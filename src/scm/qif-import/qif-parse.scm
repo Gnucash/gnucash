@@ -8,6 +8,22 @@
 
 (gnc:support "qif-import/qif-parse.scm")
 
+(define qif-category-compiled-rexp 
+  (make-regexp "^ *(\\[)?([^]/]*)(]?)(/?)(.*) *$"))
+
+(define qif-date-compiled-rexp 
+  (make-regexp "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$"))
+
+(define decimal-radix-regexp
+  (make-regexp 
+   "^ *\\$?-?\\$?[0-9]+$|^ *\\$?-?\\$?[0-9]?[0-9]?[0-9]?(,[0-9][0-9][0-9])*(\\.[0-9]*)? *$|^ *\\$?-?\\$?[0-9]+\\.[0-9]* *$"))
+
+(define comma-radix-regexp
+  (make-regexp 
+   "^ *\\$?-?\\$?[0-9]+$|^ *\\$?-?\\$?[0-9]?[0-9]?[0-9]?(\\.[0-9][0-9][0-9])*(,[0-9]*) *$|^ *\\$?-?\\$?[0-9]+,[0-9]* *$"))
+
+(define integer-regexp (make-regexp "^\\$?-?\\$?[0-9]+ *$"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-split:parse-category 
 ;;  this one just gets nastier and nastier. 
@@ -17,9 +33,6 @@
 ;;  (or #f if no class).
 ;;  gosh, I love regular expressions. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define qif-category-compiled-rexp 
-  (make-regexp "(\\[)?([^]/]*)(]?)(/?)(.*)"))
 
 (define (qif-split:parse-category self value)
   (let ((match (regexp-exec qif-category-compiled-rexp value)))
@@ -36,15 +49,16 @@
           (display "qif-split:parse-category : can't parse ")
           (display value) (newline)
           (list "" #f #f)))))
+
   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  qif-file:fix-year 
+;;  qif-parse:fix-year 
 ;;  this is where we handle y2k fixes etc.  input is a string
 ;;  containing the year ("00", "2000", and "19100" all mean the same
 ;;  thing). output is an integer representing the year in the C.E.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-file:fix-year self year-string) 
+(define (qif-parse:fix-year year-string y2k-threshold) 
   (let ((fixed-string #f)
         (post-read-value #f)
         (y2k-fixed-value #f))    
@@ -70,7 +84,7 @@
      ;; 2-digit numbers less than the window size are interpreted to 
      ;; be post-2000.
      ((and (integer? post-read-value)
-           (< post-read-value (qif-file:y2k-threshold self)))
+           (< post-read-value y2k-threshold))
       (set! y2k-fixed-value (+ 2000 post-read-value)))
      
      ;; there's a common bug in printing post-2000 dates that 
@@ -109,7 +123,7 @@
 ;;  conventions. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-file:parse-acct-type self read-value)
+(define (qif-parse:parse-acct-type read-value)
   (let ((mangled-string 
          (string-downcase! (string-remove-trailing-space 
                             (string-remove-leading-space read-value)))))
@@ -120,8 +134,8 @@
       GNC-CASH-TYPE)
      ((string=? mangled-string "ccard")
       GNC-CCARD-TYPE)
-     ((string=? mangled-string "invst")
-      GNC-STOCK-TYPE)
+     ((string=? mangled-string "invst") ;; these are brokerage accounts.
+      GNC-BANK-TYPE)
      ((string=? mangled-string "oth a")
       GNC-ASSET-TYPE)
      ((string=? mangled-string "oth l")
@@ -129,20 +143,20 @@
      ((string=? mangled-string "mutual")
       GNC-MUTUAL-TYPE)
      (#t
-      (display "qif-file:parse-acct-type : unhandled account type ")
+      (display "qif-parse:parse-acct-type : unhandled account type ")
       (display read-value)
       (display "... substituting Bank.")
       GNC-BANK-TYPE))))
 
-(define (qif-file:state-to-account-type self qstate)
+(define (qif-parse:state-to-account-type qstate)
   (cond ((eq? qstate 'type:bank)
          GNC-BANK-TYPE)
         ((eq? qstate 'type:cash)
          GNC-CASH-TYPE)
         ((eq? qstate 'type:ccard)
          GNC-CCARD-TYPE)
-        ((eq? qstate 'type:invst)
-         GNC-STOCK-TYPE)        
+        ((eq? qstate 'type:invst) ;; these are brokerage accounts in quicken
+         GNC-BANK-TYPE)        
         ((eq? qstate '#{type:oth\ a}#)
          GNC-ASSET-TYPE)
         ((eq? qstate '#{type:oth\ l}#)
@@ -153,9 +167,53 @@
 ;;  the qif file. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-file:parse-bang-field self read-value)
+(define (qif-parse:parse-bang-field read-value)
   (string->symbol (string-downcase! 
                    (string-remove-trailing-space read-value))))
+
+
+(define (qif-parse:parse-action-field read-value)
+  (let ((action-symbol (string-to-canonical-symbol read-value)))
+    (case action-symbol
+      ;; buy 
+      ((buy kauf)
+       'buy)
+      ((buyx kaufx)
+       'buyx)
+      ((sell)  ;; verkaufen
+       'sell)
+      ((sellx)
+       'sellx)
+      ((div)   ;; dividende
+       'div) 
+      ((divx)    
+       'divx)
+      ((intinc aktzu) ;; zinsen
+       'intinc)
+      ((intincx)
+       'intincx)
+      ((cglong) ;; Kapitalgewinnsteuer
+       'cglong)
+      ((cglongx)
+       'cglongx)
+      ((cgshort)
+       'cgshort)
+      ((cgshortx)
+       'cgshortx)
+      ((shrsin)
+       'shrsin)
+      ((reinvdiv)
+       'reinvdiv)
+      ((reinvint)
+       'reinvint)
+      ((reinvsg)
+       'reinvsg)
+      ((reinvsh)
+       'reinvsh)
+      ((reinvlg reinvkur)
+       'reinvlg)
+      (else 
+       action-symbol))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -164,8 +222,7 @@
 ;;  budget related stuff I don't understand. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-file:parse-cleared-field self read-value)
-  
+(define (qif-parse:parse-cleared-field read-value)  
   (if (and (string? read-value) 
            (> (string-length read-value) 0))
       (let ((secondchar (string-ref read-value 0)))
@@ -183,35 +240,87 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  qif-file:parse-date 
-;;
-;;  If the date format is specified, use that; otherwise, try to guess
-;;  the format.  When the format is being guessed, I don't actually do
-;;  any translation to a numeric format; that's saved for a second
-;;  pass (calling qif-bank-xtn:reparse on every transaction)
+;;  qif-parse:check-date-format
+;;  given a list of possible date formats, return a pruned list 
+;;  of possibilities.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-file:parse-date self date-string)
-  (if (or (not (string? date-string))
-          (not (> (string-length date-string) 0)))
-      (begin 
-        (display "qif-import: very bogus QIF date in transaction.") (newline)
-        (display "qif-import: Substituting 1/1/2999 for date.") (newline)
-        (set! date-string "1/1/2999")))
+(define (qif-parse:check-date-format date-string possible-formats)
+  (let ((retval #f))
+    (if (or (not (string? date-string))
+            (not (> (string-length date-string) 0)))
+        (set! retval possible-formats))
+    (let ((date-parts '())
+          (numeric-date-parts '())
+          (match (regexp-exec qif-date-compiled-rexp date-string)))
+      
+      (if match
+          (set! date-parts (list (match:substring match 1)
+                                 (match:substring match 2)
+                                 (match:substring match 3))))
+      
+      ;; get the strings into numbers (but keep the strings around)
+      (set! numeric-date-parts
+            (map (lambda (elt)
+                   (with-input-from-string elt
+                     (lambda () (read))))
+                 date-parts))
+      
+      (let ((possibilities possible-formats)
+            (n1 (car numeric-date-parts))
+            (n2 (cadr numeric-date-parts))
+            (n3 (caddr numeric-date-parts)))
+      
+        ;; filter the possibilities to eliminate (hopefully)
+        ;; all but one
+        (if (or (not (number? n1)) (> n1 12))
+            (set! possibilities (delq 'm-d-y possibilities)))
+        (if (or (not (number? n1)) (> n1 31))
+            (set! possibilities (delq 'd-m-y possibilities)))
+        (if (or (not (number? n1)) (< n1 1))
+            (set! possibilities (delq 'd-m-y possibilities)))
+        (if (or (not (number? n1)) (< n1 1))
+            (set! possibilities (delq 'm-d-y possibilities)))
+        
+        (if (or (not (number? n2)) (> n2 12))
+            (begin 
+              (set! possibilities (delq 'd-m-y possibilities))
+              (set! possibilities (delq 'y-m-d possibilities))))
+        
+        (if (or (not (number? n2)) (> n2 31))
+            (begin 
+              (set! possibilities (delq 'm-d-y possibilities))
+              (set! possibilities (delq 'y-d-m possibilities))))
+        
+        (if (or (not (number? n3)) (> n3 12))
+            (set! possibilities (delq 'y-d-m possibilities)))
+        (if (or (not (number? n3)) (> n3 31))
+            (set! possibilities (delq 'y-m-d possibilities)))
+        
+        (if (or (not (number? n3)) (< n3 1))
+            (set! possibilities (delq 'y-m-d possibilities)))
+        (if (or (not (number? n3)) (< n3 1))
+            (set! possibilities (delq 'y-d-m possibilities)))
+        (set! retval possibilities))
+    retval)))
 
-  (set! date-string (string-remove-trailing-space date-string))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-parse:parse-date-format 
+;;  given a list of possible date formats, return a pruned list 
+;;  of possibilities.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (qif-parse:parse-date/format date-string format)
   (let ((date-parts '())
         (numeric-date-parts '())
         (retval date-string)
-        (match 
-         (string-match "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+) *$"
-                       date-string)))
+        (match (regexp-exec qif-date-compiled-rexp date-string)))
     (if match
         (set! date-parts (list (match:substring match 1)
                                (match:substring match 2)
                                (match:substring match 3))))
-
+    
     ;; get the strings into numbers (but keep the strings around)
     (set! numeric-date-parts
           (map (lambda (elt)
@@ -219,162 +328,67 @@
                    (lambda () (read))))
                date-parts))
     
-    (cond 
-     ;; if the date parts list doesn't have 3 parts, we're in 
-     ;; trouble 
-     ((not (eq? 3 (length date-parts)))
-      (begin 
-        (display "qif-file:parse-date : can't interpret date ")
-        (display date-string) (display " ") (write date-parts)(newline)))
-     
-     ;; if the format is unknown, don't try to fully interpret the 
-     ;; number, just look for a good guess or an inconsistency with 
-     ;; the current guess. 
-     ((and (eq? (qif-file:date-format self) 'unknown)
-           (not (eq? (qif-file:guessed-date-format self) 
-                     'inconsistent)))
-      (cond 
-       ;; we currently think the date format is m/d/y
-       ((eq? (qif-file:guessed-date-format self) 'm-d-y)
-        (let ((m (car numeric-date-parts))
-              (d (cadr numeric-date-parts)))
-          (if (or (not (number? m)) (not (number? d)) (> m 12) (> d 31))
-              (qif-file:set-guessed-date-format! self 'inconsistent))))
-       
-       ;; current guess is d/m/y
-       ((eq? (qif-file:guessed-date-format self) 'd-m-y)
-        (let ((d (car numeric-date-parts))
-              (m (cadr numeric-date-parts)))
-          (if (or (not (number? m)) (not (number? d)) (> m 12) (> d 31))
-              (qif-file:set-guessed-date-format! self 'inconsistent))))
-       
-       ;; current guess is y/m/d 
-       ((eq? (qif-file:guessed-date-format self) 'y-m-d)
-        (let ((m (cadr numeric-date-parts))
-              (d (caddr numeric-date-parts)))
-          (if (or (not (number? m)) (not (number? d)) (> m 12) (> d 31))
-              (qif-file:set-guessed-date-format! self 'inconsistent))))
-       
-       ;; current guess is y/d/m (is this really possible?)
-       ((eq? (qif-file:guessed-date-format self) 'y-d-m)
-        (let ((d (cadr numeric-date-parts))
-              (m (caddr numeric-date-parts)))
-          (if (or (not (number? m)) (not (number? d)) (> m 12) (> d 31))
-              (qif-file:set-guessed-date-format! self 'inconsistent))))
-       
-       ;; no guess currently.  See if we can find a smoking gun in 
-       ;; the date format.  For dates like 11-9-11 just don't try to 
-       ;; guess. 
-       ((eq? (qif-file:guessed-date-format self) 'unknown)
-        (let ((possibilities '(m-d-y d-m-y y-m-d y-d-m))
-              (n1 (car numeric-date-parts))
-              (n2 (cadr numeric-date-parts))
-              (n3 (caddr numeric-date-parts)))
-
-          ;; filter the possibilities to eliminate (hopefully)
-          ;; all but one
-          (if (or (not (number? n1)) (> n1 12))
-              (set! possibilities (delq 'm-d-y possibilities)))
-          (if (or (not (number? n1)) (> n1 31))
-              (set! possibilities (delq 'd-m-y possibilities)))
-          (if (or (not (number? n1)) (< n1 1))
-              (set! possibilities (delq 'd-m-y possibilities)))
-          (if (or (not (number? n1)) (< n1 1))
-              (set! possibilities (delq 'm-d-y possibilities)))
-
-          (if (or (not (number? n2)) (> n2 12))
-              (begin 
-                (set! possibilities (delq 'd-m-y possibilities))
-                (set! possibilities (delq 'y-m-d possibilities))))
-
-          (if (or (not (number? n2)) (> n2 31))
-              (begin 
-                (set! possibilities (delq 'm-d-y possibilities))
-                (set! possibilities (delq 'y-d-m possibilities))))
-
-          (if (or (not (number? n3)) (> n3 12))
-              (set! possibilities (delq 'y-d-m possibilities)))
-          (if (or (not (number? n3)) (> n3 31))
-              (set! possibilities (delq 'y-m-d possibilities)))
-
-          (if (or (not (number? n3)) (< n3 1))
-              (set! possibilities (delq 'y-m-d possibilities)))
-          (if (or (not (number? n3)) (< n3 1))
-              (set! possibilities (delq 'y-d-m possibilities)))
-
+    ;; if the date parts list doesn't have 3 parts, we're in 
+    ;; trouble 
+    (if (not (eq? 3 (length date-parts)))
+        (begin 
+          (display "qif-parse:parse-date-format : can't interpret date ")
+          (display date-string) (display " ") (write date-parts)(newline))
+        
+        (case format 
+          ((d-m-y)
+           (let ((d (car numeric-date-parts))
+                 (m (cadr numeric-date-parts))
+                 (y (qif-parse:fix-year (caddr date-parts) 50)))
+             (if (and (integer? d) (integer? m) (integer? y)
+                      (<= m 12) (<= d 31))
+                 (set! retval (list d m y))
+                 (begin 
+                   (display "qif-parse:parse-date-format : ")
+                   (display "format is d/m/y, but date is ")
+                   (display date-string) (newline)))))
           
-          ;; if there's exactly one possibility left, we've got a good
-          ;; guess.  if there are no possibilities left, the date 
-          ;; is somehow inconsistent.  More than one, do nothing.
-          (cond  ((eq? (length possibilities) 1)
-                  (qif-file:set-guessed-date-format! self (car possibilities)))
-                 ((eq? (length possibilities) 0)
-                  (display "qif-file:parse-date : can't interpret date ")
-                  (display date-string)
-                  (newline)
-                  (qif-file:set-guessed-date-format! self 'inconsistent)))))))
-     
-     ;; we think we know the date format.  Make sure the data is 
-     ;; consistent with that. 
-     ((eq? (qif-file:date-format self) 'd-m-y)
-      (let ((d (car numeric-date-parts))
-            (m (cadr numeric-date-parts))
-            (y (qif-file:fix-year self (caddr date-parts))))
-        (if (and (integer? d) (integer? m) (integer? y)
-                 (<= m 12) (<= d 31))
-            (set! retval (list d m y))
-            (begin 
-              (display "qif-file:parse-date : format is d/m/y, but date is ")
-              (display date-string) (newline)))))
-     
-     ((eq? (qif-file:date-format self) 'm-d-y)
-      (let ((m (car numeric-date-parts))
-            (d (cadr numeric-date-parts))
-            (y (qif-file:fix-year self (caddr date-parts))))
-        (if (and (integer? d) (integer? m) (integer? y)
-                 (<= m 12) (<= d 31))
-            (set! retval (list d m y))
-            (begin 
-              (display "qif-file:parse-date : format is m/d/y, but date is ")
-              (display date-string) (newline)))))
-     
-     ((eq? (qif-file:date-format self) 'y-m-d)
-      (let ((y (qif-file:fix-year self (car date-parts)))
-            (m (cadr numeric-date-parts))
-            (d (caddr numeric-date-parts))))
-      (if (and (integer? d) (integer? m) (integer? y)
-               (<= m 12) (<= d 31))
-          (set! retval (list d m y))
-          (begin 
-            (display "qif-file:parse-date : format is y/m/d, but date is ")
-            (display date-string) (newline))))
-     
-     ((eq? (qif-file:date-format self) 'y-d-m)
-      (let ((y (qif-file:fix-year self (car date-parts)))
-            (d (cadr numeric-date-parts))
-            (m (caddr numeric-date-parts))))
-      (if (and (integer? d) (integer? m) (integer? y)
-               (<= m 12) (<= d 31))
-          (set! retval (list d m y))
-          (begin 
-            (display "qif-file:parse-date : format is y/m/d, but date is ")
-            (display date-string) (newline)))))
+          ((m-d-y)
+           (let ((m (car numeric-date-parts))
+                 (d (cadr numeric-date-parts))
+                 (y (qif-parse:fix-year (caddr date-parts) 50)))
+             (if (and (integer? d) (integer? m) (integer? y)
+                      (<= m 12) (<= d 31))
+                 (set! retval (list d m y))
+                 (begin 
+                   (display "qif-parse:parse-date-format : ")
+                   (display " format is m/d/y, but date is ")
+                   (display date-string) (newline)))))
+          
+          ((y-m-d)
+           (let ((y (qif-parse:fix-year (car date-parts) 50))
+                 (m (cadr numeric-date-parts))
+                 (d (caddr numeric-date-parts)))
+             (if (and (integer? d) (integer? m) (integer? y)
+                      (<= m 12) (<= d 31))
+                 (set! retval (list d m y))
+                 (begin 
+                   (display "qif-parse:parse-date-format :") 
+                   (display " format is y/m/d, but date is ")
+                   (display date-string) (newline)))))
+          
+          ((y-d-m)
+           (let ((y (qif-parse:fix-year (car date-parts) 50))
+                 (d (cadr numeric-date-parts))
+                 (m (caddr numeric-date-parts)))
+             (if (and (integer? d) (integer? m) (integer? y)
+                      (<= m 12) (<= d 31))
+                 (set! retval (list d m y))
+                 (begin 
+                   (display "qif-parse:parse-date-format : ")
+                   (display " format is y/m/d, but date is ")
+                   (display date-string) (newline)))))))
     retval))
 
-(define (qif-file:parse-string self str)
-  (if (or (not (string? str))
-          (not (> (string-length str) 0)))
-      (set! str "   "))
 
-  (string-remove-leading-space (string-remove-trailing-space str)))
-
-(define decimal-radix-regexp
-  (make-regexp 
-   "^\\$?-?\\$?[0-9]+$|^\\$?-?\\$?[0-9]?[0-9]?[0-9]?(,?[0-9][0-9][0-9])*(\\.[0-9]*)?$"))
-
-(define comma-radix-regexp
-  (make-regexp 
-   "^\\$?-?\\$?[0-9]+$|^\\$?-?\\$?[0-9]?[0-9]?[0-9]?(\\.?[0-9][0-9][0-9])*(,[0-9]*)?$"))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  number format predicates 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (value-is-decimal-radix? value)
   (if (regexp-exec decimal-radix-regexp value)
@@ -384,92 +398,87 @@
   (if (regexp-exec comma-radix-regexp value)
       #t #f))
 
-(define (qif-file:parse-value/decimal self value-string)
-  (set! value-string (string-remove-trailing-space value-string))
-  (if (value-is-decimal-radix? value-string)
-      (let ((read-val
-             (with-input-from-string 
-                 (string-remove-char 
-                  (string-remove-char value-string #\,)
-                  #\$)
-               (lambda () (read)))))
-        (if (number? read-val)
-            (+ 0.0 read-val)
-            #f))
-      #f))
+(define (value-is-integer? value)
+  (if (regexp-exec integer-regexp value)
+      #t #f))
 
-(define (qif-file:parse-value/comma self value-string)
-  (set! value-string (string-remove-trailing-space value-string))
-  (if (value-is-comma-radix? value-string)
-      (let ((read-val
-             (with-input-from-string 
-                 (string-remove-char 
-                  (string-replace-char! 
-                   (string-remove-char value-string #\.)
-                   #\, #\.)
-                  #\$)
-               (lambda () (read)))))
-        (if (number? read-val)
-            (+ 0.0 read-val)
-            #f))
-      #f))
 
-(define (qif-file:parse-value self value-string)
-  (if (or (not (string? value-string))
-          (not (> (string-length value-string) 0)))
-      (set! value-string "0")
-      (set! value-string (string-remove-leading-space 
-                          (string-remove-trailing-space value-string))))
-  
-  (let ((possibly-comma-radix? (value-is-comma-radix? value-string))
-        (possibly-decimal-radix? (value-is-decimal-radix? value-string)))
-    
-    (if (and (eq? (qif-file:radix-format self) 'unknown)
-             (not (eq? (qif-file:guessed-radix-format self) 'inconsistent)))
-        (cond 
-         ;; already think it's decimal 
-         ((eq? (qif-file:guessed-radix-format self) 'decimal)
-          (if (and possibly-comma-radix? 
-                   (not possibly-decimal-radix?))
-              (begin 
-                (qif-file:set-guessed-radix-format! self 'inconsistent)
-                (display "this QIF file has inconsistent radix notation!")
-                (newline))))
-         
-         ;; already think it's comma 
-         ((eq? (qif-file:guessed-radix-format self) 'comma)
-          (if (and possibly-decimal-radix?
-                   (not possibly-comma-radix?))
-              (begin 
-                (qif-file:set-guessed-radix-format! self 'inconsistent)
-                (display "this QIF file has inconsistent radix notation!")
-                (newline))))
-         
-         ;; don't know : look for numbers that are giveaways. 
-         ((eq? (qif-file:guessed-radix-format self) 'unknown)
-          (cond ((and possibly-decimal-radix?
-                      (not possibly-comma-radix?))
-                 (qif-file:set-guessed-radix-format! self 'decimal))
-                ((and possibly-comma-radix? 
-                      (not possibly-decimal-radix?))
-                 (qif-file:set-guessed-radix-format! self 'comma))))))
-    (cond 
-     ((eq? (qif-file:radix-format self) 'decimal)
-      (if possibly-decimal-radix? 
-          (qif-file:parse-value/decimal self value-string)
-          (begin 
-            (display "Format is decimal-radix, but number is")
-            (write value-string)
-            (newline)
-            0.0)))
-     ((eq? (qif-file:radix-format self) 'comma)
-      (if possibly-comma-radix? 
-          (qif-file:parse-value/comma self value-string)
-          (begin 
-            (display "Format is comma-radix, but number is")
-            (write value-string)
-            (newline)
-            0.0)))
-     (#t 
-      value-string))))
-        
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-parse:check-number-format 
+;;  given a list of possible number formats, return a pruned list 
+;;  of possibilities.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (qif-parse:check-number-format value-string possible-formats)
+  (let ((retval possible-formats))
+    (if (not (value-is-decimal-radix? value-string))
+        (set! retval (delq 'decimal retval)))
+    (if (not (value-is-comma-radix? value-string))
+        (set! retval (delq 'comma retval)))
+    (if (not (value-is-integer? value-string))
+        (set! retval (delq 'integer retval)))
+    retval))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-parse:parse-number/format 
+;;  assuming we know what the format is, parse the string. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (qif-parse:parse-number/format value-string format) 
+  (case format 
+    ((decimal)
+     (let ((read-val
+            (with-input-from-string 
+                (string-remove-char 
+                 (string-remove-char value-string #\,)
+                 #\$)
+              (lambda () (read)))))
+       (if (number? read-val)
+           (+ 0.0 read-val)
+           #f)))
+    ((comma)
+     (let ((read-val
+            (with-input-from-string 
+                (string-remove-char 
+                 (string-replace-char! 
+                  (string-remove-char value-string #\.)
+                  #\, #\.)
+                 #\$)
+              (lambda () (read)))))
+       (if (number? read-val)
+           (+ 0.0 read-val)
+           #f)))
+    ((integer)
+     (let ((read-val
+            (with-input-from-string 
+                (string-remove-char value-string #\$)
+              (lambda () (read)))))
+       (if (number? read-val)
+           (+ 0.0 read-val)
+           #f)))))
+     
+(define (qif-parse:check-number-formats amt-strings formats)
+  (let ((retval formats))
+    (for-each 
+     (lambda (amt)
+       (set! retval (qif-parse:check-number-format amt retval)))
+     amt-strings)
+    retval))
+
+(define (qif-parse:parse-numbers/format amt-strings format)
+  (let* ((all-ok #t)
+         (tmp #f)
+         (parsed 
+          (map 
+           (lambda (amt) 
+             (if amt
+                 (begin 
+                   (set! tmp (qif-parse:parse-number/format amt format))
+                   (if (not tmp)
+                       (set! all-ok #f))
+                   tmp)
+                 0.0))
+           amt-strings)))
+    (if all-ok parsed #f)))
+

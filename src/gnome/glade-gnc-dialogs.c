@@ -35,8 +35,6 @@ create_QIF_File_Import_Dialog (void)
   GtkWidget *label1;
   GtkWidget *label679;
   GtkWidget *currency_label;
-  GtkWidget *radix_format_label;
-  GtkWidget *date_format_label;
   GtkWidget *vbox4;
   GtkWidget *hbox33;
   GtkWidget *qif_filename_entry;
@@ -45,11 +43,6 @@ create_QIF_File_Import_Dialog (void)
   GtkWidget *qif_account_entry;
   GtkWidget *qif_account_auto_check;
   GtkWidget *qif_currency_entry;
-  GtkWidget *qif_radix_picker;
-  GtkWidget *qif_radix_picker_menu;
-  GtkWidget *glade_menuitem;
-  GtkWidget *qif_date_picker;
-  GtkWidget *qif_date_picker_menu;
   GtkWidget *hbox9;
   GtkWidget *add_file_button;
   GtkWidget *label69;
@@ -180,24 +173,6 @@ create_QIF_File_Import_Dialog (void)
   gtk_label_set_justify (GTK_LABEL (currency_label), GTK_JUSTIFY_RIGHT);
   gtk_misc_set_alignment (GTK_MISC (currency_label), 1, 0.5);
 
-  radix_format_label = gtk_label_new (_("Radix format:"));
-  gtk_widget_ref (radix_format_label);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "radix_format_label", radix_format_label,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (radix_format_label);
-  gtk_box_pack_start (GTK_BOX (vbox3), radix_format_label, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL (radix_format_label), GTK_JUSTIFY_RIGHT);
-  gtk_misc_set_alignment (GTK_MISC (radix_format_label), 1, 0.5);
-
-  date_format_label = gtk_label_new (_("Date format:"));
-  gtk_widget_ref (date_format_label);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "date_format_label", date_format_label,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (date_format_label);
-  gtk_box_pack_start (GTK_BOX (vbox3), date_format_label, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL (date_format_label), GTK_JUSTIFY_RIGHT);
-  gtk_misc_set_alignment (GTK_MISC (date_format_label), 1, 0.5);
-
   vbox4 = gtk_vbox_new (TRUE, 0);
   gtk_widget_ref (vbox4);
   gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "vbox4", vbox4,
@@ -255,48 +230,6 @@ create_QIF_File_Import_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (qif_currency_entry);
   gtk_box_pack_start (GTK_BOX (vbox4), qif_currency_entry, FALSE, FALSE, 0);
-
-  qif_radix_picker = gtk_option_menu_new ();
-  gtk_widget_ref (qif_radix_picker);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "qif_radix_picker", qif_radix_picker,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (qif_radix_picker);
-  gtk_box_pack_start (GTK_BOX (vbox4), qif_radix_picker, FALSE, FALSE, 0);
-  qif_radix_picker_menu = gtk_menu_new ();
-  glade_menuitem = gtk_menu_item_new_with_label (_("Autodetect"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (qif_radix_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("Decimal (1,000.00)"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (qif_radix_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("Comma (1.000,00)"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (qif_radix_picker_menu), glade_menuitem);
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (qif_radix_picker), qif_radix_picker_menu);
-
-  qif_date_picker = gtk_option_menu_new ();
-  gtk_widget_ref (qif_date_picker);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "qif_date_picker", qif_date_picker,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (qif_date_picker);
-  gtk_box_pack_start (GTK_BOX (vbox4), qif_date_picker, FALSE, FALSE, 0);
-  qif_date_picker_menu = gtk_menu_new ();
-  glade_menuitem = gtk_menu_item_new_with_label (_("Autodetect           "));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (qif_date_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("MM/DD/YYYY"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (qif_date_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("DD/MM/YYYY"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (qif_date_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("YYYY/MM/DD"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (qif_date_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("YYYY/DD/MM"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (qif_date_picker_menu), glade_menuitem);
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (qif_date_picker), qif_date_picker_menu);
 
   hbox9 = gtk_hbox_new (TRUE, 0);
   gtk_widget_ref (hbox9);

@@ -123,9 +123,10 @@
                             "If this is not right, remove the .LCK file " \
                             "and try again.")
 #define GNOME_PRINT_MSG   _("You need to install the gnome-print library.")
-#define QIF_LOAD_FAILED_FORMAT_MSG _("QIF file load failed. %s")
-#define QIF_LOAD_FAILED_DEFAULT_MSG _("QIF file load failed. Check "\
-	                    "settings and reload.")
+#define QIF_LOAD_FAILED_FORMAT_MSG _("QIF file load failed:\n%s")
+#define QIF_LOAD_WARNING_FORMAT_MSG _("QIF file load warning:\n%s")
+#define QIF_PARSE_FAILED_FORMAT_MSG _("QIF file parse failed:\n%s")
+#define QIF_PARSE_WARNING_FORMAT_MSG _("QIF file parse warning:\n%s")
 
 #define QUOTE_SRC_MSG     _("The source for price quotes")
 #define RECN_BALN_WARN    _("The account is not balanced.\n" \

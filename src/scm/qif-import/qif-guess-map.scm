@@ -123,17 +123,19 @@
      (lambda (bin)
        (for-each 
         (lambda (hashpair)
-          (list-set! (cdr hashpair) 4 0))
+          (list-set! (cdr hashpair) 4 0)
+          (list-set! (cdr hashpair) 5 #f))
         bin))
      (vector->list acct-map))
     (for-each 
      (lambda (bin)
        (for-each 
         (lambda (hashpair)
-          (list-set! (cdr hashpair) 4 0))
+          (list-set! (cdr hashpair) 4 0)
+          (list-set! (cdr hashpair) 5 #f))
         bin))
      (vector->list cat-map))
-
+    
 
     (with-output-to-file pref-filename
       (lambda ()
@@ -268,16 +270,17 @@
 
 (define (qif-import:find-new-acct qif-acct allowed-types gnc-map-info)
   (cond ((and (string? qif-acct)
-              (string=? qif-acct "Opening Balance"))
+              (string=? qif-acct (default-equity-account)))
          (let ((existing-equity 
-                (qif-import:find-similar-acct "Retained Earnings"
+                (qif-import:find-similar-acct (default-equity-account)
                                               (list GNC-EQUITY-TYPE)
                                               gnc-map-info)))
            (if existing-equity 
                (cdr existing-equity)
-               (list "Retained Earnings" GNC-EQUITY-TYPE))))
+               (list (default-equity-account) GNC-EQUITY-TYPE))))
         ((and (string? qif-acct)
               (not (string=? qif-acct "")))
          (list qif-acct (car allowed-types)))
         (#t 
          (list "Unspecified" (car allowed-types)))))
+

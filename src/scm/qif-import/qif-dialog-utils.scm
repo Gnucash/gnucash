@@ -22,6 +22,20 @@
           (#t 
            (list-set! old-map 5 new-descript)))))
     
+(define (default-dividend-acct security)
+  (string-append "Dividends:" security))
+
+(define (default-interest-acct security) 
+  (string-append "Interest:" security))
+
+(define (default-cglong-acct security)
+  (string-append "Cap. gain (long):" security))
+
+(define (default-cgshort-acct security)
+  (string-append "Cap. gain (short):" security))
+
+(define (default-equity-account) "Retained Earnings")
+(define (default-equity-category) "[Retained Earnings]")
 
 ;; the account-display is a 3-columned list of accounts in the QIF
 ;; import dialog (the "Account" page of the notebook).  Column 1 is
@@ -63,10 +77,10 @@
         (qif-file:accounts file))
 
        ;; then make an implicit account entry for the file
-       (if (and (qif-file:account file)
-                (qif-file:account-type file))
+       (if (and (qif-file:default-account file)
+                (qif-file:default-account-type file))
 ;                (not (eq? (qif-file:account-type file) GNC-STOCK-TYPE)))
-           (let ((entry (hash-ref acct-hash (qif-file:account file))))
+           (let ((entry (hash-ref acct-hash (qif-file:default-account file))))
              (if entry
                  ;; increment the xtn count in place 
                  (list-set! entry 4
@@ -75,83 +89,174 @@
                  ;; make a new hash table entry for the account
                  ;; make it a Bank account by default. 
                  (hash-set! 
-                  acct-hash (qif-file:account file)
+                  acct-hash (qif-file:default-account file)
                   (append (qif-import:guess-acct 
-                           (qif-file:account file)
+                           (qif-file:default-account file)
                            (list GNC-BANK-TYPE
                                  GNC-CCARD-TYPE)
                            gnc-acct-info)
-                          (list 
-                           (qif-file:default-acct-xtns file)
-                           #f)))))))
+                          (list 0 #f)))))))
      qif-files)
     
     ;; now make the second pass through the files, looking at the 
     ;; transactions.  Hopefully the accounts are all there already.
     ;; stock accounts can have both a category/account and another
-    ;; account ref from the security name.
+    ;; account ref from the security name.  
     (for-each 
      (lambda (file)
        (for-each 
         (lambda (xtn)
-          (let ((bank-xtn? (qif-xtn:bank-xtn? xtn))
-                (stock-acct (qif-xtn:security-name xtn))
+          (let ((stock-acct (qif-xtn:security-name xtn))
+                (action (qif-xtn:number xtn))
+                (action-sym #f)
+                (from-acct (qif-xtn:from-acct xtn))
+                (qif-account #f)
+                (qif-account-types #f)
                 (entry #f))
-            (if (not bank-xtn?)
+            
+            (if (string? action)
+                (set! action-sym (qif-parse:parse-action-field action)))
+            
+            (if (and stock-acct action-sym)
+                ;; stock transactions are weird.  there can be several
+                ;; accounts associated with stock xtns: the security,
+                ;; the brokerage, a dividend account, a long-term CG
+                ;; account, a short-term CG account, an interest
+                ;; account.  Make sure all of the right ones get stuck
+                ;; in the map.
                 (begin 
-                  (set! entry (hash-ref acct-hash stock-acct))
+                  ;; first: figure out what the near-end account is.
+                  ;; it's generally the security account, but could be 
+                  ;; an interest, dividend, or CG account.
+                  (case action-sym
+                    ((buy buyx sell sellx reinvdiv reinvsh reinvsg 
+                          reinvlg shrsin)
+                     (set! qif-account stock-acct)
+                     (set! qif-account-types (list GNC-STOCK-TYPE 
+                                                   GNC-MUTUAL-TYPE)))
+                    ((div cgshort cglong intinc) 
+                     (set! qif-account from-acct)
+                     (set! qif-account-types (list GNC-BANK-TYPE
+                                                   GNC-CCARD-TYPE)))
+                    
+                    ((divx cgshortx cglongx intincx)
+                     (set! qif-account 
+                           (qif-split:category 
+                            (car (qif-xtn:splits xtn))))
+                     (set! qif-account-types (list GNC-BANK-TYPE
+                                                   GNC-CCARD-TYPE)))
+                    (else 
+                     (display "HEY! HEY! action-sym = ")
+                     (display action-sym) (newline)))
+                                    
+                  ;; now reference the near-end account 
+                  (set! entry (hash-ref acct-hash qif-account))
                   (if entry
                       (list-set! entry 4
                                  (+ 1 (list-ref entry 4)))
-                      (hash-set! acct-hash stock-acct 
+                      (hash-set! acct-hash qif-account
                                  (append (qif-import:guess-acct
-                                          stock-acct
-                                          (list GNC-STOCK-TYPE
-                                                GNC-MUTUAL-TYPE)
+                                          qif-account qif-account-types
                                           gnc-acct-info)
-                                         (list 1 xtn)))))))
-          ;; if there's a from-acct, reference it 
-          (let ((from (qif-xtn:from-acct xtn))
-                (entry #f))
-            (if from
-                (begin 
-                  (set! entry (hash-ref acct-hash from))
+                                         (list 1 xtn))))
+                  
+                  ;; now figure out the other end of the transaction.
+                  ;; the far end will be the brokerage for buy, sell,
+                  ;; etc, or the "L"-referenced account for buyx,
+                  ;; sellx, etc, or an equity account for ShrsIn
+
+                  (case action-sym
+                    ((buy sell)
+                     (set! qif-account from-acct)
+                     (set! qif-account-types (list GNC-BANK-TYPE
+                                                   GNC-CCARD-TYPE)))
+                    ((buyx sellx)
+                     (set! qif-account 
+                           (qif-split:category 
+                            (car (qif-xtn:splits xtn))))
+                     (set! qif-account-types (list GNC-BANK-TYPE
+                                                   GNC-CCARD-TYPE)))
+                    
+                    ((cgshort cgshortx reinvsg reinvsh)
+                     (set! qif-account
+                           (default-cgshort-acct stock-acct))
+                     (set! qif-account-types (list GNC-INCOME-TYPE)))
+                    
+                    ((cglong cglongx reinvlg)
+                     (set! qif-account
+                           (default-cglong-acct stock-acct))
+                     (set! qif-account-types (list GNC-INCOME-TYPE)))
+                    ((intinc intincx reinvint)
+                     (set! qif-account
+                           (default-interest-acct stock-acct))
+                     (set! qif-account-types (list GNC-INCOME-TYPE)))
+                    ((div divx reinvdiv)
+                     (set! qif-account
+                           (default-dividend-acct stock-acct))
+                     (set! qif-account-types (list GNC-INCOME-TYPE)))
+                    ((shrsin)
+                     (set! qif-account
+                           (default-equity-account))
+                     (set! qif-account-types (list GNC-EQUITY-TYPE)))
+                    (else 
+                     (display "HEY! HEY! action-sym = ")
+                     (display action-sym) (newline)))
+                  
+                  ;; now reference the far-end account 
+                  (set! entry (hash-ref acct-hash qif-account))
                   (if entry
                       (list-set! entry 4
                                  (+ 1 (list-ref entry 4)))
-                      (hash-set! acct-hash from 
+                      (hash-set! acct-hash qif-account
                                  (append (qif-import:guess-acct
-                                          from 
+                                          qif-account qif-account-types
+                                          gnc-acct-info)
+                                         (list 1 xtn))))
+                  
+                  ;; if there's a commission, it will reference 
+                  ;; a separate account on the far end. 
+
+                  )
+                
+                ;; non-stock transactions.  these are a bit easier.
+                ;; the near-end account (from) is always in the
+                ;; transaction, and the far end(s) are in the splits.
+                (begin
+                  (set! entry (hash-ref acct-hash from-acct))
+                  (if entry
+                      (list-set! entry 4
+                                 (+ 1 (list-ref entry 4)))
+                      (hash-set! acct-hash from-acct 
+                                 (append (qif-import:guess-acct
+                                          from-acct 
                                           (list 
                                            GNC-BANK-TYPE
-                                           GNC-CCARD-TYPE
-                                           GNC-STOCK-TYPE)
+                                           GNC-CCARD-TYPE)
                                           gnc-acct-info)
-                                         (list 1 #f)))))))
-                    
-          ;; iterate over the splits doing the same thing. 
-          (for-each 
-           (lambda (split)
-             (let ((xtn-is-acct (qif-split:category-is-account? split))
-                   (xtn-acct #f)
-                   (entry #f))
-               (if xtn-is-acct 
-                   (begin 
-                     (set! xtn-acct (qif-split:category split))
-                     (set! entry (hash-ref acct-hash xtn-acct))
-                     (if entry
-                         (list-set! entry 4
-                                    (+ 1 (list-ref entry 4)))
-                         (hash-set! acct-hash xtn-acct 
-                                    (append (qif-import:guess-acct
-                                             xtn-acct 
-                                             (list 
-                                              GNC-BANK-TYPE
-                                              GNC-CCARD-TYPE
-                                              GNC-STOCK-TYPE)
-                                             gnc-acct-info)
-                                            (list 1 #f))))))))
-           (qif-xtn:splits xtn)))
+                                         (list 1 #f))))
+                  
+                  ;; iterate over the splits doing the same thing. 
+                  (for-each 
+                   (lambda (split)
+                     (let ((xtn-is-acct (qif-split:category-is-account? split))
+                           (xtn-acct #f)
+                           (entry #f))
+                       (if xtn-is-acct 
+                           (begin 
+                             (set! xtn-acct (qif-split:category split))
+                             (set! entry (hash-ref acct-hash xtn-acct))
+                             (if entry
+                                 (list-set! entry 4
+                                            (+ 1 (list-ref entry 4)))
+                                 (hash-set! acct-hash xtn-acct 
+                                            (append (qif-import:guess-acct
+                                                     xtn-acct 
+                                                     (list 
+                                                      GNC-BANK-TYPE
+                                                      GNC-CCARD-TYPE)
+                                                     gnc-acct-info)
+                                                    (list 1 #f))))))))
+                   (qif-xtn:splits xtn))))))
         (qif-file:xtns file)))
      qif-files)
     
@@ -186,7 +291,6 @@
 (define (qif-dialog:make-category-display qif-files gnc-acct-info) 
   (let ((cat-hash (make-hash-table 20))
         (retval '()))
-
     ;; get the Cat entries from each file 
     (for-each 
      (lambda (file)

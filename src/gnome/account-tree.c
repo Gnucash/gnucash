@@ -125,8 +125,8 @@ gnc_account_tree_init(GNCAccountTree *tree)
   gnc_account_tree_set_view_info_real(tree);
 
   gtk_ctree_construct(GTK_CTREE(tree),
-		      tree->num_columns, 0,
-		      tree->column_headings);
+                      tree->num_columns, 0,
+                      (gchar **) tree->column_headings);
 
   gtk_clist_set_shadow_type(GTK_CLIST(tree), GTK_SHADOW_IN);
   gtk_clist_column_titles_passive(GTK_CLIST(tree));

@@ -12,8 +12,24 @@
 (let ()
  (define string-db (gnc:make-string-database))
 
+ (define (make-account-subheading acc-name from-date)
+   (let* ((separator (string-ref (gnc:account-separator-char) 0))
+          (balance-at-start (gnc:account-get-balance-at-date
+                             (gnc:get-account-from-full-name
+                              (gnc:get-current-group)
+                              acc-name
+                              separator)
+			     from-date
+			     #f)))
+     (string-append acc-name
+		    " ("
+		    (string-db 'lookup 'open-bal-string) 
+		    " "
+		    (gnc:amount->formatted-string balance-at-start #f)
+		    ")"
+		    )))
 
-  (define (make-split-report-spec options)
+ (define (make-split-report-spec options)
     (remove-if-not
      (lambda (x) x)
      (list
@@ -221,7 +237,7 @@
 	#f)
        #f))))
 
-  (define (split-report-get-sort-spec-entry key ascending?)
+  (define (split-report-get-sort-spec-entry key ascending? begindate)
     (case key
       ((account)
        (make-report-sort-spec
@@ -230,7 +246,7 @@
 	(if ascending? string-ci<? string-ci>?)
 	string-ci=?
 	string-ci=?
-	(lambda (x) x)))
+	(lambda (x) (make-account-subheading x begindate))))
 
       ((date)
        (make-report-sort-spec
@@ -336,7 +352,7 @@
 
       ((amount)
        (make-report-sort-spec
-	gnc:split-get-amount
+	gnc:split-get-value
 	(if ascending? < >)
 	=
 	#f
@@ -585,10 +601,12 @@
                               (car (gnc:option-value enddate))))
 	   (s1 (split-report-get-sort-spec-entry
 		(gnc:option-value tr-report-primary-key-op)
-		(eq? (gnc:option-value tr-report-primary-order-op) 'ascend)))
+		(eq? (gnc:option-value tr-report-primary-order-op) 'ascend)
+		(gnc:option-value begindate)))
 	   (s2 (split-report-get-sort-spec-entry
 		(gnc:option-value tr-report-secondary-key-op)
-		(eq? (gnc:option-value tr-report-secondary-order-op) 'ascend)))
+		(eq? (gnc:option-value tr-report-secondary-order-op) 'ascend)
+		(gnc:option-value begindate)))
 	   (s2b (if s2 (list s2) '()))
 	   (sort-specs (if s1 (cons s1 s2b) s2b))
 	   (split-list
@@ -641,6 +659,7 @@
   (string-db 'store 'debit-string "Debit")
   (string-db 'store 'credit-string "Credit")
   (string-db 'store 'total-string "Total")
+  (string-db 'store 'open-bal-string "Opening Balance")
 
   (gnc:define-report
    'version 1

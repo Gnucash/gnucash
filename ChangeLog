@@ -1,3 +1,13 @@
+2000-05-29  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report-2.scm (make-account-subheading): 
+	added the ability to display balances at start-of-report date
+	when sorting by accounts.  Also replaced gnc:split-get-amount
+	(which doesn't exist) with gnc:split-get-value for amount sorting.
+
+	* doc/guile-hackers.txt: Added pointers to g-wrap now that it's
+	not part of the main gnucash distribution.
+
 2000-05-24  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/SplitLedger.c: some simplification, some additional

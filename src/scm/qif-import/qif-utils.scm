@@ -23,9 +23,6 @@
   (make-regexp "^ *([^ ].*)$"))
 
 (define (string-remove-trailing-space str)
-  (if (eq? (string-ref str (- (string-length str) 1)) #\cr)
-      (string-set! str (- (string-length str) 1) #\space))
-
   (let ((match (regexp-exec remove-trailing-space-rexp str)))
     (if match
         (string-copy (match:substring match 1))
@@ -76,3 +73,8 @@
           (set! parts (cons (substring str 0 last-char) parts))))    
     parts))
 
+(define (string-to-canonical-symbol str)
+  (string->symbol 
+   (string-downcase
+    (string-remove-leading-space
+     (string-remove-trailing-space str)))))
