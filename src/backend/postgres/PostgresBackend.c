@@ -64,6 +64,7 @@
 #include "events.h"
 #include "gncquery.h"
 #include "kvp-sql.h"
+#include "messages.h"
 #include "PostgresBackend.h"
 #include "price.h"
 #include "txn.h"
@@ -1842,7 +1843,7 @@ pgend_session_begin (Backend *backend,
              PWARN ("the following message should be shown in a gui");
              PWARN ("unknown mode %s, will use multi-user mode",
                     start ? start : "(null)");
-             xaccBackendSetMessage(_("Unknown database access mode '%s'. Using default mode: multi-user."),
+             xaccBackendSetMessage((Backend *)be, _("Unknown database access mode '%s'. Using default mode: multi-user."),
 			           start ? start : "(null)");
              be->session_mode = MODE_EVENT;
          } 

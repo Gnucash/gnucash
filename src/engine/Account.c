@@ -483,7 +483,7 @@ xaccAccountCommitEdit (Account *acc)
       err = xaccBackendGetMessage(be);
       /* g_strdup here, because err needs to be g_freed if from Backend */
       err = err ? err : g_strdup(_("Error message not available"));
-      PWARN_GUI("Error occurred while saving Account:\n%d: %s",
+      PWARN_GUI(_("Error occurred while saving Account:\n%d: %s"),
 		      xaccBackendGetError(be), err);
 	    
       /* push error back onto the stack */
