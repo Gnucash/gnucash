@@ -25,6 +25,7 @@
 #include <glib.h>
 
 #include "Scrub.h"
+#include "SchedXaction.h"
 #include "datecell.h"
 #include "gnc-engine-util.h"
 #include "numcell.h"
@@ -353,7 +354,7 @@ gnc_split_register_save_template_cells (gpointer save_data,
     /* FIXME: replace these with #defines - is it ok to #include "SchedXaction.h" ?? */
 
     kvp_frame_set_slot_path (kvpf, kvp_value_new_guid(acctGUID),
-                             "sched-xaction", "account", NULL);
+                             GNC_SX_ID, GNC_SX_ACCOUNT, NULL);
 
     kvpf = xaccSplitGetSlots (split);
 
@@ -390,16 +391,16 @@ gnc_split_register_save_template_cells (gpointer save_data,
 
     value = gnc_table_layout_get_cell_value (reg->table->layout, FCRED_CELL);
     kvp_frame_set_slot_path( kvpf,kvp_value_new_string( value ), 
-			     "sched-xaction",
-                             "credit-formula",
+			     GNC_SX_ID,
+			     GNC_SX_CREDIT_FORMULA,
                              NULL);
 
     value = gnc_table_layout_get_cell_value (reg->table->layout, FDEBT_CELL);
 
     kvp_frame_set_slot_path( kvpf,  
                              kvp_value_new_string( value ),
-                             "sched-xaction", 
-                             "debit-formula",
+                             GNC_SX_ID, 
+			     GNC_SX_DEBIT_FORMULA,
                              NULL);
 
     DEBUG( "kvp_frame  after: %s\n", kvp_frame_to_string( kvpf ) );
@@ -419,8 +420,8 @@ gnc_split_register_save_template_cells (gpointer save_data,
     /* sharesStr = gnc_numeric_to_string( sharesStr ); */
     kvp_frame_set_slot_path( kvpf,
 			     kvp_value_new_string( sharesStr ),
-			     "sched-xaction",
-			     "shares",
+			     GNC_SX_ID,
+			     GNC_SX_SHARES
                              NULL);
 
     DEBUG( "kvp_frame  after: %s\n", kvp_frame_to_string( kvpf ) );

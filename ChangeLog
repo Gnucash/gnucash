@@ -1,3 +1,10 @@
+2001-09-05  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/register/ledger-core/split-register-model-save.c: replace kvp-frame
+	key string literal with #defines from schedXaction.h
+
+	* src/gnome/window-register.c: rename "recur" commands "schedule".
+
 2001-09-04  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* several SX-related .c files: replaced use of kvp_frame_{set,get}_slot, 

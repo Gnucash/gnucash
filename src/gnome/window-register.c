@@ -880,7 +880,7 @@ gnc_register_create_tool_bar (RegWindow *regData)
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("Recur"),
+      N_("Schedule..."),
       N_("Make a scheduled transaction using this one as a template"),
       recurCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_LINE_IN,
@@ -1511,7 +1511,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("_Recur"),
+      N_("_Schedule..."),
       N_("Create a scheduled transaction using this one as a template"),
       recurCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
@@ -1709,7 +1709,7 @@ gnc_register_create_popup_menu (RegWindow *regData)
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("_Recur"), 
+      N_("_Schedule..."), 
       N_("Make a scheduled transaction using this one as a template"),
       recurCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL, 
