@@ -729,6 +729,7 @@ on_bankpage_back (GnomeDruidPage  *gnomedruidpage,
 			  GNOME_DRUID_PAGE (info->accountpage));
     return TRUE;
   default:
+    ;
   }
   return FALSE;
 }
@@ -832,6 +833,7 @@ on_userid_back (GnomeDruidPage  *gnomedruidpage,
 			  GNOME_DRUID_PAGE (info->accountpage));
     return TRUE;
   default:
+    ;
   }
   return FALSE;
 }
@@ -1004,6 +1006,7 @@ on_accountinfo_back (GnomeDruidPage  *gnomedruidpage,
 			  GNOME_DRUID_PAGE (info->filepage));
     return TRUE;
   default:
+    ;
   }
   return FALSE;
 }
@@ -1075,6 +1078,7 @@ on_accountlist_back (GnomeDruidPage  *gnomedruidpage,
 			  GNOME_DRUID_PAGE (info->filepage));
     return TRUE;
   default:
+    ;
   }
   return FALSE;
 }

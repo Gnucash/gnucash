@@ -279,6 +279,7 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
     return FALSE;
       
   default:
+    ;
   }
   
   return FALSE;

@@ -1,3 +1,11 @@
+2002-12-30  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/hbci/druid-hbci-initial.c
+	* src/import-export/hbci/gnc-hbci-utils.c:
+	Fix a bunch of "warning: deprecated use of label at end of
+	compound statement" in gcc3 in select statements (added 
+	semicolons after default: so that I don't break anything,
+	but it should probably output an error instead).
+
 2002-12-30  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/standard-reports/cash-flow.scm: Patch by Ed Warnicke
