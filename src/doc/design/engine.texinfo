@@ -2490,17 +2490,6 @@ Return the share balance of @var{account} including all Splits whose
 parent Transactions have posted dates on or before @var{date}.
 @end deftypefun
 
-@deftypefun {Split *} xaccAccountGetSplit (Account * @var{account}, int @var{i})
-Return the @var{i}th Split in @var{account}. If @var{i} < 0 or @var{i}
->= number of splits in @var{account}, then @code{NULL} is returned.
-This function is O(number of splits in account).
-@end deftypefun
-
-@deftypefun int xaccAccountGetNumSplits (Account * @var{account})
-Return the number of Splits in @var{account}. This function is
-O(number of splits in account).
-@end deftypefun
-
 @deftypefun {GList *} xaccAccountGetSplitList (Account * @var{account})
 Return a @code{GList} of the Splits in @var{account}. This list must
 not be modified in any way.
