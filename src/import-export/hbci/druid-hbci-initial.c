@@ -481,7 +481,7 @@ on_aqhbci_button (GtkButton *button,
   }
 
   druid_disable_next_button(info);
-  AB_Banking_DeactivateProvider(banking, backend_name);
+  /* AB_Banking_DeactivateProvider(banking, backend_name); */
   if (wizard_exists) {
     int wait_status;
     int wait_result = 0;
