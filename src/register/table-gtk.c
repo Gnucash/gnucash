@@ -172,6 +172,14 @@ verify_cell_interaction_OK(Table *table, const int row, const int col)
   int rel_row, rel_col;
   int invalid = 0;
   
+  /* make sure that we've repositioned the cursor to this location,
+   * and that we've dragged along any subsidiary GUI's with us. 
+   * Do this *before* we use the value of the "current cursor"
+   */
+  xaccVerifyCursorPosition (table, row, col);
+
+  arr = table->current_cursor;
+
   /* compute the cell location */
   rel_row = table->locators[row][col]->phys_row_offset;
   rel_col = table->locators[row][col]->phys_col_offset;

@@ -542,7 +542,10 @@ xaccRefreshHeader (Table *table)
 /* ==================================================== */
 /* verifyCursorPosition checks the location of the cursor 
  * with respect to a row/column position, and repositions 
- * the cursor if necessary.
+ * the cursor if necessary.  This includes saving any uncomited
+ * data in the old cursor, and then oving the cursor and it's
+ * GUI.
+ *
  */
 
 void

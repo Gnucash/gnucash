@@ -153,11 +153,19 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
    int invalid = 0;
 
    table = (Table *) cd;
-   arr = table->current_cursor;
    cbs = (XbaeMatrixDefaultActionCallbackStruct *) cb;
 
    row = cbs->row;
    col = cbs->column;
+
+   /* if we are entering this cell, make sure that we've
+    * moved the cursor, and that any subsidiary GUI elements
+    * properly positioned.  Do this *before* we examine the 
+    * value of the "cuirrent cursor".
+    */
+   if (XbaeEnterCellReason == cbs->reason) {
+      xaccVerifyCursorPosition (table, row, col);
+   }
 
    /* can't edit outside of the physical space */
    invalid = (0 > row) || (0 > col) ;
@@ -180,6 +188,7 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
    invalid = invalid || (0 > rel_col);
 
    /* check for a cell handler, but only if cell adress is valid */
+   arr = table->current_cursor;
    if (arr && !invalid) {
       if (! (arr->cells[rel_row][rel_col])) {
          invalid = TRUE;
@@ -229,7 +238,6 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
     * this cell. Dispatch for processing. */
    switch (cbs->reason) {
       case XbaeEnterCellReason: {
-         xaccVerifyCursorPosition (table, row, col);
          enterCB (mw, cd, cb);
          break;
       }
@@ -270,7 +278,8 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
    rel_row = table->locators[row][col]->phys_row_offset;
    rel_col = table->locators[row][col]->phys_col_offset;
 
-printf ("enter %d %d \n", row, col);
+printf ("enter %d %d (rel=%d %d %p) %p\n", row, col, rel_row, rel_col,
+arr->cells[rel_row][rel_col], arr );
 
    /* since we are here, there must be a cell handler.
     * therefore, we accept entry into the cell by default, 
