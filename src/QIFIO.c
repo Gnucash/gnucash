@@ -589,12 +589,12 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
 char * xaccReadQIFTransaction (int fd, Account *acc)
 {
    Transaction *trans;
+   Split *split = NULL;
    char * qifline;
    int isneg = 0;
    int got_share_quantity = 0;
    int share_xfer = 0;
    int is_security = 0;
-   int is_split = 0;
    Account *sub_acc = 0x0;
    Account *xfer_acc = 0x0;
    double adjust = 0.0;
@@ -639,7 +639,9 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* E == memo for split */
      if ('E' == qifline [0]) {   
-         /* hack alert */
+        if (split) {
+           XACC_PREP_STRING (split->memo);
+        }
      } else 
 
      /* I == share price */
@@ -708,8 +710,18 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* S == split */
      if ('S' == qifline [0]) {   
-         /* hack alert -- splits not supported */
-         is_split = 1;
+         split = xaccMallocSplit();
+
+         split -> memo = 0x0;         /* string */
+         split -> damount = 0.0;      /* amount is double */
+         split -> share_price= 1.0;   /* share_price is double */
+         split -> reconciled = NREC;  /* reconciled is byte */
+         split -> debit = (struct _account *) xaccGetXferQIFAccount (acc, qifline);
+
+         xaccInsertSplit (trans, split);
+
+         /* hack alert -- we should insert this split into 
+          * the split account, and remove the L field */
      } else 
 
      /* T == total */
@@ -733,17 +745,19 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      } else
 
-     /* $ == dollar amount -- always preceeded by 'L' */
+     /* $ == dollar amount */
      if ('$' == qifline [0]) {   
         /* for splits, $ records the part of the total for each split */
-        /* hack alert -- splits not supported */
-        if (!is_split) {
-            /* Currently, it appears that the $ amount is a redundant 
-             * number that we can safely ignore.  To get fancy,
-             * we use it to double-check the above work, since it 
-             * appears to always appear the last entry in the
-             * transaction.  Round things out to pennies, to 
-             * handle round-off errors. */
+        if (split) {
+           split -> damount = xaccParseQIFAmount (&qifline[1]);  
+        } else {
+           /* Currently, it appears that the $ amount is a redundant 
+            * number that we can safely ignore.  To get fancy,
+            * we use it to double-check the above work, since it 
+            * appears to always appear the last entry in the
+            * transaction.  Round things out to pennies, to 
+            * handle round-off errors. 
+            */
            double parse, pute;
            int got, wanted;
            parse = xaccParseQIFAmount (&qifline[1]);
