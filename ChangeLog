@@ -1,3 +1,17 @@
+2004-05-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Transaction.c:
+	  Don't recompute balances or write to the translog when we're
+	  shutting down.  Destroy the parent transaction from xaccSplitDestroy()
+	  if we're shutting down.
+	* src/engine/qofbook-p.h:
+	* src/engine/qofbook.h:
+	* src/engine/qofbook.c:
+	  add "shutting_down" parameter and getter-method, so that
+	  objects can detect when the book is shutting down and
+	  ignore non-necessary reprocessing.  Fixes a memory corruption
+	  bug during book-closing.
+
 2004-05-24  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/transaction.cm: applied Vasil's

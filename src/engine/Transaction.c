@@ -1463,6 +1463,9 @@ xaccTransBeginEdit (Transaction *trans)
 {
    GNC_BEGIN_EDIT(&trans->inst)
 
+   if (qof_book_shutting_down(trans->inst.book))
+     return;
+
    xaccOpenLog ();
    xaccTransWriteLog (trans, 'B');
 
@@ -1481,7 +1484,8 @@ xaccTransDestroy (Transaction *trans)
   if (!trans) return;
   check_open (trans);
 
-  if (xaccTransGetReadOnly (trans)) return;
+  if (xaccTransGetReadOnly (trans) &&
+      !qof_book_shutting_down(trans->inst.book)) return;
 
   trans->inst.do_free = TRUE;
 }
@@ -1509,13 +1513,17 @@ static void
 do_destroy (Transaction *trans)
 {
   SplitList *node;
+  gboolean shutting_down;
 
   /* If there are capital-gains transactions associated with this, 
    * they need to be destroyed too.  */
   destroy_gains (trans);
 
+  shutting_down = qof_book_shutting_down(trans->inst.book);
+
   /* Make a log in the journal before destruction.  */
-  xaccTransWriteLog (trans, 'D');
+  if (! shutting_down)
+    xaccTransWriteLog (trans, 'D');
 
   gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_DESTROY);
 
@@ -1525,7 +1533,8 @@ do_destroy (Transaction *trans)
 
     mark_split (split);
     xaccAccountRemoveSplit (split->acc, split);
-    xaccAccountRecomputeBalance (split->acc);
+    if (!shutting_down)
+      xaccAccountRecomputeBalance (split->acc);
     gen_event (split);
     xaccFreeSplit (split);
 
@@ -1952,7 +1961,15 @@ xaccSplitDestroy (Split *split)
 
    /* Note: split is removed from lot when its removed from accoount */
    xaccAccountRemoveSplit (acc, split);
-   xaccAccountRecomputeBalance (acc);
+
+   /* If we're shutting down then destroy the transaction, too, and
+    * don't recompute the balance.
+    */
+   if (qof_book_shutting_down (split->parent->inst.book))
+     xaccTransDestroy (trans);
+   else
+     xaccAccountRecomputeBalance (acc);
+   
 
    gen_event (split);
    xaccFreeSplit (split);

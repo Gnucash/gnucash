@@ -103,6 +103,8 @@ qof_book_destroy (QofBook *book)
 {
   if (!book) return;
 
+  book->shutting_down = TRUE;
+
   ENTER ("book=%p", book);
   gnc_engine_force_event (&book->entity, GNC_EVENT_DESTROY);
 
@@ -169,6 +171,13 @@ qof_book_get_backend (QofBook *book)
 {
    if (!book) return NULL;
    return book->backend;
+}
+
+gboolean
+qof_book_shutting_down (QofBook *book)
+{
+  if (!book) return FALSE;
+  return book->shutting_down;
 }
 
 /* ====================================================================== */

@@ -71,6 +71,12 @@ struct _QofBook
    * but has not yet been written out to storage (file/database) 
    */
   gboolean dirty;
+
+  /** a flag denoting whether the book is closing down, used to
+   * help the QOF objects shut down cleanly without maintaining
+   * internal consistency.
+   */
+  gboolean shutting_down;
   
   /** version number, used for tracking multiuser updates */
   gint32  version;

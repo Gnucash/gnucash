@@ -111,6 +111,9 @@ QofBackend *qof_book_get_backend (QofBook *book);
 
 void qof_book_set_backend (QofBook *book, QofBackend *);
 
+/** Is the book shutting down? */
+gboolean qof_book_shutting_down (QofBook *book);
+
 /** qof_book_not_saved() will return TRUE if any 
  *    data in the book hasn't been saved to long-term storage.
  *    (Actually, that's not quite true.  The book doesn't know 
