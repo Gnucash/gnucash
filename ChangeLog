@@ -1,5 +1,8 @@
 2003-12-22  Christian Stimming  <stimming@tuhh.de>
 
+	* accounts/tr_TR/*.xea: Added Turkish account templates by
+	A. Alper Atici <alper_atici@yahoo.com>
+
 	* accounts/hu_HU/*xea: Hungarian account templates by Sulyok Peter
 	<sp@elte.hu>
 

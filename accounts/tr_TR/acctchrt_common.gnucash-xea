@@ -1,711 +1,701 @@
 <?xml version="1.0"?>
 <gnc-account-example>
     <gnc-act:title>
-      Συνήθεις Λογαριασμοί
+      Genel
     </gnc-act:title>
     <gnc-act:short-description>
-       Ένα βασικό σύνολο λογαριασμών που χρησιμοποιούνται συχνά
+      Kiώisel kullanύma uygun, gόnlόk hayatta sύk rastlanan kalemler
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Οι περισσότεροι χρήστες θα ήθελαν να επιλέξουν αυτούς τους λογαριασμούς. Περιλαμβάνουν τους πιό συχνά χρησιμοποιούμενους λογαριασμούς (Επιταγές, αποταμίευση, μετρητά, πιστωτική κάρτα, εισόδημα , συνήθεις δαπάνες)
+    Pek ηok kiώinin tercih edeceπi, yaygύn kullanύlan kalemleri takip etmenizi saπlayan hesaplar
   </gnc-act:long-description>    
+  <gnc-act:start-selected>0</gnc-act:start-selected>
 <gnc:account version="2.0.0">
-  <act:name>Ενεργητικό</act:name>
+  <act:name>Varlύklar</act:name>
   <act:id type="new">98f262dfab9a2b99ac42919dcf58d304</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ενεργητικό</act:description>
+  <act:description>Varlύklar</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Τρέχων Ενεργητικό</act:name>
+  <act:name>Cari Varlύklar</act:name>
   <act:id type="new">a1dd5f225156f110689c204fefded0ab</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Τρέχων Ενεργητικό</act:description>
+  <act:description>Cari Varlύklar</act:description>
   <act:parent type="new">98f262dfab9a2b99ac42919dcf58d304</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Λογαριασμός Όψεως</act:name>
+  <act:name>Vadesiz/Maaώ Hesabύ</act:name>
   <act:id type="new">b477aa9e0d4eb67c34e1e35903fb3f99</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Λογαριασμός Όψεως</act:description>
+  <act:description>Vadesiz/Maaώ Hesabύ</act:description>
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Λογαριασμός Αποταμίευσης</act:name>
+  <act:name>Vadeli Hesap</act:name>
   <act:id type="new">eeae5a1892e88adbc3b369c76ee4e889</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Λογαριασμός Αποταμίευσης</act:description>
+  <act:description>Vadeli Hesap</act:description>
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Χρήματα στο Πορτοφόλι</act:name>
+  <act:name>Nakit</act:name>
   <act:id type="new">07b454b9dd6f68c4b613c5f1ef76f884</act:id>
   <act:type>CASH</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Χρήματα στο Πορτοφόλι</act:description>
+  <act:description>Nakit</act:description>
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Παθητικό</act:name>
+  <act:name>Borηlar</act:name>
   <act:id type="new">19a911feed9b41b8b01be036a2aed9fe</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Παθητικό</act:description>
+  <act:description>Borηlar</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Λογαριασμοί Πληρωτέοι</act:name>
-  <act:id type="new">a8186db64d71dc2ca5fdccb3234b531b</act:id>
-  <act:type>LIABILITY</act:type>
-  <act:commodity>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
-  </act:commodity>
-  <act:description>Λογαριασμοί Πληρωτέοι</act:description>
-  <act:parent type="new">19a911feed9b41b8b01be036a2aed9fe</act:parent>
-</gnc:account>
-<gnc:account version="2.0.0">
-  <act:name>Πιστωτική Κάρτα</act:name>
+  <act:name>Kredi Kartύ</act:name>
   <act:id type="new">efc3caac2619666c53e6e27f02d5e716</act:id>
   <act:type>CREDIT</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Πιστωτική Κάρτα</act:description>
-  <act:parent type="new">a8186db64d71dc2ca5fdccb3234b531b</act:parent>
+  <act:description>Kredi Kartύ</act:description>
+  <act:parent type="new">19a911feed9b41b8b01be036a2aed9fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Έσοδα</act:name>
+  <act:name>Gelir</act:name>
   <act:id type="new">a7ab23dd2d41616042034d5a012a0850</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Έσοδα</act:description>
+  <act:description>Gelir</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bonus</act:name>
+  <act:name>έkramiye</act:name>
   <act:id type="new">59b72cd943a2ca6f077748bba9a942cd</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Bonus</act:description>
+  <act:description>έkramiye</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Δώρα που λάβαμε</act:name>
+  <act:name>Hediye Ηekleri</act:name>
   <act:id type="new">1adcf2c65d7a66f32144ccd9ce4f438f</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Δώρα που Λάβαμε</act:description>
+  <act:description>Hediye Ηekleri</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Εισόδημα από Τόκους</act:name>
+  <act:name>Faiz Geliri</act:name>
   <act:id type="new">c47361e40d9478ec11758097e64d693c</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Έσοδα από Τόκους</act:description>
+  <act:description>Faiz Geliri</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Τόκοι Λογαριασμού Όψεως</act:name>
+  <act:name>Vadesiz Faizi</act:name>
   <act:id type="new">73481e2da7461fc34e7003b7ec560bdf</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Τόκοι Λογαριασμού Όψεως</act:description>
+  <act:description>Vadesiz Faizi</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¶λλα Έσοδα</act:name>
+  <act:name>Diπer Faizler</act:name>
   <act:id type="new">be17363347a8578c48cecd06bc8b7aa8</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¶λλα Έσοδα</act:description>
+  <act:description>Diπer Faizler</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Τόκοι Αποταμίευσης</act:name>
+  <act:name>Vadeli Faizi</act:name>
   <act:id type="new">2802ac0d1bff1c09a903f2ad6fde2725</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Τόκοι Αποταμίευσης</act:description>
+  <act:description>Vadeli Faizi</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¶λλα Έσοδα</act:name>
+  <act:name>Diπer Gelirler</act:name>
   <act:id type="new">49525ad0fb4ced06b9874d365d53f505</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¶λλα Έσοδα</act:description>
+  <act:description>Diπer Gelirler</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Μισθός</act:name>
+  <act:name>Maaώ</act:name>
   <act:id type="new">a750b99cb8487a5e47daedcd3a69fe85</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Μισθός</act:description>
+  <act:description>Maaώ</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Έξοδα</act:name>
+  <act:name>Giderler</act:name>
   <act:id type="new">1884bbd7394883ebafec8b9e2eb091a4</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Έξοδα</act:description>
+  <act:description>Giderler</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Προσαρμογή</act:name>
+  <act:name>Diπer</act:name>
   <act:id type="new">72f85277a7a7f8b4de175405e20d83bd</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Προσαρμογή</act:description>
+  <act:description>Diπer</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Αυτοκίνητο</act:name>
+  <act:name>Taώύt</act:name>
   <act:id type="new">56df186f1ce6114ddca7b9e5d03af390</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Αυτοκίνητο</act:description>
+  <act:description>Taώύt</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Τέλη</act:name>
+  <act:name>M.T.V. Taksitleri</act:name>
   <act:id type="new">2ff007a389bd23d8970afeba2d58c9a8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Τέλη</act:description>
+  <act:description>M.T.V. Taksitleri</act:description>
   <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Βενζίνη</act:name>
+  <act:name>Akaryakύt</act:name>
   <act:id type="new">e64b5eecf86ce4e27a64c477a4c77477</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Βενζίνη</act:description>
+  <act:description>Akaryakύt</act:description>
   <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Στάθμευση</act:name>
+  <act:name>Park</act:name>
   <act:id type="new">d72262c1c0e2c3388183ebb44a98b011</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Στάθμευση</act:description>
+  <act:description>Park</act:description>
   <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Συντήρηση</act:name>
+  <act:name>Bakύm ve Onarύm</act:name>
   <act:id type="new">665dd78f0cc75dd331f556949337de68</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Συντήρηση</act:description>
+  <act:description>Bakύm ve Onarύm</act:description>
   <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Τραπεζικά Έξοδα</act:name>
+  <act:name>Banka έώlem Masraflarύ</act:name>
   <act:id type="new">fb6c8e25a50737e70fffde432a2355ee</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Τραπεζικά Έξοδα</act:description>
+  <act:description>Banka έώlem Masraflarύ</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Βιβλία</act:name>
+  <act:name>Kitap</act:name>
   <act:id type="new">36479bbc17680f4b9663a9842736153f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Βιβλία</act:description>
+  <act:description>Kitap</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Καλωδιακές Υπηρεσίες</act:name>
+  <act:name>KabloTV/Uydu</act:name>
   <act:id type="new">a1393344fb199f08f751ac3154694e87</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Καλωδιακές Υπηρεσίες</act:description>
+  <act:description>KabloTV/Uydu</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Δωρεές</act:name>
+  <act:name>Baπύώlar</act:name>
   <act:id type="new">ec8eec3d46c69aa861fda836e11346c0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Δωρεές</act:description>
+  <act:description>Baπύώlar</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ρούχα</act:name>
+  <act:name>Giyecek</act:name>
   <act:id type="new">c27a040a73eac2688d85d29b5b5309c8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ρούχα</act:description>
+  <act:description>Giyecek</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Υπολογιστής</act:name>
+  <act:name>Bilgisayar</act:name>
   <act:id type="new">fc4390b6214ad1576c5ffffc2b3c268c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Υπολογιστής</act:description>
+  <act:description>Bilgisayar</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Γεύματα</act:name>
+  <act:name>Lokanta</act:name>
   <act:id type="new">0a59a3347e4ff02b862de41ef59d7351</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Γεύματα</act:description>
+  <act:description>Lokanta</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Εκπαίδευση</act:name>
+  <act:name>Eπitim</act:name>
   <act:id type="new">5b5ac050529b0f553752babe4a6a35d2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Εκπαίδευση</act:description>
+  <act:description>Eπitim</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Διασκέδαση</act:name>
+  <act:name>Eπlence</act:name>
   <act:id type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Διασκέδαση</act:description>
+  <act:description>Eπlence</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Μουσική/Ταινίες</act:name>
+  <act:name>Mόzik/Sinema</act:name>
   <act:id type="new">4570ea8f4ac5cbd7d8927c905f0978ae</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Μουσική/Ταινίες</act:description>
+  <act:description>Mόzik/Sinema</act:description>
   <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ψυχαγωγία</act:name>
+  <act:name>Sosyal Faaliyetler</act:name>
   <act:id type="new">7db9b0aa3bc348da9900f95fc67541a1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ψυχαγωγία</act:description>
+  <act:description>Sosyal Faaliyetler</act:description>
   <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ταξίδια</act:name>
+  <act:name>Seyahat</act:name>
   <act:id type="new">def0eac939dbd668f503d84860de8d6e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ταξίδια</act:description>
+  <act:description>Seyahat</act:description>
   <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Δώρα</act:name>
+  <act:name>Hediyeler</act:name>
   <act:id type="new">f86b1cebc619455ada23952a0e810909</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Δώρα</act:description>
+  <act:description>Hediyeler</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Παντοπωλείο</act:name>
+  <act:name>Market/Pazar</act:name>
   <act:id type="new">83bc2bd915ab6b74c7107b55f8783523</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Παντοπωλείο</act:description>
+  <act:description>Market/Pazar</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Hobbies</act:name>
+  <act:name>Hobi</act:name>
   <act:id type="new">89f6400a94cd87fea0b056faf6ab7744</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Hobbies</act:description>
+  <act:description>Hobi</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ασφάλιση</act:name>
+  <act:name>Sigorta</act:name>
   <act:id type="new">5bda5ff833bc395dc1b00f95c66ce555</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ασφάλιση</act:description>
+  <act:description>Sigorta</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ασφάλεια Αυτοκινήτου</act:name>
+  <act:name>Taώύt Sigortasύ</act:name>
   <act:id type="new">cd72695526906a15ba1a1d9a7680b8e7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ασφάλεια Αυτοκινήτου</act:description>
+  <act:description>Taώύt Sigortasύ</act:description>
   <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ασφάλεια Υγείας</act:name>
+  <act:name>Saπlύk Sigortasύ</act:name>
   <act:id type="new">d80613194a52340c9e5eb62e853c72cf</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ασφάλεια Υγείας</act:description>
+  <act:description>Saπlύk Sigortasύ</act:description>
   <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ασφάλεια Ζωής</act:name>
+  <act:name>Hayat Sigortasύ</act:name>
   <act:id type="new">70a327f54be53ef187a52b1d8df70fdd</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ασφάλεια Ζωής</act:description>
+  <act:description>Hayat Sigortasύ</act:description>
   <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Καθαριστήριο/Πλυντήριο</act:name>
+  <act:name>Temizlikηi/Kuru Temizleme</act:name>
   <act:id type="new">1006551b2458631dfc8507b7451c9631</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Καθαριστήριο/Πλυντήριο</act:description>
+  <act:description>Temizlikηi/Kuru Temizleme</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ιατρικές Δαπάνες</act:name>
+  <act:name>Saπlύk Harcamalarύ</act:name>
   <act:id type="new">62752930dd1b2b4c90c6d198bd2ff33f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ιατρικές Δαπάνες</act:description>
+  <act:description>Saπlύk Harcamalarύ</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Διάφορα</act:name>
+  <act:name>Ηeώitli</act:name>
   <act:id type="new">759deef82e73587bf48a7dd76aa6abe8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Διάφορα</act:description>
+  <act:description>Ηeώitli</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Διαδίκτυο</act:name>
+  <act:name>Internet</act:name>
   <act:id type="new">2170a1a631cc3b6fc32813fa49a12f77</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Διαδίκτυο</act:description>
+  <act:description>Internet</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Τηλέφωνο</act:name>
+  <act:name>Telefon</act:name>
   <act:id type="new">1d9d7265e25c6c84dda514d2e8899e87</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Τηλέφωνο</act:description>
+  <act:description>Telefon</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Δημόσια Μέσα Μεταφοράς</act:name>
+  <act:name>Toplu Taώύma</act:name>
   <act:id type="new">64aa760163c7768518e49a104d1c171f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Δημόσια Μέσα Μεταφοράς</act:description>
+  <act:description>Toplu Taώύma</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Συνδρομές</act:name>
+  <act:name>Abonelik/άyelik</act:name>
   <act:id type="new">0336712690d36bcb02e0ce59b5d7653b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Συνδρομές</act:description>
+  <act:description>Abonelik/άyelik</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Εφοδιασμός</act:name>
+  <act:name>Kύrtasiye</act:name>
   <act:id type="new">e2b34f49d4cf916cf4d45525e1e7319d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Εφοδιασμός</act:description>
+  <act:description>Kύrtasiye</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Φόροι</act:name>
+  <act:name>Vergiler</act:name>
   <act:id type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Φόροι</act:description>
+  <act:description>Vergiler</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Εφορία</act:name>
+  <act:name>KDV</act:name>
   <act:id type="new">090a786357463ec7fbee8066cb999097</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Εφορία</act:description>
+  <act:description>KDV</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ιατροφαρμακευτική Περίθαλψη</act:name>
+  <act:name>ΦTV/ΦέV</act:name>
   <act:id type="new">0785932c5de43e814659420762c9b577</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ιατροφαρμακευτική Περίθαλψη</act:description>
+  <act:description>ΦTV/ΦέV</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¶λλοι Φόροι</act:name>
+  <act:name>Diπer Vergiler</act:name>
   <act:id type="new">51875f8aaa0e4f2295a2ae13cf780b2e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¶λλοι Φόροι</act:description>
+  <act:description>Diπer Vergiler</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Κοινωνική Ασφάλιση</act:name>
+  <act:name>Emlak</act:name>
   <act:id type="new">c252f10f3d57dd05c500856164b1729e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Κοινωνική Ασφάλιση</act:description>
+  <act:description>Emlak</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Δήμος</act:name>
+  <act:name>Ηevre Temizlik</act:name>
   <act:id type="new">cd1f1b512ed51a069fd83a5ffcaf6e11</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Δήμος</act:description>
+  <act:description>Ηevre Temizlik</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Κοινή Ωφέλεια</act:name>
+  <act:name>Gayrύmenkul Giderleri</act:name>
   <act:id type="new">57635fa5f71dee8ffc207c277250e773</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Κοινή Ωφέλεια</act:description>
+  <act:description>Gayrύmenkul Giderleri</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ηλεκτρικό Ρεύμα</act:name>
+  <act:name>Elektrik</act:name>
   <act:id type="new">2fe462e202e2daffd845359b08a7eefe</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ηλεκτρικό Ρεύμα</act:description>
+  <act:description>Elektrik</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Αποκομιδή σκουπιδιών</act:name>
+  <act:name>Kapύcύ</act:name>
   <act:id type="new">2d0315d7b2f8f11a8a8b32d805bca6eb</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Αποκομιδή σκουπιδιών</act:description>
+  <act:description>Kapύcύ</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Γκάζι</act:name>
+  <act:name>D.Gaz</act:name>
   <act:id type="new">dcc33ce7edf402e327318aa1890d35ea</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Γκάζι</act:description>
+  <act:description>D.Gaz</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Νερό</act:name>
+  <act:name>Su</act:name>
   <act:id type="new">8cdc91b733444f9f0dfae9773b8f408c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Νερό</act:description>
+  <act:description>Su</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Καθαρή Θέση</act:name>
+  <act:name>Sermaye</act:name>
   <act:id type="new">3ab6a6d97b216c11333e48aa2b749a91</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Καθαρή Θέση</act:description>
+  <act:description>Sermaye</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Αρχικά Υπόλοιπα</act:name>
+  <act:name>Aηύlύώ Bakiyeleri</act:name>
   <act:id type="new">a0a622a30410f75eba35d2875a843da8</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Αρχικά Υπόλοιπα</act:description>
+  <act:description>Aηύlύώ Bakiyeleri</act:description>
   <act:parent type="new">3ab6a6d97b216c11333e48aa2b749a91</act:parent>
 </gnc:account>
 </gnc-account-example>
