@@ -22,8 +22,8 @@
     <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder">
         <separator name="ActionsSep1"/>
-	<menuitem name="ActionsReconcile" action="ActionsReconcileAction"/>
 	<menuitem name="ActionsTransfer" action="ActionsTransferAction"/>
+	<menuitem name="ActionsReconcile" action="ActionsReconcileAction"/>
 	<menuitem name="ActionsStockSplit" action="ActionsStockSplitAction"/>
 	<menuitem name="ActionLots" action="ActionsLotsAction"/>
 	<separator name="ActionsSep2"/>
