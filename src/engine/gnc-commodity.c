@@ -1451,7 +1451,7 @@ ct_helper(gpointer key, gpointer value, gpointer data)
   GCache *str_cache = gnc_engine_get_string_cache ();
   gnc_commodity_namespace * ns = value;
 
-  g_hash_table_foreach_remove(ns->table, ns_helper, NULL);
+  g_hash_table_foreach_remove(ns->table, ns_helper, str_cache);
   g_hash_table_destroy(ns->table);
   ns->table = NULL;
   g_cache_remove (str_cache, ns->namespace);
@@ -1465,7 +1465,7 @@ gnc_commodity_table_destroy(gnc_commodity_table * t)
   if (!t) return;
   ENTER ("table=%p", t);
   
-  g_hash_table_foreach_remove(t->table, ct_helper, t);
+  g_hash_table_foreach_remove(t->table, ct_helper, NULL);
   g_hash_table_destroy(t->table);
   t->table = NULL;
   g_free(t);
