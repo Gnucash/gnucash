@@ -1,4 +1,4 @@
-SUBDIRS = . test 
+SUBDIRS = . test-core test 
 
 pkglib_LTLIBRARIES = libgncmod-engine.la
 

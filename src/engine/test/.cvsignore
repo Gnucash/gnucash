@@ -1,5 +1,6 @@
 Makefile
-test-load-engine
+Makefile.in
 .deps
 .libs
-Makefile.in
+test-load-engine
+test-commodities

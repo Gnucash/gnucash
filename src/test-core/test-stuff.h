@@ -118,4 +118,12 @@ void failure_args(
 		const char *format,
 		... );
 
+gboolean get_random_boolean(void);
+gint get_random_int_in_range(int start, int end);
+gchar get_random_character(void);
+gchar* get_random_string(void);
+gint64 get_random_gint64(void);
+double get_random_double(void);
+const char* get_random_string_in_array(const char* str_list[]);
+
 #endif /* TEST_STUFF_H */

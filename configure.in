@@ -635,6 +635,7 @@ AC_OUTPUT(
           src/doc/design/Makefile
           src/engine/Makefile
           src/engine/test/Makefile
+          src/engine/test-core/Makefile
           src/experimental/Makefile
           src/experimental/cbb/Makefile
           src/experimental/cbb/cbb-engine/Makefile

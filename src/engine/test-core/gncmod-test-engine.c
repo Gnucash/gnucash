@@ -1,6 +1,6 @@
 /*********************************************************************
- * gncmod-test.c
- * module definition/initialization for the test infrastructure 
+ * gncmod-test-engine.c
+ * module definition/initialization for the engine test infrastructure 
  * 
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
@@ -21,12 +21,12 @@ int gnc_module_age      = 0;
 
 char *
 gnc_module_path(void) {
-  return g_strdup("gnucash/test");
+  return g_strdup("gnucash/engine/test");
 }
 
 char * 
 gnc_module_description(void) {
-  return g_strdup("Basic GnuCash test infrastructure.");
+  return g_strdup("GnuCash Engine test infrastructure.");
 }
 
 int
