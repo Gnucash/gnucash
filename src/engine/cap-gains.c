@@ -378,8 +378,9 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
       acc = split->acc;
       xaccAccountBeginEdit (acc);
       gnc_lot_add_split (lot, split);
-      PINFO ("simple added split to lot, new lot baln=%s", 
-           gnc_numeric_to_string (gnc_lot_get_balance(lot)));
+      PINFO ("simple added split to lot, new lot baln=%s (%s)", 
+           gnc_numeric_to_string (gnc_lot_get_balance(lot)),
+           gnc_lot_get_title (lot));
       xaccAccountCommitEdit (acc);
       return NULL;
    }
@@ -403,7 +404,9 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
    cmp = gnc_numeric_compare (gnc_numeric_abs(split->amount),
                                         gnc_numeric_abs(baln));
 
-   PINFO ("found open lot with baln=%s", gnc_numeric_to_string (baln));
+   PINFO ("found open lot with baln=%s (%s)", gnc_numeric_to_string (baln),
+                                              gnc_lot_get_title (lot));
+
    /* cmp == -1 if amt < baln, ==0 if amt==baln */
    if (0 >= cmp) 
    {
@@ -423,7 +426,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
       Split * new_split;
       gnc_numeric amt_a, amt_b, amt_tot;
       gnc_numeric val_a, val_b, val_tot;
-      gnc_numeric tmp;
+      gnc_numeric frac;
       Transaction *trans;
       Timespec ts;
 
@@ -436,7 +439,8 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
       amt_a = gnc_numeric_neg (baln);
       amt_b = gnc_numeric_sub_fixed (amt_tot, amt_a);
 
-      PINFO ("++++++++++++++ splitting split into amt = %s + %s",
+      PINFO ("++++++++++++++ splitting split=%p into amt = %s + %s",
+              split,
               gnc_numeric_to_string(amt_a),
               gnc_numeric_to_string(amt_b) );
 
@@ -444,13 +448,12 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
        * i.e. so that (amt_a / amt_tot) = (val_a / val_tot)
        */
       val_tot = split->value;
-      val_a = gnc_numeric_mul (amt_a, val_tot, 
+      frac = gnc_numeric_div (amt_a, amt_tot, 
                         GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-      tmp = gnc_numeric_div (val_a, amt_tot, 
+      val_a = gnc_numeric_mul (frac, val_tot, 
                         gnc_numeric_denom(val_tot), 
                         GNC_HOW_RND_ROUND| GNC_HOW_DENOM_EXACT);
 
-      val_a = tmp;
       val_b = gnc_numeric_sub_fixed (val_tot, val_a);
       if (gnc_numeric_check(val_a))
       {
@@ -550,7 +553,7 @@ xaccSplitAssign (Split *split)
 
    if (!split) return FALSE;
 
-   ENTER ("split=%p", split);
+   ENTER ("(split=%p)", split);
 
    /* If this split already belongs to a lot, we are done. */
    if (split->lot) return FALSE;
@@ -571,14 +574,14 @@ xaccSplitAssign (Split *split)
      if (!lot)
      {
         lot = MakeDefaultLot (acc);
-        PINFO ("start new lot");
+        PINFO ("start new lot (%s)", gnc_lot_get_title(lot));
      }
      split = xaccSplitAssignToLot (split, lot);
      if (split) splits_split_up = TRUE;
    }
    xaccAccountCommitEdit (acc);
 
-   LEAVE ("split_up=%d", splits_split_up);
+   LEAVE (" split_up=%d", splits_split_up);
    return splits_split_up;
 }
 
@@ -615,6 +618,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    gnc_commodity *currency = NULL;
    gnc_numeric zero = gnc_numeric_zero();
    gnc_numeric value = zero;
+   gnc_numeric frac;
    gnc_numeric opening_amount, opening_value;
    gnc_commodity *opening_currency;
 
@@ -627,10 +631,6 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    ENTER ("(split=%p gains=%p status=0x%x lot=%s)", split, 
        split->gains_split, split->gains,
        kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
-
-PINFO ("duude split amt=%s val=%s \n",
-          gnc_numeric_to_string (split->amount),
-          gnc_numeric_to_string (split->value));
 
    /* Make sure the status flags and pointers are initialized */
    if (GAINS_STATUS_UNKNOWN == split->gains) xaccSplitDetermineGainStatus(split);
@@ -723,10 +723,6 @@ PINFO ("duude split amt=%s val=%s \n",
    pcy->PolicyGetLotOpening (pcy, lot, &opening_amount, &opening_value,
        &opening_currency);
 
-PINFO ("duude lot opener amt=%s val=%s \n",
-          gnc_numeric_to_string (opening_amount),
-          gnc_numeric_to_string (opening_value));
-
    /* Check to make sure the lot-opening currency and this split
     * use the same currency */
    if (FALSE == gnc_commodity_equiv (currency, opening_currency))
@@ -766,10 +762,10 @@ PINFO ("duude lot opener amt=%s val=%s \n",
     * cost_basis = purchase_price * current_amount
     * cap_gain = current_value - cost_basis 
     */
-   value = gnc_numeric_mul (opening_value, split->amount,
+   frac = gnc_numeric_div (split->amount, opening_amount, 
                             GNC_DENOM_AUTO, 
-                            GNC_HOW_RND_NEVER|GNC_HOW_DENOM_REDUCE);
-   value = gnc_numeric_div (value, opening_amount, 
+                            GNC_HOW_DENOM_REDUCE);
+   value = gnc_numeric_mul (frac, opening_value, 
                             gnc_numeric_denom(opening_value), 
                             GNC_HOW_DENOM_EXACT|GNC_HOW_RND_ROUND);
    value = gnc_numeric_sub (value, split->value,
