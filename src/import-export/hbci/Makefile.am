@@ -4,11 +4,11 @@ pkglib_LTLIBRARIES = libgncmod-hbci.la
 
 libgncmod_hbci_la_SOURCES = \
   gncmod-hbci.c \
-  druid-hbci-initial.c \
-  druid-hbci-final.c \
+  druid-hbci-utils.c \
   gnc-hbci-kvp.c \
+  gnc-hbci-utils.c \
   hbci-account-picker.c \
-  gnc-hbci-utils.c
+  druid-hbci-initial.c 
 
 noinst_HEADERS = 
 

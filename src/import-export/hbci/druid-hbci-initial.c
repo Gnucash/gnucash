@@ -28,6 +28,7 @@
 #include <unistd.h>
 
 #include "druid-hbci-initial.h"
+#include "druid-hbci-utils.h"
 #include "gnc-hbci-kvp.h"
 #include "hbci-account-picker.h"
 #include "gnc-hbci-utils.h"
@@ -47,6 +48,8 @@
 /* #include "io-example-account.h" */
 /* #include "top-level.h" */
 #include <openhbci/api.h>
+#include <openhbci/outboxjobs.h>
+
 
 struct _hbciinitialinfo 
 {
@@ -130,30 +133,111 @@ delete_initial_druid (HBCIInitialInfo *info)
 }
 
 
-static void
-account_GHFunc (gpointer key, gpointer value, gpointer user_data)
+/*******************************************************************
+ * update_accountlist widget
+ */
+static gpointer
+update_accountlist_acc_cb (const HBCI_Account *hacc, gpointer user_data)
 {
-  HBCI_Account *hbci_acc = key;
-  Account *gnc_acc = value;
-  g_assert(hbci_acc);
-  g_assert(gnc_acc);
+  HBCIInitialInfo *info = user_data;
+  gchar *row_text[3];
+  Account *gacc;
+  int row;
+  gint *row_key;
+
+  g_assert(hacc);
+  g_assert(info);
+  row_text[2] = "";
   
-  gnc_hbci_set_account_accountid 
-    (gnc_acc, HBCI_Account_accountId (hbci_acc));
-  gnc_hbci_set_account_bankcode
-    (gnc_acc, HBCI_Bank_bankCode(HBCI_Account_bank(hbci_acc)));
-  gnc_hbci_set_account_countrycode
-    (gnc_acc, HBCI_Bank_countryCode(HBCI_Account_bank(hbci_acc)));
+  /* Account code, then Bank name, then Bank code in parentheses. */
+  row_text[0] = 
+    g_strdup_printf("%s at %s (code %s)",
+		    HBCI_Account_accountId (hacc),
+		    HBCI_Bank_name (HBCI_Account_bank (hacc)),
+		    HBCI_Bank_bankCode (HBCI_Account_bank (hacc)));
+		
+  /* Get corresponding gnucash account */
+  gacc = g_hash_table_lookup (info->gnc_hash, hacc);
+
+  /* Build the text for the gnucash account. */
+  if (gacc == NULL)
+    row_text[1] = "";
+  else 
+    row_text[1] = 
+      xaccAccountGetFullName (gacc, gnc_get_account_separator ());
+
+  /* Add this row to the list */
+  row = gtk_clist_append (GTK_CLIST (info->accountlist), row_text);
+
+  /* Set the "new" checkbox. */
+  gnc_clist_set_check (GTK_CLIST (info->accountlist), row, 2,
+		       FALSE);
+
+  /* Store the row_number -> hbci_account hash reference. */
+  row_key = g_new(gint, 1);
+  *row_key = row;
+  g_hash_table_insert (info->hbci_hash, row_key, (HBCI_Account*)hacc);
+
+  return NULL;
+}
+static gpointer
+update_accountlist_bankcb (const HBCI_Bank *bank, gpointer user_data)
+{
+  g_assert(bank);
+
+  return list_HBCI_Account_foreach (HBCI_Bank_accounts (bank),
+				    &update_accountlist_acc_cb,
+				    user_data);
 }
 
-/* hash is a DIRECT hash from each HBCI account to each gnucash
-   account. */
+/* Update the account list GtkCList widget */
 static void
-accounts_save_kvp (GHashTable *hash)
+update_accountlist (HBCIInitialInfo *info)
 {
-  g_assert(hash);
-  g_hash_table_foreach (hash, &account_GHFunc, NULL);
+  const list_HBCI_Bank *banklist;
+  int sel_row = 0;
+
+  g_assert(info);
+  g_assert(info->api);
+  g_assert(info->gnc_hash);
+
+  banklist = HBCI_API_bankList (info->api);
+  //printf("%d banks found.\n", list_HBCI_Bank_size (banklist));
+  if (list_HBCI_Bank_size (banklist) == 0) 
+    return;
+
+  /* Store old selected row here. */
+  sel_row = (GTK_CLIST(info->accountlist))->focus_row;
+
+  /* Delete old list */
+  gtk_clist_freeze (GTK_CLIST (info->accountlist));
+  gtk_clist_clear (GTK_CLIST (info->accountlist));
+
+  /* Delete old hash with row_number -> hbci_account */
+  delete_hash (info->hbci_hash);
+  info->hbci_hash = g_hash_table_new (&g_int_hash, &g_int_equal);
+  g_hash_table_freeze (info->hbci_hash);
+  
+  /* Go through all HBCI banks */
+  list_HBCI_Bank_foreach (banklist, 
+			  &update_accountlist_bankcb,
+			  info);
+
+  //printf("HBCI hash has %d entries.\n", g_hash_table_size(info->hbci_hash));
+  //printf("GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash));
+  
+  g_hash_table_thaw (info->hbci_hash);
+  gtk_clist_thaw (GTK_CLIST (info->accountlist));
+
+  /* move to the old selected row */
+  (GTK_CLIST(info->accountlist))->focus_row = sel_row;
+  gtk_clist_moveto(GTK_CLIST(info->accountlist), sel_row, 0, 0.0, 0.0);
 }
+/*
+ * end update_accountlist 
+ *******************************************************************/
+
+
 
 
 static void
@@ -177,22 +261,6 @@ on_finish (GnomeDruidPage *gnomedruidpage,
   delete_initial_druid(info);
 }
 
-static gpointer 
-count_accounts_cb (const HBCI_Bank *bank,
-		   gpointer user_data)
-{
-  int *counter = user_data;
-  *counter += list_HBCI_Account_size (HBCI_Bank_accounts (bank));
-  return NULL;
-}
-
-static int
-count_accounts (const list_HBCI_Bank *banklist) 
-{
-  int accounts;
-  list_HBCI_Bank_foreach (banklist, &count_accounts_cb, &accounts);
-  return accounts;
-}
 
 static gboolean 
 on_configfile_next (GnomeDruidPage *gnomedruidpage,
@@ -202,30 +270,19 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
   HBCIInitialInfo *info = user_data;
   char *filename;
   HBCI_API *api;
-  gboolean createnew;
   
   filename = g_strstrip(gnome_file_entry_get_full_path 
 			(GNOME_FILE_ENTRY (info->configfileentry), FALSE));
 
-  if (!g_file_test (filename, G_FILE_TEST_ISFILE | G_FILE_TEST_ISLINK)) {
-    createnew = gnc_verify_dialog_parented
-      (GTK_WIDGET (info->window), 
-       TRUE,
-       _("The file %s does not exist. \nWould you like to create it now?\n (not yet implemented)"), 
-       filename ? filename : _("(null"));
-    if (!createnew) {
-      free (filename);
-      return TRUE;
-    }
-    // FIXME: create file here
+  if (!gnc_verify_exist_or_new_file (GTK_WIDGET (info->window), filename)) {
+    g_free (filename);
+    return TRUE;
   }
+  // file doesn't need to be created here since OpenHBCI will create
+  // it automatically.
 
-  if (!g_file_test (filename, G_FILE_TEST_ISFILE | G_FILE_TEST_ISLINK)) {
-    gnc_error_dialog_parented
-      (GTK_WINDOW (info->window), 
-       _("The file %s does not exist."), 
-       filename ? filename : _("(null"));
-    free (filename);
+  if (!gnc_test_dir_exist_error (GTK_WINDOW (info->window), filename)) {
+    g_free (filename);
     return TRUE;
   }
   
@@ -239,36 +296,41 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
     info->api = NULL;
   }
 
+  /* Create new HBCI_API object, loading its data from filename */
   api = gnc_hbci_api_new (filename);
-  free (filename);
+  g_free (filename);
   info->api = api;
   
   /* Get HBCI bank and account list */
   {
     const list_HBCI_Bank *banklist;
-    int accounts;
 
     banklist = HBCI_API_bankList (api);
     //printf("%d banks found.\n", list_HBCI_Bank_size (banklist));
     if (list_HBCI_Bank_size (banklist) == 0) {
+      // Zero banks? go to next page (create_bank)
       return FALSE;
     }
 
-    accounts = count_accounts(banklist);
-    //printf("%d accounts found.\n", accounts);
-    
-    if (accounts > 0){
+    if (HBCI_API_totalUsers(api) == 0) {
+      // zero users? go to user-creation page
       gnome_druid_set_page (GNOME_DRUID (info->druid), 
-			    GNOME_DRUID_PAGE (info->accountpage));
+			    GNOME_DRUID_PAGE (info->userpage));
       return TRUE;
+    }
+    
+    if (HBCI_API_totalAccounts(api) == 0) {
+      // still no accounts? call account_update 
+      update_accounts (api);
     }
   }
 
-  return FALSE;
+  // accounts already exist? Then go to account matching page
+  gnome_druid_set_page (GNOME_DRUID (info->druid), 
+			GNOME_DRUID_PAGE (info->accountpage));
+  return TRUE;
 }
 
-
-  
 
 static gboolean
 on_userid_next (GnomeDruidPage  *gnomedruidpage,
@@ -280,53 +342,123 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
   int countrycode = 0;
   const char *ipaddr = NULL;//, *port;
   const char *userid = NULL;
+  const char *customerid = NULL;
   HBCI_API *api = info->api;
   HBCI_Bank *bank = NULL;
   const HBCI_User *user = NULL;
-  gboolean is_rdh;
-  const char *mediumpath;
     
   bankcode = gtk_entry_get_text (GTK_ENTRY (info->bankcode));
   countrycode = atoi (gtk_entry_get_text (GTK_ENTRY (info->countrycode)));
   
   ipaddr = gtk_entry_get_text (GTK_ENTRY (info->ipaddr));
-  //port = gtk_entry_get_text (GTK_ENTRY (info->port));
   
   userid = gtk_entry_get_text (GTK_ENTRY (info->userid));
+  customerid = gtk_entry_get_text (GTK_ENTRY (info->customerid));
 
   //printf("Got bankcode %s and userid %s.\n", bankcode, userid);
 
   bank = HBCI_API_findBank(api, countrycode, bankcode);
   if (bank == NULL) {
-    printf("No bank with code %s found.\n", bankcode);
-    /*HBCI_API_delete(api);
-      info->api = NULL;*/
-    return FALSE;
+    printf("on_userid_next: Creating bank with code %s.\n", bankcode);
+    bank = HBCI_API_bankFactory (api, countrycode, bankcode, ipaddr);
+    HBCI_API_addBank (api, bank, TRUE);
   } 
-  printf("Found bank, name %s.\n", HBCI_Bank_name(bank));
+  else {
+    printf("on_userid_next: Found bank, name %s.\n", HBCI_Bank_name(bank));
+  };
   
   user = HBCI_Bank_findUser(bank, userid);
   if (user == NULL) {
-    printf("No user with userid %s found.\n", userid);
-    /*HBCI_API_delete(api);
-      info->api = NULL; */
-    return FALSE;
-  }
-  printf("Found user, name %s.\n", HBCI_User_userName(user));
-  
-  /*info->api = api;*/
-  
-  is_rdh = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (info->mediumrdh));
-  mediumpath = gnome_file_entry_get_full_path 
-    (GNOME_FILE_ENTRY (info->mediumpath), FALSE);
+    gboolean is_rdh, mount_test;
+    HBCI_Medium *medium;
+    HBCI_User *newuser;
+    HBCI_Customer *cust;
 
-  if (is_rdh) {
-    gnome_druid_set_page (GNOME_DRUID (info->druid), 
-			  GNOME_DRUID_PAGE (info->serverpage));
-    /* create new medium here */
-    return TRUE;
-  }
+    printf("on_userid_next: Didn't find user with userid %s.\n", userid);
+    is_rdh = gtk_toggle_button_get_active 
+      (GTK_TOGGLE_BUTTON (info->mediumrdh));
+
+    if (is_rdh) {
+      /* Create RDH Medium */ 
+      char *mediumpath;
+
+      mediumpath = gnome_file_entry_get_full_path 
+	(GNOME_FILE_ENTRY (info->mediumpath), FALSE);
+
+      // Some sanity checks on the filename
+      if (!gnc_verify_exist_or_new_file 
+	  (GTK_WIDGET (info->window), mediumpath)) {
+	g_free (mediumpath);
+	return TRUE;
+      }
+      if (!gnc_test_dir_exist_error (GTK_WINDOW (info->window), 
+				     mediumpath)) {
+	g_free (mediumpath);
+	return TRUE;
+      }
+      printf("on_userid_next: About to Create user with RDH medium and userid %s.\n", userid);
+      medium = HBCI_API_createNewMedium (api, 
+					 countrycode, bankcode, userid, 
+					 mediumpath, HBCI_SECURITY_RDH);
+      printf("on_userid_next: Created user with RDH medium and userid %s.\n", userid);
+      g_free(mediumpath);
+      g_assert(medium);
+      newuser = HBCI_API_userFactory (bank, medium, TRUE, userid);
+      g_assert(newuser);
+      HBCI_Bank_addUser (bank, newuser, TRUE);
+
+      mount_test = HBCI_Medium_mountMedium (medium, newuser);
+      HBCI_Medium_unmountMedium (medium);
+      if (mount_test) {
+	printf("on_userid_next: Mounting RDH medium was successful.\n");
+      } 
+      else {
+	printf("on_userid_next: Mounting RDH medium failed.\n");
+	return TRUE;
+      }
+      
+      cust = HBCI_API_customerFactory (newuser, customerid, 
+				       "Default Customer");
+      g_assert (cust);
+      HBCI_User_addCustomer (newuser, cust, TRUE);
+      
+      gnome_druid_set_page (GNOME_DRUID (info->druid), 
+			    GNOME_DRUID_PAGE (info->serverpage));
+      return TRUE;
+      
+    }
+
+    // DDV Medium
+    medium = HBCI_API_createNewMedium (api, 
+				       countrycode, bankcode, userid, 
+				       "", HBCI_SECURITY_DDV);
+    g_assert(medium);
+    printf("on_userid_next: Creating user with DDV medium and userid %s.\n", userid);
+    newuser = HBCI_API_userFactory (bank, medium, TRUE, userid);
+    g_assert(newuser);
+    HBCI_Bank_addUser (bank, newuser, TRUE);
+
+    mount_test = HBCI_Medium_mountMedium (medium, newuser);
+    HBCI_Medium_unmountMedium (medium);
+    if (mount_test) {
+      printf("on_userid_next: Mounting DDV medium was successful.\n");
+    }
+    else {
+      printf("on_userid_next: Mounting DDV medium failed.\n");
+      return TRUE;
+    }
     
+    cust = HBCI_API_customerFactory (newuser, customerid, 
+				     "Default Customer");
+    g_assert (cust);
+    HBCI_User_addCustomer (newuser, cust, TRUE);
+    return FALSE;
+
+  }
+  else {
+    printf("on_userid_next: Found user, name %s.\n", HBCI_User_userName(user));
+  }
+  
   return FALSE;
 }
 
@@ -377,142 +509,6 @@ on_iniletter_user_next (GnomeDruidPage  *gnomedruidpage,
   return FALSE;
 }
 
-/* Update the account list GtkCList widget */
-static void
-update_accountlist (HBCIInitialInfo *info)
-{
-  const list_HBCI_Bank *banklist;
-  list_HBCI_Bank_iter *iter, *iterend;
-  gchar *row_text[3];
-  int row;
-  gint *row_key;
-  const HBCI_Account *hacc;
-  Account *gacc;
-  const list_HBCI_Account *acclist;
-  list_HBCI_Account_iter *aiter, *aiterend;
-  int sel_row = 0;
-
-  g_assert(info);
-  g_assert(info->api);
-  g_assert(info->gnc_hash);
-
-  banklist = HBCI_API_bankList (info->api);
-  //printf("%d banks found.\n", list_HBCI_Bank_size (banklist));
-  if (list_HBCI_Bank_size (banklist) == 0) 
-    return;
-
-  /* Store old selected row here. */
-  sel_row = (GTK_CLIST(info->accountlist))->focus_row;
-
-  /* Delete old list */
-  gtk_clist_freeze (GTK_CLIST (info->accountlist));
-  gtk_clist_clear (GTK_CLIST (info->accountlist));
-  row_text[2] = "";
-
-  /* Delete old row_number -> hbci_account hash */
-  delete_hash (info->hbci_hash);
-  info->hbci_hash = g_hash_table_new (&g_int_hash, &g_int_equal);
-  g_hash_table_freeze (info->hbci_hash);
-  
-  /* Go through all HBCI banks */
-  iter = list_HBCI_Bank_begin (banklist);
-  iterend = list_HBCI_Bank_end (banklist);
-  for ( ; ! list_HBCI_Bank_iter_equal(iter, iterend) ; 
-	list_HBCI_Bank_iter_next (iter)) {
-    acclist = HBCI_Bank_accounts (list_HBCI_Bank_iter_get (iter));
-    if (list_HBCI_Account_size (acclist) > 0) {
-      /* Now go through all HBCI accounts of this HBCI bank */
-      aiter = list_HBCI_Account_begin (acclist);
-      aiterend = list_HBCI_Account_end (acclist);
-      for ( ; ! list_HBCI_Account_iter_equal(aiter, aiterend) ; 
-	    list_HBCI_Account_iter_next (aiter)) {
-	/* Now add this HBCI account to the CList widget */
-	hacc = list_HBCI_Account_iter_get(aiter);
-
-	/* Account code, then Bank name, then Bank code in parentheses. */
-	row_text[0] = 
-	  g_strdup_printf("%s at %s (code %s)",
-			  HBCI_Account_accountId (hacc),
-			  HBCI_Bank_name (HBCI_Account_bank (hacc)),
-			  HBCI_Bank_bankCode (HBCI_Account_bank (hacc)));
-		
-	/* Get corresponding gnucash account */
-	gacc = g_hash_table_lookup (info->gnc_hash, hacc);
-
-	/* Build the text for the gnucash account. */
-	if (gacc == NULL)
-	  row_text[1] = "";
-	else 
-	  row_text[1] = 
-	    xaccAccountGetFullName (gacc, gnc_get_account_separator ());
-
-	/* Add this row to the list */
-	row = gtk_clist_append (GTK_CLIST (info->accountlist), row_text);
-
-	/* Set the "new" checkbox. */
-	gnc_clist_set_check (GTK_CLIST (info->accountlist), row, 2,
-			     FALSE);
-
-	/* Store the row_number -> hbci_account hash reference. */
-	row_key = g_new(gint, 1);
-	*row_key = row;
-	g_hash_table_insert (info->hbci_hash, row_key, (HBCI_Account*)hacc);
-      }
-      list_HBCI_Account_iter_delete (aiter);
-      list_HBCI_Account_iter_delete (aiterend);
-    }
-  }
-  list_HBCI_Bank_iter_delete (iter);
-  list_HBCI_Bank_iter_delete (iterend);
-
-  //printf("HBCI hash has %d entries.\n", g_hash_table_size(info->hbci_hash));
-  //printf("GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash));
-  
-  g_hash_table_thaw (info->hbci_hash);
-  gtk_clist_thaw (GTK_CLIST (info->accountlist));
-
-  /* move to the old selected row */
-  (GTK_CLIST(info->accountlist))->focus_row = sel_row;
-  gtk_clist_moveto(GTK_CLIST(info->accountlist), sel_row, 0, 0.0, 0.0);
-}
-
-
-struct hbci_acc_cb_data 
-{
-  HBCI_API *api;
-  GHashTable *hash;
-};
-
-static gpointer 
-hbci_accountcallback (Account *gnc_acc, gpointer user_data)
-{
-  struct hbci_acc_cb_data *data = user_data;
-  HBCI_Account *hbci_acc = NULL;
-
-  hbci_acc = (HBCI_Account *) gnc_hbci_get_hbci_acc (data->api, gnc_acc);
-  if (hbci_acc) {
-    g_hash_table_insert (data->hash, hbci_acc, gnc_acc);
-  }
-  return NULL;
-}
-
-static GHashTable *
-gnc_hbci_new_hash_from_kvp (HBCI_API *api)
-{
-  GHashTable *hash;
-
-  hash = g_hash_table_new (&g_direct_hash, &g_direct_equal);
-  if (api) {
-    struct hbci_acc_cb_data data;
-    AccountGroup *grp = gnc_book_get_group (gnc_get_current_book ());
-    data.api = api;
-    data.hash = hash;
-    xaccGroupForEachAccount (grp, 
-			     &hbci_accountcallback,
-			     &data, TRUE);
-  }
-  return hash;
-}
 
 
 static void
@@ -565,15 +561,17 @@ on_button_clicked (GtkButton *button,
   g_assert(info->userpage);
   
   name = gtk_widget_get_name (GTK_WIDGET (button));
-  if (strcmp(name, "addbank_button")) {
+  if (strcmp (name, "addbank_button") == 0) {
     gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			  GNOME_DRUID_PAGE (info->bankpage));
-  } else if (strcmp(name, "adduser_button")) {
+  } else if (strcmp (name, "adduser_button") == 0) {
     gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			  GNOME_DRUID_PAGE (info->userpage));
-  } else if (strcmp(name, "updatelist_button")) {
-    gnome_druid_set_page (GNOME_DRUID (info->druid), 
-			  GNOME_DRUID_PAGE (info->accountpage));
+  } else if (strcmp (name, "updatelist_button") == 0) {
+    update_accounts (info->api);
+    // Nothing else to do.
+    //gnome_druid_set_page (GNOME_DRUID (info->druid), 
+    //		  GNOME_DRUID_PAGE (info->accountpage));
   } else {
     printf("on_button_clicked: Oops, unknown button: %s\n",
 	   name);

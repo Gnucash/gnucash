@@ -11,8 +11,8 @@
 
 
   (gnc:add-extension
-   (gnc:make-menu-item (N_ "Initial HBCI Setup")
-		       (N_ "Initial HBCI Setup")
+   (gnc:make-menu-item (N_ "HBCI Setup")
+		       (N_ "HBCI Setup")
 		       (list "_Tools" "HBCI" "")
 		       (lambda ()
 			 (gnc:hbci-initial-setup))))

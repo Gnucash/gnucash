@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-hbci-utils.h -- hbci utility functions                       *
+ * druid-hbci-utils.h -- hbci  creation functionality               *
  * Copyright (C) 2002 Christian Stimming                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,33 +20,35 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef GNC_HBCI_UTILS_H
-#define GNC_HBCI_UTILS_H
+#ifndef DRUID_HBCI_UTILS_H
+#define DRUID_HBCI_UTILS_H
 
-#include <glib.h>
-#include <openhbci/account.h>
+#include <gnome.h>
 #include <openhbci/api.h>
-#include "Account.h"
-#include "gnc-book.h"
-
-/* Create a new HBCI_API and let it load its environment from the
- * configuration file filename. If the file doesn't exist, this
- * function returns NULL. If the file exists, but OpenHBCI encountered
- * an error upon opening, then an error will be displayed, and NULL
- * will be returned.*/
-HBCI_API * gnc_hbci_api_new (const char *filename);
-
-/* Same as above, but takes the filename already from the current
-   book's kvp frame. */ 
-HBCI_API * gnc_hbci_api_new_currentbook (void);
 
 
-/* Get the corresponding HBCI account to a gnucash account. Of course
- * this only works after the gnucash account has been set up for HBCI
- * use, i.e. the kvp_frame "hbci/..." have been filled with
- * information. Returns NULL if no HBCI_Account was found. */
-const HBCI_Account *
-gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc);
+/** Save the reference strings to the HBCI accounts in the kvp's of
+ * the gnucash accounts. */
+void accounts_save_kvp (GHashTable *hash);
+
+
+/** Update the account list in the banks stored in this
+ * HBCI_API. Straightforward, if we have only one bank and one user
+ * with one customer. All other cases are not currently
+ * implemented. */
+void update_accounts (HBCI_API *api);
+
+/** Builds a new hash table mapping all HBCI accounts to Gnucash
+ * accounts, where the Gnucash accounts already have the reference
+ * strings stored in their kvp's. */
+GHashTable *
+gnc_hbci_new_hash_from_kvp (HBCI_API *api);
+
+gboolean 
+gnc_verify_exist_or_new_file (GtkWidget *parent, const char *filename);
+
+gboolean
+gnc_test_dir_exist_error (GtkWindow *parent, const char *filename);
 
 
 #endif

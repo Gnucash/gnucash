@@ -94,27 +94,3 @@ gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc)
   } /* bankcode */
   return NULL;
 }
-
-
-gpointer
-list_HBCI_Bank_foreach (const list_HBCI_Bank *banklist, 
-			BankCallback thunk,
-			gpointer user_data)
-{
-  list_HBCI_Bank_iter *iter, *iterend;
-  gpointer ret = NULL;
-  
-  iter = list_HBCI_Bank_begin (banklist);
-  iterend = list_HBCI_Bank_end (banklist);
-  for ( ; ! list_HBCI_Bank_iter_equal(iter, iterend) ; 
-	list_HBCI_Bank_iter_next (iter)) {
-    ret =(*thunk)(list_HBCI_Bank_iter_get (iter), user_data);
-    if (ret) 
-      break;
-  }
-  list_HBCI_Bank_iter_delete (iter);
-  list_HBCI_Bank_iter_delete (iterend);
-
-  return ret;
-}
-
