@@ -193,6 +193,7 @@ adjBWindow(Account *account)
     GtkWidget *hbox, *vbox;
     GtkWidget *amount, *date;
     GtkWidget *label;
+    gchar *currency_symbol;
     gchar *string;
 
     hbox = gtk_hbox_new(FALSE, 5);
@@ -203,12 +204,15 @@ adjBWindow(Account *account)
     vbox = gtk_vbox_new(TRUE, 3);
 
     /* Date label */
-    label = gtk_label_new(DATE_STR);
+    string = g_strconcat(DATE_STR, ":", NULL);
+    label = gtk_label_new(string);
+    g_free(string);
     gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
     gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
 
     /* new balance label */
-    string = g_strconcat(NEW_BALN_STR, " ", CURRENCY_SYMBOL, NULL);
+    currency_symbol = gnc_localeconv()->currency_symbol;
+    string = g_strconcat(NEW_BALN_STR, ": ", currency_symbol, NULL);
     label = gtk_label_new(string);
     g_free(string);
     gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);

@@ -199,9 +199,11 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
 
     {
       GtkWidget *amount;
-      gchar * string;
+      gchar *currency_symbol;
+      gchar *string;
 
-      string = g_strconcat(AMOUNT_C_STR, " ", CURRENCY_SYMBOL, NULL);
+      currency_symbol = gnc_localeconv()->currency_symbol;
+      string = g_strconcat(AMOUNT_C_STR, " ", currency_symbol, NULL);
       label = gtk_label_new(string);
       g_free(string);
       gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
