@@ -1,6 +1,6 @@
 /*
  * gncJob.h -- the Core Job Interface
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001, 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -10,7 +10,7 @@
 typedef struct _gncJob GncJob;
 
 #include "gncAddress.h"
-#include "gncCustomer.h"
+#include "gncOwner.h"
 
 #define GNC_JOB_MODULE_NAME "gncJob"
 
@@ -24,7 +24,7 @@ void gncJobDestroy (GncJob *job);
 void gncJobSetID (GncJob *job, const char *id);
 void gncJobSetName (GncJob *job, const char *username);
 void gncJobSetDesc (GncJob *job, const char *language);
-void gncJobSetCustomer (GncJob *job, GncCustomer *customer);
+void gncJobSetOwner (GncJob *job, GncOwner *owner);
 void gncJobSetActive (GncJob *job, gboolean active);
 
 void gncJobCommitEdit (GncJob *job);
@@ -36,7 +36,7 @@ const GUID * gncJobGetGUID (GncJob *job);
 const char * gncJobGetID (GncJob *job);
 const char * gncJobGetName (GncJob *job);
 const char * gncJobGetDesc (GncJob *job);
-GncCustomer * gncJobGetCustomer (GncJob *job);
+GncOwner * gncJobGetOwner (GncJob *job);
 gboolean gncJobGetActive (GncJob *job);
 
 GncJob * gncJobLookup (GNCBook *book, const GUID *guid);

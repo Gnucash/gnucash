@@ -25,8 +25,7 @@
 			(N_ "Test New Job Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:job-new #f (gnc:extensions-get-book)
-				       #f))))
+			  (gnc:job-new #f (gnc:extensions-get-book) #f))))
 
   (define select-job-item
     (gnc:make-menu-item (N_ "Test Job Selection Dialog")

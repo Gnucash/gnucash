@@ -2,7 +2,7 @@
  * dialog-job-select.c -- Job Selection Dialog for GNC Business Objects
  *
  * Written By: Derek Atkins <warlord@MIT.EDU>
- * Copyright (C) 2001
+ * Copyright (C) 2001, 2002 Derek Atkins
  */
 
 #include "config.h"
@@ -14,7 +14,6 @@
 #include "gnc-gui-query.h"
 
 #include "gncBusiness.h"
-#include "gncCustomer.h"
 #include "gncJob.h"
 #include "dialog-job-select.h"
 #include "dialog-job.h"
@@ -29,10 +28,10 @@ struct select_job_window {
   GtkWidget * showjobs_check;
 
   GNCBook *	book;
-  GncCustomer *	customer;
   GncJob *	job;
+  GncOwner	owner;
 
-  const GncBusinessObject *job_type, *cust_type;
+  const GncBusinessObject *job_type, *owner_type;
 };
 
 
@@ -49,13 +48,22 @@ update_job_select_picker (struct select_job_window *w)
   gtk_list_clear_items (GTK_LIST (GTK_COMBO (w->job_combo)->list), 0, -1);
 
   /* Get the list of objects */
-  if (w->customer == NULL) {
+  if (w->owner.owner.undefined == NULL) {
     w->job = NULL;
   } else {
     /* Save the current job */
     saved_job = w->job;
 
-    objs = gncCustomerGetJoblist (w->customer, show_all);
+    switch (gncOwnerGetType (&(w->owner))) {
+    case GNC_OWNER_CUSTOMER:
+      objs = gncCustomerGetJoblist (gncOwnerGetCustomer (&(w->owner)),
+				    show_all);
+      break;
+    case GNC_OWNER_VENDOR:
+      /* XXX */
+      break;
+    default:
+    }
 
     /* Build a list of strings (objs is pre-sorted, so keep the order!) */
     for (iterator = objs; iterator; iterator = iterator->next) {
@@ -99,7 +107,7 @@ update_customer_select_picker (struct select_job_window *w)
 {
   GList *custs, *iterator;
   GtkWidget *li;
-  GncCustomer * saved_cust;
+  GncOwner saved_owner;
   gboolean show_all = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
 						    (w->showcust_check));
 
@@ -107,14 +115,14 @@ update_customer_select_picker (struct select_job_window *w)
   gtk_list_clear_items (GTK_LIST (GTK_COMBO (w->customer_combo)->list), 0, -1);
 
   /* Save the existing selection */
-  saved_cust = w->customer;
+  gncOwnerCopy (&(w->owner), &saved_owner);
 
   /* Get the list of objects */
-  custs = (*(w->cust_type->get_list))(w->book, show_all);
+  custs = (*(w->owner_type->get_list))(w->book, show_all);
 
   /* Build a list of strings (objs is pre-sorted, so keep the order!) */
   for (iterator = custs; iterator; iterator = iterator->next) {
-    const gchar *label = (*(w->cust_type->printable))(iterator->data);
+    const gchar *label = (*(w->owner_type->printable))(iterator->data);
 
     li = gtk_list_item_new_with_label (label);
     gtk_object_set_data (GTK_OBJECT (li), "item-list-pointer", iterator->data);
@@ -123,18 +131,18 @@ update_customer_select_picker (struct select_job_window *w)
   }
 
   /* Revert the saved customer */
-  w->customer = saved_cust;
+  gncOwnerCopy (&saved_owner, &(w->owner));
 
   if (! custs) {
     /* no customers -- update the job picker (it will clear itself) */
 
-    w->customer = NULL;
+    w->owner.owner.undefined = NULL;
     update_job_select_picker (w);
 
-  } else if (g_list_index (custs, w->customer) == -1) {
+  } else if (g_list_index (custs, w->owner.owner.undefined) == -1) {
     /* customer doesn't exist anymore!?!  Clear out the job, too */
 
-    w->customer = custs->data;
+    w->owner.owner.undefined = custs->data;
     update_job_select_picker (w);
   }      
 
@@ -142,8 +150,8 @@ update_customer_select_picker (struct select_job_window *w)
   {
     const char * label;
 
-    if (w->customer)
-      label = (*(w->cust_type->printable))(w->customer);
+    if (w->owner.owner.undefined)
+      label = (*(w->owner_type->printable))(w->owner.owner.undefined);
     else
       label = "";
   
@@ -162,7 +170,8 @@ select_job_customer_changed_cb(GtkList *list, GtkWidget *li,
   if (!li)
     return;
 
-  w->customer = gtk_object_get_data (GTK_OBJECT (li), "item-list-pointer");
+  w->owner.owner.undefined = 
+    gtk_object_get_data (GTK_OBJECT (li), "item-list-pointer");
   w->job = NULL;
   update_job_select_picker (w);
 }
@@ -195,10 +204,10 @@ static void
 gnc_ui_select_job_new_cb(GtkButton * button, gpointer user_data)
 {
   struct select_job_window * w = user_data;
-  GncJob * new_selection = gnc_job_new (w->dialog, w->book, w->customer);
+  GncJob * new_selection = gnc_job_new (w->dialog, w->book, &(w->owner));
 
   if (new_selection) {
-    w->customer = gncJobGetCustomer (new_selection);
+    gncOwnerCopy (gncJobGetOwner (new_selection), &(w->owner));
     update_customer_select_picker (w);
     w->job = new_selection;
     update_job_select_picker (w);
@@ -214,7 +223,7 @@ gnc_ui_select_job_edit_cb(GtkButton * button, gpointer user_data)
     return;
 
   gnc_job_edit (w->dialog, w->job);
-  w->customer = gncJobGetCustomer (w->job);
+  gncOwnerCopy (gncJobGetOwner (w->job), &(w->owner));
   update_customer_select_picker (w);
   update_job_select_picker (w);
 }
@@ -255,21 +264,47 @@ select_job_close (GnomeDialog *dialog, gpointer data)
 
 GncJob *
 gnc_ui_select_job_new (GtkWidget * parent, GNCBook *book,
-		       GncCustomer *cust, GncJob *job)
+		       GncOwner *ownerp, GncJob *job)
 {
-  struct select_job_window * win =
-    g_new0(struct select_job_window, 1);
+  struct select_job_window * win;
   GladeXML *xml;
   GncJob *retval;
+  GtkWidget *owner_label;
+  const char * type_name;
 
   g_return_val_if_fail (book != NULL, NULL);
+
+  win = g_new0(struct select_job_window, 1);
   win->book = book;
 
-  win->cust_type = gncBusinessLookup (GNC_CUSTOMER_MODULE_NAME);
+  if (ownerp) {
+    g_return_val_if_fail ((gncOwnerGetType (ownerp) == GNC_OWNER_CUSTOMER) ||
+			  (gncOwnerGetType (ownerp) == GNC_OWNER_VENDOR),
+			  NULL);
+    gncOwnerCopy (ownerp, &(win->owner));
+  } else
+    gncOwnerInitCustomer (&(win->owner), NULL);	/* XXX */
+
+  switch (gncOwnerGetType (&(win->owner))) {
+  case GNC_OWNER_CUSTOMER:
+    type_name = GNC_CUSTOMER_MODULE_NAME;
+    break;
+  case GNC_OWNER_VENDOR:
+    type_name = GNC_VENDOR_MODULE_NAME;
+    break;
+  default:
+    g_warning ("Cannot handle this owner type");
+    return NULL;
+  }
+  win->owner_type = gncBusinessLookup (type_name);
   win->job_type = gncBusinessLookup (GNC_JOB_MODULE_NAME);
   
   xml = gnc_glade_xml_new ("job.glade",
 			   "Job Selector Dialog");
+
+  owner_label = glade_xml_get_widget (xml, "owner_label");
+  gtk_label_set_text (GTK_LABEL (owner_label),
+		      gncBusinessGetTypeLabel (type_name));
 
   /* Grab the widgets */
 
@@ -322,7 +357,6 @@ gnc_ui_select_job_new (GtkWidget * parent, GNCBook *book,
                       GTK_SIGNAL_FUNC(select_job_close), win);
 
   /* Setup the menu */
-  win->customer = cust;
   update_customer_select_picker (win);
   win->job = job;
   update_job_select_picker (win);

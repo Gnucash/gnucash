@@ -98,13 +98,13 @@
 	<class>GtkFrame</class>
 	<name>frame1</name>
 	<border_width>3</border_width>
-	<label>Identification</label>
+	<label>Job Information</label>
 	<label_xalign>0</label_xalign>
 	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	<child>
 	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
+	  <expand>False</expand>
+	  <fill>False</fill>
 	</child>
 
 	<widget>
@@ -129,7 +129,7 @@
 	    <widget>
 	      <class>GtkLabel</class>
 	      <name>label1</name>
-	      <label>Job Number: </label>
+	      <label>Job Number</label>
 	      <justify>GTK_JUSTIFY_RIGHT</justify>
 	      <wrap>False</wrap>
 	      <xalign>1</xalign>
@@ -145,8 +145,9 @@
 
 	    <widget>
 	      <class>GtkLabel</class>
-	      <name>label2</name>
-	      <label>Customer: </label>
+	      <name>label3</name>
+	      <width>100</width>
+	      <label>Job Name</label>
 	      <justify>GTK_JUSTIFY_RIGHT</justify>
 	      <wrap>False</wrap>
 	      <xalign>1</xalign>
@@ -164,7 +165,8 @@
 	  <widget>
 	    <class>GtkVBox</class>
 	    <name>vbox12</name>
-	    <homogeneous>False</homogeneous>
+	    <border_width>3</border_width>
+	    <homogeneous>True</homogeneous>
 	    <spacing>0</spacing>
 	    <child>
 	      <padding>0</padding>
@@ -189,6 +191,104 @@
 	    </widget>
 
 	    <widget>
+	      <class>GtkEntry</class>
+	      <name>name_entry</name>
+	      <can_focus>True</can_focus>
+	      <editable>True</editable>
+	      <text_visible>True</text_visible>
+	      <text_max_length>0</text_max_length>
+	      <text></text>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkFrame</class>
+	<name>frame2</name>
+	<border_width>3</border_width>
+	<label>Owner Information</label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	<child>
+	  <padding>0</padding>
+	  <expand>False</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox9</name>
+	  <border_width>3</border_width>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+
+	  <widget>
+	    <class>GtkVBox</class>
+	    <name>vbox5</name>
+	    <border_width>3</border_width>
+	    <homogeneous>True</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>owner_label</name>
+	      <label>(owner)</label>
+	      <justify>GTK_JUSTIFY_RIGHT</justify>
+	      <wrap>False</wrap>
+	      <xalign>1</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label4</name>
+	      <width>100</width>
+	      <label>Reference</label>
+	      <justify>GTK_JUSTIFY_RIGHT</justify>
+	      <wrap>False</wrap>
+	      <xalign>1</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkVBox</class>
+	    <name>vbox13</name>
+	    <border_width>3</border_width>
+	    <homogeneous>True</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
 	      <class>GtkHBox</class>
 	      <name>customer_hbox</name>
 	      <homogeneous>False</homogeneous>
@@ -203,103 +303,6 @@
 		<class>Placeholder</class>
 	      </widget>
 	    </widget>
-	  </widget>
-	</widget>
-      </widget>
-
-      <widget>
-	<class>GtkFrame</class>
-	<name>frame2</name>
-	<border_width>3</border_width>
-	<label>Description</label>
-	<label_xalign>0</label_xalign>
-	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-
-	<widget>
-	  <class>GtkVBox</class>
-	  <name>vbox5</name>
-	  <border_width>3</border_width>
-	  <homogeneous>True</homogeneous>
-	  <spacing>0</spacing>
-
-	  <widget>
-	    <class>GtkHBox</class>
-	    <name>hbox3</name>
-	    <homogeneous>False</homogeneous>
-	    <spacing>0</spacing>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
-	    </child>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <name>label3</name>
-	      <width>100</width>
-	      <label>Job Name: </label>
-	      <justify>GTK_JUSTIFY_RIGHT</justify>
-	      <wrap>False</wrap>
-	      <xalign>1</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GtkEntry</class>
-	      <name>name_entry</name>
-	      <can_focus>True</can_focus>
-	      <editable>True</editable>
-	      <text_visible>True</text_visible>
-	      <text_max_length>0</text_max_length>
-	      <text></text>
-	      <child>
-		<padding>0</padding>
-		<expand>True</expand>
-		<fill>True</fill>
-	      </child>
-	    </widget>
-	  </widget>
-
-	  <widget>
-	    <class>GtkHBox</class>
-	    <name>hbox4</name>
-	    <homogeneous>False</homogeneous>
-	    <spacing>0</spacing>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
-	    </child>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <name>label4</name>
-	      <width>100</width>
-	      <label>Description: </label>
-	      <justify>GTK_JUSTIFY_RIGHT</justify>
-	      <wrap>False</wrap>
-	      <xalign>1</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
-	    </widget>
 
 	    <widget>
 	      <class>GtkEntry</class>
@@ -311,8 +314,8 @@
 	      <text></text>
 	      <child>
 		<padding>0</padding>
-		<expand>True</expand>
-		<fill>True</fill>
+		<expand>False</expand>
+		<fill>False</fill>
 	      </child>
 	    </widget>
 	  </widget>
@@ -457,6 +460,7 @@
       <widget>
 	<class>GtkHBox</class>
 	<name>hbox7</name>
+	<border_width>3</border_width>
 	<homogeneous>True</homogeneous>
 	<spacing>0</spacing>
 	<child>
@@ -468,6 +472,7 @@
 	<widget>
 	  <class>GtkTable</class>
 	  <name>table2</name>
+	  <border_width>3</border_width>
 	  <rows>2</rows>
 	  <columns>2</columns>
 	  <homogeneous>False</homogeneous>
@@ -482,7 +487,7 @@
 	  <widget>
 	    <class>GtkLabel</class>
 	    <name>label6</name>
-	    <label>Job:</label>
+	    <label>Job Name</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>1</xalign>
@@ -507,8 +512,8 @@
 
 	  <widget>
 	    <class>GtkLabel</class>
-	    <name>label5</name>
-	    <label>Customer:</label>
+	    <name>owner_label</name>
+	    <label>(owner)</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>1</xalign>
@@ -658,7 +663,7 @@
 	      <data>Job_Selector_Dialog</data>
 	      <last_modification_time>Sun, 11 Nov 2001 04:48:09 GMT</last_modification_time>
 	    </signal>
-	    <label>Show All Customers</label>
+	    <label>Show All Owners</label>
 	    <active>False</active>
 	    <draw_indicator>True</draw_indicator>
 	    <child>

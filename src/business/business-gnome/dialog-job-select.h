@@ -13,6 +13,6 @@
  */
 GncJob *
 gnc_ui_select_job_new (GtkWidget * parent, GNCBook *book,
-		       GncCustomer *cust, GncJob *job);
+		       GncOwner *owner, GncJob *job);
 
 #endif /* GNC_DIALOG_JOB_SELECT_H_ */

@@ -16,13 +16,11 @@
 #include "window-help.h"
 
 #include "gncBusiness.h"
-#include "gncCustomer.h"
 #include "gncJob.h"
 #include "gncJobP.h"
 
-#include "gnc-general-select.h"
-#include "dialog-customer.h"
 #include "business-chooser.h"
+#include "business-utils.h"
 #include "dialog-job-select.h"
 #include "dialog-job.h"
 
@@ -34,11 +32,6 @@ typedef enum
   NEW_JOB,
   EDIT_JOB
 } JobDialogType;
-
-struct _job_select_window {
-  GtkWidget *	toplevel;
-  GNCBook *	book;
-};
 
 typedef struct _job_window {
   GtkWidget *	dialog;
@@ -54,7 +47,7 @@ typedef struct _job_window {
   GNCBook *	book;
   GncJob *	created_job;
 
-  GNCGeneralSelectGetStringCB cust_print;
+  GncOwner	owner;
 
 } JobWindow;
 
@@ -79,11 +72,10 @@ static void gnc_ui_to_job (JobWindow *jw, GncJob *job)
   gncJobSetActive (job, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
 						      (jw->active_check)));
   {
-    GncCustomer *old = gncJobGetCustomer (job);
-    GncCustomer *new = gnc_general_select_get_selected (GNC_GENERAL_SELECT
-							(jw->cust_edit));
-    if (old != new)
-      gncJobSetCustomer (job, new);
+    GncOwner * old = gncJobGetOwner (job);
+    gnc_owner_get_owner (jw->cust_edit, &(jw->owner));
+    if (! gncOwnerEqual (old, &(jw->owner)))
+      gncJobSetOwner (job, &(jw->owner));
   }
 
   gncJobCommitEdit (job);
@@ -94,8 +86,7 @@ static void
 gnc_job_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   JobWindow *jw = data;
-  char *res;
-  GncCustomer *cust;
+  const char *res;
 
   /* Check for valid id */
   res = gtk_entry_get_text (GTK_ENTRY (jw->id_entry));
@@ -113,10 +104,11 @@ gnc_job_window_ok_cb (GtkWidget *widget, gpointer data)
     return;
   }
 
-  /* Check for customer */
-  cust = gnc_general_select_get_selected (GNC_GENERAL_SELECT (jw->cust_edit));
-  if (!cust) {
-    const char *message = _("You must choose a customer.");
+  /* Check for owner */
+  gnc_owner_get_owner (jw->cust_edit, &(jw->owner));
+  res = gncOwnerGetName (&(jw->owner));
+  if (res == NULL || safe_strcmp (res, "") == 0) {
+    const char *message = _("You must choose an owner for this job.");
     gnc_error_dialog_parented(GTK_WINDOW(jw->dialog), message);
     return;
   }
@@ -247,17 +239,18 @@ gnc_job_window_refresh_handler (GHashTable *changes, gpointer user_data)
 }
 
 static JobWindow *
-gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncCustomer *cust,
+gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncOwner *owner,
 		    GncJob *job)
 {
   JobWindow *jw;
   GladeXML *xml;
-  GtkWidget *cust_box;
+  GtkWidget *owner_box, *owner_label;
   GnomeDialog *jwd;
   GtkObject *jwo;
 
   jw = g_new0 (JobWindow, 1);
   jw->book = bookp;
+  gncOwnerCopy (owner, &(jw->owner)); /* save it off now, we know it's valid */
 
   /* Load the XML */
   xml = gnc_glade_xml_new ("job.glade", "Job Dialog");
@@ -281,7 +274,8 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncCustomer *cust,
   jw->desc_entry = glade_xml_get_widget (xml, "desc_entry");
   jw->active_check = glade_xml_get_widget (xml, "active_check");
 
-  cust_box = glade_xml_get_widget (xml, "customer_hbox");
+  owner_box = glade_xml_get_widget (xml, "customer_hbox");
+  owner_label = glade_xml_get_widget (xml, "owner_label");
 
   /* Setup signals (XXX) */
   gnome_dialog_button_connect (jwd, 0,
@@ -300,13 +294,6 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncCustomer *cust,
   gtk_signal_connect(GTK_OBJECT (jw->name_entry), "changed",
 		     GTK_SIGNAL_FUNC(gnc_job_name_changed_cb), jw);
 
-  /* grab the printable routine */
-  {
-    const GncBusinessObject *obj = gncBusinessLookup(GNC_CUSTOMER_MODULE_NAME);
-    if (!obj)
-      printf ("NO CUSTOMER OBJECT LOADED");
-    jw->cust_print = obj->printable;
-  }
 
   /* Attach <Enter> to default button */
   gnome_dialog_editable_enters (jwd, GTK_EDITABLE (jw->id_entry));
@@ -321,10 +308,8 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncCustomer *cust,
     jw->job_guid = *gncJobGetGUID (job);
 
     jw->dialog_type = EDIT_JOB;
-    jw->cust_edit = gnc_general_select_new (GNC_GENERAL_SELECT_TYPE_EDIT,
-					    jw->cust_print,
-					    gnc_customer_edit_new_edit, bookp);
-    gtk_box_pack_start(GTK_BOX(cust_box), jw->cust_edit, TRUE, TRUE, 0);
+    jw->cust_edit = gnc_owner_edit_create (owner_label, owner_box,
+					     bookp, owner);
 
     gtk_entry_set_text (GTK_ENTRY (jw->id_entry), gncJobGetID (job));
     gtk_entry_set_editable (GTK_ENTRY (jw->id_entry), FALSE);
@@ -332,8 +317,6 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncCustomer *cust,
     gtk_entry_set_text (GTK_ENTRY (jw->desc_entry), gncJobGetDesc (job));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (jw->active_check),
                                 gncJobGetActive (job));
-    gnc_general_select_set_selected (GNC_GENERAL_SELECT(jw->cust_edit),
-				     gncJobGetCustomer(job));
 
     jw->component_id = gnc_register_gui_component (DIALOG_EDIT_JOB_CM_CLASS,
 						   gnc_job_window_refresh_handler,
@@ -341,19 +324,16 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncCustomer *cust,
 						   jw);
   } else {
     job = gncJobCreate (bookp);
+    gncJobSetOwner (job, owner);
     jw->job_guid = *gncJobGetGUID (job);
       
     jw->dialog_type = NEW_JOB;
-    jw->cust_edit = gnc_general_select_new (GNC_GENERAL_SELECT_TYPE_SELECT,
-					    jw->cust_print,
-					    gnc_customer_edit_new_select, bookp);
-    gtk_box_pack_start(GTK_BOX(cust_box), jw->cust_edit, TRUE, TRUE, 0);
+    jw->cust_edit = gnc_owner_select_create (owner_label, owner_box,
+					     bookp, owner);
 
     gtk_entry_set_text (GTK_ENTRY (jw->id_entry),
 			g_strdup_printf ("%.6d", gncJobNextID(bookp)));
 
-    gnc_general_select_set_selected (GNC_GENERAL_SELECT(jw->cust_edit),
-				     cust);
     jw->component_id = gnc_register_gui_component (DIALOG_NEW_JOB_CM_CLASS,
 						   gnc_job_window_refresh_handler,
 						   gnc_job_window_close_handler,
@@ -371,15 +351,24 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncCustomer *cust,
 }
 
 GncJob *
-gnc_job_new (GtkWidget *parent, GNCBook *bookp, GncCustomer *customer)
+gnc_job_new (GtkWidget *parent, GNCBook *bookp, GncOwner *ownerp)
 {
   JobWindow *jw;
   GncJob *created_job = NULL;
+  GncOwner owner;
 
   /* Make sure required options exist */
   if (!bookp) return NULL;
 
-  jw = gnc_job_new_window (parent, bookp, customer, NULL);
+  if (ownerp) {
+    g_return_val_if_fail ((gncOwnerGetType (ownerp) == GNC_OWNER_CUSTOMER) ||
+			  (gncOwnerGetType (ownerp) == GNC_OWNER_VENDOR),
+			  NULL);
+    gncOwnerCopy (ownerp, &owner);
+  } else
+    gncOwnerInitCustomer (&owner, NULL); /* XXX */
+
+  jw = gnc_job_new_window (parent, bookp, &owner, NULL);
 
   gtk_signal_connect (GTK_OBJECT (jw->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_job_on_close_cb), &created_job);
@@ -399,7 +388,7 @@ gnc_job_edit (GtkWidget *parent, GncJob *job)
   if (!job) return;
 
   jw = gnc_job_new_window (parent, gncJobGetBook(job),
-			   gncJobGetCustomer(job), job);
+			   gncJobGetOwner(job), job);
 
   gtk_signal_connect (GTK_OBJECT (jw->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_job_on_close_cb), NULL);
@@ -412,40 +401,6 @@ gnc_job_edit (GtkWidget *parent, GncJob *job)
 }
 
 /* Functions for widgets for job selection */
-
-#if 0
-static gpointer gnc_job_edit_new_cb (gpointer arg)
-{
-  struct _job_select_window *sw = arg;
-
-  return gnc_job_new (sw->toplevel, sw->book, NULL);
-}
-
-static void gnc_job_edit_edit_cb (gpointer arg, gpointer obj)
-{
-  GncJob *job = obj;
-  struct _job_select_window *sw = arg;
-
-  g_return_if_fail (arg != NULL);
-  g_return_if_fail (obj != NULL);
-
-  gnc_job_edit (sw->toplevel, job);
-}
-#endif
-
-gpointer gnc_job_edit_new_select (gpointer job, GtkWidget *toplevel,
-				  GncCustomer *cust)
-{
-  GNCBook *book;
-  GncJob *j = job;
-
-  if (!cust) return NULL;
-
-  book = gncCustomerGetBook (cust);
-
-  return
-    gnc_ui_select_job_new (toplevel, book, cust, j);
-}
 
 gpointer
 gnc_job_edit_new_edit (gpointer book, gpointer jobp, GtkWidget *toplevel)
@@ -464,12 +419,15 @@ gnc_job_select_new_select (gpointer bookp, gpointer jobp, GtkWidget *parent)
 {
   GncJob *j = jobp;
   GNCBook *book = bookp;
-  GncCustomer *cust = NULL;
+  GncOwner owner, *ownerp;
 
   if (!book) return NULL;
 
-  if (j)
-    cust = gncJobGetCustomer (j);
+  if (j) {
+    ownerp = gncJobGetOwner (j);
+    gncOwnerCopy (ownerp, &owner);
+  } else
+    gncOwnerInitCustomer (&owner, NULL); /* XXX */
 
-  return gnc_ui_select_job_new (parent, book, cust, j);
+  return gnc_ui_select_job_new (parent, book, &owner, j);
 }

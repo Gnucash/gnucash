@@ -382,8 +382,7 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   if (type == NEW_ORDER) {
     order = gncOrderCreate (bookp);
     gncOrderSetOwner (order, owner);
-  } else
-    owner = gncOrderGetOwner (order); /* Overwrite what was passed in */
+  }
 
   /* Save this for later */
   gncOwnerCopy (owner, &(ow->owner));
@@ -617,7 +616,7 @@ gnc_order_edit (GtkWidget *parent, GncOrder *order)
   }
 
   ow = gnc_order_new_window (parent, gncOrderGetBook(order), type, order, 
-			     NULL);
+			     gncOrderGetOwner (order));
 
   gtk_signal_connect (GTK_OBJECT (ow->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_order_on_close_cb),

@@ -98,10 +98,13 @@ test_job (void)
   }    
   {
     GList *list;
+    GncOwner owner;
     GncCustomer *cust = gncCustomerCreate (book);
 
+    gncOwnerInitCustomer (&owner, cust);
+
     do_test (gncCustomerGetJoblist (cust, TRUE) == NULL, "empty list at start");
-    gncJobSetCustomer (job, cust);
+    gncJobSetOwner (job, &owner);
     list = gncCustomerGetJoblist (cust, FALSE);
     do_test (list != NULL, "added to cust");
     do_test (g_list_length (list) == 1, "correct joblist length");

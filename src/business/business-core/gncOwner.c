@@ -1,6 +1,6 @@
 /*
  * gncOwner.c -- Business Interface:  Object OWNERs
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001, 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -39,34 +39,34 @@ void gncOwnerInitVendor (GncOwner *owner, GncVendor *vendor)
   owner->owner.vendor = vendor;
 }
 
-GncOwnerType gncOwnerGetType (GncOwner *owner)
+GncOwnerType gncOwnerGetType (const GncOwner *owner)
 {
   if (!owner) return GNC_OWNER_NONE;
   return owner->type;
 }
 
-gpointer gncOwnerGetUndefined (GncOwner *owner)
+gpointer gncOwnerGetUndefined (const GncOwner *owner)
 {
   if (!owner) return NULL;
   if (owner->type != GNC_OWNER_UNDEFINED) return NULL;
   return owner->owner.undefined;
 }
 
-GncCustomer * gncOwnerGetCustomer (GncOwner *owner)
+GncCustomer * gncOwnerGetCustomer (const GncOwner *owner)
 {
   if (!owner) return NULL;
   if (owner->type != GNC_OWNER_CUSTOMER) return NULL;
   return owner->owner.customer;
 }
 
-GncJob * gncOwnerGetJob (GncOwner *owner)
+GncJob * gncOwnerGetJob (const GncOwner *owner)
 {
   if (!owner) return NULL;
   if (owner->type != GNC_OWNER_JOB) return NULL;
   return owner->owner.job;
 }
 
-GncVendor * gncOwnerGetVendor (GncOwner *owner)
+GncVendor * gncOwnerGetVendor (const GncOwner *owner)
 {
   if (!owner) return NULL;
   if (owner->type != GNC_OWNER_VENDOR) return NULL;
@@ -78,6 +78,13 @@ void gncOwnerCopy (const GncOwner *src, GncOwner *dest)
   if (!src || !dest) return;
   if (src == dest) return;
   memcpy (dest, src, sizeof (*dest));
+}
+
+gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b)
+{
+  if (!a || !b) return FALSE;
+  if (gncOwnerGetType (a) != gncOwnerGetType (b)) return FALSE;
+  return (a->owner.undefined == b->owner.undefined);
 }
 
 const char * gncOwnerGetName (GncOwner *owner)

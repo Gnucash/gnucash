@@ -1,6 +1,6 @@
 /*
  * gncJob.c -- the Core Job Interface
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001, 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -19,7 +19,6 @@
 #include "gncBusiness.h"
 #include "gncJob.h"
 #include "gncJobP.h"
-#include "gncCustomer.h"
 
 struct _gncJob {
   GNCBook *	book;
@@ -27,7 +26,7 @@ struct _gncJob {
   char *	id;
   char *	name;
   char *	desc;
-  GncCustomer *	cust;
+  GncOwner	owner;
   gboolean	active;
   gboolean	dirty;
 };
@@ -55,7 +54,6 @@ GncJob *gncJobCreate (GNCBook *book)
   job->id = CACHE_INSERT ("");
   job->name = CACHE_INSERT ("");
   job->desc = CACHE_INSERT ("");
-  job->cust = NULL;
   job->active = TRUE;
 
   xaccGUIDNew (&job->guid, book);
@@ -72,8 +70,15 @@ void gncJobDestroy (GncJob *job)
   CACHE_REMOVE (job->name);
   CACHE_REMOVE (job->desc);
 
-  if (job->cust)
-    gncCustomerRemoveJob (job->cust, job);
+  switch (gncOwnerGetType (&(job->owner))) {
+  case GNC_OWNER_CUSTOMER:
+    gncCustomerRemoveJob (gncOwnerGetCustomer(&job->owner), job);
+    break;
+  case GNC_OWNER_VENDOR:
+    /* XXX */
+    break;
+  default:
+  }
 
   remObj (job);
 
@@ -124,17 +129,34 @@ void gncJobSetGUID (GncJob *job, const GUID *guid)
   addObj (job);
 }
 
-void gncJobSetCustomer (GncJob *job, GncCustomer *cust)
+void gncJobSetOwner (GncJob *job, GncOwner *owner)
 {
   if (!job) return;
-  if (!cust) return;
-  if (cust == job->cust) return;
+  if (!owner) return;
+  if (gncOwnerEqual (owner, &(job->owner))) return;
   /* XXX: Fail if we have ANY orders or invoices */
 
-  if (cust)
-    gncCustomerRemoveJob (job->cust, job);
-  job->cust = cust;
-  gncCustomerAddJob (cust, job);
+  switch (gncOwnerGetType (&(job->owner))) {
+  case GNC_OWNER_CUSTOMER:
+    gncCustomerRemoveJob (gncOwnerGetCustomer(&job->owner), job);
+    break;
+  case GNC_OWNER_VENDOR:
+    /* XXX */
+    break;
+  default:
+  }
+
+  gncOwnerCopy (owner, &(job->owner));
+
+  switch (gncOwnerGetType (&(job->owner))) {
+  case GNC_OWNER_CUSTOMER:
+    gncCustomerAddJob (gncOwnerGetCustomer(&job->owner), job);
+    break;
+  case GNC_OWNER_VENDOR:
+    /* XXX */
+    break;
+  default:
+  }
 
   job->dirty = TRUE;
 }
@@ -179,10 +201,10 @@ const char * gncJobGetDesc (GncJob *job)
   return job->desc;
 }
 
-GncCustomer * gncJobGetCustomer (GncJob *job)
+GncOwner * gncJobGetOwner (GncJob *job)
 {
   if (!job) return NULL;
-  return job->cust;
+  return &(job->owner);
 }
 
 const GUID * gncJobGetGUID (GncJob *job)

@@ -113,8 +113,8 @@
    '<gnc:GncJob*>
    "gnc_job_new"
    '((<gnc:UIWidget> parent) (<gnc:Book*> book)
-     (<gnc:GncCustomer*> default_customer))
-   "Dialog: create a new GncJob.  Parent and Customer may be NULL.")
+     (<gnc:GncOwner*> default_owner))
+   "Dialog: create a new GncJob.  Parent and Owner may be NULL.")
 
   (gw:wrap-function
    ws
@@ -134,8 +134,8 @@
    '<gnc:GncJob*>
    "gnc_ui_select_job_new"
    '((<gnc:UIWidget> parent) (<gnc:Book*> book)
-     (<gnc:GncCustomer*> cust) (<gnc:GncJob*> job))
-   "Dialog: Select a new job.  Parent and Customer may be NULL.")
+     (<gnc:GncOwner*> owner) (<gnc:GncJob*> job))
+   "Dialog: Select a new job.  Parent and Owner may be NULL.")
 
   ;;
   ;; dialog-order.h
