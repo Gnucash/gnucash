@@ -1233,10 +1233,12 @@ create_popup_toggle(GnomeCanvasGroup *parent, PopupToggle *pt)
         pt->toggle_button = GTK_TOGGLE_BUTTON(button);
         gtk_container_add(GTK_CONTAINER(button), arrow);
 
+        gtk_widget_show_all( GTK_WIDGET(pt->toggle_button) );
+
         pt->toggle_button_item =
                 gnome_canvas_item_new(parent, gnome_canvas_widget_get_type(),
                                       "widget", button,
-                                      "size_pixels", TRUE,
+                                      "size-pixels", TRUE,
                                       NULL);
 }
 

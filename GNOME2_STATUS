@@ -1,3 +1,5 @@
+# -*- text -*-
+
 This is a ad-hoc list of list of what works and doesn't work in the g2
 port of gnucash.  The plan is to finish porting those parts of gnucash
 that have already been started (i.e. new windowing system, account
@@ -78,15 +80,30 @@ Register Core - MOSTLY FUNCTIONAL
 	- Can navigate, enter transactions, etc.
 
 	- Insertion point not shown. (fix gnucash-item-edit.c)
+
 	- <strike>Cannot hilight text with mouse (fix gnucash-item-edit.c)</strike>
-          - Getting better; x-position -> pango-text-index works; some gtk_entry selection works.
+          - Getting better; x-position -> pango-text-index-lookup works; some
+            gtk_entry selection works.
+          - draging from right to left doesn't work.
           - Offset for non-LEFT_ALIGN'ed fields not correct.
+            - Probably need to...
+              1/ check if it's a RIGHT [or CENTER] align.
+              2/ determine pango-layout width of the cell, plus the "indent".
+              3/ subtract the indent as well as the cell's x-offset from the x-coord.
           - finer points of gtk_entry selection+position setting not correct, yet.
 
 	- The first time it is used, the account popup immediately
 	  selects the first account. After that it functions normally.
 
-        - The drop-down-arrow widgets for {date,action,account-sel} don't seem to be showing.
+        - <strike>The drop-down-arrow widgets for {date,action,account-sel}
+          don't seem to be showing.</strike>
+
+          - selection of the date for the datecell seems to also select the
+            transaction underneath the calendar, leading to the "this
+            transaction has changed, do you want to save" dialog.
+
+          - selection events on the combo-cells aren't working.
+            (gnucash:26380): GLib-GObject-WARNING **: gsignal.c:989: no emission of signal "key-press-event" to stop for instance `0x855a240'
 
 Find - Somewhat Functional
 	- Can generate a query in the dialog.

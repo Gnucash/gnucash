@@ -1,6 +1,12 @@
 2004-12-15  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/register/register-gnome/gnucash-item-edit.c
+	(create_popup_toggle): realize popup-arrow widget so it gets
+	displayed; correct tyop in "field" name.
+
+2004-12-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/register-gnome/gnucash-item-edit.c
 	(gnc_item_edit_set_cursor_pos): Re-add
 	text-selection-via-mouse-drag support [still buggy in multiple
 	ways; see GNOME2_STATUS for updates].
