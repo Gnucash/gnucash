@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.6\n"
-"POT-Creation-Date: 2001-08-12 23:00-0700\n"
-"PO-Revision-Date: 2001-08-10 13:29+02:00\n"
+"POT-Creation-Date: 2001-08-13 19:51+0200\n"
+"PO-Revision-Date: 2001-08-13 19:58+02:00\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -219,7 +219,7 @@ msgstr ""
 
 #: src/FileDialog.c:483 src/gnome/dialog-filebox.c:76
 #: src/gnome/window-acct-tree.c:723 src/gnome/window-help.c:627
-#: src/gnome/window-reconcile.c:1359
+#: src/gnome/window-reconcile.c:1361
 msgid "Open"
 msgstr "Öffnen"
 
@@ -1613,7 +1613,7 @@ msgid "Add a new entry or subentry"
 msgstr "Einen neuen Eintrag oder Untereintrag erstellen"
 
 #: src/gnome/glade-gnc-dialogs.c:1929 src/gnome/glade-gnc-dialogs.c:6393
-#: src/gnome/window-acct-tree.c:765 src/gnome/window-reconcile.c:1351
+#: src/gnome/window-acct-tree.c:765 src/gnome/window-reconcile.c:1353
 #: src/gnome/window-register.c:860
 msgid "Delete"
 msgstr "Löschen"
@@ -2609,7 +2609,7 @@ msgid "Style sheet template:"
 msgstr "Vorlage für Stilvorlage:"
 
 #: src/gnome/glade-gnc-dialogs.c:5949 src/gnome/glade-gnc-dialogs.c:6043
-#: src/gnome/window-acct-tree.c:889
+#: src/gnome/window-acct-tree.c:891
 msgid "Tax Information"
 msgstr "Steuerrelevante Information"
 
@@ -2877,7 +2877,7 @@ msgid "Remove prices older than a user-entered date"
 msgstr "Entferne Preise, die älter als ein bestimmtes Datum sind"
 
 #: src/gnome/glade-gnc-dialogs.c:7498 src/gnome/glade-gnc-dialogs.c:7887
-#: src/gnome/window-acct-tree.c:733 src/gnome/window-reconcile.c:1344
+#: src/gnome/window-acct-tree.c:733 src/gnome/window-reconcile.c:1346
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -3236,14 +3236,14 @@ msgstr ""
 "eines auswählen."
 
 #: src/gnome/window-acct-tree.c:493 src/gnome/window-acct-tree.c:515
-msgid "You must select an account to scrub."
+msgid "You must select an account to check and repair."
 msgstr "Sie müssen ein Konto auswählen, das überprüft werden soll."
 
-#: src/gnome/window-acct-tree.c:724 src/gnome/window-acct-tree.c:821
+#: src/gnome/window-acct-tree.c:724 src/gnome/window-acct-tree.c:823
 msgid "Open the selected account"
 msgstr "Gewähltes Konto öffnen"
 
-#: src/gnome/window-acct-tree.c:734 src/gnome/window-acct-tree.c:837
+#: src/gnome/window-acct-tree.c:734 src/gnome/window-acct-tree.c:839
 msgid "Edit the selected account"
 msgstr "Ausgewähltes Konto bearbeiten"
 
@@ -3251,108 +3251,110 @@ msgstr "Ausgewähltes Konto bearbeiten"
 msgid "Edit the account view options"
 msgstr "Ansichts-Optionen ändern"
 
-#: src/gnome/window-acct-tree.c:755 src/gnome/window-reconcile.c:1337
+#: src/gnome/window-acct-tree.c:755 src/gnome/window-reconcile.c:1339
 msgid "New"
 msgstr "Neu"
 
-#: src/gnome/window-acct-tree.c:756 src/gnome/window-acct-tree.c:871
+#: src/gnome/window-acct-tree.c:756 src/gnome/window-acct-tree.c:873
 #: src/gnome/window-register.c:1455
 msgid "Create a new account"
 msgstr "Ein neues Konto eröffnen"
 
-#: src/gnome/window-acct-tree.c:766 src/gnome/window-acct-tree.c:879
+#: src/gnome/window-acct-tree.c:766 src/gnome/window-acct-tree.c:881
 msgid "Delete selected account"
 msgstr "Ausgewähltes Konto löschen"
 
 #: src/gnome/window-acct-tree.c:789
-msgid "Scrub A_ccount"
-msgstr "Konto über_prüfen"
+msgid "Check & Repair A_ccount"
+msgstr "_Konto überprüfen"
 
-#: src/gnome/window-acct-tree.c:790 src/gnome/window-reconcile.c:1181
-msgid "Identify and fix problems in the account"
-msgstr ""
-"Identifizieren und Reparieren von unvollständigen Buchungen in diesem Konto"
-
-#: src/gnome/window-acct-tree.c:797
-msgid "Scrub Su_baccounts"
-msgstr "_Unterkonten überprüfen"
+#: src/gnome/window-acct-tree.c:790 src/gnome/window-reconcile.c:1182
+msgid ""
+"Check for and repair unbalanced transactions and orphan splits in this "
+"account"
+msgstr "Überprüfen und Reparieren von unvollständigen Buchungen in diesem Konto"
 
 #: src/gnome/window-acct-tree.c:798
-msgid "Identify and fix problems in the account and its subaccounts"
-msgstr ""
-"Identifizieren und Reparieren von unvollständigen Buchungen in diesem Konto "
-"und seinen Unterkonten"
+msgid "Check & Repair Su_baccounts"
+msgstr "_Unterkonten überprüfen"
 
-#: src/gnome/window-acct-tree.c:806
-msgid "Scrub A_ll"
-msgstr "_Alles überprüfen"
+#: src/gnome/window-acct-tree.c:799
+msgid ""
+"Check for and repair unbalanced transactions and orphan splits in this "
+"account and its subaccounts"
+msgstr "Überprüfen und Reparieren von unvollständigen Buchungen in diesem Konto und seinen Unterkonten"
 
 #: src/gnome/window-acct-tree.c:807
-msgid "Identify and fix problems in all the accounts"
-msgstr ""
-"Identifizieren und Reparieren von unvollständigen Buchungen in allen Konten"
+msgid "Check & Repair A_ll"
+msgstr "_Alle überprüfen"
 
-#: src/gnome/window-acct-tree.c:820 src/gnome/window-reconcile.c:1158
+#: src/gnome/window-acct-tree.c:808
+msgid ""
+"Check for and repair unbalanced transactions and orphan splits in all "
+"accounts"
+msgstr "Überprüfen und Reparieren von unvollständigen Buchungen in allen Konten"
+
+#: src/gnome/window-acct-tree.c:822 src/gnome/window-reconcile.c:1158
 msgid "_Open Account"
 msgstr "_Konto öffnen"
 
-#: src/gnome/window-acct-tree.c:828
+#: src/gnome/window-acct-tree.c:830
 msgid "Open S_ubaccounts"
 msgstr "_Unterkonten öffnen"
 
-#: src/gnome/window-acct-tree.c:829
+#: src/gnome/window-acct-tree.c:831
 msgid "Open the selected account and all its subaccounts"
 msgstr "Öffne das gewählte Konto und alle Unterkonten"
 
-#: src/gnome/window-acct-tree.c:836 src/gnome/window-reconcile.c:1165
+#: src/gnome/window-acct-tree.c:838 src/gnome/window-reconcile.c:1165
 #: src/gnome/window-register.c:1420
 msgid "_Edit Account"
 msgstr "Konto _bearbeiten"
 
-#: src/gnome/window-acct-tree.c:845 src/gnome/window-register.c:1429
+#: src/gnome/window-acct-tree.c:847 src/gnome/window-register.c:1429
 msgid "_Reconcile..."
 msgstr "_Abgleichen..."
 
-#: src/gnome/window-acct-tree.c:846
+#: src/gnome/window-acct-tree.c:848
 msgid "Reconcile the selected account"
 msgstr "Gewähltes Konto abgleichen"
 
-#: src/gnome/window-acct-tree.c:853 src/gnome/window-reconcile.c:1173
+#: src/gnome/window-acct-tree.c:855 src/gnome/window-reconcile.c:1173
 #: src/gnome/window-register.c:1437
 msgid "_Transfer..."
 msgstr "_Buchen..."
 
-#: src/gnome/window-acct-tree.c:854 src/gnome/window-reconcile.c:1173
+#: src/gnome/window-acct-tree.c:856 src/gnome/window-reconcile.c:1173
 #: src/gnome/window-register.c:906 src/gnome/window-register.c:1438
 msgid "Transfer funds from one account to another"
 msgstr "Beträge von einem Konto zu einem anderen umbuchen"
 
-#: src/gnome/window-acct-tree.c:861 src/gnome/window-register.c:1445
+#: src/gnome/window-acct-tree.c:863 src/gnome/window-register.c:1445
 msgid "Stock S_plit..."
 msgstr "Aktienteilung..."
 
-#: src/gnome/window-acct-tree.c:862 src/gnome/window-register.c:1446
+#: src/gnome/window-acct-tree.c:864 src/gnome/window-register.c:1446
 msgid "Record a stock split or a stock merger"
 msgstr "Buchen einer Aktienteilung oder eines Aktienzusammenschlusses"
 
-#: src/gnome/window-acct-tree.c:870 src/gnome/window-register.c:1454
+#: src/gnome/window-acct-tree.c:872 src/gnome/window-register.c:1454
 msgid "_New Account..."
 msgstr "_Neues Konto"
 
-#: src/gnome/window-acct-tree.c:878
+#: src/gnome/window-acct-tree.c:880
 msgid "_Delete Account"
 msgstr "_Konto löschen"
 
-#: src/gnome/window-acct-tree.c:885 src/gnome/window-reconcile.c:1181
-msgid "_Scrub"
+#: src/gnome/window-acct-tree.c:887 src/gnome/window-reconcile.c:1181
+msgid "_Check & Repair"
 msgstr "_Überprüfen"
 
-#: src/gnome/window-acct-tree.c:890
+#: src/gnome/window-acct-tree.c:892
 msgid "Setup tax information for all income and expense accounts"
 msgstr ""
 "Steuerrelevante Informationen für Ertrags- und Aufwandskonten einrichten"
 
-#: src/gnome/window-acct-tree.c:901 src/gnome/window-reconcile.c:1231
+#: src/gnome/window-acct-tree.c:903 src/gnome/window-reconcile.c:1233
 #: src/gnome/window-register.c:1581
 msgid "_Account"
 msgstr "_Konto"
@@ -3600,12 +3602,12 @@ msgid "Statement Date:"
 msgstr "Datum des Kontoauszugs:"
 
 #. starting balance title/value
-#: src/gnome/window-reconcile.c:434 src/gnome/window-reconcile.c:1700
+#: src/gnome/window-reconcile.c:434 src/gnome/window-reconcile.c:1702
 msgid "Starting Balance:"
 msgstr "Anfangssaldo:"
 
 #. ending balance title/value
-#: src/gnome/window-reconcile.c:435 src/gnome/window-reconcile.c:1710
+#: src/gnome/window-reconcile.c:435 src/gnome/window-reconcile.c:1712
 msgid "Ending Balance:"
 msgstr "Schlußsaldo:"
 
@@ -3647,7 +3649,7 @@ msgstr ""
 msgid "_Finish"
 msgstr "_Fertig"
 
-#: src/gnome/window-reconcile.c:1075 src/gnome/window-reconcile.c:1367
+#: src/gnome/window-reconcile.c:1075 src/gnome/window-reconcile.c:1369
 msgid "Finish the reconciliation of this account"
 msgstr "Kontoabstimmung beenden"
 
@@ -3696,7 +3698,7 @@ msgstr "Sortiere nach Beschreibung"
 msgid "Sort by Amount"
 msgstr "Sortiere nach Betrag"
 
-#: src/gnome/window-reconcile.c:1158 src/gnome/window-reconcile.c:1359
+#: src/gnome/window-reconcile.c:1158 src/gnome/window-reconcile.c:1361
 msgid "Open the account"
 msgstr "Konto öffnen"
 
@@ -3704,70 +3706,70 @@ msgstr "Konto öffnen"
 msgid "Edit the main account for this register"
 msgstr "Bearbeiten des Hauptkonto für diesen Kassenbericht"
 
-#: src/gnome/window-reconcile.c:1193 src/gnome/window-reconcile.c:1277
+#: src/gnome/window-reconcile.c:1195 src/gnome/window-reconcile.c:1279
 msgid "_New"
 msgstr "_Neu"
 
-#: src/gnome/window-reconcile.c:1193 src/gnome/window-reconcile.c:1277
-#: src/gnome/window-reconcile.c:1337
+#: src/gnome/window-reconcile.c:1195 src/gnome/window-reconcile.c:1279
+#: src/gnome/window-reconcile.c:1339
 msgid "Add a new transaction to the account"
 msgstr "Dem Konto einen neuen Geschäftsvorgang hinzufügen"
 
-#: src/gnome/window-reconcile.c:1200 src/gnome/window-reconcile.c:1284
+#: src/gnome/window-reconcile.c:1202 src/gnome/window-reconcile.c:1286
 msgid "_Edit"
 msgstr "_Bearbeiten"
 
-#: src/gnome/window-reconcile.c:1200 src/gnome/window-reconcile.c:1284
-#: src/gnome/window-reconcile.c:1344
+#: src/gnome/window-reconcile.c:1202 src/gnome/window-reconcile.c:1286
+#: src/gnome/window-reconcile.c:1346
 msgid "Edit the current transaction"
 msgstr "Aktuellen Geschäftsvorgang bearbeiten"
 
-#: src/gnome/window-reconcile.c:1207 src/gnome/window-reconcile.c:1291
+#: src/gnome/window-reconcile.c:1209 src/gnome/window-reconcile.c:1293
 #: src/gnome/window-register.c:1483 src/gnome/window-register.c:1672
 msgid "_Delete"
 msgstr "_Löschen"
 
-#: src/gnome/window-reconcile.c:1207 src/gnome/window-reconcile.c:1291
-#: src/gnome/window-reconcile.c:1351 src/gnome/window-register.c:861
+#: src/gnome/window-reconcile.c:1209 src/gnome/window-reconcile.c:1293
+#: src/gnome/window-reconcile.c:1353 src/gnome/window-register.c:861
 #: src/gnome/window-register.c:1484 src/gnome/window-register.c:1673
 msgid "Delete the current transaction"
 msgstr "Aktuellen Geschäftsvorgang löschen"
 
-#: src/gnome/window-reconcile.c:1219 src/gnome/window-register.c:1568
+#: src/gnome/window-reconcile.c:1221 src/gnome/window-register.c:1568
 msgid "_Help"
 msgstr "_Hilfe"
 
-#: src/gnome/window-reconcile.c:1219 src/gnome/window-register.c:1569
+#: src/gnome/window-reconcile.c:1221 src/gnome/window-register.c:1569
 msgid "Open the GnuCash help window"
 msgstr "Das GnuCash-Hilfe-Fenster öffnen"
 
-#: src/gnome/window-reconcile.c:1229
+#: src/gnome/window-reconcile.c:1231
 msgid "_Reconcile"
 msgstr "_Abgleichen"
 
-#: src/gnome/window-reconcile.c:1230 src/gnome/window-register.c:1344
+#: src/gnome/window-reconcile.c:1232 src/gnome/window-register.c:1344
 msgid "Sort _Order"
 msgstr "S_ortierreihenfolge"
 
-#: src/gnome/window-reconcile.c:1232 src/gnome/window-register.c:1582
+#: src/gnome/window-reconcile.c:1234 src/gnome/window-register.c:1582
 msgid "_Transaction"
 msgstr "_Geschäftsvorgang"
 
-#: src/gnome/window-reconcile.c:1367
+#: src/gnome/window-reconcile.c:1369
 msgid "Finish"
 msgstr "Fertigstellen"
 
 #. reconciled balance title/value
-#: src/gnome/window-reconcile.c:1720
+#: src/gnome/window-reconcile.c:1722
 msgid "Reconciled Balance:"
 msgstr "Abgeglichener Saldo:"
 
 #. difference title/value
-#: src/gnome/window-reconcile.c:1730
+#: src/gnome/window-reconcile.c:1732
 msgid "Difference:"
 msgstr "Differenz:"
 
-#: src/gnome/window-reconcile.c:1924
+#: src/gnome/window-reconcile.c:1926
 msgid ""
 "The account is not balanced.\n"
 "Are you sure you want to finish?"
@@ -3775,12 +3777,12 @@ msgstr ""
 "Das Konto ist nicht ausgeglichen.\n"
 "Sind Sie sicher, daß Sie das Abgleichen beenden wollen?"
 
-#: src/gnome/window-reconcile.c:1982
+#: src/gnome/window-reconcile.c:1984
 msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr ""
 "Möchten Sie dieses Abgleichen jetzt unterbrechen und später fertigstellen?"
 
-#: src/gnome/window-reconcile.c:2016
+#: src/gnome/window-reconcile.c:2018
 msgid ""
 "You have made changes to this reconcile window.\n"
 "Are you sure you want to cancel?"
@@ -4040,24 +4042,24 @@ msgid "_Jump"
 msgstr "Gegenbuchung"
 
 #: src/gnome/window-register.c:1528
-msgid "_Scrub All"
-msgstr "Alles _überprüfen"
+msgid "_Check & Repair All"
+msgstr "Alle _überprüfen"
 
 #: src/gnome/window-register.c:1529
 msgid ""
-"Identify and fix problems in the transactions displayed in this register"
-msgstr ""
-"Identifizieren und Reparieren von unvollständigen Buchungen in diesem Konto"
+"Check for and repair unbalanced transactions and orphan splits in all "
+"transactions of this account"
+msgstr "Überprüfen und Reparieren von unvollständigen Buchungen in diesem Konto"
 
 #: src/gnome/window-register.c:1537
-msgid "_Scrub Current"
-msgstr "_Aktuell überprüfen"
+msgid "Check & _Repair Current"
+msgstr "_Geschäftsvorgang überprüfen"
 
 #: src/gnome/window-register.c:1538
-msgid "Identify and fix problems in the current transaction"
-msgstr ""
-"Identifizieren und Reparieren von Unvollständigkeiten in diesem "
-"Geschäftsvorgang"
+msgid ""
+"Check for and repair unbalanced transactions and orphan splits in this "
+"transaction"
+msgstr "Überprüfen und Reparieren von unvollständigen Buchungen in diesem Geschäftsvorgang"
 
 #: src/gnome/window-register.c:1548
 msgid "Open an invoice report window for this transaction"
