@@ -66,6 +66,23 @@ gncLogLevel gnc_log_modules[MOD_LAST + 1] =
 
 static FILE *fout = NULL;
 
+static void
+stdout_printer (const gchar   *log_domain,
+                GLogLevelFlags    log_level,
+                const gchar   *message,
+                gpointer    unused_data)
+{
+  fprintf (stderr, "duude %s:", message);
+}
+
+void 
+gnc_log_init (void)
+{
+   fout = stderr;
+   fout = stdout;
+   g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, stdout_printer, NULL);
+}
+
 /* Set the logging level of the given module. */
 void
 gnc_set_log_level(gncModuleType module, gncLogLevel level)
@@ -127,7 +144,7 @@ gnc_log (gncModuleType module, gncLogLevel log_level,
   va_list ap;
 
   if (!gnc_should_log (module, log_level)) return;
-  if (!fout) fout = stderr;
+  if (!fout) gnc_log_init();
 
   va_start (ap, format);
   vfprintf (fout, format, ap);
@@ -164,7 +181,7 @@ gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
   gettimeofday (&gnc_clock[clockno], &tz);
 
-  if (!fout) fout = stderr;
+  if (!fout) gnc_log_init();
 
   fprintf (fout, "Clock %d Start: %s: ",
            clockno, gnc_log_prettify (function_name));
@@ -201,7 +218,7 @@ gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   gnc_clock_total[clockno].tv_sec += now.tv_sec;
   gnc_clock_total[clockno].tv_usec += now.tv_usec;
 
-  if (!fout) fout = stderr;
+  if (!fout) gnc_log_init();
 
   fprintf (fout, "Clock %d Elapsed: %ld.%06lds %s: ",
            clockno, now.tv_sec, now.tv_usec, gnc_log_prettify (function_name));
@@ -231,7 +248,7 @@ gnc_report_clock_total (int clockno,
     gnc_clock_total[clockno].tv_usec -= 1000000;
   }
 
-  if (!fout) fout = stderr;
+  if (!fout) gnc_log_init();
 
   fprintf (fout, "Clock %d Total Elapsed: %ld.%06lds  %s: ",
            clockno,
@@ -272,7 +289,7 @@ gnc_send_gui_warning(const gchar *format, ...)
 
   if (!gnc_gui_warning_func)
   {
-    if (!fout) fout = stderr;
+    if (!fout) gnc_log_init();
 
     va_start (args, format);
     vfprintf (fout, format, args);
@@ -295,7 +312,7 @@ gnc_send_gui_error(const gchar *format, ...)
 
   if (!gnc_gui_error_func)
   {
-    if (!fout) fout = stderr;
+    if (!fout) gnc_log_init();
 
     va_start (args, format);
     vfprintf (fout, format, args);

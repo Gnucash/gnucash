@@ -76,7 +76,10 @@ typedef enum
   GNC_LOG_TRACE   = 6,
 } gncLogLevel;
 
-gncLogLevel gnc_log_modules[MOD_LAST + 1];
+extern gncLogLevel gnc_log_modules[MOD_LAST + 1];
+
+/** Initialize the error logging subsystem */
+void gnc_log_init (void);
 
 /** Log error/waring/info messages to stderr or to other pipe. 
  *  This logging infrastructure is meant for validating the 
