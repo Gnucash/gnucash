@@ -173,11 +173,11 @@ the account instead of opening a register." #f))
  (gnc:make-multichoice-option
   "International" "Date Format"
   "a" "Date Format Display" 'us
-  (list #(us "US" "US-style: mm/dd/yyyy")
-        #(uk "UK" "UK-style dd/mm/yyyy")
-	#(ce "Europe" "Continental Europe: dd.mm.yyyy")
-	#(iso "ISO" "ISO Standard: yyyy-mm-dd"))))
-;	#(locale "Locale" "Take from system locale"))))
+  (list #(us     "US"     "US-style: mm/dd/yyyy")
+        #(uk     "UK"     "UK-style dd/mm/yyyy")
+	#(ce     "Europe" "Continental Europe: dd.mm.yyyy")
+	#(iso    "ISO"    "ISO Standard: yyyy-mm-dd")
+	#(locale "Locale" "Default system locale format"))))
 
 (gnc:register-configuration-option
  (gnc:make-currency-option

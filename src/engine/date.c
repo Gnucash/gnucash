@@ -27,6 +27,7 @@
 
 #define _GNU_SOURCE
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -114,10 +115,10 @@ printDate (char * buff, int day, int month, int year)
       {
         struct tm tm_str;
         tm_str.tm_mday = day;
-        tm_str.tm_mon = month - 1; /*tm_mon = 0 through 11 */
+        tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
         tm_str.tm_year = year - 1900; /* this is what the standard 
-                                       * says, it's not a Y2K thing
-                                       */
+                                       * says, it's not a Y2K thing */
+
         strftime(buff, MAX_DATE_LENGTH, "%x", &tm_str);
       }
       break;
@@ -183,8 +184,8 @@ scanDate(const char *buff, int *day, int *month, int *year)
 {
    char *dupe, *tmp, *first_field, *second_field, *third_field;
    int iday, imonth, iyear;
-   time_t secs;
    struct tm *now;
+   time_t secs;
 
    if (!buff) return;
 
@@ -205,7 +206,7 @@ scanDate(const char *buff, int *day, int *month, int *year)
          }
       }
    }
-   
+
    /* if any fields appear blank, use today's date */
    time (&secs);
    now = localtime (&secs);
@@ -214,11 +215,10 @@ scanDate(const char *buff, int *day, int *month, int *year)
    iyear = now->tm_year+1900;
 
    /* get numeric values */
-   switch(dateFormat)
+   switch (dateFormat)
    {
-#if 0 /* strptime broken in glibc <= 2.1.2 */
      case DATE_FORMAT_LOCALE:
-       if (buff[0] != 0)
+       if (buff[0] != '\0')
        {
          struct tm thetime;
 
@@ -229,7 +229,6 @@ scanDate(const char *buff, int *day, int *month, int *year)
          iyear = thetime.tm_year + 1900;
        }
        break;
-#endif
      case DATE_FORMAT_UK:
      case DATE_FORMAT_CE:
        if (first_field) iday = atoi (first_field);
@@ -273,24 +272,39 @@ scanDate(const char *buff, int *day, int *month, int *year)
  */
 char dateSeparator()
 {
-  char separator;
+  static char locale_separator = '\0';
 
   switch(dateFormat)
   {
     case DATE_FORMAT_CE:
-      separator='.';
-      break;
+      return '.';
     case DATE_FORMAT_ISO:
-      separator='-';
-      break;
+      return '-';
     case DATE_FORMAT_US:
     case DATE_FORMAT_UK:
     default:
-      separator='/';
-      break;
+      return '/';
+    case DATE_FORMAT_LOCALE:
+      if (locale_separator != '\0')
+        return locale_separator;
+      else
+      { /* Make a guess */
+        char string[256];
+        struct tm *tm;
+        time_t secs;
+        char *s;
+
+        secs = time(NULL);
+        tm = localtime(&secs);
+        strftime(string, sizeof(string), "%x", tm);
+
+        for (s = string; s != '\0'; s++)
+          if (!isdigit(*s))
+            return (locale_separator = *s);
+      }
   }
 
-  return separator;
+  return '\0';
 }
 
 /********************************************************************\
