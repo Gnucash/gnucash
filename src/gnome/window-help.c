@@ -326,7 +326,8 @@ gnc_help_window_print_cb(GtkWidget * w, gpointer data) {
 
 static void 
 item_destroy_cb(GtkListItem * li, gpointer user_data) {
-  g_free(gtk_object_get_user_data(GTK_OBJECT(li)));
+  gpointer x = gtk_object_get_user_data(GTK_OBJECT(li));
+  g_free(x);
 }
 
 

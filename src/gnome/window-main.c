@@ -471,7 +471,7 @@ gnc_refresh_main_window_title (void)
 
   book = gncGetCurrentBook ();
 
-  filename = gnc_book_get_file_path (book);
+  filename = gnc_book_get_url (book);
 
   if ((filename == NULL) || (*filename == '\0'))
     filename = _("Untitled");
