@@ -49,8 +49,8 @@
 typedef struct {
   guint64 hi;
   guint64 lo;
-  short isneg;
-  short carry;
+  short isneg;    /* sign-bit -- T if number is negative */
+  short isbig;    /* sizeflag -- T if number won't fit in signed 64-bit */
 } gncint128;
 
 /** Multiply a pair of signed 64-bit numbers, 
@@ -111,7 +111,8 @@ mult128 (gint64 a, gint64 b)
 
   prod.lo = d0 + (sum<<32);
   prod.hi = carry + e1 + f1 + g0 + (g1<<32);
-  prod.carry = (prod.hi || (sum >> 31));
+  // prod.isbig = (prod.hi || (sum >> 31));
+  prod.isbig = prod.hi || (prod.lo >> 63);
 
   return prod;
 }
@@ -150,7 +151,6 @@ div128 (gncint128 n, gint64 d)
    * is larger than 2 billion.
    */
   guint64 rnd = quotient.lo;
-  // rnd &= 0x7fffffff;
   rnd *= d;
   rnd &= 0x7fffffff;
   rnd = (n.lo & 0x7fffffff) - rnd;
@@ -160,19 +160,20 @@ div128 (gncint128 n, gint64 d)
   /* ?? will this ever overflow ? */
   qlo = quotient.lo;
   quotient.lo += rnd;
-  if (lo > quotient.lo)
+  if (qlo > quotient.lo)
   {
     quotient.hi += 1;
   }
 
   /* compute the carry situation */
-  quotient.carry = (quotient.hi || (quotient.lo >> 63));
+  quotient.isbig = (quotient.hi || (quotient.lo >> 63));
 
   return quotient;
 }
 
 /** Return the remainder of a signed 128-bit number modulo a signed 64-bit,
- *  XXX the current algo only works for divisor values less than 2 billion.
+ *  XXX the current algo only works for divisor values less than 1<<31 
+ *  (2 billion)
  */
 static inline gint64
 rem128 (gncint128 n, gint64 d)
@@ -180,7 +181,6 @@ rem128 (gncint128 n, gint64 d)
   gncint128 quotient = div128 (n,d);
 
   guint64 rnd = quotient.lo;
-  // rnd &= 0x7fffffff;
   rnd *= d;
   rnd &= 0x7fffffff;
   rnd = (n.lo & 0x7fffffff) - rnd;
@@ -211,7 +211,7 @@ reduce128(gncint128 n, gint64 d)
   /* num now holds the GCD (Greatest Common Divisor) */
 
   gncint128 red = div128 (n, num);
-  if (red.carry)
+  if (red.isbig)
   {
     return gnc_numeric_error (GNC_ERROR_OVERFLOW);
   }
@@ -236,7 +236,7 @@ static void pr (gint64 a, gint64 b)
 {
    gncint128 prod = mult128 (a,b);
    printf ("%lld * %lld = %lld %llu (0x%llx %llx) %hd\n",
-	   a, b, prod.hi, prod.lo, prod.hi, prod.lo, prod.carry);
+	   a, b, prod.hi, prod.lo, prod.hi, prod.lo, prod.isbig);
 }
 
 static void prd (gint64 a, gint64 b, gint64 c)
@@ -245,7 +245,7 @@ static void prd (gint64 a, gint64 b, gint64 c)
    gncint128 quot = div128 (prod, c);
    gint64 rem = rem128 (prod, c);
    printf ("%lld * %lld / %lld = %lld %llu + %lld (0x%llx %llx) %hd\n",
-	   a, b, c, quot.hi, quot.lo, rem, quot.hi, quot.lo, quot.carry);
+	   a, b, c, quot.hi, quot.lo, rem, quot.hi, quot.lo, quot.isbig);
 }
 
 int main ()
@@ -755,7 +755,7 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
   product.denom = a.denom*b.denom;
 
   /* If it looks to be overflowing, try to reduce the fraction ... */
-  if (bigprod.carry)
+  if (bigprod.isbig)
   {
     product = reduce128 (bigprod, product.denom);
     if (gnc_numeric_check (product))
@@ -789,7 +789,8 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
 
 gnc_numeric
 gnc_numeric_div(gnc_numeric a, gnc_numeric b, 
-                gint64 denom, gint how) {
+                gint64 denom, gint how) 
+{
   gnc_numeric quotient;
 
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
@@ -828,13 +829,13 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
   {
     gncint128 nume = mult128(a.num, b.denom);
     gncint128 deno = mult128(b.num, a.denom);
-    if ((0 == nume.carry) && (0 == deno.carry))
+    if ((0 == nume.isbig) && (0 == deno.isbig))
     {
       quotient.num = nume.lo;
       if (nume.isneg) quotient.num = -quotient.num;
       quotient.denom = deno.lo;
     }
-    else if (0 == deno.carry)
+    else if (0 == deno.isbig)
     {
        quotient = reduce128 (nume, deno.lo);
     }
@@ -844,7 +845,7 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
       gint64 lcd = gnc_numeric_lcd(a,b);
       nume = mult128 (a.num, (lcd/a.denom));
       deno = mult128 (b.num, (lcd/b.denom));
-      if ((0 == nume.hi) && (0 == deno.hi))
+      if ((0 == nume.isbig) && (0 == deno.isbig))
       {
         quotient.num = nume.lo;
         if (nume.isneg) quotient.num = -quotient.num;
