@@ -143,6 +143,8 @@ gnc_book_destroy (GNCBook *book)
   xaccEntityTableDestroy (book->entity_table);
   book->entity_table = NULL;
 
+  kvp_frame_delete (book->kvp_data);
+
   /* FIXME: Make sure the data_table is empty */
   g_hash_table_destroy (book->data_tables);
 
