@@ -60,7 +60,7 @@ static void gnc_reconcile_list_fill(GNCReconcileList *list);
 
 
 GtkType
-gnc_reconcile_list_get_type()
+gnc_reconcile_list_get_type (void)
 {
   static GtkType gnc_reconcile_list_type = 0;
 
