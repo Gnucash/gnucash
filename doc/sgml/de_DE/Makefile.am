@@ -8,10 +8,10 @@ GNUCASH_SGML_FILES = \
 	xacc-quickstart.sgml \
 	xacc-whats-new.sgml
 
-gnucash_html_dir = $(top_srcdir)/doc/html/de_DE
+gnucash_html_dir = $(top_srcdir)/doc/html/C
 
-GNUCASH_HTML_FILES = 
-#	$(gnucash_html_dir)/xacc-tax-report-example.html
+GNUCASH_HTML_FILES = \
+	$(gnucash_html_dir)/xacc-tax-report-example.html
 
 install-data-local: gnucash/index.html gnucash/help-search-index.db
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)
@@ -69,7 +69,7 @@ gnucash/index.html: $(GNUCASH_SGML_FILES) $(GNUCASH_HTML_FILES)
 	-(db2html gnucash.sgml \
 	  && cp $(GNUCASH_HTML_FILES) gnucash \
 	  && mkdir -p gnucash/image \
-	  && cp $(srcdir)/image/*.png gnucash/image || exit 1) 
+	  && cp $(srcdir)/../C/image/*.png gnucash/image || exit 1) 
 
 gnucash/help-search-index.db: $(GNUCASH_SGML_FILES) $(GNUCASH_HTML_FILES)
 	-(cd gnucash && \
