@@ -323,7 +323,7 @@ int xaccAccountStagedTransactionTraversal(Account *a,
                                           TransactionCallbackInt,
                                           void *data);
 
-/* Traverse all of the transactions in the given account group.
+/** Traverse all of the transactions in the given account group.
    Continue processing IFF proc does not return FALSE. This function
    will descend recursively to traverse transactions in the
    children of the accounts in the group.
@@ -337,7 +337,17 @@ int xaccAccountStagedTransactionTraversal(Account *a,
    called once per account on the shared transactions.
 
    The result of this function will not be FALSE IFF every relevant
-   transaction was traversed exactly once.  */
+   transaction was traversed exactly once. 
+
+   Note that the traversal occurs only over the transactions that
+   are locally cached in the local gnucash engine.  If the gnucash
+   engine is attached to a remote database, the database may contain
+   (many) transactions that are not mirrored in the local cache.
+   This routine will not cause an SQL database query to be performed;
+   it will not traverse transactions present only in the remote
+   database.
+ */
+
 gboolean
 xaccGroupForEachTransaction(AccountGroup *g,
                             TransactionCallback,
