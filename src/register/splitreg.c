@@ -158,6 +158,7 @@ configLabels (SplitRegister *reg)
          break;
       case STOCK_REGISTER:
       case PORTFOLIO:
+      case CURRENCY_REGISTER:
          LABEL (DEBT,  SOLD_STR);
          LABEL (CRED,  BOUGHT_STR);
          break;
@@ -282,6 +283,7 @@ configLayout (SplitRegister *reg)
       /* --------------------------------------------------------- */
       case STOCK_REGISTER:
       case PORTFOLIO:
+      case CURRENCY_REGISTER:
       {
          /* 11 column config */
          curs = reg->single_cursor;
@@ -528,6 +530,7 @@ mallocCursors (SplitRegister *reg)
 
       case STOCK_REGISTER:
       case PORTFOLIO:
+      case CURRENCY_REGISTER:
          reg->num_cols = 11;
          break;
       default:
