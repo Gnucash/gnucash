@@ -396,6 +396,7 @@ typedef struct parser_env
   ParseError error_code;
 
   void *numeric_value;
+
   void *(*trans_numeric) (const char *digit_str,
 			  char radix_point, char group_char, char **rstr);
   void *(*numeric_ops) (char op_sym, void *left_value, void *right_value);
@@ -443,6 +444,8 @@ init_parser (var_store_ptr predefined_vars,
   pe->radix_point = radix_point;
   pe->group_char = group_char;
 
+  pe->numeric_value = NULL;
+
   pe->trans_numeric = trans_numeric;
   pe->numeric_ops = numeric_ops;
   pe->negate_numeric = negate_numeric;
@@ -465,7 +468,7 @@ exit_parser (parser_env_ptr pe)
     vars->variable_name = NULL;
 
     if (vars->value)
-      (pe->free_numeric) (vars->value);
+      pe->free_numeric (vars->value);
     vars->value = NULL;
 
     bv = vars->next_var;
@@ -480,6 +483,10 @@ exit_parser (parser_env_ptr pe)
   g_free (pe->tokens);
   pe->tokens = NULL;
   pe->token_tail = NULL;
+
+  if (pe->numeric_value)
+    pe->free_numeric (pe->numeric_value);
+  pe->numeric_value = NULL;
 
   g_free (pe);
 }				/* exit_parser */
@@ -525,7 +532,7 @@ delete_var (char *var_name, parser_env_ptr pe)
       g_free (nv->variable_name);
       nv->variable_name = NULL;
 
-      (pe->free_numeric) (nv->value);
+      pe->free_numeric (nv->value);
       nv->value = NULL;
 
       g_free (nv);
@@ -574,7 +581,7 @@ parse_string (var_store_ptr value, const char *string, parser_env_ptr pe)
       var_store_ptr val;
 
       val = pop (pe);
-      val->value = pe->negate_numeric (val->value);
+      pe->negate_numeric (val->value);
       push (val, pe);
     }
   }
@@ -656,7 +663,7 @@ get_named_var (parser_env_ptr pe)
       bv->next_var = retp;
     retp->variable_name = g_strdup (pe->name);
     retp->value =
-      (pe->trans_numeric) ("0", pe->radix_point, pe->group_char, NULL);
+      pe->trans_numeric ("0", pe->radix_point, pe->group_char, NULL);
   }
 
   return retp;
@@ -677,7 +684,7 @@ get_unnamed_var (parser_env_ptr pe)
       retp->use_flag = USED_VAR;
       if (retp->value)
       {
-	(pe->free_numeric) (retp->value);
+	pe->free_numeric (retp->value);
         retp->value = NULL;
       }				/* endif */
       break;
@@ -701,9 +708,10 @@ free_var (var_store_ptr value, parser_env_ptr pe)
     return;
 
   value->use_flag = UNUSED_VAR;
+
   if (value->value)
   {
-    (pe->free_numeric) (value->value);
+    pe->free_numeric (value->value);
     value->value = NULL;
   }
 }				/* free_var */
@@ -752,22 +760,21 @@ next_token (parser_env_ptr pe)
   else if (strchr (allowed_operators, *str_parse))
   {
     add_token (pe, *str_parse++);
-    if (*str_parse == '=')
+    if (*str_parse == ASN_OP)
     {
-      if (pe->Token != '=')
+      if (pe->Token != ASN_OP)
       {
         str_parse++;
         pe->asn_op = pe->Token;
-        add_token (pe, '=');
+        add_token (pe, ASN_OP);
       }
       else
         pe->error_code = UNDEFINED_CHARACTER;
     }				/* endif */
   }
   /* test for numeric token */
-  else if ((number =
-            (pe->trans_numeric) (str_parse, pe->radix_point,
-                                 pe->group_char, &nstr)))
+  else if ((number = pe->trans_numeric (str_parse, pe->radix_point,
+                                        pe->group_char, &nstr)))
   {
     add_token (pe, NUM_TOKEN);
     pe->numeric_value = number;
@@ -795,14 +802,13 @@ assignment_op (parser_env_ptr pe)
 {
   var_store_ptr vl;		/* left value       */
   var_store_ptr vr;		/* right value      */
-  void *sp;			/* for swapping values */
   char ao;
 
   add_sub_op (pe);
   if (pe->error_code)
     return;
 
-  while (pe->Token == '=')
+  while (pe->Token == ASN_OP)
   {
     vl = pop (pe);
     if (pe->error_code)
@@ -837,20 +843,22 @@ assignment_op (parser_env_ptr pe)
 
       if (ao)
       {
-	sp = vl->value;
-	vl->value = (pe->numeric_ops) (ao, vl->value, vr->value);
-	(pe->free_numeric) (sp);
+        void *temp;
+
+	temp = vl->value;
+	vl->value = pe->numeric_ops (ao, vl->value, vr->value);
+	pe->free_numeric (temp);
       }
       else if (vl != vr)
       {
 	if (!vr->variable_name)
 	{
-	  (pe->free_numeric) (vl->value);
+	  pe->free_numeric (vl->value);
 	  vl->value = vr->value;
 	  vr->value = NULL;
 	}
 	else
-	  vl->value = (pe->numeric_ops) (ASN_OP, vl->value, vr->value);
+	  pe->numeric_ops (ASN_OP, vl->value, vr->value);
 
 	free_var (vr, pe);
       }				/* endif */
@@ -861,6 +869,7 @@ assignment_op (parser_env_ptr pe)
     {
       add_token (pe, EOS);	/* error !!!!!!!!!! */
       pe->error_code = NOT_A_VARIABLE;
+      free_var (vl, pe);
     }				/* endif */
   }				/* endwhile */
 }				/* assignment_op */
@@ -878,7 +887,7 @@ add_sub_op (parser_env_ptr pe)
   if (pe->error_code)
     return;
 
-  while ((pe->Token == '+') || (pe->Token == '-'))
+  while ((pe->Token == ADD_OP) || (pe->Token == SUB_OP))
   {
     op = pe->Token;
 
@@ -911,10 +920,11 @@ add_sub_op (parser_env_ptr pe)
     if (pe->error_code)
     {
       free_var (vl, pe);
+      free_var (vr, pe);
       return;
     }
 
-    rslt->value = (pe->numeric_ops) (op, vl->value, vr->value);
+    rslt->value = pe->numeric_ops (op, vl->value, vr->value);
 
     free_var (vl, pe);
     free_var (vr, pe);
@@ -923,8 +933,7 @@ add_sub_op (parser_env_ptr pe)
   }				/* endwhile */
 }				/* add_sub_op */
 
-/* evaluate multiplication, division operators
- */
+/* evaluate multiplication, division operators */
 static void
 multiply_divide_op (parser_env_ptr pe)
 {
@@ -937,7 +946,7 @@ multiply_divide_op (parser_env_ptr pe)
   if (pe->error_code)
     return;
 
-  while ((pe->Token == '*') || (pe->Token == '/'))
+  while ((pe->Token == MUL_OP) || (pe->Token == DIV_OP))
   {
     op = pe->Token;
 
@@ -970,10 +979,11 @@ multiply_divide_op (parser_env_ptr pe)
     if (pe->error_code)
     {
       free_var (vl, pe);
+      free_var (vr, pe);
       return;
     }
 
-    rslt->value = (pe->numeric_ops) (op, vl->value, vr->value);
+    rslt->value = pe->numeric_ops (op, vl->value, vr->value);
 
     free_var (vl, pe);
     free_var (vr, pe);
@@ -1024,8 +1034,8 @@ primary_exp (parser_env_ptr pe)
 
       break;
 
-    case '-':
-    case '+':
+    case ADD_OP:
+    case SUB_OP:
       primary_exp (pe);
       if (pe->error_code)
         return;
@@ -1034,8 +1044,8 @@ primary_exp (parser_env_ptr pe)
       if (pe->error_code)
         return;
 
-      if (LToken == '-')
-        (pe->negate_numeric) (rslt->value);
+      if (LToken == SUB_OP)
+        pe->negate_numeric (rslt->value);
 
       break;
 

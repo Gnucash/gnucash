@@ -426,8 +426,14 @@ gnc_exp_parser_parse (const char * expression, gnc_numeric *value_p,
 
   if (error_loc == NULL)
   {
-    if ((value_p != NULL) && (pnum != NULL))
-      *value_p = gnc_numeric_reduce (pnum->value);
+    if (pnum)
+    {
+      if (value_p)
+        *value_p = gnc_numeric_reduce (pnum->value);
+
+      if (!result.variable_name)
+        g_free (pnum);
+    }
 
     if (error_loc_p != NULL)
       *error_loc_p = NULL;
