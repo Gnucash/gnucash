@@ -1,0 +1,7 @@
+
+scan-acct.pl:
+   basic perl demo: opens a book, prints top-level account
+   balances.
+
+time-book-load.pl
+   measure the time it takes to open a gnucash file/url

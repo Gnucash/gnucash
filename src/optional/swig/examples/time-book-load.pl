@@ -1,17 +1,17 @@
 #!/usr/bin/perl -w
-
-# gnucash perl demo:
 #
-# This file demonstrates how to open a gnucash file/url and print 
-# the names and balances of the top-level accounts in the file.
-# Its a pretty basic demo.
+# This utility times how long it takes to open an acount file/url.
+# Handy for performance measurement.
+#
+# Copyright (c) 2001 Linas Vepstas
+# GPL license. see COPYING.
 #
 # use lib '/usr/lib/gnucash/';
 use lib '..';
 use gnucash;                                           
 package gnucash;
 
-die "Usage: $0 <gnucash filename or url>" if $#ARGV < 0;
+die "Usage: $0 <filename>" if $#ARGV < 0;
 print "Will load $ARGV[0]\n";
 
 gnucash::gnc_engine_init(0, $ARGV);
@@ -24,8 +24,14 @@ if ($rc != 1)
    print "Could not find $ARGV[0], errrocode=$err\n";
 }
 
+$secs = time;
+
 $rc = gnucash::gnc_book_load ($session);
 die "Could not load $ARGV[0]\n" if $rc != 1;
+
+($user,$sys,$cuser,$csys) = times;
+$elapsed = time() - $secs;
+print "time to load: user-cpu=$user sys-cpu=$sys elapsed(rounded to sec)=$elapsed\n";
 
 $grp = gnucash::gnc_book_get_group ($session);
 $numacc = gnucash::xaccGroupGetNumAccounts ($grp);
@@ -39,6 +45,16 @@ for ($i=0; $i<$numacc; $i++) {
    print "\tAccount: $acctname \tBalance: $baln\n";
 }
 
+$fsecs = time;
+($user,$sys,$cuser,$csys) = times;
+
 gnucash::gnc_book_end ($session);
 
+($fuser,$fsys,$cuser,$csys) = times;
+$elapsed = time() - $secs;
+print "time to finish: user-cpu=$fuser sys-cpu=$fsys elapsed(rounded to sec)=$elapsed\n";
+$fuser -= $user;
+$fsys -= $sys;
+$elapsed = time() - $fsecs;
+print "delta time to finish: user-cpu=$fuser sys-cpu=$fsys elapsed(rounded to sec)=$elapsed\n";
 
