@@ -1,4 +1,5 @@
 TESTS = \
+  test-date-converting \
   test-dom-converters1 \
   test-kvp-frames \
   test-load-example-account \
@@ -22,6 +23,7 @@ noinst_LTLIBRARIES = libgnc-test-file-stuff.la
 libgnc_test_file_stuff_la_SOURCES = test-file-stuff.c
 
 noinst_PROGRAMS = \
+  test-date-converting \
   test-dom-converters1 \
   test-kvp-frames \
   test-load-example-account \

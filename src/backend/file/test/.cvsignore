@@ -1,4 +1,5 @@
 Makefile
+test-date-converting
 test-dom-converters1
 test-kvp-frames
 test-string-converters
