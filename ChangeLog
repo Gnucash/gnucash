@@ -1,3 +1,9 @@
+2001-08-18  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/FreqSpec.c: i18n xaccFreqSpecGetFreqStr.
+
+	* src/gnome/dialog-sxsincelast.c: fix bug in close callback.
+
 2001-08-17  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/gnc-module/gnc-module.c (gnc_module_system_setup_load_path):

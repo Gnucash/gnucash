@@ -75,8 +75,6 @@
 
 #include "config.h"
 
-/* #include <time.h> // should be config'd */
-
 #include <time.h>
 
 #include <glib.h>
@@ -700,6 +698,24 @@ xaccFreqSpecCompositesClear( FreqSpec *fs )
                         subSpecsListMapDelete, NULL );
 }
 
+static GString *
+get_dom_string(guint dom)
+{
+  GString *str = g_string_new(NULL);
+
+  if(dom > 31)
+  {
+    g_string_sprintf(str, _( "last day"));
+  }
+  else
+  {
+    g_string_sprintf(str, "%u", dom);
+  }
+
+  return str;
+}
+
+    
 void
 xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
 {
@@ -715,7 +731,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 tmpStr = g_new0( char, GDATE_STRING_BUF_SIZE );
                 /* this is now a GDate. */
                 g_date_strftime( tmpStr, GDATE_STRING_SIZE,
-                                 "%a, %b %e, %Y",
+                                 GNC_D_FMT,
                                  &fs->s.once.date );
                 g_string_sprintf( str, "Once: %s", tmpStr );
                 g_free( tmpStr );
@@ -740,16 +756,21 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 /* We assume that all of the weekly FreqSpecs that make up
                    the Daily[M-F] FreqSpec have the same interval. */
                 subFS = (FreqSpec*)fs->s.composites.subSpecs->data;
-                g_string_sprintf( str, "Daily [M-F]" );
+	       
                 if ( subFS->s.weekly.interval_weeks > 1 ) {
-                        g_string_sprintfa( str, " (x%u)",
+                        g_string_sprintf( str, _("Weekdays: (x%u)"),
                                            subFS->s.weekly.interval_weeks );
                 }
+		else
+		{
+		  g_string_sprintf(str, _("Weekdays"));
+		}
+	  
         }
         break;
 
         case UIFREQ_WEEKLY:
-                g_string_sprintf( str, "Weekly" );
+
                 tmpInt = -1;
                 tmpStr = g_new0( char, 8 );
                 for ( i=0; i<7; i++ ) {
@@ -776,66 +797,89 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 } while ( (list = g_list_next(list)) );
 
                 if ( tmpInt > 1 ) {
-                        g_string_sprintfa( str, " (x%d)", tmpInt );
+		  g_string_sprintf( str, _( "Weekly (x%d): %s"), tmpInt, tmpStr );
                 }
-                g_string_sprintfa( str, ": %s", tmpStr );
+		else
+		{
+		  g_string_sprintf( str, _( "Weekly: %s"), tmpStr );
+		}
                 g_free( tmpStr );
                 break;
 
         case UIFREQ_BI_WEEKLY:
-                g_string_sprintf( str, "Bi-Weekly, %ss", get_wday_name(fs->s.weekly.offset_from_epoch % 7) );
+                g_string_sprintf( str, _("Bi-Weekly, %ss"), get_wday_name(fs->s.weekly.offset_from_epoch % 7) );
                 break;
 
         case UIFREQ_SEMI_MONTHLY:
-                g_string_sprintf( str, "Semi-Monthly" );
-                list = xaccFreqSpecCompositeGet( fs );
-                tmpFS = (FreqSpec*)(g_list_nth( list, 0 )->data);
-                if ( tmpFS->s.monthly.interval_months > 1 ) {
-                        g_string_sprintfa( str, " (x%u)", tmpFS->s.monthly.interval_months );
-                }
-                g_string_sprintfa( str, ": " );
-                if ( tmpFS->s.monthly.day_of_month > 31 ) {
-                        g_string_sprintfa( str, "%s", "last day" );
-                } else {
-                        g_string_sprintfa( str, "%u", tmpFS->s.monthly.day_of_month );
-                }
-                g_string_sprintfa( str, ", " );
-                tmpFS = (FreqSpec*)(g_list_nth( list, 1 )->data);
-                if ( tmpFS->s.monthly.day_of_month > 31 ) {
-                        g_string_sprintfa( str, "%s", "last day" );
-                } else {
-                        g_string_sprintfa( str, "%u", tmpFS->s.monthly.day_of_month );
-                }
-                break;
+	{
+	  GString *first_dom, *second_dom;
+  
+	  list = xaccFreqSpecCompositeGet( fs );
+	  tmpFS = (FreqSpec*)(g_list_nth( list, 0 )->data);
+	 
+	  first_dom = get_dom_string(tmpFS->s.monthly.day_of_month);
+
+	  tmpFS = (FreqSpec*)(g_list_nth( list, 1 )->data);
+	  second_dom = get_dom_string(tmpFS->s.monthly.day_of_month);
+
+
+	  if ( tmpFS->s.monthly.interval_months > 1 ) {
+	    g_string_sprintf( str, _("Semi-monthly (x%u): %s, %s"), 
+			      tmpFS->s.monthly.interval_months,
+			      first_dom->str, 
+			      second_dom->str);
+	  }
+	  else
+	  {
+	    g_string_sprintf( str, _("Semi-monthly: %s, %s"), 
+			      first_dom->str,
+			      second_dom->str);
+	  }
+	  g_string_free(first_dom, TRUE);
+	  g_string_free(second_dom, TRUE);
+            
+	  break;
+	}
 
         case UIFREQ_MONTHLY:
-                g_string_sprintf( str, "Monthly" );
+               
                 if ( fs->s.monthly.interval_months > 1 ) {
-                        g_string_sprintfa( str, " (x%u)",
-                                           fs->s.monthly.interval_months );
+                        g_string_sprintf( str, _("Monthly (x%u): %u"),
+                                           fs->s.monthly.interval_months,
+					  fs->s.monthly.day_of_month);
                 }
-                g_string_sprintfa( str, ": %u",
-                                   fs->s.monthly.day_of_month );
+		else
+		{
+		  g_string_sprintf( str, _("Monthly: %u"),
+				    fs->s.monthly.day_of_month );
+		}
                 break;
 
         case UIFREQ_QUARTERLY:
-                g_string_sprintf( str, "Quarterly" );
                 if ( fs->s.monthly.interval_months != 3 ) {
-                        g_string_sprintfa( str, " (x%u)",
-                                           fs->s.monthly.interval_months/3 );
+                        g_string_sprintf( str, _("Quarterly (x%u): %u"),
+					  fs->s.monthly.interval_months/3,
+					  fs->s.monthly.day_of_month);
                 }
-                g_string_sprintfa( str, ": %u",
+		else
+		{
+		  g_string_sprintf( str, _("Quarterly: %u"),
                                    fs->s.monthly.day_of_month );
+		}
                 break;
 
         case UIFREQ_TRI_ANUALLY:
-                g_string_sprintf( str, "Tri-Anually" );
+
                 if ( fs->s.monthly.interval_months != 4 ) {
-                        g_string_sprintfa( str, " (x%u)",
-                                           fs->s.monthly.interval_months/4 );
+                        g_string_sprintf( str, _("Tri-Annually (x%u): %u"),
+					  fs->s.monthly.interval_months/4,
+					  fs->s.monthly.day_of_month);
                 }
-                g_string_sprintfa( str, ": %u",
+		else
+		{
+                g_string_sprintf( str, _("Tri-Anually: %u"),
                                    fs->s.monthly.day_of_month );
+		}
                 break;
 
         case UIFREQ_SEMI_YEARLY:
@@ -846,11 +890,15 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                                       "is not a multiple of 6 [%d]",
                                       fs->s.monthly.interval_months );
                         }
-                        g_string_sprintfa( str, " (x%u)",
-                                           fs->s.monthly.interval_months/6 );
+                        g_string_sprintf( str, _("Semi-Yearly(x%u): %u"),
+                                           fs->s.monthly.interval_months/6,
+					  fs->s.monthly.day_of_month);
                 }
-                g_string_sprintfa( str, ": %u",
-                                   fs->s.monthly.day_of_month );
+		else
+		{
+		  g_string_sprintf( str, _("Semi-Yearly: %u"),
+				     fs->s.monthly.day_of_month );
+		}
                 break;
 
         case UIFREQ_YEARLY:
@@ -861,16 +909,27 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                                       "is not a multiple of 12 [%d]",
                                       fs->s.monthly.interval_months );
                         }
-                        g_string_sprintfa( str, " (x%u)",
-                                           fs->s.monthly.interval_months/12 );
+
+			/*
+			 * FIXME: This string *must* be translated for en_GB, en_AU
+			 * and everywhere else with the sensible ordering of ddmmyy
+			 */
+
+                        g_string_sprintf( str, _("Yearly (x%u): %s/%u"),
+                                           fs->s.monthly.interval_months/12,
+					   get_abbrev_month_name(fs->s.monthly.offset_from_epoch),
+					   fs->s.monthly.day_of_month);
                 }
-                g_string_sprintfa( str, ": %s/%u",
-                                   get_abbrev_month_name(fs->s.monthly.offset_from_epoch),
-                                   fs->s.monthly.day_of_month );
+		else
+		{
+		  g_string_sprintf( str, _("Yearly: %s/%u"),
+				     get_abbrev_month_name(fs->s.monthly.offset_from_epoch),
+				     fs->s.monthly.day_of_month );
+		}
                 break;
 
         default:
-                g_string_sprintf( str, "Unknown" );
+                g_string_sprintf( str, _("Unknown") );
                 break;
         }
 }

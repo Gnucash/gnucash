@@ -862,7 +862,9 @@ sxsincelast_close_handler( gpointer ud )
 		  PERR( "How did the reminder dialog get !displayed, but !destroyed?" );
 		  sxsld_remind_close_handler( sxsld );
 		}
-		
+	}
+	else
+	{
                 gnome_dialog_close( GNOME_DIALOG( sxsld->sxsincelastDlg ) );
                 sxsld->sxsincelastDlg = NULL;
                 sxsld->sincelast_displayed = FALSE;
