@@ -1,5 +1,4 @@
 Makefile
 Makefile.in
-gnc-prices
-gnc-prices-2
-price-quote-helper
+finance-quote-helper
+histprices
