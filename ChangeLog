@@ -1,3 +1,12 @@
+2003-10-24  Christian Stimming  <stimming@tuhh.de>
+
+	* accounts/el_GR/*: Updated Greek account templates by Nikos
+	Charonitakis <frolix68@yahoo.gr>
+
+	* po/el.po: Updated Greek translation by Nikos Charonitakis
+	<frolix68@yahoo.gr>: Review and Update by ta panta rei
+	<ta_panta_rei@flashmail.com>
+
 2003-10-21  Christian Stimming  <stimming@tuhh.de>
 
 	* po/cs.po: Updated Czech translation by Miloslav Trmac

@@ -64,14 +64,14 @@
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Υποχρεώσεις</act:name>
+  <act:name>Παθητικό</act:name>
   <act:id type="new">19a911feed9b41b8b01be036a2aed9fe</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Υποχρεώσεις</act:description>
+  <act:description>Παθητικό</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Λογαριασμοί Πληρωτέοι</act:name>
@@ -96,7 +96,7 @@
   <act:parent type="new">a8186db64d71dc2ca5fdccb3234b531b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Εισόδημα</act:name>
+  <act:name>Έσοδα</act:name>
   <act:id type="new">a7ab23dd2d41616042034d5a012a0850</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -387,7 +387,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>ψυχαγωγία</act:description>
+  <act:description>Ψυχαγωγία</act:description>
   <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -585,7 +585,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Federal</act:description>
+  <act:description>Εφορία</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -688,14 +688,14 @@
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Equity</act:name>
+  <act:name>Καθαρή Θέση</act:name>
   <act:id type="new">3ab6a6d97b216c11333e48aa2b749a91</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Equity</act:description>
+  <act:description>Καθαρή Θέση</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Αρχικά Υπόλοιπα</act:name>

@@ -10,14 +10,14 @@
     Επιλέξτε αυτούς τους λογαριασμούς αν έχετε πάρει δάνειο για αγορά αυτοκινήτου (δάνειο αυτοκινήτου, τόκοι δανείου).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
-  <act:name>Υποχρεώσεις</act:name>
+  <act:name>Παθητικό</act:name>
   <act:id type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Υποχρεώσεις</act:description>
+  <act:description>Παθητικό</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Δάνεια</act:name>
