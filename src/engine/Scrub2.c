@@ -282,7 +282,10 @@ xaccScrubSubSplitPrice (Split *split, int maxmult, int maxamtscu)
 
 /* ================================================================= */
 
-/* Remove the guid of b from a */
+/* Remove the guid of b from a.  Note that a may not contain the guid 
+ * of b, (and v.v.) in which case, it will contain other guids which
+ * establish the links. So merge them back in. */
+
 static void
 remove_guids (Split *sa, Split *sb)
 {
@@ -291,20 +294,28 @@ remove_guids (Split *sa, Split *sb)
    /* Find and remove the matching guid's */
    ksub = gnc_kvp_bag_find_by_guid (sa->kvp_data, "lot-split",
                     "peer_guid", &sb->guid);
-   if (!ksub) 
+   if (ksub) 
    {
-      PERR ("merging splits that didn't have correct gemini values!\n"
-            "looking for guid=%s\n"
-            "bag held: %s", 
-            guid_to_string (&sb->guid),
-            kvp_frame_to_string (sa->kvp_data));
-      return;
+      gnc_kvp_bag_remove_frame (sa->kvp_data, "lot-split", ksub);
+      kvp_frame_delete (ksub);
    }
-   gnc_kvp_bag_remove_frame (sa->kvp_data, "lot-split", ksub);
-   kvp_frame_delete (ksub);
+
+   /* Now do it in the other direction */
+   ksub = gnc_kvp_bag_find_by_guid (sb->kvp_data, "lot-split",
+                    "peer_guid", &sa->guid);
+   if (ksub) 
+   {
+      gnc_kvp_bag_remove_frame (sb->kvp_data, "lot-split", ksub);
+      kvp_frame_delete (ksub);
+   }
+
+   /* Finally, merge b's lot-splits, if any, into a's */
+   /* This is an important step, if it got busted into many pieces. */
+   gnc_kvp_bag_merge (sa->kvp_data, "lot-split",
+                      sb->kvp_data, "lot-split");
 }
 
-/* The 'merge_splits() routine causes the amount & value of sb 
+/* The merge_splits() routine causes the amount & value of sb 
  * to be merged into sa; it then destroys sb.  It also performs
  * some other misc cleanup */
 
