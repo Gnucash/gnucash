@@ -333,9 +333,17 @@ const char *    xaccAccountGetTaxUSPayerNameSource (Account *account);
 void            xaccAccountSetTaxUSPayerNameSource (Account *account,
                                                     const char *source);
 
+typedef enum 
+{
+  PLACEHOLDER_NONE,
+  PLACEHOLDER_THIS,
+  PLACEHOLDER_CHILD,
+} GNCPlaceholderType;
+
 gboolean        xaccAccountGetPlaceholder (Account *account);
 void            xaccAccountSetPlaceholder (Account *account,
                                            gboolean option);
+GNCPlaceholderType xaccAccountGetDescendantPlaceholder (Account *account);
 
 /* The xaccAccountGetFullName routine returns the fully qualified name
  * of the account using the given separator char. The name must be freed

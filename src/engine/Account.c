@@ -2023,6 +2023,28 @@ xaccAccountSetPlaceholder (Account *account, gboolean option)
   xaccAccountCommitEdit (account);
 }
 
+GNCPlaceholderType
+xaccAccountGetDescendantPlaceholder (Account *account)
+{
+  GList *descendants, *node;
+
+  if (!account)
+    return PLACEHOLDER_NONE;
+
+  if (xaccAccountGetPlaceholder(account))
+    return PLACEHOLDER_THIS;
+
+  descendants = xaccGroupGetSubAccounts(account->children);
+  node = g_list_first(descendants);
+  for ( ; node ; node = g_list_next(node) ) {
+    account = (Account *)node->data;
+      if (xaccAccountGetPlaceholder(account))
+	return(PLACEHOLDER_CHILD);
+  }
+
+  return PLACEHOLDER_NONE;
+}
+
 /********************************************************************\
 \********************************************************************/
 

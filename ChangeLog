@@ -65,6 +65,19 @@
 
 2002-10-06  David Hampton  <hampton@employees.org>
 
+	* src/engine/Account.c (xaccAccountGetDescendantPlaceholder): New
+	function to check all descendents of an account to see if any of
+	them is a placeholder account.
+
+	* src/gnome/window-register.c (gnc_reg_get_placeholder): 
+	(regWindowDetermineReadOnly): New routines for determining if a
+	register contains a placeholder account, and putting up a nice
+	dialog about it.
+
+	* src/register/register-gnome/gnucash-sheet.c
+	(gnucash_register_set_sensitive): New routine to make the sheet
+	insensitive for read-only accounts.
+
 	* src/gnome-utils/dialog-utils.c (gnc_handle_date_accelerator): If
 	an alphabetic character has any modifiers applied to it, pass it
 	on to the window manager.  Fixes 88520.

@@ -1431,6 +1431,127 @@ gnc_reg_set_window_name (RegWindow *regData)
   g_free (windowname);
 }
 
+/********************************************************************\
+ * gnc_reg_get_placeholder                                          *
+ *   opens up a register window for a group of Accounts             *
+ *                                                                  *
+ * Args:   regData - the register window instance                   *
+ * Return: GNCPlaceholderType - indicate presence and type          *
+ *          of placeholder accounts                                 *
+\********************************************************************/
+static GNCPlaceholderType
+gnc_reg_get_placeholder (RegWindow *regData)
+{
+  Account *leader;
+  SplitRegister *reg;
+  gboolean single_account;
+
+  if (regData == NULL)
+    return PLACEHOLDER_NONE;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  switch (reg->type)
+  {
+    case GENERAL_LEDGER:
+    case INCOME_LEDGER:
+    case PORTFOLIO_LEDGER:
+    case SEARCH_LEDGER:
+      single_account = FALSE;
+      break;
+    default:
+      single_account = TRUE;
+      break;
+  }
+
+  leader = gnc_ledger_display_leader (regData->ledger);
+  if (leader == NULL)
+    return PLACEHOLDER_NONE;
+  if (single_account) {
+    if (xaccAccountGetPlaceholder (leader))
+      return PLACEHOLDER_THIS;
+    return PLACEHOLDER_NONE;
+  }
+  return xaccAccountGetDescendantPlaceholder (leader);
+}
+
+/********************************************************************\
+ * gtk_callback_bug_workaround                                      *
+ *   Gtk has occasional problems with performing function as part   *
+ *   of a callback.  This routine gets called via a timer callback  *
+ *   to get it out of the data path with the problem.               *
+ *                                                                  *
+ * Args:   argp - a pointer to the window/string for the dialog     *
+ * Return: none                                                     *
+\********************************************************************/
+typedef struct dialog_args  {
+  RegWindow *regData;
+  gchar *string;
+} dialog_args;
+
+static gint
+gtk_callback_bug_workaround (gpointer argp)
+{
+  dialog_args *args = argp;
+
+  gnc_warning_dialog_parented(args->regData->window, args->string);
+  free(args);
+  return FALSE;
+}
+
+/********************************************************************\
+ * regWindowDetermineReadOnly                                       *
+ *   determines whether this register window should be read-only    *
+ *                                                                  *
+ * Args:   regData - the register window instance                   *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+regWindowDetermineReadOnly (RegWindow *regData)
+{
+  dialog_args *args = g_malloc(sizeof(dialog_args));
+  gchar *old_title, *new_title;
+  GtkArg objarg;
+
+  switch (gnc_reg_get_placeholder(regData)) {
+   case PLACEHOLDER_NONE:
+    return;
+
+   case PLACEHOLDER_THIS:
+    args->string = _("This account may not be edited.  If you want\n"
+		    "to edit transactions in this register, please\n"
+		    "open the account options and turn off the\n"
+		    "placeholder checkbox.");
+    break;
+
+   default:
+    args->string = _("One of the sub-accounts selected may not be\n"
+		    "edited.  If you want to edit transactions in\n"
+		    "this register, please open the sub-account\n"
+		    "options and turn off the placeholder checkbox.\n"
+		    "You may also open an individual account instead\n"
+		    "of a set of accounts.");
+    break;
+  }
+
+  /* Put up a warning dialog */
+  args->regData = regData;
+  gtk_timeout_add (250, gtk_callback_bug_workaround, args); /* 0.25 seconds */
+
+  /* Make the contents immutable */
+  gnucash_register_set_sensitive(regData->reg, FALSE);
+
+  /* Rename the window title */
+  objarg.name = "GtkWindow::title";
+  gtk_object_arg_get(GTK_OBJECT(regData->window), &objarg, NULL);
+  old_title = GTK_VALUE_STRING(objarg);
+  new_title = g_strdup_printf(_("%s [Read-Only]"), old_title);
+  gtk_object_set(GTK_OBJECT(regData->window),
+		 "GtkWindow::title", new_title, NULL);
+  g_free(old_title);
+  g_free(new_title);
+}
+
 static void
 gnc_toolbar_change_cb (void *data)
 {
@@ -1472,7 +1593,6 @@ regWindowLedger (GNCLedgerDisplay *ledger)
   RegWindow *regData;
   GtkWidget *register_window;
   GtkWidget *table_frame;
-  GtkWidget *menubar;
   gboolean show_all;
   gboolean has_date;
   GladeXML *xml;
@@ -1661,6 +1781,7 @@ regWindowLedger (GNCLedgerDisplay *ledger)
   gnc_reg_refresh_toolbar (regData);
 
   gnc_window_adjust_for_screen (GTK_WINDOW(register_window));
+  regWindowDetermineReadOnly(regData);
 
   return regData;
 }
