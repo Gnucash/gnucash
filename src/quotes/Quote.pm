@@ -413,7 +413,10 @@ sub vanguard {
        @q = split (/,/);
        ($sym = $q[0]) =~ s/\W//g;
        $aa {$sym, "exchange"} = "Vanguard";  # Vanguard
-       if (! $q[1]) { last; }     # error if comma separation didn't work
+
+       # check for error message it commas are missing
+       # (unortunately very common for Vanguard)
+       if (! $q[1]) { print "Error: $_\n"; last; }
        ($aa {$sym, "nav"} = $q[1]) =~ s/\s//g;
        ($aa {$sym, "date"} = $q[2]) =~ s/\s//g;
 
