@@ -243,47 +243,45 @@ Some half-finished thoughts about the engine API:
 
 Reconciliation
 --------------
-> * From: "Christopher B. Browne" <cbbrowne@knuth.brownes.org>
-> >
-> > /* Values for the reconciled field in Transaction: */
-> > #define CREC 'c'              /* The transaction has been cleared
-> > */
-> > #define YREC 'y'              /* The transaction has been reconciled
-> > */
-> > #define FREC 'f'              /* frozen into accounting period
-> > */
-> > #define NREC 'n'              /* not reconciled or cleared
-> > */
+The 'reconcile' state of a transaction can have one of the following values:
 
-Note that FREC is not yet used/implemented ...
+/* Values for the reconciled field in Transaction: */
+#define NREC 'n'              /* not reconciled or cleared */
+#define CREC 'c'              /* The transaction has been cleared */
+#define YREC 'y'              /* The transaction has been reconciled */
+#define FREC 'f'              /* frozen into accounting period */
 
->  I've reconciled the bank/credit card                                   
-> statement containing the transaction, and completed the
-> reconciliation.  One
-> could consider the transaction to now be "set in stone."  
+(Note that FREC is not yet used/implemented ...)
 
-If a transaction has been marked "reconciled" in the gui, should
-the GUI then block any changes to the transaction?
-
-How about the following proposal:
--- transactions marked 'y' (reconciled) in gui cannot be edited.
--- gui will allow 'y' to be changed back to 'n' or 'c'
-   (thus allowing editing).
--- engine will also enforce above restrictions
--- transactions marked 'f' cannot be changed, period, either
-   in the gui or the engine.
-
-Let me know if this is a bad idea, otherwise I'll implement it.
-
-Should I change the font or color or something for reconciled
-transactions, to provide some (stronger) visual cue?  If so, what
-color/font/whatever?
-
-
-> (In a more traditional accounting system, this would be very much 
-> the case.  Once a period is "closed," you can't change the data 
-> anymore...)
-> 
+The process of reconciliation works as follows:
+1) User enters new transaction.  All splits are marked 'n' for 'new'
+   or 'no, not yet reconciled'.
+2) User beleives that the transaction has cleared the bank, 
+   e.g. that a cheque written out has been deposited/cashed.
+   User clicks in the 'R' column in the register gui,
+   marking the split 'c' for 'cleared'.   User can freely 
+   toggle this flag from the GUI with essentially no penalty,
+   no complaints.  This is a 'safe' operation.  Note that the
+   register shows the 'cleared' subtotal, which is, essentially, 
+   a guess of the banks view of the account balance. 
+3) When user gets the bank statement, user launches the 
+   reconcile dialogue.  This dialogue is used to match transactions
+   on the bank statement with which is recorded locally.  
+   Reconciled transactions are marked with a 'y'.  
+   Note that once a transaction has been marked 'y', and the 
+   user has 'finished' with the reconcile dialogue, then it 
+   should be 'hard' to change the reconcile state from
+   the ordinary register dialogue.  It should be sort-of
+   'set in stone'.  (The engine does NOT enforce this,
+   only the gui enforces this.)
+4) When the books are closed, all splits should be marked 
+   'frozen', and become truly un-editable.  The engine should
+   enforce 'frozen', and just plain not allow editing of closed
+   books, period.  The only wat to change this would have been
+   to re-open the book. (and the reopening of a book would
+   change all 'f' to 'y'.)
+   
+About storing dates associated with reconcile:
 > I think that there should be a date stamp attached to the reconciliation
 > field so that as well as knowing that it has been reconciled, you also 
 > know *when* it was reconciled.
@@ -306,6 +304,7 @@ color/font/whatever?
 If the above is implemented, what date should be stored if the user
 toggles the recn flag a few time?  The date of the last toggle?
 The very first date that it was recn'ed?
+
 
 Automatic Backup
 ----------------
