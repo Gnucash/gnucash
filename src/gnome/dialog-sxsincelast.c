@@ -200,6 +200,7 @@ typedef struct toCreateInstance_ {
          * any]; this will always be a subset of the
          * sxsld->createdTxnGUIDList. */
         GList /* <GUID*> */ *createdTxnGUIDs;
+        gboolean dirty;
 } toCreateInstance;
 
 /**
@@ -479,7 +480,7 @@ gnc_sxsld_get_appropriate_page( sxSinceLastData *sxsld,
                                 GnomeDruidPage *from,
                                 Direction dir )
 {
-        static struct _anon {
+        static struct {
                 gchar *pageName;
                 gboolean (*pageAppropriate)( sxSinceLastData *sxsld );
         } pages[] = {
@@ -617,11 +618,13 @@ reminders_prep( GnomeDruidPage *druid_page,
         gtk_clist_clear( GTK_CLIST(w) );
         add_reminders_to_gui( sxsld->reminderList, sxsld );
         gtk_clist_thaw( GTK_CLIST(w) );
-        gnome_druid_set_buttons_sensitive( sxsld->sincelast_druid,
-                                           gnc_sxsld_get_appropriate_page( sxsld,
-                                                                           druid_page,
-                                                                           BACK ),
-                                           TRUE, TRUE );
+        gnome_druid_set_buttons_sensitive(
+                sxsld->sincelast_druid,
+                ( gnc_sxsld_get_appropriate_page( sxsld,
+                                                  druid_page,
+                                                  BACK )
+                  != NULL ),
+                TRUE, TRUE );
         /* FIXME: this isn't quite right; see the comment in
          * sxsld_remind_row_toggle */
         gnome_druid_set_show_finish( sxsld->sincelast_druid,
@@ -716,11 +719,13 @@ created_prep( GnomeDruidPage *druid_page,
         xaccFreeQuery( bookQuery );
         xaccFreeQuery( guidQuery );
 
-        gnome_druid_set_buttons_sensitive( sxsld->sincelast_druid,
-                                           gnc_sxsld_get_appropriate_page( sxsld,
-                                                                           druid_page,
-                                                                           BACK ),
-                                           TRUE, TRUE );
+        gnome_druid_set_buttons_sensitive(
+                sxsld->sincelast_druid,
+                ( gnc_sxsld_get_appropriate_page( sxsld,
+                                                  druid_page,
+                                                  BACK )
+                  != NULL ),
+                TRUE, TRUE );
 
         if ( !gnc_sxsld_get_appropriate_page( sxsld,
                                               druid_page,
@@ -736,11 +741,13 @@ obsolete_prep( GnomeDruidPage *druid_page,
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
         add_dead_list_to_gui( sxsld->toRemoveList, sxsld );
 
-        gnome_druid_set_buttons_sensitive( sxsld->sincelast_druid,
-                                           gnc_sxsld_get_appropriate_page( sxsld,
-                                                                           druid_page,
-                                                                           BACK ),
-                                           TRUE, TRUE );
+        gnome_druid_set_buttons_sensitive(
+                sxsld->sincelast_druid,
+                ( gnc_sxsld_get_appropriate_page( sxsld,
+                                                  druid_page,
+                                                  BACK )
+                  != NULL ),
+                TRUE, TRUE );
 
         /* This is always the last/finish page. */
         gnome_druid_set_show_finish( sxsld->sincelast_druid, TRUE );
@@ -797,11 +804,13 @@ auto_create_prep( GnomeDruidPage *druid_page,
         xaccFreeQuery( bookQuery );
         xaccFreeQuery( guidQuery );
 
-        gnome_druid_set_buttons_sensitive( sxsld->sincelast_druid,
-                                           gnc_sxsld_get_appropriate_page( sxsld,
-                                                                           druid_page,
-                                                                           BACK ),
-                                           TRUE, TRUE );
+        gnome_druid_set_buttons_sensitive(
+                sxsld->sincelast_druid,
+                ( gnc_sxsld_get_appropriate_page( sxsld,
+                                                  druid_page,
+                                                  BACK )
+                  != NULL ),
+                TRUE, TRUE );
 
         if ( !gnc_sxsld_get_appropriate_page( sxsld,
                                               druid_page,
@@ -823,11 +832,13 @@ to_create_prep( GnomeDruidPage *druid_page,
         gtk_clist_clear( GTK_CLIST(w) );
         add_to_create_list_to_gui( sxsld->toCreateList, sxsld );
         gtk_clist_thaw( GTK_CLIST(w) );
-        gnome_druid_set_buttons_sensitive( sxsld->sincelast_druid,
-                                           gnc_sxsld_get_appropriate_page( sxsld,
-                                                                           druid_page,
-                                                                           BACK ),
-                                           TRUE, TRUE );
+        gnome_druid_set_buttons_sensitive(
+                sxsld->sincelast_druid,
+                ( gnc_sxsld_get_appropriate_page( sxsld,
+                                                  druid_page,
+                                                  BACK )
+                  != NULL ),
+                TRUE, TRUE );
         /* FIXME: we should add next/finish determination based on the number
          * of ready-to-go to-create transactions? */
 }
@@ -901,17 +912,44 @@ to_create_next( GnomeDruidPage *druid_page,
                         /* Skip over instances we've already created
                          * transactions for. */
 
-                        /* FIXME: Really, we want to re-create transactions
-                         * for which the variables have changed. */
-
                         if ( g_list_length( tci->createdTxnGUIDs ) != 0 ) {
-                                continue;
+                                /* If we've created it and the variables
+                                 * haven't changed, skip it. */
+                                if ( ! tci->dirty ) {
+                                        continue;
+                                }
+                                /* Otherwise, destroy the transactions and
+                                 * re-create them below. */
+                                /* FIXME: this would be better if we could
+                                 * re-used the existing txns we've already
+                                 * gone through the pain of creating. */
+                                gnc_suspend_gui_refresh();
+                                for( l = tci->createdTxnGUIDs;
+                                     l; l = l->next ) {
+                                        Transaction *t;
+                                        t = xaccTransLookup( (GUID*)l->data,
+                                                             gnc_get_current_book() );
+                                        g_assert( t );
+                                        xaccTransBeginEdit( t );
+                                        xaccTransDestroy( t );
+                                        xaccTransCommitEdit( t );
+
+                                        sxsld->createdTxnGUIDList =
+                                                g_list_remove(
+                                                        sxsld->createdTxnGUIDList,
+                                                        l->data );
+                                }
+                                gnc_resume_gui_refresh();
+                                /* Remove from master list, too. */
+                                g_list_free( tci->createdTxnGUIDs );
+                                tci->createdTxnGUIDs = NULL;
                         }
 
                         create_transactions_on( tci->parentTCT->sx,
                                                 tci->date,
                                                 tci,
                                                 &created );
+                        tci->dirty = FALSE;
                         /* Add to the Query for that register. */
                         for ( l = created; l; l = l->next ) {
                                 tci->createdTxnGUIDs =
@@ -1231,7 +1269,8 @@ generate_instances( SchedXaction *sx,
 
                 tci = g_new0( toCreateInstance, 1 );
 
-                tci->date = g_date_new();
+                tci->dirty = FALSE;
+                tci->date  = g_date_new();
                 *tci->date = gd;
                 tci->instanceNum = gnc_sx_get_instance_count( sx, seqStateData );
 
@@ -1413,7 +1452,6 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
         GtkCTreeNode *sxNode;
         char *rowText[ TO_CREATE_LIST_WIDTH ];
         GList *insts;
-        int htSize;
         gpointer unusedkey, unusedvalue;
 
         ct = GTK_CTREE( glade_xml_get_widget( sxsld->gxml, TO_CREATE_LIST ) );
@@ -1432,29 +1470,27 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
                 for ( insts = tct->instanceList;
                       insts;
                       insts = insts->next ) {
+                        gboolean allVarsBound;
+
                         tci = (toCreateInstance*)insts->data;
                 
                         /* tct->{sx,date} are already filled in. */
                         if ( ! tci->varBindings ) {
                                 tci->varBindings = g_hash_table_new( g_str_hash,
                                                                      g_str_equal );
+
+                                sxsl_get_sx_vars( tci->parentTCT->sx,
+                                                  tci->varBindings );
                         }
 
                         rowText[0] = g_new0( char, GNC_D_WIDTH );
                         g_date_strftime( rowText[0], GNC_D_WIDTH, GNC_D_FMT, tci->date );
-                        sxsl_get_sx_vars( tci->parentTCT->sx, tci->varBindings );
+                        allVarsBound = TRUE;
+                        g_hash_table_foreach( tci->varBindings,
+                                              andequal_numerics_set,
+                                              &allVarsBound );
+                        rowText[1] = ( allVarsBound ? "y" : "n" );
 
-                        htSize = g_hash_table_size( tci->varBindings );
-                        if ( g_hash_table_lookup_extended( tci->varBindings, "i",
-                                                           &unusedkey,
-                                                           &unusedvalue ) ) {
-                                htSize -= 1;
-                        }
-                        if ( htSize == 0 ) {
-                                rowText[1] = "y";
-                        } else {
-                                rowText[1] = "n";
-                        }
                         tci->node = gtk_ctree_insert_node( ct, sxNode, NULL,
                                                            rowText,
                                                            0, NULL, NULL, NULL, NULL,
@@ -1613,6 +1649,8 @@ processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
 
                 xaccSchedXactionGetAutoCreate( rit->parentRT->sx,
                                                &autoCreateOpt, &notifyOpt );
+                /* FIXME: c'mon, jsled, this is easy enough to
+                 * cleanup... remove that extra level of hierarchy. */
                 if ( autoCreateOpt ) {
                         for ( list = sxsld->autoCreateList;
                               list;
@@ -1631,11 +1669,12 @@ processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
                         }
 
                         tci = g_new0( toCreateInstance, 1 );
-                        tci->parentTCT = tct;
-                        tci->date = rit->occurDate;
+                        tci->dirty       = FALSE;
+                        tci->parentTCT   = tct;
+                        tci->date        = rit->occurDate;
                         tci->varBindings = NULL;
                         tci->instanceNum = rit->instanceNum;
-                        tci->node = NULL;
+                        tci->node        = NULL;
 
                         tct->instanceList =
                                 g_list_append( tct->instanceList, tci );
@@ -1661,6 +1700,7 @@ processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
                                         g_list_append( sxsld->toCreateList, tct );
                         }
                         tci = g_new0( toCreateInstance, 1 );
+                        tci->dirty       = FALSE;
                         tci->parentTCT   = tct;
                         tci->date        = rit->occurDate;
                         tci->node        = NULL;
@@ -1854,12 +1894,12 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
 
         {
                 gpointer maybeKey, maybeValue;
-
-        ourNum = NULL;
-        if ( num ) {
-                ourNum = g_new0( gnc_numeric, 1 );
-                *ourNum = *num;
-        }
+                
+                ourNum = NULL;
+                if ( num ) {
+                        ourNum = g_new0( gnc_numeric, 1 );
+                        *ourNum = *num;
+                }
                 if ( g_hash_table_lookup_extended( tci->varBindings, varName,
                                                    &maybeKey, &maybeValue ) ) {
                         g_hash_table_remove( tci->varBindings, maybeKey );
@@ -1870,6 +1910,7 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
                         /* FIXME: Does the maybeKey need to be freed? */
                 }
                 g_hash_table_insert( tci->varBindings, maybeKey, ourNum );
+                tci->dirty = TRUE;
         }
 
         {
@@ -1923,6 +1964,8 @@ gnc_sxsl_copy_ea_hash( gpointer key,
         if ( val )
                 *newVal = *val;
 
+        g_assert( name );
+
         g_hash_table_insert( table,
                              (gpointer)g_strdup( name ),
                              (gpointer)newVal );
@@ -1934,7 +1977,8 @@ gnc_sxsl_del_vars_table_ea( gpointer key,
                             gpointer value,
                             gpointer user_data )
 {
-        if ( key ) 
+        g_assert( key );
+        if ( key )
                 g_free( (gchar*)key );
 
         if ( value )
@@ -2220,8 +2264,9 @@ create_transactions_on( SchedXaction *sx,
                 tct->sx = sx;
                 tct->instanceList =
                         g_list_append( tct->instanceList, tci );
-                tci->date = gd;
-                tci->node = NULL;
+                tci->dirty     = FALSE;
+                tci->date      = gd;
+                tci->node      = NULL;
                 tci->parentTCT = tct;
 
                 createdTCT = TRUE;

@@ -1,5 +1,12 @@
 2002-08-05  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/dialog-sxsincelast.c (to_create_next): Fix for
+	re-creating to-create transactions when the variables change;
+	fixes Bug#89924.  Fixed another small bug in the variable-table
+	handling code.
+
+2002-08-05  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/import-export/gnc-generic-import.c: #if-def'd out the
 	original version, and replaced with a version sans the printf.
 	For some reason, with the printf, GCC 3.1 can't compile this file.
