@@ -30,7 +30,7 @@
 #include "druid-hbci-initial.h"
 #include "druid-hbci-utils.h"
 #include "gnc-hbci-kvp.h"
-#include "dialog-account-pick.h"
+#include "import-account-matcher.h"
 #include "gnc-hbci-utils.h"
 
 #include "dialog-utils.h"
@@ -1125,7 +1125,8 @@ on_accountlist_select_row (GtkCList *clist, gint row,
   if (hbci_acc) {
     old_value = g_hash_table_lookup (info->gnc_hash, hbci_acc);
 
-    gnc_acc = gnc_account_picker_dialog(old_value);
+    gnc_acc = gnc_import_select_account(NULL, FALSE, NULL, NULL, NO_TYPE,
+					old_value, NULL);
 
     if (gnc_acc) {
       if (old_value) 
