@@ -302,7 +302,7 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
                            gnc_commodity_get_fraction (account_currency),
                            GNC_RND_ROUND);
 
-	if (euro)
+	if (euro && (currency_accum != euro_accum))
 	  euro_accum->assets =
             gnc_numeric_add (euro_accum->assets,
                              gnc_convert_to_euro(account_currency, amount),
@@ -324,7 +324,7 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
                            gnc_commodity_get_fraction (account_currency),
                            GNC_RND_ROUND);
 
-        if (euro)
+        if (euro && (currency_accum != euro_accum))
           euro_accum->profits =
             gnc_numeric_sub (euro_accum->profits,
                              gnc_convert_to_euro(account_currency, amount),
