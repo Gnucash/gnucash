@@ -14,7 +14,7 @@ AM_CFLAGS = \
   ${GLADE_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GLIB_CFLAGS} \
-  ${GNOME_INCLUDEDIR}
+  ${GNOME_CFLAGS}
 
 #FIXME remove the following deps
 #  -I${top_srcdir}/src \
@@ -40,8 +40,7 @@ libgncmod_binary_import_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${GUILE_LIBS} \
   ${GLADE_LIBS} \
-  ${GNOMEUI_LIBS} \
-  ${GNOME_LIBDIR} \
+  ${GNOME_LIBS} \
   ${GLIB_LIBS}
 
 libgw_binary_import_la_SOURCES = gw-binary-import.c

@@ -9,7 +9,7 @@ AM_CFLAGS = \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
-  ${GNOME_INCLUDEDIR}
+  ${GNOME_CFLAGS}
 
 libgncmod_business_utils_la_SOURCES = \
   gncmod-business-utils.c \

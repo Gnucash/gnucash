@@ -168,7 +168,7 @@ gnucash_sheet_hide_editing_cursor (GnucashSheet *sheet)
                 return;
 
         gnome_canvas_item_hide (GNOME_CANVAS_ITEM (sheet->item_editor));
-        item_edit_hide_popup (ITEM_EDIT(sheet->item_editor));
+        gnc_item_edit_hide_popup (GNC_ITEM_EDIT(sheet->item_editor));
 }
 
 static void
@@ -740,7 +740,7 @@ gnucash_sheet_modify_current_cell (GnucashSheet *sheet, const gchar *new_text)
         g_free (new_text_wc);
 
         if (retval) {
-                item_edit_reset_offset (ITEM_EDIT(sheet->item_editor));
+                gnc_item_edit_reset_offset (GNC_ITEM_EDIT(sheet->item_editor));
 
                 gtk_signal_handler_block (GTK_OBJECT (sheet->entry),
 					  sheet->insert_signal);
@@ -1037,10 +1037,10 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
         sheet->window_width  = allocation->width;
 
         gnucash_cursor_configure (GNUCASH_CURSOR (sheet->cursor));
-        gnucash_header_reconfigure (GNUCASH_HEADER(sheet->header_item));
+        gnc_header_reconfigure (GNC_HEADER(sheet->header_item));
         gnucash_sheet_set_scroll_region (sheet);
 
-        item_edit_configure (ITEM_EDIT(sheet->item_editor));
+        gnc_item_edit_configure (GNC_ITEM_EDIT(sheet->item_editor));
         gnucash_sheet_update_adjustments (sheet);
 }
 
@@ -1053,7 +1053,7 @@ gnucash_sheet_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
                 (*GTK_WIDGET_CLASS (sheet_parent_class)->focus_in_event)
                         (widget, event);
 
-        item_edit_focus_in (ITEM_EDIT(sheet->item_editor));
+        gnc_item_edit_focus_in (GNC_ITEM_EDIT(sheet->item_editor));
 
         return FALSE;
 }
@@ -1067,7 +1067,7 @@ gnucash_sheet_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
                 (*GTK_WIDGET_CLASS (sheet_parent_class)->focus_out_event)
                         (widget, event);
 
-        item_edit_focus_out (ITEM_EDIT(sheet->item_editor));
+        gnc_item_edit_focus_out (GNC_ITEM_EDIT(sheet->item_editor));
 
         return FALSE;
 }
@@ -1088,7 +1088,7 @@ gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet)
 
         text = gnc_table_get_entry (sheet->table, virt_loc);
 
-        item_edit_configure (ITEM_EDIT(sheet->item_editor));
+        gnc_item_edit_configure (GNC_ITEM_EDIT(sheet->item_editor));
         gnome_canvas_item_show (GNOME_CANVAS_ITEM (sheet->item_editor));
 
         gtk_entry_set_text (GTK_ENTRY(sheet->entry), text);
@@ -1142,7 +1142,7 @@ gnucash_motion_event (GtkWidget *widget, GdkEventMotion *event)
 
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
-        item_edit_set_cursor_pos (ITEM_EDIT(sheet->item_editor),
+        gnc_item_edit_set_cursor_pos (GNC_ITEM_EDIT(sheet->item_editor),
                                   virt_loc, x, FALSE, TRUE);
 
         return TRUE;
@@ -1170,9 +1170,9 @@ gnucash_button_release_event (GtkWidget *widget, GdkEventButton *event)
         gtk_grab_remove (widget);
         sheet->grabbed = FALSE;
 
-        item_edit_set_has_selection(ITEM_EDIT(sheet->item_editor), FALSE);
+        gnc_item_edit_set_has_selection(GNC_ITEM_EDIT(sheet->item_editor), FALSE);
 
-        item_edit_claim_selection(ITEM_EDIT(sheet->item_editor), event->time);
+        gnc_item_edit_claim_selection(GNC_ITEM_EDIT(sheet->item_editor), event->time);
 
         return TRUE;
 }
@@ -1272,7 +1272,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                 case 2:
                         if (event->type != GDK_BUTTON_PRESS)
                                 return FALSE;
-                        item_edit_paste_primary(ITEM_EDIT(sheet->item_editor),
+                        gnc_item_edit_paste_primary(GNC_ITEM_EDIT(sheet->item_editor),
                                                 event->time);
                         return TRUE;
                 case 3:
@@ -1305,13 +1305,13 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         if (virt_loc_equal (new_virt_loc, cur_virt_loc) && button_1 &&
             (event->type == GDK_2BUTTON_PRESS))
         {
-                item_edit_set_cursor_pos (ITEM_EDIT(sheet->item_editor),
+                gnc_item_edit_set_cursor_pos (GNC_ITEM_EDIT(sheet->item_editor),
                                           cur_virt_loc, x, FALSE, FALSE);
 
                 gtk_editable_set_position(GTK_EDITABLE(sheet->entry), -1);
                 gtk_editable_select_region(GTK_EDITABLE(sheet->entry), 0, -1);
 
-                item_edit_claim_selection (ITEM_EDIT(sheet->item_editor),
+                gnc_item_edit_claim_selection (GNC_ITEM_EDIT(sheet->item_editor),
                                            event->time);
 
                 return TRUE;
@@ -1324,15 +1324,15 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         {
                 gtk_grab_add(widget);
                 sheet->grabbed = TRUE;
-                item_edit_set_has_selection 
-                        (ITEM_EDIT(sheet->item_editor), TRUE);
+                gnc_item_edit_set_has_selection 
+                        (GNC_ITEM_EDIT(sheet->item_editor), TRUE);
         }
 
         if (virt_loc_equal (new_virt_loc, cur_virt_loc) && sheet->editing)
         {
                 gboolean extend_selection = event->state & GDK_SHIFT_MASK;
 
-                item_edit_set_cursor_pos (ITEM_EDIT(sheet->item_editor),
+                gnc_item_edit_set_cursor_pos (GNC_ITEM_EDIT(sheet->item_editor),
                                           cur_virt_loc, x, FALSE,
                                           extend_selection);
 
@@ -1363,7 +1363,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &new_virt_loc);
 
-        item_edit_set_cursor_pos (ITEM_EDIT(sheet->item_editor),
+        gnc_item_edit_set_cursor_pos (GNC_ITEM_EDIT(sheet->item_editor),
                                   new_virt_loc, x, changed_cells, FALSE);
 
         if (do_popup)
@@ -1377,55 +1377,55 @@ void
 gnucash_register_cut_clipboard (GnucashRegister *reg)
 {
         GnucashSheet *sheet;
-        ItemEdit *item_edit;
+        GncItemEdit *item_edit;
 
         g_return_if_fail(reg != NULL);
         g_return_if_fail(GNUCASH_IS_REGISTER(reg));
 
         sheet = GNUCASH_SHEET(reg->sheet);
-        item_edit = ITEM_EDIT(sheet->item_editor);
+        item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
-        item_edit_cut_clipboard(item_edit, GDK_CURRENT_TIME);
+        gnc_item_edit_cut_clipboard(item_edit, GDK_CURRENT_TIME);
 }
 
 void
 gnucash_register_copy_clipboard (GnucashRegister *reg)
 {
         GnucashSheet *sheet;
-        ItemEdit *item_edit;
+        GncItemEdit *item_edit;
 
         g_return_if_fail(reg != NULL);
         g_return_if_fail(GNUCASH_IS_REGISTER(reg));
 
         sheet = GNUCASH_SHEET(reg->sheet);
-        item_edit = ITEM_EDIT(sheet->item_editor);
+        item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
-        item_edit_copy_clipboard(item_edit, GDK_CURRENT_TIME);
+        gnc_item_edit_copy_clipboard(item_edit, GDK_CURRENT_TIME);
 }
 
 void
 gnucash_register_paste_clipboard (GnucashRegister *reg)
 {
         GnucashSheet *sheet;
-        ItemEdit *item_edit;
+        GncItemEdit *item_edit;
 
         g_return_if_fail(reg != NULL);
         g_return_if_fail(GNUCASH_IS_REGISTER(reg));
 
         sheet = GNUCASH_SHEET(reg->sheet);
-        item_edit = ITEM_EDIT(sheet->item_editor);
+        item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
-        item_edit_paste_clipboard(item_edit, GDK_CURRENT_TIME);
+        gnc_item_edit_paste_clipboard(item_edit, GDK_CURRENT_TIME);
 }
 
 static gboolean
 gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
 {
-        ItemEdit *item_edit;
+        GncItemEdit *item_edit;
         gboolean handled = FALSE;
         guint32 time;
 
-        item_edit = ITEM_EDIT(sheet->item_editor);
+        item_edit = GNC_ITEM_EDIT(sheet->item_editor);
         time = event->time;
 
         switch (event->keyval) {
@@ -1433,7 +1433,7 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
                 case GDK_c:
                         if (event->state & GDK_CONTROL_MASK)
                         {
-                                item_edit_copy_clipboard(item_edit, time);
+                                gnc_item_edit_copy_clipboard(item_edit, time);
                                 handled = TRUE;
                         }
                         break;
@@ -1441,7 +1441,7 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
                 case GDK_x:
                         if (event->state & GDK_CONTROL_MASK)
                         {
-                                item_edit_cut_clipboard(item_edit, time);
+                                gnc_item_edit_cut_clipboard(item_edit, time);
                                 handled = TRUE;
                         }
                         break;
@@ -1449,19 +1449,19 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
                 case GDK_v:
                         if (event->state & GDK_CONTROL_MASK)
                         {
-                                item_edit_paste_clipboard(item_edit, time);
+                                gnc_item_edit_paste_clipboard(item_edit, time);
                                 handled = TRUE;
                         }
                         break;
                 case GDK_Insert:
                         if (event->state & GDK_SHIFT_MASK)
                         {
-                                item_edit_paste_clipboard(item_edit, time);
+                                gnc_item_edit_paste_clipboard(item_edit, time);
                                 handled = TRUE;
                         }
                         else if (event->state & GDK_CONTROL_MASK)
                         {
-                                item_edit_copy_clipboard(item_edit, time);
+                                gnc_item_edit_copy_clipboard(item_edit, time);
                                 handled = TRUE;
                         }
                         break;
@@ -1542,7 +1542,7 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
         }
 
         if (changed)
-                item_edit_redraw(ITEM_EDIT(sheet->item_editor));
+                gnc_item_edit_redraw(GNC_ITEM_EDIT(sheet->item_editor));
 
 	return result;
 }
@@ -1633,13 +1633,13 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 		case GDK_Down:
                         if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
                         {
-                                ItemEdit *item_edit;
+                                GncItemEdit *item_edit;
 
-                                item_edit = ITEM_EDIT (sheet->item_editor);
+                                item_edit = GNC_ITEM_EDIT (sheet->item_editor);
 
                                 if (gnc_table_confirm_change (table,
                                                               cur_virt_loc))
-                                        item_edit_show_popup (item_edit);
+                                        gnc_item_edit_show_popup (item_edit);
 
                                 return TRUE;
                         }
@@ -1932,7 +1932,7 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
         int width;
         SheetBlock *block;
         SheetBlockStyle *style;
-        GdkFont *font;
+	PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), "");
 
         g_return_val_if_fail (virt_col >= 0, 0);
         g_return_val_if_fail (virt_col < sheet->num_virt_cols, 0);
@@ -1960,17 +1960,16 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                                 if (virt_row == 0) {
                                         text = gnc_table_get_label
                                                 (sheet->table, virt_loc);
-                                        font = gnucash_register_font;
                                 }
                                 else {
                                         text = gnc_table_get_entry
                                                 (sheet->table, virt_loc);
-
-                                        font = GNUCASH_GRID(sheet->grid)->normal_font;
                                 }
 
-                                width = (gdk_string_measure (font, text) +
-                                         2 * CELL_HPADDING);
+				pango_layout_set_text (layout, text, strlen (text));
+				pango_layout_get_pixel_size (layout, &width, NULL);
+
+                                width += 2 * CELL_HPADDING;
 
                                 max = MAX (max, width);
                         }
@@ -1991,7 +1990,7 @@ gnucash_sheet_set_scroll_region (GnucashSheet *sheet)
 
         widget = GTK_WIDGET(sheet);
 
-        if (!sheet->header_item || !GNUCASH_HEADER(sheet->header_item)->style)
+        if (!sheet->header_item || !GNC_HEADER(sheet->header_item)->style)
                 return;
 
         gnome_canvas_get_scroll_region (GNOME_CANVAS(sheet),
@@ -2096,8 +2095,6 @@ gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
 
         table = sheet->table;
 
-        gtk_layout_freeze (GTK_LAYOUT(sheet));
-
         gnucash_sheet_stop_editing (sheet);
 
         gnucash_sheet_resize (sheet);
@@ -2120,9 +2117,9 @@ gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
                                      vcell->cellblock->num_rows);
                 }
 
-        gnucash_header_set_header_rows (GNUCASH_HEADER (sheet->header_item),
+        gnc_header_set_header_rows (GNC_HEADER (sheet->header_item),
                                         num_header_phys_rows);
-        gnucash_header_reconfigure (GNUCASH_HEADER(sheet->header_item));
+        gnc_header_reconfigure (GNC_HEADER(sheet->header_item));
 
         gnucash_sheet_recompute_block_offsets (sheet);
 
@@ -2141,7 +2138,6 @@ gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
 
         gnucash_sheet_cursor_set_from_table (sheet, do_scroll);
         gnucash_sheet_activate_cursor_cell (sheet, TRUE);
-        gtk_layout_thaw (GTK_LAYOUT(sheet));        
 }
 
 static gboolean
@@ -2155,7 +2151,7 @@ gnucash_sheet_selection_clear (GtkWidget          *widget,
 
         sheet = GNUCASH_SHEET(widget);
 
-        return item_edit_selection_clear(ITEM_EDIT(sheet->item_editor), event);
+        return gnc_item_edit_selection_clear(GNC_ITEM_EDIT(sheet->item_editor), event);
 }
 
 static void
@@ -2171,7 +2167,7 @@ gnucash_sheet_selection_get (GtkWidget         *widget,
 
         sheet = GNUCASH_SHEET(widget);
 
-        item_edit_selection_get(ITEM_EDIT(sheet->item_editor),
+        gnc_item_edit_selection_get(GNC_ITEM_EDIT(sheet->item_editor),
                                 selection_data, info, time);
 }
 
@@ -2187,7 +2183,7 @@ gnucash_sheet_selection_received (GtkWidget          *widget,
 
         sheet = GNUCASH_SHEET(widget);
 
-        item_edit_selection_received(ITEM_EDIT(sheet->item_editor),
+        gnc_item_edit_selection_received(GNC_ITEM_EDIT(sheet->item_editor),
                                      selection_data, time);
 }
 
@@ -2326,9 +2322,10 @@ gnucash_sheet_new (Table *table)
         sheet->entry = gtk_entry_new ();
         g_object_ref(sheet->entry);
         gtk_object_sink(GTK_OBJECT(sheet->entry));
+	/*gtk_layout_put (GTK_LAYOUT (sheet), sheet->entry, 0, 0);*/
 
         /* set up the editor */
-        sheet->item_editor = item_edit_new(sheet_group, sheet, sheet->entry);
+        sheet->item_editor = gnc_item_edit_new(sheet_group, sheet, sheet->entry);
 
         gnome_canvas_item_hide (GNOME_CANVAS_ITEM(sheet->item_editor));
 
@@ -2456,7 +2453,7 @@ gnucash_register_new (Table *table)
         reg->sheet = sheet;
         GNUCASH_SHEET(sheet)->reg = widget;
 
-        header_canvas = gnucash_header_new (GNUCASH_SHEET(sheet));
+        header_canvas = gnc_header_new (GNUCASH_SHEET(sheet));
         reg->header_canvas = header_canvas;
 
         gtk_table_attach (GTK_TABLE(widget), header_canvas,

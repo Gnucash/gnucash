@@ -37,22 +37,24 @@ gnc_plugin_get_type (void)
 
 void
 gnc_plugin_add_to_window (GncPlugin *plugin,
-			  GncMainWindow *window)
+			  GncMainWindow *window,
+			  GQuark type)
 {
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
 	g_return_if_fail (GNC_PLUGIN_GET_IFACE (plugin)->add_to_window != NULL);
 
-	GNC_PLUGIN_GET_IFACE (plugin)->add_to_window (plugin, window);
+	GNC_PLUGIN_GET_IFACE (plugin)->add_to_window (plugin, window, type);
 }
 
 void
 gnc_plugin_remove_from_window (GncPlugin *plugin,
-			       GncMainWindow *window)
+			       GncMainWindow *window,
+			       GQuark type)
 {
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
 	g_return_if_fail (GNC_PLUGIN_GET_IFACE (plugin)->remove_from_window != NULL);
 
-	GNC_PLUGIN_GET_IFACE (plugin)->remove_from_window (plugin, window);
+	GNC_PLUGIN_GET_IFACE (plugin)->remove_from_window (plugin, window, type);
 }
 
 const gchar *

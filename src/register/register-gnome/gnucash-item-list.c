@@ -34,198 +34,152 @@
 
 
 /* Item list signals */
-enum
-{
-  SELECT_ITEM,
-  CHANGE_ITEM,
-  ACTIVATE_ITEM,
-  KEY_PRESS_EVENT,
-  LAST_SIGNAL
+enum {
+	SELECT_ITEM,
+	CHANGE_ITEM,
+	ACTIVATE_ITEM,
+	KEY_PRESS_EVENT,
+	LAST_SIGNAL
 };
-
-/* Item list arguments */
-enum
-{
-        ARG_0
-};
-
 
 static GnomeCanvasWidgetClass *gnc_item_list_parent_class;
 static guint gnc_item_list_signals[LAST_SIGNAL];
 
-
 void
-gnc_item_list_clear(GNCItemList *item_list)
+gnc_item_list_clear (GncItemList *item_list)
 {
-	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
-	g_return_if_fail(item_list->clist != NULL);
+	g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
+	g_return_if_fail (item_list->list_store != NULL);
 
-	gtk_clist_clear(item_list->clist);
+	gtk_list_store_clear (item_list->list_store);
 }
 
 
 void
-gnc_item_list_append(GNCItemList *item_list, char *string)
+gnc_item_list_append (GncItemList *item_list, char *string)
 {
-	char *text[2] = {NULL, NULL};
+	GtkTreeIter iter;
 
-	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
-	g_return_if_fail(item_list->clist != NULL);
-	g_return_if_fail(string != NULL);
+	g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
+	g_return_if_fail (item_list->list_store != NULL);
+	g_return_if_fail (string != NULL);
 
-	text[0] = string;
-
-	gtk_clist_append(item_list->clist, text);
+	gtk_list_store_append (item_list->list_store, &iter);
+	gtk_list_store_set (item_list->list_store, &iter, 0, string, -1);
 }
 
 
 void
-gnc_item_list_select(GNCItemList *item_list, const char *string)
+gnc_item_list_select (GncItemList *item_list, const char *string)
 {
-	gint row = 0;
+/*	gint row = 0;
 	gchar *text;
 
 	g_return_if_fail(item_list != NULL);
-	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
+	g_return_if_fail(IS_GNC_ITEM_LIST (item_list));
 
 	if (string == NULL) {
-		gtk_clist_unselect_all(item_list->clist);
+		gtk_clist_unselect_all (item_list->clist);
 		return;
 	}
 
-	while (gtk_clist_get_text(item_list->clist, row, 0, &text)) {
+	while (gtk_clist_get_text (item_list->clist, row, 0, &text)) {
 
-		if (safe_strcmp(string, text) != 0) {
+		if (safe_strcmp (string, text) != 0) {
 			row++;
 			continue;
 		}
 
-                gtk_clist_freeze(item_list->clist);
+                gtk_clist_freeze (item_list->clist);
                 item_list->clist->focus_row = row;
-		gtk_clist_select_row(item_list->clist, row, 0);
-                gtk_clist_thaw(item_list->clist);
+		gtk_clist_select_row (item_list->clist, row, 0);
+                gtk_clist_thaw (item_list->clist);
 
-                gnc_item_list_show_selected(item_list);
+                gnc_item_list_show_selected (item_list);
 
 		return;
-	}
+	}*/
 }
 
 
 void
-gnc_item_list_show_selected(GNCItemList *item_list)
+gnc_item_list_show_selected (GncItemList *item_list)
 {
-	GtkVisibility visibility;
+/*	GtkVisibility visibility;
         gint row;
 
-	g_return_if_fail(item_list != NULL);
-	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
+	g_return_if_fail (item_list != NULL);
+	g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
 
         row = item_list->clist->focus_row;
 
-        visibility = gtk_clist_row_is_visible(item_list->clist, row);
+        visibility = gtk_clist_row_is_visible (item_list->clist, row);
 
         if (visibility != GTK_VISIBILITY_FULL)
-                gtk_clist_moveto(item_list->clist, row, 0, 0.5, 0.0);
+                gtk_clist_moveto (item_list->clist, row, 0, 0.5, 0.0);*/
 }
 
 
 void
-gnc_item_list_sort(GNCItemList *item_list)
+gnc_item_list_sort (GncItemList *item_list)
 {
-        g_return_if_fail(item_list != NULL);
-	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
+        g_return_if_fail (item_list != NULL);
+	g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
 
-        gtk_clist_sort(item_list->clist);
+/*        gtk_clist_sort (item_list->clist);*/
 }
 
 
 int
-gnc_item_list_autosize(GNCItemList *item_list)
+gnc_item_list_autosize (GncItemList *item_list)
 {
-        g_return_val_if_fail(item_list != NULL, 0);
-        g_return_val_if_fail(IS_GNC_ITEM_LIST(item_list), 0);
+        g_return_val_if_fail (item_list != NULL, 0);
+        g_return_val_if_fail (IS_GNC_ITEM_LIST (item_list), 0);
 
-        return gtk_clist_columns_autosize(item_list->clist);
+        return 100; /*gtk_clist_columns_autosize (item_list->clist);*/
 }
 
 
 static void
-gnc_item_list_init(GNCItemList *item_list)
+gnc_item_list_init (GncItemList *item_list)
 {
-        item_list->clist = NULL;
 }
 
 
 static gboolean
-gnc_item_list_button_event(GtkWidget *widget, GdkEventButton *event,
-			   gpointer data)
+gnc_item_list_button_event (GtkWidget *widget, GdkEventButton *event,
+			    gpointer data)
 {
 	/* So the sheet doesn't use it. */
-	gtk_signal_emit_stop_by_name(GTK_OBJECT(widget), "button_press_event");
+	g_signal_stop_emission_by_name (G_OBJECT(widget), "button_press_event");
 
 	return TRUE;
 }
 
-
 static gboolean
-gnc_clist_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+gnc_item_list_key_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-        GtkAdjustment *vadj;
-        gfloat multiplier = 1.0;
-        gfloat v_value;
-
-        vadj = gtk_clist_get_vadjustment(GTK_CLIST(widget));
-        v_value = vadj->value;
-        if (event->state & GDK_SHIFT_MASK)
-                multiplier = 5.0;
-
-        switch (event->button)
-        {
-                case 4:
-                        v_value -= vadj->step_increment * multiplier;
-                        break;
-                case 5:
-                        v_value += vadj->step_increment * multiplier;
-                        break;
-                default:
-                        return FALSE;
-        }
-
-        v_value = CLAMP(v_value, vadj->lower, vadj->upper - vadj->page_size);
-
-        gtk_adjustment_set_value(vadj, v_value);
-
-	return FALSE;
-}
-
-
-static gboolean
-gnc_item_list_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
-{
-	GNCItemList *item_list = GNC_ITEM_LIST(data);
-        GtkCList *clist;
+	GncItemList *item_list = GNC_ITEM_LIST (data);
+/*        GtkCList *clist;
         gboolean got_text;
         gchar *string;
-        gint row;
+        gint row;*/
 
         switch (event->keyval) {
                 case GDK_Return:
-                        clist = item_list->clist;
+/*                        clist = item_list->clist;
                         row = clist->focus_row;
                         if (row < 0)
                                 return FALSE;
 
-                        got_text = gtk_clist_get_text(clist, row, 0, &string);
+                        got_text = gtk_clist_get_text (clist, row, 0, &string);
 
                         if (!got_text)
                                 return FALSE;
 
-                        gtk_signal_emit(GTK_OBJECT(item_list),
-                                        gnc_item_list_signals[ACTIVATE_ITEM],
-                                        string);
-
-                        return TRUE;
+                        g_signal_emit (G_OBJECT (item_list),
+                                       gnc_item_list_signals[ACTIVATE_ITEM], 0, string);
+                        return TRUE;*/
 		case GDK_Page_Up:
 		case GDK_Page_Down:
 		case GDK_Up:
@@ -235,70 +189,62 @@ gnc_item_list_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	}
 
 	/* These go to the sheet */
-	gtk_signal_emit_stop_by_name(GTK_OBJECT(widget), "key_press_event");
+	g_signal_stop_emission_by_name (G_OBJECT (widget), "key_press_event");
 
-	gtk_signal_emit(GTK_OBJECT(item_list),
-			gnc_item_list_signals[KEY_PRESS_EVENT], event);
+	g_signal_emit (G_OBJECT (item_list),
+		       gnc_item_list_signals[KEY_PRESS_EVENT], 0, event);
 
 	return TRUE;
 }
 
 
 static void
-gnc_item_list_class_init(GNCItemListClass *item_list_class)
+gnc_item_list_class_init (GncItemListClass *item_list_class)
 {
-        GtkObjectClass  *object_class;
+        GObjectClass  *object_class = G_OBJECT_CLASS (item_list_class);
 
-        gnc_item_list_parent_class =
-		gtk_type_class (gnome_canvas_widget_get_type ());
+        gnc_item_list_parent_class = g_type_class_peek_parent (item_list_class);
 
-        object_class = GTK_OBJECT_CLASS(item_list_class);
 
 	gnc_item_list_signals[SELECT_ITEM] =
-		gtk_signal_new("select_item",
-			       GTK_RUN_LAST,
-			       GTK_CLASS_TYPE(object_class),
-			       GTK_SIGNAL_OFFSET(GNCItemListClass,
-						 select_item),
-			       gtk_marshal_NONE__POINTER,
-			       GTK_TYPE_NONE, 1,
-			       GTK_TYPE_POINTER);
+		g_signal_new ("select_item",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET(GncItemListClass, select_item),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_POINTER);
 
 	gnc_item_list_signals[CHANGE_ITEM] =
-		gtk_signal_new("change_item",
-			       GTK_RUN_LAST,
-			       GTK_CLASS_TYPE(object_class),
-			       GTK_SIGNAL_OFFSET(GNCItemListClass,
-						 change_item),
-			       gtk_marshal_NONE__POINTER,
-			       GTK_TYPE_NONE, 1,
-			       GTK_TYPE_POINTER);
+		g_signal_new ("change_item",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET(GncItemListClass, change_item),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_POINTER);
 
 	gnc_item_list_signals[ACTIVATE_ITEM] =
-		gtk_signal_new("activate_item",
-			       GTK_RUN_LAST,
-			       GTK_CLASS_TYPE(object_class),
-			       GTK_SIGNAL_OFFSET(GNCItemListClass,
-						 activate_item),
-			       gtk_marshal_NONE__POINTER,
-			       GTK_TYPE_NONE, 1,
-			       GTK_TYPE_POINTER);
+		g_signal_new ("activate_item",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET(GncItemListClass, activate_item),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_POINTER);
 
 	gnc_item_list_signals[KEY_PRESS_EVENT] =
-		gtk_signal_new ("key_press_event",
-				GTK_RUN_LAST,
-				GTK_CLASS_TYPE(object_class),
-				GTK_SIGNAL_OFFSET(GNCItemListClass,
-						  key_press_event),
-				gtk_marshal_NONE__POINTER,
-				GTK_TYPE_NONE, 1,
-				GDK_TYPE_EVENT);
-
-#if 0
-	gtk_object_class_add_signals(object_class,
-				     gnc_item_list_signals,
-				     LAST_SIGNAL);
-#endif
+		g_signal_new ("key_press_event",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET(GncItemListClass, key_press_event),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1,
+			      GDK_TYPE_EVENT);
 
         item_list_class->select_item = NULL;
         item_list_class->change_item = NULL;
@@ -307,28 +253,27 @@ gnc_item_list_class_init(GNCItemListClass *item_list_class)
 }
 
 
-GtkType
-gnc_item_list_get_type(void)
+GType
+gnc_item_list_get_type (void)
 {
-        static GtkType gnc_item_list_type = 0;
+        static GType gnc_item_list_type = 0;
 
-        if (gnc_item_list_type == 0)
-	{
-                GtkTypeInfo gnc_item_list_info =
-		{
-                        "GNCItemList",
-                        sizeof(GNCItemList),
-                        sizeof(GNCItemListClass),
-                        (GtkClassInitFunc)  gnc_item_list_class_init,
-                        (GtkObjectInitFunc) gnc_item_list_init,
-                        NULL, /* reserved_1 */
-                        NULL, /* reserved_2 */
-                        (GtkClassInitFunc) NULL
+        if (gnc_item_list_type == 0) {
+                static const GTypeInfo gnc_item_list_info = {
+			sizeof(GncItemListClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)  gnc_item_list_class_init,
+			NULL,
+			NULL,
+			sizeof(GncItemList),
+			0,
+			(GInstanceInitFunc) gnc_item_list_init
                 };
 
                 gnc_item_list_type =
-			gtk_type_unique(gnome_canvas_widget_get_type(),
-					&gnc_item_list_info);
+			g_type_register_static (gnome_canvas_widget_get_type(), "GncItemList",
+						&gnc_item_list_info, 0);
         }
 
         return gnc_item_list_type;
@@ -336,35 +281,34 @@ gnc_item_list_get_type(void)
 
 
 static void
-clist_select_row_cb(GtkCList *clist, gint row, gint column,
-		    GdkEventButton *event, gpointer data)
+tree_view_selection_changed (GtkTreeSelection *selection,
+			     gpointer data)
 {
-	GNCItemList *item_list = GNC_ITEM_LIST(data);
-	gboolean got_text;
+	GncItemList *item_list = GNC_ITEM_LIST (data);
+	GtkTreeModel *model;
+	GtkTreeIter iter;
 	char *string;
 
-	got_text = gtk_clist_get_text(clist, row, 0, &string);
+	gtk_tree_selection_get_selected (selection, &model, &iter);
 
-	if (!got_text)
-		return;
+	gtk_tree_model_get (model, &iter, 0, &string, -1);
 
-        if (column < 0)
-                gtk_signal_emit(GTK_OBJECT(item_list),
-                                gnc_item_list_signals[CHANGE_ITEM], string);
-        else
-                gtk_signal_emit(GTK_OBJECT(item_list),
-                                gnc_item_list_signals[SELECT_ITEM], string);
+	g_signal_emit (G_OBJECT (item_list), gnc_item_list_signals[SELECT_ITEM], 0, string);
+
+	g_free (string);
 }
 
-
 GnomeCanvasItem *
-gnc_item_list_new(GnomeCanvasGroup *parent)
+gnc_item_list_new (GnomeCanvasGroup *parent)
 {
         GtkWidget *frame;
-	GtkWidget *clist;
+	GtkWidget *tree_view;
         GtkWidget *scrollwin;
+	GtkListStore *list_store;
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
         GnomeCanvasItem *item;
-        GNCItemList *item_list;
+        GncItemList *item_list;
 
         frame = gtk_frame_new (NULL);
 
@@ -375,11 +319,21 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
                                         GTK_POLICY_AUTOMATIC,
                                         GTK_POLICY_AUTOMATIC);
 
-	clist = gtk_clist_new (1);
-        gtk_container_add (GTK_CONTAINER (scrollwin), clist);
-        gtk_clist_set_selection_mode(GTK_CLIST(clist), GTK_SELECTION_BROWSE);
+	list_store = gtk_list_store_new (1, G_TYPE_STRING);
+	tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
+	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
+	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
+				     GTK_SELECTION_BROWSE);
 
-        gtk_widget_show_all (frame);
+	renderer = gtk_cell_renderer_text_new ();
+	column = gtk_tree_view_column_new_with_attributes (_("List"),
+							  renderer,
+							  "text", 0,
+							  NULL);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+
+	gtk_container_add (GTK_CONTAINER (scrollwin), tree_view);
+	gtk_widget_show_all (frame);
 
         item = gnome_canvas_item_new (parent, gnc_item_list_get_type(),
                                       "widget", frame,
@@ -390,24 +344,18 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
 
         item_list = GNC_ITEM_LIST (item);
 
-	item_list->clist = GTK_CLIST (clist);
+	item_list->tree_view = GTK_TREE_VIEW (tree_view);
+	item_list->list_store = list_store;
         item_list->frame = frame;
 
-	gtk_signal_connect_after(GTK_OBJECT(frame), "button_press_event",
-				 GTK_SIGNAL_FUNC(gnc_item_list_button_event),
-				 (gpointer) item_list);
+	g_signal_connect_after (G_OBJECT(frame), "button_press_event",
+				G_CALLBACK (gnc_item_list_button_event), item_list);
 
-	gtk_signal_connect(GTK_OBJECT(clist), "button_press_event",
-                           GTK_SIGNAL_FUNC(gnc_clist_button_event),
-                           (gpointer) item_list);
+	g_signal_connect (G_OBJECT (list_store), "key_press_event",
+			  G_CALLBACK (gnc_item_list_key_event), item_list);
 
-	gtk_signal_connect(GTK_OBJECT(clist), "key_press_event",
-			   GTK_SIGNAL_FUNC(gnc_item_list_key_event),
-			   (gpointer) item_list);
-
-	gtk_signal_connect(GTK_OBJECT(clist), "select_row",
-			   GTK_SIGNAL_FUNC(clist_select_row_cb),
-			   (gpointer) item_list);
+	g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view))), "changed",
+			  G_CALLBACK (tree_view_selection_changed), item_list);
 
         return item;
 }

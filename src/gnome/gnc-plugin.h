@@ -25,8 +25,8 @@ typedef struct {
 	GTypeInterface parent;
 
 	/* Virtual Table */
-	void (* add_to_window) (GncPlugin *plugin, GncMainWindow *window);
-	void (* remove_from_window) (GncPlugin *plugin, GncMainWindow *window);
+	void (* add_to_window) (GncPlugin *plugin, GncMainWindow *window, GQuark type);
+	void (* remove_from_window) (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 
 	const gchar *(* get_name) (GncPlugin *plugin);
 
@@ -34,17 +34,19 @@ typedef struct {
 } GncPluginIface;
 
 /* function prototypes */
-GType          gnc_plugin_get_type        (void);
+GType                 gnc_plugin_get_type        (void);
 
-void           gnc_plugin_add_to_window      (GncPlugin *plugin,
-					      GncMainWindow *window);
-void           gnc_plugin_remove_from_window (GncPlugin *plugin,
-					      GncMainWindow *window);
+void                  gnc_plugin_add_to_window   (GncPlugin *plugin,
+					          GncMainWindow *window,
+					          GQuark type);
+void                  gnc_plugin_remove_from_window (GncPlugin *plugin,
+					             GncMainWindow *window,
+					             GQuark type);
 
-const gchar   *gnc_plugin_get_name        (GncPlugin *plugin);
+G_CONST_RETURN gchar *gnc_plugin_get_name        (GncPlugin *plugin);
 
-GncPluginPage *gnc_plugin_create_page     (GncPlugin *plugin,
-					   const gchar *uri);
+GncPluginPage        *gnc_plugin_create_page     (GncPlugin *plugin,
+						  const gchar *uri);
 
 G_END_DECLS
 

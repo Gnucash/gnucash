@@ -568,7 +568,7 @@ gnc_register_date_window (RegWindow *regData, gboolean show_all)
 
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
 				    regData);
-  gnome_dialog_set_parent(GNOME_DIALOG(dialog), GTK_WINDOW(regData->window));
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (regData->window));
 
   /*
    * Get/create all the widgets up front to prevent callback errors
@@ -607,18 +607,18 @@ gnc_register_date_window (RegWindow *regData, gboolean show_all)
     if (time_val < time(NULL))
       gnc_date_edit_set_time(GNC_DATE_EDIT(date), time_val);
 
-    gtk_signal_connect(GTK_OBJECT(date), "date-changed",
-                       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
+    g_signal_connect (G_OBJECT (date), "date-changed",
+                      G_CALLBACK (gnc_register_date_changed_cb), regData);
 
     calendar = GNC_DATE_EDIT(date)->calendar;
-    gtk_signal_connect(GTK_OBJECT(calendar), "day_selected_double_click",
-		       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
+    g_signal_connect (G_OBJECT (calendar), "day_selected_double_click",
+		      G_CALLBACK (gnc_register_date_changed_cb), regData);
 
     entry = GNC_DATE_EDIT(date)->date_entry;
-    gtk_signal_connect(GTK_OBJECT(entry), "activate",
-		       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
-    gtk_signal_connect(GTK_OBJECT(entry), "changed",
-		       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
+    g_signal_connect (G_OBJECT (entry), "activate",
+		      G_CALLBACK (gnc_register_date_changed_cb), regData);
+    g_signal_connect (G_OBJECT (entry), "changed",
+		      G_CALLBACK (gnc_register_date_changed_cb), regData);
 
 
     /* Ending Date */
@@ -635,18 +635,18 @@ gnc_register_date_window (RegWindow *regData, gboolean show_all)
     date = regDateData->end_date;
     gtk_box_pack_start(GTK_BOX(hbox), date, FALSE, FALSE, 0);
 
-    gtk_signal_connect(GTK_OBJECT(date), "date-changed",
-                       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
+    g_signal_connect (G_OBJECT (date), "date-changed",
+                      G_CALLBACK (gnc_register_date_changed_cb), regData);
 
     calendar = GNC_DATE_EDIT(date)->calendar;
-    gtk_signal_connect(GTK_OBJECT(calendar), "day_selected_double_click",
-		       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
+    g_signal_connect (G_OBJECT (calendar), "day_selected_double_click",
+		      G_CALLBACK (gnc_register_date_changed_cb), regData);
 
     entry = GNC_DATE_EDIT(date)->date_entry;
-    gtk_signal_connect(GTK_OBJECT(entry), "activate",
-		       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
-    gtk_signal_connect(GTK_OBJECT(entry), "changed",
-		       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
+    g_signal_connect (G_OBJECT (entry), "activate",
+		      G_CALLBACK (gnc_register_date_changed_cb), regData);
+    g_signal_connect (G_OBJECT (entry), "changed",
+		      G_CALLBACK (gnc_register_date_changed_cb), regData);
   }
   gtk_widget_show_all(glade_xml_get_widget(xml, "main_frame"));
 
@@ -957,13 +957,13 @@ regWindowLedger( GNCLedgerDisplay *ledger )
 
   /* The status bar */
   regData->statusbar = glade_xml_get_widget( xml, "appbar" );
-  gtk_signal_connect( GTK_OBJECT(regData->gsr), "help-changed",
-                      GTK_SIGNAL_FUNC( gnc_register_help_changed_cb ),
+  g_signal_connect (G_OBJECT (regData->gsr), "help-changed",
+                    G_CALLBACK ( gnc_register_help_changed_cb ),
                       regData );
 
   /* The "include-date" and "read-only" signals. */
-  gtk_signal_connect( GTK_OBJECT(regData->gsr), "include-date",
-                      GTK_SIGNAL_FUNC( gnc_register_include_date_adapter ),
+  g_signal_connect (G_OBJECT (regData->gsr), "include-date",
+                    G_CALLBACK ( gnc_register_include_date_adapter ),
                       regData );
 
   regData->reconciled_menu_item = glade_xml_get_widget( xml, "show_reconciled" );
@@ -1070,15 +1070,15 @@ gnc_register_setup_menu_widgets( RegWindow *regData, GladeXML *xml )
   regMenu = glade_xml_get_widget( xml, "gnc_register_edit_menu_menu" );
   gtk_menu_shell_insert( GTK_MENU_SHELL(menu), gtk_menu_item_new(), (3 + adj));
   tmpMi = glade_xml_get_widget( xml, "gnc_register_edit_mi" );
-  g_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( G_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_shell_insert( GTK_MENU_SHELL(menu), tmpMi, (4 + adj) );
-  g_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( G_OBJECT(tmpMi) );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_find_mi" );
-  g_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( G_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_shell_append( GTK_MENU_SHELL(menu), tmpMi );
-  g_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( G_OBJECT(tmpMi) );
   gtk_menu_item_remove_submenu( GTK_MENU_ITEM(regMenuItem) );
   gtk_menu_item_set_submenu( GTK_MENU_ITEM(regMenuItem), menu );
 
@@ -1087,26 +1087,26 @@ gnc_register_setup_menu_widgets( RegWindow *regData, GladeXML *xml )
   regMenuItem = glade_xml_get_widget( xml, "gnc_register_view_menu" );
   regMenu = glade_xml_get_widget( xml, "gnc_register_view_menu_menu" );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_toolbar_mi" );
-  g_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( G_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (0 + adj) );
-  g_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( G_OBJECT(tmpMi) );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_summary_mi" );
-  g_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( G_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (1 + adj) );
-  g_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( G_OBJECT(tmpMi) );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_statusbar_mi" );
-  g_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( G_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (2 + adj) );
-  g_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( G_OBJECT(tmpMi) );
   gtk_menu_insert( GTK_MENU(menu), gtk_menu_item_new(), (3 + adj) );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_select_trans_mi" );
-  g_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( G_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (4 + adj) );
-  g_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( G_OBJECT(tmpMi) );
   gtk_menu_item_remove_submenu( GTK_MENU_ITEM(regMenuItem) );
   gtk_menu_item_set_submenu( GTK_MENU_ITEM(regMenuItem), menu );
 
@@ -1115,28 +1115,28 @@ gnc_register_setup_menu_widgets( RegWindow *regData, GladeXML *xml )
   regMenuItem = glade_xml_get_widget( xml, "gnc_register_actions_menu" );
   regMenu = glade_xml_get_widget( xml, "gnc_register_actions_menu_menu" );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_xfer_mi" );
-  g_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( G_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (0 + adj) );
-  g_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( G_OBJECT(tmpMi) );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_recn_mi" );
-  g_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( G_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (1 + adj) );
-  g_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( G_OBJECT(tmpMi) );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_stock_split_mi" );
-  g_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( G_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (2 + adj) );
-  g_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( G_OBJECT(tmpMi) );
   gtk_menu_insert( GTK_MENU(menu), gtk_menu_item_new(), (3 + adj) );
   /* Base this off the end of the list for a bit more flexibility. */
   gtk_menu_append( GTK_MENU(menu), gtk_menu_item_new() );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_scrub_mi" );
-  g_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( G_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_append( GTK_MENU(menu), tmpMi );
-  g_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( G_OBJECT(tmpMi) );
   gtk_menu_item_remove_submenu( GTK_MENU_ITEM(regMenuItem) );
   gtk_menu_item_set_submenu( GTK_MENU_ITEM(regMenuItem), menu );
 
@@ -1179,7 +1179,7 @@ gnc_register_insert_cloned_toolbar_elt( GtkToolbar *dstToolbar,
   tchild = (GtkToolbarChild*)(elt->data);
   gtk_label_get( GTK_LABEL(tchild->label), &label );
   labelCopy = g_strdup( label );
-  iconCopy = gnome_pixmap_new_from_gnome_pixmap( GNOME_PIXMAP( tchild->icon ) );
+  iconCopy = gtk_image_new_from_pixbuf (gtk_image_get_pixbuf (GTK_IMAGE (tchild->icon)));
   if ( idx == -1 ) {
     gtk_toolbar_append_element( dstToolbar,
                                 tchild->type,

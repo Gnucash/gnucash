@@ -14,8 +14,8 @@
 
 #define TREE_MODEL_ACCOUNT_CM_CLASS "tree-model-account"
 
-static void gnc_tree_model_account_class_init (GNCTreeModelAccountClass *klass);
-static void gnc_tree_model_account_init (GNCTreeModelAccount *model);
+static void gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass);
+static void gnc_tree_model_account_init (GncTreeModelAccount *model);
 static void gnc_tree_model_account_finalize (GObject *object);
 static void gnc_tree_model_account_dispose (GObject *object);
 
@@ -54,10 +54,10 @@ static gpointer account_row_inserted (Account *account,
 				      gpointer data);
 static void gnc_tree_model_account_refresh_handler (GHashTable *changes,
 						    gpointer data);
-static void gnc_tree_model_account_refresh (GNCTreeModelAccount *model);
+static void gnc_tree_model_account_refresh (GncTreeModelAccount *model);
 
 
-struct GNCTreeModelAccountPrivate
+struct GncTreeModelAccountPrivate
 {
 	AccountGroup *root;
 	Account *toplevel;
@@ -73,13 +73,13 @@ gnc_tree_model_account_get_type (void)
 
 	if (gnc_tree_model_account_type == 0) {
 		static const GTypeInfo our_info = {
-			sizeof (GNCTreeModelAccountClass),
+			sizeof (GncTreeModelAccountClass),
 			NULL,
 			NULL,
 			(GClassInitFunc) gnc_tree_model_account_class_init,
 			NULL,
 			NULL,
-			sizeof (GNCTreeModelAccount),
+			sizeof (GncTreeModelAccount),
 			0,
 			(GInstanceInitFunc) gnc_tree_model_account_init
 		};
@@ -91,7 +91,7 @@ gnc_tree_model_account_get_type (void)
 		};
 
 		gnc_tree_model_account_type = g_type_register_static (G_TYPE_OBJECT,
-								      "GNCTreeModelAccount",
+								      "GncTreeModelAccount",
 								      &our_info, 0);
 		
 		g_type_add_interface_static (gnc_tree_model_account_type,
@@ -103,7 +103,7 @@ gnc_tree_model_account_get_type (void)
 }
 
 static void
-gnc_tree_model_account_class_init (GNCTreeModelAccountClass *klass)
+gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
@@ -114,14 +114,14 @@ gnc_tree_model_account_class_init (GNCTreeModelAccountClass *klass)
 }
 
 static void
-gnc_tree_model_account_init (GNCTreeModelAccount *model)
+gnc_tree_model_account_init (GncTreeModelAccount *model)
 {
 
 	while (model->stamp == 0) {
 		model->stamp = g_random_int ();
 	}
 
-	model->priv = g_new0 (GNCTreeModelAccountPrivate, 1);
+	model->priv = g_new0 (GncTreeModelAccountPrivate, 1);
 	model->priv->root = NULL;
 	model->priv->toplevel = NULL;
 }
@@ -129,7 +129,7 @@ gnc_tree_model_account_init (GNCTreeModelAccount *model)
 static void
 gnc_tree_model_account_finalize (GObject *object)
 {
-	GNCTreeModelAccount *model;
+	GncTreeModelAccount *model;
 
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (object));
@@ -146,7 +146,7 @@ gnc_tree_model_account_finalize (GObject *object)
 static void
 gnc_tree_model_account_dispose (GObject *object)
 {
-	GNCTreeModelAccount *model;
+	GncTreeModelAccount *model;
 
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (object));
@@ -158,10 +158,10 @@ gnc_tree_model_account_dispose (GObject *object)
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
-GNCTreeModelAccount *
+GtkTreeModel *
 gnc_tree_model_account_new (AccountGroup *group)
 {
-	GNCTreeModelAccount *model;
+	GncTreeModelAccount *model;
 	
 	model = g_object_new (GNC_TYPE_TREE_MODEL_ACCOUNT,
 			      NULL);
@@ -177,11 +177,11 @@ gnc_tree_model_account_new (AccountGroup *group)
 					     GNC_ID_ACCOUNT,
       					     GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
-	return model;
+	return GTK_TREE_MODEL (model);
 }
 
 void
-gnc_tree_model_account_set_root (GNCTreeModelAccount *model,
+gnc_tree_model_account_set_root (GncTreeModelAccount *model,
 		                 AccountGroup *group)
 {
 	GtkTreePath *path;
@@ -209,7 +209,7 @@ gnc_tree_model_account_set_root (GNCTreeModelAccount *model,
 }
 
 Account *
-gnc_tree_model_account_get_account (GNCTreeModelAccount *model,
+gnc_tree_model_account_get_account (GncTreeModelAccount *model,
 				    GtkTreeIter *iter)
 {
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
@@ -221,7 +221,7 @@ gnc_tree_model_account_get_account (GNCTreeModelAccount *model,
 }
 
 void
-gnc_tree_model_account_set_toplevel (GNCTreeModelAccount *model,
+gnc_tree_model_account_set_toplevel (GncTreeModelAccount *model,
                                      Account *toplevel)
 {
 	GtkTreePath *path;
@@ -257,7 +257,7 @@ gnc_tree_model_account_set_toplevel (GNCTreeModelAccount *model,
 }
 
 Account *
-gnc_tree_model_account_get_toplevel (GNCTreeModelAccount *model)
+gnc_tree_model_account_get_toplevel (GncTreeModelAccount *model)
 {
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
 
@@ -265,7 +265,7 @@ gnc_tree_model_account_get_toplevel (GNCTreeModelAccount *model)
 }
 
 void
-gnc_tree_model_account_get_iter_from_account (GNCTreeModelAccount *model,
+gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
 					      Account *account,
 					      GtkTreeIter *iter)
 {
@@ -355,7 +355,7 @@ gnc_tree_model_account_get_iter (GtkTreeModel *tree_model,
 				 GtkTreeIter *iter,
 				 GtkTreePath *path)
 {
-	GNCTreeModelAccount *model;
+	GncTreeModelAccount *model;
 	Account *account = NULL;
 	AccountGroup *group = NULL, *children;
 	gint i = 0, *indices;
@@ -417,7 +417,7 @@ static GtkTreePath *
 gnc_tree_model_account_get_path (GtkTreeModel *tree_model,
 				 GtkTreeIter *iter)
 {
-	GNCTreeModelAccount *model = GNC_TREE_MODEL_ACCOUNT (tree_model);
+	GncTreeModelAccount *model = GNC_TREE_MODEL_ACCOUNT (tree_model);
 	Account *account;
 	AccountGroup *group;
 	GtkTreePath *path;
@@ -480,7 +480,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 				  int column,
 				  GValue *value)
 {
-	GNCTreeModelAccount *model = GNC_TREE_MODEL_ACCOUNT (tree_model);
+	GncTreeModelAccount *model = GNC_TREE_MODEL_ACCOUNT (tree_model);
 	Account *account;
 
 	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
@@ -536,7 +536,7 @@ static gboolean
 gnc_tree_model_account_iter_next (GtkTreeModel *tree_model,
 				  GtkTreeIter *iter)
 {
-	GNCTreeModelAccount *model = GNC_TREE_MODEL_ACCOUNT (tree_model);
+	GncTreeModelAccount *model = GNC_TREE_MODEL_ACCOUNT (tree_model);
 	Account *account;
 	AccountGroup *group;
 	gint i;
@@ -581,7 +581,7 @@ gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
 				      GtkTreeIter *iter,
 				      GtkTreeIter *parent)
 {
-	GNCTreeModelAccount *model;
+	GncTreeModelAccount *model;
 	Account *account;
 	AccountGroup *group;
 
@@ -657,7 +657,7 @@ static gboolean
 gnc_tree_model_account_iter_has_child (GtkTreeModel *tree_model,
 				       GtkTreeIter *iter)
 {
-	GNCTreeModelAccount *model;
+	GncTreeModelAccount *model;
 	AccountGroup *group;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
@@ -685,7 +685,7 @@ static int
 gnc_tree_model_account_iter_n_children (GtkTreeModel *tree_model,
 					GtkTreeIter *iter)
 {
-	GNCTreeModelAccount *model;
+	GncTreeModelAccount *model;
 	AccountGroup *group;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
@@ -719,7 +719,7 @@ gnc_tree_model_account_iter_nth_child (GtkTreeModel *tree_model,
 				       GtkTreeIter *parent,
 				       int n)
 {
-	GNCTreeModelAccount *model;
+	GncTreeModelAccount *model;
 	Account *account;
 	AccountGroup *group;
 
@@ -795,7 +795,7 @@ gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
 				    GtkTreeIter *iter,
     				    GtkTreeIter *child)
 {
-	GNCTreeModelAccount *model;
+	GncTreeModelAccount *model;
 	Account *account;
 	AccountGroup *group;
 	gint i;
@@ -885,7 +885,7 @@ gnc_tree_model_account_refresh_handler (GHashTable *changes, gpointer user_data)
 }
 
 static void
-gnc_tree_model_account_refresh (GNCTreeModelAccount *model)
+gnc_tree_model_account_refresh (GncTreeModelAccount *model)
 {
 	GtkTreePath *path;
 	gint i;

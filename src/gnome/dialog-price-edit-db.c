@@ -378,7 +378,7 @@ remove_old_clicked (GtkWidget *widget, gpointer data)
     for (node = pdb_dialog->prices; node; node = node->next)
     {
       GNCPrice *price = node->data;
-      Timespec pt = gnc_price_get_time (price);;
+      Timespec pt = gnc_price_get_time (price);
 
       if (timespec_cmp (&pt, &ts) < 0)
         gnc_pricedb_remove_price (pdb, price);

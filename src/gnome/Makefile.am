@@ -16,7 +16,7 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
   ${top_builddir}/lib/egg/libegg.la \
-  ${GUILE_LIBS} ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GLIB_LIBS}
+  ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS}
 
 libgw_gnc_la_SOURCES = gw-gnc.c
 libgw_gnc_la_LDFLAGS = -module \
@@ -44,8 +44,10 @@ libgncgnome_la_SOURCES = \
   gnc-main-window.c \
   gnc-plugin.c \
   gnc-plugin-account-tree.c \
+  gnc-plugin-register.c \
   gnc-plugin-manager.c \
   gnc-plugin-page-account-tree.c \
+  gnc-plugin-page-register.c \
   gnc-plugin-page.c \
   gnc-splash.c \
   gnc-split-reg.c \
@@ -85,9 +87,11 @@ noinst_HEADERS = \
   gnc-main-window.h \
   gnc-plugin.h \
   gnc-plugin-account-tree.h \
+  gnc-plugin-register.h \
   gnc-plugin-manager.h \
   gnc-plugin-page.h \
   gnc-plugin-page-account-tree.h \
+  gnc-plugin-page-register.h \
   gnc-network.h \
   gnc-splash.h \
   gnc-split-reg.h \
@@ -135,7 +139,7 @@ AM_CFLAGS = \
   -DGNC_UI_DIR=\"$(GNC_UI_DIR)\"   \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GTKHTML_CFLAGS} \

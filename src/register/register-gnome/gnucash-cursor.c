@@ -239,7 +239,7 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 			/* draw the rectangle around the entire active
 			   virtual row */
 			gdk_gc_set_line_attributes (cursor->gc, 1,
-						    GDK_LINE_SOLID, -1, -1);
+						    GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
 
 			gdk_gc_set_foreground (cursor->gc, &gn_black);
 
@@ -257,7 +257,7 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 			dh = item_cursor->h;
 
 			gdk_gc_set_line_attributes (cursor->gc, 1,
-						    GDK_LINE_SOLID, -1, -1);
+						    GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
 
 			gdk_gc_set_foreground (cursor->gc, &gn_black);
 

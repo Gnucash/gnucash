@@ -1,3 +1,253 @@
+2003-06-14  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (EXTRA_DIST): Add config.rpath.
+
+2003-06-13  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
+	Cleanup build system.
+	* Makefile.am:
+	* acconfig.h:
+	* autogen.sh:
+	* configure.in:
+	* lib/egg/Makefile.am:
+	* src/app-file/Makefile.am:
+	* src/app-file/gnome/Makefile.am:
+	* src/app-utils/Makefile.am:
+	* src/backend/file/Makefile.am:
+	* src/business/business-core/file/Makefile.am:
+	* src/business/business-gnome/Makefile.am:
+	* src/business/business-ledger/Makefile.am:
+	* src/business/business-utils/Makefile.am:
+	* src/business/dialog-tax-table/Makefile.am:
+	* src/engine/Makefile.am:
+	* src/gnome-search/Makefile.am:
+	* src/gnome-utils/Makefile.am:
+	* src/gnome/Makefile.am:
+	* src/import-export/Makefile.am:
+	* src/import-export/binary-import/Makefile.am:
+	* src/import-export/hbci/Makefile.am:
+	* src/import-export/ofx/Makefile.am:
+	* src/import-export/qif-import/Makefile.am:
+	* src/network-utils/Makefile.am:
+	* src/optional/swig/Makefile.am:
+	* src/register/ledger-core/Makefile.am:
+	* src/register/register-core/Makefile.am:
+	* src/register/register-gnome/Makefile.am:
+	* src/report/report-gnome/Makefile.am:
+	* src/gnome/ui/Makefile.am:
+
+	Port register to GNOME 2. Replace GdkFont stuff by PangoLayout.
+	Replace gtk_type by g_type, gtk_args by gtk_set/get_property, gtk_signal
+	by g_signal.
+	* src/register/register-gnome/combocell-gnome.c: (select_item_cb),
+	(change_item_cb), (activate_item_cb), (key_press_item_cb),
+	(combo_disconnect_signals), (combo_connect_signals),
+	(block_list_signals), (unblock_list_signals),
+	(gnc_combo_cell_gui_destroy), (gnc_combo_cell_destroy),
+	(gnc_append_string_to_list), (gnc_combo_cell_modify_verify),
+	(gnc_combo_cell_gui_realize), (gnc_combo_cell_gui_move),
+	(popup_set_focus), (popup_get_width), (gnc_combo_cell_enter),
+	(gnc_combo_cell_leave):
+	* src/register/register-gnome/datecell-gnome.c: (date_picked_cb),
+	(key_press_item_cb), (gnc_date_cell_realize), (gnc_date_cell_move),
+	(gnc_date_cell_enter), (gnc_date_cell_leave):
+	* src/register/register-gnome/gnucash-cursor.c:
+	(gnucash_item_cursor_draw):
+	* src/register/register-gnome/gnucash-grid.c: (draw_cell),
+	(gnucash_grid_init):
+	* src/register/register-gnome/gnucash-grid.h:
+	* src/register/register-gnome/gnucash-header.c:
+	(gnc_header_update), (gnc_header_draw),
+	(gnc_header_request_redraw), (gnc_header_realize),
+	(gnc_header_unrealize), (gnc_header_finalize),
+	(gnc_header_reconfigure), (gnc_header_set_header_rows),
+	(gnc_header_point), (pointer_on_resize_line), (find_resize_col),
+	(gnc_header_resize_column), (gnc_header_auto_resize_column),
+	(gnc_header_event), (gnc_header_get_property),
+	(gnc_header_set_property), (gnc_header_init),
+	(gnc_header_class_init), (gnc_header_get_type),
+	(gnc_header_realized), (gnc_header_new):
+	* src/register/register-gnome/gnucash-header.h:
+	* src/register/register-gnome/gnucash-item-edit.c:
+	(gnc_item_edit_get_pixel_coords), (gnc_item_edit_draw_info),
+	(gnc_item_edit_free_draw_info_members), (gnc_item_edit_draw),
+	(gnc_item_edit_point), (gnc_item_edit_event),
+	(gnc_item_edit_get_toggle_offset), (gnc_item_edit_update),
+	(gnc_item_edit_realize), (gnc_item_edit_unrealize),
+	(gnc_item_edit_focus_in), (gnc_item_edit_focus_out),
+	(gnc_item_edit_reset_offset), (gnc_item_edit_init), (queue_sync),
+	(gnc_item_edit_redraw), (entry_changed), (gnc_item_edit_dispose),
+	(gnc_item_edit_finalize), (gnc_item_edit_set_cursor_pos),
+	(entry_event), (gnc_item_edit_set_editor),
+	(gnc_item_edit_configure), (gnc_item_edit_claim_selection),
+	(gnc_item_edit_cut_copy_clipboard), (gnc_item_edit_cut_clipboard),
+	(gnc_item_edit_copy_clipboard), (gnc_item_edit_paste_clipboard),
+	(gnc_item_edit_paste_primary), (gnc_item_edit_show_popup_toggle),
+	(gnc_item_edit_hide_popup_toggle), (key_press_popup_cb),
+	(gnc_item_edit_popup_toggled), (block_toggle_signals),
+	(unblock_toggle_signals), (connect_popup_toggle_signals),
+	(disconnect_popup_toggle_signals), (gnc_item_edit_get_property),
+	(gnc_item_edit_set_property), (gnc_item_edit_class_init),
+	(gnc_item_edit_get_type), (gnc_item_edit_new),
+	(gnc_item_edit_new_list), (gnc_item_edit_new_date_picker),
+	(gnc_item_edit_show_popup), (gnc_item_edit_hide_popup),
+	(gnc_item_edit_set_popup), (gnc_item_edit_set_has_selection),
+	(gnc_item_edit_selection_clear), (gnc_item_edit_selection_get),
+	(gnc_item_edit_selection_received):
+	* src/register/register-gnome/gnucash-item-edit.h:
+	* src/register/register-gnome/gnucash-item-list.c:
+	(gnc_item_list_clear), (gnc_item_list_append),
+	(gnc_item_list_select), (gnc_item_list_show_selected),
+	(gnc_item_list_sort), (gnc_item_list_autosize),
+	(gnc_item_list_init), (gnc_item_list_button_event),
+	(gnc_item_list_key_event), (gnc_item_list_class_init),
+	(gnc_item_list_get_type), (tree_view_selection_changed),
+	(gnc_item_list_new):
+	* src/register/register-gnome/gnucash-item-list.h:
+	* src/register/register-gnome/gnucash-scrolled-window.c:
+	(gnc_scrolled_window_get_type), (gnc_scrolled_window_new),
+	(gnc_scrolled_window_class_init), (gnc_scrolled_window_init):
+	* src/register/register-gnome/gnucash-scrolled-window.h:
+	* src/register/register-gnome/gnucash-sheet.c:
+	(gnucash_sheet_hide_editing_cursor),
+	(gnucash_sheet_modify_current_cell), (gnucash_sheet_size_allocate),
+	(gnucash_sheet_focus_in_event), (gnucash_sheet_focus_out_event),
+	(gnucash_sheet_start_editing_at_cursor), (gnucash_motion_event),
+	(gnucash_button_release_event), (gnucash_button_press_event),
+	(gnucash_register_cut_clipboard),
+	(gnucash_register_copy_clipboard),
+	(gnucash_register_paste_clipboard),
+	(gnucash_sheet_clipboard_event), (gnucash_sheet_direct_event),
+	(gnucash_sheet_key_press_event), (gnucash_sheet_col_max_width),
+	(gnucash_sheet_set_scroll_region), (gnucash_sheet_table_load),
+	(gnucash_sheet_selection_clear), (gnucash_sheet_selection_get),
+	(gnucash_sheet_selection_received), (gnucash_sheet_new),
+	(gnucash_register_new):
+	* src/register/register-gnome/gnucash-sheet.h:
+	* src/register/register-gnome/gnucash-style.c:
+	(set_dimensions_pass_one), (set_dimensions_pass_two),
+	(gnucash_style_init):
+	* src/register/register-gnome/gnucash-style.h:
+	* src/register/ledger-core/dialog-dup-trans.c:
+	(gnc_dup_trans_dialog_create), (gnc_dup_trans_dialog):
+	* src/gnome/glade/register.glade:
+	* src/gnome/ui/gnc-main-window-ui.xml:
+	* src/gnome/window-register.c: (gnc_register_date_window),
+	(regWindowLedger), (gnc_register_setup_menu_widgets),
+	(gnc_register_insert_cloned_toolbar_elt):
+
+
+	Rename GNCTreeModel to GncTreeModel like all the other classes.
+	* src/gnome-utils/gnc-tree-model-account.c:
+	(gnc_tree_model_account_get_type),
+	(gnc_tree_model_account_class_init), (gnc_tree_model_account_init),
+	(gnc_tree_model_account_finalize),
+	(gnc_tree_model_account_dispose), (gnc_tree_model_account_new),
+	(gnc_tree_model_account_set_root),
+	(gnc_tree_model_account_get_account),
+	(gnc_tree_model_account_set_toplevel),
+	(gnc_tree_model_account_get_toplevel),
+	(gnc_tree_model_account_get_iter_from_account),
+	(gnc_tree_model_account_get_iter),
+	(gnc_tree_model_account_get_path),
+	(gnc_tree_model_account_get_value),
+	(gnc_tree_model_account_iter_next),
+	(gnc_tree_model_account_iter_children),
+	(gnc_tree_model_account_iter_has_child),
+	(gnc_tree_model_account_iter_n_children),
+	(gnc_tree_model_account_iter_nth_child),
+	(gnc_tree_model_account_iter_parent),
+	(gnc_tree_model_account_refresh):
+	* src/gnome-utils/gnc-tree-model-account.h:
+	* src/gnome-utils/gnc-tree-model-example-account.c:
+	(gnc_tree_model_example_account_get_type),
+	(gnc_tree_model_example_account_class_init),
+	(gnc_tree_model_example_account_init),
+	(gnc_tree_model_example_account_finalize),
+	(gnc_tree_model_example_account_new),
+	(gnc_tree_model_example_account_set_accounts),
+	(gnc_tree_model_example_account_get_account),
+	(gnc_tree_model_example_account_get_flags),
+	(gnc_tree_model_example_account_get_column_type),
+	(gnc_tree_model_example_account_get_iter),
+	(gnc_tree_model_example_account_get_path),
+	(gnc_tree_model_example_account_get_value),
+	(gnc_tree_model_example_account_iter_next),
+	(gnc_tree_model_example_account_iter_children),
+	(gnc_tree_model_example_account_iter_nth_child):
+	* src/gnome-utils/gnc-tree-model-example-account.h:
+	* src/gnome-utils/dialog-account.c: (gnc_account_window_create),
+	(gnc_ui_new_account_window_internal), (gnc_ui_edit_account_window):
+	* src/gnome-utils/dialog-transfer.c:
+	(gnc_xfer_dialog_show_inc_exp_visible_cb),
+	(gnc_xfer_dialog_fill_tree_view), (gnc_xfer_dialog_create),
+	(gnc_transfer_dialog_get_selected_account),
+	(gnc_transfer_dialog_set_selected_account):
+	* src/gnome/druid-hierarchy.c: (update_account_balance),
+	(account_types_tree_view_prepare),
+	(on_choose_account_types_prepare),
+	(account_types_selection_changed), (select_all_clicked),
+	(clear_all_clicked), (get_selected_account_list),
+	(balance_cell_data_func), (on_final_account_prepare):
+	* src/gnome/window-acct-tree.c: (gnc_acct_tree_window_new):
+	
+	Port dialogs to GNOME 2. Replace GtkCList by GtkTreeView.
+	Replace gtk_type by g_type, gtk_args by gtk_set/get_property, gtk_signal
+	by g_signal.
+	* src/gnome/dialog-commodities.c:
+	(gnc_commodities_dialog_get_selected),
+	(gnc_commodities_dialog_response), (edit_clicked),
+	(remove_clicked), (add_clicked),
+	(gnc_commodities_dialog_selection_changed),
+	(show_currencies_toggled), (gnc_commodities_dialog_filter_func),
+	(gnc_commodities_dialog_create), (refresh_handler):
+	* src/gnome/glade/commodities.glade:
+	* src/gnome-utils/gnc-tree-model-commodity.[ch]
+	* src/gnome/dialog-fincalc.c: (connect_fincalc_menu_item),
+	(close_handler), (gnc_ui_fincalc_dialog_create):
+	* src/gnome/dialog-tax-info.c: (gnc_tax_info_set_changed),
+	(gnc_tax_info_dialog_get_current_accounts),
+	(gnc_tax_info_dialog_account_filter_func), (gui_to_accounts),
+	(select_subaccounts_clicked), (gnc_tax_info_dialog_response),
+	(tax_info_show_income_accounts), (gnc_tax_info_update_accounts),
+	(gnc_tax_info_income_cb), (gnc_tax_info_dialog_create),
+	(close_handler), (refresh_handler), (gnc_tax_info_dialog):
+	* src/gnome/glade/tax.glade:
+
+	Add window type to the ui plugin system and update plugins.
+	Add icon to the about dialog
+	* src/gnome/gnc-main-window.c: (gnc_main_window_open_page),
+	(gnc_main_window_close_page), (gnc_main_window_class_init),
+	(gnc_main_window_add_plugin), (gnc_main_window_switch_page),
+	(gnc_main_window_change_current_page),
+	(gnc_main_window_plugin_added), (gnc_main_window_plugin_removed),
+	(gnc_main_window_cmd_file_open_new_window),
+	(gnc_main_window_cmd_help_about):
+	* src/gnome/gnc-plugin-account-tree.c:
+	(gnc_plugin_account_tree_add_to_window),
+	(gnc_plugin_account_tree_remove_from_window):
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	(gnc_plugin_page_account_tree_create_widget),
+	(gnc_plugin_page_account_tree_unmerge_actions),
+	(gnc_plugin_page_account_tree_get_icon):
+	* src/gnome/gnc-plugin-page.c: (gnc_plugin_page_get_icon),
+	(gnc_plugin_page_get_plugin_name), (gnc_plugin_page_get_uri),
+	(gnc_plugin_page_inserted), (gnc_plugin_page_removed),
+	(gnc_plugin_page_selected), (gnc_plugin_page_unselected):
+	* src/gnome/gnc-plugin-page.h:
+	* src/gnome/gnc-plugin.c: (gnc_plugin_add_to_window),
+	(gnc_plugin_remove_from_window):
+	* src/gnome/gnc-plugin.h:
+	* src/import-export/qif-import/gnc-plugin-qif-import.c:
+	(gnc_plugin_qif_import_add_to_window),
+	(gnc_plugin_qif_import_remove_from_window):
+
+	Fix window type of splash screen. Add support for startup-notification.
+	* src/gnome/gnc-splash.c: (gnc_show_splash_screen):
+	* src/gnome/gnucash.desktop.in:
+	* src/gnome/top-level.c: (gnc_gui_init),
+	(gnc_configure_file_be_compression):
+
 2003-06-11  Jan Arne Petersen  <jpetersen@uni-bonn.de>
 
 	Add Jimmac's icons (http://jimmac.musichall.cz/i.php3?ikony=69).

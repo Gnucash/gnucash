@@ -1,5 +1,5 @@
 
-SUBDIRS = m4 macros debian doc lib src intl-scm po rpm accounts
+SUBDIRS = m4 debian doc lib src intl-scm po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
@@ -49,6 +49,10 @@ EXTRA_DIST = config.rpath  \
   gnucash-config.in \
   make-gnucash-patch.in \
   make-gnucash-potfiles.in \
+  macros/as-scrub-include.m4 \
+  macros/autogen.sh \
+  macros/gnome-guile-checks.m4 \
+  macros/openhbci.m4 \
   po/.cvsignore \
   po/README \
   po/glossary/da.po \

@@ -20,8 +20,8 @@ static void gnc_plugin_account_tree_finalize (GObject *object);
 
 static void gnc_plugin_account_tree_plugin_init (GncPluginIface *iface);
 
-static void gnc_plugin_account_tree_add_to_window (GncPlugin *plugin, GncMainWindow *window);
-static void gnc_plugin_account_tree_remove_from_window (GncPlugin *plugin, GncMainWindow *window);
+static void gnc_plugin_account_tree_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
+static void gnc_plugin_account_tree_remove_from_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 static const gchar *gnc_plugin_account_tree_get_name (GncPlugin *plugin);
 static GncPluginPage *gnc_plugin_account_tree_create_page (GncPlugin *plugin, const gchar *uri);
 
@@ -128,7 +128,8 @@ gnc_plugin_account_tree_plugin_init (GncPluginIface *iface)
 
 static void
 gnc_plugin_account_tree_add_to_window (GncPlugin *plugin,
-				       GncMainWindow *window)
+				       GncMainWindow *window,
+				       GQuark type)
 {
 	g_return_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (plugin));
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
@@ -140,7 +141,8 @@ gnc_plugin_account_tree_add_to_window (GncPlugin *plugin,
 	
 static void
 gnc_plugin_account_tree_remove_from_window (GncPlugin *plugin,
-					    GncMainWindow *window)
+					    GncMainWindow *window,
+					    GQuark type)
 {
 	g_return_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (plugin));
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));

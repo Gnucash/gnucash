@@ -15,7 +15,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/business/business-ledger \
   -I${top_srcdir}/src/business/dialog-tax-table \
   ${GNOME_PRINT_CFLAGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
@@ -65,7 +65,7 @@ libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/business/business-ledger/libgnc-business-ledger.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GUILE_LIBS} \
-  ${GNOMEUI_LIBS} \
+  ${GNOME_LIBS} \
   ${G_WRAP_LINK_ARGS} \
   ${GLIB_LIBS} \
   ${EFENCE_LIBS}

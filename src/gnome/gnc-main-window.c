@@ -6,6 +6,7 @@
 
 #include "config.h"
 
+#include <gdk/gdkpixbuf.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtknotebook.h>
@@ -28,6 +29,7 @@
 #include "druid-loan.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-dir.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-plugin.h"
@@ -81,7 +83,6 @@ static void gnc_main_window_cmd_view_statusbar (EggAction *action, GncMainWindow
 static void gnc_main_window_cmd_actions_scheduled_transaction_editor (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_since_last_run (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_mortgage_loan (EggAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_tools_general_ledger (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_tools_price_editor (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_tools_commodity_editor (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_tools_financial_calculator (EggAction *action, GncMainWindow *window);
@@ -196,9 +197,6 @@ static EggActionGroupEntry gnc_menu_entries [] = {
 	  G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan), NULL },
 	
 	/* Tools menu */
-	{ "ToolsGeneralLedgerAction", N_("_General Ledger"), NULL, NULL,
-	  N_("Open a general ledger window"),
-	  G_CALLBACK (gnc_main_window_cmd_tools_general_ledger), NULL },
 	{ "ToolsPriceEditorAction", N_("_Price Editor"), NULL, NULL,
 	  N_("View and edit the prices for stocks and mutual funds"),
 	  G_CALLBACK (gnc_main_window_cmd_tools_price_editor), NULL },
@@ -229,6 +227,8 @@ static EggActionGroupEntry gnc_menu_entries [] = {
 static guint gnc_menu_n_entries = G_N_ELEMENTS (gnc_menu_entries);
 
 static GObjectClass *parent_class = NULL;
+
+static GQuark window_type = 0;
 
 GType
 gnc_main_window_get_type (void)
@@ -269,9 +269,10 @@ gnc_main_window_open_page (GncMainWindow *window,
 	GtkWidget *child;
 	GtkWidget *label_box;
 	GtkWidget *label;
-	const GdkPixbuf *icon;
+	const gchar *icon;
 	const gchar *title;
-	gint pos;
+	GtkWidget *image;
+/*	gint pos;*/
 
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
@@ -288,6 +289,11 @@ gnc_main_window_open_page (GncMainWindow *window,
 	if (icon != NULL) {
 		/* FIXME */
 		label_box = gtk_hbox_new (FALSE, 6);
+		gtk_widget_show (label_box);
+		image = gtk_image_new_from_stock (icon, GTK_ICON_SIZE_MENU);
+		gtk_widget_show (image);
+		gtk_box_pack_start (GTK_BOX (label_box), image, FALSE, FALSE, 0);
+		gtk_box_pack_start (GTK_BOX (label_box), label, TRUE, TRUE, 0);
 	} else {
 		label_box = label;
 	}
@@ -296,7 +302,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 				  child, label_box);
 
 	gnc_plugin_page_inserted (page);
-
+/*
 	pos = gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) - 1;
 	if (gtk_notebook_get_current_page (GTK_NOTEBOOK (window->priv->notebook)) == pos) {
 		window->priv->current_page = page;
@@ -305,7 +311,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 	} else {
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (window->priv->notebook),
 					       pos);
-	}
+	}*/
 }
 
 void
@@ -340,7 +346,7 @@ gnc_main_window_close_page (GncMainWindow *window,
 
 	egg_menu_merge_ensure_update (window->ui_merge);
 
-	/* */
+	/*
 	i = gtk_notebook_get_current_page (GTK_NOTEBOOK (window->priv->notebook));
 	child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (window->priv->notebook), i);
 	if (child == NULL) {
@@ -354,7 +360,7 @@ gnc_main_window_close_page (GncMainWindow *window,
 	if (page != NULL) {
 		gnc_plugin_page_merge_actions (page, window->ui_merge);
 		gnc_plugin_page_selected (page);
-	}
+	}*/
 }
 
 GncPluginPage *
@@ -445,6 +451,8 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 
+	window_type = g_quark_from_static_string ("gnc-main-window");
+
 	object_class->finalize = gnc_main_window_finalize;
 	object_class->dispose = gnc_main_window_dispose;
 }
@@ -498,7 +506,8 @@ gnc_main_window_add_plugin (gpointer plugin,
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
 
 	gnc_plugin_add_to_window (GNC_PLUGIN (plugin),
-				  GNC_MAIN_WINDOW (window));
+				  GNC_MAIN_WINDOW (window),
+				  window_type);
 }
 
 static void
@@ -581,14 +590,6 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 			     gint pos,
 			     GncMainWindow *window)
 {
-	/* FIXME Use switch_page instead of change_current_page */
-}
-
-static void
-gnc_main_window_change_current_page (GtkNotebook *notebook,
-				     gint pos,
-				     GncMainWindow *window)
-{
 	GtkWidget *child;
 	GncPluginPage *page;
 
@@ -606,7 +607,36 @@ gnc_main_window_change_current_page (GtkNotebook *notebook,
 	window->priv->current_page = page;
 
 	if (page != NULL) {
-		gnc_plugin_page_merge_actions (page,  window->ui_merge);
+		gnc_plugin_page_merge_actions (page, window->ui_merge);
+		gnc_plugin_page_selected (page);
+	}
+}
+
+static void
+gnc_main_window_change_current_page (GtkNotebook *notebook,
+				     gint pos,
+				     GncMainWindow *window)
+{
+	GtkWidget *child;
+	GncPluginPage *page;
+
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+
+	g_print ("change_current_page");
+
+	if (window->priv->current_page != NULL) {
+		gnc_plugin_page_unmerge_actions (window->priv->current_page,
+						 window->ui_merge);
+		gnc_plugin_page_unselected (window->priv->current_page);
+	}
+
+	child = gtk_notebook_get_nth_page (notebook, pos);
+	page = g_object_get_data (G_OBJECT (child), "page-plugin");
+
+	window->priv->current_page = page;
+
+	if (page != NULL) {
+		gnc_plugin_page_merge_actions (page, window->ui_merge);
 		gnc_plugin_page_selected (page);
 	}
 }
@@ -619,7 +649,7 @@ gnc_main_window_plugin_added (GncPlugin *manager,
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
 
-	gnc_plugin_add_to_window (plugin, window);
+	gnc_plugin_add_to_window (plugin, window, window_type);
 }
 
 static void
@@ -630,7 +660,7 @@ gnc_main_window_plugin_removed (GncPlugin *manager,
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
 
-	gnc_plugin_remove_from_window (plugin, window);
+	gnc_plugin_remove_from_window (plugin, window, window_type);
 }
 
 
@@ -653,8 +683,7 @@ static void
 gnc_main_window_cmd_file_open_new_window (EggAction *action, GncMainWindow *window)
 {
 	GncMainWindow *new_window;
-	const gchar *name;
-	gchar *uri;
+	const gchar *name, *uri;
 	GncPlugin *plugin;
 	GncPluginPage *page;
 
@@ -812,23 +841,6 @@ gnc_main_window_cmd_actions_mortgage_loan (EggAction *action, GncMainWindow *win
 }
 
 static void
-gnc_main_window_cmd_tools_general_ledger (EggAction *action, GncMainWindow *window)
-{
-	GNCLedgerDisplay *ld;
-	GNCSplitReg *gsr;
-	RegWindow *regData;
-
-	ld = gnc_ledger_display_gl ();
-	gsr = gnc_ledger_display_get_user_data (ld);
-	if (!gsr) {
-		regData = regWindowLedger (ld);
-		gnc_register_raise (regData);
-	} else {
-		gnc_split_reg_raise (gsr);
-	}
-}
-
-static void
 gnc_main_window_cmd_tools_price_editor (EggAction *action, GncMainWindow *window)
 {
 	gnc_prices_dialog (NULL);
@@ -901,18 +913,14 @@ gnc_main_window_cmd_help_about (EggAction *action, GncMainWindow *window)
 		NULL
 	};
 	const gchar *translator_credits = _("translator_credits");
-	gchar *version;
+	GdkPixbuf *logo;
 
-	if (GNUCASH_MINOR_VERSION % 2) {
-		version = g_strdup_printf("%s (built %s)", VERSION, GNUCASH_BUILD_DATE);
-	} else {
-		version = strdup(VERSION);
-	}
+	logo = gdk_pixbuf_new_from_file (GNC_PIXMAP_DIR "/appicon.png", NULL);
 
-	about = gnome_about_new ("GnuCash", version, copyright, message, authors, documenters,
+	about = gnome_about_new ("GnuCash", VERSION, copyright, message, authors, documenters,
 				 strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
-				 NULL);
-	g_free(version);
+				 logo);
 
+	gdk_pixbuf_unref (logo);
 	gtk_dialog_run (GTK_DIALOG (about));
 }

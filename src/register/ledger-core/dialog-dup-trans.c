@@ -84,10 +84,10 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
 
   /* parent */
   if (parent != NULL)
-    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
   /* default to ok */
-  gnome_dialog_set_default (GNOME_DIALOG(dialog), 0);
+  gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
 
   /* date widget */
   {
@@ -109,8 +109,8 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     num_spin = glade_xml_get_widget (xml, "num_spin");
     dt_dialog->num_edit = num_spin;
 
-    gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
-                                  GTK_EDITABLE (num_spin));
+    /*gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
+                                  GTK_EDITABLE (num_spin));*/
 
     if (num_str && parse_num (num_str, &num))
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (num_spin), num + 1);
@@ -152,9 +152,9 @@ gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
 
   gtk_widget_grab_focus (entry);
 
-  result = gnome_dialog_run_and_close (GNOME_DIALOG (dt_dialog->dialog));
+  result = gtk_dialog_run (GTK_DIALOG (dt_dialog->dialog));
 
-  if (result == 0)
+  if (result == GTK_RESPONSE_OK)
   {
     *date_p = gnc_date_edit_get_date (GNC_DATE_EDIT (dt_dialog->date_edit));
     *out_num = g_strdup (gtk_entry_get_text (GTK_ENTRY (dt_dialog->num_edit)));

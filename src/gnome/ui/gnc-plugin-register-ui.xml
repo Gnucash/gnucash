@@ -1,0 +1,9 @@
+<Root>
+<menu>
+<submenu name="Tools" verb="ToolsAction">
+	<placeholder name="ToolsPlaceholder">
+		<menuitem name="ToolsGeneralLedger" verb="ToolsGeneralLedgerAction"/>
+	</placeholder>
+</submenu>
+</menu>
+</Root>

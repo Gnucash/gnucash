@@ -1,0 +1,44 @@
+<Root>
+<menu>
+<submenu name="Actions">
+	<placeholder name="ActionsPlaceholder">
+		<separator name="ActionsSep3"/>
+		<menuitem name="RecordTransaction" verb="RecordTransactionAction"/>
+		<menuitem name="CancelTransaction" verb="CancelTransactionAction"/>
+		<menuitem name="DeleteTransaction" verb="DeleteTransactionAction"/>
+		<menuitem name="DuplicateTransaction" verb="DuplicateTransactionAction"/>
+	</placeholder>
+</submenu>
+</menu>
+<!--popups>
+<popup name="AccountPopup" verb="FakeToplevel">
+	<menuitem name="AccountOpenAccount" verb="FileOpenAccountAction"/>
+	<menuitem name="AccountOpenSubaccounts" verb="FileOpenSubaccountsAction"/>
+	<menuitem name="AccountEditAccount" verb="EditEditAccountAction"/>
+	<separator name="AccountSep1"/>
+	<menuitem name="AccountReconcile" verb="ActionsReconcileAction"/>
+	<menuitem name="AccountTransfer" verb="ActionsTransferAction"/>
+	<menuitem name="AccountStockSplit" verb="ActionsStockSplitAction"/>
+	<separator name="AccountSep2"/>
+	<menuitem name="AccountNewAccount" verb="FileNewAccountAction"/>
+	<menuitem name="AccountDeleteAccount" verb="EditDeleteAccountAction"/>
+	<separator name="AccountSep3"/>
+	<submenu name="ScrubMenu" verb="ScrubMenuAction">
+		<menuitem name="Scrub" verb="ScrubAction"/>
+		<menuitem name="ScrubSub" verb="ScrubSubAction"/>
+		<menuitem name="ScrubAll" verb="ScrubAllAction"/>
+	</submenu>
+	<separator name="AccountSep4"/>
+	<menuitem name="AccountViewOptions" verb="EditAccountViewOptionsAction"/>
+</popup>
+</popups-->
+<dockitem name="DefaultToolbar">
+	<placeholder name="DefaultToolbarPlaceholder">
+		<separator name="ToolbarSep2"/>
+		<toolitem name="ToolbarRecordTransaction" verb="RecordTransactionAction"/>
+		<toolitem name="ToolbarCancelTransaction" verb="CancelTransactionAction"/>
+		<toolitem name="ToolbarDeleteTransaction" verb="DeleteTransactionAction"/>
+		<toolitem name="ToolbarDuplicateTransaction" verb="DuplicateTransactionAction"/>
+	</placeholder>
+</dockitem>
+</Root>

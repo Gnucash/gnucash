@@ -1498,7 +1498,7 @@ gnc_account_window_create(AccountWindow *aw)
   GtkWidget *box;
   GladeXML  *xml;
   AccountGroup *group;
-  GNCTreeModelAccount *model;
+  GtkTreeModel *model;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
 
@@ -1580,8 +1580,8 @@ gnc_account_window_create(AccountWindow *aw)
 
   aw->parent_tree = GTK_TREE_VIEW (glade_xml_get_widget (xml, "parent_tree_view"));
   model = gnc_tree_model_account_new (group);
-  gnc_tree_model_account_set_toplevel (model, aw->top_level_account);
-  gtk_tree_view_set_model (aw->parent_tree, GTK_TREE_MODEL (model));
+  gnc_tree_model_account_set_toplevel (GNC_TREE_MODEL_ACCOUNT (model), aw->top_level_account);
+  gtk_tree_view_set_model (aw->parent_tree, model);
   g_object_unref (G_OBJECT (model));
   
   renderer = gtk_cell_renderer_text_new ();
@@ -1772,7 +1772,7 @@ gnc_ui_new_account_window_internal (Account *base_account,
   gnc_commodity *commodity;
   AccountWindow *aw;
   Account *account;
-  GNCTreeModelAccount *model;
+  GncTreeModelAccount *model;
   GtkTreeSelection *selection;
   GtkTreeIter iter;
 
@@ -2039,7 +2039,7 @@ gnc_ui_edit_account_window(Account *account)
 {
   AccountWindow * aw;
   Account *parent;
-  GNCTreeModelAccount *model;
+  GncTreeModelAccount *model;
   GtkTreeSelection *selection;
   GtkTreeIter iter;
 

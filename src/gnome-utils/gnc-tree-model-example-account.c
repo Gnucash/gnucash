@@ -1,5 +1,5 @@
 /* 
- * gnc-tree-model-account.c -- GtkTreeModel implementation to display accounts in a GtkTreeView.
+ * gnc-tree-model-example-account.c -- GtkTreeModel implementation to display example accounts in a GtkTreeView.
  * Copyright (C) 2003 Jan Arne Petersen
  * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
  */
@@ -10,8 +10,8 @@
 #include "io-example-account.h"
 #include "Group.h"
 
-static void gnc_tree_model_example_account_class_init (GNCTreeModelExampleAccountClass *klass);
-static void gnc_tree_model_example_account_init (GNCTreeModelExampleAccount *model);
+static void gnc_tree_model_example_account_class_init (GncTreeModelExampleAccountClass *klass);
+static void gnc_tree_model_example_account_init (GncTreeModelExampleAccount *model);
 static void gnc_tree_model_example_account_finalize (GObject *object);
 
 static void gnc_tree_model_example_account_tree_model_init (GtkTreeModelIface *iface);
@@ -45,10 +45,9 @@ static gboolean	gnc_tree_model_example_account_iter_parent (GtkTreeModel *tree_m
 							    GtkTreeIter *iter,
     							    GtkTreeIter *child);
 
-struct GNCTreeModelExampleAccountPrivate
+struct GncTreeModelExampleAccountPrivate
 {
 	GSList *accounts;
-	GSList *selections;
 };
 
 static GObjectClass *parent_class = NULL;
@@ -60,13 +59,13 @@ gnc_tree_model_example_account_get_type (void)
 
 	if (gnc_tree_model_example_account_type == 0) {
 		static const GTypeInfo our_info = {
-			sizeof (GNCTreeModelExampleAccountClass),
+			sizeof (GncTreeModelExampleAccountClass),
 			NULL,
 			NULL,
 			(GClassInitFunc) gnc_tree_model_example_account_class_init,
 			NULL,
 			NULL,
-			sizeof (GNCTreeModelExampleAccount),
+			sizeof (GncTreeModelExampleAccount),
 			0,
 			(GInstanceInitFunc) gnc_tree_model_example_account_init
 		};
@@ -78,7 +77,7 @@ gnc_tree_model_example_account_get_type (void)
 		};
 
 		gnc_tree_model_example_account_type = g_type_register_static (G_TYPE_OBJECT,
-								      "GNCTreeModelExampleAccount",
+								      "GncTreeModelExampleAccount",
 								      &our_info, 0);
 		
 		g_type_add_interface_static (gnc_tree_model_example_account_type,
@@ -90,7 +89,7 @@ gnc_tree_model_example_account_get_type (void)
 }
 
 static void
-gnc_tree_model_example_account_class_init (GNCTreeModelExampleAccountClass *klass)
+gnc_tree_model_example_account_class_init (GncTreeModelExampleAccountClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
@@ -100,19 +99,19 @@ gnc_tree_model_example_account_class_init (GNCTreeModelExampleAccountClass *klas
 }
 
 static void
-gnc_tree_model_example_account_init (GNCTreeModelExampleAccount *model)
+gnc_tree_model_example_account_init (GncTreeModelExampleAccount *model)
 {
 	while (model->stamp == 0) {
 		model->stamp = g_random_int ();
 	}
 
-	model->priv = g_new0 (GNCTreeModelExampleAccountPrivate, 1);
+	model->priv = g_new0 (GncTreeModelExampleAccountPrivate, 1);
 }
 
 static void
 gnc_tree_model_example_account_finalize (GObject *object)
 {
-	GNCTreeModelExampleAccount *model;
+	GncTreeModelExampleAccount *model;
 
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GNC_IS_TREE_MODEL_EXAMPLE_ACCOUNT (object));
@@ -122,54 +121,37 @@ gnc_tree_model_example_account_finalize (GObject *object)
 	g_return_if_fail (model->priv != NULL);
 
 	g_slist_free (model->priv->accounts);
-	g_slist_free (model->priv->selections);
 	g_free (model->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-GNCTreeModelExampleAccount *
+GtkTreeModel *
 gnc_tree_model_example_account_new (GSList *accounts)
 {
-	GNCTreeModelExampleAccount *model;
-	guint i, len;
+	GncTreeModelExampleAccount *model;
 
 	model = g_object_new (GNC_TYPE_TREE_MODEL_EXAMPLE_ACCOUNT,
 			      NULL);
 
 	model->priv->accounts = accounts;
-	model->priv->selections = NULL;
 
-	for (i = 0, len = g_slist_length (accounts); i < len; i++) {
-		model->priv->selections = g_slist_prepend (model->priv->selections,
-							   GINT_TO_POINTER (FALSE));
-	}
-
-	return model;
+	return GTK_TREE_MODEL (model);
 }
 
 void
-gnc_tree_model_example_account_set_accounts (GNCTreeModelExampleAccount *model,
+gnc_tree_model_example_account_set_accounts (GncTreeModelExampleAccount *model,
                                              GSList *accounts)
 {
-	gint i, len;
-
 	g_return_if_fail (model != NULL);
 
 	g_slist_free (model->priv->accounts);
-	g_slist_free (model->priv->selections);
 
 	model->priv->accounts = accounts;
-	model->priv->selections = NULL;
-
-	for (i = 0, len = g_slist_length (accounts); i < len; i++) {
-		model->priv->selections = g_slist_prepend (model->priv->selections,
-							   GINT_TO_POINTER (FALSE));
-	}
 }
 
 GncExampleAccount *
-gnc_tree_model_example_account_get_account  (GNCTreeModelExampleAccount *model,
+gnc_tree_model_example_account_get_account  (GncTreeModelExampleAccount *model,
 		                             GtkTreeIter *iter)
 {
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_EXAMPLE_ACCOUNT (model), NULL);
@@ -179,36 +161,6 @@ gnc_tree_model_example_account_get_account  (GNCTreeModelExampleAccount *model,
 	
 	return (GncExampleAccount *) ((GSList *) iter->user_data)->data;
 }
-
-gboolean
-gnc_tree_model_example_account_is_selected  (GNCTreeModelExampleAccount *model,
-					     GtkTreeIter *iter)
-{
-	g_return_val_if_fail (GNC_IS_TREE_MODEL_EXAMPLE_ACCOUNT (model), FALSE);
-	g_return_val_if_fail (iter != NULL, FALSE);
-	g_return_val_if_fail (iter->user_data != NULL, FALSE);
-	g_return_val_if_fail (iter->stamp == model->stamp, FALSE);
-	
-	return GPOINTER_TO_INT (((GSList *) iter->user_data2)->data);
-}
-
-void
-gnc_tree_model_example_account_set_selected (GNCTreeModelExampleAccount *model,
-		                             GtkTreeIter *iter,
-					     gboolean selected)
-{
-	g_return_if_fail (GNC_IS_TREE_MODEL_EXAMPLE_ACCOUNT (model));
-	g_return_if_fail (iter != NULL);
-	g_return_if_fail (iter->user_data != NULL);
-	g_return_if_fail (iter->stamp == model->stamp);
-
-	((GSList *) iter->user_data2)->data = GINT_TO_POINTER (selected);
-
-	gtk_tree_model_row_changed (GTK_TREE_MODEL (model),
-				    gtk_tree_model_get_path (GTK_TREE_MODEL (model), iter),
-			            iter);
-}
-
 
 static void
 gnc_tree_model_example_account_tree_model_init (GtkTreeModelIface *iface)
@@ -230,7 +182,7 @@ gnc_tree_model_example_account_tree_model_init (GtkTreeModelIface *iface)
 static guint
 gnc_tree_model_example_account_get_flags (GtkTreeModel *tree_model)
 {
-	return 0;
+	return GTK_TREE_MODEL_LIST_ONLY;
 }
 
 static int
@@ -251,8 +203,6 @@ gnc_tree_model_example_account_get_column_type (GtkTreeModel *tree_model,
 		case GNC_TREE_MODEL_EXAMPLE_ACCOUNT_COL_SHORT_DESCRIPTION:
 		case GNC_TREE_MODEL_EXAMPLE_ACCOUNT_COL_LONG_DESCRIPTION:
 			return G_TYPE_STRING;
-		case GNC_TREE_MODEL_EXAMPLE_ACCOUNT_COL_SELECTED:
-			return G_TYPE_BOOLEAN;
 		default:
 			g_assert_not_reached ();
 			return G_TYPE_INVALID;
@@ -264,7 +214,7 @@ gnc_tree_model_example_account_get_iter (GtkTreeModel *tree_model,
 					 GtkTreeIter *iter,
 					 GtkTreePath *path)
 {
-	GNCTreeModelExampleAccount *model = GNC_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model);
+	GncTreeModelExampleAccount *model = GNC_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model);
 	guint i;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_EXAMPLE_ACCOUNT (model), FALSE);
@@ -279,7 +229,6 @@ gnc_tree_model_example_account_get_iter (GtkTreeModel *tree_model,
 
 	iter->stamp = model->stamp;
 	iter->user_data = g_slist_nth (model->priv->accounts, i);
-	iter->user_data2 = g_slist_nth (model->priv->selections, i);
 
 	if (iter->user_data == NULL) {
 		iter->stamp = 0;
@@ -293,7 +242,7 @@ static GtkTreePath *
 gnc_tree_model_example_account_get_path (GtkTreeModel *tree_model,
 					 GtkTreeIter *iter)
 {
-	GNCTreeModelExampleAccount *model = GNC_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model);
+	GncTreeModelExampleAccount *model = GNC_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model);
 	GtkTreePath *path;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_EXAMPLE_ACCOUNT (model), NULL);
@@ -317,7 +266,7 @@ gnc_tree_model_example_account_get_value (GtkTreeModel *tree_model,
 					  int column,
 					  GValue *value)
 {
-	GNCTreeModelExampleAccount *model = GNC_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model);
+	GncTreeModelExampleAccount *model = GNC_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model);
 	GncExampleAccount *account;
 
 	g_return_if_fail (GNC_IS_TREE_MODEL_EXAMPLE_ACCOUNT (model));
@@ -343,11 +292,6 @@ gnc_tree_model_example_account_get_value (GtkTreeModel *tree_model,
 
 			g_value_set_string (value, account->long_description);
 			break;
-		case GNC_TREE_MODEL_EXAMPLE_ACCOUNT_COL_SELECTED:
-			g_value_init (value, G_TYPE_BOOLEAN);
-
-			g_value_set_boolean (value, GPOINTER_TO_INT (((GSList *) iter->user_data2)->data));
-			break;
 		default:
 			g_assert_not_reached ();
 	}
@@ -357,7 +301,7 @@ static gboolean
 gnc_tree_model_example_account_iter_next (GtkTreeModel *tree_model,
 					  GtkTreeIter *iter)
 {
-	GNCTreeModelExampleAccount *model = GNC_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model);
+	GncTreeModelExampleAccount *model = GNC_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model);
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_EXAMPLE_ACCOUNT (model), FALSE);
 	g_return_val_if_fail (iter != NULL, FALSE);
@@ -368,7 +312,6 @@ gnc_tree_model_example_account_iter_next (GtkTreeModel *tree_model,
 		return FALSE;
 
 	iter->user_data = g_slist_next (iter->user_data);
-	iter->user_data2 = g_slist_next (iter->user_data2);
 
 	return TRUE;
 }
@@ -386,7 +329,6 @@ gnc_tree_model_example_account_iter_children (GtkTreeModel *tree_model,
 
 	iter->stamp = GNC_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model)->stamp;
 	iter->user_data = GNC_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model)->priv->accounts;
-	iter->user_data2 = GNC_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model)->priv->selections;
 
 	return TRUE;
 }
@@ -418,7 +360,7 @@ gnc_tree_model_example_account_iter_nth_child (GtkTreeModel *tree_model,
 					       GtkTreeIter *parent,
 					       int n)
 {
-	GNCTreeModelExampleAccount *model;
+	GncTreeModelExampleAccount *model;
 	
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_EXAMPLE_ACCOUNT (tree_model), FALSE);
 
@@ -431,7 +373,6 @@ gnc_tree_model_example_account_iter_nth_child (GtkTreeModel *tree_model,
 
 	iter->stamp = model->stamp;
 	iter->user_data = g_slist_nth (model->priv->accounts, n);
-	iter->user_data2 = g_slist_nth (model->priv->selections, n);
 
 	if (iter->user_data == NULL) {
 		iter->stamp = 0;

@@ -5,7 +5,9 @@ pkglib_LTLIBRARIES = libgw-engine.la libgw-kvp.la libgncmod-engine.la
 AM_CFLAGS = \
 	-I${top_srcdir}/lib/libc \
 	-I${top_srcdir}/src/gnc-module \
-	${GNUCASH_ENGINE_CFLAGS}
+	${GUILE_INCS} \
+	${G_WRAP_COMPILE_ARGS} \
+	${GLIB_CFLAGS}
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
@@ -112,7 +114,9 @@ noinst_HEADERS = \
 noinst_SCRIPTS = iso-currencies-to-c
 
 libgncmod_engine_la_LDFLAGS = -module
-libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
+libgncmod_engine_la_LIBADD = \
+ ${GUILE_LIBS} \
+ ${GLIB_LIBS} \
  libgw-engine.la \
  libgw-kvp.la \
  ../gnc-module/libgncmodule.la \

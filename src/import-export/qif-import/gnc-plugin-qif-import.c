@@ -15,8 +15,8 @@
 
 static void gnc_plugin_qif_import_plugin_init (GncPluginIface *iface);
 
-static void gnc_plugin_qif_import_add_to_window (GncPlugin *plugin, GncMainWindow *window);
-static void gnc_plugin_qif_import_remove_from_window (GncPlugin *plugin, GncMainWindow *window);
+static void gnc_plugin_qif_import_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
+static void gnc_plugin_qif_import_remove_from_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 static const gchar *gnc_plugin_qif_import_get_name (GncPlugin *plugin);
 static GncPluginPage *gnc_plugin_qif_import_create_page (GncPlugin *plugin, const gchar *uri);
 
@@ -84,7 +84,8 @@ gnc_plugin_qif_import_plugin_init (GncPluginIface *iface)
 
 static void
 gnc_plugin_qif_import_add_to_window (GncPlugin *plugin,
-				     GncMainWindow *window)
+				     GncMainWindow *window,
+				     GQuark type)
 {
 	g_return_if_fail (GNC_IS_PLUGIN_QIF_IMPORT (plugin));
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
@@ -96,7 +97,8 @@ gnc_plugin_qif_import_add_to_window (GncPlugin *plugin,
 	
 static void
 gnc_plugin_qif_import_remove_from_window (GncPlugin *plugin,
-					      GncMainWindow *window)
+					  GncMainWindow *window,
+					  GQuark type)
 {
 	g_return_if_fail (GNC_IS_PLUGIN_QIF_IMPORT (plugin));
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));

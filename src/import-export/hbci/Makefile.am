@@ -50,7 +50,7 @@ libgncmod_hbci_la_LIBADD = \
   ${top_builddir}/src/gnome/libgncgnome.la \
   ${GLADE_LIBS} \
   ${GLIB_LIBS} \
-  ${GNOMEUI_LIBS} \
+  ${GNOME_LIBS} \
   ${HBCI_LIBS}
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/hbci
@@ -78,7 +78,7 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${HBCI_CFLAGS}
 

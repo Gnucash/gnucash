@@ -8,7 +8,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/business/business-core \
   ${GNOME_PRINT_CFLAGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
@@ -29,8 +29,7 @@ libgncmod_dialog_tax_table_la_LDFLAGS = -module
 libgncmod_dialog_tax_table_la_LIBADD = \
   ../../gnc-module/libgncmodule.la \
   ${GUILE_LIBS} \
-  ${GNOME_LIBDIR} \
-  ${GNOMEUI_LIBS} \
+  ${GNOME_LIBS} \
   ${G_WRAP_LINK_ARGS} \
   ${GLIB_LIBS} \
   ${EFENCE_LIBS}

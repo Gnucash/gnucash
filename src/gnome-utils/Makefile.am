@@ -15,7 +15,7 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS}
 
@@ -45,11 +45,15 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-html-history.c \
   gnc-html-guppi.c \
   gnc-html.c \
+  gnc-icons.c \
   gnc-mdi-utils.c \
   gnc-menu-extensions.c \
   gnc-tree-model-account.c \
   gnc-tree-model-account-types.c \
+  gnc-tree-model-commodity.c \
   gnc-tree-model-example-account.c \
+  gnc-tree-model-price.c \
+  gnc-tree-model-selection.c \
   gncmod-gnome-utils.c \
   gtkselect.c \
   print-session.c \
@@ -81,11 +85,15 @@ gncinclude_HEADERS = \
   gnc-html-history.h \
   gnc-html-guppi.h \
   gnc-html.h \
+  gnc-icons.h \
   gnc-mdi-utils.h \
   gnc-menu-extensions.h \
   gnc-tree-model-account.h \
   gnc-tree-model-account-types.h \
+  gnc-tree-model-commodity.h \
   gnc-tree-model-example-account.h \
+  gnc-tree-model-price.h \
+  gnc-tree-model-selection.h \
   gtkselect.h \
   print-session.h \
   window-help.h
@@ -107,8 +115,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/lib/egg/libegg.la \
   ${GUILE_LIBS} \
   ${LIBGUPPI_LIBS} \
-  ${GNOMEUI_LIBS} \
-  ${GNOME_LIBDIR} \
+  ${GNOME_LIBS} \
   ${GNOME_PRINT_LIBS} \
   ${GTKHTML_LIBS} \
   ${GDK_PIXBUF_LIBS} \

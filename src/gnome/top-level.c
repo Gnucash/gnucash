@@ -48,7 +48,9 @@
 #include "gnc-main-window.h"
 #include "gnc-menu-extensions.h"
 #include "gnc-plugin-account-tree.h" /* FIXME Remove this line*/
+#include "gnc-plugin-register.h" /* FIXME Remove this line*/
 #include "gnc-plugin-manager.h" /* FIXME Remove this line*/
+#include "gnc-icons.h" /* FIXME Remove this line*/
 #include "gnc-network.h"
 #include "gnc-splash.h"
 #include "gnc-html.h"
@@ -91,10 +93,6 @@ static void gnc_configure_file_be_retention_days_cb(gpointer);
 static void gnc_configure_file_be_retention_days(void);
 static void gnc_configure_file_be_compression_cb(gpointer);
 static void gnc_configure_file_be_compression(void);
-static void gnc_configure_register_font_cb(gpointer);
-static void gnc_configure_register_font(void);
-static void gnc_configure_register_hint_font_cb(gpointer);
-static void gnc_configure_register_hint_font(void);
 
 
 /** GLOBALS *********************************************************/
@@ -389,17 +387,6 @@ gnc_gui_init (SCM command_line)
                                           NULL, "General",
                                           "Use file compression");
 
-    gnc_configure_register_font();
-    register_font_callback_id =
-      gnc_register_option_change_callback(gnc_configure_register_font_cb,
-                                          NULL, "Register", "Register font");
-
-    gnc_configure_register_hint_font();
-    register_hint_font_callback_id =
-      gnc_register_option_change_callback(gnc_configure_register_hint_font_cb,
-                                          NULL, "Register",
-                                          "Register hint font");
-
     if (!gnucash_style_init())
       gnc_shutdown(1);
     gnucash_color_init();
@@ -425,6 +412,8 @@ gnc_gui_init (SCM command_line)
 
     /* FIXME Remove this test code */
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_account_tree_new ());
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_register_new ());
+    gnc_load_stock_icons ();
 
     /* Run the ui startup hooks. */
     {
@@ -917,70 +906,6 @@ gnc_configure_file_be_compression (void)
 {
   gnc_file_be_set_compression
     (gnc_lookup_boolean_option("General", "Use file compression", FALSE));
-}
-
-/* gnc_configure_register_font_cb
- *     Callback called when options change -
- *     sets register font
- * 
- *  Args: unused data
- *  Returns: Nothing
- */
-static void
-gnc_configure_register_font_cb (gpointer not_used)
-{
-  gnc_configure_register_font ();
-}
-
-/* gnc_configure_register_font
- *     Set up the register font
- * 
- *  Args: Nothing
- *  Returns: Nothing
- */
-static void
-gnc_configure_register_font(void)
-{
-  char *font_name;
-
-  font_name = gnc_lookup_font_option("Register", "Register font", NULL);
-
-  gnucash_style_set_register_font_name(font_name);
-
-  if (font_name != NULL)
-    free(font_name);
-}
-
-/* gnc_configure_register_hint_font_cb
- *     Callback called when options change -
- *     sets register hint font
- * 
- *  Args: unused data
- *  Returns: Nothing
- */
-static void
-gnc_configure_register_hint_font_cb(gpointer not_used)
-{
-  gnc_configure_register_hint_font();
-}
-
-/* gnc_configure_register_hint_font
- *     Set up the register hint font
- * 
- *  Args: Nothing
- *  Returns: Nothing
- */
-static void
-gnc_configure_register_hint_font(void)
-{
-  char *font_name;
-
-  font_name = gnc_lookup_font_option("Register", "Register hint font", NULL);
-
-  gnucash_style_set_register_hint_font_name(font_name);
-
-  if (font_name != NULL)
-    free(font_name);
 }
 
 /****************** END OF FILE **********************/

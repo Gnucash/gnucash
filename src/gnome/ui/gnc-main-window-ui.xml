@@ -59,7 +59,6 @@
 
 <submenu name="Tools" verb="ToolsAction">
 	<placeholder name="ToolsPlaceholder"/>
-	<menuitem name="ToolsGeneralLedger" verb="ToolsGeneralLedgerAction"/>
 	<menuitem name="ToolsPriceEditor" verb="ToolsPriceEditorAction"/>
 	<menuitem name="ToolsCommodityEditor" verb="ToolsCommodityEditorAction"/>
 	<menuitem name="ToolsFinancialCalculator" verb="ToolsFinancialCalculatorAction"/>

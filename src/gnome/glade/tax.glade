@@ -28,20 +28,10 @@
                 <property name="can_default">yes</property>
                 <property name="can_focus">yes</property>
                 <property name="visible">yes</property>
-                <property name="label">gtk-ok</property>
+                <property name="label">gtk-cancel</property>
                 <property name="use_stock">yes</property>
                 <property name="use_underline">yes</property>
-              </widget>
-            </child>
-
-            <child>
-              <widget class="GtkButton" id="apply_button">
-                <property name="can_default">yes</property>
-                <property name="can_focus">yes</property>
-                <property name="visible">yes</property>
-                <property name="label">gtk-apply</property>
-                <property name="use_stock">yes</property>
-                <property name="use_underline">yes</property>
+                <property name="response_id">-6</property>
               </widget>
             </child>
 
@@ -50,9 +40,9 @@
                 <property name="can_default">yes</property>
                 <property name="can_focus">yes</property>
                 <property name="visible">yes</property>
-                <property name="label">gtk-close</property>
+                <property name="label">gtk-ok</property>
                 <property name="use_stock">yes</property>
-                <property name="use_underline">yes</property>
+                <property name="response_id">-5</property>
               </widget>
             </child>
           </widget>
@@ -136,7 +126,12 @@
                         <property name="visible">yes</property>
 
                         <child>
-                          <placeholder />
+                          <widget class="GtkTreeView" id="account_treeview">
+                            <property name="can_focus">yes</property>
+                            <property name="headers-visible">yes</property>
+                            <property name="visible">yes</property>
+
+			  </widget>
                         </child>
 
                         <child internal-child="hscrollbar">

@@ -374,7 +374,7 @@ gnc_xfer_dialog_show_inc_exp_visible_cb (GtkTreeModel *tree_model,
 					 GtkTreeIter *iter,
 					 gpointer data)
 {
-	GNCTreeModelAccount *model;
+	GncTreeModelAccount *model;
 	GtkCheckButton *show_button;
 	Account *account;
 
@@ -397,8 +397,7 @@ static void
 gnc_xfer_dialog_fill_tree_view (XferDialog * xferData, XferDirection direction)
 {
 	GtkTreeView *tree_view;
-	GNCTreeModelAccount *account_model;
-	GtkTreeModel *filter_model;
+	GtkTreeModel *account_model, *filter_model;
 	const char *show_inc_exp_message = _("Show the income and expense accounts");
 	GtkWidget *scroll_win;
 	GtkCheckButton *button;
@@ -414,7 +413,7 @@ gnc_xfer_dialog_fill_tree_view (XferDialog * xferData, XferDirection direction)
 				(direction == XFER_DIALOG_TO) ? "to_window" : "from_window");
 
 	account_model = gnc_tree_model_account_new (gnc_book_get_group (gnc_get_current_book ()));
-	filter_model = egg_tree_model_filter_new (GTK_TREE_MODEL (account_model), NULL);
+	filter_model = egg_tree_model_filter_new (account_model, NULL);
 	egg_tree_model_filter_set_visible_func (EGG_TREE_MODEL_FILTER (filter_model),
 						gnc_xfer_dialog_show_inc_exp_visible_cb,
 						button, NULL);
@@ -1577,7 +1576,7 @@ gnc_xfer_dialog_create (GtkWidget * parent, XferDialog * xferData)
 		GtkWidget *hbox;
 		GtkWidget *button;
 
-		frame = glade_xml_get_widget (xml, "curr_xfer_frame");
+		frame = glade_xml_get_widget (xml, "curr_transfer_frame");
 		xferData->curr_xfer_frame = frame;
 
 		edit = gnc_amount_edit_new ();
@@ -1839,7 +1838,7 @@ gnc_transfer_dialog_get_selected_account (XferDialog *dialog,
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	EggTreeModelFilter *filter_model;
-	GNCTreeModelAccount *account_model;
+	GncTreeModelAccount *account_model;
 	GtkTreeIter filter_iter;
 	GtkTreeIter account_iter;
 	Account *account;
@@ -1879,7 +1878,7 @@ gnc_transfer_dialog_set_selected_account (XferDialog *dialog,
 	GtkCheckButton *show_button;
 	GtkTreeSelection *selection;
 	EggTreeModelFilter *filter_model;
-	GNCTreeModelAccount *account_model;
+	GncTreeModelAccount *account_model;
 	GtkTreeIter filter_iter;
 	GtkTreeIter account_iter;
 	GNCAccountType type;

@@ -1144,7 +1144,7 @@ gnc_acct_tree_window_new (const gchar * url)
 	SCM temp;
 	int options_id;
 	URLType type;
-	GNCTreeModelAccount *model;
+	GtkTreeModel *model;
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 
@@ -1174,10 +1174,9 @@ gnc_acct_tree_window_new (const gchar * url)
 	model = gnc_tree_model_account_new (gnc_book_get_group (gnc_get_current_book ()));
 	
 	treewin->account_tree_view = GTK_TREE_VIEW (gtk_tree_view_new ());
-	gtk_tree_view_set_rules_hint (treewin->account_tree_view, TRUE);
 	g_signal_connect (G_OBJECT (treewin->account_tree_view), "button-press-event",
 			  G_CALLBACK (gnc_acct_tree_button_press_cb), treewin);
-	gtk_tree_view_set_model (treewin->account_tree_view, GTK_TREE_MODEL (model));
+	gtk_tree_view_set_model (treewin->account_tree_view, model);
 	g_object_unref (G_OBJECT (model));
 
 	renderer = gtk_cell_renderer_text_new ();

@@ -35,7 +35,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \

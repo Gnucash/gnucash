@@ -9,7 +9,7 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GLIB_CFLAGS} \
-  ${GNOME_INCLUDEDIR}
+  ${GNOME_CFLAGS}
 
 libgncmod_app_utils_la_SOURCES = \
   file-utils.c \

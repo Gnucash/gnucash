@@ -37,5 +37,5 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/register-core \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GLIB_CFLAGS}

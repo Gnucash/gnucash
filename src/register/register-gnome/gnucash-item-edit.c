@@ -40,11 +40,16 @@
 #include "gnucash-style.h"
 
 
+/* FIXME GNOME2 Port
+ *	- ButtonEvents are not delegated to GtkEntry. 
+ *	- Cursor isn't drawn.
+ */
+
 /* The arguments we take */
 enum {
-        ARG_0,
-        ARG_SHEET,     /* The Sheet argument      */
-        ARG_GTK_ENTRY, /* The GtkEntry argument   */
+        PROP_0,
+        PROP_SHEET,     /* The sheet property      */
+        PROP_EDITOR,     /* The entry property   */
 };
 
 /* values for selection info */
@@ -54,7 +59,7 @@ enum {
         TARGET_COMPOUND_TEXT
 };
 
-static GnomeCanvasItemClass *item_edit_parent_class;
+static GnomeCanvasItemClass *gnc_item_edit_parent_class;
 static GdkAtom clipboard_atom = GDK_NONE;
 static GdkAtom ctext_atom = GDK_NONE;
 
@@ -62,19 +67,7 @@ static GdkAtom ctext_atom = GDK_NONE;
 typedef struct _TextDrawInfo TextDrawInfo;
 struct _TextDrawInfo
 {
-        GdkWChar *all_text;
-
-        GdkWChar *text_1;
-        GdkWChar *text_2;
-        GdkWChar *text_3;
-
-        int total_len;
-
-        int len_1;
-        int len_2;
-        int len_3;
-
-        GdkFont *font;
+	PangoLayout *layout;
 
         GdkRectangle bg_rect;
         GdkRectangle text_rect;
@@ -88,18 +81,11 @@ struct _TextDrawInfo
 
         gboolean hatching;
 
-        int text_x1;
-        int text_x2;
-        int text_x3;
-        int text_y;
-
-        int cursor_x;
-        int cursor_y1;
-        int cursor_y2;
+	PangoRectangle *cursor;
 };
 
 
-static void item_edit_show_popup_toggle (ItemEdit *item_edit,
+static void gnc_item_edit_show_popup_toggle (GncItemEdit *item_edit,
 					 gint x, gint y,
 					 gint width, gint height,
 					 GtkAnchorType anchor);
@@ -108,7 +94,7 @@ static void item_edit_show_popup_toggle (ItemEdit *item_edit,
  * Returns the coordinates for the editor bounding box
  */
 void
-item_edit_get_pixel_coords (ItemEdit *item_edit,
+gnc_item_edit_get_pixel_coords (GncItemEdit *item_edit,
                             int *x, int *y,
                             int *w, int *h)
 {
@@ -135,30 +121,26 @@ item_edit_get_pixel_coords (ItemEdit *item_edit,
 
 
 static void
-item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
+gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *info)
 {
         SheetBlock *block;
         SheetBlockStyle *style;
         GtkEditable *editable;
-        CellAlignment align;
         Table *table;
 
         gboolean hatching;
         guint32 argb;
 
-        int text_len, total_width;
-        int pre_cursor_width;
-        int width_1, width_2;
         int xd, yd, wd, hd, dx, dy;
         int start_pos, end_pos;
         int toggle_space, cursor_pos;
-        int xoffset;
         const gchar *text;
+	PangoRectangle strong_pos;
+	PangoAttribute *attr;
+	PangoAttrList *attr_list;
 
         style = item_edit->style;
         table = item_edit->sheet->table;
-
-        info->font = GNUCASH_GRID(item_edit->sheet->grid)->normal_font;
 
         block = gnucash_sheet_get_block (item_edit->sheet,
                                          item_edit->virt_loc.vcell_loc);
@@ -177,29 +159,26 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
 	gtk_editable_get_selection_bounds (editable, &start_pos, &end_pos);
 
         text = gtk_entry_get_text (GTK_ENTRY (item_edit->editor));
-        text_len = strlen (text);
 
-        info->all_text = g_new0 (GdkWChar, text_len + 1);
-        text_len = gdk_mbstowcs (info->all_text, text, text_len);
-        info->total_len = text_len;
+	info->layout = gtk_widget_create_pango_layout (GTK_WIDGET (item_edit->sheet), text);
 
-        info->text_1 = info->all_text;
-        info->len_1  = start_pos;
+	/* Selection */
+	attr_list = pango_attr_list_new ();
 
-        info->text_2 = &info->text_1[start_pos];
-        info->len_2  = end_pos - start_pos;
+	attr = pango_attr_foreground_new (0xffff, 0xffff, 0xffff);
+	attr->start_index = start_pos;
+	attr->end_index = end_pos;
+	pango_attr_list_insert (attr_list, attr);
+	
+	attr = pango_attr_background_new (0x0, 0x0, 0x0);
+	attr->start_index = start_pos;
+	attr->end_index = end_pos;
+	pango_attr_list_insert (attr_list, attr);
 
-        info->text_3 = &info->text_1[end_pos];
-        info->len_3  = text_len - end_pos;
+	pango_layout_set_attributes (info->layout, attr_list);
+	pango_attr_list_unref (attr_list);
 
-        total_width = gdk_text_width_wc (info->font, info->text_1, text_len);
-        pre_cursor_width = gdk_text_width_wc (info->font, info->text_1,
-                                              cursor_pos);
-
-        width_1 = gdk_text_width_wc (info->font, info->text_1, info->len_1);
-        width_2 = gdk_text_width_wc (info->font, info->text_2, info->len_2);
-
-        item_edit_get_pixel_coords (item_edit, &xd, &yd, &wd, &hd);
+        gnc_item_edit_get_pixel_coords (item_edit, &xd, &yd, &wd, &hd);
 
         dx = xd - x;
         dy = yd - y;
@@ -217,75 +196,8 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         info->text_rect.width  = wd - toggle_space;
         info->text_rect.height = hd - 2;
 
-        align = gnc_table_get_align (table, item_edit->virt_loc);
-
-        switch (align)
-        {
-                case CELL_ALIGN_RIGHT:
-                        xoffset = info->text_rect.width -
-                                  (CELL_HPADDING + total_width);
-                        if (xoffset > 0)
-                                break;
-
-                default:
-                        xoffset = MIN (CELL_HPADDING,
-                                       info->text_rect.width -
-                                       (2*CELL_HPADDING + pre_cursor_width));
-                        break;
-        }
-
-        if (!item_edit->reset_pos)
-        {
-                xoffset = item_edit->x_offset;
-
-                if (xoffset + pre_cursor_width >
-                    info->text_rect.width - CELL_HPADDING)
-                        xoffset = info->text_rect.width -
-                                (2*CELL_HPADDING + pre_cursor_width);
-
-                if (xoffset + pre_cursor_width < CELL_HPADDING)
-                        xoffset = CELL_HPADDING - pre_cursor_width;
-        }
-
-        switch (align)
-        {
-                case CELL_ALIGN_RIGHT:
-                        if (xoffset > CELL_HPADDING &&
-                            xoffset + total_width >
-                            info->text_rect.width - CELL_HPADDING)
-                                xoffset = MAX (CELL_HPADDING,
-                                               (info->text_rect.width -
-                                                CELL_HPADDING) - total_width);
-
-                        if (xoffset + total_width <
-                            info->text_rect.width - CELL_HPADDING)
-                                xoffset = (info->text_rect.width -
-                                           CELL_HPADDING) - total_width;
-
-                        break;
-
-                default:
-                        xoffset = MIN (xoffset, CELL_HPADDING);
-
-                        if (xoffset < CELL_HPADDING &&
-                            xoffset + total_width <
-                            info->text_rect.width - CELL_HPADDING)
-                                xoffset = MIN (CELL_HPADDING,
-                                               (info->text_rect.width -
-                                                CELL_HPADDING) - total_width);
-        }
-
-        info->text_x1 = dx + xoffset;
-        info->text_x2 = info->text_x1 + width_1;
-        info->text_x3 = info->text_x2 + width_2;
-        info->text_y  = (dy + (hd / 2) +
-                         (((info->font->ascent + info->font->descent) / 2)
-                          - info->font->descent));
-        info->text_y++;
-
-        info->cursor_x  = info->text_x1 + pre_cursor_width;
-        info->cursor_y1 = info->text_y - info->font->ascent;
-        info->cursor_y2 = info->text_y + info->font->descent;
+	pango_layout_get_cursor_pos (info->layout, cursor_pos, NULL, &strong_pos);
+	info->cursor = &strong_pos;
 
         if (info->hatching)
         {
@@ -294,25 +206,22 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
                 info->hatch_rect.width = wd;
                 info->hatch_rect.height = hd;
         }
-
-        item_edit->x_offset = xoffset;
 }
 
 static void
-item_edit_free_draw_info_members(TextDrawInfo *info)
+gnc_item_edit_free_draw_info_members(TextDrawInfo *info)
 {
         if (info == NULL)
                 return;
 
-        g_free(info->all_text);
-        info->all_text = NULL;
+	g_object_unref (G_OBJECT (info->layout));
 }
 
 static void
-item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
+gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                 int x, int y, int width, int height)
 {
-        ItemEdit *item_edit = ITEM_EDIT (item);
+        GncItemEdit *item_edit = GNC_ITEM_EDIT (item);
         TextDrawInfo info;
 
         /* be sure we're valid */
@@ -321,7 +230,7 @@ item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                 return;
 
         /* Get the measurements for drawing */
-        item_edit_draw_info (item_edit, x, y, &info);
+        gnc_item_edit_draw_info (item_edit, x, y, &info);
 
         item_edit->reset_pos = FALSE;
 
@@ -341,42 +250,20 @@ item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         /* Draw the foreground text and cursor */
         gdk_gc_set_clip_rectangle (item_edit->gc, &info.text_rect);
 
-        /* Draw the highlited region */
-        if (info.len_2 > 0)
-        {
-                gdk_gc_set_foreground (item_edit->gc, info.bg_color2);
-                gdk_draw_rectangle (drawable, item_edit->gc, TRUE,
-                                    info.text_x2,
-                                    info.text_y - info.font->ascent,
-                                    info.text_x3 - info.text_x2,
-                                    info.font->ascent + info.font->descent);
-
-                gdk_gc_set_foreground (item_edit->gc, info.fg_color2);
-                gdk_draw_text_wc (drawable, info.font, item_edit->gc,
-                                  info.text_x2, info.text_y,
-                                  info.text_2, info.len_2);
-        }
-
         gdk_gc_set_foreground (item_edit->gc, info.fg_color);
 
-        if (info.len_1 > 0)
-                gdk_draw_text_wc (drawable, info.font, item_edit->gc,
-                                  info.text_x1, info.text_y,
-                                  info.text_1, info.len_1);
+	gdk_draw_layout (drawable,
+			 item_edit->gc,
+			 info.text_rect.x,
+			 info.text_rect.y,
+			 info.layout);
 
-        if (info.len_3 > 0)
-                gdk_draw_text_wc (drawable, info.font, item_edit->gc,
-                                  info.text_x3, info.text_y,
-                                  info.text_3, info.len_3);
-
-        if (info.len_2 == 0)
-                gdk_draw_line (drawable, item_edit->gc,
-                               info.cursor_x, info.cursor_y1,
-                               info.cursor_x, info.cursor_y2);
+	gdk_draw_line (drawable, item_edit->gc, info.cursor->x, info.cursor->y,
+		       info.cursor->x, info.cursor->y + info.cursor->height);
 
         gdk_gc_set_clip_rectangle (item_edit->gc, NULL);
 
-        item_edit_free_draw_info_members (&info);
+        gnc_item_edit_free_draw_info_members (&info);
 
 #ifdef USE_XIM
         if (gdk_im_ready() && item_edit->ic && 
@@ -402,12 +289,12 @@ item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
 
 static double
-item_edit_point (GnomeCanvasItem *item, double c_x, double c_y, int cx, int cy,
+gnc_item_edit_point (GnomeCanvasItem *item, double c_x, double c_y, int cx, int cy,
                  GnomeCanvasItem **actual_item)
 {
         int x, y, w, h;
 
-        item_edit_get_pixel_coords (ITEM_EDIT (item), &x, &y, &w, &h);
+        gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (item), &x, &y, &w, &h);
 
         *actual_item = NULL;
         if ((cx < x) || (cy < y) || (cx > x+w) || (cy > y+w))
@@ -420,32 +307,32 @@ item_edit_point (GnomeCanvasItem *item, double c_x, double c_y, int cx, int cy,
 
 
 static int
-item_edit_event (GnomeCanvasItem *item, GdkEvent *event)
+gnc_item_edit_event (GnomeCanvasItem *item, GdkEvent *event)
 {
         return 0;
 }
 
 
 int
-item_edit_get_toggle_offset (int row_height)
+gnc_item_edit_get_toggle_offset (int row_height)
 {
-        /* sync with item_edit_update */
+        /* sync with gnc_item_edit_update */
         return row_height - (2 * (CELL_VPADDING + 1)) + 3;
 }
 
 static void
-item_edit_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_path,
+gnc_item_edit_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_path,
 		  int flags)
 {
-        ItemEdit *item_edit = ITEM_EDIT (item);
+        GncItemEdit *item_edit = GNC_ITEM_EDIT (item);
         gint toggle_x, toggle_y, toggle_width, toggle_height;
         gint x, y, w, h;
 
-        if (GNOME_CANVAS_ITEM_CLASS (item_edit_parent_class)->update)
-                (*GNOME_CANVAS_ITEM_CLASS(item_edit_parent_class)->update)
+        if (GNOME_CANVAS_ITEM_CLASS (gnc_item_edit_parent_class)->update)
+                (*GNOME_CANVAS_ITEM_CLASS(gnc_item_edit_parent_class)->update)
 			(item, affine, clip_path, flags);
 
-        item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
+        gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
 
         item->x1 = x;
         item->y1 = y;
@@ -462,27 +349,27 @@ item_edit_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_path,
 
         item_edit->popup_toggle.toggle_offset = toggle_width + 3;
 
-        item_edit_show_popup_toggle (item_edit, toggle_x, toggle_y,
+        gnc_item_edit_show_popup_toggle (item_edit, toggle_x, toggle_y,
                                      toggle_width, toggle_height,
                                      GTK_ANCHOR_NW);
 
 	if (item_edit->show_popup)
-                item_edit_show_popup (item_edit);
+                gnc_item_edit_show_popup (item_edit);
 }
 
 
 static void
-item_edit_realize (GnomeCanvasItem *item)
+gnc_item_edit_realize (GnomeCanvasItem *item)
 {
         GnomeCanvas *canvas = item->canvas;
         GdkWindow *window;
-        ItemEdit *item_edit;
+        GncItemEdit *item_edit;
 
-        if (GNOME_CANVAS_ITEM_CLASS (item_edit_parent_class)->realize)
+        if (GNOME_CANVAS_ITEM_CLASS (gnc_item_edit_parent_class)->realize)
                 (*GNOME_CANVAS_ITEM_CLASS
-		 (item_edit_parent_class)->realize) (item);
+		 (gnc_item_edit_parent_class)->realize) (item);
 
-        item_edit = ITEM_EDIT (item);
+        item_edit = GNC_ITEM_EDIT (item);
         window = GTK_WIDGET (canvas)->window;
 
         item_edit->gc = gdk_gc_new (window);
@@ -582,11 +469,11 @@ item_edit_realize (GnomeCanvasItem *item)
 
 
 static void
-item_edit_unrealize (GnomeCanvasItem *item)
+gnc_item_edit_unrealize (GnomeCanvasItem *item)
 {
-        ItemEdit *item_edit;
+        GncItemEdit *item_edit;
 
-        item_edit = ITEM_EDIT (item);
+        item_edit = GNC_ITEM_EDIT (item);
 
 #ifdef USE_XIM
         if (item_edit->ic)
@@ -602,16 +489,16 @@ item_edit_unrealize (GnomeCanvasItem *item)
         }
 #endif
 
-        if (GNOME_CANVAS_ITEM_CLASS (item_edit_parent_class)->unrealize)
+        if (GNOME_CANVAS_ITEM_CLASS (gnc_item_edit_parent_class)->unrealize)
                 (*GNOME_CANVAS_ITEM_CLASS
-		 (item_edit_parent_class)->unrealize) (item);
+		 (gnc_item_edit_parent_class)->unrealize) (item);
 }
 
 void
-item_edit_focus_in (ItemEdit *item_edit)
+gnc_item_edit_focus_in (GncItemEdit *item_edit)
 {
         g_return_if_fail (item_edit != NULL);
-        g_return_if_fail (IS_ITEM_EDIT(item_edit));
+        g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
 #ifdef USE_XIM
         if (item_edit->ic)
@@ -621,10 +508,10 @@ item_edit_focus_in (ItemEdit *item_edit)
 }
 
 void
-item_edit_focus_out (ItemEdit *item_edit)
+gnc_item_edit_focus_out (GncItemEdit *item_edit)
 {
         g_return_if_fail (item_edit != NULL);
-        g_return_if_fail (IS_ITEM_EDIT(item_edit));
+        g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
 #ifdef USE_XIM
         gdk_im_end ();
@@ -632,10 +519,10 @@ item_edit_focus_out (ItemEdit *item_edit)
 }
 
 void
-item_edit_reset_offset (ItemEdit *item_edit)
+gnc_item_edit_reset_offset (GncItemEdit *item_edit)
 {
         g_return_if_fail (item_edit != NULL);
-        g_return_if_fail (IS_ITEM_EDIT(item_edit));
+        g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
         item_edit->reset_pos = TRUE;
 }
@@ -644,7 +531,7 @@ item_edit_reset_offset (ItemEdit *item_edit)
  * Instance initialization
  */
 static void
-item_edit_init (ItemEdit *item_edit)
+gnc_item_edit_init (GncItemEdit *item_edit)
 {
         GnomeCanvasItem *item = GNOME_CANVAS_ITEM (item_edit);
 
@@ -696,21 +583,21 @@ item_edit_init (ItemEdit *item_edit)
 
 
 static void
-queue_sync (ItemEdit *item_edit)
+queue_sync (GncItemEdit *item_edit)
 {
         GnomeCanvas *canvas = GNOME_CANVAS_ITEM (item_edit)->canvas;
         int x, y, w, h;
 
-        item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
+        gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
  
         gnome_canvas_request_redraw (canvas, x, y, x+w+1, y+h+1);
 }
 
 void
-item_edit_redraw (ItemEdit *item_edit)
+gnc_item_edit_redraw (GncItemEdit *item_edit)
 {
         g_return_if_fail (item_edit != NULL);
-        g_return_if_fail (IS_ITEM_EDIT(item_edit));
+        g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
         queue_sync (item_edit);
 }
@@ -718,31 +605,40 @@ item_edit_redraw (ItemEdit *item_edit)
 static void
 entry_changed (GtkEntry *entry, void *data)
 {
-        queue_sync(ITEM_EDIT (data));
+        queue_sync(GNC_ITEM_EDIT (data));
 }
 
 
 static void
-item_edit_destroy (GtkObject *object)
+gnc_item_edit_dispose (GObject *object)
 {
-        ItemEdit *item_edit = ITEM_EDIT (object);
-        GtkObject *edit_obj = GTK_OBJECT(item_edit->editor);
+	GncItemEdit *item_edit = GNC_ITEM_EDIT (object);
 
-        if (item_edit->clipboard != NULL)
-                g_free(item_edit->clipboard);
-        item_edit->clipboard = NULL;
+	g_signal_handlers_disconnect_matched (G_OBJECT (item_edit->editor), G_SIGNAL_MATCH_DATA,
+					      0, 0, NULL, NULL, item_edit);
 
-	gtk_signal_disconnect_by_data (edit_obj, item_edit);
+        G_OBJECT_CLASS (gnc_item_edit_parent_class)->dispose (object);
+}
+
+static void
+gnc_item_edit_finalize (GObject *object)
+{
+        GncItemEdit *item_edit = GNC_ITEM_EDIT (object);
+
+        if (item_edit->clipboard != NULL) {
+                g_free (item_edit->clipboard);
+        	item_edit->clipboard = NULL;
+	}
+
 
         gdk_gc_destroy (item_edit->gc);
 
-        if (GTK_OBJECT_CLASS (item_edit_parent_class)->destroy)
-                (*GTK_OBJECT_CLASS (item_edit_parent_class)->destroy)(object);
+        G_OBJECT_CLASS (gnc_item_edit_parent_class)->finalize (object);
 }
 
 
 gboolean
-item_edit_set_cursor_pos (ItemEdit *item_edit,
+gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
                           VirtualLocation virt_loc, int x,
                           gboolean changed_cells,
                           gboolean extend_selection)
@@ -750,15 +646,14 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
         GtkEditable *editable;
         TextDrawInfo info;
         Table *table;
-        gint pos;
-        gint pos_x;
+        gint pos = 0;
         gint o_x, o_y;
         CellDimensions *cd;
         gint cell_row, cell_col;
         SheetBlockStyle *style;
-        GdkWChar *text;
+/*        GdkWChar *text;*/
 
-        g_return_val_if_fail (IS_ITEM_EDIT(item_edit), FALSE);
+        g_return_val_if_fail (GNC_IS_ITEM_EDIT(item_edit), FALSE);
 
         table = item_edit->sheet->table;
 
@@ -792,33 +687,7 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
                         x -= item_edit->popup_toggle.toggle_offset;
         }
 
-        item_edit_draw_info (item_edit, o_x, o_y, &info);
-
-        if (info.text_1 == NULL)
-        {
-                item_edit_free_draw_info_members(&info);
-                return FALSE;
-        }
-
-        pos = info.total_len;
-        if (pos == 0)
-        {
-                item_edit_free_draw_info_members(&info);
-                return FALSE;
-        }
-
-        text = info.text_1 + (pos - 1);
-
-        while (text >= info.text_1) {
-                pos_x = o_x + info.text_x1 +
-                        gdk_text_width_wc (info.font, info.text_1, pos);
-
-                if (pos_x <= x + (gdk_char_width_wc(info.font, *text) / 2))
-                        break;
-
-                pos--;
-                text--;
-        }
+        gnc_item_edit_draw_info (item_edit, o_x, o_y, &info);
 
         if (extend_selection)
         {
@@ -846,14 +715,14 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
 
         queue_sync (item_edit);
 
-        item_edit_free_draw_info_members(&info);
+        gnc_item_edit_free_draw_info_members(&info);
 
         return TRUE;
 }
 
 
 static int
-entry_event (GtkEntry *entry, GdkEvent *event, ItemEdit *item_edit)
+entry_event (GtkEntry *entry, GdkEvent *event, GncItemEdit *item_edit)
 {
         switch (event->type)
         {
@@ -872,20 +741,20 @@ entry_event (GtkEntry *entry, GdkEvent *event, ItemEdit *item_edit)
 
 
 static void
-item_edit_set_editor (ItemEdit *item_edit, void *data)
+gnc_item_edit_set_editor (GncItemEdit *item_edit, void *data)
 {
         item_edit->editor = GTK_WIDGET (data);
 
-        gtk_signal_connect (GTK_OBJECT (item_edit->editor), "changed",
-                            GTK_SIGNAL_FUNC (entry_changed), item_edit);
+        g_signal_connect (G_OBJECT (item_edit->editor), "changed",
+                          G_CALLBACK (entry_changed), item_edit);
 
-        gtk_signal_connect_after (GTK_OBJECT (item_edit->editor), "event",
-                                  GTK_SIGNAL_FUNC (entry_event), item_edit);
+        g_signal_connect_after (G_OBJECT (item_edit->editor), "event",
+                                G_CALLBACK (entry_event), item_edit);
 }
 
 
 void
-item_edit_configure (ItemEdit *item_edit)
+gnc_item_edit_configure (GncItemEdit *item_edit)
 {
         GnucashSheet *sheet = item_edit->sheet;
         GnucashItemCursor *cursor;
@@ -925,10 +794,10 @@ item_edit_configure (ItemEdit *item_edit)
         }
 
         if (!gnc_table_is_popup (item_edit->sheet->table, item_edit->virt_loc))
-                item_edit_set_popup (item_edit, NULL, NULL, NULL,
+                gnc_item_edit_set_popup (item_edit, NULL, NULL, NULL,
                                      NULL, NULL, NULL, NULL);
 
-        item_edit_update (GNOME_CANVAS_ITEM(item_edit), NULL, NULL, 0);
+        gnc_item_edit_update (GNOME_CANVAS_ITEM(item_edit), NULL, NULL, 0);
 
 #ifdef USE_XIM
         if (item_edit->ic &&
@@ -951,13 +820,13 @@ item_edit_configure (ItemEdit *item_edit)
 
 
 void
-item_edit_claim_selection (ItemEdit *item_edit, guint32 time)
+gnc_item_edit_claim_selection (GncItemEdit *item_edit, guint32 time)
 {
         GtkEditable *editable;
         gint start_sel, end_sel;
 
         g_return_if_fail(item_edit != NULL);
-        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+        g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
         editable = GTK_EDITABLE (item_edit->editor);
 
@@ -983,14 +852,14 @@ item_edit_claim_selection (ItemEdit *item_edit, guint32 time)
 
 
 static void
-item_edit_cut_copy_clipboard (ItemEdit *item_edit, guint32 time, gboolean cut)
+gnc_item_edit_cut_copy_clipboard (GncItemEdit *item_edit, guint32 time, gboolean cut)
 {
         GtkEditable *editable;
         gint start_sel, end_sel;
         gchar *clip;
 
         g_return_if_fail(item_edit != NULL);
-        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+        g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
         editable = GTK_EDITABLE (item_edit->editor);
 
@@ -1017,24 +886,24 @@ item_edit_cut_copy_clipboard (ItemEdit *item_edit, guint32 time, gboolean cut)
 
 
 void
-item_edit_cut_clipboard (ItemEdit *item_edit, guint32 time)
+gnc_item_edit_cut_clipboard (GncItemEdit *item_edit, guint32 time)
 {
-        item_edit_cut_copy_clipboard(item_edit, time, TRUE);
+        gnc_item_edit_cut_copy_clipboard(item_edit, time, TRUE);
 }
 
 
 void
-item_edit_copy_clipboard (ItemEdit *item_edit, guint32 time)
+gnc_item_edit_copy_clipboard (GncItemEdit *item_edit, guint32 time)
 {
-        item_edit_cut_copy_clipboard(item_edit, time, FALSE);
+        gnc_item_edit_cut_copy_clipboard(item_edit, time, FALSE);
 }
 
 
 void
-item_edit_paste_clipboard (ItemEdit *item_edit, guint32 time)
+gnc_item_edit_paste_clipboard (GncItemEdit *item_edit, guint32 time)
 {
         g_return_if_fail(item_edit != NULL);
-        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+        g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
         if (ctext_atom == GDK_NONE)
                 ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
@@ -1045,10 +914,10 @@ item_edit_paste_clipboard (ItemEdit *item_edit, guint32 time)
 
 
 void
-item_edit_paste_primary (ItemEdit *item_edit, guint32 time)
+gnc_item_edit_paste_primary (GncItemEdit *item_edit, guint32 time)
 {
         g_return_if_fail(item_edit != NULL);
-        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+        g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
         if (ctext_atom == GDK_NONE)
                 ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
@@ -1059,12 +928,12 @@ item_edit_paste_primary (ItemEdit *item_edit, guint32 time)
 
 
 static void
-item_edit_show_popup_toggle (ItemEdit *item_edit,
+gnc_item_edit_show_popup_toggle (GncItemEdit *item_edit,
                              gint x, gint y,
                              gint width, gint height,
                              GtkAnchorType anchor)
 {
-	g_return_if_fail (IS_ITEM_EDIT (item_edit));
+	g_return_if_fail (GNC_IS_ITEM_EDIT (item_edit));
 
 	gnome_canvas_item_raise_to_top
                 (item_edit->popup_toggle.toggle_button_item);
@@ -1080,9 +949,9 @@ item_edit_show_popup_toggle (ItemEdit *item_edit,
 
 
 static void
-item_edit_hide_popup_toggle (ItemEdit *item_edit)
+gnc_item_edit_hide_popup_toggle (GncItemEdit *item_edit)
 {
-	g_return_if_fail (IS_ITEM_EDIT(item_edit));
+	g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
 	/* safely out of the way */
 	gnome_canvas_item_set (item_edit->popup_toggle.toggle_button_item,
@@ -1093,7 +962,7 @@ item_edit_hide_popup_toggle (ItemEdit *item_edit)
 static gboolean
 key_press_popup_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	ItemEdit *item_edit = ITEM_EDIT (data);
+	GncItemEdit *item_edit = GNC_ITEM_EDIT (data);
 
 	gtk_signal_emit_stop_by_name (GTK_OBJECT(widget), "key_press_event");
 
@@ -1104,9 +973,9 @@ key_press_popup_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
 
 
 static void
-item_edit_popup_toggled (GtkToggleButton *button, gpointer data)
+gnc_item_edit_popup_toggled (GtkToggleButton *button, gpointer data)
 {
-	ItemEdit *item_edit = ITEM_EDIT (data);
+	GncItemEdit *item_edit = GNC_ITEM_EDIT (data);
         gboolean show_popup;
 
 	show_popup = gtk_toggle_button_get_active (button);
@@ -1135,14 +1004,14 @@ item_edit_popup_toggled (GtkToggleButton *button, gpointer data)
         item_edit->show_popup = show_popup;
 
         if (!item_edit->show_popup)
-                item_edit_hide_popup (item_edit);
+                gnc_item_edit_hide_popup (item_edit);
 
-	item_edit_configure (item_edit);
+	gnc_item_edit_configure (item_edit);
 }
 
 
 static void
-block_toggle_signals(ItemEdit *item_edit)
+block_toggle_signals(GncItemEdit *item_edit)
 {
         GtkObject *obj;
 
@@ -1156,7 +1025,7 @@ block_toggle_signals(ItemEdit *item_edit)
 
 
 static void
-unblock_toggle_signals(ItemEdit *item_edit)
+unblock_toggle_signals(GncItemEdit *item_edit)
 {
         GtkObject *obj;
 
@@ -1170,11 +1039,11 @@ unblock_toggle_signals(ItemEdit *item_edit)
 
 
 static void
-connect_popup_toggle_signals (ItemEdit *item_edit)
+connect_popup_toggle_signals (GncItemEdit *item_edit)
 {
         GtkObject *object;
 
-	g_return_if_fail(IS_ITEM_EDIT(item_edit));
+	g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
 	if (item_edit->popup_toggle.signals_connected)
 		return;
@@ -1182,7 +1051,7 @@ connect_popup_toggle_signals (ItemEdit *item_edit)
         object = GTK_OBJECT(item_edit->popup_toggle.toggle_button);
 
         gtk_signal_connect (object, "toggled",
-                            GTK_SIGNAL_FUNC(item_edit_popup_toggled),
+                            GTK_SIGNAL_FUNC(gnc_item_edit_popup_toggled),
                             item_edit);
 
 	gtk_signal_connect (object, "key_press_event",
@@ -1194,9 +1063,9 @@ connect_popup_toggle_signals (ItemEdit *item_edit)
 
 
 static void
-disconnect_popup_toggle_signals (ItemEdit *item_edit)
+disconnect_popup_toggle_signals (GncItemEdit *item_edit)
 {
-	g_return_if_fail(IS_ITEM_EDIT(item_edit));
+	g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
 	if (!item_edit->popup_toggle.signals_connected)
 		return;
@@ -1207,86 +1076,115 @@ disconnect_popup_toggle_signals (ItemEdit *item_edit)
 	item_edit->popup_toggle.signals_connected = FALSE;
 }
 
-
 static void
-item_edit_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
+gnc_item_edit_get_property (GObject *object,
+			guint param_id,
+			GValue *value,
+			GParamSpec *pspec)
 {
-        GnomeCanvasItem *item;
-        ItemEdit *item_edit;
+	GncItemEdit *item_edit = GNC_ITEM_EDIT (object);
 
-        item = GNOME_CANVAS_ITEM (object);
-        item_edit = ITEM_EDIT (object);
-
-        switch (arg_id) {
-        case ARG_SHEET:
-                item_edit->sheet = GNUCASH_SHEET(GTK_VALUE_POINTER (*arg));
-                break;
-
-        case ARG_GTK_ENTRY:
-                item_edit_set_editor (item_edit, GTK_VALUE_POINTER (*arg));
-                break;
-
-        default:
-                break;
-        }
+	switch (param_id) {
+		case PROP_SHEET:
+			g_value_set_object (value, item_edit->sheet);
+			break;
+		case PROP_EDITOR:
+			g_value_set_object (value, item_edit->editor);
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+			break;
+	}
 }
 
+static void
+gnc_item_edit_set_property (GObject *object,
+			guint param_id,
+			const GValue *value,
+			GParamSpec *pspec)
+{
+	GncItemEdit *item_edit = GNC_ITEM_EDIT (object);
+
+	switch (param_id) {
+		case PROP_SHEET:
+			item_edit->sheet = GNUCASH_SHEET (g_value_get_object (value));
+			break;
+		case PROP_EDITOR:
+			gnc_item_edit_set_editor (item_edit, GTK_ENTRY (g_value_get_object (value)));
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+			break;
+	}
+}
 
 /*
- * ItemEdit class initialization
+ * GncItemEdit class initialization
  */
 static void
-item_edit_class_init (ItemEditClass *item_edit_class)
+gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
 {
-        GtkObjectClass  *object_class;
+        GObjectClass  *object_class;
         GnomeCanvasItemClass *item_class;
 
-        item_edit_parent_class = gtk_type_class (gnome_canvas_item_get_type());
+        gnc_item_edit_parent_class = g_type_class_peek_parent (gnc_item_edit_class);
  
-        object_class = (GtkObjectClass *) item_edit_class;
-        item_class = (GnomeCanvasItemClass *) item_edit_class;
+        object_class = G_OBJECT_CLASS (gnc_item_edit_class);
+        item_class = GNOME_CANVAS_ITEM_CLASS (gnc_item_edit_class);
 
-        gtk_object_add_arg_type ("ItemEdit::sheet", GTK_TYPE_POINTER,
-                                 GTK_ARG_WRITABLE, ARG_SHEET);
-        gtk_object_add_arg_type ("ItemEdit::GtkEntry", GTK_TYPE_POINTER,
-                                 GTK_ARG_WRITABLE, ARG_GTK_ENTRY);
+        object_class->get_property = gnc_item_edit_get_property;
+        object_class->set_property = gnc_item_edit_set_property;
+        object_class->dispose = gnc_item_edit_dispose;
+        object_class->finalize = gnc_item_edit_finalize;
 
-        object_class->set_arg = item_edit_set_arg;
-        object_class->destroy = item_edit_destroy;
+	g_object_class_install_property (object_class,
+					 PROP_SHEET,
+					 g_param_spec_object ("sheet",
+						 	      "Sheet Value",
+							      "Sheet Value",
+							      GNUCASH_TYPE_SHEET,
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_EDITOR,
+					 g_param_spec_object ("editor",
+						 	      "Editor Value",
+							      "Editor Value",
+							      GTK_TYPE_ENTRY,
+							      G_PARAM_READWRITE));
  
         /* GnomeCanvasItem method overrides */
-        item_class->update      = item_edit_update;
-        item_class->draw        = item_edit_draw;
-        item_class->point       = item_edit_point;
-        item_class->realize     = item_edit_realize;
-        item_class->unrealize   = item_edit_unrealize;
-        item_class->event       = item_edit_event;
+        item_class->update      = gnc_item_edit_update;
+        item_class->draw        = gnc_item_edit_draw;
+        item_class->point       = gnc_item_edit_point;
+        item_class->realize     = gnc_item_edit_realize;
+        item_class->unrealize   = gnc_item_edit_unrealize;
+        item_class->event       = gnc_item_edit_event;
 }
 
 
 GtkType
-item_edit_get_type (void)
+gnc_item_edit_get_type (void)
 {
-        static GtkType item_edit_type = 0;
+        static GtkType gnc_item_edit_type = 0;
 
-        if (!item_edit_type) {
-                GtkTypeInfo item_edit_info = {
-                        "ItemEdit",
-                        sizeof (ItemEdit),
-                        sizeof (ItemEditClass),
-                        (GtkClassInitFunc) item_edit_class_init,
-                        (GtkObjectInitFunc) item_edit_init,
+        if (!gnc_item_edit_type) {
+                GtkTypeInfo gnc_item_edit_info = {
+                        "GncItemEdit",
+                        sizeof (GncItemEdit),
+                        sizeof (GncItemEditClass),
+                        (GtkClassInitFunc) gnc_item_edit_class_init,
+                        (GtkObjectInitFunc) gnc_item_edit_init,
                         NULL, /* reserved_1 */
                         NULL, /* reserved_2 */
                         (GtkClassInitFunc) NULL
                 };
 
-                item_edit_type =
+                gnc_item_edit_type =
 			gtk_type_unique(gnome_canvas_item_get_type (),
-					&item_edit_info);
+					&gnc_item_edit_info);
         }
 
-        return item_edit_type;
+        return gnc_item_edit_type;
 }
 
 
@@ -1312,7 +1210,7 @@ create_popup_toggle(GnomeCanvasGroup *parent, PopupToggle *pt)
 
 
 GnomeCanvasItem *
-item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *entry)
+gnc_item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *entry)
 {
         static const GtkTargetEntry targets[] = {
                 { "STRING", 0, TARGET_STRING },
@@ -1322,22 +1220,22 @@ item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *entry)
         static const gint n_targets = sizeof(targets) / sizeof(targets[0]);
 
         GnomeCanvasItem *item;
-        ItemEdit *item_edit;
+        GncItemEdit *item_edit;
 
         item = gnome_canvas_item_new (parent,
-				      item_edit_get_type (),
-				      "ItemEdit::sheet", sheet,
-				      "ItemEdit::GtkEntry", sheet->entry,
+				      GNC_TYPE_ITEM_EDIT,
+				      "sheet", sheet,
+				      "editor", sheet->entry,
 				      NULL);
 
-        item_edit = ITEM_EDIT(item);
+        item_edit = GNC_ITEM_EDIT(item);
 
 	item_edit->parent = parent;
 
 	create_popup_toggle (parent, &item_edit->popup_toggle);
 
         if (clipboard_atom == GDK_NONE)
-          clipboard_atom = gdk_atom_intern ("CLIPBOARD", FALSE);
+		clipboard_atom = gdk_atom_intern ("CLIPBOARD", FALSE);
 
         gtk_selection_add_targets (GTK_WIDGET(sheet),
                                    GDK_SELECTION_PRIMARY,
@@ -1351,12 +1249,12 @@ item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *entry)
 }
 
 
-GNCItemList *
-item_edit_new_list (ItemEdit *item_edit)
+GncItemList *
+gnc_item_edit_new_list (GncItemEdit *item_edit)
 {
-        GNCItemList *item_list;
+        GncItemList *item_list;
 
-	g_return_val_if_fail (IS_ITEM_EDIT(item_edit), NULL);
+	g_return_val_if_fail (GNC_IS_ITEM_EDIT(item_edit), NULL);
 
         item_list = GNC_ITEM_LIST (gnc_item_list_new (item_edit->parent));
 
@@ -1364,11 +1262,11 @@ item_edit_new_list (ItemEdit *item_edit)
 }
 
 GNCDatePicker *
-item_edit_new_date_picker (ItemEdit *item_edit)
+gnc_item_edit_new_date_picker (GncItemEdit *item_edit)
 {
         GNCDatePicker *gdp;
 
-	g_return_val_if_fail (IS_ITEM_EDIT (item_edit), NULL);
+	g_return_val_if_fail (GNC_IS_ITEM_EDIT (item_edit), NULL);
 
         gdp = GNC_DATE_PICKER (gnc_date_picker_new (item_edit->parent));
 
@@ -1377,7 +1275,7 @@ item_edit_new_date_picker (ItemEdit *item_edit)
 
 
 void
-item_edit_show_popup (ItemEdit *item_edit)
+gnc_item_edit_show_popup (GncItemEdit *item_edit)
 {
         GtkToggleButton *toggle;
         GtkAnchorType popup_anchor;
@@ -1394,7 +1292,7 @@ item_edit_show_popup (ItemEdit *item_edit)
         gint down_height;
 
         g_return_if_fail (item_edit != NULL);
-	g_return_if_fail (IS_ITEM_EDIT(item_edit));
+	g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
         if (!item_edit->is_popup)
                 return;
@@ -1405,7 +1303,7 @@ item_edit_show_popup (ItemEdit *item_edit)
         view_width  = GTK_WIDGET (sheet)->allocation.width;
 
         gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), NULL, &y_offset);
-        item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
+        gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
 
 	popup_x = x;
 
@@ -1498,10 +1396,10 @@ item_edit_show_popup (ItemEdit *item_edit)
 
 
 void
-item_edit_hide_popup (ItemEdit *item_edit)
+gnc_item_edit_hide_popup (GncItemEdit *item_edit)
 {
         g_return_if_fail(item_edit != NULL);
-	g_return_if_fail(IS_ITEM_EDIT(item_edit));
+	g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
         if (!item_edit->is_popup)
                 return;
@@ -1518,7 +1416,7 @@ item_edit_hide_popup (ItemEdit *item_edit)
 }
 
 void
-item_edit_set_popup (ItemEdit        *item_edit,
+gnc_item_edit_set_popup (GncItemEdit        *item_edit,
                      GnomeCanvasItem *popup_item,
                      GetPopupHeight   get_popup_height,
                      PopupAutosize    popup_autosize,
@@ -1527,10 +1425,10 @@ item_edit_set_popup (ItemEdit        *item_edit,
                      PopupGetWidth    popup_get_width,
                      gpointer         popup_user_data)
 {
-	g_return_if_fail (IS_ITEM_EDIT(item_edit));
+	g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
         if (item_edit->is_popup)
-                item_edit_hide_popup (item_edit);
+                gnc_item_edit_hide_popup (item_edit);
 
         item_edit->is_popup = popup_item != NULL;
 
@@ -1548,28 +1446,28 @@ item_edit_set_popup (ItemEdit        *item_edit,
         {
                 disconnect_popup_toggle_signals (item_edit);
 
-                item_edit_hide_popup (item_edit);
-                item_edit_hide_popup_toggle (item_edit);
+                gnc_item_edit_hide_popup (item_edit);
+                gnc_item_edit_hide_popup_toggle (item_edit);
         }
 
-        item_edit_update (GNOME_CANVAS_ITEM (item_edit), NULL, NULL, 0);
+        gnc_item_edit_update (GNOME_CANVAS_ITEM (item_edit), NULL, NULL, 0);
 }
 
 void
-item_edit_set_has_selection (ItemEdit *item_edit, gboolean has_selection)
+gnc_item_edit_set_has_selection (GncItemEdit *item_edit, gboolean has_selection)
 {
         g_return_if_fail (item_edit != NULL);
-        g_return_if_fail (IS_ITEM_EDIT (item_edit));
+        g_return_if_fail (GNC_IS_ITEM_EDIT (item_edit));
 
         item_edit->has_selection = has_selection;
 }
 
 gboolean
-item_edit_selection_clear (ItemEdit          *item_edit,
+gnc_item_edit_selection_clear (GncItemEdit          *item_edit,
                            GdkEventSelection *event)
 {
         g_return_val_if_fail(item_edit != NULL, FALSE);
-        g_return_val_if_fail(IS_ITEM_EDIT(item_edit), FALSE);
+        g_return_val_if_fail(GNC_IS_ITEM_EDIT(item_edit), FALSE);
         g_return_val_if_fail(event != NULL, FALSE);
 
         /* Let the selection handling code know that the selection
@@ -1596,10 +1494,10 @@ item_edit_selection_clear (ItemEdit          *item_edit,
 
 
 void
-item_edit_selection_get (ItemEdit         *item_edit,
-                         GtkSelectionData *selection_data,
-                         guint             info,
-                         guint             time)
+gnc_item_edit_selection_get (GncItemEdit         *item_edit,
+			     GtkSelectionData *selection_data,
+			     guint             info,
+			     guint             time)
 {
         GtkEditable *editable;
 
@@ -1610,7 +1508,7 @@ item_edit_selection_get (ItemEdit         *item_edit,
         gint length;
 
         g_return_if_fail(item_edit != NULL);
-        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+        g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
         editable = GTK_EDITABLE (item_edit->editor);
 
@@ -1663,9 +1561,9 @@ item_edit_selection_get (ItemEdit         *item_edit,
 
 
 void
-item_edit_selection_received (ItemEdit          *item_edit,
-                              GtkSelectionData  *selection_data,
-                              guint              time)
+gnc_item_edit_selection_received (GncItemEdit       *item_edit,
+				  GtkSelectionData  *selection_data,
+				  guint              time)
 {
         GtkEditable *editable;
         gboolean reselect;
@@ -1675,7 +1573,7 @@ item_edit_selection_received (ItemEdit          *item_edit,
         enum {INVALID, STRING, CTEXT} type;
 
         g_return_if_fail(item_edit != NULL);
-        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+        g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
         editable = GTK_EDITABLE(item_edit->editor);
 

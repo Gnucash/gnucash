@@ -26,24 +26,22 @@ dnl Process this file with autoconf to produce a configure script.
 ### check for various programs, and stuff (do this first because later
 ### commands depend on them):
 
-AC_INIT(src/engine/Transaction.h)
+AC_INIT(gnucash, 1.9.0, http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash)
+AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
+
+AM_CONFIG_HEADER(config.h)
+AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 
 AC_PROG_CC
+AC_PROG_INTLTOOL
 
 GNUCASH_MAJOR_VERSION=1
 GNUCASH_MINOR_VERSION=9
 GNUCASH_MICRO_VERSION=0
-GNUCASH_VERSION=$GNUCASH_MAJOR_VERSION.$GNUCASH_MINOR_VERSION.$GNUCASH_MICRO_VERSION
 
 AC_SUBST(GNUCASH_MAJOR_VERSION)
 AC_SUBST(GNUCASH_MINOR_VERSION)
 AC_SUBST(GNUCASH_MICRO_VERSION)
-
-AM_INIT_AUTOMAKE(gnucash,$GNUCASH_VERSION)
-
-AC_PROG_INTLTOOL
-
-AM_CONFIG_HEADER(config.h)
 
 AC_DEFINE_UNQUOTED(GNUCASH_MAJOR_VERSION, $GNUCASH_MAJOR_VERSION)
 AC_DEFINE_UNQUOTED(GNUCASH_MINOR_VERSION, $GNUCASH_MINOR_VERSION)
@@ -56,7 +54,7 @@ GETTEXT_PACKAGE=gnucash
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE")
                
-AM_GLIB_GNU_GETTEXT([use-libtool])
+AM_GLIB_GNU_GETTEXT
 
 
 AM_MAINTAINER_MODE
@@ -150,8 +148,10 @@ esac
 ### Guile and g-wrap version checks (should this be something other than
 ### the Gnome check?)
 
+GUILE_LIBS=""
 GNOME_CHECK_GUILE
 AS_SCRUB_INCLUDE(GUILE_INCS)
+AC_SUBST(GUILE_LIBS)
 
 ### --------------------------------------------------------------------------
 ### G-wrap (libraries and executable)
@@ -205,7 +205,7 @@ AS_SCRUB_INCLUDE(CFLAGS)
 ### Check size of long_long - some guile's are broken.
 AC_MSG_CHECKING(if guile long_long is at least as big as gint64)
 GNC_OLDCFLAGS="$CFLAGS"
-CFLAGS="${GNOME_INCLUDEDIR} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
+CFLAGS="${GNOME_CFLAGS} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
 AC_TRY_RUN([
   #include <glib.h>
   #include <libguile/__scm.h>
@@ -227,7 +227,7 @@ CFLAGS="$GNC_OLDCFLAGS"
 # unless you've done sufficient code review/testing.
 AC_MSG_CHECKING(if unsigned long is at least as big as guint32)
 GNC_OLDCFLAGS="$CFLAGS"
-CFLAGS="${GNOME_INCLUDEDIR} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
+CFLAGS="${GNOME_CFLAGS} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
 AC_TRY_RUN([
   #include <glib.h>
   int main(int argc, char *argv[]) {
@@ -302,12 +302,14 @@ AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
 ### --------------------------------------------------------------------------
 ### Gnome XML -- GNOME_XML_LIB is defined by GNOME_XML_CHECK
 
-GNOME_XML2_CHECK 
-# GNOME_XML_CFLAGS=`$PKG_CONFIG --cflags xml2` Done in GNOME_XML2_CHECK
+PKG_CHECK_MODULES(XML, libxml-2.0)
+AS_SCRUB_INCLUDE(XML_CFLAGS)
+AC_SUBST(XML_CFLAGS)
+AC_SUBST(XML_LIBS)
 
 
 oLIBS="$LIBS"
-LIBS="$LIBS $GNOME_XML_LIB"
+LIBS="$LIBS $XML_LIBS"
 
 # Compile a test program to verify that the xml2 library works.
 AC_CHECK_LIB(xml2, xmlElemDump, [:], [
@@ -700,47 +702,18 @@ LIBS="$LIBS -lm"
 ### --------------------------------------------------------------------------
 ### Berkeley db
 
-AC_ARG_ENABLE(prefer-db1,
-  [  --enable-prefer-db1          Prefer Berkeley DB 1.x],[prefer_db1="$enableval"],[prefer_db1=yes])
-
 DB_LIBS=
-AC_CHECK_FUNC(dbopen, [],
-if test "$prefer_db1" = "yes"; then
- AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
-  AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
-   AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
-    AC_CHECK_LIB(db-4.0, __db185_open, DB_LIBS="-ldb-4.0",
-     AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
-    )
-   )
+AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
+  AC_CHECK_LIB(db-4.0, __db185_open, DB_LIBS="-ldb-4.0",
+    AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
   )
- )
-else
- AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
-  AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
-   AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
-    AC_CHECK_LIB(db-4.0, __db185_open, DB_LIBS="-ldb-4.0",
-     AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
-    )
-   )
-  )
- )
-fi
 )
 
 dnl look for db headers
-if test "$prefer_db1" = "yes"; then
-	AC_CHECK_HEADERS(db_185.h db1/db.h db4/db_185.h)
-	if test "$ac_cv_header_db_185_h$ac_cv_header_db1_db_h$ac_cv_header_db4_db_185_h" = nonono; then
-	  AC_MSG_ERROR([Berkeley db library required for GnuCash])
-	fi
-	AC_DEFINE(PREFER_DB1)
-else
-	AC_CHECK_HEADERS(db.h db_185.h db1/db.h db4/db_185.h)
+AC_CHECK_HEADERS(db_185.h db4/db_185.h)
 
-	if test "$ac_cv_header_db_h$ac_cv_header_db_185_h$ac_cv_header_db1_db_h$ac_cv_header_db4_db_185_h" = nononono; then
-	  AC_MSG_ERROR([Berkeley db library required for GnuCash])
-	fi
+  if test "$ac_cv_header_db_h$ac_cv_header_db_185_h$ac_cv_header_db1_db_h$ac_cv_header_db4_db_185_h" = nononono; then
+  AC_MSG_ERROR([Berkeley db library required for GnuCash])
 fi
 
 AC_SUBST(DB_LIBS)
@@ -774,17 +747,14 @@ AM_CONDITIONAL(GNUCASH_ENABLE_GUI, test x${gnc_build_gui} = xtrue)
 
 if test x${gnc_build_gui} = xtrue ;
 then
-#    GNOME_INIT			2/18/03 remove
-# 2/27/03 Add Gnome2 version of GNOME_INIT
-    GNOME_INIT
     GNOME_COMPILE_WARNINGS
 
     # Look for libgnomeui by pkg-config
-    PKG_CHECK_MODULES(GNOMEUI, libgnomeui-2.0 >= 2.2
+    PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.2
 			       gtk+-2.0 >= 2.2)
-    AS_SCRUB_INCLUDE(GNOMEUI_CFLAGS)
-    AC_SUBST(GNOMEUI_CFLAGS)
-    AC_SUBST(GNOMEUI_LIBS)
+    AS_SCRUB_INCLUDE(GNOME_CFLAGS)
+    AC_SUBST(GNOME_CFLAGS)
+    AC_SUBST(GNOME_LIBS)
 
     # look for gdk-pixbuf
     PKG_CHECK_MODULES(GDK_PIXBUF, gdk-pixbuf-2.0)
@@ -808,7 +778,6 @@ then
     ### ----------------------------------------------------------------------
     ### Check for glade, gtkhtml
     
-#  3/9/03  AM_PATH_LIBGLADE  replace by PKG_CHECK_MODULES
     PKG_CHECK_MODULES(GLADE, libglade-2.0)
     AS_SCRUB_INCLUDE(GLADE_CFLAGS)
     AC_SUBST(GLADE_CFLAGS)
@@ -820,48 +789,6 @@ then
     AC_SUBST(GTKHTML_LIBS)
 
    
-    ### ----------------------------------------------------------------------
-
-PKG_CHECK_MODULES(GAL, gal)
-AC_SUBST(GAL_CFLAGS)
-AC_SUBST(GAL_LIBS)
-
-#    AC_CHECK_LIB(gal, main, true,
-#      [AC_MSG_ERROR([gal library not found. See the README and config.log for more info.])],
-#      `$PKG_CONFIG --libs gal`)
-
-# 3/9/03  Disable gtkhtml check
-
-# gtkhtml checked with PKG_CHECK_MODULES   2/28/03   
-#    AC_MSG_CHECKING([for gtkhtml < 1.1])
-#    GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml`
-#    GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml`
-#    if test "x$GTKHTML_LIBS" != x; then
-#	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
-#	# if found
-#	AC_CHECK_LIB(gtkhtml, gtk_html_new,
-#		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS}"
-#		     AC_DEFINE(HAVE_LIBGTKHTML),
-#		     AC_MSG_ERROR([Cannot find gtkhtml. See the README and config.log for more info.]),
-#		     $GTKHTML_LIBS)
-#    else
-#	GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml-1.1`
-#	GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml-1.1`
-#	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
-#	# if found
-#	AC_MSG_CHECKING([for gtkhtml >= 1.1])
-#	AC_CHECK_LIB(gtkhtml-1.1, gtk_html_new,
-#		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS} $GTKHTML_TEST_LIB"
-#		     AC_DEFINE(HAVE_LIBGTKHTML),
-#		     AC_MSG_ERROR([Cannot find gtkhtml-1.1. See the README and config.log for more info.]),
-#		     $GTKHTML_LIBS)
-#    fi
-#    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
-    
-#    AC_SUBST(GTKHTML_LIBS)
-#    AC_SUBST(GTKHTML_CFLAGS)
-    
-    
     ### ----------------------------------------------------------------------
     
     AC_ARG_ENABLE( efence,
@@ -943,45 +870,6 @@ int main ()
         AC_MSG_ERROR([cannot continue, no long long conversion support in scanf])
         ])
 fi
-
-
-### --------------------------------------------------------------------------
-### GnuCash flags and libs configuration
-
-GNUCASH_ENGINE_BASE_LIBS="${GLIB_LIBS}"
-GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} -L${GNC_GWRAP_LIBDIR} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgw-engine -lgw-kvp -lgncmodule"
-
-GNUCASH_ENGINE_BASE_CFLAGS="${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}"
-GNUCASH_ENGINE_CFLAGS="-I${GNC_INCLUDE_DIR} ${GNUCASH_ENGINE_BASE_CFLAGS} ${GUILE_INCS}"
-
-AC_SUBST(GNUCASH_ENGINE_BASE_LIBS)
-AC_SUBST(GNUCASH_ENGINE_LIBS)
-AC_SUBST(GNUCASH_ENGINE_BASE_CFLAGS)
-AC_SUBST(GNUCASH_ENGINE_CFLAGS)
-
-GNUCASH_APP_UTILS_CFLAGS="${GNUCASH_ENGINE_CFLAGS}"
-GNUCASH_APP_UTILS_LIBS="${GNUCASH_ENGINE_LIBS} -lgncmod-calculation -lgncmod-app-utils"
-
-AC_SUBST(GNUCASH_APP_UTILS_CFLAGS)
-AC_SUBST(GNUCASH_APP_UTILS_LIBS)
-
-GNUCASH_NETWORK_UTILS_CFLAGS="${GLIB_CFLAGS} ${GNOME_INCLUDEDIR}"
-GNUCASH_NETWORK_UTILS_LIBS="${GNOME_LIBDIR} ${GNOME_LIBS} ${GNOMEUI_LIBS} -lgncmod-network-utils"
-
-AC_SUBST(GNUCASH_NETWORK_UTILS_CFLAGS)
-AC_SUBST(GNUCASH_NETWORK_UTILS_LIBS)
-
-GNUCASH_GNOME_UTILS_CFLAGS="${GNUCASH_APP_UTILS_CFLAGS} ${GNUCASH_NETWORK_UTILS_CFLAGS} ${GNOME_PRINT_CFLAGS} ${GNOME_INCLUDEDIR} ${GDK_PIXBUF_CFLAGS}"
-GNUCASH_GNOME_UTILS_LIBS="${GNUCASH_APP_UTILS_LIBS} ${GNUCASH_NETWORK_UTILS_LIBS} ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GNOME_PRINT_LIBS} ${GTKHTML_LIBS} ${GLADE_LIBS} ${GDK_PIXBUF_LIBS} -lgncmod-gnome-utils"
-
-AC_SUBST(GNUCASH_GNOME_UTILS_CFLAGS)
-AC_SUBST(GNUCASH_GNOME_UTILS_LIBS)
-
-GNUCASH_REGISTER_CORE_CFLAGS="${GNUCASH_GNOME_UTILS_CFLAGS}"
-GNUCASH_REGISTER_CORE_LIBS="${GNUCASH_GNOME_UTILS_LIBS} -lgncmod-register-core"
-
-AC_SUBST(GNUCASH_REGISTER_CORE_CFLAGS)
-AC_SUBST(GNUCASH_REGISTER_CORE_LIBS)
 
 AM_CONDITIONAL(GNUCASH_SEPARATE_BUILDDIR, test "x${srcdir}" != "x.")
 AM_CONDITIONAL(GNC_FALSE, false)
@@ -1073,7 +961,6 @@ AC_OUTPUT( m4/Makefile
           lib/guile-www/Makefile
           lib/srfi/Makefile
 	  lib/libc/Makefile
-          macros/Makefile
           po/Makefile.in
           rpm/Makefile
           src/Makefile
@@ -1185,10 +1072,6 @@ AC_OUTPUT( m4/Makefile
           dnl # we configure gnucash-config here because we *don't*
           dnl # want variables to be fully expanded
           gnucash-config
-
-          dnl # GNOME 2 Port (should be moved to Makefile.am)
-	  src/gnome/gnucash.desktop
-          src/gnome/gnucash.keys
           ,
           dnl # commands go here, but we don't have any right now
           )

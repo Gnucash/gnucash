@@ -55,7 +55,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   ${G_WRAP_COMPILE_ARGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \

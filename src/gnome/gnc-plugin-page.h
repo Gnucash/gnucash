@@ -36,34 +36,34 @@ typedef struct {
 	void (* merge_actions) (GncPluginPage *plugin_page, EggMenuMerge *merge);
 	void (* unmerge_actions) (GncPluginPage *plugin_page, EggMenuMerge *merge);
 
-	gchar *(* get_title) (GncPluginPage *plugin_page);
-	GdkPixbuf *(* get_icon) (GncPluginPage *plugin_page);
+	G_CONST_RETURN gchar *(* get_title) (GncPluginPage *plugin_page);
+	G_CONST_RETURN gchar *(* get_icon) (GncPluginPage *plugin_page);
 
-	const gchar *(* get_plugin_name) (GncPluginPage *plugin_page);
-	gchar *(* get_uri) (GncPluginPage *plugin_page);
+	G_CONST_RETURN gchar *(* get_plugin_name) (GncPluginPage *plugin_page);
+	G_CONST_RETURN gchar *(* get_uri) (GncPluginPage *plugin_page);
 } GncPluginPageIface;
 
 /* function prototypes */
-GType        gnc_plugin_page_get_type        (void);
+GType                 gnc_plugin_page_get_type        (void);
 
-GtkWidget   *gnc_plugin_page_create_widget   (GncPluginPage *plugin_page);
+GtkWidget            *gnc_plugin_page_create_widget   (GncPluginPage *plugin_page);
 
-void         gnc_plugin_page_merge_actions   (GncPluginPage *plugin_page,
-					      EggMenuMerge *merge);
-void         gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,
-					      EggMenuMerge *merge);
+void                  gnc_plugin_page_merge_actions   (GncPluginPage *plugin_page,
+                                                       EggMenuMerge *merge);
+void                  gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,
+                                                       EggMenuMerge *merge);
 
-gchar       *gnc_plugin_page_get_title       (GncPluginPage *plugin_page);
-GdkPixbuf   *gnc_plugin_page_get_icon        (GncPluginPage *plugin_page);
+G_CONST_RETURN gchar *gnc_plugin_page_get_title       (GncPluginPage *plugin_page);
+G_CONST_RETURN gchar *gnc_plugin_page_get_icon        (GncPluginPage *plugin_page);
 
-const gchar *gnc_plugin_page_get_plugin_name (GncPluginPage *plugin_page);
-gchar       *gnc_plugin_page_get_uri         (GncPluginPage *plugin_page);
+G_CONST_RETURN gchar *gnc_plugin_page_get_plugin_name (GncPluginPage *plugin_page);
+G_CONST_RETURN gchar *gnc_plugin_page_get_uri         (GncPluginPage *plugin_page);
 
 /* Signals */
-void         gnc_plugin_page_inserted        (GncPluginPage *plugin_page);
-void         gnc_plugin_page_removed         (GncPluginPage *plugin_page);
-void         gnc_plugin_page_selected        (GncPluginPage *plugin_page);
-void         gnc_plugin_page_unselected      (GncPluginPage *plugin_page);
+void                  gnc_plugin_page_inserted        (GncPluginPage *plugin_page);
+void                  gnc_plugin_page_removed         (GncPluginPage *plugin_page);
+void                  gnc_plugin_page_selected        (GncPluginPage *plugin_page);
+void                  gnc_plugin_page_unselected      (GncPluginPage *plugin_page);
 
 G_END_DECLS
 

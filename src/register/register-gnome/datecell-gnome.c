@@ -52,7 +52,7 @@
 typedef struct _PopBox
 {
   GnucashSheet  *sheet;
-  ItemEdit      *item_edit;
+  GncItemEdit      *item_edit;
   GNCDatePicker *date_picker;
 
   gboolean signals_connected; /* date picker signals connected? */
@@ -202,7 +202,7 @@ date_picked_cb (GNCDatePicker *gdp, gpointer data)
   gnucash_sheet_modify_current_cell (box->sheet, buffer);
   box->in_date_select = FALSE;
 
-  item_edit_hide_popup (box->item_edit);
+  gnc_item_edit_hide_popup (box->item_edit);
   box->calendar_popped = FALSE;
 }
 
@@ -232,7 +232,7 @@ key_press_item_cb (GNCDatePicker *gdp, GdkEventKey *event, gpointer data)
   switch(event->keyval)
   {
     case GDK_Escape:
-      item_edit_hide_popup (box->item_edit);
+      gnc_item_edit_hide_popup (box->item_edit);
       box->calendar_popped = FALSE;
       break;
 
@@ -545,14 +545,14 @@ gnc_date_cell_realize (BasicCell *bcell, gpointer data)
 {
   GnucashSheet *sheet = data;
   GnomeCanvasItem *item = sheet->item_editor;
-  ItemEdit *item_edit = ITEM_EDIT (item);
+  GncItemEdit *item_edit = GNC_ITEM_EDIT (item);
   DateCell *cell = (DateCell *) bcell;
   PopBox *box = cell->cell.gui_private;
 
   /* initialize gui-specific, private data */
   box->sheet = sheet;
   box->item_edit = item_edit;
-  box->date_picker = item_edit_new_date_picker (box->item_edit);
+  box->date_picker = gnc_item_edit_new_date_picker (box->item_edit);
   g_object_ref (GTK_OBJECT(box->date_picker));
   gtk_object_sink (GTK_OBJECT(box->date_picker));
 
@@ -570,7 +570,7 @@ gnc_date_cell_move (BasicCell *bcell)
 
   date_picker_disconnect_signals ((DateCell *) bcell);
 
-  item_edit_set_popup (box->item_edit, NULL, NULL,
+  gnc_item_edit_set_popup (box->item_edit, NULL, NULL,
                        NULL, NULL, NULL, NULL, NULL);
 
   box->calendar_popped = FALSE;
@@ -609,7 +609,7 @@ gnc_date_cell_enter (BasicCell *bcell,
   DateCell *cell = (DateCell *) bcell;
   PopBox *box = bcell->gui_private;
 
-  item_edit_set_popup (box->item_edit, GNOME_CANVAS_ITEM (box->date_picker),
+  gnc_item_edit_set_popup (box->item_edit, GNOME_CANVAS_ITEM (box->date_picker),
                        get_popup_height, NULL, popup_set_focus,
                        NULL, NULL, NULL);
 
@@ -636,7 +636,7 @@ gnc_date_cell_leave (BasicCell *bcell)
 
   date_picker_disconnect_signals ((DateCell *) bcell);
 
-  item_edit_set_popup (box->item_edit, NULL, NULL,
+  gnc_item_edit_set_popup (box->item_edit, NULL, NULL,
                        NULL, NULL, NULL, NULL, NULL);
 
   box->calendar_popped = FALSE;

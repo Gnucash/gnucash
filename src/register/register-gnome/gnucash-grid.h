@@ -28,9 +28,9 @@
 
 
 #define GNUCASH_TYPE_GRID     (gnucash_grid_get_type ())
-#define GNUCASH_GRID(obj)     (GTK_CHECK_CAST((obj), GNUCASH_TYPE_GRID, GnucashGrid))
-#define GNUCASH_GRID_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_GRID))
-#define GNUCASH_IS_GRID(o)    (GTK_CHECK_TYPE((o), GNUCASH_TYPE_GRID))
+#define GNUCASH_GRID(obj)     (G_TYPE_CHECK_INSTANCE_CAST((obj), GNUCASH_TYPE_GRID, GnucashGrid))
+#define GNUCASH_GRID_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_GRID))
+#define GNUCASH_IS_GRID(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o), GNUCASH_TYPE_GRID))
 
 
 typedef struct {
@@ -53,9 +53,6 @@ typedef struct {
         GdkColor   background;
         GdkColor   grid_color;
         GdkColor   default_color;
-
-        GdkFont *normal_font;
-        GdkFont *italic_font;
 } GnucashGrid;
 
 

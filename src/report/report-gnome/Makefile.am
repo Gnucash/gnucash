@@ -15,7 +15,7 @@ AM_CFLAGS = \
   ${GTKHTML_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GLIB_CFLAGS}
 
 libgncmod_report_gnome_la_SOURCES = \
@@ -40,8 +40,7 @@ libgncmod_report_gnome_la_LIBADD = \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GNOME_PRINT_LIBS} \
-  ${GNOME_LIBDIR} \
-  ${GNOMEUI_LIBS} \
+  ${GNOME_LIBS} \
   ${GLIB_LIBS}
 
 libgw_report_gnome_la_SOURCES = gw-report-gnome.c

@@ -868,9 +868,10 @@
                 <property name="can_default">yes</property>
                 <property name="can_focus">yes</property>
                 <property name="visible">yes</property>
-                <property name="label">gtk-ok</property>
+                <property name="label">gtk-cancel</property>
                 <property name="use_stock">yes</property>
                 <property name="use_underline">yes</property>
+		<property name="response_id">-6</property>
               </widget>
             </child>
 
@@ -879,9 +880,10 @@
                 <property name="can_default">yes</property>
                 <property name="can_focus">yes</property>
                 <property name="visible">yes</property>
-                <property name="label">gtk-cancel</property>
+                <property name="label">gtk-ok</property>
                 <property name="use_stock">yes</property>
                 <property name="use_underline">yes</property>
+		<property name="response_id">-5</property>
               </widget>
             </child>
           </widget>
