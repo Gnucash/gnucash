@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-09-18 00:23-0700\n"
+"POT-Creation-Date: 2000-09-24 23:55-0700\n"
 "PO-Revision-Date: 2000-04-25 00:00+0900\n"
 "Last-Translator: Shimpei Yamashita <shimpei@gol.com>\n"
 "Language-Team: \n"
@@ -1675,8 +1675,8 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: messages-i18n.c:372 src/gnome/print-session.c:111
-#: src/gnome/print-session.c:200
+#: messages-i18n.c:372 src/gnome/print-session.c:113
+#: src/gnome/print-session.c:210
 msgid "(none)"
 msgstr "(なし)"
 
@@ -1928,7 +1928,7 @@ msgid "sample:12/12/2000"
 msgstr ""
 
 #: messages-i18n.c:433
-msgid "sample:999"
+msgid "sample:99999"
 msgstr ""
 
 #: messages-i18n.c:434
@@ -1945,7 +1945,7 @@ msgid "sample:Memo field sample text string"
 msgstr ""
 
 #: messages-i18n.c:437
-msgid "sample:99,999.00"
+msgid "sample:999,999.000"
 msgstr ""
 
 #: po/guile_strings.txt:1
@@ -3473,8 +3473,8 @@ msgstr "読み込むファイルを指定して下さい。"
 msgid "You must specify a currency."
 msgstr "通貨を指定して下さい。"
 
-#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
-#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
+#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:627
+#: src/gnome/dialog-qif-import.c:684 src/gnome/dialog-qif-import.c:785
 msgid "QIF File scheme code not loaded properly."
 msgstr "QIFファイル処理用の scheme コードが正常にロードされていません。"
 
@@ -3482,7 +3482,7 @@ msgstr "QIFファイル処理用の scheme コードが正常にロードされていません。"
 msgid "QIF File already loaded. Reload with current settings?"
 msgstr "QIFファイルは読み込み済みです。今の設定を使ってもう一度読み込みますか?"
 
-#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
+#: src/gnome/dialog-qif-import.c:712 src/gnome/dialog-qif-import.c:812
 msgid "Something is very wrong with QIF Importing."
 msgstr "QIF読み込みが本格的におかしいようです。"
 
@@ -4184,9 +4184,27 @@ msgstr ""
 msgid "The source for price quotes:"
 msgstr ""
 
-#: src/gnome/print-session.c:233
+#: src/gnome/print-session.c:245
 msgid "You must select a printer first."
 msgstr "プリンターをまず選択して下さい。"
+
+#: src/SplitLedger.c:1850
+#, fuzzy
+msgid ""
+"You are about to overwrite an existing split.\n"
+"Are you sure you want to do that?"
+msgstr ""
+"科目の勘定が合いません。\n"
+"本当に終了してよろしいですか?"
+
+#: src/SplitLedger.c:1880
+#, fuzzy
+msgid ""
+"You are about to overwrite an existing transaction.\n"
+"Are you sure you want to do that?"
+msgstr ""
+"この照合ウィンドウには変更があります。\n"
+"本当にキャンセルしてもよろしいですか?"
 
 #~ msgid "Display N-1 lines"
 #~ msgstr "N-1 行表示"

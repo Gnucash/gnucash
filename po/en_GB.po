@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.3.0\n"
-"POT-Creation-Date: 2000-09-18 00:23-0700\n"
+"POT-Creation-Date: 2000-09-24 23:55-0700\n"
 "PO-Revision-Date: 2000-03-06 11:20+0000\n"
 "Last-Translator: David Woodhouse <dwmw2@infradead.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1605,8 +1605,8 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: messages-i18n.c:372 src/gnome/print-session.c:111
-#: src/gnome/print-session.c:200
+#: messages-i18n.c:372 src/gnome/print-session.c:113
+#: src/gnome/print-session.c:210
 msgid "(none)"
 msgstr ""
 
@@ -1851,7 +1851,7 @@ msgid "sample:12/12/2000"
 msgstr ""
 
 #: messages-i18n.c:433
-msgid "sample:999"
+msgid "sample:99999"
 msgstr ""
 
 #: messages-i18n.c:434
@@ -1867,7 +1867,7 @@ msgid "sample:Memo field sample text string"
 msgstr ""
 
 #: messages-i18n.c:437
-msgid "sample:99,999.00"
+msgid "sample:999,999.000"
 msgstr ""
 
 #: po/guile_strings.txt:1
@@ -3374,8 +3374,8 @@ msgstr ""
 msgid "You must specify a currency."
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
-#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
+#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:627
+#: src/gnome/dialog-qif-import.c:684 src/gnome/dialog-qif-import.c:785
 msgid "QIF File scheme code not loaded properly."
 msgstr ""
 
@@ -3383,7 +3383,7 @@ msgstr ""
 msgid "QIF File already loaded. Reload with current settings?"
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
+#: src/gnome/dialog-qif-import.c:712 src/gnome/dialog-qif-import.c:812
 msgid "Something is very wrong with QIF Importing."
 msgstr ""
 
@@ -4070,6 +4070,18 @@ msgstr ""
 msgid "The source for price quotes:"
 msgstr ""
 
-#: src/gnome/print-session.c:233
+#: src/gnome/print-session.c:245
 msgid "You must select a printer first."
+msgstr ""
+
+#: src/SplitLedger.c:1850
+msgid ""
+"You are about to overwrite an existing split.\n"
+"Are you sure you want to do that?"
+msgstr ""
+
+#: src/SplitLedger.c:1880
+msgid ""
+"You are about to overwrite an existing transaction.\n"
+"Are you sure you want to do that?"
 msgstr ""

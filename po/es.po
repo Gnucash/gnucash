@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNUCash 1.5\n"
-"POT-Creation-Date: 2000-09-18 00:23-0700\n"
+"POT-Creation-Date: 2000-09-24 23:55-0700\n"
 "PO-Revision-Date: 2000-08-28 22:00+0000\n"
 "Last-Translator: Juan Manuel García Molina <juanmagm@mail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -1703,8 +1703,8 @@ msgstr "Nuevo"
 msgid "No"
 msgstr "No"
 
-#: messages-i18n.c:372 src/gnome/print-session.c:111
-#: src/gnome/print-session.c:200
+#: messages-i18n.c:372 src/gnome/print-session.c:113
+#: src/gnome/print-session.c:210
 msgid "(none)"
 msgstr "(ninguno)"
 
@@ -1950,7 +1950,7 @@ msgid "sample:12/12/2000"
 msgstr "12/31/2000"
 
 #: messages-i18n.c:433
-msgid "sample:999"
+msgid "sample:99999"
 msgstr ""
 
 #: messages-i18n.c:434
@@ -1967,7 +1967,7 @@ msgid "sample:Memo field sample text string"
 msgstr ""
 
 #: messages-i18n.c:437
-msgid "sample:99,999.00"
+msgid "sample:999,999.000"
 msgstr ""
 
 #: po/guile_strings.txt:1
@@ -3511,8 +3511,8 @@ msgstr "Debe especificar el archivo a cargar."
 msgid "You must specify a currency."
 msgstr "Debe especificar una moneda."
 
-#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
-#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
+#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:627
+#: src/gnome/dialog-qif-import.c:684 src/gnome/dialog-qif-import.c:785
 msgid "QIF File scheme code not loaded properly."
 msgstr "Código de esquema de Archivo QIF no correctamente cargado."
 
@@ -3521,7 +3521,7 @@ msgid "QIF File already loaded. Reload with current settings?"
 msgstr ""
 "El Archivo cargado QIF ya existe. ¿Recargar con la configuración actual?"
 
-#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
+#: src/gnome/dialog-qif-import.c:712 src/gnome/dialog-qif-import.c:812
 msgid "Something is very wrong with QIF Importing."
 msgstr "Algo va muy mal en la Importación de QIF."
 
@@ -4220,9 +4220,27 @@ msgstr "etiqueta773"
 msgid "The source for price quotes:"
 msgstr "La fuente para cotizaciones de precios"
 
-#: src/gnome/print-session.c:233
+#: src/gnome/print-session.c:245
 msgid "You must select a printer first."
 msgstr "Debe seleccionar una impresora primero."
+
+#: src/SplitLedger.c:1850
+#, fuzzy
+msgid ""
+"You are about to overwrite an existing split.\n"
+"Are you sure you want to do that?"
+msgstr ""
+"Esta cuenta no está balanceada.\n"
+"¿Está seguro de que desea acabar?"
+
+#: src/SplitLedger.c:1880
+#, fuzzy
+msgid ""
+"You are about to overwrite an existing transaction.\n"
+"Are you sure you want to do that?"
+msgstr ""
+"Ha hecho cambios a esta ventana de cuadre.\n"
+"¿Está seguro de que desea cancelar?"
 
 #~ msgid ""
 #~ "You cannot transfer funds from the %s account.\n"

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.0\n"
-"POT-Creation-Date: 2000-09-18 00:23-0700\n"
+"POT-Creation-Date: 2000-09-24 23:55-0700\n"
 "PO-Revision-Date: 2000-08-06 20:43+00:00\n"
 "Last-Translator: Valek Filippov <frob@df.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -1660,8 +1660,8 @@ msgstr "Новый"
 msgid "No"
 msgstr "Нет"
 
-#: messages-i18n.c:372 src/gnome/print-session.c:111
-#: src/gnome/print-session.c:200
+#: messages-i18n.c:372 src/gnome/print-session.c:113
+#: src/gnome/print-session.c:210
 msgid "(none)"
 msgstr "(нет)"
 
@@ -1907,7 +1907,7 @@ msgid "sample:12/12/2000"
 msgstr "12/31/2000"
 
 #: messages-i18n.c:433
-msgid "sample:999"
+msgid "sample:99999"
 msgstr ""
 
 #: messages-i18n.c:434
@@ -1924,7 +1924,7 @@ msgid "sample:Memo field sample text string"
 msgstr ""
 
 #: messages-i18n.c:437
-msgid "sample:99,999.00"
+msgid "sample:999,999.000"
 msgstr ""
 
 #: po/guile_strings.txt:1
@@ -3439,8 +3439,8 @@ msgstr "Вы должны указать файл для загрузки."
 msgid "You must specify a currency."
 msgstr "Вы должны указать валюту."
 
-#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
-#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
+#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:627
+#: src/gnome/dialog-qif-import.c:684 src/gnome/dialog-qif-import.c:785
 msgid "QIF File scheme code not loaded properly."
 msgstr ""
 
@@ -3448,7 +3448,7 @@ msgstr ""
 msgid "QIF File already loaded. Reload with current settings?"
 msgstr "Файл QIF уже загружен. Перезагрузить с текущими установками?"
 
-#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
+#: src/gnome/dialog-qif-import.c:712 src/gnome/dialog-qif-import.c:812
 msgid "Something is very wrong with QIF Importing."
 msgstr "Что-то очень неправильное с импортированием QIF."
 
@@ -4143,9 +4143,26 @@ msgstr "метка773"
 msgid "The source for price quotes:"
 msgstr ""
 
-#: src/gnome/print-session.c:233
+#: src/gnome/print-session.c:245
 msgid "You must select a printer first."
 msgstr "Сначала вы должны выбрать принтер."
+
+#: src/SplitLedger.c:1850
+#, fuzzy
+msgid ""
+"You are about to overwrite an existing split.\n"
+"Are you sure you want to do that?"
+msgstr ""
+"Файл\n"
+"     %s\n"
+"уже существует.\n"
+"Вы уверены, в том что хотите перезаписать его?"
+
+#: src/SplitLedger.c:1880
+msgid ""
+"You are about to overwrite an existing transaction.\n"
+"Are you sure you want to do that?"
+msgstr ""
 
 #~ msgid "Display N-1 lines"
 #~ msgstr "Показать N-1 строку"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.5\n"
-"POT-Creation-Date: 2000-09-18 00:23-0700\n"
+"POT-Creation-Date: 2000-09-24 23:55-0700\n"
 "PO-Revision-Date: 2000-09-17 09:18+02:00\n"
 "Last-Translator: Dennis Björklund <dennisb@cs.chalmers.se>\n"
 "Language-Team: Sv <sv@li.org>\n"
@@ -2751,8 +2751,8 @@ msgstr "Nej"
 # src/gnome/print-session.c:200
 # messages-i18n.c:351 src/gnome/print-session.c:111
 # src/gnome/print-session.c:200
-#: messages-i18n.c:372 src/gnome/print-session.c:111
-#: src/gnome/print-session.c:200
+#: messages-i18n.c:372 src/gnome/print-session.c:113
+#: src/gnome/print-session.c:210
 msgid "(none)"
 msgstr "(ingen)"
 
@@ -3175,7 +3175,7 @@ msgid "sample:12/12/2000"
 msgstr "12/31/2000"
 
 #: messages-i18n.c:433
-msgid "sample:999"
+msgid "sample:99999"
 msgstr ""
 
 #: messages-i18n.c:434
@@ -3195,7 +3195,7 @@ msgid "sample:Memo field sample text string"
 msgstr ""
 
 #: messages-i18n.c:437
-msgid "sample:99,999.00"
+msgid "sample:999,999.000"
 msgstr ""
 
 # po/guile_strings.txt:1
@@ -5696,8 +5696,8 @@ msgstr "Du måste välja en valuta."
 # src/gnome/dialog-qif-import.c:769 src/gnome/dialog-qif-import.c:867
 # src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
 # src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
-#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
-#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
+#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:627
+#: src/gnome/dialog-qif-import.c:684 src/gnome/dialog-qif-import.c:785
 msgid "QIF File scheme code not loaded properly."
 msgstr "QIF filschema-kod kunde inte läsas in ordentligt."
 
@@ -5711,7 +5711,7 @@ msgstr "QIF-fil är redan inläst. Läsa in igen med nuvarande inställningar?"
 # src/gnome/dialog-qif-import.c:794 src/gnome/dialog-qif-import.c:892
 # src/gnome/dialog-qif-import.c:797 src/gnome/dialog-qif-import.c:895
 # src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
-#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
+#: src/gnome/dialog-qif-import.c:712 src/gnome/dialog-qif-import.c:812
 msgid "Something is very wrong with QIF Importing."
 msgstr "Det är något som är väldigt fel med QIF-importering."
 
@@ -6835,9 +6835,33 @@ msgstr "Källan för prisuppgifter"
 # src/gnome/print-session.c:230
 # src/gnome/print-session.c:233
 # src/gnome/print-session.c:233
-#: src/gnome/print-session.c:233
+#: src/gnome/print-session.c:245
 msgid "You must select a printer first."
 msgstr "Du måste välja en skrivare först."
+
+# messages-i18n.c:47
+# messages-i18n.c:48
+# messages-i18n.c:50
+#: src/SplitLedger.c:1850
+#, fuzzy
+msgid ""
+"You are about to overwrite an existing split.\n"
+"Are you sure you want to do that?"
+msgstr ""
+"Kontot är inte balanserat.\n"
+"Är du säker på att du vill slutföra?"
+
+# messages-i18n.c:48
+# messages-i18n.c:49
+# messages-i18n.c:51
+#: src/SplitLedger.c:1880
+#, fuzzy
+msgid ""
+"You are about to overwrite an existing transaction.\n"
+"Are you sure you want to do that?"
+msgstr ""
+"Du har gjort ändringar i detta avstämnings-fönster.\n"
+"Är du säker på att du vill avbryta?"
 
 # messages-i18n.c:50
 # messages-i18n.c:51

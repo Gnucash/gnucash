@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.4.X\n"
-"POT-Creation-Date: 2000-09-18 00:23-0700\n"
+"POT-Creation-Date: 2000-09-24 23:55-0700\n"
 "PO-Revision-Date: 2000-07-05 15:17+0100\n"
 "Last-Translator: Alessandro Seveso <aleseveso@tiscalinet.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2035,8 +2035,8 @@ msgstr "No"
 
 # messages-i18n.c:305 src/gnome/print-session.c:108
 # src/gnome/print-session.c:197
-#: messages-i18n.c:372 src/gnome/print-session.c:111
-#: src/gnome/print-session.c:200
+#: messages-i18n.c:372 src/gnome/print-session.c:113
+#: src/gnome/print-session.c:210
 msgid "(none)"
 msgstr "(nessuno)"
 
@@ -2344,7 +2344,7 @@ msgid "sample:12/12/2000"
 msgstr "12/31/2000"
 
 #: messages-i18n.c:433
-msgid "sample:999"
+msgid "sample:99999"
 msgstr ""
 
 #: messages-i18n.c:434
@@ -2362,7 +2362,7 @@ msgid "sample:Memo field sample text string"
 msgstr ""
 
 #: messages-i18n.c:437
-msgid "sample:99,999.00"
+msgid "sample:999,999.000"
 msgstr ""
 
 # po/guile_strings.txt:1
@@ -4211,8 +4211,8 @@ msgstr "Devi specificare una valuta."
 
 # src/gnome/dialog-qif-import.c:328 src/gnome/dialog-qif-import.c:664
 # src/gnome/dialog-qif-import.c:766 src/gnome/dialog-qif-import.c:864
-#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
-#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
+#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:627
+#: src/gnome/dialog-qif-import.c:684 src/gnome/dialog-qif-import.c:785
 msgid "QIF File scheme code not loaded properly."
 msgstr "Lo scheme per i file QIF non e' stato caricato correttamente."
 
@@ -4222,7 +4222,7 @@ msgid "QIF File already loaded. Reload with current settings?"
 msgstr "Il file QIF è già stato caricato.Ricaricare con i parametri attuali?"
 
 # src/gnome/dialog-qif-import.c:794 src/gnome/dialog-qif-import.c:892
-#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
+#: src/gnome/dialog-qif-import.c:712 src/gnome/dialog-qif-import.c:812
 msgid "Something is very wrong with QIF Importing."
 msgstr "Qualche cosa di sbagliato nell'importare il QIF."
 
@@ -5032,9 +5032,29 @@ msgid "The source for price quotes:"
 msgstr "Sorgente per i prezzi di quota"
 
 # src/gnome/print-session.c:230
-#: src/gnome/print-session.c:233
+#: src/gnome/print-session.c:245
 msgid "You must select a printer first."
 msgstr "Devi selezionare una stampante."
+
+# messages-i18n.c:47
+#: src/SplitLedger.c:1850
+#, fuzzy
+msgid ""
+"You are about to overwrite an existing split.\n"
+"Are you sure you want to do that?"
+msgstr ""
+"Il conto non è saldato.\n"
+"Sei sicuro di voler terminare?"
+
+# messages-i18n.c:48
+#: src/SplitLedger.c:1880
+#, fuzzy
+msgid ""
+"You are about to overwrite an existing transaction.\n"
+"Are you sure you want to do that?"
+msgstr ""
+"Hai fatto dei cambiamenti nella finestra d'approssimazione.\n"
+"Sei sicuro di volerlo cancellare?"
 
 # messages-i18n.c:50
 #~ msgid ""
