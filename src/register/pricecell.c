@@ -140,7 +140,25 @@ void xaccSetPriceCellValue (PriceCell * cell, double amt)
    if (cell->blank_zero && (VERY_SMALL > amt) && ((-VERY_SMALL) < amt)) {
       buff[0] = 0x0;
    } else {
-      snprintf (buff, PRTBUF, cell->prt_format, amt);
+      char *monet;
+
+      /* check for monetary-style format not natively supported by printf */
+      /* hack alert -- this type of extended function should be abstracted
+       * out to a gnc_sprintf type function, however, thjis is much easier said
+       * than done */
+      monet = strstr (cell->prt_format, "%m");
+      if (monet) {
+         char tmpfmt[PRTBUF];
+         char tmpval[PRTBUF];
+         strcpy (tmpfmt, cell->prt_format);
+         monet = strstr (tmpfmt, "%m");
+         *(monet+1) = 's';
+         xaccSPrintAmount (tmpval, amt, PRTSEP);
+
+         snprintf (buff, PRTBUF, tmpfmt, tmpval);
+      } else {
+         snprintf (buff, PRTBUF, cell->prt_format, amt);
+      }
    }
    SET ( &(cell->cell), buff);
 
