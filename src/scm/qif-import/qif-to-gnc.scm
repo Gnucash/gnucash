@@ -400,8 +400,9 @@
               (gnc-far-split (gnc:split-create)))
           
           (if (not num-shares) (set! num-shares 0.0))
-          (if (not split-amt) (set! split-amt 0.0))
-
+          (if (not share-price) (set! share-price 0.0))
+          (if (not split-amt) (set! split-amt (* num-shares share-price)))
+          
           ;; I don't think this should ever happen, but I want 
           ;; to keep this check just in case. 
           (if (> (length splits) 1)
@@ -442,14 +443,18 @@
              (gnc:split-set-share-price gnc-near-split share-price)
              (gnc:split-set-share-price gnc-far-split share-price)
              (gnc:split-set-share-amount gnc-near-split num-shares)
-             (gnc:split-set-share-amount gnc-far-split (- num-shares)))
+             (gnc:split-set-share-amount gnc-far-split (- num-shares))
+             (gnc:split-set-base-value gnc-near-split split-amt currency)
+             (gnc:split-set-base-value gnc-far-split (- split-amt) currency))
             
             ((sell sellx) 
              (if (not share-price) (set! share-price 0.0))
              (gnc:split-set-share-price gnc-near-split share-price)
              (gnc:split-set-share-price gnc-far-split share-price)
              (gnc:split-set-share-amount gnc-near-split (- num-shares))
-             (gnc:split-set-share-amount gnc-far-split num-shares))
+             (gnc:split-set-share-amount gnc-far-split num-shares)
+             (gnc:split-set-base-value gnc-near-split (- split-amt) currency)
+             (gnc:split-set-base-value gnc-far-split split-amt currency))
             
             ((cgshort cgshortx cglong cglongx intinc intincx div divx
                       miscinc miscincx xin)
@@ -495,7 +500,9 @@
                                           (/ share-price splitratio))
                (gnc:split-set-share-price gnc-far-split share-price) 
                (gnc:split-set-share-amount gnc-near-split out-shares)
-               (gnc:split-set-share-amount gnc-far-split (- in-shares))))
+               (gnc:split-set-share-amount gnc-far-split (- in-shares))
+               (gnc:split-set-base-value gnc-near-split (- split-amt) currency)
+               (gnc:split-set-base-value gnc-far-split split-amt currency)))
             (else 
              (display "symbol = " ) (write qif-action) (newline)))
           
