@@ -22,7 +22,7 @@ include @top_srcdir@/Makefile.init
 ######################################################################
 # See Makefile.common for information about these variables.
 INDEP_SRCS := helperfuncs.c
-CLEAN_SUBDIRS := guile
+CLEAN_SUBDIRS := guile perl5
 ######################################################################
 
 all: default
@@ -46,7 +46,10 @@ plot.preproc.h: /usr/include/plot.h
 	cp /usr/include/plot.h plot.preproc.h
 	echo "#include <plot.h>" | gcc -E - > plot.preproc.h
 
-.PHONY: default guile
+perl5:
+	@cd perl5 && $(MAKE) default
+
+.PHONY: default guile perl5
 
 # Local Variables:
 # tab-width: 2

@@ -26,6 +26,7 @@ INCLPATH = \
            -I@top_srcdir@/src/swig\
            -I@top_srcdir@/src/engine \
            -I@top_srcdir@/include \
+	   @PERLINCL@ \
            -I$(prefix)/include
 
 CFLAGS   = @CFLAGS@  ${INCLPATH} -Wno-unused
@@ -37,6 +38,8 @@ SWIG_FLAGS := -stat -perl5 \
 # SEE Makefile.common for information about these variables.
 INDEP_SRCS =  gnucash-engine-perl5_wrap.c
 ######################################################################
+
+all:	default
 
 # This inclusion must come after the first target, and after the
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
