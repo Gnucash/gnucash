@@ -1,23 +1,53 @@
 
-#include <Xm/Xm.h>
-#include "single.h"
+#include <stdlib.h>
+#include "cell.h"
 
-typedef struct _CellArray {
+CellArray * xaccMallocCellArray (int numrows, int numcols)
+{
 
-  short numRows;
-  short numCols;
+   CellArray *arr;
+   arr = (CellArray *) malloc (sizeof (CellArray *));
 
-  SingleCell **cells;  /* row-col array */
+   arr->cells = NULL;
+   xaccInitCellArray (arr, numrows, numcols);
 
-  Widget reg;          /* the XbaeMatrix */
-} CellArray;
+   return arr;
+}
 
+/* =================================================== */
 
-CellArray * xaccMallocCellArray (void);
-void        xaccInitCellArray (CellArray *, int numrows, int numcols);
-void        xaccDestroyCellArray (CellArray *);
+void        
+xaccInitCellArray (CellArray *arr, int numrows, int numcols)
+{
+   int i;
 
-/* add a cell to the array */
-void        xaccAddCell (SingleCell *);
+   arr->numRows = numrows;
+   arr->numCols = numcols;
 
+   if (arr->cells) {
+      for (i=0; i<numrows; i++) {
+         if (arr->cells[i]) free (arr->cells[i]);
+      }
+      free (arr->cells);
+   }
 
+   arr->cells = (SingleCell ***) malloc (numrows * sizeof (SingleCell **));
+   for (i=0; i<numrows; i++) {
+      arr->cells[i] = (SingleCell **) malloc (numcols * sizeof (SingleCell *));
+   }
+}
+
+/* =================================================== */
+
+void        
+xaccAddCell (CellArray *arr, SingleCell *cell) 
+{
+   int i,j;
+
+   i = cell->row;
+   j = cell->col;
+
+   arr->cells[i][j] = cell;
+}
+
+/* --------------- end of file ----------------- */
