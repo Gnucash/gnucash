@@ -23,6 +23,7 @@
 #include "Account.h"
 #include "AccountP.h"
 #include "Group.h"
+#include "GroupP.h"
 #include "Transaction.h"
 #include "util.h"
 

@@ -30,6 +30,7 @@
 #include "Account.h"
 #include "AccountP.h"
 #include "Group.h"
+#include "GroupP.h"
 #include "date.h"
 #include "messages.h"
 #include "Transaction.h"

@@ -87,6 +87,7 @@
 #include "AccountP.h"
 #include "FileIO.h"
 #include "Group.h"
+#include "GroupP.h"
 #include "messages.h"
 #include "TransactionP.h"
 #include "util.h"

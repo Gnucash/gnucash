@@ -36,7 +36,9 @@
 #include "Account.h"
 #include "AccountP.h"
 #include "Group.h"
+#include "GroupP.h"
 #include "FileIO.h"
+#include "Transaction.h"
 #include "TransactionP.h"
 #include "util.h"
 

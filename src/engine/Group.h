@@ -1,7 +1,7 @@
 /********************************************************************\
  * Group.h -- the main data structure of the program                *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997 Linas Vepstas                                 *
+ * Copyright (C) 1997, 1998 Linas Vepstas                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,22 +29,6 @@
 #include "config.h"
 
 #include "Account.h"
-
-/** STRUCTS *********************************************************/
-struct _account_group {
-  /* The flags: */
-  unsigned int saved : 1;
-  unsigned int new   : 1;
-  
-  Account *parent;                 /* back-pointer to parent */
-
-  int      numAcc;                 /* number of accounts in array */
-  Account  **account;              /* array of account pointers   */
-
-  /* cached parameters */
-  double balance;
-
-};
 
 /** PROTOTYPES ******************************************************/
 AccountGroup    *xaccMallocAccountGroup( void );
