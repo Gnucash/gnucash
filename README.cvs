@@ -43,13 +43,6 @@ Owen Taylor.
    by not updating Makefile.am files when files are added or removed
    to the repository.
 
- + Only one person (currently Dave Peticolas) should commit changes
-   to stable branches. If you have changes to a stable branch, send
-   them to gnucash-patches@gnucash.org.
-
- + Only one person (currently Dave Peticolas) should commit patches
-   from new developers.
-
  + If you are going to be changing many files in an experimental fashion,
    it is probably a good idea to create a separate branch for your
    changes. Please see the CVS info documentation to see how to create
@@ -62,5 +55,8 @@ Owen Taylor.
 
    - M-x customize
 
+ + When code is added from new developers, add them to AUTHORS and
+   to doc/sgml/C/xacc-about.sgml.
+
 Dave Peticolas
-May 2, 2001
+June 21, 2002
