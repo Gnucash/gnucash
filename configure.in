@@ -623,7 +623,6 @@ AC_OUTPUT(
           src/scm/printing/Makefile
           src/scm/qif-import/Makefile
           src/scm/report/Makefile
-          src/scm/srfi/Makefile
           src/test/Makefile
           dnl # non-makefiles
           dnl # Please read doc/build-system before adding *anything* here
