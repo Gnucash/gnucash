@@ -500,20 +500,25 @@
 ;; this isn't quite as efficient as it could be, but it's a whole lot
 ;; simpler :)
 (define (gnc:account-get-balance-interval account from to include-children?)
-  ;; FIXME: the get-balance-interval function uses this date
-  ;; rightaway, but since it calculates a difference it should
-  ;; rather take the end-day-time of one day before that. This
-  ;; needs to be fixed in report-utilities.scm.
+  ;; Since this function calculates a balance difference it has to
+  ;; subtract the balance of the previous day's end (from-date)
+  ;; instead of the plain date.
   (- (gnc:account-get-balance-at-date account to include-children?)
-     (gnc:account-get-balance-at-date account from include-children?)))
+     (gnc:account-get-balance-at-date 
+      account 
+      (gnc:timepair-end-day-time (gnc:timepair-previous-day from))
+      include-children?)))
 
 ;; the version which returns a commodity-collector
 (define (gnc:account-get-comm-balance-interval 
 	 account from to include-children?)
   (let ((this-collector (gnc:account-get-comm-balance-at-date 
 			 account to include-children?)))
-    (this-collector 'minusmerge (gnc:account-get-comm-balance-at-date 
-				 account from include-children?) #f)
+    (this-collector 
+     'minusmerge (gnc:account-get-comm-balance-at-date 
+		  account 
+		  (gnc:timepair-end-day-time (gnc:timepair-previous-day from))
+		  include-children?) #f)
     this-collector))
 
 (define (gnc:group-get-balance-interval group from to)

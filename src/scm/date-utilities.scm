@@ -297,6 +297,9 @@
     (let ((newtime (car (mktime bdt))))
       (cons newtime 0))))
 
+(define (gnc:timepair-previous-day tp)
+  (decdate tp DayDelta))
+
 (define (gnc:reldate-get-symbol x) (vector-ref x 0))
 (define (gnc:reldate-get-string x) (vector-ref x 1))
 (define (gnc:reldate-get-desc x) (vector-ref x 2))

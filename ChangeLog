@@ -1,5 +1,10 @@
 2001-02-08  Christian Stimming  <stimming@tuhh.de>
 
+	* src/scm/date-utilities.scm Added (gnc:timepair-previous-day).
+
+	* src/scm/report-utilities.scm (gnc:account-get-balance-interval)
+	Fix bug with start date.
+
 	* src/scm/html-style-info.scm: Fix bug.
 
 	* src/scm/gnc-numeric.scm: Add more functions on gnc-monetary.

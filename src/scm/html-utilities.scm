@@ -58,10 +58,6 @@
     ;; loss reports). Returns a commodity-collector.
     (define (my-get-balance account)
       (if start-date
-	  ;; FIXME: the get-balance-interval function uses this date
-	  ;; rightaway, but since it calculates a difference it should
-	  ;; rather take the end-day-time of one day before that. This
-	  ;; needs to be fixed in report-utilities.scm.
 	  (gnc:account-get-comm-balance-interval
 	   account start-date end-date do-subtot?)
 	  (gnc:account-get-comm-balance-at-date 
