@@ -609,7 +609,8 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
    } else
 
 
-char * xaccReadQIFTransaction (int fd, Account *acc)
+char * 
+xaccReadQIFTransaction (int fd, Account *acc, int *name_not_yet_set)
 {
    Transaction *trans;
    Split *source_split;
@@ -623,7 +624,6 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    Account *sub_acc = 0x0;
    Account *xfer_acc = 0x0;
    double adjust = 0.0;
-   int name_not_yet_set = 1;
 
    if (!acc) return NULL;
 
@@ -679,8 +679,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
          * of this account, and not the transfer account.  But this only works
          * for the very, very first transaction.
          */
-        if (name_not_yet_set) {
-            name_not_yet_set = 0;
+        if (*name_not_yet_set) {
+            *name_not_yet_set = 0;
             /* remove square brackets from name, remove carriage return ... */
             qifline = &qifline[1];
             if ('[' == qifline[0]) {
@@ -753,8 +753,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
          * of this account, and not the transfer account.  But this only works
          * for the very, very first transaction.
          */
-        if (name_not_yet_set) {
-           if (! NSTRNCMP (qifline, "POpening Balance")) name_not_yet_set = 0;
+        if (*name_not_yet_set) {
+           if (! NSTRNCMP (qifline, "POpening Balance")) *name_not_yet_set = 0;
         }
      } else
 
@@ -924,15 +924,15 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
  * the indicated account
 \********************************************************************/
 
-char * xaccReadQIFTransList (int fd, Account *acc)
+char * xaccReadQIFTransList (int fd, Account *acc, int *acc_name_not_yet_set)
 {
    char * qifline;
 
    if (!acc) return 0x0;
-   qifline = xaccReadQIFTransaction (fd, acc);
+   qifline = xaccReadQIFTransaction (fd, acc, acc_name_not_yet_set);
    while (qifline) {
       if ('!' == qifline[0]) break;
-      qifline = xaccReadQIFTransaction (fd, acc);
+      qifline = xaccReadQIFTransaction (fd, acc, acc_name_not_yet_set);
    } 
    return qifline;
 }
@@ -985,23 +985,23 @@ xaccReadQIFAccountGroup( char *datafile )
         if (STRSTR (qifline, "Type:Bank")) {
            typo = BANK;
            name = "Quicken Bank Account";
-        }
+        } else
         if (STRSTR (qifline, "Type:Cash")) {
            typo = CASH;
            name = "Quicken Cash Account";
-        }
+        } else
         if (STRSTR (qifline, "Type:CCard")) {
            typo = CREDIT;
            name = "Quicken Credit Card";
-        }
+        } else
         if (STRSTR (qifline, "Type:Invst")) {
            typo = STOCK;
            name = "Quicken Investment Account";
-        }
+        } else
         if (STRSTR (qifline, "Type:Oth A")) {
            typo = ASSET;
            name = "Quicken Asset";
-        }
+        } else
         if (STRSTR (qifline, "Type:Oth L")) {
            typo = LIABILITY;
            name = "Quicken Liability";
@@ -1009,12 +1009,13 @@ xaccReadQIFAccountGroup( char *datafile )
      } 
         
      if (name) {
+        int bogus_acc_name = 1;
         Account * acc = xaccMallocAccount();
         xaccAccountSetType (acc, typo);
         xaccAccountSetName (acc, name);
 
         insertAccount( grp, acc );
-        qifline = xaccReadQIFTransList (fd, acc);
+        qifline = xaccReadQIFTransList (fd, acc, &bogus_acc_name);
         typo = -1; name = NULL;
         continue;
      } else
@@ -1065,6 +1066,8 @@ xaccReadQIFAccountGroup( char *datafile )
            char * acc_name;
            Account *preexisting;
            Account *acc   = xaccMallocAccount();
+           int guess_acc_name = 0;
+
            DEBUG ("got account\n");
            qifline = xaccReadQIFAccount (fd, acc);
            if (!qifline) {  /* free up malloced data if the read bombed. */
@@ -1099,7 +1102,8 @@ xaccReadQIFAccountGroup( char *datafile )
            }
    
            /* read transactions */
-           if (qifline) qifline = xaccReadQIFTransList (fd, acc);
+           /* note, we have a real account name, so no need to go guessing it. */
+           if (qifline) qifline = xaccReadQIFTransList (fd, acc, &guess_acc_name);
         }    
         continue;
      } else
