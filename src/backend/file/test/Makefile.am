@@ -17,9 +17,9 @@ TESTS = \
 
 TESTS_ENVIRONMENT = \
   GNC_MODULE_PATH="${top_srcdir}/src/engine:${top_srcdir}/src/gnc-module:${top_srcdir}/src/backend/file" \
-  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:..:${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine" \
+  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:..:${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine:${top_srcdir}/src/scm:${top_srcdir}/src/guile" \
   LTDL_LIBRARY_PATH=${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine:${top_srcdir}/src/backend/file \
-  LD_LIBRARY_PATH=${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine:${top_srcdir}/src/backend/file:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/engine/.libs:${top_srcdir}/src/backend/file/.libs
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine:${top_srcdir}/src/backend/file:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/engine/.libs:${top_srcdir}/src/backend/file/.libs:${top_srcdir}/src/guile
 
 noinst_LTLIBRARIES = libgnc-test-file-stuff.la
 
@@ -54,14 +54,13 @@ LDADD = -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
         ./libgnc-test-file-stuff.la \
         -lltdl
 
-CFLAGS = ${GLIB_CFLAGS}
-
-INCLUDES = \
+CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
-  -I..
+  -I.. \
+  ${GLIB_CFLAGS}
 
 EXTRA_DIST = \
   grab-types.pl \
