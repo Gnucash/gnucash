@@ -1,12 +1,34 @@
+/********************************************************************\
+ * io-gncxml.h -- api for gnucash xml i/o                           *
+ *                                                                  *
+ * Copyright (c) 2000,2001 Gnumatic Incorporated                    *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
  * io-gncxml.h -- api for new XML-based file format
  *
  * Initial code by Rob l. Browning 4Q 2000
  * Tuneups by James LewisMoss Dec 2000
- *
- * Copyright (c) 2000,2001 Gnumatic Incorporated
- *
  */
+
 #ifndef __IO_GNCXML_H__
 #define __IO_GNCXML_H__
 

@@ -268,10 +268,14 @@ directly. Example:
 @}
 @end example
 
-You can compare two GUIDs for equality with the following function.
+You can compare two GUIDs with the following functions.
 
 @deftypefun gboolean guid_equal(const GUID * @var{guid_1}, const GUID * @var{guid_2})
 Compare two guids and return TRUE if they are both non-NULL and equal.
+@end deftypefun
+
+@deftypefun gint guid_compare(const GUID * @var{g1}, const GUID * @var{g2})
+Return the @code{memcmp} of the two GUID's.
 @end deftypefun
 
 
@@ -286,12 +290,49 @@ always be @code{GUID_ENCODING_LENGTH} characters long. The returned
 string should be freed when no longer needed.
 @end deftypefun
 
+@deftypefun {char *} guid_to_string_buff (const GUID * @var{guid}, char * @var{buff})
+This routine does the same work as @code{guid_to_string}, except that the
+string is written into the memory pointed at by @var{buff}. The
+buffer must be at least GUID_ENCODING_LENGTH+1 characters long.
+This routine is handy for avoiding a malloc/free cycle.
+It returns a pointer to the @emph{end} of what was written.
+(i.e. it can be used like @code{stpcpy} during string concatenation)
+@end deftypefun
+
 @deftypefun gboolean string_to_guid(const char * @var{string}, GUID * @var{guid})
 Given a string, decode an id into @var{guid} if @var{guid} is
 non-NULL. The function returns TRUE if the string was a valid 32
 character hexadecimal number. This function accepts both upper and lower
 case hex digits. If the return value is FALSE, the effect on @var{guid}
 is undefined.
+@end deftypefun
+
+
+You can allocate and deallocate space for GUIDs using standard
+memory routines. However, if your code is allocating and deallocating
+lots of GUID objects, then the next two functions should be used.
+
+@deftypefun {GUID *} xaccGUIDMalloc (void)
+Return newly allocated memory for a GUID object. The memory must
+be freed with @code{xaccGUIDFree}. In general, this function is
+faster than using the standard libc allocators.
+@end deftypefun
+
+@deftypefun void xaccGUIDFree (GUID * @var{guid})
+Free the space for a GUID that was allocated with @code{xaccGUIDMalloc}.
+@end deftypefun
+
+
+You can use the following two functions to aid in using GUIDS in hash
+tables.
+
+@deftypefun guint guid_hash_to_guint(gconstpointer @var{ptr})
+Return a hash value suitable for use with a @code{GHashTable}.
+@var{ptr} must point to a GUID.
+@end deftypefun
+
+@deftypefun {GHashTable *} guid_hash_table_new(void)
+Return a new @code{GHashTable} which uses GUIDs as keys.
 @end deftypefun
 
 
