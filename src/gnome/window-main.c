@@ -34,7 +34,6 @@
 #include "global-options.h"
 #include "dialog-options.h"
 #include "FileDialog.h"
-#include "g-wrap.h"
 #include "gnucash.h"
 #include "MainWindow.h"
 #include "Destroy.h"
@@ -58,7 +57,6 @@
 #include "EuroUtils.h"
 #include "Scrub.h"
 #include "util.h"
-#include "gnc.h"
 
 
 /* Main Window information structure */
@@ -1397,13 +1395,6 @@ mainWindow()
 
   gtk_container_add(GTK_CONTAINER(scrolled_win),
                     GTK_WIDGET(main_info->account_tree));
-
-  {
-    SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
-    SCM hook = gh_eval_str("gnc:*main-window-opened-hook*");
-    SCM window = POINTER_TOKEN_to_SCM(make_POINTER_TOKEN("gncUIWidget", app));
-    gh_call2(run_danglers, hook, window); 
-  }
 
   /* Attach delete and destroy signals to the main window */  
   gtk_signal_connect (GTK_OBJECT (app), "delete_event",

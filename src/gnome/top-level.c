@@ -30,6 +30,8 @@
 #include <gtk/gtk.h>
 #include <gtkhtml/gtkhtml.h>
 
+#include "g-wrap.h"
+#include "gnc.h"
 #include "gnucash.h"
 #include "gnome-top-level.h"
 #include "window-main.h"
@@ -308,6 +310,18 @@ gnc_ui_main(void)
   gtk_widget_show(app);
 
   gnome_is_running = TRUE;
+
+  /* Get the main window on screen. */
+  while (gtk_events_pending())
+    gtk_main_iteration();
+
+  /* Run the main window hooks. */
+  {
+    SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
+    SCM hook = gh_eval_str("gnc:*main-window-opened-hook*");
+    SCM window = POINTER_TOKEN_to_SCM(make_POINTER_TOKEN("gncUIWidget", app));
+    gh_call2(run_danglers, hook, window); 
+  }
 
   /* Enter gnome event loop */
   gtk_main();
