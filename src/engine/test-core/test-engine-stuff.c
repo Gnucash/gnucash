@@ -4,6 +4,18 @@
  * Create transactions with random values, random accounts, random
  * account heirarchies, etc.
  *
+ * XXX see notes below for the 'add_random_split()', which state:
+ * "this routine creates a random, but otherwise self-consistent,
+ * 'legal' transaction.  It should really be suplemented with another
+ * routine that creates cruddy, inconsistent transactions, so that the
+ * engine 'scrub' routines get tested. "
+ *
+ * XXX We should really modify that routine to create really, ugly, dirty
+ * transactions -- 3 or more splits, some without parent accounts, 
+ * other splits that have accounts but aren't in a transaction, 
+ * splits that share a currency with the transaction, but whose
+ * value doesn't equal amount, etc.
+ *
  * Created by Linux Developers Group, 2001
  * Updates Linas Vepstas July 2004
  */
@@ -1002,6 +1014,11 @@ set_tran_random_string(Transaction* trn,
     }
 }
 
+/* XXX this routine creates a random, but otherwise self-consistent,
+ * 'legal' transaction.  It should really be suplemented with another
+ * routine that creates cruddy, inconsistent transactions, so that the
+ * engine 'scrub' routines get tested.
+ */
 static void
 add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
 {
