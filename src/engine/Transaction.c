@@ -107,7 +107,6 @@ xaccInitSplit(Split * split)
   split->share_cleared_balance     = 0.0;
   split->share_reconciled_balance  = 0.0;
   split->cost_basis                = 0.0;
-  split->ticket = 0;
 
   split->kvp_data = NULL;
 
@@ -1647,54 +1646,6 @@ xaccSplitOrder (Split **sa, Split **sb)
 }
 
 int
-xaccSplitMatch (Split **sa, Split **sb)
-{
-  char *da, *db;
-  char diff;
-
-  if ( (*sa) && !(*sb) ) return -1;
-  if ( !(*sa) && (*sb) ) return +1;
-  if ( !(*sa) && !(*sb) ) return 0;
-
-  /* compare amounts use parenthesis paranoia for multiplication, pointers etc. */
-  if ( ((((*sa)->damount)*((*sa)->share_price))+EPS) < 
-        (((*sb)->damount)*((*sb)->share_price))) return -1;
-
-  if ( ((((*sa)->damount)*((*sa)->share_price))-EPS) > 
-        (((*sb)->damount)*((*sb)->share_price))) return +1;
-
-  if ((((*sa)->share_price)+EPS) < ((*sb)->share_price)) return -1;
-  if ((((*sa)->share_price)-EPS) > ((*sb)->share_price)) return +1;
-
-  /* otherwise, sort on memo strings */
-  da = (*sa)->memo;
-  db = (*sb)->memo;
-  SAFE_STRCMP (da, db);
-
-  /* otherwise, sort on action strings */
-  da = (*sa)->action;
-  db = (*sb)->action;
-  SAFE_STRCMP (da, db);
-
-  /* If the reconciled flags are different, don't compare the
-   * dates, since we want to match splits with different reconciled
-   * values. But if they do match, the dates must match as well. 
-   * Note that 
-   */
-  diff = ((*sa)->reconciled) - ((*sb)->reconciled);
-  if (!diff) {
-    DATE_CMP(sa,sb,date_reconciled);
-  }
-
-  /* otherwise, sort on docref string */
-  da = (*sa)->docref;
-  db = (*sb)->docref;
-  SAFE_STRCMP (da, db);
-
-  return 0;
-}
-
-int
 xaccTransOrder (Transaction **ta, Transaction **tb)
 {
   char *da, *db;
@@ -1725,61 +1676,6 @@ xaccTransOrder (Transaction **ta, Transaction **tb)
   da = (*ta)->docref;
   db = (*tb)->docref;
   SAFE_STRCMP (da, db);
-
-  return 0;
-}
-
-int
-xaccTransMatch (Transaction **tap, Transaction **tbp)
-{
-  int retval;
-  Transaction *ta, *tb;
-  Split *sa, *sb;
-  int na, nb;
-
-  /* first, do the basic comparison */
-  retval = xaccTransOrder (tap, tbp);
-  if (0 != retval) return retval;
-  ta = *tap;
-  tb = *tbp;
-
-  /* Now, start comparing splits */
-  na=0; while (ta->splits[na]) na++;
-  nb=0; while (tb->splits[nb]) nb++;
-  if (na-nb) return (na-nb);
-
-  /* Ugh, no we've got to compare individual splits.  They do not necessarily
-   * have to be in identical order to match.  So we have to cycle through them,
-   * without creating bogus matches.
-   */
-  na=0; while ((sa=ta->splits[na])) { sa->ticket = -1; na++; }
-  nb=0; while ((sb=tb->splits[nb])) { sb->ticket = -1; nb++; }
-
-  na=0; 
-  while ((sa=ta->splits[na])) { 
-     if (-1 < sa->ticket) {na++; continue;}
-    
-     nb=0; 
-     while ((sb=tb->splits[nb])) { 
-        if (-1 < sb->ticket) {nb++; continue;}
-        retval = xaccSplitMatch (&sa, &sb);
-        if ((0 == retval) && (sa->acc == sb->acc)) {
-           sb->ticket = na;
-           sa->ticket = nb;
-           break;
-        }
-        nb++;
-     }
-
-     if (-1 == sa->ticket) return -1;
-     na++;
-  }
-
-  nb=0; 
-  while ((sb=tb->splits[nb])) { 
-     if (-1 == sb->ticket) return +1;
-     nb++;
-  }
 
   return 0;
 }
