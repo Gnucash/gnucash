@@ -295,15 +295,13 @@ gnc_file_new (void)
 gboolean
 gnc_file_query_save (void)
 {
-  GNCSession * session = gnc_get_current_session ();
-
   /* If user wants to mess around before finishing business with
    * the old file, give em a chance to figure out what's up.  
    * Pose the question as a "while" loop, so that if user screws
    * up the file-selection dialog, we don't blow em out of the water;
    * instead, give them another chance to say "no" to the verify box.
    */
-  while (gnc_book_not_saved(gnc_session_get_book (session)))
+  while (gnc_book_not_saved(gnc_session_get_book (gnc_get_current_session ())))
   {
     GNCVerifyResult result;
     const char *message = _("Changes have been made since the last "
