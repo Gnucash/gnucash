@@ -140,7 +140,7 @@ freeAccount( Account *acc )
   acc->numTrans    = 0;
   acc->transaction = NULL; 
   
-  /* hack alert -- shouldn't we destroy this widget ??? */
+  /* we assume all widgets have been cleaned up by now */
   acc->arrowb   = NULL;  
   acc->expand   = 0;
   acc->regData  = NULL;
