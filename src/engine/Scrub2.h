@@ -58,6 +58,24 @@ gboolean xaccAccountHasTrades (Account *);
  */
 GNCLot * xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign);
 
+/** The xaccAccountGetDefaultGainAccount() routine will return
+ *   the account to which realized gains/losses may be posted.  
+ *   Because gains may be in different currencies, one must
+ *   specify the currency type in which the gains will be posted.
+ *   This routine does nothing more than return the value of
+ *   the "/lot-mgmt/gains-act/XXX" key, where XXX is the unique
+ *   currency name.  IOf there is no default account for this
+ *   currency, NULL will be returned.
+ */
+Account * xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * currency);
+
+/** The xaccAccountSetDefaultGainAccount() routine can be used 
+ *   to set the account to which realized gains/losses will be 
+ *   posted by default. This routine does nothing more than set 
+ *   value of the "/lot-mgmt/gains-act/XXX" key, where XXX is the 
+ *   unique currency name of the currency of gains account.
+ */
+void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
 
 /** The xaccAccountScrubLots() routine will walk over all of
  *   the splits in an account, and make sure that each belongs

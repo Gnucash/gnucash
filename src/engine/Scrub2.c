@@ -310,6 +310,59 @@ GetOrMakeLotOrphanAccount (AccountGroup *root, gnc_commodity * currency)
 
 /* ============================================================== */
 
+void
+xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
+{
+  kvp_frame *cwd;
+  kvp_value *vvv;
+  const char * cur_name;
+
+  if (!acc || !gain_acct) return;
+
+  cwd = xaccAccountGetSlots (acc);
+  cwd = kvp_frame_get_frame_slash (cwd, "/lot-mgmt/gains-act/");
+
+  /* Accounts are indexed by thier unique currency name */
+  cur_name = gnc_commodity_get_unique_name (acc->commodity);
+
+  xaccAccountBeginEdit (acc);
+  vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
+  kvp_frame_set_slot_nc (cwd, cur_name, vvv);
+  xaccAccountSetSlots_nc (acc, acc->kvp_data);
+  xaccAccountCommitEdit (acc);
+}
+
+/* ============================================================== */
+
+Account *
+xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * currency)
+{
+  Account *gain_acct = NULL;
+  kvp_frame *cwd;
+  kvp_value *vvv;
+  GUID * gain_acct_guid;
+  const char * cur_name;
+
+  if (!acc || !currency) return NULL;
+
+  cwd = xaccAccountGetSlots (acc);
+  cwd = kvp_frame_get_frame_slash (cwd, "/lot-mgmt/gains-act/");
+
+  /* Accounts are indexed by thier unique currency name */
+  cur_name = gnc_commodity_get_unique_name (currency);
+  vvv = kvp_frame_get_slot (cwd, cur_name);
+  gain_acct_guid = kvp_value_get_guid (vvv);
+
+  gain_acct = xaccAccountLookup (gain_acct_guid, acc->book);
+  return gain_acct;
+}
+
+/* ============================================================== */
+/* Functionally identical to the following:
+ *   if (!xaccAccountGetDefaultGainAccount()) xaccAccountSetDefaultGainAccount ();
+ * except that it saves a few cycles.
+ */
+
 static Account *
 GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
 {
