@@ -1,3 +1,9 @@
+2005-03-13  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-getbalance.c: Improve user
+	message when downloaded balance is already identical to reconciled
+	balance.
+
 2005-03-12  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-gettrans.c, hbci-interaction.h:

@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-29 13:49+0100\n"
-"PO-Revision-Date: 2005-01-29 13:50+0100\n"
+"POT-Creation-Date: 2005-03-13 13:46+0100\n"
+"PO-Revision-Date: 2005-03-13 13:47+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -394,43 +394,43 @@ msgstr "-- Eindeutige Kurs-Herkunft --"
 msgid "-- Multiple Sources --"
 msgstr "-- Verschiedene Kurs-Herkunft --"
 
-#: src/app-utils/gnc-ui-util.c:688
+#: src/app-utils/gnc-ui-util.c:692
 msgid "not cleared:n"
 msgstr "not cleared:n"
 
-#: src/app-utils/gnc-ui-util.c:690
+#: src/app-utils/gnc-ui-util.c:694
 msgid "cleared:c"
 msgstr "cleared:b"
 
-#: src/app-utils/gnc-ui-util.c:692
+#: src/app-utils/gnc-ui-util.c:696
 msgid "reconciled:y"
 msgstr "reconciled:j"
 
-#: src/app-utils/gnc-ui-util.c:694
+#: src/app-utils/gnc-ui-util.c:698
 msgid "frozen:f"
 msgstr "frozen:f"
 
-#: src/app-utils/gnc-ui-util.c:696
+#: src/app-utils/gnc-ui-util.c:700
 msgid "void:v"
 msgstr "void:s"
 
-#: src/app-utils/gnc-ui-util.c:862 intl-scm/guile-strings.c:461
+#: src/app-utils/gnc-ui-util.c:866 intl-scm/guile-strings.c:461
 msgid "Opening Balances"
 msgstr "Anfangsbestand"
 
-#: src/app-utils/gnc-ui-util.c:865 intl-scm/guile-strings.c:2494
+#: src/app-utils/gnc-ui-util.c:869 intl-scm/guile-strings.c:2494
 #: intl-scm/guile-strings.c:3568 intl-scm/guile-strings.c:3570
 #: intl-scm/guile-strings.c:3590 intl-scm/guile-strings.c:3592
 msgid "Retained Earnings"
 msgstr "Gewinnrücklagen"
 
-#: src/app-utils/gnc-ui-util.c:938 src/engine/Account.c:2523
+#: src/app-utils/gnc-ui-util.c:942 src/engine/Account.c:2523
 #: src/register/ledger-core/split-register.c:2054 intl-scm/guile-strings.c:127
 #: intl-scm/guile-strings.c:2492
 msgid "Equity"
 msgstr "Eigenkapital"
 
-#: src/app-utils/gnc-ui-util.c:998 src/gnome/glade/account.glade:864
+#: src/app-utils/gnc-ui-util.c:1002 src/gnome/glade/account.glade:864
 #: src/gnome/glade/account.glade:1369 src/gnome/glade/account.glade:1414
 #: src/gnome-utils/dialog-account.c:290 intl-scm/guile-strings.c:805
 msgid "Opening Balance"
@@ -2840,7 +2840,7 @@ msgstr "Ausbuchungskonto"
 msgid "Imbalance"
 msgstr "Ausgleichskonto"
 
-#: src/engine/Transaction.c:1717
+#: src/engine/Transaction.c:1723
 msgid ""
 "Another user has modified this transaction\n"
 "\tjust a moment ago. Please look at their changes,\n"
@@ -2850,14 +2850,14 @@ msgstr ""
 "soeben geändert. Bitte prüfen Sie die Änderungen und \n"
 "versuchen Sie es gegenebenfalls nochmal.\n"
 
-#: src/engine/Transaction.c:2357 src/engine/Transaction.c:2378
+#: src/engine/Transaction.c:2363 src/engine/Transaction.c:2384
 #: src/register/ledger-core/split-register-control.c:982
 #: src/register/ledger-core/split-register.c:2089
 #: intl-scm/guile-strings.c:2990 intl-scm/guile-strings.c:3012
 msgid "-- Split Transaction --"
 msgstr "-- Mehrteilige Buchung --"
 
-#: src/engine/Transaction.c:2399 src/gnome/glade/register.glade:1608
+#: src/engine/Transaction.c:2405 src/gnome/glade/register.glade:1608
 #: src/gnome/druid-stock-split.c:410
 #: src/register/ledger-core/split-register.c:2073
 #: intl-scm/guile-strings.c:2614
@@ -6327,7 +6327,7 @@ msgstr "GnuCash Einstellungen"
 msgid "Select pixmap"
 msgstr "Bild auswählen"
 
-#: src/gnome-utils/dialog-utils.c:137
+#: src/gnome-utils/dialog-utils.c:139
 msgid "Use local time"
 msgstr "Lokale Zeit benutzen"
 
@@ -7540,7 +7540,7 @@ msgstr "Online Aktionen"
 msgid "Online Banking & Importing"
 msgstr "Online Banking & Import"
 
-#: src/import-export/hbci/hbci-interaction.c:341
+#: src/import-export/hbci/hbci-interaction.c:348
 #, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
@@ -7549,7 +7549,7 @@ msgstr ""
 "Die PIN muß mindestens %d Zeichen lang \n"
 "sein.  Erneut versuchen?"
 
-#: src/import-export/hbci/hbci-interaction.c:407
+#: src/import-export/hbci/hbci-interaction.c:415
 #, c-format
 msgid ""
 "This TAN needs to be at least %d characters \n"
@@ -7654,7 +7654,7 @@ msgstr "Wollen Sie die Liste der Vorlagen wirklich sortieren?"
 msgid "Do you really want to delete the template '%s'?"
 msgstr "Wollen Sie die Vorlage »%s« wirklich löschen?"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:249
+#: src/import-export/hbci/gnc-hbci-getbalance.c:253
 msgid ""
 "The downloaded HBCI Balance was zero.\n"
 "Either this is the correct balance, or your bank does not \n"
@@ -7670,7 +7670,7 @@ msgstr ""
 "HBCI-Version auswählen. Versuchen Sie anschließend erneut, den Saldo\n"
 "abzufragen.  \n"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:262
+#: src/import-export/hbci/gnc-hbci-getbalance.c:268
 #, c-format
 msgid ""
 "Result of HBCI job: \n"
@@ -7679,7 +7679,7 @@ msgstr ""
 "Ergebnis des HBCI Auftrag:\n"
 "Gebuchter Saldo des Kontos ist %s\n"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:269
+#: src/import-export/hbci/gnc-hbci-getbalance.c:275
 #, c-format
 msgid ""
 "For your information: This account also \n"
@@ -7688,12 +7688,20 @@ msgstr ""
 "Zu Ihrer Information: Dieses Konto hat außerdem folgenden \n"
 "Saldo an zur Ausführung vorgemerkten Aufträgen: %s\n"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:272
+#: src/import-export/hbci/gnc-hbci-getbalance.c:280
+msgid ""
+"The booked balance is identical to the current \n"
+"reconciled balance of the account."
+msgstr ""
+"Dieser gebuchte Saldo stimmt mit dem aktuellen\n"
+"abgeglichenen Saldo Ihres Kontos überein."
+
+#: src/import-export/hbci/gnc-hbci-getbalance.c:288
 msgid "Reconcile account now?"
 msgstr "Konto jetzt abgleichen?"
 
-#: src/import-export/hbci/gnc-hbci-gettrans.c:199
-#: src/import-export/hbci/gnc-hbci-gettrans.c:220
+#: src/import-export/hbci/gnc-hbci-gettrans.c:203
+#: src/import-export/hbci/gnc-hbci-gettrans.c:224
 msgid "The HBCI import returned no transactions for the selected time period."
 msgstr "Es liegen keine Buchungen für die gewählte Zeitspanne vor."
 
@@ -8418,38 +8426,38 @@ msgstr ""
 msgid "Destination account for the auto-balance split."
 msgstr "Gegenkonto für Ausgleichsbuchung."
 
-#: src/import-export/import-main-matcher.c:601
+#: src/import-export/import-main-matcher.c:603
 msgid "New, already balanced"
 msgstr "Neu (und ausgeglichen)"
 
-#: src/import-export/import-main-matcher.c:628
+#: src/import-export/import-main-matcher.c:630
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "Neu (Buchung von %s nach \"%s\", manuell gewählt)"
 
-#: src/import-export/import-main-matcher.c:636
+#: src/import-export/import-main-matcher.c:638
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "Neu (Buchung von %s nach \"%s\", automatisch gewählt)"
 
-#: src/import-export/import-main-matcher.c:648
+#: src/import-export/import-main-matcher.c:650
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Neu (Nicht ausgeglichen, %s noch auszugleichen)"
 
-#: src/import-export/import-main-matcher.c:662
+#: src/import-export/import-main-matcher.c:664
 msgid "Reconcile (manual) match"
 msgstr "Abgleichen (mit manuell gewählter Zuordnung)"
 
-#: src/import-export/import-main-matcher.c:667
+#: src/import-export/import-main-matcher.c:669
 msgid "Reconcile (auto) match"
 msgstr "Abgleichen (mit automatisch gewählter Zuordnung)"
 
-#: src/import-export/import-main-matcher.c:675
+#: src/import-export/import-main-matcher.c:677
 msgid "Match missing!"
 msgstr "Zuordnung fehlt"
 
-#: src/import-export/import-main-matcher.c:683
+#: src/import-export/import-main-matcher.c:685
 msgid "Do not import (no action selected)"
 msgstr "Nicht importieren (keine Import-Aktion gewählt)"
 
