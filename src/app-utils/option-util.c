@@ -397,16 +397,26 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
 
   /* next the name */
   if (name == NULL)
+  {
     arg = SCM_BOOL_F;
+  }
   else
-    arg = gh_str02scm(name);
+  {
+    /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
+    arg = gh_str02scm((char *) name);
+  }
   args = gh_cons(arg, args);
 
   /* next the section */
   if (section == NULL)
+  {
     arg = SCM_BOOL_F;
+  }
   else
-    arg = gh_str02scm(section);
+  {
+    /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
+    arg = gh_str02scm((char *) section);
+  }
   args = gh_cons(arg, args);
 
   /* now apply the procedure */
