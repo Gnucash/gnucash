@@ -15,6 +15,11 @@
  * Otherwise it is not (useful when not displaying splits, gives old-styule reg).
  * Hack alert -- finish documenting this
  *
+ * The xaccConfigSplitRegister() subroutine allows the configuration 
+ * of the register to be changed on the fly (dynamically).  In particular,
+ * the register type, and/or the flags controlling the register display
+ * can be changed on the fly ... 
+ *
  * DESIGN HOPES:
  * Should probably move at least some of the layout to a config 
  * file.  Might make good sense to use scheme/guile for the layout.
