@@ -25,6 +25,7 @@
 
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
+#include "gnc-trace.h"
 
 
 /** Declarations ****************************************************/

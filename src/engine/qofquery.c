@@ -30,6 +30,7 @@
 #include <string.h>
 
 #include "gnc-engine-util.h"
+#include "gnc-trace.h"
 
 #include "qofbackend-p.h"
 #include "qofbook.h"

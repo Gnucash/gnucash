@@ -35,11 +35,12 @@
 
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
+#include "gnc-lot.h"
+#include "gnc-trace.h"
 #include "Account.h"
 #include "Query.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "gnc-lot.h"
 
 static short module = MOD_QUERY;
 

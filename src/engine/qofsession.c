@@ -272,7 +272,7 @@ static void
 qof_session_int_backend_load_error(QofSession *session,
                                    char *message, char *dll_err)
 {
-    PWARN (message, dll_err ? dll_err : "");
+    PWARN ("%s %s", message, dll_err ? dll_err : "");
 
     g_free(session->fullpath);
     session->fullpath = NULL;

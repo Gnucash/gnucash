@@ -44,6 +44,7 @@
 #include "gnc-event-p.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
+#include "gnc-trace.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "qofqueryobject.h"

@@ -29,6 +29,7 @@
 #include <glib.h>
 
 #include "gnc-engine-util.h"
+#include "gnc-trace.h"
 #include "qofobject.h"
 #include "qofobject-p.h"
 #include "qofbook.h"

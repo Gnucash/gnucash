@@ -32,6 +32,7 @@
 #include "gnc-associate-account.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-trace.h"
 #include "qofbook.h"
 #include "qofid.h"
 

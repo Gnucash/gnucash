@@ -29,6 +29,7 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "gnc-engine-util.h"
+#include "gnc-trace.h"
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (gpointer)(str));

@@ -34,6 +34,7 @@
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
+#include "gnc-trace.h"
 #include "guid.h"
 #include "kvp_frame.h"
 

@@ -43,6 +43,7 @@
 #include "gnc-event-p.h"
 #include "gnc-lot-p.h"
 #include "gnc-lot.h"
+#include "gnc-trace.h"
 #include "messages.h"
 
 #include "qofbackend-p.h"
@@ -65,23 +66,6 @@
  *    is changing the data can look at it, but all of the rest
  *    of the GUI should ignore the data until its commited.
  */
-
-/* 
- * The "force_double_entry" flag determines how 
- * the splits in a transaction will be balanced. 
- *
- * The following values have significance:
- * 0 -- anything goes
- * 1 -- The sum of all splits in a transaction will be
- *      forced to be zero, even if this requires the
- *      creation of additional splits.  Note that a split
- *      whose value is zero (e.g. a stock price) can exist
- *      by itself. Otherwise, all splits must come in at 
- *      least pairs.
- * 2 -- splits without parents will be forced into a
- *      lost & found account.  (Not implemented)
- */
-int force_double_entry = 0;
 
 const char *trans_notes_str = "notes";
 const char *void_reason_str = "void-reason";
@@ -512,21 +496,6 @@ xaccSplitLookupDirect (GUID guid, QofBook *book)
 
 /********************************************************************\
 \********************************************************************/
-
-void
-xaccConfigSetForceDoubleEntry (int force) 
-{
-   force_double_entry = force;
-}
-
-int
-xaccConfigGetForceDoubleEntry (void) 
-{
-   return (force_double_entry);
-}
-
-/********************************************************************\
-\********************************************************************/
 /* Routines for marking splits dirty, and for sending out change
  * events.  Note that we can't just mark-n-generate-event in one
  * step, since sometimes we need to mark things up before its suitable
@@ -730,6 +699,7 @@ void
 DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
 {
   if (!s) return;
+  ENTER (" ");
   check_open (s->parent);
 
   s->amount = double_to_gnc_numeric(amt, get_commodity_denom(s),
@@ -747,6 +717,7 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price,
                                  gnc_numeric amt)
 {
   if (!s) return;
+  ENTER (" ");
   check_open (s->parent);
 
   s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), GNC_RND_ROUND);
@@ -762,6 +733,7 @@ void
 xaccSplitSetSharePrice (Split *s, gnc_numeric price) 
 {
   if (!s) return;
+  ENTER (" ");
   check_open (s->parent);
 
   s->value = gnc_numeric_mul(xaccSplitGetAmount(s), 
@@ -781,6 +753,7 @@ DxaccSplitSetShareAmount (Split *s, double damt)
   gnc_numeric amt = double_to_gnc_numeric(damt, commodity_denom, 
                                           GNC_RND_ROUND); 
   if (!s) return;
+  ENTER (" ");
   check_open (s->parent);
   
   old_amt = xaccSplitGetAmount (s);
@@ -809,6 +782,8 @@ void
 xaccSplitSetAmount (Split *s, gnc_numeric amt) 
 {
   if(!s) return;
+  ENTER ("old amt=%lld/%lld new amt=%lld/%lld", 
+        s->amount.num, s->amount.denom, amt.num, amt.denom);
   check_open (s->parent);
 
   s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), GNC_RND_ROUND);
@@ -823,6 +798,8 @@ void
 xaccSplitSetValue (Split *s, gnc_numeric amt) 
 {
   if(!s) return;
+  ENTER ("old val=%lld/%lld new val=%lld/%lld", 
+        s->value.num, s->value.denom, amt.num, amt.denom);
   check_open (s->parent);
 
   s->value = gnc_numeric_convert(amt, get_currency_denom(s), GNC_RND_ROUND);
@@ -1373,25 +1350,9 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
   if (!s) return;
   check_open (s->parent);
 
-  /* Novice/casual users may not want or use the double entry
-   * features of this engine. So, in particular, there may be the
-   * occasional split without a parent account. Well, that's ok,
-   * we'll just go with the flow. */
   if (NULL == s->acc) 
   {
-    if (force_double_entry) 
-    {
-      PERR ("split must have a parent\n");
-      g_return_if_fail (s->acc);
-    } 
-    else 
-    { 
-      s->value = value;
-      s->amount = value;
-      SET_GAINS_A_VDIRTY(s);
-    }
-    mark_split (s);
-    /* gen_event (s);  No! only in TransCommit() ! */
+    PERR ("split must have a parent\n");
     return;
   }
 
@@ -1414,10 +1375,6 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
   else if (gnc_commodity_equiv(commodity, base_currency)) {
     s->amount = gnc_numeric_convert(value, get_commodity_denom(s),
                                     GNC_RND_NEVER);
-  }
-  else if ((NULL==base_currency) && (0 == force_double_entry)) { 
-    s->value = gnc_numeric_convert(value, get_currency_denom(s),
-                                   GNC_RND_NEVER);
   }
   else {
     PERR ("inappropriate base currency %s "
@@ -1443,20 +1400,9 @@ xaccSplitGetBaseValue (const Split *s,
 
   if (!s) return gnc_numeric_zero();
 
-  /* ahh -- users may not want or use the double entry 
-   * features of this engine.  So, in particular, there
-   * may be the occasional split without a parent account. 
-   * Well, that's ok, we'll just go with the flow. 
-   */
   if (NULL == s->acc) 
   {
-    if (force_double_entry) 
-    {
-      g_return_val_if_fail (s->acc, gnc_numeric_zero ());
-    } 
-    else { 
-      return xaccSplitGetValue((Split *)s);
-    }
+    g_return_val_if_fail (s->acc, gnc_numeric_zero ());
   }
 
   currency = xaccTransGetCurrency (s->parent);
@@ -1471,10 +1417,6 @@ xaccSplitGetBaseValue (const Split *s,
   else if (gnc_commodity_equiv(commodity, base_currency)) 
   {
     value = xaccSplitGetAmount (s);
-  }
-  else if ((NULL == base_currency) && (0 == force_double_entry)) 
-  {
-    value = xaccSplitGetValue(s);
   }
   else 
   {
@@ -1497,78 +1439,64 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
                         const gnc_commodity * base_currency)
 {
   GList *node;
-  gnc_numeric value;
+  gnc_numeric value = gnc_numeric_zero();
+
+  g_return_val_if_fail (base_currency, value);
 
   ENTER (" currency=%s", gnc_commodity_get_mnemonic (base_currency));
-  value = gnc_numeric_zero();
 
   for (node = splits; node; node = node->next)
   {
     Split *s = node->data;
+    const gnc_commodity *currency;
+    const gnc_commodity *commodity;
 
     if (s == skip_me) continue;
 
-    /* ahh -- users may not want or use the double entry features of
-     * this engine. So, in particular, there may be the occasional
-     * split without a parent account. Well, that's ok, we'll just
-     * go with the flow. */
+    /* The split-editor often sends us 'temp' splits whose account
+     * hasn't yet been set.  Be lenient, and assume an implied base
+     * currency. If theres a problem later, teh scrub routines will
+     * pick it up.
+     */
     if (NULL == s->acc) 
     {
-      if (force_double_entry) 
-      {
-        g_return_val_if_fail (s->acc, gnc_numeric_zero ());
-      } 
-      else 
-      { 
-        value = gnc_numeric_add(value, xaccSplitGetValue(s),
-                                GNC_DENOM_AUTO, GNC_DENOM_LCD);
-      }
+        commodity = base_currency;
     }
-    else if ((NULL == base_currency) && (0 == force_double_entry)) 
+    else
+    {
+       commodity = xaccAccountGetCommodity (s->acc);
+    }
+
+    currency = xaccTransGetCurrency (s->parent);
+
+    if (gnc_commodity_equiv(currency, base_currency)) 
     {
       value = gnc_numeric_add(value, xaccSplitGetValue(s),
                               GNC_DENOM_AUTO, GNC_DENOM_LCD);
     }
-    else 
+    else if (gnc_commodity_equiv(commodity, base_currency)) 
     {
-      const gnc_commodity *currency;
-      const gnc_commodity *commodity;
-
-      currency = xaccTransGetCurrency (s->parent);
-      commodity = xaccAccountGetCommodity (s->acc);
-
-      /* OK, we've got a parent account, we've got currency, lets
-       * behave like professionals now, instead of the shenanigans
-       * above. Note that just because the currencies are equivalent
-       * doesn't mean the denominators are the same! */
-      if (base_currency &&
-          gnc_commodity_equiv(currency, base_currency)) {
-        value = gnc_numeric_add(value, xaccSplitGetValue(s),
-                                GNC_DENOM_AUTO, GNC_DENOM_LCD);
-      }
-      else if (base_currency && 
-               gnc_commodity_equiv(commodity, base_currency)) {
-        value = gnc_numeric_add(value, xaccSplitGetAmount(s),
-                                GNC_DENOM_AUTO, GNC_DENOM_LCD);
-      }
-      else {
-        PERR ("inconsistent currencies\n"   
-              "\tbase = '%s', curr='%s', sec='%s'\n",
-               gnc_commodity_get_printname(base_currency),
-               gnc_commodity_get_printname(currency),
-               gnc_commodity_get_printname(commodity));
-        g_return_val_if_fail (FALSE, gnc_numeric_zero ());
-      }
+      value = gnc_numeric_add(value, xaccSplitGetAmount(s),
+                              GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    }
+    else {
+      PERR ("inconsistent currencies\n"   
+            "\tbase = '%s', curr='%s', sec='%s'\n",
+             gnc_commodity_get_printname(base_currency),
+             gnc_commodity_get_printname(currency),
+             gnc_commodity_get_printname(commodity));
+      g_return_val_if_fail (FALSE, value);
     }
   }
 
-  if (base_currency)
-    return gnc_numeric_convert (value,
+  /* Note that just because the currencies are equivalent
+   * doesn't mean the denominators are the same! */
+  value = gnc_numeric_convert (value,
                                 gnc_commodity_get_fraction (base_currency),
                                 GNC_RND_ROUND);
-  else
-    return gnc_numeric_convert (value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
-  LEAVE (" ");
+
+  LEAVE (" total=%lld/%lld", value.num, value.denom);
+  return value;
 }
 
 gnc_numeric
@@ -1600,126 +1528,6 @@ xaccTransGetAccountValue (const Transaction *trans,
                                GNC_DENOM_AUTO, GNC_DENOM_LCD);
   }
   return total;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-static gnc_commodity *
-FindCommonExclSCurrency (SplitList *splits,
-                         gnc_commodity * ra, gnc_commodity * rb,
-                         Split *excl_split)
-{
-  GList *node;
-
-  if (!splits) return NULL;
-
-  for (node = splits; node; node = node->next)
-  {
-    Split *s = node->data;
-    gnc_commodity * sa, * sb;
-
-    if (s == excl_split) continue;
-
-    /* Novice/casual users may not want or use the double entry 
-     * features of this engine.   Because of this, there
-     * may be the occasional split without a parent account. 
-     * Well, that's ok,  we'll just go with the flow. 
-     */
-    if (force_double_entry)
-    {
-       g_return_val_if_fail (s->acc, NULL);
-    }
-    else if (NULL == s->acc)
-    {
-      continue;
-    }
-
-    sa = DxaccAccountGetCurrency (s->acc);
-    sb = DxaccAccountGetSecurity (s->acc);
-
-    if (ra && rb) {
-       int aa = !gnc_commodity_equiv(ra,sa);
-       int ab = !gnc_commodity_equiv(ra,sb);
-       int ba = !gnc_commodity_equiv(rb,sa);
-       int bb = !gnc_commodity_equiv(rb,sb);
-
-       if ( (!aa) && bb) rb = NULL;
-       else
-       if ( (!ab) && ba) rb = NULL;
-       else
-       if ( (!ba) && ab) ra = NULL;
-       else
-       if ( (!bb) && aa) ra = NULL;
-       else
-       if ( aa && bb && ab && ba ) { ra = NULL; rb = NULL; }
-
-       if (!ra) { ra = rb; rb = NULL; }
-    }
-    else
-    if (ra && !rb) {
-       int aa = !gnc_commodity_equiv(ra,sa);
-       int ab = !gnc_commodity_equiv(ra,sb);
-       if ( aa && ab ) ra = NULL;
-    }
-
-    if ((!ra) && (!rb)) return NULL;
-  }
-
-  return (ra);
-}
-
-/* This is the wrapper for those calls (i.e. the older ones) which
- * don't exclude one split from the splitlist when looking for a
- * common currency.  
- */
-static gnc_commodity *
-FindCommonCurrency (GList *splits, gnc_commodity * ra, gnc_commodity * rb)
-{
-  return FindCommonExclSCurrency(splits, ra, rb, NULL);
-}
-
-gnc_commodity *
-xaccTransFindOldCommonCurrency (Transaction *trans, QofBook *book)
-{
-  gnc_commodity *ra, *rb, *retval;
-  Split *split;
-
-  if (!trans) return NULL;
-
-  if (trans->splits == NULL) return NULL;
-
-  g_return_val_if_fail (book, NULL);
-
-  split = trans->splits->data;
-
-  if (!split || NULL == split->acc) return NULL;
-
-  ra = DxaccAccountGetCurrency (split->acc);
-  rb = DxaccAccountGetSecurity (split->acc);
-
-  retval = FindCommonCurrency (trans->splits, ra, rb);
-
-  /* compare this value to what we think should be the 'right' value */
-  if (!trans->common_currency)
-  {
-    trans->common_currency = retval;
-  }
-  else if (!gnc_commodity_equiv (retval,trans->common_currency))
-  {
-    PWARN ("expected common currency %s but found %s\n",
-           gnc_commodity_get_unique_name (trans->common_currency),
-           gnc_commodity_get_unique_name (retval));
-  }
-
-  if (NULL == retval)
-  {
-     /* in every situation I can think of, this routine should return 
-      * common currency.  So make note of this ... */
-     PWARN ("unable to find a common currency, and that is strange.");
-  }
-
-  return retval;
 }
 
 /********************************************************************\
@@ -1910,16 +1718,20 @@ xaccTransCommitEdit (Transaction *trans)
          trans->date_entered.tv_nsec = 1000 * tv.tv_usec;
       }
 
+#if SCRUB_BEFORE_COMMITTING
+      /* XXX the below is a weak attempt to scrub the transaction
+       * before committing it.  Not clear if this is a good idea
+       * or not, since the scrubbers can run independently/in parallel.
+       */
       /* Alternately the transaction may have only one split in 
        * it, in which case that's OK if and only if the split has no 
        * value (i.e. is only recording a price). Otherwise, a single
        * split with a value can't possibly balance, thus violating the 
        * rules of double-entry, and that's way bogus. So create 
-       * a matching opposite and place it either here (if force==1), 
-       * or in some dummy account (if force==2).
+       * a matching opposite and place it here.
+       * XXX should be using Scrub routine to do this correctly ... 
        */
-      if ((1 == force_double_entry) &&
-          (NULL == g_list_nth(trans->splits, 1)) &&
+      if ((NULL == g_list_nth(trans->splits, 1)) &&
           (!gnc_numeric_zero_p(xaccSplitGetAmount(split)))) 
       {
         Split * s = xaccMallocSplit(trans->book);
@@ -1931,6 +1743,7 @@ xaccTransCommitEdit (Transaction *trans)
         xaccSplitSetAction (s, split->action);
         SET_GAINS_A_VDIRTY(s);
       }
+#endif
    }
 
    /* ------------------------------------------------- */
@@ -3398,25 +3211,54 @@ xaccGetAccountByFullName (Transaction *trans, const char * name,
 
 /********************************************************************\
 \********************************************************************/
+/* In the old world, the 'other split' was the other split of a
+ * transaction that contained only two splits.  In the new world,
+ * a split may have been cut up between multiple lots, although
+ * in a conceptual sense, if lots hadn't been used, there would be
+ * only a pair.  So we handle this conceptual case: we can still
+ * identify, unambiguously, the 'other' split when 'this' split
+ * as been cut up across lots.  We do thins by looking for the 
+ * 'lot-split' keyword, which occurs only in cut-up splits.
+ */
 
 Split *
 xaccSplitGetOtherSplit (const Split *split)
 {
-  Split *s1, *s2;
+  SplitList *node;
   Transaction *trans;
+  int count;
+  Split *other = NULL;
+  KvpValue *sva;
 
   if (!split) return NULL;
   trans = split->parent;
   if (!trans) return NULL;
 
+#ifdef OLD_ALGO_HAS_ONLY_TWO_SPLITS
+  Split *s1, *s2;
   if (g_list_length (trans->splits) != 2) return NULL;
 
   s1 = g_list_nth_data (trans->splits, 0);
   s2 = g_list_nth_data (trans->splits, 1);
 
   if (s1 == split) return s2;
-
   return s1;
+#endif
+
+  count = g_list_length (trans->splits);
+  sva = kvp_frame_get_slot (split->kvp_data, "lot-split");
+  if (!sva && (2 != count)) return NULL;
+
+  for (node=trans->splits; node; node=node->next)
+  {
+    Split *s = node->data;
+    KvpValue *va = kvp_frame_get_slot (s->kvp_data, "lot-split");
+    if (s == split) { --count; continue; }
+    if (va) { --count; continue; }
+    other = s;
+  }
+  if (1 == count) return other;
+  return NULL;
 }
 
 /********************************************************************\
