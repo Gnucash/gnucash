@@ -168,6 +168,24 @@ The 'options=' and 'tty=' postgres keywords are supported. See the
 postgres documentation for more info.
 
 
+Mangled Balances
+----------------
+If you've been working in multi-user mode for a while, and the 
+balances seem to be mangled, log off all the users, log on the the 
+same database in single-update mode, and log off again.  This
+will cause balance checkpoints to be recomputed, and should 
+probably fix any weird account balances you are seeing.
+
+(Mangled account balances shouldn't happen, and if you have
+a test case that can reliably recreate these, you should
+submit a bug report).
+
+(Note to developers: think of this as an fsck: balances
+shouldn't get wacky, but if you've been running a long time
+and something weird has happened, then a periodic cleanup 
+is good to have.  Maybe this should be automated ...)
+
+
 To Be Done
 ----------
 Core bugs/features that still need work:
@@ -248,9 +266,11 @@ This list only affects the multi-user and advanced/optional features.
 Most of the items on this list are 'critical' in the sense that
 multi-user mode is fundamentally broken unless they are fixed. 
 
--- modify checkpoint computation to always occur on fixed dates.
-   Failure to do so causes the fill-out algorithm to pull in all 
-   data. Document this inn design.txt
+-- before going beta: turn down debugging.  Set min-checkpoint-count 
+   to 30 not 3.
+
+-- possible bug ??: if always in multi-mode, then initial checkpoints 
+   not set up ?? should crete checkpoints during account creation...
 
 -- bug: if another user deletes a transaction, or an account, we
    need to look at the audit trail to see if the thing has been deleted.

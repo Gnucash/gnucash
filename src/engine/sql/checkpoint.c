@@ -312,27 +312,99 @@ get_checkpoint_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    return data;
 }
 
+static gpointer 
+get_checkpoint_date_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   Checkpoint *chk = (Checkpoint *) data;
+   chk->date_start = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_start", j));
+   return data;
+}
+
 static void
 pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
 {
+   char guid_str[80], end_str[80];
    char * p;
 
    if (!be || !chk) return;
    ENTER("be=%p", be);
 
-   /* create the query we need */
+   guid_to_string_buff (chk->account_guid, guid_str);
+   gnc_timespec_to_iso8601_buff (chk->date_end, end_str);
+
+   /* sum up the total of all the checpoints before this date */
    p = be->buff; *p = 0;
    p = stpcpy (p, "SELECT sum(balance) AS baln, "
                   "       sum(cleared_balance) AS cleared_baln, "
                   "       sum(reconciled_balance) AS reconed_baln "
                   "    FROM gncCheckpoint "
                   "    WHERE accountGuid='");
-   p = guid_to_string_buff (chk->account_guid, p);
+   p = stpcpy (p, guid_str);
    p = stpcpy (p, "'   AND commodity='");
    p = stpcpy (p, chk->commodity);
    p = stpcpy (p, "'   AND date_end <'");
-   p = gnc_timespec_to_iso8601_buff (chk->date_end, p);
+   p = stpcpy (p, end_str);
    p = stpcpy (p, "';");
+   SEND_QUERY (be,be->buff, );
+
+   pgendGetResults (be, get_checkpoint_cb, chk);
+
+   /* now get the ending date of the last checkpoint,
+    * aka the starting date of the next checkpoint */
+   p = be->buff; *p = 0;
+   p = stpcpy (p, "SELECT date_start FROM gncCheckpoint "
+                  "    WHERE accountGuid='");
+   p = stpcpy (p, guid_str);
+   p = stpcpy (p, "'   AND date_start < '");
+   p = stpcpy (p, end_str);
+   p = stpcpy (p, "'   ORDER BY date_start DESC LIMIT 1;");
+   SEND_QUERY (be,be->buff, );
+   
+   pgendGetResults (be, get_checkpoint_date_cb, chk);
+
+   LEAVE("be=%p", be);
+}
+
+/* ============================================================= */
+/* get partial balance for an account */
+
+static void
+pgendAccountGetPartialBalance (PGBackend *be, Checkpoint *chk)
+{
+   char guid_str[80], start_str[80], end_str[80];
+   char * p;
+
+   if (!be || !chk) return;
+   ENTER("be=%p", be);
+
+   guid_to_string_buff (chk->account_guid, guid_str);
+   gnc_timespec_to_iso8601_buff (chk->date_start, start_str);
+   gnc_timespec_to_iso8601_buff (chk->date_end, end_str);
+   
+   /* create the query we need */
+   p = be->buff; *p = 0;
+   p = stpcpy (p, "SELECT gncSubtotalBalance ('");
+   p = stpcpy (p, guid_str);
+   p = stpcpy (p, "', '");
+   p = stpcpy (p, start_str);
+   p = stpcpy (p, "', '");
+   p = stpcpy (p, end_str);
+   p = stpcpy (p, "') AS baln, "
+                  " gncSubtotalClearedBalance ('");
+   p = stpcpy (p, guid_str);
+   p = stpcpy (p, "', '");
+   p = stpcpy (p, start_str);
+   p = stpcpy (p, "', '");
+   p = stpcpy (p, end_str);
+   p = stpcpy (p, "') AS cleared_baln, "
+                  " gncSubtotalReconedBalance ('");
+   p = stpcpy (p, guid_str);
+   p = stpcpy (p, "', '");
+   p = stpcpy (p, start_str);
+   p = stpcpy (p, "', '");
+   p = stpcpy (p, end_str);
+   p = stpcpy (p, "') AS reconed_baln;");
+
    SEND_QUERY (be,be->buff, );
 
    pgendGetResults (be, get_checkpoint_cb, chk);
@@ -343,17 +415,17 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
 /* ============================================================= */
 /* get checkpoint value for one accounts */
 
-Timespec
+void
 pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
 {
    Checkpoint chk;
    const gnc_commodity *com;
-   gint64 deno;
+   gint64 b, cl_b, rec_b, deno;
    gnc_numeric baln;
    gnc_numeric cleared_baln;
    gnc_numeric reconciled_baln;
 
-   if (!be || !acc) return (Timespec) {0,0};
+   if (!be || !acc) return;
    ENTER("be=%p", be);
 
    /* setup what we will match for */
@@ -369,27 +441,42 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
    /* get the checkpoint */
    pgendAccountGetCheckpoint (be, &chk);
 
-/* hack alert --- xxxxxxxxxx I think we need to tot up all entries
-since the end of the checkpoint too */
+   b = chk.balance;
+   cl_b = chk.cleared_balance;
+   rec_b = chk.reconciled_balance;
+   deno = gnc_commodity_get_fraction (com);
 
+   DEBUGCMD({
+      char buf[80];
+      gnc_timespec_to_iso8601_buff (chk.date_start, buf);
+      PINFO("%s balance to %s baln=%lld/%lld clr=%lld/%lld rcn=%lld/%lld", 
+        xaccAccountGetDescription (acc), buf,
+        b, deno, cl_b, deno, rec_b, deno);
+      })
+
+   /* add up loose entries since the checkpoint */
+   pgendAccountGetPartialBalance (be, &chk);
+
+   b += chk.balance;
+   cl_b += chk.cleared_balance;
+   rec_b += chk.reconciled_balance;
 
    /* set the account balances */
-   deno = gnc_commodity_get_fraction (com);
-   baln = gnc_numeric_create (chk.balance, deno);
-   cleared_baln = gnc_numeric_create (chk.cleared_balance, deno);
-   reconciled_baln = gnc_numeric_create (chk.reconciled_balance, deno);
+   baln = gnc_numeric_create (b, deno);
+   cleared_baln = gnc_numeric_create (cl_b, deno);
+   reconciled_baln = gnc_numeric_create (rec_b, deno);
 
    xaccAccountSetStartingBalance (acc, baln,
                                      cleared_baln, reconciled_baln);
-   {
-   char buf[80];
-   gnc_timespec_to_iso8601_buff (as_of_date, buf);
-   LEAVE("be=%p %s %s baln=%lld/%lld clr=%lld/%lld rcn=%lld/%lld", be, 
-     xaccAccountGetDescription (acc), buf,
-     chk.balance, deno, chk.cleared_balance, deno, chk.reconciled_balance, deno);
-   }
+   DEBUGCMD ({
+      char buf[80];
+      gnc_timespec_to_iso8601_buff (as_of_date, buf);
+      LEAVE("be=%p %s %s baln=%lld/%lld clr=%lld/%lld rcn=%lld/%lld", be, 
+        xaccAccountGetDescription (acc), buf,
+        b, deno, cl_b, deno, rec_b, deno);
+      })
 
-   return chk.date_start;
+   return;
 }
 
 /* ============================================================= */

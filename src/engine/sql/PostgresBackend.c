@@ -1370,6 +1370,11 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
 
          trans = xaccTransLookup (trans_guid);
          ts = xaccTransRetDatePostedTS (trans);
+
+         /* Back off by a second to disambiguate time.
+          * This is safe, because the fill-out will recurse
+          * if something got into this one-second gap. */
+         ts.tv_sec --; 
          split_list = xaccTransGetSplitList (trans);
          for (snode=split_list; snode; snode=snode->next)
          {
@@ -1410,17 +1415,18 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
 
    /* OK, at this point, we have a list of accounts, including the 
     * date of the earliest split in that account.  Now, we need to 
-    * do two queries: first, get the latest checkpoint that is earlier
-    * than the earliest split. Next, we get *all* of the splits from
-    * that checkpoint onwards.
+    * do two queries: first, get the running balances to that point,
+    * and then all of the splits from that date onwards.
     */
    for (anode = acct_list; anode; anode = anode->next)
    {
       char *p;
-      Timespec start_date;
       AcctEarliest * ae = (AcctEarliest *) anode->data;
-      start_date = pgendAccountGetBalance (be, ae->acct, ae->ts);
+      pgendAccountGetBalance (be, ae->acct, ae->ts);
    
+      /* n.b. date_posted compare must be strictly greater than, since the 
+       * GetBalance goes to less-then-or-equal-to because of the BETWEEN
+       * that appears in the gncSubTotalBalance sql function. */
       p = be->buff; *p = 0;
       p = stpcpy (p, "SELECT DISTINCT gncEntry.transGuid from gncEntry, gncTransaction WHERE "
                      "   gncEntry.transGuid = gncTransaction.transGuid AND accountGuid='");
@@ -2129,7 +2135,7 @@ pgendSync (Backend *bend, AccountGroup *grp)
    if ((MODE_SINGLE_FILE != be->session_mode) &&
        (MODE_SINGLE_UPDATE != be->session_mode))
    {
-      Timespec ts = gnc_iso8601_to_timespec_local (CK_AFTER_LAST_DATE);
+      Timespec ts = gnc_iso8601_to_timespec_local (CK_BEFORE_LAST_DATE);
       pgendGroupGetAllBalances (be, grp, ts);
    } 
    else
@@ -2566,7 +2572,7 @@ pgend_session_end (Backend *bend)
 static AccountGroup *
 pgend_book_load_poll (Backend *bend)
 {
-   Timespec ts = gnc_iso8601_to_timespec_local (CK_AFTER_LAST_DATE);
+   Timespec ts = gnc_iso8601_to_timespec_local (CK_BEFORE_LAST_DATE);
    AccountGroup *grp;
    PGBackend *be = (PGBackend *)bend;
    if (!be) return NULL;

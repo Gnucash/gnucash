@@ -52,7 +52,7 @@
 /* the MIN_CHECKPOINT_COUNT value is the number of splits that
  * each checkpoint will handle, on avergage.  30 seems like a good
  * number.  The number of splits in a checkpoint will vary; 
- * checkpoints can onmly occur in between entry dates, so a 
+ * checkpoints can only occur in between entry dates, so a 
  * bunch of entries with the same date will go into the same 
  * checkpoint (and there might be an arbitrarily large number of these)
  */
@@ -73,8 +73,8 @@ typedef struct _checkpoint {
 
 #define CK_EARLIEST_DATE "1903-01-02 08:35:46.00"
 #define CK_AFTER_EARLIEST_DATE "1903-01-03 03:03:03.00"
+#define CK_BEFORE_LAST_DATE "2038-01-01 12:12:12.00"
 #define CK_LAST_DATE "2038-01-02 08:35:46.00"
-#define CK_AFTER_LAST_DATE "2038-01-02 12:12:12.00"
 
 
 void pgendTransactionRecomputeCheckpoints (PGBackend *be, Transaction *trans);
@@ -83,10 +83,9 @@ void pgendGroupRecomputeAllCheckpoints (PGBackend *, AccountGroup *);
 void pgendGroupGetAllBalances (PGBackend *, AccountGroup *, Timespec as_of_date);
 
 /* The pgendAccountGetBalance() routine goes to the sql database and finds the
- *    checkpoint with the latest date before the 'as_of_date' argument. 
- *    It sets the starting balance for this account based on that checkpoint.
- *    It returns the date of the starting balance.
+ *    balance as of the 'as_of_date' argument. It sets the starting balance for 
+ *    this account based on that value.
  */
-Timespec pgendAccountGetBalance (PGBackend *, Account *, Timespec as_of_date);
+void pgendAccountGetBalance (PGBackend *, Account *, Timespec as_of_date);
 
 #endif /* __CHECKPOINT_H__ */
