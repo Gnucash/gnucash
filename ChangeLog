@@ -1,5 +1,17 @@
 2002-04-16  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/dialog-scheduledxaction.c
+	(editor_ok_button_clicked): Check to see if the user is attempting
+	to create a Scheduled Transaction which can't occur; confirm with
+	them if they are.
+
+	* src/gnome-utils/gnc-frequency.c
+	(freq_option_value_changed): StartDate and frequency-specific
+	options now come into better sync [when possible] on
+	frequency-type change.
+
+2002-04-16  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/register/ledger-core/gnc-ledger-display.c: Some template-GL
 	cleanup [debugging printf's removed].  Removed never-used
 	LD_TEMPLATE type.

@@ -1,7 +1,7 @@
 /********************************************************************\
  * dialog-scheduledxaction.c : dialog for scheduled transaction     *
  *    list and editor                                               *
- * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2001,2002 Joshua Sled <jsled@asynchronous.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -240,15 +240,17 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         FreqSpec *fs;
         GDate *gdate;
 
-        /* FIXME: Do checks on validity and such, interrupting the user if
+        /* FIXMEs: Do checks on validity and such, interrupting the user if
          * things aren't right.
          *
-         * . "weekly" FS has some days set.
-         * . "once" with reasonable start/end dates.
-         * 
-         * . creating a "not scheduled" SX is probably not right...
-         *
          * . balancing the SX if contain numeric-only formula data.
+         *   . agreement with create-automagically/notification controls
+         * X "weekly" FS has some days set.
+         * X "once" with reasonable start/end dates.
+         *   X This doesn't work at the time the 'weekly' one was fixed with
+         *     user-confirmation, below; the once SX is always valid.
+         * [X more generically, creating a "not scheduled" SX is probably not
+         *   right... ]
          */
         gnc_split_register_save ( gnc_ledger_display_get_split_register(sxed->ledger),
                                   FALSE );
@@ -376,8 +378,29 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
 
         /* now that we have it, set the start date */
         xaccSchedXactionSetStartDate( sxed->sx, gdate );
-
         g_date_free( gdate );
+
+        /* Now, see if the user is attempting to create a SX that can't exist
+         * [will never run]. */
+        {
+                gboolean isInvalid;
+                gdate = g_date_new();
+                *gdate = xaccSchedXactionGetNextInstance( sxed->sx, NULL );
+                isInvalid = !g_date_valid( gdate );
+                g_date_free( gdate );
+                if ( isInvalid ) {
+                        char *invalid_sx_check_msg =
+                                _( "You have attempted to create a Scheduled "
+                                   "Transaction which will never run.\nDo you "
+                                   "really want to do this?" );
+                        if ( ! gnc_verify_dialog_parented( sxed->dialog,
+                                                           invalid_sx_check_msg,
+                                                           FALSE ) ) {
+                        
+                                return;
+                        }
+                }
+        }
 
         /* add to list */
         putSchedXactionInClist( sxed->sx, sxed->sxd );

@@ -78,7 +78,15 @@ X create a template register
 
 . GNCFrequency
   . bugs
-    . transitioning to a new tab doesn't correctly setup the agreement
+    . Bi-weekly / Once
+      . Add dupe of start-date control[s]
+        . Precedent: monthly, yearly, &c.
+    . Bi-weekly, quarterly <= x < yearly
+      . Add example[s] -- perhaps wait for dense-calendar widget.
+    . yearly-only?
+      . if month > current month, choose previous year in start date?
+    . Add 'today' button for startDate?
+    X transitioning to a new tab doesn't correctly setup the agreement
       between the startdate and the page elements.
     X why does the accounts window go crazy when we change the FreqSpec parameters?
       X probably component-manager related... yup; FreqSpec Malloc/Free
@@ -98,8 +106,8 @@ X create a template register
   . tab order
   . Can't click-out of the register
   . 'ESC' while editing template register causes window to go away badly
-  . attempting to create a Weekly SX with no days selected causes a segfault.
-    . the user should be prevented from doing this.
+  X attempting to create a Weekly SX with no days selected causes a segfault.
+    X the user should be prevented from doing this.
     X composite SX shouldn't segfault when asked to getFreqSpecStr for this
   X should use regWidget
   X Size/space issues [?]
@@ -131,10 +139,9 @@ X create a template register
        which may not be the Right Thing]
 
 . need "since-last-run" UI for instanatiation.
-  . need effective cancellation support
   . need nifty visual style
     . use color-setting code in src/gnome-utils/druid-utils.[ch]
-  . support sorting in clists
+  . support sorting in various clists
   . tab-order
     . variable-binding table:
       . tab through variables -- if on last one: ( if something's unfilled,
@@ -162,6 +169,7 @@ X create a template register
       X restore any obsolete-n-deleted SXes.
     X variable expressions don't get re-eval'd [as formula]?
       X need to do this only on tab-out of the field.
+  X need effective cancellation support
   X Change from dialogs to druid
   X/O create transactions
     X numeric

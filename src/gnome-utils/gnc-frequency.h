@@ -1,6 +1,6 @@
 /********************************************************************\
  * gnc-frequency.h -- GnuCash widget for frequency editing.         *
- * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2001,2002 Joshua Sled <jsled@asynchronous.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -35,10 +35,10 @@ BEGIN_GNOME_DECLS
 #define GNC_IS_FREQUENCY(obj)     GTK_CHECK_TYPE(obj, gnc_frequency_get_type())
 
 /**
- * A GNCFrequency is a VBox containing a scrollable GtkNotebook which
- * allows the user to specify the frequency [of a scheduled
- * transaction or budgeting category, for instance], manipulating a
- * FreqSpec object in the process.
+ * A GNCFrequency is a VBox containing a scrollable GtkNotebook [and other
+ * widgets] which allows the user to specify the frequency [of a scheduled
+ * transaction or budgeting category, for instance], manipulating a FreqSpec
+ * object in the process.
  **/
 typedef struct _GNCFrequency {
 	GtkVBox	        widget;
