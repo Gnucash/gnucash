@@ -157,6 +157,15 @@ sqlBuild_Table (sqlBuilder *b, const char *tablename, sqlBuild_QType qt)
          b->pval = stpcpy(b->pval, tablename);
          b->pval = stpcpy(b->pval, " WHERE ");
          break;
+
+      case SQL_DELETE:
+         b->ptag = stpcpy(b->ptag, "DELETE ");
+
+         b->pval = stpcpy(b->pval, " FROM ");
+         b->pval = stpcpy(b->pval, tablename);
+         b->pval = stpcpy(b->pval, " WHERE ");
+         break;
+
    };
 
 }
@@ -196,6 +205,9 @@ sqlBuild_Set_Str (sqlBuilder *b, const char *tag, const char *val)
 
       case SQL_SELECT:
          b->ptag = stpcpy(b->ptag, tag);
+         break;
+
+      case SQL_DELETE:
          break;
 
       default:
@@ -282,6 +294,9 @@ sqlBuild_Set_Int64 (sqlBuilder *b, const char *tag, gint64 nval)
          b->ptag = stpcpy(b->ptag, tag);
          break;
 
+      case SQL_DELETE:
+         break;
+
       default:
          PERR ("mustn't happen");
    };
@@ -312,6 +327,7 @@ sqlBuild_Where_Str (sqlBuilder *b, const char *tag, const char *val)
 
       case SQL_UPDATE:
       case SQL_SELECT:
+      case SQL_DELETE:
          if (b->where_need_and) b->pval = stpcpy(b->pval, " AND ");
          b->where_need_and = 1;
 
@@ -365,6 +381,7 @@ sqlBuild_Query (sqlBuilder *b)
 
       case SQL_UPDATE:
       case SQL_SELECT:
+      case SQL_DELETE:
          b->ptag = stpcpy(b->ptag, b->val_base);
          b->ptag = stpcpy(b->ptag, ";");
          break;

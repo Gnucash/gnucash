@@ -227,6 +227,9 @@ multi-user mode is fundamentally broken unless they are fixed.
    Failure to do so causes the fill-out algorithm to pull in all 
    data.
 
+-- Implement logging history/audit-trail in the SQL server.  
+   (partly done; delete not implemented. )  Need indexes on kvp ...
+
 -- if another user deletes a transaction, or an account, there is no way
    for us to know.  Thus, any sort of sync will probably (incorrectly)
    add the deleted transaction back in.  Question: what is the best way
@@ -262,11 +265,6 @@ multi-user mode is fundamentally broken unless they are fixed.
    them out.  The pgendSync routine should more or less do the trick;
    note, however, that the file format needs to save the version number
    ...
-
--- Implement logging history/audit-trail in the SQL server.  
-   i.e. save the old copies of stuff in log tables.  Make the username 
-   part of the logging scheme.   Having 'audit trails' is considered 
-   to be an important accounting feature.
 
 -- let all attached clients receive update events via SQL LISTEN/NOTIFY 
    events.

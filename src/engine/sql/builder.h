@@ -42,9 +42,10 @@
 #include "guid.h"
 
 typedef enum {
-   SQL_UPDATE=1,
-   SQL_INSERT,
-   SQL_SELECT
+   SQL_UPDATE = 'm',  /* m == modify */
+   SQL_INSERT = 'a',  /* a == add */
+   SQL_SELECT = 'q',  /* q == query */
+   SQL_DELETE = 'd'   /* d == drop, delete */
 } sqlBuild_QType;
 
 typedef struct _builder sqlBuilder;

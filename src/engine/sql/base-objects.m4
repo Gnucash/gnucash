@@ -13,6 +13,12 @@ store_one_only(split)
 store_one_only(transaction)
 store_one_only(price)
 
+store_audit(account)
+store_audit(modity)
+store_audit(split)
+store_audit(transaction)
+store_audit(price)
+
 compare_one_only(account)
 compare_one_only(modity)
 compare_one_only(split)

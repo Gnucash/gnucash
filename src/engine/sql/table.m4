@@ -17,7 +17,6 @@ define(`account', `gncAccount, Account, Account,
        accountGUID, KEY, GUID *, xaccAccountGetGUID(ptr),
        ')
 
-
 define(`split', `gncEntry, Split, Split,
        accountGUID,     , GUID *,   xaccAccountGetGUID(xaccSplitGetAccount(ptr)),
        transGUID,       , GUID *,   xaccTransGetGUID(xaccSplitGetParent(ptr)),
@@ -59,17 +58,6 @@ define(`modity', `gncCommodity, Commodity, gnc_commodity,
        ')
        
 
-define(`checkpoint', `gncCheckpoint, Checkpoint, Checkpoint,
-       balance,             , int64,    ptr->balance,
-       cleared_balance,     , int64,    ptr->cleared_balance,
-       reconciled_balance,  , int64,    ptr->reconciled_balance,
-       date_start,          , Timespec, ptr->date_start,
-       date_end,            , Timespec, ptr->date_end,
-       commodity,           , char *,   ptr->commodity,
-       accountGuid,         , GUID *,   ptr->account_guid,
-       ')
-       
-
 define(`price', `gncPrice, Price, GNCPrice,
        commodity,    , commod,   gnc_commodity_get_unique_name(gnc_price_get_commodity(ptr)),
        currency,     , commod,   gnc_commodity_get_unique_name(gnc_price_get_currency(ptr)),
@@ -80,6 +68,17 @@ define(`price', `gncPrice, Price, GNCPrice,
        valueDenom,   , int64,    gnc_numeric_denom(gnc_price_get_value(ptr)),
        version,      , int32,    gnc_price_get_version(ptr),
        priceGUID, KEY, GUID *,   gnc_price_get_guid(ptr),
+       ')
+       
+
+define(`checkpoint', `gncCheckpoint, Checkpoint, Checkpoint,
+       balance,             , int64,    ptr->balance,
+       cleared_balance,     , int64,    ptr->cleared_balance,
+       reconciled_balance,  , int64,    ptr->reconciled_balance,
+       date_start,          , Timespec, ptr->date_start,
+       date_end,            , Timespec, ptr->date_end,
+       commodity,           , char *,   ptr->commodity,
+       accountGuid,         , GUID *,   ptr->account_guid,
        ')
        
 
@@ -216,7 +215,7 @@ define(`store_one_only',
 /* ------------------------------------------------------ */
 /* This routine stores/updates one record in the database.
  * It does not do any traversals, it does not lock.  
- * It just pokes the data in 
+ * It just pokes the data in.
  */
 
 static void 
@@ -303,9 +302,17 @@ pgendPutOne`'func_name($@)`'Only (PGBackend *be, xacc_type($@) *ptr)
    ndiffs = pgendCompareOne`'func_name($@)`'Only (be, ptr);
 
    /* update the record if there are differences ... */
-   if (0<ndiffs) pgendStoreOne`'func_name($@)`'Only (be, ptr, SQL_UPDATE);
+   if (0<ndiffs) 
+   {
+      pgendStoreOne`'func_name($@)`'Only (be, ptr, SQL_UPDATE);
+      pgendStoreAudit`'func_name($@)`' (be, ptr, SQL_UPDATE);
+   }
    /* insert the record if it doesnt exist */
-   if (0>ndiffs) pgendStoreOne`'func_name($@)`'Only (be, ptr, SQL_INSERT);
+   if (0>ndiffs)
+   {
+      pgendStoreOne`'func_name($@)`'Only (be, ptr, SQL_INSERT);
+      pgendStoreAudit`'func_name($@)`' (be, ptr, SQL_INSERT);
+   }
 }
 
 ')
@@ -336,6 +343,46 @@ pgend`'func_name($@)`'CompareVersion (PGBackend *be, xacc_type($@) *ptr)
 
    if (-1 == sql_version) return -1;
    return (sql_version - version_function($@));
+}
+
+')
+
+define(`store_audit', 
+`
+/* ------------------------------------------------------ */
+/* This routine stores one autdit record in the database.
+ * It does not do any traversals, it does not lock.  
+ * It just pokes the data in. 
+ */
+
+static void 
+pgendStoreAudit`'func_name($@)`' (PGBackend *be,
+                     xacc_type($@) *ptr,
+                     sqlBuild_QType update)
+{
+   const char *buf;
+   ENTER ("be=%p, xacc_type($@)=%p", be, ptr);
+   if (!be || !ptr) return;
+
+   /* build the sql query */
+   sqlBuild_Table (be->builder, "tablename($@)" "Trail", SQL_INSERT);
+#define sqlBuild_Where_Str sqlBuild_Set_Str
+#define sqlBuild_Where_GUID sqlBuild_Set_GUID
+#define sqlBuild_Where_Int32 sqlBuild_Set_Int32
+   set_fields($@)
+#undef sqlBuild_Where_Str
+#undef sqlBuild_Where_GUID
+#undef sqlBuild_Where_Int32
+   sqlBuild_Set_Str (be->builder, "date_changed", "NOW");
+   sqlBuild_Set_GUID (be->builder, "sessionGUID", be->sessionGuid);
+   sqlBuild_Set_Char (be->builder, "change", update);
+
+   buf = sqlBuild_Query (be->builder);
+   SEND_QUERY (be,buf, );
+
+   /* complete/commit the transaction, check the status */
+   FINISH_QUERY(be->connection);
+   LEAVE (" ");
 }
 
 ')

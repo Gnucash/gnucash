@@ -216,6 +216,10 @@ get_version_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
 #include "base-autogen.c"
 
+static const char *table_audit_str = 
+#include "table-audit.c"
+;
+
 static const char *table_create_str = 
 #include "table-create.c"
 ;
@@ -2874,6 +2878,8 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
        * for postgres queries (which is 8192). 
        */
       SEND_QUERY (be,table_create_str, );
+      FINISH_QUERY(be->connection);
+      SEND_QUERY (be,table_audit_str, );
       FINISH_QUERY(be->connection);
       SEND_QUERY (be,sql_functions_str, );
       FINISH_QUERY(be->connection);
