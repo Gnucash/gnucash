@@ -20,9 +20,10 @@ INCLUDES=-I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS}
 noinst_DATA = .scm-links
 
 gncscmmoddir=${GNC_SHAREDIR}/guile-modules/gnucash/report/locale-specific
-gncscmmod_DATA = \
-    us.scm \
-    taxtxf.scm 
+gncscmmod_DATA = us.scm 
+
+gncscmothermoddir=${GNC_SHAREDIR}/guile-modules/gnucash/report/
+gncscmothermod_DATA=taxtxf.scm 
 
 gncscmdir=${GNC_SHAREDIR}/scm
 gncscm_DATA = txf-export.scm txf-export-help.scm 
