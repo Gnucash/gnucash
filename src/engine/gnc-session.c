@@ -243,11 +243,12 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
   LEAVE (" ");
 }
 
-gboolean
+void
 gnc_session_begin (GNCSession *session, const char * book_id, 
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
-  if (!session) return FALSE;
+  if (!session) return;
+
   ENTER (" sess=%p book=%p ignore_lock=%d, book-id=%s", 
          session, session->book, ignore_lock,
          book_id ? book_id : "(null)");
@@ -260,7 +261,7 @@ gnc_session_begin (GNCSession *session, const char * book_id,
   {
     gnc_session_push_error (session, ERR_BACKEND_LOCKED, NULL);
     LEAVE("bad book url");
-    return FALSE;
+    return;
   }
 
   /* seriously invalid */
@@ -268,7 +269,7 @@ gnc_session_begin (GNCSession *session, const char * book_id,
   {
     gnc_session_push_error (session, ERR_BACKEND_NO_BACKEND, NULL);
     LEAVE("bad book_id");
-    return FALSE;
+    return;
   }
   /* Store the sessionid URL  */
   session->book_id = g_strdup (book_id);
@@ -278,7 +279,7 @@ gnc_session_begin (GNCSession *session, const char * book_id,
   {
     gnc_session_push_error (session, ERR_FILEIO_FILE_NOT_FOUND, NULL);
     LEAVE("bad fullpath");
-    return FALSE;    /* ouch */
+    return;  
   }
   PINFO ("filepath=%s", session->fullpath ? session->fullpath : "(null)");
 
@@ -341,25 +342,24 @@ gnc_session_begin (GNCSession *session, const char * book_id,
           session->book_id = NULL;
           gnc_session_push_error (session, err, NULL);
           LEAVE("backend error %d", err);
-          return FALSE;
+          return;
       }
   }
   LEAVE (" sess=%p book=%p book-id=%s", 
          session, session->book, 
          book_id ? book_id : "(null)");
-  return TRUE;
 }
 
 /* ---------------------------------------------------------------------- */
 
-gboolean
+void
 gnc_session_load (GNCSession *session)
 {
   GNCBook *oldbook;
   Backend *be;
 
-  if (!session) return FALSE;
-  if (!gnc_session_get_url(session)) return FALSE;
+  if (!session) return;
+  if (!gnc_session_get_url(session)) return;
 
   ENTER ("sess=%p book_id=%s", session, gnc_session_get_url(session)
          ? gnc_session_get_url(session) : "(null)");
@@ -419,20 +419,20 @@ gnc_session_load (GNCSession *session)
   {
       /* ?? should we restore the oldbook here ?? */
       LEAVE("topgroup NULL");
-      return FALSE;
+      return;
   }
   
   if (!gnc_book_get_pricedb (session->book))
   {
       /* ?? should we restore the oldbook here ?? */
       LEAVE("pricedb NULL");
-      return FALSE;
+      return;
   }
 
   if (gnc_session_get_error(session) != ERR_BACKEND_NO_ERR)
   {
       LEAVE("error from backend %d", gnc_session_get_error(session));
-      return FALSE;
+      return;
   }
 
   xaccLogDisable();
@@ -442,8 +442,6 @@ gnc_session_load (GNCSession *session)
 
   LEAVE ("sess = %p, book_id=%s", session, gnc_session_get_url(session)
          ? gnc_session_get_url(session) : "(null)");
-
-  return TRUE;
 }
 
 gboolean

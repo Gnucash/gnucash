@@ -105,33 +105,32 @@ void gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2);
  *    If set to FALSE, then file/database-global locks will be tested and 
  *    obeyed.
  *
- *    If the datastore exists, can be reached (e.g over the net), connected 
- *    to, opened and read, and a lock can be obtained then a lock will be 
- *    obtained and the function returns TRUE.   Note that multi-user 
- *    datastores (e.g. the SQL backend) typically will not need to get a 
- *    global lock, and thus, the user will not be locked out.  That's the
+ *    If the datastore exists, can be reached (e.g over the net), 
+ *    connected to, opened and read, and a lock can be obtained then 
+ *    a lock will be obtained.   Note that multi-user datastores 
+ *    (e.g. the SQL backend) typically will not need to get a global
+ *    lock, and thus, the user will not be locked out.  That's the
  *    whole point of 'multi-user'.
  *
  *    If the file/database doesn't exist, and the create_if_nonexistent
  *    flag is set to TRUE, then the database is created.
  *
- *    Otherwise the function returns FALSE.
+ *    If an error occurs, it will be pushed onto the session error
+ *    stack, and that is where it should be examined.
  */
-gboolean gnc_session_begin (GNCSession *session, const char * book_id,
+void gnc_session_begin (GNCSession *session, const char * book_id,
                          gboolean ignore_lock, gboolean create_if_nonexistent);
 
 
-/* The gnc_session_load() method causes the GNCBook to be made ready to 
+/* 
+ * The gnc_session_load() method causes the GNCBook to be made ready to 
  *    to use with this URL/datastore.   When the URL points at a file, 
  *    then this routine would load the data from the file.  With remote
  *    backends, e.g. network or SQL, this would load only enough data
  *    to make teh book actually usable; it would not cause *all* of the
  *    data to be loaded.
- *
- *    The function returns TRUE on success.
- *    (Hack alert ... what does failure mean ???)
  */
-gboolean gnc_session_load (GNCSession *session);
+void gnc_session_load (GNCSession *session);
 
 /* The gnc_session_get_error() routine can be used to obtain the reason
  *    for any failure.  Calling this routine returns the current error.

@@ -128,17 +128,24 @@ GNCBook * gnc_book_close_period (GNCBook *, Timespec,
  */
 void gnc_book_partition (GNCBook *dest, GNCBook *src, Query *);
 
-/* The gnc_book_insert_trans() routine takes an existing transaction
- *    that is located in one book, and moves it to another book.
- *    It moves all of the splits as well.  In the course of the 
- *    move, the transaction is literally deleted from the first 
- *    book as its placed into the second.  The transaction and
- *    split GUID's are not changed in the move.  This routine 
- *    assumes that twin accounts already exist in both books 
- *    (and can be located with the standard twining proceedure).
+/* The gnc_book_insert_trans_clobber() routine takes an existing 
+ *    transaction that is located in one book, and moves it to 
+ *    another book.  It moves all of the splits as well.  In the 
+ *    course of the move, the transaction is literally deleted 
+ *    from the first book as its placed into the second.  The 
+ *    transaction and split GUID's are not changed in the move.  
+ *    This routine assumes that twin accounts already exist in 
+ *    both books (and can be located with the standard twining 
+ *    proceedure).
+ *
+ * The gnc_book_insert_trans() routine does the same as the above,
+ *    except that it doesn't actually clobber the transaction: it
+ *    merely moves the transaction and split GUID's to the new
+ *    books' entity tables, and not much else.
  */
 
 void gnc_book_insert_trans (GNCBook *book, Transaction *trans);
+void gnc_book_insert_trans_clobber (GNCBook *book, Transaction *trans);
 
 #endif /* XACC_PERIOD_H */
 

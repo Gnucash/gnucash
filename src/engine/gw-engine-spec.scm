@@ -1584,7 +1584,7 @@ when no longer needed.")
   (gw:wrap-function
    mod
    'gnc:session-begin
-   '<gw:bool>
+   '<gw:void>
    "gnc_session_begin"
    '((<gnc:Session*> session)
      ((<gw:m-chars-caller-owned> gw:const) id)
@@ -1595,7 +1595,7 @@ when no longer needed.")
   (gw:wrap-function
    mod
    'gnc:session-load
-   '<gw:bool>
+   '<gw:void>
    "gnc_session_load"
    '((<gnc:Session*> session))
    "Load the data associated with the given session.")

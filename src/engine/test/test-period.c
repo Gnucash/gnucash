@@ -1,5 +1,7 @@
 
-/* test file created by Linas Vepstas <linas@linas.org>
+/* Test file created by Linas Vepstas <linas@linas.org>
+ * Minimal test to see if a book can be split into two periods
+ * without crashing.
  * December 2001
  * License: GPL
  */
