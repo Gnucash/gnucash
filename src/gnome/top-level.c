@@ -198,7 +198,8 @@ gnucash_ui_init(void)
     gh_eval_str("(gnc:load-account-file)");
 
     /* this must come after using the poptGetArgs return value */
-    gnc_free_argv(restargv);
+    poptFreeContext (returnedPoptContext);
+    gnc_free_argv (restargv);
 
     gnc_component_manager_init ();
 

@@ -2424,12 +2424,14 @@ commodity_restore_end_handler(gpointer data_for_children,
     }
   }
 
-  if(!cpi->space) g_free(cpi->space);
-  if(!cpi->id) g_free(cpi->id);
-  if(!cpi->name) g_free(cpi->name);
-  if(!cpi->xcode) g_free(cpi->xcode);
+  g_free(cpi->space);
+  g_free(cpi->id);
+  g_free(cpi->name);
+  g_free(cpi->xcode);
   g_free(cpi);
-  if(!ok && comm) g_free(comm);
+
+  if(!ok) g_free(comm);
+
   return(ok);
 }
 

@@ -1601,11 +1601,14 @@ gnc_options_dialog_append_page(GnomePropertyBox *propertybox,
   GtkWidget *page_label;
   GtkWidget *page_content_box;
   gint num_options;
-  gchar *name;
+  const char *name;
   gint page;
   gint i;
 
   name = gnc_option_section_name(section);
+  if (!name)
+    return -1;
+
   if (strncmp(name, "__", 2) == 0)
     return -1;
 
@@ -1658,7 +1661,7 @@ gnc_build_options_dialog_contents(GnomePropertyBox *propertybox,
 
   for (i = 0; i < num_sections; i++)
   {
-    char *section_name;
+    const char *section_name;
 
     section = gnc_option_db_get_section(odb, i);
     page = gnc_options_dialog_append_page(propertybox, section, tooltips);
