@@ -11,3 +11,7 @@ getquotes.pl is a set of perl routines to fetch stock quotes from various
    services.  dervied from the above. Still under development.
  
 
+Finance::YahooQuote
+    This is a perl 5 module that will pull one or more stock quotes from
+    Yahoo! Finance.  From  version 0.06 by Dj Padzensky <djpadz@padz.net>.
+    Home site at http://www.padz.net/~djpadz/

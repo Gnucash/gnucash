@@ -26,7 +26,7 @@ sub get_url_command {
 
 
 #######################################################################
-###################### &get_quote_from_qyahoo(); ######################
+###################### &get_quote_from_yahoo(); ######################
 #######################################################################
 # Look up a stock via "yahoo"
 # usage: &get_yaho ("IBM", "NYSE");
@@ -81,31 +81,6 @@ sub get_quote_from_yahoo {
 }
 
 #######################################################################
-############### &add_stock("NVA", 100, 1345.5, "TSE"); ################
-#######################################################################
-# Add a security to the "active list," including the "ticker symbol,"
-# quantity of shares, original total cost, and the exchange to look it
-# up on. 
-#######################################################################
-sub add_stock {
-    local($ticker, $num, $cost, $exchange) = @_;
-    $NUM{$ticker} = $num;
-    $COST{$ticker} = $cost;
-    $EXCHANGE{$ticker} = $exchange;
-    local ($currency) = "CDN";
-    if ($exchange eq "TSE") {
-        $currency = "CDN";
-    }
-    if ($exchange eq "NYSE") {
-        $currency = "USD";
-    }
-    if ($exchange eq "NY") {
-        $currency = "USD";
-    }
-    $CURRENCY{$ticker} = $currency;
-}
-
-#######################################################################
 ###################### &search_web_for_prices(); ######################
 #######################################################################
 # This program searches the %EXCHANGE array, determining how
@@ -148,6 +123,7 @@ sub search_web_for_prices {
 ########################## &get_TSE ("RY"); ###########################
 #######################################################################
 # Look up a stock's price on the TSE using the Telenium service
+# TSE == toronoto stock exchange, primarily canadian stocks
 #######################################################################
 sub get_TSE {
     local ($stock) = @_;
