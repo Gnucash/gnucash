@@ -253,8 +253,20 @@ Plan A has been implemented in the engine.
       it with the appropriate keys, markup, etc. and to carry balances 
       forward, etc.
 
-   src/engine/gemini
+   src/engine/kvp-util.[ch]
+      Gemini code: code which allows 'linked lists' to be created, using
+      nothing but kvp trees and guid's.  These links are used to identify
+      peer accounts/ peer transactions, etc.
+
    src/engine/gnc-lot.[ch]
+      Implements accounting Lots.
+
+   src/engine/Scrub2.[ch]
+      Implements simple FIFO for lots.  Data is scrubbed with respect to
+      this FIFO before the books are closed.  Commodity accounts (e.g.
+      stock accounts) must have a coherent Lots structure before books
+      can be closed.  The scrubber makes sure there's nothing hanging
+      out.
 
    src/gnome/druid-acct-period.[ch] 
       Implements a druid interface to allow user to specify book closing 
@@ -266,15 +278,18 @@ Plan A has been implemented in the engine.
    All books are stored in the same database; there is no performance
    penalty for storing all books together in the same SQL database,
    because they can be easily picked apart by an appropriate SQL query.
--- The xml-file backend can store multiple books, but there is currently
-   no support for spreading things out across multiple files (for
-   faster load, by not loading old books).  
+
+-- The xml-file backend can store multiple books in one file.  There 
+   is currently minimal support for writing out multiple books, 
+   one per file (this enables faster load, by not loading old books).  
+   There is currently no support for loading multiple books from multiple
+   files.
 
 
 Open Issues / ToDo
 ------------------
-*) Handling of lots in book closing is implemented but is untested and 
-   may be broken.  Need to right test case.
+*) Handling of lots in book closing is implemented but is poorly tested 
+   and still has at least one known bug (see below).  Need to right test case.
  
 *) Naming convention for the different books?  When the XML file backend
    is used, different books need to be stored as different files (in order
@@ -285,12 +300,18 @@ Open Issues / ToDo
 
 *) Special considerations for scheduled transactions/recurring transactions?
 
+*) Provide for loading of closed books, if that is desired ... 
+
 *) Handling of multi-book reports ???  Need to work out the recommended way
    of making this happen....
 
 *) Need to mark closed book as unalterable, and respect that markup.
 
 *) Need to trimming of price database 
+
+*) bug: transactions that reference open lots might also reference closed
+   lots, and those close lots have transactions; none of this can be moved
+   to closed book; must walk the entire tree.
 
 =========================== end of file ========================
 
