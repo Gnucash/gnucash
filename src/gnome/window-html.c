@@ -1055,7 +1055,6 @@ gnc_html_load(HTMLWindow *hw)
 {
   HTMLData      * data;
   GtkHTMLStream * handle;
-  char * text=NULL, * label=NULL;
 
   if (hw == NULL)
     return;
@@ -1072,12 +1071,8 @@ gnc_html_load(HTMLWindow *hw)
 
   (hw->jump_cb)(data->user_data, &hw->null_text, &hw->null_label);
 
-  if (text == NULL)
-  {
-    text = "";
-    label = NULL;
-  }
   handle = gtk_html_begin(GTK_HTML(hw->htmlwidget));
+
   htmlUrlCB(GTK_HTML(hw->htmlwidget), "", handle, (gpointer)hw);
 }
 

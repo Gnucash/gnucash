@@ -104,7 +104,7 @@
 	"Currencies" "Report's currency" 
 	"AA" "All other currencies will get converted to this currency."
 	(gnc:locale-default-currency)))
-      
+
       (option-registerer
        (gnc:make-simple-boolean-option
 	"Currencies" "Other currencies' total"
@@ -186,20 +186,22 @@
 	    (row-aligner
 	     (append
 	      (list tacc ttype)
-	      (if (equal? currency balance-currency)
+	      (if (gnc:commodity-equiv? currency balance-currency)
 		  (list NBSP
-			(gnc:amount->formatted-currency-string
-			 value balance-currency #f))
-		  (list (gnc:amount->formatted-currency-string
-			 value currency #f) 
-			(gnc:amount->formatted-currency-string
+                        (gnc:amount->string
+                         value (gnc:commodity-print-info balance-currency #f)))
+		  (list (gnc:amount->string
+			 value (gnc:commodity-print-info currency #f))
+			(gnc:amount->string
 			 (* value
 			    (let ((pair (assoc currency exchange-alist)))
-			      (if (not pair) default-exchange-rate (cadr pair))))
-			 balance-currency #f)))
+			      (if (not pair)
+                                  default-exchange-rate
+                                  (cadr pair))))
+			 (gnc:commodity-print-info balance-currency #f))))
 	      (list NBSP NBSP)))))
 	#f))))
-  
+
   (define (render-level-1-account 
 	   l1-account l1-currency-collector 
 	   balance-currency exchange-alist row-aligner)
@@ -218,19 +220,21 @@
 	    (row-aligner
 	     (append 
 	      (list tacc ttype NBSP NBSP) 
-	      (if (equal? currency balance-currency)
+	      (if (gnc:commodity-equiv? currency balance-currency)
 		  (list NBSP 
-			(gnc:amount->formatted-currency-string
-			 value balance-currency #f))
-		  (list (gnc:amount->formatted-currency-string
-			 value currency #f)
-			(gnc:amount->formatted-currency-string
+			(gnc:amount->string
+			 value (gnc:commodity-print-info balance-currency #f)))
+		  (list (gnc:amount->string
+			 value (gnc:commodity-print-info currency #f))
+			(gnc:amount->string
 			 (* value
 			    (let ((pair (assoc currency exchange-alist)))
-			      (if (not pair) default-exchange-rate (cadr pair))))
-			 balance-currency #f)))))))
+			      (if (not pair)
+                                  default-exchange-rate
+                                  (cadr pair))))
+			 (gnc:commodity-print-info balance-currency #f))))))))
 	#f))))
-  
+
   (define (render-total l0-currency-collector 
 			balance-currency exchange-alist 
 			other-currency-total? show-fcur?
@@ -243,7 +247,7 @@
 	(l0-currency-collector 
 	 'format
 	 (lambda (currency value)
-	   (if (equal? currency balance-currency)
+	   (if (gnc:commodity-equiv? currency balance-currency)
 	       (begin 
 		 (set! exchanged-total (+ exchanged-total value))
 		 '())
@@ -258,15 +262,16 @@
 		     (row-aligner
 		      (list 
 		       NBSP NBSP NBSP NBSP
-		       (gnc:amount->formatted-currency-string
-			value currency #f)
+		       (gnc:amount->string
+			value (gnc:commodity-print-info currency #f))
 		       NBSP))
 		     '()))))
 	 #f)
 	(row-aligner
 	 (list account-name NBSP NBSP NBSP NBSP 
-	       (gnc:amount->formatted-currency-string
-		exchanged-total balance-currency #f)))))))
+	       (gnc:amount->string
+                exchanged-total
+                (gnc:commodity-print-info balance-currency #f))))))))
   
   (define blank-line
     (html-table-row '()))
@@ -342,12 +347,13 @@
 		      (lambda (curr val)
 			(collector
 			 'add report-currency
-			 (if (equal? curr report-currency)
+			 (if (gnc:commodity-equiv? curr report-currency)
 			     val
 			     (* val (let ((pair 
 					   (assoc curr exchange-alist)))
 				      (if (not pair) 
-					  default-exchange-rate (cadr pair)))))))
+					  default-exchange-rate
+                                          (cadr pair)))))))
 		      #f)
 		     collector))
 	       #f))))
@@ -378,10 +384,10 @@
                     (set! account-balance (- account-balance)))
 		(let ((this-collector (make-currency-collector)))
 		  (this-collector 'add 
-                                  (gnc:commodity-get-printname 
-                                   (gnc:account-get-currency account))
+                                  (gnc:account-get-currency account)
 				  account-balance)
-		  (handle-collector-merging l1-collector 'merge this-collector))
+		  (handle-collector-merging l1-collector
+                                            'merge this-collector))
                 (l1-collector 'merge l2-collector #f)
                 (l0-collector 'merge l1-collector #f)
                 (let ((level-1-output
@@ -410,11 +416,10 @@
 		 from-value
 		 to-value #f))))
 	(this-balance 'add 
-                 (gnc:commodity-get-printname 
-                  (gnc:account-get-currency account))
-		 (if balance-sheet? 
-		     rawbal
-		     (- rawbal)))
+                      (gnc:account-get-currency account)
+                      (if balance-sheet? 
+                          rawbal
+                          (- rawbal)))
 	(handle-collector-merging balance 'merge this-balance)
 	(if (is-it-on-balance-sheet? type balance-sheet?)
 	    ;; Ignore

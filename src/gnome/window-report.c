@@ -3,7 +3,7 @@
  * Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>            *
  * Copyright (C) 1998 Linas Vepstas  <linas@linas.org>              *
  * Copyright (C) 1999 Jeremy Collins ( gtk-xmhtml port )            *
- * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>      *
+ * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -40,6 +40,7 @@
 #include "messages.h"
 #include "gnc-engine-util.h"
 #include "FileBox.h"
+#include "File.h"
 #include "gfec.h"
 
 static short module = MOD_HTML; 

@@ -23,15 +23,6 @@
 (define (gnc:amount->string amount info)
   (gnc:amount->string-helper (exact->inexact amount) info))
 
-;(define (gnc:amount->formatted-string amount shares_value?)
-;  (gnc:amount->string amount #t #t shares_value?))
-
-;(define (gnc:amount->formatted-currency-string amount 
-;					       this_currency shares_value?)
-;  (gnc:amount->string-helper (exact->inexact amount)
-;			     #t #t shares_value?
-;                             this_currency))
-
 (define (gnc:account-has-shares? account)
   (let ((type (gnc:account-type->symbol (gnc:account-get-type account))))
     (member type '(STOCK MUTUAL CURRENCY))))
@@ -299,14 +290,14 @@
 				      (* -1 
 					 ((cadar clist) 'total #f)))
 		  (minus-currency-clist (cdr clist)))))
-    
+
     ;; helper function walk the association list doing a callback on
     ;; each key-value pair.
     (define (process-currency-list fn clist)
       (cond ((null? clist) '())
 	    (else (cons (fn (caar clist) ((cadar clist) 'total #f))
 			(process-currency-list fn (cdr clist))))))
-    
+
     ;; Dispatch function
     (lambda (action currency amount)
       (case action
