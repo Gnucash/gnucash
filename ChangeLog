@@ -1,3 +1,8 @@
+2003-05-07  Derek Atkins  <derek@ihtfp.com>
+
+	* macros/autogen.sh: require autoconf >= 2.53 and automake >= 1.5
+	  Also look for appropriately-named versions on systems like RH7.3
+
 2003-05-05  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-hbcitrans.c, gnc-hbci-utils.h,

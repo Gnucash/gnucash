@@ -3,10 +3,6 @@
 
 DIE=0
 
-AUTOCONF=${AUTOCONF:-autoconf}
-AUTOHEADER=${AUTOHEADER:-autoheader}
-AUTOMAKE=${AUTOMAKE:-automake}
-ACLOCAL=${ACLOCAL:-aclocal}
 GETTEXTIZE=${GETTEXTIZE:-gettextize}
 INTLTOOLIZE=${INTLTOOLIZE:-intltoolize}
 LIBTOOLIZE=${LIBTOOLIZE:-libtoolize}
@@ -17,6 +13,94 @@ if [ -n "$GNOME2_PATH" ]; then
 	PATH="$GNOME2_PATH/bin:$PATH"
 	export PATH
 fi
+
+# usage: test_version program version
+# returns 0 if program >= version; returns 1 if not.
+test_version()
+{
+    this_prog="$1"
+    want_vers="$2"
+
+    testv=`"$this_prog" --version | head -1 | awk '{print $NF}'`
+    if test -z "$testv" ; then return 1 ; fi
+
+    testv_major=`echo "$testv" | sed 's/\([0-9]*\).\([0-9]*\).*$/\1/'`
+    testv_minor=`echo "$testv" | sed 's/\([0-9]*\).\([0-9]*\).*$/\2/'`
+
+    vers_major=`echo "$want_vers" | sed 's/\([0-9]*\).\([0-9]*\).*$/\1/'`
+    vers_minor=`echo "$want_vers" | sed 's/\([0-9]*\).\([0-9]*\).*$/\2/'`
+
+    # if wanted_major > found_major, this isn't good enough
+    if test $vers_major -gt $testv_major ; then
+	return 1
+    # if wanted_major < found_major, then this is fine
+    elif test $vers_major -lt $testv_major ; then
+	return 0
+    # if we get here, then the majors are equal, so test the minor version
+    # we want found_minor >= want_minor.
+    # So, if want_minor > found_minor, this is bad.
+    elif test $vers_minor -gt $testv_minor ; then
+	return 1
+    # this is it.
+    else
+	return 0
+    fi
+}
+
+# usage: find_program preset program version
+# sets "program" to the name of the program to use.
+# if preset is set, then use that regardless,
+#  otherwise check if "program" is of a good enough version and use that,
+#  otherwise check if "program-version" is of a good enough version and use that.
+#  otherwise return an error.
+find_program()
+{
+    find="$1"
+    prog="$2"
+    vers="$3"
+
+    if test -n "$find" ; then
+	test_version "$find" "$vers"
+	status="$?"
+	if test "$status" = 0 ; then
+	    program="$find"
+	    return 0
+	fi
+	echo "**Error**: cannot use $find"
+    else
+
+	test_version "$prog" "$vers"
+	status=$?
+	if test "$status" = 0 ; then
+	    program="$prog"
+	    return 0
+	fi
+
+	test_version "$prog-$vers" "$vers"
+	status=$?
+	if test "$status" = 0 ; then
+	    program="$prog-$vers"
+	    return 0
+	fi
+    fi
+
+    echo
+    echo "**Error**: You must have at least version $vers of $prog installed."
+    echo "Please check your distribution or the appropriate web site."
+    echo
+    DIE=1
+    return 1
+}
+
+find_program "$AUTOCONF" autoconf 2.53
+[ "$?" = 0 ] && AUTOCONF="$program"
+find_program "$AUTOHEADER" autoheader 2.53
+[ "$?" = 0 ] && AUTOHEADER="$program"
+find_program "$AUTOMAKE" automake 1.5
+[ "$?" = 0 ] && AUTOMAKE="$program"
+find_program "$ACLOCAL" aclocal 1.5
+[ "$?" = 0 ] && ACLOCAL="$program"
+
 
 (${AUTOCONF} --version) < /dev/null > /dev/null 2>&1 || {
   echo
