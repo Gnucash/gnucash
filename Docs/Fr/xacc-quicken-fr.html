@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.05 [fr] (Win95; I) [Netscape]">
+   <TITLE>Guide de l'utilisateur de Quicken</TITLE>
+<X-SAS-WINDOW TOP=25 BOTTOM=475 LEFT=4 RIGHT=534>
+</HEAD>
+<BODY BGCOLOR="#EEEEEE">
+
+<H1>
+Guide de l'utilisateur de Quicken (TM)</H1>
+Tous les syst&egrave;mes de comptabilit&eacute; n'utilise pas les m&ecirc;mes
+mots pour les m&ecirc;mes concepts . Ci-dessous se trouve quelques notes
+pour les utilisateurs habitu&eacute;s des produits Quicken .
+<H2>
+Cat&eacute;gories</H2>
+Ce que Quicken appelle "Cat&eacute;gories" sont juste r&eacute;ellement
+des <A HREF="xacc-expense-fr.html">comptes Revenus/D&eacute;penses</A>
+. Ainsi, si vous utilisez les sp&eacute;cifications d'une cat&eacute;gorie
+dans Quicken, cr&eacute;ez juste un compte revenus/d&eacute;penses du m&ecirc;me
+nom dans X-Accountant, et utilisez le comme une cat&eacute;gorie.
+<H2>
+Importation des fichiers QIF de Quicken</H2>
+X-Accountant supporte l'importation des Quicken Import Fichiers (QIF).
+(Note: Seulement les fichiers QIF de la version 3.0 de Quicken ont &eacute;t&eacute;
+test&eacute;). D&ucirc; &agrave; la curieuse nature de QIF, s'il vous pla&icirc;t
+liserz cette section prudemment, ou vous serez peut-&ecirc;tre d&eacute;&ccedil;u
+avec les r&eacute;sultats.
+
+<P>Pour cr&eacute;er un fichier QIF avec Quicken , d&eacute;marrez Quicken
+(oui, il fonctionne avec Wine, et probablement avec Wabi aussi), choisissez
+le menu "Fichier" et s&eacute;lectionnez l'entr&eacute;e du menu "Exporter..."
+. Sous la version 3.0 de Quicken , vous pouvez seulement exporter un compte
+&agrave; la fois , et ainsi , l'exportation d&eacute;montrera &ecirc;tre
+un processus p&eacute;nible . Quand vous exportez , not&eacute; que il
+y a une s&eacute;ries de boites de v&eacute;rification marqu&eacute;s "Transactions",
+"Liste de Comptes ", "Liste de Cat&eacute;gories", etc. Pour de meilleurs
+r&eacute;sultats, vous devrez etre s&ucirc;r d'avoir ces trois derni&egrave;res
+qui soit v&eacute;rifi&eacute;s. Si vous ne v&eacute;rifiez *pas* la boite
+"Listes de Comptes ", alors le nom de votre compte sera perdu.
+
+<P>Pour importer un fichier QIF de Quicken, choisissez le menu "Fichier"et
+s&eacute;lectionnez l'entr&eacute;e "Importer QIF". Le fichier import&eacute;
+sera fusionn&eacute; avec quel que soit les autres donn&eacute;es que vous
+avez actuellement dans X-Accountant. Cette fusion permet aux multiples
+comptes Quicken d'&ecirc;tre import&eacute;s et fusionn&eacute;s dans un
+groupe de compte . Notez que durant la fusion, une analyse est effectu&eacute;e
+pour les transactions dupliqu&eacute;es , et les doubles sont enlev&eacute;s.
+Une transaction dupliqu&eacute;e est une o&ucirc; la date, la description
+(b&eacute;n&eacute;ficiaire), m&eacute;mo, quantit&eacute;e, prix de la
+part , et les comptes ou cat&eacute;gories d&eacute;bit&eacute;s/cr&eacute;dit&eacute;s
+se retrouve exactement. Ainsi, la fusion devrait &ecirc;tre s&ucirc;r &agrave;
+moins que vous ayez de multiples transactions &agrave; la m&ecirc;me date,
+au m&ecirc;me compte , pour le m&ecirc;me montant , avec la m&ecirc;me
+description et m&eacute;mo.
+
+<P>Notez que quand la "Liste des Comptes " et la "Liste de Cat&eacute;gories"
+est export&eacute; depuis Quicken, <B>tous</B> les comptes et cat&eacute;gories
+seront export&eacute;s m&ecirc;me si, ils sont vides , et ne contiennent
+pas transactions. Quand ceux-ci sont import&eacute;s, ils appazraitront
+comme des comptes avec un solde de zero. Si vous n'avez pas besoin ou n'utilisez
+pas ces comptes , supprimez les . Une am&eacute;lioration future de X-Accountant
+vous permettra de les supprimer en-masse, ou de les rendre invisible sans
+les supprimer.
+</BODY>
+</HTML>
