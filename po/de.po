@@ -85,7 +85,6 @@ msgid "You must select an account to scrub."
 msgstr "Wählen sie ein Konto zum Ausbuchen"
 
 #: messages-i18n.c:21
-#, fuzzy
 msgid "You must select an account type."
 msgstr "Wählen sie ein Konto zum Ausbuchen"
 
@@ -122,16 +121,14 @@ msgstr ""
 "das."
 
 #: messages-i18n.c:28
-#, fuzzy
 msgid ""
 "Warning: Just deleting all the splits will make your account unbalanced. You "
 "probably shouldn't do this unless you're going to immediately add another "
 "split to bring the transaction back into balance."
 msgstr ""
-"Warnung : Das Löschen aller Splits führt zu einem unausgeglichenen Konto. \n"
+"Warnung : Das Löschen aller Splits führt zu einem unausgeglichenen Konto."
 "Sie sollten das nicht tun,es sei denn, sie wollen sofort einen anderen "
-"Split\n"
-"hinzufügen, um das Konto wieder auszugleichen.\n"
+"Split hinzufügen, um das Konto wieder auszugleichen."
 
 #: messages-i18n.c:29
 #, c-format
@@ -211,7 +208,7 @@ msgstr ""
 "     %s."
 
 #: messages-i18n.c:37
-#, fuzzy, c-format
+#,c-format
 msgid ""
 "The file \n"
 "    %s\n"
@@ -219,7 +216,7 @@ msgid ""
 msgstr ""
 "Die Datei \n"
 "    %s\n"
-" konnte nicht gefunden werden.\n"
+" konnte nicht gefunden werden."
 
 #: messages-i18n.c:38
 #, c-format
@@ -530,7 +527,6 @@ msgid "Open the selected account and all its subaccounts"
 msgstr "Öffne das gewählte Konto und alle Sub-Konten"
 
 #: messages-i18n.c:93
-#, fuzzy
 msgid "Open a file"
 msgstr "Datei öffnen"
 
@@ -661,9 +657,8 @@ msgid "_Account"
 msgstr "Konto"
 
 #: messages-i18n.c:125
-#, fuzzy
 msgid "_Accounts"
-msgstr "Konten"
+msgstr "_Konten"
 
 #: messages-i18n.c:126
 msgid "_Adjust Balance"
@@ -798,7 +793,6 @@ msgid "Account Name"
 msgstr "Kontobezeichnung"
 
 #: messages-i18n.c:159
-#, fuzzy
 msgid "Account Type"
 msgstr "Kontoart"
 
@@ -835,7 +829,6 @@ msgid "Date Range"
 msgstr "Datumsbereich"
 
 #: messages-i18n.c:168
-#, fuzzy
 msgid "Delete Account"
 msgstr "Konto löschen"
 
@@ -904,7 +897,6 @@ msgid "New Balance"
 msgstr "Neuer Saldo"
 
 #: messages-i18n.c:185
-#, fuzzy
 msgid "New File"
 msgstr "Datei öffnen"
 
@@ -973,7 +965,6 @@ msgid "Scrub Subaccounts"
 msgstr "Öffnen Unterkonten"
 
 #: messages-i18n.c:202
-#, fuzzy
 msgid "Select All"
 msgstr "Alle auswählen"
 
@@ -1006,7 +997,6 @@ msgid "Show Inc/Exp"
 msgstr "Einnahmen/Ausgaben anzeigen"
 
 #: messages-i18n.c:210
-#, fuzzy
 msgid "Show Categories"
 msgstr "Kategorien Anzeigen"
 
@@ -1088,7 +1078,6 @@ msgstr "Konto"
 
 #: messages-i18n.c:230 src/gnome/glade-account-picker.c:60
 #: src/gnome/glade-qif-import.c:361
-#, fuzzy
 msgid "Accounts"
 msgstr "Konten"
 
@@ -1097,7 +1086,6 @@ msgid "Account Information"
 msgstr "Kontenbeschreibung"
 
 #: messages-i18n.c:232
-#, fuzzy
 msgid "AutoDep"
 msgstr "AutoDepot"
 
@@ -1297,7 +1285,6 @@ msgid "Fee"
 msgstr "Gebühr"
 
 #: messages-i18n.c:280
-#, fuzzy
 msgid "File"
 msgstr "Datei"
 
@@ -1360,7 +1347,6 @@ msgid "Memo"
 msgstr "Memo"
 
 #: messages-i18n.c:295
-#, fuzzy
 msgid "New"
 msgstr "_Neu"
 
@@ -1514,9 +1500,8 @@ msgid "Surplus"
 msgstr "Überschuß"
 
 #: messages-i18n.c:333
-#, fuzzy
 msgid "Teller"
-msgstr "Verkauf"
+msgstr "Zähler"
 
 #: messages-i18n.c:334 po/guile_strings.txt:228
 msgid "To"
@@ -1536,7 +1521,6 @@ msgid "Type"
 msgstr "Typ"
 
 #: messages-i18n.c:338
-#, fuzzy
 msgid "Transaction"
 msgstr "Transaktion"
 
@@ -1781,7 +1765,6 @@ msgid "There are no selected accounts in the account list option."
 msgstr "Es wurden keine Konten in der Kontenliste ausgewählt."
 
 #: po/guile_strings.txt:64
-#, fuzzy
 msgid "This page shows your net worth."
 msgstr "Diese Seite zeigt Ihnen Gewinn und Verlust"
 
@@ -2191,7 +2174,6 @@ msgid "Export data as text."
 msgstr "Exportiere Daten als Text"
 
 #: po/guile_strings.txt:176
-#, fuzzy
 msgid "Balance Sheet"
 msgstr "Saldo"
 
@@ -2497,9 +2479,8 @@ msgid "Display the Account Transactions report."
 msgstr "Anzeigen des Transkaktionsberichts"
 
 #: po/guile_strings.txt:256
-#, fuzzy
 msgid "Net"
-msgstr "Neu"
+msgstr "Netz"
 
 #: po/guile_strings.txt:257
 msgid "Have a nice day!"
@@ -2566,166 +2547,142 @@ msgid "Multi mode active split background"
 msgstr "Hintergrund für aktive Splits im Multi-Modus"
 
 #: src/gnome/dialog-account-picker.c:95
-#, fuzzy
 msgid "All Accounts"
-msgstr "Konten"
+msgstr "Alle Konten"
 
 #: src/gnome/dialog-qif-import.c:201
-#, fuzzy
 msgid "Select QIF File"
-msgstr "Alle auswählen"
+msgstr "QIF-Datei auswählen"
 
 #: src/gnome/dialog-qif-import.c:286
 msgid "You must specify a file to load."
-msgstr ""
+msgstr "Sie müssen eine Datei angeben, die geladen werden soll"
 
 #: src/gnome/dialog-qif-import.c:290
-#, fuzzy
 msgid "You must specify a currency."
-msgstr "Sie müssen eine Kontenart auswählen"
+msgstr "Sie müssen eine Währung angeben."
 
 #: src/gnome/dialog-qif-import.c:304 src/gnome/dialog-qif-import.c:632
 #: src/gnome/dialog-qif-import.c:734 src/gnome/dialog-qif-import.c:832
 msgid "QIF File scheme code not loaded properly."
-msgstr ""
+msgstr "Scheme Code für die QIF-Datei nichts sauber geladen."
 
 #: src/gnome/dialog-qif-import.c:327
 msgid "QIF File already loaded. Reload with current settings?"
-msgstr ""
+msgstr "QIF-Datei bereits geladen. Nochmal mit den momentanen Einstellungen laden ?"
 
 #: src/gnome/dialog-qif-import.c:360
 msgid "Failed to load QIF file. Are you sure it's a QIF file?"
-msgstr ""
+msgstr "QIF-Import fehlgeschlagen.Sind sie sicher, dass es eine QIF-Datei ist?"
 
 #: src/gnome/dialog-qif-import.c:762 src/gnome/dialog-qif-import.c:860
 msgid "Something is very wrong with QIF Importing."
-msgstr ""
+msgstr "Es ist etwas nicht in Ordnung mit dem QIF-Import."
 
 #: src/gnome/glade-account-picker.c:103
-#, fuzzy
 msgid "Selected account:"
-msgstr "Konto löschen"
+msgstr "Ausgewähltes Konto:"
 
 #: src/gnome/glade-account-picker.c:112
-#, fuzzy
-msgid "Description:"
-msgstr "Beschreibung"
-
-#: src/gnome/glade-account-picker.c:121
-#, fuzzy
 msgid "Account type:"
-msgstr "Kontoart"
+msgstr "Kontoart:"
 
 #: src/gnome/glade-account-picker.c:177
-#, fuzzy
 msgid "Mutual"
 msgstr "Investmentfonds"
 
 #: src/gnome/glade-qif-import.c:96
-#, fuzzy
 msgid "Loaded Files"
-msgstr "Neue Datei"
+msgstr "Geladenen Dateien"
 
 #: src/gnome/glade-qif-import.c:127
-#, fuzzy
 msgid "File Info"
-msgstr "Datei"
+msgstr "Datei Info"
 
 #: src/gnome/glade-qif-import.c:155
 msgid "QIF Filename:"
-msgstr ""
+msgstr "QIF-Dateiname:"
 
 #: src/gnome/glade-qif-import.c:164
-#, fuzzy
 msgid "QIF Account:"
-msgstr "Konto"
+msgstr "QIF-Konto:"
 
 #: src/gnome/glade-qif-import.c:173
-#, fuzzy
 msgid "Currency:"
-msgstr "Währung"
+msgstr "Währung:"
 
 #: src/gnome/glade-qif-import.c:182
 msgid "Radix format:"
-msgstr ""
+msgstr "Darstellungsformat"
 
 #: src/gnome/glade-qif-import.c:191
-#, fuzzy
 msgid "Date format:"
-msgstr "Datums Format"
+msgstr "Datumsformat:"
 
 #: src/gnome/glade-qif-import.c:222
-#, fuzzy
 msgid "Auto"
 msgstr "AutoDepot"
 
 #: src/gnome/glade-qif-import.c:251
 msgid "Autodetect"
-msgstr ""
+msgstr "Automatisch herausfinden"
 
 #: src/gnome/glade-qif-import.c:254
 msgid "Decimal (1,000.00)"
-msgstr ""
+msgstr "Dezimal (1,000.00)"
 
 #: src/gnome/glade-qif-import.c:257
 msgid "Comma (1.000,00)"
-msgstr ""
+msgstr "Komma (1.000,00)"
 
 #: src/gnome/glade-qif-import.c:269
 msgid "Autodetect           "
-msgstr ""
+msgstr "automatisch herausfinden"
 
 #: src/gnome/glade-qif-import.c:272
 msgid "MM/DD/YYYY"
-msgstr ""
+msgstr "Monat/Tag/Jahr"
 
 #: src/gnome/glade-qif-import.c:275
 msgid "DD/MM/YYYY"
-msgstr ""
+msgstr "Tag/Monat/Jahr"
 
 #: src/gnome/glade-qif-import.c:278
 msgid "YYYY/MM/DD"
-msgstr ""
+msgstr "Jahr/Monat/Tag"
 
 #: src/gnome/glade-qif-import.c:281
 msgid "YYYY/DD/MM"
-msgstr ""
+msgstr "Jahr/Tag/Monat"
 
 #: src/gnome/glade-qif-import.c:293
-#, fuzzy
 msgid "Select file"
-msgstr "Alle auswählen"
+msgstr "Datei auswählen"
 
 #: src/gnome/glade-qif-import.c:300
-#, fuzzy
 msgid "Load file"
 msgstr "Datei öffnen"
 
 #: src/gnome/glade-qif-import.c:307
-#, fuzzy
 msgid "Files"
-msgstr "Datei"
+msgstr "Dateien"
 
 #: src/gnome/glade-qif-import.c:333
-#, fuzzy
 msgid "QIF Account"
-msgstr "Konto"
+msgstr "QIF-Konto"
 
 #: src/gnome/glade-qif-import.c:340 src/gnome/glade-qif-import.c:394
-#, fuzzy
 msgid "Transactions"
-msgstr "Transaktion"
+msgstr "Transaktionen"
 
 #: src/gnome/glade-qif-import.c:347 src/gnome/glade-qif-import.c:401
-#, fuzzy
 msgid "GNUCash Account Name"
 msgstr "Kontobezeichnung"
 
 #: src/gnome/glade-qif-import.c:387
 msgid "QIF Category"
-msgstr ""
+msgstr "QIF Kategorie"
 
 #: src/gnome/glade-qif-import.c:415
-#, fuzzy
 msgid "Categories"
 msgstr "Kategorien Anzeigen"
