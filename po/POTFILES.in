@@ -359,6 +359,7 @@ src/import-export/hbci/gnc-hbci-getbalance.c
 src/import-export/hbci/gnc-hbci-gettrans.c
 src/import-export/hbci/dialog-daterange.c
 src/import-export/hbci/gnc-hbci-transfer.c
+src/import-export/log-replay/gnc-log-replay.c
 src/import-export/ofx/test/test-link.c
 src/import-export/ofx/gnc-ofx-import.c
 src/import-export/ofx/gncmod-ofx-import.c
