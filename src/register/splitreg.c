@@ -359,77 +359,102 @@ configLayout (SplitRegister *reg)
    prev_r = r; prev_c = c;				\
 }
 
+#define TRAVERSE_NON_NULL_CELLS() {			\
+   i = prev_r;						\
+   for (j=prev_c+1; j<curs->numCols; j++) {		\
+      if ((reg->nullCell != curs->cells[i][j]) &&	\
+          (reg->recnCell != curs->cells[i][j]) &&	\
+          (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
+      {							\
+         NEXT_RIGHT  (i, j);				\
+      }							\
+   }							\
+   for (i=prev_r+1; i<curs->numRows; i++) {		\
+      for (j=0; j<curs->numCols; j++) {			\
+         if ((reg->nullCell != curs->cells[i][j]) &&	\
+             (reg->recnCell != curs->cells[i][j]) &&	\
+             (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
+         {						\
+            NEXT_RIGHT  (i, j);				\
+         }						\
+      }							\
+   }							\
+}
+
+#define FIRST_NON_NULL(r,c) {				\
+   i = r;						\
+   for (j=c; j<curs->numCols; j++) {			\
+      if ((reg->nullCell != curs->cells[i][j]) &&	\
+          (reg->recnCell != curs->cells[i][j]) &&	\
+          (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
+      {							\
+         FIRST_RIGHT  (i, j);				\
+         break;						\
+      }							\
+   }							\
+}
+
+#define NEXT_NON_NULL(r,c) {				\
+   i = r;						\
+   for (j=c+1; j<curs->numCols; j++) {			\
+      if ((reg->nullCell != curs->cells[i][j]) &&	\
+          (reg->recnCell != curs->cells[i][j]) &&	\
+          (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
+      {							\
+         NEXT_RIGHT  (i, j);				\
+         break;						\
+      }							\
+   }							\
+}
+
+#define NEXT_SPLIT() {					\
+   i = 0;						\
+   for (j=0; j<reg->split_cursor->numCols; j++) {	\
+      if ((reg->nullCell != reg->split_cursor->cells[i][j]) &&	\
+          (reg->recnCell != reg->split_cursor->cells[i][j]) &&	\
+          (XACC_CELL_ALLOW_INPUT & reg->split_cursor->cells[i][j]->input_output)) \
+      {							\
+         NEXT_RIGHT  (i, j);				\
+         break;						\
+      }							\
+   }							\
+}
+
 static void
 configTraverse (SplitRegister *reg)
 {
    int i,j;
-   int prev_r, prev_c;
+   int prev_r=0, prev_c=0;
+   int first_r, first_c;
    CellBlock *curs = NULL;
 
    curs = reg->single_cursor;
-   FIRST_RIGHT (0, 0);  /* a bit of a hack ... */
-   for (i=0; i<curs->numRows; i++) {
-      for (j=0; j<curs->numCols; j++) {
-         if ((reg->nullCell != curs->cells[i][j]) &&
-             (reg->recnCell != curs->cells[i][j]) &&
-             (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) 
-         {
-            NEXT_RIGHT  (i, j);
-         }
-      }
-   }
+   /* lead in with the date cell, return to the date cell */
+   FIRST_NON_NULL (0, 0);
+   first_r = prev_r; first_c = prev_c;
+   TRAVERSE_NON_NULL_CELLS ();
+   /* wrap back to start of row after hitting the commit button */
+   NEXT_RIGHT (-1-first_r, -1-first_c);
 
+   curs = reg->double_cursor;
+   /* lead in with the date cell, return to the date cell */
+   FIRST_NON_NULL (0, 0);
+   first_r = prev_r; first_c = prev_c;
+   TRAVERSE_NON_NULL_CELLS ();
+   /* for double-line, hop back one row */
+   NEXT_RIGHT (-1-first_r + curs->numRows, -1-first_c);
 
-#ifdef FUTURE 
-   int type = (reg->type) & REG_TYPE_MASK;
-   int show_tamount = (reg->type) & REG_SHOW_TAMOUNT;
-   int show_samount = (reg->type) & REG_SHOW_SAMOUNT;
-   int show_txfrm = (reg->type) & REG_SHOW_TXFRM;
-   int double_line = (reg->type) & REG_DOUBLE_LINE;
-   int multi_line = (reg->type) & REG_MULTI_LINE;
+   curs = reg->trans_cursor;
+   FIRST_NON_NULL (0,0);
+   TRAVERSE_NON_NULL_CELLS ();
+   /* hop to start of next row (the split cursor) */
+   NEXT_SPLIT();
 
-   switch (type) {
-      case BANK_REGISTER:
-         curs = reg->trans_cursor;
-         FIRST_RIGHT (DATE_CELL_R, DATE_CELL_C);
-         NEXT_RIGHT  (NUM_CELL_R,  NUM_CELL_C);
-         if (show_txfrm) {
-            NEXT_RIGHT (TXFRM_CELL_R, TXFRM_CELL_C);
-         }
-         NEXT_RIGHT  (DESC_CELL_R, DESC_CELL_C);
-         if (show_tamount) {
-            NEXT_RIGHT (TDEBT_CELL_R, TDEBT_CELL_C);
-            NEXT_RIGHT (TCRED_CELL_R, TCRED_CELL_C);
-         }
-
-         /* if a multi-line display, hop down one line to the split cursor */
-         if (!double_line && !multi_line) {
-            NEXT_RIGHT (-1-DATE_CELL_R, -1-DATE_CELL_C);
-         } else {
-            NEXT_RIGHT (ACTN_CELL_R + curs->numRows, ACTN_CELL_C);
-         }
-
-         curs = reg->split_cursor;
-         FIRST_RIGHT (ACTN_CELL_R, ACTN_CELL_C);
-         NEXT_RIGHT (XFRM_CELL_R, XFRM_CELL_C);
-         NEXT_RIGHT (MEMO_CELL_R, MEMO_CELL_C);
-         if (show_samount) {
-            NEXT_RIGHT (DEBT_CELL_R, DEBT_CELL_C);
-            NEXT_RIGHT (CRED_CELL_R, CRED_CELL_C);
-         }
-         if (multi_line) {
-            NEXT_RIGHT (ACTN_CELL_R + curs->numRows, ACTN_CELL_C);
-         } else
-         if (double_line) {
-            /* if double-line, hop back one row */
-            NEXT_RIGHT (-1-DATE_CELL_R + curs->numRows, -1-DATE_CELL_C);
-         } else {
-            /* normally, this statement should enver be reached */
-            NEXT_RIGHT (-1-ACTN_CELL_R, -1-ACTN_CELL_C);
-         }
-         break;
-   }
-#endif
+   curs = reg->split_cursor;
+   FIRST_NON_NULL (0,0);
+   TRAVERSE_NON_NULL_CELLS ();
+   /* hop to start of next row (the split cursor) */
+   NEXT_SPLIT();
 }
 
 /* ============================================== */
