@@ -1,0 +1,217 @@
+
+X-Accountant
+------------
+
+xacc est un programme de suivis de vos finances personnelles. Il est
+semblable dans son concept a Quicken(TM).  Bien qu'il manque encore a Xacc
+des fonctionnalites avancees de Quicken, il a les fonctions de base.
+
+Quelques une de ces fonctions sont :
+
+  - Comptes Multiples
+  - Chaque compte conserve un solde actuel et 
+    un solde de rapprochement, alors vous pouvez suivre 
+    la verification de votre compte assez efficacement.
+  - Une interface simple .  Si vous savez utiliser 
+    le talon de votre chequier, vous savez utiliser
+    xacc.
+  - QuickFill... si vous commencez a saisir une description
+    dans les champs de description , et il retrouve une 
+    precedente transaction, frappez <TAB> copiera alors
+    la precedente transaction.  Commode si vous avez des 
+    transactions semblables assez regulierement .
+  - Portefeuille d'actions/de sociétés d'investissements (n.d.t: FCP et
+    SICAV en France).  Suivis d'actions individuellement (une par compte)
+    ou dans un portefeuille de comptes (un groupe de comptes qui peuvent 
+    etre affiches ensemble ).  
+  - Importation des fichiers QIF de Quicken .
+
+Fonctions Avancees
+------------------
+X-Accountant possede quelques une des fonctions qui ne se trouve pas
+habituellement dans un simple logiciel de gestion de finances personnelles:
+
+  - Sous-comptes: Un compte principal peut avoir un classement de petits 
+    comptes ou de comptes specialises au-dessous de lui. Cela permet
+    d'avoir des types de comptes semblables (par exemple :
+    Especes, Banque, Actions) qui peuvent etre groupes dans
+    un compte principal (par exemple: Possessions ou Avoirs).
+  - Double livret: 
+    Chaque transaction peut apparaitre dans deux 
+    comptes; un compte est debite et l'autre est  
+    credite avec exactement le meme montant.  Avec le 
+    double livret , une transaction affichee dans une 
+    fenetre sera automatiquement mise a jour dans toutes  
+    les autres fenetres montrant cette transaction, et
+    dans les deux comptes.
+  - Types de comptes gains/depenses (Categories).   
+    Correctement utilises avec la fonction du double livret,
+    ils peuvent etre utilises pour creer une feuille des
+    soldes et un rapport des Profits et des Pertes 
+    Par example, l'epargne des interets du compte,
+    les dividendes d'actions , ou la feuille de paie
+    peuvent etre marqué l'un et l'autre comme depot dans 
+    un compte bancaire , et comme gains/revenus dans un 
+    compte de type Revenus, utilisant la fonction du 
+    double livret (transfert). De la meme maniere, les paiements
+    par la carte de credit peuvent etre notes dans un compte
+    de carte de credit , en plus du compte correspondant aux depenses.
+  - Registre general/Grand livre : Des comptes multiples peuvent
+    etre affiches dans une fenetre registre au meme moment.
+    Cela peut soulager de l'ennui du depistage 
+    d'erreurs de saisie ou d'enregistrement .
+    Il permet aussi une vision pratique d'un portefeuile de 
+    beaucoup d'actions , en y montrant toutes les transactions
+    dans ce portefeuille.
+
+Home Page:
+----------
+http://www.cs.hmc.edu/~rclark/xacc
+
+Important Note:
+---------------
+Un nombre de plantages ont ete rapporte qui se produisent avec la 
+version 0.82 de lesstif.  Ces plantages ne se produisent pas avec 
+lesstif v 0.81 et avec RedHat Motif.  Si il y a plantage, essayez
+d'utiliser la version Motif lié statiquement, comme decris ci-dessous. 
+
+
+Utilisation:
+------------
+La distribution d'executables seuls inclue deux fichiers executables :
+'xacc.bin' et 'xacc-static.bin'. Le premier requiert une librairie Motif
+partagee; le second en a une integre statiquement .  Si vous avez Motif,
+alors executer juste xacc.  Si vous n'avez pas Motif, alors utiliser  
+'xacc-static.bin' a la place de 'xacc.bin'.
+
+L'acces a la documentation d'aide en ligne requiert que la
+variable d'environement XACC_HELP soit mise dans le repertoire
+'Docs'.  Le script shell 'xacc' met cette variable dans le
+repertoire configure avant d'executer le programme principal,
+donc vous n'avez pas a la mettre a la main.
+
+Si vous voulez imposez le chemin au repertoire des Docs :
+
+Pour csh/tcsh
+
+% setenv XACC_HELP /usr/local/share/xacc/Docs
+
+ou , pour bash/bsh/ksh/sh
+
+% set XACC_HELP=/usr/local/share/xacc/Docs
+% export XACC_HELP
+
+Vous pouvez alors demarrer xacc en ligne de commande , avec
+"xacc" ou "xacc <nom_du_fichier>", ou <nom_du_fichier> est un
+fichier de compte xacc .  Des echantillons de comptes peuvent
+etre trove dans le sous-repertoire "data" . Les fichiers *.dat
+sont des comptes xacc qui peuvent etre ouvert avec l'entre du
+menu "Open File" . Les fichiers *.qif sont des fichiers  
+Quicken Import Format qui peuvent etre ouvert avec l'entre du
+menu "Import QIF".
+
+
+Compilation et Installation:
+----------------------------
+Ces etapes ne s'appliquent pas aux distributions d'executables;
+seulement aux distributions de source.
+
+Normalement, pour compiler et installer xacc, tout ce que vous avez 
+a faire est :
+
+  # ./configure
+  # make depend
+  # make
+  # make install
+
+Vous pouvez aussi compiler xacc dans un repertoire separe ,
+ce qui est plus profitable si vous compilez pour plusieurs 
+plateformes depuis une meme copie du repertoire source :
+
+  # mkdir BUILD
+  # mkdir BUILD/debug
+  # cd BUILD/debug
+  # ../../configure --enable-debug
+  # make depend
+  # make
+  # make install
+
+desole, pas encore de "make install".
+
+
+
+Positions:
+----------
+Depuis la version 1.0.16:
+
+xacc est connus pour fonctionner avec ces differentes configurations:
+Linux 2.0.x           -- Intel  avec RedHat Motif
+Slackware 3.4         -- Intel  avec Mootif (OSF Motif 2.0.1)
+Linux 2.0.x           -- Intel  avec Lesstif v0.81
+SGI IRIX              -- 
+IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
+Unixware 7            -- Intel
+SCO OpenServer 5.0.4  -- Intel
+
+Allez a http://linas.org/linux/xacc pour les executables 
+pour ces plateformes.
+
+xacc semble avoir des problemes avec:
+Solaris -- Sparc  -- il ne compile pas avec les va-args exige dans XmHTML
+Linux 2.0.x -- Intel avec Lesstif v0.82
+
+Sites de telechargement:
+------------------------
+Tous ces executables  et les dernieres versions du code source peuvent etre trouve
+a http://linas.org/linux/xacc.  Pourtant , il est recommende d'utiliser a la place 
+le site principal pour chaque executable en particulier, pour deux raisons:
+1) la bande passante
+2) l'information et le support specifique a chaque OS
+
+IBM AIX 4.1.5 
+      -- images installable SMIT
+      http://www.bull.de/pub/
+      voyez aussi http://www-frec.bull.com/
+
+SCO OpenServer 5.0.4 
+      http://www.sco.com/skunkware/osr5/x11/apps/xacc/VOLS.tar
+
+Unixware 7
+      -- utiliser pkgadd pour installer
+      http://www.sco.com/skunkware/uw7/x11/apps/xacc/xacc.pkg.gz
+
+SGI Irix
+      -- dans le format d'installation SGI 
+      -- attention , c'est une version non stable 
+      http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
+
+Linux Debian
+      -- utiliser les utilitaires debian pour installer 
+      http://linas.org/linux/xacc/xacc_1.0.15-1_i386.deb
+
+That's all folks!
+
+Developpeurs principaux:
+-----------------------
+Robin Clark <rclark@hmc.edu> pour le xacc original 
+Linas Vepstas <linas@lins.org> pour une ample amelioration et extension
+
+Stabilisation et corrections:
+-----------------------------
+George Chen <georgec@sco.com> pour les fichiers QIF de MS-Money QIF et les correctifs
+Koen D'Hondt <ripley@xs4all.nl> pour les coorrectifs Solaris dans XmHTML
+Ciaran Deignan <Ciaran.Deignan@bull.net> pour la version d'executable AIX 
+Dave Freese <DFreese@osc.uscg.mil> pour le correctif de l'annee pleine
+Otto Hammersmith <otto@bug.redhat.com> pour la version RPM pour RedHat 
+Tom Kludy <tkludy@csd.sgi.com> pour le port sur SGI Irix 
+G. Allen Morris III  <gam3@ann.softgams.com> pour la correction du plantage de QIF 
+Peter Norton <spacey@inch.com> pour une audacieuse tentative du port du GTK 
+Gavin Porter <maufk@csv.warwick.ac.uk> pour les dates au format europeen 
+Ron Record <rr@sco.com> pour les executables pour SCO Unixware et OpenServer 
+Christopher Seawood <cls@seawood.org> pour la correction des plantages de XbaeMatrix
+Richard Skelton <rich@brake.demon.co.uk> pour le nettoyage pour Solaris
+Henning Spruth <spruth@bigfoot.com> pour la traduction en Allemand 
+Yannick Le Ny <y-le-ny@ifrance.com> pour la traduction du readme en francais
+... et je suis sur que j'ai oublie quelques-un ...
+
+
