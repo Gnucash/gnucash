@@ -548,6 +548,7 @@ locateAccount (int acc_id)
     * Put it in the drunk tank. */
    acc = xaccMallocAccount ();
    acc->id = acc_id;
+   acc->open = ACC_DEFER_REBALANCE;
    insertAccount (holder, acc);
 
    /* normalize the account numbers -- positive-definite.
