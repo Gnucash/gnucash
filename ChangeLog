@@ -1,5 +1,15 @@
 2001-07-03  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/commodity-utilities.scm: fix bug -- use srfi-1 to
+	make sure we get the right 'last'
+
+	* src/scm/Makefile.am: same as below
+
+	* src/scm/report/Makefile.am: fix bugs -- put modulized scm
+	files back into dist and strings targets
+
+	* src/scm/report/taxtxf.scm: fix bug, eliminate use of append
+
 	* src/MultiLedger.c: same as below
 
 	* src/register/table-allgui.c: same as below

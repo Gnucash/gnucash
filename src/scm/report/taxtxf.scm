@@ -396,16 +396,16 @@
 ;; Don't check children if parent is valid.
 ;; Returns the Parent if a child or grandchild is valid.
 (define (validate accounts)
-  (apply append (map (lambda (a)
-                       (if (gnc:account-get-tax-related a)
-                           (list a)
-                           ;; check children
-                           (if (null? (validate
-                                       (gnc:group-get-subaccounts
-                                        (gnc:account-get-children a))))
-                               '()
-                               (list a))))
-                     accounts)))
+  (filter (lambda (a)
+            (if (gnc:account-get-tax-related a)
+                #t
+                ;; check children
+                (if (null? (validate
+                            (gnc:group-get-subaccounts
+                             (gnc:account-get-children a))))
+                    #f
+                    #t)))
+          accounts))
 
 ;; returns 'html if html is chosen, 'txf if txf is chosen,
 ;; and #f otherwise
@@ -434,7 +434,7 @@
   ;; the number of account generations: children, grandchildren etc.
   (define (num-generations account gen)
     (let ((children (gnc:account-get-children account)))
-      (if (not children)
+      (if (eq? (gnc:group-get-num-accounts children) 0)
           (if (and (gnc:account-get-tax-related account)
                    (txf-special-split? (gnc:account-get-txf-code account)))
               (+ gen 1)		; Est Fed Tax has a extra generation

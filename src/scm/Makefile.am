@@ -61,16 +61,18 @@ gnc_regular_scm_files = \
 
 gncscm_DATA = ${gnc_autogen_scm_files} ${gnc_regular_scm_files}
 
+SCM_FILES = ${gncscm_DATA} ${gncscmmod_DATA}
+
 EXTRA_DIST = \
   .cvsignore \
   bootstrap.scm.in \
   design.txt \
   startup-design.txt \
-  ${gnc_regular_scm_files}
+  ${SCM_FILES}
 
-guile-strings.c: ${gncscm_DATA}
+guile-strings.c: ${SCM_FILES}
 	rm -f guile-strings.c
-	guile -s ./xgettext.scm ${gncscm_DATA}
+	guile -s ./xgettext.scm ${SCM_FILES}
 CLEANFILES += guile-strings.c
 
 all-local: guile-strings.c
