@@ -15,9 +15,6 @@ Description: A personal finance tracking program.
  double entry, a hierarchy of accounts, expense accounts (categories),
  and can import Quicken QIF files.
  .
- Gnucash is derived from xacc.  It adds perl and guile extensibility,
- and can produce HTML output.
- .
- This is BETA software.  It works to a degree but there are still many
- bugs and unimplemented features.  If you want a stable version, try the
- xacc package instead.
+ Gnucash is derived from xacc.  It adds guile extensibility, and can
+ produce HTML output.  It uses guppi to produce graphs.
+
