@@ -47,6 +47,7 @@ gnc_date_picker_set_date (GNCDatePicker *date_picker,
   g_return_if_fail (IS_GNC_DATE_PICKER (date_picker));
   g_return_if_fail (date_picker->calendar != NULL);
 
+  gtk_calendar_select_day (date_picker->calendar, 1);
   gtk_calendar_select_month (date_picker->calendar, mon, year);
   gtk_calendar_select_day (date_picker->calendar, day);
 }

@@ -434,7 +434,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ftd->date_end_toggle));
 
   start_date = gnc_date_edit_get_date(GNC_DATE_EDIT(ftd->date_start_entry));
-  end_date   = gnc_date_edit_get_date(GNC_DATE_EDIT(ftd->date_end_entry));
+  end_date   = gnc_date_edit_get_date_end(GNC_DATE_EDIT(ftd->date_end_entry));
 
   if(use_start_date || use_end_date) {
     xaccQueryAddDateMatchTT(q, 

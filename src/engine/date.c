@@ -48,7 +48,8 @@ static short module = MOD_ENGINE;
 \********************************************************************/
 
 gboolean
-timespec_equal(const Timespec *ta, const Timespec *tb) {
+timespec_equal(const Timespec *ta, const Timespec *tb)
+{
   if(ta->tv_sec != tb->tv_sec) return FALSE;
   if(ta->tv_nsec != tb->tv_nsec) return FALSE;
   return TRUE;
@@ -120,12 +121,17 @@ printDate (char * buff, int day, int month, int year)
     case DATE_FORMAT_LOCALE:
       {
         struct tm tm_str;
+
         tm_str.tm_mday = day;
         tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
         tm_str.tm_year = year - 1900; /* this is what the standard 
                                        * says, it's not a Y2K thing */
+        tm_str.tm_hour = 0;
+        tm_str.tm_min = 0;
+        tm_str.tm_sec = 0;
+        tm_str.tm_isdst = -1;
 
-        strftime(buff, MAX_DATE_LENGTH, "%x", &tm_str);
+        strftime (buff, MAX_DATE_LENGTH, "%x", &tm_str);
       }
       break;
 
@@ -142,9 +148,9 @@ printDateSecs (char * buff, time_t t)
   struct tm *theTime;
 
   if (!buff) return;
-  
-  theTime = localtime(&t);
-  
+
+  theTime = localtime (&t);
+
   printDate (buff, theTime->tm_mday, 
                    theTime->tm_mon + 1,
                    theTime->tm_year + 1900);
@@ -159,14 +165,14 @@ xaccPrintDateSecs (time_t t)
 }
 
 const char *
-gnc_print_date(Timespec ts)
+gnc_print_date (Timespec ts)
 {
   static char buff[MAX_DATE_LENGTH];
   time_t t;
 
   t = ts.tv_sec + (ts.tv_nsec / 1000000000.0);
 
-  printDateSecs(buff, t);
+  printDateSecs (buff, t);
 
   return buff;
 }
@@ -181,12 +187,12 @@ gnc_print_date(Timespec ts)
  *         month - will store month of the year as 1 ... 12
  *         year - will store the year (4-digit)
  *
- * Return: 0 if conversion was successful, 1 otherwise
+ * Return: nothing
  *
  * Globals: global dateFormat value
  */
-void 
-scanDate(const char *buff, int *day, int *month, int *year)
+void
+scanDate (const char *buff, int *day, int *month, int *year)
 {
    char *dupe, *tmp, *first_field, *second_field, *third_field;
    int iday, imonth, iyear;
@@ -228,7 +234,7 @@ scanDate(const char *buff, int *day, int *month, int *year)
        {
          struct tm thetime;
 
-         strptime(buff, "%x", &thetime);
+         strptime (buff, "%x", &thetime);
 
          iday = thetime.tm_mday;
          imonth = thetime.tm_mon + 1;
@@ -276,11 +282,11 @@ scanDate(const char *buff, int *day, int *month, int *year)
  *
  * Globals: global dateFormat value
  */
-char dateSeparator()
+char dateSeparator ()
 {
   static char locale_separator = '\0';
 
-  switch(dateFormat)
+  switch (dateFormat)
   {
     case DATE_FORMAT_CE:
       return '.';
@@ -319,34 +325,37 @@ char dateSeparator()
 time_t 
 xaccDMYToSec (int day, int month, int year)
 {
-   struct tm stm;
-   time_t secs;
+  struct tm stm;
+  time_t secs;
 
-   stm.tm_year = year - 1900;
-   stm.tm_mon = month - 1;
-   stm.tm_mday = day;
-   stm.tm_hour = 11;
-   stm.tm_min = 0;
-   stm.tm_sec = 0;
+  stm.tm_year = year - 1900;
+  stm.tm_mon = month - 1;
+  stm.tm_mday = day;
+  stm.tm_hour = 0;
+  stm.tm_min = 0;
+  stm.tm_sec = 0;
+  stm.tm_isdst = -1;
 
-   /* compute number of seconds */
-   secs = mktime (&stm);
+  /* compute number of seconds */
+  secs = mktime (&stm);
 
-   return (secs);
+  return secs;
 }
 
 time_t
 xaccScanDateS (const char *str)
 {
-   int month,day,year;
-   scanDate (str, &day, &month, &year);
-   return (xaccDMYToSec (day,month,year));
+  int month, day, year;
+
+  scanDate (str, &day, &month, &year);
+
+  return xaccDMYToSec (day,month,year);
 }
 
 #define THIRTY_TWO_YEARS 0x3c30fc00LL
 
-Timespec
-gnc_dmy2timespec(int day, int month, int year)
+static Timespec
+gnc_dmy2timespec_internal (int day, int month, int year, gboolean start_of_day)
 {
   Timespec result;
   struct tm date;
@@ -368,9 +377,21 @@ gnc_dmy2timespec(int day, int month, int year)
   date.tm_year = year;
   date.tm_mon = month - 1;
   date.tm_mday = day;
-  date.tm_hour = 11;
-  date.tm_min = 0;
-  date.tm_sec = 0;
+
+  if (start_of_day)
+  {
+    date.tm_hour = 0;
+    date.tm_min = 0;
+    date.tm_sec = 0;
+  }
+  else
+  {
+    date.tm_hour = 23;
+    date.tm_min = 59;
+    date.tm_sec = 59;
+  }
+
+  date.tm_isdst = -1;
 
   /* compute number of seconds */
   secs = mktime (&date);
@@ -380,63 +401,19 @@ gnc_dmy2timespec(int day, int month, int year)
   result.tv_sec = secs;
   result.tv_nsec = 0;
 
-  return(result);
+  return result;
 }
 
-/* ================================================ */
-/* february default is 28, and patched below */
-static char days_in_month[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
-
-static void
-xaccValidateDateInternal (struct tm *date, int recur)
+Timespec
+gnc_dmy2timespec (int day, int month, int year)
 {
-   int day, month, year;
-
-   /* avoid infinite recursion */
-   if (1 < recur) return;
-
-   day = date->tm_mday;
-   month = date->tm_mon + 1;
-   year = date->tm_year + 1900;
-
-   /* adjust days in february for leap year */
-   if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) {
-      days_in_month[1] = 29;
-   } else {
-      days_in_month[1] = 28;
-   }
-
-   /* the "% 12" business is because month might not be valid!*/
-
-   while (day > days_in_month[(month+11) % 12]) {
-      day -= days_in_month[(month+11) % 12];
-      month++;
-   }
-   while (day < 1) {
-      month--;
-      day += days_in_month[(month+11) % 12];
-   }
-   while (month > 12) {
-      month -= 12;
-      year++;
-   }
-   while (month < 1) {
-      month += 12;
-      year--;
-   }
-
-   date->tm_mday = day;
-   date->tm_mon = month - 1;
-   date->tm_year = year - 1900;
-
-   /* do it again, in case leap-year scrolling messed things up */
-   xaccValidateDateInternal (date, ++recur);
+  return gnc_dmy2timespec_internal (day, month, year, TRUE);
 }
 
-void
-xaccValidateDate (struct tm *date)
+Timespec
+gnc_dmy2timespec_end (int day, int month, int year)
 {
-  xaccValidateDateInternal (date, 0);
+  return gnc_dmy2timespec_internal (day, month, year, FALSE);
 }
 
 /********************** END OF FILE *********************************\

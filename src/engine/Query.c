@@ -1099,7 +1099,7 @@ xaccQueryAddDateMatch(Query * q,
   qt->data.date.use_start = use_start;
   qt->data.date.start     = gnc_dmy2timespec(sday, smonth, syear);
   qt->data.date.use_end   = use_end;
-  qt->data.date.end       = gnc_dmy2timespec(eday, emonth, eyear);
+  qt->data.date.end       = gnc_dmy2timespec_end(eday, emonth, eyear);
 
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);

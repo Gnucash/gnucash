@@ -98,6 +98,24 @@ xaccParseDate (struct tm *parsed, const char * datestr)
   parsed->tm_mday = day;
   parsed->tm_mon  = month - 1;
   parsed->tm_year = year - 1900;
+  parsed->tm_sec = 0;
+  parsed->tm_min = 0;
+  parsed->tm_hour = 0;
+  parsed->tm_isdst = -1;
+
+  if (mktime (parsed) == -1)
+  {
+    time_t secs = time (NULL);
+
+    *parsed = *localtime (&secs);
+
+    parsed->tm_sec = 0;
+    parsed->tm_min = 0;
+    parsed->tm_hour = 0;
+    parsed->tm_isdst = -1;
+  }
+
+  mktime (parsed);
 }
 
 /* =============================================== */
@@ -126,8 +144,6 @@ DateCellHelpValue (BasicCell *bcell)
     char string[1024];
     struct tm time;
 
-    memset (&time, 0, sizeof(time));
-
     if (bcell->value != NULL)
       xaccParseDate (&time, bcell->value);
     else
@@ -135,14 +151,16 @@ DateCellHelpValue (BasicCell *bcell)
       time.tm_mday = box->date.tm_mday;
       time.tm_mon  = box->date.tm_mon;
       time.tm_year = box->date.tm_year;
+      time.tm_sec = 0;
+      time.tm_min = 0;
+      time.tm_hour = 0;
+      time.tm_isdst = -1;
+      mktime (&time);
     }
-
-    xaccValidateDate (&time);
-    mktime (&time);
 
     strftime (string, sizeof (string), "%A %d %B %Y", &time);
 
-    return g_strdup(string);
+    return g_strdup (string);
   }
 
   if (bcell->blank_help != NULL)
@@ -379,8 +397,11 @@ xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
   dada.tm_mday = day;
   dada.tm_mon  = mon - 1;
   dada.tm_year = year - 1900;
+  dada.tm_sec = 0;
+  dada.tm_min = 0;
+  dada.tm_hour = 0;
+  dada.tm_isdst = -1;
 
-  xaccValidateDate (&dada);
   mktime (&dada);
 
   box->date.tm_mday = dada.tm_mday;
@@ -457,7 +478,10 @@ xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
     stm = localtime (&rem);
     box->date = *stm;
     box->date.tm_year += 32 * yrs;
-    xaccValidateDate (&(box->date));
+    box->date.tm_sec = 0;
+    box->date.tm_min = 0;
+    box->date.tm_hour = 0;
+    box->date.tm_isdst = -1;
     mktime (&(box->date));
   }
   else
@@ -467,6 +491,11 @@ xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
     sicko = secs;
     stm = localtime (&sicko);
     box->date = *stm;
+    box->date.tm_sec = 0;
+    box->date.tm_min = 0;
+    box->date.tm_hour = 0;
+    box->date.tm_isdst = -1;
+    mktime (&(box->date));
   }
 
   printDate (buff,
@@ -673,7 +702,8 @@ DateMV (BasicCell *_cell,
       return;
   }
 
-  xaccValidateDate (date);
+  date->tm_isdst = -1;
+
   mktime (date);
 
   printDate (buff, date->tm_mday, date->tm_mon + 1, date->tm_year + 1900);

@@ -1,11 +1,28 @@
+2000-12-08  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/gnc-dateedit.c: use more care when using parsed
+	date values.
+
+	* src/register/gnome/datecell-gnome.c: use more care when using
+	parsed date values.
+
+	* src/engine/Query.c: make sure to use end-of-day times for the
+	end date in a search.
+
+	* src/engine/date.c: remove xaccValidateDate -- use mktime instead.
+	Use more care when setting struct tm values, especially with is_dst.
+
 2000-12-05  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* src/gnome/account-tree.[ch] (gnc_account_tree_unselect_account): Add unselect account functionality as required by mainwindow account tree
+	* src/gnome/account-tree.[ch] (gnc_account_tree_unselect_account):
+	Add unselect account functionality as required by mainwindow
+	account tree
 
 2000-12-04  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* src/gnome/mainwindow-account-tree.[ch]: new file.  Widgetizes the current
-	contents of the main window in preparation for pane-ization.
+	* src/gnome/mainwindow-account-tree.[ch]: new file.  Widgetizes
+	the current contents of the main window in preparation for
+	pane-ization.
 
 	* src/gnome/window-main.c: modified to take account of the above.
 

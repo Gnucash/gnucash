@@ -111,7 +111,7 @@ const char * gnc_print_date(Timespec ts);
  *         month - will store month of the year as 1 ... 12
  *         year - will store the year (4-digit)
  *
- * Return: 0 if conversion was successful, 1 otherwise
+ * Return: nothing
  *
  * Globals: global dateFormat value
  */
@@ -132,9 +132,10 @@ char dateSeparator(void);
 time_t xaccDMYToSec (int day, int month, int year);
 time_t xaccScanDateS (const char *buff);
 
-void xaccValidateDate (struct tm *date);
-
 /* Convert a day, month, and year to a Timespec */
-Timespec gnc_dmy2timespec(int day, int month, int year);
+Timespec gnc_dmy2timespec (int day, int month, int year);
+
+/* Same as gnc_dmy2timespec, but last second of the day */
+Timespec gnc_dmy2timespec_end (int day, int month, int year);
 
 #endif /* __XACC_DATE_H__ */

@@ -253,8 +253,20 @@ select_clicked (GtkWidget *widget, GNCDateEdit *gde)
         mtm.tm_hour = 0;
         mtm.tm_isdst = -1;
 
-        mktime(&mtm); /* normalize */
+        if (mktime (&mtm) == -1)
+        {
+                time_t secs = time (NULL);
 
+                mtm = *localtime (&secs);
+                mtm.tm_sec = 0;
+                mtm.tm_min = 0;
+                mtm.tm_hour = 0;
+                mtm.tm_isdst = -1;
+
+                gnc_date_edit_set_time (gde, mktime (&mtm));
+        }
+
+        gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), 1);
 	gtk_calendar_select_month (GTK_CALENDAR (gde->calendar), mtm.tm_mon,
                                    1900 + mtm.tm_year);
         gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), mtm.tm_mday);
@@ -553,26 +565,26 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
                 case GDK_equal:
                 case GDK_KP_Equal:
                         /* increment day */
-                        tm.tm_mday ++;
+                        tm.tm_mday++;
                         break;
 
                 case GDK_underscore:
                 case GDK_minus:
                 case GDK_KP_Subtract:
                         /* decrement day */
-                        tm.tm_mday --;
+                        tm.tm_mday--;
                         break;
 
                 case GDK_bracketright:
                 case GDK_braceright:
                         /* increment month */
-                        tm.tm_mon ++;
+                        tm.tm_mon++;
                         break;
 
                 case GDK_bracketleft:
                 case GDK_braceleft:
                         /* decrement month */
-                        tm.tm_mon --;
+                        tm.tm_mon--;
                         break;
 
                 case GDK_M:
@@ -584,7 +596,7 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
                 case GDK_H:
                 case GDK_h:
                         /* end of month */
-                        tm.tm_mon ++;
+                        tm.tm_mon++;
                         tm.tm_mday = 0;
                         break;
 
@@ -615,11 +627,20 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
                 }
         }
 
-        xaccValidateDate(&tm);
-        mktime (&tm);
+        if (mktime (&tm) == -1)
+        {
+                time_t secs = time (NULL);
 
-        gnc_date_edit_set_time(gde, mktime(&tm));
+                tm = *localtime (&secs);
+                tm.tm_sec = 0;
+                tm.tm_min = 0;
+                tm.tm_hour = 0;
+                tm.tm_isdst = -1;
+        }
 
+        gnc_date_edit_set_time (gde, mktime (&tm));
+
+        gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), 1);
 	gtk_calendar_select_month (GTK_CALENDAR (gde->calendar), tm.tm_mon,
                                    1900 + tm.tm_year);
         gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), tm.tm_mday);
@@ -815,6 +836,12 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 		}
 		g_free (str);
 	}
+        else
+        {
+                tm.tm_hour = 0;
+                tm.tm_min  = 0;
+                tm.tm_sec  = 0;
+        }
 
 	tm.tm_isdst = -1;
 
@@ -833,6 +860,49 @@ gnc_date_edit_get_date (GNCDateEdit *gde)
  	struct tm tm;
 
         tm = gnc_date_edit_get_date_internal (gde);
+
+        if (mktime (&tm) == -1)
+        {
+                time_t secs = time (NULL);
+
+                tm = *localtime (&secs);
+                tm.tm_sec = 0;
+                tm.tm_min = 0;
+                tm.tm_hour = 0;
+                tm.tm_isdst = -1;
+        }
+
+	return mktime (&tm);
+}
+
+/**
+ * gnc_date_edit_get_date_end:
+ * @gde: The GNCDateEdit widget
+ *
+ * Returns the date entered in the GNCDateEdit widget,
+ * but with the time adjusted to the end of the day.
+ */
+time_t
+gnc_date_edit_get_date_end (GNCDateEdit *gde)
+{
+ 	struct tm tm;
+
+        tm = gnc_date_edit_get_date_internal (gde);
+
+        tm.tm_hour = 23;
+        tm.tm_min  = 59;
+        tm.tm_sec  = 59;
+
+        if (mktime (&tm) == -1)
+        {
+                time_t secs = time (NULL);
+
+                tm = *localtime (&secs);
+                tm.tm_sec = 23;
+                tm.tm_min = 59;
+                tm.tm_hour = 59;
+                tm.tm_isdst = -1;
+        }
 
 	return mktime (&tm);
 }
