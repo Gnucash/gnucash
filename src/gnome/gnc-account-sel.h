@@ -43,6 +43,7 @@ typedef struct
 {
         GtkHBox hbox;
         gboolean initDone;
+	gboolean isModal;
         GtkCombo *combo;
         GList *acctTypeFilters;
         gint eventHandlerId;
@@ -92,6 +93,15 @@ void gnc_account_sel_set_acct_filters( GNCAccountSel *gas, GList *filters );
  **/
 void gnc_account_sel_set_new_account_ability( GNCAccountSel *gas,
                                               gboolean state );
+
+/**
+ * Conditional call of the new-account window in modal mode.
+ * @param state TRUE if the new-account window should be modal, FALSE otherwise.
+ **/
+void gnc_account_sel_set_new_account_modal( GNCAccountSel *gas,
+                                              gboolean state );
+
+
 
 END_GNOME_DECLS
 

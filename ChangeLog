@@ -15,6 +15,11 @@
 	* fix bug #95954 -- cache backend query compiles.  Add a hash table
 	  to map book -> backend compile and fill it in when the terms are
 	  recompiled.
+
+	* add a 'modality' flag to the gnc-account-sel (which new-account API)
+	  so that the new-account-window can be called using the modal dialog
+	  interfaces.
+	* use the GNCAccoutSel in the date-close dialog (fixes bug #94973)
 	
 2002-10-16  Joshua Sled  <jsled@asynchronous.org>
 

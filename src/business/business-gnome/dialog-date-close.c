@@ -15,6 +15,7 @@
 #include "gnc-ui-util.h"
 #include "AccWindow.h"
 #include "gnc-date-edit.h"
+#include "gnc-account-sel.h"
 
 #include "business-utils.h"
 #include "dialog-date-close.h"
@@ -60,44 +61,15 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
 
   if (ddc->acct_combo) {
     Account *acc;
-    gboolean new_acc = TRUE;
-    char *name =
-      g_strdup (gtk_entry_get_text
-		(GTK_ENTRY ((GTK_COMBO (ddc->acct_combo))->entry)));
 
-    if (!name || safe_strcmp (name, "") == 0) {
-      g_free (name);
-      name = _("You must enter an account name.");
-      gnc_error_dialog_parented (GTK_WINDOW (ddc->dialog), name);
+    acc = gnc_account_sel_get_account( GNC_ACCOUNT_SEL(ddc->acct_combo) );
+
+    if (!acc) {
+      gnc_error_dialog_parented (GTK_WINDOW (ddc->dialog),
+				 _("No Account selected.  Please try again."));
       return;
     }
 
-    acc = xaccGetAccountFromFullName (gnc_book_get_group (ddc->book),
-				      name, gnc_get_account_separator ());
-    while (!acc) {
-      acc = ask_make_acct (ddc, name, new_acc);
-      if (!acc) {
-	g_free (name);
-	return;
-      }
-
-      if (g_list_index (ddc->acct_types, (gpointer)xaccAccountGetType (acc))
-	  == -1) {
-	const char *format = _("Invalid Account Type, %s.\n"
-			       "Please try again...");
-
-	gnc_error_dialog_parented (GTK_WINDOW (ddc->dialog),
-				   format,
-				   xaccAccountGetTypeStr (xaccAccountGetType (acc)));
-	g_free (name);
-	name = xaccAccountGetFullName (acc, gnc_get_account_separator ());
-	acc = NULL;
-      }
-
-      new_acc = FALSE;
-    }
-
-    g_free (name);
     ddc->acct = acc;
   }
 
@@ -137,7 +109,15 @@ gnc_dialog_date_close_cb (GnomeDialog *dialog, gpointer data)
 static void
 fill_in_acct_info (DialogDateClose *ddc)
 {
-  gnc_fill_account_select_combo (ddc->acct_combo, ddc->book, ddc->acct_types);
+  GNCAccountSel *gas = GNC_ACCOUNT_SEL (ddc->acct_combo);
+
+  /* How do I set the book? */
+  gnc_account_sel_set_acct_filters( gas, ddc->acct_types );
+  gnc_account_sel_set_new_account_ability( gas, TRUE );
+  gnc_account_sel_set_new_account_modal( gas, TRUE );
+
+  /* XXX: Some way to remember the last selection? */
+  gnc_account_sel_set_account( gas, NULL );
 }
 
 static void
@@ -264,6 +244,7 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
   GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *date_box;
+  GtkWidget *acct_box;
   GladeXML *xml;
   gboolean retval;
 
@@ -281,9 +262,12 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
 
   xml = gnc_glade_xml_new ("date-close.glade", "Date Account Dialog");
   ddc->dialog = glade_xml_get_widget (xml, "Date Account Dialog");
-  ddc->acct_combo = glade_xml_get_widget (xml, "acct_combo");
-  hbox = glade_xml_get_widget (xml, "the_hbox");
   ddc->memo_entry = glade_xml_get_widget (xml, "memo_entry");
+  hbox = glade_xml_get_widget (xml, "the_hbox");
+
+  acct_box = glade_xml_get_widget (xml, "acct_hbox");
+  ddc->acct_combo = gnc_account_sel_new();
+  gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
 
   date_box = glade_xml_get_widget (xml, "date_box");
   ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
@@ -356,6 +340,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
   GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *date_box;
+  GtkWidget *acct_box;
   GladeXML *xml;
   gboolean retval;
 
@@ -370,8 +355,11 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
 
   xml = gnc_glade_xml_new ("date-close.glade", "Date Account Dialog");
   ddc->dialog = glade_xml_get_widget (xml, "Date Account Dialog");
-  ddc->acct_combo = glade_xml_get_widget (xml, "acct_combo");
   hbox = glade_xml_get_widget (xml, "the_hbox");
+
+  acct_box = glade_xml_get_widget (xml, "acct_hbox");
+  ddc->acct_combo = gnc_account_sel_new();
+  gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
 
   date_box = glade_xml_get_widget (xml, "date_box");
   ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);

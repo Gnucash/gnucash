@@ -468,10 +468,22 @@ gnc_account_sel_set_new_account_ability( GNCAccountSel *gas,
                             FALSE, FALSE, 2 );
 }
 
+void
+gnc_account_sel_set_new_account_modal( GNCAccountSel *gas,
+				       gboolean state )
+{
+	g_assert ( gas );
+	gas->isModal = state;
+}
+
 static
 void
 gas_new_account_click( GtkButton *b, gpointer ud )
 {
         GNCAccountSel *gas = (GNCAccountSel*)ud;
-        gnc_ui_new_account_with_types( NULL, gas->acctTypeFilters );
+	if (gas->isModal)
+	  gnc_ui_new_accounts_from_name_window_with_types ( NULL,
+							    gas->acctTypeFilters );
+	else
+	  gnc_ui_new_account_with_types( NULL, gas->acctTypeFilters );
 }
