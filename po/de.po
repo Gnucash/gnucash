@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.3.1\n"
-"POT-Creation-Date: 2000-06-26 23:00-0700\n"
+"POT-Creation-Date: 2000-06-27 21:56-0700\n"
 "PO-Revision-Date: 2000-06-01 20:20+0100\n"
 "Last-Translator: Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -349,7 +349,7 @@ msgstr "Warnung!  Dies ist eine ausgeglichene Buchung. Möchten Sie fortfahren?"
 #: messages-i18n.c:54
 msgid ""
 "You have disabled \"Tip of the Day\"\n"
-"You can re-enable them from the General\n"
+"You can re-enable tips from the General\n"
 "section of the Preferences menu"
 msgstr ""
 

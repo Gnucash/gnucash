@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.3.8\n"
-"POT-Creation-Date: 2000-06-26 23:00-0700\n"
+"POT-Creation-Date: 2000-06-27 21:56-0700\n"
 "PO-Revision-Date: 2000-06-01 09:03+02:00\n"
 "Last-Translator: Dennis Björklund <dennisb@cs.chalmers.se>\n"
 "Language-Team: Sv <sv@li.org>\n"
@@ -437,7 +437,7 @@ msgstr "Varning! Detta är en avstämd transaktion. Vill du fortsätta?"
 #: messages-i18n.c:54
 msgid ""
 "You have disabled \"Tip of the Day\"\n"
-"You can re-enable them from the General\n"
+"You can re-enable tips from the General\n"
 "section of the Preferences menu"
 msgstr ""
 
