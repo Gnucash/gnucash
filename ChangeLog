@@ -10,6 +10,8 @@
 	  internationalization issues -- strings were translated but the
 	  translation was not being used.   Fixes # 105036
 
+	* src/backend/postgres/gncquery.c:  change INITIAL_BUFSZ to 32000
+	
 2003-02-01  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	* src/import-export/gnc-ofx-import.c: No longer assume that transaction with type OFX_OTHER are investement transactions.  Fixes bug reported by Rik harris.

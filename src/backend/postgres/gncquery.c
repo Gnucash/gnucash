@@ -65,7 +65,7 @@ struct _gnc_query {
 
 /* =========================================================== */
 
-#define INITIAL_BUFSZ 16300
+#define INITIAL_BUFSZ 32000
 
 sqlQuery *
 sqlQuery_new(void)
