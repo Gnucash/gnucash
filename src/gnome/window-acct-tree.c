@@ -752,6 +752,7 @@ gnc_acct_tree_window_configure (GNCAcctTreeWin * info)
 {
   GNCMainWinAccountTree *tree;
   AccountViewInfo new_avi;
+  AccountFieldCode field;
   GSList *list, *node;
 
   memset (&new_avi, 0, sizeof(new_avi));
@@ -814,39 +815,9 @@ gnc_acct_tree_window_configure (GNCAcctTreeWin * info)
 
   for (node = list; node != NULL; node = node->next)
   {
-    if (safe_strcmp(node->data, "type") == 0)
-      new_avi.show_field[ACCOUNT_TYPE] = TRUE;
-
-    else if (safe_strcmp(node->data, "code") == 0)
-      new_avi.show_field[ACCOUNT_CODE] = TRUE;
-
-    else if (safe_strcmp(node->data, "description") == 0)
-      new_avi.show_field[ACCOUNT_DESCRIPTION] = TRUE;
-
-    else if (safe_strcmp(node->data, "notes") == 0)
-      new_avi.show_field[ACCOUNT_NOTES] = TRUE;
-
-    else if (safe_strcmp(node->data, "commodity") == 0)
-      new_avi.show_field[ACCOUNT_COMMODITY] = TRUE;
-
-    else if (safe_strcmp(node->data, "tax-info") == 0)
-      new_avi.show_field[ACCOUNT_TAX_INFO] = TRUE;
-
-    else if (safe_strcmp(node->data, "balance") == 0)
-    {
-      new_avi.show_field[ACCOUNT_BALANCE] = TRUE;
-      if(gnc_lookup_boolean_option("International",
-                                   "Enable EURO support", FALSE))
-	new_avi.show_field[ACCOUNT_BALANCE_EURO] = TRUE;
-    }
-
-    else if (safe_strcmp(node->data, "total") == 0)
-    {
-      new_avi.show_field[ACCOUNT_TOTAL] = TRUE;
-      if(gnc_lookup_boolean_option("International",
-                                   "Enable EURO support", FALSE))
-	new_avi.show_field[ACCOUNT_TOTAL_EURO] = TRUE;
-    }
+    field = gnc_ui_account_pref_name_to_code(node->data);
+    if (field < NUM_ACCOUNT_FIELDS)
+      new_avi.show_field[field] = TRUE;
   }
 
   gnc_free_list_option_value (list);

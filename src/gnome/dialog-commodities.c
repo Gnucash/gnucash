@@ -225,7 +225,10 @@ edit_clicked (GtkWidget *widget, gpointer data)
 static void
 remove_clicked (GtkWidget *widget, gpointer data)
 {
+  GNCBook *book;
+  GNCPriceDB *pdb;
   GList *node;
+  GList *prices;
   GList *accounts;
   gboolean do_delete;
   gboolean can_delete;
@@ -258,6 +261,20 @@ remove_clicked (GtkWidget *widget, gpointer data)
                             "not delete it.");
 
     gnc_warning_dialog_parented (cd->dialog, message);
+    g_list_free (accounts);
+    return;
+  }
+
+  book = xaccGroupGetBook (xaccAccountGetRoot (accounts->data));
+  pdb = gnc_book_get_pricedb(book);
+  prices = gnc_pricedb_get_prices(pdb, cd->commodity, NULL);
+  if (prices)
+  {
+    const char *message = _("This commodity has price quotes. Are\n"
+			    "you sure you want to delete the selected\n"
+                            "commodity and its price quotes?");
+
+    do_delete = gnc_verify_dialog_parented (cd->dialog, TRUE, message);
   }
   else
   {
@@ -271,6 +288,9 @@ remove_clicked (GtkWidget *widget, gpointer data)
   {
     gnc_commodity_table *ct = gnc_get_current_commodities ();
 
+    for (node = prices; node; node = node->next)
+      gnc_pricedb_remove_price(pdb, node->data);
+
     gnc_commodity_table_remove (ct, cd->commodity);
     gnc_commodity_destroy (cd->commodity);
     cd->commodity = NULL;
@@ -278,7 +298,9 @@ remove_clicked (GtkWidget *widget, gpointer data)
     gnc_commodities_load_commodities (cd);
   }
 
+  gnc_price_list_destroy(prices);
   g_list_free (accounts);
+  gnc_gui_refresh_all ();
 }
 
 static void

@@ -1,4 +1,5 @@
 SUBDIRS = . test
+PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-app-utils.la libgw-app-utils.la
 

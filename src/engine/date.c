@@ -161,10 +161,7 @@ timespecCanonicalDayTime(Timespec t)
   time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
   result = localtime(&t_secs);
   tm = *result;
-  tm.tm_sec = 0;
-  tm.tm_min = 0;
-  tm.tm_hour = 12;
-  tm.tm_isdst = -1;
+  gnc_tm_set_day_middle(&tm);
   retval.tv_sec = mktime(&tm);
   retval.tv_nsec = 0;
   return retval;
@@ -375,11 +372,8 @@ printDate (char * buff, int day, int month, int year)
         tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
         tm_str.tm_year = year - 1900; /* this is what the standard 
                                        * says, it's not a Y2K thing */
-        tm_str.tm_hour = 0;
-        tm_str.tm_min = 0;
-        tm_str.tm_sec = 0;
-        tm_str.tm_isdst = -1;
 
+	gnc_tm_set_day_start (&tm_str);
         strftime (buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm_str);
       }
       break;
@@ -584,10 +578,16 @@ scanDateInternal (const char *buff, int *day, int *month, int *year,
       * swaps month and day field, if the day is 12 or less.  This is
       * deemed acceptable given the obscurity of this bug.
       */
-     if (which_format == prevDateFormat)
-       return(FALSE);
-     if (scanDateInternal(buff, day, month, year, prevDateFormat))
+     if ((which_format != prevDateFormat)
+	 && (scanDateInternal(buff, day, month, year, prevDateFormat)))
        return(TRUE);
+
+     if (imonth > 12 && iday <= 12) {
+       int tmp = imonth;
+       imonth = iday;
+       iday = tmp;
+     } else
+       return FALSE;
    }
 
    /* if the year entered is smaller than 100, assume we mean the current
@@ -849,10 +849,7 @@ xaccDMYToSec (int day, int month, int year)
   stm.tm_year = year - 1900;
   stm.tm_mon = month - 1;
   stm.tm_mday = day;
-  stm.tm_hour = 0;
-  stm.tm_min = 0;
-  stm.tm_sec = 0;
-  stm.tm_isdst = -1;
+  gnc_tm_set_day_start(&stm);
 
   /* compute number of seconds */
   secs = mktime (&stm);
@@ -897,19 +894,9 @@ gnc_dmy2timespec_internal (int day, int month, int year, gboolean start_of_day)
   date.tm_mday = day;
 
   if (start_of_day)
-  {
-    date.tm_hour = 0;
-    date.tm_min = 0;
-    date.tm_sec = 0;
-  }
+    gnc_tm_set_day_start(&date);
   else
-  {
-    date.tm_hour = 23;
-    date.tm_min = 59;
-    date.tm_sec = 59;
-  }
-
-  date.tm_isdst = -1;
+    gnc_tm_set_day_end(&date);
 
   /* compute number of seconds */
   secs = mktime (&date);
@@ -967,6 +954,102 @@ timespecToTime_t (Timespec ts)
 {
     return ts.tv_sec;
 }
+
+void
+gnc_tm_get_day_start (struct tm *tm, time_t time_val)
+{
+  /* Get the equivalent time structure */
+  tm = localtime_r(&time_val, tm);
+  gnc_tm_set_day_start(tm);
+}
+
+void
+gnc_tm_get_day_end (struct tm *tm, time_t time_val)
+{
+  /* Get the equivalent time structure */
+  tm = localtime_r(&time_val, tm);
+  gnc_tm_set_day_end(tm);
+}
+
+time_t
+gnc_timet_get_day_start (time_t time_val)
+{
+  struct tm tm;
+
+  gnc_tm_get_day_start(&tm, time_val);
+  return mktime(&tm);
+}
+
+time_t
+gnc_timet_get_day_end (time_t time_val)
+{
+  struct tm tm;
+
+  gnc_tm_get_day_end(&tm, time_val);
+  return mktime(&tm);
+}
+
+/* The xaccDateUtilGetStamp() routine will take the given time in
+ * seconds and return a buffer containing a textual for the date. */
+char *
+xaccDateUtilGetStamp (time_t thyme)
+{
+   struct tm *stm;
+
+   stm = localtime (&thyme);
+
+   return g_strdup_printf("%04d%02d%02d%02d%02d%02d",
+      (stm->tm_year + 1900),
+      (stm->tm_mon +1),
+      stm->tm_mday,
+      stm->tm_hour,
+      stm->tm_min,
+      stm->tm_sec
+   );
+}
+
+/* ======================================================== */
+
+void
+gnc_tm_get_today_start (struct tm *tm)
+{
+  gnc_tm_get_day_start(tm, time(NULL));
+}
+
+void
+gnc_tm_get_today_end (struct tm *tm)
+{
+  gnc_tm_get_day_end(tm, time(NULL));
+}
+
+time_t
+gnc_timet_get_today_start (void)
+{
+  struct tm tm;
+
+  gnc_tm_get_day_start(&tm, time(NULL));
+  return mktime(&tm);
+}
+
+time_t
+gnc_timet_get_today_end (void)
+{
+  struct tm tm;
+
+  gnc_tm_get_day_end(&tm, time(NULL));
+  return mktime(&tm);
+}
+
+/* The xaccDateUtilGetStampNow() routine returns the current time in
+ * seconds in textual format. */
+char *
+xaccDateUtilGetStampNow (void)
+{
+   time_t now;
+   time (&now);
+   return xaccDateUtilGetStamp (now);
+}
+
 
 /********************** END OF FILE *********************************\
 \********************************************************************/

@@ -669,7 +669,7 @@ static char * int64_to_string (gpointer object, QueryAccess get)
 {
   gint64 num = ((query_int64_getter)get)(object);
 
-  return g_strdup_printf ("%lld", num);
+  return g_strdup_printf (GNC_SCANF_LLD, num);
 }
 
 /* QUERYCORE_DOUBLE */
@@ -1018,7 +1018,7 @@ QueryPredData_t gncQueryKVPPredicate (query_compare_t how,
 
 static void init_tables (void)
 {
-  int i;
+  unsigned int i;
   struct {
     char const *name;
     QueryPredicate pred;

@@ -114,9 +114,9 @@ update_accounts (GtkWidget *parent, HBCI_API *api, GNCInteractor *inter)
   g_assert(api);
 
   banklist = HBCI_API_bankList (api);
-  //printf("%d banks found.\n", list_HBCI_Bank_size (banklist));
+  /*printf("%d banks found.\n", list_HBCI_Bank_size (banklist)); */
   if (list_HBCI_Bank_size (banklist) == 0) {
-    // Zero banks? nothing to do.
+    /* Zero banks? nothing to do. */
     return;
   }
   else if (list_HBCI_Bank_size (banklist) == 1) {
@@ -141,7 +141,7 @@ update_accounts_forbank (GtkWidget *parent, HBCI_API *api,
   userlist = HBCI_Bank_users (bank);
   if (list_HBCI_User_size (userlist) == 0) {
     printf("update_accounts_forbank: Oops, zero users found.\n");
-    // Zero users? nothing to do.
+    /* Zero users? nothing to do. */
     return;
   }
   else if (list_HBCI_User_size (userlist) == 1) {
@@ -166,7 +166,7 @@ update_accounts_foruser (GtkWidget *parent, HBCI_API *api,
   customerlist = HBCI_User_customers (user);
   if (list_HBCI_Customer_size (customerlist) == 0) {
     printf("update_accounts_foruser: Oops, zero customers found.\n");
-    // Zero customers? nothing to do.
+    /* Zero customers? nothing to do. */
     return;
   }
   else if (list_HBCI_Customer_size (customerlist) == 1) {
@@ -190,7 +190,7 @@ update_accounts_forcustomer (GtkWidget *parent, HBCI_API *api,
   HBCI_OutboxJob *job;
   g_assert(cust);
   
-  // this const-warning is okay and can be ignored.
+  /* this const-warning is okay and can be ignored. */
   get_job = HBCI_OutboxJobGetAccounts_new((HBCI_Customer *)cust); 
   job = HBCI_OutboxJobGetAccounts_OutboxJob(get_job);
   HBCI_API_addJob(api, job);

@@ -29,8 +29,13 @@
 #include <openhbci/account.h>
 #include <openhbci/customer.h>
 #include <openhbci/transaction.h>
+#include <openhbci/outboxaccjobs.h>
 
+#include "Account.h"
 #include "hbci-interaction.h"
+
+/** The dialog data structure. */
+typedef struct _trans_data HBCITransDialog;
 
 typedef enum GNC_HBCI_Transtype {
   SINGLE_TRANSFER = 0,
@@ -38,14 +43,60 @@ typedef enum GNC_HBCI_Transtype {
 } GNC_HBCI_Transtype;
 
 
-HBCI_Transaction *
+/*HBCI_Transaction *
 gnc_hbci_trans (GtkWidget *parent,
 		HBCI_API *api,
 		GNCInteractor *interactor,
 		const HBCI_Account *h_acc,
 		const HBCI_Customer *customer,
-		GNC_HBCI_Transtype type);
+		Account *gnc_acc,
+		GNC_HBCI_Transtype type,
+		GList **templ);*/
 
+/** Constructor: Create a new HBCITransDialog, fill in the values as
+ * specified by the arguments, and return a pointer to it. */
+HBCITransDialog *
+gnc_hbci_dialog_new (GtkWidget *parent,
+		     const HBCI_Account *h_acc,
+		     const HBCI_Customer *customer,
+		     Account *gnc_acc,
+		     GNC_HBCI_Transtype trans_type,
+		     GList *templ);
+/** Destructor */
+void gnc_hbci_dialog_delete(HBCITransDialog *td);
+
+/** Return the parent widget */
+GtkWidget *gnc_hbci_dialog_get_parent(const HBCITransDialog *td);
+/** Return the GList of transaction templates. */
+GList *gnc_hbci_dialog_get_templ(const HBCITransDialog *td);
+/** Return the HBCI_Transaction. */
+const HBCI_Transaction *gnc_hbci_dialog_get_htrans(const HBCITransDialog *td);
+/** Return the gnucash Transaction. */
+Transaction *gnc_hbci_dialog_get_gtrans(const HBCITransDialog *td);
+/** Hide the dialog */
+void gnc_hbci_dialog_hide(HBCITransDialog *td);
+/** Show the dialog */
+void gnc_hbci_dialog_show(HBCITransDialog *td);
+
+
+
+int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td, 
+				 const HBCI_Account *h_acc);
+HBCI_OutboxJob *
+gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, HBCI_API *api,
+			      const HBCI_Customer *customer, 
+			      HBCI_Account *h_acc, 
+			      GNC_HBCI_Transtype trans_type);
+/** Callback function for gnc_xfer_dialog_set_txn_cb(). The user_data
+ * has to be a pointer to a HBCITransDialog structure.  */
+void gnc_hbci_dialog_xfer_cb(Transaction *trans, gpointer user_data);
+
+/** Execute the OutboxJob, delete it when finished. Returns TRUE if
+ * the application should continue, and FALSE if the user wants to
+ * enter this job again.  */
+gboolean 
+gnc_hbci_trans_dialog_execute(HBCITransDialog *td, HBCI_API *api, 
+			      HBCI_OutboxJob *job, GNCInteractor *interactor);
 
 
 #endif

@@ -685,7 +685,7 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   struct tm *tmpTm;
   time_t tmp_tt;
   GDate date, startDate;
-  int i;
+  unsigned int i;
   FreqSpec *fs;
   getEndTuple get;
   gchar *name;

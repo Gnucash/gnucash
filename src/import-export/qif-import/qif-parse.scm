@@ -10,7 +10,13 @@
   (make-regexp "^ *(\\[)?([^]/\\|]*)(]?)(/?)([^\|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
 
 (define qif-date-compiled-rexp 
-  (make-regexp "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$|^ *([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9]).*$"))
+  (make-regexp "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$|^ *([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]).*$"))
+
+(define qif-date-mdy-compiled-rexp
+  (make-regexp "([0-9][0-9])([0-9][0-9])([0-9][0-9][0-9][0-9])"))
+
+(define qif-date-ymd-compiled-rexp
+  (make-regexp "([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])"))
 
 (define decimal-radix-regexp
   (make-regexp 
@@ -298,79 +304,125 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  parse-check-date-format
+;;  given a match-triple (matches in spaces 1, 2, 3) and a
+;;  list of possible date formats, return the list of formats
+;;  that this date string could actually be.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (parse-check-date-format match possible-formats)
+  (let ((date-parts (list (match:substring match 1)
+			  (match:substring match 2)
+			  (match:substring match 3)))
+	(numeric-date-parts '())
+	(retval #f))
+
+    ;;(define (print-list l)
+    ;;  (for-each (lambda (x) (display x) (display " ")) l))
+
+    ;;(for-each (lambda (x) (if (list? x) (print-list x) (display x)))
+    ;;      (list "parsing: " date-parts " in " possible-formats "\n"))
+
+    ;; get the strings into numbers (but keep the strings around)
+    (set! numeric-date-parts
+	  (map (lambda (elt)
+		 (with-input-from-string elt
+		   (lambda () (read))))
+	       date-parts))
+      
+    (let ((possibilities possible-formats)
+	  (n1 (car numeric-date-parts))
+	  (n2 (cadr numeric-date-parts))
+	  (n3 (caddr numeric-date-parts))
+	  (s1 (car date-parts))
+	  (s3 (caddr date-parts)))
+      
+      ;; filter the possibilities to eliminate (hopefully)
+      ;; all but one
+      (if (or (not (number? n1)) (> n1 12))
+	  (set! possibilities (delq 'm-d-y possibilities)))
+      (if (or (not (number? n1)) (> n1 31))
+	  (set! possibilities (delq 'd-m-y possibilities)))
+      (if (or (not (number? n1)) (< n1 1))
+	  (set! possibilities (delq 'd-m-y possibilities)))
+      (if (or (not (number? n1)) (< n1 1))
+	  (set! possibilities (delq 'm-d-y possibilities)))
+        
+      (if (or (not (number? n2)) (> n2 12))
+	  (begin 
+	    (set! possibilities (delq 'd-m-y possibilities))
+	    (set! possibilities (delq 'y-m-d possibilities))))
+        
+      (if (or (not (number? n2)) (> n2 31))
+	  (begin 
+	    (set! possibilities (delq 'm-d-y possibilities))
+	    (set! possibilities (delq 'y-d-m possibilities))))
+        
+      (if (or (not (number? n3)) (> n3 12))
+	  (set! possibilities (delq 'y-d-m possibilities)))
+      (if (or (not (number? n3)) (> n3 31))
+	  (set! possibilities (delq 'y-m-d possibilities)))
+        
+      (if (or (not (number? n3)) (< n3 1))
+	  (set! possibilities (delq 'y-m-d possibilities)))
+      (if (or (not (number? n3)) (< n3 1))
+	  (set! possibilities (delq 'y-d-m possibilities)))
+
+      ;; If we've got a 4-character year, make sure the date
+      ;; is after 1930.  Don't check the high value (perhaps
+      ;; we should?).
+      (if (= (string-length s1) 4)
+	  (if (or (not (number? n1)) (< n1 1930))
+	      (begin
+		(set! possibilities (delq 'y-m-d possibilities))
+		(set! possibilities (delq 'y-d-m possibilities)))))
+      (if (= (string-length s3) 4)
+	  (if (or (not (number? n3)) (< n3 1930))
+	      (begin
+		(set! possibilities (delq 'm-d-y possibilities))
+		(set! possibilities (delq 'd-m-y possibilities)))))
+
+      (set! retval possibilities))
+    retval))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-parse:check-date-format
 ;;  given a list of possible date formats, return a pruned list 
 ;;  of possibilities.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (define (qif-parse:check-date-format date-string possible-formats)
   (let ((retval #f))
     (if (or (not (string? date-string))
             (not (> (string-length date-string) 0)))
         (set! retval possible-formats))
-    (let ((date-parts '())
-          (numeric-date-parts '())
-          (match (regexp-exec qif-date-compiled-rexp date-string)))
-      
+    (let ((match (regexp-exec qif-date-compiled-rexp date-string)))
       (if match
           (if (match:substring match 1)
-              (set! date-parts (list (match:substring match 1)
-                                     (match:substring match 2)
-                                     (match:substring match 3)))
-              (set! date-parts (list (match:substring match 4)
-                                     (match:substring match 5)
-                                     (match:substring match 6)))))
+              (set! retval (parse-check-date-format match possible-formats))
 
-      ;; get the strings into numbers (but keep the strings around)
-      (set! numeric-date-parts
-            (map (lambda (elt)
-                   (with-input-from-string elt
-                     (lambda () (read))))
-                 date-parts))
-      
-      (let ((possibilities possible-formats)
-            (n1 (car numeric-date-parts))
-            (n2 (cadr numeric-date-parts))
-            (n3 (caddr numeric-date-parts)))
-      
-        ;; filter the possibilities to eliminate (hopefully)
-        ;; all but one
-        (if (or (not (number? n1)) (> n1 12))
-            (set! possibilities (delq 'm-d-y possibilities)))
-        (if (or (not (number? n1)) (> n1 31))
-            (set! possibilities (delq 'd-m-y possibilities)))
-        (if (or (not (number? n1)) (< n1 1))
-            (set! possibilities (delq 'd-m-y possibilities)))
-        (if (or (not (number? n1)) (< n1 1))
-            (set! possibilities (delq 'm-d-y possibilities)))
-        
-        (if (or (not (number? n2)) (> n2 12))
-            (begin 
-              (set! possibilities (delq 'd-m-y possibilities))
-              (set! possibilities (delq 'y-m-d possibilities))))
-        
-        (if (or (not (number? n2)) (> n2 31))
-            (begin 
-              (set! possibilities (delq 'm-d-y possibilities))
-              (set! possibilities (delq 'y-d-m possibilities))))
-        
-        (if (or (not (number? n3)) (> n3 12))
-            (set! possibilities (delq 'y-d-m possibilities)))
-        (if (or (not (number? n3)) (> n3 31))
-            (set! possibilities (delq 'y-m-d possibilities)))
-        
-        (if (or (not (number? n3)) (< n3 1))
-            (set! possibilities (delq 'y-m-d possibilities)))
-        (if (or (not (number? n3)) (< n3 1))
-            (set! possibilities (delq 'y-d-m possibilities)))
-        (set! retval possibilities))
-    retval)))
+	      ;; Uh oh -- this is a string XXXXXXXX; we don't know which
+	      ;; way to test..  So test both YYYYxxxx and xxxxYYYY,
+	      ;; and let the parser verify the year is valid.
+	      (let* ((new-date-string (match:substring match 4))
+		     (date-ymd (regexp-exec qif-date-ymd-compiled-rexp
+					    new-date-string))
+		     (date-mdy (regexp-exec qif-date-mdy-compiled-rexp
+					       new-date-string))
+		     (res1 '())
+		     (res2 '()))
+		(if (or (memq 'y-d-m possible-formats)
+			(memq 'y-m-d possible-formats))
+		    (set! res1 (parse-check-date-format date-ymd possible-formats)))
+		(if (or (memq 'd-m-y possible-formats)
+			(memq 'm-d-y possible-formats))
+		    (set! res2 (parse-check-date-format date-mdy possible-formats)))
 
+		(set! retval (append res1 res2))))))
+    retval))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-parse:parse-date-format 
-;;  given a list of possible date formats, return a pruned list 
-;;  of possibilities.
+;;  given a date-string and a format, convert the string to a
+;;  date and return a list of day, month, year
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:parse-date/format date-string format)
@@ -382,10 +434,22 @@
         (set! date-parts (list (match:substring match 1)
                                (match:substring match 2)
                                (match:substring match 3)))
-        (set! date-parts (list (match:substring match 4)
-                               (match:substring match 5)
-                               (match:substring match 6))))
-    
+	;; This is of the form XXXXXXXX; split the string based on
+	;; whether the format is YYYYxxxx or xxxxYYYY
+	(let ((date-str (match:substring match 4)))
+	  (case format
+	    ((d-m-y m-d-y)
+	     (let ((m (regexp-exec qif-date-mdy-compiled-rexp date-str)))
+	       (set! date-parts (list (match:substring m 1)
+				      (match:substring m 2)
+				      (match:substring m 3)))))
+	  ((y-m-d y-d-m)
+	     (let ((m (regexp-exec qif-date-ymd-compiled-rexp date-str)))
+	       (set! date-parts (list (match:substring m 1)
+				      (match:substring m 2)
+				      (match:substring m 3)))))
+	  )))
+	
     ;; get the strings into numbers (but keep the strings around)
     (set! numeric-date-parts
           (map (lambda (elt)

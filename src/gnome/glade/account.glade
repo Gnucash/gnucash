@@ -883,7 +883,7 @@
   <position>GTK_WIN_POS_MOUSE</position>
   <modal>False</modal>
   <default_width>640</default_width>
-  <default_height>480</default_height>
+  <default_height>640</default_height>
   <allow_shrink>False</allow_shrink>
   <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>

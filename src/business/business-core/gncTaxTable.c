@@ -33,6 +33,8 @@ struct _gncTaxTable {
   GncTaxTable *	child;		/* if non-null, we have not changed */
   gboolean	invisible;
 
+  GList *	children;	/* A list of children */
+
   int		editlevel;
   gboolean	do_free;
   gboolean	dirty;
@@ -131,6 +133,8 @@ static void addObj (GncTaxTable *table);
 static void remObj (GncTaxTable *table);
 static void maybe_resort_list (GncTaxTable *table);
 
+static void gncTaxTableRemoveChild (GncTaxTable *table, GncTaxTable *child);
+
 G_INLINE_FUNC void mark_table (GncTaxTable *table);
 G_INLINE_FUNC void
 mark_table (GncTaxTable *table)
@@ -167,23 +171,63 @@ void gncTaxTableDestroy (GncTaxTable *table)
 {
   if (!table) return;
   table->do_free = TRUE;
+  gncBusinessSetDirtyFlag (table->book, _GNC_MOD_NAME, TRUE);
   gncTaxTableCommitEdit (table);
 }
 
 static void gncTaxTableFree (GncTaxTable *table)
 {
   GList *list;
+  GncTaxTable *child;
+
   if (!table) return;
 
   gnc_engine_generate_event (&table->guid, GNC_EVENT_DESTROY);
   CACHE_REMOVE (table->name);
   remObj (table);
 
+  /* destroy the list of entries */
   for (list = table->entries; list; list=list->next)
     gncTaxTableEntryDestroy (list->data);
-
   g_list_free (table->entries);
+
+  if (!table->do_free)
+    PERR("free a taxtable without do_free set!");
+
+  /* disconnect from parent */
+  if (table->parent)
+    gncTaxTableRemoveChild(table->parent, table);
+
+  /* disconnect from the children */
+  for (list = table->children; list; list=list->next) {
+    child = list->data;
+    gncTaxTableSetParent(child, NULL);
+  }
+  g_list_free(table->children);
+
   g_free (table);
+}
+
+static void
+gncTaxTableAddChild (GncTaxTable *table, GncTaxTable *child)
+{
+  g_return_if_fail(table);
+  g_return_if_fail(child);
+  g_return_if_fail(table->do_free == FALSE);
+
+  table->children = g_list_prepend(table->children, child);
+}
+
+static void
+gncTaxTableRemoveChild (GncTaxTable *table, GncTaxTable *child)
+{
+  g_return_if_fail(table);
+  g_return_if_fail(child);
+
+  if (table->do_free)
+    return;
+
+  table->children = g_list_remove(table->children, child);
 }
 
 GncTaxTableEntry * gncTaxTableEntryCreate (void)
@@ -227,7 +271,11 @@ void gncTaxTableSetParent (GncTaxTable *table, GncTaxTable *parent)
 {
   if (!table) return;
   gncTaxTableBeginEdit (table);
+  if (table->parent)
+    gncTaxTableRemoveChild(table->parent, table);
   table->parent = parent;
+  if (parent)
+    gncTaxTableAddChild(parent, table);
   table->refcount = 0;
   gncTaxTableMakeInvisible (table);
   gncTaxTableCommitEdit (table);
@@ -244,7 +292,7 @@ void gncTaxTableSetChild (GncTaxTable *table, GncTaxTable *child)
 void gncTaxTableIncRef (GncTaxTable *table)
 {
   if (!table) return;
-  if (table->parent) return;	/* children dont need refcounts */
+  if (table->parent || table->invisible) return;	/* children dont need refcounts */
   gncTaxTableBeginEdit (table);
   table->refcount++;
   gncTaxTableCommitEdit (table);
@@ -253,7 +301,7 @@ void gncTaxTableIncRef (GncTaxTable *table)
 void gncTaxTableDecRef (GncTaxTable *table)
 {
   if (!table) return;
-  if (table->parent) return;	/* children dont need refcounts */
+  if (table->parent || table->invisible) return;	/* children dont need refcounts */
   gncTaxTableBeginEdit (table);
   table->refcount--;
   g_return_if_fail (table->refcount >= 0);
@@ -451,6 +499,7 @@ GncTaxTable *gncTaxTableReturnChild (GncTaxTable *table, gboolean make_new)
 
   if (!table) return NULL;
   if (table->child) return table->child;
+  if (table->parent || table->invisible) return table;
   if (make_new) {
     child = gncTaxTableCopy (table);
     gncTaxTableSetChild (table, child);
