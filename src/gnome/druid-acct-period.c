@@ -433,6 +433,7 @@ ap_close_period (GnomeDruidPage *druidpage,
   if (really_do_close_books)
   {
     /* Close the books ! */
+    gnc_engine_suspend_events ();
     gnc_suspend_gui_refresh ();
 
     scrub_all();
@@ -450,6 +451,7 @@ ap_close_period (GnomeDruidPage *druidpage,
      */
     gnc_file_save ();
     gnc_resume_gui_refresh ();
+    gnc_engine_resume_events ();
   }
 
   /* Report the status back to the user. */
