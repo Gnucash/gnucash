@@ -41,8 +41,6 @@
  */
 int gen_logs = 1;
 FILE * trans_log = 0x0;
-FILE * split_log = 0x0;
-
 
 /********************************************************************\
 \********************************************************************/
@@ -50,41 +48,26 @@ FILE * split_log = 0x0;
 void
 xaccOpenLog (void)
 {
+   char filename[1000];
    char * timestamp;
 
    if (!gen_logs) return;
-   if (trans_log && split_log) return;
+   if (trans_log) return;
 
    /* tag each filename with a timestamp */
    timestamp = xaccDateUtilGetStampNow ();
 
-   if (!trans_log) {
-      char filename[1000];
+   strcpy (filename, "translog.");
+   strcat (filename, timestamp);
+   strcat (filename, ".log");
 
-      strcpy (filename, "translog.");
-      strcat (filename, timestamp);
-      strcat (filename, ".log");
+   trans_log = fopen (filename, "a");
 
-      trans_log = fopen (filename, "a");
+   /* use tab-separated fields, to be /rdb compatible */
+   fprintf (trans_log, "mod	date_entered	date_posted	num description"\
+        "account	memo	action	reconciled	amount	price date_reconciled\n");
+   fprintf (trans_log, "-----------------\n");
 
-      /* use tab-separated fields, to be /rdb compatible */
-      fprintf (trans_log, "num	description\n");
-      fprintf (trans_log, "-----------------\n");
-   }
-
-   if (!split_log) {
-      char filename[1000];
-
-      strcpy (filename, "splitlog.");
-      strcat (filename, timestamp);
-      strcat (filename, ".log");
-
-      split_log = fopen (filename, "a");
-
-      /* use tab-separated fields, to be /rdb compatible */
-      fprintf (split_log, "num	memo	action	reconciled	amount	price\n");
-      fprintf (split_log, "-----------------\n");
-   }
    free (timestamp);
 }
 
@@ -92,34 +75,50 @@ xaccOpenLog (void)
 \********************************************************************/
 
 void
-xaccTransWriteLog (Transaction *trans)
+xaccTransWriteLog (Transaction *trans, char flag)
 {
    Split *split;
    int i = 0;
+   char *dent, *dpost, *drecn; 
 
    if (!gen_logs) return;
-   if (!trans_log || !split_log) return;
+   if (!trans_log) return;
+
+   dent = xaccDateUtilGetStamp (trans->date_entered.tv_sec);
+   dpost = xaccDateUtilGetStamp (trans->date_posted.tv_sec);
 
    /* use tab-separated fields, to be /rdb compatible */
-   fprintf (trans_log, "%s	%s\n", trans->num, trans->description);
 
    split = trans->splits[0];
    while (split) {
-      fprintf (split_log, "%s	%s	%s	%c	%10.6f	%10.6f\n",
-               trans->num,
+      char * accname = "";
+      if (split->acc) accname = split->acc->description;
+      drecn = xaccDateUtilGetStamp (split->date_reconciled.tv_sec);
+
+      fprintf (trans_log, "%c	%s	%s	%s	%s" \
+               "%s	%s	%s	%c	%10.6f	%10.6f	%s\n",
+               flag,
+               dent, 
+               dpost, 
+               trans->num, 
+               trans->description,
+               accname,
                split->memo,
                split->action,
                split->reconciled,
                split->damount,
-               split->share_price
+               split->share_price,
+               drecn
                );
+      free (drecn);
       i++;
       split = trans->splits[i];
    }
+   free (dent);
+   free (dpost);
 
    /* get data out to the disk */
    fflush (trans_log);
-   fflush (split_log);
 }
 
 /********************************************************************\

@@ -384,32 +384,6 @@ xaccFreeTransaction( Transaction *trans )
 /********************************************************************\
 \********************************************************************/
 
-void
-xaccTransDestroy (Transaction *trans)
-{
-   int i;
-   Split *split;
-   Account *acc;
-
-   if (!trans) return;
-
-   i=0;
-   split = trans->splits[i];
-   while (split) {
-      MARK_SPLIT (split);
-      acc = split ->acc;
-      xaccAccountRemoveSplit (acc, split);
-      xaccAccountRecomputeBalance (acc); 
-      i++;
-      split = trans->splits[i];
-   }
-
-   xaccFreeTransaction (trans);
-}
-
-/********************************************************************\
-\********************************************************************/
-
 /* hack alert -- the algorithm used in this rebalance routine
  * is less than intuitive, and could use some write-up.  
  * Maybe it does indeed do the right thing, but that is
@@ -549,6 +523,7 @@ xaccTransBeginEdit (Transaction *trans)
    assert (trans);
    trans->open = 1;
    xaccOpenLog ();
+   xaccTransWriteLog (trans, 'B');
 }
 
 void
@@ -586,7 +561,35 @@ xaccTransCommitEdit (Transaction *trans)
    }
 
    trans->open = 0;
-   xaccTransWriteLog (trans);
+   xaccTransWriteLog (trans, 'C');
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccTransDestroy (Transaction *trans)
+{
+   int i;
+   Split *split;
+   Account *acc;
+
+   if (!trans) return;
+   CHECK_OPEN (trans);
+   xaccTransWriteLog (trans, 'D');
+
+   i=0;
+   split = trans->splits[i];
+   while (split) {
+      MARK_SPLIT (split);
+      acc = split ->acc;
+      xaccAccountRemoveSplit (acc, split);
+      xaccAccountRecomputeBalance (acc); 
+      i++;
+      split = trans->splits[i];
+   }
+
+   xaccFreeTransaction (trans);
 }
 
 /********************************************************************\

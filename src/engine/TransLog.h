@@ -27,7 +27,7 @@
 #include "Transaction.h"
 
 void    xaccOpenLog (void);
-void    xaccTransWriteLog (Transaction *);
+void    xaccTransWriteLog (Transaction *, char);
 
 /* returned strings will have been allocated with malloc, free with free() */
 char *xaccSplitAsString(Split *s, const char prefix[]);
