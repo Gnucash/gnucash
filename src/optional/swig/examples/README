@@ -5,3 +5,6 @@ scan-acct.pl:
 
 time-book-load.pl
    measure the time it takes to open a gnucash file/url
+
+time-query.pl
+   measure teh time to query for a set of splits. 
