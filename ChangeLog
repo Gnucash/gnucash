@@ -1,3 +1,8 @@
+2002-03-16  Chris Lyttle  <chris@wilddev.net>
+
+	* debian/control_fr: removed at request of deb maintainer
+	* debian/Makefile.am: updated
+
 2002-03-03  Chris Lyttle  <chris@wilddev.net>
 
 	* configure.in: Added nl to ALL_LINGUAS
