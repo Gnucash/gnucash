@@ -204,8 +204,7 @@ gnc_frequency_init( GNCFrequency *gf )
     o = glade_xml_get_widget( gf->gxml, optionMenus[i].name );
     gnc_option_menu_init( GTK_WIDGET(o) );
     if ( optionMenus[i].fn != NULL ) {
-      GtkMenu  *m = gtk_option_menu_get_menu(GTK_OPTION_MENU(o));
-      o = GTK_OBJECT( m );
+      o = gtk_option_menu_get_menu(GTK_OPTION_MENU(o));
       // FIXME: having the user-data be a struct of a
       // calendar name and the GNCFrequency would allow a
       // single callback fn...
@@ -249,7 +248,7 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs )
   int    page;
   time_t    tmpTT;
   struct tm  *tmpTm;
-  GtkObject  *o;
+  GtkWidget  *o;
   FreqSpec  *subFS;
   GList    *list;
   int    tmpInt;
@@ -444,7 +443,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
   gint    page;
   struct tm  *tmpTm;
   guint    day, month, year;
-  GtkObject  *o;
+  GtkWidget  *o;
   UIFreqType  uift;
   FreqSpec  *tmpFS;
   gint    tmpInt;
@@ -713,7 +712,7 @@ update_cal( GNCFrequency *gf, GtkCalendar *cal )
 void
 update_appropriate_cal( GNCFrequency *gf )
 {
-  GtkObject  *o;
+  GtkWidget  *o;
   gint    page;
   UIFreqType  uift;
 
@@ -805,7 +804,7 @@ void
 monthly_sel_changed( GtkButton *b, gpointer d )
 {
   GNCFrequency  *gf;
-  GtkObject  *o;
+  GtkWidget  *o;
   GDate    *gd;
   guint    dayOfMonth;
   struct tm  *tmptm;
@@ -850,7 +849,7 @@ void
 semimonthly_sel_changed( GtkButton *b, gpointer d )
 {
   GNCFrequency  *gf;
-  GtkObject  *o;
+  GtkWidget  *o;
   gint    tmpint;
   time_t    tmptt;
   struct tm  *tmptm;
@@ -883,7 +882,7 @@ void
 yearly_sel_changed( GtkButton *b, gpointer d )
 {
   GNCFrequency  *gf;
-  GtkObject  *o;
+  GtkWidget  *o;
   time_t    tmptt;
   struct tm  *tmptm;
   gint    tmpint;
@@ -941,7 +940,7 @@ void
 start_date_changed( GnomeDateEdit *gde, gpointer d )
 {
   GNCFrequency  *gf;
-  GtkObject  *o;
+  GtkWidget  *o;
   struct tm  *tmpTm;
   time_t    dateFromGDE;
   gint    tmpint;
