@@ -172,7 +172,15 @@
    '(<gnc:commodity*> const)
    "gnc_default_currency"
    '()
-   "Return the default currency set by the user.")
+   "Return the new-account default currency set by the user.")
+
+  (gw:wrap-function
+   ws
+   'gnc:default-report-currency
+   '(<gnc:commodity*> const)
+   "gnc_default_report_currency"
+   '()
+   "Return the default report currency set by the user.")
 
   (gw:wrap-function
    ws

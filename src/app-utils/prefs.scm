@@ -161,7 +161,13 @@
 (gnc:register-configuration-option
  (gnc:make-currency-option
   (N_ "International") (N_ "New Account Default Currency")
-  "b" (N_ "Default currency for new accounts")
+  "b1" (N_ "Default currency for new accounts")
+  (gnc:locale-default-iso-currency-code)))
+
+(gnc:register-configuration-option
+ (gnc:make-currency-option
+  (N_ "International") (N_ "Default Report Currency")
+  "b2" (N_ "Default currency for reports")
   (gnc:locale-default-iso-currency-code)))
 
 (gnc:register-configuration-option

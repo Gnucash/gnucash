@@ -1,3 +1,12 @@
+2003-01-12  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/global-options.[ch]: add gnc_default_report_currency()
+	* src/app-utils/gw-app-utils-spec.scm: wrap gnc_default_report_currency()
+	* src/app-utils/prefs.scm: add "Default Report Currency" preference
+	* src/report/report-system/options-utilities.scm: use new report currency
+	  preference to choose the "default" report currency.
+	FIXES Bug #103160
+
 2003-01-12  David Hampton  <hampton@employees.org>
 
 	* src/register/register-gnome/gnucash-sheet.c

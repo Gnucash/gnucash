@@ -361,6 +361,19 @@ gnc_default_currency (void)
   return gnc_locale_default_currency ();
 }
 
+gnc_commodity *
+gnc_default_report_currency (void)
+{
+  gnc_commodity *currency;
+
+  currency = gnc_lookup_currency_option ("International",
+                                         "Default Report Currency", NULL);
+  if (currency)
+    return currency;
+
+  return gnc_locale_default_currency ();
+}
+
 
 /********************************************************************\
  * gnc_set_option_default                                           *
