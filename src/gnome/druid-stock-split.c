@@ -25,7 +25,8 @@
 
 #include <gnome.h>
 
-#include "Account.h"
+#include "FileDialog.h"
+#include "Group.h"
 #include "account-tree.h"
 #include "dialog-utils.h"
 #include "glade-gnc-dialogs.h"
@@ -41,8 +42,12 @@
 typedef struct
 {
   GtkWidget * window;
-
   GtkWidget * account_list;
+
+  /* account page data */
+  GUID account;
+
+
 } StockSplitInfo;
 
 
@@ -56,6 +61,82 @@ window_destroy_cb (GtkObject *object, gpointer data)
   g_free (info);
 }
 
+static int
+fill_account_list (StockSplitInfo *info)
+{
+  GtkCList *clist;
+  GList *accounts;
+  GList *node;
+  gint rows = 0;
+
+  clist = GTK_CLIST (info->account_list);
+
+  gtk_clist_freeze (clist);
+
+  gtk_clist_clear (clist);
+
+  accounts = xaccGroupGetSubAccounts (gncGetCurrentGroup ());
+  for (node = accounts; node; node = node->next)
+  {
+    Account *account = node->data;
+    GNCPrintAmountInfo print_info;
+    const gnc_commodity *security;
+    char *strings[4];
+    gint row;
+
+    if (xaccAccountGetType (account) != STOCK)
+      continue;
+
+    security = xaccAccountGetSecurity (account);
+
+    print_info = gnc_account_quantity_print_info (account, FALSE);
+
+    strings[0] = xaccAccountGetFullName (account,
+                                         gnc_get_account_separator ());
+    strings[1] = (char *) gnc_commodity_get_mnemonic (security);
+    strings[2] = (char *)
+      xaccPrintAmount (xaccAccountGetShareBalance (account), print_info);
+    strings[3] = NULL;
+
+    row = gtk_clist_append (clist, strings);
+
+    gtk_clist_set_row_data (clist, row, account);
+
+    g_free (strings[0]);
+
+    rows++;
+  }
+
+  gtk_clist_columns_autosize (clist);
+
+  gtk_clist_thaw (clist);
+
+  return rows;
+}
+
+static void
+clist_select_row (GtkCList *clist,
+                  gint row,
+                  gint column,
+                  GdkEventButton *event,
+                  gpointer user_data)
+{
+  StockSplitInfo *info = user_data;
+  Account *account;
+
+  account = gtk_clist_get_row_data (clist, row);
+
+  info->account = *xaccAccountGetGUID (account);
+}
+
+static void
+druid_cancel (GnomeDruid *druid, gpointer user_data)
+{
+  StockSplitInfo *info = user_data;
+
+  gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
+}
+
 static void
 gnc_stock_split_druid_create (StockSplitInfo *info)
 {
@@ -64,8 +145,33 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
   gtk_signal_connect (GTK_OBJECT (info->window), "destroy",
                       GTK_SIGNAL_FUNC (window_destroy_cb), info);
 
+  gtk_signal_connect (GTK_OBJECT (info->window), "cancel",
+                      GTK_SIGNAL_FUNC (druid_cancel), info);
+
   /* account list */
-  info->account_list = lookup_widget (info->window, "account_clist");
+  {
+    GtkCList *clist;
+
+    info->account_list = lookup_widget (info->window, "account_clist");
+
+    clist = GTK_CLIST (info->account_list);
+
+    gtk_clist_set_selection_mode (clist, GTK_SELECTION_BROWSE);
+
+    gtk_signal_connect (GTK_OBJECT (clist), "select_row",
+                        GTK_SIGNAL_FUNC (clist_select_row), info);
+
+    fill_account_list (info);
+  }
+}
+
+static void
+refresh_handler (GHashTable *changes, gpointer user_data)
+{
+  StockSplitInfo *info = user_data;
+
+  if (fill_account_list (info) == 0)
+    gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
 }
 
 static void
@@ -87,13 +193,21 @@ void
 gnc_stock_split_dialog (Account * initial)
 {
   StockSplitInfo *info;
+  gint component_id;
 
   info = g_new0 (StockSplitInfo, 1);
 
+  info->account = *xaccGUIDNULL ();
+
   gnc_stock_split_druid_create (info);
 
-  gnc_register_gui_component (DRUID_STOCK_SPLIT_CM_CLASS,
-                              NULL, close_handler, info);
+  component_id = gnc_register_gui_component (DRUID_STOCK_SPLIT_CM_CLASS,
+                                             refresh_handler, close_handler,
+                                             info);
+
+  gnc_gui_component_watch_entity_type (component_id,
+                                       GNC_ID_ACCOUNT,
+                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   gtk_widget_show_all (info->window);
 
