@@ -16,8 +16,10 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file
-  @brief import-commodity-matcher.h: A Generic commodity matcher/picker
+/** @addtogroup Import_Export
+    @{ */
+/** @file import-commodity-matcher.h
+  @brief A Generic commodity matcher/picker
   @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>    
  */
 #ifndef IMPORT_COMMODITY_MATCHER_H
@@ -25,8 +27,7 @@
 
 #include "gnc-commodity.h"
 
-/* The gnc_import_select_commodity():
-
+/**
   Must be called with a string containing a unique identifier for the
   commodity.  If an commodity with a matching exchange_code is
   found, the function immediately returns with a pointer to that
@@ -35,28 +36,25 @@
   written to the commodity's exchange_code field, overwriting anything that
   was there before.
 
-  Params:
-
-    char * exchange_code: The string containing the code for which you
+    @param exchange_code The string containing the code for which you
     want a matching commodity.  A CUISP code or similar UNIQUE code.
     The stock ticker is NOT appropriate, unless you have no other option.
 
-    char auto_create: If 0, if the exchange_code value in unknown,
+    @param auto_create If 0, if the exchange_code value in unknown,
     the function returns NULL, otherwise, the user will be asked to 
     create a new account.
 
-    char * default_fullname: A human-readable description of the commodity, such
+    @param default_fullname A human-readable description of the commodity, such
     as the stock name.  Can be NULL. If it is not NULL, it will be shown
     to the user when selecting a commodity.  It will also be used as
     the default if a new commodity is created.
 
-     char * default_mnemonic:  Usually the stock ticker or similar. Can be NULL.
+     @param default_mnemonic  Usually the stock ticker or similar. Can be NULL.
      If it is not NULL, it will be shown
     to the user when selecting a commodity.  It will also be used as
     the default if a new commodity is created.
 
-
-  Return: A pointer to the found or created commodity, or NULL if no
+  @return A pointer to the found or created commodity, or NULL if no
   account was found or created.
 
 */
@@ -66,3 +64,4 @@ gnc_commodity * gnc_import_select_commodity(char * exchange_code,
 				    char * default_mnemonic);
 
 #endif
+/**@}*/

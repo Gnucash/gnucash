@@ -16,10 +16,11 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
- /** @file
+/** @addtogroup Import_Export
+    @{ */
+/** @internal
+     @file gnc-ofx-import.c
      @brief Ofx import module code
-     *
-     gnc-ofx-import.c
      @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
 #define _GNU_SOURCE
@@ -157,6 +158,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
   gchar *investment_account_text;
   gnc_commodity *currency=NULL;
   gnc_commodity *investment_commodity=NULL;
+  gnc_numeric gnc_amount, gnc_units;
   GNCBook *book;
   Transaction *transaction;
   Split *split;
@@ -363,10 +365,12 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 		split=xaccMallocSplit(book);
 		xaccTransAppendSplit(transaction,split);
 		xaccAccountInsertSplit(account,split);
-		/*gnc_amount = double_to_gnc_numeric(data.amount,xaccAccountGetCommoditySCU(account),GNC_RND_ROUND);*/
+
+		gnc_amount = double_to_gnc_numeric (data.amount,
+						    gnc_commodity_get_fraction(xaccTransGetCurrency(transaction)),
+						    GNC_RND_ROUND);
+		xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 		
-		DxaccSplitSetBaseValue(split, data.amount, currency);
-		    
 		/* Also put the ofx transaction's memo in the split's memo field */ 
 		if(data.memo_valid==true){
 		  xaccSplitSetMemo(split, data.memo);
@@ -404,7 +408,15 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 			split=xaccMallocSplit(book);
 			xaccTransAppendSplit(transaction,split);
 			xaccAccountInsertSplit(investment_account,split);
-			DxaccSplitSetSharePriceAndAmount(split, data.unitprice,data.units);
+
+			gnc_amount = double_to_gnc_numeric (-(data.amount),
+							    gnc_commodity_get_fraction(investment_commodity),
+							    GNC_RND_ROUND);
+			gnc_units = double_to_gnc_numeric (data.units,
+							   gnc_commodity_get_fraction(investment_commodity),
+							   GNC_RND_ROUND);
+			xaccSplitSetAmount(split, gnc_units);
+			xaccSplitSetValue(split, gnc_amount);
 			
 			if(data.security_data_ptr->memo_valid==true)
 			  {
@@ -475,7 +487,11 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 			split=xaccMallocSplit(book);
 			xaccTransAppendSplit(transaction,split);
 			xaccAccountInsertSplit(income_account,split);
-			DxaccSplitSetBaseValue(split, data.amount, currency);
+
+			gnc_amount = double_to_gnc_numeric (data.amount,
+							    gnc_commodity_get_fraction(xaccTransGetCurrency(transaction)),
+							    GNC_RND_ROUND);
+			xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 		    
 			/* Also put the ofx transaction name in the splits memo field, or ofx memo if name is unavailable */ 
 			if(data.name_valid==true){
@@ -493,8 +509,11 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 			split=xaccMallocSplit(book);
 			xaccTransAppendSplit(transaction,split);
 			xaccAccountInsertSplit(account,split);
-			/*gnc_amount = double_to_gnc_numeric(data.amount,xaccAccountGetCommoditySCU(account),GNC_RND_ROUND);*/
-			DxaccSplitSetBaseValue(split, data.amount,currency);
+
+			gnc_amount = double_to_gnc_numeric (data.amount,
+							    gnc_commodity_get_fraction(xaccTransGetCurrency(transaction)),
+							    GNC_RND_ROUND);
+			xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 		    
 			/* Also put the ofx transaction name in the splits memo field, or ofx memo if name is unavailable */ 
 			if(data.name_valid==true){
@@ -610,3 +629,5 @@ int ofx_proc_account_cb(struct OfxAccountData data)
 
   return 0;
 }
+
+/** @} */

@@ -16,8 +16,11 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/**@file
- * \brief Account-matcher.h: A very generic and flexible account matcher/picker
+/** @addtogroup Import_Export
+    @{ */
+/**@internal
+	@file import-account-matcher.c
+ * \brief A very generic and flexible account matcher/picker
  \author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
 #define _GNU_SOURCE
@@ -302,3 +305,4 @@ Account * gnc_import_select_account(char * account_online_id_value,
   DEBUG("Return value: %p%s%s%s",retval,", account name:",xaccAccountGetName(retval),"\n");
   return retval;
 }
+/**@}*/

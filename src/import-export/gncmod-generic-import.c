@@ -1,4 +1,5 @@
- /**@file
+ /**@internal
+ @file
  \brief module definition/initialization for the generic import infrastructure
  \author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
  */

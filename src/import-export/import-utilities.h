@@ -16,8 +16,10 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file
-    @brief import-utilities.h: Utility functions for writing import modules.
+/** @addtogroup Import_Export
+    @{ */
+/** @file import-utilities.h
+    @brief Utility functions for writing import modules.
     @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
 */
 #ifndef IMPORT_UTILITIES_H
@@ -25,14 +27,27 @@
 
 #include "Account.h"
 
-/* Setter and getter functions for the online_id kvp_frame for 
-   Accounts and Transactions.
+/** @name Setter-getters
+    Setter and getter functions for the online_id kvp_frame for 
+    Accounts.
+	@{
 */ 
 const gchar * gnc_import_get_acc_online_id(Account * account);
 void gnc_import_set_acc_online_id(Account * account, 
 				  const gchar * string_value);
+/** @} */
+/** @name Setter-getters
+    Setter and getter functions for the online_id kvp_frame for 
+    Transactions.
+	@{
+*/ 
 const gchar * gnc_import_get_trans_online_id(Transaction * transaction);
 void gnc_import_set_trans_online_id(Transaction * transaction, 
 				    const gchar * string_value);
+/** @} */
 
 #endif
+/** @} */
+
+
+

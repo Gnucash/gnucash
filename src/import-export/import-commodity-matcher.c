@@ -16,8 +16,11 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file
-  @brief import-commodity-matcher.h: A Generic commodity matcher/picker
+/** @addtogroup Import_Export
+    @{ */
+/**@internal
+ @file import-commodity-matcher.c
+  @brief  A Generic commodity matcher/picker
   @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>    
  */
 #define _GNU_SOURCE
@@ -126,4 +129,4 @@ gnc_commodity * gnc_import_select_commodity(char * exchange_code,
     }
   return retval;
 };
-
+/**@}*/

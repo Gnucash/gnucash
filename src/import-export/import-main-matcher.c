@@ -16,9 +16,13 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/**@file
-   @brief  import-main-mathcer.c: Transaction matcher main window
-   @author Copyright (C) 2002 Benoit Grégoire,  Christian Stimming    
+/** @addtogroup Import_Export
+    @{ */
+/** @internal
+    @file import-main-matcher.c
+    @brief Transaction matcher main window
+    @author Copyright (C) 2002 Benoit Grégoire
+    @author Christian Stimming    
 */
 #include "config.h"
 
@@ -61,7 +65,6 @@ struct _generic_transaction_info
 #define DOWNLOADED_CLIST_ACTION_INFO 9
 static short module = MOD_IMPORT;
 
-/* XPM */
 static char * fleche_xpm[] = {
 "17 22 41 1",
 " 	c None",
@@ -128,7 +131,6 @@ static char * fleche_xpm[] = {
 "+0%%%%%%%%%%%%%a+",
 "b+++++++++++++++b"};
 
-/* XPM */
 static char * checkbox_checked_xpm[] = {
 "16 16 28 1",
 " 	c None",
@@ -176,8 +178,6 @@ static char * checkbox_checked_xpm[] = {
 "................",
 " .............. "};
 
-
-/* XPM */
 static char * checkbox_unchecked_xpm[] = {
 "12 12 14 1",
 " 	c None",
@@ -493,25 +493,25 @@ trans_clist_row_destroy_cb (gpointer data)
 }
 
 
-static void free_clist_row_text (GNCGenTransaction *gui, 
-			  int row_number)
-{
+/*static void free_clist_row_text (GNCGenTransaction *gui, 
+  int row_number)
+  {
   gchar *tmp;
   gint i;
-
+  
   DEBUG("Begin");
   g_assert (gui); 
   for (i = 0; i < NUM_COLUMNS_DOWNLOADED_CLIST; i++)
-    {
-      tmp=NULL;
-      if(gtk_clist_get_text (GTK_CLIST (gui->clist), row_number, 
-			     i, 
-			     &tmp)==1)
-	{
-	  g_free(tmp);
-	}
-    }
-}
+  {
+  tmp=NULL;
+  if(gtk_clist_get_text (GTK_CLIST (gui->clist), row_number, 
+  i, 
+  &tmp)==1)
+  {
+  g_free(tmp);
+  }
+  }
+  }*/
 
 static char ** gen_clist_row_text (GNCImportTransInfo *info)
 {
@@ -553,9 +553,17 @@ static char ** gen_clist_row_text (GNCImportTransInfo *info)
   text[DOWNLOADED_CLIST_MEMO] = g_strdup(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit(info) ) );
   
   /*Imbalance*/
-  text[DOWNLOADED_CLIST_IMBALANCE]=g_strdup(xaccPrintAmount (xaccTransGetImbalance(gnc_import_TransInfo_get_trans(info) ), 
-							      gnc_default_print_info (TRUE) )
-					     );
+  if(gnc_import_TransInfo_is_balanced(info)==TRUE)
+    {
+      text[DOWNLOADED_CLIST_IMBALANCE]=g_strdup("");
+    }
+  else
+    {
+      text[DOWNLOADED_CLIST_IMBALANCE]=g_strdup(xaccPrintAmount (xaccTransGetImbalance(gnc_import_TransInfo_get_trans(info) ), 
+								 gnc_commodity_print_info (xaccTransGetCurrency(gnc_import_TransInfo_get_trans (info)),TRUE) )
+						);
+    }
+
   /*Actions*/
   text[DOWNLOADED_CLIST_ACTION_ADD] = g_strdup("");
   text[DOWNLOADED_CLIST_ACTION_CLEAR] = g_strdup("");
@@ -571,21 +579,22 @@ static char ** gen_clist_row_text (GNCImportTransInfo *info)
 	}
       else
 	{
-	  if (gnc_import_TransInfo_get_destacc (info) != NULL) {
-	    tmp = xaccAccountGetFullName 
-	      (gnc_import_TransInfo_get_destacc (info),
-	       gnc_get_account_separator ());
-	    if(gnc_import_TransInfo_get_destacc_selected_manually(info)==TRUE)
-	      {
-		select_origin=MANUALY_SELECTED_TEXT;
-	      }
-	    else
-	      {
-		select_origin=AUTO_SELECTED_TEXT;
-	      }
-	    text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add with balancing split into (%s) account \"%s\""),select_origin,tmp);
-	    free (tmp);
-	  }
+	  if (gnc_import_TransInfo_get_destacc (info) != NULL)
+	    {
+	      tmp = xaccAccountGetFullName 
+		(gnc_import_TransInfo_get_destacc (info),
+		 gnc_get_account_separator ());
+	      if(gnc_import_TransInfo_get_destacc_selected_manually(info)==TRUE)
+		{
+		  select_origin=MANUALY_SELECTED_TEXT;
+		}
+	      else
+		{
+		  select_origin=AUTO_SELECTED_TEXT;
+		}
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add with balancing split into (%s) account \"%s\""),select_origin,tmp);
+	      free (tmp);
+	    }
 	  else
 	    {
 	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Add UNBALANCED!"));
@@ -784,3 +793,4 @@ void gnc_gen_trans_list_add_trans(GNCGenTransaction *gui, Transaction *trans)
   return;
 }/* end gnc_import_add_trans() */
 
+/** @} */

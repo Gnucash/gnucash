@@ -16,8 +16,10 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file
-   @brief import-match-picker.h -- THe transaction match picker dialog interface
+/** @addtogroup Import_Export
+    @{ */
+/** @file import-match-picker.h
+   @brief The transaction match picker dialog interface
    @author Copyright (C) 2002 Benoit Grégoire
 */
  
@@ -32,14 +34,9 @@ typedef struct _transpickerdialog GNCImportMatchPicker;
  * GUI Functions 
  ************************************************************************/
 
-/** @name Match_Picker Dialog
- *
- * A dialog where the user should pick the best match for *one* given
- * transaction.
- */
-/*@{*/
 /** 
- * Run a match_picker dialog so that the selected-MatchInfo in the
+ * Run a match_picker dialog where the user should pick the best match for 'one' given
+ * transaction, so that the selected-MatchInfo in the
  * given trans_info is updated accordingly. This functions will only
  * return after the user clicked Ok, Cancel, or Window-Close.
  *
@@ -54,7 +51,7 @@ typedef struct _transpickerdialog GNCImportMatchPicker;
  * pick a matching transaction. */
 void 
 gnc_import_match_picker_run_and_close (GNCImportTransInfo *trans_info);
-/*@}*/
+/**@}*/
 
 
 

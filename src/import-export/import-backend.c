@@ -16,9 +16,13 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file
+/** @addtogroup Import_Export
+    @{ */
+/** @internal
+    @file import-backend.c
     @brief import-backend.c: Generic importer backend implementation (duplicate matching algorithm, action handling,  etc.)
-    @author Copyright (C) 2002 Benoit Grégoire,  Christian Stimming
+    @author Copyright (C) 2002 Benoit Grégoire
+    @author Christian Stimming
 */
  
 #define _GNU_SOURCE
@@ -203,7 +207,6 @@ gnc_import_MatchInfo_get_probability (const GNCImportMatchInfo * info)
 {
   if(info)
     {
-      g_assert (info);
       return info->probability;
     }
   else
@@ -398,7 +401,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
 
 
 
-/** /brief The transaction matching heuristics are here. 
+/** @brief The transaction matching heuristics are here. 
  */
 static void split_find_match (GNCImportTransInfo * trans_info,
 			      Split * split, 
@@ -863,3 +866,4 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
   trans_info->previous_action=trans_info->action;
 }
 
+/** @} */

@@ -16,10 +16,13 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file
+/** @addtogroup Import_Export
+    @{ */
+/** @internal
+	@file import-match-map.c
     @brief Generic import mapper service, maps strings->accounts
     *
-    import-match-map.c: An import mapper service that stores Account Maps for the
+    An import mapper service that stores Account Maps for the
     generic importer.  This allows importers to map various
     "strings" to Gnucash accounts in a generic manner.
     @author Copyright (C) 2002 Derek Atkins <derek@ihtfp.com>
@@ -138,3 +141,5 @@ void gnc_imap_add_account (GncImportMatchMap *imap, const char *category,
 
   /* XXX Mark the account (or book) as dirty! */
 }
+
+/** @} */

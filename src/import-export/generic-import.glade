@@ -28,9 +28,9 @@
   <modal>False</modal>
   <default_width>800</default_width>
   <default_height>600</default_height>
-  <allow_shrink>True</allow_shrink>
+  <allow_shrink>False</allow_shrink>
   <allow_grow>True</allow_grow>
-  <auto_shrink>True</auto_shrink>
+  <auto_shrink>False</auto_shrink>
   <auto_close>False</auto_close>
   <hide_on_close>False</hide_on_close>
 
@@ -244,9 +244,9 @@
   <modal>False</modal>
   <default_width>800</default_width>
   <default_height>600</default_height>
-  <allow_shrink>True</allow_shrink>
+  <allow_shrink>False</allow_shrink>
   <allow_grow>True</allow_grow>
-  <auto_shrink>True</auto_shrink>
+  <auto_shrink>False</auto_shrink>
   <auto_close>False</auto_close>
   <hide_on_close>False</hide_on_close>
 
@@ -531,9 +531,9 @@
   <modal>False</modal>
   <default_width>800</default_width>
   <default_height>600</default_height>
-  <allow_shrink>True</allow_shrink>
+  <allow_shrink>False</allow_shrink>
   <allow_grow>True</allow_grow>
-  <auto_shrink>True</auto_shrink>
+  <auto_shrink>False</auto_shrink>
   <auto_close>True</auto_close>
   <hide_on_close>True</hide_on_close>
 
@@ -781,9 +781,9 @@ click &quot;Ok&quot;.</label>
   <modal>False</modal>
   <default_width>800</default_width>
   <default_height>600</default_height>
-  <allow_shrink>True</allow_shrink>
+  <allow_shrink>False</allow_shrink>
   <allow_grow>True</allow_grow>
-  <auto_shrink>True</auto_shrink>
+  <auto_shrink>False</auto_shrink>
   <auto_close>False</auto_close>
   <hide_on_close>False</hide_on_close>
 

@@ -16,8 +16,11 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/**@file
-   \brief import-settings.h: User preference interface for 
+/** @addtogroup Import_Export
+    @{ */
+/**@file import-settings.h
+   \brief Import preference handling.
+   *User preference interface for 
    transaction matching (for both the gui and the backend)
    \author Copyright (C) 2002 Benoit Grégoire
 */
@@ -31,8 +34,7 @@ typedef struct _genimportsettings GNCImportSettings;
  *   Getter/Setter Functions for the Data Types. 
  ************************************************************************/
 
-/** @name Getters/Setters for GNCImportSettings */
-/*@{*/
+
 
 /** Allocates a new GNCImportSettings object, and initialize it with the
     appropriate user prefs.
@@ -44,6 +46,8 @@ gnc_import_Settings_new (void);
 void gnc_import_Settings_delete (GNCImportSettings *settings);
 
 
+/** @name Getters/Setters for GNCImportSettings */
+/*@{*/
 
 /** Return the allowed amount range for fuzzy amount matching.
     @return The allowed amount range for fuzzy amount matching, 
@@ -79,7 +83,7 @@ gint gnc_import_Settings_get_add_threshold (GNCImportSettings *settings);
 /** Return the selected threshold.
 */
 gint gnc_import_Settings_get_display_threshold (GNCImportSettings *settings);
-
-/*@}*/
+/**@}*/
+/**@}*/
 
 #endif

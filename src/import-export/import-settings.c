@@ -16,8 +16,11 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/**@file
-   @brief import-settings.c: User preference handling for 
+/** @addtogroup Import_Export
+    @{ */
+/**@internal
+   @file import-settings.c
+   @brief User preference handling for 
    transaction matching (for both the gui and the backend)
    @author Copyright (C) 2002 Benoit Grégoire
 */
@@ -177,3 +180,5 @@ gint gnc_import_Settings_get_display_threshold (GNCImportSettings *settings)
   g_assert (settings);
   return settings->display_threshold;
 };
+
+/**@}*/

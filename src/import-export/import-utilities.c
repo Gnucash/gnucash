@@ -16,8 +16,11 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file
-    @brief import-utilities.h: Utility functions for writing import modules.
+/** @addtogroup Import_Export
+    @{ */
+/** @internal
+    @file import-utilities.c
+    @brief Utility functions for writing import modules.
     @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
 */
 #define _GNU_SOURCE
@@ -106,3 +109,4 @@ void gnc_import_set_trans_online_id(Transaction * transaction,
   return;
 }
 
+/* @} */

@@ -16,9 +16,12 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/**@file
-   @brief  import-main-mathcer.h: Transaction matcher main window
-   @author Copyright (C) 2002 Benoit Grégoire,  Christian Stimming    
+/** @addtogroup Import_Export
+    @{ */
+/**@file import-main-matcher.h
+   @brief Transaction matcher main window
+   @author Copyright (C) 2002 Benoit Grégoire
+   @author Christian Stimming    
 */
 
 #ifndef GNC_GEN_TRANSACTION_H
@@ -53,19 +56,20 @@ void gnc_gen_trans_list_delete (GNCGenTransaction *info);
 void gnc_gen_trans_list_add_trans(GNCGenTransaction *gui, Transaction *trans);
 
 /** Run this dialog and return only after the user pressed Ok, Cancel,
- * or closed the window. This means that all actual importing will
- * have been finished upon returning.
+  or closed the window. This means that all actual importing will
+  have been finished upon returning.
  */
 gboolean gnc_gen_trans_list_run (GNCGenTransaction *info);
 
 /** Freeze the underlying GtkCList. Do this before you add a lot of
- * transactions. */
+  transactions. */
 void gnc_gen_trans_list_freeze (GNCGenTransaction *gui);
 
 /** Thaw the underlying GtkCList. Do this after you added a lot of
- * transactions. */
+  transactions. */
 void gnc_gen_trans_list_thaw (GNCGenTransaction *gui);
 
 
 
 #endif
+/**@}*/

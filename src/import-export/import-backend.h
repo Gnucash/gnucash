@@ -1,10 +1,4 @@
 /********************************************************************\
- * Transaction-matcher.h --                                         *
- * See file generic-import-design.txt for                           *
- * description                                                      *
- *                        (GnuCash)                                 *
- * Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>        *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -22,9 +16,12 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file
-    @brief import-backend.h: Generic importer backend interface
-    @author Copyright (C) 2002 Benoit Grégoire,  Christian Stimming
+/** @addtogroup Import_Export
+    @{ */
+/** @file import-backend.h
+    @brief Generic importer backend interface
+    @author Copyright (C) 2002 Benoit Grégoire
+	@author Christian Stimming
 */
  
 #ifndef TRANSACTION_MATCHER_H
@@ -46,7 +43,6 @@ typedef enum _action {
   GNCImport_LAST_ACTION,
   GNCImport_INVALID_ACTION
 } GNCImportAction;
-/* Note: If you modify this, modify also get_next_action(). */
 
 /************************************************************************
  * @name Non-GUI Functions 
@@ -224,20 +220,23 @@ gnc_import_TransInfo_set_destacc (GNCImportTransInfo *info,
 gboolean
 gnc_import_TransInfo_get_destacc_selected_manually (const GNCImportTransInfo *info);
 
-/*@}*/
+/**@}*/
 
 /** @name Getters/Setters for GNCImportMatchInfo */
-/*@{*/
+/**@{*/
 
-/* Get the split ('this-side split') of this MatchInfo. */
+/** Get the split ('this-side split') of this MatchInfo. */
 Split * 
 gnc_import_MatchInfo_get_split (const GNCImportMatchInfo * info);
 
 
-/* Get the probability (confidence level) of this MatchInfo. 
+/** Get the probability (confidence level) of this MatchInfo. 
 @param info Can be NULL, in which case the function returns 0*/
 gint 
 gnc_import_MatchInfo_get_probability (const GNCImportMatchInfo * info);
-/*@}*/
+/**@}*/
 
 #endif
+/** @} */
+
+

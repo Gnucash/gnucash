@@ -16,7 +16,8 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file
+/** @internal
+    @file
     @brief Christian Stimming's matcher
     @author Copyright (C) 2002 Christian Stimming
  */
