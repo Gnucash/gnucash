@@ -63,15 +63,17 @@ static void gnc_table_resize (Table * table, int virt_rows, int virt_cols);
 /** Implementation *****************************************************/
 
 Table * 
-gnc_table_new (TableModel *model)
+gnc_table_new (TableControl *control, TableModel *model)
 {
   Table *table;
 
+  g_return_val_if_fail (control != NULL, NULL);
   g_return_val_if_fail (model != NULL, NULL);
   g_return_val_if_fail (model->entry_handler, NULL);
 
   table = g_new0 (Table, 1);
 
+  table->control = control;
   table->layout = gnc_table_layout_new ();
   table->model = model;
 
@@ -98,10 +100,7 @@ gnc_table_init (Table * table)
 
   gnc_virtual_location_init (&table->current_cursor_loc);
 
-  table->move_cursor = NULL;
-  table->traverse = NULL;
   table->set_help = NULL;
-  table->user_data = NULL;
 
   table->dividing_row = -1;
 
@@ -110,7 +109,6 @@ gnc_table_init (Table * table)
   table->virt_cells = NULL;
 
   table->ui_data = NULL;
-  table->destroy = NULL;
 }
 
 /* ==================================================== */
@@ -119,8 +117,8 @@ void
 gnc_table_destroy (Table * table)
 {
   /* invoke destroy callback */
-  if (table->destroy)
-    table->destroy(table);
+  if (table->ui_destroy)
+    table->ui_destroy (table);
 
   /* free the dynamic structures */
   gnc_table_free_data (table);
@@ -576,9 +574,9 @@ gnc_table_move_cursor_internal (Table *table,
   /* call the callback, allowing the app to commit any changes
    * associated with the current location of the cursor. Note that
    * this callback may recursively call this routine. */
-  if (table->move_cursor)
+  if (table->control->move_cursor && table->control->allow_move)
   {
-    (table->move_cursor) (table, &new_virt_loc);
+    table->control->move_cursor (&new_virt_loc, table->control->user_data);
 
     /* The above callback can cause this routine to be called
      * recursively. As a result of this recursion, the cursor may
@@ -1576,8 +1574,9 @@ gnc_table_traverse_update(Table *table,
   }
 
   /* Call the table traverse callback for any modifications. */
-  if (table->traverse)
-    abort_move = table->traverse (table, dest_loc, dir);
+  if (table->control->traverse)
+    abort_move = table->control->traverse (dest_loc, dir,
+                                           table->control->user_data);
   else
     abort_move = FALSE;
 

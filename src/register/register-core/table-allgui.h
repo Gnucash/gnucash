@@ -96,18 +96,10 @@
 #include "gnc-common.h"
 #include "gtable.h"
 #include "register-common.h"
+#include "table-control.h"
 #include "table-layout.h"
 #include "table-model.h"
 
-
-typedef enum
-{
-  GNC_TABLE_TRAVERSE_POINTER,
-  GNC_TABLE_TRAVERSE_LEFT,
-  GNC_TABLE_TRAVERSE_RIGHT,
-  GNC_TABLE_TRAVERSE_UP,
-  GNC_TABLE_TRAVERSE_DOWN
-} gncTableTraversalDir;
 
 /* The VirtualCell structure holds information about each virtual cell. */
 typedef struct _VirtualCell VirtualCell;
@@ -121,23 +113,18 @@ struct _VirtualCell
   unsigned int start_primary_color : 1; /* color usage flag */
 };
 
-typedef struct _Table Table;
+typedef struct table Table;
 
-typedef void (*TableMoveFunc) (Table *table,
-                               VirtualLocation *new_virt_loc);
-
-typedef gboolean (*TableTraverseFunc) (Table *table,
-                                       VirtualLocation *new_virt_loc,
-                                       gncTableTraversalDir dir);
+typedef void (*TableDestroyFunc) (Table *table);
 
 typedef void (*TableSetHelpFunc) (Table *table,
                                   const char *help_str);
 
-typedef void (*TableDestroyFunc) (Table *table);
-
-struct _Table
+struct table
 {
+  TableControl *control;
   TableLayout *layout;
+  TableModel *model;
 
   short num_virt_rows;
   short num_virt_cols;
@@ -148,18 +135,8 @@ struct _Table
 
   VirtualLocation current_cursor_loc;
 
-  /* callback that is called when the cursor is moved */
-  TableMoveFunc move_cursor;
-
-  /* callback that is called to determine traversal */
-  TableTraverseFunc traverse;
-
   /* callback to set a help string associated with a cell */
   TableSetHelpFunc set_help;
-
-  /* This value is initialized to NULL and never touched afterwards.
-   * It can be used by higher-level code. */
-  gpointer user_data;
 
   /* If positive, denotes a row that marks a boundary that should
    * be visually distinguished. */
@@ -172,16 +149,13 @@ struct _Table
   /* The virtual cell table */
   GTable *virt_cells;
 
+  TableDestroyFunc ui_destroy;
   gpointer ui_data;
-
-  TableModel *model;
-
-  TableDestroyFunc destroy;
 };
 
 
 /* Functions to create and destroy Tables.  */
-Table *     gnc_table_new (TableModel *model);
+Table *     gnc_table_new (TableControl *control, TableModel *model);
 
 void        gnc_table_save_state (Table *table);
 void        gnc_table_destroy (Table *table);

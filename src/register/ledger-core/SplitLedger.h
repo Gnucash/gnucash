@@ -64,10 +64,6 @@ void xaccSRSetData(SplitRegister *reg, gpointer user_data,
                    SRGetParentCallback get_parent,
                    SRSetHelpCallback set_help);
 
-/* The xaccSRSetAccountSeparator() method sets the character
- *    used to separate accounts in fully-qualified names. */
-void xaccSRSetAccountSeparator(char separator);
-
 /* The xaccSRSetReverseBalanceCallback() method sets up
  *    a callback used to determine whether split balances
  *    should be reversed. */

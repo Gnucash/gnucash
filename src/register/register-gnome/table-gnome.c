@@ -120,7 +120,6 @@ void
 gnc_table_init_gui (gncUIWidget widget, void *data)
 {
         int header_widths[CELL_TYPE_COUNT];
-        SplitRegister *sr;
         GnucashSheet *sheet;
         GnucashRegister *greg;
         Table *table;
@@ -131,13 +130,11 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         g_return_if_fail (GNUCASH_IS_REGISTER (widget));
         g_return_if_fail (data != NULL);
 
-        sr = data;
-
         greg = GNUCASH_REGISTER(widget);
         sheet = GNUCASH_SHEET(greg->sheet);
         table = sheet->table;
 
-        table->destroy = table_destroy_cb;
+        table->ui_destroy = table_destroy_cb;
         table->ui_data = sheet;
 
         gtk_widget_ref (GTK_WIDGET(sheet));

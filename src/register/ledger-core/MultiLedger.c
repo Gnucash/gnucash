@@ -36,6 +36,7 @@
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "split-register-control.h"
 
 
 #define REGISTER_SINGLE_CM_CLASS     "register-single"
@@ -53,6 +54,8 @@ struct _xaccLedgerDisplay
   LedgerDisplayType ld_type;
 
   SplitRegister *reg;
+
+  TableControl *control;
   TableModel *model;
 
   gboolean loading;
@@ -613,6 +616,9 @@ close_handler (gpointer user_data)
   xaccFreeQuery (ld->query);
   ld->query = NULL;
 
+  gnc_table_control_destroy (ld->control);
+  ld->control = NULL;
+
   gnc_table_model_destroy (ld->model);
   ld->model = NULL;
 
@@ -825,7 +831,12 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
   ld->model->cell_data_deallocator = xaccMLGUIDFree;
   ld->model->cell_data_copy        = xaccMLGUIDCopy;
 
-  ld->reg = gnc_register_new (reg_type, style, FALSE, ld->model, templateMode);
+  ld->control = gnc_split_register_control_new ();
+
+  ld->reg = gnc_register_new (reg_type, style, FALSE,
+                              ld->control, ld->model, templateMode);
+
+  ld->control->user_data = ld->reg;
 
   xaccSRSetData (ld->reg, ld,
                  xaccLedgerDisplayParent,

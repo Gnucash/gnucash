@@ -179,6 +179,7 @@ SplitRegister *
 gnc_register_new (SplitRegisterType type,
                   SplitRegisterStyle style,
                   gboolean use_double_line,
+                  TableControl *control,
                   TableModel *model,
                   gboolean templateMode);
 

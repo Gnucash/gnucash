@@ -118,6 +118,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterType type,
                        SplitRegisterStyle style,
                        gboolean use_double_line,
+                       TableControl *control,
                        TableModel *model,
                        gboolean templateMode);
 
@@ -620,6 +621,7 @@ SplitRegister *
 gnc_register_new (SplitRegisterType type,
                   SplitRegisterStyle style,
                   gboolean use_double_line,
+                  TableControl *control,
                   TableModel *model,
                   gboolean templateMode)
 {
@@ -638,6 +640,7 @@ gnc_register_new (SplitRegisterType type,
                          type,
                          style,
                          use_double_line,
+                         control,
                          model,
                          templateMode);
 
@@ -714,10 +717,11 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterType type,
                        SplitRegisterStyle style,
                        gboolean use_double_line,
+                       TableControl *control,
                        TableModel *model,
                        gboolean templateMode)
 {
-  reg->table = gnc_table_new (model);
+  reg->table = gnc_table_new (control, model);
 
   reg->user_data = NULL;
   reg->destroy = NULL;

@@ -77,7 +77,6 @@
 static void gnc_configure_date_format_cb(gpointer);
 static void gnc_configure_date_format(void);
 static void gnc_configure_account_separator_cb(gpointer);
-static void gnc_configure_account_separator(void);
 static void gnc_configure_register_colors_cb(gpointer);
 static void gnc_configure_register_colors(void);
 static void gnc_configure_register_borders_cb(gpointer);
@@ -260,7 +259,6 @@ gnucash_ui_init(void)
       gnc_register_option_change_callback(gnc_configure_date_format_cb, NULL,
                                           "International", "Date Format");
 
-    gnc_configure_account_separator();
     account_separator_callback_id = 
       gnc_register_option_change_callback(gnc_configure_account_separator_cb,
                                           NULL, "General",
@@ -607,23 +605,7 @@ gnc_configure_date_format (void)
 static void 
 gnc_configure_account_separator_cb (gpointer data)
 {
-  gnc_configure_account_separator ();
   gnc_gui_refresh_all ();
-}
-
-/* gnc_configure_account_separator
- *    sets the account separator to the
- *    current value on the scheme side
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_account_separator (void)
-{
-  char separator = gnc_get_account_separator ();
-
-  xaccSRSetAccountSeparator (separator);
 }
 
 /* gnc_configure_register_colors_cb

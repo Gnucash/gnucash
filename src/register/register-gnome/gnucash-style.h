@@ -23,7 +23,6 @@
 
 #include <gnome.h>
 
-#include "splitreg.h"
 #include "gnucash-sheet.h"
 
 typedef struct

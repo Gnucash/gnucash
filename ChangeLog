@@ -1,3 +1,16 @@
+2001-08-14  Dave Peticolas  <dave@krondo.com>
+
+	* all others: update for api/reorganization
+
+	* src/register/register-core/table-control.[ch]: encapsulate
+	table control object.
+
+	* src/register/ledger-core/split-register-util.c: split out
+	general split register utilities
+
+	* src/register/ledger-core/split-register-control.[ch]: split
+	out split register control functionality
+
 2001-08-13  Dave Peticolas  <dave@krondo.com>
 
 	* all other files: update for change below

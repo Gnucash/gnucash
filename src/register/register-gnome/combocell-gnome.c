@@ -44,7 +44,6 @@
 #include "gnucash-item-list.h"
 #include "gnucash-sheet.h"
 #include "messages.h"
-#include "splitreg.h"
 #include "table-allgui.h"
 
 

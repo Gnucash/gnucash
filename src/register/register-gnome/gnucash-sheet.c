@@ -40,6 +40,8 @@
 #include "gnucash-item-edit.h"
 #include "gnc-engine-util.h"
 
+#include "splitreg.h"
+
 #define DEFAULT_REGISTER_HEIGHT 400
 #define DEFAULT_REGISTER_WIDTH  630
 
