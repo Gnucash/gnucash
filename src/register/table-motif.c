@@ -51,6 +51,8 @@ static void doRefreshCursorGUI (Table * table, CellBlock *curs, int row, int col
 static XrmQuark QPointer, QLeft, QRight, QUp, QDown;
 static Boolean haveQuarks = False;
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_REGISTER;
 
 /* ==================================================== */
 
@@ -242,8 +244,8 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
    rel_row = table->locators[row][col]->phys_row_offset;
    rel_col = table->locators[row][col]->phys_col_offset;
 
-   DEBUGCMD (printf ("enter %d %d (relrow=%d relcol=%d) cell=%p\n", 
-      row, col, rel_row, rel_col, arr->cells[rel_row][rel_col]));
+   PINFO("enterCB(): enter %d %d (relrow=%d relcol=%d) cell=%p\n", 
+      row, col, rel_row, rel_col, arr->cells[rel_row][rel_col]);
 
    /* since we are here, there must be a cell handler.
     * therefore, we accept entry into the cell by default, 
@@ -392,7 +394,7 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
    rel_row = table->locators[row][col]->phys_row_offset;
    rel_col = table->locators[row][col]->phys_col_offset;
 
-   DEBUGCMD (printf ("leave %d %d \n", row, col));
+   PINFO("leaveCB(): row=%d col=%d \n", row, col);
 
    /* by default, accept whatever the final proposed edit is */
    cbs->doit = True;
