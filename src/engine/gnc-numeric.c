@@ -327,9 +327,11 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
     }
     else if(b.num == 0) {
       denom = a.denom;
+      b.denom = a.denom;
     }
     else if(a.num == 0) {
       denom = b.denom;
+      a.denom = b.denom;
     }
     else {
       return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
@@ -378,6 +380,7 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
     if (cab.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
     
     sum.num   = cab.lo;
+    if (cab.isneg) sum.num = -sum.num;
     sum.denom = lcd;
   }
   
