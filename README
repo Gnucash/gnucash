@@ -39,8 +39,8 @@ Features include:
   - Quicken File Import: Import Quicken QIF style files.
     QIF files are automtically merged to eliminate 
     duplicate transactions.
-  - Reports: Display Balance Sheet, Profit&Loss reports,
-    or print them as HTML.
+  - Reports: Display Balance Sheet, Profit&Loss, Portfolio 
+    Valuation, or print them as HTML.
   - Chart of Accounts: A master account can have a hierarchy
     of detail accounts underneath it.  This allows similar
     account types (e.g. Cash, Bank, Stock) to be grouped 
@@ -71,6 +71,9 @@ Features include:
   - Provides a byte-stream format, which allows accounts and
     account groups to be transmitted to other processes
     via pipes or sockets.
+  - Get Stock & Mutual Fund quotes from various web sites, 
+    update portfolio automatically (more funds being added 
+    regularly).
 
 Home Page:
 ----------
