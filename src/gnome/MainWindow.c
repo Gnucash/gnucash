@@ -367,6 +367,7 @@ main_window_init(AccountGroup *accts)
   {
     {"<Main>/File/New", "<control>N", NULL, NULL},
     {"<Main>/File/Open", "<control>O", file_cmd_open, NULL},
+    {"<Main>/File/Import", NULL, file_cmd_import, NULL},
     {"<Main>/File/Save", "<control>S", file_cmd_save, NULL},
     {"<Main>/File/Save as", NULL, NULL, NULL},
     {"<Main>/File/<separator>", NULL, NULL, NULL},
@@ -381,7 +382,6 @@ main_window_init(AccountGroup *accts)
 
   mwindow = g_malloc ( sizeof ( main_window ) );
   mwindow->maintree = gtk_tree_new ( );
-
 
   mwindow->root_item = GTK_WIDGET ( mwindow->maintree );
 
