@@ -144,7 +144,13 @@ install:
 	$(INSTALL_DATA) data/*.xac ${GNC_SHAREDIR}/data
 
 	@mkdir -p ${GNC_SHAREDIR}/Docs
+	@mkdir -p ${GNC_SHAREDIR}/Docs/En
+	@mkdir -p ${GNC_SHAREDIR}/Docs/Fn
 	$(INSTALL_DATA) Docs/*.html ${GNC_SHAREDIR}/Docs
+	$(INSTALL_DATA) Docs/En/*.html ${GNC_SHAREDIR}/Docs/En
+	$(INSTALL_DATA) Docs/Fr/*.html ${GNC_SHAREDIR}/Docs/Fr
+# XXX hack alert -- should fix scheme paths to find language directories.
+	$(INSTALL_DATA) Docs/En/*.html ${GNC_SHAREDIR}/Docs
   #	$(INSTALL_DATA) Docs/*.phtml ${GNC_SHAREDIR}/Docs
 	$(INSTALL_DATA) Docs/*.gif ${GNC_SHAREDIR}/Docs
   #	$(INSTALL_DATA) Docs/*.jpg ${GNC_SHAREDIR}/Docs
