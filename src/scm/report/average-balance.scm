@@ -47,7 +47,7 @@
 		    '(bank cash credit asset liability equity) 
 		    ;; or: '(bank cash checking savings stock
 		    ;; mutual-fund money-market)
-		    (gnc:group-get-subaccounts (gnc:get-current-group)))))))
+		    (gnc:group-get-account-list (gnc:get-current-group)))))))
         #f #t))
 
       (gnc:options-add-interval-choice! 
@@ -116,19 +116,17 @@
 
   (define (analyze-splits splits start-bal 
 			  start-date end-date interval collector->double)
-    (let* ((minmax-accum (gnc:make-stats-collector))
-           (stats-accum (gnc:make-stats-collector))
-           (gain-loss-accum (gnc:make-drcr-collector))
-           (interval-start start-date)
-	   ;; Note that this (decdate ... SecDelta) stuff is *vital*
-	   ;; to make sure that our intervals are *not overlapping*.
-           (interval-end (decdate (incdate start-date interval) SecDelta))
-           (last-balance (collector->double start-bal))
-           (last-balance-time interval-start)
-           (data-rows '()))
+    (let ((interval-list 
+	   (gnc:make-date-interval-list start-date end-date interval))
+	  (start-bal-double (collector->double start-bal))
+	  (data-rows '()))
       
-      (define (output-row)
-        (set! data-rows 
+      (define (output-row interval-start 
+			  interval-end 
+			  stats-accum 
+			  minmax-accum
+			  gain-loss-accum)
+	 (set! data-rows
               (cons 
                (list (gnc:timepair-to-datestring interval-start)
                      (gnc:timepair-to-datestring interval-end)
@@ -153,79 +151,94 @@
 	  ;; only have the collector->double conversion at hand.
 	  (collector->double coll)))
       
-      ;; initialize the accumulators 
-      (minmax-accum 'reset #f)
-      (stats-accum 'reset #f)
-      (gain-loss-accum 'reset #f)
-
-      (minmax-accum 'add start-bal)
-
-      ;; Now go through all splits. FIXME: This assumes that there is
-      ;; at least one split in each time interval, especially in the
-      ;; first and the last one. I haven't yet thoroughly thought
-      ;; about what happens if that's not the case -- somebody should
-      ;; think this through.
-      (for-each 
-       (lambda (split)
-	 ;; xtn-date: The date of the current split.
-         (let* ((xtn-date 
-                 (gnc:transaction-get-date-posted 
-                  (gnc:split-get-parent split)))
-		;; split-amt: The value of this split. Is a double.
-                (split-amt (get-split-value split)))
-
-	   ;; procedure to be executed if the current split is in the
-	   ;; interval
-           (define (split-in-interval)
-             (stats-accum 
-              'add (* last-balance
-                      (gnc:timepair-delta last-balance-time
-                                          xtn-date)))
-             ;; update other stats 
-             (set! last-balance (+ last-balance split-amt))
-             (set! last-balance-time xtn-date)
-             (minmax-accum 'add last-balance)
-             (gain-loss-accum 'add split-amt))
-           
-	   ;; procedure to be executed if the current split is not
-	   ;; (yet) in the interval
-           (define (split-outside-interval)
-             (stats-accum 
-              'add (* last-balance
-                      (gnc:timepair-delta last-balance-time 
-                                          interval-end)))
-             (set! last-balance-time interval-end)
-             (minmax-accum 'add last-balance)
-             
-             ;; output a row of info 
-             (output-row)
-             (set! interval-start (incdate interval-start interval))
-             (set! interval-end
-                   (decdate (incdate interval-start interval) SecDelta))
-
-             ;; reset collectors 
-             (minmax-accum 'reset #f)
-             (gain-loss-accum 'reset #f)
-             (stats-accum 'reset #f))
-           
-           ;; is this split in the interval? 
-           (let loop ()
-             (if (gnc:timepair-le xtn-date interval-end)
-                 ;; yes, it is inside interval 
-                 (split-in-interval)
-                 ;; otherwise, loop until it is
-                 ;; in the interval.
-                 (begin 
-                   (split-outside-interval)
-                   (loop))))))
-       splits)
+      ;; calculate the statistics for one interval - returns a list 
+      ;;  containing the following: 
+      ;; min-max acculumator
+      ;; average-accumulator
+      ;; gain-loss accumulator
+      ;; final balance for this interval
+      ;; splits remaining to be processed.
       
-      ;; now spit out the last chunk of data (between the beginning
-      ;; of the last interval and the last split)
-      (if (not (gnc:timepair-eq last-balance-time interval-start))
-          (begin 
-            (set! interval-end last-balance-time)
-            (output-row)))
+      ;; note that it is assumed that every split in in the list
+      ;; has a date >= from 
+
+      (define (process-interval splits from to start-balance)
+
+	(let ((minmax-accum (gnc:make-stats-collector))
+	      (stats-accum (gnc:make-stats-collector))
+	      (gain-loss-accum (gnc:make-drcr-collector))
+	      (last-balance start-balance)
+	      (last-balance-time from))
+	 
+	  
+	  (define (update-stats  split-amt split-time)
+	    (let ((time-difference (gnc:timepair-delta 
+				    last-balance-time
+				    split-time)))
+	      (stats-accum 'add (* last-balance time-difference))
+	      (set! last-balance (+ last-balance split-amt))
+	      (set! last-balance-time split-time)
+	      (minmax-accum 'add last-balance)
+	      (gain-loss-accum 'add split-amt)))
+
+	  (define (split-recurse)
+	    (if (or (null? splits) (gnc:timepair-gt 
+				    (gnc:transaction-get-date-posted 
+				     (gnc:split-get-parent
+				      (car splits))) to)) 
+		#f
+		(let* 
+		    ((split (car splits))
+		     (split-amt (get-split-value split))
+		     (split-time (gnc:transaction-get-date-posted 
+				  (gnc:split-get-parent split))))
+		  
+		  
+		  (gnc:debug "split " split)
+		  (gnc:debug "split-time " split-time)
+		  (gnc:debug "split-amt " split-amt)
+		  (gnc:debug "splits " splits)
+		  (update-stats split-amt split-time)
+		  (set! splits (cdr splits))
+		(split-recurse))))
+
+	  ;  the minmax accumulator
+
+	  (minmax-accum 'add start-balance)
+
+	  (if (not (null? splits))
+	      (split-recurse))
+
+	  ;; insert a null transaction at the end of the interval
+	  (update-stats 0.0 to)
+	  (list minmax-accum stats-accum gain-loss-accum last-balance splits)))
+		
+	      
+      (for-each
+       (lambda (interval)
+	 (let* 
+	     
+	     ((interval-results 
+	       (process-interval 
+		splits 
+		(car interval) 
+		(cadr interval)
+		start-bal-double))
+	      (min-max-accum (car interval-results))
+	      (stats-accum (cadr interval-results))
+	      (gain-loss-accum (caddr interval-results))
+	      (last-bal (cadddr interval-results))
+	      (rest-splits (list-ref interval-results 4)))
+
+	   (set! start-bal-double last-bal)
+	   (set! splits rest-splits)
+	   (output-row (car interval) 
+		       (cadr interval) 
+		       stats-accum 
+		       min-max-accum gain-loss-accum)))
+       interval-list)
+	     
+      
       (reverse data-rows)))
   
 
@@ -238,6 +251,7 @@
             (lambda (sec value)
               (gnc:option-value 
                (gnc:lookup-option (gnc:report-options report-obj) sec value))))
+	   (report-title (opt-val gnc:pagename-general gnc:optname-reportname))
            (begindate  (gnc:timepair-start-day-time
 			(gnc:date-option-absolute-time 
 			 (opt-val gnc:pagename-general (N_ "From")))))
@@ -268,7 +282,7 @@
 				       report-currency 
 				       exchange-fn))))
 
-      (gnc:html-document-set-title! document (_ "Average Balance"))
+      (gnc:html-document-set-title! document report-title)
 
       (if (not (null? accounts))
           (let ((query (gnc:malloc-query))
@@ -410,13 +424,9 @@
                   (gnc:html-document-add-object! document table))))
 
           ;; if there are no accounts selected...
-          (let ((p (gnc:make-html-text)))
-            (gnc:html-text-append! 
-             p 
-             (gnc:html-markup-h2 (_ "No accounts selected"))
-             (gnc:html-markup-p
-              (_ "This report requires accounts to be selected.")))
-            (gnc:html-document-add-object! document p)))
+            (gnc:html-document-add-object! 
+	     document
+	     (gnc:html-make-no-account-warning)))
       document))
   
   (gnc:define-report

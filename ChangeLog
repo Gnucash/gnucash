@@ -1,3 +1,8 @@
+2001-05-01  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/average-balance.scm: moved from
+	average-balance-2.scm. Fix bug.
+
 2001-04-30  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/report/portfolio.scm: fix bug
