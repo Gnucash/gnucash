@@ -516,8 +516,16 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table date-format)
-  (let ((table (gnc:make-html-table)))
+(define (make-myname-table book date-format)
+  (let* ((table (gnc:make-html-table))
+	 (slots (gnc:book-get-slots book))
+	 (name (gnc:kvp-frame-get-slot-path
+		slots (append gnc:*kvp-option-path*
+			      (list gnc:*business-label* gnc:*company-name*))))
+	 (addy (gnc:kvp-frame-get-slot-path
+		slots (append gnc:*kvp-option-path*
+			      (list gnc:*business-label* gnc:*company-addy*)))))
+
     (gnc:html-table-set-style!
      table "table"
      'attribute (list "border" 0)
@@ -525,21 +533,12 @@
      'attribute (list "valign" "top")
      'attribute (list "cellspacing" 0)
      'attribute (list "cellpadding" 0))
-    (gnc:html-table-append-row!
-     table
-     (list
-      (gnc:option-value
-       (gnc:lookup-global-option "User Info" "User Name"))))
-    (gnc:html-table-append-row!
-     table
-     (list
-      (string-expand
-       (gnc:option-value
-	(gnc:lookup-global-option "User Info" "User Address"))
-       #\newline "<br>")))
-    (gnc:html-table-append-row!
-     table
-     (list (date->string (current-date) date-format)))
+    (gnc:html-table-append-row! table (list (if name name "")))
+    (gnc:html-table-append-row! table (list (string-expand
+					     (if addy addy "")
+					     #\newline "<br>")))
+    (gnc:html-table-append-row! table (list (date->string (current-date)
+							  date-format)))
     table))
 
 (define (make-break! document)
@@ -574,7 +573,7 @@
     (gnc:html-document-set-title! document title)
 
     (if invoice
-	(begin
+	(let ((book (gnc:invoice-get-book invoice)))
 	  (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
 					add-order))
@@ -587,7 +586,7 @@
 
 	  (gnc:html-document-add-object!
 	   document
-	   (make-myname-table (opt-val "Display" "Today Date Format")))
+	   (make-myname-table book (opt-val "Display" "Today Date Format")))
 
 	  (let ((date-table #f)
 		(post-date (gnc:invoice-get-date-posted invoice))

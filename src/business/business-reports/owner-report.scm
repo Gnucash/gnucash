@@ -388,8 +388,16 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table date-format)
-  (let ((table (gnc:make-html-table)))
+(define (make-myname-table book date-format)
+  (let* ((table (gnc:make-html-table))
+	 (slots (gnc:book-get-slots book))
+	 (name (gnc:kvp-frame-get-slot-path
+		slots (append gnc:*kvp-option-path*
+			      (list gnc:*business-label* gnc:*company-name*))))
+	 (addy (gnc:kvp-frame-get-slot-path
+		slots (append gnc:*kvp-option-path*
+			      (list gnc:*business-label* gnc:*company-addy*)))))
+
     (gnc:html-table-set-style!
      table "table"
      'attribute (list "border" 0)
@@ -397,21 +405,14 @@
      'attribute (list "valign" "top")
      'attribute (list "cellspacing" 0)
      'attribute (list "cellpadding" 0))
-    (gnc:html-table-append-row!
-     table
-     (list
-      (gnc:option-value
-       (gnc:lookup-global-option "User Info" "User Name"))))
-    (gnc:html-table-append-row!
-     table
-     (list
-      (string-expand
-       (gnc:option-value
-	(gnc:lookup-global-option "User Info" "User Address"))
-       #\newline "<br>")))
-    (gnc:html-table-append-row!
-     table
-     (list (date->string (current-date) date-format)))
+
+    (gnc:html-table-append-row! table (list (if name name "")))
+    (gnc:html-table-append-row! table (list (string-expand
+					     (if addy addy "")
+					     #\newline "<br>")))
+    (gnc:html-table-append-row! table
+				(list (date->string (current-date)
+						    date-format)))
     table))
 
 (define (make-break! document)
@@ -435,7 +436,8 @@
 	 (report-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
-	 (title #f))
+	 (title #f)
+	 (book (gnc:get-current-book)))	;XXX Grab this from elsewhere
 
     (if (not (null? account-list))
 	(set! account (car account-list)))
@@ -479,7 +481,7 @@
 
 	  (gnc:html-document-add-object!
 	   document
-	   (make-myname-table (opt-val gnc:pagename-general (N_ "Today Date Format"))))
+	   (make-myname-table book (opt-val gnc:pagename-general (N_ "Today Date Format"))))
 
 	  (gnc:html-document-add-object!
 	   document
