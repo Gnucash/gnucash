@@ -204,12 +204,14 @@ gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job)
 
 
 gboolean
-gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error)
+gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
+		      GNCInteractor *inter)
 {
   int code = HBCI_Error_code (error);
 
   switch (code) {
   case HBCI_ERROR_CODE_PIN_WRONG:
+    GNCInteractor_erasePIN (inter);
     return gnc_verify_dialog_parented (parent,
 				       TRUE,
 				       _("The PIN you entered was wrong.\n"
@@ -218,6 +220,7 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error)
     printf("gnc_hbci_error_feedback: PIN dialog was aborted.\n");
     return FALSE;
   case HBCI_ERROR_CODE_PIN_TOO_SHORT:
+    GNCInteractor_erasePIN (inter);
     return gnc_verify_dialog_parented (parent,
 				       TRUE,
 				       _("The PIN you entered was too short.\n"

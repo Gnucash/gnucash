@@ -162,7 +162,7 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     do {
       err = HBCI_API_executeQueue (api, TRUE);
       g_assert (err);
-    } while (gnc_hbci_error_retry (parent, err));
+    } while (gnc_hbci_error_retry (parent, err, interactor));
     
     if (!HBCI_Error_isOk(err)) {
       char *errstr = g_strdup_printf("gnc_hbci_gettrans: Error at executeQueue: %s",

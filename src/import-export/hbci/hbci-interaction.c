@@ -80,6 +80,15 @@ void GNCInteractor_delete(GNCInteractor *data)
   data->dialog = NULL;
 }
 
+void GNCInteractor_erasePIN(GNCInteractor *i)
+{
+  g_assert(i);
+  if (i->pw != NULL)
+    g_free (memset (i->pw, 0, strlen (i->pw)));
+  i->pw = NULL;
+  i->user = NULL;
+}
+
 
 /********************************************************
  * Now all the callback functions 
@@ -110,19 +119,25 @@ static int msgInputPin(const HBCI_User *user,
       if (user != NULL) {
 	bank = HBCI_User_bank (user);
 	if (bank != NULL) 
+	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("Please enter and confirm new PIN for \n"
-"user '%s' at bank '%s',\n"
-"with at least %d characters."), username, 
+				       "user '%s' at bank '%s',\n"
+				       "with at least %d characters."),
+				     username, 
 				     HBCI_Bank_bankCode(bank),
 				     minsize);
 	else 
+	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("Please enter and confirm a new PIN for \n"
-"user '%s' at unknown bank,\n"
-"with at least %d characters."), username, minsize);
+				       "user '%s' at unknown bank,\n"
+				       "with at least %d characters."), 
+				     username, minsize);
       }
       else 
+	/* xgettext:c-format */	    
 	msgstr = g_strdup_printf ( _("Please enter and confirm a new PIN\n"
-"with at least %d characters."), minsize);
+				     "with at least %d characters."), 
+				   minsize);
 
       retval = gnc_hbci_get_initial_password (data->parent,
 					      msgstr,
@@ -140,15 +155,19 @@ static int msgInputPin(const HBCI_User *user,
 	if (user != NULL) {
 	  bank = HBCI_User_bank (user);
 	  if (bank != NULL) 
+	    /* xgettext:c-format */	    
 	    msgstr = g_strdup_printf ( _("Please enter PIN for \n"
-"user '%s' at bank '%s'."), username, HBCI_Bank_bankCode(bank));
+					 "user '%s' at bank '%s'."), 
+				       username, HBCI_Bank_bankCode(bank));
 	  else 
+	    /* xgettext:c-format */	    
 	    msgstr = g_strdup_printf ( _("Please enter PIN for \n"
-"user '%s' at unknown bank."), username);
+					 "user '%s' at unknown bank."), 
+				       username);
 	}
 	else 
 	  msgstr = g_strdup ( _("Please enter PIN for \n"
-"unknown user at unknown bank."));
+				"unknown user at unknown bank."));
 	
 	retval = gnc_hbci_get_password (data->parent,
 					msgstr,
@@ -164,8 +183,10 @@ static int msgInputPin(const HBCI_User *user,
     if (strlen(passwd) < minsize) {
       if (gnc_ok_cancel_dialog_parented (NULL, 
 					 GNC_VERIFY_OK,
+					 /* xgettext:c-format */	    
 					 _("The PIN needs to be at least %d characters long.\n"
-"Please try again."), minsize) == GNC_VERIFY_CANCEL)
+					   "Please try again."), 
+					 minsize) == GNC_VERIFY_CANCEL)
 	break;
     }
     else {
@@ -205,15 +226,19 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
 	_("Unknown")));
     b = HBCI_User_bank (user);
     if (b != NULL) 
+      /* xgettext:c-format */	    
       msgstr = g_strdup_printf ( _("Please insert chip card for \n"
-"user '%s' at bank '%s'."), username, HBCI_Bank_bankCode(b));
+				   "user '%s' at bank '%s'."), 
+				 username, HBCI_Bank_bankCode(b));
     else 
+      /* xgettext:c-format */	    
       msgstr = g_strdup_printf ( _("Please insert chip card for \n"
-"user '%s' at unknown bank."), username);
+				   "user '%s' at unknown bank."), 
+				 username);
   }
   else 
     msgstr = g_strdup ( _("Please insert chip card for \n"
-"unknown user at unknown bank."));
+			  "unknown user at unknown bank."));
       
   retval = gnc_ok_cancel_dialog_parented (data->parent,
 					  GNC_VERIFY_OK, 
@@ -241,15 +266,19 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
 	_("Unknown")));
     b = HBCI_User_bank (user);
     if (b != NULL) 
+      /* xgettext:c-format */	    
       msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"
-"user '%s' at bank '%s'."), username, HBCI_Bank_bankCode(b));
+				   "user '%s' at bank '%s'."), 
+				 username, HBCI_Bank_bankCode(b));
     else 
+      /* xgettext:c-format */	    
       msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"
-"user '%s' at unknown bank."), username);
+				   "user '%s' at unknown bank."), 
+				 username);
   }
   else 
     msgstr = g_strdup ( _("Please insert the correct chip card for \n"
-"unknown user at unknown bank."));
+			  "unknown user at unknown bank."));
       
   retval = gnc_ok_cancel_dialog_parented (data->parent,
 					  GNC_VERIFY_OK,

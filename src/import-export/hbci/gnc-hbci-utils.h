@@ -92,6 +92,7 @@ gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job);
  * other hand, returns false if the user can't do anything about this
  * error right now. */
 gboolean
-gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error);
+gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error, 
+		      GNCInteractor *inter);
 
 #endif

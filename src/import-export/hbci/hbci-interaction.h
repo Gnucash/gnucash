@@ -35,6 +35,7 @@ gboolean GNCInteractor_aborted(const GNCInteractor *i);
 void GNCInteractor_show(GNCInteractor *i);
 void GNCInteractor_hide(GNCInteractor *i);
 void GNCInteractor_delete(GNCInteractor *i);
+void GNCInteractor_erasePIN(GNCInteractor *i);
 
 
 #endif

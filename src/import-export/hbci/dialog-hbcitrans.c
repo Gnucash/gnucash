@@ -197,9 +197,12 @@ gnc_hbci_trans (GtkWidget *parent,
 	if (interactor)
 	  GNCInteractor_show (interactor);
 
-	HBCI_Hbci_setDebugLevel(1);
-	err = HBCI_API_executeQueue (api, TRUE);
-	g_assert (err);
+	HBCI_Hbci_setDebugLevel(0);
+	do {
+	  err = HBCI_API_executeQueue (api, TRUE);
+	  g_assert (err);
+	} while (gnc_hbci_error_retry (parent, err, interactor));
+
 	if (!HBCI_Error_isOk(err)) {
 	  char *errstr = g_strdup_printf("gnc_hbci_maketrans: Error at executeQueue: %s",
 					 HBCI_Error_message (err));
