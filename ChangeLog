@@ -13,6 +13,11 @@
 	    Oops!  That throws off all the numbers...)
 	  - Also print out any overpayment in the total column.
 
+	* src/report/utility-reports/view-column.scm:
+	  Catch errors when running the child reports so we display the
+	  failed report backtrace but also display an error and continue
+	  with the multicolumn report.  Fixes #113668.
+
 2003-05-24  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/dialog-options.c: back out previous change.
