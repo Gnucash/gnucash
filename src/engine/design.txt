@@ -1,0 +1,44 @@
+
+Accounting Engine
+-----------------
+
+Quick Overview
+--------------
+The fundamental accounting unit is a "split". Each split stores
+a (monetary) value, a memo, and a pointer to the "credited" account.
+The term "credited" here is arbitrary, as the value can be 
+positive or negative.
+
+The notion of "double entry" is embodied in the "transaction" structure.
+The transaction consists of a date, a single "credit split" and zero
+or more "debit splits".  Again, the notion of "credit" and "debit"
+are arbitrary, as the value stored in the split can be positive or
+negative.
+
+If a transaction has one or more "debit_splits", then the sum of 
+the debit-split values *must* equal the value of the credit-split.
+This equality is what forces a double-entry accounting system to
+balance.
+
+A transaction may have zero "debit-splits".  If the transaction value
+is non-zero, then by definition, the system as a whole cannot balance.
+Many simple, home-oriented non-double-entry systems will allow
+non-balancing transactions, as these are simpler to comprehend for the 
+casual home user.
+
+Every split must point at its parent transaction, and that transaction
+must in turn point back at the split.   A split can belong to at most
+one transaction.
+
+Splits are grouped into "accounts". Each account consists of a list of 
+splits that credit (debit) that account.   To ensure consistency, 
+if a split points at an account, then the account must point at the 
+split, and vice-versa.  A split can belong to at most one account.
+
+Accounts can be arranged in a heirarchical tree.  The nodes of the 
+tree are called "Account Groups".  By accounting convention, the 
+value of an account is equal to the value of all of its splits plus
+the value of all of its sub-accounts.  Account Groups are implemented 
+as doubly-linked trees.
+
+
