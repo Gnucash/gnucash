@@ -206,31 +206,67 @@ foreach_split_in_group(AccountGroup *g, void (*f)(Split *)) {
 #endif
 
 
-/********************************************************************\
- * gnome_main                                                       *
- *  called after the guile engine is up and running                 *
- *  sets up the top level widget                                    * 
- *  and calls the mainWindow() function which creates the main      * 
- *  window.                                                         * 
- *                                                                  * 
- * Args:   argc, the number of command line arguments, and argv,    * 
- *         the array of command line args                           * 
- * Return:                                                          * 
- * Global: topgroup - the data from the datafile                    *
- *         datafile - the name of the user's datafile               *
-\********************************************************************/
-static int
-gnome_main(int argc, char *argv[])
-{
-  SCM datafile_scm = gh_lookup("gnucash:datafile-tmp_");
-  if(datafile_scm != SCM_BOOL_F)
-  {
-    datafile = gh_scm2newstr(datafile_scm, NULL);
-  }
+int
+gnucash_ui_open_file(const char name[]) {
 
-  /* argc and argv have been cleared by guile at this point */
-  gnome_init("GnuCash", NULL, argc, argv, 0, &argc);
+  if( name == NULL ) return 0;
+
+  /* FIXME: this is a memory leak (very small). */
+  datafile = name;
+    
+  /* load the accounts data from datafile*/
+  topgroup = xaccReadAccountGroup (datafile); 
+
+  if ( topgroup == NULL )
+  {
+    GtkWidget *dialog;
+    GtkWidget *button;
+    GtkWidget *label;
+    
+    dialog = gtk_dialog_new ();
+    
+    button = gtk_button_new_with_label ( "Ok" );
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area), button,
+                        TRUE, TRUE, 0);
+    gtk_widget_show ( button );
+    
+    label = gtk_label_new (" \nInvalid filename \nNew file started.\n ");
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, TRUE,
+                        TRUE, 0);
+    gtk_widget_show ( label );
+    gtk_widget_show ( dialog );
+    
+    topgroup = xaccMallocAccountGroup(); 
+  }
   
+  /* Create main window */
+  xaccAccountGroupMarkSaved(topgroup);
+  main_window_init(topgroup);
+
+  return 0;
+}
+
+int
+gnucash_ui_select_file() {
+
+  /* Connect the cancel_button to kill the app */
+  filebox_quit =
+    gtk_signal_connect_object
+    (GTK_OBJECT (GTK_FILE_SELECTION (filebox)->cancel_button),
+     "clicked", (GtkSignalFunc)gtk_exit, NULL );
+  
+  gtk_widget_show ( filebox );
+
+  return 0;
+}
+
+int
+gnucash_lowlev_app_init()
+{
+  int fake_argc = 1;
+  char *fake_argv[] = {"gnucash"};
+
+  gnome_init("GnuCash", NULL, fake_argc, fake_argv, 0, NULL);  
   prepare_app(); 
 
   {
@@ -265,50 +301,28 @@ gnome_main(int argc, char *argv[])
   gtk_signal_connect
     (GTK_OBJECT (GTK_FILE_SELECTION (import_filebox)->ok_button),
      "clicked", (GtkSignalFunc) import_ok_sel, import_filebox );
-  
-  /* read in the filename (should be the first arg after all
-   * the X11 stuff */
-  if( datafile != NULL ) {
-    
-    /* load the accounts data from datafile*/
-    topgroup = xaccReadAccountGroup (datafile); 
 
-    if ( topgroup == NULL )
-    {
-      GtkWidget *dialog;
-      GtkWidget *button;
-      GtkWidget *label;
-      
-      dialog = gtk_dialog_new ();
-      
-      button = gtk_button_new_with_label ( "Ok" );
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area), button,
-                          TRUE, TRUE, 0);
-      gtk_widget_show ( button );
-      
-      label = gtk_label_new (" \nInvalid filename \nNew file started.\n ");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, TRUE,
-                          TRUE, 0);
-      gtk_widget_show ( label );
-      gtk_widget_show ( dialog );
-      
-      topgroup = xaccMallocAccountGroup(); 
-    }
-    /* Create main window */
-    xaccAccountGroupMarkSaved(topgroup);
-    main_window_init(topgroup);
-  } else {
-    /* Filebox code here */
-    /* Connect the cancel_button to also kill the app */
-    filebox_quit =
-      gtk_signal_connect_object
-	(GTK_OBJECT (GTK_FILE_SELECTION (filebox)->cancel_button),
-	 "clicked", (GtkSignalFunc)gtk_exit, NULL );
+  return 0;
+}
 
-    gtk_widget_show ( filebox );
-  }
-  
-  /* Enter event loop */
+/********************************************************************\
+ * gnome_main                                                       *
+ *  called after the guile engine is up and running                 *
+ *  sets up the top level widget                                    * 
+ *  and calls the mainWindow() function which creates the main      * 
+ *  window.                                                         * 
+ *                                                                  * 
+ * Args:   argc, the number of command line arguments, and argv,    * 
+ *         the array of command line args                           * 
+ * Return:                                                          * 
+ * Global: topgroup - the data from the datafile                    *
+ *         datafile - the name of the user's datafile               *
+\********************************************************************/
+
+int
+gnucash_lowlev_app_main()
+{  
+  /* Enter gnome event loop */
   gtk_main();
 
   return 0;
@@ -327,7 +341,7 @@ gnome_main(int argc, char *argv[])
 int 
 main( int argc, char *argv[] )
 {
-  gnucash_main(argc, argv, gnome_main);
+  gnucash_main(argc, argv);
   /* This will never return. */
 
   assert(0);  /* Just to be anal */
@@ -346,13 +360,3 @@ prepare_app()
 }
 
 /****************** END OF FILE **********************/
-
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c
-  c-indentation-style: gnu
-  eval: (c-set-offset 'substatement-open 0)
-  End:
-*/
