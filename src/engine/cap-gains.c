@@ -27,15 +27,12 @@
  *  This file implements the various routines to automatically
  *  compute and handle Cap Gains/Losses resulting from trading 
  *  activities.  Some of these routines might have broader 
- *  applicability, for handling depreciation *  & etc. 
+ *  applicability, for handling depreciation & etc. 
  *
- *  This code is under development, and is 'alpha': many important
- *  routines are missing, many existing routines are not called 
- *  from inside the engine as needed, and routines may be buggy.
- *
- *  This code does not currently handle tax distinctions, e.g
- *  the different tax treatment that short-term and long-term 
- *  cap gains have. 
+ *  This code is under development, and is 'beta': we think we're
+ *  mostly done, and we've tested and "things work for us", but there
+ *  may still be something missing, and there might still be some 
+ *  bugs.
  *
  * This code uses a 'gains dirty' flag: A 'dirty' flag on the source 
  * split indicates that the gains transaction needs to be recomputed.
