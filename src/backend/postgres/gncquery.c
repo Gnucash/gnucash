@@ -958,6 +958,10 @@ sqlQuery_build (sqlQuery *sq, Query *q)
 	     }
 
 	     sq->pq = stpcpy(sq->pq, ")");
+
+	   } else {
+	     /* Empty field -- nothing to "AND" in... */
+	     more_and = 0;
 	   }
 
 	 } else if (!safe_strcmp (pd->type_name, QUERYCORE_STRING)) {
