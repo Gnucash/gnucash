@@ -360,7 +360,7 @@ char *gnc_hbci_descr_tognc (const HBCI_Transaction *h_trans)
   list_string_foreach (HBCI_Transaction_otherName (h_trans), 
 		       &gnc_list_string_cb,
 		       &othername);
-  DEBUG("HBCI Description '%s'", h_descr);
+  /*DEBUG("HBCI Description '%s'", h_descr);*/
 
   if (othername && (strlen (othername) > 0))
     g_descr = 

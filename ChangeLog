@@ -1,5 +1,14 @@
 2002-12-30  Christian Stimming  <stimming@tuhh.de>
 
+	* src/business/business-gnome/dialog-invoice.c
+	(gnc_invoice_id_changed_cb): More i18n fixes. Don't split up
+	strings.
+
+	* src/business/business-gnome/glade/*.glade: Correct spelling
+	error.
+
+	* src/engine/FreqSpec.c: Fix the i18n comments for the translators.
+
 	* src/gnome-utils/gnc-dense-cal.c: i18n'ize the dense calendar
 	widget.
 

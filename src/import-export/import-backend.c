@@ -478,12 +478,12 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       if (datediff_day == 0)
 	{
 	  prob = prob+2;
-	  DEBUG("heuristics:  probability + 2 (date)");
+	  /*DEBUG("heuristics:  probability + 2 (date)");*/
 	}
       else if (datediff_day <= MATCH_DATE_THRESHOLD)
 	{
 	  prob = prob+1;
-	  DEBUG("heuristics:  probability + 1 (date)");
+	  /*DEBUG("heuristics:  probability + 1 (date)");*/
 	}
       else if (datediff_day > MATCH_DATE_NOT_THRESHOLD)
 	{

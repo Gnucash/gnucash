@@ -856,7 +856,8 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   new_item_button = glade_xml_get_widget (xml, "new_item_button");
   {
     char *desc =
-      /* Translators: %s is either "item" or the name of some other item. */
+      /* Translators: %s is either "item" or the name of some other
+       * item, e.g. "Customer" or "Invoice". */
       g_strdup_printf (_("New %s"), type_label ? type_label : _("item"));
     gtk_label_set_text (GTK_LABEL (GTK_BIN (new_item_button)->child), desc);
     g_free (desc);
