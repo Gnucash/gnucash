@@ -606,7 +606,7 @@ Returns 1 if @code{@var{a} > 0}, otherwise returns 0.
 @end deftypefun
 
 @deftypefun int gnc_numeric_negative_p (gnc_numeric @var{a})
-Returns 1 if @code{@var{a} > 0}, otherwise returns 0.
+Returns 1 if @code{@var{a} < 0}, otherwise returns 0.
 @end deftypefun
 
 @deftypefun int gnc_numeric_compare (gnc_numeric @var{a}, gnc_numeric @var{b})
