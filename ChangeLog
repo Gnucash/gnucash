@@ -1,3 +1,8 @@
+2003-09-23  Christian Stimming  <stimming@tuhh.de>
+
+	* po/ca.po: Add Catalan translation by Orestes Mas
+	<orestes@tsc.upc.es>
+
 2003-09-15  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-getbalance.c: Improve error
