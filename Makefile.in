@@ -148,16 +148,22 @@ install-bin: gnucash.${FLAVOR}
 	(cd ${GNC_BINDIR} && ln -sf gnucash.${FLAVOR} gnucash)
 
 install:
-	$(INSTALL) -d ${GNC_BINDIR} ${GNC_LIBDIR}
-	$(INSTALL) -d ${GNC_DOCDIR} ${GNC_CONFIGDIR}
-	$(INSTALL) -d ${GNC_DOCDIR}/examples ${GNC_MANDIR}/man1
-	$(INSTALL) -d ${GNC_SHAREDIR} ${GNC_SHAREDIR}/html
-	$(INSTALL) -d ${GNC_SHAREDIR}/html/C ${GNC_SHAREDIR}/html/C/pix
-	$(INSTALL) -d ${GNC_SHAREDIR}/html/fr ${GNC_SHAREDIR}/html/fr/pix
+	$(INSTALL) -d ${GNC_BINDIR}
+	$(INSTALL) -d ${GNC_LIBDIR}
+	$(INSTALL) -d ${GNC_DOCDIR}
+	$(INSTALL) -d ${GNC_CONFIGDIR}
+	$(INSTALL) -d ${GNC_DOCDIR}/examples
+	$(INSTALL) -d ${GNC_MANDIR}/man1
+	$(INSTALL) -d ${GNC_SHAREDIR}
+	$(INSTALL) -d ${GNC_SHAREDIR}/html
+	$(INSTALL) -d ${GNC_SHAREDIR}/html/C
+	$(INSTALL) -d ${GNC_SHAREDIR}/html/C/pix
+	$(INSTALL) -d ${GNC_SHAREDIR}/html/fr
+	$(INSTALL) -d ${GNC_SHAREDIR}/html/fr/pix
 	$(INSTALL) -d ${GNC_SHAREDIR}/html/logos
 
-  # Put these in the opposite order of precedence.  Final bin/gnucash link will
-  # point to the last one that exists...
+  # Put these in the opposite order of precedence. Final bin/gnucash link will
+  # point to the last one that exists.
 	-[ -f gnucash.qt.static ] && \
      ${MAKE} FLAVOR=qt.static GNC_BINDIR=${GNC_BINDIR} install-bin
 	-[ -f gnucash.qt ] && ${MAKE} FLAVOR=qt GNC_BINDIR=${GNC_BINDIR} install-bin
@@ -183,14 +189,26 @@ install:
 	$(INSTALL) src/swig/perl5/gnucash.so ${GNC_LIBDIR}
 	$(INSTALL_DATA) src/quotes/Quote.pm ${GNC_LIBDIR}
 
-	$(INSTALL_DATA) doc/README* ${GNC_DOCDIR}
-	$(INSTALL_DATA) doc/*.txt ${GNC_DOCDIR}
+	for file in doc/README*; do \
+		$(INSTALL_DATA) $$file ${GNC_DOCDIR}; \
+	done
+
+	for file in doc/*.txt; do \
+		$(INSTALL_DATA) $$file ${GNC_DOCDIR}; \
+	done
+
 	$(INSTALL_DATA) doc/INSTALL ${GNC_DOCDIR}
 	$(INSTALL_DATA) TODO ${GNC_DOCDIR}
 	$(INSTALL_DATA) NEWS ${GNC_DOCDIR}
 
-	$(INSTALL_DATA) doc/examples/*.xac ${GNC_DOCDIR}/examples
-	$(INSTALL_DATA) doc/examples/*.qif ${GNC_DOCDIR}/examples
+	for file in doc/examples/*.xac; do \
+		$(INSTALL_DATA) $$file ${GNC_DOCDIR}/examples; \
+	done
+
+	for file in doc/examples/*.qif; do \
+		$(INSTALL_DATA) $$file ${GNC_DOCDIR}/examples; \
+	done
+
 	$(INSTALL_DATA) doc/examples/README ${GNC_DOCDIR}/examples
 
 	$(INSTALL_DATA) man/gnucash.1 ${GNC_MANDIR}/man1
@@ -200,31 +218,50 @@ install:
   # Try to do this in a platform independent way...
   # Directories
 	for dir in `find share/scm/ -type d -follow`; do \
-    dest=`echo $$dir | cut -c 11-` ;\
-		mkdir -p ${GNC_SHAREDIR}/scm/$$dest; \
-  done
+		dest=`echo $$dir | cut -c 11-` ; \
+		$(INSTALL) -d ${GNC_SHAREDIR}/scm/$$dest; \
+	done
 
   # Files
 	for file in `find share/scm/ -name "*.scm" -follow`; do \
-    dest=`echo $$file | cut -c 11-` ;\
+		dest=`echo $$file | cut -c 11-` ; \
 		${INSTALL_DATA} $$file ${GNC_SHAREDIR}/scm/$$dest; \
-  done
+	done
 
-	$(INSTALL_DATA) doc/html/C/*.html ${GNC_SHAREDIR}/html/C
-	$(INSTALL_DATA) doc/html/fr/*.html ${GNC_SHAREDIR}/html/fr
-	$(INSTALL_DATA) doc/html/C/pix/*.* ${GNC_SHAREDIR}/html/C/pix
-	$(INSTALL_DATA) doc/html/fr/pix/*.* ${GNC_SHAREDIR}/html/fr/pix
-	$(INSTALL_DATA) doc/html/*.css ${GNC_SHAREDIR}/html
-	$(INSTALL_DATA) doc/html/logos/*.* ${GNC_SHAREDIR}/html/logos
+	for file in doc/html/C/*.html; do \
+		$(INSTALL_DATA) $$file ${GNC_SHAREDIR}/html/C; \
+	done
+
+	for file in doc/html/fr/*.html; do \
+		$(INSTALL_DATA) $$file ${GNC_SHAREDIR}/html/fr; \
+	done
+
+	for file in doc/html/C/pix/*.*; do \
+		$(INSTALL_DATA) $$file ${GNC_SHAREDIR}/html/C/pix; \
+	done
+
+	for file in doc/html/fr/pix/*.*; do \
+		$(INSTALL_DATA) $$file ${GNC_SHAREDIR}/html/fr/pix; \
+	done
+
+	for file in doc/html/*.css; do \
+		$(INSTALL_DATA) $$file ${GNC_SHAREDIR}/html; \
+	done
+
+	for file in doc/html/logos/*.*; do \
+		$(INSTALL_DATA) $$file ${GNC_SHAREDIR}/html/logos; \
+	done
 
   # ------------------------------------------------------------------
   # hack alert -- the config dir stuff is messed up in configure.in as well 
   # as in the scheme search paths.  For example, the configure script tries
-  # to put config files into /usr/etc/gnucash/config which is a butt-stupid 
-  # place for this stuff ...  For now, we will simply touch the one file that
-  # the scheme initialization is looking for, and punt on the rest ...
+  # to put config files into /usr/etc/gnucash/config which is a bad place
+  # for this stuff. For now, we will simply touch the one file that the
+  # scheme initialization is looking for, and punt on the rest.
 
-	$(INSTALL_DATA) etc/conf* ${GNC_CONFIGDIR}
+	for file in etc/conf*; do \
+		$(INSTALL_DATA) $$file ${GNC_CONFIGDIR}; \
+	done
 
 	$(MAKE) -C po install
 
