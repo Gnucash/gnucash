@@ -70,17 +70,46 @@ typedef enum {
   GNC_RD_WID_REL_WIDGET_POS} GNCRdPositions;
 
 
+static GtkWidget *
+gnc_options_dialog_get_apply_button (GtkWidget *widget)
+{
+  while (widget)
+  {
+    GtkWidget *button;
+
+    button = gtk_object_get_data (GTK_OBJECT (widget),
+                                  "gnc_option_apply_button");
+    if (button)
+      return button;
+
+    widget = widget->parent;
+  }
+
+  return NULL;
+}
+
 static void
-gnc_options_dialog_changed_internal (GtkWidget *dialog)
+gnc_options_dialog_changed_internal (GtkWidget *widget)
 {
   GtkWidget *button;
 
-  button = gtk_object_get_data (GTK_OBJECT (dialog),
-                                "gnc_option_apply_button");
+  button = gnc_options_dialog_get_apply_button (widget);
   if (!button)
     return;
 
   gtk_widget_set_sensitive (button, TRUE);
+}
+
+static void
+gnc_options_dialog_clear_changed (GtkWidget *widget)
+{
+  GtkWidget *button;
+
+  button = gnc_options_dialog_get_apply_button (widget);
+  if (!button)
+    return;
+
+  gtk_widget_set_sensitive (button, FALSE);
 }
 
 void
@@ -94,7 +123,7 @@ gnc_options_dialog_changed (GNCOptionWin *win)
 static void
 gnc_option_changed_cb(GtkEditable *editable, gpointer data)
 {
-  GtkWidget *raw, *pbox;
+  GtkWidget *raw;
   GNCOption *option = data;
 
   raw = GTK_WIDGET(editable);
@@ -102,21 +131,18 @@ gnc_option_changed_cb(GtkEditable *editable, gpointer data)
 
   gnc_option_call_option_widget_changed_proc(option);
 
-  pbox = gtk_widget_get_toplevel(raw);
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (raw);
 }
 
 static void 
 gnc_date_option_changed_cb(GtkWidget *dummy, gpointer data)
 {
-  GtkWidget *pbox;
   GNCOption *option = data;
   option->changed = TRUE;
 
   gnc_option_call_option_widget_changed_proc(option);
 
-  pbox = gtk_widget_get_toplevel(option->widget);
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (option->widget);
 }
 
 static void
@@ -679,8 +705,8 @@ gnc_option_get_ui_value(GNCOption *option)
     GnomePixmapEntry * p = GNOME_PIXMAP_ENTRY(option->widget);
     char             * string = gnome_pixmap_entry_get_filename(p);
 
-    result = gh_str02scm(string);
-  }  
+    result = gh_str02scm(string ? string : "");
+  }
   else
     {
     PERR("Unknown type for refresh. Ignoring.\n");
@@ -719,12 +745,11 @@ default_button_cb(GtkButton *button, gpointer data)
   GtkWidget *pbox;
   GNCOption *option = data;
 
-  gnc_option_set_ui_value(option, TRUE);
+  gnc_option_set_ui_value (option, TRUE);
 
   option->changed = TRUE;
 
-  pbox = gtk_widget_get_toplevel(GTK_WIDGET(button));
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (GTK_WIDGET(button));
 }
 
 static GtkWidget *
@@ -746,23 +771,21 @@ gnc_option_create_default_button(GNCOption *option, GtkTooltips *tooltips)
 static void
 gnc_option_toggled_cb(GtkToggleButton *button, gpointer data)
 {
-  GtkWidget *pbox;
   GNCOption *option = data;
 
   option->changed = TRUE;
 
-  gnc_option_call_option_widget_changed_proc(option);
+  gnc_option_call_option_widget_changed_proc (option);
 
-  pbox = gtk_widget_get_toplevel(GTK_WIDGET(button));
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (GTK_WIDGET(button));
 }
 
 
 static void
 gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
 {
-  GtkWidget *pbox, *omenu;
   GNCOption *option = data;
+  GtkWidget *omenu;
   gpointer _current;
   gint current;
 
@@ -782,15 +805,13 @@ gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   omenu = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_menu");
-  pbox = gtk_widget_get_toplevel(omenu);
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (omenu);
 }
 
 static void
 gnc_option_rd_combo_cb(GtkWidget *w, gint index, gpointer data)
 {
-  
-  GtkWidget *widget, *pbox, *omenu;
+  GtkWidget *widget, *omenu;
   GList *children;
   GNCOption *option = data;
   gpointer _current;
@@ -815,8 +836,7 @@ gnc_option_rd_combo_cb(GtkWidget *w, gint index, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   omenu = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_menu");
-  pbox = gtk_widget_get_toplevel(omenu);
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (omenu);
 }
 
 static GtkWidget *
@@ -993,21 +1013,18 @@ static void
 gnc_option_account_cb(GNCAccountTree *tree, Account * account, gpointer data)
 {
   GNCOption *option = data;
-  GtkWidget *pbox;
 
   option->changed = TRUE;
 
-  gnc_option_call_option_widget_changed_proc(option);
+  gnc_option_call_option_widget_changed_proc (option);
 
-  pbox = gtk_widget_get_toplevel(GTK_WIDGET(tree));
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (GTK_WIDGET(tree));
 }
 
 static void
 gnc_option_account_select_all_cb(GtkWidget *widget, gpointer data)
 {
   GNCOption *option = data;
-  GtkWidget *pbox;
 
   gtk_clist_select_all(GTK_CLIST(option->widget));
 
@@ -1015,15 +1032,13 @@ gnc_option_account_select_all_cb(GtkWidget *widget, gpointer data)
 
   gnc_option_call_option_widget_changed_proc(option);
 
-  pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (widget);
 }
 
 static void
 gnc_option_account_clear_all_cb(GtkWidget *widget, gpointer data)
 {
   GNCOption *option = data;
-  GtkWidget *pbox;
 
   gtk_clist_unselect_all(GTK_CLIST(option->widget));
 
@@ -1031,8 +1046,7 @@ gnc_option_account_clear_all_cb(GtkWidget *widget, gpointer data)
 
   gnc_option_call_option_widget_changed_proc(option);
 
-  pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (widget);
 }
 
 
@@ -1109,7 +1123,6 @@ gnc_option_list_select_cb(GtkCList *clist, gint row, gint column,
                           GdkEventButton *event, gpointer data)
 {
   GNCOption *option = data;
-  GtkWidget *pbox;
 
   option->changed = TRUE;
 
@@ -1117,8 +1130,7 @@ gnc_option_list_select_cb(GtkCList *clist, gint row, gint column,
 
   gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(TRUE));
 
-  pbox = gtk_widget_get_toplevel(GTK_WIDGET(clist));
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (GTK_WIDGET(clist));
 }
 
 static void
@@ -1126,7 +1138,6 @@ gnc_option_list_unselect_cb(GtkCList *clist, gint row, gint column,
                             GdkEventButton *event, gpointer data)
 {
   GNCOption *option = data;
-  GtkWidget *pbox;
 
   option->changed = TRUE;
 
@@ -1134,15 +1145,13 @@ gnc_option_list_unselect_cb(GtkCList *clist, gint row, gint column,
 
   gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(FALSE));
 
-  pbox = gtk_widget_get_toplevel(GTK_WIDGET(clist));
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (GTK_WIDGET(clist));
 }
 
 static void
 gnc_option_list_select_all_cb(GtkWidget *widget, gpointer data)
 {
   GNCOption *option = data;
-  GtkWidget *pbox;
 
   gtk_clist_select_all(GTK_CLIST(option->widget));
 
@@ -1150,15 +1159,13 @@ gnc_option_list_select_all_cb(GtkWidget *widget, gpointer data)
 
   gnc_option_call_option_widget_changed_proc(option);
 
-  pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (widget);
 }
 
 static void
 gnc_option_list_clear_all_cb(GtkWidget *widget, gpointer data)
 {
   GNCOption *option = data;
-  GtkWidget *pbox;
 
   gtk_clist_unselect_all(GTK_CLIST(option->widget));
 
@@ -1166,8 +1173,7 @@ gnc_option_list_clear_all_cb(GtkWidget *widget, gpointer data)
 
   gnc_option_call_option_widget_changed_proc(option);
 
-  pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (widget);
 }
 
 static GtkWidget *
@@ -1261,30 +1267,26 @@ static void
 gnc_option_color_changed_cb(GnomeColorPicker *picker, guint arg1, guint arg2,
                             guint arg3, guint arg4, gpointer data)
 {
-  GtkWidget *pbox;
   GNCOption *option = data;
 
   option->changed = TRUE;
 
   gnc_option_call_option_widget_changed_proc(option);
 
-  pbox = gtk_widget_get_toplevel(GTK_WIDGET(picker));
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (GTK_WIDGET(picker));
 }
 
 static void
 gnc_option_font_changed_cb(GnomeFontPicker *picker, gchar *font_name,
                            gpointer data)
 {
-  GtkWidget *pbox;
   GNCOption *option = data;
 
   option->changed = TRUE;
 
   gnc_option_call_option_widget_changed_proc(option);
 
-  pbox = gtk_widget_get_toplevel(GTK_WIDGET(picker));
-  gnc_options_dialog_changed_internal (pbox);
+  gnc_options_dialog_changed_internal (GTK_WIDGET(picker));
 }
 
 static void
@@ -1853,6 +1855,7 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
     }
   }
 
+  gnc_options_dialog_clear_changed(propertybox->container);
 }
 
 
@@ -1866,55 +1869,64 @@ gnc_options_dialog_notebook(GNCOptionWin * win) {
   return win->notebook;
 }
 
-static int
+static void
 gnc_options_dialog_apply_stub_cb(GtkWidget * w, gpointer data)
 {
   GNCOptionWin * window = data;
   GtkWidget *button;
 
-  button = gtk_object_get_data (GTK_OBJECT (window->container),
-                                "gnc_option_apply_button");
+  if (window->apply_cb)
+    window->apply_cb (window, window->apply_cb_data);
+
+  button = button = gnc_options_dialog_get_apply_button (window->container);
   if (button)
     gtk_widget_set_sensitive (button, FALSE);
-
-  if (window->apply_cb)
-  {
-    window->apply_cb (window, window->apply_cb_data);
-    return TRUE;
-  }
-  else
-    return FALSE;
 }
 
-static int
+static void
 gnc_options_dialog_help_stub_cb(GtkWidget * w, gpointer data) {
   GNCOptionWin * window = data;
-  if(window->help_cb) {
+
+  if(window->help_cb)
     (window->help_cb)(window, window->help_cb_data);
-    return TRUE;
-  }
-  else {
-    return FALSE;
-  }
 }
 
-static int
-gnc_options_dialog_close_stub_cb(GtkWidget * w, gpointer data) {
+static void
+gnc_options_dialog_destroy_stub_cb(GtkObject * obj, gpointer data) {
   GNCOptionWin * window = data;
 
-  gtk_signal_disconnect_by_func(GTK_OBJECT(window->container),
-                                GTK_SIGNAL_FUNC
-                                (gnc_options_dialog_close_stub_cb), 
-                                data);
-
-  if(window->close_cb) {
+  if (window->close_cb)
     (window->close_cb)(window, window->close_cb_data);
-    return TRUE;
-  }
-  else {
-    gtk_widget_hide(window->container);
-    return FALSE;
-  }
+}
+
+static void
+gnc_options_dialog_close_stub_cb(GtkWidget * w, gpointer data) {
+  GNCOptionWin * window = data;
+  GtkWidget *container;
+
+  container = window->container;
+
+  gtk_widget_ref (container);
+
+  gtk_signal_handler_block_by_func(GTK_OBJECT(container),
+                                   GTK_SIGNAL_FUNC
+                                   (gnc_options_dialog_destroy_stub_cb),
+                                   data);
+
+  if (window->close_cb)
+    (window->close_cb)(window, window->close_cb_data);
+  else
+    gtk_widget_hide(container);
+
+  /* at this point, window may point to freed data */
+
+  if (!GTK_OBJECT_DESTROYED (container))
+    gtk_signal_handler_unblock_by_func(GTK_OBJECT(container),
+                                       GTK_SIGNAL_FUNC
+                                       (gnc_options_dialog_destroy_stub_cb),
+                                       data);
+
+  gtk_widget_unref (container);
 }
 
 static void
@@ -1970,23 +1982,23 @@ gnc_options_dialog_new(gboolean make_toplevel) {
   gtk_signal_connect(GTK_OBJECT(apply_button), "clicked",
                      GTK_SIGNAL_FUNC(gnc_options_dialog_apply_stub_cb),
                      retval);
-  
+
   gtk_signal_connect(GTK_OBJECT(help_button), "clicked",
                      GTK_SIGNAL_FUNC(gnc_options_dialog_help_stub_cb),
                      retval);
-  
+
   gtk_signal_connect(GTK_OBJECT(ok_button), "clicked",
                      GTK_SIGNAL_FUNC(gnc_options_dialog_ok_cb),
                      retval);
-    
+
   gtk_signal_connect(GTK_OBJECT(close_button), "clicked",
                      GTK_SIGNAL_FUNC(gnc_options_dialog_close_stub_cb),
                      retval);
-  
+
   gtk_signal_connect(GTK_OBJECT(retval->container), "destroy",
-                     GTK_SIGNAL_FUNC(gnc_options_dialog_close_stub_cb),
+                     GTK_SIGNAL_FUNC(gnc_options_dialog_destroy_stub_cb),
                      retval);
-  
+
   gtk_box_pack_start(GTK_BOX(buttonbox), ok_button, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(buttonbox), apply_button, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(buttonbox), help_button, TRUE, TRUE, 0);
@@ -2071,18 +2083,29 @@ gnc_options_dialog_help_cb(GNCOptionWin *propertybox,
   helpWindow(NULL, NULL, HH_GLOBPREFS);
 }
 
+static void
+gnc_options_dialog_close_cb(GNCOptionWin *propertybox,
+                            gpointer user_data) {
+  GNCOptionWin **options_dialog = user_data;
+
+  if (!GTK_OBJECT_DESTROYED (GTK_OBJECT (propertybox->container)))
+    gtk_widget_destroy (propertybox->container);
+
+  *options_dialog = NULL;
+}
+
 
 void
 gnc_show_options_dialog(void)
 {
   static GNCOptionWin *options_dialog = NULL;
   GNCOptionDB *global_options;
-  
+
   global_options = gnc_get_global_options();
-  
+
   if (gnc_option_db_num_sections(global_options) == 0)
   {
-    gnc_warning_dialog("No options!");
+    gnc_warning_dialog(_("No options!"));
     return;
   }
 
@@ -2097,22 +2120,26 @@ gnc_show_options_dialog(void)
   if (options_dialog == NULL)
   {
     options_dialog = gnc_options_dialog_new(TRUE);
-    
+
     gnc_build_options_dialog_contents(options_dialog, global_options);
     gnc_option_db_clean(global_options);
-    
+
     gtk_window_set_title(GTK_WINDOW(options_dialog->container), 
                          _("GnuCash Preferences"));
     
     gnc_options_dialog_set_apply_cb(options_dialog, 
                                     gnc_options_dialog_apply_cb,
                                     global_options);
-    
+
     gnc_options_dialog_set_help_cb(options_dialog, 
                                    gnc_options_dialog_help_cb,
                                    global_options);
+
+    gnc_options_dialog_set_close_cb (options_dialog,
+                                     gnc_options_dialog_close_cb,
+                                     &options_dialog);
   }
-  
+
   gtk_widget_show(options_dialog->container);
   gdk_window_raise(options_dialog->container->window);
 }

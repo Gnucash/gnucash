@@ -846,6 +846,8 @@ gnc_report_window_default_params_editor(SCM options, SCM report) {
     scm_protect_object(prm->scm_report);
     
     gnc_build_options_dialog_contents(prm->win, prm->db);
+    gnc_option_db_clean(prm->db);
+
     gnc_options_dialog_set_apply_cb(prm->win, 
                                     gnc_options_dialog_apply_cb,
                                     (gpointer)prm);
@@ -855,6 +857,7 @@ gnc_report_window_default_params_editor(SCM options, SCM report) {
     gnc_options_dialog_set_close_cb(prm->win, 
                                     gnc_options_dialog_close_cb,
                                     (gpointer)prm);
+
     return gnc_options_dialog_widget(prm->win);
   }
 }
