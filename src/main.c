@@ -71,8 +71,8 @@ String fbRes[] = {
   "*regasset.oddRowBackground:     #ccffcc",
   "*regcredit.oddRowBackground:    #ccccff",
   "*regliability.oddRowBackground: #ffcccc",
-  "*regportfolio.oddRowBackground: grey",
-  "*regmutual.oddRowBackground:    grey",
+  "*regportfolio.oddRowBackground: #ccffff",
+  "*regmutual.oddRowBackground:    #ccffff",
   "*regportfolio.evenRowBackground:grey",
   "*regmutual.evenRowBackground:   grey",
   /* Other register window account stuff: */
