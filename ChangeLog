@@ -23,6 +23,9 @@
 	  Really fix #97095.
 
 	* configure.in: scrub GNOME_PRINT_CFLAGS
+
+	* src/gnome-utils/gnc-gui-query.c -- fix gnc_info_dialog() to deal
+	  properly in the case that it's called before the UI is up.
 	
 2003-01-18  Derek Atkins  <derek@ihtfp.com>
 

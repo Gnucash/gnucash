@@ -306,13 +306,19 @@ gnc_verify_dialog_parented(gncUIWidget parent, gboolean yes_is_default,
  * Return: none                                                     * 
 \********************************************************************/
 static void 
-gnc_info_dialog_common(GtkWindow *parent, const gchar *format, va_list args)
+gnc_info_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
 {
   GtkWidget *info_box = NULL;
   gchar *buffer;
 
+  if (parent == NULL)
+    parent = gnc_ui_get_toplevel();
+
   buffer = g_strdup_vprintf(format, args);
-  info_box = gnome_ok_dialog_parented(buffer, parent);
+  if (parent)
+    info_box = gnome_ok_dialog_parented(buffer, GTK_WINDOW(parent));
+  else
+    info_box = gnome_ok_dialog(buffer);
   g_free(buffer);
 
   gnome_dialog_run_and_close(GNOME_DIALOG(info_box));
@@ -324,7 +330,7 @@ gnc_info_dialog(const gchar *format, ...)
   va_list args;
 
   va_start(args, format);
-  gnc_info_dialog_common(GTK_WINDOW(gnc_ui_get_toplevel()), format, args);
+  gnc_info_dialog_common(NULL, format, args);
   va_end(args);
 }
 
@@ -334,7 +340,7 @@ gnc_info_dialog_parented(GtkWindow *parent, const gchar *format, ...)
   va_list args;
 
   va_start(args, format);
-  gnc_info_dialog_common(parent ? parent : GTK_WINDOW(gnc_ui_get_toplevel()),
+  gnc_info_dialog_common(parent ? GTK_WIDGET(parent) : gnc_ui_get_toplevel(),
 			 format, args);
   va_end(args);
 }
