@@ -1,3 +1,27 @@
+2002-04-27  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/prefs.scm:
+	* src/engine/date.c: 
+	* src/gnome/top-level.c (gnc_configure_date_format): Change the
+	default date format to be the user's LOCALE setting.
+
+	* src/engine/date.c (scanDate): Totally work over this routine to
+	support a user entering one, two, or three numbers. If one, assume
+	day.  If two assume day/month, ordering from locale. Three is
+	day/month/year, ordering from locale.  Also protect against an old
+	date string being supplied to the routine after the date format
+	has been changed.
+
+	* src/register/register-gnome/datecell-gnome.c
+	(gnc_date_cell_leave): Reprint the time when leaving a date_cell
+	field.
+
+	* src/gnome-utils/gnc-date-edit.c (date_focus_out_event): New
+	routine to reprint the time when tabbing out of a date_entry cell.
+	(create_children): Tie in new routine.
+	(gnc_date_editable_enters): New helper routine for setting
+	gnome_dialog_editable_enters on a date_entry widget.
+
 2002-04-23  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/gnc-component-manager.h: Change

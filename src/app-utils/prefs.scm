@@ -141,7 +141,7 @@
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
   (N_ "International") (N_ "Date Format")
-  "a" (N_ "Date Format Display") 'us
+  "a" (N_ "Date Format Display") 'locale
   (list (list->vector (list 'us
                             (N_ "US")
                             (N_ "US-style: mm/dd/yyyy")))

@@ -637,6 +637,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     /* need to get a callback on date changes to update the recn balance */
     gtk_signal_connect ( GTK_OBJECT (date_value), "date_changed",
           GTK_SIGNAL_FUNC (gnc_start_recn_date_changed), (gpointer) &data );
+    gnc_date_editable_enters(GNOME_DIALOG(dialog), GNC_DATE_EDIT(date_value));
 
     print_info.use_symbol = 0;
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (end_value), print_info);

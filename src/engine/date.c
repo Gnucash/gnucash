@@ -55,7 +55,8 @@
 #endif
 
 /* This is now user configured through the gnome options system() */
-static DateFormat dateFormat = DATE_FORMAT_US;
+static DateFormat dateFormat = DATE_FORMAT_LOCALE;
+static DateFormat prevDateFormat = DATE_FORMAT_LOCALE;
 
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_ENGINE;
@@ -176,6 +177,7 @@ void setDateFormat(DateFormat df)
 {
   if(df >= DATE_FORMAT_FIRST && df <= DATE_FORMAT_LAST)
   {
+    prevDateFormat = dateFormat;
     dateFormat = df;
   }
   else
@@ -289,6 +291,12 @@ gnc_print_date (Timespec ts)
  *    Convert a string into  day / month / year integers according to
  *    the current dateFormat value.
  *
+ *    This function will always parse a single number as the day of
+ *    the month, regardless of the ordering of the dateFormat value.
+ *    Two numbers will always be parsed as the day and the month, in
+ *    the same order that they appear in the dateFormat value.  Three
+ *    numbers are parsed exactly as specified in the dateFormat field.
+ *
  * Args:   buff - pointer to date string
  *         day -  will store day of the month as 1 ... 31
  *         month - will store month of the year as 1 ... 12
@@ -298,15 +306,16 @@ gnc_print_date (Timespec ts)
  *
  * Globals: global dateFormat value
  */
-void
-scanDate (const char *buff, int *day, int *month, int *year)
+static gboolean
+scanDateInternal (const char *buff, int *day, int *month, int *year,
+		  DateFormat which_format)
 {
    char *dupe, *tmp, *first_field, *second_field, *third_field;
    int iday, imonth, iyear;
    struct tm *now;
    time_t secs;
 
-   if (!buff) return;
+   if (!buff) return(FALSE);
 
    dupe = g_strdup (buff);
 
@@ -334,40 +343,101 @@ scanDate (const char *buff, int *day, int *month, int *year)
    iyear = now->tm_year+1900;
 
    /* get numeric values */
-   switch (dateFormat)
+   switch (which_format)
    {
      case DATE_FORMAT_LOCALE:
        if (buff[0] != '\0')
        {
          struct tm thetime;
 
+	 /* Parse time string. */
+	 memset(&thetime, -1, sizeof(struct tm));
          strptime (buff, GNC_D_FMT, &thetime);
 
-         iday = thetime.tm_mday;
-         imonth = thetime.tm_mon + 1;
-         iyear = thetime.tm_year + 1900;
+	 if (third_field) {
+	   /* Easy.  All three values were parsed. */
+	   iyear = thetime.tm_year + 1900;
+	   iday = thetime.tm_mday;
+	   imonth = thetime.tm_mon + 1;
+	 } else if (second_field) {
+	   /* Hard. Two values parsed.  Figure out the ordering. */
+	   if (thetime.tm_year == -1) {
+	     /* %m-%d or %d-%m. Don't care. Already parsed correctly. */
+	     iday = thetime.tm_mday;
+	     imonth = thetime.tm_mon + 1;
+	   } else if (thetime.tm_mon != -1) {
+	     /* Must be %Y-%m-%d. Reparse as %m-%d.*/
+	     imonth = atoi(first_field);
+	     iday = atoi(second_field);
+	   } else {
+	     /* Must be %Y-%d-%m. Reparse as %d-%m. */
+	     iday = atoi(first_field);
+	     imonth = atoi(second_field);
+	   }
+	 } else if (first_field) {
+	   iday = atoi(first_field);
+	 }
        }
        break;
      case DATE_FORMAT_UK:
      case DATE_FORMAT_CE:
-       if (first_field) iday = atoi (first_field);
-       if (second_field) imonth = atoi (second_field);
-       if (third_field) iyear = atoi (third_field);
+       if (third_field) {
+	 iday = atoi(first_field);
+         imonth = atoi(second_field);
+         iyear = atoi(third_field);
+       } else if (second_field) {
+         iday = atoi(first_field);
+         imonth = atoi(second_field);
+       } else if (first_field) {
+         iday = atoi(first_field);
+       }
        break;
      case DATE_FORMAT_ISO:
-       if (first_field) iyear = atoi (first_field);
-       if (second_field) imonth = atoi (second_field);
-       if (third_field) iday = atoi (third_field);
+       if (third_field) {
+	 iyear = atoi(first_field);
+         imonth = atoi(second_field);
+         iday = atoi(third_field);
+       } else if (second_field) {
+         imonth = atoi(first_field);
+         iday = atoi(second_field);
+       } else if (first_field) {
+         iday = atoi(first_field);
+       }
        break;
-     case DATE_FORMAT_US:
-     default:
-       if (first_field) imonth = atoi (first_field);
-       if (second_field) iday = atoi (second_field);
-       if (third_field) iyear = atoi (third_field);
+    case DATE_FORMAT_US:
+    default:
+       if (third_field) {
+         imonth = atoi(first_field);
+         iday = atoi(second_field);
+         iyear = atoi(third_field);
+       } else if (second_field) {
+         imonth = atoi(first_field);
+         iday = atoi(second_field);
+       } else if (first_field) {
+         iday = atoi(first_field);
+       }
        break;
    }
 
    g_free (dupe);
+
+   if (imonth > 12 || iday > 31) {
+     /* 
+      * Ack! Thppfft!  Someone just fed this routine a string in the
+      * wrong date format.  This is known to happen if a register
+      * window is open when changing the date format.  Try the
+      * previous date format.  If that doesn't work, bail and give the
+      * caller what they asked for (garbage) parsed in the new format.
+      *
+      * Note: This test cannot detect any format change that only
+      * swaps month and day field, if the day is 12 or less.  This is
+      * deemed acceptable given the obscurity of this bug.
+      */
+     if (which_format == prevDateFormat)
+       return(FALSE);
+     if (scanDateInternal(buff, day, month, year, prevDateFormat))
+       return(TRUE);
+   }
 
    /* if the year entered is smaller than 100, assume we mean the current
       century (and are not revising some roman emperor's books) */
@@ -377,6 +447,13 @@ scanDate (const char *buff, int *day, int *month, int *year)
    if (year) *year=iyear;
    if (month) *month=imonth;
    if (day) *day=iday;
+   return(TRUE);
+}
+
+void
+scanDate (const char *buff, int *day, int *month, int *year)
+{
+  scanDateInternal(buff, day, month, year, dateFormat);
 }
 
 /**

@@ -572,6 +572,22 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
         return TRUE;
 }
 
+static int
+date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	GNCDateEdit *gde = data;
+        struct tm tm;
+
+        tm = gnc_date_edit_get_date_internal (gde);
+        gnc_date_edit_set_time (gde, mktime (&tm));
+
+	gtk_calendar_select_month (GTK_CALENDAR (gde->calendar), tm.tm_mon,
+                                   1900 + tm.tm_year);
+        gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), tm.tm_mday);
+
+        return TRUE;
+}
+
 static void
 create_children (GNCDateEdit *gde)
 {
@@ -585,6 +601,8 @@ create_children (GNCDateEdit *gde)
 	gtk_widget_show (gde->date_entry);
 	gtk_signal_connect (GTK_OBJECT (gde->date_entry), "key_press_event",
 			    GTK_SIGNAL_FUNC(date_accel_key_press), gde);
+	gtk_signal_connect (GTK_OBJECT (gde->date_entry), "focus_out_event",
+			    GTK_SIGNAL_FUNC(date_focus_out_event), gde);
 
 	gde->date_button = gtk_button_new ();
 	gtk_signal_connect (GTK_OBJECT (gde->date_button), "clicked",
@@ -929,6 +947,26 @@ gnc_date_edit_get_flags (GNCDateEdit *gde)
 
 	return gde->flags;
 }
+
+/**
+ * gnc_date_editable_enters:
+ * @dialog: The gnome dialog this date editor lives in
+ * @gde: The date editor to modity
+ * 
+ * Extracts the editable field from a GNCDateEdit widget, and sets it
+ * up so that pressing the Enter key in this field as the same as
+ * clicking the button that has the default.
+ **/
+void
+gnc_date_editable_enters (GnomeDialog *dialog, GNCDateEdit *gde)
+{
+	if (!dialog || !gde)
+		return;
+
+	gnome_dialog_editable_enters(GNOME_DIALOG(dialog),
+				     GTK_EDITABLE(gde->date_entry));
+}
+
 
 /*
   Local Variables:

@@ -485,7 +485,7 @@ gnc_configure_date_format (void)
 {
   char *format_code = gnc_lookup_multichoice_option("International", 
                                                     "Date Format",
-                                                    "us");
+                                                    "locale");
 
   DateFormat df;
 
