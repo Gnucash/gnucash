@@ -81,7 +81,7 @@ add_account_dialog_okclicked_cb(GtkWidget * dialog, gpointer data)
   
   account = xaccMallocAccount();
             
-  xaccAccountBeginEdit (account);
+  xaccAccountBeginEdit (account, 0);
  
   xaccAccountSetName (account, gtk_entry_get_text(GTK_ENTRY(info->textbox_name)));
   xaccAccountSetDescription (account, gtk_entry_get_text(GTK_ENTRY(info->textbox_description)));
