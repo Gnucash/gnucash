@@ -138,7 +138,7 @@ gnc_book_calve_period (GNCBook *existing_book, Timespec calve_date)
 {
    Query *query;
    GNCBook *partition_book;
-   kvp_frame *exist_cwd, partn_cwd;
+   kvp_frame *exist_cwd, *partn_cwd;
    kvp_value *vvv;
    Timespec ts;
 
@@ -167,10 +167,10 @@ gnc_book_calve_period (GNCBook *existing_book, Timespec calve_date)
    vvv = kvp_value_new_timespec (ts);
    kvp_frame_set_slot_nc (partn_cwd, "close-date", vvv);
 
-   vvv = kvp_value_new_guid (existing_book->guid);
+   vvv = kvp_value_new_guid (&existing_book->guid);
    kvp_frame_set_slot_nc (partn_cwd, "next-book", vvv);
 
-   vvv = kvp_value_new_guid (partition_book->guid);
+   vvv = kvp_value_new_guid (&partition_book->guid);
    kvp_frame_set_slot_nc (exist_cwd, "prev-book", vvv);
 
    return partition_book;
