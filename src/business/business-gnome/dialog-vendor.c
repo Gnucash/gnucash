@@ -41,6 +41,7 @@ typedef enum
 struct _vendor_select_window {
   GNCBook *	book;
   GtkWidget *	parent;
+  gboolean	no_close;
 };
 
 typedef struct _vendor_window {
@@ -612,14 +613,15 @@ select_vendor_cb (gpointer *vendor_p, gpointer user_data)
   return TRUE;
 }
 
-static gpointer
-new_vendor_cb (gpointer user_data)
+static gboolean
+new_vendor_cb (gpointer *vendor_p, gpointer user_data)
 {
   struct _vendor_select_window *sw = user_data;
   
-  g_return_val_if_fail (user_data, NULL);
+  g_return_val_if_fail (vendor_p && user_data, TRUE);
 
-  return gnc_vendor_new (sw->parent, sw->book);
+  *vendor_p = gnc_vendor_new (sw->parent, sw->book);
+  return sw->no_close;
 }
 
 static GncVendor *
@@ -665,6 +667,7 @@ gnc_vendor_select (GtkWidget *parent, GncVendor *start, GNCBook *book,
   /* launch select dialog and return the result */
   sw.book = book;
   sw.parent = parent;
+  sw.no_close = !provide_select;
   res = gnc_search_dialog_choose_object (parent, type, params, q, q2,
 					 (provide_select ? buttons :
 					  &(buttons[1])), NULL,

@@ -38,6 +38,7 @@ typedef enum
 struct _employee_select_window {
   GNCBook *	book;
   GtkWidget *	parent;
+  gboolean	no_close;
 };
 
 typedef struct _employee_window {
@@ -561,14 +562,15 @@ select_employee_cb (gpointer *employee_p, gpointer user_data)
   return TRUE;
 }
 
-static gpointer
-new_employee_cb (gpointer user_data)
+static gboolean
+new_employee_cb (gpointer *employee_p, gpointer user_data)
 {
   struct _employee_select_window *sw = user_data;
   
-  g_return_val_if_fail (user_data, NULL);
+  g_return_val_if_fail (employee_p && user_data, TRUE);
 
-  return gnc_employee_new (sw->parent, sw->book);
+  *employee_p = gnc_employee_new (sw->parent, sw->book);
+  return sw->no_close;
 }
 
 static GncEmployee *
@@ -611,6 +613,7 @@ gnc_employee_select (GtkWidget *parent, GncEmployee *start, GNCBook *book,
   /* launch select dialog and return the result */
   sw.book = book;
   sw.parent = parent;
+  sw.no_close = !provide_select;
   res = gnc_search_dialog_choose_object (parent, type, params, q, q2,
 					 (provide_select ? buttons :
 					  &(buttons[1])), NULL,

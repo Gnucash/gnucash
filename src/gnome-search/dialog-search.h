@@ -30,7 +30,6 @@ typedef struct _GNCSearchWindow GNCSearchWindow;
 typedef gboolean (*GNCSearchCallback) (gpointer *obj_p, gpointer user_data);
 typedef gboolean (*GNCSearchResultCB) (QueryNew *query, gpointer user_data,
 				       gpointer *result);
-typedef gpointer (*GNCSearchNewItemCB) (gpointer user_data);
 
 typedef struct {
   const char *		label;
@@ -51,7 +50,7 @@ GNCSearchWindow * gnc_search_dialog_create (GNCIdTypeConst obj_type,
 					    QueryNew *show_start_query,
 					    GNCSearchCallbackButton *callbacks,
 					    GNCSearchResultCB result_callback,
-					    GNCSearchNewItemCB new_item_cb,
+					    GNCSearchCallback new_item_cb,
 					    gpointer user_data);
 void gnc_search_dialog_destroy (GNCSearchWindow *sw);
 void gnc_search_dialog_test (void);
@@ -71,7 +70,7 @@ gpointer gnc_search_dialog_choose_object (GtkWidget *parent,
 					  QueryNew *show_start_query,
 					  GNCSearchCallbackButton *callbacks,
 					  GNCSearchResultCB result_callback,
-					  GNCSearchNewItemCB new_item_cb,
+					  GNCSearchCallback new_item_cb,
 					  gpointer user_data);
 
 #endif

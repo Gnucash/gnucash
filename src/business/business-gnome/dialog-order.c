@@ -45,6 +45,7 @@ struct _order_select_window {
   GNCBook *	book;
   GtkWidget *	parent;
   GncOwner *	owner;
+  gboolean	no_close;
 };
 
 typedef struct _order_window {
@@ -756,14 +757,15 @@ select_order_cb (gpointer *order_p, gpointer user_data)
   return TRUE;
 }
 
-static gpointer
-new_order_cb (gpointer user_data)
+static gboolean
+new_order_cb (gpointer *order_p, gpointer user_data)
 {
   struct _order_select_window *sw = user_data;
   
-  g_return_val_if_fail (user_data, NULL);
+  g_return_val_if_fail (order_p && user_data, TRUE);
 
-  return gnc_order_new (sw->parent, sw->owner, sw->book);
+  *order_p = gnc_order_new (sw->parent, sw->owner, sw->book);
+  return sw->no_close;
 }
 
 static GncOrder *
@@ -838,6 +840,7 @@ gnc_order_select (GtkWidget *parent, GncOrder *start, GncOwner *owner,
   sw.book = book;
   sw.parent = parent;
   sw.owner = owner;
+  sw.no_close = !provide_select;
   res = gnc_search_dialog_choose_object (parent, type, params, q, q2,
 					 (provide_select ? buttons :
 					  &(buttons[1])), NULL,

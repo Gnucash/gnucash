@@ -42,6 +42,7 @@ typedef enum
 struct _customer_select_window {
   GNCBook *	book;
   GtkWidget *	parent;
+  gboolean	no_close;
 };
 
 typedef struct _customer_window {
@@ -717,14 +718,15 @@ select_customer_cb (gpointer *cust_p, gpointer user_data)
   return TRUE;
 }
 
-static gpointer
-new_customer_cb (gpointer user_data)
+static gboolean
+new_customer_cb (gpointer *cust_p, gpointer user_data)
 {
   struct _customer_select_window *sw = user_data;
   
-  g_return_val_if_fail (user_data, NULL);
+  g_return_val_if_fail (cust_p && user_data, TRUE);
 
-  return gnc_customer_new (sw->parent, sw->book);
+  *cust_p = gnc_customer_new (sw->parent, sw->book);
+  return sw->no_close;
 }
 
 static GncCustomer *
@@ -772,6 +774,7 @@ gnc_customer_select (GtkWidget *parent, GncCustomer *start, GNCBook *book,
   /* launch select dialog and return the result */
   sw.book = book;
   sw.parent = parent;
+  sw.no_close = !provide_select;
   res = gnc_search_dialog_choose_object (parent, type, params, q, q2,
 					 (provide_select ? buttons :
 					  &(buttons[1])), NULL,

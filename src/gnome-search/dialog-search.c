@@ -44,8 +44,8 @@ struct _GNCSearchWindow {
 
   /* Callbacks */
   GNCSearchResultCB result_cb;
+  GNCSearchCallback new_item_cb;
   GNCSearchCallbackButton *buttons;
-  GNCSearchNewItemCB new_item_cb;
   gpointer		user_data;
 
   /* What we're searching for, and how */
@@ -320,13 +320,18 @@ search_find_cb (GtkButton *button, GNCSearchWindow *sw)
 static void
 search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
 {
-  gpointer res;
+  gpointer res = NULL;
+  gboolean retval;
+
   g_return_if_fail (sw->new_item_cb);
 
-  res = (sw->new_item_cb)(sw->user_data);
+  retval = (sw->new_item_cb)(&res, sw->user_data);
   if (res) {
     sw->selected_item = res;
-    gnc_search_dialog_destroy (sw);
+    if (!retval)
+      gnc_search_dialog_destroy (sw);
+    //    else
+    //      gnc_search_dialog_display_results (sw);
   }
 }
 
@@ -692,7 +697,7 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
 			  QueryNew *start_query, QueryNew *show_start_query,
 			  GNCSearchCallbackButton *callbacks,
 			  GNCSearchResultCB result_callback,
-			  GNCSearchNewItemCB new_item_cb,
+			  GNCSearchCallback new_item_cb,
 			  gpointer user_data)
 {
   GNCSearchWindow *sw = g_new0 (GNCSearchWindow, 1);
@@ -776,7 +781,7 @@ gpointer gnc_search_dialog_choose_object (GtkWidget *parent,
 					  QueryNew *show_start_query,
 					  GNCSearchCallbackButton *callbacks,
 					  GNCSearchResultCB result_callback,
-					  GNCSearchNewItemCB new_item_cb,
+					  GNCSearchCallback new_item_cb,
 					  gpointer user_data)
 {
   gpointer result = NULL;

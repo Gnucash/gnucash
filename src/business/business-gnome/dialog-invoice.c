@@ -44,6 +44,7 @@ struct _invoice_select_window {
   GNCBook *	book;
   GtkWidget *	parent;
   GncOwner *	owner;
+  gboolean	no_close;
 };
 
 typedef struct _invoice_window {
@@ -857,14 +858,15 @@ select_invoice_cb (gpointer *invoice_p, gpointer user_data)
   return TRUE;
 }
 
-static gpointer
-new_invoice_cb (gpointer user_data)
+static gboolean
+new_invoice_cb (gpointer *invoice_p, gpointer user_data)
 {
   struct _invoice_select_window *sw = user_data;
   
-  g_return_val_if_fail (user_data, NULL);
+  g_return_val_if_fail (invoice_p && user_data, TRUE);
 
-  return gnc_invoice_new (sw->parent, sw->owner, sw->book);
+  *invoice_p = gnc_invoice_new (sw->parent, sw->owner, sw->book);
+  return sw->no_close;
 }
 
 static GncInvoice *
@@ -934,6 +936,7 @@ gnc_invoice_select (GtkWidget *parent, GncInvoice *start, GncOwner *owner,
   sw.book = book;
   sw.parent = parent;
   sw.owner = owner;
+  sw.no_close = !provide_select;
   res = gnc_search_dialog_choose_object (parent, type, params, q, q2,
 					 (provide_select ? buttons :
 					  &(buttons[1])), NULL,
