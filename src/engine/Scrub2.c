@@ -310,6 +310,46 @@ GetOrMakeLotOrphanAccount (AccountGroup *root, gnc_commodity * currency)
 
 /* ============================================================== */
 
+static Account *
+GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
+{
+  Account *gain_acct = NULL;
+  kvp_frame *cwd;
+  kvp_value *vvv;
+  GUID * gain_acct_guid;
+  const char * cur_name;
+
+  cwd = xaccAccountGetSlots (acc);
+  cwd = kvp_frame_get_frame_slash (cwd, "/lot-mgmt/gains-act/");
+
+  /* Accounts are indexed by thier unique currency name */
+  cur_name = gnc_commodity_get_unique_name (currency);
+  vvv = kvp_frame_get_slot (cwd, cur_name);
+  gain_acct_guid = kvp_value_get_guid (vvv);
+
+  gain_acct = xaccAccountLookup (gain_acct_guid, acc->book);
+
+  /* If there is no default place to put gains/losses 
+   * for this account, then create such a place */
+  if (NULL == gain_acct)
+  {
+      AccountGroup *root;
+
+      xaccAccountBeginEdit (acc);
+      root = xaccAccountGetRoot(acc);
+      gain_acct = GetOrMakeLotOrphanAccount (root, currency);
+
+      vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
+      kvp_frame_set_slot_nc (cwd, cur_name, vvv);
+      xaccAccountSetSlots_nc (acc, acc->kvp_data);
+      xaccAccountCommitEdit (acc);
+
+  }
+  return gain_acct;
+}
+
+/* ============================================================== */
+
 void
 xaccAccountScrubDoubleBalance (Account *acc)
 {
@@ -367,7 +407,6 @@ xaccAccountScrubDoubleBalance (Account *acc)
        */
       if (FALSE == gnc_numeric_equal (value, zero))
       {
-         AccountGroup * root;
          Transaction *trans;
          Account *lot_acc, *gain_acc;
          Split *lot_split, *gain_split;
@@ -376,8 +415,7 @@ xaccAccountScrubDoubleBalance (Account *acc)
          lot_split = xaccMallocSplit (acc->book);
          gain_split = xaccMallocSplit (acc->book);
 
-         root = xaccAccountGetRoot(acc);
-         gain_acc = GetOrMakeLotOrphanAccount (root, currency);
+         gain_acc = GetOrMakeGainAcct (acc, currency);
          xaccAccountBeginEdit (gain_acc);
          xaccAccountInsertSplit (gain_acc, gain_split);
          xaccAccountCommitEdit (gain_acc);
