@@ -37,7 +37,6 @@ transaction_set_splits_to_accounts(Transaction *tr, Account *a1, Account *a2)
 static void
 run_test (void)
 {
- 
   Account *acc1, *acc2;
   Transaction *transaction;
   gnc_numeric old_amt, new_amt, new_kvp_amt, old_val, new_val, new_kvp_val;
@@ -57,67 +56,75 @@ run_test (void)
   {
     failure("accounts not created");
   }
-   
 
- transaction = get_random_transaction(session);
+  do
+  {
+    transaction = get_random_transaction (session);
+    if (xaccTransGetVoidStatus (transaction))
+    {
+      xaccTransBeginEdit (transaction);
+      xaccTransDestroy (transaction);
+      xaccTransCommitEdit (transaction);
+      transaction = NULL;
+    }
+  } while (!transaction);
+
+  transaction_set_splits_to_accounts(transaction, acc1, acc2);
+
+  /*  Compromise, check amount on one and value on the other */
+
+  old_amt = xaccSplitGetAmount(xaccTransGetSplit(transaction, 0));
+  old_val = xaccSplitGetValue(xaccTransGetSplit(transaction, 1));
+
+  now = time (NULL);
+
+  xaccTransVoid(transaction, reason);
+
+  ts = xaccTransGetVoidTime (transaction);
+
+  /* figure at most 2 seconds difference */
+  if ((ts.tv_sec < now) || ((ts.tv_sec - now) > 2))
+  {
+    failure("bad void time");
+  }
+
+  if (!xaccTransGetVoidStatus(transaction))
+  {
+    failure("void status reports false after setting void");
+  }
+
+  if (strcmp(reason, xaccTransGetVoidReason(transaction)) != 0)
+  {
+    failure("Reasons didn't match");
+  }
  
- transaction_set_splits_to_accounts(transaction, acc1, acc2);
-   
+  new_amt = xaccSplitGetAmount(xaccTransGetSplit(transaction, 0));
+  /* print_gnc_numeric(new_amt); */
 
- /*  Compromise, check amount on one and value on the other */
+  if (!gnc_numeric_zero_p( new_amt))
+  {
+    failure("Amount not zero after voiding");
+  }      
 
- old_amt = xaccSplitGetAmount(xaccTransGetSplit(transaction, 0));
- old_val = xaccSplitGetValue(xaccTransGetSplit(transaction, 1));
-
- now = time (NULL);
-
- xaccTransVoid(transaction, reason);
-
- ts = xaccTransGetVoidTime (transaction);
-
- /* figure at most 2 seconds difference */
- if ((ts.tv_sec < now) || ((ts.tv_sec - now) > 2))
- {
-   failure("bad void time");
- }
-
- if (!xaccTransGetVoidStatus(transaction))
- {
-   failure("void status reports false after setting void");
- }
-
- if (strcmp(reason, xaccTransGetVoidReason(transaction)) != 0)
- {
-   failure("Reasons didn't match");
- }
+  new_val = xaccSplitGetValue(xaccTransGetSplit(transaction, 1));
  
- new_amt = xaccSplitGetAmount(xaccTransGetSplit(transaction, 0));
- /* print_gnc_numeric(new_amt); */
-
- if (!gnc_numeric_zero_p( new_amt))
- {
-   failure("Amount not zero after voiding");
- }      
-
- new_val = xaccSplitGetValue(xaccTransGetSplit(transaction, 1));
- 
- if (!(gnc_numeric_zero_p(new_val)))
- {
-   failure("Amount not zero after voiding");
- }
+  if (!(gnc_numeric_zero_p(new_val)))
+  {
+    failure("Amount not zero after voiding");
+  }
  
 
- if(!(gnc_numeric_eq(old_amt, xaccSplitVoidFormerAmount(xaccTransGetSplit(transaction, 0)))))
- {
-   failure("former amount (after voiding) didn't match actual old amount");
- }
+  if(!(gnc_numeric_eq(old_amt, xaccSplitVoidFormerAmount(xaccTransGetSplit(transaction, 0)))))
+  {
+    failure("former amount (after voiding) didn't match actual old amount");
+  }
 
- if(!(gnc_numeric_eq(old_val, xaccSplitVoidFormerValue(xaccTransGetSplit(transaction, 1)))))
- {
-   failure("former value (after voiding) didn't match actual old value");
- }
+  if(!(gnc_numeric_eq(old_val, xaccSplitVoidFormerValue(xaccTransGetSplit(transaction, 1)))))
+  {
+    failure("former value (after voiding) didn't match actual old value");
+  }
 
- return;
+  return;
 }
 
 static void
