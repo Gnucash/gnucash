@@ -59,10 +59,10 @@
  *    child accounts of this group.
  */
 void xaccTransScrubOrphans (Transaction *trans, AccountGroup *root,
-                            GNCSession *session);
-void xaccAccountScrubOrphans (Account *acc, GNCSession *session);
-void xaccAccountTreeScrubOrphans (Account *acc, GNCSession *session);
-void xaccGroupScrubOrphans (AccountGroup *grp, GNCSession *session);
+                            GNCBook *book);
+void xaccAccountScrubOrphans (Account *acc, GNCBook *book);
+void xaccAccountTreeScrubOrphans (Account *acc, GNCBook *book);
+void xaccGroupScrubOrphans (AccountGroup *grp, GNCBook *book);
 
 /* The ScrubSplit methods ensure that splits with the same commodity
  *   and command currency have the same amount and value.
@@ -79,22 +79,22 @@ void xaccGroupScrubSplits (AccountGroup *group);
  *    account.
  */
 void xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
-                              Account *parent, GNCSession *session);
-void xaccAccountScrubImbalance (Account *acc, GNCSession *session);
-void xaccAccountTreeScrubImbalance (Account *acc, GNCSession *session);
-void xaccGroupScrubImbalance (AccountGroup *grp, GNCSession *session);
+                              Account *parent, GNCBook *book);
+void xaccAccountScrubImbalance (Account *acc, GNCBook *book);
+void xaccAccountTreeScrubImbalance (Account *acc, GNCBook *book);
+void xaccGroupScrubImbalance (AccountGroup *grp, GNCBook *book);
 
 /* The xaccTransScrubCurrency method fixes transactions without a
  * common_currency by using the old account currency and security
  * fields of the parent accounts of the transaction's splits. */
-void xaccTransScrubCurrency (Transaction *trans, GNCSession *session);
+void xaccTransScrubCurrency (Transaction *trans, GNCBook *book);
 
 /* The xaccAccountScrubCommodity method fixed accounts without
  * a commodity by using the old account currency and security. */
-void xaccAccountScrubCommodity (Account *account, GNCSession *session);
+void xaccAccountScrubCommodity (Account *account, GNCBook *book);
 
 /* The xaccGroupScrubCommodities will scrub the currency/commodity
  * of all accounts & transactions in the group. */
-void xaccGroupScrubCommodities (AccountGroup *group, GNCSession *session);
+void xaccGroupScrubCommodities (AccountGroup *group, GNCBook *book);
 
 #endif /* XACC_SCRUB_H */

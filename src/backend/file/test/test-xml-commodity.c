@@ -24,7 +24,7 @@
 
 #include "Account.h"
 
-static GNCSession *session;
+static GNCBook *book;
 
 static gchar*
 node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
@@ -151,7 +151,7 @@ test_generation(void)
         int fd;
         gchar *compare_msg;
         
-        ran_com = get_random_commodity(session);
+        ran_com = get_random_commodity(book);
 
         test_node = gnc_commodity_dom_tree_create(ran_com);
         if(!test_node)
@@ -195,7 +195,7 @@ test_generation(void)
             parser = gnc_commodity_sixtp_parser_create();
             
             if(!gnc_xml_parse_file(parser, filename1, test_add_commodity,
-                                   (gpointer)&data, session))
+                                   (gpointer)&data, book))
             {
                 failure_args("gnc_xml_parse_file returned FALSE",  
 			     __FILE__, __LINE__, "%d", i);
@@ -229,13 +229,13 @@ guile_main(int argc, char **argv)
     gnc_module_system_init();
     gnc_module_load("gnucash/engine", 0);
 
-    session = gnc_session_new ();
+    book = gnc_book_new ();
 
     if(argc > 1)
     {
         test_files_in_dir(argc, argv, test_real_commodity,
                           gnc_commodity_sixtp_parser_create(),
-                          "gnc:commodity", session);
+                          "gnc:commodity", book);
     }
     else
     {

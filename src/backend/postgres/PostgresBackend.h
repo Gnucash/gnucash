@@ -107,8 +107,9 @@ struct _pgend {
    int path_cache_size;
    int ipath_max;
 
-   /* enginge data caches */
+   /* engine data caches */
    GNCSession *session;
+   GNCBook *book;
 };
 
 /*

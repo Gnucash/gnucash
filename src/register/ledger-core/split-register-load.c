@@ -168,10 +168,10 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   time_t present;
 
   blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                 gnc_get_current_session ());
+                                 gnc_get_current_book ());
 
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                   gnc_get_current_session ());
+                                   gnc_get_current_book ());
 
   /* make sure we have a blank split */
   if (blank_split == NULL)
@@ -180,12 +180,12 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     gnc_suspend_gui_refresh ();
 
-    trans = xaccMallocTransaction (gnc_get_current_session ());
+    trans = xaccMallocTransaction (gnc_get_current_book ());
 
     xaccTransBeginEdit (trans);
     xaccTransSetCurrency (trans, gnc_default_currency ()); /* is this lame? */
     xaccTransSetDateSecs (trans, info->last_date_entered);
-    blank_split = xaccMallocSplit (gnc_get_current_session ());
+    blank_split = xaccMallocSplit (gnc_get_current_book ());
     xaccTransAppendSplit (trans, blank_split);
     xaccTransCommitEdit (trans);
 

@@ -29,14 +29,14 @@
 gboolean
 gnc_xml_parse_file(sixtp *top_parser, const char *filename,
                    gxpf_callback callback, gpointer parsedata,
-                   gpointer sessiondata)
+                   gpointer bookdata)
 {
     gpointer parse_result = NULL;
     gxpf_data gpdata;
 
     gpdata.cb = callback;
     gpdata.parsedata = parsedata;
-    gpdata.sessiondata = sessiondata;
+    gpdata.bookdata = bookdata;
 
     return sixtp_parse_file(top_parser, filename, 
                             NULL, &gpdata, &parse_result);

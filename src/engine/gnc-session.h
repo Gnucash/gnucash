@@ -69,7 +69,7 @@
 #ifndef GNC_SESSION_H
 #define GNC_SESSION_H
 
-#include "gnc-book.h"
+#include "Backend.h"
 #include "gnc-engine.h"
 
 /** PROTOTYPES ******************************************************/
@@ -77,8 +77,8 @@
 GNCSession * gnc_session_new (void);
 void         gnc_session_destroy (GNCSession *session);
 
-/* The gnc_session_swap_data () method swaps the book and
- *    entity tables of the two given sessions. It is useful
+/* The gnc_session_swap_data () method swaps the book of
+ *    the two given sessions. It is useful
  *    for 'Save As' type functionality. */
 void gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2);
 
@@ -152,9 +152,6 @@ GNCBackendError gnc_session_pop_error (GNCSession *session);
 
 GNCBook * gnc_session_get_book (GNCSession *session);
 void gnc_session_set_book (GNCSession *session, GNCBook *book);
-
-/* Return the kvp data for the session */
-kvp_frame * gnc_session_get_slots (GNCSession *session);
 
 /* The gnc_session_get_file_path() routine returns the fully-qualified file
  *    path for the session. That is, if a relative or partial filename

@@ -244,6 +244,6 @@ gint32 xaccTransGetVersion (Transaction*);
  *    transaction have in common, using the old currency/security fields
  *    of the split accounts. */
 gnc_commodity * xaccTransFindOldCommonCurrency (Transaction *trans,
-                                                GNCSession *session);
+                                                GNCBook *book);
 
 #endif /* XACC_TRANSACTION_P_H */

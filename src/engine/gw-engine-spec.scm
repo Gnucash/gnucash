@@ -313,6 +313,8 @@
       "#include <guid.h>\n"
       "#include <Query.h>\n"
       "#include <Backend.h>\n"
+      "#include <Group.h>\n"
+      "#include <gnc-book.h>\n"
       "#include <gnc-session.h>\n"
       "#include <gnc-engine-util.h>\n"
       "#include <date.h>\n"
@@ -899,7 +901,7 @@ number of nanoseconds.")
    'gnc:malloc-account
    '<gnc:Account*>
    "xaccMallocAccount"
-   '((<gnc:Session*> session))
+   '((<gnc:Book*> book))
    "Allocate a new account structure.")
 
   (gw:wrap-function
@@ -1034,7 +1036,7 @@ description of the nature of a particular account.")
    'gnc:account-lookup
    '<gnc:Account*>
    "xaccAccountLookupDirect"
-   '((<gnc:guid-scm> guid) (<gnc:Session*> session))
+   '((<gnc:guid-scm> guid) (<gnc:Book*> book))
    "Lookup the account with GUID guid.")
 
   (gw:wrap-function
@@ -1207,7 +1209,7 @@ children to this account.")
    'gnc:malloc-account-group
    '<gnc:AccountGroup*>
    "xaccMallocAccountGroup"
-   '((<gnc:Session*> session))
+   '((<gnc:Book*> book))
    "Create a new account group.")
 
   (gw:wrap-function
@@ -1356,7 +1358,7 @@ when no longer needed.")
    'gnc:price-create
    '<gnc:Price*>
    "gnc_price_create"
-   '((<gnc:Session*> session))
+   '((<gnc:Book*> book))
    "Create and return a new price.")
 
   (gw:wrap-function
@@ -1495,7 +1497,7 @@ when no longer needed.")
    "Lookup a price at time t.")
 
   ;;===========
-  ;; GNCBook
+  ;; GNCSession
 
   (gw:wrap-function
    mod
@@ -1717,7 +1719,7 @@ of having a parent transaction with which one is working...")
    'gnc:transaction-create
    '<gnc:Transaction*>
    "xaccMallocTransaction"
-   '((<gnc:Session*> session>))
+   '((<gnc:Book*> book>))
    "Create a Transaction structure")
 
   (gw:wrap-function
@@ -1725,7 +1727,7 @@ of having a parent transaction with which one is working...")
    'gnc:split-create
    '<gnc:Split*>
    "xaccMallocSplit"
-   '((<gnc:Session*> session>>))
+   '((<gnc:Book*> book>>))
    "Create a Split structure")
 
   (gw:wrap-function

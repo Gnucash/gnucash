@@ -2,7 +2,7 @@
  * io-gncbin.c -- read and write (old format) binary datafile       *
  *             (GnuCash/X-Accountant)                               *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
  * Copyright (C) 1999-2000 Rob Browning                             *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -198,7 +198,7 @@ mark_potential_quote(Split *s, double price, double quantity)
 
 static gboolean
 cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
-                                            GNCSession *session)
+                                            GNCBook *book)
 {
   GSList *item = potential_quotes;
 
@@ -217,14 +217,14 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
        (acct_type == CURRENCY)) {
       /* this is a quote -- file it in the db and kill the split */
       Transaction *txn = xaccSplitGetParent(q->split);
-      GNCPrice *price = gnc_price_create(session);
+      GNCPrice *price = gnc_price_create(book);
       Timespec time = xaccTransRetDatePostedTS(txn);
 
       gnc_price_begin_edit(price);
       gnc_price_set_commodity(price,
-                              DxaccAccountGetSecurity(split_acct, session));
+                              DxaccAccountGetSecurity(split_acct, book));
       gnc_price_set_currency(price,
-                             DxaccAccountGetCurrency(split_acct, session));
+                             DxaccAccountGetCurrency(split_acct, book));
       gnc_price_set_time(price, time);
       gnc_price_set_source(price, "old-file-import");
       gnc_price_set_type(price, "unknown");
@@ -250,15 +250,15 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
 }
 
 /** PROTOTYPES ******************************************************/
-static Account     *locateAccount (int acc_id, GNCSession *session); 
+static Account     *locateAccount (int acc_id, GNCBook *book); 
 
-static AccountGroup *readGroup( GNCSession *, int fd, Account *, int token );
-static Account      *readAccount( GNCSession *session, int fd,
+static AccountGroup *readGroup( GNCBook *, int fd, Account *, int token );
+static Account      *readAccount( GNCBook *book, int fd,
                                   AccountGroup *, int token );
 static gboolean      readAccInfo( int fd, Account *, int token );
-static Transaction  *readTransaction( GNCSession *session,
+static Transaction  *readTransaction( GNCBook *book,
                                       int fd, Account *, int token );
-static Split        *readSplit( GNCSession *session, int fd, int token );
+static Split        *readSplit( GNCBook *book, int fd, int token );
 static char         *readString( int fd, int token );
 static time_t        readDMYDate( int fd, int token );
 static int           readTSDate( int fd, Timespec *, int token );
@@ -372,12 +372,12 @@ xaccFlipLongLong (gint64 val)
  ********************************************************************/
 
 static gnc_commodity * 
-gnc_commodity_import_legacy(GNCSession *session, const char * currency_name)
+gnc_commodity_import_legacy(GNCBook *book, const char * currency_name)
 {
   gnc_commodity_table *table;
   gnc_commodity * old = NULL;
 
-  table = gnc_book_get_commodity_table (gnc_session_get_book (session));
+  table = gnc_book_get_commodity_table (book);
 
   g_return_val_if_fail (table != NULL, NULL);
 
@@ -412,15 +412,12 @@ gnc_commodity_import_legacy(GNCSession *session, const char * currency_name)
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 static gboolean
-gnc_load_financials_from_fd(GNCSession *session, int fd)
+gnc_load_financials_from_fd(GNCBook *book, int fd)
 {
   int  err=0;
   int  token=0;
   int  num_unclaimed;
   AccountGroup *grp = 0x0;
-  GNCBook *book;
-
-  book = gnc_session_get_book (session);
 
   maingrp = 0x0;
   error_code = ERR_BACKEND_NO_ERR;
@@ -476,8 +473,8 @@ gnc_load_financials_from_fd(GNCSession *session, int fd)
 
   /* disable logging during load; otherwise its just a mess */
   xaccLogDisable();
-  holder = xaccMallocAccountGroup(session);
-  grp = readGroup (session, fd, NULL, token);
+  holder = xaccMallocAccountGroup(book);
+  grp = readGroup (book, fd, NULL, token);
 
   /* the number of unclaimed accounts should be zero if the 
    * read succeeded.  But just in case of a very unlikely 
@@ -488,7 +485,7 @@ gnc_load_financials_from_fd(GNCSession *session, int fd)
     error_code = ERR_FILEIO_FILE_BAD_READ;
 
     /* create a lost account, put the missing accounts there */
-    acc = xaccMallocAccount(session);
+    acc = xaccMallocAccount(book);
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, _("Lost Accounts"));
     acc -> children = holder;
@@ -507,7 +504,7 @@ gnc_load_financials_from_fd(GNCSession *session, int fd)
 
   {
     GNCPriceDB *tmpdb;
-    if(cvt_potential_prices_to_pricedb_and_cleanup(&tmpdb, session))
+    if(cvt_potential_prices_to_pricedb_and_cleanup(&tmpdb, book))
     {
       GNCPriceDB *db = gnc_book_get_pricedb(book);
       gnc_book_set_pricedb(book, tmpdb);
@@ -561,7 +558,7 @@ gnc_session_load_from_binfile(GNCSession *session)
     return;
   }
 
-  if (!gnc_load_financials_from_fd(session, fd))
+  if (!gnc_load_financials_from_fd(gnc_session_get_book(session), fd))
     return;
 
   close(fd);
@@ -575,12 +572,12 @@ gnc_session_load_from_binfile(GNCSession *session)
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 static AccountGroup *
-readGroup (GNCSession *session, int fd, Account *aparent, int token)
+readGroup (GNCBook *book, int fd, Account *aparent, int token)
   {
   int  numAcc;
   int  err=0;
   int  i;
-  AccountGroup *grp = xaccMallocAccountGroup(session);
+  AccountGroup *grp = xaccMallocAccountGroup(book);
   
   ENTER (" ");
 
@@ -602,7 +599,7 @@ readGroup (GNCSession *session, int fd, Account *aparent, int token)
   /* read in the accounts */
   for( i=0; i<numAcc; i++ )
     {
-    Account * acc = readAccount( session, fd, grp, token );
+    Account * acc = readAccount( book, fd, grp, token );
     if( NULL == acc ) {
       PERR("Short group read: \n"
            "\texpected %d, got %d accounts\n",numAcc,i);
@@ -623,14 +620,14 @@ readGroup (GNCSession *session, int fd, Account *aparent, int token)
  * readAccount                                                      * 
  *   reads in the data for an account from the datafile             *
  *                                                                  * 
- * Args:   session - the session                                    *
+ * Args:   book  - the session                                      *
  *         fd    - the filedescriptor of the data file              * 
  *         acc   - the account structure to be filled in            *
  *         token - the datafile version                             * 
  * Return: error value, 0 if OK, else -1                            * 
 \********************************************************************/
 static Account *
-readAccount( GNCSession *session, int fd, AccountGroup *grp, int token )
+readAccount( GNCBook *book, int fd, AccountGroup *grp, int token )
 {
   int err=0;
   int i;
@@ -647,11 +644,11 @@ readAccount( GNCSession *session, int fd, AccountGroup *grp, int token )
     err = read( fd, &accID, sizeof(int) );
     if( err != sizeof(int) ) { return NULL; }
     XACC_FLIP_INT (accID);
-    acc = locateAccount (accID, session);
+    acc = locateAccount (accID, book);
     /* locateAccountAlways should always accounts that are open for
        editing in this situation */
   } else {
-    acc = xaccMallocAccount(session);
+    acc = xaccMallocAccount(book);
     xaccGroupInsertAccount (holder, acc);
     xaccAccountBeginEdit (acc);
   }
@@ -721,8 +718,8 @@ readAccount( GNCSession *session, int fd, AccountGroup *grp, int token )
      if( NULL == tmp ) return NULL;
      
      PINFO ("currency is %s", tmp);
-     currency = gnc_commodity_import_legacy(session, tmp);
-     DxaccAccountSetCurrency (acc, currency, session);
+     currency = gnc_commodity_import_legacy(book, tmp);
+     DxaccAccountSetCurrency (acc, currency, book);
      
      if(tmp) free (tmp);
 
@@ -746,15 +743,15 @@ readAccount( GNCSession *session, int fd, AccountGroup *grp, int token )
      }
 
      PINFO ("security is %s", tmp);
-     security = gnc_commodity_import_legacy(session, tmp);
-     DxaccAccountSetSecurity (acc, security, session);
+     security = gnc_commodity_import_legacy(book, tmp);
+     DxaccAccountSetSecurity (acc, security, book);
 
      if(tmp) free (tmp);
   } 
   else {
     /* set the default currency when importing old files */
-    currency = gnc_commodity_import_legacy(session, DEFAULT_CURRENCY);
-    DxaccAccountSetCurrency (acc, currency, session);
+    currency = gnc_commodity_import_legacy(book, DEFAULT_CURRENCY);
+    DxaccAccountSetCurrency (acc, currency, book);
   }
 
   /* aux account info first appears in version ten files */
@@ -772,7 +769,7 @@ readAccount( GNCSession *session, int fd, AccountGroup *grp, int token )
   /* read the transactions */
   for( i=0; i<numTrans; i++ ) {
     Transaction *trans;
-    trans = readTransaction(session, fd, acc, token );
+    trans = readTransaction(book, fd, acc, token );
     if(trans == NULL ) {
       PERR ("Short Transaction Read: \n"
             "\texpected %d got %d transactions \n", numTrans, i);
@@ -798,7 +795,7 @@ readAccount( GNCSession *session, int fd, AccountGroup *grp, int token )
     }
     XACC_FLIP_INT (numGrps);
     if (numGrps) {
-       readGroup (session, fd, acc, token);
+       readGroup (book, fd, acc, token);
     }
   }
 
@@ -824,7 +821,7 @@ readAccount( GNCSession *session, int fd, AccountGroup *grp, int token )
  */
 
 static Account *
-locateAccount (int acc_id, GNCSession *session)
+locateAccount (int acc_id, GNCBook *book)
 {
    Account * acc;
    /* negative account ids denote no account */
@@ -842,7 +839,7 @@ locateAccount (int acc_id, GNCSession *session)
 
    /* if neither, then it does not yet exist.  Create it.
     * Put it in the drunk tank. */
-   acc = xaccMallocAccount (session);
+   acc = xaccMallocAccount (book);
    xaccAccountBeginEdit(acc);
    g_hash_table_insert(ids_to_unfinished_accounts,
                        (gpointer) acc_id,
@@ -926,7 +923,7 @@ xaccTransSetAction (Transaction *trans, const char *action)
 \********************************************************************/
 
 static Transaction *
-readTransaction(GNCSession *session, int fd, Account *acc, int revision)
+readTransaction(GNCBook *book, int fd, Account *acc, int revision)
   {
   int err=0;
   int acc_id;
@@ -942,7 +939,7 @@ readTransaction(GNCSession *session, int fd, Account *acc, int revision)
   ENTER (" ");
 
   /* create a transaction structure */
-  trans = xaccMallocTransaction(session);
+  trans = xaccMallocTransaction(book);
   xaccTransBeginEdit (trans);  
 
   tmp = readString( fd, revision );
@@ -1089,9 +1086,9 @@ readTransaction(GNCSession *session, int fd, Account *acc, int revision)
     /* The code below really wants to assume that there are a pair
      * of splits in every transaction, so make it so. 
      */
-    s = xaccMallocSplit (session);
+    s = xaccMallocSplit (book);
     xaccTransAppendSplit (trans, s);
-    s = xaccMallocSplit (session);
+    s = xaccMallocSplit (book);
     xaccTransAppendSplit (trans, s);
     
     s = xaccTransGetSplit (trans, 0);
@@ -1181,7 +1178,7 @@ readTransaction(GNCSession *session, int fd, Account *acc, int revision)
         }
       XACC_FLIP_INT (acc_id);
       DEBUG ("credit %d\n", acc_id);
-      peer_acc = locateAccount (acc_id, session);
+      peer_acc = locateAccount (acc_id, book);
   
       /* insert the split part of the transaction into 
        * the credited account */
@@ -1201,7 +1198,7 @@ readTransaction(GNCSession *session, int fd, Account *acc, int revision)
         }
       XACC_FLIP_INT (acc_id);
       DEBUG ("debit %d\n", acc_id);
-      peer_acc = locateAccount (acc_id, session);
+      peer_acc = locateAccount (acc_id, book);
       if (peer_acc) {
          Split *s0 = xaccTransGetSplit (trans, 0);
          Split *s1 = xaccTransGetSplit (trans, 1);
@@ -1223,7 +1220,7 @@ readTransaction(GNCSession *session, int fd, Account *acc, int revision)
       /* Version 5 files included a split that immediately
        * followed the transaction, before the destination splits.
        * Later versions don't have this. */
-      Split *split = readSplit (session, fd, revision);
+      Split *split = readSplit (book, fd, revision);
       xaccTransAppendSplit(trans, split);
     }
     
@@ -1237,7 +1234,7 @@ readTransaction(GNCSession *session, int fd, Account *acc, int revision)
     }
     XACC_FLIP_INT (numSplits);
     for (i = 0; i < numSplits; i++) {
-      Split *split = readSplit(session, fd, revision);
+      Split *split = readSplit(book, fd, revision);
       xaccTransAppendSplit(trans, split);
       
       if(!notes) {
@@ -1262,7 +1259,7 @@ readTransaction(GNCSession *session, int fd, Account *acc, int revision)
 \********************************************************************/
 
 static Split *
-readSplit ( GNCSession *session, int fd, int token )
+readSplit ( GNCBook *book, int fd, int token )
 {
   Account *peer_acc;
   Split *split;
@@ -1275,7 +1272,7 @@ readSplit ( GNCSession *session, int fd, int token )
   ENTER (" ");
 
   /* create a split structure */
-  split = xaccMallocSplit(session);
+  split = xaccMallocSplit(book);
 
   tmp = readString( fd, token );
   if( NULL == tmp )
@@ -1394,7 +1391,7 @@ readSplit ( GNCSession *session, int fd, int token )
   }
   XACC_FLIP_INT (acc_id);
   DEBUG ("account id %d", acc_id);
-  peer_acc = locateAccount (acc_id, session);
+  peer_acc = locateAccount (acc_id, book);
   xaccAccountInsertSplit (peer_acc, split);
 
   mark_potential_quote(split, share_price, num_shares);

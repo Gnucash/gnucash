@@ -1112,7 +1112,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   gnc_suspend_gui_refresh ();
 
   /* Create the transaction */
-  trans = xaccMallocTransaction(gnc_get_current_session ());
+  trans = xaccMallocTransaction(gnc_get_current_book ());
 
   xaccTransBeginEdit(trans);
 
@@ -1126,11 +1126,11 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   xaccTransSetDescription(trans, string);
 
   /* create from split */
-  from_split = xaccMallocSplit(gnc_get_current_session ());
+  from_split = xaccMallocSplit(gnc_get_current_book ());
   xaccTransAppendSplit(trans, from_split); 
 
   /* create to split */
-  to_split = xaccMallocSplit(gnc_get_current_session ());
+  to_split = xaccMallocSplit(gnc_get_current_book ());
   xaccTransAppendSplit(trans, to_split); 
 
   xaccAccountBeginEdit(from_account);

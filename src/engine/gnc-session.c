@@ -119,14 +119,11 @@ gnc_session_init (GNCSession *session)
 {
   if (!session) return;
 
-  session->entity_table = xaccEntityTableNew ();
-  session->book = gnc_book_new (session);
+  session->book = gnc_book_new ();
   session->book_id = NULL;
   session->fullpath = NULL;
   session->logpath = NULL;
   session->backend = NULL;
-
-  session->kvp_data = kvp_frame_new ();
 
   gnc_session_clear_error (session);
 }
@@ -160,20 +157,6 @@ gnc_session_set_book (GNCSession *session, GNCBook *book)
   session->book = book;
 
   gnc_book_set_backend (book, session->backend);
-}
-
-kvp_frame *
-gnc_session_get_slots (GNCSession *session)
-{
-  if (!session) return NULL;
-  return session->kvp_data;
-}
-
-GNCEntityTable *
-gnc_session_get_entity_table (GNCSession *session)
-{
-  if (!session) return NULL;
-  return session->entity_table;
 }
 
 Backend * 
@@ -382,7 +365,7 @@ gnc_session_load (GNCSession *session)
   xaccLogDisable();
 
   gnc_book_destroy (session->book);
-  session->book = gnc_book_new (session);
+  session->book = gnc_book_new ();
 
   xaccLogSetBaseName(session->logpath);
   xaccLogEnable();
@@ -604,12 +587,6 @@ gnc_session_destroy (GNCSession *session)
   gnc_book_destroy (session->book);
   session->book = NULL;
 
-  xaccEntityTableDestroy (session->entity_table);
-  session->entity_table = NULL;
-
-  kvp_frame_delete (session->kvp_data);
-  session->kvp_data = NULL;
-
   xaccLogEnable();
 
   g_free (session);
@@ -621,27 +598,15 @@ void
 gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2)
 {
   GNCBook *book_1, *book_2;
-  GNCEntityTable *entity_table_1, *entity_table_2;
-  kvp_frame *kvp_1, *kvp_2;
 
   if (session_1 == session_2) return;
   if (!session_1 || !session_2) return;
 
   book_1 = session_1->book;
-  entity_table_1 = session_1->entity_table;
-  kvp_1 = session_1->kvp_data;
-
   book_2 = session_2->book;
-  entity_table_2 = session_2->entity_table;
-  kvp_2 = session_2->kvp_data;
 
   session_1->book = book_2;
-  session_1->entity_table = entity_table_2;
-  session_1->kvp_data = kvp_2;
-
   session_2->book = book_1;
-  session_2->entity_table = entity_table_1;
-  session_2->kvp_data = kvp_1;
 
   gnc_book_set_backend (book_1, session_2->backend);
   gnc_book_set_backend (book_2, session_1->backend);

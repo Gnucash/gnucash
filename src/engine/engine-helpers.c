@@ -28,7 +28,9 @@
 #include <libguile.h>
 #include <string.h>
 
+#include "Account.h"
 #include "Backend.h"
+#include "Group.h"
 #include "Query.h"
 #include "date.h"
 #include "engine-helpers.h"

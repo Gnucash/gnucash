@@ -105,9 +105,9 @@ test_commodity(void)
         int j;
         gnc_commodity_table *tbl;
         gnc_commodity *coms[20];
-        GNCSession *session;
+        GNCBook *book;
 
-        session = gnc_session_new ();
+        book = gnc_book_new ();
         tbl = gnc_commodity_table_new ();
 
         do_test(gnc_commodity_table_get_size(tbl) == 0,
@@ -115,7 +115,7 @@ test_commodity(void)
 
         for(i = 0; i < 20; i++)
         {
-            coms[i] = get_random_commodity(session);
+            coms[i] = get_random_commodity(book);
 
             do_test(
                 gnc_commodity_table_insert(tbl, coms[i]) != NULL,

@@ -146,7 +146,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-io:invst-xtn-import qif-xtn qif-file gnc-acct-info commodity)
-  (let ((gnc-xtn (gnc:transaction-create (gnc:get-current-session)))
+  (let ((gnc-xtn (gnc:transaction-create (gnc:get-current-book)))
         (format-info (qif-io:file-invst-xtn-format qif-file)))
     ;; utility to make a new split and add it both to an 
     ;; account and to the transaction
@@ -155,11 +155,11 @@
              (acct-type (cdr acct-info))
              (acct (qif-io:acct-table-lookup 
                     gnc-acct-info acct-name acct-type))
-             (split (gnc:split-create (gnc:get-current-session))))
+             (split (gnc:split-create (gnc:get-current-book))))
         ;; make the account if necessary 
         (if (not acct)
             (begin 
-              (set! acct (gnc:malloc-account (gnc:get-current-session)))
+              (set! acct (gnc:malloc-account (gnc:get-current-book)))
               (gnc:account-set-name acct acct-name)
               (qif-io:acct-table-insert! gnc-acct-info 
                                          acct-name acct-type acct)))

@@ -139,8 +139,7 @@ AccountGroup *
 pgendGetTopGroup (PGBackend *be)
 {
   if (!be) return NULL;
-
-  return gnc_book_get_group (gnc_session_get_book (be->session));
+  return gnc_book_get_group (be->book);
 }
 
 /* ============================================================= */
@@ -149,13 +148,13 @@ pgendGetTopGroup (PGBackend *be)
  */
 
 gnc_commodity *
-gnc_string_to_commodity (const char *str, GNCSession *session)
+gnc_string_to_commodity (const char *str, GNCBook *book)
 {
    gnc_commodity_table *comtab;
    gnc_commodity *com;
    char *space, *name;
 
-   comtab = gnc_book_get_commodity_table (gnc_session_get_book (session));
+   comtab = gnc_book_get_commodity_table (book);
 
    space = g_strdup(str);
    name = strchr (space, ':');
@@ -307,7 +306,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* use markers to avoid redundant traversals of transactions we've
     * already checked recently. */
-   trans = xaccTransLookup (&trans_guid, be->session);
+   trans = xaccTransLookup (&trans_guid, be->book);
    if (NULL != trans)
    {
       if (0 != trans->marker)
@@ -327,7 +326,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    }
    else
    {
-      trans = xaccMallocTransaction(be->session);
+      trans = xaccMallocTransaction(be->book);
       xaccTransBeginEdit (trans);
       xaccTransSetGUID (trans, &trans_guid);
    }
@@ -341,7 +340,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
    trans->idata = atoi(DB_GET_VAL("iguid",j));
 
-   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->session);
+   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->book);
    xaccTransSetCurrency (trans, currency);
 
    trans->marker = 1;
@@ -540,7 +539,7 @@ pgendRunQuery (Backend *bend, Query *q)
    /* first thing we do is convert the gnc-engine query into
     * an sql string. */
    sq = sqlQuery_new();
-   sql_query_string = sqlQuery_build (sq, q, be->session);
+   sql_query_string = sqlQuery_build (sq, q, be->book);
 
    topgroup = pgendGetTopGroup (be);
 
@@ -1231,6 +1230,8 @@ pgend_book_load_poll (Backend *bend)
 
    if (!be) return;
 
+   be->book = gnc_session_get_book (be->session);
+
    grp = pgendGetTopGroup (be);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
@@ -1263,6 +1264,8 @@ pgend_book_load_single (Backend *bend)
 
    if (!be) return;
 
+   be->book = gnc_session_get_book (be->session);
+
    grp = pgendGetTopGroup (be);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
@@ -1288,18 +1291,18 @@ static void
 pgend_price_load_single (Backend *bend)
 {
    PGBackend *be = (PGBackend *)bend;
-   GNCBook *book;
    GNCPriceDB *db;
 
    if (!be) return;
+
+   be->book = gnc_session_get_book (be->session);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
-   book = gnc_session_get_book (be->session);
-   db = gnc_book_get_pricedb (book);
+   db = gnc_book_get_pricedb (be->book);
 
    pgendGetAllPrices (be, db);
 
@@ -1356,6 +1359,7 @@ pgend_session_begin (Backend *backend,
    pgendInit (be);
 
    be->session = session;
+   be->book = gnc_session_get_book(session);
 
    /* Parse the sessionid for the hostname, port number and db name.
     * The expected URL format is
@@ -2050,7 +2054,7 @@ pgendInit (PGBackend *be)
    }
    be->ipath_max = 0;
 
-   be->session = NULL;
+   be->book = NULL;
 }
 
 /* ============================================================= */

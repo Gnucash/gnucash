@@ -28,6 +28,9 @@
 #include <glib.h>
 #include <locale.h>
 
+#include "Account.h"
+#include "gnc-engine.h"
+#include "Group.h"
 #include "gnc-session.h"
 
 
@@ -98,11 +101,11 @@ typedef enum
 Account * gnc_find_or_create_equity_account (AccountGroup *group,
                                              GNCEquityType equity_type,
                                              gnc_commodity *currency,
-                                             GNCSession *session);
+                                             GNCBook *book);
 gboolean gnc_account_create_opening_balance (Account *account,
                                              gnc_numeric balance,
                                              time_t date,
-                                             GNCSession *session);
+                                             GNCBook *book);
 
 char * gnc_account_get_full_name (Account *account);
 

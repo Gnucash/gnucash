@@ -182,7 +182,7 @@ gnc_copy_split_onto_split(Split *from, Split *to, gboolean use_cut_semantics)
   if (split_scm == SCM_UNDEFINED)
     return;
 
-  gnc_copy_split_scm_onto_split(split_scm, to, gnc_get_current_session ());
+  gnc_copy_split_scm_onto_split(split_scm, to, gnc_get_current_book ());
 }
 
 /* Uses the scheme transaction copying routines */
@@ -201,7 +201,7 @@ gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
     return;
 
   gnc_copy_trans_scm_onto_trans(trans_scm, to, do_commit,
-                                gnc_get_current_session ());
+                                gnc_get_current_book ());
 }
 
 static int
@@ -362,7 +362,7 @@ gnc_split_register_get_blank_split (SplitRegister *reg)
 
   if (!reg) return NULL;
 
-  return xaccSplitLookup (&info->blank_split_guid, gnc_get_current_session ());
+  return xaccSplitLookup (&info->blank_split_guid, gnc_get_current_book ());
 }
 
 gboolean
@@ -395,7 +395,7 @@ gnc_split_register_get_split_virt_loc (SplitRegister *reg, Split *split,
       if (!vcell->visible)
         continue;
 
-      s = xaccSplitLookup (vcell->vcell_data, gnc_get_current_session ());
+      s = xaccSplitLookup (vcell->vcell_data, gnc_get_current_book ());
 
       if (s == split)
       {
@@ -460,7 +460,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
   Split *split;
 
   blank_split = xaccSplitLookup(&info->blank_split_guid,
-                                gnc_get_current_session ());
+                                gnc_get_current_book ());
   split = gnc_split_register_get_current_split (reg);
   trans = gnc_split_register_get_current_trans (reg);
   trans_split = gnc_split_register_get_current_trans_split (reg, NULL);
@@ -525,7 +525,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
     /* We are on a split in an expanded transaction.
      * Just copy the split and add it to the transaction. */
 
-    new_split = xaccMallocSplit (gnc_get_current_session ());
+    new_split = xaccMallocSplit (gnc_get_current_book ());
 
     xaccTransBeginEdit (trans);
     xaccTransAppendSplit (trans, new_split);
@@ -577,7 +577,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
       return NULL;
     }
 
-    new_trans = xaccMallocTransaction (gnc_get_current_session ());
+    new_trans = xaccMallocTransaction (gnc_get_current_book ());
 
     xaccTransBeginEdit (new_trans);
     gnc_copy_trans_onto_trans (trans, new_trans, FALSE, FALSE);
@@ -626,7 +626,7 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
   SCM new_item;
 
   blank_split = xaccSplitLookup(&info->blank_split_guid,
-                                gnc_get_current_session ());
+                                gnc_get_current_book ());
   split = gnc_split_register_get_current_split (reg);
   trans = gnc_split_register_get_current_trans (reg);
 
@@ -722,7 +722,7 @@ gnc_split_register_cut_current (SplitRegister *reg)
   Split *split;
 
   blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                 gnc_get_current_session ());
+                                 gnc_get_current_book ());
   split = gnc_split_register_get_current_split (reg);
   trans = gnc_split_register_get_current_trans (reg);
 
@@ -768,7 +768,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
     return;
 
   blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                 gnc_get_current_session ());
+                                 gnc_get_current_book ());
   split = gnc_split_register_get_current_split (reg);
   trans = gnc_split_register_get_current_trans (reg);
 
@@ -811,12 +811,12 @@ gnc_split_register_paste_current (SplitRegister *reg)
     xaccTransBeginEdit(trans);
     if (split == NULL)
     { /* We are on a null split in an expanded transaction. */
-      split = xaccMallocSplit(gnc_get_current_session ());
+      split = xaccMallocSplit(gnc_get_current_book ());
       xaccTransAppendSplit(trans, split);
     }
 
     gnc_copy_split_scm_onto_split(copied_item, split,
-                                  gnc_get_current_session ());
+                                  gnc_get_current_book ());
     xaccTransCommitEdit(trans);
   }
   else
@@ -857,17 +857,17 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
     if ((gnc_split_register_get_default_account (reg) != NULL) &&
         (xaccGUIDType(&copied_leader_guid,
-                      gnc_get_current_session ()) != GNC_ID_NULL))
+                      gnc_get_current_book ()) != GNC_ID_NULL))
     {
       new_guid = &info->default_account;
       gnc_copy_trans_scm_onto_trans_swap_accounts(copied_item, trans,
                                                   &copied_leader_guid,
                                                   new_guid, TRUE,
-                                                  gnc_get_current_session ());
+                                                  gnc_get_current_book ());
     }
     else
       gnc_copy_trans_scm_onto_trans(copied_item, trans, TRUE,
-                                    gnc_get_current_session ());
+                                    gnc_get_current_book ());
 
     num_splits = xaccTransCountSplits(trans);
     if (split_index >= num_splits)
@@ -897,10 +897,10 @@ gnc_split_register_delete_current_split (SplitRegister *reg)
   if (!reg) return;
 
   blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                 gnc_get_current_session ());
+                                 gnc_get_current_book ());
 
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                   gnc_get_current_session ());
+                                   gnc_get_current_book ());
 
   /* get the current split based on cursor position */
   split = gnc_split_register_get_current_split (reg);
@@ -954,9 +954,9 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
   if (!reg) return;
 
   blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                 gnc_get_current_session ());
+                                 gnc_get_current_book ());
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                   gnc_get_current_session ());
+                                   gnc_get_current_book ());
 
   /* get the current split based on cursor position */
   split = gnc_split_register_get_current_split (reg);
@@ -1030,10 +1030,10 @@ gnc_split_register_emtpy_current_trans (SplitRegister *reg)
   if (!reg) return;
 
   blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                 gnc_get_current_session ());
+                                 gnc_get_current_book ());
 
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                   gnc_get_current_session ());
+                                   gnc_get_current_book ());
 
   /* get the current split based on cursor position */
   split = gnc_split_register_get_current_split (reg);
@@ -1122,7 +1122,7 @@ gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg)
   Transaction *pending_trans;
 
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                   gnc_get_current_session ());
+                                   gnc_get_current_book ());
 
   /* Get the currently open transaction, rollback the edits on it, and
    * then repaint everything. To repaint everything, make a note of
@@ -1258,7 +1258,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
       {
         Split *temp_split;
 
-        temp_split = xaccMallocSplit (gnc_get_current_session ());
+        temp_split = xaccMallocSplit (gnc_get_current_book ());
         other_split_scm = gnc_copy_split (temp_split, use_cut_semantics);
         xaccSplitDestroy (temp_split);
 
@@ -1354,10 +1354,10 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    if (!reg) return FALSE;
 
    blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                  gnc_get_current_session ());
+                                  gnc_get_current_book ());
 
    pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                    gnc_get_current_session ());
+                                    gnc_get_current_book ());
 
    blank_trans = xaccSplitGetParent (blank_split);
 
@@ -1438,7 +1438,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
       * the split to the pre-existing transaction. */
      Split *trans_split;
 
-     split = xaccMallocSplit (gnc_get_current_session ());
+     split = xaccMallocSplit (gnc_get_current_book ());
      xaccTransAppendSplit (trans, split);
 
      gnc_table_set_virt_cell_data (reg->table,
@@ -1895,7 +1895,7 @@ gnc_split_register_changed (SplitRegister *reg)
   Transaction *pending_trans;
 
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                   gnc_get_current_session ());
+                                   gnc_get_current_book ());
 
   if (reg == NULL)
     return FALSE;
@@ -2245,10 +2245,10 @@ gnc_split_register_cleanup (SplitRegister *reg)
    Split *blank_split;
 
    blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                  gnc_get_current_session ());
+                                  gnc_get_current_book ());
 
    pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                    gnc_get_current_session ());
+                                    gnc_get_current_book ());
 
    gnc_suspend_gui_refresh ();
 

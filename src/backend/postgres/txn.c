@@ -115,7 +115,7 @@ delete_list_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* If the database has splits that the engine doesn't,
     * collect 'em up & we'll have to delete em */
-   if (NULL == xaccSplitLookup (&guid, be->session))
+   if (NULL == xaccSplitLookup (&guid, be->book))
    {
       DeleteTransInfo *dti;
 
@@ -458,10 +458,10 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
             PINFO ("split GUID=%s", DB_GET_VAL("entryGUID",j));
             guid = nullguid;  /* just in case the read fails ... */
             string_to_guid (DB_GET_VAL("entryGUID",j), &guid);
-            s = xaccSplitLookup (&guid, be->session);
+            s = xaccSplitLookup (&guid, be->book);
             if (!s)
             {
-               s = xaccMallocSplit(be->session);
+               s = xaccMallocSplit(be->book);
                xaccSplitSetGUID(s, &guid);
             }
 
@@ -479,7 +479,7 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
             /* next, find the account that this split goes into */
             guid = nullguid;  /* just in case the read fails ... */
             string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-            acc = xaccAccountLookup (&guid, be->session);
+            acc = xaccAccountLookup (&guid, be->book);
             if (!acc)
             {
                PERR ("account not found, will delete this split\n"
@@ -581,10 +581,10 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    pgendDisable(be);
 
    /* first, see if we already have such a transaction */
-   trans = xaccTransLookup (trans_guid, be->session);
+   trans = xaccTransLookup (trans_guid, be->book);
    if (!trans)
    {
-      trans = xaccMallocTransaction(be->session);
+      trans = xaccMallocTransaction(be->book);
       do_set_guid=TRUE;
       engine_data_is_newer = -1;
    }
@@ -686,7 +686,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
             xaccTransSetDateEnteredTS (trans, &ts);
             xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
             currency = gnc_string_to_commodity (DB_GET_VAL("currency",j),
-                                                be->session);
+                                                be->book);
             xaccTransSetCurrency (trans, currency);
             trans->idata = atoi(DB_GET_VAL("iguid",j));
          }

@@ -32,6 +32,7 @@
 #include <unistd.h>
 
 #include "Account.h"
+#include "Transaction.h"
 #include "dialog-account-picker.h"
 #include "dialog-commodity.h"
 #include "dialog-utils.h"

@@ -35,7 +35,7 @@ struct gxpf_data_struct
 {
     gxpf_callback cb;
     gpointer parsedata;
-    gpointer sessiondata;
+    gpointer bookdata;
 };
 
 typedef struct gxpf_data_struct gxpf_data;
@@ -43,6 +43,6 @@ typedef struct gxpf_data_struct gxpf_data;
 gboolean
 gnc_xml_parse_file(sixtp *top_parser, const char *filename,
                    gxpf_callback callback, gpointer parsedata,
-                   gpointer sessiondata);
+                   gpointer bookdata);
 
 #endif /* IO_GNCXML_GEN_H */

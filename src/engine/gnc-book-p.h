@@ -24,12 +24,14 @@
  * HISTORY:
  * Created 2001 by Rob Browning
  * Copyright (c) 2001 Rob Browning
+ * Copyright (c) 2001 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef GNC_BOOK_P_H
 #define GNC_BOOK_P_H
 
 #include "BackendP.h"
+#include "GNCIdP.h"
 #include "DateUtils.h"
 #include "TransLog.h"
 #include "gnc-book.h"
@@ -39,6 +41,12 @@
 
 struct gnc_book_struct
 {
+  /* The entity table associates the GUIDs of all the objects
+   * created in the session with their respective objects
+   * (pointer addresses) */
+  GNCEntityTable *entity_table;
+
+  /* Pointers to top-level data structures */
   AccountGroup *topgroup;
   GNCPriceDB *pricedb;
 
@@ -48,6 +56,10 @@ struct gnc_book_struct
 
   gnc_commodity_table *commodity_table;
 
+  /* To be technically correct, backends belong to sessions and
+   * not books.  So the pointer below "really shouldn't be here", 
+   * except that it provides a nice convenience, avoiding a lookup 
+   * from the session.  Better solutions welcome ... */ 
   Backend *backend;
 };
 
@@ -56,6 +68,8 @@ void gnc_book_set_group(GNCBook *book, AccountGroup *grp);
 void gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db);
 
 void gnc_book_set_backend (GNCBook *book, Backend *be);
+
+GNCEntityTable * gnc_book_get_entity_table (GNCBook *book);
 
 /*
  * used by backends to mark the notsaved as FALSE just after 

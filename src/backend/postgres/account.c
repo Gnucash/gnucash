@@ -253,10 +253,10 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    PINFO ("account GUID=%s", DB_GET_VAL("accountGUID",j));
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-   acc = xaccAccountLookup (&guid, be->session);
+   acc = xaccAccountLookup (&guid, be->book);
    if (!acc) 
    {
-      acc = xaccMallocAccount(be->session);
+      acc = xaccMallocAccount(be->book);
       xaccAccountBeginEdit(acc);
       xaccAccountSetGUID(acc, &guid);
    }
@@ -271,7 +271,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccAccountSetType(acc, xaccAccountStringToEnum(DB_GET_VAL("type",j)));
    xaccAccountSetCommodity(acc, 
                            gnc_string_to_commodity (DB_GET_VAL("commodity",j),
-                                                    be->session));
+                                                    be->book));
    xaccAccountSetVersion(acc, atoi(DB_GET_VAL("version",j)));
    acc->idata = atoi(DB_GET_VAL("iguid",j));
 
@@ -289,10 +289,10 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    {
       /* if we haven't restored the parent account, create
        * an empty holder for it */
-      parent = xaccAccountLookup (&guid, be->session);
+      parent = xaccAccountLookup (&guid, be->book);
       if (!parent)
       {
-         parent = xaccMallocAccount(be->session);
+         parent = xaccMallocAccount(be->book);
          xaccAccountBeginEdit(parent);
          xaccAccountSetGUID(parent, &guid);
       }
@@ -321,7 +321,7 @@ pgendGetAllAccounts (PGBackend *be, AccountGroup *topgrp)
 
    if (!topgrp)
    {
-      topgrp = xaccMallocAccountGroup(be->session);
+      topgrp = xaccMallocAccountGroup(be->book);
    }
 
    /* Get them ALL */
@@ -361,7 +361,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
    pgendDisable(be);
 
    /* first, see if we already have such an account */
-   acc = xaccAccountLookup (acct_guid, be->session);
+   acc = xaccAccountLookup (acct_guid, be->book);
    if (!acc)
    {
       engine_data_is_newer = -1;
@@ -394,7 +394,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
       SEND_QUERY (be,be->buff, 0);
       pgendGetResults (be, get_account_cb, pgendGetTopGroup (be));
 
-      acc = xaccAccountLookup (acct_guid, be->session);
+      acc = xaccAccountLookup (acct_guid, be->book);
       /* restore any kvp data associated with the transaction and splits */
       if (acc->idata)
       {

@@ -9,6 +9,7 @@
 #include "Backend.h"
 #include "PostgresBackend.h"
 #include "TransLog.h"
+#include "gnc-book.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-module.h"
@@ -474,10 +475,10 @@ test_raw_query (GNCSession *session, Query *q)
 
   g_return_val_if_fail (session && q, FALSE);
 
-  be = (PGBackend *) session->backend;
+  be = (PGBackend *) gnc_session_get_backend(session);
 
   sq = sqlQuery_new();
-  sql_query_string = sqlQuery_build (sq, q, session);
+  sql_query_string = sqlQuery_build (sq, q, gnc_session_get_book(session));
 
 #if 0
   fputs (sql_query_string, stderr);
@@ -624,7 +625,7 @@ test_mode (const char *db_name, const char *mode,
 
   session = get_random_session ();
 
-  add_random_transactions_to_session (session, 20);
+  add_random_transactions_to_book (gnc_session_get_book(session), 20);
 
   if (!save_db_file (session, db_name, "single-update"))
     return FALSE;

@@ -29,7 +29,7 @@
 #include "Transaction.h"
 #include "GNCIdP.h"
 
-static GNCSession *session;
+static GNCBook *book;
 
 static xmlNodePtr
 find_appropriate_node(xmlNodePtr node, Split *spl)
@@ -330,7 +330,7 @@ test_transaction(void)
         FILE *cmp_file;
         int fd;
 
-        ran_trn = get_random_transaction(session);
+        ran_trn = get_random_transaction(book);
 
         com = xaccTransGetCurrency (ran_trn);
 
@@ -380,7 +380,7 @@ test_transaction(void)
             parser = gnc_transaction_sixtp_parser_create();
             
             if(!gnc_xml_parse_file(parser, filename1, test_add_transaction,
-                                   (gpointer)&data, session))
+                                   (gpointer)&data, book))
             {
                 failure_args("gnc_xml_parse_file returned FALSE", 
 			     __FILE__, __LINE__, "%d", i);
@@ -420,13 +420,13 @@ guile_main(int argc, char **argv)
 
     xaccLogDisable();
 
-    session = gnc_session_new ();
+    book = gnc_book_new ();
 
     if(argc > 1)
     {
         test_files_in_dir(argc, argv, test_real_transaction,
                           gnc_transaction_sixtp_parser_create(),
-                          "gnc:transaction", session);
+                          "gnc:transaction", book);
     }
     else
     {

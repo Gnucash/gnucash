@@ -399,7 +399,7 @@ gnc_copy_split(Split *split, gboolean use_cut_semantics)
 \********************************************************************/
 void
 gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
-                              GNCSession *session)
+                              GNCBook * book)
 {
   static SCM split_type = SCM_UNDEFINED;
   SCM result;
@@ -412,7 +412,7 @@ gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
   if (split == NULL)
     return;
 
-  g_return_if_fail (session);
+  g_return_if_fail (book);
 
   func = gh_eval_str("gnc:split-scm?");
   if (!gh_procedure_p(func))
@@ -434,7 +434,7 @@ gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
 
   arg = gw_wcp_assimilate_ptr(split, split_type);
 
-  gh_call3(func, split_scm, arg, gnc_session_to_scm (session));
+  gh_call3(func, split_scm, arg, gnc_book_to_scm (book));
 }
 
 
@@ -773,10 +773,10 @@ gnc_copy_trans(Transaction *trans, gboolean use_cut_semantics)
 \********************************************************************/
 void
 gnc_copy_trans_scm_onto_trans(SCM trans_scm, Transaction *trans,
-                              gboolean do_commit, GNCSession *session)
+                              gboolean do_commit, GNCBook *book)
 {
   gnc_copy_trans_scm_onto_trans_swap_accounts(trans_scm, trans, NULL, NULL,
-                                              do_commit, session);
+                                              do_commit, book);
 }
 
 
@@ -799,7 +799,7 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
                                             const GUID *guid_1,
                                             const GUID *guid_2,
                                             gboolean do_commit,
-                                            GNCSession *session)
+                                            GNCBook *book)
 {
   static SCM trans_type = SCM_UNDEFINED;
   SCM result;
@@ -812,7 +812,7 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
   if (trans == NULL)
     return;
 
-  g_return_if_fail (session);
+  g_return_if_fail (book);
 
   func = gh_eval_str("gnc:transaction-scm?");
   if (!gh_procedure_p(func))
@@ -841,7 +841,7 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
 
     commit = gh_bool2scm(do_commit);
 
-    args = gh_cons(gnc_session_to_scm (session), args);
+    args = gh_cons(gnc_book_to_scm (book), args);
     args = gh_cons(commit, args);
     args = gh_cons(SCM_EOL, args);
     args = gh_cons(arg, args);
@@ -857,7 +857,7 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
     SCM commit;
     char *guid_str;
 
-    args = gh_cons(gnc_session_to_scm (session), args);
+    args = gh_cons(gnc_book_to_scm (book), args);
 
     commit = gh_bool2scm(do_commit);
 

@@ -719,7 +719,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node)
 }
 
 gnc_commodity*
-dom_tree_to_commodity_ref(xmlNodePtr node, GNCSession *session)
+dom_tree_to_commodity_ref(xmlNodePtr node, GNCBook *book)
 {
     gnc_commodity *daref;
     gnc_commodity *ret;
@@ -727,7 +727,7 @@ dom_tree_to_commodity_ref(xmlNodePtr node, GNCSession *session)
 
     daref = dom_tree_to_commodity_ref_no_engine(node);
 
-    table = gnc_book_get_commodity_table (gnc_session_get_book (session));
+    table = gnc_book_get_commodity_table (book);
 
     g_return_val_if_fail (table != NULL, NULL);
 

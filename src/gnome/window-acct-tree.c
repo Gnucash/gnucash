@@ -492,8 +492,8 @@ gnc_acct_tree_window_menu_scrub_cb(GtkWidget * widget,
 
   gnc_suspend_gui_refresh ();
 
-  xaccAccountScrubOrphans (account, gnc_get_current_session ());
-  xaccAccountScrubImbalance (account, gnc_get_current_session ());
+  xaccAccountScrubOrphans (account, gnc_get_current_book ());
+  xaccAccountScrubImbalance (account, gnc_get_current_book ());
 
   gnc_resume_gui_refresh ();
 }
@@ -514,8 +514,8 @@ gnc_acct_tree_window_menu_scrub_sub_cb(GtkWidget * widget,
 
   gnc_suspend_gui_refresh ();
 
-  xaccAccountTreeScrubOrphans (account, gnc_get_current_session ());
-  xaccAccountTreeScrubImbalance (account, gnc_get_current_session ());
+  xaccAccountTreeScrubOrphans (account, gnc_get_current_book ());
+  xaccAccountTreeScrubImbalance (account, gnc_get_current_book ());
 
   gnc_resume_gui_refresh ();
 }
@@ -527,8 +527,8 @@ gnc_acct_tree_window_menu_scrub_all_cb(GtkWidget * widget,
 
   gnc_suspend_gui_refresh ();
 
-  xaccGroupScrubOrphans (group, gnc_get_current_session ());
-  xaccGroupScrubImbalance (group, gnc_get_current_session ());
+  xaccGroupScrubOrphans (group, gnc_get_current_book ());
+  xaccGroupScrubImbalance (group, gnc_get_current_book ());
 
   gnc_resume_gui_refresh ();
 }

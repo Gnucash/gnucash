@@ -25,7 +25,7 @@
 #include "Scrub.h"
 #include "gnc-book.h"
 
-static GNCSession *session;
+static GNCBook *book;
 
 static gchar*
 node_and_account_equal(xmlNodePtr node, Account *act)
@@ -101,7 +101,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         else if(safe_strcmp(mark->name, "act:currency") == 0)
         {
             if(!equals_node_val_vs_commodity(
-                   mark, DxaccAccountGetCurrency(act, session)))
+                   mark, DxaccAccountGetCurrency(act, book)))
             {
                 return g_strdup("currencies differ");
             }
@@ -124,7 +124,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         else if(safe_strcmp(mark->name, "act:security") == 0)
         {
             if(!equals_node_val_vs_commodity(
-                   mark, DxaccAccountGetSecurity(act, session)))
+                   mark, DxaccAccountGetSecurity(act, book)))
             {
                 return g_strdup("securities differ");
             }
@@ -204,7 +204,7 @@ test_add_account(const char *tag, gpointer globaldata, gpointer data)
 
     com = xaccAccountGetCommodity (account);
 
-    t = gnc_book_get_commodity_table (gnc_session_get_book (session));
+    t = gnc_book_get_commodity_table (book);
 
     new_com = gnc_commodity_table_lookup (t,
                                           gnc_commodity_get_namespace (com),
@@ -272,7 +272,7 @@ test_account(int i, Account *test_act)
         parser = gnc_account_sixtp_parser_create();
             
         if(!gnc_xml_parse_file(parser, filename1, test_add_account,
-                               &data, session))
+                               &data, book))
         {
             failure_args("gnc_xml_parse_file returned FALSE",
                          __FILE__, __LINE__, "%d", i);
@@ -297,7 +297,7 @@ test_generation(void)
     {
         Account *ran_act;
 
-        ran_act = get_random_account(session);
+        ran_act = get_random_account(book);
 
         test_account(i, ran_act);
 
@@ -308,7 +308,7 @@ test_generation(void)
         /* empty some things. */
         Account *act;
 
-        act = get_random_account(session);
+        act = get_random_account(book);
 
         xaccAccountSetCode(act, "");
         xaccAccountSetDescription(act, "");
@@ -337,9 +337,6 @@ test_generation(void)
     
 }
 
-static GNCBook *bk;
-
-
 static gboolean
 test_real_account(const char *tag, gpointer global_data, gpointer data)
 {
@@ -348,7 +345,7 @@ test_real_account(const char *tag, gpointer global_data, gpointer data)
 
     if(!xaccAccountGetParent(act))
     {
-        xaccGroupInsertAccount(gnc_book_get_group(bk), act);
+        xaccGroupInsertAccount(gnc_book_get_group(book), act);
     }
 
     msg = node_and_account_equal((xmlNodePtr)global_data, act);
@@ -365,14 +362,13 @@ guile_main(int argc, char **argv)
     gnc_module_system_init();
     gnc_module_load("gnucash/engine", 0);
 
-    session = gnc_session_new ();
+    book = gnc_book_new ();
 
     if(argc > 1)
     {
-        bk = gnc_session_get_book (session);
         test_files_in_dir(argc, argv, test_real_account, 
                           gnc_account_sixtp_parser_create(),
-                          "gnc:account", session);
+                          "gnc:account", book);
     }
     else
     {

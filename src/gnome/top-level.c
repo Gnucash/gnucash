@@ -209,7 +209,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
       return FALSE;
     }
 
-    switch (xaccGUIDType (&guid, gnc_get_current_session ()))
+    switch (xaccGUIDType (&guid, gnc_get_current_book ()))
     {
       case GNC_ID_NONE:
       case GNC_ID_NULL:
@@ -218,12 +218,12 @@ gnc_html_register_url_cb (const char *location, const char *label,
         return FALSE;
 
       case GNC_ID_ACCOUNT:
-        account = xaccAccountLookup (&guid, gnc_get_current_session ());
+        account = xaccAccountLookup (&guid, gnc_get_current_book ());
         reg = regWindowSimple (account);
         break;
 
       case GNC_ID_TRANS:
-        trans = xaccTransLookup (&guid, gnc_get_current_session ());
+        trans = xaccTransLookup (&guid, gnc_get_current_book ());
         split = NULL;
 
         for (node = xaccTransGetSplitList (trans); node; node = node->next)
@@ -244,7 +244,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
         break;
 
       case GNC_ID_SPLIT:
-        split = xaccSplitLookup (&guid, gnc_get_current_session ());
+        split = xaccSplitLookup (&guid, gnc_get_current_book ());
         if (!split)
         {
           result->error_message = g_strdup_printf (_("No such split: %s"),

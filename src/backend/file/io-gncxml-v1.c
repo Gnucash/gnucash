@@ -90,8 +90,8 @@ typedef struct {
      after we see the file version. */
   sixtp *gnc_parser;
 
-  /* The session */
-  GNCSession *session;
+  /* The book */
+  GNCBook *book;
 
   /* The account group */
   AccountGroup *account_group;
@@ -357,11 +357,11 @@ gnc_session_load_from_xml_file(GNCSession *session)
   const gchar *filename;
   GNCBook *book;
 
-  global_parse_status.session = session;
+  g_return_val_if_fail(session, FALSE);
 
   book = gnc_session_get_book (session);
+  global_parse_status.book = book;
 
-  g_return_val_if_fail(session, FALSE);
   g_return_val_if_fail(book, FALSE);
 
   filename = gnc_session_get_file_path(session);
@@ -408,7 +408,7 @@ gnc_session_load_from_xml_file(GNCSession *session)
     }
 
     /* Fix account and transaction commodities */
-    xaccGroupScrubCommodities (gnc_book_get_group(book), session);
+    xaccGroupScrubCommodities (gnc_book_get_group(book), book);
 
     /* Fix split amount/value */
     xaccGroupScrubSplits (gnc_book_get_group(book));
@@ -1128,7 +1128,7 @@ ledger_data_start_handler(GSList* sibling_data, gpointer parent_data,
 
   /* disable logging during load; otherwise its just a mess */
   xaccLogDisable();
-  ag = xaccMallocAccountGroup(pstatus->session);
+  ag = xaccMallocAccountGroup(pstatus->book);
 
   g_return_val_if_fail(ag, FALSE);
 
@@ -1328,7 +1328,7 @@ account_restore_start_handler(GSList* sibling_data,
                               gchar **attrs)
 {
   GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
-  Account *acc = xaccMallocAccount(pstatus->session);
+  Account *acc = xaccMallocAccount(pstatus->book);
   
   g_return_val_if_fail(acc, FALSE);
   xaccAccountBeginEdit(acc);
@@ -1398,15 +1398,15 @@ account_restore_after_child_handler(gpointer data_for_children,
   else if(strcmp(child_result->tag, "currency") == 0) {
     gnc_commodity *com = (gnc_commodity *) child_result->data;
     g_return_val_if_fail(com, FALSE);
-    if(DxaccAccountGetCurrency(a, pstatus->session)) return FALSE;
-    DxaccAccountSetCurrency(a, com, pstatus->session);
+    if(DxaccAccountGetCurrency(a, pstatus->book)) return FALSE;
+    DxaccAccountSetCurrency(a, com, pstatus->book);
     /* let the normal child_result handler clean up com */
   }
   else if(strcmp(child_result->tag, "security") == 0) {
     gnc_commodity *com = (gnc_commodity *) child_result->data;
     g_return_val_if_fail(com, FALSE);
-    if(DxaccAccountGetSecurity(a, pstatus->session)) return FALSE;
-    DxaccAccountSetSecurity(a, com, pstatus->session);
+    if(DxaccAccountGetSecurity(a, pstatus->book)) return FALSE;
+    DxaccAccountSetSecurity(a, com, pstatus->book);
     /* let the normal child_result handler clean up com */
   }
 
@@ -1504,7 +1504,8 @@ acc_restore_guid_end_handler(gpointer data_for_children,
 
   g_return_val_if_fail(ok, FALSE);
 
-  if(xaccAccountLookup(&gid, pstatus->session)) {
+  if(xaccAccountLookup(&gid, pstatus->book)) 
+  {
     return(FALSE);
   }
 
@@ -1718,7 +1719,7 @@ acc_restore_parent_end_handler(gpointer data_for_children,
   /* otherwise this must be a good result - use it */
   gid = *((GUID *) child_result->data);
 
-  parent = xaccAccountLookup(&gid, pstatus->session);
+  parent = xaccAccountLookup(&gid, pstatus->book);
   
   g_return_val_if_fail(parent, FALSE);
 
@@ -1947,8 +1948,7 @@ commodity_restore_end_handler(gpointer data_for_children,
     {
       gnc_commodity_table *ctab;
 
-      ctab = gnc_book_get_commodity_table
-        (gnc_session_get_book (pstatus->session));
+      ctab = gnc_book_get_commodity_table (pstatus->book);
 
       if(ctab)
       {
@@ -2113,8 +2113,7 @@ generic_gnc_commodity_lookup_end_handler(gpointer data_for_children,
     gnc_commodity_table *table;
     gnc_commodity *com;
 
-    table = gnc_book_get_commodity_table
-      (gnc_session_get_book (pstatus->session));
+    table = gnc_book_get_commodity_table (pstatus->book);
 
     com = gnc_commodity_table_lookup(table, cpi->namespace, cpi->id);
 
@@ -2762,7 +2761,7 @@ txn_restore_start_handler(GSList* sibling_data, gpointer parent_data,
                           gpointer *result, const gchar *tag, gchar **attrs)
 {
   GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
-  Transaction *trans = xaccMallocTransaction(pstatus->session);
+  Transaction *trans = xaccMallocTransaction(pstatus->book);
 
   g_return_val_if_fail(trans, FALSE);
 
@@ -2885,7 +2884,8 @@ txn_restore_guid_end_handler(gpointer data_for_children,
 
   g_return_val_if_fail(ok, FALSE);
 
-  if(xaccTransLookup(&gid, pstatus->session)) {
+  if(xaccTransLookup(&gid, pstatus->book)) 
+  {
     return(FALSE);
   }
 
@@ -3068,7 +3068,7 @@ txn_restore_split_start_handler(GSList* sibling_data, gpointer parent_data,
                                 const gchar *tag, gchar **attrs)
 {
   GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
-  Split *s = xaccMallocSplit(pstatus->session);
+  Split *s = xaccMallocSplit(pstatus->book);
   g_return_val_if_fail(s, FALSE);
   *data_for_children = s;
   return(TRUE);
@@ -3194,7 +3194,8 @@ txn_restore_split_guid_end_handler(gpointer data_for_children,
 
   g_return_val_if_fail(ok, FALSE);
 
-  if(xaccSplitLookup(&gid, pstatus->session)) {
+  if(xaccSplitLookup(&gid, pstatus->book)) 
+  {
     return(FALSE);
   }
 
@@ -3402,7 +3403,7 @@ txn_restore_split_account_end_handler(gpointer data_for_children,
   
   g_return_val_if_fail(ok, FALSE);
   
-  acct = xaccAccountLookup(&gid, pstatus->session);
+  acct = xaccAccountLookup(&gid, pstatus->book);
   g_return_val_if_fail(acct, FALSE);
 
   xaccAccountInsertSplit(acct, s);
@@ -3563,7 +3564,7 @@ gnc_transaction_parser_new(void)
 */
 
 static gboolean
-price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, GNCSession *session)
+price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, GNCBook *book)
 {
   if(!p || !sub_node) return FALSE;
 
@@ -3575,11 +3576,11 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, GNCSession *session)
     gnc_price_set_guid(p, c);
     g_free(c);
   } else if(safe_strcmp("price:commodity", sub_node->name) == 0) {
-    gnc_commodity *c = dom_tree_to_commodity_ref(sub_node, session);
+    gnc_commodity *c = dom_tree_to_commodity_ref(sub_node, book);
     if(!c) return FALSE;
     gnc_price_set_commodity(p, c);
   } else if(safe_strcmp("price:currency", sub_node->name) == 0) {
-    gnc_commodity *c = dom_tree_to_commodity_ref(sub_node, session);
+    gnc_commodity *c = dom_tree_to_commodity_ref(sub_node, book);
     if(!c) return FALSE;
     gnc_price_set_currency(p, c);
   } else if(safe_strcmp("price:time", sub_node->name) == 0) {
@@ -3632,26 +3633,28 @@ price_parse_xml_end_handler(gpointer data_for_children,
   if(price_xml->prev) { ok = FALSE; goto cleanup_and_exit; }
   if(!price_xml->xmlChildrenNode) { ok = FALSE; goto cleanup_and_exit; }
   
-  p = gnc_price_create(pstatus->session);
+  p = gnc_price_create(pstatus->book);
   if(!p) { ok = FALSE; goto cleanup_and_exit; }
   
-  for(child = price_xml->xmlChildrenNode; child; child = child->next) {
+  for(child = price_xml->xmlChildrenNode; child; child = child->next) 
+  {
     switch(child->type) {
-    case XML_COMMENT_NODE:
-    case XML_TEXT_NODE:
-      break;
-    case XML_ELEMENT_NODE:
-      if(!price_parse_xml_sub_node(p, child, pstatus->session)) {
+      case XML_COMMENT_NODE:
+      case XML_TEXT_NODE:
+        break;
+      case XML_ELEMENT_NODE:
+        if(!price_parse_xml_sub_node(p, child, pstatus->book)) 
+        {
+          ok = FALSE;
+          goto cleanup_and_exit;
+        }
+        break;
+      default:
+        PERR("Unknown node type (%d) while parsing gnc-price xml.", child->type);
+        child = NULL;
         ok = FALSE;
         goto cleanup_and_exit;
-      }
-      break;
-    default:
-      PERR("Unknown node type (%d) while parsing gnc-price xml.", child->type);
-      child = NULL;
-      ok = FALSE;
-      goto cleanup_and_exit;
-      break;
+        break;
     }
   }
   

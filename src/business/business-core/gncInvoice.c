@@ -369,7 +369,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   Transaction *txn;
   GList *item, *iter;
   GList *splitinfo = NULL;
-  GNCSession *session;
+  GNCBook *book;
   gnc_numeric total;
   gnc_commodity *commonCommodity = NULL;
   struct acct_val {
@@ -379,8 +379,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   if (!invoice || !acc) return NULL;
 
-  /* XXX: Need to obtain the session */
-  txn = xaccMallocTransaction (session);
+  /* XXX: Need to obtain the book */
+  txn = xaccMallocTransaction (book);
   xaccTransBeginEdit (txn);
 
   /* Figure out the common currency */
@@ -457,7 +457,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     Split *split;
     acc_val = iter->data;
 
-    split = xaccMallocSplit (session);
+    split = xaccMallocSplit (book);
     /* set action and memo? */
 
     xaccSplitSetBaseValue (split, acc_val->val, commonCommodity);
@@ -469,7 +469,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   /* Now create the Posted split (which is negative -- it's a credit) */
   {
-    Split *split = xaccMallocSplit (session);
+    Split *split = xaccMallocSplit (book);
     /* Set action/memo */
     xaccSplitSetBaseValue (split, gnc_numeric_neg (total), commonCommodity);
     xaccAccountBeginEdit (acc);
@@ -500,7 +500,7 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn)
   if (!value) return NULL;
 
   guid = kvp_value_get_guid (value);
-  /* XXX: Need to get GNCSession from Transaction */
+  /* XXX: Need to get GNCBook from Transaction */
   /* XXX: lookup invoice from session/guid */
 
   return gncBusinessLookupGUID (business, GNC_INVOICE_MODULE_NAME, guid);

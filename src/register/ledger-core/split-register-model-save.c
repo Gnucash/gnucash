@@ -98,7 +98,7 @@ gnc_split_register_save_cells (gpointer save_data,
     {
       SRInfo *info = gnc_split_register_get_info (reg);
       Split *blank_split = xaccSplitLookup(&info->blank_split_guid,
-                                           gnc_get_current_session ());
+                                           gnc_get_current_book ());
       Transaction *blank_trans = xaccSplitGetParent (blank_split);
 
       if (trans != blank_trans)
@@ -205,7 +205,7 @@ gnc_split_register_save_cells (gpointer save_data,
       other_split = xaccTransGetSplit (trans, 1);
       if (!other_split)
       {
-        other_split = xaccMallocSplit (gnc_get_current_session ());
+        other_split = xaccMallocSplit (gnc_get_current_book ());
         xaccTransAppendSplit (trans, other_split);
       }
     }
@@ -323,7 +323,7 @@ gnc_split_register_save_template_cells (gpointer save_data,
   split = sd->split;
 
   template_acc = xaccAccountLookup (&info->template_account,
-                                    gnc_get_current_session ());
+                                    gnc_get_current_book ());
 
   if (gnc_table_layout_get_cell_changed (reg->table->layout,
                                          DATE_CELL, TRUE) ||

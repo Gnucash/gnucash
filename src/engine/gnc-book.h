@@ -29,7 +29,7 @@
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998, 1999 Linas Vepstas
+ * Copyright (c) 1998, 1999, 2001 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2000 Dave Peticolas
  */
 
@@ -38,26 +38,15 @@
 
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
-#include "Backend.h"
-#include "Group.h"
-
-/** TYPES **********************************************************/
-
-struct gnc_book_struct;
-
-typedef struct gnc_book_struct GNCBook;
 
 /** PROTOTYPES ******************************************************/
 
-GNCBook * gnc_book_new (GNCSession *session);
+GNCBook * gnc_book_new (void);
 void      gnc_book_destroy (GNCBook *book);
 
 AccountGroup *gnc_book_get_group (GNCBook *book);
 void gnc_book_set_group(GNCBook *book, AccountGroup *group);
 GNCPriceDB   *gnc_book_get_pricedb (GNCBook *book);
-
-GNCBook * xaccGroupGetBook (AccountGroup *group);
-GNCBook * xaccAccountGetBook (Account *account);
 
 guint gnc_book_count_transactions(GNCBook *book);
 

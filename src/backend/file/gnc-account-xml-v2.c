@@ -126,7 +126,7 @@ gnc_account_dom_tree_create(Account *act)
 struct account_pdata
 {
   Account *account;
-  GNCSession *session;
+  GNCBook *book;
 };
 
 static gboolean
@@ -212,7 +212,7 @@ account_currency_handler (xmlNodePtr node, gpointer act_pdata)
     gnc_commodity *ref;
 
     ref = dom_tree_to_commodity_ref_no_engine(node);
-    DxaccAccountSetCurrency(pdata->account, ref, pdata->session);
+    DxaccAccountSetCurrency(pdata->account, ref, pdata->book);
 
     return TRUE;
 }
@@ -236,7 +236,7 @@ account_security_handler (xmlNodePtr node, gpointer act_pdata)
     gnc_commodity *ref;
 
     ref = dom_tree_to_commodity_ref_no_engine(node);
-    DxaccAccountSetSecurity(pdata->account, ref, pdata->session);
+    DxaccAccountSetSecurity(pdata->account, ref, pdata->book);
 
     return TRUE;
 }
@@ -277,7 +277,7 @@ account_parent_handler (xmlNodePtr node, gpointer act_pdata)
     gid = dom_tree_to_guid(node);
     g_return_val_if_fail(gid, FALSE);
 
-    parent = xaccAccountLookup(gid, pdata->session);
+    parent = xaccAccountLookup(gid, pdata->book);
     if (!parent)
     {
       g_free (gid);
@@ -335,7 +335,7 @@ gnc_account_end_handler(gpointer data_for_children,
     xmlNodePtr achild;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCSession *session = gdata->sessiondata;
+    GNCBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -353,7 +353,7 @@ gnc_account_end_handler(gpointer data_for_children,
 
     g_return_val_if_fail(tree, FALSE);
 
-    acc = dom_tree_to_account(tree, session);
+    acc = dom_tree_to_account(tree, book);
     if(acc != NULL)
     {
         gdata->cb(tag, gdata->parsedata, acc);
@@ -371,17 +371,17 @@ gnc_account_end_handler(gpointer data_for_children,
 }
 
 Account*
-dom_tree_to_account (xmlNodePtr node, GNCSession * session)
+dom_tree_to_account (xmlNodePtr node, GNCBook *book)
 {
     struct account_pdata act_pdata;
     Account *accToRet;
     gboolean successful;
 
-    accToRet = xaccMallocAccount(session);
+    accToRet = xaccMallocAccount(book);
     xaccAccountBeginEdit(accToRet);
 
     act_pdata.account = accToRet;
-    act_pdata.session = session;
+    act_pdata.book = book;
 
     successful = dom_tree_generic_parse (node, account_handlers_v2,
                                          &act_pdata);

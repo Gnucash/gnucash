@@ -2,6 +2,7 @@
 #include <glib.h>
 #include <guile/gh.h>
 
+#include "Group.h"
 #include "GNCIdP.h"
 #include "TransLog.h"
 #include "gnc-book.h"
@@ -40,16 +41,20 @@ group_has_book (AccountGroup *group, GNCBook *book)
 static void
 run_test (void)
 {
-  GNCSession *session;
   AccountGroup *group1;
   AccountGroup *group2;
   Account *account1;
   Account *account2;
   GNCBook *book;
 
-  session = gnc_session_new ();
+  book = gnc_book_new ();
+  if (!book)
+  {
+    failure("book not created");
+    exit(get_rv());
+  }
 
-  group1 = get_random_group (session);
+  group1 = get_random_group (book);
   if(!group1)
   {
     failure("group1 not created");
@@ -62,13 +67,6 @@ run_test (void)
     exit(get_rv());
   }
 
-  book = gnc_book_new (session);
-  if (!book)
-  {
-    failure("book not created");
-    exit(get_rv());
-  }
-
   gnc_book_set_group (book, group1);
   if (!group_has_book (group1, book))
   {
@@ -76,7 +74,7 @@ run_test (void)
     exit(get_rv());
   }
 
-  group2 = get_random_group (session);
+  group2 = get_random_group (book);
   if(!group2)
   {
     failure("group2 not created");
@@ -97,7 +95,7 @@ run_test (void)
     exit(get_rv());
   }
 
-  account1 = get_random_account (session);
+  account1 = get_random_account (book);
   if(!account1)
   {
     failure("account1 not created");
@@ -111,7 +109,7 @@ run_test (void)
     exit(get_rv());
   }
 
-  account2 = get_random_account (session);
+  account2 = get_random_account (book);
   if(!account2)
   {
     failure("account2 not created");

@@ -23,11 +23,11 @@
 static const gchar *da_ending = ".gnucash-xea";
 
 static void
-test_load_file(GNCSession *session, const char *filename)
+test_load_file(GNCBook *book, const char *filename)
 {
     GncExampleAccount *gea;
 
-    gea = gnc_read_example_account(session, filename);
+    gea = gnc_read_example_account(book, filename);
 
     if(gea != NULL)
     {
@@ -47,12 +47,12 @@ guile_main(int argc, char **argv)
     const char *location = "../../../../accounts/C";
     GSList *list = NULL;
     DIR *ea_dir;
-    GNCSession *session;
+    GNCBook *book;
 
     gnc_module_system_init();
     gnc_module_load("gnucash/engine", 0);
 
-    session = gnc_session_new ();
+    book = gnc_book_new ();
 
     if((ea_dir = opendir(location)) == NULL)
     {
@@ -77,7 +77,7 @@ guile_main(int argc, char **argv)
                 {
                     if(!S_ISDIR(file_info.st_mode))
                     {
-                        test_load_file(session, to_open);
+                        test_load_file(book, to_open);
                     }
                 }
                 g_free(to_open);
@@ -87,7 +87,7 @@ guile_main(int argc, char **argv)
     closedir(ea_dir);
     
     {
-        list = gnc_load_example_account_list(session, location);
+        list = gnc_load_example_account_list(book, location);
 
         do_test(list != NULL, "gnc_load_example_account_list");
         

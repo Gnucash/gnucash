@@ -646,7 +646,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
           for ( i=1; i<6; i++ ) {
                   *gd2 = *gd; 
                   g_date_add_days( gd2, i );
-                  tmpFS = xaccFreqSpecMalloc(gnc_get_current_session ());
+                  tmpFS = xaccFreqSpecMalloc(gnc_get_current_book ());
                   xaccFreqSpecSetWeekly( tmpFS, gd2, tmpInt );
                   xaccFreqSpecCompositeAdd( fs, tmpFS );
           }
@@ -674,7 +674,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
                   if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o) ) ) {
 
                           tmpFS = xaccFreqSpecMalloc
-                            (gnc_get_current_session ());
+                            (gnc_get_current_book ());
                           xaccFreqSpecSetUIType( tmpFS, uift );
                           /*  struct-copy is expected to work, here */
                           /*  [wish we didn't have to know about the GDate implementation...] */
@@ -706,7 +706,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
 
     o = glade_xml_get_widget( gf->gxml, "semimonthly_first" );
     day = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
-    tmpFS = xaccFreqSpecMalloc(gnc_get_current_session ());
+    tmpFS = xaccFreqSpecMalloc(gnc_get_current_book ());
     tmpTm = g_new0( struct tm, 1 );
     g_date_to_struct_tm( gd, tmpTm );
     if ( day >= tmpTm->tm_mday ) {
@@ -723,7 +723,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
 
     o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
     day = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
-    tmpFS = xaccFreqSpecMalloc(gnc_get_current_session ());
+    tmpFS = xaccFreqSpecMalloc(gnc_get_current_book ());
     tmpTimeT = gnome_date_edit_get_date( gf->startDate );
     gd = g_date_new();
     g_date_set_time( gd, tmpTimeT );
@@ -838,7 +838,7 @@ update_cal( GNCFrequency *gf, GtkCalendar *cal )
   FreqSpec  *fs;
 
   gnc_suspend_gui_refresh();
-  fs = xaccFreqSpecMalloc(gnc_get_current_session ());
+  fs = xaccFreqSpecMalloc(gnc_get_current_book ());
   gnc_frequency_save_state( gf, fs, NULL );
   mark_calendar( cal, fs );
   xaccFreqSpecFree( fs );

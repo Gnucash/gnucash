@@ -41,8 +41,15 @@ void xaccEntityTableDestroy (GNCEntityTable *table);
 /* Generate a new id. This function is guaranteed to return an id that
  * is unique within the scope of all GnuCash entities being managed by
  * the current invocation of GnuCash. GnuCash routines should always
- * use this function and not guid_new! */
-void xaccGUIDNew (GUID *guid, GNCSession *session);
+ * use this function and not guid_new! 
+ *
+ * When considered over all possible instances of gnucash, the odds of 
+ * this routine returning a non-unique id are still astronomically small.
+ * If you had a gazzillion computers computing new ids, for the entire
+ * age of teh universe, you'd still have a one-in-a-million chance of
+ * coming up with a duplicate.  2^128 is a really really big number.
+ */
+void xaccGUIDNew (GUID *guid, GNCBook *book);
 void xaccGUIDNewEntityTable (GUID *guid, GNCEntityTable *entity_table);
 
 /* Lookup an entity given an id and a type. If there is no entity

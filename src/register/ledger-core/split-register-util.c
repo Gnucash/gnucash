@@ -119,7 +119,7 @@ gnc_split_register_get_split (SplitRegister *reg,
   if (guid == NULL)
     return NULL;
 
-  return xaccSplitLookup (guid, gnc_get_current_session ());
+  return xaccSplitLookup (guid, gnc_get_current_book ());
 }
 
 Account *
@@ -128,7 +128,7 @@ gnc_split_register_get_default_account (SplitRegister *reg)
   SRInfo *info = gnc_split_register_get_info (reg);
 
   return xaccAccountLookup (&info->default_account,
-                            gnc_get_current_session ());
+                            gnc_get_current_book ());
 }
 
 void

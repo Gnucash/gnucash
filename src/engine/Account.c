@@ -34,10 +34,10 @@
 #include "TransactionP.h"
 #include "date.h"
 #include "gnc-book.h"
+#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "gnc-session-p.h"
 #include "kvp_frame.h"
 #include "messages.h"
 
@@ -70,7 +70,7 @@ mark_account (Account *account)
 \********************************************************************/
 
 static void
-xaccInitAccount (Account * acc, GNCSession *session)
+xaccInitAccount (Account * acc, GNCBook *book)
 {
   acc->parent   = NULL;
   acc->children = NULL;
@@ -105,9 +105,9 @@ xaccInitAccount (Account * acc, GNCSession *session)
   acc->core_dirty = FALSE;
   acc->do_free = FALSE;
 
-  acc->entity_table = gnc_session_get_entity_table (session);
+  acc->entity_table = gnc_book_get_entity_table (book);
 
-  xaccGUIDNew(&acc->guid, session);
+  xaccGUIDNew(&acc->guid, book);
   xaccStoreEntity(acc->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
   LEAVE ("account=%p\n", acc);
 }
@@ -116,15 +116,15 @@ xaccInitAccount (Account * acc, GNCSession *session)
 \********************************************************************/
 
 Account *
-xaccMallocAccount (GNCSession *session)
+xaccMallocAccount (GNCBook *book)
 {
   Account *acc;
 
-  g_return_val_if_fail (session, NULL);
+  g_return_val_if_fail (book, NULL);
 
   acc = g_new (Account, 1);
 
-  xaccInitAccount (acc, session);
+  xaccInitAccount (acc, book);
 
   gnc_engine_generate_event (&acc->guid, GNC_EVENT_CREATE);
 
@@ -132,11 +132,11 @@ xaccMallocAccount (GNCSession *session)
 }
 
 Account *
-xaccCloneAccountSimple(const Account *from, GNCSession *session)
+xaccCloneAccountSimple(const Account *from, GNCBook *book)
 {
     Account *ret;
 
-    ret = xaccMallocAccount (session);
+    ret = xaccMallocAccount (book);
 
     g_return_val_if_fail (ret, NULL);
 
@@ -700,19 +700,18 @@ xaccAccountSetGUID (Account *account, const GUID *guid)
 \********************************************************************/
 
 Account *
-xaccAccountLookup (const GUID *guid, GNCSession *session)
+xaccAccountLookup (const GUID *guid, GNCBook *book)
 {
-  if (!guid) return NULL;
-  g_return_val_if_fail (session, NULL);
-  return xaccLookupEntity (gnc_session_get_entity_table (session),
+  if (!guid || !book) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
                            guid, GNC_ID_ACCOUNT);
 }
 
 Account *
-xaccAccountLookupDirect (GUID guid, GNCSession *session)
+xaccAccountLookupDirect (GUID guid, GNCBook *book)
 {
-  g_return_val_if_fail (session, NULL);
-  return xaccLookupEntity (gnc_session_get_entity_table (session),
+  if (!book) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
                            &guid, GNC_ID_ACCOUNT);
 }
 
@@ -822,7 +821,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   if (!acc) return;
   if (!split) return;
 
-  /* check for session mix-up */
+  /* check for book mix-up */
   g_return_if_fail (acc->entity_table == split->entity_table);
 
   trans = xaccSplitGetParent (split);
@@ -1292,14 +1291,14 @@ xaccAccountGetCommoditySCU (Account * acc) {
 
 void 
 DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency,
-                         GNCSession *session)
+                         GNCBook *book)
 {
   const char *string;
   gnc_commodity *commodity;
 
   if ((!acc) || (!currency)) return;
 
-  g_return_if_fail (session);
+  g_return_if_fail (book);
 
   xaccAccountBeginEdit(acc);
   string = gnc_commodity_get_unique_name (currency);
@@ -1309,25 +1308,23 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency,
   acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
 
-  commodity = DxaccAccountGetCurrency (acc, session);
+  commodity = DxaccAccountGetCurrency (acc, book);
   if (!commodity)
   {
-    GNCBook * book = gnc_session_get_book (session);
-
     gnc_commodity_table_insert (gnc_book_get_commodity_table (book), currency);
   }
 }
 
 void 
 DxaccAccountSetSecurity (Account *acc, gnc_commodity * security,
-                         GNCSession *session)
+                         GNCBook *book)
 {
   const char *string;
   gnc_commodity *commodity;
 
   if ((!acc) || (!security)) return;
 
-  g_return_if_fail (session);
+  g_return_if_fail (book);
 
   xaccAccountBeginEdit(acc);
   string = gnc_commodity_get_unique_name (security);
@@ -1337,11 +1334,9 @@ DxaccAccountSetSecurity (Account *acc, gnc_commodity * security,
   acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
 
-  commodity = DxaccAccountGetSecurity (acc, session);
+  commodity = DxaccAccountGetSecurity (acc, book);
   if (!commodity)
   {
-    GNCBook * book = gnc_session_get_book (session);
-
     gnc_commodity_table_insert (gnc_book_get_commodity_table (book), security);
   }
 }
@@ -1505,24 +1500,21 @@ xaccAccountGetNotes (Account *acc)
 }
 
 gnc_commodity * 
-DxaccAccountGetCurrency (Account *acc, GNCSession *session)
+DxaccAccountGetCurrency (Account *acc, GNCBook *book)
 {
   kvp_value *v;
   const char *s;
-  GNCBook *book;
   gnc_commodity_table *table;
 
   if (!acc) return NULL;
 
-  g_return_val_if_fail (session, NULL);
+  g_return_val_if_fail (book, NULL);
 
   v = kvp_frame_get_slot(acc->kvp_data, "old-currency");
   if (!v) return NULL;
 
   s = kvp_value_get_string (v);
   if (!s) return NULL;
-
-  book = gnc_session_get_book (session);
 
   table = gnc_book_get_commodity_table (book);
 
@@ -1538,24 +1530,19 @@ xaccAccountGetCommodity (Account *acc)
 }
 
 gnc_commodity *
-DxaccAccountGetSecurity (Account *acc, GNCSession *session)
+DxaccAccountGetSecurity (Account *acc, GNCBook *book)
 {
   kvp_value *v;
   const char *s;
-  GNCBook *book;
   gnc_commodity_table *table;
 
-  if (!acc) return NULL;
-
-  g_return_val_if_fail (session, NULL);
+  if (!acc || !book) return NULL;
 
   v = kvp_frame_get_slot(acc->kvp_data, "old-security");
   if (!v) return NULL;
 
   s = kvp_value_get_string (v);
   if (!s) return NULL;
-
-  book = gnc_session_get_book (session);
 
   table = gnc_book_get_commodity_table (book);
 

@@ -28,13 +28,13 @@
 #include <glib.h>
 
 #include "sixtp.h"
-#include "gnc-session.h"
+#include "gnc-engine.h"
 
 struct GncExampleAccount_struct
 {
     gchar *title;
     gchar *filename;
-    GNCSession *session;
+    GNCBook *book;
     AccountGroup *group;
     gchar *short_description;
     gchar *long_description;
@@ -45,14 +45,14 @@ void gnc_destroy_example_account(GncExampleAccount *gea);
 
 gboolean gnc_write_example_account(GncExampleAccount *gea,
                                    const gchar *filename);
-GncExampleAccount *gnc_read_example_account(GNCSession *session,
+GncExampleAccount *gnc_read_example_account(GNCBook *book,
                                             const gchar *filename);
 
 
 gboolean gnc_is_xml_data_file_v2(const gchar *filename);
 
 void gnc_free_example_account_list(GSList *list);
-GSList* gnc_load_example_account_list(GNCSession *session,
+GSList* gnc_load_example_account_list(GNCBook *book,
                                       const char *dirname);
 
 gboolean gnc_is_example_account_xml(const gchar *name);

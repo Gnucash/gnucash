@@ -37,17 +37,19 @@ run_test (void)
     Split *spl;
     gnc_numeric num;
     GNCSession *session;
+    GNCBook *book;
 
     session = gnc_session_new ();
+    book = gnc_session_get_book (session);
 
-    act1 = get_random_account(session);
+    act1 = get_random_account(book);
     if(!act1)
     {
         failure("act1 not created");
         return;
     }
     
-    act2 = get_random_account(session);
+    act2 = get_random_account(book);
     if(!act2)
     {
         failure("act2 not created");
@@ -55,7 +57,7 @@ run_test (void)
     }
 
     num = get_random_gnc_numeric();
-    spl = get_random_split(session, num);
+    spl = get_random_split(book, num);
     if(!spl)
     {
         failure("spl not created");

@@ -28,7 +28,7 @@
 
 #include "GNCIdP.h"
 #include "gnc-engine-util.h"
-#include "gnc-session-p.h"
+#include "gnc-book-p.h"
 
 
 /** #defines ********************************************************/
@@ -207,10 +207,10 @@ xaccGUIDTypeEntityTable (const GUID * guid, GNCEntityTable *entity_table)
 }
 
 GNCIdType
-xaccGUIDType (const GUID * guid, GNCSession *session)
+xaccGUIDType (const GUID * guid, GNCBook *book)
 {
   return xaccGUIDTypeEntityTable (guid,
-                                  gnc_session_get_entity_table (session));
+                                  gnc_book_get_entity_table (book));
 }
 
 void
@@ -233,9 +233,9 @@ xaccGUIDNewEntityTable (GUID *guid, GNCEntityTable *entity_table)
 }
 
 void
-xaccGUIDNew (GUID *guid, GNCSession *session)
+xaccGUIDNew (GUID *guid, GNCBook *book)
 {
-  xaccGUIDNewEntityTable (guid, gnc_session_get_entity_table (session));
+  xaccGUIDNewEntityTable (guid, gnc_book_get_entity_table (book));
 }
 
 const GUID *

@@ -63,18 +63,19 @@ static short module = MOD_IO;
 /* ---------------------------------------------------------------------- */
 
 static void
-gnc_book_init (GNCBook *book, GNCSession *session)
+gnc_book_init (GNCBook *book)
 {
   Account *template_acct;
 
   if (!book) return;
 
-  book->topgroup = xaccMallocAccountGroup(session);
+  book->entity_table = xaccEntityTableNew ();
+  book->topgroup = xaccMallocAccountGroup(book);
   book->pricedb = gnc_pricedb_create();
 
   book->sched_xactions = NULL;
   book->sx_notsaved = FALSE;
-  book->template_group = xaccMallocAccountGroup(session);
+  book->template_group = xaccMallocAccountGroup(book);
 
   /* FIXME: the gnc_engine_commodity_table_new() routine invokes
    * guile/scheme to load the default list of currencies.  This 
@@ -87,16 +88,23 @@ gnc_book_init (GNCBook *book, GNCSession *session)
 }
 
 GNCBook *
-gnc_book_new (GNCSession *session)
+gnc_book_new (void)
 {
   GNCBook *book;
 
-  g_return_val_if_fail (session, NULL);
-
   book = g_new0(GNCBook, 1);
-  gnc_book_init(book, session);
+  gnc_book_init(book);
 
   return book;
+}
+
+/* ---------------------------------------------------------------------- */
+
+GNCEntityTable *
+gnc_book_get_entity_table (GNCBook *book)
+{
+  if (!book) return NULL;
+  return book->entity_table;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -310,6 +318,9 @@ gnc_book_destroy (GNCBook *book)
   book->commodity_table = NULL;
 
   /* FIXME: destroy SX data members here, too */
+
+  xaccEntityTableDestroy (book->entity_table);
+  book->entity_table = NULL;
 
   xaccLogEnable();
 

@@ -36,7 +36,7 @@
 (define (qif-io:bank-xtn-import qif-xtn qif-file gnc-acct-info commodity)
   (let* ((format-info 
           (qif-io:file-bank-xtn-format qif-file))
-         (gnc-xtn (gnc:transaction-create (gnc:get-current-session)))
+         (gnc-xtn (gnc:transaction-create (gnc:get-current-book)))
          (near-split-amt
           ;; the u-amount has a larger range and is more correct,
           ;; but is optional
@@ -55,11 +55,11 @@
              (acct-type (cdr acct-info))
              (acct (qif-io:acct-table-lookup 
                     gnc-acct-info acct-name acct-type))
-             (split (gnc:split-create (gnc:get-current-session))))
+             (split (gnc:split-create (gnc:get-current-book))))
         ;; make the account if necessary 
         (if (not acct)
             (begin 
-              (set! acct (gnc:malloc-account (gnc:get-current-session)))
+              (set! acct (gnc:malloc-account (gnc:get-current-book)))
               (gnc:account-begin-edit acct)
               (gnc:account-set-name acct acct-name)
               (gnc:account-commit-edit acct)

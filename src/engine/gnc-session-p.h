@@ -40,11 +40,6 @@ struct gnc_session_struct
   /* The book is the cache for the underlying gnucash dataset. */
   GNCBook *book;
 
-  /* The entity table associates the GUIDs of all the objects
-   * created in the session with their respective objects
-   * (pointer addresses) */
-  GNCEntityTable *entity_table;
-
   /* the requested book id, in the form or a URI, such as
    * file:/some/where, or sql:server.host.com:555
    */
@@ -63,19 +58,14 @@ struct gnc_session_struct
   char *fullpath;
   char *logpath;
 
-  /* kvp database for per-session data for user code */
-  kvp_frame * kvp_data;
-
   /* ---------------------------------------------------- */
-  /* This struct member applies for network, rpc and SQL i/o */
-  /* It is not currently used for file i/o, but it should be. */
+  /* Pointer to the backend that is actually used to move data
+   * between the persistant store and the local engine.  */
   Backend *backend;
 };
 
 
 void gnc_session_set_book (GNCSession *session, GNCBook *book);
-
-GNCEntityTable *gnc_session_get_entity_table (GNCSession *session);
 
 Backend * gnc_session_get_backend (GNCSession *session);
 

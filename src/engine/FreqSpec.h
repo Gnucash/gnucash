@@ -85,7 +85,7 @@ typedef struct gncp_freq_spec FreqSpec;
 /**
  * Allocates memory for a FreqSpec and initializes it.
  **/
-FreqSpec* xaccFreqSpecMalloc(GNCSession *session);
+FreqSpec* xaccFreqSpecMalloc(GNCBook *book);
 
 /**
  * destroys any private data belonging to the FreqSpec.

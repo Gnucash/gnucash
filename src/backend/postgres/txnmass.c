@@ -65,7 +65,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* first, see if we already have such a transaction */
    string_to_guid (DB_GET_VAL("transGUID",j), &trans_guid);
-   trans = xaccTransLookup (&trans_guid, be->session);
+   trans = xaccTransLookup (&trans_guid, be->book);
    if (trans)
    {
       /* If transaction already exists, determine whose data is 
@@ -85,7 +85,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    }
    else
    {
-      trans = xaccMallocTransaction(be->session);
+      trans = xaccMallocTransaction(be->book);
       xaccTransBeginEdit (trans);
       xaccTransSetGUID (trans, &trans_guid);
    }
@@ -99,7 +99,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
    trans->idata = atoi (DB_GET_VAL("iguid",j));
 
-   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->session);
+   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->book);
 
    xaccTransSetCurrency (trans, currency);
 
@@ -132,10 +132,10 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    PINFO ("split GUID=%s", DB_GET_VAL("entryGUID",j));
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("entryGUID",j), &guid);
-   s = xaccSplitLookup (&guid, be->session);
+   s = xaccSplitLookup (&guid, be->book);
    if (!s)
    {
-      s = xaccMallocSplit(be->session);
+      s = xaccMallocSplit(be->book);
       xaccSplitSetGUID(s, &guid);
    }
 
@@ -151,7 +151,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("transGUID",j), &guid);
-   trans = xaccTransLookup (&guid, be->session);
+   trans = xaccTransLookup (&guid, be->book);
    if (!trans)
    {
       PERR ("trans not found, will delete this split\n"
@@ -170,7 +170,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    /* next, find the account that this split goes into */
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-   acc = xaccAccountLookup (&guid, be->session);
+   acc = xaccAccountLookup (&guid, be->book);
    if (!acc)
    {
       PERR ("account not found, will delete this split\n"

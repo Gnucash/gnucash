@@ -1,6 +1,7 @@
 /********************************************************************
  * gnc-engine.h  -- top-level include file for Gnucash Engine       *
  * Copyright 2000 Bill Gribble <grib@billgribble.com>               *
+ * Copyright 2001 Linas Vepstas <linas@linas.org>                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,11 +25,23 @@
 #ifndef GNC_ENGINE_H
 #define GNC_ENGINE_H
 
+#include <glib.h>
+
 #include "gnc-commodity.h"
 
 /** TYPES **********************************************************/
 
+typedef struct account_s          Account;
+typedef struct account_group_s    AccountGroup;
+typedef struct split_s            Split;
+typedef struct transaction_s      Transaction;
+typedef struct gnc_book_struct    GNCBook;
 typedef struct gnc_session_struct GNCSession;
+
+typedef GList                  AccountList;
+typedef GList                  SplitList;
+
+
 typedef void (* gnc_engine_init_hook_t)(int, char **);
 
 

@@ -233,7 +233,7 @@ gnc_cm_event_handler (GUID *entity,
 
   add_event (&changes, entity, event_type, TRUE);
 
-  id_type = xaccGUIDType (entity, gnc_get_current_session ());
+  id_type = xaccGUIDType (entity, gnc_get_current_book ());
   switch (id_type)
   {
     case GNC_ID_TRANS:

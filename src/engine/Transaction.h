@@ -1,7 +1,7 @@
 /********************************************************************\
  * Transaction.h -- api for transactions & splits (journal entries) *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
+ * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -41,15 +41,6 @@
 #define NREC 'n'              /* not reconciled or cleared         */
 #define VREC 'v'              /* split is void                     */
 
-/** STRUCTS *********************************************************/
-
-typedef struct account_s       Account;
-typedef struct account_group_s AccountGroup;
-typedef struct split_s         Split;
-typedef struct transaction_s   Transaction;
-typedef GList                  AccountList;
-typedef GList                  SplitList;
-
 
 /** PROTOTYPES ******************************************************/
 
@@ -78,7 +69,7 @@ int    xaccConfigGetForceDoubleEntry (void);
  *    Once created, it is usually unsafe to merely "free" this memory;
  *    the xaccTransDestroy() method should be called.
  */ 
-Transaction * xaccMallocTransaction (GNCSession *session); 
+Transaction * xaccMallocTransaction (GNCBook *book); 
 
 gboolean xaccTransEqual(const Transaction *ta,
                         const Transaction *tb,
@@ -132,7 +123,7 @@ gboolean      xaccTransIsOpen (Transaction *trans);
  */
 const GUID  * xaccTransGetGUID (Transaction *trans);
 GUID          xaccTransReturnGUID (Transaction *trans);
-Transaction * xaccTransLookup (const GUID *guid, GNCSession *session);
+Transaction * xaccTransLookup (const GUID *guid, GNCBook *book);
 
 
 /* Transaction slots are used to store arbitrary strings, numbers, and
@@ -245,7 +236,7 @@ void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
 gnc_numeric xaccTransGetImbalance (Transaction * trans);
 
 /* ------------- splits --------------- */
-Split       * xaccMallocSplit (GNCSession *session);
+Split       * xaccMallocSplit (GNCBook *book);
 
 gboolean xaccSplitEqual(const Split *sa, const Split *sb,
                         gboolean check_guids,
@@ -270,7 +261,7 @@ void xaccSplitSetSlots_nc(Split *s, kvp_frame *frm);
  */
 const GUID * xaccSplitGetGUID (Split *split);
 GUID         xaccSplitReturnGUID (Split *split);
-Split      * xaccSplitLookup (const GUID *guid, GNCSession *session);
+Split      * xaccSplitLookup (const GUID *guid, GNCBook *book);
 
 /* The memo is an arbitrary string associated with a split.
  *    Users typically type in free form text from the GUI.
