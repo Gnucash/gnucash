@@ -1,2 +1,2 @@
 #!/bin/sh
-guile -l test-create-account.scm -c "(exit (run-test))"diff -up /dev/null 'gnucash-1.7/src/engine/test/test-create-account.scm'
+guile -l test-create-account.scm -c "(exit (run-test))"
