@@ -42,12 +42,14 @@ EXTRA_DIST = \
   make-gnucash-potfiles.in \
   po/.cvsignore \
   po/README \
+  po/glossary/da.po \
   po/glossary/de.po \
+  po/glossary/es.po \
   po/glossary/gnc-glossary.txt \
   po/glossary/txt-to-pot.sh \
-  xml-i18n-extract.in \
-  xml-i18n-merge.in \
-  xml-i18n-update.in
+  intltool-extract.in \
+  intltool-merge.in \
+  intltool-update.in
 
 bin_SCRIPTS = gnucash-config
 
