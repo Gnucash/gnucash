@@ -1,3 +1,8 @@
+2001-06-07  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/new-user-callbacks.c (gnc_get_ea_locale_dir): if first
+	check fails, see if 2-letter prefix succeeds
+
 2001-06-07  James LewisMoss  <jimdres@mindspring.com>
 
 	* doc/README.translator.txt (variables): add instructions for

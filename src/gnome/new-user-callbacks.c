@@ -202,21 +202,32 @@ gnc_get_ea_locale_dir(const char *top_dir)
     gchar *ret;
     gchar *locale;
     struct stat buf;
-    
+
     locale = g_strdup(setlocale(LC_MESSAGES, NULL));
 
     ret = g_strdup_printf("%s/%s", top_dir, locale);
-    g_free(locale);
 
     printf("Pondering dir: %s\n", ret);
-    
+
+    if(stat(ret, &buf) != 0 && (strlen (locale) > 2))
+    {
+        g_free (ret);
+        locale[2] = '\0';
+        ret = g_strdup_printf("%s/%s", top_dir, locale);
+    }
+
+    printf("Pondering dir: %s\n", ret);
+
     if(stat(ret, &buf) != 0)
     {
+        g_free (ret);
         ret = g_strdup_printf("%s/%s", top_dir, default_locale);
     }
 
     printf("Opening from dir: %s\n", ret);
     
+    g_free(locale);
+
     return ret;
 }
     
