@@ -300,6 +300,12 @@ insertTransaction( Account *acc, Transaction *trans )
     }
   }
 
+  if (trans->debit == trans->credit) {
+    printf ("Internal Error: insertTransaction(): \n");
+    printf ("debited and credit accounts cannot be the same\n");
+    return -1;
+  }
+
   /* mark the data file as needing to be saved: */
   if( acc->parent != NULL ) acc->parent->saved = False;
   

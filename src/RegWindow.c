@@ -1173,8 +1173,13 @@ regSaveTransaction( RegWindow *regData, int position )
     /* get the new account from the name */
     xfer_acct = xaccGetAccountFromName (topgroup, name);
   
-    if (xfer_acct) {
-
+    /* if a transfer account exists, and we are not trying to transfer
+     * from ourself to ourself, then proceed, otheriwse ignore. */
+    /* hack alert -- should put up a popup warning if user tries 
+     * to transfer from & to the same account -- the two must differ! */
+    if (xfer_acct && (    ((1 <  regData->numAcc) && (xfer_acct != (Account *) (trans->credit)))
+                       || ((1 >= regData->numAcc) && (xfer_acct != regData->blackacc[0])) )) {
+      
       /* for a new transaction, the default will be that the
        * transfer occurs from the debited account */
       if( regData->changed & MOD_NEW) {
