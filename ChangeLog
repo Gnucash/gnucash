@@ -1,3 +1,10 @@
+2004-12-05  Derek Atkins  <derek@ihtfp.com>
+
+	New Account Hierarchy Setup Druid bug fix from Stephen Evanchik:
+	* src/gnome/glade/account.glade:
+	  - Made Accounts h-scroll box policy automatic.
+	  - Reordered the containing table to two rows, one column
+
 2004-12-04  Derek Atkins  <derek@ihtfp.com>
 
 	Fix some deprecated functions:
