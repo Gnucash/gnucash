@@ -1234,7 +1234,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
   if(retval == SCM_BOOL_F) {
     gnc_error_dialog_parented(GTK_WINDOW(wind->window),
                               _("An error occurred while importing "
-                                "QIF transactions into Gnucash.  Your "
+                                "QIF transactions into GnuCash. Your "
                                 "accounts are unchanged."));    
     scm_unprotect_object(wind->imported_account_group);
     wind->imported_account_group = SCM_BOOL_F;

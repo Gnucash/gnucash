@@ -151,7 +151,7 @@ show_book_error (GNCBackendError io_error, const char *newfile)
 static gboolean
 gncLockFailHandler (const char *file)
 {
-  const char *format = _("Gnucash could not obtain the lock for\n"
+  const char *format = _("GnuCash could not obtain the lock for\n"
                          "   %s.\n"
                          "That database may be in use by another user,\n"
                          "in which case you should not open the database.\n"

@@ -229,7 +229,7 @@ configAction (SplitRegister *reg)
       xaccAddComboCellMenuItem (reg->actionCell, _("Int"));
       /* Long Term Capital Gains */
       xaccAddComboCellMenuItem (reg->actionCell, _("LTCG"));
-      /* Short Term Captial Gains */
+      /* Short Term Capital Gains */
       xaccAddComboCellMenuItem (reg->actionCell, _("STCG"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Income"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Dist")); /* Distribution */

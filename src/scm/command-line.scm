@@ -205,13 +205,13 @@
          'boolean
          gnc:load-user-config-if-needed
          #f
-         (N_ "Load the user configuation"))
+         (N_ "Load the user configuration"))
 
    (list "load-system-config"
          'boolean
          gnc:load-system-config-if-needed
          #f
-         (N_ "Load the system configuation"))
+         (N_ "Load the system configuration"))
 
    (list "rpc-server"
 	 'boolean

@@ -1,3 +1,9 @@
+2001-05-03  Dave Peticolas  <dave@krondo.com>
+
+	* many files: fix spelling errors
+
+	* src/gnome/gnc-html-guppi.c: use unsigned int for color
+
 2001-05-02  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/window-main.c: set the app's mdi mode from user prefs

@@ -772,16 +772,16 @@ GtkWidget *
 gnc_html_embedded_scatter(gnc_html * parent, 
                           int w, int h, GHashTable * params) {
   struct guppi_chart_data * chart = gnc_guppi_chart_data_new();
-  GuppiObject * scatter = NULL;
-  GuppiObject * title = NULL;
-  GtkArg      arglist[8];
-  int         argind=0;
-  char        * param;
-  int         datasize;
-  int         color;
-  double      * x_data=NULL;
-  double      * y_data=NULL;
-  char        * gtitle = NULL;
+  GuppiObject  * scatter = NULL;
+  GuppiObject  * title = NULL;
+  GtkArg       arglist[8];
+  int          argind=0;
+  char         * param;
+  int          datasize;
+  unsigned int color;
+  double       * x_data=NULL;
+  double       * y_data=NULL;
+  char         * gtitle = NULL;
 
   chart->parent = parent;
 

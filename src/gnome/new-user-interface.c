@@ -637,7 +637,7 @@ create_addAccountCancelDialog (void)
   GtkWidget *dialog_action_area1;
   GtkWidget *newAccountCancelDialog_OKButton;
 
-  addAccountCancelDialog = gnome_dialog_new (_("Cancelling"), NULL);
+  addAccountCancelDialog = gnome_dialog_new (_("Canceling"), NULL);
   gtk_widget_set_name (addAccountCancelDialog, "addAccountCancelDialog");
   gtk_object_set_data (GTK_OBJECT (addAccountCancelDialog), "addAccountCancelDialog", addAccountCancelDialog);
   GTK_WINDOW (addAccountCancelDialog)->type = GTK_WINDOW_DIALOG;

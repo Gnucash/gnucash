@@ -83,7 +83,7 @@ gnc_print_session_done(PrintSession * ps) {
 void
 gnc_print_session_print(PrintSession * ps) {
   GtkWidget * dialog    =
-    gnome_print_dialog_new(_("Print Gnucash Document"), 0);
+    gnome_print_dialog_new(_("Print GnuCash Document"), 0);
   int button            = gnome_dialog_run(GNOME_DIALOG(dialog));
 
   switch(button) {

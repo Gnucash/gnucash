@@ -785,7 +785,7 @@
 <widget>
   <class>GnomeDialog</class>
   <name>addAccountCancelDialog</name>
-  <title>Cancelling</title>
+  <title>Canceling</title>
   <type>GTK_WINDOW_DIALOG</type>
   <position>GTK_WIN_POS_MOUSE</position>
   <modal>True</modal>

@@ -100,7 +100,7 @@
     (gnc:register-tax-option
      (gnc:make-multichoice-option
       gnc:pagename-general (N_ "Alternate Period")
-      "c" (N_ "Overide or modify From: & To:")
+      "c" (N_ "Override or modify From: & To:")
       (if after-tax-day 'from-to 'last-year)
       (list (list->vector
              (list 'from-to (N_ "Use From - To") (N_ "Use From - To period")))
@@ -812,7 +812,7 @@
                (generate-tax-or-txf
                 (_ "Taxable Income / Deductible Expenses")
                 (_ "This report shows your Taxable Income and \
-Deductable Expenses.")
+Deductible Expenses.")
                 report-obj
 		#t))
    'export-thunk (lambda (report-obj)
@@ -822,7 +822,7 @@ Deductable Expenses.")
                         (generate-tax-or-txf
                          (_ "Taxable Income / Deductible Expenses")
                          (_ "This page shows your Taxable Income and \
-Deductable Expenses.")
+Deductible Expenses.")
                          report-obj
                          #f)
                         #f)
