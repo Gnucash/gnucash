@@ -1363,36 +1363,6 @@ _free_varBindings_hash_elts( gpointer key, gpointer value, gpointer data )
 }
 
 static void
-_free_toCreateInst_list_elts( gpointer data, gpointer user_data )
-{
-        toCreateInstance *tci = (toCreateInstance*)data;
-        g_assert( tci->date );
-        if ( tci->date ) {
-                g_date_free( tci->date );
-        }
-        if ( tci->varBindings ) {
-                g_hash_table_foreach( tci->varBindings,
-                                      _free_varBindings_hash_elts,
-                                      NULL );
-                g_hash_table_destroy( tci->varBindings );
-                tci->varBindings = NULL;
-        }
-        tci->parentTCT = NULL;
-        tci->node = NULL;
-        g_free( tci );
-}
-
-static void
-_free_toCreate_list_elts( gpointer data, gpointer user_data )
-{
-        toCreateTuple *tct = (toCreateTuple*)data;
-        tct->sx = NULL;
-        g_list_foreach( tct->instanceList, _free_toCreateInst_list_elts, NULL );
-        g_list_free( tct->instanceList );
-        g_free( tct );
-}
-
-static void
 process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
 {
         GList *l;
@@ -2024,9 +1994,9 @@ create_each_transaction_helper( Transaction *t, void *d )
 
         for ( ; sList && osList ;
               sList = sList->next, osList = osList->next ) {
-                split = (Split*)sList->data;
-
                 Account *acct;
+
+                split = (Split*)sList->data;
 
                 /* FIXME: Ick.  This assumes that the split lists will be
                    ordered identically. :( I think it's fair to say they
