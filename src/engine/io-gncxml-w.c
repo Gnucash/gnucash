@@ -49,16 +49,32 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef GNOME_XML_HEADER_VERSION_1
-#include <gnome-xml/tree.h>
-#include <gnome-xml/parser.h>
-#include <gnome-xml/xmlmemory.h>
-#include <gnome-xml/parserInternals.h>
-#elif defined(GNOME_XML_HEADER_VERSION_2)
+#ifdef HAVE_XML_VERSION_HEADER
+#include <libxml/xmlversion.h>
+#endif
+
+#if defined(LIBXML_VERSION) && LIBXML_VERSION >= 20000
+
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 #include <libxml/xmlmemory.h>
 #include <libxml/parserInternals.h>
+#ifndef xmlChildrenNode
+#define xmlChildrenNode children
+#define xmlRootNode children
+#endif
+
+#else
+
+#include <gnome-xml/tree.h>
+#include <gnome-xml/parser.h>
+#include <gnome-xml/xmlmemory.h>
+#include <gnome-xml/parserInternals.h>
+#ifndef xmlChildrenNode
+#define xmlChildrenNode childs
+#define xmlRootNode root
+#endif
+
 #endif
 
 #include "Account.h"
@@ -85,10 +101,6 @@
 static short module = MOD_IO;
 
 /* Pulled from the libxml-1.8.8 header */
-#ifndef xmlChildrenNode
-#define xmlChildrenNode childs
-#define xmlRootNode root
-#endif
 
 static const gchar *gncxml_emacs_trailer =
 "<!-- Local variables: -->\n"
