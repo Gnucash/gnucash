@@ -1,3 +1,9 @@
+2002-07-03  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/druid-hierarchy.c (gnc_get_ea_locale_dir): If current
+	locale doesn't work for account hierarchy druid, then check all
+	abbreviated versions of that locale.
+
 2002-07-02  Derek Atkins  <derek@ihtfp.com>
 
 	* register/register-gnome/gnucash-sheet.c: allow a caller to
