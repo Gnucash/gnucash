@@ -30,8 +30,7 @@ offers, have a look at the <link linkend="xacc-features">Features
     or an older stable version. These versions are fairly stable,
     with all currently known bugs fixed.
     The present "experimental" stream is gnucash-1.7.x, which is
-    now almost at beta-test stage.  This is the version you are
-    using right now, obviously!   If you are using this version
+    now almost at beta-test stage. If you are using this version
     with real data, PLEASE MAKE BACKUPS REGULARLY!
 
     Once the 1.7.x series stabilizes, the next stable series
@@ -246,6 +245,14 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
       </glossterm>
 <glossdef>
 <para>financial calculator and expression parser</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>dark@xs4all.nl</email> Richard Braakman
+      </glossterm>
+<glossdef>
+<para>xml version configure patch</para>
 </glossdef>
 </glossentry>
 
