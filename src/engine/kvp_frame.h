@@ -18,7 +18,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Engine
+/** @addtogroup KVP
     @{ */
 /** @file kvp_frame.h
     @brief A key-value frame system

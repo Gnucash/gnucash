@@ -23,7 +23,7 @@
 #ifndef QOF_GOBJ_H
 #define QOF_GOBJ_H
 
-/** @addtogroup Engine
+/** @addtogroup GObject
     @{ */
 /** @file qofgobj.h
     @brief QOF to GLib GObject mapping

@@ -20,6 +20,9 @@
  *                                                                  *
 \********************************************************************/
 
+/** @addtogroup Entity
+    @{ */
+
 /** @file qofclass.h
     @brief API for registering paramters on objects 
     @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
@@ -168,3 +171,4 @@ QofSetterFunc qof_class_get_parameter_setter (QofIdTypeConst obj_name,
 
 
 #endif /* QOF_CLASS_H */
+/* @} */

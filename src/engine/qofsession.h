@@ -20,7 +20,7 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup Engine
+/** @addtogroup Backend
  *     @{ */
 /** @file qofsession.h
  * @brief Encapsulates a connection to a backednd (persistent store)

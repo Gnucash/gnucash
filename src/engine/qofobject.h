@@ -19,10 +19,10 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Engine
+/** @addtogroup Entity
     @{ */
 /** @file qofobject.h
- * @breif the Core Object Registration/Lookup Interface
+ * @brief the Core Object Registration/Lookup Interface
  *
  * @author Copyright (c) 2001,2002, Derek Atkins <warlord@MIT.EDU>
  */
@@ -88,8 +88,16 @@ struct _QofObject
 void qof_object_initialize (void);
 void qof_object_shutdown (void);
 
+/** Invoke the callback 'cb' on every object class definition.
+ *  The user_data pointer is passed back to the callback.
+ */
 void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
 
+/** Invoke the callback 'cb' on every instance ov a particular
+ *  object type.  It is presumed that the 'book' stores or somehow
+ *  identifies a colllection of instances; thus the callback will 
+ *  be invoked only for those instances stored in the book.
+ */
 void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
                          QofEntityForeachCB cb, gpointer user_data);
 

@@ -23,7 +23,7 @@
 #ifndef QOF_ID_H
 #define QOF_ID_H 
 
-/** @addtogroup Engine
+/** @addtogroup Entity
     @{ */
 /** @file qofid.h
     @brief QOF entity type identification system 

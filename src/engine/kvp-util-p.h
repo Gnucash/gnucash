@@ -1,5 +1,5 @@
 /********************************************************************\
- * kvp_util.h -- misc odd-job kvp utils                             *
+ * kvp-util-p.h -- misc odd-job kvp utils (private file)            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -28,8 +28,10 @@
 #include "guid.h"
 #include "kvp_frame.h"
 
-/* @file kvp_util.h
- * @breif misc odd-job kvp utils engine-private routines
+/** @addtogroup KVP_Util
+    @{ */
+/* @file kvp-util-p.h
+ * @brief misc odd-job kvp utils engine-private routines
  * @author Copyright (C) 2001, 2003 Linas Vepstas <linas@linas.org>               *
  * @note PRIVATE FILE 
  * -- these routines are private to the engine. The should not be used 
@@ -100,4 +102,5 @@ KvpFrame * gnc_kvp_bag_find_by_guid (KvpFrame *root,  const char * path,
 void gnc_kvp_bag_remove_frame (KvpFrame *root, const char *path,
                                KvpFrame *fr);
 
+/* @} */
 #endif /* XACC_KVP_UTIL_P_H */

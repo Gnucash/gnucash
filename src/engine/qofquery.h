@@ -20,10 +20,56 @@
  *                                                                  *
 \********************************************************************/
 
+/** @addtogroup Query_Core_API
+    @{ */
+
 /** @file qofquery.h
-    @breif find objects that match a certain expression.
+    @brief find objects that match a certain expression.
     @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
     @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+
+BASIC QUERY API: 
+With this API you can create arbitrary logical
+queries to find sets of arbitrary object.  To make simple
+queries (1 term, such as a search for a parameter with one value), 
+create the appropriate
+QueryTerm structure and stick it in a Query object using
+xaccInitQuery. The QueryTerm should be malloced but the Query object
+will handle freeing it.  To make compound queries, make multiple
+simple queries and combine them using qof_query_merge() and the logical
+operations of your choice.
+
+STRUCTURE OF A QUERY: A Query is a logical function of any number of
+QueryTerms.  A QueryTerm consists of a C function pointer (the
+Predicate) and a PredicateData structure containing data passed to the
+predicate funtion.  The PredicateData structure is a constant
+associated with the Term and is identical for every object that is
+tested.
+
+The terms of the Query may represent any logical function and are
+stored in canonical form, i.e. the function is expressed as a logical
+sum of logical products.  So if you have QueryTerms a, b, c, d, e and
+you have the logical function a(b+c) + !(c(d+e)), it gets stored as 
+ab + ac + !c + !c!e +!d!c + !d!e.  This may not be optimal for evaluation
+of some functions but it's easy to store, easy to manipulate, and it
+doesn't require a complete algebra system to deal with.
+
+The representation is of a GList of GLists of QueryTerms.  The
+"backbone" GList q->terms represents the OR-chain, and every item on
+the backbone is a GList of QueryTerms representing an AND-chain
+corresponding to a single product-term in the canonical
+representation.  QueryTerms are duplicated when necessary to fill out
+the canonical form, and the same predicate may be evaluated multiple
+times per split for complex queries.  This is a place where we could
+probably optimize.
+
+Evaluation of a Query (see qof_query_run()) is optimized as much as
+possible by short-circuited evaluation.  The predicates in each
+AND-chain are sorted by predicate type, with Account queries sorted
+first to allow the evaluator to completely eliminate accounts from the
+search if there's no chance of them having splits that match.
+(XXX above no longer applies)
+
 */
 
 
@@ -74,12 +120,19 @@ void qof_query_shutdown (void);
 
 GSList * qof_query_build_param_list (char const *param, ...);
 
-/** Create a new query.  A Query MUST be set with a 'search-for' 
- *  type.  The results of the query is a list of the indicated 
- *  search-for type.
+/** Create a new query.  
+ *  Before running the query, a 'search-for' type must be set
+ *  otherwise nothing will be returned.  The results of the query 
+ *  is a list of the indicated search-for type.
+ *
+ *  Allocates and initializes a Query structure which must be 
+ *  freed by the user with qof_query_destroy().  A newly-allocated 
+ *  QofQuery object matches nothing (qof_query_run() will return NULL).
  */
 QofQuery * qof_query_create (void);
 QofQuery * qof_query_create_for (QofIdTypeConst obj_type);
+
+/** Frees the resources associate with a Query object.  */
 void qof_query_destroy (QofQuery *q);
 
 /** Set the object type to be searched for.  The results of 
@@ -87,9 +140,14 @@ void qof_query_destroy (QofQuery *q);
  */
 void qof_query_search_for (QofQuery *query, QofIdTypeConst obj_type);
 
-/** Set the book to be searched (you can search multiple books) 
- *  If no books are set, no results will be returned (since there
- *  is nothing to search over).
+/** Set the book to be searched.  Books contain/identify collections 
+ *  of objects; the search will be performed over those books
+ *  specified with this function.  If no books are set, no results 
+ *  will be returned (since there is nothing to search over).
+ *
+ *  You can search multiple books.  To specify multiple books, call 
+ *  this function multiple times with different arguments.  
+ * XXX needed qof_query_clear_books() to reset the list ... 
  */
 void qof_query_set_book (QofQuery *q, QofBook *book);
 
@@ -156,15 +214,27 @@ GList * qof_query_run (QofQuery *query);
  */
 GList * qof_query_last_run (QofQuery *query);
 
-/** DOCUMENT ME !! */
+/** Remove all query terms from query.  query matches nothing 
+ *  after qof_query_clear().
+ */
 void qof_query_clear (QofQuery *query);
-/** DOCUMENT ME !! */
+
+/** Remove query terms of a particular type from q.  The "type" of a term
+ *  is determined by the type of data that gets passed to the predicate
+ *  function.  
+ * XXX ??? Huh? remove anything of that predicate type, or just 
+ * the particular predicate ?
+ */
 void qof_query_purge_terms (QofQuery *q, GSList *param_list);
 
-/** Return boolean FALSE if there are no terms in the query */
+/** Return boolean FALSE if there are no terms in the query 
+ *  Can be used as a predicate to see if the query has been 
+ *  initialized (return value > 0) or is "blank" (return value == 0).
+ */
 int qof_query_has_terms (QofQuery *q);
 
-/** Return the number of terms in thq query. */
+/** Return the number of terms in the canonical form of the query.  
+ */
 int qof_query_num_terms (QofQuery *q);
 
 /** DOCUMENT ME !! */
@@ -174,17 +244,32 @@ gboolean qof_query_has_term_type (QofQuery *q, GSList *term_param);
 QofQuery * qof_query_copy (QofQuery *q);
 
 /** Make a copy of the indicated query, inverting the sense
- * of the search.  In other words, if the original query search 
- * for all objects with a certain condition, the inverted query
- * will search for all object with NOT that condition.
+ *  of the search.  In other words, if the original query search 
+ *  for all objects with a certain condition, the inverted query
+ *  will search for all object with NOT that condition.  The union
+ *  of the results returned by the original and inverted queries
+ *  equals the set of all searched objects. These to sets are
+ *  disjoint (share no members in common).
+ *
+ *  This will return a newly allocated QofQuery object, or NULL
+ *  on error. Free it with qof_query_destroy() when no longer needed.
  */
 QofQuery * qof_query_invert(QofQuery *q);
 
-/** Merges two queries together.  Both queries must be compatible
- * search-types.  If both queries are set, they must search for the
- * same object type.  If only one is set, the resulting query will
- * search for the set type.  If neither query has the search-type set,
- * the result will be unset as well.
+/** Combine two queries together using the Boolean set (logical) 
+ *  operator 'op'.  For example, if the operator 'op' is set to
+ *  QUERY_AND, then the set of results returned by the query will
+ *  will be the Boolean set intersection of the results returned
+ *  by q1 and q2.  Similarly,  QUERY_OR maps to set union, etc.
+ *
+ *  Both queries must have compatible
+ *  search-types.  If both queries are set, they must search for the
+ *  same object type.  If only one is set, the resulting query will
+ *  search for the set type.  If neither query has the search-type set,
+ *  the result will be unset as well.
+ *
+ *  This will return a newly allocated QofQuery object, or NULL
+ *  on error. Free it with qof_query_destroy() when no longer needed.
  */
 QofQuery * qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op);
 
@@ -268,3 +353,4 @@ QofIdType qof_query_get_search_for (QofQuery *q);
 GList * qof_query_get_books (QofQuery *q);
 
 #endif /* QOF_QUERYNEW_H */
+/*  @} */

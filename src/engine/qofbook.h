@@ -17,7 +17,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Engine
+/** @addtogroup Book
     @{ */
 /** @file qofbook.h
  * @brief dataset access (an "accounting book")

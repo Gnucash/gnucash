@@ -18,7 +18,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Engine
+/** @addtogroup Backend
     @{ */
 /** @file qofbackend.h
     @brief api for data storage Backend

@@ -19,11 +19,12 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/*
- * Object instance holds many common fields that most
- * gnucash objects use.
+/** @addtogroup Entity
+    @{ */
+/** @file qofinstance.h 
+ *  @brief Object instance holds common fields that most gnucash objects use.
  * 
- * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+ *  @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef QOF_INSTANCE_H
@@ -87,4 +88,5 @@ void qof_instance_gemini (QofInstance *to, QofInstance *from);
  */
 QofInstance * qof_instance_lookup_twin (QofInstance *src, QofBook *book);
 
+/* @} */
 #endif /* QOF_INSTANCE_H */

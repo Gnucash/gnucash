@@ -20,8 +20,10 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup Query_XML
+    @{ */
 /** @file qofquery-deserial.h
-    @breif Convert Qof-Query XML to QofQuery 
+    @brief Convert Qof-Query XML to QofQuery 
 
     Qof Queries can be convrted to and from XML so that they
     can be sent from here to there. This file implements the
@@ -40,3 +42,4 @@
 QofQuery *qof_query_from_xml (xmlNodePtr);
 
 #endif /* QOF_QUERY_DESERIAL_H */
+/* @} */

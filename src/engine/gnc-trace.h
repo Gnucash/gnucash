@@ -22,7 +22,11 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
-/** @file gnc-trace.h @brief GnuCash error loging and tracing facility */
+/** @addtogroup Engine
+    @{ */
+
+/** @file gnc-trace.h 
+ *  @brief GnuCash error loging and tracing facility */
 
 #ifndef GNC_TRACE_H
 #define GNC_TRACE_H
@@ -224,3 +228,4 @@ void gnc_report_clock_total (int clockno,
 }
 
 #endif /* GNC_TRACE_H */
+/* @} */

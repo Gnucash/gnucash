@@ -18,10 +18,10 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Engine
+/** @addtogroup Entity
     @{ */
 /** @file qofobject-p.h
- * @breif the Core Object Registration/Lookup Private Interface
+ * @brief the Core Object Registration/Lookup Private Interface
  *
  * @author Copyright (c) 2001,2002, Derek Atkins <warlord@MIT.EDU>
  */

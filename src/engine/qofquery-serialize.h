@@ -20,9 +20,10 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
+/* @addtogroup Query_XML
+   @{ */
 /** @file qofquery-serialize.h
-    @breif Convert QofQuery to XML
+    @brief Convert QofQuery to XML
     @author Copyright (C) 2001,2002,2004 Linas Vepstas <linas@linas.org>
  */
 
@@ -39,3 +40,4 @@
 xmlNodePtr qof_query_to_xml (QofQuery *q);
 
 #endif /* QOF_QUERY_SERIALIZE_H */
+/* @} */

@@ -18,10 +18,10 @@
  *                                                                  *
  *******************************************************************/
 
-/** @addtogroup Engine
+/** @addtogroup Numeric
     @{ */
 /** @file gnc-numeric.h
-    @brief An exact-number library for gnucash.
+    @brief An exact-rational-number library for gnucash.
     @author Copyright (C) 2000 Bill Gribble
 */
 

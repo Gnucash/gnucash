@@ -24,16 +24,17 @@
 #ifndef GUID_H
 #define GUID_H 
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <glib.h>
 #include <stddef.h>
 
-/* This file defines an API for using globally unique identifiers. */
+/** @addtogroup GUID
+    @{ */
+/** @file guid.h
+    @brief  globally unique ID User API 
+    @author Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
+*/
 
-/* The type used to store guids */
+/** The type used to store guids */
 typedef union _GUID
 {
   unsigned char data[16];
@@ -179,4 +180,5 @@ guint guid_hash_to_guint(gconstpointer ptr);
 
 GHashTable *guid_hash_table_new(void);
 
+/* @} */
 #endif

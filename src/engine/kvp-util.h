@@ -20,7 +20,10 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/** @file kvp-util.h @brief GnuCash KVP utility functions */
+/** @addtogroup KVP_Util
+    @{ */
+/** @file kvp-util.h 
+    @brief GnuCash KVP utility functions */
 
 #ifndef GNC_KVP_UTIL_H
 #define GNC_KVP_UTIL_H
@@ -52,4 +55,5 @@ void g_hash_table_kv_pair_free_gfunc(gpointer data, gpointer user_data);
 
 /***********************************************************************/
 
+/* @} */
 #endif /* GNC_KVP_UTIL_H */
