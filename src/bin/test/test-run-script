@@ -1,0 +1,10 @@
+#!/bin/sh
+exec gnucash-run-script "$0"
+!#
+
+(display "Hello world.\n")
+(exit 0)
+
+;; Local Variables:
+;; mode: scheme
+;; End:
