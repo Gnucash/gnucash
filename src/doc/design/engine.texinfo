@@ -27,6 +27,7 @@ be created as a shared library for use by other programs.
 * Events::                      
 * Commodities::                 
 * Commodity Tables::            
+* Prices::                      
 * Splits::                      
 * Transactions::                
 * Accounts::                    
@@ -1320,7 +1321,7 @@ Set the fraction of @var{cm} to @var{fraction}.
 @end deftypefun
 
 
-@node Commodity Tables, Splits, Commodities, Engine
+@node Commodity Tables, Prices, Commodities, Engine
 @section Commodity Tables
 @tindex gnc_commodity_table
 
@@ -1424,7 +1425,192 @@ ISO4217 namespace.
 @end deftypefun
 
 
-@node Splits, Transactions, Commodity Tables, Engine
+@node Prices, Splits, Commodity Tables, Engine
+@section Prices
+@tindex GNCPrice
+
+A Price is the Engine abstraction of an "instantaneous" price quote for a
+given commodity with respect to another commodity. For example, a given
+price might represent the value of LNUX in USD on 2001-02-03. A Price
+contains the following pieces of information:
+
+@table @asis
+
+@item A GUID
+A GUID uniquely identifying the GNCPrice.
+
+@item A commodity
+The commodity being priced.
+
+@item A currency
+The denomination of the value of the item being priced.
+
+@item A value
+The value of the item being priced.
+
+@item A time
+The time the price was valid.
+
+@item A source
+A string describing the source of the quote. These strings will have a
+form like this: "Finance::Quote", "user:misc", "user:foo", etc. If the
+quote came from a user, as a matter of policy, you @emph{must} prefix
+the string you give with "user:". For now, the only other reserved
+values are "Finance::Quote" and "old-file-import".
+
+@item A type
+A string describing the type of quote -- types possible right now are
+"bid", "ask", "last", "nav", and "unknown".
+
+@end table
+
+
+@menu
+* Price Implementation Details::  
+* General Price API::           
+* Price Getters::               
+* Price Setters::               
+@end menu
+
+
+@node Price Implementation Details, General Price API, Prices, Prices
+@subsection Price Implementation Details
+
+For the source and type fields, @code{NULL} and the empty string are
+considered the same, so if one of these is the empty string then it
+might be @code{NULL} after a file save/restore.
+
+GNCPrices are reference counted. When you create a price or or clone
+one, the new price's reference count is set to 1. When you are finished
+with a price, call @code{gnc_price_unref}. If you hand the price pointer
+to some other code that needs to keep it, make sure it calls
+@code{gnc_price_ref} to indicate its interest in that price, and calls
+@code{gnc_price_unref} when it's finished with the price. For those
+unfamiliar with reference counting, basically each price stores an
+integer count which starts at 1 and is incremented every time someone
+calls @code{gnc_price_ref}. Conversely, the count is decremented every
+time someone calls @code{gnc_price_unref}. If the count ever reaches 0,
+the price is destroyed.
+
+All of the getters return data that's internal to the GNCPrice,
+not copies, so don't free or modify these values.
+
+All of the setters store copies of the data given, with the exception of
+the commodity field which just stores the pointer given. It is assumed
+that commodities are a global resource and are pointer unique.
+
+
+@node General Price API, Price Getters, Price Implementation Details, Prices
+@subsection General Price API
+
+@deftypefun {GNCPrice *} gnc_price_create (void)
+Return a newly allocated and initialized price with a reference count of
+1. The price should be dereferenced with @code{gnc_price_unref} when no
+longer needed, but the price should not be freed by user code.
+@end deftypefun
+
+@deftypefun {GNCPrice *} gnc_price_clone (GNCPrice * @var{p})
+Return a newly allocated price that's a content-wise duplicate of
+@var{p}. The returned clone will have a reference count of 1.
+@end deftypefun
+
+@deftypefun void gnc_price_ref (GNCPrice * @var{p})
+Increase the reference count of @var{p} by 1.
+@end deftypefun
+
+@deftypefun void gnc_price_unref (GNCPrice * @var{p})
+Decrease the reference coutn of @var{p} by 1. If the
+resulting count is 0, @var{p} will be destroyed.
+@end deftypefun
+
+@deftypefun {GNCPrice *} gnc_price_lookup (const GUID * @var{guid})
+Lookup and return the price associated with @var{guid}, or @code{NULL}
+if there is no such price.
+@end deftypefun
+
+
+@node Price Getters, Price Setters, General Price API, Prices
+@subsection Price Getters
+
+@deftypefun {const GUID *} gnc_price_get_guid (GNCPrice * @var{p})
+Return the GUID of @var{p}.
+@end deftypefun
+
+@deftypefun {gnc_commodity *} gnc_price_get_commodity (GNCPrice * @var{p})
+Return the commodity of @var{p}.
+@end deftypefun
+
+@deftypefun {gnc_commodity *} gnc_price_get_currency (GNCPrice * @var{p})
+Return the currency of @var{p}.
+@end deftypefun
+
+@deftypefun Timespec gnc_price_get_time (GNCPrice * @var{p})
+Return the time of @var{p}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_price_get_source (GNCPrice * @var{p})
+Return the source of @var{p}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_price_get_type (GNCPrice * @var{p})
+Return the type of @var{p}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_price_get_value (GNCPrice * @var{p})
+Return the value of @var{p}.
+@end deftypefun
+
+@deftypefun gint32 gnc_price_get_version (GNCPrice * @var{p})
+Return the version of @var{p}.
+@end deftypefun
+
+
+@node Price Setters,  , Price Getters, Prices
+@subsection Price Setters
+
+Invocations of the setters should be wrapped with calls to
+@code{gnc_price_begin_edit} and @code{gnc_price_commit_edit}. The
+begin/commit calls help ensure that the local price db is synchronized
+with the backend.
+
+@deftypefun void gnc_price_begin_edit (GNCPrice * @var{p})
+Begin a sequence of changes to @var{p}.
+@end deftypefun
+
+@deftypefun void gnc_price_commit_edit (GNCPrice * @var{p})
+End a sequence of changes to @var{p}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_commodity (GNCPrice * @var{p}, gnc_commodity * @var{c})
+Set the commodity of @var{p} to @var{c}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_currency (GNCPrice * @var{p}, gnc_commodity * @var{c})
+Set the currency of @var{p} to @var{c}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_time (GNCPrice * @var{p}, Timespec @var{t})
+Set the time of @var{p} to @var{t}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_source (GNCPrice * @var{p}, const char * @var{source})
+Set the source of @var{p} to @var{source}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_type (GNCPrice * @var{p}, const char * @var{type})
+Set the type of @var{p}to @var{type}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_value (GNCPrice * @var{p}, gnc_numeric @var{value})
+Set the value of @var{p} to @var{value}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_version (GNCPrice * @var{p}, gint32 @var{versn})
+Set the version of @var{p} to @var{versn}.
+@end deftypefun
+
+
+@node Splits, Transactions, Prices, Engine
 @section Splits
 @tindex Split
 

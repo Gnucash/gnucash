@@ -1,5 +1,9 @@
 2001-06-06  Dave Peticolas  <dave@krondo.com>
 
+	* src/doc/design/engine.texinfo: document prices and their API
+
+	* src/doc/design/gnucash-design.texinfo: update docs
+
 	* macros/gnome.m4: Chris J (Oakton) Leach's macro patch
 
 	* AUTHORS: update credits
