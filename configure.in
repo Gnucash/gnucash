@@ -52,7 +52,7 @@ AM_PATH_GLIB
 
 if test ${no_glib}x = yesx
 then
-  AC_MSG_ERROR([Cannot find glib.])
+  AC_MSG_ERROR([Cannot find glib. Check config.log])
 fi
 
 AC_CHECK_HEADERS(dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h)
@@ -261,31 +261,13 @@ AM_CONDITIONAL(GNC_TAGS_FILE, test x${GNC_TAGS_FILE} = xTAGS)
 ### --------------------------------------------------------------------------
 ### Check for glade
 
-AC_ARG_WITH(glade,
-  [  --with-glade=FILE            which glade executable to use ],
-  GLADE="${with_glade}")
-
-# If the user didn't specify a glade, then go fetch.
-if test x"$GLADE" = x;
-then
-  AC_PATH_PROG(GLADE, glade)
-fi
-
-# Make sure glade was found
-#if test x"$GLADE" = x; then
-#    AC_MSG_ERROR([Cannot find Glade.])
-#fi
-
-AC_SUBST(GLADE)
-
-
 GLADE_LIBS=`$GNOME_CONFIG --libs libglade`
 GLADE_CFLAGS=`$GNOME_CONFIG --cflags libglade`
 
 # check for glade libs
 AC_CHECK_LIB(glade, glade_init,
              GNOMEBUILDLIBS="${GNOMEBUILDLIBS} glade",
-             AC_MSG_ERROR([Cannot find libglade. See the README for more info.]),
+             AC_MSG_ERROR([Cannot find libglade. See the README and config.log for more info.]),
              $GLADE_LIBS)
 
 AC_SUBST(GLADE_LIBS)
@@ -389,7 +371,7 @@ GTKHTML_LIBS=`$GNOME_CONFIG --libs gtkhtml`
 GTKHTML_CFLAGS=`$GNOME_CONFIG --cflags gtkhtml`
 
 AC_CHECK_LIB(gal, main, true,
-  [AC_MSG_ERROR([gal library not found.  See the README for more info.])],
+  [AC_MSG_ERROR([gal library not found. See the README and config.log for more info.])],
   `$GNOME_CONFIG --libs gal`)
 
 # check for gtkhtml and enable it via HAVE_LIBGTKHTML
@@ -397,7 +379,7 @@ AC_CHECK_LIB(gal, main, true,
 AC_CHECK_LIB(gtkhtml, gtk_html_new,
              GNOMEBUILDLIBS="${GNOMEBUILDLIBS} gtkhtml"
              AC_DEFINE(HAVE_LIBGTKHTML),
-             AC_MSG_ERROR([Cannot find gtkhtml.  See the README for more info.]),
+             AC_MSG_ERROR([Cannot find gtkhtml. See the README and config.log for more info.]),
              $GTKHTML_LIBS)
 
 GHTTP_LIBS=`$GNOME_CONFIG --libs ghttp`
@@ -410,7 +392,7 @@ AC_CHECK_LIB(ghttp, ghttp_request_new,
 	     if test "x$GHTTP_LIBS" = "x" ; then
 		GHTTP_LIBS=-lghttp
 	     fi,
-             AC_MSG_ERROR([Cannot find ghttp.  See the README for more info.]),
+             AC_MSG_ERROR([Cannot find ghttp. See the README and config.log for more info.]),
              $GHTTP_LIBS)
 
 AC_CHECK_LIB(ghttp, ghttp_enable_ssl,
@@ -458,16 +440,16 @@ AC_SUBST(EFENCE_LIBS)
 # LAME: if you ask gnome-config for the zvt libs, it doesn't include
 # imlib, though it needs it so we'll just steal gtkhtml's which does.
 AC_CHECK_LIB(zvt, main, true,
-  [AC_MSG_ERROR([libzvt development files not found.  Guppi requires them.])],
+  [AC_MSG_ERROR([libzvt development files not found. See config.log.])],
   `$GNOME_CONFIG --libs zvt gtkhtml`)
 
 AC_CHECK_LIB(bonobo, main, true,
-  [AC_MSG_ERROR([libbonobo development files not found.  Guppi requires them.])
+  [AC_MSG_ERROR([libbonobo development files not found. See config.log.])
 ],
   `$GNOME_CONFIG --libs bonobo`)
 
 AC_CHECK_LIB(oaf, main, true,
-  [AC_MSG_ERROR([liboaf development files not found.  Guppi requires them.])],
+  [AC_MSG_ERROR([liboaf development files not found. See config.log.])],
   `$GNOME_CONFIG --libs oaf`)
 
 ## guppi itself.
@@ -500,7 +482,7 @@ AC_CHECK_LIB(popt, poptStrippedArgv,, [AC_MSG_ERROR([
 
   popt 1.5 or newer is required to build gnucash. You can download
   the latest version from ftp://people.redhat.com/sopwith/popt/, or if
-  you're running Debian, install the libpopt-dev pacakge.
+  you're running Debian, install the libpopt-dev package.
 ])])
 
 ### --------------------------------------------------------------------------

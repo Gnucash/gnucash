@@ -1,3 +1,7 @@
+2001-06-20  Dave Peticolas  <dave@krondo.com>
+
+	* configure.in: better error messages. remove cruft.
+
 2001-06-19  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/gnc-numeric.c: use C comments.
@@ -19,7 +23,7 @@
 
 	* src/scm/report/*: fix module reports to use-modules on 
 	srfi-1 and slib where needed. 
-	
+
 2001-06-19  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-nextrun.h: add guards
