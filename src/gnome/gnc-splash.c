@@ -57,6 +57,7 @@ gnc_show_splash_screen (void)
   GtkWidget *vbox;
   GtkWidget *hbox;
   GtkWidget *version;
+  gchar ver_string[50];
 
   if (splash) return;
 
@@ -80,7 +81,8 @@ gnc_show_splash_screen (void)
   frame = gtk_frame_new (NULL);
   vbox = gtk_vbox_new (FALSE, 3);
   hbox = gtk_hbox_new (FALSE, 0);
-  version = gtk_label_new ("Version: Gnucash-CVS");
+  sprintf(ver_string, "Version: Gnucash-%s", VERSION);
+  version = gtk_label_new (ver_string);
 
   gtk_container_add (GTK_CONTAINER (frame), pixmap);
   gtk_box_pack_end (GTK_BOX (hbox), version, TRUE, TRUE, 0);
