@@ -1,3 +1,8 @@
+2004-01-25  Benoit Grégoire <bock@step.polymtl.ca>
+
+	* po/fr.po:  Further translation from Luc Maisonobe.  Also replaced 
+	France specifie "TVA" with the generic "Taxe(s)"
+
 2004-01-19  Herbert Thoma  <herbie@hthoma.de>
 
 	* src/gnome-utils/transfer.glade: rename from_xxx and to_xxx account
