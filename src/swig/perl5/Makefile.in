@@ -33,8 +33,7 @@ INCLPATH = \
 
 # set -Dbool=char because the perl headers need this
 # use -fpic so that we can create loadable module
-CFLAGS := @CFLAGS@  ${INCLPATH} -Dbool=char -fpic -Wno-unused
-CFLAGS := $(filter-out -Werror,${CFLAGS})
+CFLAGS := @CFLAGS@  ${INCLPATH} -Dbool=char #-fpic -Wno-unused
 
 LDFLAGS  = @LDFLAGS@
 

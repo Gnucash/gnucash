@@ -225,7 +225,7 @@ AC_CHECK_LIB(png, png_read_image,
 
 AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
         AC_DEFINE(HAVE_XPM,1) X_LIBS="-lXpm $X_LIBS",
-        AC_DEFINE(HAVE_XPM,0), -L$x_libraries -lX11) 
+        AC_DEFINE(HAVE_XPM,0), $X_PRE_LIBS -lX11 $X_LIBS $X_EXTRA_LIBS) 
 
 # Don't build the xmhtml source if user already has it installed...
 # this is ugly, there must be a nicer way of setting this up ...
@@ -414,7 +414,7 @@ AC_SUBST(GNC_RUNTIME_CONFIGDIR)
 GTKSHEET_DIR="gtksheet"
 AC_SUBST(GTKSHEET_DIR)
 
-CFLAGS="${CFLAGS} -Werror -Wno-unused"
+#CFLAGS="${CFLAGS} -Werror -Wno-unused"
 
 ABSOLUTE_TOP_SRCDIR=`pwd`
 AC_SUBST(ABSOLUTE_TOP_SRCDIR)
