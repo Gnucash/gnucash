@@ -1184,11 +1184,20 @@ print_check_cb(GtkWidget * widget, gpointer data)
   if(split && trans &&
      gh_procedure_p(print_check))
   {
-    payee  = xaccTransGetDescription(trans);
+    if (xaccTransGetTxnType (trans) != TXN_TYPE_NONE) {
+      /* If this is an Invoice or Payment, reverse the meanings of
+       * these fields */
+      memo   = xaccTransGetDescription(trans);
+      payee  = xaccSplitGetMemo(split);
+
+    } else {
+      payee  = xaccTransGetDescription(trans);
+      memo   = xaccSplitGetMemo(split);
+    }
+
     amount = xaccSplitGetAmount(split);
     amount = gnc_numeric_abs (amount);
     date   = xaccTransGetDate(trans);
-    memo   = xaccSplitGetMemo(split);
 
     gh_apply(print_check,
              /* FIXME: when we drop support older guiles, drop the
@@ -2181,7 +2190,7 @@ regWindowLedger (GNCLedgerDisplay *ledger)
     gboolean use_double_line;
     GtkCheckMenuItem *check;
 
-    use_double_line = gnc_ledger_display_default_double_line (reg);
+    use_double_line = gnc_ledger_display_default_double_line (regData->ledger);
 
     /* be sure to initialize the gui elements associated with the cursor */
     gnc_split_register_config (reg, reg->type, reg->style, use_double_line);
