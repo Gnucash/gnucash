@@ -104,7 +104,7 @@ gnc_search_string_init (GNCSearchString *o)
   o->priv = g_malloc0 (sizeof (*o->priv));
   o->value = NULL;
   o->how = SEARCH_STRING_CONTAINS;
-  o->ign_case = FALSE;
+  o->ign_case = TRUE;
 }
 
 static void
