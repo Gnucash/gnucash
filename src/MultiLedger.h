@@ -119,6 +119,14 @@ extern void        xaccRegisterRefresh (SplitRegister *);
  */
 extern void        xaccLedgerDisplayClose (xaccLedgerDisplay *);
 
+/********************************************************************\
+ * sort of a quick hack involving the layout of the register.
+\********************************************************************/
+
+extern void        xaccRegisterCountHack (SplitRegister *splitreg);
+
+extern void xaccDestroyLedgerDisplay (Account *acc);
+
 #endif /* __MULTI_LEDGER_H__ */
 
 /************************** END OF FILE *************************/

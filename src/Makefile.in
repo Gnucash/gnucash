@@ -23,14 +23,25 @@
 
 include @top_srcdir@/Makefile.init
 
-INCLPATH = -I.. -I./engine -I./register -Ireports -I@srcdir@/../include -I@prefix@/include
-CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH} ${CPPFLAGS}
+INCLPATH = -I. \
+           -I.. \
+           -I./engine \
+           -I./register \
+           -Ireports \
+           -I@srcdir@/../include \
+           -I@prefix@/include
 
+GNOME_CFLAGS += -I./gnome
+MOTIF_CFLAGS += -I./motif
+
+CFLAGS = @CFLAGS@ @X_CFLAGS@ ${INCLPATH} ${CPPFLAGS}
 
 ######################################################################
 # See Makefile.common for information about these variables.
-COMMON_SRCS   := MultiLedger.c SplitLedger.c 
+COMMON_SRCS   := MultiLedger.c SplitLedger.c Destroy.c
 CLEAN_SUBDIRS := engine gnome motif register guile reports swig qt scm
+MOTIF_SRCS := FileDialog.c
+GNOME_SRCS := FileDialog.c
 ######################################################################
 
 all: default
@@ -45,7 +56,7 @@ motif: ${MOTIF_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) motif
 	@cd reports;           $(MAKE) default
-	@cd swig;              $(MAKE) default
+	@cd swig;              $(MAKE) motif
 	@cd guile;             $(MAKE) default
 	@cd motif;             $(MAKE) motif
 
@@ -53,7 +64,7 @@ gnome: ${GNOME_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) gnome
 	@cd reports;           $(MAKE) default
-	@cd swig;  	       $(MAKE) default
+	@cd swig;  	           $(MAKE) gnome
 	@cd guile;             $(MAKE) default
 	@cd gnome;             $(MAKE) gnome
 
