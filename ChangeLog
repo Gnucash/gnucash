@@ -3,7 +3,18 @@
 	* lib/egg/egg-action.c: Fix problem connecting toolbar actions and
 	switching a proxy between actions.
 	
-	* lib/egg/egg-menu-merge.c: Make popup menuns work.
+	* lib/egg/egg-menu-merge.c: Make popup menus work.
+
+	* src/gnc-ui.h:
+	* src/gnome/druid-stock-split.[ch]:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/window-acct-tree.c:
+	* src/gnome/window-register.c: Pass a parent window pointer to the
+	stock druid creation routines.
+
+	* src/gnome/gnc-splash.[ch]:
+	* src/gnome-utils/gnc-splash.[ch]: Move this code to the
+	gnome-utils directory.
 
 2003-08-08  David Hampton  <hampton@employees.org>
 
