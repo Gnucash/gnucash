@@ -221,7 +221,7 @@
 	 section
 	 name
 	 sort-tag
-          documentation-string
+         documentation-string
  	 default-value)
    (let* ((value default-value)
           (value->string (lambda () (gnc:value->string value))))
@@ -234,6 +234,37 @@
       (lambda (x)
         (cond ((string? x)(list #t x))
               (else (list #f "currency-option: not a currency code"))))
+      #f #f #f #f)))
+
+;; commodity options use a specialized widget for entering commodities
+;; in the GUI implementation.
+(define (gnc:make-commodity-option
+	 section
+	 name
+	 sort-tag
+         documentation-string
+ 	 default-value)
+
+  (define (commodity->scm commodity)
+    (list 'commodity-scm
+          (gnc:commodity-get-namespace commodity)
+          (gnc:commodity-get-mnemonic commodity)))
+
+  (define (scm->commodity scm)
+    (gnc:commodity-table-lookup
+     (gnc:engine-commodities) (cadr scm) (caddr scm)))
+
+   (let* ((value (commodity->scm default-value))
+          (value->string (lambda () (gnc:value->string value))))
+     (gnc:make-option
+      section name sort-tag 'commodity documentation-string
+      (lambda () (scm->commodity value))
+      (lambda (x) (if (and (pair? x) (eqv? (car x) 'commodity-scm))
+                      (set! value x)
+                      (set! value (commodity->scm x))))
+      (lambda () (commodity->scm default-value))
+      (gnc:restore-form-generator value->string)
+      (lambda (x) (list #t x))
       #f #f #f #f)))
 
 (define (gnc:make-simple-boolean-option

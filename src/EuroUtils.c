@@ -77,66 +77,93 @@ _gnc_euro_rate_compare_(const void * key,
 
 /* ------------------------------------------------------ */
 
-int 
+gboolean
 gnc_is_euro_currency(const gnc_commodity * currency) {
 
   gnc_euro_rate_struct *result;
-  
-  result = (gnc_euro_rate_struct *)
-    bsearch(currency, _gnc_euro_rate_,
-            sizeof(_gnc_euro_rate_)/sizeof(gnc_euro_rate_struct), 
-            sizeof(gnc_euro_rate_struct),
-            _gnc_euro_rate_compare_);
-  
-  if(result == NULL) {
-    return 0;
-  }
-  else {
-    return 1;
-  }
+  const char *namespace;
+
+  if (currency == NULL)
+    return FALSE;
+
+  namespace = gnc_commodity_get_namespace (currency);
+  if (namespace == NULL)
+    return FALSE;
+
+  if (strcmp (namespace, GNC_COMMODITY_NS_ISO) != 0)
+    return FALSE;
+
+  result = bsearch(currency,
+                   _gnc_euro_rate_,
+                   sizeof(_gnc_euro_rate_) / sizeof(gnc_euro_rate_struct), 
+                   sizeof(gnc_euro_rate_struct),
+                   _gnc_euro_rate_compare_);
+
+  if (result == NULL)
+    return FALSE;
+
+  return TRUE;
 }
 
 /* ------------------------------------------------------ */
 
 double
 gnc_convert_to_euro(const gnc_commodity * currency, double value) {
-  
-  gnc_euro_rate_struct *result;
 
-  result = (gnc_euro_rate_struct *)
-    bsearch(currency, _gnc_euro_rate_,
-            sizeof(_gnc_euro_rate_)/sizeof(gnc_euro_rate_struct), 
-            sizeof(gnc_euro_rate_struct),
-            _gnc_euro_rate_compare_);
-  
-  if(result == NULL) {
+  gnc_euro_rate_struct *result;
+  const char *namespace;
+
+  if (currency == NULL)
     return 0.0;
-  }
-  else {
-    /* round to 2 decimal places */
-    return (floor(((value / result->rate) * 100.0) + 0.5) / 100.0); 
-  }
+
+  namespace = gnc_commodity_get_namespace (currency);
+  if (namespace == NULL)
+    return FALSE;
+
+  if (strcmp (namespace, GNC_COMMODITY_NS_ISO) != 0)
+    return FALSE;
+
+  result = bsearch(currency,
+                   _gnc_euro_rate_,
+                   sizeof(_gnc_euro_rate_) / sizeof(gnc_euro_rate_struct), 
+                   sizeof(gnc_euro_rate_struct),
+                   _gnc_euro_rate_compare_);
+
+  if (result == NULL)
+    return 0.0;
+
+  /* round to 2 decimal places */
+  return (floor(((value / result->rate) * 100.0) + 0.5) / 100.0); 
 }
 
 /* ------------------------------------------------------ */
 
 double 
 gnc_convert_from_euro(const gnc_commodity * currency, double value) {
-  
+
   gnc_euro_rate_struct * result;
-  
-  result = (gnc_euro_rate_struct *)
-    bsearch(currency, _gnc_euro_rate_,
-            sizeof(_gnc_euro_rate_)/sizeof(gnc_euro_rate_struct), 
-            sizeof(gnc_euro_rate_struct),
-            _gnc_euro_rate_compare_);
-  
-  if(result == NULL) {
+  const char *namespace;
+
+  if (currency == NULL)
     return 0.0;
-  }
-  else {
-    return (value * result->rate);
-  }
+
+  namespace = gnc_commodity_get_namespace (currency);
+  if (namespace == NULL)
+    return FALSE;
+
+  if (strcmp (namespace, GNC_COMMODITY_NS_ISO) != 0)
+    return FALSE;
+
+  result = bsearch(currency,
+                   _gnc_euro_rate_,
+                   sizeof(_gnc_euro_rate_) / sizeof(gnc_euro_rate_struct), 
+                   sizeof(gnc_euro_rate_struct),
+                   _gnc_euro_rate_compare_);
+
+  if (result == NULL)
+    return 0.0;
+
+  return (value * result->rate);
 }
 
 /************************** END OF FILE *************************/

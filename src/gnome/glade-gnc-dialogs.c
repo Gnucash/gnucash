@@ -2729,25 +2729,25 @@ create_Financial_Calculator_Dialog (void)
   GtkWidget *label799;
   GtkWidget *interest_rate_clear_button;
   GtkWidget *interest_rate_calc_button;
-  GtkWidget *interest_rate_entry;
+  GtkWidget *interest_rate_hbox;
   GtkWidget *vbox68;
   GtkWidget *hbox56;
   GtkWidget *label800;
   GtkWidget *present_value_clear_button;
   GtkWidget *present_value_calc_button;
-  GtkWidget *present_value_entry;
+  GtkWidget *present_value_hbox;
   GtkWidget *vbox69;
   GtkWidget *hbox57;
   GtkWidget *label801;
   GtkWidget *periodic_payment_clear_button;
   GtkWidget *periodic_payment_calc_button;
-  GtkWidget *periodic_payment_entry;
+  GtkWidget *periodic_payment_hbox;
   GtkWidget *vbox70;
   GtkWidget *hbox58;
   GtkWidget *label802;
   GtkWidget *future_value_clear_button;
   GtkWidget *future_value_calc_button;
-  GtkWidget *future_value_entry;
+  GtkWidget *future_value_hbox;
   GtkWidget *frame27;
   GtkWidget *vbox65;
   GtkWidget *hbox51;
@@ -2768,6 +2768,9 @@ create_Financial_Calculator_Dialog (void)
   GSList *compouding_group_group = NULL;
   GtkWidget *discrete_compounding_radio;
   GtkWidget *radiobutton6;
+  GtkWidget *hbox76;
+  GtkWidget *_;
+  GtkWidget *payment_total_label;
   GtkWidget *dialog_action_area10;
   GtkWidget *schedule_button;
   GtkWidget *close_button;
@@ -2889,12 +2892,12 @@ create_Financial_Calculator_Dialog (void)
   gtk_widget_show (interest_rate_calc_button);
   gtk_box_pack_end (GTK_BOX (hbox55), interest_rate_calc_button, FALSE, FALSE, 0);
 
-  interest_rate_entry = gtk_entry_new ();
-  gtk_widget_ref (interest_rate_entry);
-  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "interest_rate_entry", interest_rate_entry,
+  interest_rate_hbox = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (interest_rate_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "interest_rate_hbox", interest_rate_hbox,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (interest_rate_entry);
-  gtk_box_pack_start (GTK_BOX (vbox67), interest_rate_entry, FALSE, FALSE, 0);
+  gtk_widget_show (interest_rate_hbox);
+  gtk_box_pack_start (GTK_BOX (vbox67), interest_rate_hbox, FALSE, FALSE, 0);
 
   vbox68 = gtk_vbox_new (FALSE, 2);
   gtk_widget_ref (vbox68);
@@ -2934,12 +2937,12 @@ create_Financial_Calculator_Dialog (void)
   gtk_widget_show (present_value_calc_button);
   gtk_box_pack_end (GTK_BOX (hbox56), present_value_calc_button, FALSE, FALSE, 0);
 
-  present_value_entry = gtk_entry_new ();
-  gtk_widget_ref (present_value_entry);
-  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "present_value_entry", present_value_entry,
+  present_value_hbox = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (present_value_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "present_value_hbox", present_value_hbox,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (present_value_entry);
-  gtk_box_pack_start (GTK_BOX (vbox68), present_value_entry, FALSE, FALSE, 0);
+  gtk_widget_show (present_value_hbox);
+  gtk_box_pack_start (GTK_BOX (vbox68), present_value_hbox, FALSE, FALSE, 0);
 
   vbox69 = gtk_vbox_new (FALSE, 2);
   gtk_widget_ref (vbox69);
@@ -2979,12 +2982,12 @@ create_Financial_Calculator_Dialog (void)
   gtk_widget_show (periodic_payment_calc_button);
   gtk_box_pack_end (GTK_BOX (hbox57), periodic_payment_calc_button, FALSE, FALSE, 0);
 
-  periodic_payment_entry = gtk_entry_new ();
-  gtk_widget_ref (periodic_payment_entry);
-  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "periodic_payment_entry", periodic_payment_entry,
+  periodic_payment_hbox = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (periodic_payment_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "periodic_payment_hbox", periodic_payment_hbox,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (periodic_payment_entry);
-  gtk_box_pack_start (GTK_BOX (vbox69), periodic_payment_entry, FALSE, FALSE, 0);
+  gtk_widget_show (periodic_payment_hbox);
+  gtk_box_pack_start (GTK_BOX (vbox69), periodic_payment_hbox, FALSE, FALSE, 0);
 
   vbox70 = gtk_vbox_new (FALSE, 2);
   gtk_widget_ref (vbox70);
@@ -3024,12 +3027,12 @@ create_Financial_Calculator_Dialog (void)
   gtk_widget_show (future_value_calc_button);
   gtk_box_pack_end (GTK_BOX (hbox58), future_value_calc_button, FALSE, FALSE, 0);
 
-  future_value_entry = gtk_entry_new ();
-  gtk_widget_ref (future_value_entry);
-  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "future_value_entry", future_value_entry,
+  future_value_hbox = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (future_value_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "future_value_hbox", future_value_hbox,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (future_value_entry);
-  gtk_box_pack_start (GTK_BOX (vbox70), future_value_entry, FALSE, FALSE, 0);
+  gtk_widget_show (future_value_hbox);
+  gtk_box_pack_start (GTK_BOX (vbox70), future_value_hbox, FALSE, FALSE, 0);
 
   frame27 = gtk_frame_new (NULL);
   gtk_widget_ref (frame27);
@@ -3039,7 +3042,7 @@ create_Financial_Calculator_Dialog (void)
   gtk_box_pack_start (GTK_BOX (hbox54), frame27, TRUE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame27), 3);
 
-  vbox65 = gtk_vbox_new (TRUE, 10);
+  vbox65 = gtk_vbox_new (FALSE, 10);
   gtk_widget_ref (vbox65);
   gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "vbox65", vbox65,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -3199,7 +3202,7 @@ create_Financial_Calculator_Dialog (void)
   gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "vbox72", vbox72,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (vbox72);
-  gtk_box_pack_start (GTK_BOX (vbox65), vbox72, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox65), vbox72, FALSE, FALSE, 0);
 
   discrete_compounding_radio = gtk_radio_button_new_with_label (compouding_group_group, _("Discrete Compounding"));
   compouding_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (discrete_compounding_radio));
@@ -3217,6 +3220,27 @@ create_Financial_Calculator_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (radiobutton6);
   gtk_box_pack_start (GTK_BOX (vbox72), radiobutton6, FALSE, FALSE, 0);
+
+  hbox76 = gtk_hbox_new (FALSE, 3);
+  gtk_widget_ref (hbox76);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "hbox76", hbox76,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox76);
+  gtk_box_pack_end (GTK_BOX (vbox65), hbox76, FALSE, FALSE, 0);
+
+  _ = gtk_label_new (_("Payment Total:"));
+  gtk_widget_ref (_);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "_", _,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (_);
+  gtk_box_pack_start (GTK_BOX (hbox76), _, FALSE, FALSE, 0);
+
+  payment_total_label = gtk_label_new (_("total"));
+  gtk_widget_ref (payment_total_label);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "payment_total_label", payment_total_label,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (payment_total_label);
+  gtk_box_pack_start (GTK_BOX (hbox76), payment_total_label, FALSE, FALSE, 0);
 
   dialog_action_area10 = GNOME_DIALOG (Financial_Calculator_Dialog)->action_area;
   gtk_object_set_data (GTK_OBJECT (Financial_Calculator_Dialog), "dialog_action_area10", dialog_action_area10);
@@ -3826,12 +3850,8 @@ create_Account_Dialog (void)
   GtkWidget *vbox77;
   GtkWidget *name_entry;
   GtkWidget *description_entry;
-  GtkWidget *hbox67;
-  GtkWidget *currency_entry;
-  GtkWidget *currency_button;
-  GtkWidget *hbox66;
-  GtkWidget *security_entry;
-  GtkWidget *security_button;
+  GtkWidget *currency_hbox;
+  GtkWidget *security_hbox;
   GtkWidget *code_entry;
   GtkWidget *hbox65;
   GtkWidget *frame29;
@@ -3955,49 +3975,19 @@ create_Account_Dialog (void)
   gtk_widget_show (description_entry);
   gtk_box_pack_start (GTK_BOX (vbox77), description_entry, FALSE, FALSE, 0);
 
-  hbox67 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox67);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "hbox67", hbox67,
+  currency_hbox = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (currency_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "currency_hbox", currency_hbox,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox67);
-  gtk_box_pack_start (GTK_BOX (vbox77), hbox67, TRUE, TRUE, 0);
+  gtk_widget_show (currency_hbox);
+  gtk_box_pack_start (GTK_BOX (vbox77), currency_hbox, TRUE, TRUE, 0);
 
-  currency_entry = gtk_entry_new ();
-  gtk_widget_ref (currency_entry);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "currency_entry", currency_entry,
+  security_hbox = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (security_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "security_hbox", security_hbox,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (currency_entry);
-  gtk_box_pack_start (GTK_BOX (hbox67), currency_entry, TRUE, TRUE, 0);
-  gtk_entry_set_editable (GTK_ENTRY (currency_entry), FALSE);
-
-  currency_button = gtk_button_new_with_label (_("Select..."));
-  gtk_widget_ref (currency_button);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "currency_button", currency_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (currency_button);
-  gtk_box_pack_start (GTK_BOX (hbox67), currency_button, FALSE, FALSE, 0);
-
-  hbox66 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox66);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "hbox66", hbox66,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox66);
-  gtk_box_pack_start (GTK_BOX (vbox77), hbox66, TRUE, TRUE, 0);
-
-  security_entry = gtk_entry_new ();
-  gtk_widget_ref (security_entry);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "security_entry", security_entry,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (security_entry);
-  gtk_box_pack_start (GTK_BOX (hbox66), security_entry, TRUE, TRUE, 0);
-  gtk_entry_set_editable (GTK_ENTRY (security_entry), FALSE);
-
-  security_button = gtk_button_new_with_label (_("Select..."));
-  gtk_widget_ref (security_button);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "security_button", security_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (security_button);
-  gtk_box_pack_start (GTK_BOX (hbox66), security_button, FALSE, FALSE, 0);
+  gtk_widget_show (security_hbox);
+  gtk_box_pack_start (GTK_BOX (vbox77), security_hbox, TRUE, TRUE, 0);
 
   code_entry = gtk_entry_new ();
   gtk_widget_ref (code_entry);
@@ -4020,7 +4010,6 @@ create_Account_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame29);
   gtk_box_pack_start (GTK_BOX (hbox65), frame29, FALSE, FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (frame29), 3);
 
   scrolledwindow7 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_ref (scrolledwindow7);
@@ -4053,7 +4042,6 @@ create_Account_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame30);
   gtk_box_pack_start (GTK_BOX (hbox65), frame30, TRUE, TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (frame30), 3);
 
   parent_scroll = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_ref (parent_scroll);
@@ -4143,13 +4131,6 @@ create_Account_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (button72);
   GTK_WIDGET_SET_FLAGS (button72, GTK_CAN_DEFAULT);
-
-  gtk_signal_connect (GTK_OBJECT (currency_button), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_account_window_select_currency_cb),
-                      Account_Dialog);
-  gtk_signal_connect (GTK_OBJECT (security_button), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_account_window_select_security_cb),
-                      Account_Dialog);
 
   return Account_Dialog;
 }

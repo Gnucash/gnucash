@@ -34,10 +34,11 @@
 #include "Refresh.h"
 #include "window-main.h"
 #include "dialog-utils.h"
-#include "dialog-commodity.h"
 #include "account-tree.h"
 #include "global-options.h"
 #include "gnc-commodity.h"
+#include "gnc-commodity-edit.h"
+#include "gnc-engine.h"
 #include "glade-gnc-dialogs.h"
 #include "ui-callbacks.h"
 #include "window-help.h"
@@ -69,12 +70,8 @@ struct _AccountWindow
   GtkWidget * code_entry;
   GtkWidget * notes_text;
 
-  GtkWidget     * currency_entry;
-  const gnc_commodity * selected_currency;
- 
-  GtkWidget     * security_entry;
-  GtkWidget     * security_button;
-  const gnc_commodity * selected_security;
+  GtkWidget * currency_edit;
+  GtkWidget * security_edit;
 
   GtkWidget * type_list;
   GtkWidget * parent_tree;
@@ -98,6 +95,7 @@ static gboolean default_currency_dynamically_allocated = FALSE;
 static GList *new_account_windows = NULL;
 static AccountWindow ** editAccountList = NULL;
 
+
 /** Implementation *******************************************************/
 
 /* Copy the account values to the GUI widgets */
@@ -115,24 +113,12 @@ gnc_account_to_ui(AccountWindow *aw)
   gtk_entry_set_text(GTK_ENTRY(aw->description_entry), string);
 
   commodity = xaccAccountGetCurrency (aw->account);
-  if(commodity) {
-    gtk_entry_set_text(GTK_ENTRY(aw->currency_entry), 
-                       gnc_commodity_get_printname(commodity));
-  }
-  else {
-    gtk_entry_set_text(GTK_ENTRY(aw->currency_entry), "");
-  }
-  aw->selected_currency = commodity;
-  
+  gnc_commodity_edit_set_commodity (GNC_COMMODITY_EDIT (aw->currency_edit),
+                                    commodity);
+
   commodity = xaccAccountGetSecurity (aw->account);
-  if(commodity) {
-    gtk_entry_set_text(GTK_ENTRY(aw->security_entry), 
-                       gnc_commodity_get_printname(commodity));
-  }
-  else {
-    gtk_entry_set_text(GTK_ENTRY(aw->security_entry), "");
-  }
-  aw->selected_security = commodity;
+  gnc_commodity_edit_set_commodity (GNC_COMMODITY_EDIT (aw->security_edit),
+                                    commodity);
   
   string = xaccAccountGetCode (aw->account);
   gtk_entry_set_text(GTK_ENTRY(aw->code_entry), string);
@@ -162,6 +148,7 @@ gnc_account_to_ui(AccountWindow *aw)
 static void
 gnc_ui_to_account(AccountWindow *aw)
 {
+  const gnc_commodity *commodity;
   Account *parent_account;
   const char *old_string;
   const char *string;
@@ -181,26 +168,27 @@ gnc_ui_to_account(AccountWindow *aw)
   if (safe_strcmp (string, old_string) != 0)
     xaccAccountSetDescription (aw->account, string);
 
-  if (aw->selected_currency && 
-      !gnc_commodity_equiv(aw->selected_currency, 
-                           xaccAccountGetCurrency(aw->account))) {
-    xaccAccountSetCurrency (aw->account, aw->selected_currency);
-  }
+  commodity =
+    gnc_commodity_edit_get_commodity (GNC_COMMODITY_EDIT (aw->currency_edit));
+  if (commodity &&
+      !gnc_commodity_equiv(commodity, xaccAccountGetCurrency(aw->account)))
+    xaccAccountSetCurrency (aw->account, commodity);
 
   string = gtk_entry_get_text (GTK_ENTRY(aw->code_entry));
   old_string = xaccAccountGetCode (aw->account);
   if (safe_strcmp (string, old_string) != 0)
     xaccAccountSetCode (aw->account, string);
 
-  if ((STOCK == aw->type) || (MUTUAL == aw->type) || (CURRENCY == aw->type)) {
+  if ((STOCK == aw->type) || (MUTUAL == aw->type) || (CURRENCY == aw->type))
+  {
+    commodity = gnc_commodity_edit_get_commodity
+      (GNC_COMMODITY_EDIT (aw->security_edit));
+    if (commodity &&
+        !gnc_commodity_equiv(commodity, xaccAccountGetSecurity(aw->account)))
+      xaccAccountSetSecurity (aw->account, commodity);
 
-    if (aw->selected_security && 
-        !gnc_commodity_equiv(aw->selected_security, 
-                             xaccAccountGetSecurity(aw->account))) {
-      xaccAccountSetSecurity (aw->account, aw->selected_security);
-    }
-
-    if((STOCK == aw->type) || (MUTUAL == aw->type)) {
+    if((STOCK == aw->type) || (MUTUAL == aw->type))
+    {
       gint code;
 
       code = gnc_option_menu_get_active (aw->source_menu);
@@ -380,9 +368,8 @@ gnc_account_change_currency_security(Account *account,
   old_security = xaccAccountGetSecurity(account);
 
   if ((gnc_commodity_equiv(currency, old_currency)) &&
-      (gnc_commodity_equiv(security, old_security))) {
+      (gnc_commodity_equiv(security, old_security)))
     return;
-  }
 
   if (!gnc_commodity_equiv(currency, old_currency))
   {
@@ -392,7 +379,7 @@ gnc_account_change_currency_security(Account *account,
   else
     new_currency = FALSE;
 
-  if (gnc_commodity_equiv(security, old_security)) 
+  if (security && !gnc_commodity_equiv(security, old_security)) 
   {
     g_hash_table_insert(change_security, account, (gpointer) security);
     new_security = TRUE;
@@ -469,7 +456,7 @@ gnc_account_change_currency_security(Account *account,
           g_hash_table_insert(change_security, a, (gpointer) security);
           add_it = TRUE;
         }
-        
+
         if (new_currency && (gnc_commodity_equiv(old_currency, commodity)))
         {
           g_hash_table_insert(change_security, a, (gpointer) currency);
@@ -500,27 +487,30 @@ fill_helper(gpointer key, gpointer value, gpointer data)
   gchar *account_field_name;
   gchar *account_field_value;
   gchar *value_str;
-  
-  if(fs == NULL) return;
-  if(fs->account == account) return;
-  
+
+  if (fs == NULL) return;
+  if (fs->account == account) return;
+
   full_name = xaccAccountGetFullName(account, gnc_get_account_separator());
-  if(!full_name) {
+  if(!full_name)
     full_name = g_strdup("");
-  } else {
+  else
+  {
     /* Make sure this was allocated with glib funcs */
     gchar *tmp = full_name;
     full_name = g_strdup(tmp);
     free(tmp);
   }
-  
+
   account_field_name = g_strdup(gnc_ui_get_account_field_name(fs->field));
-  if(!account_field_name) account_field_name = g_strdup("");
-  
+  if (!account_field_name)
+    account_field_name = g_strdup("");
+
   account_field_value = 
     g_strdup(gnc_ui_get_account_field_value_string(account, fs->field));
-  if(!account_field_value) account_field_value = g_strdup("");
-  
+  if (!account_field_value)
+    account_field_value = g_strdup("");
+
   switch (fs->field)
   {
     case ACCOUNT_CURRENCY:
@@ -540,11 +530,13 @@ fill_helper(gpointer key, gpointer value, gpointer data)
 
   {  
     gchar *strings[5];
+
     strings[0] = full_name;
     strings[1] = account_field_name;
     strings[2] = account_field_value;
     strings[3] = value_str;
     strings[4] = NULL; 
+
     gtk_clist_append(fs->list, strings);
   }
 
@@ -742,8 +734,10 @@ gnc_edit_account_ok(AccountWindow *aw)
   change_security = g_hash_table_new(NULL, NULL);
   change_type     = g_hash_table_new(NULL, NULL);
 
-  currency = aw->selected_currency;
-  security = aw->selected_security;
+  currency =
+    gnc_commodity_edit_get_commodity (GNC_COMMODITY_EDIT (aw->currency_edit));
+  security =
+    gnc_commodity_edit_get_commodity (GNC_COMMODITY_EDIT (aw->security_edit));
 
   gnc_account_change_currency_security(account,
                                        change_currency,
@@ -893,46 +887,6 @@ gnc_new_account_ok (AccountWindow *aw)
 }
 
 
-/*************************************************************
- * currecy/security selector callbacks 
- *************************************************************/
-
-void
-gnc_account_window_select_currency_cb(GtkButton * button, 
-                                      gpointer user_data) {
-  GtkWidget * dialog = user_data;
-  AccountWindow * aw = 
-    gtk_object_get_data(GTK_OBJECT(dialog), "account_window_struct");
-
-  const gnc_commodity * new_currency = 
-    gnc_ui_select_commodity_modal(aw->selected_currency, NULL);
-
-  /* NULL return means cancel; no change */
-  if(new_currency) {
-    aw->selected_currency = new_currency;
-    gtk_entry_set_text(GTK_ENTRY(aw->currency_entry),
-                       gnc_commodity_get_printname(new_currency));
-  }
-}
-
-void
-gnc_account_window_select_security_cb(GtkButton * button, 
-                                      gpointer user_data) {
-  GtkWidget * dialog = user_data;
-  AccountWindow * aw = 
-    gtk_object_get_data(GTK_OBJECT(dialog), "account_window_struct");
-
-  const gnc_commodity * new_security = 
-    gnc_ui_select_commodity_modal(aw->selected_security, NULL);
-  
-  if(new_security) {
-    aw->selected_security = new_security;
-    gtk_entry_set_text(GTK_ENTRY(aw->security_entry),
-                       gnc_commodity_get_printname(new_security));
-  }
-}
-
-
 static void
 gnc_account_window_ok_cb(GtkWidget * widget, gpointer data)
 {
@@ -1050,7 +1004,7 @@ gnc_type_list_select_cb(GtkCList * type_list, gint row, gint column,
 	       aw->type == MUTUAL   ||
 	       aw->type == CURRENCY);
 
-  gtk_widget_set_sensitive(aw->security_button, sensitive);
+  gtk_widget_set_sensitive(aw->security_edit, sensitive);
   gtk_widget_set_sensitive(aw->source_menu, sensitive);
 }
 
@@ -1063,7 +1017,7 @@ gnc_type_list_unselect_cb(GtkCList * type_list, gint row, gint column,
 
   aw->type = BAD_TYPE;
 
-  gtk_widget_set_sensitive(aw->security_button, FALSE);
+  gtk_widget_set_sensitive(aw->security_edit, FALSE);
   gtk_widget_set_sensitive(aw->source_menu, FALSE);
 }
 
@@ -1206,18 +1160,20 @@ gnc_account_window_create(AccountWindow *aw)
   aw->description_entry = gtk_object_get_data(awo, "description_entry");
   aw->code_entry =        gtk_object_get_data(awo, "code_entry");
   aw->notes_text =        gtk_object_get_data(awo, "notes_text");
-  aw->currency_entry =    gtk_object_get_data(awo, "currency_entry");
-  aw->security_entry =    gtk_object_get_data(awo, "security_entry");
-  aw->security_button =   gtk_object_get_data(awo, "security_button");
-
-  aw->selected_currency = NULL;
-  aw->selected_security = NULL;
 
   gtk_object_set_data(awo, "account_window_struct", aw);
 
   gnome_dialog_editable_enters(awd, GTK_EDITABLE(aw->name_entry));
   gnome_dialog_editable_enters(awd, GTK_EDITABLE(aw->description_entry));
   gnome_dialog_editable_enters(awd, GTK_EDITABLE(aw->code_entry));
+
+  box = gtk_object_get_data(awo, "currency_hbox");
+  aw->currency_edit = gnc_commodity_edit_new ();
+  gtk_box_pack_start(GTK_BOX(box), aw->currency_edit, TRUE, TRUE, 0);
+
+  box = gtk_object_get_data(awo, "security_hbox");
+  aw->security_edit = gnc_commodity_edit_new ();
+  gtk_box_pack_start(GTK_BOX(box), aw->security_edit, TRUE, TRUE, 0);
 
   box = gtk_object_get_data(awo, "source_box");
   aw->source_menu = gnc_ui_source_menu_create(aw->account);
@@ -1264,6 +1220,7 @@ gnc_account_window_create(AccountWindow *aw)
 AccountWindow *
 gnc_ui_new_account_window (AccountGroup *this_is_not_used) 
 {
+  const gnc_commodity *commodity;
   AccountWindow *aw;
   Account *parent;
 
@@ -1275,15 +1232,14 @@ gnc_ui_new_account_window (AccountGroup *this_is_not_used)
 
   gnc_account_window_create(aw);
   new_account_windows = g_list_prepend(new_account_windows, aw->dialog);
-  
-  aw->selected_currency = 
-    gnc_commodity_table_lookup(gnc_engine_commodities(),
-                               GNC_COMMODITY_NS_ISO,
-                               default_currency);
-  
-  gtk_entry_set_text(GTK_ENTRY(aw->currency_entry),
-                     gnc_commodity_get_printname(aw->selected_currency));
-  
+
+  commodity = gnc_commodity_table_lookup(gnc_engine_commodities(),
+                                         GNC_COMMODITY_NS_ISO,
+                                         default_currency);
+
+  gnc_commodity_edit_set_commodity (GNC_COMMODITY_EDIT (aw->currency_edit),
+                                    commodity);
+
   gtk_widget_show_all(aw->dialog);
 
   parent = gnc_get_current_account();

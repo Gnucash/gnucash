@@ -180,15 +180,16 @@ the account instead of opening a register." #f))
 	#(locale "Locale" "Default system locale format"))))
 
 (gnc:register-configuration-option
- (gnc:make-currency-option
+ (gnc:make-commodity-option
   "International" "Default Currency"
-  "b" "Default Currency For New Accounts"
+  "b" "Default currency for new accounts"
   (gnc:locale-default-currency)))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   "International" "Use 24-hour time format"
   "c" "Use a 24 hour (instead of a 12 hour) time format." #f))
+
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   "International" "Enable EURO support"
@@ -375,8 +376,8 @@ transaction." #t))
  (gnc:make-multichoice-option
   "General" "Reversed-balance account types"
   "d" "The types of accounts for which balances are sign-reversed"
- 'default
-  (list #(default "Income & Expense" "Reverse Income and Expense Accounts")
+ 'credit
+  (list #(income-expense "Income & Expense" "Reverse Income and Expense Accounts")
         #(credit "Credit Accounts" "Reverse Credit Card, Liability, Equity, and Income Accounts")
         #(none "None" "Don't reverse any accounts"))))
 

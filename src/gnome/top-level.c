@@ -746,9 +746,9 @@ gnc_configure_reverse_balance(void)
 
   choice = gnc_lookup_multichoice_option("General",
                                          "Reversed-balance account types",
-                                         "default");
+                                         "credit");
 
-  if (safe_strcmp(choice, "default") == 0)
+  if (safe_strcmp(choice, "income-expense") == 0)
   {
     reverse_type[INCOME]  = TRUE;
     reverse_type[EXPENSE] = TRUE;

@@ -4256,18 +4256,19 @@ Contingency
 	    </widget>
 
 	    <widget>
-	      <class>GtkEntry</class>
-	      <name>interest_rate_entry</name>
-	      <can_focus>True</can_focus>
-	      <editable>True</editable>
-	      <text_visible>True</text_visible>
-	      <text_max_length>0</text_max_length>
-	      <text></text>
+	      <class>GtkHBox</class>
+	      <name>interest_rate_hbox</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>
 		<fill>False</fill>
 	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
 	    </widget>
 	  </widget>
 
@@ -4339,18 +4340,19 @@ Contingency
 	    </widget>
 
 	    <widget>
-	      <class>GtkEntry</class>
-	      <name>present_value_entry</name>
-	      <can_focus>True</can_focus>
-	      <editable>True</editable>
-	      <text_visible>True</text_visible>
-	      <text_max_length>0</text_max_length>
-	      <text></text>
+	      <class>GtkHBox</class>
+	      <name>present_value_hbox</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>
 		<fill>False</fill>
 	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
 	    </widget>
 	  </widget>
 
@@ -4422,18 +4424,19 @@ Contingency
 	    </widget>
 
 	    <widget>
-	      <class>GtkEntry</class>
-	      <name>periodic_payment_entry</name>
-	      <can_focus>True</can_focus>
-	      <editable>True</editable>
-	      <text_visible>True</text_visible>
-	      <text_max_length>0</text_max_length>
-	      <text></text>
+	      <class>GtkHBox</class>
+	      <name>periodic_payment_hbox</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>
 		<fill>False</fill>
 	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
 	    </widget>
 	  </widget>
 
@@ -4505,18 +4508,19 @@ Contingency
 	    </widget>
 
 	    <widget>
-	      <class>GtkEntry</class>
-	      <name>future_value_entry</name>
-	      <can_focus>True</can_focus>
-	      <editable>True</editable>
-	      <text_visible>True</text_visible>
-	      <text_max_length>0</text_max_length>
-	      <text></text>
+	      <class>GtkHBox</class>
+	      <name>future_value_hbox</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>
 		<fill>False</fill>
 	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
 	    </widget>
 	  </widget>
 	</widget>
@@ -4538,7 +4542,7 @@ Contingency
 	  <class>GtkVBox</class>
 	  <name>vbox65</name>
 	  <border_width>5</border_width>
-	  <homogeneous>True</homogeneous>
+	  <homogeneous>False</homogeneous>
 	  <spacing>10</spacing>
 
 	  <widget>
@@ -4708,8 +4712,8 @@ Daily (365)
 	    <spacing>0</spacing>
 	    <child>
 	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
+	      <expand>False</expand>
+	      <fill>False</fill>
 	    </child>
 
 	    <widget>
@@ -4735,6 +4739,53 @@ Daily (365)
 	      <active>False</active>
 	      <draw_indicator>True</draw_indicator>
 	      <group>compouding_group</group>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkHBox</class>
+	    <name>hbox76</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>3</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	      <pack>GTK_PACK_END</pack>
+	    </child>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name></name>
+	      <label>Payment Total:</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>payment_total_label</name>
+	      <label>total</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>
@@ -5792,7 +5843,7 @@ Daily (365)
 
 	    <widget>
 	      <class>GtkHBox</class>
-	      <name>hbox67</name>
+	      <name>currency_hbox</name>
 	      <homogeneous>False</homogeneous>
 	      <spacing>0</spacing>
 	      <child>
@@ -5802,42 +5853,13 @@ Daily (365)
 	      </child>
 
 	      <widget>
-		<class>GtkEntry</class>
-		<name>currency_entry</name>
-		<can_focus>True</can_focus>
-		<editable>False</editable>
-		<text_visible>True</text_visible>
-		<text_max_length>0</text_max_length>
-		<text></text>
-		<child>
-		  <padding>0</padding>
-		  <expand>True</expand>
-		  <fill>True</fill>
-		</child>
-	      </widget>
-
-	      <widget>
-		<class>GtkButton</class>
-		<name>currency_button</name>
-		<can_focus>True</can_focus>
-		<signal>
-		  <name>clicked</name>
-		  <handler>gnc_account_window_select_currency_cb</handler>
-		  <data>Account_Dialog</data>
-		  <last_modification_time>Thu, 10 Aug 2000 14:31:04 GMT</last_modification_time>
-		</signal>
-		<label>Select...</label>
-		<child>
-		  <padding>0</padding>
-		  <expand>False</expand>
-		  <fill>False</fill>
-		</child>
+		<class>Placeholder</class>
 	      </widget>
 	    </widget>
 
 	    <widget>
 	      <class>GtkHBox</class>
-	      <name>hbox66</name>
+	      <name>security_hbox</name>
 	      <homogeneous>False</homogeneous>
 	      <spacing>0</spacing>
 	      <child>
@@ -5847,36 +5869,7 @@ Daily (365)
 	      </child>
 
 	      <widget>
-		<class>GtkEntry</class>
-		<name>security_entry</name>
-		<can_focus>True</can_focus>
-		<editable>False</editable>
-		<text_visible>True</text_visible>
-		<text_max_length>0</text_max_length>
-		<text></text>
-		<child>
-		  <padding>0</padding>
-		  <expand>True</expand>
-		  <fill>True</fill>
-		</child>
-	      </widget>
-
-	      <widget>
-		<class>GtkButton</class>
-		<name>security_button</name>
-		<can_focus>True</can_focus>
-		<signal>
-		  <name>clicked</name>
-		  <handler>gnc_account_window_select_security_cb</handler>
-		  <data>Account_Dialog</data>
-		  <last_modification_time>Thu, 10 Aug 2000 16:48:12 GMT</last_modification_time>
-		</signal>
-		<label>Select...</label>
-		<child>
-		  <padding>0</padding>
-		  <expand>False</expand>
-		  <fill>False</fill>
-		</child>
+		<class>Placeholder</class>
 	      </widget>
 	    </widget>
 
@@ -5913,7 +5906,6 @@ Daily (365)
 	<widget>
 	  <class>GtkFrame</class>
 	  <name>frame29</name>
-	  <border_width>3</border_width>
 	  <label>Account Type</label>
 	  <label_xalign>0</label_xalign>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
@@ -5961,7 +5953,6 @@ Daily (365)
 	<widget>
 	  <class>GtkFrame</class>
 	  <name>frame30</name>
-	  <border_width>3</border_width>
 	  <label>Parent Account</label>
 	  <label_xalign>0</label_xalign>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>

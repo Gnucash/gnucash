@@ -487,10 +487,11 @@
                       (set! names (cons stock-name names))
                       (hash-set! newhash stock-name 
                                  (gnc:commodity-create 
-                                  stock-name "share" "mill"
+                                  stock-name
                                   GNC_COMMODITY_NS_NYSE
-                                  stock-name 0 1000 1000)))))))
+                                  stock-name
+                                  ""
+                                  1000)))))))
         bin))
      (vector->list hash-table))
     (list newhash (sort names string<?))))
-

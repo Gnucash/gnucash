@@ -432,22 +432,24 @@ gnc_date_edit_destroy (GtkObject *object)
 
 static void
 gnc_date_edit_forall (GtkContainer *container, gboolean include_internals,
-			GtkCallback callback, gpointer callback_data)
+                      GtkCallback callback, gpointer callback_data)
 {
 	g_return_if_fail (container != NULL);
 	g_return_if_fail (GNC_IS_DATE_EDIT (container));
 	g_return_if_fail (callback != NULL);
 
-	/* Let GtkBox handle things only if the internal widgets need to be
-	 * poked.
-	 */
-	if (include_internals)
-		if (GTK_CONTAINER_CLASS (parent_class)->forall)
-			(* GTK_CONTAINER_CLASS (parent_class)->forall)
-                                (container,
-                                 include_internals,
-                                 callback,
-                                 callback_data);
+	/* Let GtkBox handle things only if the internal widgets need
+	 * to be poked.  */
+	if (!include_internals)
+                return;
+
+        if (!GTK_CONTAINER_CLASS (parent_class)->forall)
+                return;
+
+        GTK_CONTAINER_CLASS (parent_class)->forall (container,
+                                                    include_internals,
+                                                    callback,
+                                                    callback_data);
 }
 
 /**

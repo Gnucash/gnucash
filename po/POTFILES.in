@@ -21,6 +21,7 @@ src/gnome/druid-commodity.c
 src/gnome/druid-qif-import.c
 src/gnome/file-history.c
 src/gnome/glade-gnc-dialogs.c
+src/gnome/gnc-commodity-edit.c
 src/gnome/gnc-datedelta.c
 src/gnome/print-session.c
 src/gnome/reconcile-list.c

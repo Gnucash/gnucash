@@ -23,6 +23,7 @@ libgncgnome_a_SOURCES = \
   file-history.c \
   glade-gnc-dialogs.c \
   gnc-amount-edit.c \
+  gnc-commodity-edit.c \
   gnc-currency-edit.c \
   gnc-datedelta.c \
   gnc-dateedit.c \
@@ -64,6 +65,7 @@ noinst_HEADERS = \
   glade-gnc-dialogs.h \
   glade-support-gnc-dialogs.h \
   gnc-amount-edit.h \
+  gnc-commodity-edit.h \
   gnc-currency-edit.h \
   gnc-datedelta.h \
   gnc-dateedit.h \

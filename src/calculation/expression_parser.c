@@ -390,6 +390,9 @@ typedef struct parser_env
   char Token;
   char asn_op;
 
+  char *tokens;
+  char *token_tail;
+
   ParseError error_code;
 
   void *numeric_value;
@@ -474,6 +477,10 @@ exit_parser (parser_env_ptr pe)
   g_free (pe->stack);
   pe->stack = NULL;
 
+  g_free (pe->tokens);
+  pe->tokens = NULL;
+  pe->token_tail = NULL;
+
   g_free (pe);
 }				/* exit_parser */
 
@@ -533,7 +540,7 @@ delete_var (char *var_name, parser_env_ptr pe)
 
 /* parse string passed using parser environment passed return
  * evaluated value in numeric structure passed, return NULL if no
- * parse error if parse error, return pointer to character at which
+ * parse error. If parse error, return pointer to character at which
  * error occured. */
 char *
 parse_string (var_store_ptr value, const char *string, parser_env_ptr pe)
@@ -541,7 +548,7 @@ parse_string (var_store_ptr value, const char *string, parser_env_ptr pe)
   var_store_ptr retv;
   var_store unnamed_vars[UNNAMED_VARS];
 
-  if (pe == NULL)
+  if (!pe || !string)
     return NULL;
 
   pe->unnamed_vars = unnamed_vars;
@@ -550,10 +557,27 @@ parse_string (var_store_ptr value, const char *string, parser_env_ptr pe)
   pe->parse_str = string;
   pe->error_code = PARSER_NO_ERROR;
 
+  g_free (pe->tokens);
+  pe->tokens = g_new0(char, strlen (string) + 1);
+  pe->token_tail = pe->tokens;
+
   next_token (pe);
 
   if (!pe->error_code)
     assignment_op (pe);
+
+  if (!pe->error_code)
+  {
+    /* interpret (num) as -num */
+    if (strcmp (pe->tokens, "(I)") == 0)
+    {
+      var_store_ptr val;
+
+      val = pop (pe);
+      val->value = pe->negate_numeric (val->value);
+      push (val, pe);
+    }
+  }
 
   if (pe->Token == EOS)
   {
@@ -684,6 +708,13 @@ free_var (var_store_ptr value, parser_env_ptr pe)
   }
 }				/* free_var */
 
+static void
+add_token (parser_env_ptr pe, char token)
+{
+  *pe->token_tail = pe->Token = token;
+  pe->token_tail++;
+}
+
 /* parse next token from string */
 static void
 next_token (parser_env_ptr pe)
@@ -700,12 +731,12 @@ next_token (parser_env_ptr pe)
   /* test for end of string */
   if (!*str_parse)
   {
-    pe->Token = EOS;
-    /* test for name */
+    add_token (pe, EOS);
   }
+  /* test for name */
   else if (isalpha (*str_parse) || (*str_parse == '_'))
   {
-    pe->Token = VAR_TOKEN;
+    add_token (pe, VAR_TOKEN);
     nstr = pe->name;
     do
     {
@@ -716,31 +747,36 @@ next_token (parser_env_ptr pe)
            isdigit (*str_parse));
 
     *nstr = EOS;
-    /* test for possible operator */
   }
+  /* test for possible operator */
   else if (strchr (allowed_operators, *str_parse))
   {
-    pe->Token = *str_parse++;
+    add_token (pe, *str_parse++);
     if (*str_parse == '=')
     {
-      str_parse++;
-      pe->asn_op = pe->Token;
-      pe->Token = '=';
+      if (pe->Token != '=')
+      {
+        str_parse++;
+        pe->asn_op = pe->Token;
+        add_token (pe, '=');
+      }
+      else
+        pe->error_code = UNDEFINED_CHARACTER;
     }				/* endif */
-    /* test for numeric token */
   }
+  /* test for numeric token */
   else if ((number =
             (pe->trans_numeric) (str_parse, pe->radix_point,
                                  pe->group_char, &nstr)))
   {
-    pe->Token = NUM_TOKEN;
+    add_token (pe, NUM_TOKEN);
     pe->numeric_value = number;
     str_parse = nstr;
-    /* unrecognized character - error */
   }
+  /* unrecognized character - error */
   else
   {
-    pe->Token = *str_parse;
+    add_token (pe, *str_parse);
     pe->error_code = UNDEFINED_CHARACTER;
   }				/* endif */
 
@@ -823,7 +859,7 @@ assignment_op (parser_env_ptr pe)
     }
     else
     {
-      pe->Token = EOS;		/* error !!!!!!!!!! */
+      add_token (pe, EOS);	/* error !!!!!!!!!! */
       pe->error_code = NOT_A_VARIABLE;
     }				/* endif */
   }				/* endwhile */
@@ -982,7 +1018,7 @@ primary_exp (parser_env_ptr pe)
       }
       else
       {
-        pe->Token = EOS;		/* error here */
+        add_token (pe, EOS);	/* error here */
         pe->error_code = UNBALANCED_PARENS;
       }				/* endif */
 

@@ -466,7 +466,7 @@ gnc_localeconv(void)
   return &lc;
 }
 
-gnc_commodity *
+const gnc_commodity *
 gnc_locale_default_currency(void)
 {
   static gnc_commodity * currency;
@@ -889,7 +889,7 @@ DxaccPrintAmountArgs (double val, gboolean print_currency_symbol,
 typedef enum
 {
   START_ST,       /* Parsing initial whitespace */
-  NEG_ST,         /* Parsed a negative sign */
+  NEG_ST,         /* Parsed a negative sign or a left paren */
   PRE_GROUP_ST,   /* Parsing digits before grouping and decimal characters */
   START_GROUP_ST, /* Start of a digit group encountered (possibly) */
   IN_GROUP_ST,    /* Within a digit group */
@@ -935,11 +935,12 @@ fractional_multiplier (int num_decimals)
 
 gboolean
 DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
-                 char **endstr)
+                  char **endstr)
 {
   struct lconv *lc = gnc_localeconv();
   gboolean is_negative;
   gboolean got_decimal;
+  gboolean need_paren;
   GList  * group_data;
   int    group_count;
   double value;
@@ -981,6 +982,7 @@ DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
 
   is_negative = FALSE;
   got_decimal = FALSE;
+  need_paren = FALSE;
   group_data = NULL;
   group_count = 0;
   value = 0.0;
@@ -1015,6 +1017,12 @@ DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
         else if (*in == negative_sign)
         {
           is_negative = TRUE;
+          next_state = NEG_ST;
+        }
+        else if (*in == '(')
+        {
+          is_negative = TRUE;
+          need_paren = TRUE;
           next_state = NEG_ST;
         }
         else
@@ -1061,6 +1069,11 @@ DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
         {
           next_state = START_GROUP_ST;
         }
+        else if (*in == ')' && need_paren)
+        {
+          next_state = DONE_ST;
+          need_paren = FALSE;
+        }
         else
         {
           next_state = DONE_ST;
@@ -1092,6 +1105,16 @@ DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
           else
             next_state = NO_NUM_ST;
         }
+        else if (*in == ')' && need_paren)
+        {
+          if (isspace(group_separator))
+          {
+            next_state = DONE_ST;
+            need_paren = FALSE;
+          }
+          else
+            next_state = NO_NUM_ST;
+        }
         else
         {
           /* If the last group separator is also whitespace,
@@ -1120,6 +1143,11 @@ DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
         else if (*in == group_separator)
         {
           next_state = START_GROUP_ST;
+        }
+        else if (*in == ')' && need_paren)
+        {
+          next_state = DONE_ST;
+          need_paren = FALSE;
         }
         else
         {
@@ -1153,6 +1181,11 @@ DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
             next_state = DONE_ST;
           else
             next_state = NO_NUM_ST;
+        }
+        else if (*in == ')' && need_paren)
+        {
+          next_state = DONE_ST;
+          need_paren = FALSE;
         }
         else
         {
@@ -1204,7 +1237,7 @@ DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
   }
 
   /* If there was an error, just quit */
-  if (state == NO_NUM_ST)
+  if (need_paren || (state == NO_NUM_ST))
   {
     g_free(out_str);
     g_list_free(group_data);

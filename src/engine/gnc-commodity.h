@@ -43,7 +43,7 @@ gnc_commodity * gnc_commodity_new(const char * fullname,
                                   const char * mnemonic,
                                   const char * exchange_code,
                                   int fraction);
-     
+
 void  gnc_commodity_destroy(gnc_commodity * cm);
 
 const char * gnc_commodity_get_mnemonic(const gnc_commodity * cm);

@@ -202,7 +202,7 @@ gboolean gnc_strisnum(const char *s);
 struct lconv * gnc_localeconv(void);
 
 /* Returns the default currency of the current locale. */
-gnc_commodity * gnc_locale_default_currency(void);
+const gnc_commodity * gnc_locale_default_currency(void);
 int gnc_locale_decimal_places(void);
 
 /*

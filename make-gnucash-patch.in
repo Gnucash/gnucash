@@ -124,6 +124,7 @@ config.sub
 configure
 doc/sgml/C/gnucash/*
 doc/sgml/C/gnucash.junk
+doc/sgml/C/gnucash.tex
 errs*
 g-wrap-guile
 g-wrap.info

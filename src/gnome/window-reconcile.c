@@ -287,7 +287,7 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
   currency = xaccAccountGetCurrency(account);
 
   new_string = DxaccPrintAmount(value, flags & ~PRTSYM, 
-                               gnc_commodity_get_mnemonic(currency));
+                                gnc_commodity_get_mnemonic(currency));
 
   if (safe_strcmp(string, new_string) == 0)
     return FALSE;

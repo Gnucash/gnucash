@@ -214,7 +214,7 @@ gnc_ui_get_currency_accumulator(GList **list, const gnc_commodity * currency)
   found->assets = 0.0;
   found->profits = 0.0;
   *list = g_list_append(*list, found);
-  
+
   return found;
 }
 
@@ -240,10 +240,10 @@ gnc_ui_get_currency_item(GList **list, const gnc_commodity * currency,
       return found;
     }
   }
-  
+
   found = gnc_ui_build_currency_item(currency);
   *list = g_list_append(*list, found);
-  
+
   current = g_list_append(NULL, found->listitem);
   gtk_select_append_items(GTK_SELECT(holder), current);
 
@@ -258,7 +258,7 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
   AccountGroup *children;
   Account *account;
   int num_accounts;
-  int account_type;  
+  GNCAccountType account_type;  
   const gnc_commodity * account_currency;
   const gnc_commodity * default_currency;
   const gnc_commodity * euro_commodity;

@@ -55,7 +55,7 @@ typedef struct {
 
 	GtkWidget *date_entry;
 	GtkWidget *date_button;
-	
+
 	GtkWidget *time_entry;
 	GtkWidget *time_popup;
 

@@ -1,4 +1,4 @@
-;; currency descriptions for ISO4217 curerncies. 
+;; currency descriptions for ISO4217 currencies. 
 ;; Format is:
 ;; (fullname unitname partname namespace mnemonic exchange-code 
 ;;  parts-per-unit smallest-fraction)
