@@ -58,7 +58,7 @@
   (define (find-first-receivable group num-accounts index)
     (if (>= index num-accounts)
 	#f
-	(let* ((this-account (gnc:group-get-account (group index)))
+	(let* ((this-account (gnc:group-get-account group index))
 	       (account-type (gw:enum-<gnc:AccountType>-val->sym
 			      (gnc:account-get-type this-account) #f)))
 	  (if (eq? account-type 'receivable)
