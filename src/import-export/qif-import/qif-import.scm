@@ -13,6 +13,7 @@
 (use-modules (ice-9 slib))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))
+(use-modules (g-wrap gw-wct))
 
 (debug-enable 'debug)
 (debug-enable 'backtrace)
