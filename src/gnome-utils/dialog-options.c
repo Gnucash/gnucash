@@ -1404,10 +1404,10 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
                      GTK_SIGNAL_FUNC(gnc_options_dialog_destroy_stub_cb),
                      retval);
 
-  gtk_box_pack_start(GTK_BOX(buttonbox), help_button, TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(buttonbox), apply_button, TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(buttonbox), cancel_button, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(buttonbox), ok_button, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(buttonbox), apply_button, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(buttonbox), help_button, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(buttonbox), cancel_button, TRUE, TRUE, 0);
 
   retval->page_list = gtk_list_new();
   gtk_signal_connect(GTK_OBJECT(retval->page_list), "select_child",
