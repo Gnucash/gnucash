@@ -1,7 +1,7 @@
 (
- ("The GnuCash online manual has a lot of helpful information."
+ ("The GnuCash online manual has lots of helpful information."
   "You can access the manual under the Help menu.")
- ("GnuCash does not use categories like Quicken."
+ ("GnuCash does not use categories like Quicken does."
   "Instead, you should use Income and Expense accounts.")
  ("In the reconcile window, you can press the spacebar"
   "to mark transactions as reconciled."
