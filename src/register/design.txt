@@ -16,40 +16,40 @@ Features
                 use accelerator keys to set date
    Price/Value: display and or edit of numeric quantity
    Text:        arbitrary text string display and/or edit
-   Quickfill:   autocompletes user's typed in entry
+   Quickfill:   auto-completes user's typed in entry
                 to match previous entries
    Combo:       pull-down menu of choices
    Recncell:    checkbox, click to cycle through values
 
--- Modular: cells are thier own objects, new cells can 
+-- Modular: cells are their own objects, new cells can 
                 be invented.
--- Configurable: layout of cells is programmatically 
+-- Configurable: layout of cells is programatically 
                 modifiable.
 -- Tabular: cells are handled in groups ("blocks")
-                that can be maniuplated as a whole.
+                that can be manipulated as a whole.
 -- Multi-tabular: multiple cell-blocks can be defined
                 for one table, allowing different sets
                 of rows to have distinct layouts
 -- Tab-Groups:  Tabbing order between cells is customizable
 -- Engine-Independent: No assumptions made about source of 
-                data, no predifined financial structure 
+                data, no predefined financial structure 
                 required or enforced.
 -- Transaction Support: Groups of cells can be treated
                 as a single transactional entity, allowing
                 all edits to be committed or rejected as
                 a whole.
 -- Motif & C based
--- GUI code segregated, theorectially making port to 
+-- GUI code segregated, theoretically making port to 
                 Qt, GTK easy.
 
 
-Philosphy
+Philosophy
 ---------
 The register object, indeed, all code in this directory, does not
 depend on (should not depend on) any code in the accounting engine,
 or on any code in the main application.  It should be possible to use 
 the register in a stand-alone fashion.   As a result of this 
-"independence" philosophy, ther is a very small amount of
+"independence" philosophy, there is a very small amount of
 duplicated code for date handling (i.e. there are similar functions
 in src/register/datecell.c and src/engine/date.c).  As cleanup
 continues, this duplication will disappear.
@@ -69,7 +69,7 @@ enters the cell (e.g. by mouse-clicking on a cell in a
 table, or tabbing to it), when the user attempts to 
 modify text in the cell (e.g. by typing in it), and 
 when the user leaves the cell (e.g. by mouse-clicking
-eklsewhere, or tabbing away).
+elsewhere, or tabbing away).
 
 Special-purpose cells can be created by "inheriting"
 from the cell object.  Thus, there are special-purpose
@@ -78,16 +78,16 @@ monetary amounts, etc.
 
 Cells implementations may or may not contain GUI
 code.  Cells which require only that text be displayed
-are completely "gui-independent"; that is, they
+are completely "GUI-independent"; that is, they
 depend on the underlying table to display the text.
 Cells which require additional GUI elements (e.g.
 pull-down menus) must implement the proper GUI
-handling on thier own (using e.g. motif, gtk or qt).
+handling on their own (using e.g. motif, GTK or Qt).
 
 Cellblock
 ---------
 The "cellblock" is an array of active cells.  The
-cells are layed out in row-column order.  The 
+cells are laid out in row-column order.  The 
 cellblock serves as a convenient container for
 organizing active cells in an array.   It provides
 several functions. First, it defines a tab-group 
@@ -130,7 +130,7 @@ used to define a tree structure of headings/topics and
 sub-headings/sub-topics, where the layout/format of 
 the heading is different from the sub-headings.
 A financial example is a table which lists splits
-underneath thier parent transaction.  This is 
+underneath their parent transaction.  This is 
 very different from a checkbook register, where
 all entries are uniform, and can be handled with
 a single repeated cursor.
@@ -139,10 +139,10 @@ Register
 --------
 The register is a special-purpose object aimed at
 the display of financial transactions.  It includes
-cells for the date, prices, balances, tranfer accounts,
-etc.  The regsister is where the cells, cursor and
+cells for the date, prices, balances, transfer accounts,
+etc.  The register is where the cells, cursor and
 table get put together into a unified whole.  The
-register defines spcific, actual layouts and widths
+register defines specific, actual layouts and widths
 of the date, price, etc. cells in a table.  It includes 
 a table header, and defines more than ten specific layouts:
 bank, credit-card, stock, general ledger, etc.
@@ -153,7 +153,7 @@ Portability Notes
 -----------------
 Note: neither the "cell", nor the "cellblock" contain
 any Motif-specific code.  They should be portable to
-other GUI's (e.g. GTK, QT).  The excption is the
+other GUI's (e.g. GTK, QT).  The exception is the
 combo-cell, which contains Motif code for the 
 pull-down menu.
 
@@ -162,7 +162,7 @@ All Motif-specific code appears in the "table".
 Apologies
 ---------
 This is not the world's most elegant design, its 
-ocasioanly a bit of a hack, occasionally over-complex,
+occasionally a bit of a hack, occasionally over-complex,
 but it more or less works, and should be quite extensible.
 Its certainly light-years ahead of its predecessor.
 
