@@ -38,11 +38,13 @@ exec guile -s $0 "$@"
                                          ~S,
                                          ~S,
                                          ~S);\n
-    if(!c)
-      g_warning(\"failed to create commodity for currency %s\", fullname);
-    else
-      if(!gnc_commodity_table_insert(table, c))
-        g_warning(\"failed to insert %s into commodity table\", fullname);
+    if(!c) {
+      PWARN(\"failed to create commodity for currency %s\", fullname);
+    } else {
+      if(!gnc_commodity_table_insert(table, c)) {
+        PWARN(\"failed to insert %s into commodity table\", fullname);
+      }
+    }
   }\n"
          fullname
          namespace

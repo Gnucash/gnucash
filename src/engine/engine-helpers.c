@@ -40,34 +40,41 @@
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
 
+static short module = MOD_ENGINE;
+
 Timespec
-gnc_transaction_get_date_posted(Transaction *t) {
+gnc_transaction_get_date_posted(Transaction *t) 
+{
   Timespec result;
   xaccTransGetDatePostedTS(t, &result);
   return(result);
 }
 
 Timespec
-gnc_transaction_get_date_entered(Transaction *t) {
+gnc_transaction_get_date_entered(Transaction *t) 
+{
   Timespec result;
   xaccTransGetDateEnteredTS(t, &result);
   return(result);
 }
 
 Timespec
-gnc_split_get_date_reconciled(Split *s) {
+gnc_split_get_date_reconciled(Split *s) 
+{
   Timespec result;
   xaccSplitGetDateReconciledTS(s, &result);
   return(result);
 }
 
 void
-gnc_transaction_set_date_posted(Transaction *t, const Timespec d) {
+gnc_transaction_set_date_posted(Transaction *t, const Timespec d) 
+{
   xaccTransSetDatePostedTS(t, &d);
 }
 
 void
-gnc_transaction_set_date_entered(Transaction *t, const Timespec d) {
+gnc_transaction_set_date_entered(Transaction *t, const Timespec d) 
+{
   xaccTransSetDateEnteredTS(t, &d);
 }
 
@@ -716,7 +723,7 @@ gnc_scm2kvp_value (SCM value_scm)
     }
 
     default:
-      g_warning ("unexpected type: %d", value_t);
+      PWARN ("unexpected type: %d", value_t);
       return NULL;
   }
 
@@ -829,7 +836,7 @@ gnc_queryterm2scm (QueryTerm *qt)
       break;
 
     default:
-      g_warning ("query type %d not supported", qt->data.type);
+      PWARN ("query type %d not supported", qt->data.type);
       return SCM_BOOL_F;
   }
 

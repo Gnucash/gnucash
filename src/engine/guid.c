@@ -47,7 +47,6 @@
 #  define P_tmpdir "/tmp"
 # endif
 
-
 /** Constants *******************************************************/
 #define DEBUG_GUID 0
 #define BLOCKSIZE 4096
@@ -148,9 +147,7 @@ init_from_file(const char *filename, size_t max_size)
 
   file_bytes = init_from_stream(fp, max_size);
 
-#if DEBUG_GUID
-  g_warning ("guid_init got %u bytes from %s", file_bytes, filename);
-#endif
+  PINFO ("guid_init got %u bytes from %s", file_bytes, filename);
 
   total += file_bytes;
 
@@ -343,12 +340,10 @@ guid_init(void)
   /* time in secs and clock ticks */
   bytes += init_from_time();
 
-#if DEBUG_GUID
-  g_warning ("guid_init got %u bytes", bytes);
-#endif
+  PINFO ("got %u bytes", bytes);
 
   if (bytes < THRESHOLD)
-    g_warning("WARNING: guid_init only got %u bytes.\n"
+    PWARN("only got %u bytes.\n"
               "The identifiers might not be very random.\n", bytes);
 
   guid_initialized = TRUE;
