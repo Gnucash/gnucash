@@ -109,11 +109,11 @@
  *    to ERR_BACKEND_MOD_DESTROY from this routine, so that the 
  *    engine can properly clean up.
  *
- * The compile_query() method compiles a QOF query object into
+ * The compile_query() method compiles a Gnucash query object into
  *    a backend-specific data structure and returns the compiled
  *    query.  For an SQL backend, the contents of the query object
- *    are typically turned into a corresponding SQL query statement, 
- *    and sent to the database for evaluation.
+ *    need to be turned into a corresponding SQL query statement, and
+ *    sent to the database for evaluation.
  *
  * The free_query() method frees the data structure returned from 
  *    compile_query()
@@ -223,8 +223,26 @@
  *
  */
 
-struct _QofBackend
+struct QofBackendProvider_s
 {
+  /** Some arbitrary name given for this particular backend provider */
+  const char * provider_name;
+
+  /** The access method that this provider provides, for example,
+   *  http:// or postgres:// or rpc://, but without the :// at the end
+   */
+  const char * access_method;
+
+  /** Return a new, initialized backend backend. */
+  QofBackend * (*backend_new) (void);
+
+  /** Free this structure, unregister this backend handler. */
+  void (*provider_free) (QofBackendProvider *);
+};
+
+struct QofBackend_s
+{
+
   void (*session_begin) (QofBackend *be,
                          QofSession *session,
                          const char *book_id, 
@@ -271,6 +289,15 @@ struct _QofBackend
    */
   void (*export) (QofBackend *, QofBook *);
 };
+
+/** Let the ssytem know about a new provider of backends.  This function
+ *  is typically called by the provider library at library load time.
+ *  This function allows the backend library to tell the QOF infrastructure
+ *  that it can handle URL's of a certain type.  Note that a single
+ *  backend library may register more than one provider, if it is
+ *  capable of handling more than one URL access method.
+ */
+void qof_backend_register_provider (QofBackendProvider *);
 
 /**
  * The qof_backend_set_error() routine pushes an error code onto the error

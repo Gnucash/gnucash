@@ -46,8 +46,8 @@
 */
 typedef enum {
   ERR_BACKEND_NO_ERR = 0,
-  ERR_BACKEND_NO_BACKEND,   /**< Backend * pointer was null the err routine 
-                               or no backend handler (ENOSYS) */
+  ERR_BACKEND_NO_HANDLER,   /**< no backend handler found for this access method (ENOSYS) */
+  ERR_BACKEND_NO_BACKEND,   /**< Backend * pointer was unexpectedly null */
   ERR_BACKEND_BAD_URL,      /**< Can't parse url */
   ERR_BACKEND_NO_SUCH_DB,   /**< the named database doesn't exist */
   ERR_BACKEND_CANT_CONNECT, /**< bad dbname/login/passwd or network failure */
@@ -96,6 +96,14 @@ typedef enum {
   ERR_RPC_NOT_ADDED,            /**< object not added */
 } QofBackendError;
 
+/**
+ * A structure that declares backend services that can be gotten.
+ * The Provider specifies a URL access method, and specifies the
+ * function to create a backend that can handle that URL access
+ * function.
+ */
+typedef struct QofBackendProvider_s QofBackendProvider;
+
 /** \brief Pseudo-object providing an interface between the
  * engine and a persistant data store (e.g. a server, a database, 
  * or a file).  
@@ -104,7 +112,7 @@ typedef enum {
  * engine.  The backend can, however, report errors to the GUI & other
  * front-end users.  
  */
-typedef struct _QofBackend QofBackend;
+typedef struct QofBackend_s QofBackend;
 
 /** \brief DOCUMENT ME! */
 typedef void (*QofBePercentageFunc) (const char *message, double percent);

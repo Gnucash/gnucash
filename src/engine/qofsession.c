@@ -28,7 +28,7 @@
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998-2003 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 1998-2004 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2000 Dave Peticolas
  */
 
@@ -70,6 +70,15 @@
 
 static QofSession * current_session = NULL;
 static short module = MOD_BACKEND;
+static GSList *provider_list = NULL;
+
+/* ====================================================================== */
+
+void
+qof_backend_register_provider (QofBackendProvider *prov)
+{
+	provider_list = g_slist_prepend (provider_list, prov);
+}
 
 /* ====================================================================== */
 /* error handling routines */
@@ -268,6 +277,8 @@ qof_session_get_url (QofSession *session)
 
 /* ====================================================================== */
 
+#ifdef GNUCASH 
+
 static void
 qof_session_int_backend_load_error(QofSession *session,
                                    char *message, char *dll_err)
@@ -285,9 +296,6 @@ qof_session_int_backend_load_error(QofSession *session,
 
     qof_session_push_error (session, ERR_BACKEND_NO_BACKEND, NULL);
 }
-
-
-#ifdef GNUCASH 
 
 /* Gnucash uses its module system to load a backend; other users
  * use traditional dlopen calls.
@@ -342,10 +350,35 @@ qof_session_load_backend(QofSession * session, char * backend_name)
 #else /* GNUCASH */
 
 static void
-qof_session_load_backend(QofSession * session, char * backend_name)
+qof_session_load_backend(QofSession * session, char * access_method)
 {
-  ENTER (" ");
-  LEAVE (" ");
+	GSList *p;
+	ENTER (" ");
+	for (p = provider_list; p; p=p->next)
+	{
+		QofBackendProvider *prov = p->data;
+
+		/* Does this provider handle the desired access method? */
+		if (0 == strcasecmp (access_method, prov->access_method))
+		{
+			if (NULL == prov->backend_new) continue;
+
+			/* Use the providers creation callback */
+      	session->backend = (*(prov->backend_new))();
+
+			/* Tell the books about the backend that they'll be using. */
+			GList *node;
+			for (node=session->books; node; node=node->next)
+			{
+				QofBook *book = node->data;
+				qof_book_set_backend (book, session->backend);
+			}
+			return;
+		}
+	}
+
+	qof_session_push_error (session, ERR_BACKEND_NO_HANDLER, NULL);
+	LEAVE (" ");
 }
 #endif /* GNUCASH */
 
@@ -435,27 +468,39 @@ qof_session_begin (QofSession *session, const char * book_id,
   {
     qof_session_load_backend(session, "file" ); 
   }
-#if 0
-  /* load different backend based on URL.  We should probably
-   * dynamically load these based on some config file ... */
-  else if ((!g_strncasecmp(book_id, "http://", 7)) ||
-           (!g_strncasecmp(book_id, "https://", 8)))
+  else
   {
-      /* create the backend */
-      session->backend = xmlendNew();
+    /* Look for somthing of the form of "http://" or 
+     * "postgres://". Everything before the colon is the access 
+     * method.  Load the first backend found for that access method.
+     */
+    char * p = strchr (book_id, ':');
+    if (p)
+    {
+      char * access_method = g_strdup (book_id);
+      p = strchr (access_method, ':');
+      *p = 0;
+      qof_session_load_backend(session, access_method);
+      g_free (access_method);
+    }
+    else
+    {
+       /* If no colon found, assume it must be a file-path */
+       qof_session_load_backend(session, "file"); 
+    }
   }
-#endif
-  else if (!g_strncasecmp(book_id, "postgres://", 11))
+
+  /* No backend was found. That's bad. */
+  if (NULL == session->backend)
   {
-    qof_session_load_backend(session, "postgres");
-  }
-  else if (!g_strncasecmp(book_id, "rpc://", 6))
-  {
-    qof_session_load_backend(session, "rpc");
+    qof_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
+    LEAVE (" BAD: no backend: sess=%p book-id=%s", 
+         session,  book_id ? book_id : "(null)");
+    return;
   }
 
   /* If there's a begin method, call that. */
-  if (session->backend && session->backend->session_begin)
+  if (session->backend->session_begin)
   {
       int err;
       char * msg;
@@ -485,11 +530,6 @@ qof_session_begin (QofSession *session, const char * book_id,
       }
   }
 
-  /* No backend was found. That's bad. */
-  if (NULL == session->backend)
-  {
-    qof_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
-  }
   LEAVE (" sess=%p book-id=%s", 
          session,  book_id ? book_id : "(null)");
 }
