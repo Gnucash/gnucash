@@ -184,6 +184,8 @@ mainWindow( Widget parent )
       helpMenubarCB, (XtPointer)HMB_ABOUT, (MenuItem *)NULL },
     { "Help...",            &xmPushButtonWidgetClass, 'H', NULL, NULL, 
       helpMenubarCB, (XtPointer)HMB_MAIN,  (MenuItem *)NULL },
+    { "Accounts...",        &xmPushButtonWidgetClass, 'H', NULL, NULL, 
+      helpMenubarCB, (XtPointer)HMB_ACC,  (MenuItem *)NULL },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
       NULL,         NULL,                    (MenuItem *)NULL },
     { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, 
@@ -717,6 +719,10 @@ helpMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     case HMB_ABOUT:
       DEBUG("HMB_ABOUT");
       helpWindow( toplevel, "About", HH_ABOUT );
+      break;
+    case HMB_ACC:
+      DEBUG("HMB_ACC");
+      helpWindow( toplevel, "Help", HH_ACC );
       break;
     case HMB_REGWIN:
       /* When the user selects "Help" in the RegWindow */
