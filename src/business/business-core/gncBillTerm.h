@@ -9,9 +9,10 @@
 
 typedef struct _gncBillTerm GncBillTerm;
 
-#include "gnc-numeric.h"
-#include "gnc-book.h"
 #include "gnc-date.h"
+#include "gnc-numeric.h"
+#include "qofbook.h"
+#include "qofinstance.h"
 
 #define GNC_BILLTERM_MODULE_NAME "gncBillTerm"
 
@@ -50,8 +51,6 @@ GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name);
 GList * gncBillTermGetTerms (QofBook *book);
 KvpFrame* gncBillTermGetSlots (GncBillTerm *term);
 
-const GUID *gncBillTermGetGUID (GncBillTerm *term);
-QofBook *gncBillTermGetBook (GncBillTerm *term);
 const char *gncBillTermGetName (GncBillTerm *term);
 const char *gncBillTermGetDescription (GncBillTerm *term);
 GncBillTermType gncBillTermGetType (GncBillTerm *term);
@@ -75,5 +74,8 @@ int gncBillTermCompare (GncBillTerm *a, GncBillTerm *b);
 /* Compute the due date and discount dates from the post date */
 Timespec gncBillTermComputeDueDate (GncBillTerm *term, Timespec post_date);
 Timespec gncBillTermComputeDiscountDate (GncBillTerm *term, Timespec post_date);
+
+/* deprecated */
+#define gncBillTermGetGUID(x) qof_instance_get_guid (QOF_INSTANCE(x))
 
 #endif /* GNC_BILLTERM_H_ */

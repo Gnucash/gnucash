@@ -47,7 +47,8 @@
 #include "gnc-owner-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncObject.h"
+#include "qofinstance.h"
+#include "qofobject.h"
 
 #define _GNC_MOD_NAME	GNC_INVOICE_MODULE_NAME
 
@@ -121,7 +122,7 @@ invoice_dom_tree_create (GncInvoice *invoice)
     term = gncInvoiceGetTerms (invoice);
     if (term)
       xmlAddChild(ret, guid_to_dom_tree(invoice_terms_string,
-					gncBillTermGetGUID (term)));
+					qof_instance_get_guid (QOF_INSTANCE(term))));
       
     maybe_add_string (ret, invoice_billing_id_string,
 		      gncInvoiceGetBillingID (invoice));
@@ -521,7 +522,7 @@ static int
 invoice_get_count (GNCBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
@@ -544,7 +545,7 @@ xml_add_invoice (gpointer invoice_p, gpointer out_p)
 static void
 invoice_write (FILE *out, GNCBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_invoice, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_invoice, (gpointer) out);
 }
 
 void
@@ -560,7 +561,7 @@ gnc_invoice_xml_initialize (void)
     NULL,			/* scrub */
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }

@@ -51,6 +51,8 @@
 #include "qofobject.h"
 #include "qofinstance.h"
 
+#include "xml-helpers.h"
+
 #define _GNC_MOD_NAME	GNC_CUSTOMER_MODULE_NAME
 
 static short module = MOD_IO;
@@ -74,13 +76,6 @@ const gchar *customer_version_string = "2.0.0";
 #define cust_taxtable_string "cust:taxtable"
 #define cust_taxtableoverride_string "cust:use-tt"
 #define cust_slots_string "cust:slots"
-
-static void
-maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
-{
-  if (str && strlen(str) > 0)
-    xmlAddChild (ptr, text_to_dom_tree (tag, str));
-}
 
 static xmlNodePtr
 customer_dom_tree_create (GncCustomer *cust)
@@ -113,7 +108,7 @@ customer_dom_tree_create (GncCustomer *cust)
     term = gncCustomerGetTerms (cust);
     if (term)
       xmlAddChild(ret, guid_to_dom_tree(cust_terms_string,
-					gncBillTermGetGUID (term)));
+					qof_instance_get_guid (QOF_INSTANCE(term))));
 
     xmlAddChild(ret, text_to_dom_tree(cust_taxincluded_string,
 				      gncTaxIncludedTypeToString (

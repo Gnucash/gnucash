@@ -146,6 +146,8 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
   cust->shipaddr = gncCloneAddress (from->shipaddr, book);
   addObj (cust);
 
+  gnc_engine_generate_event (&cust->inst.guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+
   return cust;
 }
 

@@ -42,12 +42,14 @@
 #include "io-gncxml-v2.h"
 
 #include "gncBillTermP.h"
+#include "gncInvoice.h"
 #include "gnc-bill-term-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncInvoice.h"
 #include "qofinstance.h"
 #include "qofobject.h"
+
+#include "xml-helpers.h"
 
 #define _GNC_MOD_NAME	GNC_BILLTERM_MODULE_NAME
 
@@ -77,27 +79,6 @@ const gchar *billterm_version_string = "2.0.0";
 #define prox_discount_string "bt-prox:discount"
 #define prox_cutoff_string "bt-prox:cutoff-day"
 
-static void
-maybe_add_guid (xmlNodePtr ptr, const char *tag, GncBillTerm *term)
-{
-  if (term)
-    xmlAddChild (ptr, guid_to_dom_tree (tag, gncBillTermGetGUID (term)));
-}
-
-static void
-maybe_add_int (xmlNodePtr ptr, const char *tag, gint val)
-{
-  if (val)
-    xmlAddChild (ptr, int_to_dom_tree (tag, val));
-}
-
-static void
-maybe_add_numeric (xmlNodePtr ptr, const char *tag, gnc_numeric val)
-{
-  if (!gnc_numeric_zero_p (val))
-    xmlAddChild (ptr, gnc_numeric_to_dom_tree (tag, &val));
-}
-
 static xmlNodePtr
 billterm_dom_tree_create (GncBillTerm *term)
 {
@@ -106,7 +87,7 @@ billterm_dom_tree_create (GncBillTerm *term)
     ret = xmlNewNode(NULL, gnc_billterm_string);
     xmlSetProp(ret, "version", billterm_version_string);
 
-    maybe_add_guid(ret, billterm_guid_string, term);
+    maybe_add_guid(ret, billterm_guid_string, QOF_INSTANCE(term));
     xmlAddChild(ret, text_to_dom_tree (billterm_name_string,
 				       gncBillTermGetName (term)));
     xmlAddChild(ret, text_to_dom_tree (billterm_desc_string,
@@ -124,9 +105,11 @@ billterm_dom_tree_create (GncBillTerm *term)
 
     /* We should not be our own child */
     if (gncBillTermGetChild(term) != term)
-      maybe_add_guid(ret, billterm_child_string, gncBillTermGetChild (term));
+      maybe_add_guid(ret, billterm_child_string, 
+                    QOF_INSTANCE(gncBillTermGetChild (term)));
 
-    maybe_add_guid(ret, billterm_parent_string, gncBillTermGetParent (term));
+    maybe_add_guid(ret, billterm_parent_string,
+                    QOF_INSTANCE(gncBillTermGetParent (term)));
 
     switch (gncBillTermGetType (term)) {
     case GNC_TERM_TYPE_DAYS:
@@ -589,7 +572,7 @@ billterm_scrub_cb (gpointer term_p, gpointer list_p)
     if (t) {
       /* Fix up the broken "copy" function */
       PWARN("Fixing broken child billterm: %s",
-	    guid_to_string(gncBillTermGetGUID(term)));
+	    guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))));
 
       gncBillTermBeginEdit(term);
       gncBillTermSetType(term, gncBillTermGetType(t));
@@ -676,7 +659,7 @@ billterm_reset_refcount (gpointer key, gpointer value, gpointer notused)
 
   if (count != gncBillTermGetRefcount(term) && !gncBillTermGetInvisible(term)) {
     PWARN("Fixing refcount on billterm %s (%lld -> %d)\n",
-	  guid_to_string(gncBillTermGetGUID(term)),
+	  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))),
 	  gncBillTermGetRefcount(term), count)
       gncBillTermSetRefcount(term, count);
   }
@@ -700,7 +683,7 @@ billterm_scrub (GNCBook *book)
     term = node->data;
 
     PINFO ("deleting grandchild billterm: %s\n",
-	   guid_to_string(gncBillTermGetGUID(term)));
+	   guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))));
 
     /* Make sure the parent has no children */
     parent = gncBillTermGetParent(term);
