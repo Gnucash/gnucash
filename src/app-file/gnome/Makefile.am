@@ -2,15 +2,17 @@ SUBDIRS = . #test
 
 pkglib_LTLIBRARIES = libgncmod-app-file-gnome.la
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}
-
-INCLUDES = -I${top_srcdir}/src/gnc-module \
-           -I${top_srcdir}/src \
-           -I${top_srcdir}/src/engine \
-           -I${top_srcdir}/src/app-utils \
-           -I${top_srcdir}/src/app-file \
-           ${GNOME_INCLUDEDIR} \
-           ${GUILE_INCS}
+CFLAGS = \
+  @CFLAGS@ \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/app-file \
+  ${GUILE_INCS} \
+  ${G_WRAP_COMPILE_ARGS} \
+  ${GLIB_CFLAGS} \
+  ${GNOME_INCLUDEDIR}
 
 libgncmod_app_file_gnome_la_SOURCES = \
   gnc-file-dialog.c \
