@@ -652,6 +652,8 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
     return;
   }
 
+  gnc_engine_generate_event (&acc->guid, GNC_ID_ACCOUNT, GNC_EVENT_REMOVE);
+
   acc->parent = NULL;
 
   grp->accounts = g_list_remove (grp->accounts, acc);
@@ -757,6 +759,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 
     grp->accounts = g_list_insert_sorted (grp->accounts, acc,
                                           group_sort_helper);
+    gnc_engine_generate_event (&acc->guid, GNC_ID_ACCOUNT, GNC_EVENT_ADD);
 
     acc->core_dirty = TRUE;
     xaccAccountCommitEdit (acc);

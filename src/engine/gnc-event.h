@@ -35,6 +35,8 @@ typedef enum
   GNC_EVENT_CREATE  = 1 << 0,
   GNC_EVENT_MODIFY  = 1 << 1,
   GNC_EVENT_DESTROY = 1 << 2,
+  GNC_EVENT_ADD     = 1 << 3,
+  GNC_EVENT_REMOVE  = 1 << 4,
   GNC_EVENT_ALL     = 0xff
 } GNCEngineEventType;
 
