@@ -1,5 +1,13 @@
 2001-06-26  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/sixtp-dom-parsers.c: same as below
+
+	* src/engine/gnc-commodity-xml-v2.c: same as below
+
+	* src/engine/gnc-account-xml-v2.c: don't use node content member
+	directly -- if libxml was configured to use buffers, this won't
+	work.
+
 	* src/register/gnome/gnucash-sheet.c
 	(gnucash_sheet_key_press_event): allow shift-pgup and shift-pgdn
 	to go to top & bottom of register respectively.

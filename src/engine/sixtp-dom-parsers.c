@@ -54,12 +54,20 @@ dom_tree_to_guid(xmlNodePtr node)
     }
 
     {
-        char *type = node->properties->xmlAttrPropertyValue->content;
+        char *type;
+
+        type = xmlNodeGetContent (node->properties->xmlAttrPropertyValue);
+
         /* handle new and guid the same for the moment */
         if((safe_strcmp("guid", type) == 0) || (safe_strcmp("new", type) == 0))
         {
             GUID *gid = g_new(GUID, 1);
-            string_to_guid(node->xmlChildrenNode->content, gid);
+            char *guid_str;
+
+            guid_str = xmlNodeGetContent (node->xmlChildrenNode);
+            string_to_guid(guid_str, gid);
+            xmlFree (guid_str);
+            xmlFree (type);
             return gid;
         }
         else 
@@ -68,6 +76,7 @@ dom_tree_to_guid(xmlNodePtr node)
                  type ? type : "(null)",
                  node->properties->name ?
                  (char *) node->properties->name : "(null)");
+            xmlFree (type);
             return NULL;
         }
     }
@@ -403,10 +412,7 @@ dom_tree_to_text(xmlNodePtr tree)
 
      Ignores comment nodes and collapse text nodes into one string.
      Returns NULL if expectations are unsatisfied.
-
-     If there are a lot of text sub-nodes, this algorithm may be
-     inefficient as it will reallocate a lot.  */
-
+  */
   gboolean ok = TRUE;
   xmlNodePtr current;
   gchar *result;
@@ -419,34 +425,11 @@ dom_tree_to_text(xmlNodePtr tree)
       return g_strdup("");
   }
 
+  temp = xmlNodeListGetString (NULL, tree->xmlChildrenNode, TRUE);
+  if (!temp) return NULL;
 
-  result = g_strdup("");
-  
-  for(current = tree->xmlChildrenNode; current; current = current->next) {
-    switch(current->type) {
-    case XML_TEXT_NODE:
-      temp = g_strconcat(result, (gchar *) current->content, NULL);
-      g_free(result);
-      result = temp;
-      break;
-    case XML_COMMENT_NODE:
-      break;
-    default:
-      PERR("dom_tree_to_text: hit illegal node while extracting text.");
-      PERR("  (name %s) (type %d) (content %s)", 
-           current->name ? (char *) current->name : "(null)",
-           current->type,
-           current->content ? (char *) current->content : "(null)");
-      current = NULL;
-      ok = FALSE;
-      break;
-    };    
-  }
-
-  if(!ok) {
-    if(result) g_free(result);
-    result = NULL;
-  }
+  result = g_strdup (temp);
+  xmlFree (temp);
   return result;
 }
 
