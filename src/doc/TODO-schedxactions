@@ -19,7 +19,7 @@ X would like "don't even tell me you instantiated it, just fscking do
 
 ##################################################
 ### To-Do
-### '.' = to-do, 'X' = done
+### '.' = to-do, 'X' = done, '?' = jsled verify
 ##################################################
 
 
@@ -33,7 +33,7 @@ X create a template register
     . this is going to be: a tabbed notebook in which the tabs contain
       the number of transactions the GL they hold contain.
 
-. Hook into 'book data changed' save-on-exit decision 
+? Hook into 'book data changed' save-on-exit decision 
 
 . add a big calendar [gnome-pim?  evo?] to SXaction List/overview
 
@@ -42,6 +42,7 @@ X create a template register
     scanning code.
 
 . need "since-last-run" UI for instanatiation.
+  X Change from dialogs to druid
   X/O create transactions
     X numeric
     X formula
@@ -59,6 +60,9 @@ X create a template register
     pop up the 'new scheduled transactions' dialog [option, time-of-day]
   . Should deal with "nothing-to-do" better [not even show up in the worst
     [read: no auto-notify/to-create/reminders] case].
+    . this is different between the auto-invoked since-last-run dialog [show
+      nothing] and the menu-invoked since-last-run [show a dialog to the user
+      stating there's nothing to do].
   . Double-clicking on auto-create list should jump to transaction
     . register of first split?
   . double-clicking a reminder should [probably] move it up to the to-create
@@ -78,13 +82,13 @@ X create a template register
     not-yet-created transactions.
   . The ability to turn a non-recurring transaction into a recurring one...
   . inactive cells
-    . date
-    . recn
+    X date
+    . recn?
 
 . deal better with formulas in template transactions [real FormulaCell]
   . recognize purely numeric template transactions and balance at
     template-creation time.
-  . balance transaction via symbolic math?
+  . balance transaction via variable cancellation?
 
 . GNCFrequency
   . initial-settings synchronization [start date, optionmenus]
@@ -107,23 +111,23 @@ X create a template register
 
 . Configuration options...
   . Overall
-    . Size of template register window
+    X Size of template register window
     . color of future register entries
     . conrad's desires
-    . policy
-      . create for N days in advance
-      . show for N days in advance, create when come-due
-    . defaults
-      . create/show for 'N' days in advance
-      . remind me 'M' days in advance
-      . just create
-      . notify when created
-  . Per-SX
-    . just create/notify
-    . create/show
-      . lead-time
-    . reminder
-      . lead-time
+    X policy
+      X create for N days in advance
+      X show for N days in advance, create when come-due
+    X defaults
+      X create/show for 'N' days in advance
+      X remind me 'M' days in advance
+      X just create
+      X notify when created
+  X Per-SX
+    X just create/notify
+    X create/show
+      X lead-time
+    X reminder
+      X lead-time
 
 
 
@@ -144,8 +148,8 @@ X create a template register
 ### Bugs
 ##################################################
 
-. General
-  . Date l10n.
+X General
+  X Date l10n.
 
 . GNCFreqency
   . transitioning to a new tab doesn't correctly setup the agreement between
@@ -157,7 +161,7 @@ X create a template register
 
 . Scheduled Transaction Editor
   . Can't click-out of the register
-  . auto-shrink on window create [the register is too wide, leading to too
+  X auto-shrink on window create [the register is too wide, leading to too
     much whitespace on the two top panels -- sometimes].
   . Size/space issues.
   . Un-selecting "End Date" leaves calendar widget sensitive
@@ -167,10 +171,11 @@ X create a template register
 . Scheduled Transaction List
 
 . Since-last-run
-  . any [horizontal] window size change height-grows the top/auto-create GL.
+  . correct "Back" button behavior in new Druid paradigm
+  X any [horizontal] window size change height-grows the top/auto-create GL.
   X always goes one date past the instantiation date.
   . tab-order on variable-entry window isn't always correct.
-  X credit and debit seem reversed at instantiation time...
+  ? credit and debit seem reversed at instantiation time...
     . this is fixed, but is the fix correct?
 
 ##################################################
@@ -306,24 +311,3 @@ conrad wants to use this to remind him to pay his bills.  He runs GnuCash
 continuously, and thus wants an option to "pop-up on day change [at time
 HH:MM]".  He's interested in seeing future transactions as well as what's
 being created ATM.
-
------
-
-<Wilddev> There are 2 reasons to create scheduled transactions
-<Wilddev> as a reminder you have to pay this bill by this day or I'll remind you until you do something, either skip me or mark me as paid, if the first I do nothing other than remind you, if the second I enter a transaction in the register
-<Wilddev> and second
-<Wilddev> as an actual transaction that goes into the register on a future date, ie I know that this money leaves my account in 2 days, so I want it to go in automatically on that day. If I leave gnucash running all the time, it'll wait until that day then enter the transaction
-<Wilddev> as you can see the purpose of each is quite different
-<jsled> Wilddev: Indeed...
-<jsled> For the first, you're saying that reminders should start some number of days before the transaction is usually due/paid... and that there are two acknowledgements of that... 'remind me later' or 'here's the amount/create'.
-<jsled> For the second, you're looking at ad-hoc once-scheduled transactions... which should go away immediately afterwards.
-<Wilddev> yes, tho it would be nice to have when you actually get reminded configurable :)
-<jsled> Wilddev: On a per-scheduled-transaction basis, I think.
-<Wilddev> yup
-<jsled> Okay... so this brings up something that isn't presently in the scheme at all: reminders.
-<jsled> I think it's as simple as a "[ ] Remind me __ days in advance" element in the SXEditor, and the appropriate logic in the since-last-run code... 
-<Wilddev> how often is the last run code 'run'?
-<jsled> Wilddev: On startup, or when the timer [a-la conrad's requirement] goes off.
-<Wilddev> yes that would work
-<jsled> So the "since-last-run" dialog has three panes: 1) auto-created, notification requested.  2) To-create. 3) To-create-soon + reminders.
-<Wilddev> that sounds good

@@ -720,22 +720,12 @@ static void
 write_template_transaction_data( FILE *out, GNCBook *book )
 {
     AccountGroup *ag;
-    GList *gl;
-    gboolean hasTemplateTransactionData = FALSE;
 
     ag = gnc_book_get_template_group(book);
-    gl = xaccGroupGetSubAccounts( ag );
-    while ( !hasTemplateTransactionData && (gl != NULL) )
-    {
-        hasTemplateTransactionData |=
-        (xaccAccountGetSplitList( (Account*)gl->data ) != NULL);
-        gl = gl->next;
-    }
-
-    if ( hasTemplateTransactionData )
+    if ( xaccGroupGetNumSubAccounts(ag) > 0 )
     {
         fprintf( out, "<%s>\n", TEMPLATE_TRANSACTION_TAG );
-        write_account_group( out, gnc_book_get_template_group(book) );
+        write_account_group( out, ag );
         xaccGroupForEachTransaction( ag, xml_add_trn_data, (gpointer)out );
         fprintf( out, "</%s>\n", TEMPLATE_TRANSACTION_TAG );
     }

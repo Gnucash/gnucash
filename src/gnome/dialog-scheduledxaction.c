@@ -58,6 +58,7 @@ static short module = MOD_SX;
 #define ADVANCE_DAYS_SPIN "advance_days"
 #define REMIND_OPT "remind_opt"
 #define REMIND_DAYS_SPIN "remind_days"
+#define END_GNOME_NUMENTRY "end_gnome_nentry"
 
 #define END_OPTION 0
 #define NUM_OCCUR_OPTION 1
@@ -142,8 +143,8 @@ static void sxed_reg_xferCB( GtkWidget *w, gpointer d );
 
 static void gnc_sxed_reg_check_close(SchedXactionEditorDialog *sxed);
 
-static gboolean _editor_component_sx_equality( gpointer find_data,
-                                               gpointer user_data );
+static gboolean editor_component_sx_equality( gpointer find_data,
+                                              gpointer user_data );
 
 /** Implementations *****************************************************/
 
@@ -161,6 +162,8 @@ void
 sxed_close_handler ( gpointer user_data )
 {
         SchedXactionEditorDialog        *sxed = user_data;
+
+        DEBUG( "sxed_close_handler" );
 
         gnc_sxed_reg_check_close( sxed );
 
@@ -203,7 +206,7 @@ void
 editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
 {
         GNCBook *book;
-        GtkWidget *o, *o2, *o3;
+        GtkWidget *w, *optEndDate, *optNoEnd, *optNumOccur;
         GList *sxList;
         FreqSpec *fs;
         gint row;
@@ -213,28 +216,29 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         gdate = g_date_new();
 
         /* read out data back into SchedXaction object. */
-        o = glade_xml_get_widget( sxed->gxml, "sxe_name" );
-        xaccSchedXactionSetName( sxed->sx, gtk_entry_get_text( GTK_ENTRY(o) ) );
+        w = glade_xml_get_widget( sxed->gxml, "sxe_name" );
+        xaccSchedXactionSetName( sxed->sx, gtk_entry_get_text( GTK_ENTRY(w) ) );
 
-        o = glade_xml_get_widget( sxed->gxml, "rb_enddate" );
-        o2 = glade_xml_get_widget( sxed->gxml, "rb_noend" );
-        o3 = glade_xml_get_widget( sxed->gxml, "rb_num_occur" );
-        if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(o)) ) {
+        optEndDate = glade_xml_get_widget( sxed->gxml, "rb_enddate" );
+        optNoEnd = glade_xml_get_widget( sxed->gxml, "rb_noend" );
+        optNumOccur = glade_xml_get_widget( sxed->gxml, "rb_num_occur" );
+        if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(optEndDate)) ) {
                 /* get the end date data */
-                o = glade_xml_get_widget( sxed->gxml, "sxe_end_date" );
-                g_date_set_time( gdate, gnome_date_edit_get_date( GNOME_DATE_EDIT(o) ) );
+                w = glade_xml_get_widget( sxed->gxml, "sxe_end_date" );
+                g_date_set_time( gdate, gnome_date_edit_get_date( GNOME_DATE_EDIT(w) ) );
                 xaccSchedXactionSetEndDate( sxed->sx, gdate );
                 /* set the num occurances data */
-                xaccSchedXactionSetNumOccur( sxed->sx, -1 );
-        } else if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(o3) ) ) {
+                xaccSchedXactionSetNumOccur( sxed->sx, 0 );
+        } else if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(optNumOccur) ) ) {
+                gint num;
                 /* get the occurances data */
-                o = glade_xml_get_widget( sxed->gxml, "end_nentry" );
-                xaccSchedXactionSetNumOccur( sxed->sx,
-                                             (gint)gnome_number_entry_get_number( GNOME_NUMBER_ENTRY(o) ) );
+                w = glade_xml_get_widget( sxed->gxml, END_GNOME_NUMENTRY );
+                num = (gint)gnome_number_entry_get_number( GNOME_NUMBER_ENTRY(w) );
+                xaccSchedXactionSetNumOccur( sxed->sx, num );
                 g_date_clear( gdate, 1 );
                 xaccSchedXactionSetEndDate( sxed->sx, gdate );
-        } else if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o2) ) ) {
-                xaccSchedXactionSetNumOccur( sxed->sx, -1 );
+        } else if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(optNoEnd) ) ) {
+                xaccSchedXactionSetNumOccur( sxed->sx, 0 );
                 g_date_clear( gdate, 1 );
                 xaccSchedXactionSetEndDate( sxed->sx, gdate );
         } else {
@@ -244,10 +248,10 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         {
                 gboolean autocreateState, notifyState;
 
-                o = glade_xml_get_widget( sxed->gxml, "autocreate_opt" );
-                autocreateState = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o) );
-                o = glade_xml_get_widget( sxed->gxml, "notify_opt" );
-                notifyState = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o) );
+                w = glade_xml_get_widget( sxed->gxml, "autocreate_opt" );
+                autocreateState = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w) );
+                w = glade_xml_get_widget( sxed->gxml, "notify_opt" );
+                notifyState = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w) );
 
                 /* "Notify" only makes sense if AutoCreate is actived;
                    enforce that here. */
@@ -260,20 +264,20 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                 int daysInAdvance;
 
                 daysInAdvance = 0;
-                o = glade_xml_get_widget( sxed->gxml, "advance_opt" );
-                if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o) ) ) {
-                        o = glade_xml_get_widget( sxed->gxml, "advance_days" );
+                w = glade_xml_get_widget( sxed->gxml, "advance_opt" );
+                if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w) ) ) {
+                        w = glade_xml_get_widget( sxed->gxml, "advance_days" );
                         daysInAdvance =
-                                gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(o) );
+                                gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(w) );
                 }
                 xaccSchedXactionSetAdvanceCreation( sxed->sx, daysInAdvance );
 
                 daysInAdvance = 0;
-                o = glade_xml_get_widget( sxed->gxml, "remind_opt" );
-                if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o) ) ) {
-                        o = glade_xml_get_widget( sxed->gxml, "remind_days" );
+                w = glade_xml_get_widget( sxed->gxml, "remind_opt" );
+                if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w) ) ) {
+                        w = glade_xml_get_widget( sxed->gxml, "remind_days" );
                         daysInAdvance =
-                                gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(o) );
+                                gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(w) );
                 }
                 xaccSchedXactionSetAdvanceReminder( sxed->sx, daysInAdvance );
         }
@@ -326,6 +330,8 @@ advance_toggle( GtkButton *o, SchedXactionEditorDialog *sxed )
         }
         gtk_widget_set_sensitive( spin,
                                   gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o) ) );
+        /* FIXME: this doesn't do what we want... :( */
+        gtk_editable_set_editable( GTK_EDITABLE(spin), TRUE );
 }
 
 /* Local destruction of dialog */
@@ -519,7 +525,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         };
 
         alreadyExists = gnc_find_gui_components( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
-                                                 _editor_component_sx_equality,
+                                                 editor_component_sx_equality,
                                                  sx );
         if ( alreadyExists ) {
                 sxed = (SchedXactionEditorDialog*)alreadyExists->data;
@@ -593,9 +599,9 @@ void
 schedXact_editor_init( SchedXactionEditorDialog *sxed )
 {
         GtkWidget *w;
-        w = glade_xml_get_widget( sxed->gxml,
-                                  "end_nentry" );
+        w = glade_xml_get_widget( sxed->gxml, END_GNOME_NUMENTRY );
         gtk_widget_set_sensitive( w, FALSE );
+
         /* Allow grow, allow shrink, auto-shrink */
         gtk_window_set_policy (GTK_WINDOW(sxed->dialog), TRUE, TRUE, FALSE);
 }
@@ -892,16 +898,10 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         gnucash_register_attach_popup( sxed->reg, popup, sxed );
 
         toolbar = schedXaction_editor_create_reg_tool_bar( sxed );
-        gtk_container_set_border_width( GTK_CONTAINER(toolbar), 2 );
+        //gtk_container_set_border_width( GTK_CONTAINER(toolbar), 2 );
 
-        gtk_container_add( GTK_CONTAINER(vbox), toolbar );
-        gtk_container_add( GTK_CONTAINER(vbox), regWidget );
-
-        /* FIXME: This doesn't actually do what we want. */
-        gtk_box_set_child_packing( GTK_BOX(vbox), regWidget,
-                                   TRUE, TRUE, 2,
-                                   GTK_PACK_END /* it already has a
-                                                 * position... */ );
+        gtk_box_pack_start( GTK_BOX(vbox), toolbar, FALSE, FALSE, 2 );
+        gtk_box_pack_end( GTK_BOX(vbox), regWidget, TRUE, TRUE, 2 );
 
 #if 0
         gtk_signal_connect( GTK_OBJECT(sxed->dialog), "activate_cursor",
@@ -963,7 +963,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         } else if ( xaccSchedXactionGetNumOccur( sxed->sx ) != -1 ) {
                 w = glade_xml_get_widget( sxed->gxml, "rb_num_occur" );
                 gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(w), TRUE );
-                w = glade_xml_get_widget( sxed->gxml, "end_nentry" );
+                w = glade_xml_get_widget( sxed->gxml, END_GNOME_NUMENTRY );
                 w = gnome_number_entry_gtk_entry( GNOME_NUMBER_ENTRY(w) );
                 tmpgStr = g_string_sized_new(5);
                 g_string_sprintf( tmpgStr, "%d", xaccSchedXactionGetNumOccur( sxed->sx ) );
@@ -1059,7 +1059,7 @@ set_endgroup_toggle_states( SchedXactionEditorDialog *sxed, EndType type )
         dateCtl = glade_xml_get_widget( sxed->gxml, "sxe_end_date" );
         gtk_widget_set_sensitive( GTK_WIDGET(dateCtl), (type == END_DATE) );
 
-        occurCtl = glade_xml_get_widget( sxed->gxml, "end_nentry" );
+        occurCtl = glade_xml_get_widget( sxed->gxml, END_GNOME_NUMENTRY );
         gtk_widget_set_sensitive( GTK_WIDGET(occurCtl), (type == END_OCCUR) );
 }
 
@@ -1080,29 +1080,24 @@ static
 void
 edit_button_clicked( GtkButton *b, gpointer d )
 {
-        GList                        *sel;
-        GtkCList                *cl;
-        int                        row;
-        SchedXactionDialog        *sxd;
-        SchedXaction                *sx;
+        GList *sel;
+        GtkCList *cl;
+        int row;
+        SchedXactionDialog *sxd;
+        SchedXaction *sx;
         SchedXactionEditorDialog *sxed;
 
         sxd = (SchedXactionDialog*)d;
 
         cl = GTK_CLIST(glade_xml_get_widget( sxd->gxml, "sched_xact_list" ));
-        sel = cl->selection;
 
-        if ( !sel ) {
-                return;
-        }
-
-        do {
+        for( sel = cl->selection; sel; sel = g_list_next(sel) ) {
                 row = (int)sel->data;
                 /* get the clist row for this listitem */
                 /* get the object UD */
                 sx = (SchedXaction*)gtk_clist_get_row_data( cl, row );
                 sxed = gnc_ui_scheduled_xaction_editor_dialog_create( sxd, sx, 0 );
-        } while ( (sel = g_list_next(sel)) );
+        }
 }
 
 static
@@ -1229,7 +1224,7 @@ putSchedXactionInClist( gpointer data, gpointer user_data )
 
         xaccFreqSpecGetFreqStr( xaccSchedXactionGetFreqSpec(sx), freqStr );
 
-        gd = xaccSchedXactionGetNextInstance( sx );
+        gd = xaccSchedXactionGetNextInstance( sx, NULL );
 
         if ( ! g_date_valid( &gd ) ) {
                 g_string_sprintf( nextDate, "not scheduled" );
@@ -1622,8 +1617,8 @@ gnc_sxed_reg_check_close(SchedXactionEditorDialog *sxed)
 }
 
 static gboolean
-_editor_component_sx_equality( gpointer find_data,
-                               gpointer user_data )
+editor_component_sx_equality( gpointer find_data,
+                              gpointer user_data )
 {
         return ( (SchedXaction*)find_data
                  == ((SchedXactionEditorDialog*)user_data)->sx );

@@ -136,8 +136,9 @@ typedef struct
 static void
 fspd_init( fsParseData *fspd )
 {
-        fspd->fs   = NULL;
-        fspd->list = NULL;
+        fspd->fs      = NULL;
+        fspd->list    = NULL;
+        fspd->session = NULL;
         fspd->interval
                 = fspd->offset
                 = fspd->day
@@ -594,6 +595,7 @@ dom_tree_to_freqSpec(xmlNodePtr node, GNCSession *session)
     fsParseData        fspd;
 
     fspd_init( &fspd );
+    fspd.session = session;
 
     fspd.fs = xaccFreqSpecMalloc(session);
     successful = dom_tree_generic_parse( node, fs_dom_handlers, &fspd );

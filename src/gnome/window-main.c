@@ -507,7 +507,8 @@ gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
 {
   GtkWidget *about;
   const gchar *message = _("The GnuCash personal finance manager.\n"
-                           "The GNU way to manage your money!");
+                           "The GNU way to manage your money!\n"
+                           "http://www.gnucash.org/");
   const gchar *copyright = "(C) 1998-2001 Linas Vepstas";
   const gchar *authors[] = {
     "Rob Browning <rlb@cs.utexas.edu>",
@@ -517,6 +518,7 @@ gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
     "Dave Peticolas <dave@krondo.com>",
     "Christian Stimming <stimming@tuhh.de>",
     "Linas Vepstas <linas@linas.org>",
+    "Joshua Sled <jsled@asynchronous.org>",
     NULL
   };
 
@@ -627,6 +629,25 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
     },
     GNOMEUIINFO_END
   };
+
+  static GnomeUIInfo gnc_sched_xaction_tools_submenu_template[] = 
+  {
+    { GNOME_APP_UI_ITEM,
+      N_("List and Editor"),
+      N_("The list of Scheduled Transactions"),
+      gnc_main_window_sched_xaction_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Since Last Run..."),
+      N_("Create Scheduled Transactions since the last time run."),
+      gnc_main_window_sched_xaction_slr_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
   
   static GnomeUIInfo gnc_tools_menu_template[] =
   {
@@ -669,20 +690,8 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
-    { GNOME_APP_UI_ITEM,
-      N_("Scheduled Transactions List"),
-      N_("A list of Scheduled Transactions"),
-      gnc_main_window_sched_xaction_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    { GNOME_APP_UI_ITEM,
-      N_("Scheduled Transactions Since-Last-Run..."),
-      N_("Create Scheduled Transactions since the last-time-run."),
-      gnc_main_window_sched_xaction_slr_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
+    GNOMEUIINFO_SUBTREE( N_("Scheduled Transactions"),
+                         gnc_sched_xaction_tools_submenu_template ),
     GNOMEUIINFO_END
   };
   

@@ -40,9 +40,14 @@
 #include "gnucash-header.h"
 #include "gnucash-item-edit.h"
 
+/* +DEBUG Just for the time being, until we get this
+ * gnome-druid/gnucash-sheet problem sorted out. --jsled */
+#include "gnc-engine-util.h"
+static short module = MOD_SX;
+/* -DEBUG */
+
 #define DEFAULT_REGISTER_HEIGHT 400
 #define DEFAULT_REGISTER_WIDTH  630
-
 
 static guint gnucash_register_initial_rows = 15;
 
@@ -683,6 +688,10 @@ gnucash_sheet_size_request (GtkWidget *widget, GtkRequisition *requisition)
 
         requisition->width = compute_optimal_width (sheet);
         requisition->height = compute_optimal_height (sheet);
+/* temporary -- jsled
+        DEBUG( "size_request: returning %d x %d\n",
+               requisition->width, requisition->height );
+*/
 }
 
 const char *
@@ -1013,10 +1022,29 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
         if (GTK_WIDGET_CLASS(sheet_parent_class)->size_allocate)
                 (*GTK_WIDGET_CLASS (sheet_parent_class)->size_allocate)
                         (widget, allocation);
+/* temporary -- jsled
+        DEBUG( "allocation: x: %d, y: %d, w: %d, h: %d, "
+               "sheet_width: %d, sheet_height: %d\n",
+               allocation->x, allocation->y,
+               allocation->width, allocation->height,
+               sheet->window_height, sheet->window_width );
+*/
 
         if (allocation->height == sheet->window_height &&
             allocation->width == sheet->window_width)
                 return;
+
+        /* Deal with a bug in gnome-druid.c which causes the ledger to resize
+         * in 8x4 increments ad infinitum... :(
+         *
+         * THIS IS BAD AND LAME.  THE RIGHT THING TO DO IS FIGURE OUT WHO'S
+         * DOING THE BAD THING AND FIX THEM.
+         *                                                 -- jsled
+         */
+        if ( (allocation->height - GNOME_PAD_SMALL - sheet->window_height) == 0
+             && (allocation->width - 2 * GNOME_PAD_SMALL - sheet->window_width) == 0 )
+                return;
+        /* END LAMENESS */
 
         if (allocation->width != sheet->window_width)
                 gnucash_sheet_styles_set_dimensions (sheet, allocation->width);

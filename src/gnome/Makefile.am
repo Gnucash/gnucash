@@ -38,7 +38,6 @@ libgncgnome_la_SOURCES = \
   window-reconcile.c \
   window-register.c \
   window-report.c \
-  dialog-nextrun.c \
   dialog-sxsincelast.c
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
@@ -80,7 +79,6 @@ noinst_HEADERS = \
   window-reconcile.h \
   window-register.h \
   window-report.h \
-  dialog-nextrun.h \
   dialog-sxsincelast.h
 
 EXTRA_DIST = \

@@ -97,6 +97,9 @@ int xaccSchedXactionHasEndDate( SchedXaction *sx );
  * Returns invalid date when there is no end-date specified.
  **/
 GDate* xaccSchedXactionGetEndDate( SchedXaction *sx );
+/**
+ * Set to an invalid GDate to turn off 'end-date' definition.
+ **/
 void xaccSchedXactionSetEndDate( SchedXaction *sx, GDate* newEnd );
 
 GDate* xaccSchedXactionGetLastOccurDate( SchedXaction *sx );
@@ -108,6 +111,9 @@ void xaccSchedXactionSetLastOccurDate( SchedXaction *sx, GDate* newLastOccur );
  **/
 gboolean xaccSchedXactionHasOccurDef( SchedXaction *sx );
 gint xaccSchedXactionGetNumOccur( SchedXaction *sx );
+/**
+ * Set to '0' to turn off number-of-occurances definition.
+ **/
 void xaccSchedXactionSetNumOccur( SchedXaction *sx, gint numNum );
 gint xaccSchedXactionGetRemOccur( SchedXaction *sx );
 void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
@@ -167,12 +173,34 @@ const GUID *xaccSchedXactionGetGUID( SchedXaction *sx );
 void xaccSchedXactionSetGUID( SchedXaction *sx, GUID g );
 
 /**
+ * Next-Instance state data.
+ *
+ * If you're looking at to-create [but not-yet-created] scheduled
+ * transactions, you'll want to use this to keep track of any
+ * SX-type-specific information that relates to the sequence and when it
+ * should end.  This is an opaque structure to the caller; it should be
+ * created and freed with the following functions, and passed into the
+ * GetNextInstance and GetInstanceAfter functions.
+ *
+ * The necessity for this arose in dealing with SXes with some number of
+ * remaining occurances, and thinking about how to keep track of this when
+ * looking at reminders... and generally thinking about not wanting the
+ * caller to know every possible thing that needs to be kept track of in a
+ * forward-looking sequence of SXes.
+ **/
+void *xaccSchedXactionCreateSequenceState( SchedXaction *sx );
+void xaccSchedXactionIncrSequenceState( SchedXaction *sx, void *stateData );
+void xaccSchedXactionDestroySequenceState( SchedXaction *sx, void *stateData );
+
+/**
  * Returns the next occurance of a scheduled transaction.  If the
  * transaction hasn't occured, then it's based off the start date.
  * Otherwise, it's based off the last-occurance date.
  **/
-GDate xaccSchedXactionGetNextInstance( SchedXaction *sx );
-GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx, GDate *date );
+GDate xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData );
+GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
+                                        GDate *date,
+                                        void *stateData );
 
 /*
  * Set the schedxaction's template transaction.  t_t_list is a glist

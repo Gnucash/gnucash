@@ -323,9 +323,11 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
   {
           GDate theDate;
           tmpTm = g_new0( struct tm, 1 );
-          /*  set the date */
+          /* set the date */
           if ( xaccFreqSpecGetOnce( fs, &theDate ) < 0 ) {
-                  PERR( "Inappropriate FreqSpec type\n" );
+                  PERR( "Inappropriate FreqSpec type "
+                        "[gnc-frequency: %d vs. FreqSpec: %d]\n",
+                        uift, xaccFreqSpecGetUIType( fs ) );
                   return;
           }
           g_date_to_struct_tm( &theDate, tmpTm );
@@ -337,7 +339,9 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
   { 
           int dailyMult = -1;
           if ( xaccFreqSpecGetDaily( fs, &dailyMult ) < 0 ) {
-                  PERR( "Inappropriate FreqSpec type\n" );
+                  PERR( "Inappropriate FreqSpec type "
+                        "[gnc-frequency: %d vs. FreqSpec: %d]\n",
+                        uift, xaccFreqSpecGetUIType( fs ) );
                   return;
           }
           o = glade_xml_get_widget( gf->gxml, "daily_spin" );
@@ -358,7 +362,9 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
           }
           subFS = (FreqSpec*)fsList->data;
           if ( xaccFreqSpecGetWeekly( subFS, &weekMult, &dayOfWeek ) < 0 ) {
-                  PERR( "Invalid FreqSpec type" );
+                  PERR( "Inappropriate FreqSpec type "
+                        "[gnc-frequency: %d vs. FreqSpec: %d]\n",
+                        uift, xaccFreqSpecGetUIType( fs ) );
                   return;
           }
           o = glade_xml_get_widget( gf->gxml, "dailymf_spin" );
@@ -380,7 +386,9 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
                                   return;
                           }
                           if ( xaccFreqSpecGetWeekly( subFS, &weeklyMult, &dayOfWeek ) < 0 ) {
-                                  PERR( "Inappropriate FreqSpec type\n" );
+                                  PERR( "Inappropriate FreqSpec type "
+                                        "[gnc-frequency: %d, FreqSpec: %d]\n",
+                                        uift, xaccFreqSpecGetUIType( fs ) );
                                   return;
                           }
                   } else {
@@ -391,7 +399,9 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
                                   return;
                           }
                           if ( xaccFreqSpecGetWeekly( subFS, &otherWeeklyMult, &dayOfWeek ) < 0 ) {
-                                  PERR( "Inappropriate FreqSpec type\n" );
+                                  PERR( "Inappropriate FreqSpec type "
+                                        "[gnc-frequency: %d, FreqSpec: %d]\n",
+                                        uift, xaccFreqSpecGetUIType( fs ) );
                                   return;
                           }
                           if ( weeklyMult != otherWeeklyMult ) {
@@ -425,7 +435,9 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
           subFS = (FreqSpec*)(g_list_nth( list, 0 )->data);
           if ( xaccFreqSpecGetMonthly( subFS, &monthlyMult,
                                        &firstDayOfMonth, &monthOffset ) < 0 ) {
-                  PERR( "Inappropriate FreqSpec type\n" );
+                  PERR( "Inappropriate FreqSpec type "
+                        "[gnc-frequency: %d, FreqSpec: %d]\n",
+                        uift, xaccFreqSpecGetUIType( fs ) );
                   return;
           }
           gtk_spin_button_set_value( GTK_SPIN_BUTTON(o), monthlyMult );
@@ -448,7 +460,9 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
           int monthlyMult, dayOfMonth, monthOffset;
           if ( xaccFreqSpecGetMonthly( fs, &monthlyMult,
                                        &dayOfMonth, &monthOffset ) < 0 ) {
-                  PERR( "Inappropriate FreqSpec type" );
+                  PERR( "Inappropriate FreqSpec type "
+                        "[gnc-frequency: %d, FreqSpec: %d]\n",
+                        uift, xaccFreqSpecGetUIType( fs ) );
                   return;
           }
           o = glade_xml_get_widget( gf->gxml, "monthly_spin" );
@@ -464,7 +478,9 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
 
           if ( xaccFreqSpecGetMonthly( fs, &monthlyMult,
                                        &dayOfMonth, &monthOffset ) < 0 ) {
-                  PERR( "Inappropriate FreqSpec type" );
+                  PERR( "Inappropriate FreqSpec type "
+                        "[gnc-frequency: %d, FreqSpec: %d]\n",
+                        uift, xaccFreqSpecGetUIType( fs ) );
                   return;
           }
           if ( monthlyMult != 3 ) {
@@ -482,7 +498,9 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
 
           if ( xaccFreqSpecGetMonthly( fs, &monthlyMult,
                                        &dayOfMonth, &monthOffset ) < 0 ) {
-                  PERR( "Inappropriate FreqSpec type" );
+                  PERR( "Inappropriate FreqSpec type "
+                        "[gnc-frequency: %d, FreqSpec: %d]\n",
+                        uift, xaccFreqSpecGetUIType( fs ) );
                   return;
           }
           if ( monthlyMult != 4 ) {
@@ -500,7 +518,9 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
 
           if ( xaccFreqSpecGetMonthly( fs, &monthlyMult,
                                        &dayOfMonth, &monthOffset ) < 0 ) {
-                  PERR( "Inappropriate FreqSpec type" );
+                  PERR( "Inappropriate FreqSpec type "
+                        "[gnc-frequency: %d, FreqSpec: %d]\n",
+                        uift, xaccFreqSpecGetUIType( fs ) );
                   return;
           }
           if ( monthlyMult != 6 ) {
@@ -518,7 +538,9 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
 
           if ( xaccFreqSpecGetMonthly( fs, &monthlyMult,
                                        &dayOfMonth, &monthOffset ) < 0 ) {
-                  PERR( "Inappropriate FreqSpec type" );
+                  PERR( "Inappropriate FreqSpec type "
+                        "[gnc-frequency: %d, FreqSpec: %d]\n",
+                        uift, xaccFreqSpecGetUIType( fs ) );
                   return;
           }
           if ( (monthlyMult % 12) != 0) {
@@ -539,7 +561,8 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
   }
   break;
   default:
-          PERR( "unknown ui freq type [%d, %s]\n", __LINE__, __FILE__ );
+          PERR( "unknown ui freq type %d [%d, %s]\n",
+                uift, __LINE__, __FILE__ );
           break;
   }
   update_appropriate_cal( gf );
@@ -1118,6 +1141,7 @@ start_date_changed( GnomeDateEdit *gde, gpointer d )
   o = NULL;
 
   switch (uift) {
+  case UIFREQ_ONCE:      /* FALLTHROUGH */
   case UIFREQ_DAILY:     /* FALLTHROUGH */
   case UIFREQ_DAILY_MF:  /* FALLTHROUGH */
   case UIFREQ_WEEKLY:    /* FALLTHROUGH */

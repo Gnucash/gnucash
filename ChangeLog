@@ -1,3 +1,51 @@
+2001-10-22  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/Makefile.am: Removed obsolete dialog-nextrun.{c,h}
+
+	* src/gnome/window-main.c (gnc_main_window_create_menus): Added
+	both Scheduled Transaction-related items to "Scheduled
+	Transactions" sub-menu of "Tools".
+	(gnc_main_window_about_cb): Added self to GUI About dlg.
+
+	* src/gnome/dialog-scheduledxaction.c: Renamed '_'-led functions.
+
+	* src/gnome/dialog-sxsincelast.c: Changed from a loose
+	confederation of multiple dialogs to the strong central authority
+	of a GnomeDruid-based since-last-run UI.  Renamed '_'-led
+	functions.
+	
+	* src/gnome/glade/sched-xact.glade: Fixed a non-unique-name
+	problem between the GnomeNumberEntry "end_nentry" and it's
+	GtkEntry "end_nentry".  Added Druid-based Since-Last-Run dialog.
+
+	* src/gnome/dialog-scheduledxaction.c (schedXact_editor_populate),
+	(editor_ok_button_clicked): Added support for now-uniquely-named
+	"end_gnome_nentry".
+
+	* src/engine/SchedXaction.c
+	(xaccSchedXactionCreateSequenceState): Added.
+	(xaccSchedXactionIncrSequenceState): Added.
+	(xaccSchedXactionDestroySequenceState): Added.
+	Added support for opaque state data when generating a sequence of
+	SX instances to support number-of-occurance-terminated SXes.
+
+	* src/backend/file/gnc-freqspec-xml-v2.c (dom_tree_to_freqSpec):
+	Added missing instance of GNCSession propogation.
+
+	* src/backend/file/io-gncxml-v2.c
+	(write_template_transaction_data): Added correct determination for
+	writing out the template-transaction section [before: only if
+	transactions existed in accounts; now: if any accounts exist] to
+	prevent read errors from SXes with valid-and-referenced Accounts,
+	but no Transactions in them.
+
+	* src/gnome-utils/gnc-frequency.c (gnc_frequency_setup): Better
+	error text when UIFreqType isn't recognized or appropriate.
+
+	* src/gnome/dialog-scheduledxaction.c (editor_ok_button_clicked):
+	Correctly sets SXes to have no occurance data if that's the case.
+	Better option variable naming, usage.
+
 2001-10-16  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/test-core/test-engine-stuff.c: work on test
@@ -1304,6 +1352,7 @@
 	directory. 
 
 	* src/engine/io-gncbin-r.c: remove #if 0'ed code.
+
 2001-07-30  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/glade/sched-xact.glade: Added seperate reminders
