@@ -566,13 +566,6 @@ gnc_acct_tree_window_menu_delete_account_cb (GtkWidget *widget,
 }
 
 static void
-gnc_acct_tree_window_menu_tax_info_cb (GtkWidget * widget, 
-                                       GnomeMDIChild * child) {
-  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  gnc_tax_info_dialog(GTK_WIDGET(mc->app));
-}
-
-static void
 gnc_acct_tree_window_menu_scrub_cb(GtkWidget * widget, 
                                    GnomeMDIChild * child) {
   GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
@@ -992,15 +985,6 @@ gnc_acct_tree_window_create_menu(GNCAcctTreeWin * main_info,
     },
     GNOMEUIINFO_SEPARATOR,
     GNOMEUIINFO_SUBTREE(N_("_Check & Repair"), dup_scrub),
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Tax Information"),
-      N_("Setup tax information for all income and expense accounts"),
-      gnc_acct_tree_window_menu_tax_info_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
     GNOMEUIINFO_END
   };
   GnomeUIInfo * dup_accts = g_memdup(accountsmenu, sizeof(accountsmenu));
