@@ -1,5 +1,7 @@
 2001-06-06  Dave Peticolas  <dave@krondo.com>
 
+	* src/test/test-real-data.sh: Josh Sled's bug fix
+
 	* src/doc/design/engine.texinfo: document prices and their API
 
 	* src/doc/design/gnucash-design.texinfo: update docs
