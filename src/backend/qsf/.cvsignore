@@ -1,0 +1,7 @@
+Makefile
+.deps
+.libs
+Makefile.in
+*.lo
+*.la
+qsf-dir.h
