@@ -32,7 +32,6 @@
 
 #include "MainWindow.h"
 #include "RegWindow.h"
-#include "window-main-menu.h"
 #include "window-mainP.h"
 #include "window-help.h"
 #include "dialog-options.h"
@@ -45,6 +44,21 @@ static short module = MOD_GUI;
 
 #include "util.h"
 
+enum {
+  FMB_NEW,
+  FMB_OPEN,
+  FMB_IMPORT,
+  FMB_SAVE,
+  FMB_SAVEAS,
+  FMB_QUIT,
+};
+
+enum {
+  VIEW_CTREE_BALANCE,
+  VIEW_CTREE_DESCRIPTION,
+  VIEW_CTREE_TYPE,
+};
+
 /** STRUCTURES ******************************************************/
 
 /** PROTOTYPES ******************************************************/
@@ -54,42 +68,64 @@ static void gnc_ui_delete_account_cb( GtkWidget *, gpointer );
 static void gnc_ui_about_cb( GtkWidget *, gpointer );
 static void gnc_ui_help_cb( GtkWidget *, gpointer );
 static void gnc_ui_reports_cb( GtkWidget *, gchar * );
+static void gnc_ui_view_cb( GtkWidget *, gint );
+static void gnc_ui_filemenu_cb( GtkWidget *, gint *);
 static void gnc_ui_mainWindow_toolbar_open( GtkWidget *, gpointer );
 static void gnc_ui_mainWindow_toolbar_edit( GtkWidget *, gpointer );
 static void gnc_ui_refresh_statusbar();
 
 /** GLOBALS *********************************************************/
-char	    *HELP_ROOT = "";
+char	*HELP_ROOT = "";
+short   show_categories = 1;
+extern GtkWidget *app;
 
 /** Menus ***********************************************************/
 static GnomeUIInfo filemenu[] = {
        {GNOME_APP_UI_ITEM, 
        N_("New"), N_("Create New File."),
-       NULL, NULL, NULL, 
+       gnc_ui_filemenu_cb, (gpointer)FMB_NEW, NULL, 
        GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_NEW,
        0, 0, NULL},
        {GNOME_APP_UI_ITEM,
        N_("Open"), N_("Open File."),
-       file_cmd_open, NULL, NULL,
+       gnc_ui_filemenu_cb, (gpointer)FMB_OPEN, NULL,
        GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
        0,0, NULL},
        {GNOME_APP_UI_ITEM,
        N_("Save"), N_("Save File."),
-       file_cmd_save, NULL, NULL,
+       gnc_ui_filemenu_cb, (gpointer)FMB_SAVE, NULL,
        GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_SAVE,
        0, 0, NULL},
        {GNOME_APP_UI_ITEM,
        N_("Import"), N_("Import QIF File."),
-       file_cmd_import, NULL, NULL,
+       gnc_ui_filemenu_cb, (gpointer)FMB_IMPORT, NULL,
        GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_CONVERT,
        0, 0, NULL},
        GNOMEUIINFO_SEPARATOR,
        {GNOME_APP_UI_ITEM,
        N_("Exit"), N_("Exit Gnucash."),
-       gnc_shutdown, NULL, NULL,
+       gnc_ui_filemenu_cb, (gpointer)FMB_QUIT, NULL,
        GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_QUIT,
        0, 0, NULL},       
        GNOMEUIINFO_END             
+};
+
+static GnomeUIInfo viewmenu[] = {
+	{GNOME_APP_UI_ITEM,
+	 N_("Hide categories"), N_("Hide"),
+	 gnc_ui_view_cb, 0, NULL,
+	 GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
+	 0, 0, NULL},
+	 GNOMEUIINFO_END
+};
+
+static GnomeUIInfo showmenu[] = {
+	{GNOME_APP_UI_ITEM,
+	 N_("Show categories"), N_("Show"),
+	 gnc_ui_view_cb, 0, NULL,
+	 GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
+	 0, 0, NULL},
+	 GNOMEUIINFO_END
 };
 
 static GnomeUIInfo reportsmenu[] = {
@@ -113,6 +149,13 @@ static GnomeUIInfo optionsmenu[] = {
 	 gnc_ui_options_cb, NULL, NULL,
 	 GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
 	 0, 0, NULL},
+#if 0
+	{GNOME_APP_UI_ITEM,
+	 N_("Gnucash News"), N_("News"),
+	 gnc_ui_news_callback, NULL, NULL,
+	 GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
+	 0, 0, NULL},	 
+#endif	 
 	 GNOMEUIINFO_END
 };
   
@@ -155,16 +198,18 @@ static GnomeUIInfo helpmenu[] = {
      GNOMEUIINFO_END
 };
 
+
 static GnomeUIInfo scriptsmenu[] = {
   GNOMEUIINFO_END
 };
 
 static GnomeUIInfo mainmenu[] = {
     GNOMEUIINFO_SUBTREE(N_("File"), filemenu),
+    GNOMEUIINFO_SUBTREE(N_("View"), viewmenu),    
     GNOMEUIINFO_SUBTREE(N_("Accounts"), accountsmenu),
     GNOMEUIINFO_SUBTREE(N_("Reports"), reportsmenu),
     GNOMEUIINFO_SUBTREE(N_("Options"), optionsmenu),
-    GNOMEUIINFO_SUBTREE(N_("Extensions"), scriptsmenu),
+    GNOMEUIINFO_SUBTREE(N_("Extensions"), scriptsmenu),    
     GNOMEUIINFO_SUBTREE(N_("Help"), helpmenu),
     GNOMEUIINFO_END
 };
@@ -175,8 +220,8 @@ GnomeUIInfo toolbar[] =
   { GNOME_APP_UI_ITEM,
     N_("Open"), 
     N_("Open File."),
-    file_cmd_open, 
-    NULL, 
+    gnc_ui_filemenu_cb, 
+    (gpointer)FMB_OPEN, 
     NULL,
     GNOME_APP_PIXMAP_STOCK, 
     GNOME_STOCK_PIXMAP_OPEN, 'o', (GDK_CONTROL_MASK), NULL
@@ -184,8 +229,8 @@ GnomeUIInfo toolbar[] =
   { GNOME_APP_UI_ITEM,
     N_("Save"), 
     N_("Save File."),
-    file_cmd_save, 
-    NULL, 
+    gnc_ui_filemenu_cb, 
+    (gpointer)FMB_SAVE, 
     NULL,
     GNOME_APP_PIXMAP_STOCK, 
     GNOME_STOCK_PIXMAP_SAVE, 's', (GDK_CONTROL_MASK), NULL
@@ -193,8 +238,8 @@ GnomeUIInfo toolbar[] =
   { GNOME_APP_UI_ITEM,
     N_("Import"), 
     N_("Import QIF File."),
-    file_cmd_import, 
-    NULL, 
+    gnc_ui_filemenu_cb, 
+    (gpointer)FMB_IMPORT, 
     NULL,
     GNOME_APP_PIXMAP_STOCK, 
     GNOME_STOCK_PIXMAP_CONVERT, 'i', (GDK_CONTROL_MASK), NULL
@@ -593,6 +638,64 @@ gnc_ui_mainWindow_toolbar_edit ( GtkWidget *widget, gpointer data )
 static void
 gnc_ui_options_cb ( GtkWidget *widget, gpointer data ) {
   gnc_show_options_dialog();
+}
+
+/* This function currently just hides/shows the INCOME/EXPENSE
+ * accounts.  It could and should be extended to allow full
+ * customization of the ctree widget... for instance the user
+ * should be able to choose which fields get displayed such as
+ * balance, description, account type, etc...
+ */
+static void
+gnc_ui_view_cb(GtkWidget *widget, gint viewType)
+{
+
+  GtkWidget *ctree;
+
+  ctree = gtk_object_get_data(GTK_OBJECT(app), "ctree");  
+  
+  if(show_categories == 1)
+  {
+    /* Widget label -> Hide Categories */
+    gnome_app_remove_menus (GNOME_APP(app), "View/Hide categories", 1);
+    gnome_app_insert_menus (GNOME_APP(app), "View/", showmenu);
+    gtk_clist_set_column_visibility(GTK_CLIST(ctree), 2, FALSE);  
+    show_categories = 0;
+  }
+  else
+  {
+    /* Widget lable -> Show Categories */
+    gnome_app_remove_menus (GNOME_APP(app), "View/Show categories", 1);
+    gnome_app_insert_menus (GNOME_APP(app), "View/", viewmenu);
+    gtk_clist_set_column_visibility(GTK_CLIST(ctree), 2, TRUE);  
+    show_categories = 1;
+  }
+
+
+
+  /* We really need a smarter refresh routine... one that will 
+   * only remove the INCOME/EXPENSE accounts... or add them... instead of
+   * just wiping the whole thing out and starting over.
+   */    
+  refreshMainWindow();  
+}
+
+void
+gnc_ui_filemenu_cb(GtkWidget *widget, gint *menuItem)
+{
+  switch((gint)menuItem)
+  {
+    case FMB_OPEN:   gncFileOpen();
+                     refreshMainWindow();
+                     break;
+    case FMB_SAVE:   gncFileSave();
+                     break;
+    case FMB_IMPORT: gncFileQIFImport();
+                     break;
+    case FMB_QUIT:   gnc_shutdown(0);
+                     break;
+    default: break;  
+  }  
 }
 
 void
