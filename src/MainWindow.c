@@ -490,7 +490,7 @@ mainWindow( Widget parent )
    * if the window manager close window button is hit.  */
   Atom protocol;
   protocol = XmInternAtom (XtDisplay (toplevel), "WM_DELETE_WINDOW", False);
-  XmAddWMProtocolCallback ( toplevel, protocol, fileMenubarCB, FMB_QUIT);
+  XmAddWMProtocolCallback ( toplevel, protocol, fileMenubarCB, (XtPointer) FMB_QUIT);
   }
 
   mainwindow = XtVaCreateManagedWidget( "mainwindow", 
