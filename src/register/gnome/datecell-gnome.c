@@ -67,8 +67,9 @@ static void block_picker_signals (DateCell *cell);
 static void unblock_picker_signals (DateCell *cell);
 static void realizeDate (BasicCell *bcell, gpointer w);
 static void setDateCellValue (BasicCell *bcell, const char *value);
-static void moveDate (BasicCell *bcell, VirtualLocation virt_loc);
-static void destroyDate (BasicCell *bcell);
+static void moveDate (BasicCell *bcell);
+static void date_cell_gui_destroy (BasicCell *bcell);
+static void date_cell_destroy (BasicCell *bcell);
 static void DateMV (BasicCell *_cell,
                     const GdkWChar *change,
                     int change_len,
@@ -192,8 +193,10 @@ xaccInitDateCell (DateCell *cell)
 
   cell->cell.is_popup = TRUE;
 
-  cell->cell.realize = realizeDate;
-  cell->cell.destroy = destroyDate;
+  cell->cell.destroy = date_cell_destroy;
+
+  cell->cell.gui_realize = realizeDate;
+  cell->cell.gui_destroy = date_cell_gui_destroy;
   cell->cell.modify_verify = DateMV;
   cell->cell.direct_update = DateDirect;
   cell->cell.set_value = setDateCellValue;
@@ -219,7 +222,7 @@ xaccInitDateCell (DateCell *cell)
   xaccSetBasicCellValueInternal (&cell->cell, buff);
 }
 
-DateCell *
+BasicCell *
 xaccMallocDateCell (void)
 {
    DateCell *cell;
@@ -228,7 +231,7 @@ xaccMallocDateCell (void)
 
    xaccInitDateCell (cell);
 
-   return cell;
+   return &cell->cell;
 }
 
 /* =============================================== */
@@ -353,12 +356,12 @@ unblock_picker_signals (DateCell *cell)
 /* =============================================== */
 
 static void
-destroyDate (BasicCell *bcell)
+date_cell_gui_destroy (BasicCell *bcell)
 {
   PopBox *box = bcell->gui_private;
   DateCell *cell = (DateCell *) bcell;
 
-  if (cell->cell.realize == NULL)
+  if (cell->cell.gui_realize == NULL)
   {
     if (box != NULL && box->date_picker != NULL)
     {
@@ -368,11 +371,11 @@ destroyDate (BasicCell *bcell)
     }
 
     /* allow the widget to be shown again */
-    cell->cell.realize = realizeDate;
-    cell->cell.move = NULL;
+    cell->cell.gui_realize = realizeDate;
+    cell->cell.gui_move = NULL;
     cell->cell.enter_cell = NULL;
     cell->cell.leave_cell = NULL;
-    cell->cell.destroy = NULL;
+    cell->cell.gui_destroy = NULL;
   }
 
   DEBUG ("date destroyed\n");
@@ -380,19 +383,18 @@ destroyDate (BasicCell *bcell)
 
 /* =============================================== */
 
-void
-xaccDestroyDateCell (DateCell *cell)
+static void
+date_cell_destroy (BasicCell *bcell)
 {
+  DateCell *cell = (DateCell *) bcell;
   PopBox *box = cell->cell.gui_private;
 
-  destroyDate (&(cell->cell));
+  date_cell_gui_destroy (&(cell->cell));
 
   g_free (box);
 
   cell->cell.gui_private = NULL;
-  cell->cell.realize = NULL;
-
-  xaccDestroyBasicCell (&(cell->cell));
+  cell->cell.gui_realize = NULL;
 }
 
 /* =============================================== */
@@ -800,8 +802,8 @@ realizeDate (BasicCell *bcell, gpointer data)
   gtk_object_sink (GTK_OBJECT(box->date_picker));
 
   /* to mark cell as realized, remove the realize method */
-  cell->cell.realize = NULL;
-  cell->cell.move = moveDate;
+  cell->cell.gui_realize = NULL;
+  cell->cell.gui_move = moveDate;
   cell->cell.enter_cell = enterDate;
   cell->cell.leave_cell = leaveDate;
 }
@@ -809,7 +811,7 @@ realizeDate (BasicCell *bcell, gpointer data)
 /* =============================================== */
 
 static void
-moveDate (BasicCell *bcell, VirtualLocation virt_loc)
+moveDate (BasicCell *bcell)
 {
   PopBox *box = bcell->gui_private;
 

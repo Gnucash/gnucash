@@ -112,7 +112,7 @@ xaccInitRecnCell (RecnCell *cell)
   cell->cell.set_value = RecnSetValue;
 }
 
-RecnCell *
+BasicCell *
 xaccMallocRecnCell (void)
 {
   RecnCell * cell;
@@ -121,7 +121,7 @@ xaccMallocRecnCell (void)
 
   xaccInitRecnCell (cell);
 
-  return cell;
+  return &cell->cell;
 }
 
 /* ================================================ */
@@ -156,17 +156,6 @@ RecnSetValue (BasicCell *_cell, const char *value)
   }
 
   xaccRecnCellSetFlag (cell, flag);
-}
-
-/* ================================================ */
-
-void
-xaccDestroyRecnCell (RecnCell *cell)
-{
-  if (!cell)
-    return;
-
-  xaccDestroyBasicCell (&cell->cell);
 }
 
 /* ================================================ */

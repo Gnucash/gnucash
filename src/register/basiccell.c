@@ -76,8 +76,8 @@ BasicCellHelpValue(BasicCell *cell)
 static void
 xaccClearBasicCell (BasicCell *cell)
 {
-  cell->changed = 0;
-  cell->conditionally_changed = 0;
+  cell->changed = FALSE;
+  cell->conditionally_changed = FALSE;
 
   cell->value = NULL;
   cell->value_w = NULL;
@@ -89,9 +89,9 @@ xaccClearBasicCell (BasicCell *cell)
   cell->modify_verify = NULL;
   cell->direct_update = NULL;
   cell->leave_cell = NULL;
-  cell->realize = NULL;
-  cell->move = NULL;
-  cell->destroy = NULL;
+  cell->gui_realize = NULL;
+  cell->gui_move = NULL;
+  cell->gui_destroy = NULL;
   cell->get_help_value = NULL;
 
   cell->is_popup = FALSE;
@@ -114,11 +114,14 @@ xaccInitBasicCell (BasicCell *cell)
 /* ===================================================== */
 
 void
-xaccDestroyBasicCell (BasicCell *cell)
+gnc_basic_cell_destroy (BasicCell *cell)
 {
-  /* give any gui elements a chance to clean up */
   if (cell->destroy)
-    (*(cell->destroy)) (cell);
+    cell->destroy (cell);
+
+  /* give any gui elements a chance to clean up */
+  if (cell->gui_destroy)
+    (*(cell->gui_destroy)) (cell);
 
   /* free up data strings */
   g_free (cell->value);
@@ -135,6 +138,16 @@ xaccDestroyBasicCell (BasicCell *cell)
 
   /* free the object itself */
   g_free (cell);
+}
+
+/* ===================================================== */
+
+const char *
+gnc_basic_cell_get_value (BasicCell *cell)
+{
+  g_return_val_if_fail (cell != NULL, NULL);
+
+  return cell->value;
 }
 
 /* ===================================================== */
@@ -157,7 +170,37 @@ xaccSetBasicCellValue (BasicCell *cell, const char *val)
     xaccSetBasicCellValueInternal (cell, val);
 }
 
-/* ===================================================== */
+gboolean
+gnc_basic_cell_get_changed (BasicCell *cell)
+{
+  if (!cell) return FALSE;
+
+  return cell->changed;
+}
+
+gboolean
+gnc_basic_cell_get_conditionally_changed (BasicCell *cell)
+{
+  if (!cell) return FALSE;
+
+  return cell->conditionally_changed;
+}
+
+void
+gnc_basic_cell_set_changed (BasicCell *cell, gboolean changed)
+{
+  if (!cell) return;
+
+  cell->changed = changed;
+}
+
+void
+gnc_basic_cell_set_conditionally_changed (BasicCell *cell, gboolean changed)
+{
+  if (!cell) return;
+
+  cell->conditionally_changed = changed;
+}
 
 void
 xaccSetBasicCellBlankHelp (BasicCell *cell, const char *blank_help)
@@ -185,17 +228,6 @@ xaccBasicCellGetHelp (BasicCell *cell)
     return NULL;
 
   return cell->get_help_value(cell);
-}
-
-/* ===================================================== */
-
-void
-xaccBasicCellSetChanged (BasicCell *cell, gboolean changed)
-{
-  if (cell == NULL)
-    return;
-
-  cell->changed = changed ? GNC_CELL_CHANGED : 0;
 }
 
 /* ===================================================== */

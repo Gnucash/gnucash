@@ -61,9 +61,7 @@ typedef struct _QuickFillCell
   GdkWChar *original;  /* original string entered in original case */
 } QuickFillCell;
 
-QuickFillCell *  xaccMallocQuickFillCell (void);
-void             xaccInitQuickFillCell (QuickFillCell *cell);
-void             xaccDestroyQuickFillCell (QuickFillCell *cell);
+BasicCell *      xaccMallocQuickFillCell (void);
 
 void             xaccSetQuickFillCellValue (QuickFillCell *cell,
                                             const char *value);

@@ -59,9 +59,8 @@ typedef struct _ComboCell
 } ComboCell;
 
 
-ComboCell *  xaccMallocComboCell (void);
+BasicCell *  xaccMallocComboCell (void);
 void         xaccInitComboCell (ComboCell *cell);
-void         xaccDestroyComboCell (ComboCell *cell);
 
 void         xaccSetComboCellValue (ComboCell *cell, const char *value);
 

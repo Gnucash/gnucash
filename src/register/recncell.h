@@ -57,8 +57,7 @@ typedef struct _RecnCell
   gpointer confirm_data;
 } RecnCell;
 
-RecnCell * xaccMallocRecnCell (void);
-void       xaccDestroyRecnCell (RecnCell *cell);
+BasicCell * xaccMallocRecnCell (void);
 
 void       xaccRecnCellSetFlag (RecnCell *cell, char reconciled_flag);
 char       xaccRecnCellGetFlag (RecnCell *cell);

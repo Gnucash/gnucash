@@ -59,6 +59,7 @@
 #include "gnc-html-history.h"
 #include "gnc-network.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "query-user.h"
 #include "window-help.h"
 #include "window-main.h"

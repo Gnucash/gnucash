@@ -1,9 +1,11 @@
+SUBDIRS = gnome
 
 noinst_LIBRARIES = libgncregister.a
 
 libgncregister_a_SOURCES = \
   QuickFill.c \
   basiccell.c \
+  cell-factory.c \
   cellblock.c \
   gtable.c \
   numcell.c \
@@ -19,6 +21,7 @@ libgncregister_a_SOURCES = \
 noinst_HEADERS = \
   QuickFill.h \
   basiccell.h \
+  cell-factory.h \
   cellblock.h \
   combocell.h \
   datecell.h \
@@ -46,6 +49,3 @@ INCLUDES = \
   -I${top_srcdir}/src/register/gnome \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}
-
-
-SUBDIRS = gnome

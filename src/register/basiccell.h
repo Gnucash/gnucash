@@ -56,24 +56,6 @@
  * classes should provide a callback here if they need
  * to understand special cell formats.
  *
- * MEMBERS:
- * The input_output member controls how the cell accepts 
- *   input, and whether it displays its value.  It is a 
- *   a flag of OR-ed together values. Flag bits include:
- *
- *     XACC_CELL_ALLOW_INPUT  accept keyboard & mouse
- *       input from the user. 
- *     XACC_CELL_ALLOW_EXACT_ONLY the cell may only be
- *       entered by 'exact' selection, i.e., not by
- *       indirect selection by, for example, tabbing.
- *       Currently, the only exact method of entering
- *       a cell is via the mouse pointer.
- *
- *   If ALLOW_INPUT is not set, the cell is supposed to
- *   to only display values, but not accept user input. If
- *   set, then the callbacks below are used to when the
- *   cell is entered.
- *
  * USER CALLBACKS:
  * The enter_cell() callback is called when the user first
  *    makes a move to enter a cell.  This might be by clicking
@@ -134,14 +116,14 @@
  * callbacks that allow the programmer to perform GUI-specific
  * initialization & changes.
  *
- * The realize() callback will be called when GUI-specific 
+ * The gui_realize() callback will be called when GUI-specific 
  *    initialization needs to be done. For Gnome, the second
  *    argument will be cast to the parent widget.
  *
- * The destroy() callback will be called when the GUI associated
+ * The gui_destroy() callback will be called when the GUI associated
  *    with the cell needs to be destroyed.
  *
- * The move() callback will be called when the GUI element needs
+ * The gui_move() callback will be called when the GUI element needs
  *    to be positioned to a new location within the table grid.
  *    The second argument is the virtual location the GUI
  *    element should be moved to.
@@ -160,14 +142,12 @@
 #include <gdk/gdk.h>
 #include <glib.h>
 
-#include "gnc-common.h"
 #include "gnc-ui-common.h"
-#include "register-common.h"
 
-
-#define GNC_CELL_CHANGED 0xffffffff
 
 typedef struct _BasicCell BasicCell;
+
+typedef BasicCell * (*CellCreateFunc) (void);
 
 typedef void (*CellSetValueFunc) (BasicCell *cell,
                                   const char * new_value);
@@ -196,7 +176,7 @@ typedef void (*CellLeaveFunc) (BasicCell *cell);
 
 typedef void (*CellRealizeFunc) (BasicCell *cell, gpointer gui_handle);
 
-typedef void (*CellMoveFunc) (BasicCell *cell, VirtualLocation virt_loc);
+typedef void (*CellMoveFunc) (BasicCell *cell);
 
 typedef void (*CellDestroyFunc) (BasicCell *cell);
 
@@ -211,11 +191,12 @@ struct _BasicCell
 
   gint value_len;                /* length of wide chars value */
 
-  guint32 changed;               /* 2^32-1 if value modified */
-  guint32 conditionally_changed; /* value if modified conditionally */
+  gboolean changed;               /* true if value modified */
+  gboolean conditionally_changed; /* true if value modified conditionally */
 
-  /* "virtual", overloaded set-value method */
+  /* "virtual", overloaded methods */
   CellSetValueFunc set_value;
+  CellDestroyFunc  destroy;
 
   /* cell-editing callbacks */
   CellEnterFunc        enter_cell;
@@ -223,12 +204,12 @@ struct _BasicCell
   CellDirectUpdateFunc direct_update;
   CellLeaveFunc        leave_cell;
 
-  /* private, GUI-specific callbacks */
-  CellRealizeFunc realize;
-  CellMoveFunc    move;
-  CellDestroyFunc destroy;
-
   CellGetHelpFunc get_help_value;
+
+  /* private, GUI-specific callbacks */
+  CellRealizeFunc gui_realize;
+  CellMoveFunc    gui_move;
+  CellDestroyFunc gui_destroy;
 
   /* GUI flag indicated is a popup-widget */
   gboolean is_popup;
@@ -240,14 +221,20 @@ struct _BasicCell
 
 BasicCell *  xaccMallocBasicCell (void);
 void         xaccInitBasicCell (BasicCell *bcell);
-void         xaccDestroyBasicCell (BasicCell *bcell);
+void         gnc_basic_cell_destroy (BasicCell *bcell);
 
+const char * gnc_basic_cell_get_value (BasicCell *cell);
 void         xaccSetBasicCellValue (BasicCell *bcell, const char *value);
+
+gboolean     gnc_basic_cell_get_changed (BasicCell *cell);
+gboolean     gnc_basic_cell_get_conditionally_changed (BasicCell *cell);
+
+void         gnc_basic_cell_set_changed (BasicCell *cell, gboolean changed);
+void         gnc_basic_cell_set_conditionally_changed (BasicCell *cell,
+                                                       gboolean changed);
 
 void         xaccSetBasicCellBlankHelp (BasicCell *bcell, const char *help);
 char *       xaccBasicCellGetHelp (BasicCell *bcell);
-
-void         xaccBasicCellSetChanged (BasicCell *bcell, gboolean changed);
 
 /* for sub-class use only */
 void         xaccSetBasicCellValueInternal (BasicCell *bcell,

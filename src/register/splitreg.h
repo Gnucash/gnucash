@@ -44,14 +44,8 @@
 #ifndef XACC_SPLITREG_H
 #define XACC_SPLITREG_H
 
-#include "basiccell.h"
-#include "cellblock.h"
-#include "combocell.h"
-#include "datecell.h"
-#include "quickfillcell.h"
-#include "pricecell.h"
-#include "numcell.h"
-#include "recncell.h"
+#include "Account.h" /* FIXME No Engine headers!!! */
+
 #include "table-allgui.h"
 
 /* defined register types.
@@ -124,27 +118,6 @@ typedef enum
   REG_STYLE_JOURNAL
 } SplitRegisterStyle;
 
-/* modified flags -- indicate which cell values have been modified by user */
-typedef enum
-{
-  MOD_NONE   = 0,
-  MOD_DATE   = 1 <<  0,
-  MOD_NUM    = 1 <<  1,
-  MOD_DESC   = 1 <<  2,
-  MOD_RECN   = 1 <<  3,
-  MOD_ACTN   = 1 <<  4,
-  MOD_XFRM   = 1 <<  5,
-  MOD_MXFRM  = 1 <<  6,
-  MOD_MEMO   = 1 <<  7,
-  MOD_AMNT   = 1 <<  8,
-  MOD_PRIC   = 1 <<  9,
-  MOD_SHRS   = 1 << 10,
-  MOD_NOTES  = 1 << 11,
-  MOD_FCRED  = 1 << 12,
-  MOD_FDEBT  = 1 << 13,
-  MOD_ALL    = 0xffff
-} CellModifiedFlags;
-
 /* Types of cursors */
 typedef enum
 {
@@ -166,7 +139,7 @@ typedef enum
   NUM_CURSOR_TYPES
 } CursorType;
 
-typedef struct _SplitRegisterBuffer SplitRegisterBuffer;
+typedef struct _RegisterBuffer RegisterBuffer;
 typedef struct _SplitRegister SplitRegister;
 
 typedef void (*SplitRegisterDestroyCB) (SplitRegister *reg);
@@ -186,47 +159,24 @@ struct _SplitRegister
 
   BasicCell     * nullCell;
 
-  DateCell      * dateCell;
-  NumCell       * numCell;
-  QuickFillCell * descCell;
-  RecnCell      * recnCell;
-  PriceCell     * balanceCell;
-  ComboCell     * actionCell;
-  ComboCell     * xfrmCell;
-  QuickFillCell * memoCell;
-  PriceCell     * creditCell;
-  PriceCell     * debitCell;
-  PriceCell     * priceCell;
-  PriceCell     * sharesCell;
-  ComboCell     * mxfrmCell;
-  PriceCell     * tcreditCell;
-  PriceCell     * tdebitCell;
-  PriceCell     * tsharesCell;
-  PriceCell     * tbalanceCell;
-  QuickFillCell * notesCell;
-
-  QuickFillCell * formCreditCell;
-  QuickFillCell * formDebitCell;
-
   SplitRegisterType type;
   SplitRegisterStyle style;
   gboolean use_double_line;
 
   /* some private data; outsiders should not access this */
 
-  BasicCell *header_cells[CELL_TYPE_COUNT];
-  BasicCell *cells[CELL_TYPE_COUNT];
+  GList *cells;
 
   /**
    * A flag indicating a "template" register.
    **/
   gboolean	template;
-	
+
   /**
    * The template account which the transactions in a template
    * splitregister will belong to.
    **/
-  Account	*templateAcct;
+  Account	*templateAcct; /* FIXME: this should not be here! */
 
   /* user_data allows users of this object to hang
    * private data onto it */
@@ -245,11 +195,11 @@ struct _SplitRegister
 
 
 SplitRegister *
-xaccMallocSplitRegister (SplitRegisterType type,
-                         SplitRegisterStyle style,
-                         gboolean use_double_line,
-                         TableModel *model,
-			 gboolean templateMode);
+gnc_register_new (SplitRegisterType type,
+                  SplitRegisterStyle style,
+                  gboolean use_double_line,
+                  TableModel *model,
+                  gboolean templateMode);
 
 void            xaccConfigSplitRegister (SplitRegister *reg,
                                          SplitRegisterType type,
@@ -258,12 +208,16 @@ void            xaccConfigSplitRegister (SplitRegister *reg,
 
 void            xaccDestroySplitRegister (SplitRegister *reg);
 
-/* returns non-zero value if updates have been made to data */
-guint32         xaccSplitRegisterGetChangeFlag (SplitRegister *reg);
-guint32         xaccSplitRegisterGetConditionalChangeFlag (SplitRegister *reg);
+BasicCell *     gnc_register_get_cell (SplitRegister *sr, CellType cell_type);
+const char *    gnc_register_get_cell_value (SplitRegister *sr,
+                                             CellType cell_type);
 
-/* Clears all change flags in the register. Does not alter values */
-void            xaccSplitRegisterClearChangeFlag (SplitRegister *reg);
+gboolean        gnc_register_get_cursor_changed (SplitRegister *sr,
+                                                 gboolean include_conditional);
+gboolean        gnc_register_get_cell_changed (SplitRegister *sr,
+                                               CellType cell_type,
+                                               gboolean include_conditional);
+void            gnc_register_clear_changes (SplitRegister *sr);
 
 /* Returns the type of the current cursor */
 CursorClass     xaccSplitRegisterGetCurrentCursorClass (SplitRegister *reg);
@@ -294,12 +248,11 @@ gboolean   xaccSplitRegisterGetCurrentCellLoc (SplitRegister *reg,
                                                VirtualLocation *virt_loc);
 
 /* Functions for working with split register buffers */
-SplitRegisterBuffer * xaccMallocSplitRegisterBuffer (void);
-void xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb);
+RegisterBuffer * gnc_register_buffer_new (void);
+void gnc_register_buffer_destroy (RegisterBuffer *rb);
 
-void xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb);
-void xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
-                                           SplitRegisterBuffer *srb);
+void gnc_register_save_cursor (SplitRegister *sr, RegisterBuffer *srb);
+void gnc_register_restore_cursor (SplitRegister *sr, RegisterBuffer *srb);
 
 const char * xaccSplitRegisterGetCellTypeName (CellType type);
 CellType     xaccSplitRegisterGetCellTypeFromName (const char *name);

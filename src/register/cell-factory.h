@@ -1,5 +1,6 @@
 /********************************************************************\
- * textcell.c -- simple plain-ascii text display/input cell         *
+ * cell-factory.h -- register cell creation object                  *
+ * Copyright 2001 Free Software Foundation                          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,60 +21,21 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * FILE:
- * textcell.c
- *
- * FUNCTION:
- * implements the simplest possible cell -- a text cell
- *
- * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
- * Copyright (c) 2000 Dave Peticolas
- */
-
-#include <stdlib.h>
-#include <string.h>
+#ifndef CELL_FACTORY_H
+#define CELL_FACTORY_H
 
 #include "basiccell.h"
-#include "textcell.h"
 
-/* ================================================ */
-/* by definition, all text is valid text.  So accept
- * all modifications */
+typedef struct cell_factory CellFactory;
 
-static void
-TextMV (struct _BasicCell *_cell,
-        const GdkWChar *change,
-        int change_len,
-        const GdkWChar *newval,
-        int newval_len,
-        int *cursor_position,
-        int *start_selection,
-        int *end_selection)
-{
-  xaccSetBasicCellWCValueInternal (_cell, newval);
-}
+CellFactory * gnc_cell_factory_new (void);
+void gnc_cell_factory_destroy (CellFactory *cf);
 
-/* ================================================ */
+void gnc_cell_factory_add_cell_type (CellFactory *cf,
+                                     const char *cell_type_name,
+                                     CellCreateFunc cell_creator);
 
-static void
-xaccInitTextCell (BasicCell *cell)
-{
-  cell->modify_verify = TextMV;
-}
+BasicCell * gnc_cell_factory_make_cell (CellFactory *cf,
+                                        const char *cell_type_name);
 
-/* ================================================ */
-
-BasicCell *
-xaccMallocTextCell (void)
-{
-  BasicCell *cell;
-
-  cell = xaccMallocBasicCell ();
-  xaccInitTextCell (cell);
-
-  return cell;
-}
-
-/* --------------- end of file ---------------------- */
+#endif

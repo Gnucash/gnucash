@@ -106,8 +106,7 @@ typedef struct _DateCell
 } DateCell;
 
 /* installs a callback to handle date recording */
-DateCell * xaccMallocDateCell (void);
-void       xaccDestroyDateCell (DateCell *cell);
+BasicCell * xaccMallocDateCell (void);
 
 /* days are 1-31, mon is 1-12, year 1900 == 1900 */
 void       xaccSetDateCellValue (DateCell *cell, int day, int mon, int year);  

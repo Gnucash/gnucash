@@ -247,21 +247,26 @@ quick_leave (BasicCell * _cell)
 
 /* ================================================ */
 
-QuickFillCell *
-xaccMallocQuickFillCell (void)
+static void
+quickfill_cell_destroy (BasicCell *bcell)
 {
-   QuickFillCell *cell;
+  QuickFillCell *cell = (QuickFillCell *) bcell;
 
-   cell = g_new0 (QuickFillCell, 1);
+  gnc_quickfill_destroy (cell->qf);
+  cell->qf = NULL;
 
-   xaccInitQuickFillCell (cell);
+  g_free (cell->original);
+  cell->original = NULL;
 
-   return cell;
+  cell->cell.enter_cell    = NULL;
+  cell->cell.modify_verify = NULL;
+  cell->cell.leave_cell    = NULL;
+  cell->cell.set_value     = NULL;
 }
 
 /* ================================================ */
 
-void
+static void
 xaccInitQuickFillCell (QuickFillCell *cell)
 {
    xaccInitBasicCell (&(cell->cell));
@@ -269,6 +274,8 @@ xaccInitQuickFillCell (QuickFillCell *cell)
    cell->qf = gnc_quickfill_new ();
    cell->sort = QUICKFILL_LIFO;
    cell->original = NULL;
+
+   cell->cell.destroy = quickfill_cell_destroy;
 
    cell->cell.enter_cell    = quick_enter;
    cell->cell.modify_verify = quick_modify;
@@ -280,21 +287,16 @@ xaccInitQuickFillCell (QuickFillCell *cell)
 
 /* ================================================ */
 
-void
-xaccDestroyQuickFillCell (QuickFillCell *cell)
+BasicCell *
+xaccMallocQuickFillCell (void)
 {
-   gnc_quickfill_destroy (cell->qf);
-   cell->qf = NULL;
+   QuickFillCell *cell;
 
-   g_free (cell->original);
-   cell->original = NULL;
+   cell = g_new0 (QuickFillCell, 1);
 
-   cell->cell.enter_cell    = NULL;
-   cell->cell.modify_verify = NULL;
-   cell->cell.leave_cell    = NULL;
-   cell->cell.set_value     = NULL;
+   xaccInitQuickFillCell (cell);
 
-   xaccDestroyBasicCell (&(cell->cell));
+   return &cell->cell;
 }
 
 /* ================================================ */

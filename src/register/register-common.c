@@ -21,8 +21,78 @@
  *                                                                  *
 \********************************************************************/
 
-#include "register-common.h"
+#include "config.h"
 
+#include "basiccell.h"
+#include "cell-factory.h"
+#include "combocell.h"
+#include "datecell.h"
+#include "numcell.h"
+#include "pricecell.h"
+#include "recncell.h"
+#include "register-common.h"
+#include "textcell.h"
+#include "quickfillcell.h"
+
+
+static gboolean register_inited = FALSE;
+static CellFactory *global_factory = NULL;
+
+void
+gnc_register_init (void)
+{
+  if (register_inited)
+    return;
+
+  register_inited = TRUE;
+
+  global_factory = gnc_cell_factory_new ();
+
+  gnc_register_add_cell_type (BASIC_CELL_TYPE_NAME, xaccMallocBasicCell);
+
+  gnc_register_add_cell_type (COMBO_CELL_TYPE_NAME, xaccMallocComboCell);
+
+  gnc_register_add_cell_type (DATE_CELL_TYPE_NAME, xaccMallocDateCell);
+
+  gnc_register_add_cell_type (NUM_CELL_TYPE_NAME, xaccMallocNumCell);
+
+  gnc_register_add_cell_type (PRICE_CELL_TYPE_NAME, xaccMallocPriceCell);
+
+  gnc_register_add_cell_type (RECN_CELL_TYPE_NAME, xaccMallocRecnCell);
+
+  gnc_register_add_cell_type (TEXT_CELL_TYPE_NAME, xaccMallocTextCell);
+
+  gnc_register_add_cell_type (QUICKFILL_CELL_TYPE_NAME,
+                              xaccMallocQuickFillCell);
+}
+
+void
+gnc_register_shutdown (void)
+{
+  if (!register_inited)
+    return;
+
+  gnc_cell_factory_destroy (global_factory);
+  global_factory = NULL;
+}
+
+void
+gnc_register_add_cell_type (const char *cell_type_name,
+                            CellCreateFunc cell_creator)
+{
+  gnc_register_init ();
+
+  gnc_cell_factory_add_cell_type (global_factory,
+                                  cell_type_name, cell_creator);
+}
+
+BasicCell *
+gnc_register_make_cell (const char *cell_type_name)
+{
+  gnc_register_init ();
+
+  return gnc_cell_factory_make_cell (global_factory, cell_type_name);
+}
 
 gboolean
 virt_cell_loc_equal (VirtualCellLocation vcl1, VirtualCellLocation vcl2)

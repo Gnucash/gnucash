@@ -572,20 +572,11 @@ gnc_table_move_cursor_internal (Table *table,
           {
             BasicCell *cell = cb_cell->cell;
 
-            cell->changed = 0;
-            cell->conditionally_changed = 0;
+            cell->changed = FALSE;
+            cell->conditionally_changed = FALSE;
 
-            if (cell->move)
-            {
-              VirtualLocation vloc;
-
-              vloc.vcell_loc.virt_row = -1;
-              vloc.vcell_loc.virt_col = -1;
-              vloc.phys_row_offset = -1;
-              vloc.phys_col_offset = -1;
-
-              cell->move (cell, vloc);
-            }
+            if (cell->gui_move)
+              cell->gui_move (cell);
           }
         }
     }
@@ -631,8 +622,8 @@ gnc_table_move_cursor_internal (Table *table,
          * the cell value.  Otherwise, we'll end up putting the 
          * new values in the old cell locations, and that would 
          * lead to confusion of all sorts. */
-        if (do_move_gui && cell->move)
-          cell->move (cell, virt_loc);
+        if (do_move_gui && cell->gui_move)
+          cell->gui_move (cell);
 
         /* OK, now copy the string value from the table at large 
          * into the cell handler. */
@@ -647,9 +638,8 @@ gnc_table_move_cursor_internal (Table *table,
 
           xaccSetBasicCellValue (cell, entry);
 
-          cell->changed = 0;
-          cell->conditionally_changed =
-            conditionally_changed ? GNC_CELL_CHANGED : 0;
+          cell->changed = FALSE;
+          cell->conditionally_changed = conditionally_changed;
         }
       }
     }
@@ -752,8 +742,8 @@ gnc_table_create_cursor (Table * table, CellBlock *curs)
 
       cb_cell = gnc_cellblock_get_cell (curs, cell_row, cell_col);
 
-      if (cb_cell && cb_cell->cell && cb_cell->cell->realize)
-        cb_cell->cell->realize (cb_cell->cell, table->ui_data);
+      if (cb_cell && cb_cell->cell && cb_cell->cell->gui_realize)
+        cb_cell->cell->gui_realize (cb_cell->cell, table->ui_data);
     }
 }
 
@@ -887,7 +877,7 @@ gnc_table_enter_update(Table *table,
     can_edit = enter(cell, cursor_position, start_selection, end_selection);
 
     if (safe_strcmp(old_value, cell->value) != 0)
-      cell->changed = GNC_CELL_CHANGED;
+      cell->changed = TRUE;
 
     g_free (old_value);
   }
@@ -913,7 +903,6 @@ gnc_table_enter_update(Table *table,
 void
 gnc_table_leave_update(Table *table, VirtualLocation virt_loc)
 {
-  gboolean changed = FALSE;
   CellLeaveFunc leave;
   CellBlockCell *cb_cell;
   BasicCell *cell;
@@ -951,10 +940,7 @@ gnc_table_leave_update(Table *table, VirtualLocation virt_loc)
     leave (cell);
 
     if (safe_strcmp(old_value, cell->value) != 0)
-    {
-      changed = TRUE;
-      cell->changed = GNC_CELL_CHANGED;
-    }
+      cell->changed = TRUE;
 
     g_free (old_value);
   }
@@ -1043,7 +1029,7 @@ gnc_table_modify_update(Table *table,
   if (safe_strcmp (old_value, cell->value) != 0)
   {
     changed = TRUE;
-    cell->changed = GNC_CELL_CHANGED;
+    cell->changed = TRUE;
   }
 
   g_free (old_value);
@@ -1123,7 +1109,7 @@ gnc_table_direct_update (Table *table,
     }
     else
     {
-      cell->changed = GNC_CELL_CHANGED;
+      cell->changed = TRUE;
       *newval_ptr = cell->value;
     }
   }

@@ -64,8 +64,6 @@ gnc_cellblock_cell_construct (gpointer _cb_cell, gpointer user_data)
   cb_cell->cell = NULL;
   cb_cell->cell_type = -1;
 
-  cb_cell->label = NULL;
-
   cb_cell->sample_text = NULL;
   cb_cell->alignment = CELL_ALIGN_LEFT;
   cb_cell->expandable = FALSE;
@@ -84,9 +82,6 @@ gnc_cellblock_cell_destroy (gpointer _cb_cell, gpointer user_data)
 
   cb_cell->cell = NULL;
   cb_cell->cell_type = -1;
-
-  g_free(cb_cell->label);
-  cb_cell->label = NULL;
 
   g_free(cb_cell->sample_text);
   cb_cell->sample_text = NULL;

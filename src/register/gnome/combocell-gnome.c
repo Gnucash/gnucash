@@ -36,6 +36,7 @@
 
 #include <gnome.h>
 
+#include "QuickFill.h"
 #include "combocell.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
@@ -77,14 +78,15 @@ typedef struct _PopBox
 
 static void block_list_signals (ComboCell *cell);
 static void unblock_list_signals (ComboCell *cell);
-static void realizeCombo (BasicCell *bcell, gpointer w);
-static void moveCombo (BasicCell *bcell, VirtualLocation virt_loc);
-static void destroyCombo (BasicCell *bcell);
-static gboolean enterCombo (BasicCell *bcell,
-                            int *cursor_position,
-                            int *start_selection,
-                            int *end_selection);
-static void leaveCombo (BasicCell *bcell);
+static void combo_cell_gui_realize (BasicCell *bcell, gpointer w);
+static void combo_cell_gui_move (BasicCell *bcell);
+static void combo_cell_gui_destroy (BasicCell *bcell);
+static gboolean combo_cell_enter (BasicCell *bcell,
+                                  int *cursor_position,
+                                  int *start_selection,
+                                  int *end_selection);
+static void combo_cell_leave (BasicCell *bcell);
+static void combo_cell_destroy (BasicCell *bcell);
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GTK_REG;
@@ -93,7 +95,7 @@ static gboolean auto_pop_combos = FALSE;
 
 /* =============================================== */
 
-ComboCell *
+BasicCell *
 xaccMallocComboCell (void)
 {
 	ComboCell * cell;
@@ -102,7 +104,7 @@ xaccMallocComboCell (void)
 
 	xaccInitComboCell (cell);
 
-	return cell;
+	return &cell->cell;
 }
 
 void
@@ -114,8 +116,10 @@ xaccInitComboCell (ComboCell *cell)
 
         cell->cell.is_popup = TRUE;
 
-	cell->cell.realize = realizeCombo;
-	cell->cell.destroy = destroyCombo;
+        cell->cell.destroy = combo_cell_destroy;
+
+	cell->cell.gui_realize = combo_cell_gui_realize;
+	cell->cell.gui_destroy = combo_cell_gui_destroy;
 
 	box = g_new0 (PopBox, 1);
 
@@ -266,12 +270,12 @@ unblock_list_signals (ComboCell *cell)
 /* =============================================== */
 
 static void
-destroyCombo (BasicCell *bcell)
+combo_cell_gui_destroy (BasicCell *bcell)
 {
 	PopBox *box = bcell->gui_private;
 	ComboCell *cell = (ComboCell *) bcell;
 
-	if (cell->cell.realize == NULL)
+	if (cell->cell.gui_realize == NULL)
 	{
 		if (box != NULL && box->item_list != NULL)
                 {
@@ -281,11 +285,11 @@ destroyCombo (BasicCell *bcell)
 		}
 
 		/* allow the widget to be shown again */
-		cell->cell.realize = realizeCombo;
-		cell->cell.move = NULL;
+		cell->cell.gui_realize = combo_cell_gui_realize;
+		cell->cell.gui_move = NULL;
 		cell->cell.enter_cell = NULL;
 		cell->cell.leave_cell = NULL;
-		cell->cell.destroy = NULL;
+		cell->cell.gui_destroy = NULL;
 	}
 
 	DEBUG("combo destroyed\n");
@@ -301,12 +305,13 @@ menustring_free (gpointer string, gpointer user_data)
 
 /* =============================================== */
 
-void
-xaccDestroyComboCell (ComboCell *cell)
+static void
+combo_cell_destroy (BasicCell *bcell)
 {
+        ComboCell *cell = (ComboCell *) bcell;
 	PopBox *box = cell->cell.gui_private;
 
-	destroyCombo(&(cell->cell));
+	combo_cell_gui_destroy (&(cell->cell));
 
 	if (box != NULL)
         {
@@ -342,9 +347,7 @@ xaccDestroyComboCell (ComboCell *cell)
 	}
 
 	cell->cell.gui_private = NULL;
-	cell->cell.realize = NULL;
-
-	xaccDestroyBasicCell(&(cell->cell));
+	cell->cell.gui_realize = NULL;
 }
 
 /* =============================================== */
@@ -727,7 +730,7 @@ ComboHelpValue (BasicCell *bcell)
 /* =============================================== */
 
 static void
-realizeCombo (BasicCell *bcell, gpointer data)
+combo_cell_gui_realize (BasicCell *bcell, gpointer data)
 {
 	GnucashSheet *sheet = data;
 	GnomeCanvasItem *item = sheet->item_editor;
@@ -743,11 +746,11 @@ realizeCombo (BasicCell *bcell, gpointer data)
 	gtk_object_sink (GTK_OBJECT(box->item_list));
 
 	/* to mark cell as realized, remove the realize method */
-	cell->cell.realize = NULL;
-	cell->cell.move = moveCombo;
-	cell->cell.enter_cell = enterCombo;
-	cell->cell.leave_cell = leaveCombo;
-	cell->cell.destroy = destroyCombo;
+	cell->cell.gui_realize = NULL;
+	cell->cell.gui_move = combo_cell_gui_move;
+	cell->cell.enter_cell = combo_cell_enter;
+	cell->cell.leave_cell = combo_cell_leave;
+	cell->cell.gui_destroy = combo_cell_gui_destroy;
 	cell->cell.modify_verify = ComboMV;
         cell->cell.direct_update = ComboDirect;
         cell->cell.get_help_value = ComboHelpValue;
@@ -756,7 +759,7 @@ realizeCombo (BasicCell *bcell, gpointer data)
 /* =============================================== */
 
 static void
-moveCombo (BasicCell *bcell, VirtualLocation virt_loc)
+combo_cell_gui_move (BasicCell *bcell)
 {
 	PopBox *box = bcell->gui_private;
 
@@ -822,10 +825,10 @@ popup_get_width (GnomeCanvasItem *item,
 }
 
 static gboolean
-enterCombo (BasicCell *bcell,
-            int *cursor_position,
-            int *start_selection,
-            int *end_selection)
+combo_cell_enter (BasicCell *bcell,
+                  int *cursor_position,
+                  int *start_selection,
+                  int *end_selection)
 {
         ComboCell *cell = (ComboCell *) bcell;
 	PopBox *box = bcell->gui_private;
@@ -862,7 +865,7 @@ enterCombo (BasicCell *bcell,
 /* =============================================== */
 
 static void
-leaveCombo (BasicCell *bcell)
+combo_cell_leave (BasicCell *bcell)
 {
 	PopBox *box = bcell->gui_private;
 

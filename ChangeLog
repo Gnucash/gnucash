@@ -1,3 +1,53 @@
+2001-07-21  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/cell-factory.[ch]: a new object for creation of
+	register cells. allows new cell types to be added dynamically.
+
+	* src/register/gnome/gnucash-style.c: fix for removal of
+	label from cellblock cells.
+
+	* src/register/table-allgui.[ch]: fix for changed flag and
+	callback changes.
+
+	* src/register/splitreg.[ch]: remove fixed cells, use a dynamic
+	list. Fix code appropriately.
+
+	* src/register/register-common.[ch]: add wrapper for a global cell
+	factory.
+
+	* src/register/gnome/datecell-gnome.c: same as below
+
+	* src/register/gnome/combocell-gnome.c: same as below
+
+	* src/register/textcell.[ch]: same as below
+
+	* src/register/recncell.[ch]: same as below
+
+	* src/register/quickfillcell.[ch]: same as below
+
+	* src/register/pricecell.[ch]: same as below
+
+	* src/register/numcell.[ch]: same as below
+
+	* src/register/datecell.h: same as below
+
+	* src/register/combocell.h: make destructor private.
+	constructor returns 'BasicCell *'.
+
+	* src/register/cellblock.[ch]: remove 'label' members -- no longer
+	used.
+
+	* src/register/basiccell.[ch]: 'virtualize' destructor.
+	simplify changed flags.
+
+	* src/register/Makefile.am (SUBDIRS): add cell-factory.[ch]
+
+	* src/gnome/gnc-html.c: fix includes
+
+	* src/SplitLedger.c: update for api changes
+
+	* src/MultiLedger.c: update for api changes
+
 2001-07-20  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/gnome/top-level.c (gnucash_ui_init): remove the \n's frome

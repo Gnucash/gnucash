@@ -820,8 +820,7 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
   model.cell_data_deallocator = xaccMLGUIDFree;
   model.cell_data_copy = xaccMLGUIDCopy;
 
-  ld->reg = xaccMallocSplitRegister (reg_type, style, FALSE, &model,
-                                     templateMode);
+  ld->reg = gnc_register_new (reg_type, style, FALSE, &model, templateMode);
   xaccSRSetData (ld->reg, ld,
                  xaccLedgerDisplayParent,
                  xaccLedgerDisplaySetHelp);

@@ -191,7 +191,7 @@ PriceHelp (BasicCell *bcell)
 
 /* ================================================ */
 
-PriceCell *
+BasicCell *
 xaccMallocPriceCell (void)
 {
    PriceCell *cell;
@@ -200,7 +200,7 @@ xaccMallocPriceCell (void)
 
    xaccInitPriceCell (cell);
 
-   return cell;
+   return &cell->cell;
 }
 
 /* ================================================ */
@@ -225,15 +225,6 @@ xaccInitPriceCell (PriceCell *cell)
    cell->cell.get_help_value = PriceHelp;
 
    xaccPriceGUIInit (cell);
-}
-
-/* ================================================ */
-
-void
-xaccDestroyPriceCell (PriceCell *cell)
-{
-  cell->amount = gnc_numeric_zero ();
-  xaccDestroyBasicCell (&(cell->cell));
 }
 
 /* ================================================ */

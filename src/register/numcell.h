@@ -29,7 +29,7 @@
  * supports a number of accelerator keys for number entry.
  *
  * HISTORY:
- * Copyright (c) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
+ * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
  */
  
 #ifndef NUM_CELL_H
@@ -44,8 +44,7 @@ typedef struct _NumCell
   gboolean next_num_set;
 } NumCell;
 
-NumCell * xaccMallocNumCell (void);
-void      xaccDestroyNumCell (NumCell *cell);
+BasicCell * xaccMallocNumCell (void);
 
 void      xaccSetNumCellValue (NumCell *cell, const char *str);
 gboolean  xaccSetNumCellLastNum (NumCell *cell, const char *str);

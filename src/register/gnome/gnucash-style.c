@@ -207,17 +207,6 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                         else
                                 width = 0;
 
-                        text = cb_cell->label;
-                        if (text)
-                        {
-                                int label_width;
-
-                                label_width = gdk_string_width (font, text);
-                                label_width += 2 * CELL_HPADDING;
-
-                                width = MAX (width, label_width);
-                        }
-
                         if (cb_cell->cell && cb_cell->cell->is_popup)
                                 width += item_edit_get_toggle_offset
                                         (cd->pixel_height);

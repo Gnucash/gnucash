@@ -92,6 +92,7 @@
 #include <glib.h>
 
 #include "gnc-common.h"
+#include "register-common.h"
 
 #include "basiccell.h"
 #include "cellblock.h"

@@ -78,8 +78,6 @@ typedef struct
   BasicCell *cell; /* cell handler */
   short cell_type; /* cell type from splitreg.h */
 
-  char *label;     /* cell label for header and hints */
-
   /* GUI layout information */
   char *sample_text;       /* sample text for sizing purposes */
   CellAlignment alignment;

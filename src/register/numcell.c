@@ -159,7 +159,7 @@ NumMV (BasicCell *_cell,
 }
 
 /* ================================================ */
-NumCell *
+BasicCell *
 xaccMallocNumCell (void)
 {
   NumCell *cell;
@@ -168,14 +168,7 @@ xaccMallocNumCell (void)
 
   xaccInitNumCell (cell);
 
-  return cell;
-}
-
-/* ================================================ */
-void
-xaccDestroyNumCell (NumCell *cell)
-{
-  xaccDestroyBasicCell (&(cell->cell));
+  return &cell->cell;
 }
 
 /* ================================================ */

@@ -26,6 +26,24 @@
 
 #include <glib.h>
 
+#include "basiccell.h"
+
+#define BASIC_CELL_TYPE_NAME     "basic-cell"
+#define COMBO_CELL_TYPE_NAME     "combo-cell"
+#define DATE_CELL_TYPE_NAME      "date-cell"
+#define NUM_CELL_TYPE_NAME       "num-cell"
+#define PRICE_CELL_TYPE_NAME     "price-cell"
+#define RECN_CELL_TYPE_NAME      "recn-cell"
+#define TEXT_CELL_TYPE_NAME      "text-cell"
+#define QUICKFILL_CELL_TYPE_NAME "quickfill-cell"
+
+void gnc_register_init (void);
+void gnc_register_shutdown (void);
+
+void gnc_register_add_cell_type (const char *cell_type_name,
+                                 CellCreateFunc cell_creator);
+BasicCell * gnc_register_make_cell (const char *cell_type_name);
+
 
 /* The VirtualCellLocation structure contains the virtual
  * location of a virtual cell.

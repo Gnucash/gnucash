@@ -46,41 +46,35 @@
 
 #include "gnc-engine-util.h"
 #include "messages.h"
-#include "recncell.h"
 #include "splitreg.h"
 #include "table-allgui.h"
-#include "textcell.h"
 
+/* FIXME: these shouldn't be here */
+#include "combocell.h"
+#include "pricecell.h"
+#include "recncell.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
+typedef struct cell_node
+{
+  CellType cell_type;
+  BasicCell *cell;
+} CellNode;
+
 typedef struct _CellBuffer CellBuffer;
 struct _CellBuffer
 {
+  CellType cell_type;
   char * value;
   guint32 changed;
   guint32 conditionally_changed;
 };
 
-struct _SplitRegisterBuffer
+struct _RegisterBuffer
 {
-  CellBuffer dateCell;
-  CellBuffer numCell;
-  CellBuffer descCell;
-  CellBuffer recnCell;
-  CellBuffer balanceCell;
-  CellBuffer actionCell;
-  CellBuffer xfrmCell;
-  CellBuffer memoCell;
-  CellBuffer creditCell;
-  CellBuffer debitCell;
-  CellBuffer priceCell;
-  CellBuffer sharesCell;
-  CellBuffer mxfrmCell;
-  CellBuffer notesCell;
-  CellBuffer formCreditCell;
-  CellBuffer formDebitCell;
+  GList *buffers;
 };
 
 typedef struct
@@ -147,6 +141,114 @@ xaccInitSplitRegister (SplitRegister *reg,
                        gboolean templateMode);
 
 
+static void
+gnc_register_add_cell (SplitRegister *sr,
+                       CellType cell_type,
+                       const char *cell_type_name)
+{
+  BasicCell *cell;
+  CellNode *node;
+
+  g_return_if_fail (sr != NULL);
+  g_return_if_fail (cell_type_name != NULL);
+
+  cell = gnc_register_make_cell (cell_type_name);
+
+  node = g_new0 (CellNode, 1);
+
+  node->cell_type = cell_type;
+  node->cell = cell;
+
+  sr->cells = g_list_prepend (sr->cells, node);
+}
+
+BasicCell *
+gnc_register_get_cell (SplitRegister *sr, CellType cell_type)
+{
+  GList *node;
+
+  g_return_val_if_fail (sr != NULL, NULL);
+
+  for (node = sr->cells; node; node = node->next)
+  {
+    CellNode *cn = node->data;
+
+    if (cn->cell_type == cell_type)
+      return cn->cell;
+  }
+
+  return NULL;
+}
+
+const char *
+gnc_register_get_cell_value (SplitRegister *sr, CellType cell_type)
+{
+  BasicCell *cell;
+
+  cell = gnc_register_get_cell (sr, cell_type);
+  if (!cell) return NULL;
+
+  return gnc_basic_cell_get_value (cell);
+}
+
+gboolean
+gnc_register_get_cursor_changed (SplitRegister *sr,
+                                 gboolean include_conditional)
+{
+  GList *node;
+
+  if (!sr) return FALSE;
+
+  for (node = sr->cells; node; node = node->next)
+  {
+    CellNode *cn = node->data;
+
+    if (gnc_basic_cell_get_changed (cn->cell))
+      return TRUE;
+
+    if (include_conditional &&
+        gnc_basic_cell_get_conditionally_changed (cn->cell))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+gboolean
+gnc_register_get_cell_changed (SplitRegister *sr,
+                               CellType cell_type,
+                               gboolean include_conditional)
+{
+  BasicCell *cell;
+
+  if (!sr) return FALSE;
+
+  cell = gnc_register_get_cell (sr, cell_type);
+  if (!cell) return FALSE;
+
+  if (!include_conditional)
+    return gnc_basic_cell_get_changed (cell);
+  else
+    return (gnc_basic_cell_get_changed (cell) ||
+            gnc_basic_cell_get_conditionally_changed (cell));
+}
+
+void
+gnc_register_clear_changes (SplitRegister *sr)
+{
+  GList *node;
+
+  if (!sr) return;
+
+  for (node = sr->cells; node; node = node->next)
+  {
+    CellNode *cn = node->data;
+
+    gnc_basic_cell_set_changed (cn->cell, FALSE);
+    gnc_basic_cell_set_conditionally_changed (cn->cell, FALSE);
+  }
+}
+
 /* ============================================== */
 /* configAction strings into the action cell */
 /* hack alert -- this stuff really, really should be in a config file ... */
@@ -154,95 +256,99 @@ xaccInitSplitRegister (SplitRegister *reg,
 static void
 configAction (SplitRegister *reg)
 {
+  ComboCell *cell;
+
+  cell = (ComboCell *) gnc_register_get_cell (reg, ACTN_CELL);
+
   /* setup strings in the action pull-down */
   switch (reg->type)
   {
     case BANK_REGISTER:
       /* broken ! FIXME bg */
     case SEARCH_LEDGER:  
-      xaccAddComboCellMenuItem (reg->actionCell, _("Deposit"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Withdraw"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Check"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Int"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("ATM"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Teller"));
+      xaccAddComboCellMenuItem (cell, _("Deposit"));
+      xaccAddComboCellMenuItem (cell, _("Withdraw"));
+      xaccAddComboCellMenuItem (cell, _("Check"));
+      xaccAddComboCellMenuItem (cell, _("Int"));
+      xaccAddComboCellMenuItem (cell, _("ATM"));
+      xaccAddComboCellMenuItem (cell, _("Teller"));
       /* Action: Point Of Sale */
-      xaccAddComboCellMenuItem (reg->actionCell, _("POS"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Phone"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Online"));
+      xaccAddComboCellMenuItem (cell, _("POS"));
+      xaccAddComboCellMenuItem (cell, _("Phone"));
+      xaccAddComboCellMenuItem (cell, _("Online"));
       /* Action: Automatic Deposit ?!? */
-      xaccAddComboCellMenuItem (reg->actionCell, _("AutoDep"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Wire"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Credit"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Direct Debit"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Transfer"));
+      xaccAddComboCellMenuItem (cell, _("AutoDep"));
+      xaccAddComboCellMenuItem (cell, _("Wire"));
+      xaccAddComboCellMenuItem (cell, _("Credit"));
+      xaccAddComboCellMenuItem (cell, _("Direct Debit"));
+      xaccAddComboCellMenuItem (cell, _("Transfer"));
       break;
     case CASH_REGISTER:
-      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
+      xaccAddComboCellMenuItem (cell, _("Buy"));
+      xaccAddComboCellMenuItem (cell, _("Sell"));
       break;
     case ASSET_REGISTER:
-      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Fee"));
+      xaccAddComboCellMenuItem (cell, _("Buy"));
+      xaccAddComboCellMenuItem (cell, _("Sell"));
+      xaccAddComboCellMenuItem (cell, _("Fee"));
       break;
     case CREDIT_REGISTER:
-      xaccAddComboCellMenuItem (reg->actionCell, _("ATM"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Credit"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Fee"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Int"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Online"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
+      xaccAddComboCellMenuItem (cell, _("ATM"));
+      xaccAddComboCellMenuItem (cell, _("Buy"));
+      xaccAddComboCellMenuItem (cell, _("Credit"));
+      xaccAddComboCellMenuItem (cell, _("Fee"));
+      xaccAddComboCellMenuItem (cell, _("Int"));
+      xaccAddComboCellMenuItem (cell, _("Online"));
+      xaccAddComboCellMenuItem (cell, _("Sell"));
       break;
     case LIABILITY_REGISTER:
-      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Loan"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Int"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Payment"));
+      xaccAddComboCellMenuItem (cell, _("Buy"));
+      xaccAddComboCellMenuItem (cell, _("Sell"));
+      xaccAddComboCellMenuItem (cell, _("Loan"));
+      xaccAddComboCellMenuItem (cell, _("Int"));
+      xaccAddComboCellMenuItem (cell, _("Payment"));
       break;
     case INCOME_LEDGER:
     case INCOME_REGISTER:
-      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Int"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Payment"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Rebate"));
+      xaccAddComboCellMenuItem (cell, _("Buy"));
+      xaccAddComboCellMenuItem (cell, _("Sell"));
+      xaccAddComboCellMenuItem (cell, _("Int"));
+      xaccAddComboCellMenuItem (cell, _("Payment"));
+      xaccAddComboCellMenuItem (cell, _("Rebate"));
       break;
     case EXPENSE_REGISTER:
-      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
+      xaccAddComboCellMenuItem (cell, _("Buy"));
+      xaccAddComboCellMenuItem (cell, _("Sell"));
       break;
     case GENERAL_LEDGER:
     case EQUITY_REGISTER:
-      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Equity"));
+      xaccAddComboCellMenuItem (cell, _("Buy"));
+      xaccAddComboCellMenuItem (cell, _("Sell"));
+      xaccAddComboCellMenuItem (cell, _("Equity"));
       break;
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
     case CURRENCY_REGISTER:
-      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Price"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Fee"));
+      xaccAddComboCellMenuItem (cell, _("Buy"));
+      xaccAddComboCellMenuItem (cell, _("Sell"));
+      xaccAddComboCellMenuItem (cell, _("Price"));
+      xaccAddComboCellMenuItem (cell, _("Fee"));
       /* Action: Dividend */
-      xaccAddComboCellMenuItem (reg->actionCell, _("Div")); 
-      xaccAddComboCellMenuItem (reg->actionCell, _("Int"));
+      xaccAddComboCellMenuItem (cell, _("Div")); 
+      xaccAddComboCellMenuItem (cell, _("Int"));
       /* Action: Long Term Capital Gains */
-      xaccAddComboCellMenuItem (reg->actionCell, _("LTCG"));
+      xaccAddComboCellMenuItem (cell, _("LTCG"));
       /* Action: Short Term Capital Gains */
-      xaccAddComboCellMenuItem (reg->actionCell, _("STCG"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Income"));
+      xaccAddComboCellMenuItem (cell, _("STCG"));
+      xaccAddComboCellMenuItem (cell, _("Income"));
       /* Action: Distribution */
-      xaccAddComboCellMenuItem (reg->actionCell, _("Dist")); 
-      xaccAddComboCellMenuItem (reg->actionCell, _("Split"));
+      xaccAddComboCellMenuItem (cell, _("Dist")); 
+      xaccAddComboCellMenuItem (cell, _("Split"));
       break;
 
     default:
-      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
+      xaccAddComboCellMenuItem (cell, _("Buy"));
+      xaccAddComboCellMenuItem (cell, _("Sell"));
       break;
   }
 }
@@ -254,7 +360,6 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
           CellType cell_type, short row, short col)
 {
   CellBlockCell *cb_cell;
-  BasicCell *hcell;
   sample_string *ss;
 
   ss = &cell_sample_strings[cell_type];
@@ -265,35 +370,25 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
   reg->cursor_header->start_col = MIN (reg->cursor_header->start_col, col);
   reg->cursor_header->stop_col  = MAX (reg->cursor_header->stop_col,  col);
 
-  hcell = reg->header_cells[cell_type];
-
   cb_cell = gnc_cellblock_get_cell (cursor, row, col);
 
-  cb_cell->cell = reg->cells[cell_type];
+  cb_cell->cell = gnc_register_get_cell (reg, cell_type);
   cb_cell->cell_type = cell_type;
-  cb_cell->label = g_strdup (hcell->value);
-  cb_cell->sample_text = g_strdup (_(ss->string + ss->offset));
+  cb_cell->sample_text = g_strdup (_(ss->string) + ss->offset);
   cb_cell->alignment = cell_alignments[cell_type];
-  cb_cell->expandable =
-    reg->cells[cell_type] == (BasicCell *) reg->descCell;
-  cb_cell->span =
-    reg->cells[cell_type] == (BasicCell *) reg->memoCell ||
-    reg->cells[cell_type] == (BasicCell *) reg->notesCell;
+  cb_cell->expandable = cell_type == DESC_CELL;
+  cb_cell->span = cell_type == MEMO_CELL || cell_type == NOTES_CELL;
 
   cb_cell = gnc_cellblock_get_cell (reg->cursor_header, row, col);
 
   if (cb_cell && (cursor == reg->cursor_ledger_single))
   {
-    cb_cell->cell = reg->cells[cell_type];
+    cb_cell->cell = gnc_register_get_cell (reg, cell_type);
     cb_cell->cell_type = cell_type;
-    cb_cell->label = g_strdup (hcell->value);
-    cb_cell->sample_text = g_strdup (_(ss->string + ss->offset));
+    cb_cell->sample_text = g_strdup (_(ss->string) + ss->offset);
     cb_cell->alignment = cell_alignments[cell_type];
-    cb_cell->expandable =
-      reg->cells[cell_type] == (BasicCell *) reg->descCell;
-    cb_cell->span =
-      reg->cells[cell_type] == (BasicCell *) reg->memoCell ||
-      reg->cells[cell_type] == (BasicCell *) reg->notesCell;
+    cb_cell->expandable = cell_type == DESC_CELL;
+    cb_cell->span = cell_type == MEMO_CELL || cell_type == NOTES_CELL;
   }
 }
 
@@ -570,11 +665,11 @@ configLayout (SplitRegister *reg)
 /* ============================================== */
 
 SplitRegister *
-xaccMallocSplitRegister (SplitRegisterType type,
-                         SplitRegisterStyle style,
-                         gboolean use_double_line,
-                         TableModel *model,
-                         gboolean templateMode)
+gnc_register_new (SplitRegisterType type,
+                  SplitRegisterStyle style,
+                  gboolean use_double_line,
+                  TableModel *model,
+                  gboolean templateMode)
 {
   SplitRegister * reg;
 
@@ -658,10 +753,6 @@ mallocCursors (SplitRegister *reg)
 
 /* ============================================== */
 
-#define NEW(NAME, CN, TYPE)			\
-   reg->CN##Cell = xaccMalloc##TYPE##Cell();	\
-   reg->cells[NAME##_CELL] = (BasicCell *) reg->CN##Cell;
-
 static void 
 xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterType type,
@@ -686,39 +777,30 @@ xaccInitSplitRegister (SplitRegister *reg,
   mallocCursors (reg);
 
   /* --------------------------- */
-  /* malloc the header (label) cells */
-  {
-    int i;
-
-    for (i = 0; i < CELL_TYPE_COUNT; i++)
-      reg->header_cells[i] = xaccMallocTextCell ();
-  }
-
-  /* --------------------------- */
   /* malloc the workhorse cells */
 
-  reg->nullCell = xaccMallocBasicCell ();
+  reg->nullCell = gnc_register_make_cell (BASIC_CELL_TYPE_NAME);
 
-  NEW (DATE,     date,     Date);
-  NEW (NUM,      num,      Num);
-  NEW (DESC,     desc,     QuickFill);
-  NEW (RECN,     recn,     Recn);
-  NEW (BALN,     balance,  Price);
-  NEW (XFRM,     xfrm,     Combo);
-  NEW (ACTN,     action,   Combo);
-  NEW (MEMO,     memo,     QuickFill);
-  NEW (CRED,     credit,   Price);
-  NEW (DEBT,     debit,    Price);
-  NEW (PRIC,     price,    Price);
-  NEW (SHRS,     shares,   Price);
-  NEW (MXFRM,    mxfrm,    Combo);
-  NEW (TCRED,    tcredit,  Price);
-  NEW (TDEBT,    tdebit,   Price);
-  NEW (TSHRS,    tshares,  Price);
-  NEW (TBALN,    tbalance, Price);
-  NEW (NOTES,    notes,    QuickFill);
-  NEW (FCRED,    formCredit, QuickFill);
-  NEW (FDEBT,    formDebit,  QuickFill);
+  gnc_register_add_cell (reg, DATE_CELL,  DATE_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, NUM_CELL,   NUM_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, DESC_CELL,  QUICKFILL_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, RECN_CELL,  RECN_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, BALN_CELL,  PRICE_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, XFRM_CELL,  COMBO_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, ACTN_CELL,  COMBO_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, MEMO_CELL,  QUICKFILL_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, CRED_CELL,  PRICE_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, DEBT_CELL,  PRICE_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, PRIC_CELL,  PRICE_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, SHRS_CELL,  PRICE_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, MXFRM_CELL, COMBO_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, TCRED_CELL, PRICE_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, TDEBT_CELL, PRICE_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, TSHRS_CELL, PRICE_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, TBALN_CELL, PRICE_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, NOTES_CELL, QUICKFILL_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, FCRED_CELL, QUICKFILL_CELL_TYPE_NAME);
+  gnc_register_add_cell (reg, FDEBT_CELL, QUICKFILL_CELL_TYPE_NAME);
 
   /* --------------------------- */
 
@@ -733,7 +815,7 @@ xaccInitSplitRegister (SplitRegister *reg,
   xaccSetBasicCellValue (reg->nullCell, "");
 
   /* The num cell is the transaction number */
-  xaccSetBasicCellBlankHelp (&reg->numCell->cell,
+  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, NUM_CELL),
                              _("Enter the transaction number, such as the "
                                "check number"));
 
@@ -741,15 +823,16 @@ xaccInitSplitRegister (SplitRegister *reg,
   {
     const char *help = _("Enter the account to transfer from, or choose "
                          "one from the list");
-    xaccSetBasicCellBlankHelp (&reg->mxfrmCell->cell, help);
-    xaccSetBasicCellBlankHelp (&reg->xfrmCell->cell, help);
+    xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, MXFRM_CELL), help);
+    xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, XFRM_CELL), help);
   }
 
   {
     const char *help = _("This transaction has multiple splits; "
                          "press the Split button to see them all");
 
-    xaccComboCellAddIgnoreString (reg->mxfrmCell,
+    xaccComboCellAddIgnoreString ((ComboCell *)
+                                  gnc_register_get_cell (reg, MXFRM_CELL),
                                   _("-- Split Transaction --"), help);
   }
 
@@ -757,47 +840,48 @@ xaccInitSplitRegister (SplitRegister *reg,
     const char *help = _("This transaction is a stock split; "
                          "press the Split button to see details");
 
-    xaccComboCellAddIgnoreString (reg->mxfrmCell,
+    xaccComboCellAddIgnoreString ((ComboCell *)
+                                  gnc_register_get_cell (reg, MXFRM_CELL),
                                   _("-- Stock Split --"), help);
   }
 
   /* the action cell */
-  xaccComboCellSetAutoSize (reg->actionCell, TRUE);
+  xaccComboCellSetAutoSize ((ComboCell *)
+                            gnc_register_get_cell (reg, ACTN_CELL), TRUE);
 
   /* the memo cell */
-  xaccSetBasicCellBlankHelp (&reg->memoCell->cell,
+  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, MEMO_CELL),
                              _("Enter a description of the split"));
 
   /* the desc cell */
-  xaccSetBasicCellBlankHelp (&reg->descCell->cell,
+  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, DESC_CELL),
                              _("Enter a description of the transaction"));
 
   /* the notes cell */
-  xaccSetBasicCellBlankHelp (&reg->notesCell->cell,
+  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, NOTES_CELL),
                              _("Enter notes for the transaction"));
   /* the formula cell */
-  xaccSetBasicCellBlankHelp( &reg->formCreditCell->cell,
+  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, FCRED_CELL),
                              _("Enter credit formula for real transaction"));
-  xaccSetBasicCellBlankHelp( &reg->formDebitCell->cell,
+  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, FDEBT_CELL),
                              _("Enter debit formula for real transaction"));
 
   /* Use 6 decimal places for prices */
-  xaccSetPriceCellFraction (reg->priceCell, 1000000);
-
-  /* Initialize price cells */
-  xaccSetPriceCellValue (reg->debitCell, gnc_numeric_zero ());
-  xaccSetPriceCellValue (reg->creditCell, gnc_numeric_zero ());
-  xaccSetPriceCellValue (reg->sharesCell, gnc_numeric_zero ());
+  xaccSetPriceCellFraction ((PriceCell *)
+                            gnc_register_get_cell (reg, PRIC_CELL), 1000000);
 
   /* Initialize shares and share balance cells */
   xaccSetPriceCellPrintInfo
-    (reg->sharesCell, gnc_default_share_print_info ());
+    ((PriceCell *) gnc_register_get_cell (reg, SHRS_CELL),
+     gnc_default_share_print_info ());
   xaccSetPriceCellPrintInfo
-    (reg->tsharesCell, gnc_default_share_print_info ());
+    ((PriceCell *) gnc_register_get_cell (reg, TSHRS_CELL),
+     gnc_default_share_print_info ());
 
   /* The action cell should accept strings not in the list */
-  xaccComboCellSetStrict (reg->actionCell, FALSE);
-  xaccSetBasicCellBlankHelp (&reg->actionCell->cell,
+  xaccComboCellSetStrict ((ComboCell *)
+                          gnc_register_get_cell (reg, ACTN_CELL), FALSE);
+  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, ACTN_CELL),
                              _("Enter the type of transaction, or choose "
                                "one from the list"));
 
@@ -807,12 +891,13 @@ xaccInitSplitRegister (SplitRegister *reg,
     case CURRENCY_REGISTER:
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
-      xaccSetPriceCellPrintInfo (reg->priceCell,
+      xaccSetPriceCellPrintInfo ((PriceCell *)
+                                 gnc_register_get_cell (reg, PRIC_CELL),
                                  gnc_default_price_print_info ());
 
-      xaccSetBasicCellBlankHelp (&reg->priceCell->cell,
+      xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, PRIC_CELL),
                                  _("Enter the share price"));
-      xaccSetBasicCellBlankHelp (&reg->sharesCell->cell,
+      xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, SHRS_CELL),
                                  _("Enter the number of shares bought or "
                                    "sold"));
       break;
@@ -886,7 +971,7 @@ xaccConfigSplitRegister (SplitRegister *reg,
 void 
 xaccDestroySplitRegister (SplitRegister *reg)
 {
-  int i;
+  GList *node;
 
   /* give the user a chance to clean up */
   if (reg->destroy)
@@ -912,59 +997,19 @@ xaccDestroySplitRegister (SplitRegister *reg)
   reg->cursor_journal_double = NULL;
   reg->cursor_split = NULL;
 
-  xaccDestroyBasicCell     (reg->nullCell);
-  xaccDestroyDateCell      (reg->dateCell);
-  xaccDestroyNumCell       (reg->numCell);
-  xaccDestroyQuickFillCell (reg->descCell);
-  xaccDestroyRecnCell      (reg->recnCell);
-  xaccDestroyPriceCell     (reg->balanceCell);
-  xaccDestroyComboCell     (reg->actionCell);
-  xaccDestroyComboCell     (reg->xfrmCell);
-  xaccDestroyQuickFillCell (reg->memoCell);
-  xaccDestroyPriceCell     (reg->creditCell);
-  xaccDestroyPriceCell     (reg->debitCell);
-  xaccDestroyPriceCell     (reg->priceCell);
-  xaccDestroyPriceCell     (reg->sharesCell);
-  xaccDestroyComboCell     (reg->mxfrmCell);
-  xaccDestroyPriceCell     (reg->tcreditCell);
-  xaccDestroyPriceCell     (reg->tdebitCell);
-  xaccDestroyPriceCell     (reg->tsharesCell);
-  xaccDestroyPriceCell     (reg->tbalanceCell);
-  xaccDestroyQuickFillCell (reg->notesCell);
-  xaccDestroyQuickFillCell (reg->formCreditCell);
-  xaccDestroyQuickFillCell (reg->formDebitCell);
+  gnc_basic_cell_destroy (reg->nullCell);
+  reg->nullCell = NULL;
 
-  reg->nullCell     = NULL;
-  reg->dateCell     = NULL;
-  reg->numCell      = NULL;
-  reg->descCell     = NULL;
-  reg->recnCell     = NULL;
-  reg->balanceCell  = NULL;
-  reg->actionCell   = NULL;
-  reg->xfrmCell     = NULL;
-  reg->memoCell     = NULL;
-  reg->creditCell   = NULL;
-  reg->debitCell    = NULL;
-  reg->priceCell    = NULL;
-  reg->sharesCell   = NULL;
-  reg->mxfrmCell    = NULL;
-  reg->tcreditCell  = NULL;
-  reg->tdebitCell   = NULL;
-  reg->tsharesCell  = NULL;
-  reg->tbalanceCell = NULL;
-  reg->notesCell    = NULL;
-  reg->formCreditCell  = NULL;
-  reg->formDebitCell  = NULL;
-
-  for (i = 0; i < CELL_TYPE_COUNT; i++)
+  for (node = reg->cells; node; node = node->next)
   {
-    BasicCell *cell;
+    CellNode *cn = node->data;
 
-    cell = reg->header_cells[i];
-    if (cell)
-      xaccDestroyTextCell (cell);
-    reg->header_cells[i] = NULL;
+    gnc_basic_cell_destroy (cn->cell);
+    g_free (cn);
   }
+
+  g_list_free (reg->cells);
+  reg->cells = NULL;
 
   g_free (reg->debit_str);
   g_free (reg->tdebit_str);
@@ -978,82 +1023,6 @@ xaccDestroySplitRegister (SplitRegister *reg)
 
   /* free the memory itself */
   g_free (reg);
-}
-
-/* ============================================== */
-
-guint32
-xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
-{
-  guint32 changed = 0;
-
-  /* be careful to use bitwise ands and ors to assemble bit flag */
-  changed |= MOD_DATE  & reg->dateCell->cell.changed;
-  changed |= MOD_NUM   & reg->numCell->cell.changed;
-  changed |= MOD_DESC  & reg->descCell->cell.changed;
-  changed |= MOD_RECN  & reg->recnCell->cell.changed;
-  changed |= MOD_ACTN  & reg->actionCell->cell.changed;
-  changed |= MOD_XFRM  & reg->xfrmCell->cell.changed;
-  changed |= MOD_MEMO  & reg->memoCell->cell.changed;
-  changed |= MOD_AMNT  & reg->creditCell->cell.changed;
-  changed |= MOD_AMNT  & reg->debitCell->cell.changed;
-  changed |= MOD_PRIC  & reg->priceCell->cell.changed;
-  changed |= MOD_SHRS  & reg->sharesCell->cell.changed; 
-  changed |= MOD_MXFRM & reg->mxfrmCell->cell.changed;
-  changed |= MOD_NOTES & reg->notesCell->cell.changed;
-
-  changed |= MOD_AMNT  & reg->formCreditCell->cell.changed;
-  changed |= MOD_AMNT  & reg->formDebitCell->cell.changed;
-
-  return changed;
-}
-
-guint32
-xaccSplitRegisterGetConditionalChangeFlag (SplitRegister *reg)
-{
-  guint32 changed = 0;
-
-  /* be careful to use bitwise ands and ors to assemble bit flag */
-  changed |= MOD_DATE  & reg->dateCell->cell.conditionally_changed;
-  changed |= MOD_NUM   & reg->numCell->cell.conditionally_changed;
-  changed |= MOD_DESC  & reg->descCell->cell.conditionally_changed;
-  changed |= MOD_RECN  & reg->recnCell->cell.conditionally_changed;
-  changed |= MOD_ACTN  & reg->actionCell->cell.conditionally_changed;
-  changed |= MOD_XFRM  & reg->xfrmCell->cell.conditionally_changed;
-  changed |= MOD_MEMO  & reg->memoCell->cell.conditionally_changed;
-  changed |= MOD_AMNT  & reg->creditCell->cell.conditionally_changed;
-  changed |= MOD_AMNT  & reg->debitCell->cell.conditionally_changed;
-  changed |= MOD_PRIC  & reg->priceCell->cell.conditionally_changed;
-  changed |= MOD_SHRS  & reg->sharesCell->cell.conditionally_changed; 
-  changed |= MOD_MXFRM & reg->mxfrmCell->cell.conditionally_changed;
-  changed |= MOD_NOTES & reg->notesCell->cell.conditionally_changed;
-  
-  changed |= MOD_AMNT  & reg->formCreditCell->cell.conditionally_changed;
-  changed |= MOD_AMNT  & reg->formDebitCell->cell.conditionally_changed;
-
-  return changed;
-}
-
-/* ============================================== */
-
-void
-xaccSplitRegisterClearChangeFlag (SplitRegister *reg)
-{
-   reg->dateCell->cell.changed = 0;
-   reg->numCell->cell.changed = 0;
-   reg->descCell->cell.changed = 0;
-   reg->recnCell->cell.changed = 0;
-   reg->actionCell->cell.changed = 0;
-   reg->xfrmCell->cell.changed = 0;
-   reg->memoCell->cell.changed = 0;
-   reg->creditCell->cell.changed = 0;
-   reg->debitCell->cell.changed = 0;
-   reg->priceCell->cell.changed = 0;
-   reg->sharesCell->cell.changed = 0;
-   reg->mxfrmCell->cell.changed = 0;
-   reg->notesCell->cell.changed = 0;
-   reg->formDebitCell->cell.changed = 0;
-   reg->formCreditCell->cell.changed = 0;
 }
 
 /* ============================================== */
@@ -1142,14 +1111,18 @@ xaccCursorTypeToClass (CursorType cursor_type)
 static CellType
 sr_cell_type (SplitRegister *reg, void * cell)
 {
-  int i;
+  GList *node;
 
   if (reg == NULL)
     return NO_CELL;
 
-  for (i = 0; i < CELL_TYPE_COUNT; i++)
-    if (cell == reg->cells[i])
-      return i;
+  for (node = reg->cells; node; node = node->next)
+  {
+    CellNode *cn = node->data;
+
+    if (cell == cn->cell)
+      return cn->cell_type;
+  }
 
   return NO_CELL;
 }
@@ -1289,97 +1262,107 @@ xaccSplitRegisterGetCurrentCellLoc (SplitRegister *reg, CellType cell_type,
 
 /* ============================================== */
 
-SplitRegisterBuffer *
-xaccMallocSplitRegisterBuffer (void)
+RegisterBuffer *
+gnc_register_buffer_new (void)
 {
-  SplitRegisterBuffer *srb;
+  RegisterBuffer *rb;
 
-  srb = g_new0(SplitRegisterBuffer, 1);
+  rb = g_new0 (RegisterBuffer, 1);
 
-  return srb;
+  return rb;
 }
 
 /* ============================================== */
 
 static void
-destroyCellBuffer(CellBuffer *cb)
+destroy_cell_buffer (CellBuffer *cb)
 {
   if (cb == NULL)
     return;
 
-  g_free(cb->value);
+  g_free (cb->value);
   cb->value = NULL;
+
+  g_free (cb);
+}
+
+static void
+gnc_register_buffer_clear (RegisterBuffer *rb)
+{
+  GList *node;
+
+  if (!rb) return;
+
+  for (node = rb->buffers; node; node = node->next)
+  {
+    CellBuffer *cb = node->data;
+
+    destroy_cell_buffer (cb);
+  }
+
+  g_list_free (rb->buffers);
+  rb->buffers = NULL;
 }
 
 void
-xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb)
+gnc_register_buffer_destroy (RegisterBuffer *rb)
 {
-  if (srb == NULL)
-    return;
+  if (!rb) return;
 
-  destroyCellBuffer(&srb->dateCell);
-  destroyCellBuffer(&srb->numCell);
-  destroyCellBuffer(&srb->descCell);
-  destroyCellBuffer(&srb->recnCell);
-  destroyCellBuffer(&srb->balanceCell);
-  destroyCellBuffer(&srb->actionCell);
-  destroyCellBuffer(&srb->xfrmCell);
-  destroyCellBuffer(&srb->memoCell);
-  destroyCellBuffer(&srb->creditCell);
-  destroyCellBuffer(&srb->debitCell);
-  destroyCellBuffer(&srb->priceCell);
-  destroyCellBuffer(&srb->sharesCell);
-  destroyCellBuffer(&srb->mxfrmCell);
-  destroyCellBuffer(&srb->notesCell);
-  destroyCellBuffer(&srb->formCreditCell);
-  destroyCellBuffer(&srb->formDebitCell);
+  gnc_register_buffer_clear (rb);
 
-  g_free(srb);
+  g_free (rb);
 }
 
 /* ============================================== */
 
-static void
-saveCell(BasicCell *bcell, CellBuffer *cb)
+static CellBuffer *
+save_cell (BasicCell *bcell)
 {
-  if ((bcell == NULL) || (cb == NULL))
-    return;
+  CellBuffer *cb;
 
-  g_free(cb->value);
-  cb->value = g_strdup(bcell->value);
+  if (!bcell)
+    return NULL;
 
+  cb = g_new0 (CellBuffer, 1);
+
+  cb->value = g_strdup (bcell->value);
   cb->changed = bcell->changed;
   cb->conditionally_changed = bcell->conditionally_changed;
+
+  return cb;
 }
 
 void
-xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb)
+gnc_register_save_cursor (SplitRegister *sr, RegisterBuffer *rb)
 {
-  if ((sr == NULL) || (srb == NULL))
+  GList *node;
+
+  if ((sr == NULL) || (rb == NULL))
     return;
 
-  saveCell(&sr->dateCell->cell, &srb->dateCell);
-  saveCell(&sr->numCell->cell, &srb->numCell);
-  saveCell(&sr->descCell->cell, &srb->descCell);
-  saveCell(&sr->recnCell->cell, &srb->recnCell);
-  saveCell(&sr->balanceCell->cell, &srb->balanceCell);
-  saveCell(&sr->actionCell->cell, &srb->actionCell);
-  saveCell(&sr->xfrmCell->cell, &srb->xfrmCell);
-  saveCell(&sr->memoCell->cell, &srb->memoCell);
-  saveCell(&sr->creditCell->cell, &srb->creditCell);
-  saveCell(&sr->debitCell->cell, &srb->debitCell);
-  saveCell(&sr->priceCell->cell, &srb->priceCell);
-  saveCell(&sr->sharesCell->cell, &srb->sharesCell);
-  saveCell(&sr->mxfrmCell->cell, &srb->mxfrmCell);
-  saveCell(&sr->notesCell->cell, &srb->notesCell);
-  saveCell(&sr->formCreditCell->cell, &srb->formCreditCell);
-  saveCell(&sr->formDebitCell->cell, &srb->formDebitCell);
+  gnc_register_buffer_clear (rb);
+
+  for (node = sr->cells; node; node = node->next)
+  {
+    CellNode *cn = node->data;
+    CellBuffer *cb;
+
+    if (!gnc_basic_cell_get_changed (cn->cell) &&
+        !gnc_basic_cell_get_conditionally_changed (cn->cell))
+      continue;
+
+    cb = save_cell (cn->cell);
+    cb->cell_type = cn->cell_type;
+
+    rb->buffers = g_list_prepend (rb->buffers, cb);
+  }
 }
 
 /* ============================================== */
 
 static void
-restoreCellChanged(BasicCell *bcell, CellBuffer *cb, CellBlock *cursor)
+restore_cell (BasicCell *bcell, CellBuffer *cb, CellBlock *cursor)
 {
   int r, c;
 
@@ -1410,34 +1393,27 @@ restoreCellChanged(BasicCell *bcell, CellBuffer *cb, CellBlock *cursor)
 }
 
 void
-xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
-                                      SplitRegisterBuffer *srb)
+gnc_register_restore_cursor (SplitRegister *sr, RegisterBuffer *rb)
 {
   CellBlock *cursor;
+  GList *node;
 
-  if ((sr == NULL) || (sr->table == NULL) || (srb == NULL))
+  if ((sr == NULL) || (sr->table == NULL) || (rb == NULL))
     return;
 
   cursor = sr->table->current_cursor;
   if (cursor == NULL)
     return;
 
-  restoreCellChanged(&sr->dateCell->cell, &srb->dateCell, cursor);
-  restoreCellChanged(&sr->numCell->cell, &srb->numCell, cursor);
-  restoreCellChanged(&sr->descCell->cell, &srb->descCell, cursor);
-  restoreCellChanged(&sr->recnCell->cell, &srb->recnCell, cursor);
-  restoreCellChanged(&sr->balanceCell->cell, &srb->balanceCell, cursor);
-  restoreCellChanged(&sr->actionCell->cell, &srb->actionCell, cursor);
-  restoreCellChanged(&sr->xfrmCell->cell, &srb->xfrmCell, cursor);
-  restoreCellChanged(&sr->memoCell->cell, &srb->memoCell, cursor);
-  restoreCellChanged(&sr->creditCell->cell, &srb->creditCell, cursor);
-  restoreCellChanged(&sr->debitCell->cell, &srb->debitCell, cursor);
-  restoreCellChanged(&sr->priceCell->cell, &srb->priceCell, cursor);
-  restoreCellChanged(&sr->sharesCell->cell, &srb->sharesCell, cursor);
-  restoreCellChanged(&sr->mxfrmCell->cell, &srb->mxfrmCell, cursor);
-  restoreCellChanged(&sr->notesCell->cell, &srb->notesCell, cursor);
-  restoreCellChanged(&sr->formCreditCell->cell, &srb->formCreditCell, cursor);
-  restoreCellChanged(&sr->formDebitCell->cell, &srb->formDebitCell, cursor);
+  for (node = rb->buffers; node; node = node->next)
+  {
+    CellBuffer *cb = node->data;
+    BasicCell *cell;
+
+    cell = gnc_register_get_cell (sr, cb->cell_type);
+
+    restore_cell (cell, cb, cursor);
+  }
 }
 
 /* keep in sync with CellType enum */
@@ -1447,7 +1423,6 @@ static const char *cell_names[] =
   "num",
   "description",
   "reconcile",
-  "share-balance",
   "balance",
   "action",
   "account",
@@ -1459,7 +1434,7 @@ static const char *cell_names[] =
   "transfer",
   "trans-credit",
   "trans-debit",
-  "trans-share-balance",
+  "trans-shares",
   "trans-balance",
   "notes",
   "credit formula",

@@ -32,27 +32,13 @@
  *
  * By default, the PriceCell is an input/output cell.
  *
- * On input, this cell accepts only numeric characters
- * and numeric punctuation.  The punctuation accepted is *not*
- * currently internationalized.  Read the source for details.
- *
- * On output, it will display a numeric value using its current
- * format string.  The default format string prints two decimal 
- * places.  The format string can be set with the 
- * xaccSetPriceCellFormat() method.
- *
- * hack alert -- implement internationalization.
- *
  * On output, it will display negative values in red text.
  * hack alert -- the actual color (red) should be user configurable.
- *
- * The stored amount is stored as a double-precision floating point
- * variable. This should be sufficient precision to store trillions of
- * dollars with penny accuracy.
  *
  * HISTORY:
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
  * Copyright (c) 2000 Dave Peticolas
+ * Copyright (c) 2001 Free Software Foundation
  */
 
 #ifndef __PRICE_CELL_C__
@@ -79,8 +65,7 @@ typedef struct _PriceCell
 } PriceCell;
 
 /* installs a callback to handle price recording */
-PriceCell *  xaccMallocPriceCell (void);
-void         xaccDestroyPriceCell (PriceCell *cell);
+BasicCell *  xaccMallocPriceCell (void);
 
 /* return the value of a price cell */
 gnc_numeric  xaccGetPriceCellValue (PriceCell *cell);
