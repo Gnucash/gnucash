@@ -1148,7 +1148,6 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
 
    /* -------------------------------- */   
    phys_r = header->numRows;
-   reg->cursor_phys_col = 0;
    reg->cursor_phys_row = phys_r;  /* cursor on first line past header */
    reg->cursor_virt_row = 1;
 

@@ -17,11 +17,11 @@
 (gnc:depend "date-utilities.scm")
 
 ;; budget types
-;(define gnc:budget-recurring 1) ; regular, recurring budget expenses
-; that happen once per period
-;(define gnc:budget-contingency 2) ; a budget item where you estimate a
-; value over a long period for
-; unexpected expenses.
+					;(define gnc:budget-recurring 1) ; regular, recurring budget expenses
+					; that happen once per period
+					;(define gnc:budget-contingency 2) ; a budget item where you estimate a
+					; value over a long period for
+					; unexpected expenses.
 
 ;; convert a date to a defined fraction
 (define (gnc:date-to-N-fraction caltime type)
@@ -46,14 +46,41 @@
     ((gnc:budget-year) (gnc:date-year-delta caltime1 caltime2))
     (else (gnc:debug "undefined period type in budget!") #f)))
 
-;; returns the "day number" of the specified period.
-(define (gnc:date-to-N-remainder caltime type)
-  (case type
-    ((gnc:budget-day) 0)
-    ((gnc:budget-week) (gnc:date-get-week-day (localtime caltime)))
-    ((gnc:budget-month) (gnc:date-get-month-day (localtime caltime)))
-    ((gnc:budget-year) (gnc:date-get-year-day (localtime caltime)))
-    (else (gnc:debug "undefined period type in budget!") #f)))
+;; returns the "day number" of the specified period.  For example,
+;; December 31 is day #92 in a 3 month period.
+;; This is one based arithmetic, so the name "remainder" may be slightly
+;; confusing.
+(define (gnc:date-to-N-remainder caltime type num-periods)
+  (let ((lt (localtime caltime)))
+    (case type
+      ((gnc:budget-day) (+ 1 
+			   (remainder 
+			    (inexact->exact (floor
+					     (gnc:date-to-day-fraction caltime)))
+			    num-periods)))
+      ((gnc:budget-week) (+ (gnc:date-get-week-day lt)
+			    (* 7 (remainder 
+				  (inexact->exact 
+				   (floor (gnc:date-to-week-fraction caltime)))
+				  num-periods))))
+      ((gnc:budget-month) (+ (gnc:date-get-month-day lt)
+			     (let loop ((month 
+					 (inexact->exact 
+					  (floor
+					   (gnc:date-to-month-fraction caltime)))))
+			       (if (= 0 (remainder month num-periods))
+				   0
+				   (+ (loop (- month 1))
+				      (gnc:days-in-month
+				       (+ 1 (remainder month 12))
+				       (+ 1970 (quotient month 12))))))))
+      ((gnc:budget-year) (+ (gnc:date-get-year-day lt)
+			    (let loop ((year (gnc:date-get-year lt)))
+			      (if (= 0 (remainder year num-periods))
+				  0
+				  (+ (loop (- year 1))
+				     (gnc:days-in-year year))))))
+      (else (gnc:debug "undefined period type in budget!") #f))))
 
 ;; describe a time type
 (define (gnc:date-describe-type type)
@@ -63,37 +90,63 @@
     ((gnc:budget-month) "months")
     ((gnc:budget-year) "years")))
 
+;; returns the number of days in an n periods of type.
+(define (gnc:days-in-period date type n)
+  (let ((lt (localtime date)))
+    (case type
+      ((gnc:budget-day) n)
+      ((gnc:budget-week) (* 7 n))
+      ((gnc:budget-month) 
+       (let loop
+	   ((month (* (quotient (inexact->exact (floor (gnc:date-to-month-fraction date))) n) n)))
+	 (+ (gnc:days-in-month (+ 1 (remainder month 12))
+			       (+ 1970 (quotient month 12)))
+	    (if (= (remainder month n) (- n 1))
+		0
+		(loop (+ 1 month))))))
+      ((gnc:budget-year)
+       (let loop
+	   ((year (* (quotient (inexact->exact (floor (gnc:date-to-year-fraction date))) n) n)))
+	 (+ (gnc:days-in-year (+ 1970 year))
+	    (if (= (remainder year n) (- n 1))
+		0
+		(loop (+ 1 year)))))))))
+
 ;; define the budget itself.  For prototype, define inline.
 ;; the budget is a vector of vectors.  the vectors contain:
 ;; 0 - description: a string describing the budget line
 ;; 1 - amount:
 ;; 2 - accounts: the list of accounts that this line spans
-;;            (in colon delimited format)
-;; 3 - period: the time span of the budget line in #4
-;; 4 - period-type:
-;; 5 - budget type
-;; 6 - triggers???
+;; 3 - period: the time span of the budget line
+;; 4 - period-type: day, month, year, etc.
+;; 5 - budget type: recurring or contingency
+;; 6 - window-start: the first possible day in the period that the expenditure can occur on.  negative numbers count from the end of the period, zero indicates the last day of the previous period
+;; 7 - window-end: the last possible day.
 
 (define budget-entry-structure
   (make-record-type 
    "budget-entry-structure" 
    '(description amount accounts period period-type budget-type
-		 trigger-day)))
+		 window-start window-end)))
 
-(define (make-budget-entry desc amt acct per ptype budget-type trig-day)
+(define (make-budget-entry desc amt acct per ptype budget-type start end)
   ((record-constructor budget-entry-structure) 
-   desc amt acct per ptype budget-type trig-day))
+   desc amt acct per ptype budget-type start end))
 
 (define gnc:budget-entries
   (list
    (make-budget-entry "lunch" 8 '("Food:Lunch") 1 
-		      'gnc:budget-day 'gnc:budget-recurring 0)
+		      'gnc:budget-day 'gnc:budget-recurring 1 0)
    (make-budget-entry "junk food" 0.50 '("Food:Junk") 1 
-		      'gnc:budget-day 'gnc:budget-recurring 0)
+		      'gnc:budget-day 'gnc:budget-recurring 1 0)
    (make-budget-entry "car repairs" 2500 '("Car:Repairs") 5
-		      'gnc:budget-year 'gnc:budget-contingency 0)
+		      'gnc:budget-year 'gnc:budget-contingency 1 0)
    (make-budget-entry "rent" 312.50 '("Household:Rent") 1
-		      'gnc:budget-month 'gnc:budget-trigger 15)))
+		      'gnc:budget-month 'gnc:budget-trigger -1 2)
+   (make-budget-entry "car payments" 374.80 '("Car:Loan Payments") 1
+		      'gnc:budget-month 'gnc:budget-trigger 13 17)
+   (make-budget-entry "car 2" 374.80 '("Car:Loan Payments") 1
+		      'gnc:budget-month 'gnc:budget-trigger 20 20)))
 
 (define (budget-entry-get-description budget-entry)
   ((record-accessor budget-entry-structure 'description) budget-entry))
@@ -110,8 +163,11 @@
 (define (budget-entry-get-period-type budget-entry)
   ((record-accessor budget-entry-structure 'period-type) budget-entry))
 
-(define (budget-entry-get-trigger-day budget-entry)
-  ((record-accessor budget-entry-structure 'trigger-day) budget-entry))
+(define (budget-entry-get-window-start budget-entry)
+  ((record-accessor budget-entry-structure 'window-start) budget-entry))
+
+(define (budget-entry-get-window-end budget-entry)
+  ((record-accessor budget-entry-structure 'window-end) budget-entry))
 
 (define (budget-description-html-proc)
   (lambda (budget-line)
@@ -143,10 +199,15 @@
      (gnc:date-describe-type 
       (budget-entry-get-period-type (budget-line-get-entry budget-line))))))
 
-(define (budget-trigger-day-html-proc)
+(define (budget-window-start-html-proc)
   (lambda (budget-line)
     (html-number-cell
-     #f #f "%i" (budget-entry-get-trigger-day (budget-line-get-entry budget-line)))))
+     #f #f "%i" (budget-entry-get-window-start (budget-line-get-entry budget-line)))))
+
+(define (budget-window-end-html-proc)
+  (lambda (budget-line)
+    (html-number-cell
+     #f #f "%i" (budget-entry-get-window-end (budget-line-get-entry budget-line)))))
 
 ;; budget report:  a vector with indexes corresponding to the budget
 ;; 0 - actual:  the amount spend / recieved
@@ -162,11 +223,11 @@
   (make-record-type 
    "budget-report-structure" 
    '(actual budgeted num-periods minimum-expected maximum-expected 
-	    time-remaining num-triggers)))
+	    time-remaining num-triggers-upper num-triggers-lower)))
 
 (define (make-empty-budget-report)
   ((record-constructor budget-report-structure) 
-   0 0 0 0 0 0 0))
+   0 0 0 0 0 0 0 0))
 
 (define (budget-report-get-actual brep)
   ((record-accessor budget-report-structure 'actual) brep))
@@ -186,8 +247,11 @@
 (define (budget-report-get-time-remaining brep)
   ((record-accessor budget-report-structure 'time-remaining) brep))
 
-(define (budget-report-get-num-triggers brep)
-  ((record-accessor budget-report-structure 'num-triggers) brep))
+(define (budget-report-get-num-triggers-upper brep)
+  ((record-accessor budget-report-structure 'num-triggers-upper) brep))
+
+(define (budget-report-get-num-triggers-lower brep)
+  ((record-accessor budget-report-structure 'num-triggers-lower) brep))
 
 (define (budget-actual-html-proc)
   (lambda (budget-line)
@@ -219,10 +283,15 @@
     (html-number-cell #f #f "%.1f" (budget-report-get-time-remaining
 				    (budget-line-get-report budget-line)))))
 
-(define (budget-num-triggers-html-proc)
+(define (budget-num-triggers-upper-html-proc)
   (lambda (budget-line)
-    (html-number-cell #f #f "%.0f" (budget-report-get-num-triggers
-				  (budget-line-get-report budget-line)))))
+    (html-number-cell #f #f "%.0f" (budget-report-get-num-triggers-upper
+				    (budget-line-get-report budget-line)))))
+
+(define (budget-num-triggers-lower-html-proc)
+  (lambda (budget-line)
+    (html-number-cell #f #f "%.0f" (budget-report-get-num-triggers-lower
+				    (budget-line-get-report budget-line)))))
 
 (define budget-line-structure
   (make-record-type "budget-line-structure"
@@ -267,7 +336,7 @@
 (define (budget-calculate-expected! budget-line)
   (let ((brep (budget-line-get-report budget-line))
 	(entry (budget-line-get-entry budget-line)))
-    ; fixme: contingency type budget entries may have a lower minimum
+					; fixme: contingency type budget entries may have a lower minimum
     ((record-modifier budget-report-structure 'minimum-expected) brep
      (* (budget-entry-get-amount entry)		    
 	(floor (budget-report-get-num-periods brep))))
@@ -285,19 +354,87 @@
      (* (- (ceiling periods) periods) 
 	(budget-entry-get-period entry)))))
 
-;; calculate the number of times the trigger day occurs in the budget
+;; calculate the number of times the trigger window occurs in the budget
 ;; period
 (define (budget-calculate-num-triggers! budget-line begin-date end-date)
-  (let* ((entry (budget-line-get-entry budget-line))
-	 (brep (budget-line-get-report budget-line))
-	 (N-type (budget-entry-get-period-type entry))
-	 (trigger-day (budget-entry-get-trigger-day entry)))
-    ((record-modifier budget-report-structure 'num-triggers) brep
-     (+	-1
-	(if (<= (gnc:date-to-N-remainder begin-date N-type) trigger-day) 1 0)
-	(if (>= (gnc:date-to-N-remainder end-date N-type) trigger-day) 1 0)
-	(- (floor (gnc:date-to-N-fraction end-date N-type))
-	   (floor (gnc:date-to-N-fraction begin-date N-type)))))))
+  (let ((entry (budget-line-get-entry budget-line)))
+    (let ((brep (budget-line-get-report budget-line))
+	  (N-type (budget-entry-get-period-type entry))
+	  (window-start (budget-entry-get-window-start entry))
+	  (window-end (budget-entry-get-window-end entry))
+	  (psize (budget-entry-get-period entry)))
+      ; convert negative numbers to positive numbers
+      (let ((trig-start-A (if (> window-start 0)
+			      window-start
+			      (+ window-start 
+				 (gnc:days-in-period
+				  begin-date N-type psize))))
+	    (trig-start-B (if (> window-start 0)
+			      window-start
+			      (+ window-start 
+				 (gnc:days-in-period
+				  end-date N-type psize))))
+	    (trig-end-A (if (> window-end 0)
+			    window-end
+			    (+ window-end
+			       (gnc:days-in-period
+				begin-date N-type psize))))
+	    (trig-end-B (if (> window-end 0)
+			    window-end
+			    (+ window-end
+			       (gnc:days-in-period
+				end-date N-type psize))))
+	    (possible 0)
+	    (sure 0)
+	    (report-start (gnc:date-to-N-remainder begin-date N-type psize))
+	    (report-end (gnc:date-to-N-remainder end-date N-type psize)))
+	; special case if report start and end are in same period
+	(cond ((= (floor (/ (gnc:date-to-N-fraction end-date N-type) psize))
+		  (floor (/ (gnc:date-to-N-fraction begin-date N-type) psize)))
+	       (cond ((<= trig-start-A trig-end-A)
+		      (cond ((> report-start trig-end-A) #f)
+			    ((< report-end trig-start-A) #f)
+			    ((or (> report-start trig-start-A) 
+				 (< report-end trig-end-A))
+			     (set! possible 1))
+			    (else (set! sure 1))))
+		     (else
+		      (if (<= report-start trig-end-A) 
+			  (set! possible 1))
+		      (if (>= report-end trig-start-A) 
+			  (set! possible (+ possible 1))))))
+	      ; not in same period.
+	      (else
+	       ; first calculate terminal periods
+	       (cond ((<= trig-start-A trig-end-A)
+		      (cond ((> report-start trig-end-A) #f)
+			    ((<= report-start trig-start-A) 
+			     (set! sure (+ sure 1)))
+			    (else (set! possible (+ possible 1))))
+		      (cond ((< report-end trig-start-B) #f)
+			    ((>= report-end trig-end-B) (set! sure (+ sure 1)))
+			    (else (set! possible (+ possible 1)))))
+		     (else
+		      (if (<= report-start trig-end-A) 
+			  (set! possible (+ possible 1)))
+		      (if (>= report-end trig-start-B) 
+			  (set! possible (+ possible 1)))
+		      (if (or (> report-start trig-start-A)
+			      (< report-end trig-end-B)) 
+			  (set! possible (+ possible 1))
+			  (set! sure (+ sure 1)))))
+	       ; then add intermediate periods
+	       (set! sure (+ -1 sure 
+			     (inexact->exact
+			      (- (floor (/ (gnc:date-to-N-fraction 
+					    end-date N-type) psize))
+				 (floor (/ (gnc:date-to-N-fraction 
+					    begin-date N-type) psize))))))))
+	; now save 'em into the record
+	((record-modifier budget-report-structure 'num-triggers-lower) brep
+	 sure)
+	((record-modifier budget-report-structure 'num-triggers-upper) brep
+	 (+ sure possible))))))
 
 ;; given an account name, return the budget line
 ;; return #f if there is no budget line for that account
@@ -354,7 +491,7 @@
    (gnc:make-multichoice-option
     "Report Options" "View"
     "c" "Type of budget report"
-    'status
+    'full
     (list #(full
 	    "Full"
 	    "Show all columns")
@@ -378,9 +515,9 @@
    (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
 	  (enddate (gnc:lookup-option options "Report Options" "To"))
 	  (begin-date-secs (car (gnc:timepair-canonical-day-time 
-                                 (gnc:option-value begindate))))
+				 (gnc:option-value begindate))))
 	  (end-date-secs (car (gnc:timepair-canonical-day-time
-                               (gnc:option-value enddate))))
+			       (gnc:option-value enddate))))
 	  (budget-list (map 
 			(lambda (entry)
 			  (make-budget-line entry (make-empty-budget-report)))
@@ -425,14 +562,16 @@
 				"Period"
 				""
 				"Actual"
-				"Trigger Day"
+				"Window Start"
+				"Window End"
 				"Budgeted"
 				"Number of Periods"
 				"Lower Limit"
 				"Upper Limit"
 				"Time Remaining"
 				""
-				"Num Triggers"))
+				"Num Triggers Upper"
+				"Num Triggers Lower"))
 	  (set! report-procs (list
 			      budget-description-html-proc
 			      budget-amount-html-proc
@@ -440,14 +579,16 @@
 			      budget-period-html-proc	
 			      budget-period-type-html-proc
 			      budget-actual-html-proc
-			      budget-trigger-day-html-proc
+			      budget-window-start-html-proc
+			      budget-window-end-html-proc
 			      budget-budgeted-html-proc
 			      budget-num-periods-html-proc
 			      budget-minimum-expected-html-proc
 			      budget-maximum-expected-html-proc
 			      budget-time-remaining-html-proc
 			      budget-period-type-html-proc
-			      budget-num-triggers-html-proc)))
+			      budget-num-triggers-upper-html-proc
+			      budget-num-triggers-lower-html-proc)))
 	 ((balancing)
 	  (set! report-headers (list
 				"Description"

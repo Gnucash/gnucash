@@ -10,7 +10,7 @@
 
 ;; get stuff from localtime date vector
 (define (gnc:date-get-year datevec)
-  (vector-ref datevec 5))
+  (+ 1900 (vector-ref datevec 5)))
 (define (gnc:date-get-month-day datevec)
   (vector-ref datevec 3))
 ;; get month with january==1
@@ -18,14 +18,15 @@
   (+ (vector-ref datevec 4) 1))
 (define (gnc:date-get-week-day datevec)
   (vector-ref datevec 6))
+;; jan 1 == 1
 (define (gnc:date-get-year-day datevec)
-  (vector-ref datevec 7))
+  (+ (vector-ref datevec 7) 1))
 
 ;; is leap year?
 (define (gnc:leap-year? year)
   (if (= (remainder year 4) 0)
       (if (= (remainder year 100) 0)
-	  (if (= (remainder (+ year 1900) 400) 0) #t #f)
+	  (if (= (remainder year 400) 0) #t #f)
 	  #t)
       #f))
 
@@ -45,8 +46,8 @@
 (define (gnc:date-to-year-fraction caltime)
   (let ((lt (localtime caltime)))
     (+ (- (gnc:date-get-year lt) 1970)
-       (/ (gnc:date-get-year-day lt) (* 1.0 (gnc:days-in-year 
-					     (gnc:date-get-year lt)))))))
+       (/ (- (gnc:date-get-year-day lt) 1.0)
+	  (* 1.0 (gnc:days-in-year (gnc:date-get-year lt)))))))
 
 ;; return the number of years (in floating point format) between two dates.
 (define (gnc:date-year-delta caltime1 caltime2)
@@ -72,7 +73,7 @@
 (define (gnc:date-to-month-fraction caltime)
   (let ((lt (localtime caltime)))
     (+ (* 12 (- (gnc:date-get-year lt) 1970.0))
-       (gnc:date-get-month lt)
+       (gnc:date-get-month lt) -1
        (/ (- (gnc:date-get-month-day lt) 1.0) (gnc:days-in-month 
 					       (gnc:date-get-month lt)
 					       (gnc:date-get-year lt))))))

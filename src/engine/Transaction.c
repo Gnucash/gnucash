@@ -463,9 +463,9 @@ xaccSplitSetBaseValue (Split *s, double value, char * base_currency)
    if (!s) return;
 
    /* Novice/casual users may not want or use the double entry 
-    * features of this engine.  So, in particular, there
+    * features of this engine. So, in particular, there
     * may be the occasional split without a parent account. 
-    * Well, that's ok,  we'll just go with the flow. 
+    * Well, that's ok, we'll just go with the flow. 
     */
    if (!(s->acc)) {
       if (force_double_entry) {
@@ -504,10 +504,10 @@ xaccSplitGetBaseValue (Split *s, char * base_currency)
    double value;
    if (!s) return 0.0;
 
-   /* ahh -- stupid users may not want or use the double entry 
+   /* ahh -- users may not want or use the double entry 
     * features of this engine.  So, in particular, there
     * may be the occasional split without a parent account. 
-    * Well, that's ok,  we'll just go with the flow. 
+    * Well, that's ok, we'll just go with the flow. 
     */
    if (!(s->acc)) {
       if (force_double_entry) {
@@ -553,10 +553,10 @@ ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
    s = sarray[0];
    while (s) {
       if (s != skip_me) {
-         /* ahh -- stupid users may not want or use the double entry 
+         /* ahh -- users may not want or use the double entry 
           * features of this engine.  So, in particular, there
           * may be the occasional split without a parent account. 
-          * Well, that's ok,  we'll just go with the flow. 
+          * Well, that's ok, we'll just go with the flow. 
           */
          if (!(s->acc)) {
             if (force_double_entry) {
@@ -570,7 +570,7 @@ ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
          } else {
 
             /* OK, we've got a parent account, we've got currency, 
-             * lets behave like profesionals now, instead of the
+             * lets behave like professionals now, instead of the
              * shenanigans above.
              */
             if (!safe_strcmp(s->acc->currency, base_currency)) {
@@ -803,10 +803,10 @@ xaccSplitRebalance (Split *split)
       /* There are no destination splits !! 
        * Either this is allowed, in which case 
        * we just blow it off, or its forbidden,
-       * in which case we force a balacing split 
+       * in which case we force a balancing split 
        * to be created.
        *
-       * Note that its ok to have a single split who's amount is zero ..
+       * Note that its ok to have a single split whose amount is zero.
        * this is just a split that is recording a price, and nothing
        * else.  (i.e. it still obeys the rule that the sum of the 
        * value of all the splits is zero).
@@ -860,7 +860,7 @@ xaccSplitRebalance (Split *split)
 #define CHECK_OPEN(trans) {					\
    if (!trans->open) {						\
       PERR ("transaction %p not open for editing\n", trans);	\
-      /* assert (trans->open); */					\
+      /* assert (trans->open); */				\
       PERR ("\t%s:%d \n", __FILE__, __LINE__);			\
       /* return; */						\
    }								\

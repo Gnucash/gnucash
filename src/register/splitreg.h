@@ -167,10 +167,8 @@ struct _SplitRegister {
    int num_phys_rows;
    int num_virt_rows;
 
-   int cursor_virt_row;
-
    int cursor_phys_row;
-   int cursor_phys_col;
+   int cursor_virt_row;
 
    BasicCell *header_label_cells[NUM_CELLS];
 
