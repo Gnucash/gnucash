@@ -11,6 +11,9 @@
 
 	* src/business/business-gnome/dialog-invoice.c -- make the Notes
 	  field editable for new invoices.  Fixes #103345
+
+	* src/import-export/import-utilities.c -- applied Nigel Titley's
+	  patch for #101705
 	
 2003-01-12  Derek Atkins  <derek@ihtfp.com>
 

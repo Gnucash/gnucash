@@ -98,13 +98,9 @@ void gnc_import_set_trans_online_id(Transaction * transaction,
       DEBUG("The kvp_frame was NULL, allocating new one");
       frame = kvp_frame_new();
     }
-  value = kvp_frame_get_slot(frame, "online_id");
-  if(value != NULL)
-    {
-      kvp_value_delete(value);
-    }
   value = kvp_value_new_string(string_value);
   kvp_frame_set_slot(frame,"online_id",value);  
+  kvp_value_delete(value);
   xaccTransSetSlots_nc(transaction,frame);
   return;
 }
