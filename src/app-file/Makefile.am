@@ -1,15 +1,17 @@
 SUBDIRS = . gnome
 
-pkglib_LTLIBRARIES = libgncmod-app-file.la
+pkglib_LTLIBRARIES = libgncmod-app-file.la libgw-app-file.la
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}
-
-INCLUDES = -I${top_srcdir}/src/gnc-module \
-           -I${top_srcdir}/src \
-           -I${top_srcdir}/src/engine \
-           -I${top_srcdir}/src/app-utils \
-           ${GNOME_INCLUDEDIR} \
-           ${GUILE_INCS}
+CFLAGS = \
+  @CFLAGS@ \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/app-utils \
+  ${GNOME_INCLUDEDIR} \
+  ${GUILE_INCS} \
+  ${GLIB_CFLAGS} \
+  ${G_WRAP_COMPILE_ARGS}
 
 libgncmod_app_file_la_SOURCES = \
   gnc-file.c \
@@ -40,8 +42,7 @@ libgw_app_file_la_LDFLAGS = -module
 #gncmod_DATA = app-file.scm 
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_LTLIBRARIES = libgw-app-file.la
-gwmod_DATA = gw-app-file-spec.scm
+gwmod_DATA = gw-app-file-spec.scm gw-app-file.scm
 
 noinst_DATA = .scm-links
 
@@ -54,7 +55,7 @@ EXTRA_DIST = \
 	ln -sf . g-wrapped 
 	touch .scm-links
 
-gw-app-file.c gw-app-file.h: .scm-links gw-app-file-spec.scm
+gw-app-file.scm gw-app-file.c gw-app-file.h: .scm-links gw-app-file-spec.scm
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
@@ -62,6 +63,6 @@ gw-app-file.c gw-app-file.h: .scm-links gw-app-file-spec.scm
 	  (primitive-load \"./gw-app-file-spec.scm\") \
 	  (gw:generate-module \"gw-app-file\")"
 
-BUILT_SOURCES = gw-app-file.c gw-app-file.h
-CLEANFILES = gw-app-file.c gw-app-file.h gw-app-file.html \
+BUILT_SOURCES = gw-app-file.scm gw-app-file.c gw-app-file.h
+CLEANFILES = gw-app-file.scm gw-app-file.c gw-app-file.h gw-app-file.html \
               gnucash g-wrapped .scm-links
