@@ -52,23 +52,20 @@ static short module = MOD_LOT;
 
 /* ================================================================= */
 
-static KvpFrame *
+static inline gboolean 
 is_subsplit (Split *split)
 {
    KvpValue *kval;
-   KvpFrame *ksub;
 
-   if (!split) return NULL;
-   g_return_val_if_fail (split->parent, NULL);
+   /* generic stop-progress conditions */
+   if (!split) return FALSE;
+   g_return_val_if_fail (split->parent, FALSE);
 
    /* If there are no sub-splits, then there's nothing to do. */
    kval = kvp_frame_get_slot (split->kvp_data, "lot-split");
-   if (!kval) return NULL;  
+   if (!kval) return FALSE;  
 
-   ksub = kvp_value_get_frame (kval);
-   g_return_val_if_fail (ksub, NULL);
-
-   return ksub;
+   return TRUE;
 }
 
 /* ================================================================= */
@@ -79,7 +76,7 @@ xaccScrubSubSplitPrice (Split *split)
    gnc_numeric src_amt, src_val;
    SplitList *node;
 
-   if (NULL == is_subsplit (split)) return;
+   if (FALSE == is_subsplit (split)) return;
 
    ENTER (" ");
    /* Get 'price' of the indicated split */
@@ -204,12 +201,10 @@ xaccScrubMergeSubSplits (Split *split)
 {
    gboolean rc = FALSE;
    Transaction *txn;
-   KvpFrame *sf;
    SplitList *node;
    GNCLot *lot;
 
-   sf = is_subsplit (split);
-   if (!sf) return FALSE;
+   if (FALSE == is_subsplit (split)) return FALSE;
 
    txn = split->parent;
    lot = xaccSplitGetLot (split);
