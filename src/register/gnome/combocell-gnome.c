@@ -324,7 +324,6 @@ void xaccDestroyComboCell (ComboCell *cell)
 
 	cell->cell.gui_private = NULL;
 	cell->cell.realize = NULL;
-	cell->cell.set_value = NULL;
 
 	xaccDestroyBasicCell(&(cell->cell));
 }

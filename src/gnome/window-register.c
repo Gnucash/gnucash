@@ -1464,12 +1464,11 @@ regWindowLedger(xaccLedgerDisplay *ledger)
   GtkWidget *table_frame;
   GtkWidget *statusbar;
 
-  xaccQuerySetMaxSplits(ledger->query, INT_MAX);
-  xaccQuerySetSortOrder(ledger->query, BY_STANDARD, BY_NONE, BY_NONE);
-
   regData = (RegWindow *) (ledger->gui_hook);
   if (regData != NULL)
     return regData;
+
+  xaccQuerySetMaxSplits(ledger->query, INT_MAX);
 
   regData = (RegWindow *) malloc(sizeof (RegWindow));
 

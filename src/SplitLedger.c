@@ -183,7 +183,8 @@ xaccSRInitRegisterData(SplitRegister *reg)
 {
   SRInfo *info;
 
-  assert(reg != NULL);
+  if (reg == NULL)
+    return;
 
   /* calloc initializes to 0 */
   info = calloc(1, sizeof(SRInfo));
@@ -197,7 +198,8 @@ xaccSRInitRegisterData(SplitRegister *reg)
 static void
 xaccSRDestroyRegisterData(SplitRegister *reg)
 {
-  assert(reg != NULL);
+  if (reg == NULL)
+    return;
 
   if (reg->user_data != NULL)
     free(reg->user_data);
@@ -221,7 +223,8 @@ xaccSRGetParent(SplitRegister *reg)
 {
   SRInfo *info = xaccSRGetInfo(reg);
 
-  assert(reg != NULL);
+  if (reg == NULL)
+    return NULL;
 
   if (info->get_parent == NULL)
     return NULL;
@@ -398,7 +401,6 @@ LedgerMoveCursor (Table *table,
 
   /* redrawing the register can muck everything up */
   if (saved) {
-    CellBlock *header = table->handlers[0][0];
     int virt_row, virt_col;
 
     xaccSRRedrawRegEntry (reg);
@@ -435,8 +437,8 @@ LedgerMoveCursor (Table *table,
 
     /* just because I'm paranoid doesn't
      * mean they're not out to get me! */
-    if (new_phys_row < header->numRows)
-      new_phys_row = header->numRows;
+    if (new_phys_row < reg->num_header_rows)
+      new_phys_row = reg->num_header_rows;
     else if (new_phys_row >= table->num_phys_rows)
       new_phys_row = table->num_phys_rows - 1;
 
@@ -475,7 +477,6 @@ LedgerMoveCursor (Table *table,
     reg->table->current_cursor->user_data = (void *) split;
 
     xaccRegisterRefresh (reg);
-    gnc_refresh_main_window();
 
     /* indicate what row we should go to */
     *p_new_phys_row = table->current_cursor_phys_row;

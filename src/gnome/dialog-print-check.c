@@ -28,6 +28,7 @@
 #include "top-level.h"
 #include "messages_i18n.h"
 #include "dialog-print-check.h"
+#include "window-help.h"
 #include "print-session.h"
 #include "ui-callbacks.h"
 
