@@ -28,17 +28,17 @@
   (define (account-col columns-used)
     (vector-ref columns-used 3))
   (define (shares-col columns-used)
-    (vector-ref columns-used 4))	
+    (vector-ref columns-used 4))
   (define (price-col columns-used)
-    (vector-ref columns-used 5))	
+    (vector-ref columns-used 5))
   (define (amount-single-col columns-used)
-    (vector-ref columns-used 6))	
+    (vector-ref columns-used 6))
   (define (debit-col columns-used)
-    (vector-ref columns-used 7))	
+    (vector-ref columns-used 7))
   (define (debit-col columns-used)
-    (vector-ref columns-used 8))	
+    (vector-ref columns-used 8))
   (define (balance-col columns-used)
-    (vector-ref columns-used 9))	
+    (vector-ref columns-used 9))
 
   (define columns-used-size 10)
 
@@ -46,7 +46,8 @@
     (do ((i 0 (+ i 1)) 
          (col-req 0 col-req)) 
         ((>= i columns-used-size) col-req)
-      (if (vector-ref columns-used i) (set! col-req (+ col-req 1)))))
+      (if (vector-ref columns-used i)
+          (set! col-req (+ col-req 1)))))
 
   (define (build-column-used options)   
     (define (opt-val section name)
@@ -127,12 +128,16 @@
 	  (addto! row-contents
                   (if transaction-info?
                       (gnc:transaction-get-num parent)
-                      " ")))
+                      (if split-info?
+                          (gnc:split-get-action split)
+                          " "))))
       (if (description-col column-vector)
 	  (addto! row-contents
                   (if transaction-info?
                       (gnc:transaction-get-description parent)
-                      " ")))
+                      (if split-info?
+                          (gnc:split-get-memo split)
+                          " "))))
       (if (account-col column-vector)
 	  (addto! row-contents
                   (if split-info?
@@ -239,11 +244,6 @@
      (gnc:make-simple-boolean-option
       (N_ "Display") (N_ "Description")
       "d" (N_ "Display the description?") #t))
-
-    (gnc:register-reg-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Memo")
-      "f" (N_ "Display the memo?") #t))
 
     (gnc:register-reg-option
      (gnc:make-simple-boolean-option
