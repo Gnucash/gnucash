@@ -52,6 +52,8 @@ struct _GNCOptionDB
   GSList *option_sections;
 
   gboolean options_dirty;
+
+  GNCOptionDBHandle handle;
 };
 
 typedef struct _Getters Getters;
@@ -77,22 +79,11 @@ static Getters getters = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 /* This static indicates the debugging module this .o belongs to.  */
 static short module = MOD_GUI;
 
-static GPtrArray *option_dbs = NULL;
+static GHashTable *option_dbs = NULL;
+static int last_db_handle = 0;
+
 
 /*******************************************************************/
-
-
-static GNCOptionDBHandle
-gnc_option_db_get_handle(GNCOptionDB *odb)
-{
-  int i;
-
-  for (i = 0; i < option_dbs->len; i++)
-    if (odb == g_ptr_array_index(option_dbs, i))
-      return i;
-
-  return -1;
-}
 
 
 /********************************************************************\
@@ -106,16 +97,8 @@ static void
 gnc_option_db_init(GNCOptionDB *odb)
 {
   SCM func = gh_eval_str("gnc:send-options");
-  GNCOptionDBHandle handle;
 
-  handle = gnc_option_db_get_handle(odb);
-  if (handle < 0)
-  {
-    PERR("Can't find option database in list.\n");
-    return;
-  }
-
-  gh_call2(func, gh_int2scm(handle), odb->guile_options);
+  gh_call2(func, gh_int2scm(odb->handle), odb->guile_options);
 }
 
 
@@ -130,6 +113,7 @@ GNCOptionDB *
 gnc_option_db_new(SCM guile_options)
 {
   GNCOptionDB *odb;
+  GNCOptionDB *lookup;
 
   odb = g_new0(GNCOptionDB, 1);
 
@@ -140,9 +124,15 @@ gnc_option_db_new(SCM guile_options)
   odb->options_dirty = FALSE;
 
   if (option_dbs == NULL)
-    option_dbs = g_ptr_array_new();
+    option_dbs = g_hash_table_new(g_int_hash, g_int_equal);
 
-  g_ptr_array_add(option_dbs, odb);
+  do
+  {
+    odb->handle = last_db_handle++;
+    lookup = g_hash_table_lookup(option_dbs, &odb->handle);
+  } while (lookup != NULL);
+
+  g_hash_table_insert(option_dbs, &odb->handle, odb);
 
   gnc_option_db_init(odb);
 
@@ -197,14 +187,11 @@ gnc_option_db_destroy(GNCOptionDB *odb)
   odb->option_sections = NULL;
   odb->options_dirty = FALSE;
 
-  if (!g_ptr_array_remove(option_dbs, odb))
-  {
-    PERR("Option database not present in list.\n");
-  }
+  g_hash_table_remove(option_dbs, &odb->handle);
 
-  if (option_dbs->len == 0)
+  if (g_hash_table_size(option_dbs) == 0)
   {
-    g_ptr_array_free(option_dbs, FALSE);
+    g_hash_table_destroy(option_dbs);
     option_dbs = NULL;
   }
 
@@ -1118,7 +1105,7 @@ _gnc_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
   GNCOption *option;
   GNCOptionSection *section;
 
-  odb = g_ptr_array_index(option_dbs, handle);
+  odb = g_hash_table_lookup(option_dbs, &handle);
 
   assert(odb != NULL);
 

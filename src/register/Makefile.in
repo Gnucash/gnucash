@@ -25,7 +25,6 @@ include @top_srcdir@/Makefile.init
 
 INCLPATH = -I@top_srcdir@/ \
            -I@top_srcdir@/src \
-           -I@top_srcdir@/include \
            -I@top_srcdir@/src/engine \
            -I@top_srcdir@/src/engine/guid \
            -I@top_srcdir@/lib/ComboBox-1.33 \

@@ -4756,6 +4756,7 @@ trap 'rm -fr `echo "Makefile
           Makefile.init
           make-gnucash-patch
           src/Makefile
+          src/messages_i18n.h
           src/engine/Makefile
           src/guile/Makefile
           src/guile/gnucash.h
@@ -4774,7 +4775,6 @@ trap 'rm -fr `echo "Makefile
           src/swig/perl5/Makefile
 	  po/Makefile.in
 	  po/extract-macros.perl
-          include/messages_i18n.h
           rpm/gnucash.spec
           lib/Makefile
           lib/Xbae-4.6.2-linas/Makefile
@@ -4925,6 +4925,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
           Makefile.init
           make-gnucash-patch
           src/Makefile
+          src/messages_i18n.h
           src/engine/Makefile
           src/guile/Makefile
           src/guile/gnucash.h
@@ -4943,7 +4944,6 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
           src/swig/perl5/Makefile
 	  po/Makefile.in
 	  po/extract-macros.perl
-          include/messages_i18n.h
           rpm/gnucash.spec
           lib/Makefile
           lib/Xbae-4.6.2-linas/Makefile

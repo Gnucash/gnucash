@@ -289,24 +289,26 @@ xaccSetPriceCellBlankZero (PriceCell *cell, gncBoolean blank_zero)
 
 /* ================================================ */
 
-void xaccSetDebCredCellValue (PriceCell * deb, 
-                              PriceCell * cred, double amt)
+void xaccSetDebCredCellValue (PriceCell * debit,
+                              PriceCell * credit,
+                              double amount)
 {
-   deb->cell.fg_color = 0xff0000;
-   cred->cell.fg_color = 0x0;
+   debit->cell.fg_color = 0xff0000;
+   credit->cell.fg_color = 0x0;
 
-   if (0.0 < amt) {
-      xaccSetPriceCellValue (cred, amt);
-      xaccSetPriceCellValue (deb, 0.0);
-      if (!deb->blank_zero) {
-        SET(&deb->cell, "");
+   /* debits are positive, credits are negative */
+   if (amount > 0.0) {
+      xaccSetPriceCellValue (debit, amount);
+      xaccSetPriceCellValue (credit, 0.0);
+      if (!credit->blank_zero) {
+        SET(&credit->cell, "");
       }
    } else {
-      xaccSetPriceCellValue (cred, 0.0);
-      if (!cred->blank_zero) {
-        SET(&deb->cell, "");
+      xaccSetPriceCellValue (debit, 0.0);
+      if (!debit->blank_zero) {
+        SET(&debit->cell, "");
       }
-      xaccSetPriceCellValue (deb, -amt);
+      xaccSetPriceCellValue (credit, -amount);
    }
 }
 

@@ -29,7 +29,6 @@ INCLPATH := -I.. \
             -I../engine/guid \
             -I../register \
             -I../reports \
-            -I@srcdir@/../../include \
             -I@top_srcdir@/lib/g-wrap-install/include \
             -I@top_srcdir@/src/g-wrap \
             -I${includedir} \

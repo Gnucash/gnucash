@@ -22,9 +22,9 @@
 
 include @top_srcdir@/Makefile.init
 
-INCLPATH = -I@srcdir@/../../include \
-           -I@srcdir@/../.. \
-           -I@srcdir@/guid \
+INCLPATH = -I@srcdir@/../..   \
+           -I@srcdir@/..      \
+           -I@srcdir@/guid    \
            -I@prefix@/include
 
 # add the -fpic flag to generate relocatable position independent code

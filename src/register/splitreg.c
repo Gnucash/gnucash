@@ -43,6 +43,8 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
+static gncBoolean only_debit_credit_labels = FALSE;
+
 typedef struct _CellBuffer CellBuffer;
 struct _CellBuffer
 {
@@ -155,13 +157,21 @@ static SplitRegisterColors reg_colors = {
 
 /* ============================================== */
 
+void
+xaccSplitRegisterSetLabelMode(gncBoolean only_debit_credit)
+{
+  only_debit_credit_labels = only_debit_credit;
+}
+
+/* ============================================== */
+
 #define LABEL(NAME,label)					\
 {								\
    BasicCell *hcell;						\
    hcell = reg->header_label_cells[NAME##_CELL];		\
    xaccSetBasicCellValue (hcell, label);			\
 }
-   
+
 /* ============================================== */
 /* configLabels merely puts strings into the label cells 
  * it does *not* copy them to the header cursor */
@@ -190,50 +200,52 @@ configLabels (SplitRegister *reg)
 
 
    /* setup custom labels for the debit/credit columns */
-   switch (type) {
-      case BANK_REGISTER:
-         LABEL (DEBT,  PAYMENT_STR);
-         LABEL (CRED,  DEPOSIT_STR);
+   if (!only_debit_credit_labels) {
+     switch (type) {
+       case BANK_REGISTER:
+         LABEL (DEBT, DEPOSIT_STR);
+         LABEL (CRED, PAYMENT_STR);
          break;
-      case CASH_REGISTER:
-         LABEL (DEBT,  SPEND_STR);
-         LABEL (CRED,  RECEIVE_STR);
+       case CASH_REGISTER:
+         LABEL (DEBT, RECEIVE_STR);
+         LABEL (CRED, SPEND_STR);
          break;
-      case ASSET_REGISTER:
-         LABEL (DEBT,  DEPR_STR);
-         LABEL (CRED,  APPR_STR);
-         break;
-      case CREDIT_REGISTER:
-         LABEL (DEBT,  CHARGE_STR);
-         LABEL (CRED,  PAYMENT_STR);
-         break;
-      case LIABILITY_REGISTER:
-         LABEL (DEBT,  INCREASE_STR);
-         LABEL (CRED,  DECREASE_STR);
-         break;
-      case INCOME_LEDGER:  
-      case INCOME_REGISTER:
-         LABEL (DEBT,  INCOME_STR);
-         LABEL (CRED,  CHARGE_STR);
-         break;
-      case EXPENSE_REGISTER:
-         LABEL (DEBT,  REBATE_STR);
-         LABEL (CRED,  EXPENSE_STR);
-         break;
-      case STOCK_REGISTER:
-      case PORTFOLIO_LEDGER:
-      case CURRENCY_REGISTER:
-         LABEL (DEBT,  SOLD_STR);
-         LABEL (CRED,  BOUGHT_STR);
-         break;
-      case GENERAL_LEDGER:  
-      case EQUITY_REGISTER:
-      case SEARCH_LEDGER:
+       case ASSET_REGISTER:
          LABEL (DEBT, DEBIT_STR);
          LABEL (CRED, CREDIT_STR);
          break;
-      default:
+       case CREDIT_REGISTER:
+         LABEL (DEBT, PAYMENT_STR);
+         LABEL (CRED, CHARGE_STR);
          break;
+       case LIABILITY_REGISTER:
+         LABEL (DEBT, DEBIT_STR);
+         LABEL (CRED, CREDIT_STR);
+         break;
+       case INCOME_LEDGER:  
+       case INCOME_REGISTER:
+         LABEL (DEBT, CHARGE_STR);
+         LABEL (CRED, INCOME_STR);
+         break;
+       case EXPENSE_REGISTER:
+         LABEL (DEBT, EXPENSE_STR);
+         LABEL (CRED, REBATE_STR);
+         break;
+       case STOCK_REGISTER:
+       case PORTFOLIO_LEDGER:
+       case CURRENCY_REGISTER:
+         LABEL (DEBT, BOUGHT_STR);
+         LABEL (CRED, SOLD_STR);
+         break;
+       case GENERAL_LEDGER:  
+       case EQUITY_REGISTER:
+       case SEARCH_LEDGER:
+         LABEL (DEBT, DEBIT_STR);
+         LABEL (CRED, CREDIT_STR);
+         break;
+       default:
+         break;
+     }
    }
 
    /* copy debit, dredit strings to ndebit, ncredit cells */
@@ -252,7 +264,7 @@ configAction (SplitRegister *reg)
 {
    int type = (reg->type) & REG_TYPE_MASK;
 
-   /* setup custom labels for the debit/credit columns */
+   /* setup strings in the action pull-down */
    switch (type) {
       case BANK_REGISTER:
       case SEARCH_LEDGER:  /* broken ! FIXME bg */

@@ -91,7 +91,7 @@ $(PACKAGE).pot: pseudo-source.c $(POTFILES)
 	   || ( rm -f $(srcdir)/$(PACKAGE).pot \
 	        && mv $(PACKAGE).po $(srcdir)/$(PACKAGE).pot )
 
-pseudo-source.c: $(top_srcdir)/include/messages_i18n.h
+pseudo-source.c: $(top_srcdir)/src/messages_i18n.h
 	perl -s extract-macros.perl $< > $@
 
 install: install-exec install-data

@@ -384,9 +384,6 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
                                    QUERY_OR);
   }
   
-  /* by default, display only thirty transactions */
-  /* xaccQuerySetMaxSplits (regData->query, MAX_QUERY_SPLITS); */
-
   /* add this register to the list of registers */
   fullList = ledgerListAdd (fullList, regData);
 

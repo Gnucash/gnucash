@@ -20,9 +20,9 @@
  *
  * FUNCTION:
  * Implements a basic display register/ledger.
- * This object makes specific cell have specific properties
- * (price, text, date, etc).  and specific names that correspond.
- * it also determines the actual physical layout, arrangement
+ * This object makes specific cells have specific properties
+ * (price, text, date, etc.) and specific names that correspond.
+ * It also determines the actual physical layout, arrangement
  * of columns, etc.
  *
  * Handles splits
@@ -77,11 +77,14 @@
 
 /*
  * enumerated display styles 
- * REG_DOUBLE_LINE  -- show two lines per transaction
- * REG_MULTI_LINE   -- show multiple lines per transaction
- * REG_DYNAMIC      -- dynamically expand edited transaction
+ * REG_SINGLE_LINE    -- show one line per transaction
+ * REG_DOUBLE_LINE    -- show two lines per transaction
+ * REG_MULTI_LINE     -- show multiple lines per transaction
+ * REG_SINGLE_DYNAMIC -- dynamically expand edited transaction,
+ *                       all other transactions on one line
+ * REG_DOUBLE_DYNAMIC -- dynamically expand edited transaction,
+ *                       all other transactions on two lines
  */
-
 #define REG_SINGLE_LINE        (1 << 8)
 #define REG_DOUBLE_LINE        (2 << 8)
 #define REG_MULTI_LINE         (3 << 8)
@@ -213,6 +216,10 @@ void            xaccDestroySplitRegister (SplitRegister *);
 
 void            xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
 void            xaccSplitRegisterConfigColors (SplitRegister *reg);
+
+/* determines whether the register uses only debit/credit as labels
+ * or uses 'informal' names like deposit/payment, etc. */
+void            xaccSplitRegisterSetLabelMode(gncBoolean only_debit_credit);
 
 /* returns non-zero value if updates have been made to data */
 unsigned int    xaccSplitRegisterGetChangeFlag (SplitRegister *);

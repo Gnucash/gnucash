@@ -1520,7 +1520,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
       if (MOD_AMNT & changed) {
         double credit = xaccGetPriceCellValue(reg->creditCell);
         double debit  = xaccGetPriceCellValue(reg->debitCell);
-        new_amount = credit - debit;
+        new_amount = debit - credit;
       }
       else
         new_amount = xaccSplitGetShareAmount(split);
@@ -1617,11 +1617,11 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
       if (MOD_AMNT & changed) {
          credit = xaccGetPriceCellValue(reg->creditCell);
          debit  = xaccGetPriceCellValue(reg->debitCell);
-         new_amount = credit - debit;
+         new_amount = debit - credit;
       } else {
          credit = xaccGetPriceCellValue(reg->ncreditCell);
          debit  = xaccGetPriceCellValue(reg->ndebitCell);
-         new_amount = debit - credit;
+         new_amount = -(debit - credit);
       }
 
       DEBUG ("xaccSRSaveRegEntry(): MOD_AMNT: %f\n", new_amount);

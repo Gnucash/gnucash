@@ -1524,7 +1524,9 @@ xaccTransOrder (Transaction **ta, Transaction **tb)
   /* otherwise, sort on number string */
   da = (*ta)->num;
   db = (*tb)->num;
-  SAFE_STRCMP (da, db);
+  if (da && db && *da && *db) {
+    SAFE_STRCMP (da, db);
+  }
 
   /* if dates differ, return */
   DATE_CMP(ta,tb,date_entered);

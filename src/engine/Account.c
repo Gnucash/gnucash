@@ -309,15 +309,15 @@ disable for now till we figure out what the right thing is.
   /* mark the account as having changed */
   acc -> changed |= ACC_INVALIDATE_ALL;
 
-  /* if this split belongs to another acount, remove it from 
+  /* if this split belongs to another account, remove it from 
    * there first.  We don't want to ever leave the system
    * in an inconsistent state.
    */
   oldacc = split->acc;
   if (split->acc) xaccAccountRemoveSplit (split->acc, split);
   split->acc = acc;
-    
-  /* enlarge the size of the split array to accomadate the new split,
+
+  /* enlarge the size of the split array to accomodate the new split,
    * and copy all the splits over to the new array. 
    * If the old and new accounts are the same account, then we
    * are just shuffling around the split, resumably due to a 

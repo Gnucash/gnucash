@@ -1498,8 +1498,6 @@ regWindowLedger(xaccLedgerDisplay *ledger)
   if (regData != NULL)
     return regData;
 
-  /*  xaccQuerySetMaxSplits(ledger->query, INT_MAX); */
-
   regData = (RegWindow *) malloc(sizeof (RegWindow));
 
   ledger->gui_hook = (void *) regData;

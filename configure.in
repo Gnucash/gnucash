@@ -580,6 +580,7 @@ AC_OUTPUT(Makefile
           Makefile.init
           make-gnucash-patch
           src/Makefile
+          src/messages_i18n.h
           src/engine/Makefile
           src/guile/Makefile
           src/guile/gnucash.h
@@ -598,7 +599,6 @@ AC_OUTPUT(Makefile
           src/swig/perl5/Makefile
 	  po/Makefile.in
 	  po/extract-macros.perl
-          include/messages_i18n.h
           rpm/gnucash.spec
           lib/Makefile
           lib/Xbae-4.6.2-linas/Makefile

@@ -66,6 +66,8 @@ static void gnc_configure_register_borders_cb(void *);
 static void gnc_configure_register_borders(void);
 static void gnc_configure_reverse_balance_cb(void *);
 static void gnc_configure_reverse_balance(void);
+static void gnc_configure_debit_credit_labels_cb(void *);
+static void gnc_configure_debit_credit_labels(void);
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -83,6 +85,7 @@ static SCM account_separator_callback_id = SCM_UNDEFINED;
 static SCM register_colors_callback_id = SCM_UNDEFINED;
 static SCM register_borders_callback_id = SCM_UNDEFINED;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
+static SCM debit_credit_labels_callback_id = SCM_UNDEFINED;
 
 /* ============================================================== */
 
@@ -167,6 +170,12 @@ gnucash_ui_init()
                                           NULL, "General",
                                           "Reversed-balance account types");
 
+    gnc_configure_debit_credit_labels();
+    debit_credit_labels_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_debit_credit_labels_cb,
+                                          NULL, "Register",
+                                          "Always use debit/credit labels");
+
     mainWindow();
 
     gnucash_style_init();
@@ -217,6 +226,7 @@ gnc_ui_destroy (void)
   gnc_unregister_option_change_callback_id(register_colors_callback_id);
   gnc_unregister_option_change_callback_id(register_borders_callback_id);  
   gnc_unregister_option_change_callback_id(reverse_balance_callback_id);  
+  gnc_unregister_option_change_callback_id(debit_credit_labels_callback_id);  
 
   if (app != NULL)
   {
@@ -601,16 +611,6 @@ gnc_configure_reverse_balance(void)
     reverse_type[INCOME]    = GNC_T;
     reverse_type[CREDIT]    = GNC_T;
   }
-  else if (safe_strcmp(choice, "debit") == 0)
-  {
-    reverse_type[BANK]     = GNC_T;
-    reverse_type[CASH]     = GNC_T;
-    reverse_type[ASSET]    = GNC_T;
-    reverse_type[STOCK]    = GNC_T;
-    reverse_type[MUTUAL]   = GNC_T;
-    reverse_type[CURRENCY] = GNC_T;
-    reverse_type[EXPENSE]  = GNC_T;
-  }
   else if (safe_strcmp(choice, "none") == 0)
   {
   }
@@ -624,6 +624,38 @@ gnc_configure_reverse_balance(void)
 
   if (choice != NULL)
     free(choice);
+}
+
+/* gnc_configure_debit_credit_labels_cb
+ *    Callback called when options change - sets
+ *    register debit/credit labels
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_debit_credit_labels_cb(void *not_used)
+{
+  gnc_configure_debit_credit_labels();
+}
+
+/* gnc_configure_debit_credit_labels
+ *    sets usage of debit/credit labels
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_debit_credit_labels(void)
+{
+  gncBoolean only_debit_credit_labels;
+
+  only_debit_credit_labels =
+    gnc_lookup_boolean_option("Register",
+                              "Always use debit/credit labels",
+                              GNC_F);
+
+  xaccSplitRegisterSetLabelMode(only_debit_credit_labels);
 }
 
 /****************** END OF FILE **********************/

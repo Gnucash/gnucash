@@ -28,7 +28,6 @@ INCLPATH = \
            -I@top_srcdir@/src/swig\
            -I@top_srcdir@/src/engine \
            -I@top_srcdir@/src/engine/guid \
-           -I@top_srcdir@/include \
            -I@PERLINCL@/CORE \
            -I$(prefix)/include \
 	         `glib-config --cflags glib`
@@ -58,7 +57,7 @@ default: gnucash.so
 gnucash.so: ${OBJS} ../../engine/libengine.a
 	gcc -shared ${GLIB_LIBS} ${OBJS} ../../engine/libengine.a -L@libdir@ ${LIBNANA} -o gnucash.so
 
-SWIG_FILTER    := %P.h %/util.h
+SWIG_FILTER    := %P.h %/util.h %gnc-common.h
 SWIG_ENGINE_HDRS := \
   $(filter-out ${SWIG_FILTER},$(wildcard @top_srcdir@/src/engine/*.h))
 SWIG_ALL_HDRS := \

@@ -156,6 +156,11 @@ the account instead of opening a register." #f))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
+  "Register" "Always use debit/credit labels"
+  "aa" "Only use 'debit' and 'credit' as register column titles." #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
   "Register" "Auto-Raise Lists"
   "b" "Automatically raise the list of accounts or actions during input." #t))
 
@@ -317,7 +322,6 @@ the account instead of opening a register." #f))
   'default
   (list #(default "Income & Expense" "Reverse Income and Expense Accounts")
         #(credit "Credit Accounts" "Reverse Credit Card, Liability, Equity, and Income Accounts")
-        #(debit "Debit Accounts" "Reverse Bank, Cash, Asset, Stock, Mutual Fund, Currency, and Expense Accounts")
         #(none "None" "Don't reverse any accounts"))))
 
 

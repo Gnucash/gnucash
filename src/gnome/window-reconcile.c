@@ -58,7 +58,7 @@
 struct _RecnWindow
 {
   Account *account;         /* The account that we are reconciling  */
-  double  ddiff;            /* The amount to reconcile              */
+  double  new_ending;       /* The new ending balance               */
 
   GtkWidget *window;        /* The reconcile window                 */
 
@@ -150,10 +150,11 @@ static double
 recnRecalculateBalance(RecnWindow *recnData)
 {
   char *amount;
-  double value;
-  double ddebit  = 0.0;
-  double dcredit = 0.0;
-  double ddiff   = 0.0;
+  double debit;
+  double credit;
+  double starting;
+  double ending;
+  double diff;
   short shares = PRTSYM | PRTSEP;
   gboolean reverse_balance;
   int account_type;
@@ -165,42 +166,47 @@ recnRecalculateBalance(RecnWindow *recnData)
       (account_type == CURRENCY))
     shares |= PRTSHR;
 
-  value = xaccAccountGetReconciledBalance(recnData->account);
+  starting = xaccAccountGetReconciledBalance(recnData->account);
   if (reverse_balance)
-    value = -value;
-
-  amount = xaccPrintAmount(value, shares, NULL);
-  gnc_set_label_color(recnData->starting, value);
+    starting = -starting;
+  amount = xaccPrintAmount(starting, shares, NULL);
+  gnc_set_label_color(recnData->starting, starting);
   gtk_label_set_text(GTK_LABEL(recnData->starting), amount);
+  if (reverse_balance)
+    starting = -starting;
 
-  value -= recnData->ddiff;
-  amount = xaccPrintAmount(value, shares, NULL);
-  gnc_set_label_color(recnData->ending, value);
+  ending = recnData->new_ending;
+  if (reverse_balance)
+    ending = -ending;
+  amount = xaccPrintAmount(ending, shares, NULL);
+  gnc_set_label_color(recnData->ending, ending);
   gtk_label_set_text(GTK_LABEL(recnData->ending), amount);
+  if (reverse_balance)
+    ending = -ending;
 
-  ddebit = gnc_reconcile_list_reconciled_balance
+  debit = gnc_reconcile_list_reconciled_balance
     (GNC_RECONCILE_LIST(recnData->debit));
-  if (reverse_balance)
-    ddebit = -ddebit;
 
-  dcredit = gnc_reconcile_list_reconciled_balance
+  credit = gnc_reconcile_list_reconciled_balance
     (GNC_RECONCILE_LIST(recnData->credit));
-  if (reverse_balance)
-    dcredit = -dcredit;
 
   /* Update the difference field, and the total fields */
-  amount = xaccPrintAmount(DABS(ddebit), shares, NULL);
+  amount = xaccPrintAmount(DABS(debit), shares, NULL);
   gtk_label_set_text(GTK_LABEL(recnData->total_debit), amount);
 
-  amount = xaccPrintAmount(dcredit, shares, NULL);
+  amount = xaccPrintAmount(credit, shares, NULL);
   gtk_label_set_text(GTK_LABEL(recnData->total_credit), amount);
 
-  ddiff = recnData->ddiff + dcredit - ddebit;
-  amount = xaccPrintAmount(ddiff, shares, NULL);
-  gnc_set_label_color(recnData->difference, ddiff);
+  diff = ending - (starting + debit - credit);
+  if (reverse_balance)
+    diff = -diff;
+  amount = xaccPrintAmount(diff, shares, NULL);
+  gnc_set_label_color(recnData->difference, diff);
   gtk_label_set_text(GTK_LABEL(recnData->difference), amount);
+  if (reverse_balance)
+    diff = -diff;
 
-  return ddiff;
+  return diff;
 }
 
 static gboolean
@@ -235,17 +241,17 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
  * NOTE: This dialog does not return until the user presses "Ok"    *
  *       or "Cancel"                                                *
  *                                                                  *
- * Args:   parent  - the parent of this window                      *
- *         account - the account to reconcile                       *
- *         diff    - returns the amount from ending balance field   *
+ * Args:   parent     - the parent of this window                   *
+ *         account    - the account to reconcile                    *
+ *         new_ending - returns the amount for ending balance       *
  * Return: True, if the user presses "Ok", else False               *
 \********************************************************************/
 static gboolean
-startRecnWindow(GtkWidget *parent, Account *account, double *diff)
+startRecnWindow(GtkWidget *parent, Account *account, double *new_ending)
 {
   GtkWidget *dialog, *end_value;
   char *amount, *title;
-  double dendBalance, value;
+  double dendBalance;
   int result;
   short shares = PRTSYM | PRTSEP;
   int account_type;
@@ -256,7 +262,10 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
    */
   dendBalance = xaccAccountGetReconciledBalance(account);
   if (gnc_reverse_balance(account))
+  {
     dendBalance = -dendBalance;
+    *new_ending = -(*new_ending);
+  }
 
   account_type = xaccAccountGetType(account);
   if ((account_type == STOCK) || (account_type == MUTUAL) ||
@@ -280,7 +289,7 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
   gnome_dialog_set_parent(GNOME_DIALOG(dialog), GTK_WINDOW(parent));
 
   {
-    GtkWidget *frame = gtk_frame_new("Reconcile Information");
+    GtkWidget *frame = gtk_frame_new(RECONCILE_INFO_STR);
     GtkWidget *main_area = gtk_hbox_new(FALSE, 5);
     GtkWidget *left_column = gtk_vbox_new(TRUE, 0);
     GtkWidget *right_column = gtk_vbox_new(TRUE, 0);
@@ -290,7 +299,7 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
     GtkWidget *vbox = GNOME_DIALOG(dialog)->vbox;
     end_value = gtk_entry_new();
 
-    amount = xaccPrintAmount(dendBalance - *diff, shares & ~PRTSYM, NULL);
+    amount = xaccPrintAmount(*new_ending, shares & ~PRTSYM, NULL);
     gtk_entry_set_text(GTK_ENTRY(end_value), amount);
     gtk_editable_select_region(GTK_EDITABLE(end_value), 0, -1);
 
@@ -323,7 +332,7 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
 
     gtk_widget_grab_focus(end_value);
   }
-    
+
   while (1)
   {
     result = gnome_dialog_run(GNOME_DIALOG(dialog));
@@ -334,9 +343,10 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
 
       string = gtk_entry_get_text(GTK_ENTRY(end_value));
 
-      value = xaccParseAmount(string, GNC_T);
+      *new_ending = xaccParseAmount(string, GNC_T);
 
-      *diff = dendBalance - value;
+      if (gnc_reverse_balance(account))
+        *new_ending = -(*new_ending);
     }
 
     /* cancel or delete */
@@ -494,11 +504,11 @@ static void
 gnc_ui_reconcile_window_change_cb(GtkButton *button, gpointer data)
 {
   RecnWindow *recnData = (RecnWindow *) data;
-  double ddiff = recnData->ddiff;
+  double new_ending = recnData->new_ending;
   
-  if (startRecnWindow(recnData->window, recnData->account, &ddiff))
+  if (startRecnWindow(recnData->window, recnData->account, &new_ending))
   {
-    recnData->ddiff = ddiff;
+    recnData->new_ending = new_ending;
     recnRecalculateBalance(recnData);
   }
 }
@@ -948,20 +958,25 @@ recnWindow(GtkWidget *parent, Account *account)
   GtkWidget *statusbar;
   GtkWidget *vbox;
   GtkWidget *dock;
-  double ddiff = 0.0;
-  
+  double new_ending;
+
+  if (account == NULL)
+    return NULL;
+
   FETCH_FROM_LIST(RecnWindow, recnList, account, account, recnData);
+
+  new_ending = xaccAccountGetBalance(account);
 
   /* Popup a little window to prompt the user to enter the
    * ending balance for his/her bank statement */
-  if (!startRecnWindow(parent, account, &ddiff))
+  if (!startRecnWindow(parent, account, &new_ending))
   {
     REMOVE_FROM_LIST(RecnWindow, recnList, account, account);
     free(recnData);
     return NULL;
   }
 
-  recnData->ddiff = ddiff;
+  recnData->new_ending = new_ending;
   recnData->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   recnData->delete_refresh = FALSE;
 

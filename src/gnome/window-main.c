@@ -168,18 +168,6 @@ gnc_ui_refresh_statusbar (void)
     }
   }
 
-  /* check to see whether GUI should display reversed signs */
-  if (gnc_reverse_balance_type(ASSET))
-  {
-    assets = -assets;
-    euro_assets = -euro_assets;
-  }
-  if (!gnc_reverse_balance_type(INCOME))
-  {
-    profits = -profits;
-    euro_profits = -euro_profits;
-  }
-
   xaccSPrintAmount(asset_string, assets, PRTSYM | PRTSEP, NULL);
   if(euro)
   {
@@ -264,7 +252,7 @@ gnc_ui_delete_account ( Account *account )
   xaccFreeAccount(account);
 
   /* Step 4: Refresh things */
-  gnc_ui_refresh_statusbar();
+  gnc_refresh_main_window();
   gnc_group_ui_refresh(gncGetCurrentGroup());
 }
 

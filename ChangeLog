@@ -1,3 +1,49 @@
+2000-04-29  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/splitreg.c: add a flag determining whether to use
+	regular labels or only debit/credit.
+
+	* src/gnome/top-level.c: implement the debit/credit label option
+
+	* src/scm/prefs.scm: added option to only use debit/credit labels
+	in the register.
+
+	* src/MultiLedger.h: remove the MAX_SPLITS constants
+
+	* src/gnome/window-main.c (gnc_ui_refresh_statusbar): no need to
+	reverse quantities.
+
+	* src/gnome/top-level.c (gnc_configure_reverse_balance): take out
+	debit sign-reversal type.
+
+	* src/scm/prefs.scm: take out debit sign-reversal type
+
+	* src/SplitLedger.c: debit/credit reversal.
+
+	* src/register/pricecell.c: debit/credit reversal.
+
+	* src/register/splitreg.c: switch the column labels for the
+	debit/credit reversal.
+
+	* src/gnome/window-reconcile.c: fix up the dialog for the
+	debit/credit reversal. Also, fix the calculations so the user
+	can change sign-reversal modes while the dialog is open.
+
+	* src/gnome/window-main.c (gnc_ui_delete_account): refresh the
+	main window fully.
+
+	* src/gnome/reconcile-list.c (gnc_reconcile_list_fill): debits are
+	positive, credits are negative.
+
+2000-04-28  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/option-util.c: redid the option database storage as
+	a hash table, so databases have the same handle throughout their
+	lifetime.
+
+	* src/engine/Transaction.c (xaccTransOrder): only compare nums if
+	they are non-blank.
+
 2000-04-27  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/window-main.c (gnc_ui_refresh_statusbar): use ASSET

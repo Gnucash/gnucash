@@ -35,7 +35,3 @@ default:
 	@echo Nothing to do.
 
 .PHONY: default
-
-# Local Variables:
-# tab-width: 2
-# End:

@@ -555,9 +555,9 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     else
       amount = xaccSplitGetValue(split);
 
-    if ((amount < 0) && (list->list_type == RECLIST_CREDIT))
+    if ((amount < 0) && (list->list_type == RECLIST_DEBIT))
       continue;
-    if ((amount >= 0) && (list->list_type == RECLIST_DEBIT))
+    if ((amount >= 0) && (list->list_type == RECLIST_CREDIT))
       continue;
 
     trans = xaccSplitGetParent(split);
