@@ -45,23 +45,55 @@
                         item))
      (else (gnc:warn "gnc:run-report - " item " is the wrong type."))))
 
-  (define (report-output->string lines)
-    (call-with-output-string
-     (lambda (port)
-       (for-each
-        (lambda (item) (display-report-list-item item port))
-        lines))))
+;; Old version assumed flat lists
+;   (define (report-output->string lines)
+;     (call-with-output-string
+;      (lambda (port)
+;        (for-each
+;         (lambda (item) (display-report-list-item item port))
+;         lines))))
 
-  (let ((report (hash-ref *gnc:_report-info_* report-name)))
-    (if report
-        (let* ((renderer (gnc:report-renderer report))
-               (lines    (renderer options))
-               (output   (report-output->string lines)))
-          output)
-        #f)))
+;; New version that processes a _tree_ rather than a flat list of
+;; strings.  This means that we can pass in somewhat "more structured"
+;; data.
+
+  (define (output-tree-to-port tree port)
+    (cond 
+     ((pair? tree)
+      (output-tree-to-port (car tree) port) 
+      (output-tree-to-port (cdr tree) port))
+     ((string? tree)
+      (display-report-list-item tree port)
+      (newline port))
+     ((null? tree)
+      #f) ;;; Do Nothing...
+     (tree  ;;; If it's not #f
+      (display-report-list-item "<B> Error - Bad atom! </b>" port)
+      (display-report-list-item tree port)
+      (display "Err: (")
+      (write tree)
+      (display ")")
+      (newline)
+      (newline port))))
+  
+    (define (report-output->string tree)
+      (display "(Report-Tree ")
+      (display tree)
+      (display ")")
+      (newline)
+      (call-with-output-string
+       (lambda (port)
+	 (output-tree-to-port tree port))))
+  
+    (let ((report (hash-ref *gnc:_report-info_* report-name)))
+      (if report
+	  (let* ((renderer (gnc:report-renderer report))
+		 (lines    (renderer options))
+		 (output   (report-output->string lines)))
+	    output)
+	  #f)))
 
 (define (gnc:report-menu-setup win)
-
   (define menu (gnc:make-menu "_Reports" (list "_Accounts")))
   (define menu-namer (gnc:new-menu-namer))
 
