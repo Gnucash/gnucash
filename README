@@ -1,5 +1,5 @@
 ############################################################
-          Gnucash 1.5.x README file.
+          GnuCash 1.5.x README file.
 
 NOTE: THIS IS A DEVELOPMENT RELEASE!!! THIS VERSION HAS NOT
 BEEN TESTED PROPERLY AND MAY DO ABSOLUTELY ANYTHING!  
@@ -125,10 +125,12 @@ We hope you enjoy all the new features!
 Dependencies
 ------------
 
-The following packages are required to be installed to run gnucash:
+The following packages are required to be installed to run GnuCash:
+
+  Gnome 1.4: see www.gnome.org for more information.
 
   guile: provides main extension language infrastructure, used
-    extensively in gnucash for initialization & startup. Requires
+    extensively in GnuCash for initialization & startup. Requires
     version 1.3.4 or later.
 
   slib: scheme libraries for guile. Need version slib2c4 or later.
@@ -144,7 +146,8 @@ The following packages are required to be installed to run gnucash:
   gnome-libs: version 1.0.40 or higher should work. These libraries
     require numerous other supporting libraries, such as gtk and glib.
 
-  gnome-print: any recent version should work.
+  gnome-print: any recent version should work, however problems have
+    been reported with 0.28.
 
   gdk-pixbuf: any recent version should work.
 
@@ -152,28 +155,17 @@ The following packages are required to be installed to run gnucash:
     version of gtkhtml from Helix Code.  Note that this has changed since
     1.4, which used the older gtkxmhtml library.
 
-  guppi: version 0.35.1-1 should work
+  guppi: version 0.35.3 should work
 
 To be able to use certain features of GnuCash, such as reports and
 network stock price downloads, you must have the following packages
 below installed (in addition to those listed above).
 
-RPM's for most of these can be found at http://rufus.w3.org/linux/
-
   perl: Almost any version of perl5 should work.  I run perl-5.004 
 
-In addition, some perl modules need to be installed:
-
-  perl-LWP/libwww-perl-5.36
-  perl-HTML/HTML-0.6
-  perl-HTML/HTML-Parser-2.20
-        -- these perl modules are used to fetch stock & mutual fund quotes
-           off the net.  You can pick up RPMS at
-           ftp://ftp.gnucash.org/pub/gnucash/binaries/RPMS
-           http://rufus.w3.org/linux/RPM/PByName.html
-           http://linas.org/linux/gnucash (last resort)
-           or sources at
-           http://www.cpan.org/CPAN.html
+In addition, some perl modules need to be installed. You can run
+the script 'update-finance-quote' as root to obtain the latest
+versions of required packages.
 
 
 #######
@@ -181,8 +173,7 @@ Running
 -------
 
 For GnuCash invocation details, see the manpage in doc/gnucash.1.
-Soon, you'll be able to also run gnucash --help, but that's not
-finished yet...
+You can also run gnucash --help for the command line options.
 
 You can start GnuCash at the command-line, with "gnucash" or "gnucash
 <filename>", where <filename> is a GnuCash account file.  Sample
@@ -219,7 +210,7 @@ GnuCash responds to the following environment variables:
   debugging earlier in the startup process than you can with --debug.
 
 As an example, here's a wrapper script we used to use to allow you
-to run gnucash from a local directory:
+to run GnuCash from a local directory:
 
   #! /bin/sh
 
@@ -311,7 +302,7 @@ some of them:
 
   --enable-opt-style-install
 
-    Gnucash supports two types of install, the first is the normal
+    GnuCash supports two types of install, the first is the normal
     /usr or /usr/local/ style, where the files are installed into
     /usr/bin /usr/lib, etc.  This is the default.
 
@@ -391,14 +382,14 @@ See ftp://ftp.gnucash.org/pub/xacc (high-bandwidth)
 or  http://linas.org/linux/gnucash (slow-www ) 
 for precompiled (but *very old*) binaries for these platforms
 
-Gnucash can probably be made to work with most POSIX-ish platforms, 
+GnuCash can probably be made to work with most POSIX-ish platforms, 
 provided the libraries and toolchain are available.
 
 #########################
 Additional Download Sites
 -------------------------
 
-You can also download gnucash from:
+You can also download GnuCash from:
 
   - http://download.sourceforge.net/gnucash
   - ftp://ftp.krondo.com
@@ -464,10 +455,10 @@ Before you start developing GnuCash, you should do the following:
 2. Several of the directories under src contain files called design.txt
    which explain many aspects of GnuCash's design. Read those.
 
-3. Go to the gnucash website and skim the archives of the gnucash
+3. Go to the GnuCash website and skim the archives of the GnuCash
    development mailing list.
 
-4. Join the GnuCash development mailing list. See the gnucash website
+4. Join the GnuCash development mailing list. See the GnuCash website
    for details on how to do this.
 
 
@@ -476,8 +467,7 @@ Submitting a Patch:
   This section has been removed to the file README.patches
 
   Please consult that file for details on using the script provided to make
-  patches suitable for submitting to the gnucash development team.
+  patches suitable for submitting to the GnuCash development team.
 
 
 Thank you. 
-
