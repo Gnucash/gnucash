@@ -1,3 +1,9 @@
+2001-06-06  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report-html.scm: remove unneeded (require 'printf).
+	This is invoked as part of testing for slib > 2c4. For slib
+	< 2c4, printf is loaded from slib-backup.scm.
+
 2001-06-07  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* doc/sgml/C/xacc-regwin.sgml: Chris "Wilddev" Lyttle's 

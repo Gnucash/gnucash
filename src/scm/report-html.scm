@@ -23,7 +23,6 @@
 
 (require 'hash-table)
 (require 'record)
-(require 'printf)
 
 (gnc:support "report-html.scm")
 

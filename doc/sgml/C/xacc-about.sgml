@@ -624,6 +624,13 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>chris@wilddev.net</email> Chris Lyttle</glossterm>
+<glossdef>
+<para>Register documentation and screenshots.</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>kmaraas@gnome.org</email>Kjartan Maraas</glossterm>
 <glossdef>
 <para>Norwegian translations</para>
