@@ -148,10 +148,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterType type,
                        SplitRegisterStyle style,
                        gboolean use_double_line,
-                       TableView *view,
-                       VirtCellDataAllocator allocator,
-                       VirtCellDataDeallocator deallocator,
-                       VirtCellDataCopy copy,
+                       TableModel *model,
                        gboolean templateMode);
 
 
@@ -581,19 +578,16 @@ SplitRegister *
 xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
                          gboolean use_double_line,
-                         TableView *view,
-                         VirtCellDataAllocator allocator,
-                         VirtCellDataDeallocator deallocator,
-                         VirtCellDataCopy copy,
+                         TableModel *model,
                          gboolean templateMode)
 {
   SplitRegister * reg;
 
-  g_return_val_if_fail (view != NULL, NULL);
+  g_return_val_if_fail (model != NULL, NULL);
 
   reg = g_new0 (SplitRegister, 1);
 
-  view->handler_user_data = reg;
+  model->handler_user_data = reg;
 
   if (type >= NUM_SINGLE_REGISTER_TYPES)
     style = REG_STYLE_JOURNAL;
@@ -602,10 +596,7 @@ xaccMallocSplitRegister (SplitRegisterType type,
                          type,
                          style,
                          use_double_line,
-                         view,
-                         allocator,
-                         deallocator,
-                         copy,
+                         model,
                          templateMode);
 
   return reg;
@@ -681,10 +672,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterType type,
                        SplitRegisterStyle style,
                        gboolean use_double_line,
-                       TableView *view,
-                       VirtCellDataAllocator allocator,
-                       VirtCellDataDeallocator deallocator,
-                       VirtCellDataCopy copy,
+                       TableModel *model,
                        gboolean templateMode)
 {
   Table * table;
@@ -846,7 +834,7 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* add menu items for the action cell */
   configAction (reg);
 
-  table = gnc_table_new (view, allocator, deallocator, copy);
+  table = gnc_table_new (model);
 
   reg->table = table;
 

@@ -252,10 +252,7 @@ SplitRegister *
 xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
                          gboolean use_double_line,
-                         TableView *view,
-                         VirtCellDataAllocator allocator,
-                         VirtCellDataDeallocator deallocator,
-                         VirtCellDataCopy copy,
+                         TableModel *model,
 			 gboolean templateMode);
 
 void            xaccConfigSplitRegister (SplitRegister *reg,

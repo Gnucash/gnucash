@@ -694,7 +694,7 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
   xaccLedgerDisplay *ld;
   gboolean show_all;
   const char *class;
-  TableView view;
+  TableModel model;
   GList *splits;
 
   switch (ld_type)
@@ -800,26 +800,27 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
 
   /* xaccMallocSplitRegister will malloc & initialize the register,
    * but will not do the gui init */
-  view.label_handler       = xaccSRGetLabelHandler;
-  view.fg_color_handler    = xaccSRGetFGColorHandler;
-  view.bg_color_handler    = xaccSRGetBGColorHandler;
-  view.cell_border_handler = xaccSRGetCellBorderHandler;
-  view.handler_user_data   = NULL;
+  model.label_handler       = xaccSRGetLabelHandler;
+  model.fg_color_handler    = xaccSRGetFGColorHandler;
+  model.bg_color_handler    = xaccSRGetBGColorHandler;
+  model.cell_border_handler = xaccSRGetCellBorderHandler;
+  model.handler_user_data   = NULL;
   /* The following handlers are changed in template mode. */
   if ( templateMode ) {
-    view.entry_handler     = xaccSRTemplateGetEntryHandler;
-    view.io_flag_handler   = xaccSRTemplateGetIOFlagsHandler;
-    view.confirm_handler   = xaccSRTemplateConfirmHandler;
+    model.entry_handler     = xaccSRTemplateGetEntryHandler;
+    model.io_flag_handler   = xaccSRTemplateGetIOFlagsHandler;
+    model.confirm_handler   = xaccSRTemplateConfirmHandler;
   } else {
-    view.entry_handler     = xaccSRGetEntryHandler;
-    view.io_flag_handler   = xaccSRGetIOFlagsHandler;
-    view.confirm_handler   = xaccSRConfirmHandler;
+    model.entry_handler     = xaccSRGetEntryHandler;
+    model.io_flag_handler   = xaccSRGetIOFlagsHandler;
+    model.confirm_handler   = xaccSRConfirmHandler;
   }
 
-  ld->reg = xaccMallocSplitRegister (reg_type, style, FALSE, &view,
-                                     xaccMLGUIDMalloc,
-                                     xaccMLGUIDFree,
-                                     xaccMLGUIDCopy,
+  model.cell_data_allocator = xaccMLGUIDMalloc;
+  model.cell_data_deallocator = xaccMLGUIDFree;
+  model.cell_data_copy = xaccMLGUIDCopy;
+
+  ld->reg = xaccMallocSplitRegister (reg_type, style, FALSE, &model,
                                      templateMode);
   xaccSRSetData (ld->reg, ld,
                  xaccLedgerDisplayParent,

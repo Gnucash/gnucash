@@ -188,6 +188,10 @@ typedef void (*TableGetCellBorderHandler) (VirtualLocation virt_loc,
 typedef gboolean (*TableConfirmHandler) (VirtualLocation virt_loc,
                                          gpointer user_data);
 
+typedef gpointer (*VirtCellDataAllocator)   (void);
+typedef void     (*VirtCellDataDeallocator) (gpointer cell_data);
+typedef void     (*VirtCellDataCopy)        (gpointer to, gconstpointer from);
+
 typedef struct
 {
   TableGetEntryHandler entry_handler;
@@ -199,11 +203,11 @@ typedef struct
   TableConfirmHandler confirm_handler;
 
   gpointer handler_user_data;
-} TableView;
 
-typedef gpointer (*VirtCellDataAllocator)   (void);
-typedef void     (*VirtCellDataDeallocator) (gpointer user_data);
-typedef void     (*VirtCellDataCopy)        (gpointer to, gconstpointer from);
+  VirtCellDataAllocator cell_data_allocator;
+  VirtCellDataDeallocator cell_data_deallocator;
+  VirtCellDataCopy cell_data_copy;
+} TableModel;
 
 struct _Table
 {
@@ -248,21 +252,14 @@ struct _Table
 
   gpointer ui_data;
 
-  TableView view;
+  TableModel model;
 
   TableDestroyFunc destroy;
-
-  VirtCellDataAllocator   vcell_data_allocator;
-  VirtCellDataDeallocator vcell_data_deallocator;
-  VirtCellDataCopy        vcell_data_copy;
 };
 
 
 /* Functions to create and destroy Tables.  */
-Table *     gnc_table_new (TableView *view,
-                           VirtCellDataAllocator allocator,
-                           VirtCellDataDeallocator deallocator,
-                           VirtCellDataCopy copy);
+Table *     gnc_table_new (TableModel *model);
 
 void        gnc_table_save_state (Table *table);
 void        gnc_table_destroy (Table *table);

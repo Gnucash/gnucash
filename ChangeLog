@@ -1,3 +1,16 @@
+2001-07-03  Dave Peticolas  <dave@krondo.com>
+
+	* src/MultiLedger.c: same as below
+
+	* src/register/table-allgui.c: same as below
+
+	* src/register/splitreg.c: same as below
+
+	* src/register/splitreg.h: same as below
+
+	* src/register/table-allgui.h: rename TableView to TableModel.
+	Put cell data handlers into the model.
+
 2001-07-02  Dave Peticolas  <dave@krondo.com>
 
 	* many header files: apply Ben Stanley's script to
