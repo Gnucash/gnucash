@@ -2283,7 +2283,7 @@ finder_help_function(Account *account,
 {
   GList *slp;
 
-  if (account == NULL) return NULL;
+  if (account == NULL) return;
 
   for (slp = g_list_last (xaccAccountGetSplitList (account));
        slp;

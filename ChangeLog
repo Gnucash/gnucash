@@ -1,3 +1,7 @@
+2001-05-13  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/Account.c (finder_help_function): fix warning
+
 2001-05-13  Kevin Finn  <kevinfinn@mediaone.net>
 
 	* src/SplitLedger.c, src/engine/Account.c, src/engine/Account.h:
