@@ -55,15 +55,15 @@ include @top_srcdir@/Makefile.common
 motif:
 	@cd ComboBox-1.33;    $(MAKE) default
 	@cd Xbae-4.6.2-linas; $(MAKE) default
-	@cd g-wrap;           $(MAKE) default
+	@cd g-wrap;           $(MAKE) all
 
 gnome:
 	@cd ${GTKSHEET_DIR};  $(MAKE) default
 	@cd gtkfilesel2;      $(MAKE) default
-	@cd g-wrap;           $(MAKE) default
+	@cd g-wrap;           $(MAKE) all
 
 qt:
-	@cd g-wrap;           $(MAKE) default
+	@cd g-wrap;           $(MAKE) all
 
 .PHONY: gnome motif qt
 
