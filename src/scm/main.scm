@@ -10,7 +10,6 @@
   (gnc:load "hooks.scm")
   (gnc:load "extensions.scm")      ; Should this be here or somewhere else?
   (gnc:load "text-export.scm")
-  (gnc:load "importqif.scm")
   
   ;; Load the system and user configs
   (if (not (gnc:load-system-config-if-needed))
