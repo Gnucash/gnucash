@@ -961,8 +961,8 @@ gnc_split_register_traverse_check_stock_shares (SplitRegister *reg, const char *
 }
 
 static Account *
-gnc_split_register_get_account_always (SplitRegister *reg, const char * cell_name,
-				       gboolean force)
+gnc_split_register_get_account_always (SplitRegister *reg, const char * cell_name)
+
 {
   BasicCell *cell;
   const char *name;
@@ -975,10 +975,7 @@ gnc_split_register_get_account_always (SplitRegister *reg, const char * cell_nam
 
   /* If 'name' is "-- Split Transaction --" then return NULL or the register acct */
   if (!safe_strcmp (name, _("-- Split Transaction --"))) {
-    if (force)
-      return gnc_split_register_get_default_account (reg);
-    else
-      return NULL;
+    return NULL;
   }
 
   return gnc_split_register_get_account_by_name (reg, cell, name, &dummy);
@@ -1021,15 +1018,15 @@ gboolean
 gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 {
   Transaction *txn;
-  Split *osplit;
+  Split *split, *osplit;
   Account *xfer_acc, *reg_acc;
   gnc_commodity *txn_cur, *xfer_com, *reg_com;
   gnc_numeric amount, exch_rate;
   XferDialog *xfer;
-  gboolean used_mxfrm = FALSE;
   gboolean swap_amounts = FALSE;
   gboolean expanded = FALSE;
   PriceCell *rate_cell;
+  const char *message;
   
   /* Make sure we NEED this for this type of register */
   rate_cell = (PriceCell*) gnc_table_layout_get_cell (reg->table->layout, RATE_CELL);
@@ -1045,12 +1042,21 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   expanded = gnc_split_register_current_trans_expanded (reg);
 
   /* Grab the xfer account */
-  xfer_acc = gnc_split_register_get_account_always (reg, XFRM_CELL, FALSE);
-  if (!xfer_acc) {
-    used_mxfrm = TRUE;
-    xfer_acc = gnc_split_register_get_account_always (reg, MXFRM_CELL, !expanded);
+  if (expanded)
+    xfer_acc = gnc_split_register_get_account_always (reg, XFRM_CELL);
+  else
+    xfer_acc = gnc_split_register_get_account_always (reg, MXFRM_CELL);
+
+  message =
+    _("You need to expand the transaction in order to modify its exchange rates.");
+
+  /* If this is an un-expanded, multi-split transaction, then warn the user */
+  if (force_dialog && !expanded && ! xfer_acc) {
+    gnc_error_dialog (message);
+    return TRUE;
   }
 
+  /* No account -- don't run the dialog */
   if (!xfer_acc)
     return FALSE;
 
@@ -1064,8 +1070,8 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   reg_com = xaccAccountGetCommodity (reg_acc);
 
   /* Is this a two-split txn? */
-  osplit = gnc_split_register_get_current_split (reg);
-  osplit = xaccSplitGetOtherSplit (osplit);
+  split = gnc_split_register_get_current_split (reg);
+  osplit = xaccSplitGetOtherSplit (split);
 
   /* Check if the txn- and xfer- commodities are the same */
   if (gnc_commodity_equal (txn_cur, xfer_com)) {
@@ -1086,6 +1092,17 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     xfer_com = reg_com;
     if (gnc_commodity_equal (txn_cur, xfer_com))
       return FALSE;
+  }
+
+  /* If this is a non-expanded, two-split txn where BOTH splits need
+   * conversion rates, then require the user to actually expand the
+   * transaction in order to edit it.
+   */
+  if (!expanded && osplit &&
+      gnc_split_register_split_needs_amount (split) &&
+      gnc_split_register_split_needs_amount (osplit)) {
+    gnc_error_dialog (message);
+    return TRUE;
   }
 
   /* Ok, we need to grab the exchange rate */

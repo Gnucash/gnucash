@@ -1,3 +1,27 @@
+2002-12-07  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-control.c:
+	  - Don't grab the register account for multi-split txns.  Just return NULL.
+	  - Better logic in the exchange-rate handler function for when to
+	    pop up the dialog, and what to put into it.
+	  - add an error dialog for corner cases where we want to force
+	    the user to expand the txn in order to get proper conversions.
+	
+	* src/register/ledger-core/split-register-model-save.c:
+	  - export "split_needs_amount()" for use elsewhere
+	  - fix the logic in handling debcred changes, in particular for
+	    multi-currency cases.  Convert amount->value->amount properly.
+	  - handle the case where you change the exchange-rate manually
+	    (and do nothing else).
+	  - fix the logic in the save-split post-processing for what gets
+	    converted when.
+
+	* src/register/ledger-core/split-register-p.h:
+	  - export the "split_needs_amount()" api for use in the register.
+
+	FIXES bug #100489
+
+
 2002-12-7  Benoit Grégoire  <bock@step.polymtl.ca>	
 	More Doxygenification.  Created an Engine module, and a 
 	Deprecated list.  Unfortunately, unless we turn on EXTRACT_ALL

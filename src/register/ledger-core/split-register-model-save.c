@@ -370,7 +370,7 @@ gnc_split_register_get_rate_cell (SplitRegister *reg, const char *cell_name)
   return gnc_numeric_create (100,100);
 }
 
-static gboolean
+gboolean
 gnc_split_register_split_needs_amount (Split *split)
 {
   Transaction *txn = xaccSplitGetParent (split);
@@ -387,7 +387,7 @@ gnc_split_register_save_debcred_cell (BasicCell * bcell,
   SRSaveData *sd = save_data;
   SplitRegister *reg = user_data;
   Account *acc;
-  gnc_numeric new_amount, convrate, oldconvrate, value;
+  gnc_numeric new_amount, convrate, amtconv, value;
 
   g_return_if_fail (gnc_basic_cell_has_name (bcell, DEBT_CELL) ||
                     gnc_basic_cell_has_name (bcell, CRED_CELL));
@@ -405,43 +405,53 @@ gnc_split_register_save_debcred_cell (BasicCell * bcell,
    * 'value' by dividing by the convrate in order to set the value.
    */
 
-  /* First, compute the "old" conversion rate -- use the RATE_CELL if it
-   * exists -- if not, then compute from the old amount/value
+  /* First, compute the conversion rate to convert the value to the
+   * amount.  Use the RATE_CELL (if it exists) -- if not, then assume
+   * it is 1.
    */
-  oldconvrate = gnc_split_register_get_rate_cell (reg, RATE_CELL);
-  if (gnc_numeric_zero_p (oldconvrate)) {
-    convrate = xaccSplitGetAmount (sd->split);
-    value = xaccSplitGetValue (sd->split);
+  convrate = gnc_split_register_get_rate_cell (reg, RATE_CELL);
+  if (gnc_numeric_zero_p (convrate))
+    convrate = gnc_numeric_create (100,100);
 
-    if (! gnc_numeric_zero_p (value))
-      oldconvrate = gnc_numeric_div (convrate, value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
-    else
-      oldconvrate = gnc_numeric_create (100,100);
-  }
-
-  /* Now compute/set the split value */
+  /* Now compute/set the split value.  Amount is in the register
+   * currency but we need to convert to the txn currency.
+   */
   acc = gnc_split_register_get_default_account (reg);
   if (gnc_split_register_needs_conv_rate (sd->trans, acc)) {
-    gnc_commodity *curr;
+    gnc_commodity *curr, *reg_com, *xfer_com;
+    Account *xfer_acc;
+
+    xfer_acc = xaccSplitGetAccount (sd->split);
+    xfer_com = xaccAccountGetCommodity (xfer_acc);
+    reg_com = xaccAccountGetCommodity (acc);
+
+    /* If we are in an expanded register and the xfer_acc->comm !=
+     * reg_acc->comm then we need to compute the convrate here.
+     * Otherwise, we _can_ use the rate_cell!
+     */
+    if (sd->reg_expanded && ! gnc_commodity_equal (reg_com, xfer_com))
+      amtconv = gnc_split_register_get_conv_rate (sd->trans, acc);
+    else
+      amtconv = convrate;
 
     /* convert the amount to the Value ... */
-    convrate = gnc_split_register_get_conv_rate (sd->trans, acc);
     curr = xaccTransGetCurrency (sd->trans);
-    value = gnc_numeric_div (new_amount, convrate,
+    value = gnc_numeric_div (new_amount, amtconv,
 			     gnc_commodity_get_fraction (curr),
 			     GNC_RND_ROUND);
     xaccSplitSetValue (sd->split, value);
   } else
     xaccSplitSetValue (sd->split, new_amount);
 
-  /* Now re-compute the Amount -- We may need to convert from the Value back
-   * to the amount here using the conversion in the rate-cell.
+  /* Now re-compute the Amount from the Value.  We may need to convert
+   * from the Value back to the amount here using the convrate from
+   * earlier.
    */
   value = xaccSplitGetValue (sd->split);
 
   if (gnc_split_register_split_needs_amount (sd->split)) {
     acc = xaccSplitGetAccount (sd->split);
-    new_amount = gnc_numeric_mul (value, oldconvrate,
+    new_amount = gnc_numeric_mul (value, convrate,
 				  xaccAccountGetCommoditySCU (acc),
 				  GNC_RND_ROUND);
     xaccSplitSetAmount (sd->split, new_amount);
@@ -452,12 +462,24 @@ gnc_split_register_save_debcred_cell (BasicCell * bcell,
 }
 
 static void
+gnc_split_register_save_rate_cell (BasicCell * bcell,
+				   gpointer save_data,
+				   gpointer user_data)
+{
+  SRSaveData *sd = save_data;
+
+  /* if the exchrate cell changed, then make sure to force a scrub */
+  sd->do_scrub = TRUE;
+}
+
+static void
 gnc_split_register_save_cells (gpointer save_data,
                                gpointer user_data)
 {
   SRSaveData *sd = save_data;
   SplitRegister *reg = user_data;
   Split *other_split;
+  gnc_commodity *txn_cur;
   gnc_numeric rate = gnc_numeric_zero();
 
   g_return_if_fail (sd != NULL);
@@ -466,6 +488,7 @@ gnc_split_register_save_cells (gpointer save_data,
     return;
 
   other_split = xaccSplitGetOtherSplit (sd->split);
+  txn_cur = xaccTransGetCurrency (sd->trans);
 
   xaccSplitScrub (sd->split);
 
@@ -473,23 +496,47 @@ gnc_split_register_save_cells (gpointer save_data,
 
   if (other_split && !sd->reg_expanded)
   {
-    gnc_numeric value = xaccSplitGetValue (sd->split);
+    gnc_numeric amount, value = xaccSplitGetValue (sd->split);
+    Account *acc;
+    gboolean split_needs_amount;
 
+    split_needs_amount = gnc_split_register_split_needs_amount (sd->split);
+
+    /* We are changing the rate on the current split, but it was not
+     * handled in the debcred handler, so we need to do it here.
+     */
+    if (!sd->handled_dc && split_needs_amount && !gnc_numeric_zero_p (rate))
+    {
+      gnc_numeric amount = xaccSplitGetAmount (sd->split);
+      value = gnc_numeric_div (amount, rate, gnc_commodity_get_fraction (txn_cur),
+			       GNC_RND_ROUND);
+      xaccSplitSetValue (sd->split, value);
+
+      /* XXX: do we need to set the amount on the other split? */
+    }
+
+    /* Now reverse the value for the other split */
     value = gnc_numeric_neg (value);
 
     if (gnc_split_register_split_needs_amount (other_split))
     {
-      Account *acc = xaccSplitGetAccount (other_split);
-      gnc_numeric amount;
+      acc = xaccSplitGetAccount (other_split);
 
-      if (gnc_numeric_zero_p (rate))
+      /* If we don't have an exchange rate then figure it out.  Or, if
+       * BOTH splits require an amount, then most likely we're in the
+       * strange case of having a transaction currency different than
+       * _both_ accounts -- so grab the other exchange rate.
+       */
+      if (gnc_numeric_zero_p (rate) || split_needs_amount)
 	rate = gnc_split_register_get_conv_rate (xaccSplitGetParent (other_split),
 						 acc);
 
       amount = gnc_numeric_mul (value, rate, xaccAccountGetCommoditySCU (acc),
 				GNC_RND_ROUND);
       xaccSplitSetAmount (other_split, amount);
+
     }
+
     xaccSplitSetValue (other_split, value);
 
     xaccSplitScrub (other_split);
@@ -497,13 +544,23 @@ gnc_split_register_save_cells (gpointer save_data,
   else if (gnc_split_register_split_needs_amount (sd->split) &&
 	   ! gnc_numeric_zero_p (rate))
   {
-    Account *acc = xaccSplitGetAccount (sd->split);
-    gnc_numeric value, amount;
+    /* this is either a multi-split or expanded transaction, so only
+     * deal with this split...  In particular we need to reset the
+     * Value if the conv-rate changed.
+     *
+     * If we handled the debcred then no need to do anything there --
+     * the debcred handler did all the computation.  If NOT, then the
+     * convrate changed -- reset the value from the amount.
+     */
+    if (!sd->handled_dc)
+    {
+      gnc_numeric value, amount;
 
-    value = xaccSplitGetValue (sd->split);
-    amount = gnc_numeric_mul (value, rate, xaccAccountGetCommoditySCU (acc),
-			      GNC_RND_ROUND);
-    xaccSplitSetAmount (sd->split, amount);
+      amount = xaccSplitGetAmount (sd->split);
+      value = gnc_numeric_div (amount, rate, gnc_commodity_get_fraction (txn_cur),
+			       GNC_RND_ROUND);
+      xaccSplitSetValue (sd->split, value);
+    }
   }
 }
 
@@ -700,6 +757,10 @@ gnc_split_register_model_add_save_handlers (TableModel *model)
   gnc_table_model_set_save_handler (model,
                                     gnc_split_register_save_debcred_cell,
                                     CRED_CELL);
+
+  gnc_table_model_set_save_handler (model,
+				    gnc_split_register_save_rate_cell,
+                                    RATE_CELL);
 
   gnc_table_model_set_post_save_handler (model, gnc_split_register_save_cells);
 }
