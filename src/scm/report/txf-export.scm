@@ -42,6 +42,7 @@
    (cons 'N000 #(none "none" "Tax Report Only - No TXF Export" 0 #f))
    (cons 'N261 #(none "F1040" "Alimony received" 1 #f))
    (cons 'N257 #(none "F1040" "Other income, misc." 1 #f))
+   (cons 'N259 #(none "F1040" "Prizes, awards" 1 #f))
    (cons 'N520 #(none "F1040" "RR retirement inc., spouse" 1 #f))
    (cons 'N519 #(none "F1040" "RR retirement income, self" 1 #f))
    (cons 'N258 #(none "F1040" "Sick pay or disability pay" 1 #f))
