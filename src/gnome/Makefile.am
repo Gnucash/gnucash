@@ -90,6 +90,7 @@ noinst_HEADERS = \
   gnc-currency-edit.h \
   gnc-datedelta.h \
   gnc-dateedit.h \
+  gnc-dir.h \
   gnc-gpg.h \
   gnc-html-actions.h \
   gnc-html-history.h \
@@ -124,6 +125,7 @@ GLADE_FILES = \
 EXTRA_DIST = \
   .cvsignore \
   gnc-dialogs.glade \
+  gnc-dir.h.in \
   gnucash.desktop \
   gnucash.keys.in \
   gnucash.mime \
@@ -158,3 +160,20 @@ gnucash.keys: gnucash.keys.in
             -e 's:@-icondir-@:${appicondir}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
+
+## We borrow guile's convention and use @-...-@ as the substitution
+## brackets here, instead of the usual @...@.  This prevents autoconf
+## from substituting the values directly into the left-hand sides of
+## the sed substitutions.
+gnc-dir.h: gnc-dir.h.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+	    -e 's:@-GNC_PIXMAP_DIR-@:${GNC_PIXMAP_DIR}:g'
+	mv $@.tmp $@
+BUILT_SOURCES += gnc-dir.h
+
+# We have to do this because otherwise automake insists on putting
+# these files into the dist tarfile.  If there's a a better way,
+# by all means, let us know...
+dist-hook:
+	rm ${distdir}/gnc-dir.h

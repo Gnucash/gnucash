@@ -1,5 +1,14 @@
 2001-03-19  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/gnc-dir.h.in: move to src/gnome. fix for make dist
+	tarballs
+
+	* src/gnome/Makefile.am: add gnc-dir.h target
+
+	* src/Makefile.am: remove gnc-dir.h target
+
+	* src/quotes/Makefile.am: add gnc-prices to dist
+
 	* src/scm/report/transaction-report.scm (record): use number-cell
 	style
 

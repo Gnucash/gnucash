@@ -7,4 +7,5 @@ glade-cb-gnc-dialogs.c
 #glade-gnc-dialogs.c
 #glade-cb-gnc-dialogs.h
 #glade-gnc-dialogs.h
+gnc-dir.h
 gnucash.keys

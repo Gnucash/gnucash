@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.5\n"
-"POT-Creation-Date: 2001-03-19 01:32-0800\n"
+"POT-Creation-Date: 2001-03-19 02:36-0800\n"
 "PO-Revision-Date: 2000-09-17 09:18+02:00\n"
 "Last-Translator: Dennis Björklund <dennisb@cs.chalmers.se>\n"
 "Language-Team: Sv <sv@li.org>\n"
