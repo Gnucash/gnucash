@@ -522,11 +522,13 @@ gnc_session_load (GNCSession *session,
       (err != ERR_SQL_DB_TOO_OLD))
   {
       /* Something broke, put back the old stuff */
+      xaccLogDisable();
       gnc_book_set_backend (newbook, NULL);
       gnc_book_destroy (newbook);
       g_list_free (session->books);
       session->books = oldbooks;
       LEAVE("error from backend %d", gnc_session_get_error(session));
+      xaccLogEnable();
       return;
   }
 
