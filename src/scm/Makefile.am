@@ -4,10 +4,7 @@ SUBDIRS = gnumeric printing
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 
-gncscmmod_DATA = process.scm
-
-gnc_autogen_scm_files = \
-  bootstrap.scm
+gncscmmod_DATA = process.scm bootstrap.scm price-quotes.scm
 
 gnc_regular_scm_files = \
   command-line.scm \
@@ -18,7 +15,6 @@ gnc_regular_scm_files = \
   main.scm \
   main-window.scm \
   path.scm \
-  price-quotes.scm \
   slib-backup.scm \
   startup.scm \
   substring-search.scm \
@@ -26,7 +22,7 @@ gnc_regular_scm_files = \
   tip-of-the-day.scm \
   xml-generator.scm
 
-gncscm_DATA = ${gnc_autogen_scm_files} ${gnc_regular_scm_files}
+gncscm_DATA = ${gnc_regular_scm_files}
 
 noinst_DATA = .scm-links
 
