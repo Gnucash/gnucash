@@ -78,9 +78,10 @@ void         xaccZeroRunningBalances (Account **list);
 
 /* The xaccConsolidateTransactions() subroutine scans through
  *    all of the transactions in an account, and compares them.
- *    if any of them are exact duplicates, the duplicates are removed.
+ *    If any of them are exact duplicates, the duplicates are removed.
  *    duplicates may occur when accounts from multiple sources are 
- *    merged.  Note that this can be a dangerous operation to perform.
+ *    merged.  Note that this can be a dangerous operation to perform,
+ *    as it may remove transactions that were not true duplicatees ...
  */
 
 void        xaccConsolidateTransactions (Account *);
