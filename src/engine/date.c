@@ -31,7 +31,11 @@
 #include "config.h"
 
 #include <ctype.h>
+
+#ifdef HAVE_LANGINFO_D_FMT
 #include <langinfo.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,6 +47,12 @@
 #include "gnc-engine-util.h"
 
 #define NANOS_PER_SECOND 1000000000
+
+#ifdef HAVE_LANGINFO_D_FMT
+#  define GNC_D_FMT (nl_langinfo (D_FMT))
+#else
+#  define GNC_D_FMT "%Y-%m-%d"
+#endif
 
 /* This is now user configured through the gnome options system() */
 static DateFormat dateFormat = DATE_FORMAT_US;
@@ -228,7 +238,7 @@ printDate (char * buff, int day, int month, int year)
         tm_str.tm_sec = 0;
         tm_str.tm_isdst = -1;
 
-        strftime (buff, MAX_DATE_LENGTH, nl_langinfo (D_FMT), &tm_str);
+        strftime (buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm_str);
       }
       break;
 
@@ -331,7 +341,7 @@ scanDate (const char *buff, int *day, int *month, int *year)
        {
          struct tm thetime;
 
-         strptime (buff, nl_langinfo (D_FMT), &thetime);
+         strptime (buff, GNC_D_FMT, &thetime);
 
          iday = thetime.tm_mday;
          imonth = thetime.tm_mon + 1;
@@ -405,7 +415,7 @@ char dateSeparator ()
 
         secs = time(NULL);
         tm = localtime(&secs);
-        strftime(string, sizeof(string), nl_langinfo (D_FMT), tm);
+        strftime(string, sizeof(string), GNC_D_FMT, tm);
 
         for (s = string; s != '\0'; s++)
           if (!isdigit(*s))
