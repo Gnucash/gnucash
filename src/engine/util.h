@@ -38,9 +38,10 @@
 
 #define MOD_ENGINE     1
 #define MOD_IO         2
-#define MOD_LEDGER     3
-#define MOD_GUI        4
-#define MODULE_MAX     5
+#define MOD_REGISTER   3
+#define MOD_LEDGER     4
+#define MOD_GUI        5
+#define MODULE_MAX     6
 
 extern int loglevel[MODULE_MAX];
 
@@ -60,7 +61,7 @@ extern int loglevel[MODULE_MAX];
 #define LEAVE(x...)    LG(LDEBUG,  "Leave: ");   LG(LDEBUG,  ##x);
 #define DETAIL(x...)   LG(LDETAIL, "Detail: ");  LG(LDETAIL, ##x);
 
-#define DEBUGCMD(x) { if (INFO) { x; }}
+#define DEBUGCMD(x) { if (LINFO) { x; }}
 
 #include <errno.h>
 #define ERROR()     fprintf(stderr,"%s: Line %d, error = %s\n", \
