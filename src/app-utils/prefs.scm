@@ -634,9 +634,9 @@ Control Center"))))))
 (gnc:register-configuration-option
  (gnc:make-number-range-option
   (N_ "_+Advanced") (N_ "New Search Limit")
-  "j" (N_ "Default to 'new search' if there no more than this number of items.")
-    0.0 ;; default
-    0.0 ;; lower bound
+  "j" (N_ "Default to 'new search' if fewer than this number of items is returned.")
+    1.0 ;; default
+    1.0 ;; lower bound
   100.0 ;; upper bound
     0.0 ;; number of decimals
     1.0 ;; step size
