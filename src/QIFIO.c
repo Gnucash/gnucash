@@ -46,10 +46,6 @@
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
 
-#ifdef DEBUG
-#undef DEBUG
-#endif
-#define DEBUG printf
 
 /********************************************************************\
  * xaccReadQIFLine                                                  * 
@@ -194,11 +190,76 @@ char * xaccReadQIFCategory (int fd, Account * acc)
 }
 
 /********************************************************************\
- * read a sequence of categories, inserting them into 
+ * xaccReadQIFAccount                                               * 
+ *   reads in account name, description, etc.                       *
+ *                                                                  * 
+ * Args:   fd -- file descriptor                                    * 
+ * Args:   acc -- account structure to fill in                      * 
+ * Return: first new line after end of transaction                  * 
+\********************************************************************/
+
+char * xaccReadQIFAccount (int fd, Account * acc) 
+{
+   char * qifline;
+
+   if (!acc) return NULL;
+
+   acc -> flags = 0x0;    /* flags is byte */
+   acc -> type = -1;      /* type is byte  */
+   acc -> accountName = 0x0;  /* string */
+   acc -> description = 0x0;  /* string */
+
+   qifline = xaccReadQIFLine (fd);
+   if (!qifline) return NULL;
+   if ('!' == qifline [0]) return qifline;
+
+   /* scan for account name, description, type */
+   while (qifline) {
+     if ('N' == qifline [0]) {
+        XACC_PREP_STRING (acc->accountName);
+     } else 
+     if ('D' == qifline [0]) {
+        XACC_PREP_STRING (acc->description);
+     } else 
+     if ('T' == qifline [0]) {
+
+        if (!strcmp (&qifline[1], "Bank\r\n")) {
+           acc -> type = BANK;
+        } else
+        if (!strcmp (&qifline[1], "Cash\r\n")) {
+           acc -> type = CASH;
+        } else
+        if (!strcmp (&qifline[1], "Invst\r\n")) {
+           acc -> type = STOCK;
+        } else
+        if (!strcmp (&qifline[1], "Oth A\r\n")) {
+           acc -> type = ASSET;
+        } else {
+           printf ("QIF Parse: Unsupported account type %s \n", &qifline[1]);
+           acc -> type = -1;            /* hack alert -- */
+        }
+     } else 
+
+     /* check for end-of-transaction marker */
+     if (!strcmp (qifline, "^^\r\n")) {
+        break;
+     } else
+     if ('!' == qifline [0]) break;
+     qifline = xaccReadQIFLine (fd);
+   }
+
+   XACC_PREP_NULL_STRING (acc->accountName);
+   XACC_PREP_NULL_STRING (acc->description);
+
+   return qifline;
+}
+
+/********************************************************************\
+ * read a sequence of accounts or categories, inserting them into 
  * the indicated group
 \********************************************************************/
 
-char * xaccReadQIFCatList (int fd, AccountGroup *grp)
+char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
 {
    char * qifline;
    Account *acc;
@@ -207,7 +268,11 @@ char * xaccReadQIFCatList (int fd, AccountGroup *grp)
    if (!grp) return 0x0;
    do { 
       acc = mallocAccount();
-      qifline = xaccReadQIFCategory (fd, acc);
+      if (cat) { 
+         qifline = xaccReadQIFCategory (fd, acc);
+      } else {
+         qifline = xaccReadQIFAccount (fd, acc);
+      }
       if ('!' == qifline [0]) break;
 
       if (-1 == acc->type) {  /* free up malloced data if unknown account type */
@@ -232,14 +297,18 @@ char * xaccReadQIFCatList (int fd, AccountGroup *grp)
          *tok = ':';
 
          if (parent) {
-            xaccInsertSubAccount( parent, acc );
+            Account *preexisting;
+
             /* trim off the parent account name ... */
             /* tok += sizeof(char);  leave behind the colon ... */
             str = XtNewString (tok);
             XtFree (acc->accountName);
             acc->accountName = str;
+
+            xaccInsertSubAccount( parent, acc );
          } else {
-            insertAccount( grp, acc );
+            /* we should never get here if the qif file is OK */
+            insertAccount( grp, acc );  
          }
       } else {
          insertAccount( grp, acc );
@@ -247,67 +316,6 @@ char * xaccReadQIFCatList (int fd, AccountGroup *grp)
 
    } while (qifline);
 
-
-   return qifline;
-}
-
-/********************************************************************\
- * xaccReadQIFAccount                                               * 
- *   reads in account name, description, etc.                       *
- *                                                                  * 
- * Args:   fd -- file descriptor                                    * 
- * Args:   acc -- account structure to fill in                      * 
- * Return: first new line after end of transaction                  * 
-\********************************************************************/
-
-char * xaccReadQIFAccount (int fd, Account * acc) 
-{
-   char * qifline;
-
-   if (!acc) return NULL;
-
-   acc -> flags = 0x0;    /* flags is byte */
-   acc -> type = -1;      /* type is byte  */
-   acc -> accountName = 0x0;  /* string */
-   acc -> description = 0x0;  /* string */
-
-   qifline = xaccReadQIFLine (fd);
-
-   if (!qifline) return NULL;
-   if ('!' == qifline [0]) return qifline;
-
-   /* scan for account name, description, type */
-   while (qifline) {
-     if ('N' == qifline [0]) {
-        XACC_PREP_STRING (acc->accountName);
-     } else 
-     if ('D' == qifline [0]) {
-        XACC_PREP_STRING (acc->description);
-     } else 
-     if ('T' == qifline [0]) {
-
-        if (!strcmp (&qifline[1], "Bank\r\n")) {
-           acc -> type = BANK;
-        } else
-        if (!strcmp (&qifline[1], "Invst\r\n")) {
-           acc -> type = STOCK;
-        } else {
-           printf ("QIF Parse: Unsupported account type %s \n", &qifline[1]);
-           acc -> type = -1;            /* hack alert -- */
-        }
-     } else 
-
-     /* check for end-of-transaction marker */
-     if (!strcmp (qifline, "^^\r\n")) {
-        qifline = xaccReadQIFLine (fd);
-        break;
-     } else
-     if ('!' == qifline [0]) break;
-     qifline = xaccReadQIFLine (fd);
-   }
-
-   XACC_PREP_NULL_STRING (acc->accountName);
-   XACC_PREP_NULL_STRING (acc->description);
 
    return qifline;
 }
@@ -828,7 +836,7 @@ xaccReadQIFData( char *datafile )
 
      if (!strcmp (qifline, "!Type:Cat\r\n")) {
         DEBUG ("got category\n");
-        qifline = xaccReadQIFCatList (fd, grp);
+        qifline = xaccReadQIFAccList (fd, grp, 1);
         continue;
      } else
 
@@ -875,12 +883,13 @@ xaccReadQIFData( char *datafile )
            /* loop and read all of the account names and descriptions */
            /* no actual dollar data is expected to be read here ... */
            while (qifline) {
-              qifline = xaccReadQIFDiscard (fd);
+              qifline = xaccReadQIFAccList (fd, grp, 0);
               if (!qifline) break;
               if ('!' == qifline[0]) break;
            }
         } else {
            /* read account name, followed by dollar data ... */
+           Account *preexisting;
            Account *acc   = mallocAccount();
            DEBUG ("got account\n");
            qifline = xaccReadQIFAccount (fd, acc);
@@ -892,7 +901,16 @@ xaccReadQIFData( char *datafile )
               freeAccount(acc); 
               continue;
            }
-           insertAccount( grp, acc );
+
+           /* check to see if we already know this account;
+            * if we do, use it, otherwise create it */
+           preexisting = xaccGetAccountFromName (grp, acc->accountName);
+           if (preexisting) {
+              freeAccount (acc);
+              acc = preexisting;
+           } else {
+              insertAccount( grp, acc );
+           }
    
            /* spin until start of transaction records */
            /* in theory, in a perfect file, the transaction data follows immediately */
