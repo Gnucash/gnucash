@@ -73,8 +73,10 @@ xaccInitTable (Table * table)
    table->num_virt_cols = 0;
 
    table->current_cursor = NULL;
-   table->current_cursor_row = -1;
-   table->current_cursor_col = -1;
+   table->current_cursor_virt_row = -1;
+   table->current_cursor_virt_col = -1;
+   table->current_cursor_phys_row = -1;
+   table->current_cursor_phys_col = -1;
 
    table->move_cursor = NULL;
    table->client_data = NULL;
@@ -102,78 +104,16 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
    table->prev_phys_traverse_col = -1;
 
    /* invalidate the current cursor position, if needed */
-   if ((table->current_cursor_row >= table->num_virt_rows) ||
-       (table->current_cursor_col >= table->num_virt_cols)) {
-      table->current_cursor_row = -1;
-      table->current_cursor_col = -1;
+   if ((table->current_cursor_virt_row >= table->num_virt_rows) ||
+       (table->current_cursor_virt_col >= table->num_virt_cols)) {
+      table->current_cursor_virt_row = -1;
+      table->current_cursor_virt_col = -1;
+      table->current_cursor_phys_row = -1;
+      table->current_cursor_phys_col = -1;
       table->current_cursor = NULL;
    }
 }
 
-/* ==================================================== */
-
-void xaccCommitCursor (Table *table)
-{
-   int i,j;
-   int iphys,jphys;
-   BasicCell *cell;
-   int virt_row, virt_col;
-
-   virt_row = table->current_cursor_row;
-   virt_col = table->current_cursor_col;
-
-   if ((0 > virt_row) || (0 > virt_col)) return;
-   if (virt_row >= table->num_rows) return;
-   if (virt_col >= table->num_cols) return;
-
-   for (i=0; i<table->tile_height; i++) {
-      iphys = i + virt_row * table->tile_height;
-      iphys += table->num_header_rows;
-      for (j=0; j<table->tile_width; j++) {
-         
-         cell = table->cursor->cells[i][j];
-         if (cell) {
-            jphys = j + virt_col * table->tile_width;
-            if (table->entries[iphys][jphys]) {
-               free (table->entries[iphys][jphys]);
-            }
-            table->entries[iphys][jphys] = strdup (cell->value);
-         }
-      }
-   }
-
-   table->user_data[virt_row][virt_col] = table->cursor->user_data;
-}
-
-/* ==================================================== */
-/* verifyCursorPosition checks the location of the cursor 
- * with respect to a row/column position, and repositions 
- * the cursor if necessary.
- */
-
-static void
-verifyCursorPosition (Table *table, int phys_row, int phys_col)
-{
-   int virt_row, virt_col;
-
-   /* compute the virtual position */
-   virt_row = phys_row;
-   virt_row -= table->num_header_rows;
-   virt_row /= table->tile_height;
-
-   virt_col = phys_col;
-   virt_col /= table->tile_width;
-
-   if ((virt_row != table->current_cursor_row) ||
-       (virt_col != table->current_cursor_col)) {
-
-      /* before leaving, the current virtual position,
-       * commit any edits that have been accumulated 
-       * in the cursor */
-      xaccCommitCursor (table);
-      xaccMoveCursorGUI (table, virt_row, virt_col);
-   }
-}
 
 /* ==================================================== */
 /* hack alert -- will core dump if numrows has changed, etc. */
@@ -300,7 +240,7 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
     * this cell. Dispatch for processing. */
    switch (cbs->reason) {
       case XbaeEnterCellReason: {
-         verifyCursorPosition (table, row, col);
+         xaccVerifyCursorPosition (table, row, col);
          enterCB (mw, cd, cb);
          break;
       }
@@ -581,7 +521,7 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
       }
    }
 
-   verifyCursorPosition (table, row, col);
+   xaccVerifyCursorPosition (table, row, col);
 
    /* compute the cell location */
    rel_row = row - table->num_header_rows;

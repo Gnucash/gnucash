@@ -59,6 +59,17 @@ void        xaccMoveCursor (Table *, int phys_row, int phys_col);
 /* move the cursor GUI to the indicated location. */
 void        xaccMoveCursorGUI (Table *, int phys_row, int phys_col);
 
+/* copy text in the cursor cells to the table */
+void        xaccCommitCursor (Table *);
+
+/* xaccVerifyCursorPosition checks the location of the cursor 
+ * with respect to a physical row/column position, and if the 
+ * resulting virtual position has changed, commits the changes in the
+ * old position, and the repositions the cursor & gui to the new position.
+ */
+
+void
+xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col);
 
 #endif /* __XACC_TABLE_ALLGUI_H__ */
 

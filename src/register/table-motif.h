@@ -72,11 +72,12 @@ typedef struct _Table {
   int num_virt_rows;
   int num_virt_cols;
 
-  CellBlock *header;
-
+  /* the current cursor row/col is the virt row/col */
   CellBlock *current_cursor;
-  int current_cursor_row;
-  int current_cursor_col;
+  int current_cursor_phys_row;
+  int current_cursor_phys_col;
+  int current_cursor_virt_row;
+  int current_cursor_virt_col;
 
   /* callback that is called when the cursor is moved */
   /* hack alert -- this should be a callback list, actually */
@@ -138,9 +139,6 @@ void        xaccDestroyTable (Table *);
 
 /* redraw the table GUI */
 void        xaccRefreshTableGUI (Table *);
-
-/* copy text in the cursor cells to the table */
-void        xaccCommitCursor (Table *);
 
 #endif __XACC_TABLE_H__
 /* ================== end of file ======================= */

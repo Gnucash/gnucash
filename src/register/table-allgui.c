@@ -257,10 +257,12 @@ void xaccMoveCursor (Table *table, int new_phys_row, int new_phys_col)
    }
 
    /* record the new virtual position ... */
-   table->current_cursor_row = new_virt_row;
-   table->current_cursor_col = new_virt_col;
+   table->current_cursor_virt_row = new_virt_row;
+   table->current_cursor_virt_col = new_virt_col;
 
    /* invalidate the cursor for now; we'll set it the the correct values below */
+   table->current_cursor_phys_row = -1;
+   table->current_cursor_phys_col = -1;
    table->current_cursor->user_data = NULL;
    table->current_cursor = NULL;
 
@@ -280,6 +282,9 @@ void xaccMoveCursor (Table *table, int new_phys_row, int new_phys_col)
 
    phys_col_origin = new_phys_col;
    phys_col_origin -= table->locators[new_phys_row][new_phys_col]->phys_col_offset;
+
+   table->current_cursor_phys_row = phys_col_origin;
+   table->current_cursor_phys_col = phys_row_origin;
 
    /* update the cell values to reflect the new position */
    for (i=0; i<curs->numRows; i++) {
@@ -323,12 +328,14 @@ void xaccMoveCursorGUI (Table *table, int new_phys_row, int new_phys_col)
    }
 
    /* record the new virtual position ... */
-   table->current_cursor_row = new_virt_row;
-   table->current_cursor_col = new_virt_col;
+   table->current_cursor_virt_row = new_virt_row;
+   table->current_cursor_virt_col = new_virt_col;
 
    curs = table->current_cursor;
 
    /* invalidate the cursor for now; we'll set it the the correct values below */
+   table->current_cursor_phys_row = -1;
+   table->current_cursor_phys_col = -1;
    table->current_cursor->user_data = NULL;
    table->current_cursor = NULL;
 
@@ -366,6 +373,9 @@ void xaccMoveCursorGUI (Table *table, int new_phys_row, int new_phys_col)
    phys_col_origin = new_phys_col;
    phys_col_origin -= table->locators[new_phys_row][new_phys_col]->phys_col_offset;
 
+   table->current_cursor_phys_row = phys_col_origin;
+   table->current_cursor_phys_col = phys_row_origin;
+
    /* update the cell values to reflect the new position */
    for (i=0; i<curs->numRows; i++) {
       for (j=0; j<curs->numCols; j++) {
@@ -393,25 +403,28 @@ void xaccMoveCursorGUI (Table *table, int new_phys_row, int new_phys_col)
 void xaccCommitCursor (Table *table)
 {
    int i,j;
-   int iphys,jphys;
-   BasicCell *cell;
    int virt_row, virt_col;
+   CellBlock *curs;
 
-   virt_row = table->current_cursor_row;
-   virt_col = table->current_cursor_col;
+   curs = table->current_cursor;
+   if (!curs) return;
 
+   virt_row = table->current_cursor_virt_row;
+   virt_col = table->current_cursor_virt_col;
+
+   /* cant commit if cursor is bad */
    if ((0 > virt_row) || (0 > virt_col)) return;
-   if (virt_row >= table->num_rows) return;
-   if (virt_col >= table->num_cols) return;
+   if (virt_row >= table->num_virt_rows) return;
+   if (virt_col >= table->num_virt_cols) return;
 
-   for (i=0; i<table->tile_height; i++) {
-      iphys = i + virt_row * table->tile_height;
-      iphys += table->num_header_rows;
-      for (j=0; j<table->tile_width; j++) {
+   for (i=0; i<curs->numRows; i++) {
+      for (j=0; j<curs->numCols; j++) {
+         BasicCell *cell;
          
-         cell = table->cursor->cells[i][j];
+         cell = curs->cells[i][j];
          if (cell) {
-            jphys = j + virt_col * table->tile_width;
+            int iphys = i + table->current_cursor_phys_row;
+            int jphys = j + table->current_cursor_phys_col;
             if (table->entries[iphys][jphys]) {
                free (table->entries[iphys][jphys]);
             }
@@ -420,7 +433,7 @@ void xaccCommitCursor (Table *table)
       }
    }
 
-   table->user_data[virt_row][virt_col] = table->cursor->user_data;
+   table->user_data[virt_row][virt_col] = curs->user_data;
 }
 
 /* ==================================================== */
@@ -429,21 +442,17 @@ void xaccCommitCursor (Table *table)
  * the cursor if necessary.
  */
 
-static void
-verifyCursorPosition (Table *table, int phys_row, int phys_col)
+void
+xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col)
 {
    int virt_row, virt_col;
 
    /* compute the virtual position */
-   virt_row = phys_row;
-   virt_row -= table->num_header_rows;
-   virt_row /= table->tile_height;
+   virt_row = table->locators[phys_row][phys_col]->virt_row;
+   virt_col = table->locators[phys_row][phys_col]->virt_col;
 
-   virt_col = phys_col;
-   virt_col /= table->tile_width;
-
-   if ((virt_row != table->current_cursor_row) ||
-       (virt_col != table->current_cursor_col)) {
+   if ((virt_row != table->current_cursor_virt_row) ||
+       (virt_col != table->current_cursor_virt_col)) {
 
       /* before leaving, the current virtual position,
        * commit any edits that have been accumulated 
