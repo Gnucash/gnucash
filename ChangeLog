@@ -1,3 +1,8 @@
+2003-02-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/glade/account.glade: Increase height of
+	  account-hierarchy druid.
+
 2003-02-22  David Hampton  <hampton@employees.org>
 
 	* various: Initial port from the deprecated (in 1.6) guile gh_xxx
