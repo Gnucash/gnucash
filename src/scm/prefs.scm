@@ -480,7 +480,7 @@ without one.")
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   (N_ "General") (N_ "No account list setup on new file")
-  "j" (N_ "Popup the new account list dialog when you choose \"New File\" from the \"File\" menu") #f))
+  "j" (N_ "Don't popup the new account list dialog when you choose \"New File\" from the \"File\" menu") #f))
 
 ;; QIF Import options. 
 

@@ -44,7 +44,7 @@
       
       (gnc:options-add-price-source! 
        options gnc:pagename-general
-       optname-price-source "d" 'pricedb-latest)
+       optname-price-source "d" 'weighted-average)
 
       ;; Account tab
       (register-option

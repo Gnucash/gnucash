@@ -251,11 +251,6 @@
     (set-tm:sec ddt 1)
     ddt))
 
-(define YearDelta 
-  (let ((ddt (make-zdate)))
-    (set-tm:year ddt 1)
-    ddt))
-
 (define DayDelta
   (let ((ddt (make-zdate)))
     (set-tm:mday ddt 1)
@@ -279,6 +274,16 @@
 (define QuarterDelta
   (let ((ddt (make-zdate)))
     (set-tm:mon ddt 3)
+    ddt))
+
+(define HalfYearDelta
+  (let ((ddt (make-zdate)))
+    (set-tm:mon ddt 6)
+    ddt))
+
+(define YearDelta 
+  (let ((ddt (make-zdate)))
+    (set-tm:year ddt 1)
     ddt))
 
 ;; Find difference in seconds time 1 and time2

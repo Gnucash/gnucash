@@ -105,7 +105,8 @@
 	  (vector 'WeekDelta (N_ "Week") (N_ "Week"))
 	  (vector 'TwoWeekDelta (N_ "2Week") (N_ "Two Week"))
 	  (vector 'MonthDelta (N_ "Month") (N_ "Month"))
-	  ;; FIXME: how about quarters here?
+	  (vector 'QuarterDelta (N_ "Quarter") (N_ "Quarter"))
+	  (vector 'HalfYearDelta (N_ "Half Year") (N_ "Half Year"))
 	  (vector 'YearDelta (N_ "Year") (N_ "Year"))
 	  ))))
 

@@ -1,3 +1,18 @@
+2001-06-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/category-barchart.scm, average-balance.scm,
+	net-barchart.scm: changed price source default to
+	weighted-average.
+
+	* src/scm/prefs.scm: fix string.
+
+	* src/scm/options-utilities.scm: added date interval Quarter, Half
+	Year.
+
+	* src/scm/date-utilities.scm: added QuarterDelta, HalfYearDelta
+
+	* po/de.po: Updated German transl
+
 2001-06-05  James LewisMoss  <jimdres@mindspring.com>
 
 	* doc/sgml/C/xacc-gpl.sgml: more cleanups.

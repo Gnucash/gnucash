@@ -29,11 +29,12 @@ Table of Contents:
 Overview
 --------
 
-GnuCash is a personal finance manager.  A check-book like 
-register GUI allows you to enter and track bank accounts,
-stocks, income and even currency trades.  The interface is 
-designed to be simple and easy to use, but is backed with 
-double-entry accounting principles to ensure balanced books.
+GnuCash is a personal finance manager. A check-book like register GUI
+allows you to enter and track bank accounts, stocks, income and even
+currency trades. A full set of reports allow you to see the state of
+your finances. The interface is designed to be simple and easy to use,
+but is backed with double-entry accounting principles to ensure
+balanced books.
 
 Features include:
 
