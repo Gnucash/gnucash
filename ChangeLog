@@ -1,3 +1,8 @@
+2003-11-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/test-core/test-engine-stuff.c:  don't make a timespec
+	  with tv_sec == 0.  Fixes some tests on the alpha platform.
+
 2003-11-16  Linas Vepstas <linas@linas.org>
 
 	* src/doc/guid.txt: add document debating issues of guid usage in
