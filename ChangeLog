@@ -1,6 +1,11 @@
 2002-10-07  Derek Atkins  <derek@ihtfp.com>
 	* Rename "print invoice" to "printable invoice"
 
+	* Applied Matt Martin's advanced-portfolio patch.
+
+	* created the backend-api document
+	* removed the old Query code (bug #94318)
+	
 2002-10-07  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Fix and activate
