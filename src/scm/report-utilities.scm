@@ -434,7 +434,7 @@
 
     (if (and splits (not (null? splits)))
 	(balance-collector 'add (gnc:account-get-commodity account)
-			   (gnc:split-get-balance (car splits))))
+			   (gnc:split-get-share-balance (car splits))))
     balance-collector))
 
 ;; get the balance of a group of accounts at the specified date.
