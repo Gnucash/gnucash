@@ -1,7 +1,9 @@
 ;; -*-scheme-*-
+;; $ID$
 ;; budget-report.scm
 ;; Report on budget
 ;; Bryan Larsen (blarsen@ada-works.com)
+;; with contributions from Christopher Browne (cbbrowne@hex.net)
 
 ;; TODO
 ;; properly handle income as well
@@ -10,18 +12,19 @@
 ;; druids to enter budget
 ;; save/load budget
 ;; internationalization
-;; speedup:  replace linear search with hash, 
-;;           create structure functions on load, 
+;; speedup:  create structure functions on load, 
 ;;           move subexpressions outside loops
-;; clean up report
+;;           don't calculate values that aren't needed
+;; clean up/prettify report
 ;; graph budget progress
+;; save report parameters - "favorite" reports
+;; "unbudgeted" report
 
 (require 'sort)
 (require 'record)
 (gnc:depend "report-utilities.scm")
 (gnc:depend "html-generator.scm")
 (gnc:depend "date-utilities.scm")
-(gnc:depend "acc-create.scm")
 
 ;; budget types
 ;;(define gnc:budget-recurring 1) ; regular, recurring budget expenses
@@ -104,7 +107,9 @@
       ((gnc:budget-week) (* 7 n))
       ((gnc:budget-month) 
        (let loop
-	   ((month (* (quotient (inexact->exact (floor (gnc:date-to-month-fraction date))) n) n)))
+           ((month (* (quotient (inexact->exact 
+				 (floor (gnc:date-to-month-fraction date)))
+				n) n)))
 	 (+ (gnc:days-in-month (+ 1 (remainder month 12))
 			       (+ 1970 (quotient month 12)))
 	    (if (= (remainder month n) (- n 1))
@@ -112,7 +117,9 @@
 		(loop (+ 1 month))))))
       ((gnc:budget-year)
        (let loop
-	   ((year (* (quotient (inexact->exact (floor (gnc:date-to-year-fraction date))) n) n)))
+           ((year (* (quotient (inexact->exact 
+				(floor (gnc:date-to-year-fraction date))) n)
+		     n)))
 	 (+ (gnc:days-in-year (+ 1970 year))
 	    (if (= (remainder year n) (- n 1))
 		0
@@ -175,28 +182,62 @@
 (define gnc:budget-entries
   (list
    ;; first line is always the "other" collector.
-   (make-budget-entry "other" '()
-    (list
-     (make-budget-subentry "" 3 1 'gnc:budget-day
-			   (make-recurring-mechanism))))
-   (make-budget-entry  "lunch" '("Expense:Food:Lunch" "Expense:Food:Junk") 
-    (list 
-     (make-budget-subentry "" 8 1 'gnc:budget-day 
-			   (make-recurring-mechanism))))
-   (make-budget-entry "car repairs" '("Expense:Car:Repairs") 
-    (list
-     (make-budget-subentry "contingency" 2500 5 'gnc:budget-year
-			   (make-contingency-mechanism))
-     (make-budget-subentry "maintenance" 50 6 'gnc:budget-month 
-			   (make-recurring-mechanism))))
-   (make-budget-entry "rent" '("Expense:Household:Rent") 
-    (list
-     (make-budget-subentry "" 312.50 1 'gnc:budget-month 
-			   (make-bill-mechanism 0 2))))
-   (make-budget-entry "car payments" '("Expense:Car:Loan Payments") 
-    (list
-     (make-budget-subentry "" 374.80 1 'gnc:budget-month 
-			   (make-bill-mechanism 13 17))))))
+   (make-budget-entry "other" '() (list
+     (make-budget-subentry "" 3 1 'gnc:budget-day (make-recurring-mechanism))))
+   (make-budget-entry "bank interest" '("Expense:Bank Charges:Interest") (list
+     (make-budget-subentry "loc" 40 1 'gnc:budget-month (make-bill-mechanism -4 0))
+     (make-budget-subentry "rrsp" 40 1 'gnc:budget-month (make-bill-mechanism 8 10))))
+   (make-budget-entry "cell phone" '("Expense:Bills:Cell phone") (list
+     (make-budget-subentry "" 60 1 'gnc:budget-month (make-bill-mechanism -4 -1))))
+   (make-budget-entry "hydro" '("Expense:Bills:Hydro") (list
+     (make-budget-subentry "" 20 1 'gnc:budget-month (make-bill-mechanism 15 19))))
+   (make-budget-entry "life insurance" '("Expense:Bills:Life Insurance") (list
+     (make-budget-subentry "" 15 1 'gnc:budget-month (make-bill-mechanism 1 3))))
+   (make-budget-entry "diesel" '("Expense:Car:Diesel") (list
+     (make-budget-subentry "" 30 6 'gnc:budget-week (make-recurring-mechanism))))
+   (make-budget-entry "licenses" '("Expense:Car:Licenses") (list
+     (make-budget-subentry "" 1000 1 'gnc:budget-year (make-bill-mechanism -122 -108))))
+   (make-budget-entry "car maintenance" '("Expense:Car:Maintenance") (list
+     (make-budget-subentry "" 100 6 'gnc:budget-month (make-recurring-mechanism))))
+   (make-budget-entry "car misc" '("Expense:Car:Miscellaneous") (list
+     (make-budget-subentry "" 5 1 'gnc:budget-week (make-recurring-mechanism))))
+   (make-budget-entry "charitable" 
+		      '("Expense:Charitable:Non-taxable" "Expense:Charitable:Taxable") (list
+     (make-budget-subentry "" 200 1 'gnc:budget-year (make-recurring-mechanism))))
+   (make-budget-entry "entertainment" 
+		      '("Expense:Entertainment:Beer (out)" "Expense:Entertainment:Cover"
+			"Expense:Entertainment:Date" "Expense:Entertainment:Dining"
+			"Expense:Entertainment:Dues" "Expense:Entertainment:Goodwill"
+			"Expense:Entertainment:Liquor (home)") (list
+     (make-budget-subentry "" 50 1 'gnc:budget-week (make-recurring-mechanism))))
+   (make-budget-entry "groceries" '("Expense:Food:Groceries") (list
+     (make-budget-subentry "" 125 1 'gnc:budget-month (make-recurring-mechanism))))
+   (make-budget-entry "junk food" '("Expense:Food:Junk") (list
+     (make-budget-subentry "" 0.5 1 'gnc:budget-day (make-recurring-mechanism))))
+   (make-budget-entry "lunch" '("Expense:Food:Lunch") (list
+     (make-budget-subentry "" 8 1 'gnc:budget-day (make-recurring-mechanism))))
+   (make-budget-entry "gifts" '("Expense:Gifts") (list
+     (make-budget-subentry "" 400 1 'gnc:budget-year (make-recurring-mechanism))
+     (make-budget-subentry "xmas" 400 1 'gnc:budget-year (make-bill-mechanism -30 -5))))
+   (make-budget-entry "rent" '("Expense:Household:Rent") (list
+     (make-budget-subentry "" 312.50 1 'gnc:budget-month (make-bill-mechanism 1 2))))
+   (make-budget-entry "house junk" '("Expense:Household:Stuff") (list
+     (make-budget-subentry "" 50 1 'gnc:budget-month (make-recurring-mechanism))))
+   (make-budget-entry "medical" '("Expense:Medical:Dental" "Expense:Medical:Optical"
+				  "Expense:Medical:Other") (list
+     (make-budget-subentry "" 1000 1 'gnc:budget-year (make-contingency-mechanism))))
+   (make-budget-entry "clothes" '("Expense:Personal:Clothes") (list
+     (make-budget-subentry "" 150 3 'gnc:budget-month (make-recurring-mechanism))))
+   (make-budget-entry "hygeine" '("Expense:Personal:Personal maintenance") (list
+     (make-budget-subentry "" 30 1 'gnc:budget-month (make-recurring-mechanism))))
+   (make-budget-entry "newspapers" '("Expense:Stuff:Newspapers") (list
+     (make-budget-subentry "" 20.52 1 'gnc:budget-month (make-bill-mechanism 14 14))))
+   (make-budget-entry "stuff" '("Expense:Stuff:CD's" "Expense:Stuff:Electronic entertainment"
+				"Expense:Stuff:Fiction" "Expense:Stuff:Games"
+				"Expense:Stuff:Magazines" "Expense:Stuff:Musical Equipment"
+				"Expense:Stuff:Software" "Expense:Stuff:Sports equipment"
+				"Expense:Stuff:Videos") (list
+     (make-budget-subentry "" 250 1 'gnc:budget-month (make-recurring-mechanism))))))
 
 (define (budget-entry-get-description budget-entry)
   ((record-accessor budget-entry-structure 'description) budget-entry))
@@ -258,6 +299,10 @@
      (gnc:date-describe-type 
       (budget-subentry-get-period-type subentry)))))
 
+(define (budget-delta-html-proc)
+  (lambda (entry subentry report subreport)
+    (html-currency-cell #f #t (budget-report-get-delta report))))
+
 (define (budget-window-start-day-html-proc)
   (lambda (entry subentry report subreport)
     (let ((mechanism (budget-subentry-get-mechanism subentry)))
@@ -287,7 +332,7 @@
 (define budget-report-structure
   (make-record-type 
    "budget-report-structure" 
-   '(actual nominal minimum-expected maximum-expected subreports)))
+   '(actual nominal minimum-expected maximum-expected delta subreports)))
 
 (define budget-subreport-structure
   (make-record-type
@@ -296,7 +341,7 @@
 
 (define (make-empty-budget-report entry)
   ((record-constructor budget-report-structure) 
-   0 0 0 0 
+   0 0 0 0 0
    (map
     (lambda (subentry)
       (make-empty-subreport))
@@ -306,8 +351,14 @@
   ((record-constructor budget-subreport-structure)
    0 0 0))
 
-(define (budget-report-get-subreports brep)
-  ((record-accessor budget-report-structure 'subreports) brep))
+(define budget-report-get-subreports
+  (record-accessor budget-report-structure 'subreports))
+
+(define budget-report-get-delta
+  (record-accessor budget-report-structure 'delta))
+
+(define budget-report-set-delta!
+  (record-modifier budget-report-structure 'delta))
 
 (define (budget-report-get-actual brep)
   ((record-accessor budget-report-structure 'actual) brep))
@@ -379,51 +430,76 @@
 (define report-spec-structure
   (make-record-type
    "report-spec-structure"
-   '(header format-proc type)))
+   '(header format-proc position-type total-proc)))
 
-(define (make-report-spec header format-proc type)
-  ((record-constructor report-spec-structure)
-   header format-proc type))
+(define make-report-spec
+  (record-constructor report-spec-structure))
 
-(define (report-spec-get-header spec)
-  ((record-accessor report-spec-structure 'header) spec))
+(define report-spec-get-header
+  (record-accessor report-spec-structure 'header))
 
-(define (report-spec-get-format-proc spec)
-  ((record-accessor report-spec-structure 'format-proc) spec))
+(define report-spec-get-format-proc
+  (record-accessor report-spec-structure 'format-proc))
 
-(define (report-spec-get-type spec)
-  ((record-accessor report-spec-structure 'type) spec))
+(define report-spec-get-position-type
+  (record-accessor report-spec-structure 'position-type))
 
-(define (budget-line-html line report-specs)
-  (let ((entry (budget-line-get-entry line))
-	(report (budget-line-get-report line)))
-    ;;(map-in-order
-    (map
-     (lambda (subentry subreport)
-       (html-table-row-manual
-	(map
-	 (lambda (specs)
-	   (case (report-spec-get-type specs)
-	     ((gnc:report-all)
-	      ((report-spec-get-format-proc specs) 
-	       entry subentry report subreport))
-	     ((gnc:report-first)
-	      (if (eqv? subreport (car (budget-report-get-subreports report)))
-		  ((report-spec-get-format-proc specs)
-		   entry subentry report subreport)
-		  ((budget-null-html-proc) 
-		   entry subentry report subreport)))
-	     ((gnc:report-last)
-	      (if (= (cdr subentry) '())
-		  ((report-spec-get-format-proc specs)
-		   entry subentry report subreport)
-		  ((budget-null-html-proc) 
-		   entry subentry report subreport)))
-	     (else (gnc:debug "budget-line-html: invalid type"))))
-	 report-specs)))
-     (budget-entry-get-subentries entry)
-     (budget-report-get-subreports report))))
+(define report-spec-get-total-proc
+  (record-accessor report-spec-structure 'total-proc))
 
+(define (total-html-proc)
+  (lambda (total)
+    (cond ((exact? total)
+	   (html-generic-cell #f #f #f ""))
+	  (else (html-currency-cell #f #t total)))))
+
+(define (budget-html budget-list report-specs)
+  (map
+   (lambda (line)
+     (let ((entry (budget-line-get-entry line))
+	   (report (budget-line-get-report line)))
+       ;;(map-in-order
+       (map
+	(lambda (subentry subreport)
+	  (html-table-row-manual
+	   (map
+	    (lambda (specs)
+	      (case (report-spec-get-position-type specs)
+		((gnc:report-all)
+		 ((report-spec-get-format-proc specs) 
+		  entry subentry report subreport))
+		((gnc:report-first)
+		 (if (eqv? subreport (car (budget-report-get-subreports report)))
+		     ((report-spec-get-format-proc specs)
+		      entry subentry report subreport)
+		     ((budget-null-html-proc) 
+		      entry subentry report subreport)))
+		((gnc:report-last)
+		 (if (= (cdr subentry) '())
+		     ((report-spec-get-format-proc specs)
+		      entry subentry report subreport)
+		     ((budget-null-html-proc) 
+		      entry subentry report subreport)))
+		(else (gnc:debug "budget-line-html: invalid type"))))
+	    report-specs)))
+	(budget-entry-get-subentries entry)
+	(budget-report-get-subreports report))))
+   budget-list))
+
+(define (budget-totals-html budget-list report-specs)
+  (map
+   (lambda (spec)
+     ((total-html-proc)
+      (apply 
+       +
+       (map
+	(lambda (line)
+	  (cond ((report-spec-get-total-proc spec)
+		 ((report-spec-get-total-proc spec) 
+		  (budget-line-get-report line)))
+		(else 0)))
+	  budget-list))))
+   report-specs))
 ;; add a value to the budget accumulator
 (define (budget-report-accumulate-actual! value budget-line)
   ((record-modifier budget-report-structure 'actual)
@@ -587,29 +663,54 @@
 	(budget-subreport-set-max-expected! subreport 
 					    (* amount (+ sure possible))))))
 
-;; given an account name, return the budget line
-;; return #f if there is no budget line for that account
-(define (budget-get-line account-name budg)
-  (let loop1 ((budget budg))
-    (cond ((null? budget) #f)
-	  (else
-	   (cond ((budget-get-line-2 account-name (car budget))
-		  (car budget))
-		 (else (loop1 (cdr budget))))))))
+(define (budget-calculate-actual! budget-hash other-collector begin-date-secs end-date-secs)
+  (let loop ((group (gnc:get-current-group)))
+    (cond ((not (pointer-token-null? group))
+	   (gnc:group-map-accounts
+	    (lambda (account)
+	      (cond ((eqv? (gnc:account-type->symbol (gnc:account-get-type account))
+			   'EXPENSE)
+		     (let* ((line
+			     (budget-get-line-hash
+			      budget-hash
+			      (gnc:account-get-full-name account)))
+			    (line2 (cond (line line) 
+					 (else other-collector)))
+			    (acc 0))
+		       (set! acc 0)
+		       (gnc:for-each-split-in-account 
+			account
+			(lambda (split)
+			  (let ((date 
+				 (car (gnc:transaction-get-date-posted
+				       (gnc:split-get-parent split)))))
+			    (if (and (>= date begin-date-secs)
+				     (<= date end-date-secs))
+				(set! acc (+ acc (gnc:split-get-value split)))))))
+		       (budget-report-accumulate-actual! acc line2)
+		       (loop (gnc:account-get-children account))))
+		    (else '())))
+	    group))
+	  (else '()))))
 
-;; I should be able to put this inside budget-get-line, but for some
-;; reason, it screws up.
-(define (budget-get-line-2 account-name budget-line)
-  (let loop2
-      ((accounts (budget-entry-get-accounts 
-		  (budget-line-get-entry budget-line))))
-    (cond ((null? accounts) #f)
-	  (else 
-	   (cond ((or (string=? account-name (car accounts))
-		      (loop2 (cdr accounts)))
-		  budget-line)
-		 (else #f))))))
+(define (budget-calculate-delta! line)
+  (let ((entry (budget-line-get-entry line))
+	(report (budget-line-get-report line)))
+    (let ((min (budget-report-get-minimum-expected report))
+	  (max (budget-report-get-maximum-expected report))
+	  (actual (budget-report-get-actual report)))
+      (budget-report-set-delta! 
+       report 
+       (cond ((<= actual min) (- min actual))
+	     ((>= actual max) (- max actual))
+	     (else 0.0))))))
 
+;;; Hash search
+(define budget-get-line-hash
+  (hash-inquirer string=?))
+
+(define make-budget-hash-entry
+  (hash-associator string=?))
 
 ;; register a configuration option for the budget report
 (define (budget-report-options-generator)
@@ -664,69 +765,73 @@
 (define gnc:budget-full-report-specs
   (list
    (make-report-spec 
-    "Description" (budget-description-html-proc) 'gnc:report-first)
-   (make-report-spec
-    "Accounts" (budget-accounts-html-proc) 'gnc:report-first)
+    "Description" (budget-description-html-proc) 'gnc:report-first #f)
+;;   (make-report-spec
+;;    "Accounts" (budget-accounts-html-proc) 'gnc:report-first)
    (make-report-spec 
-    "Description (subs)" (budget-sub-description-html-proc) 'gnc:report-all)
+    "Description (subs)" (budget-sub-description-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "Amount" (budget-amount-html-proc) 'gnc:report-all)
+    "Amount" (budget-amount-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "Period" (budget-period-html-proc) 'gnc:report-all)
+    "Period" (budget-period-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "" (budget-period-type-html-proc) 'gnc:report-all)
+    "" (budget-period-type-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "Window Start Day" (budget-window-start-day-html-proc) 'gnc:report-all)
+    "Window Start Day" (budget-window-start-day-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "Window End Day" (budget-window-end-day-html-proc) 'gnc:report-all)
+    "Window End Day" (budget-window-end-day-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "Actual" (budget-actual-html-proc) 'gnc:report-first)
+    "Actual" (budget-actual-html-proc) 'gnc:report-first budget-report-get-actual)
    (make-report-spec
-    "Nominal (total)" (budget-nominal-html-proc) 'gnc:report-first)
+    "Nominal (total)" (budget-nominal-html-proc) 'gnc:report-first budget-report-get-nominal)
    (make-report-spec
-    "Nominal" (budget-sub-nominal-html-proc) 'gnc:report-all)
+    "Nominal" (budget-sub-nominal-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "Upper Limit (total)" (budget-maximum-expected-html-proc) 'gnc:report-first)
+    "Upper Limit (total)" (budget-maximum-expected-html-proc) 'gnc:report-first budget-report-get-minimum-expected)
    (make-report-spec
-    "Upper Limit" (budget-sub-maximum-expected-html-proc) 'gnc:report-all)
+    "Upper Limit" (budget-sub-maximum-expected-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "Lower Limit (total)" (budget-minimum-expected-html-proc) 'gnc:report-first)
+    "Lower Limit (total)" (budget-minimum-expected-html-proc) 'gnc:report-first budget-report-get-maximum-expected)
    (make-report-spec
-    "Lower Limit" (budget-sub-minimum-expected-html-proc) 'gnc:report-all)))
+    "Lower Limit" (budget-sub-minimum-expected-html-proc) 'gnc:report-all #f)
+   (make-report-spec
+    "Status" (budget-delta-html-proc) 'gnc:report-first budget-report-get-delta)))
 
 (define gnc:budget-balance-report-specs
   (list
    (make-report-spec 
-    "Description" (budget-description-html-proc) 'gnc:report-first)
-   (make-report-spec
-    "Accounts" (budget-accounts-html-proc) 'gnc:report-first)
+    "Description" (budget-description-html-proc) 'gnc:report-first #f)
+;;   (make-report-spec
+;;    "Accounts" (budget-accounts-html-proc) 'gnc:report-first)
    (make-report-spec 
-    "Description (subs)" (budget-sub-description-html-proc) 'gnc:report-all)
+    "Description (subs)" (budget-sub-description-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "Amount" (budget-amount-html-proc) 'gnc:report-all)
+    "Amount" (budget-amount-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "Period" (budget-period-html-proc) 'gnc:report-all)
+    "Period" (budget-period-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "" (budget-period-type-html-proc) 'gnc:report-all)
+    "" (budget-period-type-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "Window Start Day" (budget-window-start-day-html-proc) 'gnc:report-all)
+    "Window Start Day" (budget-window-start-day-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "Window End Day" (budget-window-end-day-html-proc) 'gnc:report-all)
+    "Window End Day" (budget-window-end-day-html-proc) 'gnc:report-all #f)
    (make-report-spec
-    "Nominal (total)" (budget-nominal-html-proc) 'gnc:report-first)
+    "Nominal (total)" (budget-nominal-html-proc) 'gnc:report-first budget-report-get-nominal)
    (make-report-spec
-    "Nominal" (budget-sub-nominal-html-proc) 'gnc:report-all)))
+    "Nominal" (budget-sub-nominal-html-proc) 'gnc:report-all #f)))
 
 (define gnc:budget-status-report-specs
   (list
    (make-report-spec 
-    "Description" (budget-description-html-proc) 'gnc:report-first)
+    "Description" (budget-description-html-proc) 'gnc:report-first #f)
    (make-report-spec
-    "Upper Limit" (budget-maximum-expected-html-proc) 'gnc:report-first)
+    "Upper Limit" (budget-maximum-expected-html-proc) 'gnc:report-first budget-report-get-maximum-expected)
    (make-report-spec
-    "Lower Limit" (budget-minimum-expected-html-proc) 'gnc:report-first)
+    "Lower Limit" (budget-minimum-expected-html-proc) 'gnc:report-first budget-report-get-minimum-expected)
    (make-report-spec
-    "Actual" (budget-actual-html-proc) 'gnc:report-first)))
+    "Actual" (budget-actual-html-proc) 'gnc:report-first budget-report-get-actual)
+   (make-report-spec
+    "Status" (budget-delta-html-proc) 'gnc:report-first budget-report-get-delta)))
 
 (gnc:define-report
  ;; version
@@ -743,36 +848,43 @@
 				 (gnc:option-value begindate))))
 	  (end-date-secs (car (gnc:timepair-canonical-day-time
 			       (gnc:option-value enddate))))
-	  (budget-list (map 
-			(lambda (entry)
-			  (make-budget-line entry (make-empty-budget-report entry)))
-			gnc:budget-entries)))
+ 	  (budget-hash (make-hash-table 313))
+	  (budget-list '())
+ 	  (update-hash (for-each
+ 			(lambda (entry)
+			  (set! budget-list (cons 
+					     (make-budget-line
+					      entry
+					      (make-empty-budget-report entry))
+					     budget-list))
+			  (for-each
+			   (lambda (account)
+			     (make-budget-hash-entry
+			      budget-hash account
+			      (make-budget-line entry (budget-line-get-report (car budget-list)))))
+			   (budget-entry-get-accounts entry)))
+ 			(cdr gnc:budget-entries))))
 
-     (let loop ((group (gnc:get-current-group)))
-       (if (not (pointer-token-null? group))
-	   (gnc:group-map-accounts
-	    (lambda (account)
-	      (if (eqv? (gnc:account-type->symbol (gnc:account-get-type account))
-			'EXPENSE)
-		  (let* ((line
-			  (budget-get-line
-			   (gnc:account-get-full-name account)
-			   budget-list))
-			 (line2 (if line line (car budget-list))))
-		    (gnc:for-each-split-in-account 
-		     account
-		     (lambda (split)
-		       (budget-report-accumulate-actual!
-			(gnc:split-get-value split) line2)))))
-	      (loop (gnc:account-get-children account)))
-	    group)))
-
+     
+     (set! budget-list (cons (make-budget-line (car gnc:budget-entries)
+					       (make-empty-budget-report 
+						(car gnc:budget-entries)))
+			     budget-list))
+     (gnc:debug "a")
+     
+     (budget-calculate-actual! budget-hash (car budget-list) begin-date-secs end-date-secs)
+       
+     (gnc:debug "b")
+     
      (for-each 
       (lambda (line)
 	(begin
 	  (budget-calculate-nominal! line begin-date-secs end-date-secs)
-	  (budget-calculate-expected! line begin-date-secs end-date-secs)))
+	  (budget-calculate-expected! line begin-date-secs end-date-secs)
+	  (budget-calculate-delta! line)))
       budget-list)
+     
+     (gnc:debug "c")
      
      (let ((report-specs 
 	    (case (gnc:option-value
@@ -795,9 +907,7 @@
 	     (report-spec-get-header spec)))
 	  report-specs))
 	;;(map-in-order
-	(map
-	 (lambda (line)	 
-	   (budget-line-html line report-specs))
-	 budget-list)
+	(budget-html budget-list report-specs)
+	(budget-totals-html (cdr budget-list) report-specs)
 	(html-end-table)
 	(html-end-document))))))
