@@ -47,22 +47,21 @@
 (define gnc:*tip-list* '())
 
 (define (gnc:read-tips)
-  (let ((in-port (open-input-file 
-		  (gnc:find-in-directories 
-		   (gnc:config-var-value-get gnc:*tip-file*)
-		   (gnc:config-var-value-get gnc:*load-path*)))))
-	(set! gnc:*tip-list* (read in-port))
-        (set! gnc:*tip-list*
-              (map (lambda (pair) (cadr pair)) gnc:*tip-list*))
-	(if (not (= (length gnc:*tip-list*) (gnc:current-tip-number)))
-	    (begin
-	      (gnc:config-var-value-set! gnc:*number-of-tips* #t
-                                         (length gnc:*tip-list*))
-	      (if (<= (gnc:config-var-value-get gnc:*number-of-tips*)
-		      (gnc:current-tip-number))
-		  (gnc:reset-tip-number))))
-	(close-port in-port)
-	#f))
+  (let ((in-port
+         (open-input-file
+          (%search-load-path (gnc:config-var-value-get gnc:*tip-file*)))))
+    (set! gnc:*tip-list* (read in-port))
+    (set! gnc:*tip-list*
+          (map (lambda (pair) (cadr pair)) gnc:*tip-list*))
+    (if (not (= (length gnc:*tip-list*) (gnc:current-tip-number)))
+        (begin
+          (gnc:config-var-value-set! gnc:*number-of-tips* #t
+                                     (length gnc:*tip-list*))
+          (if (<= (gnc:config-var-value-get gnc:*number-of-tips*)
+                  (gnc:current-tip-number))
+              (gnc:reset-tip-number))))
+    (close-port in-port)
+    #f))
 
 (define (gnc:current-tip-number)
   (let ((num (gnc:option-value
