@@ -672,8 +672,8 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   GtkWidget *page;
   GladeXML *xml;
 
-  id_type = xaccGUIDType (&info->account, gnc_get_current_book ());
   old_account = xaccAccountLookup (&info->account, gnc_get_current_book ());
+  id_type = xaccGUIDType (old_account, gnc_get_current_book ());
 
   if (fill_account_list (info, old_account) == 0)
   {
