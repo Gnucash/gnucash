@@ -1,7 +1,7 @@
 2003-03-12  Derek Atkins  <derek@ihtfp.com>
 
-	* the Euroland currency rates were inverted in the transfer
-	  dialog.
+	* src/gnome-utils/dialog-transfer.c: the Euroland currency rates
+	  were inverted in the transfer dialog.
 
 2003-03-11  Derek Atkins  <derek@ihtfp.com>
 
