@@ -65,7 +65,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* first, see if we already have such a transaction */
    string_to_guid (DB_GET_VAL("transGUID",j), &trans_guid);
-   trans = xaccTransLookup (&trans_guid, be->book);
+   trans = pgendTransLookup (be, &trans_guid);
    if (trans)
    {
       /* If transaction already exists, determine whose data is 
@@ -116,7 +116,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 static gpointer
 get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   Transaction *trans;
+   Transaction *trans=NULL;
    Account *acc;
    Split *s;
    GUID guid;
@@ -132,7 +132,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    PINFO ("split GUID=%s", DB_GET_VAL("entryGUID",j));
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("entryGUID",j), &guid);
-   s = xaccSplitLookup (&guid, be->book);
+   s = pgendSplitLookup (be, &guid);
    if (!s)
    {
       s = xaccMallocSplit(be->book);
@@ -151,7 +151,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("transGUID",j), &guid);
-   trans = xaccTransLookup (&guid, be->book);
+   trans = pgendTransLookup (be, &guid);
    if (!trans)
    {
       PERR ("trans not found, will delete this split\n"
@@ -170,7 +170,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    /* next, find the account that this split goes into */
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-   acc = xaccAccountLookup (&guid, be->book);
+   acc = pgendAccountLookup (be, &guid);
    if (!acc)
    {
       PERR ("account not found, will delete this split\n"

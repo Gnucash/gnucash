@@ -133,7 +133,7 @@ pgendStoreBook (PGBackend *be, GNCBook *book)
  */
 
 static gpointer
-get_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+get_one_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    GNCBook *book = (GNCBook *) data;
    GUID guid;
@@ -166,7 +166,7 @@ pgendGetBook (PGBackend *be, GNCBook *book)
     */
    bufp = "SELECT * FROM gncBook WHERE book_open='y';";
    SEND_QUERY (be, bufp, );
-   pgendGetResults (be, get_book_cb, book);
+   pgendGetResults (be, get_one_book_cb, book);
 
    if (0 != book->idata) 
    {
@@ -174,6 +174,73 @@ pgendGetBook (PGBackend *be, GNCBook *book)
    }
 
    LEAVE (" ");
+}
+
+/* ============================================================= */
+/* The pgendGetAllBooks() routine creates an empty book
+ * for each book in the database.
+ */
+
+static gpointer
+get_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   BookList *blist = (BookList *) data;
+   BookList *node;
+   GNCBook *book;
+   GUID guid;
+
+   PINFO ("book GUID=%s", DB_GET_VAL("bookGUID",j));
+   guid = nullguid;  /* just in case the read fails ... */
+   string_to_guid (DB_GET_VAL("bookGUID",j), &guid);
+
+   /* first, lets see if we've already got this one */
+   book = NULL;
+   for (node=blist; node; node=node->next)
+   {
+      book = node->data;
+      if (guid_equal (&book->guid, &guid)) break;
+      book = NULL;
+   }
+   
+   if (!book) 
+   {
+      book = gnc_book_new();
+      gnc_book_set_guid (book, guid);
+   }
+
+   book->book_open = (DB_GET_VAL("book_open",j))[0];
+   book->version = atoi(DB_GET_VAL("version",j));
+   book->idata = atoi(DB_GET_VAL("iguid",j));
+
+   return blist;
+}
+
+BookList *
+pgendGetAllBooks (PGBackend *be, BookList *blist)
+{
+   BookList *node;
+   char * bufp;
+
+   ENTER ("be=%p", be);
+   if (!be) return NULL;
+
+   /* Get them ALL */
+   bufp = "SELECT * FROM gncBook;";
+   SEND_QUERY (be, bufp, NULL);
+   blist = pgendGetResults (be, get_book_cb, blist);
+
+   /* get the KVP data for each book too */
+   for (node=blist; node; node=node->next)
+   {
+      GNCBook *book = node->data;
+      if (0 != book->idata) 
+      {
+         book->kvp_data = pgendKVPFetch (be, book->idata, book->kvp_data);
+      }
+   }
+
+   LEAVE (" ");
+   return blist;
 }
 
 /* ============================================================= */

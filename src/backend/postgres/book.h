@@ -25,9 +25,12 @@
 #define POSTGRES_BOOK_H
 
 #include "gnc-book.h"
+#include "gnc-engine.h"
 #include "guid.h"
 
 #include "PostgresBackend.h"
+
+BookList * pgendGetAllBooks (PGBackend *be, BookList *);
 
 void pgendGetBook (PGBackend *be, GNCBook *book);
 void pgendStoreBookNoLock (PGBackend *be, GNCBook *book, int do_check_version);

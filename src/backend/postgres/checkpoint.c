@@ -87,7 +87,7 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
    ENTER("be=%p", be);
 
    guid_string = guid_to_string (acct_guid);
-   acc = xaccAccountLookup (acct_guid, be->book);
+   acc = pgendAccountLookup (be, acct_guid);
    commodity_name =
      gnc_commodity_get_unique_name (xaccAccountGetCommodity(acc));
 

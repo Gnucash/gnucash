@@ -137,11 +137,86 @@ pgendGetUserGecos (PGBackend *be)
    return NULL;
 }
 
-AccountGroup *
-pgendGetTopGroup (PGBackend *be)
+/* ============================================================= */
+
+Account *
+pgendAccountLookup (PGBackend *be, const GUID *acct_guid)
 {
-  if (!be) return NULL;
-  return gnc_book_get_group (be->book);
+   GList *node;
+   Account * acc = NULL;
+
+   for (node=be->blist; node; node=node->next)
+   {
+      GNCBook *book = node->data;
+      acc = xaccAccountLookup (acct_guid, book);
+      if (acc) return acc;
+   }
+
+   return NULL;
+}
+
+Transaction *
+pgendTransLookup (PGBackend *be, const GUID *txn_guid)
+{
+   GList *node;
+   Transaction * txn = NULL;
+
+   for (node=be->blist; node; node=node->next)
+   {
+      GNCBook *book = node->data;
+      txn = xaccTransLookup (txn_guid, book);
+      if (txn) return txn;
+   }
+
+   return NULL;
+}
+
+Split *
+pgendSplitLookup (PGBackend *be, const GUID *split_guid)
+{
+   GList *node;
+   Split * split = NULL;
+
+   for (node=be->blist; node; node=node->next)
+   {
+      GNCBook *book = node->data;
+      split = xaccSplitLookup (split_guid, book);
+      if (split) return split;
+   }
+
+   return NULL;
+}
+
+GNCPrice *
+pgendPriceLookup (PGBackend *be, const GUID *price_guid)
+{
+   GList *node;
+   GNCPrice * price = NULL;
+
+   for (node=be->blist; node; node=node->next)
+   {
+      GNCBook *book = node->data;
+      price = gnc_price_lookup (price_guid, book);
+      if (price) return price;
+   }
+
+   return NULL;
+}
+
+GNCIdType
+pgendGUIDType (PGBackend *be, const GUID *guid)
+{
+   GList *node;
+   GNCIdType tip = GNC_ID_NONE;
+
+   for (node=be->blist; node; node=node->next)
+   {
+      GNCBook *book = node->data;
+      tip = xaccGUIDType (guid, book);
+      if (GNC_ID_NONE != tip) return tip;
+   }
+
+   return GNC_ID_NONE;
 }
 
 /* ============================================================= */
@@ -723,7 +798,7 @@ pgendSync (Backend *bend, GNCBook *book)
    pgendDisable(be);
 
    pgendKVPInit(be);
-   pgendGetAllAccounts (be, grp);
+   pgendGetAllAccountsInBook (be, book);
    if ((MODE_SINGLE_FILE != be->session_mode) &&
        (MODE_SINGLE_UPDATE != be->session_mode))
    {
@@ -1310,20 +1385,28 @@ pgend_book_load_poll (Backend *bend, GNCBook *book)
 
    if (!be) return;
 
-   be->book = book;
-
-   pgendGetBook (be, book);
-
-   grp = gnc_book_get_group (book);
-
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
    pgendKVPInit(be);
-   pgendGetAllAccounts (be, grp);
 
+   be->book = book;
+
+   if (be->blist) 
+   {
+      /* XXX not clear what this means ... should we free old books ?? */
+      PWARN ("old book list not empty ");
+      g_list_free (be->blist);
+   }
+   pgendGetBook (be, book);
+
+   be->blist = g_list_append (NULL, book);
+
+   pgendGetAllAccountsInBook (be, book);
+
+   grp = gnc_book_get_group (book);
    xaccAccountGroupBeginEdit (grp);
    pgendGroupGetAllBalances (be, grp, ts);
    xaccAccountGroupCommitEdit (grp);
@@ -1349,19 +1432,29 @@ pgend_book_load_single (Backend *bend, GNCBook *book)
 
    if (!be) return;
 
-   be->book = book;
-
-   pgendGetBook (be, book);
-
-   grp = gnc_book_get_group (book);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
+   be->book = book;
+
    pgendKVPInit(be);
-   pgendGetAllAccounts (be, grp);
+
+   if (be->blist) 
+   {
+      /* XXX not clear what this means ... should we free old books ?? */
+      PWARN ("old book list not empty ");
+      g_list_free (be->blist);
+   }
+   pgendGetBook (be, book);
+
+   be->blist = g_list_append (NULL, book);
+
+   pgendGetAllAccountsInBook (be, book);
+
+   grp = gnc_book_get_group (book);
    pgendGetMassTransactions (be, grp);
 
    /* re-enable events */
@@ -1981,7 +2074,7 @@ pgend_session_begin (Backend *backend,
             be->be.price_begin_edit     = pgend_price_begin_edit;
             be->be.price_commit_edit    = pgend_price_commit_edit;
             be->be.run_query            = pgendRunQuery;
-            be->be.price_lookup         = pgendPriceLookup;
+            be->be.price_lookup         = pgendPriceFind;
             be->be.sync_all             = pgendSync;
             be->be.sync_group           = NULL;
             be->be.sync_price           = pgendSyncPriceDB;
@@ -2011,7 +2104,7 @@ pgend_session_begin (Backend *backend,
             be->be.price_begin_edit     = pgend_price_begin_edit;
             be->be.price_commit_edit    = pgend_price_commit_edit;
             be->be.run_query            = pgendRunQuery;
-            be->be.price_lookup         = pgendPriceLookup;
+            be->be.price_lookup         = pgendPriceFind;
             be->be.sync_all             = pgendSync;
             be->be.sync_group           = NULL;
             be->be.sync_price           = pgendSyncPriceDB;
@@ -2197,7 +2290,9 @@ pgendInit (PGBackend *be)
    }
    be->ipath_max = 0;
 
+   be->session = NULL;
    be->book = NULL;
+   be->blist = NULL;
 }
 
 /* ============================================================= */

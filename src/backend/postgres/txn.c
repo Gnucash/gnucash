@@ -118,7 +118,7 @@ delete_list_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* If the database has splits that the engine doesn't,
     * collect 'em up & we'll have to delete em */
-   if (NULL == xaccSplitLookup (&guid, be->book))
+   if (NULL == pgendSplitLookup (be, &guid))
    {
       DeleteTransInfo *dti;
 
@@ -469,10 +469,10 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
             PINFO ("split GUID=%s", DB_GET_VAL("entryGUID",j));
             guid = nullguid;  /* just in case the read fails ... */
             string_to_guid (DB_GET_VAL("entryGUID",j), &guid);
-            s = xaccSplitLookup (&guid, be->book);
+            s = pgendSplitLookup (be, &guid);
             if (!s)
             {
-               s = xaccMallocSplit(be->book);
+               s = xaccMallocSplit(trans->book);
                xaccSplitSetGUID(s, &guid);
             }
 
@@ -490,7 +490,7 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
             /* next, find the account that this split goes into */
             guid = nullguid;  /* just in case the read fails ... */
             string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-            acc = xaccAccountLookup (&guid, be->book);
+            acc = pgendAccountLookup (be, &guid);
 
             if (!acc)
             {
@@ -564,12 +564,11 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
 
      /* account could have been pulled in by a previous
       * iteration of this loop. */
-     account = xaccAccountLookup (&sri->account_guid, be->book);
+     account = pgendAccountLookup (be, &sri->account_guid);
 
      if (!account)
      {
-       pgendCopyAccountToEngine (be, &sri->account_guid);
-       account = xaccAccountLookup (&sri->account_guid, be->book);
+       account = pgendCopyAccountToEngine (be, &sri->account_guid);
      }
 
      if (account)
@@ -661,7 +660,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    pgendDisable(be);
 
    /* first, see if we already have such a transaction */
-   trans = xaccTransLookup (trans_guid, be->book);
+   trans = pgendTransLookup (be, trans_guid);
    if (!trans)
    {
       trans = xaccMallocTransaction(be->book);
@@ -886,7 +885,7 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
             "\tto the database.  This mode of operation is\n"
             "\tguarenteed to clobber other user's updates.\n");
 
-      trans = xaccTransLookup (trans_guid);
+      trans = pgendTransLookup (be, trans_guid);
 
       /* hack alert -- basically, we should use the pgend_commit_transaction
        * routine instead, and in fact, 'StoreTransaction'

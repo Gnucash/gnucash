@@ -271,7 +271,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* First, lets see if we've already got this one */
    string_to_guid (DB_GET_VAL ("priceGuid", j), &guid);
-   pr = gnc_price_lookup (&guid, be->book);
+   pr = pgendPriceLookup (be, &guid);
 
    if (!pr) 
    { 
@@ -351,7 +351,7 @@ pgendGetAllPrices (PGBackend *be, GNCPriceDB *prdb)
 /* ============================================================= */
 
 void
-pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
+pgendPriceFind (Backend *bend, GNCPriceLookup *look)
 {
    PGBackend *be = (PGBackend *)bend;
    const char * commodity_str;
@@ -366,9 +366,9 @@ pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
    if (LOOKUP_NEAREST_IN_TIME == look->type)
    {
       look->type = LOOKUP_LATEST_BEFORE;
-      pgendPriceLookup (bend, look);
+      pgendPriceFind (bend, look);
       look->type = LOOKUP_EARLIEST_AFTER;
-      pgendPriceLookup (bend, look);
+      pgendPriceFind (bend, look);
       return;
    }
 

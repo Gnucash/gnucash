@@ -31,7 +31,7 @@ void pgendGetCommodity (PGBackend *be, const char * unique_name);
 void pgendStorePriceDB (PGBackend *be, GNCPriceDB *prdb);
 void pgendStorePriceDBNoLock (PGBackend *be, GNCPriceDB *prdb);
 GNCPriceDB * pgendGetAllPrices (PGBackend *be, GNCPriceDB *prdb);
-void pgendPriceLookup (Backend *bend, GNCPriceLookup *look);
+void pgendPriceFind (Backend *bend, GNCPriceLookup *look);
 
 
 void pgend_price_begin_edit (Backend * bend, GNCPrice *pr);

@@ -270,7 +270,7 @@ pgendProcessEvents (Backend *bend)
       GNCIdType local_obj_type;
 
       /* lets see if the local cache has this item in it */
-      local_obj_type = xaccGUIDType (&(ev->guid), be->book);
+      local_obj_type = pgendGUIDType (be, &(ev->guid));
       if ((local_obj_type != GNC_ID_NONE) && 
           (safe_strcmp (local_obj_type, ev->obj_type)))
       {
@@ -292,16 +292,20 @@ pgendProcessEvents (Backend *bend)
                PERR ("account: cant' happen !!!!!!!");
                break;
             case GNC_EVENT_CREATE:
-            case GNC_EVENT_MODIFY: 
+            case GNC_EVENT_MODIFY: {
+               Account *acc;
+
                /* if the remote user created an account, mirror it here */
-               pgendCopyAccountToEngine (be, &(ev->guid));
-               xaccGroupMarkSaved (pgendGetTopGroup (be));
+               acc = pgendCopyAccountToEngine (be, &(ev->guid));
+               xaccGroupMarkSaved (xaccAccountGetRoot(acc));
                break;
+            }
             case GNC_EVENT_DESTROY: {
-               Account * acc = xaccAccountLookup (&(ev->guid), be->book);
+               Account * acc = pgendAccountLookup (be, &(ev->guid));
+               AccountGroup *topgrp = xaccAccountGetRoot(acc);
                xaccAccountBeginEdit (acc);
                xaccAccountDestroy (acc);
-               xaccGroupMarkSaved (pgendGetTopGroup (be));
+               xaccGroupMarkSaved (topgrp);
                break;
             }
          }
@@ -327,7 +331,7 @@ pgendProcessEvents (Backend *bend)
                pgendCopyTransactionToEngine (be, &(ev->guid));
                break;
             case GNC_EVENT_DESTROY: {
-               Transaction *trans = xaccTransLookup (&(ev->guid), be->book);
+               Transaction *trans = pgendTransLookup (be, &(ev->guid));
                xaccTransBeginEdit (trans);
                xaccTransDestroy (trans);
                xaccTransCommitEdit (trans);
@@ -360,7 +364,7 @@ pgendProcessEvents (Backend *bend)
        * the guid above */
       if (GNC_ID_NONE == local_obj_type)
       {
-         local_obj_type = xaccGUIDType (&(ev->guid), be->book);
+         local_obj_type = pgendGUIDType (be, &(ev->guid));
          if (GNC_ID_NONE != local_obj_type)
          {
             gnc_engine_generate_event (&(ev->guid), GNC_EVENT_CREATE);
@@ -368,7 +372,7 @@ pgendProcessEvents (Backend *bend)
       }
       else 
       {
-         local_obj_type = xaccGUIDType (&(ev->guid), be->book);
+         local_obj_type = pgendGUIDType (be, &(ev->guid));
          if (GNC_ID_NONE != local_obj_type)
          {
             gnc_engine_generate_event (&(ev->guid), GNC_EVENT_MODIFY);

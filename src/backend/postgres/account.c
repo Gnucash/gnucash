@@ -35,12 +35,15 @@
 #include "BackendP.h"
 #include "Group.h"
 #include "GroupP.h"
+#include "gnc-book.h"
+#include "gnc-book-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "guid.h"
 
 #include "account.h"
+#include "book.h"
 #include "base-autogen.h"
 #include "kvp-sql.h"
 #include "PostgresBackend.h"
@@ -236,30 +239,47 @@ pgendGetAllAccountKVP (PGBackend *be, AccountGroup *grp)
 
 /* ============================================================= */
 /* The pgendGetAllAccounts() routine restores the account hierarchy 
- * of *all* accounts in the DB.
- * It implicitly assumes that the database has only one account
- * hierarchy in it, i.e. any accounts without a parent will be stuffed
- * into the same top group.
+ * of *all* accounts in the DB.  Each account is stuffed into
+ * its corresponding book.
+ *
+ * The pgendGetAllAccountsInBook() routine only fetches the accounts
+ * for the indicated book.
  */
 
 static gpointer
 get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   AccountGroup *topgrp = (AccountGroup *) data;
+   GList *node;
+   GNCBook *book;
    Account *parent;
    Account *acc;
-   GUID guid;
+   GUID acct_guid, book_guid;
 
-   /* first, lets see if we've already got this one */
    PINFO ("account GUID=%s", DB_GET_VAL("accountGUID",j));
-   guid = nullguid;  /* just in case the read fails ... */
-   string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-   acc = xaccAccountLookup (&guid, be->book);
+
+   /* First, find the book that pertains to this account */
+   book_guid = nullguid;  /* just in case the read fails ... */
+   string_to_guid (DB_GET_VAL("bookGUID",j), &book_guid);
+
+   book = NULL;
+   for (node=be->blist; node; node=node->next)
+   {
+      book = node->data;
+      if (guid_equal (&book->guid, &book_guid)) break;
+      book = NULL;
+   }
+   if (!book) return NULL;
+
+   /* Next, lets see if we've already got this account */
+   acct_guid = nullguid;  /* just in case the read fails ... */
+   string_to_guid (DB_GET_VAL("accountGUID",j), &acct_guid);
+
+   acc = xaccAccountLookup (&acct_guid, book);
    if (!acc) 
    {
-      acc = xaccMallocAccount(be->book);
+      acc = xaccMallocAccount(book);
       xaccAccountBeginEdit(acc);
-      xaccAccountSetGUID(acc, &guid);
+      xaccAccountSetGUID(acc, &acct_guid);
    }
    else 
    {
@@ -272,30 +292,30 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccAccountSetType(acc, xaccAccountStringToEnum(DB_GET_VAL("type",j)));
    xaccAccountSetCommodity(acc, 
                            gnc_string_to_commodity (DB_GET_VAL("commodity",j),
-                                                    be->book));
+                                                    book));
    xaccAccountSetVersion(acc, atoi(DB_GET_VAL("version",j)));
    acc->idata = atoi(DB_GET_VAL("iguid",j));
 
    /* try to find the parent account */
    PINFO ("parent GUID=%s", DB_GET_VAL("parentGUID",j));
-   guid = nullguid;  /* just in case the read fails ... */
-   string_to_guid (DB_GET_VAL("parentGUID",j), &guid);
-   if (guid_equal(xaccGUIDNULL(), &guid)) 
+   acct_guid = nullguid;  /* just in case the read fails ... */
+   string_to_guid (DB_GET_VAL("parentGUID",j), &acct_guid);
+   if (guid_equal(xaccGUIDNULL(), &acct_guid)) 
    {
       /* if the parent guid is null, then this
        * account belongs in the top group */
-      xaccGroupInsertAccount (topgrp, acc);
+      xaccGroupInsertAccount (gnc_book_get_group(book), acc);
    }
    else
    {
       /* if we haven't restored the parent account, create
        * an empty holder for it */
-      parent = xaccAccountLookup (&guid, be->book);
+      parent = xaccAccountLookup (&acct_guid, book);
       if (!parent)
       {
-         parent = xaccMallocAccount(be->book);
+         parent = xaccMallocAccount(book);
          xaccAccountBeginEdit(parent);
-         xaccAccountSetGUID(parent, &guid);
+         xaccAccountSetGUID(parent, &acct_guid);
       }
       else
       {
@@ -306,30 +326,66 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    }
    xaccAccountCommitEdit(acc);
 
-   return topgrp;
+   return acc;
 }
 
-AccountGroup *
-pgendGetAllAccounts (PGBackend *be, AccountGroup *topgrp)
+void
+pgendGetAllAccounts (PGBackend *be)
 {
+   BookList *node;
    char * bufp;
 
    ENTER ("be=%p", be);
-   if (!be) return NULL;
+   if (!be) return;
+
+   /* get all the books in the database */
+   pgendGetAllBooks (be, be->blist);
+
+   /* Make sure commodities table is up to date */
+   pgendGetAllCommodities (be);
+
+   /* Get them ALL */
+   bufp = "SELECT * FROM gncAccount;";
+   SEND_QUERY (be, bufp, );
+   pgendGetResults (be, get_account_cb, NULL);
+
+   for (node=be->blist; node; node=node->next)
+   {
+      GNCBook *book = node->data;
+      AccountGroup *topgrp = gnc_book_get_group (book);
+      pgendGetAllAccountKVP (be, topgrp);
+
+      /* Mark the newly read group as saved, since the act of putting
+       * it together will have caused it to be marked up as not-saved.
+       */
+      xaccGroupMarkSaved (topgrp);
+   }
+
+   LEAVE (" ");
+}
+
+void
+pgendGetAllAccountsInBook (PGBackend *be, GNCBook *book)
+{
+   char *p, buff[400];
+   AccountGroup *topgrp;
+
+   ENTER ("be=%p", be);
+   if (!be || !book) return;
 
    /* first, make sure commodities table is up to date */
    pgendGetAllCommodities (be);
 
-   if (!topgrp)
-   {
-      topgrp = xaccMallocAccountGroup(be->book);
-   }
+   /* Get everything for this book */
 
-   /* Get them ALL */
-   bufp = "SELECT * FROM gncAccount;";
-   SEND_QUERY (be, bufp, NULL);
-   pgendGetResults (be, get_account_cb, topgrp);
+   p = buff;
+   p = stpcpy (p, "SELECT * FROM gncAccount WHERE bookGuid='");
+   p = guid_to_string_buff (gnc_book_get_guid(book), p);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be, buff, );
+   pgendGetResults (be, get_account_cb, NULL);
 
+   topgrp = gnc_book_get_group (book);
    pgendGetAllAccountKVP (be, topgrp);
 
    /* Mark the newly read group as saved, since the act of putting
@@ -338,17 +394,16 @@ pgendGetAllAccounts (PGBackend *be, AccountGroup *topgrp)
    xaccGroupMarkSaved (topgrp);
 
    LEAVE (" ");
-   return topgrp;
 }
 
 
 /* ============================================================= */
 
-int
+Account *
 pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
 {
    char *pbuff;
-   Account *acc;
+   Account *acc = NULL;
    int engine_data_is_newer = 0;
 
    ENTER ("be=%p", be);
@@ -358,8 +413,9 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
    gnc_engine_suspend_events();
    pgendDisable(be);
 
-   /* first, see if we already have such an account */
-   acc = xaccAccountLookup (acct_guid, be->book);
+   /* First, see if we already have such an account */
+   acc = pgendAccountLookup (be, acct_guid);
+
    if (!acc)
    {
       engine_data_is_newer = -1;
@@ -390,16 +446,18 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
       pbuff = stpcpy (pbuff, "';");
 
       SEND_QUERY (be,be->buff, 0);
-      pgendGetResults (be, get_account_cb, pgendGetTopGroup (be));
+      acc = pgendGetResults (be, get_account_cb, NULL);
 
-      acc = xaccAccountLookup (acct_guid, be->book);
       /* restore any kvp data associated with the transaction and splits */
-      if (acc->idata)
+      if (acc)
       {
-         acc->kvp_data = pgendKVPFetch (be, acc->idata, acc->kvp_data);
-      }
+         if (acc->idata)
+         {
+            acc->kvp_data = pgendKVPFetch (be, acc->idata, acc->kvp_data);
+         }
 
-      acc->version_check = be->version_check;
+         acc->version_check = be->version_check;
+      }
    }
 
    /* re-enable events to the backend and GUI */
@@ -407,7 +465,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
    gnc_engine_resume_events();
 
    LEAVE (" ");
-   return engine_data_is_newer;
+   return acc;
 }
 
 /* ============================================================= */
