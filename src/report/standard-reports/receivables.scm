@@ -31,6 +31,7 @@
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (use-modules (gnucash report aging))
+(use-modules (gnucash report standard-reports))
 
 (define this-acc "this-account")
 
@@ -96,11 +97,17 @@
  'renderer receivables-renderer
  'in-menu? #f)
 
-(define (gnc:receivables-report-create-internal acct)
+(define (receivables-report-create-internal acct)
   (let* ((options (gnc:make-report-options "Receivable Aging"))
 	 (acct-op (gnc:lookup-option options "__reg" this-acc)))
 
     (gnc:option-set-value acct-op (list acct))
     (gnc:make-report "Receivable Aging" options)))
 
-(export gnc:receivables-report-create-internal)
+(define (gnc:receivables-report-create-internal
+	 account split query journal? double? title
+	 debit-string credit-string)
+  (receivables-report-create-internal account))
+
+(gnc:register-report-hook 'receivable #f
+			  gnc:receivables-report-create-internal)

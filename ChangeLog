@@ -1,5 +1,15 @@
 2002-06-27  Derek Atkins   <derek@ihtfp.com>
 
+	* Change the "Owner Report" to a "Customer Report" and "Vendor
+	Report" Create a plug-in system to plug reports into the Register
+	Window, keyed off of the account type and whether a split exists
+	(for a "Transaction" report).  This required changes to the
+	payables and receivables (aging) reports.
+
+	* Tie the Customer and Vendor reports in, so you can bring up a
+	Customer Report by selecting a transaction in an A/R account and
+	clicking on Reports -> Transaction Report.
+
 	* Create an "owner-report" which prints out a set of Invoice and
 	Payment transactions and also an aging report for a single "owner"
 	(e.g. Customer or Vendor).  This is still a first pass, so it

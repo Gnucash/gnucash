@@ -16,6 +16,7 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/business-gnome" 0)
+(use-modules (gnucash report standard-reports))
 
 (define-macro (addto! alist element)
   `(set! ,alist (cons ,element ,alist)))
@@ -406,17 +407,14 @@
     (gnc:query-set-book query (gnc:get-current-book))
 
     (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-		 (gnc:owner-get-type owner) #f))
+		 (gnc:owner-get-type (gnc:owner-get-end-owner owner)) #f))
 	  (type-str ""))
       (case type
 	((gnc-owner-customer)
 	 (set! type-str (N_ "Customer")))
 
 	((gnc-owner-vendor)
-	 (set! type-str (N_ "Vendor")))
-
-	((gnc-owner-job)
-	 (set! type-str (N_ "Job"))))
+	 (set! type-str (N_ "Vendor"))))
 
       (set! title (string-append type-str " Report: "
 				 (gnc:owner-get-name owner))))
@@ -451,20 +449,79 @@
 
 (gnc:define-report
  'version 1
- 'name (N_ "Company Report")
+ 'name (N_ "Customer Report")
  'options-generator options-generator
  'renderer reg-renderer
  'in-menu? #f)
 
-(define (gnc:owner-report-create-internal owner query account)
-  (let* ((options (gnc:make-report-options "Company Report"))
-         (owner-op (gnc:lookup-option options "__reg" "owner"))
+(gnc:define-report
+ 'version 1
+ 'name (N_ "Vendor Report")
+ 'options-generator options-generator
+ 'renderer reg-renderer
+ 'in-menu? #f)
+
+(define (owner-report-create-internal report-name owner query account)
+  (let* ((options (gnc:make-report-options report-name))
+	 (owner-op (gnc:lookup-option options "__reg" "owner"))
 	 (query-op (gnc:lookup-option options "__reg" "query"))
 	 (account-op (gnc:lookup-option options "__reg" "account")))
 
     (gnc:option-set-value owner-op owner)
     (gnc:option-set-value query-op query)
     (gnc:option-set-value account-op (list account))
-    (gnc:make-report "Company Report" options)))
+    (gnc:make-report report-name options)))
 
-(export gnc:owner-report-create-internal)
+(define (owner-report-create owner query account)
+  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
+	       (gnc:owner-get-type (gnc:owner-get-end-owner owner)) #f)))
+    (case type
+      ((gnc-owner-customer)
+       (owner-report-create-internal "Customer Report" owner query account))
+
+      ((gnc-owner-vendor)
+       (owner-report-create-internal "Vendor Reprt" owner query account)))
+  ))
+
+(define (gnc:owner-report-create-internal
+	 account split query journal? double? title
+	 debit-string credit-string)
+
+  (let* ((trans (gnc:split-get-parent split))
+	 (invoice (gnc:invoice-get-invoice-from-txn trans))
+	 (q (gnc:malloc-query))
+	 (temp-owner (gnc:owner-create))
+	 (owner #f))
+
+    (if invoice
+	(set! owner (gnc:invoice-get-owner invoice))
+	(let ((split-list (gnc:transaction-get-splits trans)))
+	  (define (check-splits splits)
+	    (let* ((split (car splits))
+		   (lot (gnc:split-get-lot split)))
+	      (if lot
+		  (let* ((invoice (gnc:invoice-get-invoice-from-lot lot))
+			 (owner? (gnc:owner-get-owner-from-lot
+				  lot temp-owner)))
+		    (if invoice
+			(set! owner (gnc:invoice-get-owner invoice))
+			(if owner?
+			    (set! owner temp-owner)
+			    (check-splits (cdr splits)))))
+		  (check-splits (cdr splits)))))
+	  (check-splits split-list)))
+
+    ;; XXX: Need to add checks for the ownership...
+    (gnc:query-add-single-account-match q account 'query-and)
+    (gnc:query-set-book q (gnc:get-current-book))
+
+    (let ((res (owner-report-create owner q account)))
+      (gnc:owner-destroy temp-owner)
+      (gnc:free-query q)
+      res)))
+
+(gnc:register-report-hook 'receivable #t
+			  gnc:owner-report-create-internal)
+
+(gnc:register-report-hook 'payable #t
+			  gnc:owner-report-create-internal)
