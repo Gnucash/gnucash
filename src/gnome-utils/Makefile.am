@@ -45,6 +45,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-dense-cal.c \
   gnc-frequency.c \
   gnc-general-select.c \
+  gnc-gconf-utils.c \
   gnc-gnome-utils.c \
   gnc-gui-query.c \
   gnc-html-history.c \
@@ -62,6 +63,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-model-price.c \
   gnc-tree-model-selection.c \
   gnc-tree-view-account.c \
+  gnc-tree-view-common.c \
   gncmod-gnome-utils.c \
   gtkselect.c \
   misc-gnome-utils.c \
@@ -88,6 +90,7 @@ gncinclude_HEADERS = \
   gnc-dense-cal.h \
   gnc-frequency.h \
   gnc-general-select.h \
+  gnc-gconf-utils.h \
   gnc-gnome-utils.h \
   gnc-gui-query.h \
   gnc-html-history.h \
@@ -105,6 +108,7 @@ gncinclude_HEADERS = \
   gnc-tree-model-price.h \
   gnc-tree-model-selection.h \
   gnc-tree-view-account.h \
+  gnc-tree-view-common.h \
   gtkselect.h \
   misc-gnome-utils.h \
   print-session.h

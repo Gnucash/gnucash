@@ -26,9 +26,7 @@
 #include <gnome.h>
 #include <libguile.h>
 
-#ifdef GTKHTML_HAVE_GCONF
 #include <gconf/gconf.h>
-#endif
 
 #ifdef USE_GUPPI
 #include "gnc-html-guppi.h"

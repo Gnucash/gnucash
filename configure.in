@@ -36,6 +36,8 @@ AC_PREREQ(2.53)
 AC_PROG_CC
 AC_PROG_INTLTOOL
 
+AM_GCONF_SOURCE_2
+
 # Comment out for production or semi-production builds.  I.E. Anything
 # that is explicitly tagged in cvs as a version.
 AC_DEFINE(GNUCASH_CVS,1,[Define if built from untagged cvs])
