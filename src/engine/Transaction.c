@@ -53,7 +53,7 @@
  * 2 -- splits without oparents will be forced into a
  *      lost & found account.  (Not implemented)
  */
-int force_double_entry = 1;
+int force_double_entry = 0;
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
