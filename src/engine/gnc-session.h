@@ -25,27 +25,44 @@
  * gnc-session.h
  *
  * FUNCTION:
- * Encapsulate a connection to a GnuCash backend.
+ * Encapsulates a connection to a GnuCash backend.  That is, it
+ * manages the connection to a persistant data store; whereas
+ * the backend is the thing that performs the actual datastore 
+ * access.
  *
  * This class provides several important services:
  *
- * 1) Prevents multiple users from editing the same file at the same
- *    time, thus avoiding lost data due to race conditions.  Thus
- *    an open session implies that the associated file is locked.
+ * 1) It resolves and loads the appropriate backend, based on 
+ *    the URL.
+ *    
+ * 2) It reports backend errors (e.g. network errors, storage 
+ *    corruption errors) through a single, backend-independent 
+ *    API.
  *
- * 2) Provides a search path for the file to be edited.  This should 
+ * 3) It reports non-error events received from the backend.
+ *
+ * 4) It helps manage global dataset locks.  For example, for the
+ *    file backend, the lock prevents multiple users from editing 
+ *    the same file at the same time, thus avoiding lost data due 
+ *    to race conditions.  Thus, an open session implies that the 
+ *    associated file is locked.
+ *
+ * 5) Misc utilities, such as a search path for the file to be 
+ *    edited, and/or other URL resolution utilities.  This should 
  *    simplify install & maintenance problems for naive users who
  *    may not have a good grasp on what a file system is, or where
  *    they want to keep their data files.
  *
- * The current implementations assumes the use of files and file
- * locks; however, the API was designed to be general enough to
- * allow the use of generic URL's, and/or implementation on top
- * of SQL or other database/persistant object technology.
+ * 6) In the future, this class is probably a good place to manage 
+ *    a portion of the user authentication porcess, and hold user
+ *    credentials/cookies/keys/tokens.  This is because at the 
+ *    coarsest level, authorization can happen at the datastore
+ *    level: i.e. does this user even have the authority to connect
+ *    to and open this datastore?
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998, 1999 Linas Vepstas
+ * Copyright (c) 1998, 1999, 2001 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2000 Dave Peticolas
  */
 
@@ -79,14 +96,21 @@ void gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2);
  *
  *    -- Postgres URI of the form
  *       "postgres://hostname.com/dbname"
- *       See the sql subdirectory for more info.
+ *       See the src/backend/postgres subdirectory for more info.
+ *
+ *    -- RPC URI of the form rpc://hostname.com/rpcserver.
  *
  *    The 'ignore_lock' argument, if set to TRUE, will cause this routine
- *    to ignore any file locks that it finds.  If set to FALSE, then
- *    file locks will be tested and obeyed.
+ *    to ignore any global-datastore locks (e.g. file locks) that it finds. 
+ *    If set to FALSE, then file/database-global locks will be tested and 
+ *    obeyed.
  *
- *    If the file exists, can be opened and read, and a lock can be obtained
- *    then a lock will be obtained and the function returns TRUE. 
+ *    If the datastore exists, can be reached (e.g over the net), connected 
+ *    to, opened and read, and a lock can be obtained then a lock will be 
+ *    obtained and the function returns TRUE.   Note that multi-user 
+ *    datastores (e.g. the SQL backend) typically will not need to get a 
+ *    global lock, and thus, the user will not be locked out.  That's the
+ *    whole point of 'multi-user'.
  *
  *    If the file/database doesn't exist, and the create_if_nonexistent
  *    flag is set to TRUE, then the database is created.
@@ -97,8 +121,15 @@ gboolean gnc_session_begin (GNCSession *session, const char * book_id,
                          gboolean ignore_lock, gboolean create_if_nonexistent);
 
 
-/* The gnc_session_load() method loads the data associated with the session.
+/* The gnc_session_load() method causes the GNCBook to be made ready to 
+ *    to use with this URL/datastore.   When the URL points at a file, 
+ *    then this routine would load the data from the file.  With remote
+ *    backends, e.g. network or SQL, this would load only enough data
+ *    to make teh book actually usable; it would not cause *all* of the
+ *    data to be loaded.
+ *
  *    The function returns TRUE on success.
+ *    (Hack alert ... what does failure mean ???)
  */
 gboolean gnc_session_load (GNCSession *session);
 
@@ -151,13 +182,17 @@ gboolean gnc_session_not_saved(GNCSession *session);
 gboolean gnc_session_save_may_clobber_data (GNCSession *session);
 
 /* The gnc_session_save() method will commit all changes that have been
- *    made to the session. In the current implementation, this is nothing
- *    more than a write to the file of the current AccountGroup of the
- *    session.
+ *    made to the session. For the file backend, this is nothing
+ *    more than a write to the file of the current AccountGroup & etc.
+ *    For the SQL backend, this is typically a no-op (since all data
+ *    has already been written out to the database.
  *
- * The gnc_session_end() method will release the session lock. It will *not*
- *    save the account group to a file. Thus, this method acts as an "abort"
- *    or "rollback" primitive.
+ * The gnc_session_end() method will release the session lock. For the
+ *    file backend, it will *not* save the account group to a file. Thus, 
+ *    this method acts as an "abort" or "rollback" primitive.  However,
+ *    for other backends, such as the sql backend, the data would have
+ *    been written out before this, and so this routines wouldn't 
+ *    roll-back anything; it would just shut the connection.
  */
 void     gnc_session_save (GNCSession *session);
 void     gnc_session_end  (GNCSession *session);
