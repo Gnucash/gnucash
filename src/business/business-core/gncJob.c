@@ -64,7 +64,7 @@ struct _gncJob
 
 static short        module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME        GNC_JOB_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_ID_JOB
 
 /* ================================================================== */
 /* misc inline functions */
@@ -372,7 +372,7 @@ gboolean gncJobRegister (void)
     { JOB_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetName, NULL },
     { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
     { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference, NULL },
-    { JOB_OWNER, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncJobGetOwner, NULL },
+    { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, NULL },
     { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
     { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },

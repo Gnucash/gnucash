@@ -79,7 +79,7 @@ struct _book_info
 
 static short        module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME        GNC_BILLTERM_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_ID_BILLTERM
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));

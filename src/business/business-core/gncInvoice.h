@@ -39,7 +39,9 @@ typedef struct _gncInvoice GncInvoice;
 #include "qofid.h"
 #include "qofinstance.h"
 
-#define GNC_INVOICE_MODULE_NAME "gncInvoice"
+#define GNC_ID_INVOICE    "gncInvoice"
+#define GNC_IS_INVOICE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_INVOICE))
+#define GNC_INVOICE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_INVOICE, GncInvoice))
 
 /* Create/Destroy Functions */
 

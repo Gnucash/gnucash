@@ -72,7 +72,7 @@ struct _gncOrder
 
 static short	module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME	GNC_ORDER_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_ORDER
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
@@ -386,7 +386,7 @@ gboolean gncOrderRegister (void)
   static QofParam params[] = {
     { ORDER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetID, NULL },
     { ORDER_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetReference, NULL },
-    { ORDER_OWNER, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncOrderGetOwner, NULL },
+    { ORDER_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncOrderGetOwner, NULL },
     { ORDER_OPENED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateOpened, NULL },
     { ORDER_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderIsClosed, NULL },
     { ORDER_CLOSED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateClosed, NULL },

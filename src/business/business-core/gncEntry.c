@@ -169,7 +169,7 @@ gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type
 }
 #undef GNC_RETURN_ON_MATCH
 
-#define _GNC_MOD_NAME	GNC_ENTRY_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_ENTRY
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
@@ -1164,11 +1164,11 @@ gboolean gncEntryRegister (void)
     { ENTRY_QTY, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetQuantity, NULL },
     { ENTRY_IPRICE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetInvPrice, NULL },
     { ENTRY_BPRICE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetBillPrice, NULL },
-    { ENTRY_INVOICE, GNC_INVOICE_MODULE_NAME, (QofAccessFunc)gncEntryGetInvoice, NULL },
-    { ENTRY_BILL, GNC_INVOICE_MODULE_NAME, (QofAccessFunc)gncEntryGetBill, NULL },
+    { ENTRY_INVOICE, GNC_ID_INVOICE, (QofAccessFunc)gncEntryGetInvoice, NULL },
+    { ENTRY_BILL, GNC_ID_INVOICE, (QofAccessFunc)gncEntryGetBill, NULL },
     { ENTRY_BILLABLE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEntryGetBillable, NULL },
-    { ENTRY_BILLTO, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncEntryGetBillTo, NULL },
-    { ENTRY_ORDER, GNC_ORDER_MODULE_NAME, (QofAccessFunc)gncEntryGetOrder, NULL },
+    { ENTRY_BILLTO, GNC_ID_OWNER, (QofAccessFunc)gncEntryGetBillTo, NULL },
+    { ENTRY_ORDER, GNC_ID_ORDER, (QofAccessFunc)gncEntryGetOrder, NULL },
     { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },

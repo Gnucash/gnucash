@@ -333,10 +333,10 @@ order_should_be_saved (GncOrder *order)
 }
 
 static void
-do_count (gpointer order_p, gpointer count_p)
+do_count (QofEntity * order_p, gpointer count_p)
 {
   int *count = count_p;
-  if (order_should_be_saved (order_p))
+  if (order_should_be_saved ((GncOrder *) order_p))
     (*count)++;
 }
 
@@ -349,10 +349,10 @@ order_get_count (GNCBook *book)
 }
 
 static void
-xml_add_order (gpointer order_p, gpointer out_p)
+xml_add_order (QofEntity * order_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncOrder *order = order_p;
+  GncOrder *order = (GncOrder *) order_p;
   FILE *out = out_p;
 
   if (!order_should_be_saved (order))

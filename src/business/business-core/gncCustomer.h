@@ -41,7 +41,9 @@ typedef struct _gncCustomer GncCustomer;
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
 
-#define GNC_CUSTOMER_MODULE_NAME "gncCustomer"
+#define GNC_ID_CUSTOMER       "gncCustomer"
+#define GNC_IS_CUSTOMER(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_CUSTOMER))
+#define GNC_CUSTOMER(obj)     (QOF_CHECK_CAST((obj), GNC_ID_CUSTOMER, GncCustomer))
 
 /* Create/Destroy Functions */
 

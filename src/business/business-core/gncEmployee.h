@@ -36,7 +36,9 @@ typedef struct _gncEmployee GncEmployee;
 #include "gncAddress.h"
 #include "Account.h"
 
-#define GNC_EMPLOYEE_MODULE_NAME "gncEmployee"
+#define GNC_ID_EMPLOYEE "gncEmployee"
+#define GNC_IS_EMPLOYEE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_EMPLOYEE))
+#define GNC_EMPLOYEE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_EMPLOYEE, GncEmployee))
 
 /* Create/Destroy Functions */
 

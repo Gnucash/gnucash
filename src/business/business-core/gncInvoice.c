@@ -86,7 +86,7 @@ struct _gncInvoice
 
 static short	module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME	GNC_INVOICE_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_INVOICE
 
 #define GNC_INVOICE_ID		"gncInvoice"
 #define GNC_INVOICE_GUID	"invoice-guid"
@@ -1323,7 +1323,7 @@ gboolean gncInvoiceRegister (void)
 {
   static QofParam params[] = {
     { INVOICE_ID, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetID, NULL },
-    { INVOICE_OWNER, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncInvoiceGetOwner, NULL },
+    { INVOICE_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncInvoiceGetOwner, NULL },
     { INVOICE_OPENED, QOF_TYPE_DATE, (QofAccessFunc)gncInvoiceGetDateOpened, NULL },
     { INVOICE_DUE, QOF_TYPE_DATE, (QofAccessFunc)gncInvoiceGetDateDue, NULL },
     { INVOICE_POSTED, QOF_TYPE_DATE, (QofAccessFunc)gncInvoiceGetDatePosted, NULL },
@@ -1335,8 +1335,8 @@ gboolean gncInvoiceRegister (void)
     { INVOICE_POST_TXN, GNC_ID_TRANS, (QofAccessFunc)gncInvoiceGetPostedTxn, NULL },
     { INVOICE_POST_LOT, GNC_ID_LOT, (QofAccessFunc)gncInvoiceGetPostedLot, NULL },
     { INVOICE_TYPE, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetType, NULL },
-    { INVOICE_TERMS, GNC_BILLTERM_MODULE_NAME, (QofAccessFunc)gncInvoiceGetTerms, NULL },
-    { INVOICE_BILLTO, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncInvoiceGetBillTo, NULL },
+    { INVOICE_TERMS, GNC_ID_BILLTERM, (QofAccessFunc)gncInvoiceGetTerms, NULL },
+    { INVOICE_BILLTO, GNC_ID_OWNER, (QofAccessFunc)gncInvoiceGetBillTo, NULL },
     { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceGetActive, NULL },
     { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },

@@ -35,7 +35,9 @@ typedef struct _gncBillTerm GncBillTerm;
 #include "qofbook.h"
 #include "qofinstance.h"
 
-#define GNC_BILLTERM_MODULE_NAME "gncBillTerm"
+#define GNC_ID_BILLTERM       "gncBillTerm"
+#define GNC_IS_BILLTERM(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_BILLTERM))
+#define GNC_BILLTERM(obj)     (QOF_CHECK_CAST((obj), GNC_ID_BILLTERM, GncBillTerm))
 
 /*
  *  How to interpret the amount.

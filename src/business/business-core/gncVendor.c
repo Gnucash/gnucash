@@ -71,7 +71,7 @@ struct _gncVendor
 
 static short        module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME        GNC_VENDOR_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_ID_VENDOR
 
 /* ============================================================ */
 /* Misc inline funcs */

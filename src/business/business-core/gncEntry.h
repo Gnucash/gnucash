@@ -49,7 +49,9 @@ typedef enum {
 #include "qofbook.h"
 #include "qofinstance.h"
 
-#define GNC_ENTRY_MODULE_NAME "gncEntry"
+#define GNC_ID_ENTRY "gncEntry"
+#define GNC_IS_ENTRY(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ENTRY))
+#define GNC_ENTRY(obj)     (QOF_CHECK_CAST((obj), GNC_ID_ENTRY, GncEntry))
 
 /* How to apply the discount and taxes.  There are three distinct ways to
  * apply them:

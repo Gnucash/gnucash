@@ -146,7 +146,7 @@ gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type)
 /* =============================================================== */
 /* Misc inline functions */
 
-#define _GNC_MOD_NAME        GNC_TAXTABLE_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_ID_TAXTABLE
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));

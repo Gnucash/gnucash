@@ -30,10 +30,14 @@
 
 typedef struct _gncJob GncJob;
 
+#include "qofid.h"
+#include "qofinstance.h"
 #include "gncAddress.h"
 #include "gncOwner.h"
 
-#define GNC_JOB_MODULE_NAME "gncJob"
+#define GNC_ID_JOB "gncJob"
+#define GNC_IS_JOB(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_JOB))
+#define GNC_JOB(obj)     (QOF_CHECK_CAST((obj), GNC_ID_JOB, GncJob))
 
 /* Create/Destroy Functions */
 

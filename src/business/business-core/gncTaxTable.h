@@ -40,7 +40,9 @@ typedef struct _gncAccountValue GncAccountValue;
 #include "qofbook.h"
 #include "qofinstance.h"
 
-#define GNC_TAXTABLE_MODULE_NAME "gncTaxTable"
+#define GNC_ID_TAXTABLE "gncTaxTable"
+#define GNC_IS_TAXTABLE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_TAXTABLE))
+#define GNC_TAXTABLE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_TAXTABLE, GncTaxTable))
 
 /**
  * How to interpret the amount.

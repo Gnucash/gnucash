@@ -485,7 +485,7 @@ billterm_sixtp_parser_create(void)
 }
 
 static void
-do_count (gpointer term_p, gpointer count_p)
+do_count (QofEntity *term_p, gpointer count_p)
 {
   int *count = count_p;
   (*count)++;
@@ -500,10 +500,10 @@ billterm_get_count (GNCBook *book)
 }
 
 static void
-xml_add_billterm (gpointer term_p, gpointer out_p)
+xml_add_billterm (QofEntity *term_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncBillTerm *term = term_p;
+  GncBillTerm *term = (GncBillTerm *) term_p;
   FILE *out = out_p;
 
   node = billterm_dom_tree_create (term);
@@ -559,9 +559,9 @@ billterm_find_senior (GncBillTerm *term)
 
 /* build a list of bill terms that are grandchildren or bogus (empty entry list). */
 static void
-billterm_scrub_cb (gpointer term_p, gpointer list_p)
+billterm_scrub_cb (QofEntity *term_p, gpointer list_p)
 {
-  GncBillTerm *term = term_p;
+  GncBillTerm *term = (GncBillTerm *) term_p;
   GList **list = list_p;
 
   if (billterm_is_grandchild(term)) {
@@ -593,10 +593,10 @@ billterm_scrub_cb (gpointer term_p, gpointer list_p)
  * grandchildren, then fix them to point to the most senior child
  */
 static void
-billterm_scrub_invoices (gpointer invoice_p, gpointer ht_p)
+billterm_scrub_invoices (QofEntity * invoice_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncInvoice *invoice = invoice_p;
+  GncInvoice *invoice = (GncInvoice *) invoice_p;
   GncBillTerm *term, *new_bt;
   gint32 count;
 
@@ -620,10 +620,10 @@ billterm_scrub_invoices (gpointer invoice_p, gpointer ht_p)
 }
 
 static void
-billterm_scrub_cust (gpointer cust_p, gpointer ht_p)
+billterm_scrub_cust (QofEntity * cust_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncCustomer *cust = cust_p;
+  GncCustomer *cust = (GncCustomer *) cust_p;
   GncBillTerm *term;
   gint32 count;
   
@@ -636,10 +636,10 @@ billterm_scrub_cust (gpointer cust_p, gpointer ht_p)
 }
 
 static void
-billterm_scrub_vendor (gpointer vendor_p, gpointer ht_p)
+billterm_scrub_vendor (QofEntity * vendor_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncVendor *vendor = vendor_p;
+  GncVendor *vendor = (GncVendor *) vendor_p;
   GncBillTerm *term;
   gint32 count;
 

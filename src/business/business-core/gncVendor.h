@@ -38,7 +38,9 @@ typedef struct _gncVendor GncVendor;
 #include "qofid.h"
 #include "qofinstance.h"
 
-#define GNC_VENDOR_MODULE_NAME "gncVendor"
+#define GNC_ID_VENDOR       "gncVendor"
+#define GNC_IS_VENDOR(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_VENDOR))
+#define GNC_VENDOR(obj)     (QOF_CHECK_CAST((obj), GNC_ID_VENDOR, GncVendor))
 
 /* Create/Destroy Functions */
 
