@@ -585,6 +585,9 @@ date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
                                    1900 + tm.tm_year);
         gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), tm.tm_mday);
 
+	gtk_signal_emit (GTK_OBJECT (gde), date_edit_signals [DATE_CHANGED]);
+	gtk_signal_emit (GTK_OBJECT (gde), date_edit_signals [TIME_CHANGED]);
+
         return TRUE;
 }
 
