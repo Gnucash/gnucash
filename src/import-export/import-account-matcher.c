@@ -123,6 +123,7 @@ static gboolean acct_tree_add_accts(struct _accountpickerdialog * picker, Accoun
 	  {
 	    gtk_ctree_expand (tree,
 			      node);
+	    expand_parent=TRUE;
 	  }
     }
   return expand_parent;
