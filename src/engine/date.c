@@ -30,6 +30,7 @@
 #include "config.h"
 
 #include <ctype.h>
+#include <langinfo.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -136,7 +137,7 @@ printDate (char * buff, int day, int month, int year)
         tm_str.tm_sec = 0;
         tm_str.tm_isdst = -1;
 
-        strftime (buff, MAX_DATE_LENGTH, "%x", &tm_str);
+        strftime (buff, MAX_DATE_LENGTH, nl_langinfo (D_FMT), &tm_str);
       }
       break;
 
@@ -239,7 +240,7 @@ scanDate (const char *buff, int *day, int *month, int *year)
        {
          struct tm thetime;
 
-         strptime (buff, "%x", &thetime);
+         strptime (buff, nl_langinfo (D_FMT), &thetime);
 
          iday = thetime.tm_mday;
          imonth = thetime.tm_mon + 1;
@@ -313,7 +314,7 @@ char dateSeparator ()
 
         secs = time(NULL);
         tm = localtime(&secs);
-        strftime(string, sizeof(string), "%x", tm);
+        strftime(string, sizeof(string), nl_langinfo (D_FMT), tm);
 
         for (s = string; s != '\0'; s++)
           if (!isdigit(*s))
@@ -393,7 +394,7 @@ gnc_iso8601_to_timespec(const char *str, int do_localtime)
   /* adjust for the local timezone */
   if (do_localtime)
   {
-    int tz_hour=0;
+    time_t tz_hour = 0;
     localtime (&tz_hour);   /* bogus call, forces 'timezone' to be set */
     tz_hour = timezone/3600;
     stm.tm_hour -= tz_hour;

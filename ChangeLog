@@ -1,3 +1,8 @@
+2001-02-14  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/date.c: use nl_langinfo (D_FMT) instead of %x for
+	locale-based date formatting and parsing.
+
 2001-02-14  Bill Gribble  <grib@billgribble.com>
 
 	* src/scm/qif-import/*.scm: fuzzify account type rules a bit to
