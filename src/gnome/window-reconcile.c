@@ -333,6 +333,10 @@ gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
       xaccAccountGetShareBalanceAsOfDate (data->account, new_date) :
       xaccAccountGetBalanceAsOfDate (data->account, new_date);
 
+    /* use the correct sign */
+    if (gnc_reverse_balance (data->account))
+      new_balance = gnc_numeric_neg (new_balance);
+
     /* update the amount edit with the amount */
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), new_balance);
 }

@@ -1,3 +1,8 @@
+2001-06-23  Kevin Finn  <kevinfinn@mediaone.net>
+
+	* src/gnome/window-reconcile.c: fix for display of auto end value
+	updates.
+
 2001-06-23  Dave Peticolas  <dave@krondo.com>
 
 	* doc/sgml/C/xacc-about.sgml: credits
