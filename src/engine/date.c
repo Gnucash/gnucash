@@ -475,11 +475,13 @@ scanDateInternal (const char *buff, int *day, int *month, int *year,
 
    /* use strtok to find delimiters */
    if (tmp) {
-      first_field = strtok (tmp, ".,-+/\\()");
+     static char *delims = ".,-+/\\() ";
+
+      first_field = strtok (tmp, delims);
       if (first_field) {
-         second_field = strtok (NULL, ".,-+/\\()");
+         second_field = strtok (NULL, delims);
          if (second_field) {
-            third_field = strtok (NULL, ".,-+/\\()");
+            third_field = strtok (NULL, delims);
          }
       }
    }

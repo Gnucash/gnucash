@@ -2477,7 +2477,7 @@ gnc_option_db_set_string_option(GNCOptionDB *odb,
     return FALSE;
 
   if (value)
-    scm_value = gh_str2scm(value, strlen(value));
+    scm_value = gh_str2scm((char*)value, strlen(value));
   else
     scm_value = SCM_BOOL_F;
 
