@@ -399,7 +399,7 @@ readGroup (int fd, Account *aparent, int token)
   int  i;
   AccountGroup *grp = xaccMallocAccountGroup();
   
-  ENTER ("");
+  ENTER ("\n");
 
   if (NULL == aparent) {
     maingrp = grp;
@@ -454,7 +454,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   Account *acc;
   char * tmp;
 
-  ENTER ("");
+  ENTER ("\n");
   
   /* version 1 does not store the account number */
   if (1 < token) {
@@ -736,7 +736,7 @@ readTransaction( int fd, Account *acc, int token )
   double num_shares = 0.0;
   double share_price = 0.0;
 
-  ENTER ("");
+  ENTER ("\n");
 
   /* create a transaction structure */
   trans = xaccMallocTransaction();
@@ -1065,7 +1065,7 @@ readSplit ( int fd, int token )
   /* create a split structure */
   split = xaccMallocSplit();
   
-  ENTER ("");
+  ENTER ("\n");
 
   tmp = readString( fd, token );
   if( NULL == tmp )
@@ -1406,7 +1406,7 @@ xaccWriteAccountGroup (int fd, AccountGroup *grp )
   int token = VERSION;    /* The file format version */
   int err = 0;
 
-  ENTER ("");
+  ENTER ("\n");
   
   if( 0 > fd )
     {
@@ -1473,7 +1473,7 @@ writeGroup (int fd, AccountGroup *grp )
   int i,numAcc;
   int err = 0;
 
-  ENTER ("");
+  ENTER ("\n");
   
   if (NULL == grp) return 0;
 
@@ -1657,7 +1657,7 @@ writeTransaction( int fd, Transaction *trans )
   int i=0;
   Timespec ts;
 
-  ENTER ("");
+  ENTER ("\n");
   
   err = writeString( fd, xaccTransGetNum (trans) );
   if( -1 == err ) return err;
@@ -1713,7 +1713,7 @@ writeSplit ( int fd, Split *split )
   Account *xfer_acc = NULL;
   char recn;
 
-  ENTER ("");
+  ENTER ("\n");
   
   err = writeString( fd, xaccSplitGetMemo (split) );
   if( -1 == err )
@@ -1774,7 +1774,7 @@ writeInvAcct ( int fd, InvAcct * invacct )
   {
   int err=0;
 
-  ENTER ("");
+  ENTER ("\n");
   if (!invacct) return 0;
   
   err = writeString( fd, xaccInvAcctGetPriceSrc (invacct) );
@@ -1798,7 +1798,7 @@ writeAccInfo ( int fd, AccInfo *accinfo )
   int err=0;
   InvAcct *invacct=NULL;
 
-  ENTER ("");
+  ENTER ("\n");
   if (!accinfo) return err;
 
   invacct = xaccCastToInvAcct (accinfo);
