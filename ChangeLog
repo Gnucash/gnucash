@@ -7,6 +7,8 @@
 	popup.  Only set the popup for Read-Write invoices.
 	* business/business-gnome/glade/invoice.glade: define the popup
 	menu in glade.
+
+	* add a menubar to the Invoice Window in glade
 	
 2002-07-01  Derek Atkins  <derek@ihtfp.com>
 

@@ -457,7 +457,16 @@
       <shadow_type>GTK_SHADOW_OUT</shadow_type>
 
       <widget>
-	<class>Placeholder</class>
+	<class>GtkMenuBar</class>
+	<name>menubar1</name>
+	<shadow_type>GTK_SHADOW_OUT</shadow_type>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>placeholder1</name>
+	  <label>PlaceHolder</label>
+	  <right_justify>False</right_justify>
+	</widget>
       </widget>
     </widget>
 
