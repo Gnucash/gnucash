@@ -1,5 +1,8 @@
 2001-05-14  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/sixtp-dom-generators.c (add_kvp_value_node): use
+	xmlNewTextChild.
+
 	* src/scm/report/register.scm: reverse balance where appropriate.
 	put total in proper column.
 
