@@ -142,7 +142,7 @@ do_test_call(
         return result;
 }
 
-void
+gboolean
 do_test_args(
 	gboolean result,
 	const char* test_title,
@@ -160,6 +160,8 @@ do_test_args(
 		vfailure_args( test_title, filename, line, format, ap );
 	}
 	va_end(ap);
+
+        return result;
 }
 
 void
@@ -199,7 +201,10 @@ get_random_boolean(void)
 gint
 get_random_int_in_range(int start, int end)
 {
-    return start + (int)((double)end * rand() / (RAND_MAX + 1.0));
+  return CLAMP (start + (int)((double)(end - start + 1) * rand() /
+                              (RAND_MAX + 1.0)),
+                start,
+                end);
 }
 
 static char *random_chars = NULL;

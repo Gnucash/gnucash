@@ -19,7 +19,7 @@
 static gboolean glist_strings_only = FALSE;
 
 static GHashTable *exclude_kvp_types = NULL;
-static gint kvp_max_depth = G_MAXINT;
+static gint kvp_max_depth = 5;
 static gint kvp_frame_max_elements = 10;
 
 static gint max_group_depth = 4;
@@ -218,11 +218,17 @@ get_random_glist_depth (gint depth)
     for (i = 0; i < count; i++)
     {
         kvp_value_t kvpt;
+        kvp_value *value;
 
         kvpt = glist_strings_only ? KVP_TYPE_STRING : -2;
 
-        ret = g_list_prepend(ret,
-                             get_random_kvp_value_depth (kvpt, depth + 1));
+        do
+        {
+          value = get_random_kvp_value_depth (kvpt, depth + 1);
+        }
+        while (!value);
+
+        ret = g_list_prepend(ret, value);
     }
 
     return ret;
@@ -258,6 +264,7 @@ get_random_kvp_frame_depth (gint depth)
 {
     kvp_frame *ret;
     int vals_to_add;
+    gboolean val_added;
 
     if (depth >= kvp_max_depth)
       return NULL;
@@ -265,6 +272,7 @@ get_random_kvp_frame_depth (gint depth)
     ret = kvp_frame_new();
 
     vals_to_add = get_random_int_in_range(1,kvp_frame_max_elements);
+    val_added = FALSE;
 
     for(;vals_to_add > 0; vals_to_add--)
     {
@@ -278,11 +286,15 @@ get_random_kvp_frame_depth (gint depth)
         {
             return NULL;
         }
+
         if (!val)
         {
-          vals_to_add++;
+          if (!val_added)
+            vals_to_add++;
           continue;
         }
+
+        val_added = TRUE;
 
         kvp_frame_set_slot_nc(ret, key, val);
 
@@ -303,14 +315,14 @@ get_random_kvp_value_depth (int type, gint depth)
 {
     int datype = type;
 
-    if(datype == -1)
-    {
-        datype = get_random_int_in_range(KVP_TYPE_GINT64, KVP_TYPE_FRAME + 1);
-    }
-
-    if(datype == -2)
+    if (datype == -1)
     {
         datype = get_random_int_in_range(KVP_TYPE_GINT64, KVP_TYPE_FRAME);
+    }
+
+    if (datype == -2)
+    {
+        datype = get_random_int_in_range(KVP_TYPE_GINT64, KVP_TYPE_FRAME - 1);
     }
 
     if (datype == KVP_TYPE_FRAME && depth >= kvp_max_depth)
@@ -440,7 +452,7 @@ get_random_group_depth(GNCSession *session, int depth)
   AccountGroup *group;
   int num_accounts;
 
-  if (depth == 0)
+  if (depth <= 0)
     return NULL;
 
   group = xaccMallocAccountGroup (session);
@@ -508,7 +520,7 @@ set_split_random_string(Split *spl,
     }
 }
 
-static char possible_chars[] = { 'c', 'y', 'f', 'n' };
+static char possible_chars[] = { 'c', 'y', 'f', 'n', 'v' };
 
 Split*
 get_random_split(GNCSession *session, gnc_numeric num)
@@ -540,6 +552,12 @@ get_random_split(GNCSession *session, gnc_numeric num)
     }
 
     return ret;
+}
+
+void
+make_random_changes_to_split (Split *split)
+{
+  g_return_if_fail (split);
 }
 
 static void

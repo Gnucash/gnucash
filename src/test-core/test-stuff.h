@@ -63,7 +63,7 @@ gboolean do_test_call(
 		const char* test_title,
 		const char* filename,
 		int line );
-void do_test_args(
+gboolean do_test_args(
 		gboolean result,
 		const char* test_title,
 		const char* filename,

@@ -59,4 +59,6 @@ GNCSession * get_random_session (void);
 void add_random_transactions_to_session (GNCSession *session,
                                          gint num_transactions);
 
+void make_random_changes_to_split (Split *split);
+
 #endif
