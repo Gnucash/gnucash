@@ -359,7 +359,9 @@ static int inputBoxCB(AB_BANKING *ab,
     else {
       g_assert (maxLen > strlen(resultbuffer));
       strcpy(resultbuffer, passwd);
-      if (text && data->cache_pin) {
+      /* Watch out: If we only compare the user string, then don't
+	 cache this if a TAN is asked for. */
+      if (text && data->cache_pin && !(strstr(text, "TAN"))) {
 	/*printf("Cached the PIN for user %s.\n", HBCI_User_userId (user));*/
 	data->cache_text= g_strdup(text);
 	if (data->pw)
