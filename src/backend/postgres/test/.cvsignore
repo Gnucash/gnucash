@@ -1,3 +1,4 @@
 Makefile
 Makefile.in
 gnc_test
+test-db
