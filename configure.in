@@ -778,10 +778,10 @@ then
     GNOME_COMPILE_WARNINGS
 
     # look for gdk-pixbuf
-    AM_PATH_GDK_PIXBUF(2.0.0,,AC_MSG_ERROR([
-*** GDK_PIXBUF >= 2.0 is required to build Gnucash; please make sure you have the
-*** development headers installed. The latest version of GDK_PIXBUF is
-*** always available at ftp://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/.]))
+    PKG_CHECK_MODULES(GDK_PIXBUF, gdk-pixbuf-2.0)
+    AS_SCRUB_INCLUDE(GDK_PIXBUF_CFLAGS)
+    AC_SUBST(GDK_PIXBUF_CFLAGS)
+    AC_SUBST(GDK_PIXBUF_LIBS)
 
     # Gnome-Print
     PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.0)

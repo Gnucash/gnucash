@@ -1,3 +1,8 @@
+2003-03-12  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: can't use AM_PATH_GDK_PIXBUF; that's a gnome-1
+	  feature and doesn't work for gnome2
+
 2003-03-11  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: get the configure script to actually attempt to do
