@@ -783,9 +783,9 @@ add_price(GNCPriceDB *db, GNCPrice *p)
 
   LEAVE ("db=%p, pr=%p dirty=%d do-free=%d commodity=%s/%s currency_hash=%p",
          db, p, p->inst.dirty, p->inst.do_free,
-	 gnc_commodity_get_namespace(p->commodity),
-	 gnc_commodity_get_mnemonic(p->commodity),
-	 currency_hash);
+         gnc_commodity_get_namespace(p->commodity),
+         gnc_commodity_get_mnemonic(p->commodity),
+         currency_hash);
   return TRUE;
 }
 
@@ -1035,9 +1035,9 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
 
 GList *
 gnc_pricedb_lookup_day(GNCPriceDB *db,
-		       gnc_commodity *c,
-		       gnc_commodity *currency,
-		       Timespec t)
+                       gnc_commodity *c,
+                       gnc_commodity *currency,
+                       Timespec t)
 {
   GList *price_list;
   GList *result = NULL;
@@ -1105,8 +1105,8 @@ lookup_day(gpointer key, gpointer val, gpointer user_data)
 
 GList *
 gnc_pricedb_lookup_day_any_currency(GNCPriceDB *db,
- 		                    gnc_commodity *c,
-		                    Timespec t)
+                                     gnc_commodity *c,
+                                    Timespec t)
 {
   GList *result = NULL;
   GHashTable *currency_hash;
@@ -1213,8 +1213,8 @@ lookup_time(gpointer key, gpointer val, gpointer user_data)
 
 GList *
 gnc_pricedb_lookup_at_time_any_currency(GNCPriceDB *db,
- 		                        gnc_commodity *c,
-		                        Timespec t)
+                                         gnc_commodity *c,
+                                        Timespec t)
 {
   GList *result = NULL;
   GHashTable *currency_hash;
@@ -1313,9 +1313,9 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
       Timespec abs_next = timespec_abs(&diff_next);
       
       if (timespec_cmp(&abs_current, &abs_next) <= 0) {
-	result = current_price;
+        result = current_price;
       } else {
-	result = next_price;
+        result = next_price;
       }
     }
   }
@@ -1368,9 +1368,9 @@ lookup_nearest(gpointer key, gpointer val, gpointer user_data)
       Timespec abs_next = timespec_abs(&diff_next);
       
       if (timespec_cmp(&abs_current, &abs_next) <= 0) {
-	result = current_price;
+        result = current_price;
       } else {
-	result = next_price;
+        result = next_price;
       }
     }
   }
@@ -1380,8 +1380,8 @@ lookup_nearest(gpointer key, gpointer val, gpointer user_data)
 
 GList *
 gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
- 		                                gnc_commodity *c,
-		                                Timespec t)
+                                                 gnc_commodity *c,
+                                                Timespec t)
 {
   GList *result = NULL;
   GHashTable *currency_hash;
@@ -1422,9 +1422,9 @@ gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
  */
 gnc_numeric
 gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
-				         gnc_numeric balance,
-				         gnc_commodity *balance_currency,
-				         gnc_commodity *new_currency)
+                                         gnc_numeric balance,
+                                         gnc_commodity *balance_currency,
+                                         gnc_commodity *new_currency)
 {
   GNCPrice *price, *currency_price;
   GList *price_list, *list_helper;
@@ -1439,8 +1439,8 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
   price = gnc_pricedb_lookup_latest (pdb, balance_currency, new_currency);
   if (price) {
     balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
-			       gnc_commodity_get_fraction (new_currency),
-			       GNC_RND_ROUND);
+                               gnc_commodity_get_fraction (new_currency),
+                               GNC_HOW_RND_ROUND);
     gnc_price_unref (price);
     return balance;
   }
@@ -1463,33 +1463,33 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
 
     intermediate_currency = gnc_price_get_currency(price);
     currency_price = gnc_pricedb_lookup_latest(pdb, intermediate_currency,
-					       new_currency);
+                                               new_currency);
     if(currency_price) {
       currency_price_value = gnc_price_get_value(currency_price);
       gnc_price_unref(currency_price);
     } else {
       currency_price = gnc_pricedb_lookup_latest(pdb, new_currency,
-						 intermediate_currency);
+                                                 intermediate_currency);
       if (currency_price) {
-	/* here we need the reciprocal */
-	currency_price_value = gnc_numeric_div(gnc_numeric_create(1, 1),
-					       gnc_price_get_value(currency_price),
-					       GNC_DENOM_AUTO,
-					       GNC_DENOM_EXACT | GNC_RND_NEVER);
-	gnc_price_unref(currency_price);
+        /* here we need the reciprocal */
+        currency_price_value = gnc_numeric_div(gnc_numeric_create(1, 1),
+                              gnc_price_get_value(currency_price),
+                              GNC_DENOM_AUTO,
+                              GNC_HOW_DENOM_EXACT | GNC_HOW_RND_NEVER);
+        gnc_price_unref(currency_price);
       }
     }
 
     list_helper = list_helper->next;
   } while((list_helper != NULL) &&
-	  (!gnc_numeric_zero_p(currency_price_value)));
+          (!gnc_numeric_zero_p(currency_price_value)));
 
   balance = gnc_numeric_mul (balance, currency_price_value,
-			     gnc_commodity_get_fraction (new_currency),
-			     GNC_RND_ROUND);      
+                             gnc_commodity_get_fraction (new_currency),
+                             GNC_HOW_RND_ROUND);      
   balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
-			     gnc_commodity_get_fraction (new_currency),
-			     GNC_RND_ROUND);      
+                             gnc_commodity_get_fraction (new_currency),
+                             GNC_HOW_RND_ROUND);      
 
   gnc_price_list_destroy(price_list);
   return balance;
@@ -1497,10 +1497,10 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
 
 gnc_numeric
 gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
-				          gnc_numeric balance,
-				          gnc_commodity *balance_currency,
-				          gnc_commodity *new_currency,
-					  Timespec t)
+                                          gnc_numeric balance,
+                                          gnc_commodity *balance_currency,
+                                          gnc_commodity *new_currency,
+                                          Timespec t)
 {
   GNCPrice *price, *currency_price;
   GList *price_list, *list_helper;
@@ -1515,8 +1515,8 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
   price = gnc_pricedb_lookup_nearest_in_time (pdb, balance_currency, new_currency, t);
   if (price) {
     balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
-			       gnc_commodity_get_fraction (new_currency),
-			       GNC_RND_ROUND);
+                               gnc_commodity_get_fraction (new_currency),
+                               GNC_HOW_RND_ROUND);
     gnc_price_unref (price);
     return balance;
   }
@@ -1539,33 +1539,33 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
 
     intermediate_currency = gnc_price_get_currency(price);
     currency_price = gnc_pricedb_lookup_nearest_in_time(pdb, intermediate_currency,
-					                new_currency, t);
+                                                        new_currency, t);
     if(currency_price) {
       currency_price_value = gnc_price_get_value(currency_price);
       gnc_price_unref(currency_price);
     } else {
       currency_price = gnc_pricedb_lookup_nearest_in_time(pdb, new_currency,
-						          intermediate_currency, t);
+                                                          intermediate_currency, t);
       if (currency_price) {
-	/* here we need the reciprocal */
-	currency_price_value = gnc_numeric_div(gnc_numeric_create(1, 1),
-					       gnc_price_get_value(currency_price),
-					       gnc_commodity_get_fraction (new_currency),
-					       GNC_RND_ROUND);
-	gnc_price_unref(currency_price);
+        /* here we need the reciprocal */
+        currency_price_value = gnc_numeric_div(gnc_numeric_create(1, 1),
+                                               gnc_price_get_value(currency_price),
+                                               gnc_commodity_get_fraction (new_currency),
+                                               GNC_HOW_RND_ROUND);
+        gnc_price_unref(currency_price);
       }
     }
 
     list_helper = list_helper->next;
   } while((list_helper != NULL) &&
-	  (!gnc_numeric_zero_p(currency_price_value)));
+          (!gnc_numeric_zero_p(currency_price_value)));
 
   balance = gnc_numeric_mul (balance, currency_price_value,
-			     gnc_commodity_get_fraction (new_currency),
-			     GNC_RND_ROUND);      
+                             gnc_commodity_get_fraction (new_currency),
+                             GNC_HOW_RND_ROUND);      
   balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
-			     gnc_commodity_get_fraction (new_currency),
-			     GNC_RND_ROUND);      
+                             gnc_commodity_get_fraction (new_currency),
+                             GNC_HOW_RND_ROUND);      
 
   gnc_price_list_destroy(price_list);
   return balance;
@@ -1662,7 +1662,7 @@ stable_price_traversal(GNCPriceDB *db,
 
   currency_hashes = g_hash_table_key_value_pairs(db->commodity_hash);
   currency_hashes = g_slist_sort(currency_hashes,
-				 compare_kvpairs_by_commodity_key);
+                                 compare_kvpairs_by_commodity_key);
 
   for(i = currency_hashes; i; i = i->next) {
     GHashTableKVPair *kv_pair = (GHashTableKVPair *) i->data;
