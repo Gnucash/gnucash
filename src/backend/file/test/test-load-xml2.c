@@ -48,12 +48,14 @@ test_load_file(const char *filename)
 {
     GNCSession *session;
     GNCBook *book;
+    gboolean ignore_lock;
 
     session = gnc_session_new();
 
     remove_locks(filename);
 
-    gnc_session_begin(session, filename, TRUE, FALSE);
+    ignore_lock = (strcmp(getenv("SRCDIR"), ".") != 0);
+    gnc_session_begin(session, filename, ignore_lock, FALSE);
 
     gnc_session_load_from_xml_file_v2(session, NULL);
 
