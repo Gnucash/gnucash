@@ -1,6 +1,7 @@
 Makefile
 Makefile.in
 .scm-links
+gw-app-utils.scm
 gw-app-utils.c
 gw-app-utils.h
 gw-app-utils.html
