@@ -877,6 +877,8 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
         }
       datafile = NULL;
+      /* destroy open windows first, before destroying the group itself */
+      xaccGroupWindowDestroy (grp);
       freeAccountGroup (grp);
       grp = mallocAccountGroup();
       grp->new = True;             /* so we have to do a "SaveAs" when
@@ -990,6 +992,8 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
         }
       
+      /* destroy open windows first, before destroying the group itself */
+      xaccGroupWindowDestroy (grp);
       freeAccountGroup (grp);
       topgroup = NULL;
       XtUnmapWidget(toplevel);     /* make it disappear quickly */
