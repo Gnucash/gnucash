@@ -656,7 +656,10 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
          /* Make sure the existing gains trans has the correct currency,
           * just in case someone screwed with it! */
-         xaccTransSetCurrency (trans, currency);
+         if (FALSE == gnc_commodity_equiv(currency,trans->common_currency))
+         {
+            xaccTransSetCurrency (trans, currency);
+         }
       }
 
       /* Common to both */
