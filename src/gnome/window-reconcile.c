@@ -459,10 +459,29 @@ static void
 gnc_reconcile_window_list_cb(GNCReconcileList *list, Split *split,
                              gpointer data)
 {
-  RecnWindow *recnData = (RecnWindow *) data;
+  RecnWindow *recnData = data;
 
   gnc_reconcile_window_set_sensitivity(recnData);
   recnRecalculateBalance(recnData);
+}
+
+static void
+gnc_reconcile_window_double_click_cb(GNCReconcileList *list, Split *split,
+                                     gpointer data)
+{
+  RecnWindow *recnData = data;
+  RegWindow *regData;
+
+  /* This should never be true, but be paranoid */
+  if (split == NULL)
+    return;
+
+  regData = regWindowSimple(recnData->account);
+  if (regData == NULL)
+    return;
+
+  gnc_register_raise(regData);
+  gnc_register_jump_to_split_amount(regData, split);
 }
 
 static void
@@ -558,6 +577,9 @@ gnc_reconcile_window_create_list_box(Account *account,
 
   gtk_signal_connect(GTK_OBJECT(list), "toggle_reconciled",
                      GTK_SIGNAL_FUNC(gnc_reconcile_window_list_cb),
+                     recnData);
+  gtk_signal_connect(GTK_OBJECT(list), "double_click_split",
+                     GTK_SIGNAL_FUNC(gnc_reconcile_window_double_click_cb),
                      recnData);
   gtk_signal_connect(GTK_OBJECT(list), "focus_in_event",
                      GTK_SIGNAL_FUNC(gnc_reconcile_window_focus_cb),

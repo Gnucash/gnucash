@@ -39,6 +39,7 @@
 enum
 {
   TOGGLE_RECONCILED,
+  DOUBLE_CLICK_SPLIT,
   LAST_SIGNAL
 };
 
@@ -227,6 +228,16 @@ gnc_reconcile_list_class_init(GNCReconcileListClass *klass)
 		   GTK_TYPE_NONE, 1,
 		   GTK_TYPE_POINTER);
 
+  reconcile_list_signals[DOUBLE_CLICK_SPLIT] =
+    gtk_signal_new("double_click_split",
+		   GTK_RUN_FIRST,
+		   object_class->type,
+		   GTK_SIGNAL_OFFSET(GNCReconcileListClass,
+				     double_click_split),
+		   gtk_marshal_NONE__POINTER,
+		   GTK_TYPE_NONE, 1,
+		   GTK_TYPE_POINTER);
+
   gtk_object_class_add_signals(object_class,
 			       reconcile_list_signals,
 			       LAST_SIGNAL);
@@ -237,6 +248,7 @@ gnc_reconcile_list_class_init(GNCReconcileListClass *klass)
   clist_class->unselect_row = gnc_reconcile_list_unselect_row;
 
   klass->toggle_reconciled = NULL;
+  klass->double_click_split = NULL;
 }
 
 static void
@@ -290,8 +302,7 @@ gnc_reconcile_list_toggle(GNCReconcileList *list)
   gnc_reconcile_list_set_row_style(list, row, reconciled);
 
   gtk_signal_emit(GTK_OBJECT(list),
-		  reconcile_list_signals[TOGGLE_RECONCILED],
-		  split);
+                  reconcile_list_signals[TOGGLE_RECONCILED], split);
 }
 
 static void
@@ -304,6 +315,16 @@ gnc_reconcile_list_select_row(GtkCList *clist, gint row, gint column,
   gnc_reconcile_list_toggle(list);
 
   GTK_CLIST_CLASS(parent_class)->select_row(clist, row, column, event);
+
+  if (event && (event->type == GDK_2BUTTON_PRESS))
+  {
+    Split *split;
+
+    split = gtk_clist_get_row_data(clist, row);
+
+    gtk_signal_emit(GTK_OBJECT(list),
+                    reconcile_list_signals[DOUBLE_CLICK_SPLIT], split);
+  }
 }
 
 static void
@@ -320,6 +341,16 @@ gnc_reconcile_list_unselect_row(GtkCList *clist, gint row, gint column,
   }
 
   GTK_CLIST_CLASS(parent_class)->unselect_row(clist, row, column, event);
+
+  if (event && (event->type == GDK_2BUTTON_PRESS))
+  {
+    Split *split;
+
+    split = gtk_clist_get_row_data(clist, row);
+
+    gtk_signal_emit(GTK_OBJECT(list),
+                    reconcile_list_signals[DOUBLE_CLICK_SPLIT], split);
+  }
 }
 
 static void

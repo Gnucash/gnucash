@@ -75,6 +75,8 @@ struct _GNCReconcileListClass
 
   void (*toggle_reconciled) (GNCReconcileList *list,
 			     Split            *split);
+  void (*double_click_split) (GNCReconcileList *list,
+                              Split            *split);
 };
 
 /***********************************************************
