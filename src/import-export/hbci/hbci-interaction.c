@@ -345,7 +345,7 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
     
   retval = gnc_ok_cancel_dialog_parented (data->parent,
 					  GNC_VERIFY_OK, 
-					  msgstr);
+					  "%s", msgstr);
   g_free (msgstr);
   
   return (retval == GNC_VERIFY_OK);
@@ -414,7 +414,7 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
   
   retval = gnc_ok_cancel_dialog_parented (data->parent,
 					  GNC_VERIFY_OK,
-					  msgstr);
+					  "%s", msgstr);
   g_free (msgstr);
   
   return (retval == GNC_VERIFY_OK);

@@ -1757,7 +1757,7 @@ delete_button_clicked( GtkButton *b, gpointer d )
                  * they confirm they actually want to do the deletion
                  * generically.  If it's false, cleanup and return. */
                 if ( ! (destroyOpenedResult =
-                        gnc_verify_dialog_parented( sxd->dialog, FALSE,
+                        gnc_verify_dialog_parented( sxd->dialog, FALSE, "%s",
                                                     realConfDelOpenMsg->str )) ) {
                         for ( l = beingEditedList; l; l = l->next ) {
                                 g_list_free( (GList*)l->data );
@@ -1768,7 +1768,7 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 }
         }
 
-        if ( gnc_verify_dialog_parented( sxd->dialog, FALSE,
+        if ( gnc_verify_dialog_parented( sxd->dialog, FALSE, "%s",
                                          realConfDeleteMsg->str ) ) {
                 /* Close the being-edited transactions. */
                 if ( destroyOpenedResult ) {

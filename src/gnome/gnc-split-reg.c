@@ -1163,10 +1163,10 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
       g_free (buf);
       buf = new_buf;
       result =
-        gnc_generic_warning_dialog_parented(gsr->window, two_choices, buf);
+        gnc_generic_warning_dialog_parented(gsr->window, two_choices, "%s", buf);
     } else {
       result =
-        gnc_generic_question_dialog_parented(gsr->window, two_choices,buf);
+        gnc_generic_question_dialog_parented(gsr->window, two_choices, "%s", buf);
     }
     g_free(buf);
 
@@ -1197,7 +1197,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     } else {
       buf = g_strdup (message);
       result =
-        gnc_generic_question_dialog_parented(gsr->window, two_choices,buf);
+        gnc_generic_question_dialog_parented(gsr->window, two_choices, buf);
     }
 
     g_free (buf);
@@ -2098,7 +2098,7 @@ gtk_callback_bug_workaround (gpointer argp)
 {
   dialog_args *args = argp;
 
-  gnc_warning_dialog_parented(args->gsr->window, args->string);
+  gnc_warning_dialog_parented(args->gsr->window, "%s", args->string);
   g_free(args);
   return FALSE;
 }
