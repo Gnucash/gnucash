@@ -1,5 +1,7 @@
 2000-08-23  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/kvp_frame.c: use g_strdup, not strdup.
+
 	* src/calculation/expression_parser.c: use glib memory routines.
 	(exit_parser): fix a bug where pe->named_vars was freed twice.
 
