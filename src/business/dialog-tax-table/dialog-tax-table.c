@@ -191,6 +191,7 @@ make_menu (GtkWidget *omenu, NewTaxTable *ntt)
 
   menu = gtk_menu_new ();
   value = add_menu_item (menu, ntt, _("Value $"), GNC_AMT_TYPE_VALUE);
+  /* xgettext:no-c-format */
   percent = add_menu_item (menu, ntt, _("Percent %"), GNC_AMT_TYPE_PERCENT);
 
   gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
