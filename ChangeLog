@@ -9,6 +9,10 @@
 	* src/doc/Makefile.am: add new documentation: generic-druid-framework.txt
 	* src/doc/generic-druid-framework.txt: new documentation
 
+	* src/import-export/csv/gnc-csv2glist.[ch]: add file from Kevin Hammack
+	  to parse CSV files.
+	* src/import-export/csv/test/test.csv:  a test CSV file
+
 2004-01-07  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Transaction.h: fix the xaccTransOrder() documentation
