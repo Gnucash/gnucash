@@ -302,6 +302,8 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
    char buff[2];
    time_t secs;
    double baln;
+   int typo = reg->type & REG_TYPE_MASK;
+   int style = reg->type & REG_STYLE_MASK;
 
    /* don't even bother doing a load if there is no current cursor */
    if (!(reg->table->current_cursor)) return;
@@ -344,8 +346,8 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
        * bank account, and a debit to the income account.
        * Thus, positive and negative are interchanged */
       baln = xaccSplitGetBalance (split);
-      if ((INCOME_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-          (EXPENSE_REGISTER == (reg->type & REG_TYPE_MASK))) { 
+      if ((INCOME_REGISTER == typo) ||
+          (EXPENSE_REGISTER == typo)) { 
          baln = -baln;
       }
       xaccSetPriceCellValue (reg->balanceCell, baln);
@@ -360,7 +362,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
        * For a one or two-line display, show the other account, but only    
        * if there are exactly two splits.                                   
        */
-      if (reg->type & REG_MULTI_LINE) {	
+      if (REG_MULTI_LINE == style) {	
          accname = xaccAccountGetName (xaccSplitGetAccount (split));
          xaccSetComboCellValue (reg->xfrmCell, accname);
       } else {
@@ -379,17 +381,17 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recnCell, buff);
    
-      if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-          (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
-          (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
+      if ((EQUITY_REGISTER == typo) ||
+          (STOCK_REGISTER  == typo) ||
+          (PORTFOLIO       == typo)) 
       { 
          amt = xaccSplitGetShareAmount (split);
       } else {
          amt = xaccSplitGetValue (split);
       }
-      xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, -amt);
+      xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, amt);
       xaccSetPriceCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
-      xaccSetPriceCellValue (reg->valueCell, -xaccSplitGetValue (split));
+      xaccSetPriceCellValue (reg->valueCell, xaccSplitGetValue (split));
    }
 
    reg->table->current_cursor->user_data = (void *) split;
