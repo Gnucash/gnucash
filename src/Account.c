@@ -29,6 +29,7 @@
 #include "Data.h"
 #include "date.h"
 #include "main.h"
+#include "Transaction.h"
 #include "util.h"
 
 int next_free_unique_account_id = 0;
@@ -264,7 +265,6 @@ insertTransaction( Account *acc, Transaction *trans )
   {
   int position=-1;
   int  i,j;
-  Date *dj,*dt;
   int  inserted = False;
   Transaction **oldTrans;
 
@@ -319,7 +319,6 @@ insertTransaction( Account *acc, Transaction *trans )
    * the new transaction before the first transaction of the same
    * or later date.  The !inserted bit is a bit of a kludge to 
    * make sure we only insert the new transaction once! */
-  dt = &(trans->date);
   for( i=0,j=0; i<acc->numTrans; i++,j++ )
     {
     /* if we didn't do this, and we needed to insert into the
@@ -333,8 +332,7 @@ insertTransaction( Account *acc, Transaction *trans )
       }
     else
       {
-      dj = &(oldTrans[j]->date);
-      if( (datecmp(dj,dt) > 0) && !inserted )
+      if( (xaccTransOrder (&(oldTrans[j]),&trans) > 0) && !inserted )
         {
         position = i;
         acc->transaction[i] = trans;
@@ -642,10 +640,10 @@ xaccCheckDateOrder (Account * acc, Transaction *trans )
 
   /* figure out if the transactions are out of order */
   if (NULL != prevTrans) {
-    if( datecmp(&(prevTrans->date),&(trans->date))>0 ) outOfOrder = True;
+    if( xaccTransOrder (&prevTrans, &trans) >0 ) outOfOrder = True;
   }
   if (NULL != nextTrans) {
-    if( datecmp(&(trans->date),&(nextTrans->date))>0 ) outOfOrder = True;
+    if( xaccTransOrder (&trans, &nextTrans) >0 ) outOfOrder = True;
   }
 
   /* take care of re-ordering, if necessary */

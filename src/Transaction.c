@@ -126,7 +126,20 @@ freeTransaction( Transaction *trans )
  *
  * returns a negative value if transaction a is dated earlier than b, 
  * returns a positive value if transaction a is dated later than b, 
- * returns zero if both transactions are on the same date.
+ *
+ * This function tries very hard to uniquely order all transactions.
+ * If two transactions occur on the same date, then thier "num" fields
+ * are compared.  If the num fileds are identical, then the description
+ * fileds are compared.  If these are identical, then the memo fileds 
+ * are compared.  Hopefully, there will not be any transactions that
+ * occur on the same day that have all three of these values identical.
+ *
+ * Note that being able to establish this kind of absolute order is 
+ * important for some of the ledger display functions.  In particular,
+ * grep for "running_balance" in the code, and see the notes there.
+ *
+ * Yes, this kindof code dependency is ugly, but the alternatives seem
+ * ugly too.
  *
 \********************************************************************/
 
@@ -136,19 +149,75 @@ xaccTransOrder (Transaction **ta, Transaction **tb)
   int retval;
   char *da, *db;
 
-  retval = datecmp (&((*ta)->date), &((*tb)->date));
+  if ( (*ta) && !(*tb) ) return -1;
+  if ( !(*ta) && (*tb) ) return +1;
+  if ( !(*ta) && !(*tb) ) return 0;
 
   /* if dates differ, return */
+  retval = datecmp (&((*ta)->date), &((*tb)->date));
   if (retval) return retval;
+
+  /* otherwise, sort on transaction strings */
+  da = (*ta)->num;
+  db = (*tb)->num;
+  if (da && db) {
+    retval = strcmp (da, db);
+    /* if strings differ, return */
+    if (retval) return retval;
+  } else 
+  if (!da && db) {
+    return -1;
+  } else 
+  if (da && !db) {
+    return +1;
+  }
 
   /* otherwise, sort on transaction strings */
   da = (*ta)->description;
   db = (*tb)->description;
-  if (!da) return -1;
-  if (!db) return +1;
+  if (da && db) {
+    retval = strcmp (da, db);
+    /* if strings differ, return */
+    if (retval) return retval;
+  } else 
+  if (!da && db) {
+    return -1;
+  } else 
+  if (da && !db) {
+    return +1;
+  }
 
-  retval = strcmp (da, db);
-  return retval;
+  /* otherwise, sort on transaction strings */
+  da = (*ta)->memo;
+  db = (*tb)->memo;
+  if (da && db) {
+    retval = strcmp (da, db);
+    /* if strings differ, return */
+    if (retval) return retval;
+  } else 
+  if (!da && db) {
+    return -1;
+  } else 
+  if (da && !db) {
+    return +1;
+  }
+
+  /* otherwise, sort on transaction strings */
+  da = (*ta)->action;
+  db = (*tb)->action;
+  if (da && db) {
+    retval = strcmp (da, db);
+    /* if strings differ, return */
+    if (retval) return retval;
+  } else 
+  if (!da && db) {
+    return -1;
+  } else 
+  if (da && !db) {
+    return +1;
+  }
+
+  return 0;
 }
 
 /********************************************************************\
