@@ -30,6 +30,7 @@
 #include <openhbci/customer.h>
 #include <openhbci/transaction.h>
 
+#include "Account.h"
 #include "hbci-interaction.h"
 
 typedef enum GNC_HBCI_Transtype {
@@ -44,6 +45,7 @@ gnc_hbci_trans (GtkWidget *parent,
 		GNCInteractor *interactor,
 		const HBCI_Account *h_acc,
 		const HBCI_Customer *customer,
+		Account *gnc_acc,
 		GNC_HBCI_Transtype type,
 		GList **templ);
 

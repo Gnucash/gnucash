@@ -101,6 +101,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     /* Now open the HBCI_trans_dialog. */
     HBCI_Transaction *h_trans = gnc_hbci_trans (parent, api, interactor,
 						h_acc, customer, 
+						gnc_acc,
 						trans_type, &template_list);
 
     /* New templates? If yes, store them */

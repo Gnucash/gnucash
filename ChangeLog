@@ -1,3 +1,8 @@
+2003-05-29  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-transfer.c: Make sure the amount
+	stays a decimal number instead of some fraction.
+
 2003-05-29  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncInvoice.[ch]: add APIs to get
