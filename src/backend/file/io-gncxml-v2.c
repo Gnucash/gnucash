@@ -309,13 +309,8 @@ add_pricedb_local(sixtp_gdv2 *data, GNCPriceDB *db)
 
     book = data->book;
 
-    if (gnc_book_get_pricedb(book))
-    {
-        gnc_pricedb_destroy(gnc_book_get_pricedb(book));
-    }
-
     /* gnc_pricedb_print_contents(db, stdout); */
-    gnc_book_set_pricedb(book, db);
+    gnc_pricedb_set_db(book, db);
 
     return TRUE;
 }
@@ -704,12 +699,6 @@ gnc_session_load_from_xml_file_v2(GNCSession *session)
         xaccLogEnable ();
         goto bail;
     }
-
-    /* If the parse succeeded, but there is no pricedb,
-     * then the file had no pricedb section. However,
-     * this routine is expected to put one in the book. */
-    if (!gnc_book_get_pricedb (book))
-      gnc_book_set_pricedb (book, gnc_pricedb_create (book));
 
     /* Mark the book as saved */
     gnc_book_mark_saved (book);

@@ -405,19 +405,11 @@ gnc_session_load_from_xml_file(GNCSession *session)
 
     if(global_parse_status.pricedb)
     {
-      GNCPriceDB *db = gnc_book_get_pricedb(book);
-
-      gnc_book_set_pricedb(book, global_parse_status.pricedb);
-
-      if(db) gnc_pricedb_destroy(db);
+      gnc_pricedb_set_db(book, global_parse_status.pricedb);
     }
     else
     {
-      GNCPriceDB *db = gnc_book_get_pricedb(book);
-
-      gnc_book_set_pricedb(book, gnc_pricedb_create(book));
-
-      if(db) gnc_pricedb_destroy(db);
+      gnc_pricedb_set_db(book, gnc_pricedb_create(book));
     }
 
     /* Fix account and transaction commodities */

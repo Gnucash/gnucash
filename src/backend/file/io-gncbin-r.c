@@ -103,13 +103,14 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
+#include "gnc-book.h"
+#include "gnc-book-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "GNCIdP.h"
 #include "gnc-pricedb.h"
-
-#include "gnc-book-p.h"
+#include "gnc-pricedb-p.h"
 
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
@@ -509,9 +510,7 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
     GNCPriceDB *tmpdb;
     if(cvt_potential_prices_to_pricedb_and_cleanup(&tmpdb, book))
     {
-      GNCPriceDB *db = gnc_book_get_pricedb(book);
-      gnc_book_set_pricedb(book, tmpdb);
-      if(db) gnc_pricedb_destroy(db);
+      gnc_pricedb_set_db(book, tmpdb);
     } else {
       PWARN("pricedb import failed.");
       error_code = ERR_BACKEND_MISC;
