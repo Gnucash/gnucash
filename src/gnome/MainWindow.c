@@ -1,7 +1,6 @@
 /********************************************************************\
  * MainWindow.c -- the main window, and associated helper functions * 
  *                 and callback functions for xacc (X-Accountant)   *
- * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Jeremy Collins				    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -25,15 +24,15 @@
 \********************************************************************/
 
 #include "MainWindow.h"
+#include "messages.h"
 
-//#include "main_window.h"
 #include "main.h"
 
 gchar *clist_titles[] =
 {
-	" Account Name ",
-	" Type ",
-	" Balance "
+  ACC_NAME_STR,
+  ACC_TYPE_STR,
+  BALN_STR 
 };
 
 struct main_window {
@@ -43,94 +42,100 @@ struct main_window {
 void main_window_init()
 {
 
-    GtkWidget *window;
-    GtkWidget *toolBar[5];
+  GtkWidget *window;
+  GtkWidget *toolBar[5];
     
-    GtkTooltips *tooltip; 
+  GtkTooltips *tooltip; 
 
-    GtkWidget *label;
-    GtkWidget *main_vbox;
-    GtkWidget *button_bar;
+  GtkWidget *label;
+  GtkWidget *main_vbox;
+  GtkWidget *button_bar;
     
-    GtkWidget *menubar;
+  GtkWidget *menubar;
 
-    GtkWidget *clist;
-    GtkWidget *list_item;
+  GtkWidget *clist;
+  GtkWidget *list_item;
 
     
-    GtkAcceleratorTable *accel;
+  GtkAcceleratorTable *accel;
 
-    clist = gtk_clist_new_with_titles(3, clist_titles);    
+  clist = gtk_clist_new_with_titles(3, clist_titles);    
 
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(window), "GnoMoney");
+  /* Fix the column widths */
+  gtk_clist_set_column_width ( GTK_CLIST(clist), 1, 85 );
+  gtk_clist_set_column_width ( GTK_CLIST(clist), 0, 85 );
 
-    main_vbox = gtk_vbox_new(FALSE, 1);
-    gtk_container_border_width(GTK_CONTAINER(main_vbox), 1);
-    gtk_container_add(GTK_CONTAINER(window), main_vbox);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title(GTK_WINDOW(window), "GnoMoney");
 
-    get_main_menu(&menubar, &accel);
-    gtk_window_add_accelerator_table(GTK_WINDOW(window), accel);
-    gtk_box_pack_start(GTK_BOX(main_vbox), menubar, FALSE, TRUE, 0);     
-    gtk_widget_show(menubar);
+  main_vbox = gtk_vbox_new(FALSE, 1);
+  gtk_container_border_width(GTK_CONTAINER(main_vbox), 1);
+  gtk_container_add(GTK_CONTAINER(window), main_vbox);
+
+  get_main_menu(&menubar, &accel);
+  gtk_window_add_accelerator_table(GTK_WINDOW(window), accel);
+  gtk_box_pack_start(GTK_BOX(main_vbox), menubar, FALSE, TRUE, 0);     
+  gtk_widget_show(menubar);
    
-   /* create a bunch of buttons */
+  /* create a bunch of buttons */
     
-    button_bar = gtk_hbox_new(FALSE, 1);
-    toolBar[0] = gtk_button_new_with_label (" Open ");
-    toolBar[1] = gtk_button_new_with_label (" New ");
-    toolBar[2] = gtk_button_new_with_label (" Edit ");
-    toolBar[3] = gtk_button_new_with_label (" Delete ");
-    toolBar[4] = gtk_button_new_with_label (" Exit ");
+  button_bar = gtk_hbox_new(FALSE, 1);
+  toolBar[0] = gtk_button_new_with_label ( OPEN_STR );
+  toolBar[1] = gtk_button_new_with_label ( NEW_STR );
+  toolBar[2] = gtk_button_new_with_label ( EDIT_STR );
+  toolBar[3] = gtk_button_new_with_label ( DELETE_STR );
+  toolBar[4] = gtk_button_new_with_label (" Exit ");
 
-    /* Initilize ToolTips */
+  /* Initilize ToolTips */
 	
 
-    tooltip = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tooltip, toolBar[open], "Open an account.", NULL);
-    gtk_tooltips_set_tip (tooltip, toolBar[close], "Create a new account.", NULL);
-    gtk_tooltips_set_tip (tooltip, toolBar[button3], "Edit selected account", NULL);
-    gtk_tooltips_set_tip (tooltip, toolBar[button4], "Delete selected account", NULL); 
-    gtk_tooltips_set_tip (tooltip, toolBar[exit], "Exit GnoMoney.", NULL);  
+  tooltip = gtk_tooltips_new ();
+  gtk_tooltips_set_tip (tooltip, toolBar[open], TOOLTIP_OPEN, NULL);
+  gtk_tooltips_set_tip (tooltip, toolBar[close], TOOLTIP_NEW , NULL);
+  gtk_tooltips_set_tip (tooltip, toolBar[button3], TOOLTIP_EDIT, NULL);
+  gtk_tooltips_set_tip (tooltip, toolBar[button4], TOOLTIP_DELETE, NULL); 
+  gtk_tooltips_set_tip (tooltip, toolBar[exit], TOOLTIP_EDIT, NULL);  
 
     
-    /* Pack the buttons into the toolbar */ 
-    gtk_box_pack_start(GTK_BOX(button_bar), toolBar[0], FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(button_bar), toolBar[1], FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(button_bar), toolBar[2], FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(button_bar), toolBar[3], FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(button_bar), toolBar[4], FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(main_vbox), clist, FALSE, FALSE, 1);
-    gtk_box_pack_start(GTK_BOX(main_vbox), button_bar, FALSE, TRUE, 1);
+  /* Pack the buttons into the toolbar */ 
+  gtk_box_pack_start(GTK_BOX(button_bar), toolBar[0], FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(button_bar), toolBar[1], FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(button_bar), toolBar[2], FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(button_bar), toolBar[3], FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(button_bar), toolBar[4], FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(main_vbox), clist, FALSE, FALSE, 1);
+  gtk_box_pack_start(GTK_BOX(main_vbox), button_bar, FALSE, TRUE, 1);
     
     
-    gtk_widget_show(toolBar[open]);
-    gtk_widget_show(toolBar[close]);
-    gtk_widget_show(toolBar[button3]);
-    gtk_widget_show(toolBar[button4]);
-    gtk_widget_show(toolBar[exit]);
-    gtk_widget_show(button_bar);
-    gtk_widget_show(clist);
+  gtk_widget_show(toolBar[open]);
+  gtk_widget_show(toolBar[close]);
+  gtk_widget_show(toolBar[button3]);
+  gtk_widget_show(toolBar[button4]);
+  gtk_widget_show(toolBar[exit]);
+  gtk_widget_show(button_bar);
+  gtk_widget_show(clist);
 
-    gtk_widget_set_usize (window, 400, 400 );
-    gtk_widget_set_usize ( clist, 400, 300 );
+  gtk_widget_set_usize (window, 400, 400 );
+  gtk_widget_set_usize ( clist, 400, 300 );
     
-    /* Setup some callbacks */
+  /* Setup some callbacks */
 	
-    gtk_signal_connect (GTK_OBJECT(window), "destroy",
-                        GTK_SIGNAL_FUNC (destroy), NULL);
+  gtk_signal_connect (GTK_OBJECT(window), "destroy",
+                      GTK_SIGNAL_FUNC (destroy), NULL);
 
-    //gtk_signal_connect(GTK_OBJECT(window), "destroy",
-    //                   GTK_SIGNAL_FUNC(file_quit_cmd_callback),
-    //                   "WM destroy");
+  //gtk_signal_connect(GTK_OBJECT(window), "destroy",
+  //                   GTK_SIGNAL_FUNC(file_quit_cmd_callback),
+  //                   "WM destroy");
     
-    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-                        GTK_SIGNAL_FUNC (gtk_exit), NULL);		       
+  gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+                      GTK_SIGNAL_FUNC (gtk_exit), NULL);		       
 
-    /* Show everything now that it is created */
-    gtk_widget_show(main_vbox);
-    gtk_container_border_width (GTK_CONTAINER (window), 2);
-    gtk_widget_show(window);    
+  /* Show everything now that it is created */
+  gtk_widget_show(main_vbox);
+  gtk_container_border_width (GTK_CONTAINER (window), 2);
+  gtk_widget_show(window);   
+
+     
 
 } 
 

@@ -74,8 +74,12 @@ void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
   {
    /* load the accounts data from datafile*/
     topgroup = xaccReadAccountGroup (datafile); 
+
    /* Close the filebox */
     gtk_widget_destroy(filebox);
+
+  /* Create main window */
+    main_window_init();
   }
   
   if( NULL == topgroup )
@@ -117,8 +121,6 @@ main( int argc, char *argv[] )
   DEBUG("Done initializing memory");
 #endif
   
-
-
   gtk_init (&argc, &argv);
   
   filebox = gtk_file_selection_new ("File selection");
@@ -126,7 +128,12 @@ main( int argc, char *argv[] )
   /* read in the filename (should be the first arg after all
    * the X11 stuff */
   if( argc > 1 )
+  {
     datafile = argv[1];
+
+    /* Create main window */
+    main_window_init();
+  }
   else
   {
     gtk_file_selection_set_filename (GTK_FILE_SELECTION(filebox), "*");
@@ -148,11 +155,6 @@ main( int argc, char *argv[] )
   gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION(filebox)->cancel_button),                                     
                             "clicked", (GtkSignalFunc) gtk_widget_destroy,                                    
                             GTK_OBJECT (filebox));
-
-  /* Make main window */
-  main_window_init();
-                            
-  
 
   /* Enter event loop */
   gtk_main();
