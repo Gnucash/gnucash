@@ -20,9 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                    *
  *                                                                   *
  ********************************************************************/
-/*
- * Test the gncBookMerge infrastructure.
- */
+ /* Test the qof_book_merge infrastructure. */
+ 
 #include <glib.h>
 #include <libguile.h>
 #define _GNU_SOURCE
@@ -280,18 +279,18 @@ test_merge (void)
 	qof_date_format_set(QOF_DATE_FORMAT_UK);
 	timespecFromTime_t(&ts,time(NULL));
 
-	do_test ((NULL != target), "#1 book null");
+	do_test ((NULL != target), "#1 target book is NULL");
 
 	/* import book objects - tests used */
-	do_test ((NULL != import), "#2 import null");
+	do_test ((NULL != import), "#2 import book is NULL");
 	import_obj = g_new(myobj, 1);
-	do_test ((NULL != import_obj), "#3 new object fail");
+	do_test ((NULL != import_obj), "#3 new object create");
 	qof_instance_init (&import_obj->inst, TEST_MODULE_NAME, import);
-	do_test ((NULL != &import_obj->inst), "#4 instance init fail");
+	do_test ((NULL != &import_obj->inst), "#4 instance init");
 	obj_setGUID(import_obj,qof_instance_get_guid(&import_obj->inst));
-	do_test ((NULL != &import_obj->obj_guid), "#5 guid set fail");
+	do_test ((NULL != &import_obj->obj_guid), "#5 guid set");
 	gnc_engine_gen_event(&import_obj->inst.entity, GNC_EVENT_CREATE);
-	do_test ((NULL != &import_obj->inst.entity), "#6 gnc event create fail");
+	do_test ((NULL != &import_obj->inst.entity), "#6 gnc event create");
 	obj_setName(import_obj, import_init);
 	do_test ((NULL != &import_obj->Name), "#7 string set");
 	obj_amount = double_to_gnc_numeric(init_value,1, GNC_HOW_DENOM_EXACT);
@@ -329,8 +328,8 @@ test_merge (void)
 
 	obj_amount = gnc_numeric_add(obj_amount, obj_amount, 1, GNC_HOW_DENOM_EXACT);
 	discount = 0.35;
-	version = 3;
-	minor = 6;
+	version = 2;
+	minor = 3;
 	tc.tv_sec = ts.tv_sec -1;
 	tc.tv_nsec = 0;
 
@@ -399,20 +398,31 @@ test_rule_loop (qof_book_mergeRule *rule, guint remainder)
 	QofParam *eachParam;
 	char *importstring;
 	char *targetstring;
-
 	/* In this test rule_loop, any lines beginning with do_test() can be removed
 	from a working rule_loop routine. It would be wise to still use some of the
-	more obvious checks, e.g. that an entity or rule exists before querying the parameters. */
+	more obvious checks, e.g. that an entity or rule exists before querying the parameters.
+	
+	Take particular care with MERGE_NEW - targetEnt is always NULL until the Commit.
+	Do not attempt to use param_getfcn on targetEnt in the loop called by 
+	qof_book_mergeRuleForeach(rule_loop, MERGE_NEW);
+	
+	*/
+	gboolean skip_target;
 	
 	importstring = NULL;
 	targetstring = NULL;
+	skip_target = FALSE;
 	do_test ((rule != NULL), "loop:#1 Rule is NULL");
-	do_test (remainder >= 0, "loop:#2 remainder too low");
+	do_test (remainder > 0, "loop:#2 remainder error.");
 	do_test ((safe_strcmp(NULL, rule->mergeLabel) != 0), "loop:#3 object label\n");
 	do_test ((rule->importEnt != NULL), "loop:#4 empty import entity");
-	do_test ((rule->targetEnt != NULL), "loop:#5 empty target entity");
-	do_test ((safe_strcmp(rule->importEnt->e_type, rule->targetEnt->e_type) == 0), "loop:#6 entity type mismatch");
-	do_test ((rule->mergeParam != NULL), "loop:#7 empty parameter list");
+	/* targetEnt is always NULL at this stage if MERGE_NEW is set */
+	if(rule->targetEnt == NULL) { skip_target = TRUE; }
+	if(!skip_target) {
+		do_test ((safe_strcmp(rule->importEnt->e_type, rule->targetEnt->e_type) == 0),
+			"loop: entity type mismatch");
+	}
+	do_test ((rule->mergeParam != NULL), "loop: empty parameter list");
 	testing = rule->mergeParam;
 	
 	while(testing != NULL) { // start of param loop
@@ -428,19 +438,22 @@ test_rule_loop (qof_book_mergeRule *rule, guint remainder)
 			importstring = g_strdup(eachParam->param_getfcn(rule->importEnt, eachParam));
 			do_test ((importstring != NULL), "loop:#12 direct get_fcn import");
 			do_test ((safe_strcmp(importstring, "test") == 0), "loop:#13 direct import comparison");
+			if(!skip_target) {
 			targetstring = eachParam->param_getfcn(rule->targetEnt, eachParam);		
 			do_test ((targetstring != NULL), "loop:#14 direct get_fcn target");
 			do_test ((safe_strcmp(targetstring, "testing") == 0), "loop:#15 direct target comparison");
+		}
 		}
 		/* param_as_string does the conversion for display purposes only */
 		/* do NOT use as_string for calculations or set_fcn */
 		importstring = qof_book_merge_param_as_string(eachParam, rule->importEnt);
 		do_test ((importstring != NULL), "loop:#16 import param_as_string is null");
 //		printf("importstring %s\t%s Type\n", importstring, eachParam->param_type);
-
+		if(!skip_target) {
 		targetstring = qof_book_merge_param_as_string(eachParam, rule->targetEnt);
 		do_test ((targetstring != NULL), "loop:#17 target param_as_string is null");
 //		printf("targetstring %s\t%s Type\n", targetstring, eachParam->param_type);
+			}
 		/* add your own code for user involvement here. */
 		/* either store the importstring and targetstring values and display separately,
 		perhaps in alphabetical/object_type/priority order, or, obtain user input as each
@@ -449,9 +462,9 @@ test_rule_loop (qof_book_mergeRule *rule, guint remainder)
 		testing = g_slist_next(testing);
 	} // end param loop
 	/* set each rule dependent on the user involvement response above. */
-	/* test routine just sets all to MERGE_UPDATE */
+	/* test routine just sets all MERGE_REPORT to MERGE_UPDATE */
 	qof_book_mergeUpdateResult(rule,MERGE_UPDATE);
-	do_test ((rule->mergeResult == MERGE_UPDATE), "update result fail");
+	do_test ((rule->mergeResult != MERGE_REPORT), "update result fail");
 }
 
 static void

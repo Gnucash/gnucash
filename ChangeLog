@@ -1,3 +1,8 @@
+2004-12-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/test/test-book-merge.c: targetEnt is always NULL
+	  during MERGE_NEW so don't test it in that case.
+
 2004-12-04  Derek Atkins  <derek@ihtfp.com>
 
 	* src/backend/file/Makefile.am:
