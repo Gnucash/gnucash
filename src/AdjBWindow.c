@@ -305,8 +305,7 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   themount = val;
   
   /* fill out the rest of the fields */
-  XtFree (trans->description);
-  trans->description = XtNewString(ADJ_BALN_STR);
+  xaccTransSetDescription (trans, ADJ_BALN_STR);
   xaccTransSetReconcile (trans, NREC);
   
   pos = insertTransaction( acc, trans );

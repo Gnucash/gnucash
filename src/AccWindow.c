@@ -677,8 +677,7 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   initTransaction(trans);
   
   todaysDate( &(trans->date) );
-  XtFree (trans->description);
-  trans->description = XtNewString(OPEN_BALN_STR);
+  xaccTransSetDescription (trans, OPEN_BALN_STR);
 
   /* add the new transaction to the account */
   insertTransaction( acc, trans );
