@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
 "POT-Creation-Date: 2001-07-13 11:26+0200\n"
-"PO-Revision-Date: 2001-07-13 11:43+02:00\n"
+"PO-Revision-Date: 2001-07-13 12:31+02:00\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -101,6 +101,8 @@ msgid ""
 "You do not have permission to access\n"
 "    %s\n"
 msgstr ""
+"Sie haben keine Leseberechtigung für die Datei\n"
+"    %s\n"
 
 #: src/FileDialog.c:124
 #, c-format
@@ -428,14 +430,12 @@ msgid "Notes"
 msgstr "Bemerkung"
 
 #: src/SplitLedger.c:4238
-#, fuzzy
 msgid "Credit Formula"
-msgstr "Kreditkarte"
+msgstr ""
 
 #: src/SplitLedger.c:4240
-#, fuzzy
 msgid "Debit Formula"
-msgstr "Datumsformat"
+msgstr ""
 
 #: src/SplitLedger.c:4605
 msgid ""
@@ -667,7 +667,6 @@ msgid "You must choose a valid parent account."
 msgstr "Wählen Sie ein gültiges Hauptkonto"
 
 #: src/gnome/dialog-account.c:804 src/gnome/dialog-account.c:955
-#, fuzzy
 msgid "You must choose a commodity."
 msgstr "Sie müssen eine Währung/Aktie auswählen."
 
@@ -958,15 +957,11 @@ msgstr ""
 "das genau das, was Sie möchten."
 
 #: src/gnome/dialog-scheduledxaction.c:1135
-#, fuzzy
 msgid ""
 "Warning: Just deleting all the splits will make your account unbalanced. You "
 "probably shouldn't do this unless you're going to immediately add another "
 "split to bring the transaction back into balance."
-msgstr ""
-"Warnung: Nur die Buchungen zu löschen, führt zu einem unausgeglichenen "
-"Geschäftsvorgang. Sie sollten das nicht tun, es sei denn, Sie fügen sofort "
-"eine neue Buchung hinzu, um den Geschäftsvorgang wieder auszugleichen."
+msgstr "Warnung: Nur die Buchungen zu löschen, führt zu einem unausgeglichenen Konto. Sie sollten das nicht tun, es sei denn, Sie fügen sofort eine neue Buchung hinzu, um das Konto wieder auszugleichen."
 
 #: src/gnome/dialog-scheduledxaction.c:1143 src/gnome/window-register.c:2840
 msgid "Delete Transaction"
@@ -977,9 +972,8 @@ msgid "Delete the whole transaction"
 msgstr "Den gesamten Geschäftsvorgang löschen"
 
 #: src/gnome/dialog-scheduledxaction.c:1175
-#, fuzzy
 msgid "Delete all the splits"
-msgstr "Alle Gegen-Buchungen löschen"
+msgstr "Alle Buchungen löschen"
 
 #: src/gnome/dialog-scheduledxaction.c:1256 src/gnome/window-register.c:2965
 #, c-format
@@ -2389,7 +2383,7 @@ msgstr ""
 
 #: src/gnome/glade/qif_strings.c:45 src/gnome/glade/qif_strings.c:55
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
-msgstr ""
+msgstr "Drücken Sie \"Zurück\", um nicht diese Datei zu laden, sondern eine andere auszuwählen."
 
 #: src/gnome/glade/qif_strings.c:46
 msgid "Set the default QIF account name"
@@ -2871,14 +2865,12 @@ msgstr "Spaltenausdehnung:"
 #. * DO NOT compile it as part of your application.
 #.
 #: src/gnome/glade/sched-xact_strings.c:7
-#, fuzzy
 msgid "Edit Scheduled Transaction"
-msgstr "Aktuellen Geschäftsvorgang bearbeiten"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:9
-#, fuzzy
 msgid "Creation Options"
-msgstr "Zweite Option"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:10
 msgid "Conditional on splits not having variables"
@@ -2893,9 +2885,8 @@ msgid "Notify me when created"
 msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:13
-#, fuzzy
 msgid "Create "
-msgstr "Gutschrift"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:14
 #: src/gnome/glade/sched-xact_strings.c:16
@@ -2907,38 +2898,32 @@ msgid "Remind me "
 msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:17
-#, fuzzy
 msgid "End"
-msgstr "Bis "
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:18
-#, fuzzy
 msgid "No End"
-msgstr "Keine Daten gefunden"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:19
-#, fuzzy
 msgid "End Date: "
-msgstr "Enddatum:"
+msgstr "Enddatum: "
 
 #: src/gnome/glade/sched-xact_strings.c:20
-#, fuzzy
 msgid "Number of Occurances:"
-msgstr "Anzahl der Spalten"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:21
 msgid "Recurrence Frequency"
 msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:22
-#, fuzzy
 msgid "Template Transaction"
-msgstr "Geschäftsvorgang löschen"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:23
-#, fuzzy
 msgid "Record"
-msgstr "Bericht"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:24
 msgid "REPLACEME with the Register control box"
@@ -2949,9 +2934,8 @@ msgid "This window should never be realized."
 msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:26
-#, fuzzy
 msgid "Frequency:"
-msgstr "Währung:"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:27
 #: src/gnome/glade/sched-xact_strings.c:41 src/scm/guile-strings.c:382
@@ -2963,9 +2947,8 @@ msgstr "keine"
 
 #: src/gnome/glade/sched-xact_strings.c:28
 #: src/gnome/glade/sched-xact_strings.c:43
-#, fuzzy
 msgid "Once"
-msgstr "Erträge"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:29
 #: src/gnome/glade/sched-xact_strings.c:47
@@ -3000,9 +2983,8 @@ msgstr "monatlich"
 
 #: src/gnome/glade/sched-xact_strings.c:35
 #: src/gnome/glade/sched-xact_strings.c:210
-#, fuzzy
 msgid "Quarterly"
-msgstr "Quartal"
+msgstr "Jedes Quartal"
 
 #: src/gnome/glade/sched-xact_strings.c:36
 msgid "Tri-Anually"
@@ -3010,9 +2992,8 @@ msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:37
 #: src/gnome/glade/sched-xact_strings.c:290
-#, fuzzy
 msgid "Semi-Yearly"
-msgstr "Jährlich"
+msgstr "Halbjährlich"
 
 #: src/gnome/glade/sched-xact_strings.c:38
 #: src/gnome/glade/sched-xact_strings.c:339 src/scm/report/guile-strings.c:688
@@ -3021,19 +3002,16 @@ msgid "Yearly"
 msgstr "Jährlich"
 
 #: src/gnome/glade/sched-xact_strings.c:39
-#, fuzzy
 msgid "Start Date:"
 msgstr "Anfangsdatum:"
 
 #: src/gnome/glade/sched-xact_strings.c:40
-#, fuzzy
 msgid "Not scheduled"
-msgstr "Zeitplan"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:42
-#, fuzzy
 msgid "Select occurrence date above."
-msgstr "Bitte wählen Sie die Währung oder Aktie"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:44
 #: src/gnome/glade/sched-xact_strings.c:48
@@ -3061,9 +3039,8 @@ msgstr "Wochen."
 #: src/gnome/glade/sched-xact_strings.c:52
 #: src/gnome/glade/sched-xact_strings.c:66
 #: src/gnome/glade/sched-xact_strings.c:291
-#, fuzzy
 msgid "Every"
-msgstr "Eingeben"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:54
 #: src/gnome/glade/sched-xact_strings.c:366 src/gnome/gnc-datedelta.c:208
@@ -3100,9 +3077,8 @@ msgid "Saturday"
 msgstr "Samstag"
 
 #: src/gnome/glade/sched-xact_strings.c:64
-#, fuzzy
 msgid "Select initial date, above."
-msgstr "Datum des Berichts"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:67
 #: src/gnome/glade/sched-xact_strings.c:137
@@ -3110,9 +3086,8 @@ msgid "months."
 msgstr "Monate."
 
 #: src/gnome/glade/sched-xact_strings.c:68
-#, fuzzy
 msgid "First on the:"
-msgstr "Erste Option"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:69
 #: src/gnome/glade/sched-xact_strings.c:102
@@ -3442,9 +3417,8 @@ msgstr ""
 #: src/gnome/glade/sched-xact_strings.c:177
 #: src/gnome/glade/sched-xact_strings.c:216
 #: src/gnome/glade/sched-xact_strings.c:257
-#, fuzzy
 msgid "On the"
-msgstr "Weitere"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:173
 #: src/gnome/glade/sched-xact_strings.c:211
@@ -3481,9 +3455,8 @@ msgid "Apr, Jul, Dec"
 msgstr "Apr, Jul, Dez"
 
 #: src/gnome/glade/sched-xact_strings.c:249
-#, fuzzy
 msgid "Tri-Yearly"
-msgstr "Jährlich"
+msgstr "Dreimal pro Jahr"
 
 #: src/gnome/glade/sched-xact_strings.c:251
 msgid "Jan, Jul"
@@ -3510,9 +3483,8 @@ msgid "Jun, Dec"
 msgstr "Jun, Dez"
 
 #: src/gnome/glade/sched-xact_strings.c:292
-#, fuzzy
 msgid "year(s)."
-msgstr "Jahre"
+msgstr "Jahre."
 
 #: src/gnome/glade/sched-xact_strings.c:293 src/scm/guile-strings.c:180
 #: src/scm/guile-strings.c:181
@@ -3576,9 +3548,8 @@ msgstr "Tag"
 #: src/scm/guile-strings.c:417 src/scm/guile-strings.c:420
 #: src/scm/guile-strings.c:423 src/scm/guile-strings.c:426
 #: src/scm/guile-strings.c:429 src/scm/guile-strings.c:432
-#, fuzzy
 msgid "Scheduled Transactions"
-msgstr "Tatsächliche Geschäftsvorgänge"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:342
 msgid "Frequency"
@@ -3595,9 +3566,8 @@ msgstr "Neu"
 
 #: src/gnome/glade/sched-xact_strings.c:347
 #: src/gnome/glade/sched-xact_strings.c:355
-#, fuzzy
 msgid "Since Last Run..."
-msgstr "_Bereich festlegen"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:348
 msgid "Next run date..."
@@ -3609,9 +3579,8 @@ msgid "To-create..."
 msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:352
-#, fuzzy
 msgid "Variable"
-msgstr "Keine Variable"
+msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:354
 msgid "What should this be?"
@@ -3626,14 +3595,12 @@ msgid "...Replace with GL..."
 msgstr ""
 
 #: src/gnome/glade/sched-xact_strings.c:363
-#, fuzzy
 msgid "Reminders"
-msgstr "Kassenberichte"
+msgstr "Erinnerungen"
 
 #: src/gnome/glade/sched-xact_strings.c:365
-#, fuzzy
 msgid "Next Date"
-msgstr "Passendes Datum"
+msgstr "Nächtes Datum"
 
 #.
 #. * Translatable strings file generated by Glade.
@@ -4300,14 +4267,12 @@ msgid "Find transactions with a search"
 msgstr "Finde Geschäftsvorgänge"
 
 #: src/gnome/window-main.c:1097
-#, fuzzy
 msgid "Scheduled Transactions List"
-msgstr "Tatsächliche Geschäftsvorgänge"
+msgstr ""
 
 #: src/gnome/window-main.c:1098
-#, fuzzy
 msgid "A list of Scheduled Transactions"
-msgstr "Tatsächliche Geschäftsvorgänge"
+msgstr ""
 
 #: src/gnome/window-main.c:1104
 msgid "Scheduled Transactions Since-Last-Run..."
@@ -4346,9 +4311,8 @@ msgid "_Windows"
 msgstr "_Fenster"
 
 #: src/gnome/window-main.c:1153
-#, fuzzy
 msgid "_Developer Options"
-msgstr "Vierte Option"
+msgstr "_Entwickler-Optionen"
 
 #: src/gnome/window-main.c:1175
 msgid "Save the file to disk"
@@ -5401,9 +5365,8 @@ msgid "SchedXact: Editor"
 msgstr "Preis-Editor"
 
 #: src/scm/guile-strings.c:62
-#, fuzzy
 msgid "Editor of Scheduled Transactions"
-msgstr "Aktuellen Geschäftsvorgang bearbeiten"
+msgstr ""
 
 #: src/scm/guile-strings.c:63
 msgid "SchedXact: [Old] Since Last Run"
@@ -5607,9 +5570,8 @@ msgid "GNU GPL"
 msgstr "GNU GPL"
 
 #: src/scm/guile-strings.c:123
-#, fuzzy
 msgid "Report a bug"
-msgstr "Berichtsname"
+msgstr ""
 
 #: src/scm/guile-strings.c:124
 msgid "URL Tests"
@@ -5693,9 +5655,8 @@ msgid "Account fields to display"
 msgstr "Kontenfelder, die angezeigt werden sollen"
 
 #: src/scm/guile-strings.c:169 src/scm/guile-strings.c:418
-#, fuzzy
 msgid "Run on GnuCash Start"
-msgstr "Mehr über GnuCash"
+msgstr ""
 
 #: src/scm/guile-strings.c:170
 msgid "Select a date to report on"
@@ -6141,9 +6102,8 @@ msgstr ""
 "mit jeder Zeile"
 
 #: src/scm/guile-strings.c:324
-#, fuzzy
 msgid "Automatic interest transfer"
-msgstr "Automatische Kreditkartenbezahlungen"
+msgstr "Automatische Zinsbuchungen"
 
 #: src/scm/guile-strings.c:325
 msgid ""
@@ -6474,9 +6434,8 @@ msgid "Should the Since-Last-Run window appear on GnuCash startup?"
 msgstr ""
 
 #: src/scm/guile-strings.c:421
-#, fuzzy
 msgid "Default: Auto-Create new Scheduled Transactions?"
-msgstr "Den gesamten Geschäftsvorgang löschen"
+msgstr ""
 
 #: src/scm/guile-strings.c:422
 msgid "Should new SchedXactions have the 'AutoCreate' flag set by default?"
@@ -6509,9 +6468,8 @@ msgid "Default number of days-in-advance to remind on new SXes"
 msgstr ""
 
 #: src/scm/guile-strings.c:433
-#, fuzzy
 msgid "Template Register Lines"
-msgstr "Standardstil Kassenbericht"
+msgstr ""
 
 #: src/scm/guile-strings.c:434
 msgid "How many lines in the template register?"
@@ -7989,14 +7947,12 @@ msgid "Net Worth Barchart"
 msgstr "Reinvermögen Balkendiagramm"
 
 #: src/scm/report/guile-strings.c:390
-#, fuzzy
 msgid "Payables Account"
-msgstr "Hauptkonto"
+msgstr ""
 
 #: src/scm/report/guile-strings.c:393
-#, fuzzy
 msgid "Use Description?"
-msgstr "Beschreibung"
+msgstr "Beschreibung benutzen?"
 
 #: src/scm/report/guile-strings.c:394
 #, c-format
@@ -8020,9 +7976,8 @@ msgid ""
 msgstr ""
 
 #: src/scm/report/guile-strings.c:398
-#, fuzzy
 msgid "Creditor Name"
-msgstr "Kreditkarte"
+msgstr ""
 
 #: src/scm/report/guile-strings.c:399
 msgid "0-30 days"
@@ -8037,9 +7992,8 @@ msgid "61-90 days"
 msgstr ""
 
 #: src/scm/report/guile-strings.c:404
-#, fuzzy
 msgid "Accounts Payable"
-msgstr "Kontobezeichnung"
+msgstr ""
 
 #: src/scm/report/guile-strings.c:405
 msgid "Amount owing, grouped by debtors and age."
@@ -8532,24 +8486,20 @@ msgid "Display 1 line"
 msgstr "1 Zeile anzeigen"
 
 #: src/scm/report/guile-strings.c:644
-#, fuzzy
 msgid "Report Accounts"
-msgstr "Konten exportieren..."
+msgstr "Konten im Bericht"
 
 #: src/scm/report/guile-strings.c:645
-#, fuzzy
 msgid "Report on these accounts"
 msgstr "Den Buchungsbericht für diese Konten erstellen"
 
 #: src/scm/report/guile-strings.c:646
-#, fuzzy
 msgid "Filter Accounts"
-msgstr "Anderes Konto"
+msgstr ""
 
 #: src/scm/report/guile-strings.c:647
-#, fuzzy
 msgid "Filter on these accounts"
-msgstr "Konten gruppieren"
+msgstr ""
 
 #: src/scm/report/guile-strings.c:648
 #, fuzzy
@@ -8566,24 +8516,20 @@ msgid "Do not do any filtering"
 msgstr ""
 
 #: src/scm/report/guile-strings.c:652
-#, fuzzy
 msgid "Include Transactions to/from Filter Accounts"
-msgstr "Unterkonten der ausgewählten Konten einbeziehen"
+msgstr ""
 
 #: src/scm/report/guile-strings.c:653
-#, fuzzy
 msgid "Include transactions to/from filter accounts only"
-msgstr "Dem Konto einen neuen Geschäftsvorgang hinzufügen"
+msgstr ""
 
 #: src/scm/report/guile-strings.c:654
-#, fuzzy
 msgid "Exclude Transactions to/from Filter Accounts"
-msgstr "Dem Konto einen neuen Geschäftsvorgang hinzufügen"
+msgstr ""
 
 #: src/scm/report/guile-strings.c:655
-#, fuzzy
 msgid "Exclude transactions to/from all filter accounts"
-msgstr "Unterkonten der ausgewählten Konten einbeziehen"
+msgstr ""
 
 #: src/scm/report/guile-strings.c:657
 msgid "Do not sort"
@@ -8610,14 +8556,12 @@ msgid "Sort by exact time"
 msgstr "Nach Tageszeit sortieren"
 
 #: src/scm/report/guile-strings.c:666
-#, fuzzy
 msgid "Register Order"
-msgstr "Bericht zum Kassenbericht"
+msgstr "Wie Kassenbericht"
 
 #: src/scm/report/guile-strings.c:667
-#, fuzzy
 msgid "Sort as with the register"
-msgstr "Die Schriftart, die im Kassenbericht benutzt werden soll"
+msgstr "Die Sortierung, die im Kassenbericht benutzt wird"
 
 #: src/scm/report/guile-strings.c:668
 msgid "Other Account Name"
