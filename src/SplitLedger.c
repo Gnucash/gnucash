@@ -3234,6 +3234,10 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc, gpointer user_data)
   if (!vcell || !vcell->cellblock)
     return bg_color;
 
+  if ((virt_loc.phys_col_offset < vcell->cellblock->start_col) ||
+      (virt_loc.phys_col_offset > vcell->cellblock->stop_col))
+    return bg_color;
+
   is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
                                     virt_loc.vcell_loc);
 

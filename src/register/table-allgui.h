@@ -96,7 +96,8 @@
 #include "gtable.h"
 
 
-typedef enum {
+typedef enum
+{
   GNC_TABLE_TRAVERSE_POINTER,
   GNC_TABLE_TRAVERSE_LEFT,
   GNC_TABLE_TRAVERSE_RIGHT,
@@ -116,6 +117,23 @@ struct _VirtualCell
   unsigned int visible : 1;             /* visible in the GUI */
   unsigned int start_primary_color : 1; /* color usage flag */
 };
+
+
+typedef enum
+{
+  CELL_BORDER_LINE_NONE,
+  CELL_BORDER_LINE_LIGHT,
+  CELL_BORDER_LINE_NORMAL,
+  CELL_BORDER_LINE_HEAVY
+} PhysicalCellBorderLineStyle;
+
+typedef struct
+{
+  PhysicalCellBorderLineStyle top;
+  PhysicalCellBorderLineStyle bottom;
+  PhysicalCellBorderLineStyle left;
+  PhysicalCellBorderLineStyle right;
+} PhysicalCellBorders;
 
 
 typedef struct _Table Table;
@@ -140,6 +158,10 @@ typedef guint32 (*TableGetFGColorHandler) (VirtualLocation virt_loc,
                                            gpointer user_data);
 
 typedef guint32 (*TableGetBGColorHandler) (VirtualLocation virt_loc,
+                                           gpointer user_data);
+
+typedef void (*TableGetCellBorderHandler) (VirtualLocation virt_loc,
+                                           PhysicalCellBorders *borders,
                                            gpointer user_data);
 
 typedef gpointer (*VirtCellDataAllocator)   (void);
@@ -190,6 +212,7 @@ struct _Table
   TableGetEntryHandler entry_handler;
   TableGetFGColorHandler fg_color_handler;
   TableGetBGColorHandler bg_color_handler;
+  TableGetCellBorderHandler cell_border_handler;
 
   gpointer handler_user_data;
 
@@ -205,6 +228,7 @@ struct _Table
 Table *     gnc_table_new (TableGetEntryHandler entry_handler,
                            TableGetFGColorHandler fg_color_handler,
                            TableGetBGColorHandler bg_color_handler,
+                           TableGetCellBorderHandler cell_border_handler,
                            gpointer handler_user_data,
                            VirtCellDataAllocator allocator,
                            VirtCellDataDeallocator deallocator,
@@ -244,6 +268,9 @@ const char *   gnc_table_get_label (Table *table, VirtualLocation virt_loc);
 guint32        gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc);
 
 guint32        gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc);
+
+void           gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
+                                      PhysicalCellBorders *borders);
 
 CellAlignment  gnc_table_get_align (Table *table, VirtualLocation virt_loc);
 

@@ -43,7 +43,8 @@ GdkFont *gnucash_register_hint_font = NULL;
 static char *register_font_name = NULL;
 static char *register_hint_font_name = NULL;
 
-static RegisterBorders reg_borders = 0;
+static gboolean use_vertical_lines = TRUE;
+static gboolean use_horizontal_lines = TRUE;
 
 static char *
 style_get_key (SheetBlockStyle *style)
@@ -485,34 +486,45 @@ gnucash_sheet_styles_recompile(GnucashSheet *sheet)
 
 
 void
-gnucash_style_set_register_borders (int reg_borders_new)
+gnucash_style_config_register_borders (gboolean use_vertical_lines_in,
+                                       gboolean use_horizontal_lines_in)
 {
-        reg_borders = reg_borders_new;
+        use_vertical_lines = use_vertical_lines_in;
+        use_horizontal_lines = use_horizontal_lines_in;
 }
 
 
-gint
-gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc)
+void
+gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
+                           PhysicalCellBorders *borders)
 {
         SheetBlockStyle *style;
-        gint borders;
+        PhysicalCellBorderLineStyle line_style;
 
-        g_return_val_if_fail (sheet != NULL, 0);
-        g_return_val_if_fail (GNUCASH_IS_SHEET (sheet), 0);
+        g_return_if_fail (sheet != NULL);
+        g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
-        borders = reg_borders;
+        line_style = use_vertical_lines ?
+                CELL_BORDER_LINE_NORMAL : CELL_BORDER_LINE_NONE;
+
+        borders->top    = line_style;
+        borders->bottom = line_style;
+
+        line_style = use_horizontal_lines ?
+                CELL_BORDER_LINE_NORMAL : CELL_BORDER_LINE_NONE;
+
+        borders->left  = line_style;
+        borders->right = line_style;
 
         if (virt_loc.phys_col_offset == 0)
-                return borders |= STYLE_BORDER_LEFT;
+                borders->left = CELL_BORDER_LINE_NORMAL;
 
         style = sheet->cursor_styles[CURSOR_TYPE_HEADER];
-        if (style == NULL)
-                return borders;
+        if (style)
+                if (virt_loc.phys_col_offset == (style->ncols - 1))
+                        borders->right = CELL_BORDER_LINE_NORMAL;
 
-        if (virt_loc.phys_col_offset == (style->ncols - 1))
-                return borders |= STYLE_BORDER_RIGHT;
-
-        return borders;
+        gnc_table_get_borders (sheet->table, virt_loc, borders);
 }
 
 

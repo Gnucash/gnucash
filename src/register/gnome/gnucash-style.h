@@ -26,13 +26,6 @@
 #include "splitreg.h"
 #include "gnucash-sheet.h"
 
-#define STYLE_BORDER_LEFT   (1 << 0)
-#define STYLE_BORDER_RIGHT  (1 << 1)
-#define STYLE_BORDER_TOP    (1 << 2)
-#define STYLE_BORDER_BOTTOM (1 << 3)
-
-typedef int RegisterBorders;
-
 typedef struct
 {
         gint pixel_height;
@@ -116,11 +109,13 @@ void gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
                                                     gint *x, gint *y,
 						    gint *w, gint *h);
 
-void gnucash_style_ref (SheetBlockStyle *style);
+void gnucash_style_ref   (SheetBlockStyle *style);
 void gnucash_style_unref (SheetBlockStyle *style);
 
-void gnucash_style_set_register_borders (int reg_borders_new);
-gint gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc);
+void gnucash_style_config_register_borders (gboolean use_vertical_lines,
+                                            gboolean use_horizontal_lines);
+void gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
+                                PhysicalCellBorders *borders);
 
 void gnucash_sheet_get_header_widths (GnucashSheet *sheet, int *header_widths);
 void gnucash_sheet_set_header_widths (GnucashSheet *sheet, int *header_widths);

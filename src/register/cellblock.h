@@ -91,6 +91,9 @@ typedef struct
   short num_rows;
   short num_cols;
 
+  short start_col;
+  short stop_col;
+
   short cursor_type;
 
   GTable *cb_cells; /* Holds the CellBlockCell table */

@@ -62,6 +62,7 @@ Table *
 gnc_table_new (TableGetEntryHandler entry_handler,
                TableGetFGColorHandler fg_color_handler,
                TableGetBGColorHandler bg_color_handler,
+               TableGetCellBorderHandler cell_border_handler,
                gpointer handler_user_data,
                VirtCellDataAllocator allocator,
                VirtCellDataDeallocator deallocator,
@@ -76,6 +77,7 @@ gnc_table_new (TableGetEntryHandler entry_handler,
    table->entry_handler = entry_handler;
    table->fg_color_handler = fg_color_handler;
    table->bg_color_handler = bg_color_handler;
+   table->cell_border_handler = cell_border_handler;
    table->handler_user_data = handler_user_data;
    table->vcell_data_allocator = allocator;
    table->vcell_data_deallocator = deallocator;
@@ -259,6 +261,18 @@ gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc)
     return 0xffffff; /* white */
 
   return table->bg_color_handler (virt_loc, table->handler_user_data);
+}
+
+/* ==================================================== */
+
+void
+gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
+                       PhysicalCellBorders *borders)
+{
+  if (!table->cell_border_handler)
+    return;
+
+  table->cell_border_handler (virt_loc, borders, table->handler_user_data);
 }
 
 /* ==================================================== */
@@ -877,7 +891,7 @@ gnc_table_leave_update(Table *table, VirtualLocation virt_loc)
   int cell_col;
 
   if (table == NULL)
-    return NULL;
+    return;
 
   cb = table->current_cursor;
 

@@ -96,6 +96,9 @@ gnc_cellblock_init (CellBlock *cellblock, int rows, int cols)
   cellblock->num_rows = rows;
   cellblock->num_cols = cols;
 
+  cellblock->start_col = cols;
+  cellblock->stop_col  = -1;
+
   /* malloc new cell table */
   cellblock->cb_cells = g_table_new (sizeof (CellBlockCell),
                                      gnc_cellblock_cell_construct,

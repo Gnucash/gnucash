@@ -308,6 +308,12 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
   CellBlockCell *cb_cell;
   BasicCell *hcell;
 
+  cursor->start_col = MIN (cursor->start_col, col);
+  cursor->stop_col  = MAX (cursor->stop_col,  col);
+
+  reg->cursor_header->start_col = MIN (reg->cursor_header->start_col, col);
+  reg->cursor_header->stop_col  = MAX (reg->cursor_header->stop_col,  col);
+
   hcell = reg->header_cells[cell_type];
 
   cb_cell = gnc_cellblock_get_cell (cursor, row, col);
@@ -333,12 +339,6 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
       reg->cells[cell_type] == (BasicCell *) reg->descCell;
     cb_cell->span = reg->cells[cell_type] == (BasicCell *) reg->memoCell;
   }
-}
-
-/* SET_CELL macro initializes cells in the register */
-
-#define SET_CELL(NAME,col,row) {		\
-  set_cell (reg, curs, NAME##_CELL, row, col);	\
 }
 
 static void
@@ -408,41 +408,41 @@ configLayout (SplitRegister *reg)
     case EQUITY_REGISTER:
       {
         curs = reg->cursor_ledger_single;
-        SET_CELL (DATE,   0,  0);
-        SET_CELL (NUM,    1,  0);
-        SET_CELL (DESC,   2,  0);
-        SET_CELL (MXFRM,  3,  0);
-        SET_CELL (RECN,   4,  0);
-        SET_CELL (DEBT,   5,  0);
-        SET_CELL (CRED,   6,  0);
-        SET_CELL (BALN,   7,  0);
+        set_cell (reg, curs, DATE_CELL,  0, 0);
+        set_cell (reg, curs, NUM_CELL,   0, 1);
+        set_cell (reg, curs, DESC_CELL,  0, 2);
+        set_cell (reg, curs, MXFRM_CELL, 0, 3);
+        set_cell (reg, curs, RECN_CELL,  0, 4);
+        set_cell (reg, curs, DEBT_CELL,  0, 5);
+        set_cell (reg, curs, CRED_CELL,  0, 6);
+        set_cell (reg, curs, BALN_CELL,  0, 7);
 
         curs = reg->cursor_ledger_double;
         copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
 
-        SET_CELL (ACTN,   1,  1);
-        SET_CELL (MEMO,   2,  1);
+        set_cell (reg, curs, ACTN_CELL, 1, 1);
+        set_cell (reg, curs, MEMO_CELL, 1, 2);
 
         curs = reg->cursor_journal_single;
-        SET_CELL (DATE,   0,  0);
-        SET_CELL (NUM,    1,  0);
-        SET_CELL (DESC,   2,  0);
-        SET_CELL (RECN,   4,  0);
-        SET_CELL (DEBT,   5,  0);
-        SET_CELL (CRED,   6,  0);
-        SET_CELL (BALN,   7,  0);
+        set_cell (reg, curs, DATE_CELL, 0, 0);
+        set_cell (reg, curs, NUM_CELL,  0, 1);
+        set_cell (reg, curs, DESC_CELL, 0, 2);
+        set_cell (reg, curs, RECN_CELL, 0, 4);
+        set_cell (reg, curs, DEBT_CELL, 0, 5);
+        set_cell (reg, curs, CRED_CELL, 0, 6);
+        set_cell (reg, curs, BALN_CELL, 0, 7);
 
         curs = reg->cursor_journal_double;
         copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
 
-        SET_CELL (MEMO,   2,  1);
+        set_cell (reg, curs, MEMO_CELL, 1, 2);
 
         curs = reg->cursor_split;
-        SET_CELL (ACTN,   1,  0);
-        SET_CELL (MEMO,   2,  0);
-        SET_CELL (XFRM,   3,  0);
-        SET_CELL (DEBT,   5,  0);
-        SET_CELL (CRED,   6,  0);
+        set_cell (reg, curs, ACTN_CELL, 0, 1);
+        set_cell (reg, curs, MEMO_CELL, 0, 2);
+        set_cell (reg, curs, XFRM_CELL, 0, 3);
+        set_cell (reg, curs, DEBT_CELL, 0, 5);
+        set_cell (reg, curs, CRED_CELL, 0, 6);
 
         break;
       }
@@ -453,41 +453,41 @@ configLayout (SplitRegister *reg)
     case SEARCH_LEDGER:
       {
         curs = reg->cursor_ledger_single;
-        SET_CELL (DATE,   0,  0);
-        SET_CELL (NUM,    1,  0);
-        SET_CELL (DESC,   2,  0);
-        SET_CELL (XTO,    3,  0);
-        SET_CELL (MXFRM,  4,  0);
-        SET_CELL (RECN,   5,  0);
-        SET_CELL (DEBT,   6,  0);
-        SET_CELL (CRED,   7,  0);
+        set_cell (reg, curs, DATE_CELL,  0, 0);
+        set_cell (reg, curs, NUM_CELL,   0, 1);
+        set_cell (reg, curs, DESC_CELL,  0, 2);
+        set_cell (reg, curs, XTO_CELL,   0, 3);
+        set_cell (reg, curs, MXFRM_CELL, 0, 4);
+        set_cell (reg, curs, RECN_CELL,  0, 5);
+        set_cell (reg, curs, DEBT_CELL,  0, 6);
+        set_cell (reg, curs, CRED_CELL,  0, 7);
 
         curs = reg->cursor_ledger_double;
         copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
 
-        SET_CELL (ACTN,   1,  1);
-        SET_CELL (MEMO,   2,  1);
+        set_cell (reg, curs, ACTN_CELL, 1, 1);
+        set_cell (reg, curs, MEMO_CELL, 1, 2);
 
         curs = reg->cursor_journal_single;
-        SET_CELL (DATE,   0,  0);
-        SET_CELL (NUM,    1,  0);
-        SET_CELL (DESC,   2,  0);
-        SET_CELL (XTO,    3,  0);
-        SET_CELL (RECN,   5,  0);
-        SET_CELL (DEBT,   6,  0);
-        SET_CELL (CRED,   7,  0);
+        set_cell (reg, curs, DATE_CELL, 0, 0);
+        set_cell (reg, curs, NUM_CELL,  0, 1);
+        set_cell (reg, curs, DESC_CELL, 0, 2);
+        set_cell (reg, curs, XTO_CELL,  0, 3);
+        set_cell (reg, curs, RECN_CELL, 0, 5);
+        set_cell (reg, curs, DEBT_CELL, 0, 6);
+        set_cell (reg, curs, CRED_CELL, 0, 7);
 
         curs = reg->cursor_journal_double;
         copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
 
-        SET_CELL (MEMO,   2,  1);
+        set_cell (reg, curs, MEMO_CELL, 1, 2);
 
         curs = reg->cursor_split;
-        SET_CELL (ACTN,   1,  0);
-        SET_CELL (MEMO,   2,  0);
-        SET_CELL (XFRM,   4,  0);
-        SET_CELL (DEBT,   6,  0);
-        SET_CELL (CRED,   7,  0);
+        set_cell (reg, curs, ACTN_CELL, 0, 1);
+        set_cell (reg, curs, MEMO_CELL, 0, 2);
+        set_cell (reg, curs, XFRM_CELL, 0, 4);
+        set_cell (reg, curs, DEBT_CELL, 0, 6);
+        set_cell (reg, curs, CRED_CELL, 0, 7);
 
         break;
       }
@@ -497,47 +497,47 @@ configLayout (SplitRegister *reg)
     case CURRENCY_REGISTER:
       {
         curs = reg->cursor_ledger_single;
-        SET_CELL (DATE,    0,  0);
-        SET_CELL (NUM,     1,  0);
-        SET_CELL (DESC,    2,  0);
-        SET_CELL (MXFRM,   3,  0);
-        SET_CELL (RECN,    4,  0);
-        SET_CELL (SHRS,    5,  0);
-        SET_CELL (PRIC,    6,  0);
-        SET_CELL (DEBT,    7,  0);
-        SET_CELL (CRED,    8,  0);
-        SET_CELL (SHRBALN, 9,  0);
-        SET_CELL (BALN,   10,  0);
+        set_cell (reg, curs, DATE_CELL,    0,  0);
+        set_cell (reg, curs, NUM_CELL,     0,  1);
+        set_cell (reg, curs, DESC_CELL,    0,  2);
+        set_cell (reg, curs, MXFRM_CELL,   0,  3);
+        set_cell (reg, curs, RECN_CELL,    0,  4);
+        set_cell (reg, curs, SHRS_CELL,    0,  5);
+        set_cell (reg, curs, PRIC_CELL,    0,  6);
+        set_cell (reg, curs, DEBT_CELL,    0,  7);
+        set_cell (reg, curs, CRED_CELL,    0,  8);
+        set_cell (reg, curs, SHRBALN_CELL, 0,  9);
+        set_cell (reg, curs, BALN_CELL,    0, 10);
 
         curs = reg->cursor_ledger_double;
         copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
 
-        SET_CELL (ACTN,    1,  1);
-        SET_CELL (MEMO,    2,  1);
+        set_cell (reg, curs, ACTN_CELL, 1, 1);
+        set_cell (reg, curs, MEMO_CELL, 1, 2);
 
         curs = reg->cursor_journal_single;
-        SET_CELL (DATE,    0,  0);
-        SET_CELL (NUM,     1,  0);
-        SET_CELL (DESC,    2,  0);
-        SET_CELL (RECN,    4,  0);
-        SET_CELL (SHRS,    5,  0);
-        SET_CELL (PRIC,    6,  0);
-        SET_CELL (DEBT,    7,  0);
-        SET_CELL (CRED,    8,  0);
-        SET_CELL (SHRBALN, 9,  0);
-        SET_CELL (BALN,   10, 0);
+        set_cell (reg, curs, DATE_CELL,    0,  0);
+        set_cell (reg, curs, NUM_CELL,     0,  1);
+        set_cell (reg, curs, DESC_CELL,    0,  2);
+        set_cell (reg, curs, RECN_CELL,    0,  4);
+        set_cell (reg, curs, SHRS_CELL,    0,  5);
+        set_cell (reg, curs, PRIC_CELL,    0,  6);
+        set_cell (reg, curs, DEBT_CELL,    0,  7);
+        set_cell (reg, curs, CRED_CELL,    0,  8);
+        set_cell (reg, curs, SHRBALN_CELL, 0,  9);
+        set_cell (reg, curs, BALN_CELL,    0, 10);
 
         curs = reg->cursor_journal_double;
         copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
 
-        SET_CELL (MEMO,   2,  1);
+        set_cell (reg, curs, MEMO_CELL, 1, 2);
 
         curs = reg->cursor_split;
-        SET_CELL (ACTN,    1,  0);
-        SET_CELL (MEMO,    2,  0);
-        SET_CELL (XFRM,    3,  0);
-        SET_CELL (DEBT,    7,  0);
-        SET_CELL (CRED,    8,  0);
+        set_cell (reg, curs, ACTN_CELL, 0, 1);
+        set_cell (reg, curs, MEMO_CELL, 0, 2);
+        set_cell (reg, curs, XFRM_CELL, 0, 3);
+        set_cell (reg, curs, DEBT_CELL, 0, 7);
+        set_cell (reg, curs, CRED_CELL, 0, 8);
 
         break;
       }
@@ -546,47 +546,47 @@ configLayout (SplitRegister *reg)
     case PORTFOLIO_LEDGER:
       {
         curs = reg->cursor_ledger_single;
-        SET_CELL (DATE,    0,  0);
-        SET_CELL (NUM,     1,  0);
-        SET_CELL (DESC,    2,  0);
-        SET_CELL (XTO,     3,  0);
-        SET_CELL (MXFRM,   4,  0);
-        SET_CELL (RECN,    5,  0);
-        SET_CELL (SHRS,    6,  0);
-        SET_CELL (PRIC,    7,  0);
-        SET_CELL (DEBT,    8,  0);
-        SET_CELL (CRED,    9,  0);
-        SET_CELL (SHRBALN, 10,  0);
+        set_cell (reg, curs, DATE_CELL,    0,  0);
+        set_cell (reg, curs, NUM_CELL,     0,  1);
+        set_cell (reg, curs, DESC_CELL,    0,  2);
+        set_cell (reg, curs, XTO_CELL,     0,  3);
+        set_cell (reg, curs, MXFRM_CELL,   0,  4);
+        set_cell (reg, curs, RECN_CELL,    0,  5);
+        set_cell (reg, curs, SHRS_CELL,    0,  6);
+        set_cell (reg, curs, PRIC_CELL,    0,  7);
+        set_cell (reg, curs, DEBT_CELL,    0,  8);
+        set_cell (reg, curs, CRED_CELL,    0,  9);
+        set_cell (reg, curs, SHRBALN_CELL, 0, 10);
 
         curs = reg->cursor_ledger_double;
         copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
 
-        SET_CELL (ACTN,    1,  1);
-        SET_CELL (MEMO,    2,  1);
+        set_cell (reg, curs, ACTN_CELL, 1, 1);
+        set_cell (reg, curs, MEMO_CELL, 1, 2);
 
         curs = reg->cursor_journal_single;
-        SET_CELL (DATE,    0,  0);
-        SET_CELL (NUM,     1,  0);
-        SET_CELL (DESC,    2,  0);
-        SET_CELL (XTO,     3,  0);
-        SET_CELL (RECN,    5,  0);
-        SET_CELL (SHRS,    6,  0);
-        SET_CELL (PRIC,    7,  0);
-        SET_CELL (DEBT,    8,  0);
-        SET_CELL (CRED,    9,  0);
-        SET_CELL (SHRBALN, 10,  0);
+        set_cell (reg, curs, DATE_CELL,    0,  0);
+        set_cell (reg, curs, NUM_CELL,     0,  1);
+        set_cell (reg, curs, DESC_CELL,    0,  2);
+        set_cell (reg, curs, XTO_CELL,     0,  3);
+        set_cell (reg, curs, RECN_CELL,    0,  5);
+        set_cell (reg, curs, SHRS_CELL,    0,  6);
+        set_cell (reg, curs, PRIC_CELL,    0,  7);
+        set_cell (reg, curs, DEBT_CELL,    0,  8);
+        set_cell (reg, curs, CRED_CELL,    0,  9);
+        set_cell (reg, curs, SHRBALN_CELL, 0, 10);
 
         curs = reg->cursor_journal_double;
         copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
 
-        SET_CELL (MEMO,   2,  1);
+        set_cell (reg, curs, MEMO_CELL, 1, 2);
 
         curs = reg->cursor_split;
-        SET_CELL (ACTN,    1,  0);
-        SET_CELL (MEMO,    2,  0);
-        SET_CELL (XFRM,    4,  0);
-        SET_CELL (DEBT,    8,  0);
-        SET_CELL (CRED,    9,  0);
+        set_cell (reg, curs, ACTN_CELL, 0, 1);
+        set_cell (reg, curs, MEMO_CELL, 0, 2);
+        set_cell (reg, curs, XFRM_CELL, 0, 4);
+        set_cell (reg, curs, DEBT_CELL, 0, 8);
+        set_cell (reg, curs, CRED_CELL, 0, 9);
 
         break;
       }
@@ -683,6 +683,30 @@ mallocCursors (SplitRegister *reg)
 
 /* ============================================== */
 
+static void
+sr_get_cell_borders (VirtualLocation virt_loc,
+                     PhysicalCellBorders *borders,
+                     gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  VirtualCell *vcell;
+
+  vcell = gnc_table_get_virtual_cell (reg->table, virt_loc.vcell_loc);
+  if (!vcell || !vcell->cellblock)
+    return;
+
+  if ((virt_loc.phys_col_offset < vcell->cellblock->start_col) ||
+      (virt_loc.phys_col_offset > vcell->cellblock->stop_col))
+  {
+    borders->top    = CELL_BORDER_LINE_NONE;
+    borders->bottom = CELL_BORDER_LINE_NONE;
+    borders->left   = CELL_BORDER_LINE_NONE;
+    borders->right  = CELL_BORDER_LINE_NONE;
+  }
+}
+
+/* ============================================== */
+
 #define NEW(NAME, CN, TYPE)			\
    reg->CN##Cell = xaccMalloc##TYPE##Cell();	\
    reg->cells[NAME##_CELL] = (BasicCell *) reg->CN##Cell;
@@ -733,7 +757,6 @@ xaccInitSplitRegister (SplitRegister *reg,
   NEW (RECN,    recn,    Recn);
   NEW (SHRBALN, shrbaln, Price);
   NEW (BALN,    balance, Price);
-
   NEW (XFRM,    xfrm,    Combo);
   NEW (MXFRM,   mxfrm,   Combo);
   NEW (XTO,     xto,     Combo);
@@ -847,8 +870,14 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* add menu items for the action cell */
   configAction (reg);
 
-  table = gnc_table_new (entry_handler, fg_color_handler, bg_color_handler,
-                         reg, allocator, deallocator, copy);
+  table = gnc_table_new (entry_handler,
+                         fg_color_handler,
+                         bg_color_handler,
+                         sr_get_cell_borders,
+                         reg,
+                         allocator,
+                         deallocator,
+                         copy);
 
   /* Set up header */
   {

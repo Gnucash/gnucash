@@ -606,19 +606,20 @@ gnc_configure_register_borders_cb(void *data)
 static void
 gnc_configure_register_borders(void)
 {
-  RegisterBorders reg_borders = 0;
+  gboolean use_vertical_lines;
+  gboolean use_horizontal_lines;
 
-  if (gnc_lookup_boolean_option("Register",
-                                "Show Vertical Borders",
-                                TRUE))
-    reg_borders |= STYLE_BORDER_LEFT | STYLE_BORDER_RIGHT;
+  use_vertical_lines = gnc_lookup_boolean_option("Register",
+                                                 "Show Vertical Borders",
+                                                 TRUE);
+
   
-  if (gnc_lookup_boolean_option("Register",
-                                "Show Horizontal Borders",
-                                TRUE))
-    reg_borders |= STYLE_BORDER_TOP | STYLE_BORDER_BOTTOM;
-  
-  gnucash_style_set_register_borders (reg_borders);
+  use_horizontal_lines = gnc_lookup_boolean_option("Register",
+                                                   "Show Horizontal Borders",
+                                                   TRUE);
+
+  gnucash_style_config_register_borders (use_vertical_lines,
+                                         use_horizontal_lines);
 }
 
 /* gnc_configure_auto_raise_cb

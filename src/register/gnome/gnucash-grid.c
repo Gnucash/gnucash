@@ -251,6 +251,86 @@ gnucash_grid_find_loc_by_pixel (GnucashGrid *grid, gint x, gint y,
         return gnucash_grid_find_cell_by_pixel (grid, x, y, virt_loc);
 }
 
+G_INLINE_FUNC void
+draw_cell_line (GdkDrawable *drawable,
+                GdkGC *gc, GdkColor *bg_color,
+                int x1, int y1, int x2, int y2,
+                PhysicalCellBorderLineStyle style);
+
+G_INLINE_FUNC void
+draw_cell_line (GdkDrawable *drawable,
+                GdkGC *gc, GdkColor *bg_color,
+                int x1, int y1, int x2, int y2,
+                PhysicalCellBorderLineStyle style)
+{
+        GdkColor *fg_color;
+
+        switch (style)
+        {
+                case CELL_BORDER_LINE_NONE:
+                        fg_color = bg_color;
+                        break;
+
+                case CELL_BORDER_LINE_LIGHT:
+                        fg_color = &gn_light_gray;
+                        break;
+
+                case CELL_BORDER_LINE_NORMAL:
+                case CELL_BORDER_LINE_HEAVY:
+                        fg_color = &gn_black;
+                        break;
+
+                default:
+                        return;
+        }
+
+        gdk_gc_set_foreground (gc, fg_color);
+        gdk_draw_line (drawable, gc, x1, y1, x2, y2);
+}
+
+static void
+get_cell_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
+                  PhysicalCellBorders *borders)
+{
+        VirtualLocation v_loc;
+        PhysicalCellBorders neighbor;
+
+        gnucash_sheet_get_borders (sheet, virt_loc, borders);
+
+        /* top */
+        v_loc = virt_loc;
+        if (gnc_table_move_vertical_position (sheet->table, &v_loc, -1))
+        {
+                gnucash_sheet_get_borders (sheet, v_loc, &neighbor);
+                borders->top = MAX (borders->top, neighbor.bottom);
+        }
+
+        /* bottom */
+        v_loc = virt_loc;
+        if (gnc_table_move_vertical_position (sheet->table, &v_loc, 1))
+        {
+                gnucash_sheet_get_borders (sheet, v_loc, &neighbor);
+                borders->bottom = MAX (borders->bottom, neighbor.top);
+        }
+
+        /* left */
+        v_loc = virt_loc;
+        v_loc.phys_col_offset--;
+        if (gnc_table_virtual_loc_valid (sheet->table, v_loc, TRUE))
+        {
+                gnucash_sheet_get_borders (sheet, v_loc, &neighbor);
+                borders->left = MAX (borders->left, neighbor.right);
+        }
+
+        /* right */
+        v_loc = virt_loc;
+        v_loc.phys_col_offset++;
+        if (gnc_table_virtual_loc_valid (sheet->table, v_loc, TRUE))
+        {
+                gnucash_sheet_get_borders (sheet, v_loc, &neighbor);
+                borders->right = MAX (borders->right, neighbor.left);
+        }
+}
 
 static void
 draw_cell (GnucashGrid *grid,
@@ -260,6 +340,7 @@ draw_cell (GnucashGrid *grid,
            int x, int y, int width, int height)
 {
         Table *table = grid->sheet->table;
+        PhysicalCellBorders borders;
         const char *text;
         GdkFont *font;
         GdkColor *bg_color;
@@ -267,7 +348,6 @@ draw_cell (GnucashGrid *grid,
         gint x_offset, y_offset;
         GdkRectangle rect;
         guint32 argb;
-        gint borders;
 
         gdk_gc_set_background (grid->gc, &gn_white);
 
@@ -275,28 +355,30 @@ draw_cell (GnucashGrid *grid,
         bg_color = gnucash_color_argb_to_gdk (argb);
 
         gdk_gc_set_foreground (grid->gc, bg_color);
-        gdk_draw_rectangle (drawable, grid->gc, TRUE, x, y, width, height);
+        gdk_draw_rectangle (drawable, grid->gc, TRUE,
+                            x + 1, y + 1, width - 1, height - 1);
 
-        gdk_gc_set_foreground (grid->gc, &gn_black);
-
-        borders = gnucash_sheet_get_borders (grid->sheet, virt_loc);
+        get_cell_borders (grid->sheet, virt_loc, &borders);
+ 
         /* top */
-        if (borders & STYLE_BORDER_TOP)
-                gdk_draw_line (drawable, grid->gc, x, y, x+width, y);
+        draw_cell_line (drawable, grid->gc, bg_color,
+                        x, y, x + width, y,
+                        borders.top);
 
         /* right */
-        if (borders & STYLE_BORDER_RIGHT)
-                gdk_draw_line (drawable, grid->gc, x+width, y,
-                               x+width, y+height);
+        draw_cell_line (drawable, grid->gc, bg_color,
+                        x + width, y, x + width, y + height,
+                        borders.right);
 
         /* bottom */
-        if (borders & STYLE_BORDER_BOTTOM)
-                gdk_draw_line (drawable, grid->gc, x+width,
-                               y+height, x, y+height);
+        draw_cell_line (drawable, grid->gc, bg_color,
+                        x + width, y + height, x, y + height,
+                        borders.bottom);
 
         /* left */
-        if (borders & STYLE_BORDER_LEFT)
-                gdk_draw_line (drawable, grid->gc, x, y+height, x, y);
+        draw_cell_line (drawable, grid->gc, bg_color,
+                        x, y + height, x, y,
+                        borders.left);
 
         /* dividing line */
         if ((virt_loc.phys_row_offset == 0) && (table->dividing_row >= 0))
@@ -355,14 +437,14 @@ draw_cell (GnucashGrid *grid,
                                 x_offset = CELL_HPADDING;
                         else {
                                 x_offset = width / 2;
-                                x_offset -= gdk_string_measure (font, text) / 2;
+                                x_offset -= gdk_string_measure(font, text) / 2;
                         }
                         break;
                 }
 
         rect.x = x + CELL_HPADDING;
         rect.y = y + CELL_VPADDING;
-        rect.width = width - 2*CELL_HPADDING;
+        rect.width = width - 2 * CELL_HPADDING;
         rect.height = height;
 
         gdk_gc_set_clip_rectangle (grid->gc, &rect);
@@ -428,7 +510,6 @@ draw_block (GnucashGrid *grid,
         }
 }
 
-/* FIXME:  this only does the first virtual column */
 static void
 gnucash_grid_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                    int x, int y, int width, int height)
@@ -437,12 +518,8 @@ gnucash_grid_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         VirtualLocation virt_loc;
         SheetBlock *sheet_block;
 
-        g_return_if_fail(x >= 0);
-        g_return_if_fail(y >= 0);
-
-        /* The default background */
-        gdk_draw_rectangle (drawable, grid->fill_gc, TRUE,
-                            0, 0, width, height);
+        if (x < 0 || y < 0)
+                return;
 
         /* compute our initial values where we start drawing */
         sheet_block = gnucash_grid_find_block_by_pixel (grid, x, y,

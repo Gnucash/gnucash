@@ -23,8 +23,9 @@
  *
  *  Based heavily (i.e., cut and pasted from) on the Gnumeric ItemCursor.
  *
- * Author:
- *     Heath Martin <martinh@pegasus.cc.ucf.edu>
+ * Authors:
+ *     Heath Martin   <martinh@pegasus.cc.ucf.edu>
+ *     Dave Peticolas <dave@krondo.com>
  */
 
 #include "gnucash-sheet.h"
@@ -44,13 +45,17 @@ enum {
 
 
 static void
-gnucash_cursor_get_pixel_coords (GnucashCursor *cursor, gint *x, gint *y,
+gnucash_cursor_get_pixel_coords (GnucashCursor *cursor,
+                                 gint *x, gint *y,
 				 gint *w, gint *h)
 {
         GnucashSheet *sheet = cursor->sheet;
         GnucashItemCursor *item_cursor;
         VirtualCellLocation vcell_loc;
+        CellDimensions *cd;
+        VirtualCell *vcell;
         SheetBlock *block;
+        gint col;
 
         item_cursor =
                 GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK]);
@@ -59,14 +64,46 @@ gnucash_cursor_get_pixel_coords (GnucashCursor *cursor, gint *x, gint *y,
         vcell_loc.virt_col = item_cursor->col;
 
         block = gnucash_sheet_get_block (sheet, vcell_loc);
-        if (block == NULL)
+        if (!block)
                 return;
 
+        vcell = gnc_table_get_virtual_cell (sheet->table, vcell_loc);
+        if (!vcell)
+                return;
+
+        for (col = 0; col < vcell->cellblock->num_cols; col++)
+        {
+                CellBlockCell *cb_cell;
+
+                cb_cell = gnc_cellblock_get_cell (vcell->cellblock, 0, col);
+                if (cb_cell->cell_type != NO_CELL)
+                        break;
+        }
+
         *y = block->origin_y;
-        *x = block->origin_x;
+
+        cd = gnucash_style_get_cell_dimensions (block->style, 0, col);
+        if (cd)
+                *x = cd->origin_x;
+        else
+                *x = block->origin_x;
+
+        for (col = vcell->cellblock->num_cols - 1; col >= 0; col--)
+        {
+                CellBlockCell *cb_cell;
+
+                cb_cell = gnc_cellblock_get_cell (vcell->cellblock, 0, col);
+                if (cb_cell->cell_type != NO_CELL)
+                        break;
+        }
 
         *h = block->style->dimensions->height;
-        *w = block->style->dimensions->width;
+
+        cd = gnucash_style_get_cell_dimensions (block->style, 0, col);
+        if (cd)
+                *w = cd->origin_x + cd->pixel_width - *x;
+        else
+                *w = block->style->dimensions->width - *x;
 }
 
 
@@ -117,18 +154,16 @@ void
 gnucash_cursor_configure (GnucashCursor *cursor)
 {
         GnomeCanvasItem *item;
-        GnucashItemCursor *item_cursor;
-        GnomeCanvasGroup *group;
+        GnucashItemCursor *block_cursor;
+        GnucashItemCursor *cell_cursor;
         GnomeCanvas *canvas;
         gint x, y, w, h;
         double wx, wy;
-                
+
         g_return_if_fail (cursor != NULL);
         g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
         canvas = GNOME_CANVAS(GNOME_CANVAS_ITEM(cursor)->canvas);
-
-        group = GNOME_CANVAS_GROUP(cursor);
 
         item = GNOME_CANVAS_ITEM (cursor);
 
@@ -147,40 +182,40 @@ gnucash_cursor_configure (GnucashCursor *cursor)
         item->y2 = y + h;
 
         item = cursor->cursor[GNUCASH_CURSOR_BLOCK];
-        item_cursor = GNUCASH_ITEM_CURSOR (item);
+        block_cursor = GNUCASH_ITEM_CURSOR (item);
 
         wx = 0;
         wy = 0;
 
         gnome_canvas_item_i2w (item, &wx, &wy);
-        gnome_canvas_w2c (canvas, wx, wy, &item_cursor->x, &item_cursor->y);
-        item_cursor->w = w;
-        item_cursor->h = h;
+        gnome_canvas_w2c (canvas, wx, wy, &block_cursor->x, &block_cursor->y);
+        block_cursor->w = w;
+        block_cursor->h = h;
 
-        item->x1 = item_cursor->x;
-        item->y1 = item_cursor->y;
-        item->x2 = item_cursor->x + w;
-        item->y2 = item_cursor->y + h;
+        item->x1 = block_cursor->x;
+        item->y1 = block_cursor->y;
+        item->x2 = block_cursor->x + w;
+        item->y2 = block_cursor->y + h;
 
         item = cursor->cursor[GNUCASH_CURSOR_CELL];
-        item_cursor = GNUCASH_ITEM_CURSOR(item);
+        cell_cursor = GNUCASH_ITEM_CURSOR(item);
 
         gnucash_sheet_style_get_cell_pixel_rel_coords (cursor->style,
-						       item_cursor->row,
-						       item_cursor->col,
+						       cell_cursor->row,
+						       cell_cursor->col,
 						       &x, &y, &w, &h);
-        wx = x;
+        wx = x - block_cursor->x;
         wy = y;
 
         gnome_canvas_item_i2w (item, &wx, &wy);
-        gnome_canvas_w2c (canvas, wx, wy, &item_cursor->x, &item_cursor->y);
-        item_cursor->w = w;
-        item_cursor->h = h;
+        gnome_canvas_w2c (canvas, wx, wy, &cell_cursor->x, &cell_cursor->y);
+        cell_cursor->w = w;
+        cell_cursor->h = h;
 
-        item->x1 =  item_cursor->x;
-        item->y1 =  item_cursor->y;
-        item->x2 =  item_cursor->x+ w;
-        item->y2 =  item_cursor->y + h;
+        item->x1 = cell_cursor->x;
+        item->y1 = cell_cursor->y;
+        item->x2 = cell_cursor->x + w;
+        item->y2 = cell_cursor->y + h;
 }
 
 
@@ -205,7 +240,7 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 						    GDK_LINE_SOLID, -1, -1);
 			gdk_gc_set_foreground (cursor->gc, &gn_black);
 			gdk_gc_set_background (cursor->gc, &gn_white);
-                
+
 			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
 					    dx+2, dy+2, dw-4, dh-4);
 			gdk_draw_rectangle (drawable, cursor->gc, FALSE,

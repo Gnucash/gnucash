@@ -39,14 +39,16 @@ GtkType    gnucash_item_cursor_get_type (void);
 GtkType    gnucash_cursor_get_type (void);
 
 
-enum {
+enum
+{
         GNUCASH_CURSOR_CELL,
         GNUCASH_CURSOR_BLOCK,
-        GNUCASH_CURSOR_MAX,
+        GNUCASH_CURSOR_NUM
 };
 
 
-typedef struct {
+typedef struct
+{
         GnomeCanvasItem canvas_item;
 
         gint type;
@@ -55,8 +57,7 @@ typedef struct {
         gint col;
 
         /* precomputed pixel coords for the item cursor*/
-        gint      x, y, w, h;
-
+        gint x, y, w, h;
 } GnucashItemCursor;
 
 
@@ -64,20 +65,21 @@ typedef struct
 {
         GnomeCanvasGroup canvas_group;
 
-        GnomeCanvasItem *cursor[GNUCASH_CURSOR_MAX];
+        GnomeCanvasItem *cursor[GNUCASH_CURSOR_NUM];
 
         GnucashSheet *sheet;
         GnucashGrid *grid;
 
         /* precomputed pixel coords for the block cursor*/
-        gint      x, y, w, h;
+        gint x, y, w, h;
 
-        GdkGC    *gc;
+        GdkGC *gc;
         SheetBlockStyle *style;
 } GnucashCursor;
 
 
-typedef struct {
+typedef struct
+{
         GnomeCanvasItemClass parent_class;
 } GnucashItemCursorClass;
 
@@ -90,7 +92,8 @@ typedef struct
 
 GnomeCanvasItem *gnucash_cursor_new (GnomeCanvasGroup *parent);
 
-void gnucash_cursor_get_virt (GnucashCursor *cursor, VirtualLocation *virt_loc);
+void gnucash_cursor_get_virt (GnucashCursor *cursor,
+                              VirtualLocation *virt_loc);
 
 void gnucash_cursor_set (GnucashCursor *cursor, VirtualLocation virt_loc);
 
