@@ -1,7 +1,9 @@
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/report
 
-gncscm_DATA = \
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report
+
+gncscmmod_DATA = \
   account-piecharts.scm \
   account-summary.scm \
   average-balance.scm \
@@ -10,15 +12,17 @@ gncscm_DATA = \
   hello-world.scm \
   iframe-url.scm \
   net-barchart.scm \
-  pnl.scm \
   portfolio.scm \
+  pnl.scm \
   price-scatter.scm \
   register.scm \
+  taxtxf.scm \
+  transaction.scm
+
+gncscm_DATA = \
   report-list.scm \
   stylesheet-fancy.scm \
   stylesheet-plain.scm \
-  taxtxf.scm \
-  transaction-report.scm \
   txf-export-help.scm \
   txf-export.scm \
   view-column.scm \
