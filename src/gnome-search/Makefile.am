@@ -18,6 +18,7 @@ AM_CFLAGS = \
 libgncmod_gnome_search_la_SOURCES = \
   gncmod-gnome-search.c \
   dialog-search.c \
+  search-account.c \
   search-boolean.c \
   search-core-type.c \
   search-date.c \
@@ -28,6 +29,7 @@ libgncmod_gnome_search_la_SOURCES = \
   search-string.c
 
 noinst_HEADERS = \
+  search-account.h \
   search-boolean.h \
   search-core-type.h \
   search-date.h \

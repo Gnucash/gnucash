@@ -429,7 +429,7 @@ static int guid_match_predicate (gpointer object, QueryAccess get_fcn,
 {
   query_guid_t pdata = (query_guid_t)pd;
   GList *node;
-  const GUID *guid;
+  const GUID *guid = NULL;
 
   VERIFY_PREDICATE (query_guid_type);
 

@@ -34,6 +34,7 @@
 #include "search-int64.h"
 #include "search-numeric.h"
 #include "search-boolean.h"
+#include "search-account.h"
 
 static gboolean validate (GNCSearchCoreType *fe);
 
@@ -198,6 +199,10 @@ gnc_search_core_type_new_type_name (const char *type)
     return (GNCSearchCoreType *)gnc_search_numeric_debcred_new ();
   } else if (!strcmp (type, QUERYCORE_BOOLEAN)) {
     return (GNCSearchCoreType *)gnc_search_boolean_new ();
+  } else if (!strcmp (type, GNC_ID_ACCOUNT)) {
+    return (GNCSearchCoreType *)gnc_search_account_new ();
+  } else if (!strcmp (type, "account-match-all")) {
+    return (GNCSearchCoreType *)gnc_search_account_matchall_new ();
   } else {
     g_warning("Unknown search type '%s'", type);
     return 0;
