@@ -678,7 +678,8 @@ xaccQueryMerge(Query * q1, Query * q2, QueryOp op)
     return NULL;
   }
 
-  switch(op) {
+  switch(op) 
+  {
   case QUERY_OR:
     retval = xaccMallocQuery();
     retval->terms = 
@@ -696,8 +697,10 @@ xaccQueryMerge(Query * q1, Query * q2, QueryOp op)
     retval->changed        = 1;
     retval->acct_group     = q1->acct_group;
 
-    for(i=q1->terms; i; i=i->next) {
-      for(j=q2->terms; j; j=j->next) {
+    for(i=q1->terms; i; i=i->next) 
+    {
+      for(j=q2->terms; j; j=j->next) 
+      {
         retval->terms = 
           g_list_append(retval->terms, 
                         g_list_concat
@@ -1042,8 +1045,8 @@ xaccQueryCheckSplit(Query * q, Split * s)
   return 0;
 }
 
-static GList *
-account_list_to_guid_list (GList *accounts)
+static AccountGUIDList *
+account_list_to_guid_list (AccountList *accounts)
 {
   GList *guids = NULL;
   GList *node;
@@ -1053,11 +1056,32 @@ account_list_to_guid_list (GList *accounts)
     Account *account = node->data;
     GUID *guid;
 
-    if (!account)
-      continue;
+    if (!account) continue;
 
     guid = xaccGUIDMalloc ();
     *guid = *xaccAccountGetGUID (account);
+
+    guids = g_list_prepend (guids, guid);
+  }
+
+  return g_list_reverse (guids);
+}
+
+static BookGUIDList *
+book_list_to_guid_list (BookList *books)
+{
+  GList *guids = NULL;
+  GList *node;
+
+  for (node = books; node; node = node->next)
+  {
+    GNCBook *book = node->data;
+    GUID *guid;
+
+    if (!book) continue;
+
+    guid = xaccGUIDMalloc ();
+    *guid = *gnc_book_get_guid (book);
 
     guids = g_list_prepend (guids, guid);
   }
@@ -1088,8 +1112,8 @@ copy_guid_list (GList *guids)
   return g_list_reverse (new_guids);
 }
 
-static GList *
-guid_list_to_account_list (Query * q, GList *guids)
+static AccountList *
+guid_list_to_account_list (Query * q, AccountGUIDList *guids)
 {
   GList *accounts = NULL;
   GList *node;
@@ -1117,6 +1141,7 @@ guid_list_to_account_list (Query * q, GList *guids)
  * xaccQueryCompileTerms
  * Prepare terms for processing by xaccQueryGetSplits
  ********************************************************************/
+
 static void
 xaccQueryCompileTerms (Query *q)
 {
@@ -1165,7 +1190,8 @@ xaccQueryGetSplits(Query * q)
   /* tmp hack alert */
   q->changed = 1;
 
-  if(q->changed == 0) {
+  if(q->changed == 0) 
+  {
     return q->split_list;
   }
 
@@ -1174,7 +1200,8 @@ xaccQueryGetSplits(Query * q)
 
   /* FIXME : sort for securities queries and eliminate non-
    * security accounts */
-  for(or_ptr = q->terms; or_ptr ; or_ptr = or_ptr->next) {
+  for(or_ptr = q->terms; or_ptr ; or_ptr = or_ptr->next) 
+  {
     and_ptr = or_ptr->data;
     or_ptr->data = g_list_sort(and_ptr, query_sort_func);
   }
@@ -1184,14 +1211,16 @@ xaccQueryGetSplits(Query * q)
 
   /* if there is a backend, query the backend, let it fetch the data */
   be = xaccGroupGetBackend (q->acct_group);
-  if (be && be->run_query) {
+  if (be && be->run_query) 
+  {
    (be->run_query) (be, q);
   }
   
   /* iterate over accounts */
   all_accts = xaccGroupGetSubAccounts (q->acct_group);
 
-  for (node = all_accts; node; node = node->next) {
+  for (node = all_accts; node; node = node->next) 
+  {
     current = node->data;
 
     if (!current)
@@ -1199,33 +1228,40 @@ xaccQueryGetSplits(Query * q)
 
     /* check this account to see if we need to look at it at all */
     acct_ok = 0;
-    for(or_ptr = q->terms; or_ptr ; or_ptr = or_ptr->next) {
+    for(or_ptr = q->terms; or_ptr ; or_ptr = or_ptr->next) 
+    {
       and_ptr = or_ptr->data;
       qt = and_ptr->data;
 
-      if(qt->data.type == PD_ACCOUNT) {
-        if(acct_query_matches(qt, current)) {
+      if(qt->data.type == PD_ACCOUNT) 
+      {
+        if(acct_query_matches(qt, current)) 
+        {
           acct_ok = 1;
           break;
         }
       }
-      else {
+      else 
+      {
         /* if the first query term isn't an account, then we have to
          * look at every split in every account. */
 
-        /* FIXME : security accounts can be ruled out */
+        /* FIXME : security accounts can be ruled out  ??? huh ??? */
         acct_ok = 1;
         break;
       }
     }
 
-    if(acct_ok) {
+    if(acct_ok) 
+    {
       GList *lp;
 
       /* iterate over splits */
-      for(lp = xaccAccountGetSplitList(current); lp; lp = lp->next) {
+      for(lp = xaccAccountGetSplitList(current); lp; lp = lp->next) 
+      {
         Split *s = (Split *) lp->data;
-        if(xaccQueryCheckSplit(q, s)) {
+        if(xaccQueryCheckSplit(q, s)) 
+        {
           matching_splits = g_list_prepend(matching_splits, s);
           split_count++;
         }
@@ -1250,20 +1286,24 @@ xaccQueryGetSplits(Query * q)
   matching_splits = g_list_sort(matching_splits, split_sort_func);
 
   /* crop the list to limit the number of splits */
-  if((split_count > q->max_splits) && (q->max_splits > -1)) {
-    if(q->max_splits > 0) {
+  if((split_count > q->max_splits) && (q->max_splits > -1)) 
+  {
+    if(q->max_splits > 0) 
+    {
       /* mptr is set to the first node of what will be the new list */
       mptr = g_list_nth(matching_splits, split_count - q->max_splits);
       /* mptr should not be NULL, but let's be safe */
-      if (mptr != NULL) {
-        if (mptr->prev != NULL)
-          mptr->prev->next = NULL;
+      if (mptr != NULL) 
+      {
+        if (mptr->prev != NULL) mptr->prev->next = NULL;
         mptr->prev = NULL;
       }
       g_list_free(matching_splits);
       matching_splits = mptr;
     }
-    else { /* q->max_splits == 0 */
+    else 
+    { 
+      /* q->max_splits == 0 */
       g_list_free(matching_splits);
       matching_splits = NULL;
     }
@@ -1581,7 +1621,8 @@ xaccQueryGetPredicate (pr_type_t term_type)
 
 /* =========================================================== */
 
-#define ADD_TERM(qt) {                             \
+#define ADD_TERM(qt, op)                           \
+{                                                  \
   Query     * qs  = xaccMallocQuery();             \
   Query     * qr;                                  \
                                                    \
@@ -1601,6 +1642,30 @@ xaccQueryGetPredicate (pr_type_t term_type)
   xaccFreeQuery(qr);                               \
 }
 
+#define STRING_TERM(case_sens, use_regexp)                   \
+{                                                            \
+  int flags = REG_EXTENDED;                                  \
+                                                             \
+  if(!case_sens)                                             \
+  {                                                          \
+    flags |= REG_ICASE;                                      \
+  }                                                          \
+                                                             \
+  if(use_regexp)                                             \
+  {                                                          \
+    regcomp(&qt->data.str.compiled, matchstring, flags);     \
+  }                                                          \
+  else if(!case_sens)                                        \
+  {                                                          \
+    char *s;                                                 \
+                                                             \
+    for(s = qt->data.str.matchstring; *s; s++)               \
+    {                                                        \
+      *s = tolower(*s);                                      \
+    }                                                        \
+  }                                                          \
+}
+
 /********************************************************************
  * xaccQueryAddPredicate
  * Add a predicate an existing query. 
@@ -1616,7 +1681,7 @@ xaccQueryAddPredicate (Query * q,
   qt->data   = *pred;
   qt->p = xaccQueryGetPredicate (qt->data.base.term_type);
   
-  ADD_TERM(qt);
+  ADD_TERM(qt, op);
 }
 
 /********************************************************************
@@ -1625,7 +1690,7 @@ xaccQueryAddPredicate (Query * q,
  ********************************************************************/
 
 void
-xaccQueryAddAccountMatch(Query * q, GList * accounts, acct_match_t how,
+xaccQueryAddAccountMatch(Query * q, AccountList * accounts, acct_match_t how,
                          QueryOp op) 
 {
   QueryTerm * qt  = g_new0(QueryTerm, 1);
@@ -1638,7 +1703,7 @@ xaccQueryAddAccountMatch(Query * q, GList * accounts, acct_match_t how,
   qt->data.acct.accounts      = NULL;
   qt->data.acct.account_guids = account_list_to_guid_list (accounts);
 
-  ADD_TERM(qt);
+  ADD_TERM(qt, op);
 }
 
 /********************************************************************
@@ -1647,7 +1712,7 @@ xaccQueryAddAccountMatch(Query * q, GList * accounts, acct_match_t how,
  ********************************************************************/
 
 void
-xaccQueryAddAccountGUIDMatch(Query * q, GList * account_guids,
+xaccQueryAddAccountGUIDMatch(Query * q, AccountGUIDList * account_guids,
                              acct_match_t how, QueryOp op)
 {
   QueryTerm * qt  = g_new0(QueryTerm, 1);
@@ -1660,7 +1725,7 @@ xaccQueryAddAccountGUIDMatch(Query * q, GList * account_guids,
   qt->data.acct.accounts      = NULL;
   qt->data.acct.account_guids = copy_guid_list (account_guids);
 
-  ADD_TERM(qt);
+  ADD_TERM(qt, op);
 }
 
 /********************************************************************
@@ -1670,7 +1735,8 @@ xaccQueryAddAccountGUIDMatch(Query * q, GList * account_guids,
 
 void
 xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
-                               QueryOp op) {
+                               QueryOp op) 
+{
   QueryTerm * qt  = g_new0(QueryTerm, 1);
 
   qt->p                   = & xaccAccountMatchPredicate;
@@ -1682,7 +1748,75 @@ xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
   qt->data.acct.account_guids
     = account_list_to_guid_list (qt->data.acct.accounts);
 
-  ADD_TERM(qt);
+  ADD_TERM(qt, op);
+}
+
+/********************************************************************
+ * xaccQueryAddBookMatch
+ * Add an book filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddBookMatch(Query * q, BookList * books, book_match_t how,
+                         QueryOp op) 
+{
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+
+  PERR ("multiple book support is not implemented");
+  qt->p                       = & xaccBookMatchPredicate;
+  qt->data.type               = PD_BOOK;
+  qt->data.base.term_type     = PR_BOOK;
+  qt->data.base.sense         = 1;
+  qt->data.book.how           = how;
+  qt->data.book.books      = NULL;
+  qt->data.book.book_guids = book_list_to_guid_list (books);
+
+  ADD_TERM(qt, op);
+}
+
+/********************************************************************
+ * xaccQueryAddBookGUIDMatch
+ * Add an book filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddBookGUIDMatch(Query * q, BookGUIDList * book_guids,
+                             book_match_t how, QueryOp op)
+{
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+
+  PERR ("multiple book support is not implemented");
+  qt->p                       = & xaccBookMatchPredicate;
+  qt->data.type               = PD_BOOK;
+  qt->data.base.term_type     = PR_BOOK;
+  qt->data.base.sense         = 1;
+  qt->data.book.how           = how;
+  qt->data.book.books      = NULL;
+  qt->data.book.book_guids = copy_guid_list (book_guids);
+
+  ADD_TERM(qt, op);
+}
+
+/********************************************************************
+ * xaccQueryAddSingleBookMatch
+ * Add an book filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddSingleBookMatch(Query * q, GNCBook * book, QueryOp op) 
+{
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+
+  qt->p                   = & xaccBookMatchPredicate;
+  qt->data.type           = PD_BOOK;
+  qt->data.base.term_type = PR_BOOK;
+  qt->data.base.sense     = 1;
+  qt->data.book.how       = BOOK_MATCH_ANY;
+  qt->data.book.books  = g_list_prepend(NULL, book);
+  qt->data.book.book_guids
+    = book_list_to_guid_list (qt->data.book.books);
+
+  ADD_TERM(qt, op);
 }
 
 
@@ -1694,9 +1828,9 @@ xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
 void
 xaccQueryAddDescriptionMatch(Query * q, const char * matchstring,
                              int case_sens, int use_regexp,
-                             QueryOp op) {
+                             QueryOp op) 
+{
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  int       flags = REG_EXTENDED;
 
   qt->p                    = & xaccDescriptionMatchPredicate;
   qt->data.type            = PD_STRING;
@@ -1706,22 +1840,8 @@ xaccQueryAddDescriptionMatch(Query * q, const char * matchstring,
   qt->data.str.use_regexp  = use_regexp;
   qt->data.str.matchstring = g_strdup(matchstring);
 
-  if(!case_sens) {
-    flags |= REG_ICASE;
-  }
-
-  if(use_regexp) {
-    regcomp(&qt->data.str.compiled, matchstring, flags);
-  }
-  else if(!case_sens) {
-    char *s;
-
-    for(s = qt->data.str.matchstring; *s; s++) {
-      *s = tolower(*s);
-    }
-  }
-
-  ADD_TERM(qt);
+  STRING_TERM (case_sens, use_regexp);
+  ADD_TERM(qt, op);
 }
 
 
@@ -1736,7 +1856,6 @@ xaccQueryAddMemoMatch(Query * q, const char * matchstring,
                       QueryOp op) 
 {
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  int       flags = REG_EXTENDED;
 
   qt->p                    = & xaccMemoMatchPredicate;
   qt->data.type            = PD_STRING;
@@ -1746,22 +1865,8 @@ xaccQueryAddMemoMatch(Query * q, const char * matchstring,
   qt->data.str.use_regexp  = use_regexp;
   qt->data.str.matchstring = g_strdup(matchstring);
 
-  if(!case_sens) {
-    flags |= REG_ICASE;
-  }
-
-  if(use_regexp) {
-    regcomp(&qt->data.str.compiled, matchstring, flags);
-  }
-  else if(!case_sens) {
-    char *s;
-
-    for(s = qt->data.str.matchstring; *s; s++) {
-      *s = tolower(*s);
-    }
-  }
-
-  ADD_TERM(qt);
+  STRING_TERM (case_sens, use_regexp);
+  ADD_TERM(qt, op);
 }
 
 
@@ -1789,7 +1894,7 @@ xaccQueryAddDateMatchTS(Query * q,
   qt->data.date.start     = sts;  
   qt->data.date.end       = ets;
   
-  ADD_TERM(qt);
+  ADD_TERM(qt, op);
 }
 
 /********************************************************************
@@ -1843,12 +1948,12 @@ xaccQueryAddDateMatchTT(Query * q,
  * xaccQueryAddNumberMatch
  * Add a number-field filter 
  ********************************************************************/
+
 void
 xaccQueryAddNumberMatch(Query * q, const char * matchstring, int case_sens,
                         int use_regexp, QueryOp op) 
 {
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  int       flags = REG_EXTENDED;
 
   qt->p                    = & xaccNumberMatchPredicate;
   qt->data.type            = PD_STRING;
@@ -1858,22 +1963,8 @@ xaccQueryAddNumberMatch(Query * q, const char * matchstring, int case_sens,
   qt->data.str.use_regexp  = use_regexp;
   qt->data.str.matchstring = g_strdup(matchstring);
 
-  if(!case_sens) {
-    flags |= REG_ICASE;
-  }
-
-  if(use_regexp) {
-    regcomp(&qt->data.str.compiled, matchstring, flags);
-  }
-  else if(!case_sens) {
-    char *s;
-
-    for(s = qt->data.str.matchstring; *s; s++) {
-      *s = tolower(*s);
-    }
-  }
-
-  ADD_TERM(qt);
+  STRING_TERM (case_sens, use_regexp);
+  ADD_TERM(qt, op);
 }
 
 
@@ -1881,12 +1972,12 @@ xaccQueryAddNumberMatch(Query * q, const char * matchstring, int case_sens,
  * xaccQueryAddActionMatch
  * Add a action-field filter 
  ********************************************************************/
+
 void
 xaccQueryAddActionMatch(Query * q, const char * matchstring, int case_sens,
                         int use_regexp, QueryOp op) 
 {
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  int       flags = REG_EXTENDED;
 
   qt->p                    = & xaccActionMatchPredicate;
   qt->data.type            = PD_STRING;
@@ -1896,22 +1987,8 @@ xaccQueryAddActionMatch(Query * q, const char * matchstring, int case_sens,
   qt->data.str.use_regexp  = use_regexp;
   qt->data.str.matchstring = g_strdup(matchstring);
 
-  if(!case_sens) {
-    flags |= REG_ICASE;
-  }
-
-  if(use_regexp) {
-    regcomp(&qt->data.str.compiled, matchstring, flags);
-  }
-  else if(!case_sens) {
-    char *s;
-
-    for(s = qt->data.str.matchstring; *s; s++) {
-      *s = tolower(*s);
-    }
-  }
-
-  ADD_TERM(qt);
+  STRING_TERM (case_sens, use_regexp);
+  ADD_TERM(qt, op);
 }
 
 
@@ -1937,7 +2014,7 @@ DxaccQueryAddValueMatch(Query * q, double amt,
   qt->data.amount.amt_sgn   = amt_sgn;
   qt->data.amount.amount    = amt;
 
-  ADD_TERM(qt);
+  ADD_TERM(qt, op);
 }
 
 
@@ -1962,7 +2039,7 @@ DxaccQueryAddSharePriceMatch(Query * q, double amt,
   qt->data.amount.amt_sgn   = AMT_SGN_MATCH_EITHER;
   qt->data.amount.amount    = amt;
   
-  ADD_TERM(qt);
+  ADD_TERM(qt, op);
 }
  
 
@@ -1987,7 +2064,7 @@ DxaccQueryAddSharesMatch(Query * q, double amt,
   qt->data.amount.amt_sgn   = AMT_SGN_MATCH_EITHER;
   qt->data.amount.amount    = amt;
   
-  ADD_TERM(qt);
+  ADD_TERM(qt, op);
 }
 
 
@@ -2010,7 +2087,7 @@ xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
   qt->data.misc.how       = how;
   qt->data.misc.data      = data;
 
-  ADD_TERM(qt);
+  ADD_TERM(qt, op);
 }
 
 /********************************************************************
@@ -2030,7 +2107,7 @@ xaccQueryAddClearedMatch(Query * q, cleared_match_t how,
   qt->data.base.sense     = 1;
   qt->data.cleared.how    = how;
 
-  ADD_TERM(qt);
+  ADD_TERM(qt, op);
 }
 
 /********************************************************************
@@ -2049,7 +2126,7 @@ xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op)
   qt->data.base.sense     = 1;
   qt->data.balance.how    = how;
 
-  ADD_TERM(qt);
+  ADD_TERM(qt, op);
 }
 
 /********************************************************************
@@ -2070,7 +2147,7 @@ xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
   qt->data.guid.guid      = guid ? *guid : *xaccGUIDNULL ();
   qt->data.guid.id_type   = id_type;
 
-  ADD_TERM(qt);
+  ADD_TERM(qt, op);
 }
 
 /********************************************************************
@@ -2095,9 +2172,11 @@ xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
   qt->data.kvp.value      = kvp_value_copy (value);
 
   for (node = qt->data.kvp.path; node; node = node->next)
+  {
     node->data = g_strdup (node->data);
+  }
 
-  ADD_TERM(qt);
+  ADD_TERM(qt, op);
 }
 
 /*******************************************************************
@@ -2196,7 +2275,8 @@ string_match_predicate(const char * s, PredicateData * pd)
 static int 
 value_match_predicate(double splitamt, PredicateData * pd) 
 {
-  switch(pd->amount.how) {
+  switch(pd->amount.how) 
+  {
   case AMT_MATCH_ATLEAST:
     return fabs(splitamt) >= pd->amount.amount;
     break;
@@ -2227,6 +2307,9 @@ PERR ("not implemented");
     case BOOK_MATCH_ALL:
     case BOOK_MATCH_ANY:
     case BOOK_MATCH_NONE:
+      /* s must match an account in pd */
+      // split_acct = xaccSplitGetAccount(s);
+      // return (g_list_find(pd->acct.accounts, split_acct) != NULL);
   }
   return 1;
 }
@@ -2751,27 +2834,18 @@ xaccQueryGetMaxSplits(Query * q)
 /*******************************************************************
  *  xaccQuerySetGroup
  *******************************************************************/
+
 void
-xaccQuerySetGroup(Query * q, AccountGroup * g) {
+xaccQuerySetGroup(Query * q, AccountGroup * g) 
+{
   if (!q) return;
   q->acct_group = g;
 }
 
-
-/*******************************************************************
- *  xaccQueryGetGroup
- *******************************************************************/
-AccountGroup *
-xaccQueryGetGroup(Query * q) 
-{
-  if (!q) return NULL;
-  return (q->acct_group);
-}
-
-
 /*******************************************************************
  *  xaccQueryGetEarliestDateFound
  *******************************************************************/
+
 time_t
 xaccQueryGetEarliestDateFound(Query * q) 
 {
