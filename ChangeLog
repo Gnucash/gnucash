@@ -1,3 +1,11 @@
+2003-04-06  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-util/transfer-dialog.c: Pop up a dialog if the user
+	  tries to transfer from a non-currency account, and don't let
+	  them do it.  Yes, this means you cannot transfer between mutual
+	  funds, but the logic for that can be added later.  This fixes
+	  bug #109641.
+
 2003-04-04  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-report/transactions.scm: symbols are not
