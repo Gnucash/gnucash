@@ -349,31 +349,224 @@ to_hexstring_hash (const char *str)
 
 
 static const HBCI_Bank *
-choose_one_bank (HBCIInitialInfo *info, int *list_size)
+choose_one_bank (gncUIWidget parent, const list_HBCI_Bank *banklist)
 {
-  const list_HBCI_Bank *banklist;
-  g_assert (info);
-  g_assert (list_size);
+  const HBCI_Bank *bank;
+  list_HBCI_Bank_iter *iter, *end;
+  int list_size;
+  g_assert (parent);
+  g_assert (banklist);
 
-  /* Get HBCI bank and account list */
-  banklist = HBCI_API_bankList (info->api);
   /*printf("%d banks found.\n", list_HBCI_Bank_size (banklist));*/
-  *list_size = list_HBCI_Bank_size (banklist);
-  if (*list_size == 0) 
-    return NULL;
-  if (*list_size > 1) 
+  list_size = list_HBCI_Bank_size (banklist);
+  if (list_size == 0) 
     return NULL;
 
-  /* Get bank. */
+  if (list_size == 1) 
+    {
+      /* Get bank. */
+      iter = list_HBCI_Bank_begin (banklist);
+      bank = list_HBCI_Bank_iter_get (iter);
+      list_HBCI_Bank_iter_delete (iter);
+      return bank;
+    }
+
+  /* More than one bank available. */
   {
-    const HBCI_Bank *bank;
-    list_HBCI_Bank_iter *iter;
+    int choice, i;
+    GList *node;
+    GList *radio_list = NULL;
 
-    iter = list_HBCI_Bank_begin (banklist);
-    bank = list_HBCI_Bank_iter_get (iter);
+    end = list_HBCI_Bank_end (banklist);
+    for (iter = list_HBCI_Bank_begin (banklist);
+	 !list_HBCI_Bank_iter_equal(iter, end); 
+	 list_HBCI_Bank_iter_next(iter))
+      {
+	bank = list_HBCI_Bank_iter_get (iter);
+	radio_list = g_list_append(radio_list, 
+				   g_strdup_printf ("%s (%s)",
+						    HBCI_Bank_name (bank),
+						    HBCI_Bank_bankCode (bank)));
+      }
     list_HBCI_Bank_iter_delete (iter);
-    return bank;
+      
+    choice = gnc_choose_radio_option_dialog
+      (parent,
+       _("Choose HBCI bank"), 
+       _("More than one HBCI bank is available for \n"
+	 "the requested operation. Please choose \n"
+	 "the one that should be used."), 
+       0, 
+       radio_list);
+      
+    for (node = radio_list; node; node = node->next)
+      g_free (node->data);
+    g_list_free (radio_list);
+
+    i = 0;
+    for (iter = list_HBCI_Bank_begin (banklist);
+	 !list_HBCI_Bank_iter_equal(iter, end); 
+	 list_HBCI_Bank_iter_next(iter))
+      if (i == choice)
+	{
+	  bank = list_HBCI_Bank_iter_get (iter);
+	  list_HBCI_Bank_iter_delete (iter);
+	  list_HBCI_Bank_iter_delete (end);
+	  return bank;
+	}
+      else
+	++i;
   }
+  
+  g_assert_not_reached();
+  return NULL;
+}
+
+static const HBCI_Customer *
+choose_one_customer (gncUIWidget parent, const list_HBCI_Customer *custlist)
+{
+  const HBCI_Customer *customer;
+  list_HBCI_Customer_iter *iter, *end;
+  g_assert(parent);
+  g_assert(custlist);
+  
+  if (list_HBCI_Customer_size (custlist) == 0) {
+    printf ("choose_one_customer: oops, no customer found.\n");
+    return NULL;
+  }
+  if (list_HBCI_Customer_size (custlist) == 1) 
+    {
+      /* Get one customer */
+      iter = list_HBCI_Customer_begin (custlist);
+      customer = list_HBCI_Customer_iter_get (iter);
+      list_HBCI_Customer_iter_delete (iter);
+      
+      return customer;
+    }
+
+  /* More than one customer available. */
+  {
+    int choice, i;
+    GList *node;
+    GList *radio_list = NULL;
+
+    end = list_HBCI_Customer_end (custlist);
+    for (iter = list_HBCI_Customer_begin (custlist);
+	 !list_HBCI_Customer_iter_equal(iter, end); 
+	 list_HBCI_Customer_iter_next(iter))
+      {
+	customer = list_HBCI_Customer_iter_get (iter);
+	radio_list = 
+	  g_list_append(radio_list, 
+			g_strdup_printf ("%s (%s)",
+					 HBCI_Customer_custName (customer),
+					 HBCI_Customer_custId (customer)));
+      }
+    list_HBCI_Customer_iter_delete (iter);
+      
+    choice = gnc_choose_radio_option_dialog
+      (parent,
+       _("Choose HBCI customer"), 
+       _("More than one HBCI customer is available for \n"
+	 "the requested operation. Please choose \n"
+	 "the one that should be used."), 
+       0, 
+       radio_list);
+      
+    for (node = radio_list; node; node = node->next)
+      g_free (node->data);
+    g_list_free (radio_list);
+
+    i = 0;
+    for (iter = list_HBCI_Customer_begin (custlist);
+	 !list_HBCI_Customer_iter_equal(iter, end); 
+	 list_HBCI_Customer_iter_next(iter))
+      if (i == choice)
+	{
+	  customer = list_HBCI_Customer_iter_get (iter);
+	  list_HBCI_Customer_iter_delete (iter);
+	  list_HBCI_Customer_iter_delete (end);
+	  return customer;
+	}
+      else
+	++i;
+  }
+  
+  g_assert_not_reached();
+  return NULL;
+}
+
+static const HBCI_User *
+choose_one_user (gncUIWidget parent, const list_HBCI_User *userlist)
+{
+  const HBCI_User *user;
+  list_HBCI_User_iter *iter, *end;
+  g_assert(parent);
+  g_assert(userlist);
+
+  if (list_HBCI_User_size (userlist) == 0) {
+    printf("choose_one_user: oops, no user found.\n");
+    return NULL;
+  }
+  if (list_HBCI_User_size (userlist) == 1)
+    {
+      /* Get one User */
+      iter = list_HBCI_User_begin (userlist);
+      user = list_HBCI_User_iter_get (iter);
+      list_HBCI_User_iter_delete (iter);
+
+      return user;
+    }
+
+  /* More than one user available. */
+  {
+    int choice, i;
+    GList *node;
+    GList *radio_list = NULL;
+
+    end = list_HBCI_User_end (userlist);
+    for (iter = list_HBCI_User_begin (userlist);
+	 !list_HBCI_User_iter_equal(iter, end); 
+	 list_HBCI_User_iter_next(iter))
+      {
+	user = list_HBCI_User_iter_get (iter);
+	radio_list = g_list_append(radio_list, 
+				   g_strdup_printf ("%s (%s)",
+						    HBCI_User_userName (user),
+						    HBCI_User_userId (user)));
+      }
+    list_HBCI_User_iter_delete (iter);
+      
+    choice = gnc_choose_radio_option_dialog
+      (parent,
+       _("Choose HBCI user"), 
+       _("More than one HBCI user is available for \n"
+	 "the requested operation. Please choose \n"
+	 "the one that should be used."), 
+       0, 
+       radio_list);
+      
+    for (node = radio_list; node; node = node->next)
+      g_free (node->data);
+    g_list_free (radio_list);
+
+    i = 0;
+    for (iter = list_HBCI_User_begin (userlist);
+	 !list_HBCI_User_iter_equal(iter, end); 
+	 list_HBCI_User_iter_next(iter))
+      if (i == choice)
+	{
+	  user = list_HBCI_User_iter_get (iter);
+	  list_HBCI_User_iter_delete (iter);
+	  list_HBCI_User_iter_delete (end);
+	  return user;
+	}
+      else
+	++i;
+  }
+  
+  g_assert_not_reached();
+  return NULL;
 }
 
 
@@ -381,68 +574,23 @@ static const HBCI_Customer *
 choose_customer (HBCIInitialInfo *info)
 {
   const HBCI_Bank *bank;
-  int banklist_size = 0;
+  const HBCI_User *user;
   g_assert (info);
 
-  bank = choose_one_bank (info, &banklist_size);
+  /* Get HBCI bank from the banklist */
+  bank = choose_one_bank (info->window, HBCI_API_bankList (info->api) );
 
-  if (banklist_size == 0) 
+  if (bank == 0) 
     return NULL;
   
-  if (banklist_size > 1) {
-    printf("choose_customer: oops, more than one bank found. Not yet implemented.\n");
+  /* Get User from user list. */
+  user = choose_one_user (info->window, HBCI_Bank_users (bank) );
+
+  if (user == NULL)
     return NULL;
-  }
-  g_assert (bank);
-  
-  /* Get User list. */
-  {
-    const list_HBCI_User *userlist;
 
-    userlist = HBCI_Bank_users (bank);
-    
-    if (list_HBCI_User_size (userlist) == 0) {
-      printf("choose_customer: oops, no user found.\n");
-      return NULL;
-    }
-    if (list_HBCI_User_size (userlist) > 1) {
-      printf("choose_customer: oops, more than one user found; not yet implemented.\n");
-      return NULL;
-    }
-
-    /* Get User */
-    {
-      const HBCI_User *user;
-      list_HBCI_User_iter *iter;
-      const list_HBCI_Customer *custlist;
-      
-      iter = list_HBCI_User_begin (userlist);
-      user = list_HBCI_User_iter_get (iter);
-      list_HBCI_User_iter_delete (iter);
-      custlist = HBCI_User_customers (user);
-      
-      if (list_HBCI_Customer_size (custlist) == 0) {
-	printf ("choose_customer: oops, no customer found.\n");
-	return NULL;
-      }
-      if (list_HBCI_Customer_size (custlist) > 1) {
-	printf ("choose_customer: oops, more than one customer found; not yet implemented.\n");
-	return NULL;
-      }
-
-      /* Get customer */
-      {
-	const HBCI_Customer *cust;
-	list_HBCI_Customer_iter *iter;
-
-	iter = list_HBCI_Customer_begin (custlist);
-	cust = list_HBCI_Customer_iter_get (iter);
-	list_HBCI_Customer_iter_delete (iter);
-	
-	return cust;
-      }
-    }
-  }
+  /* Get customer from customer list. */
+  return choose_one_customer(info->window, HBCI_User_customers (user) );
 }
 
 /*********************************************************************
@@ -765,10 +913,10 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
     }
 
     if (HBCI_API_totalUsers(api) == 0) {
-      int dummy;
       /* zero users? go to user-creation page*/
       info->state = INI_ADD_USER;
-      info->newbank = choose_one_bank (info, &dummy);
+      info->newbank = choose_one_bank (info->window, 
+				       HBCI_API_bankList (info->api) );
       gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			    GNOME_DRUID_PAGE (info->userpage));
       return TRUE;
@@ -1511,9 +1659,9 @@ on_button_clicked (GtkButton *button,
     gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			  GNOME_DRUID_PAGE (info->bankpage));
   } else if (strcmp (name, "adduser_button") == 0) {
-    int dummy;
     info->state = ADD_USER;
-    info->newbank = choose_one_bank (info, &dummy);
+    info->newbank = choose_one_bank (info->window, 
+				     HBCI_API_bankList (info->api) );
     gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			  GNOME_DRUID_PAGE (info->userpage));
   } else if (strcmp (name, "hbciversion_button") == 0) {
