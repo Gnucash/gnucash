@@ -655,20 +655,25 @@
     
     table))
 
-(define (gnc:html-make-no-account-warning)
+(define (gnc:html-make-no-account-warning report-title-string)
   (let ((p (gnc:make-html-text)))
     (gnc:html-text-append! 
      p 
+     (gnc:html-markup-h2 (string-append 
+			  report-title-string
+			  ":"))
      (gnc:html-markup-h2 (_ "No accounts selected"))
      (gnc:html-markup-p
       (_ "This report requires accounts to be selected.")))
     p))
 
-(define (gnc:html-make-empty-data-warning)
+(define (gnc:html-make-empty-data-warning report-title-string)
   (let ((p (gnc:make-html-text)))
     (gnc:html-text-append! 
      p 
+     (gnc:html-markup-h2 
+      (string-append report-title-string ":"))
      (gnc:html-markup-h2 (_ "No data"))
      (gnc:html-markup-p
-      (_ "The selected accounts contain no data (or only zeroes) for the selected time period")))
+      (_ "The selected accounts contain no data/transactions (or only zeroes) for the selected time period")))
     p))

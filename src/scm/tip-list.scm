@@ -94,7 +94,7 @@ Join them on #gnucash at irc.gnome.org")
 
  (N_ "There is a theory that if ever anyone discovers what
 the Universe is for and why it is here, it will instantly
-disappear and be replace with something even more bizarre and
+disappear and be replaced with something even more bizarre and
 inexplicable.
 There is another theory that this has already happened.
 Douglas Adams, \"The Restaurant at the End of the Universe\"")

@@ -392,11 +392,11 @@ the global Preference \"Display Tip of the Day\".")))))
 	
 	       (gnc:html-document-add-object!
 		document
-		(gnc:html-make-empty-data-warning))))
+		(gnc:html-make-empty-data-warning report-title))))
 
 	(gnc:html-document-add-object!
 	  document
-	  (gnc:html-make-no-account-warning)))
+	  (gnc:html-make-no-account-warning report-title)))
 	    
 	    document)))
     

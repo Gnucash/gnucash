@@ -468,12 +468,12 @@ the global Preference \"Display Tip of the Day\".")))))
 	     ;; else if empty data
 	     (gnc:html-document-add-object!
 	      document
-	      (gnc:html-make-empty-data-warning))))
+	      (gnc:html-make-empty-data-warning report-title))))
 	  
 	  ;; else if no accounts selected
 	  (gnc:html-document-add-object! 
 	   document 
-	   (gnc:html-make-no-account-warning)))
+	   (gnc:html-make-no-account-warning report-title)))
       
       document))
 	  

@@ -151,10 +151,12 @@
 		    (gnc:date-option-absolute-time
                      (get-option gnc:pagename-general 
                                  optname-date))))
+	  (report-title (get-option gnc:pagename-general
+				    optname-reportname))
           (doc (gnc:make-html-document))
 	  (txt (gnc:make-html-text)))
 
-      (gnc:html-document-set-title! doc (_ "Account Summary"))
+      (gnc:html-document-set-title! doc report-title))
       (if (not (null? accounts))
 	  ;; if no max. tree depth is given we have to find the
 	  ;; maximum existing depth
@@ -192,7 +194,7 @@
 	  ;; error condition: no accounts specified
 	  (gnc:html-document-add-object! 
 	   doc 
-	   (gnc:html-make-no-account-warning)))
+	   (gnc:html-make-no-account-warning report-title))
       doc))
 
   (gnc:define-report 

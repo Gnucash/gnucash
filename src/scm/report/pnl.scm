@@ -122,7 +122,7 @@
         (gnc:report-options report-obj) pagename optname)))
 
     ;; get all option's values
-    (let ((display-depth (get-option gnc:pagename-accounts 
+    (let* ((display-depth (get-option gnc:pagename-accounts 
 				     optname-display-depth))
 	  (show-subaccts? (get-option gnc:pagename-accounts
 				      optname-show-subaccounts))
@@ -151,13 +151,14 @@
 			 (gnc:date-option-absolute-time
                           (get-option gnc:pagename-general
                                       optname-from-date))))
+	  (report-title (sprintf #f
+			  (_ "Profit and Loss - %s to %s")
+			  (gnc:timepair-to-datestring from-date-tp)
+			  (gnc:timepair-to-datestring to-date-tp)))
           (doc (gnc:make-html-document)))
       
       (gnc:html-document-set-title! 
-       doc (sprintf #f
-                    (_ "Profit and Loss - %s to %s")
-                    (gnc:timepair-to-datestring from-date-tp)
-                    (gnc:timepair-to-datestring to-date-tp)))
+       doc report-title)
       (if (not (null? accounts))
 	  ;; if no max. tree depth is given we have to find the
 	  ;; maximum existing depth
@@ -195,7 +196,7 @@
 	  ;; error condition: no accounts specified
         
             (gnc:html-document-add-object!
-	     doc (gnc:html-make-no-account-warning)))      
+	     doc (gnc:html-make-no-account-warning report-title)))      
       doc))
 
   (gnc:define-report 

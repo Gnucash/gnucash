@@ -1052,7 +1052,7 @@ match the given time interval and account selection.")))
           
 	  (gnc:html-document-add-object!
 	   document 
-	   (gnc:html-make-no-account-warning)))
+	   (gnc:html-make-no-account-warning report-title)))
 
       document))
 

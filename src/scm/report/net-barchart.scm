@@ -172,7 +172,8 @@
 			     gnc:timepair-end-day-time) from-date-tp) 
                         (gnc:timepair-end-day-time to-date-tp)
                         (eval interval)))
-
+	   (report-title (if inc-exp? (_ "Income/Expense Chart") 
+		    (_ "Net Worth Chart")))
 	   (classified-accounts (gnc:decompose-accountlist accounts))
 	   (document (gnc:make-html-document))
 	   (chart (gnc:make-html-barchart))
@@ -245,8 +246,7 @@
 				 dates-list)))
 
 	 (gnc:html-barchart-set-title! 
-	  chart (if inc-exp? (_ "Income/Expense Chart") 
-		    (_ "Net Worth Chart")))
+	  chart report-title)
 	 (gnc:html-barchart-set-subtitle!
 	  chart (sprintf #f
 			 (_ "%s to %s")
@@ -335,12 +335,12 @@
 	     (gnc:html-document-add-object! document chart) 
 	     (gnc:html-document-add-object!
 	      document
-	      (gnc:html-make-empty-data-warning))))
+	      (gnc:html-make-empty-data-warning report-title))))
        
        ;; else no accounts selected
        (gnc:html-document-add-object!
 	document
-	(gnc:html-make-no-account-warning)))
+	(gnc:html-make-no-account-warning report-title)))
       
       document))
   

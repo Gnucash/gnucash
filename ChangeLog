@@ -1,3 +1,14 @@
+2001-05-25  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/html-utilities.scm: display report title
+	string in gnc:html-no-account-warning and
+	gnc:html-make-empty-data-warning.  API changed.
+
+	* src/scm/report/*.scm: update to use changed
+	functions described above.
+
+	* src/scm/tip-list.scm: fix spelling mistake.
+
 2001-05-24  Christian Stimming  <stimming@tuhh.de>
 
 	* po/gnc-glossary.txt: added file for all our translators.
