@@ -2511,6 +2511,27 @@ Password:
               When an invoice has been paid off, then there should be a 
               view mode where the invoice and its payment is no longer shown 
               (i.e. so that only outstanding, unpaid entires are shown ...)
+          <li>create report showing everything but the a/p:
+              Here's an example.  I buy a chair for a friend, and three
+              days later he pays me back.  What I've been doing is ...
+<pre>
+>   1/12/01  Credit    -$100
+>            A/R       +$100
+>   1/15/01  Cash      +$100
+>            A/R       -$100
+</pre>
+             To make it less painful to read and understand, the 
+             report should look like:
+
+<pre>
+>   1/12/01 Credit -$100
+>   1/15/01 Cash   +$100
+</pre>
+             i.e. there would be a new kind of 'transaction report' that 
+             would pair up transactions in this way, showing things 
+             'as if' the A/R didn't exist, and 'as if' a transaction
+             was spread over a bunch of days.
+
           </ul>
           <p></p>
       </dd>
