@@ -348,6 +348,7 @@ Basic GUI:
    -- A field showing realized gain/loss on a closed lot, and
       a pull-down allowing the gain/loss to be posted to a 
       specific account.
+      (The default is stored in kvp:/lots-mgmt/gains-acct/)
 
    -- button or menu item, 'add notes to this lot'.
 
@@ -366,8 +367,6 @@ Status
    These implement a FIFO accounting policy (April 2003)
 
 XXX need to add a lot id, have it auto-gened by the scrubber.
-
-XXX accounts need to designate where realized gains should be posted.
 
  o No GUI yet.
 
