@@ -231,18 +231,19 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
    if (!be || !chk) return;
    ENTER("be=%p", be);
 
-/* XXX this is totally wrong */
    /* create the query we need */
    p = be->buff; *p = 0;
-   p = stpcpy (p, "SELECT balance, cleared_balance, reconciled_balance "
-                  "FROM gncCheckpoint "
-                  "WHERE accountGuid='");
+   p = stpcpy (p, "SELECT sum(balance) AS baln, "
+                  "       sum(cleared_balance) AS cleared_baln, "
+                  "       sum(reconciled_balance) AS reconed_baln "
+                  "    FROM gncCheckpoint "
+                  "    WHERE accountGuid='");
    p = guid_to_string_buff (chk->account_guid, p);
-   p = stpcpy (p, "' AND commodity='");
+   p = stpcpy (p, "'   AND commodity='");
    p = stpcpy (p, chk->commodity);
-   p = stpcpy (p, "' AND date_start <'");
+   p = stpcpy (p, "'   AND date_start <'");
    p = gnc_timespec_to_iso8601_buff (chk->date_start, p);
-   p = stpcpy (p, "' ORDER BY date_start DESC LIMIT 1;");
+   p = stpcpy (p, "';");
    SEND_QUERY (be,be->buff, );
 
    i=0; nrows=0;
@@ -264,9 +265,9 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
          }
          if (0 < nrows )
          {
-            chk->balance = atoll(DB_GET_VAL("balance", j));
-            chk->cleared_balance = atoll(DB_GET_VAL("cleared_balance", j));
-            chk->reconciled_balance = atoll(DB_GET_VAL("reconciled_balance", j));
+            chk->balance = atoll(DB_GET_VAL("baln", j));
+            chk->cleared_balance = atoll(DB_GET_VAL("cleared_baln", j));
+            chk->reconciled_balance = atoll(DB_GET_VAL("reconed_baln", j));
          }
       }
 
@@ -278,53 +279,64 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
 }
 
 /* ============================================================= */
+/* get checkpoint value for one accounts */
+
+void
+pgendAccountGetBalance (PGBackend *be, Account *acc, gint64 start_date)
+{
+   Checkpoint chk;
+   const gnc_commodity *com;
+   gint64 deno;
+   gnc_numeric baln;
+   gnc_numeric cleared_baln;
+   gnc_numeric reconciled_baln;
+
+   if (!be || !acc) return;
+   ENTER("be=%p", be);
+
+   /* setup what we will match for */
+   chk.date_start.tv_sec = start_date;
+   chk.date_start.tv_nsec = 0;
+
+   com = xaccAccountGetCommodity(acc);
+   chk.commodity = gnc_commodity_get_unique_name(com);
+   chk.account_guid = xaccAccountGetGUID (acc);
+   chk.balance = 0;
+   chk.cleared_balance = 0;
+   chk.reconciled_balance = 0;
+
+   /* get the checkpoint */
+   pgendAccountGetCheckpoint (be, &chk);
+
+   /* set the account balances */
+   deno = gnc_commodity_get_fraction (com);
+   baln = gnc_numeric_create (chk.balance, deno);
+   cleared_baln = gnc_numeric_create (chk.cleared_balance, deno);
+   reconciled_baln = gnc_numeric_create (chk.reconciled_balance, deno);
+
+   xaccAccountSetStartingBalance (acc, baln,
+                                     cleared_baln, reconciled_baln);
+   LEAVE("be=%p", be);
+}
+
+/* ============================================================= */
 /* get checkpoint value for all accounts */
 
 void
-pgendGroupGetAllCheckpoints (PGBackend *be, AccountGroup*grp)
+pgendGroupGetAllBalances (PGBackend *be, AccountGroup *grp, 
+                             gint64 start_date)
 {
-   Checkpoint chk;
    GList *acclist, *node;
 
    if (!be || !grp) return;
    ENTER("be=%p", be);
 
-/* XXX hack alert this is all wrong */
-   chk.date_start.tv_sec = time(0);
-   chk.date_start.tv_nsec = 0;
-
-   acclist = xaccGroupGetSubAccounts (grp);
-
    /* loop over all accounts */
+   acclist = xaccGroupGetSubAccounts (grp);
    for (node=acclist; node; node=node->next)
    {
-      Account *acc;
-      const gnc_commodity *com;
-      gint64 deno;
-      gnc_numeric baln;
-      gnc_numeric cleared_baln;
-      gnc_numeric reconciled_baln;
-
-      /* setup what we will match for */
-      acc = (Account *) node->data;
-      com = xaccAccountGetCommodity(acc);
-      chk.commodity = gnc_commodity_get_unique_name(com);
-      chk.account_guid = xaccAccountGetGUID (acc);
-      chk.balance = 0;
-      chk.cleared_balance = 0;
-      chk.reconciled_balance = 0;
-
-      /* get the checkpoint */
-      pgendAccountGetCheckpoint (be, &chk);
-
-      /* set the account balances */
-      deno = gnc_commodity_get_fraction (com);
-      baln = gnc_numeric_create (chk.balance, deno);
-      cleared_baln = gnc_numeric_create (chk.cleared_balance, deno);
-      reconciled_baln = gnc_numeric_create (chk.reconciled_balance, deno);
-
-      xaccAccountSetStartingBalance (acc, baln,
-                                     cleared_baln, reconciled_baln);
+      Account *acc = (Account *) node->data;
+      pgendAccountGetBalance (be, acc, start_date);
    }
 
    g_list_free (acclist);

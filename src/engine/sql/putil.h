@@ -59,6 +59,7 @@ gpointer pgendGetResults (PGBackend *be,
 {								\
    int rc;							\
    if (NULL == be->connection) return retval;			\
+   PINFO ("sending query %s", buff);				\
    rc = PQsendQuery (be->connection, buff);			\
    if (!rc)							\
    {								\

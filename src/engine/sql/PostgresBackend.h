@@ -103,6 +103,7 @@ typedef struct _checkpoint {
 /* the following prototypes belong in a 'checkpoint.h' file */
 
 void pgendGroupRecomputeAllCheckpoints (PGBackend *be, AccountGroup *grp);
-void pgendGroupGetAllCheckpoints (PGBackend *be, AccountGroup*grp);
+void pgendGroupGetAllBalances (PGBackend *be, AccountGroup *grp, gint64 start_date);
+void pgendAccountGetBalance (PGBackend *be, Account *acct, gint64 start_date);
 
 #endif /* __POSTGRES_BACKEND_H__ */

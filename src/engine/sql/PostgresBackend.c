@@ -1276,6 +1276,46 @@ pgendRunQuery (Backend *bend, Query *q)
 }
 
 /* ============================================================= */
+/* The RunQueryToCheckpoint() routine performs the query as above.
+ * However, it first fleshes out the query to the nearest checkpoints,
+ * so that when the user opens a register window, the starting balance
+ * has been correctly set for the display.
+ *
+ * This is very much a hack at this point, since we adjust only one 
+ * very special query.  BTW, its buggy at the moment anyway.
+ */
+
+static void 
+pgendRunQueryToCheckpoint (Backend *bend, Query *q)
+{
+   PGBackend *be = (PGBackend *)bend;
+
+   if (!be || !q) return;
+   
+   PERR ("incompletely implemented");
+   pgendRunQuery (bend, q);
+
+ xaccQueryPrint (q);
+
+   if ((1 == xaccQueryNumTerms(q)) && xaccQueryHasTermType(q, PD_ACCOUNT)) {
+      GList *o, *a, *p;
+      QueryTerm *qt;
+      Account *acct;
+      o = xaccQueryGetTerms(q); 
+      a = o->data;
+      qt = a->data;
+      for (p=qt->data.acct.accounts; p; p=p->next) {
+         /* hack alert -- 0xff000000 is a negative data,
+          * around 1910 or so */
+this_ts = gnc_iso8601_to_timespec_local ("1903-01-02 08:35:46.00")
+         pgendAccountGetBalance (be, p->data, 0xff000000);
+      }
+   }
+
+// xxx
+}
+
+/* ============================================================= */
 /* The pgendGetAllTransactions() routine sucks *all* of the 
  *    transactions out of the database.  This is a potential 
  *    CPU and memory-burner; its use is not suggested for anything
@@ -1781,7 +1821,7 @@ pgendSync (Backend *bend, AccountGroup *grp)
    if ((MODE_SINGLE_FILE != be->session_mode) &&
        (MODE_SINGLE_UPDATE != be->session_mode))
    {
-      pgendGroupGetAllCheckpoints (be, grp);
+      pgendGroupGetAllBalances (be, grp, time(0));
    } 
    else
    {
@@ -2204,7 +2244,7 @@ pgend_book_load_poll (Backend *bend)
 
    pgendKVPInit(be);
    grp = pgendGetAllAccounts (be, NULL);
-   pgendGroupGetAllCheckpoints (be, grp);
+   pgendGroupGetAllBalances (be, grp, time(0));
 
    /* re-enable events */
    pgendEnable(be);
@@ -2690,7 +2730,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.trans_rollback_edit = NULL;
             be->be.price_begin_edit = pgend_price_begin_edit;
             be->be.price_commit_edit = pgend_price_commit_edit;
-            be->be.run_query = pgendRunQuery;
+            be->be.run_query = pgendRunQueryToCheckpoint;
             be->be.sync = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
             PWARN ("MODE_POLL is experimental -- you might corrupt your data\n");
