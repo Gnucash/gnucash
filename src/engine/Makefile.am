@@ -25,10 +25,10 @@ libgncmod_engine_la_SOURCES = \
   Scrub2.c \
   TransLog.c \
   Transaction.c \
-  date.c \
   gnc-associate-account.c \
   gnc-book.c \
   gnc-commodity.c \
+  gnc-date.c \
   gnc-engine-util.c \
   gnc-engine.c \
   gnc-event.c \
@@ -66,13 +66,13 @@ gncinclude_HEADERS = \
   Scrub2.h \
   TransLog.h \
   Transaction.h \
-  date.h \
   engine-helpers.h \
   glib-helpers.h \
   gnc-associate-account.h \
   gnc-be-utils.h \
   gnc-book.h \
   gnc-commodity.h \
+  gnc-date.h \
   gnc-engine-util.h \
   gnc-engine.h \
   gnc-event.h \
