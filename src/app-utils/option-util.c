@@ -1655,6 +1655,50 @@ gnc_option_db_commit(GNCOptionDB *odb)
 
 
 /********************************************************************\
+ * gnc_option_db_reset_widgets                                      *
+ *   reset all option widgets to their default values.              *
+ *                                                                  *
+ * Args: odb - option database to reset                             *
+ * Return: nothing                                                  *
+\********************************************************************/
+void
+gnc_option_db_reset_widgets (GNCOptionDB *odb)
+{
+  GSList *section_node;
+  GSList *option_node;
+  GNCOptionSection *section;
+  GNCOption *option;
+
+  g_return_if_fail (odb);
+
+  for (section_node = odb->option_sections;
+       section_node != NULL;
+       section_node = section_node->next)
+  {
+    section = section_node->data;
+
+    /* Don't reset "invisible" options.
+     * If the section name begins "__" we should not reset
+     */
+    if (section->section_name == NULL ||
+	strncmp (section->section_name, "__", 2) == 0)
+      continue;
+
+    for (option_node = section->options;
+	 option_node != NULL;
+	 option_node = option_node->next)
+    {
+      option = option_node->data;
+
+      gnc_option_set_ui_value (option, TRUE);
+      gnc_option_set_changed (option, TRUE);
+
+    }
+  }
+}
+
+
+/********************************************************************\
  * gnc_option_db_get_default_section                                *
  *   returns the malloc'd section name of the default section,      *
  *   or NULL if there is none.                                      *

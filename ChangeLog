@@ -1,3 +1,14 @@
+2002-05-27  Derek Atkins   <derek@ihtfp.com>
+
+	* src/app-utils/option-util.c: Add a function to reset all the gui
+	widgets for an option-db, ignoring sections that begin "__".
+
+	* dialog-options.c: remove all the 'set to default' buttons and
+	add a single 'defaults' button in the dialog button box, which
+	resets all the options to their default values.  The user still
+	has to 'apply' the changes to take effect.  Also change "close" to
+	"cancel".
+
 2002-05-27  David Hampton  <hampton@employees.org>
 
 	* src/dialog-account/dialog-account.c: Sort the account type list
