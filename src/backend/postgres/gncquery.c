@@ -478,7 +478,7 @@ sql_sort_need_entry (Query *q)
 /* =========================================================== */
 
 const char *
-sqlQuery_build (sqlQuery *sq, Query *q)
+sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
 {
    GList *il, *jl, *qterms, *andterms;
    QueryTerm *qt;
@@ -491,7 +491,7 @@ sqlQuery_build (sqlQuery *sq, Query *q)
    gboolean need_entry = FALSE;
    sort_type_t sorter;
 
-   if (!sq || !q) return NULL;
+   if (!sq || !q || !session) return NULL;
 
    /* determine whther the query will need to reference the account
     * or commodity tables.  If it doesn't need them, then we can gain
@@ -529,7 +529,7 @@ sqlQuery_build (sqlQuery *sq, Query *q)
                need_commodity = TRUE;
                break;
             case PR_GUID:
-               switch (xaccGUIDType (&pd->guid.guid))
+               switch (xaccGUIDType (&pd->guid.guid, session))
                {
                   case GNC_ID_ACCOUNT:
                      need_account = TRUE;
@@ -749,7 +749,7 @@ sqlQuery_build (sqlQuery *sq, Query *q)
                {
                   sq->pq = stpcpy (sq->pq, "NOT (");
                }
-               switch (xaccGUIDType (&pd->guid.guid))
+               switch (xaccGUIDType (&pd->guid.guid, session))
                {
                   case GNC_ID_NONE:
                   case GNC_ID_NULL:

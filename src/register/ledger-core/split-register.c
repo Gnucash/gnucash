@@ -856,7 +856,8 @@ gnc_split_register_paste_current (SplitRegister *reg)
     trans_split_index = gnc_trans_split_index(trans, trans_split);
 
     if ((gnc_split_register_get_default_account (reg) != NULL) &&
-        (xaccGUIDType(&copied_leader_guid) != GNC_ID_NULL))
+        (xaccGUIDType(&copied_leader_guid,
+                      gnc_get_current_session ()) != GNC_ID_NULL))
     {
       new_guid = &info->default_account;
       gnc_copy_trans_scm_onto_trans_swap_accounts(copied_item, trans,

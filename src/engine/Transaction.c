@@ -120,7 +120,7 @@ xaccInitSplit(Split * split, GNCEntityTable *entity_table)
 
   split->entity_table = entity_table;
 
-  xaccGUIDNew(&split->guid);
+  xaccGUIDNewEntityTable (&split->guid, split->entity_table);
   xaccStoreEntity(split->entity_table, split, &split->guid, GNC_ID_SPLIT);
 }
 
@@ -671,8 +671,8 @@ xaccInitTransaction (Transaction * trans, GNCSession *session)
 
   trans->entity_table = gnc_session_get_entity_table (session);
 
-  xaccGUIDNew(&trans->guid);
-  xaccStoreEntity(trans->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+  xaccGUIDNew (&trans->guid, session);
+  xaccStoreEntity (trans->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 }
 
 /********************************************************************\

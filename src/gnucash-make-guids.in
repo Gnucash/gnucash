@@ -26,10 +26,14 @@ exec @-GNUCASH_RUN_SCRIPT-@ @-THIS_SCRIPT-@ "$@"
 (gnc:module-system-init)
 (gnc:module-load "gnucash/engine" 0)
 
+(define session (gnc:session-new))
+
 (let loop ((remaining num-to-make))
-  (display (gnc:guid-new)) (newline)
+  (display (gnc:guid-new session)) (newline)
   (if (> remaining 1)
       (loop (- remaining 1))))
+
+(gnc:session-destroy session)
 
 ;; Local Variables:
 ;; mode: scheme

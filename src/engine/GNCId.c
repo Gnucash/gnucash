@@ -28,6 +28,7 @@
 
 #include "GNCIdP.h"
 #include "gnc-engine-util.h"
+#include "gnc-session-p.h"
 
 
 /** #defines ********************************************************/
@@ -180,7 +181,8 @@ entity_table_init(void)
 }
 
 GNCIdType
-xaccGUIDType(const GUID * guid)
+xaccGUIDTypeEntityTable (const GUID * guid,
+                         GNCEntityTable *entity_table_tmp)
 {
   EntityNode *e_node;
   GNCIdType entity_type;
@@ -190,6 +192,8 @@ xaccGUIDType(const GUID * guid)
 
   if (entity_table == NULL)
     entity_table_init();
+
+  g_return_val_if_fail (entity_table, GNC_ID_NONE);
 
   e_node = g_hash_table_lookup(entity_table, guid->data);
   if (e_node == NULL)
@@ -202,29 +206,45 @@ xaccGUIDType(const GUID * guid)
   return entity_type;
 }
 
+GNCIdType
+xaccGUIDType(const GUID * guid, GNCSession *session)
+{
+  return xaccGUIDTypeEntityTable (guid,
+                                  gnc_session_get_entity_table (session));
+}
+
 void
-xaccGUIDNew(GUID *guid)
+xaccGUIDNewEntityTable (GUID *guid, GNCEntityTable *entity_table)
 {
   if (guid == NULL)
     return;
+
+  /* FIXME */
+  /* g_return_if_fail (entity_table); */
 
   do
   {
     guid_new(guid);
 
-    if (xaccGUIDType(guid) == GNC_ID_NONE)
+    if (xaccGUIDTypeEntityTable (guid, entity_table) == GNC_ID_NONE)
       break;
 
     PWARN("duplicate id created, trying again");
   } while(1);
 }
 
+void
+xaccGUIDNew (GUID *guid, GNCSession *session)
+{
+  xaccGUIDNewEntityTable (guid, gnc_session_get_entity_table (session));
+}
+
 GUID
-xaccGUIDNewReturn (void)
+xaccGUIDNewReturn (GNCSession *session)
 {
   GUID guid;
 
-  xaccGUIDNew (&guid);
+  xaccGUIDNew (&guid, session);
 
   return guid;
 }

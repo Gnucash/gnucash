@@ -514,7 +514,7 @@ pgendRunQuery (Backend *bend, Query *q)
    /* first thing we do is convert the gnc-engine query into
     * an sql string. */
    sq = sqlQuery_new();
-   sql_query_string = sqlQuery_build (sq, q);
+   sql_query_string = sqlQuery_build (sq, q, be->session);
 
    topgroup = pgendGetTopGroup (be);
 

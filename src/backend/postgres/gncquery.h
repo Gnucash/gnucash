@@ -45,6 +45,7 @@
 #define GNC_QUERY_H
 
 #include "Query.h"
+#include "gnc-engine.h"
 
 typedef struct _gnc_query sqlQuery;
 
@@ -52,7 +53,7 @@ sqlQuery *sqlQuery_new(void);
 void sql_Query_destroy (sqlQuery *);
 
 /* convert a gnc query to an sql query */
-const char *sqlQuery_build (sqlQuery *, Query *);
+const char *sqlQuery_build (sqlQuery *, Query *, GNCSession *);
 
 
 #endif  /* GNC_QUERY_H */

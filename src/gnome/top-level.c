@@ -216,7 +216,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
       return FALSE;
     }
 
-    switch (xaccGUIDType (&guid))
+    switch (xaccGUIDType (&guid, gnc_get_current_session ()))
     {
       case GNC_ID_NONE:
       case GNC_ID_NULL:

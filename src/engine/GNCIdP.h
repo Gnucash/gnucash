@@ -27,6 +27,7 @@
 #include <glib.h>
 
 #include "GNCId.h"
+#include "gnc-engine.h"
 
 /* This file defines an engine-only API for using gnucash entity
  * identifiers. */
@@ -37,8 +38,9 @@ typedef GHashTable GNCEntityTable;
  * is unique within the scope of all GnuCash entities being managed by
  * the current invocation of GnuCash. GnuCash routines should always
  * use this function and not guid_new! */
-void xaccGUIDNew (GUID *guid);
-GUID xaccGUIDNewReturn (void);
+void xaccGUIDNew (GUID *guid, GNCSession *session);
+void xaccGUIDNewEntityTable (GUID *guid, GNCEntityTable *entity_table);
+GUID xaccGUIDNewReturn (GNCSession *session);
 
 /* Lookup an entity given an id and a type. If there is no entity
  * associated with the id, or if it has a different type, NULL
@@ -54,6 +56,9 @@ void xaccStoreEntity (GNCEntityTable *entity_table,
 /* Remove any existing association between an entity and the given
  * id. The entity is not changed in any way. */
 void xaccRemoveEntity (GNCEntityTable *entity_table, const GUID * guid);
+
+GNCIdType xaccGUIDTypeEntityTable (const GUID * guid,
+                                   GNCEntityTable *entity_table);
 
 GHashTable *xaccGetAndResetEntityTable (void);
 void xaccSetEntityTable (GHashTable *et);

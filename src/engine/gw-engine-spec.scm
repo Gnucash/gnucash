@@ -519,7 +519,7 @@
    'gnc:guid-new
    '<gnc:guid-scm>
    "xaccGUIDNewReturn"
-   '()
+   '((<gnc:Session*> session))
    "Return a newly-generated GUID.")
 
   (gw:wrap-function

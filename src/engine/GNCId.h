@@ -35,7 +35,7 @@
  * Identifiers can be encoded as hex strings. */
 
 #include "guid.h"
-
+#include "gnc-engine.h"
 
 /* Identifiers are 'typed' with integers. The ids used in gnucash are
  * defined below. An id with type GNC_ID_NONE does not refer to any
@@ -60,7 +60,7 @@ typedef enum
 
 
 /* Return the type of an identifier. */
-GNCIdType xaccGUIDType (const GUID * guid);
+GNCIdType xaccGUIDType (const GUID * guid, GNCSession *session);
 
 /* Returns a GUID which is guaranteed to never reference any entity. */
 const GUID * xaccGUIDNULL (void);

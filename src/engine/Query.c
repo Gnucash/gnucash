@@ -2366,7 +2366,7 @@ xaccGUIDMatchPredicate(Split * s, PredicateData * pd)
 
   guid = &pd->guid.guid;
 
-  switch (xaccGUIDType (guid))
+  switch (xaccGUIDTypeEntityTable (guid, s->entity_table))
   {
     case GNC_ID_NONE:
     case GNC_ID_NULL:

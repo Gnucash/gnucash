@@ -108,7 +108,7 @@ xaccInitAccount (Account * acc, GNCSession *session)
 
   acc->entity_table = gnc_session_get_entity_table (session);
 
-  xaccGUIDNew(&acc->guid);
+  xaccGUIDNew(&acc->guid, session);
   xaccStoreEntity(acc->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
   LEAVE ("account=%p\n", acc);
 }

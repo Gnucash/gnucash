@@ -261,10 +261,11 @@ pgendProcessEvents (Backend *bend)
       GNCIdType local_obj_type;
 
       /* lets see if the local cache has this item in it */
-      local_obj_type = xaccGUIDType (&(ev->guid));
+      local_obj_type = xaccGUIDType (&(ev->guid), be->session);
       if ((local_obj_type != GNC_ID_NONE) && (local_obj_type != ev->obj_type))
       {
-         PERR ("ouch! object type mismatch, local=%d, event=%d", local_obj_type, ev->obj_type);
+         PERR ("ouch! object type mismatch, local=%d, event=%d",
+               local_obj_type, ev->obj_type);
          g_free (ev);
          continue;
       }
@@ -333,11 +334,13 @@ pgendProcessEvents (Backend *bend)
             break;
 
          case GNC_ID_SPLIT:
-            if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction))) be->last_transaction = ev->stamp;
+            if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction)))
+              be->last_transaction = ev->stamp;
             break;
 
          case GNC_ID_PRICE:
-            if (0 < timespec_cmp(&(ev->stamp), &(be->last_price))) be->last_price = ev->stamp;
+            if (0 < timespec_cmp(&(ev->stamp), &(be->last_price)))
+              be->last_price = ev->stamp;
             break;
 
          default:
@@ -345,7 +348,7 @@ pgendProcessEvents (Backend *bend)
       }
    
       /* get the local type again, since we created guid above */
-      local_obj_type = xaccGUIDType (&(ev->guid));
+      local_obj_type = xaccGUIDType (&(ev->guid), be->session);
       if (GNC_ID_NONE != local_obj_type)
       {
          gnc_engine_generate_event (&(ev->guid), local_obj_type);

@@ -59,7 +59,7 @@ xaccSchedXactionInit( SchedXaction *sx, GNCSession *session)
 
         book = gnc_session_get_book (session);
 
-        xaccGUIDNew( &sx->guid );
+        xaccGUIDNew( &sx->guid, session );
         xaccStoreEntity( sx->entity_table, sx,
                          &sx->guid, GNC_ID_SCHEDXACTION );
         g_date_clear( &sx->last_date, 1 );

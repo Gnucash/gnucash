@@ -64,8 +64,8 @@ gnc_price_create (GNCSession *session)
 
   p->entity_table = gnc_session_get_entity_table (session);
 
-  xaccGUIDNew (&p->guid);
-  xaccStoreEntity(p->entity_table, p, &p->guid, GNC_ID_PRICE); 
+  xaccGUIDNew (&p->guid, session);
+  xaccStoreEntity (p->entity_table, p, &p->guid, GNC_ID_PRICE); 
   gnc_engine_generate_event (&p->guid, GNC_EVENT_CREATE);
 
   return p;

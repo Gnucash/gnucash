@@ -179,7 +179,7 @@ xaccFreqSpecInit( FreqSpec *fs, GNCSession *session )
 
         fs->entity_table = gnc_session_get_entity_table (session);
 
-        xaccGUIDNew( &fs->guid );
+        xaccGUIDNew( &fs->guid, session );
         xaccStoreEntity( fs->entity_table, fs, &fs->guid, GNC_ID_FREQSPEC );
 
         fs->type = INVALID;

@@ -24,6 +24,7 @@
 #include "Group.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-ui-util.h"
 
 
 /** Declarations ****************************************************/
@@ -232,7 +233,7 @@ gnc_cm_event_handler (GUID *entity,
 
   add_event (&changes, entity, event_type, TRUE);
 
-  id_type = xaccGUIDType (entity);
+  id_type = xaccGUIDType (entity, gnc_get_current_session ());
   switch (id_type)
   {
     case GNC_ID_TRANS:
