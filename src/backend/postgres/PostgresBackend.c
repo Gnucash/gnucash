@@ -2405,6 +2405,7 @@ pgendDisable (PGBackend *be)
 void
 pgendEnable (PGBackend *be)
 {
+    ENTER(" ");
    if (0 >= be->nest_count)
    {
       PERR ("too many nested disables");
@@ -2428,6 +2429,8 @@ pgendEnable (PGBackend *be)
    be->be.percentage           = be->snr.percentage;
    be->be.events_pending       = be->snr.events_pending;
    be->be.process_events       = be->snr.process_events;
+
+   LEAVE(" ");
 }
 
 /* ============================================================= */

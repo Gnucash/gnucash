@@ -1,3 +1,29 @@
+2003-02-01  Matthew Vanecek  <mevanecek@yahoo.com>
+
+	* src/backend/postgres/PostgresBackend.c (pgendEnable):
+	Added ENTER/LEAVE statements
+
+	* src/backend/postgres/escape.c: Adde gnc-engine-util.h,
+	  and "module = MOD_BACKEND"
+	- (sqlEscape_destroy): Added ENTER/LEAVE statemtents.
+
+	* src/backend/postgres/gncquery.c (sql_Query_destroy): Added
+	ENTER/LEAVE statements.
+
+	* src/backend/postgres/putil.h: Cleaned up the formatting on the
+	SEND/FINISH/EXEC/GET_RESULT macros.  Changed them to use
+	PQresultErrorMessage where possible. Made them all set the Backend
+	error message string.  Removed the PQfinish() calls, and setting
+	be->connection to NULL.  Reasoning: if a malformed query fails, there is
+	no reason to close the connection.  If an update/insert fails,
+	again, there is no need to close the connection.  The user should
+	be presented an error message and respond appropriately.  If
+	a update/insert/delete fails, then generally the transaction is
+	rolled back to the last BEGIN, thereby preventing data corruption.
+
+	* src/engine/QueryNew.c (gncQueryPrint): Check that q is not NULL
+	prior to processing it.
+	 
 2003-02-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/window-register.c: fix the query code to use the correct

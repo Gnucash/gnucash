@@ -84,22 +84,22 @@ int finishQuery(PGBackend *be);
  * It performs a minimal check to see that the send succeeded. 
  */
 
-#define SEND_QUERY(be,buff,retval) 				\
-{								\
-   int rc;							\
-   if (NULL == be->connection) return retval;			\
-   PINFO ("sending query %s", buff);				\
-   rc = PQsendQuery (be->connection, buff);			\
-   if (!rc)							\
-   {								\
+#define SEND_QUERY(be,buff,retval)                              \
+{                                                               \
+   int rc;                                                      \
+   if (NULL == be->connection) return retval;                   \
+   PINFO ("sending query %s", buff);                            \
+   rc = PQsendQuery (be->connection, buff);                     \
+   if (!rc)                                                     \
+   {                                                            \
       gchar * msg = (gchar *)PQerrorMessage(be->connection);    \
       /* hack alert -- we need kinder, gentler error handling */\
-      PERR("send query failed:\n\t%s", msg);			\
-      xaccBackendSetMessage (&be->be, msg);			\
-      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);	\
-      return retval;						\
-   }								\
-}
+      PERR("send query failed:\n\t%s", msg);                    \
+      xaccBackendSetMessage (&be->be, msg);                     \
+      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);    \
+      return retval;                                            \
+   }                                                            \
+}                                                               \
 
 /* --------------------------------------------------------------- */
 /* The FINISH_QUERY macro makes sure that the previously sent
@@ -138,50 +138,54 @@ int finishQuery(PGBackend *be);
  * wire, and makes sure that no errors occured. Results are left 
  * in the result buffer.
  */
-#define GET_RESULTS(conn,result) 				\
-{								\
-   ExecStatusType status;  					\
-   result = PQgetResult (conn);					\
-   if (!result) break;						\
-   status = PQresultStatus(result);				\
-   if ((PGRES_COMMAND_OK != status) &&				\
-       (PGRES_TUPLES_OK  != status))				\
-   {								\
-      PERR("failed to get result to query:\n"			\
-           "\t%s", PQerrorMessage((conn)));			\
-      PQclear (result);						\
-      PQfinish (conn);						\
-      be->connection = NULL;					\
-      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);	\
-      break;							\
-   }								\
-}
+#define GET_RESULTS(conn,result)                            \
+{                                                           \
+   gchar *msg = NULL;                                       \
+   ExecStatusType status;                                   \
+   result = PQgetResult (conn);                             \
+   if (!result) break;                                      \
+   status = PQresultStatus(result);                         \
+   msg = PQresultErrorMessage(result);                      \
+   if ((PGRES_COMMAND_OK != status) &&                      \
+       (PGRES_TUPLES_OK  != status))                        \
+   {                                                        \
+      PERR("failed to get result to query:\n\t%s", msg);    \
+      PQclear (result);                                     \
+      xaccBackendSetMessage (&be->be, msg);                 \
+      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);\
+      break;                                                \
+   }                                                        \
+}                                                           \
 
 /* --------------------------------------------------------------- */
 /* The EXEC_QUERY macro executes a query and returns the results
  * and makes sure that no errors occured. Results are left 
  * in the result buffer.
  */
-#define EXEC_QUERY(conn,buff,result) 				\
-{								\
-   ExecStatusType status = 0;  					\
-   result = PQexec (conn, buff);				\
-   if (result)						        \
-     status = PQresultStatus(result);				\
-   if (!result ||                                               \
-       ((PGRES_COMMAND_OK != status) &&			        \
-        (PGRES_TUPLES_OK  != status)))				\
-   {								\
-      PERR("failed to get result to query:\n"			\
-           "\t%s", PQerrorMessage((conn)));			\
-      if (result)                                               \
-        PQclear (result);					\
-      result = NULL;                                            \
-      PQfinish (conn);					        \
-      be->connection = NULL;					\
-      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);	\
-   }								\
-}
+#define EXEC_QUERY(conn,buff,result)                        \
+{                                                           \
+   gchar *msg = NULL;                                       \
+   ExecStatusType status = 0;                               \
+   result = PQexec (conn, buff);                            \
+   if (result) {                                            \
+     status = PQresultStatus(result);                       \
+     msg = PQresultErrorMessage(result);                    \
+   } else {                                                 \
+       msg = PQerrorMessage(conn);                          \
+   }                                                        \
+   if (!result ||                                           \
+       ((PGRES_COMMAND_OK != status) &&                     \
+        (PGRES_TUPLES_OK  != status)))                      \
+   {                                                        \
+      PERR("failed to get result to query:\n"               \
+           "\t%s", msg);                                    \
+      if (result)                                           \
+        PQclear (result);                                   \
+      result = NULL;                                        \
+      xaccBackendSetMessage (&be->be, msg);                 \
+      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);\
+   }                                                        \
+}                                                           \
 
 /* --------------------------------------------------------------- */
 /* The IF_ONE_ROW macro counts the number of rows returned by 

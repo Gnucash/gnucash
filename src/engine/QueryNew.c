@@ -1322,11 +1322,17 @@ gncQueryPrint (QueryNew * query)
   QueryNewSort_t s[3];
   gint maxResults = 0, numSorts = 3;
 
+  ENTER (" ");
+
+  if (!query) {
+      LEAVE("query is (null)");
+      return;
+  }
+
   output = NULL;
   str = NULL;
   maxResults = gncQueryGetMaxResults (query);
 
-  ENTER (" ");
   output = gncQueryPrintSearchFor (query, output);
   output = gncQueryPrintTerms (query, output);
 

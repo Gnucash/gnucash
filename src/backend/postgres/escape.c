@@ -32,7 +32,10 @@
 #include <glib.h>
 #include <string.h>
 
+#include "gnc-engine-util.h"
 #include "escape.h"
+
+static short module = MOD_BACKEND; 
 
 /* ================================================ */
 
@@ -129,9 +132,11 @@ sqlEscape_new (void)
 void
 sqlEscape_destroy (sqlEscape *b)
 {
-   if (!b) return;
+    ENTER(" ");
+   if (!b) { LEAVE("b is (null)"); return; }
    g_free (b->escape);     b->escape = NULL;
    g_free (b);
+   LEAVE(" ");
 }
 
 /* ================ END OF FILE ==================== */

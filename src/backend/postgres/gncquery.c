@@ -83,11 +83,15 @@ sqlQuery_new(void)
 void
 sql_Query_destroy(sqlQuery * sq)
 {
-    if (!sq)
+    ENTER(" ");
+    if (!sq) {
+        LEAVE("sq = (null)");
         return;
+    }
     g_free(sq->q_base);
     sqlEscape_destroy(sq->escape);
     g_free(sq);
+    LEAVE(" ");
 }
 
 /*
