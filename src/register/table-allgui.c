@@ -437,8 +437,6 @@ gnc_virtual_cell_new (gpointer user_data)
   else
     vcell->vcell_data = NULL;
 
-  gnc_physical_location_init(&vcell->phys_loc);
-
   return tcell;
 }
 
@@ -545,8 +543,6 @@ gnc_table_set_cursor (Table *table, CellBlock *curs,
 
   /* this cursor is the handler for this block */
   vcell->cellblock = curs;
-
-  vcell->phys_loc = phys_origin;
 
   /* intialize the mapping so that we will be able to find
    * the handler, given this range of physical cell addresses */

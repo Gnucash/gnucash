@@ -95,36 +95,6 @@ gnucash_cursor_set_style (GnucashCursor  *cursor, SheetBlockStyle *style)
 
 
 void
-gnucash_cursor_get_phys (GnucashCursor *cursor, PhysicalLocation *phys_loc)
-{
-        Table *table;
-        VirtualCell *vcell;
-        VirtualLocation virt_loc;
-
-        g_return_if_fail (cursor != NULL);
-        g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
-
-        table = cursor->sheet->table;
-
-        virt_loc.vcell_loc.virt_row =
-		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK])->row;
-        virt_loc.vcell_loc.virt_col =
-		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK])->col;
-
-        virt_loc.phys_row_offset =
-		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL])->row;
-        virt_loc.phys_col_offset =
-		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL])->col;
-
-        vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
-
-        *phys_loc = vcell->phys_loc;
-        phys_loc->phys_row += virt_loc.phys_row_offset;
-        phys_loc->phys_col += virt_loc.phys_col_offset;
-}
-
-
-void
 gnucash_cursor_get_virt (GnucashCursor *cursor, VirtualLocation *virt_loc)
 {
         g_return_if_fail (cursor != NULL);

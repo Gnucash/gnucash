@@ -3080,7 +3080,7 @@ xaccSRCountRows (SplitRegister *reg,
              !found_divider &&
              (present < xaccTransGetDate (trans)))
          {
-           table->dividing_row = num_phys_rows;
+           table->dividing_row = num_virt_rows;
            found_divider = TRUE;
          }
 

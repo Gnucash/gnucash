@@ -90,10 +90,7 @@ typedef struct
 
 GnomeCanvasItem *gnucash_cursor_new (GnomeCanvasGroup *parent);
 
-void gnucash_cursor_get_phys (GnucashCursor *cursor,
-                              PhysicalLocation *phys_loc);
-void gnucash_cursor_get_virt (GnucashCursor *cursor,
-                              VirtualLocation *virt_loc);
+void gnucash_cursor_get_virt (GnucashCursor *cursor, VirtualLocation *virt_loc);
 
 void gnucash_cursor_set (GnucashCursor *cursor, VirtualLocation virt_loc);
 

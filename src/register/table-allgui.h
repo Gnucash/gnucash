@@ -112,11 +112,8 @@ typedef enum {
 typedef struct _VirtualCell VirtualCell;
 struct _VirtualCell
 {
-  CellBlock *cellblock;       /* Array of physical cells */
-
-  PhysicalLocation phys_loc;  /* Physical location of cell (0, 0) */
-
-  gpointer vcell_data;        /* Used by higher-level code */
+  CellBlock *cellblock;  /* Array of physical cells */
+  gpointer   vcell_data; /* Used by higher-level code */
 };
 
 

@@ -262,7 +262,6 @@ draw_cell (GnucashGrid *grid, int block,
         CellStyle *cs;
         SheetBlock *sheet_block;
         VirtualLocation virt_loc;
-        VirtualCell *vcell;
         GdkColor *bg_color;
         GdkColor *fg_color;
         guint32 argb;
@@ -307,8 +306,7 @@ draw_cell (GnucashGrid *grid, int block,
         /* dividing line */
         if ((i == 0) && (table->dividing_row >= 0))
         {
-                vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
-                if (vcell->phys_loc.phys_row == table->dividing_row)
+                if (virt_loc.vcell_loc.virt_row == table->dividing_row)
                 {
                         gdk_gc_set_foreground (grid->gc, &gn_blue);
                         gdk_draw_line (drawable, grid->gc, x, y, x + width, y);
@@ -317,8 +315,7 @@ draw_cell (GnucashGrid *grid, int block,
 
         if ((i == (style->nrows - 1)) && (table->dividing_row >= 0))
         {
-                vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
-                if (vcell->phys_loc.phys_row == (table->dividing_row - 1))
+                if (virt_loc.vcell_loc.virt_row == (table->dividing_row - 1))
                 {
                         gdk_gc_set_foreground (grid->gc, &gn_blue);
                         gdk_draw_line (drawable, grid->gc, x, y + height,
