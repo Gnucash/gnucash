@@ -1,3 +1,20 @@
+2002-05-21  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-sx-from-trans.c (sxftd_get_end_info): Changed
+	to do the strtoul before we free the data itself; fixes "can't
+	create once/number-of-occurance SXes" [in from-transaction dialog]
+	bug.
+
+	* src/gnome/dialog-scheduledxaction.c (editor_ok_button_clicked):
+	Do a very lame but good-enough-for-now check to see if we can
+	determine if the template transactions will still balance.  Note
+	that we don't do anything with the result of that check, yet, but
+	we perform it.
+
+	* src/app-utils/gnc-exp-parser.c (gnc_exp_parser_real_init): Added
+	so we can conditionaly add the "predefined variables" to the
+	binding table for parsing a given expression.
+
 2002-05-18  David Hampton  <hampton@employees.org>
 
 	* configure.in: Work around incompatibilities between autoconf

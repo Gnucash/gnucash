@@ -121,8 +121,6 @@ X create a template register
 
 . make-from-transaction
   . bugs
-    . number-of-instances in 'simple' results in "Warning:
-      sxftd_advanced_clicked: something bad happened in sxftd_compute_sx"
     . general: there's going to be all sorts of interaction issues like these
       between these things [SX-from-trans, SX list, SX editor] that should be
       handled.
@@ -138,6 +136,8 @@ X create a template register
     X 20020419 - Wilddev manages to create two SXes from one; the first is
       okay, but the second is h0rk3d [deleting it causes segfault, though it
       can be instantiated correctly].
+    X number-of-instances in 'simple' results in "Warning:
+      sxftd_advanced_clicked: something bad happened in sxftd_compute_sx"
   . tab-order
   . better frequency guess?
    [ related... ]
@@ -237,9 +237,10 @@ X create a template register
     . recn?
 
 . deal better with formulas in template transactions [real FormulaCell]
-  . recognize purely numeric template transactions and balance at
+  . actually do something with the result of the balancing computation
+  / recognize purely numeric template transactions and balance at
     template-creation time.
-  . balance transaction with vars?
+  / balance transaction with vars?
 
 . GNCFrequency
   . initial-settings synchronization [start date, optionmenus]

@@ -50,7 +50,13 @@ static gboolean    parser_inited = FALSE;
 /** Implementations ************************************************/
 
 void
-gnc_exp_parser_init (void)
+gnc_exp_parser_init ( void )
+{
+  gnc_exp_parser_real_init( TRUE );
+}
+
+void
+gnc_exp_parser_real_init ( gboolean addPredefined )
 {
   SCM alist;
 
@@ -62,57 +68,60 @@ gnc_exp_parser_init (void)
   /* This comes after the statics have been initialized. Not at the end! */
   parser_inited = TRUE;
 
-  alist = gnc_lookup_option ("__exp_parser", "defined_variables", SCM_EOL);
+  if ( addPredefined ) {
+    alist = gnc_lookup_option ("__exp_parser", "defined_variables", SCM_EOL);
 
-  while (gh_list_p(alist) && !gh_null_p(alist))
-  {
-    char *name;
-    SCM assoc;
-    SCM val_scm;
-    gnc_numeric value;
-    gboolean good;
+    while (gh_list_p(alist) && !gh_null_p(alist))
+      {
+        char *name;
+        SCM assoc;
+        SCM val_scm;
+        gnc_numeric value;
+        gboolean good;
 
-    assoc = gh_car (alist);
-    alist = gh_cdr (alist);
+        assoc = gh_car (alist);
+        alist = gh_cdr (alist);
 
-    if (!gh_pair_p (assoc))
-      continue;
+        if (!gh_pair_p (assoc))
+          continue;
 
-    name = gh_scm2newstr (gh_car (assoc), NULL);
-    if (name == NULL)
-      continue;
+        name = gh_scm2newstr (gh_car (assoc), NULL);
+        if (name == NULL)
+          continue;
 
-    val_scm = gh_cdr (assoc);
-    good = TRUE;
+        val_scm = gh_cdr (assoc);
+        good = TRUE;
 
-    if (gh_number_p (val_scm))
-    {
-      double dvalue;
+        if (gh_number_p (val_scm))
+          {
+            double dvalue;
 
-      dvalue = gh_scm2double (val_scm);
-      value = double_to_gnc_numeric (dvalue, GNC_DENOM_AUTO, 
-                                     GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
-    }
-    else if (gh_string_p (val_scm))
-    {
-      char *s;
-      const char *err;
+            dvalue = gh_scm2double (val_scm);
+            value = double_to_gnc_numeric (dvalue, GNC_DENOM_AUTO, 
+                                           GNC_DENOM_SIGFIGS(6)
+                                           | GNC_RND_ROUND);
+          }
+        else if (gh_string_p (val_scm))
+          {
+            char *s;
+            const char *err;
 
-      s = gh_scm2newstr (val_scm, NULL);
+            s = gh_scm2newstr (val_scm, NULL);
 
-      err = string_to_gnc_numeric (s, &value);
-      if (err == NULL)
-        good = FALSE;
+            err = string_to_gnc_numeric (s, &value);
+            if (err == NULL)
+              good = FALSE;
 
-      free (s);
-    }
-    else
-      good = FALSE;
+            free (s);
+          }
+        else
+          good = FALSE;
 
-    if (good)
-      gnc_exp_parser_set_value (name, gnc_numeric_reduce (value));
+        if (good)
+          gnc_exp_parser_set_value (name, gnc_numeric_reduce (value));
 
-    free (name);
+        free (name);
+      }
   }
 }
 
@@ -431,7 +440,7 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
     return FALSE;
 
   if (!parser_inited)
-    gnc_exp_parser_init ();
+    gnc_exp_parser_real_init ( (varHash == NULL) );
 
   result.variable_name = NULL;
   result.value = NULL;
@@ -509,7 +518,6 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
       }
   } else {
     update_variables (vars);
-    update_variables (parser_get_vars (pe));
   }
 
   free_predefined_variables (vars);

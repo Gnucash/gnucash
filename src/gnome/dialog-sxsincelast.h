@@ -35,8 +35,11 @@ void sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash );
 /**
  * Returns the variables from the given formula [free-form non-numeric
  * character strings] as the keys of the given GHashTable.
+ * @param result can be NULL if you're not interested in the result
  **/
-int parse_vars_from_formula( const char *formula, GHashTable *varHash );
+int parse_vars_from_formula( const char *formula,
+                             GHashTable *varHash,
+                             gnc_numeric *result );
 
 void print_vars_helper( gpointer key, gpointer value, gpointer user_data );
 

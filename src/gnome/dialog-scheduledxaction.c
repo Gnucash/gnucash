@@ -230,6 +230,16 @@ local_print_helper( gpointer key, gpointer value, gpointer ud )
 }
 #endif
 
+static void
+set_var_to_random_value( gpointer key, gpointer value, gpointer ud )
+{
+        gnc_numeric *val;
+        val = g_new0( gnc_numeric, 1 );
+        *val = double_to_gnc_numeric( rand() + 2, 1,
+                                      GNC_NUMERIC_RND_MASK | GNC_RND_FLOOR );
+        g_hash_table_insert( ud, key, val );
+}
+
 static
 void
 editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
@@ -259,20 +269,37 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         gnc_split_register_save ( gnc_ledger_display_get_split_register(sxed->ledger),
                                   FALSE );
 
-#if 0
-        /* FIXME: leave for now; will use for numeric-formulas-get-balanced
-         * determination later. */
+        /* numeric-formulas-get-balanced determination */
         {
-                GHashTable *ht;
+                GHashTable *vars;
                 GList *splitList = NULL;
                 char *str;
                 kvp_frame *f;
                 kvp_value *v;
                 Split *s;
+                gnc_numeric creditSum, debitSum, tmp;
 
-                ht = g_hash_table_new( NULL, NULL );
-
+                creditSum = debitSum = gnc_numeric_zero();
+                vars = g_hash_table_new( g_str_hash, g_str_equal );
                 splitList = xaccSchedXactionGetSplits( sxed->sx );
+                /**
+                 * Plan:
+                 * . Do a first pass to get the variables.
+                 * . Set each variable to random values.
+                 * . see if we balance after that
+                 *   . true: all good
+                 *   . false: indicate to user, allow decision.
+                 */
+                sxsl_get_sx_vars( sxed->sx, vars );
+                if ( g_hash_table_size( vars ) == 0 ) {
+                        /* FIXME: just balance as is, DTRT. */
+                }
+
+                /* FIXME: since we have variables, we can deal with any
+                 * possible auto-create flaggage. */
+                g_hash_table_foreach( vars, set_var_to_random_value,
+                                      (gpointer)vars );
+                
                 for ( ; splitList; splitList = splitList->next ) {
                         s = (Split*)splitList->data;
                         f = xaccSplitGetSlots( s );
@@ -283,7 +310,14 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                         if ( v
                              && (str = kvp_value_get_string(v))
                              && strlen( str ) != 0 ) {
-                                parse_vars_from_formula( str, ht );
+                                if ( parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
+                                        PERR( "Couldn't parse credit formula for "
+                                              "\"%s\" on second pass",
+                                              xaccSchedXactionGetName( sxed->sx ) );
+                                        return;
+                                }
+                                creditSum = gnc_numeric_add_fixed( creditSum, tmp );
+                                tmp = gnc_numeric_zero();
                         }
                         v = kvp_frame_get_slot_path( f,
                                                      GNC_SX_ID,
@@ -292,16 +326,29 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                         if ( v
                              && (str = kvp_value_get_string(v))
                              && strlen(str) != 0 ) {
-                                parse_vars_from_formula( str, ht );
+                                if ( parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
+                                        PERR( "Couldn't parse debit formula for "
+                                              "\"%s\" on second pass",
+                                              xaccSchedXactionGetName( sxed->sx ) );
+                                        return;
+                                }
+                                debitSum = gnc_numeric_add_fixed( debitSum, tmp );
+                                tmp = gnc_numeric_zero();
                         }
-                        g_hash_table_foreach( ht, local_print_helper, NULL );
                 }
-                if ( g_hash_table_size( ht ) == 0 ) {
-                        
+                if ( gnc_numeric_zero_p( gnc_numeric_sub_fixed( debitSum, creditSum ) ) ) {
+                        printf( "true [%s - %s = %s]\n",
+                                gnc_numeric_to_string( debitSum ),
+                                gnc_numeric_to_string( creditSum ),
+                                gnc_numeric_to_string(gnc_numeric_sub_fixed( debitSum, creditSum )) );
+                } else {
+                        printf( "false [%s - %s = %s]\n",
+                                gnc_numeric_to_string( debitSum ),
+                                gnc_numeric_to_string( creditSum ),
+                                gnc_numeric_to_string(gnc_numeric_sub_fixed( debitSum, creditSum )) );
                 }
-                g_hash_table_destroy( ht );
+                g_hash_table_destroy( vars );
         }
-#endif /* 0 */
 
         /* read out data back into SchedXaction object. */
 

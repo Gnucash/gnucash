@@ -128,8 +128,9 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
   getEndTuple retval;
   GtkWidget *w;
 
+  retval.type = BAD_END;
+
   w = glade_xml_get_widget(sxfti->gxml, SXFTD_NEVER_END_BUTTON);
-  
   if(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w)))
   {
     retval.type = NEVER_END;
@@ -137,7 +138,6 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
   }
   
   w = glade_xml_get_widget(sxfti->gxml, SXFTD_END_ON_DATE_BUTTON);
-
   if(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w)))
   {
     time_t end_tt;
@@ -160,9 +160,11 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
     text = gtk_editable_get_chars(GTK_EDITABLE(w), 0, -1);
     
     n_occs = strtoul(text, &endptr, 10);
-
-    free(text);
-    if(!endptr && n_occs > 0)
+    if ( !endptr ) {
+      n_occs = -1;
+    }
+    g_free(text);
+    if(n_occs > 0)
     {
       retval.type = END_AFTER_N_OCCS;
       retval.n_occurrences = n_occs;
@@ -170,7 +172,6 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
     }
   }
 
-  retval.type = BAD_END;
   return retval;
 }
  
@@ -386,7 +387,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
     break;
   }
 
-  sxftd_add_template_trans( sxfti);
+  sxftd_add_template_trans( sxfti );
 
   return sxftd_errno;
 }
@@ -415,7 +416,11 @@ sxftd_ok_clicked(GtkWidget *w, gpointer user_data)
   GList *sx_list;
   guint sx_error = sxftd_compute_sx(sxfti);
 
-  if (sx_error == 0)
+  if (sx_error != 0)
+  {
+    PERR( "Error in sxftd_compute_sx after ok_clicked [%d]", sx_error );
+  }
+  else
   {
     book = gnc_get_current_book ();
     sx_list = gnc_book_get_schedxactions(book);
@@ -474,7 +479,7 @@ sxftd_advanced_clicked(GtkWidget *w, gpointer user_data)
 
   if (sx_error != 0)
   {
-    PWARN( "something bad happened in sxftd_compute_sx" );
+    PWARN( "something bad happened in sxftd_compute_sx [%d]", sx_error );
     return;
   }
   gtk_widget_hide( sxfti->dialog );

@@ -257,8 +257,6 @@ static gboolean inform_or_add( GList *reminders,
                                reminderTuple *rt, gboolean okFlag,
                                GList *badList, GList **goodList );
 
-int parse_vars_from_formula( const char *formula, GHashTable *varHash );
-
 static void sx_obsolete_select_all_clicked(GtkButton *button,
                                            gpointer user_data);
 static void sx_obsolete_unselect_all_clicked(GtkButton *button,
@@ -1383,7 +1381,7 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
         gchar *varName;
         toCreateTuple *tct;
         gchar *entryText;
-        gnc_numeric *num;
+        gnc_numeric *num, *ourNum;
         GHashTable *dummyVarHash;
 
         sxsld = (sxSinceLastData*)ud;
@@ -1397,17 +1395,14 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
         if ( !gnc_exp_parser_parse_separate_vars( entryText, num,
                                                   NULL, dummyVarHash ) ) {
                 DEBUG( "error parsing entry \"%s\"", entryText  );
-                g_free( num );
                 num = NULL;
         } else if ( g_hash_table_size( dummyVarHash ) != 0 ) {
                 DEBUG( "no new variables allowed in variable "
                        "bindings for expression \"%s\"", entryText );
-                g_free( num );
                 num = NULL;
         } else if ( gnc_numeric_check( *num ) != GNC_ERROR_OK ) {
                 DEBUG( "entry \"%s\" is not "
                        "gnc_numeric-parseable", entryText );
-                g_free( num );
                 num = NULL;
         } else {
                 DEBUG( "\"%s\" parses as \"%f\"", entryText,
@@ -1419,13 +1414,21 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
         {
                 gpointer maybeKey, maybeValue;
 
+        ourNum = NULL;
+        if ( num ) {
+                ourNum = g_new0( gnc_numeric, 1 );
+                *ourNum = *num;
+        }
                 if ( g_hash_table_lookup_extended( tct->varBindings, varName,
                                                    &maybeKey, &maybeValue ) ) {
                         g_hash_table_remove( tct->varBindings, maybeKey );
-                        g_free( maybeValue );
+                        /* only if not null. */
+                        if ( maybeValue ) {
+                                g_free( maybeValue );
+                        }
                         /* FIXME: Does the maybeKey need to be freed? */
                 }
-                g_hash_table_insert( tct->varBindings, maybeKey, num );
+                g_hash_table_insert( tct->varBindings, maybeKey, ourNum );
         }
 
         {
@@ -1810,7 +1813,7 @@ sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash )
                 if ( kvp_val != NULL ) {
                         str = kvp_value_get_string( kvp_val );
                         if ( str && strlen(str) != 0 ) {
-                                parse_vars_from_formula( str, varHash );
+                                parse_vars_from_formula( str, varHash, NULL );
                         }
                 }
 
@@ -1821,7 +1824,7 @@ sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash )
                 if ( kvp_val != NULL ) {
                         str = kvp_value_get_string( kvp_val );
                         if ( str && strlen(str) != 0 ) {
-                                parse_vars_from_formula( str, varHash );
+                                parse_vars_from_formula( str, varHash, NULL );
                         }
                 }
         }
@@ -2014,6 +2017,7 @@ sxsincelast_tc_row_unsel( GtkCList *clist,
 
         sxsld = (sxSinceLastData*)user_data;
         clean_variable_table( sxsld );
+        /* FIXME: need to cleanup the gnc_numerics we allocated */
 }
 
 void
@@ -2025,18 +2029,34 @@ print_vars_helper( gpointer key, gpointer value, gpointer user_data )
 }
 
 int
-parse_vars_from_formula( const char *formula, GHashTable *varHash )
+parse_vars_from_formula( const char *formula,
+                         GHashTable *varHash,
+                         gnc_numeric *result )
 {
-        gnc_numeric numeric;
-        char *foo;
-        
-        if ( ! gnc_exp_parser_parse_separate_vars( formula, &numeric,
-                                                   &foo, varHash ) ) {
-                PERR( "Error parsing at \"%s\": %s",
-                        foo, gnc_exp_parser_error_string() );
-                return -1;
+        gnc_numeric *num;
+        char *errLoc;
+        int toRet;
+
+        if ( result ) {
+                num = result;
+        } else {
+                num = g_new0( gnc_numeric, 1 );
         }
-        return 0;
+        
+        if ( ! gnc_exp_parser_parse_separate_vars( formula, num,
+                                                   &errLoc, varHash ) ) {
+                PERR( "Error parsing at \"%s\": %s",
+                        errLoc, gnc_exp_parser_error_string() );
+                toRet = -1;
+                goto cleanup;
+        }
+        toRet = 0;
+
+ cleanup:
+        if ( !result ) {
+                g_free( num );
+        }
+        return toRet;
 }
 
 /**
