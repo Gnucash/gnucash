@@ -1,3 +1,8 @@
+2003-06-18  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Tolerate some
+	banks' failure of the GetSystemId-job.
+
 2003-06-17  Chris Lyttle  <chris@wilddev.net>
 
 	* src/scm/help-topics-index.scm: add Jon Lapham's patch

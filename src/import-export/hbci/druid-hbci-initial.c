@@ -1052,7 +1052,8 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
     if (!gnc_hbci_api_execute (info->window, info->api, 
 			       job, info->interactor)) {
       /* HBCI_API_executeOutbox failed. */
-      return FALSE;
+      /*return FALSE;*/
+      /* -- it seems to be no problem if this fails ?! */
     }
 
     /* Now the GetAccounts job. */
