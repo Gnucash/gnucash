@@ -13,6 +13,46 @@
 	* src/doc/TODO-schedxactions: Updated; more 'X'-ed off items make
 	me happy.
 
+2002-04-21  David Hampton  <hampton@employees.org>
+
+	* src/gnc-ui.h:
+	* src/app-file/gnc-file.c:
+	* src/app-utils/option-util.c:
+	* src/busiuness/business-gnome/dialog-date-close.c:
+	* src/busiuness/business-gnome/dialog-order.c:
+	* src/busiuness/business-ledger/gncEntryLedgerControl.c:
+	* src/gnome/dialog-commodities.c:
+	* src/gnome/dialog-price-editor.c:
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/dialog-sxsincelast.c :
+	* src/gnome/dialog-transfer.c:
+	* src/gnome/druid-stock-split.c:
+	* src/gnome/window-acct-tree.c:
+	* src/gnome/window-main.c:
+	* src/gnome/window-reconcile.c:
+	* src/gnome/window-register.c:
+	* src/gnome-utils/gnc-frequency.c:
+	* src/gnome-utils/gnc-gui-query.c:
+	* src/gnome-utils/gnc-gui-query.h:
+	* src/gnome-utils/gnc-html.c:
+	* src/gnome-utils/gw-gnome-utils-spec.scm :
+	* src/import-export/qif-import/druid-qif-import.c:
+	* src/register/ledger-core/gnc-regwidget.c:
+	* src/register/ledger-core/split-register-control.c:
+	* src/register/ledger-core/split-register-model.c:
+	* src/register/ledger-core/split-register.c 
+	* src/report/report-gnome/window_report.c: Move string formatting
+	logic into the gnc_xxx_dialog routines.
+	
+	* src/scm/price-quotes.scm: Include gw-gnome-utils module.
+	(gnc:book-add-quotes book): Move string formatting logic into the
+	gnc_xxx_dialog routines.
+
+	* src/backend/file/gnc-xml-helper.h:
+	* src/backend/file/sixtp.c:
+	* src/backend/file/sixtp.h: Find SAX.h in either the libxml or
+	gnome-xml directories.
+
 2002-04-21  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/backend/file/sixtp.c (sixtp_parse_file): Explicitly create
@@ -30,6 +70,59 @@
 	* src/gnome/dialog-sxsincelast.c (process_auto_create_list): Added
 	progress-bar support for transaction auto-creation.
 
+2002-04-18  David Hampton  <hampton@employees.org>
+
+	* configure.in:
+	* src/bin/overrides/Makefile.am:
+	* src/bin/overrides/gnucash-env.in: Propagate any non standard
+	g-wrap prefix path to the setting of the LD_LIBRARY_PATH variable.
+
+	* src/app-utils/gnc-component-manager.c:
+	* src/app-utils/gnc-component-manager.h: Change
+	gnc_forall_gui_components() to pass the registered user_data to
+	the callback routine, and to return a count of the callback
+	functions called.
+
+	* src/gnome-utils/dialog-utils.c (gtk_window_present):
+	* src/gnome-utils/dialog-utils.h: Added this routine to
+	consolidate all logic in raising an existing window.
+
+	* src/dialog-account/dialog-account.c
+		(gnc_ui_edit_account_window_raise):
+	* src/gnome/dialog-scheduledxaction.c
+		(gnc_ui_scheduled_xaction_dialog_create):
+		(gnc_ui_scheduled_xaction_editor_dialog_create):
+	* src/gnome/dialog-totd.c (gnc_ui_totd_dialog_create_and_run):
+	* src/gnome/window-acct-tree.c
+		(gnc_acct_tree_window_toolbar_options_cb):
+	* src/gnome/window-reconcile.c (gnc_ui_reconcile_window_raise):
+	* src/gnome/window-register.c (gnc_register_raise):
+		(gnc_register_show_date_window):
+	* src/gnome-utils/dialog-options.c (gnc_show_options_dialog): 
+	* src/register/ledger-core/gnc-regwidget.c (gnc_register_raise):
+	* src/report/report-gnome/dialog-column-view.c:
+	* src/report/report-gnome/window-report.c
+		(gnc_report_window_default_params_editor): Convert to use
+	the new logic for raising windows.
+
+	* src/gnome/dialog-commodities.c (gnc_commodities_dialog): Add new
+	logic for raising windows.
+	(show_handler): New routine.
+
+	* src/gnome/dialog-fincalc.c (gnc_ui_fincalc_dialog_create): Add new
+	logic for raising windows.
+	(show_handler): New routine.
+
+	* src/gnome/dialog-price-editor.c (gnc_prices_dialog): Add new
+	logic for raising windows.
+	(show_handler): New routine.
+
+	* src/import-export/qif-import/druid-qif-import.c
+	(gnc_file_qif_import): Add new logic for raising windows.
+	(show_handler): New routine.
+	(gnc_ui_qif_import_druid_make):Convert to use the new logic for
+	raising windows.
+	
 2002-04-17  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-scheduledxaction.c
@@ -83,6 +176,65 @@
 	setting GUILE_LOAD_PATH when creating iso-4217-currencies.c, for
 	those of us that need to set it for whatever reason we need to do
 	so.
+
+2002-04-15  David Hampton  <hampton@employees.org>
+
+	* src/register/ledger-core/split-register-layout.c
+	(gnc_split_register_layout_add_cells): Fix problems entering stock
+	transactions into the blank split.  Add the SHRS_CELL before the
+	PRIC_CELL so that its callback is called first, since the price
+	callback performs a computation based upon the number of shares.
+
+	* src/gnome/druid-stock-split.c(-account_currency_filter):
+	Removed.
+	
+	* src/gnome/druid-stock-split.c(gnc_stock_split_druid_create): On
+	the "Cash In Lieu" page of the druid, remove the filter on which
+	accounts can be selected.
+
+2002-04-07  David Hampton  <hampton@employees.org>
+
+	* make-gnucash-patch.in: Make sure the 'manifest' argument is a
+	fully specified pathname before passing it off to the makepatch
+	program.
+		
+	* src/gnome/dialog-transfer.c: Additional support for
+	"placeholder" accounts.
+	
+	* src/gnome/druid-hierarchy.c: Additional support for
+	"placeholder" accounts.
+	
+	* src/gnome/druid-stock-split.c: Additional support for
+	"placeholder" accounts.
+	
+	* src/gnome/glade/account.glade: Additional support for
+	"placeholder" accounts.
+
+2002-04-04  David Hampton  <hampton@employees.org>
+
+	* src/dialog-account/dialog-account.c: Initial support for
+	"placeholder" accounts.
+	
+	* src/engine/Account.c: Initial support for "placeholder"
+	accounts.
+	
+	* src/engine/Account.h: Initial support for "placeholder"
+	accounts.
+
+	* src/gnome/glade/account.glade: Initial support for "placeholder"
+	accounts.
+
+	* src/register/ledger-core/split-register-control.c: Initial
+	support for "placeholder" accounts.
+
+	* src/register/ledger-core/split-register-load.c: Initial support
+	for "placeholder" accounts.
+
+	* src/register/register-gnome/combocell-gnome.c: Initial support
+	for "placeholder" accounts.
+
+	* src/gnome/window-reconcile.c(recnRecalculateBalance,
+	startRecnWindow): Fix reconciliation of a liability window.
 
 2002-03-04  Derek Atkins <warlord@MIT.EDU>
 
