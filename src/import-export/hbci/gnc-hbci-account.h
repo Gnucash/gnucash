@@ -20,6 +20,10 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+/** @file 
+    Hbci account definition
+*/
+
 #ifndef GNC_HBCI_ACCOUNT_H
 #define GNC_HBCI_ACCOUNT_H
 
@@ -41,11 +45,30 @@ const char *gnc_HBCI_Account_accountId (const gnc_HBCI_Account *hbci_acc);
 /** Returns the bank code -- this might be different than the actual
  * bank's bank code */
 const char *gnc_HBCI_Account_bankCode (const gnc_HBCI_Account *hbci_acc);
+
+void gnc_HBCI_Account_set_name (gnc_HBCI_Account *hbci_acc, const char *n);
+void gnc_HBCI_Account_set_customer (gnc_HBCI_Account *hbci_acc, const char *n);
+void gnc_HBCI_Account_set_currency (gnc_HBCI_Account *hbci_acc, const char *n);
+void gnc_HBCI_Account_set_name1 (gnc_HBCI_Account *hbci_acc, const char *n);
+const char *gnc_HBCI_Account_name (const gnc_HBCI_Account *hbci_acc);
+const char *gnc_HBCI_Account_customer (const gnc_HBCI_Account *hbci_acc);
+const char *gnc_HBCI_Account_currency (const gnc_HBCI_Account *hbci_acc);
+const char *gnc_HBCI_Account_name1 (const gnc_HBCI_Account *hbci_acc);
+
 /** Returns the bank this account belongs to */
 const HBCI_Bank *
 gnc_HBCI_Account_bank (const gnc_HBCI_Account *hbci_acc);
 /** Destructor for this account object */
 void gnc_HBCI_Account_delete (gnc_HBCI_Account *hbci_acc);
+
+/** Returns a newly allocated string that is a human-readable
+ * description of this account. The returned string will be owned by
+ * the caller. */
+gchar *gnc_HBCI_Account_longname(const gnc_HBCI_Account *hbci_acc);
+/*@}*/
+
+/** @name List of hbci accounts */
+/*@{*/
 /** Foreach function */
 void *list_HBCI_Account_foreach(GList *list_HBCI_Account, 
 				void*(*func_cb)(gnc_HBCI_Account *acc,
@@ -54,6 +77,13 @@ void *list_HBCI_Account_foreach(GList *list_HBCI_Account,
 /** Delete each element of a GList of HBCI_Accounts and finally the
  * list itself.  */
 void list_HBCI_Account_delete(GList *list_HBCI_Account);
+
+/** Searches for an account with the given data fields. Returns this
+ * account, or NULL if none was found. */
+gnc_HBCI_Account *list_HBCI_Account_find(GList *list_HBCI_Account,
+					 const HBCI_Bank *bank, 
+					 const char *bankCode,
+					 const char *accountid);
 /*@}*/
 
 /** @name Serialization -- List of gnc_HBCI_Accounts to kvp_frame and

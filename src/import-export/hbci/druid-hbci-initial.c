@@ -46,6 +46,8 @@
 
 #include <openhbci2.h>
 
+#define DEFAULT_HBCI_VERSION 201
+
 typedef enum _infostate {
   INI_ADD_BANK,
   INI_ADD_USER,
@@ -189,15 +191,10 @@ delete_initial_druid (HBCIInitialInfo *info)
   if (info->interactor)
     GNCInteractor_delete(info->interactor);
 
-  printf("delete_initial_druid: FIXME: gnucash will crash here in a call to gnome_entry_destroy(), probably related to the configfileentry object.\n");
-
   if (info->window != NULL) 
     gtk_widget_destroy (info->window);
 
-  printf("delete_initial_druid: FIXME: this is not reached \n");
-  
   g_free (info);
-  printf("delete_initial_druid: 4\n");
 }
 
 
@@ -217,12 +214,7 @@ update_accountlist_acc_cb (gnc_HBCI_Account *hacc, gpointer user_data)
   g_assert(info);
   row_text[2] = "";
   
-  row_text[0] = 
-    /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
-    g_strdup_printf(_("%s at %s (code %s)"),
-		    gnc_HBCI_Account_accountId (hacc),
-		    HBCI_Bank_name (gnc_HBCI_Account_bank (hacc)),
-		    HBCI_Bank_bankCode (gnc_HBCI_Account_bank (hacc)));
+  row_text[0] = gnc_HBCI_Account_longname(hacc);
 		
   /* Get corresponding gnucash account */
   gacc = g_hash_table_lookup (info->gnc_hash, hacc);
@@ -282,8 +274,8 @@ update_accountlist (HBCIInitialInfo *info)
 			     update_accountlist_acc_cb,
 			     info);
 
-  /*printf("HBCI hash has %d entries.\n", g_hash_table_size(info->hbci_hash));*/
-  /*printf("GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash));*/
+  //printf("update_accountlist: HBCI hash has %d entries.\n", g_hash_table_size(info->hbci_hash));
+  //printf("update_accountlist: GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash));
   
   g_hash_table_thaw (info->hbci_hash);
   gtk_clist_thaw (GTK_CLIST (info->accountlist));
@@ -560,21 +552,22 @@ static void gnc_hbci_addaccount(HBCIInitialInfo *info,
   
   if ((retval == 0) && accnr && (strlen(accnr) > 0)) {
     
-    /* Create the wrapper object */
-    acc = gnc_HBCI_Account_new(bank, HBCI_Bank_bankCode (bank), accnr);
+    /* Search for existing duplicate */
+    acc = list_HBCI_Account_find(info->hbci_accountlist, 
+				 bank, HBCI_Bank_bankCode (bank), accnr);
 
     /* Check if such an account already exists */
-    if (list_HBCI_Account_foreach(info->hbci_accountlist, hbci_find_acc_cb, acc))
+    if (acc)
       {
 	/* Yes, then don't create it again */
-	gnc_HBCI_Account_delete(acc);
 	gnc_error_dialog
 	  (info->window,
 	   _("An account with this account id at this bank already exists."));
       }
     else
       {
-	/* No, then add it to our internal list. */
+	/* No, then create it and add it to our internal list. */
+	acc = gnc_HBCI_Account_new (bank, HBCI_Bank_bankCode (bank), accnr);
 	info->hbci_accountlist = g_list_append(info->hbci_accountlist, acc);
 
 	/* Don't forget to update the account list, otherwise the new
@@ -589,18 +582,7 @@ static void gnc_hbci_addaccount(HBCIInitialInfo *info,
 }
 /* -------------------------------------- */
 
-void *hbci_find_acc_cb(gnc_HBCI_Account *acc, void *user_data)
-{
-  gnc_HBCI_Account *new_acc = user_data;
-  if (gnc_HBCI_Account_bank(acc) == gnc_HBCI_Account_bank(new_acc))
-    if (strcmp(gnc_HBCI_Account_accountId(acc),
-	       gnc_HBCI_Account_accountId(new_acc))==0)
-      return acc;
-  return NULL;
-}
 
-  
-  
 
 /*************************************************************
  * GUI callbacks
@@ -822,6 +804,22 @@ on_bankpage_next (GnomeDruidPage  *gnomedruidpage,
 				 "");
     {
       HBCI_Error *err;
+      HBCI_Transporter *tr;
+      HBCI_MessageEngine *me;
+
+      me = HBCI_API_engineFactory(info->api, 
+				  countrycode,
+				  bankcode,
+				  DEFAULT_HBCI_VERSION,
+				  "msgxml");
+      tr = HBCI_API_transporterFactory(info->api,
+				       ipaddr,
+				       "3000" /* DEFAULT_PORT */,
+				       500 /*AQMONEY_DEFAULT_CONN_TIMEOUT*/,
+				       "xptcp");
+      HBCI_Bank_setMessageEngine(bank, me, TRUE);
+      HBCI_Bank_setTransporter(bank, tr, TRUE);
+
       err = HBCI_API_addBank (info->api, bank, TRUE);
       if (err != NULL) {
 	printf("on_bankpage_next-CRITICAL: Error at addBank: %s.\n",
@@ -829,6 +827,7 @@ on_bankpage_next (GnomeDruidPage  *gnomedruidpage,
 	HBCI_Error_delete (err);
 	return TRUE;
       }
+
     }
   } 
   /*else {
@@ -1133,7 +1132,7 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
       return FALSE;
     }
 
-    /* Now evaluate the GetAccounts job. FIXME: needs more work */
+    /* Now evaluate the GetAccounts job. */
     info->hbci_accountlist =
       gnc_processOutboxResponse(info->api, info->outbox, info->hbci_accountlist);
     
@@ -1190,13 +1189,28 @@ on_accountlist_select_row (GtkCList *clist, gint row,
   HBCIInitialInfo *info = user_data;
   gnc_HBCI_Account *hbci_acc;
   Account *gnc_acc, *old_value;
+  gchar *longname;
+  gnc_commodity *currency = NULL;
   
   hbci_acc = g_hash_table_lookup (info->hbci_hash, &row);
   if (hbci_acc) {
     old_value = g_hash_table_lookup (info->gnc_hash, hbci_acc);
 
-    gnc_acc = gnc_import_select_account(NULL, FALSE, NULL, NULL, NO_TYPE,
+    /*printf("on_accountlist_select_row: Selected hbci_acc id %s; old_value %p \n",
+	   gnc_HBCI_Account_accountId(hbci_acc),
+	   old_value);*/
+
+    longname = gnc_HBCI_Account_longname(hbci_acc);
+    if (gnc_HBCI_Account_currency(hbci_acc) && 
+	(strlen(gnc_HBCI_Account_currency(hbci_acc)) > 0)) {
+      currency = gnc_commodity_table_lookup 
+	(gnc_book_get_commodity_table (gnc_get_current_book ()), 
+	 GNC_COMMODITY_NS_ISO, gnc_HBCI_Account_currency(hbci_acc));
+    }
+
+    gnc_acc = gnc_import_select_account(NULL, TRUE, longname, currency, BANK,
 					old_value, NULL);
+    g_free(longname);
 
     if (gnc_acc) {
       if (old_value) 

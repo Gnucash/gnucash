@@ -58,6 +58,5 @@ GList *
 gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox, 
 			  GList *accountlist);
 
-void *hbci_find_acc_cb(gnc_HBCI_Account *acc, void *user_data);
 
 #endif

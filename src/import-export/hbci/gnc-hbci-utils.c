@@ -39,6 +39,12 @@
 
 /* static short module = MOD_IMPORT; */
 
+/* Globale variables for HBCI_API caching. */
+static HBCI_API *gnc_hbci_api = NULL;
+static char *gnc_hbci_configfile = NULL;
+static GNCInteractor *gnc_hbci_inter = NULL;
+static GList *gnc_hbci_accountlist = NULL;
+
 
 /* ------------------------------------------------------------ */
 HBCI_API *
@@ -51,7 +57,6 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
   char *errstring;
   
   g_assert(inter);
-  g_assert(list_accounts);
   
   if (!filename)
       return NULL;
@@ -119,10 +124,12 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
 
   *inter = gnc_hbci_api_interactors (api, parent);
 
-  *list_accounts =
+  gnc_hbci_accountlist =
       gnc_HBCI_Account_glist_from_kvp_glist
       (gnc_hbci_get_book_account_list(gnc_get_current_book ()),
        api);
+  if (list_accounts)
+    *list_accounts = gnc_hbci_accountlist;
 
   {
     /* FIXME FIXME FIXME : Use a sane directory here. FIXME FIXME
@@ -144,11 +151,6 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
   return api;
 }
 
-static HBCI_API *gnc_hbci_api = NULL;
-static char *gnc_hbci_configfile = NULL;
-static GNCInteractor *gnc_hbci_inter = NULL;
-static GList *gnc_hbci_accountlist = NULL;
-
 HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent, 
 					 GNCInteractor **inter,
 					 GList **list_accounts)
@@ -159,13 +161,9 @@ HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent,
       g_strdup (gnc_hbci_get_book_configfile (gnc_get_current_book ()));
     gnc_hbci_api = gnc_hbci_api_new (gnc_hbci_configfile, 
 				     FALSE, parent, &gnc_hbci_inter, 
-				     &gnc_hbci_accountlist);
+				     list_accounts);
     if (inter)
       *inter = gnc_hbci_inter;
-
-    /* Retrieve the stored list of HBCI accounts */
-    if (list_accounts)
-      *list_accounts = gnc_hbci_accountlist;
 
     return gnc_hbci_api;
 
@@ -229,15 +227,17 @@ gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc)
   bankcode = gnc_hbci_get_account_bankcode (gnc_acc);
   countrycode = gnc_hbci_get_account_countrycode (gnc_acc);
   if (bankcode && (strlen(bankcode)>0) && (countrycode > 0)) {
-    /*printf("gnc_acc %s has blz %s and ccode %d\n",
+    /*printf("gnc_hbci_get_hbci_acc: gnc_acc %s has blz %s and ccode %d\n",
       xaccAccountGetName (gnc_acc), bankcode, countrycode);*/
     bank = HBCI_API_findBank (api, countrycode, bankcode);
     if (bank) {
-      /*printf("gnc_acc %s has blz %s and ccode %d\n",
-	xaccAccountGetName (gnc_acc), bankcode, countrycode);*/
       accountid = gnc_hbci_get_account_accountid (gnc_acc);
+      /*printf("gnc_hbci_get_hbci_acc: gnc_acc %s found blz %s and ccode %d and accountid %s, bank %p\n",
+	xaccAccountGetName (gnc_acc), bankcode, countrycode, accountid, bank);*/
       if (accountid && (strlen(accountid)>0)) {
-	hbci_acc = gnc_HBCI_Account_new(bank, bankcode, accountid);
+	hbci_acc = list_HBCI_Account_find(gnc_hbci_accountlist, 
+					  bank, bankcode, accountid);
+	/*printf("gnc_hbci_get_hbci_acc: return HBCI_Account %p\n", hbci_acc);*/
 	return hbci_acc;
       }
     }

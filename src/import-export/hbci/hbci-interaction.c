@@ -577,10 +577,6 @@ static void actStarted (ActionProgressType type, void *user_data)
   const char *msg = NULL;
   g_assert(data);
   switch (type) {
-    /** Sending message. */
-  case ACT_SENDINGMESSAGE:
-    msg = _("Sending message");
-    break;
     /** Creating HBCI job. Number of Job will follow in string argument. */
   case ACT_FILLINGQUEUE:
     msg = _("Creating HBCI Job");
@@ -601,9 +597,57 @@ static void actStarted (ActionProgressType type, void *user_data)
   case ACT_CLOSECONNECTION:
     msg = _("Closing connection");
     break;
-  default:
-    msg = _("Unknown");
+  case ACT_OPENSESSION:
+    msg = _("Open session");
     break;
+  case ACT_CLOSESESSION:
+    msg = _("Close session");
+    break;
+  case ACT_OPENDIALOG:
+    msg = _("Open dialog");
+    break;
+  case ACT_CLOSEDIALOG:
+    msg = _("Close dialog");
+    break;
+  case ACT_PROCESSMSG:
+    msg = _("Process message");
+    break;
+  case ACT_CREATEJOB:
+    msg = _("Create job");
+    break;
+  case ACT_HANDLEJOBS:
+    msg = _("Handle jobs");
+    break;
+  case ACT_SIGNMSG:
+    msg = _("Sign message");
+    break;
+  case ACT_ENCRYPTMSG:
+    msg = _("Encrypt message");
+    break;
+  case ACT_VERIFYMSG:
+    msg = _("Verify message");
+    break;
+  case ACT_DECRYPTMSG:
+    msg = _("Decrypt message");
+    break;
+  case ACT_ENCODEMSG:
+    msg = _("Encode message");
+    break;
+  case ACT_DECODEMSG:
+    msg = _("Decode message");
+    break;
+    /** Sending message. */
+  case ACT_SENDINGMESSAGE:
+    /* Note: the ACT_SENDINGMESSAGE doesn't seem to be used. */
+  case ACT_LOW_SENDMSG:
+    msg = _("Sending message");
+    break;
+  case ACT_LOW_RECEIVEMSG:
+    msg = _("Receiving message");
+    break;
+    /*default:
+      msg = _("Unknown");
+      break;*/
   }
   
   g_assert(msg);

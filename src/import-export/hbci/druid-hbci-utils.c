@@ -79,12 +79,30 @@ accounts_save_kvp_cb (gpointer key, gpointer value, gpointer user_data)
       (gnc_acc, HBCI_Bank_country (gnc_HBCI_Account_bank (hbci_acc)));
 }
 
+static gpointer accounts_clear_kvp (Account *gnc_acc, gpointer user_data)
+{
+  if (gnc_hbci_get_account_accountid(gnc_acc))
+    gnc_hbci_set_account_accountid (gnc_acc, NULL);
+  if (gnc_hbci_get_account_bankcode(gnc_acc))
+    gnc_hbci_set_account_bankcode (gnc_acc, NULL);
+  if (gnc_hbci_get_account_countrycode(gnc_acc))
+    gnc_hbci_set_account_countrycode (gnc_acc, 0);
+  return NULL;
+}
+
 /* hash is a DIRECT hash from each HBCI account to each gnucash
    account. */
 void
 accounts_save_kvp (GHashTable *hash)
 {
+  AccountGroup *grp;
   g_assert(hash);
+
+  grp = gnc_book_get_group (gnc_get_current_book ());
+  xaccGroupForEachAccount (grp, 
+			   &accounts_clear_kvp,
+			   NULL, TRUE);
+
   g_hash_table_foreach (hash, &accounts_save_kvp_cb, NULL);
 }
 /*
@@ -290,8 +308,10 @@ gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox,
       const char *accountSubId;
       const char *bankCode;
       int country;
-      gnc_HBCI_Account *acc;
       const char *custid;
+      const char *currency;
+      const char *acc_name;
+      const char *acc_name1;
       /*list_HBCI_Customer *customers;*/
       /*HBCI_User *user;*/
       HBCI_Bank *bank;
@@ -305,6 +325,10 @@ gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox,
 	printf("gnc_processOutboxResponse: AccountData without bank code/account id/customer id\n");
 	continue;
       }
+
+      currency = GWEN_DB_GetCharValue(n, "currency", 0, NULL);
+      acc_name =  GWEN_DB_GetCharValue(n, "name", 0, NULL);
+      acc_name1 = GWEN_DB_GetCharValue(n, "name1", 0, NULL);
 
       bank = HBCI_API_findBank(api, country, bankCode);
       if (bank) {
@@ -335,46 +359,31 @@ gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox,
 	  bank=user.ref().bank();*/
       }
 
-      /* Create new account object */
-      /* FIXME: Store more information here. For now, we stop with
-	 this essential information. */
-      acc = gnc_HBCI_Account_new(bank, bankCode, accountId);
       
       {
 	/* Check if such an account already exists */
-	gnc_HBCI_Account *found_account = 
-	  list_HBCI_Account_foreach(accountlist, hbci_find_acc_cb, acc);
+	gnc_HBCI_Account *acc = 
+	  list_HBCI_Account_find(accountlist, bank, bankCode, accountId);
 	
-	if (found_account) {
-	  const char *p;
-
+	if (acc) {
 	  /* Update account information */
-	  printf("Account %d/%s/%s already exists, updating.\n",
+	  printf("gnc_processOutboxResponse: Account %d/%s/%s already exists, updating.\n",
 		 country, bankCode, accountId);
-
-	  p=GWEN_DB_GetCharValue(n, "name", 0, 0);
-	  /*if (p)
-	    gnc_HBCI_Account_setAccountName(found_account,p);
-	    p=GWEN_DB_GetCharValue(n, "customer", 0, 0);
-	    if (p)
-	    gnc_HBCI_Account_setCustomer(found_account,p);
-	    p=GWEN_DB_GetCharValue(n, "currency", 0, 0);
-	    if (p)
-	    gnc_HBCI_Account_setCurrency(found_account,p);
-	    p=GWEN_DB_GetCharValue(n, "name1", 0, 0);
-	    if (p)
-	    gnc_HBCI_Account_setUserName(found_account,p);*/
-	  gnc_HBCI_Account_delete(acc);
 	}
 	else {
-	  /* new account already created */
+	  /* Create new account object */
+	  acc = gnc_HBCI_Account_new(bank, bankCode, accountId);
 
 	  /* Add it to our internal list. */
 	  accountlist = g_list_append(accountlist, acc);
 
-	  printf("Added account %d/%s/%s\n",
+	  printf("gnc_processOutboxResponse: Added account %d/%s/%s\n",
 		 country, bankCode, accountId);
 	}
+	gnc_HBCI_Account_set_currency(acc, currency);
+	gnc_HBCI_Account_set_name(acc, acc_name);
+	gnc_HBCI_Account_set_name1(acc, acc_name1);
+	gnc_HBCI_Account_set_customer(acc, custid);
       }
       
 
@@ -395,5 +404,7 @@ gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox,
   } /* while n */
 
   GWEN_DB_Group_free(response);
+  //printf("gnc_processOutboxResponse: accountlist.size: %d\n", g_list_length(accountlist));
+  
   return accountlist;
 }

@@ -1,5 +1,12 @@
 2004-01-31  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/import-backend.c: Commented out setting the
+	memo always to "Auto-created split" due to popular request.
+
+	* src/import-export/hbci/druid-hbci-initial.c, hbci-interaction.c,
+	all files: Preliminary completion of openhbci2 support -- getting
+	the transactions seems to work, as well as the HBCI setup.
+
 	* src/engine/kvp_frame.h, src/engine/Account.c: Add clear notice
 	of the semantic change of kvp_frame_get_frame
 	function. Fortunately it seems the only place that still had to be

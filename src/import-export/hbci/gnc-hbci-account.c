@@ -27,6 +27,7 @@
 #include <errno.h>
 #include <openhbci2.h>
 #include <openhbci2/error.h>
+#include "Account.h"
 
 #include "hbci-interaction.h"
 
@@ -37,6 +38,10 @@ struct _gnc_HBCI_Account
   const HBCI_Bank *bank;
   char *bankCode;
   char *accountid;
+  char *name;
+  char *customer;
+  char *currency;
+  char *name1;
 };
 
 gnc_HBCI_Account *gnc_HBCI_Account_new(const HBCI_Bank *bank, 
@@ -54,6 +59,10 @@ void gnc_HBCI_Account_delete (gnc_HBCI_Account *h)
   if (!h) return;
   g_free(h->bankCode);
   g_free(h->accountid);
+  if (h->name) g_free(h->name);
+  if (h->customer) g_free(h->customer);
+  if (h->currency) g_free(h->currency);
+  if (h->name1) g_free(h->name1);
   g_free(h);
 }
 
@@ -74,6 +83,62 @@ gnc_HBCI_Account_bank (const gnc_HBCI_Account *hbci_acc)
   return hbci_acc->bank;
 }
 
+
+void gnc_HBCI_Account_set_name (gnc_HBCI_Account *hbci_acc, const char *n)
+{
+  g_assert(hbci_acc);
+  if (hbci_acc->name) g_free(hbci_acc->name);
+  hbci_acc->name = g_strdup(n);
+}
+void gnc_HBCI_Account_set_customer (gnc_HBCI_Account *hbci_acc, const char *n)
+{
+  g_assert(hbci_acc);
+  if (hbci_acc->customer) g_free(hbci_acc->customer);
+  hbci_acc->customer = g_strdup(n);
+}
+void gnc_HBCI_Account_set_currency (gnc_HBCI_Account *hbci_acc, const char *n)
+{
+  g_assert(hbci_acc);
+  if (hbci_acc->currency) g_free(hbci_acc->currency);
+  hbci_acc->currency = g_strdup(n);
+}
+void gnc_HBCI_Account_set_name1 (gnc_HBCI_Account *hbci_acc, const char *n)
+{
+  g_assert(hbci_acc);
+  if (hbci_acc->name1) g_free(hbci_acc->name1);
+  hbci_acc->name1 = g_strdup(n);
+}
+const char *gnc_HBCI_Account_name (const gnc_HBCI_Account *hbci_acc)
+{
+  g_assert(hbci_acc);
+  return hbci_acc->name;
+}
+const char *gnc_HBCI_Account_customer (const gnc_HBCI_Account *hbci_acc)
+{
+  g_assert(hbci_acc);
+  return hbci_acc->customer;
+}
+const char *gnc_HBCI_Account_currency (const gnc_HBCI_Account *hbci_acc)
+{
+  g_assert(hbci_acc);
+  return hbci_acc->currency;
+}
+const char *gnc_HBCI_Account_name1 (const gnc_HBCI_Account *hbci_acc)
+{
+  g_assert(hbci_acc);
+  return hbci_acc->name1;
+}
+
+gchar *gnc_HBCI_Account_longname(const gnc_HBCI_Account *hacc)
+{
+    g_assert(hacc);
+    /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
+    return g_strdup_printf(_("%s at %s (code %s)"),
+			   gnc_HBCI_Account_accountId (hacc),
+			   HBCI_Bank_name (gnc_HBCI_Account_bank (hacc)),
+			   HBCI_Bank_bankCode (gnc_HBCI_Account_bank (hacc)));
+}
+
 void *list_HBCI_Account_foreach(GList *h_list, 
 				void*(*func_cb)(gnc_HBCI_Account *acc,
 						void *user_data), 
@@ -85,16 +150,10 @@ void *list_HBCI_Account_foreach(GList *h_list,
 
   if (!h_list) return NULL;
 
-  iter = h_list;
-  if (iter->data)
-    res = func_cb(iter->data, user_data);
-  if (res) 
-    return res;
-
   for (iter = h_list; iter; iter = iter->next)
     {
       if (iter->data)
-	func_cb(iter->data, user_data);
+	res = func_cb(iter->data, user_data);
       if (res)
 	break;
     }
@@ -116,11 +175,54 @@ void list_HBCI_Account_delete(GList *list_HBCI_Account)
 }
 
 
+static void *hbci_find_acc_cb(gnc_HBCI_Account *acc, void *user_data)
+{
+  gnc_HBCI_Account *new_acc = user_data;
+  if (gnc_HBCI_Account_bank(acc) == gnc_HBCI_Account_bank(new_acc)) {
+    if (strcmp(gnc_HBCI_Account_accountId(acc),
+	       gnc_HBCI_Account_accountId(new_acc))==0) {
+      return acc;
+    }
+  }
+  return NULL;
+}
+
+  
+gnc_HBCI_Account *list_HBCI_Account_find(GList *list,
+					 const HBCI_Bank *bank, 
+					 const char *bankCode,
+					 const char *accountid)
+{
+  gnc_HBCI_Account *acc;
+  gnc_HBCI_Account *res;
+
+  if (list == NULL) return NULL;
+  g_assert(bank);
+  g_assert(bankCode);
+  g_assert(accountid);
+  
+  /* Create the wrapper object */
+  acc = gnc_HBCI_Account_new(bank, bankCode, accountid);
+
+  /* Check if such an account already exists */
+  res = list_HBCI_Account_foreach(list, hbci_find_acc_cb, acc);
+
+  gnc_HBCI_Account_delete(acc);
+  return res;
+}
+
+
+
+
 /* ------------------------------------------------------------ */
 
 #define HBCI_ACCOUNT_ID "account-id"
 #define HBCI_BANK_CODE "bank-code"
 #define HBCI_COUNTRY_CODE "country-code"
+#define HBCI_ACCOUNT_CURRENCY "acc-currency"
+#define HBCI_ACCOUNT_NAME "acc-name"
+#define HBCI_ACCOUNT_NAME1 "acc-name1"
+#define HBCI_ACCOUNT_CUSTOMER "acc-customer"
 
 /** Constructor from a kvp_frame */
 gnc_HBCI_Account *gnc_HBCI_Account_from_kvp(kvp_frame *k, HBCI_API *api)
@@ -135,16 +237,24 @@ gnc_HBCI_Account *gnc_HBCI_Account_from_kvp(kvp_frame *k, HBCI_API *api)
   countrycode = kvp_value_get_gint64 (kvp_frame_get_slot(k, HBCI_COUNTRY_CODE));
 
   if (bankcode && (strlen(bankcode)>0) && (countrycode > 0)) {
-    /*printf("gnc_acc %s has blz %s and ccode %d\n",
-      xaccAccountGetName (gnc_acc), bankcode, countrycode);*/
     bank = HBCI_API_findBank (api, countrycode, bankcode);
-    res= gnc_HBCI_Account_new(bank, 
-			      kvp_value_get_string
-			      (kvp_frame_get_slot(k, HBCI_ACCOUNT_ID)),
-			      kvp_value_get_string
-			      (kvp_frame_get_slot(k, HBCI_BANK_CODE)));
+    /*printf("gnc_HBCI_Account_from_kvp: kvpframe has blz %s and ccode %d and accountid %s, bank %p\n",
+      bankcode, countrycode, kvp_value_get_string
+      (kvp_frame_get_slot(k, HBCI_ACCOUNT_ID)), bank);*/
+    res = gnc_HBCI_Account_new(bank, 
+			       bankcode,
+			       kvp_value_get_string
+			       (kvp_frame_get_slot(k, HBCI_ACCOUNT_ID)));
     if (!bank) 
       printf("gnc_HBCI_Account_from_kvp: oops, no bank found.");
+    gnc_HBCI_Account_set_currency(res, kvp_value_get_string
+				  (kvp_frame_get_slot(k, HBCI_ACCOUNT_CURRENCY)));
+    gnc_HBCI_Account_set_name(res, kvp_value_get_string
+			      (kvp_frame_get_slot(k, HBCI_ACCOUNT_NAME)));
+    gnc_HBCI_Account_set_name1(res, kvp_value_get_string
+			       (kvp_frame_get_slot(k, HBCI_ACCOUNT_NAME1)));
+    gnc_HBCI_Account_set_customer(res, kvp_value_get_string
+				  (kvp_frame_get_slot(k, HBCI_ACCOUNT_CUSTOMER)));
   }
   return res;
 }
@@ -159,6 +269,14 @@ kvp_frame *gnc_HBCI_Account_to_kvp(const gnc_HBCI_Account *t)
 		     kvp_value_new_string(gnc_HBCI_Account_accountId(t)));
   kvp_frame_set_slot(k, HBCI_BANK_CODE, 
 		     kvp_value_new_string(gnc_HBCI_Account_bankCode (t)));
+  kvp_frame_set_slot(k, HBCI_ACCOUNT_CURRENCY, 
+		     kvp_value_new_string(gnc_HBCI_Account_currency (t)));
+  kvp_frame_set_slot(k, HBCI_ACCOUNT_NAME, 
+		     kvp_value_new_string(gnc_HBCI_Account_name (t)));
+  kvp_frame_set_slot(k, HBCI_ACCOUNT_NAME1, 
+		     kvp_value_new_string(gnc_HBCI_Account_name1 (t)));
+  kvp_frame_set_slot(k, HBCI_ACCOUNT_CUSTOMER, 
+		     kvp_value_new_string(gnc_HBCI_Account_customer (t)));
   if (gnc_HBCI_Account_bank(t))
     kvp_frame_set_slot(k, HBCI_COUNTRY_CODE, 
 		       kvp_value_new_gint64(HBCI_Bank_country 

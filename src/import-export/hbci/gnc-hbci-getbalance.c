@@ -206,12 +206,17 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
   gboolean dialogres;
 	    
   response = HBCI_Job_responseData((HBCI_Job*)HBCI_OutboxJob_Job_const(job));
-  if (!response)
+  if (!response) {
+    printf("gnc_hbci_getbalance_finish: Oops, response == NULL.\n");
     return TRUE;
-  acc_bal =GWEN_DB_GetGroup(response, 
+  }
+  acc_bal = GWEN_DB_GetGroup(response, 
 			    GWEN_PATH_FLAGS_NAMEMUSTEXIST, "balance");
-  if (!acc_bal) 
+  if (!acc_bal) {
+    printf("gnc_hbci_getbalance_finish: Oops, acc_bal == NULL. Response was:\n");
+    GWEN_DB_Dump(response, stdout, 1);
     return TRUE;
+  }
 
   noted_grp = GWEN_DB_GetGroup(response, GWEN_PATH_FLAGS_NAMEMUSTEXIST, "noted");
   booked_grp = GWEN_DB_GetGroup(response, GWEN_PATH_FLAGS_NAMEMUSTEXIST, "booked");
