@@ -329,6 +329,7 @@
 (define (add-split-row table split column-vector
                        row-style account-types-to-reverse transaction-row?)
   (let* ((row-contents '())
+	 (dummy  (gnc:debug "split is originally" split))
          (parent (gnc:split-get-parent split))
          (account (gnc:split-get-account split))
          (account-type (gw:enum-<gnc:AccountType>-val->sym
@@ -400,14 +401,20 @@
                      "number-cell" (gnc:monetary-neg split-value)))
             (addto! row-contents " ")))
     (if (used-running-balance column-vector)
-        (addto! row-contents
-                (gnc:make-html-table-cell/markup
-                 "number-cell"
-                 (gnc:make-gnc-monetary currency
-                                        (gnc:split-get-balance split)))))
-    (gnc:html-table-append-row/markup! table row-style
+	(begin
+	  (gnc:debug "split is " split)
+	  (gnc:debug "split get balance:" (gnc:split-get-balance split))
+	  (addto! row-contents
+		  (gnc:make-html-table-cell/markup
+		   "number-cell"
+		   (gnc:make-gnc-monetary currency
+					  (gnc:split-get-balance split))))))
+	(gnc:html-table-append-row/markup! table row-style
                                        (reverse row-contents))
     split-value))
+
+
+(define date-sorting-types (list 'date 'exact-time 'register-order))
 
 (define (trep-options-generator)
   (define gnc:*transaction-report-options* (gnc:new-options))
@@ -488,7 +495,10 @@
       
   ;; Sorting options
   
+
+      
   (let ((options gnc:*transaction-report-options*)
+
         (key-choice-list 
          (list (vector 'none
                        (N_ "None")
@@ -505,8 +515,10 @@
                (vector 'exact-time
                        (N_ "Exact Time")
                        (N_ "Sort by exact time"))
-               
-               (vector 'corresponding-acc-name
+               (vector 'register-order
+		       (N_ "Register Order")
+		       (N_ "Sort as with the register"))
+               (vector 'corresponding-acc-name 
                        (N_ "Other Account Name")
                        (N_ "Sort by account transferred from/to's name"))
                
@@ -558,7 +570,7 @@
          (and (member x subtotal-enabled) #t))
         (gnc:option-db-set-option-selectable-by-name
          options pagename-sorting optname-prime-date-subtotal
-         (if (member x (list 'exact-time 'date)) #t #f))))) 
+         (if (member x date-sorting-types) #t #f)))))
     
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
@@ -587,7 +599,7 @@
       pagename-sorting optname-sec-sortkey
       "f"
       (N_ "Sort by this criterion second")
-      'date
+      'register-order
       key-choice-list #f
       (lambda (x)
         (gnc:option-db-set-option-selectable-by-name
@@ -595,7 +607,7 @@
          (and (member x subtotal-enabled) #t))
         (gnc:option-db-set-option-selectable-by-name
          options pagename-sorting optname-sec-date-subtotal
-         (if (member x (list 'exact-time 'date )) #t #f)))))
+         (if (member x date-sorting-types) #t #f)))))
     
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
@@ -935,7 +947,13 @@ and Income accounts")))))
                                 render-account-code-subtotal))
           (cons 'exact-time          (vector 'by-date #f #f #f))
           (cons 'date          (vector
-                                'by-date-rounded #f #f #f))
+                                'by-date #f #f #f))
+	  (cons 'register-order 
+		 (vector
+		  'by-standard
+		  #f 
+		  #f 
+		  #f))
           (cons 'corresponding-acc-name
                 (vector 'by-corr-account-full-name 
                         split-same-corr-account-full-name-p 
@@ -968,7 +986,7 @@ and Income accounts")))))
            comp-index date-index)
     ;; The value of the sorting-key multichoice option.
     (let ((sortkey (opt-val pagename-sorting name-sortkey)))
-      (if (member sortkey (list 'date 'exact-time))
+      (if (member sortkey date-sorting-types)
           ;; If sorting by date, look up the value of the
           ;; date-subtotalling multichoice option and return the
           ;; corresponding funcs in the assoc-list.

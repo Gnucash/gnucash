@@ -1,3 +1,10 @@
+2001-07-06  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction.scm: Add new sort option "register
+	order", make it the default for secondary sorting.
+
+	* po/ChangeLog: removed from CVS.
+
 2001-07-06  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/gnc-schedxaction-xml-v2.c: Support for new
