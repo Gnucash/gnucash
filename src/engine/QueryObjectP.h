@@ -12,9 +12,6 @@
 void gncQueryObjectInit(void);
 void gncQueryObjectShutdown (void);
 
-QueryAccess gncQueryObjectGetParameterGetter (GNCIdTypeConst obj_name,
-					      const char *parameter);
-
 QuerySort gncQueryObjectDefaultSort (GNCIdTypeConst obj_name);
 
 #endif /* GNC_QUERYOBJECTP_H */

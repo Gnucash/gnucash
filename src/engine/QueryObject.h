@@ -71,4 +71,9 @@ QueryCoreType gncQueryObjectParameterType (GNCIdTypeConst obj_name,
 const QueryObjectDef * gncQueryObjectGetParameter (GNCIdTypeConst obj_name,
 						   const char *parameter);
 
+/* Return the object's parameter getter function */
+QueryAccess gncQueryObjectGetParameterGetter (GNCIdTypeConst obj_name,
+					      const char *parameter);
+
+
 #endif /* GNC_QUERYOBJECT_H */

@@ -204,7 +204,7 @@ gnc_search_param_prepend (GList *list, char const *title,
   GNCSearchParam *p;
   GSList *path = NULL;
   va_list ap;
-  char *this_param;
+  const char *this_param;
 
   g_return_val_if_fail (title, list);
   g_return_val_if_fail (search_type, list);
@@ -217,8 +217,8 @@ gnc_search_param_prepend (GList *list, char const *title,
   va_start (ap, param);
 
   for (this_param = param; this_param;
-       this_param = va_arg (ap, char *)) {
-    path = g_slist_prepend (path, this_param);
+       this_param = va_arg (ap, const char *)) {
+    path = g_slist_prepend (path, (gpointer)this_param);
   }
 
   va_end (ap);

@@ -15,6 +15,7 @@
 #include "gnc-ui-util.h"
 #include "gncObject.h"
 #include "QueryNew.h"
+#include "QueryObject.h"
 
 #include "dialog-search.h"
 #include "search-core-type.h"
@@ -150,7 +151,6 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
   } else {
     /* Clear out all the items, to insert in a moment */
     gtk_list_clear_items (GTK_LIST (sw->result_list), 0, -1);
-    sw->selected_item = NULL;
   }
 
   /* Compute the actual results */
@@ -168,6 +168,9 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
     if (list->data == sw->selected_item)
       selected = item;
   }  
+
+  if (!selected)
+    sw->selected_item = NULL;
 
   itemlist = g_list_reverse (itemlist);
   if (!selected && itemlist)
@@ -337,15 +340,23 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
       gnc_search_dialog_destroy (sw);
 
     else {
+      QueryAccess get_fcn =
+	gncQueryObjectGetParameterGetter (sw->search_for,
+					  QUERY_PARAM_GUID);
+      const GUID *guid = (const GUID *) ((get_fcn)(res));
+      QueryOp op = QUERY_OR;
+
       if (!sw->q) {
 	if (!sw->start_q) {
 	  sw->start_q = gncQueryCreate ();
 	  gncQuerySetBook (sw->start_q, gnc_get_current_book ());
 	}
 	sw->q = gncQueryCopy (sw->start_q);
+	op = QUERY_AND;
       }
 
-      /* XXX: add an "object match" so this object shows up??? */
+      gncQueryAddGUIDMatch (sw->q, g_slist_prepend (NULL, QUERY_PARAM_GUID),
+			    guid, op);
 
       gnc_search_dialog_display_results (sw);
     }
