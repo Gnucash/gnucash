@@ -1,3 +1,8 @@
+2000-12-08  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/gnc-dateedit.c (gnc_date_edit_get_date): make sure the
+	date returned is valid.
+
 2000-12-05  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/util.c (PrintAmt): add minimum decimal places option.
