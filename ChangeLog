@@ -14,6 +14,8 @@
 
 	* Implement a core CheckboxCell register type (note, still needs a
 	  pretty Gnome implementation)
+
+	* use the checkbox cell in the EntryLedger
 	
 2002-10-03  Christian Stimming  <stimming@tuhh.de>
 

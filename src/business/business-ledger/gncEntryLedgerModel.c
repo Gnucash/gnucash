@@ -15,6 +15,7 @@
 #include "gnc-ui-util.h"
 
 #include "datecell.h"
+#include "checkboxcell.h"
 
 #include "gncEntryLedgerP.h"
 #include "gncEntryLedgerModel.h"
@@ -298,7 +299,6 @@ static const char * get_taxable_entry (VirtualLocation virt_loc,
   GncEntryLedger *ledger = user_data;
   GncEntry *entry;
   gboolean taxable;
-  static char s[2] = { ' ', '\0' };
 
   entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
   if (ledger->is_invoice)
@@ -306,12 +306,7 @@ static const char * get_taxable_entry (VirtualLocation virt_loc,
   else
     taxable = gncEntryGetBillTaxable (entry);
 
-  if (taxable)
-    s[0] = 'X';
-  else
-    s[0] = ' ';
-
-  return s;
+  return gnc_checkbox_cell_get_string (taxable);
 }
 
 static gboolean
@@ -372,7 +367,6 @@ static const char * get_taxincluded_entry (VirtualLocation virt_loc,
 {
   GncEntryLedger *ledger = user_data;
   GncEntry *entry;
-  static char s[2] = { ' ', '\0' };
   gboolean taxable, taxincluded;
 
   /* load the cell properly; just shadow the value */
@@ -390,12 +384,7 @@ static const char * get_taxincluded_entry (VirtualLocation virt_loc,
   else
     taxincluded = gncEntryGetBillTaxIncluded (entry);
 
-  if (taxincluded)
-    s[0] = 'X';
-  else
-    s[0] = ' ';
-
-  return s;
+  return gnc_checkbox_cell_get_string (taxincluded);
 }
 
 static const char * get_inv_entry (VirtualLocation virt_loc,
@@ -405,21 +394,16 @@ static const char * get_inv_entry (VirtualLocation virt_loc,
 {
   GncEntryLedger *ledger = user_data;
   GncEntry *entry;
-  static char s[2] = { ' ', '\0' };
 
   entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-  if (gncEntryGetInvoice (entry) == NULL)
-    s[0] = ' ';
-  else
-    s[0] = 'X';
+
+  return gnc_checkbox_cell_get_string (gncEntryGetInvoice (entry) != NULL);
 
   /* XXX: what if this entry doesn't belong to this invoice?
    * Or, better question, what if this is the blank_entry on
    * an invoice page?  For the latter, don't worry about it;
    * it will be added automatically during the Save operation
    */
-
-  return s;
 }
 
 static const char * get_value_entry (VirtualLocation virt_loc,
@@ -476,15 +460,9 @@ static const char * get_billable_entry (VirtualLocation virt_loc,
 {
   GncEntryLedger *ledger = user_data;
   GncEntry *entry;
-  static char s[2] = { ' ', '\0' };
 
   entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-  if (gncEntryGetBillable (entry))
-    s[0] = 'X';
-  else
-    s[0] = ' ';
-
-  return s;
+  return gnc_checkbox_cell_get_string (gncEntryGetBillable (entry));
 }
 
 /* GET_HELP */
@@ -1026,26 +1004,20 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
   }
 
   if (ledger->type == GNCENTRY_INVOICE_ENTRY) {
-    char inv_value;
+    gboolean inv_value;
 
-    inv_value = gnc_entry_ledger_get_inv (ledger, ENTRY_INV_CELL);
+    inv_value = gnc_entry_ledger_get_checkmark (ledger, ENTRY_INV_CELL);
 
-    if (inv_value != '\0') {
-      /* It's changed.  Note that this should only be changed in
-       * INVOICE_ENTRY.  But we don't check here (should we)?
-       */
+    if (inv_value) {
+      /* Add this to the invoice (if it's not already attached) */
+      if (gncEntryGetInvoice (entry) == NULL)
+	gncInvoiceAddEntry (ledger->invoice, entry);
 
-      if (inv_value == 'X') {
-	/* Add this to the invoice (if it's not already attached) */
-	if (gncEntryGetInvoice (entry) == NULL)
-	  gncInvoiceAddEntry (ledger->invoice, entry);
-
-      } else {
-	/* Remove from the invoice iff we're attached to an order or bill */
-	if ((gncEntryGetOrder (entry) != NULL) ||
-	    (gncEntryGetBill (entry) != NULL))
-	  gncInvoiceRemoveEntry (ledger->invoice, entry);
-      }
+    } else {
+      /* Remove from the invoice iff we're attached to an order or bill */
+      if ((gncEntryGetOrder (entry) != NULL) ||
+	  (gncEntryGetBill (entry) != NULL))
+	gncInvoiceRemoveEntry (ledger->invoice, entry);
     }
   }
 }

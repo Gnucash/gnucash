@@ -482,7 +482,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
     switch (ledger->type) {
     case GNCENTRY_INVOICE_ENTRY:
       {
-	char inv_value;
+	gboolean inv_value;
 	gboolean only_inv_changed = FALSE;
 
 	if (changed == 1 &&
@@ -490,9 +490,9 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 					       ENTRY_INV_CELL, TRUE))
 	  only_inv_changed = TRUE;
 
-	inv_value = gnc_entry_ledger_get_inv (ledger, ENTRY_INV_CELL);
+	inv_value = gnc_entry_ledger_get_checkmark (ledger, ENTRY_INV_CELL);
 
-	if (inv_value == 'X' && only_inv_changed) {
+	if (inv_value && only_inv_changed) {
 	  /* If the only change is that the 'inv' entry was clicked
 	   * "on", then just accept the change it without question.
 	   */
@@ -633,7 +633,7 @@ gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger)
     gboolean dontask = FALSE;
 
     if (ledger->type ==  GNCENTRY_INVOICE_ENTRY) {
-      char inv_value;
+      gboolean inv_value;
       gboolean only_inv_changed = FALSE;
 
       if (gnc_table_current_cursor_changed (ledger->table, FALSE) == 1 &&
@@ -641,9 +641,9 @@ gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger)
 					     ENTRY_INV_CELL, TRUE))
 	only_inv_changed = TRUE;
 
-      inv_value = gnc_entry_ledger_get_inv (ledger, ENTRY_INV_CELL);
+      inv_value = gnc_entry_ledger_get_checkmark (ledger, ENTRY_INV_CELL);
       
-      if (inv_value == 'X' && only_inv_changed) {
+      if (inv_value && only_inv_changed) {
 	/* If the only change is that the 'inv' entry was clicked
 	 * "on", then just accept the change it without question.
 	 */

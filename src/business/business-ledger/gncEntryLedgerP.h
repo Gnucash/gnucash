@@ -48,7 +48,6 @@ gint gnc_entry_ledger_get_type (GncEntryLedger *ledger,
 				const char * cell_name);
 gboolean gnc_entry_ledger_get_checkmark (GncEntryLedger *ledger,
 					 const char * cell_name);
-char gnc_entry_ledger_get_inv (GncEntryLedger *ledger, const char * cell_name);
 gboolean gnc_entry_ledger_get_numeric (GncEntryLedger *ledger,
 				       const char *cell_name,
 				       gnc_numeric *value);

@@ -15,6 +15,7 @@
 #include "combocell.h"
 #include "pricecell.h"
 #include "recncell.h"
+#include "checkboxcell.h"
 #include "messages.h"
 
 #include "gnc-component-manager.h"
@@ -77,31 +78,13 @@ GncTaxTable * gnc_entry_ledger_get_taxtable (GncEntryLedger *ledger,
 gboolean gnc_entry_ledger_get_checkmark (GncEntryLedger *ledger,
 					 const char * cell_name)
 {
-  const char *value =
-    gnc_table_layout_get_cell_value (ledger->table->layout, cell_name);
+  CheckboxCell *cell = 
+    (CheckboxCell *) gnc_table_layout_get_cell (ledger->table->layout, cell_name);
 
-  if (!value || *value == '\0')
+  if (!cell)
     return FALSE;
 
-  switch (*value) {
-  case 'X':
-    return TRUE;
-  case ' ':
-    return FALSE;
-  default:
-    g_warning ("Invalid checkmark character: %d", *value);
-    return FALSE;
-  }
-}
-
-char gnc_entry_ledger_get_inv (GncEntryLedger *ledger, const char * cell_name)
-{
-  const char *value =
-    gnc_table_layout_get_cell_value (ledger->table->layout, cell_name);
-
-  if (value)
-    return *value;
-  return '\0';
+  return cell->flag;
 }
 
 gint gnc_entry_ledger_get_type (GncEntryLedger *ledger, const char * cell_name)
