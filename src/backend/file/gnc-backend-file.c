@@ -184,10 +184,22 @@ static void
 file_sync_all(QofBackend* be, QofBook *book)
 {
     FileBackend *fbe = (FileBackend *) be;
+    ENTER ("book=%p, primary=%p", book, fbe->primary_book);
 
-    /* XXX fullpath is correct only for the current open book ! */
+    /* We make an important assumption here, that we might want to change
+     * in the future: when the user says 'save', we really save the one,
+     * the only, the current open book, and nothing else.  We do this
+     * because we assume that any other books that we are dealing with
+     * are 'read-only', non-editable, because they are closed books.
+     * If we ever want to have more than one book open read-write,
+     * this will have to change.
+     */
+    if (NULL == fbe->primary_book) fbe->primary_book = book;
+    if (book != fbe->primary_book) return;
+
     gnc_file_be_write_to_file (fbe, book, fbe->fullpath, TRUE);
     gnc_file_be_remove_old_files (fbe);
+    LEAVE ("book=%p", book);
 }
 
 /* ================================================================= */
@@ -740,7 +752,8 @@ gnc_file_be_write_to_file(FileBackend *fbe,
     ENTER (" book=%p file=%s", book, datafile);
 
     /* If the book is 'clean', recently saved, then don't save again. */
-    if (FALSE == qof_book_not_saved (book)) return FALSE;
+    /* XXX this is currently broken due to faulty 'Save As' logic. */
+    /* if (FALSE == qof_book_not_saved (book)) return FALSE; */
 
     tmp_name = g_new(char, strlen(datafile) + 12);
     strcpy(tmp_name, datafile);
