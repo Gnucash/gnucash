@@ -788,7 +788,7 @@ gnc_customer_search (GncCustomer *start, GNCBook *book)
 				       CUSTOMER_ADDR, ADDRESS_NAME, NULL);
     params = gnc_search_param_prepend (params, _("Customer ID"), NULL, type,
 				       CUSTOMER_ID, NULL);
-    params = gnc_search_param_prepend (params, _("Customer Name"), NULL, type,
+    params = gnc_search_param_prepend (params, _("Company Name"), NULL, type,
 				       CUSTOMER_NAME, NULL);
   }
 

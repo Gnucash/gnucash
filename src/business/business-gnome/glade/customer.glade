@@ -157,7 +157,7 @@
 	      <widget>
 		<class>GtkLabel</class>
 		<name>label19</name>
-		<label>Customer Name: </label>
+		<label>Company Name: </label>
 		<justify>GTK_JUSTIFY_RIGHT</justify>
 		<wrap>False</wrap>
 		<xalign>1</xalign>

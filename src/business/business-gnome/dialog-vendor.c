@@ -644,7 +644,7 @@ gnc_vendor_search (GncVendor *start, GNCBook *book)
 				       VENDOR_ADDR, ADDRESS_NAME, NULL);
     params = gnc_search_param_prepend (params, _("Vendor ID"), NULL, type,
 				       VENDOR_ID, NULL);
-    params = gnc_search_param_prepend (params, _("Vendor Name"), NULL, type,
+    params = gnc_search_param_prepend (params, _("Company Name"), NULL, type,
 				       VENDOR_NAME, NULL);
   }
 
