@@ -38,6 +38,7 @@ struct _gncInvoice {
   GncBillTerm *	terms;
   GList * 	entries;
   GncOwner	owner;
+  GncOwner	billto;
   GncJob *	job;
   Timespec 	date_opened;
   Timespec 	date_posted;
@@ -97,6 +98,7 @@ GncInvoice *gncInvoiceCreate (GNCBook *book)
   invoice->notes = CACHE_INSERT ("");
   invoice->billing_id = CACHE_INSERT ("");
 
+  invoice->billto.type = GNC_OWNER_NONE;
   invoice->active = TRUE;
 
   xaccGUIDNew (&invoice->guid, book);
@@ -208,6 +210,15 @@ void gncInvoiceSetCommonCommodity (GncInvoice *invoice, gnc_commodity *com)
       gnc_commodity_equal (invoice->common_commodity, com))
     return;
   invoice->common_commodity = com;
+  mark_invoice (invoice);
+}
+
+void gncInvoiceSetBillTo (GncInvoice *invoice, GncOwner *billto)
+{
+  if (!invoice || !billto) return;
+  if (gncOwnerEqual (&invoice->billto, billto)) return;
+
+  gncOwnerCopy (billto, &invoice->billto);
   mark_invoice (invoice);
 }
 
@@ -389,6 +400,12 @@ gnc_commodity * gncInvoiceGetCommonCommodity (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->common_commodity;
+}
+
+GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice)
+{
+  if (!invoice) return NULL;
+  return &invoice->billto;
 }
 
 GNCLot * gncInvoiceGetPostedLot (GncInvoice *invoice)
@@ -912,6 +929,7 @@ gboolean gncInvoiceRegister (void)
     { INVOICE_POST_TXN, GNC_ID_TRANS, (QueryAccess)gncInvoiceGetPostedTxn },
     { INVOICE_TYPE, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetType },
     { INVOICE_TERMS, GNC_BILLTERM_MODULE_NAME, (QueryAccess)gncInvoiceGetTerms },
+    { INVOICE_BILLTO, GNC_OWNER_MODULE_NAME, (QueryAccess)gncInvoiceGetBillTo },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncInvoiceGetBook },
     { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncInvoiceGetGUID },
     { NULL },

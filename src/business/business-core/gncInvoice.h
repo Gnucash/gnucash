@@ -33,6 +33,7 @@ void gncInvoiceSetBillingID (GncInvoice *invoice, const char *billing_id);
 void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes);
 void gncInvoiceSetCommonCommodity (GncInvoice *invoice, gnc_commodity *com);
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active);
+void gncInvoiceSetBillTo (GncInvoice *invoice, GncOwner *billto);
 
 void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry);
 void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry);
@@ -55,6 +56,7 @@ const char * gncInvoiceGetBillingID (GncInvoice *invoice);
 const char * gncInvoiceGetNotes (GncInvoice *invoice);
 const char * gncInvoiceGetType (GncInvoice *invoice); 
 gnc_commodity * gncInvoiceGetCommonCommodity (GncInvoice *invoice);
+GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice);
 gboolean gncInvoiceGetActive (GncInvoice *invoice);
 
 GNCLot * gncInvoiceGetPostedLot (GncInvoice *invoice);
@@ -103,6 +105,7 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 #define INVOICE_ACC	"account"
 #define INVOICE_POST_TXN	"posted_txn"
 #define INVOICE_TYPE	"type"
+#define INVOICE_BILLTO	"bill-to"
 
 #define INVOICE_FROM_LOT	"invoice-from-lot"
 #define INVOICE_FROM_TXN	"invoice-from-txn"

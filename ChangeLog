@@ -5,6 +5,9 @@
 	* add a Billable column to Bill register
 
 	* add gncQueryAddBooleanMatch() convenience function
+
+	* add a BillTo owner in the GncInvoice object.  Save it in XML if
+	  it's non-empty.
 	
 2002-07-09  Derek Atkins  <derek@ihftp.com>
 

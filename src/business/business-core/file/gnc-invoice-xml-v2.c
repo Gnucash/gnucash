@@ -70,6 +70,7 @@ const gchar *invoice_version_string = "2.0.0";
 #define invoice_postlot_string "invoice:postlot"
 #define invoice_postacc_string "invoice:postacc"
 #define invoice_commodity_string "invoice:commodity"
+#define invoice_billto_string "invoice:billto"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -94,6 +95,7 @@ invoice_dom_tree_create (GncInvoice *invoice)
     GNCLot *lot;
     Account *acc;
     GncBillTerm *term;
+    GncOwner *billto;
 
     ret = xmlNewNode(NULL, gnc_invoice_string);
     xmlSetProp(ret, "version", invoice_version_string);
@@ -144,6 +146,10 @@ invoice_dom_tree_create (GncInvoice *invoice)
       (ret,
        commodity_ref_to_dom_tree(invoice_commodity_string,
 				 gncInvoiceGetCommonCommodity (invoice)));
+
+    billto = gncInvoiceGetBillTo (invoice);
+    if (billto && billto->type != GNC_OWNER_NONE)
+      xmlAddChild (ret, gnc_owner_to_dom_tree (invoice_billto_string, billto));
 
     return ret;
 }
@@ -359,6 +365,20 @@ invoice_commodity_handler (xmlNodePtr node, gpointer invoice_pdata)
     return TRUE;
 }
 
+static gboolean
+invoice_billto_handler (xmlNodePtr node, gpointer invoice_pdata)
+{
+  struct invoice_pdata *pdata = invoice_pdata;
+  GncOwner owner;
+  gboolean ret;
+
+  ret = gnc_dom_tree_to_owner (node, &owner, pdata->book);
+  if (ret)
+    gncInvoiceSetBillTo (pdata->invoice, &owner);
+
+  return ret;
+}
+
 static struct dom_tree_handler invoice_handlers_v2[] = {
     { invoice_guid_string, invoice_guid_handler, 1, 0 },
     { invoice_id_string, invoice_id_handler, 1, 0 },
@@ -373,6 +393,7 @@ static struct dom_tree_handler invoice_handlers_v2[] = {
     { invoice_postlot_string, invoice_postlot_handler, 0, 0 },
     { invoice_postacc_string, invoice_postacc_handler, 0, 0 },
     { invoice_commodity_string, invoice_commodity_handler, 1, 0 },
+    { invoice_billto_string, invoice_billto_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 
