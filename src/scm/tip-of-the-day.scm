@@ -69,7 +69,11 @@
 	#f))
 
 (define (gnc:current-tip-number)
-  (gnc:option-value (gnc:lookup-global-option "__tips" "current_tip_number")))
+  (let ((num (gnc:option-value
+              (gnc:lookup-global-option "__tips" "current_tip_number"))))
+    (if (<= (gnc:config-var-value-get gnc:*number-of-tips*) num)
+        (gnc:reset-tip-number))
+  (gnc:option-value (gnc:lookup-global-option "__tips" "current_tip_number"))))
 
 (define (gnc:get-current-tip)
   (_ (list-ref gnc:*tip-list* (gnc:current-tip-number))))
