@@ -25,6 +25,7 @@ typedef struct _SingleCell {
   short row;      /* relative row position */
   short col;      /* relative column position */
   short width;    /* column width, in chars, not pixels */
+  short alignment; /* column text alignment */
 
   char * value;   /* current value */
 

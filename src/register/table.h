@@ -15,14 +15,15 @@ typedef struct _Table {
 
   short numEntries;
 
-  CellArray *header;
-  CellArray *cursor;
+  CellBlock *header;
+  CellBlock *cursor;
 
   char ***entries;
 
   Widget reg;          /* the XbaeMatrix */
 
   /* private data, cahces, etc. */
+  int num_header_rows;
   int num_phys_rows;
   int num_phys_cols;
 } Table;
@@ -30,12 +31,14 @@ typedef struct _Table {
 
 Table     * xaccMallocTable (int numentries);
 void        xaccInitTable (Table *, int entries);
+void        xaccCreateTable (Table *, Widget parent, char * name);
+
 void        xaccDestroyTable (Table *);
 
 void        xaccRefreshTable (Table *);
 
 /* add a cell to the array */
-void        xaccSetCursor (Table *, CellArray *);
+void        xaccSetCursor (Table *, CellBlock *);
 
 #endif __XACC_TABLE_H__
 /* ================== end of file ======================= */

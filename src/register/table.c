@@ -22,6 +22,7 @@ xaccMallocTable (int numentries)
 void 
 xaccInitTable (Table * table, int numentries)
 {
+   int num_header_rows;
    int num_phys_rows;
    int num_phys_cols;
    int i,j;
@@ -33,8 +34,11 @@ xaccInitTable (Table * table, int numentries)
    table->numEntries = numentries;
 
    /* compute number of physical rows */
+   num_header_rows = 0;
    num_phys_rows = 0;
+   num_phys_cols = 0;
    if (table->header) {
+      num_header_rows = table->header->numRows;
       num_phys_rows += table->header->numRows;
    }
    if (table->cursor) {
@@ -54,12 +58,55 @@ xaccInitTable (Table * table, int numentries)
    }
 }
 
+
+/* ==================================================== */
+
+void
+xaccCreateTable (Table *table, Widget parent, char * name) 
+{
+   unsigned char * alignments;
+   short * widths;
+
+   if (!table) return;
+
+   /* if a header exists, get alignments, widths from there */
+   alignments = NULL;
+   widths = NULL;
+   if (table->cursor) {
+      alignments = table->cursor->alignments;
+      widths = table->cursor->widths;
+   }
+   if (table->header) {
+      alignments = table->header->alignments;
+      widths = table->header->widths;
+   }
+
+   table->reg = XtVaCreateWidget( name,
+                  xbaeMatrixWidgetClass,  parent,
+                  XmNcells,               table->entries,
+                  XmNfixedRows,           table->num_header_rows,
+                  XmNfixedColumns,        0,
+                  XmNrows,                table->num_phys_rows,
+                  XmNvisibleRows,         15,
+                  XmNfill,                True,
+                  XmNcolumns,             table->num_phys_cols,
+                  XmNcolumnWidths,        widths,
+                  XmNcolumnAlignments,    alignments,
+                  XmNtraverseFixedCells,  False,
+                  XmNgridType,            XmGRID_SHADOW_IN,
+                  XmNshadowType,          XmSHADOW_ETCHED_IN,
+                  XmNverticalScrollBarDisplayPolicy,XmDISPLAY_STATIC,
+                  XmNselectScrollVisible, True,
+                  XmNnavigationType,      XmEXCLUSIVE_TAB_GROUP,  
+                  NULL);
+    
+}
+
 /* ==================================================== */
 
 void        
 xaccRefreshTable (Table * table)
 {
-
   XtVaSetValues (table->reg, XmNcells, table->entries, NULL);
 }
 

@@ -5,7 +5,8 @@
 #include "single.h"
 
 /* installs a callback to handle price recording */
-void        xaccInitPriceCell (SingleCell *);
+SingleCell * xaccMallocPriceCell (void);
+void         xaccInitPriceCell (SingleCell *);
 
 #endif /* __XACC_PRICE_C__ */
 

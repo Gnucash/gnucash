@@ -6,19 +6,24 @@
 
 /* a cell array is a traversal group for one entry in the register */
 
-typedef struct _CellArray {
+typedef struct _CellBlock {
 
   short numRows;
   short numCols;
 
   SingleCell ***cells;  /* row-col array */
-} CellArray;
+
+  /* private, utility cahced data */
+  short         *widths;        /* column widths */
+  unsigned char *alignments;    /* column text alignments */
+
+} CellBlock;
 
 
-CellArray * xaccMallocCellArray (int numrows, int numcols);
-void        xaccInitCellArray (CellArray *, int numrows, int numcols);
+CellBlock * xaccMallocCellBlock (int numrows, int numcols);
+void        xaccInitCellBlock (CellBlock *, int numrows, int numcols);
 
 /* add a cell to the array */
-void        xaccAddCell (CellArray *, SingleCell *);
+void        xaccAddCell (CellBlock *, SingleCell *);
 
 #endif __XACC_CELL_H__

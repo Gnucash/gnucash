@@ -17,6 +17,7 @@ void xaccInitSingleCell (SingleCell *cell)
    cell->row = 0;
    cell->col = 0;
    cell->width = 0;
+   cell->alignment = 0;
    cell->value = 0x0;
    cell->modify_verify = NULL;
 }
