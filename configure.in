@@ -415,6 +415,8 @@ AC_OUTPUT(
           doc/html/C/image/Makefile
           doc/html/fr/Makefile
           doc/html/fr/image/Makefile
+          doc/sgml/Makefile
+          doc/sgml/C/Makefile
           intl/Makefile
           lib/Makefile
 	  po/Makefile.in
