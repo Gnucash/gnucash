@@ -42,6 +42,12 @@ functioning.
    Gnucash uses the SQL LISTEN/NOTIFY async message delivery routines.
    Not implemented.
 
+Safety Lockout
+--------------
+There is a safety lockout that prevents a single-user mode database from
+being ccessed by another user, and from having a multi-user mode 
+database from being accessed by a single-user-mode client.
+
 
 Session Design Notes
 --------------------
@@ -65,3 +71,27 @@ string escapes
 Any string is valid; the builder.c routine sqlBuilder_escape() converts
 single-quotes and backslashes to escaped quotes & backslashes to prevent
 sql corruption.
+
+KVP frames
+----------
+Storage of KVP values in the sql database is treated more or less as
+described in the main kvp docs.  The hierarchical structure is converted
+into 'paths' by concatenating key names, and using / as the separator.
+(Thus, paths look like file-paths).  The root of each frame is
+associated with a guid (and thus, a url kvp://12341234/some/kvp/keys, 
+where 12341234 is the guid).
+
+The implementation caches the paths, associating a 32-bit inode number
+with each path.  Caching is done because the same path names will recurr 
+frequently for different guids (e.g. /reconcile-info/last-date will
+occur in most accounts). 
+
+The implementation also caches guids (associating a unique 32-bit int
+with each), although the utility of this is a bit dubious.  But hey, it
+works.  It saves a little bit of storage. 
+
+The actual values are stored in one of 6 different tables, depending on
+the type.  Note that the binary type and the glist type are not currently
+implemented.  The glist type could be implemented, as long as the glist
+only stored strings ... The binary type could be implemented with blobs.
+
