@@ -146,6 +146,16 @@ an hour newer/older than the others, leading to bad updates).
 
 Prices need to have version numbers added.
 
+/* The pgendAccountCompareVersion() routine compares the version
+ * number of the account in the engine and the sql database. It
+ * returns a negative number if the sql version is older (or the
+ * acount is not present in the sql db). It returns a positive
+ * number if the sql version is newer.  It returns zero if the
+ * two are equal.
+ */
+
+
+
 Balances
 --------
 The GUI displays a running balance in the register display.  When the
@@ -214,6 +224,3 @@ SELECT gnctransaction.date_posted
    LIMIT 2 OFFSET 10;
    
 ----------------------------
-nothing but junk below/test demo
-
-SELECT sum(balance) FROM gncCheckpoint WHERE accountGuid='xx' AND date_start < 'xx'
