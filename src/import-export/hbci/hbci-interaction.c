@@ -427,11 +427,12 @@ static int progressAdvanceCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
 
-  if ((id != 0) || (id != progress_id)) {
-    printf("progressLogCB: Oops, wrong progress id -- ignored.\n");
+  if ((id != 0) && (id != progress_id)) {
+    printf("progressLogCB: Oops, wrong progress id %d -- ignored.\n", id);
   }
 
   if (progress != AB_BANKING_PROGRESS_NONE) {
+    printf("progressLogCB: Setting progress to %d out of %f.\n", progress, data->action_max);
     gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 
 				 progress/data->action_max);
   }
@@ -450,8 +451,8 @@ static int progressLogCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
 
-  if ((id != 0) || (id != progress_id)) {
-    printf("progressLogCB: Oops, wrong progress id -- ignored.\n");
+  if ((id != 0) && (id != progress_id)) {
+    printf("progressLogCB: Oops, wrong progress id %d -- ignored.\n", id);
   }
 
   printf("progressLogCB: Logging msg: %s\n", text);
@@ -469,8 +470,8 @@ static int progressEndCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id)
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
 
-  if ((id != 0) || (id != progress_id)) {
-    printf("progressLogCB: Oops, wrong progress id -- ignored.\n");
+  if ((id != 0) && (id != progress_id)) {
+    printf("progressLogCB: Oops, wrong progress id %d -- ignored.\n", id);
   }
 
   GNCInteractor_setFinished(data);

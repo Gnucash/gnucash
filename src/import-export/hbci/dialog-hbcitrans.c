@@ -362,7 +362,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     gtk_label_set_text (GTK_LABEL (orig_account_label), 
 			AB_Account_GetAccountNumber (h_acc));
     gtk_label_set_text (GTK_LABEL (orig_bankname_label), 
-			(strlen(hbci_bankname)>0 ?
+			(hbci_bankname && (strlen(hbci_bankname)>0) ?
 			 hbci_bankname :
 			 _("(unknown)")));
     gtk_label_set_text (GTK_LABEL (orig_bankcode_label), 

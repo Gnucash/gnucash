@@ -121,7 +121,7 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
 
     /* Clean up behind ourself. */
     AB_Banking_DequeueJob(api, job);
-    gnc_AB_BANKING_save (api);
+    gnc_AB_BANKING_fini (api);
     GNCInteractor_hide (interactor);
   }
 }

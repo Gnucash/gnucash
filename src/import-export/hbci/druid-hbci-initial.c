@@ -25,6 +25,7 @@
 #include <gnome.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 #include "druid-hbci-initial.h"
@@ -289,8 +290,8 @@ on_cancel (GnomeDruid *gnomedruid,
   HBCIInitialInfo *info = user_data;
 
   /* FIXME: Need to choose a fixed ending procedure here */
-  gnc_AB_BANKING_save (info->api);
-  AB_Banking_Fini(info->api);
+  /* probably not saving because of 'cancel', but for now we save too */
+  gnc_AB_BANKING_fini (info->api);
   delete_initial_druid(info);
 }
 
@@ -306,9 +307,7 @@ on_finish (GnomeDruidPage *gnomedruidpage,
   if (successful && info->gnc_hash)
     accounts_save_kvp (info->gnc_hash);
   
-  /* FIXME: Need to choose a fixed ending procedure here */
-  gnc_AB_BANKING_save (info->api);
-  AB_Banking_Fini(info->api);
+  gnc_AB_BANKING_fini (info->api);
   delete_initial_druid(info);
 }
 
@@ -354,6 +353,10 @@ on_accountlist_prepare (GnomeDruidPage *gnomedruidpage,
 			gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
+  
+  /* Make sure the api reads in the current data */
+  AB_Banking_Fini (info->api);
+  AB_Banking_Init (info->api);
 
   if (info->gnc_hash == NULL)
     info->gnc_hash = gnc_hbci_new_hash_from_kvp (info->api);
@@ -464,11 +467,43 @@ on_aqhbci_button (GtkButton *button,
     GWEN_PluginDescription_List2_freeAll(l);
     } */
 
+  druid_disable_next_button(info);
   AB_Banking_DeactivateProvider(banking, backend_name);
   if (strlen(GWEN_Buffer_GetStart(buf)) > 0) {
+    const char *path = GWEN_Buffer_GetStart(buf);
+    int wait_status;
+    int wait_result = 0;
 
-    /* FIXME: This program call has to be improved !!! */
-    res = system(GWEN_Buffer_GetStart(buf));
+    /* Call the kde wizard */
+    /* res = system(path); */
+    /* In gtk2, this would be g_spawn_async or similar. */
+    AB_Banking_Fini (info->api);
+    {
+      pid_t pid;
+      pid = fork();
+      switch (pid) {
+      case -1:
+	printf("Fork call failed. Cannot start AqHBCI setup wizard.");
+	res = -1;
+	AB_Banking_Init (info->api);
+	break;
+      case 0: /* child */
+	execl(path, path, NULL);
+	printf("Fork call failed. Cannot start AqHBCI setup wizard.");
+	_exit(0);
+      default: /* parent */
+	res = 0;
+	while (wait_result == 0) {
+	  gtk_main_iteration();
+	  wait_result = waitpid(pid, &wait_status, WNOHANG);
+	  if ((wait_result == pid) && WIFEXITED(wait_status))
+	    res = WEXITSTATUS(wait_status);
+	  else
+	    res = -8;
+	}
+	AB_Banking_Init (info->api);
+      }
+    }
 
     if (res == 0) {
       res = AB_Banking_ActivateProvider(banking, backend_name);
@@ -480,7 +515,7 @@ on_aqhbci_button (GtkButton *button,
       }
     }
     else {
-      printf("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, GWEN_Buffer_GetStart(buf));
+      printf("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, path);
       druid_disable_next_button(info);
     }
   } else {

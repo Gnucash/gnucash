@@ -116,7 +116,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 
     /* Clean up after ourselves. */
     AB_Banking_DequeueJob(api, job);
-    gnc_AB_BANKING_save (api);
+    gnc_AB_BANKING_fini (api);
     GNCInteractor_hide (interactor);
   }
 }

@@ -153,7 +153,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
       }*/
 
     /* Just to be on the safe side, clear queue once again. */
-    gnc_AB_BANKING_save (api);
+    gnc_AB_BANKING_fini (api);
     gnc_hbci_dialog_delete(td);
     gnc_trans_templ_delete_glist (template_list);
     

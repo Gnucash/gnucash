@@ -39,135 +39,77 @@
 
 /* Globale variables for AB_BANKING caching. */
 static AB_BANKING *gnc_AB_BANKING = NULL;
-static char *gnc_hbci_configfile = NULL;
+static int gnc_AB_BANKING_refcnt = 0;
 static GNCInteractor *gnc_hbci_inter = NULL;
-/* static GList *AB_ACCOUNTlist = NULL; */
 
-
-/* ------------------------------------------------------------ */
-AB_BANKING *
-gnc_AB_BANKING_new (const char *filename, gboolean allowNewFile,
-		    GtkWidget *parent, GNCInteractor **inter)
-{
-  AB_BANKING *api = NULL;
-/*   int *err = NULL; */
-/*   char *errstring; */
-  
-  g_assert(inter);
-
-#if 0  
-  if (!filename)
-      return NULL;
-  if (!allowNewFile && 
-      (!g_file_test (filename, G_FILE_TEST_ISFILE | G_FILE_TEST_ISLINK))) 
-    {
-      /* ENOENT is "No such file or directory" */
-      gchar *errstring = g_strdup_printf ("%s: %s", filename, strerror (ENOENT));
-      gnc_warning_dialog
-	(parent,
-	 /* Translators: Strings from this file are really only needed
-	  * inside Germany (HBCI is not supported anywhere else). You
-	  * may safely ignore strings from the import-export/hbci
-	  * subdirectory in other countries. */
-	 _("Error while loading OpenHBCI config file:\n  %s\n"), errstring);
-      g_free (errstring);
-      return NULL;
-    }
-#endif  
-
-  api = AB_Banking_new ("gnucash", 0);
-  g_assert(api);
-  {
-    int r = AB_Banking_Init(api);
-    if (r != 0)
-      printf("gnc_AB_BANKING_new: Warning: Error %d on AB_Banking_init\n", r);
-  }
-  /* FIXME: The configfile is ignored here */
-  g_assert(api);
-
-  *inter = gnc_AB_BANKING_interactors (api, parent);
-
-#if 0
-  {
-    /* Well, currently gnucash doesn't offer a way to uniformly ask
-       for the ~/.gnucash directory, so we have to generate that path
-       here by hand. */
-    gchar *homebuffer;
-    gchar *databuffer;
-
-    /* Get home directory */
-    gnc_init_default_directory(&homebuffer);
-
-    /* Join it with the directory name */
-    databuffer = g_strjoin("", homebuffer, "/.gnucash/hbci");
-
-    /*fprintf(stderr, "Setting log dir to %s\n", databuffer);*/
-/*     HBCI_Hbci_setApplicationDataDir(AB_Banking_Hbci(api), databuffer); */
-    /* FIXME: do we need to set this here? */
-
-    g_free(databuffer);
-    g_free(homebuffer);
-  }
-#endif
-
-  g_assert(api);
-  return api;
-}
 
 AB_BANKING * gnc_AB_BANKING_new_currentbook (GtkWidget *parent, 
-					 GNCInteractor **inter)
+					     GNCInteractor **inter)
 {
   if (gnc_AB_BANKING == NULL) {
     /* No API cached -- create new one. */
-    gnc_hbci_configfile = 
-      g_strdup (gnc_hbci_get_book_configfile (gnc_get_current_book ()));
-    gnc_AB_BANKING = gnc_AB_BANKING_new (gnc_hbci_configfile, 
-					 FALSE, parent, &gnc_hbci_inter);
+    AB_BANKING *api = NULL;
+  
+    api = AB_Banking_new ("gnucash", 0);
+    g_assert(api);
+    {
+      int r = AB_Banking_Init(api);
+      if (r != 0)
+	printf("gnc_AB_BANKING_new: Warning: Error %d on AB_Banking_init\n", r);
+    }
+    
+    gnc_hbci_inter = gnc_AB_BANKING_interactors (api, parent);
+    gnc_AB_BANKING = api;
+    
     if (inter)
       *inter = gnc_hbci_inter;
 
+    gnc_AB_BANKING_refcnt = 1;
     return gnc_AB_BANKING;
-
-  } else if ((gnc_hbci_configfile != NULL) && 
-	     (strcmp(gnc_hbci_configfile, 
-		     gnc_hbci_get_book_configfile (gnc_get_current_book ()))
-	      != 0)) {
-    /* Wrong API cached -- delete old and create new. */
-    gnc_AB_BANKING_delete (gnc_AB_BANKING);
-    fprintf(stderr,
-	    "gnc_AB_BANKING_new_currentbook: Wrong AB_BANKING cached; creating new one.\n");
-    return gnc_AB_BANKING_new_currentbook (parent, inter);
   } else {
-    /* Correct API cached. */
+    /* API cached. */
+
+    /* Init the API again. */
+    if (gnc_AB_BANKING_refcnt == 0)
+      AB_Banking_Init(gnc_AB_BANKING);
+
     if (inter) {
       *inter = gnc_hbci_inter;
       GNCInteractor_reparent (*inter, parent);
     }
     
+    gnc_AB_BANKING_refcnt++;
     return gnc_AB_BANKING;
   }
 }
 
 void gnc_AB_BANKING_delete (AB_BANKING *api)
 {
-  if (api == gnc_AB_BANKING) {
-    gnc_AB_BANKING = NULL;
-    gnc_hbci_inter = NULL;
-    g_free (gnc_hbci_configfile);
-    gnc_hbci_configfile = NULL;
-  }
   if (api == 0)
     api = gnc_AB_BANKING;
+
   if (api) {
-    AB_Banking_Fini(api);
+    if (api == gnc_AB_BANKING) {
+      gnc_AB_BANKING = NULL;
+      gnc_hbci_inter = NULL;
+      if (gnc_AB_BANKING_refcnt > 0)
+	AB_Banking_Fini(api);
+    }
+
     AB_Banking_free(api);
   }
 }
 
 
-int gnc_AB_BANKING_save (const AB_BANKING *api) 
+int gnc_AB_BANKING_fini (AB_BANKING *api) 
 {
-  /* FIXME: do something to save the current state */
+  if (api == gnc_AB_BANKING) {
+    gnc_AB_BANKING_refcnt--;
+    if (gnc_AB_BANKING_refcnt == 0)
+      return AB_Banking_Fini(api);
+  }
+  else
+    return AB_Banking_Fini(api);
   return 0;
 }
 

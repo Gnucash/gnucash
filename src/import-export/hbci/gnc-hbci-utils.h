@@ -38,27 +38,8 @@
 #include "hbci-interaction.h"
 
 
-/** Create a new AB_BANKING and let it load its environment from the
- * configuration file filename. If the file doesn't exist and
- * allowNewFile is set to FALSE, this function returns NULL. If the
- * file exists, but OpenHBCI encountered an error upon opening, then
- * an error will be displayed, and NULL will be returned. 
- * 
- * @param filename The name of the OpenHBCI configuration file to use.
- * @param allowNewFile If true, non-existent filename is accepted as well.
- * @param parent When displaying dialogs, use this GtkWidget as parent.
- * @param inter Reference to a GNCInteractor-pointer in order to use this later. 
- * May be NULL.
- */
-AB_BANKING * gnc_AB_BANKING_new (const char *filename, 
-			     gboolean allowNewFile, 
-			     GtkWidget *parent,
-			     GNCInteractor **inter);
-
-/** Same as above, but takes the filename already from the current
- * book's kvp frame AND caches a pointer to the api. Returns NULL if
- * the file from the book's kvp frame doesn't exist. Returns NULL also
- * when there was an error upon opening that file.
+/** Create a new AB_BANKING and let it load its environment from its
+ * default configuration. 
  *
  * @param parent When displaying dialogs, use this GtkWidget as parent.
  * @param inter Reference to a GNCInteractor-pointer in order to use this later. 
@@ -72,10 +53,11 @@ AB_BANKING * gnc_AB_BANKING_new_currentbook (GtkWidget *parent,
 void gnc_AB_BANKING_delete (AB_BANKING *api);
 
 
-/* Save this API to the config file given in the current book. Return
- * nonzero if an error occurred, or if no filename was found in the
- * current book. */
-int gnc_AB_BANKING_save (const AB_BANKING *api);
+/* Finish using the API for now. Let the API save its current
+ * state. Return nonzero if an error occurred. After this call, you
+ * may only call gnc_AB_BANKING_new_currentbook to get the api again
+ * in a properly initialized state. */
+int gnc_AB_BANKING_fini (AB_BANKING *api);
 
 
 /* Get the corresponding HBCI account to a gnucash account. Of course
