@@ -40,7 +40,7 @@
 #include "Group.h"
 #include "Query.h"
 
-/* static short module = MOD_QUERY; */
+static short module = MOD_QUERY;
 
 /* the Query makes a subset of all splits based on 3 things: 
  *   - an AND-OR tree of predicates which combine to make a 
@@ -73,16 +73,16 @@ struct _querystruct {
  *******************************************************************/
 
 static int  xaccAccountMatchPredicate(Split * s, PredicateData * pd);
-static int  xaccDescriptionMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccActionMatchPredicate(Split * s, PredicateData * pd);
-static int  xaccNumberMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccAmountMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccBalanceMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccClearedMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccDateMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccDescriptionMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccMemoMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccNumberMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccSharePriceMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccSharesMatchPredicate(Split * s, PredicateData * pd);
-static int  xaccClearedMatchPredicate(Split * s, PredicateData * pd);
-static int  xaccBalanceMatchPredicate(Split * s, PredicateData * pd);
 
 /********************************************************************
  ********************************************************************/
@@ -95,12 +95,14 @@ xaccQueryPrint(Query * q)
   QueryTerm * qt;
 
   printf("Query: max splits = %d\n", q->max_splits);
+
+  /* print and & or terms */
   for(i=q->terms; i; i=i->next) {
     aterms = i->data;
     printf("(");
     for(j=aterms; j; j=j->next) {
       qt = (QueryTerm *)j->data;
-      if(!qt->sense) printf("~");
+      if(!qt->data.base.sense) printf("~");
       printf("%d ", qt->data.type);
     }
     printf(")");
@@ -109,6 +111,31 @@ xaccQueryPrint(Query * q)
     }    
   }
   printf("\n");
+
+  /* print the node contents */
+  for(i=q->terms; i; i=i->next) {
+    aterms = i->data;
+    printf("aterm=%p\n", aterms);
+    for(j=aterms; j; j=j->next) {
+      qt = (QueryTerm *)j->data;
+      switch (qt->data.base.term_type) 
+      {
+        case PR_DATE:
+          printf ("date sense=%d use_start=%d use_end=%d\n", 
+                  qt->data.base.sense,
+                  qt->data.date.use_start,
+                  qt->data.date.use_end
+                  );
+          break;
+        default:
+          printf ("other\n");
+      }
+    }
+    printf("\n");
+    if(i->next) {
+      printf("\n");
+    }    
+  }
 }
 
 
@@ -424,7 +451,7 @@ xaccQueryInvert(Query * q) {
     new_oterm = NULL;
     for(cur=aterms; cur; cur=cur->next) {
       qt = copy_query_term(cur->data);
-      qt->sense = !(qt->sense);
+      qt->data.base.sense = !(qt->data.base.sense);
       new_oterm = g_list_append(NULL, qt);
       retval->terms = g_list_append(retval->terms, new_oterm);
     }
@@ -830,7 +857,7 @@ xaccQueryCheckSplit(Query * q, Split * s) {
     and_terms_ok = 1;
     for(and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
       qt = (QueryTerm *)(and_ptr->data);
-      if(((qt->p)(s, &(qt->data))) != qt->sense) {
+      if(((qt->p)(s, &(qt->data))) != qt->data.base.sense) {
         and_terms_ok = 0;
         break;
       }
@@ -1055,10 +1082,8 @@ xaccQueryGetSplits(Query * q) {
  * Add a predicate an existing query. 
  ********************************************************************/
 
-/* hack alert --  this is atemproray API */
 void
 xaccQueryAddPredicate (Query * q, 
-                       int snes,
                        PredicateData *pred,
                        QueryOp op) 
 {
@@ -1066,37 +1091,50 @@ xaccQueryAddPredicate (Query * q,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
 
-  qt->sense  = snes;
   qt->data   = *pred;
 
-  /* hack alert this switch stement is clearly wrong !!!!! */
-  switch (pred->type) {
-    case PD_DATE:
-      qt->p = & xaccDateMatchPredicate;
-      break;
-    case PD_AMOUNT:
-      qt->p = & xaccAmountMatchPredicate;
-      qt->p = & xaccSharePriceMatchPredicate;
-      qt->p = & xaccSharesMatchPredicate;
-      break;
-    case PD_ACCOUNT:
+  /* the predicates are only known in the local 
+   * address space, which is why we have to set them 
+   * from the abstract type here. 
+   */
+  switch (pred->base.term_type) 
+  {
+    case PR_ACCOUNT:
       qt->p = & xaccAccountMatchPredicate;
       break;
-    case PD_STRING:
-      qt->p = & xaccDescriptionMatchPredicate;
-      qt->p = & xaccMemoMatchPredicate;
-      qt->p = & xaccNumberMatchPredicate;
+    case PR_ACTION:
       qt->p = & xaccActionMatchPredicate;
       break;
-    case PD_CLEARED:
-      qt->p = & xaccClearedMatchPredicate;
+    case PR_AMOUNT:
+      qt->p = & xaccAmountMatchPredicate;
       break;
-    case PD_BALANCE:
+    case PR_BALANCE:
       qt->p = & xaccBalanceMatchPredicate;
       break;
-    case PD_MISC:
+    case PR_CLEARED:
+      qt->p = & xaccClearedMatchPredicate;
       break;
-
+    case PR_DATE:
+      qt->p = & xaccDateMatchPredicate;
+      break;
+    case PR_DESC:
+      qt->p = & xaccDescriptionMatchPredicate;
+      break;
+    case PR_MEMO:
+      qt->p = & xaccMemoMatchPredicate;
+      break;
+    case PR_NUM:
+      qt->p = & xaccNumberMatchPredicate;
+      break;
+    case PR_PRICE:
+      qt->p = & xaccSharePriceMatchPredicate;
+      break;
+    case PR_SHRS:
+      qt->p = & xaccSharesMatchPredicate;
+      break;
+    case PR_MISC:
+      PERR ("misc term must not appear");
+      break;
   }
   
   xaccInitQuery(qs, qt);
@@ -1125,9 +1163,10 @@ xaccQueryAddAccountMatch(Query * q, GList * accounts, acct_match_t how,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
 
-  qt->p      = & xaccAccountMatchPredicate;
-  qt->sense  = 1;
+  qt->p                       = & xaccAccountMatchPredicate;
   qt->data.type               = PD_ACCOUNT;
+  qt->data.base.term_type     = PR_ACCOUNT;
+  qt->data.base.sense         = 1;
   qt->data.acct.how           = how;
   qt->data.acct.accounts      = NULL;
   qt->data.acct.account_guids = account_list_to_guid_list (accounts);
@@ -1160,9 +1199,10 @@ xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
 
-  qt->p      = & xaccAccountMatchPredicate;
-  qt->sense  = 1;
+  qt->p                   = & xaccAccountMatchPredicate;
   qt->data.type           = PD_ACCOUNT;
+  qt->data.base.term_type = PR_ACCOUNT;
+  qt->data.base.sense     = 1;
   qt->data.acct.how       = ACCT_MATCH_ANY;
   qt->data.acct.accounts  = g_list_prepend(NULL, acct);
   qt->data.acct.account_guids
@@ -1197,9 +1237,10 @@ xaccQueryAddDescriptionMatch(Query * q, const char * matchstring,
   Query     * qr;
   int       flags = REG_EXTENDED;
 
-  qt->p      = & xaccDescriptionMatchPredicate;
-  qt->sense  = 1;
+  qt->p                    = & xaccDescriptionMatchPredicate;
   qt->data.type            = PD_STRING;
+  qt->data.base.term_type  = PR_DESC;
+  qt->data.base.sense      = 1;
   qt->data.str.case_sens   = case_sens;
   qt->data.str.use_regexp  = use_regexp;
   qt->data.str.matchstring = g_strdup(matchstring);
@@ -1249,9 +1290,10 @@ xaccQueryAddMemoMatch(Query * q, const char * matchstring,
   Query     * qr;
   int       flags = REG_EXTENDED;
 
-  qt->p      = & xaccMemoMatchPredicate;
-  qt->sense  = 1;
+  qt->p                    = & xaccMemoMatchPredicate;
   qt->data.type            = PD_STRING;
+  qt->data.base.term_type  = PR_MEMO;
+  qt->data.base.sense      = 1;
   qt->data.str.case_sens   = case_sens;
   qt->data.str.use_regexp  = use_regexp;
   qt->data.str.matchstring = g_strdup(matchstring);
@@ -1303,9 +1345,10 @@ xaccQueryAddDateMatchTS(Query * q,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
 
-  qt->p      = & xaccDateMatchPredicate;
-  qt->sense  = 1;
+  qt->p                   = & xaccDateMatchPredicate;
   qt->data.type           = PD_DATE;
+  qt->data.base.term_type = PR_DATE;
+  qt->data.base.sense     = 1;
   qt->data.date.use_start = use_start;
   qt->data.date.use_end   = use_end;
   qt->data.date.start     = sts;  
@@ -1385,9 +1428,10 @@ xaccQueryAddNumberMatch(Query * q, const char * matchstring, int case_sens,
   Query     * qr;
   int       flags = REG_EXTENDED;
 
-  qt->p      = & xaccNumberMatchPredicate;
-  qt->sense  = 1;
+  qt->p                    = & xaccNumberMatchPredicate;
   qt->data.type            = PD_STRING;
+  qt->data.base.term_type  = PR_NUM;
+  qt->data.base.sense      = 1;
   qt->data.str.case_sens   = case_sens;
   qt->data.str.use_regexp  = use_regexp;
   qt->data.str.matchstring = g_strdup(matchstring);
@@ -1436,9 +1480,10 @@ xaccQueryAddActionMatch(Query * q, const char * matchstring, int case_sens,
   Query     * qr;
   int       flags = REG_EXTENDED;
 
-  qt->p      = & xaccActionMatchPredicate;
-  qt->sense  = 1;
+  qt->p                    = & xaccActionMatchPredicate;
   qt->data.type            = PD_STRING;
+  qt->data.base.term_type  = PR_ACTION;
+  qt->data.base.sense      = 1;
   qt->data.str.case_sens   = case_sens;
   qt->data.str.use_regexp  = use_regexp;
   qt->data.str.matchstring = g_strdup(matchstring);
@@ -1490,9 +1535,10 @@ DxaccQueryAddAmountMatch(Query * q, double amt,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
 
-  qt->p      = & xaccAmountMatchPredicate;
-  qt->sense  = 1;
+  qt->p                     = & xaccAmountMatchPredicate;
   qt->data.type             = PD_AMOUNT;
+  qt->data.base.term_type   = PR_AMOUNT;
+  qt->data.base.sense       = 1;
   qt->data.amount.how       = how;
   qt->data.amount.amt_sgn   = amt_sgn;
   qt->data.amount.amount    = amt;
@@ -1526,9 +1572,10 @@ DxaccQueryAddSharePriceMatch(Query * q, double amt,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
   
-  qt->p      = & xaccSharePriceMatchPredicate;
-  qt->sense  = 1;
+  qt->p                     = & xaccSharePriceMatchPredicate;
   qt->data.type             = PD_AMOUNT;
+  qt->data.base.term_type   = PR_PRICE;
+  qt->data.base.sense       = 1;
   qt->data.amount.how       = how;
   qt->data.amount.amt_sgn   = 0;
   qt->data.amount.amount    = amt;
@@ -1562,9 +1609,10 @@ DxaccQueryAddSharesMatch(Query * q, double amt,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
   
-  qt->p      = & xaccSharesMatchPredicate;
-  qt->sense  = 1;
+  qt->p                     = & xaccSharesMatchPredicate;
   qt->data.type             = PD_AMOUNT;
+  qt->data.base.term_type   = PR_SHRS;
+  qt->data.base.sense       = 1;
   qt->data.amount.how       = how;
   qt->data.amount.amt_sgn   = 0;
   qt->data.amount.amount    = amt;
@@ -1597,9 +1645,10 @@ xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
 
-  qt->p      = p;
-  qt->sense  = 1;
+  qt->p                   = p;
   qt->data.type           = PD_MISC;
+  qt->data.base.term_type = PR_MISC;
+  qt->data.base.sense     = 1;
   qt->data.misc.how       = how;
   qt->data.misc.data      = data;
 
@@ -1630,10 +1679,11 @@ xaccQueryAddClearedMatch(Query * q, cleared_match_t how,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
   
-  qt->p      = & xaccClearedMatchPredicate;
-  qt->sense  = 1;
-  qt->data.type = PD_CLEARED;
-  qt->data.cleared.how  = how;
+  qt->p                   = & xaccClearedMatchPredicate;
+  qt->data.type           = PD_CLEARED;
+  qt->data.base.term_type = PR_CLEARED;
+  qt->data.base.sense     = 1;
+  qt->data.cleared.how    = how;
 
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
@@ -1661,10 +1711,11 @@ xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op)
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
 
-  qt->p      = & xaccBalanceMatchPredicate;
-  qt->sense  = 1;
-  qt->data.type = PD_BALANCE;
-  qt->data.balance.how = how;
+  qt->p                   = & xaccBalanceMatchPredicate;
+  qt->data.type           = PD_BALANCE;
+  qt->data.base.term_type = PR_BALANCE;
+  qt->data.base.sense     = 1;
+  qt->data.balance.how    = how;
 
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);

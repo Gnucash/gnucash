@@ -33,7 +33,7 @@
 #include "Transaction.h" 
 
 typedef enum {
-  QUERY_AND,
+  QUERY_AND=1,
   QUERY_OR,
   QUERY_NAND,
   QUERY_NOR,
@@ -41,7 +41,7 @@ typedef enum {
 } QueryOp;
 
 typedef enum {
-  BY_STANDARD,
+  BY_STANDARD=1,
   BY_DATE,
   BY_DATE_ENTERED,
   BY_DATE_RECONCILED,
@@ -54,7 +54,7 @@ typedef enum {
 } sort_type_t;  
 
 typedef enum {
-  PD_DATE,
+  PD_DATE=1,
   PD_AMOUNT,
   PD_ACCOUNT, 
   PD_STRING,
@@ -64,20 +64,35 @@ typedef enum {
 } pd_type_t;
 
 typedef enum {
-  ACCT_MATCH_ALL,
+  PR_ACCOUNT=1,
+  PR_ACTION,
+  PR_AMOUNT,
+  PR_BALANCE,
+  PR_CLEARED,
+  PR_DATE,
+  PR_DESC,
+  PR_MEMO,
+  PR_MISC,
+  PR_NUM,
+  PR_PRICE,
+  PR_SHRS
+} pr_type_t;
+
+typedef enum {
+  ACCT_MATCH_ALL=1,
   ACCT_MATCH_ANY,
   ACCT_MATCH_NONE
 } acct_match_t;
 
 typedef enum
 {
-  AMT_MATCH_ATLEAST,
+  AMT_MATCH_ATLEAST=1,
   AMT_MATCH_ATMOST, 
   AMT_MATCH_EXACTLY
 } amt_match_t;
 
 typedef enum {
-  AMT_SGN_MATCH_EITHER,
+  AMT_SGN_MATCH_EITHER=1,
   AMT_SGN_MATCH_CREDIT, 
   AMT_SGN_MATCH_DEBIT
 } amt_match_sgn_t;
@@ -102,53 +117,74 @@ typedef enum {
 typedef struct _querystruct Query;
 
 typedef struct {
-  pd_type_t    type;
-  int          use_start;
-  Timespec     start;
-  int          use_end;
-  Timespec     end;
+  pd_type_t       type;
+  pr_type_t       term_type;
+  int             sense;
+} BasePredicateData;
+
+typedef struct {
+  pd_type_t       type;
+  pr_type_t       term_type;
+  int             sense;
+  int             use_start;
+  Timespec        start;
+  int             use_end;
+  Timespec        end;
 } DatePredicateData;
 
 typedef struct {
   pd_type_t       type;
+  pr_type_t       term_type;
+  int             sense;
   amt_match_t     how;
   amt_match_sgn_t amt_sgn;
   double          amount;
 } AmountPredicateData;
 
 typedef struct {
-  pd_type_t    type;
-  acct_match_t how;
-  GList        * accounts;
-  GList        * account_guids;
+  pd_type_t       type;
+  pr_type_t       term_type;
+  int             sense;
+  acct_match_t    how;
+  GList          *accounts;
+  GList          *account_guids;
 } AccountPredicateData;
 
 typedef struct {
-  pd_type_t      type;
-  int            case_sens;
-  int            use_regexp;
-  char           * matchstring;
-  regex_t        compiled;
+  pd_type_t       type;
+  pr_type_t       term_type;
+  int             sense;
+  int             case_sens;
+  int             use_regexp;
+  char           *matchstring;
+  regex_t         compiled;
 } StringPredicateData;
 
 typedef struct {
   pd_type_t       type;
+  pr_type_t       term_type;
+  int             sense;
   cleared_match_t how;
 } ClearedPredicateData;
 
 typedef struct {
   pd_type_t       type;
+  pr_type_t       term_type;
+  int             sense;
   balance_match_t how;
 } BalancePredicateData;
 
 typedef struct {
-  pd_type_t  type;
-  int        how;
-  int        data;
+  pd_type_t       type;
+  pr_type_t       term_type;
+  int             sense;
+  int             how;
+  int             data;
 } MiscPredicateData;
 
 typedef union { 
   pd_type_t            type;
+  BasePredicateData    base;
   DatePredicateData    date;
   AmountPredicateData  amount;
   AccountPredicateData acct;
@@ -161,9 +197,8 @@ typedef union {
 typedef int (* Predicate)(Split * to_test, PredicateData * test_data);
 
 typedef struct {
-  Predicate     p;
   PredicateData data;
-  int           sense;
+  Predicate     p;
 } QueryTerm;
 
 
@@ -230,8 +265,7 @@ void xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op);
 void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
                            QueryOp op);
 
-void xaccQueryAddPredicate (Query * q, int sense, PredicateData *pred,
-                            QueryOp op);
+void xaccQueryAddPredicate (Query * q, PredicateData *pred, QueryOp op);
 
 
 /*******************************************************************

@@ -879,9 +879,83 @@ xml_add_qterm_restorer(xmlNodePtr qxml, QueryTerm *qt)
   g_return_val_if_fail(qxml, FALSE);
   g_return_val_if_fail(qt, FALSE);
 
-  switch (qt->data.type) {
-    case PD_DATE:
+  /* we set the predicates names based on the info they record */
+  switch (qt->data.base.term_type) {
+    case PR_ACCOUNT: 
+       p = xmlNewTextChild(qxml, NULL, "account-pred", NULL);  
+       break;
+
+    case PR_ACTION: 
+       p = xmlNewTextChild(qxml, NULL, "action-pred", NULL);  
+       break;
+
+    case PR_AMOUNT:
+       p = xmlNewTextChild(qxml, NULL, "amount-pred", NULL);  
+       break;
+
+    case PR_BALANCE:
+       p = xmlNewTextChild(qxml, NULL, "balance-pred", NULL);  
+       break;
+
+    case PR_CLEARED:
+       p = xmlNewTextChild(qxml, NULL, "cleared-pred", NULL);  
+       break;
+
+    case PR_DATE:
        p = xmlNewTextChild(qxml, NULL, "date-pred", NULL);  
+       break;
+
+    case PR_DESC:
+       p = xmlNewTextChild(qxml, NULL, "description-pred", NULL);  
+       break;
+
+    case PR_MEMO:
+       p = xmlNewTextChild(qxml, NULL, "memo-pred", NULL);  
+       break;
+
+    case PR_NUM:
+       p = xmlNewTextChild(qxml, NULL, "num-pred", NULL);  
+       break;
+
+    case PR_PRICE:
+       p = xmlNewTextChild(qxml, NULL, "price-pred", NULL);  
+       break;
+
+    case PR_SHRS:
+       p = xmlNewTextChild(qxml, NULL, "shares-pred", NULL);  
+       break;
+
+    case PR_MISC:
+       PERR ("Misc terms are not transmittable");
+       break;
+
+    default:
+  }
+  if (!p) return (FALSE);
+
+  rc = xml_add_gint32(p, "sense", qt->data.base.sense);
+  if (!rc) return(FALSE);
+
+
+  /* however, many of the types share a generic structure. */
+  switch (qt->data.type) {
+    case PD_ACCOUNT: 
+       PERR ("unimplemented");
+       break;
+
+    case PD_AMOUNT:
+       PERR ("unimplemented");
+       break;
+
+    case PD_BALANCE:
+       PERR ("unimplemented");
+       break;
+
+    case PD_CLEARED:
+       PERR ("unimplemented");
+       break;
+
+    case PD_DATE:
        xml_add_gint32(p, "use-start", qt->data.date.use_start);
        xml_add_gint32(p, "use-end", qt->data.date.use_end);
        if (qt->data.date.use_start) {
@@ -894,51 +968,26 @@ xml_add_qterm_restorer(xmlNodePtr qxml, QueryTerm *qt)
        }
        break;
 
-    case PD_AMOUNT:
-       p = xmlNewTextChild(qxml, NULL, "amount-pred", NULL);  
-       PERR ("unimplemented");
-       break;
-
-    case PD_ACCOUNT: 
-       p = xmlNewTextChild(qxml, NULL, "account-pred", NULL);  
-       PERR ("unimplemented");
-       break;
-
     case PD_STRING:
-       p = xmlNewTextChild(qxml, NULL, "string-pred", NULL);  
        xml_add_gint32(p, "case-sens", qt->data.str.case_sens);
        xml_add_gint32(p, "use-regexp", qt->data.str.use_regexp);
        xml_add_str(p, "matchstring", qt->data.str.matchstring, TRUE);
        break;
 
-    case PD_CLEARED:
-       p = xmlNewTextChild(qxml, NULL, "cleared-pred", NULL);  
-       PERR ("unimplemented");
-       break;
-
-    case PD_BALANCE:
-       p = xmlNewTextChild(qxml, NULL, "balance-pred", NULL);  
-       PERR ("unimplemented");
-       break;
-
     case PD_MISC:
-       p = xmlNewTextChild(qxml, NULL, "misc-pred", NULL);  
-       PERR ("unimplemented");
+       PERR ("Must not happen");
        break;
 
     default:
   }
-
-  if (!p) return (FALSE);
-
-  rc = xml_add_gint32(p, "sense", qt->sense);
-  if (!rc) return(FALSE);
 
   return(TRUE);
 }
 
 /* ============================================================== */
 /* loop over all terms in the query */
+/* XXX hack alert --  need to also send max-terms, sort-order,
+ * and other mis query elements */
 
 static gboolean
 xml_add_query_restorers(xmlNodePtr p, Query *q) 

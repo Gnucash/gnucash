@@ -4011,9 +4011,35 @@ START_HANDLER(query_restore)
 
 END_HANDLER(query_restore)
 {
+  sixtp_child_result *cr;
+  Query *qand, *qret;
   Query *q = (Query *) data_for_children;
   g_return_val_if_fail(q, FALSE);
-  *result = q;
+
+  g_return_val_if_fail(data_from_children, FALSE);
+  cr = (sixtp_child_result *) data_from_children->data;
+  g_return_val_if_fail(cr, FALSE);
+
+  qand = (Query *) (cr->data);
+  g_return_val_if_fail(qand, FALSE);
+
+  /* append the and terms by or'ing them in ... */
+  qret = xaccQueryMerge (q, qand, QUERY_OR);
+  if (!qret) {
+    xaccFreeQuery(qand);
+    *result = q;
+    g_return_val_if_fail(qret, FALSE);
+  }
+
+  xaccFreeQuery(q);
+  xaccFreeQuery(qand);
+
+  *result = qret;
+  return(TRUE);
+}
+
+AFTER_CHILD(query_restore)
+{  
   return(TRUE);
 }
 
@@ -4023,19 +4049,51 @@ FAIL_HANDLER(query_restore)
   if (q) xaccFreeQuery(q);
 }
 
-RESULT_CLEANUP(query_restore)
-{  
-  Query *q = (Query *) cr->data;
-  if (q) xaccFreeQuery(q);
+/* ================================================================= */
+/* <and-terms> (lineage <restore> <query> <query-server>)
+   
+   restores a given query.  We allocate the new query in the
+   start block, the children modify it, and in the end block, we see
+   if the resultant query is OK, and if so, we're done.
+ 
+   input: Query*
+   to-children-via-*result: new Query*
+   returns: NA
+   start: create new Query*, and leave in for children.
+   characters: NA
+   end: clear *result
+   cleanup-result: NA
+   cleanup-chars: NA
+   fail: delete Query*
+   result-fail: NA
+   chars-fail: NA
+
+ */
+
+START_HANDLER(query_and)
+{
+  Query *q;
+
+  /* note this malloc freed in the node higher up (query_restore_end_handler) */
+  q = xaccMallocQuery();
+  g_return_val_if_fail(q, FALSE);
+  *data_for_children = q;
+  *result = q;
+  return(q != NULL);
 }
 
-
-AFTER_CHILD(query_restore)
+END_HANDLER(query_and)
 {
-  g_return_val_if_fail(data_for_children, FALSE);
-  if(!child_result) return(TRUE);
-  if(child_result->type != SIXTP_CHILD_RESULT_NODE) return(TRUE);
+  Query *q = (Query *) data_for_children;
+  g_return_val_if_fail(q, FALSE);
+  *result = q;
   return(TRUE);
+}
+
+FAIL_HANDLER(query_and)
+{  
+  Query *q = (Query *) data_for_children;
+  if (q) xaccFreeQuery(q);
 }
 
 /* ================================================================= */
@@ -4068,6 +4126,21 @@ AFTER_CHILD(query_restore)
 }
 
 /* ================================================================= */
+
+END_HANDLER(qrestore_genericpred)
+{
+  Query *q = (Query *) parent_data;
+  PredicateData *dp = (PredicateData *) data_for_children;
+
+  g_return_val_if_fail(q, FALSE);
+  g_return_val_if_fail(dp, FALSE);
+
+  xaccQueryAddPredicate (q, dp, QUERY_AND);
+
+  return(TRUE);
+}
+
+/* ================================================================= */
 /* <datepred> (lineage <and-terms> <restore> <query> <query-server>)
    Restores a given date predicate.  
  
@@ -4091,51 +4164,14 @@ START_HANDLER(qrestore_datepred)
   g_return_val_if_fail(dp, FALSE);
   bzero (dp, sizeof (DatePredicateData));
   dp->type = PD_DATE;
+  dp->term_type = PR_DATE;
   *data_for_children = dp;
-  return(TRUE);
-}
-
-END_HANDLER(qrestore_datepred)
-{
-  Query *q = (Query *) parent_data;
-  PredicateData *dp = (PredicateData *) data_for_children;
-
-  g_return_val_if_fail(q, FALSE);
-  g_return_val_if_fail(dp, FALSE);
-
-  xaccQueryAddPredicate (q, 1, dp, QUERY_OR);
-
-  return(TRUE);
-}
-
-AFTER_CHILD(qrestore_datepred)
-{
-#if 0
-  Split *s = (Split *) data_for_children;
-  g_return_val_if_fail(s, FALSE);
-  if(!child_result) return(TRUE);
-  if(child_result->type != SIXTP_CHILD_RESULT_NODE) return(TRUE);
-
-  if(strcmp(child_result->tag, "quantity") == 0) {
-    gnc_numeric *n = (gnc_numeric *) child_result->data;
-    g_return_val_if_fail(n, FALSE);
-    xaccSplitSetShareAmount(s, *n);
-    /* let the normal child_result handler clean up n */
-  }
-  else if(strcmp(child_result->tag, "value") == 0) {
-    gnc_numeric *n = (gnc_numeric *) child_result->data;
-    g_return_val_if_fail(n, FALSE);
-    xaccSplitSetValue(s, *n);
-    /* let the normal child_result handler clean up n */
-  }
-#endif
-
   return(TRUE);
 }
 
 FAIL_HANDLER(qrestore_datepred)
 {
-  g_free (data_for_children);
+  // g_free (data_for_children);
 }
 
 /* ================================================================= */
@@ -4175,8 +4211,8 @@ END_HANDLER(datepred_end_date)
 
 END_HANDLER(generic_pred_sense)
 {
-  DatePredicateData *dp = (DatePredicateData *) parent_data;
-  // CVT_INT(dp->sense);
+  PredicateData *dp = (PredicateData *) parent_data;
+  CVT_INT(dp->base.sense);
   return(TRUE);
 }
 
@@ -4202,11 +4238,11 @@ qrestore_datepred_parser_new(void)
   sixtp *restore_pr = top_level;
   g_return_val_if_fail(top_level, NULL);
 
+  PRED_PARSE(generic_pred, sense,  "sense");
   PRED_PARSE(datepred, use_start,  "use-start");
   PRED_PARSE(datepred, use_end,    "use-end");
   RESTORE_DATE (datepred, start_date, "start-date");
   RESTORE_DATE (datepred, end_date,   "end-date");
-  PRED_PARSE(generic_pred, sense,  "sense");
 
   return(top_level);
 }
@@ -4222,10 +4258,10 @@ qrestore_datepred_parser_new(void)
     }									\
     sixtp_set_start(tmp_pr, REST##_##NAME##_start_handler);		\
     sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);	\
-    sixtp_set_end(tmp_pr, REST##_##NAME##_end_handler);			\
-    sixtp_set_after_child(tmp_pr, REST##_##NAME##_after_child_handler);	\
+    sixtp_set_end(tmp_pr, qrestore_genericpred_end_handler);		\
+    /* sixtp_set_after_child(tmp_pr, REST##_##NAME##_after_child_handler); */	\
     sixtp_set_fail(tmp_pr, REST##_##NAME##_fail_handler);		\
-    sixtp_add_sub_parser(restore_pr, TOK, tmp_pr);			\
+    sixtp_add_sub_parser(and_pr, TOK, tmp_pr);				\
   }
 
 /* ================================================================= */
@@ -4236,6 +4272,7 @@ query_server_parser_new (void)
   sixtp *top_level;
   sixtp *query_pr;
   sixtp *restore_pr;
+  sixtp *and_pr;
   
   /* <query_server> */
   top_level = sixtp_new();
@@ -4258,21 +4295,19 @@ query_server_parser_new (void)
   /* <query> <restore> */
   SETUP_RESTORE (query, query_pr);
 
-  RESTORE_PRED(datepred, "date-pred", qrestore);
-
-#ifdef LATER
-
-  /* <transaction> */
-  {
-    sixtp *transaction_pr = gnc_transaction_parser_new();
-    if(!transaction_pr) {
-      /* FIXME: need more cleanup here... */
-      return(NULL);
-    }
-    sixtp_add_sub_parser(ledger_data_pr, "transaction", transaction_pr);
+  /* <query> <restore> <and-terms> */
+  and_pr = sixtp_new();
+  if (!and_pr) {
+    sixtp_destroy(top_level);
+    return (NULL);
   }
-
-#endif
+  sixtp_set_start(and_pr, query_and_start_handler);
+  sixtp_set_chars(and_pr, allow_and_ignore_only_whitespace);
+  sixtp_set_end(and_pr, query_and_end_handler);
+  sixtp_set_fail(and_pr, query_and_fail_handler);
+  sixtp_add_sub_parser(restore_pr, "and-terms", and_pr);
+  
+  RESTORE_PRED(datepred, "date-pred", qrestore);
 
   return(top_level);
 }
