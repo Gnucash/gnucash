@@ -40,7 +40,8 @@ GCache * gnc_string_cache = NULL;
  ********************************************************************/
 
 void 
-gnc_engine_init(int argc, char ** argv) {
+gnc_engine_init(int argc, char ** argv)
+{
   gnc_engine_init_hook_t hook;
   GList                  * cur;
 
