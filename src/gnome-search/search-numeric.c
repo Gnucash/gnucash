@@ -31,6 +31,8 @@
 
 #define d(x)
 
+static void editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog);
+static void grab_focus (GNCSearchCoreType *fe);
 static GNCSearchCoreType *clone(GNCSearchCoreType *fe);
 static gboolean validate (GNCSearchCoreType *fe);
 static GtkWidget *get_widget(GNCSearchCoreType *fe);
@@ -44,6 +46,7 @@ static void gnc_search_numeric_finalise	(GtkObject *obj);
 
 struct _GNCSearchNumericPrivate {
   gboolean	is_debcred;
+  GtkWidget * 	entry;
 };
 
 static GNCSearchCoreTypeClass *parent_class;
@@ -88,6 +91,8 @@ gnc_search_numeric_class_init (GNCSearchNumericClass *class)
   object_class->finalize = gnc_search_numeric_finalise;
 
   /* override methods */
+  gnc_search_core_type->editable_enters = editable_enters;
+  gnc_search_core_type->grab_focus = grab_focus;
   gnc_search_core_type->validate = validate;
   gnc_search_core_type->get_widget = get_widget;
   gnc_search_core_type->get_predicate = get_predicate;
@@ -290,6 +295,31 @@ make_option_menu (GNCSearchCoreType *fe)
   return opmenu;
 }
 
+static void
+grab_focus (GNCSearchCoreType *fe)
+{
+  GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
+
+  g_return_if_fail (fi);
+  g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+
+  if (fi->priv->entry)
+    gtk_widget_grab_focus (fi->priv->entry);
+}
+
+static void
+editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog)
+{
+  GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
+
+  g_return_if_fail (fi);
+  g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+  g_return_if_fail (dialog);
+
+  if (fi->priv->entry)
+    gnome_dialog_editable_enters (dialog, GTK_EDITABLE (fi->priv->entry));
+}
+
 static GtkWidget *
 get_widget (GNCSearchCoreType *fe)
 {
@@ -315,6 +345,7 @@ get_widget (GNCSearchCoreType *fe)
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (entry), fi->value);
   gtk_signal_connect (GTK_OBJECT (entry), "amount_changed", entry_changed, fe);
   gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
+  fi->priv->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
 
   /* And return the box */
   return box;
