@@ -16,7 +16,7 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${GUILE_LIBS} ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GLIB_LIBS}
 
-libgw_gnc_la_SOURCES = gw-gnc.c
+nodist_libgw_gnc_la_SOURCES = gw-gnc.c gw-gnc.h
 libgw_gnc_la_LDFLAGS = -module \
   -L. -L.libs -lgncgnome \
   ${G_WRAP_LINK_ARGS} ${GLIB_LIBS}
@@ -157,6 +157,5 @@ gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: gw-gnc-spec.scm .scm-links
            (set! %load-path (cons \"../gnome-utils\" %load-path)) \
            (set! %load-path (cons \"../report/report-gnome\" %load-path)) \
            (primitive-load \"./gw-gnc-spec.scm\") \
-           (gw:generate-module \"gw-gnc\")"
-BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c
+           (gw:generate-wrapset \"gw-gnc\")"
 CLEANFILES = gw-gnc.scm gw-gnc.h gw-gnc.c 
