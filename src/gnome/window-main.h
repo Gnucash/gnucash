@@ -59,6 +59,7 @@ void            gnc_main_window_add_child(GNCMainInfo * main,
                                           GNCMainChildInfo * child);
 void            gnc_main_window_remove_child(GNCMainInfo * main,
                                              GNCMainChildInfo * child);
-void            gnc_main_window_child_refresh(GNCMainChildInfo * mc);
+void            gnc_main_window_child_refresh(gpointer data);
 GnomeMDIChild * gnc_main_window_create_child(const gchar * configstring);
+
 #endif

@@ -63,6 +63,7 @@
 #include "messages.h"
 #include "recncell.h"
 #include "splitreg.h"
+#include "top-level.h"
 #include "window-help.h"
 #include "window-main.h"
 #include "window-acct-tree.h"

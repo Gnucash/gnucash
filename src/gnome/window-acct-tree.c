@@ -884,7 +884,7 @@ gnc_acct_tree_window_create_menu(GNCAcctTreeWin * main_info,
 static void
 gnc_acct_tree_window_set_sensitives(GNCAcctTreeWin * win,
                                     gboolean sensitive) {
-#warning "b0rken set_sensitives in account"
+  /* FIXME: set sensitivity right. */
 }
 
 static void

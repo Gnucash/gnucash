@@ -345,7 +345,8 @@ gnc_main_window_save(GNCMainInfo * wind) {
  ********************************************************************/
 
 void
-gnc_main_window_child_refresh(GNCMainChildInfo * child) {
+gnc_main_window_child_refresh(gpointer data) {
+  GNCMainChildInfo *child = data;
   gnome_mdi_update_child(gnc_ui_get_data()->mdi, child->child);
 }
 

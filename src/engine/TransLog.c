@@ -205,10 +205,10 @@ xaccTransWriteLog (Transaction *trans, char flag)
 
    for (node = trans->splits; node; node = node->next) {
       Split *split = node->data;
-      char * accname = "";
+      const char * accname = "";
 
       if (xaccSplitGetAccount(split))
-        accname = xaccSplitGetAccount(split)->accountName;
+        accname = xaccAccountGetName (xaccSplitGetAccount(split));
 
       drecn = xaccDateUtilGetStamp (split->date_reconciled.tv_sec);
 

@@ -28,21 +28,22 @@
 #include <guile/gh.h>
 #include <string.h>
 
-#include "window-main.h"
-#include "window-main-summarybar.h"
+#include "Account.h"
+#include "EuroUtils.h"
+#include "FileDialog.h"
+#include "Group.h"
 #include "dialog-utils.h"
+#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
-#include "top-level.h"
 #include "gtkselect.h"
-#include "global-options.h"
+#include "messages.h"
 #include "option-util.h"
-#include "EuroUtils.h"
-#include "FileDialog.h"
-#include "Account.h"
-#include "Group.h"
+#include "top-level.h"
+#include "window-main-summarybar.h"
+#include "window-main.h"
 
 typedef struct {
   GtkWidget * hbox;
@@ -453,7 +454,7 @@ summarybar_refresh_handler(GHashTable * changes, gpointer user_data) {
 }
 
 GtkWidget *
-gnc_main_window_summary_new () {
+gnc_main_window_summary_new (void) {
   GNCMainSummary  * retval = g_new0(GNCMainSummary, 1);
   GtkWidget       * summarybar;
   GNCCurrencyItem * def_item;
@@ -467,7 +468,7 @@ gnc_main_window_summary_new () {
   retval->totals_list  = NULL;
   retval->component_id = gnc_register_gui_component(WINDOW_SUMMARYBAR_CM_CLASS,
                                                     summarybar_refresh_handler,
-                                                    retval, retval);
+                                                    NULL, retval);
   gnc_gui_component_watch_entity_type (retval->component_id,
                                        GNC_ID_ACCOUNT,
                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
