@@ -1,3 +1,16 @@
+2003-09-15  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-getbalance.c: Improve error
+	message when receiving zero balance from bank.
+
+	* accounts/de_CH/acctchrt_chkmu.gnucash-xea: Add account template
+	for Swiss German businesses "KMU" by Tom Winterhalder
+	<t.winterhalder@freesurf.ch>
+
+	* accounts/de_DE/acctchrt_skr04.gnucash-xea: Add *big* account
+	template for German businesses "SKR04" by Betina Schmidt
+	<betina-s@gmx.de>
+
 2003-09-14  Chris Lyttle  <chris@wilddev.net>
 
 	* configure.in: Release 1.8.7
