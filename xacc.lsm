@@ -1,7 +1,7 @@
 Begin3
 Title:		xacc -- simple single-user accounting program
-Version:	1.0b8
-Entered-date:	5DEC97
+Version:	1.0b9
+Entered-date:	4DEC97
 Description:    xacc is a program to keep track of your finances.  It 
                 offers a simple check-book register style interface.
                 Currently, the features are quite simple:
@@ -45,7 +45,7 @@ Primary-site:	http://www3.hmc.edu/~rclark/xacc/
 Alternate-site:	http://linas.org/linux/xacc 
 		540KB  xacc-1.0b7-sgi-irix.inst.tar
 Alternate-site:	sunsite.unc.edu /pub/Linux/apps/financial/accounting/
-		852KB  xacc-1.0b8.tar.gz
+		861KB  xacc-1.0b9.tar.gz
 		267KB  xacc-1.0b4-bin-linux-i386-motif.tar.gz
 Platforms:      Linux/Unix/X Windows/Lesstif/Motif/Sparc/Intel/PowerPC 
 Copying-policy:	GPL
