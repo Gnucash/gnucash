@@ -7,9 +7,13 @@
 	(cdr s)
 	#f)))
 
-(display (account-type->number 'INCOME)) (newline)
+(if (gnc:debugging?)
+    (begin
+      (display (account-type->number 'INCOME))
+      (newline)))
+
 (define (gnc:get-incomes-list account-group)
-  (if testing?
+  (if (gnc:debugging?)
       gc-cats
       (filteroutnulls
        (flatten 
@@ -22,11 +26,12 @@
 ;  (map account-type->number 
 ;       '(CASH CREDIT ASSET LIABILITY CURRENCY)))
 
-(if testing?
+(if (gnc:debugging?)
     (begin
       (display "gnc-asset-account-types:") 
       (display gnc-asset-account-types)
       (newline)))
+
 ;;; '(1 2 3 4 7))
 ;;;;;;;;;;;;;;;;;;;;;;; add, eventually, 11 12 13 14))
 ;;;                  aka CHECKING SAVINGS MONEYMRKT CREDITLINE))
@@ -34,7 +39,7 @@
 (define gnc-income-account-types 
   (map account-type->number '(INCOME EXPENSE)))
 
-(if testing?
+(if (gnc:debugging?)
     (begin
       (display "gnc-income-account-types:")
       (display gnc-income-account-types)
@@ -42,10 +47,10 @@
 
 (define gnc-invest-account-types '(5 6 10))
 
-(define gnc-invest-account-types 
+(define gnc-invest-account-types
   (map account-type->number '(EQUITY STOCK MUTUAL)))
 
-(if testing?
+(if (gnc:debugging?)
     (begin
       (display "gnc-invest-account-types:")
       (display gnc-invest-account-types)
@@ -94,8 +99,10 @@
   (gnc:account-commit-edit AccPtr))
 
 ;;;;;;;;;;;  This one's REAL IMPORTANT!!! ;;;;;;;;;;;;
-(display (account-type->number 'CASH))
-(display (account-type->number 'INCOME))
+(if (gnc:debugging?)
+    (begin
+      (display (account-type->number 'CASH))
+      (display (account-type->number 'INCOME))))
 
 ;;;;; And now, a "test bed"
 (define (gnc:test-load-accs group)
