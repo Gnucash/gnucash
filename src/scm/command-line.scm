@@ -44,6 +44,12 @@
             (gnc:config-var-value-set! gnc:*debugging?* #f val))))
 
    (cons
+    "loglevel"
+    (cons 'integer
+          (lambda (val)
+            (gnc:config-var-value-set! gnc:*loglevel* #f val))))
+
+   (cons
     "nofile"
     (cons 'boolean
           (lambda (val)

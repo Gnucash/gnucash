@@ -58,7 +58,10 @@
           (gnc:config-var-value-get gnc:*arg-show-help*))
       (begin
         (gnc:prefs-show-usage)
-        (gnc:shutdown 0))))
+        (gnc:shutdown 0)))
+
+  (if (gnc:config-var-value-get gnc:*loglevel*)
+      (gnc:set-log-level-global (gnc:config-var-value-get gnc:*loglevel*))))
 
 
 (define (gnc:shutdown exit-status)

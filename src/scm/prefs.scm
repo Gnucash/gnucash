@@ -449,6 +449,13 @@ the account instead of opening a register." #f))
     #f))
   (gnc:config-var-value-set! gnc:*debugging?* #f current-value))
 
+(define gnc:*loglevel*
+  (gnc:make-config-var
+   "Logging level from 0 (least logging) to 5 (most logging)."
+   (lambda (var value) (if (exact? value) (list value) #f))
+   eq?
+   #f))
+
 ;; Convert the temporary startup value into a config var.
 (let ((current-load-path gnc:*load-path*))
   (set!
