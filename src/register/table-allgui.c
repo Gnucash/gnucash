@@ -334,8 +334,8 @@ xaccTableResize (Table * table,
                new_phys_cols,
                (table->bg_colors),
                int,
-               (0xffffff),  
-               (int));    /* no-op */
+               (0xffffff),    /* white */
+               (int));        /* no-op */
 
    /* resize the foreground color array (black text) */
    RESIZE_ARR ((table->num_phys_rows),
@@ -344,8 +344,8 @@ xaccTableResize (Table * table,
                new_phys_cols,
                (table->fg_colors),
                int,
-               (0x0),
-               (int));  /* no-op */
+               (0x0),         /* black */
+               (int));        /* no-op */
 
    /* we are done with the physical dimensions. 
     * record them for posterity. */

@@ -140,6 +140,7 @@ struct _BasicCell {
   char  input_output;    /* zero if output-only */
   int   bg_color;        /* background color, ARGB format */
   int   fg_color;        /* forground (text) color ARGB format */
+  /* hack alert -- add support for e.g. bold fonts !?!?! */
 
   char * value;          /* current value */
   unsigned int changed;  /* 2^32-1 if value modified */
