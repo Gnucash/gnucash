@@ -61,7 +61,7 @@ void  xaccQuerySetMaxSplits (Query *, int);
 /* The xaccQuerySetSortOrder() method sets the sort order that
  * should be used on the splits 
  */
-void xaccQuerySetSortOrder (Query *, int, ...); 
+void xaccQuerySetSortOrder (Query *, int, int, int); 
 
 /* The xaccQueryGetSplits() method returns a list of splits
  * matching the query and sorting criteria previously set up.
