@@ -103,7 +103,7 @@ sxprivtransactionListMapDelete( gpointer data, gpointer user_data )
 	return;
 }
 
-void
+static void
 sxprivTransMapDelete( gpointer data, gpointer user_data )
 {
   Transaction *t = (Transaction *) data;
