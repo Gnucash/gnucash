@@ -8,7 +8,6 @@ gncscm_DATA = \
   folio.scm \
   hello-world.scm \
   report-list.scm \
-  transaction-report-2.scm \
   transaction-report.scm
 
 EXTRA_DIST = \

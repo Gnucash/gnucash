@@ -1,6 +1,10 @@
 2000-06-06  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/splitreg.c (xaccInitSplitRegister): Don't blank
+	zeros in the price cell.
+
 	* src/guile/gfec.c: fix bugs in usage of internal guile functions.
+	more cleanup.
 
 2000-06-05  Dave Peticolas  <dave@krondo.com>
 

@@ -1,7 +1,8 @@
 ;; -*-scheme-*-
 ;; transaction-report.scm
-;; Report on all transactions in an account
-;; Robert Merkel (rgmerk@mira.net)
+;; Report on all transactions in account(s)
+;; original report by Robert Merkel (rgmerk@mira.net)
+;; redone from scratch by Bryan Larsen (blarsen@ada-works.com)
 
 (gnc:support "report/transaction-report.scm")
 (gnc:depend "report-utilities.scm")
@@ -9,294 +10,382 @@
 (gnc:depend "html-generator.scm")
 
 (let ()
+ (define string-db (gnc:make-string-database))
 
-  ;; functions for manipulating total inflow and outflow counts.
+ (define (make-account-subheading acc-name from-date)
+   (let* ((separator (string-ref (gnc:account-separator-char) 0))
+          (balance-at-start (gnc:account-get-balance-at-date
+                             (gnc:get-account-from-full-name
+                              (gnc:get-current-group)
+                              acc-name
+                              separator)
+			     from-date
+			     #f)))
+     (string-append acc-name
+		    " ("
+		    (string-db 'lookup 'open-bal-string) 
+		    " "
+		    (gnc:amount->formatted-string balance-at-start #f)
+		    ")"
+		    )))
 
-  (define gnc:total-inflow 0)
-  (define gnc:total-outflow 0)
+ (define (make-split-report-spec options)
+    (remove-if-not
+     (lambda (x) x)
+     (list
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "Display" "Date"))
+       (make-report-spec 
+	(string-db 'lookup 'date-string)
+	(lambda (split) 
+	  (gnc:transaction-get-date-posted 
+	   (gnc:split-get-parent split)))
+	(lambda (date) 
+	  (html-left-cell (html-string (gnc:print-date date))))
+	#f ; total-proc
+	#f ; subtotal-html-proc
+	#f ; total-html-proc
+	#t ; first-last-preference
+	#f ; subs-list-proc
+	#f)
+       #f)
+ 
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "Display" "Num"))
+       (make-report-spec 
+	(string-db 'lookup 'num-string)
+	(lambda (split)
+	  (gnc:transaction-get-num
+	   (gnc:split-get-parent split)))
+	(lambda (num) (html-left-cell (html-string num)))
+	#f ; total-proc
+	#f ; subtotal-html-proc
+	#f ; total-html-proc
+	#t ; first-last-preference
+	#f ; subs-list-proc
+	#f) ; subentry-html-proc
+       #f)
 
-  (define (gnc:set-total-inflow! x)
-    (set! gnc:total-inflow x))
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "Display" "Description"))
+       (make-report-spec 
+	(string-db 'lookup 'desc-string)
+	(lambda (split)
+	  (gnc:transaction-get-description
+	   (gnc:split-get-parent split)))
+	(lambda (desc) (html-left-cell (html-string desc)))
+	#f ; total-proc
+	#f ; subtotal-html-proc
+	#f ; total-html-proc
+	#t ; first-last-preference
+	#f ; subs-list-proc
+	#f) ; subentry-html-proc
+       #f)
 
-  (define (gnc:set-total-outflow! x)
-    (set! gnc:total-outflow x))
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "Display" "Memo"))
+       (make-report-spec 
+	(string-db 'lookup 'memo-string)
+	gnc:split-get-memo
+	(lambda (memo) (html-left-cell (html-string memo)))
+	#f ; total-proc
+	#f ; subtotal-html-proc
+	#f ; total-html-proc
+	#t ; first-last-preference
+	(lambda (split)
+	  (map gnc:split-get-memo (gnc:split-get-other-splits split)))
+	(lambda (memo) (html-left-cell (html-string memo))))
+       #f)
 
-  (define (gnc:tr-report-initialize-inflow-and-outflow!)
-    (set! gnc:total-inflow 0)
-    (set! gnc:total-outflow 0))
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "Display" "Account"))
+       (make-report-spec 
+	(string-db 'lookup 'acc-string)
+	(lambda (split) 
+	  (gnc:account-get-full-name 
+	   (gnc:split-get-account split)))
+	(lambda (account-name) (html-left-cell (html-string account-name)))
+	#f ; total-proc
+	#f ; subtotal-html-proc
+	#f ; total-html-proc
+	#t ; first-last-preference
+	(lambda (split)
+	  (map 
+	   (lambda (other)
+	     (gnc:account-get-full-name (gnc:split-get-account other)))
+	   (gnc:split-get-other-splits split)))
+	(lambda (account-name) (html-left-cell (html-string account-name))))
+       #f)
 
-  ;; extract fields out of the scheme split representation
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "Display" "Other Account"))
+       (make-report-spec 
+	(string-db 'lookup 'other-acc-string)
+	(lambda (split)
+	  (let ((others (gnc:split-get-other-splits split)))
+	    (if (null? others)
+		""
+		(gnc:account-get-full-name 
+		 (gnc:split-get-account (car others))))))
+	(lambda (account-name) (html-left-cell (html-string account-name)))
+	#f ; total-proc
+	#f ; subtotal-html-proc
+	#f ; total-html-proc
+	#t ; first-last-preference
+	#f
+	#f)
+       #f)
 
-  (define (gnc:tr-report-get-memo split-scm)
-    (vector-ref split-scm 0))
+      (if 
+       (eq? (gnc:option-value
+	(gnc:lookup-option options "Display" "Amount")) 'single)
+       (make-report-spec
+	(string-db 'lookup 'amount-string)
+	gnc:split-get-value
+	(lambda (value) (html-right-cell (html-currency value)))
+	+ ; total-proc
+	(lambda (value) 
+	  (html-right-cell (html-strong (html-currency value))))
+	(lambda (value) 
+	  (html-right-cell (html-strong (html-currency value))))
+	#t ; first-last-preference
+	(lambda (split)
+	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
+	(lambda (value) 
+	  (html-right-cell (html-ital (html-currency value)))))
+       #f)
+      
+      (if
+        (eq? (gnc:option-value
+ 	(gnc:lookup-option options "Display" "Amount")) 'double)
+        (make-report-spec
+ 	(string-db 'lookup 'debit-string)
+ 	(lambda (split)
+	  (max 0 (gnc:split-get-value split)))
+ 	(lambda (value)
+ 	  (cond ((> value 0.0) (html-right-cell (html-currency value)))
+	  (else (html-right-cell (html-ital (html-string " "))))))
+;	(lambda (value)
+; 	  (if (> value 0) (html-right-cell (html-currency value)))
+;	  (html-right-cell (html-ital (html-string " "))))  
+ 	+ ; total-proc
+ 	(lambda (value)
+ 	  (html-right-cell (html-strong (html-currency value))))
+ 	(lambda (value)
+ 	  (html-right-cell (html-strong (html-currency value))))
+ 	#t ; first-last-preference
+ 	(lambda (split)
+ 	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
+ ;	(lambda (value)
+; 	  (if (> value 0) (html-right-cell (html-ital (html-currency value)))
+; 	      (html-right-cell (html-ital (html-string " ")))))
+	(lambda (value)
+ 	  (cond ((> value 0.0) (html-right-cell (html-ital(html-currency value))))
+	  (else (html-right-cell (html-ital (html-string " ")))))))
+        #f)
 
-  (define (gnc:tr-report-get-action split-scm)
-    (vector-ref split-scm 1))
+      (if
+        (eq? (gnc:option-value
+  	(gnc:lookup-option options "Display" "Amount")) 'double)
+        (make-report-spec
+	 (string-db 'lookup 'credit-string)
+	 (lambda (split)
+	   (max  0 (- (gnc:split-get-value split))))
+;	 (lambda (value) (html-right-cell (html-currency value)))
+ 	(lambda (value)
+;	  (display value)
+;	  (display (> value 0.0))
+;	  (display "\n")
+ 	  (cond ((> value 0.0) (html-right-cell (html-currency value)))
+	  (else (html-right-cell (html-ital (html-string " "))))))
+ 	+ ; total-proc
+ 	(lambda (value)
+ 	  (html-right-cell (html-strong (html-currency value))))	
+ 	(lambda (value)
+ 	  (html-right-cell (html-strong (html-currency value))))
+ 	#t ; first-last-preference
+ 	(lambda (split)
+ 	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
+ 	(lambda (value)
+ 	  (cond  ((< value 0) (html-right-cell (html-ital (html-currency (- value)))))
+ 	      (else (html-right-cell (html-ital (html-string " ")))))))
+        #f)
 
-  (define (gnc:tr-report-get-description split-scm)
-    (vector-ref split-scm 2))
+       
+       (if 
+       (eq? (gnc:option-value
+	(gnc:lookup-option options "Display" "Amount")) 'double)
+       (make-report-spec
+	(string-db 'lookup 'total-string)
+	gnc:split-get-value
+	;(lambda (value) (html-right-cell (html-currency value)))
+	;(lambda (value) (html-right-cell (html-string "hello")))
+	#f
+	+ ; total-proc
+	(lambda (value) 
+	  (html-right-cell (html-strong (html-currency value))))
+	(lambda (value) 
+	  (html-right-cell (html-strong (html-currency value))))
+	#t ; first-last-preference
+	#f ;
+	#f)
+       #f))))
 
-  (define (gnc:tr-report-get-date split-scm)
-    (vector-ref split-scm 3))
+  (define (split-report-get-sort-spec-entry key ascending? begindate)
+    (case key
+      ((account)
+       (make-report-sort-spec
+	(lambda (split) (gnc:account-get-full-name
+                         (gnc:split-get-account split)))
+	(if ascending? string-ci<? string-ci>?)
+	string-ci=?
+	string-ci=?
+	(lambda (x) (make-account-subheading x begindate))))
 
-  (define (gnc:tr-report-get-reconcile-state split-scm)
-    (vector-ref split-scm 4))
+      ((date)
+       (make-report-sort-spec
+	(lambda (split) 
+	  (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
+	(if ascending? 
+	    (lambda (a b) (< (car a) (car b)))
+	    (lambda (a b) (> (car a) (car b))))
+	(lambda (a b) (= (car a) (car b)))
+	#f
+	#f))
 
-  (define (gnc:tr-report-get-reconcile-date split-scm)
-    (vector-ref split-scm 5))
+      ((date-monthly)
+       (make-report-sort-spec
+	(lambda (split) 
+	  (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
+	(if ascending? 
+	    (lambda (a b) (< (car a) (car b)))
+	    (lambda (a b) (> (car a) (car b))))
+	(lambda (a b) (= (car a) (car b)))
+	(lambda (a b)
+	  (= (gnc:date-get-month (localtime (car a)))
+	     (gnc:date-get-month (localtime (car b)))))
+	(lambda (date) 
+	  (gnc:date-get-month-string (localtime (car date))))))
 
-  (define (gnc:tr-report-get-share-amount split-scm)
-    (vector-ref split-scm 6))
+      ((date-yearly)
+       (make-report-sort-spec
+	(lambda (split) 
+	  (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
+	(if ascending? 
+	    (lambda (a b) (< (car a) (car b)))
+	    (lambda (a b) (> (car a) (car b))))
+	(lambda (a b) (= (car a) (car b)))
+	(lambda (a b)
+	  (= (gnc:date-get-year (localtime (car a)))
+	     (gnc:date-get-year (localtime (car b)))))
+	(lambda (date) 
+	  (number->string (gnc:date-get-year (localtime (car date)))))))
 
-  (define (gnc:tr-report-get-share-price split-scm)
-    (vector-ref split-scm 7))
+      ((time)
+       (make-report-sort-spec
+	(lambda (split) 
+	  (gnc:transaction-get-date-entered (gnc:split-get-parent split)))
+	(if ascending?
+	    (lambda (a b) (< (car a) (car b)))
+	    (lambda (a b) (> (car a) (car b))))
+	(lambda (a b) (and (= (car a) (car b)) (= (cadr a) (cadr b))))
+	#f
+	#f))
 
-  (define (gnc:tr-report-get-value split-scm)
-    (vector-ref split-scm 8))
+      ((description)
+       (make-report-sort-spec
+	(lambda (split) 
+	  (gnc:transaction-get-description (gnc:split-get-parent split)))
+	(if ascending? string-ci<? string-ci>?)
+	string-ci=?
+	#f
+	#f))
 
-  (define (gnc:tr-report-get-num split-scm)
-    (vector-ref split-scm 9))
+      ((number)
+       (make-report-sort-spec
+	(lambda (split) 
+	  (gnc:transaction-get-num (gnc:split-get-parent split)))
+	(if ascending? string-ci<? string-ci>?)
+	string-ci=?
+	#f
+	#f))
 
-  (define (gnc:tr-report-get-other-splits split-scm)
-    (vector-ref split-scm 10))
+      ((memo)
+       (make-report-sort-spec
+	gnc:split-get-memo
+	(if ascending? string-ci<? string-ci>?)
+	stri1ng-ci=?
+	#f
+	#f))
 
-  (define (gnc:tr-report-get-first-acc-name split-scm)
-    (let ((other-splits (gnc:tr-report-get-other-splits split-scm)))
-      (cond ((null? other-splits) "-")
-            (else (gnc:account-get-full-name (caar other-splits))))))
+      ((corresponding-acc)
+       (make-report-sort-spec
+	(lambda (split)
+	  (gnc:account-get-full-name
+	   (gnc:split-get-account
+	    (car (append
+		  (gnc:split-get-other-splits split) ;;may return null
+		  (list split))))))
+	(if ascending? string-ci<? string-ci>?)
+	string-ci=?
+	#f
+	#f))
 
-  ;; builds a list of the account name and values for the other
-  ;; splits in a transaction
-  (define (gnc:split-get-corresponding-account-and-value
-           split split-filter)
-    (let* ((diff-list '())
-           (parent-transaction (gnc:split-get-parent split))
-           (num-splits (gnc:transaction-get-split-count parent-transaction)))
-      (gnc:for-loop
-       (lambda (n)
-         (let* ((split-in-trans
-                 (gnc:transaction-get-split parent-transaction n))
-                (sub-split
-                 (list
-                  (gnc:split-get-account split-in-trans)
-                  (gnc:split-get-value split-in-trans))))
-           (if (split-filter sub-split)
-               (set! diff-list
-                     (cons sub-split diff-list)))))
-       0 num-splits 1)
-      (reverse diff-list)))
+      ((corresponding-acc-subtotal)
+       (make-report-sort-spec
+	(lambda (split)
+	  (gnc:account-get-full-name
+	   (gnc:split-get-account
+	    (car (append
+		  (gnc:split-get-other-splits split)
+		  (list split))))))
+	(if ascending? string-ci<? string-ci>?)
+	string-ci=?
+	string-ci=?
+	(lambda (x) x)))
 
-  ;; takes a C split, extracts relevant data and converts to a scheme 
-  ;; representation. split-filter is a predicate that filters the splits.
-  (define (gnc:make-split-scheme-data split split-filter)
-    (vector
-     (gnc:split-get-memo split) 
-     (gnc:split-get-action split)
-     (gnc:split-get-description-from-parent split)
-     (gnc:split-get-transaction-date split)
-     (gnc:split-get-reconcile-state split)
-     (gnc:split-get-reconciled-date split)
-     (gnc:split-get-share-amount split)
-     (gnc:split-get-share-price split)
-     (gnc:split-get-value split)
-     (gnc:transaction-get-num (gnc:split-get-parent split))
-     (gnc:split-get-corresponding-account-and-value split split-filter)))
+      ((amount)
+       (make-report-sort-spec
+	gnc:split-get-value
+	(if ascending? < >)
+	=
+	#f
+	#f))
 
-  (define (gnc:account->split-scm-list account sub-split-filter-pred)
+      ((none) #f)
+      (else (gnc:error "invalid sort argument"))))
+    
+
+  (define (make-split-list account split-filter-pred)
     (let ((num-splits (gnc:account-get-split-count account)))
       (let loop ((index 0)
-                 (split (gnc:account-get-split account 0))
-                 (split-scms '()))
-        (cond ((>= index num-splits) (reverse split-scms))
-              (else (loop (+ index 1)
-                          (gnc:account-get-split account (+ index 1))
-                          (cons (gnc:make-split-scheme-data
-                                 split sub-split-filter-pred) split-scms)))))))
+		 (split (gnc:account-get-split account 0))
+		 (slist '()))
+	(if (= index num-splits)
+	    (reverse slist)
+	    (loop (+ index 1)
+		  (gnc:account-get-split account (+ index 1))
+		  (if (split-filter-pred split)
+		      (cons split slist)
+		      slist))))))
 
-  ;; Note: This can be turned into a lookup table which will
-  ;; *massively* simplify it...
-  (define (gnc:sort-predicate-component component order)
-    (let ((ascending-order-comparator
-           (begin 
-             (cond
-              ((eq? component 'date) 
-               (lambda (split-scm-a split-scm-b)
-                 (- 
-                  (car 
-                   (gnc:timepair-canonical-day-time 
-                    (gnc:tr-report-get-date split-scm-a)))
-                  (car
-                   (gnc:timepair-canonical-day-time
-                    (gnc:tr-report-get-date split-scm-b))))))
-
-              ((eq? component 'time) 
-               (lambda (split-scm-a split-scm-b)
-                 (-
-                  (car (gnc:tr-report-get-date split-scm-a))
-                  (car (gnc:tr-report-get-date split-scm-b)))))
-
-              ((eq? component 'amount) 
-               (lambda (split-scm-a split-scm-b)
-                 (-
-                  (gnc:tr-report-get-value split-scm-a)
-                  (gnc:tr-report-get-value split-scm-b))))
-
-              ((eq? component 'description)
-               (lambda (split-scm-a split-scm-b)
-                 (let ((description-a
-                        (gnc:tr-report-get-description split-scm-a))
-                       (description-b
-                        (gnc:tr-report-get-description split-scm-b)))
-                   (cond ((string<? description-a description-b) -1)
-                         ((string=? description-a description-b) 0)
-                         (else 1)))))
-
-              ;; hack alert - should probably use something more sophisticated
-              ;; here - perhaps even making it user-definable
-              ((eq? component 'number)
-               (lambda (split-scm-a split-scm-b)
-                 (let ((num-a (gnc:tr-report-get-num split-scm-a))
-                       (num-b (gnc:tr-report-get-num split-scm-b)))
-                   (cond ((string<? num-a num-b) -1)
-                         ((string=? num-a num-b) 0)
-                         (else 1)))))
-
-              ((eq? component 'corresponding-acc)
-               (lambda (split-scm-a split-scm-b)
-                 (let ((corr-acc-a
-                        (gnc:tr-report-get-first-acc-name split-scm-a))
-                       (corr-acc-b
-                        (gnc:tr-report-get-first-acc-name split-scm-b)))
-                   (cond ((string<? corr-acc-a corr-acc-b) -1)
-                         ((string=? corr-acc-a corr-acc-b) 0)
-                         (else 1)))))
-
-              ((eq? component 'memo)
-               (lambda (split-scm-a split-scm-b)
-                 (let ((memo-a (gnc:tr-report-get-memo split-scm-a))
-                       (memo-b (gnc:tr-report-get-memo split-scm-b)))
-                   (cond ((string<? memo-a memo-b) -1)
-                         ((string=? memo-a memo-b) 0)
-                         (else 1)))))
-              (else (gnc:error
-                     (sprintf "transaction report: illegal sorting option %s"
-                              (symbol->string (component)))))))))
-      (cond ((eq? order 'descend) 
-             (lambda (my-split-a my-split-b)
-               (- (ascending-order-comparator my-split-a my-split-b))))
-            (else ascending-order-comparator))))
-
-  ;; returns a predicate
-  (define (gnc:tr-report-make-sort-predicate
-           primary-key-op primary-order-op secondary-key-op secondary-order-op)
-    (let ((primary-comp (gnc:sort-predicate-component
-                         (gnc:option-value primary-key-op)
-                         (gnc:option-value primary-order-op)))
-	  (secondary-comp (gnc:sort-predicate-component
-			   (gnc:option-value secondary-key-op)
-			   (gnc:option-value secondary-order-op))))
-      (lambda (split-a split-b)  
-        (let ((primary-comp-value (primary-comp split-a split-b)))
-          (cond ((< primary-comp-value 0) #t)
-                ((> primary-comp-value 0) #f)
-                (else 
-                 (let ((secondary-comp-value (secondary-comp split-a split-b)))
-                   (cond ((< secondary-comp-value 0) #t)
-                         (else #f)))))))))
-
-  ;; returns a predicate that returns true only if a split-scm is
+  ;; returns a predicate that returns true only if a split is
   ;; between early-date and late-date
-  (define (gnc:tr-report-make-filter-predicate early-date late-date)
-    (lambda (split-scm)
-      (let ((split-date (gnc:tr-report-get-date split-scm)))
-        (and (gnc:timepair-later-or-eq-date split-date early-date)
-             (gnc:timepair-earlier-or-eq-date split-date late-date)))))
-
-  ;; makes a predicate that returns true only if a sub-split account
-  ;; does not match one of the accounts
-  (define (gnc:tr-report-make-sub-split-filter-predicate accounts)
-    (lambda (sub-split)
-      (let loop
-          ((list accounts))
-        (if (null? list)
-            #f
-            (or (not (equal? (car list) (car sub-split)))
-                (loop (cdr list)))))))
-
-  ;; converts a scheme split representation to a line of HTML,
-  ;; updates the values of total-inflow and total-outflow based
-  ;; on the split value
-  (define (gnc:tr-report-split-to-html split-scm
-                                       starting-balance)
-    (let ((other-splits (gnc:tr-report-get-other-splits split-scm))
-          (report-string ""))
-      (cond ((> (gnc:tr-report-get-value split-scm) 0)
-             (gnc:set-total-inflow! (+ gnc:total-inflow
-                                       (gnc:tr-report-get-value split-scm))))
-            (else 
-             (gnc:set-total-outflow! (+ gnc:total-outflow
-                                        (- (gnc:tr-report-get-value 
-                                            split-scm))))))
-      (for-each
-       (lambda (split-sub first last)
-         (let ((account-name (gnc:account-get-full-name (car split-sub))))
-           (set! report-string
-                 (string-append
-                  report-string
-                  "<TR><TD>"
-                  (cond (first (gnc:print-date
-                                (gnc:tr-report-get-date split-scm)))
-                        (else ""))
-                  "</TD><TD>"
-                  (cond (first (gnc:tr-report-get-num split-scm))
-                        (else ""))
-                  "</TD><TD>"
-                  (cond (first (gnc:tr-report-get-description split-scm))
-                        (else ""))
-                  "</TD><TD>"
-                  (cond (first (gnc:tr-report-get-memo split-scm))
-                        (else ""))
-                  "</TD><TD>"
-                  account-name
-                  "</TD><TD>"
-                  (cond ((< (cadr split-sub) 0)
-                         (string-append
-                          (gnc:amount->string (- (cadr split-sub)) #f #t #f)
-                        "</TD><TD>"))
-                        (else
-                         (string-append
-                          "</TD><TD>"	
-                          (gnc:amount->string (cadr split-sub) #f #t #f))))
-                "</TD>"
-                (cond ((not last) "</TR>")
-                      (else ""))))))
-         other-splits
-         (if (null? other-splits)
-             ()
-             (append (list #t) (make-list (- (length other-splits) 1) #f)))
-         (if (null? other-splits)
-             ()
-             (append (make-list (- (length other-splits) 1) #f) (list #t))))
-      (string-append
-       report-string
-       "<TD>"
-       (gnc:amount->string (- (+ starting-balance gnc:total-inflow)
-                              gnc:total-outflow) #f #t #f)
-       "</TD></TR>")))
-
-  ;; gets the balance for a list of splits before beginning-date
-  ;; hack alert -
-  ;; we are doing multiple passes over the list - if it becomes a performance
-  ;; problem some code optimisation will become necessary
-  (define (gnc:tr-report-get-starting-balance scm-split-list beginning-date)
-    (let loop ((list scm-split-list)
-               (total 0))
-      (cond ((null? list) total)
-            ((gnc:timepair-lt beginning-date
-                              (gnc:tr-report-get-date (car list)))
-             total)
-            (else (loop (cdr list)
-                        (+ total (gnc:tr-report-get-value (car list))))))))
+  (define (split-report-make-date-filter-predicate begin-date-secs
+                                                   end-date-secs)
+    (lambda (split) 
+      (let ((date 
+	     (car (gnc:timepair-canonical-day-time 
+		   (gnc:transaction-get-date-posted
+		    (gnc:split-get-parent split))))))
+	(and (>= date begin-date-secs)
+	     (<= date end-date-secs)))))
 
   ;; register a configuration option for the transaction report
   (define (trep-options-generator)
@@ -331,7 +420,7 @@
     (gnc:register-trep-option
      (gnc:make-account-list-option
       "Report Options" "Account"
-      "c" "Do transaction report on this account"
+      "c" "Do transaction report on these accounts"
       (lambda ()
         (let ((current-accounts (gnc:get-current-accounts))
               (num-accounts (gnc:group-get-num-accounts
@@ -341,92 +430,153 @@
           (cond ((not (null? current-accounts)) (list (car current-accounts)))
                 ((> num-accounts 0) (list first-account))
                 (else ()))))
-      #f #f))
-
-    ;; primary sorting criterion
-    (gnc:register-trep-option
-     (gnc:make-multichoice-option
-      "Sorting" "Primary Key"
-      "a" "Sort by this criterion first"
-      'date
-      (list #(date
-              "Date"
-              "Sort by date")
-            #(time
-              "Time"
-              "Sort by exact entry time")
-            #(corresponding-acc
-              "Transfer from/to"
-              "Sort by account transferred from/to's name")
-            #(amount
-              "Amount"
-              "Sort by amount")
-            #(description
-              "Description"
-              "Sort by description")
-            #(number
-              "Number"
-              "Sort by check/transaction number")
-            #(memo
-              "Memo"
-              "Sort by memo"))))
+      #f #t))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
-      "Sorting" "Primary Sort Order"
-      "b" "Order of primary sorting"
-      'ascend
-      (list
-       #(ascend "Ascending" "smallest to largest, earliest to latest")
-       #(descend "Descending" "largest to smallest, latest to earliest"))))
+      "Report Options" "Style"
+      "d" "Report style"
+      'merged
+      (list #(merged
+	      "Merged"
+	      "Display N-1 lines")
+	    #(multi-line
+	      "Multi-Line"
+	      "Display N lines")
+	    #(single
+	      "Single"
+	      "Display 1 line"))))
+	      	      
+
+    (let ((key-choice-list 
+	   (list #(account
+		   "Account (w/subtotal)"
+		   "Sort & subtotal by account")
+		 #(date
+		   "Date"
+		   "Sort by date")
+		 #(date-monthly
+		   "Date (subtotal monthly)"
+		   "Sort by date & subtotal each month")
+		 #(date-yearly
+		   "Date (subtotal yearly)"
+		   "Sort by date & subtotal each year")
+		 #(time
+		   "Time"
+		   "Sort by exact entry time")
+		 #(corresponding-acc
+		   "Transfer from/to"
+		   "Sort by account transferred from/to's name")
+		 #(corresponding-acc-subtotal
+		   "Transfer from/to (w/subtotal)"
+		   "Sort and subtotal by account transferred from/to's name")
+		 #(amount
+		   "Amount"
+		   "Sort by amount")
+		 #(description
+		   "Description"
+		   "Sort by description")
+		 #(number
+		   "Number"
+		   "Sort by check/transaction number")
+		 #(memo
+		   "Memo"
+		   "Sort by memo")
+		 #(none
+		   "None"
+		   "Do not sort"))))
+
+      ;; primary sorting criterion
+      (gnc:register-trep-option
+       (gnc:make-multichoice-option
+	"Sorting" "Primary Key"
+	"a" "Sort by this criterion first"
+	'account
+	key-choice-list))
+
+      (gnc:register-trep-option
+       (gnc:make-multichoice-option
+	"Sorting" "Primary Sort Order"
+	"b" "Order of primary sorting"
+	'ascend
+	(list
+	 #(ascend "Ascending" "smallest to largest, earliest to latest")
+	 #(descend "Descending" "largest to smallest, latest to earliest"))))
+       
+      (gnc:register-trep-option
+       (gnc:make-multichoice-option
+	"Sorting" "Secondary Key"
+	"c"
+	"Sort by this criterion second"
+	'date
+	key-choice-list))
+      
+      (gnc:register-trep-option
+       (gnc:make-multichoice-option
+	"Sorting" "Secondary Sort Order"
+	"d" "Order of Secondary sorting"
+	'ascend
+	(list
+	 #(ascend "Ascending" "smallest to largest, earliest to latest")
+	 #(descend "Descending" "largest to smallest, latest to earliest")))))
+    
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "Display" "Date"
+      "b" "Display the date?" #t))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "Display" "Num"
+      "c" "Display the cheque number?" #t))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "Display" "Description"
+      "d" "Display the description?" #t))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "Display" "Memo"
+      "f" "Display the memo?" #t))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "Display" "Account"
+      "g" "Display the account?" #t))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "Display" "Other Account"
+      "h" "Display the other account?  (if this is a split transaction, this parameter is guessed)." #f))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
-      "Sorting" "Secondary Key"
-      "c"
-      "Sort by this criterion second"
-      'corresponding-acc
-      (list #(date
-              "Date"
-              "Sort by date")
-            #(time
-              "Time"
-              "Sort by exact entry time")
-            #(corresponding-acc
-              "Transfer from/to"
-              "Sort by account transferred from/to's name")
-            #(amount
-              "Amount"
-              "Sort by amount")
-            #(description
-              "Description"
-              "Sort by description")
-            #(number
-              "Number"
-              "Sort by check/transaction number")
-            #(memo
-              "Memo"
-              "Sort by memo"))))
+      "Display" "Amount"
+      "i" "Display the amount?" 
+      'single
+      (list #(none "None" "No amount display")
+	    #(single "Single" "Single Column Display")
+	    #(double "Double" "Two Column Display"))))
 
     (gnc:register-trep-option
-     (gnc:make-multichoice-option
-      "Sorting" "Secondary Sort Order"
-      "d" "Order of Secondary sorting"
-      'ascend
-      (list
-       #(ascend "Ascending" "smallest to largest, earliest to latest")
-       #(descend "Descending" "largest to smallest, latest to earliest"))))
+     (gnc:make-simple-boolean-option
+      "Display" "Headers"
+      "j" "Display the headers?" #t))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "Display" "Totals"
+      "k" "Display the totals?" #t))
+
+    (gnc:options-set-default-section gnc:*transaction-report-options*
+                                     "Report Options")
 
     gnc:*transaction-report-options*)
 
-  (define string-db (gnc:make-string-database))
 
-  (define (gnc:titles)
-    (map (lambda (key) (string-append "<TH>" (string-db 'lookup key) "</TH>"))
-         (list 'date 'num 'desc 'memo 'category 'debit 'credit 'balance)))
 
   (define (gnc:trep-renderer options)
-    (gnc:tr-report-initialize-inflow-and-outflow!)
     (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
            (enddate (gnc:lookup-option options "Report Options" "To"))
            (tr-report-account-op (gnc:lookup-option
@@ -442,112 +592,77 @@
                                                           "Secondary Key"))
            (tr-report-secondary-order-op
             (gnc:lookup-option options "Sorting" "Secondary Sort Order"))
+	   (tr-report-style-op (gnc:lookup-option options 
+					       "Report Options"
+					       "Style"))
            (accounts (gnc:option-value tr-report-account-op))
-           (prefix  (list "<HTML>" "<BODY bgcolor=#99ccff>"
-                          "<TABLE>"
-                          "<caption><b>"
-                          (string-db 'lookup 'tr-report) " - "
-                          (gnc:account-get-full-name (car accounts))
-                          "</b></caption>"
-                          (gnc:titles)))
-           (suffix (list "</TABLE>" "</BODY>" "</HTML>"))
-           (balance-line '())
-           (inflow-outflow-line '())
-           (net-inflow-line '())
-           (report-lines '())
-           (date-filter-pred (gnc:tr-report-make-filter-predicate
-                              (gnc:option-value begindate) 
-                              (gnc:option-value enddate)))
-           (sub-split-filter-pred
-            (gnc:tr-report-make-sub-split-filter-predicate accounts))
-           (starting-balance 0))
-      (if (null? accounts)
-          (set! report-lines
-                (list
-                 "<TR><TD>" (string-db 'lookup 'no-accounts) "</TD></TR>"))
-          (begin
-            ; reporting on more than one account not yet supported
-            (set! report-lines
-                  (gnc:account->split-scm-list (car accounts)
-                                               sub-split-filter-pred))
-            (set! starting-balance
-                  (gnc:tr-report-get-starting-balance
-                   report-lines (gnc:option-value begindate)))	
-            (set! report-lines (gnc:filter-list report-lines date-filter-pred))
-            (set! report-lines
-                  (sort!
-                   report-lines 
-                   (gnc:tr-report-make-sort-predicate
-                    tr-report-primary-key-op tr-report-primary-order-op
-                    tr-report-secondary-key-op tr-report-secondary-order-op)))
-            (let ((html-mapper (lambda (split-scm)
-                                 (gnc:tr-report-split-to-html
-                                  split-scm
-                                  starting-balance))))
-              (set! report-lines (gnc:inorder-map report-lines html-mapper)))
-            (set!
-             balance-line 
-             (list "<TR><TD><STRONG>"
-                   (gnc:print-date (gnc:option-value begindate))
-                   "</STRONG></TD>"
-                   "<TD></TD>" 
-                   "<TD></TD>"
-                   "<TD></TD>"
-                   "<TD></TD>"
-                   "<TD></TD>"
-                   "<TD></TD>"
-                   "<TD><STRONG>"
-                   (gnc:amount->string starting-balance #f #t #f)
-                   "</STRONG></TD></TR>"))
-            (set!
-             inflow-outflow-line
-             (list "<TR><TD><STRONG>"
-                   (string-db 'lookup 'totals)
-                   "</STRONG></TD>"
-                   "<TD></TD>" 
-                   "<TD></TD>"
-                   "<TD></TD>"
-                   "<TD></TD>"
-                   "<TD><STRONG>"
-                   (gnc:amount->string gnc:total-inflow #f #t #f)
-                   "</TD></STRONG>"
-                   "<TD><STRONG>"
-                   (gnc:amount->string gnc:total-outflow #f #t #f)
-                   "</TD></STRONG>"
-                   "<TD></TD></TR>"))
-            (set!
-             net-inflow-line
-             (list "<TR><TD><STRONG>"
-                   (string-db 'lookup 'net-inflow)
-                   "</STRONG></TD>"
-                   "<TD></TD>"
-                   "<TD></TD>" 
-                   "<TD></TD>" 
-                   "<TD></TD>"
-                   "<TD></TD>" 
-                   "<TD></TD>"
-                   "<TD><STRONG>"
-                   (gnc:amount->string (- gnc:total-inflow gnc:total-outflow)
-                                       #f #t #f)
-                   "</TD></STRONG></TR>"))))
-      (append prefix balance-line report-lines
-              inflow-outflow-line net-inflow-line suffix)))
+           (date-filter-pred (split-report-make-date-filter-predicate
+                              (car (gnc:option-value begindate))
+                              (car (gnc:option-value enddate))))
+	   (s1 (split-report-get-sort-spec-entry
+		(gnc:option-value tr-report-primary-key-op)
+		(eq? (gnc:option-value tr-report-primary-order-op) 'ascend)
+		(gnc:option-value begindate)))
+	   (s2 (split-report-get-sort-spec-entry
+		(gnc:option-value tr-report-secondary-key-op)
+		(eq? (gnc:option-value tr-report-secondary-order-op) 'ascend)
+		(gnc:option-value begindate)))
+	   (s2b (if s2 (list s2) '()))
+	   (sort-specs (if s1 (cons s1 s2b) s2b))
+	   (split-list
+	    (apply
+	     append
+	     (map
+	      (lambda (account)
+		(make-split-list account date-filter-pred))
+	      accounts)))
+	   (split-report-specs (make-split-report-spec options)))
 
-  (string-db 'store 'tr-report   "Transaction Report")
-  (string-db 'store 'date        "Date")
-  (string-db 'store 'num         "Num")
-  (string-db 'store 'desc        "Description")
-  (string-db 'store 'memo        "Memo")
-  (string-db 'store 'category    "Category")
-  (string-db 'store 'credit      "Credit")
-  (string-db 'store 'debit       "Debit")
-  (string-db 'store 'balance     "Balance")
-  (string-db 'store 'no-accounts "There are no accounts to report on.")
-  (string-db 'store 'totals      "Totals")
-  (string-db 'store 'net-inflow  "Net Inflow")
+      (list
+       (html-start-document-title (string-db 'lookup 'title))
+       (html-start-table)
+       (if 
+        (gnc:option-value
+         (gnc:lookup-option options "Display" "Headers"))
+        (html-table-headers split-report-specs)
+        '())
+       (html-table-render-entries split-list
+                                  split-report-specs
+                                  sort-specs
+                                  (case (gnc:option-value tr-report-style-op)
+                                    ((multi-line)
+                                     html-table-entry-render-entries-first)
+                                    ((merged)
+                                     html-table-entry-render-subentries-merged)
+                                    ((single)
+                                     html-table-entry-render-entries-only))
+                                  (lambda (split)
+                                    (length
+                                     (gnc:split-get-other-splits split))))
+       (if
+        (gnc:option-value
+         (gnc:lookup-option options "Display" "Totals"))
+        (html-table-totals split-list split-report-specs)
+        '())
+       (html-end-table)
+       (html-end-document))))
+
+
+  (string-db 'store 'title "Transaction Report")
+  (string-db 'store 'date-string "Date")
+  (string-db 'store 'num-string "Num")
+  (string-db 'store 'desc-string "Description")
+  (string-db 'store 'memo-string "Memo")
+  (string-db 'store 'acc-string "Account")
+  (string-db 'store 'other-acc-string "Other Account")
+  (string-db 'store 'amount-string "Amount")
+  (string-db 'store 'debit-string "Debit")
+  (string-db 'store 'credit-string "Credit")
+  (string-db 'store 'total-string "Total")
+  (string-db 'store 'open-bal-string "Opening Balance")
 
   (gnc:define-report
    'version 1
-   'name "Account Transactions"
+   'name (string-db 'lookup 'title)
    'options-generator trep-options-generator
    'renderer gnc:trep-renderer))
