@@ -5,6 +5,8 @@
 	  Add new preferences for the default "fancy date format",
 	  even if it's not used, yet.  Another step to fixing #99574
 
+	* Added GPL boilerplates to many of my files.
+
 2003-10-21  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-utils.c: Refactor some GUI

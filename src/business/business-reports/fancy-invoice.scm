@@ -2,7 +2,26 @@
 ;; fancy-invoice.scm -- a Fancy Invoice Report, used to print a GncInvoice
 ;;
 ;; Created by:  Derek Atkins <warlord@MIT.EDU>
+;; Copyright (c) 2003 Derek Atkins <warlord@MIT.EDU>
 ;;
+;; This program is free software; you can redistribute it and/or    
+;; modify it under the terms of the GNU General Public License as   
+;; published by the Free Software Foundation; either version 2 of   
+;; the License, or (at your option) any later version.              
+;;                                                                  
+;; This program is distributed in the hope that it will be useful,  
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+;; GNU General Public License for more details.                     
+;;                                                                  
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+
+
 ;; Fancy Invoice customized from "invoice.scm"
 ;; Customized by:  Oliver Jones <gnucash at oliverstech dot com>
 ;;
@@ -14,13 +33,15 @@
 ;; Hint: you may set your default options here until a way to save report
 ;; options will be implemented.
 ;;
-;; You will need to upgrade to gtkhtml-1.1 for the latest features or it won't look right.
-;; gtkhtml doesn't have support for table colgroup, tbody, thead and rules
-;; tags yet. When it will, the invoice will look even better.
+;; You will need to upgrade to gtkhtml-1.1 for the latest features or
+;; it won't look right.  gtkhtml doesn't have support for table
+;; colgroup, tbody, thead and rules tags yet. When it will, the
+;; invoice will look even better.
 ;;
-;; This is a quick and dirty hack. The proper way to do this (when I or someone
-;; else will have time) is to have the user supply an HTML template. The most common
-;; used templates will be distributed with gnucash.
+;; This is a quick and dirty hack. The proper way to do this (when I
+;; or someone else will have time) is to have the user supply an HTML
+;; template. The most common used templates will be distributed with
+;; gnucash.
 
 (define-module (gnucash report fancy-invoice))
 
