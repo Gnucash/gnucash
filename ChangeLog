@@ -1,3 +1,10 @@
+2003-06-11 Linas Vepstas <linas@linas.org>
+
+	* src/engine/*.[ch]: shuffle code around so that the non-accounting
+	  part of the engine can be built separately from accounting part.
+	* src/*/*/*.c: changes to fix header file includes to support
+	  above changes
+
 2003-06-09  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in, src/import-export/hbci/dialog-hbcitrans.c: Add
