@@ -12,6 +12,7 @@ AM_CFLAGS = \
   ${GNOME_INCLUDEDIR}
 
 libgncmod_app_utils_la_SOURCES = \
+  file-utils.c \
   gfec.c \
   global-options.c \
   gnc-component-manager.c \
@@ -26,6 +27,7 @@ libgncmod_app_utils_la_SOURCES = \
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
+  file-utils.h \
   gfec.h \
   global-options.h \
   gnc-component-manager.h \
