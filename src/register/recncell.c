@@ -53,13 +53,15 @@ ToggleRecn (BasicCell *_cell, const char *cur_val,
    char buff[2];
 
    /* throw up a popup if the user tries to undo a reconciled transcation
-      hack alert -- this sets a new precedent ... gnc_verify_dialog is defined in
-      both the motif and the gtk subdirs; I don't think I like it that way.
+      hack alert -- this sets a new precedent ... gnc_verify_dialog is 
+      defined in both the motif and the gtk subdirs; I don't think I like 
+      it that way.  Now it's in ui-callbacks.h which is UI independent, 
+      but that's still perhaps not optimal...  */
 
-      Now it's in ui-callbacks.h which is UI independent, but that's
-      still perhaps not optimal...  */
    if(cur_val[0] == YREC) {
-     if(!gnc_verify_dialog("Really change state of reconciled transaction?",
+     if(!gnc_verify_dialog("Do you really want to mark this transaction"
+                           "not reconciled?\nDoing so might make future"
+                           "reconciliation difficult!",
 			   GNC_T)) {
        return strdup(cur_val);
      }
