@@ -22,8 +22,10 @@
 !  *           Huntington Beach, CA 92648-4632                        *
 ! \********************************************************************/
 
-xacc*fontList:                 -*-helvetica-bold-r-normal--*-120-*-*-*-*-*-*
+Xacc*Foreground:               black 
 xacc*Background:               grey
+
+xacc*fontList:                 -*-helvetica-bold-r-normal--*-120-*-*-*-*-*-*
 xacc*text.fontList:            -*-helvetica-medium-r-normal--*-100-*-*-*-*-*-*
 
 ! Help stuff:
