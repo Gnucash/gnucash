@@ -47,8 +47,8 @@ gncLogLevel gnc_log_modules[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* IO */
   GNC_LOG_WARNING,      /* REGISTER */
   GNC_LOG_WARNING,      /* LEDGER */
-  GNC_LOG_WARNING,      /* HTML */
-  GNC_LOG_DEBUG,      /* GUI */
+  GNC_LOG_INFO,      /* HTML */
+  GNC_LOG_INFO,      /* GUI */
   GNC_LOG_WARNING,      /* SCRUB */
   GNC_LOG_WARNING,      /* GTK_REG */
   GNC_LOG_WARNING,      /* GUILE */

@@ -1,3 +1,7 @@
+2005-02-10  Joshua Sled  <jsled@asynchronous.org>
+
+	* lib/goffice/ : Initial import of libgoffice "port".
+
 2005-01-22  Derek Atkins  <derek@ihtfp.com>
 
 	Stephen Evanchik's patch to convert GncItemEdit to GObject/GLib

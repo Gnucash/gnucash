@@ -1,0 +1,30 @@
+GOffice Graph -- A graphing library based on gtk technologies
+Jody Goldberg <jody@gnome.org>
+
+   licensed under the terms of the GNU GPL included in the file COPYING.
+
+Terminology
+-----------
+
+graph   == the parent which contains a set of charts layed out in tabular form
+chart   == a rectangular region with axis, titles, and legends, and multiple
+	   plots
+plot    == a set of drawings, overlapping with a chart with axis assigned
+series  == 1 displayable set of data of dimensionality related to its
+	   associated plot type
+element == 1 'point' in a series
+
+Mailing lists
+-------------
+
+   There is a no mailing list to discuss only the graphing.  For now discussion
+   will be on the Gnumeric list, to subscribe send a mail to:
+
+	gnumeric-list-request@gnome.org
+
+   And in the body of the message write "subscribe"
+
+   An archive of the mailing lists is available in:
+
+	http://www.gnome.org/mailing-lists/archives/gnumeric-list/
+
