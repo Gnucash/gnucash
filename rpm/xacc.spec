@@ -1,8 +1,8 @@
 Summary: A program to keep track of finances.
 Name: xacc
-Version: 1.0.17
+Version: 1.0.18
 Release: 1
-Source: http://www.cs.hmc.edu/~rclark/xacc/download/xacc-1.0.17.tar.gz
+Source: http://linas.org/linux/xacc/xacc-1.0.18.tar.gz
 Source1: xacc.wmconfig
 URL: http://www.cs.hmc.edu/~rclark/xacc/
 Group: Applications/Finance
@@ -37,6 +37,10 @@ features are:
 
 %changelog
 
+* Sun Jun 14 1998 Linas Vepstas <linas@linas.org>
+
+- updated to 1.0.18, variety of fixes, some core dumps
+
 * Tue Feb 17 1998 Otto Hammersmith <otto@redhat.com>
 
 - updated to 1.0.17, author hopes it will fix some problems with core dumps
@@ -52,11 +56,13 @@ features are:
 ./configure --prefix=/usr
 make depend
 make
+make static
 
 %install
 install -d /usr/share/xacc
 install -m 755 xacc /usr/bin/xacc
 install -m 755 xacc.bin /usr/bin/xacc.bin
+install -m 755 xacc-static.bin /usr/bin/xacc-static.bin
 cp -pr Docs /usr/share/xacc
 
 install -d /etc/X11/wmconfig
@@ -66,5 +72,6 @@ install -m 644 -o root -g root $RPM_SOURCE_DIR/xacc.wmconfig /etc/X11/wmconfig/x
 %doc README TODO
 /usr/bin/xacc
 /usr/bin/xacc.bin
+/usr/bin/xacc-static.bin
 /usr/share/xacc
 /etc/X11/wmconfig/xacc
