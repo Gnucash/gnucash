@@ -302,11 +302,11 @@ const char * xaccTransIsCommonCurrency (Transaction *trans,
  *    given, otherwise, it returns NULL.
  *   
  * This is useful when changing one split such that the old entry in
- *    that split is of no relevance when determining whether the new entry
- *    has a common currency with the other splits.
+ *    that split is of no relevance when determining whether the new
+ *    entry has a common currency with the other splits.
  */
 const char * xaccTransIsCommonExclSCurrency (Transaction *trans,
-                                        const char * currency, 
+                                             const char * currency, 
 					     Split *excl_split);
 
 /* The xaccTransGetImbalance() method returns the total value of the
