@@ -1,3 +1,15 @@
+2002-12-01  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/app-utils/gnc-helpers.c (g_date_equals, g_date_hash): Added
+	to allow the use of GDates as GHashTable keys.
+
+	* src/gnome/druid-loan.c (ld_rep_next): Fix bug in 'payment' page
+	transitions.
+	(ld_rev_prep, ld_rev_recalc_schedule, ld_rev_update_clist):
+	Support for a loan amortization schedule review page; fixes
+	Bug#98966.
+	(ld_destroy): General post-run allocation cleanup.
+
 2002-11-30  Derek Atkins  <derek@ihtfp.com>
 	* src/register/ledger-core/split-register-model.c -- compute
 	  implicit exchange rates for balanced, two-split transactions.

@@ -26,10 +26,13 @@
 #include <guile/gh.h>
 #include <string.h>
 
+#include "gnc-engine-util.h"
 #include "engine-helpers.h"
 #include "gnc-helpers.h"
 #include "gnc-ui-util.h"
 
+
+static short module = MOD_SX;
 
 /* Type converters for GNCPrintAmountInfo */
 SCM
@@ -130,4 +133,26 @@ gnc_parse_amount_helper (const char * string, gboolean monetary)
     return SCM_BOOL_F;
 
   return gnc_numeric_to_scm (result);
+}
+
+gint
+g_date_equals( gconstpointer gda, gconstpointer gdb )
+{
+  if ( !g_date_valid( (GDate*)gda )
+       || !g_date_valid( (GDate*)gdb ) ) {
+    DEBUG( "invalid: %.8x(%s), %.8x(%s)",
+           gda, ( g_date_valid(gda) ? "" : "*" ),
+           gdb, ( g_date_valid(gdb) ? "" : "*" ) );
+  }
+  return ( g_date_compare( (GDate*)gda, (GDate*)gdb )
+           == 0 ? TRUE : FALSE );
+}
+
+guint
+g_date_hash( gconstpointer gd )
+{
+  gint val = (g_date_year( (GDate*)gd ) * 10000)
+    + (g_date_month( (GDate*)gd ) * 100)
+    + g_date_day( (GDate*)gd );
+  return g_int_hash( &val );
 }

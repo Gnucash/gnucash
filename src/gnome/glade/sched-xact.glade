@@ -5650,7 +5650,7 @@ Custom
 
 	    <widget>
 	      <class>GtkFrame</class>
-	      <name>frame93</name>
+	      <name>rev_date_frame</name>
 	      <border_width>2</border_width>
 	      <sensitive>False</sensitive>
 	      <label>Date Range</label>

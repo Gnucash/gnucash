@@ -38,11 +38,14 @@
 #include "gnc-book.h"
 #include "gnc-amount-edit.h"
 #include "gnc-account-sel.h"
+#include "gnc-exp-parser.h"
 #include "gnc-component-manager.h"
+#include "date.h"
 #include "dialog-utils.h"
 #include "Account.h"
 #include "FreqSpec.h"
 #include "gnc-ui.h"
+#include "gnc-helpers.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-frequency.h"
@@ -61,7 +64,6 @@
 #  define ORIG_PRINC_ENTRY "orig_princ_ent"
 #  define IRATE_SPIN       "irate_spin"
 #  define VAR_CONTAINER    "type_freq_frame"
-//#  define START_DATE       "start_gde"
 #  define LENGTH_SPIN      "len_spin"
 #  define LENGTH_OPT       "len_opt"
 #  define REMAIN_SPIN      "rem_spin"
@@ -85,9 +87,18 @@
 #  define PAY_FREQ_CONTAINER "pay_freq_align"
 #define PG_REVIEW "review_pg"
 #  define REV_SCROLLWIN      "rev_scrollwin"
+#  define REV_DATE_FRAME     "rev_date_frame"
 #  define REV_RANGE_OPT      "rev_range_opt"
 #  define REV_RANGE_TABLE    "rev_date_range_table"
+
 #define OPT_VBOX_SPACING 2
+
+typedef enum {
+        CURRENT_YEAR,
+        NOW_PLUS_ONE,
+        WHOLE_LOAN,
+        CUSTOM
+} REV_RANGE_OPTS;
 
 static short module = MOD_SX;
 
@@ -165,6 +176,16 @@ typedef enum {
 } PeriodSize;
 
 /**
+ * A transient struct used to collate the GDate and the gnc_numeric row-data
+ * for the repayment review schedule.  numCells is an array of gnc_numerics,
+ * with a length of the LoanData.revNumPmts.
+ **/
+typedef struct rev_repayment_row {
+        GDate date;
+        gnc_numeric *numCells;
+} RevRepaymentRow;
+
+/**
  * Data about a loan repayment.
  **/
 typedef struct LoanData_ {
@@ -191,6 +212,13 @@ typedef struct LoanData_ {
 
         int repayOptCount;
         RepayOptData **repayOpts;
+
+        /* Data concerning the review of repayments. */
+        int revNumPmts;
+        int revRepayOptToColMap[ (sizeof(REPAY_DEFAULTS)
+                                  / sizeof(RepayOptDataDefault))
+                                 - 1 ];
+        GList *revSchedule;
 } LoanData;
 
 /**
@@ -255,6 +283,7 @@ typedef struct LoanDruidData_ {
 
         /* rev = review */
         GtkOptionMenu     *revRangeOpt;
+        GtkFrame          *revDateFrame;
         GtkTable          *revTable;
         GNCDateEdit       *revStartDate;
         GNCDateEdit       *revEndDate;
@@ -279,8 +308,33 @@ static void ld_escrow_toggled( GtkToggleButton *tb, gpointer ud );
 
 static void ld_pay_freq_toggle( GtkToggleButton *tb, gpointer ud );
 
-static void ldd_rev_range_opt_changed( GtkButton *b, gpointer ud );
-static void ldd_rev_range_changed( GNCDateEdit *gde, gpointer ud );
+static void ld_get_loan_range( LoanDruidData *ldd,
+                               GDate *start,
+                               GDate *end );
+
+static void ld_rev_recalc_schedule( LoanDruidData *ldd );
+static void ld_rev_range_opt_changed( GtkButton *b, gpointer ud );
+static void ld_rev_range_changed( GNCDateEdit *gde, gpointer ud );
+static void ld_rev_get_dates( LoanDruidData *ldd,
+                              GDate *start,
+                              GDate *end );
+static void ld_rev_update_clist( LoanDruidData *ldd,
+                                 GDate *start,
+                                 GDate *end );
+static void ld_rev_clist_allocate_col_widths( GtkWidget *w,
+                                              GtkAllocation *alloc,
+                                              gpointer user_data );
+static void ld_rev_sched_list_free( gpointer data, gpointer user_data );
+static void ld_rev_hash_to_list( gpointer key,
+                                 gpointer val,
+                                 gpointer user_data );
+static void ld_rev_hash_free_date_keys( gpointer key,
+                                        gpointer val,
+                                        gpointer user_data );
+
+static void ld_get_pmt_formula( LoanDruidData *ldd, GString *gstr );
+static void ld_get_ppmt_formula( LoanDruidData *ldd, GString *gstr );
+static void ld_get_ipmt_formula( LoanDruidData *ldd, GString *gstr );
 
 static gboolean ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static void     ld_info_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
@@ -556,18 +610,18 @@ gnc_ui_sx_loan_druid_create(void)
 
         /* Review page widget setup. */
         {
-                gtk_signal_connect( GTK_OBJECT( gtk_option_menu_get_menu(
-                                                        ldd->revRangeOpt)),
+                gtk_signal_connect( GTK_OBJECT(gtk_option_menu_get_menu(
+                                                       ldd->revRangeOpt)),
                                     "selection-done",
-                                    GTK_SIGNAL_FUNC( ldd_rev_range_opt_changed ),
+                                    GTK_SIGNAL_FUNC( ld_rev_range_opt_changed ),
                                     ldd );
                 gtk_signal_connect( GTK_OBJECT(ldd->revStartDate),
                                     "date-changed",
-                                    GTK_SIGNAL_FUNC( ldd_rev_range_changed ),
+                                    GTK_SIGNAL_FUNC( ld_rev_range_changed ),
                                     ldd );
                 gtk_signal_connect( GTK_OBJECT(ldd->revEndDate),
                                     "date-changed",
-                                    GTK_SIGNAL_FUNC( ldd_rev_range_changed ),
+                                    GTK_SIGNAL_FUNC( ld_rev_range_changed ),
                                     ldd );
                 
         }
@@ -757,6 +811,8 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
         /* rev = review */
         ldd->revRangeOpt =
                 GET_CASTED_WIDGET( GTK_OPTION_MENU,    REV_RANGE_OPT );
+        ldd->revDateFrame =
+                GET_CASTED_WIDGET( GTK_FRAME,          REV_DATE_FRAME );
         ldd->revTable =
                 GET_CASTED_WIDGET( GTK_TABLE,          REV_RANGE_TABLE );
         /* GNCDateEdit       *revStartDate */
@@ -764,6 +820,45 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
         ldd->revScrollWin =
                 GET_CASTED_WIDGET( GTK_SCROLLED_WINDOW, REV_SCROLLWIN );
 
+}
+
+static
+void
+ld_get_pmt_formula( LoanDruidData *ldd, GString *gstr )
+{
+        g_assert( ldd != NULL );
+        g_assert( gstr != NULL );
+        g_string_sprintfa( gstr, "pmt( %.5f / 12 : %d : %0.2f : 0 : 0 )",
+                           (ldd->ld.interestRate / 100),
+                           ( ldd->ld.numPer
+                             * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ),
+                           gnc_numeric_to_double(ldd->ld.principal) );
+}
+
+static
+void
+ld_get_ppmt_formula( LoanDruidData *ldd, GString *gstr )
+{
+        g_assert( ldd != NULL );
+        g_assert( gstr != NULL );
+        g_string_sprintf( gstr, "ppmt( %.5f / 12 : i : %d : %0.2f : 0 : 0 )",
+                          (ldd->ld.interestRate / 100),
+                          ( ldd->ld.numPer
+                             * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ),
+                          gnc_numeric_to_double(ldd->ld.principal));
+}
+
+static
+void
+ld_get_ipmt_formula( LoanDruidData *ldd, GString *gstr )
+{
+        g_assert( ldd != NULL );
+        g_assert( gstr != NULL );
+        g_string_sprintf( gstr, "ipmt( %.5f / 12 : i : %d : %0.2f : 0 : 0 )",
+                          (ldd->ld.interestRate / 100),
+                          ( ldd->ld.numPer
+                             * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ),
+                          gnc_numeric_to_double( ldd->ld.principal ) );
 }
 
 static
@@ -787,7 +882,54 @@ ld_destroy( GtkObject *o, gpointer ud )
         gnc_unregister_gui_component_by_data
           (DIALOG_LOAN_DRUID_CM_CLASS, ldd);
 
-        /* FIXME: free alloc'd mem; cleanup */
+        /* free alloc'd mem; cleanup */
+
+        /* repay opts */
+        {
+                int i;
+
+                g_date_free( ldd->ld.startDate );
+                g_date_free( ldd->ld.varStartDate );
+                xaccFreqSpecFree( ldd->ld.loanFreq );
+
+                if ( ldd->ld.repMemo )
+                        g_free( ldd->ld.repMemo );
+
+                for ( i=0; i<ldd->ld.repayOptCount; i++ ) {
+                        RepayOptData *rod = ldd->ld.repayOpts[i];
+                        if ( rod->name ) 
+                                g_free( rod->name );
+                        if ( rod->txnMemo ) 
+                                g_free( rod->txnMemo );
+
+                        if ( rod->startDate )
+                                g_date_free( rod->startDate );
+
+                        if ( rod->fs )
+                                xaccFreqSpecFree( rod->fs );
+
+                        g_free( ldd->ld.repayOpts[i] );
+                        g_free( ldd->repayOptsUI[i] );
+                }
+                g_free( ldd->ld.repayOpts );
+                g_free( ldd->repayOptsUI );
+
+                if ( ldd->ld.repAmount )
+                        g_free( ldd->ld.repAmount );
+
+                g_date_free( ldd->ld.repStartDate );
+        }
+
+        /* review */
+        {
+                if ( ldd->ld.revSchedule ) {
+                        g_list_foreach( ldd->ld.revSchedule,
+                                        ld_rev_sched_list_free,
+                                        NULL );
+                        g_list_free( ldd->ld.revSchedule );
+                        ldd->ld.revSchedule = NULL;
+                }
+        }
 
         g_free( ldd );
 }
@@ -1120,14 +1262,13 @@ ld_rep_next( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
         {
                 int i;
-                gboolean haveMoreRepayOpts = FALSE;
-                for ( i = ldd->currentIdx + 1;
-                      (i < ldd->ld.repayOptCount) && !haveMoreRepayOpts;
-                      i++ ) {
-                        haveMoreRepayOpts |= ldd->ld.repayOpts[i]->enabled;
-                }
-                if ( haveMoreRepayOpts ) {
-                        ldd->currentIdx++;
+                for ( i = 0; // we can always start at 0, here.
+                      (i < ldd->ld.repayOptCount)
+                      && !ldd->ld.repayOpts[i]->enabled;
+                      i++ )
+                        ;
+                if ( i < ldd->ld.repayOptCount ) {
+                        ldd->currentIdx = i;
                         return FALSE;
                 }
         }
@@ -1162,10 +1303,7 @@ ld_rep_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         }
 
         str = g_string_sized_new( 64 );
-        g_string_sprintfa( str, "pmt( %.5f / 12 : %d : %0.2f : 0 : 0 )",
-                           (ldd->ld.interestRate / 100),
-                           ldd->ld.numPer,
-                           gnc_numeric_to_double(ldd->ld.principal) );
+        ld_get_pmt_formula( ldd, str );
         ldd->ld.repAmount = str->str;
         g_string_free( str, FALSE );
 
@@ -1186,18 +1324,6 @@ ld_rep_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         gnc_frequency_setup( ldd->repGncFreq,
                              ldd->ld.repFreq,
                              ldd->ld.repStartDate );
-
-#if 0 /* no longer needed */
-        {
-                int i;
-                gboolean haveRepayOpts = FALSE;
-                /* no repayment options selected */
-                for ( i=0; i<ldd->ld.repayOptCount && !haveRepayOpts; i++ ) {
-                        haveRepayOpts |= ldd->ld.repayOpts[i]->enabled;
-                }
-                gnome_druid_set_show_finish( ldd->druid, !haveRepayOpts );
-        }
-#endif /* 0 -- no longer needed */
 }
 
 static
@@ -1219,7 +1345,7 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         g_string_sprintf( str, _("Payment: \"%s\""), rod->name );
         gnome_druid_page_standard_set_title( GNOME_DRUID_PAGE_STANDARD(gdp),
                                              str->str );
-        /* FIXME: copy in the relevant data from the currently-indexed
+        /* copy in the relevant data from the currently-indexed
          * option. */
         gtk_entry_set_text( ldd->payTxnName, rod->txnMemo );
         g_string_sprintf( str, "%0.2f", rod->amount );
@@ -1239,21 +1365,6 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 gnc_frequency_setup( ldd->payGncFreq,
                                      rod->fs, rod->startDate );
         }
-
-#if 0 /* no longer needed to set this up; all transitions are to the review
-       * page. */
-        {
-                gboolean haveMoreRepayOpts = FALSE;
-                int i = 0;
-                for ( i = ldd->currentIdx + 1;
-                      (i < ldd->ld.repayOptCount) && !haveMoreRepayOpts;
-                      i++ ) {
-                        haveMoreRepayOpts |= ldd->ld.repayOpts[i]->enabled;
-                }
-                gnome_druid_set_show_finish( ldd->druid, !haveMoreRepayOpts );
-        }
-#endif /* 0 -- no longer needed to set this up; all transitions are to the
-        * review page. */
 
         g_string_free( str, TRUE );
 }
@@ -1380,16 +1491,16 @@ ld_pay_back( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         }
 
         /* go back through opts list and select next enabled options. */
-        for ( i=(--ldd->currentIdx);
+        for ( i = ldd->currentIdx - 1;
               (i > -1) && !ldd->ld.repayOpts[i]->enabled;
               i-- )
                 ;
-
         if ( i >= 0 ) {
                 ldd->currentIdx = i;
                 ld_pay_prep( gdp, arg1, ud );
                 return TRUE;
         }
+        ldd->currentIdx = -1;
         return FALSE;
 }
 
@@ -1439,15 +1550,13 @@ static
 void
 ld_rev_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 {
-        LoanDruidData *ldd = (LoanDruidData*)ud;
-        int i;
+        /* 3, here, does not include the Date column. */
         const static int BASE_COLS = 3;
-        int numCols = BASE_COLS;
+        LoanDruidData *ldd;
         gchar **titles;
-        int repayOptToColMap[ ( sizeof( REPAY_DEFAULTS )
-                                / sizeof( RepayOptDataDefault ) )
-                              - 1 ];
+        int i;
 
+        ldd = (LoanDruidData*)ud;
         gnome_druid_set_show_finish( ldd->druid, TRUE );
 
         /* Cleanup old clist */
@@ -1457,40 +1566,64 @@ ld_rev_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 ldd->revCL = NULL;
         }
 
-        /* Get the correct number of columns. */
+        ldd->ld.revNumPmts = BASE_COLS;
+        /* Get the correct number of repayment columns. */
         for ( i=0; i < ldd->ld.repayOptCount; i++ ) {
-                repayOptToColMap[i] = -1;
-                if ( !ldd->ld.repayOpts[i]->enabled ) {
+                ldd->ld.revRepayOptToColMap[i] = -1;
+                if ( ! ldd->ld.repayOpts[i]->enabled ) {
                         continue;
                 }
-                numCols += 1;
-                repayOptToColMap[i] = numCols - 1;
+                /* not '+1' = there is no date column to be accounted for in
+                 * the mapping. */
+                ldd->ld.revRepayOptToColMap[i] = ldd->ld.revNumPmts;
+                ldd->ld.revNumPmts += 1;
         }
-        titles = g_new0( gchar*, numCols );
+
+        /* '+1' for leading date col */
+        titles = g_new0( gchar*, ldd->ld.revNumPmts + 1 );
         titles[0] = _( "Date" );
-        titles[1] = _( "Principal" );
-        titles[2] = _( "Interest" );
+        titles[1] = _( "Payment" );
+        titles[2] = _( "Principal" );
+        titles[3] = _( "Interest" );
         /* move the appropriate names over into the title array */
         {
                 for ( i=0; i < ldd->ld.repayOptCount; i++ ) {
-                        if ( repayOptToColMap[i] == -1 ) {
+                        if ( ldd->ld.revRepayOptToColMap[i] == -1 ) {
                                 continue;
                         }
-                        titles[ repayOptToColMap[i] ] =
+                        /* '+1' offset for the "Date" title */
+                        titles[ ldd->ld.revRepayOptToColMap[i] + 1 ] =
                                 ldd->ld.repayOpts[i]->name;
                 }
         }
 
         ldd->revCL = GTK_CLIST(
-                gtk_clist_new_with_titles( numCols,
+                gtk_clist_new_with_titles( ldd->ld.revNumPmts+1,
                                            titles ) );
+        g_free( titles );
 
-        for( i=0; i < numCols; i++ ) {
-                gtk_clist_set_column_auto_resize( ldd->revCL, i, TRUE );
+        for( i=0; i < ldd->ld.revNumPmts+1; i++ ) {
+                gtk_clist_set_column_resizeable( ldd->revCL, i, TRUE );
+                
         }
+
+        gtk_signal_connect( GTK_OBJECT(ldd->revCL), "size-allocate",
+                            GTK_SIGNAL_FUNC(ld_rev_clist_allocate_col_widths),
+                            (gpointer)ldd );
+
         gtk_container_add( GTK_CONTAINER(ldd->revScrollWin),
                            GTK_WIDGET(ldd->revCL) );
         gtk_widget_show_all( GTK_WIDGET(ldd->revCL) );
+
+        ld_rev_recalc_schedule( ldd );
+
+        {
+                GDate start, end;
+                g_date_clear( &start, 1 );
+                g_date_clear( &end, 1 );
+                ld_rev_get_dates( ldd, &start, &end );
+                ld_rev_update_clist( ldd, &start, &end );
+        }
 }
 
 static
@@ -1506,8 +1639,8 @@ ld_rev_back( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         /* go back through opts list and select next enabled options. */
         for ( i = ldd->currentIdx;
               (i > -1) && !ldd->ld.repayOpts[i]->enabled;
-              i-- ) {
-        }
+              i-- )
+                ;
         if ( i >= 0 ) {
                 ldd->currentIdx = i;
                 /* natural transition to the payments page */
@@ -1630,10 +1763,7 @@ ld_create_sxes( LoanDruidData *ldd )
                 g_free( tmpStr );
                 gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repPriAcct );
                 tmpGS = g_string_sized_new( 64 );
-                g_string_sprintf( tmpGS, "ppmt( %.5f / 12 : i : %d : %0.2f : 0 : 0 )",
-                                  (ldd->ld.interestRate / 100),
-                                  ldd->ld.numPer,
-                                  gnc_numeric_to_double(ldd->ld.principal));
+                ld_get_ppmt_formula( ldd, tmpGS );
                 gnc_ttsplitinfo_set_debit_formula( ttsi, tmpGS->str );
                 g_string_free( tmpGS, FALSE );
                 repSplits = g_list_append( repSplits, ttsi );
@@ -1646,10 +1776,7 @@ ld_create_sxes( LoanDruidData *ldd )
                 g_free( tmpStr );
                 gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repIntAcct );
                 tmpGS = g_string_sized_new( 64 );
-                g_string_sprintf( tmpGS, "ipmt( %.5f / 12 : i : %d : %0.2f : 0 : 0 )",
-                                  (ldd->ld.interestRate / 100),
-                                  ldd->ld.numPer,
-                                  gnc_numeric_to_double( ldd->ld.principal ) );
+                ld_get_ipmt_formula( ldd, tmpGS );
                 gnc_ttsplitinfo_set_debit_formula( ttsi, tmpGS->str );
                 g_string_free( tmpGS, FALSE );
                 repSplits = g_list_append( repSplits, ttsi );
@@ -1721,7 +1848,14 @@ ld_create_sxes( LoanDruidData *ldd )
                 /* we're no longer responsible for this list. */
                 optSplits = NULL;
 
-                if ( rod->fs ) {
+                if ( ! rod->fs ) {
+                        /* Add transaction to existing repayment SX. */
+                        repTTList = g_list_append( repTTList, tti );
+                        continue;
+                }
+
+                /* Otherwise, create a new transaction for this one. */
+                {
                         GList *ttList;
 
                         ttList = NULL;
@@ -1732,6 +1866,8 @@ ld_create_sxes( LoanDruidData *ldd )
                         /* FIXME?  Get name from Liability/LoanAccount name? */
                         xaccSchedXactionSetName( tmpSX, ldd->ld.repMemo );
                         xaccSchedXactionSetFreqSpec( tmpSX, rod->fs );
+                        rod->fs = NULL;
+                        /* set to NULL to prevent destroy-time free */
                         xaccSchedXactionSetStartDate( tmpSX, rod->startDate );
                         xaccSchedXactionSetLastOccurDate( tmpSX, rod->startDate );
                         xaccSchedXactionSetEndDate( tmpSX, loanEndDate );
@@ -1749,10 +1885,6 @@ ld_create_sxes( LoanDruidData *ldd )
                         gnc_ttinfo_free( tti );
                         g_list_free( ttList );
                         ttList = NULL;
-
-                } else {
-                        /* Add transaction to existing repayment SX. */
-                        repTTList = g_list_append( repTTList, tti );
                 }
         }
 
@@ -1831,14 +1963,362 @@ ld_calc_upd_rem_payments( GtkWidget *w, gpointer ud )
 
 static
 void
-ldd_rev_range_opt_changed( GtkButton *b, gpointer ud )
+ld_rev_range_opt_changed( GtkButton *b, gpointer ud )
 {
-        DEBUG( "FIXME" );
+        LoanDruidData *ldd = (LoanDruidData*)ud;
+        int opt;
+
+        opt = gnc_option_menu_get_active( GTK_WIDGET(ldd->revRangeOpt) );
+        gtk_widget_set_sensitive( GTK_WIDGET(ldd->revDateFrame),
+                                  (opt == CUSTOM) );
+        {
+                GDate start, end;
+                g_date_clear( &start, 1 );
+                g_date_clear( &end, 1 );
+                ld_rev_get_dates( ldd, &start, &end );
+                ld_rev_update_clist( ldd, &start, &end );
+        }
 }
 
 static
 void
-ldd_rev_range_changed( GNCDateEdit *gde, gpointer ud )
+ld_rev_range_changed( GNCDateEdit *gde, gpointer ud )
 {
-        DEBUG( "FIXME" );
+        LoanDruidData *ldd = (LoanDruidData*)ud;
+        {
+                GDate start, end;
+                g_date_clear( &start, 1 );
+                g_date_clear( &end, 1 );
+                ld_rev_get_dates( ldd, &start, &end );
+                ld_rev_update_clist( ldd, &start, &end );
+        }
+}
+
+static
+void
+ld_get_loan_range( LoanDruidData *ldd, GDate *start, GDate *end )
+{
+        *start = *ldd->ld.startDate;
+        *end = *start;
+        g_date_add_months( end,
+                           ldd->ld.numPer
+                           * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) );
+}
+
+static
+void
+ld_rev_get_dates( LoanDruidData *ldd, GDate *start, GDate *end )
+{
+        int range = gnc_option_menu_get_active( GTK_WIDGET(ldd->revRangeOpt) );
+        switch ( range ) {
+        case CURRENT_YEAR:
+                g_date_set_time( start, time(NULL) );
+                g_date_set_dmy( start, 1, G_DATE_JANUARY, g_date_year( start ) );
+                g_date_set_dmy( end, 31, G_DATE_DECEMBER, g_date_year( start ) );
+                break;
+        case NOW_PLUS_ONE:
+                g_date_set_time( start, time(NULL) );
+                *end = *start;
+                g_date_add_years( end, 1 );
+                break;
+        case WHOLE_LOAN:
+                ld_get_loan_range( ldd, start, end );
+                break;
+        case CUSTOM:
+                g_date_set_time( start,
+                                 gnc_date_edit_get_date( ldd->revStartDate ) );
+                g_date_set_time( end,
+                                 gnc_date_edit_get_date( ldd->revEndDate ) );
+                break;
+        default:
+                PERR( "Unknown review date range option %d", range );
+                break;
+        }
+}
+
+static
+void
+ld_rev_sched_list_free( gpointer data, gpointer user_data )
+{
+        RevRepaymentRow *rrr = (RevRepaymentRow*)data;
+        g_free( rrr->numCells );
+        g_free( rrr );
+}
+
+static
+void
+ld_rev_hash_to_list( gpointer key, gpointer val, gpointer user_data )
+{
+        GList **l = (GList**)user_data;
+        RevRepaymentRow *rrr = g_new0( RevRepaymentRow, 1 );
+        if ( !key || !val ) {
+                DEBUG( "%.8x, %.8x",
+                       (unsigned int)key,
+                       (unsigned int)val );
+        }
+        rrr->date = *(GDate*)key;
+        rrr->numCells = (gnc_numeric*)val;
+        *l = g_list_append( *l, (gpointer)rrr );
+}
+
+static
+void
+ld_rev_hash_free_date_keys( gpointer key, gpointer val, gpointer user_data )
+{
+        g_free( (GDate*)key );
+}
+
+static
+void
+ld_rev_recalc_schedule( LoanDruidData *ldd )
+{
+        GDate start, end;
+        gnc_numeric *rowNumData;
+        GHashTable *schedule;
+
+        g_date_clear( &start, 1 );
+        g_date_clear( &end, 1 );
+        ld_get_loan_range( ldd, &start, &end );
+
+        /* The schedule is a hash of GDates to row-of-gnc_numeric[N] data,
+         * where N is the number of columns as determined by the _prep
+         * function, and stored in LoanData::revNumPmts. */
+        schedule = g_hash_table_new( g_date_hash, g_date_equals );
+
+        /* Do the master repayment */
+        {
+                GDate curDate;
+                GString *pmtFormula, *ppmtFormula, *ipmtFormula;
+                int i;
+                GHashTable *ivar;
+                
+                pmtFormula = g_string_sized_new( 64 );
+                ld_get_pmt_formula( ldd, pmtFormula );
+                ppmtFormula = g_string_sized_new( 64 );
+                ld_get_ppmt_formula( ldd, ppmtFormula );
+                ipmtFormula = g_string_sized_new( 64 );
+                ld_get_ipmt_formula( ldd, ipmtFormula );
+
+                ivar = g_hash_table_new( g_str_hash, g_str_equal );
+                g_date_clear( &curDate, 1 );
+                curDate = start;
+                g_date_subtract_days( &curDate, 1 );
+                xaccFreqSpecGetNextInstance( ldd->ld.repFreq,
+                                             &curDate, &curDate );
+                for ( i=0;
+                      g_date_valid( &curDate )
+                      && g_date_compare( &curDate, &end ) <= 0 ;
+                      i++,
+                      xaccFreqSpecGetNextInstance( ldd->ld.repFreq,
+                                                   &curDate, &curDate ) )
+                {
+                        gnc_numeric ival;
+                        gnc_numeric val;
+                        char *eloc;
+                        rowNumData =
+                                (gnc_numeric*)g_hash_table_lookup( schedule,
+                                                                   &curDate );
+                        if ( rowNumData == NULL) {
+                                int j;
+                                GDate *dateKeyCopy = g_date_new();
+
+                                *dateKeyCopy = curDate;
+                                rowNumData = g_new0( gnc_numeric, ldd->ld.revNumPmts );
+                                g_assert( rowNumData != NULL );
+                                for ( j=0; j<ldd->ld.revNumPmts; j++ ) {
+                                        rowNumData[j] = gnc_numeric_error( GNC_ERROR_ARG );
+                                }
+                                g_hash_table_insert( schedule,
+                                                     (gpointer)dateKeyCopy,
+                                                     (gpointer)rowNumData );
+                        }
+                        
+                        /* evaluate the expressions given the correct
+                         * sequence number i */
+                        ival = gnc_numeric_create( i, 1 );
+                        g_hash_table_insert( ivar, "i", &ival );
+
+                        if ( ! gnc_exp_parser_parse_separate_vars(
+                                     pmtFormula->str, &val, &eloc, ivar ) ) {
+                                PERR( "pmt Parsing error at %s", eloc );
+                                continue;
+                        }
+                        val = gnc_numeric_convert( val, 100, GNC_RND_ROUND );
+                        rowNumData[0] = val;
+
+                        if ( ! gnc_exp_parser_parse_separate_vars(
+                                     ppmtFormula->str, &val, &eloc, ivar ) ) {
+                                PERR( "ppmt Parsing error at %s", eloc );
+                                continue;
+                        }
+                        val = gnc_numeric_convert( val, 100, GNC_RND_ROUND );
+                        rowNumData[1] = val;
+
+                        if ( ! gnc_exp_parser_parse_separate_vars(
+                                     ipmtFormula->str, &val, &eloc, ivar ) ) {
+                                PERR( "ipmt Parsing error at %s", eloc );
+                                continue;
+                        }
+                        val = gnc_numeric_convert( val, 100, GNC_RND_ROUND );
+                        rowNumData[2] = val;
+                }
+
+                g_string_free( ipmtFormula, TRUE );
+                g_string_free( ppmtFormula, TRUE );
+                g_string_free( pmtFormula, TRUE );
+
+                g_hash_table_destroy( ivar );
+        }
+
+        /* Process any other enabled payments. */
+        {
+                int i;
+                GDate curDate;
+                FreqSpec *fs;
+
+                for ( i=0; i<ldd->ld.repayOptCount; i++ )
+                {
+                        if ( ! ldd->ld.repayOpts[i]->enabled )
+                                continue;
+
+                        fs = ( ldd->ld.repayOpts[i]->fs != NULL
+                               ? ldd->ld.repayOpts[i]->fs
+                               : ldd->ld.repFreq );
+
+                        g_date_clear( &curDate, 1 );
+                        curDate = start;
+                        g_date_subtract_days( &curDate, 1 );
+                        xaccFreqSpecGetNextInstance( fs, &curDate, &curDate );
+                        for ( ; g_date_valid( &curDate )
+                                && g_date_compare( &curDate, &end ) <= 0;
+                              xaccFreqSpecGetNextInstance(
+                                      fs, &curDate, &curDate ) )
+                        {
+                                gint gncn_how =
+                                        GNC_DENOM_SIGFIGS(2)
+                                        | GNC_RND_ROUND;
+                                gnc_numeric val;
+                                rowNumData = (gnc_numeric*)g_hash_table_lookup( schedule,
+                                                                                &curDate );
+                                if ( rowNumData == NULL ) {
+                                        int j;
+                                        GDate *dateKeyCopy = g_date_new();
+
+                                        *dateKeyCopy = curDate;
+                                        rowNumData = g_new0( gnc_numeric, ldd->ld.revNumPmts );
+                                        g_assert( rowNumData != NULL );
+                                        for ( j=0; j<ldd->ld.revNumPmts; j++ ) {
+                                                rowNumData[j] = gnc_numeric_error( GNC_ERROR_ARG );
+                                        }
+                                        g_hash_table_insert( schedule,
+                                                             (gpointer)dateKeyCopy,
+                                                             (gpointer)rowNumData );
+                                }
+                                
+                                val = double_to_gnc_numeric( (double)ldd->ld
+                                                             .repayOpts[i]
+                                                             ->amount,
+                                                             100, gncn_how );
+                                rowNumData[ ldd->ld.revRepayOptToColMap[i] ]
+                                        = val;
+                        }
+                }
+        }
+
+        /* Convert the GHashTable into a sorted GList in the LoanData */
+        {
+                if ( ldd->ld.revSchedule != NULL ) {
+                        g_list_foreach( ldd->ld.revSchedule,
+                                        ld_rev_sched_list_free,
+                                        NULL );
+                        g_list_free( ldd->ld.revSchedule );
+                        ldd->ld.revSchedule = NULL;
+                }
+                g_hash_table_foreach( schedule, ld_rev_hash_to_list,
+                                      &ldd->ld.revSchedule );
+                g_hash_table_foreach( schedule, ld_rev_hash_free_date_keys,
+                                      NULL );
+                g_hash_table_destroy( schedule );
+                ldd->ld.revSchedule =
+                        g_list_sort( ldd->ld.revSchedule, (GCompareFunc)g_date_compare );
+        }
+}
+
+static
+void
+ld_rev_update_clist( LoanDruidData *ldd, GDate *start, GDate *end )
+{
+        static gchar *NO_AMT_CELL_TEXT = " ";
+        GList *l;
+        GNCPrintAmountInfo pai;
+        /* '+1' for the date cell */
+        gchar *rowText[ ldd->ld.revNumPmts + 1 ];
+
+        pai = gnc_default_price_print_info();
+        pai.min_decimal_places = 2;
+
+        gtk_clist_clear( ldd->revCL );
+        gtk_clist_freeze( ldd->revCL );
+
+        for ( l = ldd->ld.revSchedule; l != NULL; l = l->next )
+        {
+                int i;
+                gchar tmpBuf[50];
+                RevRepaymentRow *rrr = (RevRepaymentRow*)l->data;
+
+                if ( g_date_compare( &rrr->date, start ) < 0 )
+                        continue;
+                if ( g_date_compare( &rrr->date, end ) > 0 )
+                        continue; /* though we can probably return, too. */
+
+                printGDate( tmpBuf, &rrr->date );
+                rowText[0] = g_strdup( tmpBuf );
+
+                for ( i=0; i<ldd->ld.revNumPmts; i++ )
+                {
+                        int numPrinted;
+                        if ( gnc_numeric_check( rrr->numCells[i] )
+                             == GNC_ERROR_ARG )
+                        {
+                                rowText[i+1] = NO_AMT_CELL_TEXT;
+                                continue;
+                        }
+
+                        numPrinted = xaccSPrintAmount( tmpBuf, rrr->numCells[i], pai );
+                        g_assert( numPrinted < 50 );
+                        rowText[i+1] = g_strdup( tmpBuf );
+                }
+
+                gtk_clist_append( ldd->revCL, rowText );
+
+                for ( i=ldd->ld.revNumPmts-1; i>=0; i-- )
+                {
+                        if ( strcmp( rowText[i], NO_AMT_CELL_TEXT ) == 0 )
+                                continue;
+                        g_free( rowText[i] );
+                }
+        }
+        gtk_clist_thaw( ldd->revCL );
+}
+
+static
+void
+ld_rev_clist_allocate_col_widths( GtkWidget *w,
+                                  GtkAllocation *alloc,
+                                  gpointer user_data )
+{
+        LoanDruidData *ldd = (LoanDruidData*)user_data;
+        gint i, evenWidth, width;
+
+        width = alloc->width;
+        /* The '-10' is to account for misc widget noise not accounted for by
+         * the simple division. */
+        evenWidth = (gint)(width / (ldd->ld.revNumPmts+1) ) - 10;
+        gtk_clist_freeze( ldd->revCL );
+        for ( i=0; i<ldd->ld.revNumPmts+1; i++ )
+        {
+                gtk_clist_set_column_width( ldd->revCL,
+                                            i, evenWidth );
+        }
+        gtk_clist_thaw( ldd->revCL );
 }

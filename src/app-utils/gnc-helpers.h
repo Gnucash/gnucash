@@ -36,4 +36,15 @@ const char * gnc_get_account_separator_string (void);
 
 SCM gnc_parse_amount_helper (const char * string, gboolean monetary);
 
+/**
+ * Compares two GDate*'s for equality; useful for using GDate*'s as
+ * GHashTable keys.
+ **/
+gint g_date_equals( gconstpointer gda, gconstpointer gdb );
+/**
+ * Provides a "hash" of a GDate* value; useful for using GDate*'s as
+ * GHashTable keys.
+ **/
+guint g_date_hash( gconstpointer gd );
+
 #endif
