@@ -24,6 +24,8 @@
 #include <glib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
+#include <zlib.h>
 
 #include "gnc-book-p.h"
 #include "gnc-engine.h"
@@ -1165,15 +1167,69 @@ gnc_book_write_accounts_to_xml_filehandle_v2(Backend *be, GNCBook *book, FILE *o
     return TRUE;
 }
 
+#define BUFLEN 4096
+
+static FILE *
+try_gz_open (const char *filename, const char *perms, gboolean use_gzip)
+{
+  char buffer[BUFLEN];
+  unsigned bytes;
+  int filedes[2];
+  gzFile *out;
+  pid_t pid;
+
+  if (strstr(filename, ".gz.") != NULL) /* its got a temp extension */
+      use_gzip = TRUE;
+
+  if (!use_gzip)
+    return fopen(filename, perms);
+
+//gboolean
+//gnc_lookup_boolean_option( const char *section,
+//                                    const char *name,
+//                                    gboolean default_value)
+//
+
+  if (pipe(filedes) < 0) {
+    PWARN("Pipe call failed. Opening uncompressed file.");
+    return fopen(filename, perms);
+  }
+
+  pid = fork();
+  switch (pid) {
+   case -1:
+    PWARN("Fork call failed. Opening uncompressed file.");
+    return fopen(filename, perms);
+
+   case 0: /* child */
+    close(filedes[1]);
+    out = gzopen(filename, perms);
+    if (out == NULL) {
+      PWARN("child gzopen failed\n");
+      exit(0);
+    }
+    while ((bytes = read(filedes[0], buffer, BUFLEN)) > 0)
+      gzwrite(out, buffer, bytes);
+    gzclose(out);
+    _exit(0);
+
+   default: /* parent */
+    sleep(2);
+    close(filedes[0]);
+    return fdopen(filedes[1], "w");
+  }
+}
+
 gboolean
 gnc_book_write_to_xml_file_v2(
     GNCBook *book,
-    const char *filename)
+    const char *filename,
+    gboolean compress)
 {
     FILE *out;
 
-    out = fopen(filename, "w");
-    if (out == NULL)
+    out = try_gz_open(filename, "w", compress);
+     if (out == NULL)
     {
         return FALSE;
     }

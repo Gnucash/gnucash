@@ -60,6 +60,7 @@ typedef enum
 } GNCBookFileType;
 
 static int file_retention_days = 0;
+static gboolean file_compression = FALSE;
 
 static void gnc_file_be_load_from_file(Backend *, GNCBook *);
 
@@ -78,10 +79,10 @@ gnc_file_be_set_retention_days (int days)
     file_retention_days = days;
 }
 
-int
-gnc_file_be_get_retention_days (void)
+void
+gnc_file_be_set_compression (gboolean compress)
 {
-    return file_retention_days;
+    file_compression = compress;
 }
 
 static void
@@ -657,7 +658,7 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
         }
     }
   
-    if(gnc_book_write_to_xml_file_v2(book, tmp_name)) 
+    if(gnc_book_write_to_xml_file_v2(book, tmp_name, file_compression)) 
     {
         /* Record the file's permissions before unlinking it */
         rc = stat(datafile, &statbuf);

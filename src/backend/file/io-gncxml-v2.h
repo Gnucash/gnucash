@@ -126,7 +126,7 @@ gboolean gnc_session_load_from_xml_file_v2(GNCSession *session);
 
 /* write all book info to a file */
 gboolean gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *fh);
-gboolean gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename);
+gboolean gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename, gboolean compress);
 
 /* write just the commodities and accounts to a file */
 gboolean gnc_book_write_accounts_to_xml_filehandle_v2(Backend *be, GNCBook *book, FILE *fh);

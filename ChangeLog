@@ -1,3 +1,15 @@
+2003-01-04  David Hampton  <hampton@employees.org>
+
+	* src/backend/file/io-gncxml-v2.c: Pipe the output through zlib if
+	the user requested compression. This request is either setting a
+	option in the preferences (for all files), or naming the
+	particular data file with a .gz extension. #88509
+
+	* src/backend/file/gnc-backend-file.c:
+	* src/gnome/top-level.c:
+	* src/app-utils/prefs.scm: Create a 'file compression' option and
+	pass the data into the backend.
+
 2003-01-04  Derek Atkkins  <derek@ihtfp.com>
 
 	* add a set of business accounts to the setup druid

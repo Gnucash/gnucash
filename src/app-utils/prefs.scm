@@ -512,6 +512,12 @@ without one.")
   "j" (N_ "Don't popup the new account list dialog when you choose \"New File\" from the \"File\" menu") #f))
 
 (gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "General") (N_ "Use file compression")
+  "k" (N_ "Compress the data file.")
+  #f))
+
+(gnc:register-configuration-option
  (gnc:make-number-range-option
   (N_ "General") (N_ "Days to retain log files")
   "k" (N_ "Delete old log/backup files after this many days (0 = never).")

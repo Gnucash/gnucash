@@ -86,6 +86,8 @@ static void gnc_configure_auto_decimal_places_cb(gpointer);
 static void gnc_configure_auto_decimal_places(void);
 static void gnc_configure_file_be_retention_days_cb(gpointer);
 static void gnc_configure_file_be_retention_days(void);
+static void gnc_configure_file_be_compression_cb(gpointer);
+static void gnc_configure_file_be_compression(void);
 static void gnc_configure_register_font_cb(gpointer);
 static void gnc_configure_register_font(void);
 static void gnc_configure_register_hint_font_cb(gpointer);
@@ -110,6 +112,7 @@ static SCM negative_color_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_places_callback_id = SCM_UNDEFINED;
 static SCM log_retention_days_callback_id = SCM_UNDEFINED;
+static SCM compression_callback_id = SCM_UNDEFINED;
 static SCM register_font_callback_id = SCM_UNDEFINED;
 static SCM register_hint_font_callback_id = SCM_UNDEFINED;
 
@@ -375,6 +378,12 @@ gnc_gui_init (SCM command_line)
       gnc_register_option_change_callback(gnc_configure_file_be_retention_days_cb,
                                           NULL, "General",
                                           "Days to retain log files");
+
+    gnc_configure_file_be_compression();
+    compression_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_file_be_compression_cb,
+                                          NULL, "General",
+                                          "Use file compression");
 
     gnc_configure_register_font();
     register_font_callback_id =
@@ -850,7 +859,7 @@ gnc_configure_auto_decimal_places (void)
 
 /* gnc_configure_file_be_retention_days_cb
  *     Callback called when options change -
- *     sets auto decimal places option.
+ *     sets days retained for the file backend.
  * 
  *  Args: Nothing
  *  Returns: Nothing
@@ -862,7 +871,7 @@ gnc_configure_file_be_retention_days_cb (gpointer not_used)
 }
 
 /* gnc_configure_file_be_retention_days
- *     Pass the global value for the auto decimal places range to the engine.
+ *     Pass the global value for the number of days to retain files to the file backend.
  * 
  * Args: Nothing
  * Returns: Nothing
@@ -873,9 +882,33 @@ gnc_configure_file_be_retention_days (void)
   gnc_file_be_set_retention_days
     (gnc_lookup_number_option("General",
 			      "Days to retain log files", 0));
-
 }
 
+/* gnc_configure_file_be_retention_days_cb
+ *     Callback called when options change -
+ *     sets days retained for the file backend.
+ * 
+ *  Args: Nothing
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_file_be_compression_cb (gpointer not_used)
+{
+  gnc_configure_file_be_compression ();
+}
+
+/* gnc_configure_file_be_retention_days
+ *     Pass the global value for the number of days to retain files to the file backend.
+ * 
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_file_be_compression (void)
+{
+  gnc_file_be_set_compression
+    (gnc_lookup_boolean_option("General", "Use file compression", FALSE));
+}
 
 /* gnc_configure_register_font_cb
  *     Callback called when options change -
