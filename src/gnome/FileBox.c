@@ -99,10 +99,15 @@ fileBox(const char * title, const char * filter)
 
   gtk_widget_show(GTK_WIDGET(fileBox));
 
+  /* Make the file dialog modal */
+  gtk_grab_add(GTK_WIDGET(fileBox));
+
   while ( !done )
   {
     gtk_main_iteration(); 
   }
+
+  gtk_grab_remove(GTK_WIDGET(fileBox));
 
   LEAVE("fileBox");
 

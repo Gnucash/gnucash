@@ -70,12 +70,14 @@ static void
 gnc_ui_accWindow_list_cb   ( GtkWidget *listItem, gpointer data )
 {
   GtkWidget *toplevel;
+  GtkWidget *entrySecurity;
   AccWindow *accData;
   gint       accountTypeByNumber = 0;
       
   /* Find accData so we can set the account type */
-  toplevel = gtk_widget_get_toplevel(GTK_WIDGET(listItem));
-  accData  = gtk_object_get_data(GTK_OBJECT(toplevel), "accData");
+  toplevel      = gtk_widget_get_toplevel(GTK_WIDGET(listItem));
+  entrySecurity = gtk_object_get_data(GTK_OBJECT(toplevel), "entrySecurity");
+  accData       = gtk_object_get_data(GTK_OBJECT(toplevel), "accData");
     
   while ( strcmp(xaccAccountGetTypeStr (accountTypeByNumber), 
                  gtk_object_get_data(GTK_OBJECT(listItem), 
@@ -85,9 +87,17 @@ gnc_ui_accWindow_list_cb   ( GtkWidget *listItem, gpointer data )
   }
   
   accData->type = accountTypeByNumber;
-    
-  g_print("\nSetting account type: %s\n", xaccAccountGetTypeStr(accData->type));
-    
+  
+  /* Set the Security field depending on what account type is selected */
+  switch (accountTypeByNumber)
+  {
+    case STOCK    : 
+    case MUTUAL   :
+    case CURRENCY : gtk_widget_set_sensitive(GTK_WIDGET(entrySecurity), TRUE );
+                    break;
+    default       : gtk_widget_set_sensitive(GTK_WIDGET(entrySecurity), FALSE);
+
+  } 
 }
 
 /********************************************************************\
@@ -127,14 +137,48 @@ gnc_ui_accWindow_list_fill ( GtkWidget *listOfTypes )
 static void
 gnc_ui_accWindow_tree_select ( GtkWidget *widget, gpointer data )
 {
-  GtkWidget *toplevel;
-  AccWindow *accData;
+  GtkWidget   *toplevel;
+  GtkWidget   *listOfTypes;
+  GList       *children;
+  GtkListItem *listItem;
+  gchar       *accountTypeByName;
+  AccWindow   *accData;
   
   /* Find accData so we can set the account type */
-  toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  accData  = gtk_object_get_data(GTK_OBJECT(toplevel), "accData");  
+  toplevel    = gtk_widget_get_toplevel(GTK_WIDGET(widget));
+  listOfTypes = gtk_object_get_data(GTK_OBJECT(toplevel), "listOfTypes");
+  accData     = gtk_object_get_data(GTK_OBJECT(toplevel), "accData");  
 
   accData->parentAccount = gtk_object_get_user_data(GTK_OBJECT(widget));
+  
+  children = GTK_LIST(listOfTypes)->children;
+  
+  /* If parentAccount is Income/Expense then we need to make sure they */
+  /* can't select any other type except Income/Expense.                */
+  while(children)
+  {
+    listItem          = children->data;
+    accountTypeByName = gtk_object_get_data(GTK_OBJECT(listItem), "listItemData");
+    
+    if( (strcmp(xaccAccountGetTypeStr(
+                xaccAccountGetType((Account *)accData->parentAccount)),
+                accountTypeByName) != 0 ) && 
+        (strcmp(xaccAccountGetTypeStr(
+                xaccAccountGetType((Account *)accData->parentAccount)),
+                xaccAccountGetTypeStr(INCOME)) == 0 ) )
+    {
+      gtk_widget_set_sensitive(GTK_WIDGET(listItem), FALSE); 
+      gtk_list_item_select(GTK_LIST_ITEM(listItem)); 
+    }
+    else
+    {
+      gtk_widget_set_sensitive(GTK_WIDGET(listItem), TRUE);
+      gtk_list_item_deselect(GTK_LIST_ITEM(listItem));
+    }
+    
+    children = children->next;
+        
+  }        
     
 }
 
@@ -148,64 +192,60 @@ gnc_ui_accWindow_tree_select ( GtkWidget *widget, gpointer data )
  * Returns: nothing                                                 *
 \********************************************************************/
 static void
-gnc_ui_accWindow_tree_fill (GtkTree *item, AccountGroup *accts, int subtree) 
+gnc_ui_accWindow_tree_fill (GtkTree *tree, AccountGroup *accts) 
 {
-  int accounts_in_group = xaccGroupGetNumAccounts(accts);
-  int current_account;
-  GtkTree* item_subtree;
-  GtkTreeItem* tree_item;
-  int no_root_item;
+  GtkWidget *treeItem;
+  GtkWidget *subtree;
+  gint       totalAccounts = xaccGroupGetNumAccounts(accts);
+  gint       currentAccount;
 
-  if ( subtree == -1 ) {
-    item_subtree = item;
-    no_root_item = 1;
-  } else {
-    item_subtree = GTK_TREE(gtk_tree_new());
-    no_root_item = 0;
-  }
-  
-  for( current_account=0; 
-       current_account < accounts_in_group; 
-       current_account++ )
+  /* Add each account to the tree */  
+  for ( currentAccount = 0;
+        currentAccount < totalAccounts;
+        currentAccount++ )
   {
-    Account *acc = xaccGroupGetAccount(accts, current_account);
-    AccountGroup *acc_children;
-    char buffer[255]; 
-    gchar *rowstrs[3];
+    Account      *acc = xaccGroupGetAccount(accts, currentAccount);
+    AccountGroup *hasChildren;
+        
+    /* Create a new tree item for this account */
+    treeItem = gtk_tree_item_new_with_label(xaccAccountGetName(acc));
     
-    rowstrs[0] = xaccAccountGetName (acc);
-    rowstrs[1] = xaccAccountGetDescription (acc);
-    rowstrs[2] = xaccAccountGetNotes (acc);
-
-    sprintf (buffer, "%s ($%.2f)", rowstrs[0], xaccAccountGetBalance(acc));
-
-    tree_item = GTK_TREE_ITEM(gtk_tree_item_new_with_label( buffer ));
-    /* Set the tree item to point to the actual account so we can reach it
-       trivially when the user selects the row.  (Should we use
-       gtk_*_data_full and have a destroy notify?) */
-    gtk_object_set_user_data(GTK_OBJECT(tree_item), acc); 
-
-    gtk_tree_append(GTK_TREE(item_subtree), GTK_WIDGET(tree_item)); 
-
-    gtk_signal_connect (GTK_OBJECT (tree_item), 
+    /* Set the user_data for the tree item to the account it */
+    /* represents.                                           */
+    gtk_object_set_user_data(GTK_OBJECT(treeItem), acc);
+    
+    /* Now append this tree item to the tree */
+    gtk_tree_append(GTK_TREE(tree), GTK_WIDGET(treeItem));
+    
+    /* Connect the signal to the button press event */
+    gtk_signal_connect (GTK_OBJECT (treeItem), 
                         "button_press_event",
-                        (GtkSignalFunc) gnc_ui_accWindow_tree_select, 
-                        GTK_WIDGET(tree_item));
-
-    acc_children = xaccAccountGetChildren(acc);
-    if ( acc_children )
+                        GTK_SIGNAL_FUNC(gnc_ui_accWindow_tree_select), 
+                        GTK_WIDGET(treeItem));
+    
+    /* Show the new tree item */
+    gtk_widget_show(GTK_WIDGET(treeItem));
+    
+    /* Check to see if this account has any children. If it
+     * does then we need to build a subtree and fill it 
+     */
+    hasChildren = xaccAccountGetChildren(acc); 
+     
+    if(hasChildren)
     {
-      gnc_ui_accWindow_tree_fill ( GTK_TREE(tree_item), acc_children, 1 );
+      /* Create the subtree */
+      subtree = gtk_tree_new();
+    
+      /* Append this new subtree to the current tree item */
+      gtk_tree_item_set_subtree(GTK_TREE_ITEM(treeItem), GTK_WIDGET(subtree));
+      
+      /* Call gnc_ui_accWindow_tree_fill to fill this new subtree */
+      gnc_ui_accWindow_tree_fill(GTK_TREE(subtree), hasChildren );  
+            
     }
-  
-    gtk_widget_show(GTK_WIDGET(tree_item));
 
   }
-  
-  if(!no_root_item) {
-    gtk_tree_item_set_subtree(GTK_TREE_ITEM(item), GTK_WIDGET(item_subtree));
-  }
-  
+   
 }
 
 /********************************************************************\
@@ -309,8 +349,8 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 AccWindow *
-accWindow (AccountGroup *grp) {
-
+accWindow (AccountGroup *grp) 
+{
   AccWindow *accData;
   GtkWidget *dialog_vbox3;
   GtkWidget *hbox2;
@@ -334,8 +374,9 @@ accWindow (AccountGroup *grp) {
   GtkWidget *listOfTypes;
   GtkWidget *frameParentAccount;
   GtkWidget *frameParent;
+  GtkWidget *scrolledWindow;
   GtkWidget *tree1;
-  gchar     *title = SETUP_ACCT_STR;
+  gchar     *title      = SETUP_ACCT_STR;
 
   accData = (AccWindow *)g_malloc(sizeof(AccWindow));
 
@@ -455,6 +496,9 @@ accWindow (AccountGroup *grp) {
   gtk_widget_show (entrySecurity);
   gtk_box_pack_start (GTK_BOX (hbox6), entrySecurity, FALSE, FALSE, 5);
 
+  /* Set the security entry box to insensitive by default */
+  gtk_widget_set_sensitive(GTK_WIDGET(entrySecurity), FALSE );
+
   hbox7 = gtk_hbox_new (TRUE, 5);
   gtk_object_set_data (GTK_OBJECT (accData->dialog), "hbox7", hbox7);
   gtk_widget_show (hbox7);
@@ -493,15 +537,53 @@ accWindow (AccountGroup *grp) {
   tree1 = gtk_tree_new ();
   gtk_object_set_data (GTK_OBJECT (accData->dialog), "tree1", tree1);
   gtk_widget_show (tree1);
-  gtk_container_add (GTK_CONTAINER (frameParent), tree1);  
+
+  scrolledWindow = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledWindow),
+				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_widget_show (scrolledWindow);
+
+  gtk_container_add( GTK_CONTAINER( frameParent ), scrolledWindow );
+  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolledWindow), 
+                                        GTK_WIDGET(tree1));
 
   gtk_widget_set_usize ( GTK_WIDGET(accData->dialog), 404, 376 );
 
   /*** FILL WIDGETS *************************************************/
   gnc_ui_accWindow_list_fill ( GTK_WIDGET(listOfTypes) );
-  gnc_ui_accWindow_tree_fill ( GTK_TREE(tree1), 
-                               xaccSessionGetGroup(current_session),
-                               -1); 
+
+  /* Add a toplevel tree item so we can add new top level accounts  */
+  {
+    GtkWidget *subtree;
+    GtkWidget *treeItem;
+    
+    treeItem = gtk_tree_item_new_with_label("New Toplevel Account");
+
+    /* Set the user_data for the tree item to the account it */
+    /* represents.                                           */
+    gtk_object_set_user_data(GTK_OBJECT(treeItem), NULL);
+    
+    /* Now append this tree item to the tree */
+    gtk_tree_append(GTK_TREE(tree1), GTK_WIDGET(treeItem));
+    
+    /* Connect the signal to the button press event */
+    gtk_signal_connect (GTK_OBJECT (treeItem), 
+                        "button_press_event",
+                        GTK_SIGNAL_FUNC(gnc_ui_accWindow_tree_select), 
+                        GTK_WIDGET(treeItem));
+    
+    /* Show the new tree item */
+    gtk_widget_show(GTK_WIDGET(treeItem));
+
+    /* Create the subtree */
+    subtree = gtk_tree_new();
+    
+    /* Append this new subtree to the current tree item */
+    gtk_tree_item_set_subtree(GTK_TREE_ITEM(treeItem), GTK_WIDGET(subtree));
+    
+    gnc_ui_accWindow_tree_fill(GTK_TREE(subtree),
+                               xaccSessionGetGroup(current_session)); 
+  }
 
   /*** Callbacks ****************************************************/
    

@@ -21,6 +21,7 @@
 
 #include "MenuCommands.h"
 #include "FileDialog.h"
+#include "MainWindow.h"
 
 /* hack alert --  the right way to imoplement the missing function
  * below is to move the file src/motif/FileDialog.c to some
@@ -33,6 +34,7 @@ void
 file_cmd_open (GtkWidget *widget, gpointer data)
 {
   gncFileOpen();
+  refreshMainWindow();
 }
 
 void

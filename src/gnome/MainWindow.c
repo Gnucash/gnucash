@@ -35,22 +35,130 @@
 #include "MainWindowP.h"
 
 /** STRUCTURES ******************************************************/
-struct _main_window {
-  GtkTree *maintree;
-  GtkTree *root_item;
+
+/** PROTOTYPES ******************************************************/
+static void gnc_ui_options_cb( GtkWidget *, gpointer );
+static void gnc_ui_add_account( GtkWidget *, gpointer );
+static void gnc_ui_delete_account_cb( GtkWidget *, gpointer );
+static void gnc_ui_about_cb( GtkWidget *, gpointer );
+static void gnc_ui_help_cb( GtkWidget *, gpointer );
+static void gnc_ui_mainWindow_toolbar_open( GtkWidget *, gpointer );
+
+/** GLOBALS *********************************************************/
+char	    *HELP_ROOT = "";
+
+/** Menus ***********************************************************/
+static GnomeUIInfo filemenu[] = {
+       {GNOME_APP_UI_ITEM, 
+       N_("New"), N_("Create New File."),
+       NULL, NULL, NULL, 
+       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_NEW,
+       0, 0, NULL},
+       {GNOME_APP_UI_ITEM,
+       N_("Open"), N_("Open File."),
+       file_cmd_open, NULL, NULL,
+       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
+       0,0, NULL},
+       {GNOME_APP_UI_ITEM,
+       N_("Save"), N_("Save File."),
+       file_cmd_save, NULL, NULL,
+       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_SAVE,
+       0, 0, NULL},
+       {GNOME_APP_UI_ITEM,
+       N_("Import"), N_("Import QIF File."),
+       file_cmd_import, NULL, NULL,
+       GNOME_APP_PIXMAP_NONE, NULL,
+       0, 0, NULL},
+       GNOMEUIINFO_SEPARATOR,
+       {GNOME_APP_UI_ITEM,
+       N_("Quit"), N_("Quit Gnucash."),
+       gnc_shutdown, NULL, NULL,
+       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_QUIT,
+       0, 0, NULL},       
+       GNOMEUIINFO_END             
 };
 
-typedef struct _main_window main_window;
+static GnomeUIInfo optionsmenu[] = {
+	{GNOME_APP_UI_ITEM,
+	 N_("Preferences"), N_("Preferences"),
+	 gnc_ui_options_cb, NULL, NULL,
+	 GNOME_APP_PIXMAP_NONE, NULL,
+	 0, 0, NULL},
+	 GNOMEUIINFO_END
+};
+  
+static GnomeUIInfo accountsmenu[] = {
+	{GNOME_APP_UI_ITEM,
+	 N_("Open Account"), N_("Open Account"),
+	 gnc_ui_mainWindow_toolbar_open, NULL, NULL,
+	 GNOME_APP_PIXMAP_NONE, NULL,
+	 0, 0, NULL},
+	{GNOME_APP_UI_ITEM,
+	 N_("New Account"), N_("New Account"),
+	 gnc_ui_add_account, NULL, NULL,
+	 GNOME_APP_PIXMAP_NONE, NULL,
+	 0, 0, NULL},
+	{GNOME_APP_UI_ITEM,
+	 N_("Delete Account"), N_("Delete Account"),
+	 gnc_ui_delete_account_cb, NULL, NULL,
+	 GNOME_APP_PIXMAP_NONE, NULL,
+	 0, 0, NULL},
+	{GNOME_APP_UI_ITEM,
+	 N_("Edit Account"), N_("Edit Account"),
+	 NULL, NULL, NULL,
+	 GNOME_APP_PIXMAP_NONE, NULL,
+	 0, 0, NULL},
+	 GNOMEUIINFO_END
+};  
+  
+static GnomeUIInfo helpmenu[] = {
+    {GNOME_APP_UI_ITEM, 
+     N_("About"), N_("About Gnucash."),
+     gnc_ui_about_cb, NULL, NULL, 
+     GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_ABOUT, 0, 0, NULL},
+     GNOMEUIINFO_SEPARATOR,
+    {GNOME_APP_UI_ITEM,
+     N_("Help"), N_("Gnucash Help."),
+     gnc_ui_help_cb, NULL, NULL,
+     GNOME_APP_PIXMAP_NONE, NULL,
+     0, 0, NULL},
+     GNOMEUIINFO_END
+};
 
-/** GLOBALS **********************************************************/
-main_window    *mwindow;
-char		*HELP_ROOT = "";
+static GnomeUIInfo mainmenu[] = {
+    GNOMEUIINFO_SUBTREE(N_("File"), filemenu),
+    GNOMEUIINFO_SUBTREE(N_("Accounts"), accountsmenu),
+    GNOMEUIINFO_SUBTREE(N_("Options"), optionsmenu),
+    GNOMEUIINFO_SUBTREE(N_("Help"), helpmenu),
+    GNOMEUIINFO_END
+};
 
-gchar *clist_titles[] =
+/** TOOLBAR ************************************************************/
+GnomeUIInfo toolbar[] = 
 {
-  ACC_NAME_STR,
-  ACC_TYPE_STR,
-  BALN_STR 
+  GNOMEUIINFO_ITEM_DATA(N_("Open"), 
+                        N_("Open selected account."),
+                        gnc_ui_mainWindow_toolbar_open, 
+                        NULL,
+                        GNOME_APP_PIXMAP_NONE),
+  GNOMEUIINFO_ITEM_DATA(N_("New"),
+                        N_("Create a new account."),
+                        gnc_ui_add_account, 
+                        NULL, 
+                        GNOME_APP_PIXMAP_NONE),
+  GNOMEUIINFO_ITEM_DATA(N_("Edit"), 
+                        N_("Edit account information."), 
+                        NULL, 
+                        NULL, 
+                        GNOME_APP_PIXMAP_NONE),
+  GNOMEUIINFO_ITEM_DATA(N_("Delete"), N_("Delete selected account."), 
+                       gnc_ui_delete_account_cb, 
+                       NULL, 
+                       GNOME_APP_PIXMAP_NONE),
+  GNOMEUIINFO_ITEM(N_("Exit"), N_("Exit GnuCash."),
+                   gnc_shutdown, 
+                   GNOME_APP_PIXMAP_NONE),
+  GNOMEUIINFO_END
 };
 
 static void
@@ -92,64 +200,62 @@ refreshMainWindow()
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_ui_acct_tree_fill(GtkTree *item, AccountGroup *accts, int subtree) 
+gnc_ui_acct_tree_fill(GtkTree *tree, AccountGroup *accts) 
 {
-  int accounts_in_group = xaccGroupGetNumAccounts(accts);
-  int current_account;
-  GtkTree* item_subtree;
-  GtkTreeItem* tree_item;
-  int no_root_item;
+  GtkWidget *treeItem;
+  GtkWidget *subtree;
+  gint       totalAccounts = xaccGroupGetNumAccounts(accts);
+  gint       currentAccount;
 
-  if ( subtree == -1 ) {
-    item_subtree = item;
-    no_root_item = 1;
-  } else {
-    item_subtree = GTK_TREE(gtk_tree_new());
-    no_root_item = 0;
-  }
-  
-  for( current_account=0; 
-       current_account < accounts_in_group; 
-       current_account++ )
+  /* Add each account to the tree */  
+  for ( currentAccount = 0;
+        currentAccount < totalAccounts;
+        currentAccount++ )
   {
-    Account *acc = xaccGroupGetAccount(accts, current_account);
-    AccountGroup *acc_children;
-    char buffer[255]; 
-    gchar *rowstrs[3];
+    Account      *acc = xaccGroupGetAccount(accts, currentAccount);
+    AccountGroup *hasChildren;
+    GtkWidget    *popup;
+        
+    /* Create a new tree item for this account */
+    treeItem = gtk_tree_item_new_with_label(xaccAccountGetName(acc));
     
-    rowstrs[0] = xaccAccountGetName (acc);
-    rowstrs[1] = xaccAccountGetDescription (acc);
-    rowstrs[2] = xaccAccountGetNotes (acc);
+    /* Set the user_data for the tree item to the account it */
+    /* represents.                                           */
+    gtk_object_set_user_data(GTK_OBJECT(treeItem), acc);
+    
+    /* Now append this tree item to the tree */
+    gtk_tree_append(GTK_TREE(tree), GTK_WIDGET(treeItem));
 
-    sprintf (buffer, "%s ($%.2f)", rowstrs[0], xaccAccountGetBalance(acc));
-
-    tree_item = GTK_TREE_ITEM(gtk_tree_item_new_with_label( buffer ));
-    /* Set the tree item to point to the actual account so we can reach it
-       trivially when the user selects the row.  (Should we use
-       gtk_*_data_full and have a destroy notify?) */
-    gtk_object_set_user_data(GTK_OBJECT(tree_item), acc); 
-
-    gtk_tree_append(GTK_TREE(item_subtree), GTK_WIDGET(tree_item)); 
-
-    gtk_signal_connect (GTK_OBJECT (tree_item), 
+    popup = gnome_popup_menu_new(accountsmenu);
+    gnome_popup_menu_attach (GTK_WIDGET(popup), GTK_WIDGET(treeItem), NULL);
+    
+    /* Connect the signal to the button press event */
+    gtk_signal_connect (GTK_OBJECT (treeItem), 
                         "button_press_event",
-                        (GtkSignalFunc) acct_tree_select, 
-                        GTK_WIDGET(tree_item));
-
-    acc_children = xaccAccountGetChildren(acc);
-    if ( acc_children )
+                        GTK_SIGNAL_FUNC(acct_tree_select), 
+                        GTK_WIDGET(treeItem));
+    
+    /* Show the new tree item */
+    gtk_widget_show(GTK_WIDGET(treeItem));
+    
+    /* Check to see if this account has any children. If it
+     * does then we need to build a subtree and fill it 
+     */
+    hasChildren = xaccAccountGetChildren(acc); 
+     
+    if(hasChildren)
     {
-      gnc_ui_acct_tree_fill ( GTK_TREE(tree_item), acc_children, 1 );
+      /* Create the subtree */
+      subtree = gtk_tree_new();
+    
+      /* Append this new subtree to the current tree item */
+      gtk_tree_item_set_subtree(GTK_TREE_ITEM(treeItem), GTK_WIDGET(subtree));
+      
+      /* Call gnc_ui_accWindow_tree_fill to fill this new subtree */
+      gnc_ui_acct_tree_fill(GTK_TREE(subtree), hasChildren );  
+            
     }
-  
-    gtk_widget_show(GTK_WIDGET(tree_item));
-
   }
-  
-  if(!no_root_item) {
-    gtk_tree_item_set_subtree(GTK_TREE_ITEM(item), GTK_WIDGET(item_subtree));
-  }
-  
 }
 
 /********************************************************************\
@@ -160,23 +266,20 @@ gnc_ui_acct_tree_fill(GtkTree *item, AccountGroup *accts, int subtree)
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_ui_refresh_tree() {
+gnc_ui_refresh_tree() 
+{
+  GtkTree   *accountTree;
+  GList     *list;
 
-  GList   *list;
+  accountTree = gtk_object_get_data(GTK_OBJECT(app), "accountTree");
 
   /* Make sure we are at the top of the tree */
-   
-  list = GTK_TREE( GTK_TREE_ROOT_TREE ( mwindow->maintree ) )->children;
+  list = GTK_TREE(GTK_TREE_ROOT_TREE(accountTree))->children;
 
-  gtk_tree_remove_items ( GTK_TREE_ROOT_TREE( mwindow->maintree ), list);
+  gtk_tree_remove_items(GTK_TREE_ROOT_TREE(accountTree), list);
   
   /* Refill Tree with fresh data */
-
-  gnc_ui_acct_tree_fill(mwindow->root_item,
-                        xaccSessionGetGroup(current_session),
-                       -1); 
- 
-
+  gnc_ui_acct_tree_fill(accountTree, xaccSessionGetGroup(current_session));
 }
 
 /* Standard Gnome About Dialog, need I say more? */
@@ -196,7 +299,7 @@ gnc_ui_about_cb (GtkWidget *widget, gpointer data)
           };
 
   about = gnome_about_new ( "GnuCash", VERSION,
-                            "(C) 1998 The GnuCash Project",
+                            "(C) 1998,1999 The GnuCash Project",
                             authors,
                             "GnuCash: The GNU way to manage your money!",
                             NULL);
@@ -220,25 +323,19 @@ gnc_ui_help_cb ( GtkWidget *widget, gpointer data )
 
 }
 
-#if 0
-
-/* Some dialog stubs to be worked on */
-/* We might want to move these to there own file =\ */
-
-static void
-gnc_ui_file_new_cb ( GtkWidget *widget, gpointer data )
-{
-
-}
-
-#endif
-
 static void
 gnc_ui_add_account ( GtkWidget *widget, gpointer data )
 {
-  GtkWidget *tree = data;
+  GtkWidget *toplevel;
+  GtkWidget *tree;
   GList *selection;
   
+  toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
+  tree     = gtk_object_get_data(GTK_OBJECT(app), "accountTree");
+
+  /* FIXME: Right now this really is not doing anything        */
+  /*        The new account dialog should use this information */  
+  /*        to set the parent account...                       */
   selection = GTK_TREE_SELECTION ( tree );
   if ( selection )
   {
@@ -272,8 +369,12 @@ gnc_ui_delete_account_finish_cb ( GtkWidget *widget, gpointer data )
 static void
 gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
 {
-  GtkWidget *tree = data;
+  GtkWidget *toplevel;
+  GtkWidget *tree;
   GList *selection;
+  
+  toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
+  tree     = gtk_object_get_data(GTK_OBJECT(app), "accountTree");
   
   selection = GTK_TREE_SELECTION ( tree );
   if ( selection )
@@ -305,8 +406,12 @@ gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
 static void
 gnc_ui_mainWindow_toolbar_open ( GtkWidget *widget, gpointer data )
 {
-  GtkWidget *tree = data;
+  GtkWidget *toplevel;
+  GtkWidget *tree;
   GList *selection;
+  
+  toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
+  tree     = gtk_object_get_data(GTK_OBJECT(app), "accountTree");
   
   selection = GTK_TREE_SELECTION ( tree );
   if ( selection )
@@ -337,157 +442,38 @@ gnc_ui_options_cb ( GtkWidget *widget, gpointer data ) {
   gnc_show_options_dialog();
 }
 
-/* Menus */
-
-static GnomeUIInfo filemenu[] = {
-       {GNOME_APP_UI_ITEM, 
-       N_("New"), N_("Create New File."),
-       NULL, NULL, NULL, 
-       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_NEW,
-       0, 0, NULL},
-       {GNOME_APP_UI_ITEM,
-       N_("Open"), N_("Open File."),
-       file_cmd_open, NULL, NULL,
-       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
-       0,0, NULL},
-       {GNOME_APP_UI_ITEM,
-       N_("Save"), N_("Save File."),
-       file_cmd_save, NULL, NULL,
-       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_SAVE,
-       0, 0, NULL},
-       {GNOME_APP_UI_ITEM,
-       N_("Import"), N_("Import QIF File."),
-       file_cmd_import, NULL, NULL,
-       GNOME_APP_PIXMAP_NONE, NULL,
-       0, 0, NULL},
-       GNOMEUIINFO_SEPARATOR,
-       {GNOME_APP_UI_ITEM,
-       N_("Quit"), N_("Quit Gnucash."),
-       gnc_shutdown, NULL, NULL,
-       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_QUIT,
-       0, 0, NULL},       
-       GNOMEUIINFO_END             
-};
-
-static GnomeUIInfo optionsmenu[] = {
-	{GNOME_APP_UI_ITEM,
-	 N_("Preferences"), N_("Preferences"),
-	 gnc_ui_options_cb, NULL, NULL,
-	 GNOME_APP_PIXMAP_NONE, NULL,
-	 0, 0, NULL},
-	 GNOMEUIINFO_END
-};
-  
-static GnomeUIInfo helpmenu[] = {
-    {GNOME_APP_UI_ITEM, 
-     N_("About"), N_("About Gnucash."),
-     gnc_ui_about_cb, NULL, NULL, 
-     GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_ABOUT, 0, 0, NULL},
-     GNOMEUIINFO_SEPARATOR,
-    {GNOME_APP_UI_ITEM,
-     N_("Help"), N_("Gnucash Help."),
-     gnc_ui_help_cb, NULL, NULL,
-     GNOME_APP_PIXMAP_NONE, NULL,
-     0, 0, NULL},
-     GNOMEUIINFO_END
-};
-
- /*GNOMEUIINFO_SUBTREE(N_("Options"), optionsmenu),*/
-
-static GnomeUIInfo mainmenu[] = {
-    GNOMEUIINFO_SUBTREE(N_("File"), filemenu),
-    GNOMEUIINFO_SUBTREE(N_("Options"), optionsmenu),
-    GNOMEUIINFO_SUBTREE(N_("Help"), helpmenu),
-    GNOMEUIINFO_END
-};
-
 void
 mainWindow() {
-
-  GtkWidget 	*scrolled_win;
-  GtkWidget 	*main_vbox;
-  GtkWidget 	*clist_vbox;
-  GtkWidget 	*clist;
-  GtkWidget 	*notebook;
+  GtkTree      *accountTree;
+  GtkWidget    *scrolled_win;
+  GtkWidget    *main_vbox;
   AccountGroup *accts = xaccSessionGetGroup(current_session);
 
-  mwindow = g_malloc ( sizeof ( main_window ) );
-  mwindow->maintree = GTK_TREE(gtk_tree_new());
+  accountTree = GTK_TREE(gtk_tree_new());
 
-  mwindow->root_item = mwindow->maintree;
+  gtk_object_set_data (GTK_OBJECT(app), "accountTree",  accountTree);
 
-  /* Create the toolbar, and hook up the buttons to the tree widget */
-  {
-    GnomeUIInfo toolbar[] = 
-    {
-      GNOMEUIINFO_ITEM_DATA(N_("Open"), 
-                       N_("Open selected account."),
-                       gnc_ui_mainWindow_toolbar_open, 
-                       mwindow->root_item,
-                       GNOME_APP_PIXMAP_NONE),
-      GNOMEUIINFO_ITEM_DATA(N_("New"),
-                       N_("Create a new account."),
-                       gnc_ui_add_account, mwindow->root_item, GNOME_APP_PIXMAP_NONE),
-      GNOMEUIINFO_ITEM_DATA(N_("Edit"), 
-                       N_("Edit account information."), 
-                       NULL, NULL, GNOME_APP_PIXMAP_NONE),
-      GNOMEUIINFO_ITEM_DATA(N_("Delete"), N_("Delete selected account."), 
-                       gnc_ui_delete_account_cb, mwindow->root_item, GNOME_APP_PIXMAP_NONE),
-      GNOMEUIINFO_ITEM(N_("Exit"), N_("Exit GnuCash."),
-                       gnc_shutdown, GNOME_APP_PIXMAP_NONE),
-      GNOMEUIINFO_END
-     };
-
-
-    gnome_app_create_toolbar(GNOME_APP(app), toolbar);
-    gnome_app_create_menus(GNOME_APP(app), mainmenu);
-
-  }
+  gnome_app_create_toolbar(GNOME_APP(app), toolbar);
+  gnome_app_create_menus  (GNOME_APP(app), mainmenu);
 
   /* Cram accounts into the tree widget */
-  gnc_ui_acct_tree_fill(GTK_TREE(mwindow->root_item), accts, -1);
+  gnc_ui_acct_tree_fill(GTK_TREE(accountTree), accts);
 
-  /* Create the notebook */
-  notebook = gtk_notebook_new ();
-  gtk_notebook_set_tab_pos ( GTK_NOTEBOOK( notebook ), GTK_POS_TOP );
-  gtk_widget_show ( notebook );
-  
   /* Create main vbox */
   main_vbox = gtk_vbox_new( FALSE, 1 );
   gtk_container_border_width( GTK_CONTAINER( main_vbox ), 2 );
   gnome_app_set_contents ( GNOME_APP ( app ), main_vbox );
 
-  /* Create main hbox which will hold the clist widget */
-  clist_vbox = gtk_vbox_new( FALSE, 1 );
-
-  /* Now create clist, and pack it in the hbox we just created */
-  clist = gtk_clist_new_with_titles ( 3, clist_titles );
-  gtk_box_pack_start ( GTK_BOX( clist_vbox ), clist, TRUE, TRUE, 1 );
-  
-  /* Fix the column widths */
-  gtk_clist_set_column_width ( GTK_CLIST(clist), 1, 85 );
-  gtk_clist_set_column_width ( GTK_CLIST(clist), 0, 85 );
-  
-  gtk_widget_show ( clist );
-      
   /* create scrolled window */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_widget_show (scrolled_win);
 
-  gtk_container_add( GTK_CONTAINER( main_vbox ), notebook );
-  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_win), GTK_WIDGET(mwindow->maintree));
+  gtk_container_add( GTK_CONTAINER( main_vbox ), scrolled_win );
+  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_win), GTK_WIDGET(accountTree));
 
-  /* Append some pages to notebook */
-  {
-    GtkWidget *label;
-    
-    label = gtk_label_new ( " Bank Accounts " );
-    gtk_notebook_append_page (GTK_NOTEBOOK(notebook), scrolled_win, label);
-  }
-  
-  gtk_widget_show(GTK_WIDGET(mwindow->maintree));
+  gtk_widget_show(GTK_WIDGET(accountTree));
 
   /* Setup some callbacks */
 	
@@ -505,12 +491,11 @@ mainWindow() {
 
 } 
 
-
-
 /* OLD_GNOME_CODE */
 
 void
-gnc_ui_shutdown (GtkWidget *widget, gpointer *data) {
+gnc_ui_shutdown (GtkWidget *widget, gpointer *data) 
+{
   gtk_main_quit ();
 }
     

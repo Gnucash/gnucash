@@ -33,7 +33,7 @@
 void gnc_ui_refreshMainWindow( void );
 void gnc_ui_mainWindow(AccountGroup *);
 void gnc_ui_refresh_tree ( void );
-void gnc_ui_acct_tree_fill ( GtkTree *, AccountGroup *, int );
+void gnc_ui_acct_tree_fill ( GtkTree *, AccountGroup *);
 
 #if 0
 
