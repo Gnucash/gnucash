@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
 "POT-Creation-Date: 2003-10-21 20:00+0200\n"
-"PO-Revision-Date: 2003-10-21 20:01+0200\n"
+"PO-Revision-Date: 2003-11-12 22:22+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -422,7 +422,7 @@ msgstr "void:s"
 #. src/scm/help-topics-index.scm
 #: src/app-utils/gnc-ui-util.c:837 intl-scm/guile-strings.c:449
 msgid "Opening Balances"
-msgstr "Anfangsbestände"
+msgstr "Anfangsbestand"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: src/app-utils/gnc-ui-util.c:840 intl-scm/guile-strings.c:2424
@@ -442,7 +442,7 @@ msgstr "Eigenkapital"
 #: src/app-utils/gnc-ui-util.c:973 src/gnome/glade/account.glade.h:38
 #: src/gnome-utils/dialog-account.c:290 intl-scm/guile-strings.c:769
 msgid "Opening Balance"
-msgstr "Anfangsbestand:"
+msgstr "Anfangsbestand"
 
 #. src/report/standard-reports/transaction.scm
 #: src/app-utils/guile-util.c:1112
@@ -15839,7 +15839,7 @@ msgstr "Rechnungsnummer"
 #. src/business/business-reports/fancy-invoice.scm
 #: intl-scm/guile-strings.c:3650 intl-scm/guile-strings.c:3974
 msgid "Charge Type"
-msgstr "Verpackungseinheit"
+msgstr "Einheit"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: intl-scm/guile-strings.c:3658 intl-scm/guile-strings.c:3704
