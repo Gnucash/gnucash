@@ -36,8 +36,8 @@
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid-p.h"
@@ -377,7 +377,7 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
 
 void gncCustomerBeginEdit (GncCustomer *cust)
 {
-  GNC_BEGIN_EDIT (&cust->inst);
+  QOF_BEGIN_EDIT (&cust->inst);
 }
 
 static inline void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
@@ -400,8 +400,8 @@ static inline void cust_free (QofInstance *inst)
 
 void gncCustomerCommitEdit (GncCustomer *cust)
 {
-  GNC_COMMIT_EDIT_PART1 (&cust->inst);
-  GNC_COMMIT_EDIT_PART2 (&cust->inst, gncCustomerOnError,
+  QOF_COMMIT_EDIT_PART1 (&cust->inst);
+  QOF_COMMIT_EDIT_PART2 (&cust->inst, gncCustomerOnError,
                          gncCustomerOnDone, cust_free);
 }
 

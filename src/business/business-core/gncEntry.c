@@ -34,8 +34,8 @@
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"
-#include "gnc-be-utils.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -1115,7 +1115,7 @@ gboolean gncEntryIsOpen (GncEntry *entry)
 
 void gncEntryBeginEdit (GncEntry *entry)
 {
-  GNC_BEGIN_EDIT (&entry->inst);
+  QOF_BEGIN_EDIT (&entry->inst);
 }
 
 static inline void gncEntryOnError (QofInstance *entry, QofBackendError errcode)
@@ -1133,8 +1133,8 @@ static inline void entry_free (QofInstance *inst)
 
 void gncEntryCommitEdit (GncEntry *entry)
 {
-  GNC_COMMIT_EDIT_PART1 (&entry->inst);
-  GNC_COMMIT_EDIT_PART2 (&entry->inst, gncEntryOnError,
+  QOF_COMMIT_EDIT_PART1 (&entry->inst);
+  QOF_COMMIT_EDIT_PART2 (&entry->inst, gncEntryOnError,
 			 gncEntryOnDone, entry_free);
 }
 

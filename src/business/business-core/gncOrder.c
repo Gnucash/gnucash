@@ -34,6 +34,7 @@
 #include "kvp_frame.h"
 #include "gnc-engine-util.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -45,7 +46,6 @@
 #include "qofquerycore.h"
 
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -356,7 +356,7 @@ gboolean gncOrderIsClosed (GncOrder *order)
 
 void gncOrderBeginEdit (GncOrder *order)
 {
-  GNC_BEGIN_EDIT (&order->inst);
+  QOF_BEGIN_EDIT (&order->inst);
 }
 
 static inline void gncOrderOnError (QofInstance *order, QofBackendError errcode)
@@ -374,8 +374,8 @@ static inline void order_free (QofInstance *inst)
 
 void gncOrderCommitEdit (GncOrder *order)
 {
-  GNC_COMMIT_EDIT_PART1 (&order->inst);
-  GNC_COMMIT_EDIT_PART2 (&order->inst, gncOrderOnError,
+  QOF_COMMIT_EDIT_PART1 (&order->inst);
+  QOF_COMMIT_EDIT_PART2 (&order->inst, gncOrderOnError,
 			 gncOrderOnDone, order_free);
 }
 

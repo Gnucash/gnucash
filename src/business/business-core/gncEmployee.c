@@ -32,6 +32,7 @@
 #include <string.h>
 
 #include "guid.h"
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -47,7 +48,6 @@
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 
 #include "gncAddressP.h"
 #include "gncBusiness.h"
@@ -349,7 +349,7 @@ gboolean gncEmployeeIsDirty (GncEmployee *employee)
 
 void gncEmployeeBeginEdit (GncEmployee *employee)
 {
-  GNC_BEGIN_EDIT (&employee->inst);
+  QOF_BEGIN_EDIT (&employee->inst);
 }
 
 static inline void gncEmployeeOnError (QofInstance *employee, QofBackendError errcode)
@@ -372,8 +372,8 @@ static inline void emp_free (QofInstance *inst)
 
 void gncEmployeeCommitEdit (GncEmployee *employee)
 {
-  GNC_COMMIT_EDIT_PART1 (&employee->inst);
-  GNC_COMMIT_EDIT_PART2 (&employee->inst, gncEmployeeOnError,
+  QOF_COMMIT_EDIT_PART1 (&employee->inst);
+  QOF_COMMIT_EDIT_PART2 (&employee->inst, gncEmployeeOnError,
                          gncEmployeeOnDone, emp_free);
 }
 
