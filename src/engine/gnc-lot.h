@@ -45,8 +45,20 @@ void gnc_lot_destroy (GNCLot *);
 
 const GUID * gnc_lot_get_guid (GNCLot *p);
 
+/* The gnc_lot_add_split() routine adds a split to this lot.  Note
+ *    that *all* splits in a lot must also be in the same account.
+ */
 void gnc_lot_add_split (GNCLot *, Split *);
 void gnc_lot_remove_split (GNCLot *, Split *);
+
+/* The gnc_lot_get_split_list() routine returns a GList of all the
+ *    splits in this lot.  Do *not* not free this list when done;
+ *    it is a pointer straight into the lots intenal list.  Do
+ *    *not* add to or remove from this list directly.  Calling
+ *    either gnc_lot_add_split() or gnc_lot_remove_split() will
+ *    invalidate the returned pointer.
+ */
+SplitList * gnc_lot_get_split_list (GNCLot *);
 
 /* The gnc_lot_get_account() routine returns the account with which 
  *    this lot is associated. */
@@ -64,6 +76,9 @@ gnc_numeric gnc_lot_get_balance (GNCLot *);
  */
 gboolean gnc_lot_is_closed (GNCLot *);
 
+/* Every lot has a place to hang kvp data.  This routine returns that
+ * place. 
+ * */
 kvp_frame * gnc_lot_get_slots (GNCLot *);
 
 #endif /* GNC_LOT_H */

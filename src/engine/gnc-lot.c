@@ -144,6 +144,13 @@ gnc_lot_get_slots (GNCLot *lot)
    return lot->kvp_data;
 }
 
+SplitList *
+gnc_lot_get_split_list (GNCLot *lot)
+{
+	if (!lot) return NULL;
+	return lot->splits;
+}
+
 /* ============================================================= */
 
 gnc_numeric
