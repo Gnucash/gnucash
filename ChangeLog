@@ -1,3 +1,9 @@
+2003-02-02  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* doc/README.OFX: I've quickly put together some docs for the ofx module and transaction matching.  Also includes a FAQ. Not perfect, but should closebug 99478.
+	* doc/Makefile.am: Add README.OFX
+	* src/import-export/ofx/README: Remove obsolete file.  
+	
 2003-02-02  Derek Atkins <derek@ihtfp.com>
 
 	* configure.in: re-enable -Werror, make sure it only is used with GCC,
