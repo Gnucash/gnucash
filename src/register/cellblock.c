@@ -53,7 +53,7 @@ gnc_cellblock_new (int rows, int cols)
 /* =================================================== */
 
 static gpointer
-gnc_cellblock_cell_new (void)
+gnc_cellblock_cell_new (gpointer user_data)
 {
   CellBlockCell *cb_cell;
 
@@ -70,7 +70,7 @@ gnc_cellblock_cell_new (void)
 /* =================================================== */
 
 static void
-gnc_cellblock_cell_free (gpointer _cb_cell)
+gnc_cellblock_cell_free (gpointer _cb_cell, gpointer user_data)
 {
   CellBlockCell *cb_cell = _cb_cell;
 
@@ -88,7 +88,7 @@ gnc_cellblock_cell_free (gpointer _cb_cell)
 /* =================================================== */
 
 static gpointer
-gnc_cell_traverse_info_new (void)
+gnc_cell_traverse_info_new (gpointer user_data)
 {
   CellTraverseInfo *ct_info;
 
@@ -100,7 +100,7 @@ gnc_cell_traverse_info_new (void)
 /* =================================================== */
 
 static void
-gnc_cell_traverse_info_free (gpointer ct_info)
+gnc_cell_traverse_info_free (gpointer ct_info, gpointer user_data)
 {
   g_free (ct_info);
 }
@@ -126,12 +126,12 @@ gnc_cellblock_init (CellBlock *cellblock, int rows, int cols)
 
   /* malloc new cell table */
   cellblock->cb_cells = g_table_new (gnc_cellblock_cell_new,
-                                     gnc_cellblock_cell_free);
+                                     gnc_cellblock_cell_free, NULL);
   g_table_resize (cellblock->cb_cells, rows, cols);
 
   /* malloc new traversal table */
   cellblock->traverse_info = g_table_new (gnc_cell_traverse_info_new,
-                                          gnc_cell_traverse_info_free);
+                                          gnc_cell_traverse_info_free, NULL);
   g_table_resize (cellblock->traverse_info, rows, cols);
 
   for (row = 0; row < rows; row++)

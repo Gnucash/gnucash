@@ -63,10 +63,10 @@ static GMemChunk *cell_mem_chunk = NULL;
 /** Prototypes *********************************************************/
 static void gnc_table_init (Table * table);
 static void gnc_table_free_data (Table * table);
-static gpointer gnc_virtual_cell_new (void);
-static gpointer gnc_physical_cell_new (void);
-static void gnc_virtual_cell_free (gpointer tcell);
-static void gnc_physical_cell_free (gpointer tcell);
+static gpointer gnc_virtual_cell_new (gpointer user_data);
+static gpointer gnc_physical_cell_new (gpointer user_data);
+static void gnc_virtual_cell_free (gpointer tcell, gpointer user_data);
+static void gnc_physical_cell_free (gpointer tcell, gpointer user_data);
 static void gnc_table_resize (Table * table,
                               int new_phys_rows, int new_phys_cols,
                               int new_virt_rows, int new_virt_cols);
@@ -88,10 +88,10 @@ gnc_table_new (void)
    gnc_table_init (table);
 
    table->virt_cells = g_table_new(gnc_virtual_cell_new,
-                                   gnc_virtual_cell_free);
+                                   gnc_virtual_cell_free, NULL);
 
    table->phys_cells = g_table_new(gnc_physical_cell_new,
-                                   gnc_physical_cell_free);
+                                   gnc_physical_cell_free, NULL);
 
    return table;
 }
@@ -277,7 +277,7 @@ gnc_physical_location_init (PhysicalLocation *ploc)
 /* ==================================================== */
 
 static gpointer
-gnc_virtual_cell_new (void)
+gnc_virtual_cell_new (gpointer user_data)
 {
   TableCell *tcell;
   VirtualCell *vcell;
@@ -297,7 +297,7 @@ gnc_virtual_cell_new (void)
 /* ==================================================== */
 
 static void
-gnc_virtual_cell_free (gpointer tcell)
+gnc_virtual_cell_free (gpointer tcell, gpointer user_data)
 {
   if (tcell == NULL)
     return;
@@ -308,7 +308,7 @@ gnc_virtual_cell_free (gpointer tcell)
 /* ==================================================== */
 
 static gpointer
-gnc_physical_cell_new (void)
+gnc_physical_cell_new (gpointer user_data)
 {
   TableCell *tcell;
   PhysicalCell *pcell;
@@ -331,7 +331,7 @@ gnc_physical_cell_new (void)
 /* ==================================================== */
 
 static void
-gnc_physical_cell_free (gpointer _tcell)
+gnc_physical_cell_free (gpointer _tcell, gpointer user_data)
 {
   TableCell *tcell = _tcell;
 

@@ -67,7 +67,7 @@ style_get_key (SheetBlockStyle *style)
 
 
 static gpointer
-cell_dimensions_new (void)
+cell_dimensions_new (gpointer user_data)
 {
         CellDimensions *cd;
 
@@ -79,7 +79,7 @@ cell_dimensions_new (void)
 }
 
 static void
-cell_dimensions_free (gpointer cd)
+cell_dimensions_free (gpointer cd, gpointer user_data)
 {
         g_free(cd);
 }
@@ -95,7 +95,7 @@ style_dimensions_new (SheetBlockStyle *style)
         dimensions->ncols = style->ncols;
 
         dimensions->cell_dimensions = g_table_new (cell_dimensions_new,
-                                                   cell_dimensions_free);
+                                                   cell_dimensions_free, NULL);
 
         g_table_resize (dimensions->cell_dimensions,
                         style->nrows, style->ncols);
@@ -618,7 +618,7 @@ gnucash_style_get_cell_style (SheetBlockStyle *style, int row, int col)
 }
 
 static gpointer
-cell_style_new (void)
+cell_style_new (gpointer user_data)
 {
         CellStyle *cs;
 
@@ -628,7 +628,7 @@ cell_style_new (void)
 }
 
 static void
-cell_style_free (gpointer _cs)
+cell_style_free (gpointer _cs, gpointer user_data)
 {
         CellStyle *cs = _cs;
 
@@ -659,7 +659,8 @@ gnucash_sheet_style_new (GnucashSheet *sheet, CellBlock *cursor,
         style->nrows = cursor->num_rows;
         style->ncols = cursor->num_cols;
 
-        style->cell_styles = g_table_new (cell_style_new, cell_style_free);
+        style->cell_styles = g_table_new (cell_style_new,
+                                          cell_style_free, NULL);
         g_table_resize (style->cell_styles, style->nrows, style->ncols);
 
         gnucash_sheet_style_recompile(style, sr, cursor_type);

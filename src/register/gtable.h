@@ -31,15 +31,16 @@
 
 typedef struct GTable GTable;
 
-typedef gpointer (*g_table_allocator)   (void);
-typedef void     (*g_table_deallocator) (gpointer);
+typedef gpointer (*g_table_allocator)   (gpointer user_data);
+typedef void     (*g_table_deallocator) (gpointer entry, gpointer user_data);
 
 
 /* Create a new table with the given allocator and deallocator.
  * Both functions must be given. They are used to populate the
  * table and free extra members when resizing and destroying. */
 GTable * g_table_new (g_table_allocator allocator,
-                      g_table_deallocator deallocator);
+                      g_table_deallocator deallocator,
+                      gpointer user_data);
 
 /* Free the table and all associated table elements. */
 void     g_table_destroy (GTable *gtable);
