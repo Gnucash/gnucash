@@ -15,22 +15,20 @@
  * 
  * <param_type> function (object_type *obj);
  */
-typedef void (*QueryAccess)(gpointer);
+typedef gpointer (*QueryAccess)(gpointer);
 
-/* This structure is for each queriable parameter in an object */
+/* This structure is for each queriable parameter in an object
+ *
+ * -- param_name is the name of the parameter.
+ * -- param_type is the type of the parameter, which can be either another
+ *    object or it can be a core data type.
+ * -- param_getgcn is the function to actually obtain the parameter
+ */
 typedef struct query_object_def {
   const char *	param_name;
   QueryCoreType	param_type;
   QueryAccess	param_getfcn;
 } QueryObjectDef;
-
-/* This function-type will convert from one object-type to another */
-typedef gpointer (*QueryConvert)(gpointer);
-
-typedef struct query_convert_def {
-  GNCIdType 	desired_object_name;
-  QueryConvert	object_getfcn;
-} QueryConvertDef;
 
 /* This function is the default sort function for a particular object type */
 typedef int (*QuerySort)(gpointer, gpointer);
@@ -41,34 +39,32 @@ typedef int (*QuerySort)(gpointer, gpointer);
  * "converters" are NULL-terminated arrays of structures.  Either
  * argument may be NULL if there is nothing to be registered.
  */
-void gncQueryObjectRegister (GNCIdType  obj_name,
+void gncQueryObjectRegister (GNCIdTypeConst obj_name,
 			     QuerySort default_sort_fcn,
-			     const QueryObjectDef *params,
-			     const QueryConvertDef *converters);
+			     const QueryObjectDef *params);
 
 /* An example:
  *
  * #define MY_QUERY_OBJ_MEMO	"memo"
  * #define MY_QUERY_OBJ_VALUE	"value"
  * #define MY_QUERY_OBJ_DATE	"date"
+ * #define MY_QUERY_OBJ_ACCOUNT "account"
+ * #define MY_QUERY_OBJ_TRANS	"trans"
  *
  * static QueryObjectDef myQueryObjectParams[] = {
  * { MY_QUERY_OBJ_MEMO, QUERYCORE_STRING, myMemoGetter },
  * { MY_QUERY_OBJ_VALUE, QUERYCORE_NUMERIC, myValueGetter },
  * { MY_QUERY_OBJ_DATE, QUERYCORE_DATE, myDateGetter },
+ * { MY_QUERY_OBJ_ACCOUNT, GNC_ID_ACCOUNT, myAccountGetter },
+ * { MY_QUERY_OBJ_TRANS, GNC_ID_TRANS, myTransactionGetter },
  * NULL };
  *
- * static QueryConvertDef myQueryObjectsConvs[] = {
- * { GNC_ID_ACCOUNT, myAccountGetter },
- * { GNC_ID_TRANS, myTransactionGetter },
- * NULL };
- *
- * gncQueryObjectRegisterParamters ("myObjectName", &myQueryObjectParams,
- *				    &myQueryObjectConvs);
+ * gncQueryObjectRegisterParamters ("myObjectName", myQueryObjectCompare,
+ *				    &myQueryObjectParams);
  */
 
 /* Return the core datatype of the specified object's parameter */
-QueryCoreType gncQueryObjectParameterType (GNCIdType obj_name,
+QueryCoreType gncQueryObjectParameterType (GNCIdTypeConst obj_name,
 					   const char *param_name);
 
 #endif /* GNC_QUERYOBJECT_H */

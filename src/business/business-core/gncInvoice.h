@@ -72,5 +72,7 @@ void gncInvoiceCommitEdit (GncInvoice *invoice);
 int gncInvoiceCompare (GncInvoice *a, GncInvoice *b);
 
 #define INVOICE_GUID	"guid"
+#define INVOICE_ACC	"account"
+#define INVOICE_TXN	"txn"
 
 #endif /* GNC_INVOICE_H_ */

@@ -574,17 +574,13 @@ gboolean gncInvoiceRegister (void)
 {
   static QueryObjectDef params[] = {
     { INVOICE_GUID, QUERYCORE_GUID, (QueryAccess)gncInvoiceGetGUID },
-    { NULL },
-  };
-  static const QueryConvertDef converters[] = {
-    { GNC_ID_BOOK, (QueryConvert)gncInvoiceGetBook },
-    { GNC_ID_ACCOUNT, (QueryConvert)gncInvoiceGetPostedAcc },
-    { GNC_ID_TRANS, (QueryConvert)gncInvoiceGetPostedTxn },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncInvoiceGetBook },
+    { INVOICE_ACC, GNC_ID_ACCOUNT, (QueryAccess)gncInvoiceGetPostedAcc },
+    { INVOICE_TXN, GNC_ID_TRANS, (QueryAccess)gncInvoiceGetPostedTxn },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncInvoiceCompare,
-			  params, converters);
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncInvoiceCompare, params);
 
   return gncObjectRegister (&gncInvoiceDesc);
 }

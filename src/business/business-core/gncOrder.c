@@ -342,15 +342,11 @@ gboolean gncOrderRegister (void)
 {
   static QueryObjectDef params[] = {
     { ORDER_GUID, QUERYCORE_GUID, (QueryAccess)gncOrderGetGUID },
-    { NULL },
-  };
-  static const QueryConvertDef converters[] = {
-    { GNC_ID_BOOK, (QueryConvert)gncOrderGetBook },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncOrderGetBook },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncOrderCompare,
-			  params, converters);
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncOrderCompare, params);
 
   return gncObjectRegister (&gncOrderDesc);
 }

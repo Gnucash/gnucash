@@ -332,15 +332,11 @@ gboolean gncEmployeeRegister (void)
     { EMPLOYEE_GUID, QUERYCORE_GUID, (QueryAccess)gncEmployeeGetGUID },
     { EMPLOYEE_ID, QUERYCORE_STRING, (QueryAccess)gncEmployeeGetID },
     { EMPLOYEE_USERNAME, QUERYCORE_STRING, (QueryAccess)gncEmployeeGetUsername },
-    { NULL },
-  };
-  static const QueryConvertDef converters[] = {
-    { GNC_ID_BOOK, (QueryConvert)gncEmployeeGetBook },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncEmployeeGetBook },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncEmployeeCompare,
-			  params, converters);
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncEmployeeCompare,params);
 
   return gncObjectRegister (&gncEmployeeDesc);
 }

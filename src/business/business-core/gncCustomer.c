@@ -403,15 +403,11 @@ gboolean gncCustomerRegister (void)
     { CUSTOMER_GUID, QUERYCORE_GUID, (QueryAccess)gncCustomerGetGUID },
     { CUSTOMER_ID, QUERYCORE_STRING, (QueryAccess)gncCustomerGetID },
     { CUSTOMER_NAME, QUERYCORE_STRING, (QueryAccess)gncCustomerGetName },
-    { NULL },
-  };
-  static const QueryConvertDef converters[] = {
-    { GNC_ID_BOOK, (QueryConvert)gncCustomerGetBook },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncCustomerGetBook },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncCustomerCompare,
-			  params, converters);
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncCustomerCompare,params);
 
   return gncObjectRegister (&gncCustomerDesc);
 }

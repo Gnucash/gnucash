@@ -93,4 +93,7 @@ int gncEntryCompare (GncEntry *a, GncEntry *b);
 #define ENTRY_QTY	"qty"
 #define ENTRY_PRICE	"price"
 
+#define ENTRY_ORDER	"order"
+#define ENTRY_INVOICE	"invoice"
+
 #endif /* GNC_ENTRY_H_ */

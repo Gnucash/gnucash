@@ -20,66 +20,8 @@
 static short module = MOD_QUERY;
 
 static GHashTable *paramTable = NULL;
-static GHashTable *convTable = NULL;
 static GHashTable *sortTable = NULL;
 static gboolean initialized = FALSE;
-
-typedef enum {
-  TYPE_PARAM = 1,
-  TYPE_CONV
-} QueryObjectType;
-
-/* Stupid function to perform a no-op, to make the interface clean */
-static gpointer self_convert (gpointer obj)
-{
-  return obj;
-}
-
-static GHashTable * get_object_table (GNCIdType name, QueryObjectType type)
-{
-  GHashTable *ht = NULL, *obj_ht = NULL;
-
-  g_return_val_if_fail (name, NULL);
-  g_return_val_if_fail (initialized, NULL);
-
-  switch (type) {
-  case TYPE_PARAM:
-    ht = paramTable;
-    break;
-  case TYPE_CONV:
-    ht = convTable;
-  }
-
-  if (!ht) {
-    PWARN ("Aiee -- no hash table");
-    return NULL;
-  }
-
-  obj_ht = g_hash_table_lookup (ht, name);
-
-  /* If it doesn't already exist, create a new table for this object */
-  if (!obj_ht) {
-    obj_ht = g_hash_table_new (g_str_hash, g_str_equal);
-    g_hash_table_insert (ht, (char *)name, obj_ht);
-  }
-
-  return obj_ht;
-}
-
-static void insert_method (GNCIdType objname, const char *param,
-			   gconstpointer method, QueryObjectType type)
-{
-  GHashTable *ht;
-
-  g_return_if_fail (objname);
-  g_return_if_fail (param);
-  g_return_if_fail (method);
-
-  ht = get_object_table (objname, type);
-  g_return_if_fail (ht);
-
-  g_hash_table_insert (ht, (char *)param, (gpointer)method);
-}
 
 static void init_split (void)
 {
@@ -105,17 +47,13 @@ static void init_split (void)
       (QueryAccess)xaccSplitVoidFormerAmount },
     { SPLIT_VOIDED_VALUE, QUERYCORE_NUMERIC,
       (QueryAccess)xaccSplitVoidFormerValue },
-    { NULL },
-  };
-  static const QueryConvertDef converters[] = {
-    { GNC_ID_TRANS, (QueryConvert)xaccSplitGetParent },
-    { GNC_ID_ACCOUNT, (QueryConvert)xaccSplitGetAccount },
-    { GNC_ID_BOOK, (QueryConvert)xaccSplitGetBook },
+    { SPLIT_TRANS, GNC_ID_TRANS, (QueryAccess)xaccSplitGetParent },
+    { SPLIT_ACCOUNT, GNC_ID_ACCOUNT, (QueryAccess)xaccSplitGetAccount },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccSplitGetBook },
     { NULL },
   };
 
-  gncQueryObjectRegister (GNC_ID_SPLIT, (QuerySort)xaccSplitDateOrder,
-			  params, converters);
+  gncQueryObjectRegister (GNC_ID_SPLIT, (QuerySort)xaccSplitDateOrder, params);
 }
 
 static void init_txn (void)
@@ -132,15 +70,11 @@ static void init_txn (void)
     { TRANS_VOID_STATUS, QUERYCORE_BOOLEAN, (QueryAccess)xaccTransGetVoidStatus },
     { TRANS_VOID_REASON, QUERYCORE_STRING, (QueryAccess)xaccTransGetVoidReason },
     { TRANS_VOID_TIME, QUERYCORE_DATE, (QueryAccess)xaccTransGetVoidTime },
-    { NULL },
-  };
-  static const QueryConvertDef converters[] = {
-    { GNC_ID_BOOK, (QueryConvert)xaccTransGetBook },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccTransGetBook },
     { NULL },
   };
 
-  gncQueryObjectRegister (GNC_ID_TRANS, (QuerySort)xaccTransOrder,
-			  params, converters);
+  gncQueryObjectRegister (GNC_ID_TRANS, (QuerySort)xaccTransOrder, params);
 }
 
 static void init_account (void)
@@ -156,15 +90,11 @@ static void init_account (void)
     { ACCOUNT_CLEARED_BALANCE, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetClearedBalance },
     { ACCOUNT_RECONCILED_BALANCE, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetReconciledBalance },
     { ACCOUNT_TAX_RELATED, QUERYCORE_BOOLEAN, (QueryAccess)xaccAccountGetTaxRelated },
-    { NULL },
-  };
-  static const QueryConvertDef converters[] = {
-    { GNC_ID_BOOK, (QueryConvert)xaccAccountGetBook },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccAccountGetBook },
     { NULL },
   };
 
-  gncQueryObjectRegister (GNC_ID_ACCOUNT, (QuerySort)xaccAccountOrder,
-			  params, converters);
+  gncQueryObjectRegister (GNC_ID_ACCOUNT, (QuerySort)xaccAccountOrder, params);
 }
 
 static void init_book (void)
@@ -175,7 +105,7 @@ static void init_book (void)
     { NULL },
   };
 
-  gncQueryObjectRegister (GNC_ID_BOOK, NULL, params, NULL);
+  gncQueryObjectRegister (GNC_ID_BOOK, NULL, params);
 }
 
 static void init_tables (void)
@@ -195,10 +125,9 @@ static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
 /********************************************************************/
 /* PUBLISHED API FUNCTIONS */
 
-void gncQueryObjectRegister (GNCIdType  obj_name,
+void gncQueryObjectRegister (GNCIdTypeConst obj_name,
 			     QuerySort default_sort_function,
-			     const QueryObjectDef *params,
-			     const QueryConvertDef *converters)
+			     const QueryObjectDef *params)
 {
   int i;
 
@@ -208,14 +137,19 @@ void gncQueryObjectRegister (GNCIdType  obj_name,
     g_hash_table_insert (sortTable, (char *)obj_name, default_sort_function);
 
   if (params) {
-    for (i = 0; params[i].param_name; i++)
-      insert_method (obj_name, params[i].param_name, &(params[i]), TYPE_PARAM);
-  }
+    GHashTable *ht = g_hash_table_lookup (paramTable, obj_name);
 
-  if (converters) {
-    for (i = 0; converters[i].desired_object_name; i++)
-      insert_method (obj_name, converters[i].desired_object_name,
-		     &(converters[i]), TYPE_CONV);
+    /* If it doesn't already exist, create a new table for this object */
+    if (!ht) {
+      ht = g_hash_table_new (g_str_hash, g_str_equal);
+      g_hash_table_insert (paramTable, (char *)obj_name, ht);
+    }
+
+    /* Now insert all the parameters */
+    for (i = 0; params[i].param_name; i++)
+      g_hash_table_insert (ht,
+			   (char *)params[i].param_name,
+			   (gpointer)&(params[i]));
   }
 }
 
@@ -225,7 +159,6 @@ void gncQueryObjectInit(void)
   initialized = TRUE;
 
   paramTable = g_hash_table_new (g_str_hash, g_str_equal);
-  convTable = g_hash_table_new (g_str_hash, g_str_equal);
   sortTable = g_hash_table_new (g_str_hash, g_str_equal);
 
   init_tables ();
@@ -238,15 +171,11 @@ void gncQueryObjectShutdown (void)
 
   g_hash_table_foreach_remove (paramTable, clear_table, NULL);
   g_hash_table_destroy (paramTable);
-
-  g_hash_table_foreach_remove (convTable, clear_table, NULL);
-  g_hash_table_destroy (convTable);
-
   g_hash_table_destroy (sortTable);
 }
 
 
-const QueryObjectDef * gncQueryObjectGetParameter (GNCIdType obj_name,
+const QueryObjectDef * gncQueryObjectGetParameter (GNCIdTypeConst obj_name,
 						   const char *parameter)
 {
   GHashTable *ht;
@@ -254,13 +183,13 @@ const QueryObjectDef * gncQueryObjectGetParameter (GNCIdType obj_name,
   g_return_val_if_fail (obj_name, NULL);
   g_return_val_if_fail (parameter, NULL);
 
-  ht = get_object_table (obj_name, TYPE_PARAM);
+  ht = g_hash_table_lookup (paramTable, obj_name);
   g_return_val_if_fail (ht, NULL);
 
   return (g_hash_table_lookup (ht, parameter));
 }
 
-QueryAccess gncQueryObjectGetParamaterGetter (GNCIdType obj_name,
+QueryAccess gncQueryObjectGetParameterGetter (GNCIdTypeConst obj_name,
 					      const char *parameter)
 {
   const QueryObjectDef *obj;
@@ -275,29 +204,7 @@ QueryAccess gncQueryObjectGetParamaterGetter (GNCIdType obj_name,
   return NULL;
 }
 
-QueryConvert gncQueryObjectGetConverter (GNCIdType from_obj,
-					 GNCIdType to_obj)
-{
-  GHashTable *ht;
-  QueryConvertDef *conv;
-
-  g_return_val_if_fail (from_obj, NULL);
-  g_return_val_if_fail (to_obj, NULL);
-
-  if (from_obj == to_obj || !safe_strcmp (from_obj, to_obj))
-    return self_convert;
-
-  ht = get_object_table (from_obj, TYPE_CONV);
-  g_return_val_if_fail (ht, NULL);
-
-  conv = g_hash_table_lookup (ht, to_obj);
-  if (conv)
-    return conv->object_getfcn;
-
-  return NULL;
-}
-
-QueryCoreType gncQueryObjectParameterType (GNCIdType obj_name,
+QueryCoreType gncQueryObjectParameterType (GNCIdTypeConst obj_name,
 					   const char *param_name)
 {
   const QueryObjectDef *obj;
@@ -310,7 +217,7 @@ QueryCoreType gncQueryObjectParameterType (GNCIdType obj_name,
   return (obj->param_type);
 }
 
-QuerySort gncQueryObjectDefaultSort (GNCIdType obj_name)
+QuerySort gncQueryObjectDefaultSort (GNCIdTypeConst obj_name)
 {
   if (!obj_name) return NULL;
   return g_hash_table_lookup (sortTable, obj_name);

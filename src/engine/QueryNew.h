@@ -36,6 +36,8 @@ typedef enum {
 #define QUERY_DEFAULT_SORT	"GnucashQueryDefaultSortObject"
 
 /* "Known" Object Parameters */
+#define QUERY_PARAM_BOOK	"book"
+
 #define SPLIT_KVP		"kvp"
 #define SPLIT_GUID		"guid"
 #define SPLIT_DATE_RECONCILED	"date-reconciled"
@@ -51,6 +53,8 @@ typedef enum {
 #define SPLIT_TYPE		"type"
 #define SPLIT_VOIDED_AMOUNT	"voided-amount"
 #define SPLIT_VOIDED_VALUE	"voided-value"
+#define SPLIT_TRANS		"trans"
+#define SPLIT_ACCOUNT		"account"
 
 #define TRANS_KVP		"kvp"
 #define TRANS_GUID		"guid"
@@ -127,27 +131,31 @@ typedef enum {
 
 /* This is the general function that adds a new Query Term to a query.
  * It will find the 'obj_type' object of the search item and compare
- * the 'param_name' parameter to the predicate data via the comparitor.
+ * the 'param_list' parameter to the predicate data via the comparitor.
+ *
+ * The param_list is a recursive list of parameters.  For example, you
+ * can say 'split->memo' by creating a list of one element, "SPLIT_MEMO".
+ * You can say 'split->account->name' by creating a list of two elements,
+ * "SPLIT_ACCOUNT" and "ACCOUNT_NAME".
  *
  * For example:
  *
  * acct_name_pred_data = make_string_pred_data(STRING_MATCH_CASEINSENSITIVE,
  *					       account_name);
- * gncQueryAddTerm (query, GNC_ID_ACCOUNT, QUERY_ACCOUNT_NAME,
- *		    COMPARE_EQUAL, acct_name_pred_data, QUERY_AND);
+ * param_list = make_list (SPLIT_ACCOUNT, ACCOUNT_NAME);
+ * gncQueryAddTerm (query, param_list, COMPARE_EQUAL,
+ *		    acct_name_pred_data, QUERY_AND);
  */
 
 typedef struct query_pred_data *QueryPredData_t;
 
-void gncQueryAddTerm (QueryNew *query,
-		      GNCIdTypeConst obj_type, const char *param_name,
+void gncQueryAddTerm (QueryNew *query, GSList *param_list,
 		      query_compare_t comparitor, QueryPredData_t pred_data,
 		      QueryOp op);
 
 void gncQuerySetBook (QueryNew *q, GNCBook *book);
-void gncQueryAddGUIDMatch (QueryNew *q, QueryOp op,
-			   GNCIdTypeConst obj_type, const char *param_name,
-			   const GUID *guid);
+void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,
+			   const GUID *guid, QueryOp op);
 
 /* Run the query:
  *
@@ -159,8 +167,7 @@ QueryNew * gncQueryCreate (void);
 void gncQueryDestroy (QueryNew *q);
 
 void gncQueryClear (QueryNew *query);
-void gncQueryPurgeTerms (QueryNew *q, GNCIdTypeConst obj_type,
-			 const char *param_name);
+void gncQueryPurgeTerms (QueryNew *q, GSList *param_list);
 int gncQueryHasTerms (QueryNew *q);
 int gncQueryNumTerms (QueryNew *q);
 GList * gncQueryGetTerms (QueryNew *q);
@@ -170,9 +177,9 @@ QueryNew * gncQueryInvert(QueryNew *q);
 QueryNew * gncQueryMerge(QueryNew *q1, QueryNew *q2, QueryOp op);
 
 void gncQuerySetSortOrder (QueryNew *q,
-			   GNCIdTypeConst prim_type, const char *prim_param,
-			   GNCIdTypeConst secy_type, const char *sec_param,
-			   GNCIdTypeConst tert_type, const char *tert_param);
+			   GSList *primary_sort_params,
+			   GSList *secondary_sort_params,
+			   GSList *tertiary_sort_params);
 
 void gncQuerySetSortOptions (QueryNew *q, gint prim_op, gint sec_op,
 			     gint tert_op);

@@ -26,6 +26,7 @@ TESTS = \
   test-object \
   test-period \
   test-query \
+  test-querynew \
   test-resolve-file-path \
   test-split-vs-account  \
   test-transaction-voiding \
@@ -49,6 +50,7 @@ noinst_PROGRAMS = \
   test-object \
   test-period \
   test-query \
+  test-querynew \
   test-resolve-file-path \
   test-scm-query \
   test-split-vs-account \

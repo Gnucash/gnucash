@@ -1,5 +1,16 @@
 2002-02-03  Derek Atkins <warlord@MIT.EDU>
 
+	* Updated QueryNew interface.  Provide a GSList of terms in order
+	to specify queries like "entry->order->owner->guid == XXX".
+	Update the business objects to the new API.
+
+	* Fix queryNew bug: various merging routines did not save the list
+	of books.
+
+	* add basic QueryNew tests
+
+2002-02-03  Derek Atkins <warlord@MIT.EDU>
+
 	* src/engine/gncObject.c: core object registration.
 
 	* src/engine/gnc-book.c: call into the object registration whenver

@@ -359,15 +359,11 @@ gboolean gncVendorRegister (void)
     { VENDOR_GUID, QUERYCORE_GUID, (QueryAccess)gncVendorGetGUID },
     { VENDOR_ID, QUERYCORE_STRING, (QueryAccess)gncVendorGetID },
     { VENDOR_NAME, QUERYCORE_STRING, (QueryAccess)gncVendorGetName },
-    { NULL },
-  };
-  static const QueryConvertDef converters[] = {
-    { GNC_ID_BOOK, (QueryConvert)gncVendorGetBook },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncVendorGetBook },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncVendorCompare,
-			  params, converters);
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncVendorCompare, params);
 
   return gncObjectRegister (&gncVendorDesc);
 }

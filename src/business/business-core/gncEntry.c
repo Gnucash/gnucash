@@ -491,17 +491,13 @@ gboolean gncEntryRegister (void)
     { ENTRY_ACTION, QUERYCORE_STRING, (QueryAccess)gncEntryGetAction },
     { ENTRY_QTY, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetQuantity },
     { ENTRY_PRICE, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetPrice },
-    { NULL },
-  };
-  static const QueryConvertDef converters[] = {
-    { GNC_ID_BOOK, (QueryConvert)gncEntryGetBook },
-    { GNC_INVOICE_MODULE_NAME, (QueryConvert)gncEntryGetInvoice },
-    { GNC_ORDER_MODULE_NAME, (QueryConvert)gncEntryGetOrder },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncEntryGetBook },
+    { ENTRY_INVOICE, GNC_INVOICE_MODULE_NAME, (QueryAccess)gncEntryGetInvoice },
+    { ENTRY_ORDER, GNC_ORDER_MODULE_NAME, (QueryAccess)gncEntryGetOrder },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncEntryCompare,
-			  params, converters);
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncEntryCompare, params);
 
   return gncObjectRegister (&gncEntryDesc);
 }

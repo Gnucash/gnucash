@@ -23,8 +23,7 @@
 static short module = MOD_QUERY;
 
 typedef struct {
-  GNCIdType		obj_name;
-  const char *		param_name;
+  GSList *		param_list;
   QueryPredData_t	pdata;
   query_compare_t	how;
   gboolean		invert;
@@ -34,14 +33,12 @@ typedef struct {
    * object type.  If conv_fcn is NULL, then we don't know how to
    * convert types.
    */
-  QueryConvert		conv_fcn;
-  QueryAccess		get_fcn;
+  GSList *		param_fcns;
   QueryPredicate	pred_fcn;
 } QueryNewTerm;
 
 typedef struct {
-  GNCIdType	 obj_name;
-  const char *	param_name;
+  GSList *	param_list;
   gint		options;
   gboolean	increasing;
   gboolean	use_default;
@@ -51,8 +48,7 @@ typedef struct {
    * object type.  If conv_fcn is NULL, then we don't know how to
    * convert types.
    */
-  QueryConvert	conv_fcn;
-  QueryAccess	get_fcn;
+  GSList *	param_fcns;
   QueryCompare	comp_fcn;
 } QuerySort_t;
 
@@ -108,13 +104,21 @@ static void query_init (QueryNew *q, QueryNewTerm *initial_term)
   g_list_free (q->results);
   g_list_free (q->books);
 
+  g_slist_free (q->primary_sort.param_list);
+  g_slist_free (q->secondary_sort.param_list);
+  g_slist_free (q->tertiary_sort.param_list);
+
+  g_slist_free (q->primary_sort.param_fcns);
+  g_slist_free (q->secondary_sort.param_fcns);
+  g_slist_free (q->tertiary_sort.param_fcns);
+
   memset (q, 0, sizeof (*q));
 
   q->terms = or;
   q->changed = 1;
   q->max_results = -1;
 
-  q->primary_sort.obj_name = QUERY_DEFAULT_SORT;
+  q->primary_sort.param_list = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
   q->primary_sort.increasing = TRUE;
   q->secondary_sort.increasing = TRUE;
   q->tertiary_sort.increasing = TRUE;
@@ -130,6 +134,10 @@ static void swap_terms (QueryNew *q1, QueryNew *q2)
   q1->terms = q2->terms;
   q2->terms = g;
 
+  g = q1->books;
+  q1->books = q2->books;
+  q2->books = g;
+
   q1->changed = 1;
   q2->changed = 1;
 }
@@ -139,6 +147,8 @@ static void free_query_term (QueryNewTerm *qt)
   if (!qt) return;
 
   gncQueryCorePredicateFree (qt->pdata);
+  g_slist_free (qt->param_list);
+  g_slist_free (qt->param_fcns);
   g_free (qt);
 }
 
@@ -149,6 +159,8 @@ static QueryNewTerm * copy_query_term (QueryNewTerm *qt)
 
   new_qt = g_new0 (QueryNewTerm, 1);
   memcpy (new_qt, qt, sizeof(QueryNewTerm));
+  new_qt->param_list = g_slist_copy (new_qt->param_list);
+  new_qt->param_fcns = g_slist_copy (new_qt->param_fcns);
   new_qt->pdata = gncQueryCorePredicateCopy (qt->pdata);
   return new_qt;
 }
@@ -180,6 +192,22 @@ copy_or_terms(GList * or_terms)
   return g_list_reverse(or);
 }
 
+static void copy_sort (QuerySort_t *dst, const QuerySort_t *src)
+{
+  memcpy (dst, src, sizeof (*dst));
+  dst->param_list = g_slist_copy (src->param_list);
+  dst->param_fcns = g_slist_copy (src->param_fcns);
+}
+
+static void free_sort (QuerySort_t *s)
+{
+  g_slist_free (s->param_list);
+  s->param_list = NULL;
+
+  g_slist_free (s->param_fcns);
+  s->param_fcns = NULL;
+}
+
 static void free_members (QueryNew *q)
 {
   GList * cur_or;
@@ -200,6 +228,10 @@ static void free_members (QueryNew *q)
     cur_or->data = NULL;
   }
 
+  free_sort (&(q->primary_sort));
+  free_sort (&(q->secondary_sort));
+  free_sort (&(q->tertiary_sort));
+
   g_list_free(q->terms);
   q->terms = NULL;
 
@@ -213,7 +245,9 @@ static void free_members (QueryNew *q)
 static int cmp_func (QuerySort_t *sort, QuerySort default_sort,
 		     gconstpointer a, gconstpointer b)
 {
+  GSList *node;
   gpointer conva, convb;
+  QueryAccess get_fcn;
 
   g_return_val_if_fail (sort, 0);
   g_return_val_if_fail (default_sort, 0);
@@ -225,18 +259,29 @@ static int cmp_func (QuerySort_t *sort, QuerySort default_sort,
     return 0;
   }
 
-  /* If no converter, consider them equal */
-  if (!sort->conv_fcn) return 0;
+  /* If no parameters, consider them equal */
+  if (!sort->param_fcns) return 0;
 
   /* no compare function, consider them equal */
   if (!sort->comp_fcn) return 0;
+  
+  /* Do the list of conversions */
+  conva = (gpointer)a;
+  convb = (gpointer)b;
+  for (node = sort->param_fcns; node; node = node->next) {
+    get_fcn = node->data;
 
-  /* Do the converstions */
-  conva = sort->conv_fcn ((gpointer)a);
-  convb = sort->conv_fcn ((gpointer)b);
+    /* The last term is really the "parameter getter" */
+    if (!node->next)
+      break;
+
+    /* Do the converstions */
+    conva = get_fcn (conva);
+    convb = get_fcn (convb);
+  }
 
   /* And now return the compare */
-  return sort->comp_fcn (conva, convb, sort->options, sort->get_fcn);
+  return sort->comp_fcn (conva, convb, sort->options, get_fcn);
 }
 
 static QueryNew * sortQuery = NULL;
@@ -269,16 +314,29 @@ static int check_object (QueryNew *q, gpointer object)
   GList     * or_ptr;
   QueryNewTerm * qt;
   int       and_terms_ok=1;
-  gpointer	result_obj;
   
   for(or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) {
     and_terms_ok = 1;
     for(and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
       qt = (QueryNewTerm *)(and_ptr->data);
-      if (qt->conv_fcn && qt->pred_fcn) {
-	result_obj = ((qt->conv_fcn) (object));
-	if (((qt->pred_fcn)(result_obj, qt->get_fcn,
-			    qt->how, qt->pdata)) == qt->invert) {
+      if (qt->param_fcns && qt->pred_fcn) {
+	GSList *node;
+	QueryAccess get_fcn;
+	gpointer conv_obj = object;
+
+	/* iterate through the conversions */
+	for (node = qt->param_fcns; node; node = node->next) {
+	  get_fcn = node->data;
+
+	  /* The last term is the actual parameter getter */
+	  if (!node->next)
+	    break;
+
+	  conv_obj = get_fcn (conv_obj);
+	}
+
+	if (((qt->pred_fcn)(conv_obj, get_fcn, qt->how, qt->pdata))
+	    == qt->invert) {
 	  and_terms_ok = 0;
 	  break;
 	}
@@ -293,35 +351,67 @@ static int check_object (QueryNew *q, gpointer object)
   return 0;
 }
 
+/* walk the list of parameters, starting with the given object, and
+ * compile the list of parameter get-functions.  Save the last valid
+ * parameter definition in "final" and return the list of functions.
+ *
+ * returns NULL if the first parameter is bad (and final is unchanged).
+ */
+static GSList * compile_params (GSList *param_list, GNCIdType start_obj,
+				QueryObjectDef const **final)
+{
+  const QueryObjectDef *objDef = NULL;
+  GSList *fcns = NULL;
+
+  g_return_val_if_fail (param_list, NULL);
+  g_return_val_if_fail (start_obj, NULL);
+  g_return_val_if_fail (final, NULL);
+
+  for (; param_list; param_list = param_list->next) {
+    GNCIdType param_name = param_list->data;
+    objDef = gncQueryObjectGetParameter (start_obj, param_name);
+
+    /* If it doesn't exist, then we've reached the end */
+    if (!objDef)
+      break;
+
+    /* Save off this function */
+    fcns = g_slist_prepend (fcns, objDef->param_getfcn);
+
+    /* Save this off, just in case */
+    *final = objDef;
+
+    /* And reset for the next parameter */
+    start_obj = (GNCIdType) objDef->param_type;
+  }
+
+  return (g_slist_reverse (fcns));
+}
+
 static void compile_sort (QuerySort_t *sort, GNCIdType obj)
 {
+  const QueryObjectDef *resObj = NULL;
+
   sort->use_default = FALSE;
 
-  /* An empty obj_name implies "no sort" */
-  if (!sort->obj_name || *(sort->obj_name) == '\0') {
-    sort->conv_fcn = NULL;
+  g_slist_free (sort->param_fcns);
+  sort->param_fcns = NULL;
+
+  /* An empty param_list implies "no sort" */
+  if (!sort->param_list)
     return;
-  }
 
-  /* Obtain the conversion function */
-  sort->conv_fcn = gncQueryObjectGetConverter (obj, sort->obj_name);
+  /* Walk the parameter list of obtain the parameter functions */
+  sort->param_fcns = compile_params (sort->param_list, obj, &resObj);
 
-  /* No need to continue if there is no conversion function */
-  if (sort->conv_fcn) {
-    const QueryObjectDef *resObj =
-      gncQueryObjectGetParameter (sort->obj_name, sort->param_name);
+  /* If we have valid parameters, grab the compare function,
+   * If not, see if this is the default sort.
+   */
+  if (sort->param_fcns)
+    sort->comp_fcn = gncQueryCoreGetCompare (resObj->param_type);
 
-    if (resObj) {
-      sort->get_fcn = resObj->param_getfcn;
-      sort->comp_fcn = gncQueryCoreGetCompare (resObj->param_type);
-    } else {
-      sort->get_fcn = NULL;
-      sort->comp_fcn = NULL;
-    }
-
-  } else if (!safe_strcmp (sort->obj_name, QUERY_DEFAULT_SORT)) {
+  else if (!safe_strcmp (sort->param_list->data, QUERY_DEFAULT_SORT))
     sort->use_default = TRUE;
-  }
 }
 
 static void compile_terms (QueryNew *q)
@@ -334,24 +424,23 @@ static void compile_terms (QueryNew *q)
   for (or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) {
     for (and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
       QueryNewTerm *qt = and_ptr->data;
+      const QueryObjectDef *resObj = NULL;
+      
+      g_slist_free (qt->param_fcns);
+      qt->param_fcns = NULL;
 
-      /* Obtain the conversion function */
-      qt->conv_fcn =
-	gncQueryObjectGetConverter (q->last_run_type, qt->obj_name);
+      /* Walk the parameter list of obtain the parameter functions */
+      qt->param_fcns = compile_params (qt->param_list, q->last_run_type,
+				       &resObj);
 
-      /* No need to continue if there is no conversion function */
-      if (qt->conv_fcn) {
-	const QueryObjectDef *resObj =
-	  gncQueryObjectGetParameter (qt->obj_name, qt->param_name);
+      /* If we have valid parameters, grab the predicate function,
+       * If not, see if this is the default sort.
+       */
 
-	if (resObj) {
-	  qt->get_fcn = resObj->param_getfcn;
-	  qt->pred_fcn = gncQueryCoreGetPredicate (resObj->param_type);
-	} else {
-	  qt->get_fcn = NULL;
-	  qt->pred_fcn = NULL;
-	}
-      }
+      if (qt->param_fcns)
+	qt->pred_fcn = gncQueryCoreGetPredicate (resObj->param_type);
+      else
+	qt->pred_fcn = NULL;
     }
   }
 
@@ -377,6 +466,40 @@ static void check_item_cb (gpointer object, gpointer user_data)
   return;
 }
 
+static int param_list_cmp (GSList *l1, GSList *l2)
+{
+  while (1) {
+    int ret;
+
+    /* Check the easy stuff */
+    if (!l1 && !l2) return 0;
+    if (!l1 && l2) return -1;
+    if (l1 && !l2) return 1;
+
+    ret = safe_strcmp (l1->data, l2->data);
+    if (ret)
+      return ret;
+
+    l1 = l1->next;
+    l2 = l2->next;
+  }
+}
+
+static GList * merge_books (GList *l1, GList *l2)
+{
+  GList *res = NULL;
+  GList *node;
+
+  res = g_list_copy (l1);
+
+  for (node = l2; node; node = node->next) {
+    if (g_list_index (res, node->data) == -1)
+      res = g_list_prepend (res, node->data);
+  }
+
+  return res;
+}
+
 /********************************************************************/
 /* PUBLISHED API FUNCTIONS */
 
@@ -392,19 +515,17 @@ void gncQueryNewShutdown (void)
   gncQueryCoreShutdown ();
 }
 
-void gncQueryAddTerm (QueryNew *q,
-		      GNCIdTypeConst obj_type, const char *param_name,
+void gncQueryAddTerm (QueryNew *q, GSList *param_list,		      
 		      query_compare_t comparitor, QueryPredData_t pred_data,
 		      QueryOp op)
 {
   QueryNewTerm *qt;
   QueryNew *qr, *qs;
 
-  if (!q || !obj_type || !param_name || !pred_data) return;
+  if (!q || !param_list || !pred_data) return;
 
   qt = g_new0 (QueryNewTerm, 1);
-  qt->obj_name = (GNCIdType)obj_type;
-  qt->param_name = param_name;
+  qt->param_list = param_list;
   qt->pdata = pred_data;
   qt->how = comparitor;
 
@@ -421,19 +542,17 @@ void gncQueryAddTerm (QueryNew *q,
   gncQueryDestroy (qr);
 }
 
-void gncQueryPurgeTerms (QueryNew *q,
-			 GNCIdTypeConst obj_type, const char *param_name)
+void gncQueryPurgeTerms (QueryNew *q, GSList *param_list)
 {
   QueryNewTerm *qt;
   GList *or, *and;
 
-  if (!q || !obj_type || !param_name) return;
+  if (!q || !param_list) return;
 
   for (or = q->terms; or; or = or->next) {
     for (and = or->data; and; and = and->next) {
       qt = and->data;
-      if (!safe_strcmp (qt->obj_name, obj_type) &&
-	  !safe_strcmp (qt->param_name, param_name)) {
+      if (!param_list_cmp (qt->param_list, param_list)) {
 	if (g_list_length (or->data) == 1) {
 	  q->terms = g_list_remove_link (q->terms, or);
 	  g_list_free_1 (or);
@@ -608,6 +727,10 @@ QueryNew * gncQueryCopy (QueryNew *q)
   copy->books = g_list_copy (q->books);
   copy->results = g_list_copy (q->results);
 
+  copy_sort (&(copy->primary_sort), &(q->primary_sort));
+  copy_sort (&(copy->secondary_sort), &(q->secondary_sort));
+  copy_sort (&(copy->tertiary_sort), &(q->tertiary_sort));
+
   return copy;
 }
 
@@ -641,6 +764,7 @@ QueryNew * gncQueryInvert (QueryNew *q)
   case 1:
     retval = gncQueryCreate();
     retval->max_results = q->max_results;
+    retval->books = g_list_copy (q->books);
 
     aterms = g_list_nth_data(q->terms, 0);
     new_oterm = NULL;
@@ -667,6 +791,7 @@ QueryNew * gncQueryInvert (QueryNew *q)
     ileft        = gncQueryInvert(left);
 
     retval = gncQueryMerge(iright, ileft, QUERY_AND);
+    retval->books          = g_list_copy (q->books);
     retval->max_results    = q->max_results;
     retval->changed        = 1;
 
@@ -701,12 +826,14 @@ QueryNew * gncQueryMerge(QueryNew *q1, QueryNew *q2, QueryOp op)
     retval = gncQueryCreate();
     retval->terms = 
       g_list_concat(copy_or_terms(q1->terms), copy_or_terms(q2->terms));
+    retval->books	   = merge_books (q1->books, q2->books);
     retval->max_results    = q1->max_results;
     retval->changed        = 1;
     break;
 
   case QUERY_AND:
     retval = gncQueryCreate();
+    retval->books          = merge_books (q1->books, q2->books);
     retval->max_results    = q1->max_results;
     retval->changed        = 1;
 
@@ -761,20 +888,19 @@ QueryNew * gncQueryMerge(QueryNew *q1, QueryNew *q2, QueryOp op)
 
 void
 gncQuerySetSortOrder (QueryNew *q,
-		      GNCIdTypeConst prim_type, const char *prim_param,
-		      GNCIdTypeConst sec_type, const char *sec_param,
-		      GNCIdTypeConst tert_type, const char *tert_param)
+		      GSList *params1, GSList *params2, GSList *params3)
 {
   if (!q) return;
-  q->primary_sort.obj_name = (GNCIdType)prim_type;
-  q->primary_sort.param_name = prim_param;
+  q->primary_sort.param_list = params1;
   q->primary_sort.options = 0;
-  q->secondary_sort.obj_name = (GNCIdType)sec_type;
-  q->secondary_sort.param_name = sec_param;
+
+  q->secondary_sort.param_list = params2;
   q->secondary_sort.options = 0;
-  q->tertiary_sort.obj_name = (GNCIdType)tert_type;
-  q->tertiary_sort.param_name = tert_param;
+
+  q->tertiary_sort.param_list = params2;
   q->tertiary_sort.options = 0;
+
+  q->changed = 1;
 }
 
 void gncQuerySetSortOptions (QueryNew *q, gint prim_op, gint sec_op,
@@ -807,14 +933,13 @@ int gncQueryGetMaxResults (QueryNew *q)
   return q->max_results;
 }
 
-void gncQueryAddGUIDMatch (QueryNew *q, QueryOp op,
-			   GNCIdTypeConst obj_type, const char *param_name,
-			   const GUID *guid)
+void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,
+			   const GUID *guid, QueryOp op)
 {
   QueryPredData_t pdata;
   GList *g = NULL;
 
-  if (!q || !obj_type || !param_name) return;
+  if (!q || !param_list) return;
 
   if (guid)
     g = g_list_prepend (g, (gpointer)guid);
@@ -822,7 +947,7 @@ void gncQueryAddGUIDMatch (QueryNew *q, QueryOp op,
   pdata = gncQueryGUIDPredicate (guid ? GUID_MATCH_ANY : GUID_MATCH_NULL, g);
   g_list_free (g);
 
-  gncQueryAddTerm (q, obj_type, param_name, COMPARE_EQUAL, pdata, op);
+  gncQueryAddTerm (q, param_list, COMPARE_EQUAL, pdata, op);
 }
 
 void gncQuerySetBook (QueryNew *q, GNCBook *book)
@@ -830,7 +955,8 @@ void gncQuerySetBook (QueryNew *q, GNCBook *book)
   if (!q || !book) return;
 
   q->books = g_list_prepend (q->books, book);
-  gncQueryAddGUIDMatch (q, QUERY_AND, GNC_ID_BOOK, BOOK_GUID,
-			gnc_book_get_guid(book));
+  gncQueryAddGUIDMatch (q, g_slist_prepend (g_slist_prepend (NULL, BOOK_GUID),
+					    QUERY_PARAM_BOOK),
+			gnc_book_get_guid(book), QUERY_AND);
 }
 
