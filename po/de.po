@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
 "POT-Creation-Date: 2003-11-18 22:20+0100\n"
-"PO-Revision-Date: 2003-12-28 13:14+0100\n"
+"PO-Revision-Date: 2004-01-04 14:36+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -1440,7 +1440,7 @@ msgstr "Anzahl"
 #: src/business/business-gnome/glade/invoice.glade.h:87
 #: src/gnome/glade/register.glade.h:125 intl-scm/guile-strings.c:1818
 msgid "_Reports"
-msgstr "_Berichte"
+msgstr "Be_richte"
 
 #: src/business/business-gnome/glade/invoice.glade.h:88
 #: src/gnome/glade/register.glade.h:126
@@ -3337,11 +3337,11 @@ msgstr "Nummer"
 #: src/gnome/glade/register.glade.h:123 src/gnome/window-acct-tree.c:989
 #: src/gnome/window-acct-tree.c:1342
 msgid "_Reconcile..."
-msgstr "_Abgleichen..."
+msgstr "Ab_gleichen..."
 
 #: src/gnome/glade/register.glade.h:124
 msgid "_Reconciled"
-msgstr "_Abgeglichen"
+msgstr "Ab_geglichen"
 
 #: src/gnome/glade/register.glade.h:127
 msgid "_Statement Date"
@@ -6057,7 +6057,7 @@ msgstr "Das GnuCash-Hilfe-Fenster öffnen"
 
 #: src/gnome/window-reconcile.c:1342
 msgid "_Reconcile"
-msgstr "_Abgleichen"
+msgstr "Ab_gleichen"
 
 #: src/gnome/window-reconcile.c:1344
 msgid "_Transaction"
@@ -11038,7 +11038,6 @@ msgstr "Tastenkürzel bei der Eingabe"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:447 intl-scm/guile-strings.c:499
-#, fuzzy
 msgid "Reconciliation"
 msgstr "Informationen zum Kontenabgleich"
 
@@ -11051,12 +11050,12 @@ msgstr "Abgleichen-Fenster"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:453
 msgid "Creating from the Ledger"
-msgstr ""
+msgstr "Im Kontofenster erstellen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:455
 msgid "Creating from the Editor"
-msgstr ""
+msgstr "Im Editor erstellen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:461
@@ -11102,19 +11101,17 @@ msgstr "Kreditkarten (englisch)"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:479
 msgid "Concepts"
-msgstr ""
+msgstr "Konzepte"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:483
-#, fuzzy
 msgid "Simple Setup"
 msgstr "Grundlegende Einrichtung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:485
-#, fuzzy
 msgid "Complete Setup"
-msgstr "Komplett"
+msgstr "Komplette Einrichtung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:487
@@ -11128,15 +11125,13 @@ msgstr "Zahlungen eingeben"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:493
-#, fuzzy
 msgid "Purchases"
-msgstr "Preise"
+msgstr "Käufe"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:495
-#, fuzzy
 msgid "Refund"
-msgstr "Ref"
+msgstr "Erstattung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:503
@@ -11160,25 +11155,23 @@ msgstr "Hypothek (Wie geht...)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:513
-#, fuzzy
 msgid "Calculations"
-msgstr "Berechnen"
+msgstr "Berechnungen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:515
-#, fuzzy
 msgid "Example: Monthly Payments"
-msgstr "sample:Zahlung"
+msgstr "Beispiel: Monatliche Zahlungen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:517
 msgid "Example: Length of Loan"
-msgstr ""
+msgstr "Beispiel: Darlehens-Länge"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:519
 msgid "Advanced: Calculation Details"
-msgstr ""
+msgstr "Erweitert: Berechnungsdetails"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:521
