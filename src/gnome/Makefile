@@ -35,8 +35,8 @@ INCLPATH = -I.. -I../.. -I../engine -I../register -I./../../include \
            -I$(includedir) -I$(prefix)/lib/gnome-libs/include
  
 
-CFLAGS   =  -O2 -Wall -g -Wall  -I/usr/X11R6/include ${INCLPATH}
-LDFLAGS  =  -g -Wall
+CFLAGS   =  -O2 -Wall  -I/usr/X11R6/include ${INCLPATH}
+LDFLAGS  = 
 LIBS     = -L$(prefix)/lib -lpng -ljpeg -lz -lm  -lSM -lICE -lXpm  -L/usr/X11R6/lib \
            $(shell gtk-config --libs)  -lgnomeui -lgnome \
            -lgnomesupport -lintl -lgdk_imlib -ltiff

@@ -28,13 +28,13 @@ srcdir   = .
 
 CC       = gcc
 INCLPATH = -I.. -I./engine -I./register -I./../include -I/usr/local/include
-CFLAGS   =  -O2 -Wall -g -Wall  -I/usr/X11R6/include ${INCLPATH}
+CFLAGS   =  -O2 -Wall  -I/usr/X11R6/include ${INCLPATH}
 
 
 ######################################################################
 # See Makefile.common for information about these variables.
 COMMON_SRCS   := Ledger.c SplitLedger.c
-CLEAN_SUBDIRS := engine gnome motif register
+CLEAN_SUBDIRS := engine gnome motif register qt
 ######################################################################
 
 all: default
@@ -55,7 +55,12 @@ gnome: ${GNOME_OBJS}
 	@cd register;          $(MAKE) gnome
 	@cd gnome;               $(MAKE) gnome
 
-.PHONY: default gnome motif all
+qt: $(QT_OBJS)
+	@cd engine;	       $(MAKE) default
+	@cd register;	       $(MAKE) qt
+	@cd qt;		       $(MAKE) qt
+
+.PHONY: default qt gnome motif all
 
 # Local Variables:
 # tab-width: 2
