@@ -84,17 +84,19 @@ const char * gncObjectPrintable (GNCIdTypeConst type_name, gpointer obj);
 
 /* REGISTRATION AND REG-LOOKUP FUNCTIONS */
 
-/* Register new types of object objects */
+/** Register new types of object objects */
 gboolean gncObjectRegister (const GncObject_t *object);
 
-/* Get the printable label for a type */
+/** Get the printable label for a type.  This label is *not*
+ * translated; you must use _() on it if you want a translated version.
+ */
 const char * gncObjectGetTypeLabel (GNCIdTypeConst type_name);
 
-/* Lookup a object definition */
+/** Lookup a object definition */
 const GncObject_t * gncObjectLookup (GNCIdTypeConst type_name);
 
 
-/* Register and lookup backend-specific data for this particular object */
+/** Register and lookup backend-specific data for this particular object */
 gboolean gncObjectRegisterBackend (GNCIdTypeConst type_name,
 				   const char *backend_name,
 				   gpointer be_data);
