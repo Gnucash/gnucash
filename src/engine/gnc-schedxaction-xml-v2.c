@@ -107,7 +107,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     Timespec	ts;
     GDate	*date;
 
-    // FIXME: this should be the same as the def in io-gncxml-v2.c...
+    /* FIXME: this should be the same as the def in io-gncxml-v2.c */
     ret = xmlNewNode( NULL, "gnc:schedxaction" );
 
     xmlSetProp( ret, "version", schedxaction_version_string );
@@ -140,14 +140,14 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
                                             xaccSchedXactionGetEndDate(sx) ) );
     }
 
-    // output freq spec
+    /* output freq spec */
     fsNode = xmlNewNode(NULL, "sx:freqspec");
     xmlAddChild( fsNode,
                  gnc_freqSpec_dom_tree_create(
                          xaccSchedXactionGetFreqSpec(sx)) );
     xmlAddChild( ret, fsNode );
     
-    // output kvp_frame
+    /* output kvp_frame */
     {
         xmlNodePtr kvpnode =
                 kvp_frame_to_dom_tree( "sx:slots",
@@ -349,8 +349,9 @@ gnc_schedXaction_sixtp_parser_create(void)
 
 static
 gboolean
-tt_act_handler( xmlNodePtr node, gnc_template_xaction_data *txd )
+tt_act_handler( xmlNodePtr node, gpointer data)
 {
+        gnc_template_xaction_data *txd = data;
         Account                *acc;
         acc = dom_tree_to_account( node );
         if ( acc == NULL ) {
@@ -363,8 +364,9 @@ tt_act_handler( xmlNodePtr node, gnc_template_xaction_data *txd )
 
 static
 gboolean
-tt_trn_handler( xmlNodePtr node, gnc_template_xaction_data *txd )
+tt_trn_handler( xmlNodePtr node, gpointer data )
 {
+        gnc_template_xaction_data *txd = data;
         Transaction        *trn;
         trn = dom_tree_to_transaction( node );
         if ( trn == NULL ) {
@@ -394,14 +396,13 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
         gnc_template_xaction_data        *txd =
                 g_new0( gnc_template_xaction_data, 1 );
 
-        // the DOM tree will have an account tree [the template group
-        // and account] and a list of transactions [which will be
-        // members of the template account].
+        /* the DOM tree will have an account tree [the template group
+           and account] and a list of transactions [which will be
+           members of the template account].
         
-
-        // we want to parse through the dom trees for each, placing
-        // the null-parent account in the book's template-group slot,
-        // the others under it, and the transactions as normal.
+           we want to parse through the dom trees for each, placing
+           the null-parent account in the book's template-group slot,
+           the others under it, and the transactions as normal. */
 
         if ( parent_data ) {
                 return TRUE;
@@ -421,7 +422,7 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
                 xmlElemDump( stdout, NULL, tree );
         }
         
-        // cleanup
+        /* cleanup */
         for ( n = txd->accts; n; n = n->next ) {
                 n->data = NULL;
         }

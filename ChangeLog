@@ -1,5 +1,7 @@
 2001-06-18  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/gnc-schedxaction-xml-v2.c: same as below
+
 	* src/MultiLedger.c: same as below
 
 	* src/SplitLedger.c: same as below. fix indentation. please
