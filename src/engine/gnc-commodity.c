@@ -38,6 +38,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-trace.h"
 #include "guid.h"
+#include "messages.h"
 #include "qofbook.h"
 #include "qofobject.h"
 
@@ -64,17 +65,21 @@ struct gnc_commodity_s
   char    * quote_tz;
 };
 
-struct gnc_commodity_namespace_s {
+struct gnc_commodity_namespace_s 
+{
+  char    * namespace;
   GHashTable * table;
 };
 
-struct gnc_commodity_table_s {
+struct gnc_commodity_table_s 
+{
   GHashTable * table;
 };
 
 typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
 
-struct gnc_new_iso_code {
+struct gnc_new_iso_code
+{
   const char *old_code;
   const char *new_code;
 } gnc_new_iso_codes[] = {
@@ -1045,11 +1050,14 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
   if (!table) return NULL;
   if (!comm) return NULL;
 
+  ENTER ("(table=%p, comm=%p) %s %s", table, comm, comm->mnemonic, comm->fullname);
   c = gnc_commodity_table_lookup (table, comm->namespace, comm->mnemonic);
 
   if (c) {
     if (c == comm)
+    {
       return c;
+    }
 
     gnc_commodity_set_fullname (c, gnc_commodity_get_fullname (comm));
     gnc_commodity_set_fraction (c, gnc_commodity_get_fraction (comm));
@@ -1065,18 +1073,22 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
 
   nsp = g_hash_table_lookup(table->table, (gpointer)(comm->namespace));
   
-  if(!nsp) {
+  if(!nsp) 
+  {
     nsp = g_new0(gnc_commodity_namespace, 1);
     nsp->table = g_hash_table_new(g_str_hash, g_str_equal);
+    nsp->namespace = g_strdup(comm->namespace);
     g_hash_table_insert(table->table, 
                         g_strdup(comm->namespace), 
                         (gpointer)nsp);
   }
 
+  PINFO ("insert %p %s into nsp=%p %s", comm->mnemonic, comm->mnemonic, nsp->table, nsp->namespace);
   g_hash_table_insert(nsp->table, 
                       (gpointer)g_strdup(comm->mnemonic),
                       (gpointer)comm);
 
+  LEAVE ("(table=%p, comm=%p)", table, comm);
   return comm;
 }
 
@@ -1292,6 +1304,7 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
   if(!ns) {
     ns = g_new0(gnc_commodity_namespace, 1);
     ns->table = g_hash_table_new(g_str_hash, g_str_equal);
+    ns->namespace = g_strdup(namespace);
     g_hash_table_insert(table->table,
                         (gpointer) g_strdup(namespace), 
                         (gpointer) ns);
@@ -1320,15 +1333,18 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
   gpointer orig_key;
   gnc_commodity_namespace * value;
 
-  if(table) { 
+  if(table) 
+  { 
     if(g_hash_table_lookup_extended(table->table,
                                     (gpointer) namespace,
                                     &orig_key,
-                                    (gpointer)&value)) {
+                                    (gpointer)&value)) 
+    {
       g_hash_table_remove(table->table, namespace);
 
       g_hash_table_foreach_remove(value->table, ns_helper, NULL);
       g_hash_table_destroy(value->table);
+      g_free(value->namespace);
       g_free(value);
 
       g_free(orig_key);
@@ -1397,6 +1413,7 @@ ct_helper(gpointer key, gpointer value, gpointer data)
   g_hash_table_foreach_remove(ns->table, ns_helper, NULL);
   g_hash_table_destroy(ns->table);
   ns->table = NULL;
+  g_free(ns->namespace);
   g_free(ns);
   g_free(key);
   return TRUE;
@@ -1406,10 +1423,13 @@ void
 gnc_commodity_table_destroy(gnc_commodity_table * t) 
 {
   if (!t) return;
+  ENTER ("table=%p", t);
   
   g_hash_table_foreach_remove(t->table, ct_helper, t);
   g_hash_table_destroy(t->table);
+  t->table = NULL;
   g_free(t);
+  LEAVE ("table=%p", t);
 }
 
 static gboolean 
@@ -1455,7 +1475,7 @@ gnc_commodity_table_equal(gnc_commodity_table *t_1,
 gboolean
 gnc_commodity_table_add_default_data(gnc_commodity_table *table)
 {
-
+  ENTER ("table=%p", table);
   #include "iso-4217-currencies.c"
 
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_AMEX);
@@ -1463,6 +1483,7 @@ gnc_commodity_table_add_default_data(gnc_commodity_table *table)
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NASDAQ);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_EUREX);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_MUTUAL);
+  LEAVE ("table=%p", table);
   return TRUE;
 }
 
@@ -1474,6 +1495,7 @@ static void
 commodity_table_book_begin (QofBook *book)
 {
   gnc_commodity_table *ct;
+  ENTER ("book=%p", book);
   
   ct = gnc_commodity_table_new ();
   if(!gnc_commodity_table_add_default_data(ct))
@@ -1481,7 +1503,7 @@ commodity_table_book_begin (QofBook *book)
     PWARN("unable to initialize book's commodity_table");
   }
   gnc_commodity_table_set_table (book, ct);
-  
+  LEAVE ("book=%p", book);
 }
 
 static void 
