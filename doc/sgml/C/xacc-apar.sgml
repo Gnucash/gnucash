@@ -2,8 +2,8 @@
 <artheader>
 <title>Accounts Payable/Accounts Receivable</title>
 </artheader>
-<sect1 id="xacc-ap-ar">
-<title>Accounts Payable and Accounts Receivable</title>
+<!-- <sect1 id="xacc-ap-ar"> -->
+<!-- <title>Accounts Payable and Accounts Receivable</title> -->
 
 <para>A/R (Accounts Receivable) and A/P (Accounts Payable) are used by
 businesses to record sales for which they are not immediately paid, or
@@ -15,7 +15,7 @@ track of them just because you don't pay/get paid right away.
 <para> For most home users, A/R and A/P will add so much complexity
 that they are not worth the effort.  
 </para>
-</sect1>
+<!-- </sect1> -->
     
 <sect1 id="xacc-ardef">
 <title> Accounts Receivable</title> 
