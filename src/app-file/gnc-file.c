@@ -71,7 +71,11 @@ static GNCSession *
 gnc_get_current_session_internal (void)
 {
   if (!current_session)
+  {
+    gnc_engine_suspend_events ();
     current_session = gnc_session_new ();
+    gnc_engine_resume_events ();
+  }
 
   return current_session;
 }
