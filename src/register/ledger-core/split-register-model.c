@@ -653,13 +653,13 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
 
 static const char *
 gnc_split_register_get_inactive_date_entry (VirtualLocation virt_loc,
-                                           gboolean translate,
-                                           gboolean *conditionally_changed,
-                                           gpointer user_data)
+                                            gboolean translate,
+                                            gboolean *conditionally_changed,
+                                            gpointer user_data)
 {
   /* This seems to be the one that initially gets used, the InactiveDateCell
      is set to, and subsequently displayed. */
-  return "Scheduled";
+  return _("Scheduled");
 }
 
 static const char *
