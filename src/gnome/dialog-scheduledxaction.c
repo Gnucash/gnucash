@@ -369,6 +369,7 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                         }
                         unbalanceable |= !(gnc_numeric_zero_p( gnc_numeric_sub_fixed( debitSum, creditSum ) ));
 #if DEBUG
+
                         if ( gnc_numeric_zero_p( gnc_numeric_sub_fixed( debitSum, creditSum ) ) ) {
                                 printf( "true [%s - %s = %s]\n",
                                         gnc_numeric_to_string( debitSum ),
