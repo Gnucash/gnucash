@@ -31,8 +31,6 @@ struct _GNCDruid
 
   /* PROVIDED BY TOOLKIT IMPLEMENTATION... */
   GList *providers;		/* list of GNCProvider*; list is owned herein */
-  GNCDruidPage *first_page;	/* the first page of the druid */
-  GNCDruidPage *last_page;	/* the last page of the druid */
 
   /* PROVIDED HEREIN */
   GNCDruidProvider *provider;	/* current provider */
