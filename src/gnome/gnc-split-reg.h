@@ -244,6 +244,11 @@ SortType gnc_split_reg_get_sort_type( GNCSplitReg *gsr );
 void gnc_split_reg_set_sort_type( GNCSplitReg *gsr, SortType t );
 
 /**
+ * Gets/sets the style of the GNCSplitReg.
+ **/
+void gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style);
+
+/**
  * Retreives the various menus created by the GNCSplitReg.  Callers may want
  * to put these in a more traditional menu bar, for instance.
  **/
@@ -302,5 +307,12 @@ gboolean gnc_split_reg_get_read_only( GNCSplitReg *gsr );
 void gnc_split_reg_jump_to_blank (GNCSplitReg *gsr);
 void gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split);
 void gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split);
+
+void gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data );
+void gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction );
+void gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data );
+void gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data );
+void gsr_default_expand_handler( GNCSplitReg *gsr, gpointer data );
+void gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data );
 
 #endif /* GNC_SPLIT_REG_H */

@@ -39,9 +39,6 @@ GNCSplitReg* regWindowAccGroup(Account *account_group);
 
 RegWindow* regWindowLedger(GNCLedgerDisplay *ledger);
 
-gpointer gnc_RegWindow_get_pcd (RegWindow *data);
-void     gnc_RegWindow_set_pcd (RegWindow *data, gpointer);
-
 void gnc_register_raise(RegWindow *regData);
 
 #endif

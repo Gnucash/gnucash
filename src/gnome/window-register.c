@@ -62,7 +62,6 @@
 #include "window-register.h"
 #include "window-report.h"
 #include "top-level.h"
-#include "dialog-print-check.h"
 #include "guile-mappings.h"
 
 typedef struct _RegDateWindow RegDateWindow;
@@ -95,8 +94,6 @@ struct _RegWindow
   GNCSplitReg *gsr;
 
   RegDateWindow *date_window;
-  /* pcd = "print check dialog" */
-  gpointer pcd;
   gboolean read_only;
 
   GtkWidget *reconciled_menu_item;
@@ -117,18 +114,6 @@ GNCLedgerDisplay *gnc_RegWindow_ledger (RegWindow *data)
 {
   g_assert(data);
   return data->ledger;
-}
-
-gpointer
-gnc_RegWindow_get_pcd (RegWindow *data)
-{
-  return data->pcd;
-}
-
-void
-gnc_RegWindow_set_pcd (RegWindow *data, gpointer pcd)
-{
-  data->pcd = pcd;
 }
 
 
@@ -643,29 +628,7 @@ gnc_ui_find_transactions_cb (GtkWidget *widget, gpointer data)
 void
 gnc_register_print_check_cb(GtkWidget * widget, gpointer data)
 {
-  RegWindow     * reg_data = data;
-  SplitRegister * reg      =
-    gnc_ledger_display_get_split_register (reg_data->ledger);
-  Split         * split    = gnc_split_register_get_current_split(reg);
-  Transaction   * trans    = xaccSplitGetParent(split);
-
-  const char    * payee;
-  const char    * memo;
-  gnc_numeric   amount;
-  time_t        date;
-
-  if(split && trans)
-  {
-    payee  = xaccTransGetDescription(trans);
-    memo   = xaccTransGetNotes(trans);
-    if (memo == NULL)
-      memo = "";
-    amount = xaccSplitGetAmount(split);
-    amount = gnc_numeric_abs (amount);
-    date   = xaccTransGetDate(trans);
-
-    gnc_ui_print_check_dialog_create(reg_data, payee, amount, date, memo);
-  }
+  g_assert_not_reached();
 }
 
 void
@@ -747,9 +710,6 @@ gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
     g_free(regData->date_window);
     regData->date_window = NULL;
   }
-
-  if (regData->pcd)
-    gnc_ui_print_check_dialog_destroy(regData->pcd);
 
   gtk_widget_destroy( regData->window );
 

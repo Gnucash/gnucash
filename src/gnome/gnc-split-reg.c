@@ -90,10 +90,10 @@ void gnc_split_reg_raise( GNCSplitReg *gsr );
 static GtkWidget* add_summary_label( GtkWidget *summarybar,
                                      const char *label_str );
 
+#if 0
 static void gnc_toolbar_change_cb( void *data );
+#endif
 static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr );
-
-static void gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style);
 
 static GNCPlaceholderType gnc_split_reg_get_placeholder( GNCSplitReg *gsr );
 static gncUIWidget gnc_split_reg_get_parent( GNCLedgerDisplay *ledger );
@@ -475,6 +475,7 @@ static
 void
 gsr_create_toolbar( GNCSplitReg *gsr )
 {
+#if 0
   GladeXML *xml;
   GtkWidget *widget;
   SCM id;
@@ -513,6 +514,7 @@ gsr_create_toolbar( GNCSplitReg *gsr )
     widget = glade_xml_get_widget (xml, "toolbar_duplicate");
     gtk_widget_set_sensitive(widget, FALSE);
   }
+#endif
 }
 
 static
@@ -846,6 +848,7 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     expand = gnc_split_register_current_trans_expanded (reg);
     sensitive = (reg->style == REG_STYLE_LEDGER);
 
+#if 0
     if ( gsr->createFlags & CREATE_TOOLBAR ) {
       gtk_signal_handler_block_by_data
         (GTK_OBJECT(gsr->split_button), gsr);
@@ -855,6 +858,7 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
         (GTK_OBJECT (gsr->split_button), gsr);
       gtk_widget_set_sensitive( gsr->split_button, sensitive );
     }
+#endif
 
     if ( gsr->createFlags & CREATE_MENUS ) {
       gtk_signal_handler_block_by_data
@@ -1570,49 +1574,7 @@ gnc_split_reg_new_trans_cb (GtkWidget *widget, gpointer data)
 void
 gsr_default_jump_handler( GNCSplitReg *gsr, gpointer data )
 {
-  SplitRegister *reg;
-  Account *account;
-  Account *leader;
-  Split *split;
-
-  reg = gnc_ledger_display_get_split_register (gsr->ledger);
-
-  split = gnc_split_register_get_current_split (reg);
-  if (split == NULL)
-    return;
-
-  account = xaccSplitGetAccount(split);
-  if (account == NULL)
-    return;
-
-  leader = gnc_ledger_display_leader( gsr->ledger );
-
-  if (account == leader)
-  {
-    split = xaccSplitGetOtherSplit(split);
-    if (split == NULL)
-      return;
-
-    account = xaccSplitGetAccount(split);
-    if (account == NULL)
-      return;
-    if (account == leader)
-      return;
-  }
-
-  {
-    GNCLedgerDisplay *ld;
-    GNCSplitReg *gsr;
-
-    ld = gnc_ledger_display_simple( account );
-    gsr = gnc_ledger_display_get_user_data( ld );
-    if ( !gsr ) {
-      /* create new */
-      gsr = regWindowSimple( account );
-    }
-    gnc_split_reg_raise( gsr );
-    gnc_split_reg_jump_to_split( gsr, split );
-  }
+  g_assert_not_reached();
 }
 
 void
@@ -1622,7 +1584,6 @@ gnc_split_reg_jump_cb( GtkWidget *widget, gpointer data )
   gsr_emit_simple_signal( gsr, "jump" );
 }
 
-static
 void
 gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style)
 {
@@ -1878,7 +1839,7 @@ gnc_split_reg_goto_next_trans_row (GNCSplitReg *gsr)
                                            gsr );
 }
 
-static void
+void
 gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction )
 {
   SplitRegister *sr = gnc_ledger_display_get_split_register( gsr->ledger );
@@ -2281,6 +2242,7 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
 
 }
 
+#if 0
 static
 void
 gnc_toolbar_change_cb (void *data)
@@ -2288,6 +2250,7 @@ gnc_toolbar_change_cb (void *data)
   GNCSplitReg *gsr = data;
   gnc_split_reg_refresh_toolbar( gsr );
 }
+#endif
 
 static
 gncUIWidget
@@ -2342,8 +2305,7 @@ gnc_split_reg_get_sort_type( GNCSplitReg *gsr )
 void
 gnc_split_reg_set_sort_type( GNCSplitReg *gsr, SortType t )
 {
-  /* FIXME */
-  PERR( "unimplemented" );
+  gnc_split_reg_sort( gsr, t );
 }
 
 GtkWidget*
