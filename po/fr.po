@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.4.X\n"
 "POT-Creation-Date: 2000-10-02 00:16-0700\n"
-"PO-Revision-Date: 2000-07-23 20:00+0100\n"
+"PO-Revision-Date: 2000-10-07 16:40+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: FRENCH <FR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1806,7 +1806,7 @@ msgstr "Capitaux propres"
 
 #: messages-i18n.c:325
 msgid "EUR (total)"
-msgstr ""
+msgstr "EUR (total)"
 
 # messages-i18n.c:283
 #: messages-i18n.c:326
@@ -2280,7 +2280,7 @@ msgstr "Portefeuille d'actions"
 # po/guile_strings.txt:16
 #: po/guile_strings.txt:17
 msgid "The types of accounts for which balances are sign-reversed"
-msgstr "Les types de comptes pour lesquels les soldes sont de signe inversé"
+msgstr "Types de comptes pour lesquels les soldes sont de signe inversé"
 
 # po/guile_strings.txt:17
 #: po/guile_strings.txt:19
@@ -2343,7 +2343,7 @@ msgstr "Compte (avec/sous-total)"
 # po/guile_strings.txt:27
 #: po/guile_strings.txt:33
 msgid "International"
-msgstr ""
+msgstr "International"
 
 # po/guile_strings.txt:28
 #: po/guile_strings.txt:34
@@ -2388,7 +2388,7 @@ msgstr "Transactions du compte"
 # po/guile_strings.txt:36
 #: po/guile_strings.txt:42
 msgid "UK"
-msgstr ""
+msgstr "UK"
 
 # po/guile_strings.txt:37
 #: po/guile_strings.txt:43
@@ -2511,7 +2511,7 @@ msgstr "Affiche le rapport Bonjour,tout le monde"
 # po/guile_strings.txt:64
 #: po/guile_strings.txt:73
 msgid "Gain"
-msgstr ""
+msgstr "Gain"
 
 # po/guile_strings.txt:65
 #: po/guile_strings.txt:74
@@ -2706,7 +2706,7 @@ msgstr "Inverser les comptes de revenus et dépenses."
 # po/guile_strings.txt:99
 #: po/guile_strings.txt:112
 msgid "Europe"
-msgstr ""
+msgstr "Europe"
 
 # po/guile_strings.txt:101
 #: po/guile_strings.txt:115
@@ -2807,7 +2807,7 @@ msgstr "Bonjour, tout le monde!"
 # po/guile_strings.txt:119
 #: po/guile_strings.txt:140
 msgid "ISO"
-msgstr ""
+msgstr "ISO"
 
 # po/guile_strings.txt:120
 #: po/guile_strings.txt:141
@@ -3054,7 +3054,7 @@ msgstr "Bonne option"
 # po/guile_strings.txt:169
 #: po/guile_strings.txt:198
 msgid "US"
-msgstr ""
+msgstr "US"
 
 # messages-i18n.c:346
 #: po/guile_strings.txt:199
@@ -3259,7 +3259,7 @@ msgstr "Le laid"
 # po/guile_strings.txt:207
 #: po/guile_strings.txt:248
 msgid "Max"
-msgstr ""
+msgstr "Max"
 
 #: po/guile_strings.txt:249
 msgid "Test the budget dialog."
@@ -3547,7 +3547,7 @@ msgstr "Affiche le rapport Rapport de transactions."
 # po/guile_strings.txt:255
 #: po/guile_strings.txt:306
 msgid "\\ (Backslash)"
-msgstr ""
+msgstr "\\ (Backslash)"
 
 # po/guile_strings.txt:256
 #: po/guile_strings.txt:307
@@ -3695,7 +3695,7 @@ msgstr "C'est une liste d'option"
 # po/guile_strings.txt:286
 #: po/guile_strings.txt:339
 msgid "Min"
-msgstr ""
+msgstr "Min"
 
 # po/guile_strings.txt:287
 #: po/guile_strings.txt:340
@@ -3719,7 +3719,7 @@ msgstr "Affichage"
 
 #: po/guile_strings.txt:344 src/gnome/glade-gnc-dialogs.c:3114
 msgid "Nominal"
-msgstr ""
+msgstr "Nominal"
 
 # po/guile_strings.txt:291
 #: po/guile_strings.txt:345
@@ -4050,32 +4050,32 @@ msgstr "31 Décembre, 2000"
 # src/gnome/glade-gnc-dialogs.c:1258
 #: src/gnome/glade-gnc-dialogs.c:1236
 msgid "Dec 31, 2000"
-msgstr ""
+msgstr "Dec 31, 2000"
 
 # src/gnome/glade-gnc-dialogs.c:1261
 #: src/gnome/glade-gnc-dialogs.c:1239
 msgid "31 Dec, 2000"
-msgstr ""
+msgstr "31 Dec, 2000"
 
 # src/gnome/glade-gnc-dialogs.c:1264
 #: src/gnome/glade-gnc-dialogs.c:1242
 msgid "12/31/2000"
-msgstr ""
+msgstr "12/31/2000"
 
 # src/gnome/glade-gnc-dialogs.c:1267
 #: src/gnome/glade-gnc-dialogs.c:1245
 msgid "12/31/00"
-msgstr ""
+msgstr "12/31/00"
 
 # src/gnome/glade-gnc-dialogs.c:1270
 #: src/gnome/glade-gnc-dialogs.c:1248
 msgid "31/12/2000"
-msgstr ""
+msgstr "31/12/2000"
 
 # src/gnome/glade-gnc-dialogs.c:1273
 #: src/gnome/glade-gnc-dialogs.c:1251
 msgid "31/12/00"
-msgstr ""
+msgstr "31/12/00"
 
 # src/gnome/glade-gnc-dialogs.c:1281
 #: src/gnome/glade-gnc-dialogs.c:1259
@@ -4115,7 +4115,7 @@ msgstr "Unités"
 # src/gnome/glade-gnc-dialogs.c:1387
 #: src/gnome/glade-gnc-dialogs.c:1365
 msgid "x"
-msgstr ""
+msgstr "x"
 
 # src/gnome/glade-gnc-dialogs.c:1457
 #: src/gnome/glade-gnc-dialogs.c:1442
@@ -4135,20 +4135,20 @@ msgstr "Millimètres"
 # src/gnome/glade-gnc-dialogs.c:1466
 #: src/gnome/glade-gnc-dialogs.c:1451
 msgid "Points"
-msgstr ""
+msgstr "Points"
 
 # src/gnome/glade-gnc-dialogs.c:1478
 #: src/gnome/glade-gnc-dialogs.c:1464
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: src/gnome/glade-gnc-dialogs.c:1523
 msgid "                                  "
-msgstr ""
+msgstr "                                  "
 
 #: src/gnome/glade-gnc-dialogs.c:1530
 msgid "                    "
-msgstr ""
+msgstr "                    "
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: src/gnome/glade-gnc-dialogs.c:1707
@@ -4185,7 +4185,7 @@ msgstr "Trouver les transactions ayant eu lieu entre les dates:"
 #: src/gnome/glade-gnc-dialogs.c:1830 src/gnome/glade-gnc-dialogs.c:1846
 #: src/gnome/glade-gnc-dialogs.c:1883 src/gnome/glade-gnc-dialogs.c:1898
 msgid "/"
-msgstr ""
+msgstr "/"
 
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: src/gnome/glade-gnc-dialogs.c:1927 src/gnome/glade-gnc-dialogs.c:1985
@@ -4354,7 +4354,7 @@ msgstr "Entrées du budget"
 
 #: src/gnome/glade-gnc-dialogs.c:2835
 msgid "label773"
-msgstr ""
+msgstr "label773"
 
 #: src/gnome/glade-gnc-dialogs.c:2859
 msgid "Add"
@@ -4391,7 +4391,7 @@ msgstr "Type:"
 
 #: src/gnome/glade-gnc-dialogs.c:2979
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 # messages-i18n.c:344
 #: src/gnome/glade-gnc-dialogs.c:2982
@@ -4444,7 +4444,7 @@ msgstr "Eventualité"
 
 #: src/gnome/glade-gnc-dialogs.c:3199
 msgid "window1"
-msgstr ""
+msgstr "window1"
 
 # src/gnome/print-session.c:230
 #: src/gnome/print-session.c:241
@@ -4453,23 +4453,21 @@ msgstr "Vous devez dabord sélectionner une imprimante."
 
 # messages-i18n.c:47
 #: src/SplitLedger.c:1816
-#, fuzzy
-msgid ""
+msgid""
 "You are about to overwrite an existing split.\n"
 "Are you sure you want to do that?"
 msgstr ""
-"Le compte n'est pas équilibré.\n"
-"Etes-vous sûr de vouloir terminer?"
+"Vous êtes sur le point d'écraser une répartition existante.\n"
+"Etes-vous sûr de vouloir faire celà?"
 
 # messages-i18n.c:48
 #: src/SplitLedger.c:1846
-#, fuzzy
 msgid ""
 "You are about to overwrite an existing transaction.\n"
 "Are you sure you want to do that?"
 msgstr ""
-"Vous avez fait des changements dans cette fenêtre de rapprochement.\n"
-"Etes-vous sûr de vouloir annuler?"
+"Vous êtes sur le point d'écraser une transaction existante.\n"
+"Etes-vous sûr de vouloir faire celà?"
 
 # messages-i18n.c:217
 #~ msgid "Show Categories"
