@@ -30,6 +30,7 @@ CC       = @CC@
 INCLPATH = -I/usr/include \
            -I.. \
            -I./register \
+           -I/usr/local/include \
            -I@x_includes@/. \
            -I@srcdir@/../include \
            -I@srcdir@/../lib/ComboBox-1.33 \
@@ -43,9 +44,9 @@ INCLPATH = -I/usr/include \
 CFLAGS   = @cflags@ -DCELL_WIDGETS=1
 LFLAGS   = @lflags@
 LIBS     = @LIBS@
-LIBPATH  = -L/lib -L/usr/lib -L@x_libraries@/.
-TARGET   = ../xacc
-STATIC   = ../xacc-static
+LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib -L@x_libraries@/.
+TARGET   = ../xacc.bin
+STATIC   = ../xacc-static.bin
 
 # LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
 LIBXMHTML= ../lib/XmHTML-1.1.0/src/libXmHTML.a
@@ -85,6 +86,6 @@ clean:
 	rm -f *.o *~ *.bak
 
 distclean: clean
-	rm -f $(TARGET) Makefile Makefile.bak config.h
+	rm -f $(TARGET) $(STATIC) Makefile Makefile.bak config.h
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
