@@ -135,29 +135,7 @@ gnc_mdi_set_summarybar_visibility (gboolean visible)
 void
 gnc_mdi_show_progress (const char *message, double percentage)
 {
-  GtkWidget *app;
-  GnomeAppBar *appbar;
-
-  app = gnc_ui_get_toplevel();
-  if (app == NULL)
-    return;
-  if (GNOME_APP(app)->statusbar == NULL)
-    return;
-
-  appbar = GNOME_APPBAR(GNOME_APP(app)->statusbar);
-
-  if (percentage < 0) {
-    gnome_appbar_refresh(appbar);
-    gnome_appbar_set_progress_percentage(appbar, 0.0);
-  } else {
-    if (message)
-      gnome_appbar_set_status(appbar, message);
-    gnome_appbar_set_progress_percentage(appbar, percentage/100);
-  }
-
-  /* make sure new text is up */
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  g_assert_not_reached();
 }
 
 typedef struct {

@@ -17,6 +17,17 @@
 	interface to update the status bar when moving through the
 	register.
 
+	* src/gnome/gnc-main-window.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/gnc-plugin-page.[ch]: Update status bar code to handle
+	multiple windows, and to track page switches within a window.
+
+	* src/app-file/gncmod-app-file.c:
+	* src/gnome/gnc-main-window.c:
+	* src/gnome/gnc-plugin-file-history.c:
+	* src/gnome/gnc-window.[ch]:
+	* src/gnome-utils/gnc-mdi-utils.c: Get the progress bar working.
+
 2003-10-11  David Hampton  <hampton@employees.org>
 
 	* src/business/business-gnome/gnc-plugin-business.[ch]:

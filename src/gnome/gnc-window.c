@@ -24,6 +24,10 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+
+#include "gnc-file.h"
+#include "gnc-plugin-page.h"
 #include "gnc-window.h"
 
 
@@ -49,12 +53,18 @@ gnc_window_get_type (void)
 					      "GncWindow",
 					      &our_info, 0);
     g_type_interface_add_prerequisite (gnc_window_type, G_TYPE_OBJECT);
+
+    gnc_file_set_pct_handler (gnc_window_show_progress);
   }
 
   return gnc_window_type;
 }
 
-GtkWidget *
+/************************************************************
+ *                Interface access functions                *
+ ************************************************************/
+
+static GtkWidget *
 gnc_window_get_statusbar (GncWindow *window)
 {
   g_return_val_if_fail(GNC_WINDOW (window), NULL);
@@ -65,7 +75,7 @@ gnc_window_get_statusbar (GncWindow *window)
   return GNC_WINDOW_GET_IFACE (window)->get_statusbar (window);
 }
 
-GtkWidget *
+static GtkWidget *
 gnc_window_get_progressbar (GncWindow *window)
 {
   g_return_val_if_fail(GNC_WINDOW (window), NULL);
@@ -76,3 +86,86 @@ gnc_window_get_progressbar (GncWindow *window)
 
   return GNC_WINDOW_GET_IFACE (window)->get_progressbar (window);
 }
+
+/************************************************************
+ *              Auxiliary status bar functions              *
+ ************************************************************/
+
+void
+gnc_window_update_status (GncWindow *window, GncPluginPage *page)
+{
+  GtkWidget *statusbar;
+
+  g_return_if_fail(GNC_WINDOW (window));
+
+  statusbar = gnc_window_get_statusbar (window);
+  gtk_statusbar_pop(GTK_STATUSBAR(statusbar), 0);
+  gtk_statusbar_push(GTK_STATUSBAR(statusbar), 0,
+		     page->statusbar_text ? page->statusbar_text : "");
+}
+
+void
+gnc_window_set_status (GncWindow *window, GncPluginPage *page, const gchar *message)
+{
+  g_return_if_fail(GNC_WINDOW (window));
+  g_return_if_fail(GNC_PLUGIN_PAGE (page));
+
+  if (page->statusbar_text)
+    g_free(page->statusbar_text);
+  page->statusbar_text = g_strdup(message ? message : "");
+
+  gnc_window_update_status (window, page);
+}
+
+/************************************************************
+ *             Auxiliary progress bar functions             *
+ ************************************************************/
+
+/*
+ * Single threaded hack.  Otherwise the window value has to be passed
+ * all the way down to the backend and then back out again.  Not too
+ * bad from C, but also has to be done in Scheme.
+ */
+static GncWindow *progress_bar_hack_window = NULL;
+
+/*
+ * Must be set to a valid window or to NULL (no window).
+ */
+void
+gnc_window_set_progressbar_window (GncWindow *window)
+{
+  if (window != NULL) {
+    g_return_if_fail(GNC_WINDOW (window));
+  }
+
+  progress_bar_hack_window = window;
+}
+
+void
+gnc_window_show_progress (const char *message, double percentage)
+{
+  GncWindow *window;
+  GtkWidget *progressbar;
+
+  window = progress_bar_hack_window;
+  if (window == NULL)
+    return;
+
+  progressbar = gnc_window_get_progressbar (window);
+  if (progressbar == NULL)
+    return;
+
+  if (percentage < 0) {
+    gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar), NULL);
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar), 0.0);
+  } else {
+    if (message)
+      gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar), message);
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar), percentage/100);
+  }
+
+  /* make sure new text is up */
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
+}
+

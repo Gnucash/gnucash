@@ -30,6 +30,7 @@
 #include "gnc-file-history.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-file-history.h"
+#include "gnc-window.h"
 #include "messages.h"
 
 static GList *active_pages = NULL;
@@ -272,7 +273,9 @@ gnc_plugin_file_history_cmd_open_file (EggAction *action,
 	g_return_if_fail(GNC_IS_PLUGIN(plugin));
 
 	filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
+	gnc_window_set_progressbar_window (GNC_WINDOW(plugin->window));
 	gnc_file_open_file (filename); /* also opens new account page */
+	gnc_window_set_progressbar_window (NULL);
 	gnc_main_window_update_title (plugin->window);
 	/* FIXME GNOME 2 Port (update the title etc.) */
 }

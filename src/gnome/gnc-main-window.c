@@ -460,6 +460,7 @@ gnc_main_window_close_page (GncMainWindow *window,
 	gnc_plugin_page_removed (page);
 
 	egg_menu_merge_ensure_update (window->ui_merge);
+	gnc_window_set_status (GNC_WINDOW(window), page, NULL);
 
 	gnc_plugin_page_destroy_widget (page);
 	g_object_unref(page);
@@ -684,8 +685,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
 	priv->progressbar = gtk_progress_bar_new ();
 	gtk_widget_show (priv->progressbar);
-	gtk_progress_bar_set_text (GTK_PROGRESS_BAR(priv->progressbar),
-				   "<- Progress Bar ->");
 	gtk_box_pack_start (GTK_BOX (priv->statusbar), priv->progressbar,
 			    FALSE, TRUE, 0);
 
@@ -769,6 +768,7 @@ gnc_main_window_switch_page_internal (GtkNotebook *notebook,
 	if (page != NULL) {
 		gnc_plugin_page_merge_actions (page, window->ui_merge);
 		gnc_plugin_page_selected (page);
+		gnc_window_update_status (GNC_WINDOW(window), page);
 	}
 }
 
@@ -823,7 +823,9 @@ gnc_main_window_cmd_file_new (EggAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_file_open (EggAction *action, GncMainWindow *window)
 {
+	gnc_window_set_progressbar_window (GNC_WINDOW(window));
 	gnc_file_open ();
+	gnc_window_set_progressbar_window (NULL);
 	gnc_main_window_update_title (window);
 	/* FIXME GNOME 2 Port (update the title etc.) */
 }
@@ -858,21 +860,27 @@ gnc_main_window_cmd_file_open_new_window (EggAction *action, GncMainWindow *wind
 static void
 gnc_main_window_cmd_file_save (EggAction *action, GncMainWindow *window)
 {
+	gnc_window_set_progressbar_window (GNC_WINDOW(window));
 	gnc_file_save ();
+	gnc_window_set_progressbar_window (NULL);
 	/* FIXME GNOME 2 Port (update the title etc.) */
 }
 
 static void
 gnc_main_window_cmd_file_save_as (EggAction *action, GncMainWindow *window)
 {
+	gnc_window_set_progressbar_window (GNC_WINDOW(window));
 	gnc_file_save_as ();
+	gnc_window_set_progressbar_window (NULL);
 	/* FIXME GNOME 2 Port (update the title etc.) */
 }
 
 static void
 gnc_main_window_cmd_file_export_accounts (EggAction *action, GncMainWindow *window)
 {
+	gnc_window_set_progressbar_window (GNC_WINDOW(window));
 	gnc_file_export_file (NULL);
+	gnc_window_set_progressbar_window (NULL);
 	/* FIXME GNOME 2 Port (update the title etc.) */
 	/* gnc_refresh_main_window_info (); */
 }

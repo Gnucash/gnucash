@@ -26,6 +26,7 @@
 #define __GNC_WINDOW_H
 
 #include <gtk/gtkwindow.h>
+#include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
 
@@ -50,8 +51,12 @@ typedef struct {
 
 /* function prototypes */
 GType          gnc_window_get_type (void);
-GtkWidget     *gnc_window_get_statusbar (GncWindow *window);
-GtkWidget     *gnc_window_get_progressbar (GncWindow *window);
+
+void           gnc_window_update_status (GncWindow *window, GncPluginPage *page);
+void           gnc_window_set_status (GncWindow *window, GncPluginPage *page, const gchar *message);
+
+void           gnc_window_set_progressbar_window (GncWindow *window);
+void           gnc_window_show_progress (const char *message, double percentage);
 
 G_END_DECLS
 
