@@ -1677,7 +1677,7 @@ pgend_do_rollback (Backend *bend, GNCIdTypeConst type, gpointer object)
 
     if (!safe_strcmp (type, GNC_ID_TRANS)) {
       Transaction *txn = (Transaction*) object;
-      return pgend_trans_rollback_edit (bend, txn, txn->orig);
+      return pgend_trans_rollback_edit (bend, txn);
     }
 
   case MODE_SINGLE_UPDATE:
