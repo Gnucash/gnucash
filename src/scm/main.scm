@@ -15,13 +15,78 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
+(define-module (gnucash main))
+
+(use-modules (ice-9 slib))
+(use-modules (g-wrapped gw-gnc))
+(use-modules (g-wrapped gw-runtime))
+
 ;; Load the srfis (eventually, we should see where these are needed
 ;; and only have the use-modules statements in those files).
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-8))
+
 (use-modules (gnucash gnc-module))
 (use-modules (ice-9 slib))
 (require 'printf)
+
+;; from bootstrap.scm
+(export gnc:version)
+(export gnc:debugging?)
+(export gnc:warn)
+(export gnc:error)
+(export gnc:msg)
+(export gnc:debug)
+(export build-path)
+(export gnc:use-module-here!)
+(export hash-fold)
+(export item-list->hash!)
+(export string-split)
+(export string-join)
+(export gnc:backtrace-if-exception)
+
+;; from main.scm
+(export gnc:main)
+
+;; from path.scm
+(export gnc:make-home-dir)
+(export gnc:current-config-auto)
+
+;; from command-line.scm
+(export gnc:*command-line-remaining*)
+(export gnc:*config-dir*)
+(export gnc:*share-dir*)
+
+;; from doc.scm
+(export gnc:find-doc-file)
+(export gnc:load-help-topics)
+
+;; from main-window.scm
+(export gnc:find-acct-tree-window-options)
+(export gnc:make-new-acct-tree-window)  
+(export gnc:free-acct-tree-window)
+(export gnc:main-window-save-state)
+
+;; from printing/print-check.scm
+(export make-print-check-format)
+(export gnc:print-check)
+
+;; from tip-of-the-day.scm
+(export gnc:get-current-tip)
+(export gnc:increment-tip-number)
+(export gnc:decrement-tip-number)
+
+;; Get the Makefile.am/configure.in generated variables.
+(load-from-path "build-config.scm")
+
+;; Do this stuff very early -- but other than that, don't add any
+;; executable code until the end of the file if you can help it.
+;; These are needed for a guile 1.3.4 bug
+(debug-enable 'debug)
+(read-enable 'positions)
+
+(debug-set! maxdepth 100000)
+(debug-set! stack    2000000)
 
 ;;(use-modules (ice-9 statprof))
 
@@ -29,7 +94,199 @@
 ;; startup.  List items may be strings, in which case they're read and
 ;; evaluated or procedures, in which case they're just executed.
 ;; The items will be done in reverse order.
+
 (define gnc:*batch-mode-things-to-do* '())
+
+;; These will be converted to config vars later (see command-line.scm)
+(define gnc:*debugging?* (if (getenv "GNC_DEBUG") #t #f))
+(define gnc:*develmode* (if (getenv "GNC_DEVEL_MODE") #t #f))
+
+;; Function to get debugging
+(define (gnc:debugging?)
+  (if (boolean? gnc:*debugging?*)
+      gnc:*debugging?*
+      (gnc:config-var-value-get gnc:*debugging?*)))
+
+(define (gnc:setup-debugging)
+  (if (gnc:debugging?)
+      (debug-enable 'backtrace)))
+
+;; various utilities
+
+;; Test for simple-format
+(if (not (defined? 'simple-format))
+    (begin
+      (require 'format)
+      (export simple-format)
+      (define simple-format format)))
+
+(define gnc:use-guile-module-here!
+  ;; FIXME: this should be a temporary fix.  We need to check to see
+  ;; if there's a more approved way to do this.  As I recall, there's
+  ;; not, but I belive a better way will be added to Guile soon.
+
+  ;; module arg must be something like '(ice-9 slib)
+  (cond
+   ((or (string=? "1.3" (version))
+        (string=? "1.3.4" (version))
+        (string=? "1.4" (version)))
+    (lambda (module)
+      (process-use-modules (list module))))
+   (else
+    (lambda (module)
+      (process-use-modules (list (list module)))))))
+
+(if (not (defined? 'hash-fold))
+    (define (hash-fold proc init table)
+      (for-each 
+       (lambda (bin)
+         (for-each 
+          (lambda (elt)
+            (set! init (proc (car elt) (cdr elt) init)))
+          bin))
+       (vector->list table))))
+
+(define (item-list->hash! lst hash
+			  getkey getval
+			  hashref hashset 
+			  list-duplicates?)
+  ;; Takes a list of the form (item item item item) and returns a hash
+  ;; formed by traversing the list, and getting the key and val from
+  ;; each item using the supplied get-key and get-val functions, and
+  ;; building a hash table from the result using the given hashref and
+  ;; hashset functions.  list-duplicates? determines whether or not in
+  ;; the resulting hash, the value for a given key is a list of all
+  ;; the values associated with that key in the input or just the
+  ;; first one encountered.
+
+  (define (handle-item item)
+    (let* ((key (getkey item))
+	   (val (getval item))
+	   (existing-val (hashref hash key)))
+
+      (if (not list-duplicates?)
+	  ;; ignore if not first value.
+	  (if (not existing-val) (hashset hash key val))
+	  ;; else result is list.
+	  (if existing-val
+	      (hashset hash key (cons val existing-val))
+	      (hashset hash key (list val))))))
+	      
+  (for-each handle-item lst)
+  hash)
+
+(define (string-join lst joinstr)
+  ;; This should avoid a bunch of unnecessary intermediate string-appends.
+  ;; I'm presuming those are more expensive than cons...
+  (if (or (not (list? lst)) (null? lst))
+      ""
+      (apply string-append
+             (car lst)
+             (let loop ((remaining-elements (cdr lst)))
+               (if (null? remaining-elements)
+                   '()
+                   (cons joinstr (cons (car remaining-elements)
+                                       (loop (cdr remaining-elements)))))))))
+
+(define (string-split str char)
+  (let ((parts '())
+        (first-char #f))
+    (let loop ((last-char (string-length str)))
+      (set! first-char (string-rindex str char 0 last-char))
+      (if first-char 
+          (begin 
+            (set! parts (cons (substring str (+ 1 first-char) last-char) 
+                              parts))
+            (loop first-char))
+          (set! parts (cons (substring str 0 last-char) parts))))    
+    parts))
+
+(define (gnc:backtrace-if-exception proc . args)
+  (define (dumper key . args)
+    (let ((stack (make-stack #t dumper)))
+      (display-backtrace stack (current-error-port))
+      (apply display-error stack (current-error-port) args)
+      (throw 'ignore)))
+  
+  (catch 
+   'ignore
+   (lambda () 
+     (lazy-catch #t 
+                 (lambda () (apply proc args))
+                 dumper))
+   (lambda (key . args)
+     #f)))
+
+;;;; Status output functions.
+
+(define (gnc:warn . items)
+  (display "gnucash: [W] ")
+  (for-each (lambda (i) (write i)) items)
+  (newline))
+
+(define (gnc:error . items)
+  (display "gnucash: [E] ")
+  (for-each (lambda (i) (write i)) items)
+  (newline))
+
+(define (gnc:msg . items)
+  (display "gnucash: [M] ")
+  (for-each (lambda (i) (write i)) items)
+  (newline))
+
+(define (gnc:debug . items)
+  (if (gnc:debugging?)
+      (begin
+        (display "gnucash: [D] ")
+        (for-each (lambda (i) (write i)) items)
+        (newline))))
+
+
+;; Set up timing functions
+
+(define gnc:*last-time* (gettimeofday))
+
+(define (gnc:timestamp . stuff)
+  (let* ((now (gettimeofday))
+         (delta (+ (- (car now) (car gnc:*last-time*))
+                   (/ (- (cdr now) (cdr gnc:*last-time*)) 1000000))))
+    (gnc:msg stuff "-- Elapsed time: " delta "seconds.")
+    (set! gnc:*last-time* now)))
+
+
+(define (build-path firstelement . restofpath)
+  (define separator "/")
+  (define (bp first rest)
+    (if (null? rest)
+	first
+	(bp 	
+	 (string-append first separator (car rest))
+	 (cdr rest))))
+  (if (null? restofpath)
+      firstelement
+      (bp 
+       (string-append firstelement separator
+		      (car restofpath))
+       (cdr restofpath))))
+
+(define (gnc:find-in-directories file directories)
+  "Find file named 'file' anywhere in 'directories'.  'file' must be a
+string and 'directories' must be a list of strings."
+
+  (gnc:debug "gnc:find-in-directories looking for " file " in " directories)
+
+  (do ((rest directories (cdr rest))
+       (finished? #f)
+       (result #f))
+      ((or (null? rest) finished?) result)
+
+    (let ((file-name (build-path (car rest) file)))
+      (gnc:debug "  checking for " file-name)
+      (if (access? file-name F_OK)
+          (begin
+            (gnc:debug "found file " file-name)
+            (set! finished? #t)
+            (set! result file-name))))))
 
 (define (gnc:print-unstable-message)
   (newline)
@@ -127,13 +384,23 @@
   (gnc:debug "starting up.")
   (gnc:setup-debugging)
 
+  (let ((envdir (getenv "GNC_CONFIG_DIR")))
+    (if envdir
+        (set! gnc:_install-config-dir_ envdir)))
+  (let ((envdir (getenv "GNC_SHARE_DIR")))
+    (if envdir
+        (set! gnc:_install-share-dir_ envdir)))
+  (let ((envdir (getenv "GNC_HELP_DIR")))
+    (if envdir
+        (set! gnc:_install-help-dir_ envdir)))
+
   ;; initialize the gnucash module system 
   (gnc:module-system-init)
   
   ;; SUPER UGLY HACK -- this should go away when I come back for the
   ;; second cleanup pass...
   (let ((original-module (current-module))
-        (bootstrap (resolve-module '(gnucash bootstrap))))
+        (bootstrap (resolve-module '(gnucash main))))
     
     (set-current-module bootstrap)
     
@@ -264,7 +531,7 @@
                (begin
                  ;; FIXME: is this where we want to eval these?
                  ;; should we perhaps have a (gnucash user)?
-                 (eval next-form (resolve-module '(gnucash bootstrap)))
+                 (eval next-form (resolve-module '(gnucash main)))
                  (loop (read port))))))))
      (else
       (display "gnucash: unknown batch-mode item - ignoring.")
