@@ -39,33 +39,28 @@ sorry, no "make install" yet.
 
 Status:
 -------
-As of version 0.9p:
+As of version 0.9t:
 Bugs:
--- Cash distributions & cash dividends on stock are confusing
-   without sub-accounts.  They should appear as transfers from
-   an income account to the brokerage account, and should be 
-   visible in a general ledger that shows both the brokerage 
-   account, and the stock.  However, the general-ledger regsiter 
-   window is not implemented.  Soon ...
 
 -- tabbing between fields for mutual funds does not work correctly. 
 -- should add "number of shares" to transfer popup when transferring
    from bank account to portfolio.
--- Nasty core dump in motif when two register windows are opened,
-   and then closed.  Beats the heck out of me. 
 -- should do something for automatic interest computations,
    also mortgages, bonds, etc.
--- need to expose transfer type for bank acounts ass well as stocks.
 
 Fixed:
 -- nasty bug relating to save/restore of double-entry to file
    was fixed!
+-- Nasty core dump in motif when two register windows are opened,
+   and then closed.  Beats the heck out of me. Bug with 
+   vendorShellWidgetClass
    
 ---------------
 Bare-bones general ledger capabilities added.
 Working Features:
 -- accounts can have sub-accounts
 -- Income and Expense account types added.
+-- General Ledger windows for sub-accounts
 
 ---------------
 Bare-bones Mutual Fund and Stock Portfolio handling
