@@ -25,11 +25,11 @@ run_test (void)
   GNCBook *book;
   Timespec ts;
 
-int ok = 1;
-    if (!ok)
-    {
-      failure ("its borken");
-    }
+  int ok = 1;
+  if (!ok)
+  {
+    failure ("its borken");
+  }
 
   book = gnc_book_new ();
   if (!book)
@@ -47,17 +47,25 @@ int ok = 1;
 
   gnc_book_set_group (book, grp);
 
-
   success ("periods work but wern't really tested yet");
 }
 
-int
-main (int argc, char **argv)
+static void
+main_helper (int argc, char **argv)
 {
+  gnc_module_load("gnucash/engine", 0);
+
   run_test ();
 
   success ("periods aren't realy tested yet");
 
   print_test_results();
   exit(get_rv());
+}
+
+int
+main (int argc, char **argv)
+{
+  gh_enter (argc, argv, main_helper);
+  return 0;
 }
