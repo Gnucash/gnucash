@@ -1,3 +1,9 @@
+2003-01-29  Herbert Thoma  <herbie@hthoma.de>
+
+	* src/report/standard-reports/cash-flow.scm: only asset accounts
+	  are in the default account selection, tables use normal-row
+	  and alternate-row
+	
 2003-01-28  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in -- fix the PG test to deal properly with non-standard

@@ -91,8 +91,7 @@
      optname-accounts "a" 2
      (lambda ()
        (gnc:filter-accountlist-type 
-        '(bank cash credit asset liability stock mutual-fund currency
-               payable receivable equity)
+        '(bank cash asset stock mutual-fund)
         (gnc:group-get-subaccounts (gnc:get-current-group)))))
     
     ;; Set the general page as default option tab
@@ -119,7 +118,8 @@
          (show-subaccts? (get-option gnc:pagename-accounts
                                      optname-show-subaccounts))
          (accounts (get-option gnc:pagename-accounts
-                               optname-accounts))	 
+                               optname-accounts))
+         (row-num 0)
 	 (work-done 0)
 	 (work-to-do 0)
          (report-currency (get-option gnc:pagename-general
@@ -379,17 +379,19 @@
              (_ "Money In")
              ""))
 
+          (set! row-num 0)
 	  (set! work-done 0)
 	  (set! work-to-do (length money-in-alist))
           (for-each
             (lambda (account)
+              (set! row-num (+ 1 row-num))
 	      (set! work-done (+ 1 work-done))
 	      (gnc:report-percent-done (+ 90 (* 5 (/ work-done work-to-do))))
               (let* ((pair (account-in-alist account money-in-alist))
                      (acct (car pair)))
                 (gnc:html-table-append-row/markup!
                  table
-                 "normal-row"
+                 (if (odd? row-num) "normal-row" "alternate-row")
                  (list
                   ;(gnc:html-account-anchor acct)
                   (gnc:make-html-text
@@ -422,17 +424,19 @@
              (_ "Money Out")
              ""))
 
+          (set! row-num 0)
 	  (set! work-done 0)
 	  (set! work-to-do (length money-out-alist))
           (for-each
             (lambda (account)
+              (set! row-num (+ 1 row-num))
 	      (set! work-done (+ 1 work-done))
 	      (gnc:report-percent-done (+ 95 (* 5 (/ work-done work-to-do))))
               (let* ((pair (account-in-alist account money-out-alist))
                      (acct (car pair)))
                 (gnc:html-table-append-row/markup!
                  table
-                 "normal-row"
+                 (if (odd? row-num) "normal-row" "alternate-row")
                  (list
                   ;(gnc:html-account-anchor acct)
                   (gnc:make-html-text
