@@ -38,6 +38,7 @@
 
 ;; define all option's names so that they are properly defined
 ;; in *one* place.
+(define optname-from-date (N_ "From"))
 (define optname-to-date (N_ "To"))
 
 (define optname-display-depth (N_ "Account Display Depth"))
@@ -64,13 +65,35 @@
      t1 (+ (gnc:html-table-num-rows t1)
            (gnc:html-table-num-rows t2)))))
 
-(define (accountlist-get-comm-balance-at-date accountlist date)
+(define (accountlist-get-comm-balance-at-date accountlist from date)
+;;  (for-each (lambda (x) (display x))
+;;	    (list "computing from: " (gnc:print-date from) " to "
+;;		  (gnc:print-date date) "\n"))
   (let ((collector (gnc:make-commodity-collector)))
     (for-each (lambda (account)
-                (let ((balance 
-                       (gnc:account-get-comm-balance-at-date 
-                        account date #f)))
-                  (collector 'merge balance #f)))
+                (let* (
+;;		       (start-balance
+;;			(gnc:account-get-comm-balance-at-date
+;;			 account from #f))
+;;		       (sb (cadr (start-balance
+;;				  'getpair
+;;				  (gnc:account-get-commodity account)
+;;				  #f)))
+		       (end-balance
+			(gnc:account-get-comm-balance-at-date 
+			 account date #f))
+		       (eb (cadr (end-balance
+				  'getpair
+				  (gnc:account-get-commodity account)
+				  #f)))
+		       )
+;;		  (for-each (lambda (x) (display x))
+;;			    (list "Start balance: " sb " : "
+;;				  (gnc:account-get-name account) " : end balance: "
+;;				  eb "\n"))
+                  (collector 'merge end-balance #f)
+;;		  (collector 'minusmerge start-balance #f)
+		  ))
               accountlist)
     collector))
 
@@ -79,9 +102,11 @@
   (let ((options (gnc:new-options)))
 
     ;; date at which to report balance
+;;    (gnc:options-add-date-interval!
     (gnc:options-add-report-date!
      options gnc:pagename-general 
      optname-to-date "a")
+;;     optname-from-date optname-to-date "a")
 
     ;; all about currencies
     (gnc:options-add-currency!
@@ -167,6 +192,11 @@
                                    optname-price-source))
          (show-rates? (get-option gnc:pagename-display 
                                   optname-show-rates))
+	 (from-date-tp #f)
+;;	  (gnc:timepair-end-day-time
+;;	 		(gnc:timepair-previous-day
+;;			 (gnc:date-option-absolute-time
+;;			  (get-option gnc:pagename-general optname-from-date)))))
          (to-date-tp (gnc:timepair-end-day-time 
                       (gnc:date-option-absolute-time
                        (get-option gnc:pagename-general
@@ -254,7 +284,7 @@
 	  (set! neg-retained-profit-balance 
                 (accountlist-get-comm-balance-at-date
                  income-expense-accounts
-                 to-date-tp))
+                 from-date-tp to-date-tp))
 	  (gnc:report-percent-done 14)
 	  (set! retained-profit-balance (gnc:make-commodity-collector))
 	  (gnc:report-percent-done 16)
