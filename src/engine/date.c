@@ -184,7 +184,7 @@ scanDate(const char *buff, int *day, int *month, int *year)
    /* if the year entered is smaller than 100, assume we mean the current
       century (and are not revising some roman emperor's books) */
    if(iyear<100) {
-     iyear += ((int) ((now->tm_year+1900)/100)) * 100;
+     iyear += ((int) ((now->tm_year+1950-iyear)/100)) * 100;
    }
 
    if (year) *year=iyear;
