@@ -44,16 +44,6 @@
  */
 int force_double_entry = 0;
 
-/*
- * The logfiles are useful for tracing, journalling.
- * Note that the current support for journalling is at best 
- * embryonic, at worst, sets the wrong expectations.
- */
-int gen_logs = 0;
-FILE * trans_log;
-
-
-
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend too!  These functions perform actions on the       *
@@ -175,16 +165,32 @@ xaccCountSplits (Split **tarray)
 /********************************************************************\
 \********************************************************************/
 
+void xaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
+{
+   MARK_SPLIT(s);
+   s -> share_price = price;
+   s -> damount = amt;
+
+   /* force double entry to always balance */
+   xaccSplitRebalance (s);
+}
+
 void xaccSplitSetSharePrice (Split *s, double amt)
 {
    MARK_SPLIT(s);
    s -> share_price = amt;
+
+   /* force double entry to always balance */
+   xaccSplitRebalance (s);
 }
 
 void xaccSplitSetShareAmount (Split *s, double amt)
 {
    MARK_SPLIT(s);
    s -> damount = amt;
+
+   /* force double entry to always balance */
+   xaccSplitRebalance (s);
 }
 
 void xaccSplitSetValue (Split *s, double amt)
@@ -192,6 +198,9 @@ void xaccSplitSetValue (Split *s, double amt)
    MARK_SPLIT(s);
    /* remember, damount is actually share price */
    s -> damount = amt / (s->share_price);
+
+   /* force double entry to always balance */
+   xaccSplitRebalance (s);
 }
 
 /********************************************************************\
@@ -229,6 +238,7 @@ double xaccSplitGetShareBalance (Split *s)
 void
 xaccInitTransaction( Transaction * trans )
   {
+  Split *dsplit;
   
   /* fill in some sane defaults */
   trans->num         = strdup("");
@@ -239,6 +249,10 @@ xaccInitTransaction( Transaction * trans )
 
   xaccInitSplit ( &(trans->source_split));
   trans->source_split.parent = trans;
+
+  /* create at least one destination split */
+  dsplit = xaccMallocSplit ();
+  xaccTransAppendSplit (trans, dsplit);
 
   trans->date.year   = 1900;        
   trans->date.month  = 1;        
@@ -346,7 +360,6 @@ xaccTransRebalance (Transaction * trans)
   xaccSplitRebalance (&(trans->source_split));
 }
 
-/* hack alert -- the Rebalance algorithm is wrong. Needs fixing */
 void
 xaccSplitRebalance (Split *split)
 {
@@ -434,6 +447,13 @@ xaccSplitRebalance (Split *split)
     MARK_SPLIT (s);
   }
 
+  /* hack alert -- if the "force-double-entry" flag is set,
+   * we should check to make sure that every split belongs
+   * to some account.  If any of them don't, force them 
+   * into the current account. If there's not current account,
+   * force them into a lost & found account */
+  /* hack alert -- implement the above */
+
 }
 
 /********************************************************************\
@@ -461,6 +481,9 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
    trans->dest_splits[num+1] = NULL;
 
    if (oldarray) _free (oldarray);
+
+   /* force double entry to always be consistent */
+   xaccSplitRebalance (split);
 }
 
 /********************************************************************\
@@ -485,6 +508,12 @@ xaccTransRemoveSplit (Transaction *trans, Split *split)
      s = trans->dest_splits[n];
    }
    trans->dest_splits[i] = NULL;
+
+   /* force double entry to always be consistent */
+   xaccTransRebalance (trans);
+
+   /* hack alert -- this leaves open the possibility of a danglig split!
+    * */
 }
 
 /********************************************************************\
