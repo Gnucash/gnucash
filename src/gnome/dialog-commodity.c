@@ -374,6 +374,8 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
     active = "CURRENCY";
     init_string = GNC_COMMODITY_NS_ISO;
   }
+  else
+    init_string = active;
 
   gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(combobox)->entry), active);
   g_list_free(namespaces);
