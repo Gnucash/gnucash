@@ -106,7 +106,7 @@ struct split_s
   /* kvp_data is a key-value pair database for storing simple 
    * "extra" information in splits, transactions, and accounts. 
    * it's NULL until accessed. */
-  kvp_frame * kvp_data;
+  KvpFrame * kvp_data;
 
   char    reconciled;        /* The reconciled field                      */
   Timespec date_reconciled;  /* date split was reconciled                 */
@@ -160,7 +160,7 @@ struct transaction_s
   /* kvp_data is a key-value pair database for storing simple 
    * "extra" information in splits, transactions, and accounts. 
    * it's NULL until accessed. */
-  kvp_frame * kvp_data;
+  KvpFrame * kvp_data;
 
 
   /* The common_currency field is the balancing common currency for

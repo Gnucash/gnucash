@@ -52,11 +52,11 @@ static char * income_to_key[] = {"income-miscellaneous",
 static char * expense_to_key[] = {"expense-miscellaneous",
 				  "expense-commission"};
 
-static kvp_frame *
-get_assoc_acc_frame(kvp_frame *account_frame)
+static KvpFrame *
+get_assoc_acc_frame(KvpFrame *account_frame)
 {
-  kvp_frame *assoc_acc_frame;
-  kvp_value *assoc_acc_frame_kvpvalue =
+  KvpFrame *assoc_acc_frame;
+  KvpValue *assoc_acc_frame_kvpvalue =
     kvp_frame_get_slot(account_frame, "associated-accounts");
 
   assoc_acc_frame = kvp_value_get_frame(assoc_acc_frame_kvpvalue);
@@ -76,8 +76,8 @@ back_associate_expense_accounts(Account *stock_account,
 				GList *accounts,
 				GNCTrackingExpenseCategory category)
 {
-  kvp_frame *acc_frame;
-  kvp_value *val, *stock_acc_guid_kvpval, *stock_acc_category_kvpval;
+  KvpFrame *acc_frame;
+  KvpValue *val, *stock_acc_guid_kvpval, *stock_acc_category_kvpval;
   const GUID *stock_acc_guid;
   const GUID *existing_acc_guid;
 
@@ -111,8 +111,8 @@ back_associate_income_accounts(Account *stock_account,
 			       GList *accounts,
 			       GNCTrackingIncomeCategory category)
 {
-  kvp_frame *acc_frame;
-  kvp_value *val, *stock_acc_guid_kvpval, *stock_acc_category_kvpval;
+  KvpFrame *acc_frame;
+  KvpValue *val, *stock_acc_guid_kvpval, *stock_acc_category_kvpval;
   const GUID *stock_acc_guid;
   const GUID *existing_acc_guid;
 
@@ -141,12 +141,12 @@ back_associate_income_accounts(Account *stock_account,
   return;
 }  
     
-static kvp_value *
+static KvpValue *
 make_kvpd_on_list(GList *account_list)
 {
   GList *iter;
-  kvp_value *retval;
-  kvp_value *guid_kvp;
+  KvpValue *retval;
+  KvpValue *guid_kvp;
   GList  *kvp_acc_list = NULL;
   const GUID *acc_id;
 
@@ -171,7 +171,7 @@ make_kvpd_on_list(GList *account_list)
 }
 
 static GList *
-de_kvp_account_list(kvp_value *kvpd_list, QofBook *book)
+de_kvp_account_list(KvpValue *kvpd_list, QofBook *book)
 { 
   GList *guid_account_list = kvp_value_get_glist(kvpd_list);
   if (guid_account_list)
@@ -213,8 +213,8 @@ gnc_tracking_associate_income_accounts(Account *stock_account,
                                        GNCTrackingIncomeCategory category, 
                                        GList *account_list)
 {
-  kvp_frame *account_frame, *inc_account_frame;
-  kvp_value *kvpd_on_account_list;
+  KvpFrame *account_frame, *inc_account_frame;
+  KvpValue *kvpd_on_account_list;
   GNCAccountType type;
 
   g_return_if_fail(stock_account);
@@ -255,8 +255,8 @@ gnc_tracking_asssociate_expense_account(Account *stock_account,
                                         GNCTrackingExpenseCategory category,
                                         GList *account_list)
 {
-  kvp_frame *account_frame, *expense_acc_frame;
-  kvp_value *kvpd_on_account_list;
+  KvpFrame *account_frame, *expense_acc_frame;
+  KvpValue *kvpd_on_account_list;
   GNCAccountType type;
 
   g_return_if_fail(stock_account);
@@ -295,8 +295,8 @@ gnc_tracking_find_expense_accounts(Account *stock_account,
 {
   
   GNCAccountType type;
-  kvp_frame *account_frame, *expense_acc_frame;
-  kvp_value *kvpd_on_account_list;
+  KvpFrame *account_frame, *expense_acc_frame;
+  KvpValue *kvpd_on_account_list;
 
   type = xaccAccountGetType(stock_account);
   g_return_val_if_fail(category >= 0 && category < GNC_TR_EXP_N_CATEGORIES,
@@ -329,8 +329,8 @@ gnc_tracking_find_income_accounts(Account *stock_account,
                                   GNCTrackingIncomeCategory category)
 {
   GNCAccountType type;
-  kvp_frame *account_frame, *income_acc_frame;
-  kvp_value *kvpd_on_account_list;
+  KvpFrame *account_frame, *income_acc_frame;
+  KvpValue *kvpd_on_account_list;
 
   type = xaccAccountGetType(stock_account);
   g_return_val_if_fail(category >= 0 && category < GNC_TR_INC_N_CATEGORIES,
@@ -429,9 +429,9 @@ void
 gnc_tracking_dissociate_account(Account *inc_or_expense_account)
 {
   GNCAccountType type;
-  kvp_frame *stock_account_kvpframe, *assoc_acc_kvpframe;
-  kvp_frame *current_account_kvpframe;
-  kvp_value *stock_account_kvpval, *acc_list_kvpval, *category_kvpval;
+  KvpFrame *stock_account_kvpframe, *assoc_acc_kvpframe;
+  KvpFrame *current_account_kvpframe;
+  KvpValue *stock_account_kvpval, *acc_list_kvpval, *category_kvpval;
   const GUID *stock_account_guid, *inc_or_expense_account_guid, *current_guid;
   Account *stock_account;
   char *category_name;

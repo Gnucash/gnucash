@@ -61,7 +61,7 @@ set_max_kvp_frame_elements (gint max_kvp_frame_elements)
 }
 
 void
-kvp_exclude_type (kvp_value_t kvp_type)
+kvp_exclude_type (KvpValueType kvp_type)
 {
   gint *key;
 
@@ -75,7 +75,7 @@ kvp_exclude_type (kvp_value_t kvp_type)
 }
 
 static gboolean
-kvp_type_excluded (kvp_value_t kvp_type)
+kvp_type_excluded (KvpValueType kvp_type)
 {
   gint key = kvp_type;
 
@@ -314,7 +314,7 @@ get_random_glist_depth (gint depth)
 
     for (i = 0; i < count; i++)
     {
-        kvp_value_t kvpt;
+        KvpValueType kvpt;
         kvp_value *value;
 
         kvpt = glist_strings_only ? KVP_TYPE_STRING : -2;

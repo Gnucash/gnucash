@@ -206,7 +206,7 @@ void xaccQueryAddGUIDMatchGL (QofQuery *q, GList *param_list,
 			      GUID guid, QofQueryOp op);
 
 /* given kvp value is on right side of comparison */
-void xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
+void xaccQueryAddKVPMatch(Query *q, GSList *path, const KvpValue *value,
                           QofQueryCompare how, QofIdType id_type,
                           QofQueryOp op);
 

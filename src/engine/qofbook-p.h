@@ -40,9 +40,9 @@ struct _QofBook
   /* Unique guid for this book. */
   GUID guid;
 
-  /* The kvp_frame provides a place for top-level data associated 
+  /* The KvpFrame provides a place for top-level data associated 
    * with this book. */
-  kvp_frame *kvp_data;
+  KvpFrame *kvp_data;
   
   /* The entity table associates the GUIDs of all the objects
    * belonging to this book, with their pointers to the respective

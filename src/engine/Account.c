@@ -228,7 +228,7 @@ xaccCloneAccount (const Account *from, QofBook *book)
 Account *
 xaccAccountLookupTwin (Account *acc,  QofBook *book)
 {
-   kvp_value *v_ncopies;
+   KvpValue *v_ncopies;
    int i, ncopies = 0;
 
    if (!acc || !book) return NULL;
@@ -240,7 +240,7 @@ xaccAccountLookupTwin (Account *acc,  QofBook *book)
    for (i=0; i<ncopies; i++)
    {
       GUID * book_guid;
-      kvp_value *v_book_guid;
+      KvpValue *v_book_guid;
       char buff[80];
 
       sprintf (buff, "%d", i);
@@ -253,7 +253,7 @@ xaccAccountLookupTwin (Account *acc,  QofBook *book)
       {
          Account *twin;
          GUID * acct_guid;
-         kvp_value *v_acct_guid;
+         KvpValue *v_acct_guid;
 
          v_acct_guid = kvp_frame_get_slot_path (acc->kvp_data, 
              "gemini", buff, "acct_guid", NULL);
@@ -795,7 +795,7 @@ xaccAccountBringUpToDate(Account *acc)
  * xaccAccountGetSlots
  ********************************************************************/
 
-kvp_frame * 
+KvpFrame * 
 xaccAccountGetSlots(Account * account) 
 {
   if (!account) return NULL;
@@ -803,7 +803,7 @@ xaccAccountGetSlots(Account * account)
 }
 
 void
-xaccAccountSetSlots_nc(Account *account, kvp_frame *frame)
+xaccAccountSetSlots_nc(Account *account, KvpFrame *frame)
 {
   if (!account) return;
 
@@ -1642,7 +1642,7 @@ DxaccAccountSetCurrencySCU (Account * acc, int scu)
 int
 DxaccAccountGetCurrencySCU (Account * acc) 
 {
-  kvp_value *v;
+  KvpValue *v;
 
   if (!acc) return 0;
 
@@ -1787,7 +1787,7 @@ xaccAccountGetDescription (Account *acc)
 const char * 
 xaccAccountGetNotes (Account *acc) 
 {
-  kvp_value *v;
+  KvpValue *v;
 
   if (!acc) return NULL;
   v = kvp_frame_get_slot(acc->kvp_data, "notes");
@@ -1798,7 +1798,7 @@ xaccAccountGetNotes (Account *acc)
 gnc_commodity * 
 DxaccAccountGetCurrency (Account *acc)
 {
-  kvp_value *v;
+  KvpValue *v;
   const char *s;
   gnc_commodity_table *table;
 
@@ -1826,7 +1826,7 @@ xaccAccountGetCommodity (Account *acc)
 gnc_commodity *
 DxaccAccountGetSecurity (Account *acc)
 {
-  kvp_value *v;
+  KvpValue *v;
   const char *s;
   gnc_commodity_table *table;
 
@@ -2222,7 +2222,7 @@ xaccAccountForEachLot(Account *acc,
 gboolean
 xaccAccountGetTaxRelated (Account *account)
 {
-  kvp_value *kvp;
+  KvpValue *kvp;
 
   if (!account)
     return FALSE;
@@ -2237,7 +2237,7 @@ xaccAccountGetTaxRelated (Account *account)
 void
 xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
 {
-  kvp_value *new_value;
+  KvpValue *new_value;
 
   if (!account)
     return;
@@ -2258,7 +2258,7 @@ xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
 const char *
 xaccAccountGetTaxUSCode (Account *account)
 {
-  kvp_value *value;
+  KvpValue *value;
 
   if (!account)
     return FALSE;
@@ -2273,7 +2273,7 @@ xaccAccountGetTaxUSCode (Account *account)
 void
 xaccAccountSetTaxUSCode (Account *account, const char *code)
 {
-  kvp_frame *frame;
+  KvpFrame *frame;
 
   if (!account)
     return;
@@ -2293,7 +2293,7 @@ xaccAccountSetTaxUSCode (Account *account, const char *code)
 const char *
 xaccAccountGetTaxUSPayerNameSource (Account *account)
 {
-  kvp_value *value;
+  KvpValue *value;
 
   if (!account)
     return FALSE;
@@ -2309,7 +2309,7 @@ xaccAccountGetTaxUSPayerNameSource (Account *account)
 void
 xaccAccountSetTaxUSPayerNameSource (Account *account, const char *source)
 {
-  kvp_frame *frame;
+  KvpFrame *frame;
 
   if (!account)
     return;
@@ -2332,7 +2332,7 @@ xaccAccountSetTaxUSPayerNameSource (Account *account, const char *source)
 gboolean
 xaccAccountGetPlaceholder (Account *account)
 {
-  kvp_value *kvp;
+  KvpValue *kvp;
   char *setting;
 
   if ( ( account )                                      &&
@@ -2595,7 +2595,7 @@ xaccAccountTypesCompatible (GNCAccountType parent_type,
 gboolean
 xaccAccountGetReconcileLastDate (Account *account, time_t *last_date)
 {
-  kvp_value *value;
+  KvpValue *value;
 
   if (!account)
     return FALSE;
@@ -2622,7 +2622,7 @@ xaccAccountGetReconcileLastDate (Account *account, time_t *last_date)
 void
 xaccAccountSetReconcileLastDate (Account *account, time_t last_date)
 {
-  kvp_frame *frame;
+  KvpFrame *frame;
   if (!account)
     return;
 
@@ -2642,7 +2642,7 @@ xaccAccountSetReconcileLastDate (Account *account, time_t last_date)
 gboolean
 xaccAccountGetReconcileLastInterval (Account *account, int *months, int *days)
 {
-  kvp_value *value1, *value2;
+  KvpValue *value1, *value2;
 
   if (!account)
     return FALSE;
@@ -2668,7 +2668,7 @@ xaccAccountGetReconcileLastInterval (Account *account, int *months, int *days)
 void
 xaccAccountSetReconcileLastInterval (Account *account, int months, int days)
 {
-  kvp_frame *frame;
+  KvpFrame *frame;
   if (!account)
     return;
 
@@ -2692,7 +2692,7 @@ gboolean
 xaccAccountGetReconcilePostponeDate (Account *account,
                                      time_t *postpone_date)
 {
-  kvp_value *value;
+  KvpValue *value;
 
   if (!account)
     return FALSE;
@@ -2720,7 +2720,7 @@ void
 xaccAccountSetReconcilePostponeDate (Account *account,
                                      time_t postpone_date)
 {
-  kvp_frame *frame;
+  KvpFrame *frame;
   if (!account)
     return;
 
@@ -2743,7 +2743,7 @@ gboolean
 xaccAccountGetReconcilePostponeBalance (Account *account,
                                         gnc_numeric *balance)
 {
-  kvp_value *value;
+  KvpValue *value;
 
   if (!account)
     return FALSE;
@@ -2772,7 +2772,7 @@ void
 xaccAccountSetReconcilePostponeBalance (Account *account,
                                         gnc_numeric balance)
 {
-  kvp_frame *frame;
+  KvpFrame *frame;
   if (!account)
     return;
 
@@ -2819,7 +2819,7 @@ xaccAccountClearReconcilePostpone (Account *account)
 gboolean
 xaccAccountGetAutoInterestXfer (Account *account, gboolean default_value)
 {
-  kvp_value *value = NULL;
+  KvpValue *value = NULL;
   char *setting = NULL;
   gboolean result = default_value;
 
@@ -2846,7 +2846,7 @@ xaccAccountGetAutoInterestXfer (Account *account, gboolean default_value)
 void
 xaccAccountSetAutoInterestXfer (Account *account, gboolean option)
 {
-  kvp_frame *frame;
+  KvpFrame *frame;
   if (!account)
     return;
 
@@ -2870,7 +2870,7 @@ xaccAccountSetAutoInterestXfer (Account *account, gboolean option)
 const char *
 xaccAccountGetLastNum (Account *account)
 {
-  kvp_value *value;
+  KvpValue *value;
 
   if (!account)
     return FALSE;
@@ -2934,7 +2934,7 @@ dxaccAccountGetPriceSrc(Account *acc)
   t = acc->type;
   if((t == STOCK) || (t == MUTUAL) || (t == CURRENCY)) 
   {
-    kvp_value *value = kvp_frame_get_slot(acc->kvp_data, "old-price-source");
+    KvpValue *value = kvp_frame_get_slot(acc->kvp_data, "old-price-source");
     if(value) return (kvp_value_get_string(value));
   }
   return NULL;
@@ -2975,7 +2975,7 @@ dxaccAccountGetQuoteTZ(Account *acc)
   t = acc->type;
   if((t == STOCK) || (t == MUTUAL) || (t == CURRENCY))
   {
-    kvp_value *value = kvp_frame_get_slot(acc->kvp_data, "old-quote-tz");
+    KvpValue *value = kvp_frame_get_slot(acc->kvp_data, "old-quote-tz");
     if(value) return (kvp_value_get_string(value));
   }
   return NULL;
@@ -2987,7 +2987,7 @@ dxaccAccountGetQuoteTZ(Account *acc)
 void
 xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status)
 { 
-  kvp_frame *frame;
+  KvpFrame *frame;
   if (!account)
     return;
   
@@ -3008,7 +3008,7 @@ xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status)
 gboolean
 xaccAccountGetReconcileChildrenStatus(Account *account)
 {
-  kvp_value *status;
+  KvpValue *status;
   if (!account)
     return FALSE;
   /* access the account's kvp-data for status and return that, if no value

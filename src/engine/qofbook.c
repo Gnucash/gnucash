@@ -150,7 +150,7 @@ qof_book_get_guid (QofBook *book)
   return &book->guid;
 }
 
-kvp_frame *
+KvpFrame *
 qof_book_get_slots (QofBook *book)
 {
   if (!book) return NULL;
@@ -232,8 +232,8 @@ gint64
 qof_book_get_counter (QofBook *book, const char *counter_name)
 {
   QofBackend *be;
-  kvp_frame *kvp;
-  kvp_value *value;
+  KvpFrame *kvp;
+  KvpValue *value;
   gint64 counter;
 
   if (!book) {

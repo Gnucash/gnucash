@@ -100,7 +100,7 @@ typedef struct {
   kvp_match_t       how;
   kvp_match_where_t where;
   GSList           *path;
-  kvp_value        *value;
+  KvpValue        *value;
 } KVPPredicateData;
 
 typedef struct {

@@ -136,7 +136,7 @@ QofQueryPredData *qof_query_boolean_predicate (QofQueryCompare how, gboolean val
 QofQueryPredData *qof_query_char_predicate (QofCharMatch options,
 				       const char *chars);
 QofQueryPredData *qof_query_kvp_predicate (QofQueryCompare how,
-				      GSList *path, const kvp_value *value);
+				      GSList *path, const KvpValue *value);
 
 /** Copy a predicate. */
 QofQueryPredData *qof_query_core_predicate_copy (QofQueryPredData *pdata);
