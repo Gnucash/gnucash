@@ -27,6 +27,10 @@
  *                                                                  *
 \********************************************************************/
 
+/* hack alert -- splits & stocks probably not handled correctly
+ * this stuff still needs work 
+ */
+
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
