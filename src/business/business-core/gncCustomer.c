@@ -169,24 +169,14 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
     cust->currency = gnc_commodity_table_lookup_unique (comtbl, ucom);
   }
 
-  /* Find the matching bill term in the new book, 
-   * else clone that too. */
+  /* Find the matching bill term, tax table in the new book */
   if (from->terms)
   {
     cust->terms = gncBillTermObtainTwin(from->terms, book);
   }
-
-  /* Find the matching taxtable in the new book, 
-   * else clone that too. */
   if (from->taxtable)
   {
-    GncTaxTable *txtab;
-    txtab = (GncTaxTable *) qof_instance_lookup_twin (QOF_INSTANCE(from->taxtable), book);
-    if (!txtab)
-    {
-      txtab = gncCloneTaxTable (from->taxtable, book);
-    }
-    cust->taxtable = txtab;
+    cust->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
   }
 
   addObj (cust);
