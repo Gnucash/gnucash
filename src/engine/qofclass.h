@@ -195,11 +195,19 @@ QofAccessFunc qof_class_get_parameter_getter (QofIdTypeConst obj_name,
 QofSetterFunc qof_class_get_parameter_setter (QofIdTypeConst obj_name,
                                               const char *parameter);
 
+/** Type definition for the class callback function. */
+typedef void (*QofClassForeachCB) (QofIdTypeConst, gpointer);
+
+/** Call the callback once for each object class that is registered
+ *  with the system.  The 'user_data' is passed back to the callback.
+ */
+void qof_class_foreach (QofClassForeachCB, gpointer user_data);
+
 /** Type definition for the paramter callback function. */
 typedef void (*QofParamForeachCB) (QofParam *, gpointer user_data);
 
 /** Call the callback once for each parameter on the indicated 
- *  object class.  The 'user_data' is passed back to teh callback.
+ *  object class.  The 'user_data' is passed back to the callback.
  */
 void qof_class_param_foreach (QofIdTypeConst obj_name,
                               QofParamForeachCB, gpointer user_data);

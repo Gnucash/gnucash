@@ -33,7 +33,7 @@
 
 static short module = MOD_QUERY;
 
-static GHashTable *paramTable = NULL;
+static GHashTable *classTable = NULL;
 static GHashTable *sortTable = NULL;
 static gboolean initialized = FALSE;
 
@@ -61,13 +61,13 @@ qof_class_register (QofIdTypeConst obj_name,
     g_hash_table_insert (sortTable, (char *)obj_name, default_sort_function);
   }
 
-  ht = g_hash_table_lookup (paramTable, obj_name);
+  ht = g_hash_table_lookup (classTable, obj_name);
 
   /* If it doesn't already exist, create a new table for this object */
   if (!ht) 
   {
     ht = g_hash_table_new (g_str_hash, g_str_equal);
-    g_hash_table_insert (paramTable, (char *)obj_name, ht);
+    g_hash_table_insert (classTable, (char *)obj_name, ht);
   }
 
   /* At least right now, we allow dummy, paramterless objects, 
@@ -89,7 +89,7 @@ qof_class_init(void)
   if (initialized) return;
   initialized = TRUE;
 
-  paramTable = g_hash_table_new (g_str_hash, g_str_equal);
+  classTable = g_hash_table_new (g_str_hash, g_str_equal);
   sortTable = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
@@ -99,8 +99,8 @@ qof_class_shutdown (void)
   if (!initialized) return;
   initialized = FALSE;
 
-  g_hash_table_foreach_remove (paramTable, clear_table, NULL);
-  g_hash_table_destroy (paramTable);
+  g_hash_table_foreach_remove (classTable, clear_table, NULL);
+  g_hash_table_destroy (classTable);
   g_hash_table_destroy (sortTable);
 }
 
@@ -109,7 +109,7 @@ qof_class_is_registered (QofIdTypeConst obj_name)
 {
   if (!obj_name) return FALSE;
 
-  if (g_hash_table_lookup (paramTable, obj_name)) return TRUE;
+  if (g_hash_table_lookup (classTable, obj_name)) return TRUE;
 
   return FALSE;
 }
@@ -123,7 +123,7 @@ qof_class_get_parameter (QofIdTypeConst obj_name,
   g_return_val_if_fail (obj_name, NULL);
   g_return_val_if_fail (parameter, NULL);
 
-  ht = g_hash_table_lookup (paramTable, obj_name);
+  ht = g_hash_table_lookup (classTable, obj_name);
   if (!ht)
   {
     PERR ("no object of type %s", obj_name);
@@ -188,36 +188,66 @@ qof_class_get_default_sort (QofIdTypeConst obj_name)
 
 /* ================================================================ */
 
-struct _iterate {
-  QofParamForeachCB   fcn;
-  gpointer                data;
+struct class_iterate {
+  QofClassForeachCB   fcn;
+  gpointer            data;
 };
-                                                                                
+
 static void 
-foreach_cb (gpointer key, gpointer item, gpointer arg)
+class_foreach_cb (gpointer key, gpointer item, gpointer arg)
 {
-  struct _iterate *iter = arg;
-  QofParam *parm = item;
-                                                                                
-  iter->fcn (parm, iter->data);
+  struct class_iterate *iter = arg;
+  QofIdTypeConst id = key;
+ 
+  iter->fcn (id, iter->data);
 }
 
+void
+qof_class_foreach (QofClassForeachCB cb, gpointer user_data)
+{
+  struct class_iterate iter;
+
+  if (!cb) return;
+  if (!classTable) return;
+
+  iter.fcn = cb;
+  iter.data = user_data;
+
+  g_hash_table_foreach (classTable, class_foreach_cb, &iter);
+}
+
+/* ================================================================ */
+
+struct parm_iterate {
+  QofParamForeachCB   fcn;
+  gpointer            data;
+};
+
+static void 
+param_foreach_cb (gpointer key, gpointer item, gpointer arg)
+{
+  struct parm_iterate *iter = arg;
+  QofParam *parm = item;
+
+  iter->fcn (parm, iter->data);
+}
 
 void
 qof_class_param_foreach (QofIdTypeConst obj_name,
                          QofParamForeachCB cb, gpointer user_data)
 {
-  struct _iterate iter;
+  struct parm_iterate iter;
   GHashTable *param_ht;
 
   if (!obj_name || !cb) return;
-  param_ht = g_hash_table_lookup (paramTable, obj_name);
+  if (!classTable) return;
+  param_ht = g_hash_table_lookup (classTable, obj_name);
   if (!param_ht) return;
 
   iter.fcn = cb;
   iter.data = user_data;
 
-  g_hash_table_foreach (param_ht, foreach_cb, &iter);
+  g_hash_table_foreach (param_ht, param_foreach_cb, &iter);
 }
 
 /* ============================= END OF FILE ======================== */
