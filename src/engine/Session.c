@@ -131,6 +131,14 @@ void           xaccSessionEnd (Session *);
 #endif /* __XACC_SESSION_H__ */
 
 #include <errno.h>
+#include <limits.h>
+#include <nana.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#include "util.h"
 
 struct _session {
    AccountGroup *topgroup;
@@ -150,6 +158,7 @@ struct _session {
    int errtype;
 };
 
+/* ============================================================== */
 
 Session *
 xaccMallocSession (void)
@@ -167,10 +176,12 @@ xaccInitSession (Session *sess)
   if (!sess) return;
   sess->topgroup = NULL;
   sess->errtype = 0;
-  session->sessionid = NULL;
-  session->fullpath = NULL;
+  sess->sessionid = NULL;
+  sess->fullpath = NULL;
 };
   
+/* ============================================================== */
+
 int
 xaccSessionGetError (Session * sess)
 {
@@ -181,3 +192,170 @@ xaccSessionGetError (Session * sess)
    sess->errtype = 0;
    return (retval);
 }
+
+/* ============================================================== */
+
+AccountGroup * 
+xaccSessionGetGroup (Session *sess)
+{
+   if (!sess) return NULL;
+   return (sess->topgroup);
+}
+
+void 
+xaccSessionSetGroup (Session *sess, AccountGroup *grp)
+{
+   if (!sess) return;
+   sess->topgroup = grp;
+}
+
+/* ============================================================== */
+
+/* hack alert -- we should be yanking this out of 
+ * some config file 
+ */
+static char * searchpaths[] = {
+   "/usr/share/gnucash/",
+   NULL,
+};
+
+void
+xaccSessionBegin (Session *sess, char * sid)
+{
+   char * filefrag;
+   if (!sess) return;
+
+   /* clear the error condition of previous errors */
+   sess->errtype = 0;
+
+   /* seriously invalid */
+   if (!sid) {
+      sess->errtype = EINVAL;
+      return;
+   }
+
+   /* check to see if this session is already open */
+   if (sess->sessionid) {
+      sess->errtype = EEXIST;
+      return;
+   }
+
+   /* check to see if this is a type we know how to handle */
+   if (strncmp (sid, "file:", 5)) {
+      sess->errtype = ENOSYS;
+      return;
+   }
+
+   /* ---------------------------------------------------- */
+   /* OK, now we try to find or build an absolute file path */
+
+   /* check for an absolute file path */
+   filefrag = sess->sessionid + 5;  /* space past 'file:' */
+   if ('/' == *filefrag) {
+      sess->fullpath = strdup (filefrag);
+   } else {
+      int i, rc;
+      struct stat statbuf;
+      char pathbuf[PATH_MAX];
+      char * path = NULL;
+      int namelen, len;
+
+      namelen = strlen (filefrag) + 2;
+
+      for (i=-2; 1 ; i++) 
+      {
+         switch (i) {
+            case -2: {
+               /* try to find a file by this name in the cwd ... */
+               path = getcwd (pathbuf, PATH_MAX);
+               if (!path) continue;
+               len = strlen (path) + namelen;
+               if (PATH_MAX <= len) continue;
+               strcat (path, "/");
+               break;
+            }
+            case -1: {
+               /* look for something in $HOME/.gnucash/data */
+               path = getenv ("HOME");
+               if (!path) continue;
+               len = strlen (path) + namelen + 20;
+               if (PATH_MAX <= len) continue;
+               strcpy (pathbuf, path);
+               strcat (pathbuf, "/.gnucash/data/");
+               path = pathbuf;
+               break;
+            }
+            default: {
+               /* OK, check the user-configured paths */
+               path = searchpaths[i];
+               len = strlen (path) + namelen;
+               if (PATH_MAX <= len) continue;
+               strcpy (pathbuf, path);
+               path = pathbuf;
+            }
+         }
+
+         if (!path) break;
+
+         /* lets see if we found the file here ... */
+         strcat (path, filefrag);
+         rc = stat (path, &statbuf);
+         if (!rc) {
+            sess->fullpath = strdup (path);
+            break;
+         }
+      }
+
+      /* OK, we didn't find the file */
+      /* Lets try creating a new file in $HOME/.gnucash/data */
+      if (!(sess->fullpath)) 
+      {
+         /* let the user know that we're creating a new file */
+         sess->errtype = ENOENT;
+
+         path = getenv ("HOME");
+         if (path) {
+            len = strlen (path) + namelen + 20;
+            if (PATH_MAX > len) {
+               strcpy (pathbuf, path);
+               strcat (pathbuf, "/.gnucash/data/");
+               strcat (pathbuf, filefrag);
+               sess->fullpath = strdup (pathbuf);
+            }
+         } 
+      }
+
+      /* OK, we still didn't find the file */
+      /* Lets try creating a new file in the cwd */
+      if (!(sess->fullpath)) 
+      {
+         /* let the user know that we're creating a new file */
+         sess->errtype = ENOENT;
+
+         /* create a new file in the cwd */
+         path = getcwd (pathbuf, PATH_MAX);
+         if (!path) {
+            sess->errtype = ERANGE;  
+            return;    /* ouch */
+         }
+         len = strlen (path) + namelen;
+         if (PATH_MAX <= len) {
+            sess->errtype = ERANGE;  
+            return;    /* ouch */
+         }
+         strcat (path, "/");
+         strcat (path, filefrag);
+         sess->fullpath = strdup (path);
+      }
+   }
+   assert (sess->fullpath);  /* no one fucked with the code, yeah? */
+      
+   /* OK, we've got a good string ... */
+   sess->sessionid = strdup (sid);
+
+   /* ---------------------------------------------------- */
+   /* Yow! OK, after all of that, we've finnaly got a fully 
+    * resolved path name.  Lets see if we can get a lock on it */
+}
+
+/* ==================== END OF FILE ================== */
