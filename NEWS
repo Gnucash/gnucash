@@ -1,5 +1,11 @@
 Version history:
 ------- -------
+ 1.5.5  - 15 April 2001
+         o more new & improved reports
+         o use of gnome MDI for main window
+         o GUI improvements
+         o bug fixes
+
  1.5.4  - 01 April 2001
          o several new & improved reports/graphs
          o online price quotes now work
