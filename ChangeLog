@@ -1,3 +1,8 @@
+2004-07-11  Christian Stimming  <stimming@tuhh.de>
+
+	* po/nl.po: Updated Dutch translation by Jeroen ten Berge
+	<twinbit@home.nl>
+
 2004-07-02  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/dialog-print-check.c:
