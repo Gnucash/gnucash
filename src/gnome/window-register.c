@@ -1180,7 +1180,7 @@ print_check_cb(GtkWidget * widget, gpointer data)
      gh_procedure_p(print_check))
   {
     payee  = xaccTransGetDescription(trans);
-    amount = xaccSplitGetValue(split);
+    amount = xaccSplitGetAmount(split);
     amount = gnc_numeric_abs (amount);
     date   = xaccTransGetDate(trans);
     memo   = xaccSplitGetMemo(split);

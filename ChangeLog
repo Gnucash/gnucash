@@ -1,3 +1,9 @@
+2001-07-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-register.c: same as below
+
+	* src/scm/report/taxtxf.scm: use split amount
+
 2001-07-13  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/payables.scm: New file - an 

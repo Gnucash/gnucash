@@ -597,8 +597,8 @@
         (map (lambda (spl) 
                (let* ((date (gnc:transaction-get-date-posted 
                              (gnc:split-get-parent spl)))
-                      (value (gnc:numeric-to-double
-                              (gnc:split-get-value spl)))
+                      (amount (gnc:numeric-to-double
+                               (gnc:split-get-amount spl)))
                       ;; TurboTax 1999 and 2000 ignore dates after Dec 31
                       (fudge-date (if (and full-year? 
                                            (gnc:timepair-lt to-value date))
@@ -606,8 +606,8 @@
                                       date)))
                  (if tax-mode?
                      (render-level-x-account table lev max-level account
-                                             value suppress-0 #f date)
-                     (render-txf-account account value
+                                             amount suppress-0 #f date)
+                     (render-txf-account account amount
                                          #t fudge-date  #t date))))
              split-list)))
     
