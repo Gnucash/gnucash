@@ -21,6 +21,9 @@
 
 	FIXES bug #100489
 
+	* src/engine/gnc-commodity.c: change PWARN() to DEBUG() in
+	  gnc_commodity_equal(), because the average user doesn't need
+	  to know why commodities are not equal.
 
 2002-12-7  Benoit Grégoire  <bock@step.polymtl.ca>	
 	More Doxygenification.  Created an Engine module, and a 

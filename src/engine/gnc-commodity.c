@@ -341,38 +341,38 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
 
   if (!a || !b)
   {
-    PWARN ("one is NULL");
+    DEBUG ("one is NULL");
     return FALSE;
   }
 
   if (safe_strcmp(a->namespace, b->namespace) != 0)
   {
-    PWARN ("namespaces differ: %s vs %s", a->namespace, b->namespace);
+    DEBUG ("namespaces differ: %s vs %s", a->namespace, b->namespace);
     return FALSE;
   }
 
   if (safe_strcmp(a->mnemonic, b->mnemonic) != 0)
   {
-    /* PWARN ("mnemonics differ: %s vs %s", a->mnemonic, b->mnemonic); */
+    DEBUG ("mnemonics differ: %s vs %s", a->mnemonic, b->mnemonic);
     return FALSE;
   }
 
   if (safe_strcmp(a->fullname, b->fullname) != 0)
   {
-    PWARN ("fullnames differ: %s vs %s", a->fullname, b->fullname);
+    DEBUG ("fullnames differ: %s vs %s", a->fullname, b->fullname);
     return FALSE;
   }
 
   if (safe_strcmp(a->exchange_code, b->exchange_code) != 0)
   {
-    PWARN ("exchange codes differ: %s vs %s",
+    DEBUG ("exchange codes differ: %s vs %s",
            a->exchange_code, b->exchange_code);
     return FALSE;
   }
 
   if (a->fraction != b->fraction)
   {
-    PWARN ("fractions differ: %d vs %d", a->fraction, b->fraction);
+    DEBUG ("fractions differ: %d vs %d", a->fraction, b->fraction);
     return FALSE;
   }
 
