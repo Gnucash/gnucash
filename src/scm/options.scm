@@ -488,18 +488,25 @@
         (gnc:account-lookup item)
         item))
 
-  (let ((option (map convert-to-guid (default-getter)))
-        (option-set #f)
-        (validator
-         (if (not value-validator)
-             (lambda (account-list) (list #t account-list))
-             value-validator)))
+  (let* ((option (map convert-to-guid (default-getter)))
+         (option-set #f)
+         (getter (lambda () (map convert-to-account
+                                 (if option-set
+                                     option
+                                     (default-getter)))))
+         (value->string (lambda ()
+                          (string-append
+                           "'" (gnc:value->string (if option-set option #f)))))
+         (validator
+          (if (not value-validator)
+              (lambda (account-list) (list #t account-list))
+              value-validator)))
     (gnc:make-option
      section name sort-tag 'account-list documentation-string
-     (lambda () (map convert-to-account (if option-set
-                                            option
-                                            (default-getter))))
+     getter
      (lambda (account-list)
+       (if (not account-list) (set! account-list (default-getter)))
+       (set! account-list (filter (lambda (x) (string? x)) account-list))
        (let* ((result (validator account-list))
               (valid (car result))
               (value (cadr result)))
@@ -509,7 +516,7 @@
                (set! option-set #t))
              (gnc:error "Illegal account list value set"))))
      (lambda () (map convert-to-account (default-getter)))
-     #f
+     (gnc:restore-form-generator value->string)
      validator
      multiple-selection #f #f #f)))
 
