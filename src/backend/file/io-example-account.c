@@ -283,7 +283,7 @@ gnc_excludep_end_handler(gpointer data_for_children,
     gint64 val = 0;
 
     dom_tree_to_integer ((xmlNodePtr)data_for_children, &val);
-    gea->exclude_from_select_all = (dom_tree_to_integer ? TRUE : FALSE);
+    gea->exclude_from_select_all = (val ? TRUE : FALSE);
     
     return TRUE;
 }
@@ -305,7 +305,7 @@ gnc_selected_end_handler(gpointer data_for_children,
     gint64 val = 0;
 
     dom_tree_to_integer ((xmlNodePtr)data_for_children, &val);
-    gea->start_selected = (dom_tree_to_integer ? TRUE : FALSE);
+    gea->start_selected = (val ? TRUE : FALSE);
     
     return TRUE;
 }

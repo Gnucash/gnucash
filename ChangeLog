@@ -36,6 +36,10 @@
 	  visible number the same and changing the "other" account.  This
 	  should fix #102161
 
+	* src/backend/file/io-example-account.c: fix a logic bug
+	* accounts/C/acctchrt_common.gnucash-xea: don't start selected
+	* accounts/C/acctchrt_checkbook.gnucash-xea: provide a simple checkbook
+	
 2003-01-04  David Hampton  <hampton@employees.org>
 
 	* src/backend/file/gnc-account-xml-v2.c: 
