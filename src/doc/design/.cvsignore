@@ -12,6 +12,9 @@ gnucash-design.tp
 gnucash-design.vr
 gnucash-design.fn
 gnucash-design.cp
+gnucash-design.ps
+gnucash-design.dvi
+gnucash-design.aux
 *.info
 *.info-*
 *.html

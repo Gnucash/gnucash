@@ -50,6 +50,10 @@ typedef enum {
   BY_MEMO,
   BY_DESC,
   BY_RECONCILE,
+  BY_ACCOUNT_NAME,
+  BY_ACCOUNT_CODE,
+  BY_CORR_ACCOUNT_NAME,
+  BY_CORR_ACCOUNT_CODE,
   BY_NONE
 } sort_type_t;  
 
@@ -287,7 +291,9 @@ void xaccQueryAddPredicate (Query * q, PredicateData *pred, QueryOp op);
 
 void xaccQuerySetSortOrder(Query * q, sort_type_t primary, 
                            sort_type_t secondary, sort_type_t tertiary);
-void xaccQuerySetSortIncreasing(Query * q, gboolean increasing);
+void xaccQuerySetSortIncreasing(Query * q, gboolean prim_increasing,
+			   gboolean sec_increasing, 
+				gboolean tert_increasing);
 void xaccQuerySetMaxSplits(Query * q, int n);
 int  xaccQueryGetMaxSplits(Query * q);
 

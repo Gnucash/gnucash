@@ -1822,7 +1822,137 @@ xaccTransOrder (Transaction *ta, Transaction *tb)
 
   return 0;
 }
+static gboolean
+get_corr_account_split(Split *sa, Split **retval)
+{
+ 
+  Split *current_split;
+  GList *split_list;
+  Transaction * ta;
+  gnc_numeric sa_balance, current_balance;
+  gboolean sa_balance_positive, current_balance_positive, seen_different = FALSE;
 
+  *retval = NULL;
+  g_return_val_if_fail(sa, TRUE);
+  ta = xaccSplitGetParent(sa);
+  
+  sa_balance = xaccSplitGetBalance(sa);
+  sa_balance_positive = gnc_numeric_positive_p(sa_balance);
+
+  for(split_list = xaccTransGetSplitList(ta);split_list; split_list = split_list->next)
+  {
+    current_split = split_list->data;
+    if(current_split != sa)
+    {
+      current_balance = xaccSplitGetBalance(current_split);
+      current_balance_positive = gnc_numeric_positive_p(current_balance);
+      if((sa_balance_positive && !current_balance_positive) || 
+	 (!sa_balance_positive && current_balance_positive))
+      {
+	if(seen_different)
+	{
+	  *retval = NULL;
+	  return TRUE;
+	}
+	else
+	{
+	  seen_different = TRUE;
+	  *retval = current_split;
+	}
+      }
+    }
+  }
+  return FALSE;
+}
+
+const char *
+xaccSplitGetCorrAccountName(Split *sa)
+{
+  static const char *split_const = "Split";
+  Split *other_split;
+  Account *other_split_acc;
+
+  if(get_corr_account_split(sa, &other_split))
+  {
+    return split_const;
+  }
+  else
+  {
+    other_split_acc = xaccSplitGetAccount(other_split);
+    return xaccAccountGetName(other_split_acc);
+  }
+}
+
+const char *
+xaccSplitGetCorrAccountCode(Split *sa)
+{
+  static const char *split_const = "Split";
+  Split *other_split;
+  Account *other_split_acc;
+  if(get_corr_account_split(sa, &other_split))
+  {
+    return split_const;
+  }
+  else
+  {
+    other_split_acc = xaccSplitGetAccount(other_split);
+    return xaccAccountGetName(other_split_acc);
+  }
+}
+
+int 
+xaccSplitCompareAccountNames(Split *sa, Split *sb)
+{
+  Account *aa, *ab;
+  if (!sa && !sb) return 0;
+  if (!sa) return -1;
+  if (!sb) return 1;
+
+  aa = xaccSplitGetAccount(sa);
+  ab = xaccSplitGetAccount(sb);
+  
+  return safe_strcmp(xaccAccountGetName(aa), xaccAccountGetName(ab));
+}
+
+int 
+xaccSplitCompareAccountCodes(Split *sa, Split *sb)
+{
+  Account *aa, *ab;
+  if (!sa && !sb) return 0;
+  if (!sa) return -1;
+  if (!sb) return 1;
+
+  aa = xaccSplitGetAccount(sa);
+  ab = xaccSplitGetAccount(sb);
+  
+  return safe_strcmp(xaccAccountGetName(aa), xaccAccountGetName(ab));
+}
+
+int 
+xaccSplitCompareOtherAccountNames(Split *sa, Split *sb)
+{
+  const char *ca, *cb; 
+  if (!sa && !sb) return 0;
+  if (!sa) return -1;
+  if (!sb) return 1;
+
+  ca = xaccSplitGetCorrAccountName(sa);
+  cb = xaccSplitGetCorrAccountName(sb);
+  return safe_strcmp(ca, cb);
+}
+
+int
+xaccSplitCompareOtherAccountCodes(Split *sa, Split *sb)
+{
+  const char *ca, *cb;
+  if (!sa && !sb) return 0;
+  if (!sa) return -1;
+  if (!sb) return 1;
+
+  ca = xaccSplitGetCorrAccountCode(sa);
+  cb = xaccSplitGetCorrAccountCode(sb);
+  return safe_strcmp(ca, cb);
+}
 /********************************************************************\
 \********************************************************************/
 

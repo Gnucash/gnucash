@@ -59,7 +59,9 @@ struct _querystruct {
   sort_type_t primary_sort;
   sort_type_t secondary_sort;
   sort_type_t tertiary_sort;
-  gboolean    sort_increasing;
+  gboolean    primary_increasing;
+  gboolean    secondary_increasing;
+  gboolean    tertiary_increasing;
   int         max_splits;
 
   /* cache the results so we don't have to run the whole search 
@@ -211,7 +213,9 @@ xaccInitQuery(Query * q, QueryTerm * initial_term) {
   q->secondary_sort = BY_NONE;
   q->tertiary_sort = BY_NONE;
 
-  q->sort_increasing = TRUE;
+  q->primary_increasing = TRUE;
+  q->secondary_increasing = TRUE;
+  q->tertiary_increasing = TRUE;
 }
 
 
@@ -447,7 +451,9 @@ xaccQueryCopy(Query *q) {
   copy->secondary_sort = q->secondary_sort;
   copy->tertiary_sort = q->tertiary_sort;
 
-  copy->sort_increasing = q->sort_increasing;
+  copy->primary_increasing = q->primary_increasing;
+  copy->secondary_increasing = q->secondary_increasing;      
+  copy->tertiary_increasing = q->tertiary_increasing;
   copy->max_splits = q->max_splits;
 
   copy->changed = q->changed;
@@ -703,7 +709,7 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb)
   Transaction * tb;
   unsigned long n1;                             
   unsigned long n2;                             
-  char   *da, *db;                               
+  const char   *da, *db;                               
   gnc_numeric fa, fb;                                
   
   if (sa && !sb)  return -1; 
@@ -804,6 +810,20 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb)
     }
     break;
 
+  case BY_ACCOUNT_NAME:
+    return xaccSplitCompareAccountCodes(sa,sb);
+    break;
+
+  case BY_ACCOUNT_CODE:
+    return xaccSplitCompareAccountNames(sa, sb);
+    break;
+
+  case BY_CORR_ACCOUNT_NAME:
+    return xaccSplitCompareOtherAccountNames(sa, sb);
+
+  case BY_CORR_ACCOUNT_CODE:
+    return xaccSplitCompareOtherAccountCodes(sa, sb);
+
   case BY_NONE:
     return 0;
     break;
@@ -815,14 +835,9 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb)
 static int
 split_sort_func(gconstpointer a, gconstpointer b) {
   int retval;
-  int multiplier;
+ 
 
   assert(split_sort_query);
-
-  if (split_sort_query->sort_increasing)
-    multiplier = 1;
-  else
-    multiplier = -1;
 
   retval = split_cmp_func(split_sort_query->primary_sort, a, b);
   if((retval == 0) && 
@@ -831,14 +846,14 @@ split_sort_func(gconstpointer a, gconstpointer b) {
     if((retval == 0) &&
        (split_sort_query->tertiary_sort != BY_NONE)) {
       retval = split_cmp_func(split_sort_query->tertiary_sort, a, b);
-      return retval * multiplier;
+      return split_sort_query->tertiary_increasing ? retval : - retval;
     }
     else {
-      return retval * multiplier;
+      return split_sort_query->secondary_increasing ? retval : - retval;
     }
   }
   else {
-    return retval * multiplier;
+    return split_sort_query->primary_increasing ? retval : - retval;
   }
 }
 
@@ -2221,9 +2236,14 @@ xaccQuerySetSortOrder(Query * q, sort_type_t primary,
  *  xaccQuerySetSortIncreasing
  *******************************************************************/
 void
-xaccQuerySetSortIncreasing(Query * q, gboolean increasing)
+xaccQuerySetSortIncreasing(Query * q, gboolean prim_increasing,
+			   gboolean sec_increasing, 
+			   gboolean tert_increasing)
 {
-  q->sort_increasing = increasing;
+  q->primary_increasing = prim_increasing;
+  q->secondary_increasing = sec_increasing;
+  q->tertiary_increasing = tert_increasing;
+  return;
 }
 
 /*******************************************************************

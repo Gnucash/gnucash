@@ -622,7 +622,7 @@ gnc_reconcile_list_set_sort_order (GNCReconcileList *list, sort_type_t key)
   if (list->list_type == RECLIST_DEBIT)
     return;
 
-  xaccQuerySetSortIncreasing (list->query, !(key == BY_AMOUNT));
+  xaccQuerySetSortIncreasing (list->query, !(key == BY_AMOUNT), !(key == BY_AMOUNT), !(key == BY_AMOUNT));
 }
 
 static void

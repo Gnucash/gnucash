@@ -506,6 +506,36 @@ int  xaccSplitDateOrder (Split *sa, Split *sb);
  * Miscellaneous utility routines.
 \********************************************************************/
 
+/*
+ * These functions compare two splits by different criteria.  The *Other*
+ * functions attempt to find the split on the other side of a transaction
+ * and compare on it.  They return similar to strcmp.
+ * 
+ * These functions were added because converting strings to guile 
+ * for comparisons in the transaction report is terribly inefficient.
+ * More may be added here in future if it turns out that other types
+ * of comparisons also induces guile slowdowns.
+ */
+
+int xaccSplitCompareAccountNames(Split *sa, Split *sb);
+int xaccSplitCompareAccountCodes(Split *sa, Split *sb);
+int xaccSplitCompareOtherAccountNames(Split *sa, Split *sb);
+int xaccSplitCompareOtherAccountCodes(Split *sa, Split *sb);
+
+
+/*
+ * These functions take a split, get the corresponding split on the
+ * "other side" of the transaction, and extract either the name or code
+ * of that split, reverting to returning a constant "Split" if the 
+ * transaction has more than one split on the "other side".  These
+ * were added for the transaction report, and is in C because the code
+ * was already written in C for the above functions and duplication 
+ * is silly. 
+ */
+
+const char * xaccSplitGetCorrAccountName(Split *sa);
+const char * xaccSplitGetCorrAccountCode(Split *sa);
+
 /* 
  * The xaccGetAccountByName() is a convenience routine that 
  *    is essentially identical to xaccGetPeerAccountFromName(),

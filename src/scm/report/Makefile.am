@@ -8,8 +8,8 @@ gncscm_DATA = \
   hello-world.scm \
   report-list.scm \
   stylesheet-plain.scm \
-  stylesheet-fancy.scm
-
+  stylesheet-fancy.scm \
+  transaction-report-2.scm
 EXTRA_DIST = \
   .cvsignore \
   ${gncscm_DATA}

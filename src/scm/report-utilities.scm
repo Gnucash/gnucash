@@ -389,7 +389,7 @@
     (gnc:query-add-single-account-match query account 'query-and)
     (gnc:query-add-date-match-timepair query #f date #t date 'query-and) 
     (gnc:query-set-sort-order query 'by-date 'by-standard 'by-none)
-    (gnc:query-set-sort-increasing query #t)
+    (gnc:query-set-sort-increasing query #t #t #t)
     (gnc:query-set-max-splits query 1)
     
     (set! splits (gnc:glist->list 
@@ -424,7 +424,7 @@
     (gnc:query-add-single-account-match query account 'query-and)
     (gnc:query-add-date-match-timepair query #f date #t date 'query-and) 
     (gnc:query-set-sort-order query 'by-date 'by-standard 'by-none)
-    (gnc:query-set-sort-increasing query #t)
+    (gnc:query-set-sort-increasing query #t #t #t)
     (gnc:query-set-max-splits query 1)
 
     (set! splits (gnc:glist->list 

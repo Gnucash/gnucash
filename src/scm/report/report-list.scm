@@ -10,6 +10,7 @@
 (gnc:depend "report/average-balance.scm")
 (gnc:depend "report/pnl.scm")
 (gnc:depend "report/hello-world.scm")
+(gnc:depend "report/transaction-report.scm")
 
 ;; style sheets 
 (gnc:depend "report/stylesheet-plain.scm")
