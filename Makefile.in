@@ -135,6 +135,7 @@ install-bin: gnucash.${FLAVOR}
 
 install:
 	$(INSTALL) -d ${GNC_BINDIR} ${GNC_LIBDIR} ${GNC_DOCDIR} ${GNC_SHAREDIR}
+	$(INSTALL) -d ${GNC_MANDIR}/man1
 
   # Put these in the opposite order of precedence.  Final bin/gnucash link will
   # point to the last one that exists...
@@ -166,6 +167,9 @@ install:
 	$(INSTALL_DATA) README* ${GNC_DOCDIR}
 	$(INSTALL_DATA) TODO ${GNC_DOCDIR}
 	$(INSTALL_DATA) CHANGES ${GNC_DOCDIR}
+
+	$(INSTALL_DATA) man/gnucash.1 ${GNC_MANDIR}/man1
+	$(INSTALL_DATA) man/gnc-prices.1 ${GNC_MANDIR}/man1
 
 # 	@mkdir -p $(prefix)/toolbar
 # 	$(INSTALL_DATA) toolbar/*.xpm $(prefix)/toolbar

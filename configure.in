@@ -510,11 +510,14 @@ else
   GNC_SHAREDIR=${datadir}/gnucash
 fi
 
+GNC_MANDIR=${mandir}
+
 AC_SUBST(GNC_DOCDIR)
 AC_SUBST(GNC_BINDIR)
 AC_SUBST(GNC_LIBDIR)
 AC_SUBST(GNC_CONFIGDIR)
 AC_SUBST(GNC_SHAREDIR)
+AC_SUBST(GNC_MANDIR)
 
 
 # HACK : inserts the path to gnucash.pm, which is used in the
