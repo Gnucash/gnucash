@@ -88,16 +88,7 @@
 
             (cond ((not (null? current-accounts)) current-accounts)
                   (else
-                   (let ((acctlist '()))
-                     (gnc:for-loop 
-                      (lambda(x)
-                        (set! acctlist 
-                              (append! 
-                               acctlist
-                               (list (gnc:group-get-account 
-                                      (gnc:get-current-group) x)))))
-                      0 num-accounts 1)
-                     acctlist)))))	
+                   (gnc:group-get-account-list (gnc:get-current-group))))))
         #f #t))
 
       (gnc:register-runavg-option
