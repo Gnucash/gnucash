@@ -598,7 +598,7 @@ find_nearest_equity_acct (Account *acc)
    AccountGroup *parent;
    Account *next_up, *candidate;
 
-   /* see if we can find an equity account that is peered to this account */
+   /* See if we can find an equity account that is peered to this account */
    parent = xaccAccountGetParent (acc);
    g_return_val_if_fail (parent, NULL);
 

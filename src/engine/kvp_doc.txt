@@ -159,36 +159,30 @@ Use:  GUID of the split that records the capital gains for this split.
 -----------------------
 
 Name: /gemini/
-Type: kvp_frame
+Type: kvp_glist
 Entities: Account, Book
-Use:  kvp subdirectory holding identification of accounts or books 
+Use:  kvp bag holding frames that identify accounts or books 
       that are copies of this account.
 
-Name: /gemini/ncopies
-Type: int64
-Entities: Account, Book
-Use:  number of subdirectories containing copy info.
-
-Name: /gemini/0/
+Name: /gemini/*
 Type: kvp_frame
 Entities: Account, Book
-Use:  subdirectory holding identification of the first copied account.
-      Other copies would appear in directories /gemini/1/, /gemini/2/,
-      etc.
+Use:  bag value holds a frame that identifies a single copied account.
+      Other copies would appear in other bag values.
 
-Name: /gemini/0/acct_guid
+Name: /gemini/*/acct_guid
 Type: guid
 Entities: Account
 Use:  guid of another account that is a copy of this one.
 
-Name: /gemini/0/book_guid
+Name: /gemini/*/book_guid
 Type: guid
 Entities: Account, Book
 Use:  When this appears in an account, then it contains the guid of 
       the book that the other account belongs to.  When this appears
       in a book, then this is the guid of the other book.
 
-Name: /gemini/0/date
+Name: /gemini/*/date
 Type: timespec
 Entities: Account, Book
 Use:  date that the copy was created.
@@ -268,13 +262,13 @@ Use: The next unused lot id number, used to autogenerate
 
 
 Name: /lot-split/
-Type: kvp_frame
+Type: kvp_glist
 Entities: Split
-Use:  A gemini-style kvp subdirectory holding identification of splits
-      that were split off of this split.  See /gemini/ for additional 
-      doco's.
+Use:  A bag of kvp frames holding identification of splits
+      that were split off of this split.  Same style as the 
+      /gemini/, look there for additional doco's.
 
-Name: /lot-split/0/peer_guid
+Name: /lot-split/*/peer_guid
 Type: GUID
 Entities: Split
 Use:  The GUID of the peer split which was split from this split.

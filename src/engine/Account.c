@@ -233,44 +233,21 @@ xaccCloneAccount (const Account *from, QofBook *book)
 Account *
 xaccAccountLookupTwin (Account *acc,  QofBook *book)
 {
-   KvpValue *v_ncopies;
-   int i, ncopies = 0;
+   KvpFrame *fr;
+   GUID * twin_guid;
+   Account * twin;
 
    if (!acc || !book) return NULL;
    ENTER (" ");
 
-   v_ncopies = kvp_frame_get_slot_path (acc->kvp_data, "gemini", "ncopies", NULL);
-   if (!v_ncopies) return NULL;
-   ncopies = kvp_value_get_gint64 (v_ncopies);
-   for (i=0; i<ncopies; i++)
-   {
-      GUID * book_guid;
-      KvpValue *v_book_guid;
-      char buff[80];
+   fr = gnc_kvp_bag_find_by_guid (acc->kvp_data, "gemini", 
+                    "book_guid", &book->guid);
 
-      sprintf (buff, "%d", i);
-      v_book_guid = kvp_frame_get_slot_path (acc->kvp_data, 
-             "gemini", buff, "book_guid", NULL);
-      if (!v_book_guid) continue;
-      book_guid = kvp_value_get_guid (v_book_guid);
+   twin_guid = kvp_frame_get_guid (fr, "acct_guid");
+   twin = xaccAccountLookup (twin_guid, book);
 
-      if (guid_equal(book_guid, &book->guid))
-      {
-         Account *twin;
-         GUID * acct_guid;
-         KvpValue *v_acct_guid;
-
-         v_acct_guid = kvp_frame_get_slot_path (acc->kvp_data, 
-             "gemini", buff, "acct_guid", NULL);
-         if (!v_acct_guid) return NULL;
-         acct_guid = kvp_value_get_guid (v_acct_guid);
-
-         twin = xaccAccountLookup (acct_guid, book);
-         return twin;
-      }
-   }
-   LEAVE (" ");
-   return NULL;
+   LEAVE (" found twin=%p", twin);
+   return twin;
 }
 
 /********************************************************************\
@@ -2190,17 +2167,10 @@ xaccAccountGetTaxUSCode (Account *account)
 void
 xaccAccountSetTaxUSCode (Account *account, const char *code)
 {
-  KvpFrame *frame;
-
-  if (!account)
-    return;
+  if (!account) return;
 
   xaccAccountBeginEdit (account);
-
-  frame = kvp_frame_get_frame (account->kvp_data, "tax-US", NULL);
-
-  kvp_frame_set_slot_nc (frame, "code",
-                         code ? kvp_value_new_string (code) : NULL);
+  kvp_frame_set_str (account->kvp_data, "/tax-US/code", code);
 
   mark_account (account);
   account->core_dirty = TRUE;
@@ -2210,33 +2180,17 @@ xaccAccountSetTaxUSCode (Account *account, const char *code)
 const char *
 xaccAccountGetTaxUSPayerNameSource (Account *account)
 {
-  KvpValue *value;
-
-  if (!account)
-    return FALSE;
-
-  value = kvp_frame_get_slot_path (account->kvp_data,
-                                   "tax-US", "payer-name-source", NULL);
-  if (!value)
-    return NULL;
-
-  return kvp_value_get_string (value);
+  if (!account) return NULL;
+  return kvp_frame_get_string (account->kvp_data, "/tax-US/payer-name-source");
 }
 
 void
 xaccAccountSetTaxUSPayerNameSource (Account *account, const char *source)
 {
-  KvpFrame *frame;
-
-  if (!account)
-    return;
+  if (!account) return;
 
   xaccAccountBeginEdit (account);
-
-  frame = kvp_frame_get_frame (account->kvp_data, "tax-US", NULL);
-
-  kvp_frame_set_slot_nc (frame, "payer-name-source",
-                         source ? kvp_value_new_string (source) : NULL);
+  kvp_frame_set_str (account->kvp_data, "/tax-US/payer-name-source", source);
 
   mark_account (account);
   account->core_dirty = TRUE;
@@ -2539,14 +2493,11 @@ xaccAccountGetReconcileLastDate (Account *account, time_t *last_date)
 void
 xaccAccountSetReconcileLastDate (Account *account, time_t last_date)
 {
-  KvpFrame *frame;
-  if (!account)
-    return;
+  if (!account) return;
 
   xaccAccountBeginEdit (account);
-  frame = kvp_frame_get_frame (account->kvp_data, "reconcile-info", NULL);
-  kvp_frame_set_slot_nc (frame, "last-date", 
-                               kvp_value_new_gint64 (last_date));
+  kvp_frame_set_gint64 (account->kvp_data, 
+                 "/reconcile-info/last-date", last_date);
 
   mark_account (account);
   account->core_dirty = TRUE;
@@ -2586,16 +2537,15 @@ void
 xaccAccountSetReconcileLastInterval (Account *account, int months, int days)
 {
   KvpFrame *frame;
-  if (!account)
-    return;
+  if (!account) return;
 
   xaccAccountBeginEdit (account);
-  frame = kvp_frame_get_frame (account->kvp_data, "reconcile-info",
-			       "last-interval", NULL);
-  kvp_frame_set_slot_nc (frame, "months", 
-                               kvp_value_new_gint64 (months));
-  kvp_frame_set_slot_nc (frame, "days", 
-                               kvp_value_new_gint64 (days));
+
+  frame = kvp_frame_get_frame (account->kvp_data, 
+         "/reconcile-info/last-interval");
+
+  kvp_frame_set_gint64 (frame, "months", months);
+  kvp_frame_set_gint64 (frame, "days", days);
 
   mark_account (account);
   account->core_dirty = TRUE;
@@ -2637,16 +2587,13 @@ void
 xaccAccountSetReconcilePostponeDate (Account *account,
                                      time_t postpone_date)
 {
-  KvpFrame *frame;
-  if (!account)
-    return;
+  if (!account) return;
 
   xaccAccountBeginEdit (account);
-  frame = kvp_frame_get_frame (account->kvp_data, 
-                         "reconcile-info", "postpone", NULL);
 
-  kvp_frame_set_slot_nc (frame, "date", 
-                         kvp_value_new_gint64 (postpone_date));
+  /* XXX this should be using timespecs, not gints !! */
+  kvp_frame_set_gint64 (account->kvp_data,
+            "/reconcile-info/postpone/date", postpone_date);
 
   mark_account (account);
   account->core_dirty = TRUE;
@@ -2689,16 +2636,11 @@ void
 xaccAccountSetReconcilePostponeBalance (Account *account,
                                         gnc_numeric balance)
 {
-  KvpFrame *frame;
-  if (!account)
-    return;
+  if (!account) return;
 
   xaccAccountBeginEdit (account);
-  frame = kvp_frame_get_frame (account->kvp_data, 
-                         "reconcile-info", "postpone", NULL);
-
-  kvp_frame_set_slot_nc (frame, "balance", 
-                         kvp_value_new_gnc_numeric (balance));
+  kvp_frame_set_gnc_numeric (account->kvp_data,
+           "/reconcile-info/postpone/balance", balance);
 
   mark_account (account);
   account->core_dirty = TRUE;
@@ -2763,18 +2705,15 @@ xaccAccountGetAutoInterestXfer (Account *account, gboolean default_value)
 void
 xaccAccountSetAutoInterestXfer (Account *account, gboolean option)
 {
-  KvpFrame *frame;
   if (!account)
     return;
 
   xaccAccountBeginEdit (account);
-  frame = kvp_frame_get_frame (account->kvp_data, 
-                         "reconcile-info", NULL);
 
   /* FIXME: need KVP_TYPE_BOOLEAN for this someday */
-
-  kvp_frame_set_slot_nc (frame, "auto-interest-transfer", 
-                         kvp_value_new_string (option ? "true" : "false"));
+  kvp_frame_set_str (account->kvp_data,
+       "/reconcile-info/auto-interest-transfer",
+       (option ? "true" : "false"));
 
   mark_account (account);
   account->core_dirty = TRUE;
@@ -2904,19 +2843,16 @@ dxaccAccountGetQuoteTZ(Account *acc)
 void
 xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status)
 { 
-  KvpFrame *frame;
-  if (!account)
-    return;
+  if (!account) return;
   
   xaccAccountBeginEdit (account);
   
-  frame = kvp_frame_get_frame (account->kvp_data, "reconcile-info", NULL);
-  kvp_frame_set_slot_nc (frame,
-                         "include-children",
-                         status ? kvp_value_new_gint64 (status) : NULL);
+  /* XXX FIXME: someday this should use KVP_TYPE_BOOLEAN */
+  kvp_frame_set_gint64 (account->kvp_data, 
+        "/reconcile-info/include-children", status);
+
   account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
-  return;
 }
 
 /********************************************************************\
