@@ -389,6 +389,8 @@ AC_ARG_ENABLE( sql,
 	PGSQL_CFLAGS="-I${PGSQL_CFLAGS}"
       fi
 
+      AS_SCRUB_INCLUDE(PGSQL_CFLAGS)
+
       saved_CPPFLAGS="${CPPFLAGS}"
       CPPFLAGS="${CPPFLAGS} ${PGSQL_CFLAGS}"
       AC_CHECK_HEADERS(pgsql/libpq-fe.h postgresql/libpq-fe.h libpq-fe.h)
@@ -411,9 +413,9 @@ AC_ARG_ENABLE( sql,
               fi
           done
 	fi
-        
-	AS_SCRUB_INCLUDE(PGSQL_CFLAGS)
 
+	AS_SCRUB_INCLUDE(CFLAGS)
+        
         PGSQL_LIBS=`${PG_CONFIG} --libdir`
         if test "x$PGSQL_LIBS" != x; then
 	  PGSQL_LIBS="-L${PGSQL_LIBS}"
@@ -483,6 +485,7 @@ then
     fi
 
     AC_MSG_CHECKING(for libofx/libofx.h)
+    AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
     save_CPPFLAGS="${CPPFLAGS}"
     CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
     AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT(yes), OFXfound=no )
@@ -490,6 +493,7 @@ then
     if test x${OFXPREFIX} = x -a x${OFXfound} = no ; then
     	LIBOFX_LIBS="-L$/usr/local/lib"
 	LIBOFX_CFLAGS="-I$/usr/local/include"
+        AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
         CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
 
         AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT([yes (in /usr/local)]),
@@ -514,7 +518,6 @@ int ofx_proc_statement_cb(const struct OfxStatementData data) { return 0; }
 
     LIBS="${save_LIBS}"
     CPPFLAGS="${save_CPPFLAGS}"
-    AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
     AC_SUBST(LIBOFX_CFLAGS)
     AC_SUBST(LIBOFX_LIBS)
 fi
@@ -745,7 +748,7 @@ AC_CHECK_LIB(popt, poptStrippedArgv,, [AC_MSG_ERROR([
 ### --------------------------------------------------------------------------
 
 AC_ARG_ENABLE(gui, 
-  [  --enable-gui                  build the GNOME GUI components of Gnucash],
+  [  --diable-gui                  build without the GNOME GUI components of Gnucash],
   [case "${enableval}" in
      yes) gnc_build_gui=true ;;
      no)  gnc_build_gui=false ;;
@@ -787,6 +790,7 @@ then
     AC_MSG_CHECKING([for gtkhtml < 1.1])
     GTKHTML_LIBS=`$GNOME_CONFIG --libs gtkhtml`
     GTKHTML_CFLAGS=`$GNOME_CONFIG --cflags gtkhtml`
+    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
     if test "x$GTKHTML_LIBS" != x; then
 	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
 	# if found
@@ -806,6 +810,7 @@ then
 	fi
 	GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml-1.1`
 	GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml-1.1`
+        AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
 	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
 	# if found
 	AC_MSG_CHECKING([for gtkhtml >= 1.1])
@@ -815,7 +820,6 @@ then
 		     AC_MSG_ERROR([Cannot find gtkhtml-1.1. See the README and config.log for more info.]),
 		     $GTKHTML_LIBS)
     fi
-    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
     
     GHTTP_LIBS=`$GNOME_CONFIG --libs ghttp`
     GHTTP_CFLAGS=`$GNOME_CONFIG --cflags ghttp`
@@ -1040,7 +1044,7 @@ then
   # Enable error-on-warning by default -- I'm tired of fixing other
   # people's missing #includes, etc.
   AC_ARG_ENABLE(error-on-warning,
-    [  --enable-error-on-warning    treat compile warnings as errors],
+    [  --disable-error-on-warning    disable treating compile warnings as errors],
     [case "${enableval}" in
        yes) warnFLAGS="${warnFLAGS} -Werror" ;;
        no)  ;;

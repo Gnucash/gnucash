@@ -1,3 +1,14 @@
+2003-02-19  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: move AS_SCRUB_INCLUDE _before_ tests so it wont
+	  fail on gcc 3.2.2 which actually cares.  This is particularly
+	  important for AC_CHECK_HEADER(S)
+
+	* configure.in: change the configure help message from
+	  "--enable-gui" to "--disable-gui", because the default is
+	  enabled.  Also changed "--enable-error-on-warning" for the
+	  same reason.
+	
 2003-02-18  David Hampton  <hampton@employees.org>
 
 	* acconfig.h: 
