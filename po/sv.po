@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.5\n"
-"POT-Creation-Date: 2000-11-14 15:33-0800\n"
+"POT-Creation-Date: 2000-12-18 16:25-0800\n"
 "PO-Revision-Date: 2000-09-17 09:18+02:00\n"
 "Last-Translator: Dennis Björklund <dennisb@cs.chalmers.se>\n"
 "Language-Team: Sv <sv@li.org>\n"
@@ -37,7 +37,7 @@ msgstr "Kostnad"
 # messages-i18n.c:198 po/guile_strings.txt:4
 # messages-i18n.c:217 po/guile_strings.txt:4
 # messages-i18n.c:219 po/guile_strings.txt:4
-#: po/guile_strings.txt:4 src/engine/Account.c:1345
+#: po/guile_strings.txt:4 src/engine/Account.c:1479
 msgid "Mutual Fund"
 msgstr "Aktiefond"
 
@@ -53,15 +53,15 @@ msgstr "Status"
 # src/gnome/glade-gnc-dialogs.c:1980
 # messages-i18n.c:308 po/guile_strings.txt:6
 # src/gnome/glade-gnc-dialogs.c:1920
-#: po/guile_strings.txt:6 src/gnome/glade-gnc-dialogs.c:1460
-#: src/gnome/reconcile-list.c:134 src/register/splitreg.c:167
+#: po/guile_strings.txt:6 src/SplitLedger.c:3664
+#: src/gnome/glade-gnc-dialogs.c:1468 src/gnome/reconcile-list.c:134
 msgid "Date"
 msgstr "Datum"
 
 # messages-i18n.c:173 po/guile_strings.txt:7
 # messages-i18n.c:191 po/guile_strings.txt:7
 # messages-i18n.c:193 po/guile_strings.txt:7
-#: po/guile_strings.txt:7 src/gnome/dialog-utils.c:182
+#: po/guile_strings.txt:7 src/gnc-ui-util.c:114
 msgid "Account Name"
 msgstr "Kontonamn"
 
@@ -71,8 +71,8 @@ msgstr "Kontonamn"
 # src/gnome/glade-gnc-dialogs.c:658
 # messages-i18n.c:324 po/guile_strings.txt:8
 # src/gnome/glade-gnc-dialogs.c:591
-#: po/guile_strings.txt:8 src/engine/Account.c:1349
-#: src/gnome/glade-gnc-dialogs.c:190 src/register/splitreg.c:272
+#: po/guile_strings.txt:8 src/engine/Account.c:1483
+#: src/gnome/glade-gnc-dialogs.c:190 src/register/splitreg.c:217
 msgid "Equity"
 msgstr "Utjämning"
 
@@ -116,8 +116,9 @@ msgstr "Auto-höj listor"
 # messages-i18n.c:258 po/guile_strings.txt:12
 # messages-i18n.c:288 messages-i18n.c:289 po/guile_strings.txt:13
 # messages-i18n.c:289 messages-i18n.c:290 po/guile_strings.txt:13
-#: po/guile_strings.txt:14 src/gnome/dialog-utils.c:200
-#: src/gnome/dialog-utils.c:203 src/register/splitreg.c:172
+#: po/guile_strings.txt:14 src/SplitLedger.c:3679 src/SplitLedger.c:3778
+#: src/gnc-ui-util.c:132 src/gnc-ui-util.c:135
+#: src/gnome/glade-gnc-dialogs.c:2041
 msgid "Balance"
 msgstr "Saldo"
 
@@ -160,7 +161,7 @@ msgstr "Typerna på konton vars saldon teckenbyts"
 # messages-i18n.c:329
 # messages-i18n.c:366 po/guile_strings.txt:18
 # messages-i18n.c:367 po/guile_strings.txt:18
-#: po/guile_strings.txt:20 src/register/splitreg.c:262
+#: po/guile_strings.txt:20 src/register/splitreg.c:207
 msgid "Rebate"
 msgstr "Återbäring"
 
@@ -200,7 +201,7 @@ msgstr ""
 # messages-i18n.c:185 po/guile_strings.txt:19
 # messages-i18n.c:203 po/guile_strings.txt:22
 # messages-i18n.c:205 po/guile_strings.txt:22
-#: po/guile_strings.txt:26 src/gnome/window-register.c:1106
+#: po/guile_strings.txt:26 src/gnome/window-register.c:1138
 msgid "Double Line"
 msgstr "Dubbla rader"
 
@@ -290,8 +291,8 @@ msgstr "Konto (m/delsumma)"
 # src/gnome/glade-gnc-dialogs.c:2256
 # messages-i18n.c:347 po/guile_strings.txt:32
 # src/gnome/glade-gnc-dialogs.c:2196
-#: po/guile_strings.txt:39 src/gnome/glade-gnc-dialogs.c:1736
-#: src/register/splitreg.c:177
+#: po/guile_strings.txt:39 src/SplitLedger.c:3688
+#: src/gnome/glade-gnc-dialogs.c:1744
 msgid "Memo"
 msgstr "Anteckning"
 
@@ -345,8 +346,8 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:2145
 # messages-i18n.c:310 po/guile_strings.txt:38
 # src/gnome/glade-gnc-dialogs.c:2085
-#: po/guile_strings.txt:47 src/gnome/glade-gnc-dialogs.c:1625
-#: src/register/splitreg.c:179
+#: po/guile_strings.txt:47 src/SplitLedger.c:3712
+#: src/gnome/glade-gnc-dialogs.c:1633
 msgid "Debit"
 msgstr "Debet"
 
@@ -532,7 +533,7 @@ msgstr "Som standard, visa alla transaktioner i ett konto"
 # src/gnome/glade-gnc-dialogs.c:2198
 # messages-i18n.c:282 po/guile_strings.txt:57
 # src/gnome/glade-gnc-dialogs.c:2138
-#: po/guile_strings.txt:75 src/gnome/glade-gnc-dialogs.c:1678
+#: po/guile_strings.txt:75 src/gnome/glade-gnc-dialogs.c:1686
 #: src/gnome/reconcile-list.c:137
 msgid "Amount"
 msgstr "Belopp"
@@ -540,7 +541,7 @@ msgstr "Belopp"
 # messages-i18n.c:197 po/guile_strings.txt:51
 # messages-i18n.c:216 po/guile_strings.txt:58
 # messages-i18n.c:218 po/guile_strings.txt:58
-#: po/guile_strings.txt:76 src/gnome/window-register.c:1110
+#: po/guile_strings.txt:76
 msgid "Multi Line"
 msgstr "Flerrad"
 
@@ -595,16 +596,15 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:1844
 # messages-i18n.c:275 po/guile_strings.txt:65
 # src/gnome/glade-gnc-dialogs.c:1784
-#: po/guile_strings.txt:84 src/gnome/dialog-account.c:578
-#: src/gnome/glade-gnc-dialogs.c:1378 src/register/splitreg.c:174
-#: src/register/splitreg.c:176
+#: po/guile_strings.txt:84 src/SplitLedger.c:3685
+#: src/gnome/dialog-account.c:638 src/gnome/glade-gnc-dialogs.c:1386
 msgid "Account"
 msgstr "Konto"
 
 # messages-i18n.c:358 po/guile_strings.txt:57
 # messages-i18n.c:396 po/guile_strings.txt:65
 # messages-i18n.c:397 po/guile_strings.txt:66
-#: po/guile_strings.txt:85 src/SplitLedger.c:2759 src/SplitLedger.c:2761
+#: po/guile_strings.txt:85 src/SplitLedger.c:3050 src/SplitLedger.c:3052
 msgid "Value"
 msgstr "Värde"
 
@@ -625,7 +625,7 @@ msgstr "Visa bara ikoner"
 # messages-i18n.c:177 po/guile_strings.txt:62
 # messages-i18n.c:195 po/guile_strings.txt:70
 # messages-i18n.c:197 po/guile_strings.txt:71
-#: po/guile_strings.txt:88 src/gnome/window-register.c:1114
+#: po/guile_strings.txt:88
 msgid "Auto Single"
 msgstr "Automatisk enkel"
 
@@ -1022,7 +1022,7 @@ msgstr "Spara fönsterstorlekar och positioner."
 # src/gnome/glade-gnc-dialogs.c:628
 # messages-i18n.c:291 po/guile_strings.txt:107
 # src/gnome/glade-gnc-dialogs.c:561
-#: po/guile_strings.txt:154 src/engine/Account.c:1339
+#: po/guile_strings.txt:154 src/engine/Account.c:1473
 #: src/gnome/glade-gnc-dialogs.c:160
 msgid "Bank"
 msgstr "Bank"
@@ -1082,8 +1082,8 @@ msgstr "Startsaldo"
 # messages-i18n.c:321
 # messages-i18n.c:358 po/guile_strings.txt:113
 # messages-i18n.c:359 po/guile_strings.txt:114
-#: po/guile_strings.txt:163 src/register/splitreg.c:254
-#: src/register/splitreg.c:261
+#: po/guile_strings.txt:163 src/register/splitreg.c:199
+#: src/register/splitreg.c:206
 msgid "Payment"
 msgstr "Utgift"
 
@@ -1156,14 +1156,14 @@ msgstr "Sortera och delsumma per kontoöverföringens från/till-namn"
 # messages-i18n.c:69 po/guile_strings.txt:103
 # messages-i18n.c:73 po/guile_strings.txt:119
 # messages-i18n.c:75 po/guile_strings.txt:120
-#: po/guile_strings.txt:172 src/gnome/window-register.c:1119
+#: po/guile_strings.txt:172
 msgid "Double line mode with a multi-line cursor"
 msgstr "Läge för dubbla rader med fler-raders markör"
 
 # messages-i18n.c:70 po/guile_strings.txt:104
 # messages-i18n.c:74 po/guile_strings.txt:120
 # messages-i18n.c:76 po/guile_strings.txt:121
-#: po/guile_strings.txt:173 src/gnome/window-register.c:1115
+#: po/guile_strings.txt:173
 msgid "Single line mode with a multi-line cursor"
 msgstr "Läge för enkelrader med flerrads markör"
 
@@ -1230,9 +1230,9 @@ msgstr "Full"
 # messages-i18n.c:325
 # messages-i18n.c:362 src/gnome/glade-gnc-dialogs.c:2400
 # messages-i18n.c:363 src/gnome/glade-gnc-dialogs.c:2340
-#: po/guile_strings.txt:183 src/SplitLedger.c:2754 src/SplitLedger.c:2756
-#: src/gnome/glade-gnc-dialogs.c:1880 src/register/splitreg.c:180
-#: src/register/splitreg.c:279
+#: po/guile_strings.txt:183 src/SplitLedger.c:3045 src/SplitLedger.c:3047
+#: src/SplitLedger.c:3720 src/gnome/glade-gnc-dialogs.c:1888
+#: src/register/splitreg.c:224
 msgid "Price"
 msgstr "Kurs"
 
@@ -1282,8 +1282,8 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:649
 # messages-i18n.c:307 po/guile_strings.txt:134
 # src/gnome/glade-gnc-dialogs.c:582
-#: po/guile_strings.txt:190 src/engine/Account.c:1346
-#: src/gnome/dialog-utils.c:194 src/gnome/glade-gnc-dialogs.c:181
+#: po/guile_strings.txt:190 src/engine/Account.c:1480 src/gnc-ui-util.c:126
+#: src/gnome/glade-gnc-dialogs.c:181
 msgid "Currency"
 msgstr "Valuta"
 
@@ -1319,7 +1319,7 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:631
 # messages-i18n.c:296 po/guile_strings.txt:137
 # src/gnome/glade-gnc-dialogs.c:564
-#: po/guile_strings.txt:196 src/engine/Account.c:1340
+#: po/guile_strings.txt:196 src/engine/Account.c:1474
 #: src/gnome/glade-gnc-dialogs.c:163
 msgid "Cash"
 msgstr "Kontant"
@@ -1404,7 +1404,7 @@ msgstr "Kontotyper för omkastat saldo"
 # messages-i18n.c:78 po/guile_strings.txt:126
 # messages-i18n.c:85 po/guile_strings.txt:147
 # messages-i18n.c:87 po/guile_strings.txt:148
-#: po/guile_strings.txt:209 src/gnome/window-register.c:1107
+#: po/guile_strings.txt:209
 msgid "Show transactions on two lines with more information"
 msgstr "Visa transaktioner på två rader med mer information"
 
@@ -1426,11 +1426,11 @@ msgstr "Rapport för %s och alla underkonton."
 # messages-i18n.c:341
 # messages-i18n.c:378
 # messages-i18n.c:379
-#: po/guile_strings.txt:212 src/register/splitreg.c:233
-#: src/register/splitreg.c:237 src/register/splitreg.c:247
-#: src/register/splitreg.c:251 src/register/splitreg.c:259
-#: src/register/splitreg.c:266 src/register/splitreg.c:271
-#: src/register/splitreg.c:278 src/register/splitreg.c:293
+#: po/guile_strings.txt:212 src/register/splitreg.c:178
+#: src/register/splitreg.c:182 src/register/splitreg.c:192
+#: src/register/splitreg.c:196 src/register/splitreg.c:204
+#: src/register/splitreg.c:211 src/register/splitreg.c:216
+#: src/register/splitreg.c:223 src/register/splitreg.c:238
 msgid "Sell"
 msgstr "Sälja"
 
@@ -1456,7 +1456,7 @@ msgstr "Rapport alternativ"
 # messages-i18n.c:114 po/guile_strings.txt:130
 # messages-i18n.c:125 po/guile_strings.txt:151
 # messages-i18n.c:127 po/guile_strings.txt:152
-#: po/guile_strings.txt:216 src/gnome/window-register.c:1104
+#: po/guile_strings.txt:216
 msgid "Show transactions on single lines"
 msgstr "Visa transaktioner på enkla rader"
 
@@ -1465,9 +1465,8 @@ msgstr "Visa transaktioner på enkla rader"
 # src/gnome/glade-gnc-dialogs.c:2038
 # messages-i18n.c:317 po/guile_strings.txt:153
 # src/gnome/glade-gnc-dialogs.c:1978
-#: po/guile_strings.txt:217 src/gnome/dialog-utils.c:188
-#: src/gnome/glade-gnc-dialogs.c:1518 src/gnome/reconcile-list.c:136
-#: src/register/splitreg.c:169
+#: po/guile_strings.txt:217 src/SplitLedger.c:3670 src/gnc-ui-util.c:120
+#: src/gnome/glade-gnc-dialogs.c:1526 src/gnome/reconcile-list.c:136
 msgid "Description"
 msgstr "Beskrivning"
 
@@ -1675,7 +1674,7 @@ msgstr "/ (Snedstreck)"
 # src/gnome/glade-gnc-dialogs.c:634
 # messages-i18n.c:285 po/guile_strings.txt:174
 # src/gnome/glade-gnc-dialogs.c:567
-#: po/guile_strings.txt:248 src/engine/Account.c:1341
+#: po/guile_strings.txt:248 src/engine/Account.c:1475
 #: src/gnome/glade-gnc-dialogs.c:166
 msgid "Asset"
 msgstr "Tillgång"
@@ -1694,8 +1693,8 @@ msgstr "Använd 24-timmars tidsformat"
 # messages-i18n.c:316 po/guile_strings.txt:151
 # messages-i18n.c:352 po/guile_strings.txt:175
 # messages-i18n.c:353 po/guile_strings.txt:176
-#: po/guile_strings.txt:251 src/gnome/reconcile-list.c:135
-#: src/register/splitreg.c:168
+#: po/guile_strings.txt:251 src/SplitLedger.c:3667
+#: src/gnome/reconcile-list.c:135
 msgid "Num"
 msgstr "Num"
 
@@ -1730,7 +1729,7 @@ msgstr "Standardvaluta"
 # messages-i18n.c:353
 # messages-i18n.c:390 src/gnome/glade-gnc-dialogs.c:2624
 # messages-i18n.c:391 src/gnome/glade-gnc-dialogs.c:2615
-#: po/guile_strings.txt:256 src/gnome/window-register.c:794
+#: po/guile_strings.txt:256 src/gnome/window-register.c:776
 msgid "Today"
 msgstr "Idag"
 
@@ -1783,7 +1782,7 @@ msgstr "Allmän"
 # messages-i18n.c:340 po/guile_strings.txt:164
 # messages-i18n.c:377 po/guile_strings.txt:189
 # messages-i18n.c:378 po/guile_strings.txt:189
-#: po/guile_strings.txt:264 src/gnome/dialog-utils.c:197
+#: po/guile_strings.txt:264 src/gnc-ui-util.c:129
 msgid "Security"
 msgstr "Säkerhet"
 
@@ -1796,7 +1795,7 @@ msgstr ""
 # messages-i18n.c:229 po/guile_strings.txt:165
 # messages-i18n.c:253 po/guile_strings.txt:190
 # messages-i18n.c:254 po/guile_strings.txt:190
-#: po/guile_strings.txt:266 src/gnome/window-register.c:1103
+#: po/guile_strings.txt:266
 msgid "Single Line"
 msgstr "Enkel rad"
 
@@ -1832,7 +1831,7 @@ msgstr "Datum och tidsalternativet är %s."
 # src/gnome/glade-gnc-dialogs.c:640
 # messages-i18n.c:343 po/guile_strings.txt:194
 # src/gnome/glade-gnc-dialogs.c:573
-#: po/guile_strings.txt:271 src/engine/Account.c:1343
+#: po/guile_strings.txt:271 src/engine/Account.c:1477
 #: src/gnome/glade-gnc-dialogs.c:172
 msgid "Liability"
 msgstr "Skuld"
@@ -1886,7 +1885,7 @@ msgstr ""
 # messages-i18n.c:314 po/guile_strings.txt:200
 # messages-i18n.c:315 po/guile_strings.txt:200
 #. broken ! FIXME bg
-#: po/guile_strings.txt:281 src/register/splitreg.c:216
+#: po/guile_strings.txt:281 src/register/splitreg.c:161
 msgid "Deposit"
 msgstr "Insättning"
 
@@ -1927,7 +1926,7 @@ msgstr ""
 # po/guile_strings.txt:176
 # po/guile_strings.txt:203 src/gnome/glade-gnc-dialogs.c:2096
 # po/guile_strings.txt:203 src/gnome/glade-gnc-dialogs.c:2036
-#: po/guile_strings.txt:291 src/gnome/glade-gnc-dialogs.c:1576
+#: po/guile_strings.txt:291 src/gnome/glade-gnc-dialogs.c:1584
 msgid "Number"
 msgstr "Nummer"
 
@@ -1961,8 +1960,7 @@ msgstr "Överföring från/till (m/delsumma)"
 # messages-i18n.c:354
 # messages-i18n.c:391 messages-i18n.c:392 po/guile_strings.txt:207
 # messages-i18n.c:392 messages-i18n.c:393 po/guile_strings.txt:207
-#: po/guile_strings.txt:296 src/gnome/dialog-utils.c:206
-#: src/gnome/dialog-utils.c:209
+#: po/guile_strings.txt:296 src/gnc-ui-util.c:138 src/gnc-ui-util.c:141
 msgid "Total"
 msgstr "Totalt"
 
@@ -1976,8 +1974,8 @@ msgstr "Rapport"
 # messages-i18n.c:315 po/guile_strings.txt:179
 # messages-i18n.c:351 po/guile_strings.txt:209
 # messages-i18n.c:352 po/guile_strings.txt:209
-#: po/guile_strings.txt:298 src/gnome/dialog-utils.c:191
-#: src/gnome/glade-gnc-dialogs.c:4081
+#: po/guile_strings.txt:298 src/SplitLedger.c:3781 src/gnc-ui-util.c:123
+#: src/gnome/glade-gnc-dialogs.c:4135
 msgid "Notes"
 msgstr "Anteckningar"
 
@@ -2014,7 +2012,7 @@ msgstr "_Rapporter"
 # messages-i18n.c:333 po/guile_strings.txt:184
 # messages-i18n.c:370 po/guile_strings.txt:215
 # messages-i18n.c:371 po/guile_strings.txt:215
-#: po/guile_strings.txt:303 src/gnome/window-register.c:1596
+#: po/guile_strings.txt:303 src/gnome/window-register.c:1661
 msgid "Register"
 msgstr "Kontoutdrag"
 
@@ -2299,8 +2297,8 @@ msgstr "Använd bara 'debit' och 'kredit' istället för informella synonymer"
 # src/gnome/glade-gnc-dialogs.c:652
 # messages-i18n.c:339 po/guile_strings.txt:244
 # src/gnome/glade-gnc-dialogs.c:585
-#: po/guile_strings.txt:348 src/engine/Account.c:1347
-#: src/gnome/glade-gnc-dialogs.c:184 src/register/splitreg.c:287
+#: po/guile_strings.txt:348 src/engine/Account.c:1481
+#: src/gnome/glade-gnc-dialogs.c:184 src/register/splitreg.c:232
 msgid "Income"
 msgstr "Inkomst"
 
@@ -2393,9 +2391,9 @@ msgstr "Visa vertikala kanter i celler som standard."
 # src/gnome/glade-gnc-dialogs.c:637 src/gnome/glade-gnc-dialogs.c:2142
 # messages-i18n.c:305 po/guile_strings.txt:254
 # src/gnome/glade-gnc-dialogs.c:570 src/gnome/glade-gnc-dialogs.c:2082
-#: po/guile_strings.txt:361 src/gnome/glade-gnc-dialogs.c:169
-#: src/gnome/glade-gnc-dialogs.c:1622 src/register/splitreg.c:178
-#: src/register/splitreg.c:227 src/register/splitreg.c:243
+#: po/guile_strings.txt:361 src/SplitLedger.c:3699
+#: src/gnome/glade-gnc-dialogs.c:169 src/gnome/glade-gnc-dialogs.c:1630
+#: src/register/splitreg.c:172 src/register/splitreg.c:188
 msgid "Credit"
 msgstr "Kredit"
 
@@ -2462,7 +2460,7 @@ msgstr "De valda kontona i kontovalslistan är:"
 # messages-i18n.c:331
 # messages-i18n.c:368
 # messages-i18n.c:369
-#: po/guile_strings.txt:371 src/gnome/window-reconcile.c:739
+#: po/guile_strings.txt:371 src/gnome/window-reconcile.c:742
 msgid "Reconcile"
 msgstr "Avstämma"
 
@@ -2623,8 +2621,8 @@ msgstr "Graftyp"
 # src/gnome/glade-gnc-dialogs.c:2741
 # po/guile_strings.txt:275 src/gnome/glade-gnc-dialogs.c:2724
 # src/gnome/glade-gnc-dialogs.c:2732
-#: po/guile_strings.txt:390 src/gnome/glade-gnc-dialogs.c:2246
-#: src/gnome/glade-gnc-dialogs.c:2254
+#: po/guile_strings.txt:390 src/gnome/glade-gnc-dialogs.c:2299
+#: src/gnome/glade-gnc-dialogs.c:2307
 msgid "Budget"
 msgstr "Budget"
 
@@ -2786,7 +2784,7 @@ msgstr "Raportera slutdatum"
 # po/guile_strings.txt:244
 # po/guile_strings.txt:292 src/gnome/glade-gnc-dialogs.c:1823
 # po/guile_strings.txt:292 src/gnome/glade-gnc-dialogs.c:1763
-#: po/guile_strings.txt:414 src/gnome/glade-gnc-dialogs.c:1357
+#: po/guile_strings.txt:414 src/gnome/glade-gnc-dialogs.c:1365
 msgid "None"
 msgstr "Inget"
 
@@ -2890,7 +2888,7 @@ msgstr "minsta till största, tidigaste till senaste"
 # src/gnome/glade-gnc-dialogs.c:362 src/gnome/glade-gnc-dialogs.c:416
 # messages-i18n.c:394 po/guile_strings.txt:304
 # src/gnome/glade-gnc-dialogs.c:295 src/gnome/glade-gnc-dialogs.c:349
-#: po/guile_strings.txt:429 src/gnome/dialog-utils.c:179
+#: po/guile_strings.txt:429 src/gnc-ui-util.c:111
 msgid "Type"
 msgstr "Typ"
 
@@ -2948,7 +2946,7 @@ msgstr "Standardläge för kontoutdrag"
 # messages-i18n.c:176 po/guile_strings.txt:260
 # messages-i18n.c:194 po/guile_strings.txt:310
 # messages-i18n.c:196 po/guile_strings.txt:310
-#: po/guile_strings.txt:438 src/gnome/window-register.c:1118
+#: po/guile_strings.txt:438
 msgid "Auto Double"
 msgstr "Automatisk dubbel"
 
@@ -3019,8 +3017,8 @@ msgstr ""
 # po/guile_strings.txt:267
 # po/guile_strings.txt:318 src/gnome/glade-gnc-dialogs.c:2328
 # po/guile_strings.txt:318 src/gnome/glade-gnc-dialogs.c:2268
-#: po/guile_strings.txt:452 src/SplitLedger.c:2749 src/SplitLedger.c:2751
-#: src/gnome/glade-gnc-dialogs.c:1808 src/register/splitreg.c:181
+#: po/guile_strings.txt:452 src/SplitLedger.c:3040 src/SplitLedger.c:3042
+#: src/SplitLedger.c:3726 src/gnome/glade-gnc-dialogs.c:1816
 msgid "Shares"
 msgstr "Andelar"
 
@@ -3117,7 +3115,7 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:655
 # messages-i18n.c:326 po/guile_strings.txt:327
 # src/gnome/glade-gnc-dialogs.c:588
-#: po/guile_strings.txt:467 src/engine/Account.c:1348
+#: po/guile_strings.txt:467 src/engine/Account.c:1482
 #: src/gnome/glade-gnc-dialogs.c:187
 msgid "Expense"
 msgstr "Utgift"
@@ -3296,7 +3294,7 @@ msgstr "Visa"
 
 # po/guile_strings.txt:345 src/gnome/glade-gnc-dialogs.c:3123
 # po/guile_strings.txt:344 src/gnome/glade-gnc-dialogs.c:3114
-#: po/guile_strings.txt:495 src/gnome/glade-gnc-dialogs.c:2636
+#: po/guile_strings.txt:495 src/gnome/glade-gnc-dialogs.c:2689
 msgid "Nominal"
 msgstr "Nominell"
 
@@ -3353,11 +3351,11 @@ msgstr "Hej, Världen"
 # messages-i18n.c:262
 # messages-i18n.c:293
 # messages-i18n.c:294
-#: po/guile_strings.txt:502 src/register/splitreg.c:232
-#: src/register/splitreg.c:236 src/register/splitreg.c:242
-#: src/register/splitreg.c:250 src/register/splitreg.c:258
-#: src/register/splitreg.c:265 src/register/splitreg.c:270
-#: src/register/splitreg.c:277 src/register/splitreg.c:292
+#: po/guile_strings.txt:502 src/register/splitreg.c:177
+#: src/register/splitreg.c:181 src/register/splitreg.c:187
+#: src/register/splitreg.c:195 src/register/splitreg.c:203
+#: src/register/splitreg.c:210 src/register/splitreg.c:215
+#: src/register/splitreg.c:222 src/register/splitreg.c:237
 msgid "Buy"
 msgstr "Köpa"
 
@@ -3381,7 +3379,7 @@ msgstr "Kasta om Kreditkort-, Skuld-, Utjämning- och Inkomst-konton"
 # src/gnome/glade-gnc-dialogs.c:643
 # messages-i18n.c:386 po/guile_strings.txt:353
 # src/gnome/glade-gnc-dialogs.c:576
-#: po/guile_strings.txt:505 src/engine/Account.c:1344
+#: po/guile_strings.txt:505 src/engine/Account.c:1478
 #: src/gnome/glade-gnc-dialogs.c:175
 msgid "Stock"
 msgstr "Aktie"
@@ -3403,7 +3401,7 @@ msgstr "Utvidgningar"
 # messages-i18n.c:180
 # messages-i18n.c:198
 # messages-i18n.c:200
-#: src/engine/Account.c:1342
+#: src/engine/Account.c:1476
 msgid "Credit Card"
 msgstr "Kreditkort"
 
@@ -3418,26 +3416,25 @@ msgstr "Tappade konton"
 # messages-i18n.c:356
 # messages-i18n.c:357
 #. OK, we found an orphan.  Put it in an orphan account.
-#: src/engine/Scrub.c:93
+#: src/engine/Scrub.c:97
 msgid "Orphan"
 msgstr "Föräldralös"
 
 # messages-i18n.c:258 po/guile_strings.txt:12
 # messages-i18n.c:336
 # messages-i18n.c:337
-#. OK, we found an imbalanced trans.  Put it in the imbal account.
-#: src/engine/Scrub.c:171
+#: src/engine/Scrub.c:269
 msgid "Imbalance"
 msgstr "Obalans"
 
-#: src/gnc-exp-parser.c:464
+#: src/gnc-exp-parser.c:470
 msgid "Unbalanced parenthesis"
 msgstr ""
 
 # po/guile_strings.txt:15
 # po/guile_strings.txt:16
 # po/guile_strings.txt:16
-#: src/gnc-exp-parser.c:466
+#: src/gnc-exp-parser.c:472
 #, fuzzy
 msgid "Stack overflow"
 msgstr "Aktieportfölj"
@@ -3445,60 +3442,102 @@ msgstr "Aktieportfölj"
 # po/guile_strings.txt:15
 # po/guile_strings.txt:16
 # po/guile_strings.txt:16
-#: src/gnc-exp-parser.c:468
+#: src/gnc-exp-parser.c:474
 #, fuzzy
 msgid "Stack underflow"
 msgstr "Aktieportfölj"
 
-#: src/gnc-exp-parser.c:470
+#: src/gnc-exp-parser.c:476
 msgid "Undefined character"
 msgstr ""
 
-#: src/gnc-exp-parser.c:472
+#: src/gnc-exp-parser.c:478
 msgid "Not a variable"
 msgstr ""
 
-#: src/gnc-exp-parser.c:474
+#: src/gnc-exp-parser.c:480
 msgid "Out of memory"
 msgstr ""
+
+# messages-i18n.c:172
+# messages-i18n.c:190
+# messages-i18n.c:192
+#: src/gnc-ui-util.c:117
+msgid "Account Code"
+msgstr "Konto kod"
+
+#: src/gnc-ui-util.c:271
+msgid "not cleared:n"
+msgstr ""
+
+# messages-i18n.c:178
+# messages-i18n.c:196
+# src/gnome/glade-gnc-dialogs.c:2435
+#: src/gnc-ui-util.c:272
+#, fuzzy
+msgid "cleared:c"
+msgstr "Töm allt"
+
+# messages-i18n.c:331
+# messages-i18n.c:368
+# src/gnome/glade-gnc-dialogs.c:2442
+#: src/gnc-ui-util.c:273
+#, fuzzy
+msgid "reconciled:y"
+msgstr "Avstämmd (y)"
+
+#: src/gnc-ui-util.c:274
+msgid "frozen:f"
+msgstr ""
+
+# messages-i18n.c:314 src/gnome/print-session.c:108
+# src/gnome/print-session.c:197
+# messages-i18n.c:350 src/gnome/print-session.c:111
+# src/gnome/print-session.c:200
+# messages-i18n.c:351 src/gnome/print-session.c:111
+# src/gnome/print-session.c:200
+#: src/gnc-ui-util.c:289 src/gnome/print-session.c:112
+#: src/gnome/print-session.c:209
+msgid "(none)"
+msgstr "(ingen)"
 
 # messages-i18n.c:297
 # messages-i18n.c:329
 # messages-i18n.c:330
-#: src/gnome/dialog-account.c:579
+#: src/gnome/dialog-account.c:639
 msgid "Field"
 msgstr "Fält"
 
 # messages-i18n.c:358 po/guile_strings.txt:57
 # messages-i18n.c:224
 # messages-i18n.c:226
-#: src/gnome/dialog-account.c:580
+#: src/gnome/dialog-account.c:640
 msgid "Old Value"
 msgstr "Gammalt värde"
 
 # messages-i18n.c:358 po/guile_strings.txt:57
 # messages-i18n.c:222
 # messages-i18n.c:224
-#: src/gnome/dialog-account.c:581
+#: src/gnome/dialog-account.c:641
 msgid "New Value"
 msgstr "Nytt värde"
 
 # messages-i18n.c:268
 # messages-i18n.c:269
-#: src/gnome/dialog-account.c:609
+#: src/gnome/dialog-account.c:669
 msgid "Verify Changes"
 msgstr "Verifiera ändringar"
 
 # messages-i18n.c:62
 # messages-i18n.c:64
-#: src/gnome/dialog-account.c:623
+#: src/gnome/dialog-account.c:683
 msgid "The following changes must be made. Continue?"
 msgstr "Följande ändringar måste utföras. Fortsätta?"
 
 # messages-i18n.c:18
 # messages-i18n.c:18
 # messages-i18n.c:18
-#: src/gnome/dialog-account.c:697 src/gnome/dialog-account.c:820
+#: src/gnome/dialog-account.c:757 src/gnome/dialog-account.c:899
 #, fuzzy
 msgid "The account must be given a name."
 msgstr "Kontot måste ges ett namn! \n"
@@ -3506,21 +3545,37 @@ msgstr "Kontot måste ges ett namn! \n"
 # messages-i18n.c:21
 # messages-i18n.c:21
 # messages-i18n.c:21
-#: src/gnome/dialog-account.c:705 src/gnome/dialog-account.c:871
+#: src/gnome/dialog-account.c:765 src/gnome/dialog-account.c:950
 msgid "You must select an account type."
 msgstr "Du måste välja en kontotyp."
 
 # messages-i18n.c:13
 # messages-i18n.c:13
 # messages-i18n.c:13
-#: src/gnome/dialog-account.c:716
+#: src/gnome/dialog-account.c:776
 msgid "You must choose a valid parent account."
+msgstr "Du måste välja ett giltigt föräldrakonto"
+
+# src/gnome/dialog-qif-import.c:314
+# src/gnome/dialog-qif-import.c:317
+# src/gnome/dialog-qif-import.c:255
+#: src/gnome/dialog-account.c:788 src/gnome/dialog-account.c:963
+#, fuzzy
+msgid "You must choose a currency."
+msgstr "Du måste välja en valuta."
+
+# messages-i18n.c:13
+# messages-i18n.c:13
+# messages-i18n.c:13
+#: src/gnome/dialog-account.c:797 src/gnome/dialog-account.c:972
+#, fuzzy
+msgid "You must choose a security."
 msgstr "Du måste välja ett giltigt föräldrakonto"
 
 # po/guile_strings.txt:96
 # po/guile_strings.txt:109
 # po/guile_strings.txt:109
-#: src/gnome/dialog-account.c:862
+#: src/gnome/dialog-account.c:941
 #, fuzzy
 msgid "There is already an account with that name."
 msgstr "Det finns inga konton att skapa rapporter från."
@@ -3528,16 +3583,39 @@ msgstr "Det finns inga konton att skapa rapporter från."
 # messages-i18n.c:202
 # messages-i18n.c:221
 # messages-i18n.c:223
-#: src/gnome/dialog-account.c:1178
+#: src/gnome/dialog-account.c:1301
 msgid "New top level account"
 msgstr "Nytt toppnivåkonto"
+
+# po/guile_strings.txt:191
+# po/guile_strings.txt:222
+# po/guile_strings.txt:222
+#: src/gnome/dialog-account.c:1337
+#, fuzzy
+msgid "<No name>"
+msgstr "Namn"
 
 # messages-i18n.c:186
 # messages-i18n.c:204
 # messages-i18n.c:206
-#: src/gnome/dialog-account.c:1252
+#: src/gnome/dialog-account.c:1374
 msgid "Edit Account"
 msgstr "Redigera konto"
+
+# messages-i18n.c:199
+# messages-i18n.c:218
+# messages-i18n.c:220
+#: src/gnome/dialog-account.c:1377
+#, fuzzy, c-format
+msgid "(%d) New Accounts"
+msgstr "Nytt konto"
+
+# messages-i18n.c:199
+# messages-i18n.c:218
+# messages-i18n.c:220
+#: src/gnome/dialog-account.c:1388 src/gnome/glade-gnc-dialogs.c:3929
+msgid "New Account"
+msgstr "Nytt konto"
 
 # src/gnome/dialog-account-picker.c:93
 # src/gnome/dialog-account-picker.c:95
@@ -3576,8 +3654,8 @@ msgstr "Hjälp"
 # messages-i18n.c:319
 # messages-i18n.c:355
 # messages-i18n.c:356
-#: src/FileDialog.c:382 src/gnome/dialog-filebox.c:77
-#: src/gnome/window-main.c:1026 src/gnome/window-reconcile.c:1214
+#: src/FileDialog.c:364 src/gnome/dialog-filebox.c:78
+#: src/gnome/window-main.c:1022 src/gnome/window-reconcile.c:1217
 msgid "Open"
 msgstr "Öppna"
 
@@ -3643,7 +3721,7 @@ msgstr "Välj standard"
 # messages-i18n.c:300
 # messages-i18n.c:334
 # messages-i18n.c:335
-#: src/gnome/dialog-options.c:1745
+#: src/gnome/dialog-options.c:1748
 msgid "GnuCash Preferences"
 msgstr "GnuCash inställningar"
 
@@ -3677,7 +3755,7 @@ msgstr ""
 # messages-i18n.c:53
 # messages-i18n.c:54
 # messages-i18n.c:56
-#: src/gnome/dialog-transfer.c:335
+#: src/gnome/dialog-transfer.c:337
 #, fuzzy
 msgid "Show the income and expense accounts"
 msgstr "Visar inkomst och utgifts konton."
@@ -3685,7 +3763,7 @@ msgstr "Visar inkomst och utgifts konton."
 # messages-i18n.c:13
 # messages-i18n.c:13
 # messages-i18n.c:13
-#: src/gnome/dialog-transfer.c:404
+#: src/gnome/dialog-transfer.c:406
 #, fuzzy, c-format
 msgid ""
 "You must enter a valid %s.\n"
@@ -3696,7 +3774,7 @@ msgstr "Du måste välja ett giltigt föräldrakonto"
 # messages-i18n.c:65
 # messages-i18n.c:67
 # messages-i18n.c:69
-#: src/gnome/dialog-transfer.c:644
+#: src/gnome/dialog-transfer.c:646
 msgid ""
 "You must specify an account to transfer from,\n"
 "or to, or both, for this transaction.\n"
@@ -3709,11 +3787,11 @@ msgstr ""
 # messages-i18n.c:64
 # messages-i18n.c:66
 # messages-i18n.c:68
-#: src/gnome/dialog-transfer.c:653
+#: src/gnome/dialog-transfer.c:655
 msgid "You can't transfer from and to the same account!"
 msgstr "Du kan inte överföra från och till samma konto!"
 
-#: src/gnome/dialog-transfer.c:700
+#: src/gnome/dialog-transfer.c:702
 #, c-format
 msgid ""
 "No matching currency account!\n"
@@ -3722,48 +3800,6 @@ msgid ""
 "and security %s\n"
 "(or vice versa) to transfer funds\n"
 "between the selected accounts."
-msgstr ""
-
-# messages-i18n.c:314 src/gnome/print-session.c:108
-# src/gnome/print-session.c:197
-# messages-i18n.c:350 src/gnome/print-session.c:111
-# src/gnome/print-session.c:200
-# messages-i18n.c:351 src/gnome/print-session.c:111
-# src/gnome/print-session.c:200
-#: src/gnome/dialog-utils.c:50 src/gnome/print-session.c:112
-#: src/gnome/print-session.c:209
-msgid "(none)"
-msgstr "(ingen)"
-
-# messages-i18n.c:172
-# messages-i18n.c:190
-# messages-i18n.c:192
-#: src/gnome/dialog-utils.c:185
-msgid "Account Code"
-msgstr "Konto kod"
-
-#: src/gnome/dialog-utils.c:733
-msgid "not cleared:n"
-msgstr ""
-
-# messages-i18n.c:178
-# messages-i18n.c:196
-# src/gnome/glade-gnc-dialogs.c:2435
-#: src/gnome/dialog-utils.c:734
-#, fuzzy
-msgid "cleared:c"
-msgstr "Töm allt"
-
-# messages-i18n.c:331
-# messages-i18n.c:368
-# src/gnome/glade-gnc-dialogs.c:2442
-#: src/gnome/dialog-utils.c:735
-#, fuzzy
-msgid "reconciled:y"
-msgstr "Avstämmd (y)"
-
-#: src/gnome/dialog-utils.c:736
-msgid "frozen:f"
 msgstr ""
 
 #: src/gnome/druid-commodity.c:222
@@ -3807,18 +3843,18 @@ msgstr "Välj QIF-fil"
 # src/gnome/dialog-qif-import.c:310
 # src/gnome/dialog-qif-import.c:313
 # src/gnome/dialog-qif-import.c:251
-#: src/gnome/druid-qif-import.c:290
+#: src/gnome/druid-qif-import.c:287
 #, fuzzy
 msgid "Please select a file to load.\n"
 msgstr "Du måste välja en fil att läsa in."
 
-#: src/gnome/druid-qif-import.c:296
+#: src/gnome/druid-qif-import.c:293
 msgid ""
 "File not found or read permission denied.\n"
 "Please select another file."
 msgstr ""
 
-#: src/gnome/druid-qif-import.c:308
+#: src/gnome/druid-qif-import.c:305
 msgid ""
 "That QIF file is already loaded.\n"
 "Please select another file."
@@ -3827,7 +3863,7 @@ msgstr ""
 # messages-i18n.c:44
 # messages-i18n.c:45
 # messages-i18n.c:46
-#: src/gnome/druid-qif-import.c:332
+#: src/gnome/druid-qif-import.c:329
 #, c-format
 msgid ""
 "QIF file load warning:\n"
@@ -3839,7 +3875,7 @@ msgstr ""
 # messages-i18n.c:44
 # messages-i18n.c:45
 # messages-i18n.c:45
-#: src/gnome/druid-qif-import.c:344
+#: src/gnome/druid-qif-import.c:341
 #, c-format
 msgid ""
 "QIF file load failed:\n"
@@ -3851,7 +3887,7 @@ msgstr ""
 # messages-i18n.c:44
 # messages-i18n.c:45
 # messages-i18n.c:47
-#: src/gnome/druid-qif-import.c:392
+#: src/gnome/druid-qif-import.c:389
 #, c-format
 msgid ""
 "QIF file parse failed:\n"
@@ -3863,7 +3899,7 @@ msgstr ""
 # messages-i18n.c:21
 # messages-i18n.c:21
 # messages-i18n.c:21
-#: src/gnome/druid-qif-import.c:620
+#: src/gnome/druid-qif-import.c:617
 #, fuzzy
 msgid "You must enter an account name."
 msgstr "Du måste välja en kontotyp."
@@ -3871,7 +3907,7 @@ msgstr "Du måste välja en kontotyp."
 # src/gnome/print-session.c:230
 # src/gnome/print-session.c:233
 # src/gnome/print-session.c:233
-#: src/gnome/druid-qif-import.c:1000
+#: src/gnome/druid-qif-import.c:997
 #, fuzzy
 msgid "You must enter a Type for the commodity."
 msgstr "Du måste välja en skrivare först."
@@ -3879,7 +3915,7 @@ msgstr "Du måste välja en skrivare först."
 # messages-i18n.c:13
 # messages-i18n.c:13
 # messages-i18n.c:13
-#: src/gnome/druid-qif-import.c:1004
+#: src/gnome/druid-qif-import.c:1001
 #, fuzzy
 msgid "You must enter a name for the commodity."
 msgstr "Du måste välja ett giltigt föräldrakonto"
@@ -3887,32 +3923,32 @@ msgstr "Du måste välja ett giltigt föräldrakonto"
 # messages-i18n.c:13
 # messages-i18n.c:13
 # messages-i18n.c:13
-#: src/gnome/druid-qif-import.c:1008
+#: src/gnome/druid-qif-import.c:1005
 #, fuzzy
 msgid "You must enter an abbreviation for the commodity."
 msgstr "Du måste välja ett giltigt föräldrakonto"
 
 #. save the old commodity name
-#: src/gnome/druid-qif-import.c:1092
+#: src/gnome/druid-qif-import.c:1089
 #, c-format
 msgid "Enter information about \"%s\""
 msgstr ""
 
-#: src/gnome/druid-qif-import.c:1105
+#: src/gnome/druid-qif-import.c:1102
 msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
 msgstr ""
 
-#: src/gnome/druid-qif-import.c:1130
+#: src/gnome/druid-qif-import.c:1127
 msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
 msgstr ""
 
-#: src/gnome/druid-qif-import.c:1152
+#: src/gnome/druid-qif-import.c:1149
 msgid ""
 "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for "
 "the name."
 msgstr ""
 
-#: src/gnome/druid-qif-import.c:1173
+#: src/gnome/druid-qif-import.c:1170
 msgid "Click \"Next\" to accept the information and move on."
 msgstr ""
 
@@ -3945,9 +3981,9 @@ msgstr "Valt konto:"
 # src/gnome/glade-gnc-dialogs.c:3027
 # src/gnome/glade-gnc-dialogs.c:514 src/gnome/glade-gnc-dialogs.c:2931
 # src/gnome/glade-gnc-dialogs.c:3018
-#: src/gnome/glade-gnc-dialogs.c:113 src/gnome/glade-gnc-dialogs.c:2453
-#: src/gnome/glade-gnc-dialogs.c:2540 src/gnome/glade-gnc-dialogs.c:3921
-#: src/gnome/glade-gnc-dialogs.c:4985
+#: src/gnome/glade-gnc-dialogs.c:113 src/gnome/glade-gnc-dialogs.c:2506
+#: src/gnome/glade-gnc-dialogs.c:2593 src/gnome/glade-gnc-dialogs.c:3975
+#: src/gnome/glade-gnc-dialogs.c:5047
 msgid "Description:"
 msgstr "Beskrivning:"
 
@@ -4015,7 +4051,7 @@ msgstr "Sidor att skriva ut:"
 # src/gnome/glade-gnc-dialogs.c:869
 # src/gnome/glade-gnc-dialogs.c:902 src/gnome/glade-gnc-dialogs.c:1817
 # src/gnome/glade-gnc-dialogs.c:835 src/gnome/glade-gnc-dialogs.c:1757
-#: src/gnome/glade-gnc-dialogs.c:434 src/gnome/glade-gnc-dialogs.c:1351
+#: src/gnome/glade-gnc-dialogs.c:434 src/gnome/glade-gnc-dialogs.c:1359
 msgid "All"
 msgstr "Alla"
 
@@ -4044,7 +4080,7 @@ msgstr "Till:"
 # src/gnome/glade-gnc-dialogs.c:969 src/gnome/glade-gnc-dialogs.c:976
 # src/gnome/glade-gnc-dialogs.c:902 src/gnome/glade-gnc-dialogs.c:909
 #: src/gnome/glade-gnc-dialogs.c:501 src/gnome/glade-gnc-dialogs.c:508
-#: src/gnome/glade-gnc-dialogs.c:4387 src/gnome/gnc-commodity-edit.c:165
+#: src/gnome/glade-gnc-dialogs.c:4449 src/gnome/gnc-commodity-edit.c:167
 msgid "Select..."
 msgstr "Välj..."
 
@@ -4211,7 +4247,7 @@ msgstr "Betalningsmottagare:"
 # src/gnome/glade-gnc-dialogs.c:1324
 # src/gnome/glade-gnc-dialogs.c:1369
 # src/gnome/glade-gnc-dialogs.c:1302
-#: src/gnome/glade-gnc-dialogs.c:901 src/gnome/glade-gnc-dialogs.c:5030
+#: src/gnome/glade-gnc-dialogs.c:901 src/gnome/glade-gnc-dialogs.c:5092
 msgid "Date:"
 msgstr "Datum:"
 
@@ -4232,7 +4268,7 @@ msgstr "Summa (siffror):"
 # src/gnome/glade-gnc-dialogs.c:1348
 # src/gnome/glade-gnc-dialogs.c:1393
 # src/gnome/glade-gnc-dialogs.c:1326
-#: src/gnome/glade-gnc-dialogs.c:925 src/gnome/glade-gnc-dialogs.c:4993
+#: src/gnome/glade-gnc-dialogs.c:925 src/gnome/glade-gnc-dialogs.c:5055
 msgid "Memo:"
 msgstr "Anteckning:"
 
@@ -4300,46 +4336,46 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 # src/gnome/glade-gnc-dialogs.c:1767
 # src/gnome/glade-gnc-dialogs.c:1707
-#: src/gnome/glade-gnc-dialogs.c:1301
+#: src/gnome/glade-gnc-dialogs.c:1307
 msgid "Find Transactions"
 msgstr "Sök transaktioner"
 
 # messages-i18n.c:195
 # src/gnome/glade-gnc-dialogs.c:1782
 # src/gnome/glade-gnc-dialogs.c:1722
-#: src/gnome/glade-gnc-dialogs.c:1316
+#: src/gnome/glade-gnc-dialogs.c:1323
 msgid "Match Accounts"
 msgstr "Matcha konton"
 
 # src/gnome/glade-gnc-dialogs.c:1803
 # src/gnome/glade-gnc-dialogs.c:1743
-#: src/gnome/glade-gnc-dialogs.c:1337
+#: src/gnome/glade-gnc-dialogs.c:1345
 msgid "Find transactions affecting"
 msgstr "Sök transaktioner som påverkar"
 
 # src/gnome/glade-gnc-dialogs.c:1820
 # src/gnome/glade-gnc-dialogs.c:1760
-#: src/gnome/glade-gnc-dialogs.c:1354
+#: src/gnome/glade-gnc-dialogs.c:1362
 msgid "Any"
 msgstr "Någon"
 
 # src/gnome/glade-gnc-dialogs.c:564
 # src/gnome/glade-gnc-dialogs.c:1829
 # src/gnome/glade-gnc-dialogs.c:1769
-#: src/gnome/glade-gnc-dialogs.c:1363
+#: src/gnome/glade-gnc-dialogs.c:1371
 msgid "selected accounts:"
 msgstr "av valda konton:"
 
 # messages-i18n.c:236
 # src/gnome/glade-gnc-dialogs.c:1851
 # src/gnome/glade-gnc-dialogs.c:1791
-#: src/gnome/glade-gnc-dialogs.c:1385
+#: src/gnome/glade-gnc-dialogs.c:1393
 msgid "Match Date"
 msgstr "Matcha datum"
 
 # src/gnome/glade-gnc-dialogs.c:1866
 # src/gnome/glade-gnc-dialogs.c:1806
-#: src/gnome/glade-gnc-dialogs.c:1400
+#: src/gnome/glade-gnc-dialogs.c:1408
 #, fuzzy
 msgid "Find transactions occurring in the date range:"
 msgstr "Hitta transaktioner som skett mellan två datum:"
@@ -4347,7 +4383,7 @@ msgstr "Hitta transaktioner som skett mellan två datum:"
 # po/guile_strings.txt:59
 # po/guile_strings.txt:67
 # po/guile_strings.txt:68
-#: src/gnome/glade-gnc-dialogs.c:1423
+#: src/gnome/glade-gnc-dialogs.c:1431
 #, fuzzy
 msgid "Starting "
 msgstr "Sorterar"
@@ -4355,7 +4391,7 @@ msgstr "Sorterar"
 # po/guile_strings.txt:124
 # po/guile_strings.txt:145
 # po/guile_strings.txt:146
-#: src/gnome/glade-gnc-dialogs.c:1430
+#: src/gnome/glade-gnc-dialogs.c:1438
 #, fuzzy
 msgid "Ending "
 msgstr "Slut"
@@ -4363,13 +4399,13 @@ msgstr "Slut"
 # messages-i18n.c:284 po/guile_strings.txt:131
 # src/gnome/glade-gnc-dialogs.c:1987 src/gnome/glade-gnc-dialogs.c:2045
 # src/gnome/glade-gnc-dialogs.c:1927 src/gnome/glade-gnc-dialogs.c:1985
-#: src/gnome/glade-gnc-dialogs.c:1467 src/gnome/glade-gnc-dialogs.c:1525
+#: src/gnome/glade-gnc-dialogs.c:1475 src/gnome/glade-gnc-dialogs.c:1533
 msgid "Match Description"
 msgstr "Matcha beskrivning"
 
 # src/gnome/glade-gnc-dialogs.c:2002
 # src/gnome/glade-gnc-dialogs.c:1942
-#: src/gnome/glade-gnc-dialogs.c:1482
+#: src/gnome/glade-gnc-dialogs.c:1490
 msgid "Find transactions whose Description matches:"
 msgstr "Sök transaktioner vars beskrivning matchar:"
 
@@ -4377,9 +4413,9 @@ msgstr "Sök transaktioner vars beskrivning matchar:"
 # src/gnome/glade-gnc-dialogs.c:2242 src/gnome/glade-gnc-dialogs.c:2444
 # src/gnome/glade-gnc-dialogs.c:1964 src/gnome/glade-gnc-dialogs.c:2022
 # src/gnome/glade-gnc-dialogs.c:2182 src/gnome/glade-gnc-dialogs.c:2384
-#: src/gnome/glade-gnc-dialogs.c:1504 src/gnome/glade-gnc-dialogs.c:1562
-#: src/gnome/glade-gnc-dialogs.c:1722 src/gnome/glade-gnc-dialogs.c:1924
-#: src/gnome/glade-gnc-dialogs.c:2034
+#: src/gnome/glade-gnc-dialogs.c:1512 src/gnome/glade-gnc-dialogs.c:1570
+#: src/gnome/glade-gnc-dialogs.c:1730 src/gnome/glade-gnc-dialogs.c:1932
+#: src/gnome/glade-gnc-dialogs.c:2086
 msgid "Case sensitive"
 msgstr "Skilj på stora/små bokstäver"
 
@@ -4387,41 +4423,41 @@ msgstr "Skilj på stora/små bokstäver"
 # src/gnome/glade-gnc-dialogs.c:2249 src/gnome/glade-gnc-dialogs.c:2451
 # src/gnome/glade-gnc-dialogs.c:1971 src/gnome/glade-gnc-dialogs.c:2029
 # src/gnome/glade-gnc-dialogs.c:2189 src/gnome/glade-gnc-dialogs.c:2391
-#: src/gnome/glade-gnc-dialogs.c:1511 src/gnome/glade-gnc-dialogs.c:1569
-#: src/gnome/glade-gnc-dialogs.c:1729 src/gnome/glade-gnc-dialogs.c:1931
-#: src/gnome/glade-gnc-dialogs.c:2042
+#: src/gnome/glade-gnc-dialogs.c:1519 src/gnome/glade-gnc-dialogs.c:1577
+#: src/gnome/glade-gnc-dialogs.c:1737 src/gnome/glade-gnc-dialogs.c:1939
+#: src/gnome/glade-gnc-dialogs.c:2094
 msgid "Regular expression"
 msgstr "Reguljärt uttryck"
 
 # src/gnome/glade-gnc-dialogs.c:2060
 # src/gnome/glade-gnc-dialogs.c:2000
-#: src/gnome/glade-gnc-dialogs.c:1540
+#: src/gnome/glade-gnc-dialogs.c:1548
 msgid "Find transactions whose Number matches:"
 msgstr "Sök transaktioner vars nummer matchar:"
 
 # messages-i18n.c:251 po/guile_strings.txt:50
 # src/gnome/glade-gnc-dialogs.c:2103
 # src/gnome/glade-gnc-dialogs.c:2043
-#: src/gnome/glade-gnc-dialogs.c:1583
+#: src/gnome/glade-gnc-dialogs.c:1591
 msgid "Match Amount"
 msgstr "Matcha belopp"
 
 # src/gnome/glade-gnc-dialogs.c:2125
 # src/gnome/glade-gnc-dialogs.c:2065
-#: src/gnome/glade-gnc-dialogs.c:1605
+#: src/gnome/glade-gnc-dialogs.c:1613
 msgid "Find "
 msgstr "Sök"
 
 # messages-i18n.c:286
 # src/gnome/glade-gnc-dialogs.c:2139
 # src/gnome/glade-gnc-dialogs.c:2079
-#: src/gnome/glade-gnc-dialogs.c:1619
+#: src/gnome/glade-gnc-dialogs.c:1627
 msgid "Credit or Debit"
 msgstr "Kredit eller debet"
 
 # src/gnome/glade-gnc-dialogs.c:2150
 # src/gnome/glade-gnc-dialogs.c:2090
-#: src/gnome/glade-gnc-dialogs.c:1630
+#: src/gnome/glade-gnc-dialogs.c:1638
 msgid "splits having amounts of:"
 msgstr ""
 
@@ -4429,14 +4465,14 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:2372
 # src/gnome/glade-gnc-dialogs.c:2111 src/gnome/glade-gnc-dialogs.c:2240
 # src/gnome/glade-gnc-dialogs.c:2312
-#: src/gnome/glade-gnc-dialogs.c:1651 src/gnome/glade-gnc-dialogs.c:1780
-#: src/gnome/glade-gnc-dialogs.c:1852
+#: src/gnome/glade-gnc-dialogs.c:1659 src/gnome/glade-gnc-dialogs.c:1788
+#: src/gnome/glade-gnc-dialogs.c:1860
 msgid "At least"
 msgstr "Minst"
 
 # src/gnome/glade-gnc-dialogs.c:2174
 # src/gnome/glade-gnc-dialogs.c:2114
-#: src/gnome/glade-gnc-dialogs.c:1654
+#: src/gnome/glade-gnc-dialogs.c:1662
 msgid "At most "
 msgstr "Som mest"
 
@@ -4444,109 +4480,109 @@ msgstr "Som mest"
 # src/gnome/glade-gnc-dialogs.c:2378
 # src/gnome/glade-gnc-dialogs.c:2117 src/gnome/glade-gnc-dialogs.c:2246
 # src/gnome/glade-gnc-dialogs.c:2318
-#: src/gnome/glade-gnc-dialogs.c:1657 src/gnome/glade-gnc-dialogs.c:1786
-#: src/gnome/glade-gnc-dialogs.c:1858
+#: src/gnome/glade-gnc-dialogs.c:1665 src/gnome/glade-gnc-dialogs.c:1794
+#: src/gnome/glade-gnc-dialogs.c:1866
 msgid "Exactly"
 msgstr "Exakt"
 
 # src/gnome/glade-gnc-dialogs.c:2205
 # src/gnome/glade-gnc-dialogs.c:2145
-#: src/gnome/glade-gnc-dialogs.c:1685
+#: src/gnome/glade-gnc-dialogs.c:1693
 msgid "Match Memo"
 msgstr "Matcha anteckning"
 
 # src/gnome/glade-gnc-dialogs.c:2220
 # src/gnome/glade-gnc-dialogs.c:2160
-#: src/gnome/glade-gnc-dialogs.c:1700
+#: src/gnome/glade-gnc-dialogs.c:1708
 msgid "Find splits whose Memo matches:"
 msgstr "Hitta delning där anteckningen passar:"
 
 # messages-i18n.c:127
 # src/gnome/glade-gnc-dialogs.c:2263
 # src/gnome/glade-gnc-dialogs.c:2203
-#: src/gnome/glade-gnc-dialogs.c:1743
+#: src/gnome/glade-gnc-dialogs.c:1751
 msgid "Match number of shares"
 msgstr "Matcha antal andelar"
 
 # messages-i18n.c:82
 # src/gnome/glade-gnc-dialogs.c:2278
 # src/gnome/glade-gnc-dialogs.c:2218
-#: src/gnome/glade-gnc-dialogs.c:1758
+#: src/gnome/glade-gnc-dialogs.c:1766
 msgid "Find securities transactions of:"
 msgstr ""
 
 # messages-i18n.c:251 po/guile_strings.txt:50
 # src/gnome/glade-gnc-dialogs.c:2303 src/gnome/glade-gnc-dialogs.c:2375
 # src/gnome/glade-gnc-dialogs.c:2243 src/gnome/glade-gnc-dialogs.c:2315
-#: src/gnome/glade-gnc-dialogs.c:1783 src/gnome/glade-gnc-dialogs.c:1855
+#: src/gnome/glade-gnc-dialogs.c:1791 src/gnome/glade-gnc-dialogs.c:1863
 msgid "At most"
 msgstr "Som mest"
 
 # po/guile_strings.txt:267
 # src/gnome/glade-gnc-dialogs.c:2320
 # src/gnome/glade-gnc-dialogs.c:2260
-#: src/gnome/glade-gnc-dialogs.c:1800
+#: src/gnome/glade-gnc-dialogs.c:1808
 msgid "shares"
 msgstr "andelar"
 
 # messages-i18n.c:126
 # src/gnome/glade-gnc-dialogs.c:2335
 # src/gnome/glade-gnc-dialogs.c:2275
-#: src/gnome/glade-gnc-dialogs.c:1815
+#: src/gnome/glade-gnc-dialogs.c:1823
 msgid "Match share price"
 msgstr "Matcha andelspriset"
 
 # src/gnome/glade-gnc-dialogs.c:2350
 # src/gnome/glade-gnc-dialogs.c:2290
-#: src/gnome/glade-gnc-dialogs.c:1830
+#: src/gnome/glade-gnc-dialogs.c:1838
 msgid "Find securities transactions with share price of:"
 msgstr ""
 
 # messages-i18n.c:249
 # src/gnome/glade-gnc-dialogs.c:2407
 # src/gnome/glade-gnc-dialogs.c:2347
-#: src/gnome/glade-gnc-dialogs.c:1887
+#: src/gnome/glade-gnc-dialogs.c:1895
 msgid "Match Action"
 msgstr "Matcha handling"
 
 # messages-i18n.c:114 po/guile_strings.txt:130
 # src/gnome/glade-gnc-dialogs.c:2422
 # src/gnome/glade-gnc-dialogs.c:2362
-#: src/gnome/glade-gnc-dialogs.c:1902
+#: src/gnome/glade-gnc-dialogs.c:1910
 msgid "Find transactions whose Action matches:"
 msgstr "Sök transaktioner vars handling matchar"
 
 # messages-i18n.c:249
 # messages-i18n.c:278 src/gnome/glade-gnc-dialogs.c:2458
 # messages-i18n.c:279 src/gnome/glade-gnc-dialogs.c:2398
-#: src/gnome/glade-gnc-dialogs.c:1938 src/register/splitreg.c:173
+#: src/SplitLedger.c:3682 src/gnome/glade-gnc-dialogs.c:1946
 msgid "Action"
 msgstr "Handling"
 
 # messages-i18n.c:236
 # src/gnome/glade-gnc-dialogs.c:1851
 # src/gnome/glade-gnc-dialogs.c:2405
-#: src/gnome/glade-gnc-dialogs.c:1945
+#: src/gnome/glade-gnc-dialogs.c:1953
 #, fuzzy
 msgid "Match Cleared state"
 msgstr "Matcha datum"
 
 # src/gnome/glade-gnc-dialogs.c:2060
 # src/gnome/glade-gnc-dialogs.c:2420
-#: src/gnome/glade-gnc-dialogs.c:1960
+#: src/gnome/glade-gnc-dialogs.c:1968
 #, fuzzy
 msgid "Find transactions whose Cleared status is:"
 msgstr "Sök transaktioner vars nummer matchar:"
 
 # src/gnome/glade-gnc-dialogs.c:2428
-#: src/gnome/glade-gnc-dialogs.c:1968
+#: src/gnome/glade-gnc-dialogs.c:1976
 msgid "Not cleared (n)"
 msgstr ""
 
 # messages-i18n.c:178
 # messages-i18n.c:196
 # src/gnome/glade-gnc-dialogs.c:2435
-#: src/gnome/glade-gnc-dialogs.c:1975
+#: src/gnome/glade-gnc-dialogs.c:1983
 #, fuzzy
 msgid "Cleared (c)"
 msgstr "Töm allt"
@@ -4554,24 +4590,55 @@ msgstr "Töm allt"
 # messages-i18n.c:331
 # messages-i18n.c:368
 # src/gnome/glade-gnc-dialogs.c:2442
-#: src/gnome/glade-gnc-dialogs.c:1982
+#: src/gnome/glade-gnc-dialogs.c:1990
 msgid "Reconciled (y)"
 msgstr "Avstämmd (y)"
 
 # messages-i18n.c:269
 # messages-i18n.c:300
 # messages-i18n.c:301 src/gnome/glade-gnc-dialogs.c:2449
-#: src/gnome/glade-gnc-dialogs.c:1989
+#: src/gnome/glade-gnc-dialogs.c:1997
 msgid "Cleared"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:1996
+# messages-i18n.c:236
+# src/gnome/glade-gnc-dialogs.c:1851
+# src/gnome/glade-gnc-dialogs.c:2405
+#: src/gnome/glade-gnc-dialogs.c:2004
+#, fuzzy
+msgid "Match Balance state"
+msgstr "Matcha datum"
+
+# src/gnome/glade-gnc-dialogs.c:2060
+# src/gnome/glade-gnc-dialogs.c:2420
+#: src/gnome/glade-gnc-dialogs.c:2019
+#, fuzzy
+msgid "Find transactions whose Balance status is:"
+msgstr "Sök transaktioner vars nummer matchar:"
+
+# messages-i18n.c:258 po/guile_strings.txt:12
+# messages-i18n.c:288 messages-i18n.c:289 po/guile_strings.txt:13
+# messages-i18n.c:289 messages-i18n.c:290 po/guile_strings.txt:13
+#: src/gnome/glade-gnc-dialogs.c:2027
+#, fuzzy
+msgid "Balanced"
+msgstr "Saldo"
+
+# messages-i18n.c:200
+# messages-i18n.c:219
+# messages-i18n.c:221
+#: src/gnome/glade-gnc-dialogs.c:2034
+#, fuzzy
+msgid "Not Balanced"
+msgstr "Nytt saldo"
+
+#: src/gnome/glade-gnc-dialogs.c:2048
 msgid "Match transaction tags (CURRENTLY INOPERABLE)"
 msgstr ""
 
 # messages-i18n.c:92
 # messages-i18n.c:94
-#: src/gnome/glade-gnc-dialogs.c:2011
+#: src/gnome/glade-gnc-dialogs.c:2063
 #, fuzzy
 msgid "Find transactions with the tag:"
 msgstr "Hitta transaktioner med en sökning."
@@ -4579,120 +4646,120 @@ msgstr "Hitta transaktioner med en sökning."
 # po/guile_strings.txt:265
 # po/guile_strings.txt:316
 # po/guile_strings.txt:316
-#: src/gnome/glade-gnc-dialogs.c:2050
+#: src/gnome/glade-gnc-dialogs.c:2102
 #, fuzzy
 msgid "Tags"
 msgstr "Totalt"
 
 # src/gnome/glade-gnc-dialogs.c:2479
 # src/gnome/glade-gnc-dialogs.c:2470
-#: src/gnome/glade-gnc-dialogs.c:2071
+#: src/gnome/glade-gnc-dialogs.c:2123
 msgid "Type of search"
 msgstr "Typ av sökning"
 
 # src/gnome/glade-gnc-dialogs.c:2493
 # src/gnome/glade-gnc-dialogs.c:2484
-#: src/gnome/glade-gnc-dialogs.c:2085
+#: src/gnome/glade-gnc-dialogs.c:2138
 msgid "New search"
 msgstr "Ny sökning"
 
 # src/gnome/glade-gnc-dialogs.c:2501
 # src/gnome/glade-gnc-dialogs.c:2492
-#: src/gnome/glade-gnc-dialogs.c:2093
+#: src/gnome/glade-gnc-dialogs.c:2146
 msgid "Refine current search"
 msgstr "Förfina nuvarande sökningen"
 
 # src/gnome/glade-gnc-dialogs.c:2509
 # src/gnome/glade-gnc-dialogs.c:2500
-#: src/gnome/glade-gnc-dialogs.c:2101
+#: src/gnome/glade-gnc-dialogs.c:2154
 msgid "Add results to current search"
 msgstr "Lägg till resultatet till den nuvarande sökningen"
 
 # messages-i18n.c:77
 # src/gnome/glade-gnc-dialogs.c:2517
 # src/gnome/glade-gnc-dialogs.c:2508
-#: src/gnome/glade-gnc-dialogs.c:2109
+#: src/gnome/glade-gnc-dialogs.c:2162
 msgid "Delete results from current search"
 msgstr "Radera resultatet från den nuvarande sökningen"
 
 # messages-i18n.c:190
 # messages-i18n.c:331 src/gnome/glade-gnc-dialogs.c:2532
 # messages-i18n.c:332 src/gnome/glade-gnc-dialogs.c:2523
-#: src/gnome/glade-gnc-dialogs.c:2124 src/gnome/window-main.c:1068
-#: src/gnome/window-register.c:883
+#: src/gnome/glade-gnc-dialogs.c:2177 src/gnome/window-main.c:1064
+#: src/gnome/window-register.c:873
 msgid "Find"
 msgstr "Sök"
 
 # po/guile_strings.txt:191
 # src/gnome/glade-gnc-dialogs.c:2765
 # src/gnome/glade-gnc-dialogs.c:2756
-#: src/gnome/glade-gnc-dialogs.c:2278
+#: src/gnome/glade-gnc-dialogs.c:2331
 msgid "Name:"
 msgstr "Namn:"
 
 # src/gnome/glade-gnc-dialogs.c:2787
 # src/gnome/glade-gnc-dialogs.c:2778
-#: src/gnome/glade-gnc-dialogs.c:2300
+#: src/gnome/glade-gnc-dialogs.c:2353
 msgid "The name of this budget"
 msgstr "Namnet på denna budgeten"
 
 # po/guile_strings.txt:229
 # src/gnome/glade-gnc-dialogs.c:2796
 # src/gnome/glade-gnc-dialogs.c:2787
-#: src/gnome/glade-gnc-dialogs.c:2309
+#: src/gnome/glade-gnc-dialogs.c:2362
 msgid "Budget Entries"
 msgstr "Budget inmatningar"
 
 # src/gnome/glade-gnc-dialogs.c:2844
 # src/gnome/glade-gnc-dialogs.c:2835
-#: src/gnome/glade-gnc-dialogs.c:2357
+#: src/gnome/glade-gnc-dialogs.c:2410
 msgid "label773"
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:2868
 # src/gnome/glade-gnc-dialogs.c:2859
-#: src/gnome/glade-gnc-dialogs.c:2381
+#: src/gnome/glade-gnc-dialogs.c:2434
 msgid "Add"
 msgstr "Lägg till"
 
 # src/gnome/glade-gnc-dialogs.c:2875
 # src/gnome/glade-gnc-dialogs.c:2866
-#: src/gnome/glade-gnc-dialogs.c:2388
+#: src/gnome/glade-gnc-dialogs.c:2441
 msgid "Add a new entry or subentry"
 msgstr "Lägg till ny rad eller delrad"
 
 # messages-i18n.c:281
 # messages-i18n.c:313 src/gnome/glade-gnc-dialogs.c:2877
 # messages-i18n.c:314 src/gnome/glade-gnc-dialogs.c:2868
-#: src/gnome/glade-gnc-dialogs.c:2390 src/gnome/window-main.c:1057
-#: src/gnome/window-reconcile.c:1206 src/gnome/window-register.c:837
+#: src/gnome/glade-gnc-dialogs.c:2443 src/gnome/window-main.c:1053
+#: src/gnome/window-reconcile.c:1209 src/gnome/window-register.c:819
 msgid "Delete"
 msgstr "Radera"
 
 # messages-i18n.c:76
 # src/gnome/glade-gnc-dialogs.c:2884
 # src/gnome/glade-gnc-dialogs.c:2875
-#: src/gnome/glade-gnc-dialogs.c:2397
+#: src/gnome/glade-gnc-dialogs.c:2450
 msgid "Delete the selected entry or subentry"
 msgstr "Radera den valda imatningen eller delinmatningen"
 
 # messages-i18n.c:95
 # src/gnome/glade-gnc-dialogs.c:2899
 # src/gnome/glade-gnc-dialogs.c:2890
-#: src/gnome/glade-gnc-dialogs.c:2412
+#: src/gnome/glade-gnc-dialogs.c:2465
 msgid "Move the selected item up"
 msgstr "Flytta den valda raden uppåt"
 
 # messages-i18n.c:95
 # src/gnome/glade-gnc-dialogs.c:2907
 # src/gnome/glade-gnc-dialogs.c:2898
-#: src/gnome/glade-gnc-dialogs.c:2420
+#: src/gnome/glade-gnc-dialogs.c:2473
 msgid "Move the selected item down"
 msgstr "Flytta den valda raden nedåt"
 
 # src/gnome/glade-gnc-dialogs.c:2916
 # src/gnome/glade-gnc-dialogs.c:2907
-#: src/gnome/glade-gnc-dialogs.c:2429
+#: src/gnome/glade-gnc-dialogs.c:2482
 msgid "Entry"
 msgstr ""
 
@@ -4700,96 +4767,96 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
 # src/gnome/glade-gnc-dialogs.c:2949
 # src/gnome/glade-gnc-dialogs.c:2940
-#: src/gnome/glade-gnc-dialogs.c:2462 src/gnome/glade-gnc-dialogs.c:3535
-#: src/gnome/glade-gnc-dialogs.c:3702
+#: src/gnome/glade-gnc-dialogs.c:2515 src/gnome/glade-gnc-dialogs.c:3588
+#: src/gnome/glade-gnc-dialogs.c:3755
 msgid "Type:"
 msgstr "Typ:"
 
 # src/gnome/glade-gnc-dialogs.c:2988
 # src/gnome/glade-gnc-dialogs.c:2979
-#: src/gnome/glade-gnc-dialogs.c:2501
+#: src/gnome/glade-gnc-dialogs.c:2554
 msgid "Normal"
 msgstr "Normal"
 
 # messages-i18n.c:354
 # src/gnome/glade-gnc-dialogs.c:2991
 # src/gnome/glade-gnc-dialogs.c:2982
-#: src/gnome/glade-gnc-dialogs.c:2504
+#: src/gnome/glade-gnc-dialogs.c:2557
 msgid "No Total"
 msgstr "Ingen summa"
 
 # po/guile_strings.txt:35
 # src/gnome/glade-gnc-dialogs.c:2996
 # src/gnome/glade-gnc-dialogs.c:2987
-#: src/gnome/glade-gnc-dialogs.c:2509
+#: src/gnome/glade-gnc-dialogs.c:2562
 msgid "Matching Transactions..."
 msgstr "Matchande transaktioner..."
 
 # src/gnome/glade-gnc-dialogs.c:3003
 # src/gnome/glade-gnc-dialogs.c:2994
-#: src/gnome/glade-gnc-dialogs.c:2516
+#: src/gnome/glade-gnc-dialogs.c:2569
 msgid "Subentry"
 msgstr ""
 
 # messages-i18n.c:251 po/guile_strings.txt:50
 # src/gnome/glade-gnc-dialogs.c:3036
 # src/gnome/glade-gnc-dialogs.c:3027
-#: src/gnome/glade-gnc-dialogs.c:2549 src/gnome/glade-gnc-dialogs.c:4969
+#: src/gnome/glade-gnc-dialogs.c:2602 src/gnome/glade-gnc-dialogs.c:5031
 msgid "Amount:"
 msgstr "Belopp:"
 
 # po/guile_strings.txt:189
 # src/gnome/glade-gnc-dialogs.c:3045
 # src/gnome/glade-gnc-dialogs.c:3036
-#: src/gnome/glade-gnc-dialogs.c:2558
+#: src/gnome/glade-gnc-dialogs.c:2611
 msgid "Period:"
 msgstr "Period:"
 
 # src/gnome/glade-gnc-dialogs.c:3054
 # src/gnome/glade-gnc-dialogs.c:3045
-#: src/gnome/glade-gnc-dialogs.c:2567
+#: src/gnome/glade-gnc-dialogs.c:2620
 msgid "Mechanism:"
 msgstr "Mekanism:"
 
 # src/gnome/glade-gnc-dialogs.c:3063
 # src/gnome/glade-gnc-dialogs.c:3054
-#: src/gnome/glade-gnc-dialogs.c:2576
+#: src/gnome/glade-gnc-dialogs.c:2629
 msgid "Bill Day:"
 msgstr ""
 
 # po/guile_strings.txt:189
 # src/gnome/glade-gnc-dialogs.c:3072
 # src/gnome/glade-gnc-dialogs.c:3063
-#: src/gnome/glade-gnc-dialogs.c:2585
+#: src/gnome/glade-gnc-dialogs.c:2638
 msgid "Grace Period:"
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:3126
 # src/gnome/glade-gnc-dialogs.c:3117
-#: src/gnome/glade-gnc-dialogs.c:2639
+#: src/gnome/glade-gnc-dialogs.c:2692
 msgid "Bill"
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:3129
 # src/gnome/glade-gnc-dialogs.c:3120
-#: src/gnome/glade-gnc-dialogs.c:2642
+#: src/gnome/glade-gnc-dialogs.c:2695
 msgid "Recurring"
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:3132
 # src/gnome/glade-gnc-dialogs.c:3123
-#: src/gnome/glade-gnc-dialogs.c:2645
+#: src/gnome/glade-gnc-dialogs.c:2698
 msgid "Contingency"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2782
+#: src/gnome/glade-gnc-dialogs.c:2835
 msgid "Financial Calculator"
 msgstr ""
 
 # messages-i18n.c:320
 # messages-i18n.c:357
 # messages-i18n.c:358
-#: src/gnome/glade-gnc-dialogs.c:2827
+#: src/gnome/glade-gnc-dialogs.c:2880
 #, fuzzy
 msgid "Payment Periods"
 msgstr "Parametrar"
@@ -4797,29 +4864,29 @@ msgstr "Parametrar"
 # messages-i18n.c:178
 # messages-i18n.c:196
 # messages-i18n.c:198
-#: src/gnome/glade-gnc-dialogs.c:2836 src/gnome/glade-gnc-dialogs.c:2881
-#: src/gnome/glade-gnc-dialogs.c:2926 src/gnome/glade-gnc-dialogs.c:2971
-#: src/gnome/glade-gnc-dialogs.c:3016
+#: src/gnome/glade-gnc-dialogs.c:2889 src/gnome/glade-gnc-dialogs.c:2934
+#: src/gnome/glade-gnc-dialogs.c:2979 src/gnome/glade-gnc-dialogs.c:3024
+#: src/gnome/glade-gnc-dialogs.c:3069
 #, fuzzy
 msgid "Clear"
 msgstr "Töm allt"
 
-#: src/gnome/glade-gnc-dialogs.c:2842 src/gnome/glade-gnc-dialogs.c:2887
-#: src/gnome/glade-gnc-dialogs.c:2932 src/gnome/glade-gnc-dialogs.c:2977
-#: src/gnome/glade-gnc-dialogs.c:3022
+#: src/gnome/glade-gnc-dialogs.c:2895 src/gnome/glade-gnc-dialogs.c:2940
+#: src/gnome/glade-gnc-dialogs.c:2985 src/gnome/glade-gnc-dialogs.c:3030
+#: src/gnome/glade-gnc-dialogs.c:3075
 msgid "Clear the entry"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2844 src/gnome/glade-gnc-dialogs.c:2889
-#: src/gnome/glade-gnc-dialogs.c:2934 src/gnome/glade-gnc-dialogs.c:2979
-#: src/gnome/glade-gnc-dialogs.c:3024
+#: src/gnome/glade-gnc-dialogs.c:2897 src/gnome/glade-gnc-dialogs.c:2942
+#: src/gnome/glade-gnc-dialogs.c:2987 src/gnome/glade-gnc-dialogs.c:3032
+#: src/gnome/glade-gnc-dialogs.c:3077
 msgid "Calculate"
 msgstr ""
 
 # messages-i18n.c:236
 # messages-i18n.c:262
 # messages-i18n.c:263
-#: src/gnome/glade-gnc-dialogs.c:2872
+#: src/gnome/glade-gnc-dialogs.c:2925
 #, fuzzy
 msgid "Interest Rate"
 msgstr "Startdatum"
@@ -4827,7 +4894,7 @@ msgstr "Startdatum"
 # messages-i18n.c:358 po/guile_strings.txt:57
 # messages-i18n.c:222
 # messages-i18n.c:224
-#: src/gnome/glade-gnc-dialogs.c:2917
+#: src/gnome/glade-gnc-dialogs.c:2970
 #, fuzzy
 msgid "Present Value"
 msgstr "Nytt värde"
@@ -4835,7 +4902,7 @@ msgstr "Nytt värde"
 # messages-i18n.c:321
 # messages-i18n.c:358 po/guile_strings.txt:113
 # messages-i18n.c:359 po/guile_strings.txt:114
-#: src/gnome/glade-gnc-dialogs.c:2962
+#: src/gnome/glade-gnc-dialogs.c:3015
 #, fuzzy
 msgid "Periodic Payment"
 msgstr "Utgift"
@@ -4843,113 +4910,113 @@ msgstr "Utgift"
 # messages-i18n.c:358 po/guile_strings.txt:57
 # messages-i18n.c:222
 # messages-i18n.c:224
-#: src/gnome/glade-gnc-dialogs.c:3007
+#: src/gnome/glade-gnc-dialogs.c:3060
 #, fuzzy
 msgid "Future Value"
 msgstr "Nytt värde"
 
-#: src/gnome/glade-gnc-dialogs.c:3068 src/gnome/glade-gnc-dialogs.c:3337
+#: src/gnome/glade-gnc-dialogs.c:3121 src/gnome/glade-gnc-dialogs.c:3390
 msgid "Compounding:"
 msgstr ""
 
 # messages-i18n.c:321
 # messages-i18n.c:358 po/guile_strings.txt:113
 # messages-i18n.c:359 po/guile_strings.txt:114
-#: src/gnome/glade-gnc-dialogs.c:3077 src/gnome/glade-gnc-dialogs.c:3346
+#: src/gnome/glade-gnc-dialogs.c:3130 src/gnome/glade-gnc-dialogs.c:3399
 #, fuzzy
 msgid "Payments:"
 msgstr "Utgift"
 
 # po/guile_strings.txt:255
 # po/guile_strings.txt:255
-#: src/gnome/glade-gnc-dialogs.c:3100 src/gnome/glade-gnc-dialogs.c:3142
-#: src/gnome/glade-gnc-dialogs.c:3383 src/gnome/glade-gnc-dialogs.c:3425
+#: src/gnome/glade-gnc-dialogs.c:3153 src/gnome/glade-gnc-dialogs.c:3195
+#: src/gnome/glade-gnc-dialogs.c:3436 src/gnome/glade-gnc-dialogs.c:3478
 #, fuzzy
 msgid "Annual"
 msgstr "Verklig"
 
-#: src/gnome/glade-gnc-dialogs.c:3103 src/gnome/glade-gnc-dialogs.c:3145
-#: src/gnome/glade-gnc-dialogs.c:3386 src/gnome/glade-gnc-dialogs.c:3428
+#: src/gnome/glade-gnc-dialogs.c:3156 src/gnome/glade-gnc-dialogs.c:3198
+#: src/gnome/glade-gnc-dialogs.c:3439 src/gnome/glade-gnc-dialogs.c:3481
 msgid "Semi-annual"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3106 src/gnome/glade-gnc-dialogs.c:3148
-#: src/gnome/glade-gnc-dialogs.c:3389 src/gnome/glade-gnc-dialogs.c:3431
+#: src/gnome/glade-gnc-dialogs.c:3159 src/gnome/glade-gnc-dialogs.c:3201
+#: src/gnome/glade-gnc-dialogs.c:3442 src/gnome/glade-gnc-dialogs.c:3484
 msgid "Tri-annual"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3109 src/gnome/glade-gnc-dialogs.c:3151
-#: src/gnome/glade-gnc-dialogs.c:3392 src/gnome/glade-gnc-dialogs.c:3434
+#: src/gnome/glade-gnc-dialogs.c:3162 src/gnome/glade-gnc-dialogs.c:3204
+#: src/gnome/glade-gnc-dialogs.c:3445 src/gnome/glade-gnc-dialogs.c:3487
 msgid "Quarterly"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3112 src/gnome/glade-gnc-dialogs.c:3154
-#: src/gnome/glade-gnc-dialogs.c:3395 src/gnome/glade-gnc-dialogs.c:3437
+#: src/gnome/glade-gnc-dialogs.c:3165 src/gnome/glade-gnc-dialogs.c:3207
+#: src/gnome/glade-gnc-dialogs.c:3448 src/gnome/glade-gnc-dialogs.c:3490
 msgid "Bi-monthly"
 msgstr ""
 
 # po/guile_strings.txt:187
 # po/guile_strings.txt:218
 # po/guile_strings.txt:218
-#: src/gnome/glade-gnc-dialogs.c:3115 src/gnome/glade-gnc-dialogs.c:3157
-#: src/gnome/glade-gnc-dialogs.c:3398 src/gnome/glade-gnc-dialogs.c:3440
+#: src/gnome/glade-gnc-dialogs.c:3168 src/gnome/glade-gnc-dialogs.c:3210
+#: src/gnome/glade-gnc-dialogs.c:3451 src/gnome/glade-gnc-dialogs.c:3493
 #, fuzzy
 msgid "Monthly"
 msgstr "Månad"
 
-#: src/gnome/glade-gnc-dialogs.c:3118 src/gnome/glade-gnc-dialogs.c:3160
-#: src/gnome/glade-gnc-dialogs.c:3401 src/gnome/glade-gnc-dialogs.c:3443
+#: src/gnome/glade-gnc-dialogs.c:3171 src/gnome/glade-gnc-dialogs.c:3213
+#: src/gnome/glade-gnc-dialogs.c:3454 src/gnome/glade-gnc-dialogs.c:3496
 msgid "Semi-monthly"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3121 src/gnome/glade-gnc-dialogs.c:3163
-#: src/gnome/glade-gnc-dialogs.c:3404 src/gnome/glade-gnc-dialogs.c:3446
+#: src/gnome/glade-gnc-dialogs.c:3174 src/gnome/glade-gnc-dialogs.c:3216
+#: src/gnome/glade-gnc-dialogs.c:3457 src/gnome/glade-gnc-dialogs.c:3499
 msgid "Bi-weekly"
 msgstr ""
 
 # po/guile_strings.txt:115
 # po/guile_strings.txt:134
 # po/guile_strings.txt:135
-#: src/gnome/glade-gnc-dialogs.c:3124 src/gnome/glade-gnc-dialogs.c:3166
-#: src/gnome/glade-gnc-dialogs.c:3407 src/gnome/glade-gnc-dialogs.c:3449
+#: src/gnome/glade-gnc-dialogs.c:3177 src/gnome/glade-gnc-dialogs.c:3219
+#: src/gnome/glade-gnc-dialogs.c:3460 src/gnome/glade-gnc-dialogs.c:3502
 #, fuzzy
 msgid "Weekly"
 msgstr "Vecka"
 
-#: src/gnome/glade-gnc-dialogs.c:3127 src/gnome/glade-gnc-dialogs.c:3169
-#: src/gnome/glade-gnc-dialogs.c:3410 src/gnome/glade-gnc-dialogs.c:3452
+#: src/gnome/glade-gnc-dialogs.c:3180 src/gnome/glade-gnc-dialogs.c:3222
+#: src/gnome/glade-gnc-dialogs.c:3463 src/gnome/glade-gnc-dialogs.c:3505
 msgid "Daily (360)"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3130 src/gnome/glade-gnc-dialogs.c:3172
-#: src/gnome/glade-gnc-dialogs.c:3413 src/gnome/glade-gnc-dialogs.c:3455
+#: src/gnome/glade-gnc-dialogs.c:3183 src/gnome/glade-gnc-dialogs.c:3225
+#: src/gnome/glade-gnc-dialogs.c:3466 src/gnome/glade-gnc-dialogs.c:3508
 msgid "Daily (365)"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3184
+#: src/gnome/glade-gnc-dialogs.c:3237
 msgid "End of Period Payments"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3193
+#: src/gnome/glade-gnc-dialogs.c:3246
 msgid "Beginning of Period Payments"
 msgstr ""
 
 # po/guile_strings.txt:192
 # po/guile_strings.txt:224
 # po/guile_strings.txt:224
-#: src/gnome/glade-gnc-dialogs.c:3208
+#: src/gnome/glade-gnc-dialogs.c:3261
 #, fuzzy
 msgid "Discrete Compounding"
 msgstr "Fallande"
 
-#: src/gnome/glade-gnc-dialogs.c:3217
+#: src/gnome/glade-gnc-dialogs.c:3270
 msgid "Continuous Compounding"
 msgstr ""
 
 # messages-i18n.c:321
 # messages-i18n.c:358 po/guile_strings.txt:113
 # messages-i18n.c:359 po/guile_strings.txt:114
-#: src/gnome/glade-gnc-dialogs.c:3232
+#: src/gnome/glade-gnc-dialogs.c:3285
 #, fuzzy
 msgid "Payment Total:"
 msgstr "Utgift"
@@ -4957,19 +5024,19 @@ msgstr "Utgift"
 # messages-i18n.c:354
 # messages-i18n.c:391 messages-i18n.c:392 po/guile_strings.txt:207
 # messages-i18n.c:392 messages-i18n.c:393 po/guile_strings.txt:207
-#: src/gnome/glade-gnc-dialogs.c:3239
+#: src/gnome/glade-gnc-dialogs.c:3292
 #, fuzzy
 msgid "total"
 msgstr "Totalt"
 
-#: src/gnome/glade-gnc-dialogs.c:3252
+#: src/gnome/glade-gnc-dialogs.c:3305
 msgid "Schedule"
 msgstr ""
 
 # messages-i18n.c:219
 # src/gnome/glade-gnc-dialogs.c:2599
 # src/gnome/glade-gnc-dialogs.c:2590
-#: src/gnome/glade-gnc-dialogs.c:3319
+#: src/gnome/glade-gnc-dialogs.c:3372
 #, fuzzy
 msgid "Effective Date:"
 msgstr "Välj datum"
@@ -4977,19 +5044,19 @@ msgstr "Välj datum"
 # messages-i18n.c:321
 # messages-i18n.c:358 po/guile_strings.txt:113
 # messages-i18n.c:359 po/guile_strings.txt:114
-#: src/gnome/glade-gnc-dialogs.c:3328
+#: src/gnome/glade-gnc-dialogs.c:3381
 #, fuzzy
 msgid "Initial Payment:"
 msgstr "Utgift"
 
-#: src/gnome/glade-gnc-dialogs.c:3512
+#: src/gnome/glade-gnc-dialogs.c:3565
 msgid "Select currency/security "
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:173
 # src/gnome/glade-gnc-dialogs.c:174
 # src/gnome/glade-gnc-dialogs.c:167
-#: src/gnome/glade-gnc-dialogs.c:3543
+#: src/gnome/glade-gnc-dialogs.c:3596
 #, fuzzy
 msgid "Currency/security:"
 msgstr "Valuta:"
@@ -4997,70 +5064,63 @@ msgstr "Valuta:"
 # messages-i18n.c:312
 # messages-i18n.c:348
 # messages-i18n.c:349
-#: src/gnome/glade-gnc-dialogs.c:3602
+#: src/gnome/glade-gnc-dialogs.c:3655
 #, fuzzy
 msgid "New..."
 msgstr "Nytt"
 
-#: src/gnome/glade-gnc-dialogs.c:3664
+#: src/gnome/glade-gnc-dialogs.c:3717
 msgid "New Currency/Security"
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:155
 # src/gnome/glade-gnc-dialogs.c:156
 # src/gnome/glade-gnc-dialogs.c:149
-#: src/gnome/glade-gnc-dialogs.c:3686
+#: src/gnome/glade-gnc-dialogs.c:3739
 #, fuzzy
 msgid "Full name:"
 msgstr "QIF-filnamn:"
 
-#: src/gnome/glade-gnc-dialogs.c:3694
+#: src/gnome/glade-gnc-dialogs.c:3747
 msgid "Symbol/abbreviation:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3710
+#: src/gnome/glade-gnc-dialogs.c:3763
 msgid "CUSIP or other code:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3718
+#: src/gnome/glade-gnc-dialogs.c:3771
 msgid "Fraction traded:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3739
+#: src/gnome/glade-gnc-dialogs.c:3792
 msgid "Enter the full name of the commodity. Example: US Dollars"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3747
+#: src/gnome/glade-gnc-dialogs.c:3800
 msgid ""
 "Enter the ticker symbol or currency code for the commodity. Example: USD"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3776
+#: src/gnome/glade-gnc-dialogs.c:3829
 msgid "1 /"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3790
+#: src/gnome/glade-gnc-dialogs.c:3843
 msgid "Enter the smallest fraction of the commodity which can be traded."
 msgstr ""
-
-# messages-i18n.c:199
-# messages-i18n.c:218
-# messages-i18n.c:220
-#: src/gnome/glade-gnc-dialogs.c:3875
-msgid "New Account"
-msgstr "Nytt konto"
 
 # messages-i18n.c:247
 # messages-i18n.c:276
 # messages-i18n.c:277
-#: src/gnome/glade-gnc-dialogs.c:3889
+#: src/gnome/glade-gnc-dialogs.c:3943
 msgid "Account Information"
 msgstr "Kontoinformation"
 
 # messages-i18n.c:173 po/guile_strings.txt:7
 # messages-i18n.c:191 po/guile_strings.txt:7
 # messages-i18n.c:193 po/guile_strings.txt:7
-#: src/gnome/glade-gnc-dialogs.c:3912
+#: src/gnome/glade-gnc-dialogs.c:3966
 #, fuzzy
 msgid "Account Name:"
 msgstr "Kontonamn"
@@ -5068,15 +5128,15 @@ msgstr "Kontonamn"
 # src/gnome/glade-gnc-dialogs.c:173
 # src/gnome/glade-gnc-dialogs.c:174
 # src/gnome/glade-gnc-dialogs.c:167
-#: src/gnome/glade-gnc-dialogs.c:3930 src/gnome/glade-gnc-dialogs.c:5098
-#: src/gnome/glade-gnc-dialogs.c:5153
+#: src/gnome/glade-gnc-dialogs.c:3984 src/gnome/glade-gnc-dialogs.c:5160
+#: src/gnome/glade-gnc-dialogs.c:5215
 msgid "Currency:"
 msgstr "Valuta:"
 
 # messages-i18n.c:340 po/guile_strings.txt:164
 # messages-i18n.c:377 po/guile_strings.txt:189
 # messages-i18n.c:378 po/guile_strings.txt:189
-#: src/gnome/glade-gnc-dialogs.c:3939
+#: src/gnome/glade-gnc-dialogs.c:3993
 #, fuzzy
 msgid "Security:"
 msgstr "Säkerhet"
@@ -5084,7 +5144,7 @@ msgstr "Säkerhet"
 # messages-i18n.c:172
 # messages-i18n.c:190
 # messages-i18n.c:192
-#: src/gnome/glade-gnc-dialogs.c:3948
+#: src/gnome/glade-gnc-dialogs.c:4002
 #, fuzzy
 msgid "Account Code:"
 msgstr "Konto kod"
@@ -5092,45 +5152,53 @@ msgstr "Konto kod"
 # messages-i18n.c:174
 # messages-i18n.c:192
 # messages-i18n.c:194
-#: src/gnome/glade-gnc-dialogs.c:4008
+#: src/gnome/glade-gnc-dialogs.c:4062
 msgid "Account Type"
 msgstr "Kontotyp"
 
-#: src/gnome/glade-gnc-dialogs.c:4033
+#: src/gnome/glade-gnc-dialogs.c:4087
 msgid "label812"
 msgstr ""
 
 # messages-i18n.c:208
 # messages-i18n.c:230
 # messages-i18n.c:232
-#: src/gnome/glade-gnc-dialogs.c:4040
+#: src/gnome/glade-gnc-dialogs.c:4094
 msgid "Parent Account"
 msgstr "Föräldrakonto"
 
 # messages-i18n.c:211
 # messages-i18n.c:233
 # messages-i18n.c:235
-#: src/gnome/glade-gnc-dialogs.c:4056
+#: src/gnome/glade-gnc-dialogs.c:4110
 msgid "Price Quote Source"
 msgstr "Källa för Prisuppgift"
 
 # messages-i18n.c:46
 # messages-i18n.c:47
 # messages-i18n.c:49
-#: src/gnome/glade-gnc-dialogs.c:4072
+#: src/gnome/glade-gnc-dialogs.c:4126
 #, fuzzy
 msgid "The source for price quotes:"
 msgstr "Källan för prisuppgifter"
 
-#: src/gnome/glade-gnc-dialogs.c:4157
+# messages-i18n.c:220
+# messages-i18n.c:244
+# messages-i18n.c:246
+#: src/gnome/glade-gnc-dialogs.c:4160
+#, fuzzy
+msgid "Tax Related"
+msgstr "Ställ in datumintervall"
+
+#: src/gnome/glade-gnc-dialogs.c:4219
 msgid "Import currency and stock information"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4178
+#: src/gnome/glade-gnc-dialogs.c:4240
 msgid "Import currency and stock information "
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4179
+#: src/gnome/glade-gnc-dialogs.c:4241
 msgid ""
 "The file you are loading is from an older version of Gnucash. \n"
 "Information about currencies, stocks, and mutual funds needs to\n"
@@ -5144,11 +5212,11 @@ msgid ""
 "Hit \"Cancel\" now to stop loading the file. "
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4191
+#: src/gnome/glade-gnc-dialogs.c:4253
 msgid "Update your accounts with the new information"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4192
+#: src/gnome/glade-gnc-dialogs.c:4254
 msgid ""
 "Click \"Finish\" to update your accounts to use the new \n"
 "information you have entered.\n"
@@ -5161,7 +5229,7 @@ msgstr ""
 # messages-i18n.c:302
 # messages-i18n.c:337
 # messages-i18n.c:338
-#: src/gnome/glade-gnc-dialogs.c:4315
+#: src/gnome/glade-gnc-dialogs.c:4377
 #, fuzzy
 msgid "QIF Import"
 msgstr "Importera"
@@ -5169,12 +5237,12 @@ msgstr "Importera"
 # src/gnome/glade-gnc-dialogs.c:74
 # src/gnome/glade-gnc-dialogs.c:75
 # src/gnome/glade-gnc-dialogs.c:68
-#: src/gnome/glade-gnc-dialogs.c:4336
+#: src/gnome/glade-gnc-dialogs.c:4398
 #, fuzzy
 msgid "Import QIF files"
 msgstr "Importera QIF-filer"
 
-#: src/gnome/glade-gnc-dialogs.c:4337
+#: src/gnome/glade-gnc-dialogs.c:4399
 msgid ""
 "Gnucash can import financial data from QIF (Quicken \n"
 "Interchange Format) files written by Quicken/Quickbooks,\n"
@@ -5191,12 +5259,12 @@ msgstr ""
 # src/gnome/dialog-qif-import.c:221
 # src/gnome/dialog-qif-import.c:224
 # src/gnome/dialog-qif-import.c:190
-#: src/gnome/glade-gnc-dialogs.c:4348
+#: src/gnome/glade-gnc-dialogs.c:4410
 #, fuzzy
 msgid "Select a QIF file to load"
 msgstr "Välj QIF-fil"
 
-#: src/gnome/glade-gnc-dialogs.c:4356
+#: src/gnome/glade-gnc-dialogs.c:4418
 msgid ""
 "Please select a file to load. When you click \"Next\", the file will be "
 "loaded\n"
@@ -5210,19 +5278,19 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:155
 # src/gnome/glade-gnc-dialogs.c:156
 # src/gnome/glade-gnc-dialogs.c:149
-#: src/gnome/glade-gnc-dialogs.c:4371
+#: src/gnome/glade-gnc-dialogs.c:4433
 msgid "QIF Filename:"
 msgstr "QIF-filnamn:"
 
 # messages-i18n.c:75
 # messages-i18n.c:82
 # messages-i18n.c:84
-#: src/gnome/glade-gnc-dialogs.c:4403
+#: src/gnome/glade-gnc-dialogs.c:4465
 #, fuzzy
 msgid "Set a date format for this QIF file"
 msgstr "Mata in datumintervall för detta register"
 
-#: src/gnome/glade-gnc-dialogs.c:4411
+#: src/gnome/glade-gnc-dialogs.c:4473
 msgid ""
 "The QIF file format does not specify which order the day, month, and \n"
 "year components of a date are printed.  In most cases, it is possible \n"
@@ -5237,12 +5305,12 @@ msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:165
 # src/gnome/glade-gnc-dialogs.c:158
-#: src/gnome/glade-gnc-dialogs.c:4443
+#: src/gnome/glade-gnc-dialogs.c:4505
 #, fuzzy
 msgid "Set the default QIF account name"
 msgstr "Standard QIF-konto:"
 
-#: src/gnome/glade-gnc-dialogs.c:4451
+#: src/gnome/glade-gnc-dialogs.c:4513
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just \n"
 "one account, but the file does not specify a name for that account.  \n"
@@ -5255,7 +5323,7 @@ msgstr ""
 # messages-i18n.c:173 po/guile_strings.txt:7
 # messages-i18n.c:191 po/guile_strings.txt:7
 # messages-i18n.c:193 po/guile_strings.txt:7
-#: src/gnome/glade-gnc-dialogs.c:4466
+#: src/gnome/glade-gnc-dialogs.c:4528
 #, fuzzy
 msgid "Account name:"
 msgstr "Kontonamn"
@@ -5263,7 +5331,7 @@ msgstr "Kontonamn"
 # messages-i18n.c:44
 # messages-i18n.c:45
 # messages-i18n.c:45
-#: src/gnome/glade-gnc-dialogs.c:4490
+#: src/gnome/glade-gnc-dialogs.c:4552
 #, fuzzy
 msgid "QIF files you have loaded"
 msgstr ""
@@ -5273,16 +5341,16 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:155
 # src/gnome/glade-gnc-dialogs.c:156
 # src/gnome/glade-gnc-dialogs.c:149
-#: src/gnome/glade-gnc-dialogs.c:4498
+#: src/gnome/glade-gnc-dialogs.c:4560
 #, fuzzy
 msgid "QIF Files"
 msgstr "QIF-filnamn:"
 
-#: src/gnome/glade-gnc-dialogs.c:4521
+#: src/gnome/glade-gnc-dialogs.c:4583
 msgid "label827"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4528
+#: src/gnome/glade-gnc-dialogs.c:4590
 msgid ""
 "Click \"Load another file\" if you have more data to import at this time.\n"
 "Do this if you have saved your accounts to separate QIF files.\n"
@@ -5294,22 +5362,22 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:300
 # src/gnome/glade-gnc-dialogs.c:308
 # src/gnome/glade-gnc-dialogs.c:241
-#: src/gnome/glade-gnc-dialogs.c:4543
+#: src/gnome/glade-gnc-dialogs.c:4605
 #, fuzzy
 msgid "Load another file"
 msgstr "Öppna fil"
 
 # src/gnome/glade-gnc-dialogs.c:293
-#: src/gnome/glade-gnc-dialogs.c:4550
+#: src/gnome/glade-gnc-dialogs.c:4612
 #, fuzzy
 msgid "Unload selected file"
 msgstr "Välj fil"
 
-#: src/gnome/glade-gnc-dialogs.c:4566
+#: src/gnome/glade-gnc-dialogs.c:4628
 msgid "Your accounts and stock holdings"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4574
+#: src/gnome/glade-gnc-dialogs.c:4636
 msgid ""
 "On the next page, the accounts in your QIF files and any stocks or mutual "
 "funds\n"
@@ -5333,14 +5401,14 @@ msgid ""
 "alone.\n"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4591
+#: src/gnome/glade-gnc-dialogs.c:4653
 msgid "Match QIF accounts with Gnucash accounts"
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:333
 # src/gnome/glade-gnc-dialogs.c:341
 # src/gnome/glade-gnc-dialogs.c:274
-#: src/gnome/glade-gnc-dialogs.c:4618
+#: src/gnome/glade-gnc-dialogs.c:4680
 #, fuzzy
 msgid "QIF account name"
 msgstr "QIF-konto"
@@ -5348,7 +5416,7 @@ msgstr "QIF-konto"
 # src/gnome/glade-gnc-dialogs.c:347 src/gnome/glade-gnc-dialogs.c:401
 # src/gnome/glade-gnc-dialogs.c:355 src/gnome/glade-gnc-dialogs.c:409
 # src/gnome/glade-gnc-dialogs.c:288 src/gnome/glade-gnc-dialogs.c:342
-#: src/gnome/glade-gnc-dialogs.c:4625 src/gnome/glade-gnc-dialogs.c:4714
+#: src/gnome/glade-gnc-dialogs.c:4687 src/gnome/glade-gnc-dialogs.c:4776
 #, fuzzy
 msgid "Gnucash account name"
 msgstr "GNUCash Kontonamn"
@@ -5356,24 +5424,24 @@ msgstr "GNUCash Kontonamn"
 # messages-i18n.c:312
 # messages-i18n.c:348
 # messages-i18n.c:349
-#: src/gnome/glade-gnc-dialogs.c:4632 src/gnome/glade-gnc-dialogs.c:4721
+#: src/gnome/glade-gnc-dialogs.c:4694 src/gnome/glade-gnc-dialogs.c:4783
 #, fuzzy
 msgid "New?"
 msgstr "Nytt"
 
-#: src/gnome/glade-gnc-dialogs.c:4639
+#: src/gnome/glade-gnc-dialogs.c:4701
 msgid "Click \"Next\" to check matchings for QIF categories. "
 msgstr ""
 
 # po/guile_strings.txt:98
 # po/guile_strings.txt:111
 # po/guile_strings.txt:111
-#: src/gnome/glade-gnc-dialogs.c:4655
+#: src/gnome/glade-gnc-dialogs.c:4717
 #, fuzzy
 msgid "Income and expense categories"
 msgstr "Kasta om inkomst och utgiftskonton."
 
-#: src/gnome/glade-gnc-dialogs.c:4663
+#: src/gnome/glade-gnc-dialogs.c:4725
 msgid ""
 "Gnucash uses separate Income and Expense accounts rather than categories\n"
 "to classify your transactions. Each of the categories in your QIF file will "
@@ -5390,19 +5458,19 @@ msgid ""
 "within GnuCash."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4680
+#: src/gnome/glade-gnc-dialogs.c:4742
 msgid "Match QIF categories with Gnucash accounts"
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:387
 # src/gnome/glade-gnc-dialogs.c:395
 # src/gnome/glade-gnc-dialogs.c:328
-#: src/gnome/glade-gnc-dialogs.c:4707
+#: src/gnome/glade-gnc-dialogs.c:4769
 #, fuzzy
 msgid "QIF category name"
 msgstr "QIF kategori"
 
-#: src/gnome/glade-gnc-dialogs.c:4728
+#: src/gnome/glade-gnc-dialogs.c:4790
 msgid ""
 "Click \"Next\" to enter information about the currency used in your QIF "
 "files."
@@ -5411,12 +5479,12 @@ msgstr ""
 # po/guile_strings.txt:203
 # po/guile_strings.txt:236
 # po/guile_strings.txt:236
-#: src/gnome/glade-gnc-dialogs.c:4744
+#: src/gnome/glade-gnc-dialogs.c:4806
 #, fuzzy
 msgid "Enter the currency used for new accounts"
 msgstr "Standardvaluta för nya konton"
 
-#: src/gnome/glade-gnc-dialogs.c:4752
+#: src/gnome/glade-gnc-dialogs.c:4814
 msgid ""
 "The QIF importer cannot currently handle multi-currency QIF files. All the \n"
 "accounts in the QIF file(s) you are importing must be denominated in the\n"
@@ -5425,17 +5493,17 @@ msgid ""
 "Select the currency to use for transactions imported from your QIF files:\n"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4774
+#: src/gnome/glade-gnc-dialogs.c:4836
 msgid ""
 "Click \"Next\" to enter information about stocks and\n"
 "mutual funds in the imported data."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4790
+#: src/gnome/glade-gnc-dialogs.c:4852
 msgid "Tradable commodities"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4798
+#: src/gnome/glade-gnc-dialogs.c:4860
 msgid ""
 "In the next pages, you will be asked to provide information about stocks, \n"
 "mutual funds, and other tradable commodities that appear in the QIF file(s)\n"
@@ -5453,11 +5521,11 @@ msgid ""
 "or listing for its type.  \n"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4817
+#: src/gnome/glade-gnc-dialogs.c:4879
 msgid "Update your Gnucash accounts"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4818
+#: src/gnome/glade-gnc-dialogs.c:4880
 msgid ""
 "Click \"Finish\" to import data from the staging area and update\n"
 "your Gnucash accounts. The account and category matching\n"
@@ -5474,14 +5542,14 @@ msgstr ""
 # messages-i18n.c:240
 # messages-i18n.c:269
 # messages-i18n.c:270
-#: src/gnome/glade-gnc-dialogs.c:4946
+#: src/gnome/glade-gnc-dialogs.c:5008
 msgid "Transfer Information"
 msgstr "Överför information"
 
 # messages-i18n.c:316 po/guile_strings.txt:151
 # messages-i18n.c:352 po/guile_strings.txt:175
 # messages-i18n.c:353 po/guile_strings.txt:176
-#: src/gnome/glade-gnc-dialogs.c:4977
+#: src/gnome/glade-gnc-dialogs.c:5039
 #, fuzzy
 msgid "Num:"
 msgstr "Num"
@@ -5489,25 +5557,25 @@ msgstr "Num"
 # messages-i18n.c:242
 # messages-i18n.c:271
 # messages-i18n.c:272
-#: src/gnome/glade-gnc-dialogs.c:5066
+#: src/gnome/glade-gnc-dialogs.c:5128
 msgid "Transfer From"
 msgstr "Överföring från"
 
-#: src/gnome/glade-gnc-dialogs.c:5106 src/gnome/glade-gnc-dialogs.c:5161
+#: src/gnome/glade-gnc-dialogs.c:5168 src/gnome/glade-gnc-dialogs.c:5223
 msgid " "
 msgstr ""
 
 # messages-i18n.c:225
 # messages-i18n.c:249
 # messages-i18n.c:251
-#: src/gnome/glade-gnc-dialogs.c:5114 src/gnome/glade-gnc-dialogs.c:5169
+#: src/gnome/glade-gnc-dialogs.c:5176 src/gnome/glade-gnc-dialogs.c:5231
 msgid "Show Income/Expense"
 msgstr "Visa Inkomst/Utgift"
 
 # messages-i18n.c:243
 # messages-i18n.c:272
 # messages-i18n.c:273
-#: src/gnome/glade-gnc-dialogs.c:5121
+#: src/gnome/glade-gnc-dialogs.c:5183
 msgid "Transfer To"
 msgstr "Överföring till"
 
@@ -5517,7 +5585,7 @@ msgstr "Överföring till"
 # src/gnome/glade-gnc-dialogs.c:649
 # messages-i18n.c:307 po/guile_strings.txt:134
 # src/gnome/glade-gnc-dialogs.c:582
-#: src/gnome/glade-gnc-dialogs.c:5176
+#: src/gnome/glade-gnc-dialogs.c:5238
 #, fuzzy
 msgid "Currency Transfer"
 msgstr "Valuta"
@@ -5525,7 +5593,7 @@ msgstr "Valuta"
 # messages-i18n.c:208
 # messages-i18n.c:230
 # messages-i18n.c:232
-#: src/gnome/glade-gnc-dialogs.c:5199
+#: src/gnome/glade-gnc-dialogs.c:5261
 #, fuzzy
 msgid "Currency Account:"
 msgstr "Föräldrakonto"
@@ -5533,7 +5601,7 @@ msgstr "Föräldrakonto"
 # messages-i18n.c:188
 # messages-i18n.c:206
 # messages-i18n.c:208
-#: src/gnome/glade-gnc-dialogs.c:5207
+#: src/gnome/glade-gnc-dialogs.c:5269
 #, fuzzy
 msgid "Exchange Rate:"
 msgstr "Slutdatum"
@@ -5541,19 +5609,19 @@ msgstr "Slutdatum"
 # messages-i18n.c:251 po/guile_strings.txt:50
 # src/gnome/glade-gnc-dialogs.c:3036
 # src/gnome/glade-gnc-dialogs.c:3027
-#: src/gnome/glade-gnc-dialogs.c:5216
+#: src/gnome/glade-gnc-dialogs.c:5278
 #, fuzzy
 msgid "To Amount:"
 msgstr "Belopp:"
 
-#: src/gnome/glade-gnc-dialogs.c:5298
+#: src/gnome/glade-gnc-dialogs.c:5360
 msgid "Working..."
 msgstr ""
 
 # po/guile_strings.txt:215
 # po/guile_strings.txt:257
 # po/guile_strings.txt:257
-#: src/gnome/glade-gnc-dialogs.c:5310
+#: src/gnome/glade-gnc-dialogs.c:5372
 #, fuzzy
 msgid "Heading"
 msgstr "Stigande"
@@ -5561,41 +5629,41 @@ msgstr "Stigande"
 # po/guile_strings.txt:101
 # messages-i18n.c:308
 # messages-i18n.c:309
-#: src/gnome/gnc-datedelta.c:206
+#: src/gnome/gnc-datedelta.c:208
 msgid "Days"
 msgstr "Dagar"
 
 # po/guile_strings.txt:115
 # messages-i18n.c:398
 # messages-i18n.c:399
-#: src/gnome/gnc-datedelta.c:207
+#: src/gnome/gnc-datedelta.c:209
 msgid "Weeks"
 msgstr "Veckor"
 
 # po/guile_strings.txt:187
 # messages-i18n.c:347
 # messages-i18n.c:348
-#: src/gnome/gnc-datedelta.c:208
+#: src/gnome/gnc-datedelta.c:210
 msgid "Months"
 msgstr "Månader"
 
 # po/guile_strings.txt:185
 # messages-i18n.c:401
 # messages-i18n.c:403
-#: src/gnome/gnc-datedelta.c:209
+#: src/gnome/gnc-datedelta.c:211
 msgid "Years"
 msgstr "År"
 
 # messages-i18n.c:280
 # messages-i18n.c:281
-#: src/gnome/gnc-datedelta.c:252
+#: src/gnome/gnc-datedelta.c:254
 msgid "Ago"
 msgstr "Sedan"
 
 # messages-i18n.c:299 po/guile_strings.txt:108
 # messages-i18n.c:209
 # messages-i18n.c:211
-#: src/gnome/gnc-datedelta.c:253
+#: src/gnome/gnc-datedelta.c:255
 msgid "From Now"
 msgstr "Från nu"
 
@@ -5610,8 +5678,8 @@ msgstr "Du måste välja en skrivare först."
 # messages-i18n.c:368
 # messages-i18n.c:369
 #. desc cell
-#: src/gnome/reconcile-list.c:138 src/register/splitreg.c:89
-#: src/register/splitreg.c:170
+#: src/SplitLedger.c:3673 src/gnome/reconcile-list.c:138
+#: src/register/splitreg.c:89
 #, fuzzy
 msgid "Reconciled:R"
 msgstr "Avstämma"
@@ -5655,8 +5723,8 @@ msgstr "Huvudfönster"
 # messages-i18n.c:270
 # messages-i18n.c:301
 # messages-i18n.c:302
-#: src/gnome/window-html.c:483 src/gnome/window-register.c:893
-#: src/gnome/window-register.c:1198
+#: src/gnome/window-html.c:483 src/gnome/window-register.c:883
+#: src/gnome/window-register.c:1212
 msgid "Close"
 msgstr "Stäng"
 
@@ -5670,7 +5738,7 @@ msgstr "Stäng detta HTML fönster"
 # messages-i18n.c:255
 # messages-i18n.c:285
 # messages-i18n.c:286
-#: src/gnome/window-main.c:160
+#: src/gnome/window-main.c:161
 #, fuzzy
 msgid "Net Assets:"
 msgstr "Tillgångar"
@@ -5678,19 +5746,19 @@ msgstr "Tillgångar"
 # messages-i18n.c:327
 # messages-i18n.c:364
 # messages-i18n.c:365
-#: src/gnome/window-main.c:175
+#: src/gnome/window-main.c:176
 #, fuzzy
 msgid "Profits:"
 msgstr "Vinster"
 
-#: src/gnome/window-main.c:471 src/gnome/window-main.c:476
+#: src/gnome/window-main.c:474
 msgid "Untitled"
 msgstr ""
 
 # messages-i18n.c:11
 # messages-i18n.c:11
 # messages-i18n.c:11
-#: src/gnome/window-main.c:512
+#: src/gnome/window-main.c:510
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
@@ -5701,7 +5769,7 @@ msgstr ""
 # messages-i18n.c:17
 # messages-i18n.c:17
 # messages-i18n.c:17
-#: src/gnome/window-main.c:570
+#: src/gnome/window-main.c:568
 #, c-format
 msgid "Are you sure you want to delete the %s account?"
 msgstr "Är du säker på att du vill radera kontot %s?"
@@ -5709,7 +5777,7 @@ msgstr "Är du säker på att du vill radera kontot %s?"
 # messages-i18n.c:16
 # messages-i18n.c:16
 # messages-i18n.c:16
-#: src/gnome/window-main.c:585
+#: src/gnome/window-main.c:583
 msgid ""
 "To delete an account, you must first\n"
 "choose an account to delete.\n"
@@ -5720,7 +5788,7 @@ msgstr ""
 # messages-i18n.c:19
 # messages-i18n.c:19
 # messages-i18n.c:19
-#: src/gnome/window-main.c:599 src/gnome/window-main.c:619
+#: src/gnome/window-main.c:597 src/gnome/window-main.c:617
 #, fuzzy
 msgid ""
 "To open an account, you must first\n"
@@ -5732,7 +5800,7 @@ msgstr ""
 # messages-i18n.c:15
 # messages-i18n.c:15
 # messages-i18n.c:15
-#: src/gnome/window-main.c:644
+#: src/gnome/window-main.c:642
 msgid ""
 "To edit an account, you must first\n"
 "choose an account to edit.\n"
@@ -5743,7 +5811,7 @@ msgstr ""
 # messages-i18n.c:22
 # messages-i18n.c:22
 # messages-i18n.c:22
-#: src/gnome/window-main.c:663
+#: src/gnome/window-main.c:661
 #, fuzzy
 msgid ""
 "To reconcile an account, you must first\n"
@@ -5755,84 +5823,84 @@ msgstr ""
 # messages-i18n.c:20
 # messages-i18n.c:20
 # messages-i18n.c:20
-#: src/gnome/window-main.c:682 src/gnome/window-main.c:701
+#: src/gnome/window-main.c:680 src/gnome/window-main.c:699
 msgid "You must select an account to scrub."
 msgstr "Du måste välja ett konto att städa upp."
 
 # messages-i18n.c:336
 # messages-i18n.c:373
 # messages-i18n.c:374
-#: src/FileDialog.c:489 src/gnome/window-main.c:1005
+#: src/FileDialog.c:467 src/gnome/window-main.c:1001
 msgid "Save"
 msgstr "Spara"
 
 # messages-i18n.c:107
 # messages-i18n.c:118
 # messages-i18n.c:120
-#: src/gnome/window-main.c:1006
+#: src/gnome/window-main.c:1002
 msgid "Save the file to disk"
 msgstr "Spara fil till disk"
 
 # messages-i18n.c:302
 # messages-i18n.c:337
 # messages-i18n.c:338
-#: src/gnome/window-main.c:1015
+#: src/gnome/window-main.c:1011
 msgid "Import"
 msgstr "Importera"
 
 # messages-i18n.c:88
 # messages-i18n.c:96
 # messages-i18n.c:98
-#: src/gnome/window-main.c:1016 src/gnome/window-main.c:1125
+#: src/gnome/window-main.c:1012 src/gnome/window-main.c:1120
 msgid "Import a Quicken QIF file"
 msgstr "Importera en Quicken QIF fil."
 
 # messages-i18n.c:95
 # messages-i18n.c:104
 # messages-i18n.c:106
-#: src/gnome/window-main.c:1027 src/gnome/window-main.c:1184
+#: src/gnome/window-main.c:1023 src/gnome/window-main.c:1179
 msgid "Open the selected account"
 msgstr "Öppna det valda kontot"
 
 # messages-i18n.c:290
 # messages-i18n.c:322
 # messages-i18n.c:323
-#: src/gnome/window-main.c:1036 src/gnome/window-reconcile.c:1199
+#: src/gnome/window-main.c:1032 src/gnome/window-reconcile.c:1202
 msgid "Edit"
 msgstr "Redigera"
 
 # messages-i18n.c:80
 # messages-i18n.c:87
 # messages-i18n.c:89
-#: src/gnome/window-main.c:1037 src/gnome/window-main.c:1200
+#: src/gnome/window-main.c:1033 src/gnome/window-main.c:1195
 msgid "Edit the selected account"
 msgstr "Redigera det valda kontot"
 
 # messages-i18n.c:312
 # messages-i18n.c:348
 # messages-i18n.c:349
-#: src/gnome/window-main.c:1047 src/gnome/window-reconcile.c:1192
+#: src/gnome/window-main.c:1043 src/gnome/window-reconcile.c:1195
 msgid "New"
 msgstr "Nytt"
 
 # messages-i18n.c:92
 # messages-i18n.c:101
 # messages-i18n.c:103
-#: src/gnome/window-main.c:1048 src/gnome/window-main.c:1226
-#: src/gnome/window-register.c:1271
+#: src/gnome/window-main.c:1044 src/gnome/window-main.c:1221
+#: src/gnome/window-register.c:1285
 msgid "Create a new account"
 msgstr "Skapa ett nytt konto"
 
 # messages-i18n.c:76
 # messages-i18n.c:83
 # messages-i18n.c:85
-#: src/gnome/window-main.c:1058 src/gnome/window-main.c:1234
+#: src/gnome/window-main.c:1054 src/gnome/window-main.c:1229
 msgid "Delete selected account"
 msgstr "Radera det valda kontot"
 
 # messages-i18n.c:92
 # messages-i18n.c:94
-#: src/gnome/window-main.c:1069 src/gnome/window-register.c:884
+#: src/gnome/window-main.c:1065 src/gnome/window-register.c:874
 #, fuzzy
 msgid "Find transactions with a search"
 msgstr "Hitta transaktioner med en sökning."
@@ -5840,204 +5908,204 @@ msgstr "Hitta transaktioner med en sökning."
 # messages-i18n.c:292
 # messages-i18n.c:324
 # messages-i18n.c:325
-#: src/gnome/window-main.c:1079
+#: src/gnome/window-main.c:1075
 msgid "Exit"
 msgstr "Avsluta"
 
 # messages-i18n.c:83
 # messages-i18n.c:90
 # messages-i18n.c:92
-#: src/gnome/window-main.c:1080
+#: src/gnome/window-main.c:1076
 msgid "Exit GnuCash"
 msgstr "Avsluta GnuCash"
 
 # messages-i18n.c:201
 # messages-i18n.c:220
 # messages-i18n.c:222
-#: src/gnome/window-main.c:1111
+#: src/gnome/window-main.c:1106
 msgid "New File"
 msgstr "Ny fil"
 
 # messages-i18n.c:93
 # messages-i18n.c:102
 # messages-i18n.c:104
-#: src/gnome/window-main.c:1112
+#: src/gnome/window-main.c:1107
 msgid "Create a new file"
 msgstr "Skapa en ny fil"
 
 # messages-i18n.c:193
 # messages-i18n.c:212
 # messages-i18n.c:214
-#: src/gnome/window-main.c:1124
+#: src/gnome/window-main.c:1119
 msgid "Import QIF..."
 msgstr "Importera QIF..."
 
 # messages-i18n.c:154
 # messages-i18n.c:171
 # messages-i18n.c:173
-#: src/gnome/window-main.c:1140
+#: src/gnome/window-main.c:1135
 msgid "_Preferences..."
 msgstr "_Inställningar..."
 
 # messages-i18n.c:99
 # messages-i18n.c:109
 # messages-i18n.c:111
-#: src/gnome/window-main.c:1141
+#: src/gnome/window-main.c:1136
 msgid "Open the global preferences dialog"
 msgstr "Öppna de globala inställningarnas dialogruta"
 
 # messages-i18n.c:161
 # messages-i18n.c:179
 # messages-i18n.c:181
-#: src/gnome/window-main.c:1153
+#: src/gnome/window-main.c:1148
 msgid "Scrub A_ccount"
 msgstr "Städa upp _konto"
 
 # messages-i18n.c:108
 # messages-i18n.c:119
 # messages-i18n.c:121
-#: src/gnome/window-main.c:1154 src/gnome/window-reconcile.c:1036
+#: src/gnome/window-main.c:1149 src/gnome/window-reconcile.c:1039
 msgid "Identify and fix problems in the account"
 msgstr "Identifiera och fixa problem i kontot"
 
 # messages-i18n.c:163
 # messages-i18n.c:181
 # messages-i18n.c:183
-#: src/gnome/window-main.c:1161
+#: src/gnome/window-main.c:1156
 msgid "Scrub Su_baccounts"
 msgstr "Städa upp u_nderkonton"
 
 # messages-i18n.c:110
 # messages-i18n.c:121
 # messages-i18n.c:123
-#: src/gnome/window-main.c:1162
+#: src/gnome/window-main.c:1157
 msgid "Identify and fix problems in the account and its subaccounts"
 msgstr "Identifiera och fixa problem i kontot och dess underkonton"
 
 # messages-i18n.c:162
 # messages-i18n.c:180
 # messages-i18n.c:182
-#: src/gnome/window-main.c:1170
+#: src/gnome/window-main.c:1165
 msgid "Scrub A_ll"
 msgstr "Städa upp _allt"
 
 # messages-i18n.c:109
 # messages-i18n.c:120
 # messages-i18n.c:122
-#: src/gnome/window-main.c:1171
+#: src/gnome/window-main.c:1166
 msgid "Identify and fix problems in all the accounts"
 msgstr "Identifiera och fixa problem i alla konton"
 
 # messages-i18n.c:151
 # messages-i18n.c:167
 # messages-i18n.c:169
-#: src/gnome/window-main.c:1183 src/gnome/window-reconcile.c:1013
+#: src/gnome/window-main.c:1178 src/gnome/window-reconcile.c:1016
 msgid "_Open Account"
 msgstr "_Öppna konto"
 
 # messages-i18n.c:152
 # messages-i18n.c:168
 # messages-i18n.c:170
-#: src/gnome/window-main.c:1191
+#: src/gnome/window-main.c:1186
 msgid "Open S_ubaccounts"
 msgstr "Öppna _Underkonton"
 
 # messages-i18n.c:97
 # messages-i18n.c:106
 # messages-i18n.c:108
-#: src/gnome/window-main.c:1192
+#: src/gnome/window-main.c:1187
 msgid "Open the selected account and all its subaccounts"
 msgstr "Öppna det valda kontot och alla dess underkonton"
 
 # messages-i18n.c:142
 # messages-i18n.c:157
 # messages-i18n.c:159
-#: src/gnome/window-main.c:1199 src/gnome/window-reconcile.c:1020
-#: src/gnome/window-register.c:1244
+#: src/gnome/window-main.c:1194 src/gnome/window-reconcile.c:1023
+#: src/gnome/window-register.c:1258
 msgid "_Edit Account"
 msgstr "_Redigera konto"
 
 # messages-i18n.c:156
 # messages-i18n.c:174
 # messages-i18n.c:176
-#: src/gnome/window-main.c:1208 src/gnome/window-register.c:1253
+#: src/gnome/window-main.c:1203 src/gnome/window-register.c:1267
 msgid "_Reconcile..."
 msgstr "_Avstämma..."
 
 # messages-i18n.c:101
 # messages-i18n.c:111
 # messages-i18n.c:113
-#: src/gnome/window-main.c:1209
+#: src/gnome/window-main.c:1204
 msgid "Reconcile the selected account"
 msgstr "Avstämma det valda kontot"
 
 # messages-i18n.c:171
 # messages-i18n.c:189
 # messages-i18n.c:191
-#: src/gnome/window-main.c:1216 src/gnome/window-reconcile.c:1028
-#: src/gnome/window-register.c:1261
+#: src/gnome/window-main.c:1211 src/gnome/window-reconcile.c:1031
+#: src/gnome/window-register.c:1275
 msgid "_Transfer..."
 msgstr "_Överför..."
 
 # messages-i18n.c:121
 # messages-i18n.c:134
 # messages-i18n.c:136
-#: src/gnome/window-main.c:1217 src/gnome/window-reconcile.c:1028
-#: src/gnome/window-register.c:875 src/gnome/window-register.c:1262
+#: src/gnome/window-main.c:1212 src/gnome/window-reconcile.c:1031
+#: src/gnome/window-register.c:865 src/gnome/window-register.c:1276
 msgid "Transfer funds from one account to another"
 msgstr "Överför pengar från ett konto till ett annat"
 
 # messages-i18n.c:150
 # messages-i18n.c:166
 # messages-i18n.c:168
-#: src/gnome/window-main.c:1225 src/gnome/window-register.c:1270
+#: src/gnome/window-main.c:1220 src/gnome/window-register.c:1284
 msgid "_New Account..."
 msgstr "_Nytt konto..."
 
 # messages-i18n.c:138
 # messages-i18n.c:153
 # messages-i18n.c:155
-#: src/gnome/window-main.c:1233
+#: src/gnome/window-main.c:1228
 msgid "_Delete Account"
 msgstr "_Radera konto"
 
 # messages-i18n.c:160
 # messages-i18n.c:178
 # messages-i18n.c:180
-#: src/gnome/window-main.c:1240 src/gnome/window-reconcile.c:1036
-#: src/gnome/window-register.c:1279
+#: src/gnome/window-main.c:1235 src/gnome/window-reconcile.c:1039
+#: src/gnome/window-register.c:1293
 msgid "_Scrub"
 msgstr "_Städa upp"
 
-#: src/gnome/window-main.c:1248
+#: src/gnome/window-main.c:1243
 msgid "_Financial Calculator"
 msgstr ""
 
-#: src/gnome/window-main.c:1249
+#: src/gnome/window-main.c:1244
 msgid "Use the financial calculator"
 msgstr ""
 
 # messages-i18n.c:163
 # messages-i18n.c:165
-#: src/gnome/window-main.c:1261
+#: src/gnome/window-main.c:1256
 msgid "_Manual"
 msgstr "_Manual"
 
 # messages-i18n.c:85
 # messages-i18n.c:98
 # messages-i18n.c:100
-#: src/gnome/window-main.c:1262
+#: src/gnome/window-main.c:1257
 msgid "Open the GnuCash Manual"
 msgstr "Öppna GnuCash manual"
 
-#: src/gnome/window-main.c:1269
+#: src/gnome/window-main.c:1264
 msgid "_Tips Of The Day"
 msgstr ""
 
 # po/guile_strings.txt:222
 # po/guile_strings.txt:223
 # po/guile_strings.txt:223
-#: src/gnome/window-main.c:1270
+#: src/gnome/window-main.c:1265
 #, fuzzy
 msgid "View the Tips of the Day"
 msgstr "Visa datum?"
@@ -6045,14 +6113,14 @@ msgstr "Visa datum?"
 # messages-i18n.c:132
 # messages-i18n.c:145
 # messages-i18n.c:147
-#: src/gnome/window-main.c:1284
+#: src/gnome/window-main.c:1279
 msgid "_Accounts"
 msgstr "_Konton"
 
 # po/guile_strings.txt:265
 # po/guile_strings.txt:316
 # po/guile_strings.txt:316
-#: src/gnome/window-main.c:1285
+#: src/gnome/window-main.c:1280
 #, fuzzy
 msgid "_Tools"
 msgstr "Totalt"
@@ -6060,14 +6128,14 @@ msgstr "Totalt"
 # messages-i18n.c:247
 # messages-i18n.c:235
 # messages-i18n.c:237
-#: src/gnome/window-reconcile.c:328
+#: src/gnome/window-reconcile.c:331
 msgid "Reconcile Information"
 msgstr "Avstämmningsinformation"
 
 # messages-i18n.c:219
 # messages-i18n.c:265
 # messages-i18n.c:266
-#: src/gnome/window-reconcile.c:332
+#: src/gnome/window-reconcile.c:335
 msgid "Statement Date:"
 msgstr "Avstämmningsdatum:"
 
@@ -6075,7 +6143,7 @@ msgstr "Avstämmningsdatum:"
 # messages-i18n.c:263
 # messages-i18n.c:264
 #. starting balance title/value
-#: src/gnome/window-reconcile.c:333 src/gnome/window-reconcile.c:1414
+#: src/gnome/window-reconcile.c:336 src/gnome/window-reconcile.c:1446
 #, fuzzy
 msgid "Starting Balance:"
 msgstr "Startsaldo"
@@ -6084,7 +6152,7 @@ msgstr "Startsaldo"
 # messages-i18n.c:205
 # messages-i18n.c:207
 #. ending balance title/value
-#: src/gnome/window-reconcile.c:334 src/gnome/window-reconcile.c:1424
+#: src/gnome/window-reconcile.c:337 src/gnome/window-reconcile.c:1456
 #, fuzzy
 msgid "Ending Balance:"
 msgstr "Slutsaldo"
@@ -6092,21 +6160,21 @@ msgstr "Slutsaldo"
 # messages-i18n.c:278
 # messages-i18n.c:310
 # messages-i18n.c:311
-#: src/gnome/window-reconcile.c:495 src/gnome/window-reconcile.c:1002
+#: src/gnome/window-reconcile.c:498 src/gnome/window-reconcile.c:1005
 msgid "Debits"
 msgstr "Debeter"
 
 # messages-i18n.c:274
 # messages-i18n.c:305
 # messages-i18n.c:306
-#: src/gnome/window-reconcile.c:505 src/gnome/window-reconcile.c:1003
+#: src/gnome/window-reconcile.c:508 src/gnome/window-reconcile.c:1006
 msgid "Credits"
 msgstr "Krediter"
 
 # messages-i18n.c:354
 # messages-i18n.c:391 messages-i18n.c:392 po/guile_strings.txt:207
 # messages-i18n.c:392 messages-i18n.c:393 po/guile_strings.txt:207
-#: src/gnome/window-reconcile.c:580
+#: src/gnome/window-reconcile.c:583
 #, fuzzy
 msgid "Total:"
 msgstr "Totalt"
@@ -6114,20 +6182,20 @@ msgstr "Totalt"
 # messages-i18n.c:56
 # messages-i18n.c:57
 # messages-i18n.c:59
-#: src/gnome/window-reconcile.c:673 src/gnome/window-register.c:2406
+#: src/gnome/window-reconcile.c:676 src/gnome/window-register.c:2474
 msgid "Are you sure you want to delete the current transaction?"
 msgstr "Är du säker på att du vill radera den aktuella transaktionen?"
 
 # messages-i18n.c:247
 # messages-i18n.c:173
 # messages-i18n.c:175
-#: src/gnome/window-reconcile.c:927
+#: src/gnome/window-reconcile.c:930
 msgid "_Reconcile Information..."
 msgstr "_Avstämmningsinformation..."
 
 # messages-i18n.c:114
 # messages-i18n.c:116
-#: src/gnome/window-reconcile.c:928
+#: src/gnome/window-reconcile.c:931
 msgid ""
 "Change the reconcile information including statement date and ending balance."
 msgstr ""
@@ -6136,182 +6204,182 @@ msgstr ""
 # messages-i18n.c:145
 # messages-i18n.c:160
 # messages-i18n.c:162
-#: src/gnome/window-reconcile.c:937
+#: src/gnome/window-reconcile.c:940
 msgid "_Finish"
 msgstr "_Slutför"
 
 # messages-i18n.c:103
 # messages-i18n.c:113
 # messages-i18n.c:115
-#: src/gnome/window-reconcile.c:938 src/gnome/window-reconcile.c:1222
+#: src/gnome/window-reconcile.c:941 src/gnome/window-reconcile.c:1225
 msgid "Finish the reconciliation of this account"
 msgstr "Slutför avstämning av detta konto"
 
 # messages-i18n.c:136
 # messages-i18n.c:149
 # messages-i18n.c:151
-#: src/gnome/window-reconcile.c:945 src/gnome/window-register.c:1301
-#: src/gnome/window-register.c:1446
+#: src/gnome/window-reconcile.c:948 src/gnome/window-register.c:1315
+#: src/gnome/window-register.c:1474
 msgid "_Cancel"
 msgstr "_Avbryt"
 
 # messages-i18n.c:102
 # messages-i18n.c:112
 # messages-i18n.c:114
-#: src/gnome/window-reconcile.c:946
+#: src/gnome/window-reconcile.c:949
 msgid "Cancel the reconciliation of this account"
 msgstr "Avbryt avstämning av detta kontot"
 
 # messages-i18n.c:237
 # messages-i18n.c:264
 # messages-i18n.c:265
-#: src/gnome/window-reconcile.c:956 src/gnome/window-reconcile.c:979
-#: src/gnome/window-register.c:1133
+#: src/gnome/window-reconcile.c:959 src/gnome/window-reconcile.c:982
+#: src/gnome/window-register.c:1147
 msgid "Standard order"
 msgstr "Standardordning"
 
 # messages-i18n.c:120
 # messages-i18n.c:133
 # messages-i18n.c:135
-#: src/gnome/window-reconcile.c:957 src/gnome/window-reconcile.c:980
-#: src/gnome/window-register.c:1134
+#: src/gnome/window-reconcile.c:960 src/gnome/window-reconcile.c:983
+#: src/gnome/window-register.c:1148
 msgid "Keep normal account order"
 msgstr "Bevara normal kontoordning"
 
 # messages-i18n.c:234
 # messages-i18n.c:131 messages-i18n.c:259
 # messages-i18n.c:133 messages-i18n.c:260
-#: src/gnome/window-reconcile.c:959 src/gnome/window-reconcile.c:960
-#: src/gnome/window-reconcile.c:982 src/gnome/window-reconcile.c:983
-#: src/gnome/window-register.c:1148 src/gnome/window-register.c:1149
+#: src/gnome/window-reconcile.c:962 src/gnome/window-reconcile.c:963
+#: src/gnome/window-reconcile.c:985 src/gnome/window-reconcile.c:986
+#: src/gnome/window-register.c:1162 src/gnome/window-register.c:1163
 msgid "Sort by Num"
 msgstr "Sortera efter nummer"
 
 # messages-i18n.c:232
 # messages-i18n.c:128 messages-i18n.c:256
 # messages-i18n.c:130 messages-i18n.c:257
-#: src/gnome/window-reconcile.c:962 src/gnome/window-reconcile.c:963
-#: src/gnome/window-reconcile.c:985 src/gnome/window-reconcile.c:986
-#: src/gnome/window-register.c:1157 src/gnome/window-register.c:1158
+#: src/gnome/window-reconcile.c:965 src/gnome/window-reconcile.c:966
+#: src/gnome/window-reconcile.c:988 src/gnome/window-reconcile.c:989
+#: src/gnome/window-register.c:1171 src/gnome/window-register.c:1172
 msgid "Sort by Description"
 msgstr "Sortera efter beskrivning"
 
 # messages-i18n.c:230
 # messages-i18n.c:126 messages-i18n.c:254
 # messages-i18n.c:128 messages-i18n.c:255
-#: src/gnome/window-reconcile.c:965 src/gnome/window-reconcile.c:966
-#: src/gnome/window-reconcile.c:988 src/gnome/window-reconcile.c:989
-#: src/gnome/window-register.c:1151 src/gnome/window-register.c:1152
+#: src/gnome/window-reconcile.c:968 src/gnome/window-reconcile.c:969
+#: src/gnome/window-reconcile.c:991 src/gnome/window-reconcile.c:992
+#: src/gnome/window-register.c:1165 src/gnome/window-register.c:1166
 msgid "Sort by Amount"
 msgstr "Sortera efter belopp"
 
 # messages-i18n.c:96
 # messages-i18n.c:105
 # messages-i18n.c:107
-#: src/gnome/window-reconcile.c:1013 src/gnome/window-reconcile.c:1214
+#: src/gnome/window-reconcile.c:1016 src/gnome/window-reconcile.c:1217
 msgid "Open the account"
 msgstr "Öppna ett konto"
 
 # messages-i18n.c:81
 # messages-i18n.c:88
 # messages-i18n.c:90
-#: src/gnome/window-reconcile.c:1020 src/gnome/window-register.c:1245
+#: src/gnome/window-reconcile.c:1023 src/gnome/window-register.c:1259
 msgid "Edit the main account for this register"
 msgstr "Ändra huvudkontot för detta register"
 
 # messages-i18n.c:148
 # messages-i18n.c:164
 # messages-i18n.c:166
-#: src/gnome/window-reconcile.c:1048 src/gnome/window-reconcile.c:1132
+#: src/gnome/window-reconcile.c:1051 src/gnome/window-reconcile.c:1135
 msgid "_New"
 msgstr "_Nytt"
 
 # messages-i18n.c:94
 # messages-i18n.c:103
 # messages-i18n.c:105
-#: src/gnome/window-reconcile.c:1048 src/gnome/window-reconcile.c:1132
-#: src/gnome/window-reconcile.c:1192
+#: src/gnome/window-reconcile.c:1051 src/gnome/window-reconcile.c:1135
+#: src/gnome/window-reconcile.c:1195
 msgid "Add a new transaction to the account"
 msgstr "Lägg till ny transaktion till kontot"
 
 # messages-i18n.c:141
 # messages-i18n.c:156
 # messages-i18n.c:158
-#: src/gnome/window-reconcile.c:1055 src/gnome/window-reconcile.c:1139
+#: src/gnome/window-reconcile.c:1058 src/gnome/window-reconcile.c:1142
 msgid "_Edit"
 msgstr "_Redigera"
 
 # messages-i18n.c:82
 # messages-i18n.c:89
 # messages-i18n.c:91
-#: src/gnome/window-reconcile.c:1055 src/gnome/window-reconcile.c:1139
-#: src/gnome/window-reconcile.c:1199
+#: src/gnome/window-reconcile.c:1058 src/gnome/window-reconcile.c:1142
+#: src/gnome/window-reconcile.c:1202
 msgid "Edit the current transaction"
 msgstr "Redigera den aktuella transaktionen"
 
 # messages-i18n.c:139
 # messages-i18n.c:154
 # messages-i18n.c:156
-#: src/gnome/window-reconcile.c:1062 src/gnome/window-reconcile.c:1146
-#: src/gnome/window-register.c:1309 src/gnome/window-register.c:1454
+#: src/gnome/window-reconcile.c:1065 src/gnome/window-reconcile.c:1149
+#: src/gnome/window-register.c:1323 src/gnome/window-register.c:1482
 msgid "_Delete"
 msgstr "_Radera"
 
 # messages-i18n.c:77
 # messages-i18n.c:84
 # messages-i18n.c:86
-#: src/gnome/window-reconcile.c:1062 src/gnome/window-reconcile.c:1146
-#: src/gnome/window-reconcile.c:1206 src/gnome/window-register.c:838
-#: src/gnome/window-register.c:1310 src/gnome/window-register.c:1455
+#: src/gnome/window-reconcile.c:1065 src/gnome/window-reconcile.c:1149
+#: src/gnome/window-reconcile.c:1209 src/gnome/window-register.c:820
+#: src/gnome/window-register.c:1324 src/gnome/window-register.c:1483
 msgid "Delete the current transaction"
 msgstr "Radera den aktuella transaktionen"
 
 # messages-i18n.c:146
 # messages-i18n.c:161
 # messages-i18n.c:163
-#: src/gnome/window-reconcile.c:1074 src/gnome/window-register.c:1359
+#: src/gnome/window-reconcile.c:1077 src/gnome/window-register.c:1381
 msgid "_Help"
 msgstr "_Hjälp"
 
 # messages-i18n.c:85
 # messages-i18n.c:93
 # messages-i18n.c:95
-#: src/gnome/window-reconcile.c:1074 src/gnome/window-register.c:1360
+#: src/gnome/window-reconcile.c:1077 src/gnome/window-register.c:1382
 msgid "Open the GnuCash help window"
 msgstr "Öppna GnuCash hjälpfönster"
 
 # messages-i18n.c:157
 # messages-i18n.c:175
 # messages-i18n.c:177
-#: src/gnome/window-reconcile.c:1084
+#: src/gnome/window-reconcile.c:1087
 msgid "_Reconcile"
 msgstr "_Avstämma"
 
 # messages-i18n.c:167
 # messages-i18n.c:185
 # messages-i18n.c:187
-#: src/gnome/window-reconcile.c:1085 src/gnome/window-register.c:1193
+#: src/gnome/window-reconcile.c:1088 src/gnome/window-register.c:1207
 msgid "Sort _Order"
 msgstr "Sorterings_ordning"
 
 # messages-i18n.c:131
 # messages-i18n.c:144
 # messages-i18n.c:146
-#: src/gnome/window-reconcile.c:1086 src/gnome/window-register.c:1372
+#: src/gnome/window-reconcile.c:1089 src/gnome/window-register.c:1394
 msgid "_Account"
 msgstr "_Konto"
 
 # messages-i18n.c:169
 # messages-i18n.c:187
 # messages-i18n.c:189
-#: src/gnome/window-reconcile.c:1087 src/gnome/window-register.c:1373
+#: src/gnome/window-reconcile.c:1090 src/gnome/window-register.c:1395
 msgid "_Transaction"
 msgstr "_Transaktion"
 
 # messages-i18n.c:190
 # messages-i18n.c:208
 # messages-i18n.c:210
-#: src/gnome/window-reconcile.c:1222
+#: src/gnome/window-reconcile.c:1225
 msgid "Finish"
 msgstr "Slutför"
 
@@ -6319,7 +6387,7 @@ msgstr "Slutför"
 # messages-i18n.c:234
 # messages-i18n.c:236
 #. reconciled balance title/value
-#: src/gnome/window-reconcile.c:1434
+#: src/gnome/window-reconcile.c:1466
 #, fuzzy
 msgid "Reconciled Balance:"
 msgstr "Avstämmt saldo"
@@ -6328,7 +6396,7 @@ msgstr "Avstämmt saldo"
 # messages-i18n.c:317
 # messages-i18n.c:318
 #. difference title/value
-#: src/gnome/window-reconcile.c:1444
+#: src/gnome/window-reconcile.c:1476
 #, fuzzy
 msgid "Difference:"
 msgstr "Skillnad"
@@ -6336,7 +6404,7 @@ msgstr "Skillnad"
 # messages-i18n.c:47
 # messages-i18n.c:48
 # messages-i18n.c:50
-#: src/gnome/window-reconcile.c:1655
+#: src/gnome/window-reconcile.c:1687
 msgid ""
 "The account is not balanced.\n"
 "Are you sure you want to finish?"
@@ -6347,7 +6415,7 @@ msgstr ""
 # messages-i18n.c:48
 # messages-i18n.c:49
 # messages-i18n.c:51
-#: src/gnome/window-reconcile.c:1704
+#: src/gnome/window-reconcile.c:1736
 msgid ""
 "You have made changes to this reconcile window.\n"
 "Are you sure you want to cancel?"
@@ -6358,21 +6426,21 @@ msgstr ""
 # messages-i18n.c:212
 # messages-i18n.c:236
 # messages-i18n.c:238
-#: src/gnome/window-register.c:666
+#: src/gnome/window-register.c:648
 msgid "Register date ranges"
 msgstr "Kontoutdragets datumintervall"
 
 # messages-i18n.c:227
 # messages-i18n.c:251
 # messages-i18n.c:252
-#: src/gnome/window-register.c:708
+#: src/gnome/window-register.c:690
 msgid "Show Earliest"
 msgstr "Visa tidigaste"
 
 # messages-i18n.c:236
 # messages-i18n.c:262
 # messages-i18n.c:263
-#: src/gnome/window-register.c:719
+#: src/gnome/window-register.c:701
 #, fuzzy
 msgid "Start date:"
 msgstr "Startdatum"
@@ -6380,14 +6448,14 @@ msgstr "Startdatum"
 # messages-i18n.c:228
 # messages-i18n.c:252
 # messages-i18n.c:253
-#: src/gnome/window-register.c:757
+#: src/gnome/window-register.c:739
 msgid "Show Latest"
 msgstr "Visa senaste"
 
 # messages-i18n.c:188
 # messages-i18n.c:206
 # messages-i18n.c:208
-#: src/gnome/window-register.c:768
+#: src/gnome/window-register.c:750
 #, fuzzy
 msgid "End date:"
 msgstr "Slutdatum"
@@ -6395,82 +6463,99 @@ msgstr "Slutdatum"
 # messages-i18n.c:220
 # messages-i18n.c:244
 # messages-i18n.c:246
-#: src/gnome/window-register.c:800
+#: src/gnome/window-register.c:782
 msgid "Set Date Range"
 msgstr "Ställ in datumintervall"
 
 # messages-i18n.c:332
 # messages-i18n.c:369
 # messages-i18n.c:370
-#: src/gnome/window-register.c:821
+#: src/gnome/window-register.c:803
 msgid "Record"
 msgstr "Spara"
 
 # messages-i18n.c:105
 # messages-i18n.c:116
 # messages-i18n.c:118
-#: src/gnome/window-register.c:822 src/gnome/window-register.c:1294
-#: src/gnome/window-register.c:1439
+#: src/gnome/window-register.c:804 src/gnome/window-register.c:1308
+#: src/gnome/window-register.c:1467
 msgid "Record the current transaction"
 msgstr "Spara den aktuella transaktionen"
 
 # messages-i18n.c:263
 # messages-i18n.c:294
 # messages-i18n.c:295
-#: src/gnome/window-register.c:829
+#: src/gnome/window-register.c:811
 msgid "Cancel"
 msgstr "Avbryt"
 
 # messages-i18n.c:72
 # messages-i18n.c:76
 # messages-i18n.c:78
-#: src/gnome/window-register.c:830 src/gnome/window-register.c:1302
-#: src/gnome/window-register.c:1447
+#: src/gnome/window-register.c:812 src/gnome/window-register.c:1316
+#: src/gnome/window-register.c:1475
 msgid "Cancel the current transaction"
 msgstr "Avbryt den aktuella transaktionen"
 
 # messages-i18n.c:289
 # messages-i18n.c:321
 # messages-i18n.c:322
-#: src/gnome/window-register.c:846
+#: src/gnome/window-register.c:828
 msgid "Duplicate"
 msgstr "Duplicera"
 
 # messages-i18n.c:79
 # messages-i18n.c:86
 # messages-i18n.c:88
-#: src/gnome/window-register.c:847 src/gnome/window-register.c:1319
-#: src/gnome/window-register.c:1464
+#: src/gnome/window-register.c:829 src/gnome/window-register.c:1333
+#: src/gnome/window-register.c:1492
 msgid "Make a copy of the current transaction"
 msgstr "Skapa en kopia av den aktuella transaktionen"
+
+# messages-i18n.c:346
+# messages-i18n.c:383
+# messages-i18n.c:384
+#. Distribution
+#: src/gnome/window-register.c:837 src/register/splitreg.c:234
+msgid "Split"
+msgstr "Delning"
+
+# messages-i18n.c:82
+# messages-i18n.c:89
+# messages-i18n.c:91
+#: src/gnome/window-register.c:838 src/gnome/window-register.c:1342
+#: src/gnome/window-register.c:1501
+#, fuzzy
+msgid "Show all splits in the current transaction"
+msgstr "Redigera den aktuella transaktionen"
 
 # messages-i18n.c:260
 # messages-i18n.c:291
 # messages-i18n.c:292
-#: src/gnome/window-register.c:855
+#: src/gnome/window-register.c:845
 msgid "Blank"
 msgstr "Tom"
 
 # messages-i18n.c:71
 # messages-i18n.c:75
 # messages-i18n.c:77
-#: src/gnome/window-register.c:856 src/gnome/window-register.c:1328
-#: src/gnome/window-register.c:1473
+#: src/gnome/window-register.c:846 src/gnome/window-register.c:1350
+#: src/gnome/window-register.c:1509
 msgid "Move to the blank transaction at the bottom of the register"
 msgstr "Flytta till den tomma transaktionen i slutet på registret"
 
 # messages-i18n.c:306
 # messages-i18n.c:341
 # messages-i18n.c:342
-#: src/gnome/window-register.c:864
+#: src/gnome/window-register.c:854
 msgid "Jump"
 msgstr "Hoppa"
 
 # messages-i18n.c:89
 # messages-i18n.c:97
 # messages-i18n.c:99
-#: src/gnome/window-register.c:865 src/gnome/window-register.c:1337
-#: src/gnome/window-register.c:1482
+#: src/gnome/window-register.c:855 src/gnome/window-register.c:1359
+#: src/gnome/window-register.c:1518
 msgid "Jump to the corresponding transaction in the other account"
 msgstr "Hoppa till motsvarande transaktion i det andra kontot"
 
@@ -6478,22 +6563,22 @@ msgstr "Hoppa till motsvarande transaktion i det andra kontot"
 # messages-i18n.c:395
 # messages-i18n.c:396
 #. balance cell
-#: src/gnome/window-register.c:874 src/register/splitreg.c:92
-#: src/register/splitreg.c:175 src/register/splitreg.c:229
+#: src/SplitLedger.c:3729 src/gnome/window-register.c:864
+#: src/register/splitreg.c:92 src/register/splitreg.c:174
 msgid "Transfer"
 msgstr "Överföring"
 
 # messages-i18n.c:74
 # messages-i18n.c:78
 # messages-i18n.c:80
-#: src/gnome/window-register.c:894 src/gnome/window-register.c:1199
+#: src/gnome/window-register.c:884 src/gnome/window-register.c:1213
 msgid "Close this register window"
 msgstr "Stäng detta registerfönster"
 
 # messages-i18n.c:178
 # messages-i18n.c:196
 # src/gnome/glade-gnc-dialogs.c:2435
-#: src/gnome/window-register.c:954
+#: src/gnome/window-register.c:946
 #, fuzzy
 msgid "Cleared:"
 msgstr "Töm allt"
@@ -6501,49 +6586,90 @@ msgstr "Töm allt"
 # messages-i18n.c:258 po/guile_strings.txt:12
 # messages-i18n.c:288 messages-i18n.c:289 po/guile_strings.txt:13
 # messages-i18n.c:289 messages-i18n.c:290 po/guile_strings.txt:13
-#: src/gnome/window-register.c:966
+#: src/gnome/window-register.c:958
 #, fuzzy
 msgid "Balance:"
 msgstr "Saldo"
 
-# messages-i18n.c:90
-# messages-i18n.c:99
-# messages-i18n.c:101
-#: src/gnome/window-register.c:1111
-msgid "Show transactions on multiple lines with one line for each split"
-msgstr "Visa transaktioner över flera rader med en rad för varje delning"
+# messages-i18n.c:191
+# messages-i18n.c:210
+# messages-i18n.c:212
+#: src/gnome/window-register.c:1120
+#, fuzzy
+msgid "Basic Ledger"
+msgstr "Allmän liggare"
+
+# messages-i18n.c:114 po/guile_strings.txt:130
+# messages-i18n.c:125 po/guile_strings.txt:151
+# messages-i18n.c:127 po/guile_strings.txt:152
+#: src/gnome/window-register.c:1121
+#, fuzzy
+msgid "Show transactions on one or two lines"
+msgstr "Visa transaktioner på enkla rader"
+
+#: src/gnome/window-register.c:1123
+msgid "Auto-Split Ledger"
+msgstr ""
+
+# messages-i18n.c:78 po/guile_strings.txt:126
+# messages-i18n.c:85 po/guile_strings.txt:147
+# messages-i18n.c:87 po/guile_strings.txt:148
+#: src/gnome/window-register.c:1124
+#, fuzzy
+msgid ""
+"Show transactions on one or two lines and expand the current transaction"
+msgstr "Visa transaktioner på två rader med mer information"
+
+# po/guile_strings.txt:133
+# po/guile_strings.txt:154
+# po/guile_strings.txt:155
+#: src/gnome/window-register.c:1127
+#, fuzzy
+msgid "Transaction Journal"
+msgstr "Transaktionsrapport"
+
+# messages-i18n.c:92
+# messages-i18n.c:94
+#: src/gnome/window-register.c:1128
+#, fuzzy
+msgid "Show expanded transactions with all splits"
+msgstr "Hitta transaktioner med en sökning."
+
+#: src/gnome/window-register.c:1139
+msgid "Show two lines of information for each transaction"
+msgstr ""
 
 # messages-i18n.c:231
 # messages-i18n.c:127 messages-i18n.c:255
 # messages-i18n.c:129 messages-i18n.c:256
-#: src/gnome/window-register.c:1136 src/gnome/window-register.c:1137
+#: src/gnome/window-register.c:1150 src/gnome/window-register.c:1151
 msgid "Sort by Date"
 msgstr "Sortera efter datum"
 
 # po/guile_strings.txt:37
 # messages-i18n.c:257
 # messages-i18n.c:258
-#: src/gnome/window-register.c:1139
+#: src/gnome/window-register.c:1153
 msgid "Sort by date of entry"
 msgstr "Sortera efter inmatmningsdatum"
 
 # po/guile_strings.txt:37
 # messages-i18n.c:129
 # messages-i18n.c:131
-#: src/gnome/window-register.c:1140
+#: src/gnome/window-register.c:1154
 msgid "Sort by the date of entry"
 msgstr "Sortera efter inmatningsdatum"
 
 # po/guile_strings.txt:37
 # messages-i18n.c:260
 # messages-i18n.c:261
-#: src/gnome/window-register.c:1143
+#: src/gnome/window-register.c:1157
 msgid "Sort by statement date"
 msgstr "Sortera efter avstämmningsdatum"
 
 # messages-i18n.c:132
 # messages-i18n.c:134
-#: src/gnome/window-register.c:1144
+#: src/gnome/window-register.c:1158
 #, fuzzy
 msgid "Sort by the statement date (unreconciled items last)"
 msgstr "Sortera efter avstämmningsdatum (icke avstämda rader sist)"
@@ -6551,182 +6677,190 @@ msgstr "Sortera efter avstämmningsdatum (icke avstämda rader sist)"
 # messages-i18n.c:233
 # messages-i18n.c:130 messages-i18n.c:258
 # messages-i18n.c:132 messages-i18n.c:259
-#: src/gnome/window-register.c:1154 src/gnome/window-register.c:1155
+#: src/gnome/window-register.c:1168 src/gnome/window-register.c:1169
 msgid "Sort by Memo"
 msgstr "Sortera efter anteckning"
 
 # messages-i18n.c:166
 # messages-i18n.c:184
 # messages-i18n.c:186
-#: src/gnome/window-register.c:1173
+#: src/gnome/window-register.c:1187
 msgid "Show _All"
 msgstr "Visa _allt"
 
 # messages-i18n.c:113
 # messages-i18n.c:124
 # messages-i18n.c:126
-#: src/gnome/window-register.c:1174
+#: src/gnome/window-register.c:1188
 msgid "Show all of the transactions in the account"
 msgstr "Visa alla transaktioner i kontot"
 
 # messages-i18n.c:164
 # messages-i18n.c:182
 # messages-i18n.c:184
-#: src/gnome/window-register.c:1181
+#: src/gnome/window-register.c:1195
 msgid "Set _Range..."
 msgstr "Ställ in _Intervall..."
 
 # messages-i18n.c:75
 # messages-i18n.c:82
 # messages-i18n.c:84
-#: src/gnome/window-register.c:1182
+#: src/gnome/window-register.c:1196
 msgid "Set the date range of this register"
 msgstr "Mata in datumintervall för detta register"
 
 # messages-i18n.c:168
 # messages-i18n.c:186
 # messages-i18n.c:188
-#: src/gnome/window-register.c:1192
+#: src/gnome/window-register.c:1206
 msgid "_Style"
 msgstr "_Stil"
 
 # messages-i18n.c:137
 # messages-i18n.c:152
 # messages-i18n.c:154
-#: src/gnome/window-register.c:1194
+#: src/gnome/window-register.c:1208
 msgid "_Date Range"
 msgstr "_Datum intervall"
 
 # messages-i18n.c:356
 # messages-i18n.c:151
 # messages-i18n.c:153
-#: src/gnome/window-register.c:1215
+#: src/gnome/window-register.c:1229
 msgid "Cut Transaction"
 msgstr "Klipp ut transaktion"
 
 # messages-i18n.c:80
 # messages-i18n.c:81
 # messages-i18n.c:83
-#: src/gnome/window-register.c:1216
+#: src/gnome/window-register.c:1230
 msgid "Cut the selected transaction"
 msgstr "Klipp ut den valda transaktionen"
 
 # messages-i18n.c:356
 # messages-i18n.c:150
 # messages-i18n.c:152
-#: src/gnome/window-register.c:1223
+#: src/gnome/window-register.c:1237
 msgid "Copy Transaction"
 msgstr "Kopiera transaktion"
 
 # messages-i18n.c:95
 # messages-i18n.c:79
 # messages-i18n.c:81
-#: src/gnome/window-register.c:1224
+#: src/gnome/window-register.c:1238
 msgid "Copy the selected transaction"
 msgstr "Kopiera den valda transaktionen"
 
 # messages-i18n.c:184
 # messages-i18n.c:169
 # messages-i18n.c:171
-#: src/gnome/window-register.c:1231
+#: src/gnome/window-register.c:1245
 msgid "Paste Transaction"
 msgstr "Klistra in transaktion"
 
 # po/guile_strings.txt:188
 # messages-i18n.c:108
 # messages-i18n.c:110
-#: src/gnome/window-register.c:1232
+#: src/gnome/window-register.c:1246
 msgid "Paste the transaction clipboard"
 msgstr "Klistra in transaktionen från klippbordet"
 
 # messages-i18n.c:104
 # messages-i18n.c:115
 # messages-i18n.c:117
-#: src/gnome/window-register.c:1254
+#: src/gnome/window-register.c:1268
 msgid "Reconcile the main account for this register"
 msgstr "Avstämma huvudkontot i detta register"
 
 # messages-i18n.c:111
 # messages-i18n.c:122
 # messages-i18n.c:124
-#: src/gnome/window-register.c:1280
+#: src/gnome/window-register.c:1294
 msgid "Identify and fix problems in the accounts of this register"
 msgstr "Identifiera och fixa problem i kontona i detta register"
 
 # messages-i18n.c:158
 # messages-i18n.c:176
 # messages-i18n.c:178
-#: src/gnome/window-register.c:1293 src/gnome/window-register.c:1438
+#: src/gnome/window-register.c:1307 src/gnome/window-register.c:1466
 msgid "_Record"
 msgstr "_Spara"
 
 # messages-i18n.c:140
 # messages-i18n.c:155
 # messages-i18n.c:157
-#: src/gnome/window-register.c:1318 src/gnome/window-register.c:1463
+#: src/gnome/window-register.c:1332 src/gnome/window-register.c:1491
 msgid "D_uplicate"
 msgstr "_Duplicera"
+
+# messages-i18n.c:346
+# messages-i18n.c:383
+# messages-i18n.c:384
+#: src/gnome/window-register.c:1341 src/gnome/window-register.c:1500
+#, fuzzy
+msgid "_Split"
+msgstr "Delning"
 
 # messages-i18n.c:135
 # messages-i18n.c:148
 # messages-i18n.c:150
-#: src/gnome/window-register.c:1327 src/gnome/window-register.c:1472
+#: src/gnome/window-register.c:1349 src/gnome/window-register.c:1508
 msgid "_Blank"
 msgstr "_Tom"
 
 # messages-i18n.c:147
 # messages-i18n.c:162
 # messages-i18n.c:164
-#: src/gnome/window-register.c:1336 src/gnome/window-register.c:1481
+#: src/gnome/window-register.c:1358 src/gnome/window-register.c:1517
 msgid "_Jump"
 msgstr "_Hoppa"
 
 # messages-i18n.c:155
 # messages-i18n.c:172
 # messages-i18n.c:174
-#: src/gnome/window-register.c:1346
+#: src/gnome/window-register.c:1368
 msgid "_Print Check... (unfinished!)"
 msgstr "_Skriv ut testsida... (inte klar)"
 
 # messages-i18n.c:100
 # messages-i18n.c:110
 # messages-i18n.c:112
-#: src/gnome/window-register.c:1347
+#: src/gnome/window-register.c:1369
 msgid "Print a check using a standard format"
 msgstr "Skriv ut en testsida i standardformat"
 
 # messages-i18n.c:159
 # messages-i18n.c:177
 # messages-i18n.c:179
-#: src/gnome/window-register.c:1370
+#: src/gnome/window-register.c:1392
 msgid "_Register"
 msgstr "_Kontoutdrag"
 
 # messages-i18n.c:191
 # messages-i18n.c:210
 # messages-i18n.c:212
-#: src/gnome/window-register.c:1584
+#: src/gnome/window-register.c:1649
 msgid "General Ledger"
 msgstr "Allmän liggare"
 
 # messages-i18n.c:322
 # messages-i18n.c:359
 # messages-i18n.c:360
-#: src/gnome/window-register.c:1588
+#: src/gnome/window-register.c:1653
 msgid "Portfolio"
 msgstr "Portfölj"
 
 # messages-i18n.c:339
 # messages-i18n.c:376
 # messages-i18n.c:377
-#: src/gnome/window-register.c:1592
+#: src/gnome/window-register.c:1657
 msgid "Search Results"
 msgstr "Sökresultat"
 
 # messages-i18n.c:27
 # messages-i18n.c:28
 # messages-i18n.c:28
-#: src/gnome/window-register.c:2257
+#: src/gnome/window-register.c:2326
 msgid ""
 "This selection will delete the whole transaction. This is what you usually "
 "want."
@@ -6737,7 +6871,7 @@ msgstr ""
 # messages-i18n.c:28
 # messages-i18n.c:29
 # messages-i18n.c:29
-#: src/gnome/window-register.c:2259
+#: src/gnome/window-register.c:2328
 msgid ""
 "Warning: Just deleting all the splits will make your account unbalanced. You "
 "probably shouldn't do this unless you're going to immediately add another "
@@ -6752,28 +6886,28 @@ msgstr ""
 # messages-i18n.c:184
 # messages-i18n.c:202
 # messages-i18n.c:204
-#: src/gnome/window-register.c:2267
+#: src/gnome/window-register.c:2336
 msgid "Delete Transaction"
 msgstr "Radera transaktion"
 
 # messages-i18n.c:26
 # messages-i18n.c:27
 # messages-i18n.c:27
-#: src/gnome/window-register.c:2289
+#: src/gnome/window-register.c:2358
 msgid "Delete the whole transaction"
 msgstr "Radera hela transaktionen"
 
 # messages-i18n.c:25
 # messages-i18n.c:26
 # messages-i18n.c:26
-#: src/gnome/window-register.c:2299
+#: src/gnome/window-register.c:2368
 msgid "Delete all the splits"
 msgstr "Radera alla uppdelningar"
 
 # messages-i18n.c:55
 # messages-i18n.c:56
 # messages-i18n.c:58
-#: src/gnome/window-register.c:2382
+#: src/gnome/window-register.c:2451
 #, c-format
 msgid ""
 "Are you sure you want to delete\n"
@@ -6789,8 +6923,8 @@ msgstr ""
 # messages-i18n.c:54
 # messages-i18n.c:55
 # messages-i18n.c:57
-#: src/SplitLedger.c:1148 src/SplitLedger.c:1573
-#: src/gnome/window-register.c:2490
+#: src/SplitLedger.c:1436 src/SplitLedger.c:1872
+#: src/gnome/window-register.c:2558
 msgid ""
 "The current transaction has been changed.\n"
 "Would you like to record it?"
@@ -6808,7 +6942,7 @@ msgstr "Fel vid körning av scheme rapport."
 # messages-i18n.c:52
 # messages-i18n.c:53
 # messages-i18n.c:55
-#: src/gnome/window-report.c:294
+#: src/gnome/window-report.c:293
 msgid "This report has no parameters."
 msgstr "Denna rapport saknar parametrar."
 
@@ -6816,14 +6950,14 @@ msgstr "Denna rapport saknar parametrar."
 # messages-i18n.c:207
 # messages-i18n.c:209
 #. Get the filename
-#: src/gnome/window-report.c:319
+#: src/gnome/window-report.c:318
 msgid "Export To"
 msgstr "Exportera till"
 
 # messages-i18n.c:40
 # messages-i18n.c:41
 # messages-i18n.c:41
-#: src/FileDialog.c:557 src/gnome/window-report.c:328
+#: src/FileDialog.c:533 src/gnome/window-report.c:327
 #, c-format
 msgid ""
 "The file \n"
@@ -6839,7 +6973,7 @@ msgstr ""
 # messages-i18n.c:35
 # messages-i18n.c:36
 # messages-i18n.c:36
-#: src/gnome/window-report.c:344
+#: src/gnome/window-report.c:343
 #, c-format
 msgid ""
 "There was an error opening the file\n"
@@ -6855,7 +6989,7 @@ msgstr ""
 # messages-i18n.c:34
 # messages-i18n.c:35
 # messages-i18n.c:35
-#: src/FileDialog.c:436 src/gnome/window-report.c:356
+#: src/FileDialog.c:418 src/gnome/window-report.c:355
 #, c-format
 msgid ""
 "There was an error writing the file\n"
@@ -6871,7 +7005,7 @@ msgstr ""
 # messages-i18n.c:36
 # messages-i18n.c:37
 # messages-i18n.c:37
-#: src/gnome/window-report.c:368
+#: src/gnome/window-report.c:367
 #, c-format
 msgid ""
 "There was an error closing the file\n"
@@ -6887,51 +7021,64 @@ msgstr ""
 # messages-i18n.c:320
 # messages-i18n.c:357
 # messages-i18n.c:358
-#: src/gnome/window-report.c:418 src/gnome/window-report.c:427
+#: src/gnome/window-report.c:417 src/gnome/window-report.c:426
 msgid "Parameters"
 msgstr "Parametrar"
 
 # messages-i18n.c:106
 # messages-i18n.c:117
 # messages-i18n.c:119
-#: src/gnome/window-report.c:428
+#: src/gnome/window-report.c:427
 msgid "Set the parameters for this report"
 msgstr "Ställ in parametrar för denna rapport"
 
 # messages-i18n.c:294
 # messages-i18n.c:326
 # messages-i18n.c:327
-#: src/gnome/window-report.c:436
+#: src/gnome/window-report.c:435
 msgid "Export"
 msgstr "Export"
 
 # messages-i18n.c:84
 # messages-i18n.c:91
 # messages-i18n.c:93
-#: src/gnome/window-report.c:437
+#: src/gnome/window-report.c:436
 msgid "Export HTML-formatted report to file"
 msgstr "Exportera HTML-formaterad rapport till fil"
 
-#: src/guile/gnucash.c:140
+#: src/guile/gnucash.c:142
 msgid "This is a development version. It may or may not work."
 msgstr ""
 
 # po/guile_strings.txt:34
 # po/guile_strings.txt:40
 # po/guile_strings.txt:40
-#: src/guile/gnucash.c:144
+#: src/guile/gnucash.c:146
 #, fuzzy, c-format
 msgid "The last stable version was %s."
 msgstr "Datumalternativet är %s."
 
-#: src/guile/gnucash.c:146
+#: src/guile/gnucash.c:148
 #, c-format
 msgid "The next stable version will be %s."
 msgstr ""
 
+#. same as DEFAULT_FONT
+#. repeated here so gettext will pick it up
+#: src/register/gnome/gnucash-style.c:874
+msgid ""
+"register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
+msgstr ""
+
+#. same as HINT_FONT
+#. repeated here so gettext will pick it up
+#: src/register/gnome/gnucash-style.c:882
+msgid "register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
+msgstr ""
+
 # messages-i18n.c:25
 # messages-i18n.c:25
-#: src/register/recncell.c:87
+#: src/register/recncell.c:95
 msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
@@ -6944,7 +7091,7 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:1242
 #: src/register/splitreg.c:86
 #, fuzzy
-msgid "sample:12/12/2000"
+msgid "sample: 12/12/2000"
 msgstr "12/31/2000"
 
 #. date cell
@@ -6963,40 +7110,40 @@ msgstr "Mata in en beskrivning på transaktionen"
 
 #. recn cell
 #: src/register/splitreg.c:90 src/register/splitreg.c:91
-#: src/register/splitreg.c:96 src/register/splitreg.c:97
-#: src/register/splitreg.c:98 src/register/splitreg.c:99
+#: src/register/splitreg.c:95 src/register/splitreg.c:96
+#: src/register/splitreg.c:97 src/register/splitreg.c:98
+#: src/register/splitreg.c:100 src/register/splitreg.c:101
+#: src/register/splitreg.c:102 src/register/splitreg.c:103
+#: src/register/splitreg.c:104
 msgid "sample:999,999.000"
 msgstr ""
 
 #. action cell
-#: src/register/splitreg.c:93 src/register/splitreg.c:94
-#: src/register/splitreg.c:100
+#: src/register/splitreg.c:93 src/register/splitreg.c:99
 msgid "sample:Expenses:Automobile:Gasoline"
 msgstr ""
 
-#. xto cell
-#: src/register/splitreg.c:95
+#. xfrm cell
+#: src/register/splitreg.c:94
 msgid "sample:Memo field sample text string"
 msgstr ""
 
-# messages-i18n.c:239
-# messages-i18n.c:267
-# messages-i18n.c:268
-#: src/register/splitreg.c:171
-msgid "Total Shares"
-msgstr "Andelar totalt"
+#. tbalance cell
+#: src/register/splitreg.c:105
+msgid "sample:Notes field sample text string"
+msgstr ""
 
 # messages-i18n.c:361
 # messages-i18n.c:400
 # messages-i18n.c:401
-#: src/register/splitreg.c:217
+#: src/register/splitreg.c:162
 msgid "Withdraw"
 msgstr "Uttag"
 
 # messages-i18n.c:267
 # messages-i18n.c:298
 # messages-i18n.c:299
-#: src/register/splitreg.c:218
+#: src/register/splitreg.c:163
 msgid "Check"
 msgstr "Check"
 
@@ -7004,87 +7151,87 @@ msgstr "Check"
 # messages-i18n.c:340
 # messages-i18n.c:341
 #. Dividend
-#: src/register/splitreg.c:219 src/register/splitreg.c:245
-#: src/register/splitreg.c:253 src/register/splitreg.c:260
-#: src/register/splitreg.c:282
+#: src/register/splitreg.c:164 src/register/splitreg.c:190
+#: src/register/splitreg.c:198 src/register/splitreg.c:205
+#: src/register/splitreg.c:227
 msgid "Int"
 msgstr "Ränta"
 
 # messages-i18n.c:256
 # messages-i18n.c:286
 # messages-i18n.c:287
-#: src/register/splitreg.c:220 src/register/splitreg.c:241
+#: src/register/splitreg.c:165 src/register/splitreg.c:186
 msgid "ATM"
 msgstr "Bankomat"
 
 # messages-i18n.c:351
 # messages-i18n.c:388
 # messages-i18n.c:389
-#: src/register/splitreg.c:221
+#: src/register/splitreg.c:166
 msgid "Teller"
 msgstr "Kassör"
 
 # messages-i18n.c:323
 # messages-i18n.c:360
 # messages-i18n.c:361
-#: src/register/splitreg.c:222
+#: src/register/splitreg.c:167
 msgid "POS"
 msgstr ""
 
 # messages-i18n.c:253
 # messages-i18n.c:283
 # messages-i18n.c:284
-#: src/register/splitreg.c:223
+#: src/register/splitreg.c:168
 msgid "Phone"
 msgstr "Telefon"
 
 # messages-i18n.c:318
 # messages-i18n.c:354
 # messages-i18n.c:355
-#: src/register/splitreg.c:224 src/register/splitreg.c:246
+#: src/register/splitreg.c:169 src/register/splitreg.c:191
 msgid "Online"
 msgstr "Uppkopplad"
 
 # messages-i18n.c:248
 # messages-i18n.c:277
 # messages-i18n.c:278
-#: src/register/splitreg.c:225
+#: src/register/splitreg.c:170
 msgid "AutoDep"
 msgstr ""
 
 # messages-i18n.c:360
 # messages-i18n.c:399
 # messages-i18n.c:400
-#: src/register/splitreg.c:226
+#: src/register/splitreg.c:171
 msgid "Wire"
 msgstr "Överför elektroniskt"
 
 # messages-i18n.c:286
 # messages-i18n.c:318
 # messages-i18n.c:319
-#: src/register/splitreg.c:228
+#: src/register/splitreg.c:173
 msgid "Direct Debit"
 msgstr "Direkt debet"
 
 # messages-i18n.c:296
 # messages-i18n.c:328
 # messages-i18n.c:329
-#: src/register/splitreg.c:238 src/register/splitreg.c:244
-#: src/register/splitreg.c:280
+#: src/register/splitreg.c:183 src/register/splitreg.c:189
+#: src/register/splitreg.c:225
 msgid "Fee"
 msgstr "Avgift"
 
 # messages-i18n.c:309
 # messages-i18n.c:344
 # messages-i18n.c:345
-#: src/register/splitreg.c:252
+#: src/register/splitreg.c:197
 msgid "Loan"
 msgstr "Lån"
 
 # messages-i18n.c:288
 # messages-i18n.c:320
 # messages-i18n.c:321
-#: src/register/splitreg.c:281
+#: src/register/splitreg.c:226
 msgid "Div"
 msgstr "Div"
 
@@ -7092,7 +7239,7 @@ msgstr "Div"
 # messages-i18n.c:345
 # messages-i18n.c:346
 #. Long Term Capital Gains
-#: src/register/splitreg.c:284
+#: src/register/splitreg.c:229
 msgid "LTCG"
 msgstr ""
 
@@ -7100,54 +7247,46 @@ msgstr ""
 # messages-i18n.c:384
 # messages-i18n.c:385
 #. Short Term Captial Gains
-#: src/register/splitreg.c:286
+#: src/register/splitreg.c:231
 msgid "STCG"
 msgstr ""
 
 # messages-i18n.c:287
 # messages-i18n.c:319
 # messages-i18n.c:320
-#: src/register/splitreg.c:288
+#: src/register/splitreg.c:233
 msgid "Dist"
 msgstr "Dist"
-
-# messages-i18n.c:346
-# messages-i18n.c:383
-# messages-i18n.c:384
-#. Distribution
-#: src/SplitLedger.c:3046 src/register/splitreg.c:289
-#: src/register/splitreg.c:775 src/register/splitreg.c:776
-msgid "Split"
-msgstr "Delning"
 
 # messages-i18n.c:125
 # messages-i18n.c:138
 # messages-i18n.c:140
-#: src/register/splitreg.c:760
+#: src/register/splitreg.c:721
 msgid "Enter the transaction number, such as the check number"
 msgstr "Mata in transaktionsnumret (t.ex. checknumret)"
 
 # messages-i18n.c:129
 # messages-i18n.c:142
 # messages-i18n.c:144
-#: src/register/splitreg.c:765
+#: src/register/splitreg.c:726
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "Mata in kontot att överföra från eller välj ett från listan"
 
-# messages-i18n.c:130
-# messages-i18n.c:143
-# messages-i18n.c:145
-#: src/register/splitreg.c:772
-msgid "Enter the account to transfer to, or choose one from the list"
-msgstr "Mata in kontot att överföra till eller välj ett från listan"
+# messages-i18n.c:356
+# messages-i18n.c:151
+# messages-i18n.c:153
+#: src/register/splitreg.c:732
+#, fuzzy
+msgid "-- Split Transaction --"
+msgstr "Klipp ut transaktion"
 
 # messages-i18n.c:91
 # messages-i18n.c:100
 # messages-i18n.c:102
-#: src/register/splitreg.c:780
+#: src/register/splitreg.c:735
+#, fuzzy
 msgid ""
-"This transaction has multiple splits; switch to multi-line mode to see them "
-"all"
+"This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
 "Denna transaktion har multipla delningar; byt till flerradsläge för att\n"
 "se alla"
@@ -7155,35 +7294,43 @@ msgstr ""
 # messages-i18n.c:124
 # messages-i18n.c:137
 # messages-i18n.c:139
-#: src/register/splitreg.c:788
+#: src/register/splitreg.c:742
 msgid "Enter a description of the split"
 msgstr "Mata in en beskrivning för delningen"
 
 # messages-i18n.c:123
 # messages-i18n.c:136
 # messages-i18n.c:138
-#: src/register/splitreg.c:792
+#: src/register/splitreg.c:746
 msgid "Enter a description of the transaction"
+msgstr "Mata in en beskrivning på transaktionen"
+
+# messages-i18n.c:123
+# messages-i18n.c:136
+# messages-i18n.c:138
+#: src/register/splitreg.c:750
+#, fuzzy
+msgid "Enter notes for the transaction"
 msgstr "Mata in en beskrivning på transaktionen"
 
 # messages-i18n.c:122
 # messages-i18n.c:135
 # messages-i18n.c:137
-#: src/register/splitreg.c:820
+#: src/register/splitreg.c:776
 msgid "Enter the type of transaction, or choose one from the list"
 msgstr "Mata in transaktionstyp eller välj en från listan"
 
 # messages-i18n.c:126
 # messages-i18n.c:139
 # messages-i18n.c:141
-#: src/register/splitreg.c:833
+#: src/register/splitreg.c:789
 msgid "Enter the share price"
 msgstr "Mata in andelspriset"
 
 # messages-i18n.c:127
 # messages-i18n.c:140
 # messages-i18n.c:142
-#: src/register/splitreg.c:835
+#: src/register/splitreg.c:791
 #, fuzzy
 msgid "Enter the number of shares bought or sold"
 msgstr "Mata in antal sålda andelar"
@@ -7191,7 +7338,7 @@ msgstr "Mata in antal sålda andelar"
 # messages-i18n.c:37
 # messages-i18n.c:38
 # messages-i18n.c:38
-#: src/FileDialog.c:52
+#: src/FileDialog.c:50
 #, c-format
 msgid ""
 "The file \n"
@@ -7202,7 +7349,7 @@ msgstr ""
 "    %s\n"
 "kunde inte hittas."
 
-#: src/FileDialog.c:68
+#: src/FileDialog.c:66
 msgid ""
 "Something went wrong during file IO,\n"
 "but I'm not sure what."
@@ -7211,7 +7358,7 @@ msgstr ""
 # messages-i18n.c:38
 # messages-i18n.c:39
 # messages-i18n.c:39
-#: src/FileDialog.c:79
+#: src/FileDialog.c:77
 #, c-format
 msgid ""
 "The file \n"
@@ -7225,7 +7372,7 @@ msgstr ""
 # messages-i18n.c:32
 # messages-i18n.c:33
 # messages-i18n.c:33
-#: src/FileDialog.c:85
+#: src/FileDialog.c:83
 msgid ""
 "This file appears to be from a newer version of GnuCash. You must upgrade "
 "GnuCash to read this file."
@@ -7236,7 +7383,7 @@ msgstr ""
 # messages-i18n.c:31
 # messages-i18n.c:32
 # messages-i18n.c:32
-#: src/FileDialog.c:92
+#: src/FileDialog.c:90
 #, fuzzy
 msgid ""
 "This file is from an older version of GnuCash.\n"
@@ -7248,7 +7395,7 @@ msgstr ""
 # messages-i18n.c:33
 # messages-i18n.c:34
 # messages-i18n.c:34
-#: src/FileDialog.c:98
+#: src/FileDialog.c:96
 #, fuzzy
 msgid ""
 "There was an error reading the file.\n"
@@ -7260,7 +7407,7 @@ msgstr ""
 # messages-i18n.c:41
 # messages-i18n.c:42
 # messages-i18n.c:42
-#: src/FileDialog.c:134
+#: src/FileDialog.c:132
 #, c-format
 msgid ""
 "The filepath \n"
@@ -7274,11 +7421,11 @@ msgstr ""
 # messages-i18n.c:39
 # messages-i18n.c:40
 # messages-i18n.c:40
-#: src/FileDialog.c:209
+#: src/FileDialog.c:197
 msgid "Changes have been made since the last Save. Save the data to file?"
 msgstr "Det har gjorts ändringar som inte sparats. Spara data till fil?"
 
-#: src/FileDialog.c:231
+#: src/FileDialog.c:219
 #, c-format
 msgid ""
 "Gnucash could not obtain the lock for\n"
@@ -7289,10 +7436,22 @@ msgid ""
 "Do you want to proceed with opening the file?"
 msgstr ""
 
+# messages-i18n.c:54
+# messages-i18n.c:55
+# messages-i18n.c:57
+#: src/SplitLedger.c:1325
+#, fuzzy, c-format
+msgid ""
+"The account %s does not exist.\n"
+"Would you like to create it?"
+msgstr ""
+"Den aktuella transaktionen har ändrats.\n"
+"Vill du spara den?"
+
 # messages-i18n.c:47
 # messages-i18n.c:48
 # messages-i18n.c:50
-#: src/SplitLedger.c:1835
+#: src/SplitLedger.c:2134
 #, fuzzy
 msgid ""
 "You are about to overwrite an existing split.\n"
@@ -7304,7 +7463,7 @@ msgstr ""
 # messages-i18n.c:48
 # messages-i18n.c:49
 # messages-i18n.c:51
-#: src/SplitLedger.c:1865
+#: src/SplitLedger.c:2164
 #, fuzzy
 msgid ""
 "You are about to overwrite an existing transaction.\n"
@@ -7313,7 +7472,7 @@ msgstr ""
 "Du har gjort ändringar i detta avstämnings-fönster.\n"
 "Är du säker på att du vill avbryta?"
 
-#: src/SplitLedger.c:2604 src/SplitLedger.c:2685
+#: src/SplitLedger.c:2896 src/SplitLedger.c:2976
 #, c-format
 msgid ""
 "You cannot transfer funds from the %s account.\n"
@@ -7326,14 +7485,14 @@ msgstr ""
 # messages-i18n.c:57
 # messages-i18n.c:58
 # messages-i18n.c:60
-#: src/SplitLedger.c:2743
+#: src/SplitLedger.c:3034
 msgid "Recalculate Transaction"
 msgstr "Beräkna transaktion igen"
 
 # messages-i18n.c:58
 # messages-i18n.c:59
 # messages-i18n.c:61
-#: src/SplitLedger.c:2744
+#: src/SplitLedger.c:3035
 #, fuzzy
 msgid ""
 "The values entered for this transaction are inconsistent.\n"
@@ -7345,14 +7504,59 @@ msgstr ""
 # messages-i18n.c:265
 # messages-i18n.c:296
 # messages-i18n.c:297
-#: src/SplitLedger.c:2749 src/SplitLedger.c:2754 src/SplitLedger.c:2759
+#: src/SplitLedger.c:3040 src/SplitLedger.c:3045 src/SplitLedger.c:3050
 msgid "Changed"
 msgstr "Ändrad"
+
+# messages-i18n.c:200
+# messages-i18n.c:219
+# messages-i18n.c:221
+#: src/SplitLedger.c:3676 src/SplitLedger.c:3775
+#, fuzzy
+msgid "Share Balance"
+msgstr "Nytt saldo"
+
+# po/guile_strings.txt:265
+# po/guile_strings.txt:316
+# po/guile_strings.txt:316
+#: src/SplitLedger.c:3739 src/SplitLedger.c:3759
+#, fuzzy, c-format
+msgid "Tot %s"
+msgstr "Totalt"
+
+# messages-i18n.c:273 po/guile_strings.txt:214
+# src/gnome/glade-gnc-dialogs.c:629
+# messages-i18n.c:304 po/guile_strings.txt:254
+# src/gnome/glade-gnc-dialogs.c:637 src/gnome/glade-gnc-dialogs.c:2142
+# messages-i18n.c:305 po/guile_strings.txt:254
+# src/gnome/glade-gnc-dialogs.c:570 src/gnome/glade-gnc-dialogs.c:2082
+#: src/SplitLedger.c:3747
+#, fuzzy
+msgid "Tot Credit"
+msgstr "Kredit"
+
+# messages-i18n.c:277 po/guile_strings.txt:32
+# messages-i18n.c:309 po/guile_strings.txt:38
+# src/gnome/glade-gnc-dialogs.c:2145
+# messages-i18n.c:310 po/guile_strings.txt:38
+# src/gnome/glade-gnc-dialogs.c:2085
+#: src/SplitLedger.c:3767
+#, fuzzy
+msgid "Tot Debit"
+msgstr "Debet"
+
+# messages-i18n.c:239
+# messages-i18n.c:267
+# messages-i18n.c:268
+#: src/SplitLedger.c:3772
+#, fuzzy
+msgid "Tot Shares"
+msgstr "Andelar totalt"
 
 # messages-i18n.c:48
 # messages-i18n.c:49
 # messages-i18n.c:51
-#: src/SplitLedger.c:3698
+#: src/SplitLedger.c:4629
 #, fuzzy
 msgid ""
 "You are about to change a reconciled transaction.\n"
@@ -7360,6 +7564,18 @@ msgid ""
 msgstr ""
 "Du har gjort ändringar i detta avstämnings-fönster.\n"
 "Är du säker på att du vill avbryta?"
+
+# messages-i18n.c:90
+# messages-i18n.c:99
+# messages-i18n.c:101
+#~ msgid "Show transactions on multiple lines with one line for each split"
+#~ msgstr "Visa transaktioner över flera rader med en rad för varje delning"
+
+# messages-i18n.c:130
+# messages-i18n.c:143
+# messages-i18n.c:145
+#~ msgid "Enter the account to transfer to, or choose one from the list"
+#~ msgstr "Mata in kontot att överföra till eller välj ett från listan"
 
 # po/guile_strings.txt:10
 # po/guile_strings.txt:11
@@ -7775,12 +7991,6 @@ msgstr ""
 #~ msgid "Money Market"
 #~ msgstr "Pengamarknad"
 
-# messages-i18n.c:200
-# messages-i18n.c:219
-# messages-i18n.c:221
-#~ msgid "New Balance"
-#~ msgstr "Nytt saldo"
-
 # messages-i18n.c:203
 # messages-i18n.c:225
 # messages-i18n.c:227
@@ -8020,12 +8230,6 @@ msgstr ""
 # messages-i18n.c:404
 #~ msgid "Yes"
 #~ msgstr "Ja"
-
-# src/gnome/dialog-qif-import.c:314
-# src/gnome/dialog-qif-import.c:317
-# src/gnome/dialog-qif-import.c:255
-#~ msgid "You must specify a currency."
-#~ msgstr "Du måste välja en valuta."
 
 # src/gnome/dialog-qif-import.c:328 src/gnome/dialog-qif-import.c:664
 # src/gnome/dialog-qif-import.c:766 src/gnome/dialog-qif-import.c:864
