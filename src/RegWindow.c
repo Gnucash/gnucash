@@ -3310,7 +3310,7 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
     case 'h':
       /* end of month */
       DEBUG("end of month\n");
-      date.day = daysInMonth( date.month );
+      date.day = daysInMonth( date.month, date.year );
       mvcbs->verify->doit = False;
       changed = True;
       break;
