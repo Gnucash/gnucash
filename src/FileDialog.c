@@ -93,6 +93,13 @@ static AccountGroup *topgroup = NULL; /* the current top of the hierarchy */
         uh_oh = 1;						\
       }								\
     else 							\
+    if (ERANGE == norr)						\
+      {								\
+        sprintf (buf, FILE_NOT_FOUND_MSG, newfile);		\
+        gnc_error_dialog (buf);				        \
+        uh_oh = 1;						\
+      }								\
+    else 							\
     if (norr)							\
       {								\
         sprintf (buf, FMB_INVALID_MSG, newfile);		\
@@ -197,7 +204,11 @@ gncPostFileOpen (const char * filename)
 
   if (!filename) return;
   newfile = xaccResolveFilePath (filename); 
-  if (!newfile) return;
+  if (!newfile) {
+     sprintf (buf, FILE_NOT_FOUND_MSG, filename);
+     gnc_error_dialog (buf);
+     return;
+  }
 
   /* -------------- BEGIN CORE SESSION CODE ------------- */
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
@@ -378,22 +389,26 @@ gncFileSaveAs (void)
 {
   Session *newsess;
   AccountGroup *oldgrp;
-  char * newfile;
+  char *filename, *newfile;
   AccountGroup *newgrp;
   char * oldfile;
   char buf[BUFSIZE];
   int io_error, uh_oh = 0;
 
-  newfile = fileBox( SAVE_STR, "*.xac");
-  if (!newfile) return;
+  filename = fileBox( SAVE_STR, "*.xac");
+  if (!filename) return;
 
   /* check to see if the user did something silly, 
    * like specifying the same file as the current file ... 
    * if so, then just do that, instead of the below,
-   * which assumes a tuly new name was given.
+   * which assumes a truly new name was given.
    */
-  newfile = xaccResolveFilePath (newfile);
-  assert (newfile);  /* deep doodoo if resolve failed */
+  newfile = xaccResolveFilePath (filename);
+  if (!newfile) {
+     sprintf (buf, FILE_NOT_FOUND_MSG, filename);
+     gnc_error_dialog (buf);
+     return;
+  }
   oldfile = xaccSessionGetFilePath (current_session);
   if (oldfile && !strcmp (oldfile, newfile)) 
   {

@@ -378,7 +378,7 @@ MakeHomeDir (void)
 
 /* ============================================================== */
 
-/* hack alert -- we should be yanking this out of 
+/* XXX hack alert -- we should be yanking this out of 
  * some config file 
  */
 static char * searchpaths[] = {
@@ -460,7 +460,15 @@ xaccResolveFilePath (const char * filefrag)
    /* make sure that the gnucash home dir exists. */
    MakeHomeDir();
 
-   /* OK, we didn't find the file */
+   /* OK, we didn't find the file. */
+   /* If the user specified a simple filename (i.e. no slashes in it)
+    * then create the file.  But if it has slashes in it, then creating
+    * a bnuch of directories seems like a bad idea; more likely, the user
+    * specified a bad filename.  So return with error. */
+   if (strchr (filefrag, '/')) {
+      return NULL;
+   }
+   
    /* Lets try creating a new file in $HOME/.gnucash/data */
    path = getenv ("HOME");
    if (path) {
