@@ -2,13 +2,13 @@ SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-network-utils.la
 
-CFLAGS = @CFLAGS@ \
-         ${GLIB_CFLAGS} \
-	 ${GHTTP_CFLAGS} \
-         ${GNOME_INCLUDEDIR}
-
-INCLUDES = \
-  -I${top_srcdir}/src/gnc-module
+CFLAGS = \
+  @CFLAGS@ \
+  -I${top_srcdir}/src/gnc-module \
+  ${GLIB_CFLAGS} \
+  ${GHTTP_CFLAGS} \
+  ${GNOME_INCLUDEDIR} \
+  ${GUILE_INCS}
 
 libgncmod_network_utils_la_SOURCES = \
   gnc-gpg.c \
