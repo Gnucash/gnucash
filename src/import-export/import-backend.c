@@ -917,10 +917,12 @@ gnc_import_TransInfo_refresh_destacc (GNCImportTransInfo *transaction_info,
 				      GncImportMatchMap *matchmap)
 {
   Transaction *transaction;
+  Account *orig_destacc;
+  Account *new_destacc;
   g_assert(transaction_info);
 
-  Account *orig_destacc = gnc_import_TransInfo_get_destacc(transaction_info);
-  Account *new_destacc = NULL;
+  orig_destacc = gnc_import_TransInfo_get_destacc(transaction_info);
+  new_destacc = NULL;
 
   /* if we haven't manually selected a destination account for this transaction */
   if(gnc_import_TransInfo_get_destacc_selected_manually(transaction_info) == FALSE)

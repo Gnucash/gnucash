@@ -1,11 +1,30 @@
+2003-02-10  Herbert Thoma  <herbie@hthoma.de>
+
+	* src/app-utils/gnc-ui-util.c:
+	* src/app-utils/gnc-ui-util.h:
+	* src/gnome-utils/gnc-account-tree.c:
+	* src/gnome/window-acct-tree.c:
+	* src/scm/main-window.scm:
+	  recycle ACCOUNT_BALANCE_EURO and ACCOUNT_TOTAL_EURO account tree 
+	  columns to display balance resp. total in default report currency
+
+	* src/import-export/import-backend.c: in
+	  gnc_import_TransInfo_refresh_destacc move g_assert before first
+	  assignment, otherwise I get a syntax error
+
 2003-02-10  Benoit Grégoire  <bock@step.polymtl.ca>
 
-	* src/import-export/import-main-matcher.c: Patch by cmorgan to restrict iterative destination account matching to transactions AFTER the current one in the clist.
+	* src/import-export/import-main-matcher.c: Patch by cmorgan to
+	  restrict iterative destination account matching to transactions
+	  AFTER the current one in the clist.
 
 2003-02-10  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-backend.c,h: 
-	* src/import-export/import-main-matcher.c: Apply most of cmorgan's patch for iterative destination account matching.  Optionally restricting to the transactions after the one being edited still need's to be implemented.
+	* src/import-export/import-main-matcher.c: Apply most of cmorgan's
+	  patch for iterative destination account matching.  Optionally
+	  restricting to the transactions after the one being edited still
+	  need's to be implemented.
 
 2003-02-10  Derek Atkins  <derek@ihtfp.com>
 

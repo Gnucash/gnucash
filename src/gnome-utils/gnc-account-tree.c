@@ -951,11 +951,11 @@ gnc_account_tree_set_view_info_real(GNCAccountTree *tree)
 
   tree->balance_column = i;
   tree->column_fields[i++] = ACCOUNT_BALANCE;
-  tree->column_fields[i++] = ACCOUNT_BALANCE_EURO;
+  tree->column_fields[i++] = ACCOUNT_BALANCE_REPORT;
 
   tree->total_column = i;
   tree->column_fields[i++] = ACCOUNT_TOTAL;
-  tree->column_fields[i++] = ACCOUNT_TOTAL_EURO;
+  tree->column_fields[i++] = ACCOUNT_TOTAL_REPORT;
 
   tree->column_fields[i++] = ACCOUNT_NOTES;
   tree->column_fields[i++] = ACCOUNT_TAX_INFO;

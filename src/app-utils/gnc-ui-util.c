@@ -318,13 +318,13 @@ gnc_ui_account_get_field_name (AccountFieldCode field)
     case ACCOUNT_BALANCE :
       return _("Balance");
       break;
-    case ACCOUNT_BALANCE_EURO :
+    case ACCOUNT_BALANCE_REPORT :
       return _("Balance");
       break;
     case ACCOUNT_TOTAL :
       return _("Total");
       break;
-    case ACCOUNT_TOTAL_EURO :
+    case ACCOUNT_TOTAL_REPORT :
       return _("Total");
       break;
     case ACCOUNT_TAX_INFO :
@@ -690,15 +690,18 @@ gnc_ui_account_get_field_value_string (Account *account,
           (xaccPrintAmount (balance, gnc_account_print_info (account, TRUE)));
       }
 
-    case ACCOUNT_BALANCE_EURO :
+    case ACCOUNT_BALANCE_REPORT :
       {
 	gnc_commodity * commodity = xaccAccountGetCommodity(account);
+        gnc_commodity * report_commodity = gnc_default_report_currency();
         gnc_numeric balance = gnc_ui_account_get_balance(account, FALSE);
-	gnc_numeric euro_balance = gnc_convert_to_euro(commodity, balance);
+
+	gnc_numeric report_balance = gnc_ui_convert_balance_to_currency(balance, commodity, 
+                                                                        report_commodity);
 
         return g_strdup
-          (xaccPrintAmount(euro_balance,
-                           gnc_commodity_print_info (gnc_get_euro (), TRUE)));
+          (xaccPrintAmount(report_balance,
+                           gnc_commodity_print_info (report_commodity, TRUE)));
       }
 
     case ACCOUNT_TOTAL :
@@ -709,15 +712,18 @@ gnc_ui_account_get_field_value_string (Account *account,
           (xaccPrintAmount(balance, gnc_account_print_info (account, TRUE)));
       }
 
-    case ACCOUNT_TOTAL_EURO :
+    case ACCOUNT_TOTAL_REPORT :
       {
 	gnc_commodity * commodity = xaccAccountGetCommodity(account);
+        gnc_commodity * report_commodity = gnc_default_report_currency();
 	gnc_numeric balance = gnc_ui_account_get_balance(account, TRUE);
-	gnc_numeric euro_balance = gnc_convert_to_euro(commodity, balance);
+
+	gnc_numeric report_balance = gnc_ui_convert_balance_to_currency(balance, commodity, 
+                                                                        report_commodity);
 
 	return g_strdup
-          (xaccPrintAmount(euro_balance,
-                           gnc_commodity_print_info (gnc_get_euro (), TRUE)));
+          (xaccPrintAmount(report_balance,
+                           gnc_commodity_print_info (report_commodity, TRUE)));
       }
 
     case ACCOUNT_TAX_INFO:
