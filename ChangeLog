@@ -1,3 +1,19 @@
+2001-05-12  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/category-barchart.scm, net-barchart.scm,
+	average-balance.scm: Added price-source option. Uses new function
+	gnc:make-exchange-nearest-function to offer time-varying exchange
+	rates.
+
+	* src/scm/report-utilities.scm
+	(gnc:acccounts-get-all-subaccounts): added.
+
+	* src/scm/commodity-utilities.scm
+	(gnc:make-exchange-nearest-function): Added this and many more
+	functions to enable time-variant currency exchange.
+
+	* src/scm/report/price-scatter.scm: Add warnings if data is empty.
+
 2001-05-12  Bill Gribble  <grib@billgribble.com>
 
 	* src/gnome/dialog-options.c: fix destructor bug 

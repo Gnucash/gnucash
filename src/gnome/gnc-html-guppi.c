@@ -621,6 +621,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
     argind++;    
   }
 
+  /* Those are not yet implemented in libguppitank :( */
 #if 0
   if((param = g_hash_table_lookup(params, "x_axis_label")) != NULL) {
     arglist[argind].name   = "x_axis_label";

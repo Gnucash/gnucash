@@ -62,6 +62,7 @@ developing over time"))
       (optname-to-date (N_ "To"))
       (optname-stepsize (N_ "Step Size"))
       (optname-report-currency (N_ "Report's currency"))
+      (optname-price-source (N_ "Price Source"))
 
       (optname-accounts (N_ "Accounts"))
       (optname-levels (N_ "Show Accounts until level"))
@@ -88,6 +89,10 @@ developing over time"))
 
       (gnc:options-add-currency! 
        options gnc:pagename-general optname-report-currency "c")
+
+      (gnc:options-add-price-source! 
+       options gnc:pagename-general
+       optname-price-source "d" 'pricedb-latest)
 
       ;; Accounts tab
       (add-option
@@ -167,6 +172,8 @@ developing over time"))
 	  (interval (get-option gnc:pagename-general optname-stepsize))
 	  (report-currency (get-option gnc:pagename-general
 				       optname-report-currency))
+	  (price-source (get-option gnc:pagename-general
+				    optname-price-source))
 	  (report-title (get-option gnc:pagename-general 
 				    gnc:optname-reportname))
 
@@ -196,9 +203,14 @@ developing over time"))
 	  
 	  ;; Define more helper variables.
 	  
-	  (let* ((exchange-alist (gnc:make-exchange-alist
-				  report-currency to-date-tp))
-		 (exchange-fn (gnc:make-exchange-function exchange-alist))
+	  (let* ((commodity-list (gnc:accounts-get-commodities 
+				  (append 
+				   (gnc:acccounts-get-all-subaccounts accounts)
+				   accounts)
+				  report-currency))
+		 (exchange-fn (gnc:case-exchange-time-fn 
+			       price-source report-currency 
+			       commodity-list to-date-tp))
 		 (tree-depth (if (equal? account-levels 'all)
 				 (gnc:get-current-group-depth)
 				 account-levels))
@@ -226,15 +238,15 @@ developing over time"))
 	    
 	    ;; Converts a commodity-collector into one single double
 	    ;; number, depending on the report currency and the
-	    ;; exchange-alist calculated above. Returns a double.
-	    (define (collector->double c)
+	    ;; exchange-fn calculated above. Returns a double.
+	    (define (collector->double c date)
 	      ;; Future improvement: Let the user choose which kind of
 	      ;; currency combining she want to be done. 
 	      (gnc:numeric-to-double 
 	       (gnc:gnc-monetary-amount
 		(gnc:sum-collector-commodity 
 		 c report-currency 
-		 exchange-fn))))
+		 (lambda (a b) (exchange-fn a b date))))))
 	    
 	    ;; Calculates the net balance (profit or loss) of an account in
 	    ;; the given time interval. date-list-entry is a pair containing
@@ -245,14 +257,17 @@ developing over time"))
 	    (define (get-balance account date-list-entry subacct?)
 	      ((if (gnc:account-reverse-balance? account)
 		   - +)
-	       (collector->double
 		(if do-intervals?
-		    (gnc:account-get-comm-balance-interval 
-		     account 
-		     (car date-list-entry) 
-		     (cadr date-list-entry) subacct?)
-		    (gnc:account-get-comm-balance-at-date
-		     account date-list-entry subacct?)))))
+		    (collector->double
+		     (gnc:account-get-comm-balance-interval 
+		      account 
+		      (first date-list-entry) 
+		      (second date-list-entry) subacct?)
+		     (second date-list-entry))
+		    (collector->double
+		     (gnc:account-get-comm-balance-at-date
+		      account date-list-entry subacct?)
+		     date-list-entry))))
 	    
 	    ;; Creates the <balance-list> to be used in the function
 	    ;; below. 
@@ -314,7 +329,7 @@ developing over time"))
 	    ;; choose sorting.
 	    
 	    
-	    (gnc:warn "all-data" all-data)
+	    ;;(gnc:warn "all-data" all-data)
 	    
 	    (let ((all-data-amounts (map cadr all-data)))
 	      (if 
@@ -437,8 +452,7 @@ developing over time"))
 		  (gnc:html-markup-p 
 		   "If you don't see a stacked barchart i.e. you only see \
 lots of thin bars next to each other for each date, then you \
-should upgrade Guppi to version 0.35.4 or, \
-if that isn't out yet, use the Guppi CVS version.")
+should upgrade Guppi to version 0.35.5.")
 		  (gnc:html-markup-p
 		   "Double-click on any legend box or any bar opens \
 another barchart report with the subaccounts of that account or, \

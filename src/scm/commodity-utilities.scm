@@ -170,13 +170,16 @@
 ;; of the foreign-currency and the appropriate list from
 ;; gnc:get-commodity-totalavg-prices, see there.
 (define (gnc:get-commoditylist-totalavg-prices
-	 currency-accounts end-date-tp commodity-list report-currency)
-  (map
-   (lambda (c)
-     (cons c
-	   (gnc:get-commodity-totalavg-prices
-	    currency-accounts end-date-tp c report-currency)))
-   commodity-list))
+	 commodity-list report-currency end-date-tp)
+  (let ((currency-accounts 
+	 (filter gnc:account-has-shares? (gnc:group-get-subaccounts
+					  (gnc:get-current-group)))))
+    (map
+     (lambda (c)
+       (cons c
+	     (gnc:get-commodity-totalavg-prices
+	      currency-accounts end-date-tp c report-currency)))
+     commodity-list)))
 
 ;; Get the instantaneous prices for the 'price-commodity', measured in
 ;; amounts of the 'report-currency'. The prices are taken from all
@@ -245,13 +248,16 @@
 ;; consists of the foreign-currency and the appropriate list from
 ;; gnc:get-commodity-inst-prices, see there.
 (define (gnc:get-commoditylist-inst-prices
-	 currency-accounts end-date-tp commodity-list report-currency)
-  (map
-   (lambda (c)
-     (cons c
-	   (gnc:get-commodity-inst-prices
-	    currency-accounts end-date-tp c report-currency)))
-   commodity-list))
+	 commodity-list report-currency end-date-tp)
+  (let ((currency-accounts 
+	 (filter gnc:account-has-shares? (gnc:group-get-subaccounts
+					  (gnc:get-current-group)))))
+    (map
+     (lambda (c)
+       (cons c
+	     (gnc:get-commodity-inst-prices
+	      currency-accounts end-date-tp c report-currency)))
+     commodity-list)))
 
 
 ;; Go through all toplevel non-'report-commodity' balances in
@@ -359,10 +365,10 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; In progress: A suggested function to calculate the weighted average
-;; exchange rate between all commodities and the
-;; report-commodity. Uses all currency transactions up until the
-;; end-date. Returns an alist, see sumlist.
+;; Calculate the weighted average exchange rate between all
+;; commodities and the 'report-commodity'. Uses all currency
+;; transactions up until the 'end-date'. Returns an alist, see
+;; sumlist.
 (define (gnc:get-exchange-totals report-commodity end-date)
   (let ((curr-accounts 
 	 (filter gnc:account-has-shares? (gnc:group-get-subaccounts
@@ -543,8 +549,89 @@
 	domestic date))
       #f))
 
-;; Return a ready-to-use function. Which one is determined by the
-;; value of 'source-option', whose possible values are set in
+;; Find the price in 'pricelist' that's nearest to 'date'. The
+;; pricelist comes from
+;; e.g. gnc:get-commodity-totalavg-prices. Returns a <gnc-numeric> or,
+;; if pricelist was empty, #f.
+(define (gnc:pricelist-price-find-nearest
+	 pricelist date)
+  (let* ((later (find (lambda (p) 
+			(gnc:timepair-lt date (first p)))
+		      pricelist))
+	 (earlierlist (take-while 
+		       (lambda (p) 
+			 (gnc:timepair-ge date (first p)))
+		       pricelist))
+	 (earlier (and (not (null? earlierlist))
+		       (last earlierlist))))
+    ;;		(if earlier
+    ;;		    (warn "earlier" 
+    ;;			  (gnc:timepair-to-datestring (first earlier))
+    ;;			  (gnc:numeric-to-double (second earlier))))
+    ;;		(if later
+    ;;		    (warn "later" 
+    ;;			  (gnc:timepair-to-datestring (first later))
+    ;;			  (gnc:numeric-to-double (second later))))
+    
+    (if (and earlier later)
+	(if (< (abs (gnc:timepair-delta date (first earlier)))
+	       (abs (gnc:timepair-delta date (first later))))
+	    (second earlier)
+	    (second later))
+	(or
+	 (and earlier (second earlier))
+	 (and later (second later))))))
+
+;; Exchange by the nearest price from pricelist. This function takes
+;; the <gnc-monetary> 'foreign' amount, the <gnc:commodity*>
+;; 'domestic' commodity, a <gnc:time-pair> 'date' and the
+;; 'pricelist'. It exchanges the amount into the domestic currency,
+;; using the price nearest to 'data' found in the pricelist. The
+;; function returns a <gnc-monetary>.
+(define (gnc:exchange-by-pricelist-nearest
+	 pricelist foreign domestic date)
+  (if (and (record? foreign) (gnc:gnc-monetary? foreign)
+	   date (not (null? pricelist)))
+      (gnc:make-gnc-monetary 
+       domestic
+       (let ((price (gnc:pricelist-price-find-nearest pricelist date)))
+	 (if price
+	     (gnc:numeric-mul (gnc:gnc-monetary-amount foreign) 
+			      price
+			      (gnc:commodity-get-fraction domestic)
+			      GNC-RND-ROUND)
+	     (begin
+	       (warn "gnc:exchange-by-pricelist-nearest: No price found for "
+		     (gnc:monetary->string foreign) " into "
+		     (gnc:monetary->string
+		      (gnc:make-gnc-monetary domestic (gnc:numeric-zero)))
+		     " at date " (gnc:timepair-to-datestring date))
+	       (gnc:numeric-zero)))))
+      #f))
+
+;; Create a ready-to-use function for calculation of the exchange
+;; rates at different times. (This is the glorious generalization of
+;; gnc:make-exchange-function, woohoo!) The prices over time are
+;; stored in 'pricealist' which comes from
+;; e.g. gnc:get-commoditylist-totalavg-prices. The returned function
+;; takes the <gnc-monetary> 'foreign' amount, the <gnc:commodity*>
+;; 'domestic', and the <gnc:timepair> 'date'. It exchanges the amount
+;; into the domestic currency according to the nearest price found in
+;; the 'pricealist'. It will return a <gnc-monetary>.
+(define (gnc:make-exchange-nearest-function pricealist)
+  (lambda (foreign domestic date)
+    (let ((plist (assoc-ref pricealist 
+			    (gnc:gnc-monetary-commodity foreign))))
+      (if (and plist (not (null? plist)))
+	  (gnc:exchange-by-pricelist-nearest
+	   plist foreign domestic date)
+	  (warn "gnc:make-exchange-nearest-fn: No pricelist found for "
+		(gnc:monetary->string foreign) " into "
+		(gnc:monetary->string
+		 (gnc:make-gnc-monetary domestic (gnc:numeric-zero))))))))
+
+;; Return a ready-to-use function. Which one to use is determined by
+;; the value of 'source-option', whose possible values are set in
 ;; gnc:options-add-price-source!.
 (define (gnc:case-exchange-fn 
 	 source-option report-currency to-date-tp)
@@ -556,9 +643,21 @@
     ('pricedb-nearest (lambda (foreign domestic)
 			(gnc:exchange-by-pricedb-nearest
 			 foreign domestic to-date-tp)))
-    (else (gnc:warn "gnc:case-exchange-gn: bad price-source value"))))
+    (else (gnc:warn "gnc:case-exchange-fn: bad price-source value"))))
 
-
+;; Return a ready-to-use function. Which one to use is determined by
+;; the value of 'source-option', whose possible values are set in
+;; gnc:options-add-price-source!.
+(define (gnc:case-exchange-time-fn 
+	 source-option report-currency commodity-list to-date-tp)
+  (case source-option
+    ('weighted-average (gnc:make-exchange-nearest-function 
+			(gnc:get-commoditylist-totalavg-prices
+			 commodity-list report-currency to-date-tp)))
+    ('pricedb-latest (lambda (foreign domestic date)
+		       (gnc:exchange-by-pricedb-latest foreign domestic)))
+    ('pricedb-nearest gnc:exchange-by-pricedb-nearest)
+    (else (gnc:warn "gnc:case-exchange-time-fn: bad price-source value"))))
 
 ;; Adds all different commodities in the commodity-collector <foreign>
 ;; by using the exchange rates of <exchange-fn> to calculate the

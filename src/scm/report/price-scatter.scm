@@ -160,9 +160,7 @@
 	   (currency-accounts 
 	    (filter gnc:account-has-shares? (gnc:group-get-subaccounts
 					     (gnc:get-current-group))))
-	   ;; some bogus data
-	   (data '((1.0 1.0) (1.1 1.2) (1.2 1.4) (1.3 1.6) 
-		   (2.0 1.0) (2.1 1.2) (2.2 1.4) (2.3 1.6))))
+	   (data '()))
       
       (gnc:html-scatter-set-title! 
        chart report-title)
@@ -225,13 +223,13 @@
 			(gnc:timepair-ge to-date-tp (first x))
 			(gnc:timepair-ge (first x) from-date-tp)))
 		     data))
-	 
+
 	 ;; some output
 	 ;;(warn "data" (map (lambda (x) (list
-	 ;;    (gnc:timepair-to-datestring (car x))
-	 ;;    (gnc:numeric-to-double (second x))))
-	 ;;data))
-
+	 ;;			(gnc:timepair-to-datestring (car x))
+	 ;;		(gnc:numeric-to-double (second x))))
+	 ;; data))
+	 
 	 ;; convert the gnc:numeric's to doubles
 	 (set! data (map (lambda (x) 
 			   (list (first x) 
@@ -257,20 +255,25 @@
 			    ('YearDelta 31536000)))
 		       (second x)))
 		    data))
-	 ))
-      
-      (gnc:html-scatter-set-data! 
-       chart data)
-      
-      (gnc:html-document-add-object! document chart) 
-      
-;;      (gnc:html-document-add-object! 
-;;       document 
-;;       (gnc:make-html-text 
-;;	(gnc:html-markup-p 
-;;	 "This report calculates the 'prices of commodity' transactions \
-;;versus the 'report commodity'. (I.e. it won't work if there's another \
-;;commodity involved in between.) cstim.")))
+	 
+	 (gnc:html-scatter-set-data! 
+	  chart data)
+	 
+	 (if (not (null? data))
+	     (gnc:html-document-add-object! document chart) 
+	     (gnc:html-document-add-object!
+	      document
+	      (gnc:html-make-empty-data-warning))))
+
+       ;; warning if report-currency == price-commodity
+       (gnc:html-document-add-object! 
+	document 
+	(gnc:make-html-text 
+	 (gnc:html-markup-h2 (_ "Identical commodities"))
+	 (gnc:html-markup-p 
+	  (_ "Your selected commodity and the currency of the report \
+are identical. It doesn't make sense to show prices for identical \
+commodities.")))))
       
       document))
 

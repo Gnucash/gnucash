@@ -13,8 +13,13 @@
 (gnc:depend "report-utilities.scm")
 (gnc:depend "date-utilities.scm")
 
-(let ((optname-subacct (N_ "Include Sub-Accounts"))
-      (optname-report-currency (N_ "Report Currency")))
+(let ((optname-from-date (N_ "From"))
+      (optname-to-date (N_ "To"))
+      (optname-stepsize (N_ "Step Size"))
+      (optname-report-currency (N_ "Report's currency"))
+      (optname-price-source (N_ "Price Source"))
+      (optname-subacct (N_ "Include Sub-Accounts")))
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Options
   ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -26,14 +31,32 @@
             (lambda (new-option)
               (gnc:register-option options new-option))))      
 
+      ;; General tab
       (gnc:options-add-date-interval!
-       options gnc:pagename-general (N_ "From") (N_ "To") "a")
+       options gnc:pagename-general optname-from-date optname-to-date "a")
+
+      (gnc:options-add-interval-choice! 
+       options gnc:pagename-general optname-stepsize "b" 'TwoWeekDelta)
+
+      ;; Report currency
+      (gnc:options-add-currency! 
+       options gnc:pagename-general optname-report-currency "c")
+      
+      (gnc:options-add-price-source! 
+       options gnc:pagename-general
+       optname-price-source "d" 'pricedb-latest)
+
+      ;; Account tab
+      (register-option
+       (gnc:make-simple-boolean-option
+        gnc:pagename-accounts optname-subacct
+        "a" (N_ "Include sub-accounts of all selected accounts") #t))
 
       ;; account(s) to do report on
       (register-option
        (gnc:make-account-list-option
         gnc:pagename-accounts (N_ "Accounts")
-        "d" (N_ "Do transaction report on this account")
+        "b" (N_ "Do transaction report on this account")
         (lambda ()
           ;; FIXME : gnc:get-current-accounts disappeared
           (let ((current-accounts '()))
@@ -50,18 +73,7 @@
 		    (gnc:group-get-account-list (gnc:get-current-group)))))))
         #f #t))
 
-      (gnc:options-add-interval-choice! 
-       options gnc:pagename-general (N_ "Step Size") "b" 'TwoWeekDelta)
-
-      (register-option
-       (gnc:make-simple-boolean-option
-        gnc:pagename-accounts optname-subacct
-        "e" (N_ "Include sub-accounts of all selected accounts") #t))
-
-      ;; Report currency
-      (gnc:options-add-currency! 
-       options gnc:pagename-general optname-report-currency "f")
-      
+      ;; Display tab
       (register-option
        (gnc:make-simple-boolean-option
         gnc:pagename-display (N_ "Show table")
@@ -106,19 +118,12 @@
   ;; avg-bal max-bal min-bal total-in total-out net) if multiple
   ;; accounts are selected the balance is the sum for all.  Each
   ;; balance in a foreign currency will be converted to a double in
-  ;; the report-currency by means of the collector->double
+  ;; the report-currency by means of the monetary->double
   ;; function. 
-
-  ;; FIXME: the exchange rate should change every time interval, of
-  ;; course, but right now we assume the very last exchange rate to be
-  ;; constant over the whole report period. Note that this might get
-  ;; *really* complicated.
-
-  (define (analyze-splits splits start-bal 
-			  start-date end-date interval collector->double)
+  (define (analyze-splits splits start-bal-double 
+			  start-date end-date interval monetary->double)
     (let ((interval-list 
 	   (gnc:make-date-interval-list start-date end-date interval))
-	  (start-bal-double (collector->double start-bal))
 	  (data-rows '()))
       
       (define (output-row interval-start 
@@ -142,14 +147,14 @@
                data-rows)))
       
       ;; Returns a double which is the split value, correctly
-      ;; exchanged to the current report-currency.
-      (define (get-split-value split)
-	(let ((coll (gnc:make-commodity-collector)))
-	  (coll 'add (gnc:account-get-commodity (gnc:split-get-account split))
-		(gnc:split-get-amount split))
-	  ;; FIXME: not as efficient as it would be possible because I
-	  ;; only have the collector->double conversion at hand.
-	  (collector->double coll)))
+      ;; exchanged to the current report-currency. We use the exchange
+      ;; rate at the 'date'.
+      (define (get-split-value split date)
+	(monetary->double
+	 (gnc:make-gnc-monetary
+	  (gnc:account-get-commodity (gnc:split-get-account split))
+	  (gnc:split-get-amount split))
+	 date))
       
       ;; calculate the statistics for one interval - returns a list 
       ;;  containing the following: 
@@ -189,9 +194,11 @@
 		#f
 		(let* 
 		    ((split (car splits))
-		     (split-amt (get-split-value split))
 		     (split-time (gnc:transaction-get-date-posted 
-				  (gnc:split-get-parent split))))
+				  (gnc:split-get-parent split)))
+		     ;; FIXME: Which date should we use here? The 'to'
+		     ;; date? the 'split-time'?
+		     (split-amt (get-split-value split split-time)))
 		  
 		  
 		  (gnc:debug "split " split)
@@ -247,42 +254,55 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (define (renderer report-obj)
-    (let* ((opt-val 
-            (lambda (sec value)
-              (gnc:option-value 
-               (gnc:lookup-option (gnc:report-options report-obj) sec value))))
-	   (report-title (opt-val gnc:pagename-general gnc:optname-reportname))
-           (begindate  (gnc:timepair-start-day-time
-			(gnc:date-option-absolute-time 
-			 (opt-val gnc:pagename-general (N_ "From")))))
-           (enddate    (gnc:timepair-end-day-time 
-			(gnc:date-option-absolute-time 
-			 (opt-val gnc:pagename-general (N_ "To")))))
-           (stepsize   (eval (opt-val gnc:pagename-general (N_ "Step Size"))))
-           (accounts   (opt-val gnc:pagename-accounts (N_ "Accounts")))
-           (dosubs?    (opt-val gnc:pagename-accounts optname-subacct))
-	   (report-currency (opt-val gnc:pagename-general 
+
+    (define (get-option section name)
+      (gnc:option-value 
+       (gnc:lookup-option (gnc:report-options report-obj) section name)))
+
+    (let* ((report-title (get-option gnc:pagename-general 
+				     gnc:optname-reportname))
+           (begindate (gnc:timepair-start-day-time
+		       (gnc:date-option-absolute-time 
+			(get-option gnc:pagename-general optname-from-date))))
+           (enddate (gnc:timepair-end-day-time 
+		     (gnc:date-option-absolute-time 
+		      (get-option gnc:pagename-general optname-to-date))))
+           (stepsize (eval (get-option gnc:pagename-general optname-stepsize)))
+	   (report-currency (get-option gnc:pagename-general 
 				     optname-report-currency))
-           (plot-type  (opt-val gnc:pagename-display (N_ "Plot Type")))
-           (show-plot? (opt-val gnc:pagename-display (N_ "Show plot")))
-           (show-table? (opt-val gnc:pagename-display (N_ "Show table")))
+	   (price-source (get-option gnc:pagename-general
+				     optname-price-source))
+
+           (accounts   (get-option gnc:pagename-accounts (N_ "Accounts")))
+           (dosubs?    (get-option gnc:pagename-accounts optname-subacct))
+
+           (plot-type  (get-option gnc:pagename-display (N_ "Plot Type")))
+           (show-plot? (get-option gnc:pagename-display (N_ "Show plot")))
+           (show-table? (get-option gnc:pagename-display (N_ "Show table")))
+
            (document   (gnc:make-html-document))
-	   (exchange-alist (gnc:make-exchange-alist
-			    report-currency enddate))
-	   (exchange-fn (gnc:make-exchange-function exchange-alist))
+
+	   (commodity-list (gnc:accounts-get-commodities 
+			    (append 
+			     (gnc:acccounts-get-all-subaccounts accounts)
+			     accounts)
+			    report-currency))
+	   (exchange-fn (gnc:case-exchange-time-fn 
+			 price-source report-currency 
+			 commodity-list enddate))
+
 	   (beforebegindate (gnc:timepair-end-day-time 
 			     (gnc:timepair-previous-day begindate)))
 	   ;; startbal will be a commodity-collector
            (startbal  '()))
 
-      (define (collector->double commodity-collector)
+      (define (monetary->double foreign-monetary date)
 	(gnc:numeric-to-double
 	 (gnc:gnc-monetary-amount
-	  (gnc:sum-collector-commodity commodity-collector
-				       report-currency 
-				       exchange-fn))))
+	  (exchange-fn foreign-monetary report-currency date))))
 
       (gnc:html-document-set-title! document report-title)
+      (warn commodity-list)
 
       (if (not (null? accounts))
           (let ((query (gnc:malloc-query))
@@ -332,18 +352,28 @@
 		   (lambda (acct) (gnc:account-get-comm-balance-at-date 
 				   acct beforebegindate #f))
 		   gnc:account-reverse-balance?))
+
+	    (set! startbal 
+		  (gnc:numeric-to-double
+		   (gnc:gnc-monetary-amount
+		    (gnc:sum-collector-commodity 
+		     startbal
+		     report-currency 
+		     (lambda (a b) 
+		       (exchange-fn a b beforebegindate))))))
             
             ;; and analyze the data 
-            (set! data (analyze-splits splits startbal begindate enddate 
-                                       stepsize collector->double))
+            (set! data (analyze-splits splits startbal
+				       begindate enddate 
+                                       stepsize monetary->double))
             
             ;; make a plot (optionally)... if both plot and table, 
             ;; plot comes first. 
             (if show-plot?
                 (let ((barchart (gnc:make-html-barchart))
-                      (width (opt-val gnc:pagename-display 
+                      (width (get-option gnc:pagename-display 
 				      (N_ "Plot Width")))
-                      (height (opt-val gnc:pagename-display 
+                      (height (get-option gnc:pagename-display 
 				       (N_ "Plot Height")))
                       (col-labels '())
                       (col-colors '()))

@@ -202,6 +202,15 @@
   (let ((group (gnc:account-get-children acct)))
     (gnc:group-get-subaccounts group)))
 
+;; Get all children of this list of accounts.
+(define (gnc:acccounts-get-all-subaccounts accountlist)
+  (append-map 
+   (lambda (a)
+     (gnc:group-get-subaccounts
+      (gnc:account-get-children a)))
+   accountlist))
+
+
 (define (gnc:transaction-map-splits thunk transaction)
   (let loop ((num-splits (gnc:transaction-get-split-count transaction))
              (i 0))
