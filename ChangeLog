@@ -1,5 +1,7 @@
 2000-06-28  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/dialog-budget.c (entry_down_button_clicked): bug fix.
+
 	* src/gnome/dialog-options.c: implement font options.
 
 	* src/scm/prefs.scm: add options for the register fonts.
