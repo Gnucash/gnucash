@@ -10,7 +10,6 @@ gnc_regular_scm_files = \
   command-line.scm \
   depend.scm \
   doc.scm \
-  extensions.scm \
   help-topics-index.scm \
   main.scm \
   main-window.scm \

@@ -156,12 +156,12 @@
     (gnc:module-load "gnucash/report/standard-reports" 0)
     (gnc:module-load "gnucash/report/utility-reports" 0)
     (gnc:module-load "gnucash/report/locale-specific/us" 0)
+    (gnc:module-load "gnucash/business-gnome" 0)
 
     ;; Now we can load a bunch of files.
     (load-from-path "path.scm")
     (load-from-path "command-line.scm")
     (load-from-path "doc.scm")
-    (load-from-path "extensions.scm")
     (load-from-path "main-window.scm")
     (load-from-path "tip-of-the-day.scm")
     (load-from-path "printing/print-check.scm")

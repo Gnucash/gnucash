@@ -213,7 +213,7 @@
 (export gnc:reldate-initialize)
 
 ;; hooks 
-(export gnc:hook-export)
+(export gnc:hook-define)
 (export gnc:hook-danglers-get)
 (export gnc:hook-danglers-set!)
 (export gnc:hook-danglers->list)

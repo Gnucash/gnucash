@@ -50,13 +50,6 @@
 (export gnc:find-doc-file)
 (export gnc:load-help-topics)
 
-;; from extensions.scm
-(export gnc:extension-type)
-(export gnc:extension-name)
-(export gnc:extension-documentation)
-(export gnc:extension-path)
-(export gnc:extension-script)
-
 ;; from main-window.scm
 (export gnc:find-acct-tree-window-options)
 (export gnc:make-new-acct-tree-window)  

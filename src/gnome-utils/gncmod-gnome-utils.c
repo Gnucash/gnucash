@@ -64,6 +64,7 @@ gnc_module_init(int refcount) {
 
   /* publish g-wrapped bindings */
   lmod("(g-wrapped gw-gnome-utils)");
+  lmod("(gnucash gnome-utils)");
 
   return TRUE;
 }

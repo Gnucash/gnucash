@@ -97,6 +97,12 @@ libgw_gnome_utils_la_LDFLAGS = -module
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-gnome-utils.scm gw-gnome-utils-spec.scm
 
+gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+gncmod_DATA = gnome-utils.scm 
+
+gncscmdir = ${GNC_SHAREDIR}/scm
+gncscm_DATA = gnc-menu-extensions.scm
+
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
   commodity.glade
@@ -105,7 +111,8 @@ EXTRA_DIST = \
   .cvsignore \
   gnc-dir.h.in \
   ${glade_DATA} \
-  ${gwmod_DATA}
+  ${gwmod_DATA} \
+  ${gncscm_DATA}
 
 dialog-utils.c: gnc-dir.h
 
