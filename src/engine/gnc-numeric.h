@@ -301,10 +301,10 @@ gnc_numeric gnc_numeric_zero(void) { return gnc_numeric_create(0, 1); }
 gnc_numeric double_to_gnc_numeric(double in, gint64 denom,  
                                   gint how);
 
-/** Read a gnc_numeric from str, skipping any leading whitespace, 
- *  and return a pointer to just past the last byte read.  
+/** Read a gnc_numeric from str, skipping any leading whitespace.
+ *  Return TRUE on success and store the resulting value in "n".
  *  Return NULL on error. */
-const gchar *string_to_gnc_numeric(const gchar* str, gnc_numeric *n);
+gboolean string_to_gnc_numeric(const gchar* str, gnc_numeric *n);
 
 /** Create a gnc_numeric object that signals the error condition
  *  noted by error_code, rather than a number. 

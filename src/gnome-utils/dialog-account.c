@@ -1148,7 +1148,7 @@ gnc_account_list_fill(GtkCList *type_list, GList *types)
     {
       text[0] = (gchar *) xaccAccountGetTypeStr(acct_type);
       row = gtk_clist_append(type_list, text);
-      gtk_clist_set_row_data(type_list, row, (gpointer)acct_type);
+      gtk_clist_set_row_data(type_list, row, GINT_TO_POINTER(acct_type));
     }
   }
   else
@@ -1171,7 +1171,7 @@ gnc_account_choose_new_acct_type (AccountWindow *aw)
   if (aw->valid_types == NULL)
     return last_used_account_type;
 
-  if (g_list_index (aw->valid_types, (gpointer)last_used_account_type) != -1)
+  if (g_list_index (aw->valid_types, GINT_TO_POINTER(last_used_account_type)) != -1)
     return last_used_account_type;
 
   return ((GNCAccountType)(aw->valid_types->data));

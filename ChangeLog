@@ -5,6 +5,24 @@
 	* src/engine/gnc-pricedb.c:
 	  Phil Longstaff's patch to prevent duplicate pricedb entries.
 
+	Heath Martin's x86_64 patch:
+	* macros/autogen.sh:
+	  change "head -1" to "head -n 1"
+	* src/engine/gnc-numeric.[ch]:
+	  change string_to_gnc_numeric() to return gboolean.
+	* src/app-utils/gnc-exp-parser.c:
+	* src/backend/file/sixtp-dom-parsers.c:
+	  use new string_to_gnc_numeric() API
+	* src/engine/gnc-lot.c:
+	  64-bit safe for x86_64
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/dialog-sxsincelast.c:
+	* src/gnome/druid-loan.c:
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome-utils/gnc-query-list.c:
+	* src/import-export/import-match-map.c:
+	  use GPOINTER_TO_INT and GINT_TO_POINTER macros to be 64-bit safe.
+
 2004-10-30  Christian Stimming  <stimming@tuhh.de>
 
 	* doc/README.HBCI: Updated HBCI readme.

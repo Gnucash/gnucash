@@ -2585,8 +2585,8 @@ ld_rev_hash_to_list( gpointer key, gpointer val, gpointer user_data )
         RevRepaymentRow *rrr = g_new0( RevRepaymentRow, 1 );
         if ( !key || !val ) {
                 DEBUG( "%.8x, %.8x",
-                       (unsigned int)key,
-                       (unsigned int)val );
+                       GPOINTER_TO_UINT(key),
+                       GPOINTER_TO_UINT(val));
                 return;
         }
         rrr->date = *(GDate*)key;

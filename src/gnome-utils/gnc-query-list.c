@@ -178,7 +178,7 @@ update_booleans (GNCQueryList *list, gint row)
     if (safe_strcmp (type, QUERYCORE_BOOLEAN))
       continue;
 
-    result = (gboolean)(gnc_search_param_compute_value(param, entry));
+    result = (gboolean) GPOINTER_TO_INT(gnc_search_param_compute_value(param, entry));
     gnc_clist_set_check (clist, row, i, result);
   }
 }

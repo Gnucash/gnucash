@@ -1204,32 +1204,32 @@ gnc_num_dbg_to_string(gnc_numeric n)
   return p;
 }
 
-const gchar *
+gboolean
 string_to_gnc_numeric(const gchar* str, gnc_numeric *n) 
 {
   size_t num_read;
   long long int tmpnum;
   long long int tmpdenom;
     
-  if(!str) return NULL;
+  if(!str) return FALSE;
 
 #ifdef GNC_DEPRECATED
   /* must use "<" here because %n's effects aren't well defined */
   if(sscanf(str, " " GNC_SCANF_LLD "/" GNC_SCANF_LLD "%n",
             &tmpnum, &tmpdenom, &num_read) < 2) {
-    return(NULL);
+    return FALSE;
   }
 #else
   tmpnum = strtoll (str, NULL, 0);
   str = strchr (str, '/');
-  if (!str) return NULL;
+  if (!str) return FALSE;
   str ++;
   tmpdenom = strtoll (str, NULL, 0);
   num_read = strspn (str, "0123456789");
 #endif
   n->num = tmpnum;
   n->denom = tmpdenom;
-  return(str + num_read);
+  return TRUE;
 }
 
 /********************************************************************

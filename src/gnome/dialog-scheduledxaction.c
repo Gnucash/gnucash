@@ -1770,7 +1770,7 @@ edit_button_clicked( GtkButton *b, gpointer d )
         sxd = (SchedXactionDialog*)d;
         cl = GTK_CLIST(glade_xml_get_widget( sxd->gxml, SX_LIST ));
         for( sel = cl->selection; sel; sel = g_list_next(sel) ) {
-                row = (int)sel->data;
+                row = GPOINTER_TO_INT(sel->data);
                 /* get the clist row for this listitem */
                 sx = (SchedXaction*)gtk_clist_get_row_data( cl, row );
                 /* get the object UD */
@@ -1807,7 +1807,7 @@ delete_button_clicked( GtkButton *b, gpointer d )
         realConfDelOpenMsg = g_string_new( beingEditedMessage );
         beingEditedList = NULL;
         for ( ; sel ; sel = sel->next ) {
-                sx = (SchedXaction*)gtk_clist_get_row_data( cl, (int)sel->data );
+                sx = (SchedXaction*)gtk_clist_get_row_data( cl, GPOINTER_TO_INT(sel->data));
                 g_string_sprintfa( realConfDeleteMsg, "\n\"%s\"",
                                    xaccSchedXactionGetName( sx ) );
                 if ( (l = gnc_find_gui_components( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
@@ -1870,7 +1870,7 @@ delete_button_clicked( GtkButton *b, gpointer d )
                         gpointer unused;
                         gboolean foundP;
 
-                        sx = (SchedXaction*)gtk_clist_get_row_data( cl, (int)sel->data );
+                        sx = (SchedXaction*)gtk_clist_get_row_data( cl, GPOINTER_TO_INT(sel->data));
                         sxList = g_list_remove( sxList, (gpointer)sx );
                         foundP = g_hash_table_lookup_extended( sxd->sxData, sx,
                                                                &unused,
@@ -1891,7 +1891,7 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 sel = g_list_reverse( sel );
                 gtk_clist_unselect_all( cl );
                 for ( ; sel; sel = sel->next ) {
-                        gtk_clist_remove( cl, (int)sel->data );
+                        gtk_clist_remove( cl, GPOINTER_TO_INT(sel->data) );
                 }
                 g_list_free( sel );
                 sel = NULL;

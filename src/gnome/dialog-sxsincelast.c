@@ -1327,7 +1327,7 @@ gnc_sxsld_finish( GnomeDruidPage *druid_page,
                       toDelPtr;
                       toDelPtr = toDelPtr->next ) {
 
-                        row = (gint)toDelPtr->data;
+                        row = GPOINTER_TO_INT(toDelPtr->data);
                         tdt = (toDeleteTuple*)gtk_clist_get_row_data( cl, row );
                         elt = g_list_find( sxList, tdt->sx );
                         sxList = g_list_remove_link( sxList, elt );
@@ -2983,7 +2983,7 @@ void
 print_vars_helper( gpointer key, gpointer value, gpointer user_data )
 {
         DEBUG( "\"%s\" -> %.8x [%s]",
-               (gchar*)key, (unsigned int)value,
+               (gchar*)key, GPOINTER_TO_UINT(value),
                gnc_numeric_to_string( *(gnc_numeric*)value ) );
 }
 
