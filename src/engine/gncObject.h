@@ -16,3 +16,6 @@
 		#define gncObjectIsDirty qof_object_is_dirty
 		#define gncObjectMarkClean qof_object_mark_clean
 
+		#define gncObjectForeachType qof_object_foreach_type
+		#define gncObjectForeach qof_object_foreach
+		#define gncObjectPrintable qof_object_printable

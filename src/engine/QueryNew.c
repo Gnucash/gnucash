@@ -693,7 +693,7 @@ GList * gncQueryRun (QueryNew *q)
       }
 
       /* and then iterate over all the objects */
-      gncObjectForeach (q->search_for, book, check_item_cb, &qcb);
+      qof_object_foreach (q->search_for, book, check_item_cb, &qcb);
     }
 
     matching_objects = qcb.list;

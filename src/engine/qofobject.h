@@ -74,12 +74,12 @@ struct _QofObject {
 
 };
 
-void gncObjectForeachType (foreachTypeCB cb, gpointer user_data);
+void qof_object_foreach_type (foreachTypeCB cb, gpointer user_data);
 
-void gncObjectForeach (GNCIdTypeConst type_name, QofBook *book, 
+void qof_object_foreach (GNCIdTypeConst type_name, QofBook *book, 
 		       foreachObjectCB cb, gpointer user_data);
 
-const char * gncObjectPrintable (GNCIdTypeConst type_name, gpointer obj);
+const char * qof_object_printable (GNCIdTypeConst type_name, gpointer obj);
 
 
 /* REGISTRATION AND REG-LOOKUP FUNCTIONS */
@@ -97,11 +97,11 @@ const QofObject * qof_object_lookup (GNCIdTypeConst type_name);
 
 
 /** Register and lookup backend-specific data for this particular object */
-gboolean qof_object_registerBackend (GNCIdTypeConst type_name,
+gboolean qof_object_register_backend (GNCIdTypeConst type_name,
 				   const char *backend_name,
 				   gpointer be_data);
 
-gpointer qof_object_lookupBackend (GNCIdTypeConst type_name,
+gpointer qof_object_lookup_backend (GNCIdTypeConst type_name,
 				 const char *backend_name);
 
 void qof_object_foreach_backend (const char *backend_name,

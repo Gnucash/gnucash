@@ -1,5 +1,5 @@
 /********************************************************************\
- * gncObject.c -- the Core Object Registration/Lookup Interface     *
+ * qofobject.c -- the Core Object Registration/Lookup Interface     *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -19,7 +19,7 @@
  *                                                                  *
 \********************************************************************/
 /*
- * gncObject.c -- the Core Object Object Registry
+ * qofobject.c -- the Core Object Object Registry
  * Copyright (C) 2001 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
@@ -94,7 +94,7 @@ void qof_object_mark_clean (QofBook *book)
   }
 }
 
-void gncObjectForeachType (foreachTypeCB cb, gpointer user_data)
+void qof_object_foreach_type (foreachTypeCB cb, gpointer user_data)
 {
   GList *l;
 
@@ -106,7 +106,7 @@ void gncObjectForeachType (foreachTypeCB cb, gpointer user_data)
   }
 }
 
-void gncObjectForeach (GNCIdTypeConst type_name, QofBook *book, 
+void qof_object_foreach (GNCIdTypeConst type_name, QofBook *book, 
 		       foreachObjectCB cb, gpointer user_data)
 {
   const QofObject *obj;
@@ -123,7 +123,7 @@ void gncObjectForeach (GNCIdTypeConst type_name, QofBook *book,
 }
 
 const char *
-gncObjectPrintable (GNCIdTypeConst type_name, gpointer obj)
+qof_object_printable (GNCIdTypeConst type_name, gpointer obj)
 {
   const QofObject *b_obj;
 
@@ -224,7 +224,7 @@ const QofObject * qof_object_lookup (GNCIdTypeConst name)
   return NULL;
 }
 
-gboolean qof_object_registerBackend (GNCIdTypeConst type_name,
+gboolean qof_object_register_backend (GNCIdTypeConst type_name,
 				   const char *backend_name,
 				   gpointer be_data)
 {
@@ -250,7 +250,7 @@ gboolean qof_object_registerBackend (GNCIdTypeConst type_name,
   return TRUE;
 }
 
-gpointer qof_object_lookupBackend (GNCIdTypeConst type_name,
+gpointer qof_object_lookup_backend (GNCIdTypeConst type_name,
 				 const char *backend_name)
 {
   GHashTable *ht;
