@@ -456,9 +456,13 @@ xaccGroupScrubCommodities (AccountGroup *group)
 {
   if (!group) return;
 
+  xaccAccountGroupBeginEdit (group);
+
   xaccGroupForEachTransaction (group, scrub_trans_currency_helper, NULL);
 
   xaccGroupForEachAccount (group, scrub_account_commodity_helper, NULL, TRUE);
+
+  xaccAccountGroupCommitEdit (group);
 }
 
 /* ================================================================ */

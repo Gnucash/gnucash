@@ -116,7 +116,7 @@ xaccGroupEqual(AccountGroup *ga,
 /********************************************************************\
 \********************************************************************/
 
-static void
+void
 xaccAccountGroupBeginEdit (AccountGroup *grp)
 {
   GList *node;

@@ -1,3 +1,10 @@
+2001-07-17  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/Scrub.c (xaccGroupScrubCommodities): use group
+	begin/commit to speed up processing
+
+	* src/engine/Group.[ch] (xaccAccountGroupBeginEdit): make public
+
 2001-07-18  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/payables.scm: Make creditor display
