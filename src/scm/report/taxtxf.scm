@@ -181,6 +181,10 @@
   (define (txf-payer? payer)
     (member payer '('current 'parent)))
 
+  (define (gnc:account-get-txf account)
+    (and (gnc:account-get-tax-related account)
+	 (not (equal? (gnc:account-get-txf-code account) 'N000))))
+
   (define (gnc:account-get-txf-code account)
     (let ((code (gnc:account-get-tax-US-code account)))
       (string->symbol (if code code "N000"))))
@@ -197,13 +201,13 @@
 
   ;; because we use the list-option input structure, we have to build our own
   ;; search function
-  (define (txfq-ref key txf-list)
-    (do ((i 0 (+ i 1))
-	 (len (length txf-list)))
-	((or (>= i len) (eq? key (vector-ref (list-ref txf-list i) 0)))
-	 (if (>= i len)
-	     (list-ref txf-list 0)
-	     (list-ref txf-list i)))))
+;  (define (txfq-ref key txf-list)
+;    (do ((i 0 (+ i 1))
+;	 (len (length txf-list)))
+;	((or (>= i len) (eq? key (vector-ref (list-ref txf-list i) 0)))
+;	 (if (>= i len)
+;	     (list-ref txf-list 0)
+;	     (list-ref txf-list i)))))
 
   ;; check for duplicate txf codes
   (define (txf-check-dups account) 
@@ -261,7 +265,7 @@
   (define (render-txf-account account account-value date)
     (let* ((print-info (gnc:account-value-print-info account #f))
 	   (value (gnc:amount->string account-value print-info))
-	   (txf? (gnc:account-get-tax-related account)))
+	   (txf? (gnc:account-get-txf account)))
       (if (and txf?
 	       (not (equal? value (gnc:amount->string 0 print-info))))
 	  (let* ((type (gw:enum-<gnc:AccountType>-val->sym
@@ -314,7 +318,7 @@
 			     (if (or full-names (equal? level 1))
 				 (gnc:account-get-full-name account)
 				 (gnc:account-get-name account))))
-	   (blue? (gnc:account-get-tax-related account))
+	   (blue? (gnc:account-get-txf account))
 	   (print-info (gnc:account-value-print-info account #f))
 	   (value (gnc:amount->string lx-value print-info))
 	   (value-formatted
@@ -338,7 +342,7 @@
             (list
              (gnc:make-html-table-cell
               (apply gnc:make-html-text
-                     (append (make-list level "&nbsp;")
+                     (append (make-list (* 6 level) "&nbsp;")
                              (list account-name)))))
             blank-cells
             (list
@@ -547,18 +551,18 @@
 	(let ((type (gw:enum-<gnc:AccountType>-val->sym
                      (gnc:account-get-type account) #f))
 	      (name (gnc:account-get-name account)))
-
+	  
 	  (if (gnc:account-is-inc-exp? account)
 	      (let ((children (gnc:account-get-children account))
                     (account-balance (if (gnc:account-get-tax-related account)
                                          (gnc:account-get-balance-interval
                                           account from-value to-value #f)
                                          0))) ; don't add non tax related
-
-                (if (and tax-mode (not children))
+		
+                (if (not children)
                     (handle-txf-special-splits 
                      level account from-value to-value))
-
+		
                 (set! account-balance (+ (if (> max-level level)
 					     (lx-collector (+ 1 level)
 							   'total #f)
@@ -568,7 +572,7 @@
 					     (- account-balance)
 					     account-balance)))
 		(lx-collector level 'add account-balance)
-
+		
 		(let ((level-x-output
 		       (if tax-mode
 			   (render-level-x-account table level
@@ -580,15 +584,15 @@
 		      (lx-collector 1 'reset #f))
 		  (if (> max-level level)
 		      (lx-collector (+ 1 level) 'reset #f))
-
-                  (if (and tax-mode children)
+		  
+                  (if children
                       (gnc:group-map-accounts
                        (lambda (x)
                          (if (>= max-level (+ 1 level))
                              (handle-level-x-account (+ 1 level) x)))
                        children))
                   level-x-output)))))
-
+      
       (let ((from-date  (strftime "%Y-%b-%d" (localtime (car from-value))))
 	    (to-date    (strftime "%Y-%b-%d" (localtime (car to-value))))
 	    (today-date (strftime "D%m/%d/%Y" 
@@ -604,8 +608,8 @@
               '()
               (cons (gnc:make-html-table-header-cell/markup
                      "number-header"
-                     "(" (_ "Sub") " "
-                     (number->string (- max-level 1)) ")")
+                     (_ "Sub") " "
+                     (number->string (- max-level 1)))
                     (make-sub-headers (- max-level 1)))))
 
 	;; Now, the main body
