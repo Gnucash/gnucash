@@ -87,6 +87,9 @@ gboolean gnc_set_number_option(const char *section, const char *name,
 gboolean gnc_set_boolean_option(const char *section, const char *name,
                                 gboolean value);
 
+gboolean gnc_set_string_option(const char *section, const char *name,
+			       const char *value);
+
 void gnc_option_refresh_ui_by_name(const char *section_name, 
 				   const char *name);
 

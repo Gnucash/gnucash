@@ -2334,7 +2334,7 @@ gnc_option_db_set_option_default(GNCOptionDB *odb,
 
 
 /********************************************************************\
- * gnc_option_db_set_number_option                                  *
+ * gnc_option_db_set_option                                         *
  *   sets the option to the given value. If successful              *
  *   returns TRUE, otherwise FALSE.                                 *
  *                                                                  *
@@ -2437,6 +2437,49 @@ gnc_option_db_set_boolean_option(GNCOptionDB *odb,
     return FALSE;
 
   scm_value = gh_bool2scm(value);
+
+  scm_value = gnc_option_valid_value(option, scm_value);
+  if (scm_value == SCM_UNDEFINED)
+    return FALSE;
+
+  setter = gnc_option_setter(option);
+  if (setter == SCM_UNDEFINED)
+    return FALSE;
+
+  gh_call1(setter, scm_value);
+
+  return TRUE;
+}
+
+/********************************************************************\
+ * gnc_option_db_set_string_option                                  *
+ *   sets the string option to the given value. If successful       *
+ *   returns TRUE, otherwise FALSE.                                 *
+ *                                                                  *
+ * Args: odb       - option database to search in                   *
+ *       section   - section name of option                         *
+ *       name      - name of option                                 *
+ *       value     - value to set to                                *
+ * Return: success indicator                                        *
+\********************************************************************/
+gboolean
+gnc_option_db_set_string_option(GNCOptionDB *odb,
+				const char *section,
+				const char *name,
+				const char *value)
+{
+  GNCOption *option;
+  SCM scm_value;
+  SCM setter;
+
+  option = gnc_option_db_get_option_by_name(odb, section, name);
+  if (option == NULL)
+    return FALSE;
+
+  if (value)
+    scm_value = gh_str2scm(value, strlen(value));
+  else
+    scm_value = SCM_BOOL_F;
 
   scm_value = gnc_option_valid_value(option, scm_value);
   if (scm_value == SCM_UNDEFINED)

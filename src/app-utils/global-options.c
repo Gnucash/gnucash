@@ -441,6 +441,23 @@ gnc_set_boolean_option(const char *section, const char *name, gboolean value)
 
 
 /********************************************************************\
+ * gnc_set_string_option                                            *
+ *   sets the string option to the given value. If successful       *
+ *   returns TRUE, otherwise FALSE.                                 *
+ *                                                                  *
+ * Args: section   - section name of option                         *
+ *       name      - name of option                                 *
+ *       value     - value to set to                                *
+ * Return: success indicator                                        *
+\********************************************************************/
+gboolean
+gnc_set_string_option(const char *section, const char *name, const char *value)
+{
+  return gnc_option_db_set_string_option(global_options, section, name, value);
+}
+
+
+/********************************************************************\
  * _gnc_option_refresh_ui                                           *
  *   sets the GUI representation of an option with its              *
  *   current guile value.  Designed to be called from guile         *

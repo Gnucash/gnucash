@@ -224,6 +224,11 @@ gboolean gnc_option_db_set_boolean_option(GNCOptionDB *odb,
                                           const char *name,
                                           gboolean value);
 
+gboolean gnc_option_db_set_string_option(GNCOptionDB *odb,
+                                          const char *section,
+                                          const char *name,
+                                          const char *value);
+
 char * gnc_option_date_option_get_subtype(GNCOption *option);
 
 char * gnc_date_option_value_get_type (SCM option_value);
