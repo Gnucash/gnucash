@@ -79,8 +79,12 @@ xaccMallocQuery (void)
 
 static int Sort_DATE_NUM_AMOUNT (Split **, Split **);
 
+#ifndef LONG_LONG_MAX
 #define LONG_LONG_MAX 0x7fffffffffffffffLL
+#endif
+#ifndef LONG_LONG_MIN
 #define LONG_LONG_MIN (- (0x7fffffffffffffffLL) -1)
+#endif
 
 void 
 xaccInitQuery (Query *q)
