@@ -290,32 +290,127 @@ static const char *table_drop_str =
 static gpointer
 query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GList *node, *xaction_list = (GList *) data;
+   GHashTable *xaction_hash = (GHashTable *) data;
    GUID *trans_guid;
+   Transaction *trans;
 
    /* find the transaction this goes into */
    trans_guid = xaccGUIDMalloc();
    *trans_guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("transGUID",j), trans_guid);
 
-   /* don't put transaction into the list more than once ... */
-   for (node=xaction_list; node; node=node->next)
+   /* use markers to avoid redundant traversals of transactions we've
+    * already checked recently. */
+   trans = xaccTransLookup (trans_guid);
+   if (NULL != trans && 0 != trans->marker)
    {
-      if (guid_equal ((GUID *)node->data, trans_guid)) 
-      {
-         xaccGUIDFree (trans_guid);
-         return xaction_list;
-      }
+      xaccGUIDFree (trans_guid);
+      return xaction_hash;
    }
 
-   xaction_list = g_list_prepend (xaction_list, trans_guid);
-   return xaction_list;
+   /* don't put transaction into the list more than once ... */
+   if (g_hash_table_lookup (xaction_hash, trans_guid))
+   {
+      xaccGUIDFree (trans_guid);
+      return xaction_hash;
+   }
+   g_hash_table_insert (xaction_hash, trans_guid, 0);
+
+   return xaction_hash;
 }
+
+typedef struct _ctxt {
+  PGBackend *be;
+  GList *acct_list;
+} ctxt;
 
 typedef struct acct_earliest {
    Account *acct;
    Timespec ts;
 } AcctEarliest;
+
+static void 
+for_each_txn (gpointer key, gpointer value, gpointer user_data)
+{
+   GUID *trans_guid = (GUID *)key;
+   ctxt *ct = (ctxt *) user_data;
+   PGBackend *be = ct->be;
+   GList *anode, *acct_list = ct->acct_list;
+
+   Transaction *trans;
+   int engine_data_is_newer;
+
+   /* use markers to avoid redundant traversals of transactions we've
+    * already checked recently. */
+   trans = xaccTransLookup (trans_guid);
+   if (NULL == trans || 0 == trans->marker)
+   {
+      engine_data_is_newer = pgendCopyTransactionToEngine (be, trans_guid);
+      trans = xaccTransLookup (trans_guid);
+      trans->marker = 1;
+      PINFO ("copy result=%d", engine_data_is_newer);
+   }
+   else
+   {
+      PINFO ("avoided scan");
+      engine_data_is_newer = 1;
+   }
+
+   /* if we restored this transaction from the db, scan over the accounts 
+    * it affects and see how far back the data goes.
+    */
+   if (0 > engine_data_is_newer) 
+   {
+      GList *split_list, *snode;
+      Timespec ts;
+
+      ts = xaccTransRetDatePostedTS (trans);
+
+      /* Back off by a second to disambiguate time.
+       * This is safe, because the fill-out will recurse
+       * if something got into this one-second gap. */
+      ts.tv_sec --; 
+      split_list = xaccTransGetSplitList (trans);
+      for (snode=split_list; snode; snode=snode->next)
+      {
+         int found = 0;
+         Split *s = (Split *) snode->data;
+         Account *acc = xaccSplitGetAccount (s);
+
+         /* lets see if we have a record of this account already */
+         for (anode = ct->acct_list; anode; anode = anode->next)
+         {
+            AcctEarliest * ae = (AcctEarliest *) anode->data;
+            if (ae->acct == acc) 
+            {
+               if (0 > timespec_cmp(&ts, &(ae->ts)))
+               {
+                  ae->ts = ts;
+               }
+               found = 1;
+               break;
+            }
+         }
+
+         /* if not found, make note of this account, and the date */
+         if (0 == found)
+         {
+            AcctEarliest * ae = g_new (AcctEarliest, 1);
+            ae->acct = acc;
+            ae->ts = ts;
+            ct->acct_list = g_list_prepend (ct->acct_list, ae);
+         }
+      }
+   }
+}
+
+static gboolean
+for_each_remove (gpointer key, gpointer value, gpointer user_data)
+{
+   GUID *trans_guid = (GUID *)key;
+   xaccGUIDFree (trans_guid);
+   return TRUE;
+}
 
 static int ncalls = 0;
 
@@ -324,8 +419,9 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
 {
    int call_count = ncalls;
    int nact=0;
-   int total_txn=0, avoided_txn=0, fetched_txn=0;
-   GList *node, *anode, *xaction_list= NULL, *acct_list = NULL;
+   GHashTable *xaction_hash = NULL;
+   GList *node, *anode, *acct_list = NULL;
+   ctxt ct;
 
    ENTER (" ");
    if (!be) return;
@@ -340,88 +436,18 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    ncalls ++;
 
    SEND_QUERY (be, query_string, );
-   xaction_list = pgendGetResults (be, query_cb, xaction_list);
-   if (NULL == xaction_list) return;
+   xaction_hash = g_hash_table_new (g_direct_hash, (GCompareFunc) guid_equal);
+   xaction_hash = pgendGetResults (be, query_cb, xaction_hash);
    REPORT_CLOCK (9, "fetched results at call %d", call_count);
 
    /* restore the transactions */
-   for (node=xaction_list; node; node=node->next)
-   {
-      Transaction *trans;
-      int engine_data_is_newer;
-      GUID *trans_guid = (GUID *)node->data;
-      total_txn ++;
+   ct.be = be;
+   ct.acct_list = NULL;
+   g_hash_table_foreach (xaction_hash, for_each_txn, &ct);
+   g_hash_table_foreach_remove (xaction_hash, for_each_remove, NULL);
+   g_hash_table_destroy (xaction_hash);
+   acct_list = ct.acct_list;
 
-      /* use markers to avoid redundant traversals of transactions we've
-       * already checked recently. */
-      trans = xaccTransLookup (trans_guid);
-      if (NULL == trans || 0 == trans->marker)
-      {
-         engine_data_is_newer = pgendCopyTransactionToEngine (be, trans_guid);
-         trans = xaccTransLookup (trans_guid);
-         trans->marker = 1;
-         PINFO ("copy result=%d", engine_data_is_newer);
-      }
-      else
-      {
-         avoided_txn ++;
-         PINFO ("avoided scan");
-         engine_data_is_newer = 1;
-      }
-
-      /* if we restored this transaction from the db, scan over the accounts 
-       * it affects and see how far back the data goes.
-       */
-      if (0 > engine_data_is_newer) 
-      {
-         GList *split_list, *snode;
-         Timespec ts;
-         fetched_txn ++;
-
-         ts = xaccTransRetDatePostedTS (trans);
-
-         /* Back off by a second to disambiguate time.
-          * This is safe, because the fill-out will recurse
-          * if something got into this one-second gap. */
-         ts.tv_sec --; 
-         split_list = xaccTransGetSplitList (trans);
-         for (snode=split_list; snode; snode=snode->next)
-         {
-            int found = 0;
-            Split *s = (Split *) snode->data;
-            Account *acc = xaccSplitGetAccount (s);
-
-            /* lets see if we have a record of this account already */
-            for (anode = acct_list; anode; anode = anode->next)
-            {
-               AcctEarliest * ae = (AcctEarliest *) anode->data;
-               if (ae->acct == acc) 
-               {
-                  if (0 > timespec_cmp(&ts, &(ae->ts)))
-                  {
-                     ae->ts = ts;
-                  }
-                  found = 1;
-                  break;
-               }
-            }
-
-            /* if not found, make note of this account, and the date */
-            if (0 == found)
-            {
-               AcctEarliest * ae = g_new (AcctEarliest, 1);
-               ae->acct = acc;
-               ae->ts = ts;
-               acct_list = g_list_prepend (acct_list, ae);
-            }
-         }
-      }
-      xaccGUIDFree (trans_guid);
-   }
-   g_list_free(xaction_list);
-
-   PINFO ("Clocked total txn=%d avoided=%d fetched=%d", 
-           total_txn, avoided_txn, fetched_txn);
    REPORT_CLOCK (9, "done gathering at call %d", call_count);
    if (NULL == acct_list) return;
 
