@@ -127,7 +127,7 @@ kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data) {
   kvp_frame * dest = (kvp_frame *)user_data;
   g_hash_table_freeze(dest->hash);
   g_hash_table_insert(dest->hash,
-                      (gpointer)strdup(key), 
+                      (gpointer)g_strdup(key), 
                       (gpointer)kvp_value_copy(value));
   g_hash_table_thaw(dest->hash);
 }
@@ -146,7 +146,7 @@ kvp_frame_set_slot(kvp_frame * frame, const char * slot,
                    const kvp_value * value) {
   g_hash_table_freeze(frame->hash);
   g_hash_table_insert(frame->hash, 
-                      (gpointer)strdup(slot), 
+                      (gpointer)g_strdup(slot), 
                       (gpointer)kvp_value_copy(value));
   g_hash_table_thaw(frame->hash);
 }
@@ -344,7 +344,7 @@ kvp_value *
 kvp_value_new_string(const char * value) {
   kvp_value * retval = g_new0(kvp_value, 1);
   retval->type       = KVP_TYPE_STRING;
-  retval->str.value  = strdup(value);
+  retval->str.value  = g_strdup(value);
   return retval;
 }  
 
@@ -365,7 +365,7 @@ kvp_value_new_binary(const void * value, int datasize) {
   retval->binary.datasize = datasize;
   memcpy(retval->binary.value, value, datasize);
   return retval;
-}  
+}
 
 kvp_value *
 kvp_value_new_list(const kvp_list * value) {
