@@ -641,9 +641,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   g_return_val_if_fail (equity_type >= 0, NULL);
   g_return_val_if_fail (equity_type < NUM_EQUITY_TYPES, NULL);
   g_return_val_if_fail (currency != NULL, NULL);
-
-  if (!group)
-    group = gncGetCurrentGroup ();
+  g_return_val_if_fail (group != NULL, NULL);
 
   base_name = equity_base_name (equity_type);
 
