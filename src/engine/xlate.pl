@@ -164,6 +164,8 @@ foreach (@files)
 		s/gncQuerySortGetIncreasing/qof_query_sort_get_increasing/g;
 
 		s/QuerySort/QofSortFunc/g;
+		s/QueryTerm_t/QofQueryTerm/g;
+		s/SortFunc_t/QofQuerySort/g;
 
 		s/querynew_s/_QofQuery/g;
 		s/QueryNew/QofQuery/g;
@@ -233,12 +235,27 @@ foreach (@files)
 		s/kvp_value* /KvpValue* /g;
 		s/kvp_value_t/KvpValueType/g;
 
-		}
-		s/QofQueryTerm_t/QofQueryTerm/g;
-		s/QofSortFunc_t/QofQuerySort/g;
-
 		s/QofQof/Qof/g;
 		s/QOF_QOF/QOF/g;
+
+		s/getDateFormatString/qof_date_format_get_string/g;
+		s/getDateTextFormatString/qof_date_format_get_format/g;
+		s/getDateFormat/qof_date_format_get/g;
+		s/setDateFormat/qof_date_format_set/g;
+		s/DateFormat/QofDateFormat/g;
+		s/printDateSecs/qof_print_date_secs_buff/g;
+		s/printDate/qof_print_date_buff/g;
+		s/printGDate/qof_print_gdate/g;
+		s/xaccPrintDateSecs/qof_print_date_secs/g;
+		s/scanDate/qof_scan_date/g;
+		s/DATE_FORMAT_US/QOF_DATE_FORMAT_US/g;
+  		s/DATE_FORMAT_UK/QOF_DATE_FORMAT_UK/g;
+  		s/DATE_FORMAT_CE/QOF_DATE_FORMAT_CE/g;
+  		s/DATE_FORMAT_ISO/QOF_DATE_FORMAT_ISO/g;
+  		s/DATE_FORMAT_LOCALE/QOF_DATE_FORMAT_LOCALE/g;
+  		s/DATE_FORMAT_CUSTOM/QOF_DATE_FORMAT_CUSTOM/g;
+
+		}
 
 		print OF $_;
 	}
