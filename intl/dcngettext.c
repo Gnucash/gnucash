@@ -1,4 +1,4 @@
-/* Implementation of the dcgettext(3) function.
+/* Implementation of the dcngettext(3) function.
    Copyright (C) 1995-1999, 2000, 2001 Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
@@ -33,25 +33,27 @@
    code is also used in GNU C Library where the names have a __
    prefix.  So we have to make a difference here.  */
 #ifdef _LIBC
-# define DCGETTEXT __dcgettext
+# define DCNGETTEXT __dcngettext
 # define DCIGETTEXT __dcigettext
 #else
-# define DCGETTEXT dcgettext__
+# define DCNGETTEXT dcngettext__
 # define DCIGETTEXT dcigettext__
 #endif
 
 /* Look up MSGID in the DOMAINNAME message catalog for the current CATEGORY
    locale.  */
 char *
-DCGETTEXT (domainname, msgid, category)
+DCNGETTEXT (domainname, msgid1, msgid2, n, category)
      const char *domainname;
-     const char *msgid;
+     const char *msgid1;
+     const char *msgid2;
+     unsigned long int n;
      int category;
 {
-  return DCIGETTEXT (domainname, msgid, NULL, 0, 0, category);
+  return DCIGETTEXT (domainname, msgid1, msgid2, 1, n, category);
 }
 
 #ifdef _LIBC
 /* Alias for function name in GNU C Library.  */
-weak_alias (__dcgettext, dcgettext);
+weak_alias (__dcngettext, dcngettext);
 #endif
