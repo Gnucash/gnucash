@@ -96,11 +96,14 @@ gnc_ui_qif_import_dialog_make()
   int  scm_strlen;
 
   retval = g_new0(QIFImportWindow, 1);
-  
+
   retval->dialog = create_QIF_File_Import_Dialog();
-  retval->imported_files = 
-    SCM_EOL;
-  retval->selected_file = SCM_BOOL_F;
+
+  retval->imported_files    = SCM_UNDEFINED;
+  retval->selected_file     = SCM_UNDEFINED;
+  retval->mapping_info      = SCM_UNDEFINED;
+  retval->cat_display_info  = SCM_UNDEFINED;
+  retval->acct_display_info = SCM_UNDEFINED;
 
   retval->currency_entry = 
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "qif_currency_entry");
@@ -117,7 +120,6 @@ gnc_ui_qif_import_dialog_make()
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "account_page_list");
   retval->cat_list = 
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "category_page_list");
-  
 
   gtk_object_set_data(GTK_OBJECT(retval->dialog),
                       "qif_window_struct", retval);
@@ -130,14 +132,15 @@ gnc_ui_qif_import_dialog_make()
 
   mapping_info = gh_call0(load_map_prefs);
   retval->mapping_info = mapping_info;
-  
+  scm_protect_object(retval->mapping_info);
+
   default_currency = gh_call1(lookup_value,
                               gh_call2(lookup_option,
                                        gh_str02scm("International"),
                                        gh_str02scm("Default Currency")));
-  
+
+  retval->imported_files = SCM_EOL;
   scm_protect_object(retval->imported_files);
-  scm_protect_object(retval->mapping_info);
 
   /* set the currency entry to the GNC default currency */
   gtk_entry_set_text(GTK_ENTRY(retval->currency_entry), 
@@ -161,11 +164,20 @@ gnc_ui_qif_import_dialog_destroy (QIFImportWindow * window)
     gnome_dialog_close(GNOME_DIALOG(window->dialog));
   }
 
-  scm_unprotect_object(window->imported_files);
-  scm_unprotect_object(window->selected_file);
-  scm_unprotect_object(window->mapping_info);
-  scm_unprotect_object(window->cat_display_info);
-  scm_unprotect_object(window->acct_display_info);
+  if (window->imported_files != SCM_UNDEFINED)
+    scm_unprotect_object(window->imported_files);
+
+  if (window->selected_file != SCM_UNDEFINED)
+    scm_unprotect_object(window->selected_file);
+
+  if (window->mapping_info != SCM_UNDEFINED)
+    scm_unprotect_object(window->mapping_info);
+
+  if (window->cat_display_info != SCM_UNDEFINED)
+    scm_unprotect_object(window->cat_display_info);
+
+  if (window->acct_display_info != SCM_UNDEFINED)
+    scm_unprotect_object(window->acct_display_info);
 
   g_free(window);
 }
