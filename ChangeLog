@@ -1,5 +1,13 @@
 2001-03-02  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/new-user.glade: tweak layout, strings
+
+	* src/gnome/new-user-funs.h: add gpl header
+
+	* src/gnome/new-user-funs.{ch}: add gpl header
+
+	* src/gnome/new-user-callbacks.c: tweak layout, add gpl header
+
 	* src/gnome/gnc-dialogs.glade: add title to transfer dialog
 
 	* src/engine/gnc-pricedb.c (gnc_pricedb_destroy): fix mem leak

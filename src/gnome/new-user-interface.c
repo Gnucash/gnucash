@@ -31,9 +31,9 @@ create_newUserDialog (void)
   GdkColor newAccountCurrencyChoosePage_bg_color = { 0, 6425, 6425, 28784 };
   GdkColor newAccountCurrencyChoosePage_logo_bg_color = { 0, 65535, 65535, 65535 };
   GdkColor newAccountCurrencyChoosePage_title_color = { 0, 65535, 65535, 65535 };
-  GtkWidget *newAccountCurrencyChooser_vbox;
-  GtkWidget *vbox2;
+  GtkWidget *newAccountCurrencyChooser_vbox2;
   GtkWidget *newUserChooseCurrencyDescrip;
+  GtkWidget *newAccountCurrencyChooser_vbox;
   GtkWidget *chooseAccountTypesPage;
   GdkColor chooseAccountTypesPage_bg_color = { 0, 6425, 6425, 28784 };
   GdkColor chooseAccountTypesPage_logo_bg_color = { 0, 65535, 65535, 65535 };
@@ -98,20 +98,13 @@ create_newUserDialog (void)
   gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (newAccountCurrencyChoosePage), &newAccountCurrencyChoosePage_title_color);
   gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (newAccountCurrencyChoosePage), _("Choose Currency"));
 
-  newAccountCurrencyChooser_vbox = GNOME_DRUID_PAGE_STANDARD (newAccountCurrencyChoosePage)->vbox;
-  gtk_widget_set_name (newAccountCurrencyChooser_vbox, "newAccountCurrencyChooser_vbox");
-  gtk_widget_ref (newAccountCurrencyChooser_vbox);
-  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "newAccountCurrencyChooser_vbox", newAccountCurrencyChooser_vbox,
+  newAccountCurrencyChooser_vbox2 = GNOME_DRUID_PAGE_STANDARD (newAccountCurrencyChoosePage)->vbox;
+  gtk_widget_set_name (newAccountCurrencyChooser_vbox2, "newAccountCurrencyChooser_vbox2");
+  gtk_widget_ref (newAccountCurrencyChooser_vbox2);
+  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "newAccountCurrencyChooser_vbox2", newAccountCurrencyChooser_vbox2,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (newAccountCurrencyChooser_vbox);
-
-  vbox2 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_set_name (vbox2, "vbox2");
-  gtk_widget_ref (vbox2);
-  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "vbox2", vbox2,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox2);
-  gtk_box_pack_start (GTK_BOX (newAccountCurrencyChooser_vbox), vbox2, TRUE, TRUE, 0);
+  gtk_widget_show (newAccountCurrencyChooser_vbox2);
+  gtk_container_set_border_width (GTK_CONTAINER (newAccountCurrencyChooser_vbox2), 5);
 
   newUserChooseCurrencyDescrip = gtk_label_new (_("Please choose the currency to use for new accounts."));
   gtk_widget_set_name (newUserChooseCurrencyDescrip, "newUserChooseCurrencyDescrip");
@@ -119,8 +112,15 @@ create_newUserDialog (void)
   gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "newUserChooseCurrencyDescrip", newUserChooseCurrencyDescrip,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (newUserChooseCurrencyDescrip);
-  gtk_box_pack_start (GTK_BOX (vbox2), newUserChooseCurrencyDescrip, FALSE, FALSE, 0);
-  gtk_widget_set_sensitive (newUserChooseCurrencyDescrip, FALSE);
+  gtk_box_pack_start (GTK_BOX (newAccountCurrencyChooser_vbox2), newUserChooseCurrencyDescrip, FALSE, FALSE, 0);
+
+  newAccountCurrencyChooser_vbox = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (newAccountCurrencyChooser_vbox, "newAccountCurrencyChooser_vbox");
+  gtk_widget_ref (newAccountCurrencyChooser_vbox);
+  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "newAccountCurrencyChooser_vbox", newAccountCurrencyChooser_vbox,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (newAccountCurrencyChooser_vbox);
+  gtk_box_pack_start (GTK_BOX (newAccountCurrencyChooser_vbox2), newAccountCurrencyChooser_vbox, FALSE, FALSE, 0);
 
   chooseAccountTypesPage = gnome_druid_page_standard_new_with_vals ("", NULL);
   gtk_widget_set_name (chooseAccountTypesPage, "chooseAccountTypesPage");
@@ -140,6 +140,7 @@ create_newUserDialog (void)
   gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "druid_vbox1", druid_vbox1,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox1);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox1), 5);
 
   pickAccountsDescriptionLabel = gtk_label_new (_("Please choose the account types you would like to have automatically setup in GnuCash."));
   gtk_widget_set_name (pickAccountsDescriptionLabel, "pickAccountsDescriptionLabel");
@@ -380,7 +381,7 @@ create_addAccountCancelDialog (void)
   GtkWidget *dialog_action_area1;
   GtkWidget *newAccountCancelDialog_OKButton;
 
-  addAccountCancelDialog = gnome_dialog_new (NULL, NULL);
+  addAccountCancelDialog = gnome_dialog_new (_("Cancelling"), NULL);
   gtk_widget_set_name (addAccountCancelDialog, "addAccountCancelDialog");
   gtk_object_set_data (GTK_OBJECT (addAccountCancelDialog), "addAccountCancelDialog", addAccountCancelDialog);
   GTK_WINDOW (addAccountCancelDialog)->type = GTK_WINDOW_DIALOG;
@@ -393,7 +394,7 @@ create_addAccountCancelDialog (void)
   gtk_object_set_data (GTK_OBJECT (addAccountCancelDialog), "newAccountCancelDialog", newAccountCancelDialog);
   gtk_widget_show (newAccountCancelDialog);
 
-  vbox1 = gtk_vbox_new (FALSE, 0);
+  vbox1 = gtk_vbox_new (FALSE, 5);
   gtk_widget_set_name (vbox1, "vbox1");
   gtk_widget_ref (vbox1);
   gtk_object_set_data_full (GTK_OBJECT (addAccountCancelDialog), "vbox1", vbox1,
@@ -401,7 +402,7 @@ create_addAccountCancelDialog (void)
   gtk_widget_show (vbox1);
   gtk_box_pack_start (GTK_BOX (newAccountCancelDialog), vbox1, TRUE, TRUE, 0);
 
-  newAccountCancelDialog_ShouldRunAgainLable = gtk_label_new (_("Canceling.  Please uncheck if you would not like this new user dialog to run again."));
+  newAccountCancelDialog_ShouldRunAgainLable = gtk_label_new (_("Uncheck if you do not want this new user dialog to run again."));
   gtk_widget_set_name (newAccountCancelDialog_ShouldRunAgainLable, "newAccountCancelDialog_ShouldRunAgainLable");
   gtk_widget_ref (newAccountCancelDialog_ShouldRunAgainLable);
   gtk_object_set_data_full (GTK_OBJECT (addAccountCancelDialog), "newAccountCancelDialog_ShouldRunAgainLable", newAccountCancelDialog_ShouldRunAgainLable,
@@ -411,7 +412,7 @@ create_addAccountCancelDialog (void)
   gtk_label_set_justify (GTK_LABEL (newAccountCancelDialog_ShouldRunAgainLable), GTK_JUSTIFY_FILL);
   gtk_label_set_line_wrap (GTK_LABEL (newAccountCancelDialog_ShouldRunAgainLable), TRUE);
 
-  newAccountCancelDialog_RunAgainToggle = gtk_check_button_new_with_label (_("Run New User Dialog again?"));
+  newAccountCancelDialog_RunAgainToggle = gtk_check_button_new_with_label (_("Run New User Account Setup again?"));
   gtk_widget_set_name (newAccountCancelDialog_RunAgainToggle, "newAccountCancelDialog_RunAgainToggle");
   gtk_widget_ref (newAccountCancelDialog_RunAgainToggle);
   gtk_object_set_data_full (GTK_OBJECT (addAccountCancelDialog), "newAccountCancelDialog_RunAgainToggle", newAccountCancelDialog_RunAgainToggle,
@@ -427,7 +428,7 @@ create_addAccountCancelDialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area1), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (addAccountCancelDialog), GNOME_STOCK_BUTTON_OK);
-  newAccountCancelDialog_OKButton = g_list_last (GNOME_DIALOG (addAccountCancelDialog)->buttons)->data;
+  newAccountCancelDialog_OKButton = GTK_WIDGET (g_list_last (GNOME_DIALOG (addAccountCancelDialog)->buttons)->data);
   gtk_widget_set_name (newAccountCancelDialog_OKButton, "newAccountCancelDialog_OKButton");
   gtk_widget_ref (newAccountCancelDialog_OKButton);
   gtk_object_set_data_full (GTK_OBJECT (addAccountCancelDialog), "newAccountCancelDialog_OKButton", newAccountCancelDialog_OKButton,

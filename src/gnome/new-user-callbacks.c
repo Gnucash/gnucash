@@ -1,3 +1,25 @@
+/********************************************************************\
+ * new-user-callbacks.c - new user functionality for GnuCash        *
+ * Copyright (C) 2001 Gnumatic, Inc.                                *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+\********************************************************************/
+
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
@@ -109,10 +131,9 @@ on_newAccountCancelDialog_OKButton_clicked
 
 
 void
-on_newAccountCurrencyChoosePage_prepare
-                                        (GnomeDruidPage  *gnomedruidpage,
-                                        gpointer         arg1,
-                                        gpointer         user_data)
+on_newAccountCurrencyChoosePage_prepare (GnomeDruidPage  *gnomedruidpage,
+                                         gpointer         arg1,
+                                         gpointer         user_data)
 {
     /* need to load currency info here.  In fact drop a
        gnc-commodity-edit widget here */
@@ -130,7 +151,7 @@ on_newAccountCurrencyChoosePage_prepare
         vbox = lookup_widget(GTK_WIDGET(gnomedruidpage),
                              "newAccountCurrencyChooser_vbox");
         
-        gtk_box_pack_end(GTK_BOX(vbox), commodityWid, 1, 1, 1);
+        gtk_box_pack_start(GTK_BOX(vbox), commodityWid, FALSE, FALSE, 0);
     }
     
 }

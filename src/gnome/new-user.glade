@@ -77,9 +77,10 @@
       <widget>
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>newAccountCurrencyChooser_vbox</name>
+	<name>newAccountCurrencyChooser_vbox2</name>
+	<border_width>5</border_width>
 	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
+	<spacing>5</spacing>
 	<child>
 	  <padding>0</padding>
 	  <expand>True</expand>
@@ -87,33 +88,32 @@
 	</child>
 
 	<widget>
+	  <class>GtkLabel</class>
+	  <name>newUserChooseCurrencyDescrip</name>
+	  <label>Please choose the currency to use for new accounts.</label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+
+	<widget>
 	  <class>GtkVBox</class>
-	  <name>vbox2</name>
+	  <name>newAccountCurrencyChooser_vbox</name>
 	  <homogeneous>False</homogeneous>
 	  <spacing>0</spacing>
 	  <child>
 	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
+	    <expand>False</expand>
+	    <fill>False</fill>
 	  </child>
-
-	  <widget>
-	    <class>GtkLabel</class>
-	    <name>newUserChooseCurrencyDescrip</name>
-	    <sensitive>False</sensitive>
-	    <label>Please choose the currency to use for new accounts.</label>
-	    <justify>GTK_JUSTIFY_CENTER</justify>
-	    <wrap>False</wrap>
-	    <xalign>0.5</xalign>
-	    <yalign>0.5</yalign>
-	    <xpad>0</xpad>
-	    <ypad>0</ypad>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
 
 	  <widget>
 	    <class>Placeholder</class>
@@ -144,8 +144,9 @@
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox1</name>
+	<border_width>5</border_width>
 	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
+	<spacing>5</spacing>
 	<child>
 	  <padding>0</padding>
 	  <expand>True</expand>
@@ -428,6 +429,7 @@ Press `Finish' if this is OK.</text>
 <widget>
   <class>GnomeDialog</class>
   <name>addAccountCancelDialog</name>
+  <title>Cancelling</title>
   <type>GTK_WINDOW_DIALOG</type>
   <position>GTK_WIN_POS_MOUSE</position>
   <modal>True</modal>
@@ -484,7 +486,7 @@ Press `Finish' if this is OK.</text>
       <class>GtkVBox</class>
       <name>vbox1</name>
       <homogeneous>False</homogeneous>
-      <spacing>0</spacing>
+      <spacing>5</spacing>
       <child>
 	<padding>0</padding>
 	<expand>True</expand>
@@ -494,7 +496,7 @@ Press `Finish' if this is OK.</text>
       <widget>
 	<class>GtkLabel</class>
 	<name>newAccountCancelDialog_ShouldRunAgainLable</name>
-	<label>Canceling.  Please uncheck if you would not like this new user dialog to run again.</label>
+	<label>Uncheck if you do not want this new user dialog to run again.</label>
 	<justify>GTK_JUSTIFY_FILL</justify>
 	<wrap>True</wrap>
 	<xalign>0.5</xalign>
@@ -517,7 +519,7 @@ Press `Finish' if this is OK.</text>
 	  <handler>on_newAccountRunAgain_toggled</handler>
 	  <last_modification_time>Wed, 10 Jan 2001 03:44:02 GMT</last_modification_time>
 	</signal>
-	<label>Run New User Dialog again?</label>
+	<label>Run New User Account Setup again?</label>
 	<active>True</active>
 	<draw_indicator>True</draw_indicator>
 	<child>
