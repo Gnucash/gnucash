@@ -50,10 +50,9 @@ your list of accounts. For subaccounts, type the first letter(s)
 of the parent account, followed by ':' and the first letter(s) of
 the subaccount (e.g. A:C for Assets:Cash.)")
 
-;; FIXME: #99454 needs to be fixed first.
-;; (N_ "Want to see all your subaccount transactions in one register?
-;;From the main menu, highlight the parent account and select
-;;Accounts -> Open Subaccounts from the menu.")
+ (N_ "Want to see all your subaccount transactions in one register?
+From the main menu, highlight the parent account and select
+Accounts -> Open Subaccounts from the menu.")
 
  (N_ "When entering dates, you can type '+' or '-' to increment or
 decrement the selected date. You can use '+' and '-' to increment and
