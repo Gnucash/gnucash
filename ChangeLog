@@ -18,6 +18,22 @@
 	
 2002-12-03  David Hampton  <hampton@employees.org>
 
+	* src/scm/main.scm ((gnc:account-file-to-load)): Normalize the
+	path name before using it to open a config files. #90487
+
+	* src/scm/path.scm (gnc:load-user-config-if-needed): Write out a
+	new 1.8 version of the config file. Add the 1.8 version to the
+	list of files to try an read when reading the config. #100266
+
+	* src/engine/gnc-session.c (gnc_session_load): Don't erase the
+	just loaded account information because the backend is reporting
+	that the file is from a previous version.  Let the caller decide
+	after querying the user. #97270.
+
+	* src/gnome/window-main.c (gnc_main_window_about_cb): Put the
+	build date into the about box for development versions of
+	gnucash. #99775
+
 	* src/register/ledger-core/split-register-control.c
 	(gnc_split_register_move_cursor): Don't delete an empty split if
 	its the current transaction split. Dangling pointers are no

@@ -512,12 +512,33 @@ string and 'directories' must be a list of strings."
   (gnc:debug "UI Shutdown hook.")
   (gnc:file-quit))
 
+(define (gnc:normalize-path file)
+  (let* ((parts-in (string-split file #\/))
+	 (parts-out '()))
+
+    ;; Convert to a path based at the root
+    (if (not (string-null? (car parts-in)))
+	(set! parts-in (append (string-split (getenv "PWD") #\/) parts-in)))
+
+    ;; Strip out "." and ".." components
+    (for-each
+     (lambda (part)
+       (cond ((string=? part ".") #f)
+	     ((string=? part "..") (set! parts-out (cdr parts-out)))
+	     (else (set! parts-out (cons part parts-out)))))
+     parts-in)
+
+    ;; Put it back together
+    (string-join (reverse parts-out) "/")
+  )
+)
+
 (define (gnc:account-file-to-load)
   (let ((ok (not (gnc:config-var-value-get gnc:*arg-no-file*)))
         (file (if (pair? gnc:*command-line-remaining*)
                   (car gnc:*command-line-remaining*)
                   (gnc:history-get-last))))
-    (and ok (string? file) file)))
+    (and ok (string? file) (gnc:normalize-path file))))
 
 (define (gnc:load-account-file)
   (let ((file (gnc:account-file-to-load)))
