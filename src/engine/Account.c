@@ -1666,12 +1666,17 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
       lp = lp->next;
   }
 
-  if( lp && lp->prev )
-  {
-    /* Since lp is now pointing to a split which was past the reconcile
-     * date, get the running balance of the previous split.
-     */
-    balance = xaccSplitGetBalance( (Split *)lp->prev->data );
+  if( lp ) {
+    if ( lp->prev ) {
+      /* Since lp is now pointing to a split which was past the reconcile
+       * date, get the running balance of the previous split.
+       */
+      balance = xaccSplitGetBalance( (Split *)lp->prev->data );
+    }		
+    else {
+      /* AsOf date must be before any entries, return zero. */
+      balance = gnc_numeric_zero();
+    }
   }
 
   /* Otherwise there were no splits posted after the given date,
