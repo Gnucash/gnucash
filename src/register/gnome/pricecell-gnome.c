@@ -80,6 +80,9 @@ PriceDirect (BasicCell *bcell,
 
                 if (parse_ok)
                     changed = xaccSetPriceCellValue (cell, amount);
+                else if (!cell->cell.value || cell->cell.value[0] == '\0')
+                    changed = xaccSetPriceCellValue (cell,
+                                                     gnc_numeric_zero ());
                 else
                     *cursor_position = error_loc - cell->cell.value;
 
