@@ -21,6 +21,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+(define (gnc:commodity-collector-contains-commodity? collector commodity)
+    (let ((ret #f))
+        (gnc:commodity-collector-map
+	    collector
+	    (lambda (comm amt)
+		(set! ret (or ret (gnc:commodity-equiv? comm commodity)))))
+	ret
+    ))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get splits with interesting data from accounts.
 

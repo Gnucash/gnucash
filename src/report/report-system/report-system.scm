@@ -48,7 +48,7 @@
 (export gnc:case-exchange-time-fn)
 (export gnc:sum-collector-commodity)
 (export gnc:sum-collector-stocks)
-
+(export gnc:commodity-collector-contains-commodity?)
 
 ;; options-utilities.scm 
 
@@ -84,7 +84,8 @@
 (export gnc:html-acct-table-cell)
 (export gnc:html-acct-table-row-helper! )
 (export gnc:html-acct-table-comm-row-helper!)
-(export gnc:html-build-acct-table )
+(export gnc:html-build-acct-table)
+(export gnc:first-html-build-acct-table)
 (export gnc:html-make-exchangerates)
 (export gnc:html-make-no-account-warning)
 (export gnc:html-make-empty-data-warning)
@@ -401,6 +402,43 @@
 (export gnc:html-style-sheet-find)
 (export gnc:html-style-sheet-remove)
 
+;; html-acct-table.scm 
+
+(export gnc:colspans-are-working-right)
+(export <html-acct-table>)
+(export gnc:html-acct-table?)
+(export gnc:_make-html-acct-table_)
+(export gnc:make-html-acct-table)
+(export gnc:make-html-acct-table/env)
+(export gnc:make-html-acct-table/env/accts)
+(export gnc:_html-acct-table-matrix_)
+(export gnc:_html-acct-table-set-matrix!_)
+(export gnc:_html-acct-table-env_)
+(export gnc:_html-acct-table-set-env!_)
+(export gnc:html-acct-table-add-accounts!)
+(export gnc:html-acct-table-num-rows)
+(export gnc:html-acct-table-num-cols)
+(export gnc:html-acct-table-get-row)
+(export gnc:html-acct-table-get-cell)
+(export gnc:html-acct-table-set-cell!)
+(export gnc:html-acct-table-get-row-env)
+(export gnc:html-acct-table-set-row-env!)
+(export gnc:html-acct-table-append-row)
+(export gnc:html-acct-table-prepend-row!)
+(export gnc:html-acct-table-append-col)
+(export gnc:html-acct-table-prepend-col!)
+(export gnc:html-acct-table-remove-last-row!)
+(export gnc:html-acct-table-render)
+(export gnc:account-code-less-p)
+(export gnc:account-name-less-p)
+(export gnc:account-path-less-p)
+(export gnc:identity)
+(export gnc:html-table-add-labeled-amount-line!)
+(export gnc:html-table-add-account-balances)
+(export gnc:second-html-build-acct-table)
+(export gnc:commodity-table)
+(export gnc:uniform-commodity?)
+
 ;; html-table.scm 
 
 (export <html-table>)
@@ -465,9 +503,11 @@
 (export gnc:html-table-append-row!)
 (export gnc:html-table-remove-last-row!)
 (export gnc:html-table-prepend-row!)
+(export gnc:html-table-get-cell)
 (export gnc:html-table-set-cell!)
 (export gnc:html-table-append-column!)
 (export gnc:html-table-prepend-column!)
+(export gnc:html-table-merge)
 (export gnc:html-table-render)
 
 ;; html-text.scm
@@ -530,6 +570,7 @@
 (export gnc:make-value-collector)
 (export gnc:make-numeric-collector)
 (export gnc:make-commodity-collector)
+(export gnc:commodity-collector-commodity-count)
 (export gnc:account-get-balance-at-date)
 (export gnc:account-get-comm-balance-at-date)
 (export gnc:accounts-get-balance-helper)
@@ -549,6 +590,7 @@
 (export gnc:report-percent-done)
 (export gnc:report-finished)
 (export gnc:accounts-count-splits)
+(export gnc:commodity-collector-allzero?)
 
 (load-from-path "commodity-utilities.scm")
 (load-from-path "html-barchart.scm")
@@ -560,6 +602,7 @@
 (load-from-path "html-style-sheet.scm")
 (load-from-path "html-table.scm")
 (load-from-path "html-text.scm")
+(load-from-path "html-acct-table.scm")
 (load-from-path "html-utilities.scm")
 (load-from-path "options-utilities.scm")
 (load-from-path "report-utilities.scm")

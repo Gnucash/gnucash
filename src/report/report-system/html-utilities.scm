@@ -1,7 +1,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; html-utilities.scm: Useful functions when using the HTML generator.
-;; Copyright 2001 Christian Stimming <stimming@tu-harburg.de>
 ;; 
+;; Modified slightly by David Montenegro 2004.06.18.
+;; 
+;; Copyright 2001 Christian Stimming <stimming@tu-harburg.de>
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
 ;; published by the Free Software Foundation; either version 2 of   
@@ -21,22 +23,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; returns a list with n #f (empty cell) values 
+(define (gnc:html-make-empty-cell) #f)
 (define (gnc:html-make-empty-cells n)
   (if (> n 0)
       (cons #f (gnc:html-make-empty-cells (- n 1)))
-      '()))
+      (list)))
 
-(define (register-guid type guid)
+(define (gnc:register-guid type guid)
   (gnc:html-build-url gnc:url-type-register (string-append type guid) #f))
 
 (define (gnc:account-anchor-text acct)
-  (register-guid "acct-guid=" (gnc:account-get-guid acct)))
+  (gnc:register-guid "acct-guid=" (gnc:account-get-guid acct)))
 
 (define (gnc:split-anchor-text split)
-  (register-guid "split-guid=" (gnc:split-get-guid split)))
+  (gnc:register-guid "split-guid=" (gnc:split-get-guid split)))
 
 (define (gnc:transaction-anchor-text trans)
-  (register-guid "trans-guid=" (gnc:transaction-get-guid trans)))
+  (gnc:register-guid (gnc:transaction-get-guid trans)))
 
 (define (gnc:report-anchor-text report-id)
   (gnc:html-build-url gnc:url-type-report
@@ -117,22 +120,32 @@
               (assign-colors (+ i 1)))))
   (assign-colors 0))
 
-;; Appends a horizontal ruler to a html-table with the specified width
-;; colspan.
-(define (gnc:html-table-append-ruler! table colspan)
+;; Appends a horizontal ruler to a html-table with the specified
+;; colspan at, optionally, the specified column.
+(define (gnc:html-table-append-ruler/at! table colskip colspan)
+  (define empty-cell '())
   (gnc:html-table-append-row! 
    table
-   (list
-    (gnc:make-html-table-cell/size
-     1 colspan (gnc:make-html-text (gnc:html-markup-hr))))))
-
-(define (gnc:html-table-append-ruler/markup! table markup colspan)
-  (gnc:html-table-append-row/markup!
+   (append (make-list colskip empty-cell)
+    (list
+     (gnc:make-html-table-cell/size
+      1 colspan (gnc:make-html-text (gnc:html-markup-hr)))))))
+     
+(define (gnc:html-table-append-ruler/at/markup! table markup colskip colspan)
+  (define empty-cell "")
+  (gnc:html-table-append-row/markup! 
    table
    markup
-   (list
-    (gnc:make-html-table-cell/size
-     1 colspan (gnc:make-html-text (gnc:html-markup-hr))))))
+   (append (make-list colskip empty-cell)
+    (list
+     (gnc:make-html-table-cell/size
+      1 colspan (gnc:make-html-text (gnc:html-markup-hr)))))))
+
+(define (gnc:html-table-append-ruler! table colspan)
+  (gnc:html-table-append-ruler/at! table 0 colspan))
+
+(define (gnc:html-table-append-ruler/markup! table markup colspan)
+  (gnc:html-table-append-ruler/at/markup! table markup 0 colspan))
 
 ;; Creates a table cell with some text in it. The cell will be created
 ;; with the colspan 'colspan' (the rowspan==1), the content 'content'
@@ -140,10 +153,12 @@
 ;; string, or a <html-text> object. Returns a <html-table-cell>
 ;; object.
 (define (gnc:html-acct-table-cell colspan content boldface?)
+  ;; instead of html-markup-b, just use the corresponding html-table-styles.
+  (define default-style "text-cell")
+  (define boldface-style "total-label-cell")
   (gnc:make-html-table-cell/size/markup 
    1 colspan 
-   ;; instead of html-markup-b, just use the right html-table-styles.
-   (if boldface? "total-label-cell" "text-cell")
+   (if boldface? boldface-style default-style)
    content))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -194,8 +209,10 @@
 ;; in the appropriate name column. my-commodity (a
 ;; <gnc:commodity*>) is the "natural" balance of the current
 ;; account. balance (a commodity-collector) is the balance to be
-;; printed. If reverse-balance? == #t then the balance's signs get
+;; printed. If reverse-balance? == #t then the balances' signs get
 ;; reversed.
+;; DM: If you trace this function through gnc:html-build-acct-table,
+;; my-commodity always ends up being report-commodity.
 (define (gnc:html-acct-table-comm-row-helper!
 	 table tree-depth report-commodity exchange-fn
 	 current-depth my-name my-commodity balance 
@@ -232,12 +249,14 @@
 	       "number-cell"
 	       (gnc:make-html-text (gnc:html-markup-b domestic-balance)))))
 	    (list 
-	     (gnc:make-html-table-cell/markup 
-	      "number-cell"
-	      foreign-balance)
-	     (gnc:make-html-table-cell/markup 
-	      "number-cell"
-	      domestic-balance)))
+	     (and foreign-balance
+	    	(gnc:make-html-table-cell/markup 
+	        "number-cell"
+	        foreign-balance))
+	     (and domestic-balance
+		(gnc:make-html-table-cell/markup 
+	        "number-cell"
+	        domestic-balance))))
 	(gnc:html-make-empty-cells (* 2 (- current-depth 
 					   (if group-header-line? 0 1)))))))
     
@@ -288,7 +307,7 @@
 			  (gnc:make-gnc-monetary curr val))))
 		 (commodity-row-helper!
 		  ;; print no account name 
-		  (car (gnc:html-make-empty-cells 1))
+		  (gnc:html-make-empty-cell)
 		  ;; print the account balance in the respective
 		  ;; commodity
 		  bal
@@ -375,6 +394,37 @@
 	 show-total? get-total-fn
 	 total-name group-types? show-parent-balance? show-parent-total? 
 	 show-other-curr? report-commodity exchange-fn show-zero-entries?)
+  ;; Select, here, which version of gnc:html-build-acct-table you want
+  ;; to use by default.
+  (define fn-version 'first)
+  (if (equal? fn-version 'second)
+      (gnc:second-html-build-acct-table 
+       start-date end-date 
+       tree-depth show-subaccts? accounts 
+       start-percent delta-percent
+       show-col-headers?
+       show-total? get-total-fn
+       total-name group-types? show-parent-balance? show-parent-total? 
+       show-other-curr? report-commodity exchange-fn show-zero-entries?)
+      (gnc:first-html-build-acct-table 
+       start-date end-date 
+       tree-depth show-subaccts? accounts 
+       start-percent delta-percent
+       show-col-headers?
+       show-total? get-total-fn
+       total-name group-types? show-parent-balance? show-parent-total? 
+       show-other-curr? report-commodity exchange-fn show-zero-entries?)
+      )
+  )
+
+(define (gnc:first-html-build-acct-table 
+	 start-date end-date 
+	 tree-depth show-subaccts? accounts 
+	 start-percent delta-percent
+	 show-col-headers?
+	 show-total? get-total-fn
+	 total-name group-types? show-parent-balance? show-parent-total? 
+	 show-other-curr? report-commodity exchange-fn show-zero-entries?)
   (let ((table (gnc:make-html-table))
 	(work-to-do 0)
 	(work-done 0)
@@ -410,7 +460,7 @@
 			  this-collector x )))
 	 (gnc:group-map-all-accounts
 	  (lambda (a)
-	    ;; Important: Calculate the balance if and only of the
+	    ;; Important: Calculate the balance if and only if the
 	    ;; account a is shown, i.e. (use-acct? a) == #t.
 	    (and (use-acct? a)
 		 (my-get-balance-nosub a)))
@@ -659,7 +709,7 @@
 
     (gnc:html-table-set-style! 
      table "th" 
-     'attribute '("align" "right")
+     'attribute '("align" "center")
      'attribute '("valign" "top"))
 
     ;; set some column headers 

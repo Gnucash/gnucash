@@ -63,14 +63,14 @@ CLEANFILES = gnucash-config
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-make-gnucash-patch: make-gnucash-patch.in
+make-gnucash-patch: make-gnucash-patch.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-make-gnucash-potfiles: make-gnucash-potfiles.in
+make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g'

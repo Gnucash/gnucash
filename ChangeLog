@@ -1,3 +1,34 @@
+2004-06-24  Derek Atkins  <derek@ihtfp.com>
+
+	* Makefile.am: be sure to rebuild make-gnucash-patch and
+	  make-gnucash-potfiles when the Makefile changes (which means the
+	  PERL paths might have changed).
+	* src/scm/paths.scm: change the default config file to 1.9, so we
+	  don't screw up users of 1.8.
+
+2004-06-23  David Montenegro  <sunrise2000@comcast.net>
+
+	* src/report/report-system/html-acct-table.scm:
+	  Added file implementing gnc:html-acct-table utility
+	  object for easier creation of HTML reports.
+
+        * src/report/standard-reports/balance-sheet.scm:
+	  Updated to use the new gnc:html-acct-table object.
+	  Added many new options, including report/account
+	  form option.
+
+        * src/report/standard-reports/equity-statement.scm:
+	  Created Statement of Owner's Equity.
+	  (Unsure if correct exchange-fn's are being used.)
+
+        * src/report/report-system/commodity-utilities.scm:
+	* src/report/report-system/html-table.scm:
+	* src/report/report-system/html-utilities.scm:
+	* src/report/report-system/report-system.scm:
+	* src/report/report-system/report-utilities.scm:
+	  miscellaneous small additions and/or fixes
+	Fixes #144243.
+
 2004-06-18  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/main-window.scm, src/scm/main.scm: Added example Menu

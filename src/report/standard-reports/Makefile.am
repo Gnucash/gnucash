@@ -30,6 +30,7 @@ gncscmmod_DATA = \
    cash-flow.scm \
    category-barchart.scm \
    daily-reports.scm \
+   equity-statement.scm \
    net-barchart.scm \
    pnl.scm \
    portfolio.scm \

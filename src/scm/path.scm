@@ -40,10 +40,10 @@
     (gnc:make-dir home-dir)))
 
 (define gnc:current-config-auto
-  (build-path (getenv "HOME") ".gnucash" "config-1.8.auto"))
+  (build-path (getenv "HOME") ".gnucash" "config-1.9.auto"))
 
 (define gnc:current-saved-reports
-  (build-path (getenv "HOME") ".gnucash" "saved-reports-1.8"))
+  (build-path (getenv "HOME") ".gnucash" "saved-reports-1.9"))
 
 (define gnc:load-user-config-if-needed
   (let ((user-config-loaded? #f))
@@ -74,11 +74,13 @@
 		    ;; Don't continue adding to this list. When 2.0
 		    ;; rolls around bump the 1.4 (unnumbered) files
 		    ;; off the list.
-                    '("config-1.8.user" "config-1.6.user" "config.user"
-                      "config-1.8.auto" "config-1.6.auto" "config.auto"))
+                    '("config-1.9.user" "config-1.8.user"
+		      "config-1.6.user" "config.user"
+                      "config-1.9.auto" "config-1.8.auto"
+		      "config-1.6.auto" "config.auto"))
 	    (gnc:debug "loading saved reports")
 	    (or-map try-load-no-set
-		    '("saved-reports-1.8"))
+		    '("saved-reports-1.9" "saved-reports-1.8"))
 	    )))))
 
 ;; the system config should probably be loaded from some directory
