@@ -51,6 +51,7 @@ typedef struct
   GtkWidget * druid;
   GNCFrequency *period_menu;
   GtkLabel  * remarks;
+  GtkLabel  * book_details;
 
   time_t earliest;
   char * earliest_str;
@@ -77,7 +78,7 @@ ap_window_destroy_cb (GtkObject *object, gpointer data)
 
 static void
 ap_finish (GnomeDruidPage *druidpage,
-                    gpointer arg1,
+                    GtkWidget *druid,
                     gpointer user_data)
 {
   AcctPeriodInfo *info = user_data;
@@ -93,7 +94,6 @@ static void
 ap_druid_cancel (GnomeDruid *druid, gpointer user_data)
 {
   AcctPeriodInfo *info = user_data;
-
   gnc_close_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
 }
 
@@ -110,7 +110,11 @@ prepare_remarks (AcctPeriodInfo *info)
   remarks_text = 
     _("The earliest transaction date found in this book is %s.\n"
       "Based on the selection made above, this book will be split\n"
-      "into %d books, and all but the most recent one will be closed.\n");
+      "into %d books.  Click on 'Next' to start closing the\n"
+      "earliest book.\n");
+
+  /* Pull info from widget, push into freq spec */
+  gnc_frequency_save_state (info->period_menu, info->period, NULL);
 
   /* Count the number of periods that would be generated */
   period_begin = g_date_new();
@@ -149,13 +153,53 @@ g_date_year(period_end));
 /* =============================================================== */
 
 static void
+show_book_details (AcctPeriodInfo *info)
+{
+  const char *period_text;
+  char *str;
+
+  /* Pull info from widget, push into freq spec */
+  gnc_frequency_save_state (info->period_menu, info->period, NULL);
+  printf ("duude gwanna show period info=%p\n", info);
+
+  period_text = 
+    _("You have asked for a book to be created.  This book\n"
+      "will contain all transactions between midnight %s\n"
+      "and midnight %s (for a total of\n"
+      "%d transactions spread over %d accounts).\n"
+      "Click on 'Next' to create this book.\n"
+      "Click on 'Back' to adjust the dates.\n");
+
+  /* Display the results */
+  str = g_strdup_printf (remarks_text, 
+      "asdf", "asdf", 0, 0);
+
+  gtk_label_set_text (info->book_details, str);
+  g_free (str);
+}
+
+/* =============================================================== */
+
+static void
 ap_changed (GtkWidget *widget, gpointer user_data)
 {
   AcctPeriodInfo *info = user_data;
 
-  printf ("something changed info=%p\n", info);
+  printf ("duude something changed info=%p\n", info);
   prepare_remarks (info);
-  
+}
+
+/* =============================================================== */
+
+static void
+ap_show_period (GnomeDruidPage *druidpage,
+                GtkWidget *druid,
+                gpointer user_data)
+{
+  AcctPeriodInfo *info = user_data;
+
+  printf ("duude gwanna show period info=%p\n", info);
+  show_book_details (info);
 }
 
 /* =============================================================== */
@@ -236,6 +280,9 @@ printf ("duude the earliest is %ld %s\n", info->earliest, ctime (&info->earliest
   info->remarks = 
         GTK_LABEL (glade_xml_get_widget (xml, "remarks label"));
 
+  info->book_details = 
+        GTK_LABEL (glade_xml_get_widget (xml, "book label"));
+
   prepare_remarks (info);
 
   /* generic finished/close/abort signals */
@@ -244,6 +291,10 @@ printf ("duude the earliest is %ld %s\n", info->earliest, ctime (&info->earliest
 
   gtk_signal_connect (GTK_OBJECT (info->druid), "cancel",
                       GTK_SIGNAL_FUNC (ap_druid_cancel), info);
+
+  page = glade_xml_get_widget (xml, "details_page");
+  gtk_signal_connect (GTK_OBJECT (page), "next",
+                      GTK_SIGNAL_FUNC (ap_show_period), info);
 
   page = glade_xml_get_widget (xml, "finish_page");
   gtk_signal_connect (GTK_OBJECT (page), "finish",
