@@ -1,3 +1,20 @@
+2001-06-17  Dave Peticolas  <dave@krondo.com>
+
+	* src/FileDialog.c (gncFileSave): save the window state on a save
+	(gncFileQuerySave): don't provide cancel option when the ui can't
+
+	* src/scm/main-window.scm (gnc:main-window-save-state): new func
+	don't save state when the ui can't
+
+	* src/gnome/window-main.c
+	(gnc_main_window_can_cancel_exit): new func
+	(gnc_main_window_can_save): new func
+	(gnc_main_window_has_apps): new func
+
+	* src/gnc-ui.h: add new api
+
+	* src/gnome/top-level.c (gnc_ui_can_cancel_exit): new func
+
 2001-06-16  Dave Peticolas  <dave@krondo.com>
 
 	* src/guile/gnc.gwp: update for api change

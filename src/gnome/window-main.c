@@ -77,7 +77,7 @@ static void gnc_main_window_create_menus(GNCMainInfo * maininfo);
  ********************************************************************/
 
 static void
-gnc_main_window_destroy_cb(GtkObject * w) {
+gnc_main_window_destroy_cb(GtkObject * w, gpointer data) {
   gnc_shutdown (0);
 }
 
@@ -115,7 +115,6 @@ gnc_main_window_app_destroyed_cb(GnomeApp * app, gpointer user_data) {
     }
   }
 }
-
 
 /********************************************************************
  * gnc_main_window_app_created_cb()
@@ -452,6 +451,45 @@ gnc_main_window_child_save_func(GnomeMDIChild * child, gpointer user_data) {
 
 
 /********************************************************************
+ * gnc_main_window_can_*()
+ ********************************************************************/
+
+static gboolean
+gnc_main_window_has_apps (GNCMainInfo * wind)
+{
+  GList *toplevels;
+
+  toplevels = gtk_container_get_toplevels ();
+  while (toplevels)
+  {
+    if (GNOME_IS_APP (toplevels->data) &&
+        !GTK_OBJECT_DESTROYED (toplevels->data))
+      return TRUE;
+
+    toplevels = toplevels->next;
+  }
+
+  return FALSE;
+}
+
+gboolean
+gnc_main_window_can_save (GNCMainInfo * wind)
+{
+  if (!wind) return FALSE;
+
+  return gnc_main_window_has_apps (wind);
+}
+
+gboolean
+gnc_main_window_can_cancel_save (GNCMainInfo *wind)
+{
+  if (!wind) return FALSE;
+
+  return gnc_main_window_has_apps (wind);
+}
+
+
+/********************************************************************
  * gnc_main_window_save()
  * save the status of the MDI session
  ********************************************************************/
@@ -469,6 +507,7 @@ gnc_main_window_save(GNCMainInfo * wind, char * filename) {
   if(filename && *filename != '\0') {
     gnome_mdi_save_state(GNOME_MDI(wind->mdi), session_name);
   }
+
   g_free(session_name);
 }
 
