@@ -578,10 +578,16 @@ scanDateInternal (const char *buff, int *day, int *month, int *year,
       * swaps month and day field, if the day is 12 or less.  This is
       * deemed acceptable given the obscurity of this bug.
       */
-     if (which_format == prevDateFormat)
-       return(FALSE);
-     if (scanDateInternal(buff, day, month, year, prevDateFormat))
+     if ((which_format != prevDateFormat)
+	 && (scanDateInternal(buff, day, month, year, prevDateFormat)))
        return(TRUE);
+
+     if (imonth > 12 && iday <= 12) {
+       int tmp = imonth;
+       imonth = iday;
+       iday = tmp;
+     } else
+       return FALSE;
    }
 
    /* if the year entered is smaller than 100, assume we mean the current

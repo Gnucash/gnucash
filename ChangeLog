@@ -1,3 +1,10 @@
+2003-07-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/date.c: back port a change to gnc-date.c.
+	  If the date format hasn't changed and the month/day appears
+	  in the wrong order, try swaping them.
+	Fixes #117198
+
 2003-07-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Add button for
