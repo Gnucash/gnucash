@@ -43,6 +43,8 @@
 char * stpcpy (char *dest, const char *src);
 
 /** GLOBALS *********************************************************/
+static int min_decimal_places = 0;
+
 gncLogLevel loglevel[MOD_NUM] =
 {
   GNC_LOG_NOTHING,      /* DUMMY */
@@ -79,6 +81,17 @@ gnc_set_log_level_global(gncLogLevel level)
     loglevel[module] = level;
 }
 
+void
+gnc_set_mininum_decimal_places (int places)
+{
+  if (places < 0)
+    return;
+
+  if (places > 8)
+    return;
+
+  min_decimal_places = places;
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -479,6 +492,9 @@ PrintAmt(char *buf, double val, int prec,
   if (val < 0.0)
     val = DABS(val);
 
+  if (prec < min_decimal_places)
+    prec = min_decimal_places;
+
   util_fptostr(tempBuf, val, prec);
 
   /* Here we strip off trailing decimal zeros per the argument. */
@@ -593,15 +609,13 @@ xaccSPrintAmountGeneral (char * bufp, double val,
      cs_precedes = 0;  /* currency symbol follows amount */
      sep_by_space = 1; /* they are separated by a space  */
    }
-   else if (flags & PRTEUR)
-   {
-     currency_symbol = "EUR";
-     cs_precedes = 1;  /* currency symbol precedes amount */
-     sep_by_space = 0; /* they are not separated by a space  */
-   }
    else
    {
-     if (curr_sym == NULL)
+     if (flags & PRTEUR)
+     {
+       currency_symbol = "EUR ";
+     }
+     else if (curr_sym == NULL)
      {
        currency_symbol = lc->currency_symbol;
      }
@@ -833,6 +847,20 @@ double xaccParseAmount (const char * instr, gncBoolean monetary)
    if (*str == negative_sign) {
       isneg = GNC_T;
       str++;
+   }
+   /* also accept (num) as negative */
+   else if (*str == '(') {
+     /* go to end of string */
+     for (tok = str; *tok != '\0'; tok++)
+       ;
+     tok--;
+
+     if (*tok != ')')
+       return 0.0;
+
+     isneg = GNC_T;
+     str++;
+     *tok = '\0';
    }
 
    if (*str == '\0') return 0.0;

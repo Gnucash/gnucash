@@ -684,7 +684,7 @@ gnucash_sheet_redraw_all (GnucashSheet *sheet)
         g_return_if_fail (GNUCASH_IS_SHEET(sheet));
 
         gnome_canvas_request_redraw (
-                GNOME_CANVAS (sheet), 0, 0, INT_MAX, INT_MAX);
+                GNOME_CANVAS (sheet), 0, 0, INT_MAX/2 -1, INT_MAX/2 -1);
 }
 
 
@@ -734,6 +734,8 @@ gnucash_sheet_destroy (GtkObject *object)
         for (i = 0; i < sheet->num_virt_rows; i++)
                 for (j = 0; j < sheet->num_virt_cols; j++)
                         gnucash_sheet_block_destroy(sheet, i, j);
+
+        g_hash_table_destroy (sheet->blocks);
 
         for (i = GNUCASH_CURSOR_HEADER; i < GNUCASH_CURSOR_LAST; i++)
                 gnucash_sheet_style_destroy(sheet, sheet->cursor_style[i]);

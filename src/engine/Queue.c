@@ -159,6 +159,9 @@ ExtendHead (Queue * q)
       newlist[i] = list[i+tail]; 
    }
 
+   q->tail_split = 0;
+   q->head_split = len-1;
+
    q->split_list = newlist;
    free(list);
 }

@@ -666,6 +666,17 @@ gnc_date_edit_get_date (GNCDateEdit *gde)
 
 	tm.tm_isdst = -1;
 
+        if (mktime (&tm) == -1)
+        {
+                time_t secs = time (NULL);
+
+                tm = *localtime (&secs);
+                tm.tm_sec = 0;
+                tm.tm_min = 0;
+                tm.tm_hour = 0;
+                tm.tm_isdst = -1;
+        }
+
 	return mktime (&tm);
 }
 

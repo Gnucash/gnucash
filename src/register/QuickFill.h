@@ -46,7 +46,7 @@
  * when the end of the descriptions string is reached.
  */
 
-#define QFNUM 129     /* 128 characters + 1 */
+#define QFNUM 257     /* 256 characters + 1 */
 
 typedef enum
 {

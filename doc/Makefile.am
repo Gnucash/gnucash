@@ -20,6 +20,7 @@ EXTRA_DIST = \
   README.build-system \
   README.francais \
   README.german \
+  README.translator.txt \
   build-aix.txt \
   build-solaris.txt \
   build-suse.txt \

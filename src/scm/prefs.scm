@@ -382,16 +382,16 @@ the account instead of opening a register." #f))
   "General" "Use accounting labels"
   "e" "Only use 'debit' and 'credit' instead of informal synonyms" #f))
 
-;(gnc:register-configuration-option
-; (gnc:make-number-range-option
-;  "General" "Default precision"
-;  "f" "Default number of decimal places to display"
-;   15.0 ;; default
-;    1.0 ;; lower bound
-;  200.0 ;; upper bound
-;    0.0 ;; number of decimals
-;    1.0 ;; step size
-;  ))
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  "General" "Minimum displayed decimal places"
+  "f" "Minimum number of decimal places to display"
+  0.0 ;; default
+  0.0 ;; lower bound
+  8.0 ;; upper bound
+  0.0 ;; number of decimals
+  1.0 ;; step size
+  ))
 
 
 ;; Configuation variables
