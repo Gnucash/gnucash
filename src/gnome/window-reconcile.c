@@ -62,6 +62,7 @@ struct _RecnWindow
   Account *account;         /* The account that we are reconciling  */
   double  new_ending;       /* The new ending balance               */
   time_t statement_date;    /* The statement date                   */
+  gboolean use_shares;      /* Use share balances                   */
 
   GtkWidget *window;        /* The reconcile window                 */
 
@@ -176,21 +177,21 @@ recnRecalculateBalance(RecnWindow *recnData)
   double diff;
   GNCPrintAmountFlags flags;
   gboolean reverse_balance;
-  int account_type;
 
   flags = PRTSYM | PRTSEP;
 
   reverse_balance = gnc_reverse_balance(recnData->account);
 
-  account_type = xaccAccountGetType(recnData->account);
-  if ((account_type == STOCK ) || (account_type == MUTUAL) ||
-      (account_type == CURRENCY))
+  if (recnData->use_shares)
     flags |= PRTSHR;
 
   currency = xaccAccountGetCurrency(recnData->account);
 
   /* update the starting balance */
-  starting = xaccAccountGetReconciledBalance(recnData->account);
+  if (recnData->use_shares)
+    starting = xaccAccountGetShareReconciledBalance(recnData->account);
+  else
+    starting = xaccAccountGetReconciledBalance(recnData->account);
   if (reverse_balance)
     starting = -starting;
   amount = xaccPrintAmount(starting, flags, currency);
@@ -310,20 +311,22 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
   flags = PRTSYM | PRTSEP;
 
-  /* Get the previous ending balance.  Use the published
-   * account interface for this, since the ending balance
-   * may have to be adjusted for stock price fluctuations. */
-  dendBalance = xaccAccountGetReconciledBalance(account);
+  account_type = xaccAccountGetType(account);
+
+  if ((account_type == STOCK) || (account_type == MUTUAL) ||
+      (account_type == CURRENCY))
+  {
+    flags |= PRTSHR;
+    dendBalance = xaccAccountGetShareReconciledBalance(account);
+  }
+  else
+    dendBalance = xaccAccountGetReconciledBalance(account);
+
   if (gnc_reverse_balance(account))
   {
     dendBalance = -dendBalance;
     *new_ending = -(*new_ending);
   }
-
-  account_type = xaccAccountGetType(account);
-  if ((account_type == STOCK) || (account_type == MUTUAL) ||
-      (account_type == CURRENCY))
-    flags |= PRTSHR;
 
   currency = xaccAccountGetCurrency(account);
 
@@ -1241,13 +1244,22 @@ recnWindow(GtkWidget *parent, Account *account)
   GtkWidget *dock;
   double new_ending;
   time_t statement_date;
+  GNCAccountType type;
 
   if (account == NULL)
     return NULL;
 
   FETCH_FROM_LIST(RecnWindow, recnList, account, account, recnData);
 
-  new_ending = xaccAccountGetBalance(account);
+  type = xaccAccountGetType(account);
+  recnData->use_shares = ((type == STOCK) || (type == MUTUAL) ||
+                          (type == CURRENCY));
+
+  if (recnData->use_shares)
+    new_ending = xaccAccountGetShareBalance(account);
+  else
+    new_ending = xaccAccountGetBalance(account);
+
   statement_date = time(NULL);
 
   /* Popup a little window to prompt the user to enter the

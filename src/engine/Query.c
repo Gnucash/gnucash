@@ -745,13 +745,20 @@ xaccQueryGetSplits(Query * q) {
       /* iterate over splits */
       for(sptr = splits; *sptr; sptr++) {
         if(xaccQueryCheckSplit(q, *sptr)) {
-          matching_splits = g_list_append(matching_splits, *sptr);
+          matching_splits = g_list_prepend(matching_splits, *sptr);
           split_count++;
         }
         total_splits_checked++;
       }      
     }
   }
+
+  /* There is no absolute need to reverse this list, since it's
+   * being sorted below. However, in the common case, we will be
+   * searching in a single account and returning in the account
+   * order, thus reversing will put us in the correct order we
+   * want and make the sorting go much faster. */
+  matching_splits = g_list_reverse(matching_splits);
 
   /* now sort the matching splits based on the search criteria 
    * split_sort_query is an unforgivable use of static global data...
@@ -762,9 +769,15 @@ xaccQueryGetSplits(Query * q) {
   /* crop the list to limit the number of splits */
   if((split_count > q->max_splits) && (q->max_splits > -1)) {
     if(q->max_splits > 0) {
-      mptr = g_list_nth(matching_splits, q->max_splits - 1);
-      g_list_free(mptr->next);
-      mptr->next = NULL;
+      /* mptr is set to the first node of what will be the new list */
+      mptr = g_list_nth(matching_splits, split_count - q->max_splits);
+      mptr->prev = NULL;
+      g_list_free(matching_splits);
+      matching_splits = mptr;
+    }
+    else { /* q->max_splits == 0 */
+      g_list_free(matching_splits);
+      matching_splits = NULL;
     }
     split_count = q->max_splits;
   }

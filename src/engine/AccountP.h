@@ -128,9 +128,9 @@ struct _account {
   double cleared_balance;
   double reconciled_balance;
 
-  double running_balance;
-  double running_cleared_balance;
-  double running_reconciled_balance;
+  double share_balance;
+  double share_cleared_balance;
+  double share_reconciled_balance;
 
   int numSplits;                /* length of splits array below   */
   Split **splits;               /* ptr to array of ptrs to splits */

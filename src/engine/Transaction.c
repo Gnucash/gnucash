@@ -345,6 +345,18 @@ double xaccSplitGetShareBalance (Split *s)
    return s->share_balance;
 }
 
+double xaccSplitGetShareClearedBalance (Split *s) 
+{
+   if (!s) return 0.0;
+   return s->share_cleared_balance;
+}
+
+double xaccSplitGetShareReconciledBalance (Split *s) 
+{
+   if (!s) return 0.0;
+   return s->share_reconciled_balance;
+}
+
 double xaccSplitGetCostBasis (Split *s) 
 {
    if (!s) return 0.0;
@@ -1386,8 +1398,7 @@ xaccTransRemoveSplit (Transaction *trans, Split *split)
  * occur on the same day that have all three of these values identical.
  *
  * Note that being able to establish this kind of absolute order is 
- * important for some of the ledger display functions.  In particular,
- * grep for "running_balance" in the code, and see the notes there.
+ * important for some of the ledger display functions.
  *
  * Yes, this kind of code dependency is ugly, but the alternatives seem
  * ugly too.

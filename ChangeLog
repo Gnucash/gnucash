@@ -1,7 +1,24 @@
+2000-05-21  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-reconcile.c: use share balances when
+	reconciling stock, mutual fund, and currency accounts.
+
 2000-05-20  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
-	* src/gnome/dialog-add.c (accWindow): if the window is closed as
-	a result of a window destroy, don't save the size or destroy the
+	* src/engine/Account.c (xaccAccountRecomputeBalance): added share,
+	cleared share, and reconciled share balance tracking, along with
+	api calls for getting them.
+
+	* src/engine/Transaction.c: add calls to get share cleared and
+	reconciled balance.
+
+	* src/engine/Query.c: use g_list_prepend and then reverse when
+	gathering splits. When pruning the list, prune from the beginning,
+	not the end, per the original semantics. Handle the case when
+	q->max_splits is 0.
+
+	* src/gnome/dialog-add.c (accWindow): if the window is closed as a
+	result of a gnome_dialog_close, don't save the size or destroy the
 	window, it's already gone.
 
 	* configure.in: remove check for readline. guile-config should

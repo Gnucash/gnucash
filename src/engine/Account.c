@@ -77,12 +77,13 @@ xaccInitAccount (Account * acc)
   acc->parent   = NULL;
   acc->children = NULL;
 
-  acc->balance  = 0.0;
+  acc->balance = 0.0;
   acc->cleared_balance = 0.0;
   acc->reconciled_balance = 0.0;
-  acc->running_balance  = 0.0;
-  acc->running_cleared_balance = 0.0;
-  acc->running_reconciled_balance = 0.0;
+
+  acc->share_balance = 0.0;
+  acc->share_cleared_balance = 0.0;
+  acc->share_reconciled_balance = 0.0;
 
   acc->flags = 0;
   acc->type  = -1;
@@ -180,6 +181,10 @@ xaccFreeAccount( Account *acc )
   acc->balance  = 0.0;
   acc->cleared_balance = 0.0;
   acc->reconciled_balance = 0.0;
+
+  acc->share_balance = 0.0;
+  acc->share_cleared_balance = 0.0;
+  acc->share_reconciled_balance = 0.0;
 
   acc->flags = 0;
   acc->type  = -1;
@@ -490,25 +495,25 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
  * xaccAccountRecomputeBalance                                      *
  *   recomputes the partial balances and the current balance for    *
  *   this account.                                                  *
- * 
- * The way the computation is done depends on whether the partial
- * balances are for a monetary account (bank, cash, etc.) or a 
- * certificate account (stock portfolio, mutual fund).  For bank
- * accounts, the invariant amount is the dollar amount. For share
- * accounts, the invariant amount is the number of shares. For
- * share accounts, the share price fluctuates, and the current 
- * value of such an account is the number of shares times the current 
- * share price.
- * 
- * Part of the complexity of this computatation stems from the fact 
- * xacc uses a double-entry system, meaning that one transaction
- * appears in two accounts: one account is debited, and the other 
- * is credited.  When the transaction represents a sale of shares,
- * or a purchase of shares, some care must be taken to compute 
- * balances correctly.  For a sale of shares, the stock account must
- * be debited in shares, but the bank account must be credited 
- * in dollars.  Thus, two different mechanisms must be used to
- * compute balances, depending on account type.
+ *                                                                  *
+ * The way the computation is done depends on whether the partial   *
+ * balances are for a monetary account (bank, cash, etc.) or a      *
+ * certificate account (stock portfolio, mutual fund).  For bank    *
+ * accounts, the invariant amount is the dollar amount. For share   *
+ * accounts, the invariant amount is the number of shares. For      *
+ * share accounts, the share price fluctuates, and the current      *
+ * value of such an account is the number of shares times the       *
+ * current share price.                                             *
+ *                                                                  *
+ * Part of the complexity of this computatation stems from the fact *
+ * xacc uses a double-entry system, meaning that one transaction    *
+ * appears in two accounts: one account is debited, and the other   *
+ * is credited.  When the transaction represents a sale of shares,  *
+ * or a purchase of shares, some care must be taken to compute      *
+ * balances correctly.  For a sale of shares, the stock account must*
+ * be debited in shares, but the bank account must be credited      *
+ * in dollars.  Thus, two different mechanisms must be used to      *
+ * compute balances, depending on account type.                     *
  *                                                                  *
  * Args:   account -- the account for which to recompute balances   *
  * Return: void                                                     *
@@ -526,7 +531,7 @@ xaccAccountRecomputeBalance( Account * acc )
   double  share_reconciled_balance = 0.0;
   double  amt = 0.0;
   Split *split, *last_split = NULL;
-  
+
   if( NULL == acc ) return;
   if (0x0 == (ACC_INVALID_BALN & acc->changed)) return;
   acc->changed &= ~ACC_INVALID_BALN;
@@ -557,7 +562,8 @@ xaccAccountRecomputeBalance( Account * acc )
       split -> share_reconciled_balance = share_reconciled_balance;
       split -> balance = split->share_price * share_balance;
       split -> cleared_balance = split->share_price * share_cleared_balance;
-      split -> reconciled_balance = split->share_price * share_reconciled_balance;
+      split -> reconciled_balance = (split->share_price *
+                                     share_reconciled_balance);
     } else {
       split -> share_balance = dbalance;
       split -> share_cleared_balance = dcleared_balance;
@@ -576,20 +582,31 @@ xaccAccountRecomputeBalance( Account * acc )
 
   if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
     if (last_split) {
+       acc -> share_balance = share_balance;
+       acc -> share_cleared_balance = share_cleared_balance;
+       acc -> share_reconciled_balance = share_reconciled_balance;
        acc -> balance = share_balance * (last_split->share_price);
-       acc -> cleared_balance = share_cleared_balance * (last_split->share_price);
-       acc -> reconciled_balance = share_reconciled_balance * (last_split->share_price);
+       acc -> cleared_balance = (share_cleared_balance *
+                                 last_split->share_price);
+       acc -> reconciled_balance = (share_reconciled_balance *
+                                    last_split->share_price);
     } else {
+       acc -> share_balance = 0.0;
+       acc -> share_cleared_balance = 0.0;
+       acc -> share_reconciled_balance = 0.0;
        acc -> balance = 0.0;
        acc -> cleared_balance = 0.0;
        acc -> reconciled_balance = 0.0;
     }
   } else {
+    acc -> share_balance = dbalance;
+    acc -> share_cleared_balance = dcleared_balance;
+    acc -> share_reconciled_balance = dreconciled_balance;
     acc -> balance = dbalance;
     acc -> cleared_balance = dcleared_balance;
     acc -> reconciled_balance = dreconciled_balance;
   }
-    
+
   return;
 }
 
@@ -855,25 +872,6 @@ xaccAccountRecomputeBalances( Account **list )
    acc = list[0];
    while (acc) {
       xaccAccountRecomputeBalance (acc);
-      nacc++;
-      acc = list[nacc];
-   }
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccZeroRunningBalances( Account **list )
-{
-   Account * acc;
-   int nacc = 0;
-   if (!list) return;
-
-   acc = list[0];
-   while (acc) {
-      acc -> running_balance = 0.0;
-      acc -> running_cleared_balance = 0.0;
       nacc++;
       acc = list[nacc];
    }
@@ -1317,6 +1315,27 @@ xaccAccountGetReconciledBalance (Account *acc)
 {
    if (!acc) return 0.0;
    return (acc->reconciled_balance);
+}
+
+double
+xaccAccountGetShareBalance (Account *acc)
+{
+   if (!acc) return 0.0;
+   return (acc->share_balance);
+}
+
+double
+xaccAccountGetShareClearedBalance (Account *acc)
+{
+   if (!acc) return 0.0;
+   return (acc->share_cleared_balance);
+}
+
+double
+xaccAccountGetShareReconciledBalance (Account *acc)
+{
+   if (!acc) return 0.0;
+   return (acc->share_reconciled_balance);
 }
 
 Split *

@@ -94,7 +94,6 @@ int          xaccCheckTransDateOrder (Transaction *);
  *    that an account appears in the account list. 
  */
 int          xaccIsAccountInList (Account * acc, Account **list);
-void         xaccZeroRunningBalances (Account **list);
 
 /* The xaccAccountOrder() subroutine defines a sorting order 
  *    on accounts.  It takes pointers to two accounts, and
@@ -165,6 +164,9 @@ AccInfo *      xaccAccountGetAccInfo (Account *);
 double         xaccAccountGetBalance (Account *);
 double         xaccAccountGetClearedBalance (Account *);
 double         xaccAccountGetReconciledBalance (Account *);
+double         xaccAccountGetShareBalance (Account *);
+double         xaccAccountGetShareClearedBalance (Account *);
+double         xaccAccountGetShareReconciledBalance (Account *);
 Split *        xaccAccountGetSplit (Account *acc, int i);
 Split **       xaccAccountGetSplitList (Account *acc);
 int            xaccAccountGetNumSplits (Account *acc);
