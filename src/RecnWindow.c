@@ -448,6 +448,7 @@ recnWindow( Widget parent, Account *acc )
                           xmDialogShellWidgetClass, parent,
                           XmNtitle,            title,
                           XmNdeleteResponse,   XmDESTROY,
+                          XmNtransient,        FALSE,  /* allow window to be repositioned */
                           NULL );
   
   XtAddCallback( recnData->dialog, XmNdestroyCallback, 
