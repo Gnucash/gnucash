@@ -377,6 +377,7 @@ gnc_numeric xaccSplitGetBaseValue (Split *split,
 
 /* return the parent transaction of the split */
 Transaction * xaccSplitGetParent (Split *split);
+GNCLot *      xaccSplitGetLot (Split *);
 
 /* return the memo, action strings */
 const char *  xaccSplitGetMemo (Split *split);

@@ -299,7 +299,18 @@ gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
 
 gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
 
+/* The xaccAccountGetSplitList() routine returns a pointer to a GList of
+ *    the splits in the account.  This GList is the account's internal 
+ *    data structure: do not delete it when done; treat it as a read-only
+ *    structure.  Note that some routines (such as xaccAccountRemoveSplit())
+ *    modify this list directly, and could leave you with a corrupted 
+ *    pointer.
+ *
+ * The xaccAccountGetLotList() routine returns a pointer to the GList of
+ *    the lots in this account.  The same warnings as above apply.
+ */
 SplitList*      xaccAccountGetSplitList (Account *account);
+LotList*        xaccAccountGetLotList (Account *account);
 
 gboolean        xaccAccountGetTaxRelated (Account *account);
 void            xaccAccountSetTaxRelated (Account *account,

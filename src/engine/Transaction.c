@@ -2761,6 +2761,13 @@ xaccSplitGetParent (Split *split)
    return (split->parent);
 }
 
+GNCLot *
+xaccSplitGetLot (Split *split)
+{
+   if (!split) return NULL;
+   return (split->lot);
+}
+
 const char *
 xaccSplitGetMemo (Split *split)
 {

@@ -119,6 +119,15 @@ gnc_lot_set_guid (GNCLot *lot, GUID uid)
    xaccStoreEntity(lot->book->entity_table, lot, &lot->guid, GNC_ID_LOT);
 }
 
+GNCLot *
+gnc_lot_lookup (const GUID *guid, GNCBook *book)
+{
+  if (!guid || !book) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+                                          guid, GNC_ID_LOT);
+}
+
+
 
 /* ============================================================= */
 
@@ -126,7 +135,7 @@ gboolean
 gnc_lot_is_closed (GNCLot *lot)
 {
    if (!lot) return TRUE;
-	if (0 > lot->is_closed) gnc_lot_get_balance (lot);
+   if (0 > lot->is_closed) gnc_lot_get_balance (lot);
    return lot->is_closed;
 }
 
@@ -147,8 +156,8 @@ gnc_lot_get_slots (GNCLot *lot)
 SplitList *
 gnc_lot_get_split_list (GNCLot *lot)
 {
-	if (!lot) return NULL;
-	return lot->splits;
+   if (!lot) return NULL;
+   return lot->splits;
 }
 
 /* ============================================================= */

@@ -44,6 +44,8 @@ GNCLot * gnc_lot_new (GNCBook *);
 void gnc_lot_destroy (GNCLot *);
 
 const GUID * gnc_lot_get_guid (GNCLot *p);
+GNCLot * gnc_lot_lookup (const GUID *guid, GNCBook *book);
+		  
 
 /* The gnc_lot_add_split() routine adds a split to this lot.  Note
  *    that *all* splits in a lot must also be in the same account.

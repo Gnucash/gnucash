@@ -406,7 +406,7 @@ xaccAccountCommitEdit (Account *acc)
   if (acc->do_free)
   {
     GList *lp;
-	 
+ 
     acc->editlevel++;
 
     /* First, recursively free children */
@@ -766,7 +766,8 @@ xaccAccountBringUpToDate(Account *acc)
  ********************************************************************/
 
 kvp_frame * 
-xaccAccountGetSlots(Account * account) {
+xaccAccountGetSlots(Account * account) 
+{
   if (!account) return NULL;
   return(account->kvp_data);
 }
@@ -939,7 +940,7 @@ xaccClearMarkDownGr (AccountGroup *grp, short val)
 void
 xaccAccountInsertLot (Account *acc, GNCLot *lot)
 {
-	GList *sl;
+   GList *sl;
    Account * old_acc = NULL;
 
    if (!acc || !lot) return;
@@ -963,7 +964,7 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
    {
       for (sl = lot->splits; sl; sl=sl->next)
       {
-			Split *s = sl->data;
+         Split *s = sl->data;
          if (s->acc != acc)
          {
             xaccAccountInsertSplit (acc, s);
@@ -1000,7 +1001,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   /* if the denominator can't be exactly converted, it's an error */
   /* FIXME : need to enforce ordering of insertion/value */
   split->amount = gnc_numeric_convert(split->amount, 
-                                      xaccAccountGetCommoditySCU(acc),
+                                      acc->commodity_scu,
                                       GNC_RND_ROUND);
 
   /* if this split belongs to another account, remove it from there
@@ -1398,7 +1399,7 @@ update_split_commodity(Account * acc)
 
     xaccTransBeginEdit (trans);
     s->amount = gnc_numeric_convert(s->amount,
-                                    xaccAccountGetCommoditySCU(acc),
+                                    acc->commodity_scu,
                                     GNC_RND_ROUND);
     xaccTransCommitEdit (trans);
   }
@@ -1444,7 +1445,8 @@ xaccAccountSetCommoditySCU (Account *acc, int scu)
 }
 
 int
-xaccAccountGetCommoditySCU (Account * acc) {
+xaccAccountGetCommoditySCU (Account * acc) 
+{
   if (!acc) return 0;
 
   return acc->commodity_scu;
@@ -1600,7 +1602,7 @@ xaccAccountGetFullName(Account *account, const char separator)
   a = account;
   while (a != NULL)
   {
-    name = xaccAccountGetName(a);
+    name = a->accountName;
 
     length += strlen(name) + 1; /* plus one for the separator */
 
@@ -1622,7 +1624,7 @@ xaccAccountGetFullName(Account *account, const char separator)
   a = account;
   while (a != NULL)
   {
-    name = xaccAccountGetName(a);
+    name = a->accountName;
     length = strlen(name);
 
     /* copy the characters going backwards */
@@ -1756,7 +1758,7 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
   xaccAccountSortSplits (acc, TRUE); /* just in case, normally a noop */
   xaccAccountRecomputeBalance (acc); /* just in case, normally a noop */
 
-  balance = xaccAccountGetBalance( acc );
+  balance = acc->balance;
 
   /* Since transaction post times are stored as a Timespec,
    * convert date into a Timespec as well rather than converting
@@ -1765,7 +1767,7 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
   ts.tv_sec = date;
   ts.tv_nsec = 0;
 
-  lp = xaccAccountGetSplitList( acc );
+  lp = acc->splits;
   while( lp && !found )
   {
     xaccTransGetDatePostedTS( xaccSplitGetParent( (Split *)lp->data ),
@@ -1794,10 +1796,18 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
 /********************************************************************\
 \********************************************************************/
 
-GList *
-xaccAccountGetSplitList (Account *acc) {
+SplitList *
+xaccAccountGetSplitList (Account *acc) 
+{
   if (!acc) return NULL;
   return (acc->splits);
+}
+
+LotList *
+xaccAccountGetLotList (Account *acc) 
+{
+  if (!acc) return NULL;
+  return (acc->lots);
 }
 
 /********************************************************************\
@@ -2466,7 +2476,7 @@ xaccAccountSetPriceSrc(Account *acc, const char *src)
 
   xaccAccountBeginEdit(acc);
   {
-    GNCAccountType t = xaccAccountGetType(acc);
+    GNCAccountType t = acc->type;
 
     if((t == STOCK) || (t == MUTUAL) || (t == CURRENCY)) {
       kvp_frame_set_slot_nc(acc->kvp_data,
@@ -2488,7 +2498,7 @@ xaccAccountGetPriceSrc(Account *acc)
   GNCAccountType t;
   if(!acc) return NULL;
 
-  t = xaccAccountGetType(acc);
+  t = acc->type;
   if((t == STOCK) || (t == MUTUAL) || (t == CURRENCY)) 
   {
     kvp_value *value = kvp_frame_get_slot(acc->kvp_data, "old-price-source");
@@ -2508,7 +2518,7 @@ xaccAccountSetQuoteTZ(Account *acc, const char *tz)
 
   xaccAccountBeginEdit(acc);
   {
-    GNCAccountType t = xaccAccountGetType(acc);
+    GNCAccountType t = acc->type;
 
     if((t == STOCK) || (t == MUTUAL) || (t == CURRENCY)) {
       kvp_frame_set_slot_nc(acc->kvp_data,
@@ -2530,7 +2540,7 @@ xaccAccountGetQuoteTZ(Account *acc)
   GNCAccountType t;
   if(!acc) return NULL;
 
-  t = xaccAccountGetType(acc);
+  t = acc->type;
   if((t == STOCK) || (t == MUTUAL) || (t == CURRENCY))
   {
     kvp_value *value = kvp_frame_get_slot(acc->kvp_data, "old-quote-tz");
@@ -2589,7 +2599,8 @@ xaccAccountVisitUnvisitedTransactions(Account *acc,
                                       gboolean (*proc)(Transaction *t,
                                                        void *data),
                                       void *data,
-                                      GHashTable *visited_txns) {
+                                      GHashTable *visited_txns) 
+{
   gboolean keep_going = TRUE;
   GList *lp;
 
@@ -2597,7 +2608,7 @@ xaccAccountVisitUnvisitedTransactions(Account *acc,
   if(!proc) return(FALSE);
   if(!visited_txns) return(FALSE);
 
-  for(lp = xaccAccountGetSplitList(acc); lp && keep_going; lp = lp->next) {
+  for(lp = acc->splits; lp && keep_going; lp = lp->next) {
     Split *s = (Split *) lp->data;
     Transaction *t = xaccSplitGetParent(s);
 
@@ -2620,7 +2631,8 @@ xaccAccountVisitUnvisitedTransactions(Account *acc,
 gboolean
 xaccAccountForEachTransaction(Account *acc,
                               gboolean (*proc)(Transaction *t, void *data),
-                              void *data) {
+                              void *data) 
+{
   GHashTable *visited_txns = NULL;
   gboolean result = FALSE;
 
@@ -2656,7 +2668,10 @@ finder_help_function(Account *account,
 
   if (account == NULL) return;
 
-  for (slp = g_list_last (xaccAccountGetSplitList (account));
+  /* Why is this loop iterated backwards ?? Presumably because the split
+   * list is in date order, and the most recent matches should be 
+   * returned!?  */
+  for (slp = g_list_last (account->splits);
        slp;
        slp = slp->prev)
   {
