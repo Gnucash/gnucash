@@ -159,12 +159,6 @@ Use: xaccAccountGetLastNum, xaccAccountSetLastNum
      Store the last number used in an account's transactions.
      Used in auto-filling the Num field.
 
-Name: memo
-Type: string
-Entities: Split
-Use: xaccSplitGetMemo, xaccSplitSetMemo
-     Store the 'Memo' string associated with Splits.
-
 Name: notes
 Type: string
 Entities: Account, Transaction
