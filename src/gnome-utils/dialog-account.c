@@ -41,7 +41,6 @@
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
 #include "gnc-session.h"
-#include "gnc-tree-model-account.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
@@ -1261,20 +1260,16 @@ commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
 
 static gboolean
 account_commodity_filter (GtkTreeSelection *selection,
-			  GtkTreeModel *filter_model,
-			  GtkTreePath *filter_path,
+			  GtkTreeModel *unused_model,
+			  GtkTreePath *unused_path,
 			  gboolean path_currently_selected,
 			  gpointer user_data)
 {
   gnc_commodity *commodity;
   AccountWindow *aw;
   Account *account;
-  GtkTreeModel *model;
-  GtkTreePath *path;
-  GtkTreeIter iter;
 
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), FALSE);
-  g_return_val_if_fail (EGG_IS_TREE_MODEL_FILTER (filter_model), FALSE);
 
   aw = user_data;
 
@@ -1283,17 +1278,7 @@ account_commodity_filter (GtkTreeSelection *selection,
     return TRUE;
   }
 
-  model = egg_tree_model_filter_get_model
-    (EGG_TREE_MODEL_FILTER(filter_model));
-  path = egg_tree_model_filter_convert_path_to_child_path
-    (EGG_TREE_MODEL_FILTER(filter_model), filter_path);
-
-  if (!gtk_tree_model_get_iter (model, &iter, path)) {
-    /* Can't convert path to iter? Bad! */
-    return FALSE;
-  }
-
-  account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT (model), &iter);
+  account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->transfer_tree));
   if (!account) {
     return FALSE;
   }

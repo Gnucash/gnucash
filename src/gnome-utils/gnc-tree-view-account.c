@@ -473,6 +473,28 @@ gnc_tree_view_account_count_children (GncTreeViewAccount *view,
   return num_children;
 }
 
+
+Account *
+gnc_tree_view_account_get_account_from_column (GtkTreeViewColumn *column,
+					       GtkTreeModel *f_model,
+					       GtkTreeIter  *f_iter)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  Account *account;
+
+  g_return_val_if_fail (EGG_IS_TREE_MODEL_FILTER (f_model), NULL);
+
+  ENTER("column %p, model %p, iter %p", column, f_model, f_iter);
+  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+						    &iter,
+						    f_iter);
+  account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
+  LEAVE("account %p (%s)", account, xaccAccountGetName (account));
+  return account;
+}
+
 /************************************************************/
 /*            Account Tree View Filter Functions            */
 /************************************************************/

@@ -40,7 +40,6 @@
 #include "gnc-event-p.h"
 #include "../gnome-utils/gnc-dir.h"
 #include "gnc-gui-query.h"
-#include "gnc-tree-model-account.h"
 #include "gnc-tree-model-example-account.h"
 #include "gnc-tree-model-selection.h"
 #include "gnc-tree-view-account.h"
@@ -603,27 +602,19 @@ get_selected_account_list (GtkTreeView *tree_view)
 static void
 balance_cell_data_func (GtkTreeViewColumn *tree_column,
 	       		GtkCellRenderer *cell,
-			GtkTreeModel *filter_model,
-			GtkTreeIter *filter_iter,
+			GtkTreeModel *model,
+			GtkTreeIter *iter,
 			gpointer user_data)
 {
-	GtkTreeModel *model;
-	GtkTreeIter iter;
 	Account *account;
 	gnc_numeric balance;
 	const gchar *string;
 	GNCPrintAmountInfo print_info;
 	hierarchy_data *data = (hierarchy_data *)user_data;
 
-	g_return_if_fail (EGG_IS_TREE_MODEL_FILTER (filter_model));
-
-	model =
-	  egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(filter_model));
-	egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(filter_model),
-							  &iter,
-							  filter_iter);
-
-	account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
+	g_return_if_fail (GTK_TREE_MODEL (model));
+	account = gnc_tree_view_account_get_account_from_column (tree_column,
+								 model, iter);
 
 	balance = get_final_balance (data->balance_hash, account);
 	if (gnc_reverse_balance (account))

@@ -1,3 +1,10 @@
+2003-11-01  David Hampton  <hampton@employees.org>
+
+	* src/gnome/druid-hierarchy.c: 
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome-utils/gnc-tree-view-account.[ch]: Collapse knowledge
+	of the account tree model layering into one place.
+
 2003-10-26  David Hampton  <hampton@employees.org>
 
 	* src/gnome/druid-stock-split.c:

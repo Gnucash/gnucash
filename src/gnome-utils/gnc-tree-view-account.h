@@ -229,6 +229,12 @@ gint          gnc_tree_view_account_count_children (GncTreeViewAccount *view,
 						    Account *account);
 
 
+
+Account     * gnc_tree_view_account_get_account_from_column (GtkTreeViewColumn *column,
+							     GtkTreeModel *f_model,
+							     GtkTreeIter  *f_iter);
+
+
 /** This function returns the account associated with the top level
  *  pseudo-account.  The gnucash engine does not have a single top
  *  level account (it has a list of top level accounts), but this code
