@@ -143,10 +143,31 @@ AC_SUBST(GNC_HELPDIR)
 
 
 ### --------------------------------------------------------------------------
+### Check for glade
+
+# Check for glade
+AC_ARG_WITH(glade,
+  [  --with-glade=FILE              which glade executable to use ],
+  GLADE="${with_glade}")
+
+# If the user didn't specify a glade, then go fetch.
+if test x"$GLADE" = x;
+then
+  AC_PATH_PROG(GLADE, glade)
+fi
+
+# Make sure glade was found
+#if test x"$GLADE" = x; then
+#    AC_MSG_ERROR([Cannot find Glade.])
+#fi
+
+AC_SUBST(GLADE)
+
+
+### --------------------------------------------------------------------------
 ### Check for perl
 
 # Check for perl, force version 5
-# AC_CHECK_PROGS(PERL,perl5 perl)		# Sets @PERL@
 AC_ARG_WITH(perl,
   [  --with-perl=FILE              which perl executable to use ],
   PERL="${with_perl}")

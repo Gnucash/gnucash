@@ -74,6 +74,15 @@ noinst_HEADERS = \
   window-register.h \
   window-report.h
 
+GLADE_FILES = \
+  glade-gnc-dialogs.c \
+  glade-cb-gnc-dialogs.h \
+  glade-gnc-dialogs.h \
+  glade-support-gnc-dialogs.h
+
+#${GLADE_FILES}: gnc-dialogs.glade
+#	${GLADE} --write-source ${srcdir}/gnc-dialogs.glade
+
 EXTRA_DIST = \
   .cvsignore \
   gnc-dialogs.glade \
@@ -91,4 +100,3 @@ INCLUDES = \
   -I${top_srcdir}/src/register/gnome \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}
-

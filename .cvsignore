@@ -3,9 +3,13 @@ Makefile.in
 aclocal.m4
 configure
 config.cache
+config.guess
+config.sub
 config.log
 config.status
 config.h
+ltconfig
+ltmain.sh
 *.tar.gz
 *.log
 *.patch
