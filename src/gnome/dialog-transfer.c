@@ -716,7 +716,9 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
  
     to_amount = gnc_amount_edit_get_amount
       (GNC_AMOUNT_EDIT(xferData->to_amount_edit));
- 
+
+    gnc_suspend_gui_refresh ();
+
     /* from -> curr transaction */
     /* Create the transaction */
     trans = xaccMallocTransaction();
@@ -801,9 +803,12 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     gnc_account_ui_refresh(to);
     gnc_account_ui_refresh(from);
     gnc_account_ui_refresh(curr);
+    gnc_resume_gui_refresh ();
   }
   else
   {
+    gnc_suspend_gui_refresh ();
+
     /* Create the transaction */
     trans = xaccMallocTransaction();
 
@@ -850,6 +855,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     /* Refresh everything */
     gnc_account_ui_refresh(to);
     gnc_account_ui_refresh(from);
+    gnc_resume_gui_refresh ();
   }
 
   gnc_refresh_main_window();

@@ -225,7 +225,29 @@ gnc_cm_event_handler (GUID *entity,
                       GNCEngineEventType event_type,
                       gpointer user_data)
 {
+  GNCIdType id_type;
+
   add_event (&changes, entity, event_type, TRUE);
+
+  id_type = xaccGUIDType (entity);
+  switch (id_type)
+  {
+    case GNC_ID_TRANS:
+      changes.trans_event_mask |= event_type;
+      break;
+
+    case GNC_ID_ACCOUNT:
+      changes.account_event_mask |= event_type;
+      break;
+
+    case GNC_ID_NONE:
+      break;
+
+    default:
+      PERR ("unexpected id type: %d", id_type);
+      break;
+  }
+
   got_events = TRUE;
 
 #if CM_DEBUG
@@ -558,43 +580,6 @@ changes_match (ComponentEventInfo *cei)
 }
 
 static void
-compile_helper (gpointer key, gpointer value, gpointer user_data)
-{
-  GUID *guid = key;
-  EventInfo *info = value;
-  ComponentEventInfo *cei = user_data;
-  GNCIdType id_type;
-
-  id_type = xaccGUIDType (guid);
-  switch (id_type)
-  {
-    case GNC_ID_TRANS:
-      cei->trans_event_mask |= info->event_mask;
-      break;
-
-    case GNC_ID_ACCOUNT:
-      cei->account_event_mask |= info->event_mask;
-      break;
-
-    case GNC_ID_NONE:
-      break;
-
-    default:
-      PERR ("unexpected id type: %d", id_type);
-      break;
-  }
-}
-
-static void
-compile_changes (ComponentEventInfo *cei)
-{
-  if (!cei)
-    return;
-
-  g_hash_table_foreach (cei->entity_events, compile_helper, cei);
-}
-
-static void
 gnc_gui_refresh_internal (gboolean force)
 {
   GList *list;
@@ -606,9 +591,6 @@ gnc_gui_refresh_internal (gboolean force)
 
   if (!got_events)
     return;
-
-  if (!force)
-    compile_changes (&changes);
 
   list = find_component_ids_by_class (NULL);
 

@@ -88,8 +88,8 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   ftd->dialog = create_Find_Transactions();
 
   if(orig_ledg) {
-    ftd->q = xaccQueryCopy (orig_ledg->query);
-    ftd->ledger_q = orig_ledg->query;
+    ftd->q = xaccQueryCopy (xaccLedgerDisplayGetQuery (orig_ledg));
+    ftd->ledger_q = xaccLedgerDisplayGetQuery (orig_ledg);
   }
   else {
     ftd->q = NULL;
@@ -589,7 +589,6 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
 
   xaccFreeQuery (new_q);
 
-  ledger->dirty = TRUE;
   xaccLedgerDisplayRefresh(ledger);
 
   if (new_ledger)

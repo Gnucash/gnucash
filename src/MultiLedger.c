@@ -39,17 +39,111 @@
 #define REGISTER_SUBACCOUNT_CM_CLASS "register-subaccount"
 #define REGISTER_GL_CM_CLASS         "register-gl"
 
+
+struct _xaccLedgerDisplay
+{
+  GUID leader;
+
+  Query *query;
+
+  LedgerDisplayType ld_type;
+
+  SplitRegister *reg;
+
+  LedgerDisplayDestroy destroy;
+  LedgerDisplayGetParent get_parent;
+  LedgerDisplaySetHelp set_help;
+
+  gpointer user_data;
+
+  gint component_id;
+};
+
+
 /** GLOBALS *********************************************************/
 static short module = MOD_LEDGER;
 
 
 /** Declarations ****************************************************/
 static xaccLedgerDisplay *
-xaccLedgerDisplayInternal (Account *lead_account, GList *accounts, Query *q,
-                           SplitRegisterType type, SplitRegisterStyle style);
+xaccLedgerDisplayInternal (Account *lead_account, Query *q,
+                           LedgerDisplayType ld_type,
+                           SplitRegisterType reg_type,
+                           SplitRegisterStyle style);
 
 
 /** Implementations *************************************************/
+
+Account *
+xaccLedgerDisplayLeader (xaccLedgerDisplay *ld)
+{
+  if (!ld)
+    return NULL;
+
+  return xaccAccountLookup (&ld->leader);
+}
+
+void
+xaccLedgerDisplaySetUserData (xaccLedgerDisplay *ld, gpointer user_data)
+{
+  if (!ld)
+    return;
+
+  ld->user_data = user_data;
+}
+
+gpointer
+xaccLedgerDisplayGetUserData (xaccLedgerDisplay *ld)
+{
+  if (!ld)
+    return NULL;
+
+  return ld->user_data;
+}
+
+void
+xaccLedgerDisplaySetHandlers (xaccLedgerDisplay *ld,
+                              LedgerDisplayDestroy destroy,
+                              LedgerDisplayGetParent get_parent,
+                              LedgerDisplaySetHelp set_help)
+{
+  if (!ld)
+    return;
+
+  ld->destroy = destroy;
+  ld->get_parent = get_parent;
+  ld->set_help = set_help;
+}
+
+SplitRegister *
+xaccLedgerDisplayGetSR (xaccLedgerDisplay *ld)
+{
+  if (!ld)
+    return NULL;
+
+  return ld->reg;
+}
+
+Query *
+xaccLedgerDisplayGetQuery (xaccLedgerDisplay *ld)
+{
+  if (!ld)
+    return NULL;
+
+  return ld->query;
+}
+
+static gboolean
+find_by_leader (gpointer find_data, gpointer user_data)
+{
+  Account *account = find_data;
+  xaccLedgerDisplay *ld = user_data;
+
+  if (!account || !ld)
+    return FALSE;
+
+  return (account == xaccLedgerDisplayLeader (ld));
+}
 
 static gboolean
 find_by_account (gpointer find_data, gpointer user_data)
@@ -60,14 +154,11 @@ find_by_account (gpointer find_data, gpointer user_data)
   if (!account || !ld)
     return FALSE;
 
-  if (account == ld->leader)
+  if (account == xaccLedgerDisplayLeader (ld))
     return TRUE;
 
-  if (ld->type < NUM_SINGLE_REGISTER_TYPES)
+  if (ld->ld_type == LD_SINGLE)
     return FALSE;
-
-  if (ld->displayed_accounts)
-    return g_list_find (ld->displayed_accounts, account) != NULL;
 
   /* Hack. */
   return TRUE;
@@ -108,6 +199,121 @@ gnc_get_default_register_style ()
   return new_style;
 }
 
+static SplitRegisterType
+get_reg_type (Account *leader, LedgerDisplayType ld_type)
+{
+  GNCAccountType account_type;
+  SplitRegisterType reg_type;
+  GList *subaccounts;
+  GList *node;
+
+  if (ld_type == LD_GL)
+    return GENERAL_LEDGER;
+
+  account_type = xaccAccountGetType (leader);
+
+  if (ld_type == LD_SINGLE)
+  {
+    switch (account_type)
+    {
+      case BANK:
+        return BANK_REGISTER;
+
+      case CASH:
+        return CASH_REGISTER;
+
+      case ASSET:
+        return ASSET_REGISTER;
+
+      case CREDIT:
+        return CREDIT_REGISTER;
+
+      case LIABILITY:
+        return LIABILITY_REGISTER;
+
+      case STOCK:
+      case MUTUAL:
+        return STOCK_REGISTER;
+
+      case INCOME:
+        return INCOME_REGISTER;
+
+      case EXPENSE:
+        return EXPENSE_REGISTER;
+
+      case EQUITY:
+        return EQUITY_REGISTER;
+
+      case CURRENCY:
+        return CURRENCY_REGISTER;
+
+      default:
+        PERR ("unknown account type %d\n", account_type);
+        return BANK_REGISTER;
+    }
+  }
+
+  if (ld_type != LD_SUBACCOUNT)
+  {
+    PERR ("unknown ledger type %d\n", ld_type);
+    return BANK_REGISTER;
+  }
+
+  subaccounts = xaccGroupGetSubAccounts (xaccAccountGetChildren (leader));
+
+  switch (account_type)
+  {
+    case BANK:
+    case CASH:
+    case ASSET:
+    case CREDIT:
+    case LIABILITY:
+      /* if any of the sub-accounts have STOCK or MUTUAL types,
+       * then we must use the PORTFOLIO_LEDGER ledger. Otherwise,
+       * a plain old GENERAL_LEDGER will do. */
+      reg_type = GENERAL_LEDGER;
+
+      for (node = subaccounts; node; node = node->next)
+      {
+        GNCAccountType le_type;
+
+        le_type = xaccAccountGetType (node->data);
+        if ((STOCK    == le_type) ||
+            (MUTUAL   == le_type) ||
+            (CURRENCY == le_type))
+        {
+          reg_type = PORTFOLIO_LEDGER;
+          break;
+        }
+      }
+      break;
+
+    case STOCK:
+    case MUTUAL:
+    case CURRENCY:
+      reg_type = PORTFOLIO_LEDGER;
+      break;
+
+    case INCOME:
+    case EXPENSE:
+      reg_type = INCOME_LEDGER;
+      break;
+
+    case EQUITY:
+      reg_type = GENERAL_LEDGER;
+      break;
+
+    default:
+      PERR ("unknown account type:%d", account_type);
+      reg_type = GENERAL_LEDGER;
+      break;
+  }
+
+  g_list_free (subaccounts);
+
+  return reg_type;
+}
+
 /********************************************************************\
  * regWindowSimple                                                  *
  *   opens up a register window to display a single account         *
@@ -120,76 +326,11 @@ xaccLedgerDisplay *
 xaccLedgerDisplaySimple (Account *account)
 {
   SplitRegisterType reg_type;
-  GNCAccountType account_type;
 
-  account_type = xaccAccountGetType (account);
+  reg_type = get_reg_type (account, LD_SINGLE);
 
-  /* translate between different enumerants */
-  switch (account_type)
-  {
-    case BANK:
-      reg_type = BANK_REGISTER;
-      break;
-    case CASH:
-      reg_type = CASH_REGISTER;
-      break;
-    case ASSET:
-      reg_type = ASSET_REGISTER;
-      break;
-    case CREDIT:
-      reg_type = CREDIT_REGISTER;
-      break;
-    case LIABILITY:
-      reg_type = LIABILITY_REGISTER;
-      break;
-    case STOCK:
-    case MUTUAL:
-      reg_type = STOCK_REGISTER;
-      break;
-    case INCOME:
-      reg_type = INCOME_REGISTER;
-      break;
-    case EXPENSE:
-      reg_type = EXPENSE_REGISTER;
-      break;
-    case EQUITY:
-      reg_type = EQUITY_REGISTER;
-      break;
-    case CURRENCY:
-      reg_type = CURRENCY_REGISTER;
-      break;
-    default:
-      PERR ("unknown account type %d\n", account_type);
-      return NULL;
-  }
-
-  return xaccLedgerDisplayInternal (account, NULL, NULL, reg_type,
+  return xaccLedgerDisplayInternal (account, NULL, LD_SINGLE, reg_type,
                                     gnc_get_default_register_style ());
-}
-
-static GList *
-xaccAccountPrependChildren (Account *account, GList *list)
-{
-  AccountGroup *group;
-  int num_accounts;
-  int i;
-
-  if (!account) return NULL;
-
-  list = g_list_prepend(list, account);
-
-  group = xaccAccountGetChildren (account);
-  if (group == NULL)
-    return list;
-
-  num_accounts = xaccGroupGetNumAccounts (group);
-  for (i = 0; i < num_accounts; i++)
-  {
-    account = xaccGroupGetAccount (group, i);
-    list = xaccAccountPrependChildren (account, list);
-  }
-
-  return list;
 }
 
 /********************************************************************\
@@ -206,61 +347,11 @@ xaccLedgerDisplayAccGroup (Account *account)
 {
   xaccLedgerDisplay *ld;
   SplitRegisterType reg_type;
-  GNCAccountType le_type;
-  GList *accounts;
-  GList *node;
 
-  /* build a flat list from the tree */
-  accounts = xaccAccountPrependChildren (account, NULL);
-  accounts = g_list_reverse (accounts);
+  reg_type = get_reg_type (account, LD_SUBACCOUNT);
 
-  switch (xaccAccountGetType (account))
-  {
-    case BANK:
-    case CASH:
-    case ASSET:
-    case CREDIT:
-    case LIABILITY:
-      /* if any of the sub-accounts have STOCK or MUTUAL types,
-       * then we must use the PORTFOLIO_LEDGER ledger. Otherwise,
-       * a plain old GENERAL_LEDGER will do. */
-      reg_type = GENERAL_LEDGER;
-
-      for (node = accounts; node; node = node->next)
-      {
-        le_type = xaccAccountGetType (node->data);
-        if ((STOCK == le_type) || (MUTUAL == le_type))
-        {
-          reg_type = PORTFOLIO_LEDGER;
-          break;
-        }
-      }
-      break;
-
-    case STOCK:
-    case MUTUAL:
-      reg_type = PORTFOLIO_LEDGER;
-      break;
-
-    case INCOME:
-    case EXPENSE:
-      reg_type = INCOME_LEDGER;
-      break;
-
-    case EQUITY:
-      reg_type = GENERAL_LEDGER;
-      break;
-
-    default:
-      PERR ("unknown account type \n");
-      g_list_free (accounts);
-      return NULL;
-  }
-
-  ld = xaccLedgerDisplayInternal (account, accounts, NULL,
+  ld = xaccLedgerDisplayInternal (account, NULL, LD_SUBACCOUNT,
                                   reg_type, REG_STYLE_JOURNAL);
-
-  g_list_free (accounts);
 
   return ld;
 }
@@ -332,6 +423,36 @@ xaccGUIDCopy (gpointer _to, gconstpointer _from)
     *to = *from;
 }
 
+#if 0
+static void
+refresh_handler (GHashTable *changes, gpointer user_data)
+{
+  xaccLedgerDisplay *ld = user_data;
+  const EventInfo *info;
+
+  if (ld->type > NUM_SINGLE_REGISTER_TYPES)
+  {
+    Account *leader = xaccLedgerDisplayLeader (ld);
+    if (!account)
+    {
+      gnc_close_gui_component (ld->component_id);
+      return;
+    }
+
+  if (changes)
+  {
+    info = gnc_gui_get_entity_events (changes, &recnData->account);
+    if (info && (info->event_mask & GNC_EVENT_DESTROY))
+    {
+      gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
+      return;
+    }
+  }
+
+  recnRefresh (recnData);
+}
+#endif
+
 static void
 close_handler (gpointer user_data)
 {
@@ -351,16 +472,35 @@ close_handler (gpointer user_data)
   xaccFreeQuery (ld->query);
   ld->query = NULL;
 
-  g_list_free (ld->displayed_accounts);
-  ld->displayed_accounts = NULL;
-
   g_free (ld);
 }
 
 static void
-make_ledger_query (xaccLedgerDisplay *ld, gboolean show_all,
+make_ledger_query (xaccLedgerDisplay *ld,
+                   gboolean show_all,
                    SplitRegisterType type)
 {
+  Account *leader;
+  GList *accounts;
+
+  if (!ld)
+    return;
+
+  switch (ld->ld_type)
+  {
+    case LD_SINGLE:
+    case LD_SUBACCOUNT:
+      break;
+
+    case LD_GL:
+      return;
+
+    default:
+      PERR ("unknown ledger type: %d", ld->ld_type);
+      return;
+  }
+
+  xaccFreeQuery (ld->query);
   ld->query = xaccMallocQuery ();
 
   /* This is a bit of a hack. The number of splits should be
@@ -372,13 +512,19 @@ make_ledger_query (xaccLedgerDisplay *ld, gboolean show_all,
 
   xaccQuerySetGroup (ld->query, gncGetCurrentGroup());
 
-  if (ld->displayed_accounts)
-    xaccQueryAddAccountMatch (ld->query, ld->displayed_accounts,
-                              ACCT_MATCH_ANY, QUERY_OR);
+  leader = xaccLedgerDisplayLeader (ld);
 
-  if (ld->leader &&
-      (g_list_find (ld->displayed_accounts, ld->leader) == NULL))
-    xaccQueryAddSingleAccountMatch (ld->query, ld->leader, QUERY_OR);
+  if (ld->ld_type == LD_SUBACCOUNT)
+    accounts = xaccGroupGetSubAccounts (xaccAccountGetChildren (leader));
+  else
+    accounts = NULL;
+
+  accounts = g_list_prepend (accounts, leader);
+
+  xaccQueryAddAccountMatch (ld->query, accounts,
+                            ACCT_MATCH_ANY, QUERY_OR);
+
+  g_list_free (accounts);
 }
 
 /********************************************************************\
@@ -394,75 +540,93 @@ xaccLedgerDisplay *
 xaccLedgerDisplayQuery (Query *query, SplitRegisterType type,
                         SplitRegisterStyle style)
 {
-  return xaccLedgerDisplayInternal (NULL, NULL, query, type, style);
+  return xaccLedgerDisplayInternal (NULL, query, LD_GL, type, style);
 }
 
 static xaccLedgerDisplay *
-xaccLedgerDisplayInternal (Account *lead_account, GList *accounts, Query *q,
-                           SplitRegisterType type, SplitRegisterStyle style)
+xaccLedgerDisplayInternal (Account *lead_account, Query *q,
+                           LedgerDisplayType ld_type,
+                           SplitRegisterType reg_type,
+                           SplitRegisterStyle style)
 {
   xaccLedgerDisplay *ld;
   gboolean show_all;
   const char *class;
 
-  if (type < NUM_SINGLE_REGISTER_TYPES) /* single account types */
+  switch (ld_type)
   {
-    if (!lead_account)
-    {
-      PERR ("single-account register with no account specified");
+    case LD_SINGLE:
+      class = REGISTER_SINGLE_CM_CLASS;
+
+      if (reg_type >= NUM_SINGLE_REGISTER_TYPES)
+      {
+        PERR ("single-account register with wrong split register type");
+        return NULL;
+      }
+
+      if (!lead_account)
+      {
+        PERR ("single-account register with no account specified");
+        return NULL;
+      }
+
+      if (q)
+      {
+        PWARN ("single-account register with external query");
+        q = NULL;
+      }
+
+      ld = gnc_find_first_gui_component (class, find_by_leader, lead_account);
+      if (ld)
+        return ld;
+
+      break;
+
+    case LD_SUBACCOUNT:
+      class = REGISTER_SUBACCOUNT_CM_CLASS;
+
+      if (!lead_account)
+      {
+        PERR ("sub-account register with no lead account");
+        return NULL;
+      }
+
+      if (q)
+      {
+        PWARN ("account register with external query");
+        q = NULL;
+      }
+
+      ld = gnc_find_first_gui_component (class, find_by_leader, lead_account);
+      if (ld)
+        return ld;
+
+      break;
+
+    case LD_GL:
+      class = REGISTER_GL_CM_CLASS;
+
+      if (!q)
+      {
+        PWARN ("general ledger with no query");
+      }
+
+      break;
+
+    default:
+      PERR ("bad ledger type: %d", ld_type);
       return NULL;
-    }
-
-    if (q)
-    {
-      PWARN ("single-account register with external query");
-      q = NULL;
-    }
-
-    class = REGISTER_SINGLE_CM_CLASS;
-
-    ld = gnc_find_first_gui_component (class, find_by_account, lead_account);
-
-    if (ld)
-      return ld;
-  }
-  else if (lead_account) /* sub-account registers */
-  {
-    class = REGISTER_SUBACCOUNT_CM_CLASS;
-
-    ld = gnc_find_first_gui_component (class, find_by_account, lead_account);
-
-    if (q)
-    {
-      PWARN ("account register with external query");
-      q = NULL;
-    }
-
-    if (ld)
-      return ld;
-  }
-  else
-  {
-    class = REGISTER_GL_CM_CLASS;
-
-    if (!q)
-    {
-      PWARN ("general ledger with no query");
-    }
   }
 
   ld = g_new (xaccLedgerDisplay, 1);
 
-  ld->type = type;
-  ld->leader = lead_account;
+  ld->leader = *xaccAccountGetGUID (lead_account);
+  ld->query = NULL;
+  ld->ld_type = ld_type;
   ld->destroy = NULL;
   ld->get_parent = NULL;
   ld->set_help = NULL;
-  ld->gui_hook = NULL;
-  ld->dirty = FALSE;
-
-  /* store the displayed accounts */
-  ld->displayed_accounts = g_list_copy (accounts);
+  ld->user_data = NULL;
 
   show_all = gnc_lookup_boolean_option ("Register",
                                         "Show All Transactions",
@@ -472,7 +636,7 @@ xaccLedgerDisplayInternal (Account *lead_account, GList *accounts, Query *q,
   if (q)
     ld->query = xaccQueryCopy (q);
   else
-    make_ledger_query (ld, show_all, type);
+    make_ledger_query (ld, show_all, reg_type);
 
   ld->component_id = gnc_register_gui_component (class, NULL,
                                                  close_handler, ld);
@@ -483,7 +647,7 @@ xaccLedgerDisplayInternal (Account *lead_account, GList *accounts, Query *q,
 
   /* xaccMallocSplitRegister will malloc & initialize the register,
    * but will not do the gui init */
-  ld->reg = xaccMallocSplitRegister (type, style, FALSE,
+  ld->reg = xaccMallocSplitRegister (reg_type, style, FALSE,
                                      xaccSRGetEntryHandler,
                                      xaccSRGetLabelHandler,
                                      xaccSRGetIOFlagsHandler,
@@ -498,7 +662,6 @@ xaccLedgerDisplayInternal (Account *lead_account, GList *accounts, Query *q,
                  xaccLedgerDisplayParent,
                  xaccLedgerDisplaySetHelp);
 
-  ld->dirty = TRUE;
   xaccLedgerDisplayRefresh (ld);
 
   return ld;
@@ -509,6 +672,8 @@ xaccLedgerDisplaySetQuery (xaccLedgerDisplay *ledger_display, Query *q)
 {
   if (!ledger_display || !q)
     return;
+
+  g_return_if_fail (ledger_display->ld_type == LD_GL);
 
   xaccFreeQuery (ledger_display->query);
   ledger_display->query = xaccQueryCopy (q);
@@ -530,18 +695,17 @@ xaccFindGeneralLedgerByQuery (Query *q)
 void 
 xaccLedgerDisplayRefresh (xaccLedgerDisplay *ld)
 {
-  /* If we don't really need the redraw, don't do it. */
-  if (!ld->dirty)
+  if (!ld)
     return;
-
-  ld->dirty = FALSE;  /* mark clean */
 
   /* The leader account is used by the register gui to
    * assign a default source account for a "blank split"
    * that is attached to the bottom of the register.
    * The "blank split" is what the user edits to create 
    * new splits and get them into the system. */
-  xaccSRLoadRegister (ld->reg, xaccQueryGetSplits (ld->query), ld->leader);
+  xaccSRLoadRegister (ld->reg,
+                      xaccQueryGetSplits (ld->query),
+                      xaccLedgerDisplayLeader (ld));
 }
 
 /********************************************************************\
@@ -558,9 +722,6 @@ MarkDirtyAllRegsClass (Account *account, const char *component_class)
 
   for (node = list; node; node = node->next)
   {
-    xaccLedgerDisplay *ld = node->data;
-
-    ld->dirty = TRUE;
   }
 }
 

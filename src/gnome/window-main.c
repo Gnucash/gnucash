@@ -47,6 +47,7 @@
 #include "file-history.h"
 #include "global-options.h"
 #include "gnc-commodity.h"
+#include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-ui.h"
@@ -542,19 +543,16 @@ gnc_ui_add_account (GtkWidget *widget, gpointer data)
 static void
 gnc_ui_delete_account (Account *account)
 {
-  /* Step 1: Delete associated windows */
-  xaccAccountWindowDestroy(account);
+  xaccAccountWindowDestroy (account);
 
-  /* Step 2: Remove the account from all trees */
-  gnc_account_tree_remove_account_all(account);
+  gnc_suspend_gui_refresh ();
 
-  /* Step 3: Delete the actual account */  
-  xaccRemoveAccount(account);
-  xaccFreeAccount(account);
+  xaccRemoveAccount (account);
+  xaccFreeAccount (account);
 
-  /* Step 4: Refresh things */
-  gnc_refresh_main_window();
-  gnc_group_ui_refresh(gncGetCurrentGroup());
+  gnc_refresh_main_window ();
+  gnc_group_ui_refresh (gncGetCurrentGroup ());
+  gnc_resume_gui_refresh ();
 }
 
 static void
@@ -681,11 +679,14 @@ gnc_ui_mainWindow_scrub(GtkWidget *widget, gpointer data)
     return;
   }
 
+  gnc_suspend_gui_refresh ();
+
   xaccAccountScrubOrphans(account);
   xaccAccountScrubImbalance(account);
 
   gnc_account_ui_refresh(account);
   gnc_refresh_main_window();
+  gnc_resume_gui_refresh ();
 }
 
 static void
@@ -700,11 +701,14 @@ gnc_ui_mainWindow_scrub_sub(GtkWidget *widget, gpointer data)
     return;
   }
 
+  gnc_suspend_gui_refresh ();
+
   xaccAccountTreeScrubOrphans(account);
   xaccAccountTreeScrubImbalance(account);
 
   gnc_account_ui_refresh(account);
   gnc_refresh_main_window();
+  gnc_resume_gui_refresh ();
 }
 
 static void
@@ -712,11 +716,14 @@ gnc_ui_mainWindow_scrub_all(GtkWidget *widget, gpointer data)
 {
   AccountGroup *group = gncGetCurrentGroup();
 
+  gnc_suspend_gui_refresh ();
+
   xaccGroupScrubOrphans(group);
   xaccGroupScrubImbalance(group);
 
   gnc_group_ui_refresh(group);
   gnc_refresh_main_window();
+  gnc_resume_gui_refresh ();
 }
 
 static void
@@ -728,7 +735,7 @@ gnc_ui_options_cb(GtkWidget *widget, gpointer data)
 static void
 gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem)
 {
-  switch(GPOINTER_TO_INT(menuItem))
+  switch (GPOINTER_TO_INT(menuItem))
   {
     case FMB_NEW:
       gncFileNew();
@@ -886,7 +893,6 @@ gnc_configure_account_tree(void *data)
   GSList *list, *node;
 
   memset(&new_avi, 0, sizeof(new_avi));
-
 
   info = gnc_get_main_info();
   tree = GNC_MAINWIN_ACCOUNT_TREE(info->account_tree);

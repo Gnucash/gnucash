@@ -35,36 +35,42 @@
 #include "Transaction.h"
 
 
-/** Structures ******************************************************/
+/** Definitions *****************************************************/
 
 /* The xaccLedgerDisplay struct describes a single register/ledger
  * instance. */
 typedef struct _xaccLedgerDisplay xaccLedgerDisplay;
 
-struct _xaccLedgerDisplay
+typedef void (*LedgerDisplayDestroy) (xaccLedgerDisplay *ld);
+typedef gncUIWidget (*LedgerDisplayGetParent) (xaccLedgerDisplay *ld);
+typedef void (*LedgerDisplaySetHelp) (xaccLedgerDisplay *ld,
+                                      const char *help_str);
+
+typedef enum
 {
-  Account *leader;               /* leading. "master" account, if any       */
-  GList   *displayed_accounts;   /* The list of accounts shown here         */
-  Query   *query;                /* query engine & filter for displaying    */
-
-  SplitRegisterType type;        /* register display type, usually equal to *
-                                  * account type, but not always.           */
-
-  /* GUI related stuff */
-  gboolean dirty;                /* dirty flag, non zero if redraw needed   */
-
-  SplitRegister *reg;            /* main ledger window                      */
-  gpointer gui_hook;             /* GUI-specific state                      */
-
-  void (*destroy) (xaccLedgerDisplay *); /* destroy callback                */
-  gncUIWidget (*get_parent) (xaccLedgerDisplay *); /* get parent widget     */
-  void (*set_help) (xaccLedgerDisplay *, const char *); /* help string      */
-
-  gint component_id;             /* id of ledger component                  */
-};
+  LD_SINGLE,
+  LD_SUBACCOUNT,
+  LD_GL
+} LedgerDisplayType;
 
 
 /** Prototypes ******************************************************/
+
+/* returns the 'lead' account of a ledger display, or NULL if none. */
+Account * xaccLedgerDisplayLeader (xaccLedgerDisplay *ld);
+
+/* get and set the user data associated with the ledger */
+void xaccLedgerDisplaySetUserData (xaccLedgerDisplay *ld, gpointer user_data);
+gpointer xaccLedgerDisplayGetUserData (xaccLedgerDisplay *ld);
+
+/* set the handlers used by the ledger display */
+void xaccLedgerDisplaySetHandlers (xaccLedgerDisplay *ld,
+                                   LedgerDisplayDestroy destroy,
+                                   LedgerDisplayGetParent get_parent,
+                                   LedgerDisplaySetHelp set_help);
+
+/* return the split register associated with a ledger display */
+SplitRegister * xaccLedgerDisplayGetSR (xaccLedgerDisplay *ld);
 
 /* opens up a register window to display a single account */
 xaccLedgerDisplay * xaccLedgerDisplaySimple (Account *account);
@@ -80,6 +86,9 @@ xaccLedgerDisplay * xaccLedgerDisplayQuery (Query *query,
 
 /* Set the query used for a register. */
 void xaccLedgerDisplaySetQuery (xaccLedgerDisplay *ledger_display, Query *q);
+
+/* return the query associated with a ledger */
+Query * xaccLedgerDisplayGetQuery (xaccLedgerDisplay *ld);
 
 /* If the given ledger display still exists, return it. Otherwise,
  * return NULL */

@@ -177,7 +177,7 @@ recn_get_account (RecnWindow *recnData)
  *         and the 'effective' ending balance.                      *
 \********************************************************************/
 static gnc_numeric
-recnRecalculateBalance(RecnWindow *recnData)
+recnRecalculateBalance (RecnWindow *recnData)
 {
   Account *account;
   const char *amount;
@@ -323,7 +323,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     *new_ending = gnc_numeric_neg (*new_ending);
   }
 
-  /* Create the dialog box... */
+  /* Create the dialog box */
   title = gnc_recn_make_window_name(account);
 
   dialog = gnome_dialog_new(title,
@@ -836,11 +836,14 @@ gnc_recn_scrub_cb(GtkWidget *widget, gpointer data)
   if (account == NULL)
     return;
 
+  gnc_suspend_gui_refresh ();
+
   xaccAccountTreeScrubOrphans (account);
   xaccAccountTreeScrubImbalance (account);
 
   gnc_account_ui_refresh (account);
   gnc_refresh_main_window ();
+  gnc_resume_gui_refresh ();
 }
 
 static void
@@ -1661,7 +1664,10 @@ recn_destroy_cb (GtkWidget *w, gpointer data)
   gnc_unregister_option_change_callback_id (id);
 
   if (recnData->delete_refresh)
+  {
     gnc_account_ui_refresh (recn_get_account (recnData));
+    gnc_resume_gui_refresh ();
+  }
 
   g_free (recnData);
 }
@@ -1679,21 +1685,22 @@ recn_destroy_cb (GtkWidget *w, gpointer data)
 static Account *
 find_payment_account(Account *account)
 {
-  int i;
+  GList *list;
+  GList *node;
 
   if (account == NULL)
     return NULL;
 
-  i = xaccAccountGetNumSplits(account);
+  list = xaccAccountGetSplitList (account);
+
   /* Search backwards to find the latest payment */
-  for (i -= 1; i >= 0; i--)
+  for (node = g_list_last (list); node; node = node->prev)
   {
     Transaction *trans;
     Split *split;
-    int num_splits;
-    int j;
+    GList *n;
 
-    split = xaccAccountGetSplit(account, i);
+    split = node->data;
     if (split == NULL)
       continue;
 
@@ -1705,14 +1712,13 @@ find_payment_account(Account *account)
     if (trans == NULL)
       continue;
 
-    num_splits = xaccTransCountSplits(trans);
-    for (j = 0; j < num_splits; j++)
+    for (n = xaccTransGetSplitList (trans); n; n = n->next)
     {
       GNCAccountType type;
       Account *a;
       Split *s;
 
-      s = xaccTransGetSplit(trans, j);
+      s = n->data;
       if ((s == NULL) || (s == split))
         continue;
 
@@ -1755,6 +1761,8 @@ recnFinishCB (GtkWidget *w, gpointer data)
   }
 
   date = recnData->statement_date;
+
+  gnc_suspend_gui_refresh ();
 
   gnc_reconcile_list_commit(GNC_RECONCILE_LIST(recnData->credit), date);
   gnc_reconcile_list_commit(GNC_RECONCILE_LIST(recnData->debit), date);
