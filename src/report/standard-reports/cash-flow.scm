@@ -153,6 +153,9 @@
     (define (same-account? a1 a2)
       (string=? (gnc:account-get-guid a1) (gnc:account-get-guid a2)))
 
+    (define (same-split? s1 s2) 
+      (string=? (gnc:split-get-guid s1) (gnc:split-get-guid s2)))
+
     (define account-in-list?
       (lambda (account accounts)
         (cond
@@ -160,10 +163,17 @@
           ((same-account? (car accounts) account) #t)
           (else (account-in-list? account (cdr accounts))))))
 
+    (define split-in-list? 
+      (lambda (split splits)
+	(cond 
+	 ((null? splits) #f)
+	 ((same-split? (car splits) split) #t)
+	 (else (split-in-list? split (cdr splits))))))
+
     (define account-in-alist
       (lambda (account alist)
         (cond
-           ((null? alist) #f)
+	   ((null? alist) #f)
            ((same-account? (caar alist) account) (car alist))
            (else (account-in-alist account (cdr alist))))))
 
@@ -223,11 +233,11 @@
                (money-out-collector (gnc:make-commodity-collector))
 
                (money-diff-collector (gnc:make-commodity-collector))
-	       (splits-to-do (gnc:accounts-count-splits accounts)))
+	       (splits-to-do (gnc:accounts-count-splits accounts))
+	       (seen-split-list '()))
 
           ;; function to add inflow and outflow of money
           (define (calc-money-in-out accounts)
-
             (define (calc-money-in-out-internal accounts-internal)
               (if (not (null? accounts-internal))
                 (let* ((current (car accounts-internal))
@@ -236,7 +246,7 @@
                        (curr-commodity (gnc:account-get-commodity current))
                       )
 
-                  ;(gnc:debug "---" name "---" (gnc:commodity-get-printname curr-commodity))
+                  ;(gnc:debug "calc-money-in-out-internal---" name "---" (gnc:commodity-get-printname curr-commodity))
 
                   (for-each
                     (lambda (split)
@@ -258,45 +268,50 @@
                                        (s-commodity (gnc:account-get-commodity s-account)))
                                   ;(gnc:debug (gnc:account-get-name s-account))
                                   (if (not (account-in-list? s-account accounts))
-                                    (if (gnc:numeric-negative-p (gnc:split-get-value s))
-                                        (let ((pair (account-in-alist s-account money-in-alist)))
-                                          ;(gnc:debug "in:" (gnc:commodity-get-printname s-commodity)
-                                          ;                 (gnc:numeric-to-double s-amount) 
-                                          ;                 (gnc:commodity-get-printname curr-commodity)
-                                          ;                 (gnc:numeric-to-double s-value))
-                                          (if (not pair)
-                                              (begin
-                                                (set! pair (list s-account (gnc:make-commodity-collector)))
-                                                (set! money-in-alist (cons pair money-in-alist))
-                                                (set! money-in-accounts (cons s-account money-in-accounts))
-                                                ;(gnc:debug money-in-alist)
-                                              )
-                                          )
-                                          (let ((s-account-in-collector (cadr pair)))
-                                            (money-in-collector 'add parent-currency (gnc:numeric-neg s-value))
-                                            (s-account-in-collector 'add parent-currency (gnc:numeric-neg s-value)))
-                                        )
-                                        (let ((pair (account-in-alist s-account money-out-alist)))
-                                          ;(gnc:debug "out:" (gnc:commodity-get-printname s-commodity)
-                                          ;                  (gnc:numeric-to-double s-amount) 
-                                          ;                  (gnc:commodity-get-printname curr-commodity)
-                                          ;                  (gnc:numeric-to-double s-value))
-                                          (if (not pair)
-                                              (begin
-                                                (set! pair (list s-account (gnc:make-commodity-collector)))
-                                                (set! money-out-alist (cons pair money-out-alist))
-                                                (set! money-out-accounts (cons s-account money-out-accounts))
-                                                ;(gnc:debug money-out-alist)
-                                              )
-                                          )
-                                          (let ((s-account-out-collector (cadr pair)))
-                                            (money-out-collector 'add parent-currency s-value)
-                                            (s-account-out-collector 'add parent-currency s-value))
-                                        )
-                                    )
-                                  )
-                                )
-                              )
+				      (if (not (split-in-list? s seen-split-list))
+					  (begin  
+					    (set! seen-split-list (cons s seen-split-list))
+					    (if (gnc:numeric-negative-p (gnc:split-get-value s))
+						(let ((pair (account-in-alist s-account money-in-alist)))
+						  ;(gnc:debug "in:" (gnc:commodity-get-printname s-commodity)
+						;	     (gnc:numeric-to-double s-amount) 
+						;	     (gnc:commodity-get-printname curr-commodity)
+						;	     (gnc:numeric-to-double s-value))
+						  (if (not pair)
+						      (begin
+							(set! pair (list s-account (gnc:make-commodity-collector)))
+							(set! money-in-alist (cons pair money-in-alist))
+							(set! money-in-accounts (cons s-account money-in-accounts))
+							;(gnc:debug money-in-alist)
+							)
+						      )
+						  (let ((s-account-in-collector (cadr pair)))
+						    (money-in-collector 'add parent-currency (gnc:numeric-neg s-value))
+						    (s-account-in-collector 'add parent-currency (gnc:numeric-neg s-value)))
+						  )
+						(let ((pair (account-in-alist s-account money-out-alist)))
+						  ;(gnc:debug "out:" (gnc:commodity-get-printname s-commodity)
+						;	     (gnc:numeric-to-double s-amount) 
+						;	     (gnc:commodity-get-printname curr-commodity)
+						;	     (gnc:numeric-to-double s-value))
+						  (if (not pair)
+						      (begin
+							(set! pair (list s-account (gnc:make-commodity-collector)))
+							(set! money-out-alist (cons pair money-out-alist))
+							(set! money-out-accounts (cons s-account money-out-accounts))
+							;(gnc:debug money-out-alist)
+							)
+						      )
+						  (let ((s-account-out-collector (cadr pair)))
+						    (money-out-collector 'add parent-currency s-value)
+						    (s-account-out-collector 'add parent-currency s-value))
+						  )
+						)
+					    )
+					  )
+				      )
+				  )
+				)
                               (gnc:transaction-get-splits parent)
                             )
                           )

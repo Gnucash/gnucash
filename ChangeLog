@@ -1,3 +1,8 @@
+2002-12-30  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/standard-reports/cash-flow.scm: Patch by Ed Warnicke
+	<hagbard@physics.rutgers.edu>.
+
 2002-12-30  Matthew Vanecek <mevanecek@yahoo.com>
 	* src/backend/postgres/PostgresBackend.c: Added some ENTER
 	and LEAVE statements to more of the functions.
