@@ -55,7 +55,8 @@ gnucash_LDADD = \
   ${GUPPI_LIBS} \
   ${DB_LIBS} \
   ${INTLLIBS} \
-  ${EFENCE_LIBS}
+  ${EFENCE_LIBS} \
+  -lltdl
 
 gnucash_SOURCES = \
   FileDialog.c \
