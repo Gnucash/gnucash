@@ -40,7 +40,7 @@ INCLPATH = -I/usr/include \
 # and general brokenness
 #           -I./../../lib/libhtmlw 
 
-CFLAGS   = -g
+CFLAGS   = 
 LFLAGS   = -O2
 # LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
 LIBS     = -lgtk -lgdk -lglib -lXpm -lXext -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm

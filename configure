@@ -536,7 +536,7 @@ fi
 # *******************************************
 # * figure out the configure options:
 # cflags=-O2 
-cflags=-g
+cflags=-g -Wall
 lflags=-O2
 # Check whether --enable-debug or --disable-debug was given.
 if test "${enable_debug+set}" = set; then

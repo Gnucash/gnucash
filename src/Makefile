@@ -36,7 +36,7 @@ INCLPATH = -I/usr/include \
            -I./../include \
 
 
-CFLAGS   = -g 
+CFLAGS   =  
 LFLAGS   = -O2
 LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
 
