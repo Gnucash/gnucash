@@ -82,3 +82,40 @@ on_newAccountTree_select_row           (GtkCList        *clist,
 
 
 #endif /* _NEW_USER_CALLBACKS_H_ */    
+
+void
+on_newAccountSelectAllButton_clicked   (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_newAccountOKButton_clicked          (GtkButton       *button,
+                                        gpointer         user_data);
+
+gboolean
+on_newAccountCurrencyChoosePage_next   (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+void
+on_newAccountTypesList_select_row      (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
+
+void
+on_newAccountsTypeList_SelectAllButton_clicked
+                                        (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_ctree1_select_row                   (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
+
+void
+on_finalAccountDruidPage_prepare       (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);

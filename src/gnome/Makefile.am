@@ -179,7 +179,8 @@ gnucash.keys: gnucash.keys.in
 gnc-dir.h: gnc-dir.h.in
 	rm -f $@.tmp
 	sed < $@.in > $@.tmp \
-	    -e 's:@-GNC_PIXMAP_DIR-@:${GNC_PIXMAP_DIR}:g'
+	    -e 's:@-GNC_PIXMAP_DIR-@:${GNC_PIXMAP_DIR}:g' \
+	    -e 's:@-GNC_ACCOUNTS_DIR-@:${GNC_ACCOUNTS_DIR}:g'
 	mv $@.tmp $@
 BUILT_SOURCES += gnc-dir.h
 

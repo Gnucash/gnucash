@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <gnc-account-example>
-    <gnc-act:short-description>
+    <gnc-act:title>
       Brokerage Accounts
-    </gnc-act:short-description>
-    <gnc-act:long-description>
+    </gnc-act:title>
+    <gnc-act:short-description>
       These accounts provide a set of accounts to deal with a
       brokerage.
-    </gnc-act:long-description>
+    </gnc-act:short-description>
 <gnc:account version="2.0.0">
   <act:name>Brokerage Account</act:name>
-  <act:id type="guid">a4b92830ee9ab7db17221f156bc15d87</act:id>
+  <act:id type="new">a4b92830ee9ab7db17221f156bc15d87</act:id>
   <act:type>BANK</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -19,51 +19,51 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bond</act:name>
-  <act:id type="guid">fbb97d1d8f6ae60d0e699af8c5b8dbfd</act:id>
+  <act:id type="new">fbb97d1d8f6ae60d0e699af8c5b8dbfd</act:id>
   <act:type>STOCK</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Bond</act:description>
-  <act:parent type="guid">a4b92830ee9ab7db17221f156bc15d87</act:parent>
+  <act:parent type="new">a4b92830ee9ab7db17221f156bc15d87</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Stock</act:name>
-  <act:id type="guid">2b85576ddedda530fd80b17451cd37e8</act:id>
+  <act:id type="new">2b85576ddedda530fd80b17451cd37e8</act:id>
   <act:type>STOCK</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Stock</act:description>
-  <act:parent type="guid">a4b92830ee9ab7db17221f156bc15d87</act:parent>
+  <act:parent type="new">a4b92830ee9ab7db17221f156bc15d87</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Market Index</act:name>
-  <act:id type="guid">d9934aaf4fc86463bb43088df18498ab</act:id>
+  <act:id type="new">d9934aaf4fc86463bb43088df18498ab</act:id>
   <act:type>MUTUAL</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Market Index</act:description>
-  <act:parent type="guid">a4b92830ee9ab7db17221f156bc15d87</act:parent>
+  <act:parent type="new">a4b92830ee9ab7db17221f156bc15d87</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Mutual Fund</act:name>
-  <act:id type="guid">31f4e66a69252f7b91fbdea85bdd0781</act:id>
+  <act:id type="new">31f4e66a69252f7b91fbdea85bdd0781</act:id>
   <act:type>MUTUAL</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Mutual Fund</act:description>
-  <act:parent type="guid">a4b92830ee9ab7db17221f156bc15d87</act:parent>
+  <act:parent type="new">a4b92830ee9ab7db17221f156bc15d87</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dividend Income</act:name>
-  <act:id type="guid">741e084d7449e1ec774082ae9c838189</act:id>
+  <act:id type="new">741e084d7449e1ec774082ae9c838189</act:id>
   <act:type>INCOME</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -73,7 +73,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Interest Income</act:name>
-  <act:id type="guid">d50762c0a7c86969f9ac1ade01ffd224</act:id>
+  <act:id type="new">d50762c0a7c86969f9ac1ade01ffd224</act:id>
   <act:type>INCOME</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -83,18 +83,18 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bond Interest</act:name>
-  <act:id type="guid">e9b8d2fd441762aade7068a3a0a0830d</act:id>
+  <act:id type="new">e9b8d2fd441762aade7068a3a0a0830d</act:id>
   <act:type>INCOME</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Bond Interest</act:description>
-  <act:parent type="guid">d50762c0a7c86969f9ac1ade01ffd224</act:parent>
+  <act:parent type="new">d50762c0a7c86969f9ac1ade01ffd224</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Commissions</act:name>
-  <act:id type="guid">1e9cae201e379af3ebc90206fc0a823c</act:id>
+  <act:id type="new">1e9cae201e379af3ebc90206fc0a823c</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>

@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <gnc-account-example>
-    <gnc-act:short-description>
+    <gnc-act:title>
       Brokerage Accounts
-    </gnc-act:short-description>
-    <gnc-act:long-description>
+    </gnc-act:title>
+    <gnc-act:short-description>
       These accounts provide a set of accounts to deal with a
       brokerage.
-    </gnc-act:long-description>
+    </gnc-act:short-description>
 <gnc:account version="2.0.0">
   <act:name>Bank CD</act:name>
-  <act:id type="guid">a2e2f8fd2396ad134fa3721767f56a4a</act:id>
+  <act:id type="new">a2e2f8fd2396ad134fa3721767f56a4a</act:id>
   <act:type>BANK</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -19,7 +19,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Money Market</act:name>
-  <act:id type="guid">1c220d832ee37e660837a3753f221079</act:id>
+  <act:id type="new">1c220d832ee37e660837a3753f221079</act:id>
   <act:type>BANK</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -29,7 +29,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>CD Interest</act:name>
-  <act:id type="guid">a78ff890768703e6d88ea01366a93eff</act:id>
+  <act:id type="new">a78ff890768703e6d88ea01366a93eff</act:id>
   <act:type>INCOME</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -39,7 +39,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Money Market Interest</act:name>
-  <act:id type="guid">88986ef5fbe8e1b9ffda8485fe8c0f93</act:id>
+  <act:id type="new">88986ef5fbe8e1b9ffda8485fe8c0f93</act:id>
   <act:type>INCOME</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>

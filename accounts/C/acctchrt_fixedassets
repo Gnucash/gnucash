@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <gnc-account-example>
+    <gnc-act:title>
+      Fixed Assets
+    </gnc-act:title>
     <gnc-act:short-description>
-      Brokerage Accounts
+      Accounts for tracking large fixed assets
+        (house, vehicle, other assets)
     </gnc-act:short-description>
-    <gnc-act:long-description>
-      These accounts provide a set of accounts to deal with a
-      brokerage.
-    </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>
-  <act:id type="guid">64b6276c060185131cecbd1ac6218440</act:id>
+  <act:id type="new">64b6276c060185131cecbd1ac6218440</act:id>
   <act:type>ASSET</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -19,47 +19,47 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fixed Assets</act:name>
-  <act:id type="guid">9b171f77000bf68dd1ebbaf58336656d</act:id>
+  <act:id type="new">9b171f77000bf68dd1ebbaf58336656d</act:id>
   <act:type>ASSET</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Fixed Assets</act:description>
-  <act:parent type="guid">64b6276c060185131cecbd1ac6218440</act:parent>
+  <act:parent type="new">64b6276c060185131cecbd1ac6218440</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>House</act:name>
-  <act:id type="guid">9205ad6b6482903e5a696602d491c8f5</act:id>
+  <act:id type="new">9205ad6b6482903e5a696602d491c8f5</act:id>
   <act:type>ASSET</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>House</act:description>
-  <act:parent type="guid">9b171f77000bf68dd1ebbaf58336656d</act:parent>
+  <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Other Asset</act:name>
-  <act:id type="guid">ad3b239297277c9ef3840c0433cecb18</act:id>
+  <act:id type="new">ad3b239297277c9ef3840c0433cecb18</act:id>
   <act:type>ASSET</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Other Asset</act:description>
-  <act:parent type="guid">9b171f77000bf68dd1ebbaf58336656d</act:parent>
+  <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Vehicle</act:name>
-  <act:id type="guid">5913089ffc36df6f0a5d96a5d7a444c0</act:id>
+  <act:id type="new">5913089ffc36df6f0a5d96a5d7a444c0</act:id>
   <act:type>ASSET</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Vehicle</act:description>
-  <act:parent type="guid">9b171f77000bf68dd1ebbaf58336656d</act:parent>
+  <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
 </gnc-account-example>
 

@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <gnc-account-example>
+    <gnc-act:title>
+      Car Loan 
+    </gnc-act:title>
     <gnc-act:short-description>
-      Carloan Accounts
+      Accounts for car loan and associated interest
+        (car loan, car loan interest)
     </gnc-act:short-description>
-    <gnc-act:long-description>
-      These accounts provide a set of accounts to deal with a
-      car loan.
-    </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Liabilities</act:name>
-  <act:id type="guid">33a326fe16ae360f777a94b3f5bdfbdc</act:id>
+  <act:id type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:id>
   <act:type>LIABILITY</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -19,29 +19,29 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Loans</act:name>
-  <act:id type="guid">023e2343114b3d695feaeb96904e0da6</act:id>
+  <act:id type="new">023e2343114b3d695feaeb96904e0da6</act:id>
   <act:type>LIABILITY</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Loans</act:description>
-  <act:parent type="guid">33a326fe16ae360f777a94b3f5bdfbdc</act:parent>
+  <act:parent type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Vehicle Loan</act:name>
-  <act:id type="guid">3e5f44fd7bfaa9cae737a4113a749e36</act:id>
+  <act:id type="new">3e5f44fd7bfaa9cae737a4113a749e36</act:id>
   <act:type>LIABILITY</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Vehicle Loan</act:description>
-  <act:parent type="guid">023e2343114b3d695feaeb96904e0da6</act:parent>
+  <act:parent type="new">023e2343114b3d695feaeb96904e0da6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Expense</act:name>
-  <act:id type="guid">acacdcb998e45fb741766622e8542f0b</act:id>
+  <act:id type="new">acacdcb998e45fb741766622e8542f0b</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -51,25 +51,25 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Interest</act:name>
-  <act:id type="guid">9e8495e80ebfb762089be917dff7ab72</act:id>
+  <act:id type="new">9e8495e80ebfb762089be917dff7ab72</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Interest</act:description>
-  <act:parent type="guid">acacdcb998e45fb741766622e8542f0b</act:parent>
+  <act:parent type="new">acacdcb998e45fb741766622e8542f0b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Vehicle Loan Interest</act:name>
-  <act:id type="guid">e9bd8477e27361238d2f53c4fe7594ab</act:id>
+  <act:id type="new">e9bd8477e27361238d2f53c4fe7594ab</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Vehicle Loan Interest</act:description>
-  <act:parent type="guid">9e8495e80ebfb762089be917dff7ab72</act:parent>
+  <act:parent type="new">9e8495e80ebfb762089be917dff7ab72</act:parent>
 </gnc:account>
 </gnc-account-example>
 

@@ -10,14 +10,16 @@ account_DATA = \
   acctchrt_currency \
   acctchrt_eduloan \
   acctchrt_fixedassets \
-  acctchrt_full \
   acctchrt_homeloan \
   acctchrt_homeown \
   acctchrt_otherloan \
   acctchrt_renter \
   acctchrt_retiremt \
   acctchrt_spouseinc \
-  acctchrt_spouseretire \
+  acctchrt_spouseretire
+
+EXTRA_DIST = \
+  acctchrt_full \
   acctlist_brokerage \
   acctlist_carloan \
   acctlist_cdmoneymkt \

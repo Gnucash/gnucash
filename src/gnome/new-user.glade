@@ -71,6 +71,11 @@
 	<handler>on_newAccountCurrencyChoosePage_prepare</handler>
 	<last_modification_time>Thu, 11 Jan 2001 23:30:52 GMT</last_modification_time>
       </signal>
+      <signal>
+	<name>next</name>
+	<handler>on_newAccountCurrencyChoosePage_next</handler>
+	<last_modification_time>Wed, 11 Apr 2001 18:53:01 GMT</last_modification_time>
+      </signal>
       <title>Choose Currency</title>
       <title_color>255,255,255</title_color>
       <background_color>25,25,112</background_color>
@@ -192,10 +197,10 @@
 	    <signal>
 	      <name>select_row</name>
 	      <handler>on_newAccountTypesList_select_row</handler>
-	      <last_modification_time>Tue, 03 Apr 2001 19:46:37 GMT</last_modification_time>
+	      <last_modification_time>Thu, 12 Apr 2001 22:01:16 GMT</last_modification_time>
 	    </signal>
-	    <columns>3</columns>
-	    <column_widths>52,152,80</column_widths>
+	    <columns>2</columns>
+	    <column_widths>144,80</column_widths>
 	    <selection_mode>GTK_SELECTION_MULTIPLE</selection_mode>
 	    <show_titles>True</show_titles>
 	    <shadow_type>GTK_SHADOW_IN</shadow_type>
@@ -203,8 +208,8 @@
 	    <widget>
 	      <class>GtkLabel</class>
 	      <child_name>CList:title</child_name>
-	      <name>label2</name>
-	      <label>Choose</label>
+	      <name>newAccountTypesList_TypeLabel</name>
+	      <label>Account List Type</label>
 	      <justify>GTK_JUSTIFY_CENTER</justify>
 	      <wrap>False</wrap>
 	      <xalign>0.5</xalign>
@@ -216,20 +221,7 @@
 	    <widget>
 	      <class>GtkLabel</class>
 	      <child_name>CList:title</child_name>
-	      <name>label3</name>
-	      <label>Account Type</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label4</name>
+	      <name>newAccountTypesList_DescriptionLabel</name>
 	      <label>Description</label>
 	      <justify>GTK_JUSTIFY_CENTER</justify>
 	      <wrap>False</wrap>
@@ -303,6 +295,235 @@
 	    </widget>
 	  </widget>
 	</widget>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox3</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkButton</class>
+	    <name>newAccountsTypeList_SelectAllButton</name>
+	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>clicked</name>
+	      <handler>on_newAccountsTypeList_SelectAllButton_clicked</handler>
+	      <last_modification_time>Thu, 12 Apr 2001 22:03:24 GMT</last_modification_time>
+	    </signal>
+	    <label>Select All</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkButton</class>
+	    <name>newAccountsTypeList_ClearAllButton</name>
+	    <can_focus>True</can_focus>
+	    <label>Clear All</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>finalAccountDruidPage</name>
+      <signal>
+	<name>prepare</name>
+	<handler>on_finalAccountDruidPage_prepare</handler>
+	<last_modification_time>Thu, 12 Apr 2001 22:49:49 GMT</last_modification_time>
+      </signal>
+      <title>Check and Enter Final Account Info</title>
+      <title_color>255,255,255</title_color>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox3</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label6</name>
+	  <label>If you would like the accounts to have a starting balance click on the account line and enter the starting balance in the text entry box on the right.</label>
+	  <justify>GTK_JUSTIFY_FILL</justify>
+	  <wrap>True</wrap>
+	  <xalign>0.0800003</xalign>
+	  <yalign>0.08</yalign>
+	  <xpad>1</xpad>
+	  <ypad>1</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox4</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkScrolledWindow</class>
+	    <name>scrolledwindow4</name>
+	    <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
+	    <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkCTree</class>
+	      <name>ctree1</name>
+	      <can_focus>True</can_focus>
+	      <signal>
+		<name>select_row</name>
+		<handler>on_ctree1_select_row</handler>
+		<last_modification_time>Thu, 12 Apr 2001 22:48:53 GMT</last_modification_time>
+	      </signal>
+	      <columns>3</columns>
+	      <column_widths>285,118,80</column_widths>
+	      <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	      <show_titles>True</show_titles>
+	      <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CTree:title</child_name>
+		<name>checkAccountList_AccountNameLabel</name>
+		<label>Account Name</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CTree:title</child_name>
+		<name>checkAccountList_TypeLabel</name>
+		<label>Type</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CTree:title</child_name>
+		<name>checkAccountList_StartBalanceLabel</name>
+		<label>Starting Balance</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkVBox</class>
+	    <name>vbox5</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>checkAccount_AccountLabel</name>
+	      <label>Account:</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>checkAccount_StartBalanceLabel</name>
+	      <label>Enter Starting Balance</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkEntry</class>
+	      <name>checkAccount_StartBalanceEntry</name>
+	      <can_focus>True</can_focus>
+	      <editable>True</editable>
+	      <text_visible>True</text_visible>
+	      <text_max_length>20</text_max_length>
+	      <text>$ x.x</text>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+	  </widget>
+	</widget>
       </widget>
     </widget>
 
@@ -320,10 +541,7 @@
 	<last_modification_time>Sun, 14 Jan 2001 18:14:22 GMT</last_modification_time>
       </signal>
       <title>Finish Account Setup</title>
-      <text>Please check the window for the new accounts that will be created.  
-Add any starting balances you would like to exist.
-This will come from a Starting Equity account.
-Press `Finish' if this is OK.</text>
+      <text>Press `Finish' if everything is OK.</text>
       <background_color>25,25,112</background_color>
       <logo_background_color>255,255,255</logo_background_color>
       <textbox_color>255,255,255</textbox_color>
@@ -510,6 +728,55 @@ Press `Finish' if this is OK.</text>
 	    <fill>False</fill>
 	  </child>
 	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkHBox</class>
+      <name>hbox2</name>
+      <border_width>5</border_width>
+      <homogeneous>False</homogeneous>
+      <spacing>5</spacing>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>False</fill>
+      </child>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>newAccountSelectAllButton</name>
+	<can_focus>True</can_focus>
+	<signal>
+	  <name>clicked</name>
+	  <handler>on_newAccountSelectAllButton_clicked</handler>
+	  <last_modification_time>Tue, 10 Apr 2001 16:54:25 GMT</last_modification_time>
+	</signal>
+	<label>Select All</label>
+	<relief>GTK_RELIEF_NORMAL</relief>
+	<child>
+	  <padding>5</padding>
+	  <expand>False</expand>
+	  <fill>False</fill>
+	</child>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>newAccountOKButton</name>
+	<can_focus>True</can_focus>
+	<signal>
+	  <name>clicked</name>
+	  <handler>on_newAccountOKButton_clicked</handler>
+	  <last_modification_time>Tue, 10 Apr 2001 16:54:32 GMT</last_modification_time>
+	</signal>
+	<label>OK</label>
+	<relief>GTK_RELIEF_NORMAL</relief>
+	<child>
+	  <padding>5</padding>
+	  <expand>False</expand>
+	  <fill>False</fill>
+	</child>
       </widget>
     </widget>
   </widget>

@@ -40,11 +40,13 @@ libgncengine_la_SOURCES = \
   gnc-pricedb.c \
   gnc-transaction-xml-v2.c \
   guid.c \
+  io-example-account.c \
   io-gncbin-r.c \
   io-gncxml-gen.c \
   io-gncxml-r.c \
   io-gncxml-v2.c \
   io-gncxml-w.c \
+  io-utils.c \
   kvp_frame.c \
   md5.c \
   sixtp-dom-generators.c \
@@ -90,11 +92,13 @@ noinst_HEADERS = \
   gnc-xml-helper.h \
   gnc-xml.h \
   guid.h \
+  io-example-account.h \
   io-gncbin.h \
   io-gncxml-gen.h \
   io-gncxml-p.h \
   io-gncxml-v2.h \
   io-gncxml.h \
+  io-utils.h \
   kvp_frame.h \
   md5.h \
   sixtp-dom-generators.h \

@@ -29,6 +29,14 @@
 
 	* src/scm/html-style-sheet.scm: so are style sheets. 
 
+2001-04-12  James LewisMoss  <jimdres@mindspring.com>
+
+	* accounts/C/Makefile.am (EXTRA_DIST): move some of the files to
+	the EXTRA_DIST rule for the moment (we don't want them installed
+	at the moment)
+
+	* accounts/C/acctchrt_*: Include Carol's documentation fixes.
+
 2001-04-12  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/gnome/gnucash-item-list.c: same as below
@@ -163,6 +171,18 @@
 	generate simple timeseries for net worth barchart.
 
 	* src/scm/report/{Makefile.am, report-list.scm}: add new barchart.
+
+2001-04-10  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/io-utils.c (write_accounts): Pull out function from
+	io-gncxml-v2.c.
+	(write_account_group): same.
+	(write_emacs_trailer): abstract out functionality.
+
+2001-04-09  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/sixtp-dom-parsers.c (dom_tree_to_guid): handle new
+	and guid types the same for the moment.
 
 2001-04-09  Dave Peticolas  <dave@krondo.com>
 

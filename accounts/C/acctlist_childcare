@@ -1,15 +1,14 @@
 <?xml version="1.0"?>
 <gnc-account-example>
+    <gnc-act:title>
+      Childcare Expenses
+    </gnc-act:title>
     <gnc-act:short-description>
-      Brokerage Accounts
+      An account for tracking childcare expenses
     </gnc-act:short-description>
-    <gnc-act:long-description>
-      These accounts provide a set of accounts to deal with a
-      brokerage.
-    </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Childcare</act:name>
-  <act:id type="guid">f37587dab73433d30ce6fa1a2c0ee53d</act:id>
+  <act:id type="new">f37587dab73433d30ce6fa1a2c0ee53d</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>

@@ -34,7 +34,8 @@
 #include "glade-support.h"
 #include "new-user-funs.h"
 #include "gnc-ui-util.h"
-
+#include "gnc-dir.h"
+#include "io-example-account.h"
 #include <guile/gh.h>
 
 static int commodEditAdded = 0;
@@ -58,7 +59,7 @@ on_newUserStartPage_next               (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data)
 {
-
+    
     return FALSE;
 }
 
@@ -68,6 +69,7 @@ on_chooseAccountTypesPage_next         (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data)
 {
+    /* must collect the file list here. */
     return FALSE;
 }
 
@@ -82,7 +84,7 @@ on_newUserDruidFinishPage_finish       (GnomeDruidPage  *gnomedruidpage,
     gnc_ui_delete_nu_account_list();
     
     gh_eval_str("(gnc:default-ui-start)");
-
+    
     /* now we need to load all the accounts into the program */
 
     gh_eval_str("(gnc:show-main-window)");
@@ -148,13 +150,45 @@ on_newAccountCurrencyChoosePage_prepare (GnomeDruidPage  *gnomedruidpage,
     
 }
 
+static void
+add_each_gea_to_clist(gpointer data, gpointer user_data)
+{
+    GncExampleAccount *gea = (GncExampleAccount*)data;
+    GtkCList *clist = (GtkCList*)user_data;
+    int row = 0;
+    gchar **rowdata;
+
+    rowdata = g_new(gchar*, 2);
+    rowdata[0] = gea->title;
+    rowdata[1] = gea->short_description;
+
+    row = gtk_clist_insert(clist, row, rowdata);
+    gtk_clist_set_row_data(clist, row, gea);
+    row++;
+}
 
 void
 on_chooseAccountTypesPage_prepare      (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data)
 {
+    GSList *list;
+    GtkCList *clist;
+    
     /* Need to load the account type lists here */
+
+    list = gnc_load_example_account_list(GNC_ACCOUNTS_DIR "/C");
+
+    clist = GTK_CLIST(lookup_widget(GTK_WIDGET(gnomedruidpage),
+                                    "newAccountTypesList"));
+    gtk_clist_freeze(clist);
+
+    gtk_clist_set_sort_column(clist, 0);
+
+    g_slist_foreach(list, add_each_gea_to_clist, (gpointer)clist);
+
+    gtk_clist_sort(clist);
+    gtk_clist_thaw(clist);
 }
 
 
@@ -163,8 +197,10 @@ on_newUserDruidFinishPage_prepare      (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data)
 {
-    gnc_ui_show_nu_account_list();
+    /* gnc_ui_show_nu_account_list(); */
 
+    /* need to reset the account guids merge the lists and replace the
+       commodity with the one determined earlier here */
     /* need to fill up the account list info here */
 }
 
@@ -188,5 +224,60 @@ on_newAccountTree_select_row           (GtkCList        *clist,
                                         gpointer         user_data)
 {
     /* need to put info in the box and account name here */
+}
+
+
+void
+on_newAccountSelectAllButton_clicked   (GtkButton       *button,
+                                        gpointer         user_data)
+{
+
+}
+
+
+void
+on_newAccountOKButton_clicked          (GtkButton       *button,
+                                        gpointer         user_data)
+{
+
+}
+
+
+gboolean
+on_newAccountCurrencyChoosePage_next   (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data)
+{
+
+  return FALSE;
+}
+
+
+void
+on_newAccountsTypeList_SelectAllButton_clicked
+                                        (GtkButton       *button,
+                                        gpointer         user_data)
+{
+
+}
+
+
+void
+on_ctree1_select_row                   (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data)
+{
+
+}
+
+
+void
+on_finalAccountDruidPage_prepare       (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data)
+{
+
 }
 

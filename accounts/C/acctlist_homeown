@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <gnc-account-example>
-    <gnc-act:short-description>
+    <gnc-act:title>
       Brokerage Accounts
-    </gnc-act:short-description>
-    <gnc-act:long-description>
+    </gnc-act:title>
+    <gnc-act:short-description>
       These accounts provide a set of accounts to deal with a
       brokerage.
-    </gnc-act:long-description>
+    </gnc-act:short-description>
 <gnc:account version="2.0.0">
   <act:name>Home Repair</act:name>
   <act:id type="guid">a2a85849ba534678e1970ec49515e6fa</act:id>

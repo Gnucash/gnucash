@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <gnc-account-example>
+    <gnc-act:title>
+      Other Loans       
+    </gnc-act:title>
     <gnc-act:short-description>
-      Brokerage Accounts
+      Accounts for tracking other loans and associated interest
+        (other loan, other loan interest)
     </gnc-act:short-description>
-    <gnc-act:long-description>
-      These accounts provide a set of accounts to deal with a
-      brokerage.
-    </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Liabilities</act:name>
-  <act:id type="guid">8ec79e80d9abf58d78ce3129d3fe3365</act:id>
+  <act:id type="new">8ec79e80d9abf58d78ce3129d3fe3365</act:id>
   <act:type>LIABILITY</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -19,29 +19,29 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Loans</act:name>
-  <act:id type="guid">b5624a9d1a1b797b87b815774faccfe4</act:id>
+  <act:id type="new">b5624a9d1a1b797b87b815774faccfe4</act:id>
   <act:type>LIABILITY</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Loans</act:description>
-  <act:parent type="guid">8ec79e80d9abf58d78ce3129d3fe3365</act:parent>
+  <act:parent type="new">8ec79e80d9abf58d78ce3129d3fe3365</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Other Loan</act:name>
-  <act:id type="guid">eb79670a4c9b0faab87485b7b2a4abe4</act:id>
+  <act:id type="new">eb79670a4c9b0faab87485b7b2a4abe4</act:id>
   <act:type>LIABILITY</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Other Loan</act:description>
-  <act:parent type="guid">b5624a9d1a1b797b87b815774faccfe4</act:parent>
+  <act:parent type="new">b5624a9d1a1b797b87b815774faccfe4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Expenses</act:name>
-  <act:id type="guid">565e52a122e8acc9a67a36e61357e2ae</act:id>
+  <act:id type="new">565e52a122e8acc9a67a36e61357e2ae</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -51,25 +51,25 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Interest</act:name>
-  <act:id type="guid">4a02c14e992ea79076837c164aa6fc8d</act:id>
+  <act:id type="new">4a02c14e992ea79076837c164aa6fc8d</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Interest</act:description>
-  <act:parent type="guid">565e52a122e8acc9a67a36e61357e2ae</act:parent>
+  <act:parent type="new">565e52a122e8acc9a67a36e61357e2ae</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Other Interest</act:name>
-  <act:id type="guid">f01de45e290ecc29b64d9cb8a733af68</act:id>
+  <act:id type="new">f01de45e290ecc29b64d9cb8a733af68</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Other Interest</act:description>
-  <act:parent type="guid">4a02c14e992ea79076837c164aa6fc8d</act:parent>
+  <act:parent type="new">4a02c14e992ea79076837c164aa6fc8d</act:parent>
 </gnc:account>
 </gnc-account-example>
 

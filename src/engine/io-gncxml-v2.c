@@ -15,8 +15,11 @@
 #include "gnc-xml.h"
 #include "gnc-book-p.h"
 #include "gnc-pricedb-p.h"
+#include "io-utils.h"
 
 #include "Group.h"
+
+#define GNC_V2_STRING "gnc-v2"
 
 static void
 run_callback(sixtp_gdv2 *data, const char *type)
@@ -29,7 +32,8 @@ run_callback(sixtp_gdv2 *data, const char *type)
 
 static void
 clear_up_account_commodity(
-    GNCBook *book, Account *act, gnc_commodity * (*getter) (Account *account),
+    gnc_commodity_table *tbl, Account *act,
+    gnc_commodity * (*getter) (Account *account),
     void (*setter) (Account *account, gnc_commodity *comm))
 {
     gnc_commodity *gcom;
@@ -40,15 +44,14 @@ clear_up_account_commodity(
         return;
     }
     
-    gcom = gnc_commodity_table_lookup(gnc_book_get_commodity_table(book),
-                                      gnc_commodity_get_namespace(com),
+    gcom = gnc_commodity_table_lookup(tbl, gnc_commodity_get_namespace(com),
                                       gnc_commodity_get_mnemonic(com));
     if(!gcom)
     {
         g_warning("unable to find global commodity for %s:%s adding new",
                   gnc_commodity_get_namespace(com),
                   gnc_commodity_get_mnemonic(com));
-        gnc_commodity_table_insert(gnc_book_get_commodity_table(book), com);
+        gnc_commodity_table_insert(tbl, com);
     }
     else
     {
@@ -60,12 +63,10 @@ clear_up_account_commodity(
 static gboolean
 add_account_local(sixtp_gdv2 *data, Account *act)
 {
-    clear_up_account_commodity(data->book, act,
-                               xaccAccountGetCurrency,
-                               xaccAccountSetCurrency);
-    clear_up_account_commodity(data->book, act,
-                               xaccAccountGetSecurity,
-                               xaccAccountSetSecurity);
+    clear_up_account_commodity(gnc_book_get_commodity_table(data->book), act,
+                               xaccAccountGetCurrency, xaccAccountSetCurrency);
+    clear_up_account_commodity(gnc_book_get_commodity_table(data->book), act,
+                               xaccAccountGetSecurity, xaccAccountSetSecurity);
     if(!xaccAccountGetParent(act))
     {
         xaccGroupInsertAccount(gnc_book_get_group(data->book), act);
@@ -255,7 +256,7 @@ gnc_book_load_from_xml_file_v2(
 
     if(!sixtp_add_some_sub_parsers(
         top_parser, TRUE,
-        "gnc-v2", main_parser,
+        GNC_V2_STRING, main_parser,
         NULL, NULL))
     {
         return FALSE;
@@ -312,6 +313,7 @@ gnc_book_load_from_xml_file_v2(
     /* start logging again */
     xaccLogEnable ();
 
+    g_free(gd);
     /* DEBUG */
     /* print_counter_data(gd.counter); */
 
@@ -319,11 +321,6 @@ gnc_book_load_from_xml_file_v2(
 }
 
 /***********************************************************************/
-
-static const gchar *emacs_trailer =
-"<!-- Local variables: -->\n"
-"<!-- mode: xml        -->\n"
-"<!-- End:             -->\n";
 
 static void
 write_counts(FILE* out, ...)
@@ -440,40 +437,6 @@ write_pricedb(FILE *out, GNCBook *book)
     xmlFreeNode(node);
 }
 
-static void
-write_account_group(FILE *out, AccountGroup *grp)
-{
-    GList *list;
-    GList *node;
-
-    list = xaccGroupGetAccountList(grp);
-
-    for (node = list; node; node = node->next) {
-        xmlNodePtr accnode;
-        AccountGroup *newgrp;
-        
-        accnode = gnc_account_dom_tree_create((Account*)(node->data));
-
-        xmlElemDump(out, NULL, accnode);
-        fprintf(out, "\n");
-
-        xmlFreeNode(accnode);
-
-        newgrp = xaccAccountGetChildren((Account*)(node->data));
-
-        if(grp)
-        {
-            write_account_group(out, newgrp);
-        }
-    }
-}
-
-static void
-write_accounts(FILE *out, GNCBook *book)
-{
-    write_account_group(out, gnc_book_get_group(book));
-}
-
 static gboolean
 xml_add_trn_data(Transaction *t, gpointer data) {
     xmlNodePtr node;
@@ -503,7 +466,7 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
     out = fopen(filename, "w");
 
     fprintf(out, "<?xml version=\"1.0\"?>\n");
-    fprintf(out, "<gnc-v2>\n");
+    fprintf(out, "<" GNC_V2_STRING ">\n");
 
     write_counts(out,
                  "commodity",
@@ -523,8 +486,8 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
 
     write_transactions(out, book);
 
-    fprintf(out, "</gnc-v2>\n\n");
-    fprintf(out, emacs_trailer);
+    fprintf(out, "</" GNC_V2_STRING ">\n\n");
+    write_emacs_trailer(out);
 
     fclose(out);
     
@@ -535,6 +498,6 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
 gboolean
 gnc_is_xml_data_file_v2(const gchar *name)
 {
-    return gnc_is_our_xml_file(name, "gnc-v2");
+    return gnc_is_our_xml_file(name, GNC_V2_STRING);
 }
 

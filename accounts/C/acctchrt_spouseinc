@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <gnc-account-example>
+    <gnc-act:title>
+      Spouse Income
+    </gnc-act:title>
     <gnc-act:short-description>
-      Brokerage Accounts
+     Accounts for tracking spouse's income separately
+        (salary(spouse), taxes (spouse)) 
     </gnc-act:short-description>
-    <gnc-act:long-description>
-      These accounts provide a set of accounts to deal with a
-      brokerage.
-    </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Income</act:name>
-  <act:id type="guid">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:id>
+  <act:id type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:id>
   <act:type>INCOME</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -19,80 +19,80 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Salary (Spouse)</act:name>
-  <act:id type="guid">7c4495ff132d100b0aa339ce683200dd</act:id>
+  <act:id type="new">7c4495ff132d100b0aa339ce683200dd</act:id>
   <act:type>INCOME</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Salary (Spouse)</act:description>
-  <act:parent type="guid">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
+  <act:parent type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Taxes (Spouse)</act:name>
-  <act:id type="guid">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:id>
+  <act:id type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Taxes (Spouse)</act:description>
-  <act:parent type="guid">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
+  <act:parent type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Federal</act:name>
-  <act:id type="guid">78df9cf06ee197272a695a4c3044f749</act:id>
+  <act:id type="new">78df9cf06ee197272a695a4c3044f749</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Federal</act:description>
-  <act:parent type="guid">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
+  <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Medicare</act:name>
-  <act:id type="guid">eba0c095658c7c3a4f4294db9c7392f3</act:id>
+  <act:id type="new">eba0c095658c7c3a4f4294db9c7392f3</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Medicare</act:description>
-  <act:parent type="guid">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
+  <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Other Tax</act:name>
-  <act:id type="guid">dea0cf67026749c9a5aa97be4e5cd052</act:id>
+  <act:id type="new">dea0cf67026749c9a5aa97be4e5cd052</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Other Tax</act:description>
-  <act:parent type="guid">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
+  <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Social Security</act:name>
-  <act:id type="guid">9bd3abb2ed8c4c0d00f8e8ec36d2744d</act:id>
+  <act:id type="new">9bd3abb2ed8c4c0d00f8e8ec36d2744d</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Social Security</act:description>
-  <act:parent type="guid">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
+  <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>State/Province</act:name>
-  <act:id type="guid">aa14dbcd622024495a8a972b0f37d13a</act:id>
+  <act:id type="new">aa14dbcd622024495a8a972b0f37d13a</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>State/Province</act:description>
-  <act:parent type="guid">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
+  <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 </gnc-account-example>
 
