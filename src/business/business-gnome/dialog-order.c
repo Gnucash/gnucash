@@ -255,6 +255,7 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
   gtk_widget_show_all (ow->dialog);
+  gnc_table_refresh_gui (gnc_entry_ledger_get_table (entry_ledger), TRUE);
 
   return ow;
 }
