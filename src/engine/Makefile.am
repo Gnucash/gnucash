@@ -45,7 +45,6 @@ libgncengine_la_SOURCES = \
   io-gncxml-gen.c \
   io-gncxml-r.c \
   io-gncxml-v2.c \
-  io-gncxml-w.c \
   io-utils.c \
   kvp_frame.c \
   md5.c \
