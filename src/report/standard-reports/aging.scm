@@ -26,7 +26,7 @@
 (define-module (gnucash report aging))
 
 (use-modules (ice-9 slib))
-(use-modules (gnucash bootstrap))
+(use-modules (gnucash main))
 (use-modules (gnucash gnc-module))
 
 (require 'hash-table)
