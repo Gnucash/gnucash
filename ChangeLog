@@ -1,3 +1,7 @@
+2003-10-24  David Hampton  <hampton@employees.org>
+
+	* lots of files: Sync up at the gnome2-merge-4 tag.
+
 2003-10-23  David Hampton  <hampton@employees.org>
 
 	* src/engine/Group.c: Send an event when two accounts are merged.
@@ -360,6 +364,10 @@
 	
 	* src/gnome/gnc-plugin-page-account-tree.c: Destroy account tree
 	page when the corresponding session is closed.
+
+2003-09-18  David Hampton  <hampton@employees.org>
+
+	* lots of files: Sync up at the gnome2-merge-3 tag.
 
 2003-09-16  David Hampton  <hampton@employees.org>
 
