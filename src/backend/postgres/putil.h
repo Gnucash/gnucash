@@ -155,6 +155,32 @@ gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
 }
 
 /* --------------------------------------------------------------- */
+/* The EXEC_QUERY macro executes a query and returns the results
+ * and makes sure that no errors occured. Results are left 
+ * in the result buffer.
+ */
+#define EXEC_QUERY(conn,buff,result) 				\
+{								\
+   ExecStatusType status = 0;  					\
+   result = PQexec (conn, buff);				\
+   if (result)						        \
+     status = PQresultStatus(result);				\
+   if (!result ||                                               \
+       ((PGRES_COMMAND_OK != status) &&			        \
+        (PGRES_TUPLES_OK  != status)))				\
+   {								\
+      PERR("failed to get result to query:\n"			\
+           "\t%s", PQerrorMessage((conn)));			\
+      if (result)                                               \
+        PQclear (result);					\
+      result = NULL;                                            \
+      PQfinish (conn);					        \
+      be->connection = NULL;					\
+      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);	\
+   }								\
+}
+
+/* --------------------------------------------------------------- */
 /* The IF_ONE_ROW macro counts the number of rows returned by 
  * a query, reports an error if there is more than one row, and
  * conditionally executes a block for the first row.

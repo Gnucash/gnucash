@@ -43,9 +43,10 @@
 #include "Transaction.h"
 #include "TransactionP.h"
  
+#include "PostgresBackend.h"
 #include "checkpoint.h"
 #include "kvp-sql.h"
-#include "PostgresBackend.h"
+#include "price.h"
 #include "txn.h"
 
 #include "putil.h"
@@ -570,7 +571,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    PGresult *result;
    gboolean do_set_guid=FALSE;
    int engine_data_is_newer = 0;
-   int i, j, nrows;
+   int j;
    GList *node, *engine_splits;
    
    ENTER ("be=%p", be);
@@ -604,96 +605,102 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    /* build the sql query to get the transaction */
    pbuff = be->buff;
    pbuff[0] = 0;
-   pbuff = stpcpy (pbuff, 
-         "SELECT * FROM gncTransaction WHERE transGuid='");
+   pbuff = stpcpy (pbuff, "SELECT * FROM gncTransaction WHERE transGuid='");
    pbuff = guid_to_string_buff(trans_guid, pbuff);
    pbuff = stpcpy (pbuff, "';");
 
-   SEND_QUERY (be,be->buff, 0);
-   i=0; nrows=0;
-   do {
-      GET_RESULTS (be->connection, result);
-      {
-         int jrows;
-         int ncols = PQnfields (result);
-         jrows = PQntuples (result);
-         nrows += jrows;
-         PINFO ("query result %d has %d rows and %d cols",
-            i, nrows, ncols);
+   EXEC_QUERY (be->connection, be->buff, result);
+   if (!result)
+     return 0;
 
-         j = 0;
-         if (0 == nrows) 
-         {
-            PQclear (result);
-            /* I beleive its a programming error to get this case.
-             * Print a warning for now... */
-            PERR ("no such transaction in the database. This is unexpected ...\n");
-            xaccBackendSetError (&be->be, ERR_SQL_MISSING_DATA);
-            pgendEnable(be);
-            gnc_engine_resume_events();
-            return 0;
+   {
+     int ncols = PQnfields (result);
+     int nrows = PQntuples (result);
+
+     PINFO ("query result has %d rows and %d cols", nrows, ncols);
+
+     j = 0;
+     if (0 == nrows) 
+     {
+       PQclear (result);
+       /* I beleive its a programming error to get this case.
+        * Print a warning for now... */
+       PERR ("no such transaction in the database. This is unexpected ...\n");
+       xaccBackendSetError (&be->be, ERR_SQL_MISSING_DATA);
+       pgendEnable(be);
+       gnc_engine_resume_events();
+       return 0;
+     }
+
+     if (1 < nrows)
+     {
+       /* since the guid is primary key, this error is totally
+        * and completely impossible, theoretically ... */
+       PERR ("!!!!!!!!!!!SQL database is corrupt!!!!!!!\n"
+             "too many transactions with GUID=%s\n",
+             guid_to_string (trans_guid));
+       xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
+       pgendEnable(be);
+       gnc_engine_resume_events();
+       return 0;
+     }
+
+     /* First order of business is to determine whose data is
+      * newer: the engine cache, or the database.  If the 
+      * database has newer stuff, we update the engine. If the
+      * engine is equal or newer, we do nothing in this routine.
+      * Of course, we know the database has newer data if this
+      * transaction doesn't exist in the engine yet.
+      */
+     if (!do_set_guid)
+     {
+       gint32 db_version, cache_version;
+       db_version = atoi (DB_GET_VAL("version",j));
+       cache_version = xaccTransGetVersion (trans);
+       if (db_version == cache_version) {
+         engine_data_is_newer = 0;
+       } else 
+         if (db_version < cache_version) {
+           engine_data_is_newer = +1;
+         } else {
+           engine_data_is_newer = -1;
          }
+     }
 
-         if (1 < nrows)
-         {
-             /* since the guid is primary key, this error is totally
-              * and completely impossible, theoretically ... */
-             PERR ("!!!!!!!!!!!SQL database is corrupt!!!!!!!\n"
-                   "too many transactions with GUID=%s\n",
-                    guid_to_string (trans_guid));
-             if (jrows != nrows) xaccTransCommitEdit (trans);
-             xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
-             pgendEnable(be);
-             gnc_engine_resume_events();
-             return 0;
-         }
+     /* if the DB data is newer, copy it to engine */
+     if (0 > engine_data_is_newer)
+     {
+       Timespec ts;
+       gnc_commodity *currency;
 
-         /* First order of business is to determine whose data is
-          * newer: the engine cache, or the database.  If the 
-          * database has newer stuff, we update the engine. If the
-          * engine is equal or newer, we do nothing in this routine.
-          * Of course, we know the database has newer data if this
-          * transaction doesn't exist in the engine yet.
-          */
-         if (!do_set_guid)
-         {
-            gint32 db_version, cache_version;
-            db_version = atoi (DB_GET_VAL("version",j));
-            cache_version = xaccTransGetVersion (trans);
-            if (db_version == cache_version) {
-               engine_data_is_newer = 0;
-            } else 
-            if (db_version < cache_version) {
-               engine_data_is_newer = +1;
-            } else {
-               engine_data_is_newer = -1;
-            }
-         }
+       currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->book);
+       if (!currency)
+       {
+         pgendGetCommodity (be, DB_GET_VAL("currency",j));
+         currency = gnc_string_to_commodity (DB_GET_VAL("currency",j),
+                                             be->book);
+       }
 
-         /* if the DB data is newer, copy it to engine */
-         if (0 > engine_data_is_newer)
-         {
-            Timespec ts;
-            gnc_commodity *currency;
+       if (!currency)
+       {
+         PERR ("currency not found: %s", DB_GET_VAL("currency",j));
+       }
 
-            xaccTransBeginEdit (trans);
-            if (do_set_guid) xaccTransSetGUID (trans, trans_guid);
-            xaccTransSetNum (trans, DB_GET_VAL("num",j));
-            xaccTransSetDescription (trans, DB_GET_VAL("description",j));
-            ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",j));
-            xaccTransSetDatePostedTS (trans, &ts);
-            ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_entered",j));
-            xaccTransSetDateEnteredTS (trans, &ts);
-            xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
-            currency = gnc_string_to_commodity (DB_GET_VAL("currency",j),
-                                                be->book);
-            xaccTransSetCurrency (trans, currency);
-            trans->idata = atoi(DB_GET_VAL("iguid",j));
-         }
-      }
-      PQclear (result);
-      i++;
-   } while (result);
+       xaccTransBeginEdit (trans);
+       if (do_set_guid) xaccTransSetGUID (trans, trans_guid);
+       xaccTransSetNum (trans, DB_GET_VAL("num",j));
+       xaccTransSetDescription (trans, DB_GET_VAL("description",j));
+       ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",j));
+       xaccTransSetDatePostedTS (trans, &ts);
+       ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_entered",j));
+       xaccTransSetDateEnteredTS (trans, &ts);
+       xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
+       xaccTransSetCurrency (trans, currency);
+       trans->idata = atoi(DB_GET_VAL("iguid",j));
+     }
+   }
+
+   PQclear (result);
 
    /* set timestamp as 'recent' for this data */
    trans->version_check = be->version_check;
@@ -718,6 +725,12 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
 
    if (0 != trans->idata)
    {
+      if (!kvp_frame_is_empty (trans->kvp_data))
+      {
+        kvp_frame_delete (trans->kvp_data);
+        trans->kvp_data = kvp_frame_new ();
+      }
+
       trans->kvp_data = pgendKVPFetch (be, trans->idata, trans->kvp_data);
    }
 
@@ -727,6 +740,12 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
       Split *s = node->data;
       if (0 != s->idata)
       {
+         if (!kvp_frame_is_empty (s->kvp_data))
+         {
+           kvp_frame_delete (s->kvp_data);
+           s->kvp_data = kvp_frame_new ();
+         }
+
          s->kvp_data = pgendKVPFetch (be, s->idata, s->kvp_data);
       }
    }
@@ -890,7 +909,9 @@ pgend_trans_commit_edit (Backend * bend,
              * and crashes. We've fixed the bugs, but ...
              */
             char buf[80];
-            gnc_timespec_to_iso8601_buff (xaccTransRetDatePostedTS (trans), buf);
+            gnc_timespec_to_iso8601_buff (xaccTransRetDatePostedTS (trans),
+                                          buf);
+
             PERR ("The impossible has happened, and thats not good!\n"
                   "\tThe SQL database contains an active transaction that\n"
                   "\talso appears in the audit trail as deleted !!\n"
@@ -945,7 +966,8 @@ pgend_trans_commit_edit (Backend * bend,
       {
          Split *s = (Split *) node->data;
          Account *acc = xaccSplitGetAccount (s);
-         pgendAccountRecomputeOneCheckpoint (be, acc, trans->orig->date_posted);
+         pgendAccountRecomputeOneCheckpoint (be, acc,
+                                             trans->orig->date_posted);
       }
 
       /* set checkpoints for the new accounts */

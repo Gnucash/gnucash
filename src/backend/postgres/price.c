@@ -57,22 +57,22 @@ static short module = MOD_BACKEND;
 static gpointer
 get_commodities_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   gnc_commodity_table *comtab = (gnc_commodity_table *) data;
+   gnc_commodity_table *comtab = data;
    gnc_commodity *com;
 
    /* first, lets see if we've already got this one */
    com = gnc_commodity_table_lookup(comtab,
-         DB_GET_VAL("namespace",j), DB_GET_VAL("mnemonic",j));
+                                    DB_GET_VAL("namespace",j),
+                                    DB_GET_VAL("mnemonic",j));
 
    if (com) return comtab;
 
    /* no we don't ... restore it */
-   com = gnc_commodity_new (
-                     DB_GET_VAL("fullname",j),
-                     DB_GET_VAL("namespace",j),
-                     DB_GET_VAL("mnemonic",j),
-                     DB_GET_VAL("code",j),
-                     atoi(DB_GET_VAL("fraction",j)));
+   com = gnc_commodity_new (DB_GET_VAL("fullname",j),
+                            DB_GET_VAL("namespace",j),
+                            DB_GET_VAL("mnemonic",j),
+                            DB_GET_VAL("code",j),
+                            atoi(DB_GET_VAL("fraction",j)));
 
    gnc_commodity_table_insert (comtab, com);
    return comtab;
@@ -101,6 +101,38 @@ pgendGetAllCommodities (PGBackend *be)
    LEAVE (" ");
 }
 
+void
+pgendGetCommodity (PGBackend *be, const char * unique_name)
+{
+   gnc_commodity_table *comtab;
+   sqlEscape *escape;
+   char *p;
+
+   if (!be || !unique_name) return;
+
+   ENTER ("be=%p, conn=%p", be, be->connection);
+
+   comtab = gnc_book_get_commodity_table (be->book);
+   if (!comtab) {
+      PERR ("can't get commodity table");
+      return;
+   }
+
+   escape = sqlEscape_new ();
+
+   /* Get them ALL */
+   p = be->buff;
+   p = stpcpy (p, "SELECT * FROM gncCommodity WHERE gncCommodity.commodity='");
+   p = stpcpy (p, sqlEscapeString (escape, unique_name));
+   p = stpcpy (p, "';");
+
+   SEND_QUERY (be, be->buff, );
+   pgendGetResults (be, get_commodities_cb, comtab);
+
+   sqlEscape_destroy (escape);
+
+   LEAVE (" ");
+}
 
 /* ============================================================= */
 /* ============================================================= */

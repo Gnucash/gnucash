@@ -27,6 +27,7 @@
 #include "PostgresBackend.h"
 
 void pgendGetAllCommodities (PGBackend *be);
+void pgendGetCommodity (PGBackend *be, const char * unique_name);
 void pgendStorePriceDB (PGBackend *be, GNCPriceDB *prdb);
 void pgendStorePriceDBNoLock (PGBackend *be, GNCPriceDB *prdb);
 GNCPriceDB * pgendGetAllPrices (PGBackend *be, GNCPriceDB *prdb);
