@@ -1,3 +1,13 @@
+2003-05-23  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/dialog-options.c: don't let the user do anything
+	  with the options dialog until Apply() finishes.  This is a
+	  simple fix for #107953 so that a user can't crash gnucash by
+	  hitting Apply and then OK (before the Apply completes).
+	  However, what should really happen is that we queue up requests
+	  to destroy ourselves and process the event later.  See #107953
+	  for more information.
+
 2003-05-22  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-reports/owner-report.scm:  Better fix for 108731
