@@ -33,15 +33,22 @@
 
 /** DEBUGGING MACROS ************************************************/
 /* The debuging macros enable the setting of trace messages */
-#include <nana.h>
 #include <stdio.h>
+#include <nana.h>
+
+/* override standard system assert with nana I assertion */
+#ifdef assert 
+#undef assert
+#endif 
+#define assert I
 
 #define MOD_ENGINE     1
 #define MOD_IO         2
 #define MOD_REGISTER   3
 #define MOD_LEDGER     4
 #define MOD_GUI        5
-#define MODULE_MAX     6
+#define MOD_SCRUB      6
+#define MODULE_MAX     7
 
 extern int loglevel[MODULE_MAX];
 
