@@ -438,8 +438,9 @@ add_closing_balances (AccountGroup *closed_grp,
    if (!closed_grp) return;
    ENTER (" enter=%s post=%s desc=%s", gnc_print_date(*date_entered),
        gnc_print_date (*post_date), desc);
+   xaccAccountBeginEdit (equity_account);
 
-   /* walk accounts in closed book */
+   /* Walk accounts in closed book */
    acc_list = xaccGroupGetAccountList (closed_grp);
    for (node=acc_list; node; node=node->next)
    {
@@ -500,6 +501,7 @@ add_closing_balances (AccountGroup *closed_grp,
          if (NULL == equity_account)
          {
             equity = find_nearest_equity_acct (twin);
+            xaccAccountBeginEdit (equity);
          }
          else
          {
@@ -517,12 +519,12 @@ add_closing_balances (AccountGroup *closed_grp,
          xaccTransSetCurrency (trans, xaccAccountGetCommodity(equity));
 
          st = xaccMallocSplit(open_book);
-         xaccAccountInsertSplit (twin, st);
          xaccTransAppendSplit(trans, st);
+         xaccAccountInsertSplit (twin, st);
          
          se = xaccMallocSplit(open_book);
-         xaccAccountInsertSplit (equity, se);
          xaccTransAppendSplit(trans, se);
+         xaccAccountInsertSplit (equity, se);
 
          xaccSplitSetAmount (st, baln);
          xaccSplitSetValue (st, baln);
@@ -542,6 +544,10 @@ add_closing_balances (AccountGroup *closed_grp,
          
          xaccTransCommitEdit (trans);
 
+         if (NULL == equity_account)
+         {
+            xaccAccountCommitEdit (equity);
+         }
          /* -------------------------------- */
          /* Add KVP to closed account, indicating where the
           * balance was carried forward to. */
@@ -567,6 +573,7 @@ add_closing_balances (AccountGroup *closed_grp,
                           post_date, date_entered, desc);
       }
    }
+   xaccAccountCommitEdit (equity_account);
    LEAVE (" ");
 }
 
