@@ -211,6 +211,11 @@ gnc_entry_ledger_config_cells (GncEntryLedger *ledger)
     ((ComboCell *)
      gnc_table_layout_get_cell (ledger->table->layout, ENTRY_ACTN_CELL), TRUE);
 
+  /* The action cell should also accept strings not in the list */
+  gnc_combo_cell_set_strict
+    ((ComboCell *)
+     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_ACTN_CELL), FALSE);
+
   /* Use 6 decimal places for all prices and quantities */
   gnc_price_cell_set_fraction
     ((PriceCell *)
