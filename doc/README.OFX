@@ -247,11 +247,10 @@ specs, but needs the OFC DTD (Data Type Definition) to add support.  That file
 is supposed to be available from a link an this page:
 http://support.microsoft.com/default.aspx?scid=kb%3Ben-us%3B162872
 
-However,
-despite numerous requests to Microsoft to either fix the broken link or send a 
-copy of the file, they still haven't done either.  That file is probably free to
-redistribute, and was part of the OFC development toolkit.  If you still have a 
-copy or know where to get one, please send the information to
+However, despite numerous requests to Microsoft to either fix the broken link or
+send him a copy of the file, they still haven't done so.  That file is probably
+free to redistribute, and was part of their OFC development toolkit.  If you still
+have a copy or know where to get one, please send the information to
 bock@step.polymtl.ca
 
 (7) Where do I find/How do I download OFX files for bank XYZ?
@@ -260,10 +259,12 @@ Somewhere on one of the banks website.  We can't say anymore than this, the
 adress, interface, and origin of the info used as user id and password changes
 from bank to bank.
 
-(8) Can I export my data in QIF, OFX, CSV, whatever from
-Gnucash.Export capability is currently being built into LibOfx.  During the 
+(8) Can I export my Gnucash data in QIF, OFX, CSV, etc. ?
+
+Export capability is currently being built into LibOfx.  During the
 1.8.x series, Gnucash will be able to export in any format supported by
 LibOFX.
+
 
 7. Credits-------
 
