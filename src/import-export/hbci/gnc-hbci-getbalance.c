@@ -102,7 +102,9 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
     if (!gnc_AB_BANKING_execute (parent, api, job, interactor)) {
 
       /* AB_BANKING_executeOutbox failed. */
-      /* AB_Banking_DequeueJob(api, job); FIXME: Which one to use here? */
+      AB_Banking_DequeueJob(api, job);
+      AB_Banking_DelFinishedJob(api, job);
+      AB_Banking_DelPendingJob(api, job);
       /* FIXME: free unneeded data */
       return;
     }
@@ -115,7 +117,9 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 				job);
 
     /* Clean up after ourselves. */
+    AB_Banking_DequeueJob(api, job);
     AB_Banking_DelFinishedJob(api, job);
+    AB_Banking_DelPendingJob(api, job);
     gnc_AB_BANKING_fini (api);
     GNCInteractor_hide (interactor);
   }

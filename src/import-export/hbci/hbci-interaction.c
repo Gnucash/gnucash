@@ -209,11 +209,22 @@ static int inputBoxCB(AB_BANKING *ab,
   int retval = 0;
   int newPin;
   int hideInput;
+  GWEN_BUFFER *buffer1, *buffer2;
+  int bufsize = 10+strlen(text);
+  const char *latin1text;
+  const char *latin1title;
 
   g_assert(ab);
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
   g_assert(maxLen > minsize);
+
+  buffer1 = GWEN_Buffer_new(0, bufsize, 0, 0);
+  buffer2 = GWEN_Buffer_new(0, bufsize, 0, 0);
+  AB_ImExporter_Utf8ToDta (title, bufsize, buffer1);
+  AB_ImExporter_Utf8ToDta (text, bufsize, buffer2);
+  latin1title = GWEN_Buffer_GetStart (buffer1);
+  latin1text = GWEN_Buffer_GetStart (buffer2);
 
   newPin = (flags | AB_BANKING_INPUT_FLAGS_CONFIRM) == 0;
   /*   printf("inputBoxCB: Requesting newPind: %s\n", newPin ? "true" : "false"); */
@@ -224,7 +235,7 @@ static int inputBoxCB(AB_BANKING *ab,
   while (TRUE) {
 
     if (newPin) {
-      msgstr = g_strdup_printf("%s\n\n%s", title, text);
+      msgstr = g_strdup_printf("%s\n\n%s", latin1title, latin1text);
       retval = gnc_hbci_get_initial_password (data->parent,
 					      msgstr,
 					      &passwd);
@@ -238,7 +249,7 @@ static int inputBoxCB(AB_BANKING *ab,
 	return 0;
       }
       else {
-	msgstr = g_strdup_printf("%s\n\n%s", title, text);
+	msgstr = g_strdup_printf("%s\n\n%s", latin1title, latin1text);
 	
 	retval = gnc_hbci_get_password (data->parent,
 					msgstr,
@@ -276,11 +287,15 @@ static int inputBoxCB(AB_BANKING *ab,
       }
       else 
 	g_free (memset (passwd, 0, strlen (passwd)));
+      GWEN_Buffer_free (buffer1);
+      GWEN_Buffer_free (buffer2);
       return 0;
     }
   }
   
   /* User wanted to abort. */
+  GWEN_Buffer_free (buffer1);
+  GWEN_Buffer_free (buffer2);
   return 1;
 }
 
@@ -449,17 +464,26 @@ static int progressLogCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
 {
   GNCInteractor *data;
   //GtkWidget *dialog;
+  GWEN_BUFFER *buffer;
+  int bufsize = 10+strlen(text);
+  const char *latin1text;
+
   g_assert(ab);
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
+
+  buffer = GWEN_Buffer_new(0, bufsize, 0, 0);
+  AB_ImExporter_Utf8ToDta (text, bufsize, buffer);
+  latin1text = GWEN_Buffer_GetStart (buffer);
 
   if ((id != 0) && (id != progress_id)) {
     printf("progressLogCB: Oops, wrong progress id %d -- ignored.\n", id);
   }
 
-  printf("progressLogCB: Logging msg: %s\n", text);
-  GNCInteractor_add_log_text (data, text);
+  printf("progressLogCB: Logging msg: %s\n", latin1text);
+  GNCInteractor_add_log_text (data, latin1text);
 
+  GWEN_Buffer_free (buffer);
   keepAlive(data);
   return 0;
 }

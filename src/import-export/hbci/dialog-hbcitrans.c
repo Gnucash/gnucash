@@ -495,7 +495,7 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
     /* FIXME: If this is a direct debit, set the textkey/ "Textschluessel"/
        transactionCode according to some GUI selection here!! */
     /*if (td->trans_type == SINGLE_DEBITNOTE)
-      AB_TRANSACTION_setTransactionCode (td->hbci_trans, 05);*/
+      AB_TRANSACTION_setTextKey (td->hbci_trans, 05);*/
 
     /* And finally check the account code, if ktoblzcheck is available. */
     values_ok = check_ktoblzcheck(GTK_WIDGET (td->dialog), td, td->hbci_trans);
@@ -521,6 +521,7 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
   AB_Transaction_SetLocalBankCode (trans, 
 				   AB_Account_GetBankCode (h_acc));
   AB_Transaction_SetLocalAccountNumber (trans, AB_Account_GetAccountNumber (h_acc));
+  AB_Transaction_SetLocalCountryCode (trans, 280);
 	
   AB_Transaction_SetRemoteBankCode
     (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_bankcode_entry)));
@@ -530,6 +531,7 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
     (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_account_entry)));
   /* printf("Got otherAccountId %s.\n",
      AB_Transaction_otherAccountId (trans)); */
+  AB_Transaction_SetRemoteCountryCode (trans, 280);
   AB_Transaction_AddRemoteName
     (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_name_entry)), FALSE);
 	
@@ -553,9 +555,12 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
      transactionCode different from the default has to be set. */
   switch(td->trans_type) {
   case SINGLE_DEBITNOTE:
-    AB_Transaction_SetTransactionCode (trans, 05);
+    /* AB_Transaction_SetTransactionCode (trans, 05); */
+    AB_Transaction_SetTextKey (trans, 05);
+    break;
   default:
-    AB_Transaction_SetTransactionCode (trans, 51);
+    /* AB_Transaction_SetTransactionCode (trans, 51); */
+    AB_Transaction_SetTextKey (trans, 51);
   }
 
   return trans;
