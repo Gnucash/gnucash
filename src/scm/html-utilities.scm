@@ -480,7 +480,9 @@
 	(for-each 
 	 (lambda (accts) 
 	   (if (and (not (null? accts)) (not (null? (cdr accts))))
-	       (add-group! 1 (car accts) (cdr accts) #f #t)))
+	       (add-group! 1 
+			   (gnc:account-get-type-string-plural (car accts))
+			   (cdr accts) #f #t)))
 	 (gnc:decompose-accountlist (lset-intersection 
 				     equal? accounts topl-accounts)))
 	;; No extra grouping. 

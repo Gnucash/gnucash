@@ -130,11 +130,11 @@
 	   (accounts (op-value pagename-general optname-accounts))
 	   (classified-accounts (gnc:decompose-accountlist accounts))
 	   (asset-accounts
-	    (assoc-ref classified-accounts (_"Assets")))
+	    (assoc-ref classified-accounts 'asset))
 	   (liability-equity-accounts
 	    (append
-	     (assoc-ref classified-accounts (_ "Liabilities"))
-	     (assoc-ref classified-accounts (_ "Equity"))))
+	     (assoc-ref classified-accounts 'liability)
+	     (assoc-ref classified-accounts 'equity)))
            (report-currency (op-value pagename-general
                                       optname-report-currency))
 

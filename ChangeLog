@@ -1,3 +1,13 @@
+2001-04-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report-utilities.scm: Added function
+	(gnc:account-get-type-string-plural). Changed
+	gnc:decompose-accountlist to return AccountType symbols.
+
+	* src/scm/html-utilities.scm,
+	src/scm/report/net-worth-timeseries.scm, balance-sheet.scm:
+	Adapted to changed gnc:decompose-accountlist.
+
 2001-04-10  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/date.c (__EXTENSIONS__): add a define for solaris

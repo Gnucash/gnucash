@@ -73,21 +73,46 @@
 		    typelist) )
 	  accounts))
 
-;; Decompose a given list of accounts accts into different lists
-;; according to their types, each with the name of that category as
-;; first element.
+;; Decompose a given list of accounts 'accounts' into an alist
+;; according to their types. Each element of alist is a list, whose
+;; first element is the type-symbol, e.g. 'assets, and the rest (cdr)
+;; of the element is the list of accounts which belong to that
+;; category.
 (define (gnc:decompose-accountlist accounts)
   (map (lambda (x) (cons
 		    (car x)
 		    (gnc:filter-accountlist-type (cdr x) accounts)))
        (list
-	(cons (_ "Assets") 
+	(cons 'asset
 	      '(asset bank cash checking savings money-market 
 		      stock mutual-fund currency))
-	(cons (_ "Liabilities") '(liability credit credit-line))
-	(cons (_ "Equity") '(equity))
-	(cons (_ "Income") '(income))
-	(cons (_ "Expense") '(expense)))))
+	(cons 'liability '(liability credit credit-line))
+	(cons 'equity '(equity))
+	(cons 'income '(income))
+	(cons 'expense '(expense)))))
+
+;; Returns the name of the account type as a string, and in its plural
+;; form (as opposed to gnc:account-get-type-string which gives the
+;; singular form of the word).
+(define (gnc:account-get-type-string-plural type)
+  (assoc-ref
+   (list 
+    (cons 'bank (_ "Bank"))
+    (cons 'cash (_ "Cash"))
+    (cons 'credit (_ "Credits"))
+    (cons 'asset (_ "Assets"))
+    (cons 'liability (_ "Liabilities"))
+    (cons 'stock (_ "Stocks"))
+    (cons 'mutual-fund (_ "Mutual-Funds"))
+    (cons 'currency (_ "Currencies"))
+    (cons 'income (_ "Income"))
+    (cons 'expense (_ "Expenses"))
+    (cons 'equity (_ "Equities"))
+    (cons 'checking (_ "Checkings"))
+    (cons 'savings (_ "Savings"))
+    (cons 'money-market (_ "Money-Market"))
+    (cons 'credit-line (_ "Credit-Lines")))
+   type))
 
 ;; Returns the depth of the current account heirarchy, that is, the
 ;; maximum level of subaccounts in the current-group.

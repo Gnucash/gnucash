@@ -166,20 +166,20 @@
 
 	   ;; decompose the account list
 	   (split-up-accounts (gnc:decompose-accountlist accounts))
-	   (dummy (gnc:warn "split-up-accounts" split-up-accounts))
+	   ;;(dummy (gnc:warn "split-up-accounts" split-up-accounts))
 	   (asset-accounts
-	    (assoc-ref split-up-accounts (_ "Assets")))
+	    (assoc-ref split-up-accounts 'asset))
 	   (liability-accounts
-	    (assoc-ref split-up-accounts (_ "Liabilities")))
+	    (assoc-ref split-up-accounts 'liability))
 ;	   (liability-account-names
 ;	    (map gnc:account-get-name liability-accounts))
 ;	   (dummy2 
 ;	    (gnc:warn "liability-account-names" liability-account-names))
 	   (equity-accounts
-	    (assoc-ref split-up-accounts (_"Equity")))
+	    (assoc-ref split-up-accounts 'equity))
 	   (income-expense-accounts
-	    (append (assoc-ref split-up-accounts (_ "Income"))
-		    (assoc-ref split-up-accounts (_ "Expense"))))
+	    (append (assoc-ref split-up-accounts 'income)
+		    (assoc-ref split-up-accounts 'expense)))
 
 
 	   (doc (gnc:make-html-document))
@@ -231,7 +231,7 @@
 
       ;;(gnc:warn "account names" liability-account-names)
       (gnc:html-document-set-title! 
-       ;; FIXME: Use magic sprintf code.
+       ;; FIXME: Use magic sprintf code (which one?).
        doc (sprintf #f (_ "Balance sheet at %s")
 		    (gnc:timepair-to-datestring to-date-tp)))
 
