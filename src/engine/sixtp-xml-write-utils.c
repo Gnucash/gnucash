@@ -8,34 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef HAVE_XML_VERSION_HEADER
-#include <libxml/xmlversion.h>
-#endif
-
-#if defined(LIBXML_VERSION) && LIBXML_VERSION >= 20000
-
-#include <libxml/tree.h>
-#include <libxml/parser.h>
-#include <libxml/xmlmemory.h>
-#include <libxml/parserInternals.h>
-#ifndef xmlChildrenNode
-#define xmlChildrenNode children
-#define xmlRootNode children
-#endif
-
-#else
-
-#include <gnome-xml/tree.h>
-#include <gnome-xml/parser.h>
-#include <gnome-xml/xmlmemory.h>
-#include <gnome-xml/parserInternals.h>
-#ifndef xmlChildrenNode
-#define xmlChildrenNode childs
-#define xmlRootNode root
-#endif
-
-#endif
-
+#include "gnc-xml-helper.h"
 #include "sixtp-xml-write-utils.h"
 
 #include "gnc-numeric.h"

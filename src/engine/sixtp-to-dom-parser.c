@@ -66,14 +66,6 @@ static gboolean dom_chars_handler(
         
 }
 
-static gboolean dom_before_handler(
-    gpointer data_for_children, GSList* data_from_children,
-    GSList* sibling_data, gpointer parent_data, gpointer global_data,
-    gpointer *result, const gchar *tag, const gchar *child_tag)
-{
-    return TRUE;
-}
-
 sixtp* sixtp_dom_parser_new(sixtp_end_handler ender)
 {
     sixtp *top_level;
@@ -83,7 +75,6 @@ sixtp* sixtp_dom_parser_new(sixtp_end_handler ender)
     if(!(top_level =
          sixtp_set_any(sixtp_new(), FALSE,
                        SIXTP_START_HANDLER_ID, dom_start_handler,
-                       SIXTP_BEFORE_CHILD_HANDLER_ID, dom_before_handler,
                        SIXTP_CHARACTERS_HANDLER_ID, dom_chars_handler,
                        SIXTP_END_HANDLER_ID, ender,
                        SIXTP_NO_MORE_HANDLERS)))

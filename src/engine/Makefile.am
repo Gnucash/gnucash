@@ -79,6 +79,7 @@ noinst_HEADERS = \
   gnc-event.h \
   gnc-event-p.h \
   gnc-numeric.h \
+  gnc-xml-helper.h \
   sixtp-parsers.h \
   sixtp-writers.h \
   sixtp-stack.h \
