@@ -1,3 +1,11 @@
+2000-06-23  Dave Peticolas  <dave@krondo.com>
+
+	* doc/html/C/projects.html: update last version info
+
+	* doc/html/C/xacc-about.html: update last version info
+
+	* src/guile/gnucash.c.in: update last version info
+
 2000-06-21  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/splitreg.h: break out the register type and the
