@@ -1,3 +1,8 @@
+2003-01-03  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-gnome/glade/invoice.glade: fix a string
+	  to make the meaning more clear (per user request)
+
 2003-01-03  Matthew Vanecek <mevanecek@yahoo.com>
     * src/backend/postgres/Postgresbackend.c: Fixed some compiler
     warning messages about MODE_NONE and a some GUIDs used as
