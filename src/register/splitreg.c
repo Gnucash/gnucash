@@ -238,7 +238,6 @@ configLayout (SplitRegister *reg)
             curs = reg->double_cursor;
             FANCY (DATE,   date,     0,  0);
             BASIC (NUM,    num,      1,  0);
-            FANCY (XFRM,   xfrm,     2,  0);
             FANCY (DESC,   desc,     3,  0);
             BASIC (RECN,   recn,     4,  0);
             FANCY (DEBT,   debit,    5,  0);
@@ -266,6 +265,8 @@ configLayout (SplitRegister *reg)
             FANCY (ACTN,   action,   1,  0);
             FANCY (XFRM,   xfrm,     2,  0);
             BASIC (MEMO,   memo,     3,  0);
+            FANCY (DEBT,   debit,    5,  0);
+            FANCY (CRED,   credit,   6,  0);
          }
          break;
 
@@ -297,7 +298,6 @@ configLayout (SplitRegister *reg)
             curs = reg->double_cursor;
             FANCY (DATE,   date,     0,  0);
             BASIC (NUM,    num,      1,  0);
-            FANCY (XFRM,   xfrm,     2,  0);
             FANCY (DESC,   desc,     3,  0);
             BASIC (RECN,   recn,     4,  0);
             FANCY (DEBT,   debit,    5,  0);
