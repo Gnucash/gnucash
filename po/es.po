@@ -6,15 +6,15 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.8.7\n"
-"POT-Creation-Date: 2003-09-14 18:59-0700\n"
-"PO-Revision-Date: 2003-11-12 23:09+0100\n"
+"Project-Id-Version: gnucash 1.8.8\n"
+"Report-Msgid-Bugs-To: Eneko Lacunza <enlar@enlar.net>\n"
+"POT-Creation-Date: 2003-11-17 22:01-0800\n"
+"PO-Revision-Date: 2004-01-14 22:55+0100\n"
 "Last-Translator: Eneko Lacunza <enlar@enlar.net>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-15\n"
 "Content-Transfer-Encoding: 8-bit\n"
-"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/app-file/gnome/gnc-file-dialog.c:77 src/app-file/gnc-file.c:547
@@ -1668,13 +1668,13 @@ msgstr ""
 "Su elecci�n �%s� ya est� en uso."
 
 #: src/business/business-gnome/dialog-billterms.c:484
-#: src/engine/FreqSpec.c:970 src/import-export/hbci/druid-hbci-initial.c:892
-#: src/import-export/hbci/druid-hbci-initial.c:1290
-#: src/import-export/hbci/hbci-interaction.c:178
-#: src/import-export/hbci/hbci-interaction.c:179
-#: src/import-export/hbci/hbci-interaction.c:303
-#: src/import-export/hbci/hbci-interaction.c:369
-#: src/import-export/hbci/hbci-interaction.c:491
+#: src/engine/FreqSpec.c:970 src/import-export/hbci/druid-hbci-initial.c:820
+#: src/import-export/hbci/druid-hbci-initial.c:1218
+#: src/import-export/hbci/hbci-interaction.c:170
+#: src/import-export/hbci/hbci-interaction.c:171
+#: src/import-export/hbci/hbci-interaction.c:295
+#: src/import-export/hbci/hbci-interaction.c:371
+#: src/import-export/hbci/hbci-interaction.c:493
 #: src/import-export/hbci/hbci-progressmon.c:192 intl-scm/guile-strings.c:1081
 msgid "Unknown"
 msgstr "Desconocido"
@@ -1893,7 +1893,7 @@ msgstr "Impuestos:"
 
 #: src/business/business-gnome/dialog-invoice.c:964
 msgid "Total Cash:"
-msgstr ""
+msgstr "Total efectivo:"
 
 #: src/business/business-gnome/dialog-invoice.c:965
 msgid "Total Charge:"
@@ -2598,8 +2598,8 @@ msgstr ""
 "%d: %s"
 
 #: src/engine/Account.c:2478 src/import-export/hbci/glade/hbci.glade:444
-#: src/import-export/hbci/gnc-hbci-utils.c:522
-#: src/import-export/hbci/gnc-hbci-utils.c:526 intl-scm/guile-strings.c:1565
+#: src/import-export/hbci/gnc-hbci-utils.c:527
+#: src/import-export/hbci/gnc-hbci-utils.c:531 intl-scm/guile-strings.c:1565
 #: intl-scm/guile-strings.c:3909
 msgid "Bank"
 msgstr "Banco"
@@ -2754,21 +2754,21 @@ msgstr "Hu�rfano"
 msgid "Imbalance"
 msgstr "Descuadre"
 
-#: src/engine/Transaction.c:1718
+#: src/engine/Transaction.c:1717
 msgid ""
 "Another user has modified this transaction\n"
 "\tjust a moment ago. Please look at their changes,\n"
 "\tand try again, if needed.\n"
 msgstr "Otro usuario ha modificado esta anotaci�n hace un momento. Por favor, compruebe los cambios e intentelo de nuevo si fuera necesario.\n"
 
-#: src/engine/Transaction.c:2358 src/engine/Transaction.c:2379
-#: src/register/ledger-core/split-register-control.c:977
+#: src/engine/Transaction.c:2357 src/engine/Transaction.c:2378
+#: src/register/ledger-core/split-register-control.c:982
 #: src/register/ledger-core/split-register.c:2089
 #: intl-scm/guile-strings.c:2325 intl-scm/guile-strings.c:2809
 msgid "-- Split Transaction --"
 msgstr "-- desglosar transacci�n --"
 
-#: src/engine/Transaction.c:2400 src/gnome/glade/register.glade:1608
+#: src/engine/Transaction.c:2399 src/gnome/glade/register.glade:1608
 #: src/gnome/druid-stock-split.c:410
 #: src/register/ledger-core/split-register.c:2073
 #: intl-scm/guile-strings.c:2435
@@ -2867,7 +2867,7 @@ msgstr "_Conciliar..."
 
 #: src/gnome/glade/register.glade:472 src/gnome/glade/register.glade:791
 msgid "_Stock Split..."
-msgstr "_Canje de acciones"
+msgstr "Divi_si�n de valores..."
 
 #: src/gnome/glade/register.glade:479
 msgid "Chec_k & Repair"
@@ -2926,7 +2926,7 @@ msgstr "Conciliar la cuenta principal para este registro"
 #: src/gnome/glade/register.glade:785 src/gnome/window-acct-tree.c:1006
 #: src/gnome/window-acct-tree.c:1351
 msgid "Record a stock split or a stock merger"
-msgstr "Grabar un canje de valores o una fusi�n de valores"
+msgstr "Anotar una divisi�n o una fusi�n de valores"
 
 #: src/gnome/glade/register.glade:804 src/gnome/glade/register.glade:1530
 #: src/gnome/glade/register.glade:2020 src/gnome/glade/register.glade:2263
@@ -3466,8 +3466,8 @@ msgstr "Elegir o a�adir una cuenta GnuCash"
 #: src/import-export/generic-import.glade:161
 #: src/import-export/generic-import.glade:389
 #: src/import-export/generic-import.glade:899
-#: src/import-export/hbci/gnc-hbci-utils.c:521
-#: src/import-export/hbci/gnc-hbci-utils.c:525
+#: src/import-export/hbci/gnc-hbci-utils.c:526
+#: src/import-export/hbci/gnc-hbci-utils.c:530
 #: src/import-export/qif-import/qif.glade:125
 #: src/register/ledger-core/split-register-model.c:191
 #: intl-scm/guile-strings.c:1055 intl-scm/guile-strings.c:1765
@@ -4398,19 +4398,21 @@ msgstr "Crear"
 
 #: src/gnome/glade/stocks.glade:22 src/gnome/glade/stocks.glade:326
 msgid "Stock Split"
-msgstr "Canje de acciones"
+msgstr "Canje de valores"
 
 #: src/gnome/glade/stocks.glade:38
 msgid "This druid will help you record a stock split or stock merger."
 msgstr ""
+"Este asistente le ayudar� a anotar una divisi�n (split)\n"
+"o una fusi�n (merger) de valores."
 
 #: src/gnome/glade/stocks.glade:49
 msgid "Stock Account"
-msgstr "Cuenta de Valores"
+msgstr "Cuenta de valores"
 
 #: src/gnome/glade/stocks.glade:70
 msgid "Select the account for which you want to record a stock split or merger."
-msgstr ""
+msgstr "Elija la cuenta para la que quiere anotar el canje de valores."
 
 #: src/gnome/glade/stocks.glade:146
 #: src/register/ledger-core/split-register-model.c:254
@@ -4424,7 +4426,7 @@ msgstr "Acciones"
 
 #: src/gnome/glade/stocks.glade:163
 msgid "Stock Split Details"
-msgstr "Detalles del canje de acciones"
+msgstr "Detalles del canje de valores"
 
 #: src/gnome/glade/stocks.glade:184
 msgid ""
@@ -4432,10 +4434,13 @@ msgid ""
 "For stock mergers (negative splits) use a negative value for the share distribution.\n"
 "You can also enter a description of the transaction, or accept the default one."
 msgstr ""
+"Introduzca la fecha y el n�mero de acciones que ha ganado o perdido por el canje de valores.\n"
+"Para fusiones, use un valor negativo para la cantidad de acciones recibidas.\n"
+"Tambi�n puede introducir una descripci�n del asiento o aceptar el valor por omisi�n."
 
 #: src/gnome/glade/stocks.glade:244
 msgid "Share Distribution:"
-msgstr "Distribuci�n de Acciones:"
+msgstr "Acciones recibidas:"
 
 #: src/gnome/glade/stocks.glade:349
 msgid ""
@@ -4447,17 +4452,19 @@ msgstr ""
 
 #: src/gnome/glade/stocks.glade:390
 msgid "New Price:"
-msgstr "Nuevo Precio:"
+msgstr "Precio nuevo:"
 
 #: src/gnome/glade/stocks.glade:472 src/gnome/glade/stocks.glade:611
 msgid "Cash In Lieu"
-msgstr ""
+msgstr "Efectivo en compensaci�n al canje"
 
 #: src/gnome/glade/stocks.glade:493
 msgid ""
 "If you received a cash disbursement as a result of the stock split,\n"
 "enter the details of that payment here. Otherwise, just click `Next'."
 msgstr ""
+"Si ha recibido un desembolso de efectivo por el canje de valores,\n"
+"introduzca los detalles de ese pago aqu�. Sino, pulse �Siguiente�."
 
 #: src/gnome/glade/stocks.glade:545
 msgid "Cash Amount:"
@@ -4473,6 +4480,9 @@ msgid ""
 "You may also press `Back' to review your choices, or `Cancel' to\n"
 "quit without making any changes."
 msgstr ""
+"Si ha terminado de crear el canje de valores, pulse �Finalizar�.\n"
+"Tambi�n puede pulsar �Atr�s� para revisar los datos\n"
+"o �Cancelar� para salir sin hacer ning�n cambio."
 
 #: src/gnome/glade/tax.glade:22 src/gnome/glade/tax.glade:244
 msgid "Tax Information"
@@ -4581,7 +4591,7 @@ msgstr "usuario:editor de cotizaciones"
 
 #: src/gnome/dialog-price-edit-db.c:76
 msgid "user:stock-split"
-msgstr ""
+msgstr "usuario:split de acciones"
 
 #: src/gnome/dialog-price-edit-db.c:77
 msgid "user:xfer-dialog"
@@ -4886,28 +4896,28 @@ msgid ""
 "You must either enter a valid cash amount\n"
 "or leave it blank."
 msgstr ""
-"Debe introducir una cantidad v�lida de dinero\n"
+"Debe introducir una cantidad v�lida de efectivo\n"
 "o dejarlo en blanco."
 
 #: src/gnome/druid-stock-split.c:326
 msgid "The cash distribution must be positive."
-msgstr ""
+msgstr "El efectivo recibido debe ser positivo."
 
 #: src/gnome/druid-stock-split.c:339
 msgid ""
 "You must select an income account\n"
 "for the cash distribution."
 msgstr ""
-"Debe seleccionar una cuenta de ingresos\n"
-"para la distribuci�n del dinero."
+"Debe seleccionar una cuenta de ingreso\n"
+"para el efectivo recibido."
 
 #: src/gnome/druid-stock-split.c:349
 msgid ""
 "You must select an asset account\n"
 "for the cash distribution."
 msgstr ""
-"Debe seleccionar una cuenta de activos\n"
-"para la distribuci�n de dinero en met�lico."
+"Debe seleccionar una cuenta de activo\n"
+"para el efectivo recibido."
 
 #: src/gnome/druid-stock-split.c:442
 msgid "Error adding price."
@@ -4915,7 +4925,7 @@ msgstr "Error al a�adir precio."
 
 #: src/gnome/druid-stock-split.c:731
 msgid "You don't have any stock accounts with balances!"
-msgstr ""
+msgstr "�No tiene ninguna cuenta de valores con saldo!"
 
 #: src/gnome/gnc-network.c:168
 msgid "Enter GnuCash Network passphrase:"
@@ -5124,7 +5134,7 @@ msgstr "Conciliar la cuenta seleccionada"
 
 #: src/gnome/window-acct-tree.c:1005 src/gnome/window-acct-tree.c:1350
 msgid "Stock S_plit..."
-msgstr "Canje de Valores..."
+msgstr "Canje de _valores..."
 
 #: src/gnome/window-acct-tree.c:1014 src/gnome/window-acct-tree.c:1275
 msgid "_New Account..."
@@ -5540,7 +5550,7 @@ msgid "<No information>"
 msgstr "<Sin informaci�n>"
 
 #: src/gnome/gnc-split-reg.c:902
-#: src/register/ledger-core/split-register-control.c:1462
+#: src/register/ledger-core/split-register-control.c:1467
 #: src/register/ledger-core/split-register.c:496
 msgid ""
 "The current transaction has been changed.\n"
@@ -7261,7 +7271,7 @@ msgstr ""
 msgid "%s at %s (code %s)"
 msgstr "%s en %s (c�digo %s)"
 
-#: src/import-export/hbci/druid-hbci-initial.c:562
+#: src/import-export/hbci/druid-hbci-initial.c:490
 msgid ""
 "You have changed the HBCI version. GnuCash will now need to \n"
 "update various system parameters, including the account list.\n"
@@ -7271,7 +7281,7 @@ msgstr ""
 "par�metros del sistema, incluyendo el plan de cuentas. Pulse \n"
 "�Aceptar� para continuar actualizando el sistema y el plan de cuentas."
 
-#: src/import-export/hbci/druid-hbci-initial.c:605
+#: src/import-export/hbci/druid-hbci-initial.c:533
 #, c-format
 msgid ""
 "Enter account id for new account \n"
@@ -7280,15 +7290,15 @@ msgstr ""
 "Introduzca identificador de cuenta para nueva\n"
 "cuenta en el banco %s (c�digo de banco %s):"
 
-#: src/import-export/hbci/druid-hbci-initial.c:620
+#: src/import-export/hbci/druid-hbci-initial.c:548
 msgid "An account with this account id at this bank already exists."
 msgstr "Una cuenta con este mismo c�digo de cuenta existe en este banco."
 
-#: src/import-export/hbci/druid-hbci-initial.c:1057
+#: src/import-export/hbci/druid-hbci-initial.c:985
 msgid "Default Customer"
 msgstr "Cliente por omisi�n"
 
-#: src/import-export/hbci/druid-hbci-initial.c:1549
+#: src/import-export/hbci/druid-hbci-initial.c:1477
 msgid ""
 "Since the cryptographic keys of the bank cannot be verified,\n"
 "you should stop contacting this Server Internet Address\n"
@@ -7433,10 +7443,49 @@ msgstr ""
 "Su soporte de seguridad no est� soportado. No se ha encontrado\n"
 "un plugin adecuado para ese soporte. Abortando."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:494 intl-scm/guile-strings.c:1277
+#: src/import-export/hbci/gnc-hbci-utils.c:499 intl-scm/guile-strings.c:1277
 #: intl-scm/guile-strings.c:1317
 msgid "Unspecified"
 msgstr "Sin especificar"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:607
+msgid "Choose HBCI bank"
+msgstr "Elegir banco HBCI"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:608
+msgid ""
+"More than one HBCI bank is available for \n"
+"the requested operation. Please choose \n"
+"the one that should be used."
+msgstr ""
+
+#: src/import-export/hbci/gnc-hbci-utils.c:677
+#: src/import-export/hbci/gnc-hbci-utils.c:753
+#, c-format
+msgid "%s (%s) at bank %s (%s)"
+msgstr "%s (%s) en el banco %s (%s)"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:687
+msgid "Choose HBCI customer"
+msgstr "Elegir cliente HBCI"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:688
+msgid ""
+"More than one HBCI customer is available for \n"
+"the requested operation. Please choose \n"
+"the one that should be used."
+msgstr ""
+
+#: src/import-export/hbci/gnc-hbci-utils.c:763
+msgid "Choose HBCI user"
+msgstr "Elegir usuario HBCI"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:764
+msgid ""
+"More than one HBCI user is available for \n"
+"the requested operation. Please choose \n"
+"the one that should be used."
+msgstr ""
 
 #: src/import-export/hbci/gncmod-hbci.c:89
 msgid "HBCI Get Balance"
@@ -7474,14 +7523,14 @@ msgstr ""
 msgid "Online Actions"
 msgstr "Acciones online"
 
-#: src/import-export/hbci/hbci-interaction.c:43 intl-scm/guile-strings.c:433
+#: src/import-export/hbci/hbci-interaction.c:44 intl-scm/guile-strings.c:433
 #: intl-scm/guile-strings.c:1209 intl-scm/guile-strings.c:1215
 #: intl-scm/guile-strings.c:1221 intl-scm/guile-strings.c:1227
 #: intl-scm/guile-strings.c:1237 intl-scm/guile-strings.c:3851
 msgid "Online Banking & Importing"
 msgstr "Operaciones e importaci�n online"
 
-#: src/import-export/hbci/hbci-interaction.c:192
+#: src/import-export/hbci/hbci-interaction.c:184
 #, c-format
 msgid ""
 "Please enter and confirm new PIN for \n"
@@ -7492,18 +7541,18 @@ msgstr ""
 "el usuario �%s� del banco �%s�,\n"
 "con al menos %d caracteres."
 
-#: src/import-export/hbci/hbci-interaction.c:201
+#: src/import-export/hbci/hbci-interaction.c:193
 #, c-format
 msgid ""
 "Please enter and confirm a new PIN for \n"
-"user '%s' at unknown bank,\n"
+"user '%s',\n"
 "with at least %d characters."
 msgstr ""
-"Introduzca y confirme un nuevo PIN para\n"
-"el usuario �%s� del banco desconocido,\n"
+"Introduzca y confirme nuevo PIN para \n"
+"el usuario �%s�,\n"
 "con al menos %d caracteres."
 
-#: src/import-export/hbci/hbci-interaction.c:208
+#: src/import-export/hbci/hbci-interaction.c:200
 #, c-format
 msgid ""
 "Please enter and confirm a new PIN\n"
@@ -7512,7 +7561,7 @@ msgstr ""
 "Introduzca y confirme un nuevo PIN\n"
 "con al menos %d caracteres."
 
-#: src/import-export/hbci/hbci-interaction.c:229
+#: src/import-export/hbci/hbci-interaction.c:221
 #, c-format
 msgid ""
 "Please enter PIN for \n"
@@ -7521,7 +7570,7 @@ msgstr ""
 "Introduzca el PIN para\n"
 "el usuario �%s� del banco �%s�."
 
-#: src/import-export/hbci/hbci-interaction.c:236
+#: src/import-export/hbci/hbci-interaction.c:228
 #, c-format
 msgid ""
 "Please enter PIN for \n"
@@ -7530,15 +7579,15 @@ msgstr ""
 "Introduzca el PIN para el \n"
 "usuario �%s� en banco desconocido."
 
-#: src/import-export/hbci/hbci-interaction.c:242
+#: src/import-export/hbci/hbci-interaction.c:234
 msgid ""
-"Please enter PIN for \n"
-"unknown user at unknown bank."
+"Please enter the PIN for \n"
+"the newly created user."
 msgstr ""
-"Introduzca el PIN para el usuario\n"
-"desconocido en el banco desconocido."
+"Introduzca el PIN para \n"
+"el usuario reci�n creado."
 
-#: src/import-export/hbci/hbci-interaction.c:259
+#: src/import-export/hbci/hbci-interaction.c:251
 #, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
@@ -7547,25 +7596,25 @@ msgstr ""
 "El PIN debe tener al menos %d caracteres.\n"
 "�Quiere intentarlo de nuevo?"
 
-#: src/import-export/hbci/hbci-interaction.c:310
+#: src/import-export/hbci/hbci-interaction.c:303
 #, c-format
 msgid ""
-"Please make sure the key file for \n"
-"user '%s' at bank '%s' can be accessed."
+"Please make sure the key file for user '%s' at bank '%s' can be \n"
+"accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
+"the key file is on a floppy disk or other removable media, please make \n"
+"sure the floppy disk or medium is correctly mounted."
 msgstr ""
-"Asegurese de que el archivo con la clave del\n"
-"usuario �%s� del banco �%s� puede accederse."
 
-#: src/import-export/hbci/hbci-interaction.c:315
+#: src/import-export/hbci/hbci-interaction.c:311
 #, c-format
 msgid ""
-"Please make sure the key file for \n"
-"user '%s' at unknown bank can be accessed."
+"Please make sure the key file for user '%s' can be \n"
+"accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
+"the key file is on a floppy disk or other removable media, please make \n"
+"sure the floppy disk or medium is correctly mounted."
 msgstr ""
-"Asegurese de que el archivo con la clave para el\n"
-"usuario �%s� en banco desconocido puede ser accedido."
 
-#: src/import-export/hbci/hbci-interaction.c:323
+#: src/import-export/hbci/hbci-interaction.c:321
 #, c-format
 msgid ""
 "Please insert chip card for \n"
@@ -7574,32 +7623,33 @@ msgstr ""
 "Introduzca tarjeta chip para el\n"
 "usuario �%s� del banco �%s�."
 
-#: src/import-export/hbci/hbci-interaction.c:328
+#: src/import-export/hbci/hbci-interaction.c:326
 #, c-format
 msgid ""
 "Please insert chip card for \n"
-"user '%s' at unknown bank."
+"user '%s'."
 msgstr ""
-"Introduzca la tarjeta chip para el\n"
-"usuario �%s� del banco desconocido."
+"Introduzca tarjeta chip para el\n"
+"usuario �%s�."
 
-#: src/import-export/hbci/hbci-interaction.c:337
+#: src/import-export/hbci/hbci-interaction.c:336
 msgid ""
-"Please make sure the key file for \n"
-"unknown user at unknown bank can be accessed."
+"Please make sure the key file for the newly created user can be \n"
+"accessed. If you want to create the key file on your harddisk, simply \n"
+"press 'Ok'. If you want to create the key on a floppy disk or other \n"
+"removable media, please make sure the floppy disk or medium is \n"
+"correctly mounted."
 msgstr ""
-"Asegurese de que el archivo con la clave del usuario\n"
-"desconocido en el banco desconocido puede accederse."
 
-#: src/import-export/hbci/hbci-interaction.c:342
+#: src/import-export/hbci/hbci-interaction.c:344
 msgid ""
 "Please insert chip card for \n"
-"unknown user at unknown bank."
+"the newly created user."
 msgstr ""
-"Introduzca la tarjeta chip para el \n"
-"usuario desconocido del banco desconocido."
+"Introduzca tarjeta chip para el \n"
+"usuario usuario reci�n creado."
 
-#: src/import-export/hbci/hbci-interaction.c:376
+#: src/import-export/hbci/hbci-interaction.c:378
 #, c-format
 msgid ""
 "The key file does not seem to be the correct \n"
@@ -7610,18 +7660,18 @@ msgstr ""
 "para el usuario �%s� en el banco �%s�.\n"
 "Compruebe que el archivo puede ser accedido."
 
-#: src/import-export/hbci/hbci-interaction.c:382
+#: src/import-export/hbci/hbci-interaction.c:384
 #, c-format
 msgid ""
 "The key file does not seem to be the correct \n"
-"file for user '%s' at unknown bank. Please make \n"
-"sure the correct key file can be accessed."
+"file for user '%s'. Please make sure the \n"
+"correct key file can be accessed."
 msgstr ""
-"El archivo de clave no parece ser correcto para\n"
-"el usuario �%s� en banco desconocido. Asegurese\n"
-"de que el archivo de clave puede ser accedido."
+"El archivo de clave no parece ser correcto \n"
+"para el usuario �%s�. Compruebe \n"
+"que el archivo correcto puede ser accedido."
 
-#: src/import-export/hbci/hbci-interaction.c:391
+#: src/import-export/hbci/hbci-interaction.c:393
 #, c-format
 msgid ""
 "Please insert the correct chip card for \n"
@@ -7630,34 +7680,34 @@ msgstr ""
 "Introduzca la tarjeta chip correspondiente\n"
 "al usuario �%s� del banco �%s�."
 
-#: src/import-export/hbci/hbci-interaction.c:396
+#: src/import-export/hbci/hbci-interaction.c:398
 #, c-format
 msgid ""
 "Please insert the correct chip card for \n"
-"user '%s' at unknown bank."
+"user '%s'."
 msgstr ""
-"Introduzca la tarjeta chip correspondiente al\n"
-"usuario �%s� del banco desconocido."
+"Introduzca la tarjeta chip correspondiente\n"
+"al usuario �%s�."
 
-#: src/import-export/hbci/hbci-interaction.c:405
+#: src/import-export/hbci/hbci-interaction.c:407
 msgid ""
 "The key file does not seem to be the correct \n"
-"file for unknown user at unknown bank. Please make \n"
+"file for the newly created user. Please make \n"
 "sure the correct key file can be accessed."
 msgstr ""
-"El archivo de clave no parece ser correcto para\n"
-"usuario desconocido de banco desconocido. Asegurese\n"
-"de que el archivo de clave puede ser accedido."
+"El archivo de clave no parece ser el correcto \n"
+"para el usuario reci�n creado. Compruebe \n"
+"que el archivo correcto puede ser accedido."
 
-#: src/import-export/hbci/hbci-interaction.c:411
+#: src/import-export/hbci/hbci-interaction.c:413
 msgid ""
 "Please insert the correct chip card for \n"
-"unknown user at unknown bank."
+"the newly created user."
 msgstr ""
-"Introduzca la tarjeta chip correspondiente al\n"
-"usuario desconocido del banco desconocido."
+"Introduzca la tarjeta chip correspondiente\n"
+"al usuario reci�n creado."
 
-#: src/import-export/hbci/hbci-interaction.c:495
+#: src/import-export/hbci/hbci-interaction.c:497
 #, c-format
 msgid ""
 "Please enter PIN for \n"
@@ -7668,25 +7718,25 @@ msgstr ""
 "el usuario �%s� del banco �%s�\n"
 "en el teclado de su lector de tarjetas chip."
 
-#: src/import-export/hbci/hbci-interaction.c:503
+#: src/import-export/hbci/hbci-interaction.c:505
 #, c-format
 msgid ""
 "Please enter PIN for \n"
-"user '%s' at unknown bank\n"
+"user '%s'\n"
 "at the keypad of your chip card reader."
 msgstr ""
-"Introduzca el PIN para el \n"
-"usuario �%s� en banco desconocido\n"
+"Introduzca PIN para \n"
+"el usuario �%s�\n"
 "en el teclado de su lector de tarjetas chip."
 
-#: src/import-export/hbci/hbci-interaction.c:510
+#: src/import-export/hbci/hbci-interaction.c:512
 msgid ""
 "Please enter PIN for \n"
-"unknown user at unknown bank\n"
+"the newly created user \n"
 "at the keypad of your chip card reader."
 msgstr ""
-"Introduzca el PIN para el usuario\n"
-"desconocido en el banco desconocido\n"
+"Introduzca PIN para \n"
+"el usuario reci�n creado \n"
 "en el teclado de su lector de tarjetas chip."
 
 #: src/import-export/hbci/hbci-progressmon.c:98
@@ -7799,41 +7849,41 @@ msgstr "Actualizando el sistema local"
 msgid "Closing connection"
 msgstr "Cerrando la conexi�n"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:291
+#: src/import-export/hbci/dialog-hbcitrans.c:295
 msgid "Enter an Online Direct Debit Note"
 msgstr ""
 
-#: src/import-export/hbci/dialog-hbcitrans.c:294
+#: src/import-export/hbci/dialog-hbcitrans.c:298
 msgid "Debited Account Owner"
 msgstr "Titular de la cuenta cargada"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:296
+#: src/import-export/hbci/dialog-hbcitrans.c:300
 msgid "Debited Account Number"
 msgstr "N�mero de cuenta a cargada"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:298
+#: src/import-export/hbci/dialog-hbcitrans.c:302
 msgid "Debited Account Bank Code"
 msgstr "C�digo de banco de la cuenta cargada"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:301
+#: src/import-export/hbci/dialog-hbcitrans.c:305
 msgid "Credited Account Owner"
 msgstr "Due�o de la cuenta de cr�dito"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:303
+#: src/import-export/hbci/dialog-hbcitrans.c:307
 msgid "Credited Account Number"
 msgstr "N�mero de cuenta de cr�dito"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:305
+#: src/import-export/hbci/dialog-hbcitrans.c:309
 msgid "Credited Account Bank Code"
 msgstr "C�digo del banco de la cuenta de cr�dito"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:326
-#: src/import-export/hbci/dialog-hbcitrans.c:647
-#: src/import-export/hbci/dialog-hbcitrans.c:656
+#: src/import-export/hbci/dialog-hbcitrans.c:330
+#: src/import-export/hbci/dialog-hbcitrans.c:661
+#: src/import-export/hbci/dialog-hbcitrans.c:670
 msgid "(unknown)"
 msgstr "(desconocido)"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:401
+#: src/import-export/hbci/dialog-hbcitrans.c:405
 msgid ""
 "The amount is zero or the amount field could not be \n"
 "interpreted correctly. You might have mixed up decimal \n"
@@ -7850,7 +7900,7 @@ msgstr ""
 "Esta no es una tarea de transferencia online v�lida.\n"
 "�Quiere introducir la tarea de nuevo?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:489
+#: src/import-export/hbci/dialog-hbcitrans.c:503
 #, c-format
 msgid ""
 "The internal check of the destination account number '%s' \n"
@@ -7863,7 +7913,7 @@ msgstr ""
 "que el n�mero de cuenta puede tener un error. �Enviar la tarea de\n"
 "transferencia online con este n�mero de cuenta de todas formas?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:583
+#: src/import-export/hbci/dialog-hbcitrans.c:597
 msgid ""
 "The job was successfully sent to the bank, but the \n"
 "bank is refusing to execute the job. Please check \n"
@@ -7881,34 +7931,43 @@ msgstr ""
 "\n"
 "�Quiere introducir la tarea de nuevo?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:686
+#: src/import-export/hbci/dialog-hbcitrans.c:700
 msgid "Enter name for new template:"
 msgstr "Introducir nombre para la plantilla nueva:"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:207
+#: src/import-export/hbci/gnc-hbci-getbalance.c:221
 msgid ""
 "The downloaded HBCI Balance was zero.\n"
-"It seems as if your bank does not support Balance download \n"
-"in this HBCI version. You should choose a higher HBCI version \n"
-"number in the HBCI Setup. After that, try again to download \n"
-"the HBCI Balance.\n"
+"Either this is the correct balance, or your bank does not \n"
+"support Balance download in this HBCI version. In the latter \n"
+"case you should choose a higher HBCI version number in the HBCI \n"
+"Setup. After that, try again to download the HBCI Balance.\n"
 msgstr ""
 "El saldo HBCI descargado ha sido cero.\n"
-"Parece como si su banco no soportara la descarga de saldo\n"
-"en esta versi�n HBCI. Deber�a elegir una versi�n HBCI superior\n"
-"en la configuraci�n HBCI. Despu�s intente de nuevo descargar\n"
-"el balance HBCI.\n"
+"O este es el saldo correcto, o su banco no soporta la descarga \n"
+"del saldo en esta versi�n HBCI. Deber�a elegir una versi�n \n"
+"HBCI superior en la configuraci�n HBCI. Despu�s intente de \n"
+"nuevo descargar el saldo HBCI.\n"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:223
+#: src/import-export/hbci/gnc-hbci-getbalance.c:237
 #, c-format
 msgid ""
 "Result of HBCI job: \n"
 "Account booked balance is %s%s\n"
-"Reconcile account now?"
 msgstr ""
-"Resultado de la tarea HBCI:\n"
+"Resultado de la tarea HBCI: \n"
 "El saldo anotado de la cuenta es %s%s\n"
-"�Conciliar la cuenta ahora?"
+
+#: src/import-export/hbci/gnc-hbci-getbalance.c:248
+#, c-format
+msgid ""
+"For your information: This account also \n"
+"has a noted balance of %s%s\n"
+msgstr ""
+
+#: src/import-export/hbci/gnc-hbci-getbalance.c:252
+msgid "Reconcile account now?"
+msgstr "�Conciliar cuenta ahora?"
 
 #: src/import-export/hbci/gnc-hbci-gettrans.c:230
 msgid "The HBCI import returned no transactions for the selected time period."
@@ -8649,11 +8708,11 @@ msgstr "Ajustar el total actual para la partida de la cuenta"
 msgid "Adjust other account split total"
 msgstr "Ajustar otra partida de total de otra cuenta"
 
-#: src/register/ledger-core/split-register-control.c:1060
+#: src/register/ledger-core/split-register-control.c:1065
 msgid "You need to expand the transaction in order to modify its exchange rates."
 msgstr "Debe desglosar el asiento para poder cambiar sus tipos de cambio."
 
-#: src/register/ledger-core/split-register-control.c:1533
+#: src/register/ledger-core/split-register-control.c:1538
 msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
@@ -11776,7 +11835,7 @@ msgstr "Subtotal primario"
 
 #: intl-scm/guile-strings.c:2425
 msgid "Primary Subtotal for Date Key"
-msgstr ""
+msgstr "Subtotal primario para la clave Fecha"
 
 #: intl-scm/guile-strings.c:2427
 msgid "Secondary Key"
@@ -13951,9 +14010,110 @@ msgstr ""
 #~ "(%d transaction automatically created)There are no Scheduled Transactions to be entered at this time.\n"
 #~ "(%d transactions automatically created)"
 #~ msgstr ""
-#~ "No hay asientos programados que introducir en este momento.\n"
-#~ "(%d asiento creado autom�ticamente)No hay asientos programados que introducir en este momento.\n"
+#~ "No�hay�asientos�programados�que�introducir�en�este�momento.\n"
+#~ "(%d�asiento�creado�autom�ticamente)No hay asientos programados que introducir en este momento.\n"
 #~ "(%d asientos creados autom�ticamente)"
+
+#~ msgid ""
+#~ "Please enter and confirm a new PIN for \n"
+#~ "user '%s' at unknown bank,\n"
+#~ "with at least %d characters."
+#~ msgstr ""
+#~ "Introduzca y confirme un nuevo PIN para\n"
+#~ "el usuario ÃÂ«%sÃÂ» del banco desconocido,\n"
+#~ "con al menos %d caracteres."
+
+#~ msgid ""
+#~ "Please enter PIN for \n"
+#~ "unknown user at unknown bank."
+#~ msgstr ""
+#~ "Introduzca el PIN para el usuario\n"
+#~ "desconocido en el banco desconocido."
+
+#~ msgid ""
+#~ "Please make sure the key file for \n"
+#~ "user '%s' at bank '%s' can be accessed."
+#~ msgstr ""
+#~ "Asegurese de que el archivo con la clave del\n"
+#~ "usuario ÃÂ«%sÃÂ» del banco ÃÂ«%sÃÂ» puede accederse."
+
+#~ msgid ""
+#~ "Please make sure the key file for \n"
+#~ "user '%s' at unknown bank can be accessed."
+#~ msgstr ""
+#~ "Asegurese de que el archivo con la clave para el\n"
+#~ "usuario ÃÂ«%sÃÂ» en banco desconocido puede ser accedido."
+
+#~ msgid ""
+#~ "Please insert chip card for \n"
+#~ "user '%s' at unknown bank."
+#~ msgstr ""
+#~ "Introduzca la tarjeta chip para el\n"
+#~ "usuario ÃÂ«%sÃÂ» del banco desconocido."
+
+#~ msgid ""
+#~ "Please make sure the key file for \n"
+#~ "unknown user at unknown bank can be accessed."
+#~ msgstr ""
+#~ "Asegurese de que el archivo con la clave del usuario\n"
+#~ "desconocido en el banco desconocido puede accederse."
+
+#~ msgid ""
+#~ "Please insert chip card for \n"
+#~ "unknown user at unknown bank."
+#~ msgstr ""
+#~ "Introduzca la tarjeta chip para el \n"
+#~ "usuario desconocido del banco desconocido."
+
+#~ msgid ""
+#~ "The key file does not seem to be the correct \n"
+#~ "file for user '%s' at unknown bank. Please make \n"
+#~ "sure the correct key file can be accessed."
+#~ msgstr ""
+#~ "El archivo de clave no parece ser correcto para\n"
+#~ "el usuario ÃÂ«%sÃÂ» en banco desconocido. Asegurese\n"
+#~ "de que el archivo de clave puede ser accedido."
+
+#~ msgid ""
+#~ "Please insert the correct chip card for \n"
+#~ "user '%s' at unknown bank."
+#~ msgstr ""
+#~ "Introduzca la tarjeta chip correspondiente al\n"
+#~ "usuario ÃÂ«%sÃÂ» del banco desconocido."
+
+#~ msgid ""
+#~ "The key file does not seem to be the correct \n"
+#~ "file for unknown user at unknown bank. Please make \n"
+#~ "sure the correct key file can be accessed."
+#~ msgstr ""
+#~ "El archivo de clave no parece ser correcto para\n"
+#~ "usuario desconocido de banco desconocido. Asegurese\n"
+#~ "de que el archivo de clave puede ser accedido."
+
+#~ msgid ""
+#~ "Please insert the correct chip card for \n"
+#~ "unknown user at unknown bank."
+#~ msgstr ""
+#~ "Introduzca la tarjeta chip correspondiente al\n"
+#~ "usuario desconocido del banco desconocido."
+
+#~ msgid ""
+#~ "Please enter PIN for \n"
+#~ "user '%s' at unknown bank\n"
+#~ "at the keypad of your chip card reader."
+#~ msgstr ""
+#~ "Introduzca el PIN para el \n"
+#~ "usuario ÃÂ«%sÃÂ» en banco desconocido\n"
+#~ "en el teclado de su lector de tarjetas chip."
+
+#~ msgid ""
+#~ "Please enter PIN for \n"
+#~ "unknown user at unknown bank\n"
+#~ "at the keypad of your chip card reader."
+#~ msgstr ""
+#~ "Introduzca el PIN para el usuario\n"
+#~ "desconocido en el banco desconocido\n"
+#~ "en el teclado de su lector de tarjetas chip."
 
 #~ msgid "Type Menu"
 #~ msgstr "Menu de Tipo"
@@ -14028,7 +14188,7 @@ msgstr ""
 #~ msgstr "Abajo"
 
 #~ msgid "Centimeters"
-#~ msgstr "Centímetros"
+#~ msgstr "CentÃÂÃÂ­metros"
 
 #~ msgid "Custom"
 #~ msgstr "Personalizado"
@@ -14040,7 +14200,7 @@ msgstr ""
 #~ msgstr "Medio"
 
 #~ msgid "Millimeters"
-#~ msgstr "Milímetros"
+#~ msgstr "MilÃÂÃÂ­metros"
 
 #~ msgid "Points"
 #~ msgstr "Puntos"
@@ -14052,88 +14212,88 @@ msgstr ""
 #~ msgstr "Arriba"
 
 #~ msgid "10th"
-#~ msgstr "10º"
+#~ msgstr "10ÃÂÃÂº"
 
 #~ msgid "11th"
-#~ msgstr "11º"
+#~ msgstr "11ÃÂÃÂº"
 
 #~ msgid "12th"
-#~ msgstr "12º"
+#~ msgstr "12ÃÂÃÂº"
 
 #~ msgid "13th"
-#~ msgstr "13º"
+#~ msgstr "13ÃÂÃÂº"
 
 #~ msgid "14th"
-#~ msgstr "14º"
+#~ msgstr "14ÃÂÃÂº"
 
 #~ msgid "15th"
-#~ msgstr "15º"
+#~ msgstr "15ÃÂÃÂº"
 
 #~ msgid "16th"
-#~ msgstr "16º"
+#~ msgstr "16ÃÂÃÂº"
 
 #~ msgid "17th"
-#~ msgstr "17º"
+#~ msgstr "17ÃÂÃÂº"
 
 #~ msgid "18th"
-#~ msgstr "18º"
+#~ msgstr "18ÃÂÃÂº"
 
 #~ msgid "19th"
-#~ msgstr "19º"
+#~ msgstr "19ÃÂÃÂº"
 
 #~ msgid "1st"
-#~ msgstr "1º"
+#~ msgstr "1ÃÂÃÂº"
 
 #~ msgid "20th"
-#~ msgstr "20º"
+#~ msgstr "20ÃÂÃÂº"
 
 #~ msgid "21st"
-#~ msgstr "21º"
+#~ msgstr "21ÃÂÃÂº"
 
 #~ msgid "22nd"
-#~ msgstr "22º"
+#~ msgstr "22ÃÂÃÂº"
 
 #~ msgid "23rd"
-#~ msgstr "23º"
+#~ msgstr "23ÃÂÃÂº"
 
 #~ msgid "24th"
-#~ msgstr "24º"
+#~ msgstr "24ÃÂÃÂº"
 
 #~ msgid "25th"
-#~ msgstr "25º"
+#~ msgstr "25ÃÂÃÂº"
 
 #~ msgid "26th"
-#~ msgstr "26º"
+#~ msgstr "26ÃÂÃÂº"
 
 #~ msgid "27th"
-#~ msgstr "27º"
+#~ msgstr "27ÃÂÃÂº"
 
 #~ msgid "28th"
-#~ msgstr "28º"
+#~ msgstr "28ÃÂÃÂº"
 
 #~ msgid "2nd"
-#~ msgstr "2º"
+#~ msgstr "2ÃÂÃÂº"
 
 #~ msgid "3rd"
-#~ msgstr "3º"
+#~ msgstr "3ÃÂÃÂº"
 
 #~ msgid "4th"
-#~ msgstr "4º"
+#~ msgstr "4ÃÂÃÂº"
 
 #~ msgid "5th"
-#~ msgstr "5º"
+#~ msgstr "5ÃÂÃÂº"
 
 #~ msgid "6th"
-#~ msgstr "6º"
+#~ msgstr "6ÃÂÃÂº"
 
 #~ msgid "7th"
-#~ msgstr "7º"
+#~ msgstr "7ÃÂÃÂº"
 
 #~ msgid "8th"
-#~ msgstr "9º"
+#~ msgstr "9ÃÂÃÂº"
 
 #~ msgid "9th"
-#~ msgstr "9º"
+#~ msgstr "9ÃÂÃÂº"
 
 #~ msgid "Apr, Jul, Dec"
 #~ msgstr "Abr, Jul, Dic"
@@ -14152,7 +14312,7 @@ msgstr ""
 #~ msgstr "Crear un archivo nuevo"
 
 #~ msgid "Current Year"
-#~ msgstr "Año actual"
+#~ msgstr "AÃÂÃÂ±o actual"
 
 #~ msgid "December"
 #~ msgstr "Diciembre"
@@ -14212,7 +14372,7 @@ msgstr ""
 #~ msgstr "Noviembre"
 
 #~ msgid "Now + 1 Year"
-#~ msgstr "Ahora + 1 año"
+#~ msgstr "Ahora + 1 aÃÂÃÂ±o"
 
 #~ msgid "October"
 #~ msgstr "Octubre"
@@ -14221,19 +14381,19 @@ msgstr ""
 #~ msgstr "Septiembre"
 
 #~ msgid "[29th/last]"
-#~ msgstr "[29º/último]"
+#~ msgstr "[29ÃÂÃÂº/ÃÂÃÂºltimo]"
 
 #~ msgid "[30th/last]"
-#~ msgstr "[30º/último]"
+#~ msgstr "[30ÃÂÃÂº/ÃÂÃÂºltimo]"
 
 #~ msgid "[31st/last]"
-#~ msgstr "[31º/último]"
+#~ msgstr "[31ÃÂÃÂº/ÃÂÃÂºltimo]"
 
 #~ msgid "months"
 #~ msgstr "meses"
 
 #~ msgid "years"
-#~ msgstr "años"
+#~ msgstr "aÃÂÃÂ±os"
 
 #~ msgid "GnuCash"
 #~ msgstr "GnuCash"
@@ -14252,7 +14412,7 @@ msgstr ""
 #~ "Would you like to record the change?"
 #~ msgstr ""
 #~ "El elemento actual ha cambiado.\n"
-#~ "¿Quiere grabarlo?"
+#~ "ÃÂÃÂ¿Quiere grabarlo?"
 
 #~ msgid "sample:Xfer:Account"
 #~ msgstr "ejemplo:trans:cuenta"
@@ -14261,13 +14421,13 @@ msgstr ""
 #~ msgstr "Meses:"
 
 #~ msgid "Years:"
-#~ msgstr "Años:"
+#~ msgstr "AÃÂÃÂ±os:"
 
 #~ msgid "Format:"
 #~ msgstr "Formato:"
 
 #~ msgid "Specify the format for the date with strftime(3) formatting codes."
-#~ msgstr "Especificar el formato de la fecha con códigos de formato strftime(3)"
+#~ msgstr "Especificar el formato de la fecha con cÃÂÃÂ³digos de formato strftime(3)"
 
 #~ msgid "%Y-%m-%d"
 #~ msgstr "%d-%m-%Y"
@@ -14276,10 +14436,10 @@ msgstr ""
 #~ msgstr "31 de Diciembre de 2000"
 
 #~ msgid "Use month number for date format."
-#~ msgstr "Usar el número de mes para el formato de fecha."
+#~ msgstr "Usar el nÃÂÃÂºmero de mes para el formato de fecha."
 
 #~ msgid "number"
-#~ msgstr "número"
+#~ msgstr "nÃÂÃÂºmero"
 
 #~ msgid "Use abbreviated month name for date format."
 #~ msgstr "Usar el nombre abreviado del mes para el formato de fecha."
@@ -14294,13 +14454,13 @@ msgstr ""
 #~ msgstr "nombre"
 
 #~ msgid "Include the century when printing the year. (E.g. 2001 instead of 01.)"
-#~ msgstr "Incluir la centuria al mostrar el año. (Por ejemplo, 2001 en vez de 01)"
+#~ msgstr "Incluir la centuria al mostrar el aÃÂÃÂ±o. (Por ejemplo, 2001 en vez de 01)"
 
 #~ msgid "include century"
 #~ msgstr "incluir centuria"
 
 #~ msgid "Number of Occurences:"
-#~ msgstr "Número de coincidencias"
+#~ msgstr "NÃÂÃÂºmero de coincidencias"
 
 #~ msgid "User ID"
 #~ msgstr "Identificador de usuario"
@@ -14320,7 +14480,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Loan Amount:"
-#~ msgstr "Cuenta de préstamo:"
+#~ msgstr "Cuenta de prÃÂÃÂ©stamo:"
 
 #, fuzzy
 #~ msgid "Payment Amount:"
@@ -14333,10 +14493,10 @@ msgstr ""
 #~ msgstr "Al menos"
 
 #~ msgid "At most"
-#~ msgstr "Como máximo"
+#~ msgstr "Como mÃÂÃÂ¡ximo"
 
 #~ msgid "At most "
-#~ msgstr "Como máximo "
+#~ msgstr "Como mÃÂÃÂ¡ximo "
 
 #, fuzzy
 #~ msgid "Balanced"
@@ -14344,7 +14504,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Case sensitive"
-#~ msgstr "¿Sensible a mayús/minús?"
+#~ msgstr "ÃÂÃÂ¿Sensible a mayÃÂÃÂºs/minÃÂÃÂºs?"
 
 #, fuzzy
 #~ msgid "Credit or Debit"
@@ -14378,7 +14538,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Find transactions whose Action contains:"
-#~ msgstr "Buscar transacciones cuya Descripción contenga:"
+#~ msgstr "Buscar transacciones cuya DescripciÃÂÃÂ³n contenga:"
 
 #~ msgid "Find transactions whose Balance status is:"
 #~ msgstr "Encontrar transacciones cuyo Saldo sea:"
@@ -14387,18 +14547,18 @@ msgstr ""
 #~ msgstr "Encontrar transacciones cuyo estado de Limpiado sea:"
 
 #~ msgid "Find transactions whose Description contains:"
-#~ msgstr "Buscar transacciones cuya Descripción contenga:"
+#~ msgstr "Buscar transacciones cuya DescripciÃÂÃÂ³n contenga:"
 
 #~ msgid "Find transactions whose Number contains:"
-#~ msgstr "Buscar transacciones cuyo Número contenga:"
+#~ msgstr "Buscar transacciones cuyo NÃÂÃÂºmero contenga:"
 
 #, fuzzy
 #~ msgid "Find transactions with the tag:"
-#~ msgstr "Buscar transacciones con una búsqueda."
+#~ msgstr "Buscar transacciones con una bÃÂÃÂºsqueda."
 
 #, fuzzy
 #~ msgid "Match Accounts"
-#~ msgstr "Coincidir Acción"
+#~ msgstr "Coincidir AcciÃÂÃÂ³n"
 
 #, fuzzy
 #~ msgid "Match Amount"
@@ -14414,16 +14574,16 @@ msgstr ""
 #~ msgstr "Coincidir Fecha"
 
 #~ msgid "Match Description"
-#~ msgstr "Coincidir Descripción"
+#~ msgstr "Coincidir DescripciÃÂÃÂ³n"
 
 #~ msgid "Match Memo"
 #~ msgstr "Coincidir Memo"
 
 #~ msgid "Match number of shares"
-#~ msgstr "Coincidir número de acciones"
+#~ msgstr "Coincidir nÃÂÃÂºmero de acciones"
 
 #~ msgid "Match share price"
-#~ msgstr "Coincidir cotización"
+#~ msgstr "Coincidir cotizaciÃÂÃÂ³n"
 
 #, fuzzy
 #~ msgid "Not Balanced"
@@ -14434,7 +14594,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Regular expression"
-#~ msgstr "Variable no permitida en la expresión"
+#~ msgstr "Variable no permitida en la expresiÃÂÃÂ³n"
 
 #~ msgid "Starting "
 #~ msgstr "Inicio "
@@ -14454,7 +14614,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Sort"
-#~ msgstr "Ordenar por Núm"
+#~ msgstr "Ordenar por NÃÂÃÂºm"
 
 #, fuzzy
 #~ msgid "noted balance"
@@ -14465,7 +14625,7 @@ msgstr ""
 #~ msgstr "Descuadre"
 
 #~ msgid "The Employee must be given an ID."
-#~ msgstr "El empleado debe tener un código."
+#~ msgstr "El empleado debe tener un cÃÂÃÂ³digo."
 
 #, fuzzy
 #~ msgid "GnuCash Manual"
@@ -14476,7 +14636,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Profit and Loss - %s to %s"
-#~ msgstr "Beneficios y Pérdidas - %s a %s"
+#~ msgstr "Beneficios y PÃÂÃÂ©rdidas - %s a %s"
 
 #, fuzzy
 #~ msgid "Tax Value"
@@ -14486,13 +14646,13 @@ msgstr ""
 #~ msgstr "Debe elegir una moneda."
 
 #~ msgid "No description"
-#~ msgstr "Sin descripción"
+#~ msgstr "Sin descripciÃÂÃÂ³n"
 
 #~ msgid "Set to default"
 #~ msgstr "Valor por defecto"
 
 #~ msgid "Set the option to its default value"
-#~ msgstr "Colocar la opción a su valor por defecto"
+#~ msgstr "Colocar la opciÃÂÃÂ³n a su valor por defecto"
 
 #~ msgid "Dec 31, 2000"
 #~ msgstr "Dic 31, 2000"
@@ -14504,7 +14664,7 @@ msgstr ""
 #~ msgstr "Presupuestos"
 
 #~ msgid "Add a new entry or subentry"
-#~ msgstr "Añadir una nueva entrada o subentrada"
+#~ msgstr "AÃÂÃÂ±adir una nueva entrada o subentrada"
 
 #~ msgid "Delete the selected entry or subentry"
 #~ msgstr "Borrar la entrada o subentrada seleccionada"
@@ -14522,13 +14682,13 @@ msgstr ""
 #~ msgstr "No Total"
 
 #~ msgid "Period:"
-#~ msgstr "Período:"
+#~ msgstr "PerÃÂÃÂ­odo:"
 
 #~ msgid "Mechanism:"
 #~ msgstr "Mecanismo:"
 
 #~ msgid "Grace Period:"
-#~ msgstr "Período de gracia:"
+#~ msgstr "PerÃÂÃÂ­odo de gracia:"
 
 #~ msgid "Nominal"
 #~ msgstr "Nominal"
@@ -14563,7 +14723,7 @@ msgstr ""
 #~ msgstr "_Preferencias..."
 
 #~ msgid "Open the global preferences dialog"
-#~ msgstr "Abrir el diálogo de preferencias global"
+#~ msgstr "Abrir el diÃÂÃÂ¡logo de preferencias global"
 
 #, fuzzy
 #~ msgid "_Settings"
@@ -14613,18 +14773,18 @@ msgstr ""
 #~ msgstr "_Registrar"
 
 #~ msgid "This selection will delete the whole transaction. This is what you usually want."
-#~ msgstr "Esta selección borrará toda la transacción. Esto es lo que normalmente quiere."
+#~ msgstr "Esta selecciÃÂÃÂ³n borrarÃÂÃÂ¡ toda la transacciÃÂÃÂ³n. Esto es lo que normalmente quiere."
 
 #, fuzzy
 #~ msgid ""
 #~ "This selection will delete the whole transaction.\n"
 #~ "\n"
 #~ "You would be deleting a transaction with reconciled splits!"
-#~ msgstr "Esta selección borrará toda la transacción. Esto es lo que normalmente quiere."
+#~ msgstr "Esta selecciÃÂÃÂ³n borrarÃÂÃÂ¡ toda la transacciÃÂÃÂ³n. Esto es lo que normalmente quiere."
 
 #, fuzzy
 #~ msgid "Warning: Just deleting all the other splits will make your account unbalanced. You probably shouldn't do this unless you're going to immediately add another split to bring the transaction back into balance."
-#~ msgstr "Aviso: Simplemente borrando todas las partidas hará que su cuenta no cuadre. Probablemente no debería hacer esto a no ser que inmediatamente añada otra partida para retornar la transacción al balance."
+#~ msgstr "Aviso: Simplemente borrando todas las partidas harÃÂÃÂ¡ que su cuenta no cuadre. Probablemente no deberÃÂÃÂ­a hacer esto a no ser que inmediatamente aÃÂÃÂ±ada otra partida para retornar la transacciÃÂÃÂ³n al balance."
 
 #, fuzzy
 #~ msgid "Set the search path for .scm files."
@@ -14640,13 +14800,13 @@ msgstr ""
 #~ msgstr "Quicken"
 
 #~ msgid "Vs. Categories"
-#~ msgstr "Vs. Categorías"
+#~ msgstr "Vs. CategorÃÂÃÂ­as"
 
 #~ msgid "Income/Expense"
 #~ msgstr "Ingresos/Gastos"
 
 #~ msgid "New Setup"
-#~ msgstr "Nueva Configuración"
+#~ msgstr "Nueva ConfiguraciÃÂÃÂ³n"
 
 #, fuzzy
 #~ msgid "Editing"
@@ -14661,14 +14821,14 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Reconciliation"
-#~ msgstr "Información de Conciliación"
+#~ msgstr "InformaciÃÂÃÂ³n de ConciliaciÃÂÃÂ³n"
 
 #, fuzzy
 #~ msgid "Record Keeping"
-#~ msgstr "Periódico"
+#~ msgstr "PeriÃÂÃÂ³dico"
 
 #~ msgid "Check Printing"
-#~ msgstr "Impresión de cheque"
+#~ msgstr "ImpresiÃÂÃÂ³n de cheque"
 
 #, fuzzy
 #~ msgid "Balance Tracking"
@@ -14701,7 +14861,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Select file for .TXF export"
-#~ msgstr "Colocar los parámetros para este informe"
+#~ msgstr "Colocar los parÃÂÃÂ¡metros para este informe"
 
 #~ msgid "Main Window"
 #~ msgstr "Ventana Principal"
@@ -14723,11 +14883,11 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Max Bal"
-#~ msgstr "Saldo Máx"
+#~ msgstr "Saldo MÃÂÃÂ¡x"
 
 #, fuzzy
 #~ msgid "Min Bal"
-#~ msgstr "Saldo Mín"
+#~ msgstr "Saldo MÃÂÃÂ­n"
 
 #, fuzzy
 #~ msgid "New User Account Setup"
@@ -14746,7 +14906,7 @@ msgstr ""
 #~ msgstr "Mostrar informe de Cartera de Existencias."
 
 #~ msgid "_Print Check... (unfinished!)"
-#~ msgstr "_Imprimir Cheque... (¡no terminado!)"
+#~ msgstr "_Imprimir Cheque... (ÃÂÃÂ¡no terminado!)"
 
 #, fuzzy
 #~ msgid "Account Chart"
@@ -14807,7 +14967,7 @@ msgstr ""
 #~ msgstr "Ordenar por fecha y subtotal cada mes"
 
 #~ msgid "Sort by date & subtotal each year"
-#~ msgstr "Ordenar por fecha y subtotal cada año"
+#~ msgstr "Ordenar por fecha y subtotal cada aÃÂÃÂ±o"
 
 #~ msgid "Transfer from/to (w/subtotal)"
 #~ msgstr "Transferir desde/hacia (c/subtotal)"
@@ -14820,11 +14980,11 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Transfer from/to code"
-#~ msgstr "Transferir desde/hacia código"
+#~ msgstr "Transferir desde/hacia cÃÂÃÂ³digo"
 
 #, fuzzy
 #~ msgid "Transfer from/to (w/subtotal) by code"
-#~ msgstr "Transferir desde/hacia (c/subtotal) por código"
+#~ msgstr "Transferir desde/hacia (c/subtotal) por cÃÂÃÂ³digo"
 
 #, fuzzy
 #~ msgid ""
@@ -14841,16 +15001,16 @@ msgstr ""
 #~ "You can re-enable tips from the General\n"
 #~ "section of the Preferences menu"
 #~ msgstr ""
-#~ "Ha deshabilitado el \"Consejo del Día\"\n"
-#~ "Puede reactivar los consejos en la sección\n"
-#~ "General del menú de Preferencias"
+#~ "Ha deshabilitado el \"Consejo del DÃÂÃÂ­a\"\n"
+#~ "Puede reactivar los consejos en la secciÃÂÃÂ³n\n"
+#~ "General del menÃÂÃÂº de Preferencias"
 
 #, fuzzy
 #~ msgid "Choose"
 #~ msgstr "Elegir"
 
 #~ msgid "Untitled"
-#~ msgstr "Sin Título"
+#~ msgstr "Sin TÃÂÃÂ­tulo"
 
 #, fuzzy
 #~ msgid "Write _Account Hierarchy"
@@ -14860,7 +15020,7 @@ msgstr ""
 #~ msgstr "_Cuentas"
 
 #~ msgid "Parameters"
-#~ msgstr "Parámetros"
+#~ msgstr "ParÃÂÃÂ¡metros"
 
 #, fuzzy
 #~ msgid "Close this report window"
@@ -14890,7 +15050,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Select the display value for the currency"
-#~ msgstr "Colocar los parámetros para este informe"
+#~ msgstr "Colocar los parÃÂÃÂ¡metros para este informe"
 
 #, fuzzy
 #~ msgid "Income by Account"
@@ -14959,7 +15119,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "< ^   Payer Name source"
-#~ msgstr "Precio de Cotización"
+#~ msgstr "Precio de CotizaciÃÂÃÂ³n"
 
 #, fuzzy
 #~ msgid "Use Indicated Default"
@@ -14975,11 +15135,11 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "This is a sample GnuCash report. See the guile (scheme) source code in "
-#~ msgstr "Este es un ejemplo de informe de GnuCash. Vea el código fuente de guile (esquema) en %s para detalles sobre la escritura de sus propios informes, o extender los informes existentes."
+#~ msgstr "Este es un ejemplo de informe de GnuCash. Vea el cÃÂÃÂ³digo fuente de guile (esquema) en %s para detalles sobre la escritura de sus propios informes, o extender los informes existentes."
 
 #, fuzzy
 #~ msgid "for details on writing your own reports, or extending existing reports."
-#~ msgstr "Este es un ejemplo de informe de GnuCash. Vea el código fuente de guile (esquema) en %s para detalles sobre la escritura de sus propios informes, o extender los informes existentes."
+#~ msgstr "Este es un ejemplo de informe de GnuCash. Vea el cÃÂÃÂ³digo fuente de guile (esquema) en %s para detalles sobre la escritura de sus propios informes, o extender los informes existentes."
 
 #~ msgid ""
 #~ "The filepath \n"
@@ -14988,14 +15148,14 @@ msgstr ""
 #~ msgstr ""
 #~ "El camino del archivo \n"
 #~ "    %s\n"
-#~ "no es una localización válida en el sistema de ficheros."
+#~ "no es una localizaciÃÂÃÂ³n vÃÂÃÂ¡lida en el sistema de ficheros."
 
 #, fuzzy
 #~ msgid ""
 #~ "You must enter a valid %s.\n"
 #~ "\n"
 #~ "Error: %s."
-#~ msgstr "Debe seleccionar una cuenta padre válida."
+#~ msgstr "Debe seleccionar una cuenta padre vÃÂÃÂ¡lida."
 
 #~ msgid "Mutual"
 #~ msgstr "Mutua"
@@ -15056,37 +15216,37 @@ msgstr ""
 #~ msgstr "Neto"
 
 #~ msgid "This page shows your net worth."
-#~ msgstr "Esta página muestra sus pérdidas netas."
+#~ msgstr "Esta pÃÂÃÂ¡gina muestra sus pÃÂÃÂ©rdidas netas."
 
 #~ msgid "This page shows your profits and losses."
-#~ msgstr "Esta página muestra sus beneficios y pérdidas."
+#~ msgstr "Esta pÃÂÃÂ¡gina muestra sus beneficios y pÃÂÃÂ©rdidas."
 
 #~ msgid "Report start date"
 #~ msgstr "Fecha de comienzo del informe"
 
 #~ msgid "A report useful for balancing the budget"
-#~ msgstr "Un informe útil para balancear los presupuestos"
+#~ msgstr "Un informe ÃÂÃÂºtil para balancear los presupuestos"
 
 #~ msgid "How are you doing on your budget?"
-#~ msgstr "¿Qué está haciendo en su presupuesto?"
+#~ msgstr "ÃÂÃÂ¿QuÃÂÃÂ© estÃÂÃÂ¡ haciendo en su presupuesto?"
 
 #, fuzzy
 #~ msgid "Budget (Testing, Unfinished)"
-#~ msgstr "Diáologo de Presupuestos (Probando)"
+#~ msgstr "DiÃÂÃÂ¡ologo de Presupuestos (Probando)"
 
 #, fuzzy
 #~ msgid "Test the budget dialog"
-#~ msgstr "Probar el diálogo de presupuestos."
+#~ msgstr "Probar el diÃÂÃÂ¡logo de presupuestos."
 
 #, fuzzy
 #~ msgid "Calculate stock portfolio value at this date"
 #~ msgstr "Calcular hoja de balance a esta fecha"
 
 #~ msgid "Profit/Loss"
-#~ msgstr "Beneficios/Pérdidas"
+#~ msgstr "Beneficios/PÃÂÃÂ©rdidas"
 
 #~ msgid "The accounts selected in the account list option are:"
-#~ msgstr "Las cuentas seleccionadas en la opción de lista de cuentas son:"
+#~ msgstr "Las cuentas seleccionadas en la opciÃÂÃÂ³n de lista de cuentas son:"
 
 #~ msgid "The items selected in the list option are:"
 #~ msgstr "Los elementos seleccionados en las opciones de la lista son:"
@@ -15102,20 +15262,20 @@ msgstr ""
 #~ msgstr "Rastreador de Balance de Cuenta"
 
 #~ msgid "Double line mode with a multi-line cursor"
-#~ msgstr "Modo de dobles líneas con un cursor multi-línea"
+#~ msgstr "Modo de dobles lÃÂÃÂ­neas con un cursor multi-lÃÂÃÂ­nea"
 
 #~ msgid "Single line mode with a multi-line cursor"
-#~ msgstr "Modo de línea simple con un cursor multi-línea"
+#~ msgstr "Modo de lÃÂÃÂ­nea simple con un cursor multi-lÃÂÃÂ­nea"
 
 #~ msgid "Upper Limit"
-#~ msgstr "Límite Superior"
+#~ msgstr "LÃÂÃÂ­mite Superior"
 
 #~ msgid "Show transactions on two lines with more information"
-#~ msgstr "Mostrar las transacciones en dos líneas con más información"
+#~ msgstr "Mostrar las transacciones en dos lÃÂÃÂ­neas con mÃÂÃÂ¡s informaciÃÂÃÂ³n"
 
 #, fuzzy
 #~ msgid "Period"
-#~ msgstr "Período:"
+#~ msgstr "PerÃÂÃÂ­odo:"
 
 #~ msgid "Save Translatable Strings"
 #~ msgstr "Guardar Cadenas Traducibles"
@@ -15141,16 +15301,16 @@ msgstr ""
 #~ msgstr "_Hola, Mundo"
 
 #~ msgid "Show transactions on multiple lines with one line for each split in the transaction"
-#~ msgstr "Mostrar transacciones sobre líneas múltiples con una línea para cada partida de la transacción"
+#~ msgstr "Mostrar transacciones sobre lÃÂÃÂ­neas mÃÂÃÂºltiples con una lÃÂÃÂ­nea para cada partida de la transacciÃÂÃÂ³n"
 
 #~ msgid "Auto Double"
 #~ msgstr "Auto Doble"
 
 #~ msgid "Lower Limit"
-#~ msgstr "Límite Inferior"
+#~ msgstr "LÃÂÃÂ­mite Inferior"
 
 #~ msgid "Display the Profit and Loss report."
-#~ msgstr "Mostrar el informe de Beneficios y Pérdidas."
+#~ msgstr "Mostrar el informe de Beneficios y PÃÂÃÂ©rdidas."
 
 #~ msgid "Display the Account Balance Tracker report."
 #~ msgstr "Mostrar el informe de Rastreador de Balance de Cuenta."
@@ -15168,25 +15328,25 @@ msgstr ""
 #~ msgstr "Impresora:"
 
 #~ msgid "Paper size:"
-#~ msgstr "Tamaño de papel:"
+#~ msgstr "TamaÃÂÃÂ±o de papel:"
 
 #~ msgid "Pages to print:"
-#~ msgstr "Páginas a imprimir:"
+#~ msgstr "PÃÂÃÂ¡ginas a imprimir:"
 
 #~ msgid "Select Paper Size"
-#~ msgstr "Seleccionar Tamaño de Papel"
+#~ msgstr "Seleccionar TamaÃÂÃÂ±o de Papel"
 
 #~ msgid "Close this HTML window"
 #~ msgstr "Cerrar esta ventana HTML"
 
 #~ msgid "Show transactions on multiple lines with one line for each split"
-#~ msgstr "Mostrar transacciones en líneas múltiples con una línea para cada partida"
+#~ msgstr "Mostrar transacciones en lÃÂÃÂ­neas mÃÂÃÂºltiples con una lÃÂÃÂ­nea para cada partida"
 
 #~ msgid "The default background color for splits in multi-line mode and the auto modes"
-#~ msgstr "El color de fondo por defecto para partidas en modo multi-línea y los modos auto"
+#~ msgstr "El color de fondo por defecto para partidas en modo multi-lÃÂÃÂ­nea y los modos auto"
 
 #~ msgid "The background color for an active split in multi-line mode and the auto modes"
-#~ msgstr "El color de fondo para una partida activa en modo multi-línea y los modos auto"
+#~ msgstr "El color de fondo para una partida activa en modo multi-lÃÂÃÂ­nea y los modos auto"
 
 #~ msgid "Double mode active background"
 #~ msgstr "Fondo activo en modo doble"
@@ -15198,7 +15358,7 @@ msgstr ""
 #~ msgstr "El color de fondo por defecto para filas impares en modo simple"
 
 #~ msgid "Multi mode default transaction background"
-#~ msgstr "Fondo de transacción por defecto multi modo"
+#~ msgstr "Fondo de transacciÃÂÃÂ³n por defecto multi modo"
 
 #~ msgid "A_ccount Balance Tracker"
 #~ msgstr "Rastreador de Balances de _Cuentas"
@@ -15207,7 +15367,7 @@ msgstr ""
 #~ msgstr "Fondo de partida por defecto multi modo"
 
 #~ msgid "The default background color for transactions in multi-line mode and the auto modes"
-#~ msgstr "El color de fondo por defecto para las transacciones en modo multi-línea y los modos auto"
+#~ msgstr "El color de fondo por defecto para las transacciones en modo multi-lÃÂÃÂ­nea y los modos auto"
 
 #~ msgid "Single mode default even row background"
 #~ msgstr "Fondo de fila par por defecto para modo simple"
@@ -15219,7 +15379,7 @@ msgstr ""
 #~ msgstr "Fondo activo de modo simple"
 
 #~ msgid "Multi mode active transaction background"
-#~ msgstr "Fondo de transacción activa multi modo"
+#~ msgstr "Fondo de transacciÃÂÃÂ³n activa multi modo"
 
 #~ msgid "The default background color for even rows in double mode"
 #~ msgstr "El color de fondo por defecto para filas pares en modo doble"
@@ -15231,7 +15391,7 @@ msgstr ""
 #~ msgstr "Fondo de fila impar por defecto en modo doble"
 
 #~ msgid "The background color for an active transaction in multi-line mode and the auto modes"
-#~ msgstr "El color de fondo para una transacción activa en modo multi-línea y los modos auto"
+#~ msgstr "El color de fondo para una transacciÃÂÃÂ³n activa en modo multi-lÃÂÃÂ­nea y los modos auto"
 
 #~ msgid "Multi mode active split background"
 #~ msgstr "Fondo de partida activa en multi modo"
@@ -15248,12 +15408,12 @@ msgstr ""
 #~ "If not, then please select an account\n"
 #~ "to open in the main window.\n"
 #~ msgstr ""
-#~ "¿Desea crear una cuenta nueva?\n"
+#~ "ÃÂÃÂ¿Desea crear una cuenta nueva?\n"
 #~ "Si no, por favor, seleccione una cuenta\n"
 #~ "para abrir en la ventana principal.\n"
 
 #~ msgid "The amount must be a number."
-#~ msgstr "El saldo debe ser un número."
+#~ msgstr "El saldo debe ser un nÃÂÃÂºmero."
 
 #~ msgid ""
 #~ "It is dangerous to change the currency type\n"
@@ -15262,9 +15422,9 @@ msgstr ""
 #~ "Are You Sure?\n"
 #~ msgstr ""
 #~ "Es peligroso cambiar el tipo de moneda\n"
-#~ "de una cuenta. Solicitó cambiar\n"
+#~ "de una cuenta. SolicitÃÂÃÂ³ cambiar\n"
 #~ "de %s a %s.\n"
-#~ "¿Está seguro?\n"
+#~ "ÃÂÃÂ¿EstÃÂÃÂ¡ seguro?\n"
 
 #~ msgid ""
 #~ "It is dangerous to change the security\n"
@@ -15273,9 +15433,9 @@ msgstr ""
 #~ "Are You Sure?\n"
 #~ msgstr ""
 #~ "Es peligroso cambiar la seguridad\n"
-#~ "de una cuenta. Solicitó cambiar\n"
+#~ "de una cuenta. SolicitÃÂÃÂ³ cambiar\n"
 #~ "de %s a %s.\n"
-#~ "¿Está seguro?\n"
+#~ "ÃÂÃÂ¿EstÃÂÃÂ¡ seguro?\n"
 
 #~ msgid ""
 #~ "The file \n"
@@ -15286,10 +15446,10 @@ msgstr ""
 #~ "El archivo \n"
 #~ "    %s\n"
 #~ "parece estar siendo utilizado por otro usuario.\n"
-#~ "Si no es así, borre el archivo .LCK y vuelva a intentarlo."
+#~ "Si no es asÃÂÃÂ­, borre el archivo .LCK y vuelva a intentarlo."
 
 #~ msgid "You need to install the gnome-print library."
-#~ msgstr "Necesita instalar la librería gnome-print."
+#~ msgstr "Necesita instalar la librerÃÂÃÂ­a gnome-print."
 
 #~ msgid ""
 #~ "QIF file parse warning:\n"
@@ -15299,21 +15459,21 @@ msgstr ""
 #~ "%s"
 
 #~ msgid "Warning! This is a reconciled transaction. Do you want do continue?"
-#~ msgstr "¡Aviso! Esta es una transacción cuadrada. ¿Desea continuar?"
+#~ msgstr "ÃÂÃÂ¡Aviso! Esta es una transacciÃÂÃÂ³n cuadrada. ÃÂÃÂ¿Desea continuar?"
 
 #~ msgid ""
 #~ "The types of all the parent accounts and their subaccounts must be changed to %s.\n"
 #~ "Is that what you want to do?"
 #~ msgstr ""
 #~ "Los tipo de todas las cuentas padres y de sus subcuentas deben cambiar a %s.\n"
-#~ "¿Es esto lo que quiere hacer?"
+#~ "ÃÂÃÂ¿Es esto lo que quiere hacer?"
 
 #~ msgid ""
 #~ "The types of all the subaccounts must be changed to %s.\n"
 #~ "Is that what you want to do?"
 #~ msgstr ""
 #~ "Los tipos de todas las subcuentas deben cambiar a %s.\n"
-#~ "¿Es esto lo que quiere hacer?"
+#~ "ÃÂÃÂ¿Es esto lo que quiere hacer?"
 
 #~ msgid ""
 #~ "There must be at least two accounts\n"
@@ -15326,17 +15486,17 @@ msgstr ""
 #~ "The \"From\" and \"To\" accounts\n"
 #~ " must be different!"
 #~ msgstr ""
-#~ "¡Las cuentas \"Desde\" y \"Hacia\"\n"
+#~ "ÃÂÃÂ¡Las cuentas \"Desde\" y \"Hacia\"\n"
 #~ "deben ser distintas!"
 
 #~ msgid "Enter the date you want the balance adjusted"
-#~ msgstr "Introducir el día al que quiera ajustar el balance"
+#~ msgstr "Introducir el dÃÂÃÂ­a al que quiera ajustar el balance"
 
 #~ msgid "Adjust the balance of the main account for this register"
 #~ msgstr "Ajustar el balance de la cuenta principal para este registro"
 
 #~ msgid "Enter a 3-letter ISO currency code such as USD (US Dollars)"
-#~ msgstr "Introducir un código de moneda ISO de 3 letras como ESP (Peseta Española)"
+#~ msgstr "Introducir un cÃÂÃÂ³digo de moneda ISO de 3 letras como ESP (Peseta EspaÃÂÃÂ±ola)"
 
 #~ msgid "_Adjust Balance"
 #~ msgstr "_Ajustar Balance"
@@ -15382,7 +15542,7 @@ msgstr ""
 #~ msgstr "Compra"
 
 #~ msgid "Deficit"
-#~ msgstr "Déficit"
+#~ msgstr "DÃÂÃÂ©ficit"
 
 #~ msgid "License"
 #~ msgstr "Licencia"
@@ -15397,13 +15557,13 @@ msgstr ""
 #~ msgstr "ADVERTENCIA"
 
 #~ msgid "QIF File scheme code not loaded properly."
-#~ msgstr "Código de esquema de Archivo QIF no correctamente cargado."
+#~ msgstr "CÃÂÃÂ³digo de esquema de Archivo QIF no correctamente cargado."
 
 #~ msgid "QIF File already loaded. Reload with current settings?"
-#~ msgstr "El Archivo cargado QIF ya existe. ¿Recargar con la configuración actual?"
+#~ msgstr "El Archivo cargado QIF ya existe. ÃÂÃÂ¿Recargar con la configuraciÃÂÃÂ³n actual?"
 
 #~ msgid "Something is very wrong with QIF Importing."
-#~ msgstr "Algo va muy mal en la Importación de QIF."
+#~ msgstr "Algo va muy mal en la ImportaciÃÂÃÂ³n de QIF."
 
 #~ msgid "Loaded Files"
 #~ msgstr "Archivos Cargados"
@@ -15426,13 +15586,13 @@ msgstr ""
 #~ "They do not have a common currency."
 #~ msgstr ""
 #~ "No puede transferir entre esas cuentas.\n"
-#~ "No tienen una moneda común."
+#~ "No tienen una moneda comÃÂÃÂºn."
 
 #~ msgid "Display N-1 lines"
-#~ msgstr "Mostrar N-1 líneas"
+#~ msgstr "Mostrar N-1 lÃÂÃÂ­neas"
 
 #~ msgid "Category"
-#~ msgstr "Categoría"
+#~ msgstr "CategorÃÂÃÂ­a"
 
 #~ msgid "Net Inflow"
 #~ msgstr "Afluencia Neta"
@@ -15444,10 +15604,10 @@ msgstr ""
 #~ msgstr "El nombre del usuario. Se usa en algunos informes."
 
 #~ msgid "User Address"
-#~ msgstr "Dirección"
+#~ msgstr "DirecciÃÂÃÂ³n"
 
 #~ msgid "The address of the user. This is used in some reports."
-#~ msgstr "La dirección del usuario. Se usa en algunos informes."
+#~ msgstr "La direcciÃÂÃÂ³n del usuario. Se usa en algunos informes."
 
 #~ msgid ""
 #~ "You cannot transfer funds from the %s account.\n"
@@ -15460,7 +15620,7 @@ msgstr ""
 #~ "No coinciden las monedas.\n"
 #~ "Para transferir fondos entre cuentas con diferentes monedas\n"
 #~ "necesita una cuenta intermedia.\n"
-#~ "Por favor, consulte el manual en línea de GnuCash."
+#~ "Por favor, consulte el manual en lÃÂÃÂ­nea de GnuCash."
 
 #~ msgid "31 December, 2000"
 #~ msgstr "31 Diciembre, 2000"
@@ -15496,7 +15656,7 @@ msgstr ""
 #~ msgstr "Informes"
 
 #~ msgid "TXF Anomalies"
-#~ msgstr "Anomalías TXF"
+#~ msgstr "AnomalÃÂÃÂ­as TXF"
 
 #~ msgid "GNU GPL"
 #~ msgstr "GNU GPL"
