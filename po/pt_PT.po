@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 1.5.97\n"
-"POT-Creation-Date: 2001-07-06 20:11-0700\n"
+"POT-Creation-Date: 2001-07-06 22:58-0700\n"
 "PO-Revision-Date: 2001-07-07 22:45-0700\n"
 "Last-Translator: Duarte Loreto <dlsl@poli.org>\n"
 "Language-Team: Portuguese Documentation Project (POLI) <info@poli.org>\n"
