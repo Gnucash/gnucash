@@ -394,7 +394,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    DEBUG ("xaccSRSaveRegEntry(): updating trans addr=%p\n", trans);
 
    /* copy the contents from the cursor to the split */
-   if (MOD_DATE & changed) 
+   if (MOD_DATE & changed) {
       /* commit any pending changes */
       xaccCommitDateCell (reg->dateCell);
       DEBUG ("xaccSRSaveRegEntry(): MOD_DATE DMY= %2d/%2d/%4d \n",
@@ -405,19 +405,23 @@ xaccSRSaveRegEntry (SplitRegister *reg)
       xaccTransSetDate (trans, reg->dateCell->date.tm_mday,
                                reg->dateCell->date.tm_mon+1,
                                reg->dateCell->date.tm_year+1900);
+   }
 
-   if (MOD_NUM & changed) 
+   if (MOD_NUM & changed) {
       xaccTransSetNum (trans, reg->numCell->value);
+   }
    
-   if (MOD_DESC & changed) 
+   if (MOD_DESC & changed) {
       xaccTransSetDescription (trans, reg->descCell->cell.value);
+   }
 
    if (MOD_RECN & changed) {
       xaccSplitSetReconcile (split, reg->recnCell->value[0]);
    }
 
-   if (MOD_ACTN & changed) 
+   if (MOD_ACTN & changed) {
       xaccSplitSetAction (split, reg->actionCell->cell.value);
+   }
 
    /* -------------------------------------------------------------- */
    /* OK, the handling of transfers gets complicated because it 
@@ -483,8 +487,9 @@ xaccSRSaveRegEntry (SplitRegister *reg)
       /* hack alert -- implement this */
    }
 
-   if (MOD_MEMO & changed) 
+   if (MOD_MEMO & changed) {
       xaccSplitSetMemo (split, reg->memoCell->value);
+   }
 
    /* The AMNT and NAMNT updates only differ by sign.  Basically, 
     * the split and transaction cursors show minus the quants that
