@@ -1,4 +1,16 @@
-2004-01-10  Derek Atkins  <derek@ihtfp.com>
+2005-01-22  Derek Atkins  <derek@ihtfp.com>
+
+	Stephen Evanchik's patch to convert GncItemEdit to GObject/GLib
+	and fix signal processing:
+
+        * src/register/register-gnome/gnucash-item-edit.h:
+          Made the gnc_item_edit_get_type function return GType
+        * src/register/register-gnome/gnucash-item-edit.h:
+          Made the gnc_item_edit_get_type function use GObject
+        * src/register/register-gnome/gnucash-item-list.c:
+          Removed an extra button_press_event handler
+
+2005-01-10  Derek Atkins  <derek@ihtfp.com>
 
 	Stephen Evanchik's Move GNCDateFormat to GLib patch:
         * src/gnome-utils/gnc-date-format.h:
@@ -11,7 +23,7 @@
                 gnc_date_format_class_init
           Created gnc_date_format_dipose function
 
-2004-01-02  Derek Atkins  <derek@ihtfp.com>
+2005-01-02  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/test/Makefile.am: don't explicitly add -lglib.
 

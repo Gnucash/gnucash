@@ -1194,26 +1194,29 @@ gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
 }
 
 
-GtkType
+GType
 gnc_item_edit_get_type (void)
 {
-        static GtkType gnc_item_edit_type = 0;
+        static GType gnc_item_edit_type = 0;
 
         if (!gnc_item_edit_type) {
-                GtkTypeInfo gnc_item_edit_info = {
-                        "GncItemEdit",
-                        sizeof (GncItemEdit),
+                static const GTypeInfo gnc_item_edit_info = {
                         sizeof (GncItemEditClass),
-                        (GtkClassInitFunc) gnc_item_edit_class_init,
-                        (GtkObjectInitFunc) gnc_item_edit_init,
-                        NULL, /* reserved_1 */
-                        NULL, /* reserved_2 */
-                        (GtkClassInitFunc) NULL
+                        NULL,
+                        NULL,
+                        (GClassInitFunc) gnc_item_edit_class_init,
+                        NULL,
+                        NULL,
+                        sizeof (GncItemEdit),
+			0, /* n_preallocs */
+                        (GInstanceInitFunc) gnc_item_edit_init,
+                        NULL,
                 };
 
                 gnc_item_edit_type =
-			gtk_type_unique(gnome_canvas_item_get_type (),
-					&gnc_item_edit_info);
+			g_type_register_static(gnome_canvas_item_get_type (),
+					"GncItemEdit",
+					&gnc_item_edit_info, 0);
         }
 
         return gnc_item_edit_type;

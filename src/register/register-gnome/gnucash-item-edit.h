@@ -115,7 +115,7 @@ typedef struct {
 } GncItemEditClass;
 
 
-GtkType gnc_item_edit_get_type (void);
+GType gnc_item_edit_get_type (void);
 
 void gnc_item_edit_configure (GncItemEdit *item_edit);
 

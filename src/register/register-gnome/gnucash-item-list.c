@@ -377,9 +377,6 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
 	g_signal_connect_after (G_OBJECT(frame), "button_press_event",
 				G_CALLBACK (gnc_item_list_button_event), item_list);
 
-	g_signal_connect (G_OBJECT (tree_view), "button_press_event",
-			  G_CALLBACK (gnc_item_list_key_event), item_list);
-
 	g_signal_connect (G_OBJECT (tree_view), "key_press_event",
 			  G_CALLBACK (gnc_item_list_key_event), item_list);
 
