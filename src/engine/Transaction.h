@@ -145,7 +145,31 @@ void          xaccSplitSetMemo (Split *, const char *);
 void          xaccSplitSetAction (Split *, const char *);
 void          xaccSplitSetReconcile (Split *, char);
 
-/* The following two functions set the amount on the split */
+
+/* 
+ * The following four functions set the prices and amounts.
+ * All of the routines always maintain balance: that is, 
+ * invoking any of them will cause other splits in the transaction
+ * to be modified so that the net value of the transaction is zero. 
+ *
+ * The xaccSetShareAmount() method sets the number of shares
+ *     that the split should have.  
+ *
+ * The xaccSetSharePrice() method sets the price of the split.
+ *
+ * The xaccSetValue() method adjusts the number of shares in 
+ *     the split so that the number of shares times the share price
+ *     equals the value passed in.
+ *
+ * The xaccSetSharePriceAndAmount() method will simultaneously
+ *     update the share price and the number of shares. This 
+ *     is a utility routine that is equivalent to a xaccSplitSetSharePrice()
+ *     followed by and xaccSplitSetAmount(), except that it incurs the
+ *     processing overhead of balancing only once, instead of twise.
+ */
+
+void         xaccSplitSetSharePriceAndAmount (Split *, double price,
+                                              double amount);
 void         xaccSplitSetShareAmount (Split *, double);
 void         xaccSplitSetSharePrice (Split *, double);
 void         xaccSplitSetValue (Split *, double);
