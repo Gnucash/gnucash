@@ -1,3 +1,8 @@
+2000-11-05  Rob Browning  <rlb@cs.utexas.edu>
+
+	* src/engine/io-gncxml-w.c: sort commodities by namespace and id
+	before writing so we get stable output.
+
 2000-10-30  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnc-exp-parser.c: modify to use gnc_numerics instead of

@@ -271,7 +271,23 @@ xml_add_commodity_restorer(xmlNodePtr p, gnc_commodity *c) {
 
   return(TRUE);
 }
-  
+
+
+static gint
+compare_namespaces(gconstpointer a, gconstpointer b) {
+  const gchar *sa = (const gchar *) a;
+  const gchar *sb = (const gchar *) b;
+  return(safe_strcmp(sa, sb));
+}
+
+static gint
+compare_commodity_ids(gconstpointer a, gconstpointer b) {
+  const gnc_commodity *ca = (const gnc_commodity *) a;
+  const gnc_commodity *cb = (const gnc_commodity *) b;
+  return(safe_strcmp(gnc_commodity_get_mnemonic(ca),
+                     gnc_commodity_get_mnemonic(cb)));
+}
+
 static gboolean
 xml_add_commodity_restorers(xmlNodePtr p) {
   gnc_commodity_table *commodities;
@@ -283,7 +299,9 @@ xml_add_commodity_restorers(xmlNodePtr p) {
   commodities = gnc_engine_commodities();
   if(!commodities) return(FALSE);
 
-  namespaces = gnc_commodity_table_get_namespaces(commodities);
+  namespaces = g_list_sort(gnc_commodity_table_get_namespaces(commodities),
+                           compare_namespaces);
+  
 
   for(lp = namespaces; lp; lp = lp->next) {
     gchar *space;
@@ -297,6 +315,8 @@ xml_add_commodity_restorers(xmlNodePtr p) {
     if(strcmp(GNC_COMMODITY_NS_ISO, space) != 0) {
       GList *comms = gnc_commodity_table_get_commodities(commodities, space);
       GList *lp2;
+
+      comms = g_list_sort(comms, compare_commodity_ids);
 
       for(lp2 = comms; lp2; lp2 = lp2->next) {
         gnc_commodity *com = (gnc_commodity *) lp2->data;
