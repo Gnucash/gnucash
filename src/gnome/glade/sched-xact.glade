@@ -20,6 +20,7 @@
 <widget>
   <class>GnomeDialog</class>
   <name>Scheduled Transaction Editor</name>
+  <visible>False</visible>
   <title>Edit Scheduled Transaction</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_CENTER</position>

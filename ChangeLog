@@ -17,6 +17,11 @@
 	  arguments to prevent scheme crash.
 	Fixes 105405
 
+	* src/gnome/glade/sched-xact.glade: Need to start the Editor dialog
+	  as non-visible so the ledger get's sized properly
+	* src/gnome/dialog-scheduledxaction.c: resize the cal after the
+	  dialog is shown, so it get's sized properly.
+	
 2003-02-07  Derek Atkins  <derek@ihtfp.com>
 
 	* src/scm/main.scm:
