@@ -43,6 +43,8 @@
 char * stpcpy (char *dest, const char *src);
 
 /** GLOBALS *********************************************************/
+static int min_decimal_places = 0;
+
 gncLogLevel loglevel[MOD_NUM] =
 {
   GNC_LOG_NOTHING,      /* DUMMY */
@@ -79,6 +81,17 @@ gnc_set_log_level_global(gncLogLevel level)
     loglevel[module] = level;
 }
 
+void
+gnc_set_mininum_decimal_places (int places)
+{
+  if (places < 0)
+    return;
+
+  if (places > 8)
+    return;
+
+  min_decimal_places = places;
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -478,6 +491,9 @@ PrintAmt(char *buf, double val, int prec,
 
   if (val < 0.0)
     val = DABS(val);
+
+  if (prec < min_decimal_places)
+    prec = min_decimal_places;
 
   util_fptostr(tempBuf, val, prec);
 

@@ -199,6 +199,8 @@ struct lconv * gnc_localeconv();
 /* Returns the 3 character currency code of the current locale. */
 char * gnc_locale_default_currency();
 
+/* Set the minimum number of displayed decimal places. */
+void gnc_set_mininum_decimal_places (int places);
 
 /*
  * The xaccPrintAmount() and xaccSPrintAmount() routines provide

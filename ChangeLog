@@ -1,3 +1,13 @@
+2000-12-05  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/util.c (PrintAmt): add minimum decimal places option.
+	This is a workaround since all amounts are printed in the current
+	locale. GnuCash 2.0 will fix this using gnc-commodity objects.
+
+	* src/SplitLedger.c (xaccSRInitRegisterData): use the date stripped
+	of its time values for the default date. This fixes a bug where dates
+	entered by hand show up before default dates.
+
 2000-10-26  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/util.c (xaccParseAmount): interpret (NUM) as -NUM.

@@ -67,7 +67,9 @@ static void gnc_configure_register_borders_cb(void *);
 static void gnc_configure_register_borders(void);
 static void gnc_configure_reverse_balance_cb(void *);
 static void gnc_configure_reverse_balance(void);
-static void gnc_configure_sr_label_callbacks();
+static void gnc_configure_sr_label_callbacks(void);
+static void gnc_configure_min_decimal_places_cb(void *);
+static void gnc_configure_min_decimal_places(void);
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -85,6 +87,7 @@ static SCM account_separator_callback_id = SCM_UNDEFINED;
 static SCM register_colors_callback_id = SCM_UNDEFINED;
 static SCM register_borders_callback_id = SCM_UNDEFINED;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
+static SCM min_decimal_places_callback_id = SCM_UNDEFINED;
 
 /* ============================================================== */
 
@@ -169,6 +172,12 @@ gnucash_ui_init()
                                           NULL, "General",
                                           "Reversed-balance account types");
 
+    gnc_configure_min_decimal_places();
+    min_decimal_places_callback_id =
+      gnc_register_option_change_callback(gnc_configure_min_decimal_places_cb,
+                                          NULL, "General",
+                                          "Minimum displayed decimal places");
+
     gnc_configure_sr_label_callbacks();
 
     mainWindow();
@@ -221,6 +230,7 @@ gnc_ui_destroy (void)
   gnc_unregister_option_change_callback_id(register_colors_callback_id);
   gnc_unregister_option_change_callback_id(register_borders_callback_id);  
   gnc_unregister_option_change_callback_id(reverse_balance_callback_id);  
+  gnc_unregister_option_change_callback_id(min_decimal_places_callback_id);
 
   if (app != NULL)
   {
@@ -457,6 +467,38 @@ gnc_configure_account_separator(void)
   char separator = gnc_get_account_separator();
 
   xaccSRSetAccountSeparator(separator);
+}
+
+/* gnc_configure_min_decimal_places_cb
+ *    Callback called when options change - sets
+ *    minimum decimal places to display.
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void 
+gnc_configure_min_decimal_places_cb(void *data)
+{
+  gnc_configure_min_decimal_places();
+  gnc_group_ui_refresh(gncGetCurrentGroup());
+  gnc_refresh_main_window();
+}
+
+/* gnc_configure_min_decimal_places
+ *    sets the minimum decimal places to display
+ *    to the current value on the scheme side
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_min_decimal_places(void)
+{
+  int places = gnc_lookup_number_option ("General",
+                                         "Minimum displayed decimal places",
+                                         0.0);
+
+  gnc_set_mininum_decimal_places (places);
 }
 
 /* gnc_configure_register_colors_cb
