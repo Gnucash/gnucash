@@ -57,7 +57,7 @@ enum
   MONEYMRKT = 12,
   CREDITLINE = 13,     /* line of credit */
 
-  NUM_ACCINFO_TYPES = 14
+  NUM_ACCOUNT_TYPES = 14
 };
 
 struct _BankAcct 
