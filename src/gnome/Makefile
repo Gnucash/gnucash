@@ -25,15 +25,22 @@
 
 # These three lines are suggested defs for autoconf (see the info pages).
 
+prefix   = /usr/local
 srcdir   = .
+includedir=${prefix}/include
+
 
 CC       = gcc
-INCLPATH = -I.. -I../.. -I../engine -I../register -I./../../include
+INCLPATH = -I.. -I../.. -I../engine -I../register -I./../../include \
+           -I$(includedir) -I$(prefix)/lib/gnome-libs/include
+ 
 
 CFLAGS   =  -O2 -Wall -g -Wall  -I/usr/X11R6/include ${INCLPATH}
 LDFLAGS  =  -g -Wall
-LIBS     = -lpng -ljpeg -lz -lm  -lSM -lICE -lXpm  -L/usr/X11R6/lib $(shell gtk-config --libs) \
-            -lgnomeui -lgnome -lgnomesupport -lgdk_imlib -ltiff -ldl
+LIBS     = -L$(prefix)/lib -lpng -ljpeg -lz -lm  -lSM -lICE -lXpm  -L/usr/X11R6/lib \
+           $(shell gtk-config --libs)  -lgnomeui -lgnome \
+           -lgnomesupport -lintl -lgdk_imlib -ltiff
+
 
 TARGET   = ../../xacc.gtk.bin
 STATIC   = ../../xacc-static.gtk.bin
@@ -42,7 +49,8 @@ OTHER_OBJS := ../obj/gnome/*.o ../engine/obj/*.o ../register/obj/gnome/*.o
 
 ######################################################################
 # See Makefile.common for information about these variables.
-GNOME_SRCS := main.c MainWindow.c MenuBar.c RegWindow.c Dialogs.c
+GNOME_SRCS := main.c MainWindow.c MenuBar.c RegWindow.c Add_Dialog.c xtutil.c \
+              RecnWindow.c
 #        AccWindow.c AccountMenu.c AdjBWindow.c    \
 #        BuildMenu.c Destroy.c FileBox.c HelpWindow.c  \
 #        RecnWindow.c RegWindow.c Reports.c TextBox.c  \

@@ -27,8 +27,9 @@
 srcdir   = .
 
 CC       = gcc
-INCLPATH = -I.. -I./engine -I./register -I./../include
-CFLAGS   =  -O2 -Wall -g -Wall ${INCLPATH}
+INCLPATH = -I.. -I./engine -I./register -I./../include -I/usr/local/include
+CFLAGS   =  -O2 -Wall -g -Wall  -I/usr/X11R6/include ${INCLPATH}
+
 
 ######################################################################
 # See Makefile.common for information about these variables.
