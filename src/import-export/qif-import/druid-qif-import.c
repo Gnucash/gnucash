@@ -350,7 +350,7 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
                                  gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
-  const char * new_file_name;
+  char * new_file_name;
   char *file_name, *default_dir;
 
   /* Default to whatever's already present */
@@ -360,12 +360,14 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   new_file_name = gnc_file_dialog (_("Select QIF File"), "*.qif", default_dir);
 
   /* Insure valid data, and something that can be freed. */
-  if (new_file_name == NULL)
+  if (new_file_name == NULL) {
     file_name = g_strdup(default_dir);
-  else if (*new_file_name != '/')
+  } else if (*new_file_name != '/') {
     file_name = g_strdup_printf("%s%s", default_dir, new_file_name);
-  else
-    file_name = g_strdup(new_file_name);
+    g_free(new_file_name);
+  } else {
+    file_name = new_file_name;
+  }
 
   /* set the filename entry for what was selected */
   gtk_entry_set_text(GTK_ENTRY(wind->filename_entry), file_name);

@@ -70,7 +70,7 @@ SCM  scm_gnc_file_mt940_import ()
 
 void gnc_file_mt940_import (void)
 {
-  const char *selected_filename;
+  char *selected_filename;
   char *default_dir;
   FILE *mt940_file;
   GNCImportMainMatcher *gnc_mt940_importer_gui = NULL;
@@ -140,6 +140,7 @@ void gnc_file_mt940_import (void)
         HBCI_transactionReport_delete(tr);
       }
       g_free(mt940_records);
+      g_free(selected_filename);
     }
 }
 

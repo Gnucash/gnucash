@@ -396,10 +396,10 @@ gnc_get_export_type_choice (SCM export_types)
   return scm_list_ref (export_types, scm_int2num (choice));
 }
 
-static const char *
+static char *
 gnc_get_export_filename (SCM choice)
 {
-  const char * filepath;
+  char * filepath;
   struct stat statbuf;
   char * title;
   char * type;
@@ -434,6 +434,7 @@ gnc_get_export_filename (SCM choice)
     const char *format = _("You cannot save to that filename.\n\n%s");
 
     gnc_error_dialog (NULL, format, strerror(errno));
+    g_free(filepath);
     return NULL;
   }
 
@@ -443,6 +444,7 @@ gnc_get_export_filename (SCM choice)
     const char *message = _("You cannot save to that file.");
 
     gnc_error_dialog (NULL, message);
+    g_free(filepath);
     return NULL;
   }
 
@@ -451,8 +453,10 @@ gnc_get_export_filename (SCM choice)
     const char *format = _("The file \n    %s\n already exists.\n"
                            "Are you sure you want to overwrite it?");
 
-    if (!gnc_verify_dialog (NULL, FALSE, format, filepath))
+    if (!gnc_verify_dialog (NULL, FALSE, format, filepath)) {
+      g_free(filepath);
       return NULL;
+    }
   }
 
   return filepath;
@@ -462,7 +466,7 @@ static int
 gnc_report_window_export_button_cb(GtkWidget * w, gpointer data)
 {
   gnc_report_window * report = data;
-  const char * filepath;
+  char * filepath;
   SCM export_types;
   SCM export_thunk;
   gboolean result;
@@ -509,6 +513,7 @@ gnc_report_window_export_button_cb(GtkWidget * w, gpointer data)
 		      strerror (errno) ? strerror (errno) : "");
   }
 
+  g_free(filepath);
   return TRUE;
 }
 

@@ -81,7 +81,7 @@ void gnc_file_ofx_import (void)
   extern int ofx_INFO_msg;
   extern int ofx_STATUS_msg;
   char *filenames[3];
-  const char *selected_filename;
+  char *selected_filename;
   char *default_dir;
 
   ofx_PARSER_msg = false;
@@ -120,6 +120,7 @@ void gnc_file_ofx_import (void)
 
       DEBUG("Opening selected file");
       ofx_proc_file(2, filenames);
+      g_free(selected_filename);
     }
 
 }
