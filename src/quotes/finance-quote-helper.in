@@ -107,14 +107,14 @@ sub check_modules {
 
   return unless @missing;
 
-  print "\n";
-  print "You need to install the following Perl modules:\n";
+  print STDERR "\n";
+  print STDERR "You need to install the following Perl modules:\n";
   foreach my $mod (@missing) {
-    print "  ".$mod."\n";
+    print STDERR "  ".$mod."\n";
   }
 
-  print "\n";
-  print "Run 'update-finance-quote' as root to install them.\n";
+  print STDERR "\n";
+  print STDERR "Run 'update-finance-quote' as root to install them.\n";
 
   exit 1
 }

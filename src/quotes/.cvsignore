@@ -1,4 +1,5 @@
 Makefile
 Makefile.in
 finance-quote-helper
+update-finance-quote
 histprices
