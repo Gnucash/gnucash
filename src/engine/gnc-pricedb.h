@@ -308,6 +308,23 @@ GList      * gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
  		                                             gnc_commodity *c,
 		                                             Timespec t);
 
+/** gnc_pricedb_convert_balance_latest_price - Convert a balance
+    from one currency to another. */
+gnc_numeric
+gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
+				         gnc_numeric balance,
+				         gnc_commodity *balance_currency,
+				         gnc_commodity *new_currency);
+
+/** gnc_pricedb_convert_balance_nearest_price - Convert a balance
+    from one currency to another. */
+gnc_numeric
+gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
+				          gnc_numeric balance,
+				          gnc_commodity *balance_currency,
+				          gnc_commodity *new_currency,
+					  Timespec t);
+
 /** gnc_pricedb_foreach_price - call f once for each price in db, until
      and unless f returns FALSE.  If stable_order is not FALSE, make
      sure the ordering of the traversal is stable (i.e. the same order

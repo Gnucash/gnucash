@@ -1,3 +1,26 @@
+2003-04-18  Herbert Thoma  <herbie@hthoma.de>
+
+	* src/engine/Account.c: move currency conversion to gnc-pricedb.c
+
+	* src/engine/gnc-pricedb.c
+	* src/engine/gnc-pricedb.h: add functions
+	  gnc_pricedb_convert_balance_latest_price and
+	  gnc_pricedb_convert_balance_nearest_price
+
+	* src/engine/gw-engine-spec.scm: wrap functions
+	  gnc_price_list_destroy, gnc_pricedb_lookup_latest_any_currency,
+	  gnc_pricedb_lookup_nearest_in_time_any_currency,
+	  gnc_pricedb_convert_balance_latest_price and
+	  gnc_pricedb_convert_balance_nearest_price
+
+	* src/report/report-system/commodity-utilities.scm: use
+	  gnc:pricedb-convert-balance-latest-price and
+	  gnc:pricedb-convert-balance-nearest-price to improve
+	  multiple currency reports
+
+	* src/report/standard-reports/advanced-portfolio.scm:
+	  improve report for stocks and funds not denominated in report currency
+
 2003-04-16  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c,

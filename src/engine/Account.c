@@ -1988,10 +1988,6 @@ xaccAccountConvertBalanceToCurrency(Account *account, /* for book */
 {
   GNCBook *book;
   GNCPriceDB *pdb;
-  GNCPrice *price, *currency_price;
-  GList *price_list, *list_helper;
-  gnc_numeric currency_price_value;
-  gnc_commodity *intermediate_currency;
 
   if (gnc_numeric_zero_p (balance) ||
       gnc_commodity_equiv (balance_currency, new_currency))
@@ -2000,63 +1996,8 @@ xaccAccountConvertBalanceToCurrency(Account *account, /* for book */
   book = xaccGroupGetBook (xaccAccountGetRoot (account));
   pdb = gnc_book_get_pricedb (book);
 
-  /* Look for a direct price. */
-  price = gnc_pricedb_lookup_latest (pdb, balance_currency, new_currency);
-  if (price) {
-    balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
-			       gnc_commodity_get_fraction (new_currency),
-			       GNC_RND_ROUND);
-    gnc_price_unref (price);
-    return balance;
-  }
+  balance = gnc_pricedb_convert_balance_latest_price(pdb, balance, balance_currency, new_currency);
 
-  /*
-   * no direct price found, try if we find a price in another currency
-   * and convert in two stages
-   */
-  price_list = gnc_pricedb_lookup_latest_any_currency(pdb, balance_currency);
-  if (!price_list) {
-    balance =  gnc_numeric_zero ();
-    return balance;
-  }
-
-  list_helper = price_list;
-  currency_price_value = gnc_numeric_zero();
-
-  do {
-    price = (GNCPrice *)(list_helper->data);
-
-    intermediate_currency = gnc_price_get_currency(price);
-    currency_price = gnc_pricedb_lookup_latest(pdb, intermediate_currency,
-					       new_currency);
-    if(currency_price) {
-      currency_price_value = gnc_price_get_value(currency_price);
-      gnc_price_unref(currency_price);
-    } else {
-      currency_price = gnc_pricedb_lookup_latest(pdb, new_currency,
-						 intermediate_currency);
-      if (currency_price) {
-	/* here we need the reciprocal */
-	currency_price_value = gnc_numeric_div(gnc_numeric_create(1, 1),
-					       gnc_price_get_value(currency_price),
-					       gnc_commodity_get_fraction (new_currency),
-					       GNC_RND_ROUND);
-	gnc_price_unref(currency_price);
-      }
-    }
-
-    list_helper = list_helper->next;
-  } while((list_helper != NULL) &&
-	  (!gnc_numeric_zero_p(currency_price_value)));
-
-  balance = gnc_numeric_mul (balance, currency_price_value,
-			     gnc_commodity_get_fraction (new_currency),
-			     GNC_RND_ROUND);      
-  balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
-			     gnc_commodity_get_fraction (new_currency),
-			     GNC_RND_ROUND);      
-
-  gnc_price_list_destroy(price_list);
   return balance;
 }
 
