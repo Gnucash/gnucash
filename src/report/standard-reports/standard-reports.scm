@@ -9,7 +9,7 @@
 
 (export gnc:register-report-create)
 
-(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash report account-piecharts))
 (use-modules (gnucash report account-summary))
 (use-modules (gnucash report average-balance))
