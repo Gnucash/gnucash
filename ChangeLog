@@ -1,5 +1,9 @@
 2001-05-25  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/report/account-summary.scm: fix bug
+
+	* src/gnome/window-main.c: add close window button to toolbar
+
 	* doc/sgml/C/xacc-about.sgml: fix warnings
 
 	* doc/sgml/C/xacc-quickstart.sgml: fix warnings

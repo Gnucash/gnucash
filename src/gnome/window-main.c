@@ -816,6 +816,17 @@ static void
 gnc_main_window_file_close_cb(GtkWidget * widget, GnomeMDI * mdi) {
   GNCMainChildInfo * inf;
 
+  if (!mdi)
+  {
+    GNCMainInfo *main_info;
+
+    main_info = gnc_ui_get_data ();
+    if (!main_info) return;
+
+    mdi = main_info->mdi;
+    if (!mdi) return;
+  }
+
   if(mdi->active_child) {
     inf = gtk_object_get_user_data(GTK_OBJECT(mdi->active_child));
     if(inf->toolbar) {
@@ -1081,6 +1092,16 @@ gnc_main_window_create_child_toolbar(GNCMainInfo * mi,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
       GNOME_STOCK_PIXMAP_SAVE,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Close"),
+      N_("Close the current notebook page"),
+      gnc_main_window_file_close_cb,
+      NULL,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_CLOSE,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR
