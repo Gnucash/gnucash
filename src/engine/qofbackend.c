@@ -64,12 +64,17 @@ qof_backend_set_message (QofBackend *be, const char *format, ...)
    
    if (!be) return;
   
+   /* If there's already something here, free it */
+   if (be->error_msg) g_free(be->error_msg);
+
+   if (!format) {
+       be->error_msg = NULL;
+       return;
+   }
+
    va_start(args, format);
    buffer = (char *)g_strdup_vprintf(format, args);
    va_end(args);
-
-   /* If there's already something here, free it */
-   if (be->error_msg) g_free(be->error_msg);
 
    be->error_msg = buffer;
 }

@@ -16,4 +16,6 @@
 "INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,1,1,'iGUID in Main Tables'); \n"
 "INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,2,1,'Fix gncSubtotalReconedBalance'); \n"
 "INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,3,1,'Add kvp_timespec tables'); \n"
-"INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,4,1,'Add support for multiple books');";
+"INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,4,1,'Add support for multiple books');"
+"INSERT INTO gncVersion (major, minor, rev, name, date) VALUES (1, 5, 0, 'Change timestamp definition', now());\n";
+

@@ -98,7 +98,7 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
     * lock) */
    p = "BEGIN WORK;\n"
        "LOCK TABLE gncCheckpoint IN ACCESS EXCLUSIVE MODE;\n"
-       "LOCK TABLE gncEntry IN SHARE MODE;\n";
+       "LOCK TABLE gncSplit IN SHARE MODE;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
@@ -126,10 +126,10 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
    {
       p = be->buff; *p = 0;
       p = stpcpy (p, "SELECT gncTransaction.date_posted"
-                     "    FROM gncTransaction, gncEntry"
+                     "    FROM gncTransaction, gncSplit"
                      "    WHERE"
-                     "        gncEntry.transguid = gncTransaction.transguid AND"
-                     "        gncEntry.accountguid='");
+                     "        gncSplit.transguid = gncTransaction.transguid AND"
+                     "        gncSplit.accountguid='");
       p = stpcpy (p, guid_string);
       p = stpcpy (p, "'"
                      "    ORDER BY gncTransaction.date_posted ASC"
@@ -251,7 +251,7 @@ pgendAccountRecomputeOneCheckpoint (PGBackend *be, Account *acc, Timespec ts)
    p = be->buff; *p = 0;
    p = stpcpy (p, "BEGIN WORK;\n"
                   "LOCK TABLE gncCheckpoint IN ACCESS EXCLUSIVE MODE;\n"
-                  "LOCK TABLE gncEntry IN SHARE MODE;\n"
+                  "LOCK TABLE gncSplit IN SHARE MODE;\n"
                   "UPDATE gncCheckpoint SET "
           "   balance            = (gncsubtotalbalance        (accountGuid, date_start, date_end )),"
           "   cleared_balance    = (gncsubtotalclearedbalance (accountGuid, date_start, date_end )),"
@@ -282,15 +282,15 @@ pgendTransactionRecomputeCheckpoints (PGBackend *be, Transaction *trans)
    p = stpcpy (p, "BEGIN WORK;\n"
                   "LOCK TABLE gncCheckpoint IN ACCESS EXCLUSIVE MODE;\n"
                   "LOCK TABLE gncTransaction IN SHARE MODE;\n"
-                  "LOCK TABLE gncEntry IN SHARE MODE;\n"
+                  "LOCK TABLE gncSplit IN SHARE MODE;\n"
                   "UPDATE gncCheckpoint SET "
-   "  balance            = (gncsubtotalbalance        (gncEntry.accountGuid, date_start, date_end )),"
-   "  cleared_balance    = (gncsubtotalclearedbalance (gncEntry.accountGuid, date_start, date_end )),"
-   "  reconciled_balance = (gncsubtotalreconedbalance (gncEntry.accountGuid, date_start, date_end )) "
-   " WHERE gncEntry.transGuid = '");
+   "  balance            = (gncsubtotalbalance        (gncSplit.accountGuid, date_start, date_end )),"
+   "  cleared_balance    = (gncsubtotalclearedbalance (gncSplit.accountGuid, date_start, date_end )),"
+   "  reconciled_balance = (gncsubtotalreconedbalance (gncSplit.accountGuid, date_start, date_end )) "
+   " WHERE gncSplit.transGuid = '");
    p = guid_to_string_buff (xaccTransGetGUID(trans), p);
-   p = stpcpy (p, "' AND gncTransaction.transGuid = gncEntry.transGuid "
-                  "  AND gncCheckpoint.accountGuid = gncEntry.accountGuid "
+   p = stpcpy (p, "' AND gncTransaction.transGuid = gncSplit.transGuid "
+                  "  AND gncCheckpoint.accountGuid = gncSplit.accountGuid "
                   "  AND date_start <= gncTransaction.date_posted "
                   "  AND date_end > gncTransaction.date_posted;\n"
                   "COMMIT WORK;\n"

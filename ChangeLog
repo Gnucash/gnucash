@@ -6,6 +6,64 @@
 	* src/gnome/reconcile-list.c: our parent is a gnc-query-list, not
 	  a clist.  Fix a bug so we properly call the parent destroy function.
 
+2003-08-08  Matt Vanecek  <mevanecek@yahoo.com>
+
+    * src/backend/postgres/PostgresBackend.c: Changed all the
+      gncEntry references to gncSplit, and entryGuid to splitGuid.
+    - pgend_session_begin(): Changed the 2nd qof_backend_set_message()
+      message argument to the internationalization format.
+    - Changed the pgendUpgradeDB() call to come after a commit--the
+      upgrade process uses its own transaction handling (now).
+      
+    * src/backend/postgres/checkpoint.c:
+    * src/backend/postgres/gncquery.c:
+    * src/backend/postgres/gncquery.h:
+    * src/backend/postgres/txn.c:
+    * src/backend/postgres/txnmass.c:
+    * src/backend/postgres/events.c: Changed all the gncEntry
+      references to gncSplit, and entryGuid to splitGuid.
+      
+    * src/backend/postgres/functions.sql: Changed the TIMESTAMP args
+      to TIMESTAMP WITH TIME ZONE args, and gncEntry args to gncSplit.
+    
+    * src/backend/postgres/putil.c: Added the execQuery() function
+    - sendQuery(): Added internationalization to the
+      qof_backend_set_message() call.
+
+    * src/backend/postgres/putil.h: Added the execQuery() prototype.
+    
+    * src/backend/postgres/table-create.sql:
+    * src/backend/postgres/table-audit.sql: Changed all the TIMESTAMP
+      types to TIMESTAMP WITH TIME ZONE.  Change all the gncEntry refs
+      to gncSplit, and entryGuid to splitGuid.
+    - Grouped all the index creates at the end for readability and
+      maintenance ease.
+
+    * src/backend/postgres/table-version.sql: Added a new insert row for
+      the gncVersion table to reflect these changes.
+
+    * src/backend/postgres/table.m4: Change all the gncEntry refs to
+      gncSplit, and entryGuid to splitGuid.
+
+    * src/backend/postgres/upgrade.c: Added message.h and qofbackend.h
+      for error messaging support.
+    - In each update function, added a call the DB for BEGIN and COMMIT.
+    - Changed all the gncEntry and entryGuid to gncSplit and splitGuid.
+    - Added the add_timezone_support() function to perform the latest
+      upgrades.
+    - pgendUpgradeDB(): Add a call to add_timezone_support() if the minor
+      version is less than 5.
+    - Changed PGEND_CURRENT_MINOR_VERSION from 4 to 5
+
+    * src/backend/postgres/newtables.h: new file for upgrading db tables
+      to v1.5.0.
+
+    * src/engine/qofbackend.c -- qof_backend_set_message(): Allow the
+      function to accept an NULL argument for the message, and to set
+      the backend error message to NULL in such a case.
+
+	FIXES #90768
+
 2003-08-03  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/druid-loan.c: Apply patch to fix a number of

@@ -115,7 +115,7 @@ delete_list_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    GList * deletelist = (GList *) data;
    GUID guid = nullguid;
 
-   string_to_guid (DB_GET_VAL ("entryGuid", j), &guid);
+   string_to_guid (DB_GET_VAL ("splitGuid", j), &guid);
 
    /* If the database has splits that the engine doesn't,
     * collect 'em up & we'll have to delete em */
@@ -126,7 +126,7 @@ delete_list_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       dti = g_new (DeleteTransInfo, 1);
 
       dti->guid = guid;
-      dti->guid_str = g_strdup (DB_GET_VAL ("entryGuid", j));
+      dti->guid_str = g_strdup (DB_GET_VAL ("splitGuid", j));
       dti->iguid = atoi (DB_GET_VAL ("iguid", j));
 
       deletelist = g_list_prepend (deletelist, dti);
@@ -157,7 +157,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
     * since what is there may not match what we have cached in 
     * the engine. */
    p = be->buff; *p = 0;
-   p = stpcpy (p, "SELECT entryGuid, iguid FROM gncEntry WHERE transGuid='");
+   p = stpcpy (p, "SELECT splitGuid, iguid FROM gncSplit WHERE transGuid='");
    p = guid_to_string_buff(xaccTransGetGUID(trans), p);
    p = stpcpy (p, "';");
 
@@ -185,7 +185,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
           }
         }
 
-      p = stpcpy (p, "DELETE FROM gncEntry WHERE entryGuid='");
+      p = stpcpy (p, "DELETE FROM gncSplit WHERE splitGuid='");
       p = stpcpy (p, dti->guid_str);
       p = stpcpy (p, "';\n");
    }
@@ -265,7 +265,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       {
          Split * s = node->data;
          pgendStoreAuditSplit (be, s, SQL_DELETE);
-         p = stpcpy (p, "DELETE FROM gncEntry WHERE entryGuid='");
+         p = stpcpy (p, "DELETE FROM gncSplit WHERE splitGuid='");
          p = guid_to_string_buff (xaccSplitGetGUID(s), p);
          p = stpcpy (p, "';\n");
       }
@@ -311,7 +311,7 @@ pgendStoreTransaction (PGBackend *be, Transaction *trans)
    /* lock it up so that we store atomically */
    bufp = "BEGIN;\n"
           "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
-          "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
+          "LOCK TABLE gncSplit IN EXCLUSIVE MODE;\n";
    SEND_QUERY (be,bufp, );
    FINISH_QUERY(be->connection);
 
@@ -364,7 +364,7 @@ pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
    /* lock it up so that we store atomically */
    p = "BEGIN;\n"
        "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
-       "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
+       "LOCK TABLE gncSplit IN EXCLUSIVE MODE;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
@@ -441,7 +441,7 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
    pbuff = be->buff;
    pbuff[0] = 0;
    pbuff = stpcpy (pbuff, 
-                   "SELECT * FROM gncEntry WHERE transGuid='");
+                   "SELECT * FROM gncSplit WHERE transGuid='");
    pbuff = guid_to_string_buff(trans_guid, pbuff);
    pbuff = stpcpy (pbuff, "';");
 
@@ -467,9 +467,9 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
 
             /* --------------------------------------------- */
             /* first, lets see if we've already got this one */
-            PINFO ("split GUID=%s", DB_GET_VAL("entryGUID",j));
+            PINFO ("split GUID=%s", DB_GET_VAL("splitGuid",j));
             guid = nullguid;  /* just in case the read fails ... */
-            string_to_guid (DB_GET_VAL("entryGUID",j), &guid);
+            string_to_guid (DB_GET_VAL("splitGuid",j), &guid);
             s = pgendSplitLookup (be, &guid);
             if (!s)
             {
@@ -937,7 +937,7 @@ pgend_trans_commit_edit (QofBackend * bend,
    /* lock it up so that we query and store atomically */
    bufp = "BEGIN;\n"
           "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
-          "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
+          "LOCK TABLE gncSplit IN EXCLUSIVE MODE;\n";
    SEND_QUERY (be,bufp, );
    FINISH_QUERY(be->connection);
 
