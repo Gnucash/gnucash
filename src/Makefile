@@ -42,7 +42,7 @@ INCLPATH = -I/usr/include \
 
 CFLAGS   = -g -DCELL_WIDGETS=1
 LFLAGS   = -O2
-LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
+LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm -lefence
 LIBPATH  = -L/lib -L/usr/lib -L/usr/X11R6/lib/.
 TARGET   = ../xacc
 STATIC   = ../xacc-static

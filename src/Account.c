@@ -99,9 +99,9 @@ freeAccount( Account *acc )
   /* recursively free children */
   freeAccountGroup (acc->children);
 
-  XtFree(acc->accountName);
-  XtFree(acc->description);
-  XtFree(acc->notes);
+  free(acc->accountName);
+  free(acc->description);
+  free(acc->notes);
   
   /* any split pointing at this account needs to be unmarked */
   i=0;

@@ -49,10 +49,17 @@ xaccInitSplit( Split * split )
   split->acc         = NULL;
   split->parent      = NULL;
   
-  split->memo        = XtNewString("");
+  split->action      = strdup("");
+  split->memo        = strdup("");
   split->reconciled  = NREC;
   split->damount     = 0.0;
   split->share_price = 1.0;
+  split->balance             = 0.0;
+  split->cleared_balance     = 0.0;
+  split->reconciled_balance  = 0.0;
+  split->share_balance             = 0.0;
+  split->share_cleared_balance     = 0.0;
+  split->share_reconciled_balance  = 0.0;
 
   }
 
@@ -80,8 +87,8 @@ xaccFreeSplit( Split *split )
 
   xaccTransRemoveSplit (split->parent, split);
 
-  XtFree(split->memo);
-  XtFree(split->action);
+  free(split->memo);
+  free(split->action);
 
   /* just in case someone looks up freed memory ... */
   split->memo        = 0x0;
@@ -163,8 +170,8 @@ initTransaction( Transaction * trans )
   {
   
   /* fill in some sane defaults */
-  trans->num         = XtNewString("");
-  trans->description = XtNewString("");
+  trans->num         = strdup("");
+  trans->description = strdup("");
 
   trans->debit_splits    = (Split **) _malloc (sizeof (Split *));
   trans->debit_splits[0] = NULL;
@@ -211,8 +218,8 @@ freeTransaction( Transaction *trans )
   }
 
   _free (trans->debit_splits);
-  XtFree(trans->num);
-  XtFree(trans->description);
+  free(trans->num);
+  free(trans->description);
 
   /* just in case someone looks up freed memory ... */
   trans->num         = 0x0;
@@ -454,22 +461,22 @@ xaccCountTransactions (Transaction **tarray)
 void
 xaccTransSetDescription  (Transaction *trans, char *desc)
 {
-   if (trans->description) XtFree (trans->description);
-   trans->description = XtNewString (desc);
+   if (trans->description) free (trans->description);
+   trans->description = strdup (desc);
 }
 
 void
 xaccTransSetMemo (Transaction *trans, char *memo)
 {
-   if (trans->credit_split.memo) XtFree (trans->credit_split.memo);
-   trans->credit_split.memo = XtNewString (memo);
+   if (trans->credit_split.memo) free (trans->credit_split.memo);
+   trans->credit_split.memo = strdup (memo);
 }
 
 void
 xaccTransSetAction (Transaction *trans, char *actn)
 {
-   if (trans->credit_split.action) XtFree (trans->credit_split.action);
-   trans->credit_split.action = XtNewString (actn);
+   if (trans->credit_split.action) free (trans->credit_split.action);
+   trans->credit_split.action = strdup (actn);
 }
 
 void
@@ -484,15 +491,15 @@ xaccTransSetReconcile (Transaction *trans, char recn)
 void
 xaccSplitSetMemo (Split *split, char *memo)
 {
-   if (split->memo) XtFree (split->memo);
-   split->memo = XtNewString (memo);
+   if (split->memo) free (split->memo);
+   split->memo = strdup (memo);
 }
 
 void
 xaccSplitSetAction (Split *split, char *actn)
 {
-   if (split->action) XtFree (split->action);
-   split->action = XtNewString (actn);
+   if (split->action) free (split->action);
+   split->action = strdup (actn);
 }
 
 void
