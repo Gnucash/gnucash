@@ -140,7 +140,7 @@ void          xaccTransDestroy (Transaction *);
  *    any added splits, and undoing the effects of xaccTransDestroy,
  *    as well as restoring prices, memo's descriptions, etc.
  *
- * The xaccTransIsOpen() method returns GNC_T if the transaction
+ * The xaccTransIsOpen() method returns TRUE if the transaction
  *    is open for editing. Otherwise, it returns false.
  */
 void          xaccTransBeginEdit (Transaction *, int defer);

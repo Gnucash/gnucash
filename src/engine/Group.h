@@ -268,8 +268,8 @@ void xaccAccountsBeginStagedTransactionTraversals (Account **accounts);
 
 /* xaccTransactionTraverse() checks the stage of the given transaction.
  *    If the transaction hasn't reached the given stage, the transaction
- *    is updated to that stage and the function returns GNC_T. Otherwise
- *    no change is made and the function returns GNC_F.
+ *    is updated to that stage and the function returns TRUE. Otherwise
+ *    no change is made and the function returns FALSE.
  *
  * xaccSplitTransactionTraverse() behaves as above using the parent of
  *    the given split.

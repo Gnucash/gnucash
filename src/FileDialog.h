@@ -68,7 +68,7 @@
  *    otherwise no action will be performed. If there is no currently
  *    locked session, a popup will query the user for a filename
  *    (using the gncFileSaveAs() routine). The routine will return
- *    TRUE if the user hits "Yes" or "No" and GNC_F if the user
+ *    TRUE if the user hits "Yes" or "No" and FALSE if the user
  *    hits "Cancel". If nothing needed to be saved, the routine
  *    will return TRUE.
  *
