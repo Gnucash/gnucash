@@ -21,6 +21,9 @@ cibc_visa.qfx
     Canadian Bank of Commerce checking and visa card statements.
     Note dissimilarities.
 
+wamu.qfx
+    Washington Mutual checking account with debit card
+
 
 Guide to *.xac Files:
 ---------------------
