@@ -1843,15 +1843,17 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
                           xmDialogShellWidgetClass, parent,
                           XmNdeleteResponse,   XmDESTROY,
                           XmNtitle,            windowname,
-/*
-                          XmNwidth,            395,
-                          XmNheight,           400,
-                          XmNminWidth,         495,
-                          XmNmaxWidth,         495,
-                          XmNminHeight,        500,
-*/
-                          /* XmNresizable,        FALSE, */
-                          /* XmNallowShellResize, FALSE, */
+                          /*
+                           * Let the window find ti's own size, 
+                           * based on the size of the fonts.
+                           * XmNwidth,            395,
+                           * XmNheight,           400,
+                           * XmNminWidth,         495,
+                           * XmNmaxWidth,         495,
+                           * XmNminHeight,        500,
+                           */
+                          /* XmNresizable,        False, */
+                          /* XmNallowShellResize, False, */
                           XmNtransient,        FALSE,  /* allow window to be repositioned */
                           NULL );
   
@@ -2283,22 +2285,24 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 
   /* create action box for the first time */
   { 
-  int width;
+  int width, downwidth;
   width = XbaeMatrixGetColumnPixelWidth (reg, regData->cellColLocation[ACTN_CELL_ID]);
-  /* hack alert -- we do want popbox drop-down width to be font dependant */
-  regData->actbox = actionBox (reg, width, 55);
+  /* it would be nice if ComboBox had an XmNunits resource ... but it doesn't */
+  downwidth =  (int) (1.3 * ((float) width));
+  regData->actbox = actionBox (reg, width, downwidth);
   }
 
   /* create the xfer account box for the first time */
   /* but first, find the topmost group */
   {
   AccountGroup *grp;
-  int width;
+  int width, downwidth;
   grp = xaccGetRootGroupOfAcct (regData->blackacc[0]);
   width = XbaeMatrixGetColumnPixelWidth (reg, regData->cellColLocation[XFRM_CELL_ID]);
-  /* hack alert -- we do want popbox drop-down width to be font dependant */
-  regData->xfrmbox = xferBox (reg, grp, width, 103);
-  regData->xtobox  = xferBox (reg, grp, width, 103);
+  downwidth =  (int) (1.2 * ((float) width));
+  /* it would be nice if ComboBox had an XmNunits resource ... but it doesn't */
+  regData->xfrmbox = xferBox (reg, grp, width, downwidth);
+  regData->xtobox  = xferBox (reg, grp, width, downwidth);
   }
 
   /******************************************************************\

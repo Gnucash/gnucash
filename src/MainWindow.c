@@ -173,8 +173,13 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
     if (acc->children) {
        /* if the arrow button doesn't exist, add it */
        if (NULL == acc->arrowb) {
+          int height;
+          /* adjust arrow size for font size */
+          height = XbaeMatrixGetRowPixelHeight (acctrix);
           acc->arrowb = XtVaCreateManagedWidget ("accarrow", 
                                       xmArrowButtonWidgetClass, acctrix,
+                                      XmNwidth, height,
+                                      XmNheight, height,
                                       XmNshadowThickness, 0,
                                       XmNarrowDirection, XmARROW_DOWN, 
                                       NULL);
@@ -464,8 +469,12 @@ mainWindow( Widget parent )
   mainwindow = XtVaCreateManagedWidget( "mainwindow", 
 					xmMainWindowWidgetClass, parent, 
 					XmNdeleteResponse,       XmDESTROY,
-                                        XmNwidth,     450,
-                                        XmNheight,    240,
+                                        /*
+                                         * Let the window find its own size, 
+                                         * based on the font sizes.
+                                         * XmNwidth,     450,
+                                         * XmNheight,    240,
+                                         */
 					NULL );
   
   /* Umm... this doesn't seem to be getting called */

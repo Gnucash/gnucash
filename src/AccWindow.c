@@ -123,12 +123,16 @@ accWindow( Widget parent )
 				 xmDialogShellWidgetClass, parent,
 				 XmNtitle,            "Set Up Account",
 				 XmNdeleteResponse,   XmDESTROY,
-				 XmNwidth,     350,
-				 XmNminWidth,  350,
-				 XmNmaxWidth,  350,
-				 XmNheight,    340,
-				 XmNminHeight, 340,
-				 XmNmaxHeight, 340,
+                                 /*
+                                  * Let the window find it's own size,
+                                  * based on the font size.
+				  * XmNwidth,     350,
+				  * XmNminWidth,  350,
+				  * XmNmaxWidth,  350,
+				  * XmNheight,    340,
+				  * XmNminHeight, 340,
+				  * XmNmaxHeight, 340,
+                                  */
                                  XmNresizable, FALSE,
                                  XmNallowShellResize, FALSE,
                                  /* XmNtransient, FALSE, */ /* allow window to be repositioned */
@@ -409,12 +413,16 @@ editAccWindow( Widget parent, Account *account )
 				 xmDialogShellWidgetClass, parent,
 				 XmNtitle,            "Edit Account",
 				 XmNdeleteResponse,   XmDESTROY,
-				 XmNwidth,     350,
-				 XmNminWidth,  350,
-				 XmNmaxWidth,  350,
-				 XmNheight,    150,
-				 XmNminHeight, 150,
-				 XmNmaxHeight, 150,
+                                 /*
+                                  * Let the window find it's own size, 
+                                  * based on the size of the font.
+				  * XmNwidth,     350,
+				  * XmNminWidth,  350,
+				  * XmNmaxWidth,  350,
+				  * XmNheight,    150,
+				  * XmNminHeight, 150,
+				  * XmNmaxHeight, 150,
+                                  */
                                  XmNresizable, FALSE,
                                  XmNallowShellResize, FALSE,
                                  XmNtransient, FALSE,  /* allow window to be repositioned */

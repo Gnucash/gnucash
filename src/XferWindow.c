@@ -109,12 +109,17 @@ xferWindow( Widget parent )
                                  xmDialogShellWidgetClass, parent,
                                  XmNtitle,            "Transfer Money",
                                  XmNdeleteResponse,   XmDESTROY,
-                                 XmNwidth,     450,
-                                 XmNminWidth,  450,
-                                 XmNmaxWidth,  450,
-                                 XmNheight,    230,
-                                 XmNminHeight, 230,
-                                 XmNmaxHeight, 230,
+                                 /*
+                                  * Let the window find its own size,
+                                  * based on the size of the fonts
+                                  * XmNwidth,     450,
+                                  * XmNminWidth,  450,
+                                  * XmNmaxWidth,  450,
+                                  * XmNheight,    230,
+                                  * XmNminHeight, 230,
+                                  * XmNmaxHeight, 230,
+                                  */
+                                 XmNresizable, False,
                                  NULL );
   
   XtAddCallback( dialog, XmNdestroyCallback, 

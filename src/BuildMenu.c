@@ -54,6 +54,7 @@
 #include <Xm/ToggleBG.h>
 #include <Xm/PushB.h>
 #include <Xm/PushBG.h>
+#include <Xm/CascadeB.h>
 #include <Xm/CascadeBG.h>
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
@@ -194,7 +195,8 @@ Widget BuildMenu( Widget parent, int menu_type, char *menu_title,
     {
     str = XmStringCreateLocalized (menu_title);
     cascade = XtVaCreateManagedWidget( menu_title,
-				       xmCascadeButtonGadgetClass, parent, 
+				       /* xmCascadeButtonGadgetClass, parent, */
+				       xmCascadeButtonWidgetClass, parent, 
 				       XmNsubMenuId,   menu,
 				       XmNlabelString, str,
 				       XmNmnemonic,    menu_mnemonic,

@@ -54,12 +54,17 @@ simpleReportWindow( Widget parent )
 				 xmDialogShellWidgetClass, parent,
 				 XmNtitle,            "Report",
 				 XmNdeleteResponse,   XmDESTROY,
-				 XmNwidth,     350,
-				 XmNminWidth,  350,
-				 XmNmaxWidth,  350,
-				 XmNheight,    300,
-				 XmNminHeight, 300,
-				 XmNmaxHeight, 300,
+                                 /* 
+                                  * Let the window find its own size,
+                                  * based on the size of the fonts.
+				  * XmNwidth,     350,
+				  * XmNminWidth,  350,
+				  * XmNmaxWidth,  350,
+				  * XmNheight,    300,
+				  * XmNminHeight, 300,
+				  * XmNmaxHeight, 300,
+                                  */
+                                 XmNresizable, False,
 				 NULL );
   
   /* The form to put everything in the dialog in */
