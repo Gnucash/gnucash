@@ -1,5 +1,11 @@
 2001-06-02  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/report/register.scm: fix bugs
+
+	* src/scm/html-utilities.scm: fix bugs
+
+	* src/gnome/window-register.c: fix bugs
+
 	* src/scm/report/price-scatter.scm: same as below
 
 	* src/scm/prefs.scm: same as below

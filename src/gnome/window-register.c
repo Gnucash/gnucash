@@ -232,6 +232,8 @@ gnc_register_jump_to_split(RegWindow *regData, Split *split)
   VirtualCellLocation vcell_loc;
   SplitRegister *reg;
 
+  if (!regData) return;
+
   trans = xaccSplitGetParent(split);
   if (trans != NULL)
     if (gnc_register_include_date(regData, xaccTransGetDate(trans)))
@@ -260,6 +262,8 @@ gnc_register_jump_to_split_amount(RegWindow *regData, Split *split)
   Transaction *trans;
   VirtualLocation virt_loc;
   SplitRegister *reg;
+
+  if (!regData) return;
 
   trans = xaccSplitGetParent(split);
   if (trans != NULL)

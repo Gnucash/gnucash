@@ -122,7 +122,9 @@
     (let* ((row-contents '())
 	   (parent (gnc:split-get-parent split))
 	   (account (gnc:split-get-account split))
-	   (currency (gnc:account-get-commodity account))
+	   (currency (if account
+                         (gnc:account-get-commodity account)
+                         (gnc:default-currency)))
 	   (damount (gnc:split-get-share-amount split))
 	   (split-value (gnc:make-gnc-monetary currency damount)))
 
