@@ -46,14 +46,160 @@ char days[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 
 static int been_here = 0;
 
+DateFormat dateFormat = DATE_FORMAT_US;
+
 /********************************************************************\
 \********************************************************************/
 
-void
-sprtDate (char * buff, int day, int month, int year)
+
+/**
+ * printDate
+ *    Convert a date as day / month / year integers into a localized string
+ *    representation
+ *
+ * Args:   buff - pointer to previously allocated character array; its size
+ *                must be at lease MAX_DATE_LENTH bytes.
+ *         day - day of the month as 1 ... 31
+ *         month - month of the year as 1 ... 12
+ *         year - year (4-digit)
+ *
+ * Return: nothing
+ *
+ * Globals: global dateFormat value
+ */
+void printDate (char * buff, int day, int month, int year)
 {
-   sprintf (buff, "%2d/%2d/%4d", month, day, year);
+  switch(dateFormat)
+    {
+    case DATE_FORMAT_UK:
+      sprintf (buff, "%2d/%2d/%4d", day, month, year);
+      break;
+    case DATE_FORMAT_CE:
+      sprintf (buff, "%2d.%2d.%4d", day, month, year);
+      break;
+    case DATE_FORMAT_ISO:
+      sprintf (buff, "%04d-%02d-%02d", year, month, day);
+      break;
+    case DATE_FORMAT_US:
+    default:
+      sprintf (buff, "%2d/%2d/%4d", month, day, year);
+      break;
+    }
 }
+
+
+/**
+ * scanDate
+ *    Convert a string into  day / month / year integers according to
+ *    the current dateFormat value.
+ *
+ * Args:   buff - pointer to date string
+ *         day -  will store day of the month as 1 ... 31
+ *         month - will store month of the year as 1 ... 12
+ *         year - will store the year (4-digit)
+ *
+ * Return: 0 if conversion was successful, 1 otherwise
+ *
+ * Globals: global dateFormat value
+ */
+int scanDate(const char *buff, int *day, int *month, int *year)
+{
+   char *dupe, *tmp, *first_field, *second_field, *third_field;
+   int iday, imonth, iyear;
+   time_t secs;
+   struct tm *now;
+
+   dupe = strdup (buff);
+   tmp = dupe;
+   first_field = 0x0;
+   second_field = 0x0;
+   third_field = 0x0;
+
+   /* use strtok to find delimiters */
+   if (tmp) {
+      first_field = strtok (tmp, ".,-+/\\()");
+      if (first_field) {
+         second_field = strtok (NULL, ".,-+/\\()");
+         if (second_field) {
+            third_field = strtok (NULL, ".,-+/\\()");
+         }
+      }
+   }
+   
+   /* if any fields appear blank, use today's date */
+   time (&secs);
+   now = localtime (&secs);
+   iday = now->tm_mday; 
+   imonth = now->tm_mon+1;
+   iyear = now->tm_year+1900;
+
+   /* get numeric values */
+   switch(dateFormat)
+   {
+     case DATE_FORMAT_UK:
+     case DATE_FORMAT_CE:
+       if (first_field) iday = atoi (first_field);
+       if (second_field) imonth = atoi (second_field);
+       if (third_field) iyear = atoi (third_field);
+       break;
+     case DATE_FORMAT_ISO:
+       if (first_field) iyear = atoi (first_field);
+       if (second_field) imonth = atoi (second_field);
+       if (third_field) iday = atoi (third_field);
+       break;
+     case DATE_FORMAT_US:
+     default:
+       if (first_field) imonth = atoi (first_field);
+       if (second_field) iday = atoi (second_field);
+       if (third_field) iyear = atoi (third_field);
+       break;
+   }
+
+   free (dupe);
+
+   /* if the year entered is smaller than 100, assume we mean the current
+      century (and are not revising some roman emperor's books) */
+   if(iyear<100)
+     iyear += ((int) ((now->tm_year+1900)/100)) * 100;
+
+   *year=iyear;
+   *month=imonth;
+   *day=iday;
+
+   return;
+}
+
+/**
+ * dateSeparator
+ *    Return the field separator for the current date format
+ *
+ * Args:   none
+ *
+ * Return: date character
+ *
+ * Globals: global dateFormat value
+ */
+char dateSeparator()
+{
+  char separator;
+  switch(dateFormat)
+  {
+    case DATE_FORMAT_CE:
+      separator='.';
+      break;
+    case DATE_FORMAT_ISO:
+      separator='-';
+      break;
+    case DATE_FORMAT_US:
+    case DATE_FORMAT_UK:
+    default:
+      separator='/';
+      break;
+  }
+  return separator;
+}
+
+
 
 /********************************************************************\
  * adjustDay                                                        *
@@ -240,41 +386,19 @@ datecmp( Date *date1, Date *date2 )
     }
   }
 
-/********************************************************************\
- * sscandate                                                        *
- *   parses a date from a given string                              *
- *                                                                  *
- * Args:   in_string -- the string to parse                         *
- *         date -- the date into which the parsed date is placed    *
- *         flag -- indicates whether to parse the whole of the      *
- *                 or a portion. Valid values are:                  *
-                   DATE_SHORT, DATE_YEAR and DATE_FULL              *
- * Return: number of characters read from string                    *
-\********************************************************************/
-int
-sscandate( const char *in_string, Date *date, int flags )
-{
-  int *a,*b,*c; /* pointers to address of day, month and year vars */
-  int ret;
-
-#ifdef UK_DATES
-  a=&date->day; b=&date->month; c=&date->year;
-#else
-  a=&date->month; b=&date->day; c=&date->year;
-#endif
-
-  switch (flags)
-    {
-    case DATE_SHORT:
-      ret=sscanf( in_string, "%d/%d", a, b ); break;
-    case DATE_YEAR:
-      ret=sscanf( in_string, "%d", c ); break;
-    case DATE_FULL:
-      ret=sscanf( in_string, "%d/%d/%d", a, b, c); break;
-    }
-  return ret;
-}
 
 
 /********************** END OF FILE *********************************\
 \********************************************************************/
+
+      
+/*
+  Local Variables:
+  tab-width: 2
+  indent-tabs-mode: nil
+  mode: c-mode
+  c-indentation-style: gnu
+  eval: (c-set-offset 'block-open '-)
+  End:
+*/
+      

@@ -646,7 +646,7 @@ xaccTransSetDateStr (Transaction *trans, char *str)
 {
    Date d;
 
-   sscandate (str, &d, DATE_FULL);
+   scanDate(str, &(d.day), &(d.month), &(d.year));
    xaccTransSetDate (trans, d.day, d.month, d.year);
 }
 
@@ -758,12 +758,8 @@ xaccTransGetDate (Transaction *trans)
 char *
 xaccTransGetDateStr (Transaction *trans)
 {
-
-   char buf [100];
-   sprintf( buf, "%2d/%2d/%02d",
-             trans->date.month,
-             trans->date.day,
-             (trans->date.year%100) );
+   char buf [MAX_DATE_LENGTH];
+   printDate(buf, trans->date.day, trans->date.month, trans->date.year%100);
    return strdup (buf);
 }
 

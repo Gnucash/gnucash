@@ -97,8 +97,21 @@ typedef struct _date {
   int day;
 } Date;
 
+typedef enum
+{
+  DATE_FORMAT_US,       /* United states: mm/dd/yyyy */
+  DATE_FORMAT_UK,       /* Britain: dd/mm/yyyy */
+  DATE_FORMAT_CE,       /* Continental Europe: dd.mm.yyyy */
+  DATE_FORMAT_ISO       /* ISO: yyyy-mm-dd */
+} DateFormat;
+
+/* the maximum length of a string created by sprtDate() */
+#define MAX_DATE_LENGTH 11
+
 /** PROTOTYPES ******************************************************/
-void   sprtDate (char * buff, int day, int month, int year);
+void printDate (char * buff, int day, int month, int year);
+int scanDate (const char *buff, int *day, int *monty, int *year);
+char dateSeparator(void);
 
 void   adjustDay( Date *date, int adj );
 void   adjustMonth( Date *date, int adj );
@@ -109,13 +122,11 @@ Date*  todaysDate( Date *date );
 int    daysInMonth( int month , int year );
 int    datecmp( Date *date1, Date *date2 );
 
-#define DATE_SHORT 0
-#define DATE_YEAR  1
-#define DATE_FULL  2
-
 int    sscandate( const char *in_string, Date *date, int flags);
 
 
 /** GLOBALS *********************************************************/
+
+extern DateFormat dateFormat;
 
 #endif /* __XACC_DATE_H__ */

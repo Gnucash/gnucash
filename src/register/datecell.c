@@ -46,74 +46,16 @@ static void setDateCellValue (BasicCell *, const char *);
    (cell)->value = strdup (str);		\
 }
 
-#define DATE_SEP '/'
-
 /* ================================================ */
 
-static void 
-prtDate (char * buff, int day, int month, int year)
-{
-   sprintf (buff, "%2d/%2d/%4d", month, day, year);
-}
-
-/* ================================================ */
 
 static
 void xaccParseDate (struct tm *parsed, const char * datestr)
 {
-   char *dupe, *tmp, *first_field, *second_field, *third_field;
+
    int iday, imonth, iyear;
-   time_t secs;
-   struct tm *now;
 
-   dupe = strdup (datestr);
-   tmp = dupe;
-   first_field = 0x0;
-   second_field = 0x0;
-   third_field = 0x0;
-
-   /* use strtok to find delimiters */
-   if (tmp) {
-      first_field = strtok (tmp, ".,-+/\\()");
-      if (first_field) {
-         second_field = strtok (NULL, ".,-+/\\()");
-         if (second_field) {
-            third_field = strtok (NULL, ".,-+/\\()");
-         }
-      }
-   }
-   
-   /* if any fields appear blank, use today's date */
-   time (&secs);
-   now = localtime (&secs);
-   iday = now->tm_mday; 
-   imonth = now->tm_mon+1;
-   iyear = now->tm_year+1900;
-
-#ifdef _PARSE_DATE_AS_DD_MM_YY
-   /* get numeric values */
-   if (first_field) iday = atoi (first_field);
-   if (second_field) imonth = atoi (second_field);
-   if (third_field) iyear = atoi (third_field);
-#endif /* _PARSE_DATE_AS_DD_MM_YY */
-
-#define _PARSE_DATE_AS_MM_DD_YY
-#ifdef _PARSE_DATE_AS_MM_DD_YY
-   /* get numeric values */
-   if (first_field) imonth = atoi (first_field);
-   if (second_field) iday = atoi (second_field);
-   if (third_field) iyear = atoi (third_field);
-#endif /* _PARSE_DATE_AS_MM_DD_YY */
-
-   /* check to see if day & month are reversed */
-   /* only works for some dates */
-   if (12 < imonth) {
-      int itmp = imonth;
-      imonth = iday;
-      iday = itmp;
-   }
-
-   free (dupe);
+   scanDate(datestr, &iday, &imonth, &iyear);
 
    if (parsed) {
       parsed->tm_mday = iday;
@@ -213,7 +155,9 @@ DateMV (BasicCell *_cell,
    if (isdigit (change[0])) return newval;
 
    /* accept the separator character */
-   if (DATE_SEP == change[0]) return newval;
+   /* Note that the separator of '-' (for DATE_FORMAT_ISO) takes precedence
+      over the accelerator below! */
+   if (dateSeparator() == change[0]) return newval;
 
    /* otherwise, maybe its an accelerator key. */
    date = &(cell->date);
@@ -295,7 +239,7 @@ DateMV (BasicCell *_cell,
       xaccValidateDate (date, 0);
    }
 
-   prtDate (buff, date->tm_mday, date->tm_mon+1, date->tm_year+1900);
+   printDate (buff, date->tm_mday, date->tm_mon+1, date->tm_year+1900);
 
    if (cell->cell.value) free (cell->cell.value);
    cell->cell.value = strdup (buff);
@@ -318,7 +262,7 @@ DateLeave (BasicCell *_cell, const char * curr)
     * what date that cell thinks it has.   */
    xaccParseDate (&(cell->date), curr);
 
-   prtDate (buff, cell->date.tm_mday, 
+   printDate (buff, cell->date.tm_mday, 
                   cell->date.tm_mon+1, 
                   cell->date.tm_year+1900);
 
@@ -355,7 +299,7 @@ xaccInitDateCell (DateCell *cell)
    time (&secs);
    now = localtime (&secs);
    cell->date = *now;
-   prtDate (buff, now->tm_mday, now->tm_mon+1, now->tm_year+1900);
+   printDate (buff, now->tm_mday, now->tm_mon+1, now->tm_year+1900);
  
    SET (&(cell->cell), buff);
  
@@ -393,7 +337,7 @@ xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
    cell->date.tm_mon = dada.tm_mon;
    cell->date.tm_year = dada.tm_year;
 
-   prtDate (buff, dada.tm_mday, dada.tm_mon+1, dada.tm_year+1900);
+   printDate (buff, dada.tm_mday, dada.tm_mon+1, dada.tm_year+1900);
 
    if (cell->cell.value) free (cell->cell.value);
    cell->cell.value = strdup (buff);
@@ -409,7 +353,7 @@ setDateCellValue (BasicCell *_cell, const char *str)
 
    xaccParseDate (&(cell->date), str);
 
-   prtDate (buff, cell->date.tm_mday, 
+   printDate (buff, cell->date.tm_mday, 
                   cell->date.tm_mon+1, 
                   cell->date.tm_year+1900);
 
