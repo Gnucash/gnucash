@@ -3,6 +3,11 @@
 	  to compare split value and quantities in tests, because Splits can
 	  adjust those values based on the commodity.
 
+	* src/backend/file/test/test-file-stuff.c -- don't spew so much
+	
+	* src/test-core and src/engine/test-core should not be added to
+	  the gnucash-build-env (noinst_ is a static library)
+	
 2002-10-14  Chris Lyttle  <chris@wilddev.net>
 
 	* src/import-export/Makefile.am: fix make dist breakage
