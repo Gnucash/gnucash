@@ -69,6 +69,8 @@ int force_double_entry = 0;
  * knowledge of the internals of the Transaction in one file.       *
 \********************************************************************/
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
 
 /********************************************************************\
  * xaccInitSplit
@@ -387,6 +389,7 @@ xaccFreeTransaction( Transaction *trans )
   Split *s;
 
   if (!trans) return;
+  ENTER ("xaccFreeTransaction(): addr=%p\n", trans);
 
   /* free up the destination splits */
   if (trans->splits) {
@@ -425,6 +428,7 @@ xaccFreeTransaction( Transaction *trans )
   }
 
   _free(trans);
+  LEAVE ("xaccFreeTransaction(): addr=%p\n", trans);
 }
 
 /********************************************************************\
@@ -462,9 +466,9 @@ xaccSplitSetBaseValue (Split *s, double value, char * base_currency)
       s -> damount = (value / (s->share_price));   
    } else 
    {
-      printf ("Error: xaccSplitSetBaseValue(): "
-              " inappropriate base currency %s "
-              " given split currency=%s and security=%s\n",
+      PERR ("xaccSplitSetBaseValue(): "
+            " inappropriate base currency %s "
+            " given split currency=%s and security=%s\n",
               base_currency, s->acc->currency, s->acc->security);
       return;
    }
@@ -504,9 +508,9 @@ xaccSplitGetBaseValue (Split *s, char * base_currency)
       value = s->damount * s->share_price;   
    } else 
    {
-      printf ("Error: xaccSplitGetBaseValue(): "
-              " inappropriate base currency %s "
-              " given split currency=%s and security=%s\n",
+      PERR ("xaccSplitGetBaseValue(): "
+            " inappropriate base currency %s "
+            " given split currency=%s and security=%s\n",
               base_currency, s->acc->currency, s->acc->security);
       return 0.0;
    }
@@ -553,8 +557,8 @@ ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
             if (!safe_strcmp(s->acc->security, base_currency)) {
                value += s->damount;
             } else {
-               printf ("Internal Error: ComputeValue(): "
-                       " inconsistent currencies \n");
+               PERR ("Internal Error: ComputeValue(): "
+                     " inconsistent currencies \n");
                assert (0);
             }
          }
@@ -652,10 +656,10 @@ xaccSplitRebalance (Split *split)
       }
   
     if ((!ra) && (!rb)) {
-        printf ("Internal Error: SplitRebalance(): "
-                " no common split currencies \n");
-        printf ("\tbase acc=%s cur=%s base_sec=%s\n"
-                "\tacc=%s scur=%s ssec=%s \n", 
+        PERR ("Internal Error: SplitRebalance(): "
+              " no common split currencies \n");
+        PERR ("\tbase acc=%s cur=%s base_sec=%s\n"
+              "\tacc=%s scur=%s ssec=%s \n", 
             split->acc->accountName, split->acc->currency, split->acc->security,
             s->acc->accountName, s->acc->currency, s->acc->security );
         assert (0);
@@ -745,9 +749,9 @@ xaccSplitRebalance (Split *split)
 
 #define CHECK_OPEN(trans) {					\
    if (!trans->open) {						\
-      printf ("Error: transaction %p not open for editing\n", trans);	\
+      PERR ("transaction %p not open for editing\n", trans);	\
       /* assert (trans->open); */					\
-      printf ("%s:%d \n", __FILE__, __LINE__);			\
+      PERR ("\t%s:%d \n", __FILE__, __LINE__);			\
       /* return; */						\
    }								\
 }
@@ -775,6 +779,7 @@ xaccTransCommitEdit (Transaction *trans)
    Account *acc;
 
    if (!trans) return;
+   ENTER ("xaccTransCommitEdit(): trans addr=%p\n", trans);
    CHECK_OPEN (trans);
 
    /* At this point, we check to see if we have a valid transaction.
@@ -785,6 +790,7 @@ xaccTransCommitEdit (Transaction *trans)
    split = trans->splits[0];
    if (!split)
    {
+      PINFO ("xaccTransCommitEdit(): delete trans at addr=%p\n", trans);
       /* Make a log in the journal before destruction.  */
       xaccTransWriteLog (trans, 'D');
       xaccFreeTransaction (trans);
@@ -830,6 +836,8 @@ xaccTransCommitEdit (Transaction *trans)
        (trans->orig->date_posted.tv_sec  != trans->date_posted.tv_sec))
    {
 
+      DEBUG ("xaccTransCommitEdit(): date changed to %u %s\n",
+             trans->date_posted.tv_sec, ctime (&trans->date_posted.tv_sec));
       /* since the date has changed, we need to be careful to 
        * make sure all associated splits are in proper order
        * in thier accounts.  The easiest way of ensuring this
@@ -864,6 +872,7 @@ xaccTransCommitEdit (Transaction *trans)
    xaccFreeTransaction (trans->orig);
    trans->orig = NULL;
 
+   LEAVE ("xaccTransCommitEdit(): trans addr=%p\n", trans);
 }
 
 void
@@ -876,6 +885,7 @@ xaccTransRollbackEdit (Transaction *trans)
 
    if (!trans) return;
    CHECK_OPEN (trans);
+   ENTER ("xaccTransRollbackEdit(): trans addr=%p\n", trans);
 
    /* copy the original values back in. */
    orig = trans->orig;
@@ -971,6 +981,7 @@ xaccTransRollbackEdit (Transaction *trans)
    xaccFreeTransaction (trans->orig);
    trans->orig = NULL;
    trans->open = 0;
+   LEAVE ("xaccTransRollbackEdit(): trans addr=%p\n", trans);
 }
 
 
@@ -1375,6 +1386,8 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
 {
    if (!trans) return;
    CHECK_OPEN (trans);
+   PINFO ("xaccTransSetDateSecs(): addr=%p set date to %u %s \n",
+         trans, secs, ctime (&secs));
 
    trans->date_posted.tv_sec = secs;
    trans->date_posted.tv_nsec = 0;
@@ -1404,6 +1417,8 @@ xaccTransSetDateTS (Transaction *trans, struct timespec *ts)
 {
    if (!trans) return;
    CHECK_OPEN (trans);
+   PINFO ("xaccTransSetDateTS(): addr=%p set date to %u %s \n",
+         trans, ts->tv_sec, ctime (&ts->tv_sec));
 
    trans->date_posted.tv_sec = ts->tv_sec;
    trans->date_posted.tv_nsec = ts->tv_nsec;
@@ -1449,6 +1464,10 @@ xaccTransSetDateToday (Transaction *trans)
    gettimeofday (&tv, NULL);
    trans->date_posted.tv_sec = tv.tv_sec;
    trans->date_posted.tv_nsec = 1000 * tv.tv_usec;
+
+   PINFO ("xaccTransSetDateToday(): addr=%p set date to %u %s \n",
+         trans, tv.tv_sec, ctime (&tv.tv_sec));
+
 }
 
 

@@ -40,6 +40,11 @@
 #include "TransactionP.h"
 #include "util.h"
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
+
+/* ================================================== */
+
 struct _Query {
    Account ** acc_list;
 
@@ -547,6 +552,8 @@ xaccQueryGetSplits (Query *q)
    Split *s, **slist;
    Account *acc;
 
+   ENTER ("xaccQueryGetSplits()\n");
+
    if (!q) return NULL;
 
    /* tmp hack alert */
@@ -606,6 +613,8 @@ xaccQueryGetSplits (Query *q)
    }
    slist[k] = NULL;
 
+   DEBUG ("xaccQueryGetSplits(): will sort %d splits\n", nsplits);
+
    /* sort them ... */
    SortSplits (q, slist);
 
@@ -654,6 +663,7 @@ xaccQueryGetSplits (Query *q)
       }
       i++; s=slist[i];
    }
+   LEAVE ("xaccQueryGetSplits(): returning  %d splits\n", nret);
    
    return q->split_list;
 }
