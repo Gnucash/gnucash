@@ -201,7 +201,8 @@ printf ("save split is %p \n", split);
 
       /* do some reparenting */
       old_acc = xaccSplitGetAccount (split);
-      new_acc = xaccGetPeerAccountFromName (old_acc, reg->xfrmCell->cell.value);
+
+      new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
       xaccAccountInsertSplit (new_acc, split);
 
       /* make sure any open windows of the old account get redrawn */
