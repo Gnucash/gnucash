@@ -1,5 +1,7 @@
 # You can debug gnucash by running gdb as "gdb -x gnucash.gdb-cmds"
 # and then executing "run-gnucash somefile".
+#
+# Secrets: gdb requires that parens be escaped as well as quotes ...
 
 file gnucash.bin
 
@@ -8,7 +10,8 @@ define run-gnucash
            --startup-dir ./share/scm/startup \
            --share-dir ./share \
            --config-dir ./etc \
-           --load-path \
-   "(\"(./share/scm)\")" --doc-path  "(\"(./Docs)\"\"(./Reports)\")" $arg0
+           --load-path \(\"\(./share/scm\)\"\) \
+           --doc-path  \(\"\(./Docs\)\"\"\(./Reports\)\"\) \
+           $arg0
   run
 end
