@@ -455,6 +455,13 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
     }
   }
 
+  if((denom == GNC_DENOM_AUTO) &&
+     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_LCD)) 
+  {
+    denom = gnc_numeric_lcd(a, b);
+    how   = how & GNC_NUMERIC_RND_MASK;
+  }
+
   if(a.denom < 0) {
     a.num *= a.denom;
     a.denom = 1;
@@ -531,13 +538,6 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
   }
 #endif
   
-  if((denom == GNC_DENOM_AUTO) &&
-     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_LCD)) 
-  {
-    denom = gnc_numeric_lcd(a, b);
-    how   = how & GNC_NUMERIC_RND_MASK;
-  }
-
   result = gnc_numeric_convert(product, denom, how);                             
   return result;
 }
