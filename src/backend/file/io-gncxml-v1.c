@@ -370,6 +370,7 @@ qof_session_load_from_xml_file(QofBook *book, const char *filename)
   g_return_val_if_fail(book, FALSE);
   g_return_val_if_fail(filename, FALSE);
 
+  xaccDisableDataScrubbing();
   top_level_pr = gncxml_setup_for_read (&global_parse_status);
   g_return_val_if_fail(top_level_pr, FALSE);
 
@@ -380,6 +381,7 @@ qof_session_load_from_xml_file(QofBook *book, const char *filename)
                               &parse_result);
 
   sixtp_destroy(top_level_pr);
+  xaccEnableDataScrubbing();
 
   if(parse_ok) 
   {
