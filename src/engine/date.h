@@ -133,6 +133,12 @@ void scanDate (const char *buff, int *day, int *month, int *year);
  */
 char dateSeparator(void);
 
+/*
+ * hack alert XXX FIXME -- these date routines return incorrect
+ * values for dates before 1970.  Most of them are good only up 
+ * till 2038.  This needs fixing ...
+ */
+
 time_t xaccDMYToSec (int day, int month, int year);
 time_t xaccScanDateS (const char *buff);
 

@@ -327,6 +327,8 @@ char dateSeparator ()
 /********************************************************************\
  * iso 8601 datetimes should look like 1998-07-02 11:00:00.68-05
 \********************************************************************/
+/* hack alert -- this routine returns incorrect values for 
+ * dates before 1970 */
 
 Timespec
 gnc_iso8601_to_timespec(const char *str)
@@ -373,6 +375,8 @@ gnc_iso8601_to_timespec(const char *str)
 
 /********************************************************************\
 \********************************************************************/
+/* hack alert -- this routine returns incorrect values for 
+ * dates before 1970 */
 
 time_t 
 xaccDMYToSec (int day, int month, int year)
