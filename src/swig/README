@@ -1,0 +1,18 @@
+
+This README needs some serious help.
+
+./examples contains whatever examples we've accumulated to date.
+
+Each language interface is built in a separate subdirectory.  Right
+now we have guile and perl5.  A simple "make" should build everything.
+
+Building guile will result in guile/xacc-guile, a simple interpreter
+that will let you execute scheme forms (including xacc commands).  We
+need to add an example of building a dynamically loadable guile module
+later, but guile/xacc-guile.c shows you how easy it is to embed a
+guile interpreter in your app, and then load all the xacc functions
+into the interpreter.
+
+Building perl5 will result in a perl module.  For an example of how to
+use it, see ../cbb/cbb-to-xacc.
+
