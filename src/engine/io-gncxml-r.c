@@ -9,9 +9,6 @@
 
 #include "config.h"
 
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include <glib.h>
@@ -45,29 +42,15 @@
 #endif
 
 #include "Account.h"
-#include "date.h"
-#include "DateUtils.h"
-#include "Group.h"
-#include "messages.h"
 #include "Query.h"
-#include "Transaction.h"
-#include "TransLog.h"
-#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 
 #include "io-gncxml.h"
-
-#include "AccountP.h"
-#include "TransactionP.h"
 
 #include "sixtp.h"
 #include "sixtp-stack.h"
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
-
-#ifdef USE_GUILE_FOR_DOUBLE_CONVERSION 
-#include <guile/gh.h>
-#endif /* USE_GUILE_FOR_DOUBLE_CONVERSION */
 
 /* result for a characters handler is shared across all character
    handlers for a given node.  result for start/end pair is shared as
@@ -93,7 +76,6 @@
 */
 
 static short module = MOD_IO;
-
 
 static xmlEntityPtr
 sixtp_sax_get_entity_handler(void *user_data, const CHAR *name) {
