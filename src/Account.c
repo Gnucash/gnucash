@@ -587,8 +587,13 @@ xaccRecomputeBalance( Account * acc )
   }
 
   if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
-    acc -> balance = share_balance * (last_trans->share_price);
-    acc -> cleared_balance = share_cleared_balance * (last_trans->share_price);
+    if (last_trans) {
+       acc -> balance = share_balance * (last_trans->share_price);
+       acc -> cleared_balance = share_cleared_balance * (last_trans->share_price);
+    } else {
+       acc -> balance = 0.0;
+       acc -> cleared_balance = 0.0;
+    }
   } else {
     acc -> balance = dbalance;
     acc -> cleared_balance = dcleared_balance;
