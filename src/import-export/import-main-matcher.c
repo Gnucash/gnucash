@@ -49,6 +49,10 @@ struct _generic_transaction_info
   GdkPixmap* fleche_pixmap;
   GdkPixmap* checkbox_checked_pixmap;
   GdkPixmap* checkbox_unchecked_pixmap;
+  GdkColor color_back_white;
+  GdkColor color_back_red;
+  GdkColor color_back_green;
+  GdkColor color_back_yellow;
   int selected_row;
 };
 
@@ -420,7 +424,19 @@ GNCGenTransaction *gnc_gen_trans_list_new (GtkWidget *parent,
 									    NULL,
 									    NULL,
 									    checkbox_unchecked_xpm);
-  
+ /*Initialise the colors */
+  info->color_back_red.red=65535;
+  info->color_back_red.green=32766;
+  info->color_back_red.blue=32766;
+  info->color_back_green.red=49151;
+  info->color_back_green.green=65535;
+  info->color_back_green.blue=49151;
+  info->color_back_yellow.red=65535;
+  info->color_back_yellow.green=65535;
+  info->color_back_yellow.blue=0;
+  info->color_back_white.red=65535;
+  info->color_back_white.green=65535;
+  info->color_back_white.blue=65535;
   /*Ajust column size*/
   gtk_clist_set_column_auto_resize (GTK_CLIST (info->clist),
 				    DOWNLOADED_CLIST_DATE,
@@ -493,61 +509,75 @@ trans_clist_row_destroy_cb (gpointer data)
 }
 
 
-/*static void free_clist_row_text (GNCGenTransaction *gui, 
-  int row_number)
-  {
-  gchar *tmp;
-  gint i;
-  
-  DEBUG("Begin");
-  g_assert (gui); 
-  for (i = 0; i < NUM_COLUMNS_DOWNLOADED_CLIST; i++)
-  {
-  tmp=NULL;
-  if(gtk_clist_get_text (GTK_CLIST (gui->clist), row_number, 
-  i, 
-  &tmp)==1)
-  {
-  g_free(tmp);
-  }
-  }
-  }*/
-
 static char ** gen_clist_row_text (GNCImportTransInfo *info)
 {
   static char *text[NUM_COLUMNS_DOWNLOADED_CLIST];
   gint i;
-  gchar *tmp;
-  DEBUG("Begin");
   g_assert (info);
   for(i = 0; i < NUM_COLUMNS_DOWNLOADED_CLIST; i++)
     {
+      text[i]=g_strdup("");
+    }
+  return text;
+}
+
+
+static void
+refresh_clist_row (GNCGenTransaction *gui, 
+		   int row_number, GNCImportTransInfo *info)
+{
+  char *text[NUM_COLUMNS_DOWNLOADED_CLIST];
+  char **old_text = g_new(char *, NUM_COLUMNS_DOWNLOADED_CLIST);/* Should be g_new?*/
+  gint i;
+  gchar *tmp;
+  g_assert (gui);
+  g_assert (info);
+    DEBUG("Begin");
+  gnc_gen_trans_list_freeze(gui);
+  
+  for (i = 0; i < NUM_COLUMNS_DOWNLOADED_CLIST; i++)
+    {
+      gtk_clist_get_text (GTK_CLIST (gui->clist), row_number, 
+	i, 
+	&(old_text[i]));
       text[i]=NULL;
     }
 
-/*  row_number = gtk_clist_find_row_from_data(matcher->downloaded_clist,
-					    transaction_info);*/
-
   /* Note that ALL strings must be duplicated with g_strdup or equivalent, so that they can
-     be g_freed by free_clist_row_text*/
+     be freed by the widget*/
   
   /*Account:*/
   text[DOWNLOADED_CLIST_ACCOUNT] = g_strdup(xaccAccountGetName(xaccSplitGetAccount(gnc_import_TransInfo_get_fsplit (info))));
+  gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
+		      DOWNLOADED_CLIST_ACCOUNT, 
+		      text[DOWNLOADED_CLIST_ACCOUNT]);
 
   /*Date*/
 
   text[DOWNLOADED_CLIST_DATE] = g_strdup( xaccPrintDateSecs ( xaccTransGetDate( gnc_import_TransInfo_get_trans(info) ) ));
+  gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
+		      DOWNLOADED_CLIST_DATE, 
+		      text[DOWNLOADED_CLIST_DATE]);
   
   /*Amount*/
   text[DOWNLOADED_CLIST_AMOUNT] = g_strdup(xaccPrintAmount (xaccSplitGetAmount (gnc_import_TransInfo_get_fsplit(info) ), 
 							     gnc_split_amount_print_info(gnc_import_TransInfo_get_fsplit(info), TRUE) 
 							    ) );
+  gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
+		      DOWNLOADED_CLIST_AMOUNT, 
+		      text[DOWNLOADED_CLIST_AMOUNT]);
   
   /*Description*/
   text[DOWNLOADED_CLIST_DESCRIPTION] = g_strdup(xaccTransGetDescription(gnc_import_TransInfo_get_trans(info) ) );
-  
+  gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
+		      DOWNLOADED_CLIST_DESCRIPTION, 
+		      text[DOWNLOADED_CLIST_DESCRIPTION]);
+
   /*Memo*/
   text[DOWNLOADED_CLIST_MEMO] = g_strdup(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit(info) ) );
+  gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
+		      DOWNLOADED_CLIST_MEMO, 
+		      text[DOWNLOADED_CLIST_MEMO]);
   
   /*Imbalance*/
   if(gnc_import_TransInfo_is_balanced(info)==TRUE)
@@ -560,102 +590,87 @@ static char ** gen_clist_row_text (GNCImportTransInfo *info)
 								 gnc_commodity_print_info (xaccTransGetCurrency(gnc_import_TransInfo_get_trans (info)),TRUE) )
 						);
     }
-
+  gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
+		      DOWNLOADED_CLIST_IMBALANCE, 
+		      text[DOWNLOADED_CLIST_IMBALANCE]);
+  
   /*Actions*/
   text[DOWNLOADED_CLIST_ACTION_ADD] = g_strdup("");
   text[DOWNLOADED_CLIST_ACTION_CLEAR] = g_strdup("");
   text[DOWNLOADED_CLIST_ACTION_EDIT] = g_strdup("");
   
-  
+  /* Action informations */
+  gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
+			    &(gui->color_back_white));
   switch(gnc_import_TransInfo_get_action(info))
     {
     case GNCImport_ADD:
       if(gnc_import_TransInfo_is_balanced(info)==TRUE)
 	{
-	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Add the transaction (Already balanced)"));
+	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Add, transaction already balanced)"));
+	  gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
+				    &(gui->color_back_green));
 	}
       else
 	{
 	  if (gnc_import_TransInfo_get_destacc (info) != NULL)
 	    {
+	      gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
+					&(gui->color_back_green));
 	      tmp = xaccAccountGetFullName 
 		(gnc_import_TransInfo_get_destacc (info),
 		 gnc_get_account_separator ());
 	      if(gnc_import_TransInfo_get_destacc_selected_manually(info)==TRUE)
 		{
-		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add with balancing split into (user-selected) account \"%s\""),tmp);
+		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add, create balancing split in (user-selected) account \"%s\""),tmp);
 		}
 	      else
 		{
-		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add with balancing split into (auto-selected) account \"%s\""),tmp);
+		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add, create balancing split in (auto-selected) account \"%s\""),tmp);
 		}
 	      free (tmp);
 	    }
 	  else
 	    {
-	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Add UNBALANCED!"));
+	      gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
+					&(gui->color_back_yellow));
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Add, UNBALANCED transaction!"));
 	    }
 	}
       break;
     case GNCImport_CLEAR: 
       if(gnc_import_TransInfo_get_selected_match(info))
 	{
+	  gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
+				    &(gui->color_back_green));
 	  if(gnc_import_TransInfo_get_match_selected_manually(info)==TRUE)
 	    {
-	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Reconcile the (user-selected) match"));
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Reconcile (user-selected) match"));
 	    }
 	  else
 	    {
-	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Reconcile the (auto-selected) match"));
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Reconcile (auto-selected) match"));
 	    }
 	}
       else
 	{
-	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Please select other action or a transaction to reconcile"));
+	  gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
+				    &(gui->color_back_red));
+	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Please select transaction to reconcile (or another action)"));
 	}
       break;
     case GNCImport_EDIT: text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup("NOT SUPPORTED YET!");
       break;
-    case GNCImport_SKIP: text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Will NOT import: inconclusive match or SKIP selected"));
+    case GNCImport_SKIP: 
+      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Skip the transaction, no action selected"));
+      gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
+				&(gui->color_back_red));
       break;
     default:
       text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup("WRITEME, this is an unknown action");
     }
-  
-  return text;
-}
 
-
-static void
-refresh_clist_row (GNCGenTransaction *gui, 
-		   int row_number, GNCImportTransInfo *info)
-{
-  static char ** text;
-  gint i;
-  g_assert (gui);
-  g_assert (info);
-  
-  gnc_gen_trans_list_freeze(gui);
-  
-/*What the hell, neither freeing the memory used by the previous values here or elsewhere seems to work, WHY?*/
-
-  /*free_clist_row_text (gui, 
-		       row_number);*/
-  text=gen_clist_row_text (info);
-
-  for (i = 0; i < NUM_COLUMNS_DOWNLOADED_CLIST; i++)
-    {
-      /*DEBUG("gtk_clist_set_text %d",i);*/
-      /*gtk_clist_get_text (GTK_CLIST (gui->clist), row_number, 
-			  i, 
-			  &tmp);*/
-      gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
-			  i, 
-			  text[i]);
-      /*g_free(tmp);*/
-    }  
-
-
+  /* Set the pixmaps */
   if(gnc_import_TransInfo_get_action(info)==GNCImport_ADD)
     {
       gtk_clist_set_pixtext (GTK_CLIST (gui->clist), row_number,
@@ -664,7 +679,7 @@ refresh_clist_row (GNCGenTransaction *gui,
 			     3,
 			     gui->checkbox_checked_pixmap,
 			     NULL);
-
+      
       if(gnc_import_TransInfo_is_balanced(info)==FALSE)
 	{
 	  /*Show the arrow button*/
@@ -675,7 +690,6 @@ refresh_clist_row (GNCGenTransaction *gui,
 				 gui->fleche_pixmap,
 				 NULL);
 	}
-
     }
   else
     {
@@ -700,7 +714,7 @@ refresh_clist_row (GNCGenTransaction *gui,
 						     GTK_WIDGET(gui->clist)),
 			     NULL);
     }
-
+  
   if(gnc_import_TransInfo_get_action(info)==GNCImport_CLEAR)
     {
       gtk_clist_set_pixtext (GTK_CLIST (gui->clist), row_number,
@@ -729,7 +743,7 @@ refresh_clist_row (GNCGenTransaction *gui,
 			     gui->checkbox_unchecked_pixmap,
 			     NULL);
     }
-
+  
   if(gnc_import_TransInfo_get_action(info)==GNCImport_EDIT)
     {
       gtk_clist_set_pixtext (GTK_CLIST (gui->clist), row_number,
@@ -748,15 +762,14 @@ refresh_clist_row (GNCGenTransaction *gui,
 			     gui->checkbox_unchecked_pixmap,
 			     NULL);
     }
-
+  
   gtk_clist_set_row_height        (GTK_CLIST (gui->clist),
 				   24);
-
+  
   
   gnc_gen_trans_list_thaw(gui);
-
-
 }
+
 
 void gnc_gen_trans_list_add_trans(GNCGenTransaction *gui, Transaction *trans)
 {

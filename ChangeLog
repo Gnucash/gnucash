@@ -1,3 +1,16 @@
+2002-12-7  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* src/import-export/generic-import.glade:  Add user instructions, 
+	get rid of apply button.
+	* src/import-export/import-main-matcher.c: Speed optimizations, 
+	implement import status notification with background color.  
+	Clarify strings.
+
+	Note:  The matcher is now feature complete, except for manual 
+	transaction editing.  (More optimizations and code review still
+	to be done)  I am awaiting comments about the matcher UI and
+	and investment transaction importing.
+	
 2002-12-07  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/gnc-ui-util.c: Consolidate all knowledge about
@@ -60,6 +73,7 @@
 	  to know why commodities are not equal.
 
 2002-12-07  Benoit Grégoire  <bock@step.polymtl.ca>	
+
 	More Doxygenification.  Created an Engine module, and a 
 	Deprecated list.  Unfortunately, unless we turn on EXTRACT_ALL
 	(not very practical currently) not all functions will appear 

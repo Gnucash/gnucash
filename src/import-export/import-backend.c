@@ -323,7 +323,7 @@ GdkPixmap* gen_probability_pixmap(gint score_original, GNCImportSettings *settin
   return retval;
 }
 
-/*************************************************************************
+/*-************************************************************************
  * MatchMap- related functions (storing and retrieving)
  */
 static Account *
@@ -353,10 +353,10 @@ matchmap_find_destination (GncImportMatchMap *matchmap,
   return result;
 }
 
-/* Store the destination account from trans_info in the matchmap. If
-   'use_match' is true, the destination account of the selected
-   matching/duplicate transaction is used; otherwise, the stored
-   destination_acc pointer is used. */
+/** Store the destination account from trans_info in the matchmap. If
+    'use_match' is true, the destination account of the selected
+    matching/duplicate transaction is used; otherwise, the stored
+    destination_acc pointer is used. */
 static void 
 matchmap_store_destination (GncImportMatchMap *matchmap, 
 			    GNCImportTransInfo *trans_info,
