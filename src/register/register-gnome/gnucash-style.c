@@ -796,6 +796,18 @@ gnucash_font_load (const char *name)
         return gdk_font_load (name);
 }
 
+static const char *
+gnucash_style_get_default_register_font_name (void)
+{
+        return _("register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*") + 22;
+}
+
+static const char *
+gnucash_style_get_default_register_hint_font_name (void)
+{
+        return _("register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*") + 19;
+}
+
 void
 gnucash_style_set_register_font_name (const char *name)
 {
@@ -999,18 +1011,6 @@ gnucash_sheet_set_header_widths (GnucashSheet *sheet,
                         cd->pixel_width = gnc_header_widths_get_width
                                 (widths, cell->cell_name);
                 }
-}
-
-const char *
-gnucash_style_get_default_register_font_name (void)
-{
-        return _("register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*") + 22;
-}
-
-const char *
-gnucash_style_get_default_register_hint_font_name (void)
-{
-        return _("register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*") + 19;
 }
 
 void

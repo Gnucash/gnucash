@@ -80,7 +80,7 @@
 
 ;(simple-format #t "load-path == ~S\n" %load-path)
 
-;; These will be converted to config vars later (see prefs.scm)
+;; These will be converted to config vars later (see command-line.scm)
 (define gnc:*load-path* #f)
 (define gnc:*debugging?* (if (getenv "GNC_DEBUG") #t #f))
 (define gnc:*develmode* (if (getenv "GNC_DEVEL_MODE") #t #f))

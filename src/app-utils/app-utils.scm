@@ -88,6 +88,30 @@
 (export gnc:send-options)
 (export gnc:save-options)
 
+;; config-var.scm
+(export gnc:make-config-var)
+(export gnc:config-var-description-get)
+(export gnc:config-var-action-func-get)
+(export gnc:config-var-equality-func-get)
+(export gnc:config-var-modified?)
+(export gnc:config-var-modified?-set!)
+(export gnc:config-var-default-value-get)
+(export gnc:config-var-default-value-set!)
+(export gnc:config-var-value-get)
+(export gnc:config-var-value-set!)
+(export gnc:config-var-value-is-default?)
+
+;; prefs.scm
+(export gnc:register-configuration-option)
+(export gnc:lookup-global-option)
+(export gnc:send-global-options)
+(export gnc:global-options-clear-changes)
+(export gnc:save-all-options)
+(export gnc:get-debit-string)
+(export gnc:get-credit-string)
+(export gnc:*options-entries*)
+(export gnc:config-file-format-version)
+
 ;; date-utilities.scm
 
 (export gnc:reldate-list)
@@ -210,7 +234,38 @@
 (export gnc:backtrace-if-exception)
 
 (load-from-path "c-interface.scm")
+(load-from-path "config-var.scm")
 (load-from-path "options.scm")
+(load-from-path "prefs.scm")
 (load-from-path "hooks.scm")
 (load-from-path "date-utilities.scm")
 (load-from-path "utilities.scm")
+
+(gnc:hook-add-dangler gnc:*startup-hook*
+                      (lambda ()
+                        (begin
+                          ;; Initialize the C side options code.
+                          ;; Must come after the scheme options are loaded.
+                          (gnc:c-options-init)
+
+                          ;; Initialize the expresion parser.
+                          ;; Must come after the C side options initialization.
+                          (gnc:exp-parser-init))))
+
+;; add a hook to shut down the expression parser
+(gnc:hook-add-dangler gnc:*shutdown-hook*
+                      (lambda ()
+                        (begin
+                          ;; Shutdown the expression parser
+                          (gnc:exp-parser-shutdown)
+
+                          ;; This saves global options plus (for the
+                          ;; moment) saved report and account tree
+                          ;; window parameters. Reports and parameters
+                          ;; should probably be in a separate file,
+                          ;; with the main data file, or something
+                          ;; else.
+                          (gnc:save-all-options)
+
+                          ;; Shut down the C side options code
+                          (gnc:c-options-shutdown))))

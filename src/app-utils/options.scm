@@ -888,12 +888,7 @@
        (lambda (option)
          (let ((value (gnc:option-value option))
                (default-value (gnc:option-default-value option)))
-;           (if (and (pair? default-value)); (eqv? 'commodity-scm (car value)))
-;               (begin
-;                 (write value) (newline)
-;                 (write default-value) (newline)))
-           (if
-            (not (equal? value default-value))
+           (if (not (equal? value default-value))
             (let* ((generator (gnc:option-generate-restore-form option))
                    (restore-code (false-if-exception (generator))))
               (if restore-code

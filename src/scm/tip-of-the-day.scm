@@ -23,9 +23,6 @@
 ;; Tips should be written as a list of lists of string.  Each list of strings 
 ;; represents one tip
 
-(gnc:depend "config-var.scm")
-(gnc:depend "prefs.scm")
-
 (define (non-negative-integer? value)
   (and (integer? value) (>= value 0)))
 
@@ -105,6 +102,3 @@
                                             "Display \"Tip of the Day\"")))
      (if (gnc:option-value tip-opt)
          (gnc:ui-totd-dialog-create-and-run)))))
-
-
-

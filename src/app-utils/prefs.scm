@@ -56,8 +56,6 @@
 ;;    eq?
 ;;    #f))
 
-(gnc:support "prefs.scm")
-
 (define gnc:*options-entries* (gnc:new-options))
 
 (define (gnc:register-configuration-option new-option)
@@ -76,9 +74,8 @@
 ;; it's important to make sure it happens in this order.  later the
 ;; hook should probably revert back to just save-global-options.
 (define (gnc:save-all-options)
-  (gnc:save-global-options)
-;  (gnc:save-report-options);  (gnc:save-acct-tree-options)
-  (gnc:save-style-sheet-options))
+  (gnc:save-global-options))
+;  (gnc:save-style-sheet-options))
 
 (define (gnc:save-global-options)
   (gnc:make-home-dir)
@@ -240,16 +237,20 @@ and expand the current transaction")))
   "h" (N_ "If selected, use a dialog to confirm a change to a reconciled \
 transaction.") #t))
 
+(define (string-take-n string n)
+  (substring string n (string-length string)))
+
 (gnc:register-configuration-option
  (gnc:make-font-option
   (N_ "Register") (N_ "Register font")
-  "i" (N_ "The font to use in the register") (gnc:register-default-font)))
+  "i" (N_ "The font to use in the register")
+  (string-take-n (_ "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*") 22)))
 
 (gnc:register-configuration-option
  (gnc:make-font-option
   (N_ "Register") (N_ "Register hint font")
   "j" (N_ "The font used to show hints in the register")
-  (gnc:register-default-hint-font)))
+  (string-take-n (_ "register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*") 19)))
 
 
 ;; Register Color options
@@ -557,8 +558,8 @@ without one.")
 (gnc:register-configuration-option
  (gnc:make-number-range-option
   (N_ "Scheduled Transactions")
-  (N_ "Default create-in-advance days")
-  "d" (N_ "Default number of days-in-advance to create new SXes")
+  (N_ "Default create in advance days")
+  "d" (N_ "Default number of days in advance to create new SXes")
   0 ; default
   0 ; min
   99999999 ; max
@@ -570,14 +571,14 @@ without one.")
  (gnc:make-number-range-option
   (N_ "Scheduled Transactions")
   (N_ "Default remind-in-advance days")
-  "e" (N_ "Default number of days-in-advance to remind on new SXes")
+  "e" (N_ "Default number of days in advance to remind on new SXes")
   0 ; default
   0 ; min
   99999 ; max
   0 ; num-decimals
   1 ; step size
   ))
-      
+
 (gnc:register-configuration-option
  (gnc:make-number-range-option
   (N_ "Scheduled Transactions")
@@ -589,111 +590,6 @@ without one.")
   0  ; num-decimals
   1  ; step size
   ))
-
-;;; Configuation variables
-
-(define gnc:*arg-show-version*
-  (gnc:make-config-var
-   (N_ "Show version.")
-   (lambda (var value) (if (boolean? value) (list value) #f))
-   eq?
-   #f))
-
-(define gnc:*arg-show-usage*
-  (gnc:make-config-var
-   (N_ "Generate an argument summary.")
-   (lambda (var value) (if (boolean? value) (list value) #f))
-   eq?
-   #f))
-
-(define gnc:*arg-show-help*
-  (gnc:make-config-var
-   (N_ "Generate an argument summary.")
-   (lambda (var value) (if (boolean? value) (list value) #f))
-   eq?
-   #f))
-
-(define gnc:*arg-no-file*
-  (gnc:make-config-var
-   (N_ "Don't load any file, including autoloading the last file.")
-   (lambda (var value) (if (boolean? value) (list value) #f))
-   eq?
-   #f))
-
-(define gnc:*config-dir*
-  (gnc:make-config-var
-   (N_ "Configuration directory.")
-   (lambda (var value) (if (string? value) (list value) #f))
-   string=?
-   gnc:_config-dir-default_))
-
-(define gnc:*share-dir*
-  (gnc:make-config-var
-   (N_ "Shared files directory.")
-   (lambda (var value) (if (string? value) (list value) #f))
-   string=?
-   gnc:_share-dir-default_))
-
-;; Convert the temporary startup value into a config var.
-(let ((current-value gnc:*debugging?*))
-  (set! 
-   gnc:*debugging?*
-   (gnc:make-config-var
-    (N_ "Enable debugging code.")
-    (lambda (var value) (if (boolean? value) (list value) #f))
-    eq?
-    #f))
-  (gnc:config-var-value-set! gnc:*debugging?* #f current-value))
-
-(let ((current-value gnc:*debugging?*))
-  (set! 
-   gnc:*develmode*
-   (gnc:make-config-var
-    (N_ "Enable developers mode.")
-    (lambda (var value) (if (boolean? value) (list value) #f))
-    eq?
-    #f))
-  (gnc:config-var-value-set! gnc:*develmode* #f current-value))
-
-(define gnc:*loglevel*
-  (gnc:make-config-var
-   (N_ "Logging level from 0 (least logging) to 5 (most logging).")
-   (lambda (var value) (if (exact? value) (list value) #f))
-   eq?
-   #f))
-
-;; Convert the temporary startup value into a config var.
-(let ((current-load-path gnc:*load-path*))
-  (set!
-   gnc:*load-path*
-   (gnc:make-config-var
-    (N_ "A list of strings indicating the load path for (gnc:load name).
-Each element must be a string representing a directory or a symbol
-where 'default expands to the default path, and 'current expands to
-the current value of the path.")
-    (lambda (var value)
-      (let ((result (gnc:expand-load-path value)))
-        (if (list? result)
-            (list result)
-            #f)))
-    equal?
-    '(default)))
-  (gnc:config-var-value-set! gnc:*load-path* #f current-load-path))
-
-(define gnc:*doc-path*
-
-  (gnc:make-config-var
-   (N_ "A list of strings indicating where to look for html and parsed-html files. \
-Each element must be a string representing a directory or a symbol \
-where 'default expands to the default path, and 'current expands to \
-the current value of the path.")
-   (lambda (var value)
-     (let ((result (gnc:_expand-doc-path_ value)))
-       (if (list? result)
-           (list result)
-           #f)))
-   equal?
-   '(default)))
 
 
 ;;; Internal options -- Section names that start with "__" are not

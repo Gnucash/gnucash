@@ -31,17 +31,13 @@ gboolean      gnucash_ui_is_running(void);
 gboolean      gnucash_ui_is_terminating(void);
 int           gnucash_ui_init(void);
 gboolean      gnucash_ui_open_file(const char * name);
-int           gnucash_ui_select_file(void);
 
 GNCMainInfo * gnc_ui_get_data(void);
-void          gnc_default_ui_start(void);
 void          gnc_ui_shutdown(void);
 void          gnc_ui_destroy(void);
 int           gnc_ui_show_main_window(void);
 int           gnc_ui_start_event_loop(void);
-int           gnc_ui_main(void);
-const char  * gnc_register_default_font(void);
-const char  * gnc_register_default_hint_font(void);
 gboolean      gnc_reverse_balance_type(GNCAccountType type);
 gboolean      gnc_reverse_balance(Account *account);
+
 #endif

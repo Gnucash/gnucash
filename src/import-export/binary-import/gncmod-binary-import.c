@@ -42,33 +42,30 @@ lmod(char * mn)
 
 int
 gnc_module_init(int refcount) {
-  if (refcount == 0)
-  {
-    /* load the engine (we depend on it) */
-    if(!gnc_module_load("gnucash/engine", 0)) {
-      return FALSE;
-    }
-
-    /* load the calculation module (we depend on it) */
-    if(!gnc_module_load("gnucash/app-utils", 0)) {
-      return FALSE;
-    }
-
-    /* load the calculation module (we depend on it) */
-    if(!gnc_module_load("gnucash/app-file", 0)) {
-      return FALSE;
-    }
-
-    /* load the calculation module (we depend on it) */
-    if(!gnc_module_load("gnucash/gnome-utils", 0)) {
-      return FALSE;
-    }
-
-    /* publish g-wrapped bindings */
-    /* load the scheme code */
-    lmod("(g-wrapped gw-binary-import)");
-    lmod("(gnucash import-export binary-import)");
+  /* load the engine (we depend on it) */
+  if(!gnc_module_load("gnucash/engine", 0)) {
+    return FALSE;
   }
+
+  /* load the calculation module (we depend on it) */
+  if(!gnc_module_load("gnucash/app-utils", 0)) {
+    return FALSE;
+  }
+
+  /* load the calculation module (we depend on it) */
+  if(!gnc_module_load("gnucash/app-file", 0)) {
+    return FALSE;
+  }
+
+  /* load the calculation module (we depend on it) */
+  if(!gnc_module_load("gnucash/gnome-utils", 0)) {
+    return FALSE;
+  }
+
+  /* publish g-wrapped bindings */
+  /* load the scheme code */
+  lmod("(g-wrapped gw-binary-import)");
+  lmod("(gnucash import-export binary-import)");
 
   return TRUE;
 }

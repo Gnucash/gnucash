@@ -33,14 +33,12 @@
 ;;; permanent, and if they leave the variable value different from the
 ;;; default, should be saved to the auto configuration file.
 
-(gnc:support "config-var.scm")
-
 (define (gnc:make-config-var description
                              set-action-func
                              equality-func
                              default)
-  (let ((var
-         (vector description set-action-func equality-func #f default default)))
+  (let ((var (vector description set-action-func
+                     equality-func #f default default)))
     (gnc:config-var-value-set! var #f default)
     var))
 
@@ -54,7 +52,8 @@
 (define (gnc:config-var-modified?-set! var value) (vector-set! var 3 value))
 
 (define (gnc:config-var-default-value-get var) (vector-ref var 4))
-(define (gnc:config-var-default-value-set! var value) (vector-set! var 4 value))
+(define (gnc:config-var-default-value-set! var value)
+  (vector-set! var 4 value))
 
 (define (gnc:config-var-value-get var) (vector-ref var 5))
 (define (gnc:config-var-value-set! var is-config-mod? value)

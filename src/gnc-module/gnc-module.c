@@ -277,8 +277,7 @@ gnc_module_get_info(const char * fullpath)
       }
       else 
       {
-        printf("\n** WARNING ** : module '%s' does not match module signature\n",
-               fullpath);
+        g_warning ("module '%s' does not match module signature\n", fullpath);
         lt_dlclose(handle);
         return NULL;
       }
@@ -294,8 +293,7 @@ gnc_module_get_info(const char * fullpath)
   }
   else 
   {
-    printf("\n** WARNING ** : Failed to dlopen() '%s': %s\n",
-	   fullpath, lt_dlerror());
+    g_warning ("Failed to dlopen() '%s': %s\n", fullpath, lt_dlerror());
     return NULL;
   }
 }
@@ -424,10 +422,12 @@ gnc_module_load(char * module_name, gint interface)
       }
       else
       {
+        g_warning ("module init failed: %s", module_name);
 	return NULL;
       }	
     }
     else {
+      g_warning ("module has no init func: %s", module_name);
       return NULL;
     }
   }
@@ -455,7 +455,7 @@ gnc_module_load(char * module_name, gint interface)
         if(!info->init_func(0)) 
 	{
           /* init failed. unload the module. */
-          printf("Initialization failed for module %s\n", module_name);
+          g_warning ("Initialization failed for module %s\n", module_name);
           g_hash_table_remove(loaded_modules, info);
           g_free(info->filename);
           g_free(info);
@@ -467,18 +467,18 @@ gnc_module_load(char * module_name, gint interface)
       }
       else 
       {
-        printf("Module %s (%s) is not a gnc-module.\n", module_name,
-               modinfo->module_filepath);
+        g_warning ("Module %s (%s) is not a gnc-module.\n", module_name,
+                   modinfo->module_filepath);
         lt_dlclose(handle);
       }
       return info;
     }
     else 
     {
-      printf("Failed to open module %s", module_name);
+      g_warning ("Failed to open module %s", module_name);
       if(modinfo) printf(": %s\n", lt_dlerror());
-      else printf(": could not locate %s interface v.%d\n",
-		  module_name, interface);
+      else g_warning (": could not locate %s interface v.%d\n",
+                      module_name, interface);
       return NULL;
     }      
   }
@@ -524,7 +524,7 @@ gnc_module_unload(GNCModule module)
   }
   else 
   {
-    printf("Failed to unload module %p (it is not loaded)\n", module);
+    g_warning ("Failed to unload module %p (it is not loaded)\n", module);
     return 0;
   }
 }

@@ -159,10 +159,7 @@
   (gnc:module-load "gnucash/report/locale-specific/us" 0)
 
   ;; Now we can load a bunch of files.
-  (gnc:depend "config-var.scm")
-  (gnc:depend "utilities.scm")
   (gnc:depend "path.scm")
-  (gnc:depend "prefs.scm")
   (gnc:depend "command-line.scm")
   (gnc:depend "doc.scm")
   (gnc:depend "extensions.scm")
@@ -187,14 +184,6 @@
   (gnc:report-menu-setup)
 
   (gnc:hook-run-danglers gnc:*startup-hook*)
-
-  ;; Initialize the C side options code. Must come after the scheme
-  ;; options are loaded.
-  (gnc:c-options-init)
-
-  ;; Initialize the expresion parser. Must come after the C side
-  ;; options initialization.
-  (gnc:exp-parser-init)
 
   (if (gnc:config-var-value-get gnc:*arg-show-version*)
       (begin
@@ -267,19 +256,6 @@
 
   (gnc:print-unstable-message)
 
-  ;; add a hook to shut down the expression parser
-  (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:exp-parser-shutdown)
-
-  ;; add a hook to save the user configs on shutdown.  this saves
-  ;; global options plus (for the moment) saved report and account
-  ;; tree window parameters.  reports and parameters should probably
-  ;; be in a separate file, with the main data file, or something
-  ;; else.
-  (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:save-all-options)
-
-  ;; add a hook to shut down the C side options code
-  (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:c-options-shutdown)
-
   (if (null? gnc:*batch-mode-things-to-do*)
       ;; We're not in batch mode; we can go ahead and do the normal thing.
       (begin
@@ -296,7 +272,6 @@
               (gnc:start-ui-event-loop))
             (begin
               (gnc:load-account-file)
-              (gnc:default-ui-start)
               (gnc:show-main-window)
               (gnc:start-ui-event-loop)))
         (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:ui-finish))

@@ -42,6 +42,7 @@
       "#include <global-options.h>\n"
       "#include <option-util.h>\n"
       "#include <gnc-euro.h>\n"
+      "#include <gnc-exp-parser.h>\n"
       "#include <gnc-ui-util.h>\n"
       "#include <gnc-gettext-util.h>\n"
       "#include <gnc-helpers.h>\n"
@@ -83,6 +84,23 @@
   (gw:wrap-non-native-type 
    mod '<gnc:OptionChangeCallback> 
    "GNCOptionChangeCallback" "const GNCOptionChangeCallback")
+
+
+  (gw:wrap-function
+   mod
+   'gnc:exp-parser-init
+   '<gw:void>
+   "gnc_exp_parser_init"
+   '()
+   "Initialize the expression parser.")
+
+  (gw:wrap-function
+   mod
+   'gnc:exp-parser-shutdown
+   '<gw:void>
+   "gnc_exp_parser_shutdown"
+   '()
+   "Shutdown the expression parser and free any associated memory.")
 
   (gw:wrap-function
    mod
@@ -139,7 +157,7 @@
 
   (gw:wrap-function
    mod
-   'gnc:amount->string-helper
+   'gnc:amount->string
    '(<gw:m-chars-callee-owned> gw:const)
    "xaccPrintAmount"
    '((<gnc:numeric> amount)

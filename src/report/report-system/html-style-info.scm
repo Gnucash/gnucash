@@ -278,15 +278,15 @@
   datum)
 
 (define (gnc:default-html-gnc-numeric-renderer datum params)
-  (gnc:amount->string-helper datum (gnc:default-print-info #f)))
+  (gnc:amount->string datum (gnc:default-print-info #f)))
 
 (define (gnc:default-html-gnc-monetary-renderer datum params)
-  (gnc:amount->string-helper 
+  (gnc:amount->string 
    (gnc:gnc-monetary-amount datum) 
    (gnc:commodity-print-info (gnc:gnc-monetary-commodity datum) #t)))
 
 (define (gnc:default-html-number-renderer datum params)  
-  (gnc:amount->string-helper
+  (gnc:amount->string
    (gnc:double-to-gnc-numeric datum 100 GNC-RND-ROUND)
    (gnc:default-print-info #f)))
 

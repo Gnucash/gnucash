@@ -44,9 +44,6 @@ char gnc_get_account_separator (void);
 gboolean gnc_reverse_balance(Account *account);
 gboolean gnc_reverse_balance_type(GNCAccountType type);
 
-const char * gnc_register_default_font(void);
-const char * gnc_register_default_hint_font(void);
-
 
 /* Engine enhancements & i18n ***************************************/
 void gnc_set_current_book_handler (GNCBookCB cb);

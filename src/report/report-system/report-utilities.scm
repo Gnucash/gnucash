@@ -36,8 +36,6 @@
         (set! l (append! l filler))))
   l)
 
-(define gnc:amount->string gnc:amount->string-helper)
-
 ;; pair is a list of one gnc:commodity and one gnc:numeric
 ;; value. Deprecated -- use <gnc-monetary> instead.
 (define (gnc:commodity-value->string pair)
@@ -48,7 +46,7 @@
 ;; style-info mechanism and simple plug the <gnc-monetary> into the
 ;; html-renderer.
 (define (gnc:monetary->string value)
-  (gnc:amount->string-helper 
+  (gnc:amount->string 
    (gnc:gnc-monetary-amount value) 
    (gnc:commodity-print-info (gnc:gnc-monetary-commodity value) #t)))
 

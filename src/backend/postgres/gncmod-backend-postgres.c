@@ -40,24 +40,24 @@ gnc_module_description(void)
 int
 gnc_module_init(int refcount) 
 {  
-  if(refcount == 0) {
-    engine = gnc_module_load("gnucash/engine", 0);
+  engine = gnc_module_load("gnucash/engine", 0);
+  if(!engine) return FALSE;
 
-    if(!engine) return FALSE;
-  }
   return TRUE;
 }
 
 int
 gnc_module_end(int refcount) 
 {
-  if((refcount == 0) && engine) 
-  {
-    int unload = gnc_module_unload(engine);    
+  int unload = TRUE;
+
+  if (engine)
+    unload = gnc_module_unload(engine);    
+
+  if (refcount == 0)
     engine = NULL;
-    return unload;
-  }
-  return TRUE;
+
+  return unload;
 }
 
 

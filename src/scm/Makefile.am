@@ -11,7 +11,6 @@ gnc_autogen_scm_files = \
 
 gnc_regular_scm_files = \
   command-line.scm \
-  config-var.scm \
   depend.scm \
   doc.scm \
   extensions.scm \
@@ -19,7 +18,6 @@ gnc_regular_scm_files = \
   main.scm \
   main-window.scm \
   path.scm \
-  prefs.scm \
   price-quotes.scm \
   slib-backup.scm \
   startup.scm \

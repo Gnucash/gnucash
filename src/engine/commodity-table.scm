@@ -3,16 +3,8 @@
 ;;;  load and save commodity tables 
 ;;;
 ;;;  Bill Gribble <grib@billgribble.com> 3 Aug 2000 
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-;;(define gnc:*iso-4217-currency-file*
-;;  (gnc:make-config-var
-;;   "Database of ISO-4217 currency definitions"
-;;   (lambda (var value) (if (string? value) (list value) #f))
-;;   string=?
-;;   "iso-4217-currencies.scm"))
 
 (define gnc:*iso-4217-currency-file* "iso-4217-currencies.scm")
 

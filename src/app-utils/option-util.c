@@ -158,7 +158,9 @@ gnc_option_set_ui_value (GNCOption *option, gboolean use_default)
 {
   g_return_if_fail (option != NULL);
   g_return_if_fail (option->odb != NULL);
-  g_return_if_fail (option->odb->set_ui_value != NULL);
+
+  if (!option->odb->set_ui_value)
+    return;
 
   option->odb->set_ui_value (option, use_default);
 }

@@ -71,9 +71,6 @@ void gnucash_sheet_style_init(void);
 void gnucash_style_set_register_font_name(const char *name);
 void gnucash_style_set_register_hint_font_name(const char *name);
 
-const char * gnucash_style_get_default_register_font_name(void);
-const char * gnucash_style_get_default_register_hint_font_name(void);
-
 gint gnucash_style_col_is_resizable (SheetBlockStyle *style, int col);
 
 CellDimensions * gnucash_style_get_cell_dimensions (SheetBlockStyle *style,

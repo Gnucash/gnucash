@@ -43,18 +43,18 @@ lmod(char * mn)
 
 int
 gnc_module_init(int refcount) {
+  /* load the engine (we depend on it) */
+  if(!gnc_module_load("gnucash/engine", 0)) {
+    return FALSE;
+  }
+
+  /* load the calculation module (we depend on it) */
+  if(!gnc_module_load("gnucash/app-utils", 0)) {
+    return FALSE;
+  }
+
   if (refcount == 0)
   {
-    /* load the engine (we depend on it) */
-    if(!gnc_module_load("gnucash/engine", 0)) {
-      return FALSE;
-    }
-
-    /* load the calculation module (we depend on it) */
-    if(!gnc_module_load("gnucash/app-utils", 0)) {
-      return FALSE;
-    }
-
     gnc_file_init ();
   }
 

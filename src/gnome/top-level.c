@@ -526,7 +526,6 @@ gnucash_ui_init(void)
 
     gnc_recn_cell_set_string_getter (gnc_get_reconcile_str);
 
-    /* gnc_default_ui_start */
     gnucash_style_init();
     gnucash_color_init();
 
@@ -556,17 +555,6 @@ gnucash_ui_init(void)
   LEAVE (" ");
 
   return 0;
-}
-
-static gboolean hasstarted = FALSE;
-void
-gnc_default_ui_start(void)
-{
-  if (!hasstarted)
-  {
-    hasstarted = TRUE;
-    gnc_get_current_book ();
-  }
 }
 
 /* ============================================================== */
@@ -618,11 +606,10 @@ gnc_ui_destroy (void)
 /* ============================================================== */
 
 int
-gnc_ui_show_main_window(void)
+gnc_ui_show_main_window (void)
 {
   /* Initialize gnome */
   gnucash_ui_init();
-  gnc_default_ui_start();
   
   /* Get the main window on screen. */
   while (gtk_events_pending())
@@ -707,46 +694,12 @@ gnc_ui_start_event_loop (void)
   return 0;
 }
 
-
-int
-gnc_ui_main(void)
-{
-    gnc_ui_show_main_window();
-
-    return gnc_ui_start_event_loop();
-}
-
 /* ============================================================== */
 
 gboolean
 gnucash_ui_open_file(const char name[])
 {
   return gnc_file_open_file (name);
-}
-
-/* ============================================================== */
-
-int
-gnucash_ui_select_file(void)
-{
-  gnc_file_open ();
-  return 1;
-}
-
-/* ============================================================== */
-
-const char *
-gnc_register_default_font(void)
-{
-  return gnucash_style_get_default_register_font_name();
-}
-
-/* ============================================================== */
-
-const char *
-gnc_register_default_hint_font(void)
-{
-  return gnucash_style_get_default_register_hint_font_name();
 }
 
 /* ============================================================== */

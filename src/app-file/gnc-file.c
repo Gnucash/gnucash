@@ -63,6 +63,9 @@ void
 gnc_file_init (void)
 {
   gnc_set_current_book_handler (gnc_get_current_book_internal);
+
+  /* Make sure we have a curent book. */
+  gnc_get_current_book_internal ();
 }
 
 static gboolean

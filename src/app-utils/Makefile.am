@@ -55,9 +55,11 @@ gncmod_DATA = app-utils.scm
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \
   c-interface.scm \
+  config-var.scm \
   date-utilities.scm \
   hooks.scm \
   options.scm \
+  prefs.scm \
   utilities.scm
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
