@@ -173,7 +173,7 @@ gncmod-engine.c: gw-engine.h
 gnc-commodity.c: iso-4217-currencies.c
 
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
-	chmod u+x ./iso-currencies-to-c
+	-chmod u+x ./iso-currencies-to-c
 	GUILE_LOAD_PATH=${top_srcdir}/lib/:${GUILE_LOAD_PATH} ${srcdir}/iso-currencies-to-c
 
 gw-engine.scm gw-engine.c gw-engine.h: .scm-links gw-engine-spec.scm

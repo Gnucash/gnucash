@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-char *gnc_qualifier_prefix_gettext (const char *s);
+const char *gnc_qualifier_prefix_gettext (const char *s);
 char *gnc_qualifier_prefix_noop (const char *s);
 
 #if defined(HAVE_GETTEXT)             /* HAVE_GETTEXT */
@@ -44,6 +44,7 @@ char *gnc_qualifier_prefix_noop (const char *s);
 #endif		                      /* End ENABLE_GETTEXT_UNDERSCORE */
 
 #else                                 /* Not HAVE_GETTEXT */
+#if !defined(__USE_GNU_GETTEXT)
 
 #undef _
 #undef Q_
@@ -54,6 +55,7 @@ char *gnc_qualifier_prefix_noop (const char *s);
 #define ngettext(msgid, msgid_plural, n) (((n)==1) ? \
                                             (msgid) : (msgid_plural))
 
+#endif                                /* End not__USE_GNU_GETTEXT */
 #endif                                /* End Not HAVE_GETTEXT */
 
 #undef  N_

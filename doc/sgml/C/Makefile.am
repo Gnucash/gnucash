@@ -87,7 +87,7 @@ dist-hook: gnucash/help.html gnucash/index.html gnucash/help-search-index.db
 	  cp $${dir}/help/*.html $(distdir)/gnucash; \
 	  cp $${dir}/help/figures/*.png $(distdir)/gnucash/figures; \
 	  cp $${dir}/help/*.css $(distdir)/gnucash; \
-	  cp $${dir}/help/stylesheet-images/*.gif $(distdir)/gnucash/stylesheet-images) \
+	  cp $${dir}/help/stylesheet-images/*.gif $(distdir)/gnucash/stylesheet-images \
 	  cp $${dir}/guide/*.html $(distdir)/gnucash; \
 	  cp $${dir}/guide/figures/*.png $(distdir)/gnucash/figures; \
 	  cp $${dir}/guide/*.css $(distdir)/gnucash; \

@@ -37,7 +37,7 @@
 /***
  * gnc_qualifier_prefix_gettext
  **/
-gchar *
+const gchar *
 gnc_qualifier_prefix_gettext (const gchar *string)
 {
         g_return_val_if_fail (string, NULL);
@@ -45,14 +45,14 @@ gnc_qualifier_prefix_gettext (const gchar *string)
 	if (*string != Q_PREFIX_START) {
 		return gettext (string);
 	} else {
-		gchar *translation;
+		const gchar *translation;
 
 		translation = gettext (string);
 		if (translation != string) {
 			if (*translation != Q_PREFIX_START) {
 				return translation;
 			} else {
-				gchar *real_translation;
+				const gchar *real_translation;
 
 				real_translation = strchr (translation + 1, Q_PREFIX_END);
 				if (real_translation != NULL) {
