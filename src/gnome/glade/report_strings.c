@@ -4,6 +4,16 @@
  * DO NOT compile it as part of your application.
  */
 
+gchar *s = N_("New Style Sheet");
+gchar *s = N_("New style sheet info");
+gchar *s = N_("Name:");
+gchar *s = N_("Style sheet template:");
+gchar *s = N_("HTML Style Sheets");
+gchar *s = N_("Style sheets");
+gchar *s = N_("label847668");
+gchar *s = N_("New...");
+gchar *s = N_("Delete");
+gchar *s = N_("Style sheet options");
 gchar *s = N_("Available reports");
 gchar *s = N_("                       ");
 gchar *s = N_("Add  >>");

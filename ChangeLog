@@ -1,3 +1,7 @@
+2001-06-13  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-style-sheet.c: use libglade
+
 2001-06-13  James LewisMoss  <jimdres@mindspring.com>
 
 	* configure.in (CFLAGS): add test-files makefiles to list.

@@ -27,7 +27,7 @@
 
 #include "dialog-style-sheet.h"
 #include "dialog-options.h"
-#include "glade-gnc-dialogs.h"
+#include "dialog-utils.h"
 #include "messages.h"
 
 StyleSheetDialog * gnc_style_sheet_dialog = NULL;
@@ -162,11 +162,12 @@ gnc_style_sheet_new_cb(GtkWidget * w, gpointer user_data) {
   char             * name_str = NULL;
 
   /* get the new name for the style sheet */
-  GtkWidget * dlg = create_New_Style_Sheet_Dialog();
-  GtkObject * tlo = GTK_OBJECT(dlg);
-  template_entry = gtk_object_get_data(tlo, "template_entry");
-  template_combo = gtk_object_get_data(tlo, "template_combo");
-  name_entry     = gtk_object_get_data(tlo, "name_entry");
+  GladeXML *xml = gnc_glade_xml_new ("report.glade",
+                                     "New Style Sheet Dialog");
+  GtkWidget * dlg = glade_xml_get_widget (xml, "New Style Sheet Dialog");
+  template_entry = glade_xml_get_widget (xml, "template_entry");
+  template_combo = glade_xml_get_widget (xml, "template_combo");
+  name_entry     = glade_xml_get_widget (xml, "name_entry");
 
   /* put in the list of style sheet type names */
   for(; !gh_null_p(templates); templates=gh_cdr(templates)) {
@@ -196,7 +197,8 @@ gnc_style_sheet_new_cb(GtkWidget * w, gpointer user_data) {
       gtk_clist_clear(GTK_CLIST(ssd->list));
       gnc_style_sheet_dialog_fill(ssd, new_ss);
     }
-  }  
+  }
+
   gnome_dialog_close(GNOME_DIALOG(dlg));
 }
 
@@ -223,16 +225,18 @@ gnc_style_sheet_dialog_close_cb(GtkWidget * w, GdkEventAny * ev,
 static StyleSheetDialog *
 gnc_style_sheet_dialog_create() {
   StyleSheetDialog  * ss = g_new0(StyleSheetDialog, 1);
-  GtkObject         * tlo;
   GtkWidget         * new_button=NULL;
   GtkWidget         * delete_button=NULL;
-  ss->toplevel   = create_HTML_Style_Sheet_Dialog();
+  GladeXML          * xml;
 
-  tlo = GTK_OBJECT(ss->toplevel);
-  ss->list          = gtk_object_get_data(tlo, "style_sheet_list");
-  ss->options_frame = gtk_object_get_data(tlo, "style_sheet_options");
-  new_button        = gtk_object_get_data(tlo, "new_button");
-  delete_button     = gtk_object_get_data(tlo, "delete_button");
+  xml = gnc_glade_xml_new ("report.glade", "HTML Style Sheet Dialog");
+
+  ss->toplevel   = glade_xml_get_widget (xml, "HTML Style Sheet Dialog");
+
+  ss->list          = glade_xml_get_widget (xml, "style_sheet_list");
+  ss->options_frame = glade_xml_get_widget (xml, "style_sheet_options");
+  new_button        = glade_xml_get_widget (xml, "new_button");
+  delete_button     = glade_xml_get_widget (xml, "delete_button");
 
   gtk_signal_connect(GTK_OBJECT(ss->list), "select_row",
                      GTK_SIGNAL_FUNC(gnc_style_sheet_dialog_select_cb), ss);
