@@ -1,3 +1,10 @@
+2002-08-15  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/*: much more HBCI work. Ini-Letter of
+	user can already be printed. However no information is *sent* to
+	the bank or saved to disk so far, so everybody can play around as
+	you like. 
+
 2002-08-14  Joachim Breitner <mail@joachim-breitner.de>
 
 	It may not be appropriate for a newcomer in the gnucash community

@@ -30,6 +30,8 @@
 #include "Account.h"
 #include "gnc-book.h"
 
+#include "hbci-interaction.h"
+
 /** Create a new HBCI_API and let it load its environment from the
  * configuration file filename. If the file doesn't exist and
  * allowNewFile is set to FALSE, this function returns NULL. If the
@@ -39,10 +41,13 @@
  * @param filename The name of the OpenHBCI configuration file to use.
  * @param allowNewFile If true, non-existent filename is accepted as well.
  * @param parent When displaying dialogs, use this GtkWidget as parent.
+ * @param inter Reference to a GNCInteractor-pointer in order to use this later. 
+ * May be NULL.
  */
 HBCI_API * gnc_hbci_api_new (const char *filename, 
 			     gboolean allowNewFile, 
-			     GtkWidget *parent);
+			     GtkWidget *parent,
+			     GNCInteractor **inter);
 
 /** Same as above, but takes the filename already from the current
  * book's kvp frame. Returns NULL if the file from the book's kvp
@@ -50,8 +55,11 @@ HBCI_API * gnc_hbci_api_new (const char *filename,
  * opening that file. 
  *
  * @param parent When displaying dialogs, use this GtkWidget as parent.
+ * @param inter Reference to a GNCInteractor-pointer in order to use this later. 
+ * May be NULL.
  */ 
-HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent);
+HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent,
+					 GNCInteractor **inter);
 
 
 /* Get the corresponding HBCI account to a gnucash account. Of course

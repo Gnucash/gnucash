@@ -35,13 +35,12 @@
 #include "dialog-pass.h"
 
 
-
 /** Adds the interactor and progressmonitor classes to the api. */
-void gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent)
+GNCInteractor *gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent)
 {
-  Inter_data *data;
+  GNCInteractor *data;
   
-  data = g_new0 (Inter_data, 1);
+  data = g_new0 (GNCInteractor, 1);
   data->parent = parent;
   data->keepAlive = TRUE;
     
@@ -50,15 +49,39 @@ void gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent)
 			  gnc_hbci_new_interactor(data), TRUE);
   // Set HBCI_Progressmonitor
   HBCI_API_setMonitor(api, gnc_hbci_new_pmonitor(data), TRUE);
+  return data;
 }
 
+gboolean GNCInteractor_aborted(const GNCInteractor *i)
+{
+  g_assert(i);
+  return !(i->keepAlive);
+}
+
+void GNCInteractor_show(GNCInteractor *i)
+{
+  g_assert(i);
+  gtk_widget_show_all (i->dialog);
+}
+
+
+void GNCInteractor_hide(GNCInteractor *i)
+{
+  g_assert(i);
+  gtk_widget_hide_all (i->dialog);
+}
+
+
+/********************************************************
+ * Now all the callback functions 
+ */
 static int msgInputPin(const HBCI_User *user,
 		       char **pinbuf,
 		       int minsize,
 		       int newPin,
 		       void *user_data)
 {
-  Inter_data *data = user_data;
+  GNCInteractor *data = user_data;
   const HBCI_Bank *bank = NULL;
   char *msgstr = NULL, *passwd = NULL;
   int retval = 0;
@@ -139,7 +162,7 @@ Please try again."), minsize) == GNC_VERIFY_CANCEL)
     else {
       *pinbuf = g_strdup (passwd);
       if (user) {
-	printf("Cached the PIN for user %s.\n", HBCI_User_userId (user));
+	//printf("Cached the PIN for user %s.\n", HBCI_User_userId (user));
 	data->user = user;
 	if (data->pw)
 	  g_free (memset (data->pw, 0, strlen (data->pw)));
@@ -158,7 +181,7 @@ Please try again."), minsize) == GNC_VERIFY_CANCEL)
 
 static int msgInsertCardOrAbort(const HBCI_User *user, void *user_data)
 {
-  Inter_data *data = user_data;
+  GNCInteractor *data = user_data;
   const HBCI_Bank * b = NULL;
   char *msgstr = NULL;
   GNCVerifyResult retval;
@@ -193,7 +216,7 @@ unknown user at unknown bank."));
 static int msgInsertCorrectCardOrAbort(const HBCI_User *user, 
 				       void *user_data)
 {
-  Inter_data *data = user_data;
+  GNCInteractor *data = user_data;
   const HBCI_Bank * b = NULL;
   char *msgstr = NULL;
   GNCVerifyResult retval;
@@ -227,7 +250,7 @@ unknown user at unknown bank."));
 
 static void msgStateResponse(const char *msg, void *user_data)
 {
-  Inter_data *data = user_data;
+  GNCInteractor *data = user_data;
   g_assert(data);
 
   add_log_text (data, msg);
@@ -238,7 +261,7 @@ static void msgStateResponse(const char *msg, void *user_data)
 
 static int keepAlive(void *user_data)
 {
-  Inter_data *data = user_data;
+  GNCInteractor *data = user_data;
   g_assert(data);
   //fprintf(stdout, "my-keepAlive: returning 1\n");
 
@@ -250,7 +273,7 @@ static int keepAlive(void *user_data)
 
 static void destr(void *user_data) 
 {
-  Inter_data *data = user_data;
+  GNCInteractor *data = user_data;
   if (data == NULL)
     return;
 
@@ -262,7 +285,7 @@ static void destr(void *user_data)
 
 
 HBCI_Interactor *
-gnc_hbci_new_interactor(Inter_data *data)
+gnc_hbci_new_interactor(GNCInteractor *data)
 {
   HBCI_InteractorCB *inter;
 

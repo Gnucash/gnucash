@@ -33,7 +33,7 @@
 
 HBCI_API *
 gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
-		  GtkWidget *parent)
+		  GtkWidget *parent, GNCInteractor **inter)
 {
   HBCI_API *api = NULL;
   HBCI_Error *err = NULL;
@@ -60,16 +60,21 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
   }
   HBCI_Error_delete (err);
 
-  gnc_hbci_api_interactors (api, parent);
-  
+  if (inter)
+    *inter = gnc_hbci_api_interactors (api, parent);
+  else
+    gnc_hbci_api_interactors (api, parent);
+
   return api;
 };
 
 
-HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent)
+HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent, 
+					 GNCInteractor **inter)
 {
   return gnc_hbci_api_new 
-    (gnc_hbci_get_book_configfile (gnc_get_current_book ()), FALSE, parent);
+    (gnc_hbci_get_book_configfile (gnc_get_current_book ()), 
+     FALSE, parent, inter);
 };
 
 

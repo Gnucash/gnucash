@@ -37,16 +37,23 @@ typedef enum {
   CLOSING
 } PMon_state;
 
-typedef struct _data 
+struct _inter_data 
 {
   GtkWidget *parent;
-
   GtkWidget *dialog;
+
+  /* Progress bars */
   GtkWidget *job_entry;
   GtkWidget *action_entry;
   GtkWidget *action_progress;
+
+  /* Log window */
   GtkWidget *log_text;
 
+  /* Buttons */
+  GtkWidget *abort_button;
+  GtkWidget *close_button;
+  
   gboolean keepAlive;
   PMon_state state;
 
@@ -57,17 +64,17 @@ typedef struct _data
 
   const HBCI_User *user;
   char *pw;
-} Inter_data;
+};
 
-void delete_Inter_data (Inter_data *data);
+void delete_GNCInteractor (GNCInteractor *data);
 
 HBCI_ProgressMonitor *
-gnc_hbci_new_pmonitor(Inter_data *data);
+gnc_hbci_new_pmonitor(GNCInteractor *data);
 
 HBCI_Interactor *
-gnc_hbci_new_interactor(Inter_data *data);
+gnc_hbci_new_interactor(GNCInteractor *data);
 
-void add_log_text (Inter_data *data, const char *msg);
+void add_log_text (GNCInteractor *data, const char *msg);
 
 
 

@@ -26,8 +26,14 @@
 #include <openhbci/api.h>
 #include <gnome.h>
 
+typedef struct _inter_data GNCInteractor;
+
 /** Adds the interactor and progressmonitor classes to the api. */
-void gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent);
+GNCInteractor *gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent);
+
+gboolean GNCInteractor_aborted(const GNCInteractor *i);
+void GNCInteractor_show(GNCInteractor *i);
+void GNCInteractor_hide(GNCInteractor *i);
 
 
 #endif

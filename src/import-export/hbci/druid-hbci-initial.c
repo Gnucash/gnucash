@@ -37,16 +37,8 @@
 #include "druid-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
-/* #include "Group.h" */
-/* #include "glade/glade-xml.h" */
-/* #include "gnc-amount-edit.h" */
-/* #include "gnc-commodity-edit.h" */
-/* #include "gnc-general-select.h" */
-/* #include "gnc-component-manager.h" */
-/* #include "../gnome-utils/gnc-dir.h" */
-/* #include "gnc-gui-query.h" */
-/* #include "io-example-account.h" */
-/* #include "top-level.h" */
+#include "gnc-html.h"
+
 #include <openhbci/api.h>
 #include <openhbci/outboxjobs.h>
 #include <openhbci/outboxjobkeys.h>
@@ -94,6 +86,9 @@ struct _hbciinitialinfo
   GtkWidget *accountpage;
   GtkWidget *accountlist;
     
+  /* server iniletter info page */
+  GtkWidget *serverinfopage;
+
   /* iniletter server */
   GtkWidget *serverpage;
   GtkWidget *server_bankcode;
@@ -102,12 +97,19 @@ struct _hbciinitialinfo
   GtkWidget *server_exp;
   GtkWidget *server_mod;
   GtkWidget *server_hash;
+  GtkWidget *server_frame;
+  gnc_html *server_html;
 
+  /* user iniletter info page */
+  GtkWidget *userinfopage;
+  
   /* iniletter user */
-  GtkWidget *user_text;
+  GtkWidget *user_frame;
+  gnc_html *user_html;
 
   /* OpenHBCI stuff */
   HBCI_API *api;
+  GNCInteractor *interactor;
 
   /* account match: row_number (int) -> hbci_account */
   GHashTable *hbci_hash;
@@ -121,6 +123,10 @@ struct _hbciinitialinfo
   HBCI_Customer *newcustomer;
   /* Bank for which a new user is about to be created */
   HBCI_Bank *newbank;
+
+  /* Customer for which we already got the keys */
+  HBCI_Customer *gotkeysforCustomer;
+  
 };
 
 static gboolean
@@ -338,11 +344,15 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
       reset_initial_info (info);
       info->configfile = g_strdup (filename);
       /* Create new HBCI_API object, loading its data from filename */
-      info->api = gnc_hbci_api_new (filename, TRUE, GTK_WIDGET (info->window));
+      info->api = gnc_hbci_api_new (filename, TRUE, 
+				    GTK_WIDGET (info->window), 
+				    &(info->interactor));
     }
     else if (info->api == NULL)
       /* Create new HBCI_API object, loading its data from filename */
-      info->api = gnc_hbci_api_new (filename, TRUE, GTK_WIDGET (info->window));
+      info->api = gnc_hbci_api_new (filename, TRUE, 
+				    GTK_WIDGET (info->window), 
+				    &(info->interactor));
 
     api = info->api;
     g_free (filename);
@@ -644,7 +654,7 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
 
     if (is_rdh) {
       gnome_druid_set_page (GNOME_DRUID (info->druid), 
-			    GNOME_DRUID_PAGE (info->serverpage));
+			    GNOME_DRUID_PAGE (info->serverinfopage));
       return TRUE;
     } 
     else
@@ -661,17 +671,70 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
 
 
 static gboolean
-on_iniletter_server_back (GnomeDruidPage  *gnomedruidpage,
+on_iniletter_info_back (GnomeDruidPage  *gnomedruidpage,
 			  gpointer arg1,
 			  gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
   g_assert(info);
+
+  if (info->interactor)
+    GNCInteractor_hide (info->interactor);
   
   gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			GNOME_DRUID_PAGE (info->userpage));
   return TRUE;
 }
+
+
+
+
+static gboolean
+on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
+			  gpointer arg1,
+			  gpointer user_data)
+{
+  HBCIInitialInfo *info = user_data;
+  g_assert(info);
+
+  if (info->newcustomer == NULL) 
+    return FALSE;
+
+  if (info->gotkeysforCustomer == NULL) {
+    /* Execute a GetKey job. */
+    HBCI_OutboxJob *job;
+    HBCI_Error *err;
+    
+    job = HBCI_OutboxJobGetKeys_OutboxJob 
+      (HBCI_OutboxJobGetKeys_new (info->api, info->newcustomer));
+    HBCI_API_addJob (info->api, job);
+
+    if (info->interactor)
+      GNCInteractor_show (info->interactor);
+  
+    err = HBCI_API_executeQueue (info->api, TRUE);
+    if (!HBCI_Error_isOk(err)) {
+      char *errstr = g_strdup_printf("on_iniletter_info_next: Error at executeQueue: %s",
+				     HBCI_Error_message (err));
+      printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
+	     HBCI_OutboxJob_result(job));
+      HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor (HBCI_API_Hbci (info->api)), errstr);
+      g_free (errstr);
+      HBCI_Error_delete (err);
+      return FALSE;
+    }
+    HBCI_Error_delete (err);
+    info->gotkeysforCustomer = info->newcustomer;
+  }
+  else if (info->gotkeysforCustomer != info->newcustomer) {
+    printf("on_iniletter_info_next: Oops, already got keys for another customer. Not yet implemented.\n");
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+
 
 static char *
 to_hexstring (const char *str)
@@ -711,12 +774,7 @@ on_iniletter_server_prepare (GnomeDruidPage *gnomedruidpage,
 			     gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
-  HBCI_OutboxJob *job;
-  HBCI_Error *err;
   g_assert(info);
-
-  if (info->newcustomer == NULL) 
-    return;
 
   gnome_druid_set_buttons_sensitive (GNOME_DRUID (info->druid),
 				     TRUE, FALSE, TRUE);
@@ -742,23 +800,6 @@ on_iniletter_server_prepare (GnomeDruidPage *gnomedruidpage,
   /* Let the widgets be redrawn */
   while (g_main_iteration (FALSE));
     
-  job = HBCI_OutboxJobGetKeys_OutboxJob 
-    (HBCI_OutboxJobGetKeys_new (info->api, info->newcustomer));
-  HBCI_API_addJob (info->api, job);
-
-  err = HBCI_API_executeQueue (info->api, TRUE);
-  if (!HBCI_Error_isOk(err)) {
-    char *errstr = g_strdup_printf("on_iniletter_server_prepare: Error at executeQueue: %s",
-				  HBCI_Error_message (err));
-    printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
-	   HBCI_OutboxJob_result(job));
-    HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor (HBCI_API_Hbci (info->api)), errstr);
-    g_free (errstr);
-    HBCI_Error_delete (err);
-    return;
-  }
-  HBCI_Error_delete (err);
-  
   {
     gint pos;
     const HBCI_Medium *med;
@@ -797,7 +838,7 @@ on_iniletter_server_prepare (GnomeDruidPage *gnomedruidpage,
   
 }
 static gboolean
-on_iniletter_server_next (GnomeDruidPage  *gnomedruidpage,
+on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
 			  gpointer arg1,
 			  gpointer user_data)
 {
@@ -805,6 +846,77 @@ on_iniletter_server_next (GnomeDruidPage  *gnomedruidpage,
   return FALSE;
 }
 
+static void
+on_iniletter_user_prepare (GnomeDruidPage  *gnomedruidpage,
+			gpointer arg1,
+			gpointer user_data)
+{
+  HBCIInitialInfo *info = user_data;
+  char *res;
+  g_assert (info);
+  
+  if (info->newcustomer == NULL)
+    return;
+  
+  {
+    const HBCI_Medium *med;
+    const HBCI_MediumRDH *medr;
+    int keynumber, keyversion;
+    char *tmp, *hash, *exponent, *modulus;
+    const HBCI_User *user = HBCI_Customer_user (info->newcustomer);
+    time_t now = time(NULL);
+    char *time_now = ctime(&now);
+    
+    med = HBCI_User_medium (HBCI_Customer_user(info->newcustomer));
+    medr = HBCI_Medium_MediumRDH ((HBCI_Medium *)med);
+    g_assert (medr);
+
+    tmp = HBCI_MediumRDH_getUserIniLetterHash(medr);
+    hash = to_hexstring_hash (tmp);
+    g_free (tmp);
+    tmp = HBCI_MediumRDH_getUserIniLetterExponent(medr);
+    exponent = to_hexstring (tmp);
+    g_free (tmp);
+    tmp = HBCI_MediumRDH_getUserIniLetterModulus(medr);
+    modulus = to_hexstring (tmp);
+    g_free (tmp);
+    keynumber = HBCI_MediumRDH_getUserKeyNumber(medr);
+    keyversion = HBCI_MediumRDH_getUserKeyVersion(medr);
+
+    res = g_strdup_printf("<html><body><h1>Ini-Brief</h1>
+<h2>Benutzerdaten</h2><table>
+<tr><td>Benutzername</td><td>%s</td></tr>
+<tr><td>Datum, Uhrzeit</td><td>%s</td></tr>
+<tr><td>Benutzerkennung</td><td>%s</td></tr>
+<tr><td>Schl&uuml;sselnummer</td><td>%d</td></tr>
+<tr><td>Schl&uuml;sselversion</td><td>%d</td></tr>
+<tr><td>Kundensystemkennung</td><td>%s</td></tr>
+</table>
+<h2>Oeffentlicher Schl&uuml;ssel f&uuml;r die elektronische
+Signatur</h2>
+<h3>Exponent</h3>
+<pre>%s</pre>
+<h3>Modulus</h3>
+<pre>%s</pre>
+<h3>Hash</h3>
+<pre>%s</pre>
+<p>&nbsp;</p>
+<hr>
+Ort, Datum, Unterschrift</body></html>",
+			  HBCI_User_userName (user),
+			  time_now,
+			  HBCI_User_userId (user),
+			  keynumber, keyversion,
+			  HBCI_Hbci_systemName (HBCI_API_Hbci (info->api)),
+			  exponent, modulus, hash);
+    
+    g_free (exponent);
+    g_free (modulus);
+    g_free (hash);
+  }
+  gnc_html_show_data (info->user_html, res, strlen(res));
+  g_free (res);
+}
 static gboolean
 on_iniletter_user_next (GnomeDruidPage  *gnomedruidpage,
 			gpointer arg1,
@@ -907,6 +1019,8 @@ on_button_clicked (GtkButton *button,
   } else if (strcmp (name, "serveryes_button") == 0) {
     gnome_druid_set_buttons_sensitive (GNOME_DRUID (info->druid),
 				       TRUE, TRUE, TRUE);
+  } else if (strcmp (name, "userprint_button") == 0) {
+    gnc_html_print (info->user_html);
   } else {
     printf("on_button_clicked: Oops, unknown button: %s\n",
 	   name);
@@ -1042,6 +1156,14 @@ void gnc_hbci_initial_druid (void)
 			GTK_SIGNAL_FUNC (on_accountlist_back), info);
   }
   {
+    page = glade_xml_get_widget (xml, "iniletter_info_page");
+    info->serverinfopage = page;
+    gtk_signal_connect (GTK_OBJECT (page), "back", 
+			GTK_SIGNAL_FUNC (on_iniletter_info_back), info);
+    gtk_signal_connect (GTK_OBJECT (page), "next", 
+			GTK_SIGNAL_FUNC (on_iniletter_info_next), info);
+  }
+  {
     page = glade_xml_get_widget(xml, "iniletter_server_page");
     info->serverpage = page;
     gtk_signal_connect (GTK_OBJECT 
@@ -1054,18 +1176,33 @@ void gnc_hbci_initial_druid (void)
     info->server_exp = glade_xml_get_widget(xml, "serverexponent_text");
     info->server_mod = glade_xml_get_widget(xml, "servermodulus_text");
     info->server_hash = glade_xml_get_widget(xml, "serverhash_text");
+    info->server_frame = glade_xml_get_widget(xml, "iniletter_server_frame");
     gtk_signal_connect (GTK_OBJECT (page), "prepare", 
 			GTK_SIGNAL_FUNC (on_iniletter_server_prepare), info);
-    gtk_signal_connect (GTK_OBJECT (page), "back", 
-			GTK_SIGNAL_FUNC (on_iniletter_server_back), info);
-    gtk_signal_connect (GTK_OBJECT (page), "next", 
-			GTK_SIGNAL_FUNC (on_iniletter_server_next), info);
+    /*gtk_signal_connect (GTK_OBJECT (page), "next", 
+      GTK_SIGNAL_FUNC (on_iniletter_server_next), info);*/
   }
   {
-    info->user_text = glade_xml_get_widget(xml, "iniletter_user_text");
+    page = glade_xml_get_widget (xml, "iniletter_userinfo_page");
+    info->userinfopage = page;
+    gtk_signal_connect (GTK_OBJECT (page), "next", 
+			GTK_SIGNAL_FUNC (on_iniletter_userinfo_next), info);
+  }
+  {
     page = glade_xml_get_widget(xml, "iniletter_user_page");
+    info->user_frame = glade_xml_get_widget(xml, "iniletter_user_frame");
+    info->user_html = gnc_html_new();
+    gtk_container_add (GTK_CONTAINER (info->user_frame), 
+		       gnc_html_get_widget (info->user_html));
+
+    gtk_signal_connect (GTK_OBJECT 
+			(glade_xml_get_widget (xml, "userprint_button")), 
+			"clicked",
+			GTK_SIGNAL_FUNC (on_button_clicked), info);
     gtk_signal_connect (GTK_OBJECT (page), "next", 
 			GTK_SIGNAL_FUNC (on_iniletter_user_next), info);
+    gtk_signal_connect (GTK_OBJECT (page), "prepare", 
+			GTK_SIGNAL_FUNC (on_iniletter_user_prepare), info);
   }
   
 
