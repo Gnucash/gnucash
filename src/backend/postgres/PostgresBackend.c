@@ -389,7 +389,6 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       pgendCopySplitsToEngine (be, trans);
    }
 
-   /* hack alert !! deal with kvp later -- huge sucking sound ! */
    /* restore any kvp data associated with the transaction and splits */
    for (node=xaction_list; node; node=node->next)
    {
