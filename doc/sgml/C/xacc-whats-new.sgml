@@ -6,7 +6,7 @@
   </artheader>
   <sect1>
     <title>
-      What's new in GnuCash 1.5 (soon to be 1.6)?
+      What's new in GnuCash 1.6?
     </title>
     
     <para>
@@ -209,6 +209,24 @@
 	business accounting features database support will 
 	be needed to handle massive datasets.</para>
       
+      <para>The Postgres backend allows multiple simultaneous
+        users to work on the same set of accounts at the same 
+        time. When one user makes a change to a transaction,
+        the change is sent to the Postgres database, and other
+        users see the effect of that change within (10) seconds.
+        The Postgres backend also maintains an audit trail
+        of modified transactions, allowing you to see what changed,
+        when. (Currently, there is no GUI to review the audit trail,
+        one must be an SQL user to review the trail).  The
+        Postgres backend also 'caches' data, so that a user
+        only sees the data they are working with, without requiring
+        that the entire contents of the database be loaded into  
+        GnucCash.  This should make it possible to work with much 
+        larger datasets.  The Postgres backend is currently 'beta',
+        meaning tht it works, but hasn't been well-tested, and
+        may contain bugs.
+      </para>
+
       <para>Similarly, an RPC backend exists, which allows you
 	to seperate the engine and interface and have them 
 	running on totally seperate machines.  Developments
