@@ -2912,11 +2912,12 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
        * next valid cell.  Also, if regData->qf and regData->qf->trans
        * aren't NULL, then fill the field we are entering with the
        * data from regData->qf->trans */
-        {
+      {
         char buf[BUFSIZE];
         XbaeMatrixTraverseCellCallbackStruct *tcbs =
         (XbaeMatrixTraverseCellCallbackStruct *)cb;
         
+      
         /* If the quark is zero, then it is likely that we are
          * here because we traversed out of a cell that had a 
          * PopBox in it.  The PopBox is clever enough to put
@@ -2961,7 +2962,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
               tcbs->next_column = MEMO_CELL_C;
               tcbs->next_row = row - XTO_CELL_R + MEMO_CELL_R;
             }
-          } 
+          }
 
           if( IN_ACTN_CELL(row,col) ) {
             /* the cell that follows action depends on 
@@ -2983,77 +2984,109 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
             }
           }
 
-          if( IN_DESC_CELL(row,col) )
-            {
+          if( IN_DESC_CELL(row,col) ) {
             tcbs->next_column = PAY_CELL_C;
             tcbs->next_row = row - DESC_CELL_R + PAY_CELL_R;
-            if( regData->qf != NULL )
+            if( regData->qf != NULL ) {
               if( regData->qf->trans != NULL ) {
                 /* hack alert -- this is guarenteed to break for ledgers */
                 Account *acc = regData->blackacc[0];
                 double themount;
                 themount = xaccGetAmount (acc, regData->qf->trans);
-                if( 0.0 > themount )
-                  {
+                if( 0.0 > themount ) {
                   sprintf( buf, "%.2f ", - themount );
                   XbaeMatrixSetCell( reg, tcbs->next_row, 
                                      tcbs->next_column, buf );
-                  }
-               }
+                }
+              }
             }
+          }
           
-          if( IN_PAY_CELL(row,col) )
-            {
+          if( IN_PAY_CELL(row,col) ) {
             /* In this field, we either go to the deposit field,
              * if the user hasn't entered any data in this field,
              * or to the action field, if the user has entered data */
             XbaeMatrixCommitEdit(reg,True);
-            if( strcmp(XbaeMatrixGetCell(reg,tcbs->row,tcbs->column),"") != 0 )
-              {
-              tcbs->next_column = ACTN_CELL_C;
-              tcbs->next_row    = row - PAY_CELL_R + ACTN_CELL_R;
+            if( strcmp(XbaeMatrixGetCell(reg,tcbs->row,tcbs->column),"") != 0 ) {
+              /* hmm .. for stocks & mutual funds, the next field is price.
+               * ordinary accounts don't have a price so hop to action. */
+              if ((STOCK     == regData->type) ||
+                  (MUTUAL    == regData->type) ||
+                  (PORTFOLIO == regData->type)) {
+                tcbs->next_column = PRCC_CELL_C;
+                tcbs->next_row    = row - PAY_CELL_R + PRCC_CELL_R;
+              } else {
+                tcbs->next_column = ACTN_CELL_C;
+                tcbs->next_row    = row - PAY_CELL_R + ACTN_CELL_R;
               }
-            else
-              {
+            } else {
               tcbs->next_column = DEP_CELL_C;
               tcbs->next_row    = row - PAY_CELL_R + DEP_CELL_R;
-              if( regData->qf != NULL )
+              if( NULL != regData->qf ) {
                 if( regData->qf->trans != NULL ) {
                   /* hack alert -- this is guarenteed to break for ledgers */
                   Account *acc = regData->blackacc[0];
                   double themount;
                   themount = xaccGetAmount (acc, regData->qf->trans);
-                  if( 0.0 <= themount )
-                    {
+                  if( 0.0 <= themount ) {
                     sprintf( buf, "%.2f ", themount );
                     XbaeMatrixSetCell( reg, tcbs->next_row, 
                                        tcbs->next_column, buf );
-                    }
+                  }
                 }
               }
             }
-          
-          if( IN_DEP_CELL(row,col) )
-            {
-            tcbs->next_column = ACTN_CELL_C;
-            tcbs->next_row    = row - DEP_CELL_R + ACTN_CELL_R;
+          }
+
+          if( IN_DEP_CELL(row,col) ) {
+            /* hmm .. for stocks & mutual funds, the next field is price.
+             * ordinary accounts don't have a price so hop to action. */
+            if ((STOCK     == regData->type) ||
+                (MUTUAL    == regData->type) ||
+                (PORTFOLIO == regData->type)) {
+              tcbs->next_column = PRCC_CELL_C;
+              tcbs->next_row    = row - DEP_CELL_R + PRCC_CELL_R;
+            } else {
+              tcbs->next_column = ACTN_CELL_C;
+              tcbs->next_row    = row - DEP_CELL_R + ACTN_CELL_R;
             }
+          }
           
-          /* If we are in the memo cell, stay there! */
-          if( (IN_MEMO_CELL(row,col)) && 
-              (IN_BAD_CELL(tcbs->next_row,tcbs->next_column)) )
-            {
-            tcbs->next_row    = row;
-            tcbs->next_column = MEMO_CELL_C;
+          /* price-credit cell only in stock, mutual registers */
+          if ((STOCK     == regData->type) ||
+              (MUTUAL    == regData->type)) {
+            if( IN_PRCC_CELL(row,col) ) {
+              tcbs->next_column = ACTN_CELL_C;
+              tcbs->next_row    = row - PRCC_CELL_R + ACTN_CELL_R;
             }
           }
 
-          regData->prev_row = tcbs->next_row;
-          regData->prev_col = tcbs->next_column;
+          /* price-debit cell only in portfolio ledger */
+          if ((PORTFOLIO == regData->type)) {
+            if( IN_PRCC_CELL(row,col) ) {
+              tcbs->next_column = PRCD_CELL_C;
+              tcbs->next_row    = row - PRCC_CELL_R + PRCD_CELL_R;
+            }
+
+            if( IN_PRCD_CELL(row,col) ) {
+              tcbs->next_column = ACTN_CELL_C;
+              tcbs->next_row    = row - PRCD_CELL_R + ACTN_CELL_R;
+            }
+          }
+
+          /* If we are in the memo cell, stay there! */
+          if( (IN_MEMO_CELL(row,col)) && 
+              (IN_BAD_CELL(tcbs->next_row,tcbs->next_column)) ) {
+            tcbs->next_row    = row;
+            tcbs->next_column = MEMO_CELL_C;
+          }
         }
+
+        regData->prev_row = tcbs->next_row;
+        regData->prev_col = tcbs->next_column;
       }
       break;
-
+    }
     default: 
       PERR("regDB(): We shouldn't get here!");
     }
