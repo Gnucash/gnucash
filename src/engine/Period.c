@@ -268,6 +268,47 @@ remove_open_lots_from_trans_list (TransList *trans_list)
    return trans_list;
 }
 
+/* Remove any lots that have associated open transactions,
+ * where by 'open transaction' we mean a transaction that has
+ * a split in an open lot.
+ * These lots, even though closed, are participants in transactions
+ * that cannot be moved to a closed book, and thus, by association 
+ * can't be moved either.
+ */
+
+static LotList *
+remove_open_trans_from_lot_list (LotList *lot_list)
+{
+   LotList *node;
+
+   for (node=lot_list; node; )
+   {
+      GNCLot *lot = node->data;
+      LotList *next = node->next;
+      SplitList *split_list = gnc_lot_get_split_list (lot);
+      SplitList *snode;
+      gboolean do_remove = FALSE;
+      for (snode = split_list; snode; snode=snode->next)
+      {
+         Split *s = snode->data;
+         Transaction *trans = s->parent;
+         if (trans_has_open_lot (trans))
+         {
+            do_remove = TRUE;
+            break;
+         }
+      }
+      if (do_remove)
+      {
+         lot_list = g_list_remove_link (lot_list, node);
+         g_list_free_1 (node);
+      }
+      node = next;
+   }
+
+   return lot_list;
+}
+
 /* ================================================================ */
 /* Return a unique list of lots that are involved with the listed
  * transactions.
@@ -345,6 +386,8 @@ gnc_book_partition (QofBook *dest_book, QofBook *src_book, QofQuery *query)
     * moving transactions, which should avoid damage to lots. */
    trans_list = remove_open_lots_from_trans_list (trans_list);
    lot_list = create_lot_list_from_trans_list (trans_list);
+   lot_list = remove_open_trans_from_lot_list (lot_list);
+
    for (lnode = lot_list; lnode; lnode = lnode->next)
    {
       GNCLot *lot = lnode->data;
