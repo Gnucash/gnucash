@@ -809,7 +809,7 @@ xaccAccountRecomputeBalance (Account * acc)
     if( YREC == split -> reconciled ||
         FREC == split -> reconciled ) {
       share_reconciled_balance = 
-        gnc_numeric_add_fixed(share_cleared_balance, split->damount);
+        gnc_numeric_add_fixed(share_reconciled_balance, split->damount);
       reconciled_balance =  
         gnc_numeric_add_fixed(reconciled_balance, split->value);
     }
