@@ -7,7 +7,7 @@ GNC_ARGS="${GNC_ARGS} --share-dir ./share"
 GNC_ARGS="${GNC_ARGS} --config-dir ./etc"
 GNC_ARGS="${GNC_ARGS} --load-path (\"(./share/scm)\")"
 
-XACC_HELP=${XACC_HELP}:./doc
+XACC_HELP=${XACC_HELP}:./Docs
 export XACC_HELP
 
 # Run whichever one was built last.
