@@ -97,6 +97,7 @@ src/gnome-utils/gnc-date-delta.c
 src/gnome-utils/gnc-frequency.c
 src/gnome-utils/gtkselect.c
 src/gnome-utils/print-session.c
+src/gnome-utils/commodity.glade
 src/gnome-utils/gnc-mdi-utils.c
 src/network-utils/gnc-gpg.c
 src/network-utils/gnc-http.c
@@ -175,7 +176,7 @@ src/gnc-module/test/mod-foo/foo.c
 src/gnc-module/test/mod-foo/gnc-mod-foo.c
 src/gnc-module/gnc-module.c
 src/gnome/glade/account.glade
-src/gnome/glade/commodity.glade
+src/gnome/glade/commodities.glade
 src/gnome/glade/fincalc.glade
 src/gnome/glade/find.glade
 src/gnome/glade/help.glade
