@@ -46,6 +46,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
+#include "gnc-err-popup.h"
 #include "gnc-euro.h"
 #include "gnc-gui-query.h"
 #include "gnc-ledger-display.h"
@@ -1142,6 +1143,25 @@ gnc_split_reg_reverse_trans_cb (GtkWidget *w, gpointer data)
 /* Remove when porting to gtk2.0 */
 #define GTK_STOCK_CANCEL           GNOME_STOCK_BUTTON_CANCEL
 #define GTK_STOCK_DELETE           "Delete"
+
+
+static gboolean
+xaccTransWarnReadOnly (const Transaction *trans)
+{
+  const gchar *reason;
+
+  if (!trans) return FALSE;
+
+  reason = xaccTransGetReadOnly (trans);
+  if (reason) {
+    gnc_send_gui_error(_("Cannot modify or delete this transaction.\n"
+                       "This transaction is marked read-only because:\n\n'%s'"),
+                       reason);
+    return TRUE;
+  }
+  return FALSE;
+}
+
 
 void
 gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
