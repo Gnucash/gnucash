@@ -241,9 +241,10 @@ gnc_add_history (GNCSession * session)
 static void
 gnc_book_opened (void)
 {
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
   gh_call2 (gh_eval_str("gnc:hook-run-danglers"),
             gh_eval_str("gnc:*book-opened-hook*"),
-            gh_str02scm(gnc_session_get_url(current_session))); 
+            gh_str02scm((char *) gnc_session_get_url(current_session))); 
 }
 
 void
@@ -261,10 +262,11 @@ gnc_file_new (void)
   /* close any ongoing file sessions, and free the accounts.
    * disable events so we don't get spammed by redraws. */
   gnc_engine_suspend_events ();
-
+  
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
   gh_call2(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*book-closed-hook*"),
-           gh_str02scm(gnc_session_get_url(session)));
+           gh_str02scm((char *) gnc_session_get_url(session)));
 
   gnc_session_destroy (session);
   current_session = NULL;
@@ -348,10 +350,10 @@ gnc_post_file_open (const char * filename)
 
   /* -------------- BEGIN CORE SESSION CODE ------------- */
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
   gh_call2(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*book-closed-hook*"),
-           gh_str02scm(gnc_session_get_url(current_session)));           
-
+           gh_str02scm((char *) gnc_session_get_url(current_session)));
   gnc_session_destroy (current_session);
   current_session = NULL;
 
@@ -550,8 +552,9 @@ gnc_file_save (void)
   gnc_book_mark_saved (gnc_session_get_book (session));
 
   /* save the main window state */
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
   gh_call1 (gh_eval_str("gnc:main-window-save-state"),
-            gh_str02scm(gnc_session_get_url(current_session))); 
+            gh_str02scm((char *) gnc_session_get_url(current_session))); 
 
   LEAVE (" ");
 }
@@ -679,9 +682,10 @@ gnc_file_quit (void)
    * transactions during shutdown would cause massive redraws */
   gnc_engine_suspend_events ();
 
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
   gh_call2(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*book-closed-hook*"),
-           gh_str02scm(gnc_session_get_url(session)));           
+           gh_str02scm((char *) gnc_session_get_url(session)));           
   
   gnc_session_destroy (session);
   current_session = NULL;
