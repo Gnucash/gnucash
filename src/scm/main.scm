@@ -77,6 +77,7 @@
 (export gnc:make-new-acct-tree-window)  
 (export gnc:free-acct-tree-window)
 (export gnc:main-window-save-state)
+(export gnc:main-window-properties-cb)
 
 ;; from printing/print-check.scm
 (export make-print-check-format)

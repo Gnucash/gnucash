@@ -93,6 +93,7 @@ static void gnc_main_window_cmd_file_save (EggAction *action, GncMainWindow *win
 static void gnc_main_window_cmd_file_save_as (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_export_accounts (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_print (EggAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_file_properties (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_close (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_quit (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_edit_cut (EggAction *action, GncMainWindow *window);
@@ -174,6 +175,9 @@ static EggActionEntry gnc_menu_entries [] =
 	{ "FilePrintAction", N_("_Print..."), GTK_STOCK_PRINT, "<control>p",
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_file_print) },
+	{ "FilePropertiesAction", N_("Properties..."), GTK_STOCK_PROPERTIES, NULL,
+	  NULL,
+	  G_CALLBACK (gnc_main_window_cmd_file_properties) },
 	{ "FileCloseAction", N_("_Close"), GTK_STOCK_CLOSE, "<control>w",
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_file_close) },
@@ -954,6 +958,17 @@ gnc_main_window_cmd_file_export_accounts (EggAction *action, GncMainWindow *wind
 static void
 gnc_main_window_cmd_file_print (EggAction *action, GncMainWindow *window)
 {
+}
+
+static void
+gnc_main_window_cmd_file_properties (EggAction *action, GncMainWindow *window)
+{
+  SCM func = scm_c_eval_string("gnc:main-window-properties-cb");
+  if (!SCM_PROCEDUREP (func)) {
+      PERR ("not a procedure\n");
+      return;
+  }
+  scm_call_0(func);
 }
 
 static void

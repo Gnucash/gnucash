@@ -24,6 +24,8 @@
       <menuitem name="FilePrint" action="FilePrintAction"/>
       <placeholder name="FilePrintPlaceholder"/>
       <separator name="FileSep5"/>
+      <menuitem name="FileProperties" action="FilePropertiesAction"/>
+      <separator name="FileSep6"/>
       <menuitem name="FileClose" action="FileCloseAction"/>
       <menuitem name="FileQuit" action="FileQuitAction"/>
     </menu>
