@@ -9,6 +9,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/business/business-core \
+  $(GNOME_XML_CFLAGS) \
   ${GLIB_CFLAGS}
 
 libgncmod_business_backend_file_la_SOURCES = \
