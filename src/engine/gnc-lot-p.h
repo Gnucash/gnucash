@@ -64,6 +64,7 @@ struct gnc_lot_struct
   gboolean is_closed;
 };
 
+void gnc_lot_set_guid(GNCLot *lot, GUID guid);
 
 #endif /* GNC_LOT_P_H */
 

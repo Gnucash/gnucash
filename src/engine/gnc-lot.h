@@ -43,6 +43,8 @@
 GNCLot * gnc_lot_new (GNCBook *);
 void gnc_lot_destroy (GNCLot *);
 
+const GUID * gnc_lot_get_guid (GNCLot *p);
+
 void gnc_lot_add_split (GNCLot *, Split *);
 void gnc_lot_remove_split (GNCLot *, Split *);
 

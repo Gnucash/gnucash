@@ -100,6 +100,28 @@ gnc_lot_destroy (GNCLot *lot)
 
 /* ============================================================= */
 
+const GUID * 
+gnc_lot_get_guid (GNCLot *lot)
+{
+	if (!lot) return NULL;
+	return &lot->guid;
+}
+
+void
+gnc_lot_set_guid (GNCLot *lot, GUID uid)
+{
+	if (!lot) return;
+
+	if (guid_equal (&lot->guid, &uid)) return;
+
+	xaccRemoveEntity(lot->book->entity_table, &lot->guid);
+   lot->guid = uid;
+   xaccStoreEntity(lot->book->entity_table, lot, &lot->guid, GNC_ID_LOT);
+}
+
+
+/* ============================================================= */
+
 gboolean 
 gnc_lot_is_closed (GNCLot *lot)
 {
