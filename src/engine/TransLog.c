@@ -39,6 +39,26 @@
  * Note that the current support for journalling is at best 
  * embryonic, at worst, sets the wrong expectations.
  */
+
+/* 
+ * Some design philosphy that I think would be good to keep in mind:
+ *
+ * (1) Try to keep the code simple.  Want to make it simple and obvious
+ *     that we are recording everything that we need to record.
+ *
+ * (2) Keep the printed format human readable, for the same reasons.
+ * (2.a) Use tabs as a human freindly field separator; its also a character
+ *       that does not (should not) appear naturally anywhere in the data, 
+ *       as it serves no formatting purpose in the current GUI design.
+ *       (hack alert -- this is not currently tested for or enforced,
+ *       so this is a very unsafe assumption. Maybe urlencoding should 
+ *       be used.)
+ *       
+ * (3) There are no compatibility requirements from release to release.
+ *     Sounds OK to me to change the format of the output when needed.
+ */
+
+
 int gen_logs = 1;
 FILE * trans_log = 0x0;
 
@@ -63,8 +83,8 @@ xaccOpenLog (void)
 
    trans_log = fopen (filename, "a");
 
-   /* use tab-separated fields, to be /rdb compatible */
-   fprintf (trans_log, "mod	date_entered	date_posted	num description"\
+   /* use tab-separated fields */
+   fprintf (trans_log, "mod	date_entered	date_posted	num description	" \
         "account	memo	action	reconciled	amount	price date_reconciled\n");
    fprintf (trans_log, "-----------------\n");
 
@@ -87,7 +107,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
    dent = xaccDateUtilGetStamp (trans->date_entered.tv_sec);
    dpost = xaccDateUtilGetStamp (trans->date_posted.tv_sec);
 
-   /* use tab-separated fields, to be /rdb compatible */
+   fprintf (trans_log, "===== START\n");
 
    split = trans->splits[0];
    while (split) {
@@ -95,7 +115,8 @@ xaccTransWriteLog (Transaction *trans, char flag)
       if (split->acc) accname = split->acc->description;
       drecn = xaccDateUtilGetStamp (split->date_reconciled.tv_sec);
 
-      fprintf (trans_log, "%c	%s	%s	%s	%s" \
+      /* use tab-separated fields */
+      fprintf (trans_log, "%c	%s	%s	%s	%s	" \
                "%s	%s	%s	%c	%10.6f	%10.6f	%s\n",
                flag,
                dent, 
@@ -114,6 +135,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
       i++;
       split = trans->splits[i];
    }
+   fprintf (trans_log, "===== END\n");
    free (dent);
    free (dpost);
 
