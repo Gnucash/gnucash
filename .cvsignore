@@ -8,6 +8,7 @@ config.sub
 config.log
 config.status
 config.h
+config.h.in
 ltconfig
 ltmain.sh
 *.tar.gz
