@@ -4552,7 +4552,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (scrolledwindow22);
   gtk_container_add (GTK_CONTAINER (frame45), scrolledwindow22);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow22), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow22), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   new_transaction_list = gtk_clist_new (3);
   gtk_widget_ref (new_transaction_list);
@@ -4599,7 +4599,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (scrolledwindow23);
   gtk_container_add (GTK_CONTAINER (frame46), scrolledwindow23);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow23), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow23), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   old_transaction_list = gtk_clist_new (4);
   gtk_widget_ref (old_transaction_list);

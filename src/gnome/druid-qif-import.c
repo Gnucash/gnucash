@@ -1350,6 +1350,8 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
       return FALSE;
     }
 
+    gtk_clist_column_titles_passive (GTK_CLIST(wind->new_transaction_list));
+
     /* otherwise, make up the display for the duplicates page */
     gtk_clist_clear(GTK_CLIST(wind->new_transaction_list));
     gtk_clist_freeze(GTK_CLIST(wind->new_transaction_list));
@@ -1377,10 +1379,13 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
       
       retval      = gh_cdr(retval); 
     }
-    
+
+    gtk_clist_columns_autosize(GTK_CLIST(wind->new_transaction_list));
+
     gtk_clist_thaw(GTK_CLIST(wind->new_transaction_list));        
     gtk_clist_select_row(GTK_CLIST(wind->new_transaction_list), 0, 0);
   }  
+
   gnc_resume_gui_refresh();
   return TRUE;
 }
@@ -1728,9 +1733,15 @@ refresh_old_transactions(QIFImportWindow * wind, int selection) {
   Split        * gnc_split;
   gchar        * row_text[4] = { NULL, NULL, NULL, NULL };
   int          rownum;
-  
+
+  gtk_clist_column_titles_passive (GTK_CLIST(wind->old_transaction_list));
+
   gtk_clist_clear(GTK_CLIST(wind->old_transaction_list));
   gtk_clist_freeze(GTK_CLIST(wind->old_transaction_list));
+
+  gtk_clist_set_column_justification(GTK_CLIST(wind->old_transaction_list),
+                                     3,
+                                     GTK_JUSTIFY_CENTER);
 
   if(wind->match_transactions != SCM_BOOL_F) {
     possible_matches = gh_cdr(gh_list_ref
@@ -1738,7 +1749,9 @@ refresh_old_transactions(QIFImportWindow * wind, int selection) {
                                gh_int2scm(wind->selected_transaction)));
     gh_call2(gh_eval_str("qif-import:refresh-match-selection"),
              possible_matches, gh_int2scm(selection));
-    
+
+    row_text[3] = "";
+
     while(!gh_null_p(possible_matches)) {
       current_xtn = gh_car(possible_matches);
       gnc_xtn     = (Transaction *)gw_wcp_get_ptr(gh_car(current_xtn));
@@ -1749,7 +1762,7 @@ refresh_old_transactions(QIFImportWindow * wind, int selection) {
       row_text[1] = xaccTransGetDescription(gnc_xtn);
       
       if(xaccTransCountSplits(gnc_xtn) > 2) {
-        row_text[2] = g_strdup(_("(split)")); 
+        row_text[2] = _("(split)");
       }
       else {
         row_text[2] = 
@@ -1758,18 +1771,18 @@ refresh_old_transactions(QIFImportWindow * wind, int selection) {
                           (xaccSplitGetAccount(gnc_split), TRUE));
       }
       
-      if(selected != SCM_BOOL_F) {
-        row_text[3] = "*";
-      }
-      else {
-        row_text[3] = NULL;
-      }
-      
       rownum = gtk_clist_append(GTK_CLIST(wind->old_transaction_list),
                                 row_text);
+
+      gnc_clist_set_check (GTK_CLIST(wind->old_transaction_list),
+                           rownum, 3, selected != SCM_BOOL_F);
+
       possible_matches = gh_cdr(possible_matches);
     }
   }
+
+  gtk_clist_columns_autosize (GTK_CLIST(wind->old_transaction_list));
+
   gtk_clist_thaw(GTK_CLIST(wind->old_transaction_list));
 }
 

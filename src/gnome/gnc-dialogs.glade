@@ -6855,8 +6855,8 @@ Click &quot;Next&quot; to find duplicate transactions. </label>
 	    <widget>
 	      <class>GtkScrolledWindow</class>
 	      <name>scrolledwindow22</name>
-	      <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-	      <vscrollbar_policy>GTK_POLICY_NEVER</vscrollbar_policy>
+	      <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
+	      <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
 	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
 
@@ -6933,8 +6933,8 @@ Click &quot;Next&quot; to find duplicate transactions. </label>
 	    <widget>
 	      <class>GtkScrolledWindow</class>
 	      <name>scrolledwindow23</name>
-	      <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-	      <vscrollbar_policy>GTK_POLICY_NEVER</vscrollbar_policy>
+	      <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
+	      <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
 	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
 
