@@ -48,6 +48,8 @@
 #include "Scrub.h"
 #include "TransLog.h"
 
+static short module = MOD_IO;
+
 #define GNC_ACCOUNT_STRING "gnc-account-example"
 #define GNC_ACCOUNT_SHORT "gnc-act:short-description"
 #define GNC_ACCOUNT_LONG "gnc-act:long-description"
@@ -115,7 +117,7 @@ clear_up_account_commodity_session(
     }
     else if(!gcom)
     {
-        g_warning("unable to find global commodity for %s adding new",
+        PWARN("unable to find global commodity for %s adding new",
                   gnc_commodity_get_unique_name(com));
         gnc_commodity_table_insert(tbl, com);
     }
@@ -152,7 +154,7 @@ clear_up_account_commodity(
     }
     else if(!gcom)
     {
-        g_warning("unable to find global commodity for %s adding new",
+        PWARN("unable to find global commodity for %s adding new",
                   gnc_commodity_get_unique_name(com));
         gnc_commodity_table_insert(tbl, com);
     }
@@ -392,7 +394,7 @@ slist_destroy_example_account(gpointer data, gpointer user_data)
     }
     else
     {
-        g_warning("GncExampleAccount pointer in slist was NULL");
+        PWARN("GncExampleAccount pointer in slist was NULL");
     }
 }
 

@@ -41,6 +41,7 @@
 #include "gnc-numeric.h"
 #include "gnc-engine-util.h"
 
+static short module = MOD_IO;
 
 gboolean
 isspace_str(const gchar *str, int nomorethan)
@@ -369,7 +370,7 @@ gnc_timegm (struct tm *tm)
 
   /* FIXME: there's no way to report this error to the caller. */
   if(gnc_setenv("TZ", "UTC", 1) != 0)
-    g_error ("gnc_timegm couldn't switch the TZ.");
+    PERR ("couldn't switch the TZ.");
 
   result = mktime (tm);
 
@@ -377,13 +378,13 @@ gnc_timegm (struct tm *tm)
   {
     /* FIXME: there's no way to report this error to the caller. */
     if(gnc_setenv("TZ", old_tz, 1) != 0)
-      g_error ("gnc_timegm couldn't switch the TZ back.");
+      PERR ("couldn't switch the TZ back.");
   }
   else
   {
     /* FIXME: there's no way to report this error to the caller. */
     if(gnc_unsetenv("TZ") != 0)
-      g_error ("gnc_timegm couldn't restore the TZ to undefined.");
+      PERR ("couldn't restore the TZ to undefined.");
   }
   return result;
 }

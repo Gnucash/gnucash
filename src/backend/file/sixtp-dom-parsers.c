@@ -627,20 +627,20 @@ dom_tree_to_gdate(xmlNodePtr node)
           seen_date = TRUE;
           g_date_set_dmy( ret, day, month, year );
           if( !g_date_valid( ret ) ) {
-            g_warning("dom_tree_to_gdate: invalid date");
+            PWARN("invalid date");
             goto failure;
           }
         }
       }
       break;
     default:
-      PERR("dom_tree_to_gdate: unexpected sub-node.");
+      PERR("unexpected sub-node.");
       goto failure;
     }
   }
 
   if(!seen_date) {
-      g_warning("dom_tree_to_gdate: no gdate node found.");
+      PWARN("no gdate node found.");
       goto failure;
   }
 

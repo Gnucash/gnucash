@@ -148,7 +148,7 @@ sixtp_set_any(sixtp *tochange, int cleanup, ...)
     
     if(!tochange)
     {
-        g_warning("Null tochange passed\n");
+        PWARN("Null tochange passed\n");
         return NULL;
     }
 
@@ -208,7 +208,7 @@ sixtp_set_any(sixtp *tochange, int cleanup, ...)
 
         default:
             va_end(ap);
-            g_error("Bogus sixtp type %d\n", type);
+            PERR("Bogus sixtp type %d\n", type);
             if(cleanup)
             {
                 sixtp_destroy(tochange);
@@ -317,7 +317,7 @@ sixtp_add_some_sub_parsers(sixtp *tochange, int cleanup, ...)
         handler = va_arg(ap, sixtp*);
         if(!handler)
         {
-            g_warning("Handler for tag %s is null\n",
+            PWARN("Handler for tag %s is null\n",
                       tag ? tag : "(null)");
 
             if(cleanup)

@@ -394,7 +394,7 @@ gnc_file_be_load_from_file(FileBackend *be)
         }
     }
     default:
-        g_warning("File not any known type");
+        PWARN("File not any known type");
         xaccBackendSetError((Backend*)be, ERR_FILEIO_UNKNOWN_FILE_TYPE);
         return FALSE;
         break;

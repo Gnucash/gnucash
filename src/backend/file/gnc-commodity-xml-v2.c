@@ -45,6 +45,8 @@
 #include "Account.h"
 #include "Group.h"
 
+static short module = MOD_IO;
+
 const gchar *commodity_version_string = "2.0.0";
 
 xmlNodePtr
@@ -135,17 +137,17 @@ valid_commodity(gnc_commodity *com)
 {
     if(gnc_commodity_get_namespace(com) == NULL)
     {
-        g_warning("Invalid commodity: no namespace");
+        PWARN("Invalid commodity: no namespace");
         return FALSE;
     }
     if(gnc_commodity_get_mnemonic(com) == NULL)
     {
-        g_warning("Invalid commodity: no mnemonic");
+        PWARN("Invalid commodity: no mnemonic");
         return FALSE;
     }
     if(gnc_commodity_get_fraction(com) == 0)
     {
-        g_warning("Invalid commodity: 0 fraction");
+        PWARN("Invalid commodity: 0 fraction");
         return FALSE;
     }
     return TRUE;
@@ -185,7 +187,7 @@ gnc_commodity_end_handler(gpointer data_for_children,
 
     if(!valid_commodity(com))
     {
-        g_warning("Invalid commodity parsed");
+        PWARN("Invalid commodity parsed");
         xmlElemDump(stdout, NULL, tree);
         printf("\n");
         fflush(stdout);
