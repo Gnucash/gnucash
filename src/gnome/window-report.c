@@ -267,6 +267,8 @@ gnc_report_window_button_cb(gnc_html * html, GdkEventButton * event,
 static int
 gnc_report_window_params_cb(GtkWidget * w, gpointer data) {
   gnc_report_window * win = data;
+  if (!win->option_dialog)
+    return TRUE;
   gtk_widget_show(gnc_options_dialog_widget(win->option_dialog));
   gtk_paned_set_position(GTK_PANED(win->paned), 400);
   return TRUE;
