@@ -15,6 +15,7 @@
 (gnc:depend "report/pnl.scm")
 (gnc:depend "report/hello-world.scm")
 (gnc:depend "report/portfolio.scm")
+(gnc:depend "report/price-scatter.scm")
 (gnc:depend "report/register.scm")
 (gnc:depend "report/iframe-url.scm") 
 (gnc:depend "report/taxtxf.scm")

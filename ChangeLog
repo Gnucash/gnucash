@@ -1,3 +1,18 @@
+2001-05-03  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/account-summary.scm: fix bug.
+
+	* src/scm/html-document.scm: added handler for scatter plots.
+
+	* src/scm/report/price-scatter.scm: Added file. This eventually
+	should show prices over time. ATM it demonstrates scatter plots in
+	a meaningless report.
+
+	* src/scm/html-scatter.scm: Added file. Provides scatter plots for
+	reports.
+
+	* src/scm/options.scm (gnc:color->hex-string): added function.
+
 2001-05-03  Robert Graham Merkel <rgmerk@mira.net>
 
 	* src/scm/report/transaction-report.scm: fix bug with secondary

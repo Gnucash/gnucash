@@ -12,6 +12,7 @@ gncscm_DATA = \
   net-barchart.scm \
   pnl.scm \
   portfolio.scm \
+  price-scatter.scm \
   register.scm \
   report-list.scm \
   stylesheet-fancy.scm \

@@ -171,8 +171,10 @@
 	      report-currency exchange-fn accounts)));;)
 	  
 	  ;; error condition: no accounts specified
-	  (gnc:html-document-add-object! doc (gnc:html-make-no-account-warning))))      
-      doc)
+	  (gnc:html-document-add-object! 
+	   doc 
+	   (gnc:html-make-no-account-warning)))
+      doc))
 
   (gnc:define-report 
    'version 1

@@ -32,6 +32,7 @@
 (gnc:depend "html-table.scm")
 (gnc:depend "html-piechart.scm")
 (gnc:depend "html-barchart.scm")
+(gnc:depend "html-scatter.scm")
 (gnc:depend "html-style-info.scm")
 (gnc:depend "html-style-sheet.scm")
 (gnc:depend "html-utilities.scm")

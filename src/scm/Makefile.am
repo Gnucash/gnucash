@@ -27,6 +27,7 @@ gnc_regular_scm_files = \
   html-barchart.scm \
   html-document.scm \
   html-piechart.scm \
+  html-scatter.scm \
   html-style-info.scm \
   html-style-sheet.scm \
   html-text.scm \

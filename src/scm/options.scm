@@ -772,26 +772,32 @@
      (list range use-alpha)
      #f #f #f)))
 
-(define (gnc:color->html color range)
-
+(define (gnc:color->hex-string color range)
   (define (html-value value)
     (inexact->exact
      (min 255.0
           (truncate (* (/ 255.0 range) value)))))
-
   (let ((red (car color))
         (green (cadr color))
         (blue (caddr color)))
     (string-append
-     "#"
      (number->string (html-value red) 16)
      (number->string (html-value green) 16)
      (number->string (html-value blue) 16))))
+
+(define (gnc:color->html color range)
+    (string-append "#"
+		   (gnc:color->hex-string color range)))
 
 (define (gnc:color-option->html color-option)
   (let ((color (gnc:option-value color-option))
         (range (car (gnc:option-data color-option))))
     (gnc:color->html color range)))
+
+(define (gnc:color-option->hex-string color-option)
+  (let ((color (gnc:option-value color-option))
+        (range (car (gnc:option-data color-option))))
+    (gnc:color->hex-string color range)))
 
 
 ;; Create a new options database
