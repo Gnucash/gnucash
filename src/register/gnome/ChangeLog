@@ -1,3 +1,102 @@
+1999-11-20  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* ChangeLog: we're going to stop using this changlog
+	file and put all changes in the top-level ChangLog file.
+
+1999-11-20  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-sheet.c:
+ 	(gnucash_button_press_event): For now, we need to enter the cell,
+ 	even if we're already there. The reconcile cell, for instance,
+ 	depends on this behavior. But, if we're entering the cell where we
+ 	already are, we remember the cursor position and try to go back to
+ 	it. Also, when we're entering a new cell it's drawn as if we're at
+ 	cursor position 0, so tell item_edit_set_cursor.
+
+	* gnucash-item-edit.c (item_edit_draw_info): new function to
+	calculate drawing parameters for the item editor. This is used
+	both in drawing and in calculating the place to move the cursor
+	to for mouse traversals.
+	(item_edit_draw): use item_edit_draw_info
+	(item_edit_set_cursor_pos): use item_edit_draw_info
+
+1999-11-19  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* gnucash-cursor.c (gnucash_item_cursor_draw): Use light gray for
+ 	the cell cursor; experimental to see if we like it.
+	(gnucash_item_cursor_draw): Draw the inside rectangle slightly
+ 	inside.
+	(gnucash_cursor_request_redraw): Tighten up the bounds now
+ 	that we don't have the outside rectangle.
+
+	* gnucash-sheet.c (gnucash_button_press_event): Only move the cursor
+	if the button press moves us to a new cell.  Set the editing cursor.
+
+	* gnucash-item-edit.c (item_edit_draw): Take justification into
+ 	account here.  Use CELL_HPADDING, CELL_VPADDING instead of magic
+ 	constants to set the clip rectangle and the offsets.
+	(item_edit_set_cursor_pos): New function.
+	(item_edit_update): Adjust the positioning of the list now that we
+ 	don't have the outer rectangle.
+
+1999-11-19  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* gnucash-cursor.c: (gnucash_item_cursor_draw): Heath's
+	mod which removes the outer rectangle.
+
+	* gnucash-item-edit.c: (item_edit_update): Heath's mod
+	to make the combo list draw correctly
+
+1999-11-17  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* gnucash-header.[ch]: removed type variable. The header
+	should always be type GNUCASH_CURSOR_HEADER
+
+	* gnucash-style.c: (gnucash_sheet_style_compile): use the
+	cell labels for the header style labels
+	
+	* gnucash-item-edit.[ch]: Added a toggle button for popping
+	the combo list.
+
+	* gnucash-style.c: (gnucash_style_layout_init) make the width
+	of the 'num' column of the split cursor the same as the others.
+
+1999-11-15  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* gnucash-sheet.c: (gnucash_sheet_delete_cb) and
+	(gnucash_sheet_insert_cb): use malloc/free instead
+	of glib routines for newval. newval may be free()d by
+	routines in the register code. You can't mix-n-match.
+
+	* gnucash-sheet.c (gnucash_sheet_destroy) and
+	(gnucash_sheet_new): sink the entry and unref it after the
+	item editor is destroyed. This fixes a memory leak, the entry
+	was not being finalized.
+
+	* gnucash-sheet.c add (gnucash_sheet_key_press): allow
+	outside entities to pass keystrokes to the sheet. Used
+	by the combocell.
+
+	* combocell-gnome-c: extensive modifications to support
+	the new list item.
+
+	* gnucash-item-edit.[ch]: ditto
+
+1999-11-12  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* gnucash-item-edit.c: (item_edit_draw): make the cursor
+	larger and allow it to be seen even when it's at the end
+	of a too-long-to-fit-in-cell string.
+
+	* gnucash-item-list.[ch]: new code to support the combo cell.
+
+1999-11-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* combocell-gnome.c: reformatted to be idiomatic
+
+	* gnucash-sheet.c: (gnucash_sheet_key_press_event): Added
+	support for pageup/down and home/end keypressed.
+
 1999-11-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* gnucash-sheet.c (gnucash_sheet_activate_cursor_cell): handle

@@ -14,32 +14,59 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#ifndef GNUMERIC_ITEM_EDIT_H
-#define GNUMERIC_ITEM_EDIT_H
+#ifndef GNUCASH_ITEM_EDIT_H
+#define GNUCASH_ITEM_EDIT_H
 
 
 #include "gnucash-sheet.h"
 #include "gnucash-color.h"
 #include "gnucash-grid.h"
 #include "gnucash-cursor.h"
+#include "gnucash-item-list.h"
+
 
 #define ITEM_EDIT(obj)          (GTK_CHECK_CAST((obj), item_edit_get_type (), ItemEdit))
 #define ITEM_EDIT_CLASS(k)      (GTK_CHECK_CLASS_CAST ((k), item_edit_get_type (), ItemEditClass))
 #define IS_ITEM_EDIT(o)         (GTK_CHECK_TYPE((o), item_edit_get_type ()))
 
 
-typedef struct 
+typedef struct _ComboToggle ComboToggle;
+struct _ComboToggle
+{
+	GtkToggleButton *combo_button;
+	GnomeCanvasItem *combo_button_item;
+
+        gint toggle_offset;
+
+	GtkArrow *arrow;
+
+	gboolean signals_connected;
+
+	gint toggle_signal;
+	gint key_press_signal;
+};
+
+
+typedef struct
 {
         GnomeCanvasItem canvas_item;
 
-        /* The editor whose status we reflect on the spreadsheet */
-        GtkWidget  *editor;
-        guint      signal;     	/* the signal we connect */
-        guint      signal2;	   /* the other signal we connect */
+	GnomeCanvasGroup *parent;
 
-        GtkWidget *combo_widget;
-        GnomeCanvasItem *combo_item; 
         GnucashSheet *sheet;
+
+        /* The editor whose status we reflect on the sheet */
+        GtkWidget  *editor;
+
+        guint signal;  /* the signal we connect */
+        guint signal2; /* the other signal we connect */
+
+	gboolean is_combo;
+	gboolean show_list;
+
+	ComboToggle combo_toggle;
+        GNCItemList *item_list;
+
         GdkGC *gc;
 
         /* Where are we */
@@ -59,13 +86,25 @@ void item_edit_get_pixel_coords (ItemEdit *item_edit, int *x, int *y,
 GnomeCanvasItem *item_edit_new (GnomeCanvasGroup *parent,
 				GnucashSheet *sheet, GtkWidget *entry);
 
+GNCItemList * item_edit_new_list (ItemEdit *item_edit);
+
+void item_edit_set_list (ItemEdit *item_edit, GNCItemList *item_list);
+
+void item_edit_show_list (ItemEdit *item_edit, gint x, gint y,
+			  gint heigth, GtkAnchorType anchor);
+
+void item_edit_hide_list (ItemEdit *item_edit);
+
+gboolean item_edit_set_cursor_pos (ItemEdit *item_edit, int x, int y,
+                                   gboolean changed_cells);
+
 
 typedef struct {
         GnomeCanvasItemClass parent_class;
 } ItemEditClass;
 
 
-#endif /* GNUMERIC_ITEM_EDIT_H */
+#endif /* GNUCASH_ITEM_EDIT_H */
 
 
 /*

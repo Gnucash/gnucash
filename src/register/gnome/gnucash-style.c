@@ -88,8 +88,8 @@ gnucash_style_layout_init (SheetBlockStyle *style)
                         style->cell_perc [0][7] = 0.12;
                         break;
                 case GNUCASH_CURSOR_SPLIT:
-                        style->cell_perc [0][0] = 0.0;
-                        style->cell_perc [0][1] = 0.17;
+                        style->cell_perc [0][0] = 0.10;
+                        style->cell_perc [0][1] = 0.07;
                         style->cell_perc [0][2] = 0.15;
                         style->cell_perc [0][3] = 0.32;
                         style->cell_perc [0][4] = 0.0;
@@ -235,10 +235,7 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
 			     gint cursor_type)
 {
         gint i, j;
-        gint nrows;
-        gint ncols;
         SheetBlockStyle *style;
-        CellBlock *header;
         SplitRegister *sr;
 
         g_return_val_if_fail (sheet != NULL, NULL);
@@ -247,14 +244,13 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
 
         sr = (SplitRegister *)sheet->split_register;
 
-        header = sr->header;
         style  = g_new0(SheetBlockStyle, 1);
 
         style->reg_type = sr->type & REG_TYPE_MASK;
         style->cursor_type = cursor_type;
 
-        style->nrows = nrows = cellblock->numRows;
-        style->ncols = ncols = cellblock->numCols;
+        style->nrows = cellblock->numRows;
+        style->ncols = cellblock->numCols;
 
         style->widths = g_new0(gint *, cellblock->numRows);
         style->pixel_heights = g_new0(gint *, cellblock->numRows);
@@ -283,13 +279,20 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
         for (i = 0; i < style->nrows; i++)
                 for (j = 0; j < style->ncols; j++) {
                         gint type = cellblock->cell_types[i][j];
+			char *label;
                         
                         style->widths[i][j] = cellblock->widths[j];
 
                         style->fonts[i][j] = gnucash_default_font;
 
-                        if (type > -1 ) 
-                                style->labels[i][j] = g_strdup (sr->header_label_cells[type]->value);
+                        if (type > -1)
+                                label = sr->header_label_cells[type]->value;
+			else if (cursor_type == GNUCASH_CURSOR_HEADER)
+				label = cellblock->cells[i][j]->value;
+			else
+				label = "";
+
+			style->labels[i][j] = g_strdup(label);
 
                         style->active_bg_color[i][j] = gnucash_color_argb_to_gdk (cellblock->active_bg_color);
                         style->inactive_bg_color[i][j] = gnucash_color_argb_to_gdk (cellblock->passive_bg_color);
@@ -337,7 +340,7 @@ gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
         for (i = 0; i < cell_col; i++)
                 *x += style->pixel_widths[cell_row][i];
 
-        *w = style->pixel_widths [ cell_row][cell_col];
+        *w = style->pixel_widths [cell_row][cell_col];
 }
 
 

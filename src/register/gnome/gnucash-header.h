@@ -29,7 +29,6 @@ GtkType    gnucash_header_get_type (void);
 
 typedef struct {
         GnomeCanvasItem canvas_item;
-        gint type;
 
         GnucashSheet *sheet;
         

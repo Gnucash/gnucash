@@ -32,6 +32,7 @@
 #include "gnucash-style.h"
 #include "gnucash-header.h"
 #include "gnucash-item-edit.h"
+#include "util.h"
 
 #define DEFAULT_REGISTER_HEIGHT 400
 #define DEFAULT_REGISTER_WIDTH 640
@@ -49,12 +50,14 @@ static void gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet,
                                                    gboolean blankp,
 						   gboolean cursorp);
 
-static void gnucash_sheet_cursor_move (GnucashSheet *sheet, gint virt_row,
-				       gint virt_col, gint cell_row,
-				       gint cell_col);
+static void gnucash_sheet_cursor_move (GnucashSheet *sheet,
+                                       gint virt_row, gint virt_col,
+                                       gint cell_row, gint cell_col,
+                                       gboolean changed_cells);
 
 static void gnucash_sheet_deactivate_cursor_cell (GnucashSheet *sheet);
-static void gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet);
+static void gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
+                                                gboolean changed_cells);
 static void gnucash_sheet_stop_editing (GnucashSheet *sheet);
 static void gnucash_sheet_block_destroy (GnucashSheet *sheet, gint virt_row,
 					 gint virt_col);
@@ -162,8 +165,10 @@ gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet)
 void
 gnucash_sheet_hide_editing_cursor (GnucashSheet *sheet)
 {
-        if (sheet->item_editor)
+        if (sheet->item_editor != NULL) {
                 gnome_canvas_item_hide(GNOME_CANVAS_ITEM (sheet->item_editor));
+		item_edit_hide_list(ITEM_EDIT(sheet->item_editor));
+	}
 }
 
 static void
@@ -222,7 +227,8 @@ gnucash_sheet_deactivate_cursor_cell (GnucashSheet *sheet)
 
 
 static void
-gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet)
+gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
+                                    gboolean changed_cells)
 {
         int p_row, p_col;
         Table *table = sheet->table;
@@ -253,7 +259,8 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet)
 		gnucash_sheet_cell_set_from_table (sheet, virt_row, virt_col,
 						   cell_row, cell_col);
 	else
-		gnucash_sheet_start_editing_at_cursor (sheet, FALSE, TRUE);
+		gnucash_sheet_start_editing_at_cursor (sheet, FALSE,
+                                                       !changed_cells);
 
         gtk_widget_grab_focus (GTK_WIDGET(sheet));
 }
@@ -261,24 +268,30 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet)
 
 static void
 gnucash_sheet_cursor_move (GnucashSheet *sheet, gint virt_row, gint virt_col,
-                           gint cell_row, gint cell_col)
+                           gint cell_row, gint cell_col,
+                           gboolean changed_cells)
 {
-        if (gnucash_sheet_cell_valid (sheet, virt_row, virt_col,
-				      cell_row, cell_col)) {
-                gnucash_sheet_deactivate_cursor_cell (sheet);
+        if (!gnucash_sheet_cell_valid (sheet,
+                                       virt_row, virt_col,
+                                       cell_row, cell_col))
+                return;
 
-                gnucash_sheet_make_cell_visible (sheet, virt_row, virt_col,
-						 cell_row, cell_col);
-                
-                gnucash_sheet_cursor_set (sheet, virt_row, virt_col,
-					  cell_row, cell_col);
+        gnucash_sheet_deactivate_cursor_cell (sheet);
 
-                gnucash_sheet_activate_cursor_cell (sheet);
-        }
+        gnucash_sheet_make_cell_visible (sheet,
+                                         virt_row, virt_col,
+                                         cell_row, cell_col);
+
+        gnucash_sheet_cursor_set (sheet,
+                                  virt_row, virt_col,
+                                  cell_row, cell_col);
+
+        gnucash_sheet_activate_cursor_cell (sheet, changed_cells);
 }
 
 
-int  gnucash_sheet_can_move_cursor (GnucashSheet *gsheet)
+int
+gnucash_sheet_can_move_cursor (GnucashSheet *gsheet)
 {
         return TRUE;
 }
@@ -594,11 +607,12 @@ gnucash_sheet_destroy (GtkObject *object)
         for (i = GNUCASH_CURSOR_HEADER; i < GNUCASH_CURSOR_LAST; i++)
                 gnucash_sheet_style_destroy(sheet->cursor_style[i]);
 
-
-        gtk_widget_unref (sheet->entry);
-
         if (GTK_OBJECT_CLASS (sheet_parent_class)->destroy)
                 (*GTK_OBJECT_CLASS (sheet_parent_class)->destroy)(object);
+
+	/* This has to come after the parent destroy, so the item edit
+	   destruction can do its disconnects. */
+        gtk_widget_unref (sheet->entry);
 }
 
 
@@ -650,12 +664,12 @@ compute_optimal_width (Table *table)
         return DEFAULT_REGISTER_WIDTH;
 }
 
+
 static gint
 compute_optimal_height (Table *table)
 {
         return DEFAULT_REGISTER_HEIGHT;
 }
-
 
 
 static void
@@ -667,13 +681,68 @@ gnucash_sheet_size_request (GtkWidget *widget, GtkRequisition *requisition)
         requisition->height = compute_optimal_height (sheet->table);
 }
 
+
+const char *
+gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
+{
+        Table *table = sheet->table;
+        int v_row, v_col, c_row, c_col;
+        int p_row, p_col;
+
+        const char *old_text;
+        const char *retval;
+        char *newval;
+	char *change;
+
+        gnucash_cursor_get_phys(GNUCASH_CURSOR(sheet->cursor), &p_row, &p_col);
+
+        gnucash_cursor_get_virt(GNUCASH_CURSOR(sheet->cursor),
+				&v_row, &v_col, &c_row, &c_col);
+
+        if (!gnc_register_cell_valid (table, p_row, p_col))
+                return NULL;
+
+        old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
+        if (old_text == NULL)
+                old_text = "";
+
+	newval = strdup(new_text);
+	change = strdup(new_text);
+	assert((newval != NULL) && (change != NULL));
+
+        retval = gnc_table_modify_update (table, p_row, p_col,
+					  old_text, change, newval);
+
+        gnucash_sheet_cell_set_from_table (sheet, v_row, v_col, c_row, c_col);
+
+        if (retval != NULL) {
+                gtk_signal_handler_block (GTK_OBJECT (sheet->entry),
+					  sheet->insert_signal);
+
+                gtk_entry_set_text (GTK_ENTRY (sheet->entry), retval);
+
+                gtk_signal_handler_unblock (GTK_OBJECT (sheet->entry),
+					    sheet->insert_signal);
+
+		if (retval != newval)
+			free (newval);
+        }
+
+	if (retval == NULL)
+		free (newval);
+
+	free(change);
+
+	return retval;
+}
+
+
 static void
 gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
                          const gint new_text_length,
                          gint *position,
                          GnucashSheet *sheet)
 {
-
         Table *table = sheet->table;
         int p_row, p_col;
         int v_row, v_col, c_row, c_col;
@@ -691,19 +760,18 @@ gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &v_row,
 				 &v_col, &c_row, &c_col);
         
-        if (! gnc_register_cell_valid (table, p_row, p_col))
+        if (!gnc_register_cell_valid (table, p_row, p_col))
                 return;
 
         old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
-
-        if (!old_text)
+        if (old_text == NULL)
                 old_text = "";
-
 
         /* we set newval to what the entry contents would be if
            the insert was processed */
-        
-        newval = g_new0 (char, strlen (old_text) + new_text_length + 1);
+        newval = calloc (strlen(old_text) + new_text_length + 1, sizeof(char));
+	assert (newval != NULL);
+
         strncat (newval, old_text, *position);
         strncat (newval, new_text, new_text_length);
         strcat (newval, &old_text[*position + new_text_length - 1]);
@@ -733,16 +801,18 @@ gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
 
                 gtk_signal_emit_stop_by_name (GTK_OBJECT(sheet->entry),
 					      "insert_text");
-                g_free (newval);
+                free (newval);
         }
         else if (!retval) {
                 /* the entry was disallowed, so we stop the insert signal */
                 gtk_signal_emit_stop_by_name (GTK_OBJECT(sheet->entry),
 					      "insert_text");
+		free (newval);
         }
 
         g_free (change);
 }
+
 
 static void
 gnucash_sheet_delete_cb (GtkWidget *widget,
@@ -767,12 +837,14 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
         if (!gnc_register_cell_valid (table, p_row, p_col))
                 return;
         
-        old_text = gtk_entry_get_text  (GTK_ENTRY(sheet->entry));
+        old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
 
-        if (!old_text)
+        if (old_text == NULL)
                 old_text = "";
 
-        newval = g_new0 (char, strlen(old_text) - (end_pos - start_pos) + 1);
+        newval = calloc (strlen(old_text) - (end_pos - start_pos) + 1,
+                         sizeof(char));
+	assert (newval != NULL);
 
         strncat (newval, old_text, start_pos);
         strcat (newval, &old_text[end_pos]);
@@ -797,12 +869,13 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
 
                 gtk_signal_emit_stop_by_name (GTK_OBJECT(sheet->entry),
 					      "delete_text");
-                g_free (newval);
+                free (newval);
         }
         else if (!retval) {
                 /* the entry was disallowed, so we stop the delete signal */
                 gtk_signal_emit_stop_by_name (GTK_OBJECT(sheet->entry),
 					      "delete_text");
+		free (newval);
         }
 }
 
@@ -831,9 +904,11 @@ static void
 gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet, gboolean blankp,
 				       gboolean cursorp)
 {
+        GtkEditable *editable;
         GnomeCanvas *canvas;
         const char *text;
         int virt_row, virt_col, cell_row, cell_col;
+        int cursor_pos = -1;
 
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
@@ -849,12 +924,21 @@ gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet, gboolean blankp,
         item_edit_configure (ITEM_EDIT(sheet->item_editor));
         gnome_canvas_item_show (GNOME_CANVAS_ITEM (sheet->item_editor));
 
+        editable = GTK_EDITABLE(sheet->entry);
+
+        if (cursorp)
+                cursor_pos = gtk_editable_get_position(editable);
+
         if (blankp)
-                gtk_entry_set_text (GTK_ENTRY (sheet->entry), "");
+                gtk_entry_set_text (GTK_ENTRY(sheet->entry), "");
         else
                 gtk_entry_set_text (GTK_ENTRY(sheet->entry), text);
 
-        
+        if (cursorp)
+                cursor_pos = MIN(cursor_pos, strlen(text));
+
+        gtk_editable_set_position(editable, cursor_pos);
+
         sheet->editing = TRUE;
 
         /* set up the signals */
@@ -873,9 +957,10 @@ static gint
 gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
         GnucashSheet *sheet;
+        gboolean changed_cells;
         int xoffset, yoffset;
         int x, y;
-        
+
         /* physical coordinates */
         int current_p_row, current_p_col, new_p_row, new_p_col;
 
@@ -884,7 +969,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
         /* cell coordinates */
         int current_c_row, current_c_col, new_c_row, new_c_col;
-        
+
         Table *table;
         gncBoolean exit_register;
 
@@ -894,7 +979,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
         if (event->type != GDK_BUTTON_PRESS || event->button != 1)
                 return TRUE;
-                
+
         sheet = GNUCASH_SHEET (widget);
         table = sheet->table;
 
@@ -903,6 +988,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
         gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor),
 				 &current_p_row, &current_p_col);
+
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor),
                                  &current_v_row, &current_v_col,
 				 &current_c_row, &current_c_col);
@@ -930,12 +1016,10 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                                                    GNC_TABLE_TRAVERSE_POINTER,
                                                    &new_p_row, &new_p_col);
 
-        if (exit_register) {
-                /* FIXME:  what is this supposed to do? */
-        }
+        if (exit_register)
+		return TRUE;
 
-        /* Hmmm, shouldn't gnc_table_traverse_update fill in
-           only valid cells ? */
+        /* Shouldn't gnc_table_traverse_update fill in valid cells? */
         if (!gnc_register_cell_valid (table, new_p_row, new_p_col))
                 return TRUE;
 
@@ -945,10 +1029,19 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         new_c_row = table->locators[new_p_row][new_p_col]->phys_row_offset;
         new_c_col = table->locators[new_p_row][new_p_col]->phys_col_offset;
 
+        changed_cells =
+                (new_v_row != current_v_row) ||
+                (new_v_col != current_v_col) ||
+                (new_c_row != current_c_row) ||
+                (new_c_col != current_c_col);
+
         gnucash_sheet_cursor_move (sheet,
                                    new_v_row, new_v_col,
-                                   new_c_row, new_c_col);
+                                   new_c_row, new_c_col,
+                                   changed_cells);
 
+        item_edit_set_cursor_pos (ITEM_EDIT(sheet->item_editor),
+                                  x, y, changed_cells);
         return TRUE;
 }
 
@@ -957,8 +1050,10 @@ static gint
 gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
         GnucashSheet *sheet;
-        int scroll = 1;
-	int direction = -1;
+	CellBlock *header;
+	int direction = 0;
+	gboolean pass_on = FALSE;
+        gboolean changed_cells;
 
         /* physical coordinates */
         int current_p_row, current_p_col, new_p_row, new_p_col;
@@ -978,6 +1073,7 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                 
         sheet = GNUCASH_SHEET (widget);
         table = sheet->table;
+	header = table->handlers[0][0];
 
         gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor),
 				 &current_p_row, &current_p_col);
@@ -985,92 +1081,41 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor),
                                  &current_v_row, &current_v_col,
 				 &current_c_row, &current_c_col);
-        
+
+	/* Calculate tentative physical values */
         switch (event->keyval) {
 		case GDK_Tab:
+			direction = GNC_TABLE_TRAVERSE_RIGHT;
 			new_p_row = current_p_row;
-			new_p_col = current_p_col + 1;
-
-			exit_register = gnc_table_traverse_update
-				(table, current_p_row, current_p_col,
-				 GNC_TABLE_TRAVERSE_RIGHT,
-				 &new_p_row, &new_p_col);
-
-			if (exit_register) {
-				/* FIXME:  what is this supposed to do? */
-			}
-
-			/* Hmmm, shouldn't gnc_table_traverse_update fill in
-			   only valid cells ? */
-			if (!gnc_register_cell_valid (table, new_p_row,
-						      new_p_col))
-				return TRUE;
-                                
-			new_v_row = table->locators[new_p_row][new_p_col]->virt_row;
-			new_v_col = table->locators[new_p_row][new_p_col]->virt_col;
-
-			new_c_row = table->locators[new_p_row][new_p_col]->phys_row_offset;
-			new_c_col = table->locators[new_p_row][new_p_col]->phys_col_offset;
-
-			gnucash_sheet_cursor_move (sheet,
-						   new_v_row, new_v_col,
-						   new_c_row, new_c_col);
-
-			return TRUE;
-                
-		case GDK_Up:
-			scroll = -1;
+			new_p_col = MIN(current_p_col + 1,
+					table->num_phys_cols - 1);
+			break;
+		case GDK_Page_Up:
 			direction = GNC_TABLE_TRAVERSE_UP;
-			/* FALL DOWN */
+			new_p_col = 0;
+			new_p_row = MAX(current_p_row -
+					sheet->vadj->page_increment,
+					header->numRows);
+			break;
+		case GDK_Page_Down:
+			direction = GNC_TABLE_TRAVERSE_DOWN;
+			new_p_col = 0;
+			new_p_row = MIN(current_p_row +
+					sheet->vadj->page_increment,
+					table->num_phys_rows - 1);
+			break;
+		case GDK_Up:
+			direction = GNC_TABLE_TRAVERSE_UP;
+			new_p_col = current_p_col;
+			new_p_row = MAX(current_p_row - 1,
+					header->numRows);
+			break;
 		case GDK_Down:
-			{
-				CellBlock *handler;
-
-				if (direction != -1)
-					direction = GNC_TABLE_TRAVERSE_DOWN;
-
-				new_v_row = current_v_row + scroll;
-				new_v_col = current_v_col;
-
-				/* HACK: new_v_row < 1 says we can't
-                                   scroll to the header */
-				if ( new_v_row < 1 ||
-				     new_v_row >= sheet->num_virt_rows)
-					return TRUE;
-
-				/* OK, we have a valid virt_row,
-				 * virt_col, so let's compute which
-				 * cell we should enter.  */
-                
-				new_p_row = table->rev_locators[new_v_row][new_v_col]->phys_row;
-				new_p_col = table->rev_locators[new_v_row][new_v_col]->phys_col;
-
-				exit_register = gnc_table_traverse_update
-					(table, current_p_row, current_p_col,
-					 direction, &new_p_row, &new_p_col);
-
-				if (exit_register) {
-					/* FIXME: what to do? */
-				}
-
-				handler = table->handlers[new_p_row]
-					                 [new_p_col];
-
-				new_c_row = MIN(handler->numRows - 1,
-						current_c_row);
-
-				new_c_col = MIN(handler->numCols - 1,
-						current_c_col);
-
-				gnucash_sheet_cursor_move (sheet,
-							   new_v_row,
-							   new_v_col,
-							   new_c_row,
-							   new_c_col);
-
-				return TRUE;
-			}
-        
+			direction = GNC_TABLE_TRAVERSE_DOWN;
+			new_p_col = current_p_col;
+			new_p_row = MIN(current_p_row + 1,
+					table->num_phys_rows - 1);
+			break;
 		case GDK_Left:
 			/* Hmm, what to do here? */
 			/* FALL DOWN */
@@ -1078,28 +1123,54 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 			/* Hmm, what to do here? */
 			/* FALL DOWN */
 		default:
-#if 0
-			/* We could use this to start an editor on a
-			   key press in a cell.  Currently, there's
-			   always an editor started, so this isn't
-			   needed. */
-			if (!sheet->item_editor){
-				if ((event->state &
-				     (GDK_MOD1_MASK|GDK_CONTROL_MASK)) != 0)
-					return 0;
-
-				if (event->keyval >= 0x20 &&
-				    event->keyval <= 0xff)
-					gnucash_sheet_start_editing_at_cursor
-						(sheet, FALSE, TRUE);
-			}
-#endif                
-			/* Forward the keystroke to the input line */
-			return gtk_widget_event (sheet->entry,
-						 (GdkEvent *) event);
-                
+			pass_on = TRUE;
 			break;
         }
+
+	/* Forward the keystroke to the input line */
+	if (pass_on)
+		return gtk_widget_event(sheet->entry, (GdkEvent *) event);
+
+	exit_register = gnc_table_traverse_update
+		(table, current_p_row, current_p_col,
+		 direction, &new_p_row, &new_p_col);
+
+	/* If that would leave the register and we're not going right, abort */
+	if (exit_register && (direction != GNC_TABLE_TRAVERSE_RIGHT))
+		return TRUE;
+
+	/* Hack: try to wrap around. Shouldn't splitreg.c do this? */
+	if (exit_register) {
+		new_p_row = table->rev_locators[current_v_row]
+			                       [current_v_col]->phys_row;
+		new_p_col = 0;
+		exit_register = gnc_table_traverse_update
+			(table, current_p_row, current_p_col,
+			 GNC_TABLE_TRAVERSE_POINTER, &new_p_row, &new_p_col);
+	}
+
+	/* Give up */
+	if (exit_register)
+		return TRUE;
+
+	/* Shouldn't gnc_table_traverse_update fill in valid cells ? */
+	if (!gnc_register_cell_valid (table, new_p_row, new_p_col))
+		return TRUE;
+
+	new_v_row = table->locators[new_p_row][new_p_col]->virt_row;
+	new_v_col = table->locators[new_p_row][new_p_col]->virt_col;
+
+	new_c_row = table->locators[new_p_row][new_p_col]->phys_row_offset;
+	new_c_col = table->locators[new_p_row][new_p_col]->phys_col_offset;
+
+        changed_cells =
+                (new_v_row != current_v_row) ||
+                (new_v_col != current_v_col) ||
+                (new_c_row != current_c_row) ||
+                (new_c_col != current_c_col);
+
+	gnucash_sheet_cursor_move(sheet, new_v_row, new_v_col,
+				  new_c_row, new_c_col, changed_cells);
 
         /* return true because we handled the key press */
         return TRUE;
@@ -1224,12 +1295,12 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet, gint virt_row,
 
                 if (block->style)
                         gnucash_style_unref (block->style);
-                
+
                 block->style = gnucash_sheet_get_style_from_table
 			(sheet, virt_row, virt_col);
 
                 gnucash_style_ref(block->style);
-                
+
                 block->entries = g_new0( gchar **, block->style->nrows);
                 for (i = 0; i < block->style->nrows; i++)
                         block->entries[i] = g_new0(gchar *,
@@ -1320,9 +1391,8 @@ gnucash_sheet_block_new (GnucashSheet *sheet, gint virt_row, gint virt_col)
 
                 block->virt_row = virt_row;
                 block->virt_col = virt_col;
-                
+
                 g_hash_table_insert (sheet->blocks, block, block);
-                
         }
 
         return;
@@ -1409,7 +1479,7 @@ gnucash_sheet_table_load (GnucashSheet *sheet)
         gnucash_sheet_compute_visible_range(sheet);
 
         gnucash_sheet_cursor_set_from_table (sheet);
-        gnucash_sheet_activate_cursor_cell (sheet);
+        gnucash_sheet_activate_cursor_cell (sheet, TRUE);
 }
 
 
@@ -1425,7 +1495,6 @@ gnucash_sheet_class_init (GnucashSheetClass *class)
         canvas_class = (GnomeCanvasClass *) class;
 
         sheet_parent_class = gtk_type_class (gnome_canvas_get_type ());
-
 
         /* Method override */
         object_class->destroy = gnucash_sheet_destroy;
@@ -1516,7 +1585,7 @@ GtkWidget *
 gnucash_sheet_new (Table *table)
 {
         GnucashSheet *sheet;
-        GnomeCanvas   *sheet_canvas;
+        GnomeCanvas *sheet_canvas;
         GnomeCanvasItem *item;
         GnomeCanvasGroup *sheet_group;
         GtkWidget *widget;
@@ -1549,15 +1618,14 @@ gnucash_sheet_new (Table *table)
 
         /* The entry widgets */
         sheet->entry = gtk_entry_new ();
-        gtk_widget_set_uposition (sheet->entry, 20000, 20000);
+        gtk_widget_ref(sheet->entry);
+	gtk_object_sink(GTK_OBJECT(sheet->entry));
 
         /* set up the editor */
         sheet->item_editor = item_edit_new(sheet_group, sheet, sheet->entry);
 
 	gnome_canvas_item_hide (GNOME_CANVAS_ITEM(sheet->item_editor));
 
-        gtk_widget_ref(sheet->entry);
-        
         widget = GTK_WIDGET (sheet);
         return widget;
 }

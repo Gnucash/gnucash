@@ -42,7 +42,7 @@ LIBS      = -L$(prefix)/lib @LIBS@ \
 # See Makefile.common for information about these variables.
 GNOME_SRCS := gnucash-sheet.c gnucash-grid.c gnucash-color.c gnucash-cursor.c \
 	      gnucash-item-edit.c gnucash-style.c combocell-gnome.c  \
-              gnucash-header.c
+              gnucash-header.c gnucash-item-list.c
 ######################################################################
 
 default: gnome

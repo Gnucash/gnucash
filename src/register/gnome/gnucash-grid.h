@@ -55,7 +55,6 @@ typedef struct {
 } GnucashGrid;
 
 
-
 typedef struct {
         GnomeCanvasItemClass parent_class;
 } GnucashGridClass;
@@ -77,7 +76,6 @@ gint gnucash_grid_find_cell_origin_by_pixel (GnucashGrid *grid,
 
 
 #endif /* GNUCASH_GRID_H */
-
 
 
 /*

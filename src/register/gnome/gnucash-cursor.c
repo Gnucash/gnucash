@@ -85,7 +85,7 @@ gnucash_cursor_request_redraw (GnucashCursor *cursor)
         w = cursor->w;
         h = cursor->h;
 
-        gnome_canvas_request_redraw (canvas, x-2, y-2, x+w+5, y+h+5);
+        gnome_canvas_request_redraw (canvas, x, y, x+w, y+h);
 }
 
 
@@ -245,9 +245,6 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 			gdk_gc_set_background (cursor->gc, &gn_white);
                 
 			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
-					    dx-2, dy-1, dw+2, dh+2);
-
-			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
 					    dx+2, dy+2, dw-4, dh-4);
 
 			break;
@@ -257,13 +254,13 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 			dy = item_cursor->y - y;
 			dw = item_cursor->w;
 			dh = item_cursor->h;
-                
-			gdk_gc_set_foreground (cursor->gc, &gn_dark_gray);
-			gdk_gc_set_line_attributes (cursor->gc, 2,
+
+			gdk_gc_set_foreground (cursor->gc, &gn_light_gray);
+			gdk_gc_set_line_attributes (cursor->gc, 1,
 						    GDK_LINE_SOLID, -1, -1);
-                
+
 			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
-					    dx+2, dy+2, dw-3, dh-3);
+					    dx+1, dy+1, dw-2, dh-2);
         }
 }
 
@@ -287,9 +284,6 @@ gnucash_cursor_set_block (GnucashCursor *cursor, gint block_row,
                 return;
 
         cursor->style = gnucash_sheet_get_style (sheet, block_row, block_col);
-
-        gnome_canvas_item_set (GNOME_CANVAS_ITEM(sheet->header_item),
-                               "type", cursor->style->cursor_type, NULL);
 
         item_cursor->row = block_row;
         item_cursor->col = block_col;
@@ -415,14 +409,8 @@ gnucash_item_cursor_class_init (GnucashItemCursorClass *item_cursor_class)
 
         object_class->destroy = gnucash_item_cursor_destroy;
 
-/* GnomeCanvasItem method overrides */
+        /* GnomeCanvasItem method overrides */
         item_class->draw        = gnucash_item_cursor_draw;
-/*
-  item_class->update      = gnucash_item_cursor_update;
-  item_class->point       = gnucash_item_cursor_point;
-  item_class->translate   = gnucash_item_cursor_translate;
-  item_class->event       = gnucash_item_cursor_event;
-*/
 }
 
 

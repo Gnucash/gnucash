@@ -23,7 +23,7 @@
 #include "table-gnome.h"
 #include "table-allgui.h"
 
-#define CELL_VPADDING 6
+#define CELL_VPADDING 5
 #define CELL_HPADDING 4
 
 
@@ -38,10 +38,6 @@
 #define GNUCASH_SHEET_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_SHEET))
 #define GNUCASH_IS_SHEET(o)    (GTK_CHECK_TYPE((o), GNUCASH_TYPE_SHEET))
 
-enum {
-        GNUCASH_GTK_ENTRY,
-        GNUCASH_COMBO,
-};
 
 enum {
         GNUCASH_CURSOR_HEADER = 0,
@@ -51,7 +47,6 @@ enum {
         GNUCASH_CURSOR_SPLIT,
         GNUCASH_CURSOR_LAST,
 };
-
 
 
 typedef enum {
@@ -196,6 +191,9 @@ void gnucash_sheet_cursor_set (GnucashSheet *gsheet,
                                int virt_row, int virt_col,
 			       int cell_row, int cell_col);
 
+const char * gnucash_sheet_modify_current_cell(GnucashSheet *sheet,
+					       const gchar *new_text);
+
 void gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet);
 
 void gnucash_sheet_move_cursor (GnucashSheet *sheet,
@@ -212,6 +210,7 @@ void gnucash_sheet_compute_visible_range (GnucashSheet *sheet);
 void gnucash_sheet_make_cell_visible (GnucashSheet *sheet,
 				      gint virt_row, gint virt_col,
 				      gint cell_row, gint cell_col);
+
 
 typedef struct {
         GnomeCanvasClass parent_class;

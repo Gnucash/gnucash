@@ -97,9 +97,6 @@ void gnucash_cursor_set  (GnucashCursor *cursor,
                           gint virt_row, gint virt_col,
                           gint cell_row, gint cell_col);
 
-void gnucash_cursor_set_visibility (GnucashItemCursor *cursor,
-                                    int visible);
-
 void gnucash_cursor_set_style (GnucashCursor  *cursor, SheetBlockStyle *style);
 
 void gnucash_cursor_configure (GnucashCursor *cursor);

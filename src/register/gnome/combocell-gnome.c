@@ -1,15 +1,3 @@
-/*
- * FILE:
- * combocell.c
- *
- * FUNCTION:
- * implement motif portions of a pull-down combo widget
- * embedded in a table cell.
- *
- * HISTORY:
- * Copyright (c) 1998 Linas Vepstas <linas@linas.org>
- * Copyright (c) 1998-1999 Rob Browning <rlb@cs.utexas.edu>
- */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -27,14 +15,21 @@
 \********************************************************************/
 
 /*
+ * FILE: combocell-gnome.c
+ *
+ * FUNCTION: Implement gnome portion of a pull-down combo widget
+ *           embedded in a table cell.
+ *
+ * HISTORY:
+ * Copyright (c) 1998 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 1998-1999 Rob Browning <rlb@cs.utexas.edu>
+ */
+
+/*
    TODO: We have no use for the generic ComboCell->menuitems.  These
    should probably be killed.  Each GUI should probably handle it's
    own strings.
 */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include <gnome.h>
 
@@ -44,26 +39,29 @@
 #include "util.h"
 #include "combocell.h"
 #include "gnucash-sheet.h"
+#include "gnucash-item-edit.h"
+#include "gnucash-item-list.h"
 
 
-/* Some GUI-private date that is inappropriate for 
- * the public interface.  In this impelmentation, 
- * it holds gtk data that we need.  */
+typedef struct _PopBox
+{
+	GList *menustrings;
 
-#define SET(cell,str) { 		   \
-  if ((cell)->value) free ((cell)->value); \
-  (cell)->value = strdup (str);    \
-}
+	GnucashSheet *sheet;
+	ItemEdit     *item_edit;
+	GNCItemList  *item_list;
 
-typedef struct _PopBox {
-  GList *menustrings;
-  GnucashSheet *sheet;
+	gint     select_item_signal;
+	gint     key_press_signal;
+	gboolean list_signals_connected;
+
+	gboolean list_in_sync; /* list in sync with menustrings? */
 } PopBox;
+
 
 static void realizeCombo (BasicCell *bcell, void *w, int width);
 static void moveCombo (BasicCell *bcell, int phys_row, int phys_col);
 static void destroyCombo (BasicCell *bcell);
-static void setComboValue (BasicCell *bcell, const char *value);
 static const char * enterCombo (BasicCell *bcell, const char *value);
 static const char * leaveCombo (BasicCell *bcell, const char *value);
 
@@ -72,213 +70,285 @@ static short module = MOD_GTK_REG;
 
 /* =============================================== */
 
-ComboCell *xaccMallocComboCell (void) {
-  ComboCell * cell;
-  cell = (ComboCell *) malloc (sizeof (ComboCell));
-  xaccInitComboCell (cell);
-  return cell;
+ComboCell *xaccMallocComboCell (void)
+{
+	ComboCell * cell = (ComboCell *) malloc (sizeof (ComboCell));
+
+	assert(cell != NULL);
+
+	xaccInitComboCell(cell);
+
+	return cell;
 }
 
-void xaccInitComboCell (ComboCell *cell) {
-  xaccInitBasicCell(&(cell->cell));
-  cell->cell.realize = realizeCombo;
-  cell->cell.set_value = setComboValue;
-  cell->cell.destroy = destroyCombo;
-  {
-    PopBox *box = (PopBox *) malloc (sizeof (PopBox));
-    box->sheet   = NULL;
-    box->menustrings = NULL;
-    cell->cell.gui_private = box;
-  }
-}
+void xaccInitComboCell (ComboCell *cell)
+{
+	PopBox *box;
 
-/* =============================================== */
+	xaccInitBasicCell(&(cell->cell));
 
-static void
-destroyCombo (BasicCell *bcell) {
-  ComboCell *cell = (ComboCell *) bcell;
-  
-  if (!(cell->cell.realize)) {
-    /* allow the widget to be shown again */
-          cell->cell.realize = NULL;
-    cell->cell.move = NULL;
-    cell->cell.enter_cell = NULL;
-    cell->cell.leave_cell = NULL;
-    cell->cell.destroy = NULL;
-  }  
-}
+	cell->cell.realize = realizeCombo;
+	cell->cell.destroy = destroyCombo;
 
-/* =============================================== */
+	box = g_new(PopBox, 1);
 
-void xaccDestroyComboCell (ComboCell *cell) {
-  PopBox *box = (PopBox *) (cell->cell.gui_private);
-  
-  destroyCombo (&(cell->cell));
-  
-  g_list_foreach(box->menustrings, (GFunc) g_free, NULL);
-  g_list_free(box->menustrings);
+	box->sheet = NULL;
+	box->item_edit = NULL;
+	box->item_list = NULL;
+	box->menustrings = NULL;
+	box->list_signals_connected = FALSE;
+	box->list_in_sync = TRUE;
 
-  free (box);
-  box = NULL;
-
-  cell->cell.gui_private = NULL;
-  cell->cell.realize = NULL;
-  cell->cell.set_value = NULL;
-  
-  xaccDestroyBasicCell (&(cell->cell));
-}
-
-/* =============================================== */
-
-void 
-xaccAddComboCellMenuItem (ComboCell *cell, char * menustr) { 
-  if (!cell) return;
-  if (!menustr) return;
-
-  {
-    PopBox *box = (PopBox *) cell->cell.gui_private;
-    box->menustrings = g_list_append(box->menustrings, g_strdup(menustr));
-    
-    /* if we are adding the menu item to a cell that is already
-       realized, then alose add it to the widget directly.  */
-#if 0
-    if(box->sheet) {
-      if(GTK_IS_COMBO(gtk_sheet_get_entry(box->sheet))) {
-        GtkCombo *combobox = GTK_COMBO(box->sheet->sheet_entry);
-        gtk_combo_set_popdown_strings(combobox, box->menustrings);
-      }
-    }
-#endif
-  }
-}
-
-/* =============================================== */
-/* not only do we set the cell contents, but we 
- * make the gui reflect the right value too.
- */
-
-void 
-xaccSetComboCellValue (ComboCell *cell, const char * str) {
-  PopBox *box = (PopBox *) (cell->cell.gui_private);  
-
-  if(!str) str = "";
-  SET (&(cell->cell), str);
-
-  if(box->sheet) {
-#if 0
-		/*  This doesn't really do what we want, since
-				sheet->active_cell points to the cell on the
-				sheet that has most recently been clicked on,
-				which is not necessarily where the current
-				ComboCell *cell is located
-		*/
-    gtk_sheet_set_cell_text(box->sheet,
-                            box->sheet->active_cell.row,
-                            box->sheet->active_cell.col,
-                            (char *)str);
-#endif
-  }
+	cell->cell.gui_private = box;
 }
 
 /* =============================================== */
 
 static void
-setComboValue (BasicCell *_cell, const char *str) {
-  ComboCell *cell = (ComboCell *) _cell;
-  xaccSetComboCellValue(cell, str);
+select_item_cb (GNCItemList *item_list, char *item_string, gpointer data)
+{
+	ComboCell *cell = (ComboCell *) data;
+	PopBox *box = (PopBox *) cell->cell.gui_private;
+
+	gnucash_sheet_modify_current_cell(box->sheet, item_string);
 }
+
+static void
+key_press_item_cb (GNCItemList *item_list, GdkEventKey *event, gpointer data)
+{
+	ComboCell *cell = (ComboCell *) data;
+	PopBox *box = (PopBox *) cell->cell.gui_private;
+
+	gtk_widget_event(GTK_WIDGET(box->sheet), (GdkEvent *) event);
+}
+
+static void
+disconnect_list_signals (ComboCell *cell)
+{
+	PopBox *box = (PopBox *) cell->cell.gui_private;
+
+	if (!box->list_signals_connected)
+		return;
+
+	gtk_signal_disconnect(GTK_OBJECT(box->item_list),
+			      box->select_item_signal);
+
+	gtk_signal_disconnect(GTK_OBJECT(box->item_list),
+			      box->key_press_signal);
+
+	box->list_signals_connected = FALSE;
+}
+
+static void
+connect_list_signals (ComboCell *cell)
+{
+	PopBox *box = (PopBox *) cell->cell.gui_private;
+
+	if (box->list_signals_connected)
+		return;
+
+	box->select_item_signal =
+		gtk_signal_connect(GTK_OBJECT(box->item_list), "select_item",
+				   GTK_SIGNAL_FUNC(select_item_cb),
+				   (gpointer) cell);
+
+	box->key_press_signal =
+		gtk_signal_connect(GTK_OBJECT(box->item_list),
+				   "key_press_event",
+				   GTK_SIGNAL_FUNC(key_press_item_cb),
+				   (gpointer) cell);
+
+	box->list_signals_connected = TRUE;
+}
+
+/* =============================================== */
+
+static void
+destroyCombo (BasicCell *bcell)
+{
+	PopBox *box = (PopBox *) bcell->gui_private;
+	ComboCell *cell = (ComboCell *) bcell;
+  
+	if (cell->cell.realize == NULL)
+	{
+		if (box != NULL && box->item_list != NULL) {
+			disconnect_list_signals(cell);
+			gtk_object_unref(GTK_OBJECT(box->item_list));
+			box->item_list = NULL;
+		}
+
+		/* allow the widget to be shown again */
+		cell->cell.realize = realizeCombo;
+		cell->cell.move = NULL;
+		cell->cell.enter_cell = NULL;
+		cell->cell.leave_cell = NULL;
+		cell->cell.destroy = NULL;
+	}
+
+	DEBUG("combo destroyed\n");
+}
+
+/* =============================================== */
+
+void xaccDestroyComboCell (ComboCell *cell)
+{
+	PopBox *box = (PopBox *) cell->cell.gui_private;
+
+	destroyCombo(&(cell->cell));
+
+	if (box != NULL) {
+		g_list_foreach(box->menustrings, (GFunc) g_free, NULL);
+		g_list_free(box->menustrings);
+
+		g_free(box);
+		cell->cell.gui_private = NULL;
+	}
+
+	cell->cell.gui_private = NULL;
+	cell->cell.realize = NULL;
+	cell->cell.set_value = NULL;
+
+	xaccDestroyBasicCell(&(cell->cell));
+}
+
+/* =============================================== */
+
+static void
+gnc_append_string_to_list(gpointer _string, gpointer _item_list)
+{
+	char *string = (char *) _string;
+	GNCItemList *item_list = GNC_ITEM_LIST(_item_list);
+
+	gnc_item_list_append(item_list, string);
+}
+
+static void
+gnc_combo_sync_edit_list(PopBox *box)
+{
+	if (box->list_in_sync || box->item_list == NULL)
+		return;
+
+	gnc_item_list_clear(box->item_list);
+	g_list_foreach(box->menustrings, gnc_append_string_to_list,
+		       box->item_list);
+}
+
+void 
+xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
+{ 
+	PopBox *box;
+
+	if (cell == NULL)
+		return;
+	if (menustr == NULL)
+		return;
+
+	box = (PopBox *) cell->cell.gui_private;
+	box->menustrings = g_list_append(box->menustrings, g_strdup(menustr));
+
+	gnc_combo_sync_edit_list(box);
+
+	if (box->item_list != NULL)
+		gnc_item_list_append(box->item_list, menustr);
+	else
+		box->list_in_sync = FALSE;
+}
+
+/* =============================================== */
+
+void
+xaccSetComboCellValue (ComboCell *cell, const char *str)
+{
+	xaccSetBasicCellValue(&cell->cell, str);
+}
+
+/* =============================================== */
 
 static const char *
-ComboMV (BasicCell *_cell,
-         const char *oldval,
-         const char *change,
-         const char *newval)
+ComboMV (BasicCell *_cell, const char *oldval, const char *change,
+	 const char *newval)
 {
         xaccSetBasicCellValue (_cell, newval);
 
         return newval;
 }
-         
-
-
 
 /* =============================================== */
 
 static void
-realizeCombo (BasicCell *bcell, void *data, int pixel_width) {
-  GnucashSheet *sheet = (GnucashSheet *) data;
-  ComboCell *cell = (ComboCell *) bcell;
-  PopBox *box = cell->cell.gui_private;
-  
-  /* initialize gui-specific, private data */
-  box->sheet   = sheet;
-  
-  /* to mark cell as realized, remove the realize method */
-  cell->cell.realize = NULL;
-  cell->cell.move = moveCombo;
-  cell->cell.enter_cell = enterCombo;
-  cell->cell.leave_cell = leaveCombo;
-  cell->cell.destroy = NULL;
-  cell->cell.modify_verify = ComboMV;
-  
-#if 0
-  cell->cell.realize = NULL;
-  cell->cell.move = moveCombo;
-  cell->cell.enter_cell = enterCombo;
-  cell->cell.leave_cell = leaveCombo;
-  cell->cell.destroy = destroyCombo;
-#endif
+realizeCombo (BasicCell *bcell, void *data, int pixel_width)
+{
+	GnucashSheet *sheet = (GnucashSheet *) data;
+	GnomeCanvasItem *item = sheet->item_editor;
+	ItemEdit *item_edit = ITEM_EDIT(item);
+	ComboCell *cell = (ComboCell *) bcell;
+	PopBox *box = cell->cell.gui_private;
+
+	/* initialize gui-specific, private data */
+	box->sheet = sheet;
+	box->item_edit = item_edit;
+	box->item_list = item_edit_new_list(box->item_edit);
+	gtk_object_ref(GTK_OBJECT(box->item_list));
+	gtk_object_sink(GTK_OBJECT(box->item_list));
+
+	/* to mark cell as realized, remove the realize method */
+	cell->cell.realize = NULL;
+	cell->cell.move = moveCombo;
+	cell->cell.enter_cell = enterCombo;
+	cell->cell.leave_cell = leaveCombo;
+	cell->cell.destroy = destroyCombo;
+	cell->cell.modify_verify = ComboMV;
 }
 
 /* =============================================== */
 
 static void
-moveCombo (BasicCell *bcell, int phys_row, int phys_col) {
-  /* no op with gtksheet */
-  return;
+moveCombo (BasicCell *bcell, int phys_row, int phys_col)
+{
+	PopBox *box = (PopBox *) bcell->gui_private;
+
+	gnome_canvas_item_set(GNOME_CANVAS_ITEM(box->item_edit),
+			      "is_combo", FALSE, NULL);
+
+	item_edit_set_list(box->item_edit, NULL);
 }
 
 /* =============================================== */
 
 static const char *
-enterCombo (BasicCell *bcell, const char *value) {
+enterCombo (BasicCell *bcell, const char *value)
+{
+	PopBox *box = (PopBox *) bcell->gui_private;
 
-  ComboCell *cell = (ComboCell *) bcell;
+	gnc_combo_sync_edit_list(box);
 
-#if 0
-  PopBox *box = (PopBox *) (cell->cell.gui_private);
+	item_edit_set_list(box->item_edit, box->item_list);
 
-  GnucashSheet *sheet = box->sheet;
-#endif
+	gnome_canvas_item_set(GNOME_CANVAS_ITEM(box->item_edit),
+			      "is_combo", TRUE, NULL);
 
-  PINFO("ComboBox(%p): enter value (%s)\n", cell, value);
+	gnc_item_list_select(box->item_list, bcell->value);
 
-#if 0
-  gnome_canvas_item_set (sheet->item_editor,
-                         "combo_show", TRUE,
-                         NULL);
-#endif
+	connect_list_signals((ComboCell *) bcell);
 
-  return NULL;
+	return NULL;
 }
 
 /* =============================================== */
 
 static const char *
-leaveCombo (BasicCell *bcell, const char *value) {
+leaveCombo (BasicCell *bcell, const char *value)
+{
+	PopBox *box = (PopBox *) bcell->gui_private;
 
-#if 0
-  ComboCell *cell = (ComboCell *) bcell;
-  PopBox *box = (PopBox *) (cell->cell.gui_private);
+	disconnect_list_signals((ComboCell *) bcell);
 
-  GnucashSheet *sheet = box->sheet;
+	gnome_canvas_item_set(GNOME_CANVAS_ITEM(box->item_edit),
+			      "is_combo", FALSE, NULL);
 
-  gnome_canvas_item_set (sheet->item_editor,
-                         "combo_show", FALSE,
-                         NULL);
-#endif
+	item_edit_set_list(box->item_edit, NULL);
 
-  return value;
+	return value;
 }
 
 /* =============== end of file =================== */

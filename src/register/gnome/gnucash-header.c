@@ -32,7 +32,6 @@ static GnomeCanvasItem *gnucash_header_parent_class;
 enum {
         ARG_0,
         ARG_SHEET,
-        ARG_TYPE,
 };
 
 
@@ -188,20 +187,21 @@ gnucash_header_destroy (GtkObject *object)
 }
 
 
-/* FIXME:  for now, let's only draw one row, to avoid
- * resizing.
- */
+/* FIXME:  for now, let's only draw one row, to avoid resizing. */
 void
 gnucash_header_reconfigure (GnucashHeader *header)
 {
         GnomeCanvas *canvas = GNOME_CANVAS_ITEM(header)->canvas;
-        int w,h;
+        int w, h;
         double old_w, old_h;
-        
-        header->style = header->sheet->cursor_style[header->type];
-        
-        w = header->style->width+1;
-        h = header->style->pixel_heights[0][0]+2;
+
+        header->style = header->sheet->cursor_style[GNUCASH_CURSOR_HEADER];
+
+	if (header->style == NULL)
+		return;
+
+        w = header->style->width + 1;
+        h = header->style->pixel_heights[0][0] + 2;
 
         gnome_canvas_get_scroll_region(canvas, NULL, NULL, &old_w, &old_h);
 
@@ -220,7 +220,6 @@ static void
 gnucash_header_set_arg (GtkObject *o, GtkArg *arg, guint arg_id)
 {
         GnucashHeader *header;
-        gint new_type;
         gint needs_update = FALSE;
 
         header = GNUCASH_HEADER (o);
@@ -230,18 +229,11 @@ gnucash_header_set_arg (GtkObject *o, GtkArg *arg, guint arg_id)
                 header->sheet = GTK_VALUE_POINTER (*arg);
                 needs_update = TRUE;
                 break;
-        case ARG_TYPE:
-                new_type = GTK_VALUE_INT (*arg);
-                if (new_type != header->type) {
-                        header->type = new_type;
-                        needs_update = TRUE;
-                }
-                break;
         default:
                 break;
         }
 
-        if (header->sheet && header->type > -1 && needs_update)
+        if ((header->sheet != NULL) && needs_update)
                 gnucash_header_reconfigure (header);
 }
 
@@ -250,7 +242,6 @@ static void
 gnucash_header_init (GnucashHeader *header)
 {
         header->sheet = NULL;
-        header->type = -1;
 }
 
 
@@ -268,8 +259,6 @@ gnucash_header_class_init (GnucashHeaderClass *header_class)
 
         gtk_object_add_arg_type ("GnucashHeader::sheet", GTK_TYPE_POINTER,
                                  GTK_ARG_WRITABLE, ARG_SHEET);
-        gtk_object_add_arg_type ("GnucashHeader::type", GTK_TYPE_INT,
-                                 GTK_ARG_WRITABLE, ARG_TYPE);
 
         object_class->set_arg = gnucash_header_set_arg;
         object_class->destroy = gnucash_header_destroy;
