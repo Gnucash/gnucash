@@ -44,6 +44,28 @@
 
 	* src/engine/engine-helpers.c: fix a compiler warning
 	
+2002-10-15  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-utils.c (gnc_handle_date_accelerator): Be
+	more careful about what keystrokes are passed onto the menuing
+	system. Clean up the code somewhat. #95787
+
+	* src/gnome/reconcile-list.c (gnc_reconcile_list_select_row):
+	(gnc_reconcile_list_unselect_row): If the user pressed the space
+	key to toggle a transaction, move the focus down to the next row
+	of the transaction.  This lets the user toggle successive
+	transactions by repeatedly pressing the space bar (instead of
+	alternating the space and the down arrow key.)
+
+2002-10-14  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/prefs.scm: By default, remove old files after 30
+	days.
+
+	* src/gnome/dialog-print-check.c:
+	* src/gnome/glade/print.glade: Use radio buttons for setting how
+	the month is displayed. Reorganize the code.
+
 2002-10-14  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c (process_auto_create_list): Use
@@ -53,8 +75,6 @@
 	next-page-determination.
 	(sxsld_disposition_changed): Correctly predicts
 	post-processing/future txn count; fixes Bug#95734.
-
-2002-10-14  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/app-utils/gnc-exp-parser.c (func_op): Remove
 	seemed-like-a-bad-idea explicit negation of calculated values;
