@@ -37,6 +37,9 @@
 
 static GNCMDIInfo *gnc_mdi_current = NULL;
 static gboolean gnc_toolbar_visible = TRUE;
+static gboolean gnc_statusbar_visible = TRUE;
+static gboolean gnc_summarybar_visible = TRUE;
+
 
 /*
  * These strings must match the dispatch enum listed at the start of
@@ -90,10 +93,34 @@ gnc_mdi_get_toolbar_visibility (void)
   return(gnc_toolbar_visible);
 }
 
+gboolean
+gnc_mdi_get_statusbar_visibility (void)
+{
+  return(gnc_statusbar_visible);
+}
+
+gboolean
+gnc_mdi_get_summarybar_visibility (void)
+{
+  return(gnc_summarybar_visible);
+}
+
 void
 gnc_mdi_set_toolbar_visibility (gboolean visible)
 {
   gnc_toolbar_visible = visible;
+}
+
+void
+gnc_mdi_set_statusbar_visibility (gboolean visible)
+{
+  gnc_statusbar_visible = visible;
+}
+
+void
+gnc_mdi_set_summarybar_visibility (gboolean visible)
+{
+  gnc_summarybar_visible = visible;
 }
 
 void
@@ -468,6 +495,106 @@ gnc_mdi_show_toolbar (GNCMDIChildInfo *mc)
   }
 }
 
+/**
+ * gnc_mdi_show_statusbar
+ *
+ * @mc: A pointer to the child data structure for the GNC child
+ * whose statusbar should be shown/hidden.
+ *
+ * This routine shows or hides the gnome dock item containing the
+ * statusbar.
+ */
+void
+gnc_mdi_show_statusbar (GNCMDIChildInfo *mc)
+{
+  if (!mc || !mc->app)
+    return;
+
+  if (gnc_statusbar_visible) {
+    gtk_widget_show(mc->app->statusbar);
+  } else {
+    gtk_widget_hide(mc->app->statusbar);
+    gtk_widget_queue_resize(mc->app->statusbar->parent);
+  }
+}
+
+/**
+ * gnc_mdi_show_summarybar
+ *
+ * @mc: A pointer to the child data structure for the GNC child
+ * whose summarybar should be shown/hidden.
+ *
+ * This routine shows or hides the gnome dock item containing the
+ * summarybar.
+ */
+void
+gnc_mdi_show_summarybar (GNCMDIChildInfo *mc)
+{
+  GnomeDockItem *summarybar;
+  guint dc1, dc2, dc3, dc4;
+
+  if (!mc || !mc->app)
+    return;
+
+  summarybar = gnome_dock_get_item_by_name(GNOME_DOCK(mc->app->dock),
+					   "Summary Bar",
+					   &dc1, &dc2, &dc3, &dc4);
+  if (!summarybar)
+    return;
+
+  if (gnc_summarybar_visible) {
+    gtk_widget_show(GTK_WIDGET(summarybar));
+  } else {
+    gtk_widget_hide(GTK_WIDGET(summarybar));
+    gtk_widget_queue_resize(mc->app->dock);
+  }
+}
+
+/**
+ * gnc_mdi_tweak_menus
+ *
+ * @mc: A pointer to the GNC MDI child associated with the Main
+ * window.
+ *
+ * This routine tweaks the View window in the main window menubar so
+ * that the menu checkboxes correctly show the state of the Toolbar,
+ * Summarybar and Statusbar.  There is no way to have the checkboxes
+ * start checked.  This will trigger each of the callbacks once, but
+ * they are designed to ignore the first 'sync' callback.  This is a
+ * suboptimal solution, but I can't find a better one at the moment.
+ */
+static void
+gnc_mdi_tweak_menus(GNCMDIChildInfo * mc)
+{
+  GtkWidget *widget;
+  GnomeMDI *info;
+
+  info = mc->gnc_mdi->mdi;
+  widget = gnc_mdi_child_find_menu_item(mc, "_View/_Toolbar");
+  gtk_signal_handler_block_by_data(GTK_OBJECT(widget), info);
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), gnc_toolbar_visible);
+  gtk_signal_handler_unblock_by_data(GTK_OBJECT(widget), info);
+
+  widget = gnc_mdi_child_find_menu_item(mc, "_View/_Status Bar");
+  gtk_signal_handler_block_by_data(GTK_OBJECT(widget), info);
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), gnc_statusbar_visible);
+  gtk_signal_handler_unblock_by_data(GTK_OBJECT(widget), info);
+
+  widget = gnc_mdi_child_find_menu_item(mc, "_View/S_ummary Bar");
+  gtk_signal_handler_block_by_data(GTK_OBJECT(widget), info);
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), gnc_summarybar_visible);
+  gtk_signal_handler_unblock_by_data(GTK_OBJECT(widget), info);
+}
+
+static void
+gnc_mdi_show_bars (GNCMDIChildInfo *mc)
+{
+  gnc_mdi_show_toolbar (mc);
+  gnc_mdi_show_statusbar (mc);
+  gnc_mdi_show_summarybar (mc);
+  gnc_mdi_tweak_menus(mc);
+}
+
 static void
 gnc_mdi_child_set_title (GNCMDIChildInfo *childwin)
 {
@@ -617,8 +744,6 @@ gnc_mdi_child_menu_tweaking (GNCMDIChildInfo * mc)
 
   if (mc->menu_tweaking)
     mc->menu_tweaking(mc);
-  if (mc->gnc_mdi->menu_tweaking)
-    mc->gnc_mdi->menu_tweaking(mc);
 }
 
 /**
@@ -690,7 +815,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
       {
         if (oldbar->parent)
           gtk_widget_hide (GTK_WIDGET(oldbar)->parent);        
-	gnc_mdi_show_toolbar(childwin);
+	gnc_mdi_show_bars(childwin);
       }
     }
     else if (childwin->app)
@@ -717,7 +842,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
 
       gtk_toolbar_set_style (GTK_TOOLBAR(childwin->toolbar), 
                              gnc_get_toolbar_style ());
-      gnc_mdi_show_toolbar(childwin);
+      gnc_mdi_show_bars(childwin);
     }
     else
     {
@@ -733,7 +858,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
 
       gtk_toolbar_set_style (GTK_TOOLBAR(childwin->toolbar), 
                              gnc_get_toolbar_style ());
-      gnc_mdi_show_toolbar(childwin);
+      gnc_mdi_show_bars(childwin);
       gnc_mdi_child_menu_tweaking(childwin);
     }
 
@@ -969,6 +1094,22 @@ gnc_mdi_child_refresh (GNCMDIChildInfo *child)
   /* pesky child_set_name tries to change the window title. Set it back. */
   if ((child->gnc_mdi->mdi->active_child == child->child) && child->app)
     gnc_mdi_child_set_title (child);
+}
+
+GNCMDIChildInfo *
+gnc_mdi_child_find_by_app (GnomeApp *app)
+{
+  GNCMDIChildInfo *child;
+  GList *item;
+
+  g_return_val_if_fail (gnc_mdi_current != NULL, NULL);
+
+  for (item = gnc_mdi_current->children; item; item = g_list_next(item)) {
+    child = item->data;
+    if (child->app == app)
+      return child;
+  }
+  return NULL;
 }
 
 GNCMDIInfo *
