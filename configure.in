@@ -422,6 +422,7 @@ AC_OUTPUT(
           src/experimental/Makefile
           src/experimental/cbb/Makefile
           src/experimental/cbb/cbb-engine/Makefile
+          src/experimental/cgi-bin/Makefile
           src/experimental/gg/Makefile
           src/experimental/ofx/Makefile
           src/experimental/ofx/dtd/Makefile
