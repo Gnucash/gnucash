@@ -23,6 +23,7 @@ MOTIF_OBJS += $(addprefix obj/motif/,${MOTIF_SRCS:.c=.o})
 QT_OBJS    := $(addprefix obj/qt/,${COMMON_SRCS:.c=.o})
 QT_OBJS    += $(addprefix obj/qt/,${QT_SRCS:.cpp=.o})
 
+
 ifdef GNOME_CONFIG_BIN
   GNOME_CFLAGS += $(shell ${GNOME_CONFIG_BIN} --cflags gnomeui)
 endif
@@ -52,6 +53,12 @@ obj/%.o: %.c
 	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) -o $@ $< 
 	${cleanupdeps}
 
+obj/%.o: %.cpp
+	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
+	g++ -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) -o $@ $< 
+	${cleanupdeps}
+
+
 obj/motif/%.o: %.c
 	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
 	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${MOTIF_CFLAGS} -DMOTIF -o $@ $< 
@@ -62,12 +69,12 @@ obj/gnome/%.o: %.c
 	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${GNOME_CFLAGS} -DGNOME -o $@ $< 
 	${cleanupdeps}
 
-obj/qt/%.o: %.c
+obj/qt/%.o: %.cpp
 	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
-	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${QT_CFLAGS} -DKDE -o $@ $< 
+	g++ -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${QT_CFLAGS} -DKDE -o $@ $< 
 	${cleanupdeps}
 
-obj/qt/%.o: %.cpp
+obj/qt/%.o: %.c
 	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
 	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${QT_CFLAGS} -DKDE -o $@ $< 
 	${cleanupdeps}

@@ -21,6 +21,7 @@ sysconfdir=@sysconfdir@
 includedir=@includedir@
 
 CC           = @CC@
+C++          = @C++@
 CFLAGS       = @CFLAGS@
 CPPFLAGS     = @CPPFLAGS@
 INSTALL      = @INSTALL@
