@@ -378,7 +378,7 @@ gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
   bg_color_handler = gnc_table_model_get_bg_color_handler (table->model,
                                                            cell_name);
   if (!bg_color_handler)
-    return 0x0;
+    return 0xffffff;
 
   return bg_color_handler (virt_loc, hatching,
                            table->model->handler_user_data);

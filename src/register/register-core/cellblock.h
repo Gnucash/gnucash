@@ -29,30 +29,6 @@
  * define an arrangement of cells.  It is typically used to
  * define a virtual cursor within a larger table of cells.
  *
- * The CellBlock also has utilities to define a tab group.
- * A tab group is an ordered group of cells that are traversed
- * when the user presses the tab key (and/or uses the arrow 
- * keys).
- *
- * The xaccNextRight() method can be used to declare the
- * traversal order from cell to cell.  If the indicated cell
- * has the current input focus, then the next cell that will
- * be traversed to will be the one indicated.  Traversing
- * to the rright is usally performed with the tab key.
- * Special traversal order to the left, up or down are not
- * currently implemented.  
- *
- * To traverse out of the table entirely,
- * the next_row&col should be set to negative values.  If
- * a traversal back into the table occurs, then the cell that 
- * will be entered will be the one with the negative values 
- * minus one.  Thus to traverse out of the table, then back
- * back to (m,n), set the next row-col to (-m-1,-n-1).
- *
- * MEMBERS:
- * The right_traverse array indicates which cell chould be
- * traversed to when the tab key is pressed.
- *
  * HISTORY:
  * Copyright (c) 1988 Linas Vepstas
  * Copyright (c) 2000-2001 Dave Peticolas <dave@krondo.com>
