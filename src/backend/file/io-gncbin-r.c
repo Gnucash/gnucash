@@ -520,11 +520,7 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
 
   xaccLogEnable();
 
-  {
-    AccountGroup *g = gnc_book_get_group(book);
-    gnc_book_set_group(book, grp);
-    if (g) xaccFreeAccountGroup(g);
-  }
+  xaccSetAccountGroup(book, grp);
 
   /* mark the newly read book as saved, since the act of putting it
    * together will have caused it to be marked up as not-saved.  */

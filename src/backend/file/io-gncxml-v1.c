@@ -35,6 +35,8 @@
 #include "gnc-xml-helper.h"
 #include "Account.h"
 #include "AccountP.h"
+#include "Group.h"
+#include "GroupP.h"
 #include "Query.h"
 #include "QueryP.h"
 #include "Scrub.h"
@@ -387,29 +389,15 @@ gnc_session_load_from_xml_file(GNCSession *session)
 
   sixtp_destroy(top_level_pr);
 
-  if(parse_ok) {
-    if(!global_parse_status.account_group)
-      return FALSE;
+  if(parse_ok) 
+  {
+    if(!global_parse_status.account_group) return FALSE;
 
-    {
-      AccountGroup *g = gnc_book_get_group(book);
-
-      gnc_book_set_group(book, global_parse_status.account_group);
-
-      if(g) 
-      {
-        xaccAccountGroupBeginEdit(g);
-        xaccAccountGroupDestroy(g);
-      }
-    }
+    xaccSetAccountGroup(book, global_parse_status.account_group);
 
     if(global_parse_status.pricedb)
     {
       gnc_pricedb_set_db(book, global_parse_status.pricedb);
-    }
-    else
-    {
-      gnc_pricedb_set_db(book, gnc_pricedb_create(book));
     }
 
     /* Fix account and transaction commodities */
