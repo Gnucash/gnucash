@@ -119,6 +119,16 @@ struct _Table {
   /* protected data -- vital for the implementation, 
    * but not something we want to generally expose */
   GtkWidget *table_widget;          /* the CList */
+  GtkWidget *entry_frame;           /* the editing widget frame */
+  GtkWidget *entry_widget;          /* the current cell editing widget */
+
+  /* Current editing cell */
+  int current_col;
+  int current_row;
+
+  /* snapshot of entry text -- used to detect changes in callback */
+  char *prev_entry_text;
+
   GtkWidget *next_tab_group;        /* where to traverse in the end */
 
 };

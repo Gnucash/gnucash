@@ -35,11 +35,11 @@ CFLAGS := @CFLAGS@  -DCELL_WIDGETS=1 ${INCLPATH}
 
 ######################################################################
 # See Makefile.common for information about these variables.
-COMMON_SRCS := basiccell.c cellblock.c combocell.c \
+COMMON_SRCS := basiccell.c cellblock.c \
 	       datecell.c pricecell.c QuickFill.c quickfillcell.c \
 	       recncell.c register.c table-allgui.c textcell.c
-MOTIF_SRCS := table-motif.c
-GNOME_SRCS := table-gtk.c
+MOTIF_SRCS := table-motif.c combocell-motif.c
+GNOME_SRCS := table-gtk.c combocell-gtk.c
 ######################################################################
 
 all:

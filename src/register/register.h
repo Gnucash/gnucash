@@ -37,16 +37,18 @@
 #define __XACC_REGISTER_H__
 
 #include "basiccell.h"
-#include "combocell.h"
 #include "datecell.h"
 #include "quickfillcell.h"
 #include "pricecell.h"
 
 #ifdef MOTIF
+#include "combocell-motif.h"
 #include "table-motif.h"
 #endif
 
 #ifdef GNOME
+#include "combocell-gtk.h"
+#include "combocell-gtkP.h"
 #include "table-gtk.h"
 #endif 
 
@@ -91,7 +93,7 @@ struct _BasicRegister {
    /* the table itself that implements the underlying GUI. */
    Table         * table;
 
-   /* the cursors that define thecurrently edited row */
+   /* the cursors that define the currently edited row */
    CellBlock     * cursor;
    CellBlock     * header;
 

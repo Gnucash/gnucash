@@ -27,9 +27,18 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+/*
+  TODO:
+  
+  Everywhere I use row + 1, it should be row + num_header_rows
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "cellblock.h"
@@ -37,10 +46,6 @@
 #include "table-gtk.h"
 
 #if 0
-static void enterCB (GtkWidget * mw, gpointer cd, gpointer cb);
-static void leaveCB (GtkWidget * mw, gpointer cd, gpointer cb);
-static void modifyCB (GtkWidget * mw, gpointer cd, gpointer cb);
-static void traverseCB (GtkWidget * mw, gpointer cd, gpointer cb);
 
 /* The XrmQuarks are used to figure out the direction of
  * traversal from cell to cell */
@@ -66,7 +71,14 @@ xaccMallocTable (void)
 void 
 xaccInitTable (Table * table)
 {
-   table->table_widget = 0;
+   table->table_widget = NULL;
+   table->entry_frame = NULL;
+   table->entry_widget = NULL;
+
+   table->current_col = -1;  /* coords ignoring header lines */
+   table->current_row = -1;
+   table->prev_entry_text = NULL;
+   
    table->next_tab_group = 0;
 
    table->num_phys_rows = -1;
@@ -102,7 +114,14 @@ xaccDestroyTable (Table * table)
    xaccFreeTableEntries (table);
 
    /* Let GTK know we're finished with this */
-   gtk_widget_unref(table->table_widget);
+   if(table->table_widget) gtk_widget_unref(table->table_widget);
+   if(table->entry_frame) gtk_widget_unref(table->entry_frame);
+   if(table->entry_widget) gtk_widget_unref(table->entry_widget);
+   table->table_widget = NULL;
+   table->entry_frame = NULL;
+   table->entry_widget = NULL;
+
+   g_free(table->prev_entry_text); table->prev_entry_text = NULL;
 
    /* intialize vars to null value so that any access is voided. */
    xaccInitTable (table);
@@ -140,107 +159,40 @@ xaccNextTabGroup (Table *table, GtkWidget * w)
    table->next_tab_group = w;
 }
 
-#if 0
-
-/* ==================================================== */
-/* this routine calls the individual cell callbacks */
-/* hack alert -- assumes that header is first cell */
-
-static void
-cellCB (GtkWidget *mw, gpointer cd, gpointer cb)
+static int
+verify_cell_interaction_OK(Table *table, const int row, const int col)
 {
-   Table *table;
-   XbaeMatrixDefaultActionCallbackStruct *cbs;
-   int row, col;
-   int rel_row, rel_col;
-   CellBlock *arr, *header;
-   int invalid = 0;
-
-   table = (Table *) cd;
-   arr = table->current_cursor;
-   cbs = (XbaeMatrixDefaultActionCallbackStruct *) cb;
-
-   row = cbs->row;
-   col = cbs->column;
-
-   /* can't edit outside of the physical space */
-   invalid = (0 > row) || (0 > col) ;
-   invalid = invalid || (row >= table->num_phys_rows);
-   invalid = invalid || (col >= table->num_phys_cols);
-
-   /* header rows cannot be modified */
-   header = table->handlers[0][0];
-   invalid = invalid || (row < header->numRows);
-
-   /* compute the cell location */
-   rel_row = table->locators[row][col]->phys_row_offset;
-   rel_col = table->locators[row][col]->phys_col_offset;
-
-   /* check for a cell handler, but only if cell adress is valid */
-   if (arr && !invalid) {
-      if (! (arr->cells[rel_row][rel_col])) {
-         invalid = TRUE;
-      } else {
-         /* if cell is marked as output-only,
-          * then don't call callbacks */
-         if (0 == (arr->cells[rel_row][rel_col])->input_output) {
-            invalid = TRUE;
-         }
-      }
-
-   } else {
+  /* This was cellCB in a previous (Motif) life. We don't do nearly
+     the checking that the Xbae code did because we presume that the
+     row/column has to be valid if the user could have clicked on it.
+     That's reasonable given the way that CList works.  For one thing,
+     header rows are handled separately. */
+  
+  const CellBlock *arr = table->current_cursor;
+  int rel_row, rel_col;
+  int invalid = 0;
+  
+  /* compute the cell location */
+  rel_row = table->locators[row][col]->phys_row_offset;
+  rel_col = table->locators[row][col]->phys_col_offset;
+  
+  /* check for a cell handler, but only if cell adress is valid */
+  /* GTK may not need all these checks, but they don't hurt */
+  if (arr && !invalid) {
+    if (! (arr->cells[rel_row][rel_col])) {
       invalid = TRUE;
-   }
+    } else {
+      /* if cell is marked as output-only,
+       * then don't call callbacks */
+      if (0 == (arr->cells[rel_row][rel_col])->input_output) {
+        invalid = TRUE;
+      }
+    }
+  } else {
+    invalid = TRUE;
+  }
 
-   /* oops the callback failed for some reason ... 
-    * reject the enter/edit/leave  and return */
-   if (invalid) {
-      switch (cbs->reason) {
-         case XbaeEnterCellReason: {
-            XbaeMatrixEnterCellCallbackStruct *ecbs;
-            ecbs = (XbaeMatrixEnterCellCallbackStruct *) cbs;
-            ecbs->doit = False;
-            ecbs->map = False;
-            break;
-         }
-         case XbaeModifyVerifyReason: {
-            XbaeMatrixModifyVerifyCallbackStruct *mvcbs;
-            mvcbs = (XbaeMatrixModifyVerifyCallbackStruct *) cbs;
-            mvcbs->verify->doit = False;
-            break;
-         }
-         case XbaeLeaveCellReason: {
-            XbaeMatrixLeaveCellCallbackStruct *lcbs;
-            lcbs = (XbaeMatrixLeaveCellCallbackStruct *) cbs;
-            /* must set doit to true in order to be able to leave the cell */
-            lcbs->doit = True;
-            break;
-         }
-         default:
-            break;
-      }
-      return;
-   }
-
-   /* if we got to here, then there is a cell handler for 
-    * this cell. Dispatch for processing. */
-   switch (cbs->reason) {
-      case XbaeEnterCellReason: {
-         xaccVerifyCursorPosition (table, row, col);
-         enterCB (mw, cd, cb);
-         break;
-      }
-      case XbaeModifyVerifyReason: {
-         modifyCB (mw, cd, cb);
-         break;
-      }
-      case XbaeLeaveCellReason: {
-         leaveCB (mw, cd, cb);
-         break;
-      }
-      default:
-         break;
-   }
+  return(!invalid);
 }
 
 /* ==================================================== */
@@ -248,217 +200,285 @@ cellCB (GtkWidget *mw, gpointer cd, gpointer cb)
  * been performed. */
 
 static void
-enterCB (GtkWidget * mw, gpointer cd, gpointer cb)
+cell_entered(Table *table, const int row, const int col)
 {
-   Table *table;
-   CellBlock *arr;
-   XbaeMatrixEnterCellCallbackStruct *cbs;
-   int row, col;
-   int rel_row, rel_col;
-   const char * (*enter) (BasicCell *, const char *);
+  CellBlock *arr;
+  int rel_row, rel_col;
+  const char * (*enter) (BasicCell *, const char *);
+  gchar *text;
+  GtkCList *cl = GTK_CLIST(table->table_widget);
+  
+  fprintf(stderr, "cell_entered: %d %d\n", row - 1, col);
+  
+  gtk_clist_get_text(cl, row - 1, col, &text);
+  text = g_strdup(text);  /* This is OK and required b/c GTK kills the
+                             old pointer before using the one you
+                             give it. */
+  
+  { 
+    GtkWidget *w = GTK_WIDGET(cl);
+    GdkColor *background = &w->style->bg[GTK_STATE_NORMAL];
+    GdkBitmap *mask;
+    GdkPixmap *pm = gdk_pixmap_create_from_xpm(w->window, &mask, background,
+                                               "/home/rlb/xacc/src/register/"
+                                               "left_arrow_small.xpm");
+    gtk_clist_set_pixtext(cl, row - 1, col, text, 2, pm, mask);
+    gdk_pixmap_unref(pm);
+    gdk_bitmap_unref(mask);
+  }
+  
+  gtk_frame_set_label(GTK_FRAME(table->entry_frame),
+                      cl->column[col].title);
 
-   table = (Table *) cd;
+  /* Have to block and unblock here because we don't want a callback
+     for this "edit" */
+  {
+    const guint handler_id =
+      (guint) gtk_object_get_user_data(GTK_OBJECT(table->entry_widget));
+    
+    gtk_signal_handler_block(GTK_OBJECT(table->entry_widget), handler_id);
+    gtk_entry_set_text(GTK_ENTRY(table->entry_widget), text);
+    gtk_signal_handler_unblock(GTK_OBJECT(table->entry_widget), handler_id);
+  }
+
+  g_free(table->prev_entry_text);
+  table->prev_entry_text = text;
+  
+  fprintf(stderr,
+          "  current_cursor->phys: %d %d\n"
+          "  current_cursor->virt: %d %d\n"          
+          "  text: %s\n",
+          table->current_cursor_phys_row,
+          table->current_cursor_phys_col,
+          table->current_cursor_virt_row,
+          table->current_cursor_virt_col,
+          text);
+
+   xaccVerifyCursorPosition (table, row, col);
+   
    arr = table->current_cursor;
-   cbs = (XbaeMatrixEnterCellCallbackStruct *) cb;
-
-   /* compute the cell location */
-   row = cbs->row;
-   col = cbs->column;
+   
    rel_row = table->locators[row][col]->phys_row_offset;
    rel_col = table->locators[row][col]->phys_col_offset;
-
-printf ("enter %d %d \n", row, col);
-
-   /* since we are here, there must be a cell handler.
-    * therefore, we accept entry into the cell by default, 
-    */
-   cbs->doit = True;
-   cbs->map = True;
-
+   
    /* OK, if there is a callback for this cell, call it */
    enter = arr->cells[rel_row][rel_col]->enter_cell;
    if (enter) {
-      const char *val;
-      char *retval;
-
-      val = table->entries[row][col];
-      retval = (char *) enter (arr->cells[rel_row][rel_col], val);
-      if (NULL == retval) retval = (char *) val;
-      if (val != retval) {
-         if (table->entries[row][col]) free (table->entries[row][col]);
-         table->entries[row][col] = retval;
-         (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
-         XbaeMatrixSetCell (mw, row, col, retval);
-         XbaeMatrixRefreshCell (mw, row, col);
-
-         /* don't map a text widget */
-         cbs->map = False;
-         cbs->doit = False;
-      }
+     const char *val;
+     char *retval;
+     
+     val = table->entries[row][col];
+     retval = (char *) enter (arr->cells[rel_row][rel_col], val);
+     if (NULL == retval) retval = (char *) val;
+     if (val != retval) {
+       if (table->entries[row][col]) free (table->entries[row][col]);
+       table->entries[row][col] = retval;
+       (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
+       
+       /* ??? Should this be setting the entry or the clist cell? */
+       gtk_entry_set_text(GTK_ENTRY(table->entry_widget), retval);
+     }
    }
-
+   
    /* record this position as the cell that will be
     * traversed out of if a traverse even happens */
    table->prev_phys_traverse_row = row;
    table->prev_phys_traverse_col = col;
 }
 
+static void
+compute_string_single_change(const gchar *a, const gchar *b, gchar **result) {
+  /* Compute the change from a to b assuming that the changed region
+     is contiguous.  This is only a guess, the solution is
+     ambiguous. */
+  
+  const gint a_len = strlen(a); 
+  const gint b_len = strlen(b); 
+  const gchar *afptr = a, *bfptr = b;
+  const gchar *arptr = a + a_len;
+  const gchar *brptr = b + b_len;
+  
+  while(*afptr && *bfptr && (*afptr == *bfptr)) {
+    afptr++;
+    bfptr++;
+  }
+  
+  while((arptr != afptr) && (brptr != bfptr) && (*arptr == *brptr)) {
+    arptr--;
+    brptr--;
+  }
+  if(a_len == b_len) brptr++;
+
+  if(bfptr == brptr) {
+    /* deletion or nothing */
+    *result = NULL;
+    return;
+  } else {
+    const gint length = (brptr - bfptr);
+    *result = (char *) g_malloc(length * sizeof(char) + 1);
+    strncpy(*result, bfptr, length);
+    (*result)[length] = '\0';
+    return;
+  }
+}
+    
 /* ==================================================== */
 /* this routine calls the individual cell callbacks */
 
 static void
-modifyCB (GtkWidget * mw, gpointer cd, gpointer cb)
+cell_modified(Table *table, const int row, const int col)
 {
-   Table *table;
-   CellBlock *arr;
-   XbaeMatrixModifyVerifyCallbackStruct *cbs;
-   int row, col;
-   int rel_row, rel_col;
-   const char * (*mv) (BasicCell *, 
-                       const char *, 
-                       const char *, 
-                       const char *);
-   const char *oldval, *change;
-   char *newval;
-   const char *retval;
-   int len;
 
-   table = (Table *) cd;
-   arr = table->current_cursor;
-   cbs = (XbaeMatrixModifyVerifyCallbackStruct *) cb;
+  CellBlock *arr;
+  GtkEntry *entry = GTK_ENTRY(table->entry_widget);
+  int rel_row, rel_col;
+  const char * (*mv) (BasicCell *, 
+                      const char *, 
+                      const char *, 
+                      const char *);
+  const char *oldval, *newval, *retval, *final_text;
+  gchar *change = NULL;
 
-   /* compute the cell location */
-   row = cbs->row;
-   col = cbs->column;
-   rel_row = table->locators[row][col]->phys_row_offset;
-   rel_col = table->locators[row][col]->phys_col_offset;
+  arr = table->current_cursor;
+  
+  /* compute the cell location */
+  rel_row = table->locators[row][col]->phys_row_offset;
+  rel_col = table->locators[row][col]->phys_col_offset;
+  
+  /* accept edits by default, unless the cell handler rejects them */
+  /* cbs->verify->doit = True; */
+  
+  oldval = table->prev_entry_text;
+  newval = strdup(gtk_entry_get_text(entry));
+  final_text = newval;
+  
+  if(oldval) compute_string_single_change(oldval, newval, &change);
 
-   /* accept edits by default, unless the cell handler rejects them */
-   cbs->verify->doit = True;
+  fprintf(stderr, "   CHANGES: (%s -> %s) <=> [%s]\n",
+          oldval, newval, change);
+  
+  if(strcmp(newval, oldval) == 0) {
+    g_free((gchar *) change);
+    return;
+  }
 
-   oldval = cbs->prev_text;
-   change = cbs->verify->text->ptr;
+  /* OK, if there is a callback for this cell, call it */
+  mv = arr->cells[rel_row][rel_col]->modify_verify;
 
-   /* first, compute the newval string */
-   len = 1;
-   if (oldval) len += strlen (oldval);
-   if (change) len += strlen (change);
-   newval = (char *) malloc (len);
-
-   /* text may be inserted, or deleted, or replaced ... */
-   newval[0] = 0;
-   strncat (newval, oldval, cbs->verify->startPos);
-   if (change) strcat (newval, change);
-   strcat (newval, &oldval[(cbs->verify->endPos)]);
-
-   /* OK, if there is a callback for this cell, call it */
-   mv = arr->cells[rel_row][rel_col]->modify_verify;
-   if (mv) {
-      retval = (*mv) (arr->cells[rel_row][rel_col], oldval, change, newval);
-
-      /* if the callback returned a non-null value, allow the edit */
-      if (retval) {
-
-         /* update data. bounds check done earlier */
-         free (table->entries[row][col]);
-         table->entries[row][col] = (char *) retval;
-         (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
-
-         /* if the callback modified the display string,
-          * update the display cell as well */
-         if (retval != newval) {
-            XbaeMatrixSetCell (mw, row, col, (char *) retval);
-            XbaeMatrixRefreshCell (mw, row, col);
-            XbaeMatrixSetCursorPosition (mw, (cbs->verify->endPos) +1);
-
-            /* the default update has already been overridden,
-             * so don't allow Xbae to update */
-            cbs->verify->doit = False;
-
-            /* avoid wasting memory */
-            free (newval);
-         }
-      } else {
-         /* NULL return value means the edit was rejected */
-         cbs->verify->doit = False;
-
-         /* avoid wasting memory */
-         free(newval);
-      }
-   } else {
+  if (mv) {
+    retval = (*mv) (arr->cells[rel_row][rel_col], oldval, change, newval);
+    
+    /* if the callback returned a non-null value, allow the edit */
+    if (retval) {
+      
       /* update data. bounds check done earlier */
       free (table->entries[row][col]);
-      table->entries[row][col] = newval;
+      table->entries[row][col] = (char *) retval;
       (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
-   }
+      
+      /* if the callback modified the display string,
+       * update the display cell as well */
+      if (retval != newval) {
+        {
+          /* Don't want a signal for this change */
+          const guint id =
+            (guint) gtk_object_get_user_data(GTK_OBJECT(table->entry_widget));
+          gtk_signal_handler_block(GTK_OBJECT(table->entry_widget), id);
+          gtk_entry_set_text(entry, retval);
+          gtk_signal_handler_unblock(GTK_OBJECT(table->entry_widget), id);
+        }
+        final_text = retval;
+        /*XbaeMatrixSetCursorPosition (mw, (cbs->verify->endPos) +1);*/
+        free((char *) newval);
+      }
+    } else {
+      free((char *) newval);
+    }
+  } else {
+    /* update data. bounds check done earlier */
+    free (table->entries[row][col]);
+    table->entries[row][col] = strdup(newval);
+    (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
+  }
+  g_free(table->prev_entry_text);
+  table->prev_entry_text = g_strdup(final_text);
+  g_free((gchar *) change);
 }
 
 /* ==================================================== */
 
 static void
-leaveCB (GtkWidget * mw, gpointer cd, gpointer cb)
+cell_left(Table *table, const int row, const int col)
 {
-   Table *table;
-   CellBlock *arr;
-   XbaeMatrixLeaveCellCallbackStruct *cbs;
-   int row, col;
-   int rel_row, rel_col;
-   const char * (*leave) (BasicCell *, const char *);
-   char * newval;
+  CellBlock *arr;
+  int rel_row, rel_col;
+  const char * (*leave) (BasicCell *, const char *);
+  char * newval;
+  const char *val;
+  gchar *text;
+  GdkBitmap *mask;
+  GtkCList *cl = GTK_CLIST(table->table_widget);
 
-   table = (Table *) cd;
-   arr = table->current_cursor;
-   cbs = (XbaeMatrixLeaveCellCallbackStruct *) cb;
+  fprintf(stderr, "cell_left: %d %d\n", row - 1, col);
 
-   /* compute the cell location */
-   row = cbs->row;
-   col = cbs->column;
-   rel_row = table->locators[row][col]->phys_row_offset;
-   rel_col = table->locators[row][col]->phys_col_offset;
+  if(gtk_clist_get_pixtext(cl, row - 1, col, &text, NULL, NULL, &mask)) {
+    /* we need to get rid of the pixmap -- this will only fail on the
+       first click when there was no previous cell (but we default to
+       0 0) */
+    text = g_strdup(text);  /* This is OK and required b/c we're about to
+                               kill this pointer via set_text. */
+    gtk_clist_set_text(cl, row - 1, col, text);
+    g_free(text);
+  }
+  
+  arr = table->current_cursor;
+  
+  /* compute the cell location */
+  rel_row = table->locators[row][col]->phys_row_offset;
+  rel_col = table->locators[row][col]->phys_col_offset;
 
-printf ("leave %d %d \n", row, col);
+  val = gtk_entry_get_text(GTK_ENTRY(table->entry_widget));
+  
+  /* OK, if there is a callback for this cell, call it */
+  leave = arr->cells[rel_row][rel_col]->leave_cell;
+  if (leave) {
+    const char *retval;
+    
+    retval = leave (arr->cells[rel_row][rel_col], val);
+    
+    newval = (char *) retval;
+    if (NULL == retval) newval = strdup (val);
+    if (val == retval) newval = strdup (val);
+    
+    /* if the leave() routine declared a new string, lets use it */
+    if ( retval && (retval != val)) {
+      gtk_clist_set_text(cl, row - 1, col, (gchar *) retval);
+    } 
+  } else {
+    newval = strdup(val);
+  }
 
-   /* by default, accept whatever the final proposed edit is */
-   cbs->doit = True;
-
-   /* OK, if there is a callback for this cell, call it */
-   leave = arr->cells[rel_row][rel_col]->leave_cell;
-   if (leave) {
-      const char *val, *retval;
-
-      val = cbs->value;
-      retval = leave (arr->cells[rel_row][rel_col], val);
-
-      newval = (char *) retval;
-      if (NULL == retval) newval = strdup (val);
-      if (val == retval) newval = strdup (val);
-
-      /* if the leave() routine declared a new string, lets use it */
-      if ( retval && (retval != val)) {
-         cbs->value = strdup (retval);
-      }
-
-   } else {
-      newval = strdup (cbs->value);
-   }
-
-   /* save whatever was returned; but lets check for  
-    * changes to avoid roiling the cells too much */
-   if (table->entries[row][col]) {
-      if (strcmp (table->entries[row][col], newval)) {
-         free (table->entries[row][col]);
-         table->entries[row][col] = newval;
-         (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
-      } else {
-         /* leave() allocated memory, which we will not be using ... */
-         free (newval);
-      }
-   } else {
+  /* Commit the change to the clist when we leave the cell */
+  gtk_clist_set_text(GTK_CLIST(table->table_widget), row - 1, col, newval);
+  
+  /* save whatever was returned; but lets check for  
+   * changes to avoid roiling the cells too much */
+  if (table->entries[row][col]) {
+    if (strcmp (table->entries[row][col], newval)) {
+      free (table->entries[row][col]);
       table->entries[row][col] = newval;
       (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
-   }
+    } else {
+      /* leave() allocated memory, which we will not be using ... */
+      free(newval);
+    }
+  } else {
+    table->entries[row][col] = newval;
+    (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
+  }
 }
 
+#if 0
 
 /* ==================================================== */
 
@@ -538,6 +558,58 @@ traverseCB (GtkWidget * mw, gpointer cd, gpointer cb)
 
 #endif
 
+static int counter;
+
+static void
+table_edit_entry_cb(GtkEntry *entry, gpointer user_data) {
+  Table *table = (Table *) user_data;
+  const int row = table->current_row;
+  const int col = table->current_col;
+
+  fprintf(stderr, "table_edit_entry_cb:\n");
+  fprintf(stderr, "  curpos: %d selstart %d  selend %d has_select: %d\n",
+          GTK_EDITABLE(entry)->current_pos,
+          GTK_EDITABLE(entry)->selection_start_pos,
+          GTK_EDITABLE(entry)->selection_end_pos,
+          GTK_EDITABLE(entry)->has_selection
+          );
+
+  if(!verify_cell_interaction_OK(table, row + 1, col)) return;
+
+  {
+    const int xxx = counter++;
+    printf("  cm: in %d\n", xxx);
+    cell_modified(table, row + 1, col);
+    printf("  cm: out %d\n", xxx);
+  }
+}
+
+static void
+table_select_row_cb(GtkCList *cl, gint row, gint column, GdkEventButton *e,
+                    gpointer user_data) {
+  Table *table = (Table *) user_data;
+
+  fprintf(stderr, "table_select_row_cb: %d %d\n", row, column);
+
+  //gtk_clist_unselect_row(cl, row, column);
+
+  if(!verify_cell_interaction_OK(table, row + 1, column)) return;
+
+  if(table->current_col != -1) {
+    cell_left(table, table->current_row + 1, table->current_col);
+  }
+
+  table->current_col = column;
+  table->current_row = row;
+
+  {
+    const int xxx = counter++;
+    printf("  ce: in %d\n", xxx);
+    cell_entered(table, row + 1, column);
+    printf("  ce: out %d\n", xxx);
+  }
+}
+
 /* ==================================================== */
 
 GtkWidget *
@@ -546,12 +618,18 @@ xaccCreateTable (Table *table, GtkWidget * parent)
   CellBlock *curs;
   unsigned char * alignments;
   short * widths;
-  GtkWidget * reg;
   int num_header_rows = 0;
   int i;
   
   if (!table) return 0;
-  
+
+  if(table->table_widget != NULL) {
+    fprintf(stderr,
+            "Error: detected internal corruption in xaccCreateTable, "
+            "aborting\n");
+    return 0;
+  }
+
 #if 0  
   /* if quarks have not yet been initialized for this 
    * application, initialize them now. */
@@ -583,47 +661,94 @@ xaccCreateTable (Table *table, GtkWidget * parent)
     num_header_rows = 1;
   }
   
-  if(num_header_rows == 0) {
-    reg = gtk_clist_new(table->num_phys_cols);
-  } else {        
-    reg = gtk_clist_new_with_titles(table->num_phys_cols, table->entries[0]);
-    gtk_clist_freeze(GTK_CLIST(reg));
-    for(i = 0; i < table->num_phys_cols; i++) {
+  {
+    /* TODO: Handle unrefs in destructor */
 
-      /* Widths are in units of characters, not pixels, so we have
-         this hack.  It should be fixed later... */
-      gtk_clist_set_column_width(GTK_CLIST(reg), i, widths[i] * 5);
+    GtkWidget *vbox;
+    GtkWidget * reg;
+
+    /* We don't ref this vbox because we never use it in our code again */
+    vbox = gtk_vbox_new(FALSE, 0);
+    gtk_container_add(GTK_CONTAINER(parent), vbox);
+    
+    if(num_header_rows == 0) {
+      reg = gtk_clist_new(table->num_phys_cols);
+      gtk_widget_ref(reg);
+    } else {        
+      reg = gtk_clist_new_with_titles(table->num_phys_cols,
+                                      table->entries[0]);
+      gtk_widget_ref(reg);
+      gtk_clist_freeze(GTK_CLIST(reg));
+      for(i = 0; i < table->num_phys_cols; i++) {
+        
+        /* Widths are in units of characters, not pixels, so we have
+           this hack.  It should be fixed later... */
+        gtk_clist_set_column_width(GTK_CLIST(reg), i, widths[i] * 5);
+      }
+      gtk_clist_thaw(GTK_CLIST(reg));
     }
+    
+    gtk_clist_freeze(GTK_CLIST(reg));
+    for(i = num_header_rows; i < table->num_phys_rows; i++) {
+      gtk_clist_append(GTK_CLIST(reg), table->entries[i]);
+    }
+    gtk_clist_set_selection_mode(GTK_CLIST(reg), GTK_SELECTION_BROWSE);
     gtk_clist_thaw(GTK_CLIST(reg));
+    
+    /* size?
+       alignments?
+       grid type?
+       shadow type?
+    */
+    
+    gtk_signal_connect (GTK_OBJECT (reg), "select_row",
+                        GTK_SIGNAL_FUNC (table_select_row_cb),
+                        (gpointer) table);
+    
+    // unselect is mostly useless for us since it doesn't get called when
+    // you click on a different cell in the same row.
+    //gtk_signal_connect (GTK_OBJECT (reg), "unselect_row",
+    //                    GTK_SIGNAL_FUNC (table_unselect_row_cb),
+    //                    (gpointer) table);
+
+    gtk_box_pack_start(GTK_BOX(vbox), reg, TRUE, TRUE, 0);
+    gtk_widget_show(reg);
+    
+    table->table_widget = reg;
+
+    {
+      GtkWidget *entry_frame = NULL;
+      GtkWidget *entry_widget = NULL;
+      
+      entry_frame = gtk_frame_new("<none>");
+      gtk_widget_ref(entry_frame);
+      entry_widget = gtk_entry_new();
+      gtk_widget_ref(entry_widget);
+
+      gtk_container_add(GTK_CONTAINER(entry_frame), entry_widget);
+      gtk_box_pack_start(GTK_BOX(vbox), entry_frame, FALSE, FALSE, 0);
+      
+      {
+        const guint handler_id = 
+          gtk_signal_connect (GTK_OBJECT(entry_widget), "changed",
+                              GTK_SIGNAL_FUNC(table_edit_entry_cb),
+                              (gpointer) table);
+        
+        gtk_object_set_user_data(GTK_OBJECT(entry_widget),
+                                 (gpointer) handler_id);
+      }
+
+      gtk_widget_show(entry_widget);
+      gtk_widget_show(entry_frame);
+
+      gtk_widget_show(vbox);
+      table->entry_frame = entry_frame;
+      table->entry_widget = entry_widget;
+    }
   }
   
-  gtk_clist_freeze(GTK_CLIST(reg));
-  for(i = num_header_rows; i < table->num_phys_rows; i++) {
-    gtk_clist_append(GTK_CLIST(reg), table->entries[i]);
-  }
-  gtk_clist_thaw(GTK_CLIST(reg));
-  
-  /* size?
-     alignments?
-     grid type?
-     shadow type?
-  */
-  
-  gtk_container_add(GTK_CONTAINER(parent), reg);
-  gtk_widget_show(reg);
-  
-#if 0
-  /* add callbacks that handle cell editing */
-  
-  XtAddCallback (reg, XmNenterCellCallback, cellCB, (gpointer)table);
-  XtAddCallback (reg, XmNleaveCellCallback, cellCB, (gpointer)table);
-  XtAddCallback (reg, XmNmodifyVerifyCallback, cellCB, (gpointer)table);
-  XtAddCallback (reg, XmNtraverseCellCallback, traverseCB, (gpointer)table);
-#endif
-  
-  table->table_widget = reg;
-  
-#if 0  
+  /* ??? What does xt_realize do? */
+
   /* if any of the cells have GUI specific components that need 
    * initialization, initialize them now. */
   
@@ -636,21 +761,20 @@ xaccCreateTable (Table *table, GtkWidget * parent)
         BasicCell *cell;
         cell = curs->cells[i][j];
         if (cell) {
-          void (*xt_realize) (BasicCell *, 
-                              void *gui,
-                              int pixel_width);
+          void (*xt_realize) (BasicCell *,  void *gui, int pixel_width);
           xt_realize = cell->realize;
           if (xt_realize) {
             int pixel_width;
-            pixel_width = XbaeMatrixGetColumnPixelWidth (reg, j);
-            xt_realize (cell, ((void *) reg), pixel_width);
+            /* cl->column[col].width */
+            /*pixel_width = XbaeMatrixGetColumnPixelWidth (reg, j);*/
+            xt_realize (cell, ((void *) table), 0);
+            /*xt_realize (cell, ((void *) reg), pixel_width);*/
           }
         }
       }
     }
   }
-#endif
-  return (reg);
+  return (table->table_widget);
 }
 
 /* ==================================================== */
@@ -672,7 +796,7 @@ xaccRefreshTableGUI (Table * table)
   reg = table->table_widget;
 
   printf (" refresh numphysrows=%d numphyscols=%d \n",
-          table->num_phys_rows,table->num_phys_cols);
+          table->num_phys_rows, table->num_phys_cols);
   
   for (i = num_header_rows; i < table->num_phys_rows; i++) {
     printf ("cell %d act:%s descr: %s \n",
@@ -682,13 +806,15 @@ xaccRefreshTableGUI (Table * table)
 
   gtk_clist_freeze(GTK_CLIST(reg));
 
-  while(GTK_CLIST(reg)->rows < table->num_phys_rows) {
+  while(GTK_CLIST(reg)->rows < (table->num_phys_rows - num_header_rows)) {
     gtk_clist_append(GTK_CLIST(reg), NULL);
   }
 
-  for(i = num_header_rows; i < table->num_phys_rows; i++) {
+  for(i = num_header_rows; i < table->num_phys_rows; i++)
+  {
     for(j = 0; j < table->num_phys_cols; j++) {
-      gtk_clist_set_text(GTK_CLIST(reg), i, j, table->entries[i][j]);
+      gtk_clist_set_text(GTK_CLIST(reg), i - num_header_rows, j,
+                         table->entries[i][j]);
     }
   }
   gtk_clist_thaw(GTK_CLIST(reg)); 
@@ -700,8 +826,8 @@ xaccRefreshTableGUI (Table * table)
   Local Variables:
   tab-width: 2
   indent-tabs-mode: nil
-  mode: c-mode
+  mode: c
   c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
+  eval: (c-set-offset 'substatement-open 0)
   End:
 */
