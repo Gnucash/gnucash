@@ -315,6 +315,8 @@ void gnc_ui_print_dialog_destroy(PrintDialog * pcd) { }
 
 void gnc_ui_print_dialog_select_printer_cb(GtkWidget * widget, 
                                            gpointer user_data) { } 
+void gnc_ui_print_dialog_select_paper_cb(GtkWidget * widget, 
+                                         gpointer user_data) { } 
 void gnc_ui_print_dialog_preview_cb(GtkWidget * widget, gpointer user_data) {}
 void gnc_ui_print_dialog_ok_cb(GtkWidget * widget, gpointer user_data) {}
 void gnc_ui_print_dialog_cancel_cb(GtkWidget * widget, gpointer user_data) {}
