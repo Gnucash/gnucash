@@ -146,16 +146,14 @@ div128 (gncint128 n, gint64 d)
   quotient.lo = lo + n.lo/d;
 
   /* Deal with low remainder bits.
-   * There's probably a more efficient way of doing this.
-   * XXX This algo breaks if the value of teh denominator 
-   * is larger than 2 billion.
+   * Is there a more efficient way of doing this?
    */
-  guint64 rnd = quotient.lo;
-  rnd *= d;
-  rnd &= 0x7fffffff;
-  rnd = (n.lo & 0x7fffffff) - rnd;
-  rnd &= 0x7fffffff;
-  rnd /= d;
+  gncint128 mu = mult128 (quotient.lo, d);
+
+  gint64 nn = 0x7fffffffffffffffULL & n.lo;
+  gint64 rr = 0x7fffffffffffffffULL & mu.lo;
+  gint64 rnd = nn - rr;
+  rnd /= d;   
 
   /* ?? will this ever overflow ? */
   qlo = quotient.lo;
@@ -171,21 +169,20 @@ div128 (gncint128 n, gint64 d)
   return quotient;
 }
 
-/** Return the remainder of a signed 128-bit number modulo a signed 64-bit,
- *  XXX the current algo only works for divisor values less than 1<<31 
- *  (2 billion)
+/** Return the remainder of a signed 128-bit number modulo 
+ *  a signed 64-bit.  I beleive that ths algo is overflow-free,
+ *  but should be audited some more ... 
  */
 static inline gint64
 rem128 (gncint128 n, gint64 d)
 {
   gncint128 quotient = div128 (n,d);
 
-  guint64 rnd = quotient.lo;
-  rnd *= d;
-  rnd &= 0x7fffffff;
-  rnd = (n.lo & 0x7fffffff) - rnd;
-  rnd &= 0x7fffffff;
-  return rnd;
+  gncint128 mu = mult128 (quotient.lo, d);
+
+  gint64 nn = 0x7fffffffffffffffULL & n.lo;
+  gint64 rr = 0x7fffffffffffffffULL & mu.lo;
+  return nn - rr;
 }
 
 /** Return the ratio n/d reduced so that there are no common factors. */
