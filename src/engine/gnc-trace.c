@@ -62,6 +62,7 @@ gncLogLevel gnc_log_modules[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* BUSINESS */
   GNC_LOG_TRACE,        /* DRUID */
   GNC_LOG_WARNING,      /* COMMODITY */
+  GNC_LOG_WARNING,      /* HBCI */
 };
 
 static FILE *fout = NULL;
