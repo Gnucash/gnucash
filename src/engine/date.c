@@ -469,26 +469,29 @@ gnc_iso8601_to_timespec(const char *str, int do_localtime)
   }
   stm.tm_isdst = -1;
 
-  /* timezone format can be +hh or +hhmm or +hh.mm (or -) */
+  /* timezone format can be +hh or +hhmm or +hh.mm (or -) (or not present) */
   str += strcspn (str, "+-");
-  buf[0] = str[0];
-  buf[1] = str[1];
-  buf[2] = str[2];
-  buf[3] = 0;
-  stm.tm_hour -= atoi(buf);
-
-  str +=3;
-  if ('.' == *str) str++;
-  if (isdigit (*str) && isdigit (*(str+1)))
+  if (str)
   {
-     int cyn;
-     /* copy sign from hour part */
-     if ('+' == buf[0]) { cyn = -1; } else { cyn = +1; } 
-     buf[0] = str[0];
-     buf[1] = str[1];
-     buf[2] = str[2];
-     buf[3] = 0;
-     stm.tm_min += cyn * atoi(buf);
+    buf[0] = str[0];
+    buf[1] = str[1];
+    buf[2] = str[2];
+    buf[3] = 0;
+    stm.tm_hour -= atoi(buf);
+
+    str +=3;
+    if ('.' == *str) str++;
+    if (isdigit (*str) && isdigit (*(str+1)))
+    {
+      int cyn;
+      /* copy sign from hour part */
+      if ('+' == buf[0]) { cyn = -1; } else { cyn = +1; } 
+      buf[0] = str[0];
+      buf[1] = str[1];
+      buf[2] = str[2];
+      buf[3] = 0;
+      stm.tm_min += cyn * atoi(buf);
+    }
   }
 
   /* adjust for the local timezone */
