@@ -114,6 +114,23 @@
 
 	    <widget>
 	      <class>GtkLabel</class>
+	      <name>label7</name>
+	      <label>Amount:</label>
+	      <justify>GTK_JUSTIFY_RIGHT</justify>
+	      <wrap>False</wrap>
+	      <xalign>1</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
 	      <name>label1</name>
 	      <label>From:</label>
 	      <justify>GTK_JUSTIFY_RIGHT</justify>
@@ -162,23 +179,6 @@
 		<fill>False</fill>
 	      </child>
 	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <name>label7</name>
-	      <label>Amount:</label>
-	      <justify>GTK_JUSTIFY_RIGHT</justify>
-	      <wrap>False</wrap>
-	      <xalign>1</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
-	    </widget>
 	  </widget>
 
 	  <widget>
@@ -192,6 +192,22 @@
 	      <expand>True</expand>
 	      <fill>True</fill>
 	    </child>
+
+	    <widget>
+	      <class>GtkHBox</class>
+	      <name>from_amount_box</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
+	    </widget>
 
 	    <widget>
 	      <class>GtkEntry</class>
@@ -234,22 +250,6 @@
 		<padding>0</padding>
 		<expand>False</expand>
 		<fill>False</fill>
-	      </child>
-
-	      <widget>
-		<class>Placeholder</class>
-	      </widget>
-	    </widget>
-
-	    <widget>
-	      <class>GtkHBox</class>
-	      <name>from_amount_box</name>
-	      <homogeneous>False</homogeneous>
-	      <spacing>0</spacing>
-	      <child>
-		<padding>0</padding>
-		<expand>True</expand>
-		<fill>True</fill>
 	      </child>
 
 	      <widget>
