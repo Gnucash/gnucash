@@ -73,6 +73,7 @@ GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
 GNC_CONFIGDIR = @GNC_CONFIGDIR@
 GNC_DOC_INSTALL_DIR = @GNC_DOC_INSTALL_DIR@
+GNC_HELPDIR = @GNC_HELPDIR@
 GNC_LIBDIR = @GNC_LIBDIR@
 GNC_SCM_INSTALL_DIR = @GNC_SCM_INSTALL_DIR@
 GNC_SHAREDIR = @GNC_SHAREDIR@
@@ -367,7 +368,8 @@ bootstrap.scm: bootstrap.scm.in Makefile
 	sed < $@.in > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:' \
             -e 's:@-GNC_CONFIGDIR-@:${GNC_CONFIGDIR}:' \
-            -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:'
+            -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:' \
+            -e 's:@-GNC_HELPDIR-@:${GNC_HELPDIR}:'
 	mv $@.tmp $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

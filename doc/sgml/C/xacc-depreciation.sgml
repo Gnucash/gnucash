@@ -174,7 +174,7 @@
 <PARA>Your main window will resemble this:
     <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="appr-main1.gif">
+<IMAGEDATA FILEREF="image/appr-main1.png">
 </IMAGEOBJECT>
 <TEXTOBJECT>
 <PHRASE>Main window after purchase and appreciation</PHRASE>
@@ -185,7 +185,7 @@
 <PARA>and your asset account will resemble this:
     <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="appr-asset1.gif">
+<IMAGEDATA FILEREF="image/appr-asset1.png">
 </IMAGEOBJECT>
 <TEXTOBJECT>
 <PHRASE>Asset account after purchase and appreciation</PHRASE>
@@ -423,7 +423,7 @@
 <PARA>Below, we show the second case discussed.
     <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="appr-main2.gif">
+<IMAGEDATA FILEREF="image/appr-main2.png">
 </IMAGEOBJECT>
 <TEXTOBJECT>
 <PHRASE>Main window after sale</PHRASE>
@@ -431,7 +431,7 @@
 </INLINEMEDIAOBJECT>
      <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="appr-asset2.gif">
+<IMAGEDATA FILEREF="image/appr-asset2.png">
 </IMAGEOBJECT>
 <TEXTOBJECT>
 <PHRASE>Asset account after sale</PHRASE>
@@ -783,7 +783,7 @@ fairly simple, taxation often gets terribly complicated...  </PARA>
     digits" scheme for the example above.
     <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="depr-asset.gif">
+<IMAGEDATA FILEREF="image/depr-asset.png">
 </IMAGEOBJECT>
 <TEXTOBJECT>
 <PHRASE>Asset account after depreciation</PHRASE>
@@ -791,7 +791,7 @@ fairly simple, taxation often gets terribly complicated...  </PARA>
 </INLINEMEDIAOBJECT>
      <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="depr-main.gif">
+<IMAGEDATA FILEREF="image/depr-main.png">
 </IMAGEOBJECT>
 <TEXTOBJECT>
 <PHRASE>Main window after depreciation</PHRASE>

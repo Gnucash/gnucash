@@ -1,13 +1,11 @@
-
 <ARTICLE ID="XACC-PNL">
 <ARTHEADER>
 <TITLE>Profit And Loss Statement</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE> Profit and Loss Statement</TITLE>
+
 <PARA>    <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="report-pnl.gif">
+<IMAGEDATA FILEREF="image/report-pnl.png">
 </IMAGEOBJECT>
 </INLINEMEDIAOBJECT> 
 
@@ -20,5 +18,5 @@
     the "parameters" toolbar button.
 
 </PARA>
-</SECT1>
+
 </ARTICLE>

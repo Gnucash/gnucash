@@ -1,9 +1,11 @@
 <ARTICLE ID="XACC-ABOUT">
+
 <ARTHEADER>
 <TITLE>About GnuCash</TITLE>
 </ARTHEADER>
+
 <SECT1>
-<TITLE> About GnuCash</TITLE>
+<TITLE>Introduction</TITLE>
 
 <PARA>GnuCash is a program to keep track of your finances. Its features
 include:
@@ -95,7 +97,9 @@ similar transactions.
 </ITEMIZEDLIST>
 
  </PARA>
-<SECT2>
+</SECT1>
+
+<SECT1 ID="XACC-FEATURES">
 <TITLE>Advanced Features</TITLE>
 <PARA> </PARA>
 <PARA>GnuCash offers some features not found in simpler accounting
@@ -159,8 +163,9 @@ similar transactions.
 </ITEMIZEDLIST>
 
  </PARA>
-</SECT2>
-<SECT2>
+</SECT1>
+
+<SECT1 ID="XACC-VERSIONING">
 <TITLE>Versioning</TITLE>
 <PARA> </PARA>
 <PARA>The versioning scheme for GnuCash parallels that of the
@@ -190,8 +195,9 @@ similar transactions.
     page in order to get some perspective on the overall design.
 
  </PARA>
-</SECT2>
-<SECT2>
+</SECT1>
+
+<SECT1 ID="XACC-DEVELOPERS">
 <TITLE>Lead Developers</TITLE>
 <PARA>    <GLOSSLIST>
 <GLOSSENTRY>
@@ -259,8 +265,9 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSLIST>
 
  </PARA>
-</SECT2>
-<SECT2>
+</SECT1>
+
+<SECT1 ID="XACC-CONTRIBUTORS">
 <TITLE>Fixers and Patchers</TITLE>
 
 <PARA>The <EMPHASIS>cast of thousands</EMPHASIS> includes:
@@ -844,93 +851,66 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSLIST>
 
  </PARA>
-</SECT2>
-<SECT2>
+</SECT1>
+
+<SECT1 ID="XACC-OSES">
 <TITLE>Supported Operating Systems</TITLE>
-<PARA>    gnucash-1.0.18 (xacc-1.0.18) is known to work on the following
-    systems: 
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA>Linux 2.0.x -- Intel w/ RedHat Motif
+<PARA>GnuCash 1.5.0 is known to work on the following systems: 
 
- </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Linux 2.0.x -- Intel w/ Lesstif v0.81
+<ITEMIZEDLIST>
 
- </PARA>
-</LISTITEM>
 <LISTITEM>
-<PARA>Linux Debian -- Intel w/ Lesstif v0.81
+<PARA>Linux</PARA>
+</LISTITEM>
 
- </PARA>
-</LISTITEM>
 <LISTITEM>
-<PARA>SGI IRIX -- MIPS
+<PARA>FreeBSD</PARA>
+</LISTITEM>
 
- </PARA>
-</LISTITEM>
 <LISTITEM>
-<PARA>IBM AIX 4.1.5 -- RS/6000
+<PARA>NetBSD</PARA>
+</LISTITEM>
 
- </PARA>
-</LISTITEM>
 <LISTITEM>
-<PARA>SCO Unixware 7 -- Intel
+<PARA>Solaris</PARA>
+</LISTITEM>
 
- </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>SCO OpenServer 5.0.4 -- Intel
-
- </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>NetBSD -- Intel
- </PARA>
-</LISTITEM>
 </ITEMIZEDLIST>
 
- </PARA>
-<PARA><ULINK URL="http://www.gnucash.org/"><INLINEMEDIAOBJECT>
+</PARA>
+
+<PARA>
+
+<ULINK URL="http://www.gnucash.org/">
+  <INLINEMEDIAOBJECT>
+    <IMAGEOBJECT>
+      <IMAGEDATA FILEREF="image/logo-linux.png">
+    </IMAGEOBJECT>
+  </INLINEMEDIAOBJECT>
+</ULINK>
+
+<ULINK URL="http://www.debian.org"><INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="logo-linux.gif">
+<IMAGEDATA FILEREF="image/logo-debian.png">
 </IMAGEOBJECT>
-</INLINEMEDIAOBJECT></ULINK> <ULINK URL="http://www.sco.com/skunkware">    <INLINEMEDIAOBJECT>
+</INLINEMEDIAOBJECT></ULINK>
+
+<ULINK URL="http://www.netbsd.org"><INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="logo-skunkware.gif">
+<IMAGEDATA FILEREF="image/logo-NetBSD-banner.png">
 </IMAGEOBJECT>
-</INLINEMEDIAOBJECT></ULINK> <ULINK URL="http://www.bull.de/pub/"><INLINEMEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="logo-bullogogross.gif">
-</IMAGEOBJECT>
-</INLINEMEDIAOBJECT> <ULINK URL="http://www.ibm.com"><INLINEMEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="logo-ibm.gif">
-</IMAGEOBJECT>
-</INLINEMEDIAOBJECT></ULINK> <ULINK URL="http://www.sgi.com"><INLINEMEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="logo-sgi.gif">
-</IMAGEOBJECT>
-</INLINEMEDIAOBJECT></ULINK> <ULINK URL="http://www.debian.org"><INLINEMEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="logo-debian.jpg">
-</IMAGEOBJECT>
-</INLINEMEDIAOBJECT></ULINK> <ULINK URL="http://www.netbsd.org"><INLINEMEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="logo-NetBSD-banner.gif">
-</IMAGEOBJECT>
-</INLINEMEDIAOBJECT></ULINK></ULINK>
+</INLINEMEDIAOBJECT></ULINK>
 
  </PARA>
-</SECT2>
-<SECT2>
+</SECT1>
+
+<SECT1 ID="XACC-HISTORY">
 <TITLE>History</TITLE>
 
 <PARA> The table below shows some historical lines-of-code and
-number-of-files metrics for the <application>X-Accountant</application>
-<application>GnuCash</application> development project
+number-of-files metrics for the <application>GnuCash</application>
+development project.
 
 <TABLE>
 <TITLE> Historical Development Stats </TITLE>
@@ -1129,6 +1109,5 @@ number-of-files metrics for the <application>X-Accountant</application>
 </ITEMIZEDLIST>
 
 </PARA>
-</SECT2>
 </SECT1>
 </ARTICLE>

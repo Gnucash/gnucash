@@ -1,10 +1,9 @@
-
 <ARTICLE ID="XACC-RECNWIN">
+
 <ARTHEADER>
 <TITLE>Reconciliation Window</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE> Reconciliation Window</TITLE>
+
 <PARA>The Reconciliation window is used to reconcile cleared
     transactions from a bank statement. Enter a dollar amount from
     your last bank statement in the box, and then click <GUIMENU>OK</GUIMENU>
@@ -15,7 +14,7 @@
     </PARA>
 <PARA>     <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="recnwin.gif">
+<IMAGEDATA FILEREF="image/recnwin.png">
 </IMAGEOBJECT>
 </INLINEMEDIAOBJECT>
     
@@ -32,9 +31,9 @@
 
     </PARA>
 <PARA>At the end of the month, you receive your bank statement,
-    perhaps including canceled checks. At <EMPHASIS>that</EMPHASIS> point, you
-    should "reconcile" the account, that is, agree your personal
-    records to the documentation provided by the bank.
+perhaps including canceled checks. At <EMPHASIS>that</EMPHASIS> point,
+you should "reconcile" the account, that is, agree your personal
+records to the documentation provided by the bank.
 
     <ITEMIZEDLIST>
 <LISTITEM>
@@ -114,5 +113,5 @@ transaction
 
 
 </PARA>
-</SECT1>
+
 </ARTICLE>

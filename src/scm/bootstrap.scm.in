@@ -91,6 +91,7 @@
 ;; Automatically generated defaults
 (define gnc:_config-dir-default_ "@-GNC_CONFIGDIR-@")
 (define gnc:_share-dir-default_ "@-GNC_SHAREDIR-@")
+(define gnc:_help-dir-default_ "@-GNC_HELPDIR-@")
 (define gnc:version "@-VERSION-@")
 
 ;; These will be converted to config vars later (see prefs.scm)

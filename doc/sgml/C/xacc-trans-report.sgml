@@ -1,10 +1,8 @@
-
 <ARTICLE ID="XACC-TRANS-REPORT">
+
 <ARTHEADER>
 <TITLE>Transaction Report</TITLE>
 </ARTHEADER>
-<SECT1 ID="XACC-TXNREPORTS">
-<TITLE> Transaction Report</TITLE>
 
 <PARA>Transaction reports list details for transactions in a
     specified account over a specified period, in a convenient
@@ -137,5 +135,5 @@ in the report. The choices include:
 
 
 </PARA>
-</SECT1>
+
 </ARTICLE>

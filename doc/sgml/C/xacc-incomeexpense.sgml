@@ -1,8 +1,9 @@
-
 <ARTICLE ID="XACC-INCOMEEXPENSE">
+
 <ARTHEADER>
 <TITLE>Using Expense/Income Accounts</TITLE>
 </ARTHEADER>
+
 <SECT1>
 <TITLE> What are Incomes and Expenses?</TITLE>
 
@@ -18,7 +19,7 @@ section deals with the more basic recording of incomes and expenses.
 </PARA>
 </SECT1>
 
-<SECT1>
+<SECT1 ID="XACC-RECORDING-INCOMEEXPENSE">
 <TITLE> Recording Income and Expenses</TITLE>
 
 <PARA>In a double entry system, two kinds of accounts must be

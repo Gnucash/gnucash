@@ -56,6 +56,7 @@ bootstrap.scm: bootstrap.scm.in Makefile
 	sed < $@.in > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:' \
             -e 's:@-GNC_CONFIGDIR-@:${GNC_CONFIGDIR}:' \
-            -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:'
+            -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:' \
+            -e 's:@-GNC_HELPDIR-@:${GNC_HELPDIR}:'
 	mv $@.tmp $@
 CLEANFILES += bootstrap.scm

@@ -1,4 +1,6 @@
-gnucash_helpdir = $(datadir)/gnome/help/gnucash/C
+SUBDIRS = image
+
+gnucash_helpdir = $(GNC_HELPDIR)/C
 
 GNUCASH_SGML_FILES = \
 	bofa-mym.sgml \
@@ -25,7 +27,6 @@ GNUCASH_SGML_FILES = \
 	xacc-pnl.sgml \
 	xacc-portfolio-report.sgml \
 	xacc-preferences.sgml \
-	xacc-preferences2.sgml \
 	xacc-print-check.sgml \
 	xacc-print.sgml \
 	xacc-qif-import.sgml \
@@ -43,9 +44,8 @@ install-data-local: gnucash/index.html
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)/image
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)/stylesheet-images
-#	$(INSTALL_DATA) $(srcdir)/topic.dat \
-#			$(DESTDIR)$(gnucash_helpdir)/topic.dat
-#	$(INSTALL_DATA) $(srcdir)/index.html $(DESTDIR)$(gnucash_helpdir)/
+	$(INSTALL_DATA) $(srcdir)/topic.dat \
+			$(DESTDIR)$(gnucash_helpdir)/topic.dat
 	-(for file in gnucash/*.html; do \
 	    basefile=`basename $$file` \
 	    $(INSTALL_DATA) $(srcdir)/$$file \
@@ -56,11 +56,6 @@ install-data-local: gnucash/index.html
 	    $(INSTALL_DATA) $(srcdir)/$$file \
                             $(DESTDIR)$(gnucash_helpdir)/$$basefile; \
 	  done)
-#	for file in gnucash/image/*.png; do \
-#	  basefile=`basename $$file` \
-#	  $(INSTALL_DATA) $(srcdir)/$$file \
-#                          $(DESTDIR)$(gnucash_helpdir)/figs/$$basefile;\
-#	done
 	-(for file in gnucash/stylesheet-images/*.gif; do \
 	    basefile=`basename $$file` \
 	    $(INSTALL_DATA) \
@@ -70,8 +65,8 @@ install-data-local: gnucash/index.html
 
 
 EXTRA_DIST = \
-	$(GNUCASH_SGML_FILES)
-#	topic.dat
+	$(GNUCASH_SGML_FILES) \
+	topic.dat
 
 manual-html: gnucash/index.html
 manual-dvi: gnucash/gnucash.dvi
@@ -95,16 +90,16 @@ gnucash/gnucash.rtf: $(GNUCASH_SGML_FILES)
 	db2rtf gnucash.sgml
 
 gnucash/index.html: $(GNUCASH_SGML_FILES)
-	-(db2html gnucash.sgml)
-#	  && mkdir -p users-guide/figs \
-#	  && cp $(srcdir)/figs/*.png users-guide/figs || exit 1)
+	-(db2html gnucash.sgml \
+	  && mkdir -p gnucash/image \
+	  && cp $(srcdir)/image/*.png gnucash/image || exit 1)
 
 
 dist-hook:
 	mkdir $(distdir)/gnucash
-#	mkdir $(distdir)/gnucash/figs
+	mkdir $(distdir)/gnucash/image
 	mkdir $(distdir)/gnucash/stylesheet-images
 	cp gnucash/*.html $(distdir)/gnucash
 	cp gnucash/*.css $(distdir)/gnucash
-#	cp gnucash/figs/*.png $(distdir)/gnucash/figs
+	cp gnucash/image/*.png $(distdir)/gnucash/image
 	cp gnucash/stylesheet-images/*.gif $(distdir)/gnucash/stylesheet-images

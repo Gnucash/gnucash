@@ -118,6 +118,15 @@ AC_ARG_WITH( locale-dir,
 AC_SUBST(LOCALE_DIR)
 
 ### --------------------------------------------------------------------------
+### help files
+AC_ARG_WITH( help-prefix,
+  [  --with-help-prefix=PATH         specify where to store the help files],
+  GNC_HELPDIR="$with_help_prefix/gnome/help/gnucash",
+  GNC_HELPDIR="\${datadir}/gnome/help/gnucash")
+
+AC_SUBST(GNC_HELPDIR)
+
+### --------------------------------------------------------------------------
 ### Check for gettext
 AM_GNU_GETTEXT
 
@@ -417,6 +426,7 @@ AC_OUTPUT(
           doc/html/fr/image/Makefile
           doc/sgml/Makefile
           doc/sgml/C/Makefile
+          doc/sgml/C/image/Makefile
           intl/Makefile
           lib/Makefile
 	  po/Makefile.in

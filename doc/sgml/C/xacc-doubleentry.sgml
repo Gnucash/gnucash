@@ -40,8 +40,10 @@
 
     </PARA>
 </SECT1>
-<SECT1>
+
+<SECT1 ID="XACC-DOUBLEENTRYRULE">
 <TITLE> The Rule of Double-Entry Accounting</TITLE>
+
 <PARA>The intuitive way of understanding double-entry 
     is as a transfer from one bank account to another,
     where the amount taken out of one bank account must equal that
@@ -120,6 +122,7 @@ to track the change over time.)
     </PARA>
 
 </SECT1>
+
 <SECT1 ID="XACC-DOUBLEUSE">
 <TITLE> Using Double Entry</TITLE>
 <PARA>    </PARA>
