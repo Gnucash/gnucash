@@ -328,9 +328,6 @@ AC_SUBST(GNC_SCM_INSTALL_DIR)
 AC_SUBST(GNC_SHAREDIR)
 AC_SUBST(GNC_LIBEXECDIR)
 
-# We should always see these errors...
-CFLAGS="${CFLAGS} -Wall"
-
 # Enable error-on-warning by default -- I'm tired of fixing other
 # people's missing #includes, etc.
 AC_ARG_ENABLE(error-on-warning,
@@ -758,7 +755,14 @@ then
     
     GNOME=1
     AC_DEFINE(GNOME)  
-
+else
+  # GNOME_COMPILE_WARNINGS will add -Wall; no need to set it again.
+  # also, only add it for GCC.
+  if test ${GCC}x = yesx
+  then
+     # We should always see these errors...
+     CFLAGS="${CFLAGS} -Wall"
+  fi
 fi
 
 ###-------------------------------------------------------------------------
@@ -766,16 +770,23 @@ fi
 ###-------------------------------------------------------------------------
 
 # This has to come after AC_PROG_CC _AND_ GNOME_COMPILE_WARNINGS
+AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
 then
+  warnFLAGS=
   # These two are because of g-wrap -- it can't avoid unused and uninitialized.
-  CFLAGS="${CFLAGS} -Wno-uninitialized"
-  CFLAGS="${CFLAGS} -Wno-unused"
+  warnFLAGS="${warnFLAGS} -Wno-uninitialized"
+  warnFLAGS="${warnFLAGS} -Wno-unused"
   # other flags...
-  CFLAGS="${CFLAGS} -Wmissing-prototypes"
-  CFLAGS="${CFLAGS} -Wmissing-declarations"
-  CFLAGS="${CFLAGS} -Werror-implicit-function-declaration"
+  warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
+  warnFLAGS="${warnFLAGS} -Wmissing-declarations"
+  warnFLAGS="${warnFLAGS} -Werror-implicit-function-declaration"
+
+  CFLAGS="${CFLAGS} ${warnFLAGS}"
+else
+  warnFLAGS=none
 fi
+AC_MSG_RESULT($warnFLAGS)
 
 ###-------------------------------------------------------------------------
 ### Stuff from Mac OS X Port

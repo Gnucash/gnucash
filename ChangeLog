@@ -1,6 +1,9 @@
 2002-10-19  Derek Atkins  <derek@ihtfp.com>
 	* gnome/gw-gnc-spec.scm -- add "#include <gnc-splash.h>"
 	* configure.in -- don't let GNOME_COMPILE_WARNINGS overwrite our list
+
+	* configure.in -- don't double-add -Wall.  Only add -Wall for GCC.
+	  let the user know what additional warnings are being added.
 	
 2002-10-19  Christian Stimming  <stimming@tuhh.de>
 
