@@ -1,6 +1,5 @@
 
-# This isn't right right now.  This needs to be updated to be a real
-# Makefile.am...
+# Build the postgres backend as its own loadable shared object.
 
 lib_LTLIBRARIES = libgnc_postgres.la
 
@@ -19,3 +18,13 @@ EXTRA_DIST = \
   gnc-init.sql 
 
 INCLUDES = -I.. -I/usr/lib/glib/include
+
+LDFLAGS= -lpq
+
+# Some of the required C files are built with the m4 pre-processor
+
+PostgresBackend.o: autogen.c
+PostgresBackend.lo: autogen.c
+
+autogen.c:	table.m4
+	m4 table.m4 > autogen.c
