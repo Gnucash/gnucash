@@ -1,3 +1,7 @@
+2000-08-07  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/cellblock.c (FreeCellBlockMem): fix memory leaks
+
 2000-07-13  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/transaction-report.scm: Added checks
