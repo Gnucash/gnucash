@@ -44,6 +44,7 @@
 #include "gnc-html.h"
 #include "gnc-icons.h"
 #include "gnc-plugin-account-tree.h"
+#include "gnc-session.h"
 #include "gnc-split-reg.h"
 #include "gnc-tree-model-account.h"
 #include "gnc-tree-view-account.h"
@@ -59,6 +60,7 @@
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
+#define PLUGIN_PAGE_ACCT_TREE_CM_CLASS "plugin-page-acct-tree"
 
 
 static void gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass);
@@ -186,6 +188,7 @@ struct GncPluginPageAccountTreePrivate
 	GNCOptionWin * editor_dialog;
 
 	GtkWidget *options_db;
+	gint       component_id;
 };
 
 static GObjectClass *parent_class = NULL;
@@ -447,6 +450,17 @@ gnc_plugin_page_account_tree_plugin_page_init (GncPluginPageIface *iface)
 	LEAVE(" ");
 }
 
+static void
+gnc_plugin_page_account_tree_close_cb (gpointer user_data)
+{
+  GncPluginPageAccountTree *page;
+  GncMainWindow *window;
+
+  page = GNC_PLUGIN_PAGE_ACCOUNT_TREE(user_data);
+  window = GNC_MAIN_WINDOW(g_object_get_data (G_OBJECT (page->priv->widget), "window"));
+  gnc_main_window_close_page (window, GNC_PLUGIN_PAGE(page));
+}
+
 static GtkWidget *
 gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 {
@@ -486,6 +500,14 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 	gtk_widget_show (GTK_WIDGET (tree_view));
 	gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(tree_view));
 
+	page->priv->component_id =
+	  gnc_register_gui_component(PLUGIN_PAGE_ACCT_TREE_CM_CLASS,
+				     NULL,
+				     gnc_plugin_page_account_tree_close_cb,
+				     page);
+	gnc_gui_component_set_session (page->priv->component_id,
+				       gnc_get_current_session());
+
 	LEAVE("widget = %p", page->priv->widget);
 	return page->priv->widget;
 }
@@ -497,9 +519,14 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
 
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
-	if (page->priv->widget == NULL) {
-		LEAVE("no widget");
-		return;
+	if (page->priv->widget) {
+	  g_object_unref(G_OBJECT(page->priv->widget));
+	  page->priv->widget = NULL;
+	}
+
+	if (page->priv->component_id) {
+	  gnc_unregister_gui_component(page->priv->component_id);
+	  page->priv->component_id = 0;
 	}
 
 	LEAVE("widget destroyed");
