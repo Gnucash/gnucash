@@ -398,6 +398,7 @@ ap_close_period (GnomeDruidPage *druidpage,
   const char *btitle, *bnotes;
   Timespec closing_date;
   KvpFrame *book_frame;
+  gboolean really_do_close_books = FALSE;
 
   ENTER("info=%p", info);
 
@@ -405,28 +406,31 @@ ap_close_period (GnomeDruidPage *druidpage,
 
   btitle = gtk_entry_get_text (info->book_title);
   bnotes = xxxgtk_text_get_text (info->book_notes);
-printf ("duuude tit=%s no=%s\n", btitle, bnotes);
+  PINFO("book title=%s\n", btitle);
 
   timespecFromTime_t (&closing_date,
           gnc_timet_get_day_end_gdate (&info->closing_date));
 
 #define REALLY_DO_CLOSE_BOOKS
 #ifdef REALLY_DO_CLOSE_BOOKS
-  /* Close the books ! */
-  gnc_suspend_gui_refresh ();
-
-/* XXX we need to split the pricedb to, 
- * and lots too
- * and handle file storage which is not currently handled.
- */
-  closed_book = gnc_book_close_period (current_book, closing_date, NULL, btitle);
-
-  book_frame = qof_book_get_slots(closed_book);
-  kvp_frame_set_str (book_frame, "/book/title", btitle);
-  kvp_frame_set_str (book_frame, "/book/notes", bnotes);
-
-  gnc_resume_gui_refresh ();
+  really_do_close_books = TRUE;
 #endif /* REALLY_DO_CLOSE_BOOKS */
+
+  if (really_do_close_books)
+  {
+    /* Close the books ! */
+    gnc_suspend_gui_refresh ();
+
+    closed_book = gnc_book_close_period (current_book, closing_date, NULL, btitle);
+
+    book_frame = qof_book_get_slots(closed_book);
+    kvp_frame_set_str (book_frame, "/book/title", btitle);
+    kvp_frame_set_str (book_frame, "/book/notes", bnotes);
+
+    qof_session_add_book (qof_session_get_current_session(), closed_book);
+
+    gnc_resume_gui_refresh ();
+  }
 
   /* Report the status back to the user. */
   info->close_status = 0;  /* XXX fixme */
