@@ -8,74 +8,122 @@
 #include "table.h"
 #include "textcell.h"
 
+#define DATE_CELL_C  0
+#define DATE_CELL_R  0
+
 #define DESC_CELL_C  2
 #define DESC_CELL_R  0
+
 #define MEMO_CELL_C  2
 #define MEMO_CELL_R  1
 
-Table *
-CreateReg(Widget parent ) {
+#define CRED_CELL_C  3
+#define CRED_CELL_R  0
 
+#define DEBT_CELL_C  4
+#define DEBT_CELL_R  0
+
+typedef struct _BasicRegister {
+   Table       * table;
+   CellBlock   * cursor;
+   CellBlock   * header;
+   SingleCell  * dateCell;
+   SingleCell  * descCell;
+   SingleCell  * memoCell;
+   SingleCell  * creditCell;
+   SingleCell  * debitCell;
+
+} BasicRegister;
+
+BasicRegister * xaccMallocBasicRegister (void);
+void            xaccInitBasicRegister (BasicRegister *);
+
+/* ================================= */
+
+BasicRegister * xaccMallocBasicRegister (void)
+{
+   BasicRegister * reg;
+   reg = (BasicRegister *) malloc (sizeof (BasicRegister));
+   xaccInitBasicRegister (reg);
+   return reg;
+}
+
+/* ================================= */
+
+void xaccInitBasicRegister (BasicRegister *reg)
+{
    Table * table;
    CellBlock *curs, *header;
    SingleCell *cell;
 
+   /* define the header */
+
    header = xaccMallocCellBlock (1, 10);
+   reg->header = header;
 
    cell = xaccMallocDateCell();
    cell->width = 9;
-   xaccAddCell (header, cell, 0, 0);
+   xaccAddCell (header, cell, 0, DATE_CELL_C);
+   xaccSetSingleCellValue (cell, "Date");
    
-   cell = xaccMallocPriceCell();
-   cell->width = 9;
-   xaccAddCell (header, cell, 0, 3);
-   
-   cell = xaccMallocPriceCell();
-   cell->width = 9;
-   xaccAddCell (header, cell, 0, 4);
-
    cell = xaccMallocTextCell();
+   cell->width = 19;
+   xaccAddCell (header, cell, 0, DESC_CELL_C);
+   xaccSetSingleCellValue (cell, "Description");
+
+   cell = xaccMallocPriceCell();
    cell->width = 9;
-   xaccAddCell (header, cell, DESC_CELL_R, DESC_CELL_C);
+   xaccAddCell (header, cell, 0, CRED_CELL_C);
+   xaccSetSingleCellValue (cell, "Credit");
+   
+   cell = xaccMallocPriceCell();
+   cell->width = 9;
+   xaccAddCell (header, cell, 0, DEBT_CELL_C);
+   xaccSetSingleCellValue (cell, "Debit");
+
    
    /* --------------------------- */
    curs = xaccMallocCellBlock (2, 10);
+   reg->cursor = curs;
    
    cell = xaccMallocDateCell();
    cell->width = 9;
-   xaccAddCell (curs, cell, 0, 0);
+   xaccAddCell (curs, cell, DATE_CELL_R, DATE_CELL_C);
+   reg->dateCell = cell;
    
    cell = xaccMallocTextCell();
    cell->width = 9;
    xaccAddCell (curs, cell, DESC_CELL_R, DESC_CELL_C);
+   reg->descCell = cell;
    
    cell = xaccMallocTextCell();
    cell->width = 9;
    xaccAddCell (curs, cell, MEMO_CELL_R, MEMO_CELL_C);
+   reg->memoCell = cell;
 
    cell = xaccMallocPriceCell();
    cell->width = 9;
-   xaccAddCell (curs, cell, 0, 3);
+   xaccAddCell (curs, cell, CRED_CELL_R, CRED_CELL_C);
+   reg->creditCell = cell;
    
    cell = xaccMallocPriceCell();
    cell->width = 9;
-   xaccAddCell (curs, cell, 0, 4);
+   xaccAddCell (curs, cell, DEBT_CELL_R, DEBT_CELL_C);
+   reg->debitCell = cell;
    
-   
-
    table =  xaccMallocTable (0, 0);
    table -> header = header;
    xaccSetCursor (table, curs);
    xaccInitTable (table, 15, 1);
-
-   xaccCreateTable (table, parent, "yodudue");
-   return table;
+   reg->table = table;
 }
+
+/* ================================= */
 
 main (int argc, char *argv[]) {
   Widget toplevel, mainwindow, actionform;
   XtAppContext app;
-  Table * table;
+  BasicRegister *reg;
 
 
   toplevel = XtVaAppInitialize( &app, "Xacc", NULL, 0,
@@ -92,11 +140,14 @@ main (int argc, char *argv[]) {
                                  xmFormWidgetClass, mainwindow,
                                  NULL );
 
-  table = CreateReg (actionform);
+  reg = xaccMallocBasicRegister ();
+
+  xaccCreateTable (reg->table, actionform, "yodudue");
+
   XtManageChild (actionform);
 
   XtRealizeWidget(toplevel);
-  XtRealizeWidget (table->reg);
+  XtRealizeWidget (reg->table->reg);
 
   XtAppMainLoop(app);
 
