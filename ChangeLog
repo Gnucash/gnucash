@@ -1,3 +1,8 @@
+2001-08-25  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/gnc-html-guppi.c: activate the [xy]_axis_label
+	options.
+
 2001-08-22  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/query-user.c
