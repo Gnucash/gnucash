@@ -319,7 +319,7 @@ gnc_employee_new_window (GNCBook *bookp,
   GladeXML *xml;
   GtkWidget *hbox, *edit;
   GnomeDialog *ewd;
-  gnc_commodity *commodity;
+  gnc_commodity *currency;
   GNCPrintAmountInfo print_info;
 
   /*
@@ -386,12 +386,12 @@ gnc_employee_new_window (GNCBook *bookp,
 
   /* RATE: Monetary Value */
   edit = gnc_amount_edit_new();
-  commodity = gnc_default_currency ();
-  print_info = gnc_commodity_print_info (commodity, FALSE);
+  currency = gnc_default_currency ();
+  print_info = gnc_commodity_print_info (currency, FALSE);
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit),
-                                gnc_commodity_get_fraction (commodity));
+                                gnc_commodity_get_fraction (currency));
   ew->rate_amount = edit;
   gtk_widget_show (edit);
 
@@ -472,7 +472,7 @@ gnc_employee_new_window (GNCBook *bookp,
 				  ew);
   } else {
     employee = gncEmployeeCreate (bookp);
-    gncEmployeeSetCommodity (employee, commodity);
+    gncEmployeeSetCurrency (employee, currency);
     ew->employee_guid = *gncEmployeeGetGUID (employee);
 
     ew->dialog_type = NEW_EMPLOYEE;

@@ -33,7 +33,7 @@ struct _gncCustomer {
   GncBillTerm *	terms;
   GncAddress *	addr;
   GncAddress *	shipaddr;
-  gnc_commodity	* commodity;
+  gnc_commodity	* currency;
   gnc_numeric	discount;
   gnc_numeric	credit;
   GncTaxIncluded taxincluded;
@@ -229,12 +229,12 @@ void gncCustomerSetCredit (GncCustomer *cust, gnc_numeric credit)
   gncCustomerCommitEdit (cust);
 }
 
-void gncCustomerSetCommodity (GncCustomer *cust, gnc_commodity *com)
+void gncCustomerSetCurrency (GncCustomer *cust, gnc_commodity *currency)
 {
-  if (!cust || !com) return;
-  if (cust->commodity && gnc_commodity_equal (cust->commodity, com)) return;
+  if (!cust || !currency) return;
+  if (cust->currency && gnc_commodity_equal (cust->currency, currency)) return;
   gncCustomerBeginEdit (cust);
-  cust->commodity = com;
+  cust->currency = currency;
   mark_customer (cust);
   gncCustomerCommitEdit (cust);
 }
@@ -374,10 +374,10 @@ GncTaxIncluded gncCustomerGetTaxIncluded (GncCustomer *cust)
   return cust->taxincluded;
 }
 
-gnc_commodity * gncCustomerGetCommodity (GncCustomer *cust)
+gnc_commodity * gncCustomerGetCurrency (GncCustomer *cust)
 {
   if (!cust) return NULL;
-  return cust->commodity;
+  return cust->currency;
 }
 
 gboolean gncCustomerGetActive (GncCustomer *cust)

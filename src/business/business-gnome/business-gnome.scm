@@ -316,7 +316,7 @@
 			    ;; Create Customer
 			    (gnc:customer-set-id customer "000001")
 			    (gnc:customer-set-name customer "Test Customer")
-			    (gnc:customer-set-commodity customer
+			    (gnc:customer-set-currency customer
 							(gnc:default-currency))
 			    (gnc:address-set-name address "Contact Person")
 			    (gnc:address-set-addr1 address
@@ -332,7 +332,7 @@
 			    (gnc:invoice-set-owner invoice owner)
 			    (gnc:invoice-set-date-opened
 			     invoice (cons (current-time) 0))
-			    (gnc:invoice-set-common-commodity
+			    (gnc:invoice-set-currency
 			     invoice (gnc:default-currency))
 
 			    ;; Create the Job

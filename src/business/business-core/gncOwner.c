@@ -104,9 +104,9 @@ gnc_commodity * gncOwnerGetCurrency (GncOwner *owner)
   default:
     return NULL;
   case GNC_OWNER_CUSTOMER:
-    return gncCustomerGetCommodity (owner->owner.customer);
+    return gncCustomerGetCurrency (owner->owner.customer);
   case GNC_OWNER_VENDOR:
-    return gncVendorGetCommodity (owner->owner.vendor);
+    return gncVendorGetCurrency (owner->owner.vendor);
   case GNC_OWNER_JOB:
     return gncOwnerGetCurrency (gncJobGetOwner (owner->owner.job));
   }

@@ -66,7 +66,7 @@ const gchar *vendor_version_string = "2.0.0";
 #define vendor_terms_string "vendor:terms"
 #define vendor_taxincluded_string "vendor:taxincluded"
 #define vendor_active_string "vendor:active"
-#define vendor_commodity_string "vendor:commodity"
+#define vendor_currency_string "vendor:currency"
 #define vendor_taxtable_string "vendor:taxtable"
 #define vendor_taxtableoverride_string "vendor:use-tt"
 
@@ -115,8 +115,8 @@ vendor_dom_tree_create (GncVendor *vendor)
 
     xmlAddChild
       (ret,
-       commodity_ref_to_dom_tree(vendor_commodity_string,
-				 gncVendorGetCommodity (vendor)));
+       commodity_ref_to_dom_tree(vendor_currency_string,
+				 gncVendorGetCurrency (vendor)));
 
     xmlAddChild (ret, int_to_dom_tree (vendor_taxtableoverride_string,
 				       gncVendorGetTaxTableOverride (vendor)));
@@ -271,7 +271,7 @@ vendor_active_handler (xmlNodePtr node, gpointer vendor_pdata)
 }
 
 static gboolean
-vendor_commodity_handler (xmlNodePtr node, gpointer vendor_pdata)
+vendor_currency_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
     struct vendor_pdata *pdata = vendor_pdata;
     gnc_commodity *com;
@@ -279,7 +279,7 @@ vendor_commodity_handler (xmlNodePtr node, gpointer vendor_pdata)
     com = dom_tree_to_commodity_ref(node, pdata->book);
     g_return_val_if_fail (com, FALSE);
 
-    gncVendorSetCommodity (pdata->vendor, com);
+    gncVendorSetCurrency (pdata->vendor, com);
 
     return TRUE;
 }
@@ -323,7 +323,8 @@ static struct dom_tree_handler vendor_handlers_v2[] = {
     { vendor_terms_string, vendor_terms_handler, 0, 0 },
     { vendor_taxincluded_string, vendor_taxincluded_handler, 1, 0 },
     { vendor_active_string, vendor_active_handler, 1, 0 },
-    { vendor_commodity_string, vendor_commodity_handler, 1, 0 },
+    { vendor_currency_string, vendor_currency_handler, 0, 0 }, /* XXX */
+    { "vendor:commodity", vendor_currency_handler, 0, 0 }, /* XXX */
     { vendor_taxtable_string, vendor_taxtable_handler, 0, 0 },
     { vendor_taxtableoverride_string, vendor_taxtableoverride_handler, 0, 0 },
     { NULL, 0, 0, 0 }

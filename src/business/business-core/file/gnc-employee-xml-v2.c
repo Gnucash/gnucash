@@ -65,7 +65,7 @@ const gchar *employee_version_string = "2.0.0";
 #define employee_active_string "employee:active"
 #define employee_workday_string "employee:workday"
 #define employee_rate_string "employee:rate"
-#define employee_commodity_string "employee:commodity"
+#define employee_currency_string "employee:currency"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -110,8 +110,8 @@ employee_dom_tree_create (GncEmployee *employee)
 
     xmlAddChild
       (ret,
-       commodity_ref_to_dom_tree(employee_commodity_string,
-				 gncEmployeeGetCommodity (employee)));
+       commodity_ref_to_dom_tree(employee_currency_string,
+				 gncEmployeeGetCurrency (employee)));
     return ret;
 }
 
@@ -245,7 +245,7 @@ employee_rate_handler (xmlNodePtr node, gpointer employee_pdata)
 }
 
 static gboolean
-employee_commodity_handler (xmlNodePtr node, gpointer employee_pdata)
+employee_currency_handler (xmlNodePtr node, gpointer employee_pdata)
 {
     struct employee_pdata *pdata = employee_pdata;
     gnc_commodity *com;
@@ -253,7 +253,7 @@ employee_commodity_handler (xmlNodePtr node, gpointer employee_pdata)
     com = dom_tree_to_commodity_ref(node, pdata->book);
     g_return_val_if_fail (com, FALSE);
 
-    gncEmployeeSetCommodity (pdata->employee, com);
+    gncEmployeeSetCurrency (pdata->employee, com);
 
     return TRUE;
 }
@@ -268,7 +268,8 @@ static struct dom_tree_handler employee_handlers_v2[] = {
     { employee_active_string, employee_active_handler, 1, 0 },
     { employee_workday_string, employee_workday_handler, 1, 0 },
     { employee_rate_string, employee_rate_handler, 1, 0 },
-    { employee_commodity_string, employee_commodity_handler, 1, 0 },
+    { employee_currency_string, employee_currency_handler, 0, 0 }, /* XXX */
+    { "employee:commodity", employee_currency_handler, 0, 0 }, /* XXX */
     { NULL, 0, 0, 0 }
 };
 

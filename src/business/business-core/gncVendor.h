@@ -29,7 +29,7 @@ void gncVendorSetName (GncVendor *vendor, const char *name);
 void gncVendorSetNotes (GncVendor *vendor, const char *notes);
 void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms);
 void gncVendorSetTaxIncluded (GncVendor *vendor, GncTaxIncluded taxincl);
-void gncVendorSetCommodity (GncVendor *vendor, gnc_commodity *com);
+void gncVendorSetCurrency (GncVendor *vendor, gnc_commodity *currency);
 void gncVendorSetActive (GncVendor *vendor, gboolean active);
 
 void gncVendorSetTaxTableOverride (GncVendor *vendor, gboolean override);
@@ -51,7 +51,7 @@ GncAddress * gncVendorGetAddr (GncVendor *vendor);
 const char * gncVendorGetNotes (GncVendor *vendor);
 GncBillTerm * gncVendorGetTerms (GncVendor *vendor);
 GncTaxIncluded gncVendorGetTaxIncluded (GncVendor *vendor);
-gnc_commodity * gncVendorGetCommodity (GncVendor *vendor);
+gnc_commodity * gncVendorGetCurrency (GncVendor *vendor);
 gboolean gncVendorGetActive (GncVendor *vendor);
 
 gboolean gncVendorGetTaxTableOverride (GncVendor *vendor);

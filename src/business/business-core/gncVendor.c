@@ -31,7 +31,7 @@ struct _gncVendor {
   char *	notes;
   GncBillTerm *	terms;
   GncAddress *	addr;
-  gnc_commodity * commodity;
+  gnc_commodity * currency;
   GncTaxIncluded taxincluded;
   gboolean	active;
   GList *	jobs;
@@ -190,14 +190,14 @@ void gncVendorSetTaxIncluded (GncVendor *vendor, GncTaxIncluded taxincl)
   gncVendorCommitEdit (vendor);
 }
 
-void gncVendorSetCommodity (GncVendor *vendor, gnc_commodity *com)
+void gncVendorSetCurrency (GncVendor *vendor, gnc_commodity *currency)
 {
-  if (!vendor || !com) return;
-  if (vendor->commodity &&
-      gnc_commodity_equal (vendor->commodity, com))
+  if (!vendor || !currency) return;
+  if (vendor->currency &&
+      gnc_commodity_equal (vendor->currency, currency))
     return;
   gncVendorBeginEdit (vendor);
-  vendor->commodity = com;
+  vendor->currency = currency;
   mark_vendor (vendor);
   gncVendorCommitEdit (vendor);
 }
@@ -286,10 +286,10 @@ GncTaxIncluded gncVendorGetTaxIncluded (GncVendor *vendor)
   return vendor->taxincluded;
 }
 
-gnc_commodity * gncVendorGetCommodity (GncVendor *vendor)
+gnc_commodity * gncVendorGetCurrency (GncVendor *vendor)
 {
   if (!vendor) return NULL;
-  return vendor->commodity;
+  return vendor->currency;
 }
 
 gboolean gncVendorGetActive (GncVendor *vendor)

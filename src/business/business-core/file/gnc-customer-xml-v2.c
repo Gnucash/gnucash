@@ -69,7 +69,7 @@ const gchar *customer_version_string = "2.0.0";
 #define cust_active_string "cust:active"
 #define cust_discount_string "cust:discount"
 #define cust_credit_string "cust:credit"
-#define cust_commodity_string "cust:commodity"
+#define cust_currency_string "cust:currency"
 #define cust_taxtable_string "cust:taxtable"
 #define cust_taxtableoverride_string "cust:use-tt"
 
@@ -128,8 +128,8 @@ customer_dom_tree_create (GncCustomer *cust)
 
     xmlAddChild
       (ret,
-       commodity_ref_to_dom_tree(cust_commodity_string,
-				 gncCustomerGetCommodity (cust)));
+       commodity_ref_to_dom_tree(cust_currency_string,
+				 gncCustomerGetCurrency (cust)));
 
     xmlAddChild (ret, int_to_dom_tree (cust_taxtableoverride_string,
 				       gncCustomerGetTaxTableOverride (cust)));
@@ -324,7 +324,7 @@ customer_credit_handler (xmlNodePtr node, gpointer cust_pdata)
 }
 
 static gboolean
-customer_commodity_handler (xmlNodePtr node, gpointer customer_pdata)
+customer_currency_handler (xmlNodePtr node, gpointer customer_pdata)
 {
     struct customer_pdata *pdata = customer_pdata;
     gnc_commodity *com;
@@ -332,7 +332,7 @@ customer_commodity_handler (xmlNodePtr node, gpointer customer_pdata)
     com = dom_tree_to_commodity_ref(node, pdata->book);
     g_return_val_if_fail (com, FALSE);
 
-    gncCustomerSetCommodity (pdata->customer, com);
+    gncCustomerSetCurrency (pdata->customer, com);
 
     return TRUE;
 }
@@ -379,7 +379,8 @@ static struct dom_tree_handler customer_handlers_v2[] = {
     { cust_active_string, customer_active_handler, 1, 0 },
     { cust_discount_string, customer_discount_handler, 1, 0 },
     { cust_credit_string, customer_credit_handler, 1, 0 },
-    { cust_commodity_string, customer_commodity_handler, 1, 0 },
+    { cust_currency_string, customer_currency_handler, 0, 0 }, /* XXX */
+    { "cust:commodity", customer_currency_handler, 0, 0 }, /* XXX */
     { cust_taxtable_string, customer_taxtable_handler, 0, 0 },
     { cust_taxtableoverride_string, customer_taxtableoverride_handler, 0, 0 },
     { NULL, 0, 0, 0 }

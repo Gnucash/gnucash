@@ -34,7 +34,7 @@ void gncCustomerSetTaxIncluded (GncCustomer *customer, GncTaxIncluded taxincl);
 void gncCustomerSetActive (GncCustomer *customer, gboolean active);
 void gncCustomerSetDiscount (GncCustomer *customer, gnc_numeric discount);
 void gncCustomerSetCredit (GncCustomer *customer, gnc_numeric credit);
-void gncCustomerSetCommodity (GncCustomer *customer, gnc_commodity *com);
+void gncCustomerSetCurrency (GncCustomer *customer, gnc_commodity *currency);
 
 void gncCustomerSetTaxTableOverride (GncCustomer *customer, gboolean override);
 void gncCustomerSetTaxTable (GncCustomer *customer, GncTaxTable *table);
@@ -59,7 +59,7 @@ GncTaxIncluded gncCustomerGetTaxIncluded (GncCustomer *customer);
 gboolean gncCustomerGetActive (GncCustomer *customer);
 gnc_numeric gncCustomerGetDiscount (GncCustomer *customer);
 gnc_numeric gncCustomerGetCredit (GncCustomer *customer);
-gnc_commodity * gncCustomerGetCommodity (GncCustomer *customer);
+gnc_commodity * gncCustomerGetCurrency (GncCustomer *customer);
 
 gboolean gncCustomerGetTaxTableOverride (GncCustomer *customer);
 GncTaxTable* gncCustomerGetTaxTable (GncCustomer *customer);

@@ -384,7 +384,7 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
   GladeXML *xml;
   GtkWidget *hbox, *edit;
   GnomeDialog *cwd;
-  gnc_commodity *commodity;
+  gnc_commodity *currency;
   GNCPrintAmountInfo print_info;
   
   /*
@@ -466,12 +466,12 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
 
   /* CREDIT: Monetary Value */
   edit = gnc_amount_edit_new();
-  commodity = gnc_default_currency ();
-  print_info = gnc_commodity_print_info (commodity, FALSE);
+  currency = gnc_default_currency ();
+  print_info = gnc_commodity_print_info (currency, FALSE);
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit),
-                                gnc_commodity_get_fraction (commodity));
+                                gnc_commodity_get_fraction (currency));
   cw->credit_amount = edit;
   gtk_widget_show (edit);
 
@@ -581,7 +581,7 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
 
   } else {
     cust = gncCustomerCreate (bookp);
-    gncCustomerSetCommodity (cust, commodity);
+    gncCustomerSetCurrency (cust, currency);
     cw->customer_guid = *gncCustomerGetGUID (cust);
 
     cw->dialog_type = NEW_CUSTOMER;

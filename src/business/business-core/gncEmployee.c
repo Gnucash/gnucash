@@ -32,7 +32,7 @@ struct _gncEmployee {
   char *	language;
   char *	acl;
   GncAddress *	addr;
-  gnc_commodity * commodity;
+  gnc_commodity * currency;
   gnc_numeric	workday;
   gnc_numeric	rate;
   gboolean	active;
@@ -193,14 +193,14 @@ void gncEmployeeSetRate (GncEmployee *employee, gnc_numeric rate)
   gncEmployeeCommitEdit (employee);
 }
 
-void gncEmployeeSetCommodity (GncEmployee *employee, gnc_commodity *com)
+void gncEmployeeSetCurrency (GncEmployee *employee, gnc_commodity *currency)
 {
-  if (!employee || !com) return;
-  if (employee->commodity && 
-      gnc_commodity_equal (employee->commodity, com))
+  if (!employee || !currency) return;
+  if (employee->currency && 
+      gnc_commodity_equal (employee->currency, currency))
     return;
   gncEmployeeBeginEdit (employee);
-  employee->commodity = com;
+  employee->currency = currency;
   mark_employee (employee);
   gncEmployeeCommitEdit (employee);
 }
@@ -271,10 +271,10 @@ gnc_numeric gncEmployeeGetRate (GncEmployee *employee)
   return employee->rate;
 }
 
-gnc_commodity * gncEmployeeGetCommodity (GncEmployee *employee)
+gnc_commodity * gncEmployeeGetCurrency (GncEmployee *employee)
 {
   if (!employee) return NULL;
-  return employee->commodity;
+  return employee->currency;
 }
 
 gboolean gncEmployeeGetActive (GncEmployee *employee)

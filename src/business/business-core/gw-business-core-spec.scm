@@ -275,11 +275,11 @@
 
   (gw:wrap-function
    ws
-   'gnc:customer-set-commodity
+   'gnc:customer-set-currency
    '<gw:void>
-   "gncCustomerSetCommodity"
-   '((<gnc:GncCustomer*> customer) (<gnc:commodity*> commodity))
-   "Set the Customer Commodity")
+   "gncCustomerSetCurrency"
+   '((<gnc:GncCustomer*> customer) (<gnc:commodity*> currency))
+   "Set the Customer Currency")
 
   ; Get Functions
 
@@ -341,11 +341,11 @@
 
   (gw:wrap-function
    ws
-   'gnc:customer-get-commodity
+   'gnc:customer-get-currency
    '<gnc:commodity*>
-   "gncCustomerGetCommodity"
+   "gncCustomerGetCurrency"
    '((<gnc:GncCustomer*> customer))
-   "Get the Customer Commodity")
+   "Get the Customer Currency")
 
   ;;
   ;; gncEmployee.h
@@ -574,7 +574,7 @@
    'gnc:invoice-set-currency
    '<gw:void>
    "gncInvoiceSetCurrency"
-   '((<gnc:GncInvoice*> invoice) (<gnc:commodity*> commodity))
+   '((<gnc:GncInvoice*> invoice) (<gnc:commodity*> currency))
    "Set the Invoice Currency")
 
   ; Get Functions

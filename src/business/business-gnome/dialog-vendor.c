@@ -10,7 +10,6 @@
 
 #include "dialog-utils.h"
 #include "global-options.h"
-#include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
@@ -446,7 +445,7 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
 
   } else {
     vendor = gncVendorCreate (bookp);
-    gncVendorSetCommodity (vendor, gnc_default_currency ());
+    gncVendorSetCurrency (vendor, gnc_default_currency ());
     vw->vendor_guid = *gncVendorGetGUID (vendor);
 
     vw->dialog_type = NEW_VENDOR;

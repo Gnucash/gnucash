@@ -24,6 +24,22 @@
 	  for printing the invoice.
 	PARTITAL fix for #101001
 
+	* .../business-core/gncCustomer.[ch]:
+	* .../business-core/gncVendor.[ch]:
+	* .../business-core/gncEmployee.[ch]:
+	  Rename ...Commodity() to ...Currency()
+	* .../business-core/gw-business-core-spec.scm: fix function wrappings
+	* .../business-core/file/gnc-customer-xml-v2.c:
+	* .../business-core/file/gnc-vendor-xml-v2.c:
+	* .../business-core/file/gnc-employee-xml-v2.c:
+	  Use new function names.
+	* .../business-gnome/business-gnome.scm:
+	* .../business-gnome/dialog-customer.c:
+	* .../business-gnome/dialog-vendor.c:
+	* .../business-gnome/dialog-employee.c:
+	  Use new ...Currency() functions
+	More prep to fix #101001
+	
 2003-01-12  David Hampton  <hampton@employees.org>
 
 	* src/register/register-gnome/gnucash-sheet.c
