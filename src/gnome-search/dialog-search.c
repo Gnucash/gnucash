@@ -599,6 +599,9 @@ option_activate (GtkMenuItem *item, struct _crit_data *data)
   /* Make sure it's visible */
   gtk_widget_show_all (data->container);
 
+  /* Make sure we widen up if necessary */
+  gtk_widget_queue_resize (GTK_WIDGET (data->dialog));
+
   /* And grab focus */
   gnc_search_core_type_grab_focus (newelem);
   gnc_search_core_type_editable_enters (newelem, data->dialog);

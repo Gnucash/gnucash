@@ -271,19 +271,35 @@
 	  </widget>
 
 	  <widget>
-	    <class>GtkTable</class>
-	    <name>criteria_table</name>
-	    <border_width>3</border_width>
-	    <rows>1</rows>
-	    <columns>2</columns>
-	    <homogeneous>False</homogeneous>
-	    <row_spacing>0</row_spacing>
-	    <column_spacing>0</column_spacing>
+	    <class>GtkScrolledWindow</class>
+	    <name>scrolledwindow1</name>
+	    <height>100</height>
+	    <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	    <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
 	    <child>
 	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
+	      <expand>False</expand>
+	      <fill>False</fill>
 	    </child>
+
+	    <widget>
+	      <class>GtkViewport</class>
+	      <name>viewport1</name>
+	      <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	      <widget>
+		<class>GtkTable</class>
+		<name>criteria_table</name>
+		<border_width>3</border_width>
+		<rows>1</rows>
+		<columns>2</columns>
+		<homogeneous>False</homogeneous>
+		<row_spacing>0</row_spacing>
+		<column_spacing>0</column_spacing>
+	      </widget>
+	    </widget>
 	  </widget>
 	</widget>
       </widget>
