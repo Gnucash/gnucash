@@ -182,7 +182,7 @@ gnc_copy_split_onto_split(Split *from, Split *to, gboolean use_cut_semantics)
   if (split_scm == SCM_UNDEFINED)
     return;
 
-  gnc_copy_split_scm_onto_split(split_scm, to);
+  gnc_copy_split_scm_onto_split(split_scm, to, gnc_get_current_session ());
 }
 
 /* Uses the scheme transaction copying routines */
@@ -807,7 +807,8 @@ gnc_split_register_paste_current (SplitRegister *reg)
       xaccTransAppendSplit(trans, split);
     }
 
-    gnc_copy_split_scm_onto_split(copied_item, split);
+    gnc_copy_split_scm_onto_split(copied_item, split,
+                                  gnc_get_current_session ());
     xaccTransCommitEdit(trans);
   }
   else

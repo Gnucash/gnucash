@@ -177,7 +177,7 @@
   (gnc:backtrace-if-exception 
    (lambda ()
      (let* ((old-group (gnc:get-current-group))
-            (new-group (gnc:malloc-account-group))
+            (new-group (gnc:malloc-account-group (gnc:get-current-session)))
             (gnc-acct-hash (make-hash-table 20))
             (separator (string-ref (gnc:account-separator-char) 0))
             (default-currency 

@@ -38,6 +38,7 @@
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
+#include "gnc-session-p.h"
 #include "kvp_frame.h"
 #include "messages.h"
 
@@ -104,6 +105,8 @@ xaccInitAccount (Account * acc, GNCSession *session)
   acc->sort_dirty = FALSE;
   acc->core_dirty = FALSE;
   acc->do_free = FALSE;
+
+  acc->entity_table = gnc_session_get_entity_table (session);
 
   xaccGUIDNew(&acc->guid);
   xaccStoreEntity(acc, &acc->guid, GNC_ID_ACCOUNT);
@@ -537,16 +540,28 @@ xaccAccountSetGUID (Account *account, const GUID *guid)
 \********************************************************************/
 
 Account *
-xaccAccountLookup (const GUID *guid)
+xaccAccountLookup (const GUID *guid, GNCSession *session)
 {
   if (!guid) return NULL;
+  g_return_val_if_fail (session, NULL);
   return xaccLookupEntity (guid, GNC_ID_ACCOUNT);
 }
 
 Account *
-xaccAccountLookupDirect (GUID guid)
+xaccAccountLookupDirect (GUID guid, GNCSession *session)
 {
+  g_return_val_if_fail (session, NULL);
   return xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
+}
+
+Account *
+xaccAccountLookupEntityTable (const GUID *guid,
+                              GNCEntityTable *entity_table)
+{
+  if (!guid) return NULL;
+  /* FIXME: uncomment when entity tables are in sessions */
+  /* g_return_val_if_fail (entity_table, NULL); */
+  return xaccLookupEntity (guid, GNC_ID_ACCOUNT);
 }
 
 /********************************************************************\

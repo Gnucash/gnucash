@@ -50,7 +50,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-io:acct-table-make-gnc-group acct-table qif-file commodity)
-  (let ((group (gnc:malloc-account-group)))
+  (let ((group (gnc:malloc-account-group (gnc:get-current-session))))
     ;; poke through the qif-file accounts to see if any of them
     ;; show up in the data 
     (let ((qif-acct-table (qif-io:acct-table-accounts acct-table)))

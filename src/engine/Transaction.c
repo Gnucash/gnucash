@@ -114,6 +114,8 @@ xaccInitSplit(Split * split, GNCEntityTable *entity_table)
   split->kvp_data = kvp_frame_new();
   split->idata = 0;
 
+  split->entity_table = entity_table;
+
   xaccGUIDNew(&split->guid);
   xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
 }
@@ -293,9 +295,12 @@ xaccSplitGetAccount(Split *s)
 {
     if(!s) return NULL;
     
-    if(!s->acc)
+    if (!s->acc)
     {
-        xaccSplitSetAccount_Internal(s, xaccAccountLookup(&s->acc_guid));
+        Account *account;
+
+        account = xaccAccountLookupEntityTable (&s->acc_guid, s->entity_table);
+        xaccSplitSetAccount_Internal (s, account);
     }
 
     return s->acc;
@@ -649,9 +654,10 @@ xaccInitTransaction (Transaction * trans, GNCSession *session)
   trans->kvp_data = kvp_frame_new();
   trans->idata = 0;
 
+  trans->entity_table = gnc_session_get_entity_table (session);
+
   xaccGUIDNew(&trans->guid);
   xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
-  trans->entity_table = NULL;
 }
 
 /********************************************************************\

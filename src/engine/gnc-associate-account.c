@@ -28,6 +28,8 @@
 
 #include "config.h"
 
+#include "AccountP.h"
+#include "GNCIdP.h"
 #include "gnc-associate-account.h"
 #include "gnc-engine-util.h"
 
@@ -166,7 +168,7 @@ make_kvpd_on_list(GList *account_list)
 }
 
 static GList *
-de_kvp_account_list(kvp_value *kvpd_list)
+de_kvp_account_list(kvp_value *kvpd_list, GNCEntityTable *entity_table)
 { 
   GList *guid_account_list = kvp_value_get_glist(kvpd_list);
   if (guid_account_list)
@@ -175,7 +177,8 @@ de_kvp_account_list(kvp_value *kvpd_list)
     for(; guid_account_list; guid_account_list=g_list_next(guid_account_list))
     {
       g_list_prepend(expense_acc_list,
-                     xaccAccountLookup(guid_account_list->data));
+                     xaccAccountLookupEntityTable(guid_account_list->data,
+                                                  entity_table));
     }
     
     expense_acc_list = g_list_reverse(expense_acc_list);
@@ -304,8 +307,9 @@ gnc_tracking_find_expense_accounts(Account *stock_account,
   expense_acc_frame = get_assoc_acc_frame(account_frame);
   kvpd_on_account_list = kvp_frame_get_slot(account_frame,
 					    expense_to_key[category]);
-  
-  return de_kvp_account_list(kvpd_on_account_list);
+
+  return de_kvp_account_list(kvpd_on_account_list,
+                             stock_account->entity_table);
 }
 
 /*********************************************************************\
@@ -339,7 +343,8 @@ gnc_tracking_find_income_accounts(Account *stock_account,
   kvpd_on_account_list = kvp_frame_get_slot(income_acc_frame,
 					    income_to_key[category]);
   
-  return de_kvp_account_list(kvpd_on_account_list);
+  return de_kvp_account_list(kvpd_on_account_list,
+                             stock_account->entity_table);
 }
 
 /*********************************************************************\
@@ -451,7 +456,8 @@ gnc_tracking_dissociate_account(Account *inc_or_expense_account)
 
 
   inc_or_expense_account_guid = xaccAccountGetGUID(inc_or_expense_account);
-  stock_account = xaccAccountLookup(stock_account_guid);
+  stock_account = xaccAccountLookupEntityTable
+    (stock_account_guid, inc_or_expense_account->entity_table);
 
   stock_account_kvpframe = xaccAccountGetSlots(stock_account);
 

@@ -201,7 +201,7 @@ recn_get_account (RecnWindow *recnData)
   if (!recnData)
     return NULL;
 
-  return xaccAccountLookup (&recnData->account);
+  return xaccAccountLookup (&recnData->account, gnc_get_current_session ());
 }
 
 /********************************************************************\

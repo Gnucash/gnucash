@@ -173,7 +173,7 @@ refresh_details_page (StockSplitInfo *info)
   GNCPrintAmountInfo print_info;
   Account *account;
 
-  account = xaccAccountLookup (&info->account);
+  account = xaccAccountLookup (&info->account, gnc_get_current_session ());
 
   g_return_if_fail (account != NULL);
 
@@ -197,7 +197,7 @@ account_next (GnomeDruidPage *druidpage,
   StockSplitInfo *info = user_data;
   Account *account;
 
-  account = xaccAccountLookup (&info->account);
+  account = xaccAccountLookup (&info->account, gnc_get_current_session ());
 
   g_return_val_if_fail (account != NULL, TRUE);
 
@@ -357,7 +357,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
   Split *split;
   time_t date;
 
-  account = xaccAccountLookup (&info->account);
+  account = xaccAccountLookup (&info->account, gnc_get_current_session ());
   g_return_if_fail (account != NULL);
 
   amount = gnc_amount_edit_get_amount
@@ -498,7 +498,8 @@ static gboolean
 account_currency_filter (Account *account, gpointer user_data)
 {
   StockSplitInfo *info = user_data;
-  Account *split_account = xaccAccountLookup (&info->account);
+  Account *split_account = xaccAccountLookup (&info->account,
+                                              gnc_get_current_session ());
 
   if (!account)
     return FALSE;
@@ -677,7 +678,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   GladeXML *xml;
 
   id_type = xaccGUIDType (&info->account);
-  old_account = xaccAccountLookup (&info->account);
+  old_account = xaccAccountLookup (&info->account, gnc_get_current_session ());
 
   if (fill_account_list (info, old_account) == 0)
   {
@@ -685,7 +686,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     return;
   }
 
-  new_account = xaccAccountLookup (&info->account);
+  new_account = xaccAccountLookup (&info->account, gnc_get_current_session ());
 
   if (id_type == GNC_ID_NULL || old_account == new_account)
     return;

@@ -1155,7 +1155,8 @@ _create_each_transaction_helper( Transaction *t, void *d )
                                 PERR( "Null kvp_val for account" );
                         }
                         acct_guid = kvp_value_get_guid( kvp_val );
-                        acct = xaccAccountLookup( acct_guid );
+                        acct = xaccAccountLookup( acct_guid,
+                                                  gnc_get_current_session ());
                         DEBUG( "Got account with name \"%s\"",
                                 xaccAccountGetName( acct ) );
                         if ( commonCommodity != NULL ) {

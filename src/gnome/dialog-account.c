@@ -130,7 +130,7 @@ aw_get_account (AccountWindow *aw)
   if (!aw)
     return NULL;
 
-  return xaccAccountLookup (&aw->account);
+  return xaccAccountLookup (&aw->account, gnc_get_current_session ());
 }
 
 /* Copy the account values to the GUI widgets */

@@ -991,7 +991,7 @@ description of the nature of a particular account.")
    'gnc:account-lookup
    '<gnc:Account*>
    "xaccAccountLookupDirect"
-   '((<gnc:guid-scm> guid))
+   '((<gnc:guid-scm> guid) (<gnc:Session*> session))
    "Lookup the account with GUID guid.")
 
   (gw:wrap-function
@@ -1164,8 +1164,8 @@ children to this account.")
    'gnc:malloc-account-group
    '<gnc:AccountGroup*>
    "xaccMallocAccountGroup"
-   '()
-   "Create a newaccount group.")
+   '((<gnc:Session*> session))
+   "Create a new account group.")
 
   (gw:wrap-function
    mod

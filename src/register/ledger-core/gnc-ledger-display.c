@@ -89,7 +89,7 @@ gnc_ledger_display_leader (GNCLedgerDisplay *ld)
   if (!ld)
     return NULL;
 
-  return xaccAccountLookup (&ld->leader);
+  return xaccAccountLookup (&ld->leader, gnc_get_current_session ());
 }
 
 GNCLedgerDisplayType

@@ -476,7 +476,7 @@ gnc_load_financials_from_fd(GNCSession *session, int fd)
 
   /* disable logging during load; otherwise its just a mess */
   xaccLogDisable();
-  holder = xaccMallocAccountGroup();
+  holder = xaccMallocAccountGroup(session);
   grp = readGroup (session, fd, NULL, token);
 
   /* the number of unclaimed accounts should be zero if the 
@@ -580,7 +580,7 @@ readGroup (GNCSession *session, int fd, Account *aparent, int token)
   int  numAcc;
   int  err=0;
   int  i;
-  AccountGroup *grp = xaccMallocAccountGroup();
+  AccountGroup *grp = xaccMallocAccountGroup(session);
   
   ENTER (" ");
 

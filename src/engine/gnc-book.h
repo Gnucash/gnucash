@@ -36,6 +36,7 @@
 #ifndef GNC_BOOK_H
 #define GNC_BOOK_H
 
+#include "gnc-engine.h"
 #include "gnc-pricedb.h"
 #include "Backend.h"
 #include "Group.h"
@@ -48,7 +49,7 @@ typedef struct gnc_book_struct GNCBook;
 
 /** PROTOTYPES ******************************************************/
 
-GNCBook * gnc_book_new (void);
+GNCBook * gnc_book_new (GNCSession *session);
 void      gnc_book_destroy (GNCBook *book);
 
 AccountGroup *gnc_book_get_group (GNCBook *book);

@@ -150,8 +150,8 @@ void xaccAccountSetSlots_nc(Account *account, kvp_frame *frame);
  */
 const GUID * xaccAccountGetGUID (Account *account);
 GUID         xaccAccountReturnGUID (Account *account);
-Account    * xaccAccountLookup (const GUID *guid);
-Account    * xaccAccountLookupDirect (GUID guid);
+Account    * xaccAccountLookup (const GUID *guid, GNCSession *session);
+Account    * xaccAccountLookupDirect (GUID guid, GNCSession *session);
 
 /*
  * The xaccAccountInsertSplit() method will insert the indicated

@@ -325,7 +325,8 @@ create_each_transaction( Transaction *t, void *d )
                                 PERR( "Null kvp_val for account\n" );
                         }
                         acct_guid = kvp_value_get_guid( kvp_val );
-                        acct = xaccAccountLookup( acct_guid );
+                        acct = xaccAccountLookup( acct_guid,
+                                                  gnc_get_current_session () );
                         DEBUG( "Got account with name \"%s\"\n",
                                 xaccAccountGetName( acct ) );
                         /* xaccSplitSetAccount( split, acct ); */

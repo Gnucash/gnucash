@@ -305,7 +305,7 @@ gnc_read_example_account(GNCSession *session, const gchar *filename)
 
     gea->session = session;
     gea->filename = g_strdup(filename);
-    gea->group = xaccMallocAccountGroup();
+    gea->group = xaccMallocAccountGroup(session);
 
     top_parser = sixtp_new();
     main_parser = sixtp_new();

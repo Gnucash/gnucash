@@ -225,7 +225,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
         return FALSE;
 
       case GNC_ID_ACCOUNT:
-        account = xaccAccountLookup (&guid);
+        account = xaccAccountLookup (&guid, gnc_get_current_session ());
         reg = regWindowSimple (account);
         break;
 

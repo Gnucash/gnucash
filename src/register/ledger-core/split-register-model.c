@@ -1315,6 +1315,7 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
 
   if (kvpf)
   {
+    Account *account;
     GUID *guid;
 
     guid = kvp_value_get_guid (kvp_frame_get_slot_path
@@ -1323,8 +1324,9 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
                                 "account",
                                 NULL));
 
-    name = xaccAccountGetFullName (xaccAccountLookup (guid),
-                                   gnc_get_account_separator ());
+    account = xaccAccountLookup (guid, gnc_get_current_session ());
+
+    name = xaccAccountGetFullName (account, gnc_get_account_separator ());
   }
   else
     name = NULL;

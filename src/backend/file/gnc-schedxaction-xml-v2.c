@@ -213,68 +213,94 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     return ret;
 }
 
+struct sx_pdata
+{
+  SchedXaction *sx;
+  GNCSession *session;
+};
+
 static
 gboolean
-sx_id_handler( xmlNodePtr node, gpointer sx )
+sx_id_handler( xmlNodePtr node, gpointer sx_pdata )
 {
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
     GUID        *tmp = dom_tree_to_guid( node );
+
     g_return_val_if_fail( tmp, FALSE );
-    xaccSchedXactionSetGUID( (SchedXaction*)sx, *tmp );
+    xaccSchedXactionSetGUID(sx, *tmp);
     g_free( tmp );
+
     return TRUE;
 }
 
 static
 gboolean
-sx_name_handler( xmlNodePtr node, gpointer sx )
+sx_name_handler( xmlNodePtr node, gpointer sx_pdata )
 {
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
     gchar *tmp = dom_tree_to_text( node );
+
     g_return_val_if_fail( tmp, FALSE );
-    xaccSchedXactionSetName( (SchedXaction*)sx, tmp );
+    xaccSchedXactionSetName( sx, tmp );
     g_free( tmp );
+
     return TRUE;
 }
 
 static gboolean
-sx_autoCreate_handler( xmlNodePtr node, gpointer sx )
+sx_autoCreate_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-        gchar *tmp = dom_tree_to_text( node );
-        ((SchedXaction*)sx)->autoCreateOption = (safe_strcmp( tmp, "y" ) == 0 ? TRUE : FALSE );
-        return TRUE;
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+    gchar *tmp = dom_tree_to_text( node );
+
+    sx->autoCreateOption = (safe_strcmp( tmp, "y" ) == 0 ? TRUE : FALSE );
+
+    return TRUE;
 }
 
 static gboolean
-sx_notify_handler( xmlNodePtr node, gpointer sx )
+sx_notify_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-        gchar *tmp = dom_tree_to_text( node );
-        ((SchedXaction*)sx)->autoCreateNotify = (safe_strcmp( tmp, "y" ) == 0 ? TRUE : FALSE );
-        return TRUE;
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+    gchar *tmp = dom_tree_to_text( node );
+
+    sx->autoCreateNotify = (safe_strcmp( tmp, "y" ) == 0 ? TRUE : FALSE );
+
+    return TRUE;
 }
 
 static gboolean
-sx_advCreate_handler( xmlNodePtr node, gpointer sx )
+sx_advCreate_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-        gint64 advCreate;
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+    gint64 advCreate;
 
-        if ( ! dom_tree_to_integer( node, &advCreate ) ) {
-                return FALSE;
-        }
+    if ( ! dom_tree_to_integer( node, &advCreate ) ) {
+      return FALSE;
+    }
 
-        xaccSchedXactionSetAdvanceCreation( (SchedXaction*)sx, advCreate );
-        return TRUE;
+    xaccSchedXactionSetAdvanceCreation( sx, advCreate );
+    return TRUE;
 }
 
 static gboolean
-sx_advRemind_handler( xmlNodePtr node, gpointer sx )
+sx_advRemind_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-        gint64 advRemind;
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+    gint64 advRemind;
 
-        if ( ! dom_tree_to_integer( node, &advRemind ) ) {
-                return FALSE;
-        }
+    if ( ! dom_tree_to_integer( node, &advRemind ) ) {
+      return FALSE;
+    }
 
-        xaccSchedXactionSetAdvanceReminder( (SchedXaction*)sx, advRemind );
-        return TRUE;
+    xaccSchedXactionSetAdvanceReminder( sx, advRemind );
+    return TRUE;
 }
 
 static
@@ -293,96 +319,114 @@ sx_set_date( xmlNodePtr node, SchedXaction *sx,
 
 static
 gboolean
-sx_start_handler( xmlNodePtr node, gpointer sx )
+sx_start_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-    return sx_set_date( node, (SchedXaction*)sx, 
-                        xaccSchedXactionSetStartDate );
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+
+    return sx_set_date( node, sx, xaccSchedXactionSetStartDate );
 }
 
 static
 gboolean
-sx_last_handler( xmlNodePtr node, gpointer sx )
+sx_last_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-    return sx_set_date( node, (SchedXaction*)sx, 
-                        xaccSchedXactionSetLastOccurDate );
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+
+    return sx_set_date( node, sx, xaccSchedXactionSetLastOccurDate );
 }
 
 static
 gboolean
-sx_end_handler( xmlNodePtr node, gpointer sx )
+sx_end_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-    return sx_set_date( node, (SchedXaction*)sx, 
-                        xaccSchedXactionSetEndDate );
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+
+    return sx_set_date( node, sx, xaccSchedXactionSetEndDate );
 }
 
 static
 gboolean
-sx_freqspec_handler( xmlNodePtr node, gpointer sx )
+sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-    xmlNodePtr        mark;
-    FreqSpec        *fs;
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+    xmlNodePtr mark;
+    FreqSpec *fs;
 
     g_return_val_if_fail( node, FALSE );
 
     fs = dom_tree_to_freqSpec( xmlGetLastChild( node ) );
-    xaccSchedXactionSetFreqSpec( (SchedXaction*)sx, fs );
+    xaccSchedXactionSetFreqSpec( sx, fs );
 
     return TRUE;
 }
 
 static
 gboolean
-sx_numOccur_handler( xmlNodePtr node, gpointer sx )
+sx_numOccur_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-    gint64        numOccur;
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+    gint64 numOccur;
 
     if ( ! dom_tree_to_integer( node, &numOccur ) ) {
         return FALSE;
     }
 
-    xaccSchedXactionSetNumOccur( (SchedXaction*)sx, numOccur );
+    xaccSchedXactionSetNumOccur( sx, numOccur );
+
     return TRUE;
 }
 
 
 static 
 gboolean
-sx_templ_acct_handler( xmlNodePtr node, gpointer p)
+sx_templ_acct_handler( xmlNodePtr node, gpointer sx_pdata)
 {
-  SchedXaction *sx = (SchedXaction *) p;
-  GUID *templ_acct_guid 
-    = dom_tree_to_guid(node);
+  struct sx_pdata *pdata = sx_pdata;
+  SchedXaction *sx = pdata->sx;
+  GUID *templ_acct_guid = dom_tree_to_guid(node);
 
-  if( ! templ_acct_guid)
+  if (!templ_acct_guid)
   {
     return FALSE;
   }
 
-  sx->template_acct = xaccAccountLookup(templ_acct_guid);
+  sx->template_acct = xaccAccountLookup(templ_acct_guid, pdata->session);
   g_free(templ_acct_guid);
+
   return TRUE;
 }
 
 			
 static
 gboolean
-sx_remOccur_handler( xmlNodePtr node, gpointer sx )
+sx_remOccur_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-    gint64        remOccur;
+  struct sx_pdata *pdata = sx_pdata;
+  SchedXaction *sx = pdata->sx;
+  gint64        remOccur;
 
-    if ( ! dom_tree_to_integer( node, &remOccur ) ) {
-        return FALSE;
-    }
+  if ( ! dom_tree_to_integer( node, &remOccur ) ) {
+    return FALSE;
+  }
 
-    xaccSchedXactionSetRemOccur( (SchedXaction*)sx, remOccur );
-    return TRUE;
+  xaccSchedXactionSetRemOccur( sx, remOccur );
+
+  return TRUE;
 }
 
 static
 gboolean
-sx_slots_handler( xmlNodePtr node, gpointer sx )
+sx_slots_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-    return dom_tree_to_kvp_frame_given( node, xaccSchedXactionGetSlots (sx) );
+  struct sx_pdata *pdata = sx_pdata;
+  SchedXaction *sx = pdata->sx;
+
+  return dom_tree_to_kvp_frame_given( node, xaccSchedXactionGetSlots (sx) );
 }
 
 struct dom_tree_handler sx_dom_handlers[] = {
@@ -408,11 +452,12 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
                              gpointer parent_data, gpointer global_data,
                              gpointer *result, const gchar *tag)
 {
-    SchedXaction        *sx;
-    gboolean                successful = FALSE;
-    xmlNodePtr                achild;
-    xmlNodePtr                tree = (xmlNodePtr)data_for_children;
-    gxpf_data                *gdata = (gxpf_data*)global_data;
+    SchedXaction *sx;
+    gboolean     successful = FALSE;
+    xmlNodePtr   achild;
+    xmlNodePtr   tree = (xmlNodePtr)data_for_children;
+    gxpf_data    *gdata = (gxpf_data*)global_data;
+    struct sx_pdata sx_pdata;
 
     if ( parent_data ) {
         return TRUE;
@@ -436,7 +481,10 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
             sx->template_acct = NULL;
     }
 
-    successful = dom_tree_generic_parse( tree, sx_dom_handlers, sx );
+    sx_pdata.sx = sx;
+    sx_pdata.session = gdata->sessiondata;
+
+    successful = dom_tree_generic_parse( tree, sx_dom_handlers, &sx_pdata );
 
     if ( successful ) {
             gdata->cb( tag, gdata->parsedata, sx );

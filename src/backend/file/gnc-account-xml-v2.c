@@ -277,7 +277,7 @@ account_parent_handler (xmlNodePtr node, gpointer act_pdata)
     gid = dom_tree_to_guid(node);
     g_return_val_if_fail(gid, FALSE);
 
-    parent = xaccAccountLookup(gid);
+    parent = xaccAccountLookup(gid, pdata->session);
     if (!parent)
     {
       g_free (gid);

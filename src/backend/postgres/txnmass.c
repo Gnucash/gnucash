@@ -176,7 +176,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    /* next, find the account that this split goes into */
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-   acc = xaccAccountLookup (&guid);
+   acc = xaccAccountLookup (&guid, be->session);
    if (!acc)
    {
       PERR ("account not found, will delete this split\n"

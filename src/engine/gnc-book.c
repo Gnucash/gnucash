@@ -63,18 +63,18 @@ static short module = MOD_IO;
 /* ---------------------------------------------------------------------- */
 
 static void
-gnc_book_init (GNCBook *book)
+gnc_book_init (GNCBook *book, GNCSession *session)
 {
   Account *template_acct;
 
   if (!book) return;
 
-  book->topgroup = xaccMallocAccountGroup();
+  book->topgroup = xaccMallocAccountGroup(session);
   book->pricedb = gnc_pricedb_create();
 
   book->sched_xactions = NULL;
   book->sx_notsaved = FALSE;
-  book->template_group = xaccMallocAccountGroup();
+  book->template_group = xaccMallocAccountGroup(session);
 
   book->commodity_table = gnc_engine_commodity_table_new ();
 
@@ -83,10 +83,15 @@ gnc_book_init (GNCBook *book)
 }
 
 GNCBook *
-gnc_book_new (void)
+gnc_book_new (GNCSession *session)
 {
-  GNCBook *book = g_new0(GNCBook, 1);
-  gnc_book_init(book);
+  GNCBook *book;
+
+  g_return_val_if_fail (session, NULL);
+
+  book = g_new0(GNCBook, 1);
+  gnc_book_init(book, session);
+
   return book;
 }
 

@@ -61,7 +61,7 @@ run_test (void)
     exit(get_rv());
   }
 
-  book = gnc_book_new ();
+  book = gnc_book_new (session);
   if (!book)
   {
     failure("book not created");

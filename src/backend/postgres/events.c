@@ -292,7 +292,7 @@ pgendProcessEvents (Backend *bend)
                   xaccGroupMarkSaved (pgendGetTopGroup (be));
                   break;
                case GNC_EVENT_DESTROY: {
-                  Account * acc = xaccAccountLookup (&(ev->guid));
+                  Account * acc = xaccAccountLookup (&(ev->guid), be->session);
                   xaccAccountBeginEdit (acc);
                   xaccAccountDestroy (acc);
                   xaccGroupMarkSaved (pgendGetTopGroup (be));

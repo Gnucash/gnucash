@@ -29,10 +29,11 @@
 
 #include "Account.h"
 #include "GNCId.h"
+#include "gnc-engine.h"
 
 
 /** PROTOTYPES ******************************************************/
-AccountGroup *xaccMallocAccountGroup (void);
+AccountGroup *xaccMallocAccountGroup (GNCSession *session);
 void          xaccFreeAccountGroup (AccountGroup *account_group);
 void          xaccAccountGroupBeginEdit (AccountGroup *grp);
 void 	      xaccAccountGroupCommitEdit (AccountGroup *grp);

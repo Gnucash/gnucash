@@ -52,7 +52,8 @@ gboolean gnc_is_split_scm(SCM scm);
 gboolean gnc_is_trans_scm(SCM scm);
 
 SCM    gnc_copy_split(Split *split, gboolean use_cut_semantics);
-void   gnc_copy_split_scm_onto_split(SCM split_scm, Split *split);
+void   gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
+                                     GNCSession *session);
 
 void   gnc_split_scm_set_account(SCM split_scm, Account *account);
 void   gnc_split_scm_set_memo(SCM split_scm, const char *memo);

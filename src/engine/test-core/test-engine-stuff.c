@@ -430,7 +430,7 @@ get_random_group_depth(GNCSession *session, int depth)
   if (depth == 0)
     return NULL;
 
-  group = xaccMallocAccountGroup ();
+  group = xaccMallocAccountGroup (session);
 
   num_accounts = get_random_int_in_range (1, max_group_accounts);
 
@@ -824,7 +824,7 @@ get_random_book (GNCSession *session)
 {
   GNCBook *book;
 
-  book = gnc_book_new ();
+  book = gnc_book_new (session);
 
   gnc_book_set_group (book, get_random_group (session));
 

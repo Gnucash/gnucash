@@ -78,6 +78,8 @@ struct split_s
 {
   GUID guid;  /* globally unique id */
 
+  GNCEntityTable *entity_table; /* The table where this split is stored. */
+
   GUID acc_guid;             /* the guid of the associated account */
   Account *acc;              /* back-pointer to debited/credited account  */
 

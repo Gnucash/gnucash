@@ -38,6 +38,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"
+#include "gnc-session-p.h"
 
 static short module = MOD_ENGINE;
 
@@ -52,7 +53,7 @@ static short module = MOD_ENGINE;
 \********************************************************************/
 
 static void
-xaccInitializeAccountGroup (AccountGroup *grp)
+xaccInitializeAccountGroup (AccountGroup *grp, GNCEntityTable *entity_table)
 {
   grp->saved       = 1;
 
@@ -61,19 +62,34 @@ xaccInitializeAccountGroup (AccountGroup *grp)
 
   grp->backend     = NULL;
   grp->book        = NULL;
+
+  grp->entity_table = entity_table;
 }
 
 /********************************************************************\
 \********************************************************************/
 
-AccountGroup *
-xaccMallocAccountGroup (void)
+static AccountGroup *
+xaccMallocAccountGroupEntityTable (GNCEntityTable *entity_table)
 {
-  AccountGroup *grp = g_new (AccountGroup, 1);
+  AccountGroup *grp;
 
-  xaccInitializeAccountGroup (grp);
+  /* FIXME: uncomment when entity tables are finally in sessions. */
+  /* g_return_val_if_fail (entity_table, NULL); */
+
+  grp = g_new (AccountGroup, 1);
+
+  xaccInitializeAccountGroup (grp, entity_table);
 
   return grp;
+}
+
+AccountGroup *
+xaccMallocAccountGroup (GNCSession *session)
+{
+  g_return_val_if_fail (session, NULL);
+  return xaccMallocAccountGroupEntityTable
+    (gnc_session_get_entity_table (session));
 }
 
 /********************************************************************\
@@ -634,10 +650,14 @@ xaccAccountInsertSubAccount (Account *adult, Account *child)
 {
   if (!adult || !child) return;
 
+  /* FIXME: uncomment when entity tables are finished. */
+  /* g_return_if_fail (adult->entity_table); */
+  g_return_if_fail (adult->entity_table == child->entity_table);
+
   /* if a container for the children doesn't yet exist, add it */
   if (adult->children == NULL)
   {
-    adult->children = xaccMallocAccountGroup ();
+    adult->children = xaccMallocAccountGroupEntityTable (adult->entity_table);
     xaccGroupSetBook (adult->children, xaccGroupGetBook (adult->parent));
   }
 

@@ -36,12 +36,11 @@
 
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
-#include "Account.h"
+#include "AccountP.h"
 #include "BackendP.h"
 #include "GNCId.h"
-#include "Group.h"
+#include "GroupP.h"
 #include "Query.h"
-#include "Transaction.h"
 #include "TransactionP.h"
 
 static short module = MOD_QUERY;
@@ -1021,10 +1020,13 @@ copy_guid_list (GList *guids)
 }
 
 static GList *
-guid_list_to_account_list (GList *guids)
+guid_list_to_account_list (Query * q, GList *guids)
 {
   GList *accounts = NULL;
   GList *node;
+
+  if (!q || !q->acct_group)
+    return NULL;
 
   for (node = guids; node; node = node->next)
   {
@@ -1034,7 +1036,7 @@ guid_list_to_account_list (GList *guids)
     if (!guid)
       continue;
 
-    account = xaccAccountLookup (guid);
+    account = xaccAccountLookupEntityTable (guid, q->acct_group->entity_table);
     if (!account)
       continue;
 
@@ -1061,7 +1063,7 @@ xaccQueryCompileTerms (Query *q)
         case PD_ACCOUNT:
           g_list_free (qt->data.acct.accounts);
           qt->data.acct.accounts =
-            guid_list_to_account_list (qt->data.acct.account_guids);
+            guid_list_to_account_list (q, qt->data.acct.account_guids);
           break;
 
         default:
@@ -2358,8 +2360,9 @@ xaccGUIDMatchPredicate(Split * s, PredicateData * pd)
   GUIDPredicateData *gpd;
   GUID *guid;
 
-  assert(s && pd);  
-  assert(pd->type == PD_GUID);
+  g_return_val_if_fail (s, 0);
+  g_return_val_if_fail (pd, 0);
+  g_return_val_if_fail (pd->type == PD_GUID, 0);
 
   guid = &pd->guid.guid;
 
@@ -2371,7 +2374,8 @@ xaccGUIDMatchPredicate(Split * s, PredicateData * pd)
       return 0;
 
     case GNC_ID_ACCOUNT:
-      return xaccSplitGetAccount (s) == xaccAccountLookup (guid);
+      return (xaccSplitGetAccount (s) ==
+              xaccAccountLookupEntityTable (guid, s->entity_table));
 
     case GNC_ID_TRANS:
       return xaccSplitGetParent (s) == xaccTransLookup (guid);

@@ -247,7 +247,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    PINFO ("account GUID=%s", DB_GET_VAL("accountGUID",j));
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-   acc = xaccAccountLookup (&guid);
+   acc = xaccAccountLookup (&guid, be->session);
    if (!acc) 
    {
       acc = xaccMallocAccount(be->session);
@@ -283,7 +283,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    {
       /* if we haven't restored the parent account, create
        * an empty holder for it */
-      parent = xaccAccountLookup (&guid);
+      parent = xaccAccountLookup (&guid, be->session);
       if (!parent)
       {
          parent = xaccMallocAccount(be->session);
@@ -315,7 +315,7 @@ pgendGetAllAccounts (PGBackend *be, AccountGroup *topgrp)
 
    if (!topgrp)
    {
-      topgrp = xaccMallocAccountGroup();
+      topgrp = xaccMallocAccountGroup(be->session);
    }
 
    /* Get them ALL */
@@ -355,14 +355,15 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
    pgendDisable(be);
 
    /* first, see if we already have such an account */
-   acc = xaccAccountLookup (acct_guid);
+   acc = xaccAccountLookup (acct_guid, be->session);
    if (!acc)
    {
       engine_data_is_newer = -1;
    } 
    else
    {
-      /* save some performance, don't go to the backend if the data is recent. */
+      /* save some performance, don't go to the
+       * backend if the data is recent. */
       if (MAX_VERSION_AGE >= be->version_check - acc->version_check) 
       {
          PINFO ("fresh data, skip check");
@@ -387,7 +388,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
       SEND_QUERY (be,be->buff, 0);
       pgendGetResults (be, get_account_cb, pgendGetTopGroup (be));
 
-      acc = xaccAccountLookup (acct_guid);
+      acc = xaccAccountLookup (acct_guid, be->session);
       /* restore any kvp data associated with the transaction and splits */
       if (acc->idata)
       {

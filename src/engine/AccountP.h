@@ -45,7 +45,7 @@
 #include "config.h"
 
 #include "Account.h"
-#include "GNCId.h"
+#include "GNCIdP.h"
 #include "Transaction.h"
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
@@ -57,6 +57,9 @@ struct account_s
 {
   /* public data, describes account */
   GUID      guid;          /* globally unique account id */
+
+  GNCEntityTable *entity_table; /* Entity table this account is
+                                 * stored in. */
 
   /* The accountName is an arbitrary string assigned by the user. 
    * It is intended to a short, 5 to 30 character long string that
@@ -149,6 +152,11 @@ struct account_s
   guint32  idata;     /* used by the sql backend for kvp management */
 };
 
+
+/* The xaccAccountLookupEntityTable() routine is like xaccAccountLookup
+ *    but accepts and entity table instead of a session. */
+Account * xaccAccountLookupEntityTable (const GUID *guid,
+                                        GNCEntityTable *entity_table);
 
 /* The xaccAccountRemoveSplit() routine will remove the indicated split
  *    from the indicated account.  Note that this will leave the split

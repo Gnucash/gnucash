@@ -634,7 +634,7 @@ hierarchy_merge_groups (GSList *dalist)
 {
   GSList *mark;
   gnc_commodity *com;
-  AccountGroup *ret = xaccMallocAccountGroup ();
+  AccountGroup *ret = xaccMallocAccountGroup (gnc_get_current_session ());
 
   com = gnc_commodity_edit_get_commodity (get_commodity_editor ());
 

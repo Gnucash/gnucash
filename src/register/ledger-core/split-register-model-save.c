@@ -321,7 +321,8 @@ gnc_split_register_save_template_cells (gpointer save_data,
   trans = sd->trans;
   split = sd->split;
 
-  template_acc = xaccAccountLookup (&info->template_account);
+  template_acc = xaccAccountLookup (&info->template_account,
+                                    gnc_get_current_session ());
 
   if (gnc_table_layout_get_cell_changed (reg->table->layout,
                                          DATE_CELL, TRUE) ||

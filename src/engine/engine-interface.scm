@@ -110,7 +110,7 @@
 ;; scheme split. Not all values are copied. The reconcile
 ;; status and date are not copied. The C split's guid is,
 ;; of course, unchanged.
-(define (gnc:split-scm-onto-split split-scm split)
+(define (gnc:split-scm-onto-split split-scm split session)
   (if (not split)
       #f
       (begin
@@ -123,7 +123,8 @@
           (if amount   (gnc:split-set-amount split amount))
           (if value    (gnc:split-set-value split value)))
         (let ((account (gnc:account-lookup
-                        (gnc:split-scm-get-account-guid split-scm))))
+                        (gnc:split-scm-get-account-guid split-scm)
+                        session)))
           (if account
               (begin
                 (gnc:account-begin-edit account)
@@ -279,7 +280,7 @@
                 (if (not new-guid)
                     (set! new-guid old-guid))
                 (gnc:split-scm-set-account-guid split-scm new-guid)
-                (gnc:split-scm-onto-split split-scm new-split)
+                (gnc:split-scm-onto-split split-scm new-split session)
                 (gnc:split-scm-set-account-guid split-scm old-guid)
                 (gnc:transaction-append-split trans new-split)
                 (loop (cdr split-scms)))))

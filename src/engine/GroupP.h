@@ -39,7 +39,7 @@
 #include "config.h"
 
 #include "BackendP.h"
-#include "GNCId.h"
+#include "GNCIdP.h"
 #include "Transaction.h"
 #include "gnc-book.h"
 #include "gnc-numeric.h"
@@ -50,6 +50,9 @@ struct account_group_s
 {
   /* The flags: */
   unsigned int saved : 1;
+
+  GNCEntityTable *entity_table; /* table which child accounts must
+                                 * be stored in. */
 
   Account *parent;         /* back-pointer to parent */
 

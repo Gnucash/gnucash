@@ -364,7 +364,8 @@ gnc_copy_split(Split *split, gboolean use_cut_semantics)
  * Returns: Nothing                                                 *
 \********************************************************************/
 void
-gnc_copy_split_scm_onto_split(SCM split_scm, Split *split)
+gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
+                              GNCSession *session)
 {
   static SCM split_type = SCM_UNDEFINED;
   SCM result;
@@ -376,6 +377,8 @@ gnc_copy_split_scm_onto_split(SCM split_scm, Split *split)
 
   if (split == NULL)
     return;
+
+  g_return_if_fail (session);
 
   func = gh_eval_str("gnc:split-scm?");
   if (!gh_procedure_p(func))
@@ -396,7 +399,8 @@ gnc_copy_split_scm_onto_split(SCM split_scm, Split *split)
   }
 
   arg = gw_wcp_assimilate_ptr(split, split_type);
-  gh_call2(func, split_scm, arg);
+
+  gh_call3(func, split_scm, arg, gnc_session_to_scm (session));
 }
 
 

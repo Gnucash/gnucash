@@ -127,7 +127,8 @@ gnc_split_register_get_default_account (SplitRegister *reg)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
 
-  return xaccAccountLookup (&info->default_account);
+  return xaccAccountLookup (&info->default_account,
+                            gnc_get_current_session ());
 }
 
 void

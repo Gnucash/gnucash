@@ -363,7 +363,8 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 
   gtk_clist_clear(clist);
 
-  root_account = xaccAccountLookup (&tree->root_account);
+  root_account = xaccAccountLookup (&tree->root_account,
+                                    gnc_get_current_session ());
 
   gnc_account_tree_fill (tree, expanded_accounts,
                          gnc_account_tree_insert_row (tree, NULL, NULL,

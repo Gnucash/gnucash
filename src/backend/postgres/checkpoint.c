@@ -51,7 +51,6 @@
 #include "gnc-engine-util.h"
 #include "guid.h"
 #include "GNCId.h"
-#include "GNCIdP.h"
 
 #include "builder.h"
 #include "checkpoint.h"
@@ -86,8 +85,9 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
    ENTER("be=%p", be);
 
    guid_string = guid_to_string (acct_guid);
-   acc = xaccLookupEntity (acct_guid, GNC_ID_ACCOUNT);
-   commodity_name = gnc_commodity_get_unique_name (xaccAccountGetCommodity(acc));
+   acc = xaccAccountLookup (acct_guid, be->session);
+   commodity_name =
+     gnc_commodity_get_unique_name (xaccAccountGetCommodity(acc));
 
    chunk = g_mem_chunk_create (Checkpoint, 300, G_ALLOC_ONLY);
 

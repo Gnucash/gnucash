@@ -1123,11 +1123,12 @@ ledger_data_start_handler(GSList* sibling_data, gpointer parent_data,
                           gpointer global_data, gpointer *data_for_children,
                           gpointer *result, const gchar *tag, gchar **attrs)
 {
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
   AccountGroup *ag;
 
   /* disable logging during load; otherwise its just a mess */
   xaccLogDisable();
-  ag = xaccMallocAccountGroup();
+  ag = xaccMallocAccountGroup(pstatus->session);
 
   g_return_val_if_fail(ag, FALSE);
 
@@ -1487,6 +1488,7 @@ acc_restore_guid_end_handler(gpointer data_for_children,
                              gpointer parent_data, gpointer global_data,
                              gpointer *result, const gchar *tag)
 {
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
   Account *acc = (Account *) parent_data;
   gchar *txt = NULL;
   GUID gid;
@@ -1502,7 +1504,7 @@ acc_restore_guid_end_handler(gpointer data_for_children,
 
   g_return_val_if_fail(ok, FALSE);
 
-  if(xaccAccountLookup(&gid)) {
+  if(xaccAccountLookup(&gid, pstatus->session)) {
     return(FALSE);
   }
 
@@ -1697,7 +1699,7 @@ acc_restore_parent_end_handler(gpointer data_for_children,
                                gpointer parent_data, gpointer global_data,
                                gpointer *result, const gchar *tag)
 {
-
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
   Account *acc = (Account *) parent_data;
   Account *parent;
   sixtp_child_result *child_result;
@@ -1716,7 +1718,7 @@ acc_restore_parent_end_handler(gpointer data_for_children,
   /* otherwise this must be a good result - use it */
   gid = *((GUID *) child_result->data);
 
-  parent = xaccAccountLookup(&gid);
+  parent = xaccAccountLookup(&gid, pstatus->session);
   
   g_return_val_if_fail(parent, FALSE);
 
@@ -3381,6 +3383,7 @@ txn_restore_split_account_end_handler(gpointer data_for_children,
                                       gpointer parent_data, gpointer global_data,
                                       gpointer *result, const gchar *tag)
 {
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
   Split *s = (Split *) parent_data;
   Account *acct;
   gchar *txt = NULL;
@@ -3397,7 +3400,7 @@ txn_restore_split_account_end_handler(gpointer data_for_children,
   
   g_return_val_if_fail(ok, FALSE);
   
-  acct = xaccAccountLookup(&gid);
+  acct = xaccAccountLookup(&gid, pstatus->session);
   g_return_val_if_fail(acct, FALSE);
 
   xaccAccountInsertSplit(acct, s);
