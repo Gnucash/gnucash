@@ -358,7 +358,7 @@ msgid ""
 "QIF file parse failed:\n"
 "%s"
 msgstr ""
-Le traitement/analyse du fichier QIF:\n
+"Le traitement/analyse du fichier QIF:\n"
 "%s a échoué."
 
 # messages-i18n.c:44
