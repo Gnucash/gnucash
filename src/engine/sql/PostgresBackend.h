@@ -85,6 +85,9 @@ struct _pgend {
    char **path_cache;
    int path_cache_size;
    int ipath_max;
+
+   /* enginge data caches -- not used anywhere except in session_end */
+   AccountGroup *topgroup;
 };
 
 /*

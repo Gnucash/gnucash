@@ -2054,12 +2054,6 @@ pgendSync (Backend *bend, AccountGroup *grp)
    pgendStoreGroup (be, grp);
    pgendStoreAllTransactions (be, grp);
 
-   /* although the book may be open in 'single-user' mode right now,
-    * it might be opened in multi-user mode next time. Thus, update
-    * the account balance checkpoints just in case. 
-    */
-   pgendGroupRecomputeAllCheckpoints (be, grp);
-
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
@@ -2440,6 +2434,29 @@ pgend_session_end (Backend *bend)
 
    ENTER("be=%p", be);
 
+   /* mode-specific shutdowns */
+   switch (be->session_mode)
+   {
+      case MODE_SINGLE_FILE:
+      case MODE_SINGLE_UPDATE:
+         /* although the book may be open in 'single-user' mode right now,
+          * it might be opened in multi-user mode next time. Thus, update
+          * the account balance checkpoints just in case. 
+          */
+         pgendGroupRecomputeAllCheckpoints (be, be->topgroup);
+         break;
+
+      case MODE_POLL:
+         break;
+
+      case MODE_EVENT:
+         break;
+
+      default:
+         PERR ("bad mode specified");
+         break;
+   }
+
    /* prevent further callbacks into backend */
    pgendDisable(be);
    be->be.book_begin = NULL;
@@ -2500,6 +2517,7 @@ pgend_book_load_poll (Backend *bend)
    pgendEnable(be);
    gnc_engine_resume_events();
 
+   be->topgroup = grp;
    return grp;
 }
 
@@ -2554,6 +2572,7 @@ pgend_book_load_single (Backend *bend)
    pgendEnable(be);
    gnc_engine_resume_events();
 
+   be->topgroup = grp;
    return grp;
 }
 
@@ -3165,6 +3184,8 @@ pgendInit (PGBackend *be)
       (be->path_cache)[i] = NULL;
    }
    be->ipath_max = 0;
+
+   be->topgroup = NULL;
 }
 
 /* ============================================================= */

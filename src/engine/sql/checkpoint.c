@@ -93,9 +93,9 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
    /* prevent others from inserting any splits while we recompute 
     * the checkpoints. (hack alert -verify that this is the correct
     * lock) */
-   p = "BEGIN WORK; "
-       "LOCK TABLE gncCheckpoint IN ACCESS EXCLUSIVE MODE; "
-       "LOCK TABLE gncEntry IN SHARE MODE; ";
+   p = "BEGIN WORK;\n"
+       "LOCK TABLE gncCheckpoint IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncEntry IN SHARE MODE;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
@@ -206,13 +206,13 @@ done:
     * subtotal balances */
    p = be->buff; *p = 0;
    p = stpcpy (p, "UPDATE gncCheckpoint SET "
-                  "  balance            = (gncsubtotalbalance        (accountGuid, date_start, date_end )),"
-                  "  cleared_balance    = (gncsubtotalclearedbalance (accountGuid, date_start, date_end )),"
-                  "  reconciled_balance = (gncsubtotalreconedbalance (accountGuid, date_start, date_end )) "
-                  "WHERE accountGuid='");
+          "   balance            = (gncsubtotalbalance        (accountGuid, date_start, date_end )),"
+          "   cleared_balance    = (gncsubtotalclearedbalance (accountGuid, date_start, date_end )),"
+          "   reconciled_balance = (gncsubtotalreconedbalance (accountGuid, date_start, date_end )) "
+          " WHERE accountGuid='");
    p = stpcpy (p, guid_string);
-   p = stpcpy (p, "'; ");
-   p = stpcpy (p, "COMMIT WORK;");
+   p = stpcpy (p, "';\n");
+   p = stpcpy (p, "COMMIT WORK;\n");
    SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
 
@@ -234,6 +234,37 @@ pgendGroupRecomputeAllCheckpoints (PGBackend *be, AccountGroup *grp)
       pgendAccountRecomputeAllCheckpoints (be, xaccAccountGetGUID(acc));
    }
    g_list_free (acclist);
+}
+
+/* ============================================================= */
+/* recompute *one* checkpoints for the account */
+
+void
+pgendAccountRecomputeOneCheckpoint (PGBackend *be, Account *acc, Timespec ts)
+{
+   char *p, dbuf[80];
+
+   gnc_timespec_to_iso8601_buff (ts, dbuf);
+
+   p = be->buff; *p = 0;
+   p = stpcpy (p, "BEGIN WORK;\n"
+                  "LOCK TABLE gncCheckpoint IN ACCESS EXCLUSIVE MODE;\n"
+                  "LOCK TABLE gncEntry IN SHARE MODE;\n"
+                  "UPDATE gncCheckpoint SET "
+          "   balance            = (gncsubtotalbalance        (accountGuid, date_start, date_end )),"
+          "   cleared_balance    = (gncsubtotalclearedbalance (accountGuid, date_start, date_end )),"
+          "   reconciled_balance = (gncsubtotalreconedbalance (accountGuid, date_start, date_end )) "
+          " WHERE accountGuid='");
+   p = guid_to_string_buff (xaccAccountGetGUID(acc), p);
+   p = stpcpy (p, "' AND date_start <= '");
+   p = stpcpy (p, dbuf);
+   p = stpcpy (p, "' AND date_end > '");
+   p = stpcpy (p, dbuf);
+   p = stpcpy (p, "';\n");
+
+   p = stpcpy (p, "COMMIT WORK;\n");
+   SEND_QUERY (be,be->buff, );
+   FINISH_QUERY(be->connection);
 }
 
 /* ============================================================= */
