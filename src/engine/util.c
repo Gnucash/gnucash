@@ -900,50 +900,65 @@ typedef enum
 
 #define done_state(state) (((state) == DONE_ST) || ((state) == NO_NUM_ST))
 
-G_INLINE_FUNC double fractional_multiplier (int num_decimals);
+G_INLINE_FUNC long long multiplier (int num_decimals);
 
-G_INLINE_FUNC double
-fractional_multiplier (int num_decimals)
+G_INLINE_FUNC long long
+multiplier (int num_decimals)
 {
   switch (num_decimals)
   {
     case 8:
-      return 0.00000001;
+      return 100000000;
     case 7:
-      return 0.0000001;
+      return 10000000;
     case 6:
-      return 0.000001;
-      break;
+      return 1000000;
     case 5:
-      return 0.00001;
+      return 100000;
     case 4:
-      return 0.0001;
+      return 10000;
     case 3:
-      return 0.001;
+      return 1000;
     case 2:
-      return 0.01;
+      return 100;
     case 1:
-      return 0.1;
+      return 10;
     default:
       PERR("bad fraction length");
       g_assert_not_reached();
       break;
   }
 
-  return 0.0;
+  return 1;
 }
 
 gboolean
 DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
                   char **endstr)
 {
+  gnc_numeric answer;
+
+  if (!xaccParseAmount (in_str, monetary, &answer, endstr))
+    return FALSE;
+
+  if (result)
+    *result = gnc_numeric_to_double (answer);
+
+  return TRUE;
+}
+
+gboolean
+xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
+                 char **endstr)
+{
   struct lconv *lc = gnc_localeconv();
   gboolean is_negative;
   gboolean got_decimal;
   gboolean need_paren;
   GList  * group_data;
-  int    group_count;
-  double value;
+  int      group_count;
+  long long numer;
+  long long denom;
 
   ParseState state;
 
@@ -985,7 +1000,8 @@ DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
   need_paren = FALSE;
   group_data = NULL;
   group_count = 0;
-  value = 0.0;
+  numer = 0;
+  denom = 1;
 
   /* Initialize the state machine */
   state = START_ST;
@@ -1213,9 +1229,8 @@ DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
         ((next_state == DONE_ST) && !got_decimal))
     {
       *out = '\0';
-      value = strtod(out_str, NULL);
 
-      if (value == HUGE_VAL)
+      if (sscanf(out_str, "%lld", &numer) < 1)
       {
         next_state = NO_NUM_ST;
       }
@@ -1301,6 +1316,7 @@ DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
   if (got_decimal && (*out_str != '\0'))
   {
     size_t len;
+    long long fraction;
 
     len = strlen(out_str);
 
@@ -1310,13 +1326,15 @@ DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
       len = 8;
     }
 
-    value += fractional_multiplier(len) * strtod(out_str, NULL);
-
-    if (value == HUGE_VAL)
+    if (sscanf (out_str, "%lld", &fraction) < 1)
     {
       g_free(out_str);
       return FALSE;
     }
+
+    denom = multiplier(len);
+    numer *= denom;
+    numer += fraction;
   }
   else if (auto_decimal_enabled && !got_decimal)
   {
@@ -1325,14 +1343,20 @@ DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
      * unit. For each auto decimal place requested, move the final
      * decimal point one place to the left. */
     if ((auto_decimal_places > 0) && (auto_decimal_places < 9))
-      value *= fractional_multiplier(auto_decimal_places);
+    {
+      denom = multiplier(auto_decimal_places);
+      numer *= denom;
+    }
   }
 
   if (is_negative)
-    value = -value;
+    numer = -numer;
 
   if (result != NULL)
-    *result = value;
+  {
+    result->num = numer;
+    result->denom = denom;
+  }
 
   if (endstr != NULL)
     *endstr = (char *) in;

@@ -1,5 +1,5 @@
 /********************************************************************
- * gncnumeric.c -- an exact-number library for gnucash.            *
+ * gnc-numeric.c -- an exact-number library for gnucash.            *
  * Copyright (C) 2000 Bill Gribble                                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *

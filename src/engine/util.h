@@ -293,8 +293,10 @@ const char * xaccPrintAmountArgs (gnc_numeric val,
  *   parser will be returned in *endstr. If FALSE is returned
  *   and endstr is non-NULL, *endstr will point to in_str.
  */
+gboolean xaccParseAmount (const char * in_str, gboolean monetary,
+                          gnc_numeric *result, char **endstr);
 gboolean DxaccParseAmount (const char * in_str, gboolean monetary,
-                          double *result, char **endstr);
+                           double *result, char **endstr);
 
 
 /** TEMPLATES ******************************************************/
