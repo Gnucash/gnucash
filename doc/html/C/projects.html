@@ -183,9 +183,24 @@
 
     <h2>Modularity, Extensibility and Customization</h2>
 
-    <p>The above structure should leads us to view GnuCash not so
+    <p>The above structure should lead us to view GnuCash not so
     much as a tightly integrated application, but rather as a loose
     confederation of component objects, libraries and interfaces.
+    This has a number of advantages for both the deeloper and the 
+    user.  For the developer, it allows parts to evolve semi-independently
+    of one-another, and to be used in other, non-gnucash projects.
+    For the user, a good extensibility allows the use of
+    <a href="#arrangements">arrangements</a>: a way of broadly
+    customizing the appearence and behaviour of gnucash, and then 
+    allowing users to very easily share these customizations with 
+    one another.  Such arrangements might be collections of canned 
+    reports, e.g. for business or home user.  Or they might be
+    the menu contents: one menu arrangement is for gbeginners, another 
+    for 'power users', a third for business owners.  Th goal is that
+    broad areas should be not only customizable, but it should be
+    possible, even easy, to trade these customizations between users.
+    </p>
+    <p>
     In order to facilitate the gluing together of these parts, as
     well as simplify the questions of customizability, change and
     rapid development, GnuCash makes use of the <a href=
@@ -196,7 +211,8 @@
     engine interface is also available with <a href=
     "http://www.perl.org">Perl</a> interfaces, thanks to a <a href=
     "http://starship.skyport.net/crew/beazley/swig.html">SWIG</a>
-    wrapper.</p>
+    wrapper.
+    </p>
     <hr>
     <!--===================================================-->
 
@@ -447,7 +463,7 @@
       </tr>
 
       <tr>
-        <td><a href="#formats">Formats</a></td>
+        <td><a href="#arrangements">Arrangements</a></td>
 
         <td>Medium</td>
         <td>?</td>
@@ -780,7 +796,7 @@
             at a later date.
         </ul>
         Note that the customization info should be stored in a 
-        <a href="#formats">Format File (see below)</a>.
+        <a href="#arrangements">Arrangements File (see below)</a>.
         </p>
 
         <p>Generated reports should be exportable to other gnome
@@ -948,7 +964,8 @@
             <p><b>Static Currency Exchange Table</b> 
             Keep a (semi-)static exchange-rate table. (possibly updated
             via net).  The table is used to auto-fill currency
-            exchanges.
+            exchanges. (the finance::quote perl module now handles 
+            currency exchange rate fetches)
             </p>
           </li>
 
@@ -957,7 +974,7 @@
             would be nice too. The button bar is the set of
             'buttons' (open, edit...) at the top of a register
             window and the main window.
-            See the section <a href="#formats">Formats</a> for
+            See the section <a href="#arrangements">Arrangements</a> for
             a discussion of the customization issues.
             </p>
           </li>
@@ -967,7 +984,7 @@
             regular household assets (house, car, jewelry, etc.)
             should be treated. In particular, show how appreciation
             and depreciation should be treated.
-            See the section <a href="#formats">Formats</a> for
+            See the section <a href="#arrangments">Arrangements</a> for
             a discussion of the customization issues.
             </p>
           </li>
@@ -1010,7 +1027,7 @@
             income-expense (profits). Make this configurable, so
             that user can show arbitrary sums of arbitrary
             accounts.
-            See the section <a href="#formats">Formats</a> for
+            See the section <a href="#arrangements">Arrangements</a> for
             a discussion of the customization issues.
             </p>
           </li>
@@ -1241,8 +1258,7 @@
         <a href="http://dir.yahoo.com/business_and_economy/shopping_and_services/financial_services/banking/checks/">
         Yahoo Check Printing</a> provides a list of vendors & printers.
 
-        <p><b>Status:</b></p>
-
+        <p><b>Status:</b>
         <ul>
           <li>Bill Gribble has built a prototype based on the
               gnome-print. Waiting for gnome-print to mature ...</li>
@@ -1250,9 +1266,8 @@
               so that user can test printer.
           <li>MICR Fonts are available & brought to mailing list.
         </ul>
+        </p>
 
-        <br>
-        <br>
       </dd>
 
       <dt><a name="wizards"><b>Wizards</b></a></dt>
@@ -1263,20 +1278,20 @@
         QIF import, budget prep, obscure functional corners.
         <ul>
           <li>
-            <p><b>New User Setup</b> Provide
+            <b>New User Setup</b> Provide
             a default Chart of Accounts, which will mostly consist
             of a default set of 'Categories' (Income/Expense
             Accounts). These are categories such as "Automobile
             Expense", "Bank Interest Income", and "Employment
             Income". The user should be able to select a default
             set of accounts, and have those created
-            automatically.</p>
+            automatically.
           </li>
           <li><b>Account Creation</b>
           </li>
           <li><b>QIF Import</b>
             QIF Import is just complicated enough that it needs 
-            a wizard walk-through of the steps.
+            a wizard walk-through of the steps.  Grib has a prototype.
           </li>
           <li><b>Budget Setup</b>
             Setting up a budget.
@@ -1290,32 +1305,32 @@
         <p></p>
 
 
-      <dt><a name="formats"><b>Formats</b></a></dt>
+      <dt><a name="arrangements"><b>Arrangments</b></a></dt>
 
       <dd>
-        An "application format" is the defining look-n-feel of an application.
+        An "application arrangement" is the defining look-n-feel of an application.
         The idea is similar to, but not the same as 'skins'/'themes'.  Its similar
         to, but not the same as alllowing a user to set 'preferences'.  Its similar 
         to, but not the same as, allowing a user to generate customized financial 
-        reports.  In the context of GnuCash, a 'format' should be a single file
+        reports.  In the context of GnuCash, a 'arrangement' should be a file
         (that can be traded by users, uploaded and shared) that controls important
         aspects of how the application is configured.
         <p>
-        In particular, the GnuCash Format should include the following:
+        In particular, the GnuCash Arrangement should include the following:
         <ul>
         <li>A list of sample/initial accounts.  These might be tailored for a 
             home user (groceries, gas, electric), an apartment dweller 
             (rent, laundry), or different kinds of business users.
-            Because these sample accounts appear in the Format file, 
-            it becomes easy to create & distribute customized formats.
+            Because these sample accounts appear in the Arrangement file, 
+            it becomes easy to create & distribute customized arrangements.
         <li>A list of pre-defined reports and graphs.  The kind that you'd find
-            for a home user might be different than for a person manageing a stock
+            for a home user might be different than for a person managing a stock
             portfolio, which is in turn different from what a business might need.
-            The Format File should include install-specific customizations, such 
+            The Arrangement File should include install-specific customizations, such 
             as the report headers, footers, etc.
         <li>Hint of the day.  The types of 'hint of the day' would be different 
             for new users, than it would be for advanced users.  Thus, different
-            formats would have different catalogues of 'hint of the day'.
+            arrangements would have different catalogues of 'hint of the day'.
         <li>Menu Contents & Navigation.  New users might be presented with a simple set
             of menu contents.  'Power Users' might be presented with deep, nested
             sets of menus, with oodles of features.
@@ -1324,9 +1339,18 @@
             banking seems to require the display of account numbers in separate
             columns in the register.
         </ul>
-        A good format infrastructure will not only allow gnucash to be configured
+        A good arrangement infrastructure will not only allow gnucash to be configured
         for different application domains, but also will allow users to fine-tune
-        thier own prefered format.  The idea for formats is was inspired by 
+        thier own prefered arrangement.   It can also simplify the code base: 
+        instead of having two products, a home-user application, and a small-business 
+        application, each with a different code base and #defines and what not, instead,
+        we have one code base, and different arrangments for each.
+        However, most importantly, the arrangments should be easy to share between users.
+        They should be such that users are encouraged to trade and use arrangments,
+        and to create new ones that suit thier needs.
+        </p>
+        <p>
+        The idea for arrangements was inspired by 
         Adam Curry's commentary on
         <a href="http://adamcurry.editthispage.com/stories/storyReader$161">
         radio formats and Napster</a>.
