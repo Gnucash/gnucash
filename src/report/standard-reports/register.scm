@@ -553,12 +553,14 @@
            document
            (gnc:make-html-text
             (gnc:html-markup-br)
-            (gnc:option-value
-             (gnc:lookup-global-option "User Info" "User Name"))
+            ;;(gnc:option-value
+            ;; (gnc:lookup-global-option "User Info" "User Name"))
+	    "User Name"
             (gnc:html-markup-br)
             (string-expand
-             (gnc:option-value
-              (gnc:lookup-global-option "User Info" "User Address"))
+             ;;(gnc:option-value
+	     ;; (gnc:lookup-global-option "User Info" "User Address"))
+	     "User Address"
              #\newline
              "<br>")
             (gnc:html-markup-br)))

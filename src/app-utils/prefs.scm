@@ -360,15 +360,15 @@ to enter a credit card payment")
 
 ;;; User Info Options
 
-(gnc:register-configuration-option
- (gnc:make-string-option
-  (N_ "User Info") (N_ "User Name")
-  "b" (N_ "The name of the user. This is used in some reports.") ""))
+;(gnc:register-configuration-option
+; (gnc:make-string-option
+;  (N_ "User Info") (N_ "User Name")
+;  "b" (N_ "The name of the user. This is used in some reports.") ""))
 
-(gnc:register-configuration-option
- (gnc:make-text-option
-  (N_ "User Info") (N_ "User Address")
-  "c" (N_ "The address of the user. This is used in some reports.") ""))
+;(gnc:register-configuration-option
+; (gnc:make-text-option
+;  (N_ "User Info") (N_ "User Address")
+;  "c" (N_ "The address of the user. This is used in some reports.") ""))
 
 
 ;;; General Options

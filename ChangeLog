@@ -44,6 +44,13 @@
 	  from the book-kvp options and use that as the default tax table
 
 	FIXES 93462.
+
+	* src/app-utils/prefs.scm: Remove "user name" and "user address"
+	  preferences, as they are no longer used by anything.
+	* src/report/standard/reports/register.scm: we're not using the
+	  'invoice' portion anymore, so we don't need references to user
+	  name and user address preferences.  This removes the "User Info"
+	  page from the Global Preferences.
 	
 2003-01-16  Derek Atkins  <derek@ihtfp.com>
 
