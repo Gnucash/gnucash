@@ -510,7 +510,7 @@ gnc_table_get_cell_location (Table *table,
 
       cell = gnc_cellblock_get_cell (cellblock, cell_row, cell_col);
       if (!cell)
-        return FALSE;
+        continue;
 
       if (gnc_basic_cell_has_name (cell, cell_name))
       {
