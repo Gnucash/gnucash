@@ -7,7 +7,7 @@
  * See the header file for additional documentation.
  *
  * HISTORY:
- * Copyright (c) 1988 Linas Vepstas
+ * Copyright (c) 1998 Linas Vepstas
  */
 
 /********************************************************************\

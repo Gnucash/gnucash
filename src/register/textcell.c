@@ -6,7 +6,7 @@
  * implements the simplest possible cell -- a text cell
  *
  * HISTORY:
- * Copyright (c) 1988 Linas Vepstas
+ * Copyright (c) 1998 Linas Vepstas
  */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
