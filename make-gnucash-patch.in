@@ -83,14 +83,17 @@ exit(0);
 __DATA__
 
 #*#
+*.a
 *.bak
 *.bin
 *.diff
 *.diffs
 *.gmo
+*.lo
 *.log
 *.mo
 *.moc
+*.o
 *.orig
 *.patch
 *.rej
