@@ -202,7 +202,7 @@ gnc_tree_model_example_account_tree_model_init (GtkTreeModelIface *iface)
 static guint
 gnc_tree_model_example_account_get_flags (GtkTreeModel *tree_model)
 {
-	return GTK_TREE_MODEL_LIST_ONLY;
+	return GTK_TREE_MODEL_ITERS_PERSIST | GTK_TREE_MODEL_LIST_ONLY;
 }
 
 static int
