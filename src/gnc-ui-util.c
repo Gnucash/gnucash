@@ -615,7 +615,13 @@ gnc_account_value_print_info (Account *account, gboolean use_symbol)
 GNCPrintAmountInfo
 gnc_split_quantity_print_info (Split *split, gboolean use_symbol)
 {
-  if(!split) return gnc_default_share_print_info();
+  if (!split)
+  {
+    GNCPrintAmountInfo info = gnc_default_share_print_info ();
+    info.use_symbol = use_symbol;
+    return info;
+  }
+
   return gnc_account_quantity_print_info (xaccSplitGetAccount (split),
                                           use_symbol);
 }
@@ -623,21 +629,21 @@ gnc_split_quantity_print_info (Split *split, gboolean use_symbol)
 GNCPrintAmountInfo
 gnc_split_value_print_info (Split *split, gboolean use_symbol)
 {
-  if(!split) return gnc_default_price_print_info();
+  if (!split) return gnc_default_print_info (use_symbol);
   return gnc_account_value_print_info (xaccSplitGetAccount (split),
                                        use_symbol);
 }
 
 static GNCPrintAmountInfo
-gnc_default_print_info_helper(int decplaces)
+gnc_default_print_info_helper (int decplaces)
 {
     GNCPrintAmountInfo info;
 
     info.commodity = NULL;
-    
+
     info.max_decimal_places = decplaces;
     info.min_decimal_places = 0;
-    
+
     info.use_separators = 1;
     info.use_symbol = 0;
     info.use_locale = 1;
@@ -645,7 +651,7 @@ gnc_default_print_info_helper(int decplaces)
 
     return info;
 }
-    
+
 GNCPrintAmountInfo
 gnc_default_share_print_info (void)
 {
@@ -654,10 +660,10 @@ gnc_default_share_print_info (void)
 
   if (!got_it)
   {
-      info = gnc_default_print_info_helper(4);
+      info = gnc_default_print_info_helper (5);
       got_it = TRUE;
   }
-  
+
   return info;
 }
 
@@ -669,8 +675,8 @@ gnc_default_price_print_info (void)
 
   if (!got_it)
   {
-      info = gnc_default_print_info_helper(6);
-      got_it = TRUE;
+    info = gnc_default_print_info_helper (6);
+    got_it = TRUE;
   }
 
   return info;
@@ -684,8 +690,8 @@ gnc_integral_print_info (void)
 
   if (!got_it)
   {
-      info = gnc_default_print_info_helper(0);
-      got_it = TRUE;
+    info = gnc_default_print_info_helper (0);
+    got_it = TRUE;
   }
 
   return info;
