@@ -74,6 +74,9 @@ struct gnc_report_window_s
 };
 
 
+static void gnc_report_window_print_cb(GtkWidget * w, gpointer data);
+static void gnc_report_window_reload_cb(GtkWidget * w, gpointer data);
+
 /********************************************************************
  * REPORT WINDOW FUNCTIONS 
  * creating/managing report-window mdi children
@@ -133,13 +136,20 @@ gnc_report_window_view_destroy(GtkObject * obj, gpointer user_data)
   g_free(mc);
 }
 
+static void
+gnc_report_window_menu_tweaking (GNCMDIChildInfo * mc)
+{
+  /* Do not i18n these strings!!! */
+}
+
 /********************************************************************
  * report_view_new
  * create a new report view.  
  ********************************************************************/
 
 static GtkWidget *
-gnc_report_window_view_new(GnomeMDIChild * child, gpointer user_data) {  
+gnc_report_window_view_new(GnomeMDIChild * child, gpointer user_data)
+{
   GNCMDIInfo        * maininfo = user_data;
   GNCMDIChildInfo    * mc = g_new0(GNCMDIChildInfo, 1);
   gnc_report_window  * win = gnc_report_window_new(mc);
@@ -153,9 +163,14 @@ gnc_report_window_view_new(GnomeMDIChild * child, gpointer user_data) {
   mc->user_data    = win;
   mc->child        = child; 
   mc->title        = g_strdup("Report");
-
+  mc->menu_tweaking  = gnc_report_window_menu_tweaking;
   gnc_mdi_add_child (maininfo, mc);
 
+  /* Override a couple of standard buttons. */
+  gnc_mdi_set_dispatch_cb(mc, GNC_DISP_PRINT,
+			  gnc_report_window_print_cb, win);
+  gnc_mdi_set_dispatch_cb(mc, GNC_DISP_REFRESH,
+			  gnc_report_window_reload_cb, win);
   type = gnc_html_parse_url(gnc_report_window_get_html(win),
                             child->name, &url_location, &url_label);
   
@@ -504,8 +519,8 @@ gnc_report_window_params_cb(GtkWidget * w, gpointer data)
   return TRUE;
 }
 
-static int
-gnc_report_window_reload_button_cb(GtkWidget * w, gpointer data) {
+static void
+gnc_report_window_reload_cb(GtkWidget * unused, gpointer data) {
   gnc_report_window * report = data;
   SCM               dirty_report = gh_eval_str("gnc:report-set-dirty?!");
 
@@ -513,7 +528,6 @@ gnc_report_window_reload_button_cb(GtkWidget * w, gpointer data) {
     gh_call2(dirty_report, report->cur_report, SCM_BOOL_T);
     gnc_html_reload(report->html);
   }
-  return TRUE;
 }
 
 static void
@@ -795,7 +809,7 @@ gnc_report_window_create_toolbar(gnc_report_window * win,
     { GNOME_APP_UI_ITEM,
       N_("Reload"),
       N_("Reload the current report"),
-      gnc_report_window_reload_button_cb, win,
+      gnc_report_window_reload_cb, win,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
       GNOME_STOCK_PIXMAP_REFRESH,

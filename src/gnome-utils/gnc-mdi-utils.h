@@ -32,6 +32,28 @@ typedef struct gnc_mdi_child_info GNCMDIChildInfo;
 typedef void (*GNCShutdownFunc) (int exit_status);
 typedef gboolean (*GNCMDICanRestoreCB) (const char * filename);
 typedef GnomeMDIChild * (*GNCMDIRestoreCB) (const char *config_string);
+typedef void (*GNCMDIAutoSetup) (GNCMDIChildInfo *child);
+
+typedef enum {
+  GNC_AUTO_SHOW,
+  GNC_AUTO_HIDE,
+  GNC_AUTO_ENABLE,
+  GNC_AUTO_DISABLE,
+  GNC_AUTO_LAST
+} GNCMDIAutoType;
+
+/*
+ * If you update this enum, you must also update the list of menu
+ * paths at the start of gnc-mdi-utils.c.
+ */
+typedef enum {
+  GNC_DISP_PRINT,
+  GNC_DISP_CUT,
+  GNC_DISP_COPY,
+  GNC_DISP_PASTE,
+  GNC_DISP_REFRESH,
+  GNC_DISP_LAST
+} GNCMDIDispatchType;
 
 typedef struct
 {
@@ -51,6 +73,7 @@ typedef struct
   GList    * children;
 
   GNCShutdownFunc shutdown;
+  GNCMDIAutoSetup menu_tweaking;
 
   GNCMDICanRestoreCB can_restore_cb;
   GNCMDIRestoreCB restore_cb;
@@ -70,6 +93,12 @@ struct gnc_mdi_child_info
   int             component_id;
   void            * user_data;
   char            * title;
+ 
+  GNCMDIAutoSetup menu_tweaking;
+  GList	          * widgets[GNC_AUTO_LAST];
+
+  GtkCallback     dispatch_callback[GNC_DISP_LAST];
+  gpointer        dispatch_data[GNC_DISP_LAST];
 };
 
 
@@ -95,5 +124,17 @@ void gnc_mdi_save (GNCMDIInfo * gnc_mdi, char * filename);
 void gnc_mdi_restore (GNCMDIInfo * gnc_mdi, const char * filename);
 
 void gnc_mdi_create_child_toolbar (GNCMDIInfo * mi, GNCMDIChildInfo * child);
+
+void gnc_mdi_child_auto_menu(GNCMDIChildInfo *, GNCMDIAutoType, gchar *, ...);
+void gnc_mdi_child_auto_toolbar(GNCMDIChildInfo *, GNCMDIAutoType, gchar *, ...);
+GtkWidget * gnc_mdi_child_find_menu_item(GNCMDIChildInfo *mc, gchar *path);
+GtkWidget * gnc_mdi_child_find_toolbar_item(GNCMDIChildInfo *mc, gchar *name);
+void gnc_mdi_set_dispatch_cb (GNCMDIChildInfo * mc, GNCMDIDispatchType type,
+			      GtkCallback cb, gpointer data);
+gboolean gnc_mdi_get_toolbar_visibility (void);
+void gnc_mdi_set_toolbar_visibility (gboolean visible);
+void gnc_mdi_show_toolbar (GNCMDIChildInfo *mc);
+void gnc_mdi_widget_show(gpointer data, gpointer user_data);
+
 
 #endif

@@ -79,8 +79,8 @@
 
 (define (gnc:report-menu-setup)
   ;; since this menu gets added to every child window, we say it 
-  ;; comes after the "_File" menu. 
-  (define menu (gnc:make-menu gnc:menuname-reports (list "_File")))
+  ;; comes after the "_Actions" menu. 
+  (define menu (gnc:make-menu gnc:menuname-reports (list "_Actions")))
   (define menu-namer (gnc:new-menu-namer))
   (define tax-menu (gnc:make-menu gnc:menuname-taxes
                                   (list gnc:menuname-reports "")))

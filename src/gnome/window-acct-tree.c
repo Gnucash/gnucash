@@ -73,6 +73,75 @@ struct GNCAcctTreeWin_p
   GList       * account_sensitives;
 };
 
+static void gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc);
+
+
+/**
+ * gnc_acct_tree_window_set_sensitives
+ *
+ * @par1: A pointer to the data structure holding all the data
+ * associated with the Account Tree window.
+ *
+ * @par2: TRUE to enable the list of widgets, FALSE to disable them.
+ *
+ * Run the list of account sensitive widgets and enable/disable all
+ * the items in the list.
+ */
+static void
+gnc_acct_tree_window_set_sensitives(GNCAcctTreeWin * win,
+                                    gboolean sensitive)
+{
+  g_list_foreach(win->account_sensitives, (GFunc)gtk_widget_set_sensitive,
+		 (gpointer)sensitive);
+}
+
+
+/**
+ * gnc_acct_tree_window_add_sensitive
+ *
+ * @par1: A pointer to the data structure holding all the data
+ * associated with the Account Tree window.
+ *
+ * @par2: A pointer to a menu or toolbar item.
+ *
+ * Add this widget to the list of items to be enabled/disabled when an
+ * account is selected in this window.
+ */
+static void
+gnc_acct_tree_window_add_sensitive(GNCAcctTreeWin * win, GtkWidget *widget)
+{
+  if (widget == NULL)
+    return;
+  win->account_sensitives = g_list_append(win->account_sensitives, widget);
+}
+
+/**
+ * gnc_acct_tree_window_find_popup_item
+ *
+ * @par1: A pointer to the data structure holding all the data
+ * associated with the Account Tree window.
+ *
+ * @par2: A pointer to the popup menu for this window.
+ *
+ * @par3: The name of the menu item to find.
+ *
+ * This routine looks for a particular menu item in a popup menu.  If
+ * found, it adds the menu to the list of items to be enabled/disabled
+ * when an account is selected in this window.
+ */
+static void
+gnc_acct_tree_window_find_popup_item(GNCAcctTreeWin * win, GtkWidget *popup,
+				     gchar *name)
+{
+    GtkWidget *menuitem;
+    gint pos;
+
+    if (gnome_app_find_menu_pos(popup, name, &pos)) {
+      menuitem = (GtkWidget*)g_list_nth_data(GTK_MENU_SHELL(popup)->children,
+					     pos-1);
+      gnc_acct_tree_window_add_sensitive(win, menuitem);
+    }
+}
 
 /********************************************************************
  * ACCOUNT WINDOW FUNCTIONS 
@@ -150,10 +219,12 @@ gnc_acct_tree_view_refresh (gpointer data)
 }
 
 static GtkWidget *
-gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
+gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data)
+{
   GNCMDIInfo        * maininfo = user_data;
   GNCMDIChildInfo   * mc = g_new0(GNCMDIChildInfo, 1);
   GNCAcctTreeWin     * win = gnc_acct_tree_window_new(child->name);
+  GtkWidget          * popup;
   char               * name;
 
   mc->contents     = gnc_acct_tree_window_get_widget(win);
@@ -164,6 +235,8 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
                                                 NULL, NULL, mc);
   mc->user_data    = win;
   mc->title        = g_strdup(_("Accounts"));
+
+  mc->menu_tweaking = gnc_acct_tree_tweak_menu;
 
   gtk_object_set_user_data(GTK_OBJECT(child), mc);
 
@@ -189,13 +262,22 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
   gnc_acct_tree_window_create_toolbar(win, mc);
   gnc_mdi_create_child_toolbar(maininfo, mc);
 
-  gnc_mainwin_account_tree_attach_popup
-    (GNC_MAINWIN_ACCOUNT_TREE (win->account_tree),
-     mc->menu_info->moreinfo, child);
-
-  if(mc->menu_info) {
-    gnome_mdi_child_set_menu_template(child, mc->menu_info);  
+  if (mc->menu_info) {
+    popup = gnc_mainwin_account_tree_attach_popup
+      (GNC_MAINWIN_ACCOUNT_TREE (win->account_tree),
+       mc->menu_info->moreinfo, child);
+    gnc_acct_tree_window_find_popup_item(win, popup, "Open Account");
+    gnc_acct_tree_window_find_popup_item(win, popup, "Open Subaccounts");
+    gnc_acct_tree_window_find_popup_item(win, popup, "Edit Account");
+    gnc_acct_tree_window_find_popup_item(win, popup, "Delete Account");
   }
+
+  /*
+   * The 'Account' menu used to be created at this point. Its
+   * functionality has been integrated into the other menus.  The
+   * GnomeUIInfo data structures are still used to create the popup
+   * menu.
+   */
 
   return mc->contents;
 }
@@ -721,7 +803,8 @@ static void gnc_acct_tree_window_toolbar_options_cb(GtkWidget * w, gpointer d);
 
 void
 gnc_acct_tree_window_create_toolbar(GNCAcctTreeWin * win, 
-                                    GNCMDIChildInfo * child) {
+                                    GNCMDIChildInfo * child)
+{
   GnomeUIInfo toolbar_template[] = 
   {
     { GNOME_APP_UI_ITEM, 
@@ -782,57 +865,78 @@ gnc_acct_tree_window_create_toolbar(GNCAcctTreeWin * win,
   child->toolbar_info = g_memdup (toolbar_template, sizeof(toolbar_template));
 }
 
+/*
+ * The scrub menu is shared by both the code to insert items into the
+ * main menus, and the code to create the right click popup menu.
+ */
+static GnomeUIInfo scrubmenu[] =
+{
+  {
+    GNOME_APP_UI_ITEM,
+    N_("Check & Repair A_ccount"),
+    N_("Check for and repair unbalanced transactions and orphan splits "
+       "in this account"),
+    gnc_acct_tree_window_menu_scrub_cb, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    0, 0, NULL
+  },
+  {
+    GNOME_APP_UI_ITEM,
+    N_("Check & Repair Su_baccounts"),
+    N_("Check for and repair unbalanced transactions and orphan splits "
+       "in this account and its subaccounts"),
+    gnc_acct_tree_window_menu_scrub_sub_cb, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    0, 0, NULL
+  },
+  {
+    GNOME_APP_UI_ITEM,
+    N_("Check & Repair A_ll"),
+    N_("Check for and repair unbalanced transactions and orphan splits "
+       "in all accounts"),
+    gnc_acct_tree_window_menu_scrub_all_cb, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    0, 0, NULL
+  },
+  GNOMEUIINFO_END
+};
+
+/**
+ * gnc_acct_tree_window_create_menu
+ *
+ * @par1: A pointer to the data structure holding all the data
+ * associated with the Account Tree window.
+ *
+ * @par2: A pointer to the GNC MDI child associated with the Account
+ * Tree window.
+ *
+ * This routine creates the menu for the right-click popup menu in the
+ * account tree window.  This same menu was also previously inserted
+ * into the menu bar and available there.  These menu items are now
+ * separately incorporated into the menus.  See
+ * gnc_acct_tree_tweak_menu().
+ */
 void
 gnc_acct_tree_window_create_menu(GNCAcctTreeWin * main_info,
-                                 GNCMDIChildInfo * child) {
-  GnomeUIInfo scrubmenu[] =
-  {
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Check & Repair A_ccount"),
-      N_("Check for and repair unbalanced transactions and orphan splits "
-	 "in this account"),
-      gnc_acct_tree_window_menu_scrub_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Check & Repair Su_baccounts"),
-      N_("Check for and repair unbalanced transactions and orphan splits "
-	 "in this account and its subaccounts"),
-      gnc_acct_tree_window_menu_scrub_sub_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Check & Repair A_ll"),
-      N_("Check for and repair unbalanced transactions and orphan splits "
-	 "in all accounts"),
-      gnc_acct_tree_window_menu_scrub_all_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_END
-  };
+				 GNCMDIChildInfo * child)
+{
   GnomeUIInfo * dup_scrub = g_memdup(scrubmenu, sizeof(scrubmenu));
   
   GnomeUIInfo accountsmenu[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      N_("_Open Account"),
+      N_("Open Account"),
       N_("Open the selected account"),
-      gnc_acct_tree_window_menu_open_cb, NULL, NULL,
+      gnc_acct_tree_window_menu_open_cb, child->child, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
       'o', GDK_CONTROL_MASK, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("Open S_ubaccounts"),
+      N_("Open _Subaccounts"),
       N_("Open the selected account and all its subaccounts"),
-      gnc_acct_tree_window_menu_open_subs_cb, NULL, NULL,
+      gnc_acct_tree_window_menu_open_subs_cb, child->child, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
       0, 0, NULL
     },
@@ -911,17 +1015,6 @@ gnc_acct_tree_window_create_menu(GNCAcctTreeWin * main_info,
 }
 
 
-/********************************************************************
- * gnc_acct_tree_window_set_sensitives
- * set account-related buttons/menus sensitivities 
- ********************************************************************/
-
-static void
-gnc_acct_tree_window_set_sensitives(GNCAcctTreeWin * win,
-                                    gboolean sensitive) {
-  /* FIXME: set sensitivity right. */
-}
-
 static void
 gnc_acct_tree_window_select_cb(GNCMainWinAccountTree *tree, 
                                Account *account, 
@@ -931,8 +1024,7 @@ gnc_acct_tree_window_select_cb(GNCMainWinAccountTree *tree,
   account = gnc_mainwin_account_tree_get_current_account(tree);
   sensitive = (account != NULL);
   
-  gnc_acct_tree_window_set_sensitives
-    (gtk_object_get_user_data(GTK_OBJECT(tree)), sensitive);
+  gnc_acct_tree_window_set_sensitives(win, sensitive);
 }
 
 
@@ -1126,5 +1218,160 @@ gnc_acct_tree_window_toolbar_options_cb(GtkWidget * widget, gpointer data) {
                                     gnc_options_dialog_close_cb,
                                     (gpointer)win);    
   }
+}
+
+/**
+ * gnc_acct_tree_tweak_menu
+ *
+ * @par1: A pointer to the GNC MDI child associated with the Account
+ * Tree window.
+ *
+ * This routine is called when the account tree view is created and
+ * shown for the first time.  It performs a variety of setup functions.
+ * First, it creates menu items needed for the Account Tree window,
+ * and inserts them into the main MDI application menus at the correct
+ * positions.  Second, it also sets up certain main menu items to be
+ * enabled/disabled whenever the account tree view is brought to the
+ * top.  Third, it builds a list of widgets (menu and toolbar items)
+ * to be enabled/disabled whenever an account is selected in the
+ * view.
+ */
+static void
+gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
+{
+  GNCAcctTreeWin * win;
+  GtkWidget      * widget;
+  GnomeUIInfo fileitems1[] =
+  {
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_New Account..."),
+      N_("Create a new account"),
+      gnc_acct_tree_window_menu_add_account_cb, mc->child, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+  GnomeUIInfo fileitems2[] =
+  {
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Open Account"),
+      N_("Open the selected account"),
+      gnc_acct_tree_window_menu_open_cb, mc->child, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
+      'o', GDK_CONTROL_MASK, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Open S_ubaccounts"),
+      N_("Open the selected account and all its subaccounts"),
+      gnc_acct_tree_window_menu_open_subs_cb, mc->child, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
+  GnomeUIInfo edititems[] =
+  {
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Edit Account"),
+      N_("Edit the selected account"),
+      gnc_acct_tree_window_menu_edit_cb, mc->child, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PROP,
+      'e', GDK_CONTROL_MASK, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("_Delete Account"),
+      N_("Delete selected account"),
+      gnc_acct_tree_window_menu_delete_account_cb, 
+      mc->child,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK,
+      GNOME_STOCK_PIXMAP_REMOVE,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
+  GnomeUIInfo * dup_scrub = g_memdup(scrubmenu, sizeof(scrubmenu));
+  GnomeUIInfo actionsitems[] =
+  {
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Transfer..."),
+      N_("Transfer funds from one account to another"),
+      gnc_acct_tree_window_menu_transfer_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      't', GDK_CONTROL_MASK, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Reconcile..."),
+      N_("Reconcile the selected account"),
+      gnc_acct_tree_window_menu_reconcile_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      'r', GDK_CONTROL_MASK, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Stock S_plit..."),
+      N_("Record a stock split or a stock merger"),
+      gnc_acct_tree_window_menu_stock_split_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    GNOMEUIINFO_SUBTREE(N_("_Check & Repair"), dup_scrub),
+    GNOMEUIINFO_END
+  };
+
+  if (mc->app == NULL)
+    return;
+
+  /*
+   * This window can be created multiple times, so the code needs to
+   * check and see if the menus its adding are already present.  This
+   * can't just be code to insure this routine is only called
+   * once,because the Gnome MDI code may destroy and recreate the
+   * menus and toolbars.  What a pain.
+   */
+  /* Do not i18n these strings!!! */
+  if (gnc_mdi_child_find_menu_item(mc, "File/New Account..."))
+    return;
+    
+  /* Do not i18n these strings!!! */
+  gnome_app_insert_menus (mc->app, "File/New File", fileitems1);
+  gnome_app_insert_menus (mc->app, "File/Open...", fileitems2);
+  gnome_app_insert_menus (mc->app, "Edit/Paste", edititems);
+  gnome_app_insert_menus (mc->app, "Actions/Scheduled Transactions",
+			  actionsitems);
+
+  win = (GNCAcctTreeWin *)mc->user_data;
+  gnc_acct_tree_window_add_sensitive(win, fileitems2[0].widget);
+  gnc_acct_tree_window_add_sensitive(win, fileitems2[1].widget);
+  gnc_acct_tree_window_add_sensitive(win, edititems[1].widget);
+  gnc_acct_tree_window_add_sensitive(win, edititems[2].widget);
+
+  /* Do not i18n these strings!!! */
+  widget = gnc_mdi_child_find_toolbar_item(mc, "Open");
+  gnc_acct_tree_window_add_sensitive(win, widget);
+  widget = gnc_mdi_child_find_toolbar_item(mc, "Edit");
+  gnc_acct_tree_window_add_sensitive(win, widget);
+  widget = gnc_mdi_child_find_toolbar_item(mc, "Delete");
+  gnc_acct_tree_window_add_sensitive(win, widget);
+
+  /* Do not i18n these strings!!! */
+  gnc_mdi_child_auto_menu(mc, GNC_AUTO_DISABLE, "File/Close", NULL);
+  gnc_mdi_child_auto_toolbar(mc, GNC_AUTO_DISABLE, "Close", NULL);
+
+  /* Start with all the 'sensitives' disabled. */
+  g_list_foreach(win->account_sensitives, (GFunc)gtk_widget_set_sensitive,
+		 (gpointer)FALSE);
 }
 

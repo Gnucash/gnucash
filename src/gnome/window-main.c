@@ -66,9 +66,40 @@
 #include "window-register.h"
 #include "window-report.h"
 
+static gboolean gnc_show_status_bar = TRUE;
+static gboolean gnc_show_summary_bar = TRUE;
+
 static void gnc_main_window_create_menus(GNCMDIInfo * maininfo);
 static GnomeUIInfo * gnc_main_window_toolbar_prefix (void);
 static GnomeUIInfo * gnc_main_window_toolbar_suffix (void);
+
+
+/**
+ * gnc_main_window_get_mdi_child
+ *
+ * This routine grovels through the mdi data structures and finds the
+ * GNCMDIChildInfo data structure for the view currently at the top of
+ * the stack.
+ *
+ * returns: A pointer to the GNCMDIChildInfo data structure for the
+ * current view, or NULL in cast of error.
+ */
+static GNCMDIChildInfo *
+gnc_main_window_get_mdi_child (void)
+{
+  GNCMDIInfo *main_info;
+  GnomeMDI *mdi;
+
+  main_info = gnc_mdi_get_current ();
+  if (!main_info)
+    return(NULL);
+
+  mdi = main_info->mdi;
+  if (!mdi || !mdi->active_child)
+    return(NULL);
+
+  return(gtk_object_get_user_data(GTK_OBJECT(mdi->active_child)));
+}
 
 /********************************************************************
  * gnc_shutdown
@@ -178,7 +209,8 @@ gnc_refresh_main_window_info (void)
  ********************************************************************/
 
 static GnomeMDIChild * 
-gnc_main_window_create_child(const gchar * configstring) {
+gnc_main_window_create_child(const gchar * configstring)
+{
   GnomeMDIChild *child;
   URLType type;
   char * location;
@@ -221,6 +253,144 @@ gnc_main_window_can_restore_cb (const char * filename)
                                              GNC_COMMODITY_NS_LEGACY);
 }
 
+/**
+ * gnc_acct_tree_tweak_menus
+ *
+ * @par1: A pointer to the GNC MDI child associated with the Main
+ * window.
+ *
+ * This routine updates the View window in the main window menubar to
+ * correctly show the state of the Toolbar, Summarybar and Statusbar.
+ * The "show xxx" and "Hide xxx" menu items are changed to show what
+ * can be done to the item in its current state.  I.E. If the item is
+ * hidden, only the "Show xxx" menu item will be visible. This
+ * routine is called whenever one of the main window parts is hidden
+ * or shown, or whenever the the mdi view is changed (for safety
+ * sake).
+ */
+static void
+gnc_main_window_tweak_menus(GNCMDIChildInfo * mc)
+{
+  GtkWidget *widget;
+  gboolean   toolbar_visibility;
+
+  toolbar_visibility = gnc_mdi_get_toolbar_visibility();
+
+  widget = gnc_mdi_child_find_menu_item(mc, "View/Show Toolbar");
+  gnc_mdi_widget_show(widget, (gpointer)!toolbar_visibility);
+  widget = gnc_mdi_child_find_menu_item(mc, "View/Hide Toolbar");
+  gnc_mdi_widget_show(widget, (gpointer)toolbar_visibility);
+
+  widget = gnc_mdi_child_find_menu_item(mc, "View/Show Status Bar");
+  gnc_mdi_widget_show(widget, (gpointer)!gnc_show_status_bar);
+  widget = gnc_mdi_child_find_menu_item(mc, "View/Hide Status Bar");
+  gnc_mdi_widget_show(widget, (gpointer)gnc_show_status_bar);
+
+  widget = gnc_mdi_child_find_menu_item(mc, "View/Show Summary Bar");
+  gnc_mdi_widget_show(widget, (gpointer)!gnc_show_summary_bar);
+  widget = gnc_mdi_child_find_menu_item(mc, "View/Hide Summary Bar");
+  gnc_mdi_widget_show(widget, (gpointer)gnc_show_summary_bar);
+}
+
+/**
+ * gnc_main_window_flip_toolbar_cb
+ *
+ * @par1: A pointer to the menu item selected. (ignored)
+ * @par2: The user data for this menu item. (ignored)
+ *
+ * This routine flips the state of the toolbar, hiding it if currently
+ * visible, and showing it if not.  This routine has to grovel through
+ * the mdi related data structures to find the current child data
+ * structure (because there are potentially many windows).  The
+ * callback data should point to the right mdi child data structure,
+ * but doesn't appear to.
+ */
+static void
+gnc_main_window_flip_toolbar_cb(GtkWidget * widget, gpointer data)
+{
+  GNCMDIChildInfo * mc;
+  gboolean toolbar_visibility = !gnc_mdi_get_toolbar_visibility();
+
+  mc = gnc_main_window_get_mdi_child();
+  if (!mc)
+    return;
+  gnc_mdi_set_toolbar_visibility(toolbar_visibility);
+  gnc_mdi_show_toolbar(mc);
+  gnc_main_window_tweak_menus(mc);
+}
+
+/**
+ * gnc_main_window_flip_status_bar_cb
+ *
+ * @par1: A pointer to the menu item selected. (ignored)
+ * @par2: The user data for this menu item. (ignored)
+ *
+ * This routine flips the state of the status bar, hiding it if
+ * currently visible, and showing it if not.  This routine has to
+ * grovel through the mdi related data structures to find the current
+ * child data structure (because there are potentially many windows).
+ * The callback data should point to the right mdi child data
+ * structure, but doesn't appear to.
+ */
+static void
+gnc_main_window_flip_status_bar_cb(GtkWidget * widget, gpointer data)
+{
+  GNCMDIChildInfo * mc;
+
+  gnc_show_status_bar = !gnc_show_status_bar;
+
+  mc = gnc_main_window_get_mdi_child();
+  if (!mc || !mc->app)
+    return;
+
+  if (gnc_show_status_bar) {
+    gtk_widget_show(mc->app->statusbar);
+  } else {
+    gtk_widget_hide(mc->app->statusbar);
+    gtk_widget_queue_resize(mc->app->statusbar->parent);
+  }
+  gnc_main_window_tweak_menus(mc);
+}
+
+/**
+ * gnc_main_window_flip_summary_bar_cb
+ *
+ * @par1: A pointer to the menu item selected. (ignored)
+ * @par2: The user data for this menu item. (ignored)
+ *
+ * This routine flips the state of the summary bar, hiding it if
+ * currently visible, and showing it if not.  This routine has to
+ * grovel through the mdi related data structures to find the current
+ * child data structure (because there are potentially many windows).
+ * The callback data should point to the right mdi child data
+ * structure, but doesn't appear to.
+ */
+static void
+gnc_main_window_flip_summary_bar_cb(GtkWidget * widget, gpointer data)
+{
+  GNCMDIChildInfo * mc;
+  GnomeDockItem *summarybar;
+  guint dc1, dc2, dc3, dc4;
+
+  gnc_show_summary_bar = !gnc_show_summary_bar;
+
+  mc = gnc_main_window_get_mdi_child();
+  if (!mc || !mc->app)
+    return;
+
+  summarybar = gnome_dock_get_item_by_name(GNOME_DOCK(mc->app->dock),
+					   "Summary Bar",
+					   &dc1, &dc2, &dc3, &dc4);
+  if (!summarybar) return;
+
+  if (gnc_show_summary_bar)
+    gtk_widget_show(GTK_WIDGET(summarybar));
+  else
+    gtk_widget_hide(GTK_WIDGET(summarybar));
+  gnc_main_window_tweak_menus(mc);
+  gtk_widget_queue_resize(mc->app->dock);
+}
+
 /********************************************************************
  * gnc_main_window_new()
  * initialize the Gnome MDI system
@@ -247,7 +417,7 @@ gnc_main_window_new (void)
   /* set up the position where the child menus/toolbars will be 
    * inserted  */
   gnome_mdi_set_child_menu_path(GNOME_MDI(retval->mdi),
-                                "_Tools");
+                                "_Edit");
   gnome_mdi_set_child_list_path(GNOME_MDI(retval->mdi),
                                 "_Windows/");
 
@@ -256,12 +426,16 @@ gnc_main_window_new (void)
                      GTK_SIGNAL_FUNC(gnc_main_window_app_created_cb),
                      retval);
 
+
+  /* handle show/hide items in view menu */
+  retval->menu_tweaking = gnc_main_window_tweak_menus;
+
   return retval;
 }
 
 /********************************************************************
  * menu/toolbar data structures and callbacks 
- * these are the "templates" that are installed in every toplevel
+ * these are the "templates" that are installed in every top level
  * MDI window
  ********************************************************************/
 
@@ -347,7 +521,7 @@ gnc_main_window_file_export_cb(GtkWidget * widget, gpointer data)
 
   rc = stat (filename, &statbuf);
 
-  /* Check for an error that isn't a non-existant file. */
+  /* Check for an error that isn't a non-existent file. */
   if (rc != 0 && errno != ENOENT)
   {
     const char *format = _("You cannot save to that filename.\n\n%s");
@@ -406,6 +580,60 @@ static void
 gnc_main_window_file_shutdown_cb(GtkWidget * widget, gpointer data)
 {
   gnc_shutdown (0);
+}
+
+/**
+ * gnc_main_window_dispatch_cb
+ *
+ * @par1: A pointer to the menu item selected. (ignored)
+ * @par2: The user data for this menu item. (ignored)
+ *
+ * The main menubar has several items that must react differently
+ * depending upon what window is in front when they are selected.
+ * These menus all point to this dispatch routine, which uses the user
+ * data associated with the menu item to determine which function was
+ * requested. If then calls the appropriate dispatch function (and
+ * data) registered for this item and saved in the GNCMDIChildInfo
+ * data structure.
+ *
+ * Again, this routine has to grovel through the mdi related data
+ * structures to find the current child data structure (because there
+ * are potentially many windows).  The callback data should point to
+ * the right mdi child data structure, but doesn't appear to.
+ */
+static void
+gnc_main_window_dispatch_cb(GtkWidget * widget, gpointer data)
+{
+  GNCMDIChildInfo *mc;
+  GNCMDIDispatchType type;
+  gpointer *uidata;
+
+  /* How annoying. MDI overrides the user data. Get it the hard way. */
+  uidata = gtk_object_get_data(GTK_OBJECT(widget), GNOMEUIINFO_KEY_UIDATA);
+  type = (GNCMDIDispatchType)GPOINTER_TO_UINT(uidata);
+  g_return_if_fail(type < GNC_DISP_LAST);
+
+  mc = gnc_main_window_get_mdi_child();
+  if (mc && mc->dispatch_callback[type])
+    mc->dispatch_callback[type](widget, mc->dispatch_data[type]);
+}
+
+/**
+ * gnc_main_window_tax_info_cb
+ *
+ * @par1: A pointer to the menu item selected. (ignored)
+ * @par2: The user data for this menu item. (ignored)
+ *
+ * Bring up the window for editing tax data.
+ */
+static void
+gnc_main_window_tax_info_cb (GtkWidget * widget, gpointer unused) {
+  GNCMDIChildInfo * mc;
+
+  mc = gnc_main_window_get_mdi_child();
+  if (!mc || !mc->app)
+    return;
+  gnc_tax_info_dialog(GTK_WIDGET(mc->app));
 }
 
 static void
@@ -546,66 +774,140 @@ gnc_main_window_file_new_account_tree_cb(GtkWidget * w, gpointer data)
 static void
 gnc_main_window_create_menus(GNCMDIInfo * maininfo)
 {
-  static GnomeUIInfo gnc_file_menu_template[] = 
+  static GnomeUIInfo gnc_file_recent_files_submenu_template[] =
   {
-    GNOMEUIINFO_MENU_NEW_ITEM(N_("New _File"),
-                              N_("Create a new file"),
-                              gnc_main_window_file_new_file_cb, NULL),
-    GNOMEUIINFO_MENU_OPEN_ITEM(gnc_main_window_file_open_cb, NULL),
-    GNOMEUIINFO_MENU_SAVE_ITEM(gnc_main_window_file_save_cb, NULL),
-    GNOMEUIINFO_MENU_SAVE_AS_ITEM(gnc_main_window_file_save_as_cb, NULL),
+    GNOMEUIINFO_END
+  };
+
+  static GnomeUIInfo gnc_file_export_submenu_template[] =
+  {
     {
       GNOME_APP_UI_ITEM,
-      N_("Export Accounts..."),
+      N_("Export _Accounts..."),
       N_("Export the account hierarchy to a new file"),
       gnc_main_window_file_export_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
-    GNOMEUIINFO_SEPARATOR,
+    GNOMEUIINFO_END
+  };
+
+  static GnomeUIInfo gnc_file_menu_template[] = 
+  {
+    GNOMEUIINFO_MENU_NEW_ITEM(N_("_New File"),
+                              N_("Create a new file"),
+                              gnc_main_window_file_new_file_cb, NULL),
     {
       GNOME_APP_UI_ITEM,
-      N_("Import QIF..."),
-      N_("Import a Quicken QIF file"),
-      gnc_main_window_file_import_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_CONVERT,
-      'i', GDK_CONTROL_MASK, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("New _Account Tree"),
+      N_("New Account _Tree"),
       N_("Open a new account tree view"),
       gnc_main_window_file_new_account_tree_cb, NULL, NULL, 
       GNOME_APP_PIXMAP_NONE, NULL, 0, 0, NULL
     },    
     GNOMEUIINFO_SEPARATOR,
+    GNOMEUIINFO_MENU_OPEN_ITEM(gnc_main_window_file_open_cb, NULL),
     {
       GNOME_APP_UI_ITEM,
-      N_("Move to New Window"),
+      N_("Open in a New Window"),
       N_("Open a new top-level GnuCash window for the current view"),
       gnc_main_window_file_new_window_cb, NULL, NULL, 
       GNOME_APP_PIXMAP_NONE, NULL, 0, 0, NULL
     },    
+    GNOMEUIINFO_SUBTREE( N_("Open _Recent"),
+                         gnc_file_recent_files_submenu_template ),
+    GNOMEUIINFO_SEPARATOR,
+    GNOMEUIINFO_MENU_SAVE_ITEM(gnc_main_window_file_save_cb, NULL),
+    GNOMEUIINFO_MENU_SAVE_AS_ITEM(gnc_main_window_file_save_as_cb, NULL),
+    GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      N_("Close _Window"),
-      N_("Close the current notebook page"),
-      gnc_main_window_file_close_cb, NULL, NULL, 
-      GNOME_APP_PIXMAP_NONE, NULL, 0, 0, NULL
-    },    
+      N_("_Import QIF..."),
+      N_("Import a Quicken QIF file"),
+      gnc_main_window_file_import_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_CONVERT,
+      'i', GDK_CONTROL_MASK, NULL
+    },
+    GNOMEUIINFO_SUBTREE( N_("_Export"),
+                         gnc_file_export_submenu_template ),
+    GNOMEUIINFO_SEPARATOR,
+    GNOMEUIINFO_MENU_PRINT_ITEM(gnc_main_window_dispatch_cb,
+				GUINT_TO_POINTER(GNC_DISP_PRINT)),
+    GNOMEUIINFO_SEPARATOR,
+    GNOMEUIINFO_MENU_CLOSE_ITEM(gnc_main_window_file_close_cb, NULL),
     GNOMEUIINFO_MENU_EXIT_ITEM(gnc_main_window_file_shutdown_cb, NULL),
     GNOMEUIINFO_END
   };
   
-  static GnomeUIInfo gnc_settings_menu_template[] =
+  static GnomeUIInfo gnc_edit_menu_template[] = 
   {
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Preferences..."),
-      N_("Open the global preferences dialog"),
-      gnc_main_window_options_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
+    GNOMEUIINFO_MENU_CUT_ITEM(gnc_main_window_dispatch_cb,
+				GUINT_TO_POINTER(GNC_DISP_CUT)),
+    GNOMEUIINFO_MENU_COPY_ITEM(gnc_main_window_dispatch_cb,
+				GUINT_TO_POINTER(GNC_DISP_COPY)),
+    GNOMEUIINFO_MENU_PASTE_ITEM(gnc_main_window_dispatch_cb,
+				GUINT_TO_POINTER(GNC_DISP_PASTE)),
+    GNOMEUIINFO_SEPARATOR,
+    GNOMEUIINFO_MENU_PREFERENCES_ITEM(gnc_main_window_options_cb, NULL),
+    { GNOME_APP_UI_ITEM,
+      N_("Ta_x Options"),
+      N_("Setup tax information for all income and expense accounts"),
+      gnc_main_window_tax_info_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
+  static GnomeUIInfo gnc_view_menu_template[] = 
+  {
+    { GNOME_APP_UI_ITEM,
+      N_("_Refresh"),
+      N_("Refresh this window"),
+      gnc_main_window_dispatch_cb, GUINT_TO_POINTER(GNC_DISP_REFRESH), NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    { GNOME_APP_UI_ITEM,
+      N_("Hide _Toolbar"),
+      N_("Hide the toolbar on this window"),
+      gnc_main_window_flip_toolbar_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Show _Toolbar"),
+      N_("Show the toolbar on this window"),
+      gnc_main_window_flip_toolbar_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Hide _Status Bar"),
+      N_("Hide the status bar on this window"),
+      gnc_main_window_flip_status_bar_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Show _Status Bar"),
+      N_("Show the status bar on this window"),
+      gnc_main_window_flip_status_bar_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Hide S_ummary Bar"),
+      N_("Hide the summary bar on this window"),
+      gnc_main_window_flip_summary_bar_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Show S_ummary Bar"),
+      N_("Show the summary bar on this window"),
+      gnc_main_window_flip_summary_bar_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_END
@@ -630,6 +932,12 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
     GNOMEUIINFO_END
   };
   
+  static GnomeUIInfo gnc_actions_menu_template[] =
+  {
+    GNOMEUIINFO_SUBTREE( N_("Scheduled Transactions"),
+                         gnc_sched_xaction_tools_submenu_template ),
+    GNOMEUIINFO_END
+  };
   static GnomeUIInfo gnc_tools_menu_template[] =
   {
     {
@@ -642,17 +950,17 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("Commodity _Editor"),
-      N_("View and edit the commodities for stocks and mutual funds"),
-      gnc_main_window_commodities_cb, NULL, NULL,
+      N_("_Price Editor"),
+      N_("View and edit the prices for stocks and mutual funds"),
+      gnc_main_window_prices_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("_Price Editor"),
-      N_("View and edit the prices for stocks and mutual funds"),
-      gnc_main_window_prices_cb, NULL, NULL,
+      N_("Commodity _Editor"),
+      N_("View and edit the commodities for stocks and mutual funds"),
+      gnc_main_window_commodities_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -671,8 +979,6 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
       GNOME_APP_PIXMAP_NONE, NULL,
       'f', GDK_CONTROL_MASK, NULL
     },
-    GNOMEUIINFO_SUBTREE( N_("Scheduled Transactions"),
-                         gnc_sched_xaction_tools_submenu_template ),
     GNOMEUIINFO_END
   };
   
@@ -708,8 +1014,10 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
   static GnomeUIInfo gnc_main_menu_template[] =
   {
     GNOMEUIINFO_MENU_FILE_TREE(gnc_file_menu_template),
+    GNOMEUIINFO_MENU_EDIT_TREE(gnc_edit_menu_template),
+    GNOMEUIINFO_MENU_VIEW_TREE(gnc_view_menu_template),
+    GNOMEUIINFO_SUBTREE(N_("_Actions"), gnc_actions_menu_template),
     GNOMEUIINFO_SUBTREE(N_("_Tools"), gnc_tools_menu_template),
-    GNOMEUIINFO_SUBTREE(N_("_Settings"), gnc_settings_menu_template),
     GNOMEUIINFO_SUBTREE(N_("_Windows"), gnc_windows_menu_template),    
     GNOMEUIINFO_MENU_HELP_TREE(gnc_help_menu_template),
     GNOMEUIINFO_END
@@ -718,7 +1026,7 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
   gnome_mdi_set_menubar_template(GNOME_MDI(maininfo->mdi),
                                  gnc_main_menu_template);
 
-  gnc_file_history_add_after ("New _Account Tree");
+  gnc_file_history_add_after ("Open _Recent/");
 }
 
 static GnomeUIInfo *

@@ -433,9 +433,9 @@ string and 'directories' must be a list of strings."
   ;; add the menu option to edit style sheets 
   (gnc:add-extension
    (gnc:make-menu-item 
-    (_ "Style Sheets...")
+    (_ "_Style Sheets...")
     (_ "Edit report style sheets.")
-    (list "_Settings" "")
+    (list "_Edit" "_Preferences...")
     (lambda ()
       (gnc:style-sheet-dialog-open))))
 

@@ -36,7 +36,22 @@
 #define GNC_MDI_CM_CLASS "gnc-mdi"
 
 static GNCMDIInfo *gnc_mdi_current = NULL;
+static gboolean gnc_toolbar_visible = TRUE;
 
+/*
+ * These strings must match the dispatch enum listed at the start of
+ * gnc-mdi-utils.h.
+ *
+ * Do not internationalize these strings!!!
+ */
+static gchar *
+dispatch_menu_paths[GNC_DISP_LAST] = {
+  "File/Print",
+  "Edit/Cut",
+  "Edit/Copy",
+  "Edit/Paste",
+  "View/Refresh"
+};
 
 gncUIWidget
 gnc_ui_get_toplevel (void)
@@ -67,6 +82,329 @@ gnc_ui_get_toplevel (void)
     return GTK_WIDGET (app);
 
   return NULL;
+}
+
+gboolean
+gnc_mdi_get_toolbar_visibility (void)
+{
+  return(gnc_toolbar_visible);
+}
+
+void
+gnc_mdi_set_toolbar_visibility (gboolean visible)
+{
+  gnc_toolbar_visible = visible;
+}
+
+/**
+ * gnc_mdi_widget_show
+ *
+ * @par1: The widget to modify.
+ * @par2: TRUE if the widget should be shown, FALSE if hidden.
+ *
+ * This routine is merely a wrapper around gtk_widget_show/hide so
+ * that those functions can be called on a list of widgets.
+ */
+void
+gnc_mdi_widget_show(gpointer data, gpointer user_data)
+{
+  g_return_if_fail(data != NULL);
+  g_return_if_fail(GTK_IS_WIDGET(data));
+
+  if ((gboolean)user_data) {
+    gtk_widget_show(GTK_WIDGET(data));
+  } else {
+    gtk_widget_hide(GTK_WIDGET(data));
+  }
+}
+
+/**
+ * gnc_mdi_widget_sensitive
+ *
+ * @par1: The widget to modify.
+ * @par2: The new sensitivity of the widget.
+ *
+ * This routine is merely a wrapper around gtk_widget_set_sensitive
+ * so that functions can be called on a list of widgets.
+ */
+static void
+gnc_mdi_widget_sensitive(gpointer data, gpointer user_data)
+{
+  g_return_if_fail(data != NULL);
+  g_return_if_fail(GTK_IS_WIDGET(data));
+
+  gtk_widget_set_sensitive(GTK_WIDGET(data), (gboolean)user_data);
+}
+
+/**
+ * gnc_mdi_update_widgets
+ *
+ * @par1: A pointer to the child data structure for the GNC child
+ * being brought to the front (or sent to the back).
+ *
+ * @par2: TRUE if this child is being raised to the front of the
+ * notebook (or to be the topmost window.)
+ *
+ * This routine performs all the widget modifications needed to adjust
+ * the menus and toolbar for a new gnc window.
+ */
+static void
+gnc_mdi_update_widgets(GNCMDIChildInfo *mc, gboolean topmost)
+{
+  if (mc == NULL) return; /* expected once */
+
+  g_list_foreach(mc->widgets[GNC_AUTO_SHOW], gnc_mdi_widget_show,
+		 (gpointer)topmost);
+  g_list_foreach(mc->widgets[GNC_AUTO_HIDE], gnc_mdi_widget_show,
+		 (gpointer)!topmost);
+  g_list_foreach(mc->widgets[GNC_AUTO_ENABLE], gnc_mdi_widget_sensitive,
+		 (gpointer)topmost);
+  g_list_foreach(mc->widgets[GNC_AUTO_DISABLE], gnc_mdi_widget_sensitive,
+		 (gpointer)!topmost);
+}
+
+/**
+ * gnc_mdi_child_find_menu_item
+ *
+ * @par1: A pointer to the child data structure for the GNC child
+ * currently visible.
+ *
+ * @par2: A string giving the menu path of the item wanted.  This
+ * string MUST NOT be internationalized.
+ *
+ * This routine will search through the menubar looking for a specific
+ * menu item.  It handles internationalizing the string passed to it,
+ * and pulling apart the string into the components of the menu path.
+ *
+ * returns: A pointer to the requested GtkMenuItem, or NULL.
+ */
+GtkWidget *
+gnc_mdi_child_find_menu_item(GNCMDIChildInfo *mc, gchar *path)
+{
+  GnomeDockItem *di;
+  GtkWidget *menubar;
+  GtkWidget *menu;
+  GtkWidget *menuitem;
+  int pos;
+
+  if (mc->app == NULL)
+    return(NULL);
+
+  di = gnome_app_get_dock_item_by_name (mc->app, GNOME_APP_MENUBAR_NAME);
+  if (di == NULL)
+    return(NULL);
+
+  menubar = gnome_dock_item_get_child (di);
+  if (menubar == NULL)
+    return(NULL);
+
+  menu = gnome_app_find_menu_pos (menubar, path, &pos);
+  if (menu == NULL)
+    return(NULL);
+
+  menuitem = (GtkWidget*)g_list_nth_data(GTK_MENU_SHELL(menu)->children, pos-1);
+  return(menuitem);
+}
+
+/**
+ * gnc_mdi_child_find_toolbar_item
+ *
+ * @par1: A pointer to the child data structure for the GNC child
+ * currently visible.
+ *
+ * @par2: A string giving the name the item wanted.  This name MUST
+ * NOT be internationalized.
+ *
+ * This routine will search through the toolbar looking for a specific
+ * item.  It returns the widget that is used to display that item in
+ * the toolbar.  This routine handles internationalizing the string
+ * passed to it.
+ *
+ * returns: A pointer to the requested toolbar item, or NULL.
+ */
+GtkWidget *
+gnc_mdi_child_find_toolbar_item(GNCMDIChildInfo *mc, gchar *name)
+{
+  GtkToolbar *toolbar;
+  GtkToolbarChild *child;
+  gchar *label;
+  gchar *transl;
+  int pos;
+
+  g_return_val_if_fail(mc != NULL, NULL);
+  g_return_val_if_fail(mc->toolbar != NULL, NULL);
+
+  transl = L_(name);
+  toolbar = GTK_TOOLBAR(mc->toolbar);
+  for (pos = 0; pos < toolbar->num_children; pos++) {
+    child = g_list_nth_data(toolbar->children, pos);
+    if ((child == NULL) || (child->label == NULL) || (child->widget == NULL))
+      continue;
+    gtk_label_get(GTK_LABEL(child->label), &label);
+    if (strcasecmp(label, transl) == 0)
+      return(child->widget);
+  }
+  return(NULL);
+}
+
+/**
+ * gnc_mdi_child_auto_menu
+ *
+ * @par1: A pointer to the child data structure for the GNC child
+ * whose menus should be set up for automatic adjustment.
+ *
+ * @par2: An enum describing what should be done with this item each
+ * time this child is brought to the front.  Choices are: SHOW, HIDE,
+ * ENABLE, and DISABLE.
+ *
+ * @par3: NULL terminated list of strings corresponding to the menu
+ * items that should be added to the adjustment list.
+ *
+ * This routine searches through the application menu data structures
+ * to find the specified menu item widgets, and then adds them to a
+ * list.  This list is used for automatic manipulation of the widget
+ * whenever the gnc child (@param1) becomes the front-most
+ * window. When the child is no longer the front-most window the
+ * manipulation is undone.
+ *
+ * *** Do not i18n strings passed to this function.  The routines
+ * *** called by this function correctly handle taking menu paths
+ * *** apart and i18n the individual pieces as they go.  Passing i18n
+ * *** strings will cause this function to fail.
+ */
+void
+gnc_mdi_child_auto_menu(GNCMDIChildInfo *mc,
+			GNCMDIAutoType type,
+			gchar *first_path, ...)
+{
+  GnomeDockItem *di;
+  GtkWidget *menubar;
+  GtkWidget *menu;
+  GtkWidget *menuitem;
+  va_list args;
+  gchar *path;
+  int pos;
+
+  if (mc->app == NULL)
+    return;
+
+  di = gnome_app_get_dock_item_by_name (mc->app, GNOME_APP_MENUBAR_NAME);
+  if (di == NULL)
+    return;
+
+  menubar = gnome_dock_item_get_child (di);
+  if (menubar == NULL)
+    return;
+
+  va_start(args, first_path);
+  for (path = first_path; path != NULL; path = va_arg(args, gchar *)) {
+    menu = gnome_app_find_menu_pos (menubar, path, &pos);
+    if (menu == NULL)
+      continue;
+
+    menuitem = (GtkWidget*)g_list_nth_data(GTK_MENU_SHELL(menu)->children, pos-1);
+    if (menuitem == NULL)
+      continue;
+
+    if (g_list_index(mc->widgets[type], menuitem) == -1)
+      mc->widgets[type] = g_list_append(mc->widgets[type], menuitem);
+  }
+  va_end(args);
+}
+
+/**
+ * gnc_mdi_child_auto_toolbar
+ *
+ * @par1: A pointer to the child data structure for the GNC child
+ * whose toolbar items should be set up for automatic adjustment.
+ *
+ * @par2: An enum describing what should be done with this item each
+ * time this child is brought to the front.  Choices are: SHOW, HIDE,
+ * ENABLE, and DISABLE.
+ *
+ * @par3: NULL terminated list of strings corresponding to the toolbar
+ * items that should be added to the adjustment list.
+ *
+ * This routine searches through the application toolbar data structures
+ * to find the specified toolbar item widgets, and then adds them to a
+ * list.  This list is used for automatic manipulation of the widget
+ * whenever the gnc child (par1) becomes the front-most window. When
+ * the child is no longer the front-most window the manipulation is
+ * undone.
+ *
+ * *** Do not i18n strings passed to this function.  This is for
+ * *** consistency with the previous function.  This function
+ * *** correctly handles performing i18n on the strings passed to it.
+ */
+void
+gnc_mdi_child_auto_toolbar(GNCMDIChildInfo *mc,
+			   GNCMDIAutoType type,
+			   gchar *first_path, ...)
+{
+  GnomeDockItem *di;
+  GtkToolbar *toolbar;
+  GtkToolbarChild *child;
+  GtkWidget *widget = NULL;
+  gchar *label;
+  gchar *path, *transl;
+  va_list args;
+  int pos;
+
+  if (mc->app == NULL)
+    return;
+
+  di = gnome_app_get_dock_item_by_name (mc->app, GNOME_APP_TOOLBAR_NAME);
+  if (di == NULL)
+    return;
+
+  toolbar = GTK_TOOLBAR(gnome_dock_item_get_child (di));
+  if (toolbar == NULL)
+    return;
+
+  va_start(args, first_path);
+  for (path = first_path; path != NULL; path = va_arg(args, gchar *)) {
+    transl = L_(path);
+    for (pos = 0; pos < toolbar->num_children; pos++) {
+      child = g_list_nth_data(toolbar->children, pos);
+      if ((child == NULL) || (child->label == NULL) || (child->widget == NULL))
+	continue;
+      gtk_label_get(GTK_LABEL(child->label), &label);
+      if (strcasecmp(label, transl) == 0) {
+	widget = child->widget;
+	break;
+      }
+    }
+
+    if (widget == NULL)
+      continue;
+
+    if (g_list_index(mc->widgets[type], widget) == -1)
+      mc->widgets[type] = g_list_append(mc->widgets[type], widget);
+  }
+  va_end(args);
+}
+
+/**
+ * gnc_mdi_show_toolbar
+ *
+ * @par1: A pointer to the child data structure for the GNC child
+ * whose toolbar items should be shown/hidden.
+ *
+ * This routine shows or hides the gnome dock item containing the
+ * toolbar.
+ */
+void
+gnc_mdi_show_toolbar (GNCMDIChildInfo *mc)
+{
+  GtkWidget *dockitem = GTK_WIDGET(mc->toolbar)->parent;
+
+  if (gnc_toolbar_visible) {
+    gtk_widget_show(dockitem);
+  } else {
+    gtk_widget_hide(dockitem);
+    if (mc->app)
+      gtk_widget_queue_resize(mc->app->dock);
+  }
 }
 
 static void
@@ -111,8 +449,6 @@ gnc_mdi_child_set_title (GNCMDIChildInfo *childwin)
  *
  * (I'm not sure this routine is ever really called. I tried to find a
  * set of actions that would trigger it and couldn't.)
- *
- * Returns: void
  */
 static void 
 gnc_mdi_app_destroyed_cb (GnomeApp * app, gpointer user_data)
@@ -176,8 +512,6 @@ gnc_mdi_app_created_cb (GnomeMDI * mdi, GnomeApp * app, gpointer data)
  * which occurs in the gnc_mdi_destroy function.  This function is
  * basically a subroutine of that function, with a couple of layers of
  * gtk code between them.
- *
- * Returns: void
  */
 static void
 gnc_mdi_destroy_cb (GtkObject * w, gpointer data)
@@ -197,15 +531,83 @@ gnc_mdi_destroy_cb (GtkObject * w, gpointer data)
   g_free (gnc_mdi);
 }
 
+/**
+ * gnc_mdi_child_menu_tweaking
+ *
+ * @par1: A pointer to the child data structure for the GNC child view
+ * that has just been created.
+ *
+ * This routine adjust the main menubar to reflect which of the
+ * 'dispatchable' menu items this view has set up callbacks for.  It
+ * also calls a view specific routine which can add menu items to the
+ * menubar, and calls the main window routine to adjust items in the
+ * View menu.
+ */
 static void
-gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * not_used,
+gnc_mdi_child_menu_tweaking (GNCMDIChildInfo * mc)
+{
+  GNCMDIAutoType what;
+  GNCMDIDispatchType type;
+
+  for (type = GNC_DISP_PRINT; type < GNC_DISP_LAST; type++) {
+    what = mc->dispatch_callback[type] ? GNC_AUTO_ENABLE : GNC_AUTO_DISABLE;
+    gnc_mdi_child_auto_menu(mc, what, dispatch_menu_paths[type], NULL);
+  }
+
+  if (mc->menu_tweaking)
+    mc->menu_tweaking(mc);
+  if (mc->gnc_mdi->menu_tweaking)
+    mc->gnc_mdi->menu_tweaking(mc);
+}
+
+/**
+ * gnc_mdi_child_menu_tweaking
+ *
+ * @par1: A pointer to the child data structure for the GNC child view
+ * that should be updated.
+ *
+ * @par2: The dispatch entry whose data should be set.
+ *
+ * @par3: A view specific callback function.
+ *
+ * @par4: The data to pass to the view specific callback.
+ *
+ * This routine remembers the data for dispatching various top level
+ * menu items to view specific functions.  These are items like the
+ * print menu item, or the refresh menu item.  All this function does
+ * is record the passed arguments on to the gnc mdi child data
+ * structure for later use in determining whether or not the menu item
+ * should be available, and then for use when the menu item is
+ * selected.
+ */
+void
+gnc_mdi_set_dispatch_cb (GNCMDIChildInfo * mc, GNCMDIDispatchType type,
+			 GtkCallback cb, gpointer data)
+{
+  g_return_if_fail(mc != NULL);
+  g_return_if_fail(type < GNC_DISP_LAST);
+  g_return_if_fail(cb != NULL);
+
+  mc->dispatch_callback[type] = cb;
+  mc->dispatch_data[type] = data;
+
+}
+
+static void
+gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
                           gpointer data)
 {
-  GNCMDIChildInfo * childwin = NULL;
+  GNCMDIChildInfo * childwin = NULL, *prevwin = NULL;
   GnomeUIInfo      * hintinfo;
   GtkWidget        * oldbar;
   GnomeApp         * new_app = NULL; 
   GnomeDockItemBehavior behavior;
+
+  if (prev_child)
+  {
+    prevwin = gtk_object_get_user_data (GTK_OBJECT(prev_child));
+    gnc_mdi_update_widgets(prevwin, FALSE);
+  }
 
   if (mdi && mdi->active_child)
   {
@@ -226,7 +628,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * not_used,
       {
         if (oldbar->parent)
           gtk_widget_hide (GTK_WIDGET(oldbar)->parent);        
-        gtk_widget_show (GTK_WIDGET(childwin->toolbar)->parent);
+	gnc_mdi_show_toolbar(childwin);
       }
     }
     else if (childwin->app)
@@ -253,6 +655,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * not_used,
 
       gtk_toolbar_set_style (GTK_TOOLBAR(childwin->toolbar), 
                              gnc_get_toolbar_style ());
+      gnc_mdi_show_toolbar(childwin);
     }
     else
     {
@@ -268,6 +671,8 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * not_used,
 
       gtk_toolbar_set_style (GTK_TOOLBAR(childwin->toolbar), 
                              gnc_get_toolbar_style ());
+      gnc_mdi_show_toolbar(childwin);
+      gnc_mdi_child_menu_tweaking(childwin);
     }
 
     oldbar = gtk_object_get_user_data (GTK_OBJECT(new_app));
@@ -295,6 +700,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * not_used,
     hintinfo = gnome_mdi_get_child_menu_info (new_app);
     if (hintinfo)
       gnome_app_install_menu_hints (new_app, hintinfo);
+    gnc_mdi_update_widgets(childwin, TRUE);
   }
 }
 
@@ -565,8 +971,6 @@ gnc_app_set_title (GnomeApp *app)
  *
  * This function is called during the destruction of the gnucash gui.
  * It is called from gnc_gui_destroy() in top-level.c
- *
- * Returns: void 
  */
 void
 gnc_mdi_destroy (GNCMDIInfo * gnc_mdi)

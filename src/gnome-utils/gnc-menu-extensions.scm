@@ -60,7 +60,7 @@
    "Functions to run when the extensions menu is created. Hook args: ()"))
 
 (define (gnc:extensions-menu-setup)
-  (define menu (gnc:make-menu "Extensions" (list "_Settings")))
+  (define menu (gnc:make-menu "Extensions" (list "_Tools")))
   (gnc:add-extension menu)
   (gnc:hook-run-danglers gnc:*add-extension-hook*))
 

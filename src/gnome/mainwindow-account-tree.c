@@ -196,17 +196,17 @@ gnc_mainwin_account_tree_get_type ()
  *                                                                             *
  * Args: mwac_trec - the mainwindow account tree to attach to                  *
  *       popup_info - the popup to attach                                      *
- * Returns: Nothing                                                            *
+ * Returns: The menu created.                                                  *
 \*******************************************************************************/
 
-void 
+GtkWidget *
 gnc_mainwin_account_tree_attach_popup(GNCMainWinAccountTree *mwac_tree,
                                       GnomeUIInfo *popup_info,
                                       gpointer user_data)
 {
   GtkWidget *popup = gnome_popup_menu_new(popup_info);
   gnome_popup_menu_attach(popup, GTK_WIDGET(mwac_tree->acc_tree), user_data);
-  return;
+  return(popup);
 }
 
 /*******************************************************************************\

@@ -1,3 +1,34 @@
+2002-06-08  David Hampton  <hampton@employees.org>
+
+	* src/app-file/gnome/gnc-file-history.c (gnc_history_update_menu):
+	Move the file history items into a sub-menu of the file menu.
+
+	* src/gnome/window-acct-tree.c: Menu/toolbar items are now
+	enabled/disabled depending upon whether or not an account is
+	selected.  Integrated the account specific menu into the main
+	application window menus.
+
+	* src/gnome/window-main.c: Reorganize the menubar in the main
+	window.  Add support for dispatching top level menu items to
+	functions that operate on contained views (i,e, on a report).
+
+	* src/gnome/window-register.c: Start reorganizing the menubar in
+	the register window.
+
+	* src/gnome-utils/gnc-mdi-utils.[ch]: Add new functions for
+	finding/manipulating menu/toolbar items on the fly.  Add support
+	for automatically showing/hiding/enabling/disabling menu/toolbar
+	items when the view is changed in the MDI window. Add support for
+	dispatching various main menu items to view specific callback
+	functions.
+
+	* src/report/report-gnome/window-report.c: Hook into the
+	dispatching from the main window menubar.
+
+	* src/gnome-utils/gnc-menu-extensions.scm
+	* src/report/report-gnome/report-gnome.scm:
+	* src/scm/main.scm: Reorganize menu items.
+
 2002-06-06  Derek Atkins   <derek@ihtfp.com>
 
 	Create a top-level Business menu item in the main window.  You
