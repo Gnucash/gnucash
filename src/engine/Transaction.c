@@ -62,6 +62,7 @@ int force_double_entry = 0;
 /* bit-field flags for controlling transaction commits */
 #define BEGIN_EDIT 0x1
 #define DEFER_REBALANCE 0x2
+#define BEING_DESTROYED 0x4
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
@@ -102,8 +103,10 @@ xaccInitSplit(Split * split)
   split->share_cleared_balance     = 0.0;
   split->share_reconciled_balance  = 0.0;
   split->cost_basis                = 0.0;
-
   split->ticket = 0;
+
+  xaccGUIDNew(&split->guid);
+  xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
 }
 
 /********************************************************************\
@@ -113,13 +116,7 @@ Split *
 xaccMallocSplit(void)
 {
   Split *split = (Split *)_malloc(sizeof(Split));
-
   xaccInitSplit (split);
-
-  xaccGUIDNew(&split->guid);
-
-  xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
-
   return split;
 }
 
@@ -149,6 +146,8 @@ xaccCloneSplit (Split *s)
   split->date_reconciled.tv_sec  = s->date_reconciled.tv_sec;
   split->date_reconciled.tv_nsec = s->date_reconciled.tv_nsec;
 
+  /* copy(!) the guid.  The cloned split is *not* unique,
+   * is a sick twisted clone that holds 'undo' information. */
   split->guid = s->guid;
 
   /* no need to futz with the balances;  these get wiped each time ... 
@@ -193,35 +192,33 @@ xaccFreeSplit( Split *split )
 
 /********************************************************************\
 \********************************************************************/
+
 const GUID *
 xaccSplitGetGUID (Split *split)
 {
-  if (!split)
-    return xaccGUIDNULL();
-
+  if (!split) return xaccGUIDNULL();
   return &split->guid;
 }
 
 /********************************************************************\
 \********************************************************************/
-void xaccSplitSetGUID (Split *split, GUID *guid)
+
+void 
+xaccSplitSetGUID (Split *split, GUID *guid)
 {
   if (!split || !guid) return;
-
   xaccRemoveEntity(&split->guid);
-
   split->guid = *guid;
-
   xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
 }
 
 /********************************************************************\
 \********************************************************************/
+
 Split *
 xaccSplitLookup (const GUID *guid)
 {
   if (!guid) return NULL;
-
   return xaccLookupEntity(guid, GNC_ID_SPLIT);
 }
 
@@ -365,14 +362,14 @@ xaccInitTransaction( Transaction * trans )
 {
   Split *split;
   
-  /* fill in some sane defaults */
+  /* Fill in some sane defaults */
   trans->num         = strdup("");
   trans->description = strdup("");
   trans->docref      = strdup("");
 
   trans->splits    = (Split **) _malloc (3* sizeof (Split *));
 
-  /* create a single split only.  As soon as the balance becomes
+  /* Create a single split only.  As soon as the balance becomes
    * non-zero, additional splits will get created. 
    */
   split = xaccMallocSplit ();
@@ -389,6 +386,9 @@ xaccInitTransaction( Transaction * trans )
   trans->marker = 0;
   trans->open = 0;
   trans->orig = NULL;
+
+  xaccGUIDNew(&trans->guid);
+  xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
 }
 
 /********************************************************************\
@@ -398,13 +398,7 @@ Transaction *
 xaccMallocTransaction( void )
 {
   Transaction *trans = (Transaction *)_malloc(sizeof(Transaction));
-
   xaccInitTransaction (trans);
-
-  xaccGUIDNew(&trans->guid);
-
-  xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
-
   return trans;
 }
 
@@ -447,6 +441,8 @@ xaccCloneTransaction (Transaction *t)
   trans->open = 0;
   trans->orig = NULL;
 
+  /* copy(!) the guid.  The cloned transaction is *not* unique,
+   * is a sick twisted clone that holds 'undo' information. */
   trans->guid = t->guid;
 
   return (trans);
@@ -509,31 +505,30 @@ xaccFreeTransaction( Transaction *trans )
 
 /********************************************************************\
 \********************************************************************/
+
 const GUID *
 xaccTransGetGUID (Transaction *trans)
 {
-  if (!trans)
-    return xaccGUIDNULL();
-
+  if (!trans) return xaccGUIDNULL();
   return &trans->guid;
 }
 
 /********************************************************************\
 \********************************************************************/
-void xaccTransSetGUID (Transaction *trans, GUID *guid)
+
+void 
+xaccTransSetGUID (Transaction *trans, GUID *guid)
 {
   if (!trans || !guid) return;
-
   xaccRemoveEntity(&trans->guid);
-
   trans->guid = *guid;
-
   xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
 }
 
 
 /********************************************************************\
 \********************************************************************/
+
 Transaction *
 xaccTransLookup (const GUID *guid)
 {
@@ -981,7 +976,7 @@ xaccTransBeginEdit (Transaction *trans, int defer)
 void
 xaccTransCommitEdit (Transaction *trans)
 {
-   int i, rc;
+   int i, rc=0;
    Split *split;
    Account *acc;
    Backend *be;
@@ -996,7 +991,7 @@ xaccTransCommitEdit (Transaction *trans)
     * return.  
     */
    split = trans->splits[0];
-   if (!split)
+   if (!split || (trans->open & BEING_DESTROYED))
    {
       PINFO ("delete trans at addr=%p\n", trans);
       /* Make a log in the journal before destruction.  */
@@ -1049,6 +1044,7 @@ xaccTransCommitEdit (Transaction *trans)
 
    /* See if there's a backend.  If there is, invoke it. */
    be = xaccTransactionGetBackend (trans);
+   rc = 0;
    if (be && be->trans_commit_edit) {
       rc = (be->trans_commit_edit) (be, trans, trans->orig);
    }
@@ -1084,7 +1080,7 @@ xaccTransCommitEdit (Transaction *trans)
    trans->open = 0;
    xaccTransWriteLog (trans, 'C');
 
-   /* get rid of the copy we made. We won't be rolling back, 
+   /* Get rid of the copy we made. We won't be rolling back, 
     * so we don't need it any more.  */
    xaccFreeTransaction (trans->orig);
    trans->orig = NULL;
@@ -1109,6 +1105,8 @@ xaccTransRollbackEdit (Transaction *trans)
    /* copy the original values back in. */
    orig = trans->orig;
 
+   /* If the transaction had been deleted before the rollback,
+    * the guid would have been unlisted. Restore that */
    xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
 
 #define PUT_BACK(val) { free(trans->val); trans->val=orig->val; orig->val=0x0; }
@@ -1130,34 +1128,39 @@ xaccTransRollbackEdit (Transaction *trans)
     * CheckDateOrder routine could be cpu-cyle brutal, so it maybe 
     * it could use some tuning ...
     */
-   i=0;
-   s = trans->splits[0];
-   so = orig->splits[0];
-   while (s && so) {
-      if (so->acc != s->acc) { force_it = 1;  mismatch=i; break; }
-
-#define HONKY_CAT(val) { free(s->val); s->val=so->val; so->val=0x0; }
-      HONKY_CAT (action);
-      HONKY_CAT (memo);
-      HONKY_CAT (docref);
-
-      s->reconciled  = so->reconciled;
-      s->damount     = so->damount;
-      s->share_price = so->share_price;
-
-      s->date_reconciled.tv_sec  = so->date_reconciled.tv_sec;
-      s->date_reconciled.tv_nsec = so->date_reconciled.tv_nsec;
-
-      /* do NOT check date order until all of the other fields 
-       * have been properly restored */
-      xaccCheckDateOrder (s->acc, s); 
-      MARK_SPLIT (s);
-      xaccAccountRecomputeBalance (s->acc);
-      i++;
-      s = trans->splits[i];
-      so = orig->splits[i];
+   if (trans->open & BEING_DESTROYED) {
+      force_it = 1;
+      mismatch = 0;
+   } else  {
+      i=0;
+      s = trans->splits[0];
+      so = orig->splits[0];
+      while (s && so) {
+         if (so->acc != s->acc) { force_it = 1;  mismatch=i; break; }
+   
+   #define HONKY_CAT(val) { free(s->val); s->val=so->val; so->val=0x0; }
+         HONKY_CAT (action);
+         HONKY_CAT (memo);
+         HONKY_CAT (docref);
+   
+         s->reconciled  = so->reconciled;
+         s->damount     = so->damount;
+         s->share_price = so->share_price;
+   
+         s->date_reconciled.tv_sec  = so->date_reconciled.tv_sec;
+         s->date_reconciled.tv_nsec = so->date_reconciled.tv_nsec;
+   
+         /* do NOT check date order until all of the other fields 
+          * have been properly restored */
+         xaccCheckDateOrder (s->acc, s); 
+         MARK_SPLIT (s);
+         xaccAccountRecomputeBalance (s->acc);
+         i++;
+         s = trans->splits[i];
+         so = orig->splits[i];
+      }
+      if (so != s) { force_it = 1; mismatch=i; }
    }
-   if (so != s) { force_it = 1; mismatch=i; }
 
    /* OK, if force_it got set, we'll have to tough it out and brute-force
     * the rest of the way.  Clobber all the edited splits, add all new splits.
@@ -1175,9 +1178,9 @@ xaccTransRollbackEdit (Transaction *trans)
       while (s) {
          acc = s->acc;
          MARK_SPLIT (s);
-         xaccRemoveEntity(&s->guid);
          xaccAccountRemoveSplit (acc, s);
          xaccAccountRecomputeBalance (acc);
+         xaccRemoveEntity(&s->guid);
          xaccFreeSplit (s);
          i++;
          s =  trans->splits[i];
@@ -1212,9 +1215,8 @@ xaccTransRollbackEdit (Transaction *trans)
 gncBoolean
 xaccTransIsOpen (Transaction *trans)
 {
-  if (trans == NULL) return GNC_F;
-
-  return ((trans->open & BEGIN_EDIT) != 0);
+  if (!trans) return GNC_F;
+  return (0 != (trans->open & BEGIN_EDIT));
 }
 
 /********************************************************************\
@@ -1229,23 +1231,24 @@ xaccTransDestroy (Transaction *trans)
 
    if (!trans) return;
    CHECK_OPEN (trans);
+   trans->open |= BEING_DESTROYED;
    xaccTransWriteLog (trans, 'D');
-
-   xaccRemoveEntity(&trans->guid);
 
    i=0;
    split = trans->splits[i];
    while (split) {
       MARK_SPLIT (split);
       acc = split ->acc;
-      xaccRemoveEntity(&split->guid);
       xaccAccountRemoveSplit (acc, split);
       xaccAccountRecomputeBalance (acc); 
+      xaccRemoveEntity(&split->guid);
       xaccFreeSplit (split);
       trans->splits[i] = NULL;
       i++;
       split = trans->splits[i];
    }
+
+   xaccRemoveEntity(&trans->guid);
 
    /* the actual free is done with the commit call, else its rolled back */
    /* xaccFreeTransaction (trans);  don't do this here ... */
@@ -1286,7 +1289,8 @@ xaccSplitDestroy (Split *split)
     * Or if the account has only two splits, 
     * then this destroy will leave only one split.
     * Don't rebalance, as this will goof up the
-    * value of the remaining split.
+    * value of the remaining split. (The rebalance 
+    * happens later(?) during commit(?).)
     */
    MARK_SPLIT (split);
    xaccTransRemoveSplit (trans, split);
