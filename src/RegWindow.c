@@ -296,6 +296,14 @@ regRefresh( RegWindow *regData )
     String **newData;
     double themount;  /* amount */
     
+    /* unmap the pop boxes, otherwise they get confused about
+     * which row/transaction they belong to.  The goal is to
+     * do this *before* rows are added to, or deleted from
+     * the XbaeMatrix.  */
+    SetPopBox (regData->actbox,  -1, -1);
+    SetPopBox (regData->xfrmbox, -1, -1);
+    SetPopBox (regData->xtobox,  -1, -1);
+
     /* first, build a sorted array of transactions */
     if (1 == regData->numAcc) {
        tarray = regData->blackacc[0]->transaction;
@@ -1490,7 +1498,6 @@ regSaveTransaction( RegWindow *regData, int position )
     }
   }
 
-      
   if( regData->changed & MOD_DATE )
     {
 
@@ -1559,12 +1566,6 @@ regSaveTransaction( RegWindow *regData, int position )
      */
     regData->currEntry = (newrow-NUM_HEADER_ROWS)/NUM_ROWS_PER_TRANS;
   }
-
-  /* unmap the pop boxes, otherwise they get confused about
-   * which row/transaction they belong to */
-  SetPopBox (regData->actbox,  -1, -1);
-  SetPopBox (regData->xfrmbox, -1, -1);
-  SetPopBox (regData->xtobox,  -1, -1);
 
   /* reset the "changed" bitfield */
   regData->changed   = 0;
@@ -2496,11 +2497,6 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
       Account * cred = (Account *) (trans->credit);
       Account * deb = (Account *) (trans->debit);
       
-      /* unmanage the ComboBoxes, otherwise things get confusing */
-      SetPopBox (regData->actbox,  -1, -1);
-      SetPopBox (regData->xfrmbox, -1, -1);
-      SetPopBox (regData->xtobox,  -1, -1);
-
       /* remove the transaction from both accounts */
       REMOVE_TRANS (cred, trans);
       REMOVE_TRANS (deb, trans);
