@@ -24,7 +24,7 @@ bar-gwrap.c bar-gwrap.h: bar-gwrap.scm
 	FLAVOR=gnome guile -c \
 	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (primitive-load \"./bar-gwrap.scm\") \
-	  (gw:generate-module \"bar-gwrap\")"
+	  (gw:generate-wrapset \"bar-gwrap\")"
 
 BUILT_SOURCES = bar-gwrap.c bar-gwrap.h
 CLEANFILES = *.so* *.a bar-gwrap.c bar-gwrap.h bar-gwrap.html
