@@ -20,7 +20,6 @@
 #include "Backend.h"
 #include "BackendP.h"
 #include "Group.h"
-#include "Scrub.h"
 #include "TransLog.h"
 #include "gnc-engine-util.h"
 #include "gnc-pricedb-p.h"

@@ -421,7 +421,7 @@ gnc_session_load_from_xml_file(GNCSession *session)
     }
 
     /* Fix account and transaction commodities */
-    xaccGroupScrubCommodities (gnc_book_get_group(book), book);
+    xaccGroupScrubCommodities (gnc_book_get_group(book));
 
     /* Fix split amount/value */
     xaccGroupScrubSplits (gnc_book_get_group(book));
@@ -1403,7 +1403,7 @@ account_restore_after_child_handler(gpointer data_for_children,
                                     sixtp_child_result *child_result)
 {
   Account *a = (Account *) data_for_children;
-  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
+  /* GNCParseStatus *pstatus = (GNCParseStatus *) global_data; */
 
   g_return_val_if_fail(a, FALSE);
 
@@ -1419,15 +1419,15 @@ account_restore_after_child_handler(gpointer data_for_children,
   else if(strcmp(child_result->tag, "currency") == 0) {
     gnc_commodity *com = (gnc_commodity *) child_result->data;
     g_return_val_if_fail(com, FALSE);
-    if(DxaccAccountGetCurrency(a, pstatus->book)) return FALSE;
-    DxaccAccountSetCurrency(a, com, pstatus->book);
+    if(DxaccAccountGetCurrency(a)) return FALSE;
+    DxaccAccountSetCurrency(a, com);
     /* let the normal child_result handler clean up com */
   }
   else if(strcmp(child_result->tag, "security") == 0) {
     gnc_commodity *com = (gnc_commodity *) child_result->data;
     g_return_val_if_fail(com, FALSE);
-    if(DxaccAccountGetSecurity(a, pstatus->book)) return FALSE;
-    DxaccAccountSetSecurity(a, com, pstatus->book);
+    if(DxaccAccountGetSecurity(a)) return FALSE;
+    DxaccAccountSetSecurity(a, com);
     /* let the normal child_result handler clean up com */
   }
 

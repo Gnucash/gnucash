@@ -101,7 +101,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         else if(safe_strcmp(mark->name, "act:currency") == 0)
         {
             if(!equals_node_val_vs_commodity(
-                   mark, DxaccAccountGetCurrency(act, book), xaccAccountGetBook(act)))
+                   mark, DxaccAccountGetCurrency(act), xaccAccountGetBook(act)))
             {
                 return g_strdup("currencies differ");
             }
@@ -124,7 +124,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         else if(safe_strcmp(mark->name, "act:security") == 0)
         {
             if(!equals_node_val_vs_commodity(
-                   mark, DxaccAccountGetSecurity(act, book), xaccAccountGetBook(act)))
+                   mark, DxaccAccountGetSecurity(act), xaccAccountGetBook(act)))
             {
                 return g_strdup("securities differ");
             }
