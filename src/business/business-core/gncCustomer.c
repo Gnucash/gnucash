@@ -81,7 +81,7 @@ struct _gncCustomer
 
 static short module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME        GNC_CUSTOMER_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_ID_CUSTOMER
 
 /* ============================================================== */
 /* misc inline funcs */
@@ -94,8 +94,7 @@ G_INLINE_FUNC void
 mark_customer (GncCustomer *customer)
 {
   customer->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (customer->inst.book, _GNC_MOD_NAME, TRUE);
-
+  qof_collection_mark_dirty (customer->inst.entity.collection);
   gnc_engine_gen_event (&customer->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -189,7 +188,7 @@ void gncCustomerDestroy (GncCustomer *cust)
 {
   if (!cust) return;
   cust->inst.do_free = TRUE;
-  // ??? why not?? gncBusinessSetDirtyFlag (table->book, _GNC_MOD_NAME, TRUE);
+  qof_collection_mark_dirty (cust->inst.entity.collection);
   gncCustomerCommitEdit (cust);
 }
 
@@ -427,6 +426,7 @@ void gncCustomerCommitEdit (GncCustomer *cust)
                          gncCustomerOnDone, cust_free);
 }
 
+/* ============================================================== */
 /* Get Functions */
 
 const char * gncCustomerGetID (GncCustomer *cust)
@@ -524,25 +524,6 @@ GList * gncCustomerGetJoblist (GncCustomer *cust, gboolean show_all)
   }
 }
 
-GUID gncCustomerRetGUID (GncCustomer *customer)
-{
-  if (!customer)
-    return *guid_null();
-
-  return customer->inst.entity.guid;
-}
-
-GncCustomer * gncCustomerLookupDirect (GUID guid, QofBook *book)
-{
-  if (!book) return NULL;
-  return gncCustomerLookup (book, &guid);
-}
-
-GncCustomer * gncCustomerLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP (GncCustomer);
-}
-
 gboolean gncCustomerIsDirty (GncCustomer *cust)
 {
   if (!cust) return FALSE;
@@ -562,54 +543,26 @@ int gncCustomerCompare (GncCustomer *a, GncCustomer *b)
   return(strcmp(a->name, b->name));
 }
 
+/* ============================================================== */
 /* Package-Private functions */
-
-static void _gncCustomerCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
-
-static void _gncCustomerDestroy (QofBook *book)
-{
-  return gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncCustomerIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncCustomerMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncCustomerForeach (QofBook *book, QofForeachCB cb,
-                                 gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
-
 static const char * _gncCustomerPrintable (gpointer item)
 {
-  GncCustomer *c;
-
+  GncCustomer *c = item;
   if (!item) return NULL;
-
-  c = item;
   return c->name;
 }
 
-static QofObject gncCustomerDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Customer",
-  _gncCustomerCreate,
-  _gncCustomerDestroy,
-  _gncCustomerIsDirty,
-  _gncCustomerMarkClean,
-  _gncCustomerForeach,
-  _gncCustomerPrintable,
+static QofObject gncCustomerDesc = 
+{
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Customer",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          _gncCustomerPrintable,
 };
 
 gboolean gncCustomerRegister (void)

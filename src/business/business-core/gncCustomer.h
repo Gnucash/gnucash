@@ -41,7 +41,9 @@ typedef struct _gncCustomer GncCustomer;
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
 
-#define GNC_CUSTOMER_MODULE_NAME "gncCustomer"
+#define GNC_ID_CUSTOMER       "gncCustomer"
+#define GNC_IS_CUSTOMER(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_CUSTOMER))
+#define GNC_CUSTOMER(obj)     (QOF_CHECK_CAST((obj), GNC_ID_CUSTOMER, GncCustomer))
 
 /* Create/Destroy Functions */
 
@@ -70,6 +72,14 @@ void gncCustomerBeginEdit (GncCustomer *customer);
 void gncCustomerCommitEdit (GncCustomer *customer);
 
 /* Get Functions */
+/** Return a pointer to the instance gncCustomer that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the 
+ *  instance can't be found.
+ *  Equivalent function prototype is
+ *  GncCustomer * gncCustomerLookup (QofBook *book, const GUID *guid);
+ */
+#define gncCustomerLookup(book,guid)    \
+       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_CUSTOMER, GncCustomer)
 
 const char * gncCustomerGetID (GncCustomer *customer);
 const char * gncCustomerGetName (GncCustomer *customer);
@@ -89,10 +99,7 @@ GncTaxTable* gncCustomerGetTaxTable (GncCustomer *customer);
 KvpFrame *gncCustomerGetSlots (GncCustomer *customer);
 GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
 
-GUID gncCustomerRetGUID (GncCustomer *customer);
-GncCustomer * gncCustomerLookupDirect (GUID guid, QofBook *book);
 
-GncCustomer * gncCustomerLookup (QofBook *book, const GUID *guid);
 
 gboolean gncCustomerIsDirty (GncCustomer *customer);
 int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
@@ -104,6 +111,8 @@ int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
 
 /* deprecated functions, should be removed */
 #define gncCustomerGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
+#define gncCustomerRetGUID(x) (*(qof_instance_get_guid(QOF_INSTANCE(x))))
 #define gncCustomerGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
+#define gncCustomerLookupDirect(g,b) gncCustomerLookup((b), &(g))
 
 #endif /* GNC_CUSTOMER_H_ */

@@ -38,7 +38,9 @@ typedef struct _gncVendor GncVendor;
 #include "qofid.h"
 #include "qofinstance.h"
 
-#define GNC_VENDOR_MODULE_NAME "gncVendor"
+#define GNC_ID_VENDOR       "gncVendor"
+#define GNC_IS_VENDOR(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_VENDOR))
+#define GNC_VENDOR(obj)     (QOF_CHECK_CAST((obj), GNC_ID_VENDOR, GncVendor))
 
 /* Create/Destroy Functions */
 
@@ -82,10 +84,17 @@ GncTaxTable* gncVendorGetTaxTable (GncVendor *vendor);
  * other usage, since caller must free the copied list 
  */
 GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all);
-
-GncVendor * gncVendorLookup (QofBook *book, const GUID *guid);
 gboolean gncVendorIsDirty (GncVendor *vendor);
 int gncVendorCompare (GncVendor *a, GncVendor *b);
+
+/** Return a pointer to the instance gncVendor that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the 
+ *  instance can't be found.
+ *  Equivalent function prototype is
+ *  GncVendor * gncVendorLookup (QofBook *book, const GUID *guid);
+ */
+#define gncVendorLookup(book,guid)    \
+       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_VENDOR, GncVendor)
 
 #define VENDOR_ID	"id"
 #define VENDOR_NAME	"name"

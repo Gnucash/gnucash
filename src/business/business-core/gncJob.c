@@ -64,7 +64,7 @@ struct _gncJob
 
 static short        module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME        GNC_JOB_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_ID_JOB
 
 /* ================================================================== */
 /* misc inline functions */
@@ -77,7 +77,7 @@ G_INLINE_FUNC void
 mark_job (GncJob *job)
 {
   job->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (job->inst.book, _GNC_MOD_NAME, TRUE);
+  qof_collection_mark_dirty (job->inst.entity.collection);
   gnc_engine_gen_event (&job->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -326,11 +326,6 @@ gboolean gncJobGetActive (GncJob *job)
   return job->active;
 }
 
-GncJob * gncJobLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP(GncJob);
-}
-
 /* Other functions */
 
 int gncJobCompare (const GncJob * a, const GncJob *b) {
@@ -344,52 +339,25 @@ int gncJobCompare (const GncJob * a, const GncJob *b) {
 /* ================================================================== */
 /* Package-Private functions */
 
-static void _gncJobCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
-
-static void _gncJobDestroy (QofBook *book)
-{
-  gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncJobIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncJobMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncJobForeach (QofBook *book, QofForeachCB cb,
-                            gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
-
 static const char * _gncJobPrintable (gpointer item)
 {
   GncJob *c;
-
   if (!item) return NULL;
-
   c = item;
   return c->name;
 }
 
-static QofObject gncJobDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Job",
-  _gncJobCreate,
-  _gncJobDestroy,
-  _gncJobIsDirty,
-  _gncJobMarkClean,
-  _gncJobForeach,
-  _gncJobPrintable
+static QofObject gncJobDesc = 
+{
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Job",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          _gncJobPrintable
 };
 
 gboolean gncJobRegister (void)
@@ -399,7 +367,7 @@ gboolean gncJobRegister (void)
     { JOB_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetName, NULL },
     { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
     { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference, NULL },
-    { JOB_OWNER, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncJobGetOwner, NULL },
+    { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, NULL },
     { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
     { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },

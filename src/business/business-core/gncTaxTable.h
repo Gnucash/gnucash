@@ -39,8 +39,11 @@ typedef struct _gncAccountValue GncAccountValue;
 
 #include "qofbook.h"
 #include "qofinstance.h"
+#include "gncBusiness.h"
 
-#define GNC_TAXTABLE_MODULE_NAME "gncTaxTable"
+#define GNC_ID_TAXTABLE       "gncTaxTable"
+#define GNC_IS_TAXTABLE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_TAXTABLE))
+#define GNC_TAXTABLE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_TAXTABLE, GncTaxTable))
 
 /**
  * How to interpret the amount.
@@ -87,8 +90,18 @@ void gncTaxTableBeginEdit (GncTaxTable *table);
 void gncTaxTableCommitEdit (GncTaxTable *table);
 
 /** Get Functions */
-GncTaxTable *gncTaxTableLookup (QofBook *book, const GUID *guid);
+
+/** Return a pointer to the instance gncTaxTable that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the 
+ *  instance can't be found.
+ *  Equivalent function prototype is
+ *  GncTaxTable * gncTaxTableLookup (QofBook *book, const GUID *guid);
+ */
+#define gncTaxTableLookup(book,guid)    \
+       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_TAXTABLE, GncTaxTable)
+
 GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name);
+
 GList * gncTaxTableGetTables (QofBook *book);
 
 const char *gncTaxTableGetName (GncTaxTable *table);

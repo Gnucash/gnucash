@@ -41,7 +41,7 @@
 #include "gncOwner.h"
 #include "gncOwnerP.h"
 
-#define _GNC_MOD_NAME	GNC_OWNER_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_OWNER
 
 #define GNC_OWNER_ID	"gncOwner"
 #define GNC_OWNER_TYPE	"owner-type"
@@ -396,12 +396,12 @@ gboolean gncOwnerRegister (void)
 {
   static QofParam params[] = {
     { OWNER_TYPE, QOF_TYPE_INT64, (QofAccessFunc)gncOwnerGetType, NULL },
-    { OWNER_CUSTOMER, GNC_CUSTOMER_MODULE_NAME,
+    { OWNER_CUSTOMER, GNC_ID_CUSTOMER,
       (QofAccessFunc)gncOwnerGetCustomer, NULL },
-    { OWNER_JOB, GNC_JOB_MODULE_NAME, (QofAccessFunc)gncOwnerGetJob, NULL },
-    { OWNER_VENDOR, GNC_VENDOR_MODULE_NAME, (QofAccessFunc)gncOwnerGetVendor, NULL },
-    { OWNER_EMPLOYEE, GNC_EMPLOYEE_MODULE_NAME, (QofAccessFunc)gncOwnerGetEmployee, NULL },
-    { OWNER_PARENT, _GNC_MOD_NAME, (QofAccessFunc)gncOwnerGetEndOwner, NULL },
+    { OWNER_JOB, GNC_ID_JOB, (QofAccessFunc)gncOwnerGetJob, NULL },
+    { OWNER_VENDOR, GNC_ID_VENDOR, (QofAccessFunc)gncOwnerGetVendor, NULL },
+    { OWNER_EMPLOYEE, GNC_ID_EMPLOYEE, (QofAccessFunc)gncOwnerGetEmployee, NULL },
+    { OWNER_PARENT, GNC_ID_OWNER, (QofAccessFunc)gncOwnerGetEndOwner, NULL },
     { OWNER_PARENTG, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetEndGUID, NULL },
     { OWNER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncOwnerGetName, NULL },
     { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetGUID, NULL },

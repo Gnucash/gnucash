@@ -76,7 +76,6 @@ struct _gncTaxTableEntry
 
 struct _book_info 
 {
-  GncBookInfo     bi;
   GList *         tables;          /* visible tables */
 };
 
@@ -147,7 +146,7 @@ gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type)
 /* =============================================================== */
 /* Misc inline functions */
 
-#define _GNC_MOD_NAME        GNC_TAXTABLE_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_ID_TAXTABLE
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
@@ -166,7 +165,7 @@ static inline void
 mark_table (GncTaxTable *table)
 {
   table->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (table->inst.book, _GNC_MOD_NAME, TRUE);
+  qof_collection_mark_dirty (table->inst.entity.collection);
   gnc_engine_gen_event (&table->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -311,7 +310,7 @@ gncTaxTableDestroy (GncTaxTable *table)
 {
   if (!table) return;
   table->inst.do_free = TRUE;
-  gncBusinessSetDirtyFlag (table->inst.book, _GNC_MOD_NAME, TRUE);
+  qof_collection_mark_dirty (table->inst.entity.collection);
   gncTaxTableCommitEdit (table);
 }
 
@@ -566,10 +565,6 @@ void gncTaxTableCommitEdit (GncTaxTable *table)
 
 /* =============================================================== */
 /* Get Functions */
-GncTaxTable * gncTaxTableLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP(GncTaxTable);
-}
 
 GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name)
 {
@@ -811,33 +806,17 @@ static void _gncTaxTableDestroy (QofBook *book)
   g_free (bi);
 }
 
-static gboolean _gncTaxTableIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncTaxTableMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncTaxTableForeach (QofBook *book, QofForeachCB cb,
-                                 gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
-
 static QofObject gncTaxTableDesc = 
 {
-  interface_version:   QOF_OBJECT_VERSION,
-  e_type:              _GNC_MOD_NAME,
-  type_label:          "Tax Table",
-  book_begin:          _gncTaxTableCreate,
-  book_end:            _gncTaxTableDestroy,
-  is_dirty:            _gncTaxTableIsDirty,
-  mark_clean:          _gncTaxTableMarkClean,
-  foreach:             _gncTaxTableForeach,
-  printable:           NULL
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Tax Table",
+  book_begin:         _gncTaxTableCreate,
+  book_end:           _gncTaxTableDestroy,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          NULL,
 };
 
 gboolean gncTaxTableRegister (void)

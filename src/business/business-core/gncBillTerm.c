@@ -74,13 +74,12 @@ struct _gncBillTerm
 
 struct _book_info 
 {
-  GncBookInfo     bi;
   GList *         terms;        /* visible terms */
 };
 
 static short        module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME        GNC_BILLTERM_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_ID_BILLTERM
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
@@ -105,8 +104,7 @@ static inline void
 mark_term (GncBillTerm *term)
 {
   term->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (term->inst.book, _GNC_MOD_NAME, TRUE);
-
+  qof_collection_mark_dirty (term->inst.entity.collection);
   gnc_engine_gen_event (&term->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -187,7 +185,7 @@ void gncBillTermDestroy (GncBillTerm *term)
 {
   if (!term) return;
   term->inst.do_free = TRUE;
-  gncBusinessSetDirtyFlag (term->inst.book, _GNC_MOD_NAME, TRUE);
+  qof_collection_mark_dirty (term->inst.entity.collection);
   gncBillTermCommitEdit (term);
 }
 
@@ -457,10 +455,6 @@ void gncBillTermCommitEdit (GncBillTerm *term)
 }
 
 /* Get Functions */
-GncBillTerm * gncBillTermLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP(GncBillTerm);
-}
 
 GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name)
 {
@@ -703,22 +697,6 @@ static void _gncBillTermDestroy (QofBook *book)
   g_free (bi);
 }
 
-static gboolean _gncBillTermIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncBillTermMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncBillTermForeach (QofBook *book, QofForeachCB cb,
-                              gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, (QofEntityForeachCB) cb, user_data);
-}
-
 static QofObject gncBillTermDesc = 
 {
   interface_version:   QOF_OBJECT_VERSION,
@@ -726,9 +704,9 @@ static QofObject gncBillTermDesc =
   type_label:          "Billing Term",
   book_begin:          _gncBillTermCreate,
   book_end:            _gncBillTermDestroy,
-  is_dirty:            _gncBillTermIsDirty,
-  mark_clean:          _gncBillTermMarkClean,
-  foreach:             _gncBillTermForeach,
+  is_dirty:            qof_collection_is_dirty,
+  mark_clean:          qof_collection_mark_clean,
+  foreach:             qof_collection_foreach,
   printable:           NULL
 };
 

@@ -72,7 +72,7 @@ struct _gncOrder
 
 static short	module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME	GNC_ORDER_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_ORDER
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
@@ -92,8 +92,7 @@ G_INLINE_FUNC void
 mark_order (GncOrder *order)
 {
   order->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (order->inst.book, _GNC_MOD_NAME, TRUE);
-
+  qof_collection_mark_dirty (order->inst.entity.collection);
   gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -210,13 +209,6 @@ void gncOrderSetActive (GncOrder *order, gboolean active)
   gncOrderCommitEdit (order);
 }
 
-/* XXX the existance of this routie is wrong */
-void gncOrderSetDirty (GncOrder *order, gboolean dirty)
-{
-  if (!order) return;
-  order->inst.dirty = dirty;
-}
-
 /* Add an Entry to the Order */
 void gncOrderAddEntry (GncOrder *order, GncEntry *entry)
 {
@@ -298,11 +290,6 @@ GList * gncOrderGetEntries (GncOrder *order)
   return order->entries;
 }
 
-GncOrder * gncOrderLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP(GncOrder);
-}
-
 gboolean gncOrderIsClosed (GncOrder *order)
 {
   if (!order) return FALSE;
@@ -355,35 +342,11 @@ int gncOrderCompare (GncOrder *a, GncOrder *b)
   return guid_compare (&(a->inst.entity.guid), &(b->inst.entity.guid));
 }
 
+/* =========================================================== */
 /* Package-Private functions */
 
-static void _gncOrderCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
-
-static void _gncOrderDestroy (QofBook *book)
-{
-  gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncOrderIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncOrderMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncOrderForeach (QofBook *book, QofForeachCB cb,
-			      gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
-
-static const char * _gncOrderPrintable (gpointer obj)
+static const char * 
+_gncOrderPrintable (gpointer obj)
 {
   GncOrder *order = obj;
 
@@ -400,16 +363,17 @@ static const char * _gncOrderPrintable (gpointer obj)
   return order->printname;
 }
 
-static QofObject gncOrderDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Order",
-  _gncOrderCreate,
-  _gncOrderDestroy,
-  _gncOrderIsDirty,
-  _gncOrderMarkClean,
-  _gncOrderForeach,
-  _gncOrderPrintable,
+static QofObject gncOrderDesc =
+{
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Order",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          _gncOrderPrintable,
 };
 
 gboolean gncOrderRegister (void)
@@ -417,7 +381,7 @@ gboolean gncOrderRegister (void)
   static QofParam params[] = {
     { ORDER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetID, NULL },
     { ORDER_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetReference, NULL },
-    { ORDER_OWNER, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncOrderGetOwner, NULL },
+    { ORDER_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncOrderGetOwner, NULL },
     { ORDER_OPENED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateOpened, NULL },
     { ORDER_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderIsClosed, NULL },
     { ORDER_CLOSED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateClosed, NULL },

@@ -33,7 +33,6 @@
 
 gboolean gncOrderRegister (void);
 gint64 gncOrderNextID (QofBook *book);
-void gncOrderSetDirty (GncOrder *order, gboolean dirty);
 
 #define gncOrderSetGUID(O,G) qof_entity_set_guid(QOF_ENTITY(O),(G))
 

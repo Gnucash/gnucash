@@ -36,7 +36,9 @@ typedef struct _gncEmployee GncEmployee;
 #include "gncAddress.h"
 #include "Account.h"
 
-#define GNC_EMPLOYEE_MODULE_NAME "gncEmployee"
+#define GNC_ID_EMPLOYEE "gncEmployee"
+#define GNC_IS_EMPLOYEE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_EMPLOYEE))
+#define GNC_EMPLOYEE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_EMPLOYEE, GncEmployee))
 
 /* Create/Destroy Functions */
 
@@ -69,7 +71,16 @@ gnc_commodity * gncEmployeeGetCurrency (GncEmployee *employee);
 gboolean gncEmployeeGetActive (GncEmployee *employee);
 Account * gncEmployeeGetCCard (GncEmployee *employee);
 
-GncEmployee * gncEmployeeLookup (QofBook *book, const GUID *guid);
+
+/** Return a pointer to the instance gncEmployee that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the
+ *  instance can't be found.
+ *  Equivalent function prototype is
+ *  GncEmployee * gncEmployeeLookup (QofBook *book, const GUID *guid);
+ */
+#define gncEmployeeLookup(book,guid)    \
+       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_EMPLOYEE, GncEmployee)
+
 gboolean gncEmployeeIsDirty (GncEmployee *employee);
 
 

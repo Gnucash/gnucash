@@ -53,7 +53,7 @@
 
 #include "xml-helpers.h"
 
-#define _GNC_MOD_NAME	GNC_VENDOR_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_VENDOR
 
 static short module = MOD_IO;
 
@@ -418,10 +418,10 @@ vendor_should_be_saved (GncVendor *vendor)
 }
 
 static void
-do_count (gpointer vendor_p, gpointer count_p)
+do_count (QofEntity * vendor_p, gpointer count_p)
 {
   int *count = count_p;
-  if (vendor_should_be_saved (vendor_p))
+  if (vendor_should_be_saved ((GncVendor *)vendor_p))
     (*count)++;
 }
 
@@ -434,10 +434,10 @@ vendor_get_count (GNCBook *book)
 }
 
 static void
-xml_add_vendor (gpointer vendor_p, gpointer out_p)
+xml_add_vendor (QofEntity * vendor_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncVendor *vendor = vendor_p;
+  GncVendor *vendor = (GncVendor *) vendor_p;
   FILE *out = out_p;
 
   if (!vendor_should_be_saved (vendor))

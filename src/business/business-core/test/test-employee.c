@@ -99,7 +99,7 @@ test_employee (void)
 
     addr = gncEmployeeGetAddr (employee);
     gncAddressSetName (addr, str);
-    res = qof_object_printable (GNC_EMPLOYEE_MODULE_NAME, employee);
+    res = qof_object_printable (GNC_ID_EMPLOYEE, employee);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    

@@ -39,7 +39,9 @@ typedef struct _gncInvoice GncInvoice;
 #include "qofid.h"
 #include "qofinstance.h"
 
-#define GNC_INVOICE_MODULE_NAME "gncInvoice"
+#define GNC_ID_INVOICE    "gncInvoice"
+#define GNC_IS_INVOICE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_INVOICE))
+#define GNC_INVOICE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_INVOICE, GncInvoice))
 
 /* Create/Destroy Functions */
 
@@ -137,7 +139,15 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn);
 /* Given a LOT, find and return the Invoice attached to the lot */
 GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot);
 
-GncInvoice * gncInvoiceLookup (QofBook *book, const GUID *guid);
+/** Return a pointer to the instance gncInvoice that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the 
+ *  instance can't be found.
+ *  Equivalent function prototype is
+ *  GncInvoice * gncInvoiceLookup (QofBook *book, const GUID *guid);
+ */
+#define gncInvoiceLookup(book,guid)    \
+       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_INVOICE, GncInvoice)
+
 gboolean gncInvoiceIsDirty (GncInvoice *invoice);
 void gncInvoiceBeginEdit (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);

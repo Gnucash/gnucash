@@ -81,12 +81,12 @@ test_vendor (void)
   {
     GList *list;
 
-    list = gncBusinessGetList (book, GNC_VENDOR_MODULE_NAME, TRUE);
+    list = gncBusinessGetList (book, GNC_ID_VENDOR, TRUE);
     do_test (list != NULL, "getList all");
     do_test (g_list_length (list) == count, "correct length: all");
     g_list_free (list);
 
-    list = gncBusinessGetList (book, GNC_VENDOR_MODULE_NAME, FALSE);
+    list = gncBusinessGetList (book, GNC_ID_VENDOR, FALSE);
     do_test (list != NULL, "getList active");
     do_test (g_list_length (list) == 1, "correct length: active");
     g_list_free (list);
@@ -97,7 +97,7 @@ test_vendor (void)
     const char *res;
 
     gncVendorSetName (vendor, str);
-    res = qof_object_printable (GNC_VENDOR_MODULE_NAME, vendor);
+    res = qof_object_printable (GNC_ID_VENDOR, vendor);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    

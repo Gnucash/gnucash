@@ -30,10 +30,14 @@
 
 typedef struct _gncJob GncJob;
 
+#include "qofid.h"
+#include "qofinstance.h"
 #include "gncAddress.h"
 #include "gncOwner.h"
 
-#define GNC_JOB_MODULE_NAME "gncJob"
+#define GNC_ID_JOB "gncJob"
+#define GNC_IS_JOB(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_JOB))
+#define GNC_JOB(obj)     (QOF_CHECK_CAST((obj), GNC_ID_JOB, GncJob))
 
 /* Create/Destroy Functions */
 
@@ -58,9 +62,16 @@ const char * gncJobGetName (GncJob *job);
 const char * gncJobGetReference (GncJob *job);
 GncOwner * gncJobGetOwner (GncJob *job);
 gboolean gncJobGetActive (GncJob *job);
-
-GncJob * gncJobLookup (QofBook *book, const GUID *guid);
 gboolean gncJobIsDirty (GncJob *job);
+
+/** Return a pointer to the instance gncJob that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the 
+ *  instance can't be found.
+ *  Equivalent function prototype is
+ *  GncJob * gncJobLookup (QofBook *book, const GUID *guid);
+ */
+#define gncJobLookup(book,guid)    \
+       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_JOB, GncJob)
 
 /* Other functions */
 

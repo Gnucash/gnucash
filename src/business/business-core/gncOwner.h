@@ -30,7 +30,9 @@
 
 typedef struct gnc_owner_s GncOwner;
 
-#define GNC_OWNER_MODULE_NAME	"gncOwner"
+#define GNC_ID_OWNER   "gncOwner"
+#define GNC_IS_OWNER(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_OWNER))
+#define GNC_OWNER(obj)     (QOF_CHECK_CAST((obj), GNC_ID_OWNER, GncOwner))
 
 #include "gncCustomer.h"
 #include "gncJob.h"
@@ -48,13 +50,13 @@ typedef enum {
 } GncOwnerType;
 
 struct gnc_owner_s {
-  GncOwnerType		type;
+  GncOwnerType     type;
   union {
-    gpointer		undefined;
-    GncCustomer *	customer;
-    GncJob *		job;
-    GncVendor *		vendor;
-    GncEmployee *	employee;
+    gpointer       undefined;
+    GncCustomer *  customer;
+    GncJob *       job;
+    GncVendor *    vendor;
+    GncEmployee *  employee;
   } owner;
 };
 

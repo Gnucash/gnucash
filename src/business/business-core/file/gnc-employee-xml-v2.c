@@ -49,7 +49,7 @@
 #include "qofinstance.h"
 #include "qofobject.h"
 
-#define _GNC_MOD_NAME	GNC_EMPLOYEE_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_EMPLOYEE
 
 static short module = MOD_IO;
 
@@ -393,10 +393,10 @@ employee_should_be_saved (GncEmployee *employee)
 }
 
 static void
-do_count (gpointer employee_p, gpointer count_p)
+do_count (QofEntity * employee_p, gpointer count_p)
 {
   int *count = count_p;
-  if (employee_should_be_saved (employee_p))
+  if (employee_should_be_saved ((GncEmployee *) employee_p))
     (*count)++;
 }
 
@@ -409,10 +409,10 @@ employee_get_count (GNCBook *book)
 }
 
 static void
-xml_add_employee (gpointer employee_p, gpointer out_p)
+xml_add_employee (QofEntity * employee_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncEmployee *employee = employee_p;
+  GncEmployee *employee = (GncEmployee *) employee_p;
   FILE *out = out_p;
 
   if (!employee_should_be_saved (employee))

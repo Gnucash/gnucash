@@ -53,7 +53,7 @@
 
 #include "xml-helpers.h"
 
-#define _GNC_MOD_NAME	GNC_CUSTOMER_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_CUSTOMER
 
 static short module = MOD_IO;
 
@@ -480,10 +480,10 @@ customer_should_be_saved (GncCustomer *customer)
 }
 
 static void
-do_count (gpointer cust_p, gpointer count_p)
+do_count (QofEntity * cust_p, gpointer count_p)
 {
   int *count = count_p;
-  if (customer_should_be_saved (cust_p))
+  if (customer_should_be_saved ((GncCustomer *)cust_p))
     (*count)++;
 }
 
@@ -496,13 +496,13 @@ customer_get_count (GNCBook *book)
 }
 
 static void
-xml_add_customer (gpointer cust_p, gpointer out_p)
+xml_add_customer (QofEntity * cust_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncCustomer *cust = cust_p;
+  GncCustomer *cust = (GncCustomer *) cust_p;
   FILE *out = out_p;
 
-  if (!customer_should_be_saved (cust_p))
+  if (!customer_should_be_saved (cust))
     return;
 
   node = customer_dom_tree_create (cust);
