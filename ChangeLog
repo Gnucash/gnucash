@@ -1,5 +1,8 @@
 2001-06-02  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/gnome/gnucash-date-picker.c (gnc_date_picker_new):
+	fix bug
+
 	* src/SplitLedger.c: fix mem leak
 
 	* src/gnome/top-level.c: handle X errors ourselves

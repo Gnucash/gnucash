@@ -217,6 +217,8 @@ gnc_date_picker_new (GnomeCanvasGroup *parent)
 
   {
     GtkWidget *hbox;
+    GtkAllocation allocation;
+    GtkRequisition requisition;
 
     hbox = gtk_hbox_new (FALSE, 0);
 
@@ -228,6 +230,17 @@ gnc_date_picker_new (GnomeCanvasGroup *parent)
                                   "x", -10000.0,
                                   "y", -10000.0,
                                   NULL);
+
+    gtk_widget_realize (calendar);
+
+    gtk_widget_size_request (calendar, &requisition);
+
+    allocation.x = 0;
+    allocation.y = 0;
+    allocation.width = requisition.width;
+    allocation.height = requisition.height;
+
+    gtk_widget_size_allocate (calendar, &allocation);
   }
 
   date_picker = GNC_DATE_PICKER (item);
