@@ -1,85 +1,61 @@
 # Generated automatically from Makefile.in by configure.
-#
-######################################################################
-#********************************************************************
-#* Makefile -- makefile for xacc/src                                *
-#* Copyright (C) 1997 Robin Clark                                   *
-#*                                                                  *
-#* This program is free software; you can redistribute it and/or    *
-#* modify it under the terms of the GNU General Public License as   *
-#* published by the Free Software Foundation; either version 2 of   *
-#* the License, or (at your option) any later version.              *
-#*                                                                  *
-#* This program is distributed in the hope that it will be useful,  *
-#* but WITHOUT ANY WARRANTY; without even the implied warranty of   *
-#* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
-#* GNU General Public License for more details.                     *
-#*                                                                  *
-#* You should have received a copy of the GNU General Public License*
-#* along with this program; if not, write to the Free Software      *
-#* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
-#*                                                                  *
-#*   Author: Robin Clark                                            *
-#* Internet: rclark@rush.aero.org                                   *
-#*  Address: 609 8th Street                                         *
-#*           Huntington Beach, CA 92648-4632                        *
-#********************************************************************
+# Makefile -- makefile for xacc/src                                
+# Copyright (C) 1997 Robin Clark                                   
+# Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              
+#                                                                  
+# This program is free software; you can redistribute it and/or    
+# modify it under the terms of the GNU General Public License as   
+# published by the Free Software Foundation; either version 2 of   
+# the License, or (at your option) any later version.              
+#                                                                  
+# This program is distributed in the hope that it will be useful,  
+# but WITHOUT ANY WARRANTY; without even the implied warranty of   
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+# GNU General Public License for more details.                     
+#                                                                  
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software      
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        
+#                                                                  
+#   Author: Robin Clark                                            
+# Internet: rclark@rush.aero.org                                   
+#  Address: 609 8th Street                                         
+#           Huntington Beach, CA 92648-4632                        
+
+# These three lines are suggested defs for autoconf (see the info pages).
 
 srcdir   = .
+
 CC       = gcc
-INCLPATH = -I/usr/include \
-           -I.. \
-           -I./engine \
-           -I./register \
-           -I/usr/local/include \
-           -I/usr/X11R6/include/. \
-           -I./../include \
-
-
-CFLAGS   = -g -Wall 
-LFLAGS   = -g -Wall
-LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
+INCLPATH = -I.. -I./engine -I./register -I./../include
+CFLAGS   =  -O2 -Wall -g -Wall ${INCLPATH}
 
 ######################################################################
-SRCS = Ledger.c
-OBJS = ${SRCS:.c=.o} 
+# See Makefile.common for information about these variables.
+COMMON_SRCS   := Ledger.c
+CLEAN_SUBDIRS := engine gnome motif register
 ######################################################################
+
+all: default
+
+# This inclusion must come after the first target, and after the
+# definitions of *_SRCS, etc., but before the usage of *_OBJS.
+include ../Makefile.common
 
 default: $(OBJS)
 
-motif: default
+motif: ${MOTIF_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) motif
 	@cd motif;             $(MAKE) motif
 
-gnome: default
+gnome: ${GNOME_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) gnome
-	@cd gtk;               $(MAKE) gnome
+	@cd gnome;               $(MAKE) gnome
 
-.c.o:
-	@echo "+++"
-	$(CC) -c $(CFLAGS) $(INCLPATH) $<
+.PHONY: default gnome motif all
 
-depend:
-	makedepend -- $(INCLPATH) $(DEFN) -- $(SRCS)
-	@cd engine;            $(MAKE) depend
-	@cd register;          $(MAKE) depend
-	@cd motif;             $(MAKE) depend
-
-clean:
-	rm -f *.o *~ *.bak
-	@cd engine;            $(MAKE) clean
-	@cd gtk;               $(MAKE) clean
-	@cd motif;             $(MAKE) clean
-	@cd register;          $(MAKE) clean
-
-
-distclean: clean
-	rm -f $(TARGET) $(STATIC) Makefile Makefile.bak config.h
-	@cd engine;            $(MAKE) distclean
-	@cd gtk;               $(MAKE) distclean
-	@cd motif;             $(MAKE) distclean
-	@cd register;          $(MAKE) distclean
-
-# DO NOT DELETE THIS LINE -- make depend depends on it.
+# Local Variables:
+# tab-width: 2
+# End:

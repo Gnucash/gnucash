@@ -1,0 +1,79 @@
+### -*-makefile-*- #################################################
+##  Makefile.common
+##
+##  standard targets and rules 
+####################################################################
+
+# Autoconf notes...
+# Need to handle -MD there.
+
+# COMMON_SRCS: have to be compiled separately for all flavors
+#  MOTIF_SRCS: are motif only sources
+#  GNOME_SRCS: are gnome only sources
+#  INDEP_SRCS: are for flavor independent sources (like engine)
+
+# OBJS is for flavor independent files
+# GNOME/MOTIF_OBJS  is for flavor dependent files
+
+OBJS       := $(addprefix obj/,${INDEP_SRCS:.c=.o})
+GNOME_OBJS := $(addprefix obj/gnome/,${COMMON_SRCS:.c=.o})
+GNOME_OBJS += $(addprefix obj/gnome/,${GNOME_SRCS:.c=.o})
+MOTIF_OBJS := $(addprefix obj/motif/,${COMMON_SRCS:.c=.o})
+MOTIF_OBJS += $(addprefix obj/motif/,${MOTIF_SRCS:.c=.o})
+
+GTK_CFLAGS := $(shell gtk-config --cflags)
+
+%.c : %.h
+
+# Basically take the output foo.d file and put it in the right
+# subdirectory, adding a prefix indicating where the file actually
+# lives (i.e. obj-pic/Foo.cc rather than Foo.cc.  This would all be
+# unnecessary if gcc actually paid attention to the argument to "-o".
+
+# Note that this cannot handle subdirs in the Makefile dir, so if the
+# relevant Makefile was src/foo/Makefile, this rule can't handle
+# src/foo/bar/x.c src/foo/x.c and src/foo/bax/x.c.  You'd need another
+# Makefile in src/foo/bar and src/foo/bax for now.
+
+define cleanupdeps
+	@echo -n "obj/" > $(basename $@).d
+	@cat $(basename $<).d >> $(basename $@).d
+	@rm $(basename $<).d
+endef
+
+# Default rule used for non-flavor dependent files (i.e. all of register)
+obj/%.o: %.c
+	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
+	$(CC) -MD -c $(CFLAGS) -o $@ $< 
+	${cleanupdeps}
+
+obj/motif/%.o: %.c
+	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
+	$(CC) -MD -c $(CFLAGS) -DMOTIF -o $@ $< 
+	${cleanupdeps}
+
+obj/gnome/%.o: %.c
+	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
+	$(CC) -MD -c $(CFLAGS) ${GTK_CFLAGS} -DGNOME -o $@ $< 
+	${cleanupdeps}
+
+clean:
+	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && make clean);)
+	rm -f *~ *.bak \#* $(TRASH)
+	rm -rf obj
+
+distclean:
+	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && make distclean);)
+	rm -f *~ *.bak \#* $(TRASH)
+	rm -rf obj
+	rm -f Makefile Makefile.bak config.h
+
+.PHONY: clean distclean
+
+# Get dependencies (if existent).
+
+-include $(shell if [ -e obj ]; then find obj -name "*.d"; fi) ""
+
+# Local Variables:
+# tab-width: 2
+# End:
