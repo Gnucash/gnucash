@@ -330,6 +330,11 @@ configLayout (SplitRegister *reg)
             BASIC (NUM,    num,      1,  0);
             FANCY (DESC,   desc,     3,  0);
             BASIC (RECN,   recn,     4,  0);
+            FANCY (DEBT,   debit,    5,  0);
+            FANCY (CRED,   credit,   6,  0);
+            FANCY (PRIC,   price,    7,  0);
+            FANCY (VALU,   value,    8,  0);
+            FANCY (SHRS,   shrs,     9,  0);
             FANCY (BALN,   balance,  10, 0);
       
             curs = reg->split_cursor;
@@ -338,9 +343,6 @@ configLayout (SplitRegister *reg)
             BASIC (MEMO,   memo,     3,  0);
             FANCY (NDEBT,  ndebit,   5,  0);
             FANCY (NCRED,  ncredit,  6,  0);
-            FANCY (PRIC,   price,    7,  0);
-            FANCY (VALU,   value,    8,  0);
-            FANCY (SHRS,   shrs,     9,  0);
          }
          break;
       /* --------------------------------------------------------- */
