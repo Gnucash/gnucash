@@ -36,6 +36,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
+#include "gnc-trace.h"
 #include "guile-mappings.h"
 #include "qofbook.h"
 #include "qofquery.h"

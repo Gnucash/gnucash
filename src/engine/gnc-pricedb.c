@@ -31,6 +31,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-pricedb-p.h"
+#include "gnc-trace.h"
 #include "guid.h"
 #include "kvp-util.h"
 #include "qofbackend-p.h"

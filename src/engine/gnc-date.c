@@ -43,6 +43,7 @@
 
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
+#include "gnc-trace.h"
 
 #ifndef HAVE_STRPTIME
 #include "strptime.h"

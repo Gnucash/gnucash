@@ -43,6 +43,7 @@
 #include "gnc-event-p.h"
 #include "gnc-lot-p.h"
 #include "gnc-lot.h"
+#include "gnc-trace.h"
 #include "messages.h"
 
 #include "qofbackend-p.h"

@@ -40,6 +40,7 @@
 #include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
+#include "gnc-trace.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "kvp-util-p.h"

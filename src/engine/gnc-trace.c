@@ -35,10 +35,10 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_ENGINE; */
 
-static gncLogLevel loglevel[MOD_LAST + 1] =
+gncLogLevel gnc_log_modules[MOD_LAST + 1] =
 {
   GNC_LOG_FATAL,        /* DUMMY */
-  GNC_LOG_WARNING,      /* ENGINE */
+  GNC_LOG_TRACE,      /* ENGINE */
   GNC_LOG_WARNING,      /* IO */
   GNC_LOG_WARNING,      /* REGISTER */
   GNC_LOG_WARNING,      /* LEDGER */
@@ -47,16 +47,16 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* SCRUB */
   GNC_LOG_WARNING,      /* GTK_REG */
   GNC_LOG_WARNING,      /* GUILE */
-  GNC_LOG_WARNING,      /* BACKEND */
-  GNC_LOG_WARNING,      /* QUERY */
+  GNC_LOG_TRACE,      /* BACKEND */
+  GNC_LOG_TRACE,      /* QUERY */
   GNC_LOG_WARNING,      /* PRICE */
   GNC_LOG_WARNING,      /* SQL EVENT */
   GNC_LOG_WARNING,      /* SQL TXN */
   GNC_LOG_WARNING,      /* KVP */
   GNC_LOG_WARNING,      /* SX */
-  GNC_LOG_WARNING,      /* BOOK */
+  GNC_LOG_TRACE,      /* BOOK */
   GNC_LOG_TRACE,        /* TEST */
-  GNC_LOG_WARNING,      /* LOT */
+  GNC_LOG_TRACE,      /* LOT */
   GNC_LOG_WARNING,      /* ACCOUNT */
   GNC_LOG_WARNING,      /* IMPORT */
   GNC_LOG_WARNING,      /* BUSINESS */
@@ -73,7 +73,7 @@ gnc_set_log_level(gncModuleType module, gncLogLevel level)
   if ((module < 0) || (module > MOD_LAST))
     return;
 
-  loglevel[module] = level;
+  gnc_log_modules[module] = level;
 }
 
 /* Set the logging level for all modules. */
@@ -83,7 +83,7 @@ gnc_set_log_level_global(gncLogLevel level)
   gncModuleType module;
 
   for (module = 0; module <= MOD_LAST; module++)
-    loglevel[module] = level;
+    gnc_log_modules[module] = level;
 }
 
 void
@@ -92,13 +92,13 @@ gnc_set_logfile (FILE *outfile)
    fout = outfile;
 }
 
-/* prettify() cleans up subroutine names. AIX/xlC has the habit of
- * printing signatures not names; clean this up. On other operating
+/* gnc_log_prettify() cleans up subroutine names. AIX/xlC has the habit
+ * of printing signatures not names; clean this up. On other operating
  * systems, truncate name to 30 chars. Note this routine is not thread
  * safe. Note we wouldn't need this routine if AIX did something more
  * reasonable. Hope thread safety doesn't poke us in eye. */
-static const char *
-prettify (const char *name)
+const char *
+gnc_log_prettify (const char *name)
 {
   static char bf[128];
   char *p;
@@ -120,43 +120,20 @@ prettify (const char *name)
   return bf;
 }
 
-gboolean
-gnc_should_log (gncModuleType module, gncLogLevel log_level)
-{
-  if (module < 0 || module > MOD_LAST)
-  {
-    PERR ("Bad module: %d", module);
-    return FALSE;
-  }
-
-  if (log_level > loglevel[module])
-    return FALSE;
-
-  return TRUE;
-}
-
 void
-gnc_log (gncModuleType module, gncLogLevel log_level, const char *prefix,
-         const char *function_name, const char *format, ...)
+gnc_log (gncModuleType module, gncLogLevel log_level, 
+         const char *format, ...)
 {
   va_list ap;
 
-  if (!gnc_should_log (module, log_level))
-    return;
-
+  if (!gnc_should_log (module, log_level)) return;
   if (!fout) fout = stderr;
 
-  fprintf (fout, "%s: %s: ",
-           prefix ? prefix : "(null)",
-           prettify (function_name));
-
   va_start (ap, format);
-
   vfprintf (fout, format, ap);
-
   va_end (ap);
-
   fprintf (fout, "\n");
+  fflush (fout);
 }
 
 
@@ -190,7 +167,7 @@ gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   if (!fout) fout = stderr;
 
   fprintf (fout, "Clock %d Start: %s: ",
-           clockno, prettify (function_name));
+           clockno, gnc_log_prettify (function_name));
 
   va_start (ap, format);
 
@@ -227,7 +204,7 @@ gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   if (!fout) fout = stderr;
 
   fprintf (fout, "Clock %d Elapsed: %ld.%06lds %s: ",
-           clockno, now.tv_sec, now.tv_usec, prettify (function_name));
+           clockno, now.tv_sec, now.tv_usec, gnc_log_prettify (function_name));
 
   va_start (ap, format);
 
@@ -260,7 +237,7 @@ gnc_report_clock_total (int clockno,
            clockno,
            gnc_clock_total[clockno].tv_sec,
            gnc_clock_total[clockno].tv_usec,
-           prettify (function_name));
+           gnc_log_prettify (function_name));
 
   va_start (ap, format);
 
@@ -294,7 +271,16 @@ gnc_send_gui_warning(const gchar *format, ...)
   va_list args;
 
   if (!gnc_gui_warning_func)
+  {
+    if (!fout) fout = stderr;
+
+    va_start (args, format);
+    vfprintf (fout, format, args);
+    va_end (args);
+    fprintf (fout, "\n");
+    fflush (fout);
     return(FALSE);
+  }
 
   va_start(args, format);
   gnc_gui_warning_func(format, args);
@@ -308,7 +294,16 @@ gnc_send_gui_error(const gchar *format, ...)
   va_list args;
 
   if (!gnc_gui_error_func)
+  {
+    if (!fout) fout = stderr;
+
+    va_start (args, format);
+    vfprintf (fout, format, args);
+    va_end (args);
+    fprintf (fout, "\n");
+    fflush (fout);
     return(FALSE);
+  }
 
   va_start(args, format);
   gnc_gui_error_func(format, args);

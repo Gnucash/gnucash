@@ -52,6 +52,7 @@
 #include "gnc-engine-util.h"
 #include "messages.h"
 #include "gnc-commodity.h"
+#include "gnc-trace.h"
 
 static short module = MOD_SCRUB;
 
