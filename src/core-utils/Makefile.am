@@ -14,7 +14,7 @@ libgw_core_utils_la_LIBADD = libcore-utils.la
 
 noinst_HEADERS = core-utils.h gw-core-utils.h
 
-EXTRA_DIST = .cvsignore
+EXTRA_DIST = .cvsignore gw-core-utils-spec.scm
 
 AM_CFLAGS = ${G_WRAP_COMPILE_ARGS} ${GLIB_CFLAGS} ${GUILE_INCS}
 
