@@ -34,12 +34,12 @@
 
 #include <fcntl.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 
 #include "config.h"
 
 #include "Account.h"
-#include "date.h"
 #include "Group.h"
 #include "FileIO.h"
 #include "Transaction.h"
@@ -376,36 +376,45 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
  * xaccParseQIFDate                                                 * 
  *   parses date of the form MM/DD/YY                               *
  *                                                                  * 
- * Args:   date -- pointer to Date structure                        * 
  * Args:   str -- pointer to string rep of date                     * 
  * Return: void                                                     * 
 \********************************************************************/
 
-void xaccParseQIFDate (Date * dat, char * str) 
+time_t
+xaccParseQIFDate (char * str) 
 {
    char * tok;
+   time_t secs;
+   struct tm dat;
 
-   if (!str) return;
+   if (!str) return 0;
    tok = strchr (str, '/');
-   if (!tok) return;
+   if (!tok) return 0;
    *tok = 0x0;
-   dat->month = atoi (str);
+   dat.tm_mon = atoi (str) - 1;
 
    str = tok+sizeof(char);
    tok = strchr (str, '/');
-   if (!tok) return;
+   if (!tok) return 0;
    *tok = 0x0;
-   dat->day = atoi (str);
+   dat.tm_mday = atoi (str);
 
    str = tok+sizeof(char);
    tok = strchr (str, '\r');
    if (!tok) {
       tok = strchr (str, '\n');
-      if (!tok) return;
+      if (!tok) return 0;
    }
    *tok = 0x0;
-   dat->year = atoi (str);
-   dat->year += 1900;
+   dat.tm_year = atoi (str);
+
+   dat.tm_sec = 0;
+   dat.tm_min = 0;
+   dat.tm_hour = 11;
+
+   secs = mktime (&dat);
+
+   return secs;
 }
 
 /********************************************************************\
@@ -632,9 +641,9 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* D == date */
      if ('D' == qifline [0]) {  
-         Date dayt;
-         xaccParseQIFDate (&dayt, &qifline[1]);
-         xaccTransSetDate (trans, dayt.day, dayt.month, dayt.year);
+         time_t secs;
+         secs = xaccParseQIFDate (&qifline[1]);
+         xaccTransSetDateSecs (trans, secs);
      } else 
 
      /* E == memo for split */
