@@ -182,32 +182,75 @@ gnc_tree_view_price_destroy (GtkObject *object)
 /*                      sort functions                      */
 /************************************************************/
 
-static gint
-sort_ns_or_cm (GtkTreeModel *model,
-	       GtkTreeIter *iter_a,
-	       GtkTreeIter *iter_b)
+static gboolean
+get_prices (GtkTreeModel *f_model,
+	    GtkTreeIter *f_iter_a,
+	    GtkTreeIter *f_iter_b,
+	    GNCPrice **price_a,
+	    GNCPrice **price_b)
 {
+  GncTreeModelPrice *model;
+  GtkTreeModel *tree_model;
+  GtkTreeIter iter_a, iter_b;
+
+  tree_model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = GNC_TREE_MODEL_PRICE(tree_model);
+
+  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+						    &iter_a,
+						    f_iter_a);
+
+  /* The iters must point to prices for this to be meaningful */
+  if (!gnc_tree_model_price_iter_is_price (model, &iter_a))
+    return FALSE;
+
+  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+						    &iter_b,
+						    f_iter_b);
+
+  *price_a = gnc_tree_model_price_get_price (model, &iter_a);
+  *price_b = gnc_tree_model_price_get_price (model, &iter_b);
+  return TRUE;
+}
+
+static gint
+sort_ns_or_cm (GtkTreeModel *f_model,
+	       GtkTreeIter *f_iter_a,
+	       GtkTreeIter *f_iter_b)
+{
+  GncTreeModelPrice *model;
+  GtkTreeModel *tree_model;
+  GtkTreeIter iter_a, iter_b;
   gnc_commodity_namespace *ns_a, *ns_b;
   gnc_commodity *comm_a, *comm_b;
 
-  if (gnc_tree_model_price_iter_is_namespace (GNC_TREE_MODEL_PRICE(model), iter_a)) {
-    ns_a = gnc_tree_model_price_get_namespace (GNC_TREE_MODEL_PRICE(model), iter_a);
-    ns_b = gnc_tree_model_price_get_namespace (GNC_TREE_MODEL_PRICE(model), iter_b);
+  tree_model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = GNC_TREE_MODEL_PRICE(tree_model);
+
+  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+						    &iter_a,
+						    f_iter_a);
+  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+						    &iter_b,
+						    f_iter_b);
+
+  if (gnc_tree_model_price_iter_is_namespace (model, &iter_a)) {
+    ns_a = gnc_tree_model_price_get_namespace (model, &iter_a);
+    ns_b = gnc_tree_model_price_get_namespace (model, &iter_b);
     SAFE_STRCMP (gnc_commodity_namespace_get_name (ns_a),
 		 gnc_commodity_namespace_get_name (ns_b));
     return 0;
   }
 
-  comm_a = gnc_tree_model_price_get_commodity (GNC_TREE_MODEL_PRICE(model), iter_a);
-  comm_b = gnc_tree_model_price_get_commodity (GNC_TREE_MODEL_PRICE(model), iter_b);
+  comm_a = gnc_tree_model_price_get_commodity (model, &iter_a);
+  comm_b = gnc_tree_model_price_get_commodity (model, &iter_b);
   SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
 	       gnc_commodity_get_mnemonic (comm_b));
   return 0;
 }
 
 static gint
-sort_standard_order (GNCPrice *price_a,
-		     GNCPrice *price_b)
+default_sort (GNCPrice *price_a, GNCPrice *price_b)
 {
   gnc_commodity *curr_a, *curr_b;
   Timespec ts_a, ts_b;
@@ -243,29 +286,12 @@ sort_by_name (GtkTreeModel *f_model,
 	      GtkTreeIter *f_iter_b,
 	      gpointer user_data)
 {
-  GtkTreeModel *model;
-  GtkTreeIter iter_a, iter_b;
   GNCPrice *price_a, *price_b;
 
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  if (!get_prices (f_model, f_iter_a, f_iter_b, &price_a, &price_b))
+    return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
 
-  /* Get real iters */
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
-						    &iter_a,
-						    f_iter_a);
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
-						    &iter_b,
-						    f_iter_b);
-
-  /* Both iters must point to prices for this to be meaningful */
-  if (!gnc_tree_model_price_iter_is_price (GNC_TREE_MODEL_PRICE(model), &iter_a))
-    return sort_ns_or_cm(model, &iter_a, &iter_b);
-
-  /* OK, now get the prices. */
-  price_a = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model), &iter_a);
-  price_b = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model), &iter_b);
-
-  return sort_standard_order (price_a, price_b);
+  return default_sort (price_a, price_b);
 }
 
 static gint
@@ -274,29 +300,12 @@ sort_by_date (GtkTreeModel *f_model,
 	      GtkTreeIter *f_iter_b,
 	      gpointer user_data)
 {
-  GtkTreeModel *model;
-  GtkTreeIter iter_a, iter_b;
   GNCPrice *price_a, *price_b;
   Timespec ts_a, ts_b;
   gboolean result;
 
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
-
-  /* Get real iters */
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
-						    &iter_a,
-						    f_iter_a);
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
-						    &iter_b,
-						    f_iter_b);
-
-  /* Both iters must point to prices for this to be meaningful */
-  if (!gnc_tree_model_price_iter_is_price (GNC_TREE_MODEL_PRICE(model), &iter_a))
-    return sort_ns_or_cm(model, &iter_a, &iter_b);
-
-  /* OK, now get the prices. */
-  price_a = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model), &iter_a);
-  price_b = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model), &iter_b);
+  if (!get_prices (f_model, f_iter_a, f_iter_b, &price_a, &price_b))
+    return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
 
   /* sort by time first */
   ts_a = gnc_price_get_time (price_a);
@@ -305,7 +314,7 @@ sort_by_date (GtkTreeModel *f_model,
   if (result)
     return result;
 
-  return sort_standard_order (price_a, price_b);
+  return default_sort (price_a, price_b);
 }
 
 static gint
@@ -314,33 +323,16 @@ sort_by_source (GtkTreeModel *f_model,
 		GtkTreeIter *f_iter_b,
 		gpointer user_data)
 {
-  GtkTreeModel *model;
-  GtkTreeIter iter_a, iter_b;
   GNCPrice *price_a, *price_b;
 
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
-
-  /* Get real iters */
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
-						    &iter_a,
-						    f_iter_a);
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
-						    &iter_b,
-						    f_iter_b);
-
-  /* Both iters must point to prices for this to be meaningful */
-  if (!gnc_tree_model_price_iter_is_price (GNC_TREE_MODEL_PRICE(model), &iter_a))
-    return sort_ns_or_cm(model, &iter_a, &iter_b);
-
-  /* OK, now get the prices. */
-  price_a = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model), &iter_a);
-  price_b = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model), &iter_b);
+  if (!get_prices (f_model, f_iter_a, f_iter_b, &price_a, &price_b))
+    return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
 
   /* sort by source first */
   SAFE_STRCMP (gnc_price_get_source (price_a),
                gnc_price_get_source (price_b));
 
-  return sort_standard_order (price_a, price_b);
+  return default_sort (price_a, price_b);
 }
 
 static gint
@@ -349,33 +341,16 @@ sort_by_type (GtkTreeModel *f_model,
 	      GtkTreeIter *f_iter_b,
 	      gpointer user_data)
 {
-  GtkTreeModel *model;
-  GtkTreeIter iter_a, iter_b;
   GNCPrice *price_a, *price_b;
 
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
-
-  /* Get real iters */
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
-						    &iter_a,
-						    f_iter_a);
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
-						    &iter_b,
-						    f_iter_b);
-
-  /* Both iters must point to prices for this to be meaningful */
-  if (!gnc_tree_model_price_iter_is_price (GNC_TREE_MODEL_PRICE(model), &iter_a))
-    return sort_ns_or_cm(model, &iter_a, &iter_b);
-
-  /* OK, now get the prices. */
-  price_a = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model), &iter_a);
-  price_b = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model), &iter_b);
+  if (!get_prices (f_model, f_iter_a, f_iter_b, &price_a, &price_b))
+    return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
 
   /* sort by source first */
   SAFE_STRCMP (gnc_price_get_type (price_a),
                gnc_price_get_type (price_b));
 
-  return sort_standard_order (price_a, price_b);
+  return default_sort (price_a, price_b);
 }
 
 static gint
@@ -384,29 +359,12 @@ sort_by_value (GtkTreeModel *f_model,
 	       GtkTreeIter *f_iter_b,
 	       gpointer user_data)
 {
-  GtkTreeModel *model;
-  GtkTreeIter iter_a, iter_b;
   gnc_commodity *comm_a, *comm_b;
   GNCPrice *price_a, *price_b;
   gboolean result;
 
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
-
-  /* Get real iters */
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
-						    &iter_a,
-						    f_iter_a);
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
-						    &iter_b,
-						    f_iter_b);
-
-  /* Both iters must point to prices for this to be meaningful */
-  if (!gnc_tree_model_price_iter_is_price (GNC_TREE_MODEL_PRICE(model), &iter_a))
-    return sort_ns_or_cm(model, &iter_a, &iter_b);
-
-  /* OK, now get the prices. */
-  price_a = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model), &iter_a);
-  price_b = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model), &iter_b);
+  if (!get_prices (f_model, f_iter_a, f_iter_b, &price_a, &price_b))
+    return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
 
   /*
    * Sorted by commodity because of the tree structure.  Now sort by
@@ -432,7 +390,7 @@ sort_by_value (GtkTreeModel *f_model,
   if (result)
     return result;
 
-  return sort_standard_order (price_a, price_b);
+  return default_sort (price_a, price_b);
 }
 
 

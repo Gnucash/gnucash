@@ -182,63 +182,6 @@ gnc_tree_view_commodity_destroy (GtkObject *object)
 /*                      sort functions                      */
 /************************************************************/
 
-static gint
-default_sort (gnc_commodity *comm_a, gnc_commodity *comm_b)
-{
-  gint fraction_a, fraction_b;
-
-  SAFE_STRCMP (gnc_commodity_get_namespace (comm_a),
-               gnc_commodity_get_namespace (comm_b));
-
-  SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
-               gnc_commodity_get_mnemonic (comm_b));
-
-  SAFE_STRCMP (gnc_commodity_get_fullname (comm_a),
-               gnc_commodity_get_fullname (comm_b));
-
-  SAFE_STRCMP (gnc_commodity_get_exchange_code (comm_a),
-               gnc_commodity_get_exchange_code (comm_b));
-
-  fraction_a = gnc_commodity_get_fraction (comm_a);
-  fraction_b = gnc_commodity_get_fraction (comm_b);
-
-  if (fraction_a < fraction_b)
-    return -1;
-
-  if (fraction_b < fraction_a)
-    return 1;
-
-  return 0;
-}
-
-static gint
-sort_namespace (GtkTreeModel *f_model,
-		GtkTreeIter *f_iter_a,
-		GtkTreeIter *f_iter_b)
-{
-  GncTreeModelCommodity *model;
-  GtkTreeModel *tree_model;
-  GtkTreeIter iter_a, iter_b;
-  gnc_commodity_namespace *ns_a, *ns_b;
-
-  tree_model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
-  model = GNC_TREE_MODEL_COMMODITY(tree_model);
-
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
-						    &iter_a,
-						    f_iter_a);
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
-						    &iter_b,
-						    f_iter_b);
-
-  ns_a = gnc_tree_model_commodity_get_namespace (model, &iter_a);
-  ns_b = gnc_tree_model_commodity_get_namespace (model, &iter_b);
-  SAFE_STRCMP (gnc_commodity_namespace_get_name (ns_a),
-	       gnc_commodity_namespace_get_name (ns_b));
-  return 0;
-}
-
-
 static gboolean
 get_commodities (GtkTreeModel *f_model,
 		 GtkTreeIter *f_iter_a,
@@ -268,6 +211,62 @@ get_commodities (GtkTreeModel *f_model,
   *comm_a = gnc_tree_model_commodity_get_commodity (model, &iter_a);
   *comm_b = gnc_tree_model_commodity_get_commodity (model, &iter_b);
   return TRUE;
+}
+
+static gint
+sort_namespace (GtkTreeModel *f_model,
+		GtkTreeIter *f_iter_a,
+		GtkTreeIter *f_iter_b)
+{
+  GncTreeModelCommodity *model;
+  GtkTreeModel *tree_model;
+  GtkTreeIter iter_a, iter_b;
+  gnc_commodity_namespace *ns_a, *ns_b;
+
+  tree_model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = GNC_TREE_MODEL_COMMODITY(tree_model);
+
+  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+						    &iter_a,
+						    f_iter_a);
+  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+						    &iter_b,
+						    f_iter_b);
+
+  ns_a = gnc_tree_model_commodity_get_namespace (model, &iter_a);
+  ns_b = gnc_tree_model_commodity_get_namespace (model, &iter_b);
+  SAFE_STRCMP (gnc_commodity_namespace_get_name (ns_a),
+	       gnc_commodity_namespace_get_name (ns_b));
+  return 0;
+}
+
+static gint
+default_sort (gnc_commodity *comm_a, gnc_commodity *comm_b)
+{
+  gint fraction_a, fraction_b;
+
+  SAFE_STRCMP (gnc_commodity_get_namespace (comm_a),
+               gnc_commodity_get_namespace (comm_b));
+
+  SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
+               gnc_commodity_get_mnemonic (comm_b));
+
+  SAFE_STRCMP (gnc_commodity_get_fullname (comm_a),
+               gnc_commodity_get_fullname (comm_b));
+
+  SAFE_STRCMP (gnc_commodity_get_exchange_code (comm_a),
+               gnc_commodity_get_exchange_code (comm_b));
+
+  fraction_a = gnc_commodity_get_fraction (comm_a);
+  fraction_b = gnc_commodity_get_fraction (comm_b);
+
+  if (fraction_a < fraction_b)
+    return -1;
+
+  if (fraction_b < fraction_a)
+    return 1;
+
+  return 0;
 }
 
 static gint
