@@ -180,17 +180,17 @@ static split_record interpret_split_record( char *record_line)
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
-      record.log_date = gnc_iso8601_to_timespec_local(tok_ptr);
+      record.log_date = gnc_iso8601_to_timespec_gmt(tok_ptr);
       record.log_date_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
-      record.date_entered = gnc_iso8601_to_timespec_local(tok_ptr);
+      record.date_entered = gnc_iso8601_to_timespec_gmt(tok_ptr);
       record.date_entered_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
-      record.date_posted = gnc_iso8601_to_timespec_local(tok_ptr);
+      record.date_posted = gnc_iso8601_to_timespec_gmt(tok_ptr);
       record.date_posted_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
@@ -245,7 +245,7 @@ static split_record interpret_split_record( char *record_line)
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
-      record.date_reconciled = gnc_iso8601_to_timespec_local(tok_ptr);
+      record.date_reconciled = gnc_iso8601_to_timespec_gmt(tok_ptr);
       record.date_reconciled_present=TRUE;
     }
 
