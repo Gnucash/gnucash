@@ -6,6 +6,8 @@
 	Partial fix for bug #96833
 
 	* gncInvoice.c -- implement GetTotal() -- fixes #96833
+
+	* invoice.glade -- add "View->SummaryBar" item to turn it off.
 	
 2002-10-27  Christian Stimming  <stimming@tuhh.de>
 

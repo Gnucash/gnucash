@@ -780,6 +780,20 @@
 
 	    <widget>
 	      <class>GtkCheckMenuItem</class>
+	      <name>menu_summary_bar</name>
+	      <tooltip>Display the Summary Bar</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_summarybar_cb</handler>
+		<last_modification_time>Mon, 28 Oct 2002 04:13:57 GMT</last_modification_time>
+	      </signal>
+	      <label>S_ummary Bar</label>
+	      <active>True</active>
+	      <always_show_toggle>True</always_show_toggle>
+	    </widget>
+
+	    <widget>
+	      <class>GtkCheckMenuItem</class>
 	      <name>menu_status_bar</name>
 	      <tooltip>Display the Status Bar</tooltip>
 	      <signal>
