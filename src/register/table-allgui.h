@@ -420,7 +420,9 @@ gnc_table_traverse_update(Table *table,
                           int *dest_row,
                           int *dest_col);
 
-/* Find the closest valid horizontal cell */
+/* Find the closest valid horizontal cell. If exact_cell is true,
+ * cells that must be explicitly selected by the user (as opposed
+ * to just tabbing into), are considered valid cells. */
 gncBoolean
 gnc_table_find_valid_cell_horiz(Table *table, int *row, int *col,
                                 gncBoolean exact_cell);

@@ -1,5 +1,9 @@
 2000-06-06  Dave Peticolas  <dave@krondo.com>
 
+	* src/SplitLedger.c (LedgerTraverse): use correct argument for
+	exact_cell to gnc_table_find_valid_cell_horiz.
+	(LedgerMoveCursor): ditto.
+
 	* src/register/splitreg.c (xaccInitSplitRegister): Don't blank
 	zeros in the price cell.
 

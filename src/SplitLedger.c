@@ -142,6 +142,10 @@ struct _SRInfo
   /* If the hints were set by the traverse callback */
   gncBoolean hint_set_by_traverse;
 
+  /* A flag indicating if the last traversal was 'exact'.
+   * See table-allgui.[ch] for details. */
+  gncBoolean exact_traversal;
+
   /* The default account where new splits are added */
   Account *default_source_account;
 
@@ -737,8 +741,8 @@ LedgerMoveCursor (Table *table,
   else if (new_phys_col >= table->num_phys_cols)
     new_phys_col = table->num_phys_cols - 1;
 
-  gnc_table_find_valid_cell_horiz(table, &new_phys_row,
-                                  &new_phys_col, GNC_F);
+  gnc_table_find_valid_cell_horiz(table, &new_phys_row, &new_phys_col,
+                                  info->exact_traversal);
 
   *p_new_phys_row = new_phys_row;
   *p_new_phys_col = new_phys_col;
@@ -1067,6 +1071,8 @@ LedgerTraverse (Table *table,
   GNCVerifyResult result;
   Split *split;
 
+  info->exact_traversal = (dir == GNC_TABLE_TRAVERSE_POINTER);
+
   split = xaccSRGetCurrentSplit(reg);
   trans = xaccSRGetCurrentTrans(reg);
   if (trans == NULL)
@@ -1084,7 +1090,8 @@ LedgerTraverse (Table *table,
     if (phys_row >= table->num_phys_rows)
       phys_row = table->num_phys_rows - 1;
 
-    gnc_table_find_valid_cell_horiz(table, &phys_row, &phys_col, GNC_F);
+    gnc_table_find_valid_cell_horiz(table, &phys_row, &phys_col,
+                                    info->exact_traversal);
 
     *p_new_phys_row = phys_row;
     *p_new_phys_col = phys_col;
@@ -1129,12 +1136,14 @@ LedgerTraverse (Table *table,
   if (phys_row < reg->num_header_rows)
   {
     phys_row = reg->num_header_rows;
-    gnc_table_find_valid_cell_horiz(table, &phys_row, &phys_col, GNC_F);
+    gnc_table_find_valid_cell_horiz(table, &phys_row, &phys_col,
+                                    info->exact_traversal);
   }
   if (phys_row >= table->num_phys_rows)
   {
     phys_row = table->num_phys_rows - 1;
-    gnc_table_find_valid_cell_horiz(table, &phys_row, &phys_col, GNC_F);
+    gnc_table_find_valid_cell_horiz(table, &phys_row, &phys_col,
+                                    info->exact_traversal);
   }
 
   /* Same transaction, no problem */
@@ -2098,8 +2107,8 @@ xaccSRCancelCursorSplitChanges (SplitRegister *reg)
   if (!changed)
     return;
 
-  /* We're just cancelling the current split here, not the transaction */
-  /* When cancelling edits, reload the cursor from the transaction */
+  /* We're just cancelling the current split here, not the transaction.
+   * When cancelling edits, reload the cursor from the transaction. */
   split = xaccSRGetCurrentSplit(reg);
   xaccSRLoadRegEntry(reg, split);
   xaccSplitRegisterClearChangeFlag(reg);
@@ -3597,6 +3606,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    info->cursor_hint_trans_split = xaccSRGetCurrentTransSplit (reg);
    info->cursor_hint_phys_col = -1;
    info->hint_set_by_traverse = GNC_F;
+   info->exact_traversal = GNC_F;
 
    xaccRefreshTableGUI (table);
 
