@@ -1925,13 +1925,17 @@ pgend_session_begin (Backend *backend,
 
       if (FALSE == db_exists)
       {
+         char* encoding = nl_langinfo(CODESET);
+
+         if (!strcmp (encoding, "ANSI_X3.4-1968"))
+           encoding = "SQL_ASCII";
 
          /* create the database */
          p = be->buff; *p =0;
          p = stpcpy (p, "CREATE DATABASE ");
          p = stpcpy (p, be->dbName);
          p = stpcpy (p, " WITH ENCODING = '");
-	 p = stpcpy (p, nl_langinfo(CODESET));
+	 p = stpcpy (p, encoding);
          p = stpcpy (p, "';");
          SEND_QUERY (be,be->buff, );
          FINISH_QUERY(be->connection);
