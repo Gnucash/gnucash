@@ -394,6 +394,8 @@ static void
 price_ok_clicked (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
+  GNCBook *book = gncGetCurrentBook ();
+  GNCPriceDB *pdb = gnc_book_get_pricedb (book);
   const char *error_str;
 
   if (!pdb_dialog->changed)
@@ -402,29 +404,30 @@ price_ok_clicked (GtkWidget *widget, gpointer data)
     return;
   }
 
+  if (!pdb_dialog->new)
+    gnc_pricedb_remove_price (pdb, pdb_dialog->price);
+
   error_str = gui_to_price (pdb_dialog);
 
   if (error_str)
   {
     gnc_warning_dialog_parented (pdb_dialog->price_dialog, error_str);
+
+    if (!pdb_dialog->new)
+      gnc_pricedb_add_price (pdb, pdb_dialog->price);
+
     return;
   }
 
   gtk_widget_hide (pdb_dialog->price_dialog);
 
-  if (pdb_dialog->new)
+  if (!gnc_pricedb_add_price (pdb, pdb_dialog->price))
   {
-    GNCBook *book = gncGetCurrentBook ();
-    GNCPriceDB *pdb = gnc_book_get_pricedb (book);
-
-    if (!gnc_pricedb_add_price (pdb, pdb_dialog->price))
-    {
-      gnc_price_unref (pdb_dialog->price);
-      pdb_dialog->price = NULL;
-    }
-
-    pdb_dialog->new = FALSE;
+    gnc_price_unref (pdb_dialog->price);
+    pdb_dialog->price = NULL;
   }
+
+  pdb_dialog->new = FALSE;
 
   gnc_gui_refresh_all ();
 

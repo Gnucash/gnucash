@@ -804,17 +804,11 @@ gnc_main_window_create_menus(GNCMainInfo * maininfo) {
     GNOMEUIINFO_END
   };
 
-  static GnomeUIInfo gnc_developer_menu_template[] =
-  {
-    GNOMEUIINFO_END
-  };
-
   static GnomeUIInfo gnc_main_menu_template[] =
   {
     GNOMEUIINFO_MENU_FILE_TREE(gnc_file_menu_template),
     GNOMEUIINFO_SUBTREE(N_("_Tools"), gnc_tools_menu_template),
     GNOMEUIINFO_SUBTREE(N_("_Settings"), gnc_settings_menu_template),
-    GNOMEUIINFO_SUBTREE(N_("_Devel Options"), gnc_developer_menu_template),
     GNOMEUIINFO_SUBTREE(N_("_Windows"), gnc_windows_menu_template),    
     GNOMEUIINFO_MENU_HELP_TREE(gnc_help_menu_template),
     GNOMEUIINFO_END
