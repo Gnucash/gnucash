@@ -27,6 +27,7 @@
 
 #include "gnc-engine-util.h"
 
+#include "gnc-xml.h"
 #include "sixtp.h"
 #include "sixtp-utils.h"
 #include "sixtp-parsers.h"
@@ -400,7 +401,7 @@ xml_add_gnc_price_adapter(GNCPrice *p, gpointer data)
   }
 }
 
-xmlNodePtr
+static xmlNodePtr
 gnc_pricedb_to_dom_tree(const char *tag, GNCPriceDB *db)
 {
   xmlNodePtr db_xml = NULL;
