@@ -20,7 +20,7 @@ GNOME_OBJS := $(addprefix obj/gnome/,${COMMON_SRCS:.c=.o})
 GNOME_OBJS += $(addprefix obj/gnome/,${GNOME_SRCS:.c=.o})
 MOTIF_OBJS := $(addprefix obj/motif/,${COMMON_SRCS:.c=.o})
 MOTIF_OBJS += $(addprefix obj/motif/,${MOTIF_SRCS:.c=.o})
-QT_OBJS    := $(addprefix obj/motif/,${COMMON_SRCS:.c=.o})
+QT_OBJS    := $(addprefix obj/qt/,${COMMON_SRCS:.c=.o})
 QT_OBJS    += $(addprefix obj/qt/,${QT_SRCS:.cpp=.o})
 
 GTK_CFLAGS := $(shell gtk-config --cflags)
