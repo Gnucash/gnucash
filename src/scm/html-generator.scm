@@ -335,13 +335,13 @@
 
 (define (html-table-headers-row headers)
   (list
-   "<TR bgcolor=#ffccff cellspacing=10 rules=\"rows\">"
+   "<TR bgcolor=#96b284 cellspacing=10 rules=\"rows\">"
    headers
    "</TR>\n"))
 
 (define (html-table-totals-row cells)
   (list
-   "<TR bgcolor=#ffccff cellspacing=10 rules=\"rows\">"
+   "<TR bgcolor=#bfdeba cellspacing=10 rules=\"rows\">"
    (map
     (lambda (cell)
       (cond (cell cell)
@@ -352,7 +352,7 @@
 (define (html-table-subtotals-row depth cells)
   (list
    "<TR bgcolor=" 
-   (number->string (+ #xffff40 (* depth #x30)) 16)
+   (number->string (+ #xf6ffdb (* depth #x8)) 16)
    "cellspacing=10 rules=\"rows\">"
    (map
     (lambda (cell)
@@ -374,8 +374,8 @@
 
 (define (html-table-subsection-title title depth)
   (list "<TR bgcolor=#"
-	   (number->string (+ #xffff40 (* depth #x30)) 16)
-	   "><TH>" title "</TH></TR>"))
+        (number->string (+ #x96b284 (* depth #x8)) 16)
+        "><TH>" title "</TH></TR>"))
 
 ;; help! this doesn't work!  I want something to group several rows
 ;; together so that an "entry" is noticably one unit.
@@ -383,12 +383,12 @@
 ;;(define (html-table-row-group rows)
 ;;  (list  "</TR><TBODY>" rows  "</TBODY>"))
 
-(define html-table-group-color "#99ccff")
+(define html-table-group-color "#f6ffdb")
 
 (define (html-table-row-group row)
-  (if (string=? html-table-group-color "#99ccff")
+  (if (string=? html-table-group-color "#f6ffdb")
       (set! html-table-group-color "#ffffff")
-      (set! html-table-group-color "#99ccff"))
+      (set! html-table-group-color "#f6ffdb"))
   row)
 
 (define (html-strong html)
@@ -458,13 +458,15 @@
 (define (html-para text)
   (string-append "<P>" text "</P>\n"))
 
-(define (html-start-document-title title)
+(define (html-start-document-title title color)
   (list 
    "<HTML>"
    "<HEAD>"
    "<TITLE>" title "</TITLE>"
    "</HEAD>"
-   "<BODY bgcolor=#99ccff>"))
+   (if color
+       (string-append "<BODY bgcolor=" color ">")
+       "<BODY>")))
 
 (define (html-start-document-color color)
   (list 
@@ -528,17 +530,21 @@
 
 ; Create an html table from a list of rows, each containing 
 ;   a list of column entries
-(define (html-table hdrlst llst)
+(define (html-table caption hdrlst llst)
   (string-append
-   (html-table-header hdrlst)
+   (html-table-header caption hdrlst)
    (apply string-append (map html-table-row llst))
    (html-table-footer)))
 
 (define (html-table-headcol val)
   (string-append "<TH justify=center>" (tostring val) "</TH>"))
 
-(define (html-table-header vec)
-   (apply string-append "<TABLE cellspacing=10 rules=\"rows\">\n"
+(define (html-table-header caption vec)
+   (apply string-append
+          "<TABLE cellspacing=10 rules=\"rows\">\n"
+          (if caption
+              (string-append "<caption><b>" caption "</b></caption>")
+              "")
           (map html-table-headcol vec)))
 
 (define (html-table-footer)

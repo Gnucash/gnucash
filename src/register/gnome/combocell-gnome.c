@@ -428,7 +428,7 @@ xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
                 block_list_signals(cell);
 
 		gnc_item_list_append(box->item_list, menustr);
-                if (strcmp(menustr, cell->cell.value) == 0)
+                if (safe_strcmp(menustr, cell->cell.value) == 0)
                         gnc_item_list_select(box->item_list, menustr);
 
                 unblock_list_signals(cell);

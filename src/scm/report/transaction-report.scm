@@ -619,9 +619,9 @@
 	   (split-report-specs (make-split-report-spec options)))
 
       (list
-       (html-start-document-title (string-db 'lookup 'title))
+       (html-start-document-title (string-db 'lookup 'title) #f)
        (html-start-table)
-       (if 
+       (if
         (gnc:option-value
          (gnc:lookup-option options "Display" "Headers"))
         (html-table-headers split-report-specs)

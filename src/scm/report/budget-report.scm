@@ -1179,7 +1179,7 @@
       
       ((full)        
        (list
-	(html-start-document-title "Budget Report -- Full Debug")
+	(html-start-document-title "Budget Report -- Full Debug" #f)
 	(html-para "This is a budget report.  It is very preliminary, but you may find it useful.  To actually change the budget, currently you have to edit budget-report.scm.")
 	(html-para "This is the full debug report.  It is mainly useful for debugging the budget report.")
 	(html-start-table)
@@ -1194,7 +1194,7 @@
 	(html-end-document)))
       ((balancing)
        (list
-	(html-start-document-title "Budget Report -- Balancing View")
+	(html-start-document-title "Budget Report -- Balancing View" #f)
 	(html-para "This is a budget report.  It is very preliminary, but you may find it useful.  To actually change the budget, currently you have to edit budget-report.scm.")
 	(html-para "This is the balancing view.  It is supposed to be useful when you are balancing your budget.")
 	(html-start-table)
@@ -1209,7 +1209,7 @@
 	(html-end-document)))
       ((status)
        (list
-	(html-start-document-title "Budget Report -- Balancing View")
+	(html-start-document-title "Budget Report -- Balancing View" #f)
 	(html-para "This is a budget report.  It is very preliminary, but you may find it useful.  To actually change the budget, currently you have to edit budget-report.scm.")
 	(html-para "This is the status view.  It is supposed to tell you the current status of your budget.")
 	(html-start-table)

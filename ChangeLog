@@ -1,5 +1,11 @@
 2000-06-07  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/Query.c: fixed a "dave is an idiot" bug in cropping
+	the split list.
+
+	* src/gnome/window-register.c (gnc_register_create_menu_bar): don't
+	use stock close menu -- it's for closing files not closing windows.
+
 	* src/gnome/dialog-add.c (gnc_ui_accWindow_create_account): don't
 	make an opening balance transaction.
 

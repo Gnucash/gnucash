@@ -210,7 +210,9 @@
        "<title>" report-name "</title>"
        "</head>"
 
-       "<body bgcolor=#ccccff>"
+       (if balance-sheet?
+           "<body bgcolor=#fffde6>"
+           "<body bgcolor=#f6ffdb>")
 
        "<table cellpadding=1>"
        "<caption><b>" report-name "</b></caption>"

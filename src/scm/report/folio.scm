@@ -96,8 +96,8 @@
 
   (define (folio-renderer options)
     (list
-     (html-start-document-title (string-db 'lookup 'title))
-     (html-table (titles) (report-rows))
+     (html-start-document-title (string-db 'lookup 'title) "#bfdeba")
+     (html-table (string-db 'lookup 'title) (titles) (report-rows))
      (html-end-document)))
 
   (string-db 'store 'title "Stock Portfolio Valuation")

@@ -328,7 +328,7 @@
             (plotstr (eval (gov-fun "Plot Type")))
             (accounts (gov-fun "Account"))
             (dosubs (gov-fun "Sub-Accounts"))
-            (prefix  (list "<HTML>" "<BODY>"))
+            (prefix  (list "<HTML>" "<BODY bgcolor=#fff8c7>"))
             (suffix  (list "</BODY>" "</HTML>"))
             (columns (column-list))
             (report-lines '())
@@ -377,7 +377,7 @@
 
               ;; Create HTML
               (set! rept-text 
-                    (html-table 
+                    (html-table #f
                      columns
                      (append (format-reduced-list rept-data)
                              (list "<TR cellspacing=0><TD><TD><TD colspan=3><HR size=2 noshade><TD colspan=3><HR size=2 noshade></TR>"

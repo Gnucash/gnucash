@@ -3638,7 +3638,7 @@ LoadXferCell (ComboCell *cell,
 
   if (!grp) return;
 
-  load_everything = ((base_security == NULL) && (base_security == NULL));
+  load_everything = ((base_currency == NULL) && (base_security == NULL));
 
   /* Build the xfer menu out of account names.
    * Traverse sub-accounts recursively.
@@ -3652,7 +3652,7 @@ LoadXferCell (ComboCell *cell,
 
     curr = xaccAccountGetCurrency (acc);
     secu = xaccAccountGetSecurity (acc);
-    if (secu && (0x0 == secu[0])) secu = 0x0;
+    if (secu && (0x0 == secu[0])) secu = NULL;
 
     DEBUG ("curr=%s secu=%s acct=%s\n", 
            curr, secu, xaccAccountGetName (acc));

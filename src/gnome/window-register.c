@@ -666,16 +666,6 @@ gnc_register_date_window(RegWindow *regData)
                                          "Show All Transactions",
                                          TRUE);
 
-    /* This is a bit of a hack. The number of splits should be
-     * configurable, or maybe we should go back a time range instead
-     * of picking a number, or maybe we should be able to exclude
-     * based on reconciled status. Anyway, this works for now. */
-    if (!show_all)
-    {
-      xaccQuerySetMaxSplits(regData->ledger->query, 30);
-      xaccQueryGetSplits(regData->ledger->query);
-    }
-
     vbox = gtk_vbox_new(FALSE, 2);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
     gtk_container_add(GTK_CONTAINER(frame), vbox);
@@ -1143,7 +1133,13 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SUBTREE(SORT_ORDER_MENU_STR_N, sort_menu),
     GNOMEUIINFO_SUBTREE(DATE_RANGE_MENU_STR_N, date_menu),
     GNOMEUIINFO_SEPARATOR,
-    GNOMEUIINFO_MENU_CLOSE_ITEM(closeCB, NULL),
+    {
+      GNOME_APP_UI_ITEM,
+      CLOSE_STR_N, TOOLTIP_CLOSE_REG_N,
+      closeCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     GNOMEUIINFO_END
   };
 
@@ -1558,7 +1554,7 @@ gnc_toolbar_change_cb(void *data)
 RegWindow *
 regWindowLedger(xaccLedgerDisplay *ledger)
 {
-  RegWindow *regData = NULL;
+  RegWindow *regData;
   GtkWidget *vbox;
   GtkWidget *register_window;
   GtkWidget *register_dock;
@@ -1597,9 +1593,8 @@ regWindowLedger(xaccLedgerDisplay *ledger)
 
   regData->date_window = gnc_register_date_window(regData);
 
-  if(ledger->type != SEARCH_LEDGER) {
+  if (ledger->type != SEARCH_LEDGER)
     gnc_register_set_date_range(regData);
-  }
 
   statusbar = gnc_register_create_status_bar(regData);
   gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);

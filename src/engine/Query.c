@@ -799,7 +799,12 @@ xaccQueryGetSplits(Query * q) {
     if(q->max_splits > 0) {
       /* mptr is set to the first node of what will be the new list */
       mptr = g_list_nth(matching_splits, split_count - q->max_splits);
-      mptr->prev = NULL;
+      /* mptr should not be NULL, but let's be safe */
+      if (mptr != NULL) {
+        if (mptr->prev != NULL)
+          mptr->prev->next = NULL;
+        mptr->prev = NULL;
+      }
       g_list_free(matching_splits);
       matching_splits = mptr;
     }

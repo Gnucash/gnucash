@@ -107,7 +107,7 @@
      (gnc:make-color-option
       "Hello, World!" "Background Color"
       "f" "This is a color option"
-      (list #x99 #xcc #xff 0)
+      (list #xf6 #xff #xdb 0)
       255
       #f))
 

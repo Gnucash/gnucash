@@ -32,6 +32,7 @@
 #include "SplitLedger.h"
 #include "Transaction.h"
 #include "FileDialog.h"
+#include "global-options.h"
 #include "util.h"
 
 
@@ -322,6 +323,7 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
                           int ledger_type)
 {
   xaccLedgerDisplay *regData = NULL;
+  gboolean show_all;
 
   /******************************************************************\
   \******************************************************************/
@@ -373,8 +375,20 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
   regData->displayed_accounts = accListCopy (acclist);
   regData->type = ledger_type;
 
+  show_all = gnc_lookup_boolean_option("Register",
+                                       "Show All Transactions",
+                                       TRUE);
+
   /* set up the query filter */
   regData->query = xaccMallocQuery();
+
+  /* This is a bit of a hack. The number of splits should be
+   * configurable, or maybe we should go back a time range instead
+   * of picking a number, or maybe we should be able to exclude
+   * based on reconciled status. Anyway, this works for now. */
+  if (!show_all && ((ledger_type & REG_TYPE_MASK) != SEARCH_LEDGER))
+    xaccQuerySetMaxSplits(regData->query, 30);
+
   xaccQuerySetGroup(regData->query, gncGetCurrentGroup());
   if(regData->displayed_accounts) {
     xaccQueryAddAccountMatch(regData->query, 
