@@ -1007,8 +1007,8 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
   char *buf = NULL;
   Split *split;
   gint result;
-  const char *two_choices[] = { N_(GTK_STOCK_CANCEL),
-				N_(GTK_STOCK_DELETE),
+  const char *two_choices[] = { N_(GTK_STOCK_DELETE),
+				N_(GTK_STOCK_CANCEL),
 				NULL };
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
@@ -1079,7 +1079,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     }
     g_free(buf);
 
-    if (!result)
+    if (result != 0)
       return;
 
     gnc_split_register_delete_current_split (reg);
@@ -1111,7 +1111,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
 
     g_free (buf);
 
-    if (!result)
+    if (result != 0)
       return;
 
     gnc_split_register_delete_current_trans (reg);
