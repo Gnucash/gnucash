@@ -127,25 +127,108 @@ xaccScrubSubSplitPrice (Split *split)
 
 #if LATER
 
+/** The gnc_kvp_array_find_guid() routine walks the array pointed
+ *    at by array_root.  It looks for the array entry that has the
+ *    guid value of "desired_guid" filed under the key name "guid_name".
+ *    If it find that matching guid, then it returns the integer value
+ *    of the array element.  If it is not found, or if there is any
+ *    other error, then a negative value is returned.
+ */
+
+int
+gnc_kvp_array_find_guid (KvpFrame *array_root, 
+                         const char *guid_name, GUID *desired_guid)
+{
+  KvpValue *va;
+  int i, ncopies;
+
+  va = kvp_frame_get_value (array_root, "ncopies");
+  if (!va) return -1;
+  ncopies = (int) kvp_value_get_gint64 (va, "ncopies");
+
+  for (i=0; i<ncopies; i++)
+  {
+    char buff[32];
+    KvpFrame *fr;
+    GUID *guid;
+
+    snprintf (buff, 32, "%d", i);
+    fr = kvp_frame_get_slot (array_root, buff);
+    if (!fr) continue;
+
+    guid = kvp_frame_get_guid (fr, guid_name);
+    if (!guid) continue;
+
+    if (guid_equal (desired_guid, guid)) return i;
+  }
+  return -1;
+}
+
+
+/* Remove the guid of b from a */
+static void
+remove_guids (Split *sa, Split *sb)
+{
+   KvpValue *kval;
+   KvpFrame *ksub;
+
+   /* If there are no sub-splits, thats real bad, since the whole 
+    * point fo the merge was to have them be gemini'd. */
+   kval = kvp_frame_get_slot (sa->kvp_data, "lot-split");
+   ksub = kvp_value_get_frame (kval);
+   if (!ksub) 
+   {
+      PERR ("merging splits that didn't have correct gemini values!");
+      return;
+   }
+   
+
+}
+
+/* The 'merge_splits() routine causes the amount & value of sb 
+ * to be merged into sa; it then destroys sb.  It also performs
+ * some other misc cleanup */
+
 static void
 merge_splits (Split *sa, Split *sb)
 {
+   Account *act;
    Transaction *txn;
+   gnc_numeric amt, val;
+
+   act = xaccSplitGetAccount (sb);
+   xaccAccountBeginEdit (act);
 
    txn = sa->parent;
    xaccTransBeginEdit (txn);
-   /* whack kvp of b, remove gem kvp of a */
-   /* whack memo etc. b */
-   /* set reconsile to no */
-   /* add amounts, values */
+
+   /* Remove the guid of sb from the 'gemini' of sa */
+   remove_guids (sa, sb);
+
+   /* Add amount of sb into sa, ditto for value. */
+   amt = xaccSplitGetAmount (sa);
+   amt = gnc_numeric_add_fixed (amt, xaccSplitGetAmount (sb));
+   xaccSplitSetAmount (sa, amt);
+
+   val = xaccSplitGetValue (sa);
+   val = gnc_numeric_add_fixed (val, xaccSplitGetValue (sb));
+   xaccSplitSetValue (sa, val);
+
+   /* Set reconcile to no; after this much violence, 
+    * no way its reconciled. */
+   xaccSplitSetReconcile (sa, NREC);
+
+   /* Finally, delete sb */
+   xaccSplitDestroy(sb);
 
    xaccTransCommitEdit (txn);
-   
+   xaccAccountCommitEdit (act);
 }
 
 void 
 xaccScrubMergeSubSplits (Split *split)
 {
+   Transaction *txn;
    KvpFrame *sf;
    SplitList *node;
    GNCLot *lot;
@@ -153,17 +236,22 @@ xaccScrubMergeSubSplits (Split *split)
    sf = is_subsplit (split);
    if (!sf) return;
 
+   txn = split->parent;
    lot = xaccSplitGetLot (split);
 
    ENTER (" ");
-   for (node=split->parent->splits; node; node=node->next)
+restart:
+   for (node=txn->splits; node; node=node->next)
    {
       Split *s = node->data;
       if (xaccSplitGetLot (s) != lot) continue;
 
       /* OK, this split is in the same lot (and thus same account)
-       * as the indicated split.  It must be a subsplit. Merge the
+       * as the indicated split.  It must be a subsplit (although
+       * we should double-check the kvp's to be sure).  Merge the
        * two back together again. */
+      merge_splits (split, s);
+      goto restart;
    }
    LEAVE (" ");
 }
