@@ -62,7 +62,17 @@ void  gnc_commodity_set_exchange_code(gnc_commodity * cm,
 void  gnc_commodity_set_fraction(gnc_commodity * cm, int smallest_fraction);
 void  gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark);
 
+/** The gnc_commodity_equiv() routine returns TRUE if the two commodities are 
+ *   equivalent.  Commodities are equivalent if they have the same namespace
+ *   and mnemonic.  Equivalent commodities my belong to different exchanges,
+ *   may have different fullnames, and may have different fractionals.
+ */
 gboolean gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b);
+
+/** The gnc_commodity_equal() routine returns TRUE if the two commodities are 
+ *   equal.  Commodities are equal if they have the same namespace, mnemonic,
+ *   fullname, exchange and fraction.
+ */
 gboolean gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b);
 
 /* gnc_commodity_table functions : operate on a database of commodity
