@@ -364,7 +364,7 @@ rpcend_book_load (Backend *bend)
   ag = gnc_book_get_group (be->book);
   if (!ag)
   {
-    ag = xaccMallocAccountGroup ();
+    ag = xaccMallocAccountGroup (book);
     gnc_book_set_group (be->book, ag);
   }
 
