@@ -2,6 +2,9 @@
 
 	* fix bug #96030 -- change "Customer/Vendor Name" to "Company Name"
 
+	* remove (old, unused) dialog-job-select.[ch] files from CVS.
+	* fix bug #96035 -- do not limit searches to the last-chosen object.
+	
 2002-10-16  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/app-utils/gnc-exp-parser.c (gnc_exp_parser_parse): This

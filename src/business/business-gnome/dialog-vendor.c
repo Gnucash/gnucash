@@ -662,11 +662,13 @@ gnc_vendor_search (GncVendor *start, GNCBook *book)
   q = gncQueryCreate ();
   gncQuerySetBook (q, book);
 
+#if 0
   if (start) {
     q2 = gncQueryCopy (q);
     gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			  gncVendorGetGUID (start), QUERY_AND);
   }
+#endif
 
   /* launch select dialog and return the result */
   sw = g_new0 (struct _vendor_select_window, 1);

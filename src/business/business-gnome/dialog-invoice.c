@@ -1997,6 +1997,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
     q2 = gncQueryCopy (q);
   }
 
+#if 0
   if (start) {
     if (q2 == NULL)
       q2 = gncQueryCopy (q);
@@ -2004,6 +2005,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
     gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			  gncInvoiceGetGUID (start), QUERY_AND);
   }
+#endif
 
   /* launch select dialog and return the result */
   sw = g_new0 (struct _invoice_select_window, 1);

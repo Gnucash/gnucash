@@ -806,11 +806,13 @@ gnc_customer_search (GncCustomer *start, GNCBook *book)
   q = gncQueryCreateFor (type);
   gncQuerySetBook (q, book);
 
+#if 0
   if (start) {
     q2 = gncQueryCopy (q);
     gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			  gncCustomerGetGUID (start), QUERY_AND);
   }
+#endif
 
   /* launch select dialog and return the result */
   sw = g_new0 (struct _customer_select_window, 1);

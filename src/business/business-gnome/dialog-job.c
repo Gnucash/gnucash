@@ -552,6 +552,12 @@ gnc_job_search (GncJob *start, GncOwner *owner, GNCBook *book)
   q = gncQueryCreateFor (type);
   gncQuerySetBook (q, book);
 
+  /* If we have a start job but, for some reason, not an owner -- grab
+   * the owner from the starting job.
+   */
+  if ((!owner || !gncOwnerGetGUID (owner)) && start)
+    owner = gncJobGetOwner (start);
+
   /* If owner is supplied, limit all searches to invoices who's owner
    * is the supplied owner!  Show all invoices by this owner.
    */
@@ -564,6 +570,7 @@ gnc_job_search (GncJob *start, GncOwner *owner, GNCBook *book)
     q2 = gncQueryCopy (q);
   }
 
+#if 0
   if (start) {
     if (q2 == NULL)
       q2 = gncQueryCopy (q);
@@ -571,6 +578,7 @@ gnc_job_search (GncJob *start, GncOwner *owner, GNCBook *book)
     gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			  gncJobGetGUID (start), QUERY_AND);
   }
+#endif
 
   /* launch select dialog and return the result */
   sw = g_new0 (struct _job_select_window, 1);

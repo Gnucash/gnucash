@@ -892,6 +892,7 @@ gnc_order_search (GncOrder *start, GncOwner *owner, GNCBook *book)
     q2 = gncQueryCopy (q);
   }
 
+#if 0
   if (start) {
     if (q2 == NULL)
       q2 = gncQueryCopy (q);
@@ -899,6 +900,7 @@ gnc_order_search (GncOrder *start, GncOwner *owner, GNCBook *book)
     gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			  gncOrderGetGUID (start), QUERY_AND);
   }
+#endif
 
   /* launch select dialog and return the result */
   sw = g_new0 (struct _order_select_window, 1);

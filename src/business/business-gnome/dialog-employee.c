@@ -606,11 +606,13 @@ gnc_employee_search (GncEmployee *start, GNCBook *book)
   q = gncQueryCreateFor (type);
   gncQuerySetBook (q, book);
 
+#if 0
   if (start) {
     q2 = gncQueryCopy (q);
     gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			  gncEmployeeGetGUID (start), QUERY_AND);
   }
+#endif
 
   /* launch select dialog and return the result */
   sw = g_new0 (struct _employee_select_window, 1);
