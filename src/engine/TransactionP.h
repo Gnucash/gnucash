@@ -105,10 +105,20 @@ struct _transaction
 };
 
 
-/* freeTransaction only does so if the transaction is not part of an
- * account. (i.e. if none of the member splits are in an account). */
+/* The xaccFreeTransaction() method simply frees all memory associated
+ * with the transaction.  It does not perform any consistency checks 
+ * to verify that such freeing can be safely done. (e.g. id does
+ * not check to see if any of the member splits are referenced
+ * by an account.
+ */
 void  xaccFreeTransaction (Transaction *);
 
+/* The xaccFreeSplit() method simply frees all memory associated
+ * with the split.  It does not verify that the split isn't
+ * referenced in some account.  If the split is referenced by an 
+ * account, then calling this method will leave the system in an 
+ * inconsistent state.
+ */
 void  xaccFreeSplit   (Split *);    /* frees memory */
 
 /* The xaccTransRemoveSplit() routine will remove the indicated

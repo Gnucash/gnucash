@@ -797,7 +797,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
     * if we see something else, assume the worst, free the last 
     * transaction, and return */
    if ('!' == qifline[0]) {
-      xaccFreeTransaction (trans);
+      xaccTransDestroy (trans);
       return qifline;
    }
 

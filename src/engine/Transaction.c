@@ -319,17 +319,6 @@ xaccFreeTransaction( Transaction *trans )
 
   if (!trans) return;
 
-  /* free a transaction only if it is not claimed
-   * by any accounts. */
-
-  i = 0;
-  s = trans->splits[i];
-  while (s) {
-    if (s->acc) return;
-    i++;
-    s = trans->splits[i];
-  }
-
   /* free up the destination splits */
   i = 0;
   s = trans->splits[i];
@@ -356,6 +345,28 @@ xaccFreeTransaction( Transaction *trans )
   trans->open = 0;
 
   _free(trans);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccTransDestroy (Transaction *trans)
+{
+   int i;
+   Split *split;
+
+   if (!trans) return;
+
+   i=0;
+   split = trans->splits[i];
+   while (split) {
+      xaccAccountRemoveSplit (split->acc, split);
+      i++;
+      split = trans->splits[i];
+   }
+
+   xaccFreeTransaction (trans);
 }
 
 /********************************************************************\

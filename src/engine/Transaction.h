@@ -64,6 +64,13 @@ typedef struct _transaction   Transaction;
 Transaction * xaccMallocTransaction (void);       /* mallocs and inits */
 void          xaccInitTransaction (Transaction *);/* clears a trans struct */
 
+/* The xaccTransactionDestroy() method will remove all 
+ *    of the splits from each of thier accounts, free the memory
+ *    associated with them, and will then free the transaction
+ *    itself.
+ */
+void          xaccTransDestroy (Transaction *);
+
 void          xaccTransBeginEdit (Transaction *);
 void          xaccTransCommitEdit (Transaction *);
 
