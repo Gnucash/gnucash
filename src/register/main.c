@@ -3,14 +3,25 @@
 #include <Xm/Form.h>
 #include <Xm/MainW.h>
 
+#include "FileIO.h"
 #include "register.h"
 
+void
+xaccLoadRegister (BasicRegister *reg, Account *acc)
+{
+
+printf ("its %s \n", acc->accountName);
+
+}
+
 /* ================================= */
+int loglevel = 1;
 
 main (int argc, char *argv[]) {
   Widget toplevel, mainwindow, actionform;
   XtAppContext app;
   BasicRegister *reg;
+  AccountGroup * grp;
 
 
   toplevel = XtVaAppInitialize( &app, "Xacc", NULL, 0,
@@ -27,7 +38,11 @@ main (int argc, char *argv[]) {
                                  xmFormWidgetClass, mainwindow,
                                  NULL );
 
+  grp = xaccReadData ("../../data/test4.xac");
+
   reg = xaccMallocBasicRegister ();
+
+  xaccLoadRegister (reg, grp->account[0]);
 
   xaccCreateTable (reg->table, actionform, "yodudue");
 

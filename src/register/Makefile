@@ -3,7 +3,7 @@ srcdir   = .
 CC       = gcc
 INCLPATH = -I/usr/include \
            -I/usr/X11R6/include/. \
-           -I./../include \
+           -I./../../include \
            -I./../lib/ComboBox-1.33 \
            -I./../lib/XmHTML-1.1.0/src \
            -I./../../lib/Xbae-4.6.2-linas 
@@ -18,16 +18,16 @@ LFLAGS   = -O2
 LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11 -lm
 LIBPATH  = -L/lib -L/usr/lib -L/usr/X11R6/lib/.
 TARGET   = demo
-STATIC   = xacc-static
 
 # LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
 LIBXMHTML= ../lib/XmHTML-1.1.0/src/libXmHTML.a
 LIBXBAE  = ../../lib/Xbae-4.6.2-linas/libXbae.a
 LIBCOMBO = ../lib/ComboBox-1.33/libComboBox.a
+LIBTRANS = ../Account.o ../Data.o ../FileIO.o ../Transaction.o ../date.o
 ######################################################################
 SRCS = 	basiccell.c cellblock.c datecell.c main.c pricecell.c \
 	recncell.c register.c table.c textcell.c
-OBJS = ${SRCS:.c=.o} $(LIBXBAE)
+OBJS = ${SRCS:.c=.o} $(LIBTRANS) $(LIBXBAE)
 ######################################################################
 
 default: $(TARGET)
