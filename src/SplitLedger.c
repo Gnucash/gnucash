@@ -114,6 +114,7 @@
 #include "splitreg.h"
 #include "table-allgui.h"
 #include "guile-util.h"
+#include "global-options.h"
 #include "messages.h"
 #include "util.h"
 
@@ -1143,9 +1144,13 @@ LedgerTraverse (Table *table,
 
   switch (result)
   {
+    case GNC_VERIFY_YES:
     case GNC_VERIFY_NO: {
       Split *new_split;
       Split *trans_split;
+
+      if ((result == GNC_VERIFY_YES) && xaccSRCheckReconciled (reg))
+        break;
 
       new_split = gnc_table_get_user_data_physical(reg->table, phys_loc);
       trans_split = xaccSRGetTransSplit(reg, phys_loc);
@@ -3764,6 +3769,46 @@ xaccSRHasPendingChanges (SplitRegister *reg)
     return TRUE;
 
   return xaccTransIsOpen(pending_trans);
+}
+
+/* ======================================================== */
+
+gboolean
+xaccSRCheckReconciled (SplitRegister *reg)
+{
+  Split *split;
+  guint32 changed;
+  gboolean confirm;
+  char *message = _("You are about to change a reconciled transaction.\n"
+                    "Are you sure you want to do that?");
+
+  if (reg == NULL)
+    return TRUE;
+
+  changed = xaccSplitRegisterGetChangeFlag(reg);
+  if (!changed)
+    return TRUE;
+
+  split = xaccSRGetCurrentSplit(reg);
+  if (split == NULL)
+    return TRUE;
+
+  switch (xaccSplitGetReconcile (split))
+  {
+    case YREC:
+    case FREC:
+      break;
+    default:
+      return TRUE;
+  }
+
+  confirm = gnc_lookup_boolean_option("Register",
+                                      "Confirm before changing reconciled",
+                                      TRUE);
+  if (!confirm)
+    return TRUE;
+
+  return gnc_verify_dialog_parented(xaccSRGetParent(reg), message, FALSE);
 }
 
 /* =======================  end of file =================== */

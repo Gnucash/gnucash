@@ -981,8 +981,13 @@ new_trans_cb(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
 
-  if (xaccSRSaveRegEntry(regData->ledger->ledger, TRUE))
-    xaccSRRedrawRegEntry(regData->ledger->ledger);
+  if (xaccSRCheckReconciled (regData->ledger->ledger))
+  {
+    if (xaccSRSaveRegEntry(regData->ledger->ledger, TRUE))
+      xaccSRRedrawRegEntry(regData->ledger->ledger);
+  }
+  else
+    xaccSRCancelCursorTransChanges (regData->ledger->ledger);
 
   gnc_register_jump_to_blank(regData);
 }
@@ -2125,15 +2130,22 @@ gnc_register_include_date(RegWindow *regData, time_t date)
 static void
 recordCB(GtkWidget *w, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
   gboolean really_saved;
   Transaction *trans;
 
   trans = xaccSRGetCurrentTrans(regData->ledger->ledger);
 
-  really_saved = xaccSRSaveRegEntry(regData->ledger->ledger, TRUE);
-  if (!really_saved)
+  if (xaccSRCheckReconciled (regData->ledger->ledger))
+  {
+    if (!xaccSRSaveRegEntry(regData->ledger->ledger, TRUE))
+      return;
+  }
+  else
+  {
+    xaccSRCancelCursorTransChanges (regData->ledger->ledger);
     return;
+  }
 
   if (trans != NULL)
     gnc_register_include_date(regData, xaccTransGetDate(trans));
@@ -2421,7 +2433,7 @@ gnc_register_check_close(RegWindow *regData)
 static void
 closeCB(GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
 
   gnc_register_check_close(regData);
 

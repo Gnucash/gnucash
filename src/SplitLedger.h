@@ -163,4 +163,12 @@ void     xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);
  *    has changed cells that have not been committed. */
 gboolean xaccSRHasPendingChanges (SplitRegister *reg);
 
+/* The xaccSRCheckReconciled() method returns TRUE if the current
+ * cursor has not been changed. It also returns TRUE if it has been
+ * changed, but the relevant split is not reconciled or frozen. It
+ * also returns TRUE if it has been changed and it is reconciled and
+ * the user verifies in a dialog that the split should be changed.
+ * Otherwise, it returns FALSE. */
+gboolean xaccSRCheckReconciled (SplitRegister *reg);
+
 #endif /* __XACC_SPLIT_LEDGER_H__ */

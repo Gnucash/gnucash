@@ -253,14 +253,20 @@ the account instead of opening a register." #f))
 'Enter'. Otherwise, move down one row." #f))
 
 (gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register" "Confirm before changing reconciled"
+  "h" "If selected, use a dialog to confirm a change to a reconciled \
+transaction." #t))
+
+(gnc:register-configuration-option
  (gnc:make-font-option
   "Register" "Register font"
-  "h" "The font to use in the register" (gnc:register-default-font)))
+  "i" "The font to use in the register" (gnc:register-default-font)))
 
 (gnc:register-configuration-option
  (gnc:make-font-option
   "Register" "Register hint font"
-  "i" "The font used to show hints in the register"
+  "j" "The font used to show hints in the register"
   (gnc:register-default-hint-font)))
 
 
