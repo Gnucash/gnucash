@@ -521,21 +521,23 @@ fill_helper(gpointer key, gpointer value, gpointer data)
     g_strdup(gnc_ui_get_account_field_value_string(account, fs->field));
   if(!account_field_value) account_field_value = g_strdup("");
   
-  switch (fs->field) {
-  case ACCOUNT_CURRENCY:
-  case ACCOUNT_SECURITY:
-    value_str = g_strdup(gnc_commodity_get_printname(value));
-    break;
-  case ACCOUNT_TYPE:
-    value_str = g_strdup(xaccAccountGetTypeStr(GPOINTER_TO_INT(value)));
-    break;
-  default:
-    g_warning("unexpected field type");
-    g_free(full_name);
-    g_free(account_field_name);
-    g_free(account_field_value);
-    return;
+  switch (fs->field)
+  {
+    case ACCOUNT_CURRENCY:
+    case ACCOUNT_SECURITY:
+      value_str = g_strdup(gnc_commodity_get_printname(value));
+      break;
+    case ACCOUNT_TYPE:
+      value_str = g_strdup(xaccAccountGetTypeStr(GPOINTER_TO_INT(value)));
+      break;
+    default:
+      g_warning("unexpected field type");
+      g_free(full_name);
+      g_free(account_field_name);
+      g_free(account_field_value);
+      return;
   }
+
   {  
     gchar *strings[5];
     strings[0] = full_name;
@@ -545,6 +547,7 @@ fill_helper(gpointer key, gpointer value, gpointer data)
     strings[4] = NULL; 
     gtk_clist_append(fs->list, strings);
   }
+
   g_free(full_name);
   g_free(account_field_name);
   g_free(account_field_value);
@@ -928,8 +931,6 @@ gnc_account_window_select_security_cb(GtkButton * button,
                        gnc_commodity_get_printname(new_security));
   }
 }
-
-
 
 
 static void

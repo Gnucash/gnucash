@@ -3848,7 +3848,8 @@ create_Account_Dialog (void)
   GtkWidget *notes_text;
   GtkWidget *dialog_action_area12;
   GtkWidget *button63;
-  GtkWidget *close_button;
+  GtkWidget *cancel_button;
+  GtkWidget *button72;
 
   Account_Dialog = gnome_dialog_new (_("New Account"), NULL);
   gtk_object_set_data (GTK_OBJECT (Account_Dialog), "Account_Dialog", Account_Dialog);
@@ -4127,13 +4128,21 @@ create_Account_Dialog (void)
   gtk_widget_show (button63);
   GTK_WIDGET_SET_FLAGS (button63, GTK_CAN_DEFAULT);
 
-  gnome_dialog_append_button (GNOME_DIALOG (Account_Dialog), GNOME_STOCK_BUTTON_HELP);
-  close_button = g_list_last (GNOME_DIALOG (Account_Dialog)->buttons)->data;
-  gtk_widget_ref (close_button);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "close_button", close_button,
+  gnome_dialog_append_button (GNOME_DIALOG (Account_Dialog), GNOME_STOCK_BUTTON_CANCEL);
+  cancel_button = g_list_last (GNOME_DIALOG (Account_Dialog)->buttons)->data;
+  gtk_widget_ref (cancel_button);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "cancel_button", cancel_button,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (close_button);
-  GTK_WIDGET_SET_FLAGS (close_button, GTK_CAN_DEFAULT);
+  gtk_widget_show (cancel_button);
+  GTK_WIDGET_SET_FLAGS (cancel_button, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Account_Dialog), GNOME_STOCK_BUTTON_HELP);
+  button72 = g_list_last (GNOME_DIALOG (Account_Dialog)->buttons)->data;
+  gtk_widget_ref (button72);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "button72", button72,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button72);
+  GTK_WIDGET_SET_FLAGS (button72, GTK_CAN_DEFAULT);
 
   gtk_signal_connect (GTK_OBJECT (currency_button), "clicked",
                       GTK_SIGNAL_FUNC (gnc_account_window_select_currency_cb),

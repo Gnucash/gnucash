@@ -5605,7 +5605,15 @@ Daily (365)
 
       <widget>
 	<class>GtkButton</class>
-	<name>close_button</name>
+	<name>cancel_button</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button72</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_HELP</stock_button>
