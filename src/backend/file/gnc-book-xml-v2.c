@@ -85,7 +85,7 @@ book_id_handler (xmlNodePtr node, gpointer book_pdata)
     GUID *guid;
 
     guid = dom_tree_to_guid(node);
-    gnc_book_set_guid(book, guid);
+    gnc_book_set_guid(book, *guid);
 
     g_free(guid);
     
@@ -100,8 +100,7 @@ book_slots_handler (xmlNodePtr node, gpointer book_pdata)
 
     /* the below works only because the get is gaurenteed to return 
      * a frame, even if its empty */
-    success = dom_tree_to_kvp_frame_given
-      (node, gnc_book_get_slots (book);
+    success = dom_tree_to_kvp_frame_given (node, gnc_book_get_slots (book));
 
     g_return_val_if_fail(success, FALSE);
     
@@ -111,7 +110,7 @@ book_slots_handler (xmlNodePtr node, gpointer book_pdata)
 
 static struct dom_tree_handler book_handlers_v2[] = {
     { book_id_string, book_id_handler, 1, 0 },
-    { act_slots_string, account_slots_handler, 0, 0 },
+    { book_slots_string, book_slots_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 
