@@ -7,7 +7,7 @@
       Account for trading and converting a foreign currency
     </gnc-act:short-description>
     <gnc-act:long-description>
-    You would want to select these set of accounts if you convert
+    You would want to select this set of accounts if you convert
     foreign currencies.
 
     Note: account currently in DEM; edit account to change currency.

@@ -7,7 +7,7 @@
       An account for tracking childcare costs
     </gnc-act:short-description>
     <gnc-act:long-description>
-    You would want to select these set of accounts if you have
+    You would want to select this set of accounts if you have
     childcare expenses.
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">

@@ -8,9 +8,9 @@
         (stock, bond, mutual fund, index fund, interest, dividend)
     </gnc-act:short-description>
     <gnc-act:long-description>
-    You would want to select these set of accounts if you have
+    You would want to select this set of accounts if you have
     investments (stock, bond, mutual fund, index fund, interest,
-    dividend)
+    dividend).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>

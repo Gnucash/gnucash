@@ -1,5 +1,7 @@
 2001-05-17  Dave Peticolas  <dave@krondo.com>
 
+	* accounts/C/*: tweak detailed descriptions
+
 	* doc/sgml/C/xacc-reports.sgml: fix warnings
 
 	* doc/sgml/C/xacc-net-worth-barchart.sgml: fix warnings

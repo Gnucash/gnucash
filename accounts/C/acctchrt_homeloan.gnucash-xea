@@ -7,7 +7,7 @@
      Accounts for home loan and associated interest 
     </gnc-act:short-description>
     <gnc-act:long-description>
-    You would want to select these set of accounts if you have
+    You would want to select this set of accounts if you have
     a home loan (mortgage loan, mortgage interest).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
