@@ -469,6 +469,7 @@ gnc_book_load (GNCBook *book)
      * id and a lock on the file. */
 
     xaccLogDisable();
+    xaccGroupMarkDoFree (book->topgroup);
     xaccFreeAccountGroup (book->topgroup);
     book->topgroup = NULL;
 
@@ -503,6 +504,7 @@ gnc_book_load (GNCBook *book)
      */
     Backend *be = book->backend;
     xaccLogDisable();
+    xaccGroupMarkDoFree (book->topgroup);
     xaccFreeAccountGroup (book->topgroup);
     xaccLogEnable();
     book->topgroup = NULL;

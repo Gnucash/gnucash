@@ -179,21 +179,23 @@ xaccGroupMarkDoFree (AccountGroup *grp)
 void
 xaccFreeAccountGroup (AccountGroup *grp)
 {
+  gboolean root_grp;
+
   if (!grp) return;
+
+  root_grp = grp->parent == NULL;
 
   if (grp->accounts)
   {
     Account *account;
     /* This is a weird iterator & needs some explanation.
-     * xaccAccountDestroy() will rip the account out  
-     * of the list, thus iterating while grp->accounts 
-     * is non-null is enough to iterate the loop.  But
-     * when it deletes the last account, then it will also 
-     * delete the group, making the grp pointer invalid. 
-     * So we have to be careful with the last deletion:
-     * in particular, g_free(grp) would be freeing that 
-     * memory a second time, so don't do it.
-     */
+     * xaccAccountDestroy() will rip the account out of the list, thus
+     * iterating while grp->accounts is non-null is enough to iterate
+     * the loop.  But when it deletes the last account, then it will
+     * also delete the group, unless it's the root group, making the
+     * grp pointer invalid. So we have to be careful with the last
+     * deletion: in particular, g_free(grp) would be freeing that
+     * memory a second time, so don't do it. */
     while (grp->accounts->next)
     {
       account = grp->accounts->next->data;
@@ -203,13 +205,13 @@ xaccFreeAccountGroup (AccountGroup *grp)
     account = grp->accounts->data;
     xaccAccountBeginEdit (account);
     xaccAccountDestroy (account);
-  } 
-  else
-  {
-    grp->parent   = NULL;
-    grp->balance  = gnc_numeric_zero();
-    g_free (grp);
+
+    if (!root_grp) return;
   }
+
+  grp->parent   = NULL;
+  grp->balance  = gnc_numeric_zero();
+  g_free (grp);
 }
 
 /********************************************************************\
