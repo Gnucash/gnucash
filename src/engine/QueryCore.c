@@ -127,26 +127,42 @@ static int string_match_predicate (gpointer object, QueryAccess get_fcn,
 {
   query_string_t pdata = (query_string_t) pd;
   const char *s;
+  int ret = 0;
 
   VERIFY_PREDICATE (query_string_type);
 
   s = ((query_string_getter)get_fcn) (object);
 
-  if (pdata->is_regex) {
-    regmatch_t match;
-    if (!regexec (&pdata->compiled, s, 1, &match, 0))
-      return 1;
-    else
-      return 0;
-  }
+  do {
+    if (pdata->is_regex) {
+      regmatch_t match;
+      if (!regexec (&pdata->compiled, s, 1, &match, 0))
+	ret = 1;
 
-  if (pdata->options == STRING_MATCH_CASEINSENSITIVE) {
-    if (strcasestr (s, pdata->matchstring)) return 1;
+      break;
+    }
+
+    if (pdata->options == STRING_MATCH_CASEINSENSITIVE) {
+      if (strcasestr (s, pdata->matchstring))
+	ret = 1;
+
+      break;
+    }
+
+    if (strstr (s, pdata->matchstring))
+      ret = 1;
+
+  } while (FALSE);
+
+  switch (how) {
+  case COMPARE_EQUAL:
+    return ret;
+  case COMPARE_NEQ:
+    return !ret;
+  default:
+    PWARN ("bad match type: %d", how);
     return 0;
   }
-
-  if (strstr (s, pdata->matchstring)) return 1;
-  return 0;
 }
 
 static int string_compare_func (gpointer a, gpointer b, gint options,
@@ -258,6 +274,8 @@ static int date_match_predicate (gpointer object, QueryAccess get_fcn,
     return (compare > 0);
   case COMPARE_GTE:
     return (compare >= 0);
+  case COMPARE_NEQ:
+    return (compare != 0);
   default:
     PWARN ("bad match type: %d", how);
     return 0;
@@ -351,6 +369,8 @@ static int numeric_match_predicate (gpointer object, QueryAccess get_fcn,
     return (compare > 0);
   case COMPARE_GTE:
     return (compare >= 0);
+  case COMPARE_NEQ:
+    return (!compare);
   default:
     PWARN ("bad match type: %d", how);
     return 0;
@@ -513,6 +533,8 @@ static int int64_match_predicate (gpointer object, QueryAccess get_fcn,
     return (val > pdata->val);
   case COMPARE_GTE:
     return (val >= pdata->val);
+  case COMPARE_NEQ:
+    return (val != pdata->val);
   default:
     PWARN ("bad match type: %d", how);
     return 0;
@@ -578,6 +600,8 @@ static int double_match_predicate (gpointer object, QueryAccess get_fcn,
     return (val > pdata->val);
   case COMPARE_GTE:
     return (val >= pdata->val);
+  case COMPARE_NEQ:
+    return (val != pdata->val);
   default:
     PWARN ("bad match type: %d", how);
     return 0;
@@ -633,7 +657,15 @@ static int boolean_match_predicate (gpointer object, QueryAccess get_fcn,
 
   val = ((query_boolean_getter)get_fcn) (object);
 
-  return (val == pdata->val);
+  switch (how) {
+  case COMPARE_EQUAL:
+    return (val == pdata->val);
+  case  COMPARE_NEQ:
+    return (val != pdata->val);
+  default:
+    PWARN ("bad match type: %d", how);
+    return 0;
+  }
 }
 
 static int boolean_compare_func (gpointer a, gpointer b, gint options,
@@ -769,6 +801,8 @@ static int kvp_match_predicate (gpointer object, QueryAccess get_fcn,
     return (compare >= 0);
   case COMPARE_GT:
     return (compare > 0);
+  case COMPARE_NEQ:
+    return (compare != 0);
   default:
     PWARN ("bad match type: %d", how);
     return 0;

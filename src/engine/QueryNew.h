@@ -30,7 +30,8 @@ typedef enum {
   COMPARE_LTE,
   COMPARE_EQUAL,
   COMPARE_GT,
-  COMPARE_GTE
+  COMPARE_GTE,
+  COMPARE_NEQ
 } query_compare_t;
 
 #define QUERY_DEFAULT_SORT	"GnucashQueryDefaultSortObject"
