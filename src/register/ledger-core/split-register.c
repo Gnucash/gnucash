@@ -2146,7 +2146,13 @@ gnc_split_register_init (SplitRegister *reg,
                                           CURSOR_SINGLE_LEDGER);
 
     gnc_table_set_vcell (reg->table, cursor, NULL, TRUE, TRUE, vloc.vcell_loc);
-    gnc_table_move_cursor (reg->table, vloc);
+
+    if (gnc_table_find_close_valid_cell (reg->table, &vloc, FALSE))
+      gnc_table_move_cursor (reg->table, vloc);
+    else
+    {
+      PERR ("Can't find valid initial location");
+    }
   }
 }
 
