@@ -89,18 +89,17 @@ gnc_destroy_example_account(GncExampleAccount *gea)
 
 static void
 clear_up_account_commodity_session(
-    GNCSession *session, Account *act,
-    gnc_commodity * (*getter) (Account *account, GNCSession *session),
-    void (*setter) (Account *account, gnc_commodity *comm,
-                    GNCSession *session))
+    GNCBook *book, Account *act,
+    gnc_commodity * (*getter) (Account *account, GNCBook *book),
+    void (*setter) (Account *account, gnc_commodity *comm, GNCBook *book))
 {
     gnc_commodity_table *tbl;
     gnc_commodity *gcom;
     gnc_commodity *com;
 
-    tbl = gnc_book_get_commodity_table (gnc_session_get_book (session));
+    tbl = gnc_book_get_commodity_table (book);
 
-    com = getter (act, session);
+    com = getter (act, book);
     if(!com)
     {
         return;
@@ -125,7 +124,7 @@ clear_up_account_commodity_session(
     else
     {
         gnc_commodity_destroy(com);
-        setter(act, gcom, session);
+        setter(act, gcom, book);
     }
 }
 
@@ -171,12 +170,12 @@ add_account_local(GncExampleAccount *gea, Account *act)
 {
     gnc_commodity_table *table;
 
-    table = gnc_book_get_commodity_table (gnc_session_get_book (gea->session));
+    table = gnc_book_get_commodity_table (gea->book);
 
-    clear_up_account_commodity_session(gea->session, act,
+    clear_up_account_commodity_session(gea->book, act,
                                        DxaccAccountGetCurrency,
                                        DxaccAccountSetCurrency);
-    clear_up_account_commodity_session(gea->session, act,
+    clear_up_account_commodity_session(gea->book, act,
                                        DxaccAccountGetSecurity,
                                        DxaccAccountSetSecurity);
 
@@ -184,7 +183,7 @@ add_account_local(GncExampleAccount *gea, Account *act)
                                xaccAccountGetCommodity,
                                xaccAccountSetCommodity);
 
-    xaccAccountScrubCommodity (act, gea->session);
+    xaccAccountScrubCommodity (act, gea->book);
 
     if (!xaccAccountGetParent(act))
     {
@@ -293,19 +292,19 @@ gnc_titse_sixtp_parser_create(void)
 
 
 GncExampleAccount*
-gnc_read_example_account(GNCSession *session, const gchar *filename)
+gnc_read_example_account(GNCBook *book, const gchar *filename)
 {
     GncExampleAccount *gea;
     sixtp *top_parser;
     sixtp *main_parser;
 
-    g_return_val_if_fail (session != NULL, NULL);
+    g_return_val_if_fail (book != NULL, NULL);
 
     gea = g_new0(GncExampleAccount, 1);
 
-    gea->session = session;
+    gea->book = book;
     gea->filename = g_strdup(filename);
-    gea->group = xaccMallocAccountGroup(session);
+    gea->group = xaccMallocAccountGroup(book);
 
     top_parser = sixtp_new();
     main_parser = sixtp_new();
@@ -330,7 +329,7 @@ gnc_read_example_account(GNCSession *session, const gchar *filename)
     }
 
     if(!gnc_xml_parse_file(top_parser, filename,
-                           generic_callback, gea, session))
+                           generic_callback, gea, book))
     {
         sixtp_destroy(top_parser);
         xaccLogEnable ();
@@ -417,7 +416,7 @@ is_directory(const gchar *filename)
 }
     
 GSList*
-gnc_load_example_account_list(GNCSession *session, const char *dirname)
+gnc_load_example_account_list(GNCBook *book, const char *dirname)
 {
     GSList *ret;
     DIR *dir;
@@ -440,7 +439,7 @@ gnc_load_example_account_list(GNCSession *session, const char *dirname)
 
         if(!is_directory(filename))
         {
-            gea = gnc_read_example_account(session, filename);
+            gea = gnc_read_example_account(book, filename);
 
             if(gea == NULL)
             {

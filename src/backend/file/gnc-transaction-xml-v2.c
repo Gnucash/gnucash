@@ -312,13 +312,13 @@ struct dom_tree_handler spl_dom_handlers[] =
 };
 
 Split*
-dom_tree_to_split(xmlNodePtr node, GNCSession *session)
+dom_tree_to_split(xmlNodePtr node, GNCBook *book)
 {
     Split *ret;
 
-    g_return_val_if_fail (session, NULL);
+    g_return_val_if_fail (book, NULL);
 
-    ret = xaccMallocSplit(session);
+    ret = xaccMallocSplit(book);
     g_return_val_if_fail(ret, NULL);
 
     /* this isn't going to work in a testing setup */
@@ -338,7 +338,7 @@ dom_tree_to_split(xmlNodePtr node, GNCSession *session)
 struct trans_pdata
 {
   Transaction *trans;
-  GNCSession *session;
+  GNCBook *book;
 };
 
 static gboolean
@@ -476,7 +476,7 @@ trn_splits_handler(xmlNodePtr node, gpointer trans_pdata)
             return FALSE;
         }
 
-        spl = dom_tree_to_split(mark, pdata->session);
+        spl = dom_tree_to_split(mark, pdata->book);
 
         if(spl)
         {
@@ -529,7 +529,7 @@ gnc_transaction_end_handler(gpointer data_for_children,
 
     g_return_val_if_fail(tree, FALSE);
 
-    trn = dom_tree_to_transaction(tree, gdata->sessiondata);
+    trn = dom_tree_to_transaction(tree, gdata->bookdata);
     if(trn != NULL)
     {
         gdata->cb(tag, gdata->parsedata, trn);
@@ -542,21 +542,21 @@ gnc_transaction_end_handler(gpointer data_for_children,
 }
 
 Transaction *
-dom_tree_to_transaction( xmlNodePtr node, GNCSession *session )
+dom_tree_to_transaction( xmlNodePtr node, GNCBook *book )
 {
     Transaction *trn;
     gboolean	successful;
     struct trans_pdata pdata;
 
     g_return_val_if_fail(node, NULL);
-    g_return_val_if_fail(session, NULL);
+    g_return_val_if_fail(book, NULL);
     
-    trn = xaccMallocTransaction(session);
+    trn = xaccMallocTransaction(book);
     g_return_val_if_fail(trn, NULL);
     xaccTransBeginEdit(trn);
 
     pdata.trans = trn;
-    pdata.session = session;
+    pdata.book = book;
 
     successful = dom_tree_generic_parse(node, trn_dom_handlers, &pdata);
 
