@@ -856,6 +856,7 @@ AC_OUTPUT( m4/Makefile  intl/Makefile
           accounts/da/Makefile
           accounts/de_DE/Makefile
           accounts/es_ES/Makefile
+          accounts/fr_FR/Makefile
           accounts/pt_PT/Makefile
           accounts/sk/Makefile
           debian/Makefile
