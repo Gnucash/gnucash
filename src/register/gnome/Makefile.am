@@ -27,7 +27,7 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore
 
-CFLAGS = @CFLAGS@ ${GNOME_CFLAGS}
+CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} ${GLIB_CFLAGS}
 
 INCLUDES = \
   -I${top_srcdir}/src \

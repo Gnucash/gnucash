@@ -30,7 +30,7 @@ AM_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
 
 dnl Set of available languages.
-ALL_LINGUAS="de en_GB es fr it ru sv"
+ALL_LINGUAS="da de en_GB es fr it no pt_BR ru sv uk"
 
 AM_PROG_LIBTOOL
 
@@ -300,7 +300,7 @@ AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
 ## If there's a better way to tackle this please let me know!
 
 OLDCPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS `$GNOME_CONFIG_BIN --cflags gnome`"
+CPPFLAGS="$CPPFLAGS `$GNOME_CONFIG_BIN --cflags gtk gnome`"
 
 
 # gnome targets if all goes well
@@ -363,7 +363,7 @@ AC_SUBST(GNOME_STATIC_TARGET)
 GNOME=1
 AC_DEFINE(GNOME)
 
-GNOMEBUILDLIBS="gnomeui gnome gtkxmhtml xml ${GNOMEBUILDLIBS}"
+GNOMEBUILDLIBS="gnomeui gnome gtkxmhtml gtk xml ${GNOMEBUILDLIBS}"
 
 if test "${GNOME_CONFIG_BIN}"x != GNOME_CONFIG_NOT_FOUNDx
 then

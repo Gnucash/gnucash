@@ -1,0 +1,3709 @@
+# Portuguese messages to gnucash
+# Copyright (C) 2000 Free Software Foundation, Inc.
+# Marcia Norie Nakaza <norie@conectiva.com.br>, 2000.
+# Marcus Vinicius Brito <pazu@linuxbr.com.br>, 2000.
+#
+# ## 2825 ###
+msgid ""
+msgstr ""
+"Project-Id-Version: gnucash\n"
+"POT-Creation-Date: 2000-08-05 12:59+0200\n"
+"PO-Revision-Date: 2000-12-07 10:00-03:00\n"
+"Last-Translator: Marcia Norie Nakaza <norie@conectiva.com.br>\n"
+"Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8-bit\n"
+"Last-Revisor: Marcus Vinicius Brito <pazu@linuxbr.com.br>\n"
+
+#: messages-i18n.c:10
+msgid "$"
+msgstr "$"
+
+#: messages-i18n.c:11
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"Gerenciador financeiro pessoal GnuCash.\n"
+"O modo GNU de administrar seu dinheiro!"
+
+#: messages-i18n.c:12
+msgid ""
+"To adjust an account's balance, you must first\n"
+"choose an account to adjust.\n"
+msgstr ""
+"Para ajustar o saldo de uma conta, deve-se\n"
+"primeiro escolher uma.\n"
+
+#: messages-i18n.c:13
+msgid "You must choose a valid parent account."
+msgstr "Você deve escolher uma conta-pai válida."
+
+#: messages-i18n.c:14
+msgid "There is already an account with that name."
+msgstr "Já existe uma conta com este nome."
+
+#: messages-i18n.c:15
+msgid ""
+"Do you want to create a new account?\n"
+"If not, then please select an account\n"
+"to open in the main window.\n"
+msgstr ""
+"Você quer criar uma nova conta?\n"
+"Se não, selecione uma conta para\n"
+"abrí-la na janela principal.\n"
+
+#: messages-i18n.c:16
+msgid ""
+"To edit an account, you must first\n"
+"choose an account to edit.\n"
+msgstr ""
+"Para editar uma conta, deve-se primeiro\n"
+"escolher uma.\n"
+
+#: messages-i18n.c:17
+msgid ""
+"To delete an account, you must first\n"
+"choose an account to delete.\n"
+msgstr ""
+"Para excluir uma conta, deve-se\n"
+"primeiro escolher uma.\n"
+
+#: messages-i18n.c:18
+#, c-format
+msgid "Are you sure you want to delete the %s account?"
+msgstr "Está certo de que deseja excluir a conta %s?"
+
+#: messages-i18n.c:19
+msgid "The account must be given a name! \n"
+msgstr "Deve ser dado um nome para a conta!\n"
+
+#: messages-i18n.c:20
+msgid ""
+"To open an account, you must first\n"
+"choose an account to open.\n"
+msgstr ""
+"Para abrir uma conta, deve-se\n"
+"primeiro escolher uma.\n"
+
+#: messages-i18n.c:21
+msgid "You must select an account to scrub."
+msgstr "Você deve selecionar uma conta para limpar."
+
+#: messages-i18n.c:22
+msgid "You must select an account type."
+msgstr "Você deve selecionar um tipo de conta."
+
+#: messages-i18n.c:23
+msgid ""
+"To reconcile an account, you must first\n"
+"choose an account to reconcile.\n"
+msgstr ""
+"Para reconciliar uma conta, deve-se\n"
+"primeiro escolher uma.\n"
+
+#: messages-i18n.c:24
+msgid "The amount must be a number."
+msgstr "O valor deve ser um número."
+
+#: messages-i18n.c:25
+msgid "The balance must be a number."
+msgstr "O saldo deve ser um número."
+
+#: messages-i18n.c:26
+msgid ""
+"Do you really want to mark this transaction not reconciled?\n"
+"Doing so might make future reconciliation difficult!"
+msgstr ""
+"Você realmente quer marcar esta transação como não reconciliada?\n"
+"Isto pode dificultar uma reconciliação futura!"
+
+#: messages-i18n.c:27
+msgid "Delete all the splits"
+msgstr "Apaga todas as divisões"
+
+#: messages-i18n.c:28
+msgid "Delete the whole transaction"
+msgstr "Apaga toda a transação"
+
+#: messages-i18n.c:29
+msgid ""
+"This selection will delete the whole transaction. This is what you usually "
+"want."
+msgstr ""
+"Esta seleção apagará toda a transação. Isto é o que você geralmente quer."
+
+#: messages-i18n.c:30
+msgid ""
+"Warning: Just deleting all the splits will make your account unbalanced. You "
+"probably shouldn't do this unless you're going to immediately add another "
+"split to bring the transaction back into balance."
+msgstr ""
+"Aviso: Apenas apagar todas as divisões desequilibrará o saldo da conta. Você "
+"provavelmente não deve fazer isto a menos que você vá adicionar "
+"imediatamente outra divisão para equilibrar o saldo da transação."
+
+#: messages-i18n.c:31
+#, c-format
+msgid ""
+"It is dangerous to change the currency type\n"
+"of an account. You asked to change it\n"
+"from %s to %s.\n"
+"Are You Sure?\n"
+msgstr ""
+"É perigoso alterar o tipo de moeda de\n"
+"uma conta. Você pediu para mudá-lo\n"
+"de %s para %s.\n"
+"Está certo disso?\n"
+
+#: messages-i18n.c:32
+#, c-format
+msgid ""
+"It is dangerous to change the security\n"
+"of an account. You asked to change it\n"
+"from %s to %s.\n"
+"Are You Sure?\n"
+msgstr ""
+"É perigoso alterar a segurança\n"
+"de uma conta. Você pediu para\n"
+"mudá-la de %s para %s.\n"
+"Está certo disso?\n"
+
+#: messages-i18n.c:33
+msgid ""
+"This file is from an older version of GnuCash.  \n"
+"Do you want to continue?"
+msgstr ""
+"Este é um arquivo de uma versão antiga do GnuCash.  \n"
+"Deseja continuar?"
+
+#: messages-i18n.c:34
+msgid ""
+"This file appears to be from a newer version of GnuCash. You must upgrade "
+"GnuCash to read this file."
+msgstr ""
+"Este arquivo parece ser de uma versão mais recente do GnuCash. Você deve "
+"atualizar o GnuCash para lê-lo."
+
+#: messages-i18n.c:35
+msgid ""
+"There was an error reading the file. \n"
+"Do you want to continue?"
+msgstr ""
+"Houve um erro ao ler o arquivo. \n"
+"Deseja continuar?"
+
+#: messages-i18n.c:36
+#, c-format
+msgid ""
+"There was an error writing the file\n"
+"     %s\n"
+"\n"
+"%s"
+msgstr ""
+"Houve um erro ao gravar o arquivo\n"
+"     %s\n"
+"\n"
+"%s"
+
+#: messages-i18n.c:37
+#, c-format
+msgid ""
+"There was an error opening the file\n"
+"     %s\n"
+"\n"
+"%s"
+msgstr ""
+"Houve um erro ao abrir o arquivo\n"
+"     %s\n"
+"\n"
+"%s"
+
+#: messages-i18n.c:38
+#, c-format
+msgid ""
+"There was an error closing the file\n"
+"     %s\n"
+"\n"
+"%s"
+msgstr ""
+"Houve um erro ao fechar o arquivo\n"
+"     %s\n"
+"\n"
+"%s"
+
+#: messages-i18n.c:39
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" could not be found."
+msgstr ""
+"O arquivo \n"
+"    %s\n"
+" não pôde ser encontrado."
+
+#: messages-i18n.c:40
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" is empty."
+msgstr ""
+"O arquivo \n"
+"    %s\n"
+" está vazio."
+
+#: messages-i18n.c:41
+msgid "Changes have been made since the last Save. Save the data to file?"
+msgstr "Foram feitas alterações desde a última gravação. Salvar os dados?"
+
+#: messages-i18n.c:42
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" already exists.\n"
+"Are you sure you want to overwrite it?"
+msgstr ""
+"O arquivo \n"
+"    %s\n"
+" já existe.\n"
+"Está certo de que deseja sobrescrevê-lo?"
+
+#: messages-i18n.c:43
+#, c-format
+msgid ""
+"The filepath \n"
+"    %s\n"
+"is not a valid location in the filesystem."
+msgstr ""
+"O caminho \n"
+"    %s\n"
+"não é uma localização válida no sistema de arquivos."
+
+#: messages-i18n.c:44
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+"appears to be in use by another user.\n"
+"If this is not right, remove the .LCK file and try again."
+msgstr ""
+"O arquivo \n"
+"    %s\n"
+"parece estar em uso por outro usuário.\n"
+"Se não for isto, remova o arquivo .LCK e tente novamente."
+
+#: messages-i18n.c:45
+msgid "You need to install the gnome-print library."
+msgstr "Você precisa instalar a biblioteca gnome-print."
+
+#: messages-i18n.c:46
+#, c-format
+msgid ""
+"QIF file load failed:\n"
+"%s"
+msgstr ""
+"Houve falha ao carregar o arquivo QIF:\n"
+"%s"
+
+#: messages-i18n.c:47
+#, c-format
+msgid ""
+"QIF file load warning:\n"
+"%s"
+msgstr ""
+"Alerta ao carregar o arquivo QIF:\n"
+"%s"
+
+#: messages-i18n.c:48
+#, c-format
+msgid ""
+"QIF file parse failed:\n"
+"%s"
+msgstr ""
+"Falha na análise do arquivo QIF:\n"
+"%s"
+
+#: messages-i18n.c:49
+#, c-format
+msgid ""
+"QIF file parse warning:\n"
+"%s"
+msgstr ""
+"Alerta ao analisar o arquivo QIF:\n"
+"%s"
+
+#: messages-i18n.c:50
+msgid "The source for price quotes"
+msgstr "Onde obter o preço das cotações"
+
+#: messages-i18n.c:51
+msgid ""
+"The account is not balanced.\n"
+"Are you sure you want to finish?"
+msgstr ""
+"A conta não está equilibrada.\n"
+"Está certo de que deseja finalizar?"
+
+#: messages-i18n.c:52
+msgid ""
+"You have made changes to this reconcile window.\n"
+"Are you sure you want to cancel?"
+msgstr ""
+"Foram feitas mudanças para esta janela de reconciliação.\n"
+"Está certo de que deseja cancelar?"
+
+#: messages-i18n.c:53
+msgid "Warning! This is a reconciled transaction. Do you want do continue?"
+msgstr "Aviso! Esta é uma transação reconciliada. Deseja continuar?"
+
+#: messages-i18n.c:54
+msgid ""
+"You have disabled \"Tip of the Day\"\n"
+"You can re-enable tips from the General\n"
+"section of the Preferences menu"
+msgstr ""
+"A \"Dica do dia\" foi desabilitada.\n"
+"É possível reativar as dicas na seção Geral\n"
+"do menu Preferências"
+
+#: messages-i18n.c:55
+#, c-format
+msgid ""
+"You cannot transfer funds from the %s account.\n"
+"It does not have a matching currency."
+msgstr ""
+"Não é possível transferir fundos da conta %s.\n"
+"A moeda não é a mesma."
+
+#: messages-i18n.c:56
+msgid "Error executing scheme report."
+msgstr "Erro ao executar o relatório."
+
+#: messages-i18n.c:57
+msgid "This report has no parameters."
+msgstr "Este relatório não tem parâmetros."
+
+#: messages-i18n.c:58
+msgid "Show the income and expense accounts."
+msgstr "Exibe as contas de rendimento e despesa."
+
+#: messages-i18n.c:59
+msgid ""
+"The current transaction has been changed.\n"
+"Would you like to record it?"
+msgstr ""
+"A transação atual foi modificada.\n"
+"Deseja gravá-la?"
+
+#: messages-i18n.c:60
+#, c-format
+msgid ""
+"Are you sure you want to delete\n"
+"   %s\n"
+"from the transaction\n"
+"   %s ?"
+msgstr ""
+"Tem certeza que deseja apagar\n"
+"   %s\n"
+"da transação\n"
+"   %s ?"
+
+#: messages-i18n.c:61
+msgid "Are you sure you want to delete the current transaction?"
+msgstr "Está certo que quer apagar a transação atual?"
+
+#: messages-i18n.c:62
+msgid "Recalculate Transaction"
+msgstr "Recalcular a transação"
+
+#: messages-i18n.c:63
+msgid ""
+"The values entered for this transaction are inconsistent.\n"
+"Which value would you like to have recalculated?\n"
+msgstr ""
+"Os valores inseridos para esta transação são inconsistentes.\n"
+"Qual valor você quer recalcular?\n"
+
+#: messages-i18n.c:64
+#, c-format
+msgid ""
+"The types of all the parent accounts and their subaccounts must be changed "
+"to %s.\n"
+"Is that what you want to do?"
+msgstr ""
+"Os tipos de todas as contas-pai e suas subcontas devem ser modificados para "
+"%s.\n"
+"É isto que você quer fazer?"
+
+#: messages-i18n.c:65
+#, c-format
+msgid ""
+"The types of all the subaccounts must be changed to %s.\n"
+"Is that what you want to do?"
+msgstr ""
+"Os tipos de todas as subcontas devem ser alterados para %s.\n"
+"É isto que você quer fazer?"
+
+#: messages-i18n.c:66
+msgid "The following changes must be made. Continue?"
+msgstr "As seguintes modificações devem ser feitas. Continuar?"
+
+#: messages-i18n.c:67
+msgid ""
+"There must be at least two accounts\n"
+"created before you can transfer funds."
+msgstr ""
+"Você deve criar pelo menos duas contas\n"
+"antes de transferir fundos."
+
+#: messages-i18n.c:68
+msgid ""
+"You cannot transfer between those accounts.\n"
+"They do not have a common currency."
+msgstr ""
+"Não é possível a transferência entre estas contas.\n"
+"Elas não têm uma moeda em comum."
+
+#: messages-i18n.c:69
+msgid ""
+"The \"From\" and \"To\" accounts\n"
+" must be different!"
+msgstr ""
+"As contas \"De\" e \"Para\"\n"
+" devem ser diferentes!"
+
+#: messages-i18n.c:70
+msgid "You can't transfer from and to the same account!"
+msgstr "Não é possível transferir de e para a mesma conta!"
+
+#: messages-i18n.c:71
+msgid ""
+"You must specify an account to transfer from,\n"
+"or to, or both, for this transaction.\n"
+"Otherwise, it will not be recorded."
+msgstr ""
+"Deve-se especificar uma conta para tranferir de,\n"
+"para, ou ambos, para esta transação.\n"
+"Caso contrário, ela não será registrada."
+
+#: messages-i18n.c:72
+msgid "Adjust the balance of the selected account"
+msgstr "Ajusta o saldo da conta selecionada"
+
+#: messages-i18n.c:73
+msgid "Enter the new balance"
+msgstr "Entre com o novo saldo"
+
+#: messages-i18n.c:74
+msgid "Enter the date you want the balance adjusted"
+msgstr "Entre com a data na qual o saldo será ajustado"
+
+#: messages-i18n.c:75
+msgid "Adjust the ending balance"
+msgstr "Ajusta o saldo final"
+
+#: messages-i18n.c:76
+msgid "Adjust the balance of the main account for this register"
+msgstr "Ajusta o saldo da conta principal para este registro"
+
+#: messages-i18n.c:77 po/guile_strings.txt:120
+msgid "Double line mode with a multi-line cursor"
+msgstr "Modo de linha dupla com um cursor multilinha"
+
+#: messages-i18n.c:78 po/guile_strings.txt:121
+msgid "Single line mode with a multi-line cursor"
+msgstr "Modo de linha simples com um cursor multilinha"
+
+#: messages-i18n.c:79
+msgid "Move to the blank transaction at the bottom of the register"
+msgstr "Move para a transação em branco no final do registro"
+
+#: messages-i18n.c:80
+msgid "Cancel the current transaction"
+msgstr "Cancela a transação atual"
+
+#: messages-i18n.c:81
+msgid "Close this HTML window"
+msgstr "Fecha esta janela HTML"
+
+#: messages-i18n.c:82
+msgid "Close this register window"
+msgstr "Fecha esta janela de registro"
+
+#: messages-i18n.c:83
+msgid "Copy the selected transaction"
+msgstr "Copia a transação selecionada"
+
+#: messages-i18n.c:84
+msgid "Enter a 3-letter ISO currency code such as USD (US Dollars)"
+msgstr ""
+"Entre com um código de moeda ISO de 3 letras como BRL (Real Brasileiro)"
+
+#: messages-i18n.c:85
+msgid "Cut the selected transaction"
+msgstr "Corta a transação selecionada"
+
+#: messages-i18n.c:86
+msgid "Set the date range of this register"
+msgstr "Define o intervalo de data para este registro"
+
+#: messages-i18n.c:87
+msgid "Delete selected account"
+msgstr "Apaga a conta selecionada"
+
+#: messages-i18n.c:88
+msgid "Delete the current transaction"
+msgstr "Apaga a transação atual"
+
+#: messages-i18n.c:89 po/guile_strings.txt:148
+msgid "Show transactions on two lines with more information"
+msgstr "Exibe transações em duas linhas com mais informação"
+
+#: messages-i18n.c:90
+msgid "Make a copy of the current transaction"
+msgstr "Faz uma cópia da transação atual"
+
+#: messages-i18n.c:91
+msgid "Edit the selected account"
+msgstr "Edita a conta selecionada"
+
+#: messages-i18n.c:92
+msgid "Edit the main account for this register"
+msgstr "Edita a conta principal para este registro"
+
+#: messages-i18n.c:93
+msgid "Edit the current transaction"
+msgstr "Edita a transação atual"
+
+#: messages-i18n.c:94
+msgid "Exit GnuCash"
+msgstr "Sai do GnuCash"
+
+#: messages-i18n.c:95
+msgid "Export HTML-formatted report to file"
+msgstr "Exporta relatório formatado em HTML para arquivo"
+
+#: messages-i18n.c:96
+msgid "Find transactions with a search."
+msgstr "Encontra transações com uma busca."
+
+#: messages-i18n.c:97
+msgid "Open the GnuCash help window"
+msgstr "Abre a janela de ajuda do GnuCash"
+
+#: messages-i18n.c:98
+msgid "Move back one step in the history"
+msgstr "Retrocede um passo no histórico"
+
+#: messages-i18n.c:99
+msgid "Move forward one step in the history"
+msgstr "Avança um passo no histórico"
+
+#: messages-i18n.c:100
+msgid "Import a Quicken QIF file"
+msgstr "Importa um arquivo QIF do Quicken"
+
+#: messages-i18n.c:101
+msgid "Jump to the corresponding transaction in the other account"
+msgstr "Pula para a transação correspondente na outra conta"
+
+#: messages-i18n.c:102
+msgid "Open the GnuCash Manual"
+msgstr "Abre o manual do GnuCash"
+
+#: messages-i18n.c:103
+msgid "Show transactions on multiple lines with one line for each split"
+msgstr "Exibe transações em linhas múltiplas com uma linha para cada divisão"
+
+#: messages-i18n.c:104
+msgid ""
+"This transaction has multiple splits; switch to multi-line mode to see them "
+"all"
+msgstr ""
+"Esta transação tem divisões múltiplas; mude para o modo de multilinhas para "
+"ver todas elas"
+
+#: messages-i18n.c:105
+msgid "Create a new account"
+msgstr "Cria uma nova conta"
+
+#: messages-i18n.c:106
+msgid "Create a new file"
+msgstr "Criar um novo arquivo"
+
+#: messages-i18n.c:107
+msgid "Add a new transaction to the account"
+msgstr "Adicionar uma nova transação à conta"
+
+#: messages-i18n.c:108
+msgid "Open the selected account"
+msgstr "Abrir a conta selecionada"
+
+#: messages-i18n.c:109
+msgid "Open the account"
+msgstr "Abrir a conta"
+
+#: messages-i18n.c:110
+msgid "Open the selected account and all its subaccounts"
+msgstr "Abrir a conta selecionada e todas as suas subcontas"
+
+#: messages-i18n.c:111
+msgid "Open a file"
+msgstr "Abrir um arquivo"
+
+#: messages-i18n.c:112
+msgid "Paste the transaction clipboard"
+msgstr "Colar a área de transferência da transação"
+
+#: messages-i18n.c:113
+msgid "Open the global preferences dialog"
+msgstr "Abrir o diálogo de preferências globais"
+
+#: messages-i18n.c:114
+msgid "Print a check using a standard format"
+msgstr "Imprimir um cheque usando um formato padrão"
+
+#: messages-i18n.c:115
+msgid "Reconcile the selected account"
+msgstr "Reconciliar a conta selecionada"
+
+#: messages-i18n.c:116
+msgid "Cancel the reconciliation of this account"
+msgstr "Cancelar a reconciliação desta conta"
+
+#: messages-i18n.c:117
+msgid "Finish the reconciliation of this account"
+msgstr "Finalizar a reconciliação desta conta"
+
+#: messages-i18n.c:118
+msgid ""
+"Change the reconcile information including statement date and ending balance."
+msgstr ""
+"Alterar a informação de reconciliação incluindo a data de declaração e o "
+"saldo final."
+
+#: messages-i18n.c:119
+msgid "Reconcile the main account for this register"
+msgstr "Reconciliar a conta principal para este registro"
+
+#: messages-i18n.c:120
+msgid "Record the current transaction"
+msgstr "Registrar a transação atual"
+
+#: messages-i18n.c:121
+msgid "Set the parameters for this report"
+msgstr "Definir os parâmetros para este relatório"
+
+#: messages-i18n.c:122
+msgid "Save the file to disk"
+msgstr "Salva o arquivo no disco"
+
+#: messages-i18n.c:123
+msgid "Identify and fix problems in the account"
+msgstr "Identificar e corrigir problemas na conta"
+
+#: messages-i18n.c:124
+msgid "Identify and fix problems in all the accounts"
+msgstr "Identificar e corrigir problemas em todas as contas"
+
+#: messages-i18n.c:125
+msgid "Identify and fix problems in the account and its subaccounts"
+msgstr "Identificar e corrigir problemas na conta e suas subcontas"
+
+#: messages-i18n.c:126
+msgid "Identify and fix problems in the accounts of this register"
+msgstr "Identificar e corrigir problemas nas contas deste registro"
+
+#: messages-i18n.c:127
+msgid "Set the option to its default value"
+msgstr "Usa o valor padrão para esta opção"
+
+#: messages-i18n.c:128
+msgid "Show all of the transactions in the account"
+msgstr "Exibir todas as transações na conta"
+
+#: messages-i18n.c:129 po/guile_strings.txt:152
+msgid "Show transactions on single lines"
+msgstr "Exibir transações em linhas simples"
+
+#: messages-i18n.c:130 messages-i18n.c:260
+msgid "Sort by Amount"
+msgstr "Classificar por valor"
+
+#: messages-i18n.c:131 messages-i18n.c:261
+msgid "Sort by Date"
+msgstr "Classificar por data"
+
+#: messages-i18n.c:132 messages-i18n.c:262
+msgid "Sort by Description"
+msgstr "Classificar por descrição"
+
+#: messages-i18n.c:133
+msgid "Sort by the date of entry"
+msgstr "Classificar por data de entrada"
+
+#: messages-i18n.c:134 messages-i18n.c:264
+msgid "Sort by Memo"
+msgstr "Classificar por anotação"
+
+#: messages-i18n.c:135 messages-i18n.c:265
+msgid "Sort by Num"
+msgstr "Classificar por número"
+
+#: messages-i18n.c:136
+msgid "Sort by the statement date (unreconciled items last"
+msgstr "Classificar por data de declaração (itens reconciliados por último)"
+
+#: messages-i18n.c:137
+msgid "Keep normal account order"
+msgstr "Manter ordem normal de conta"
+
+#: messages-i18n.c:138
+msgid "Tips of the Day"
+msgstr "Dica do dia"
+
+#: messages-i18n.c:139
+msgid "Transfer funds from one account to another"
+msgstr "Transferir fundos de uma conta para outra"
+
+#: messages-i18n.c:140
+msgid "Enter the type of transaction, or choose one from the list"
+msgstr "Entre com o tipo de transação ou escolha um da lista"
+
+#: messages-i18n.c:141
+msgid "Enter a description of the transaction"
+msgstr "Entre com uma descrição da transação"
+
+#: messages-i18n.c:142
+msgid "Enter a description of the split"
+msgstr "Entre uma descrição da divisão"
+
+#: messages-i18n.c:143
+msgid "Enter the transaction number, such as the check number"
+msgstr "Entre o número da transação, como o número do cheque"
+
+#: messages-i18n.c:144
+msgid "Enter the share price"
+msgstr "Entre com o preço da ação"
+
+#: messages-i18n.c:145
+msgid "Enter the number of shares sold"
+msgstr "Entre com o número de ações vendidas"
+
+#: messages-i18n.c:146
+msgid "Enter the total value of the shares"
+msgstr "Entre com o valor total das ações"
+
+#: messages-i18n.c:147
+msgid "Enter the account to transfer from, or choose one from the list"
+msgstr "Entre com a conta de origem da transferência ou escolha uma da lista"
+
+#: messages-i18n.c:148
+msgid "Enter the account to transfer to, or choose one from the list"
+msgstr "Entro com a conta de destino da transferência ou escolha uma da lista"
+
+#: messages-i18n.c:149
+msgid "_Account"
+msgstr "_Conta"
+
+#: messages-i18n.c:150
+msgid "_Accounts"
+msgstr "_Contas"
+
+#: messages-i18n.c:151
+msgid "_Adjust Balance"
+msgstr "_Ajustar Saldo"
+
+#: messages-i18n.c:152
+msgid "_Adjust Balance..."
+msgstr "_Ajustar Saldo..."
+
+#: messages-i18n.c:153
+msgid "_Blank"
+msgstr "_Branco"
+
+#: messages-i18n.c:154
+msgid "_Cancel"
+msgstr "_Cancelar"
+
+#: messages-i18n.c:155
+msgid "Copy Transaction"
+msgstr "Copiar Transação"
+
+#: messages-i18n.c:156
+msgid "Cut Transaction"
+msgstr "Cortar Transação"
+
+#: messages-i18n.c:157
+msgid "_Date Range"
+msgstr "Intervalo de _Datas"
+
+#: messages-i18n.c:158
+msgid "_Delete Account"
+msgstr "E_xcluir Conta"
+
+#: messages-i18n.c:159
+msgid "_Delete"
+msgstr "E_xcluir"
+
+#: messages-i18n.c:160
+msgid "D_uplicate"
+msgstr "D_uplicar"
+
+#: messages-i18n.c:161
+msgid "_Edit"
+msgstr "_Editar"
+
+#: messages-i18n.c:162
+msgid "_Edit Account"
+msgstr "_Editar Conta"
+
+#: messages-i18n.c:163
+msgid "_Ending Balance"
+msgstr "Saldo _Final"
+
+#: messages-i18n.c:164
+msgid "_Ending Balance..."
+msgstr "Saldo _Final..."
+
+#: messages-i18n.c:165
+msgid "_Finish"
+msgstr "_Finalizar"
+
+#: messages-i18n.c:166
+msgid "_Help"
+msgstr "A_juda"
+
+#: messages-i18n.c:167
+msgid "_Jump"
+msgstr "_Pular"
+
+#: messages-i18n.c:168
+msgid "_Manual"
+msgstr "_Manual"
+
+#: messages-i18n.c:169
+msgid "_New"
+msgstr "_Novo"
+
+#: messages-i18n.c:170
+msgid "_New Account"
+msgstr "_Nova Conta"
+
+#: messages-i18n.c:171
+msgid "_New Account..."
+msgstr "_Nova Conta..."
+
+#: messages-i18n.c:172
+msgid "_Open Account"
+msgstr "A_brir Conta"
+
+#: messages-i18n.c:173
+msgid "Open S_ubaccounts"
+msgstr "Abrir S_ubcontas"
+
+#: messages-i18n.c:174
+msgid "Paste Transaction"
+msgstr "Colar Transação"
+
+#: messages-i18n.c:175
+msgid "_Preferences"
+msgstr "_Preferências"
+
+#: messages-i18n.c:176
+msgid "_Preferences..."
+msgstr "_Preferências..."
+
+#: messages-i18n.c:177
+msgid "_Print Check... (unfinished!)"
+msgstr "_Imprimir Cheque... (não finalizado!)"
+
+#: messages-i18n.c:178
+msgid "_Reconcile Information..."
+msgstr "Informações de _Reconciliação..."
+
+#: messages-i18n.c:179
+msgid "_Reconcile..."
+msgstr "_Reconciliar..."
+
+#: messages-i18n.c:180
+msgid "_Reconcile"
+msgstr "_Reconciliar"
+
+#: messages-i18n.c:181
+msgid "_Record"
+msgstr "_Registrar"
+
+#: messages-i18n.c:182
+msgid "_Register"
+msgstr "_Registro"
+
+#: messages-i18n.c:183
+msgid "_Scrub"
+msgstr "Lim_par"
+
+#: messages-i18n.c:184
+msgid "Scrub A_ccount"
+msgstr "Limpar _Conta"
+
+#: messages-i18n.c:185
+msgid "Scrub A_ll"
+msgstr "Limpar _Tudo"
+
+#: messages-i18n.c:186
+msgid "Scrub Su_baccounts"
+msgstr "Limpar Su_bcontas"
+
+#: messages-i18n.c:187
+msgid "Set _Range..."
+msgstr "Definir _Intervalo..."
+
+#: messages-i18n.c:188
+msgid "Set _Range"
+msgstr "Definir _Intervalo"
+
+#: messages-i18n.c:189
+msgid "Show _All"
+msgstr "Exibir _Tudo"
+
+#: messages-i18n.c:190
+msgid "Sort _Order"
+msgstr "_Ordem de Classificação"
+
+#: messages-i18n.c:191
+msgid "_Style"
+msgstr "_Estilo"
+
+#: messages-i18n.c:192
+msgid "_Tips Of The Day"
+msgstr "_Dicas do dia"
+
+#: messages-i18n.c:193
+msgid "_Transaction"
+msgstr "_Transação"
+
+#: messages-i18n.c:194
+msgid "_Transfer"
+msgstr "_Transferência"
+
+#: messages-i18n.c:195
+msgid "_Transfer..."
+msgstr "_Transferência..."
+
+#: messages-i18n.c:196
+msgid "Account Code"
+msgstr "Código da Conta"
+
+#: messages-i18n.c:197 po/guile_strings.txt:7
+msgid "Account Name"
+msgstr "Nome da Conta"
+
+#: messages-i18n.c:198
+msgid "Account Type"
+msgstr "Tipo da Conta"
+
+#: messages-i18n.c:199
+msgid "Adjust Balance"
+msgstr "Ajustar Saldo"
+
+#: messages-i18n.c:200 po/guile_strings.txt:310
+msgid "Auto Double"
+msgstr "Linha Dupla Automática"
+
+#: messages-i18n.c:201 po/guile_strings.txt:71
+msgid "Auto Single"
+msgstr "Linha Simples Automática"
+
+#: messages-i18n.c:202
+msgid "Clear All"
+msgstr "Limpar tudo"
+
+#: messages-i18n.c:203
+msgid "Close Window"
+msgstr "Fechar Janela"
+
+#: messages-i18n.c:204
+msgid "Credit Card"
+msgstr "Cartão de Crédito"
+
+#: messages-i18n.c:205
+msgid "Credit Line"
+msgstr "Linha de Crédito"
+
+#: messages-i18n.c:206
+msgid "Date Range"
+msgstr "Intervalo de Datas"
+
+#: messages-i18n.c:207
+msgid "Delete Account"
+msgstr "Excluir Conta"
+
+#: messages-i18n.c:208
+msgid "Delete Transaction"
+msgstr "Excluir Transação"
+
+#: messages-i18n.c:209
+msgid "Display this dialog next time"
+msgstr "Exibir este diálogo da próxima vez"
+
+#: messages-i18n.c:210 po/guile_strings.txt:22
+msgid "Double Line"
+msgstr "Linha Dupla"
+
+#: messages-i18n.c:211
+msgid "Edit Account"
+msgstr "Editar Conta"
+
+#: messages-i18n.c:212
+msgid "Ending Balance"
+msgstr "Saldo Final"
+
+#: messages-i18n.c:213
+msgid "End date"
+msgstr "Data Final"
+
+#: messages-i18n.c:214
+msgid "Export To"
+msgstr "Exportar Para"
+
+#: messages-i18n.c:215
+msgid "Finish"
+msgstr "Finalizar"
+
+#: messages-i18n.c:216
+msgid "From Now"
+msgstr "A partir de agora"
+
+#: messages-i18n.c:217
+msgid "General Ledger"
+msgstr "Livro-mestre geral"
+
+#: messages-i18n.c:218
+msgid "Hide Inc/Exp"
+msgstr "Ocultar Ren/Des"
+
+#: messages-i18n.c:219
+msgid "Import QIF..."
+msgstr "Importar QIF..."
+
+#: messages-i18n.c:220
+msgid "Import QIF"
+msgstr "Importar QIF"
+
+#: messages-i18n.c:221
+msgid "Lost Accounts"
+msgstr "Contas Perdidas"
+
+#: messages-i18n.c:222
+msgid "Money Market"
+msgstr "Mercado de Dinheiro"
+
+#: messages-i18n.c:223 po/guile_strings.txt:58
+msgid "Multi Line"
+msgstr "Multi-linha"
+
+#: messages-i18n.c:224 po/guile_strings.txt:4
+msgid "Mutual Fund"
+msgstr "Fundo Mútuo"
+
+#: messages-i18n.c:225
+msgid "New Account"
+msgstr "Nova conta"
+
+#: messages-i18n.c:226
+msgid "New Balance"
+msgstr "Novo Saldo"
+
+#: messages-i18n.c:227
+msgid "New File"
+msgstr "Novo Arquivo"
+
+#: messages-i18n.c:228
+msgid "New top level account"
+msgstr "Nova conta de topo"
+
+#: messages-i18n.c:229
+msgid "New Value"
+msgstr "Novo Valor"
+
+#: messages-i18n.c:230
+msgid "No description"
+msgstr "Sem Descrição"
+
+#: messages-i18n.c:231
+msgid "Old Value"
+msgstr "Valor Antigo"
+
+#: messages-i18n.c:232
+msgid "Open Account"
+msgstr "Abrir Conta"
+
+#: messages-i18n.c:233 po/guile_strings.txt:113
+msgid "Opening Balance"
+msgstr "Saldo Inicial"
+
+#: messages-i18n.c:234
+msgid "Open File"
+msgstr "Abrir Arquivo"
+
+#: messages-i18n.c:235
+msgid "Open Subaccounts"
+msgstr "Abrir Subcontas"
+
+#: messages-i18n.c:236
+msgid "Pick One"
+msgstr "Escolha Uma"
+
+#: messages-i18n.c:237
+msgid "Parent Account"
+msgstr "Conta Pai"
+
+#: messages-i18n.c:238
+msgid "Previous Balance"
+msgstr "Saldo anterior"
+
+#: messages-i18n.c:239
+msgid "Purch Price"
+msgstr "Preço de Compra"
+
+#: messages-i18n.c:240
+msgid "Price Quote Source"
+msgstr "Fonte de cotação de ações"
+
+#: messages-i18n.c:241
+msgid "Reconciled Balance"
+msgstr "Saldo Reconciliado"
+
+#: messages-i18n.c:242
+msgid "Reconcile Information"
+msgstr "Informação de Reconciliação"
+
+#: messages-i18n.c:243
+msgid "Register date ranges"
+msgstr "Interavalos de datas do registro"
+
+#: messages-i18n.c:244
+msgid "Sale Price"
+msgstr "Preço de venda"
+
+#: messages-i18n.c:245
+msgid "Save As"
+msgstr "Salvar Como"
+
+#: messages-i18n.c:246
+msgid "Scrub Account"
+msgstr "Limpar Conta"
+
+#: messages-i18n.c:247
+msgid "Scrub All"
+msgstr "Limpar Tudo"
+
+#: messages-i18n.c:248
+msgid "Scrub Subaccounts"
+msgstr "Limpar Subcontas"
+
+#: messages-i18n.c:249
+msgid "Select All"
+msgstr "Selecionar Tudo"
+
+#: messages-i18n.c:250
+msgid "Select Default"
+msgstr "Selecionar Padrão"
+
+#: messages-i18n.c:251
+msgid "Set Date Range"
+msgstr "Definir Intervalo de Data"
+
+#: messages-i18n.c:252
+msgid "Set Range"
+msgstr "Definir Intervalo"
+
+#: messages-i18n.c:253
+msgid "Set to default"
+msgstr "Usar padrão"
+
+#: messages-i18n.c:254
+msgid "Set Up Account"
+msgstr "Configurar Conta"
+
+#: messages-i18n.c:255
+msgid "Show All"
+msgstr "Exibir Tudo"
+
+#: messages-i18n.c:256
+msgid "Show Income/Expense"
+msgstr "Exibir Rendimento/Despesa"
+
+#: messages-i18n.c:257
+msgid "Show Earliest"
+msgstr "Exibir o mais recente"
+
+#: messages-i18n.c:258
+msgid "Show Latest"
+msgstr "Exibir o último"
+
+#: messages-i18n.c:259 po/guile_strings.txt:190
+msgid "Single Line"
+msgstr "Linha simples"
+
+#: messages-i18n.c:263
+msgid "Sort by date of entry"
+msgstr "Classificar por data de entrada"
+
+#: messages-i18n.c:266
+msgid "Sort by statement date"
+msgstr "Classificar por data de declaração"
+
+#: messages-i18n.c:267
+msgid "Sort Order"
+msgstr "Ordem de Classificação"
+
+#: messages-i18n.c:268
+msgid "Start date"
+msgstr "Data inicial"
+
+#: messages-i18n.c:269
+msgid "Starting Balance"
+msgstr "Saldo Inicial"
+
+#: messages-i18n.c:270
+msgid "Standard order"
+msgstr "Ordem padrão"
+
+#: messages-i18n.c:271
+msgid "Statement Date:"
+msgstr "Data de declaração:"
+
+#: messages-i18n.c:272
+msgid "Tip of the Day:"
+msgstr "Dica do dia:"
+
+#: messages-i18n.c:273
+msgid "Top level account"
+msgstr "Conta de topo"
+
+#: messages-i18n.c:274
+msgid "Total Shares"
+msgstr "Total de ações"
+
+#: messages-i18n.c:275
+msgid "Verify Changes"
+msgstr "Verificar Alterações"
+
+#: messages-i18n.c:276
+msgid "Transfer Information"
+msgstr "Informações da Transferência"
+
+#: messages-i18n.c:277
+msgid "Transfer Money"
+msgstr "Transferir Dinheiro"
+
+#: messages-i18n.c:278
+msgid "Transfer From"
+msgstr "Transferir De"
+
+#: messages-i18n.c:279
+msgid "Transfer To"
+msgstr "Transferir Para"
+
+#: messages-i18n.c:280
+msgid "About"
+msgstr "Sobre"
+
+#: messages-i18n.c:281 po/guile_strings.txt:65
+#: src/gnome/glade-gnc-dialogs.c:1784
+msgid "Account"
+msgstr "Conta"
+
+#: messages-i18n.c:282 src/gnome/glade-gnc-dialogs.c:302
+#: src/gnome/glade-gnc-dialogs.c:462
+msgid "Accounts"
+msgstr "Contas"
+
+#: messages-i18n.c:283
+msgid "Account Information"
+msgstr "Informações da Conta"
+
+#: messages-i18n.c:284
+msgid "AutoDep"
+msgstr "AutoDep"
+
+#: messages-i18n.c:285 src/gnome/glade-gnc-dialogs.c:2398
+msgid "Action"
+msgstr "Ação"
+
+#: messages-i18n.c:286
+msgid "Activities"
+msgstr "Atividades"
+
+#: messages-i18n.c:287
+msgid "Ago"
+msgstr "Atrás"
+
+#: messages-i18n.c:288 po/guile_strings.txt:57
+#: src/gnome/glade-gnc-dialogs.c:2138
+msgid "Amount"
+msgstr "Valor"
+
+#: messages-i18n.c:289 po/guile_strings.txt:239
+msgid "Appreciation"
+msgstr "Avaliação"
+
+#: messages-i18n.c:290
+msgid "Phone"
+msgstr "Telefone"
+
+#: messages-i18n.c:291 po/guile_strings.txt:174
+#: src/gnome/glade-gnc-dialogs.c:567
+msgid "Asset"
+msgstr "Bens"
+
+#: messages-i18n.c:292
+msgid "Assets"
+msgstr "Ativos"
+
+#: messages-i18n.c:293
+msgid "ATM"
+msgstr "Caixa Automático"
+
+#: messages-i18n.c:294
+msgid "Back"
+msgstr "Voltar"
+
+#: messages-i18n.c:295 messages-i18n.c:296 po/guile_strings.txt:13
+msgid "Balance"
+msgstr "Saldo"
+
+#: messages-i18n.c:297 po/guile_strings.txt:107
+#: src/gnome/glade-gnc-dialogs.c:561
+msgid "Bank"
+msgstr "Banco"
+
+#: messages-i18n.c:298
+msgid "Blank"
+msgstr "Em Branco"
+
+#: messages-i18n.c:299 po/guile_strings.txt:124
+msgid "Bought"
+msgstr "Comprado"
+
+#: messages-i18n.c:300
+msgid "Buy"
+msgstr "Comprar"
+
+#: messages-i18n.c:301
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: messages-i18n.c:302 po/guile_strings.txt:137
+#: src/gnome/glade-gnc-dialogs.c:564
+msgid "Cash"
+msgstr "Dinheiro"
+
+#: messages-i18n.c:303
+msgid "Changed"
+msgstr "Alterado"
+
+#: messages-i18n.c:304 po/guile_strings.txt:205
+msgid "Charge"
+msgstr "Débito"
+
+#: messages-i18n.c:305
+msgid "Check"
+msgstr "Verificar"
+
+#: messages-i18n.c:306
+msgid "Checking"
+msgstr "Verificando"
+
+#: messages-i18n.c:307 src/gnome/glade-gnc-dialogs.c:2449
+msgid "Cleared"
+msgstr "Limpo"
+
+#: messages-i18n.c:308
+msgid "Close"
+msgstr "Fechar"
+
+#: messages-i18n.c:309
+msgid "Commit"
+msgstr "Confirmar"
+
+#: messages-i18n.c:310
+msgid "Create"
+msgstr "Criar"
+
+#: messages-i18n.c:311 po/guile_strings.txt:254
+#: src/gnome/glade-gnc-dialogs.c:570 src/gnome/glade-gnc-dialogs.c:2082
+msgid "Credit"
+msgstr "Crédito"
+
+#: messages-i18n.c:312
+msgid "Credits"
+msgstr "Créditos"
+
+#: messages-i18n.c:313 po/guile_strings.txt:134
+#: src/gnome/glade-gnc-dialogs.c:582
+msgid "Currency"
+msgstr "Moeda"
+
+#: messages-i18n.c:314 po/guile_strings.txt:6
+#: src/gnome/glade-gnc-dialogs.c:1920
+msgid "Date"
+msgstr "Data"
+
+#: messages-i18n.c:315
+msgid "Days"
+msgstr "Dias"
+
+#: messages-i18n.c:316 po/guile_strings.txt:38
+#: src/gnome/glade-gnc-dialogs.c:2085
+msgid "Debit"
+msgstr "Débito"
+
+#: messages-i18n.c:317
+msgid "Debits"
+msgstr "Débitos"
+
+#: messages-i18n.c:318
+msgid "Decrease"
+msgstr "Diminuir"
+
+#: messages-i18n.c:319
+msgid "Deficit"
+msgstr "Déficit"
+
+#: messages-i18n.c:320 src/gnome/glade-gnc-dialogs.c:2868
+msgid "Delete"
+msgstr "Excluir"
+
+#: messages-i18n.c:321 po/guile_strings.txt:200
+msgid "Deposit"
+msgstr "Depósito"
+
+#: messages-i18n.c:322 po/guile_strings.txt:160
+msgid "Depreciation"
+msgstr "Desvalorização"
+
+#: messages-i18n.c:323 po/guile_strings.txt:153
+#: src/gnome/glade-gnc-dialogs.c:1978
+msgid "Description"
+msgstr "Descrição"
+
+#: messages-i18n.c:324
+msgid "Difference"
+msgstr "Diferença"
+
+#: messages-i18n.c:325
+msgid "Direct Debit"
+msgstr "Débito Direto"
+
+#: messages-i18n.c:326
+msgid "Dist"
+msgstr "Dist"
+
+#: messages-i18n.c:327
+msgid "Div"
+msgstr "Div"
+
+#: messages-i18n.c:328
+msgid "Duplicate"
+msgstr "Duplicar"
+
+#: messages-i18n.c:329
+msgid "Edit"
+msgstr "Editar"
+
+#: messages-i18n.c:330 po/guile_strings.txt:8
+#: src/gnome/glade-gnc-dialogs.c:591
+msgid "Equity"
+msgstr "Igualdade"
+
+#: messages-i18n.c:331
+msgid "Exit"
+msgstr "Sair"
+
+#: messages-i18n.c:332 po/guile_strings.txt:327
+#: src/gnome/glade-gnc-dialogs.c:588
+msgid "Expense"
+msgstr "Despesa"
+
+#: messages-i18n.c:333
+msgid "Export"
+msgstr "Exportar"
+
+#: messages-i18n.c:334 po/guile_strings.txt:355
+msgid "Extensions"
+msgstr "Extensões"
+
+#: messages-i18n.c:335
+msgid "Fee"
+msgstr "Taxa"
+
+#: messages-i18n.c:336
+msgid "Field"
+msgstr "Campo"
+
+#: messages-i18n.c:337
+msgid "File"
+msgstr "Arquivo"
+
+# Quicken
+#: messages-i18n.c:338 src/gnome/glade-gnc-dialogs.c:2523
+msgid "Find"
+msgstr "Encontrar"
+
+#: messages-i18n.c:339
+msgid "Forward"
+msgstr "Avançar"
+
+#: messages-i18n.c:340 po/guile_strings.txt:126
+msgid "From"
+msgstr "De"
+
+#: messages-i18n.c:341
+msgid "GnuCash Preferences"
+msgstr "Preferências do GnuCash"
+
+#: messages-i18n.c:342
+msgid "Help"
+msgstr "Ajuda"
+
+#: messages-i18n.c:343
+msgid "Imbalance"
+msgstr "Deseqüilíbrio"
+
+#: messages-i18n.c:344
+msgid "Import"
+msgstr "Importar"
+
+#: messages-i18n.c:345 po/guile_strings.txt:244
+#: src/gnome/glade-gnc-dialogs.c:585
+msgid "Income"
+msgstr "Rendimento"
+
+#: messages-i18n.c:346
+msgid "Increase"
+msgstr "Aumentar"
+
+#: messages-i18n.c:347
+msgid "Int"
+msgstr "Int"
+
+#: messages-i18n.c:348
+msgid "Jump"
+msgstr "Pular"
+
+#: messages-i18n.c:349 po/guile_strings.txt:194
+#: src/gnome/glade-gnc-dialogs.c:573
+msgid "Liability"
+msgstr "Dívida"
+
+#: messages-i18n.c:350
+msgid "License"
+msgstr "Licença"
+
+#: messages-i18n.c:351
+msgid "Loan"
+msgstr "Empréstimo"
+
+#: messages-i18n.c:352
+msgid "LTCG"
+msgstr "LTCG"
+
+#: messages-i18n.c:353 po/guile_strings.txt:32
+#: src/gnome/glade-gnc-dialogs.c:2196
+msgid "Memo"
+msgstr "Anotação"
+
+#: messages-i18n.c:354
+msgid "Months"
+msgstr "Meses"
+
+#: messages-i18n.c:355
+msgid "New"
+msgstr "Novo"
+
+#: messages-i18n.c:356
+msgid "No"
+msgstr "Não"
+
+#: messages-i18n.c:357 src/gnome/print-session.c:111
+#: src/gnome/print-session.c:200
+msgid "(none)"
+msgstr "(nada)"
+
+#: messages-i18n.c:358 po/guile_strings.txt:209
+msgid "Notes"
+msgstr "Notas"
+
+#: messages-i18n.c:359 po/guile_strings.txt:176
+msgid "Num"
+msgstr "Num"
+
+#: messages-i18n.c:360
+msgid "Ok"
+msgstr "Ok"
+
+#: messages-i18n.c:361
+msgid "Online"
+msgstr "Online"
+
+#: messages-i18n.c:362
+msgid "Open"
+msgstr "Abrir"
+
+#: messages-i18n.c:363
+msgid "Orphan"
+msgstr "Órfão"
+
+#: messages-i18n.c:364
+msgid "Parameters"
+msgstr "Parâmetros"
+
+#: messages-i18n.c:365 po/guile_strings.txt:114
+msgid "Payment"
+msgstr "Pagamento"
+
+#: messages-i18n.c:366
+msgid "Portfolio"
+msgstr "Portfólio"
+
+#: messages-i18n.c:367
+msgid "POS"
+msgstr "POS"
+
+#: messages-i18n.c:368
+msgid "Preferences"
+msgstr "Preferências"
+
+#: messages-i18n.c:369 src/gnome/glade-gnc-dialogs.c:2340
+msgid "Price"
+msgstr "Preço"
+
+#: messages-i18n.c:370 src/gnome/glade-gnc-dialogs.c:937
+msgid "Print"
+msgstr "Imprimir"
+
+#: messages-i18n.c:371
+msgid "Profits"
+msgstr "Lucros"
+
+#: messages-i18n.c:372
+msgid "Quit"
+msgstr "Sair"
+
+#: messages-i18n.c:373 po/guile_strings.txt:18
+msgid "Rebate"
+msgstr "Desconto"
+
+#: messages-i18n.c:374 po/guile_strings.txt:191
+msgid "Receive"
+msgstr "Receber"
+
+#: messages-i18n.c:375
+msgid "Reconcile"
+msgstr "Reconciliar"
+
+#: messages-i18n.c:376
+msgid "Record"
+msgstr "Registrar"
+
+#: messages-i18n.c:377 po/guile_strings.txt:215
+msgid "Register"
+msgstr "Registro"
+
+#: messages-i18n.c:378 po/guile_strings.txt:208
+msgid "Report"
+msgstr "Relatório"
+
+#: messages-i18n.c:379
+msgid "Reports"
+msgstr "Relatórios"
+
+#: messages-i18n.c:380
+msgid "Save"
+msgstr "Salvar"
+
+#: messages-i18n.c:381
+msgid "Savings"
+msgstr "Gravações"
+
+#: messages-i18n.c:382
+msgid "Scrub"
+msgstr "Limpar"
+
+#: messages-i18n.c:383
+msgid "Search Results"
+msgstr "Resultados da Busca"
+
+#: messages-i18n.c:384 po/guile_strings.txt:189
+msgid "Security"
+msgstr "Segurança"
+
+#: messages-i18n.c:385
+msgid "Sell"
+msgstr "Vender"
+
+#: messages-i18n.c:386
+msgid "Settings"
+msgstr "Ajustes"
+
+#: messages-i18n.c:387
+msgid "Simple"
+msgstr "Simples"
+
+#: messages-i18n.c:388 po/guile_strings.txt:313
+msgid "Sold"
+msgstr "Vendido"
+
+#: messages-i18n.c:389 po/guile_strings.txt:51
+msgid "Spend"
+msgstr "Gasto"
+
+#: messages-i18n.c:390
+msgid "Split"
+msgstr "Dividido"
+
+#: messages-i18n.c:391
+msgid "STCG"
+msgstr "STCG"
+
+#: messages-i18n.c:392 po/guile_strings.txt:353
+#: src/gnome/glade-gnc-dialogs.c:576
+msgid "Stock"
+msgstr "Ação"
+
+#: messages-i18n.c:393 po/guile_strings.txt:246
+msgid "Style"
+msgstr "Estilo"
+
+#: messages-i18n.c:394
+msgid "Surplus"
+msgstr "Excedente"
+
+#: messages-i18n.c:395
+msgid "Teller"
+msgstr "Caixa"
+
+#: messages-i18n.c:396 po/guile_strings.txt:302
+msgid "To"
+msgstr "Para"
+
+#: messages-i18n.c:397 src/gnome/glade-gnc-dialogs.c:2615
+msgid "Today"
+msgstr "Hoje"
+
+#: messages-i18n.c:398 messages-i18n.c:399 po/guile_strings.txt:207
+msgid "Total"
+msgstr "Total"
+
+#: messages-i18n.c:400 po/guile_strings.txt:304
+#: src/gnome/glade-gnc-dialogs.c:295 src/gnome/glade-gnc-dialogs.c:349
+msgid "Type"
+msgstr "Tipo"
+
+#: messages-i18n.c:401
+msgid "Transaction"
+msgstr "Transação"
+
+#: messages-i18n.c:402
+msgid "Transfer"
+msgstr "Transferência"
+
+#: messages-i18n.c:403
+msgid "Untitled"
+msgstr "Sem título"
+
+#: messages-i18n.c:404 po/guile_strings.txt:66
+msgid "Value"
+msgstr "Valor"
+
+#: messages-i18n.c:405
+msgid "WARNING"
+msgstr "AVISO"
+
+#: messages-i18n.c:406
+msgid "Weeks"
+msgstr "Semanas"
+
+#: messages-i18n.c:407
+msgid "Wire"
+msgstr "Fio"
+
+#: messages-i18n.c:408
+msgid "Withdraw"
+msgstr "Sacar"
+
+#: messages-i18n.c:409 po/guile_strings.txt:60
+msgid "Withdrawal"
+msgstr "Saque"
+
+#: messages-i18n.c:410
+msgid "Years"
+msgstr "Anos"
+
+#: messages-i18n.c:411
+msgid "Yes"
+msgstr "Sim"
+
+#: messages-i18n.c:412
+msgid "cleared:c"
+msgstr "limpo:c"
+
+#: messages-i18n.c:413
+msgid "frozen:f"
+msgstr "congelado:f"
+
+#: messages-i18n.c:414
+msgid "not cleared:n"
+msgstr "não limpo:n"
+
+#: messages-i18n.c:415
+msgid "Reconciled:R"
+msgstr "Reconciliado:R"
+
+#: messages-i18n.c:416
+msgid "reconciled:y"
+msgstr "reconciliado:y"
+
+#: po/guile_strings.txt:1
+msgid "String Option"
+msgstr "Opção de Texto"
+
+#: po/guile_strings.txt:2
+msgid "Second Option"
+msgstr "Segunda Opção"
+
+#: po/guile_strings.txt:3
+msgid "Cost"
+msgstr "Custo"
+
+#: po/guile_strings.txt:5
+msgid "Status"
+msgstr "Status"
+
+#: po/guile_strings.txt:9
+msgid "Other Account"
+msgstr "Outra Conta"
+
+#: po/guile_strings.txt:10
+msgid "Account Separator"
+msgstr "Separador de Contas"
+
+#: po/guile_strings.txt:11
+msgid ""
+"The default background color for splits in multi-line mode and the auto modes"
+msgstr ""
+"A cor de fundo padrão para divisões no modo de multi-linha e modos "
+"automáticos"
+
+#: po/guile_strings.txt:12
+msgid "Auto-Raise Lists"
+msgstr "Listas de elevação automática"
+
+#: po/guile_strings.txt:14
+msgid "Secondary Sort Order"
+msgstr "Ordem de classificação secundária"
+
+#: po/guile_strings.txt:15
+msgid "Stock Portfolio Valuation"
+msgstr "Avaliação de portfólio de ações"
+
+#: po/guile_strings.txt:16
+msgid "Stock Portfolio"
+msgstr "Portfólio de ações"
+
+#: po/guile_strings.txt:17
+msgid "The types of accounts for which balances are sign-reversed"
+msgstr "Os tipos de contas para os quais os saldos têm sinais contrários"
+
+#: po/guile_strings.txt:19
+msgid "The Good"
+msgstr "O Bom"
+
+#: po/guile_strings.txt:20
+#, c-format
+msgid "The current time is %s."
+msgstr "A hora atual é %s."
+
+#: po/guile_strings.txt:21
+msgid "Headers"
+msgstr "Cabeçalhos"
+
+#: po/guile_strings.txt:23
+msgid "Display N-1 lines"
+msgstr "Exibir N-1 linhas"
+
+#: po/guile_strings.txt:24
+msgid "Use a 24 hour (instead of a 12 hour) time format."
+msgstr "Usar um formato de hora com 24 horas (em vez de 12 horas)"
+
+#: po/guile_strings.txt:25
+msgid "Income:Salary:Taxable"
+msgstr "Rendimento:Salário:Tributável"
+
+#: po/guile_strings.txt:26
+msgid "Type of budget report"
+msgstr "Tipo de Relatório de Orçamento"
+
+#: po/guile_strings.txt:27
+msgid "Balancing"
+msgstr "Balanço"
+
+#: po/guile_strings.txt:28
+msgid "Date (subtotal monthly)"
+msgstr "Data (sub-total mensal)"
+
+#: po/guile_strings.txt:29
+msgid "Single Column Display"
+msgstr "Exibição de coluna simples"
+
+#: po/guile_strings.txt:30
+msgid "Time"
+msgstr "Hora"
+
+#: po/guile_strings.txt:31
+msgid "Account (w/subtotal)"
+msgstr "Conta (com sub-total)"
+
+#: po/guile_strings.txt:33
+msgid "International"
+msgstr "Internacional"
+
+#: po/guile_strings.txt:34
+msgid ""
+"The background color for an active split in multi-line mode and the auto "
+"modes"
+msgstr ""
+"A cor de fundo para uma divisão ativa no modo de multi-linha e nos modos "
+"automáticos"
+
+#: po/guile_strings.txt:35
+msgid "Double mode active background"
+msgstr "Fundo ativo no modo duplo"
+
+#: po/guile_strings.txt:36
+msgid "This is a string option"
+msgstr "Esta é uma opção de texto"
+
+#: po/guile_strings.txt:37
+msgid "Main Window"
+msgstr "Janela principal"
+
+#: po/guile_strings.txt:39
+msgid "_Account Transactions"
+msgstr "Transações da _Conta"
+
+#: po/guile_strings.txt:40
+#, c-format
+msgid "The date option is %s."
+msgstr "A opção de data é %s."
+
+#: po/guile_strings.txt:41
+msgid "Account Transactions"
+msgstr "Transações de Conta"
+
+#: po/guile_strings.txt:42
+msgid "UK"
+msgstr "Inglaterra"
+
+#: po/guile_strings.txt:43
+msgid "Sort by date"
+msgstr "Classificar por data"
+
+#: po/guile_strings.txt:44
+msgid "Budget Dialog (Testing)"
+msgstr "Diálogo de Orçamento (Teste)"
+
+#: po/guile_strings.txt:45
+#, c-format
+msgid "Report for %s and all subaccounts."
+msgstr "Relatório para %s e todas as subcontas."
+
+#: po/guile_strings.txt:46
+msgid "Account types to display"
+msgstr "Tipos de contas a exibir"
+
+#: po/guile_strings.txt:47
+msgid "Gain And Loss"
+msgstr "Ganho e Perda"
+
+#: po/guile_strings.txt:48
+msgid "Double click expands parent accounts"
+msgstr "O clique duplo expande as contas-pai"
+
+#: po/guile_strings.txt:49
+msgid "Boolean Option"
+msgstr "Opção Booleana"
+
+#: po/guile_strings.txt:50
+msgid "Income-Salary-Taxable"
+msgstr "Rendimento-Salário-Tributável"
+
+#: po/guile_strings.txt:52
+msgid "_Stock Portfolio"
+msgstr "Por_tfólio de ações"
+
+#: po/guile_strings.txt:53
+msgid "Testing"
+msgstr "Teste"
+
+#: po/guile_strings.txt:54
+msgid "US-style: mm/dd/yyyy"
+msgstr "Estilo americano: mm/dd/yyyy"
+
+#: po/guile_strings.txt:55
+msgid "You have not selected an account."
+msgstr "Nenhuma conta foi selecionada."
+
+#: po/guile_strings.txt:56
+msgid "By default, show every transaction in an account."
+msgstr "Por padrão, exibe todas as transações de uma conta."
+
+#: po/guile_strings.txt:59
+msgid "No amount display"
+msgstr "Nenhum valor exibido"
+
+#: po/guile_strings.txt:61
+msgid "View"
+msgstr "Visualizar"
+
+#: po/guile_strings.txt:62
+msgid "The default background color for odd rows in double mode"
+msgstr "A cor de fundo padrão para colunas ímpares em modo duplo"
+
+#: po/guile_strings.txt:63
+msgid "UK-style dd/mm/yyyy"
+msgstr "Estilo inglês: dd/mm/yyyy"
+
+#: po/guile_strings.txt:64
+msgid "Show all columns"
+msgstr "Mostrar todas as colunas"
+
+#: po/guile_strings.txt:67
+msgid "Header background"
+msgstr "Fundo do cabeçalho"
+
+#: po/guile_strings.txt:68
+msgid "Sorting"
+msgstr "Classificação"
+
+#: po/guile_strings.txt:69
+msgid "Show icons only"
+msgstr "Exibir apenas os ícones"
+
+#: po/guile_strings.txt:70
+msgid "The default background color for odd rows in single mode"
+msgstr "A cor de fundo padrão para colunas ímpares no modo simples"
+
+#: po/guile_strings.txt:72
+msgid "Display the Hello, World report."
+msgstr "Exibe o relatório Hello, World."
+
+#: po/guile_strings.txt:73
+msgid "Gain"
+msgstr "Ganho"
+
+#: po/guile_strings.txt:74
+msgid "Hello Again"
+msgstr "Olá novamente"
+
+#: po/guile_strings.txt:75
+msgid "This page shows your profits and losses."
+msgstr "Esta página exibe seus lucros e perdas."
+
+#: po/guile_strings.txt:76
+msgid "Show Vertical Borders"
+msgstr "Exibe bordas verticais."
+
+#: po/guile_strings.txt:77
+msgid "This is a boolean option."
+msgstr "Esta é uma opção booleana."
+
+#: po/guile_strings.txt:78
+msgid "_Profit and Loss"
+msgstr "_Lucros e perdas"
+
+#: po/guile_strings.txt:79
+msgid "Display 1 line"
+msgstr "Exibe 1 linha"
+
+#: po/guile_strings.txt:80
+msgid "Background Color"
+msgstr "Cor de fundo"
+
+#: po/guile_strings.txt:81
+#, c-format
+msgid "The number option formatted as currency is %s."
+msgstr "A opção de número formatado como moeda é %s."
+
+#: po/guile_strings.txt:82
+msgid "Income/Salary/Taxable"
+msgstr "Rendimento/Salário/Tributável"
+
+#: po/guile_strings.txt:83
+msgid "There are no selected accounts in the account list option."
+msgstr "Não há contas selecionadas na opção de lista de contas."
+
+#: po/guile_strings.txt:84
+msgid "Funds Out"
+msgstr "Saída de fundos"
+
+#: po/guile_strings.txt:85
+msgid "This page shows your net worth."
+msgstr "Esta página exibe o valor de sua net."
+
+#: po/guile_strings.txt:86
+msgid "_Budget"
+msgstr "O_rçamento"
+
+#: po/guile_strings.txt:87
+msgid "Continental Europe: dd.mm.yyyy"
+msgstr "Europa continental: dd.mm.yyyy"
+
+#: po/guile_strings.txt:88
+msgid "Category"
+msgstr "Categoria"
+
+#: po/guile_strings.txt:89
+msgid "Single"
+msgstr "Simples"
+
+#: po/guile_strings.txt:90
+msgid "Show Horizontal Borders"
+msgstr "Exibir bordas horizontais"
+
+#: po/guile_strings.txt:91
+msgid "Sort by check/transaction number"
+msgstr "Classificar por número do cheque/transação"
+
+#: po/guile_strings.txt:92
+msgid "The background color for the active transaction in double mode"
+msgstr "A cor de fundo para a transação ativa no modo duplo"
+
+#: po/guile_strings.txt:93
+msgid "Register Colors"
+msgstr "Cores do registro"
+
+#: po/guile_strings.txt:94
+#, c-format
+msgid "The boolean option is %s."
+msgstr "A opção booleana é %s."
+
+#: po/guile_strings.txt:95
+msgid "Display the memo?"
+msgstr "Exibir a anotação?"
+
+#: po/guile_strings.txt:96
+msgid "(subaccounts)"
+msgstr "(subcontas)"
+
+#: po/guile_strings.txt:97
+msgid "Multi mode default transaction background"
+msgstr "Fundo de transação padrão no modo múliplo"
+
+#: po/guile_strings.txt:98
+msgid ""
+"Double clicking on an account with children expands the account instead of "
+"opening a register."
+msgstr ""
+"O clique duplo em uma conta com conta-filho expande a conta em vez de abrir "
+"um registro."
+
+#: po/guile_strings.txt:99
+msgid "The background color for the active transaction in single mode"
+msgstr "A cor de fundo para a transação ativa no modo simples"
+
+#: po/guile_strings.txt:100
+msgid "Loss"
+msgstr "Perda"
+
+#: po/guile_strings.txt:101
+msgid "Credit Accounts"
+msgstr "Contas de Crédito"
+
+#: po/guile_strings.txt:102
+msgid "Sort by description"
+msgstr "Classificar por Descrição"
+
+#: po/guile_strings.txt:103
+msgid "largest to smallest, latest to earliest"
+msgstr "do maior para o menor, do mais antigo para o mais novo"
+
+#: po/guile_strings.txt:104
+msgid "Display the description?"
+msgstr "Exibir a Descrição?"
+
+#: po/guile_strings.txt:105
+msgid "Secondary Key"
+msgstr "Chave Secundária"
+
+#: po/guile_strings.txt:106
+msgid "Save window sizes and positions."
+msgstr "Salvar tamanhos e posições da janela."
+
+#: po/guile_strings.txt:108
+msgid "Number Option"
+msgstr "Opção numérica"
+
+#: po/guile_strings.txt:109
+msgid "There are no accounts to report on."
+msgstr "Não há contas para serem relatadas."
+
+#: po/guile_strings.txt:110
+#, c-format
+msgid "Report for %s."
+msgstr "Relatório para %s."
+
+#: po/guile_strings.txt:111
+msgid "Reverse Income and Expense Accounts"
+msgstr "Contas de Rendimento e Despesa Invertidos"
+
+#: po/guile_strings.txt:112
+msgid "Europe"
+msgstr "Europa"
+
+#: po/guile_strings.txt:115
+msgid "Day"
+msgstr "Dia"
+
+#: po/guile_strings.txt:116
+msgid ""
+"This is for testing. Your reports probably shouldn't have an option like "
+"this."
+msgstr ""
+"Este é um teste. Seus relatórios provavelmente não devem ter uma opção como "
+"esta."
+
+#: po/guile_strings.txt:117
+msgid "Display the headers?"
+msgstr "Exibir os cabeçalhos?"
+
+#: po/guile_strings.txt:118
+msgid "Do transaction report on these accounts"
+msgstr "Emite o relatório de transação nestas contas"
+
+#: po/guile_strings.txt:119
+msgid "Sort and subtotal by account transferred from/to's name"
+msgstr "Classifica e subtotaliza por conta transferida do nome de/para "
+
+#: po/guile_strings.txt:122
+msgid "The items selected in the list option are:"
+msgstr "Os itens selecionadas na opção de listas são:"
+
+#: po/guile_strings.txt:123
+msgid "Average"
+msgstr "Média"
+
+#: po/guile_strings.txt:125
+msgid "A_ccount Balance Tracker"
+msgstr "Investigador de Saldo de _Conta"
+
+#: po/guile_strings.txt:127
+msgid "Start of reporting period"
+msgstr "Início de período de relatório"
+
+#: po/guile_strings.txt:128
+msgid "Sort by exact entry time"
+msgstr "Classificar por hora exata de entrada"
+
+#: po/guile_strings.txt:129
+msgid "Use accounting labels"
+msgstr "Usar rótulos de conta"
+
+#: po/guile_strings.txt:130
+msgid "Full"
+msgstr "Completo"
+
+#: po/guile_strings.txt:131
+msgid "The amount of time between data points"
+msgstr "O tempo transcorrido entre os pontos dos dados"
+
+#: po/guile_strings.txt:132
+msgid "Upper Limit"
+msgstr "Limite superior"
+
+#: po/guile_strings.txt:133
+msgid "Multi mode default split background"
+msgstr "Fundo de divisão padrão de multi-modo"
+
+#: po/guile_strings.txt:135
+msgid "Week"
+msgstr "Semana"
+
+#: po/guile_strings.txt:136
+msgid "Crash the report"
+msgstr "Destruir o relatório"
+
+#: po/guile_strings.txt:138
+msgid "Step Size"
+msgstr "Tamanho do passo"
+
+#: po/guile_strings.txt:139
+msgid "Hello, World!"
+msgstr "Hello, World!"
+
+#: po/guile_strings.txt:140
+msgid "ISO"
+msgstr "ISO"
+
+#: po/guile_strings.txt:141
+msgid "A report useful for balancing the budget"
+msgstr "Um relatório útil para equilíbrar o orçamento"
+
+#: po/guile_strings.txt:142
+msgid "Display the amount?"
+msgstr "Exibir o valor?"
+
+#: po/guile_strings.txt:143
+msgid "Multi-Line"
+msgstr "Multi-linha"
+
+#: po/guile_strings.txt:144
+msgid "Two Column Display"
+msgstr "Exibição em duas colunas"
+
+#: po/guile_strings.txt:145
+msgid "Date Format Display"
+msgstr "Formato para Exibição de Datas"
+
+#: po/guile_strings.txt:146
+msgid "Ending"
+msgstr "Final"
+
+#: po/guile_strings.txt:147
+msgid "Reversed-balance account types"
+msgstr "Tipos de contas com saldo invertido"
+
+#: po/guile_strings.txt:149
+msgid "Account fields to display"
+msgstr "Campos de conta a exibir"
+
+#: po/guile_strings.txt:150
+msgid "Account Balance Tracker"
+msgstr "Investigador de balanço de conta"
+
+#: po/guile_strings.txt:151
+msgid "Report Options"
+msgstr "Opções de relatório"
+
+#: po/guile_strings.txt:154
+msgid "Calculate balance sheet up to this date"
+msgstr "Calcular a folha de saldo até esta data"
+
+#: po/guile_strings.txt:155
+msgid "Transaction Report"
+msgstr "Relatório de Transação"
+
+#: po/guile_strings.txt:156
+msgid "Alternate the even and odd colors with each transaction, not each row"
+msgstr ""
+"Alternar as cores pares e ímpares com cada transação, não com cada linha"
+
+#: po/guile_strings.txt:157
+msgid "Gain/Loss"
+msgstr "Ganho/perda"
+
+#: po/guile_strings.txt:158
+msgid "Transfer from/to"
+msgstr "Transferir de/para"
+
+#: po/guile_strings.txt:159
+msgid "Text only"
+msgstr "Apenas texto"
+
+#: po/guile_strings.txt:161
+msgid "Toolbar Buttons"
+msgstr "Botões da barra de ferramentas"
+
+#: po/guile_strings.txt:162
+msgid "Report Items from this date"
+msgstr "Itens de relatório a partir desta data"
+
+#: po/guile_strings.txt:163
+msgid "Period"
+msgstr "Período"
+
+#: po/guile_strings.txt:164
+msgid ""
+"The default background color for transactions in multi-line mode and the "
+"auto modes"
+msgstr ""
+"A cor de fundo padrão para transações em modo multi-linha e modos automáticos"
+
+#: po/guile_strings.txt:165
+msgid "Fourth Options"
+msgstr "Quarta opção"
+
+#: po/guile_strings.txt:166
+msgid "Sort by this criterion first"
+msgstr "Classificar primeiro por este critério"
+
+#: po/guile_strings.txt:167
+msgid "Double"
+msgstr "Duplo"
+
+#: po/guile_strings.txt:168
+msgid "Ugly option"
+msgstr "Péssima opção"
+
+#: po/guile_strings.txt:169
+msgid "How are you doing on your budget?"
+msgstr "Como está indo seu orçamento?"
+
+#: po/guile_strings.txt:170
+msgid "Save Translatable Strings"
+msgstr "Salvar as cadeias tradutíveis"
+
+#: po/guile_strings.txt:171
+msgid "Save strings that need to be translated"
+msgstr "Salvar as cadeias que precisam ser traduzidas"
+
+#: po/guile_strings.txt:172
+msgid "Number of Rows"
+msgstr "Número de linhas"
+
+#: po/guile_strings.txt:173
+msgid "/ (Slash)"
+msgstr "/ (Barra)"
+
+#: po/guile_strings.txt:175
+msgid "Use 24-hour time format"
+msgstr "Usar o formato de 24 horas"
+
+#: po/guile_strings.txt:177
+msgid "Date Format"
+msgstr "Formato de data"
+
+#: po/guile_strings.txt:178
+msgid "A list option"
+msgstr "Uma opção de listas"
+
+#: po/guile_strings.txt:179
+msgid "ISO Standard: yyyy-mm-dd"
+msgstr "Padrão ISO: yyyy-mm-dd"
+
+#: po/guile_strings.txt:180
+msgid "Default Currency"
+msgstr "Moeda Padrão"
+
+#: po/guile_strings.txt:181
+msgid "Do transaction report on this account"
+msgstr "Faz o relatório de transação nesta conta"
+
+#: po/guile_strings.txt:182
+msgid "Recent Price"
+msgstr "Preço recente"
+
+#: po/guile_strings.txt:183
+msgid "Net Inflow"
+msgstr "Fluxo de Entrada Líquido"
+
+#: po/guile_strings.txt:184
+msgid "Single mode default even row background"
+msgstr "Fundo de linha par padrão de modo simples"
+
+#: po/guile_strings.txt:185
+msgid "Double mode default even row background"
+msgstr "Fundo de linha ímpar padrão de modo duplo"
+
+#: po/guile_strings.txt:186
+#, c-format
+msgid "The multi-choice option is %s."
+msgstr "A opção de multi-escolha é %s."
+
+#: po/guile_strings.txt:187
+msgid "Double mode colors alternate with transactions"
+msgstr "Cores de modo duplo alternado com as transações"
+
+#: po/guile_strings.txt:188
+msgid "General"
+msgstr "Geral"
+
+#: po/guile_strings.txt:192
+msgid "Sub-Accounts"
+msgstr "Subcontas"
+
+#: po/guile_strings.txt:193
+#, c-format
+msgid "The date and time option is %s."
+msgstr "A opção de data e hora é %s."
+
+#: po/guile_strings.txt:195
+msgid "End of reporting period"
+msgstr "Fim do período de relatório"
+
+#: po/guile_strings.txt:196
+msgid "Don't reverse any accounts"
+msgstr "Não reverter nenhuma conta"
+
+#: po/guile_strings.txt:197
+msgid "Good option"
+msgstr "Boa opção"
+
+#: po/guile_strings.txt:198
+msgid "US"
+msgstr "EUA"
+
+#: po/guile_strings.txt:199
+msgid "_Transaction Report"
+msgstr "Relatório de _Transação"
+
+#: po/guile_strings.txt:201
+msgid "Ba_lance sheet"
+msgstr "Folha de Sa_ldo"
+
+#: po/guile_strings.txt:202
+msgid "Help for first option"
+msgstr "Ajuda para a primeira opção"
+
+#: po/guile_strings.txt:203 src/gnome/glade-gnc-dialogs.c:2036
+msgid "Number"
+msgstr "Número"
+
+#: po/guile_strings.txt:204
+msgid "Show both icons and text"
+msgstr "Exibir os ícones e texto"
+
+#: po/guile_strings.txt:206
+msgid "Transfer from/to (w/subtotal)"
+msgstr "Transferir de/para (com subtotal)"
+
+#: po/guile_strings.txt:210
+#, c-format
+msgid "The number option is %s."
+msgstr "A opção de número é %s."
+
+#: po/guile_strings.txt:211
+#, c-format
+msgid "The string option is %s."
+msgstr "A opção de texto é %s."
+
+#: po/guile_strings.txt:212
+msgid "Report style"
+msgstr "Estilo de relatório"
+
+#: po/guile_strings.txt:213
+msgid "_Reports"
+msgstr "_Relatórios"
+
+#: po/guile_strings.txt:214
+msgid "Single mode active background"
+msgstr "Fundo ativo de modo simples"
+
+#: po/guile_strings.txt:216
+msgid "Year"
+msgstr "Ano"
+
+#: po/guile_strings.txt:217
+msgid "Profit and Loss"
+msgstr "Perda e lucro"
+
+#: po/guile_strings.txt:218
+msgid "Month"
+msgstr "Mês"
+
+#: po/guile_strings.txt:219
+msgid "Multi mode active transaction background"
+msgstr "Fundo de transação ativo de multi-modo"
+
+#: po/guile_strings.txt:220
+msgid ". (Period)"
+msgstr ". (Ponto)"
+
+#: po/guile_strings.txt:221
+msgid "Primary Sort Order"
+msgstr "Ordem de classificação primária"
+
+#: po/guile_strings.txt:222
+msgid "Name"
+msgstr "Nome"
+
+#: po/guile_strings.txt:223
+msgid "Display the date?"
+msgstr "Exibir a data?"
+
+#: po/guile_strings.txt:224
+msgid "Descending"
+msgstr "Descendente"
+
+#: po/guile_strings.txt:225
+msgid "This is a date option"
+msgstr "Esta é uma opção de data"
+
+#: po/guile_strings.txt:226
+msgid "Two Week"
+msgstr "Duas semanas"
+
+#: po/guile_strings.txt:227
+msgid "Save Window Geometry"
+msgstr "Salvar geometria da janela"
+
+#: po/guile_strings.txt:228
+msgid "Income\\Salary\\Taxable"
+msgstr "Rendimento\\Salário\\Tributável"
+
+#: po/guile_strings.txt:229
+msgid "Code"
+msgstr "Código"
+
+#: po/guile_strings.txt:230
+msgid "Balance sheet"
+msgstr "Folha de saldo"
+
+#: po/guile_strings.txt:231
+msgid "Export data as text."
+msgstr "Exportar dados como texto."
+
+#: po/guile_strings.txt:232
+msgid "Balance Sheet"
+msgstr "Folha de saldo"
+
+#: po/guile_strings.txt:233
+msgid "- (Dash)"
+msgstr "- (Traço)"
+
+#: po/guile_strings.txt:234
+msgid "Funds In"
+msgstr "Entrada de fundos"
+
+#: po/guile_strings.txt:235
+msgid "Order of primary sorting"
+msgstr "Ordem de classificação primária"
+
+#: po/guile_strings.txt:236
+msgid "Default Currency For New Accounts"
+msgstr "Moeda padrão para novas contas"
+
+#: po/guile_strings.txt:237
+msgid "Sort by this criterion second"
+msgstr "Classificar em segundo lugar por este critério"
+
+#: po/guile_strings.txt:238
+msgid "true"
+msgstr "verdadeiro"
+
+#: po/guile_strings.txt:240
+msgid "Do not sort"
+msgstr "Não classificar"
+
+#: po/guile_strings.txt:241
+msgid "Period Ending"
+msgstr "Final do período"
+
+#: po/guile_strings.txt:242
+msgid "Income.Salary.Taxable"
+msgstr "Rendimento.Salário.Tributável"
+
+#: po/guile_strings.txt:243
+msgid "Only use 'debit' and 'credit' instead of informal synonyms"
+msgstr "Usar apenas 'débito' e 'crédito' em vez de sinônimos informais"
+
+#: po/guile_strings.txt:245
+msgid "Include sub-accounts of all selected accounts"
+msgstr "Incluir subcontas de todas as contas selecionadas"
+
+#: po/guile_strings.txt:247
+msgid "The Ugly"
+msgstr "O Feio"
+
+#: po/guile_strings.txt:248
+msgid "Max"
+msgstr "Max"
+
+#: po/guile_strings.txt:249
+msgid "Test the budget dialog."
+msgstr "Testar o diálogo de orçamento."
+
+#: po/guile_strings.txt:250
+msgid "By default, show horizontal borders on the cells."
+msgstr "Por padrão, exibir bordas horizontais nas células."
+
+#: po/guile_strings.txt:251
+msgid "Display the totals?"
+msgstr "Exibir os totais?"
+
+#: po/guile_strings.txt:252
+msgid ": (Colon)"
+msgstr ": (Dois pontos)"
+
+#: po/guile_strings.txt:253
+msgid "By default, show vertical borders on the cells."
+msgstr "Por padrão, exibir bordas verticais nas células."
+
+#: po/guile_strings.txt:255
+msgid "Actual"
+msgstr "Real"
+
+#: po/guile_strings.txt:256
+msgid "Enable EURO support"
+msgstr "Habilita suporte ao EURO"
+
+#: po/guile_strings.txt:257
+msgid "Ascending"
+msgstr "Ascendente"
+
+#: po/guile_strings.txt:258
+msgid "The Bad"
+msgstr "O Mau"
+
+#: po/guile_strings.txt:259
+msgid "Just a Date Option"
+msgstr "Apenas uma opção de data"
+
+#: po/guile_strings.txt:260
+msgid "The accounts selected in the account list option are:"
+msgstr "As contas selecionadas na opção de listas de contas são:"
+
+#: po/guile_strings.txt:261
+#, c-format
+msgid ""
+"This is a sample GnuCash report. See the guile (scheme) source code in %s "
+"for details on writing your own reports, or extending existing reports."
+msgstr ""
+"Este é um exemplo de relatório do GnuCash. Veja o código-fonte em guile "
+"(scheme) em %s para detalhes sobre como escrever seus próprios relatórios ou "
+"ampliar os relatórios existentes."
+
+#: po/guile_strings.txt:262
+msgid "Enables support for the European Union EURO currency"
+msgstr "Habilita suporte para a moeda EURO da União Européia"
+
+#: po/guile_strings.txt:263
+msgid "Merged"
+msgstr "Unificado"
+
+#: po/guile_strings.txt:264
+msgid "The default background color for even rows in single mode"
+msgstr "A cor de fundo padrão para linhas pares no modo simples"
+
+#: po/guile_strings.txt:265
+msgid "The default background color for even rows in double mode"
+msgstr "A cor de fundo padrão para linhas ímpares no modo duplo"
+
+#: po/guile_strings.txt:266
+msgid "Display the Budget report."
+msgstr "Exibir o relatório de orçamento."
+
+#: po/guile_strings.txt:267
+msgid "Display the account?"
+msgstr "Exibir a conta?"
+
+#: po/guile_strings.txt:268
+msgid "Display the cheque number?"
+msgstr "Exibir o número do cheque?"
+
+#: po/guile_strings.txt:269
+msgid "Display N lines"
+msgstr "Exibir N linhas"
+
+#: po/guile_strings.txt:270
+msgid "_Hello, World"
+msgstr "_Hello, World"
+
+#: po/guile_strings.txt:271
+msgid "First Option"
+msgstr "Primeira opção"
+
+#: po/guile_strings.txt:272
+msgid "Display the Stock Portfolio report."
+msgstr "Exibir o relatório de portfólio de ações."
+
+#: po/guile_strings.txt:273
+msgid ""
+"Show transactions on multiple lines with one line for each split in the "
+"transaction"
+msgstr ""
+"Exibir transações em linhas múltiplas com uma linha para cada divisão na "
+"transação"
+
+#: po/guile_strings.txt:274
+msgid "Plot Type"
+msgstr "Tipo de organização"
+
+#: po/guile_strings.txt:275 src/gnome/glade-gnc-dialogs.c:2724
+#: src/gnome/glade-gnc-dialogs.c:2732
+msgid "Budget"
+msgstr "Orçamento"
+
+#: po/guile_strings.txt:276
+msgid "Choose whether to display icons, text, or both for toolbar buttons"
+msgstr ""
+"Escolhe a exibição de ícones, texto ou ambos para os botões da barra de "
+"ferramentas"
+
+#: po/guile_strings.txt:277
+msgid "Sort by date & subtotal each year"
+msgstr "Classificar por cada & subtotal de cada ano"
+
+#: po/guile_strings.txt:278
+msgid "Show text only"
+msgstr "Exibir apenas texto"
+
+#: po/guile_strings.txt:279
+msgid "Icons and Text"
+msgstr "Ícones e Texto"
+
+#: po/guile_strings.txt:280
+msgid "The type of graph to generate"
+msgstr "O tipo de gráfico a ser gerado"
+
+#: po/guile_strings.txt:281
+msgid "Automatically raise the list of accounts or actions during input."
+msgstr "Aumentar automaticamente a lista de contas ou ações durante a entrada."
+
+#: po/guile_strings.txt:282
+msgid "Sort by account transferred from/to's name"
+msgstr "Classificar pelo nome da contra transferida de/para"
+
+#: po/guile_strings.txt:283
+msgid "Net Gain"
+msgstr "Ganho Líquido"
+
+#: po/guile_strings.txt:284
+msgid "The fourth option rules!"
+msgstr "A quarta opção é o que há!"
+
+#: po/guile_strings.txt:285
+msgid "This is a date option with time"
+msgstr "Esta é uma opção de data com hora"
+
+#: po/guile_strings.txt:286
+msgid "The header background color"
+msgstr "A cor de fundo do cabeçalho"
+
+#: po/guile_strings.txt:287
+msgid "Sort by memo"
+msgstr "Classificar por Nota"
+
+#: po/guile_strings.txt:288
+msgid "Third Option"
+msgstr "Terceira opção"
+
+#: po/guile_strings.txt:289
+msgid "Choose the default mode for register windows"
+msgstr "Escolha o modo padrão para as janelas de registro"
+
+#: po/guile_strings.txt:290
+msgid "Default number of register rows to display."
+msgstr "Número padrão de linhas de registro a exibir."
+
+#: po/guile_strings.txt:291
+msgid "Report end date"
+msgstr "Data final do relatório"
+
+#: po/guile_strings.txt:292 src/gnome/glade-gnc-dialogs.c:1763
+msgid "None"
+msgstr "Nenhuma"
+
+#: po/guile_strings.txt:293
+msgid "Export data as text (Danger: Unfinished)"
+msgstr "Exportar dados como texto (Perigo: não finalizado)"
+
+#: po/guile_strings.txt:294
+msgid "Primary Key"
+msgstr "Chave primária"
+
+#: po/guile_strings.txt:295
+msgid "Ticker"
+msgstr "Contador"
+
+#: po/guile_strings.txt:296
+msgid ""
+"Display the other account?  (if this is a split transaction, this parameter "
+"is guessed)."
+msgstr ""
+"Exibir a outra conta?  (Se esta for uma transação dividida, este parâmetro é "
+"suposto)."
+
+#: po/guile_strings.txt:297
+msgid "Time and Date Option"
+msgstr "Opção de Hora e Data"
+
+#: po/guile_strings.txt:298
+msgid "Single mode default odd row background"
+msgstr "Fundo de linha ímpar padrão de modo simples"
+
+#: po/guile_strings.txt:299
+msgid "Double mode default odd row background"
+msgstr "Fundo de linha ímpar de modo duplo"
+
+#: po/guile_strings.txt:300
+msgid "The character used to separate fully-qualified account names"
+msgstr "O caractere usado para separar nomes completos de contas"
+
+#: po/guile_strings.txt:301
+msgid "Report start date"
+msgstr "Data inicial do relatório"
+
+#: po/guile_strings.txt:303
+msgid "smallest to largest, earliest to latest"
+msgstr "do menor para o maior, do mais novo para o mais antigo"
+
+#: po/guile_strings.txt:305
+msgid "Display the Transaction Report report."
+msgstr "Exibir o relatório de relatório de transações."
+
+#: po/guile_strings.txt:306
+msgid "\\ (Backslash)"
+msgstr "\\ (contrabarra)"
+
+#: po/guile_strings.txt:307
+msgid "Icons only"
+msgstr "Apenas ícones"
+
+#: po/guile_strings.txt:308
+msgid "Help for third option"
+msgstr "Ajuda para a terceira opção"
+
+#: po/guile_strings.txt:309
+msgid "Default Register Mode"
+msgstr "Modo Padrão do Registro"
+
+#: po/guile_strings.txt:311
+msgid "Lower Limit"
+msgstr "Limite Inferior"
+
+#: po/guile_strings.txt:312
+msgid "Sort by amount"
+msgstr "Classificar por quantidade"
+
+#: po/guile_strings.txt:314
+msgid "This is an account list option"
+msgstr "Esta é uma opção de listas de contas"
+
+#: po/guile_strings.txt:315
+msgid "Average Balance"
+msgstr "Saldo médio"
+
+#: po/guile_strings.txt:316
+msgid "Totals"
+msgstr "Totais"
+
+#: po/guile_strings.txt:317
+msgid "Profit/Loss"
+msgstr "Lucro/Prejuízo"
+
+#: po/guile_strings.txt:318 src/gnome/glade-gnc-dialogs.c:2268
+msgid "Shares"
+msgstr "Ações"
+
+#: po/guile_strings.txt:319
+msgid "Show All Transactions"
+msgstr "Exibir Todas as Transações"
+
+#: po/guile_strings.txt:320
+msgid "Display the Profit and Loss report."
+msgstr "Exibir o Relatório de Lucros e Prejuízos"
+
+#: po/guile_strings.txt:321
+msgid "Date (subtotal yearly)"
+msgstr "Data (subtotal anual)"
+
+#: po/guile_strings.txt:322
+msgid "Display the Account Balance Tracker report."
+msgstr "Exibir o relatório de acompanhador de saldo de conta."
+
+#: po/guile_strings.txt:323
+msgid "2Week"
+msgstr "2Semana"
+
+#: po/guile_strings.txt:324
+msgid "Nothing"
+msgstr "Nada"
+
+#: po/guile_strings.txt:325
+msgid "You have selected no values in the list option."
+msgstr "Nenhum valor foi selecionado na opção de listas."
+
+#: po/guile_strings.txt:326
+msgid "false"
+msgstr "falso"
+
+#: po/guile_strings.txt:328
+msgid "An account list option"
+msgstr "Uma opção de lista de contas"
+
+#: po/guile_strings.txt:329
+msgid "Multi Choice Option"
+msgstr "Opção de múltipla escolha"
+
+#: po/guile_strings.txt:330
+msgid "This is a color option"
+msgstr "Esta é uma opção de cor"
+
+#: po/guile_strings.txt:331
+msgid "Make No Plot"
+msgstr "Não Trame"
+
+#: po/guile_strings.txt:332
+msgid "Bad option"
+msgstr "Opção ruim"
+
+#: po/guile_strings.txt:333
+msgid "Display the Balance sheet report."
+msgstr "Exibir o relatório de folha de saldo."
+
+#: po/guile_strings.txt:334
+msgid "Sort by date & subtotal each month"
+msgstr "Classificar por data e subtotal de cada mês"
+
+#: po/guile_strings.txt:335
+msgid "Display the Account Transactions report."
+msgstr "Exibir o relatório de transações de conta."
+
+#: po/guile_strings.txt:336
+msgid "Net"
+msgstr "Líquido"
+
+#: po/guile_strings.txt:337
+msgid "Have a nice day!"
+msgstr "Tenha um bom dia!"
+
+#: po/guile_strings.txt:338
+msgid "This is a list option"
+msgstr "Esta é uma opção de lista"
+
+#: po/guile_strings.txt:339
+msgid "Min"
+msgstr "Min"
+
+#: po/guile_strings.txt:340
+msgid "Order of Secondary sorting"
+msgstr "Ordem de classificação secundária"
+
+#: po/guile_strings.txt:341
+msgid "Help for second option"
+msgstr "Ajuda para a segunda opção"
+
+#: po/guile_strings.txt:342
+msgid "Report items up to and including this date"
+msgstr "Relatar itens até e incluindo esta data"
+
+#: po/guile_strings.txt:343
+msgid "Display"
+msgstr "Exibir"
+
+#: po/guile_strings.txt:344 src/gnome/glade-gnc-dialogs.c:3114
+msgid "Nominal"
+msgstr "Nominal"
+
+#: po/guile_strings.txt:345
+msgid "Beginning"
+msgstr "Início"
+
+#: po/guile_strings.txt:346
+#, c-format
+msgid ""
+"For help on writing reports, or to contribute your brand new, totally cool "
+"report, consult the mailing list %s. For details on subscribing to that "
+"list, see %s."
+msgstr ""
+"Para ajuda sobre como escrever relatórios ou para contribuir com o seu "
+"relatório super supimpa, consulte a lista de discussão %s. Para detalhes "
+"sobre como assinar a lista, veja %s."
+
+#: po/guile_strings.txt:347
+msgid ""
+"The background color for an active transaction in multi-line mode and the "
+"auto modes"
+msgstr ""
+"A cor de fundo para uma transação ativa no modo multi-linha e nos modos "
+"automáticos"
+
+#: po/guile_strings.txt:348
+msgid "This is a multi choice option."
+msgstr "Esta é uma opção de múltipla escolha."
+
+#: po/guile_strings.txt:349
+msgid "Income & Expense"
+msgstr "Rendimento & Despesa"
+
+#: po/guile_strings.txt:350
+msgid "Hello, World"
+msgstr "Olá, Mundo"
+
+#: po/guile_strings.txt:351
+msgid "Sort & subtotal by account"
+msgstr "Classificar e subtotalizar por conta"
+
+#: po/guile_strings.txt:352
+msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
+msgstr "Contas reversas de cartão de crédito, dívida, eqüidade e rendimento"
+
+#: po/guile_strings.txt:354
+msgid "This is a number option."
+msgstr "Esta é uma opção de número."
+
+#: po/guile_strings.txt:356
+msgid "Multi mode active split background"
+msgstr "Fundo de divisão ativo de multi-modo"
+
+#: src/gnome/dialog-account-picker.c:95
+msgid "All Accounts"
+msgstr "Todas as contas"
+
+#: src/gnome/dialog-qif-import.c:190
+msgid "Select QIF File"
+msgstr "Selecionar arquivo QIF"
+
+#: src/gnome/dialog-qif-import.c:251
+msgid "You must specify a file to load."
+msgstr "Deve-se especificar uma arquivo para ser carregado."
+
+#: src/gnome/dialog-qif-import.c:255
+msgid "You must specify a currency."
+msgstr "Deve-se especificar uma moeda."
+
+#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
+#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
+msgid "QIF File scheme code not loaded properly."
+msgstr "Código scheme de arquivo QIF não carregado adequadamente."
+
+#: src/gnome/dialog-qif-import.c:291
+msgid "QIF File already loaded. Reload with current settings?"
+msgstr "Arquivo QIF já carregado. Recarregar com as configurações atuais?"
+
+#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
+msgid "Something is very wrong with QIF Importing."
+msgstr "Algo está muito errado com a importação de QIF."
+
+#: src/gnome/glade-gnc-dialogs.c:68
+msgid "Import QIF Files"
+msgstr "Importar arquivos QIF"
+
+#: src/gnome/glade-gnc-dialogs.c:90
+msgid "Loaded Files"
+msgstr "Arquivos carregados"
+
+#: src/gnome/glade-gnc-dialogs.c:121
+msgid "File Info"
+msgstr "Informações do arquivo"
+
+#: src/gnome/glade-gnc-dialogs.c:149
+msgid "QIF Filename:"
+msgstr "Nome do arquivo QIF:"
+
+#: src/gnome/glade-gnc-dialogs.c:158
+msgid "Default QIF acct:"
+msgstr "Conta QIF padrão:"
+
+#: src/gnome/glade-gnc-dialogs.c:167
+msgid "Currency:"
+msgstr "Moeda:"
+
+#: src/gnome/glade-gnc-dialogs.c:198 src/gnome/glade-gnc-dialogs.c:1861
+#: src/gnome/glade-gnc-dialogs.c:1913
+msgid "Select ..."
+msgstr "Selecionar ..."
+
+#: src/gnome/glade-gnc-dialogs.c:219
+msgid "Auto"
+msgstr "Auto"
+
+#: src/gnome/glade-gnc-dialogs.c:241
+msgid "Load file"
+msgstr "Carregar arquivo"
+
+#: src/gnome/glade-gnc-dialogs.c:248
+msgid "Files"
+msgstr "Arquivos"
+
+#: src/gnome/glade-gnc-dialogs.c:274
+msgid "QIF Account"
+msgstr "Conta QIF"
+
+#: src/gnome/glade-gnc-dialogs.c:281 src/gnome/glade-gnc-dialogs.c:335
+msgid "Transactions"
+msgstr "Transações"
+
+#: src/gnome/glade-gnc-dialogs.c:288 src/gnome/glade-gnc-dialogs.c:342
+msgid "GNUCash Account Name"
+msgstr "Nome da conta GNUCash"
+
+#: src/gnome/glade-gnc-dialogs.c:328
+msgid "QIF Category"
+msgstr "Categoria QIF"
+
+#: src/gnome/glade-gnc-dialogs.c:356
+msgid "Categories"
+msgstr "Categorias"
+
+#: src/gnome/glade-gnc-dialogs.c:447
+msgid "Select Account"
+msgstr "Selecionar conta"
+
+#: src/gnome/glade-gnc-dialogs.c:505
+msgid "Selected account:"
+msgstr "Conta selecionada:"
+
+#: src/gnome/glade-gnc-dialogs.c:514 src/gnome/glade-gnc-dialogs.c:2931
+#: src/gnome/glade-gnc-dialogs.c:3018
+msgid "Description:"
+msgstr "Descrição:"
+
+#: src/gnome/glade-gnc-dialogs.c:523
+msgid "Account type:"
+msgstr "Tipo de conta:"
+
+#: src/gnome/glade-gnc-dialogs.c:579
+msgid "Mutual"
+msgstr "Conjunta"
+
+#: src/gnome/glade-gnc-dialogs.c:644 src/gnome/glade-gnc-dialogs.c:652
+msgid "Print Preview"
+msgstr "Visualizar Impressão"
+
+#: src/gnome/glade-gnc-dialogs.c:694
+msgid "Zoom in"
+msgstr "Aproximar"
+
+#: src/gnome/glade-gnc-dialogs.c:702
+msgid "Zoom out"
+msgstr "Afastar"
+
+#: src/gnome/glade-gnc-dialogs.c:752
+msgid "Print Setup"
+msgstr "Configuração da impressora"
+
+#: src/gnome/glade-gnc-dialogs.c:774
+msgid "Printer:"
+msgstr "Impressora:"
+
+#: src/gnome/glade-gnc-dialogs.c:782
+msgid "Paper size:"
+msgstr "Tamanho do papel:"
+
+#: src/gnome/glade-gnc-dialogs.c:790
+msgid "Pages to print:"
+msgstr "Imprimir Páginas:"
+
+#: src/gnome/glade-gnc-dialogs.c:835 src/gnome/glade-gnc-dialogs.c:1757
+msgid "All"
+msgstr "Todas"
+
+#: src/gnome/glade-gnc-dialogs.c:843
+msgid "Selected"
+msgstr "Selecionadas"
+
+#: src/gnome/glade-gnc-dialogs.c:865
+msgid "From:"
+msgstr "De:"
+
+#: src/gnome/glade-gnc-dialogs.c:880
+msgid "To:"
+msgstr "A:"
+
+#: src/gnome/glade-gnc-dialogs.c:902 src/gnome/glade-gnc-dialogs.c:909
+msgid "Select..."
+msgstr "Selecionar..."
+
+#: src/gnome/glade-gnc-dialogs.c:945
+msgid "Preview"
+msgstr "Visualizar"
+
+#: src/gnome/glade-gnc-dialogs.c:1002
+msgid "Select Paper Size"
+msgstr "Selecionar Tamanho do Papel"
+
+#: src/gnome/glade-gnc-dialogs.c:1127
+msgid "Print Check"
+msgstr "Imprimir cheque"
+
+#: src/gnome/glade-gnc-dialogs.c:1156
+msgid "Check format:"
+msgstr "Formato do cheque:"
+
+#: src/gnome/glade-gnc-dialogs.c:1164 src/gnome/glade-gnc-dialogs.c:1334
+msgid "Check position:"
+msgstr "Posição do cheque:"
+
+#: src/gnome/glade-gnc-dialogs.c:1172 src/gnome/glade-gnc-dialogs.c:1342
+msgid "Date format:"
+msgstr "Formato de data:"
+
+#: src/gnome/glade-gnc-dialogs.c:1194
+msgid "Quicken/QuickBooks (tm) US-Letter"
+msgstr "Quicken/QuickBooks (tm) US-Letter"
+
+#: src/gnome/glade-gnc-dialogs.c:1197 src/gnome/glade-gnc-dialogs.c:1218
+#: src/gnome/glade-gnc-dialogs.c:1254
+msgid "Custom"
+msgstr "Personalizar"
+
+#: src/gnome/glade-gnc-dialogs.c:1209
+msgid "Top"
+msgstr "Superior"
+
+#: src/gnome/glade-gnc-dialogs.c:1212
+msgid "Middle"
+msgstr "Meio"
+
+#: src/gnome/glade-gnc-dialogs.c:1215
+msgid "Bottom"
+msgstr "Inferior"
+
+#: src/gnome/glade-gnc-dialogs.c:1230
+msgid "December  31, 2000"
+msgstr "Dezembro  31, 2000"
+
+#: src/gnome/glade-gnc-dialogs.c:1233
+msgid "31 December, 2000"
+msgstr "31 de dezembro, 2000"
+
+#: src/gnome/glade-gnc-dialogs.c:1236
+msgid "Dec 31, 2000"
+msgstr "Dez 31, 2000"
+
+#: src/gnome/glade-gnc-dialogs.c:1239
+msgid "31 Dec, 2000"
+msgstr "31 dez, 2000"
+
+#: src/gnome/glade-gnc-dialogs.c:1242
+msgid "12/31/2000"
+msgstr "12/31/2000"
+
+#: src/gnome/glade-gnc-dialogs.c:1245
+msgid "12/31/00"
+msgstr "12/31/00"
+
+#: src/gnome/glade-gnc-dialogs.c:1248
+msgid "31/12/2000"
+msgstr "31/12/2000"
+
+#: src/gnome/glade-gnc-dialogs.c:1251
+msgid "31/12/00"
+msgstr "31/12/00"
+
+#: src/gnome/glade-gnc-dialogs.c:1259
+msgid "Custom check parameters"
+msgstr "Personalizar parâmetros do cheque"
+
+#: src/gnome/glade-gnc-dialogs.c:1294
+msgid "Payee:"
+msgstr "Favorecido:"
+
+#: src/gnome/glade-gnc-dialogs.c:1302
+msgid "Date:"
+msgstr "Data:"
+
+#: src/gnome/glade-gnc-dialogs.c:1310
+msgid "Amount (words):"
+msgstr "Valor (palavras):"
+
+#: src/gnome/glade-gnc-dialogs.c:1318
+msgid "Amount (numbers):"
+msgstr "Valor (números):"
+
+#: src/gnome/glade-gnc-dialogs.c:1326
+msgid "Memo:"
+msgstr "Nota:"
+
+#: src/gnome/glade-gnc-dialogs.c:1350
+msgid "Units:"
+msgstr "Unidades:"
+
+#: src/gnome/glade-gnc-dialogs.c:1365
+msgid "x"
+msgstr "x"
+
+#: src/gnome/glade-gnc-dialogs.c:1442
+msgid "Inches"
+msgstr "Polegadas"
+
+#: src/gnome/glade-gnc-dialogs.c:1445
+msgid "Centimeters"
+msgstr "Centímetros"
+
+#: src/gnome/glade-gnc-dialogs.c:1448
+msgid "Millimeters"
+msgstr "Milímetros"
+
+#: src/gnome/glade-gnc-dialogs.c:1451
+msgid "Points"
+msgstr "Pontos"
+
+#: src/gnome/glade-gnc-dialogs.c:1464
+msgid "y"
+msgstr "y"
+
+#: src/gnome/glade-gnc-dialogs.c:1523
+msgid "                                  "
+msgstr "                                  "
+
+#: src/gnome/glade-gnc-dialogs.c:1530
+msgid "                    "
+msgstr "                    "
+
+#: src/gnome/glade-gnc-dialogs.c:1707
+msgid "Find Transactions"
+msgstr "Descobrir transações"
+
+#: src/gnome/glade-gnc-dialogs.c:1722
+msgid "Match Accounts"
+msgstr "Casar contas"
+
+#: src/gnome/glade-gnc-dialogs.c:1743
+msgid "Find transactions affecting"
+msgstr "Encontrar transações influenciando"
+
+#: src/gnome/glade-gnc-dialogs.c:1760
+msgid "Any"
+msgstr "Nada"
+
+#: src/gnome/glade-gnc-dialogs.c:1769
+msgid "selected accounts:"
+msgstr "contas selecionadas:"
+
+#: src/gnome/glade-gnc-dialogs.c:1791
+msgid "Match Date"
+msgstr "Combinar data"
+
+#: src/gnome/glade-gnc-dialogs.c:1806
+msgid "Find transactions occurring between the dates:"
+msgstr "Encontrar transações que ocorram entre as datas:"
+
+#: src/gnome/glade-gnc-dialogs.c:1830 src/gnome/glade-gnc-dialogs.c:1846
+#: src/gnome/glade-gnc-dialogs.c:1883 src/gnome/glade-gnc-dialogs.c:1898
+msgid "/"
+msgstr "/"
+
+#: src/gnome/glade-gnc-dialogs.c:1927 src/gnome/glade-gnc-dialogs.c:1985
+msgid "Match Description"
+msgstr "Casar descrição"
+
+#: src/gnome/glade-gnc-dialogs.c:1942
+msgid "Find transactions whose Description matches:"
+msgstr "Encontrar transações cujas descrições casem com:"
+
+#: src/gnome/glade-gnc-dialogs.c:1964 src/gnome/glade-gnc-dialogs.c:2022
+#: src/gnome/glade-gnc-dialogs.c:2182 src/gnome/glade-gnc-dialogs.c:2384
+msgid "Case sensitive"
+msgstr "Diferenciar maiúscula/minúscula"
+
+#: src/gnome/glade-gnc-dialogs.c:1971 src/gnome/glade-gnc-dialogs.c:2029
+#: src/gnome/glade-gnc-dialogs.c:2189 src/gnome/glade-gnc-dialogs.c:2391
+msgid "Regular expression"
+msgstr "Expressão regular"
+
+#: src/gnome/glade-gnc-dialogs.c:2000
+msgid "Find transactions whose Number matches:"
+msgstr "Encontrar transações cujos números casem com:"
+
+#: src/gnome/glade-gnc-dialogs.c:2043
+msgid "Match Amount"
+msgstr "Casar conta"
+
+#: src/gnome/glade-gnc-dialogs.c:2065
+msgid "Find "
+msgstr "Encontrar "
+
+#: src/gnome/glade-gnc-dialogs.c:2079
+msgid "Credit or Debit"
+msgstr "Crédito ou Débito"
+
+#: src/gnome/glade-gnc-dialogs.c:2090
+msgid "splits having amounts of:"
+msgstr "divisões que tenham valores de:"
+
+#: src/gnome/glade-gnc-dialogs.c:2111 src/gnome/glade-gnc-dialogs.c:2240
+#: src/gnome/glade-gnc-dialogs.c:2312
+msgid "At least"
+msgstr "Pelo menos"
+
+#: src/gnome/glade-gnc-dialogs.c:2114
+msgid "At most "
+msgstr "No máximo "
+
+#: src/gnome/glade-gnc-dialogs.c:2117 src/gnome/glade-gnc-dialogs.c:2246
+#: src/gnome/glade-gnc-dialogs.c:2318
+msgid "Exactly"
+msgstr "Exatamente"
+
+#: src/gnome/glade-gnc-dialogs.c:2145
+msgid "Match Memo"
+msgstr "Casar Nota"
+
+#: src/gnome/glade-gnc-dialogs.c:2160
+msgid "Find splits whose Memo matches:"
+msgstr "Encontrar divisões cujas notas casam com:"
+
+#: src/gnome/glade-gnc-dialogs.c:2203
+msgid "Match number of shares"
+msgstr "Casar número de ações"
+
+#: src/gnome/glade-gnc-dialogs.c:2218
+msgid "Find securities transactions of:"
+msgstr "Encontre transações de segurança de:"
+
+#: src/gnome/glade-gnc-dialogs.c:2243 src/gnome/glade-gnc-dialogs.c:2315
+msgid "At most"
+msgstr "No máximo"
+
+#: src/gnome/glade-gnc-dialogs.c:2260
+msgid "shares"
+msgstr "ações"
+
+#: src/gnome/glade-gnc-dialogs.c:2275
+msgid "Match share price"
+msgstr "Casar com o preço da ação"
+
+#: src/gnome/glade-gnc-dialogs.c:2290
+msgid "Find securities transactions with share price of:"
+msgstr "Encontrar transações de segurança com preço de ação de:"
+
+#: src/gnome/glade-gnc-dialogs.c:2347
+msgid "Match Action"
+msgstr "Casar ação"
+
+#: src/gnome/glade-gnc-dialogs.c:2362
+msgid "Find transactions whose Action matches:"
+msgstr "Encontrar transações cujas ações casem com:"
+
+#: src/gnome/glade-gnc-dialogs.c:2405
+msgid "Match Cleared state"
+msgstr "Casar estado Limpo"
+
+#: src/gnome/glade-gnc-dialogs.c:2420
+msgid "Find transactions whose Cleared status is:"
+msgstr "Encontrar transações cujos status Limpo é:"
+
+#: src/gnome/glade-gnc-dialogs.c:2428
+msgid "Not cleared (n)"
+msgstr "Não limpo (n)"
+
+#: src/gnome/glade-gnc-dialogs.c:2435
+msgid "Cleared (c)"
+msgstr "Limpo (c)"
+
+#: src/gnome/glade-gnc-dialogs.c:2442
+msgid "Reconciled (y)"
+msgstr "Reconciliado (y)"
+
+#: src/gnome/glade-gnc-dialogs.c:2470
+msgid "Type of search"
+msgstr "Tipo de busca"
+
+#: src/gnome/glade-gnc-dialogs.c:2484
+msgid "New search"
+msgstr "Nova busca"
+
+#: src/gnome/glade-gnc-dialogs.c:2492
+msgid "Refine current search"
+msgstr "Detalhar busca atual"
+
+#: src/gnome/glade-gnc-dialogs.c:2500
+msgid "Add results to current search"
+msgstr "Adicionar resultados à busca atual"
+
+#: src/gnome/glade-gnc-dialogs.c:2508
+msgid "Delete results from current search"
+msgstr "Apagar resultados da busca atual"
+
+#: src/gnome/glade-gnc-dialogs.c:2590
+msgid "Select Date"
+msgstr "Selecionar data"
+
+#: src/gnome/glade-gnc-dialogs.c:2756
+msgid "Name:"
+msgstr "Nome:"
+
+#: src/gnome/glade-gnc-dialogs.c:2778
+msgid "The name of this budget"
+msgstr "O nome deste orçamento"
+
+#: src/gnome/glade-gnc-dialogs.c:2787
+msgid "Budget Entries"
+msgstr "Entradas de Orçamento"
+
+#: src/gnome/glade-gnc-dialogs.c:2835
+msgid "label773"
+msgstr "label773"
+
+#: src/gnome/glade-gnc-dialogs.c:2859
+msgid "Add"
+msgstr "Adicionar"
+
+#: src/gnome/glade-gnc-dialogs.c:2866
+msgid "Add a new entry or subentry"
+msgstr "Adicionar uma nova entrada ou sub-entrada"
+
+#: src/gnome/glade-gnc-dialogs.c:2875
+msgid "Delete the selected entry or subentry"
+msgstr "Apagar a entrada ou sub-entrada selecionada"
+
+#: src/gnome/glade-gnc-dialogs.c:2890
+msgid "Move the selected item up"
+msgstr "Mover o item selecionado para cima"
+
+#: src/gnome/glade-gnc-dialogs.c:2898
+msgid "Move the selected item down"
+msgstr "Mover o item selecionado para baixo"
+
+#: src/gnome/glade-gnc-dialogs.c:2907
+msgid "Entry"
+msgstr "Entrada"
+
+#: src/gnome/glade-gnc-dialogs.c:2940
+msgid "Type:"
+msgstr "Tipo:"
+
+#: src/gnome/glade-gnc-dialogs.c:2979
+msgid "Normal"
+msgstr "Normal"
+
+#: src/gnome/glade-gnc-dialogs.c:2982
+msgid "No Total"
+msgstr "Sem total"
+
+#: src/gnome/glade-gnc-dialogs.c:2987
+msgid "Matching Transactions..."
+msgstr "Casando Transações..."
+
+#: src/gnome/glade-gnc-dialogs.c:2994
+msgid "Subentry"
+msgstr "Sub-entrada"
+
+#: src/gnome/glade-gnc-dialogs.c:3027
+msgid "Amount:"
+msgstr "Valor:"
+
+#: src/gnome/glade-gnc-dialogs.c:3036
+msgid "Period:"
+msgstr "Período:"
+
+#: src/gnome/glade-gnc-dialogs.c:3045
+msgid "Mechanism:"
+msgstr "Mecanismo:"
+
+#: src/gnome/glade-gnc-dialogs.c:3054
+msgid "Bill Day:"
+msgstr "Dia de pagamento:"
+
+#: src/gnome/glade-gnc-dialogs.c:3063
+msgid "Grace Period:"
+msgstr "Período de Perdão:"
+
+#: src/gnome/glade-gnc-dialogs.c:3117
+msgid "Bill"
+msgstr "Conta"
+
+#: src/gnome/glade-gnc-dialogs.c:3120
+msgid "Recurring"
+msgstr "Recorrente"
+
+#: src/gnome/glade-gnc-dialogs.c:3123
+msgid "Contingency"
+msgstr "Contingência"
+
+#: src/gnome/glade-gnc-dialogs.c:3199
+msgid "window1"
+msgstr "janela1"
+
+#: src/gnome/print-session.c:233
+msgid "You must select a printer first."
+msgstr "Deve-se primeiro selecionar uma impressora."

@@ -851,7 +851,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$host" 1>&6
 
 
-ALL_LINGUAS="de en_GB es fr it ru sv"
+ALL_LINGUAS="da de en_GB es fr it no pt_BR ru sv uk"
 
 # Check whether --enable-shared or --disable-shared was given.
 if test "${enable_shared+set}" = set; then
@@ -5498,7 +5498,7 @@ fi
 ## If there's a better way to tackle this please let me know!
 
 OLDCPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS `$GNOME_CONFIG_BIN --cflags gnome`"
+CPPFLAGS="$CPPFLAGS `$GNOME_CONFIG_BIN --cflags gtk gnome`"
 
 
 # gnome targets if all goes well
@@ -5655,7 +5655,7 @@ cat >> confdefs.h <<\EOF
 EOF
 
 
-GNOMEBUILDLIBS="gnomeui gnome gtkxmhtml xml ${GNOMEBUILDLIBS}"
+GNOMEBUILDLIBS="gnomeui gnome gtkxmhtml gtk xml ${GNOMEBUILDLIBS}"
 
 if test "${GNOME_CONFIG_BIN}"x != GNOME_CONFIG_NOT_FOUNDx
 then
