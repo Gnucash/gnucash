@@ -877,6 +877,12 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
 							   "search_for_active_only",
 							   TRUE));
 
+  /* Figure out if we this object-type has an "active" parameter, and
+   * if not, then set the active-check button insensitive
+   */
+  if (gncQueryObjectGetParameter (sw->search_for, QUERY_PARAM_ACTIVE) == NULL)
+    gtk_widget_set_sensitive (sw->active_only_check, FALSE);
+
   /* Deal with the cancel button */
   sw->cancel_button = glade_xml_get_widget (xml, "cancel_button");
   sw->close_button = glade_xml_get_widget (xml, "close_button");

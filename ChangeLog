@@ -14,6 +14,9 @@
 	* src/gnome-search/dialog-search.c -- add preliminary support to
 	  limit searches to only "active" objects.  Fixes bug #103506
 
+	* src/gnome-search/dialog-search.c -- grey out the button if it
+	  has no meaning for this particular search-type.
+	
 2003-01-13  David Hampton  <hampton@employees.org>
 
 	* src/engine/engine-helpers.c: Make the gnc_scm_to_gint64()
