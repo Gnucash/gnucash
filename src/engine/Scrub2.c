@@ -172,6 +172,7 @@ restart_loop:
               Split * new_split;
               gnc_numeric amt_a, amt_b, amt_tot;
               gnc_numeric val_a, val_b, val_tot;
+              gnc_numeric tmp;
               Transaction *trans;
               Timespec ts;
 
@@ -189,11 +190,19 @@ restart_loop:
                * i.e. so that (amt_a / amt_tot) = (val_a / val_tot)
                */
               val_tot = split->value;
-              val_a = gnc_numeric_mul (amt_a, val_tot, GNC_DENOM_AUTO, GNC_RND_NEVER);
-              val_a = gnc_numeric_div (val_a, amt_tot, gnc_numeric_denom(val_tot), GNC_DENOM_EXACT);
+              val_a = gnc_numeric_mul (amt_a, val_tot, 
+                                GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+              tmp = gnc_numeric_div (val_a, amt_tot, 
+                                gnc_numeric_denom(val_tot), GNC_DENOM_EXACT);
 
+              val_a = tmp;
               val_b = gnc_numeric_sub_fixed (val_tot, val_a);
         
+              PINFO ("split value is = %s = %s + %s", 
+                      gnc_numeric_to_string(val_tot),
+                      gnc_numeric_to_string(val_a),
+                      gnc_numeric_to_string(val_b) );
+
               xaccSplitSetAmount (split, amt_a);
               xaccSplitSetValue (split, val_a);
 
