@@ -2295,7 +2295,7 @@ deleteCB(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
   SplitRegisterStyle style;
-  CursorType cursor_type;
+  CursorClass cursor_class;
   Transaction *trans;
   char *buf = NULL;
   Split *split;
@@ -2311,7 +2311,8 @@ deleteCB(GtkWidget *widget, gpointer data)
 
   trans = xaccSplitGetParent(split);
   style = regData->ledger->ledger->style;
-  cursor_type = xaccSplitRegisterGetCurrentCursorType(regData->ledger->ledger);
+  cursor_class =
+    xaccSplitRegisterGetCurrentCursorClass(regData->ledger->ledger);
 
   /* Deleting the blank split just cancels */
   {
@@ -2324,11 +2325,11 @@ deleteCB(GtkWidget *widget, gpointer data)
     }
   }
 
-  if (cursor_type == CURSOR_NONE)
+  if (cursor_class == CURSOR_NONE)
     return;
 
   /* On a split cursor, just delete the one split. */
-  if (cursor_type == CURSOR_SPLIT)
+  if (cursor_class == CURSOR_SPLIT)
   {
     /* ask for user confirmation before performing permanent damage */
     buf = g_strdup_printf(TRANS_DEL_MSG, xaccSplitGetMemo(split),
@@ -2346,7 +2347,7 @@ deleteCB(GtkWidget *widget, gpointer data)
     return;
   }
 
-  assert(cursor_type == CURSOR_TRANS);
+  assert(cursor_class == CURSOR_TRANS);
 
   /* On a transaction cursor with 2 or fewer splits in single or double
    * mode, we just delete the whole transaction, kerblooie */

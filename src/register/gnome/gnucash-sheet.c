@@ -74,6 +74,18 @@ static guint register_signals[LAST_SIGNAL];
 
 
 void
+gnucash_sheet_set_cursor (GnucashSheet *sheet, CellBlock *cursor,
+                          GNCCursorType cursor_type)
+{
+        g_return_if_fail (sheet != NULL);
+        g_return_if_fail (GNUCASH_IS_SHEET (sheet));
+        g_return_if_fail (cursor_type >= 0);
+        g_return_if_fail (cursor_type < GNUCASH_NUM_CURSORS);
+
+        sheet->cursors[cursor_type] = cursor;
+}
+
+void
 gnucash_register_set_initial_rows(guint num_rows)
 {
         gnucash_register_initial_rows = num_rows;
@@ -704,8 +716,8 @@ gnucash_sheet_destroy (GtkObject *object)
         g_table_destroy (sheet->blocks);
         sheet->blocks = NULL;
 
-        for (i = GNUCASH_CURSOR_HEADER; i < GNUCASH_CURSOR_LAST; i++)
-                gnucash_sheet_style_destroy(sheet, sheet->cursor_style[i]);
+        for (i = GNUCASH_CURSOR_HEADER; i < GNUCASH_NUM_CURSORS; i++)
+                gnucash_sheet_style_destroy(sheet, sheet->cursor_styles[i]);
 
         g_hash_table_destroy (sheet->layout_info_hash_table);
         g_hash_table_destroy (sheet->dimensions_hash_table);        
@@ -765,20 +777,19 @@ compute_optimal_width (GnucashSheet *sheet)
 {
         SheetBlockStyle *style;
 
-        if ((sheet == NULL) || (sheet->cursor_style == NULL))
+        if ((sheet == NULL) ||
+            (sheet->cursor_styles[GNUCASH_CURSOR_HEADER] == NULL))
                 return DEFAULT_REGISTER_WIDTH;
-#if 0
-        if (sheet->default_width >= 0)
-                return sheet->default_width;
-#endif
-        style = sheet->cursor_style[GNUCASH_CURSOR_HEADER];
+
+        if (sheet->window_width >= 0)
+                return sheet->window_width;
+
+        style = sheet->cursor_styles[GNUCASH_CURSOR_HEADER];
 
         if ((style == NULL) || (style->dimensions == NULL))
                 return DEFAULT_REGISTER_WIDTH;
 
-        sheet->default_width = style->dimensions->width;
-
-        return sheet->default_width;
+        return style->dimensions->width;
 }
 
 
@@ -790,22 +801,22 @@ compute_optimal_height (GnucashSheet *sheet)
         CellDimensions *cd;
         gint row_height;
 
-        if (sheet->default_height >= 0)
-                return sheet->default_height;
+        if (sheet->window_height >= 0)
+                return sheet->window_height;
 
-        if ((sheet == NULL) || (sheet->cursor_style == NULL))
+        if ((sheet == NULL) ||
+            (sheet->cursor_styles[GNUCASH_CURSOR_HEADER] == NULL))
                 return DEFAULT_REGISTER_HEIGHT;
 
-        style = sheet->cursor_style[GNUCASH_CURSOR_HEADER];
+        style = sheet->cursor_styles[GNUCASH_CURSOR_HEADER];
 
         cd = gnucash_style_get_cell_dimensions (style, 0, 0);
         if (cd == NULL)
                 return DEFAULT_REGISTER_HEIGHT;
 
         row_height = cd->pixel_height;
-        sheet->default_height = row_height * gnucash_register_initial_rows;
 
-        return sheet->default_height;
+        return row_height * gnucash_register_initial_rows;
 }
 
 
@@ -817,7 +828,6 @@ gnucash_sheet_size_request (GtkWidget *widget, GtkRequisition *requisition)
         requisition->width = compute_optimal_width (sheet);
         requisition->height = compute_optimal_height (sheet);
 }
-
 
 const char *
 gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
@@ -1089,27 +1099,26 @@ static void
 gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 {
         GnucashSheet *sheet = GNUCASH_SHEET(widget);
-        gint i;
 
         if (GTK_WIDGET_CLASS(sheet_parent_class)->size_allocate)
                 (*GTK_WIDGET_CLASS (sheet_parent_class)->size_allocate)
                         (widget, allocation);
 
-        if (allocation->height != sheet->window_height ||
-            allocation->width != sheet->window_width) {
-                sheet->window_height = allocation->height;
-                sheet->window_width = allocation->width;
-                
-                for (i = GNUCASH_CURSOR_HEADER; i < GNUCASH_CURSOR_LAST; i++)
-                        gnucash_sheet_style_set_dimensions(sheet,
-                                                           sheet->cursor_style[i], allocation->width);
-                
-                gnucash_cursor_configure (GNUCASH_CURSOR (sheet->cursor));
-                gnucash_header_reconfigure (GNUCASH_HEADER(sheet->header_item));
-                gnucash_sheet_set_scroll_region (sheet);
-                item_edit_configure (ITEM_EDIT(sheet->item_editor));
-                gnucash_sheet_update_adjustments (sheet);
-        }
+        if (allocation->height == sheet->window_height &&
+            allocation->width == sheet->window_width)
+                return;
+
+        sheet->window_height = allocation->height;
+        sheet->window_width = allocation->width;
+
+        gnucash_sheet_styles_set_dimensions(sheet, allocation->width);
+
+        gnucash_cursor_configure (GNUCASH_CURSOR (sheet->cursor));
+        gnucash_header_reconfigure (GNUCASH_HEADER(sheet->header_item));
+        gnucash_sheet_set_scroll_region (sheet);
+
+        item_edit_configure (ITEM_EDIT(sheet->item_editor));
+        gnucash_sheet_update_adjustments (sheet);
 }
 
 
@@ -2363,8 +2372,8 @@ gnucash_sheet_init (GnucashSheet *sheet)
         sheet->editing = FALSE;
         sheet->button = 0;
         sheet->grabbed = FALSE;
-        sheet->default_width = -1;
-        sheet->default_height = -1;
+        sheet->window_width = -1;
+        sheet->window_height = -1;
         sheet->width = 0;
         sheet->height = 0;
         sheet->smooth_scroll = TRUE;

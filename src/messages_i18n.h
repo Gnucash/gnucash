@@ -712,7 +712,7 @@
 
 /* register sample strings */
 #define DATE_CELL_SAMPLE    _("sample:12/12/2000"+7)
-#define NUM_CELL_SAMPLE     _("sample:999"+7)
+#define NUM_CELL_SAMPLE     _("sample:99999"+7)
 #define ACTN_CELL_SAMPLE    TRANSFER_STR
 #define XFRM_CELL_SAMPLE    _("sample:Expenses:Automobile:Gasoline"+7)
 #define MXFRM_CELL_SAMPLE   XFRM_CELL_SAMPLE
@@ -720,7 +720,7 @@
 #define DESC_CELL_SAMPLE    _("sample:Description of a transaction"+7)
 #define MEMO_CELL_SAMPLE    _("sample:Memo field sample text string"+7)
 #define RECN_CELL_SAMPLE    RECONCILE_ABBREV
-#define DEBT_CELL_SAMPLE    _("sample:99,999.00"+7)
+#define DEBT_CELL_SAMPLE    _("sample:999,999.000"+7)
 #define CRED_CELL_SAMPLE    DEBT_CELL_SAMPLE
 #define NDEBT_CELL_SAMPLE   DEBT_CELL_SAMPLE
 #define NCRED_CELL_SAMPLE   DEBT_CELL_SAMPLE

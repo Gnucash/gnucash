@@ -66,16 +66,16 @@ typedef struct
         int border;
 } CellStyle;
 
-typedef struct _CellLayoutInfo CellLayoutInfo;
 struct _SheetBlockStyle
 {
+        CellBlock * cursor;
+
         gint nrows;
         gint ncols;
 
         gint reg_type;
         gint cursor_type;
 
-        CellLayoutInfo *layout_info;
         BlockDimensions *dimensions;
 
         GTable *cell_styles;
@@ -104,25 +104,17 @@ CellDimensions * gnucash_style_get_cell_dimensions (SheetBlockStyle *style,
 CellStyle * gnucash_style_get_cell_style (SheetBlockStyle *style,
                                           int row, int col);
 
-void gnucash_sheet_style_set_col_width (GnucashSheet *sheet,
-                                        SheetBlockStyle *style,
-                                        int col, int width, int same_size);
+void gnucash_sheet_set_col_width (GnucashSheet *sheet, int col, int width);
 
 gint gnucash_style_row_width(SheetBlockStyle *style, int row);
 
-void gnucash_sheet_style_set_dimensions (GnucashSheet *sheet,
-					 SheetBlockStyle *style, int width);
+void gnucash_sheet_styles_set_dimensions (GnucashSheet *sheet, int width);
 
 void gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style);
 
-SheetBlockStyle * gnucash_sheet_style_compile (GnucashSheet *sheet,
-					       CellBlock *cellblock,
-                                               gint cursor_type);
+void gnucash_sheet_compile_styles (GnucashSheet *sheet);
 
-void gnucash_sheet_style_recompile (SheetBlockStyle *style,
-                                    CellBlock *cellblock,
-                                    SplitRegister *sr,
-                                    gint cursor_type);
+void gnucash_sheet_styles_recompile (GnucashSheet *sheet);
 
 SheetBlockStyle *gnucash_sheet_get_style (GnucashSheet *sheet,
                                           VirtualCellLocation vcell_loc);

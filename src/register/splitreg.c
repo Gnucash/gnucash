@@ -294,29 +294,32 @@ configAction (SplitRegister *reg)
 
 /* ============================================== */
 
-#define SET(NAME,col,row,handler)			    \
-{							    \
-   BasicCell *hcell;					    \
-   hcell = reg->header_label_cells[NAME##_CELL];	    \
-							    \
-   if ((0<=row) && (0<=col)) {				    \
-      CellBlockCell *cb_cell;                               \
-                                                            \
-      cb_cell = gnc_cellblock_get_cell (curs, row, col);    \
-                                                            \
-      cb_cell->cell = (handler);			    \
-      cb_cell->cell_type = NAME##_CELL;                     \
-      cb_cell->sample_text = g_strdup (NAME##_CELL_SAMPLE); \
-      cb_cell->alignment = NAME##_CELL_ALIGN;		    \
-      cb_cell->resizable = (cb_cell->cell !=                \
-                            (BasicCell *) reg->recnCell);   \
-                                                            \
-      cb_cell = gnc_cellblock_get_cell (header, row, col);  \
-      if (cb_cell) {                                        \
-        cb_cell->alignment = NAME##_CELL_ALIGN;		    \
-        cb_cell->cell = hcell;			            \
-      }							    \
-   }                                                        \
+#define SET(NAME,col,row,handler)			      \
+{							      \
+   BasicCell *hcell;					      \
+   hcell = reg->header_label_cells[NAME##_CELL];	      \
+							      \
+   if ((0<=row) && (0<=col)) {				      \
+      CellBlockCell *cb_cell;                                 \
+                                                              \
+      cb_cell = gnc_cellblock_get_cell (curs, row, col);      \
+                                                              \
+      cb_cell->cell = (handler);			      \
+      cb_cell->cell_type = NAME##_CELL;                       \
+      cb_cell->sample_text = g_strdup (NAME##_CELL_SAMPLE);   \
+      cb_cell->alignment = NAME##_CELL_ALIGN;		      \
+      cb_cell->expandable = ((handler) == (BasicCell *) reg->descCell);     \
+      cb_cell->span = ((handler) == (BasicCell *) reg->memoCell);     \
+                                                              \
+      cb_cell = gnc_cellblock_get_cell (header, row, col);    \
+      if (cb_cell) {                                          \
+        cb_cell->cell = hcell;			              \
+        cb_cell->sample_text = g_strdup (NAME##_CELL_SAMPLE); \
+        cb_cell->alignment = NAME##_CELL_ALIGN;		      \
+        cb_cell->expandable = ((handler) == (BasicCell *) reg->descCell);   \
+        cb_cell->span = ((handler) == (BasicCell *) reg->memoCell);   \
+      }							      \
+   }                                                          \
 }
 
 /* SET_CELL macro initializes cells in the register */
@@ -1333,8 +1336,8 @@ xaccSplitRegisterClearChangeFlag (SplitRegister *reg)
 
 /* ============================================== */
 
-static CursorType
-sr_cellblock_cursor_type(SplitRegister *reg, CellBlock *cursor)
+static CursorClass
+sr_cellblock_cursor_class(SplitRegister *reg, CellBlock *cursor)
 {
   if (cursor == NULL)
     return CURSOR_NONE;
@@ -1352,8 +1355,8 @@ sr_cellblock_cursor_type(SplitRegister *reg, CellBlock *cursor)
 
 /* ============================================== */
 
-CursorType
-xaccSplitRegisterGetCurrentCursorType (SplitRegister *reg)
+CursorClass
+xaccSplitRegisterGetCurrentCursorClass (SplitRegister *reg)
 {
   Table *table;
 
@@ -1364,14 +1367,14 @@ xaccSplitRegisterGetCurrentCursorType (SplitRegister *reg)
   if (table == NULL)
     return CURSOR_NONE;
 
-  return sr_cellblock_cursor_type(reg, table->current_cursor);
+  return sr_cellblock_cursor_class(reg, table->current_cursor);
 }
 
 /* ============================================== */
 
-CursorType
-xaccSplitRegisterGetCursorType (SplitRegister *reg,
-                                VirtualCellLocation vcell_loc)
+CursorClass
+xaccSplitRegisterGetCursorClass (SplitRegister *reg,
+                                 VirtualCellLocation vcell_loc)
 {
   VirtualCell *vcell;
   Table *table;
@@ -1387,7 +1390,7 @@ xaccSplitRegisterGetCursorType (SplitRegister *reg,
   if (vcell == NULL)
     return CURSOR_NONE;
 
-  return sr_cellblock_cursor_type(reg, vcell->cellblock);
+  return sr_cellblock_cursor_class(reg, vcell->cellblock);
 }
 
 /* ============================================== */

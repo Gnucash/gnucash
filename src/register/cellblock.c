@@ -61,7 +61,8 @@ gnc_cellblock_cell_new (void)
 
   cb_cell->cell_type = -1;
   cb_cell->alignment = CELL_ALIGN_LEFT;
-  cb_cell->resizable = TRUE;
+  cb_cell->expandable = FALSE;
+  cb_cell->span = FALSE;
 
   return cb_cell;
 }

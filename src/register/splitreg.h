@@ -152,7 +152,7 @@ typedef enum
   CURSOR_SPLIT,
   CURSOR_TRANS,
   CURSOR_NONE
-} CursorType;
+} CursorClass;
 
 /* The value of NUM_CELLS should be larger than the number of 
  * cells defined in the structure below!
@@ -270,10 +270,10 @@ guint32         xaccSplitRegisterGetChangeFlag (SplitRegister *reg);
 void            xaccSplitRegisterClearChangeFlag (SplitRegister *reg);
 
 /* Returns the type of the current cursor */
-CursorType      xaccSplitRegisterGetCurrentCursorType (SplitRegister *reg);
+CursorClass     xaccSplitRegisterGetCurrentCursorClass (SplitRegister *reg);
 
 /* Returns the type of the cursor at the given virtual row and column. */
-CursorType      xaccSplitRegisterGetCursorType (SplitRegister *reg,
+CursorClass    xaccSplitRegisterGetCursorClass (SplitRegister *reg,
                                                 VirtualCellLocation vcell_loc);
 
 /* Returns the type of the current cell */

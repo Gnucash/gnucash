@@ -198,7 +198,7 @@ static char account_separator = ':';
 static SRReverseBalanceCallback reverse_balance = NULL;
 
 /* The copied split or transaction, if any */
-static CursorType copied_type = CURSOR_NONE;
+static CursorClass copied_class = CURSOR_NONE;
 static SCM copied_item = SCM_UNDEFINED;
 static GUID copied_leader_guid;
 
@@ -814,7 +814,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
   PhysicalLocation new_phys_loc;
-  CursorType cursor_type;
+  CursorClass cursor_class;
   CellType cell_type;
   Transaction *trans;
   guint32 changed;
@@ -830,11 +830,11 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
   if (trans == NULL)
     return;
 
-  cursor_type = xaccSplitRegisterGetCurrentCursorType(reg);
+  cursor_class = xaccSplitRegisterGetCurrentCursorClass(reg);
   cell_type = xaccSplitRegisterGetCurrentCellType(reg);
   changed = xaccSplitRegisterGetChangeFlag(reg);
 
-  switch (cursor_type)
+  switch (cursor_class)
   {
     case CURSOR_TRANS: {
       Transaction *auto_trans;
@@ -1278,7 +1278,7 @@ xaccSRGetTrans (SplitRegister *reg, PhysicalLocation phys_loc)
 static Split *
 xaccSRGetTransSplit (SplitRegister *reg, PhysicalLocation phys_loc)
 {
-  CursorType cursor_type;
+  CursorClass cursor_class;
   VirtualCellLocation vcell_loc;
   PhysicalCell *pcell;
 
@@ -1293,9 +1293,9 @@ xaccSRGetTransSplit (SplitRegister *reg, PhysicalLocation phys_loc)
 
   while (TRUE)
   {
-    cursor_type = xaccSplitRegisterGetCursorType (reg, vcell_loc);
+    cursor_class = xaccSplitRegisterGetCursorClass (reg, vcell_loc);
 
-    if (cursor_type == CURSOR_TRANS)
+    if (cursor_class == CURSOR_TRANS)
       return gnc_table_get_user_data_virtual (reg->table, vcell_loc);
 
     vcell_loc.virt_row --;
@@ -1314,7 +1314,7 @@ xaccSRGetCurrentTransSplit (SplitRegister *reg)
 {
   Split *split;
   PhysicalCell *pcell;
-  CursorType cursor_type;
+  CursorClass cursor_class;
   PhysicalLocation phys_loc;
   VirtualCellLocation vcell_loc;
 
@@ -1322,8 +1322,8 @@ xaccSRGetCurrentTransSplit (SplitRegister *reg)
     return NULL;
 
   split = xaccSRGetCurrentSplit (reg);
-  cursor_type = xaccSplitRegisterGetCurrentCursorType (reg);
-  if (cursor_type == CURSOR_TRANS)
+  cursor_class = xaccSplitRegisterGetCurrentCursorClass (reg);
+  if (cursor_class == CURSOR_TRANS)
     return split;
 
   /* Split is not associated with a transaction cursor. Assume it is a
@@ -1346,9 +1346,9 @@ xaccSRGetCurrentTransSplit (SplitRegister *reg)
       return NULL;
     }
 
-    cursor_type = xaccSplitRegisterGetCursorType (reg, vcell_loc);
+    cursor_class = xaccSplitRegisterGetCursorClass (reg, vcell_loc);
 
-    if (cursor_type == CURSOR_TRANS)
+    if (cursor_class == CURSOR_TRANS)
       return gnc_table_get_user_data_virtual (reg->table, vcell_loc);
   }
 }
@@ -1459,7 +1459,7 @@ xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
                              VirtualLocation *virt_loc)
 {
   VirtualLocation v_loc;
-  CursorType cursor_type;
+  CursorClass cursor_class;
   PhysicalLocation p_loc;
   PhysicalCell *pcell;
   CellType cell_type;
@@ -1468,13 +1468,13 @@ xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
   if (!xaccSRGetSplitVirtLoc (reg, split, &v_loc.vcell_loc))
     return FALSE;
 
-  cursor_type = xaccSplitRegisterGetCursorType (reg, v_loc.vcell_loc);
+  cursor_class = xaccSplitRegisterGetCursorClass (reg, v_loc.vcell_loc);
 
   value = xaccSplitGetValue (split);
   if (DEQ (value, 0.0))
     value = 0.0;
 
-  switch (cursor_type)
+  switch (cursor_class)
   {
     case CURSOR_TRANS:
       cell_type = (value >= 0.0) ? DEBT_CELL : CRED_CELL;
@@ -1513,7 +1513,7 @@ xaccSRGetTransSplitVirtLoc (SplitRegister *reg, Transaction *trans,
   gboolean found_trans = FALSE;
   gboolean found_trans_split = FALSE;
   gboolean found_something = FALSE;
-  CursorType cursor_type;
+  CursorClass cursor_class;
   int v_row, v_col;
   Transaction *t;
   Split *s;
@@ -1526,12 +1526,12 @@ xaccSRGetTransSplitVirtLoc (SplitRegister *reg, Transaction *trans,
       s = gnc_table_get_user_data_virtual (table, vc_loc);
       t = xaccSplitGetParent(s);
 
-      cursor_type = xaccSplitRegisterGetCursorType(reg, vc_loc);
+      cursor_class = xaccSplitRegisterGetCursorClass(reg, vc_loc);
 
       if (t == trans)
         found_trans = TRUE;
 
-      if ((cursor_type == CURSOR_TRANS) && (s == trans_split))
+      if ((cursor_class == CURSOR_TRANS) && (s == trans_split))
         found_trans_split = TRUE;
 
       if (found_trans && (s == split))
@@ -1561,7 +1561,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 {
   SRInfo *info = xaccSRGetInfo(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
-  CursorType cursor_type;
+  CursorClass cursor_class;
   Transaction *trans;
   Split *return_split;
   Split *trans_split;
@@ -1576,14 +1576,14 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   if (trans == NULL)
     return NULL;
 
-  cursor_type = xaccSplitRegisterGetCurrentCursorType(reg);
+  cursor_class = xaccSplitRegisterGetCurrentCursorClass (reg);
 
   /* Can't do anything with this. */
-  if (cursor_type == CURSOR_NONE)
+  if (cursor_class == CURSOR_NONE)
     return NULL;
 
   /* This shouldn't happen, but be paranoid. */
-  if ((split == NULL) && (cursor_type == CURSOR_TRANS))
+  if ((split == NULL) && (cursor_class == CURSOR_TRANS))
     return NULL;
 
   changed = xaccSplitRegisterGetChangeFlag(reg);
@@ -1618,7 +1618,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 
   /* Ok, we are now ready to make the copy. */
 
-  if (cursor_type == CURSOR_SPLIT)
+  if (cursor_class == CURSOR_SPLIT)
   {
     Split *new_split;
 
@@ -1686,7 +1686,7 @@ xaccSRCopyCurrent (SplitRegister *reg)
 {
   SRInfo *info = xaccSRGetInfo(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
-  CursorType cursor_type;
+  CursorClass cursor_class;
   Transaction *trans;
   guint32 changed;
   Split *split;
@@ -1699,14 +1699,14 @@ xaccSRCopyCurrent (SplitRegister *reg)
   if (trans == NULL)
     return;
 
-  cursor_type = xaccSplitRegisterGetCurrentCursorType(reg);
+  cursor_class = xaccSplitRegisterGetCurrentCursorClass (reg);
 
   /* Can't do anything with this. */
-  if (cursor_type == CURSOR_NONE)
+  if (cursor_class == CURSOR_NONE)
     return;
 
   /* This shouldn't happen, but be paranoid. */
-  if ((split == NULL) && (cursor_type == CURSOR_TRANS))
+  if ((split == NULL) && (cursor_class == CURSOR_TRANS))
     return;
 
   changed = xaccSplitRegisterGetChangeFlag(reg);
@@ -1717,7 +1717,7 @@ xaccSRCopyCurrent (SplitRegister *reg)
 
   /* Ok, we are now ready to make the copy. */
 
-  if (cursor_type == CURSOR_SPLIT)
+  if (cursor_class == CURSOR_SPLIT)
   {
     /* We are on a split in an expanded transaction. Just copy the split. */
     new_item = gnc_copy_split(split);
@@ -1765,7 +1765,7 @@ xaccSRCopyCurrent (SplitRegister *reg)
   copied_item = new_item;
   scm_protect_object(copied_item);
 
-  copied_type = cursor_type;
+  copied_class = cursor_class;
 }
 
 /* ======================================================== */
@@ -1775,7 +1775,7 @@ xaccSRCutCurrent (SplitRegister *reg)
 {
   SRInfo *info = xaccSRGetInfo(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
-  CursorType cursor_type;
+  CursorClass cursor_class;
   Transaction *trans;
   guint32 changed;
   Split *split;
@@ -1787,14 +1787,14 @@ xaccSRCutCurrent (SplitRegister *reg)
   if (trans == NULL)
     return;
 
-  cursor_type = xaccSplitRegisterGetCurrentCursorType(reg);
+  cursor_class = xaccSplitRegisterGetCurrentCursorClass (reg);
 
   /* Can't do anything with this. */
-  if (cursor_type == CURSOR_NONE)
+  if (cursor_class == CURSOR_NONE)
     return;
 
   /* This shouldn't happen, but be paranoid. */
-  if ((split == NULL) && (cursor_type == CURSOR_TRANS))
+  if ((split == NULL) && (cursor_class == CURSOR_TRANS))
     return;
 
   changed = xaccSplitRegisterGetChangeFlag(reg);
@@ -1805,7 +1805,7 @@ xaccSRCutCurrent (SplitRegister *reg)
 
   xaccSRCopyCurrent(reg);
 
-  if (cursor_type == CURSOR_SPLIT)
+  if (cursor_class == CURSOR_SPLIT)
     xaccSRDeleteCurrentSplit(reg);
   else
     xaccSRDeleteCurrentTrans(reg);
@@ -1819,12 +1819,12 @@ xaccSRPasteCurrent (SplitRegister *reg)
   SRInfo *info = xaccSRGetInfo(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   GList *accounts = NULL;
-  CursorType cursor_type;
+  CursorClass cursor_class;
   Transaction *trans;
   Split *trans_split;
   Split *split;
 
-  if (copied_type == CURSOR_NONE)
+  if (copied_class == CURSOR_NONE)
     return;
 
   split = xaccSRGetCurrentSplit(reg);
@@ -1836,18 +1836,18 @@ xaccSRPasteCurrent (SplitRegister *reg)
   if (trans == NULL)
     return;
 
-  cursor_type = xaccSplitRegisterGetCurrentCursorType(reg);
+  cursor_class = xaccSplitRegisterGetCurrentCursorClass (reg);
 
   /* Can't do anything with this. */
-  if (cursor_type == CURSOR_NONE)
+  if (cursor_class == CURSOR_NONE)
     return;
 
   /* This shouldn't happen, but be paranoid. */
-  if ((split == NULL) && (cursor_type == CURSOR_TRANS))
+  if ((split == NULL) && (cursor_class == CURSOR_TRANS))
     return;
 
-  if (cursor_type == CURSOR_SPLIT) {
-    if (copied_type == CURSOR_TRANS)
+  if (cursor_class == CURSOR_SPLIT) {
+    if (copied_class == CURSOR_TRANS)
       return;
 
     accounts = gnc_trans_prepend_account_list(trans, NULL);
@@ -1869,7 +1869,7 @@ xaccSRPasteCurrent (SplitRegister *reg)
     int split_index;
     int num_splits;
 
-    if (copied_type == CURSOR_SPLIT)
+    if (copied_class == CURSOR_SPLIT)
       return;
 
     accounts = gnc_trans_prepend_account_list(trans, NULL);

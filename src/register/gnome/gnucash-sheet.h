@@ -42,14 +42,15 @@
 #define GNUCASH_IS_SHEET(o)    (GTK_CHECK_TYPE((o), GNUCASH_TYPE_SHEET))
 
 
-enum {
+typedef enum
+{
         GNUCASH_CURSOR_HEADER = 0,
         GNUCASH_CURSOR_SINGLE,
         GNUCASH_CURSOR_DOUBLE,
         GNUCASH_CURSOR_TRANS,
         GNUCASH_CURSOR_SPLIT,
-        GNUCASH_CURSOR_LAST,
-};
+        GNUCASH_NUM_CURSORS
+} GNCCursorType;
 
 
 typedef enum {
@@ -98,7 +99,8 @@ typedef struct {
         GnomeCanvasItem *cursor;
         GnomeCanvasItem *grid;
 
-        SheetBlockStyle *cursor_style[GNUCASH_CURSOR_LAST];
+        CellBlock *cursors[GNUCASH_NUM_CURSORS];
+        SheetBlockStyle *cursor_styles[GNUCASH_NUM_CURSORS];
 
         /* some style information associated to a sheet */
         GHashTable *layout_info_hash_table;
@@ -206,6 +208,9 @@ void gnucash_sheet_block_pixel_origin (GnucashSheet *sheet,
 
 void gnucash_sheet_make_cell_visible (GnucashSheet *sheet,
                                       VirtualLocation virt_loc);
+
+void gnucash_sheet_set_cursor (GnucashSheet *sheet, CellBlock *cursor,
+                               GNCCursorType cursor_type);
 
 void gnucash_sheet_update_adjustments (GnucashSheet *sheet);
 

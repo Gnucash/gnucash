@@ -73,7 +73,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         GdkFont *font;
         CellStyle *cs;
 
-        header_style = header->sheet->cursor_style[GNUCASH_CURSOR_HEADER];
+        header_style = header->sheet->cursor_styles[GNUCASH_CURSOR_HEADER];
 
         cs = gnucash_style_get_cell_style (header_style, 0, 0);
 
@@ -237,13 +237,13 @@ gnucash_header_reconfigure (GnucashHeader *header)
 
         g_return_if_fail (header != NULL);
         g_return_if_fail (GNUCASH_IS_HEADER (header));
-        
+
         canvas = GNOME_CANVAS_ITEM(header)->canvas;
         widget = GTK_WIDGET (header->sheet);
         sheet = GNUCASH_SHEET(header->sheet);
         old_style = header->style;
 
-        header->style = header->sheet->cursor_style[header->type];
+        header->style = header->sheet->cursor_styles[header->type];
 
         if (header->style == NULL)
                 return;
@@ -255,7 +255,7 @@ gnucash_header_reconfigure (GnucashHeader *header)
 
         sheet->width = header->style->dimensions->width;
 
-        w = MAX (widget->allocation.width, header->style->dimensions->width);
+        w = header->style->dimensions->width;
         h = header->style->dimensions->height;
 
         if (header->height != h || header->width != w ||
@@ -265,12 +265,12 @@ gnucash_header_reconfigure (GnucashHeader *header)
 
                 gnome_canvas_set_scroll_region(GNOME_CANVAS(canvas),
 					       0, 0, w, h);
+
                 gtk_widget_set_usize (GTK_WIDGET(canvas), -1, h);
 
                 gnucash_header_request_redraw (header);
         }
 }
-
 
 static double
 gnucash_header_point (GnomeCanvasItem *item,
@@ -346,17 +346,17 @@ gnucash_header_auto_resize_column (GnucashHeader *header, gint col)
 
         int width = gnucash_sheet_col_max_width (sheet, 0, col);
 
-        gnucash_sheet_style_set_col_width (sheet, header->style,
-                                           col, width, FALSE);
-
-        gtk_window_set_default_size(GTK_WINDOW(sheet->window), 0, 0); 
+        gnucash_sheet_set_col_width (sheet, col, width);
 
         gnucash_cursor_configure (GNUCASH_CURSOR(sheet->cursor));
         item_edit_configure (ITEM_EDIT(sheet->item_editor));
 
         gnucash_sheet_update_adjustments (sheet);
 
-        gnucash_header_request_redraw (header);
+        gnucash_header_reconfigure (header);
+        gnucash_sheet_set_scroll_region (sheet);
+        gnucash_sheet_update_adjustments (sheet);
+
         gnucash_sheet_redraw_all (sheet);
 }
 
@@ -453,18 +453,18 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
                                                           event->button.time);
                                 header->needs_ungrab = FALSE;
 
-                                gnucash_sheet_style_set_col_width (sheet,
-                                                                   header->style,
-                                                                   header->resize_col, header->resize_col_width, FALSE);
+                                gnucash_sheet_set_col_width (sheet,
+                                                             header->resize_col, header->resize_col_width);
 
                                 gtk_window_set_default_size(GTK_WINDOW(sheet->window), 0, 0);
 
                                 gnucash_cursor_configure (GNUCASH_CURSOR(sheet->cursor));
                                 item_edit_configure (ITEM_EDIT(sheet->item_editor));
 
+                                gnucash_header_reconfigure (header);
+                                gnucash_sheet_set_scroll_region (sheet);
                                 gnucash_sheet_update_adjustments (sheet);
 
-                                gnucash_header_request_redraw (header);
                                 gnucash_sheet_redraw_all (sheet);
                         }
                         header->in_resize = FALSE;
@@ -494,7 +494,8 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
                         header->in_resize = FALSE;
                         header->resize_col = -1;
                         if (header->needs_ungrab) {
-                                gnome_canvas_item_ungrab (item, event->button.time);
+                                gnome_canvas_item_ungrab (item,
+                                                          event->button.time);
                                 header->needs_ungrab = FALSE;
                         }
 
@@ -616,7 +617,7 @@ static void
 gnucash_header_realized (GtkWidget *widget, gpointer data)
 {
        	gdk_window_set_back_pixmap (GTK_LAYOUT (widget)->bin_window,
-				    NULL, FALSE);
+                                    NULL, FALSE);
 }
 
 
@@ -645,6 +646,7 @@ gnucash_header_new (GnucashSheet *sheet)
         sheet->header_item = item;
 
         gtk_widget_show (canvas);
+
         return canvas;
 }
 

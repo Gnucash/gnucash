@@ -78,9 +78,10 @@ typedef struct
   short cell_type; /* cell type from splitreg.h */
 
   /* GUI layout information */
-  char *sample_text; /* sample text for sizing purposes */
+  char *sample_text;       /* sample text for sizing purposes */
   CellAlignment alignment;
-  gboolean resizable;
+  gboolean expandable;     /* can fill with extra space */
+  gboolean span;           /* can span multiple columns */
 } CellBlockCell;
 
 typedef struct
