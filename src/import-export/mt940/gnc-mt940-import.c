@@ -62,12 +62,6 @@ static void *trans_importer_cb (const HBCI_Transaction *h_trans,
  * Entry point
 \********************************************************************/
 
-SCM  scm_gnc_file_mt940_import ()
-{
-  gnc_file_mt940_import();
-  return SCM_EOL;
-}
-
 void gnc_file_mt940_import (void)
 {
   char *selected_filename;

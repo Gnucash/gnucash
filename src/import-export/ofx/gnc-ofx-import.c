@@ -62,12 +62,6 @@ static short module = MOD_IMPORT;
  * Entry point
 \********************************************************************/
 
-SCM  scm_gnc_file_ofx_import ()
-{
-  gnc_file_ofx_import();
-  return SCM_EOL;
-}
-
 /* CS: Store the reference to the created importer gui so that the
    ofx_proc_transaction_cb can use it. */
 GNCImportMainMatcher *gnc_ofx_importer_gui = NULL;

@@ -5,10 +5,12 @@ pkglib_LTLIBRARIES=libgncmod-mt940.la
 
 libgncmod_mt940_la_SOURCES = \
   gnc-mt940-import.c \
-  gncmod-mt940-import.c
+  gncmod-mt940-import.c \
+  gnc-plugin-mt940.c
 
 noinst_HEADERS = \
-  gnc-mt940-import.h
+  gnc-mt940-import.h \
+  gnc-plugin-mt940.h
 
 libgncmod_mt940_la_LDFLAGS = -module
 
@@ -16,15 +18,12 @@ libgncmod_mt940_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
+  ${top_builddir}/lib/egg/libegg.la \
   ${GLIB_LIBS} \
   $(HBCI_LIBS)
 
-gncscmdir = ${GNC_SCM_INSTALL_DIR}/mt940
-
-gncscm_DATA = \
-	mt940-import.scm
-
 AM_CFLAGS = \
+  -I${top_srcdir}/lib/egg \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
@@ -41,8 +40,9 @@ AM_CFLAGS = \
   ${GTKHTML_CFLAGS} \
   $(HBCI_CFLAGS)
 
-EXTRA_DIST = \
-  .cvsignore \
-  ${gncscm_DATA}
+uidir = $(GNC_UI_DIR)
+ui_DATA = \
+	gnc-plugin-mt940-ui.xml
 
-CLEANFILES = mt940 import-export gnucash g-wrapped .scm-links
+EXTRA_DIST = \
+  .cvsignore

@@ -93,4 +93,4 @@ ui_DATA = \
 
 EXTRA_DIST = ${gncscm_DATA} ${libgncmod_hbci_la_empty}
 
-CLEANFILES = hbci import-export gnucash g-wrapped .scm-links
+CLEANFILES = gnucash g-wrapped .scm-links

@@ -5,6 +5,35 @@
 	modal form of the edit account dialog.  Make AccountWindow an
 	internal data structure. No-one uses it anyway.
 
+	* src/gnome-utils/gnc-icons.c: Register our icons as stock icons.
+
+	* src/gnc-ui.h:
+	* src/gnome/dialog-commodities.c:
+	* src/gnome-utils/commodity.glade:
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome-utils/dialog-commodity.c: The GNC_RESPONSE_xxx names
+	should match the GNC_STOCK_xxx names.
+
+	* src/gnome-utils/gnc-tree-view-account.[ch]: Function to add a
+	new column to an account tree to display kvp data.
+
+	* src/import-export/generic-import.glade:
+	* src/import-export/qif-import/qif.glade: Put back the GtkCLists
+	that the glade upgrade tool removed.  Update for gtk2 dialogs.
+
+	* src/import-export/import-account-matcher.c: Use the account tree widget. Update for
+	gtk2 dialogs.
+
+	* src/import-export/import-format-dialog.c:
+	* src/import-export/import-main-matcher.c:
+	* src/import-export/import-match-picker.c: 
+	* src/import-export/qif-import/dialog-account-picker.c: Update for
+	gtk2 dialogs.
+
+	* src/import-export/mt940:
+	* src/import-export/ofx: Install menus using the new plugin
+	system.  Cleanup some gnome2 errors.
+
 2003-10-24  David Hampton  <hampton@employees.org>
 
 	* lots of files: Sync up at the gnome2-merge-4 tag.

@@ -49,7 +49,8 @@ row_data_destroy_cb(gpointer data) {
 
 static void
 acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
-                    char * base_name, int *row) {
+                    char * base_name, int *row)
+{
   char         * acctinfo[2];
   char         * acctname;
   char         sep[2] = " ";
@@ -105,18 +106,21 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
 }
 
 static gint
-test_str_cmp(gconstpointer a, gconstpointer b) {
+test_str_cmp(gconstpointer a, gconstpointer b)
+{
   return strcmp(a, b);
 }
 
 static void
-build_acct_tree(QIFAccountPickerDialog * picker, QIFImportWindow * import) {
+build_acct_tree(QIFAccountPickerDialog * picker, QIFImportWindow * import)
+{
   SCM  get_accts = scm_c_eval_string("qif-import:get-all-accts");
   SCM  acct_tree = scm_call_1(get_accts, 
 			      gnc_ui_qif_import_druid_get_mappings(import));
   GtkCTreeNode * new_sel;
   int row = 0;
 
+  gtk_clist_freeze(GTK_CLIST(picker->treeview));
   gtk_clist_clear(GTK_CLIST(picker->treeview));
   gtk_clist_set_column_justification (GTK_CLIST(picker->treeview),
                                       1, GTK_JUSTIFY_CENTER);
@@ -138,38 +142,35 @@ build_acct_tree(QIFAccountPickerDialog * picker, QIFImportWindow * import) {
 
   gtk_clist_columns_autosize (GTK_CLIST (picker->treeview));
   gtk_clist_column_titles_passive (GTK_CLIST (picker->treeview));
+  gtk_clist_thaw(GTK_CLIST(picker->treeview));
 }
 
 static void
-new_child_string_cb(char * string, gpointer data) {
-  if(string) {
-    strncpy(data, string, 250);
-  }
-  else {
-    *(char *)data = 0;
-  }
-}
-
-static void
-gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data) {
+gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
+{
   QIFAccountPickerDialog * wind = user_data;
   SCM name_setter = scm_c_eval_string("qif-map-entry:set-gnc-name!");
-  char name[251] = "";
+  const char *name;
   char sep[2] = " ";
-  int  retval    = -1;
-  char * fullname = NULL;
+  int  response;
+  char * fullname;
+  GtkWidget *dlg, *entry;
 
-  GtkWidget * dlg = gnome_request_dialog(FALSE, 
-                                         _("Enter a name for the account"), 
-                                         "", 250,
-                                         &new_child_string_cb, &name[0],
-                                         NULL);
-  retval = gnome_dialog_run_and_close(GNOME_DIALOG(dlg));
-  sep[0] = gnc_get_account_separator();
+  dlg = gtk_message_dialog_new (GTK_WINDOW(wind->dialog),
+				GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_MESSAGE_QUESTION,
+				GTK_BUTTONS_OK_CANCEL,
+				_("Enter a name for the account"));
 
-  /* retval is 0 if the 'ok' button was clicked */
-  if(retval == 0) {
+  entry = gtk_entry_new_with_max_length (250);
+  gtk_widget_show(entry);
+  gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dlg)->vbox), entry);
+
+  response = gtk_dialog_run(GTK_DIALOG(dlg));
+  if (response == GTK_RESPONSE_OK) {
+    name = gtk_entry_get_text(GTK_ENTRY(entry));
     if(wind->selected_name && (strlen(wind->selected_name) > 0)) {
+      sep[0] = gnc_get_account_separator();
       fullname = g_strjoin(sep, wind->selected_name, name, NULL);
     }
     else {
@@ -179,6 +180,7 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data) {
     scm_call_2(name_setter, wind->map_entry, scm_makfrom0str(fullname));
     g_free(fullname);
   }
+  gtk_widget_destroy(dlg);
 
   build_acct_tree(wind, wind->qif_wind);
 
@@ -188,7 +190,8 @@ static void
 gnc_ui_qif_account_picker_select_cb(GtkCTree   * tree,
                                     GtkCTreeNode  * node,
                                     gint column,
-                                    gpointer  user_data) {
+                                    gpointer  user_data)
+{
   QIFAccountPickerDialog * wind = user_data;
   SCM name_setter = scm_c_eval_string("qif-map-entry:set-gnc-name!");
 
@@ -204,7 +207,8 @@ static void
 gnc_ui_qif_account_picker_unselect_cb(GtkCTree   * tree,
                                       GtkCTreeNode  * node,
                                       gint column,
-                                      gpointer  user_data) {
+                                      gpointer  user_data)
+{
   QIFAccountPickerDialog * wind = user_data;
 
   g_free(wind->selected_name);
@@ -213,7 +217,8 @@ gnc_ui_qif_account_picker_unselect_cb(GtkCTree   * tree,
 
 
 static int
-gnc_ui_qif_account_picker_map_cb(GtkWidget * w, gpointer user_data) {
+gnc_ui_qif_account_picker_map_cb(GtkWidget * w, gpointer user_data)
+{
   QIFAccountPickerDialog * wind = user_data;
 
   /* update the tree display with all the existing accounts plus all
@@ -232,14 +237,16 @@ gnc_ui_qif_account_picker_map_cb(GtkWidget * w, gpointer user_data) {
  ****************************************************************/
 
 SCM
-qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry) {  
+qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
+{  
   QIFAccountPickerDialog * wind;
   SCM save_entry   = scm_c_eval_string("qif-map-entry:clone");
   SCM init_pick    = scm_c_eval_string("qif-map-entry:gnc-name");
   SCM saved_entry  = scm_call_1(save_entry, map_entry);
-  int retval = -1;
+  int response;
   char * scmname;
   GladeXML *xml;
+  GtkWidget *button;
 
   wind = g_new0(QIFAccountPickerDialog, 1);
 
@@ -273,17 +280,24 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry) {
                            GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_map_cb),
                            wind);
   
+  button = glade_xml_get_widget (xml, "newbutton");
+  gtk_button_set_use_stock(GTK_BUTTON(button), TRUE);
+  printf("account picker is %p\n", wind->dialog);
+
   /* this is to get the checkmarks set up right.. it will get called 
    * again after the window is mapped. */
   build_acct_tree(wind, wind->qif_wind);
 
-  retval = gnome_dialog_run_and_close(GNOME_DIALOG(wind->dialog));  
-  
+  do {
+    response = gtk_dialog_run(GTK_DIALOG(wind->dialog));
+  } while (response == GNC_RESPONSE_NEW);
+  gtk_widget_destroy(wind->dialog);
+
   scm_unprotect_object(wind->map_entry);
   g_free(wind->selected_name);
   g_free(wind);
 
-  if(retval == 0) {
+  if (response == GTK_RESPONSE_OK) {
     return map_entry;
   }
   else {

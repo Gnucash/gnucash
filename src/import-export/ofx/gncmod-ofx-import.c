@@ -25,12 +25,11 @@
  */
 #include "config.h"
 #include <glib.h>
-#include <libguile.h>
-#include "guile-mappings.h"
 
 #include "gnc-ofx-import.h"
 #include "gnc-module.h"
 #include "gnc-module-api.h"
+#include "gnc-plugin-ofx.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_ofx_LTX_gnc_module_system_interface = 0;
@@ -79,8 +78,10 @@ libgncmod_ofx_LTX_gnc_module_init(int refcount)
   {
     return FALSE;
   }
-    scm_c_eval_string("(load-from-path \"ofx/ofx-import.scm\")");
-    scm_c_define_gsubr("gnc:ofx-import", 0, 0, 0, scm_gnc_file_ofx_import);
+
+  /* Add menu items with C callbacks */
+  gnc_plugin_ofx_create_plugin();
+  
   return TRUE;
 }
 

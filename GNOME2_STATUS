@@ -28,6 +28,10 @@ Transfer
 View Toolbar
 View Statusbar
 Properties Dialog
+QIF Import
+OFX Import
+MT940 Import (need test data file)
+Export Accounts
 
 ========================================
           MISSING MENU ITEMS
@@ -35,8 +39,6 @@ Properties Dialog
 
 Main Window
   File
-    Import
-      OFX
     Print <- remove ?
   Edit
     Style Sheets
@@ -120,19 +122,9 @@ Business functions - Somewhat Functional
 	seems to function properly but then gnucash crashes when the
 	dialog is closed.
 
-
-
 IMPORTING
 
-  QIF - importing produces errors
-
-  OFX - ???
-
   HBCI - Needs new http support.
-
-EXPORTING
-
-  COA - ?
 
 ========================================
               ENHANCEMENTS
@@ -144,9 +136,7 @@ EXPORTING
 	b) Register
 	c) Report
 
-2) Support multiple windows and moving plugin pages between windows. -Done.
-
-2a) Support a preference on whether new plugin pages appear in the same
+2) Support a preference on whether new plugin pages appear in the same
 	or a new window.
 
 3) Enhance Commodity Editor by converting to a tree so types can be

@@ -335,7 +335,7 @@ void
 gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info)
 {
   GNCImportMatchPicker *matcher;
-  gint row_number, result;
+  gint row_number, response;
   GNCImportMatchInfo *old;
   g_assert (transaction_info);
   
@@ -361,11 +361,12 @@ gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info)
   
   /* Let this dialog run and close. */
   /*DEBUG("Right before run and close");*/
-  result = 
-    gnome_dialog_run_and_close (GNOME_DIALOG (matcher->transaction_matcher));
+  gtk_window_set_modal(GTK_WINDOW(matcher->transaction_matcher), TRUE);
+  response = gtk_dialog_run (GTK_DIALOG (matcher->transaction_matcher));
+  gtk_widget_destroy (matcher->transaction_matcher);
   /*DEBUG("Right after run and close");*/
-  /* DEBUG("Result was %d.", result); */
-  if (result == 0 && matcher->selected_match_info != old)
+  /* DEBUG("Response was %d.", response); */
+  if (response == GTK_RESPONSE_OK && matcher->selected_match_info != old)
     {    /* OK was pressed */
       gnc_import_TransInfo_set_selected_match (transaction_info,
 					       matcher->selected_match_info,

@@ -25,12 +25,11 @@
  */
 #include "config.h"
 #include <glib.h>
-#include <libguile.h>
-#include "guile-mappings.h"
 
 #include "gnc-mt940-import.h"
 #include "gnc-module.h"
 #include "gnc-module-api.h"
+#include "gnc-plugin-mt940.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_mt940_LTX_gnc_module_system_interface = 0;
@@ -79,8 +78,8 @@ libgncmod_mt940_LTX_gnc_module_init(int refcount)
   {
     return FALSE;
   }
-    scm_c_eval_string("(load-from-path \"mt940/mt940-import.scm\")");
-    scm_c_define_gsubr("gnc:mt940-import", 0, 0, 0, scm_gnc_file_mt940_import);
+
+  gnc_plugin_mt940_create_plugin();
   return TRUE;
 }
 

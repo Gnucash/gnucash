@@ -38,6 +38,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-html.h"
+#include "import-account-matcher.h"
 
 #include <openhbci/api.h>
 #include <openhbci/outboxjobs.h>

@@ -39,6 +39,7 @@ libgncmod_generic_import_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
+  ${top_builddir}/lib/egg/libegg.la \
   ${GLADE_LIBS} \
   ${GLIB_LIBS}
 
@@ -58,6 +59,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-file \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/lib/egg \
   ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \

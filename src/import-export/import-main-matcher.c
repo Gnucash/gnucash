@@ -392,7 +392,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
   /* Initialize user Settings. */
   info->user_settings = gnc_import_Settings_new ();
 
-  /* Initialize the GnomeDialog. */
+  /* Initialize the GtkDialog. */
   xml = gnc_glade_xml_new ("generic-import.glade", "transaction_matcher");
 
   info->dialog = glade_xml_get_widget (xml, "transaction_matcher");
