@@ -206,7 +206,7 @@
                       (html #f))
                  (gnc:html-document-set-style-sheet! doc stylesheet)
                  (set! html (gnc:html-document-render doc))
-                 (display html)
+;                 (display html)
                  (gnc:report-set-ctext! report html)
                  html)
                #f))
