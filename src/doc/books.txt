@@ -278,12 +278,45 @@ Plan A has been implemented in the engine.
    All books are stored in the same database; there is no performance
    penalty for storing all books together in the same SQL database,
    because they can be easily picked apart by an appropriate SQL query.
+   (Not tested, probably borken).
 
 -- The xml-file backend can store multiple books in one file.  There 
    is currently minimal support for writing out multiple books, 
    one per file (this enables faster load, by not loading old books).  
    There is currently no support for loading multiple books from multiple
    files.
+
+ANNOUNCE: Book Closing Beta 2
+-----------------------------
+Books AKA Accounting Periods can now be closed by going to the 'Action'
+menu on the main window, and selecting 'close books'.   This will popup
+a druid that will allow you to select closing dates.  Books are closed
+one at a time: after each one, you can go back and alter the close date.  
+A book is 'closed' by moving transactions and prices earlier than the 
+indicated date to a separate file.
+
+As a side-effect of book closing, capital gains (losses) will be
+automatically computed using a FIFO accounting method.  Stocks 
+or other non-cash assets that haven't been sold will remain in the 
+currently open book, even if the purchasing transactions were made 
+a long time ago.
+
+The biggest drawback to the automatic computation of the gains/losses
+is that there is no GUI to specify alternate accounting methods
+(e.g. LIFO, or hand-picked lots, etc.)  There is bascially no practical
+way to 'undo' the results of the gain/loss computations.
+
+The other main drawback to book closing is that this will prevent
+multi-year (multi-period) reports & graphs from being generated.
+The old data will be in separate files, and there is currently no
+way to load several files at once.
+
+I would like to hear some thoughts/discussion on these issues. 
+Bug reports, too.  A ranking of 'the most important related
+task to do next' would be good.  One, um, uncomfortable remark:  
+I am so flooded in email that I may not be able to react for a while.  
+(Like a week or more).
+
 
 Open Issues/Questions that Need Discussion:
 -------------------------------------------
@@ -312,14 +345,27 @@ Open Issues/Questions that Need Discussion:
 
 Open Issues / ToDo
 ------------------
-*) Big Bug: closing books still seems to leave registers and accounts
-   showing old data. whazzup with that? 
+*) Fix crash when exiting gnucash after closing books. 
 
-*) Bug: price db is not split up. why nnot?
+*) The filename of the old, closed books should probably be saved 
+   in the KVP tree of the current open book.  This need be done only
+   from the file backend.
+
+*) Need to mark closed book as unalterable, and respect that markup.
+   I think there's a 'closed' flag in the book, but I don't think its
+   respected.
+
+*) The book closing GUI (druid-acct-period.c) needs to save/restore 
+   period end date (the FreqSpec) to KVP on open book.  This would be
+   easy once we have a freq-spec-to-kvp and freq-spec-from-kvp routines.
 
 *) Handling of lots in book closing is implemented but is poorly tested.
    Need to write test cases.  Also test cases for prices in book
    closing.
+
+*) price-saving in the SQL backend is probably borken, its certainly
+   untested.  Need to remove old deprecated price-lookup mechanism, 
+   and replace w/ qofquery.
 
 *) Need to provide for loading of closed books, because this is needed
    for reports.
@@ -329,11 +375,6 @@ Open Issues / ToDo
 
 *) Have some way of remembering the quickfill text from older books.
 
-*) Need to mark closed book as unalterable, and respect that markup.
-
-*) book closing GUI needs to save/restore period end date to KVP on 
-   open book.
-
 *) Possibly neat idea: 
    Book closing, as currently implemented in the GUI, is driven entirely
    by the date-posted.  There is no (planned) interface to allow you to
@@ -341,7 +382,8 @@ Open Issues / ToDo
    it would be 'easy' to add this: right be fore I close a book, I have a
    list of transactions which can be added to/removed from).
 
-*) add 13-period support to SX.  e.g.
+*) add 13-period support to FreqSpec and the FreqSpec widget.  
+   e.g. from the mailing list:
    One of the calenders my company uses is like this:
    13 periods
    1st period begins jan 1st, partial first week plus 4 weeks.
