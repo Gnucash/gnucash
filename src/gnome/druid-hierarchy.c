@@ -34,6 +34,7 @@
 #include "druid-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-commodity-edit.h"
+#include "gnc-general-select.h"
 #include "gnc-component-manager.h"
 #include "../gnome-utils/gnc-dir.h"
 #include "gnc-gui-query.h"
@@ -95,7 +96,7 @@ get_account_types_clist (void)
   return GTK_CLIST(hierarchy_get_widget ("account_types_clist"));
 }
 
-static GNCCommodityEdit *
+static GNCGeneralSelect *
 get_commodity_editor(void)
 {
   GtkWidget *tmp_wid = gtk_object_get_data (GTK_OBJECT (hierarchy_window),
@@ -103,11 +104,13 @@ get_commodity_editor(void)
 
   if(!tmp_wid)
   {
-    GNCCommodityEdit *cur_editor;
+    GNCGeneralSelect *cur_editor;
 
-    cur_editor = GNC_COMMODITY_EDIT(gnc_commodity_edit_new());
+    cur_editor =
+      GNC_GENERAL_SELECT (gnc_general_select_new(gnc_commodity_edit_get_string,
+						 gnc_commodity_edit_new_select));
     gtk_widget_show (GTK_WIDGET(cur_editor));
-    gnc_commodity_edit_set_commodity (cur_editor,
+    gnc_general_select_set_selected (cur_editor,
                                       gnc_locale_default_currency());
     gtk_object_set_data(GTK_OBJECT(hierarchy_window),
                         "commod_editor", cur_editor);
@@ -115,7 +118,7 @@ get_commodity_editor(void)
   }
   else
   {
-    return GNC_COMMODITY_EDIT(tmp_wid);
+    return GNC_GENERAL_SELECT(tmp_wid);
   }
 }
 
@@ -636,7 +639,7 @@ hierarchy_merge_groups (GSList *dalist)
   gnc_commodity *com;
   AccountGroup *ret = xaccMallocAccountGroup (gnc_get_current_session ());
 
-  com = gnc_commodity_edit_get_commodity (get_commodity_editor ());
+  com = gnc_general_select_get_selected (get_commodity_editor ());
 
   for (mark = dalist; mark; mark = mark->next)
   {

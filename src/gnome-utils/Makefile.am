@@ -31,6 +31,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-date-delta.c \
   gnc-date-edit.c \
   gnc-frequency.c \
+  gnc-general-select.c \
   gnc-gui-query.c \
   gnc-html-history.c \
   gnc-html-guppi.c \
@@ -54,6 +55,7 @@ gncinclude_HEADERS = \
   gnc-date-delta.h \
   gnc-date-edit.h \
   gnc-frequency.h \
+  gnc-general-select.h \
   gnc-gui-query.h \
   gnc-html-history.h \
   gnc-html-guppi.h \

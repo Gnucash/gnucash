@@ -30,6 +30,7 @@
 #include "global-options.h"
 #include "gnc-account-tree.h"
 #include "gnc-commodity-edit.h"
+#include "gnc-general-select.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
@@ -274,7 +275,7 @@ gnc_option_set_ui_value_internal (GNCOption *option, gboolean use_default)
 
     commodity = gnc_scm_to_commodity (value);
     if (commodity)
-      gnc_currency_edit_set_currency(GNC_CURRENCY_EDIT(widget), commodity);
+      gnc_general_select_set_selected(GNC_GENERAL_SELECT(widget), commodity);
     else
       bad_value = TRUE;
   }
@@ -284,8 +285,7 @@ gnc_option_set_ui_value_internal (GNCOption *option, gboolean use_default)
 
     commodity = gnc_scm_to_commodity (value);
     if (commodity)
-      gnc_commodity_edit_set_commodity(GNC_COMMODITY_EDIT (widget),
-                                       commodity);
+      gnc_general_select_set_selected(GNC_GENERAL_SELECT (widget), commodity);
     else
       bad_value = TRUE;
   }
@@ -564,7 +564,7 @@ gnc_option_get_ui_value_internal (GNCOption *option)
     gnc_commodity *commodity;
 
     commodity =
-      gnc_currency_edit_get_currency(GNC_CURRENCY_EDIT(widget));
+      gnc_general_select_get_selected(GNC_GENERAL_SELECT(widget));
 
     result = gnc_commodity_to_scm (commodity);
   }
@@ -573,7 +573,7 @@ gnc_option_get_ui_value_internal (GNCOption *option)
     gnc_commodity *commodity;
 
     commodity =
-      gnc_commodity_edit_get_commodity(GNC_COMMODITY_EDIT(widget));
+      gnc_general_select_get_selected(GNC_GENERAL_SELECT(widget));
 
     result = gnc_commodity_to_scm(commodity);
   }
@@ -1458,16 +1458,17 @@ gnc_option_set_ui_widget(GNCOption *option,
     g_free(colon_name);
 
     enclosing = gtk_hbox_new(FALSE, 5);
-    value = gnc_commodity_edit_new();
+    value = gnc_general_select_new(gnc_commodity_edit_get_string,
+				   gnc_commodity_edit_new_select);
 
     gnc_option_set_widget (option, value);
     gnc_option_set_ui_value(option, FALSE);
 
     if (documentation != NULL)
-      gtk_tooltips_set_tip(tooltips, GNC_COMMODITY_EDIT(value)->entry,
+      gtk_tooltips_set_tip(tooltips, GNC_GENERAL_SELECT(value)->entry,
                            documentation, NULL);
 
-    gtk_signal_connect(GTK_OBJECT(GNC_COMMODITY_EDIT(value)->entry), "changed",
+    gtk_signal_connect(GTK_OBJECT(GNC_GENERAL_SELECT(value)->entry), "changed",
 		       GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);
 
     gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);

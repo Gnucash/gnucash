@@ -862,6 +862,8 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
        if (node->next)
          sq->pq = stpcpy(sq->pq, ", ");
      }
+
+     g_list_free (tables);
    }
 
    sq->pq = stpcpy(sq->pq, " WHERE ");

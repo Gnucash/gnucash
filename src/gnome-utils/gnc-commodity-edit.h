@@ -5,6 +5,7 @@
  * All rights reserved.
  *
  * Dave Peticolas <dave@krondo.com>
+ * Derek Atkins <warlord@MIT.EDU>
  *
  * GnuCash is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -32,41 +33,13 @@
 #define GNC_COMMODITY_EDIT_H
 
 #include <gnome.h>
-
 #include "gnc-commodity.h"
 
-BEGIN_GNOME_DECLS
+/* Callback function to return the printable string of a commodity */
+const char * gnc_commodity_edit_get_string (gpointer ptr);
 
-
-#define GNC_COMMODITY_EDIT(obj)          GTK_CHECK_CAST (obj, gnc_commodity_edit_get_type(), GNCCommodityEdit)
-#define GNC_COMMODITY_EDIT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_commodity_edit_get_type(), GNCCommodityEditClass)
-#define GNC_IS_COMMODITY_EDIT(obj)       GTK_CHECK_TYPE (obj, gnc_commodity_edit_get_type ())
-
-typedef struct {
-        GtkHBox hbox;
-
-        GtkWidget *entry;  /* display of commodity name */
-        GtkWidget *button; /* button for popping up commodity window */
-
-        gnc_commodity *selected_commodity;
-} GNCCommodityEdit;
-
-typedef struct {
-        GtkHBoxClass parent_class;
-
-        void (*changed) (GNCCommodityEdit *edit);
-} GNCCommodityEditClass;
-
-guint      gnc_commodity_edit_get_type       (void);
-
-GtkWidget *gnc_commodity_edit_new            (void);
-
-void       gnc_commodity_edit_set_commodity  (GNCCommodityEdit *gce,
-                                              gnc_commodity *commodity);
-
-gnc_commodity * gnc_commodity_edit_get_commodity (GNCCommodityEdit *gce);
-
-END_GNOME_DECLS
+/* Callback function to popup a new selection (modal) dialog */
+gpointer gnc_commodity_edit_new_select (gpointer ptr, GtkWidget *toplevel);
 
 #endif
 

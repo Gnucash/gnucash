@@ -32,8 +32,9 @@
 #include "global-options.h"
 #include "gnc-account-tree.h"
 #include "gnc-amount-edit.h"
-#include "gnc-commodity-edit.h"
+#include "gnc-general-select.h"
 #include "gnc-commodity.h"
+#include "gnc-commodity-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
@@ -155,7 +156,7 @@ gnc_account_to_ui(AccountWindow *aw)
   gtk_entry_set_text(GTK_ENTRY(aw->description_entry), string);
 
   commodity = xaccAccountGetCommodity (account);
-  gnc_commodity_edit_set_commodity (GNC_COMMODITY_EDIT (aw->commodity_edit),
+  gnc_general_select_set_selected (GNC_GENERAL_SELECT (aw->commodity_edit),
                                     commodity);
 
   string = xaccAccountGetCode (account);
@@ -291,8 +292,8 @@ gnc_ui_to_account(AccountWindow *aw)
   if (safe_strcmp (string, old_string) != 0)
     xaccAccountSetDescription (account, string);
 
-  commodity =
-    gnc_commodity_edit_get_commodity (GNC_COMMODITY_EDIT (aw->commodity_edit));
+  commodity = (gnc_commodity *)
+    gnc_general_select_get_selected (GNC_GENERAL_SELECT (aw->commodity_edit));
   if (commodity &&
       !gnc_commodity_equiv(commodity, xaccAccountGetCommodity (account)))
     xaccAccountSetCommodity (account, commodity);
@@ -450,7 +451,7 @@ gnc_finish_ok (AccountWindow *aw,
     gnc_account_window_set_name (aw);
 
     commodity = xaccAccountGetCommodity (parent);
-    gnc_commodity_edit_set_commodity (GNC_COMMODITY_EDIT (aw->commodity_edit),
+    gnc_general_select_set_selected (GNC_GENERAL_SELECT (aw->commodity_edit),
                                       commodity);
 
     gnc_account_tree_select_account (GNC_ACCOUNT_TREE(aw->parent_tree),
@@ -798,8 +799,8 @@ gnc_edit_account_ok(AccountWindow *aw)
     return;
   }
 
-  commodity =
-    gnc_commodity_edit_get_commodity (GNC_COMMODITY_EDIT (aw->commodity_edit));
+  commodity = (gnc_commodity *)
+    gnc_general_select_get_selected (GNC_GENERAL_SELECT (aw->commodity_edit));
 
   if (!commodity)
   {
@@ -949,8 +950,8 @@ gnc_new_account_ok (AccountWindow *aw)
   }
 
   /* check for commodity */
-  commodity =
-    gnc_commodity_edit_get_commodity (GNC_COMMODITY_EDIT (aw->commodity_edit));
+  commodity = (gnc_commodity *)
+    gnc_general_select_get_selected (GNC_GENERAL_SELECT (aw->commodity_edit));
 
   if (!commodity)
   {
@@ -1279,12 +1280,12 @@ gnc_account_name_changed_cb(GtkWidget *widget, gpointer data)
 }
 
 static void
-commodity_changed_cb (GNCCommodityEdit *gce, gpointer data)
+commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
 {
   AccountWindow *aw = data;
   gnc_commodity *currency;
 
-  currency = gnc_commodity_edit_get_commodity (gce);
+  currency = (gnc_commodity *) gnc_general_select_get_selected (gsl);
   if (!currency)
     return;
 
@@ -1305,8 +1306,8 @@ account_commodity_filter (Account *account, gpointer user_data)
   if (!account)
     return FALSE;
 
-  commodity =
-    gnc_commodity_edit_get_commodity (GNC_COMMODITY_EDIT (aw->commodity_edit));
+  commodity = (gnc_commodity *)
+    gnc_general_select_get_selected (GNC_GENERAL_SELECT (aw->commodity_edit));
 
   return gnc_commodity_equiv (xaccAccountGetCommodity (account), commodity);
 }
@@ -1396,7 +1397,8 @@ gnc_account_window_create(AccountWindow *aw)
   gnome_dialog_editable_enters(awd, GTK_EDITABLE(aw->code_entry));
 
   box = glade_xml_get_widget (xml, "commodity_hbox");
-  aw->commodity_edit = gnc_commodity_edit_new ();
+  aw->commodity_edit = gnc_general_select_new (gnc_commodity_edit_get_string,
+					       gnc_commodity_edit_new_select);
   gtk_box_pack_start(GTK_BOX(box), aw->commodity_edit, TRUE, TRUE, 0);
 
   gtk_signal_connect (GTK_OBJECT (aw->commodity_edit), "changed",
@@ -1643,7 +1645,7 @@ gnc_ui_new_account_window_internal (Account *base_account,
 
   commodity = gnc_default_currency ();
 
-  gnc_commodity_edit_set_commodity (GNC_COMMODITY_EDIT (aw->commodity_edit),
+  gnc_general_select_set_selected (GNC_GENERAL_SELECT (aw->commodity_edit),
                                     commodity);
 
   gtk_widget_show_all (aw->dialog);

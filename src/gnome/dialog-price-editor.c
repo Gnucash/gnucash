@@ -31,6 +31,7 @@
 #include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-commodity-edit.h"
+#include "gnc-general-select.h"
 #include "gnc-component-manager.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
@@ -312,8 +313,8 @@ price_to_gui (PricesDialog *pdb_dialog)
   }
 
   if (commodity)
-    gnc_commodity_edit_set_commodity
-      (GNC_COMMODITY_EDIT (pdb_dialog->commodity_edit), commodity);
+    gnc_general_select_set_selected
+      (GNC_GENERAL_SELECT (pdb_dialog->commodity_edit), commodity);
 
   if (currency)
     gnc_currency_edit_set_currency
@@ -342,8 +343,8 @@ gui_to_price (PricesDialog *pdb_dialog)
   if (!pdb_dialog->price)
     return NULL;
 
-  commodity = gnc_commodity_edit_get_commodity
-    (GNC_COMMODITY_EDIT (pdb_dialog->commodity_edit));
+  commodity = gnc_general_select_get_selected
+    (GNC_GENERAL_SELECT (pdb_dialog->commodity_edit));
   if (!commodity)
     return _("You must select a commodity.");
 
@@ -677,7 +678,7 @@ gnc_prices_unselect_price_cb (GtkCTree *ctre, gint row, gint col,
 }
 
 static void
-commodity_changed_cb (GNCCommodityEdit *gce, gpointer data)
+commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
 
@@ -799,7 +800,8 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
 
   box = glade_xml_get_widget (xml, "commodity_box");
 
-  w = gnc_commodity_edit_new ();
+  w = gnc_general_select_new (gnc_commodity_edit_get_string,
+			      gnc_commodity_edit_new_select);
   pdb_dialog->commodity_edit = w;
   gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
   gtk_widget_show (w);
