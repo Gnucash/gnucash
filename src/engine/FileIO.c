@@ -558,6 +558,13 @@ readTransaction( int fd, Account *acc, int token )
   if (4 >= token) 
     { 
     Split * s;
+
+    /* The code below really wants to assume that there are a pair
+     * of splits in every transaction, so make it so. 
+     */
+    s = xaccMallocSplit ();
+    xaccTransAppendSplit (trans, s);
+
     tmp = readString( fd, token );
     if( NULL == tmp )
       {
@@ -569,7 +576,8 @@ readTransaction( int fd, Account *acc, int token )
     free (tmp);
     
     /* action first introduced in version 3 of the file format */
-    if (3 <= token) {
+    if (3 <= token) 
+       {
        tmp = readString( fd, token );
        if( NULL == tmp )
          {
