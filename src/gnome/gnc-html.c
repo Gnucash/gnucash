@@ -244,7 +244,6 @@ extract_base_name(URLType type, const gchar * path) {
   regex_t    compiled_h, compiled_o;
   regmatch_t match[4];
   char       * machine=NULL, * location = NULL, * base=NULL;
-  int        free_location = 0;
 
   regcomp(&compiled_h, http_rexp, REG_EXTENDED);
   regcomp(&compiled_o, other_rexp, REG_EXTENDED);
@@ -265,7 +264,6 @@ extract_base_name(URLType type, const gchar * path) {
         location = g_new0(char, match[2].rm_eo - match[2].rm_so + 1);
         strncpy(location, path+match[2].rm_so, 
                 match[2].rm_eo - match[2].rm_so);
-        free_location = 1;
       }
     }  
     break;
@@ -286,9 +284,7 @@ extract_base_name(URLType type, const gchar * path) {
   regfree(&compiled_h);
   regfree(&compiled_o);
 
-  if(free_location) {
-    g_free(location);
-  }
+  g_free(location);
 
   if(machine) {
     strcat(machine, "/");
@@ -1100,6 +1096,9 @@ gnc_html_export(gnc_html * html) {
   FILE *fh;
   
   filepath = fileBox (_("Save HTML To File"), NULL, NULL);
+  if (!filepath)
+    return;
+
   PINFO (" user selected file=%s\n", filepath);
   fh = fopen (filepath, "w");
   if (NULL == fh) {

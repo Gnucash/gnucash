@@ -118,8 +118,7 @@
           (from-date-tp (gnc:timepair-start-day-time 
 			 (vector-ref (get-option pagename-general
 						 optname-from-date) 1)))
-          (doc (gnc:make-html-document))
-	  (txt (gnc:make-html-text)))
+          (doc (gnc:make-html-document)))
       
       (gnc:html-document-set-title! 
        doc (string-append (_ "Profit and Loss") " "

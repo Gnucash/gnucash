@@ -31,6 +31,7 @@
 #include "finproto.h"
 #include "finvar.h"
 #include "glade-gnc-dialogs.h"
+#include "glade-support.h"
 #include "gnc-amount-edit.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
@@ -528,7 +529,7 @@ gnc_ui_fincalc_dialog_create(void)
   fcd->amounts[PAYMENT_PERIODS] = edit;
   gtk_widget_show (edit);
 
-  hbox = gtk_object_get_data(fcdo, "payment_periods_hbox");
+  hbox = lookup_widget (fcd->dialog, "payment_periods_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -544,7 +545,7 @@ gnc_ui_fincalc_dialog_create(void)
   fcd->amounts[INTEREST_RATE] = edit;
   gtk_widget_show (edit);
 
-  hbox = gtk_object_get_data(fcdo, "interest_rate_hbox");
+  hbox = lookup_widget (fcd->dialog, "interest_rate_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -562,7 +563,7 @@ gnc_ui_fincalc_dialog_create(void)
   fcd->amounts[PRESENT_VALUE] = edit;
   gtk_widget_show (edit);
 
-  hbox = gtk_object_get_data(fcdo, "present_value_hbox");
+  hbox = lookup_widget (fcd->dialog, "present_value_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -578,7 +579,7 @@ gnc_ui_fincalc_dialog_create(void)
   fcd->amounts[PERIODIC_PAYMENT] = edit;
   gtk_widget_show (edit);
 
-  hbox = gtk_object_get_data(fcdo, "periodic_payment_hbox");
+  hbox = lookup_widget (fcd->dialog, "periodic_payment_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -594,7 +595,7 @@ gnc_ui_fincalc_dialog_create(void)
   fcd->amounts[FUTURE_VALUE] = edit;
   gtk_widget_show (edit);
 
-  hbox = gtk_object_get_data(fcdo, "future_value_hbox");
+  hbox = lookup_widget (fcd->dialog, "future_value_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -602,83 +603,87 @@ gnc_ui_fincalc_dialog_create(void)
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
 
-  button = gtk_object_get_data(fcdo, "payment_periods_calc_button");
+  button = lookup_widget (fcd->dialog, "payment_periods_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_payment_periods), fcd);
 
-  button = gtk_object_get_data(fcdo, "interest_rate_calc_button");
+  button = lookup_widget (fcd->dialog, "interest_rate_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_interest_rate), fcd);
 
-  button = gtk_object_get_data(fcdo, "present_value_calc_button");
+  button = lookup_widget (fcd->dialog, "present_value_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_present_value), fcd);
 
-  button = gtk_object_get_data(fcdo, "periodic_payment_calc_button");
+  button = lookup_widget (fcd->dialog, "periodic_payment_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_periodic_payment), fcd);
 
-  button = gtk_object_get_data(fcdo, "future_value_calc_button");
+  button = lookup_widget (fcd->dialog, "future_value_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_future_value), fcd);
 
-  button = gtk_object_get_data(fcdo, "payment_periods_clear_button");
+  button = lookup_widget (fcd->dialog, "payment_periods_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_entry_clear_clicked),
                      fcd->amounts[PAYMENT_PERIODS]);
 
-  button = gtk_object_get_data(fcdo, "interest_rate_clear_button");
+  button = lookup_widget (fcd->dialog, "interest_rate_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[INTEREST_RATE]);
 
-  button = gtk_object_get_data(fcdo, "present_value_clear_button");
+  button = lookup_widget (fcd->dialog, "present_value_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[PRESENT_VALUE]);
 
-  button = gtk_object_get_data(fcdo, "periodic_payment_clear_button");
+  button = lookup_widget (fcd->dialog, "periodic_payment_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[PERIODIC_PAYMENT]);
 
-  button = gtk_object_get_data(fcdo, "future_value_clear_button");
+  button = lookup_widget (fcd->dialog, "future_value_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[FUTURE_VALUE]);
 
-  menu = gtk_object_get_data(fcdo, "compounding_menu");
+  menu = lookup_widget (fcd->dialog, "compounding_menu");
   fcd->compounding_menu = menu;
   gnc_option_menu_init(menu);
   menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(menu));
   gtk_container_forall(GTK_CONTAINER(menu), connect_fincalc_menu_item, fcd);
 
-  menu = gtk_object_get_data(fcdo, "payment_menu");
+  menu = lookup_widget (fcd->dialog, "payment_menu");
   fcd->payment_menu = menu;
   gnc_option_menu_init(menu);
   menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(menu));
   gtk_container_forall(GTK_CONTAINER(menu), connect_fincalc_menu_item, fcd);
 
-  button = gtk_object_get_data(fcdo, "period_payment_radio");
+  button = lookup_widget (fcd->dialog, "period_payment_radio");
   fcd->end_of_period_radio = button;
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
                      GTK_SIGNAL_FUNC(fincalc_radio_toggled), fcd);
 
-  button = gtk_object_get_data(fcdo, "discrete_compounding_radio");
+  button = lookup_widget (fcd->dialog, "discrete_compounding_radio");
   fcd->discrete_compounding_radio = button;
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
                      GTK_SIGNAL_FUNC(fincalc_radio_toggled), fcd);
 
-  button = gtk_object_get_data(fcdo, "close_button");
+  button = lookup_widget (fcd->dialog, "close_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(close_button_clicked), fcd);
 
-  fcd->payment_total_label = gtk_object_get_data (fcdo, "payment_total_label");
+  fcd->payment_total_label = lookup_widget (fcd->dialog,
+                                            "payment_total_label");
+
+  button = lookup_widget (fcd->dialog, "schedule_button");
+  gtk_widget_hide (button);
 
   init_fi(fcd);
 

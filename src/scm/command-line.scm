@@ -115,86 +115,78 @@
          #f
          (N_ "Enable debugging mode"))
 
-   (cons
-    "loglevel"
-    (list 'integer
-          (lambda (val)
-            (gnc:config-var-value-set! gnc:*loglevel* #f val))
-          "LOGLEVEL"
-          (N_ "Set the logging level from 0 (least) to 6 (most)")))
+   (list "loglevel"
+         'integer
+         (lambda (val)
+           (gnc:config-var-value-set! gnc:*loglevel* #f val))
+         "LOGLEVEL"
+         (N_ "Set the logging level from 0 (least) to 6 (most)"))
 
-   (cons
-    "nofile"
-    (list 'boolean
-          (lambda (val)
-            (gnc:config-var-value-set! gnc:*arg-no-file* #f val))
-          #f
-          (N_ "Do not load the last file opened")))
+   (list "nofile"
+         'boolean
+         (lambda (val)
+           (gnc:config-var-value-set! gnc:*arg-no-file* #f val))
+         #f
+         (N_ "Do not load the last file opened"))
 
-   (cons
-    "config-dir"
-    (list 'string
-          (lambda (val)
-            (gnc:config-var-value-set! gnc:*config-dir* #f val))
-          "CONFIGDIR"
-          (N_ "Set configuration directory")))
+   (list "config-dir"
+         'string
+         (lambda (val)
+           (gnc:config-var-value-set! gnc:*config-dir* #f val))
+         "CONFIGDIR"
+         (N_ "Set configuration directory"))
 
-   (cons
-    "share-dir"
-    (list 'string
-          (lambda (val)
-            (gnc:config-var-value-set! gnc:*share-dir* #f val))
-          "SHAREDIR"
-          (N_ "Set shared directory")))
+   (list "share-dir"
+         'string
+         (lambda (val)
+           (gnc:config-var-value-set! gnc:*share-dir* #f val))
+         "SHAREDIR"
+         (N_ "Set shared directory"))
 
-   (cons
-    "load-path"
-    (list 'string
-          (lambda (val)
-            (let ((path-list
-                   (call-with-input-string val (lambda (port) (read port)))))
-              (if (list? path-list)
-                  (gnc:config-var-value-set! gnc:*load-path* #f path-list)
-                  (begin
-                    (gnc:error "non-list given for --load-path: " val)
-                    (gnc:shutdown 1)))))
-          "LOADPATH"
-          (N_ "Set the search path for .scm files.")))
+   (list "load-path"
+         'string
+         (lambda (val)
+           (let ((path-list
+                  (call-with-input-string val (lambda (port) (read port)))))
+             (if (list? path-list)
+                 (gnc:config-var-value-set! gnc:*load-path* #f path-list)
+                 (begin
+                   (gnc:error "non-list given for --load-path: " val)
+                   (gnc:shutdown 1)))))
+         "LOADPATH"
+         (N_ "Set the search path for .scm files."))
 
-   (cons
-    "doc-path"
-    (list 'string
-          (lambda (val)
-            (gnc:debug "parsing --doc-path " val)
-            (let ((path-list
-                   (call-with-input-string val (lambda (port) (read port)))))
-              (if (list? path-list)
-                  (gnc:config-var-value-set! gnc:*doc-path* #f path-list)
-                  (begin
-                    (gnc:error "non-list given for --doc-path: " val)
-                    (gnc:shutdown 1)))))
-          "DOCPATH"
-          (N_ "Set the search path for documentation files")))
+   (list "doc-path"
+         'string
+         (lambda (val)
+           (gnc:debug "parsing --doc-path " val)
+           (let ((path-list
+                  (call-with-input-string val (lambda (port) (read port)))))
+             (if (list? path-list)
+                 (gnc:config-var-value-set! gnc:*doc-path* #f path-list)
+                 (begin
+                   (gnc:error "non-list given for --doc-path: " val)
+                   (gnc:shutdown 1)))))
+         "DOCPATH"
+         (N_ "Set the search path for documentation files"))
 
-   (cons
-    "evaluate"
-    (list 'string
-          (lambda (val)
-            (set! gnc:*batch-mode-things-to-do*
-                  (cons val gnc:*batch-mode-things-to-do*)))
-          "COMMAND"
-          (N_ "Evaluate the guile command")))
+   (list "evaluate"
+         'string
+         (lambda (val)
+           (set! gnc:*batch-mode-things-to-do*
+                 (cons val gnc:*batch-mode-things-to-do*)))
+         "COMMAND"
+         (N_ "Evaluate the guile command"))
 
    ;; Given a string, --load will load the indicated file, if possible.
-   (cons
-    "load"
-    (list 'string
-          (lambda (val)
-            (set! gnc:*batch-mode-things-to-do*
-                  (cons (lambda () (load val))
-                        gnc:*batch-mode-things-to-do*)))
-          "FILE"
-          (N_ "Load the given .scm file")))
+   (list "load"
+         'string
+         (lambda (val)
+           (set! gnc:*batch-mode-things-to-do*
+                 (cons (lambda () (load val))
+                       gnc:*batch-mode-things-to-do*)))
+         "FILE"
+         (N_ "Load the given .scm file"))
 
 ;    (cons "add-price-quotes"
 ;          (cons 'string
@@ -216,19 +208,17 @@
 ;
 ;			gnc:*batch-mode-things-to-do*)))))
 
-   (cons
-    "load-user-config"
-    (list 'boolean
-          gnc:load-user-config-if-needed
-          #f
-          (N_ "Load the user configuation")))
+   (list "load-user-config"
+         'boolean
+         gnc:load-user-config-if-needed
+         #f
+         (N_ "Load the user configuation"))
 
-   (cons
-    "load-system-config"
-    (list 'boolean
-          gnc:load-system-config-if-needed
-          #f
-          (N_ "Load the system configuation")))))
+   (list "load-system-config"
+         'boolean
+         gnc:load-system-config-if-needed
+         #f
+         (N_ "Load the system configuation"))))
 
 (define (gnc:cmd-line-get-boolean-arg args)
   ;; --arg         means #t

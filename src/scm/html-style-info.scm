@@ -278,7 +278,6 @@
 
 (define (gnc:default-html-gnc-numeric-renderer datum params)
   (gnc:amount->string-helper datum (gnc:default-print-info #f)))
-;  (sprintf #f "%.2f" (gnc:numeric-to-double datum)))
 
 (define (gnc:default-html-gnc-monetary-renderer datum params)
   (gnc:amount->string-helper 
@@ -289,13 +288,6 @@
   (gnc:amount->string-helper
    (gnc:double-to-gnc-numeric datum 100 GNC-RND-ROUND)
    (gnc:default-print-info #f)))
-
-;  (gnc:print-double-amount datum))
-
-;  (sprintf #f "%.2f" datum))
-;  (format #f "~,2f" datum))
-;  "(NUM)")
-;  (sprintf 20 "%.2f" datum))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

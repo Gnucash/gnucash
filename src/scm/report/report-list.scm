@@ -8,8 +8,13 @@
 ;; reports 
 (gnc:depend "report/account-summary.scm")
 (gnc:depend "report/average-balance.scm")
-(gnc:depend "report/pnl.scm")
 (gnc:depend "report/hello-world.scm")
+(gnc:depend "report/pnl.scm")
+(let ((locale (setlocale LC_MESSAGES)))
+  (if (or (equal? locale "C")
+          (equal? locale "en")
+          (equal? locale "en_US"))
+      (gnc:depend "report/taxtxf.scm")))
 (gnc:depend "report/transaction-report.scm")
 
 ;; style sheets 

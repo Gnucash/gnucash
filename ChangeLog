@@ -1,10 +1,26 @@
-<<<<<<< ChangeLog
+2001-03-08  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/report-list.scm: load tax report if possibly in
+	US locale.
+
+	* src/scm/report/taxtxf.scm: work on tax report (unfinished)
+
+2001-03-07  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/hello-world.scm: use new html format functions.
+	Add scheme reference.
+
+	* src/gnome/dialog-fincalc.c (gnc_ui_fincalc_dialog_create): hide
+	schedule button. Use 'lookup_widget'.
+
+	* src/gnome/gnc-html.c (gnc_html_export): handle cancelling
+
+	* src/scm/html-style-info.scm: remove cruft
+
 2001-03-08  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/transaction-report.scm: More colourization.
 	
-
-=======
 2001-03-07  Bill Gribble  <grib@billgribble.com>
 
 	* summary: separate the HTML and HTTP processing functions into
@@ -42,7 +58,6 @@
 	(html-markup/format "%a %a %a %a" 1 2 3 4) does what you'd expect,
 	even if the non-format args are html-markup objects.
 	
->>>>>>> 1.251
 2001-03-07  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/top-level.c (gnc_ui_check_events): add timeout

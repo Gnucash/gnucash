@@ -300,7 +300,7 @@ option like this.")
         ;; current locale, then the translation is returned,
         ;; otherwise the original string is returned.
         (gnc:html-document-set-title! document (_ "Hello, World"))
-        
+
         ;; we make a "text object" to add a bunch of text to.
         ;; the function gnc:make-html-text can take any number of 
         ;; arguments.  The gnc:html-markup functions are designed
@@ -308,67 +308,81 @@ option like this.")
         ;; the appearance of the report from the Gnucash UI; you 
         ;; should use the HTML markup functions whenever possible
         ;; rather than including literal HTML in your report.
-        
+
         (gnc:html-document-add-object!
          document
          (gnc:make-html-text         
           (gnc:html-markup-p
-           (_ "This is a sample GnuCash report. \
-See the guile (scheme) source code in ")
-           (gnc:html-markup-tt 
-            gnc:_share-dir-default_ "/gnucash/scm/report")
-           (_ "for details on writing your own reports, \
-or extending existing reports."))
-          (gnc:html-markup-p           
-           (_ "For help on writing reports, or to contribute your brand \
-new, totally cool report, consult the mailing list ")
-           (gnc:html-markup-anchor 
-            "mailto:gnucash-devel@gnucash.org"
-            (gnc:html-markup-tt "gnucash-devel@gnucash.org")) ". " 
-            
-            (_ "For details on subscribing to that list, see ")
+           (gnc:html-markup/format
+            (_ "This is a sample GnuCash report. \
+See the guile (scheme) source code in %s \
+for details on writing your own reports, \
+or extending existing reports.")
+            (gnc:html-markup-tt 
+             gnc:_share-dir-default_ "/gnucash/scm/report")))
+
+          (gnc:html-markup-p
+           (gnc:html-markup/format
+            (_ "For help on writing reports, or to contribute your brand \
+new, totally cool report, consult the mailing list %s.")
             (gnc:html-markup-anchor 
+             "mailto:gnucash-devel@gnucash.org"
+             (gnc:html-markup-tt "gnucash-devel@gnucash.org")))
+           (gnc:html-markup/format
+            (_ "For details on subscribing to that list, see %s.")
+            (gnc:html-markup-anchor
              "http://www.gnucash.org"
              (gnc:html-markup-tt
-              "www.gnucash.org"))  ".")
-          
-          (gnc:html-markup-p 
-           (_ "The current time is ") 
-           (gnc:html-markup-b time-string)  ".")
-          
-          (gnc:html-markup-p 
-           (_ "The boolean option is ")
-           (gnc:html-markup-b (if bool-val (_ "true") (_ "false"))) ".")
-          
-          (gnc:html-markup-p 
-           (_ "The multi-choice option is ")
-           (gnc:html-markup-b (symbol->string mult-val)) ".")
-          
-          (gnc:html-markup-p 
-           (_ "The string option is ") 
-           (gnc:html-markup-b string-val) ".")
-          
-          (gnc:html-markup-p 
-           (_ "The date option is ") 
-           (gnc:html-markup-b date-string) ".")
-          
-          (gnc:html-markup-p 
-           (_ "The date and time option is ") 
-           (gnc:html-markup-b date-string2) ".")
-          
-          (gnc:html-markup-p 
+              "www.gnucash.org")))
+           (gnc:html-markup/format
+            (_ "You can learn more about writing scheme using this %s.")
+            (gnc:html-markup-anchor
+             "http://www.scheme.com/tspl2d/index.html"
+             (_ "online book"))))
+
+          (gnc:html-markup-p
+           (gnc:html-markup/format
+            (_ "The current time is %s.") 
+            (gnc:html-markup-b time-string)))
+
+          (gnc:html-markup-p
+           (gnc:html-markup/format
+            (_ "The boolean option is %s.")
+            (gnc:html-markup-b (if bool-val (_ "true") (_ "false")))))
+
+          (gnc:html-markup-p
+           (gnc:html-markup/format
+            (_ "The multi-choice option is %s.")
+            (gnc:html-markup-b (symbol->string mult-val))))
+
+          (gnc:html-markup-p
+           (gnc:html-markup/format
+            (_ "The string option is %s.") 
+            (gnc:html-markup-b string-val)))
+
+          (gnc:html-markup-p
+           (gnc:html-markup/format
+            (_ "The date option is %s.") 
+            (gnc:html-markup-b date-string)))
+
+          (gnc:html-markup-p
+           (gnc:html-markup/format
+            (_ "The date and time option is %s.") 
+            (gnc:html-markup-b date-string2)))
+
+          (gnc:html-markup-p
            (gnc:html-markup/format 
-            (_ "The relative date option is %a.")
+            (_ "The relative date option is %s.")
             (gnc:html-markup-b rel-date-string)))
-          
-          (gnc:html-markup-p 
+
+          (gnc:html-markup-p
            (gnc:html-markup/format 
-            (_ "The combination date option is %a.")
+            (_ "The combination date option is %s.")
             (gnc:html-markup-b combo-date-string)))
-          
-          (gnc:html-markup-p 
+
+          (gnc:html-markup-p
            (gnc:html-markup/format 
-            (_ "The number option is %a.")
+            (_ "The number option is %s.")
             (gnc:html-markup-b (number->string num-val))))
 
           ;; Here we print the value of the number option formatted as
@@ -379,10 +393,10 @@ new, totally cool report, consult the mailing list ")
           ;; it yourself -- it will be wrong in other locales.
           (gnc:html-markup-p 
            (gnc:html-markup/format
-            (_ "The number option formatted as currency is %a.")
+            (_ "The number option formatted as currency is %s.")
             (gnc:html-markup-b
              (gnc:amount->string num-val (gnc:default-print-info #f)))))))
-        
+
         ;; you can add as many objects as you want.  Here's another 
         ;; one.  We'll make a single-column table of the selected list 
         ;; options just for grins. 
@@ -435,7 +449,7 @@ new, totally cool report, consult the mailing list ")
              document
              (gnc:make-html-text
               (gnc:html-markup-p (_ "You have selected no accounts.")))))
-        
+
         (gnc:html-document-add-object! 
          document 
          (gnc:make-html-text 

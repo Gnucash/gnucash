@@ -9,7 +9,11 @@ gncscm_DATA = \
   report-list.scm \
   stylesheet-plain.scm \
   stylesheet-fancy.scm \
+  taxtxf.scm \
+  txf-export.scm \
+  txf-export-help.scm \
   transaction-report.scm
+
 EXTRA_DIST = \
   .cvsignore \
   ${gncscm_DATA}

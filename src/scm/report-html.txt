@@ -403,11 +403,7 @@ We have three different kinds of style control information available:
            (gnc:html-document-render ssdoc)))
 
        (gnc:define-html-style-sheet 
-        'version 1.0
+        'version 1
         'name "Sample Style Sheet"
         'renderer sample-renderer
         'options sample-options))
-
- 
-
-
