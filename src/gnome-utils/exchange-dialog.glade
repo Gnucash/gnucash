@@ -15,7 +15,7 @@
 <widget>
   <class>GnomeDialog</class>
   <name>Exchange Dialog</name>
-  <type>GTK_WINDOW_TOPLEVEL</type>
+  <type>GTK_WINDOW_POPUP</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>
   <allow_shrink>False</allow_shrink>

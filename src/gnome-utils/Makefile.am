@@ -19,12 +19,14 @@ AM_CFLAGS = \
   ${G_WRAP_COMPILE_ARGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
+  QuickFill.c \
   cursors.c \
   argv-list-converters.c \
   dialog-account.c \
   dialog-account-pick.c \
   dialog-commodity.c \
   dialog-options.c \
+  dialog-transfer.c \
   dialog-utils.c \
   druid-utils.c \
   gnc-account-sel.c \
@@ -51,10 +53,12 @@ libgncmod_gnome_utils_la_SOURCES = \
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
+  QuickFill.h \
   dialog-account.h \
   dialog-account-pick.h \
   dialog-commodity.h \
   dialog-options.h \
+  dialog-transfer.h \
   dialog-utils.h \
   druid-utils.h \
   gnc-account-sel.h \
@@ -117,7 +121,8 @@ gncscm_DATA = gnc-menu-extensions.scm
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
   commodity.glade \
-  exchange-dialog.glade
+  exchange-dialog.glade \
+  transfer.glade
 
 EXTRA_DIST = \
   .cvsignore \

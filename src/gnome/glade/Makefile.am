@@ -11,7 +11,6 @@ glade_DATA = \
 	register.glade \
 	stocks.glade \
 	tax.glade \
-	transfer.glade \
 	userpass.glade \
 	sched-xact.glade
 

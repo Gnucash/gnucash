@@ -12,7 +12,6 @@ libgncmod_register_core_la_LIBADD = \
 
 libgncmod_register_core_la_SOURCES = \
   gncmod-register-core.c \
-  QuickFill.c \
   basiccell.c \
   cell-factory.c \
   cellblock.c \
@@ -31,7 +30,6 @@ libgncmod_register_core_la_SOURCES = \
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
-  QuickFill.h \
   basiccell.h \
   cell-factory.h \
   cellblock.h \

@@ -36,7 +36,6 @@ libgncgnome_la_SOURCES = \
   dialog-sxsincelast.c \
   dialog-tax-info.c \
   dialog-totd.c \
-  dialog-transfer.c \
   dialog-userpass.c \
   dialog-scheduledxaction.c \
   druid-hierarchy.c \
@@ -74,7 +73,6 @@ noinst_HEADERS = \
   dialog-sx-from-trans.h \
   dialog-sxsincelast.h \
   dialog-totd.h \
-  dialog-transfer.h \
   dialog-scheduledxaction.h \
   druid-hierarchy.h \
   druid-loan.h \

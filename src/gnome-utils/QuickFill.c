@@ -33,7 +33,6 @@
 #endif
 
 #include "QuickFill.h"
-#include "basiccell.h"
 #include "dialog-utils.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"

@@ -37,10 +37,10 @@
 #include "gnc-euro.h"
 #include "gnc-exp-parser.h"
 #include "gnc-gui-query.h"
-#include "gnc-ledger-display.h"
 #include "gnc-ui.h"
 #include "messages.h"
-#include "window-reconcile.h"
+#include "Transaction.h"
+#include "Account.h"
 
 
 #define DIALOG_TRANSFER_CM_CLASS "dialog-transfer"
@@ -94,6 +94,11 @@ struct _xferDialog
   GtkWidget * amount_radio;
 
   GtkTooltips *tips;
+
+  /* Where to store the "to_amount" at exit (in lieu of
+   * creating a transaction)
+   */
+  gnc_numeric * to_amount;
 };
 
 struct _acct_list_item
@@ -900,7 +905,8 @@ gnc_xfer_dialog_select_to_account(XferDialog *xferData, Account *account)
 
 static void
 gnc_xfer_dialog_lock_account_tree(XferDialog *xferData,
-                                  XferDirection direction)
+                                  XferDirection direction,
+				  gboolean hide)
 {
   GNCAccountTree *tree;
   GtkWidget *show_button;
@@ -924,6 +930,11 @@ gnc_xfer_dialog_lock_account_tree(XferDialog *xferData,
 
   gtk_widget_set_sensitive( GTK_WIDGET(tree), FALSE );
   gtk_widget_set_sensitive( GTK_WIDGET(show_button), FALSE );
+
+  if (hide) {
+    gtk_widget_hide( GTK_WIDGET(tree) );
+    gtk_widget_hide( GTK_WIDGET(show_button) );
+  }
 }
 
 
@@ -937,7 +948,7 @@ gnc_xfer_dialog_lock_account_tree(XferDialog *xferData,
 void
 gnc_xfer_dialog_lock_from_account_tree(XferDialog *xferData)
 {
-  gnc_xfer_dialog_lock_account_tree(xferData, XFER_DIALOG_FROM);
+  gnc_xfer_dialog_lock_account_tree(xferData, XFER_DIALOG_FROM, FALSE);
 }
 
 
@@ -951,9 +962,60 @@ gnc_xfer_dialog_lock_from_account_tree(XferDialog *xferData)
 void
 gnc_xfer_dialog_lock_to_account_tree(XferDialog *xferData)
 {
-  gnc_xfer_dialog_lock_account_tree(xferData, XFER_DIALOG_TO);
+  gnc_xfer_dialog_lock_account_tree(xferData, XFER_DIALOG_TO, FALSE);
 }
 
+
+/********************************************************************\
+ * gnc_xfer_dialog_hide_from_account_tree                           *
+ *   prevent changes to the from account tree in an xfer dialog     *
+ *                                                                  *
+ * Args:   xferData - xfer dialog structure                         *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_xfer_dialog_hide_from_account_tree(XferDialog *xferData)
+{
+  gnc_xfer_dialog_lock_account_tree(xferData, XFER_DIALOG_FROM, TRUE);
+}
+
+
+/********************************************************************\
+ * gnc_xfer_dialog_hide_to_account_tree                             *
+ *   prevent changes to the to account tree in an xfer dialog       *
+ *                                                                  *
+ * Args:   xferData - xfer dialog structure                         *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_xfer_dialog_hide_to_account_tree(XferDialog *xferData)
+{
+  gnc_xfer_dialog_lock_account_tree(xferData, XFER_DIALOG_TO, TRUE);
+}
+
+
+/********************************************************************\
+ * gnc_xfer_dialog_is_exchange_dialog                               *
+ *   set the dialog as an "exchange-dialog", which means that the   *
+ *   Transfer Information frame is read-only (and the dialog        *
+ *   will NOT create a transaction when it is closed)               *
+ *                                                                  *
+ * Args:   xferData - xfer dialog structure                         *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_xfer_dialog_is_exchange_dialog (XferDialog *xferData, gnc_numeric *to_amount)
+{
+  if (!xferData) return;
+
+  gtk_widget_set_sensitive (xferData->amount_edit, FALSE);
+  gtk_widget_set_sensitive (xferData->date_entry, FALSE);
+  gtk_widget_set_sensitive (xferData->num_entry, FALSE);
+  gtk_widget_set_sensitive (xferData->description_entry, FALSE);
+  gtk_widget_set_sensitive (xferData->memo_entry, FALSE);
+
+  xferData->to_amount = to_amount;
+}
 
 /********************************************************************\
  * gnc_xfer_dialog_set_amount                                       *
@@ -1013,6 +1075,24 @@ gnc_xfer_dialog_set_memo(XferDialog *xferData, const char *memo)
 
   gtk_entry_set_text(GTK_ENTRY(xferData->memo_entry), memo);
   /* gnc_quickfill_insert( xferData->qf, memo, QUICKFILL_LIFO ); */
+}
+
+/********************************************************************\
+ * gnc_xfer_dialog_set_num                                          *
+ *   set the num in the given xfer dialog                           *
+ *                                                                  *
+ * Args:   xferData    - xfer dialog structure                      *
+ *         num        - the num to set                              *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_xfer_dialog_set_num(XferDialog *xferData, const char *num)
+{
+  if (xferData == NULL)
+    return;
+
+  gtk_entry_set_text(GTK_ENTRY(xferData->num_entry), num);
+  /* gnc_quickfill_insert( xferData->qf, num, QUICKFILL_LIFO ); */
 }
 
 /********************************************************************\
@@ -1141,47 +1221,54 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   gnc_suspend_gui_refresh ();
 
-  /* Create the transaction */
-  trans = xaccMallocTransaction(gnc_get_current_book ());
+  if (xferData->to_amount)
+  {
+    *(xferData->to_amount) = to_amount;
+  }
+  else
+  {
+    /* Create the transaction */
+    trans = xaccMallocTransaction(gnc_get_current_book ());
 
-  xaccTransBeginEdit(trans);
+    xaccTransBeginEdit(trans);
 
-  xaccTransSetCurrency(trans, from_commodity);
-  xaccTransSetDateSecs(trans, time);
+    xaccTransSetCurrency(trans, from_commodity);
+    xaccTransSetDateSecs(trans, time);
 
-  string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
-  xaccTransSetNum(trans, string);
+    string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
+    xaccTransSetNum(trans, string);
 
-  string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
-  xaccTransSetDescription(trans, string);
+    string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
+    xaccTransSetDescription(trans, string);
 
-  /* create from split */
-  from_split = xaccMallocSplit(gnc_get_current_book ());
-  xaccTransAppendSplit(trans, from_split); 
+    /* create from split */
+    from_split = xaccMallocSplit(gnc_get_current_book ());
+    xaccTransAppendSplit(trans, from_split); 
 
-  /* create to split */
-  to_split = xaccMallocSplit(gnc_get_current_book ());
-  xaccTransAppendSplit(trans, to_split); 
+    /* create to split */
+    to_split = xaccMallocSplit(gnc_get_current_book ());
+    xaccTransAppendSplit(trans, to_split); 
 
-  xaccAccountBeginEdit(from_account);
-  xaccAccountInsertSplit(from_account, from_split);
+    xaccAccountBeginEdit(from_account);
+    xaccAccountInsertSplit(from_account, from_split);
 
-  xaccAccountBeginEdit(to_account);
-  xaccAccountInsertSplit(to_account, to_split);
+    xaccAccountBeginEdit(to_account);
+    xaccAccountInsertSplit(to_account, to_split);
 
-  xaccSplitSetBaseValue(from_split, gnc_numeric_neg (amount), from_commodity);
-  xaccSplitSetBaseValue(to_split, amount, from_commodity);
-  xaccSplitSetBaseValue(to_split, to_amount, to_commodity);
+    xaccSplitSetBaseValue(from_split, gnc_numeric_neg (amount), from_commodity);
+    xaccSplitSetBaseValue(to_split, amount, from_commodity);
+    xaccSplitSetBaseValue(to_split, to_amount, to_commodity);
 
-  /* Set the memo fields */
-  string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
-  xaccSplitSetMemo(from_split, string);
-  xaccSplitSetMemo(to_split, string);
+    /* Set the memo fields */
+    string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
+    xaccSplitSetMemo(from_split, string);
+    xaccSplitSetMemo(to_split, string);
 
-  /* finish transaction */
-  xaccTransCommitEdit(trans);
-  xaccAccountCommitEdit(from_account);
-  xaccAccountCommitEdit(to_account);
+    /* finish transaction */
+    xaccTransCommitEdit(trans);
+    xaccAccountCommitEdit(from_account);
+    xaccAccountCommitEdit(to_account);
+  }
 
   /* XXX: Maybe save this exchange to the pricedb */
 

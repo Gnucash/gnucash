@@ -29,18 +29,21 @@
 #include "gnc-numeric.h"
 #include "date.h"
 
-typedef struct _exchange_window ExchangeDialog;
-
-void gnc_ui_exchange_dialog_destroy (ExchangeDialog * w);
-
-/* Create a dialog to enter an exchange rate.  Looks in the pricedb
- * for entries; stores entries in the pricedb.
+/* Create a dialog to enter/modify an Split's exchange rate.  Look in
+ * the pricedb for potential entries if exchange_rate points to a
+ * 'zero' value; new/changed entries are stored in the pricedb
+ * (overwriting existing pricedb entries if they exist).
+ *
+ * If the run was successful (user hit 'ok'), fill in the (new)
+ * exchange rate, store it in the pricedb, and return TRUE.  Otherwise
+ * return FALSE (and do not touch exchange_rate)
  */
-ExchangeDialog *
-gnc_ui_exchange_dialog_full (GNCPriceDB * pricedb,
-			     gnc_numeric amount,
-			     gnc_commodity * from,
-			     gnc_commodity * to,
-			     Timespec date);
+gboolean
+gnc_ui_exchange_dialog_new (GNCPriceDB * pricedb,
+			    gnc_numeric amount,
+			    gnc_commodity * from,
+			    gnc_commodity * to,
+			    Timespec date,
+			    gnc_numeric * exchange_rate);
 
 #endif /* GNC_DIALOG_EXCHANGE_H */
