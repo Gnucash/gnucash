@@ -100,9 +100,10 @@ architectural goals.
 <dt><b>C++</b>
 <dd>The current code is written in C, in an object-oriented fashion.
     However, C++ has many benefits;  a major overhaul and conversion
-    to C++ would benefit the project.  However, this is a large task,
-    with few obvious rewards, and little short-term benefit to the
-    project.
+    to C++ is needed.  This is a large task, with little short-term 
+    benefit to the project; however, it is vital for getting to the 
+    next level of clean, well-structured code, and thus should be
+    considered a priority.
     <p>
 
 <dt><b>Loadable Modules</b>
@@ -174,7 +175,7 @@ immediately, independent of the major goals.
     it is not possible to tab over to the "Commit" button. It should be.
     <p>
 
-<dt><b>Icons, Icons Icons</b>
+<dt><b>Icons, Icons, Icons</b>
 <dd>A set of pretty icons and button pixmaps should be created for
     minimized windows, and for the various buttons.  A user-configurable
     button-bar would be nice too.  This should probably be coupled with
@@ -302,13 +303,16 @@ immediately, independent of the major goals.
     cleared flag to be independently set for both the debited & credited
     accounts.
     <p>
+    N.B. Some initial groundwork for splits has been done, but the
+    hard part is still ahead.
+    <p>
 
 <dt><b>Locks</b>
 <dd>When splits are implemented, and the parent transaction has been
     marked as cleared, the record should be locked, so that further
     modifications to the amount can't be performed (or at least, a warning
     is generated.  This prevents accidental garbaging up of old
-    transactions.
+    transactions.)
 
 </dl>
 </p>
@@ -320,14 +324,26 @@ Your name here as project contributor!
 <li><a href="http://www3.hmc.edu/~rclark/xacc/">X-Accountant Home Page</a>
 <li><a href="http://www.hex.net/~cbbrowne/finances.html">CBBrowne's List
     of Linux Accounting Software</a>
+<li><a href="http://www.ios-online.de/Linux-Kontor/">Linux-Kontor,
+    an industrial accounting package project. German.</a>
 <li><a href="http://www.chieti.com/lpc/">Linux Projects Catalogue</a>
 <li><a href="http://www.projects.ml.org/">Another Linux Project
     Server</a>
+<li><a href="http://www.im.lcs.mit.edu/~magnus/ml/">Maxwell's Lemur 
+    -- a GTK based table widget</a>
+<li><a href="mailto:nw@hydaspes.if.org">Nathan Wagner (nw@hydaspes.if.org)
+    </a> is working on an accounting SQL table layout.
+<li><a href="mailto:carew@hotmail.com">Evan Carew
+    (carew@hotmail.com)</a> is working on an accounting SQL table
+    layout.  Evan has strong coporate accounting experience.
+<li><a href="mailto:rlb@cs.utexas.edu">Rob Browning (rlb@cs.utexas.edu)</a>
+    is a technical engine behind CBB (perl & tk based accting program).
+
 </ul>
 
 <hr>
-Draft version 0.11 December 1997<br>
-Linas Vepstas linas@linas.org <br>
-Robin Clark rclark@hmc.edu<br>
+Draft version 0.13 December 1997<br>
+Linas Vepstas <a href="mailto:linas@linas.org">linas@linas.org</a><br>
+Robin Clark <a href="mailto:rclark@hmc.edu">rclark@hmc.edu</a><br>
 </body>
 </html>
