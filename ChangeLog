@@ -1,3 +1,8 @@
+2005-02-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/locale-specific/us/Makefile.am: make sure the
+	  scheme reports are part of the DIST.
+
 2005-01-30  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Account.c:
