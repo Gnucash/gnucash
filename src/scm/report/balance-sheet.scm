@@ -173,6 +173,8 @@
 	    (gnc:filter-accountlist-type
 	     '(credit liability)
 	     accounts))
+	   (liability-account-names
+	    (map gnc:account-get-name liability-accounts))
 	   (equity-accounts
 	    (gnc:filter-accountlist-type
 	     '(equity)
@@ -196,7 +198,7 @@
 	 
 	   (doc (gnc:make-html-document))
 	   (txt (gnc:make-html-text)))
-
+      (gnc:warn "account names" liability-account-names)
       (gnc:html-document-set-title! 
        ;; FIXME: Use magic sprintf code.
        doc (sprintf #f (N_ "Balance sheet at %s")
@@ -213,18 +215,19 @@
 		 (exchange-alist (gnc:make-exchange-alist 
 				  report-currency to-date-tp))
 		 (exchange-fn (gnc:make-exchange-function exchange-alist))
-		 (my-get-balance (lambda (account)
+		 (totals-get-balance (lambda (account)
 				    (gnc:account-get-comm-balance-at-date 
-				     account to-date-tp do-subtotals?)))
+				     account to-date-tp #f)))
+
 		 (asset-balance 
 		  (gnc:accounts-get-comm-total-assets 
-		   asset-accounts my-get-balance))
+		   asset-accounts totals-get-balance))
 		 (liability-balance
 		  (gnc:accounts-get-comm-total-assets 
-		   liability-accounts my-get-balance))
+		   liability-accounts totals-get-balance))
 		 (equity-balance
 		  (gnc:accounts-get-comm-total-assets 
-		   equity-accounts my-get-balance))
+		   equity-accounts totals-get-balance))
 		 (sign-reversed-liability-balance
 		  (gnc:make-commodity-collector))
 		 (neg-retained-profit-balance 
@@ -239,8 +242,8 @@
 		 (asset-table (gnc:html-build-acct-table 
 			 #f  to-date-tp 
 			 tree-depth show-subaccts? asset-accounts
-			 #f
-			 #t gnc:accounts-get-comm-total-assets 
+			 #f #f
+			 gnc:accounts-get-comm-total-assets
 			 (_ "Assets") #f do-subtotals?
 			 show-fcur? report-currency exchange-fn))
 		 (liability-table 
@@ -252,7 +255,7 @@
 			liability-accounts
 			#f #f
 			gnc:accounts-get-comm-total-assets
-			(_ "Liabilities") #f #f
+			(_ "Liabilities") #f do-subtotals?
 			show-fcur? report-currency exchange-fn))
 		 (equity-table
 		  (gnc:html-build-acct-table
@@ -263,7 +266,7 @@
 		   equity-accounts
 		   #f #f
 		   gnc:accounts-get-comm-total-assets
-		   (_ "Equity") #f #f
+		   (_ "Equity") #f do-subtotals?
 		   show-fcur? report-currency exchange-fn)))
 	    (retained-profit-balance 'minusmerge
 				     neg-retained-profit-balance
@@ -287,6 +290,10 @@
 	    
 	    ;; add the tables
 	    (gnc:html-table-prepend-row! asset-table (list "Assets"))	    
+	    (add-subtotal-line
+	     asset-table "Assets" 
+	     asset-balance show-fcur? exchange-fn
+	     report-currency)	    
 	    (gnc:html-table-append-row! asset-table (list "Liabilities"))
 	    (html-table-merge asset-table liability-table)
 	    (add-subtotal-line
