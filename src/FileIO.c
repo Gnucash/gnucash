@@ -779,7 +779,7 @@ xaccResetWriteFlags (AccountGroup *grp)
     trans = getTransaction (acc, 0); 
     n++;
     while (trans) {
-      trans->write_flag = 0;
+      trans->credit_split.write_flag = 0;
       trans = getTransaction (acc, n); 
       n++;
     }
@@ -926,7 +926,7 @@ writeAccount( int fd, Account *acc )
   numUnwrittenTrans = 0;
   for( i=0; i<acc->numTrans; i++ ) {
     trans = getTransaction(acc,i);
-    if (0 == trans->write_flag) numUnwrittenTrans ++;
+    if (0 == trans->credit_split.write_flag) numUnwrittenTrans ++;
   }
 
   ntrans = numUnwrittenTrans;
@@ -938,7 +938,7 @@ writeAccount( int fd, Account *acc )
   INFO_2 ("writeAccount(): will write %d trans\n", numUnwrittenTrans);
   for( i=0; i<acc->numTrans; i++ ) {
     trans = getTransaction(acc,i);
-    if (0 == trans->write_flag) {
+    if (0 == trans->credit_split.write_flag) {
        err = writeTransaction( fd, trans );
     }
     if( -1 == err ) return err;
@@ -984,8 +984,8 @@ writeTransaction( int fd, Transaction *trans )
    * it again.  That is, prevent double-entry transactions 
    * from being written twice 
    */
-  if (trans->write_flag) return 4;
-  trans->write_flag = 1;
+  if (trans->credit_split.write_flag) return 4;
+  trans->credit_split.write_flag = 1;
   
   err = writeString( fd, trans->num );
   if( -1 == err )

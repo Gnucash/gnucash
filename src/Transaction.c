@@ -145,8 +145,6 @@ initTransaction( Transaction * trans )
   trans->date.year   = 1900;        
   trans->date.month  = 1;        
   trans->date.day    = 1;        
-
-  trans->write_flag  = 0;
   }
 
 /********************************************************************\
@@ -198,7 +196,6 @@ implemented and tested.
   trans->date.month  = 1;        
   trans->date.day    = 1;        
 
-  trans->write_flag  = 0;
   _free(trans);
 }
 
