@@ -523,7 +523,6 @@ gnc_commodity_table *
 gnc_commodity_table_get_table(GNCBook *book)
 {
   if (!book) return NULL;
-printf ("duude get commodity table\n");
   return gnc_book_get_data (book, GNC_COMMODITY_TABLE);
 }
 
@@ -1106,7 +1105,6 @@ commodity_table_book_begin (GNCBook *book)
 {
   gnc_commodity_table *ct;
   
-printf ("duude call commodity_table book begin \n");
   ct = gnc_commodity_table_new ();
   if(!gnc_commodity_table_add_default_data(ct))
   {
