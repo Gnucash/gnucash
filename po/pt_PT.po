@@ -1,13 +1,13 @@
 # Localization for Portuguese
 # Copyright (C) 2001 Free Software Foundation, Inc.
-# Duarte Loreto <happyguy_pt@hotmail.com>, 2001.
+# Duarte Loreto <dlsl@poli.org>, 2001.
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 1.5.5\n"
+"Project-Id-Version: GnuCash 1.5.6\n"
 "POT-Creation-Date: 2001-04-23 00:36-0700\n"
-"PO-Revision-Date: 2001-04-22 19:00+GMT\n"
-"Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
+"PO-Revision-Date: 2001-05-07 01:00+GMT\n"
+"Last-Translator: Duarte Loreto <dlsl@poli.org>\n"
 "Language-Team: Portuguese Documentation Project (POLI) <info@poli.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
@@ -26,7 +26,7 @@ msgid ""
 "    %s\n"
 "is not supported by this version of GnuCash."
 msgstr ""
-"O URL \n"
+"O endereço \n"
 "    %s\n"
 "não é suportado por esta versão do GnuCash."
 
@@ -38,7 +38,7 @@ msgid ""
 "    %s\n"
 "is in use by another user."
 msgstr ""
-"O URL \n"
+"O endereço \n"
 "    %s\n"
 "está aberto por outro utilizador."
 
@@ -107,7 +107,7 @@ msgstr ""
 
 #: src/FileDialog.c:120
 msgid "Unknown file type"
-msgstr ""
+msgstr "Tipo de ficheiro desconhecido"
 
 # src/FileDialog.c:118
 #: src/FileDialog.c:126
@@ -116,7 +116,7 @@ msgid ""
 "Can't parse the database URL\n"
 "   %s\n"
 msgstr ""
-"Não é possível parsear o endereço (URL) de base de dados\n"
+"Não é possível parsear o endereço de base de dados\n"
 "   %s\n"
 
 # src/FileDialog.c:124
@@ -169,8 +169,7 @@ msgstr ""
 # src/FileDialog.c:229
 #: src/FileDialog.c:257
 msgid "Changes have been made since the last Save. Save the data to file?"
-msgstr ""
-"Foram feitas alterações desde a última gravação. Gravar os dados em ficheiro?"
+msgstr "Foram feitas alterações desde a última gravação. Gravar os dados em ficheiro?"
 
 # src/FileDialog.c:392 src/gnome/dialog-filebox.c:78
 # src/gnome/window-help.c:505 src/gnome/window-main.c:1041
@@ -678,9 +677,8 @@ msgstr "Total "
 # src/gnome/glade-gnc-dialogs.c:5701 src/gnome/glade-gnc-dialogs.c:5755
 # src/gnome/window-main.c:1266
 #: src/gnc-ui-util.c:147 src/scm/guile-strings.c:376
-#, fuzzy
 msgid "Tax Info"
-msgstr "Informação de Impostos"
+msgstr "Info. de Impostos"
 
 # src/gnc-ui-util.c:271
 #: src/gnc-ui-util.c:364
@@ -791,8 +789,7 @@ msgstr "Já existe uma conta com esse nome."
 # src/gnome/druid-stock-split.c:250
 #: src/gnome/dialog-account.c:1142
 msgid "You must enter a valid opening balance or leave it blank."
-msgstr ""
-"Tem de ou introduzir um saldo inicial válido ou deixar o campo em branco."
+msgstr "Tem de ou introduzir um saldo inicial válido ou deixar o campo em branco."
 
 # src/gnome/druid-stock-split.c:326
 #: src/gnome/dialog-account.c:1167
@@ -1072,7 +1069,6 @@ msgstr "Tem de introduzir um preço válido."
 
 # src/gnome/dialog-transfer.c:700
 #: src/gnome/dialog-transfer.c:704
-#, fuzzy
 msgid "You must enter a valid `to' amount."
 msgstr "Tem de introduzir um montante `para' válido."
 
@@ -1149,8 +1145,7 @@ msgstr ""
 # src/gnome/druid-qif-import.c:1445
 #: src/gnome/druid-commodity.c:397 src/gnome/druid-qif-import.c:1466
 msgid "You must enter an existing national currency or enter a different type."
-msgstr ""
-"Tem de introduzir uma abreviatura nacional existente ou um tipo diferente."
+msgstr "Tem de introduzir uma abreviatura nacional existente ou um tipo diferente."
 
 # src/gnome/druid-qif-import.c:203 src/gnome/glade-gnc-dialogs.c:3905
 # src/scm/guile-strings.c:243
@@ -2254,8 +2249,7 @@ msgstr "Introduza o nome completo do activo. Exemplo: Escudos Portugueses"
 msgid ""
 "Enter the ticker symbol or currency code for the commodity. Example: USD"
 msgstr ""
-"Introduza o símbolo do \"ticker\" ou código de moeda para o activo. Exemplo: "
-"PTE"
+"Introduza o símbolo do \"ticker\" ou código de moeda para o activo. Exemplo: PTE"
 
 #: src/gnome/glade-gnc-dialogs.c:3300
 msgid ""
@@ -3182,8 +3176,7 @@ msgstr "\"Split\" de Acções"
 # src/gnome/glade-gnc-dialogs.c:6201
 #: src/gnome/glade-gnc-dialogs.c:6472
 msgid "This wizard will help you record a stock split or stock merger."
-msgstr ""
-"Esta ajuda apoia-lo-á no registo de um \"split\" ou \"merge\" de acções."
+msgstr "Esta ajuda apoia-lo-á no registo de um \"split\" ou \"merge\" de acções."
 
 # src/gnome/glade-gnc-dialogs.c:6212
 #: src/gnome/glade-gnc-dialogs.c:6483
@@ -3516,11 +3509,11 @@ msgstr ""
 
 #: src/gnome/gnc-html.c:1062
 msgid "Badly formed gnc-register: URL."
-msgstr "gnc-register: URL mal formado."
+msgstr "gnc-register: Endereço mal formado."
 
 #: src/gnome/gnc-html.c:1085
 msgid "Badly formed gnc-options: URL."
-msgstr "gnc-options: URL mal formado."
+msgstr "gnc-options: Endereço mal formado."
 
 # src/gnome/dialog-totd.c:184
 #: src/gnome/gnc-html.c:1231
@@ -3603,9 +3596,7 @@ msgstr "Configuração de Conta de Novo Utilizador"
 # src/gnome/new-user-interface.c:87
 #: src/gnome/new-user-interface.c:106
 msgid "This wizard will help you to set up a default set of accounts to use."
-msgstr ""
-"Esta ajuda apoia-lo-á na definição de um conjunto padrão de contas a "
-"utilizar."
+msgstr "Esta ajuda apoia-lo-á na definição de um conjunto padrão de contas a utilizar."
 
 # src/gnome/new-user-interface.c:99
 #: src/gnome/new-user-interface.c:118
@@ -3909,8 +3900,7 @@ msgstr "_Limpar"
 # src/gnome/window-main.c:1267
 #: src/gnome/window-acct-tree.c:881
 msgid "Setup tax information for all income and expense accounts"
-msgstr ""
-"Definir informação de impostos para todas as contas de receitas e despesas"
+msgstr "Definir informação de impostos para todas as contas de receitas e despesas"
 
 # src/gnome/window-reconcile.c:1131 src/gnome/window-register.c:1520
 #: src/gnome/window-acct-tree.c:892 src/gnome/window-reconcile.c:1226
@@ -4040,15 +4030,13 @@ msgstr "Abrir uma nova vista de árvore de contas"
 
 # src/scm/guile-strings.c:88 src/scm/guile-strings.c:91
 #: src/gnome/window-main.c:749
-#, fuzzy
 msgid "Move to New Window"
-msgstr "Janela _Principal"
+msgstr "Ir para Nova Janela"
 
 # src/gnome/window-reconcile.c:1119 src/gnome/window-register.c:1508
 #: src/gnome/window-main.c:750
-#, fuzzy
 msgid "Open a new top-level GnuCash window for the current view"
-msgstr "Abre uma nova janela de topo no GnuCash"
+msgstr "Abre uma nova janela de topo no GnuCash para a visualização actual"
 
 # src/gnome/window-help.c:535
 #: src/gnome/window-main.c:756
@@ -5785,8 +5773,7 @@ msgstr "Sexto nível"
 # src/scm/guile-strings.c:48
 #: src/scm/guile-strings.c:142
 msgid "Show accounts to this depth, overriding any other option."
-msgstr ""
-"Mostrar contas até esta profundidade, ignorando quaisquer outras opções."
+msgstr "Mostrar contas até esta profundidade, ignorando quaisquer outras opções."
 
 # src/scm/guile-strings.c:57
 #: src/scm/guile-strings.c:143
@@ -5799,8 +5786,7 @@ msgstr ""
 # src/scm/guile-strings.c:58
 #: src/scm/guile-strings.c:144
 msgid "Report on these accounts, if display depth allows."
-msgstr ""
-"Relatório sobre estas contas, caso a profundidade de visualização permita."
+msgstr "Relatório sobre estas contas, caso a profundidade de visualização permita."
 
 # src/scm/guile-strings.c:59
 #: src/scm/guile-strings.c:145
@@ -6014,8 +6000,7 @@ msgstr "Mostrar Automaticamente Listas"
 # src/scm/guile-strings.c:145
 #: src/scm/guile-strings.c:212
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr ""
-"Mostrar automaticamente a lista de contas ou acções durante a inserção."
+msgstr "Mostrar automaticamente a lista de contas ou acções durante a inserção."
 
 # src/scm/guile-strings.c:147
 #: src/scm/guile-strings.c:214
@@ -6118,37 +6103,37 @@ msgstr "Cores do Registo"
 # src/scm/guile-strings.c:171
 #: src/scm/guile-strings.c:238
 msgid "Header color"
-msgstr "Côr do cabeçalho"
+msgstr "Cor do cabeçalho"
 
 # src/scm/guile-strings.c:172
 #: src/scm/guile-strings.c:239
 msgid "The header background color"
-msgstr "A côr de fundo do cabeçalho"
+msgstr "A cor de fundo do cabeçalho"
 
 # src/scm/guile-strings.c:174
 #: src/scm/guile-strings.c:241
 msgid "Primary color"
-msgstr "Côr principal"
+msgstr "Cor principal"
 
 # src/scm/guile-strings.c:175
 #: src/scm/guile-strings.c:242
 msgid "The default background color for register rows"
-msgstr "A côr de defeito para o fundo das linhas do registo"
+msgstr "A cor de defeito para o fundo das linhas do registo"
 
 # src/scm/guile-strings.c:177
 #: src/scm/guile-strings.c:244
 msgid "Secondary color"
-msgstr "Côr secundária"
+msgstr "Cor secundária"
 
 # src/scm/guile-strings.c:178
 #: src/scm/guile-strings.c:245
 msgid "The default secondary background color for register rows"
-msgstr "A segunda côr de defeito para o fundo das linhas do registo"
+msgstr "A segunda cor de defeito para o fundo das linhas do registo"
 
 # src/scm/guile-strings.c:180
 #: src/scm/guile-strings.c:247
 msgid "Primary active color"
-msgstr "Côr activa principal"
+msgstr "Cor activa principal"
 
 # src/scm/guile-strings.c:181
 #: src/scm/guile-strings.c:248
@@ -6158,32 +6143,32 @@ msgstr "A cor de fundo para a linha actual do registo"
 # src/scm/guile-strings.c:183
 #: src/scm/guile-strings.c:250
 msgid "Secondary active color"
-msgstr "Côr activa secindária"
+msgstr "Cor activa secundária"
 
 # src/scm/guile-strings.c:184
 #: src/scm/guile-strings.c:251
 msgid "The secondary background color for the current register row"
-msgstr "Segunda côr de fundo para a linha actual do registo"
+msgstr "Segunda cor de fundo para a linha actual do registo"
 
 # src/scm/guile-strings.c:186
 #: src/scm/guile-strings.c:253
 msgid "Split color"
-msgstr "Côr de parcelas"
+msgstr "Cor de parcelas"
 
 # src/scm/guile-strings.c:187
 #: src/scm/guile-strings.c:254
 msgid "The default background color for split rows in the register"
-msgstr "A côr de fundo de defeito para linhas de parcela no registo"
+msgstr "A cor de fundo de defeito para linhas de parcela no registo"
 
 # src/scm/guile-strings.c:189
 #: src/scm/guile-strings.c:256
 msgid "Split active color"
-msgstr "Côr activa de parcela"
+msgstr "Cor activa de parcela"
 
 # src/scm/guile-strings.c:190
 #: src/scm/guile-strings.c:257
 msgid "The background color for the current split row in the register"
-msgstr "A côr de fundo da linha de parcela actual no registo"
+msgstr "A cor de fundo da linha de parcela actual no registo"
 
 # src/scm/guile-strings.c:192
 #: src/scm/guile-strings.c:259
@@ -6327,8 +6312,7 @@ msgstr "Modo MDI da aplicação"
 
 #: src/scm/guile-strings.c:284
 msgid "Choose how new windows are created for reports and account trees."
-msgstr ""
-"Seleccione como as novas são criadas para relatórios e árvores de contas."
+msgstr "Seleccione como as novas são criadas para relatórios e árvores de contas."
 
 # src/SplitLedger.c:4039 src/gnc-ui-util.c:123
 # src/gnome/glade-gnc-dialogs.c:3622 src/scm/guile-strings.c:107
@@ -6456,8 +6440,7 @@ msgstr "Contas de Crédito"
 # src/scm/guile-strings.c:225
 #: src/scm/guile-strings.c:312
 msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
-msgstr ""
-"Contas de Cartão de Crédito, Passivo, Saldo Inicial e Receitas Invertidas"
+msgstr "Contas de Cartão de Crédito, Passivo, Saldo Inicial e Receitas Invertidas"
 
 # src/scm/guile-strings.c:227
 #: src/scm/guile-strings.c:314
@@ -6752,11 +6735,11 @@ msgstr "Editar folhas de estilos dos relatórios."
 
 #: src/scm/guile-strings.c:420
 msgid "Welcome Extravaganza"
-msgstr ""
+msgstr "Extravagância de Boas Vindas"
 
 #: src/scm/guile-strings.c:421
 msgid "Welcome-to-gnucash screen"
-msgstr ""
+msgstr "Ecrã de Boas Vindas ao GnuCash"
 
 # src/register/splitreg.c:764
 #: src/scm/guile-strings.c:422
@@ -7201,8 +7184,7 @@ msgstr "Altura do Gráfico"
 #: src/scm/report/guile-strings.c:23 src/scm/report/guile-strings.c:138
 #: src/scm/report/guile-strings.c:241 src/scm/report/guile-strings.c:262
 msgid "Report on these accounts, if chosen account level allows."
-msgstr ""
-"Relatório sobre estas contas, caso nível de conta seleccionado permita."
+msgstr "Relatório sobre estas contas, caso nível de conta seleccionado permita."
 
 # src/scm/guile-strings.c:48
 #: src/scm/report/guile-strings.c:24 src/scm/report/guile-strings.c:139
@@ -7534,7 +7516,7 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:142
 msgid "Maximum number of bars in the chart"
-msgstr "N~umero máximo de barras no gráfico"
+msgstr "Número máximo de barras no gráfico"
 
 # src/SplitLedger.c:3937 src/SplitLedger.c:4036 src/gnc-ui-util.c:132
 # src/gnc-ui-util.c:135 src/gnome/glade-gnc-dialogs.c:1527
@@ -7691,19 +7673,19 @@ msgstr "Esta é uma opção numérica"
 #: src/scm/report/guile-strings.c:180 src/scm/report/guile-strings.c:409
 #: src/scm/report/guile-strings.c:438 src/scm/report/guile-strings.c:458
 msgid "Background Color"
-msgstr "Côr de Fundo"
+msgstr "Cor de Fundo"
 
 # src/scm/report/guile-strings.c:136 src/scm/report/guile-strings.c:139
 #: src/scm/report/guile-strings.c:181 src/scm/report/guile-strings.c:184
 msgid "This is a color option"
-msgstr "Esta é uma opção de côr"
+msgstr "Esta é uma opção de cor"
 
 # src/scm/report/guile-strings.c:138 src/scm/report/guile-strings.c:233
 # src/scm/report/guile-strings.c:261
 #: src/scm/report/guile-strings.c:183 src/scm/report/guile-strings.c:412
 #: src/scm/report/guile-strings.c:440
 msgid "Text Color"
-msgstr "Côr do Texto"
+msgstr "Cor do Texto"
 
 # src/scm/report/guile-strings.c:140 src/scm/report/guile-strings.c:143
 #: src/scm/report/guile-strings.c:185 src/scm/report/guile-strings.c:188
@@ -7916,17 +7898,16 @@ msgstr "Um relatório de demonstração com exemplos."
 
 #: src/scm/report/guile-strings.c:226 src/scm/report/guile-strings.c:229
 msgid "URL to frame"
-msgstr ""
+msgstr "Endereço para \"frame\""
 
 # src/scm/guile-strings.c:247
 #: src/scm/report/guile-strings.c:227
-#, fuzzy
 msgid "URL to display in report"
-msgstr "Apresentar o relatório %s"
+msgstr "Endereço para apresentar no relatório"
 
 #: src/scm/report/guile-strings.c:230
 msgid "Frame URL"
-msgstr ""
+msgstr "Endereço em \"Frame\""
 
 # src/scm/guile-strings.c:205
 #: src/scm/report/guile-strings.c:237
@@ -7953,16 +7934,14 @@ msgstr "Gráfico de Receitas/Despesas"
 
 # src/gnome/glade-gnc-dialogs.c:6500
 #: src/scm/report/guile-strings.c:250
-#, fuzzy
 msgid "Income Chart"
-msgstr "Gráfico de Barras de Receitas"
+msgstr "Gráfico de Receitas"
 
 # src/engine/Account.c:1684 src/scm/guile-strings.c:74
 # src/scm/guile-strings.c:102 src/scm/guile-strings.c:260
 #: src/scm/report/guile-strings.c:251
-#, fuzzy
 msgid "Expense Chart"
-msgstr "Gráfico de Barras de Despesas"
+msgstr "Gráfico de Despesas"
 
 #: src/scm/report/guile-strings.c:258
 msgid "Show Asset & Liability bars"
@@ -7994,15 +7973,13 @@ msgstr "Resultado Líquido"
 # src/engine/Account.c:1684 src/scm/guile-strings.c:74
 # src/scm/guile-strings.c:102 src/scm/guile-strings.c:260
 #: src/scm/report/guile-strings.c:270
-#, fuzzy
 msgid "Asset Chart"
-msgstr "Gráfico circular de Activos"
+msgstr "Gráfico de Activos"
 
 # src/scm/guile-strings.c:258
 #: src/scm/report/guile-strings.c:271
-#, fuzzy
 msgid "Liability/Equity Chart"
-msgstr "Passivo/Saldos Iniciais"
+msgstr "Gráfico Passivo/Saldos Iniciais"
 
 #: src/scm/report/guile-strings.c:272
 msgid "Net Worth Barchart"
@@ -8326,12 +8303,12 @@ msgstr "Cor normal de texto do corpo."
 # src/scm/report/guile-strings.c:236 src/scm/report/guile-strings.c:263
 #: src/scm/report/guile-strings.c:415 src/scm/report/guile-strings.c:442
 msgid "Link Color"
-msgstr "Cor de \"Link\""
+msgstr "Cor de Endereço"
 
 # src/scm/report/guile-strings.c:237
 #: src/scm/report/guile-strings.c:416
 msgid "Link text color."
-msgstr "Cor do texto do \"link\"."
+msgstr "Cor do texto do endereço."
 
 # src/scm/report/guile-strings.c:239 src/scm/report/guile-strings.c:265
 #: src/scm/report/guile-strings.c:418 src/scm/report/guile-strings.c:444
@@ -8403,7 +8380,7 @@ msgstr "Imagem de Fundo"
 # src/scm/report/guile-strings.c:186
 #: src/scm/report/guile-strings.c:465
 msgid "Enable hyperlinks in reports."
-msgstr "Activar \"links\" nos relatórios."
+msgstr "Activar endereços nos relatórios."
 
 # src/scm/report/guile-strings.c:307 src/scm/report/guile-strings.c:310
 # src/scm/report/guile-strings.c:313 src/scm/report/guile-strings.c:316
@@ -8535,21 +8512,20 @@ msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:236
 #: src/scm/report/guile-strings.c:509
-#, fuzzy
 msgid "Choose export format"
-msgstr "Formato do Cheque:"
+msgstr "Escolha formato de exportação"
 
 #: src/scm/report/guile-strings.c:510
 msgid "Choose the export format for this report:"
-msgstr ""
+msgstr "Escolha o formato de exportação para este relatório:"
 
 #: src/scm/report/guile-strings.c:511
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: src/scm/report/guile-strings.c:512
 msgid "TXF"
-msgstr ""
+msgstr "TXF"
 
 # src/gnome/window-main.c:1262 src/gnome/window-reconcile.c:1081
 #: src/scm/report/guile-strings.c:513
@@ -8558,9 +8534,8 @@ msgstr "Sub"
 
 # src/scm/guile-strings.c:252
 #: src/scm/report/guile-strings.c:514 src/scm/report/guile-strings.c:515
-#, fuzzy
 msgid "Select file for .TXF export"
-msgstr "Seleccione uma folha de estilo para o relatório."
+msgstr "Seleccione ficheiro para exportação .TXF."
 
 #: src/scm/report/guile-strings.c:516
 #, c-format
@@ -8568,6 +8543,8 @@ msgid ""
 "File: \"%s\" exists.\n"
 "Overwrite?"
 msgstr ""
+"Ficheiro: \"%s\" existe.\n"
+"Sobrepôr?"
 
 #: src/scm/report/guile-strings.c:518
 #, c-format
@@ -8615,14 +8592,12 @@ msgid "Primary Key"
 msgstr "Chave Primária"
 
 #: src/scm/report/guile-strings.c:530
-#, fuzzy
 msgid "Primary Subtotal"
-msgstr "Subtotais Primários/cabeçalhos"
+msgstr "Subtotais Primários"
 
 #: src/scm/report/guile-strings.c:531
-#, fuzzy
 msgid "Primary Subtotal for Date Key"
-msgstr "Subtotais Primários/cabeçalhos"
+msgstr "Subtotais Primários para Chave de Data"
 
 # src/scm/report/guile-strings.c:362 src/scm/report/guile-strings.c:418
 # src/scm/report/guile-strings.c:422
@@ -8631,14 +8606,12 @@ msgid "Secondary Key"
 msgstr "Chave Secundária"
 
 #: src/scm/report/guile-strings.c:533
-#, fuzzy
 msgid "Secondary Subtotal"
-msgstr "Subtotais Secundários/cabeçalhos"
+msgstr "Subtotais Secundários"
 
 #: src/scm/report/guile-strings.c:534
-#, fuzzy
 msgid "Secondary Subtotal for Date Key"
-msgstr "Subtotais Secundários/cabeçalhos"
+msgstr "Subtotais Secundários para Chave de Data"
 
 # src/scm/report/guile-strings.c:287 src/scm/report/guile-strings.c:387
 #: src/scm/report/guile-strings.c:539 src/scm/report/guile-strings.c:618
@@ -8707,9 +8680,8 @@ msgstr "Ordenar por data"
 
 # src/scm/report/guile-strings.c:287 src/scm/report/guile-strings.c:387
 #: src/scm/report/guile-strings.c:574
-#, fuzzy
 msgid "Other Account Name"
-msgstr "Outra Conta"
+msgstr "Outro Nome de Conta"
 
 # src/scm/report/guile-strings.c:334
 #: src/scm/report/guile-strings.c:575
@@ -8718,9 +8690,8 @@ msgstr "Ordenar por nome da conta de/para onde ocorreu transferência"
 
 # src/scm/report/guile-strings.c:287 src/scm/report/guile-strings.c:387
 #: src/scm/report/guile-strings.c:576
-#, fuzzy
 msgid "Other Account Code"
-msgstr "Outra Conta"
+msgstr "Outra Código de Conta"
 
 # src/scm/report/guile-strings.c:338
 #: src/scm/report/guile-strings.c:577
@@ -8769,9 +8740,8 @@ msgstr "do maior para o mais pequeno, mais recente para antigo"
 
 # src/gnome/gnc-datedelta.c:211
 #: src/scm/report/guile-strings.c:594 src/scm/report/guile-strings.c:595
-#, fuzzy
 msgid "Yearly"
-msgstr "Ano"
+msgstr "Anual"
 
 # src/scm/report/guile-strings.c:353
 #: src/scm/report/guile-strings.c:596
@@ -8780,13 +8750,12 @@ msgstr "Ordenar primeiro por este critério"
 
 #: src/scm/report/guile-strings.c:597
 msgid "Subtotal according to the primary key?"
-msgstr ""
+msgstr "Subtotal de acordo com chave primária?"
 
 # src/scm/report/guile-strings.c:331
 #: src/scm/report/guile-strings.c:598 src/scm/report/guile-strings.c:603
-#, fuzzy
 msgid "Do a date subtotal"
-msgstr "Data (subtotal anual)"
+msgstr "Fazer subtotal por data"
 
 # src/scm/report/guile-strings.c:355
 #: src/scm/report/guile-strings.c:599
@@ -8805,7 +8774,7 @@ msgstr "Ordenar em segundo lugar por este critério"
 
 #: src/scm/report/guile-strings.c:602
 msgid "Subtotal according to the secondary key?"
-msgstr ""
+msgstr "Subtotal de acordo com chave secundária?"
 
 # src/scm/report/guile-strings.c:365
 #: src/scm/report/guile-strings.c:604
@@ -8909,7 +8878,7 @@ msgstr "Vista de Colunas Múltiplas"
 #~ msgstr "Os itens a azul foram exportados para o ficheiro %s."
 
 #~ msgid "Blue items were <em>not</em> exported to txf file!"
-#~ msgstr "Intes a azul <em>não</em> foram exportados para ficheiro txf!"
+#~ msgstr "Itens a azul <em>não</em> foram exportados para ficheiro txf!"
 
 # src/gnome/window-report.c:389
 #~ msgid "Export .TXF"
