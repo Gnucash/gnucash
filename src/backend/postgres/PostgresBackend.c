@@ -685,9 +685,9 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       p = be->buff; *p = 0;
       p = stpcpy (p,
                   "SELECT DISTINCT gncTransaction.* "
-                  "FROM gncEntry, gncTransaction WHERE "
-                  "gncEntry.transGuid = gncTransaction.transGuid AND "
-                  "gncEntry.accountGuid='");
+                  "FROM gncSplit, gncTransaction WHERE "
+                  "gncSplit.transGuid = gncTransaction.transGuid AND "
+                  "gncSplit.accountGuid='");
       p = guid_to_string_buff(xaccAccountGetGUID(ae->acct), p);
       p = stpcpy (p, "' AND gncTransaction.date_posted > '");
       p = gnc_timespec_to_iso8601_buff (ae->ts, p);
@@ -981,7 +981,7 @@ pgendSyncSingleFile (Backend *bend, GNCBook *book)
        "LOCK TABLE gncAccount IN EXCLUSIVE MODE;\n"
        "LOCK TABLE gncCommodity IN EXCLUSIVE MODE;\n"
        "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
-       "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
+       "LOCK TABLE gncSplit IN EXCLUSIVE MODE;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
@@ -995,18 +995,18 @@ pgendSyncSingleFile (Backend *bend, GNCBook *book)
    /* do the one-book equivalent of "DELETE FROM gncTransaction;" */
    p = buff;
    p = stpcpy (p, "DELETE FROM gncTransaction WHERE "
-                  "  gncTransaction.transGuid = gncEntry.transGuid AND "
-                  "  gncEntry.accountGuid = gncAccount.accountGuid AND "
+                  "  gncTransaction.transGuid = gncSplit.transGuid AND "
+                  "  gncSplit.accountGuid = gncAccount.accountGuid AND "
                   "  gncAccount.bookGuid = '");
    p = stpcpy (p, book_guid);
    p = stpcpy (p, "';");
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 
-   /* do the one-book equivalent of "DELETE FROM gncEntry;" */
+   /* do the one-book equivalent of "DELETE FROM gncSplit;" */
    p = buff;
-   p = stpcpy (p, "DELETE FROM gncEntry WHERE "
-                  "  gncEntry.accountGuid = gncAccount.accountGuid AND "
+   p = stpcpy (p, "DELETE FROM gncSplit WHERE "
+                  "  gncSplit.accountGuid = gncAccount.accountGuid AND "
                   "  gncAccount.bookGuid = '");
    p = stpcpy (p, book_guid);
    p = stpcpy (p, "';");
@@ -1996,7 +1996,7 @@ pgend_session_begin (Backend *backend,
              * Alas, it does not, so we just bomb out.
              */
             xaccBackendSetError (&be->be, ERR_BACKEND_CANT_CONNECT);
-            xaccBackendSetMessage(&be->be, msg);
+            xaccBackendSetMessage(&be->be, "From the Postgresql Server: %s", msg);
             return;
          }
 
@@ -2032,7 +2032,7 @@ pgend_session_begin (Backend *backend,
       /* Check to see if we have a database version that we can 
        * live with */
       rc = pgendDBVersionIsCurrent (be);
-      if (0 > rc)
+      if (rc < 0)
       {
          /* The server is newer than we are, or another error occured,
           * we don't know how to talk to it.  The err code is already set. */
@@ -2040,7 +2040,7 @@ pgend_session_begin (Backend *backend,
          be->connection = NULL;
          return;
       }
-      if (0 < rc)
+      if (rc > 0)
       {
          /* The server is older than we are; ask user if they want to 
           * upgrade the database contents. */
@@ -2225,10 +2225,10 @@ pgend_session_begin (Backend *backend,
                xaccBackendSetError (&be->be, ERR_SQL_DB_BUSY);
                return;
              }
-             pgendUpgradeDB (be);
              p = "COMMIT;\n";
              SEND_QUERY (be,p, );
              FINISH_QUERY(be->connection);
+             pgendUpgradeDB (be);
            }
            else
            {

@@ -28,6 +28,8 @@
 #include <libpq-fe.h> 
 
 #include "PostgresBackend.h"
+#include "messages.h"
+#include "Backend.h"
 #include "upgrade.h"
 
 #include "putil.h"
@@ -37,7 +39,7 @@ static short module = MOD_BACKEND;
 /* ============================================================= */
 
 #define PGEND_CURRENT_MAJOR_VERSION  1
-#define PGEND_CURRENT_MINOR_VERSION  4
+#define PGEND_CURRENT_MINOR_VERSION  5
 #define PGEND_CURRENT_REV_VERSION    1
 
 /* ============================================================= */
@@ -132,7 +134,9 @@ put_iguid_in_tables (PGBackend *be)
 {
    char *p, buff[200];
    guint iguid;
-	
+
+   execQuery(be, "BEGIN");
+
    p = "LOCK TABLE gncAccount IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncEntry IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncTransaction IN ACCESS EXCLUSIVE MODE;\n"
@@ -158,7 +162,7 @@ put_iguid_in_tables (PGBackend *be)
        
        "UPDATE gncEntry SET iguid = gncGUIDCache.iguid "
        " FROM gncGUIDCache, gncKVPValue "
-       " WHERE gncGUIDCache.guid = gncEntry.entryGUID "
+       " WHERE gncGUIDCache.guid = gncEntry.entryGuid "
        " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
 
        "ALTER TABLE gncEntryTrail ADD COLUMN iguid INT4;\n"
@@ -167,7 +171,7 @@ put_iguid_in_tables (PGBackend *be)
        
        "UPDATE gncEntryTrail SET iguid = gncGUIDCache.iguid "
        " FROM gncGUIDCache, gncKVPValue "
-       " WHERE gncGUIDCache.guid = gncEntryTrail.entryGUID "
+       " WHERE gncGUIDCache.guid = gncEntryTrail.entryGuid "
        " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
@@ -217,6 +221,7 @@ put_iguid_in_tables (PGBackend *be)
        " (1,1,1,'End Put iGUID in Main Tables');";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
+   execQuery(be, "COMMIT");
 }
 
 /* ============================================================= */
@@ -225,6 +230,8 @@ static void
 fix_reconciled_balance_func (PGBackend *be)
 {
    char *p;
+
+   execQuery(be, "BEGIN");
 
    p = "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n "
        "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
@@ -256,6 +263,7 @@ fix_reconciled_balance_func (PGBackend *be)
        " (1,2,1,'End Fix gncSubtotalReconedBalance');";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
+   execQuery(be, "COMMIT");
 }
 
 /* ============================================================= */
@@ -265,6 +273,7 @@ add_kvp_timespec_tables (PGBackend *be)
 {
   char *p;
 
+  execQuery(be, "BEGIN");
   p = "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n "
       "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
       " (1,3,0,'Start Add kvp_timespec tables');";
@@ -290,6 +299,7 @@ add_kvp_timespec_tables (PGBackend *be)
       " (1,3,1,'End Add kvp_timespec tables');";
   SEND_QUERY (be,p, );
   FINISH_QUERY(be->connection);
+  execQuery(be, "COMMIT");
 }
 
 /* ============================================================= */
@@ -300,6 +310,7 @@ add_multiple_book_support (PGBackend *be)
    char buff[4000];
    char *p;
  
+   execQuery(be, "BEGIN");
    p = "LOCK TABLE gncAccount IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncAccountTrail IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncPrice IN ACCESS EXCLUSIVE MODE;\n"
@@ -368,7 +379,143 @@ add_multiple_book_support (PGBackend *be)
        " (1,4,1,'End Add multiple book support');";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
+   execQuery(be, "COMMIT");
 }
+
+static void
+add_timezone_support(PGBackend *be) {
+#include "newtables.h"
+
+    ENTER(" ");
+
+    if (!be) { LEAVE("Backend is (null)"); return; }
+    if (!be->connection) {
+        xaccBackendSetMessage(&be->be, "Backend connection is not available");
+        xaccBackendSetError(&be->be, ERR_BACKEND_CONN_LOST);
+        return;
+    }
+    
+	if (execQuery(be, "BEGIN WORK;\n") != PGRES_COMMAND_OK) {
+        LEAVE("Failed at BEGIN WORK (2)");
+        return;
+    }
+    
+    /* Drop the _old tables if the exist already from a previous
+     * upgrage attempt, although
+     * the ROLLBACKs ought to ensure that they don't 
+     */
+    execQuery(be, drop_old_tables);
+    execQuery(be, "COMMIT");
+
+    /* Clear backend error messages.  Use _get_error, because
+     * _set_error won't clear the backend error message if it
+     * is already set.
+     */
+    xaccBackendSetMessage(&be->be, NULL);
+    xaccBackendGetError(&be->be);
+    
+    /* execQuery sets the backend error message if one occurs */
+	if (execQuery(be, "BEGIN WORK") != PGRES_COMMAND_OK) {
+        LEAVE("Failed at BEGIN WORK");
+        return;
+    }
+    
+    if (execQuery(be, lock_tables) != PGRES_COMMAND_OK) {
+        execQuery(be, "ROLLBACK");
+        LEAVE("Failed at lock tables");
+        return;
+    }
+    if (execQuery(be, lock_entry) != PGRES_COMMAND_OK) {
+        execQuery(be, "ROLLBACK");
+        LEAVE("Failed at lock entry tables");
+        return;
+    }
+    
+    if (execQuery(be, drop_index) != PGRES_COMMAND_OK) {
+        execQuery(be, "ROLLBACK");
+        LEAVE("Failed at drop indexes");
+        return;
+    }
+    if (execQuery(be, drop_functions) != PGRES_COMMAND_OK) {
+        execQuery(be, "ROLLBACK");
+        LEAVE("Failed at drop functions");
+        return;
+    }
+    if (execQuery(be, alter_tables) != PGRES_COMMAND_OK) {
+        execQuery(be, "ROLLBACK");
+        LEAVE("Failed at alter tables");
+        return;
+    }
+
+    if (execQuery(be, create_new_tables) != PGRES_COMMAND_OK) {
+        execQuery(be, "ROLLBACK");
+        LEAVE("Failed at create new tables");
+        return;
+    }
+    if (execQuery(be, create_audits) != PGRES_COMMAND_OK) {
+        execQuery(be, "ROLLBACK");
+        LEAVE("Failed at create audit tables");
+        return;
+    }
+    if (execQuery(be, create_indexes) != PGRES_COMMAND_OK) {
+        execQuery(be, "ROLLBACK");
+        LEAVE("Failed at create indexes");
+        return;
+    }
+    if (execQuery(be, create_functions) != PGRES_COMMAND_OK) {
+        execQuery(be, "ROLLBACK");
+        LEAVE("Failed at create functions");
+        return;
+    }
+    
+    if (execQuery(be, lock_tables) != PGRES_COMMAND_OK) {
+        execQuery(be, "ROLLBACK");
+        LEAVE("Failed at lock tables (2)");
+        return;
+    }
+    if (execQuery(be, lock_split) != PGRES_COMMAND_OK) {
+        execQuery(be, "ROLLBACK");
+        LEAVE("Failed at lock split");
+        return;
+    }
+    
+    if (execQuery(be, insert_new_data) != PGRES_COMMAND_OK) {
+        execQuery(be, "ROLLBACK");
+        LEAVE("Failed at insert new data");
+        return;
+    }
+    if (execQuery(be, version_sql) != PGRES_COMMAND_OK) {
+        execQuery(be, "ROLLBACK");
+        LEAVE("Failed at insert version row");
+        return;
+    }
+    
+    /* Everything worked thus far, commit it now! */
+    execQuery(be, "COMMIT WORK;\n");
+
+    /* Clean up crud, Drop the _old tables, vacuum to 
+     * bring the indexes into use.
+     */
+    execQuery(be, "BEGIN WORK");
+    execQuery(be, drop_old_tables);
+    execQuery(be, "COMMIT WORK");
+    execQuery(be, "VACUUM FULL ANALYZE");
+    
+    /* Clear backend error messages.  Use _get_error, because
+     * _set_error won't clear the backend error message if it
+     * is already set.
+     *
+     * Cleanup failures don't necessarily mean we should error
+     * out, but it would be handy to have an informational 
+     * message to pass back to the user...
+     */
+    xaccBackendSetMessage(&be->be, NULL);
+    xaccBackendGetError(&be->be);
+
+    LEAVE("Success");
+
+}
+
 
 /* ============================================================= */
 /* Are we up to date ? */
@@ -384,17 +531,17 @@ pgendDBVersionIsCurrent (PGBackend *be)
    pgendVersionTable(be);
    vers = pgendGetVersion(be);
 
-   if (1 > vers.major)
+   if (vers.major < 1)
    {
       xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
       return -1;
    }
 
-   if ((PGEND_CURRENT_MAJOR_VERSION == vers.major) &&
-       (PGEND_CURRENT_MINOR_VERSION <= vers.minor)) return 0;
+   if ((vers.major == PGEND_CURRENT_MAJOR_VERSION) &&
+       (vers.minor >= PGEND_CURRENT_MINOR_VERSION)) return 0;
 
    /* check to see if this client can connect */
-   if (PGEND_CURRENT_MAJOR_VERSION < vers.major)
+   if (vers.major > PGEND_CURRENT_MAJOR_VERSION)
    {
       xaccBackendSetError (&be->be, ERR_BACKEND_TOO_NEW);
       return -1;
@@ -413,24 +560,27 @@ pgendUpgradeDB (PGBackend *be)
    vers = pgendGetVersion(be);
 
    /* start adding features to bring database up to date */
-   if (1 == vers.major)
+   if (vers.major == 1)
    {
       /* version 1.1.0 add iguids to transaction and entry tables */
-      if (1 > vers.minor)
+      if (vers.minor < 1)
       {
          put_iguid_in_tables(be);
       }
-      if (2 > vers.minor)
+      if (vers.minor < 2)
       {
         fix_reconciled_balance_func (be);
       }
-      if (3 > vers.minor)
+      if (vers.minor < 3)
       {
         add_kvp_timespec_tables (be);
       }
-      if (4 > vers.minor)
+      if (vers.minor < 4)
       {
         add_multiple_book_support (be);
+      }
+      if (vers.minor < 5) {
+          add_timezone_support(be);
       }
    }
 }
