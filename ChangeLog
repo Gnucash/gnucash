@@ -1,3 +1,16 @@
+2004-12-18  Derek Atkins  <derek@ihtfp.com>
+
+	Stephen Evanchik's GncDenseCal GObject patch:
+        * src/gnome-utils/gnc-dense-cal.h:
+          Added #include <glib.h>
+          Added private member 'disposed' to GncDenseCal struct
+          Added GNC_TYPE_DENSE_CAL macro
+        * src/gnome-utils/gnc-dense-cal.c:
+          Converted the following functions to use GObject:
+                gnc_dense_cal_get_type,
+                gnc_dense_cal_class_init
+          Renamed gnc_dense_cal_destroy to gnc_dense_cal_dispose
+
 2004-12-17  Derek Atkins  <derek@ihtfp.com>
 
 	Stephen Evanchik's GNCDateEdit GObject patch:

@@ -101,7 +101,7 @@ static short module = MOD_SX;
 static void gnc_dense_cal_class_init (GncDenseCalClass *class);
 static void gnc_dense_cal_init (GncDenseCal *dcal);
 static void gnc_dense_cal_finalize (GObject *object);
-static void gnc_dense_cal_destroy (GtkObject *object);
+static void gnc_dense_cal_dispose (GObject *object);
 static void gnc_dense_cal_realize (GtkWidget *widget);
 static void gnc_dense_cal_draw_to_buffer( GncDenseCal *dcal );
 static gint gnc_dense_cal_expose( GtkWidget      *widget,
@@ -200,43 +200,43 @@ static const gchar *day_label(int wday)
 }
 
 
-GtkType
+GType
 gnc_dense_cal_get_type ()
 {
-        static GtkType dense_cal_type = 0;
+        static GType dense_cal_type = 0;
 
-        if (!dense_cal_type)
-        {
-                static const GtkTypeInfo dense_cal_info =
-                        {
-                                "GncDenseCal",
-                                sizeof (GncDenseCal),
+        if (dense_cal_type == 0) {
+                static const GTypeInfo dense_cal_info = {
                                 sizeof (GncDenseCalClass),
-                                (GtkClassInitFunc) gnc_dense_cal_class_init,
-                                (GtkObjectInitFunc) gnc_dense_cal_init,
-                                /* reserved_1 */ NULL,
-                                /* reserved_1 */ NULL,
-                                (GtkClassInitFunc) NULL
-                        };
+				NULL,
+				NULL,
+                                (GClassInitFunc) gnc_dense_cal_class_init,
+				NULL,
+				NULL,
+                                sizeof (GncDenseCal),
+				0,  /* n_preallocs */
+                                (GInstanceInitFunc) gnc_dense_cal_init,
+                                NULL
+		};
 
-                dense_cal_type =
-                        gtk_type_unique (GTK_TYPE_WIDGET, &dense_cal_info);
+                dense_cal_type = g_type_register_static(GTK_TYPE_WIDGET,
+						"GncDenseCal",
+						&dense_cal_info, 0);
         }
 
         return dense_cal_type;
 }
 
 static void
-gnc_dense_cal_class_init (GncDenseCalClass *class)
+gnc_dense_cal_class_init (GncDenseCalClass *klass)
 {
         GObjectClass *object_class;
-	GtkObjectClass *gtkobject_class;
         GtkWidgetClass *widget_class;
 
-        object_class =  G_OBJECT_CLASS (class);
-	gtkobject_class = GTK_OBJECT_CLASS (class);
-        widget_class = GTK_WIDGET_CLASS (class);
-        parent_class = g_type_class_peek_parent (class);
+        object_class =  G_OBJECT_CLASS (klass);
+        widget_class = GTK_WIDGET_CLASS (klass);
+
+        parent_class = g_type_class_peek_parent (klass);
 
         gnc_dense_cal_signals[MARKS_LOST_SIGNAL] =
                 g_signal_new (MARKS_LOST_SIGNAL_NAME,
@@ -249,7 +249,8 @@ gnc_dense_cal_class_init (GncDenseCalClass *class)
 			      0);
 
         object_class->finalize = gnc_dense_cal_finalize;
-        gtkobject_class->destroy = gnc_dense_cal_destroy;
+        object_class->dispose = gnc_dense_cal_dispose;
+
         widget_class->realize = gnc_dense_cal_realize;
         widget_class->expose_event = gnc_dense_cal_expose;
         widget_class->size_request = gnc_dense_cal_size_request;
@@ -263,6 +264,7 @@ gnc_dense_cal_init (GncDenseCal *dcal)
 {
         gboolean colorAllocSuccess;
 
+        dcal->disposed = FALSE;
         dcal->initialized = FALSE;
         dcal->markData = NULL;
         dcal->numMarks = 0;
@@ -471,7 +473,7 @@ gnc_dense_cal_get_year( GncDenseCal *dcal )
 }
 
 static void
-gnc_dense_cal_destroy (GtkObject *object)
+gnc_dense_cal_dispose (GObject *object)
 {
         int i;
         GncDenseCal *dcal;
@@ -479,6 +481,11 @@ gnc_dense_cal_destroy (GtkObject *object)
         g_return_if_fail (GNC_IS_DENSE_CAL (object));
 
         dcal = GNC_DENSE_CAL(object);
+
+	if(dcal->disposed)
+		return;
+
+	dcal->disposed = TRUE;
 
         if ( GTK_WIDGET_REALIZED( dcal->transPopup ) ) {
                 gtk_widget_hide( GTK_WIDGET(dcal->transPopup) );
@@ -511,8 +518,8 @@ gnc_dense_cal_destroy (GtkObject *object)
         /* mark data */
         gdc_free_all_mark_data( dcal );
 
-        if (GTK_OBJECT_CLASS (parent_class)->destroy)
-                (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+        if (G_OBJECT_CLASS (parent_class)->dispose)
+                (* G_OBJECT_CLASS (parent_class)->dispose) (object);
 }
 
 static void
