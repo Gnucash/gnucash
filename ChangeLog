@@ -1,3 +1,13 @@
+2001-05-23  Rob Browning  <rlb@cs.utexas.edu>
+
+	* configure.in (AC_OUTPUT): remove src/scm/srfi/Makefile (again?).
+
+	* src/scm/report/transaction-report.scm: add use-modules
+	for syncase.
+
+	* lib/srfi/srfi-19.scm: update to new guile-core version.  (Grab
+	my fixes).
+
 2001-05-23  Dave Peticolas  <dave@krondo.com>
 
 	* src/doc/design/gnucash-design.texinfo: update docs
