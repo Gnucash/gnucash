@@ -82,5 +82,8 @@ typedef struct _qifimportwindow QIFImportWindow;
 QIFImportWindow * gnc_ui_qif_import_dialog_make();
 void gnc_ui_qif_import_dialog_destroy(QIFImportWindow * window);
 
+/* Register font information ****************************************/
+const char * gnc_register_default_font();
+const char * gnc_register_default_hint_font();
 
 #endif

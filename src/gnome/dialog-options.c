@@ -207,6 +207,21 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
       bad_value = TRUE;
 
   }
+  else if (safe_strcmp(type, "font") == 0)
+  {
+    if (gh_string_p(value))
+    {
+      char *string = gh_scm2newstr(value, NULL);
+      if ((string != NULL) && (*string != '\0'))
+      {
+        GnomeFontPicker *picker = GNOME_FONT_PICKER(option->widget);
+        gnome_font_picker_set_font_name(picker, string);
+        free(string);
+      }
+    }
+    else
+      bad_value = TRUE;
+  }
   else
   {
     PERR("Unknown type. Ignoring.\n");
@@ -344,6 +359,14 @@ gnc_option_get_ui_value(GNCOption *option)
     result = gh_cons(gh_double2scm(blue * scale), result);
     result = gh_cons(gh_double2scm(green * scale), result);
     result = gh_cons(gh_double2scm(red * scale), result);
+  }
+  else if (safe_strcmp(type, "font") == 0)
+  {
+    GnomeFontPicker *picker = GNOME_FONT_PICKER(option->widget);
+    char * string;
+
+    string = gnome_font_picker_get_font_name(picker);
+    result = gh_str02scm(string);
   }
   else
   {
@@ -752,6 +775,19 @@ gnc_option_color_changed_cb(GnomeColorPicker *picker, guint arg1, guint arg2,
 }
 
 static void
+gnc_option_font_changed_cb(GnomeFontPicker *picker, gchar *font_name,
+                           gpointer data)
+{
+  GtkWidget *pbox;
+  GNCOption *option = data;
+
+  option->changed = TRUE;
+
+  pbox = gtk_widget_get_toplevel(GTK_WIDGET(picker));
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
+}
+
+static void
 gnc_option_set_ui_widget(GNCOption *option,
                          GtkBox *page_box,
                          GtkTooltips *tooltips)
@@ -1063,6 +1099,34 @@ gnc_option_set_ui_widget(GNCOption *option,
 
     gtk_signal_connect(GTK_OBJECT(value), "color-set",
 		       GTK_SIGNAL_FUNC(gnc_option_color_changed_cb), option);
+
+    gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(enclosing),
+		     gnc_option_create_default_button(option, tooltips),
+		     FALSE, FALSE, 0);
+  }
+  else if (safe_strcmp(type, "font") == 0)
+  {
+    GtkWidget *label;
+    gchar *colon_name;
+
+    colon_name = g_strconcat(name, ":", NULL);
+    label = gtk_label_new(colon_name);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+    g_free(colon_name);
+
+    enclosing = gtk_hbox_new(FALSE, 5);
+    value = gnome_font_picker_new();
+    gnome_font_picker_set_mode(GNOME_FONT_PICKER(value),
+                               GNOME_FONT_PICKER_MODE_FONT_INFO);
+
+    option->widget = value;
+
+    gnc_option_set_ui_value(option, FALSE);
+
+    gtk_signal_connect(GTK_OBJECT(value), "font-set",
+		       GTK_SIGNAL_FUNC(gnc_option_font_changed_cb), option);
 
     gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);

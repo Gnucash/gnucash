@@ -1,3 +1,13 @@
+2000-06-28  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/prefs.scm: add options for the register fonts.
+
+	* src/gnome/top-level.c: configure the register fonts from
+	callbacks.
+
+	* src/register/gnome/gnucash-style.c: make the register font and
+	hint fonts configurable outside the register.
+
 2000-06-28  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/gnome/dialog-totd.c: If somebody tries to open a second

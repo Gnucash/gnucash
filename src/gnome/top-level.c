@@ -75,6 +75,11 @@ static void gnc_configure_auto_raise_cb(void *);
 static void gnc_configure_auto_raise(void);
 static void gnc_configure_auto_decimal_cb(void *);
 static void gnc_configure_auto_decimal(void);
+static void gnc_configure_register_font_cb(void *);
+static void gnc_configure_register_font(void);
+static void gnc_configure_register_hint_font_cb(void *);
+static void gnc_configure_register_hint_font(void);
+
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -94,6 +99,8 @@ static SCM register_borders_callback_id = SCM_UNDEFINED;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static SCM auto_raise_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_callback_id = SCM_UNDEFINED;
+static SCM register_font_callback_id = SCM_UNDEFINED;
+static SCM register_hint_font_callback_id = SCM_UNDEFINED;
 
 
 /* ============================================================== */
@@ -191,6 +198,17 @@ gnucash_ui_init()
                                           NULL, "General",
                                          "Automatic Decimal Point");
 
+    gnc_configure_register_font();
+    register_font_callback_id =
+      gnc_register_option_change_callback(gnc_configure_register_font_cb,
+                                          NULL, "Register", "Register font");
+
+    gnc_configure_register_hint_font();
+    register_hint_font_callback_id =
+      gnc_register_option_change_callback(gnc_configure_register_hint_font_cb,
+                                          NULL, "Register",
+                                          "Register hint font");
+
     gnc_configure_sr_label_callbacks();
 
     xaccRecnCellSetStringGetter(gnc_get_reconcile_str);
@@ -244,9 +262,11 @@ gnc_ui_destroy (void)
   gnc_unregister_option_change_callback_id(currency_callback_id);
   gnc_unregister_option_change_callback_id(account_separator_callback_id);
   gnc_unregister_option_change_callback_id(register_colors_callback_id);
-  gnc_unregister_option_change_callback_id(register_borders_callback_id);  
-  gnc_unregister_option_change_callback_id(reverse_balance_callback_id);  
-  gnc_unregister_option_change_callback_id(auto_raise_callback_id);  
+  gnc_unregister_option_change_callback_id(register_borders_callback_id);
+  gnc_unregister_option_change_callback_id(reverse_balance_callback_id);
+  gnc_unregister_option_change_callback_id(auto_raise_callback_id);
+  gnc_unregister_option_change_callback_id(register_font_callback_id);
+  gnc_unregister_option_change_callback_id(register_hint_font_callback_id);
 
   if (app != NULL)
   {
@@ -280,7 +300,6 @@ gnc_ui_main()
   return 0;
 }
 
-/* hack alert -- all we do below is rename some functions. fix this someday */
 /* ============================================================== */
 
 int
@@ -297,6 +316,22 @@ gnucash_ui_select_file()
 {
   gncFileOpen();
   return 1;
+}
+
+/* ============================================================== */
+
+const char *
+gnc_register_default_font()
+{
+  return gnucash_style_get_default_register_font_name();
+}
+
+/* ============================================================== */
+
+const char *
+gnc_register_default_hint_font()
+{
+  return gnucash_style_get_default_register_hint_font_name();
 }
 
 /* ============================================================== */
@@ -739,7 +774,6 @@ gnc_configure_reverse_balance(void)
  *  Args: Nothing
  *  Returns: Nothing
  */
-
 static void
 gnc_configure_auto_decimal_cb(void *not_used)
 {
@@ -762,6 +796,68 @@ gnc_configure_auto_decimal(void)
                                             GNC_F);
 }
 
+/* gnc_configure_register_font_cb
+ *     Callback called when options change -
+ *     sets register font
+ * 
+ *  Args: unused data
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_register_font_cb(void *not_used)
+{
+  gnc_configure_register_font();
+}
 
+/* gnc_configure_register_font
+ *     Set up the register font
+ * 
+ *  Args: Nothing
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_register_font(void)
+{
+  char *font_name;
+
+  font_name = gnc_lookup_font_option("Register", "Register font", NULL);
+
+  gnucash_style_set_register_font_name(font_name);
+
+  if (font_name != NULL)
+    free(font_name);
+}
+
+/* gnc_configure_register_hint_font_cb
+ *     Callback called when options change -
+ *     sets register hint font
+ * 
+ *  Args: unused data
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_register_hint_font_cb(void *not_used)
+{
+  gnc_configure_register_hint_font();
+}
+
+/* gnc_configure_register_hint_font
+ *     Set up the register hint font
+ * 
+ *  Args: Nothing
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_register_hint_font(void)
+{
+  char *font_name;
+
+  font_name = gnc_lookup_font_option("Register", "Register hint font", NULL);
+
+  gnucash_style_set_register_hint_font_name(font_name);
+
+  if (font_name != NULL)
+    free(font_name);
+}
 
 /****************** END OF FILE **********************/

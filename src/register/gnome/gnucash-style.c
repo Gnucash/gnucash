@@ -34,11 +34,15 @@
 
 
 #define DEFAULT_FONT "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-#define ITALIC_FONT "-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
+#define HINT_FONT    "-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
+
 #define DEFAULT_STYLE_WIDTH 680
 
-GdkFont *gnucash_default_font = NULL;
-GdkFont *gnucash_italic_font = NULL;
+GdkFont *gnucash_register_font = NULL;
+GdkFont *gnucash_register_hint_font = NULL;
+
+static char *register_font_name = NULL;
+static char *register_hint_font_name = NULL;
 
 
 /*  layout info flags */
@@ -1279,7 +1283,7 @@ gnucash_sheet_style_recompile(SheetBlockStyle *style, CellBlock *cellblock,
                         style->widths[i][j] = cellblock->widths[j];
 
                         style->fonts[i][j] = NULL;
-                        style->header_font = gnucash_default_font;
+                        style->header_font = gnucash_register_font;
 
                         gnucash_style_set_borders (style, reg_borders);
 
@@ -1511,19 +1515,81 @@ gnucash_style_unref (SheetBlockStyle *style)
                 g_warning ("Unbalanced Style ref/unref");
 }
 
+void
+gnucash_style_set_register_font_name(const char *name)
+{
+        g_free(register_font_name);
+        register_font_name = g_strdup(name);
+
+        if (gnucash_register_font != NULL)
+        {
+                gdk_font_unref(gnucash_register_font);
+                gnucash_register_font = NULL;
+        }
+
+        if (register_font_name != NULL)
+                gnucash_register_font = gdk_font_load(register_font_name);
+
+        if (gnucash_register_font == NULL)
+        {
+                g_free(register_font_name);
+                register_font_name = NULL;
+                gnucash_register_font = gdk_font_load(DEFAULT_FONT);
+        }
+
+        g_assert(gnucash_register_font != NULL);
+
+        gdk_font_ref(gnucash_register_font);
+}
+
+void
+gnucash_style_set_register_hint_font_name(const char *name)
+{
+        g_free(register_hint_font_name);
+        register_hint_font_name = g_strdup(name);
+
+        if (gnucash_register_hint_font != NULL)
+        {
+                gdk_font_unref(gnucash_register_hint_font);
+                gnucash_register_hint_font = NULL;
+        }
+
+        if (register_hint_font_name != NULL)
+                gnucash_register_hint_font =
+                        gdk_font_load(register_hint_font_name);
+
+        if (gnucash_register_hint_font == NULL)
+        {
+                g_free(register_hint_font_name);
+                register_hint_font_name = NULL;
+                gnucash_register_hint_font = gdk_font_load(HINT_FONT);
+        }
+
+        g_assert(gnucash_register_hint_font != NULL);
+
+        gdk_font_ref(gnucash_register_hint_font);
+}
+
+const char *
+gnucash_style_get_default_register_font_name()
+{
+        return DEFAULT_FONT;
+}
+
+const char *
+gnucash_style_get_default_register_hint_font_name()
+{
+        return HINT_FONT;
+}
 
 void
 gnucash_style_init (void)
 {
-        GtkStyle *style;
+        if (gnucash_register_font == NULL)
+                gnucash_style_set_register_font_name(NULL);
 
-        style = gtk_widget_get_default_style();
-
-        gnucash_default_font = style->font;
-        gnucash_italic_font = style->font;
-
-        g_assert (gnucash_default_font);
-        g_assert (gnucash_italic_font);
+        if (gnucash_register_hint_font == NULL)
+                gnucash_style_set_register_hint_font_name(NULL);
 }
 
 

@@ -37,6 +37,12 @@ void gnucash_style_init (void);
 
 void gnucash_sheet_style_init(void);
 
+void gnucash_style_set_register_font_name(const char *name);
+void gnucash_style_set_register_hint_font_name(const char *name);
+
+const char * gnucash_style_get_default_register_font_name();
+const char * gnucash_style_get_default_register_hint_font_name();
+
 gint gnucash_style_col_is_resizable (SheetBlockStyle *style, int col);
 
 void gnucash_sheet_style_set_col_width (GnucashSheet *sheet,
@@ -82,8 +88,8 @@ void gnucash_sheet_set_borders (GnucashSheet *sheet, int border);
 
 
 
-extern GdkFont *gnucash_default_font;
-extern GdkFont *gnucash_italic_font;
+extern GdkFont *gnucash_register_font;
+extern GdkFont *gnucash_register_hint_font;
 
 
 #endif

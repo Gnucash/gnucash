@@ -457,8 +457,8 @@ gnucash_grid_init (GnucashGrid *grid)
         grid->top_offset = 0;
         grid->left_offset = 0;
 
-        grid->normal_font = gnucash_default_font;
-        grid->italic_font = gnucash_italic_font;
+        grid->normal_font = gnucash_register_font;
+        grid->italic_font = gnucash_register_hint_font;
 }
 
 

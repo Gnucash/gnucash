@@ -208,9 +208,12 @@ the account instead of opening a register." #f))
   (list #(single_line "Single Line" "Show transactions on single lines")
         #(double_line "Double Line"
                       "Show transactions on two lines with more information")
-        #(multi_line  "Multi Line" "Show transactions on multiple lines with one line for each split in the transaction")
-        #(auto_single "Auto Single" "Single line mode with a multi-line cursor")
-        #(auto_double "Auto Double" "Double line mode with a multi-line cursor")
+        #(multi_line  "Multi Line"
+                      "Show transactions on multiple lines with one line for each split in the transaction")
+        #(auto_single "Auto Single"
+                      "Single line mode with a multi-line cursor")
+        #(auto_double "Auto Double"
+                      "Double line mode with a multi-line cursor")
         )))
 
 (gnc:register-configuration-option
@@ -243,6 +246,17 @@ the account instead of opening a register." #f))
  (gnc:make-simple-boolean-option
   "Register" "Show Horizontal Borders"
   "f" "By default, show horizontal borders on the cells." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-font-option
+  "Register" "Register font"
+  "g" "The font to use in the register" (gnc:register-default-font)))
+
+(gnc:register-configuration-option
+ (gnc:make-font-option
+  "Register" "Register hint font"
+  "g" "The font used to show hints in the register"
+  (gnc:register-default-hint-font)))
 
 
 ;; Register Color options
