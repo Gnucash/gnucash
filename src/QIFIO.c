@@ -148,30 +148,32 @@ char * xaccReadQIFCategory (int fd, Account * acc)
    /* scan for account name, description, type */
    while (qifline) {
 
+     /* N == Name */
      if ('N' == qifline [0]) {
         XACC_PREP_STRING (acc->accountName);
      } else 
 
+     /* D == Description */
      if ('D' == qifline [0]) {
         XACC_PREP_STRING (acc->description);
      } else 
 
+     /* T == Taxable -- this income is taxable */
      if ('T' == qifline [0]) {
-        if ('\r' != qifline[1]) {
-           printf ("QIF Parse: Unsupported category type %s \n", &qifline[1]);
-        }
      } else 
 
+     /* E == Expense Category */
      if ('E' == qifline [0]) {
         acc->type = EXPENSE;
      } else 
 
+     /* I == Income Category */
      if ('I' == qifline [0]) {
         acc->type = INCOME;
      } else 
 
+     /* R == Tax Rate Indicator; -- some number ... */
      if ('R' == qifline [0]) {
-        /* hack alert -- some number that I don't understand */
      } else 
 
      /* check for end-of-transaction marker */
@@ -229,12 +231,19 @@ char * xaccReadQIFAccount (int fd, Account * acc)
         if (!strcmp (&qifline[1], "Cash\r\n")) {
            acc -> type = CASH;
         } else
+        if (!strcmp (&qifline[1], "CCard\r\n")) {
+           acc -> type = CREDIT;
+        } else
         if (!strcmp (&qifline[1], "Invst\r\n")) {
            acc -> type = STOCK;
         } else
         if (!strcmp (&qifline[1], "Oth A\r\n")) {
            acc -> type = ASSET;
-        } else {
+        } else 
+        if (!strcmp (&qifline[1], "Oth L\r\n")) {
+           acc -> type = LIABILITY;
+        } else 
+        {
            printf ("QIF Parse: Unsupported account type %s \n", &qifline[1]);
            acc -> type = -1;            /* hack alert -- */
         }
@@ -544,6 +553,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    int got_share_quantity = 0;
    int share_xfer = 0;
    int is_security = 0;
+   int is_split = 0;
    Account *sub_acc = 0x0;
    Account *xfer_acc = 0x0;
    double adjust = 0.0;
@@ -581,27 +591,31 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
    /* scan for transaction date, description, type */
    while (qifline) {
+     /* D == date */
+     if ('D' == qifline [0]) {  
+         xaccParseQIFDate (&(trans->date), &qifline[1]);
+     } else 
+
+     /* E == memo for split */
+     if ('E' == qifline [0]) {   
+         /* hack alert */
+     } else 
+
+     /* I == share price */
+     if ('I' == qifline [0]) {   
+         trans -> share_price = xaccParseQIFAmount (&qifline[1]); 
+     } else 
+
+     /* L == name of acount from which transfer occured */
+     if ('L' == qifline [0]) {   
+         /* locate the transfer account */
+         xfer_acc = xaccGetXferQIFAccount (acc, qifline);
+     } else 
+
      /* M == memo field */
      if ('M' == qifline [0]) {  
         XACC_PREP_STRING (trans->memo);
      } else 
-
-     /* P == Payee, for Bank accounts */
-     if ('P' == qifline [0]) {   
-        XACC_PREP_STRING (trans->description);
-     } else
-
-     /* Y == Name of Security */
-     if ('Y' == qifline [0]) {   
-        XACC_PREP_STRING (trans->description);
-
-        is_security = 1;
-        if (share_xfer) {
-           /* locate or create the sub-account account */
-           sub_acc = xaccGetSecurityQIFAccount (acc, qifline);
-        }
-
-     } else
 
      /* N == check numbers for Banks, but Action for portfolios */
      if ('N' == qifline [0]) {   
@@ -625,56 +639,6 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
         }
      } else
 
-     if ('D' == qifline [0]) {   /* D == date */
-         xaccParseQIFDate (&(trans->date), &qifline[1]);
-     } else 
-
-     if ('T' == qifline [0]) {   /* T == total */
-
-         /* ignore T for stock transactions, since T is a dollar amount */
-         if (0 == got_share_quantity) {
-            trans -> damount = xaccParseQIFAmount (&qifline[1]);  
-            if (isneg) trans -> damount = - (trans->damount);
-         }
-     } else 
-
-     if ('I' == qifline [0]) {   /* I == share price */
-         trans -> share_price = xaccParseQIFAmount (&qifline[1]); 
-     } else 
-
-     if ('Q' == qifline [0]) {   /* Q == number of shares */
-         trans -> damount = xaccParseQIFAmount (&qifline[1]);  
-         if (isneg) trans -> damount = - (trans->damount);
-         got_share_quantity = 1;
-     } else 
-
-     /* L == name of acount from which transfer occured */
-     if ('L' == qifline [0]) {   
-         /* locate the transfer account */
-         xfer_acc = xaccGetXferQIFAccount (acc, qifline);
-     } else 
-
-     /* $ == dollar amount -- always preceeded by 'L' */
-     if ('$' == qifline [0]) {   
-         /* Currently, it appears that the $ amount is a redundant 
-          * number that we can safely ignore.  To get fancy,
-          * we use it to double-check the above work, since it 
-          * appears to always appear the last entry in the
-          * transaction.  Round things out to pennies, to 
-          * handle round-off errors. */
-        double parse, pute;
-        int got, wanted;
-        parse = xaccParseQIFAmount (&qifline[1]);
-        pute = (trans->damount) * (trans->share_price);
-        if (isneg) pute = -pute;
-
-        wanted = (int) (100.0 * parse + 0.5);
-        got = (int) (100.0 * (pute+adjust) + 0.5);
-        if (wanted != got) {
-           printf ("QIF Parse Error: wanted %f got %f \n", parse, pute);
-        }
-     } else 
-
      /* O == adjustments */
      /* hack alert -- sometimes adjustments are quite large.
       * I have no clue why, and what to do about it.  For what 
@@ -687,6 +651,70 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
         if (isneg) pute = -pute;
 
         printf ("QIF Warning: Adjustment of %.2f to amount %.2f not handled \n", adjust, pute);
+     } else 
+
+     /* P == Payee, for Bank accounts */
+     if ('P' == qifline [0]) {   
+        XACC_PREP_STRING (trans->description);
+     } else
+
+     /* Q == number of shares */
+     if ('Q' == qifline [0]) {   
+         trans -> damount = xaccParseQIFAmount (&qifline[1]);  
+         if (isneg) trans -> damount = - (trans->damount);
+         got_share_quantity = 1;
+     } else 
+
+     /* S == split */
+     if ('S' == qifline [0]) {   
+         /* hack alert -- splits not supported */
+         is_split = 1;
+     } else 
+
+     /* T == total */
+     if ('T' == qifline [0]) {   
+         /* ignore T for stock transactions, since T is a dollar amount */
+         if (0 == got_share_quantity) {
+            trans -> damount = xaccParseQIFAmount (&qifline[1]);  
+            if (isneg) trans -> damount = - (trans->damount);
+         }
+     } else 
+
+     /* Y == Name of Security */
+     if ('Y' == qifline [0]) {   
+        XACC_PREP_STRING (trans->description);
+
+        is_security = 1;
+        if (share_xfer) {
+           /* locate or create the sub-account account */
+           sub_acc = xaccGetSecurityQIFAccount (acc, qifline);
+        }
+
+     } else
+
+     /* $ == dollar amount -- always preceeded by 'L' */
+     if ('$' == qifline [0]) {   
+        /* for splits, $ records the part of the total for each split */
+        /* hack alert -- splits not supported */
+        if (!is_split) {
+            /* Currently, it appears that the $ amount is a redundant 
+             * number that we can safely ignore.  To get fancy,
+             * we use it to double-check the above work, since it 
+             * appears to always appear the last entry in the
+             * transaction.  Round things out to pennies, to 
+             * handle round-off errors. */
+           double parse, pute;
+           int got, wanted;
+           parse = xaccParseQIFAmount (&qifline[1]);
+           pute = (trans->damount) * (trans->share_price);
+           if (isneg) pute = -pute;
+   
+           wanted = (int) (100.0 * parse + 0.5);
+           got = (int) (100.0 * (pute+adjust) + 0.5);
+           if (wanted != got) {
+              printf ("QIF Parse Error: wanted %f got %f \n", parse, pute);
+           }
+        }
      } else 
 
      /* check for end-of-transaction marker */
