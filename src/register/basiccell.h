@@ -15,8 +15,15 @@ enum {
 
 
 /* The modify-verify callback is called when a user
- * makes a change to a cell.  The input is a changed string.
+ * makes a change to a cell.  
+ * The three arguments passed in are :
+ * "old", the string prior to user's attempted modification,
+ * "add", the string the user is attemptiong to add
+ *        (will be null if text is being deleted).
+ * "new", the string that would result is user's changes
+ *        are accepted.
  * It must return a string, or void if it rejects the change.
+ * The returned string will be the next cell value.
  */
 
 typedef struct _SingleCell {
@@ -29,7 +36,7 @@ typedef struct _SingleCell {
 
   char * value;   /* current value */
 
-  char * (*modify_verify) (char *);  /* modify verify callback */
+  char * (*modify_verify) (char *old, char *add, char *new);  /* modify verify callback */
 
 
 } SingleCell;

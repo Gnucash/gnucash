@@ -1,0 +1,65 @@
+
+Design Overview
+---------------
+The register is an infrastructure for building 
+a modular spread-sheet/matrix/array of cells,
+where each cell may have a unique/special 
+capability, e.g. to store only dates, amounts
+or text.  The register has been designed to 
+be easy to extend, modular & easy to maintain,
+and memory-efficient.  It is intended to be used
+for building financial apps and spread-sheets.
+
+The register is built of several components:
+the "cell", the "cellblock", the "cursor", the 
+"table", and the "register".
+
+The "cell" is an active cell object.  This object
+defines callbacks that are called when the user
+enters the cell (e.g. by clicking on a cell in a 
+table), when the user attempts to modify text in the
+cell (e.g. by typing in it), and when the user leaves 
+the cell (e.g. by moving to a different cell).
+
+Special-purpose cells can be created by "inheriting"
+from the cell object.  Thus, there are special-purpose
+cells for handling dates, pull-down menus, text fields,
+monetary amounts, etc.
+
+The "cellblock" is an array of active cells.  The
+cells are layed out in row-column order.  The 
+cellblock is mostly just a convenient container for
+organizing active cells in an array.
+
+The "table" is the displayed matrix.  The table is
+a complex object; it is NOT merely a cellblock.
+The table provides all of the GUI infrastructure for
+displaying a row-column matrix of strings. 
+
+The table provides one very important function
+for minimizing memory usage for large matrixes.
+It defines the notion of a "cursor".  The "cursor"
+is a cellblock (an array of active cells) that is
+moved to the location that the user is currently
+editing.  The cursor "virtualizes" cell functions;
+that is, it makes it seem to the user as if all
+cells in the table are active, when in fact the only
+cell that actually needs to be active is the one that 
+the user is currently editing.  Note that the 
+cursor "tiles" the table: when it is moved to the
+active cell, it is moved in such a way so that
+it is shifted an integer multiple of the cursor
+width and height.
+
+
+Portability Notes
+-----------------
+Note: neither the "cell", nor the "cellblock" contain
+any Motif-specific code.  They should be portable to
+other GUI's (e.g. GTK, QT).  
+
+All Motif-specific code appears in the "table".
+
+
+
+

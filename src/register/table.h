@@ -13,7 +13,8 @@
 
 typedef struct _Table {
 
-  short numEntries;
+  int num_tile_rows;
+  int num_tile_cols;
 
   CellBlock *header;
   CellBlock *cursor;
@@ -22,15 +23,21 @@ typedef struct _Table {
 
   Widget reg;          /* the XbaeMatrix */
 
-  /* private data, cahces, etc. */
+  /* private data, caches, etc. */
+
+  /* the "physical" rows/cols are equal to
+   * the size of the tile times the number 
+   * of tile rows/cols
+   */
+
   int num_header_rows;
   int num_phys_rows;
   int num_phys_cols;
 } Table;
 
 
-Table     * xaccMallocTable (int numentries);
-void        xaccInitTable (Table *, int entries);
+Table     * xaccMallocTable (int tile_rows, int tile_cols);
+void        xaccInitTable (Table *, int tile_rows, int tile_cols);
 
 /* create the widget */
 Widget      xaccCreateTable (Table *, Widget parent, char * name);

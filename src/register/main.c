@@ -29,10 +29,10 @@ CreateReg(Widget parent ) {
    xaccAddCell (header, cell);
    
 
-   table =  xaccMallocTable (0);
+   table =  xaccMallocTable (0, 0);
    table -> cursor = curs;
    table -> header = header;
-   xaccInitTable (table, 15);
+   xaccInitTable (table, 15, 1);
 
    xaccCreateTable (table, parent, "yodudue");
    return table;

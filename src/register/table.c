@@ -7,21 +7,21 @@
 #include "table.h"
 
 Table * 
-xaccMallocTable (int numentries)
+xaccMallocTable (int tile_rows, int tile_cols)
 {
    Table *table;
    table = (Table *) malloc (sizeof (Table));
    table->header = NULL;
    table->cursor = NULL;
    table->entries = NULL;
-   xaccInitTable (table, numentries);
+   xaccInitTable (table, tile_rows, tile_cols);
    return table;
 }
 
 /* ==================================================== */
 
 void 
-xaccInitTable (Table * table, int numentries)
+xaccInitTable (Table * table, int tile_rows, int tile_cols)
 {
    int num_header_rows;
    int num_phys_rows;
@@ -52,20 +52,21 @@ xaccInitTable (Table * table, int numentries)
       num_phys_rows += table->header->numRows;
    }
    if (table->cursor) {
-      num_phys_rows += numentries* table->cursor->numRows;
-      num_phys_cols = table->cursor->numCols;
+      num_phys_rows += tile_rows * table->cursor->numRows;
+      num_phys_cols  = tile_cols * table->cursor->numCols;
    }
    table->num_phys_rows = num_phys_rows;
    table->num_phys_cols = num_phys_cols;
 
-   table->numEntries = numentries;
+   table->num_tile_rows = tile_rows;
+   table->num_tile_cols = tile_cols;
 
    /* create an empty table */
    table->entries = (char ***) malloc (num_phys_rows * sizeof (char **));
    for (i=0; i<num_phys_rows; i++) {
       table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
       for (j=0; j<num_phys_cols; j++) {
-         table->entries[i][j] = NULL;
+         table->entries[i][j] = NULL;   /* hack alert ... */
          table->entries[i][j] = strdup ("");
       }
    }
@@ -142,9 +143,15 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
 
    printf ("modify %d %d %s \n", row, col, cbs->verify->text->ptr);
 
+   /* reject edits by default, unless the cell handler allows them */
+   cbs->verify->doit = False;
+
    /* compute the cell location */
+   /* remove offset for the header rows */
    arr = table->header;
    if (arr) {
+      /* header rows cannot be modified */
+      if (row < arr->numRows) return;
       row -= arr->numRows;
    }
 
@@ -152,14 +159,21 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    arr = table->cursor;
    if (arr) {
      row %= arr->numRows;
-     if (0 > col) return;
-     if (col >= arr->numCols) return;
+     col %= arr->numCols;
+printf ("arr %p cells %p %d %d \n", arr, arr->cells, row, col);
+printf ("cell row %p \n", arr->cells[row]);
+printf ("cell col %p \n", arr->cells[row][col]);
      if (arr->cells[row][col]) {
-        char * (*mv) (char *);
+        char * (*mv) (char *, char *, char *);
         mv = arr->cells[row][col]->modify_verify;
         if (mv) {
            char * tmp;
-           tmp = (*mv) ("haha");
+           tmp = (*mv) ("old", "haha", "new");
+
+           /* if the callback returned a non-null value, allow the edit */
+           if (tmp) {
+               cbs->verify->doit = True;
+           }
         }
      }
    }
@@ -200,7 +214,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    if (!table) return 0;
 
    /* make sure that the table is consistent */
-   xaccInitTable (table, table->numEntries);
+   xaccInitTable (table, table->num_tile_rows, table->num_tile_cols);
 
    /* if a header exists, get alignments, widths from there */
    alignments = NULL;
