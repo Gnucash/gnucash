@@ -438,7 +438,7 @@ qsf_foreach_obj_type(QofObject *qsf_obj, gpointer data)
 static xmlDocPtr
 qofbook_to_qsf(QofBook *book)
 {
-	xmlNodePtr top_node, node;;
+	xmlNodePtr top_node, node;
 	xmlDocPtr doc;
 	gchar buffer[GUID_ENCODING_LENGTH + 1];
 	qsf_param *params;
