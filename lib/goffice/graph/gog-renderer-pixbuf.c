@@ -224,8 +224,6 @@ gog_renderer_pixbuf_draw_path (GogRenderer *rend, ArtVpath const *path,
 	ArtSVP *svp;
 	ArtVpath *dashed_path;
 
-	printf( "drawing a path!" );
-
 	switch (style->line.dash_type) {
 		case GO_LINE_NONE:
 			return;
@@ -493,6 +491,13 @@ gog_renderer_pixbuf_get_pango_layout (GogRendererPixbuf *prend)
 	PangoAttribute *attr;
 	PangoAttrList  *attrs = NULL;
 	PangoFontDescription const *fd = prend->base.cur_style->font.font->desc;
+
+	{
+		char *pfdStr;
+		pfdStr = pango_font_description_to_string( fd );
+		printf( "pfd=[%s]\n", pfdStr );
+		g_free( pfdStr );
+	}
 
 	if (prend->pango_layout != NULL)
 		return prend->pango_layout;
