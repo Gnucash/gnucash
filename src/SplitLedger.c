@@ -213,8 +213,7 @@ printf ("save split is %p \n", split);
 
       if (reg->type & REG_MULTI_LINE) {
          split_to_modify = split;
-      }
-      if (reg->type & REG_DOUBLE_LINE) {
+      } else {
          split_to_modify = xaccGetOtherSplit(split);
       }
 

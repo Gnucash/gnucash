@@ -349,6 +349,8 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
 void 
 xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
 {
+   int typo;
+
    /* If we don't really need the redraw, don't do it. */
    if (!(regData->dirty)) return;
    regData->dirty = 0;  /* mark clean */
@@ -370,7 +372,7 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
   /* provide some convenience data for the ture GUI window.
    * If the GUI wants to display yet other stuff, its on its own.
    */
-  // xaccAccountRecomputeBalance(regData->leader);
+  xaccAccountRecomputeBalance(regData->leader);
   regData->balance = xaccAccountGetBalance (regData->leader);
   regData->clearedBalance = xaccAccountGetClearedBalance (regData->leader);
   regData->reconciledBalance = xaccAccountGetReconciledBalance (regData->leader);
@@ -380,10 +382,12 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
    * system, income will show up as a credit to a
    * bank account, and a debit to the income account.
    * Thus, positive and negative are interchanged */
-  if ((INCOME_REGISTER == regData->type) ||
-      (EXPENSE_REGISTER == regData->type)) { 
+  typo = regData->type & REG_TYPE_MASK;
+  if ((INCOME_REGISTER == typo) ||
+      (EXPENSE_REGISTER == typo)) { 
     regData->balance = - (regData->balance);
     regData->clearedBalance = - (regData->clearedBalance);
+    regData->reconciledBalance = - (regData->reconciledBalance);
   }
 
   /* OK, now tell this specific GUI window to redraw itself ... */
