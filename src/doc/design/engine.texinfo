@@ -274,11 +274,11 @@ directly. Example:
 
 You can compare two GUIDs with the following functions.
 
-@deftypefun gboolean guid_equal(const GUID * @var{guid_1}, const GUID * @var{guid_2})
+@deftypefun gboolean guid_equal (const GUID * @var{guid_1}, const GUID * @var{guid_2})
 Compare two guids and return TRUE if they are both non-NULL and equal.
 @end deftypefun
 
-@deftypefun gint guid_compare(const GUID * @var{g1}, const GUID * @var{g2})
+@deftypefun gint guid_compare (const GUID * @var{g1}, const GUID * @var{g2})
 Return the @code{memcmp} of the two GUID's.
 @end deftypefun
 
@@ -286,7 +286,7 @@ Return the @code{memcmp} of the two GUID's.
 You can encode and decode GUIDs and their string representations using the
 next two functions.
 
-@deftypefun {char *} guid_to_string(const GUID * @var{guid})
+@deftypefun {char *} guid_to_string (const GUID * @var{guid})
 Return a null-terminated string encoding of @var{guid}. String encodings
 of identifiers are hex numbers printed only with the characters @code{0}
 through @code{9} and @code{a} through @code{f}.  The encoding will
@@ -303,7 +303,7 @@ It returns a pointer to the @emph{end} of what was written.
 (i.e. it can be used like @code{stpcpy} during string concatenation)
 @end deftypefun
 
-@deftypefun gboolean string_to_guid(const char * @var{string}, GUID * @var{guid})
+@deftypefun gboolean string_to_guid (const char * @var{string}, GUID * @var{guid})
 Given a string, decode an id into @var{guid} if @var{guid} is
 non-NULL. The function returns TRUE if the string was a valid 32
 character hexadecimal number. This function accepts both upper and lower
@@ -330,12 +330,12 @@ Free the space for a GUID that was allocated with @code{xaccGUIDMalloc}.
 You can use the following two functions to aid in using GUIDS in hash
 tables.
 
-@deftypefun guint guid_hash_to_guint(gconstpointer @var{ptr})
+@deftypefun guint guid_hash_to_guint (gconstpointer @var{ptr})
 Return a hash value suitable for use with a @code{GHashTable}.
 @var{ptr} must point to a GUID.
 @end deftypefun
 
-@deftypefun {GHashTable *} guid_hash_table_new(void)
+@deftypefun {GHashTable *} guid_hash_table_new (void)
 Return a new @code{GHashTable} which uses GUIDs as keys.
 @end deftypefun
 
@@ -348,23 +348,23 @@ GUIDs. User code and general engine code should not use this API;
 instead use the API documented in the sections for the specific GnuCash
 entities such as Accounts and Transactions.
 
-@deftypefun void xaccGUIDNew(GUID * @var{guid})
+@deftypefun void xaccGUIDNew (GUID * @var{guid})
 Generate a new guid. This function is guaranteed to return a guid that
 is unique within the scope of all GnuCash entities being managed by the
 the current invocation of GnuCash. GnuCash routines should always use
 this function and not @code{guid_new}!
 @end deftypefun
 
-@deftypefun {void *} xaccLookupEntity(const GUID * @var{guid}, GNCIdType @var{entity_type})
+@deftypefun {void *} xaccLookupEntity (const GUID * @var{guid}, GNCIdType @var{entity_type})
 Lookup an entity given an id and a type. If there is no entity
 associated with the id, or if it has a different type, NULL is returned.
 @end deftypefun
 
-@deftypefun void xaccStoreEntity(void * @var{entity}, const GUID * @var{guid}, GNCIdType entity_type)
+@deftypefun void xaccStoreEntity (void * @var{entity}, const GUID * @var{guid}, GNCIdType entity_type)
 Store the given entity under the given id with the given type.
 @end deftypefun
 
-@deftypefun void xaccRemoveEntity(const GUID * @var{guid})
+@deftypefun void xaccRemoveEntity (const GUID * @var{guid})
 Remove any existing association between an entity and the given id. The
 entity is not changed in any way.
 @end deftypefun
@@ -916,25 +916,25 @@ Create and initialize a new @code{kvp_frame} object and return
 a pointer to it.
 @end deftypefun
 
-@deftypefun void kvp_frame_delete(kvp_frame * @var{frame})
+@deftypefun void kvp_frame_delete (kvp_frame * @var{frame})
 Free all memory associated with @var{frame}.
 @end deftypefun
 
-@deftypefun kvp_frame* kvp_frame_copy(const kvp_frame * frame)
+@deftypefun kvp_frame* kvp_frame_copy (const kvp_frame * frame)
 Return a deep copy of @var{frame}.
 @end deftypefun
 
-@deftypefun void kvp_frame_set_slot(kvp_frame * @var{frame}, const char * @var{key}, const kvp_value * @var{value})
+@deftypefun void kvp_frame_set_slot (kvp_frame * @var{frame}, const char * @var{key}, const kvp_value * @var{value})
 Associate @var{key} with @var{value} in @var{frame}.
 @end deftypefun
 
-@deftypefun void kvp_frame_set_slot_nc(kvp_frame * @var{frame}, const char * @var{key}, kvp_value * @var{value})
+@deftypefun void kvp_frame_set_slot_nc (kvp_frame * @var{frame}, const char * @var{key}, kvp_value * @var{value})
 Same as @code{kvp_frame_set_slot}, except that @var{value} is used
 directly, instead of being copied. This call transfers 'ownership'
 of @var{value} to @var{frame}.
 @end deftypefun
 
-@deftypefun kvp_value* kvp_frame_get_slot(kvp_frame * @var{frame}, const char * @var{key})
+@deftypefun kvp_value* kvp_frame_get_slot (kvp_frame * @var{frame}, const char * @var{key})
 Return the @code{kvp_value} object associated with @var{key}
 in @var{frame} or return @code{NULL} if there is no association
 for @var{key}. The value returned is not a copy.
@@ -992,15 +992,15 @@ is arguably a bug that needs fixing).
 The @code{kvp_value} object stores the 'value' part of a key-value
 association in a @code{kvp_frame} object.
 
-@deftypefun void kvp_value_delete(kvp_value * @var{value})
+@deftypefun void kvp_value_delete (kvp_value * @var{value})
 Free all of the memory associated with @var{value}.
 @end deftypefun
 
-@deftypefun kvp_value* kvp_value_copy(const kvp_value * @var{value})
+@deftypefun kvp_value* kvp_value_copy (const kvp_value * @var{value})
 Return a deep copy of @var{value}.
 @end deftypefun
 
-@deftypefun kvp_value_t kvp_value_get_type(const kvp_value * @var{value})
+@deftypefun kvp_value_t kvp_value_get_type (const kvp_value * @var{value})
 Return the type of value stored in @var{value}.
 @end deftypefun
 
@@ -1041,19 +1041,19 @@ The following functions create and return @code{kvp_value} objects with
 particular values. In the case of pointer arguments, deep copies are
 performed.
 
-@deftypefun kvp_value* kvp_value_new_int64(gint64 @var{value})
+@deftypefun kvp_value* kvp_value_new_int64 (gint64 @var{value})
 @end deftypefun
-@deftypefun kvp_value* kvp_value_new_float64(double @var{value})
+@deftypefun kvp_value* kvp_value_new_float64 (double @var{value})
 @end deftypefun
-@deftypefun kvp_value* kvp_value_new_string(const char * @var{value})
+@deftypefun kvp_value* kvp_value_new_string (const char * @var{value})
 @end deftypefun
-@deftypefun kvp_value* kvp_value_new_guid(const GUID * @var{guid})
+@deftypefun kvp_value* kvp_value_new_guid (const GUID * @var{guid})
 @end deftypefun
-@deftypefun kvp_value* kvp_value_new_binary(const void * @var{data}, int @var{datasize})
+@deftypefun kvp_value* kvp_value_new_binary (const void * @var{data}, int @var{datasize})
 @end deftypefun
-@deftypefun kvp_value* kvp_value_new_list(const kvp_list * @var{value})
+@deftypefun kvp_value* kvp_value_new_list (const kvp_list * @var{value})
 @end deftypefun
-@deftypefun kvp_value* kvp_value_new_frame(const kvp_frame * @var{value});
+@deftypefun kvp_value* kvp_value_new_frame (const kvp_frame * @var{value});
 @end deftypefun
 
 @subsubsection Value Accessors
@@ -1063,19 +1063,19 @@ object. If the type of the object does not correspond to that named
 in the function, @code{NULL}, @code{0}, or @code{0.0} is returned
 as appropriate.
 
-@deftypefun gint64 kvp_value_get_int64(const kvp_value * @var{value})
+@deftypefun gint64 kvp_value_get_int64 (const kvp_value * @var{value})
 @end deftypefun
-@deftypefun double kvp_value_get_float64(const kvp_value * @var{value})
+@deftypefun double kvp_value_get_float64 (const kvp_value * @var{value})
 @end deftypefun
-@deftypefun char* kvp_value_get_string(const kvp_value * @var{value})
+@deftypefun char* kvp_value_get_string (const kvp_value * @var{value})
 @end deftypefun
-@deftypefun GUID* kvp_value_get_guid(const kvp_value * @var{value})
+@deftypefun GUID* kvp_value_get_guid (const kvp_value * @var{value})
 @end deftypefun
-@deftypefun void* kvp_value_get_binary(const kvp_value * @var{value}, int * @var{size_return})
+@deftypefun void* kvp_value_get_binary (const kvp_value * @var{value}, int * @var{size_return})
 @end deftypefun
-@deftypefun kvp_list* kvp_value_get_list(const kvp_value * @var{value})
+@deftypefun kvp_list* kvp_value_get_list (const kvp_value * @var{value})
 @end deftypefun
-@deftypefun kvp_frame* kvp_value_get_frame(const kvp_value * @var{value})
+@deftypefun kvp_frame* kvp_value_get_frame (const kvp_value * @var{value})
 @end deftypefun
 
 
@@ -1085,35 +1085,35 @@ as appropriate.
 
 A @code{kvp_list} object abstract a list of @code{kvp_value} objects.
 
-@deftypefun kvp_list* kvp_list_new()
+@deftypefun kvp_list* kvp_list_new ()
 Return a newly allocated @code{kvp_list} object.
 @end deftypefun
 
-@deftypefun void kvp_list_delete(kvp_list * @var{list})
+@deftypefun void kvp_list_delete (kvp_list * @var{list})
 Free all memory associated with @var{list}, including the
 @code{kvp_value} objects in @var{list}.
 @end deftypefun
 
-@deftypefun kvp_list* kvp_list_copy(const kvp_list * @var{list})
+@deftypefun kvp_list* kvp_list_copy (const kvp_list * @var{list})
 Return a deep copy of @var{list}.
 @end deftypefun
 
-@deftypefun gboolean kvp_list_null_p(const kvp_list * @var{list})
+@deftypefun gboolean kvp_list_null_p (const kvp_list * @var{list})
 Return @code{TRUE} if @var{list} is the empty list.
 @end deftypefun
 
-@deftypefun kvp_value* kvp_list_car(kvp_list * @var{list})
+@deftypefun kvp_value* kvp_list_car (kvp_list * @var{list})
 If @var{list} is @code{NULL} or the empty list, return @code{NULL}.
 Otherwise, return the first @code{kvp_value} object in the list.
 @end deftypefun
 
-@deftypefun kvp_list* kvp_list_cdr(kvp_list * @var{list})
+@deftypefun kvp_list* kvp_list_cdr (kvp_list * @var{list})
 If @var{list} is @code{NULL} or the empty list, return @code{NULL}.
 Otherwise, return a @code{kvp_list} object consisting of @var{list}
 with the first value removed. NOTE: the returned list is not a copy!
 @end deftypefun
 
-@deftypefun kvp_list* kvp_list_cons(kvp_value * @var{car}, kvp_list * @var{cdr})
+@deftypefun kvp_list* kvp_list_cons (kvp_value * @var{car}, kvp_list * @var{cdr})
 If either @var{car} or @var{cdr} is @code{NULL}, return @code{NULL}. Otherwise,
 return a @code{kvp_list} object consisting of the value of @var{car} followed
 by the values of @var{cdr}. This function uses 'hand-over' semantics, i.e.,
@@ -1168,13 +1168,13 @@ and @code{GNC_EVENT_DESTROY}.
 
 Event handlers are functions with the following type:
 
-@deftypefun void (*GNCEngineEventHandler) (GUID * @var{entity}, GNCEngineEventType @var{event_type}, gpointer @var{user_data})
+@deftp {Data type} GNCEngineEventHandler void (*) (GUID * @var{entity}, GNCEngineEventType @var{event_type}, gpointer @var{user_data})
 A callback invoked when an engine event occurs. @var{entity} is the
 @code{GUID} of the entity generating the event. @var{event_type} is
 one of @code{GNC_EVENT_CREATE}, @code{GNC_EVENT_MODIFY}, or
 @code{GNC_EVENT_DESTROY}. @var{user_data} is the user data parameter
 supplied when the handler was registered.
-@end deftypefun
+@end deftp
 
 @deftypefun gint gnc_engine_register_event_handler (GNCEngineEventHandler @var{handler}, gpointer @var{user_data})
 Register a handler for engine events. The return value is an identifier used
@@ -2068,12 +2068,12 @@ Return the Transaction associated with @var{GUID}, or @code{NULL} if
 there is no such Transaction.
 @end deftypefun
 
-@deftypefun {kvp_value *} xaccTransGetSlot(Transaction * @var{trans}, const char * @var{key})
+@deftypefun {kvp_value *} xaccTransGetSlot (Transaction * @var{trans}, const char * @var{key})
 Return the @code{kvp_value} associated with @var{key} in @var{trans}.
 If there is none, @code{NULL} is returned.
 @end deftypefun
 
-@deftypefun void xaccTransSetSlot(Split * @var{trans}, const char * @var{key}, const kvp_value * @var{value})
+@deftypefun void xaccTransSetSlot (Split * @var{trans}, const char * @var{key}, const kvp_value * @var{value})
 Associate a copy of @var{value} with @var{key} in @var{trans}.
 @end deftypefun
 
@@ -2314,7 +2314,7 @@ much in the same way as @var{xaccTransBeginEdit} and
 The counterpart to @var{xaccAccountBeginEdit}.
 @end deftypefun
 
-@deftypefun {Account *} xaccCloneAccountSimple(const Account * @var{from})
+@deftypefun {Account *} xaccCloneAccountSimple (const Account * @var{from})
 Return a 'copy' of @var{from} that is identical in the type, name, code,
 description, kvp data, and currency. All other fields are the same as an
 account returned by @code{xaccMallocAccount}.
@@ -2788,7 +2788,7 @@ book not open when @code{gnc_book_save()} was called.
 @end table
 @end deftypefun
 
-@deftypefun {const char *} gnc_book_get_error_message(GNCBook * @var{book})
+@deftypefun {const char *} gnc_book_get_error_message (GNCBook * @var{book})
 Return a string describing the reason for the current error. Calling
 this routine resets the error value.
 @end deftypefun

@@ -162,14 +162,14 @@ When a component registers itself with the CM, it may specify two
 different handlers: a refresh handler and a close handler. A refresh
 handler is a function with the following type signature:
 
-@deftypefun void (*GNCComponentRefreshHandler) (GHashTable *@var{changes}, gpointer @var{user_data})
+@deftp {Data type} GNCComponentRefreshHandler void (*) (GHashTable *@var{changes}, gpointer @var{user_data})
 This is the type signature of a refresh handler. The @var{changes} hash
 describes the Engine events which have occurred since the last refresh.
 It is used to determine whether a refresh is actually needed. It may,
 however, be @code{NULL}, meaning the component must perform a refresh.
 The @code{user_data} pointer is the data pointer supplied when the
 component was registered.
-@end deftypefun
+@end deftp
 
 When a refresh handler is invoked, it should perform the following actions:
 
@@ -239,10 +239,10 @@ objects.
 
 A close handler is a function with the following type signature:
 
-@deftypefun void (*GNCComponentCloseHandler) (gpointer @var{user_data})
+@deftp {Data type} GNCComponentCloseHandler void (*) (gpointer @var{user_data})
 This is the type signature of a close handler. The @code{user_data}
 pointer is the data pointer supplied when the component was registered.
-@end deftypefun
+@end deftp
 
 The invocation of a close handler is a command to the component to close
 itself. The component must close itself -- the handler should not be
@@ -349,12 +349,12 @@ to be searched for. Each function uses a find handler to perform the
 actual search work. A find handler is a function with the following
 signature:
 
-@deftypefun gboolean (*GNCComponentFindHandler) (gpointer @var{find_data}, gpointer @var{user_data})
+@deftp {Data type} GNCComponentFindHandler gboolean (*) (gpointer @var{find_data}, gpointer @var{user_data})
 A find handler is invoked with the @var{find_data} specified in the search
 API call, and the @var{user_data} of a particular component. The handler
 should return TRUE if the component matches the search criteria and FALSE
 otherwise.
-@end deftypefun
+@end deftp
 
 @deftypefun {GList *} gnc_find_gui_components (const char * @var{component_class}, GNCComponentFindHandler @var{find_handler}, gpointer @var{find_data})
 Search for all components in class @var{component_class} using @var{find_handler}. Return a @code{GList} of the user data pointers of matching components.
@@ -377,11 +377,11 @@ of class.
 In either case, a generic component handler is invoked for each
 component. The handler has the following signature:
 
-@deftypefun void (*GNCComponentHandler) (const char * @var{class}, gint @var{component_id}, gpointer @var{iter_data})
+@deftp {Data type} GNCComponentHandler void (*) (const char * @var{class}, gint @var{component_id}, gpointer @var{iter_data})
 The component handler is invoked with the @var{class},
 @var{component_id} of a particular component, as well as the
 @var{iter_data} supplied in the iteration API call.
-@end deftypefun
+@end deftp
 
 @deftypefun void gnc_forall_gui_components (const char * @var{component_class}, GNCComponentHandler @var{handler}, gpointer @var{iter_data})
 Apply @var{handler} to every component in @var{component_class}. If
