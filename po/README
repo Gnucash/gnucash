@@ -1,6 +1,8 @@
 Notes on I18n for GnuCash
 -------------------------
 
+Please send new and updated .po files to gnucash-patches@gnucash.org.
+
 To update the .pot file for GnuCash it is best to simply build the
 sources using 'make'. Don't run xgettext by hand, because many of the
 translatable strings in GnuCash are taken from scheme files and will
