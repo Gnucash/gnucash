@@ -63,6 +63,7 @@ gnome:
 	@cd g-wrap;           $(MAKE) default
 
 qt:
+	@cd g-wrap;           $(MAKE) default
 
 .PHONY: gnome motif qt
 
