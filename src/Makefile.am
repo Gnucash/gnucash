@@ -10,7 +10,6 @@ SUBDIRS = \
   tax \
   app-utils \
   gnome-utils \
-  guile \
   gnome \
   app-file \
   register \
@@ -44,9 +43,9 @@ gnucash_LDADD = \
   register/register-gnome/libgncmod-register-gnome.la \
   report/report-system/libgncmod-report-system.la \
   import-export/qif-import/libgncmod-qif-import.la \
-  guile/libgncguile.la \
+  gnome/libgncguile.la \
   gnome/libgncgnome.la \
-  guile/libgncguile.la \
+  gnome/libgncguile.la \
   ${GNOMEUI_LIBS} \
   ${GNOME_LIBDIR} \
   ${GNOME_PRINT_LIBS} \
