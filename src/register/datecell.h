@@ -52,6 +52,18 @@
  *    value day, month, year should follow the regular written
  *    conventions, i.e. day==(1..31), mon==(1..12), year==4 digits
  *
+ * The xaccCommitDateCell() method commits any pending changes to the 
+ *    value of the cell.  That is, it will take the cells current string 
+ *    value, and parse it into a month-day-year value.
+ *
+ *    Why is this needed? Basically, while the user is typing into the
+ *    cell, we do not even try to parse the date, lest we confuse things
+ *    royally.  Normally, when the user leaves this cell, and moves to  
+ *    another, we parse the date and print it nicely and cleanly into 
+ *    the cell.  But it can happen that we want to get the accurate contentts 
+ *    of the date cell before we've left it, e.g. if the user has clicked
+ *    on the "commit" button.  This is the troutine to call for that.
+ *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
  */
@@ -74,6 +86,8 @@ void       xaccDestroyDateCell (DateCell *);
 
 void       xaccSetDateCellValue (DateCell *, int day, int mon, int year);  
 void       xaccSetDateCellValueSecs (DateCell *, time_t secs);
+
+void       xaccCommitDateCell (DateCell *);
 
 #endif /* __XACC_DATE_CELL_C__ */
 
