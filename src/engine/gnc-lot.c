@@ -281,6 +281,7 @@ gnc_lot_get_earliest_split (GNCLot *lot)
    {
       Split *s = node->data;
       Transaction *trans = s->parent;
+      if (!trans) continue;
       if ((ts.tv_sec > trans->date_posted.tv_sec) ||
           ((ts.tv_sec == trans->date_posted.tv_sec) &&
            (ts.tv_nsec > trans->date_posted.tv_nsec)))
@@ -292,6 +293,35 @@ gnc_lot_get_earliest_split (GNCLot *lot)
    }
 
    return earliest;
+}
+
+Split *
+gnc_lot_get_latest_split (GNCLot *lot)
+{
+   SplitList *node;
+   Timespec ts;
+   Split *latest = NULL;
+
+   ts.tv_sec = -1000000LL * ((long long) LONG_MAX);
+   ts.tv_nsec = 0;
+   if (!lot) return NULL;
+
+   for (node=lot->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      Transaction *trans = s->parent;
+      if (!trans) continue;
+      if ((ts.tv_sec < trans->date_posted.tv_sec) ||
+          ((ts.tv_sec == trans->date_posted.tv_sec) &&
+           (ts.tv_nsec < trans->date_posted.tv_nsec)))
+          
+      {
+         ts = trans->date_posted;
+         latest = s;
+      }
+   }
+
+   return latest;
 }
 
 /* ============================================================= */
