@@ -13,6 +13,7 @@
 #include "Account.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
+#include "gnc-component-manager.h"
 
 #include "gncCustomer.h"
 #include "gncJob.h"
@@ -215,6 +216,27 @@ gnc_business_account_types (GncOwner *owner)
   }
 }
 
+/*********************************************************************/
+/* Option Menu creation                                              */
+
+typedef const char * (*GenericLookup_t)(gpointer);
+
+typedef struct {
+  gint		component_id;
+  GtkWidget *	omenu;
+  GNCBook *	book;
+  gpointer *	result;
+  gboolean	none_ok;
+  const char *	(*get_name)(gpointer);
+  GList *	(*get_list)(GNCBook*);
+} OpMenuData;
+
+#define DO_ADD_ITEM(s,o) { \
+	add_menu_item (menu, (s), omd->result, (o)); \
+	if (*(omd->result) == (o)) current = index; \
+	index++; \
+}
+
 static void
 business_option_changed (GtkWidget *widget, gpointer *result)
 {
@@ -234,34 +256,86 @@ add_menu_item (GtkWidget *menu, const char *label, gpointer *result,
   gtk_widget_show (item);
 }
 
-#define DO_ADD_ITEM(s,o) { \
-	add_menu_item (menu, (s), result, (o)); \
-	if (*result == (o)) current = index; \
-	index++; \
+static void
+generic_omenu_destroy_cb (GtkWidget *widget, gpointer data)
+{
+  OpMenuData *omd = data;
+
+  gnc_unregister_gui_component (omd->component_id);
+  g_free (omd);
 }
 
-typedef const char * (*GenericLookup_t)(gpointer);
-
 static void
-make_generic_optionmenu (GList *items, GtkWidget *omenu, GNCBook *book,
-			 gboolean none_ok, GenericLookup_t func,
-			 gpointer *result)
+build_generic_optionmenu (OpMenuData *omd)
 {
+  GList *items;
   GtkWidget *menu;
   int current = 0, index = 0;
 
+  /* Get the list of items */
+  items = (omd->get_list)(omd->book);
+
   menu = gtk_menu_new ();
   
-  if (none_ok || items == NULL)
+  if (omd->none_ok || items == NULL)
     DO_ADD_ITEM (_("None"), NULL);
 
   for ( ; items; items = items->next)
-    DO_ADD_ITEM (func (items->data), items->data);
+    DO_ADD_ITEM ((omd->get_name)(items->data), items->data);
 
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), current);
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (omd->omenu), menu);
+  gtk_option_menu_set_history (GTK_OPTION_MENU (omd->omenu), current);
   gtk_widget_show (menu);
-  
+}
+
+static void
+generic_omenu_refresh_handler (GHashTable *changes, gpointer user_data)
+{
+  OpMenuData *omd = user_data;
+  build_generic_optionmenu (omd);
+}
+
+static void
+make_generic_optionmenu (GtkWidget *omenu, GNCBook *book,
+			 gboolean none_ok, GNCIdType type_name,
+			 GList * (*get_list)(GNCBook*),
+			 GenericLookup_t get_name,
+			 gpointer *result)
+{
+  OpMenuData *omd;
+
+  omd = gtk_object_get_data (GTK_OBJECT (omenu), "menu-data");
+
+  /* If this is the first time we've been called, then build the
+   * Option Menu Data object, register with the component manager, and
+   * watch for changed items.  Then register for deletion, so we can
+   * unregister and free the data when this menu is destroyed.
+   */
+  if (!omd) {
+    omd = g_new0 (OpMenuData, 1);
+    omd->omenu = omenu;
+    omd->book = book;
+    omd->result = result;
+    omd->none_ok = none_ok;
+    omd->get_name = get_name;
+    omd->get_list = get_list;
+    gtk_object_set_data (GTK_OBJECT (omenu), "menu-data", omd);
+
+    omd->component_id =
+      gnc_register_gui_component ("generic-omenu-refresh-hook",
+				  generic_omenu_refresh_handler,
+				  NULL, omd);
+
+    gnc_gui_component_watch_entity_type (omd->component_id,
+					 type_name,
+					 GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+    
+    gtk_signal_connect (GTK_OBJECT (omenu), "destroy",
+			generic_omenu_destroy_cb, omd);
+
+  }
+
+  build_generic_optionmenu (omd);
 }
 
 /* Create an optionmenu of available billing terms and attach it to
@@ -275,12 +349,10 @@ void
 gnc_ui_billterms_optionmenu (GtkWidget *omenu, GNCBook *book,
 			     gboolean none_ok, GncBillTerm **choice)
 {
-  GList *terms;
+  if (!omenu || !book || !choice) return;
 
-  if (!omenu || !choice || !book) return;
-
-  terms = gncBillTermGetTerms (book);
-  make_generic_optionmenu (terms, omenu, book, none_ok,
+  make_generic_optionmenu (omenu, book, none_ok, GNC_BILLTERM_MODULE_NAME,
+			   gncBillTermGetTerms,
 			   (GenericLookup_t)gncBillTermGetName,
 			   (gpointer *)choice);
 }
@@ -289,12 +361,10 @@ void
 gnc_ui_taxtables_optionmenu (GtkWidget *omenu, GNCBook *book,
 			     gboolean none_ok, GncTaxTable **choice)
 {
-  GList *tables;
+  if (!omenu || !book || !choice) return;
 
-  if (!omenu || !choice || !book) return;
-
-  tables = gncTaxTableGetTables (book);
-  make_generic_optionmenu (tables, omenu, book, none_ok,
+  make_generic_optionmenu (omenu, book, none_ok, GNC_TAXTABLE_MODULE_NAME,
+			   gncTaxTableGetTables,
 			   (GenericLookup_t)gncTaxTableGetName,
 			   (gpointer *)choice);
 }
