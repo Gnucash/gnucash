@@ -2,7 +2,7 @@
 	* src/scm/main.scm -- move (setlocale ...) earlier in the startup.
 	  it needs to run before app-utils is loaded (because gnc_localeconv()
 	  caches the first run -- so if that happens before setlocale, you're
-	  stuck!)
+	  stuck!)  fixes 89471 and partially fixes 87729
 
 2002-10-02  Derek Atkins <derek@ihtfp.com>
 	* configure.in: check for ltdl.h
