@@ -166,7 +166,7 @@ printf ("SplitDestroy(): trans=%p, %d'th split=%p\n", trans, numsplits, s);
    }
    assert (ismember);
 
-   /* if the accoount has three or more splits, 
+   /* if the account has three or more splits, 
     * merely unlink & free the split. 
     */
    if (2 < numsplits) {
