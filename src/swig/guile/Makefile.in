@@ -32,7 +32,10 @@ INCLPATH = \
            -I@top_srcdir@/lib/Xbae-4.6.2-linas \
            -I$(prefix)/include
 
-CFLAGS   = @CFLAGS@ @X_CFLAGS@ -DCELL_WIDGETS=1 ${INCLPATH}
+CFLAGS   = @CFLAGS@ @X_CFLAGS@ -DCELL_WIDGETS=1 ${INCLPATH} -Wno-unused
+
+SWIG_FLAGS := -stat -guile \
+              -I.. -I@top_srcdir@/src/engine -I@top_srcdir@/src/guile
 
 ######################################################################
 # SEE Makefile.common for information about these variables.
@@ -64,16 +67,18 @@ SWIG_ALL_BASENAMES := $(notdir ${SWIG_ALL_HDRS})
 
 # This is .PHONY because it has to be re-generated *every* time.  Who
 # knows when headers are added to the engine dir?
-gnucash.engine.i: ${SWIG_ENGINE_HDRS}
+gnucash.engine.i: guile_swig_annotations.i ${SWIG_ENGINE_HDRS}
 	@echo "%module gnucash" > $@
+	@echo "%include guile_swig_annotations.i" >> $@
 	@echo "%{" >> $@
 	@($(foreach hdr,${SWIG_ENGINE_BASENAMES},echo "#include <${hdr}>"; )) >> $@
 	@echo "%}" >> $@
 	@($(foreach hdr,${SWIG_ENGINE_BASENAMES},echo %include ${hdr}; )) >> $@
 TRASH += gnucash.engine.i gnucash.engine_wrap.doc
 
-gnucash.all.i: ${SWIG_ALL_HDRS}
+gnucash.all.i: guile_swig_annotations.i ${SWIG_ALL_HDRS}
 	@echo "%module gnucash" > $@
+	@echo "%include guile_swig_annotations.i" >> $@
 	@echo "%{" >> $@
 	@($(foreach hdr,${SWIG_ALL_BASENAMES},echo "#include <${hdr}>"; )) >> $@
 	@echo "%}" >> $@
@@ -81,13 +86,13 @@ gnucash.all.i: ${SWIG_ALL_HDRS}
 TRASH += gnucash.all.i gnucash.all_wrap.doc
 
 gnucash-engine-guile_wrap.c: gnucash.engine.i
-	swig -I.. -I@top_srcdir@/src/engine -I@top_srcdir@/src/guile -guile -o $@ $< 
-	perl -pi -e 's/^void gnucash\(/void gnucash_swig_init\(/' $@
+	swig ${SWIG_FLAGS} -o $@ $< 
+	perl -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
 TRASH += gnucash-engine-guile_wrap.c
 
 gnucash-all-guile_wrap.c: gnucash.all.i
-	swig -I.. -I@top_srcdir@/src/engine -I@top_srcdir@/src/guile -guile -o $@ $< 
-	perl -pi -e 's/^void gnucash\(/void gnucash_swig_init\(/' $@
+	swig ${SWIG_FLAGS} -o $@ $< 
+	perl -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
 TRASH += gnucash-all-guile_wrap.c
 
 # Local Variables:
