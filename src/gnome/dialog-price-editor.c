@@ -207,6 +207,10 @@ gnc_prices_load_prices (PricesDialog *pdb_dialog)
   pdb_dialog->prices = prices;
 
   gtk_clist_select_row (GTK_CLIST (pdb_dialog->price_list), new_row, 0);
+  if (gtk_clist_row_is_visible (GTK_CLIST (pdb_dialog->price_list), new_row)
+      != GTK_VISIBILITY_FULL)
+    gtk_clist_moveto (GTK_CLIST (pdb_dialog->price_list),
+                      new_row, 0, 0.5, 0.0);
 
   gtk_widget_set_sensitive (pdb_dialog->edit_button, prices != NULL);
   gtk_widget_set_sensitive (pdb_dialog->remove_button, prices != NULL);
@@ -730,13 +734,9 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
   /* default to ok */
   gnome_dialog_set_default (GNOME_DIALOG(dialog), 0);
 
-  /* price information */
-  
-
   /* price tree */
   {
     GtkWidget *income_radio;
-    GtkWidget *scroll;
     GtkWidget *list;
 
     list = lookup_widget (dialog, "price_list");

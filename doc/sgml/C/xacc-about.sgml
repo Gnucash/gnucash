@@ -1299,8 +1299,7 @@ For now, this is what we have.
 </listitem>
 <listitem>
 <para>scheme -- scheme and guile code -- <filename> src/scm </filename> plus
- <filename>     src/guile </filename> -- in parenthesis is  <filename/*.c + *.h + *.scm/
-
+ <filename>     src/guile </filename> -- in parenthesis is  <filename>*.c + *.h + *.scm</filename>
  </para>
 </listitem>
 <listitem>
@@ -1311,7 +1310,8 @@ For now, this is what we have.
 <listitem>
 <para>Languages -- the number of languages that the application messages
       have been translated to.  In parenthesis, the number of messages
-      in the message files <command/grep msgstr *.po |wc/, in thousands.
+      in the message files <command>grep msgstr *.po |wc</command>,
+      in thousands.
  </para>
 </listitem>
 

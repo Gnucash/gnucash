@@ -7485,7 +7485,7 @@ create_Price_Dialog (void)
   GtkWidget *ok_button;
   GtkWidget *cancel_button;
 
-  Price_Dialog = gnome_dialog_new (_("Price Dialog"), NULL);
+  Price_Dialog = gnome_dialog_new (_("Price Editor"), NULL);
   gtk_object_set_data (GTK_OBJECT (Price_Dialog), "Price_Dialog", Price_Dialog);
   gtk_window_set_modal (GTK_WINDOW (Price_Dialog), TRUE);
   gtk_window_set_policy (GTK_WINDOW (Price_Dialog), FALSE, FALSE, FALSE);
@@ -7656,5 +7656,169 @@ create_Price_Dialog (void)
   GTK_WIDGET_SET_FLAGS (cancel_button, GTK_CAN_DEFAULT);
 
   return Price_Dialog;
+}
+
+GtkWidget*
+create_Commodities_Dialog (void)
+{
+  GtkWidget *Commodities_Dialog;
+  GtkWidget *vbox127;
+  GtkWidget *hbox107;
+  GtkWidget *frame51;
+  GtkWidget *vbox128;
+  GtkWidget *scrolledwindow33;
+  GtkWidget *commodity_list;
+  GtkWidget *label8477426;
+  GtkWidget *label8477427;
+  GtkWidget *label8477428;
+  GtkWidget *label8477429;
+  GtkWidget *label8477430;
+  GtkWidget *hbuttonbox7;
+  GtkWidget *add_button;
+  GtkWidget *remove_button;
+  GtkWidget *edit_button;
+  GtkWidget *hbuttonbox6;
+  GtkWidget *close_button;
+  GtkTooltips *tooltips;
+
+  tooltips = gtk_tooltips_new ();
+
+  Commodities_Dialog = gnome_dialog_new (_("Commodities"), NULL);
+  gtk_object_set_data (GTK_OBJECT (Commodities_Dialog), "Commodities_Dialog", Commodities_Dialog);
+  gtk_window_set_policy (GTK_WINDOW (Commodities_Dialog), TRUE, TRUE, FALSE);
+
+  vbox127 = GNOME_DIALOG (Commodities_Dialog)->vbox;
+  gtk_object_set_data (GTK_OBJECT (Commodities_Dialog), "vbox127", vbox127);
+  gtk_widget_show (vbox127);
+
+  hbox107 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_ref (hbox107);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "hbox107", hbox107,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox107);
+  gtk_box_pack_start (GTK_BOX (vbox127), hbox107, TRUE, TRUE, 0);
+
+  frame51 = gtk_frame_new (_("Commodities"));
+  gtk_widget_ref (frame51);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "frame51", frame51,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame51);
+  gtk_box_pack_start (GTK_BOX (hbox107), frame51, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame51), 3);
+
+  vbox128 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox128);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "vbox128", vbox128,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox128);
+  gtk_container_add (GTK_CONTAINER (frame51), vbox128);
+
+  scrolledwindow33 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (scrolledwindow33);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "scrolledwindow33", scrolledwindow33,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (scrolledwindow33);
+  gtk_box_pack_start (GTK_BOX (vbox128), scrolledwindow33, TRUE, TRUE, 0);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow33), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+
+  commodity_list = gtk_clist_new (5);
+  gtk_widget_ref (commodity_list);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "commodity_list", commodity_list,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (commodity_list);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow33), commodity_list);
+  gtk_clist_set_column_width (GTK_CLIST (commodity_list), 0, 80);
+  gtk_clist_set_column_width (GTK_CLIST (commodity_list), 1, 80);
+  gtk_clist_set_column_width (GTK_CLIST (commodity_list), 2, 80);
+  gtk_clist_set_column_width (GTK_CLIST (commodity_list), 3, 80);
+  gtk_clist_set_column_width (GTK_CLIST (commodity_list), 4, 80);
+  gtk_clist_column_titles_show (GTK_CLIST (commodity_list));
+
+  label8477426 = gtk_label_new (_("Type"));
+  gtk_widget_ref (label8477426);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "label8477426", label8477426,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477426);
+  gtk_clist_set_column_widget (GTK_CLIST (commodity_list), 0, label8477426);
+
+  label8477427 = gtk_label_new (_("Symbol"));
+  gtk_widget_ref (label8477427);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "label8477427", label8477427,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477427);
+  gtk_clist_set_column_widget (GTK_CLIST (commodity_list), 1, label8477427);
+
+  label8477428 = gtk_label_new (_("Name"));
+  gtk_widget_ref (label8477428);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "label8477428", label8477428,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477428);
+  gtk_clist_set_column_widget (GTK_CLIST (commodity_list), 2, label8477428);
+
+  label8477429 = gtk_label_new (_("Code"));
+  gtk_widget_ref (label8477429);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "label8477429", label8477429,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477429);
+  gtk_clist_set_column_widget (GTK_CLIST (commodity_list), 3, label8477429);
+
+  label8477430 = gtk_label_new (_("Fraction"));
+  gtk_widget_ref (label8477430);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "label8477430", label8477430,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477430);
+  gtk_clist_set_column_widget (GTK_CLIST (commodity_list), 4, label8477430);
+
+  hbuttonbox7 = gtk_hbutton_box_new ();
+  gtk_widget_ref (hbuttonbox7);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "hbuttonbox7", hbuttonbox7,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbuttonbox7);
+  gtk_box_pack_start (GTK_BOX (vbox128), hbuttonbox7, FALSE, FALSE, 0);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox7), GTK_BUTTONBOX_SPREAD);
+
+  add_button = gtk_button_new_with_label (_("Add"));
+  gtk_widget_ref (add_button);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "add_button", add_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (add_button);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox7), add_button);
+  GTK_WIDGET_SET_FLAGS (add_button, GTK_CAN_DEFAULT);
+  gtk_tooltips_set_tip (tooltips, add_button, _("Add a new price."), NULL);
+
+  remove_button = gtk_button_new_with_label (_("Remove"));
+  gtk_widget_ref (remove_button);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "remove_button", remove_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (remove_button);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox7), remove_button);
+  GTK_WIDGET_SET_FLAGS (remove_button, GTK_CAN_DEFAULT);
+  gtk_tooltips_set_tip (tooltips, remove_button, _("Remove the current price"), NULL);
+
+  edit_button = gtk_button_new_with_label (_("Edit"));
+  gtk_widget_ref (edit_button);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "edit_button", edit_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (edit_button);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox7), edit_button);
+  GTK_WIDGET_SET_FLAGS (edit_button, GTK_CAN_DEFAULT);
+
+  hbuttonbox6 = GNOME_DIALOG (Commodities_Dialog)->action_area;
+  gtk_object_set_data (GTK_OBJECT (Commodities_Dialog), "hbuttonbox6", hbuttonbox6);
+  gtk_widget_show (hbuttonbox6);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox6), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (hbuttonbox6), 8);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Commodities_Dialog), GNOME_STOCK_BUTTON_CLOSE);
+  close_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Commodities_Dialog)->buttons)->data);
+  gtk_widget_ref (close_button);
+  gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "close_button", close_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (close_button);
+  GTK_WIDGET_SET_FLAGS (close_button, GTK_CAN_DEFAULT);
+
+  gtk_object_set_data (GTK_OBJECT (Commodities_Dialog), "tooltips", tooltips);
+
+  return Commodities_Dialog;
 }
 

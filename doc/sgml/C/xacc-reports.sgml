@@ -120,6 +120,7 @@ examine some of the other reports in <filename> src/scm/report
 rendering this with a HTML widget. (Future versions of GnuCash will
 hopefully support a more flexible system).  </para>
 
+</sect1>
 </article>
 <!-- Local variables: -->
 <!-- sgml-parent-document: "gnucash.sgml" -->

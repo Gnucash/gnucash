@@ -90,6 +90,7 @@ gboolean gnc_dup_trans_dialog (gncUIWidget parent, time_t *date_p,
 void     gnc_tax_info_dialog (gncUIWidget parent);
 void     gnc_stock_split_dialog (Account * initial);
 void     gnc_prices_dialog (gncUIWidget parent);
+void     gnc_commodities_dialog (gncUIWidget parent);
 
 /* Open a dialog asking for username and password. The heading and
  * either 'initial_*' arguments may be NULL. If the dialog returns

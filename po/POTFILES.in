@@ -12,10 +12,12 @@ src/gnome/dialog-account-picker.c
 src/gnome/dialog-account.c
 src/gnome/dialog-budget.c
 src/gnome/dialog-column-view.c
+src/gnome/dialog-commodities.c
 src/gnome/dialog-commodity.c
 src/gnome/dialog-filebox.c
 src/gnome/dialog-fincalc.c
 src/gnome/dialog-options.c
+src/gnome/dialog-price-editor.c
 src/gnome/dialog-progress.c
 src/gnome/dialog-totd.c
 src/gnome/dialog-transfer.c

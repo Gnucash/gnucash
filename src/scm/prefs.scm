@@ -628,6 +628,14 @@ the current value of the path.")
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
+  "__gui" "commodities_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "commodities_win_height" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
   "__gui" "help_win_width" 0))
 
 (gnc:register-configuration-option

@@ -1,3 +1,8 @@
+2001-04-10  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-commodities.c: new file. commodity editor.
+	unfinished.
+
 2001-04-10  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/net-worth-timeseries.scm: Fixed date argument
@@ -19,6 +24,10 @@
 	generate simple timeseries for net worth barchart.
 
 	* src/scm/report/{Makefile.am, report-list.scm}: add new barchart.
+
+2001-04-09  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-price-editor.c: more work
 
 2001-04-09  Robert Graham Merkel  <rgmerk@mira.net>
 
