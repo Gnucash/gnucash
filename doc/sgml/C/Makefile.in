@@ -235,27 +235,27 @@ install-data-local: gnucash/index.html
 #	$(INSTALL_DATA) $(srcdir)/topic.dat \
 #			$(DESTDIR)$(gnucash_helpdir)/topic.dat
 #	$(INSTALL_DATA) $(srcdir)/index.html $(DESTDIR)$(gnucash_helpdir)/
-	for file in gnucash/*.html; do \
-	  basefile=`basename $$file` \
-	  $(INSTALL_DATA) $(srcdir)/$$file \
-                          $(DESTDIR)$(gnucash_helpdir)/$$basefile; \
-	done
-	for file in gnucash/*.css; do \
-	  basefile=`basename $$file` \
-	  $(INSTALL_DATA) $(srcdir)/$$file \
-                          $(DESTDIR)$(gnucash_helpdir)/$$basefile; \
-	done
+	-(for file in gnucash/*.html; do \
+	    basefile=`basename $$file` \
+	    $(INSTALL_DATA) $(srcdir)/$$file \
+                            $(DESTDIR)$(gnucash_helpdir)/$$basefile; \
+	  done)
+	-(for file in gnucash/*.css; do \
+	    basefile=`basename $$file` \
+	    $(INSTALL_DATA) $(srcdir)/$$file \
+                            $(DESTDIR)$(gnucash_helpdir)/$$basefile; \
+	  done)
 #	for file in gnucash/image/*.png; do \
 #	  basefile=`basename $$file` \
 #	  $(INSTALL_DATA) $(srcdir)/$$file \
 #                          $(DESTDIR)$(gnucash_helpdir)/figs/$$basefile;\
 #	done
-	for file in gnucash/stylesheet-images/*.gif; do \
-	  basefile=`basename $$file` \
-	  $(INSTALL_DATA) \
-            $(srcdir)/$$file \
-            $(DESTDIR)$(gnucash_helpdir)/stylesheet-images/$$basefile; \
-	done
+	-(for file in gnucash/stylesheet-images/*.gif; do \
+	    basefile=`basename $$file` \
+	    $(INSTALL_DATA) \
+              $(srcdir)/$$file \
+              $(DESTDIR)$(gnucash_helpdir)/stylesheet-images/$$basefile; \
+	  done)
 #	topic.dat
 
 manual-html: gnucash/index.html
