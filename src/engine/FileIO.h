@@ -27,7 +27,7 @@
 #define __FILEIO_H__
 
 #include "config.h"
-#include "Data.h"
+#include "Group.h"
 
 #define ERR_FILEIO_NO_ERROR          0
 #define ERR_FILEIO_FILE_BAD_READ     1 
@@ -37,10 +37,10 @@
 #define ERR_FILEIO_FILE_TOO_OLD      5
 
 /** PROTOTYPES ******************************************************/
-AccountGroup *xaccReadData  (char *datafile);
-int           xaccWriteData (char *datafile, AccountGroup *grp);
+AccountGroup *xaccReadAccountGroup  (char *datafile);
+int           xaccWriteAccountGroup (char *datafile, AccountGroup *grp);
 int           xaccGetFileIOError (void);
 
-AccountGroup *xaccReadQIFData (char *datafile);
+AccountGroup *xaccReadQIFAccountGroup (char *datafile);
 
-#endif
+#endif /* __FILEIO_H__ */

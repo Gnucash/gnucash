@@ -26,7 +26,7 @@
 #include "config.h"
 
 #include "Account.h"
-#include "Data.h"
+#include "Group.h"
 #include "date.h"
 #include "messages.h"
 #include "Transaction.h"

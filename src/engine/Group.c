@@ -1,5 +1,5 @@
 /********************************************************************\
- * Data.c -- the main data structure of the program                 *
+ * Group.c -- the main data structure of the program                *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997 Linas Vepstas                                 *
  *                                                                  *
@@ -26,7 +26,7 @@
 #include "config.h"
 
 #include "Account.h"
-#include "Data.h"
+#include "Group.h"
 #include "util.h"
 
 #ifndef FALSE

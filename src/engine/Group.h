@@ -1,5 +1,5 @@
 /********************************************************************\
- * Data.h -- the main data structure of the program                 *
+ * Group.h -- the main data structure of the program                *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997 Linas Vepstas                                 *
  *                                                                  *

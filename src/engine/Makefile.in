@@ -28,52 +28,26 @@ srcdir   = @srcdir@
 VPATH    = @srcdir@
 CC       = @CC@
 INCLPATH = -I/usr/include \
-           -I.. \
-           -I./register \
            -I/usr/local/include \
-           -I@x_includes@/. \
-           -I@srcdir@/../include \
-           -I@srcdir@/../lib/ComboBox-1.33 \
-           -I@srcdir@/../lib/XmHTML-1.1.0/src \
-           -I@srcdir@/../lib/Xbae-4.6.2-linas 
+           -I@srcdir@/../../include 
 
-# libhtmlw eliminated due to license restrictions 
-# and general brokenness
-#           -I@srcdir@/../lib/libhtmlw 
-
-CFLAGS   = @cflags@ -DCELL_WIDGETS=1
+CFLAGS   = @cflags@ 
 LFLAGS   = @lflags@
 LIBS     = @LIBS@
-LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib -L@x_libraries@/.
-TARGET   = ../xacc.bin
-STATIC   = ../xacc-static.bin
+LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib 
+TARGET   = ../libengine.a
 
-# LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
-LIBXMHTML= ../lib/XmHTML-1.1.0/src/libXmHTML.a
-LIBXBAE  = ../lib/Xbae-4.6.2-linas/libXbae.a
-LIBCOMBO = ../lib/ComboBox-1.33/libComboBox.a
-LIBREG   = libregister.a
 ######################################################################
-SRCS = AccWindow.c Account.c AccountMenu.c AdjBWindow.c    \
-       BuildMenu.c Data.c Destroy.c FileBox.c FileIO.c HelpWindow.c \
-       Ledger.c LedgerUtils.c MainWindow.c QIFIO.c   \
-       RecnWindow.c RegWindow.c Reports.c TextBox.c Transaction.c   \
-       XferWindow.c date.c main.c util.c xtutil.c
-# OBJS = ${SRCS:.c=.o} $(LIBHTMLW) $(LIBXBAE) $(LIBCOMBO)
-OBJS = ${SRCS:.c=.o} $(LIBREG) $(LIBXMHTML) $(LIBXBAE) $(LIBCOMBO)
+SRCS = Account.c FileIO.c Group.c QIFIO.c Transaction.c date.c 
+OBJS = ${SRCS:.c=.o} 
 ######################################################################
 
 default: $(TARGET)
 
 $(TARGET): $(OBJS)
 	@echo "++++++"
-	$(CC) $(LFLAGS) $(OBJS) $(LIBPATH) $(LIBS) -o $@
-
-static: $(STATIC)
-
-$(STATIC): $(OBJS)
-	@echo "++++++"
-	$(CC) $(LFLAGS) $(OBJS) $(LIBPATH) $(LIBS) -o $@ -static
+	$(AR) rv $(TARGET) $(OBJS)
+	$(RANLIB) $(TARGET)
 
 .c.o:
 	@echo "+++"
@@ -86,6 +60,6 @@ clean:
 	rm -f *.o *~ *.bak
 
 distclean: clean
-	rm -f $(TARGET) $(STATIC) Makefile Makefile.bak config.h
+	rm -f $(TARGET) Makefile Makefile.bak config.h
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.

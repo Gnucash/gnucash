@@ -35,7 +35,7 @@
 #include "config.h"
 
 #include "Account.h"
-#include "Data.h"
+#include "Group.h"
 #include "messages.h"
 #include "util.h"
 
@@ -864,7 +864,7 @@ char * xaccReadQIFTransList (int fd, Account *acc)
 \********************************************************************/
 
 /********************************************************************\
- * xaccReadQIFData                                                  * 
+ * xaccReadQIFAccountGroup                                                  * 
  *   reads in the data from file datafile                           *
  *                                                                  * 
  * Args:   datafile - the file to load the data from                * 
@@ -874,7 +874,7 @@ char * xaccReadQIFTransList (int fd, Account *acc)
 #define STRSTR(x,y) ((NSTRNCMP(x,y)) ||  (NSTRNCMP((&(x)[1]), y)))
 
 AccountGroup *
-xaccReadQIFData( char *datafile )
+xaccReadQIFAccountGroup( char *datafile )
   {
   int  fd;
   int  skip = 0;

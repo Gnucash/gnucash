@@ -84,8 +84,8 @@
 #include "config.h"
 
 #include "Account.h"
-#include "Data.h"
 #include "FileIO.h"
+#include "Group.h"
 #include "messages.h"
 #include "util.h"
 
@@ -185,14 +185,14 @@ double xaccFlipDouble (double val)
 \********************************************************************/
 
 /********************************************************************\
- * xaccReadData                                                     * 
+ * xaccReadAccountGroup                                                     * 
  *   reads in the data from file datafile                           *
  *                                                                  * 
  * Args:   datafile - the file to load the data from                * 
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 AccountGroup *
-xaccReadData( char *datafile )
+xaccReadAccountGroup( char *datafile )
   {
   int  fd;
   int  err=0;
@@ -955,14 +955,14 @@ xaccResetWriteFlags (AccountGroup *grp)
 }
 
 /********************************************************************\
- * xaccWriteData                                                    * 
+ * xaccWriteAccountGroup                                                    * 
  *   flattens the program data and saves it in a file               * 
  *                                                                  * 
  * Args:   datafile - the file to store the data in                 * 
  * Return: -1 on failure                                            * 
 \********************************************************************/
 int 
-xaccWriteData( char *datafile, AccountGroup *grp )
+xaccWriteAccountGroup( char *datafile, AccountGroup *grp )
   {
   int err = 0;
   int token = VERSION;    /* The file format version */
