@@ -2,36 +2,39 @@
 noinst_LIBRARIES = libgncgnome.a
 
 libgncgnome_a_SOURCES = \
-  top-level.c \
-  window-main.c \
-  window-register.c \
-  window-adjust.c \
-  window-help.c \
-  cursors.c \
   account-tree.c \
-  dialog-budget.c \
-  window-reconcile.c \
-  window-html.c \
-  dialog-options.c \
-  dialog-filebox.c \
-  dialog-transfer.c \
+  cursors.c \
+  dialog-account-picker.c \
   dialog-add.c \
+  dialog-budget.c \
   dialog-edit.c \
-  dialog-utils.c \
+  dialog-filebox.c \
+  dialog-fincalc.c \
+  dialog-find-transactions.c \
+  dialog-options.c \
+  dialog-print-check.c \
+  dialog-qif-import.c \
   dialog-totd.c \
+  dialog-transfer.c \
+  dialog-utils.c \
   extensions.c \
+  file-history.c \
+  glade-gnc-dialogs.c \
+  gnc-currency-edit.c \
+  gnc-datedelta.c \
+  gnc-dateedit.c \
+  gtkselect.c \
+  print-session.c \
   query-user.c \
   reconcile-list.c \
-  window-report.c \
-  gnc-dateedit.c gnc-currency-edit.c \
-  dialog-qif-import.c \
-  glade-gnc-dialogs.c \
-  gnc-datedelta.c \
-  dialog-account-picker.c \
-  print-session.c \
-  file-history.c \
-  dialog-print-check.c \
-  dialog-find-transactions.c
+  top-level.c \
+  window-adjust.c \
+  window-help.c \
+  window-html.c \
+  window-main.c \
+  window-reconcile.c \
+  window-register.c \
+  window-report.c
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
@@ -45,6 +48,7 @@ noinst_HEADERS = \
   dialog-add.h \
   dialog-budget.h \
   dialog-edit.h \
+  dialog-fincalc.h \
   dialog-find-transactions.h \
   dialog-options.h \
   dialog-print-check.h \
@@ -60,6 +64,7 @@ noinst_HEADERS = \
   gnc-datedelta.h \
   gnc-dateedit.h \
   gnome-top-level.h \
+  gtkselect.h \
   print-session.h \
   query-user.h \
   reconcile-list.h \
@@ -81,6 +86,7 @@ CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_COMPILE_ARGS}
 
 INCLUDES = \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/g-wrap \
   -I${top_srcdir}/src/guile \

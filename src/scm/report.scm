@@ -62,7 +62,7 @@
 
 (define (gnc:report-menu-setup win)
 
-  (define menu (gnc:make-menu "_Reports" (list "_Settings")))
+  (define menu (gnc:make-menu "_Reports" (list "_Accounts")))
   (define menu-namer (gnc:new-menu-namer))
 
   (define (add-report-menu-item name report)

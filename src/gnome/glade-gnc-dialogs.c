@@ -3190,14 +3190,757 @@ create_Budget_Dialog (void)
 }
 
 GtkWidget*
-create_window1 (void)
+create_Financial_Calculator_Dialog (void)
 {
-  GtkWidget *window1;
+  GtkWidget *Financial_Calculator_Dialog;
+  GtkWidget *dialog_vbox10;
+  GtkWidget *hbox54;
+  GtkWidget *frame26;
+  GtkWidget *vbox62;
+  GtkWidget *vbox66;
+  GtkWidget *hbox46;
+  GtkWidget *label790;
+  GtkWidget *payment_periods_clear_button;
+  GtkWidget *payment_periods_calc_button;
+  GtkWidget *payment_periods_entry;
+  GtkWidget *vbox67;
+  GtkWidget *hbox55;
+  GtkWidget *label799;
+  GtkWidget *interest_rate_clear_button;
+  GtkWidget *interest_rate_calc_button;
+  GtkWidget *interest_rate_entry;
+  GtkWidget *vbox68;
+  GtkWidget *hbox56;
+  GtkWidget *label800;
+  GtkWidget *present_value_clear_button;
+  GtkWidget *present_value_calc_button;
+  GtkWidget *present_value_entry;
+  GtkWidget *vbox69;
+  GtkWidget *hbox57;
+  GtkWidget *label801;
+  GtkWidget *periodic_payment_clear_button;
+  GtkWidget *periodic_payment_calc_button;
+  GtkWidget *periodic_payment_entry;
+  GtkWidget *vbox70;
+  GtkWidget *hbox58;
+  GtkWidget *label802;
+  GtkWidget *future_value_clear_button;
+  GtkWidget *future_value_calc_button;
+  GtkWidget *future_value_entry;
+  GtkWidget *frame27;
+  GtkWidget *vbox65;
+  GtkWidget *hbox51;
+  GtkWidget *vbox63;
+  GtkWidget *label797;
+  GtkWidget *label798;
+  GtkWidget *vbox64;
+  GtkWidget *compounding_menu;
+  GtkWidget *compounding_menu_menu;
+  GtkWidget *glade_menuitem;
+  GtkWidget *payment_menu;
+  GtkWidget *payment_menu_menu;
+  GtkWidget *vbox71;
+  GSList *period_group_group = NULL;
+  GtkWidget *period_payment_radio;
+  GtkWidget *radiobutton4;
+  GtkWidget *vbox72;
+  GSList *compouding_group_group = NULL;
+  GtkWidget *discrete_compounding_radio;
+  GtkWidget *radiobutton6;
+  GtkWidget *dialog_action_area10;
+  GtkWidget *schedule_button;
+  GtkWidget *close_button;
+  GtkTooltips *tooltips;
 
-  window1 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_object_set_data (GTK_OBJECT (window1), "window1", window1);
-  gtk_window_set_title (GTK_WINDOW (window1), _("window1"));
+  tooltips = gtk_tooltips_new ();
 
-  return window1;
+  Financial_Calculator_Dialog = gnome_dialog_new (_("Financial Calculator"), NULL);
+  gtk_object_set_data (GTK_OBJECT (Financial_Calculator_Dialog), "Financial_Calculator_Dialog", Financial_Calculator_Dialog);
+  gtk_window_set_policy (GTK_WINDOW (Financial_Calculator_Dialog), TRUE, TRUE, FALSE);
+
+  dialog_vbox10 = GNOME_DIALOG (Financial_Calculator_Dialog)->vbox;
+  gtk_object_set_data (GTK_OBJECT (Financial_Calculator_Dialog), "dialog_vbox10", dialog_vbox10);
+  gtk_widget_show (dialog_vbox10);
+
+  hbox54 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox54);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "hbox54", hbox54,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox54);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox10), hbox54, TRUE, TRUE, 0);
+
+  frame26 = gtk_frame_new (NULL);
+  gtk_widget_ref (frame26);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "frame26", frame26,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame26);
+  gtk_box_pack_start (GTK_BOX (hbox54), frame26, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame26), 3);
+
+  vbox62 = gtk_vbox_new (FALSE, 6);
+  gtk_widget_ref (vbox62);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "vbox62", vbox62,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox62);
+  gtk_container_add (GTK_CONTAINER (frame26), vbox62);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox62), 5);
+
+  vbox66 = gtk_vbox_new (FALSE, 2);
+  gtk_widget_ref (vbox66);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "vbox66", vbox66,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox66);
+  gtk_box_pack_start (GTK_BOX (vbox62), vbox66, TRUE, TRUE, 0);
+
+  hbox46 = gtk_hbox_new (FALSE, 6);
+  gtk_widget_ref (hbox46);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "hbox46", hbox46,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox46);
+  gtk_box_pack_start (GTK_BOX (vbox66), hbox46, TRUE, TRUE, 0);
+
+  label790 = gtk_label_new (_("Payment Periods"));
+  gtk_widget_ref (label790);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "label790", label790,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label790);
+  gtk_box_pack_start (GTK_BOX (hbox46), label790, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label790), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label790), 0.5, 0.75);
+
+  payment_periods_clear_button = gtk_button_new_with_label (_("Clear"));
+  gtk_widget_ref (payment_periods_clear_button);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "payment_periods_clear_button", payment_periods_clear_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (payment_periods_clear_button);
+  gtk_box_pack_end (GTK_BOX (hbox46), payment_periods_clear_button, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, payment_periods_clear_button, _("Clear the entry"), NULL);
+
+  payment_periods_calc_button = gtk_button_new_with_label (_("Calculate"));
+  gtk_widget_ref (payment_periods_calc_button);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "payment_periods_calc_button", payment_periods_calc_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (payment_periods_calc_button);
+  gtk_box_pack_end (GTK_BOX (hbox46), payment_periods_calc_button, FALSE, FALSE, 0);
+
+  payment_periods_entry = gtk_entry_new ();
+  gtk_widget_ref (payment_periods_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "payment_periods_entry", payment_periods_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (payment_periods_entry);
+  gtk_box_pack_start (GTK_BOX (vbox66), payment_periods_entry, FALSE, FALSE, 0);
+
+  vbox67 = gtk_vbox_new (FALSE, 2);
+  gtk_widget_ref (vbox67);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "vbox67", vbox67,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox67);
+  gtk_box_pack_start (GTK_BOX (vbox62), vbox67, FALSE, FALSE, 0);
+
+  hbox55 = gtk_hbox_new (FALSE, 6);
+  gtk_widget_ref (hbox55);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "hbox55", hbox55,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox55);
+  gtk_box_pack_start (GTK_BOX (vbox67), hbox55, TRUE, TRUE, 0);
+
+  label799 = gtk_label_new (_("Interest Rate"));
+  gtk_widget_ref (label799);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "label799", label799,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label799);
+  gtk_box_pack_start (GTK_BOX (hbox55), label799, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label799), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label799), 0.5, 0.75);
+
+  interest_rate_clear_button = gtk_button_new_with_label (_("Clear"));
+  gtk_widget_ref (interest_rate_clear_button);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "interest_rate_clear_button", interest_rate_clear_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (interest_rate_clear_button);
+  gtk_box_pack_end (GTK_BOX (hbox55), interest_rate_clear_button, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, interest_rate_clear_button, _("Clear the entry"), NULL);
+
+  interest_rate_calc_button = gtk_button_new_with_label (_("Calculate"));
+  gtk_widget_ref (interest_rate_calc_button);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "interest_rate_calc_button", interest_rate_calc_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (interest_rate_calc_button);
+  gtk_box_pack_end (GTK_BOX (hbox55), interest_rate_calc_button, FALSE, FALSE, 0);
+
+  interest_rate_entry = gtk_entry_new ();
+  gtk_widget_ref (interest_rate_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "interest_rate_entry", interest_rate_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (interest_rate_entry);
+  gtk_box_pack_start (GTK_BOX (vbox67), interest_rate_entry, FALSE, FALSE, 0);
+
+  vbox68 = gtk_vbox_new (FALSE, 2);
+  gtk_widget_ref (vbox68);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "vbox68", vbox68,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox68);
+  gtk_box_pack_start (GTK_BOX (vbox62), vbox68, TRUE, TRUE, 0);
+
+  hbox56 = gtk_hbox_new (FALSE, 6);
+  gtk_widget_ref (hbox56);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "hbox56", hbox56,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox56);
+  gtk_box_pack_start (GTK_BOX (vbox68), hbox56, TRUE, TRUE, 0);
+
+  label800 = gtk_label_new (_("Present Value"));
+  gtk_widget_ref (label800);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "label800", label800,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label800);
+  gtk_box_pack_start (GTK_BOX (hbox56), label800, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label800), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label800), 0.5, 0.75);
+
+  present_value_clear_button = gtk_button_new_with_label (_("Clear"));
+  gtk_widget_ref (present_value_clear_button);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "present_value_clear_button", present_value_clear_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (present_value_clear_button);
+  gtk_box_pack_end (GTK_BOX (hbox56), present_value_clear_button, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, present_value_clear_button, _("Clear the entry"), NULL);
+
+  present_value_calc_button = gtk_button_new_with_label (_("Calculate"));
+  gtk_widget_ref (present_value_calc_button);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "present_value_calc_button", present_value_calc_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (present_value_calc_button);
+  gtk_box_pack_end (GTK_BOX (hbox56), present_value_calc_button, FALSE, FALSE, 0);
+
+  present_value_entry = gtk_entry_new ();
+  gtk_widget_ref (present_value_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "present_value_entry", present_value_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (present_value_entry);
+  gtk_box_pack_start (GTK_BOX (vbox68), present_value_entry, FALSE, FALSE, 0);
+
+  vbox69 = gtk_vbox_new (FALSE, 2);
+  gtk_widget_ref (vbox69);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "vbox69", vbox69,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox69);
+  gtk_box_pack_start (GTK_BOX (vbox62), vbox69, FALSE, FALSE, 0);
+
+  hbox57 = gtk_hbox_new (FALSE, 6);
+  gtk_widget_ref (hbox57);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "hbox57", hbox57,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox57);
+  gtk_box_pack_start (GTK_BOX (vbox69), hbox57, TRUE, TRUE, 0);
+
+  label801 = gtk_label_new (_("Periodic Payment"));
+  gtk_widget_ref (label801);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "label801", label801,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label801);
+  gtk_box_pack_start (GTK_BOX (hbox57), label801, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label801), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label801), 0.5, 0.75);
+
+  periodic_payment_clear_button = gtk_button_new_with_label (_("Clear"));
+  gtk_widget_ref (periodic_payment_clear_button);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "periodic_payment_clear_button", periodic_payment_clear_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (periodic_payment_clear_button);
+  gtk_box_pack_end (GTK_BOX (hbox57), periodic_payment_clear_button, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, periodic_payment_clear_button, _("Clear the entry"), NULL);
+
+  periodic_payment_calc_button = gtk_button_new_with_label (_("Calculate"));
+  gtk_widget_ref (periodic_payment_calc_button);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "periodic_payment_calc_button", periodic_payment_calc_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (periodic_payment_calc_button);
+  gtk_box_pack_end (GTK_BOX (hbox57), periodic_payment_calc_button, FALSE, FALSE, 0);
+
+  periodic_payment_entry = gtk_entry_new ();
+  gtk_widget_ref (periodic_payment_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "periodic_payment_entry", periodic_payment_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (periodic_payment_entry);
+  gtk_box_pack_start (GTK_BOX (vbox69), periodic_payment_entry, FALSE, FALSE, 0);
+
+  vbox70 = gtk_vbox_new (FALSE, 2);
+  gtk_widget_ref (vbox70);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "vbox70", vbox70,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox70);
+  gtk_box_pack_start (GTK_BOX (vbox62), vbox70, TRUE, TRUE, 0);
+
+  hbox58 = gtk_hbox_new (FALSE, 6);
+  gtk_widget_ref (hbox58);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "hbox58", hbox58,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox58);
+  gtk_box_pack_start (GTK_BOX (vbox70), hbox58, TRUE, TRUE, 0);
+
+  label802 = gtk_label_new (_("Future Value"));
+  gtk_widget_ref (label802);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "label802", label802,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label802);
+  gtk_box_pack_start (GTK_BOX (hbox58), label802, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label802), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label802), 0.5, 0.75);
+
+  future_value_clear_button = gtk_button_new_with_label (_("Clear"));
+  gtk_widget_ref (future_value_clear_button);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "future_value_clear_button", future_value_clear_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (future_value_clear_button);
+  gtk_box_pack_end (GTK_BOX (hbox58), future_value_clear_button, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, future_value_clear_button, _("Clear the entry"), NULL);
+
+  future_value_calc_button = gtk_button_new_with_label (_("Calculate"));
+  gtk_widget_ref (future_value_calc_button);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "future_value_calc_button", future_value_calc_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (future_value_calc_button);
+  gtk_box_pack_end (GTK_BOX (hbox58), future_value_calc_button, FALSE, FALSE, 0);
+
+  future_value_entry = gtk_entry_new ();
+  gtk_widget_ref (future_value_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "future_value_entry", future_value_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (future_value_entry);
+  gtk_box_pack_start (GTK_BOX (vbox70), future_value_entry, FALSE, FALSE, 0);
+
+  frame27 = gtk_frame_new (NULL);
+  gtk_widget_ref (frame27);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "frame27", frame27,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame27);
+  gtk_box_pack_start (GTK_BOX (hbox54), frame27, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame27), 3);
+
+  vbox65 = gtk_vbox_new (TRUE, 10);
+  gtk_widget_ref (vbox65);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "vbox65", vbox65,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox65);
+  gtk_container_add (GTK_CONTAINER (frame27), vbox65);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox65), 5);
+
+  hbox51 = gtk_hbox_new (FALSE, 3);
+  gtk_widget_ref (hbox51);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "hbox51", hbox51,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox51);
+  gtk_box_pack_start (GTK_BOX (vbox65), hbox51, FALSE, FALSE, 0);
+
+  vbox63 = gtk_vbox_new (TRUE, 2);
+  gtk_widget_ref (vbox63);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "vbox63", vbox63,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox63);
+  gtk_box_pack_start (GTK_BOX (hbox51), vbox63, TRUE, TRUE, 0);
+
+  label797 = gtk_label_new (_("Compounding:"));
+  gtk_widget_ref (label797);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "label797", label797,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label797);
+  gtk_box_pack_start (GTK_BOX (vbox63), label797, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label797), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label797), 1, 0.5);
+
+  label798 = gtk_label_new (_("Payments:"));
+  gtk_widget_ref (label798);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "label798", label798,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label798);
+  gtk_box_pack_start (GTK_BOX (vbox63), label798, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label798), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label798), 1, 0.5);
+
+  vbox64 = gtk_vbox_new (TRUE, 2);
+  gtk_widget_ref (vbox64);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "vbox64", vbox64,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox64);
+  gtk_box_pack_start (GTK_BOX (hbox51), vbox64, TRUE, TRUE, 0);
+
+  compounding_menu = gtk_option_menu_new ();
+  gtk_widget_ref (compounding_menu);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "compounding_menu", compounding_menu,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (compounding_menu);
+  gtk_box_pack_start (GTK_BOX (vbox64), compounding_menu, FALSE, FALSE, 0);
+  compounding_menu_menu = gtk_menu_new ();
+  glade_menuitem = gtk_menu_item_new_with_label (_("Annual"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (compounding_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Semi-annual"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (compounding_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Tri-annual"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (compounding_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Quarterly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (compounding_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Bi-monthly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (compounding_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Monthly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (compounding_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Semi-monthly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (compounding_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Bi-weekly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (compounding_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Weekly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (compounding_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Daily (360)"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (compounding_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Daily (365)"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (compounding_menu_menu), glade_menuitem);
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (compounding_menu), compounding_menu_menu);
+
+  payment_menu = gtk_option_menu_new ();
+  gtk_widget_ref (payment_menu);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "payment_menu", payment_menu,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (payment_menu);
+  gtk_box_pack_start (GTK_BOX (vbox64), payment_menu, FALSE, FALSE, 0);
+  payment_menu_menu = gtk_menu_new ();
+  glade_menuitem = gtk_menu_item_new_with_label (_("Annual"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (payment_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Semi-annual"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (payment_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Tri-annual"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (payment_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Quarterly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (payment_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Bi-monthly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (payment_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Monthly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (payment_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Semi-monthly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (payment_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Bi-weekly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (payment_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Weekly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (payment_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Daily (360)"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (payment_menu_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Daily (365)"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (payment_menu_menu), glade_menuitem);
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (payment_menu), payment_menu_menu);
+
+  vbox71 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox71);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "vbox71", vbox71,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox71);
+  gtk_box_pack_start (GTK_BOX (vbox65), vbox71, FALSE, FALSE, 0);
+
+  period_payment_radio = gtk_radio_button_new_with_label (period_group_group, _("End of Period Payments"));
+  period_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (period_payment_radio));
+  gtk_widget_ref (period_payment_radio);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "period_payment_radio", period_payment_radio,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (period_payment_radio);
+  gtk_box_pack_start (GTK_BOX (vbox71), period_payment_radio, FALSE, FALSE, 0);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (period_payment_radio), TRUE);
+
+  radiobutton4 = gtk_radio_button_new_with_label (period_group_group, _("Beginning of Period Payments"));
+  period_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton4));
+  gtk_widget_ref (radiobutton4);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "radiobutton4", radiobutton4,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton4);
+  gtk_box_pack_start (GTK_BOX (vbox71), radiobutton4, FALSE, FALSE, 0);
+
+  vbox72 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox72);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "vbox72", vbox72,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox72);
+  gtk_box_pack_start (GTK_BOX (vbox65), vbox72, TRUE, TRUE, 0);
+
+  discrete_compounding_radio = gtk_radio_button_new_with_label (compouding_group_group, _("Discrete Compounding"));
+  compouding_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (discrete_compounding_radio));
+  gtk_widget_ref (discrete_compounding_radio);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "discrete_compounding_radio", discrete_compounding_radio,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (discrete_compounding_radio);
+  gtk_box_pack_start (GTK_BOX (vbox72), discrete_compounding_radio, FALSE, FALSE, 0);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (discrete_compounding_radio), TRUE);
+
+  radiobutton6 = gtk_radio_button_new_with_label (compouding_group_group, _("Continuous Compounding"));
+  compouding_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton6));
+  gtk_widget_ref (radiobutton6);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "radiobutton6", radiobutton6,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton6);
+  gtk_box_pack_start (GTK_BOX (vbox72), radiobutton6, FALSE, FALSE, 0);
+
+  dialog_action_area10 = GNOME_DIALOG (Financial_Calculator_Dialog)->action_area;
+  gtk_object_set_data (GTK_OBJECT (Financial_Calculator_Dialog), "dialog_action_area10", dialog_action_area10);
+  gtk_widget_show (dialog_action_area10);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area10), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area10), 8);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Financial_Calculator_Dialog), _("Schedule"));
+  schedule_button = g_list_last (GNOME_DIALOG (Financial_Calculator_Dialog)->buttons)->data;
+  gtk_widget_ref (schedule_button);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "schedule_button", schedule_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (schedule_button);
+  GTK_WIDGET_SET_FLAGS (schedule_button, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Financial_Calculator_Dialog), GNOME_STOCK_BUTTON_CLOSE);
+  close_button = g_list_last (GNOME_DIALOG (Financial_Calculator_Dialog)->buttons)->data;
+  gtk_widget_ref (close_button);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "close_button", close_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (close_button);
+  GTK_WIDGET_SET_FLAGS (close_button, GTK_CAN_DEFAULT);
+
+  gtk_object_set_data (GTK_OBJECT (Financial_Calculator_Dialog), "tooltips", tooltips);
+
+  return Financial_Calculator_Dialog;
+}
+
+GtkWidget*
+create_Amortization_Schedule_Dialog (void)
+{
+  GtkWidget *Amortization_Schedule_Dialog;
+  GtkWidget *dialog_vbox11;
+  GtkWidget *hbox59;
+  GtkWidget *vbox73;
+  GtkWidget *label803;
+  GtkWidget *label804;
+  GtkWidget *label805;
+  GtkWidget *label806;
+  GtkWidget *vbox74;
+  GtkWidget *hbox60;
+  GtkWidget *hbox61;
+  GtkWidget *optionmenu1;
+  GtkWidget *optionmenu1_menu;
+  GtkWidget *glade_menuitem;
+  GtkWidget *optionmenu2;
+  GtkWidget *optionmenu2_menu;
+  GtkWidget *dialog_action_area11;
+  GtkWidget *button60;
+  GtkWidget *button61;
+  GtkWidget *button62;
+
+  Amortization_Schedule_Dialog = gnome_dialog_new (NULL, NULL);
+  gtk_object_set_data (GTK_OBJECT (Amortization_Schedule_Dialog), "Amortization_Schedule_Dialog", Amortization_Schedule_Dialog);
+  gtk_window_set_policy (GTK_WINDOW (Amortization_Schedule_Dialog), FALSE, FALSE, FALSE);
+
+  dialog_vbox11 = GNOME_DIALOG (Amortization_Schedule_Dialog)->vbox;
+  gtk_object_set_data (GTK_OBJECT (Amortization_Schedule_Dialog), "dialog_vbox11", dialog_vbox11);
+  gtk_widget_show (dialog_vbox11);
+
+  hbox59 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox59);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "hbox59", hbox59,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox59);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox11), hbox59, TRUE, TRUE, 0);
+
+  vbox73 = gtk_vbox_new (TRUE, 2);
+  gtk_widget_ref (vbox73);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "vbox73", vbox73,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox73);
+  gtk_box_pack_start (GTK_BOX (hbox59), vbox73, TRUE, TRUE, 0);
+
+  label803 = gtk_label_new (_("Effective Date:"));
+  gtk_widget_ref (label803);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "label803", label803,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label803);
+  gtk_box_pack_start (GTK_BOX (vbox73), label803, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label803), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label803), 0.5, 1);
+
+  label804 = gtk_label_new (_("Initial Payment:"));
+  gtk_widget_ref (label804);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "label804", label804,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label804);
+  gtk_box_pack_start (GTK_BOX (vbox73), label804, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label804), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label804), 0.5, 1);
+
+  label805 = gtk_label_new (_("Compounding:"));
+  gtk_widget_ref (label805);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "label805", label805,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label805);
+  gtk_box_pack_start (GTK_BOX (vbox73), label805, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label805), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label805), 0.5, 1);
+
+  label806 = gtk_label_new (_("Payments:"));
+  gtk_widget_ref (label806);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "label806", label806,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label806);
+  gtk_box_pack_start (GTK_BOX (vbox73), label806, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label806), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label806), 0.5, 1);
+
+  vbox74 = gtk_vbox_new (TRUE, 2);
+  gtk_widget_ref (vbox74);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "vbox74", vbox74,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox74);
+  gtk_box_pack_start (GTK_BOX (hbox59), vbox74, TRUE, TRUE, 0);
+
+  hbox60 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox60);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "hbox60", hbox60,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox60);
+  gtk_box_pack_start (GTK_BOX (vbox74), hbox60, TRUE, TRUE, 0);
+
+  hbox61 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox61);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "hbox61", hbox61,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox61);
+  gtk_box_pack_start (GTK_BOX (vbox74), hbox61, TRUE, TRUE, 0);
+
+  optionmenu1 = gtk_option_menu_new ();
+  gtk_widget_ref (optionmenu1);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "optionmenu1", optionmenu1,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (optionmenu1);
+  gtk_box_pack_start (GTK_BOX (vbox74), optionmenu1, FALSE, FALSE, 0);
+  optionmenu1_menu = gtk_menu_new ();
+  glade_menuitem = gtk_menu_item_new_with_label (_("Annual"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu1_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Semi-annual"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu1_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Tri-annual"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu1_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Quarterly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu1_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Bi-monthly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu1_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Monthly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu1_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Semi-monthly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu1_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Bi-weekly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu1_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Weekly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu1_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Daily (360)"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu1_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Daily (365)"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu1_menu), glade_menuitem);
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu1), optionmenu1_menu);
+
+  optionmenu2 = gtk_option_menu_new ();
+  gtk_widget_ref (optionmenu2);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "optionmenu2", optionmenu2,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (optionmenu2);
+  gtk_box_pack_start (GTK_BOX (vbox74), optionmenu2, FALSE, FALSE, 0);
+  optionmenu2_menu = gtk_menu_new ();
+  glade_menuitem = gtk_menu_item_new_with_label (_("Annual"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu2_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Semi-annual"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu2_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Tri-annual"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu2_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Quarterly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu2_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Bi-monthly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu2_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Monthly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu2_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Semi-monthly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu2_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Bi-weekly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu2_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Weekly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu2_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Daily (360)"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu2_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Daily (365)"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (optionmenu2_menu), glade_menuitem);
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu2), optionmenu2_menu);
+
+  dialog_action_area11 = GNOME_DIALOG (Amortization_Schedule_Dialog)->action_area;
+  gtk_object_set_data (GTK_OBJECT (Amortization_Schedule_Dialog), "dialog_action_area11", dialog_action_area11);
+  gtk_widget_show (dialog_action_area11);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area11), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area11), 8);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Amortization_Schedule_Dialog), GNOME_STOCK_BUTTON_OK);
+  button60 = g_list_last (GNOME_DIALOG (Amortization_Schedule_Dialog)->buttons)->data;
+  gtk_widget_ref (button60);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "button60", button60,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button60);
+  GTK_WIDGET_SET_FLAGS (button60, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Amortization_Schedule_Dialog), GNOME_STOCK_BUTTON_APPLY);
+  button61 = g_list_last (GNOME_DIALOG (Amortization_Schedule_Dialog)->buttons)->data;
+  gtk_widget_ref (button61);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "button61", button61,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button61);
+  GTK_WIDGET_SET_FLAGS (button61, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Amortization_Schedule_Dialog), GNOME_STOCK_BUTTON_CANCEL);
+  button62 = g_list_last (GNOME_DIALOG (Amortization_Schedule_Dialog)->buttons)->data;
+  gtk_widget_ref (button62);
+  gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "button62", button62,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button62);
+  GTK_WIDGET_SET_FLAGS (button62, GTK_CAN_DEFAULT);
+
+  return Amortization_Schedule_Dialog;
 }
 

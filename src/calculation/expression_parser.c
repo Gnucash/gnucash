@@ -287,6 +287,7 @@
  *
  */
 
+#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -380,7 +381,6 @@ void  exit_parser(
 void *vp)
 {
     parser_env_ptr pe = (parser_env_ptr)(vp);
-    unsigned       j;
     var_store_ptr  vars,
                    bv;
 
@@ -423,9 +423,7 @@ void          *vp)
 	unsigned       ret = FALSE;
 	parser_env_ptr pe = (parser_env_ptr)vp;
 	var_store_ptr  nv,
-	               tv,
-	               sv,
-	               uv;
+          tv;
 	
 	for ( nv = pe->named_vars , tv = NULL ; nv ; tv = nv , nv = nv->next_var ) {
         if ( strcmp(nv->variable_name,var_name) == 0 ) {
@@ -521,7 +519,6 @@ parser_env_ptr       pe)
 static var_store_ptr  get_named_var(
 parser_env_ptr        pe)
 {
-    unsigned      cntr;
     var_store_ptr retp = NULL,
                   bv;
 
