@@ -80,9 +80,10 @@ sub yahoo {
 #
 sub fidelity {
     my @symbols = @_;
-    my(%aa,$sym);
+    my(%aa,%cc,$sym, $k);
 
-    # rather iritatingly, fidelity sorts its funds into different groups.
+    # rather irritatingly, fidelity sorts its funds into different groups.
+    # as a result, the fetch that we need to do depends on the group.
     my @gandi =  ("FBALX", "FCVSX", "FEQIX", "FEQTX", "FFIDX", "FGRIX",
                   "FIUIX", "FPURX", "FRESX", );
     my @growth = ("FBGRX", "FCNTX", "FCONX", "FDCAX", "FDEGX", "FDEQX",
@@ -91,18 +92,27 @@ sub fidelity {
                   "FMILX", "FOCPX", "FSLCX", "FSLSX", "FTQGX", "FTRNX",
                   "FTXMX", );
     my (%agandi, %agrowth);
+    my $dgandi=0;
+    my $dgrowth=0;
 
     for (@gandi) { $agandi{$_} ++; }
     for (@growth) { $agrowth{$_} ++; }
    
     # for Fidelity, we get them all. 
     for (@symbols) {
-print "duuude handling $_\n";
        if ($agandi {$_} ) {
-          %aa = &fidelity_gandi;
+          if (0 == $dgandi ) {
+             %cc = &fidelity_gandi;
+             $dgandi = 1;
+             foreach $k (keys %cc) { $aa{$k} = $cc{$k}; }
+          }
        }
        if ($agrowth {$_} ) {
-          %aa = &fidelity_growth;
+          if (0 ==  $dgrowth ) {
+             %cc = &fidelity_growth;
+             $dgrowth = 1;
+             foreach $k (keys %cc) { $aa{$k} = $cc{$k}; }
+          }
        }
     }
     return %aa;
