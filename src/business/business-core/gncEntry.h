@@ -16,6 +16,17 @@ typedef struct _gncEntry GncEntry;
 
 #define GNC_ENTRY_MODULE_NAME "gncEntry"
 
+/* How to interpret the Discount and Tax numbers..  You can interpret
+ * the as a VALUE or a PERCENT.  Similarly, you can set the PRETAX
+ * bit if you want the discount to be applied before a percentage-tax.
+ */
+#define GNC_ENTRY_INTERP_VALUE		0x00
+#define GNC_ENTRY_INTERP_PERCENT	0x01
+#define GNC_ENTRY_INTERP_PRETAX		0x02
+
+#define GNC_ENTRY_INTERP_IS_VALUE(x)	(((x)&0x01) == GNC_ENTRY_INTERP_VALUE)
+#define GNC_ENTRY_INTERP_IS_PERCENT(x)	(((x)&0x01) == GNC_ENTRY_INTERP_PERCENT)
+
 /* Create/Destroy Functions */
 
 GncEntry *gncEntryCreate (GncBusiness *business);
@@ -29,7 +40,9 @@ void gncEntrySetAction (GncEntry *entry, const char *action);
 void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity);
 void gncEntrySetPrice (GncEntry *entry, gnc_numeric price);
 void gncEntrySetTax (GncEntry *entry, gnc_numeric tax);
+void gncEntrySetTaxType (GncEntry *entry, gint type);
 void gncEntrySetDiscount (GncEntry *entry, gnc_numeric discount);
+void gncEntrySetDiscountType (GncEntry *entry, gint type);
 
 void gncEntrySetAccount (GncEntry *entry, Account *acc);
 void gncEntrySetTaxAccount (GncEntry *entry, Account *acc);
@@ -44,7 +57,10 @@ const char * gncEntryGetAction (GncEntry *entry);
 gnc_numeric gncEntryGetQuantity (GncEntry *entry);
 gnc_numeric gncEntryGetPrice (GncEntry *entry);
 gnc_numeric gncEntryGetTax (GncEntry *entry);
+gint gncEntryGetTaxType (GncEntry *entry);
 gnc_numeric gncEntryGetDiscount (GncEntry *entry);
+gint gncEntryGetDiscountType (GncEntry *entry);
+
 
 Account * gncEntryGetAccount (GncEntry *entry);
 Account * gncEntryGetTaxAccount (GncEntry *entry);

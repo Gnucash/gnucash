@@ -18,5 +18,6 @@ void gncInvoiceSetGUID (GncInvoice *invoice, const GUID *guid);
 void gncInvoiceSetDirty (GncInvoice *invoice, gboolean dirty);
 void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc);
 void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn);
+void gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn);
 
 #endif /* GNC_INVOICEP_H_ */

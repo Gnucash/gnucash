@@ -28,7 +28,9 @@ struct _gncEntry {
   gnc_numeric 	quantity;
   gnc_numeric 	price;
   gnc_numeric 	tax;
+  gint		tax_type;
   gnc_numeric 	discount;
+  gint		disc_type;
   Account *	account;
   Account *	taxaccount;
 
@@ -183,6 +185,24 @@ void gncEntrySetInvoice (GncEntry *entry, GncInvoice *invoice)
   entry->dirty = TRUE;
 }
 
+void gncEntrySetTaxType (GncEntry *entry, gint type)
+{
+  if (!entry) return;
+  if (type < 0 || type > 3) return;
+
+  entry->tax_type = type;
+  entry->dirty = TRUE;
+}
+
+void gncEntrySetDiscountType (GncEntry *entry, gint type)
+{
+  if (!entry) return;
+  if (type < 0 || type > 3) return;
+
+  entry->disc_type = type;
+  entry->dirty = TRUE;
+}
+
 void gncEntrySetDirty (GncEntry *entry, gboolean dirty)
 {
   if (!entry) return;
@@ -268,6 +288,18 @@ GncOrder * gncEntryGetOrder (GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->order;
+}
+
+gint gncEntryGetTaxType (GncEntry *entry)
+{
+  if (!entry) return 0;
+  return entry->tax_type;
+}
+
+gint gncEntryGetDiscountType (GncEntry *entry)
+{
+  if (!entry) return 0;
+  return entry->disc_type;
 }
 
 void gncEntryCommitEdit (GncEntry *entry)

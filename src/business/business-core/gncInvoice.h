@@ -55,7 +55,20 @@ gint gncInvoiceGetTerms (GncInvoice *invoice);
 const char * gncInvoiceGetNotes (GncInvoice *invoice);
 gboolean gncInvoiceGetActive (GncInvoice *invoice);
 
+Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice);
+Account * gncInvoiceGetPostedAcc (GncInvoice *invoice);
+
 GList * gncInvoiceGetEntries (GncInvoice *invoice);
+
+/* Post this invoice to an account.  Returns the new Transaction
+ * that is tied to this invoice.   The transaction is set with
+ * the posted date.
+ */
+Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
+				       Timespec *date);
+
+/* Given a transaction, find and return the Invoice */
+GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn);
 
 gboolean gncInvoiceIsDirty (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);
