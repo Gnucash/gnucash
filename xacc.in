@@ -1,6 +1,12 @@
 #! /bin/sh
 # @configure_input@
 
+GNC_ARGS="${GNC_ARGS} --debug"
+GNC_ARGS="${GNC_ARGS} --startup-file ./share/scm/startup.scm"
+GNC_ARGS="${GNC_ARGS} --share-dir ./share"
+GNC_ARGS="${GNC_ARGS} --config-dir ./etc"
+GNC_ARGS="${GNC_ARGS} --load-path (\"(./share/scm)\")"
+
 XACC_HELP=${XACC_HELP}:./Docs:@prefix@/share/xacc/Docs
 export XACC_HELP
 
@@ -8,7 +14,7 @@ export XACC_HELP
 # the motif library.  We should also do something to auto-detect
 # and load the gtk version.
 if [ -f /usr/X11R6/lib/libXm.so -o -L /usr/X11R6/lib/libXm.so ]; then
-  exec xacc.bin $@
+  exec xacc.bin ${GNC_ARGS} $@
 else
-  exec xacc-static.bin $@
+  exec xacc-static.bin ${GNC_ARGS} $@
 fi

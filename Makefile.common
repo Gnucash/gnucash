@@ -68,6 +68,7 @@ clean:
 	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && $(MAKE) clean);)
 	rm -f *~ *.bak \#* $(TRASH)
 	rm -rf obj
+	-rm -rf ${TRASH}
 
 distclean:
 	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && $(MAKE) distclean);)

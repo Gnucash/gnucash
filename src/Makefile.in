@@ -34,7 +34,7 @@ CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
 ######################################################################
 # See Makefile.common for information about these variables.
 COMMON_SRCS   := SplitLedger.c MultiLedger.c
-CLEAN_SUBDIRS := engine gnome motif register guile qt
+CLEAN_SUBDIRS := engine gnome motif register guile swig qt
 ######################################################################
 
 all: default
@@ -48,18 +48,23 @@ default: $(OBJS)
 motif: ${MOTIF_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) motif
+	@cd guile;             $(MAKE) path-defaults.h
+	@cd swig;              $(MAKE) guile
+	@cd guile;             $(MAKE) default
 	@cd motif;             $(MAKE) motif
 
 gnome: ${GNOME_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) gnome
+	@cd guile;             $(MAKE) path-defaults.h
+	@cd swig;              $(MAKE) guile
 	@cd guile;             $(MAKE) default
 	@cd gnome;             $(MAKE) gnome
 
 qt: $(QT_OBJS)
-	@cd engine;	       $(MAKE) default
-	@cd register;	       $(MAKE) qt
-	@cd qt;		       $(MAKE) qt
+	@cd engine;	           $(MAKE) default
+	@cd register;	         $(MAKE) qt
+	@cd qt;		             $(MAKE) qt
 
 .PHONY: default qt gnome motif all
 

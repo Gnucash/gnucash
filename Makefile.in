@@ -24,11 +24,15 @@
 srcdir  = @srcdir@
 VPATH   = @srcdir@
 
-PREFIX  = @prefix@
+prefix=@prefix@
+datadir=@datadir@
+VARDIR=@localstatedir@
+CONFIGDIR=@sysconfdir@
+
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 TARGET  = xacc
-DOCDIR	= share/xacc/Docs
+DOCDIR	= ${datadir}/Docs
 CPU     = @target_cpu@
 
 LIBS=@LIBS@
@@ -90,24 +94,58 @@ TAGS: ${tagsfiles}
 	etags ${tagsfiles}    
 
 install: $(TARGET)
-	@mkdir -p $(PREFIX)/bin
-	$(INSTALL) $(TARGET) $(PREFIX)/bin/$(TARGET)
-	$(INSTALL) $(TARGET).bin $(PREFIX)/bin/$(TARGET).bin
-	$(INSTALL) $(TARGET).gtk.bin $(PREFIX)/bin/$(TARGET).gtk.bin
-	$(INSTALL) $(TARGET).qt.bin $(PREFIX)/bin/$(TARGET).qt.bin
-	$(INSTALL) $(TARGET).static.bin $(PREFIX)/bin/$(TARGET).static.bin
-# 	@mkdir -p $(PREFIX)/toolbar
-# 	$(INSTALL_DATA) toolbar/*.xpm $(PREFIX)/toolbar
-	@mkdir -p $(PREFIX)/$(DOCDIR)
-	$(INSTALL_DATA) Docs/*.html $(PREFIX)/$(DOCDIR)
-	$(INSTALL_DATA) Docs/*.gif $(PREFIX)/$(DOCDIR)
-#	$(INSTALL_DATA) Docs/*.jpg $(PREFIX)/$(DOCDIR)
-	$(INSTALL_DATA) Docs/*.xpm $(PREFIX)/$(DOCDIR)
-	@mkdir -p $(PREFIX)/$(DOCDIR)/logos
-	$(INSTALL_DATA) Docs/logos/*.* $(PREFIX)/$(DOCDIR)/logos
-	@mkdir -p $(PREFIX)/share/gnucash
-	$(INSTALL_DATA) src/prefs/*.scm $(PREFIX)/share/gnucash
- 
+	@mkdir -p $(prefix)/bin
+	$(INSTALL) $(TARGET) $(prefix)/bin/$(TARGET)
+	-$(INSTALL) $(TARGET).bin $(prefix)/bin/$(TARGET).bin
+	-$(INSTALL) $(TARGET).gtk.bin $(prefix)/bin/$(TARGET).gtk.bin
+	-$(INSTALL) $(TARGET).qt.bin $(prefix)/bin/$(TARGET).qt.bin
+	-$(INSTALL) $(TARGET).static.bin $(prefix)/bin/$(TARGET).static.bin
+
+  # Make sure at least one succeeded
+	[ -e ${TARGET}.bin -o -${TARGET}.gtk.bin -o -${TARGET}.qt.bin \
+    -o -${TARGET}.static.bin ]
+
+# 	@mkdir -p $(prefix)/toolbar
+# 	$(INSTALL_DATA) toolbar/*.xpm $(prefix)/toolbar
+	@mkdir -p $(DOCDIR)
+	$(INSTALL_DATA) Docs/*.html $(DOCDIR)
+	$(INSTALL_DATA) Docs/*.gif $(DOCDIR)
+#	$(INSTALL_DATA) Docs/*.jpg $(DOCDIR)
+	$(INSTALL_DATA) Docs/*.xpm $(DOCDIR)
+	@mkdir -p $(DOCDIR)/logos
+	$(INSTALL_DATA) Docs/logos/*.* $(DOCDIR)/logos
+
+  # Config directory
+	@mkdir -p ${CONFIGDIR}
+
+  # Try to do this in a platform independent way...
+  # Directories
+	for dir in `find etc/ -type d`; do \
+    dest=`echo $$dir | cut -c 5-` \
+		mkdir -p ${CONFIGDIR}/$$dest; \
+  done
+
+  # Files
+	for file in `find etc/ -type f`; do \
+    dest=`echo $$file | cut -c 5-` \
+		${INSTALL_DATA} $$file ${CONFIGDIR}/$$dest; \
+  done
+
+  # Share directory
+	@mkdir -p ${datadir}
+
+  # Try to do this in a platform independent way...
+  # Directories
+	for dir in `find share/scm/ -type d`; do \
+    dest=`echo $$dir | cut -c 11-` \
+		mkdir -p ${datadir}/scm/$$dest; \
+  done
+
+  # Files
+	for file in `find share/scm/ -name "*.scm"`; do \
+    dest=`echo $$file | cut -c 11-` \
+		${INSTALL_DATA} $$file ${datadir}/scm/$$dest; \
+  done
 
 # Local Variables:
 # tab-width: 2
