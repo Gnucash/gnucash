@@ -218,6 +218,19 @@ add_event_type (ComponentEventInfo *cei, GNCIdType entity_type,
   }
 }
 
+static void
+gnc_cm_event_handler (GUID *entity,
+                      GNCEngineEventType event_type,
+                      gpointer user_data)
+{
+#ifdef CM_DEBUG
+  add_event (&changes, entity, event_type, TRUE);
+  fprintf (stderr, "event: %d\n", event_type);
+#endif
+}
+
+static gint handler_id;
+
 void
 gnc_component_manager_init (void)
 {
@@ -230,6 +243,8 @@ gnc_component_manager_init (void)
   changes.trans_event_mask = 0;
   changes.account_event_mask = 0;
   changes.entity_events = guid_hash_table_new ();
+
+  handler_id = gnc_engine_register_event_handler (gnc_cm_event_handler, NULL);
 }
 
 void
@@ -244,6 +259,8 @@ gnc_component_manager_shutdown (void)
   clear_event_info (&changes);
   destroy_event_hash (changes.entity_events);
   changes.entity_events = NULL;
+
+  gnc_engine_unregister_event_handler (handler_id);
 }
 
 static ComponentInfo *

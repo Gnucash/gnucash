@@ -34,17 +34,7 @@ typedef struct _newcommoditywindow NewCommodityWindow;
 
 typedef void (* gnc_commodity_callback)(const gnc_commodity *, void * data);
  
-SelectCommodityWindow * 
-gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
-                               gnc_commodity_callback cb,
-                               void * callback_data);
-
 void gnc_ui_select_commodity_destroy(SelectCommodityWindow * w);
-
-NewCommodityWindow *
-gnc_ui_new_commodity_create(const char * selected_namespace,
-                            gnc_commodity_callback cb,
-                            void * callback_data);
 
 void gnc_ui_new_commodity_destroy(NewCommodityWindow * w);
 

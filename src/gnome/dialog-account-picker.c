@@ -75,11 +75,12 @@ build_acct_tree(AccountGroup * group, GtkWidget * tree, GtkWidget * picker) {
   g_list_free (accts);
 }
 
-static gboolean
-delete_event_cb(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+static gint
+close_cb (GnomeDialog *dialog, gpointer data)
 {
   gtk_main_quit ();
-  return TRUE;
+
+  return FALSE;
 }
 
 /****************************************************************\
@@ -119,8 +120,8 @@ accountPickerBox(char * initial_selection, int initial_type) {
                      GTK_SIGNAL_FUNC(gnc_ui_account_picker_select_cb),
                      wind->dialog);
 
-  gtk_signal_connect (GTK_OBJECT (wind->dialog), "delete_event",
-                      GTK_SIGNAL_FUNC (delete_event_cb), NULL);
+  gtk_signal_connect (GTK_OBJECT (wind->dialog), "close",
+                      GTK_SIGNAL_FUNC (close_cb), NULL);
 
   /* do some setup */
   topgroup = gncGetCurrentGroup();
@@ -172,7 +173,6 @@ accountPickerBox(char * initial_selection, int initial_type) {
   infolist = wind->scm_acct_info;
 
   /* destroy the window */
-  gtk_widget_destroy(wind->dialog);
   scm_unprotect_object(wind->scm_acct_info);
   g_free(wind);
 
@@ -249,7 +249,7 @@ gnc_ui_account_picker_ok_cb(GtkButton *button,
   scm_unprotect_object(wind->scm_acct_info);
   wind->scm_acct_info = infolist;
 
-  gtk_main_quit();
+  gnome_dialog_close (GNOME_DIALOG (wind->dialog));
 }
 
 void
@@ -263,5 +263,5 @@ gnc_ui_account_picker_cancel_cb(GtkButton * button,
   wind->scm_acct_info = SCM_BOOL_F;
   scm_protect_object(wind->scm_acct_info);
 
-  gtk_main_quit();
+  gnome_dialog_close (GNOME_DIALOG (wind->dialog));
 }

@@ -530,7 +530,6 @@ gncFileSaveAs (void)
     xaccLogEnable ();
 
     g_free (newfile);
-    gnc_refresh_main_window();
 
     return;
   }

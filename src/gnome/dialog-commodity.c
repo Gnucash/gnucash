@@ -58,6 +58,17 @@ struct _newcommoditywindow {
   void      * callback_data;
 };
 
+
+static SelectCommodityWindow *
+gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
+                               gnc_commodity_callback callback,
+                               void * callback_data);
+static NewCommodityWindow *
+gnc_ui_new_commodity_create(const char * selected_namespace,
+                            gnc_commodity_callback callback, 
+                            void * callback_data);
+
+
 static void 
 select_modal_callback(const gnc_commodity * arg, void * data) {
   *((const gnc_commodity **)data) = arg;
@@ -79,6 +90,7 @@ gnc_ui_select_commodity_modal(const gnc_commodity * orig_sel,
     gnome_dialog_set_parent(GNOME_DIALOG(win->dialog), GTK_WINDOW(parent));
   }
   gtk_window_set_modal(GTK_WINDOW(win->dialog), TRUE);
+  gtk_widget_show (win->dialog);
   gtk_main();
 
   return retval;
@@ -92,6 +104,8 @@ select_commodity_close (GnomeDialog *dialog, gpointer data)
 
   g_free(scw);
 
+  gtk_main_quit ();
+
   return FALSE;
 }
 
@@ -99,7 +113,7 @@ select_commodity_close (GnomeDialog *dialog, gpointer data)
  * gnc_ui_select_commodity_create()
  ********************************************************************/
 
-SelectCommodityWindow *
+static SelectCommodityWindow *
 gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
                                gnc_commodity_callback callback,
                                void * callback_data) {
@@ -131,7 +145,6 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
                                    gnc_commodity_get_namespace(orig_sel));
   gnc_ui_update_commodity_picker(retval->commodity_combo, namespace,
                                  gnc_commodity_get_printname(orig_sel));
-  gtk_widget_show_all(retval->dialog);
   g_free(namespace);
   
   return retval;
@@ -193,7 +206,6 @@ gnc_ui_update_commodity_picker(GtkWidget * combobox,
 void
 gnc_ui_select_commodity_destroy(SelectCommodityWindow * w) {
   if(w) {
-    gtk_main_quit();
     gnome_dialog_close(GNOME_DIALOG(w->dialog));
   }
 }
@@ -337,6 +349,8 @@ new_commodity_close (GnomeDialog *dialog, gpointer data)
 
   g_free(ncw);
 
+  gtk_main_quit ();
+
   return FALSE;
 }
 
@@ -344,7 +358,7 @@ new_commodity_close (GnomeDialog *dialog, gpointer data)
  * gnc_ui_new_commodity_create()
  ********************************************************************/
 
-NewCommodityWindow *
+static NewCommodityWindow *
 gnc_ui_new_commodity_create(const char * selected_namespace,
                             gnc_commodity_callback callback, 
                             void * callback_data) {
@@ -375,8 +389,6 @@ gnc_ui_new_commodity_create(const char * selected_namespace,
   gtk_signal_connect (GTK_OBJECT(retval->dialog), "close",
                       GTK_SIGNAL_FUNC(new_commodity_close), retval);
 
-  gtk_widget_show_all(retval->dialog);
-
   namespace = gnc_ui_update_namespace_picker(retval->namespace_combo,
                                              selected_namespace);
   g_free(namespace);
@@ -406,8 +418,9 @@ gnc_ui_new_commodity_modal(const char * selected_namespace,
     gnome_dialog_set_parent(GNOME_DIALOG(win->dialog), GTK_WINDOW(parent));
   }
   gtk_window_set_modal(GTK_WINDOW(win->dialog), TRUE);
+  gtk_widget_show (win->dialog);
   gtk_main();
-  
+
   return retval;
 }
 
@@ -419,7 +432,6 @@ gnc_ui_new_commodity_modal(const char * selected_namespace,
 void
 gnc_ui_new_commodity_destroy(NewCommodityWindow * w) {
   if(w) {
-    gtk_main_quit();
     gnome_dialog_close(GNOME_DIALOG(w->dialog));
   }
 }

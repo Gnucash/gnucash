@@ -45,7 +45,6 @@ create_QIF_Import_Account_Picker (void)
   QIF_Import_Account_Picker = gnome_dialog_new (_("Select Account"), NULL);
   gtk_object_set_data (GTK_OBJECT (QIF_Import_Account_Picker), "QIF_Import_Account_Picker", QIF_Import_Account_Picker);
   gtk_window_set_policy (GTK_WINDOW (QIF_Import_Account_Picker), TRUE, TRUE, FALSE);
-  gnome_dialog_close_hides (GNOME_DIALOG (QIF_Import_Account_Picker), TRUE);
 
   vbox1 = GNOME_DIALOG (QIF_Import_Account_Picker)->vbox;
   gtk_object_set_data (GTK_OBJECT (QIF_Import_Account_Picker), "vbox1", vbox1);
