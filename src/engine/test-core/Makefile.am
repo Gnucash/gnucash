@@ -3,6 +3,8 @@ noinst_LTLIBRARIES=libgncmod-test-engine.la
 LDADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ../libgncmod-engine.la \
+  ../libgw-engine.la \
+  ../libgw-kvp.la \
   ${GLIB_LIBS} \
   -lltdl
 
@@ -10,6 +12,9 @@ libgncmod_test_engine_la_SOURCES = gncmod-test-engine.c test-engine-stuff.c
 libgncmod_test_engine_la_LDFLAGS = -module
 libgncmod_test_engine_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ../libgncmod-engine.la \
+  ../libgw-engine.la \
+  ../libgw-kvp.la \
   ${GLIB_LIBS}
 
 noinst_HEADERS=test-engine-stuff.h

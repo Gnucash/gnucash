@@ -1,5 +1,8 @@
 2002-12-27  Christian Stimming  <stimming@tuhh.de>
 
+	* src/engine/test-core/Makefile.am: Fix linker errors in
+	src/engine/test/
+
 	* src/import-export/hbci/hbci-interaction.c: Fix reparent
 	warnings. Make the PIN dialog a bit nicer.
 
