@@ -1,5 +1,7 @@
 2001-11-12  Rob Browning  <rlb@defaultvalue.org>
 
+	* src/gnome/Makefile.am (noinst_HEADERS): add gw-gnc.h.
+
 	* src/report/utility-reports/test/Makefile.am: use gnc-test-env.
 
 	* src/report/stylesheets/test/Makefile.am: switch to use gnc-test-env.
