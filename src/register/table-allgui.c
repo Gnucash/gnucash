@@ -867,11 +867,7 @@ gnc_table_enter_update(Table *table,
   
   const char * (*enter) (BasicCell *, const char *);
   
-  ENTER("gnc_table_enter_update(): enter rr (0 2) cell->val=%s table val=%s\n", 
-        arr->cells[0][2]->value,
-        table->entries[2][2]);
-
-  DEBUG("gnc_table_enter_update(): "
+  ENTER("gnc_table_enter_update(): "
         "enter %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
          row, col, rel_row, rel_col, 
          arr->cells[rel_row][rel_col], table->entries[row][col]);
@@ -1133,7 +1129,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
   table->prev_phys_traverse_row = *dest_row;
   table->prev_phys_traverse_col = *dest_col;
 
-  LEAVE("gnc_table_traverse_update(): return %d\n", exit_register);
+  LEAVE("gnc_table_traverse_update(): exit_register=%d\n", exit_register);
   return(exit_register);
 }
 
