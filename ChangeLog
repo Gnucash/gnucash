@@ -1,3 +1,10 @@
+2004-04-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/report-system/html-utilities.scm:
+	  Fix a broken recursion problem.  Don't call show-acct? from
+	  use-acct? so we don't recurse ad flictum.  This recursive
+	  call isn't necessary, just have use-acct? recurse unto itself.
+
 2004-04-19  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/balance-sheet.scm:
