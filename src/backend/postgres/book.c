@@ -194,7 +194,7 @@ pgend_book_transfer_begin(Backend *bend, GNCBook *newbook)
 void 
 pgend_book_transfer_commit(Backend *bend, GNCBook *newbook)
 {
-   PGBackend *be = (PGBackend *) bend;
+   /* PGBackend *be = (PGBackend *) bend; */
    ENTER (" ");
 
    LEAVE (" ");
