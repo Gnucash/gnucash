@@ -103,6 +103,8 @@ __DATA__
 .#*
 .deps
 .libs
+INSTALL
+COPYING
 Makefile
 Makefile.in
 Makefile.init
@@ -114,6 +116,7 @@ conf.h
 config.cache
 config.guess
 config.h
+config.h.in
 config.log
 config.status
 config.sub
@@ -130,6 +133,7 @@ gnucash-engine-perl5_wrap_int.c
 gnucash.engine.i
 gnucash.pm
 gnucash.pot
+install-sh
 intl/libintl.h
 intl/po2tbl.sed
 lib/finance-quote/blib

@@ -73,39 +73,35 @@ xaccAccountTreeScrubOrphans (Account *acc)
 #endif
 
 void
-xaccAccountScrubOrphans (Account *acc)
-{
-   int i=0;
-   Split *split, **slist;
-   Transaction *trans;
-   Account * parent;
+xaccAccountScrubOrphans (Account *acc) {
+  GList *slp;
+  Transaction *trans;
+  Account * parent;
+  
+  PINFO ("Looking for orphans in account %s \n", xaccAccountGetName(acc));
+  
+  for(slp = xaccAccountGetSplitList(acc); slp; slp = slp->next) {
+    Split *split = (Split *) slp->data;
+    Split * tsplit;
+    int j = 0;
 
-   PINFO ("Looking for orphans in account %s \n", xaccAccountGetName(acc));
-
-   slist = xaccAccountGetSplitList (acc);
-   split = slist[0];
-   while (split) {
-      Split * s;
-      int j = 0;
-      trans = xaccSplitGetParent (split);
-
-      s = xaccTransGetSplit (trans, 0);
-      while (s) {
-         parent = xaccSplitGetAccount (s);
-         if (!parent) {
-            Account *orph;
-            DEBUG ("Found an orphan \n");
-            /* OK, we found an orphan.  Put it in an orphan account. */
-            orph = GetOrMakeAccount (acc, trans, ORPHAN_STR);
-            xaccAccountBeginEdit (orph, 1);
-            xaccAccountInsertSplit (orph, s);
-            xaccAccountCommitEdit (orph);
-         }
-         j++; 
-         s = xaccTransGetSplit (trans, j);
+    trans = xaccSplitGetParent (split);
+    tsplit = xaccTransGetSplit (trans, 0);
+    while (tsplit) {
+      parent = xaccSplitGetAccount (tsplit);
+      if (!parent) {
+        Account *orph;
+        DEBUG ("Found an orphan \n");
+        /* OK, we found an orphan.  Put it in an orphan account. */
+        orph = GetOrMakeAccount (acc, trans, ORPHAN_STR);
+        xaccAccountBeginEdit (orph);
+        xaccAccountInsertSplit (orph, tsplit);
+        xaccAccountCommitEdit (orph);
       }
-      i++; split = slist[i];
-   }
+      j++; 
+      tsplit = xaccTransGetSplit (trans, j);
+    }
+  }
 }
 
 /* ================================================================ */
@@ -134,21 +130,17 @@ xaccAccountTreeScrubImbalance (Account *acc)
 #endif
 
 void
-xaccAccountScrubImbalance (Account *acc)
-{
-   int i=0;
-   Split *split, **slist;
-   Transaction *trans;
+xaccAccountScrubImbalance (Account *acc) {
+   GList *slp;
 
    PINFO ("Looking for imbalance in account %s \n", xaccAccountGetName(acc));
 
-   slist = xaccAccountGetSplitList (acc);
-   split = slist[0];
-   while (split) {
-      double imbalance;
-      trans = xaccSplitGetParent (split);
+   for(slp = xaccAccountGetSplitList(acc); slp; slp = slp->next) {
+     Split *split = (Split *) slp->data;
+     Transaction *trans = xaccSplitGetParent(split);
+     double imbalance;
 
-      imbalance = xaccTransGetImbalance (trans);
+      imbalance = DxaccTransGetImbalance (trans);
       if (!(DEQ (imbalance, 0.0))) {
          Split *splat;
          Account *orph;
@@ -158,16 +150,15 @@ xaccAccountScrubImbalance (Account *acc)
          
          /* put split into account before setting split value */
          splat = xaccMallocSplit();
-         xaccAccountBeginEdit (orph, 1);
+         xaccAccountBeginEdit (orph);
          xaccAccountInsertSplit (orph, splat);
          xaccAccountCommitEdit (orph);
 
          xaccTransBeginEdit (trans, 1);
-         xaccSplitSetValue (splat, -imbalance);
+         DxaccSplitSetValue (splat, -imbalance);
          xaccTransAppendSplit (trans, splat);
          xaccTransCommitEdit (trans);
       }
-      i++; split = slist[i];
    }
 }
 
@@ -177,16 +168,17 @@ static Account *
 GetOrMakeAccount (Account *peer, Transaction *trans, const char *name_root)
 {
    char * accname;
-   const char * currency;
+   const gnc_commodity * currency;
    Account * acc;
    AccountGroup *root;
 
    /* build the account name */
    currency = xaccTransFindCommonCurrency (trans);
-   accname = alloca (strlen (name_root) + strlen (currency) + 2);
+   accname = alloca (strlen (name_root) + 
+                     strlen (gnc_commodity_get_mnemonic(currency)) + 2);
    strcpy (accname, name_root);
    strcat (accname, "-");
-   strcat (accname, currency); 
+   strcat (accname, gnc_commodity_get_mnemonic(currency)); 
 
    /* see if we've got one of these going already ... */
    acc = xaccGetPeerAccountFromName (peer, accname);
@@ -194,7 +186,7 @@ GetOrMakeAccount (Account *peer, Transaction *trans, const char *name_root)
 
    /* guess not. We'll have to build one */
    acc = xaccMallocAccount ();
-   xaccAccountBeginEdit (acc, 1);
+   xaccAccountBeginEdit (acc);
    xaccAccountSetName (acc, accname);
    xaccAccountSetCurrency (acc, currency);
    xaccAccountSetType (acc, BANK);

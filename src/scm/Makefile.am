@@ -36,7 +36,11 @@ gnc_regular_scm_files = \
   tip-of-the-day.scm \
   tip-list.scm \
   utilities.scm \
-  xml-generator.scm
+  xml-generator.scm \
+  iso-4217-currencies.scm \
+  engine-init.scm \
+  commodity-table.scm \
+  commodity-import.scm
 
 gncscm_DATA = ${gnc_autogen_scm_files} ${gnc_regular_scm_files}
 

@@ -15,9 +15,11 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
-;; A list of strings provided by the --evaluate option that should be
-;; executed in reverse order.
-(define gnc:*batch-mode-forms-to-evaluate* '())
+;; A list of things to do when in batch mode after the initial
+;; startup.  List items may be strings, in wich case they're read and
+;; evaluated or procedures, in which case they're just executed.
+;; The items will be done in reverse order.
+(define gnc:*batch-mode-things-to-do* '())
 
 (define (gnc:startup)
   (gnc:debug "starting up.")
@@ -37,6 +39,7 @@
   (gnc:depend "extensions.scm")
   (gnc:depend "text-export.scm")
   (gnc:depend "report.scm")
+  (gnc:depend "commodity-import.scm")
   (gnc:depend "report/report-list.scm")
   (gnc:depend "qif-import/qif-import.scm")
   (gnc:depend "printing/print-check.scm")
@@ -113,7 +116,7 @@
   ;; add a hood to shut down the C side options code
   (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:c-options-shutdown)
 
-  (if (null? gnc:*batch-mode-forms-to-evaluate*)
+  (if (null? gnc:*batch-mode-things-to-do*)
       ;; We're not in batch mode; we can go ahead and do the normal thing.
       (let ((ok (not (gnc:config-var-value-get gnc:*arg-no-file*)))
             (file (if (pair? gnc:*command-line-files*)
@@ -127,14 +130,6 @@
       
       ;; else: we're in batch mode.  Just do what the user said on the
       ;; command line
-      (map (lambda (cmd-line-string-to-eval) 
-             (call-with-input-string
-              cmd-line-string-to-eval
-              (lambda (port)
-                (let loop ((form (read port)))
-                  (if (not (eof-object? form))
-                      (begin (eval form)
-                             (loop (read port))))))))
-           (reverse gnc:*batch-mode-forms-to-evaluate*)))
+      (map handle-batch-mode-item (reverse gnc:*batch-mode-things-to-do*)))
   
   (gnc:shutdown 0))

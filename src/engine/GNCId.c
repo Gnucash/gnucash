@@ -43,8 +43,7 @@ typedef struct entity_node
 
 /** Static global variables *****************************************/
 static GHashTable * entity_table = NULL;
-static short module = MOD_ENGINE; 
-
+static short module = MOD_ENGINE;
 
 /** Function implementations ****************************************/
 
@@ -270,4 +269,17 @@ xaccRemoveEntity(const GUID * guid)
     g_hash_table_remove(entity_table, old_guid);
     entity_node_destroy(old_guid, node, NULL);
   }
+}
+
+GHashTable *
+xaccGetAndResetEntityTable() {
+  GHashTable *result = entity_table;
+  entity_table = NULL;
+  return(result);
+}
+
+void
+xaccSetEntityTable(GHashTable *et) {
+  if(entity_table) entity_table_destroy();
+  entity_table = et;
 }

@@ -7,16 +7,18 @@ libgncgnome_a_SOURCES = \
   dialog-account.c \
   dialog-account-picker.c \
   dialog-budget.c \
+  dialog-commodity.c \
   dialog-filebox.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
   dialog-options.c \
   dialog-print-check.c \
   dialog-progress.c \
-  dialog-qif-import.c \
   dialog-totd.c \
   dialog-transfer.c \
   dialog-utils.c \
+  druid-commodity.c \
+  druid-qif-import.c \
   extensions.c \
   file-history.c \
   glade-gnc-dialogs.c \
@@ -34,7 +36,7 @@ libgncgnome_a_SOURCES = \
   window-main.c \
   window-reconcile.c \
   window-register.c \
-  window-report.c
+  window-report.c 
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
@@ -46,15 +48,17 @@ noinst_HEADERS = \
   dialog-account.h \
   dialog-account-picker.h \
   dialog-budget.h \
+  dialog-commodity.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
   dialog-options.h \
   dialog-print-check.h \
   dialog-progress.h \
-  dialog-qif-import.h \
   dialog-totd.h \
   dialog-transfer.h \
   dialog-utils.h \
+  druid-commodity.h \
+  druid-qif-import.h \
   extensions.h \
   glade-cb-gnc-dialogs.h \
   glade-gnc-dialogs.h \

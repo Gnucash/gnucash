@@ -27,7 +27,8 @@
                              print_separators?
                              shares_value?
                              ;; fixme
-                             (gnc:locale-default-currency)))
+                             (gnc:commodity-get-mnemonic 
+                              (gnc:locale-default-currency))))
 
 (define (gnc:amount->formatted-string amount shares_value?)
   (gnc:amount->string amount #t #t shares_value?))

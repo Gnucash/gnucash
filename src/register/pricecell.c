@@ -119,7 +119,6 @@ PriceMV (BasicCell *_cell,
     thousands_sep = lc->mon_thousands_sep[0];
   else
     thousands_sep = lc->thousands_sep[0];
-
   for (i = 0; change[i] != '\0'; i++)
     if (!isdigit(change[i]) &&
         !isspace(change[i]) &&
@@ -260,7 +259,7 @@ xaccPriceCellPrintValue (PriceCell *cell)
   if (cell->is_currency)
     flags |= PRTCUR;
 
-  return xaccPrintAmount(cell->amount, flags, NULL);
+  return DxaccPrintAmount(cell->amount, flags, NULL);
 }
 
 /* ================================================ */

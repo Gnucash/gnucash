@@ -100,12 +100,14 @@
 #include <config.h>
 
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
 #include <glib.h>
 #include <guile/gh.h>
 
 #include "top-level.h"
 
+#include "Account.h"
 #include "ui-callbacks.h"
 #include "SplitLedger.h"
 #include "MultiLedger.h"
@@ -428,13 +430,13 @@ gnc_find_split_in_trans_by_memo(Transaction *trans, const char *memo,
   {
     Split *split = xaccTransGetSplit(trans, i);
 
-    if (unit_price && (xaccSplitGetSharePrice(split) != 1.0))
+    if (unit_price && (DxaccSplitGetSharePrice(split) != 1.0))
       continue;
 
     if (safe_strcmp(memo, xaccSplitGetMemo(split)) == 0)
     {
       Account *account = xaccSplitGetAccount(split);
-      const char *currency, *security;
+      const gnc_commodity *currency, *security;
 
       if (account == NULL)
         return split;
@@ -458,39 +460,21 @@ gnc_find_split_in_trans_by_memo(Transaction *trans, const char *memo,
  * is a transaction used for currency checking. */
 static Split *
 gnc_find_split_in_account_by_memo(Account *account, const char *memo,
-                                  Transaction *dest_trans, gboolean unit_price)
-{
-  Split **splits;
-  Split **orig;
+                                  Transaction *dest_trans, gboolean unit_price) {
+  GList *slp;
 
-  if (account == NULL)
-    return NULL;
+  if (account == NULL) return NULL;
 
-  splits = xaccAccountGetSplitList(account);
-  if ((splits == NULL) || (*splits == NULL))
-    return NULL;
+  for(slp = g_list_last(xaccAccountGetSplitList(account));
+      slp;
+      slp = slp->prev) {
+    Split *split = (Split *) slp->data;
+    Transaction *trans = xaccSplitGetParent(split);
 
-  orig = splits;
+    split = gnc_find_split_in_trans_by_memo(trans, memo, dest_trans, unit_price);
 
-  while (*splits != NULL)
-    splits++;
-
-  do
-  {
-    Transaction *trans;
-    Split *split;
-
-    splits--;
-
-    trans = xaccSplitGetParent(*splits);
-
-    split = gnc_find_split_in_trans_by_memo(trans, memo, dest_trans,
-                                            unit_price);
-    if (split != NULL)
-      return split;
-
-  } while (splits != orig);
-
+    if (split != NULL) return split;
+  }
   return NULL;
 }
 
@@ -499,36 +483,20 @@ gnc_find_split_in_account_by_memo(Account *account, const char *memo,
  * in registers with a default leading account. The dest_trans is a
  * transaction used for currency checking. */
 static Transaction *
-gnc_find_trans_in_account_by_desc(Account *account, const char *description)
-{
-  Split **splits;
-  Split **orig;
+gnc_find_trans_in_account_by_desc(Account *account, const char *description) {
+  GList *slp;
 
-  if (account == NULL)
-    return NULL;
+  if (account == NULL) return NULL;
 
-  splits = xaccAccountGetSplitList(account);
-  if ((splits == NULL) || (*splits == NULL))
-    return NULL;
+  for(slp = g_list_last(xaccAccountGetSplitList(account));
+      slp;
+      slp = slp->prev) {
+    Split *split = (Split *) slp->data;
+    Transaction *trans = xaccSplitGetParent(split);
 
-  orig = splits;
-
-  while (*splits != NULL)
-    splits++;
-
-  do
-  {
-    Transaction *trans;
-
-    splits--;
-
-    trans = xaccSplitGetParent(*splits);
-
-    if (safe_strcmp(description, xaccTransGetDescription(trans)) == 0)
+    if(safe_strcmp(description, xaccTransGetDescription(trans)) == 0)
       return trans;
-
-  } while (splits != orig);
-
+  }
   return NULL;
 }
 
@@ -904,7 +872,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       g_list_free(refresh_accounts);
 
       /* now move to the non-empty amount column */
-      amount = xaccSplitGetShareAmount (blank_split);
+      amount = DxaccSplitGetShareAmount (blank_split);
       cell_type = (amount >= 0) ? DEBT_CELL : CRED_CELL;
 
       if (xaccSplitRegisterGetCurrentCellLoc (reg, cell_type, &new_virt_loc))
@@ -971,7 +939,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       xaccSetComboCellValue (reg->xfrmCell, fullname);
       xaccBasicCellSetChanged(&(reg->xfrmCell->cell), TRUE);
 
-      amount = xaccSplitGetValue (auto_split);
+      amount = DxaccSplitGetValue (auto_split);
 
       xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, amount);
       xaccBasicCellSetChanged (&(reg->debitCell->cell), TRUE);
@@ -981,7 +949,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       gnc_table_refresh_gui (reg->table);
 
       /* now move to the non-empty amount column */
-      amount = xaccSplitGetShareAmount (auto_split);
+      amount = DxaccSplitGetShareAmount (auto_split);
       cell_type = (amount < 0) ? CRED_CELL : DEBT_CELL;
 
       if (xaccSplitRegisterGetCurrentCellLoc (reg, cell_type, &new_virt_loc))
@@ -1102,10 +1070,10 @@ LedgerTraverse (Table *table,
         if (xaccSRGetTransSplitVirtLoc (reg, new_trans, trans_split,
                                         new_split, &vcell_loc))
           virt_loc.vcell_loc = vcell_loc;
-
+        
         gnc_table_find_close_valid_cell (table, &virt_loc,
                                          info->exact_traversal);
-
+        
         *p_new_virt_loc = virt_loc;
       }
 
@@ -1186,6 +1154,7 @@ xaccSRGetTrans (SplitRegister *reg, VirtualCellLocation vcell_loc)
     return NULL;
 
   split = sr_get_split (reg, vcell_loc);
+
   if (split != NULL)
     return xaccSplitGetParent(split);
 
@@ -1373,7 +1342,7 @@ xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
 
   cursor_class = xaccSplitRegisterGetCursorClass (reg, v_loc.vcell_loc);
 
-  value = xaccSplitGetValue (split);
+  value = DxaccSplitGetValue (split);
   if (DEQ (value, 0.0))
     value = 0.0;
 
@@ -1388,7 +1357,7 @@ xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
     default:
       return FALSE;
   }
-
+  
   if (!xaccSplitRegisterGetCellLoc (reg, cell_type, v_loc.vcell_loc, &v_loc))
     return FALSE;
 
@@ -1885,7 +1854,7 @@ xaccSRDeleteCurrentSplit (SplitRegister *reg)
   account = xaccSplitGetAccount(split);
 
   xaccTransBeginEdit(trans, TRUE);
-  xaccAccountBeginEdit(account, TRUE);
+  xaccAccountBeginEdit(account);
   xaccSplitDestroy(split);
   xaccAccountCommitEdit(account);
   xaccTransCommitEdit(trans);
@@ -2513,8 +2482,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     if ((new_acc != NULL) && (old_acc != new_acc))
     {
-      const char *currency = NULL;
-      const char *security = NULL;
+      const gnc_commodity * currency = NULL;
+      const gnc_commodity * security = NULL;
 
       currency = xaccAccountGetCurrency(new_acc);
       currency = xaccTransIsCommonExclSCurrency(trans, currency, split);
@@ -2562,12 +2531,12 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     if (!other_split) {
       other_split = xaccTransGetSplit (trans, 1);
       if (!other_split) {
-        double  amt = xaccSplitGetShareAmount (split);
-        double  prc = xaccSplitGetSharePrice (split);
+        double  amt = DxaccSplitGetShareAmount (split);
+        double  prc = DxaccSplitGetSharePrice (split);
 
         other_split = xaccMallocSplit ();
 
-        xaccSplitSetSharePriceAndAmount (other_split, prc, -amt);
+        DxaccSplitSetSharePriceAndAmount (other_split, prc, -amt);
 
         xaccTransAppendSplit (trans, other_split);
       }
@@ -2584,8 +2553,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
       if ((new_acc != NULL) && (old_acc != new_acc))
       {
-        const char *currency = NULL;
-        const char *security = NULL;
+        const gnc_commodity * currency = NULL;
+        const gnc_commodity * security = NULL;
 
         currency = xaccAccountGetCurrency(new_acc);
         currency = xaccTransIsCommonExclSCurrency(trans, 
@@ -2627,12 +2596,12 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     if (MOD_SHRS & changed)
       amount = xaccGetPriceCellValue(reg->sharesCell);
     else
-      amount = xaccSplitGetShareAmount(split);
+      amount = DxaccSplitGetShareAmount(split);
 
     if (MOD_PRIC & changed)
       price = xaccGetPriceCellValue(reg->priceCell);
     else
-      price = xaccSplitGetSharePrice(split);
+      price = DxaccSplitGetSharePrice(split);
 
     if (MOD_AMNT & changed) {
       double credit = xaccGetPriceCellValue(reg->creditCell);
@@ -2640,7 +2609,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       value = debit - credit;
     }
     else
-      value = xaccSplitGetValue(split);
+      value = DxaccSplitGetValue(split);
 
     if (!DEQEPS(value, price * amount, 1.0e-15)) {
       int i;
@@ -2727,7 +2696,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     DEBUG ("MOD_SHRS: %f\n", amount);
 
-    xaccSplitSetShareAmount (split, amount);
+    DxaccSplitSetShareAmount (split, amount);
   }
 
   if (MOD_PRIC & changed) {
@@ -2737,7 +2706,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     DEBUG ("MOD_PRIC: %f\n", price);
 
-    xaccSplitSetSharePrice (split, price);
+    DxaccSplitSetSharePrice (split, price);
   }
 
   /* The AMNT and NAMNT updates only differ by sign. Basically, 
@@ -2755,9 +2724,9 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     DEBUG ("MOD_AMNT: %f\n", new_amount);
 
-    xaccSplitSetValue (split, new_amount);
+    DxaccSplitSetValue (split, new_amount);
   }
-
+  
   return refresh_accounts;
 }
 
@@ -2820,9 +2789,9 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
         if (split == blank_split)
           return "";
 
-        balance = xaccSplitGetShareBalance (split);
+        balance = DxaccSplitGetShareBalance (split);
 
-        return xaccPrintAmount (balance, PRTSEP | PRTSHR, NULL);
+        return DxaccPrintAmount (balance, PRTSEP | PRTSHR, NULL);
       }
       break;
 
@@ -2837,7 +2806,7 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
 
         /* If the reverse_balance callback is present use that.
          * Otherwise, reverse income and expense by default. */
-        balance = xaccSplitGetBalance (split);
+        balance = DxaccSplitGetBalance (split);
         if (reverse_balance != NULL)
         {
           Account *account;
@@ -2853,7 +2822,7 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
                  (EXPENSE_REGISTER == reg->type))
           balance = -balance;
 
-        return xaccPrintAmount (balance, PRTSEP, NULL);
+        return DxaccPrintAmount (balance, PRTSEP, NULL);
       }
       break;
 
@@ -2888,7 +2857,7 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
       {
         double amount;
 
-        amount = xaccSplitGetValue (split);
+        amount = DxaccSplitGetValue (split);
         if (DEQ (amount, 0.0))
           return "";
 
@@ -2900,28 +2869,28 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
 
         amount = DABS (amount);
 
-        return xaccPrintAmount (amount, PRTSEP, NULL);
+        return DxaccPrintAmount (amount, PRTSEP, NULL);
       }
 
     case PRIC_CELL:
       {
         double price;
 
-        price = xaccSplitGetSharePrice (split);
+        price = DxaccSplitGetSharePrice (split);
 
-        return xaccPrintAmount (price, PRTSEP | PRTCUR, NULL);
+        return DxaccPrintAmount (price, PRTSEP | PRTCUR, NULL);
       }
 
     case SHRS_CELL:
       {
         double shares;
 
-        shares = xaccSplitGetShareAmount (split);
+        shares = DxaccSplitGetShareAmount (split);
 
         if (DEQ (shares, 0.0))
           return "";
 
-        return xaccPrintAmount (shares, PRTSEP | PRTSHR, NULL);
+        return DxaccPrintAmount (shares, PRTSEP | PRTSHR, NULL);
       }
 
     case MXFRM_CELL:
@@ -2982,7 +2951,7 @@ xaccSRGetFGColorHandler (gpointer vcell_data, short _cell_type,
       {
         double balance;
 
-        balance = xaccSplitGetShareBalance (split);
+        balance = DxaccSplitGetShareBalance (split);
         if (DEQ (balance, 0.0))
           balance = 0.0;
 
@@ -2999,7 +2968,7 @@ xaccSRGetFGColorHandler (gpointer vcell_data, short _cell_type,
 
         /* If the reverse_balance callback is present use that.
          * Otherwise, reverse income and expense by default. */
-        balance = xaccSplitGetBalance (split);
+        balance = DxaccSplitGetBalance (split);
         if (reverse_balance != NULL)
         {
           Account *account;
@@ -3635,10 +3604,10 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 /* walk account tree recursively, pulling out all the names */
 
 static void 
-LoadXferCell (ComboCell *cell,  
-              AccountGroup *grp,
-              const char *base_currency,
-              const char *base_security)
+LoadXferCell (ComboCell * cell,  
+              AccountGroup * grp,
+              const gnc_commodity * base_currency,
+              const gnc_commodity * base_security)
 {
   gboolean load_everything;
   Account * acc;
@@ -3659,20 +3628,19 @@ LoadXferCell (ComboCell *cell,
   n = 0;
   acc = xaccGroupGetAccount (grp, n);
   while (acc) {
-    const char *curr, *secu;
+    const gnc_commodity * curr, * secu;
 
     curr = xaccAccountGetCurrency (acc);
     secu = xaccAccountGetSecurity (acc);
-    if (secu && (0x0 == secu[0])) secu = NULL;
 
-    DEBUG ("curr=%s secu=%s acct=%s\n", 
+    DEBUG ("curr=%p secu=%p acct=%s\n", 
            curr, secu, xaccAccountGetName (acc));
 
     if ( load_everything || 
-         (!safe_strcmp(curr,base_currency)) ||
-         (!safe_strcmp(curr,base_security)) ||
-         (secu && (!safe_strcmp(secu,base_currency))) ||
-         (secu && (!safe_strcmp(secu,base_security))) )
+         (gnc_commodity_equiv(curr,base_currency)) ||
+         (gnc_commodity_equiv(curr,base_security)) ||
+         (secu && (gnc_commodity_equiv(secu,base_currency))) ||
+         (secu && (gnc_commodity_equiv(secu,base_security))) )
     {
       name = xaccAccountGetFullName (acc, account_separator);
       if (name != NULL)
@@ -3697,13 +3665,10 @@ xaccLoadXferCell (ComboCell *cell,
                   AccountGroup *grp, 
                   Account *base_account)
 {
-  const char *curr, *secu;
+  const gnc_commodity * curr, * secu;
 
   curr = xaccAccountGetCurrency (base_account);
   secu = xaccAccountGetSecurity (base_account);
-
-  if ((secu != NULL) && (secu[0] == 0))
-    secu = NULL;
 
   xaccClearComboCellMenu (cell);
   xaccAddComboCellMenuItem (cell, "");

@@ -126,7 +126,7 @@
                         (gnc:split-scm-get-account-guid split-scm))))
           (if (and account (gnc:account-can-insert-split? account split))
               (begin
-                (gnc:account-begin-edit account 1)
+                (gnc:account-begin-edit account)
                 (gnc:account-insert-split account split)
                 (gnc:account-commit-edit account)))))))
 
@@ -135,12 +135,6 @@
   (let ((currency (gnc:account-get-currency account))
         (security (gnc:account-get-security account))
         (trans    (gnc:split-get-parent split)))
-
-    ;; fixme: This is a temporary fix of a g-wrap problem.
-    (if (not currency)
-        (set! currency ""))
-    (if (not security)
-        (set! security ""))
 
     (or (< (gnc:transaction-get-split-count trans) 2)
         (gnc:transaction-is-common-currency trans currency)

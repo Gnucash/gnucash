@@ -6,13 +6,13 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "qif-import/qif-parse.scm")
+;(gnc:support "qif-import/qif-parse.scm")
 
 (define qif-category-compiled-rexp 
-  (make-regexp "^ *(\\[)?([^]/]*)(]?)(/?)(.*) *$"))
+  (make-regexp "^ *(\\[)?([^]/]*)(]?)(/?)([^\|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
 
 (define qif-date-compiled-rexp 
-  (make-regexp "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$"))
+  (make-regexp "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$|^ *([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9]).*$"))
 
 (define decimal-radix-regexp
   (make-regexp 
@@ -44,7 +44,18 @@
                     #t #f)
                 (if (match:substring match 4)
                     (match:substring match 5)
-                    #f)))
+                    #f)
+                ;; miscx category name 
+                (if (match:substring match 6)
+                    (match:substring match 8)
+                    #f)
+                ;; is it an account? 
+                (if (and (match:substring match 7)
+                         (match:substring match 9))
+                    #t #f)
+                (if (match:substring match 10)
+                    (match:substring match 11)
+                    #f)))                
         (begin 
           (display "qif-split:parse-category : can't parse ")
           (display value) (newline)
@@ -276,10 +287,14 @@
           (match (regexp-exec qif-date-compiled-rexp date-string)))
       
       (if match
-          (set! date-parts (list (match:substring match 1)
-                                 (match:substring match 2)
-                                 (match:substring match 3))))
-      
+          (if (match:substring match 1)
+              (set! date-parts (list (match:substring match 1)
+                                     (match:substring match 2)
+                                     (match:substring match 3)))
+              (set! date-parts (list (match:substring match 4)
+                                     (match:substring match 5)
+                                     (match:substring match 6)))))
+
       ;; get the strings into numbers (but keep the strings around)
       (set! numeric-date-parts
             (map (lambda (elt)
@@ -337,10 +352,13 @@
         (numeric-date-parts '())
         (retval date-string)
         (match (regexp-exec qif-date-compiled-rexp date-string)))
-    (if match
+    (if (match:substring match 1)
         (set! date-parts (list (match:substring match 1)
                                (match:substring match 2)
-                               (match:substring match 3))))
+                               (match:substring match 3)))
+        (set! date-parts (list (match:substring match 4)
+                               (match:substring match 5)
+                               (match:substring match 6))))
     
     ;; get the strings into numbers (but keep the strings around)
     (set! numeric-date-parts

@@ -95,9 +95,17 @@
    (cons "evaluate"
          (cons 'string
                (lambda (val)
-                 (set! gnc:*batch-mode-forms-to-evaluate*
-                       (cons val gnc:*batch-mode-forms-to-evaluate*)))))
+                 (set! gnc:*batch-mode-things-to-do*
+                       (cons val gnc:*batch-mode-things-to-do*)))))
    
+   ;; Given a string, --load will load the indicated file, if possible.
+   (cons "load"
+         (cons 'string
+               (lambda (val)
+                 (set! gnc:*batch-mode-things-to-do*
+                       (cons (lambda () (load val))
+                             gnc:*batch-mode-things-to-do*)))))
+
    (cons "load-user-config"
          (cons 'boolean gnc:load-user-config-if-needed))
 

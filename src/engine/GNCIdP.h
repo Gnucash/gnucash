@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __GNC_ID_P__
-#define __GNC_ID_P__ 1
+#ifndef __GNC_ID_P_H__
+#define __GNC_ID_P_H__ 1
 
 #include "GNCId.h"
 
@@ -47,5 +47,7 @@ void xaccStoreEntity(void * entity, const GUID * guid, GNCIdType entity_type);
  * id. The entity is not changed in any way. */
 void xaccRemoveEntity(const GUID * guid);
 
+GHashTable *xaccGetAndResetEntityTable();
+void xaccSetEntityTable(GHashTable *et);
 
 #endif

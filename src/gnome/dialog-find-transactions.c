@@ -43,7 +43,7 @@
 #include "dialog-find-transactions.h"
 #include "window-help.h"
 #include "Query.h"
-
+#include "gnc-dateedit.h"
 
 /********************************************************************\
  * gnc_ui_find_transactions_dialog_create
@@ -53,7 +53,6 @@
 FindTransactionsDialog * 
 gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   FindTransactionsDialog * ftd = g_new0(FindTransactionsDialog, 1);  
-  SCM        lookup_option, lookup_value;
 
   /* call the glade-defined creator */
   ftd->dialog = create_Find_Transactions();
@@ -84,18 +83,25 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   ftd->match_accounts_picker = 
     gtk_object_get_data(GTK_OBJECT(ftd->dialog), "account_match_picker");
 
-  ftd->date_start_entry_1 =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_start_entry_1");
-  ftd->date_start_entry_2 =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_start_entry_2");
-  ftd->date_start_entry_3 =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_start_entry_3");
-  ftd->date_end_entry_1 =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_end_entry_1");
-  ftd->date_end_entry_2 =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_end_entry_2");
-  ftd->date_end_entry_3 =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_end_entry_3");
+  ftd->date_start_toggle =
+    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_start_toggle");
+  ftd->date_start_frame =
+    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_start_frame");
+
+  ftd->date_start_entry = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+  gtk_container_add(GTK_CONTAINER(ftd->date_start_frame), 
+                    ftd->date_start_entry);
+  gtk_widget_set_sensitive(ftd->date_start_entry, FALSE);
+
+  ftd->date_end_toggle =
+    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_end_toggle");
+  ftd->date_end_frame =
+    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_end_frame");
+
+  ftd->date_end_entry = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+  gtk_container_add(GTK_CONTAINER(ftd->date_end_frame), 
+                    ftd->date_end_entry);
+  gtk_widget_set_sensitive(ftd->date_end_entry, FALSE);
 
   ftd->description_entry =
     gtk_object_get_data(GTK_OBJECT(ftd->dialog), "description_entry");
@@ -149,6 +155,13 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   ftd->cleared_not_cleared_toggle = 
     gtk_object_get_data(GTK_OBJECT(ftd->dialog), "cleared_not_cleared_toggle");
 
+  ftd->tag_entry =
+    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "tag_entry");
+  ftd->tag_case_toggle =
+    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "tag_case_toggle");
+  ftd->tag_regexp_toggle =
+    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "tag_regexp_toggle");
+
   /* add an account picker to the first tab */
   ftd->account_tree = gnc_account_tree_new();
   gtk_clist_column_titles_hide(GTK_CLIST(ftd->account_tree));
@@ -169,47 +182,6 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   gnc_option_menu_init(ftd->amount_comp_picker);
   gnc_option_menu_init(ftd->shares_comp_picker);
   gnc_option_menu_init(ftd->price_comp_picker);
-
-  /* initialize the date to something reasonable */
-  lookup_option = gh_eval_str("gnc:lookup-global-option");
-  lookup_value  = gh_eval_str("gnc:option-value");
-  
-  ftd->ymd_format = 
-    gh_symbol2newstr(gh_call1(lookup_value,
-                              gh_call2(lookup_option,
-                                       gh_str02scm("International"),
-                                       gh_str02scm("Date Format"))),
-                     NULL);
-  if(!strcmp(ftd->ymd_format, "us") || 
-     !strcmp(ftd->ymd_format, "uk") ||
-     !strcmp(ftd->ymd_format, "europe")) {
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(ftd->date_start_entry_1),
-                              1.0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(ftd->date_start_entry_2),
-                              1.0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(ftd->date_start_entry_3),
-                              1900.0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(ftd->date_end_entry_1),
-                              1.0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(ftd->date_end_entry_2),
-                              1.0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(ftd->date_end_entry_3),
-                              2100.0);
-  }
-  else {
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(ftd->date_start_entry_1),
-                              1900.0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(ftd->date_start_entry_2),
-                              1.0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(ftd->date_start_entry_3),
-                              1.0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(ftd->date_end_entry_1),
-                              2100.0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(ftd->date_end_entry_2),
-                              1.0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(ftd->date_end_entry_3),
-                              1.0);
-  }
 
   /* set data so we can find the struct in callbacks */
   gtk_object_set_data(GTK_OBJECT(ftd->dialog), "find_transactions_structure",
@@ -301,37 +273,41 @@ gnc_ui_find_transactions_dialog_help_cb(GtkButton * button,
 
 
 /********************************************************************\
- * gnc_ui_find_transactions_dialog_early_date_select_cb
+ * gnc_ui_find_transactions_dialog_early_date_toggle_cb
 \********************************************************************/
 
 void
-gnc_ui_find_transactions_dialog_early_date_select_cb(GtkButton * button, 
+gnc_ui_find_transactions_dialog_early_date_toggle_cb(GtkToggleButton * button, 
                                                      gpointer user_data) {
   FindTransactionsDialog * ftd =
     gtk_object_get_data(GTK_OBJECT(user_data), "find_transactions_structure");
-
-  gnc_ui_select_date_dialog_create(ftd->date_start_entry_1,
-                                   ftd->date_start_entry_2,
-                                   ftd->date_start_entry_3,
-                                   ftd->ymd_format);
+  
+  if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button))) {
+    gtk_widget_set_sensitive(GTK_WIDGET(ftd->date_start_entry), TRUE);
+  }
+  else {
+    gtk_widget_set_sensitive(GTK_WIDGET(ftd->date_start_entry), FALSE);
+  }
 }
 
+
 /********************************************************************\
- * gnc_ui_find_transactions_dialog_late_date_select_cb
+ * gnc_ui_find_transactions_dialog_late_date_toggle_cb
 \********************************************************************/
 
 void
-gnc_ui_find_transactions_dialog_late_date_select_cb(GtkButton * button, 
-                                                    gpointer user_data) {
+gnc_ui_find_transactions_dialog_late_date_toggle_cb(GtkToggleButton * button, 
+                                                     gpointer user_data) {
   FindTransactionsDialog * ftd =
     gtk_object_get_data(GTK_OBJECT(user_data), "find_transactions_structure");
-
-  gnc_ui_select_date_dialog_create(ftd->date_end_entry_1,
-                                   ftd->date_end_entry_2,
-                                   ftd->date_end_entry_3,
-                                   ftd->ymd_format);
+  
+  if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button))) {
+    gtk_widget_set_sensitive(GTK_WIDGET(ftd->date_end_entry), TRUE);
+  }
+  else {
+    gtk_widget_set_sensitive(GTK_WIDGET(ftd->date_end_entry), FALSE);
+  }
 }
-
 
 
 /********************************************************************\
@@ -350,6 +326,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   char    * memo_match_text;
   char    * number_match_text;
   char    * action_match_text;
+  char    * tag_match_text;
 
   int     search_type = ftd->search_type;
 
@@ -358,8 +335,8 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   Query   * q, * q2;
   gboolean new_ledger = FALSE;
 
-  int start_year, start_month, start_day;
-  int end_year, end_month, end_day;
+  int    use_start_date, use_end_date;
+  time_t start_date, end_date;
 
   int c_cleared, c_notcleared, c_reconciled;
 
@@ -393,6 +370,10 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   /* action */
   action_match_text = 
     gtk_entry_get_text(GTK_ENTRY(ftd->action_entry));
+  
+  /* tag */
+  tag_match_text = 
+    gtk_entry_get_text(GTK_ENTRY(ftd->tag_entry));
   
   if(selected_accounts) {
     xaccQueryAddAccountMatch(q, selected_accounts,
@@ -432,7 +413,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   amt_type = gnc_option_menu_get_active(ftd->credit_debit_picker);
   
   if((amt_temp > 0.00001) || (amt_type != 0)) {
-    xaccQueryAddAmountMatch(q, 
+    DxaccQueryAddAmountMatch(q, 
                             amt_temp,
                             amt_type,
                             gnc_option_menu_get_active
@@ -440,74 +421,19 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
                             QUERY_AND);
   }
   
-  if(!strcmp(ftd->ymd_format, "us")) {
-    start_day = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_start_entry_1));
-    start_month = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_start_entry_2));
-    start_year = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_start_entry_3));
-    
-    end_day = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_end_entry_1));
-    end_month = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_end_entry_2));
-    end_year = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_end_entry_3));    
-  }
-  else if(!strcmp(ftd->ymd_format, "uk") ||
-          !strcmp(ftd->ymd_format, "europe")) {
-    start_month = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_start_entry_1));
-    start_day = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_start_entry_2));
-    start_year = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_start_entry_3));
-    
-    end_month = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_end_entry_1));
-    end_day = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_end_entry_2));
-    end_year = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_end_entry_3));        
-  }
-  else if(!strcmp(ftd->ymd_format, "iso")) {
-    start_year = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_start_entry_1));
-    start_month = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_start_entry_2));
-    start_day = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_start_entry_3));
-    
-    end_year = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_end_entry_1));
-    end_month = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_end_entry_2));
-    end_day = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_end_entry_3));    
-  }
-  else {
-    start_day = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_start_entry_1));
-    start_month = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_start_entry_2));
-    start_year = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_start_entry_3));
-    
-    end_day = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_end_entry_1));
-    end_month = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_end_entry_2));
-    end_year = gtk_spin_button_get_value_as_int
-      (GTK_SPIN_BUTTON(ftd->date_end_entry_3));    
-  }
-  
-  if(!((start_day==1) && (start_month==1) && (start_year==1900) &&
-       (end_day==1) && (end_month==1) && (end_year==2100))) {
-    xaccQueryAddDateMatch(q, 
-                          start_day, start_month, start_year,
-                          end_day, end_month, end_year,
-                          QUERY_AND);
+  use_start_date = 
+    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ftd->date_start_toggle));
+  use_end_date = 
+    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ftd->date_end_toggle));
+
+  start_date = gnc_date_edit_get_date(GNC_DATE_EDIT(ftd->date_start_entry));
+  end_date   = gnc_date_edit_get_date(GNC_DATE_EDIT(ftd->date_end_entry));
+
+  if(use_start_date || use_end_date) {
+    xaccQueryAddDateMatchTT(q, 
+                            use_start_date, start_date, 
+                            use_end_date, end_date,
+                            QUERY_AND);
   }
   
   if(strlen(memo_match_text)) {    
@@ -526,7 +452,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     gnc_option_menu_get_active(ftd->price_comp_picker);
 
   if((amt_temp > 0.00001) || (amt_type != 0)) {
-    xaccQueryAddSharePriceMatch(q, 
+    DxaccQueryAddSharePriceMatch(q, 
                                 amt_temp,
                                 amt_type,
                                 QUERY_AND);
@@ -539,7 +465,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     gnc_option_menu_get_active(ftd->shares_comp_picker);
   
   if((amt_temp > 0.00001) || (amt_type != 0)) {
-    xaccQueryAddSharesMatch(q, 
+    DxaccQueryAddSharesMatch(q, 
                             amt_temp,
                             amt_type,
                             QUERY_AND);
@@ -606,147 +532,4 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   gnc_ui_find_transactions_dialog_destroy(ftd);
 }
 
-/********************************************************************\
- * gnc_ui_select_date_dialog_cancel_cb
-\********************************************************************/
-
-SelectDateDialog *
-gnc_ui_select_date_dialog_create(GtkWidget * entry_1, GtkWidget * entry_2,
-                                 GtkWidget * entry_3, char * ymd_default) {
-  SelectDateDialog * sdd = g_new0(SelectDateDialog, 1);
-  int y, m, d;
-
-  sdd->dialog = create_Select_Date();
-  sdd->cal = gtk_object_get_data(GTK_OBJECT(sdd->dialog),
-                                 "calendar1");
-
-  sdd->entry_1 = entry_1;
-  sdd->entry_2 = entry_2;
-  sdd->entry_3 = entry_3;
-
-  if(!strcmp(ymd_default, "us")) {
-    m = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sdd->entry_1));
-    d = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sdd->entry_2));
-    y = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sdd->entry_3));
-  }
-  else if(!strcmp(ymd_default, "uk") ||
-          !strcmp(ymd_default, "europe")) {
-    d = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sdd->entry_1));
-    m = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sdd->entry_2));
-    y = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sdd->entry_3));
-  }
-  else if(!strcmp(ymd_default, "iso")) {
-    y = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sdd->entry_1));
-    m = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sdd->entry_2));
-    d = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sdd->entry_3));
-  }
-  else {
-    m = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sdd->entry_1));
-    d = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sdd->entry_2));
-    y = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sdd->entry_3));
-  }
-  
-  sdd->ymd_format = strdup(ymd_default);
-
-  gtk_calendar_select_month(GTK_CALENDAR(sdd->cal),
-                            m-1, y);
-  gtk_calendar_select_day(GTK_CALENDAR(sdd->cal),
-                          d);
-  
-  gtk_object_set_data(GTK_OBJECT(sdd->dialog), "select_date_struct",
-                      sdd);
-  gtk_widget_show_all(GTK_WIDGET(sdd->dialog));
-  return sdd;
-}
-
-/********************************************************************\
- * gnc_ui_select_date_dialog_destroy
-\********************************************************************/
-
-void
-gnc_ui_select_date_dialog_destroy(SelectDateDialog * sdd) {
-  gnome_dialog_close(GNOME_DIALOG(sdd->dialog));
-  g_free(sdd->ymd_format);
-  g_free(sdd);
-}
-
-/********************************************************************\
- * gnc_ui_select_date_dialog_cancel_cb
-\********************************************************************/
-
-void
-gnc_ui_select_date_dialog_cancel_cb(GtkButton * button, 
-                                    gpointer user_data) {
-  SelectDateDialog * sdd = 
-    (SelectDateDialog *)gtk_object_get_data(GTK_OBJECT(user_data),
-                                            "select_date_struct");
-  gnc_ui_select_date_dialog_destroy(sdd);
-}
-
-
-/********************************************************************\
- * gnc_ui_select_date_dialog_today_cb
-\********************************************************************/
-
-void
-gnc_ui_select_date_dialog_today_cb(GtkButton * button, 
-                                    gpointer user_data) {
-  SelectDateDialog * sdd = 
-    (SelectDateDialog *)gtk_object_get_data(GTK_OBJECT(user_data),
-                                            "select_date_struct");
-  time_t    now;
-  struct tm * bdtime; 
-
-  now = time(NULL);
-  bdtime = localtime(&now);
-  gtk_calendar_select_month(GTK_CALENDAR(sdd->cal),
-                            bdtime->tm_mon,
-                            bdtime->tm_year+1900);
-  gtk_calendar_select_day(GTK_CALENDAR(sdd->cal),
-                          bdtime->tm_mday);
-}
-
-
-/********************************************************************\
- * gnc_ui_select_date_dialog_cancel_cb
-\********************************************************************/
-
-void
-gnc_ui_select_date_dialog_ok_cb(GtkButton * button, 
-                                gpointer user_data) {
-  SelectDateDialog * sdd = 
-    (SelectDateDialog *)gtk_object_get_data(GTK_OBJECT(user_data),
-                                            "select_date_struct");
-  int   y, m, d;
-
-  gtk_calendar_get_date(GTK_CALENDAR(sdd->cal), &y, &m, &d);
-  
-  if(!strcmp(sdd->ymd_format, "us")) {
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(sdd->entry_1),
-                              (float)m+1);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(sdd->entry_2),
-                              (float)d);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(sdd->entry_3),
-                              (float)y);
-  }
-  else if(!strcmp(sdd->ymd_format, "uk") ||
-          !strcmp(sdd->ymd_format, "europe")) {
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(sdd->entry_1),
-                              (float)d);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(sdd->entry_2),
-                              (float)m+1);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(sdd->entry_3),
-                              (float)y);
-  }
-  else if(!strcmp(sdd->ymd_format, "iso")) {
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(sdd->entry_1),
-                              (float)y);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(sdd->entry_2),
-                              (float)m+1);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(sdd->entry_3),
-                              (float)d);
-  }
-  
-  gnc_ui_select_date_dialog_destroy(sdd);
-}
 

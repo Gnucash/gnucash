@@ -340,6 +340,7 @@ static void
 load_subentry(BudgetDialog *bd)
 {
   char *string;
+  const char *const_string;
   SCM subentry;
 
   subentry = bd->current_subentry;
@@ -361,8 +362,8 @@ load_subentry(BudgetDialog *bd)
 
     value = gh_call1(getters.subentry_amount, subentry);
     amount = gh_scm2double(value);
-    string = xaccPrintAmount(amount, PRTSEP, NULL);
-    gtk_entry_set_text(GTK_ENTRY(bd->subentry_amount_entry), string);
+    const_string = DxaccPrintAmount(amount, PRTSEP, NULL);
+    gtk_entry_set_text(GTK_ENTRY(bd->subentry_amount_entry), const_string);
 
     value = gh_call1(getters.subentry_period, subentry);
     period = gh_scm2int(value);
@@ -855,7 +856,7 @@ subentry_amount_entry_focus_out(GtkWidget *widget, GdkEventFocus *event,
                                 BudgetDialog *bd)
 {
   GtkEntry *entry = GTK_ENTRY(widget);
-  gchar *new_string;
+  const gchar *new_string;
   gchar *string;
   double value;
 
@@ -865,9 +866,9 @@ subentry_amount_entry_focus_out(GtkWidget *widget, GdkEventFocus *event,
     return FALSE;
 
   value = 0.0;
-  xaccParseAmount(string, TRUE, &value, NULL);
+  DxaccParseAmount(string, TRUE, &value, NULL);
 
-  new_string = xaccPrintAmount(value, PRTSEP, NULL);
+  new_string = DxaccPrintAmount(value, PRTSEP, NULL);
 
   if (safe_strcmp(string, new_string) == 0)
     return FALSE;

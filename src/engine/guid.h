@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __GUID__
-#define __GUID__ 
+#ifndef __GUID_H__
+#define __GUID_H__ 
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -91,5 +91,11 @@ gboolean string_to_guid(const char * string, GUID * guid);
 /* Given two GUIDs, return TRUE if they are non-NULL and equal.
  * Return FALSE, otherwise. */
 gboolean guid_equal(const GUID *guid_1, const GUID *guid_2);
+gint     guid_compare(const GUID *g1, const GUID *g2);
+
+/* Given a GUID *, hash it to a guint */
+guint guid_hash_to_guint(gconstpointer ptr);
+
+GHashTable *guid_hash_table_new();
 
 #endif

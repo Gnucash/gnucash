@@ -598,6 +598,7 @@ gnucash_sheet_row_get_distance (GnucashSheet *sheet, int v_row_a, int v_row_b)
         return sign * distance;
 }
 
+#if 0
 static gint
 gnucash_sheet_col_get_distance (GnucashSheet *sheet, int vrow,
                                 int v_col_a, int v_col_b)
@@ -642,7 +643,7 @@ gnucash_sheet_col_get_distance (GnucashSheet *sheet, int vrow,
 
         return sign * distance;
 }
-
+#endif
 
 void
 gnucash_sheet_redraw_all (GnucashSheet *sheet)

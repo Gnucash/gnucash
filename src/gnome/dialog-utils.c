@@ -28,7 +28,7 @@
 #include "account-tree.h"
 #include "dialog-utils.h"
 #include "global-options.h"
-#include "gnc-currency-edit.h"
+#include "gnc-commodity.h"
 #include "messages.h"
 #include "EuroUtils.h"
 #include "util.h"
@@ -129,9 +129,7 @@ gnc_ui_source_menu_create(Account *account)
   GtkMenu   *menu;
   GtkWidget *item;
   GtkWidget *omenu;
-  gchar *codename;
-  AccInfo *accinfo;
-  InvAcct *invacct;
+  /* gchar *codename;      This didn't appear to be used anywhere... */
   GNCAccountType type;
 
   menu = GTK_MENU(gtk_menu_new());
@@ -156,12 +154,12 @@ gnc_ui_source_menu_create(Account *account)
   if ((STOCK != type) && (MUTUAL != type) && (CURRENCY != type))
     return omenu;
 
-  accinfo = xaccAccountGetAccInfo(account);
-  invacct = xaccCastToInvAcct(accinfo);
-  if (invacct == NULL)
+  if ((STOCK != type) && (MUTUAL != type))
     return omenu;
-
-  codename = xaccInvAcctGetPriceSrc(invacct);
+  
+  /* 
+     This didn't appear to be used anywhere...
+     codename = xaccInvAcctGetPriceSrc(invacct); */
 
   return omenu;
 }
@@ -223,14 +221,14 @@ gnc_ui_account_get_balance(Account *account, gboolean include_children)
   if (account == NULL)
     return 0.0;
 
-  balance = xaccAccountGetBalance (account);
+  balance = DxaccAccountGetBalance (account);
 
   if (include_children)
   {
     AccountGroup *children;
 
     children = xaccAccountGetChildren (account);
-    balance += xaccGroupGetBalance (children);
+    balance += DxaccGroupGetBalance (children);
   }
 
   /* reverse sign if needed */
@@ -267,43 +265,47 @@ gnc_ui_get_account_field_value_string(Account *account, int field)
       return xaccAccountGetNotes(account);
       break;
     case ACCOUNT_CURRENCY :
-      return xaccAccountGetCurrency(account);
+      return gnc_commodity_get_printname(xaccAccountGetCurrency(account));
       break;
     case ACCOUNT_SECURITY :
-      return xaccAccountGetSecurity(account);
+      return gnc_commodity_get_printname(xaccAccountGetSecurity(account));
       break;
     case ACCOUNT_BALANCE :
       {
         double balance = gnc_ui_account_get_balance(account, FALSE);
 
-	return xaccPrintAmount(balance, PRTSYM | PRTSEP,
-			       xaccAccountGetCurrency(account));
+	return DxaccPrintAmount(balance, PRTSYM | PRTSEP,
+			       gnc_commodity_get_mnemonic
+                               (xaccAccountGetCurrency(account)));
       }
       break;
     case ACCOUNT_BALANCE_EURO :
       {
-	const char *account_currency = xaccAccountGetCurrency(account);
+	const gnc_commodity * account_currency = 
+          xaccAccountGetCurrency(account);
         double balance = gnc_ui_account_get_balance(account, FALSE);
 	double euro_balance = gnc_convert_to_euro(account_currency, balance);
 
-	return xaccPrintAmount(euro_balance, PRTSYM | PRTSEP | PRTEUR, NULL);
+	return DxaccPrintAmount(euro_balance, PRTSYM | PRTSEP | PRTEUR, NULL);
       }
       break;
     case ACCOUNT_TOTAL :
       {
 	double balance = gnc_ui_account_get_balance(account, TRUE);
 
-	return xaccPrintAmount(balance, PRTSYM | PRTSEP,
-			       xaccAccountGetCurrency(account));
+	return DxaccPrintAmount(balance, PRTSYM | PRTSEP,
+			       gnc_commodity_get_mnemonic
+                               (xaccAccountGetCurrency(account)));
       }
       break;
     case ACCOUNT_TOTAL_EURO :
       {
-	const char *account_currency = xaccAccountGetCurrency(account);
+	const gnc_commodity * account_currency = 
+          xaccAccountGetCurrency(account);
 	double balance = gnc_ui_account_get_balance(account, TRUE);
 	double euro_balance = gnc_convert_to_euro(account_currency, balance);
 
-	return xaccPrintAmount(euro_balance, PRTSYM | PRTSEP | PRTEUR, NULL);
+	return DxaccPrintAmount(euro_balance, PRTSYM | PRTSEP | PRTEUR, NULL);
       }
       break;
   }

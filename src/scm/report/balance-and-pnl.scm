@@ -377,7 +377,9 @@
                 (if (not balance-sheet?)
                     (set! account-balance (- account-balance)))
 		(let ((this-collector (make-currency-collector)))
-		  (this-collector 'add (gnc:account-get-currency account)
+		  (this-collector 'add 
+                                  (gnc:commodity-get-printname 
+                                   (gnc:account-get-currency account))
 				  account-balance)
 		  (handle-collector-merging l1-collector 'merge this-collector))
                 (l1-collector 'merge l2-collector #f)
@@ -408,7 +410,8 @@
 		 from-value
 		 to-value #f))))
 	(this-balance 'add 
-                 (gnc:account-get-currency account)
+                 (gnc:commodity-get-printname 
+                  (gnc:account-get-currency account))
 		 (if balance-sheet? 
 		     rawbal
 		     (- rawbal)))

@@ -185,7 +185,7 @@ void
 gnc_ui_print_dialog_select_printer_cb(GtkButton * button, gpointer user_data) {
   PrintDialog  * pcd;
   GnomePrinter * printer;
-  char         * printer_string;
+  /* char         * printer_string; */
 
   if(user_data) {
     pcd = gtk_object_get_data(GTK_OBJECT(user_data), "print_struct");    

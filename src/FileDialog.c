@@ -21,6 +21,7 @@
 
 #include <string.h>
 #include <glib.h>
+#include <guile/gh.h>
 
 #include "top-level.h"
 
@@ -37,7 +38,7 @@
 #include "file-history.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-/* static short module = MOD_GUI; */
+static short module = MOD_GUI;
 
 /** GLOBALS *********************************************************/
 static Session *current_session = NULL;
@@ -54,14 +55,20 @@ file_not_found_msg (void)
 /* ======================================================== */
 
 static gboolean
-show_file_error (int io_error, char *newfile)
+show_file_error (GNCFileIOError io_error, char *newfile)
 {
   gboolean uh_oh = FALSE;
   char *buf = NULL;
 
   switch (io_error)
   {
-    case ERR_FILEIO_NO_ERROR:
+    case ERR_FILEIO_NONE:
+      break;
+    case ERR_FILEIO_MISC:
+      buf = _("Something went wrong during file IO,\n"
+              "but I'm not sure what.");
+      if (!gnc_verify_dialog (buf, TRUE))
+        uh_oh = TRUE;
       break;
     case ERR_FILEIO_FILE_NOT_FOUND:
       buf = g_strdup_printf (file_not_found_msg(), newfile);
@@ -94,6 +101,7 @@ show_file_error (int io_error, char *newfile)
         uh_oh = TRUE;
       break;
     default:
+      PERR("FIXME: Unhandled FileIO error in show_file_error.");
       break;
   }
 
@@ -129,7 +137,6 @@ show_session_error(Session *session, char *newfile)
   }
 
   g_free(buf);
-
   return uh_oh;
 }
 
@@ -246,7 +253,6 @@ gncPostFileOpen (const char * filename)
   Session *newsess;
   AccountGroup *oldgrp;
   gboolean uh_oh = FALSE;
-  int io_error;
   AccountGroup *newgrp;
   char * newfile;
 
@@ -274,7 +280,12 @@ gncPostFileOpen (const char * filename)
    * switchover is not something we want to keep in a journal.  */
   gnc_set_busy_cursor(NULL);
   xaccLogDisable();
-  newgrp = xaccSessionBeginFile (newsess, newfile, gncLockFailHandler);
+  newgrp = NULL;
+  if(xaccSessionBeginFile(newsess, newfile, gncLockFailHandler)) {
+    if(xaccSessionLoad(newsess)) {
+      newgrp = xaccSessionGetGroup(newsess);
+    }
+  }
   xaccLogEnable();
   gnc_unset_busy_cursor(NULL);
 
@@ -283,9 +294,9 @@ gncPostFileOpen (const char * filename)
 
   if (!uh_oh)
   {
+    GNCFileIOError io_err = xaccSessionGetFileError(newsess);
     /* check for i/o error, put up appropriate error message */
-    io_error = xaccGetFileIOError();
-    uh_oh = show_file_error (io_error, newfile);
+    uh_oh = show_file_error(io_err, newfile);
     if (uh_oh)
     {
       xaccFreeAccountGroup (newgrp);
@@ -294,7 +305,7 @@ gncPostFileOpen (const char * filename)
 
     /* Umm, came up empty-handed, i.e. the file was not found. */
     /* This is almost certainly not what the user wanted. */
-    if (!uh_oh && !newgrp && !io_error) 
+    if (!uh_oh && !newgrp && (io_err == ERR_FILEIO_NONE)) 
     {
       char *buf = g_strdup_printf (file_not_found_msg(), newfile);	
       gnc_error_dialog (buf);
@@ -341,6 +352,19 @@ gncPostFileOpen (const char * filename)
   xaccLogEnable();
 
   free (newfile);
+
+  /* run a file-opened hook.  For now, the main thing it will do 
+   * is notice if legacy currencies are being imported. */
+  {
+    SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
+    SCM hook = gh_eval_str("gnc:*file-opened-hook*");
+    SCM filename;
+    
+    if(newfile) {
+      filename = gh_str02scm(newfile);
+      gh_call2(run_danglers, hook, filename); 
+    }
+  }  
 }
 
 /* ======================================================== */
@@ -380,15 +404,6 @@ gncFileOpenFile (const char * newfile)
 }
 
 /* ======================================================== */
-
-void
-gncFileQIFImport (void)
-{
-  /* pop up the QIF File Import dialog box */
-  gnc_ui_qif_import_dialog_make();
-}
-
-/* ======================================================== */
 static int been_here_before = 0;
 
 void
@@ -396,7 +411,8 @@ gncFileSave (void)
 {
   AccountGroup *newgrp = NULL;
   char * newfile;
-  int io_error, norr, uh_oh = 0;
+  GNCFileIOError io_err;
+  int norr, uh_oh = 0;
 
   /* hack alert -- Somehow make sure all in-progress edits get committed! */
 
@@ -414,8 +430,8 @@ gncFileSave (void)
   xaccSessionSave (current_session);
   gnc_unset_busy_cursor(NULL);
 
-  /* in theory, no error should have occured, but just in case, 
-   * we're gonna check and handle ... */
+  /* Make sure everything's OK - disk could be full, file could have
+     become read-only etc. */
   norr = xaccSessionGetError (current_session);
   if (norr)
   {
@@ -441,11 +457,11 @@ gncFileSave (void)
   /* check for i/o error, put up appropriate error message.
    * NOTE: the file-writing routines never set the file io
    * error code, so this seems to be unneccesary. */
-  io_error = xaccGetFileIOError();
+  io_err = xaccSessionGetFileError(current_session);
   newfile = xaccSessionGetFilePath(current_session);
   gnc_history_add_file(newfile);
 
-  uh_oh = show_file_error (io_error, newfile);
+  uh_oh = show_file_error (io_err, newfile);
   if (uh_oh)
   {
     xaccFreeAccountGroup (newgrp);
@@ -467,9 +483,7 @@ gncFileSaveAs (void)
   AccountGroup *oldgrp;
   const char *filename;
   char *newfile;
-  AccountGroup *newgrp;
   char * oldfile;
-  int io_error;
   gboolean uh_oh = FALSE;
 
   filename = fileBox(SAVE_STR, "*.gnc");
@@ -488,15 +502,13 @@ gncFileSaveAs (void)
      return;
   }
   oldfile = xaccSessionGetFilePath (current_session);
-  if (oldfile && !strcmp (oldfile, newfile)) 
-  {
+  if (oldfile && (strcmp(oldfile, newfile) == 0)) {
     free (newfile);
     gncFileSave ();
     return;
   }
 
-  /* -------------- BEGIN CORE SESSION CODE ------------- */
-  /* -- this code identical in FileOpen and FileSaveAs -- */
+  /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
   oldgrp = xaccSessionGetGroup (current_session);
   /* if session not yet started ... */
   if (!oldgrp) oldgrp = topgroup;
@@ -508,28 +520,16 @@ gncFileSaveAs (void)
    * edit; the mass deletetion of accounts and transactions during
    * switchover is not something we want to keep in a journal.  */
   xaccLogDisable();
-  newgrp = xaccSessionBeginFile (newsess, newfile, gncLockFailHandler);
+  xaccSessionBeginFile(newsess, newfile, gncLockFailHandler);
   xaccLogEnable();
 
   /* check for session errors (e.g. file locked by another user) */
   uh_oh = show_session_error (newsess, newfile);
 
-  if (!uh_oh)
-  {
-    /* check for i/o error, put up appropriate error message */
-    io_error = xaccGetFileIOError();
-    uh_oh = show_file_error (io_error, newfile);
-    if (uh_oh)
-    {
-      xaccFreeAccountGroup (newgrp);
-      newgrp = NULL;
-    }
-  }
+  /* No check for file errors since we didn't read a file... */
 
   /* going down -- abandon ship */
-  if (uh_oh) 
-  {
-    xaccSessionEnd (newsess);
+  if (uh_oh) {
     xaccSessionDestroy (newsess);
 
     /* well, no matter what, I think its a good idea to have 
@@ -538,27 +538,22 @@ gncFileSaveAs (void)
      * reason, we don't want to leave them high & dry without a topgroup,
      * because if user continues, then bad things will happen ...
      */
-    if (NULL == topgroup) 
-    {
+    if(NULL == topgroup) {
       topgroup = xaccMallocAccountGroup();
     }
     free (newfile);
-
     gnc_refresh_main_window();
-
     return;
   }
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  xaccSessionEnd (current_session);
   xaccSessionDestroy (current_session);
   current_session = newsess;
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* oops ... file already exists ... ask user what to do... */
-  if (newgrp) 
-  {
+  if(xaccSessionSaveMayClobberData(newsess)) {
     char *tmpmsg;
     gboolean result;
 
@@ -576,7 +571,6 @@ gncFileSaveAs (void)
      *  decides it was all a big mistake. */
     xaccSessionSetGroup (newsess, NULL);
     /* xaccLogDisable();  no don't disable, keep logging on */
-    xaccFreeAccountGroup (newgrp);
   }
 
   /* OK, save the data to the file ... */

@@ -135,15 +135,13 @@ fi_to_gui(FinCalcDialog *fcd)
 
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[PRESENT_VALUE]),
                               fcd->financial_info.pv);
-
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[PERIODIC_PAYMENT]),
                               fcd->financial_info.pmt);
-
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]),
                               -fcd->financial_info.fv);
-
   total = fcd->financial_info.npp * fcd->financial_info.pmt;
-  xaccSPrintAmount (string, total, PRTSEP, NULL);
+
+  DxaccSPrintAmount (string, total, PRTSEP, NULL);
   gtk_label_set_text (GTK_LABEL(fcd->payment_total_label), string);
 
   i = normalize_period(&fcd->financial_info.CF);
@@ -176,16 +174,13 @@ gui_to_fi(FinCalcDialog *fcd)
 
   string = gtk_entry_get_text(GTK_ENTRY(fcd->amounts[PAYMENT_PERIODS]));
   fcd->financial_info.npp = strtol(string, NULL, 10);
-
   fcd->financial_info.ir =
     gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[INTEREST_RATE]));
 
   fcd->financial_info.pv =
     gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[PRESENT_VALUE]));
-
   fcd->financial_info.pmt =
     gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[PERIODIC_PAYMENT]));
-
   fcd->financial_info.fv =
     gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]));
   fcd->financial_info.fv = -fcd->financial_info.fv;

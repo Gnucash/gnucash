@@ -452,10 +452,10 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
 
   /* provide some convenience data for the the GUI window.
    * If the GUI wants to display yet other stuff, it's on its own. */
-  regData->balance = xaccAccountGetBalance (regData->leader);
-  regData->clearedBalance = xaccAccountGetClearedBalance (regData->leader);
+  regData->balance = DxaccAccountGetBalance (regData->leader);
+  regData->clearedBalance = DxaccAccountGetClearedBalance (regData->leader);
   regData->reconciledBalance = 
-    xaccAccountGetReconciledBalance(regData->leader);
+    DxaccAccountGetReconciledBalance(regData->leader);
 
   /* OK, now tell this specific GUI window to redraw itself ... */
   if (regData->redraw)

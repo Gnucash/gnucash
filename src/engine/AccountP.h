@@ -43,8 +43,9 @@
 #define __XACC_ACCOUNT_P_H__
 
 #include "config.h"
+#include "gnc-numeric.h"
+#include "gnc-commodity.h"
 #include "kvp_frame.h"
-#include "AccInfo.h"
 #include "GNCId.h"
 #include "Transaction.h"
 
@@ -75,18 +76,10 @@ struct _account {
    */
   char     *description;
 
-  /* The notes field is an arbitrary string assigned by the user.
-   * It is intended to hold long, free-form arbitrary additional 
-   * data about the account. Machine-readable data *must* be 
-   * structured using standard mime-type techniques.  For example,
-   * image data would be Base64 encoded, and lists of key-value
-   * pairs would be URL-encoded.
-   */
-  char     *notes;
-
-  /* kvp_data is a key-value pair database for storing simple 
-   * "extra" information in splits, transactions, and accounts. 
-   * it's NULL until accessed. */
+  /* kvp_data is a key-value pair database for storing simple "extra"
+   * information in splits, transactions, and accounts.  it's NULL
+   * until accessed.  See ??? for a list and description of the
+   * important keys. */
   kvp_frame * kvp_data;
 
   /* The type field is the account type, picked from the enumerated 
@@ -96,22 +89,15 @@ struct _account {
    */
   short     type;
 
-  /* The accInfo field provides a hook for storing additional 
-   * account-type specific data.  Thus, it will contain different
-   * structures depending on whether the account is a bank, investment
-   * or other type of account.  Implemented as a union.
-   */
-  AccInfo *accInfo;
-
   /* The currency field denotes the default currency in which all
-   * splits in this account are denominated.  Its value *MUST*
-   * be a three-letter ISO currency code, or it must be a comma followed
-   * by an arbitrary string (security name).  Currency trading accounts
-   * allow splits between accounts when the currency string matches the
-   * security string.
-   */
-  char    *currency;
-  char    *security;
+   * splits in this account are denominated.  The gnc_commodity type
+   * represents the namespace, full name, and symbol for the currency.
+   * Currency trading accounts allow splits between accounts when the
+   * currency string matches the security string.  */
+  const gnc_commodity * currency;
+  const gnc_commodity * security;
+  int  currency_scu;
+  int  security_scu;
 
   /* The parent and children pointers are used to implement an account
    * hierarchy, of accounts that have sub-accounts ("detail accounts").
@@ -119,36 +105,31 @@ struct _account {
   AccountGroup *parent;    /* back-pointer to parent */
   AccountGroup *children;  /* pointer to sub-accounts */
 
-  /* The id number is internally assigned by the engine, and is used for 
-   * various housekeeping operations by the engine.
-   */
-  int       id;            /* unique account id, internally assigned */
-
-  /* the 'flags' field is currently unused.  If you need some
-   * persistant flags, this is it.  It *is* stored in the flat-file DB.
-   */
-  char      flags;
-
   /* protected data, cached parameters */
-  double balance;
-  double cleared_balance;
-  double reconciled_balance;
+  gnc_numeric balance;
+  gnc_numeric cleared_balance;
+  gnc_numeric reconciled_balance;
 
-  double share_balance;
-  double share_cleared_balance;
-  double share_reconciled_balance;
+  gnc_numeric share_balance;
+  gnc_numeric share_cleared_balance;
+  gnc_numeric share_reconciled_balance;
 
-  int numSplits;                /* length of splits array below   */
-  Split **splits;               /* ptr to array of ptrs to splits */
+  GList *splits;               /* ptr to array of ptrs to splits */
 
   /* The "changed" flag is used to invalidate cached values in this structure.
    * Currently, the balances and the cost basis are cached.
    */
-  short changed;
+  /*short changed;*/
 
   /* The "open" flag indicates if the account has been 
    * opened for editing. */
-  short open;
+  /* short open; */
+
+  /* keep track of nesting level of begin/end edit calls */
+  gint32 editlevel;
+
+  gboolean balance_dirty;
+  gboolean sort_dirty;
 
   /* The "mark" flag can be used by the user to mark this account
    * in any way desired.  Handy for specialty traversals of the 
@@ -181,12 +162,6 @@ void         xaccAccountRemoveSplit (Account *, Split *);
  * and the total balance, for this account */
 void         xaccAccountRecomputeBalance (Account *);
 void         xaccAccountRecomputeBalances (Account **);
-
-/*
- * recomputes the cost basis 
- */
-void         xaccAccountRecomputeCostBasis (Account *);
-
 
 /* Set the account's GUID. This should only be done when reading
  * an account from a datafile, or some other external source. Never

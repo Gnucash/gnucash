@@ -66,7 +66,7 @@
     (gnc:make-menu-item "Export data as text (Danger: Unfinished)"
                         "Export data as text."
                         (list "Extensions" "")
-                        (lambda () (gnc:main-win-export-data-as-text win))))
+                        (lambda () (gnc:main-win-account-group-write win))))
 
   (define export-item
     (gnc:make-menu-item "Test progress dialog"

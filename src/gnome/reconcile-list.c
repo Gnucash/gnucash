@@ -116,10 +116,10 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
   xaccQueryAddSingleAccountMatch(list->query, account, QUERY_OR);
 
   if (type == RECLIST_CREDIT)
-    xaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_CREDIT,
+    DxaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_CREDIT,
                             AMT_MATCH_ATLEAST, QUERY_AND);
   else
-    xaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_DEBIT,
+    DxaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_DEBIT,
                             AMT_MATCH_ATLEAST, QUERY_AND);
 
   return GTK_WIDGET(list);
@@ -513,9 +513,9 @@ gnc_reconcile_list_reconciled_balance(GNCReconcileList *list)
 
     if ((account_type == STOCK) || (account_type == MUTUAL) ||
         (account_type == CURRENCY))
-      total += xaccSplitGetShareAmount(split);
+      total += DxaccSplitGetShareAmount(split);
     else
-      total += xaccSplitGetValue(split);
+      total += DxaccSplitGetValue(split);
   }
 
   return DABS(total);
@@ -634,7 +634,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   Split **splits;
   Split *split;
 
-  const char *currency;
+  const gnc_commodity * currency;
   char recn;
 
   double amount;
@@ -661,9 +661,9 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
       continue;
 
     if((account_type == STOCK) || (account_type == MUTUAL))
-      amount = xaccSplitGetShareAmount(split);
+      amount = DxaccSplitGetShareAmount(split);
     else
-      amount = xaccSplitGetValue(split);
+      amount = DxaccSplitGetValue(split);
 
     if ((amount < 0) && (list->list_type == RECLIST_DEBIT))
       continue;
@@ -677,7 +677,8 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[0] = gnc_print_date(ts);
     strings[1] = xaccTransGetNum(trans);
     strings[2] = xaccTransGetDescription(trans);
-    strings[3] = xaccPrintAmount(DABS(amount), flags, currency);
+    strings[3] = DxaccPrintAmount(DABS(amount), flags, 
+                                 gnc_commodity_get_mnemonic(currency));
 
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
     recn = reconciled ? YREC : recn;

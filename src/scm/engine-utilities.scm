@@ -23,6 +23,58 @@
 
 (gnc:support "engine-utilities.scm")
 
+(define (gnc:filename->account-group filename)
+  "Returns an account group on success and #f on failure"
+  (let* ((session (gnc:malloc-session)))
+    (if (not session)
+        #f
+        (begin
+          (gnc:init-session session)
+          (let ((account-group (gnc:session-begin-file session filename)))
+            (if (not account-group)
+                (begin
+                  (display (list 'serr (gnc:session-get-error session)))
+                  (newline)
+                  (gnc:session-destroy session)
+                  #f)
+                (begin
+                  (gnc:session-end session)
+                  (gnc:session-destroy session)
+                  account-group)))))))
+
+(define (gnc:call-with-account-data-from-file filename proc)
+  ;; calls proc with one argument, the account group representing the
+  ;; data in filename.  If there's an error, this procedure throws an
+  ;; exception of type misc-error (for now).  Otherwise, the return
+  ;; value is the result of the call to proc.
+  ;;
+  ;; This procedure does not currently handle any acceptions thrown by
+  ;; the sub-procedures that it calls.
+
+  (let ((account-group (gnc:filename->account-group filename)))
+    (if (not account-group)
+        (throw 'misc-error)
+        (let ((result (proc account-group)))
+          (gnc:free-account-group account-group)
+          result))))
+
+; (define (gnc:account-transactions-for-each thunk account)
+;   ;; You must call gnc:group-reset-write-flags on the account group
+;   ;; before using this...
+
+;   (let loop ((num-splits (gnc:account-get-split-count account))
+;              (i 0))
+;     (if (< i num-splits)
+;         (let* ((split (gnc:account-get-split account i))
+;                (transaction (gnc:split-get-parent split)))
+;           ;; We don't use the flags just like FileIO does (only 1 pass here)...
+;           (if (= (gnc:transaction-get-write-flag transaction) 0)
+;               (begin
+;                 (thunk transaction)
+;                 (gnc:transaction-set-write-flag transaction 2)))
+;           (loop num-splits (+ i 1))))))
+
+
 (define (gnc:transaction-map-splits thunk transaction)
   (let loop ((num-splits (gnc:transaction-get-split-count transaction))
              (i 0))

@@ -36,6 +36,8 @@
 #include <stdlib.h>
 
 #include "gnc-common.h"
+#include "gnc-commodity.h"
+#include "gnc-numeric.h"
 
 #define BUFSIZE   1024
 
@@ -199,12 +201,9 @@ gboolean gnc_strisnum(const char *s);
  */
 struct lconv * gnc_localeconv(void);
 
-/* Returns the 3 character currency code of the current locale. */
-const char * gnc_locale_default_currency(void);
-
-/* Return the number of decimal places for this locale. */
-int gnc_locale_decimal_places( void );
-
+/* Returns the default currency of the current locale. */
+gnc_commodity * gnc_locale_default_currency(void);
+int gnc_locale_decimal_places(void);
 
 /*
  * The xaccPrintAmount() and xaccSPrintAmount() routines provide
@@ -251,21 +250,36 @@ int gnc_locale_decimal_places( void );
 
 typedef unsigned int GNCPrintAmountFlags;
 
-const char * xaccPrintAmount (double val, GNCPrintAmountFlags flags,
+const char * DxaccPrintAmount (double val, GNCPrintAmountFlags flags,
+                               const char *curr_code);
+int DxaccSPrintAmount (char *buf, double val, GNCPrintAmountFlags flags,
+                       const char * curr_code);
+int DxaccSPrintAmountGeneral (char * bufp, double val,
+                              GNCPrintAmountFlags flags,
+                              int precision,
+                              int min_trailing_zeros,
+                              const char *curr_sym);
+const char * DxaccPrintAmountArgs (double val,
+                                   gboolean print_currency_symbol,
+                                   gboolean print_separators,
+                                   gboolean is_shares_value,
+                                   const char *curr_code);
+
+const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountFlags flags,
                               const char *curr_code);
-int xaccSPrintAmount (char *buf, double val, GNCPrintAmountFlags flags,
-                      const char *curr_code);
-int xaccSPrintAmountGeneral (char * bufp, double val,
+
+int xaccSPrintAmount (char *buf, gnc_numeric val, GNCPrintAmountFlags flags,
+                      const char * curr_code);
+int xaccSPrintAmountGeneral (char * bufp, gnc_numeric val,
                              GNCPrintAmountFlags flags,
                              int precision,
                              int min_trailing_zeros,
                              const char *curr_sym);
-const char * xaccPrintAmountArgs (double val,
+const char * xaccPrintAmountArgs (gnc_numeric val,
                                   gboolean print_currency_symbol,
                                   gboolean print_separators,
                                   gboolean is_shares_value,
                                   const char *curr_code);
-
 
 /* xaccParseAmount parses in_str to obtain a numeric result. The
  *   routine will parse as much of in_str as it can to obtain a single
@@ -279,7 +293,7 @@ const char * xaccPrintAmountArgs (double val,
  *   parser will be returned in *endstr. If FALSE is returned
  *   and endstr is non-NULL, *endstr will point to in_str.
  */
-gboolean xaccParseAmount (const char * in_str, gboolean monetary,
+gboolean DxaccParseAmount (const char * in_str, gboolean monetary,
                           double *result, char **endstr);
 
 

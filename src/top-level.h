@@ -45,6 +45,7 @@
 #define HH_PRINTCHECK        "xacc-print-check.html"
 #define HH_FIND_TRANSACTIONS "xacc-locatingtxns.html"
 #define HH_PRINT             "xacc-print.html"
+#define HH_COMMODITY         "xacc-commodity.html"
 
 
 /** PROTOTYPES ******************************************************/

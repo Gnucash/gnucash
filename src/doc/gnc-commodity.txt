@@ -1,0 +1,10 @@
+README.gnc-commodity
+
+Bill Gribble <grib@gnumatic.com> 
+2 Aug 2000
+
+gnc-commodity : a representation of currencies, stocks, and other
+tradable commodities.
+
+
+

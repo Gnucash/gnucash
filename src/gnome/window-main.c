@@ -47,7 +47,6 @@
 #include "account-tree.h"
 #include "dialog-transfer.h"
 #include "dialog-account.h"
-#include "dialog-qif-import.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
 #include "dialog-totd.h"
@@ -56,7 +55,13 @@
 #include "EuroUtils.h"
 #include "Scrub.h"
 #include "util.h"
+#include "gnc-commodity.h"
+#include "gnc-engine.h"
+#include "gtkselect.h"
 
+/* FIXME get rid of these */
+#include <g-wrap.h>
+#include "gnc.h"
 
 /* Main Window information structure */
 typedef struct _GNCMainInfo GNCMainInfo;
@@ -97,7 +102,7 @@ static GNCMainInfo * gnc_get_main_info(void);
  * kept around for the duration of the calculation. There may, in fact
  * be better ways to do this, but none occurred. */
 struct _GNCCurrencyAcc {
-  const char *currency;
+  const gnc_commodity * currency;
   double assets;
   double profits;
 };
@@ -109,7 +114,7 @@ typedef struct _GNCCurrencyAcc GNCCurrencyAcc;
  * currency, plus (eventually) one for the default currency
  * accumulation (like the EURO). */
 struct _GNCCurrencyItem {
-  const char *currency;
+  const gnc_commodity * currency;
   GtkWidget *listitem;
   GtkWidget *assets_label;
   GtkWidget *profits_label;
@@ -119,11 +124,12 @@ typedef struct _GNCCurrencyItem GNCCurrencyItem;
 
 /* Build a single currency item.
  *
- * This function handles the building of a single currency item for
- * the selector. It looks like the old code in the update function,
- * but now only handles a single currency. */
+ * This function handles the building of a single currency item for the
+ * selector. It looks like the old code in the update function, but now
+ * only handles a single currency.
+ */
 static GNCCurrencyItem *
-gnc_ui_build_currency_item(const char *currency)
+gnc_ui_build_currency_item(const gnc_commodity * currency)
 {
   GtkWidget *label;
   GtkWidget *topbox;
@@ -144,7 +150,7 @@ gnc_ui_build_currency_item(const char *currency)
   gtk_widget_show(hbox);
   gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
 
-  label = gtk_label_new(currency);
+  label = gtk_label_new(gnc_commodity_get_mnemonic(currency));
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_widget_show(label);
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -190,25 +196,24 @@ gnc_ui_build_currency_item(const char *currency)
  * This will search the given list, and if no accumulator is found,
  * will allocate a fresh one. */
 static GNCCurrencyAcc *
-gnc_ui_get_currency_accumulator(GList **list, const char *currency)
+gnc_ui_get_currency_accumulator(GList **list, const gnc_commodity * currency)
 {
   GList *current;
   GNCCurrencyAcc *found;
-
+    
   for (current = g_list_first(*list); current;
-       current = g_list_next(current))
-  {
+       current = g_list_next(current)) {
     found = current->data;
-    if (safe_strcmp(found->currency, currency) == 0)
+    if (gnc_commodity_equiv(currency, found->currency)) {
       return found;
-  }
-
+    }
+  } 
   found = g_new0(GNCCurrencyAcc, 1);
   found->currency = currency;
   found->assets = 0.0;
   found->profits = 0.0;
   *list = g_list_append(*list, found);
-
+  
   return found;
 }
 
@@ -219,23 +224,24 @@ gnc_ui_get_currency_accumulator(GList **list, const char *currency)
  *
  * It looks just like the function above, with some extra stuff to get
  * the item into the list. */
+
 static GNCCurrencyItem *
-gnc_ui_get_currency_item(GList **list, const char *currency, GtkWidget *holder)
+gnc_ui_get_currency_item(GList **list, const gnc_commodity * currency, GtkWidget *holder)
 {
   GList *current;
   GNCCurrencyItem *found;
 
   for (current = g_list_first(*list); current;
-       current = g_list_next(current))
-  {
+       current = g_list_next(current)) {
     found = current->data;
-    if (safe_strcmp(found->currency, currency) == 0)
+    if (gnc_commodity_equiv(found->currency, currency)) {
       return found;
+    }
   }
-
+  
   found = gnc_ui_build_currency_item(currency);
   *list = g_list_append(*list, found);
-
+  
   current = g_list_append(NULL, found->listitem);
   gtk_select_append_items(GTK_SELECT(holder), current);
 
@@ -250,16 +256,30 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
   AccountGroup *children;
   Account *account;
   int num_accounts;
-  int account_type;
-  const char *account_currency;
+  int account_type;  
+  const gnc_commodity * account_currency;
+  const gnc_commodity * default_currency;
+  const gnc_commodity * euro_commodity;
+  const char * default_mnemonic;
   GNCCurrencyAcc *currency_accum;
   GNCCurrencyAcc *euro_accum = NULL;
   int i;
 
-  if (euro)
-    euro_accum = gnc_ui_get_currency_accumulator(currency_list,
-						 EURO_TOTAL_STR);
+  default_mnemonic = gnc_lookup_string_option("International",
+					      "Default Currency",
+					      "USD");
+  default_currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
+                                                GNC_COMMODITY_NS_ISO,
+                                                default_mnemonic);
 
+  if (euro) {
+    euro_commodity = gnc_commodity_table_lookup(gnc_engine_commodities(),
+                                                GNC_COMMODITY_NS_ISO,
+                                                "EUR");    
+    euro_accum = gnc_ui_get_currency_accumulator(currency_list,
+						 euro_commodity);
+  }
+  
   num_accounts = xaccGroupGetNumAccounts(group);
   for (i = 0; i < num_accounts; i++)
   {
@@ -280,7 +300,7 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
       case MUTUAL:
       case CREDIT:
       case LIABILITY:
-	amount = xaccAccountGetBalance(account);
+	amount = DxaccAccountGetBalance(account);
         currency_accum->assets += amount;
 	if(euro)
 	  euro_accum->assets += gnc_convert_to_euro(account_currency, amount);
@@ -290,7 +310,7 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
 	break;
       case INCOME:
       case EXPENSE:
-	amount = xaccAccountGetBalance(account);
+	amount = DxaccAccountGetBalance(account);
         currency_accum->profits -= amount;
 	if(euro)
 	  euro_accum->profits -= gnc_convert_to_euro(account_currency, amount);
@@ -331,17 +351,20 @@ gnc_ui_refresh_statusbar (void)
   AccountGroup *group;
   char asset_string[256];
   char profit_string[256];
-  const char *default_currency;
+  const char * default_mnemonic;
+  const gnc_commodity * default_currency;
   GNCCurrencyAcc *currency_accum;
   GNCCurrencyItem *currency_item;
   GList *currency_list;
   GList *current;
   gboolean euro;
 
-  default_currency = gnc_lookup_string_option("International",
+  default_mnemonic = gnc_lookup_string_option("International",
 					      "Default Currency",
 					      "USD");
-
+  default_currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
+                                                default_mnemonic,
+                                                GNC_COMMODITY_NS_ISO);
   euro = gnc_lookup_boolean_option("International",
 				   "Enable EURO support",
 				   FALSE);
@@ -374,13 +397,15 @@ gnc_ui_refresh_statusbar (void)
 					     main_info->totals_combo);
     currency_item->touched = 1;
 
-    xaccSPrintAmount(asset_string, currency_accum->assets,
-		     PRTSYM | PRTSEP, currency_accum->currency);
+    DxaccSPrintAmount(asset_string, currency_accum->assets,
+		     PRTSYM | PRTSEP, 
+                     gnc_commodity_get_mnemonic(currency_accum->currency));
     gtk_label_set_text(GTK_LABEL(currency_item->assets_label), asset_string);
     gnc_set_label_color(currency_item->assets_label, currency_accum->assets);
 
-    xaccSPrintAmount(profit_string, currency_accum->profits,
-		     PRTSYM | PRTSEP, currency_accum->currency);
+    DxaccSPrintAmount(profit_string, currency_accum->profits,
+		     PRTSYM | PRTSEP, 
+                     gnc_commodity_get_mnemonic(currency_accum->currency));
     gtk_label_set_text(GTK_LABEL(currency_item->profits_label), profit_string);
     gnc_set_label_color(currency_item->profits_label, currency_accum->profits);
 
@@ -395,11 +420,11 @@ gnc_ui_refresh_statusbar (void)
   while (current)
   {
     GList *next = current->next;
-
+    
     currency_item = current->data;
     if (currency_item->touched == 0
-        && strcmp(currency_item->currency, default_currency) != 0)
-    {
+        && !gnc_commodity_equiv(currency_item->currency,
+                                default_currency)) {
       currency_list = g_list_append(currency_list, currency_item->listitem);
       main_info->totals_list = g_list_remove_link(main_info->totals_list,
 						  current);
@@ -407,7 +432,7 @@ gnc_ui_refresh_statusbar (void)
       current->data = NULL;
       g_list_free_1(current);
     }
-
+    
     current = next;
   }
 
@@ -1376,12 +1401,16 @@ mainWindow()
   /* create the label containing the account balances */
   {
     GtkWidget *combo_box;
-    const char *default_currency;
+    const char *default_currency_mnemonic;
+    const gnc_commodity * default_currency;
     GNCCurrencyItem *def_item;
-
-    default_currency = gnc_lookup_string_option("International",
-						"Default Currency",
-						"USD");
+    
+    default_currency_mnemonic = gnc_lookup_string_option("International",
+                                                         "Default Currency",
+                                                         "USD");
+    default_currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
+                                                  GNC_COMMODITY_NS_ISO,
+                                                  default_currency_mnemonic);
     combo_box = gtk_select_new();
     main_info->totals_combo = combo_box;
     main_info->totals_list = NULL;
@@ -1402,12 +1431,12 @@ mainWindow()
 
   gtk_container_add(GTK_CONTAINER(scrolled_win),
                     GTK_WIDGET(main_info->account_tree));
-
+  
   /* Attach delete and destroy signals to the main window */  
   gtk_signal_connect (GTK_OBJECT (app), "delete_event",
                       GTK_SIGNAL_FUNC (gnc_ui_mainWindow_delete_cb),
                       NULL);
-
+  
   gtk_signal_connect (GTK_OBJECT (app), "destroy_event",
                       GTK_SIGNAL_FUNC (gnc_ui_mainWindow_destroy_event_cb),
                       NULL);

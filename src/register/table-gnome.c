@@ -159,7 +159,7 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
                 name = gh_scm2newstr(gh_car (assoc), NULL);
                 ctype = xaccSplitRegisterGetCellTypeFromName (name);
                 if (name)
-                        free(name);
+                        free((void *)name);
 
                 if (ctype == NO_CELL)
                         continue;

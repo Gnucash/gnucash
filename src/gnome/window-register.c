@@ -548,7 +548,8 @@ gnc_register_set_date_range(RegWindow *regData)
     start = gnc_register_min_day_time(start);
 
     xaccQueryAddDateMatchTT(regData->ledger->query, 
-                            start, LONG_MAX,
+                            TRUE, start, 
+                            FALSE, 0, 
                             QUERY_AND);
   }
 
@@ -560,8 +561,8 @@ gnc_register_set_date_range(RegWindow *regData)
     end = gnc_register_max_day_time(end);
 
     xaccQueryAddDateMatchTT(regData->ledger->query, 
-                            LONG_MIN,
-                            end,                            
+                            FALSE, 0,
+                            TRUE, end,                            
                             QUERY_AND);
   }
 
@@ -1051,7 +1052,7 @@ print_check_cb(GtkWidget * widget, gpointer data)
      gh_procedure_p(print_check))
   {
     payee  = xaccTransGetDescription(trans);
-    amount = xaccSplitGetValue(split);
+    amount = DxaccSplitGetValue(split);
     date   = xaccTransGetDate(trans);
     memo   = xaccSplitGetMemo(split);
 
@@ -1761,13 +1762,12 @@ regRefresh(xaccLedgerDisplay *ledger)
   gboolean euro = gnc_lookup_boolean_option("International",
 					    "Enable EURO support",
 					    FALSE);
-  const char *currency = xaccAccountGetCurrency(ledger->leader);
+  const gnc_commodity * currency = xaccAccountGetCurrency(ledger->leader);
 
   /* no EURO converson, if account is already EURO or no EURO currency */
   if(currency != NULL)
   {
-    euro = (euro && strncasecmp("EUR", currency, 3) &&
-	    gnc_is_euro_currency(currency));
+    euro = (euro && gnc_is_euro_currency(currency));
   }
   else
   {
@@ -1788,11 +1788,12 @@ regRefresh(xaccLedgerDisplay *ledger)
       if (reverse)
         amount = -amount;
 
-      xaccSPrintAmount(string, amount, print_flags, currency);
+      DxaccSPrintAmount(string, amount, print_flags,
+                       gnc_commodity_get_mnemonic(currency));
       if(euro)
       {
 	strcat(string, " / ");
-	xaccSPrintAmount(string + strlen(string),
+	DxaccSPrintAmount(string + strlen(string),
 			 gnc_convert_to_euro(currency, amount),
 			 print_flags | PRTEUR, NULL);
       }
@@ -1808,11 +1809,12 @@ regRefresh(xaccLedgerDisplay *ledger)
       if (reverse)
         amount = -amount;
 
-      xaccSPrintAmount(string, amount, print_flags, currency);
+      DxaccSPrintAmount(string, amount, print_flags,
+                       gnc_commodity_get_mnemonic(currency));
       if(euro)
       {
 	strcat(string, " / ");
-	xaccSPrintAmount(string + strlen(string),
+	DxaccSPrintAmount(string + strlen(string),
 			 gnc_convert_to_euro(currency, amount),
 			 print_flags | PRTEUR, NULL);
       }

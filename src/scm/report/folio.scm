@@ -57,7 +57,8 @@
 
           (list
            (gnc:account-get-name account)
-           (gnc:account-get-security account)
+           (gnc:commodity-get-printname 
+            (gnc:account-get-security account))
            (gnc:amount->string shares #f #t #t)
            (gnc:amount->string price #f #t #f)
            (gnc:amount->string balance #f #t #f)

@@ -25,6 +25,9 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
+#define _GNU_SOURCE
+#include <string.h>
+
 #include "config.h"
 
 #ifdef HAVE_IEEEFP_H
@@ -38,14 +41,12 @@
 #include <locale.h>
 #include <math.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "messages.h"
+#include "gnc-engine.h"
 #include "gnc-common.h"
+#include "gnc-commodity.h"
 #include "util.h"
-
-/* hack alert -- stpcpy prototype is missing, use -DGNU */
-char * stpcpy (char *dest, const char *src);
 
 /** GLOBALS *********************************************************/
 gncLogLevel loglevel[MOD_LAST + 1] =
@@ -89,7 +90,7 @@ gnc_set_log_level_global(gncLogLevel level)
 }
 
 
-/* xaccParseAmount configuration */
+/* DxaccParseAmount configuration */
 static gboolean auto_decimal_enabled = FALSE;
 static int auto_decimal_places = 2;    /* default, can be changed */
 
@@ -142,7 +143,7 @@ prettify (const char *name)
 \********************************************************************/
 #if DEBUG_MEMORY
 
-// #if defined (__NetBSD__) || defined(__FreeBSD__)
+/* #if defined (__NetBSD__) || defined(__FreeBSD__) */
 
 #ifndef HAVE_MALLOC_USABLE_SIZE
 #define malloc_usable_size(ptr) 0
@@ -444,7 +445,7 @@ gnc_localeconv(void)
   gnc_lconv_set(&lc.decimal_point, ".");
   gnc_lconv_set(&lc.thousands_sep, ",");
   gnc_lconv_set(&lc.grouping, "\003");
-  gnc_lconv_set(&lc.int_curr_symbol, "USD ");
+  gnc_lconv_set(&lc.int_curr_symbol, "USD");
   gnc_lconv_set(&lc.currency_symbol, "$");
   gnc_lconv_set(&lc.mon_decimal_point, ".");
   gnc_lconv_set(&lc.mon_thousands_sep, ",");
@@ -465,26 +466,19 @@ gnc_localeconv(void)
   return &lc;
 }
 
-const char *
-gnc_locale_default_currency(void)
-{
-  static char currency[4];
-  static gboolean got_it = FALSE;
-  struct lconv *lc;
-  int i;
+gnc_commodity *
+gnc_locale_default_currency(void) {
+  static gnc_commodity * currency;
+  struct lconv         * lc;
+  static gboolean      got_it = FALSE;
 
-  if (got_it)
-    return currency;
-
-  for (i = 0; i < 4; i++)
-    currency[i] = 0;
-
-  lc = gnc_localeconv();
-
-  strncpy(currency, lc->int_curr_symbol, 3);
-
-  got_it = TRUE;
-
+  if(got_it == FALSE) {
+    lc = gnc_localeconv();
+    currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
+                                          GNC_COMMODITY_NS_ISO,
+                                          lc->int_curr_symbol);
+    got_it = TRUE;
+  }
   return currency;
 }
 
@@ -653,7 +647,7 @@ PrintAmt(char *buf, double val, int prec,
 }
 
 int
-xaccSPrintAmountGeneral (char * bufp, double val,
+DxaccSPrintAmountGeneral (char * bufp, double val,
                          GNCPrintAmountFlags flags,
                          int precision,
                          int min_trailing_zeros,
@@ -788,8 +782,8 @@ xaccSPrintAmountGeneral (char * bufp, double val,
 }
 
 int
-xaccSPrintAmount (char * bufp, double val, GNCPrintAmountFlags flags,
-                  const char *curr_code) 
+DxaccSPrintAmount (char * bufp, double val, GNCPrintAmountFlags flags,
+                  const char * curr_code) 
 {
    struct lconv *lc;
    int precision;
@@ -832,24 +826,24 @@ xaccSPrintAmount (char * bufp, double val, GNCPrintAmountFlags flags,
      min_trailing_zeros = lc->frac_digits;
    }
 
-   return xaccSPrintAmountGeneral(bufp, val, flags, precision,
+   return DxaccSPrintAmountGeneral(bufp, val, flags, precision,
                                   min_trailing_zeros, curr_code);
 }
 
 const char *
-xaccPrintAmount (double val, GNCPrintAmountFlags flags, const char *curr_code) 
+DxaccPrintAmount (double val, GNCPrintAmountFlags flags, const char *curr_code) 
 {
    /* hack alert -- this is not thread safe ... */
    static char buf[BUFSIZE];
 
-   xaccSPrintAmount (buf, val, flags, curr_code);
+   DxaccSPrintAmount (buf, val, flags, curr_code);
 
    /* its OK to return buf, since we declared it static */
    return buf;
 }
 
 const char *
-xaccPrintAmountArgs (double val, gboolean print_currency_symbol,
+DxaccPrintAmountArgs (double val, gboolean print_currency_symbol,
                      gboolean print_separators, gboolean is_shares_value,
                      const char *curr_code)
 {
@@ -859,12 +853,12 @@ xaccPrintAmountArgs (double val, gboolean print_currency_symbol,
   if (print_separators)      flags |= PRTSEP;
   if (is_shares_value)       flags |= PRTSHR;
 
-  return xaccPrintAmount(val, flags, curr_code);
+  return DxaccPrintAmount(val, flags, curr_code);
 }
 
 
 /********************************************************************\
- * xaccParseAmount                                                  *
+ * DxaccParseAmount                                                  *
  *   parses amount strings using locale data                        *
  *                                                                  *
  * Args: in_str   -- pointer to string rep of num                   *
@@ -924,14 +918,14 @@ fractional_multiplier (int num_decimals)
 }
 
 gboolean
-xaccParseAmount (const char * in_str, gboolean monetary, double *result,
+DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
                  char **endstr)
 {
   struct lconv *lc = gnc_localeconv();
   gboolean is_negative;
   gboolean got_decimal;
-  GList *group_data;
-  int group_count;
+  GList  * group_data;
+  int    group_count;
   double value;
 
   ParseState state;
@@ -1092,7 +1086,6 @@ xaccParseAmount (const char * in_str, gboolean monetary, double *result,
           else
             next_state = NO_NUM_ST;
         }
-
         break;
 
       /* IN_GROUP_ST means we are in the middle of parsing

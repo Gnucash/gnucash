@@ -104,7 +104,6 @@ gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
     xferData->to = atree;
   else
     xferData->from = atree;
-
   gtk_clist_column_titles_hide(GTK_CLIST(tree));
   gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(tree));
   gnc_account_tree_hide_income_expense(GNC_ACCOUNT_TREE(tree));
@@ -169,21 +168,20 @@ gnc_parse_error_dialog (XferDialog *xferData)
 static gboolean
 gnc_xfer_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 {
-  XferDialog *xferData = data;
-  const char *currency;
-  Account *account;
+  XferDialog * xferData = data;
+  Account    * account;
+  const gnc_commodity * currency;
 
   account = gnc_account_tree_get_current_account(xferData->from);
   if (account == NULL)
     account = gnc_account_tree_get_current_account(xferData->to);
 
   currency = xaccAccountGetCurrency(account);
-
+  
   gnc_amount_edit_set_currency (GNC_AMOUNT_EDIT (xferData->amount_edit),
-                                currency);
-
+                                gnc_commodity_get_printname(currency));
   gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit));
-
+  
   return FALSE;
 }
 
@@ -267,8 +265,8 @@ gnc_xfer_dialog_select_to_account(XferDialog *xferData, Account *account)
 void
 gnc_xfer_dialog_set_amount(XferDialog *xferData, double amount)
 {
-  Account *account;
-  const char *currency;
+  Account * account;
+  const gnc_commodity * currency;
 
   if (xferData == NULL)
     return;
@@ -276,12 +274,12 @@ gnc_xfer_dialog_set_amount(XferDialog *xferData, double amount)
   account = gnc_account_tree_get_current_account(xferData->from);
   if (account == NULL)
     account = gnc_account_tree_get_current_account(xferData->to);
-
+  
   currency = xaccAccountGetCurrency(account);
 
   gnc_amount_edit_set_currency (GNC_AMOUNT_EDIT (xferData->amount_edit),
-                                currency);
-
+                                gnc_commodity_get_printname(currency));
+  
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->amount_edit), amount);
 }
 
@@ -363,11 +361,11 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   /* first split is already there */
   to_split = xaccTransGetSplit(trans, 0);
-  xaccSplitSetShareAmount(to_split, amount);
+  DxaccSplitSetShareAmount(to_split, amount);
 
   /* second split must be created */
   from_split = xaccMallocSplit();
-  xaccSplitSetShareAmount(from_split, -amount);
+  DxaccSplitSetShareAmount(from_split, -amount);
   xaccTransAppendSplit(trans, from_split); 
 
   /* TransSetMemo will set the memo for both splits */
@@ -375,12 +373,12 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   xaccTransSetMemo(trans, string);
 
   /* Now do the 'to' account */
-  xaccAccountBeginEdit(to, FALSE);
+  xaccAccountBeginEdit(to);
   xaccAccountInsertSplit(to, to_split);
   xaccAccountCommitEdit(to);
 
   /* Now do the 'from' account */
-  xaccAccountBeginEdit(from, FALSE);
+  xaccAccountBeginEdit(from);
   xaccAccountInsertSplit(from, from_split);
   xaccAccountCommitEdit(from);
 
@@ -471,14 +469,13 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
     xferData->amount_edit = amount;
 
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (amount));
-
     gtk_signal_connect(GTK_OBJECT(entry), "focus-out-event",
                        GTK_SIGNAL_FUNC(gnc_xfer_update_cb), xferData);
-
     gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
 
     date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
     hbox = gtk_object_get_data(tdo, "date_hbox");
+
     gtk_box_pack_end(GTK_BOX(hbox), date, TRUE, TRUE, 0);
     xferData->date_entry = date;
   }

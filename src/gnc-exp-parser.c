@@ -298,7 +298,7 @@ trans_numeric(const char *digit_str,
   if (digit_str == NULL)
     return NULL;
 
-  if (!xaccParseAmount (digit_str, TRUE, &value, rstr))
+  if (!DxaccParseAmount (digit_str, TRUE, &value, rstr))
     return NULL;
 
   pnum = g_new0(ParserNum, 1);

@@ -5,6 +5,7 @@
 <!entity xaccnewacctwin system "xacc-newacctwin.sgml">
 <!entity xaccadjbalwin system "xacc-adjbalwin.sgml">
 <!entity xaccapar system "xacc-apar.sgml">
+<!entity xacccommodity system "xacc-commodity.sgml">
 <!entity xaccdepreciation system "xacc-depreciation.sgml">
 <!entity xaccbalancereport system "xacc-balancereport.sgml">
 <!entity xaccbalancesheet system "xacc-balancesheet.sgml">
@@ -49,6 +50,7 @@
 &xaccdepreciation;
 &xaccbalancereport;
 &xaccbalancesheet;
+&xacccommodity;
 &xacccurrencyhandling;
 &xaccdoubleentry;
 &xacceuro;

@@ -430,6 +430,8 @@ guid_to_string(const GUID * guid)
   char *string = malloc(GUID_ENCODING_LENGTH+1);
   if (!string) return NULL;
 
+  if(!guid) return(NULL);
+
   encode_md5_data(guid->data, string);
 
   string[GUID_ENCODING_LENGTH] = '\0';
@@ -450,4 +452,52 @@ guid_equal(const GUID *guid_1, const GUID *guid_2)
     return (memcmp(guid_1, guid_2, sizeof(GUID)) == 0);
   else
     return FALSE;
+}
+
+gint
+guid_compare(const GUID *guid_1, const GUID *guid_2) {
+  if(guid_1 == guid_2) return 0;
+  /* nothing is always less than something */
+  if(!guid_1 && guid_2) return -1;
+  if(guid_1 && !guid_2) return 1;
+
+  return(memcmp(guid_1, guid_2, sizeof(GUID)));
+}
+
+guint
+guid_hash_to_guint(gconstpointer ptr)
+{
+  GUID *guid = (GUID *) ptr;
+
+  if(!guid) {
+    fprintf(stderr, "guid_g_hash_table_hash: received NULL guid pointer.");
+    return(0);
+  }
+
+  if (sizeof(guint) <= sizeof(guid->data)) {
+    return(*((guint *) guid->data));
+  } else {
+    guint hash = 0;
+    int i, j;
+
+    for (i = 0, j = 0; i < sizeof(guint); i++, j++) {
+      if (j == 16) j = 0;
+
+      hash <<= 4;
+      hash |= guid->data[j];
+    }
+
+    return(hash);
+  }
+}
+
+static gint
+guid_g_hash_table_equal(gconstpointer guid_a, gconstpointer guid_b)
+{
+  return((gint) guid_equal((GUID *) guid_a, (GUID *) guid_b));
+}
+
+GHashTable *
+guid_hash_table_new() {
+  return(g_hash_table_new(guid_hash_to_guint, guid_g_hash_table_equal));
 }

@@ -61,13 +61,12 @@
                    (case qstate-type 
                      ((type:bank type:cash type:ccard type:invst
                                  #{type:oth\ a}#  #{type:oth\ l}#)
-                      (if ignore-accounts (set! current-account-name last-seen-account-name))
+                      (if ignore-accounts 
+                          (set! current-account-name last-seen-account-name))
                       (set! ignore-accounts #f)
                       (set! current-xtn (make-qif-xtn))
                       (set! default-split (make-qif-split))
                       (qif-split:set-category! default-split "")
-                      (qif-file:set-default-account-type! 
-                       self (qif-parse:state-to-account-type qstate-type))
                       (set! first-xtn #t))
                      ((type:class)
                       (set! current-xtn (make-qif-class)))
@@ -182,22 +181,23 @@
                            (qif-xtn:set-splits! current-xtn
                                                 (list default-split)))
                        (if first-xtn 
-                           (begin 
-                             (qif-file:process-opening-balance-xtn 
-                              self current-xtn qstate-type)
+                           (begin
+                             (if (not current-account-name)
+                                 (set! current-account-name 
+                                       (qif-file:process-opening-balance-xtn 
+                                        self current-xtn qstate-type)))
                              (set! first-xtn #f)))
                        
                        (if (and (eq? qstate-type 'type:invst)
                                 (not (qif-xtn:security-name current-xtn)))
                            (qif-xtn:set-security-name! current-xtn ""))
                        
-                       (if current-account-name 
-                           (qif-xtn:set-from-acct! current-xtn 
-                                                   current-account-name) 
-                           (qif-xtn:set-from-acct! 
-                            current-xtn (qif-file:default-account self)))
+                       (qif-xtn:set-from-acct! current-xtn 
+                                               current-account-name) 
+                       
                        (if (qif-xtn:date current-xtn)
                            (qif-file:add-xtn! self current-xtn))
+                       ;;(write current-xtn) (newline)
                        (set! current-xtn (make-qif-xtn))
                        (set! current-split #f)
                        (set! default-split (make-qif-split)))))
@@ -349,7 +349,8 @@
                    (car (qif-xtn:splits xtn))))
         (cat-is-acct? (qif-split:category-is-account? 
                        (car (qif-xtn:splits xtn))))
-        (security (qif-xtn:security-name xtn)))
+        (security (qif-xtn:security-name xtn))
+        (acct-name #f))
     (if (and payee (string? payee)              
              (not security)
              (string=? (string-remove-trailing-space payee)
@@ -363,22 +364,31 @@
            (car (qif-xtn:splits xtn))
            (default-equity-account))
           (qif-split:set-category-is-account?! 
-           (car (qif-xtn:splits xtn)) #t) 
-          (if (eq? (qif-file:default-account self) 'unknown)
-              (qif-file:set-default-account! self category)))
-        
-        ;; it's not an OB transaction.  Still set the default 
-        ;; account if there isn't one. 
-        (if (eq? (qif-file:default-account self) 'unknown)
-            (begin 
-              (qif-file:set-default-account!
-               self (qif-file:path-to-accountname self))
-              (case type
-                ((type:invst)
-                 (qif-file:set-default-account-type! self GNC-STOCK-TYPE))
-                (else
-                 (qif-file:set-default-account-type! self GNC-BANK-TYPE))))))))
+           (car (qif-xtn:splits xtn)) #t)
+          (set! acct-name category)))
+    acct-name))
 
+;; return #t if all xtns have a non-#f from-acct otherwise, we will
+;; need to ask for an explicit account.
+(define (qif-file:check-from-acct self)
+  (let ((retval #t))
+    (for-each 
+     (lambda (xtn)
+       (if (not (qif-xtn:from-acct xtn))
+           (set! retval #f)))
+     (qif-file:xtns self))
+    retval))
+
+;; if the date format was ambiguous, this will get called to reparse.
+(define (qif-file:reparse-dates self new-format)
+  (check-and-parse-field 
+   qif-xtn:date qif-xtn:set-date! 
+   qif-parse:check-date-format (list new-format)
+   qif-parse:parse-date/format 
+   (qif-file:xtns self)
+   qif-parse:print-date
+   'error-on-ambiguity
+   (lambda (e) e)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file:parse-fields self 
@@ -392,7 +402,10 @@
          (start-time #f)
          (end-time #f)
          (set-error 
-          (lambda (e) (set! error e)))
+          (lambda (e) 
+            (if (not error)
+                (set! error (list e))
+                (set! error (cons e error)))))
          (errlist-to-string 
           (lambda (lst)
             (with-output-to-string 
@@ -402,7 +415,6 @@
                    (display elt))
                  lst))))))
     (set! start-time (gettimeofday))
-    
     (and 
      ;; fields of categories. 
      (check-and-parse-field 
@@ -410,6 +422,7 @@
       qif-parse:check-number-format '(decimal comma)
       qif-parse:parse-number/format (qif-file:cats self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
      
      (check-and-parse-field 
@@ -417,6 +430,7 @@
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:cats self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
      
      ;; fields of accounts 
@@ -425,6 +439,7 @@
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:accounts self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
      
      (check-and-parse-field 
@@ -432,6 +447,7 @@
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:accounts self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
     
      (parse-field 
@@ -446,6 +462,7 @@
       qif-parse:parse-date/format 
       (qif-file:xtns self)
       qif-parse:print-date
+      'error-on-ambiguity
       set-error)
      
      (parse-field 
@@ -461,6 +478,7 @@
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:xtns self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
      
      (check-and-parse-field 
@@ -468,6 +486,7 @@
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:xtns self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
      
      (check-and-parse-field 
@@ -475,6 +494,7 @@
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:xtns self)
       qif-parse:print-number
+      'guess-on-ambiguity
       set-error)
      
      ;; this one's a little tricky... it checks and sets all the 
@@ -484,6 +504,7 @@
       qif-parse:check-number-formats '(decimal comma) 
       qif-parse:parse-numbers/format (qif-file:xtns self)
       qif-parse:print-numbers
+      'guess-on-ambiguity
       set-error)
      
      (begin 
@@ -491,11 +512,8 @@
        #t))
     
     (set! end-time (gettimeofday))
-
-    (cond ((list? error)
-           (list all-ok (errlist-to-string error)))
-          (error 
-           (list all-ok error))
+    (cond (error
+           (cons all-ok error))
           (#t #t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -525,7 +543,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (check-and-parse-field getter setter checker 
-                               formats parser objects printer errormsg)
+                               formats parser objects printer 
+                               on-error errormsg)
   ;; first find the right format for the field
   (let ((do-parsing #f)
         (retval #t)
@@ -541,15 +560,20 @@
                   (set! do-parsing #t)                  
                   (set! formats (checker val formats)))))
           (if (and (not (null? formats))
-                   (not (null? (cdr formats)))
+                   ;; (not (null? (cdr formats)))
                    (not (null? rest)))
               (loop (car rest) (cdr rest)))))
     
     ;; if there's nothing left in formats, there's no format that will
     ;; fit all the values for a given field.  We have to give up at
-    ;; that point.  If there are multiple items in formats, we just
-    ;; take the default (first) item in the list.  This is not super
-    ;; great.
+    ;; that point.  
+
+    ;; If there are multiple items in formats, we look at the on-error
+    ;; arg.  If it's 'guess-on-ambiguity, we take the default (first)
+    ;; item in the list.  This is not super great.  if it's
+    ;; 'fail-on-ambiguity (or anything else, actually) we return the
+    ;; list of acceptable formats.
+
     (cond 
      ((null? formats) 
       (errormsg "Data for number or date does not match a known format.")
@@ -561,15 +585,21 @@
       ;; just ignore the format ambiguity.  Otherwise, it's really an
       ;; error.  ATM since there's no way to correct the error let's 
       ;; just leave it be.
-      (all-formats-equivalent? getter parser formats objects printer 
-                               errormsg)      
-      (set! format (car formats)))
+      (if (or (all-formats-equivalent? getter parser formats objects printer 
+                                       errormsg)      
+              (eq? on-error 'guess-on-ambiguity))
+          (set! format (car formats))
+          (begin 
+            (errormsg formats)
+            (set! do-parsing #f)
+            (set! retval #t))))
      (#t 
       (set! format (car formats))))
     
     ;; do-parsing is false if there were no objects with non-#f values
-    ;; in the field.  We would have had to look at all of them once,
-    ;; but at least not twice.
+    ;; in the field, or the data format is ambiguous and
+    ;; 'fail-on-ambiguity was passed.  We would have had to look at
+    ;; all of them once, but at least not twice.
     (if do-parsing
         (for-each 
          (lambda (current)
@@ -586,6 +616,12 @@
                           "Data format inconsistent in QIF file.")))))))
          objects))
     retval))
+
+
+;; check for the off chance that even though there are multiple
+;; possible interpretations they are all the same. (i.e. the numbers
+;; "1000 2000 3000 4000" could be interpreted as decimal or comma
+;; radix, but who cares?  The values will be the same).
 
 (define (all-formats-equivalent? getter parser formats objects 
                                  printer errormsg)
