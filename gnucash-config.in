@@ -174,7 +174,7 @@ if test "$echo_cflags" = "yes"; then
 fi
 
 if test "$echo_libs" = "yes"; then
-    libs=""
+    libs="-L${libdir}"
 
     if test "$lib_engine" = "yes"; then
         libs="$libs @GNUCASH_ENGINE_LIBS@"
