@@ -12,6 +12,7 @@ libgncgnome_a_SOURCES = \
   dialog-find-transactions.c \
   dialog-options.c \
   dialog-print-check.c \
+  dialog-progress.c \
   dialog-qif-import.c \
   dialog-totd.c \
   dialog-transfer.c \
@@ -49,6 +50,7 @@ noinst_HEADERS = \
   dialog-find-transactions.h \
   dialog-options.h \
   dialog-print-check.h \
+  dialog-progress.h \
   dialog-qif-import.h \
   dialog-totd.h \
   dialog-transfer.h \

@@ -4528,3 +4528,69 @@ create_Transfer_Dialog (void)
   return Transfer_Dialog;
 }
 
+GtkWidget*
+create_Progress_Dialog (void)
+{
+  GtkWidget *Progress_Dialog;
+  GtkWidget *vbox85;
+  GtkWidget *heading_label;
+  GtkWidget *progress_bar;
+  GtkWidget *hbuttonbox3;
+  GtkWidget *ok_button;
+  GtkWidget *cancel_button;
+
+  Progress_Dialog = gtk_window_new (GTK_WINDOW_DIALOG);
+  gtk_object_set_data (GTK_OBJECT (Progress_Dialog), "Progress_Dialog", Progress_Dialog);
+  gtk_window_set_title (GTK_WINDOW (Progress_Dialog), _("Working..."));
+  gtk_window_set_modal (GTK_WINDOW (Progress_Dialog), TRUE);
+  gtk_window_set_policy (GTK_WINDOW (Progress_Dialog), FALSE, FALSE, FALSE);
+
+  vbox85 = gtk_vbox_new (FALSE, 5);
+  gtk_widget_ref (vbox85);
+  gtk_object_set_data_full (GTK_OBJECT (Progress_Dialog), "vbox85", vbox85,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox85);
+  gtk_container_add (GTK_CONTAINER (Progress_Dialog), vbox85);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox85), 5);
+
+  heading_label = gtk_label_new (_("Heading"));
+  gtk_widget_ref (heading_label);
+  gtk_object_set_data_full (GTK_OBJECT (Progress_Dialog), "heading_label", heading_label,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (heading_label);
+  gtk_box_pack_start (GTK_BOX (vbox85), heading_label, FALSE, FALSE, 0);
+
+  progress_bar = gtk_progress_bar_new ();
+  gtk_widget_ref (progress_bar);
+  gtk_object_set_data_full (GTK_OBJECT (Progress_Dialog), "progress_bar", progress_bar,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (progress_bar);
+  gtk_box_pack_start (GTK_BOX (vbox85), progress_bar, FALSE, FALSE, 0);
+  gtk_progress_set_show_text (GTK_PROGRESS (progress_bar), TRUE);
+
+  hbuttonbox3 = gtk_hbutton_box_new ();
+  gtk_widget_ref (hbuttonbox3);
+  gtk_object_set_data_full (GTK_OBJECT (Progress_Dialog), "hbuttonbox3", hbuttonbox3,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbuttonbox3);
+  gtk_box_pack_start (GTK_BOX (vbox85), hbuttonbox3, TRUE, TRUE, 0);
+
+  ok_button = gnome_stock_button (GNOME_STOCK_BUTTON_OK);
+  gtk_widget_ref (ok_button);
+  gtk_object_set_data_full (GTK_OBJECT (Progress_Dialog), "ok_button", ok_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (ok_button);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox3), ok_button);
+  gtk_widget_set_sensitive (ok_button, FALSE);
+  GTK_WIDGET_SET_FLAGS (ok_button, GTK_CAN_DEFAULT);
+
+  cancel_button = gnome_stock_button (GNOME_STOCK_BUTTON_CANCEL);
+  gtk_widget_ref (cancel_button);
+  gtk_object_set_data_full (GTK_OBJECT (Progress_Dialog), "cancel_button", cancel_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox3), cancel_button);
+  GTK_WIDGET_SET_FLAGS (cancel_button, GTK_CAN_DEFAULT);
+
+  return Progress_Dialog;
+}
+

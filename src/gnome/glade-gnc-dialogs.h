@@ -15,3 +15,4 @@ GtkWidget* create_Financial_Calculator_Dialog (void);
 GtkWidget* create_Amortization_Schedule_Dialog (void);
 GtkWidget* create_Account_Dialog (void);
 GtkWidget* create_Transfer_Dialog (void);
+GtkWidget* create_Progress_Dialog (void);

@@ -68,6 +68,30 @@
                         (list "Extensions" "")
                         (lambda () (gnc:main-win-export-data-as-text win))))
 
+  (define export-item
+    (gnc:make-menu-item "Test progress dialog"
+                        "Test progress dialog"
+                        (list "Extensions" "")
+                        (lambda ()
+                          (let ((dialog (gnc:progress-dialog-new
+                                         (gnc:get-ui-data)))
+                                (canceled #f))
+                            (gnc:progress-dialog-set-cancel-scm-func
+                             dialog
+                             (lambda ()
+                               (display "User canceled.") (newline)
+                               (set! canceled #t)
+                               #t))
+                            (let loop ((value 0.0))
+                              (gnc:progress-dialog-set-value dialog value)
+                              (gnc:progress-dialog-set-heading
+                               dialog (number->string value))
+                              (sleep 1)
+                              (if (and (not canceled) (< value 90.0))
+                                  (loop (+ value 5.0))))
+                            (gnc:progress-dialog-finish dialog)
+                            (gnc:progress-dialog-destroy dialog)))))
+
   (define strings-item
     (gnc:make-menu-item
      "Save Translatable Strings"
