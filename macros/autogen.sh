@@ -159,7 +159,7 @@ do
 	echo "Running autoheader..."
 	autoheader || { echo "**Error**: autoheader failed."; exit 1; }
       fi
-      echo "Running automake --gnu $am_opt ..."
+      echo "Running automake --add-missing --gnu $am_opt ..."
       automake --add-missing --gnu $am_opt ||
 	{ echo "**Error**: automake failed."; exit 1; }
       echo "Running autoconf ..."
