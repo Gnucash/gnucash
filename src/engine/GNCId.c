@@ -44,9 +44,43 @@ typedef struct entity_node
 
 /** Static global variables *****************************************/
 static GHashTable * entity_table = NULL;
+static GMemChunk *guid_memchunk = NULL;
 static short module = MOD_ENGINE;
 
+
 /** Function implementations ****************************************/
+
+void
+xaccGUIDInit (void)
+{
+  if (!guid_memchunk)
+    guid_memchunk = g_mem_chunk_create (GUID, 512, G_ALLOC_AND_FREE);
+}
+
+void
+xaccGUIDShutdown (void)
+{
+  if (guid_memchunk)
+  {
+    g_mem_chunk_destroy (guid_memchunk);
+    guid_memchunk = NULL;
+  }
+}
+
+GUID *
+xaccGUIDMalloc (void)
+{
+  return g_chunk_new (GUID, guid_memchunk);
+}
+
+void
+xaccGUIDFree (GUID *guid)
+{
+  if (!guid)
+    return;
+
+  g_chunk_free (guid, guid_memchunk);
+}
 
 static gboolean
 entity_node_destroy(gpointer key, gpointer value, gpointer not_used)
@@ -63,7 +97,8 @@ entity_node_destroy(gpointer key, gpointer value, gpointer not_used)
   return TRUE;
 }
 
-static void entity_table_destroy()
+static void
+entity_table_destroy (void)
 {
   if (entity_table == NULL)
     return;
@@ -75,7 +110,7 @@ static void entity_table_destroy()
 }
 
 static guint
-id_hash(gconstpointer key)
+id_hash (gconstpointer key)
 {
   const GUID *guid = key;
 
@@ -120,7 +155,7 @@ print_node(gpointer key, gpointer value, gpointer not_used)
 }
 
 static void
-summarize_table()
+summarize_table(void)
 {
   if (entity_table == NULL)
     return;
@@ -130,7 +165,7 @@ summarize_table()
 #endif
 
 static void
-entity_table_init()
+entity_table_init(void)
 {
   if (entity_table != NULL)
     entity_table_destroy();
@@ -273,7 +308,7 @@ xaccRemoveEntity(const GUID * guid)
 }
 
 GHashTable *
-xaccGetAndResetEntityTable() {
+xaccGetAndResetEntityTable(void) {
   GHashTable *result = entity_table;
   entity_table = NULL;
   return(result);

@@ -593,7 +593,7 @@ static char * searchpaths[] =
    NULL,
 };
 
-static char * 
+char * 
 xaccResolveFilePath (const char * filefrag)
 {
   struct stat statbuf;

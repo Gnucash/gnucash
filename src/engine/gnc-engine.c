@@ -21,9 +21,12 @@
  *                                                                  *
  ********************************************************************/
 
-#include <glib.h>
-#include <assert.h>
+#include "config.h"
 
+#include <assert.h>
+#include <glib.h>
+
+#include "GNCIdP.h"
 #include "gnc-engine.h"
 
 static GList * engine_init_hooks = NULL;
@@ -48,6 +51,8 @@ gnc_engine_init(int argc, char ** argv) {
     g_free, (GCacheDupFunc) g_strdup, g_free, g_str_hash, 
     g_str_hash, g_str_equal);
 
+  xaccGUIDInit ();
+
   /* initialize the commodity table (it starts empty) */
   known_commodities = gnc_commodity_table_new();
 
@@ -71,7 +76,9 @@ gnc_engine_shutdown (void)
   g_cache_destroy (gnc_string_cache);
   gnc_string_cache = NULL;
 
-  gnc_commodity_table_destroy(known_commodities);
+  xaccGUIDShutdown ();
+
+  gnc_commodity_table_destroy (known_commodities);
   known_commodities = NULL;
 }
 

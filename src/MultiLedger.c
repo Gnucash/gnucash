@@ -446,11 +446,11 @@ xaccLedgerDisplaySetHelp (void *user_data, const char *help_str)
 }
 
 static gpointer
-xaccGUIDMalloc (void)
+xaccMLGUIDMalloc (void)
 {
   GUID *guid;
 
-  guid = g_new (GUID, 1);
+  guid = xaccGUIDMalloc ();
 
   *guid = *xaccGUIDNULL ();
 
@@ -458,20 +458,13 @@ xaccGUIDMalloc (void)
 }
 
 static void
-xaccGUIDFree (gpointer _guid)
+xaccMLGUIDFree (gpointer _guid)
 {
-  GUID *guid = _guid;
-
-  if (guid == NULL)
-    return;
-
-  *guid = *xaccGUIDNULL ();
-
-  g_free (guid);
+  xaccGUIDFree (_guid);
 }
 
 static void
-xaccGUIDCopy (gpointer _to, gconstpointer _from)
+xaccMLGUIDCopy (gpointer _to, gconstpointer _from)
 {
   GUID *to = _to;
   const GUID *from = _from;
@@ -752,9 +745,9 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
                                      xaccSRGetFGColorHandler,
                                      xaccSRGetBGColorHandler,
                                      xaccSRGetCellBorderHandler,
-                                     xaccGUIDMalloc,
-                                     xaccGUIDFree,
-                                     xaccGUIDCopy);
+                                     xaccMLGUIDMalloc,
+                                     xaccMLGUIDFree,
+                                     xaccMLGUIDCopy);
 
   xaccSRSetData (ld->reg, ld,
                  xaccLedgerDisplayParent,

@@ -34,8 +34,6 @@
  *
  * Identifiers can be encoded as hex strings. */
 
-#include <config.h>
-
 #include "guid.h"
 
 
@@ -59,9 +57,13 @@ typedef enum
 
 
 /* Return the type of an identifier. */
-GNCIdType xaccGUIDType(const GUID * guid);
+GNCIdType xaccGUIDType (const GUID * guid);
 
 /* Returns a GUID which is guaranteed to never reference any entity. */
-const GUID * xaccGUIDNULL(void);
+const GUID * xaccGUIDNULL (void);
+
+/* Efficiently allocate & free memory for GUIDs */
+GUID * xaccGUIDMalloc (void);
+void   xaccGUIDFree (GUID *guid);
 
 #endif
