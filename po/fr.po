@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.4.X\n"
-"POT-Creation-Date: 2000-10-02 00:16-0700\n"
+"POT-Creation-Date: 2000-10-13 23:36-0700\n"
 "PO-Revision-Date: 2000-10-07 16:40+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: FRENCH <FR@li.org>\n"
@@ -1543,7 +1543,7 @@ msgstr "A propos de"
 
 # messages-i18n.c:236 po/guile_strings.txt:56
 #: messages-i18n.c:275 po/guile_strings.txt:65
-#: src/gnome/glade-gnc-dialogs.c:1784
+#: src/gnome/glade-gnc-dialogs.c:1771
 msgid "Account"
 msgstr "Compte"
 
@@ -1565,7 +1565,7 @@ msgid "AutoDep"
 msgstr "Dépot Automatique"
 
 # messages-i18n.c:240
-#: messages-i18n.c:279 src/gnome/glade-gnc-dialogs.c:2398
+#: messages-i18n.c:279 src/gnome/glade-gnc-dialogs.c:2331
 msgid "Action"
 msgstr "Action"
 
@@ -1580,7 +1580,7 @@ msgstr "Il y a"
 
 # messages-i18n.c:242 po/guile_strings.txt:50
 #: messages-i18n.c:282 po/guile_strings.txt:57
-#: src/gnome/glade-gnc-dialogs.c:2138
+#: src/gnome/glade-gnc-dialogs.c:2071
 msgid "Amount"
 msgstr "Montant"
 
@@ -1676,7 +1676,7 @@ msgid "Checking"
 msgstr "Vérification"
 
 # messages-i18n.c:260
-#: messages-i18n.c:301 src/gnome/glade-gnc-dialogs.c:2449
+#: messages-i18n.c:301 src/gnome/glade-gnc-dialogs.c:2382
 msgid "Cleared"
 msgstr "Pointé"
 
@@ -1698,7 +1698,7 @@ msgstr "Créér"
 # messages-i18n.c:264 po/guile_strings.txt:211
 # src/gnome/glade-gnc-dialogs.c:629
 #: messages-i18n.c:305 po/guile_strings.txt:254
-#: src/gnome/glade-gnc-dialogs.c:570 src/gnome/glade-gnc-dialogs.c:2082
+#: src/gnome/glade-gnc-dialogs.c:570 src/gnome/glade-gnc-dialogs.c:2015
 msgid "Credit"
 msgstr "Crédit"
 
@@ -1716,7 +1716,7 @@ msgstr "Monnaie"
 
 # messages-i18n.c:267 po/guile_strings.txt:6
 #: messages-i18n.c:308 po/guile_strings.txt:6
-#: src/gnome/glade-gnc-dialogs.c:1920
+#: src/gnome/glade-gnc-dialogs.c:1853
 msgid "Date"
 msgstr "Date"
 
@@ -1727,7 +1727,7 @@ msgstr "Jours"
 
 # messages-i18n.c:268 po/guile_strings.txt:32
 #: messages-i18n.c:310 po/guile_strings.txt:38
-#: src/gnome/glade-gnc-dialogs.c:2085
+#: src/gnome/glade-gnc-dialogs.c:2018
 msgid "Debit"
 msgstr "Débiter"
 
@@ -1747,7 +1747,7 @@ msgid "Deficit"
 msgstr "Déficit"
 
 # messages-i18n.c:272
-#: messages-i18n.c:314 src/gnome/glade-gnc-dialogs.c:2868
+#: messages-i18n.c:314 src/gnome/glade-gnc-dialogs.c:2722
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -1763,7 +1763,7 @@ msgstr "Dépréciation/Moins-values"
 
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: messages-i18n.c:317 po/guile_strings.txt:153
-#: src/gnome/glade-gnc-dialogs.c:1978
+#: src/gnome/glade-gnc-dialogs.c:1911
 msgid "Description"
 msgstr "Description"
 
@@ -1846,7 +1846,7 @@ msgid "File"
 msgstr "Fichier"
 
 # messages-i18n.c:182
-#: messages-i18n.c:333 src/gnome/glade-gnc-dialogs.c:2523
+#: messages-i18n.c:333 src/gnome/glade-gnc-dialogs.c:2456
 msgid "Find"
 msgstr "Chercher"
 
@@ -1926,7 +1926,7 @@ msgstr "PVLT"
 
 # messages-i18n.c:302 po/guile_strings.txt:26
 #: messages-i18n.c:348 po/guile_strings.txt:32
-#: src/gnome/glade-gnc-dialogs.c:2196
+#: src/gnome/glade-gnc-dialogs.c:2129
 msgid "Memo"
 msgstr "Mémo"
 
@@ -2008,7 +2008,7 @@ msgid "Preferences"
 msgstr "Préferences"
 
 # messages-i18n.c:316
-#: messages-i18n.c:364 src/gnome/glade-gnc-dialogs.c:2340
+#: messages-i18n.c:364 src/gnome/glade-gnc-dialogs.c:2273
 msgid "Price"
 msgstr "Cours"
 
@@ -2149,7 +2149,7 @@ msgid "To"
 msgstr "Vers"
 
 # messages-i18n.c:343
-#: messages-i18n.c:392 src/gnome/glade-gnc-dialogs.c:2615
+#: messages-i18n.c:392
 msgid "Today"
 msgstr "Aujourd'hui"
 
@@ -3072,7 +3072,7 @@ msgid "Help for first option"
 msgstr "Aide pour la première option"
 
 # po/guile_strings.txt:173
-#: po/guile_strings.txt:203 src/gnome/glade-gnc-dialogs.c:2036
+#: po/guile_strings.txt:203 src/gnome/glade-gnc-dialogs.c:1969
 msgid "Number"
 msgstr "Numéro"
 
@@ -3395,8 +3395,8 @@ msgid "Plot Type"
 msgstr "Type de graphique"
 
 # po/guile_strings.txt:228
-#: po/guile_strings.txt:275 src/gnome/glade-gnc-dialogs.c:2724
-#: src/gnome/glade-gnc-dialogs.c:2732
+#: po/guile_strings.txt:275 src/gnome/glade-gnc-dialogs.c:2578
+#: src/gnome/glade-gnc-dialogs.c:2586
 msgid "Budget"
 msgstr "Budget"
 
@@ -3482,7 +3482,7 @@ msgid "Report end date"
 msgstr "Date de fin du rapport"
 
 # po/guile_strings.txt:243
-#: po/guile_strings.txt:292 src/gnome/glade-gnc-dialogs.c:1763
+#: po/guile_strings.txt:292 src/gnome/glade-gnc-dialogs.c:1750
 msgid "None"
 msgstr "Aucun"
 
@@ -3594,7 +3594,7 @@ msgid "Profit/Loss"
 msgstr "Pertes/Profits"
 
 # po/guile_strings.txt:266
-#: po/guile_strings.txt:318 src/gnome/glade-gnc-dialogs.c:2268
+#: po/guile_strings.txt:318 src/gnome/glade-gnc-dialogs.c:2201
 msgid "Shares"
 msgstr "Titres"
 
@@ -3717,7 +3717,7 @@ msgstr "Eléments du rapport jusqu'à et incluant cette date"
 msgid "Display"
 msgstr "Affichage"
 
-#: po/guile_strings.txt:344 src/gnome/glade-gnc-dialogs.c:3114
+#: po/guile_strings.txt:344 src/gnome/glade-gnc-dialogs.c:2968
 msgid "Nominal"
 msgstr "Nominal"
 
@@ -3851,8 +3851,7 @@ msgid "Currency:"
 msgstr "Monnaie:"
 
 # src/gnome/glade-gnc-dialogs.c:936 src/gnome/glade-gnc-dialogs.c:943
-#: src/gnome/glade-gnc-dialogs.c:198 src/gnome/glade-gnc-dialogs.c:1861
-#: src/gnome/glade-gnc-dialogs.c:1913
+#: src/gnome/glade-gnc-dialogs.c:198
 msgid "Select ..."
 msgstr "Sélectionner..."
 
@@ -3907,8 +3906,8 @@ msgid "Selected account:"
 msgstr "Compte sélectionné:"
 
 # src/gnome/glade-gnc-dialogs.c:573
-#: src/gnome/glade-gnc-dialogs.c:514 src/gnome/glade-gnc-dialogs.c:2931
-#: src/gnome/glade-gnc-dialogs.c:3018
+#: src/gnome/glade-gnc-dialogs.c:514 src/gnome/glade-gnc-dialogs.c:2785
+#: src/gnome/glade-gnc-dialogs.c:2872
 msgid "Description:"
 msgstr "Description:"
 
@@ -3956,7 +3955,7 @@ msgid "Pages to print:"
 msgstr "Pages à imprimer:"
 
 # src/gnome/glade-gnc-dialogs.c:869
-#: src/gnome/glade-gnc-dialogs.c:835 src/gnome/glade-gnc-dialogs.c:1757
+#: src/gnome/glade-gnc-dialogs.c:835 src/gnome/glade-gnc-dialogs.c:1744
 msgid "All"
 msgstr "Tous"
 
@@ -4151,300 +4150,299 @@ msgid "                    "
 msgstr "                    "
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
-#: src/gnome/glade-gnc-dialogs.c:1707
+#: src/gnome/glade-gnc-dialogs.c:1694
 msgid "Find Transactions"
 msgstr "Chercher des transactions"
 
 # messages-i18n.c:186
-#: src/gnome/glade-gnc-dialogs.c:1722
+#: src/gnome/glade-gnc-dialogs.c:1709
 msgid "Match Accounts"
 msgstr "Comptes trouvés"
 
-#: src/gnome/glade-gnc-dialogs.c:1743
+#: src/gnome/glade-gnc-dialogs.c:1730
 msgid "Find transactions affecting"
 msgstr "Trouver les transactions affectant"
 
-#: src/gnome/glade-gnc-dialogs.c:1760
+#: src/gnome/glade-gnc-dialogs.c:1747
 msgid "Any"
 msgstr "Aucun"
 
 # src/gnome/glade-gnc-dialogs.c:564
-#: src/gnome/glade-gnc-dialogs.c:1769
+#: src/gnome/glade-gnc-dialogs.c:1756
 msgid "selected accounts:"
 msgstr "comptes sélectionnés:"
 
 # messages-i18n.c:227
-#: src/gnome/glade-gnc-dialogs.c:1791
+#: src/gnome/glade-gnc-dialogs.c:1778
 msgid "Match Date"
 msgstr "Date trouvé"
 
-#: src/gnome/glade-gnc-dialogs.c:1806
-msgid "Find transactions occurring between the dates:"
+#: src/gnome/glade-gnc-dialogs.c:1793
+#, fuzzy
+msgid "Find transactions occurring in the date range:"
 msgstr "Trouver les transactions ayant eu lieu entre les dates:"
 
-#: src/gnome/glade-gnc-dialogs.c:1830 src/gnome/glade-gnc-dialogs.c:1846
-#: src/gnome/glade-gnc-dialogs.c:1883 src/gnome/glade-gnc-dialogs.c:1898
-msgid "/"
-msgstr "/"
+# po/guile_strings.txt:59
+#: src/gnome/glade-gnc-dialogs.c:1816
+#, fuzzy
+msgid "Starting "
+msgstr "Tri"
+
+# po/guile_strings.txt:122
+#: src/gnome/glade-gnc-dialogs.c:1823
+#, fuzzy
+msgid "Ending "
+msgstr "Fin"
 
 # messages-i18n.c:275 po/guile_strings.txt:129
-#: src/gnome/glade-gnc-dialogs.c:1927 src/gnome/glade-gnc-dialogs.c:1985
+#: src/gnome/glade-gnc-dialogs.c:1860 src/gnome/glade-gnc-dialogs.c:1918
 msgid "Match Description"
 msgstr "Description trouvé"
 
-#: src/gnome/glade-gnc-dialogs.c:1942
+#: src/gnome/glade-gnc-dialogs.c:1875
 msgid "Find transactions whose Description matches:"
 msgstr "Trouver les transactions qui se trouvent dans cette Description:"
 
-#: src/gnome/glade-gnc-dialogs.c:1964 src/gnome/glade-gnc-dialogs.c:2022
-#: src/gnome/glade-gnc-dialogs.c:2182 src/gnome/glade-gnc-dialogs.c:2384
+#: src/gnome/glade-gnc-dialogs.c:1897 src/gnome/glade-gnc-dialogs.c:1955
+#: src/gnome/glade-gnc-dialogs.c:2115 src/gnome/glade-gnc-dialogs.c:2317
 msgid "Case sensitive"
 msgstr "Respecter la casse"
 
-#: src/gnome/glade-gnc-dialogs.c:1971 src/gnome/glade-gnc-dialogs.c:2029
-#: src/gnome/glade-gnc-dialogs.c:2189 src/gnome/glade-gnc-dialogs.c:2391
+#: src/gnome/glade-gnc-dialogs.c:1904 src/gnome/glade-gnc-dialogs.c:1962
+#: src/gnome/glade-gnc-dialogs.c:2122 src/gnome/glade-gnc-dialogs.c:2324
 msgid "Regular expression"
 msgstr "Expression régulière"
 
-#: src/gnome/glade-gnc-dialogs.c:2000
+#: src/gnome/glade-gnc-dialogs.c:1933
 msgid "Find transactions whose Number matches:"
 msgstr "Trouver les transactions qui se trouvent dans ce Numéro:"
 
 # messages-i18n.c:242 po/guile_strings.txt:50
-#: src/gnome/glade-gnc-dialogs.c:2043
+#: src/gnome/glade-gnc-dialogs.c:1976
 msgid "Match Amount"
 msgstr "Montant trouvé"
 
-#: src/gnome/glade-gnc-dialogs.c:2065
+#: src/gnome/glade-gnc-dialogs.c:1998
 msgid "Find "
 msgstr "Trouver"
 
 # messages-i18n.c:277
-#: src/gnome/glade-gnc-dialogs.c:2079
+#: src/gnome/glade-gnc-dialogs.c:2012
 msgid "Credit or Debit"
 msgstr "Crédit ou Débit"
 
-#: src/gnome/glade-gnc-dialogs.c:2090
+#: src/gnome/glade-gnc-dialogs.c:2023
 msgid "splits having amounts of:"
 msgstr "répartitions ayant des montants de:"
 
-#: src/gnome/glade-gnc-dialogs.c:2111 src/gnome/glade-gnc-dialogs.c:2240
-#: src/gnome/glade-gnc-dialogs.c:2312
+#: src/gnome/glade-gnc-dialogs.c:2044 src/gnome/glade-gnc-dialogs.c:2173
+#: src/gnome/glade-gnc-dialogs.c:2245
 msgid "At least"
 msgstr "Au moins"
 
-#: src/gnome/glade-gnc-dialogs.c:2114
+#: src/gnome/glade-gnc-dialogs.c:2047
 msgid "At most "
 msgstr "Au plus"
 
-#: src/gnome/glade-gnc-dialogs.c:2117 src/gnome/glade-gnc-dialogs.c:2246
-#: src/gnome/glade-gnc-dialogs.c:2318
+#: src/gnome/glade-gnc-dialogs.c:2050 src/gnome/glade-gnc-dialogs.c:2179
+#: src/gnome/glade-gnc-dialogs.c:2251
 msgid "Exactly"
 msgstr "Exactement"
 
-#: src/gnome/glade-gnc-dialogs.c:2145
+#: src/gnome/glade-gnc-dialogs.c:2078
 msgid "Match Memo"
 msgstr "Trouver Mémo"
 
-#: src/gnome/glade-gnc-dialogs.c:2160
+#: src/gnome/glade-gnc-dialogs.c:2093
 msgid "Find splits whose Memo matches:"
 msgstr "Trouver les répartitions qui se trouvent dans ce Mémo:"
 
 # messages-i18n.c:127
-#: src/gnome/glade-gnc-dialogs.c:2203
+#: src/gnome/glade-gnc-dialogs.c:2136
 msgid "Match number of shares"
 msgstr "Trouver le nombre de titres"
 
 # messages-i18n.c:82
-#: src/gnome/glade-gnc-dialogs.c:2218
+#: src/gnome/glade-gnc-dialogs.c:2151
 msgid "Find securities transactions of:"
 msgstr "Trouver les transactions de valeurs de:"
 
 # messages-i18n.c:242 po/guile_strings.txt:50
-#: src/gnome/glade-gnc-dialogs.c:2243 src/gnome/glade-gnc-dialogs.c:2315
+#: src/gnome/glade-gnc-dialogs.c:2176 src/gnome/glade-gnc-dialogs.c:2248
 msgid "At most"
 msgstr "Au plus"
 
 # po/guile_strings.txt:266
-#: src/gnome/glade-gnc-dialogs.c:2260
+#: src/gnome/glade-gnc-dialogs.c:2193
 msgid "shares"
 msgstr "titres"
 
 # messages-i18n.c:126
-#: src/gnome/glade-gnc-dialogs.c:2275
+#: src/gnome/glade-gnc-dialogs.c:2208
 msgid "Match share price"
 msgstr "Retrouver cours du titre"
 
-#: src/gnome/glade-gnc-dialogs.c:2290
+#: src/gnome/glade-gnc-dialogs.c:2223
 msgid "Find securities transactions with share price of:"
 msgstr "Trouver les transactions de valeurs avec un cours du titre de:"
 
 # messages-i18n.c:240
-#: src/gnome/glade-gnc-dialogs.c:2347
+#: src/gnome/glade-gnc-dialogs.c:2280
 msgid "Match Action"
 msgstr "Action trouvée"
 
 # messages-i18n.c:114 po/guile_strings.txt:128
-#: src/gnome/glade-gnc-dialogs.c:2362
+#: src/gnome/glade-gnc-dialogs.c:2295
 msgid "Find transactions whose Action matches:"
 msgstr "Trouver les transactions sur lesquels ces Actions se retrouvent:"
 
 # messages-i18n.c:227
-#: src/gnome/glade-gnc-dialogs.c:2405
+#: src/gnome/glade-gnc-dialogs.c:2338
 msgid "Match Cleared state"
 msgstr "Etat de rapprochement trouvé"
 
-#: src/gnome/glade-gnc-dialogs.c:2420
+#: src/gnome/glade-gnc-dialogs.c:2353
 msgid "Find transactions whose Cleared status is:"
 msgstr "Trouver les transactions dont le status de rapprochement est:"
 
-#: src/gnome/glade-gnc-dialogs.c:2428
+#: src/gnome/glade-gnc-dialogs.c:2361
 msgid "Not cleared (n)"
 msgstr "Pas rapproché (n)"
 
 # messages-i18n.c:260
-#: src/gnome/glade-gnc-dialogs.c:2435
+#: src/gnome/glade-gnc-dialogs.c:2368
 msgid "Cleared (c)"
 msgstr "Pointé (c)"
 
 # messages-i18n.c:322
-#: src/gnome/glade-gnc-dialogs.c:2442
+#: src/gnome/glade-gnc-dialogs.c:2375
 msgid "Reconciled (y)"
 msgstr "Rapprocher (y)"
 
-#: src/gnome/glade-gnc-dialogs.c:2470
+#: src/gnome/glade-gnc-dialogs.c:2403
 msgid "Type of search"
 msgstr "Type de recherche"
 
-#: src/gnome/glade-gnc-dialogs.c:2484
+#: src/gnome/glade-gnc-dialogs.c:2417
 msgid "New search"
 msgstr "Nouvelle recherche"
 
-#: src/gnome/glade-gnc-dialogs.c:2492
+#: src/gnome/glade-gnc-dialogs.c:2425
 msgid "Refine current search"
 msgstr "Redéfinir la recherche actuelle"
 
-#: src/gnome/glade-gnc-dialogs.c:2500
+#: src/gnome/glade-gnc-dialogs.c:2433
 msgid "Add results to current search"
 msgstr "Ajouter les résultats à la recherche actuelle"
 
 # messages-i18n.c:77
-#: src/gnome/glade-gnc-dialogs.c:2508
+#: src/gnome/glade-gnc-dialogs.c:2441
 msgid "Delete results from current search"
 msgstr "Supprimer les résultats de la recherche actuelle"
 
-# messages-i18n.c:210
-#: src/gnome/glade-gnc-dialogs.c:2590
-msgid "Select Date"
-msgstr "Sélectionner date"
-
 # po/guile_strings.txt:188
-#: src/gnome/glade-gnc-dialogs.c:2756
+#: src/gnome/glade-gnc-dialogs.c:2610
 msgid "Name:"
 msgstr "Nom:"
 
-#: src/gnome/glade-gnc-dialogs.c:2778
+#: src/gnome/glade-gnc-dialogs.c:2632
 msgid "The name of this budget"
 msgstr "Le nom de ce budget"
 
 # po/guile_strings.txt:228
-#: src/gnome/glade-gnc-dialogs.c:2787
+#: src/gnome/glade-gnc-dialogs.c:2641
 msgid "Budget Entries"
 msgstr "Entrées du budget"
 
-#: src/gnome/glade-gnc-dialogs.c:2835
+#: src/gnome/glade-gnc-dialogs.c:2689
 msgid "label773"
 msgstr "label773"
 
-#: src/gnome/glade-gnc-dialogs.c:2859
+#: src/gnome/glade-gnc-dialogs.c:2713
 msgid "Add"
 msgstr "Ajouter"
 
-#: src/gnome/glade-gnc-dialogs.c:2866
+#: src/gnome/glade-gnc-dialogs.c:2720
 msgid "Add a new entry or subentry"
 msgstr "Ajouter une nouvelle entrée ou sous-entrée"
 
 # messages-i18n.c:76
-#: src/gnome/glade-gnc-dialogs.c:2875
+#: src/gnome/glade-gnc-dialogs.c:2729
 msgid "Delete the selected entry or subentry"
 msgstr "Supprimer l'entrée ou la sous-entrée sélectionnée."
 
 # messages-i18n.c:95
-#: src/gnome/glade-gnc-dialogs.c:2890
+#: src/gnome/glade-gnc-dialogs.c:2744
 msgid "Move the selected item up"
 msgstr "Déplacer l'élément sélectionné vers le haut."
 
 # messages-i18n.c:95
-#: src/gnome/glade-gnc-dialogs.c:2898
+#: src/gnome/glade-gnc-dialogs.c:2752
 msgid "Move the selected item down"
 msgstr "Déplacer l'élément sélectionné vers le bas."
 
-#: src/gnome/glade-gnc-dialogs.c:2907
+#: src/gnome/glade-gnc-dialogs.c:2761
 msgid "Entry"
 msgstr "Entrée"
 
 # messages-i18n.c:345 po/guile_strings.txt:254
 # src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
-#: src/gnome/glade-gnc-dialogs.c:2940
+#: src/gnome/glade-gnc-dialogs.c:2794
 msgid "Type:"
 msgstr "Type:"
 
-#: src/gnome/glade-gnc-dialogs.c:2979
+#: src/gnome/glade-gnc-dialogs.c:2833
 msgid "Normal"
 msgstr "Normal"
 
 # messages-i18n.c:344
-#: src/gnome/glade-gnc-dialogs.c:2982
+#: src/gnome/glade-gnc-dialogs.c:2836
 msgid "No Total"
 msgstr "Pas de Total"
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
-#: src/gnome/glade-gnc-dialogs.c:2987
+#: src/gnome/glade-gnc-dialogs.c:2841
 msgid "Matching Transactions..."
 msgstr "Transactions trouvées..."
 
-#: src/gnome/glade-gnc-dialogs.c:2994
+#: src/gnome/glade-gnc-dialogs.c:2848
 msgid "Subentry"
 msgstr "Sous-entrée"
 
 # messages-i18n.c:242 po/guile_strings.txt:50
-#: src/gnome/glade-gnc-dialogs.c:3027
+#: src/gnome/glade-gnc-dialogs.c:2881
 msgid "Amount:"
 msgstr "Montant:"
 
 # po/guile_strings.txt:186
-#: src/gnome/glade-gnc-dialogs.c:3036
+#: src/gnome/glade-gnc-dialogs.c:2890
 msgid "Period:"
 msgstr "Point/Période:"
 
-#: src/gnome/glade-gnc-dialogs.c:3045
+#: src/gnome/glade-gnc-dialogs.c:2899
 msgid "Mechanism:"
 msgstr "Mécanisme:"
 
-#: src/gnome/glade-gnc-dialogs.c:3054
+#: src/gnome/glade-gnc-dialogs.c:2908
 msgid "Bill Day:"
 msgstr "Jour de la facture:"
 
 # po/guile_strings.txt:186
-#: src/gnome/glade-gnc-dialogs.c:3063
+#: src/gnome/glade-gnc-dialogs.c:2917
 msgid "Grace Period:"
 msgstr "Période de répit:"
 
-#: src/gnome/glade-gnc-dialogs.c:3117
+#: src/gnome/glade-gnc-dialogs.c:2971
 msgid "Bill"
 msgstr "Facture"
 
-#: src/gnome/glade-gnc-dialogs.c:3120
+#: src/gnome/glade-gnc-dialogs.c:2974
 msgid "Recurring"
 msgstr "Récurrent"
 
-#: src/gnome/glade-gnc-dialogs.c:3123
+#: src/gnome/glade-gnc-dialogs.c:2977
 msgid "Contingency"
 msgstr "Eventualité"
-
-#: src/gnome/glade-gnc-dialogs.c:3199
-msgid "window1"
-msgstr "window1"
 
 # src/gnome/print-session.c:230
 #: src/gnome/print-session.c:241
@@ -4453,7 +4451,7 @@ msgstr "Vous devez dabord sélectionner une imprimante."
 
 # messages-i18n.c:47
 #: src/SplitLedger.c:1816
-msgid""
+msgid ""
 "You are about to overwrite an existing split.\n"
 "Are you sure you want to do that?"
 msgstr ""
@@ -4468,6 +4466,16 @@ msgid ""
 msgstr ""
 "Vous êtes sur le point d'écraser une transaction existante.\n"
 "Etes-vous sûr de vouloir faire celà?"
+
+#~ msgid "/"
+#~ msgstr "/"
+
+# messages-i18n.c:210
+#~ msgid "Select Date"
+#~ msgstr "Sélectionner date"
+
+#~ msgid "window1"
+#~ msgstr "window1"
 
 # messages-i18n.c:217
 #~ msgid "Show Categories"
