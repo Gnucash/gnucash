@@ -24,9 +24,9 @@
 #ifndef __XACC_LEDGER_UTILS_H__
 #define __XACC_LEDGER_UTILS_H__
 
-#include "gnc-common.h"
 #include "config.h"
 
+#include "gnc-common.h"
 #include "Account.h"
 
 /** PROTOTYPES ******************************************************/

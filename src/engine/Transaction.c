@@ -585,7 +585,7 @@ xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
 
 
 double
-xaccSplitGetBaseValue (Split *s, char * base_currency)
+xaccSplitGetBaseValue (Split *s, const char * base_currency)
 {
    double value;
    if (!s) return 0.0;
@@ -604,7 +604,7 @@ xaccSplitGetBaseValue (Split *s, char * base_currency)
       }
    }
 
-   /* be more precise -- the value depends on the curency 
+   /* be more precise -- the value depends on the currency 
     * we want it expressed in.
     */
    if (!safe_strcmp(s->acc->currency, base_currency)) {
@@ -613,7 +613,7 @@ xaccSplitGetBaseValue (Split *s, char * base_currency)
    if (!safe_strcmp(s->acc->security, base_currency)) {
       value = s->damount;   
    } else 
-   if ((0x0==base_currency) && (0 == force_double_entry)) {
+   if ((NULL==base_currency) && (0 == force_double_entry)) {
       value = s->damount * s->share_price;   
    } else 
    {

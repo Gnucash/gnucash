@@ -401,7 +401,7 @@ double xaccSplitGetClearedBalance (Split *);
 double xaccSplitGetReconciledBalance (Split *);
 double xaccSplitGetShareBalance (Split *);
 double xaccSplitGetCostBasis (Split *);
-double xaccSplitGetBaseValue (Split *s, char *base_currency);
+double xaccSplitGetBaseValue (Split *s, const char *base_currency);
 
 
 /* return the parent transaction of the split */
