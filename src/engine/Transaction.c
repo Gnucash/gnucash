@@ -616,14 +616,15 @@ FindCommonCurrency (Split **slist, char * ra, char * rb)
   while (s) {
     char *sa, *sb;
   
-    /* ahh -- stupid users may not want or use the double entry 
-     * features of this engine.  So, in particular, there
+    /* Novice/casual users may not want or use the double entry 
+     * features of this engine.   Because of this, there
      * may be the occasional split without a parent account. 
      * Well, that's ok,  we'll just go with the flow. 
      */
     if (force_double_entry) {
        assert (s->acc);
-    } else {
+    } else
+    if (NULL == s->acc) {
        i++; s=slist[i]; continue;
     }
   
