@@ -145,7 +145,7 @@ install:
 
 	@mkdir -p ${GNC_SHAREDIR}/Docs
 	@mkdir -p ${GNC_SHAREDIR}/Docs/En
-	@mkdir -p ${GNC_SHAREDIR}/Docs/Fn
+	@mkdir -p ${GNC_SHAREDIR}/Docs/Fr
 	$(INSTALL_DATA) Docs/*.html ${GNC_SHAREDIR}/Docs
 	$(INSTALL_DATA) Docs/En/*.html ${GNC_SHAREDIR}/Docs/En
 	$(INSTALL_DATA) Docs/Fr/*.html ${GNC_SHAREDIR}/Docs/Fr
