@@ -24,6 +24,7 @@ static GncObject_t bus_obj = {
   NULL,				/* create */
   NULL,				/* destroy */
   NULL,                         /* is dirty */
+  NULL,				/* mark_clean */
   foreach,
   printable,
 };
