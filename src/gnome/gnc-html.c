@@ -593,6 +593,7 @@ gnc_html_guppi_redraw_cb(GtkHTMLEmbedded * eb,
                          gpointer data) {
   /* nothing special to do */
 }
+#endif /* USE_GUPPI */
 
 static char * 
 unescape_newlines(const gchar * in) {
@@ -614,7 +615,6 @@ unescape_newlines(const gchar * in) {
   *op = 0;
   return retval;
 }
-#endif /* USE_GUPPI */
 
 
 /********************************************************************
@@ -687,6 +687,7 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
       retval = FALSE;
     }
   }
+#if USE_GPG
   else if(!strcmp(eb->classid, "gnc-crypted-html")) {
     /* we just want to take the data and stuff it into the widget,
        blowing away the active streams.  crypted-html contains a
@@ -707,6 +708,7 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
     g_free(cleartext);
     g_free(cryptext);
   }
+#endif /* USE_GPG */
 
 #if 0 && defined(USE_GUPPI)
   if(widg) {
