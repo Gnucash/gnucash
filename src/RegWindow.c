@@ -87,7 +87,8 @@ typedef struct _RegWindow {
 
   /* pull-down (combo) box stuff */
   PopBox         *actbox;     /* ComboBox for actions                    */
-  PopBox         *xferbox;    /* ComboBox for transfers                  */
+  PopBox         *xfrmbox;    /* ComboBox for transfers                  */
+  PopBox         *xtobox;     /* ComboBox for transfers                  */
 
   /* structures for controlling the column layout */
   short          numCols;     /* number of columns in the register       */
@@ -140,9 +141,10 @@ extern Pixel negPixel;
 #define MOD_PRIC  0x40
 #define MOD_MEMO  0x80
 #define MOD_ACTN  0x100
-#define MOD_XFER  0x200
-#define MOD_NEW   0x400
-#define MOD_ALL   0x7ff
+#define MOD_XFRM  0x200
+#define MOD_XTO   0x400
+#define MOD_NEW   0x800
+#define MOD_ALL   0xfff
 
 /* These defines are indexes into the column location array */
 #define DATE_COL_ID  0
@@ -561,13 +563,13 @@ regRecalculateBalance( RegWindow *regData )
         XbaeMatrixSetCell( reg, position, SHRS_CELL_C, buf );
         }
 
-      position+=2;            /* each transaction has two rows */
+      position += NUM_ROWS_PER_TRANS;     /* each transaction has two rows */
       }
     }
   
   if( NULL != regData->balance )
     {
-    sprintf( buf, "$ %.2f \n$ %.2f \0", 
+    sprintf( buf, "$ %.2f\n$ %.2f", 
              dbalance, dclearedBalance );
     
     XmTextSetString( regData->balance, buf );
@@ -656,8 +658,9 @@ regRecalculateBalance( RegWindow *regData )
 								\
     /* remove the rows from the matrix */			\
     if (otherRegData) {						\
-      int otherrow = 2*n + 1;					\
-      XbaeMatrixDeleteRows( otherRegData->reg, otherrow, 2 );	\
+      int otherrow = NUM_ROWS_PER_TRANS*n + NUM_HEADER_ROWS;	\
+      XbaeMatrixDeleteRows( otherRegData->reg, 			\
+          otherrow, NUM_ROWS_PER_TRANS );			\
       XbaeMatrixRefresh( otherRegData->reg);			\
     }								\
   }								\
@@ -720,7 +723,7 @@ regSaveTransaction( RegWindow *regData, int position )
                  XbaeMatrixGetCell(regData->reg,row+NUM_CELL_R,NUM_CELL_C)); 
     }
   
-  if( regData->changed & MOD_XFER )
+  if( regData->changed & MOD_XFRM )
     {
     /* ... the transfer ... */
     char * name;
@@ -728,7 +731,7 @@ regSaveTransaction( RegWindow *regData, int position )
     Account *main_acc = regData->blackacc[0];
    
     Account *xfer_acct = xaccGetOtherAccount (main_acc, trans);
-    DEBUG("MOD_XFER\n");
+    DEBUG("MOD_XFRM\n");
 
     if (xfer_acct) {
       /* remove the transaction from wherever it used to be */
@@ -904,7 +907,7 @@ regSaveTransaction( RegWindow *regData, int position )
   
   /* For many, but not all changes, we need to 
    * recalculate the balances */
-  if( regData->changed & (MOD_XFER | MOD_RECN | MOD_AMNT | MOD_PRIC | MOD_NEW)) {
+  if( regData->changed & (MOD_XFRM | MOD_RECN | MOD_AMNT | MOD_PRIC | MOD_NEW)) {
     RECALC_BALANCE ((trans->credit));
     RECALC_BALANCE ((trans->debit));
   }
@@ -1321,9 +1324,9 @@ regWindowLedger( Widget parent, Account **acclist )
     reg = XtVaCreateWidget( strcat(buf,accRes[regData->type]),
                             xbaeMatrixWidgetClass,  frame,
                             XmNcells,               data,
-                            XmNfixedRows,           1,
+                            XmNfixedRows,           NUM_HEADER_ROWS,
                             XmNfixedColumns,        0,
-                            XmNrows,                2,
+                            XmNrows,                NUM_ROWS_PER_TRANS,
                             XmNvisibleRows,         15,
                             XmNfill,                True,
                             XmNcolumns,             regData -> numCols,
@@ -1358,7 +1361,8 @@ regWindowLedger( Widget parent, Account **acclist )
   {
   AccountGroup *grp;
   grp = xaccGetRootGroupOfAcct (regData->blackacc[0]);
-  regData->xferbox = xferBox (reg, grp);
+  regData->xfrmbox = xferBox (reg, grp);
+  regData->xtobox  = xferBox (reg, grp);
   }
 
   /******************************************************************\
@@ -1420,7 +1424,7 @@ regWindowLedger( Widget parent, Account **acclist )
   XtAddCallback( widget, XmNactivateCallback, 
                  destroyShellCB, (XtPointer)(regData->dialog) );
   
-  position+=2;
+  position += NUM_ROWS_PER_TRANS;
   
   /* Fix button area of the buttonform to its current size, and not let 
    * it resize. */
@@ -1478,8 +1482,9 @@ regWindowLedger( Widget parent, Account **acclist )
   XtPopup( regData->dialog, XtGrabNone );
   
   /* unmanage the ComboBoxes, until they are needed */
-  SetPopBox (regData->actbox, -1, -1);
-  SetPopBox (regData->xferbox, -1, -1);
+  SetPopBox (regData->actbox,  -1, -1);
+  SetPopBox (regData->xfrmbox, -1, -1);
+  SetPopBox (regData->xtobox,  -1, -1);
 
   unsetBusyCursor( parent );
   
@@ -1603,7 +1608,7 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
   Transaction *trans;
   int currow;
   
-  currow = 2 *regData->currEntry +1;
+  currow = NUM_ROWS_PER_TRANS *regData->currEntry + NUM_HEADER_ROWS;
   trans = (Transaction *) XbaeMatrixGetRowUserData (regData->reg, currow);
 
   if( NULL != trans)
@@ -1682,15 +1687,16 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       DEBUGCMD(printf(" row = %d\n col = %d\n",row,col));
       /* figure out if we are editing a different transaction... if we 
        * are, then we need to save the transaction we left */
-      if( regData->currEntry != (row-1)/2 )
+      if( regData->currEntry != (row-NUM_HEADER_ROWS)/NUM_ROWS_PER_TRANS )
         {
         DEBUG("Save Transaction\n");
         DEBUGCMD(printf(" currEntry = %d\n currTrans = %d\n", 
-                        regData->currEntry, (row+1)/2 ));
+                        regData->currEntry, 
+                        (row+NUM_HEADER_ROWS)/NUM_ROWS_PER_TRANS));
         
         regSaveTransaction( regData, regData->currEntry );
         
-        regData->currEntry = (row-1)/2;
+        regData->currEntry = (row-NUM_HEADER_ROWS)/NUM_ROWS_PER_TRANS;
         regData->insert    = 0;
         regData->qf = acc->qfRoot;
         }
@@ -1738,11 +1744,20 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
            regData->changed |= MOD_ACTN;
         }
 
-      /* otherwise, move the XFER widget */
+      /* otherwise, move the XFRM widget */
       else if( IN_XFRM_CELL(row,col) )
         {
-           SetPopBox (regData->xferbox, row, col);
-           regData->changed |= MOD_XFER;
+           SetPopBox (regData->xfrmbox, row, col);
+           regData->changed |= MOD_XFRM;
+        }
+
+      /* otherwise, move the XTO widget */
+      else if(IN_XTO_CELL(row,col)  &&
+             ((GEN_LEDGER == regData->type) ||
+              (PORTFOLIO  == regData->type)) ) 
+        {
+           SetPopBox (regData->xtobox, row, col);
+           regData->changed |= MOD_XTO;
         }
       break;
     }
@@ -1763,7 +1778,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         int currow;
         Transaction *trans;
 
-        currow = 2 * regData->currEntry + 1;
+        currow = NUM_ROWS_PER_TRANS * regData->currEntry + NUM_HEADER_ROWS;
         trans = (Transaction *) XbaeMatrixGetRowUserData (regData->reg, currow);
 
         /* If trans==NULL, then this must be a new transaction */
@@ -1924,7 +1939,12 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
        * Thus, the following if statment will never be true
        */
       if( IN_XFRM_CELL(row,col) ) {
-        regData->changed |= MOD_XFER;
+        regData->changed |= MOD_XFRM;
+      }
+      if(IN_XTO_CELL(row,col)  &&
+        ((GEN_LEDGER == regData->type) || 
+         (PORTFOLIO  == regData->type)) ) {
+        regData->changed |= MOD_XTO;
       }
 
       break;
