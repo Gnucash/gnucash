@@ -4,6 +4,13 @@
 
 #include "single.h"
 
+/*
+typedef struct _DateCell {
+   SingleCell cell;
+   double amount;
+} DateCell;
+*/
+
 /* installs a callback to handle date recording */
 SingleCell * xaccMallocDateCell (void);
 void         xaccInitDateCell (SingleCell *);

@@ -4,7 +4,7 @@
 #include <Xm/MainW.h>
 
 #include "datecell.h"
-#include "price.h"
+#include "pricecell.h"
 #include "table.h"
 #include "recncell.h"
 #include "textcell.h"

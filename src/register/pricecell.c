@@ -1,7 +1,7 @@
 
 #include <string.h>
 
-#include "price.h"
+#include "pricecell.h"
 #include "single.h"
 
 #define DECIMAL_PT  '.'

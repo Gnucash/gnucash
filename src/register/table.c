@@ -146,7 +146,6 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
 
    row = cbs->row;
    col = cbs->column;
-printf ("cell cb %d %d %d \n", row, col, cbs->reason);
 
    /* can't edit outside of the physical space */
    invalid = (0 > row) || (0 > col) ;
@@ -367,6 +366,7 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
       free (table->entries[row][col]);
       table->entries[row][col] = strdup (newval);
    }
+
 }
  
 
@@ -407,11 +407,13 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
 
       val = cbs->value;
       retval = leave (val);
-      if (val != retval) {
-         if (table->entries[row][col]) free (table->entries[row][col]);
-         table->entries[row][col] = (char *) retval;
-         cbs->value = strdup (retval);
-      }
+
+      if (NULL == retval) retval = "";
+
+      /* save whatever was returned */
+      if (table->entries[row][col]) free (table->entries[row][col]);
+      table->entries[row][col] = (char *) retval;
+      cbs->value = strdup (retval);
    } else {
       if (table->entries[row][col]) free (table->entries[row][col]);
       table->entries[row][col] = strdup (cbs->value);

@@ -5,12 +5,37 @@
 #include "datecell.h"
 #include "single.h"
 
-/* ================================================ */
-
 #define DATE_SEP '/'
 
+/* ================================================ */
+
 static const char * 
-DateMV (const char * old, const char *change, const char *new)
+DateEnter (const char * curr)
+{
+   short day, month, year;
+   char * datestr;
+   char * sep;
+
+   /* OK, we just entered a newval cell.  Find out
+    * what date that cell thinks it has. 
+    */
+   day = 1;
+   month = 1;
+   year = 1970;
+
+printf ("curr is %p \n", curr);
+printf ("curr val is %s \n", curr);
+   sscanf (curr, "%d/%d/%d", day, month, year);
+
+printf ("enter parsed %d %d %d \n", day, month, year);
+
+   return curr;
+}
+
+/* ================================================ */
+
+static const char * 
+DateMV (const char * oldval, const char *change, const char *newval)
 {
    int accel=0;
    short day, month, year;
@@ -18,13 +43,13 @@ DateMV (const char * old, const char *change, const char *new)
    char * sep;
 
    /* if user hit backspace, accept the change */
-   if (!change) return new;
+   if (!change) return newval;
 
    /* accept any numeric input */
-   if (isdigit (change[0])) return new;
+   if (isdigit (change[0])) return newval;
 
    /* accept the separator character */
-   if (DATE_SEP == change[0]) return new;
+   if (DATE_SEP == change[0]) return newval;
 
    /* otherwise, maybe its an accelerator key.
     * parse the date string */
@@ -32,7 +57,7 @@ DateMV (const char * old, const char *change, const char *new)
    month = 1;
    year = 1970;
 
-   sscanf (new, "%d/%d/%d", day, month, year);
+   sscanf (newval, "%d/%d/%d", day, month, year);
 
 printf ("parsed %d %d %d \n", day, month, year);
 
@@ -45,13 +70,36 @@ printf ("parsed %d %d %d \n", day, month, year);
 
       default:
          /* accept any numeric input */
-         if (isdigit (change[0])) return new;
+         if (isdigit (change[0])) return newval;
    }
 
    if (accel) {
    }
 
-   return new;
+   return newval;
+}
+
+/* ================================================ */
+
+static const char * 
+DateLeave (const char * curr)
+{
+   short day, month, year;
+   char * datestr;
+   char * sep;
+
+   /* otherwise, maybe its an accelerator key.
+    * parse the date string */
+   day = 1;
+   month = 1;
+   year = 1970;
+
+   sscanf (curr, "%d/%d/%d", day, month, year);
+
+printf ("leave parsed %d %d %d \n", day, month, year);
+
+
+   return curr;
 }
 
 /* ================================================ */
@@ -81,6 +129,7 @@ xaccInitDateCell (SingleCell *cell)
   if (cell->value) free (cell->value);
   cell ->value = strdup (buff);
 
+  cell ->enter_cell = DateEnter;
   cell ->modify_verify = DateMV;
 }
 
