@@ -19,10 +19,7 @@ Linas Vepstas <linas@linas.org> liked what he saw: the GUI was slick,
    up the help menus.  All for version 1.0 as of January 1998.  Since
    then, for version 1.1 & 1.2, the engine was expanded & refined, and the 
    register window code completely redesigned and made mostly 
-   Motif-(and GUI-)independent.  Linas is now active with Gnumatic
-   Incorporated, a company formed to enhance and support GnuCash for 
-   everyone, from home desktop users to commercial and professional
-   accountants. 
+   Motif-(and GUI-)independent.
 
 Jeremy Collins <jcollins@gnucash.org> publicized the GnoMoney project 
    widely and broadly, and then changed its name to GnuCash.  (Actually, 
@@ -40,15 +37,8 @@ Rob Browning <rlb@cs.utexas.edu> abused everyone for not using perl,
    file-format to XML. He is now concentrating on scheme performance. 
    He is the g-wrap guile wrapper maintainer. 
 
-Yannick Le Ny <y-le-ny@ifrance.com>  Our French translator. He has 
-   translated the menus, messages, README and the documentation to French. 
-   He strung up the French translation to the GnuCash website, working
-   hard to keep it up to date. Patches for Yahoo Europe to get stocks quotes. 
-
-Dave Peticolas <dave@krondo.com> hacks obsessively on GnuCash. But he can 
-   stop anytime he wants to. Really.  (As he is now the gatekeeper of the 
-   GnuCash CVS tree, be nice to him, or he may decide to stop hacking in the
-   middle of your patch). 
+Dave Peticolas <dave@krondo.com> worked on most parts of Gnucash, especially
+   the register and GUI.
 
 Bill Gribble <grib@billgribble.com> is not shy, or softly spoken. So don't 
    be shy if you find a bug in his code: QIF import, query API and 
@@ -70,11 +60,17 @@ Joshua Sled <jsled@asynchronous.org> works on scheduled transactions
    and budgeting.
 
 Derek Atkins <derek@ihtfp.com> wrote the business-accounting package
-   for Gnucash.  This includes the Customer/Vendor database, Job tracking,
+   for Gnucash. This includes the Customer/Vendor database, Job tracking,
    Order entry, Invoicing, Accounts Payable, Accounts Receivable, and
    related technologies.  In the process he we-wrote the Query engine,
    modularized the Book object storage, and modularized the backend
    to allow pluggable objects.
+
+David Hampton <hampton@employees.org> is an all-around making-things-better guy.
+
+Chris Lyttle <chris@wilddev.net> writes documentation and administers the GnuCash
+   bug list.
+
 
 Other Contributors:
 ----------------
@@ -99,7 +95,6 @@ Graham Chapman <grahamc@zeta.org.au> for the xacc-rpts addon package
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
 Albert Chin-A-Young <china@thewrittenword.com> configure.in patch
 Kenneth Christiansen <kenneth@gnome.org> Danish translation
-Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
 Matthew Condell <mcondell@bbn.com> FreeBSD patch
 Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection (credits to rackspace.com)
 Raphael Dechenaux <raphael.dechenaux@worldonline.fr> register patch
@@ -117,11 +112,10 @@ Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 John Goerzen <jgoerzen@complete.org> file i/o fix for 64-bit architectures
 Hans de Graaff <hans@degraaff.org> XML patches
-Bill Gribble <grib@billgribble.com> qif importation code, and much much more
+Benoit Grégoire <bock@step.polymtl.ca> OFX import
 Daniel Hagerty <hag@linnaean.org> patch to balance sheet report
 Mitsuo Hamada <mhamada@redhat.com> messages Japanese translations
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
-David Hampton <hampton@employees.org> qif import patch
 Eric Hanchrow <offby1@blarg.net> updated currency documentation
 Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
 John Hasler <john@dhh.gt.org> engine patch
@@ -142,18 +136,16 @@ Nicholas Lee <nj.lee@plumtree.co.nz> scheme bug fix
 Graham Leggett <minfrin@sharp.fm> for fixing a hang
 Georg Lehner <Jorge.Lehner@gmx.net> Nicaraguan Spanish translation
 Ted Lemon <mellon@andare.fugue.com> for NetBSD port
+Yannick Le Ny <y-le-ny@ifrance.com> French translations
 Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
 Duarte Loreto <happyguy_pt@hotmail.com> message and documentation Portuguese translations
-Chris Lyttle <chris@wilddev.net> Register documentation and screenshots.
 Kjartan Maraas <kmaraas@gnome.org> Norwegian translations
 Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work
 Matt Martin <mgmartin@abacusnet.net> guile error handling code
-Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches
 Juan Manuel García Molina <juanmagm@mail.com> messages Spanish translation
 Christopher Molnar <molnarc@mandrakesoft.com> build system patch
 Tim Mooney <mooney@dogbert.cc.ndsu.NoDak.edu> port to alpha-dec-osf4.0f
 G. Allen Morris III <gam3@ann.softgams.com> for QIF core dump
-James LewisMoss <dres@debian.org> design doc patches, XML refactoring, automated test suite
 Steven Murdoch <sjmurdoch@bigfoot.com> gnc-prices fix for London exchange
 Jose Carlos Nascimento <joseca@psabs.com> Brazilian Portuguese translation
 Brent Neal <brent@baton.phys.lsu.edu> TIAA-CREF support.
@@ -167,7 +159,6 @@ OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
 Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
 Alan Orndorff <dwarf@solarisresources.com> Solaris packager
 Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
-Dave Peticolas <dave@krondo.com> extensive intelligent patches
 Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
 Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
 Zdenko Podobný <zdpo@mailbox.sk> Slovak translations
@@ -187,7 +178,6 @@ Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
 Ben Stanley <bds02@uow.edu.au> test infrastructure
 Robby Stephenson <robby.stephenson@usa.net> register & file history patches
-Christian Stimming <stimming@tuhh.de> report patch
 Michael T. Garrison Stuber <garrisonstuber@bellsouth.net> report patch
 Bartek Szady <bszx@bszxdomain.edu.eu.org> engine and build system patches
 Herbert Thoma <tma@iis.fhg.de> gnome register & euro support patches
