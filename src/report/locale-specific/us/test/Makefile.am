@@ -13,7 +13,6 @@ GNC_TEST_DEPS := \
   --guile-load-dir ${top_srcdir}/lib \
   --guile-load-dir ${top_srcdir}/src/scm \
   --guile-load-dir ${top_srcdir}/src/gnome-utils \
-  --gnc-module-dir ${top_builddir}/src/report/report-gnome \
   --guile-load-dir ${top_srcdir}/src/gnome \
   --library-dir    ${top_srcdir}/src/gnome-utils \
   --library-dir    ${top_srcdir}/src/gnome
