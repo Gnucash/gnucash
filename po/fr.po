@@ -1,8 +1,3 @@
-# translation of fr.po to
-# translation of fr.po to
-# translation of fr.po to
-# translation of fr.po to
-# translation of fr.po to
 # translation of fr.po to Français
 # Messages en francais pour GnuCash
 # Copyright (C) 1998-2002,2003 Free Software Foundation, Inc.
@@ -15,8 +10,8 @@ msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: 2003-08-18 23:26+0200\n"
 "PO-Revision-Date: 2003-08-17 02:21-0400\n"
-"Last-Translator: \n"
-"Language-Team:  <en@li.org>\n"
+"Last-Translator: Benoit Gregoire <bock@step.polymtl.ca>\n"
+"Language-Team: FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
