@@ -90,7 +90,7 @@ bin_SCRIPTS = gnucash-run-script gnucash-make-guids
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.  *sigh*
-gnucash-run-script: gnucash-run-script.in Makefile
+gnucash-run-script: gnucash-run-script.in
 	rm -f $@.tmp
 	sed < $@.in > $@.tmp \
 	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:' \
@@ -99,10 +99,10 @@ gnucash-run-script: gnucash-run-script.in Makefile
 	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:' \
 	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:'
 	mv $@.tmp $@
-BUILT_SOURCES += gnucash-run-script
+BUILT_SOURCES = gnucash-run-script
 CLEANFILES += gnucash-run-script
 
-gnucash-make-guids: gnucash-make-guids.in Makefile
+gnucash-make-guids: gnucash-make-guids.in
 	rm -f $@.tmp
 	sed < $@.in > $@.tmp \
 	    -e 's:@-GNUCASH_RUN_SCRIPT-@:${bindir}/gnucash-run-script:' \
