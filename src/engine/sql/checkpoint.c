@@ -17,7 +17,7 @@
 #include <string.h>  
 #include <sys/types.h>  
 
-#include <pgsql/libpq-fe.h>  
+#include <libpq-fe.h>  
 
 #include "Account.h"
 #include "AccountP.h"

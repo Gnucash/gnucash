@@ -25,7 +25,7 @@
 #include <sys/types.h>  
 #include <unistd.h>  
 
-#include <pgsql/libpq-fe.h>  
+#include <libpq-fe.h>  
 
 #include "AccountP.h"
 #include "Backend.h"

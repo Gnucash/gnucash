@@ -13,7 +13,7 @@
 #ifndef __POSTGRES_BACKEND_H__
 #define __POSTGRES_BACKEND_H__
 
-#include <pgsql/libpq-fe.h>
+#include <libpq-fe.h>
 
 #include "Group.h"
 #include "guid.h"

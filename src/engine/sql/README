@@ -17,9 +17,11 @@ Postgres Install Instructions
     have a GUI to ask for your password yet)
 
 5) (optional) enable TCPIP connections to remote hosts. To do this:
-   edit the file /var/lib/pgsql/pg_hba.conf on the remote host to
-   configure and allow access from other hosts.  See 'man pg_hba.conf'
-   for details.  Also create users.  Be sure to set a password.
+   edit the file pg_hba.conf on the remote host to configure and allow 
+   access from other hosts.  See 'man pg_hba.conf' for details.  
+        RedHat:   /var/lib/pgsql/pg_hba.conf  
+	Debian:   /etc/postgresql/pg_hba.conf 
+   Also create users.  Be sure to set a password.
    (there appears to be no way to pass an empty password to postgres)
    Note also the user must have 'createuser' permissions in order to 
    lock tables (this is a bug in postgres 6.5 and maybe later ???)
@@ -54,7 +56,9 @@ using root privileges. After step 1 above, perform the following:
 
 GnuCash Build Instructions
 --------------------------
-Same as usual, but you want to specify the flag '--enable-sql' i.e. 
+Same as usual, but you must specify the flag '--enable-sql' in order
+to build in Postrges support.  
+i.e. 
 ./configure --enable-sql
 and then 'make'.
 

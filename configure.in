@@ -56,12 +56,15 @@ AC_CHECK_HEADERS(dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h)
 
 DL_LIB=
 AC_CHECK_FUNCS(dlopen,,[
-AC_CHECK_LIB(dl, dlopen, DL_LIB="-ldl",[
-AC_CHECK_LIB(dld, shl_load, DL_LIB="-ldld",[
-AC_CHECK_FUNCS(dlopen, DL_LIB="",
-AC_MSG_ERROR(Dynamic linking is not available on this platform.  Some apps,
+  AC_CHECK_LIB(dl, dlopen, DL_LIB="-ldl",[
+    AC_CHECK_LIB(dld, shl_load, DL_LIB="-ldld",[
+      AC_CHECK_FUNCS(dlopen, DL_LIB="",
+      AC_MSG_ERROR(Dynamic linking is not available on this platform.  Some apps,
 like panel, will not run properly.))
-])])])
+    ])
+  ])
+])
+
 oLIBS="$LIBS"
 LIBS="$LIBS $DL_LIB"
 AC_CHECK_FUNCS(dlerror,,)
@@ -158,12 +161,47 @@ AC_ARG_ENABLE( profile,
 
 ### --------------------------------------------------------------------------
 ### SQL
+# Check to see if the user wants to have Postgres support
+
 AC_ARG_ENABLE( sql,
   [  --enable-sql                 compile with sql support],
-       SQL_DIR=sql)
+  [
+    if test "x$enableval" != "xno" ; then
+      AC_CHECK_HEADERS(pgsql/libpq-fe.h postgresql/libpq-fe.h)
+      if test "x$ac_cv_header_pgsql_libpq_fe_h$ac_cv_header_postgresql_libpq_fe_h" == xnono; then
+         AC_MSG_ERROR([Cannot find PosgreSQL headers; won't build sql backend]) 
+      else 
+        if test "x$ac_cv_header_pgsql_libpq_fe_h" != xno; then
+          CFLAGS="${CFLAGS} -I/usr/include/pgsql"
+	fi
+        if test "x$ac_cv_header_postgresql_libpq_fe_h" != xno; then
+          CFLAGS="${CFLAGS} -I/usr/include/postgresql"
+	fi
+        
+        saved_LIBS="$LIBS"
+        LIBS="-lpq $LIBS"
+        AC_MSG_CHECKING(for libpq)
+        AC_TRY_LINK(
+          [
+	    #include <libpq-fe.h>
+	  ],
+          [
+             PQconnectdb("asdf");
+          ],
+          [
+            AC_MSG_RESULT(yes)
+            SQL_DIR=sql
+          ],
+          [
+            AC_MSG_ERROR([Cannot find PosgreSQL libraries; won't build sql backend]) 
+          ]
+        )
+      fi
+    fi
+  ]
+)
 
 AC_SUBST(SQL_DIR)
-
 
 ### --------------------------------------------------------------------------
 ### RPC
@@ -355,7 +393,7 @@ AC_CHECK_LIB(ghttp, ghttp_request_new,
 
 AC_CHECK_LIB(ghttp, ghttp_enable_ssl,
              AC_DEFINE(HAVE_OPENSSL),
-	     AC_MSG_WARN([ghttp does not have SSL support.]),
+	     AC_MSG_WARN([****** ghttp does not have SSL support.]),
 	     $GHTTP_LIBS)
 
 AC_SUBST(GTKHTML_LIBS)

@@ -17,7 +17,7 @@
 #include <string.h>  
 #include <sys/types.h>  
 
-#include <pgsql/libpq-fe.h>  
+#include <libpq-fe.h>  
 
 #include "Backend.h"
 #include "BackendP.h"
