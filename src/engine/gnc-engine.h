@@ -30,6 +30,11 @@ typedef void (* gnc_engine_init_hook_t)(int, char **);
 
 /** PROTOTYPES ******************************************************/
 
+/* GnuCash version number infomation. */
+unsigned int gnucash_major_version (void);
+unsigned int gnucash_minor_version (void);
+unsigned int gnucash_micro_version (void);
+
 /* gnc_engine_init MUST be called before gnc engine functions can 
  * be used. */
 void gnc_engine_init(int argc, char ** argv);
