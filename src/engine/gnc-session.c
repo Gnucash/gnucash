@@ -148,6 +148,7 @@ gnc_session_set_book (GNCSession *session, GNCBook *book)
 {
   if (!session) return;
 
+  ENTER (" sess=%p book=%p", session, book);
   /* Do not free the old book here unless you also fix
    * all the other uses of gnc_session_set_book! */
 
@@ -157,6 +158,7 @@ gnc_session_set_book (GNCSession *session, GNCBook *book)
   session->book = book;
 
   gnc_book_set_backend (book, session->backend);
+  LEAVE (" ");
 }
 
 Backend * 
@@ -207,6 +209,7 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
   Backend    *(* be_new_func)(void);
   char       * mod_name = g_strdup_printf("gnucash/backend/%s", backend_name);
 
+  ENTER (" ");
   /* FIXME: this needs to be smarter with version numbers. */
   /* FIXME: this should use dlopen(), instead of guile/scheme, 
    *    to load the modules.  Right now, this requires the engine to
@@ -237,6 +240,7 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
   }
 
   g_free(mod_name);
+  LEAVE (" ");
 }
 
 gboolean
@@ -244,7 +248,8 @@ gnc_session_begin (GNCSession *session, const char * book_id,
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
   if (!session) return FALSE;
-  ENTER (" ignore_lock=%d, book-id=%s", ignore_lock,
+  ENTER (" sess=%p book=%p ignore_lock=%d, book-id=%s", 
+         session, session->book, ignore_lock,
          book_id ? book_id : "(null)");
 
   /* clear the error condition of previous errors */
@@ -324,7 +329,7 @@ gnc_session_begin (GNCSession *session, const char * book_id,
       (session->backend->session_begin)(session->backend, session,
                                   gnc_session_get_url(session), ignore_lock,
                                   create_if_nonexistent);
-      PINFO("Run session_begin on backend");
+      PINFO("Done running session_begin on backend");
       err = xaccBackendGetError(session->backend);
       if (err != ERR_BACKEND_NO_ERR)
       {
@@ -335,11 +340,13 @@ gnc_session_begin (GNCSession *session, const char * book_id,
           g_free(session->book_id);
           session->book_id = NULL;
           gnc_session_push_error (session, err, NULL);
-          LEAVE("backend error");
+          LEAVE("backend error %d", err);
           return FALSE;
       }
   }
-  LEAVE(" ");
+  LEAVE (" sess=%p book=%p book-id=%s", 
+         session, session->book, 
+         book_id ? book_id : "(null)");
   return TRUE;
 }
 
@@ -353,7 +360,7 @@ gnc_session_load (GNCSession *session)
   if (!session) return FALSE;
   if (!gnc_session_get_url(session)) return FALSE;
 
-  ENTER ("book_id=%s", gnc_session_get_url(session)
+  ENTER ("sess=%p book_id=%s", session, gnc_session_get_url(session)
          ? gnc_session_get_url(session) : "(null)");
 
   /* At this point, we should are supposed to have a valid book 
@@ -364,6 +371,7 @@ gnc_session_load (GNCSession *session)
   gnc_book_set_backend (session->book, NULL);
   gnc_book_destroy (session->book);
   session->book = gnc_book_new ();
+  PINFO ("new book=%p", session->book);
 
   xaccLogSetBaseName(session->logpath);
   xaccLogEnable();
@@ -429,7 +437,7 @@ gnc_session_load (GNCSession *session)
       return FALSE;
   }
 
-  LEAVE ("book_id=%s", gnc_session_get_url(session)
+  LEAVE ("sess = %p, book_id=%s", session, gnc_session_get_url(session)
          ? gnc_session_get_url(session) : "(null)");
 
   return TRUE;
@@ -477,7 +485,9 @@ gnc_session_save (GNCSession *session)
 
   if (!session) return;
 
-  ENTER ("book_id=%s", gnc_session_get_url(session)
+  ENTER ("sess=%p book=%p book_id=%s", 
+         session, session->book,
+         gnc_session_get_url(session)
          ? gnc_session_get_url(session) : "(null)");
 
   /* if there is a backend, and the backend is reachablele
@@ -536,7 +546,7 @@ gnc_session_end (GNCSession *session)
 {
   if (!session) return;
 
-  ENTER ("book_id=%s", gnc_session_get_url(session)
+  ENTER ("sess=%p book_id=%s", session, gnc_session_get_url(session)
          ? gnc_session_get_url(session) : "(null)");
 
   /* close down the backend first */
@@ -556,7 +566,8 @@ gnc_session_end (GNCSession *session)
   g_free (session->book_id);
   session->book_id = NULL;
 
-  LEAVE(" ");
+  LEAVE ("sess=%p book_id=%s", session, gnc_session_get_url(session)
+         ? gnc_session_get_url(session) : "(null)");
 }
 
 void 
@@ -564,7 +575,8 @@ gnc_session_destroy (GNCSession *session)
 {
   if (!session) return;
 
-  ENTER ("book_id=%s", gnc_session_get_url(session)
+  ENTER ("sess=%p book=%p book_id=%s", session, session->book,
+         gnc_session_get_url(session)
          ? gnc_session_get_url(session) : "(null)");
 
   xaccLogDisable();
@@ -589,7 +601,7 @@ gnc_session_destroy (GNCSession *session)
 
   g_free (session);
 
-  LEAVE(" ");
+  LEAVE ("sess=%p", session);
 }
 
 void
@@ -600,6 +612,8 @@ gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2)
   if (session_1 == session_2) return;
   if (!session_1 || !session_2) return;
 
+  ENTER ("sess1=%p sess2=%p", session_1, session_2);
+
   book_1 = session_1->book;
   book_2 = session_2->book;
 
@@ -608,6 +622,7 @@ gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2)
 
   gnc_book_set_backend (book_1, session_2->backend);
   gnc_book_set_backend (book_2, session_1->backend);
+  LEAVE (" ");
 }
 
 gboolean

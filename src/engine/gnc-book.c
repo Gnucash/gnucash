@@ -102,10 +102,12 @@ gnc_book_new (void)
 {
   GNCBook *book;
 
+  ENTER (" ");
   book = g_new0(GNCBook, 1);
   gnc_book_init(book);
 
   gnc_engine_generate_event (&book->guid, GNC_EVENT_CREATE);
+  LEAVE ("book=%p", book);
   return book;
 }
 
@@ -114,6 +116,7 @@ gnc_book_destroy (GNCBook *book)
 {
   if (!book) return;
 
+  ENTER ("book=%p", book);
   gnc_engine_generate_event (&book->guid, GNC_EVENT_DESTROY);
 
   xaccAccountGroupBeginEdit (book->topgroup);
@@ -138,7 +141,7 @@ gnc_book_destroy (GNCBook *book)
   xaccLogEnable();
 
   g_free (book);
-  LEAVE(" ");
+  LEAVE ("book=%p", book);
 }
 
 /* ====================================================================== */
@@ -256,6 +259,7 @@ void
 gnc_book_set_backend (GNCBook *book, Backend *be)
 {
   if (!book) return;
+  ENTER ("book=%p be=%p", book, be);
   book->backend = be;
 }
 
