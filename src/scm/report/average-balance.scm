@@ -92,7 +92,7 @@
       (gnc:register-runavg-option
        (gnc:make-multichoice-option
         "Report Options" "Step Size"
-        "b" "Get number at each one of these" 'WeekDelta
+        "b" "The amount of time between data points" 'WeekDelta
         (list #(DayDelta "Day" "Day")
               #(WeekDelta "Week" "Week")
               #(TwoWeekDelta "2Week" "Two Week")
@@ -103,12 +103,12 @@
       (gnc:register-runavg-option
        (gnc:make-simple-boolean-option
         "Report Options" "Sub-Accounts"
-        "e" "Add in sub-accounts of each selected" #f))
+        "e" "Include sub-accounts of all selected accounts" #f))
 
       (gnc:register-runavg-option
        (gnc:make-multichoice-option
         "Report Options" "Plot Type"
-        "f" "Get number at each one of these" 'NoPlot
+        "f" "The type of graph to generate" 'NoPlot
         (list #(NoPlot "Nothing" "Make No Plot")
               #(AvgBalPlot "Average" "Average Balance")
               #(GainPlot "Net Gain" "Net Gain")
@@ -321,7 +321,6 @@
             (rept-text "")
             (gncq (gnc:malloc-query))
             (slist '()))
-        (gnc:init-query gncq)
 
         (if (null? accounts)
             (set! rept-text
@@ -339,7 +338,7 @@
                          (set! accounts (addunique accounts a)))
                        (allsubaccounts accounts)))
 
-              (map (lambda (acct) (gnc:query-add-account gncq acct)) accounts)
+;              (map (lambda (acct) (gnc:query-add-account gncq acct)) accounts)
 
               (set! acctcurrency (gnc:account-get-currency (car accounts)))
 

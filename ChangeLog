@@ -1,4 +1,18 @@
+2000-04-22  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/dialog-options.c: use the default section, if present,
+	when building the dialog.
+
+	* src/scm/options.scm: option databases can have default sections.
+
+	* src/scm/report/transaction-report-2.scm: make the default option
+	section "Report Options". Change "x Display" section to "Display".
+	Add title of report to string database.
+
 2000-04-21  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/report/average-balance.scm: comment out query function.
+	This needs to be fixed when the new query api gets g-wrapped.
 
 	* src/engine/Query.c: (xaccFreeQuery): free the split list
 	(xaccQueryGetSplits) handle a null account group

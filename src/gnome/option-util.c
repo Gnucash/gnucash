@@ -1469,6 +1469,35 @@ gnc_option_db_commit(GNCOptionDB *odb)
 
 
 /********************************************************************\
+ * gnc_option_db_get_default_section                                *
+ *   returns the malloc'd section name of the default section,      *
+ *   or NULL if there is none.                                      *
+ *                                                                  *
+ * Args: odb - option database to get default page for              *
+ * Return: g_malloc'd default section name                          *
+\********************************************************************/
+char *
+gnc_option_db_get_default_section(GNCOptionDB *odb)
+{
+  SCM getter;
+  SCM value;
+
+  if (odb == NULL)
+    return NULL;
+
+  getter = gh_eval_str("gnc:options-get-default-section");
+  if (!gh_procedure_p(getter))
+    return NULL;
+
+  value = gh_call1(getter, odb->guile_options);
+  if (!gh_string_p(value))
+    return NULL;
+
+  return gh_scm2newstr(value, NULL);
+}
+
+
+/********************************************************************\
  * gnc_option_db_lookup_boolean_option                              *
  *   looks up a boolean option. If present, returns its value,      *
  *   otherwise returns the default.                                 *

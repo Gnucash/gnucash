@@ -106,8 +106,13 @@
 (define report-sort-spec-get-subsection-title-proc
   (record-accessor report-sort-spec-structure 'subsection-title-proc))
 
-(define make-report-spec
+(define report-spec-constructor
   (record-constructor report-spec-structure))
+
+(define (make-report-spec . args)
+  (let ((spec (apply report-spec-constructor args)))
+    (gnc:register-translatable-strings (report-spec-get-header spec))
+    spec))
 
 (define report-spec-get-header
   (record-accessor report-spec-structure 'header))
@@ -137,7 +142,8 @@
   (record-accessor report-spec-structure 'first-last-preference))
 
 ;; convert a list of entries into html
-(define (html-table-render-entries entry-list specs sort-specs line-render-proc count-subentries-proc)
+(define (html-table-render-entries entry-list specs sort-specs
+                                   line-render-proc count-subentries-proc)
   (html-table-do-subsection
    (html-table-sort entry-list sort-specs)
    specs sort-specs line-render-proc count-subentries-proc 1))
@@ -145,7 +151,8 @@
 ;; the next 3 functions can be passed to html-table-render-entries
 
 ;; convert an entry into html.  subentries follow entries
-(define (html-table-entry-render-entries-first line specs count-subentries-proc)
+(define (html-table-entry-render-entries-first line specs
+                                               count-subentries-proc)
   (html-table-row-group
    (cons
     (html-table-row-manual (html-table-do-entry line specs))
@@ -154,8 +161,10 @@
      (html-table-collect-subentries line specs count-subentries-proc)))))
 
 ;; convert an entry into html.  first subentry is merged with the entry
-(define (html-table-entry-render-subentries-merged line specs count-subentries-proc)
-  (let ((subs-lines (html-table-collect-subentries line specs count-subentries-proc)))
+(define (html-table-entry-render-subentries-merged line specs
+                                                   count-subentries-proc)
+  (let ((subs-lines (html-table-collect-subentries line specs
+                                                   count-subentries-proc)))
     (html-table-row-group
      (if (null? subs-lines)
 	 (html-table-row-manual (html-table-do-entry line specs))
@@ -193,7 +202,7 @@
    (map
     (lambda (spec) 
       (html-header-cell 
-       (report-spec-get-header spec)))
+       (gnc:_ (report-spec-get-header spec))))
     specs)))
 
 ;;;;;;;;;;;;;;;;
@@ -214,11 +223,11 @@
     specs)))
 
 
-
 (define (html-table-sort lst sort-specs)
   (sort lst (html-table-make-sort-pred sort-specs)))
 
-(define (html-table-do-subsection lst specs sort-specs line-render-proc count-subentries-proc depth)
+(define (html-table-do-subsection lst specs sort-specs line-render-proc
+                                  count-subentries-proc depth)
   (cond
    ((null? sort-specs)
     (map 
@@ -232,7 +241,8 @@
 	(let* ((front '())
 	       (back '())
 	       (sort-spec (car sort-specs))
-	       (subsection-pred (report-sort-spec-get-subsection-pred sort-spec))
+	       (subsection-pred (report-sort-spec-get-subsection-pred
+                                 sort-spec))
 	       (get-value-proc (report-sort-spec-get-get-value-proc sort-spec))
 	       (value1 (get-value-proc (car lst2))))
 	  (cond 
@@ -254,7 +264,8 @@
 		   depth))
 		 (else '()))
 	   (html-table-do-subsection 
-	    front specs (cdr sort-specs) line-render-proc count-subentries-proc (+ depth 1))
+	    front specs (cdr sort-specs) line-render-proc
+            count-subentries-proc (+ depth 1))
 	   (cond (subsection-pred
 		  (html-table-subtotals front sort-spec specs depth))
 		 (else '()))

@@ -17,7 +17,7 @@
      (list
       (if 
        (gnc:option-value
-	(gnc:lookup-option options "x Display" "Date"))
+	(gnc:lookup-option options "Display" "Date"))
        (make-report-spec 
 	"Date"
 	(lambda (split) 
@@ -35,7 +35,7 @@
 
       (if 
        (gnc:option-value
-	(gnc:lookup-option options "x Display" "Num"))
+	(gnc:lookup-option options "Display" "Num"))
        (make-report-spec 
 	"Num"
 	(lambda (split)
@@ -52,7 +52,7 @@
 
       (if 
        (gnc:option-value
-	(gnc:lookup-option options "x Display" "Description"))
+	(gnc:lookup-option options "Display" "Description"))
        (make-report-spec 
 	"Description"
 	(lambda (split)
@@ -69,7 +69,7 @@
 
       (if 
        (gnc:option-value
-	(gnc:lookup-option options "x Display" "Memo"))
+	(gnc:lookup-option options "Display" "Memo"))
        (make-report-spec 
 	"Memo"
 	gnc:split-get-memo
@@ -85,7 +85,7 @@
 
       (if 
        (gnc:option-value
-	(gnc:lookup-option options "x Display" "Account"))
+	(gnc:lookup-option options "Display" "Account"))
        (make-report-spec 
 	"Account"
 	(lambda (split) 
@@ -106,7 +106,7 @@
 
       (if 
        (gnc:option-value
-	(gnc:lookup-option options "x Display" "Other Account"))
+	(gnc:lookup-option options "Display" "Other Account"))
        (make-report-spec 
 	"Other Account"
 	(lambda (split)
@@ -126,7 +126,7 @@
 
       (if 
        (gnc:option-value
-	(gnc:lookup-option options "x Display" "Amount"))
+	(gnc:lookup-option options "Display" "Amount"))
        (make-report-spec
 	"Amount"
 	gnc:split-get-value
@@ -147,7 +147,8 @@
     (case key
       ((account)
        (make-report-sort-spec
-	(lambda (split) (gnc:account-get-full-name (gnc:split-get-account split)))
+	(lambda (split) (gnc:account-get-full-name
+                         (gnc:split-get-account split)))
 	(if ascending? string-ci<? string-ci>?)
 	string-ci=?
 	string-ci=?
@@ -282,7 +283,8 @@
 
   ;; returns a predicate that returns true only if a split is
   ;; between early-date and late-date
-  (define (split-report-make-date-filter-predicate begin-date-secs end-date-secs)
+  (define (split-report-make-date-filter-predicate begin-date-secs
+                                                   end-date-secs)
     (lambda (split) 
       (let ((date 
 	     (car (gnc:timepair-canonical-day-time 
@@ -367,7 +369,7 @@
 		   "Sort by date & subtotal each year")
 		 #(time
 		   "Time"
-		   "Sort by EXACT entry time")
+		   "Sort by exact entry time")
 		 #(corresponding-acc
 		   "Transfer from/to"
 		   "Sort by account transferred from/to's name")
@@ -426,51 +428,55 @@
     
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "x Display" "Date"
+      "Display" "Date"
       "b" "Display the date?" #t))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "x Display" "Num"
+      "Display" "Num"
       "c" "Display the cheque number?" #t))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "x Display" "Description"
+      "Display" "Description"
       "d" "Display the description?" #t))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "x Display" "Memo"
+      "Display" "Memo"
       "f" "Display the memo?" #t))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "x Display" "Account"
+      "Display" "Account"
       "g" "Display the account?" #t))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "x Display" "Other Account"
+      "Display" "Other Account"
       "h" "Display the other account?  (if this is a split transaction, this parameter is guessed." #f))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "x Display" "Amount"
+      "Display" "Amount"
       "i" "Display the amount?" #t))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "x Display" "Headers"
+      "Display" "Headers"
       "j" "Display the headers?" #t))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "x Display" "Totals"
+      "Display" "Totals"
       "k" "Display the totals?" #t))
 
+    (gnc:options-set-default-section gnc:*transaction-report-options*
+                                     "Report Options")
 
     gnc:*transaction-report-options*)
+
+  (define string-db (gnc:make-string-database))
 
   (define (gnc:trep-renderer options)
     (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
@@ -513,34 +519,36 @@
 	   (split-report-specs (make-split-report-spec options)))
 
       (list
-       (html-start-document-title "Transaction Report")
-	(html-para "Transaction report using the new reporting framework in html-generator.scm")
-	(html-start-table)
-	(if 
-	 (gnc:option-value
-	  (gnc:lookup-option options "x Display" "Headers"))
-	 (html-table-headers split-report-specs)
-	 '())
-	(html-table-render-entries split-list
-				   split-report-specs
-				   sort-specs
-				   (case (gnc:option-value tr-report-style-op)
-				     ((multi-line)
-				      html-table-entry-render-entries-first)
-				     ((merged)
-				      html-table-entry-render-subentries-merged)
-				     ((single)
-				      html-table-entry-render-entries-only))
-				   (lambda (split)
-				     (length
-				      (gnc:split-get-other-splits split))))
-	(if 
-	 (gnc:option-value
-	  (gnc:lookup-option options "x Display" "Totals"))
-	 (html-table-totals split-list split-report-specs)
-	 '())
-	(html-end-table)
-	(html-end-document))))
+       (html-start-document-title (string-db 'lookup 'title))
+       (html-para "Transaction report using the new reporting framework in html-generator.scm")
+       (html-start-table)
+       (if 
+        (gnc:option-value
+         (gnc:lookup-option options "Display" "Headers"))
+        (html-table-headers split-report-specs)
+        '())
+       (html-table-render-entries split-list
+                                  split-report-specs
+                                  sort-specs
+                                  (case (gnc:option-value tr-report-style-op)
+                                    ((multi-line)
+                                     html-table-entry-render-entries-first)
+                                    ((merged)
+                                     html-table-entry-render-subentries-merged)
+                                    ((single)
+                                     html-table-entry-render-entries-only))
+                                  (lambda (split)
+                                    (length
+                                     (gnc:split-get-other-splits split))))
+       (if
+        (gnc:option-value
+         (gnc:lookup-option options "Display" "Totals"))
+        (html-table-totals split-list split-report-specs)
+        '())
+       (html-end-table)
+       (html-end-document))))
+
+  (string-db 'store 'title "Transaction Report")
 
   (gnc:define-report
    'version 1

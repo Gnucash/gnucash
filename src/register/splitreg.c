@@ -176,7 +176,7 @@ configLabels (SplitRegister *reg)
    LABEL (NUM,   NUM_STR);
    LABEL (DESC,  DESC_STR);
    LABEL (RECN,  "R");
-   LABEL (SHRS,  TOT_SHRS_STR);
+   LABEL (SHRS,  TOTAL_SHARES_STR);
    LABEL (BALN,  BALN_STR);
    LABEL (ACTN,  ACTION_STR);
    LABEL (XFRM,  XFRM_STR);

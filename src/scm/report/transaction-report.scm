@@ -354,7 +354,7 @@
               "Sort by date")
             #(time
               "Time"
-              "Sort by EXACT entry time")
+              "Sort by exact entry time")
             #(corresponding-acc
               "Transfer from/to"
               "Sort by account transferred from/to's name")
@@ -391,7 +391,7 @@
               "Sort by date")
             #(time
               "Time"
-              "Sort by EXACT entry time")
+              "Sort by exact entry time")
             #(corresponding-acc
               "Transfer from/to"
               "Sort by account transferred from/to's name")

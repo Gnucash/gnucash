@@ -1040,7 +1040,7 @@ gnc_options_dialog_add_option(GtkWidget *page,
   gnc_option_set_ui_widget(option, GTK_BOX(page), tooltips);
 }
 
-static void
+static gint
 gnc_options_dialog_append_page(GnomePropertyBox *propertybox,
                                GNCOptionSection *section,
                                GtkTooltips *tooltips)
@@ -1050,11 +1050,12 @@ gnc_options_dialog_append_page(GnomePropertyBox *propertybox,
   GtkWidget *page_content_box;
   gint num_options;
   gchar *name;
+  gint page;
   gint i;
 
   name = gnc_option_section_name(section);
   if (strncmp(name, "__", 2) == 0)
-    return;
+    return -1;
 
   page_label = gtk_label_new(_(name));
   gtk_widget_show(page_label);
@@ -1063,7 +1064,8 @@ gnc_options_dialog_append_page(GnomePropertyBox *propertybox,
   gtk_container_set_border_width(GTK_CONTAINER(page_content_box), 5);
   gtk_widget_show(page_content_box);
 
-  gnome_property_box_append_page(propertybox, page_content_box, page_label);
+  page = gnome_property_box_append_page(propertybox,
+                                        page_content_box, page_label);
 
   num_options = gnc_option_section_num_options(section);
   for (i = 0; i < num_options; i++)
@@ -1071,6 +1073,8 @@ gnc_options_dialog_append_page(GnomePropertyBox *propertybox,
     option = gnc_get_option_section_option(section, i);
     gnc_options_dialog_add_option(page_content_box, option, tooltips);
   }
+
+  return page;
 }
 
 
@@ -1089,16 +1093,32 @@ gnc_build_options_dialog_contents(GnomePropertyBox *propertybox,
 {
   GtkTooltips *tooltips;
   GNCOptionSection *section;
+  gchar *default_section_name;
+  gint default_page = -1;
   gint num_sections;
+  gint page;
   gint i;
 
   tooltips = gtk_tooltips_new();
 
   num_sections = gnc_option_db_num_sections(odb);
+  default_section_name = gnc_option_db_get_default_section(odb);
 
   for (i = 0; i < num_sections; i++)
   {
+    char *section_name;
+
     section = gnc_option_db_get_section(odb, i);
-    gnc_options_dialog_append_page(propertybox, section, tooltips);
+    page = gnc_options_dialog_append_page(propertybox, section, tooltips);
+
+    section_name = gnc_option_section_name(section);
+    if (safe_strcmp(section_name, default_section_name) == 0)
+      default_page = page;
   }
+
+  if (default_page >= 0)
+    gtk_notebook_set_page(GTK_NOTEBOOK(propertybox->notebook), default_page);
+
+  if (default_section_name != NULL)
+    free(default_section_name);
 }

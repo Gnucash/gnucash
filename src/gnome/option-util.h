@@ -125,6 +125,8 @@ void     gnc_option_db_clean(GNCOptionDB *odb);
 
 void gnc_option_db_commit(GNCOptionDB *odb);
 
+char * gnc_option_db_get_default_section(GNCOptionDB *odb);
+
 gboolean gnc_option_db_lookup_boolean_option(GNCOptionDB *odb,
                                              const char *section,
                                              const char *name,

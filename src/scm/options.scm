@@ -527,6 +527,14 @@
         (hash-for-each run-callback callback-hash))
     (clear-changes))
 
+  (define default-section #f)
+
+  (define (set-default-section section-name)
+    (set! default-section section-name))
+
+  (define (get-default-section)
+    default-section)
+
   (define (dispatch key)
     (case key
       ((lookup) lookup-option)
@@ -538,6 +546,8 @@
       ((generate-restore-forms) generate-restore-forms)
       ((clear-changes) clear-changes)
       ((run-callbacks) run-callbacks)
+      ((set-default-section) set-default-section)
+      ((get-default-section) get-default-section)
       (else (gnc:warn "options: bad key: " key "\n"))))
 
   dispatch)
@@ -572,6 +582,12 @@
 
 (define (gnc:options-run-callbacks options)
   ((options 'run-callbacks)))
+
+(define (gnc:options-set-default-section options section-name)
+  ((options 'set-default-section) section-name))
+
+(define (gnc:options-get-default-section options)
+  ((options 'get-default-section)))
 
 (define (gnc:send-options db_handle options)
   (gnc:options-for-each
