@@ -227,3 +227,39 @@ gnc_help_window_search_button_cb       (GtkButton       *button,
 void
 gnc_help_window_search_help_button_cb  (GtkButton       *button,
                                         gpointer         user_data);
+
+void
+gnc_column_view_edit_add_cb            (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_column_view_edit_remove_cb         (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_edit_column_view_move_up_cb        (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_edit_column_view_move_down_cb      (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_column_view_edit_add_cb            (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_column_view_edit_remove_cb         (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_edit_column_view_move_up_cb        (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_edit_column_view_move_down_cb      (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_column_view_edit_size_cb           (GtkButton       *button,
+                                        gpointer         user_data);

@@ -1797,6 +1797,11 @@ gnc_options_dialog_widget(GNCOptionWin * win) {
   return win->container;
 }
 
+GtkWidget *
+gnc_options_dialog_notebook(GNCOptionWin * win) {
+  return win->notebook;
+}
+
 static int
 gnc_options_dialog_apply_stub_cb(GtkWidget * w, gpointer data) {
   GNCOptionWin * window = data;
@@ -1901,7 +1906,7 @@ gnc_options_dialog_new(gboolean make_toplevel) {
   gtk_box_pack_start(GTK_BOX(buttonbox), close_button, TRUE, TRUE, 0);
 
   retval->notebook = gtk_notebook_new();
-  gtk_box_pack_start(GTK_BOX(vbox), retval->notebook, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), retval->notebook, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(buttonbox), FALSE, TRUE, 0);
 
   if(make_toplevel) {
@@ -1910,6 +1915,10 @@ gnc_options_dialog_new(gboolean make_toplevel) {
 
   gtk_widget_show_all(vbox);
 
+  if(make_toplevel) {
+    gtk_widget_show_all(retval->container);
+  }
+  
   return retval;
 }
 

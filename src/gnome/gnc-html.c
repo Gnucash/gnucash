@@ -200,6 +200,9 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
     else if(!strcmp(protocol, "gnc-report")) {
       retval = URL_TYPE_REPORT;
     }
+    else if(!strcmp(protocol, "gnc-options")) {
+      retval = URL_TYPE_OPTIONS;
+    }
     else if(!strcmp(protocol, "gnc-scm")) {
       retval = URL_TYPE_SCHEME;
     }
@@ -344,7 +347,7 @@ extract_base_name(URLType type, const gchar * path) {
 
 static char * url_type_names[] = {
   "file:", "", "http:", "ftp:", "https:", 
-  "gnc-register:", "gnc-report:", "gnc-scm:",
+  "gnc-register:", "gnc-report:", "gnc-options:", "gnc-scm:",
   "gnc-help:", "gnc-xml:", "gnc-action:", ""
 };
 
@@ -587,6 +590,7 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
     break;
     
   case URL_TYPE_REGISTER:
+  case URL_TYPE_OPTIONS:
   case URL_TYPE_SCHEME:
   case URL_TYPE_FTP:
   default:
@@ -1044,6 +1048,35 @@ gnc_html_open_register(gnc_html * html, const gchar * location) {
   }
 }
 
+/********************************************************************
+ * gnc_html_open_options
+ * open an editor for report parameters 
+ ********************************************************************/
+
+static void
+gnc_html_open_options(gnc_html * html, const gchar * location) {
+  int report_id;
+  SCM find_report = gh_eval_str("gnc:find-report");
+  SCM get_options = gh_eval_str("gnc:report-options");
+  SCM get_editor = gh_eval_str("gnc:report-options-editor");
+  
+  SCM report;
+  SCM options;
+  SCM editor;
+
+  /* href="gnc-options:report-id=2676" */
+  if(!strncmp("report-id=", location, 10)) {
+    sscanf(location+10, "%d", &report_id);
+    report = gh_call1(find_report, gh_int2scm(report_id));
+    options = gh_call1(get_options, report);
+    editor = gh_call1(get_editor, report);
+    gh_call2(editor, options, report);
+  }
+  else {
+    gnc_warning_dialog(_("Badly formed gnc-options: URL."));
+  }
+}
+
 
 /********************************************************************
  * gnc_html_open_report
@@ -1164,7 +1197,11 @@ gnc_html_show_url(gnc_html * html, URLType type,
   case URL_TYPE_REPORT:
     gnc_html_open_report(html, location, label, newwin);
     break;
-    
+
+  case URL_TYPE_OPTIONS:
+    gnc_html_open_options(html, location);
+    break;
+
   case URL_TYPE_HELP:
     gnc_html_open_help(html, location, label, newwin);
     break;

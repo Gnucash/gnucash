@@ -401,6 +401,7 @@
                     style (get-inheritable-style 
                            (gnc:html-style-table-primary parent)))
                    (cdr antecedents)))))))
+
   (if (and table (gnc:html-style-table-compiled? table))
       (kvt-ref (gnc:html-style-table-compiled table) markup)
       (fetch-worker 

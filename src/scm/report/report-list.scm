@@ -24,3 +24,6 @@
 ;; style sheets 
 (gnc:depend "report/stylesheet-plain.scm")
 (gnc:depend "report/stylesheet-fancy.scm")
+
+;; view templates 
+(gnc:depend "report/view-column.scm")

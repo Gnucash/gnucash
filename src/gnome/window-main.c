@@ -3,7 +3,7 @@
  *                  and callback functions for GnuCash              *
  * Copyright (C) 1998,1999 Jeremy Collins	                    *
  * Copyright (C) 1998,1999,2000 Linas Vepstas                       *
- *                                                                  *
+ * Copyright (C) 2001 Bill Gribble                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -74,6 +74,7 @@ struct _GNCMainInfo
 {
   GtkWidget *account_tree;
   GtkWidget *totals_combo;
+  GtkWidget *notebook;
   GList *totals_list;
 
   SCM main_window_change_callback_id;
@@ -1609,10 +1610,21 @@ mainWindow (void)
                                         "General", "Toolbar Buttons");
 
   /* create scrolled window */
+  main_info->notebook = gtk_notebook_new();
+  gtk_notebook_set_show_border(GTK_NOTEBOOK(main_info->notebook), TRUE);
+  gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_info->notebook), TRUE);
+  gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_info->notebook), 
+                           GTK_POS_LEFT);
 
   main_info->account_tree = gnc_mainwin_account_tree_new();
-  gnome_app_set_contents(GNOME_APP(app), main_info->account_tree);
 
+  gtk_notebook_append_page(GTK_NOTEBOOK(main_info->notebook),
+                           main_info->account_tree,
+                           gtk_label_new("Accounts"));
+  
+  /* gnome_app_set_contents(GNOME_APP(app), main_info->account_tree); */
+  gnome_app_set_contents(GNOME_APP(app), main_info->notebook); 
+  
   gnc_main_create_menus(GNOME_APP(app), main_info->account_tree, main_info);
 
   gtk_signal_connect(GTK_OBJECT(main_info->account_tree), "activate_account",
@@ -1641,6 +1653,7 @@ mainWindow (void)
   /* Show everything now that it is created */
   gtk_widget_show (summarybar);
   gtk_widget_show (statusbar);
+  gtk_widget_show_all (main_info->notebook);
   gtk_widget_show (main_info->account_tree);
 
   gnc_configure_account_tree (main_info);
@@ -1675,6 +1688,28 @@ gnc_ui_destroy_all_subwindows (void)
   gnc_forall_gui_components (NULL, component_handler, info);
 
   gnc_resume_gui_refresh ();
+}
+
+void
+gnc_report_in_main_window (int report_id) {
+  GNCMainInfo       * mainwin = gnc_get_main_info();
+  GtkWidget         * fr = gtk_frame_new(NULL);
+  gnc_report_window * reptwin = gnc_report_window_new(fr);
+  SCM               get_report = gh_eval_str("gnc:find-report");
+  SCM               get_name = gh_eval_str("gnc:report-name");
+  char              * report_name;
+  
+  gtk_frame_set_shadow_type(GTK_FRAME(fr), GTK_SHADOW_NONE);
+
+  report_name = gh_scm2newstr(gh_call1(get_name, 
+                                       gh_call1(get_report, 
+                                                gh_int2scm(report_id))),
+                              NULL);                                       
+  gtk_widget_show_all(fr);
+  gtk_notebook_append_page(GTK_NOTEBOOK(mainwin->notebook),
+                           fr, gtk_label_new(report_name));
+  
+  gnc_report_window_show_report(reptwin, report_id);
 }
 
 /********************* END OF FILE **********************************/

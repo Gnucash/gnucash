@@ -1,3 +1,30 @@
+2001-03-26  Bill Gribble  <grib@billgribble.com>
+
+	* src/gnome/dialog-column-view.{c,h}: new files.  Options editor
+	for the multicolumn report view.
+
+	* src/gnome/dialog-options.{c,h}: add API to get notebook widget
+	from standard options dialog
+
+	* src/gnome/gnc-html.c: add handler for gnc-options:report-id=%d 
+	url... pops up the options editor for that report. 
+
+	* src/gnome/window-main.c: make the app main widget a notebook
+	with side tabs.  When a report is run from the menu, it makes a
+	new tab and put itself there (via gnc_report_in_main_window).
+
+	* src/gnome/window-report.c: ask the report how to edit its
+	options. Redo options dialog handling.  Add a "open in new window"
+	option to the report toolbar/popup
+
+	* src/scm/report.scm: add 'options-editor field to report template
+	struct.  It's optional (there's a default).  Add a "Report name"
+	option for all reports. Not used yet but will be soon.
+
+	* src/scm/report/view-column.scm: a generic table layout for
+	multiple reports.  Each report is in a table cell with a
+	configurable rowspan and colspan.
+	
 2001-03-26  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/report/transaction-report.scm: fix i18n bug

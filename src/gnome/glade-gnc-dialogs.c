@@ -5536,7 +5536,7 @@ create_Report_Window (void)
   GtkWidget *report_vbox;
   GtkWidget *handlebox2;
   GtkWidget *report_toolbar;
-  GtkWidget *report_paned;
+  GtkWidget *report_frame;
 
   Report_Window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_object_set_data (GTK_OBJECT (Report_Window), "Report_Window", Report_Window);
@@ -5565,13 +5565,13 @@ create_Report_Window (void)
   gtk_toolbar_set_space_style (GTK_TOOLBAR (report_toolbar), GTK_TOOLBAR_SPACE_LINE);
   gtk_toolbar_set_button_relief (GTK_TOOLBAR (report_toolbar), GTK_RELIEF_NONE);
 
-  report_paned = gtk_hpaned_new ();
-  gtk_widget_ref (report_paned);
-  gtk_object_set_data_full (GTK_OBJECT (Report_Window), "report_paned", report_paned,
+  report_frame = gtk_frame_new (NULL);
+  gtk_widget_ref (report_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Report_Window), "report_frame", report_frame,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (report_paned);
-  gtk_box_pack_start (GTK_BOX (report_vbox), report_paned, TRUE, TRUE, 0);
-  gtk_paned_set_position (GTK_PANED (report_paned), 0);
+  gtk_widget_show (report_frame);
+  gtk_box_pack_start (GTK_BOX (report_vbox), report_frame, TRUE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (report_frame), GTK_SHADOW_NONE);
 
   return Report_Window;
 }
@@ -6746,5 +6746,325 @@ create_Username_Password_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button81, GTK_CAN_DEFAULT);
 
   return Username_Password_Dialog;
+}
+
+GtkWidget*
+create_Edit_Column_View_Page (void)
+{
+  GtkWidget *Edit_Column_View_Page;
+  GtkWidget *view_contents_hbox;
+  GtkWidget *scrolledwindow26;
+  GtkWidget *available_list;
+  GtkWidget *label847720;
+  GtkWidget *vbox109;
+  GtkWidget *label847721;
+  GtkWidget *button85;
+  GtkWidget *button86;
+  GtkWidget *label847722;
+  GtkWidget *button87;
+  GtkWidget *button88;
+  GtkWidget *label847723;
+  GtkWidget *button89;
+  GtkWidget *label847728;
+  GtkWidget *scrolledwindow27;
+  GtkWidget *contents_list;
+  GtkWidget *label847725;
+  GtkWidget *label847726;
+  GtkWidget *label847727;
+
+  Edit_Column_View_Page = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_object_set_data (GTK_OBJECT (Edit_Column_View_Page), "Edit_Column_View_Page", Edit_Column_View_Page);
+  gtk_window_set_title (GTK_WINDOW (Edit_Column_View_Page), _("window1"));
+  gtk_window_set_policy (GTK_WINDOW (Edit_Column_View_Page), TRUE, TRUE, FALSE);
+
+  view_contents_hbox = gtk_hbox_new (FALSE, 5);
+  gtk_widget_ref (view_contents_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "view_contents_hbox", view_contents_hbox,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (view_contents_hbox);
+  gtk_container_add (GTK_CONTAINER (Edit_Column_View_Page), view_contents_hbox);
+  gtk_container_set_border_width (GTK_CONTAINER (view_contents_hbox), 3);
+
+  scrolledwindow26 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (scrolledwindow26);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "scrolledwindow26", scrolledwindow26,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (scrolledwindow26);
+  gtk_box_pack_start (GTK_BOX (view_contents_hbox), scrolledwindow26, TRUE, TRUE, 0);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow26), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
+  available_list = gtk_clist_new (1);
+  gtk_widget_ref (available_list);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "available_list", available_list,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (available_list);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow26), available_list);
+  gtk_clist_set_column_width (GTK_CLIST (available_list), 0, 80);
+  gtk_clist_column_titles_show (GTK_CLIST (available_list));
+
+  label847720 = gtk_label_new (_("Available reports"));
+  gtk_widget_ref (label847720);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "label847720", label847720,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847720);
+  gtk_clist_set_column_widget (GTK_CLIST (available_list), 0, label847720);
+
+  vbox109 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox109);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "vbox109", vbox109,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox109);
+  gtk_box_pack_start (GTK_BOX (view_contents_hbox), vbox109, FALSE, FALSE, 0);
+
+  label847721 = gtk_label_new (_("                       "));
+  gtk_widget_ref (label847721);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "label847721", label847721,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847721);
+  gtk_box_pack_start (GTK_BOX (vbox109), label847721, TRUE, TRUE, 0);
+
+  button85 = gtk_button_new_with_label (_("Add  >>"));
+  gtk_widget_ref (button85);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "button85", button85,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button85);
+  gtk_box_pack_start (GTK_BOX (vbox109), button85, FALSE, FALSE, 0);
+
+  button86 = gtk_button_new_with_label (_("<< Remove"));
+  gtk_widget_ref (button86);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "button86", button86,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button86);
+  gtk_box_pack_start (GTK_BOX (vbox109), button86, FALSE, FALSE, 0);
+
+  label847722 = gtk_label_new ("");
+  gtk_widget_ref (label847722);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "label847722", label847722,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847722);
+  gtk_box_pack_start (GTK_BOX (vbox109), label847722, FALSE, TRUE, 0);
+
+  button87 = gtk_button_new_with_label (_("Move up"));
+  gtk_widget_ref (button87);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "button87", button87,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button87);
+  gtk_box_pack_start (GTK_BOX (vbox109), button87, FALSE, FALSE, 0);
+
+  button88 = gtk_button_new_with_label (_("Move down"));
+  gtk_widget_ref (button88);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "button88", button88,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button88);
+  gtk_box_pack_start (GTK_BOX (vbox109), button88, FALSE, FALSE, 0);
+
+  label847723 = gtk_label_new ("");
+  gtk_widget_ref (label847723);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "label847723", label847723,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847723);
+  gtk_box_pack_start (GTK_BOX (vbox109), label847723, FALSE, FALSE, 0);
+
+  button89 = gtk_button_new_with_label (_("Size ..."));
+  gtk_widget_ref (button89);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "button89", button89,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button89);
+  gtk_box_pack_start (GTK_BOX (vbox109), button89, FALSE, FALSE, 0);
+
+  label847728 = gtk_label_new ("");
+  gtk_widget_ref (label847728);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "label847728", label847728,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847728);
+  gtk_box_pack_start (GTK_BOX (vbox109), label847728, TRUE, TRUE, 0);
+
+  scrolledwindow27 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (scrolledwindow27);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "scrolledwindow27", scrolledwindow27,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (scrolledwindow27);
+  gtk_box_pack_start (GTK_BOX (view_contents_hbox), scrolledwindow27, TRUE, TRUE, 0);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow27), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
+  contents_list = gtk_clist_new (3);
+  gtk_widget_ref (contents_list);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "contents_list", contents_list,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (contents_list);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow27), contents_list);
+  gtk_clist_set_column_width (GTK_CLIST (contents_list), 0, 150);
+  gtk_clist_set_column_width (GTK_CLIST (contents_list), 1, 34);
+  gtk_clist_set_column_width (GTK_CLIST (contents_list), 2, 25);
+  gtk_clist_column_titles_show (GTK_CLIST (contents_list));
+
+  label847725 = gtk_label_new (_("Report"));
+  gtk_widget_ref (label847725);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "label847725", label847725,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847725);
+  gtk_clist_set_column_widget (GTK_CLIST (contents_list), 0, label847725);
+
+  label847726 = gtk_label_new (_("Cols"));
+  gtk_widget_ref (label847726);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "label847726", label847726,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847726);
+  gtk_clist_set_column_widget (GTK_CLIST (contents_list), 1, label847726);
+
+  label847727 = gtk_label_new (_("Rows"));
+  gtk_widget_ref (label847727);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "label847727", label847727,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847727);
+  gtk_clist_set_column_widget (GTK_CLIST (contents_list), 2, label847727);
+
+  gtk_signal_connect (GTK_OBJECT (button85), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_column_view_edit_add_cb),
+                      Edit_Column_View_Page);
+  gtk_signal_connect (GTK_OBJECT (button86), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_column_view_edit_remove_cb),
+                      Edit_Column_View_Page);
+  gtk_signal_connect (GTK_OBJECT (button87), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_edit_column_view_move_up_cb),
+                      Edit_Column_View_Page);
+  gtk_signal_connect (GTK_OBJECT (button88), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_edit_column_view_move_down_cb),
+                      Edit_Column_View_Page);
+  gtk_signal_connect (GTK_OBJECT (button89), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_column_view_edit_size_cb),
+                      Edit_Column_View_Page);
+
+  return Edit_Column_View_Page;
+}
+
+GtkWidget*
+create_Edit_Report_Size (void)
+{
+  GtkWidget *Edit_Report_Size;
+  GtkWidget *dialog_vbox17;
+  GtkWidget *frame48;
+  GtkWidget *hbox97;
+  GtkWidget *vbox111;
+  GtkWidget *label847729;
+  GtkWidget *label847730;
+  GtkWidget *label847731;
+  GtkWidget *vbox112;
+  GtkObject *row_spin_adj;
+  GtkWidget *row_spin;
+  GtkObject *col_spin_adj;
+  GtkWidget *col_spin;
+  GtkWidget *label847732;
+  GtkWidget *dialog_action_area17;
+  GtkWidget *button90;
+  GtkWidget *button92;
+
+  Edit_Report_Size = gnome_dialog_new (NULL, NULL);
+  gtk_object_set_data (GTK_OBJECT (Edit_Report_Size), "Edit_Report_Size", Edit_Report_Size);
+  gtk_window_set_modal (GTK_WINDOW (Edit_Report_Size), TRUE);
+  gtk_window_set_policy (GTK_WINDOW (Edit_Report_Size), FALSE, FALSE, FALSE);
+  gnome_dialog_close_hides (GNOME_DIALOG (Edit_Report_Size), TRUE);
+
+  dialog_vbox17 = GNOME_DIALOG (Edit_Report_Size)->vbox;
+  gtk_object_set_data (GTK_OBJECT (Edit_Report_Size), "dialog_vbox17", dialog_vbox17);
+  gtk_widget_show (dialog_vbox17);
+
+  frame48 = gtk_frame_new (_("Enter report row/column span"));
+  gtk_widget_ref (frame48);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "frame48", frame48,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame48);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox17), frame48, TRUE, TRUE, 0);
+
+  hbox97 = gtk_hbox_new (FALSE, 4);
+  gtk_widget_ref (hbox97);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "hbox97", hbox97,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox97);
+  gtk_container_add (GTK_CONTAINER (frame48), hbox97);
+
+  vbox111 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox111);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "vbox111", vbox111,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox111);
+  gtk_box_pack_start (GTK_BOX (hbox97), vbox111, TRUE, TRUE, 0);
+
+  label847729 = gtk_label_new (_("Row span:"));
+  gtk_widget_ref (label847729);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "label847729", label847729,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847729);
+  gtk_box_pack_start (GTK_BOX (vbox111), label847729, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label847729), 1, 0.5);
+
+  label847730 = gtk_label_new (_("Column span:"));
+  gtk_widget_ref (label847730);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "label847730", label847730,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847730);
+  gtk_box_pack_start (GTK_BOX (vbox111), label847730, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label847730), 1, 0.5);
+
+  label847731 = gtk_label_new ("");
+  gtk_widget_ref (label847731);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "label847731", label847731,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847731);
+  gtk_box_pack_start (GTK_BOX (vbox111), label847731, FALSE, FALSE, 0);
+
+  vbox112 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox112);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "vbox112", vbox112,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox112);
+  gtk_box_pack_start (GTK_BOX (hbox97), vbox112, TRUE, TRUE, 0);
+
+  row_spin_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
+  row_spin = gtk_spin_button_new (GTK_ADJUSTMENT (row_spin_adj), 1, 0);
+  gtk_widget_ref (row_spin);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "row_spin", row_spin,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (row_spin);
+  gtk_box_pack_start (GTK_BOX (vbox112), row_spin, FALSE, FALSE, 0);
+
+  col_spin_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
+  col_spin = gtk_spin_button_new (GTK_ADJUSTMENT (col_spin_adj), 1, 0);
+  gtk_widget_ref (col_spin);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "col_spin", col_spin,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (col_spin);
+  gtk_box_pack_start (GTK_BOX (vbox112), col_spin, FALSE, FALSE, 0);
+
+  label847732 = gtk_label_new ("");
+  gtk_widget_ref (label847732);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "label847732", label847732,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847732);
+  gtk_box_pack_start (GTK_BOX (vbox112), label847732, FALSE, FALSE, 0);
+
+  dialog_action_area17 = GNOME_DIALOG (Edit_Report_Size)->action_area;
+  gtk_object_set_data (GTK_OBJECT (Edit_Report_Size), "dialog_action_area17", dialog_action_area17);
+  gtk_widget_show (dialog_action_area17);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area17), GTK_BUTTONBOX_SPREAD);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area17), 8);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Edit_Report_Size), GNOME_STOCK_BUTTON_OK);
+  button90 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Edit_Report_Size)->buttons)->data);
+  gtk_widget_ref (button90);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "button90", button90,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button90);
+  GTK_WIDGET_SET_FLAGS (button90, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Edit_Report_Size), GNOME_STOCK_BUTTON_CANCEL);
+  button92 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Edit_Report_Size)->buttons)->data);
+  gtk_widget_ref (button92);
+  gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "button92", button92,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button92);
+  GTK_WIDGET_SET_FLAGS (button92, GTK_CAN_DEFAULT);
+
+  return Edit_Report_Size;
 }
 

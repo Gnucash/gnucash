@@ -55,7 +55,7 @@
                  (lambda ()
                    (let ((rept (gnc:make-report
                                 (gnc:report-template-name report))))
-                     (gnc:report-window rept)))))
+                     (gnc:report-in-main-window rept)))))
           (gnc:add-extension item))))
 
   ;; add the menu option to edit style sheets 
@@ -77,22 +77,20 @@
 (define <report-template>
   (make-record-type "<report-template>"
                     ;; The data items in a report record
-                    '(version name options-generator renderer in-menu?)))
+                    '(version name options-generator options-editor
+                              renderer in-menu?)))
 
 (define (gnc:define-report . args) 
   ;; For now the version is ignored, but in the future it'll let us
   ;; change behaviors without breaking older reports.
   ;;
-  ;; The generator should be a function that accepts one argument, a
-  ;; set of options, and generates the report.
-  ;;
-  ;; This code must return as its final value a string representing
-  ;; the contents of the HTML document.  preferably this should be
-  ;; generated via the <html-document> class, but it's not required.
+  ;; The renderer should be a function that accepts one argument, a
+  ;; set of options, and generates the report. the renderer must
+  ;; return as its final value an <html-document> object.
 
   (define (blank-report)
     ;; Number of #f's == Number of data members
-    ((record-constructor <report-template>) #f #f #f #f #t))
+    ((record-constructor <report-template>) #f #f #f gnc:default-options-editor #f #t))
 
   (define (args-to-defn in-report-rec args)
     (let ((report-rec (if in-report-rec
@@ -119,6 +117,8 @@
   (record-accessor <report-template> 'name))
 (define gnc:report-template-options-generator
   (record-accessor <report-template> 'options-generator))
+(define gnc:report-template-options-editor
+  (record-accessor <report-template> 'options-editor))
 (define gnc:report-template-renderer
   (record-accessor <report-template> 'renderer))
 (define gnc:report-in-menu?
@@ -126,9 +126,14 @@
 
 (define (gnc:report-template-new-options report-template)
   (let ((generator (gnc:report-template-options-generator report-template))
+        (namer 
+         (gnc:make-string-option 
+          (N_ "General") (N_ "Report name") "0a"
+          (N_ "Enter a descriptive name for this report")
+          (gnc:report-template-name report-template)))
         (stylesheet 
          (gnc:make-multichoice-option 
-          (N_ "General") (N_ "Stylesheet") "0a"
+          (N_ "General") (N_ "Stylesheet") "0b"
           (N_ "Select a stylesheet for the report.")
           (string->symbol (N_ "Default"))
           (map 
@@ -139,12 +144,15 @@
               (string-append (gnc:html-style-sheet-name ss) 
                              (_ " Stylesheet"))))
            (gnc:get-html-style-sheets)))))
+    
     (if (procedure? generator)
         (let ((options (generator)))
           (gnc:register-option options stylesheet)
+          (gnc:register-option options namer)
           options)
         (let ((options (gnc:new-options)))
           (gnc:register-option options stylesheet)
+          (gnc:register-option options names)
           options))))
 
 (define <report> 
@@ -210,6 +218,50 @@
     (if template
         (gnc:report-template-new-options template)
         #f)))
+
+(define (gnc:report-options-editor report) 
+  (let ((template 
+         (hash-ref  *gnc:_report-templates_* 
+                    (gnc:report-type report))))
+    (if template
+        (gnc:report-template-options-editor template)
+        #f)))
+
+(define (gnc:report-name report) 
+  (gnc:option-value
+   (gnc:lookup-option (gnc:report-options report)
+                      (N_ "General") (N_ "Report name"))))
+   
+
+;;; (define (gnc:report-default-options-editor)
+;;;   (let* ((option-db #f)
+;;;          (option-dlg #f))
+;;;     (define (editor options action report-win)
+;;;       (if (string? action)
+;;;           (cond 
+;;;            ;; open: start the options editor. 
+;;;            ((string=? action "open")
+;;;             (set! option-db 
+;;;                   (gnc:option-db-new options))
+;;;             (set! option-dlg 
+;;;                   (gnc:options-dialog-new #t))
+;;;             (gnc:build-options-dialog-contents 
+;;;              option-dlg option-db)
+;;;             ;; set up the default callbacks 
+;;;             (gnc:report-default-options-setup option-dlg report-win))
+           
+;;;            ;; close: shut it down, probably because the report window
+;;;            ;; is getting closed. 
+;;;            ((string=? action "close")
+;;;             (gnc:options-dialog-destroy option-dlg)))
+             
+(define (gnc:all-report-template-names)
+  (sort 
+   (hash-fold 
+    (lambda (k v p)
+      (cons k p)) 
+    '() *gnc:_report-templates_*)
+   string<?))
 
 (define (gnc:report-remove-by-id id)
   (let ((r (hash-ref *gnc:_reports_* id)))

@@ -16,7 +16,8 @@ gncscm_DATA = \
   taxtxf.scm \
   txf-export.scm \
   txf-export-help.scm \
-  transaction-report.scm
+  transaction-report.scm \
+  view-column.scm
 
 EXTRA_DIST = \
   .cvsignore \

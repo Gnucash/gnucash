@@ -36,6 +36,7 @@ GNCOptionWin * gnc_options_dialog_new(gboolean make_toplevel);
 void gnc_options_dialog_destroy(GNCOptionWin * win);
 
 GtkWidget * gnc_options_dialog_widget(GNCOptionWin * win);
+GtkWidget * gnc_options_dialog_notebook(GNCOptionWin * win);
 
 void gnc_options_dialog_set_apply_cb(GNCOptionWin * win,
                                      GNCOptionWinCallback thunk,

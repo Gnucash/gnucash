@@ -33,6 +33,7 @@ typedef enum { URL_TYPE_FILE, URL_TYPE_JUMP,
                URL_TYPE_SECURE, 
                URL_TYPE_REGISTER,   /* for gnucash register popups */
                URL_TYPE_REPORT,     /* for gnucash report popups */
+               URL_TYPE_OPTIONS,    /* for editing report options */ 
                URL_TYPE_SCHEME,     /* for scheme code evaluation */
                URL_TYPE_HELP,       /* for a gnucash help window */
                URL_TYPE_XMLDATA,    /* links to gnucash XML data files */ 
