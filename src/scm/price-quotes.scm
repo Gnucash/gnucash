@@ -20,9 +20,19 @@
 ;;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (gnucash process))
+(define-module (gnucash price-quotes))
 
-(gnc:support "price-quotes.scm")
+(export yahoo-get-historical-quotes)
+(export gnc:book-add-quotes)
+(export gnc:add-quotes-to-book-at-url)
+
+(use-modules (gnucash process))
+(use-modules (www main))
+(use-modules (srfi srfi-1))
+(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash gnc-module))
+
+(gnc:module-load "gnucash/app-utils" 0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
