@@ -1,19 +1,20 @@
-# Swedish translation of gnucash
+# Swedish translation of Gnucash.
 # Copyright (C) 2000, 2001 Free Software Foundation, Inc.
 # Dennis Björklund <dennisb@cs.chalmers.se>, 2000.
 # Martin Norbäck <d95mback@dtek.chalmers.se>, 2001.
+# Christian Rose <menthos@menthos.com>, 2001.
 # 
 # $Id$
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.6\n"
-"POT-Creation-Date: 2001-08-12 23:00-0700\n"
-"PO-Revision-Date: 2001-07-06 22:58-0700\n"
-"Last-Translator: Martin Norbäck <d95mback@dtek.chalmers.se>\n"
+"Project-Id-Version: gnucash\n"
+"POT-Creation-Date: 2001-08-10 13:20+0200\n"
+"PO-Revision-Date: 2001-09-12 16:41+0200\n"
+"Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/FileDialog.c:62
@@ -63,15 +64,14 @@ msgstr ""
 "Uppkopplingen försvann, kan inte skicka data."
 
 #: src/FileDialog.c:98
-#, fuzzy
 msgid ""
 "This file/URL appears to be from a newer version\n"
 "of GnuCash. You must upgrade your version of GnuCash\n"
 "to work with this data."
 msgstr ""
-"Denna fil verkar vara från en nyare version\n"
+"Denna fil/URL verkar vara från en nyare version\n"
 "av GnuCash. Du måste uppgradera GnuCash för\n"
-"att kunna läsa den här filen."
+"att kunna arbeta med denna data."
 
 #: src/FileDialog.c:105
 #, c-format
@@ -102,13 +102,13 @@ msgstr ""
 "Vill du fortfarande öppna databasen?"
 
 #: src/FileDialog.c:123
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file/URL \n"
 "    %s\n"
 "does not contain GnuCash data or the data is corrupt."
 msgstr ""
-"URL:en \n"
+"Filen/URL:en \n"
 "   %s\n"
 "innehåller inte GnuCash-data eller innehåller felaktig data."
 
@@ -184,13 +184,12 @@ msgid "Unknown file type"
 msgstr "Okänd filtyp"
 
 #: src/FileDialog.c:179
-#, fuzzy
 msgid ""
 "This database is from an older version of GnuCash.\n"
 "Do you want to upgrade the database to the current version?"
 msgstr ""
-"Denna fil kommer från en äldre version av GnuCash.\n"
-"Vill du fortsätta?"
+"Denna databas kommer från en äldre version av GnuCash.\n"
+"Vill du uppgradera databasen till den aktuella versionen?"
 
 #: src/FileDialog.c:186
 msgid ""
@@ -200,6 +199,10 @@ msgid ""
 "documentation to learn how to clear out dangling login\n"
 "sessions."
 msgstr ""
+"SQL-databasen används av andra användare, och uppgraderingen kan inte "
+"utföras innan de loggar ut.\n"
+"Om det inte finns andra användare bör du studera dokumentationen för "
+"information om hur kvarvarande inloggningssessioner kan tas bort."
 
 #: src/FileDialog.c:196
 msgid "An unknown I/O error occurred."
@@ -2180,8 +2183,8 @@ msgstr ""
 "importera\n"
 "nu. Gör detta om du har sparat dina konton till separata QIF-filer.\n"
 "\n"
-"Klicka på \"Nästa\" för att avsluta inläsningen av filer och gå vidare "
-"till \n"
+"Klicka på \"Nästa\" för att avsluta inläsningen av filer och gå vidare till "
+"\n"
 "nästa steg i QIF-importprocessen."
 
 #: src/gnome/glade-gnc-dialogs.c:4373
@@ -2210,32 +2213,32 @@ msgid ""
 "\n"
 "Note that GnuCash will be creating many accounts that did not exist on your\n"
 "other personal finance program, including a separate account for each stock\n"
-"you own, separate accounts for the brokerage commissions, special \"Equity"
-"\"\n"
+"you own, separate accounts for the brokerage commissions, special "
+"\"Equity\"\n"
 "accounts (subaccounts of Retained Earnings, by default) which are the "
 "source\n"
-"of your opening balances, etc. All of these accounts will appear on the "
-"next \n"
+"of your opening balances, etc. All of these accounts will appear on the next "
+"\n"
 "page so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
-"På nästa sida kommer konton i QIF-filer och eventuella aktier och fonder "
-"som \n"
-"du äger att matchas med GnuCash-konton. Om det redan finns ett GnuCash-"
-"konto \n"
-"med samma namn, eller med ett liknande namn och jämförbar typ, så kommer "
-"det \n"
+"På nästa sida kommer konton i QIF-filer och eventuella aktier och fonder som "
+"\n"
+"du äger att matchas med GnuCash-konton. Om det redan finns ett GnuCash-konto "
+"\n"
+"med samma namn, eller med ett liknande namn och jämförbar typ, så kommer det "
+"\n"
 "kontot att användas som match, annars kommer GnuCash att skapa ett nytt \n"
 "konto med samma namn och typ som QIF-kontot. Om det föreslagna \n"
 "GnuCash-kontot inte passar, klicka på det för att ändra det.\n"
 "\n"
 "Observera att GnuCash kommer att skapa många konton som inte finns i ditt \n"
-"andra finansprogram, bland annat ett separat konto för varje aktie du "
-"äger, \n"
+"andra finansprogram, bland annat ett separat konto för varje aktie du äger, "
+"\n"
 "speciella konton för mäklarkommission och speciella eget kapitalkonto \n"
 "(underkonton till Bibehållna intäkter som standard) som kommer att vara \n"
-"ursprunget till dina ingående saldon. Alla dessa konton kommer att synas "
-"på \n"
+"ursprunget till dina ingående saldon. Alla dessa konton kommer att synas på "
+"\n"
 "nästa sida så att du kan ändra dem om du vill, men det är helt säkert \n"
 "att lämna dem som de är.\n"
 
@@ -2277,12 +2280,12 @@ msgid ""
 "within GnuCash."
 msgstr ""
 "GnuCash använder separata intäkts- och utgiftskonton i stället för att ha \n"
-"kategorier som klassificerar varje transaktion. Varje kategori i din QIF-"
-"fil \n"
+"kategorier som klassificerar varje transaktion. Varje kategori i din QIF-fil "
+"\n"
 "kommer att omvandlas till ett GnuCash-konto.\n"
 "\n"
-"På nästa sida kommer du att ha möjlighet att se de föreslagna "
-"matchningarna \n"
+"På nästa sida kommer du att ha möjlighet att se de föreslagna matchningarna "
+"\n"
 "mellan QIF-kategorier och GnuCash-konton. Du kan ändra matchningar som du \n"
 "inte gillar genom att klicka på raden som innehåller kategorinamnet.\n"
 "\n"
@@ -2352,10 +2355,10 @@ msgid ""
 "\n"
 "Select the currency to use for transactions imported from your QIF files:\n"
 msgstr ""
-"QIF-importeraren kan just nu inte hantera QIF-filer med flera valutor.  "
-"Alla \n"
-"konton i QIF-filerna som du importerar måste anges i samma valuta.  Den "
-"här \n"
+"QIF-importeraren kan just nu inte hantera QIF-filer med flera valutor.  Alla "
+"\n"
+"konton i QIF-filerna som du importerar måste anges i samma valuta.  Den här "
+"\n"
 "begränsningen kommer att tas bort snart.\n"
 "\n"
 "Välj valuta som ska användas för transaktioner som importeras från dina \n"
@@ -2392,14 +2395,14 @@ msgid ""
 msgstr ""
 "På de följande sidorna så kommer du att få ange information om aktier, "
 "fonder \n"
-"och andra köp- och säljbara varor som finns i QIF-filerna som du "
-"importerar. \n"
-"GnuCash behöver mer information om köp- och säljbara varor än den som "
-"finns \n"
+"och andra köp- och säljbara varor som finns i QIF-filerna som du importerar. "
+"\n"
+"GnuCash behöver mer information om köp- och säljbara varor än den som finns "
+"\n"
 "i QIF-formatet.\n"
 "\n"
-"Varje aktie, fond och annan vara måste ha en typ, som är börsen eller "
-"listan \n"
+"Varje aktie, fond och annan vara måste ha en typ, som är börsen eller listan "
+"\n"
 "som den finns på (t.ex NASDAQ eller OMX), ett fullständigt namn och \n"
 "en förkortning.\n"
 "\n"
@@ -2423,8 +2426,8 @@ msgid ""
 "On the next page, you will be asked to confirm that an existing transaction\n"
 "matches an imported transaction.  Imported transactions are shown on the\n"
 "left side of the page, and possible  matches for the selected left-hand\n"
-"transaction are shown  to the right.  There may be several old "
-"transactions \n"
+"transaction are shown  to the right.  There may be several old transactions "
+"\n"
 "that could match an imported transaction; you will be able to select the \n"
 "correct one by clicking in the \"Dup?\" column of the correct transaction.\n"
 "\n"
@@ -2433,16 +2436,16 @@ msgid ""
 "\n"
 "Click \"Next\" to find duplicate transactions. "
 msgstr ""
-"Om du importerar en QIF-fil som du har hämtat från en bank eller något "
-"annat \n"
+"Om du importerar en QIF-fil som du har hämtat från en bank eller något annat "
+"\n"
 "finansinstitut så kan en del information i filen redan finnas i dina \n"
 "GnuCash-konton. GnuCash försöker upptäcka duplicerade transaktioner.\n"
 "\n"
 "På nästa sida kommer du att få bekräfta att en existerande transaktion \n"
-"matchar en importerad transaktion. Importerade transaktioner syns på "
-"vänster \n"
-"sida av fönstret och möjliga matchningar för den valda transaktionen syns "
-"på \n"
+"matchar en importerad transaktion. Importerade transaktioner syns på vänster "
+"\n"
+"sida av fönstret och möjliga matchningar för den valda transaktionen syns på "
+"\n"
 "höger sida. Det kan finnas flera gamla transaktioner som matchar en \n"
 "importerad transaktion; du kan välja den rätta genom att klicka i kolumnen \n"
 "\"Dup?\" på den rätta transaktionen.\n"
@@ -2494,8 +2497,8 @@ msgstr ""
 "\n"
 "Klicka på \"Bakåt\" för att kontrollera dina konto- och kategorimatchingar, "
 "för \n"
-"att ändra valuta- eller säkerhetsinställningar för nya konton eller för "
-"att \n"
+"att ändra valuta- eller säkerhetsinställningar för nya konton eller för att "
+"\n"
 "lägga till fler filer till mellanlagringen\n"
 "\n"
 "Klicka på \"Avbryt\" för att avbryta QIF-importprocessen."
@@ -2756,10 +2759,10 @@ msgid ""
 "You may also press `Back' to review your choices, or `Cancel' to\n"
 "quit without making any changes."
 msgstr ""
-"Om du är klar med aktiedelningen eller -sammanslagningen, klicka på \"Slutför"
-"\". \n"
-"Du kan också klicka på \"Bakåt\" för att kontrollera dina val, eller \"Avbryt"
-"\" \n"
+"Om du är klar med aktiedelningen eller -sammanslagningen, klicka på "
+"\"Slutför\". \n"
+"Du kan också klicka på \"Bakåt\" för att kontrollera dina val, eller "
+"\"Avbryt\" \n"
 "för att avbryta utan att göra några ändringar."
 
 #: src/gnome/glade-gnc-dialogs.c:6896
@@ -4213,8 +4216,8 @@ msgstr "Nästa stabila version kommer att vara %s."
 msgid ""
 "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
 msgstr ""
-"register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-"
-"iso8859-1"
+"register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-iso8859"
+"-1"
 
 #: src/register/gnome/gnucash-style.c:904
 msgid "register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
@@ -4840,9 +4843,8 @@ msgid "slashdot.org"
 msgstr "slashdot.org"
 
 #: src/scm/guile-strings.c:122
-#, fuzzy
 msgid "Can't save style sheet"
-msgstr "Redigera stilmallar för rapporten."
+msgstr "Kan inte spara stilmall"
 
 #: src/scm/guile-strings.c:123 src/scm/guile-strings.c:454
 #: src/scm/report/guile-strings.c:115
@@ -4911,7 +4913,7 @@ msgstr "Kontofält att visa"
 
 #: src/scm/guile-strings.c:164
 msgid "Can't save window state"
-msgstr ""
+msgstr "Kan inte spara fönstertillstånd"
 
 #: src/scm/guile-strings.c:165
 msgid "Select a date to report on"
@@ -5608,8 +5610,8 @@ msgid ""
 "Don't popup the new account list dialog when you choose \"New File\" from "
 "the \"File\" menu"
 msgstr ""
-"Visa inte dialogrutan för nytt konto när du väljer \"Ny fil\" från \"Arkiv\"-"
-"menyn"
+"Visa inte dialogrutan för nytt konto när du väljer \"Ny fil\" från "
+"\"Arkiv\"-menyn"
 
 #: src/scm/guile-strings.c:394
 msgid "Verbose documentation"
@@ -5877,8 +5879,8 @@ msgid ""
 "under the Help menu."
 msgstr ""
 "GnuCash-manualen har en stor mängd information som kan vara till hjälp.\n"
-"Om du uppgraderar från GnuCash 1.4, är avsnittet \"What's new in GnuCash 1.6"
-"\" särskilt intressant. Du kommer åt manualen i \"Hjälp\"-menyn."
+"Om du uppgraderar från GnuCash 1.4, är avsnittet \"What's new in GnuCash "
+"1.6\" särskilt intressant. Du kommer åt manualen i \"Hjälp\"-menyn."
 
 #: src/scm/guile-strings.c:477
 msgid ""
@@ -5887,8 +5889,8 @@ msgid ""
 "Format) files.  Click the Import button in the main window tool\n"
 "bar and follow the instructions provided."
 msgstr ""
-"Du kan lätt importera dina nuvarande finansiella data från Quicken, MS "
-"Money \n"
+"Du kan lätt importera dina nuvarande finansiella data från Quicken, MS Money "
+"\n"
 "eller andra program som exporterar QIF-filer (Quicken Interchange Format). \n"
 "Klicka på \"Importera\" i verktygsraden i huvudfönstret och följ \n"
 "instruktionerna."
@@ -5934,10 +5936,10 @@ msgid ""
 "the first value, then select '+', '-','*', or '/'.  Type the\n"
 "second value and press Enter to record the calculated amount."
 msgstr ""
-"När du skriver in belopp i registret, kan du använda GnuCash-kalkylatorn "
-"för \n"
-"att addera, subtrahera, multiplicera och dividera. Skriva bara förta "
-"värdet, \n"
+"När du skriver in belopp i registret, kan du använda GnuCash-kalkylatorn för "
+"\n"
+"att addera, subtrahera, multiplicera och dividera. Skriva bara förta värdet, "
+"\n"
 "sen +, -, * eller /. Skriv in det andra värdet och tryck \"Enter\" för att \n"
 "spara det kalkylerade värdet."
 
@@ -5996,8 +5998,8 @@ msgid ""
 "You can also press Tab and Shift-Tab to move between\n"
 "deposits and withdrawals."
 msgstr ""
-"I avstämningsfönstret kan du trycka på mellanslagstangenten för att "
-"markera \n"
+"I avstämningsfönstret kan du trycka på mellanslagstangenten för att markera "
+"\n"
 "transaktioner som avstämda. Du kan också trycka Tab och Shift-Tab för att \n"
 "flytta mellan insättningar och uttag."
 
@@ -6009,8 +6011,8 @@ msgid ""
 "dates as well."
 msgstr ""
 "När du skriver in checknummer i registret, kan du skriva + för att skriva \n"
-"nästa nummer och - för att skriva föregående nummer. Du kan använda + och "
-"- \n"
+"nästa nummer och - för att skriva föregående nummer. Du kan använda + och - "
+"\n"
 "för att öka och minska datum också."
 
 #: src/scm/guile-strings.c:521
@@ -6018,8 +6020,8 @@ msgid ""
 "You should back up your files regularly.  Just copy\n"
 "your GnuCash data file to a floppy or other backup device."
 msgstr ""
-"Du bör göra säkerhetskopior av dina datafiler regelbundet. Kopiera bara "
-"din \n"
+"Du bör göra säkerhetskopior av dina datafiler regelbundet. Kopiera bara din "
+"\n"
 "datafil till en diskett eller något annat medium."
 
 #: src/scm/guile-strings.c:523
@@ -6040,8 +6042,8 @@ msgid ""
 "providing all the financial information you want at a glance.\n"
 "To do so, use the \"Multicolumn View\" report."
 msgstr ""
-"Du kan lägga flera rapporter i samma fönster, för att få all information "
-"du \n"
+"Du kan lägga flera rapporter i samma fönster, för att få all information du "
+"\n"
 "vill ha i ett ögonkast. För att göra det, använd \"Flerkolumnsvy\"-rapporten."
 
 #: src/scm/guile-strings.c:530
@@ -6049,8 +6051,8 @@ msgid ""
 "GnuCash can act as a simple web browser!  To display\n"
 "a web page as a report, use the \"Frame URL\" report."
 msgstr ""
-"GnuCash kan fungera som en enkel webbläsare. För att visa en webbsida som "
-"en \n"
+"GnuCash kan fungera som en enkel webbläsare. För att visa en webbsida som en "
+"\n"
 "rapport, använd rapporten \"Fånga URL\"."
 
 #: src/scm/guile-strings.c:532
@@ -7436,8 +7438,8 @@ msgid ""
 "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF "
 "codes with payer sources may be repeated."
 msgstr ""
-"VARNING: Det finns dubbla TXF-koder tilldelade till vissa konton. Bara TXF-"
-"konton med betalningskälla kan upprepas."
+"VARNING: Det finns dubbla TXF-koder tilldelade till vissa konton. Bara "
+"TXF-konton med betalningskälla kan upprepas."
 
 #: src/scm/report/guile-strings.c:559
 msgid "Sub-"
@@ -7486,8 +7488,8 @@ msgid ""
 "No Tax Related accounts were found.  Go to the Accounts->Tax Information "
 "dialog to set up tax-related accounts."
 msgstr ""
-"Inga skatterelaterade konton hittades. Gå till dialogrutan för Konton-"
-">Skatteinformation för ställa in skatterelaterade konton."
+"Inga skatterelaterade konton hittades. Gå till dialogrutan för "
+"Konton->Skatteinformation för ställa in skatterelaterade konton."
 
 #: src/scm/report/guile-strings.c:571
 msgid "Tax Report / TXF Export"
@@ -7578,58 +7580,48 @@ msgid "Display 1 line"
 msgstr "Visa en rad"
 
 #: src/scm/report/guile-strings.c:628
-#, fuzzy
 msgid "Report Accounts"
-msgstr "Exportera konton..."
+msgstr "Rapportkonton"
 
 #: src/scm/report/guile-strings.c:629
-#, fuzzy
 msgid "Report on these accounts"
-msgstr "Skapa transaktionsrapport på dessa konton"
+msgstr "Skapa rapport på dessa konton"
 
 #: src/scm/report/guile-strings.c:630
-#, fuzzy
 msgid "Filter Accounts"
-msgstr "Andra kontot"
+msgstr "Filtrera konton"
 
 #: src/scm/report/guile-strings.c:631
-#, fuzzy
 msgid "Filter on these accounts"
-msgstr "Gruppera kontona"
+msgstr "Filtrera på dessa konton"
 
 #: src/scm/report/guile-strings.c:632
-#, fuzzy
 msgid "Filter Type"
-msgstr "Graftyp"
+msgstr "Filtertyp"
 
 #: src/scm/report/guile-strings.c:633
-#, fuzzy
 msgid "Filter account"
-msgstr "Andra kontot"
+msgstr "Filterkonto"
 
 #: src/scm/report/guile-strings.c:635
 msgid "Do not do any filtering"
-msgstr ""
+msgstr "Använd ingen filtrering"
 
 #: src/scm/report/guile-strings.c:636
-#, fuzzy
 msgid "Include Transactions to/from Filter Accounts"
-msgstr "Inkludera underkonton till varje valt konto"
+msgstr "Inkludera transaktioner till/från filterkonton"
 
 #: src/scm/report/guile-strings.c:637
-#, fuzzy
 msgid "Include transactions to/from filter accounts only"
-msgstr "Lägg till en ny transaktion till kontot"
+msgstr "Inkludera endast transaktioner till/från filterkonton"
 
 #: src/scm/report/guile-strings.c:638
-#, fuzzy
 msgid "Exclude Transactions to/from Filter Accounts"
-msgstr "Lägg till en ny transaktion till kontot"
+msgstr "Exkludera transaktioner till/från filterkonton"
 
 #: src/scm/report/guile-strings.c:639
-#, fuzzy
 msgid "Exclude transactions to/from all filter accounts"
-msgstr "Inkludera underkonton till varje valt konto"
+msgstr "Exkludera transaktioner till/från alla filterkonton"
 
 #: src/scm/report/guile-strings.c:641
 msgid "Do not sort"
@@ -7838,6 +7830,18 @@ msgstr ""
 #: src/scm/report/guile-strings.c:738
 msgid "Transaction Report"
 msgstr "Transaktionsrapport"
+
+#~ msgid ""
+#~ "The SQL database is in use by other users, and the upgrade cannot be "
+#~ "performed until they logoff.\n"
+#~ "If there are currently no other users, consult the \n"
+#~ "documentation to learn how to clear out dangling login\n"
+#~ "sessions."
+#~ msgstr ""
+#~ "SQL-databasen används av andra användare, och uppgraderingen kan inte "
+#~ "utföras innan de loggar ut.\n"
+#~ "Om det inte finns andra användare bör du studera dokumentationen för "
+#~ "information om hur kvarvarande inloggningssessioner kan tas bort."
 
 #~ msgid ""
 #~ "The URL \n"
