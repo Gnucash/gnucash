@@ -70,9 +70,6 @@ typedef struct _RegWindow {
   Widget   reg;               /* The matrix widget...                    */
   Widget   balance;           /* The balance text field                  */
   Widget   record;            /* the record transaction button           */
-  unsigned short changed;     /* bitmask of fields that have changed in  *
-                               * transaction currEntry                   */
-  unsigned short currEntry;   /* to keep track of last edited transaction*/
 
   short type;                 /* register display type, usually equal to *
                                * account type                            */
@@ -96,22 +93,6 @@ static void cancelCB( Widget mw, XtPointer cd, XtPointer cb );
 
 /** GLOBALS *********************************************************/
 extern Widget  toplevel;
-
-#define MOD_NONE  0x00
-#define MOD_DATE  0x01
-#define MOD_NUM   0x02
-#define MOD_DESC  0x04
-#define MOD_RECN  0x08
-#define MOD_AMNT  0x10
-#define MOD_SHRS  0x20
-#define MOD_PRIC  0x40
-#define MOD_MEMO  0x80
-#define MOD_ACTN  0x100
-#define MOD_XFRM  0x200
-#define MOD_XTO   0x400
-#define MOD_NEW   0x800
-#define MOD_ALL   0xfff
-
 
 /********************************************************************\
  * xaccDestroyRegWindow()
@@ -251,7 +232,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
    * values are changed below. Be careful with which row is which.  *
   \******************************************************************/
   MenuItem reportMenu[] = {
-    { "Simple...",          &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
+    { SIMPLE_E_STR,         &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
       NULL, (XtPointer)0,  (MenuItem *)NULL, 0 },
     { NULL,                 NULL,                      0,  NULL, NULL, False,
       NULL, (XtPointer)0,  (MenuItem *)NULL, 0 },
@@ -302,8 +283,6 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   setBusyCursor( parent );
   
   regData = (RegWindow *)_malloc(sizeof(RegWindow));
-  regData->changed     = MOD_NONE;   /* Nothing has changed yet! */
-  regData->currEntry   = 0;
 
   /* count the number of accounts we are supposed to display,
    * and then, store them. */
@@ -574,9 +553,11 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 
 void regRefresh (RegWindow * regData)
 {
-   xaccLoadRegister (regData->ledger, regData->blackacc[0]->splits);
-
+   /* complete GUI initialization */
    xaccLoadXferCell (regData->ledger->xfrmCell, regData->blackacc[0]->parent);
+
+   xaccRecomputeBalance (regData->blackacc[0]);
+   xaccLoadRegister (regData->ledger, regData->blackacc[0]->splits);
 }
 
 /********************************************************************\

@@ -290,9 +290,6 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
    trans->debit_splits[num+1] = NULL;
 
    if (oldarray) _free (oldarray);
-
-   /* bring dollar amounts into synchrony */
-   xaccTransRecomputeAmount (trans);
 }
 
 /********************************************************************\

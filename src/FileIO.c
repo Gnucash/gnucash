@@ -576,7 +576,7 @@ readTransaction( int fd, Account *acc, int token )
        * aren't reconciled until you get your bank statement, and
        * use the reconcile window to mark the transaction reconciled
        */
-      if( YREC == trans->credit_split.reconciled == YREC ) {
+      if( YREC == trans->credit_split.reconciled ) {
         xaccTransSetReconcile (trans, CREC);
       }
     }

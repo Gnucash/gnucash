@@ -234,9 +234,6 @@ xaccInsertSplit ( Account *acc, Split *split )
   acc->splits[acc->numSplits] = NULL;
 
   _free(oldsplits);
-
-  /* hack alert -- quickfill belong in gui */
-  /* qfInsertTransaction( acc->qfRoot, trans ); */
 }
 
 
