@@ -121,7 +121,7 @@ sqlEscape_new (void)
 /* ================================================ */
 
 void
-qlEscape_destroy (sqlEscape *b)
+sqlEscape_destroy (sqlEscape *b)
 {
    if (!b) return;
    g_free (b->escape);     b->escape = NULL;
