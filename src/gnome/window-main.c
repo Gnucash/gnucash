@@ -254,42 +254,33 @@ gnc_main_window_can_restore_cb (const char * filename)
 }
 
 /**
- * gnc_acct_tree_tweak_menus
+ * gnc_main_window_tweak_menus
  *
  * @par1: A pointer to the GNC MDI child associated with the Main
  * window.
  *
- * This routine updates the View window in the main window menubar to
- * correctly show the state of the Toolbar, Summarybar and Statusbar.
- * The "show xxx" and "Hide xxx" menu items are changed to show what
- * can be done to the item in its current state.  I.E. If the item is
- * hidden, only the "Show xxx" menu item will be visible. This
- * routine is called whenever one of the main window parts is hidden
- * or shown, or whenever the the mdi view is changed (for safety
- * sake).
+ * This routine tweaks the View window in the main window menubar so
+ * that the menu checkboxes correctly show the state of the Toolbar,
+ * Summarybar and Statusbar.  There is no way to have the checkboxes
+ * start checked.  This will trigger each of the callbacks once, but
+ * they are designed to ignore the first 'sync' callback.  This is a
+ * suboptimal solution, but I can't find a better one at the moment.
  */
 static void
 gnc_main_window_tweak_menus(GNCMDIChildInfo * mc)
 {
   GtkWidget *widget;
-  gboolean   toolbar_visibility;
 
-  toolbar_visibility = gnc_mdi_get_toolbar_visibility();
+  widget = gnc_mdi_child_find_menu_item(mc, "View/Toolbar");
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
 
-  widget = gnc_mdi_child_find_menu_item(mc, "View/Show Toolbar");
-  gnc_mdi_widget_show(widget, (gpointer)!toolbar_visibility);
-  widget = gnc_mdi_child_find_menu_item(mc, "View/Hide Toolbar");
-  gnc_mdi_widget_show(widget, (gpointer)toolbar_visibility);
+  widget = gnc_mdi_child_find_menu_item(mc, "View/Status Bar");
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
 
-  widget = gnc_mdi_child_find_menu_item(mc, "View/Show Status Bar");
-  gnc_mdi_widget_show(widget, (gpointer)!gnc_show_status_bar);
-  widget = gnc_mdi_child_find_menu_item(mc, "View/Hide Status Bar");
-  gnc_mdi_widget_show(widget, (gpointer)gnc_show_status_bar);
+  widget = gnc_mdi_child_find_menu_item(mc, "View/Summary Bar");
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
 
-  widget = gnc_mdi_child_find_menu_item(mc, "View/Show Summary Bar");
-  gnc_mdi_widget_show(widget, (gpointer)!gnc_show_summary_bar);
-  widget = gnc_mdi_child_find_menu_item(mc, "View/Hide Summary Bar");
-  gnc_mdi_widget_show(widget, (gpointer)gnc_show_summary_bar);
+  mc->gnc_mdi->menu_tweaking = NULL;
 }
 
 /**
@@ -309,14 +300,23 @@ static void
 gnc_main_window_flip_toolbar_cb(GtkWidget * widget, gpointer data)
 {
   GNCMDIChildInfo * mc;
+  static gboolean in_sync = FALSE;
   gboolean toolbar_visibility = !gnc_mdi_get_toolbar_visibility();
+
+  if (!in_sync) {
+    /*
+     * Sync the hard way. Syncing by calling the xxx_set_active
+     * function causes an infinite recursion.
+     */
+    in_sync = TRUE;
+    return;
+  }
 
   mc = gnc_main_window_get_mdi_child();
   if (!mc)
     return;
   gnc_mdi_set_toolbar_visibility(toolbar_visibility);
   gnc_mdi_show_toolbar(mc);
-  gnc_main_window_tweak_menus(mc);
 }
 
 /**
@@ -336,6 +336,16 @@ static void
 gnc_main_window_flip_status_bar_cb(GtkWidget * widget, gpointer data)
 {
   GNCMDIChildInfo * mc;
+  static gboolean in_sync = FALSE;
+
+  if (!in_sync) {
+    /*
+     * Sync the hard way. Syncing by calling the xxx_set_active
+     * function causes an infinite recursion.
+     */
+    in_sync = TRUE;
+    return;
+  }
 
   gnc_show_status_bar = !gnc_show_status_bar;
 
@@ -349,7 +359,6 @@ gnc_main_window_flip_status_bar_cb(GtkWidget * widget, gpointer data)
     gtk_widget_hide(mc->app->statusbar);
     gtk_widget_queue_resize(mc->app->statusbar->parent);
   }
-  gnc_main_window_tweak_menus(mc);
 }
 
 /**
@@ -371,6 +380,16 @@ gnc_main_window_flip_summary_bar_cb(GtkWidget * widget, gpointer data)
   GNCMDIChildInfo * mc;
   GnomeDockItem *summarybar;
   guint dc1, dc2, dc3, dc4;
+  static gboolean in_sync = FALSE;
+
+  if (!in_sync) {
+    /*
+     * Sync the hard way. Syncing by calling the xxx_set_active
+     * function causes an infinite recursion.
+     */
+    in_sync = TRUE;
+    return;
+  }
 
   gnc_show_summary_bar = !gnc_show_summary_bar;
 
@@ -383,12 +402,12 @@ gnc_main_window_flip_summary_bar_cb(GtkWidget * widget, gpointer data)
 					   &dc1, &dc2, &dc3, &dc4);
   if (!summarybar) return;
 
-  if (gnc_show_summary_bar)
+  if (gnc_show_summary_bar) {
     gtk_widget_show(GTK_WIDGET(summarybar));
-  else
+  } else {
     gtk_widget_hide(GTK_WIDGET(summarybar));
-  gnc_main_window_tweak_menus(mc);
-  gtk_widget_queue_resize(mc->app->dock);
+    gtk_widget_queue_resize(mc->app->dock);
+  }
 }
 
 /********************************************************************
@@ -425,7 +444,6 @@ gnc_main_window_new (void)
   gtk_signal_connect(GTK_OBJECT(retval->mdi), "app_created",
                      GTK_SIGNAL_FUNC(gnc_main_window_app_created_cb),
                      retval);
-
 
   /* handle show/hide items in view menu */
   retval->menu_tweaking = gnc_main_window_tweak_menus;
@@ -868,45 +886,24 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
-    { GNOME_APP_UI_ITEM,
-      N_("Hide _Toolbar"),
-      N_("Hide the toolbar on this window"),
+    { GNOME_APP_UI_TOGGLEITEM,
+      N_("_Toolbar"),
+      N_("Show/hide the toolbar on this window"),
       gnc_main_window_flip_toolbar_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
-    { GNOME_APP_UI_ITEM,
-      N_("Show _Toolbar"),
-      N_("Show the toolbar on this window"),
-      gnc_main_window_flip_toolbar_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    { GNOME_APP_UI_ITEM,
-      N_("Hide _Status Bar"),
-      N_("Hide the status bar on this window"),
-      gnc_main_window_flip_status_bar_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    { GNOME_APP_UI_ITEM,
-      N_("Show _Status Bar"),
-      N_("Show the status bar on this window"),
-      gnc_main_window_flip_status_bar_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    { GNOME_APP_UI_ITEM,
-      N_("Hide S_ummary Bar"),
-      N_("Hide the summary bar on this window"),
+    { GNOME_APP_UI_TOGGLEITEM,
+      N_("S_ummary Bar"),
+      N_("Show/hide the summary bar on this window"),
       gnc_main_window_flip_summary_bar_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
-    { GNOME_APP_UI_ITEM,
-      N_("Show S_ummary Bar"),
-      N_("Show the summary bar on this window"),
-      gnc_main_window_flip_summary_bar_cb, NULL, NULL,
+    { GNOME_APP_UI_TOGGLEITEM,
+      N_("_Status Bar"),
+      N_("Show/Hide the status bar on this window"),
+      gnc_main_window_flip_status_bar_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },

@@ -1,4 +1,14 @@
+2002-06-10  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-main.c: Update the view items to use
+	gtkcheckmenuitems instead of having separate show and hide menu
+	items.  Also flip the order of the Summary and Status menu items
+	so that the menu order reflects the items order within the window.
+
 2002-06-09  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-acct-tree.c: Remove the 'tax information' item
+	from the account window pop-up menu.
 
 	* src/gnome/glade/price.glade:
 	* src/gnome/dialog-price-editor.c: Set up all fields so that the
