@@ -1,5 +1,11 @@
 2005-01-29  Christian Stimming  <stimming@tuhh.de>
 
+	* configure.in, src/tax/us/gncmod-tax-us.c,
+	src/report/locale-specific/us/gncmod-locale-reports-us.c,
+	src/app-utils/gnc-ui-util.c: Make localized tax categories
+	disabled by default; can be enabled by
+	--enable-locale-specific-tax switch.
+
 	* src/import-export/hbci/dialog-hbcitrans.c: Enable debit notes
 	again. Various other improvements.
 

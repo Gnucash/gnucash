@@ -33,10 +33,12 @@ int libgncmod_tax_us_LTX_gnc_module_end(int refcount);
 
 char *
 libgncmod_tax_us_LTX_gnc_module_path(void) {
+#ifdef LOCALE_SPECIFIC_TAX
   const char *thislocale = setlocale(LC_ALL, NULL);
   if (strncmp(thislocale, "de_DE", 5) == 0)
     return g_strdup("gnucash/tax/de_DE");
   else
+#endif
     return g_strdup("gnucash/tax/us");
 }
 
@@ -58,10 +60,12 @@ libgncmod_tax_us_LTX_gnc_module_init(int refcount) {
   /* This is a very simple hack that loads the (new, special) German
      tax definition file in a German locale, or (default) loads the
      previous US tax file. */
+#ifdef LOCALE_SPECIFIC_TAX
   const char *thislocale = setlocale(LC_ALL, NULL);
   if (strncmp(thislocale, "de_DE", 5) == 0)
     lmod("(gnucash tax de_DE)");
   else
+#endif
     lmod("(gnucash tax us)");
   return TRUE;
 }
