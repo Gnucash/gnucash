@@ -466,10 +466,10 @@ gnc_register_gui_component_scm (const char * component_class,
   g_return_val_if_fail (ci, NO_COMPONENT);
 
   ci->refresh_handler_scm = refresh_handler;
-  scm_protect_object (refresh_handler);
+  scm_gc_protect_object (refresh_handler);
 
   ci->close_handler_scm = close_handler;
-  scm_protect_object (close_handler);
+  scm_gc_protect_object (close_handler);
 
   return ci->component_id;
 }
@@ -575,11 +575,11 @@ gnc_unregister_gui_component (gint component_id)
   ci->component_class = NULL;
 
   if (ci->refresh_handler_scm != SCM_BOOL_F)
-    scm_unprotect_object (ci->refresh_handler_scm);
+    scm_gc_unprotect_object (ci->refresh_handler_scm);
   ci->refresh_handler_scm = SCM_BOOL_F;
 
   if (ci->close_handler_scm != SCM_BOOL_F)
-    scm_unprotect_object (ci->close_handler_scm);
+    scm_gc_unprotect_object (ci->close_handler_scm);
   ci->close_handler_scm = SCM_BOOL_F;
 
   g_free (ci);

@@ -97,7 +97,7 @@ pgendStoreBookNoLock (PGBackend *be, QofBook *book,
    if (book->idata)
    {
       pgendKVPDelete (be, book->idata);
-      pgendKVPStore (be, book->idata, book->kvp_data);
+      pgendKVPStore (be, book->idata, book->inst.kvp_data);
    }
    LEAVE(" ");
 }
@@ -172,7 +172,7 @@ pgendBookRestore (PGBackend *be, QofBook *book)
 
    if (0 != book->idata) 
    {
-      book->kvp_data = pgendKVPFetch (be, book->idata, book->kvp_data);
+      book->inst.kvp_data = pgendKVPFetch (be, book->idata, book->inst.kvp_data);
    }
 
    LEAVE (" ");
@@ -200,7 +200,7 @@ get_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    for (node=blist; node; node=node->next)
    {
       book = node->data;
-      if (guid_equal (&book->entity.guid, &guid)) break;
+      if (guid_equal (&book->inst.entity.guid, &guid)) break;
       book = NULL;
    }
    
@@ -237,7 +237,7 @@ pgendGetAllBooks (PGBackend *be, QofBookList *blist)
       QofBook *book = node->data;
       if (0 != book->idata) 
       {
-         book->kvp_data = pgendKVPFetch (be, book->idata, book->kvp_data);
+         book->inst.kvp_data = pgendKVPFetch (be, book->idata, book->inst.kvp_data);
       }
    }
 

@@ -20,11 +20,11 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup Engine
+/** @addtogroup Query
     @{ */
 /**
     @file qofsql.h
-    @breif QOF client-side SQL parser.
+    @brief QOF client-side SQL parser.
     @author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
 */
 
@@ -36,6 +36,8 @@
 #include <qof/qofbook.h>
 #include <qof/qofquery.h>
 
+/** @addtogroup SQL SQL Interface to Query
+  @{ */
 typedef struct _QofSqlQuery QofSqlQuery;
 
 /** Create a new SQL-syntax query machine.
@@ -139,5 +141,6 @@ GList * qof_sql_query_rerun (QofSqlQuery *query);
  */
 void qof_sql_query_set_kvp (QofSqlQuery *, KvpFrame *);
 
+/** @} */
 #endif /* QOF_SQL_QUERY_H */
 /** @} */

@@ -17,18 +17,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /** @addtogroup Date
-    @{ */
-/** @file gnc-date.h 
-    @brief Date and Time handling routines  
-    *
     Utility functions to handle date and time (adjusting, getting 
     the current date, printing the date and time, etc.) 
-
-    \warning HACK ALERT -- the scan and print routines should probably be moved
-    to somewhere else. The engine really isn't involved with things
-    like printing formats. This is needed mostly by the GUI and so on.
-    If a file-io backend needs date handling, it should do it itself,
-    instead of depending on the routines here. 
 
     Overall, this file is quite a mess.  Note, however, that other 
     applications, besides just GnuCash, use this file.  In particular,
@@ -50,10 +40,21 @@
     that is not Universal Time.  Break these rules, and you will 
     rue the day...
 
+    \warning HACK ALERT -- the scan and print routines should probably be moved
+    to somewhere else. The engine really isn't involved with things
+    like printing formats. This is needed mostly by the GUI and so on.
+    If a file-io backend needs date handling, it should do it itself,
+    instead of depending on the routines here. 
+
     @author Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu> 
     @author Copyright (C) 1998-2001,2003 Linas Vepstas <linas@linas.org>
 */
 
+/* @{ 
+    @file gnc-date.h 
+    @brief Date and Time handling routines  
+*/
+    
 #ifndef GNC_DATE_H
 #define GNC_DATE_H
 

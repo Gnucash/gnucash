@@ -20,7 +20,10 @@
 \********************************************************************/
 
 /**
- * @addtogroup Engine_SchedXaction
+ * @addtogroup Engine
+ * @{ */
+/**
+ * @addtogroup SchedXaction
  * @{ */
 /**
  * @file SX-book.h
@@ -56,4 +59,5 @@ AccountGroup * gnc_collection_get_template_group( QofCollection *col );
 
 
 #endif /* GNC_SX_BOOK_H */
+/** @} */
 /** @} */

@@ -114,7 +114,7 @@ gnc_style_sheet_dialog_create(StyleSheetDialog * ss,
     ssinfo->row_ref    = row_ref;
     g_free(title);
 
-    scm_protect_object(ssinfo->stylesheet);
+    scm_gc_protect_object(ssinfo->stylesheet);
     g_object_ref(gnc_options_dialog_widget(ssinfo->odialog));
 
     gnc_build_options_dialog_contents(ssinfo->odialog, 

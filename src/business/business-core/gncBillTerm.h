@@ -19,11 +19,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * Copyright (C) 2002 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
+/** @addtogroup Business
+    @{ */
+/** @addtogroup BillTerm
+    @{ */
+/** @file gncBillTerm.h
+    @brief Billing Term interface
+    @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_BILLTERM_H_
 #define GNC_BILLTERM_H_
@@ -41,7 +44,7 @@ typedef struct _gncBillTerm GncBillTerm;
 #define GNC_IS_BILLTERM(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_BILLTERM))
 #define GNC_BILLTERM(obj)     (QOF_CHECK_CAST((obj), GNC_ID_BILLTERM, GncBillTerm))
 
-/*
+/**
  * How to interpret the amount.
  * You can interpret it as a VALUE or a PERCENT.
  * ??? huh?
@@ -51,11 +54,19 @@ typedef enum {
   GNC_TERM_TYPE_PROXIMO,
 } GncBillTermType;
 
-/* Create/Destroy Functions */
+/** @name Create/Destroy Functions */
+/** @{ */
 GncBillTerm * gncBillTermCreate (QofBook *book);
 void gncBillTermDestroy (GncBillTerm *term);
+void gncBillTermIncRef (GncBillTerm *term);
+void gncBillTermDecRef (GncBillTerm *term);
 
-/* Set Functions */
+void gncBillTermChanged (GncBillTerm *term);
+void gncBillTermBeginEdit (GncBillTerm *term);
+void gncBillTermCommitEdit (GncBillTerm *term);
+/** @} */
+
+/** @name Set Functions */
 void gncBillTermSetName (GncBillTerm *term, const char *name);
 void gncBillTermSetDescription (GncBillTerm *term, const char *name);
 void gncBillTermSetType (GncBillTerm *term, GncBillTermType type);
@@ -64,15 +75,10 @@ void gncBillTermSetDiscountDays (GncBillTerm *term, gint days);
 void gncBillTermSetDiscount (GncBillTerm *term, gnc_numeric discount);
 void gncBillTermSetCutoff (GncBillTerm *term, gint cutoff);
 
-void gncBillTermIncRef (GncBillTerm *term);
-void gncBillTermDecRef (GncBillTerm *term);
+/** @} */
 
-void gncBillTermChanged (GncBillTerm *term);
-void gncBillTermBeginEdit (GncBillTerm *term);
-void gncBillTermCommitEdit (GncBillTerm *term);
-
-/* Get Functions */
-
+/** @name Get Functions */
+/** @{ */
 /** Return a pointer to the instance gncBillTerm that is identified
  *  by the guid, and is residing in the book. Returns NULL if the 
  *  instance can't be found.
@@ -100,6 +106,7 @@ GncBillTerm *gncBillTermGetParent (GncBillTerm *term);
 GncBillTerm *gncBillTermReturnChild (GncBillTerm *term, gboolean make_new);
 #define gncBillTermGetChild(t) gncBillTermReturnChild((t),FALSE)
 gint64 gncBillTermGetRefcount (GncBillTerm *term);
+/** @} */
 
 int gncBillTermCompare (GncBillTerm *a, GncBillTerm *b);
 
@@ -114,3 +121,5 @@ Timespec gncBillTermComputeDiscountDate (GncBillTerm *term, Timespec post_date);
 #define gncBillTermGetGUID(x) qof_instance_get_guid (QOF_INSTANCE(x))
 
 #endif /* GNC_BILLTERM_H_ */
+/** @} */
+/** @} */

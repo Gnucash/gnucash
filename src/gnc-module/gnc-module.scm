@@ -11,12 +11,18 @@
 
 (export gnc:module-system-init)
 
+(if (not (defined? 're-export))
+    (begin
+      (defmacro re-export names
+	`(eval export names))
+      (export re-export)))
+
 ;; symbols from gw-gnc-module
-(export gnc:module-system-refresh)
-(export gnc:module-load)
-(export gnc:module-load-optional)
-(export gnc:module-unload)
-(export gnc:module-lookup)
+(re-export gnc:module-system-refresh)
+(re-export gnc:module-load)
+(re-export gnc:module-load-optional)
+(re-export gnc:module-unload)
+(re-export gnc:module-lookup)
 
 (define (gnc:module-system-init)
   (let ((lib (if (or (string=? (version) "1.3")

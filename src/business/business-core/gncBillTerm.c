@@ -36,9 +36,9 @@
 #include "gnc-engine-util.h"
 #include "qofquerycore.h"
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 #include "kvp_frame.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -404,7 +404,7 @@ void gncBillTermChanged (GncBillTerm *term)
 
 void gncBillTermBeginEdit (GncBillTerm *term)
 {
-  GNC_BEGIN_EDIT (&term->inst);
+  QOF_BEGIN_EDIT (&term->inst);
 }
 
 static void gncBillTermOnError (QofInstance *inst, QofBackendError errcode)
@@ -422,8 +422,8 @@ static inline void on_done (QofInstance *inst) {}
 
 void gncBillTermCommitEdit (GncBillTerm *term)
 {
-  GNC_COMMIT_EDIT_PART1 (&term->inst);
-  GNC_COMMIT_EDIT_PART2 (&term->inst, gncBillTermOnError,
+  QOF_COMMIT_EDIT_PART1 (&term->inst);
+  QOF_COMMIT_EDIT_PART2 (&term->inst, gncBillTermOnError,
                          on_done, bill_free);
 }
 
@@ -678,19 +678,21 @@ static QofObject gncBillTermDesc =
   interface_version:   QOF_OBJECT_VERSION,
   e_type:              _GNC_MOD_NAME,
   type_label:          "Billing Term",
+  create:              NULL,
   book_begin:          _gncBillTermCreate,
   book_end:            _gncBillTermDestroy,
   is_dirty:            qof_collection_is_dirty,
   mark_clean:          qof_collection_mark_clean,
   foreach:             qof_collection_foreach,
-  printable:           NULL
+  printable:           NULL,
+  version_cmp:         (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncBillTermRegister (void)
 {
   static QofParam params[] = {
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

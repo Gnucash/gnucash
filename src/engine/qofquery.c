@@ -1242,9 +1242,10 @@ void qof_query_set_book (QofQuery *q, QofBook *book)
   if (g_list_index (q->books, book) == -1)
     q->books = g_list_prepend (q->books, book);
 
-  qof_query_add_guid_match (q, g_slist_prepend (g_slist_prepend (NULL,
-                                                             QOF_QUERY_PARAM_GUID),
-                                            QOF_QUERY_PARAM_BOOK),
+  GSList *slist = NULL;
+  g_slist_prepend (slist, QOF_PARAM_GUID);
+  g_slist_prepend (slist, QOF_PARAM_BOOK);
+  qof_query_add_guid_match (q, slist,
                         qof_book_get_guid(book), QOF_QUERY_AND);
 }
 
@@ -1720,7 +1721,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     g_string_sprintfa (gs, "\n      Match type %s",
                        qof_query_printNumericMatch (pdata->options));
     g_string_sprintfa (gs, " gnc_numeric: %s",
-                       gnc_numeric_to_string (pdata->amount));
+                       gnc_num_dbg_to_string (pdata->amount));
     return;
   }
   if (!safe_strcmp (pd->type_name, QOF_TYPE_KVP))

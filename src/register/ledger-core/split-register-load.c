@@ -1,5 +1,7 @@
 /********************************************************************\
  * split-register-load.c -- split register loading code             *
+ * Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 2000 Dave Peticolas                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,6 +25,7 @@
 #include "config.h"
 
 #include "Group.h"
+#include "account-quickfill.h"
 #include "combocell.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
@@ -36,8 +39,7 @@
 
 
 /* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_LEDGER;
-
+/* static short module = MOD_LEDGER; */
 
 static void
 gnc_split_register_load_recn_cells (SplitRegister *reg)
@@ -276,6 +278,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
   /* get the current time and reset the dividing row */
   present = gnc_timet_get_today_end ();
+
   if (info->first_pass)
   {
     if (default_account)
@@ -292,6 +295,28 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         has_last_num = TRUE;
       }
     }
+
+    /* set the completion character for the xfer cells */
+    gnc_combo_cell_set_complete_char
+      ((ComboCell *)
+       gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
+       gnc_get_account_separator ());
+  
+    gnc_combo_cell_set_complete_char
+      ((ComboCell *)
+       gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL),
+       gnc_get_account_separator ());
+  
+    /* set the confirmation callback for the reconcile cell */
+    gnc_recn_cell_set_confirm_cb
+      ((RecnCell *)
+       gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
+       gnc_split_register_recn_cell_confirm, reg);
+  
+    /* load up account names into the transfer combobox menus */
+    gnc_split_register_load_xfer_cells (reg, default_account);
+    gnc_split_register_load_recn_cells (reg);
+    gnc_split_register_load_type_cells (reg);
   }
 
   table->model->dividing_row = -1;
@@ -512,70 +537,44 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
   gnc_split_register_show_trans (reg, table->current_cursor_loc.vcell_loc);
 
-  /* set the completion character for the xfer cells */
-  gnc_combo_cell_set_complete_char
-    ((ComboCell *)
-     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
-     gnc_get_account_separator ());
-
-  gnc_combo_cell_set_complete_char
-    ((ComboCell *)
-     gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL),
-     gnc_get_account_separator ());
-
-  /* set the confirmation callback for the reconcile cell */
-  gnc_recn_cell_set_confirm_cb
-    ((RecnCell *)
-     gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
-     gnc_split_register_recn_cell_confirm, reg);
-
   /* enable callback for cursor user-driven moves */
   gnc_table_control_allow_move (table->control, TRUE);
-
-  gnc_split_register_load_xfer_cells (reg, default_account);
-  gnc_split_register_load_recn_cells (reg);
-  gnc_split_register_load_type_cells (reg);
 }
 
-static void
-gnc_load_xfer_cell (ComboCell * cell, AccountGroup * grp)
+/* ===================================================================== */
+/* Splat the account name into the transfer cell combobox menu */
+
+static gpointer
+load_xfer_cell_cb (Account *account, gpointer data)
 {
-  GList *list;
-  GList *node;
+  ComboCell *cell = data;
+  char *name;
 
-  ENTER ("\n");
+  if (xaccAccountGetPlaceholder (account)) return NULL;
 
-  if (!grp) return;
+  name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+  if (NULL == name) return NULL;
+  gnc_combo_cell_add_menu_item (cell, name);
+  g_free(name);
 
-  /* Build the xfer menu out of account names. */
+  return NULL;
+}
 
-  list = xaccGroupGetSubAccounts (grp);
+/* ===================================================================== */
 
-  for (node = list; node; node = node->next)
-  {
-    Account *account = node->data;
-    char *name;
+#define QKEY  "split_reg_shared_quickfill"
 
-    if (xaccAccountGetPlaceholder (account))
-	continue;
-
-    name = xaccAccountGetFullName (account, gnc_get_account_separator ());
-    if (name != NULL)
-    {
-      gnc_combo_cell_add_menu_item (cell, name);
-      g_free(name);
-    }
-  }
-
-  g_list_free (list);
-
-  LEAVE ("\n");
+static gboolean 
+skip_cb (Account *account, gpointer x)
+{
+  return xaccAccountGetPlaceholder (account);
 }
 
 void
 gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
 {
   AccountGroup *group;
+  QuickFill *qf;
   ComboCell *cell;
 
   group = xaccAccountGetRoot(base_account);
@@ -585,13 +584,19 @@ gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
   if (group == NULL)
     return;
 
+  qf = gnc_get_shared_account_name_quickfill (group, QKEY, skip_cb, NULL);
+
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
   gnc_combo_cell_clear_menu (cell);
-  gnc_load_xfer_cell (cell, group);
+  gnc_combo_cell_use_quickfill_cache (cell, qf);
+  xaccGroupForEachAccount (group, load_xfer_cell_cb, cell, TRUE);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL);
   gnc_combo_cell_clear_menu (cell);
-  gnc_load_xfer_cell (cell, group);
+  gnc_combo_cell_use_quickfill_cache (cell, qf);
+  xaccGroupForEachAccount (group, load_xfer_cell_cb, cell, TRUE);
 }
+
+/* ====================== END OF FILE ================================== */

@@ -19,7 +19,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/** @addtogroup Engine
+/** @addtogroup Utilities
     @{ */
 /** @file gnc-engine-util.h 
     @brief GnuCash engine utility functions 
@@ -130,7 +130,7 @@ int qof_util_bool_to_int (const char * val);
  * cached the strings are just plain C strings.
  */
 
-/* get the gnc_string_cache.  Create it if it doesn't exist already */
+/** Get the gnc_string_cache.  Create it if it doesn't exist already */
 GCache* gnc_engine_get_string_cache(void);
 
 void gnc_engine_string_cache_destroy (void);

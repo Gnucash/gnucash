@@ -404,6 +404,10 @@ GnuCash code should use @code{xaccGUIDNew}.
 @cindex Numeric Library
 @tindex gnc_numeric
 
+=============== The documentation below for gnc_numeric is obsolete
+  and has been superseeded by the gnc_numeric docs in the header file.
+=========================================
+
 Financial quantities in GnuCash (Split quantities and values) are stored
 as exact quantities measured in the smallest denominational unit of the
 appropriate currency. For example, 100.50 US Dollars would be stored as
@@ -441,6 +445,10 @@ functions have not been implemented for @code{gnc_numeric} objects.
 @subsection Standard Numeric Arguments
 @cindex Standard Numeric Arguments
 
+=============== The documentation below for gnc_numeric is obsolete
+  and has been superseeded by the gnc_numeric docs in the header file.
+=========================================
+
 It is useful to specify a denominator in cases where it is known that
 the output value is of constrained precision. For example, monetary
 transactions must be executed in an integer number of the "smallest
@@ -466,10 +474,6 @@ Use the number @code{n} as the denominator of the output value.
 
 @item GNC_DENOM_RECIPROCAL (n)
 Use the value @code{1/n} as the denominator of the output value.
-
-@item GNC_DENOM_SIGFIGS (n)
-Use a value for the denominator that will keep at least @code{n}
-significant figures in the result.
 
 @item GNC_DENOM_AUTO
 Compute an appropriate denominator automatically. Flags in the @var{how}
@@ -554,6 +558,10 @@ if any argument has a different denominator.
 Round to the number of significant figures given in the rounding
 instructions by the GNC_DENOM_SIGFIGS () macro.
 
+@item GNC_DENOM_SIGFIGS (n)
+Use a value for the denominator that will keep at least @code{n}
+significant figures in the result.
+
 @end table
 
 
@@ -569,6 +577,11 @@ GNC_RND_NEVER} as @var{how}.
 
 
 @node Creating Numeric Objects, Basic Arithmetic Operations, Standard Numeric Arguments, Numeric Library
+
+=============== The documentation below for gnc_numeric is obsolete
+  and has been superseeded by the gnc_numeric docs in the header file.
+=========================================
+
 @subsection Creating Numeric Objects
 @cindex Creating Numeric Objects
 
@@ -691,6 +704,10 @@ Arguments} and compare numerators of the result.
 
 
 @node Numeric Denominator Conversion, Numeric Floating Point Conversion, Numeric Comparisons and Predicates, Numeric Library
+=============== The documentation below for gnc_numeric is obsolete
+  and has been superseeded by the gnc_numeric docs in the header file.
+=========================================
+
 @subsection Numeric Denominator Conversion
 @cindex Numeric Denominator Conversion
 
@@ -779,6 +796,10 @@ noted by @var{error_code} rather than a number.
 @node Numeric Example,  , Numeric Error Handling , Numeric Library
 @subsection Numeric Example
 @cindex Numeric Example
+
+=============== The documentation below for gnc_numeric is obsolete
+  and has been superseeded by the gnc_numeric docs in the header file.
+=========================================
 
 The following program finds the best @code{gnc_numeric} approximation to
 the @file{math.h} constant @code{M_PI} given a maximum denominator. For

@@ -55,6 +55,10 @@
 static short module = MOD_LOT;
 
 /* ============================================================== */
+/** Loop over all splits, and make sure that every split
+ * belongs to some lot.  If a split does not belong to 
+ * any lots, poke it into one.
+ */
 
 void
 xaccAccountAssignLots (Account *acc)
@@ -66,10 +70,6 @@ xaccAccountAssignLots (Account *acc)
    ENTER ("acc=%s", acc->accountName);
    xaccAccountBeginEdit (acc);
 
-   /* Loop over all splits, and make sure that every split
-    * belongs to some lot.  If a split does not belong to 
-    * any lots, poke it into one.
-    */
 restart_loop:
    for (node=acc->splits; node; node=node->next)
    {
@@ -77,12 +77,16 @@ restart_loop:
 
       /* If already in lot, then no-op */
       if (split->lot) continue;
+
+      /* Skip voided transactions */
+      if (gnc_numeric_zero_p (split->amount) &&
+          xaccTransGetVoidStatus(split->parent)) continue;
+
       if (xaccSplitAssign (split)) goto restart_loop;
    }
    xaccAccountCommitEdit (acc);
    LEAVE ("acc=%s", acc->accountName);
 }
-
 
 /* ============================================================== */
 
@@ -96,7 +100,6 @@ restart_loop:
 void
 xaccLotFill (GNCLot *lot)
 {
-   gnc_numeric lot_baln;
    Account *acc;
    Split *split;
    GNCPolicy *pcy;
@@ -105,14 +108,17 @@ xaccLotFill (GNCLot *lot)
    acc = lot->account;
    pcy = acc->policy;
 
-   ENTER ("acc=%s", acc->accountName);
+   ENTER ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), acc->accountName);
 
    /* If balance already zero, we have nothing to do. */
-   lot_baln = gnc_lot_get_balance (lot);
-   if (gnc_numeric_zero_p (lot_baln)) return;
+   if (gnc_lot_is_closed (lot)) return;
 
    split = pcy->PolicyGetSplit (pcy, lot);
    if (!split) return;   /* Handle the common case */
+
+   /* Reject voided transactions */
+   if (gnc_numeric_zero_p(split->amount) &&
+       xaccTransGetVoidStatus(split->parent)) return;
 
    xaccAccountBeginEdit (acc);
 
@@ -126,18 +132,21 @@ xaccLotFill (GNCLot *lot)
       if (subsplit == split)
       {
          PERR ("Accounting Policy gave us a split that "
-               "doesn't fit into this lot");
+               "doesn't fit into this lot\n"
+               "lot baln=%s, isclosed=%d, aplit amt=%s",
+               gnc_num_dbg_to_string (gnc_lot_get_balance(lot)),
+               gnc_lot_is_closed (lot),
+               gnc_num_dbg_to_string (split->amount));
          break;
       }
 
-      lot_baln = gnc_lot_get_balance (lot);
-      if (gnc_numeric_zero_p (lot_baln)) break;
+      if (gnc_lot_is_closed (lot)) break;
 
       split = pcy->PolicyGetSplit (pcy, lot);
       if (!split) break;
    }
    xaccAccountCommitEdit (acc);
-   LEAVE ("acc=%s", acc->accountName);
+   LEAVE ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), acc->accountName);
 }
 
 /* ============================================================== */
@@ -178,17 +187,17 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
          /* This lot has mixed currencies. Can't double-balance.
           * Silently punt */
          PWARN ("Lot with multiple currencies:\n"
-               "\ttrans=%s curr=%s\n", xaccTransGetDescription(trans), 
+               "\ttrans=%s curr=%s", xaccTransGetDescription(trans), 
                gnc_commodity_get_fullname(trans->common_currency)); 
          break;
       }
 
       /* Now, total up the values */
       value = gnc_numeric_add (value, xaccSplitGetValue (s), 
-                  GNC_DENOM_AUTO, GNC_DENOM_EXACT);
+                  GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
       PINFO ("Split=%p value=%s Accum Lot value=%s", s,
-          gnc_numeric_to_string (s->value),
-          gnc_numeric_to_string (value));
+          gnc_num_dbg_to_string (s->value),
+          gnc_num_dbg_to_string (value));
           
    }
 
@@ -197,10 +206,19 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
       /* Unhandled error condition. Not sure what to do here,
        * Since the ComputeCapGains should have gotten it right. 
        * I suppose there might be small rounding errors, a penny or two,
-       * the ideal thing would to figure out why there's a roudning
+       * the ideal thing would to figure out why there's a rounding
        * error, and fix that.
        */
-      PERR ("Closed lot fails to double-balance !!\n");
+      PERR ("Closed lot fails to double-balance !! lot value=%s",
+            gnc_num_dbg_to_string (value));
+      GList *node;
+      for (node=lot->splits; node; node=node->next)
+      {
+        Split *s = node->data;
+        PERR ("s=%p amt=%s val=%s", s, 
+              gnc_num_dbg_to_string(s->amount),
+              gnc_num_dbg_to_string(s->value));
+      }
    }
 
    LEAVE ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
@@ -247,7 +265,7 @@ xaccScrubSubSplitPrice (Split *split, int maxmult, int maxamtscu)
       Split *s = node->data;
       Transaction *txn = s->parent;
       gnc_numeric dst_amt, dst_val, target_val;
-      gnc_numeric delta;
+      gnc_numeric frac, delta;
       int scu;
 
       /* Skip the reference split */
@@ -257,10 +275,22 @@ xaccScrubSubSplitPrice (Split *split, int maxmult, int maxamtscu)
 
       dst_amt = xaccSplitGetAmount (s);
       dst_val = xaccSplitGetValue (s);
-      target_val = gnc_numeric_mul (dst_amt, src_val,
-                        GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
-      target_val = gnc_numeric_div (target_val, src_amt,
-                        scu, GNC_DENOM_EXACT);
+      frac = gnc_numeric_div (dst_amt, src_amt, 
+                        GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+      target_val = gnc_numeric_mul (frac, src_val,
+                        scu, GNC_HOW_DENOM_EXACT|GNC_HOW_RND_ROUND);
+      if (gnc_numeric_check (target_val))
+      {
+         PERR ("Numeric overflow of value\n"
+               "\tAcct=%s txn=%s\n"
+               "\tdst_amt=%s src_val=%s src_amt=%s\n",
+               xaccAccountGetName (s->acc),
+               xaccTransGetDescription(txn),
+               gnc_num_dbg_to_string(dst_amt),
+               gnc_num_dbg_to_string(src_val),
+               gnc_num_dbg_to_string(src_amt));
+         continue;
+      }
 
       /* If the required price changes are 'small', do nothing.
        * That is a case that the user will have to deal with
@@ -380,7 +410,7 @@ xaccScrubMergeSubSplits (Split *split)
    txn = split->parent;
    lot = xaccSplitGetLot (split);
 
-   ENTER (" ");
+   ENTER ("(Lot=%s)", gnc_lot_get_title(lot));
 restart:
    for (node=txn->splits; node; node=node->next)
    {
@@ -395,6 +425,10 @@ restart:
       merge_splits (split, s);
       rc = TRUE;
       goto restart;
+   }
+   if (gnc_numeric_zero_p (split->amount))
+   {
+      PWARN ("Result of merge has zero amt!");
    }
    LEAVE (" splits merged=%d", rc);
    return rc;

@@ -36,6 +36,7 @@
 #include "gnc-file-dialog.h"
 #include "gnc-file-history.h"
 #include "gnc-file-p.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-splash.h"
 #include "gnc-ui.h"
@@ -44,6 +45,7 @@
 #include "qofbook.h"
 #include "qofsession.h"
 #include "messages.h"
+#include "TransLog.h"
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -290,7 +292,9 @@ gnc_file_new (void)
               SCM_BOOL_F));
 
   gnc_close_gui_component_by_session (session);
+  xaccLogDisable();
   qof_session_destroy (session);
+  xaccLogEnable();
 
   /* start a new book */
   qof_session_get_current_session ();
@@ -379,7 +383,9 @@ gnc_post_file_open (const char * filename)
               gw_wcp_assimilate_ptr (current_session,
                                      scm_c_eval_string("<gnc:Session*>")) :
               SCM_BOOL_F));
+  xaccLogDisable();
   qof_session_destroy (current_session);
+  xaccLogEnable();
 
   /* load the accounts from the users datafile */
   /* but first, check to make sure we've got a session going. */
@@ -467,6 +473,11 @@ gnc_post_file_open (const char * filename)
   {
     AccountGroup *new_group;
 
+    char * logpath = xaccResolveFilePath(newfile);
+    PINFO ("logpath=%s", logpath ? logpath : "(null)");
+    xaccLogSetBaseName (logpath);
+    xaccLogDisable();
+
     if (file_percentage_func) {
       file_percentage_func(_("Reading file..."), 0.0);
       qof_session_load (new_session, file_percentage_func);
@@ -474,6 +485,7 @@ gnc_post_file_open (const char * filename)
     } else {
       qof_session_load (new_session, NULL);
     }
+    xaccLogEnable();
 
     /* check for i/o error, put up appropriate error dialog */
     io_err = qof_session_get_error (new_session);
@@ -495,7 +507,9 @@ gnc_post_file_open (const char * filename)
   /* going down -- abandon ship */
   if (uh_oh) 
   {
+    xaccLogDisable();
     qof_session_destroy (new_session);
+    xaccLogEnable();
 
     /* well, no matter what, I think it's a good idea to have a
      * topgroup around.  For example, early in the gnucash startup
@@ -650,7 +664,9 @@ gnc_file_export_file(const char * newfile)
     ok = qof_session_export (new_session, current_session, NULL);
   }
   gnc_unset_busy_cursor (NULL);
+  xaccLogDisable();
   qof_session_destroy (new_session);
+  xaccLogEnable();
   gnc_engine_resume_events();
 
   if (!ok)
@@ -806,7 +822,9 @@ gnc_file_save_as (void)
   if (ERR_BACKEND_NO_ERR != io_err) 
   {
     show_session_error (io_err, newfile);
+    xaccLogDisable();
     qof_session_destroy (new_session);
+    xaccLogEnable();
     g_free (newfile);
     return;
   }
@@ -814,7 +832,9 @@ gnc_file_save_as (void)
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
   qof_session_swap_data (session, new_session);
+  xaccLogDisable();
   qof_session_destroy (session);
+  xaccLogEnable();
   session = NULL;
 
   /* XXX At this point, we should really mark the data in the new session
@@ -866,7 +886,9 @@ gnc_file_quit (void)
               gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
               SCM_BOOL_F));
   
+  xaccLogDisable();
   qof_session_destroy (session);
+  xaccLogEnable();
 
   qof_session_get_current_session ();
 

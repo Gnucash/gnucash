@@ -19,6 +19,8 @@
 \********************************************************************/
 /** @addtogroup Engine
     @{ */
+/** @addtogroup Transaction Financial Transactions
+    @{ */
 /** @file Transaction.h 
     @brief API for Transactions and Splits (journal entries)
     @author Copyright (C) 1997 Robin D. Clark
@@ -873,4 +875,5 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 #define xaccTransGetSlots(X)     qof_instance_get_slots (QOF_INSTANCE(X))
 
 #endif /* XACC_TRANSACTION_H */
+/** @} */
 /** @} */

@@ -29,13 +29,15 @@
 #include <libguile.h>
 
 #include "Account.h"
-#include "gnc-ui-util.h"
-#include "recncell.h"
+#include "account-quickfill.h"
 #include "combocell.h"
-#include "messages.h"
 #include "global-options.h"
-#include "business-options.h"
 #include "gnc-component-manager.h"
+#include "gnc-ui-util.h"
+#include "messages.h"
+#include "recncell.h"
+
+#include "business-options.h"
 
 #include "gncEntry.h"
 #include "gncEntryLedger.h"
@@ -122,42 +124,86 @@ static void load_payment_type_cells (GncEntryLedger *ledger)
     gnc_combo_cell_add_menu_item (cell, _("Charge"));
 }
 
-static void load_xfer_cell (ComboCell * cell, AccountGroup * grp,
-			    GncEntryLedgerType ledger_type)
+/* ==================================================================== */
+/* Return TRUE if we don't want to add this account to the xfer menu */
+
+static gboolean
+skip_expense_acct_cb (Account *account, gpointer user_data)
 {
-  GList *list;
-  GList *node;
+  GNCAccountType type;
 
-  if (!grp) return;
+  /* Don't add A/R, A/P, Bank, Cash, or Equity accounts */
+  type = xaccAccountGetType (account);
+  if (type == PAYABLE || type == RECEIVABLE ||
+      type == CASH || type == BANK || type == EQUITY)
+  {
+    return TRUE;
+  }
 
-  /* Build the xfer menu out of account names. */
+  /* If this is an ORDER or INVOICE, then leave out the expenses.  */
+  if (type == EXPENSE) return TRUE;
 
-  list = xaccGroupGetSubAccounts (grp);
+  /* Don't add placeholder accounts */
+  if (xaccAccountGetPlaceholder (account)) return TRUE;
 
-  for (node = list; node; node = node->next) {
-    Account *account = node->data;
-    char *name;
-    GNCAccountType type;
+  return FALSE;
+}
 
-    /* Don't add placeholder accounts */
-    if (xaccAccountGetPlaceholder (account))
-      continue;
+static gboolean
+skip_income_acct_cb (Account *account, gpointer user_data)
+{
+  GNCAccountType type;
 
-    /* Don't add A/R, A/P, Bank, Cash, or Equity accounts */
-    type = xaccAccountGetType (account);
-    if (type == PAYABLE || type == RECEIVABLE ||
-	type == CASH || type == BANK || type == EQUITY)
-      continue;
+  /* Don't add A/R, A/P, Bank, Cash, or Equity accounts */
+  type = xaccAccountGetType (account);
+  if (type == PAYABLE || type == RECEIVABLE ||
+      type == CASH || type == BANK || type == EQUITY)
+  {
+    return TRUE;
+  }
 
-    /* If this is an ORDER or INVOICE, then leave out the expenses.
-     * if it's a BILL, then leave out the incomes
-     */
-    switch (ledger_type) {
+  /* If this is a BILL, then leave out the incomes */
+  if (type == INCOME) return TRUE;
+
+  /* Don't add placeholder accounts */
+  if (xaccAccountGetPlaceholder (account)) return TRUE;
+
+  return FALSE;
+}
+
+/* ===================================================================== */
+/* Splat the account name into the transfer cell combobox menu */
+
+typedef struct {
+  ComboCell *cell;
+  GncEntryLedgerType ledger_type;
+} BCE;
+
+static gpointer
+load_xfer_cell_cb (Account *account, gpointer data)
+{
+  BCE *bce = data;
+  GNCAccountType type;
+  char *name;
+
+  /* Don't add A/R, A/P, Bank, Cash, or Equity accounts */
+  type = xaccAccountGetType (account);
+  if (type == PAYABLE || type == RECEIVABLE ||
+      type == CASH || type == BANK || type == EQUITY)
+  {
+    return NULL;
+  }
+
+  /* If this is an ORDER or INVOICE, then leave out the expenses.
+   * if it's a BILL, then leave out the incomes
+   */
+  switch (bce->ledger_type) 
+  {
     case GNCENTRY_ORDER_ENTRY:
     case GNCENTRY_ORDER_VIEWER:
     case GNCENTRY_INVOICE_ENTRY:
     case GNCENTRY_INVOICE_VIEWER:
-      if (type == EXPENSE) continue;
+      if (type == EXPENSE) return NULL;
       break;
 
     case GNCENTRY_BILL_ENTRY:
@@ -165,39 +211,80 @@ static void load_xfer_cell (ComboCell * cell, AccountGroup * grp,
     case GNCENTRY_EXPVOUCHER_ENTRY:
     case GNCENTRY_EXPVOUCHER_VIEWER:
     case GNCENTRY_NUM_REGISTER_TYPES:
-      if (type == INCOME) continue;
+      if (type == INCOME) return NULL;
       break;
-    }
-
-    name = xaccAccountGetFullName (account, gnc_get_account_separator ());
-    if (name != NULL)
-      gnc_combo_cell_add_menu_item (cell, name);
-
-    g_free(name);
   }
 
-  g_list_free (list);
+  /* Don't add placeholder accounts */
+  if (xaccAccountGetPlaceholder (account)) return NULL;
+
+
+  name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+  if (NULL == name) return NULL;
+  gnc_combo_cell_add_menu_item (bce->cell, name);
+  g_free(name);
+
+  return NULL;
 }
 
-static void load_xfer_type_cells (GncEntryLedger *ledger)
+#define EKEY "Expense Business entry quickfill"
+#define IKEY "Income Business entry quickfill"
+
+static void 
+load_xfer_type_cells (GncEntryLedger *ledger)
 {
+  BCE bce;
   AccountGroup *group;
   ComboCell *cell;
+  QuickFill *qf=NULL;
 
   group = gnc_book_get_group (ledger->book);
-  if (group == NULL)
-    return;
+  if (group == NULL) return;
+
+  /* Use a common, shared quickfill.  For the ORDER or INVOICE, 
+   * ledgers, we don't want expense-type accounts in the menu.
+   * For BILL, etc. then leave out the income types.
+   */
+  switch (ledger->type) 
+  {
+    case GNCENTRY_ORDER_ENTRY:
+    case GNCENTRY_ORDER_VIEWER:
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
+      qf = gnc_get_shared_account_name_quickfill (group, IKEY, 
+                                      skip_expense_acct_cb, NULL);
+      break;
+
+    case GNCENTRY_BILL_ENTRY:
+    case GNCENTRY_BILL_VIEWER:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_NUM_REGISTER_TYPES:
+      qf = gnc_get_shared_account_name_quickfill (group, EKEY, 
+                                      skip_income_acct_cb, NULL);
+      break;
+  }
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_IACCT_CELL);
   gnc_combo_cell_clear_menu (cell);
-  load_xfer_cell (cell, group, ledger->type);
+  gnc_combo_cell_use_quickfill_cache (cell, qf);
+
+  bce.cell = cell;
+  bce.ledger_type = ledger->type;
+  xaccGroupForEachAccount (group, load_xfer_cell_cb, &bce, TRUE);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_BACCT_CELL);
   gnc_combo_cell_clear_menu (cell);
-  load_xfer_cell (cell, group, ledger->type);
+  gnc_combo_cell_use_quickfill_cache (cell, qf);
+
+  bce.cell = cell;
+  bce.ledger_type = ledger->type;
+  xaccGroupForEachAccount (group, load_xfer_cell_cb, &bce, TRUE);
 }
+
+/* ===================================================================== */
 
 static void load_taxtable_type_cells (GncEntryLedger *ledger)
 {
@@ -240,6 +327,10 @@ void gnc_entry_ledger_load_xfer_cells (GncEntryLedger *ledger)
 
 /* XXX (FIXME): This should be in a config file! */
 /* Copy GncEntry information from the list to the rows of the Ledger. */
+/* XXX This code is a cut-n-paste job from the SplitRegister code;
+ * the split-regsiter should be generalized to the point where a cut-n-paste
+ * like this isn't required, and this should be trashed.
+ */
 void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 {
   static SCM id_book = SCM_UNDEFINED;
@@ -506,3 +597,5 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
   /* enable callback for cursor user-driven moves */
   gnc_table_control_allow_move (table->control, TRUE);
 }
+
+/* =========================== END OF FILE ========================== */

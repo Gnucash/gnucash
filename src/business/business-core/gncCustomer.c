@@ -36,8 +36,8 @@
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid-p.h"
@@ -377,7 +377,7 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
 
 void gncCustomerBeginEdit (GncCustomer *cust)
 {
-  GNC_BEGIN_EDIT (&cust->inst);
+  QOF_BEGIN_EDIT (&cust->inst);
 }
 
 static inline void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
@@ -400,8 +400,8 @@ static inline void cust_free (QofInstance *inst)
 
 void gncCustomerCommitEdit (GncCustomer *cust)
 {
-  GNC_COMMIT_EDIT_PART1 (&cust->inst);
-  GNC_COMMIT_EDIT_PART2 (&cust->inst, gncCustomerOnError,
+  QOF_COMMIT_EDIT_PART1 (&cust->inst);
+  QOF_COMMIT_EDIT_PART2 (&cust->inst, gncCustomerOnError,
                          gncCustomerOnDone, cust_free);
 }
 
@@ -536,12 +536,14 @@ static QofObject gncCustomerDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Customer",
+  create:             NULL,
   book_begin:         NULL,
   book_end:           NULL,
   is_dirty:           qof_collection_is_dirty,
   mark_clean:         qof_collection_mark_clean,
   foreach:            qof_collection_foreach,
   printable:          _gncCustomerPrintable,
+  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncCustomerRegister (void)
@@ -551,9 +553,9 @@ gboolean gncCustomerRegister (void)
     { CUSTOMER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetName, NULL },
     { CUSTOMER_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetAddr, NULL },
     { CUSTOMER_SHIPADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetShipAddr, NULL },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

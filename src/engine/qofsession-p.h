@@ -53,9 +53,6 @@ struct _QofSession
   QofBackendError last_err;
   char *error_message;
 
-  char *fullpath;
-  char *logpath;
-
   /* ---------------------------------------------------- */
   /* Pointer to the backend that is actually used to move data
    * between the persistant store and the local engine.  */

@@ -34,23 +34,23 @@
 
 (define gnc:menuname-business-reports (N_ "Business Reports"))
 
-(define (guid-ref type guid)
-  (gnc:html-build-url type (string-append "guid=" guid) #f))
+(define (guid-ref idstr type guid)
+  (gnc:html-build-url type (string-append idstr guid) #f))
 
 (define (gnc:customer-anchor-text customer)
-  (guid-ref gnc:url-type-customer (gnc:customer-get-guid customer)))
+  (guid-ref "customer=" gnc:url-type-customer (gnc:customer-get-guid customer)))
 
 (define (gnc:job-anchor-text job)
-  (guid-ref gnc:url-type-job (gnc:job-get-guid job)))
+  (guid-ref "job=" gnc:url-type-job (gnc:job-get-guid job)))
 
 (define (gnc:vendor-anchor-text vendor)
-  (guid-ref gnc:url-type-vendor (gnc:vendor-get-guid vendor)))
+  (guid-ref "vendor=" gnc:url-type-vendor (gnc:vendor-get-guid vendor)))
 
 (define (gnc:employee-anchor-text employee)
-  (guid-ref gnc:url-type-employee (gnc:employee-get-guid employee)))
+  (guid-ref "employee=" gnc:url-type-employee (gnc:employee-get-guid employee)))
 
 (define (gnc:invoice-anchor-text invoice)
-  (guid-ref gnc:url-type-invoice (gnc:invoice-get-guid invoice)))
+  (guid-ref "invoice=" gnc:url-type-invoice (gnc:invoice-get-guid invoice)))
 
 (define (gnc:owner-anchor-text owner)
   (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym

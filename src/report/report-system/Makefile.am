@@ -46,6 +46,7 @@ noinst_DATA = .scm-links
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \
      commodity-utilities.scm  \
+     html-acct-table.scm \
      html-barchart.scm \
      html-document.scm \
      html-piechart.scm \

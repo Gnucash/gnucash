@@ -152,7 +152,7 @@ gnc_kvp_bag_remove_frame (KvpFrame *root, const char *path, KvpFrame *fr)
     {
       listhead = g_list_remove_link (listhead, node);
       g_list_free_1 (node);
-      kvp_value_replace_glist_nc (va, listhead);
+      kvp_value_replace_glist_nc (arr, listhead);
       kvp_value_replace_frame_nc (va, NULL);
       kvp_value_delete (va);
       return;
@@ -180,10 +180,10 @@ gnc_kvp_bag_get_first (KvpFrame *root, const char * path)
   if (KVP_TYPE_GLIST != valtype) return NULL;
 
   node = kvp_value_get_glist(arr);
-  {
-    KvpValue *va = node->data;
-    return kvp_value_get_frame(va);
-  }
+  if (NULL == node) return NULL;
+
+  KvpValue *va = node->data;
+  return kvp_value_get_frame(va);
 }
 
 void

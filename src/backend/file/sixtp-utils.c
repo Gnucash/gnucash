@@ -177,7 +177,7 @@ string_to_double(const char *str, double *result)
   
     if(!ready) {
       string_to_number = scm_c_eval_string("string->number");
-      scm_protect_object(string_to_number);
+      scm_gc_protect_object(string_to_number);
       ready = TRUE;
     }
     

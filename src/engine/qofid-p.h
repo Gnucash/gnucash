@@ -20,6 +20,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup Object
+    @{ */
+/** @addtogroup Object_Private
+    Private interfaces, not meant to be used by applications.
+    @{ */
+/** @name  Entity_Private
+    @{ */
 
 #ifndef QOF_ID_P_H
 #define QOF_ID_P_H 
@@ -42,8 +49,11 @@ void qof_entity_set_guid (QofEntity *ent, const GUID *guid);
  */
 void qof_collection_insert_entity (QofCollection *, QofEntity *);
 
-/* reset value of dirty flag */
+/** reset value of dirty flag */
 void qof_collection_mark_clean (QofCollection *);
 void qof_collection_mark_dirty (QofCollection *);
 
+/* @} */
+/* @} */
+/* @} */
 #endif /* QOF_ID_P_H */

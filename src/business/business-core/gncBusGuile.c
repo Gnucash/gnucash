@@ -35,7 +35,7 @@ get_acct_type ()
   if(account_type == SCM_UNDEFINED) {
     account_type = scm_c_eval_string("<gnc:Account*>");
     /* don't really need this - types are bound globally anyway. */
-    if(account_type != SCM_UNDEFINED) scm_protect_object(account_type);
+    if(account_type != SCM_UNDEFINED) scm_gc_protect_object(account_type);
   }
 
   return account_type;

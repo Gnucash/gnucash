@@ -19,7 +19,6 @@ run_test (void)
     Account *act1;
     Account *act2;
     Split *spl;
-    gnc_numeric num;
     QofSession *session;
     QofBook *book;
 
@@ -40,15 +39,12 @@ run_test (void)
         return;
     }
 
-    num = get_random_gnc_numeric();
-    spl = get_random_split(book, num);
+    spl = get_random_split(book, act1);
     if(!spl)
     {
         failure("spl not created");
         return;
     }
-
-    xaccAccountInsertSplit(act1, spl);
 
     if(act1 != xaccSplitGetAccount(spl))
     {

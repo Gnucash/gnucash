@@ -389,11 +389,6 @@ qof_session_load_from_xml_file(QofBook *book, const char *filename)
 
     xaccSetAccountGroup(book, global_parse_status.account_group);
 
-    if(global_parse_status.pricedb)
-    {
-      gnc_pricedb_set_db(book, global_parse_status.pricedb);
-    }
-
     /* Fix account and transaction commodities */
     xaccGroupScrubCommodities (gnc_book_get_group(book));
 

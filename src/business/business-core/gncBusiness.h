@@ -1,7 +1,4 @@
-/*
- * gncBusiness.h -- Business Helper Functions
- * Copyright (C) 2002 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
+/* gncBusiness.h -- Business Helper Functions
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -19,15 +16,26 @@
  * Free Software Foundation           Voice:  +1-617-542-5942
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
- *
- * Currently mostly not used ... 
+ */
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup Business
+    The Business Engine provides a set of structures for 
+    that provide small-business accounting features.
+    @{ */
+
+/** @file gncBusiness.h -- Business Helper Functions
+ *  @author Copyright (C) 2002 Derek Atkins
+ *  @author Derek Atkins <warlord@MIT.EDU>
  */
 
+/** @} */
+/** @} */
 #ifndef GNC_BUSINESS_H_
 #define GNC_BUSINESS_H_
 
 
-/* deprecated backwards-compat definitions */
+/* @deprecated backwards-compat definitions */
 #define GNC_BILLTERM_MODULE_NAME GNC_ID_BILLTERM
 #define GNC_CUSTOMER_MODULE_NAME GNC_ID_CUSTOMER
 #define GNC_EMPLOYEE_MODULE_NAME GNC_ID_EMPLOYEE

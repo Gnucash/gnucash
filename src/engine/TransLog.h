@@ -20,13 +20,23 @@
 
 /** @addtogroup Engine
     @{ */
+/** @addtogroup TransLog  Transaction Logging
+    The transaction logging mechanism provides a very simple, 
+    low-level logging of user input to a file.   The goal of
+    the transaction logger is to provide mechanism of last resort
+    for recovering lost user data in the event of a crash.
+
+    Ideally, the storage backends should provide a robust journaling,
+    logging and crash-recovery mechanism.  But just in case they
+    don't, or it didn't work, this mechanism provides a "Plan B"
+    by providing a low-tech, fool-proof, simple logging system
+    that can be used to recover user input.
+    There are some simple command-line tools that will read a log
+    and replay it.
+    
+    @{ */
 /** @file TransLog.h
     @brief API for the transaction logger
-*
- * The logfiles are useful for tracing, journalling, error recovery.
- * Note that the current support for journalling is at best
- * embryonic, at worst, is dangerous by setting the wrong expectations.
- *
     @author Copyright (C) 1998 Linas Vepstas
 */
 
@@ -68,5 +78,6 @@ void    xaccLogDisable (void);
 void    xaccLogSetBaseName (const char *);
 
 #endif /* XACC_TRANS_LOG_H */
+/** @} */
 /** @} */
 

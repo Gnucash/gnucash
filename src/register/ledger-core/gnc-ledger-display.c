@@ -81,7 +81,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
                              GNCLedgerDisplayType ld_type,
                              SplitRegisterType reg_type,
                              SplitRegisterStyle style,
-			     gboolean use_double_line,
+                             gboolean use_double_line,
                              gboolean is_template);
 static void gnc_ledger_display_refresh_internal (GNCLedgerDisplay *ld,
                                                  GList *splits);
@@ -226,8 +226,8 @@ gnc_get_default_register_style (GNCAccountType type)
 
   default:
     style_string = gnc_lookup_multichoice_option("Register", 
-						 "Default Register Style",
-						 "ledger");
+                                                 "Default Register Style",
+                                                 "ledger");
 
     if (safe_strcmp(style_string, "ledger") == 0)
       new_style = REG_STYLE_LEDGER;
@@ -245,13 +245,26 @@ gnc_get_default_register_style (GNCAccountType type)
   return new_style;
 }
 
+static gpointer
+look_for_portfolio_cb (Account *account, gpointer data)
+{
+  GNCAccountType le_type;
+
+  le_type = xaccAccountGetType (account);
+  if ((STOCK    == le_type) ||
+      (MUTUAL   == le_type) ||
+      (CURRENCY == le_type))
+  {
+     return (gpointer) PORTFOLIO_LEDGER;
+  }
+  return NULL;
+}
+
 static SplitRegisterType
 gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
 {
   GNCAccountType account_type;
   SplitRegisterType reg_type;
-  GList *subaccounts;
-  GList *node;
 
   if (ld_type == LD_GL)
     return GENERAL_LEDGER;
@@ -278,10 +291,10 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
         return LIABILITY_REGISTER;
 
       case PAYABLE:
-	return PAYABLE_REGISTER;
+        return PAYABLE_REGISTER;
 
       case RECEIVABLE:
-	return RECEIVABLE_REGISTER;
+        return RECEIVABLE_REGISTER;
 
       case STOCK:
       case MUTUAL:
@@ -311,8 +324,6 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
     return BANK_REGISTER;
   }
 
-  subaccounts = xaccGroupGetSubAccounts (xaccAccountGetChildren (leader));
-
   switch (account_type)
   {
     case BANK:
@@ -322,25 +333,19 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
     case LIABILITY:
     case RECEIVABLE:
     case PAYABLE:
-      /* if any of the sub-accounts have STOCK or MUTUAL types,
+    {
+      /* If any of the sub-accounts have STOCK or MUTUAL types,
        * then we must use the PORTFOLIO_LEDGER ledger. Otherwise,
        * a plain old GENERAL_LEDGER will do. */
+      gpointer ret;
       reg_type = GENERAL_LEDGER;
 
-      for (node = subaccounts; node; node = node->next)
-      {
-        GNCAccountType le_type;
-
-        le_type = xaccAccountGetType (node->data);
-        if ((STOCK    == le_type) ||
-            (MUTUAL   == le_type) ||
-            (CURRENCY == le_type))
-        {
-          reg_type = PORTFOLIO_LEDGER;
-          break;
-        }
-      }
+      ret = xaccGroupForEachAccount (xaccAccountGetChildren (leader),
+                                    look_for_portfolio_cb,
+                                    NULL, TRUE);
+      if (ret) reg_type = PORTFOLIO_LEDGER;
       break;
+    }
 
     case STOCK:
     case MUTUAL:
@@ -363,8 +368,6 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
       break;
   }
 
-  g_list_free (subaccounts);
-
   return reg_type;
 }
 
@@ -374,7 +377,7 @@ gboolean
 gnc_ledger_display_default_double_line (GNCLedgerDisplay *gld)
 {
   return (gld->use_double_line_default ||
-	  gnc_lookup_boolean_option ("Register", "Double Line Mode", FALSE));
+          gnc_lookup_boolean_option ("Register", "Double Line Mode", FALSE));
 }
 
 /* Opens up a register window to display a single account */
@@ -413,7 +416,7 @@ gnc_ledger_display_subaccounts (Account *account)
 
   return gnc_ledger_display_internal (account, NULL, LD_SUBACCOUNT,
                                       reg_type, REG_STYLE_JOURNAL, FALSE,
-				      FALSE);
+                                      FALSE);
 }
 
 /* Opens up a general ledger window. */
@@ -433,7 +436,7 @@ gnc_ledger_display_gl (void)
    * transactions.  While these are in a seperate AccountGroup just for this
    * reason, the query engine makes no distinction between AccountGroups.
    * See Gnome Bug 86302.
-   * 	-- jsled */
+   *         -- jsled */
   {
     AccountGroup *tAG;
     AccountList *al;
@@ -666,7 +669,7 @@ gnc_ledger_display_query (Query *query, SplitRegisterType type,
                           SplitRegisterStyle style)
 {
   return gnc_ledger_display_internal (NULL, query, LD_GL, type, style,
-				      FALSE, FALSE);
+                                      FALSE, FALSE);
 }
 
 static GNCLedgerDisplay *
@@ -674,7 +677,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
                              GNCLedgerDisplayType ld_type,
                              SplitRegisterType reg_type,
                              SplitRegisterStyle style,
-			     gboolean use_double_line,
+                             gboolean use_double_line,
                              gboolean is_template )
 {
   GNCLedgerDisplay *ld;
@@ -778,7 +781,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
 
   ld->use_double_line_default = use_double_line;
   ld->reg = gnc_split_register_new (reg_type, style, use_double_line,
-				    is_template);
+                                    is_template);
 
   gnc_split_register_set_data (ld->reg, ld, gnc_ledger_display_parent);
 

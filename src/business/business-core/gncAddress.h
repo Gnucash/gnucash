@@ -19,11 +19,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * Copyright (C) 2001 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
+/** @addtogroup Business
+    @{ */
+/** @addtogroup Address
+    @{ */
+/** @file gncAddress.h
+    @brief an Address object
+    @author Copyright (C) 2001 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_ADDRESS_H_
 #define GNC_ADDRESS_H_
@@ -35,11 +38,14 @@
 
 typedef struct _gncAddress GncAddress;
 
-/* Create/Destroy functions */
+/** @name Create/Destroy functions */
+/** @{ */
 GncAddress * gncAddressCreate (QofBook *book, QofEntity *parent);
 void gncAddressDestroy (GncAddress *addr);
+/** @} */
 
-/* Set functions */
+/** @name Set functions */
+/** @{ */
 
 void gncAddressSetName (GncAddress *addr, const char *name);
 void gncAddressSetAddr1 (GncAddress *addr, const char *addr1);
@@ -50,8 +56,10 @@ void gncAddressSetPhone (GncAddress *addr, const char *phone);
 void gncAddressSetFax (GncAddress *addr, const char *fax);
 void gncAddressSetEmail (GncAddress *addr, const char *email);
 void gncAddressClearDirty (GncAddress *address);
+/** @} */
 
-/* Get Functions */
+/** @name Get Functions */
+/** @{ */
 
 const char * gncAddressGetName (const GncAddress *addr);
 const char * gncAddressGetAddr1 (const GncAddress *addr);
@@ -61,6 +69,8 @@ const char * gncAddressGetAddr4 (const GncAddress *addr);
 const char * gncAddressGetPhone (const GncAddress *addr);
 const char * gncAddressGetFax (const GncAddress *addr);
 const char * gncAddressGetEmail (const GncAddress *addr);
+/** @} */
+
 gboolean gncAddressIsDirty (const GncAddress *addr);
 
 int gncAddressCompare (const GncAddress *a, const GncAddress *b);
@@ -71,3 +81,5 @@ int gncAddressCompare (const GncAddress *a, const GncAddress *b);
 #define ADDRESS_EMAIL   "email"
 
 #endif /* GNC_ADDRESS_H_ */
+/** @} */
+/** @} */

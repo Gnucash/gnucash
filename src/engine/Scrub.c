@@ -144,9 +144,19 @@ xaccTransScrubOrphans (Transaction *trans)
     if (split->acc)
     {
       TransScrubOrphansFast (trans, xaccAccountGetRoot(split->acc));
-      break;
+      return;
     }
   }
+
+  /* If we got to here, then *none* of the splits belonged to an 
+   * account.  Not a happy situation.  We should dig an account
+   * out of the book the transaction belongs to.
+   * XXX we should probably *always* to this, instead of the above loop!
+   */
+  PINFO ("Free Floating Transaction!");
+  QofBook *book = xaccTransGetBook (trans);
+  AccountGroup *root = xaccGetAccountGroup (book);
+  TransScrubOrphansFast (trans, root);
 }
 
 /* ================================================================ */
@@ -250,7 +260,7 @@ xaccSplitScrub (Split *split)
   value = xaccSplitGetValue (split);
 
   if (gnc_numeric_same (xaccSplitGetAmount (split),
-                        value, scu, GNC_RND_ROUND))
+                        value, scu, GNC_HOW_RND_ROUND))
   {
     return;
   }
@@ -262,9 +272,9 @@ xaccSplitScrub (Split *split)
   PINFO ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
          " old amount %s %s, new amount %s",
             trans->description, split->memo,
-            gnc_numeric_to_string (xaccSplitGetAmount(split)),
+            gnc_num_dbg_to_string (xaccSplitGetAmount(split)),
             gnc_commodity_get_mnemonic (currency),
-            gnc_numeric_to_string (xaccSplitGetValue(split)));
+            gnc_num_dbg_to_string (xaccSplitGetValue(split)));
 
   xaccTransBeginEdit (trans);
   xaccSplitSetAmount (split, value);
@@ -344,7 +354,27 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     if (!root) 
     { 
        Split *s = slist->data; 
+       if (NULL == s->acc)
+       {
+          /* This should never occur, since xaccTransScrubSplits()
+           * above should have fixed things up.  */
+          PERR ("Split is not assigned to any account");
+       }
        root = xaccAccountGetRoot (s->acc);
+       if (NULL == root)
+       {
+          /* This should never occur, accounts are always 
+           * in an account group */
+          PERR ("Can't find root account");
+          QofBook *book = xaccTransGetBook (trans);
+          root = xaccGetAccountGroup (book);
+       }
+       if (NULL == root)
+       {
+          /* This can't occur, things should be in books */
+          PERR ("Bad data corruption, no root account in book");
+          return;
+       }
     }
     account = xaccScrubUtilityGetOrMakeAccount (root, 
         trans->common_currency, _("Imbalance"));
@@ -398,7 +428,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
      * of the denominators might already be reduced.  */
     new_value = gnc_numeric_sub (old_value, imbalance,
              gnc_commodity_get_fraction(currency), 
-             GNC_RND_ROUND);
+             GNC_HOW_RND_ROUND);
 
     xaccSplitSetValue (balance_split, new_value);
 
@@ -608,9 +638,9 @@ xaccTransScrubCurrency (Transaction *trans)
         PWARN ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
                " old amount %s %s, new amount %s",
                trans->description, sp->memo,
-               gnc_numeric_to_string (xaccSplitGetAmount(sp)),
+               gnc_num_dbg_to_string (xaccSplitGetAmount(sp)),
                gnc_commodity_get_mnemonic (currency),
-               gnc_numeric_to_string (xaccSplitGetValue(sp)));
+               gnc_num_dbg_to_string (xaccSplitGetValue(sp)));
         xaccTransBeginEdit (trans);
         xaccSplitSetAmount (sp, xaccSplitGetValue(sp));
         xaccTransCommitEdit (trans);
@@ -619,9 +649,9 @@ xaccTransScrubCurrency (Transaction *trans)
       {
         PINFO ("Ok: Split '%s' Amount %s %s, value %s %s",
         xaccSplitGetMemo (sp),
-        gnc_numeric_to_string (amount),
+        gnc_num_dbg_to_string (amount),
         gnc_commodity_get_mnemonic (currency),
-        gnc_numeric_to_string (value),
+        gnc_num_dbg_to_string (value),
         gnc_commodity_get_mnemonic (acc_currency));
       }*/
     }

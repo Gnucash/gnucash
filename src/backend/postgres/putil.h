@@ -146,13 +146,13 @@ int finishQuery(PGBackend *be);
    result = PQgetResult (conn);                             \
    if (!result) break;                                      \
    status = PQresultStatus(result);                         \
-   msg = PQresultErrorMessage(result);                      \
    if ((PGRES_COMMAND_OK != status) &&                      \
        (PGRES_TUPLES_OK  != status))                        \
    {                                                        \
+      msg = PQresultErrorMessage(result);                   \
       PERR("failed to get result to query:\n\t%s", msg);    \
       PQclear (result);                                     \
-      qof_backend_set_message (&be->be, msg);                 \
+      qof_backend_set_message (&be->be, msg);               \
       qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);\
       break;                                                \
    }                                                        \
@@ -362,7 +362,7 @@ int finishQuery(PGBackend *be);
       for (node=be->blist; node; node=node->next)                \
       {                                                          \
          book = node->data;                                      \
-         if (guid_equal (&book->entity.guid, &book_guid)) break; \
+         if (guid_equal (&book->inst.entity.guid, &book_guid)) break; \
          book = NULL;                                            \
       }                                                          \
       if (!book) return data;                                    \

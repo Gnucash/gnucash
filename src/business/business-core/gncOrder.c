@@ -34,6 +34,7 @@
 #include "kvp_frame.h"
 #include "gnc-engine-util.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -45,7 +46,6 @@
 #include "qofquerycore.h"
 
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -356,7 +356,7 @@ gboolean gncOrderIsClosed (GncOrder *order)
 
 void gncOrderBeginEdit (GncOrder *order)
 {
-  GNC_BEGIN_EDIT (&order->inst);
+  QOF_BEGIN_EDIT (&order->inst);
 }
 
 static inline void gncOrderOnError (QofInstance *order, QofBackendError errcode)
@@ -374,8 +374,8 @@ static inline void order_free (QofInstance *inst)
 
 void gncOrderCommitEdit (GncOrder *order)
 {
-  GNC_COMMIT_EDIT_PART1 (&order->inst);
-  GNC_COMMIT_EDIT_PART2 (&order->inst, gncOrderOnError,
+  QOF_COMMIT_EDIT_PART1 (&order->inst);
+  QOF_COMMIT_EDIT_PART2 (&order->inst, gncOrderOnError,
 			 gncOrderOnDone, order_free);
 }
 
@@ -425,12 +425,14 @@ static QofObject gncOrderDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Order",
+  create:             NULL,
   book_begin:         NULL,
   book_end:           NULL,
   is_dirty:           qof_collection_is_dirty,
   mark_clean:         qof_collection_mark_clean,
   foreach:            qof_collection_foreach,
   printable:          _gncOrderPrintable,
+  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncOrderRegister (void)
@@ -443,9 +445,9 @@ gboolean gncOrderRegister (void)
     { ORDER_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderIsClosed, NULL },
     { ORDER_CLOSED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateClosed, NULL },
     { ORDER_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetNotes, NULL },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderGetActive, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderGetActive, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

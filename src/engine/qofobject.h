@@ -19,12 +19,25 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Engine
+/** @addtogroup Object
+    @{ */
+/** @addtogroup Objects
+    QOF Objects provide the means for associating
+    a storage backend to a set of QOF Entities.   While an entity
+    can be though of as an identified instance of some thing,  the
+    QOF Object provides for a way to associate instances with
+    a storage backend.  Storage might be file or SQL storage.
+
+    QOF Objects are also used by the query system .... 
+    
+    XXX todo, we should split out the storage aspects of this 
+    thing from the 'foreach' that query depends on.  These are
+    kinda unrelated concepts.
+
     @{ */
 /** @file qofobject.h
- * @breif the Core Object Registration/Lookup Interface
- *
- * @author Copyright (c) 2001,2002, Derek Atkins <warlord@MIT.EDU>
+ *  @brief the Core Object Registration/Lookup Interface
+ *  @author Copyright (c) 2001,2002 Derek Atkins <warlord@MIT.EDU>
  */
 
 #ifndef QOF_OBJECT_H_
@@ -33,11 +46,11 @@
 #include "qofbook.h"
 #include "qofid.h"
 
-/* Defines the version of the core object object registration
+/** Defines the version of the core object object registration
  * interface.  Only object modules compiled against this version
  * of the interface will load properly
  */
-#define QOF_OBJECT_VERSION 1
+#define QOF_OBJECT_VERSION 3
 
 
 typedef struct _QofObject QofObject;
@@ -48,8 +61,6 @@ typedef void (*QofForeachBackendTypeCB) (QofIdTypeConst type,
                                       gpointer user_data);
 
 /** This is the QofObject Class descriptor 
- *
- * XXX Hmm, should we add an object factory to this?
  */
 struct _QofObject 
 {
@@ -57,58 +68,92 @@ struct _QofObject
   QofIdType           e_type;            /* the Object's QOF_ID */
   const char *        type_label;        /* "Printable" type-label string */
 
-  /* book_begin is called from within the Book routines to create
+  /** Create a new instance of this object type.  This routine might be
+   *  NULL if the object type doesn't provide a way of creating new 
+   *  instances. 
+   */
+  gpointer            (*create)(QofBook *);
+
+  /** book_begin is called from within the Book routines to create
    * module-specific hooks in a book whenever a book is created.
-   * book_end is called when the book is being closed, to clean
-   * up (and free memory).
    */
   void                (*book_begin)(QofBook *);
+
+  /** book_end is called when the book is being closed, to clean
+   * up (and free memory).
+   */
   void                (*book_end)(QofBook *);
 
-  /* Determine if there are any dirty items in this book */
+  /** Determine if there are any dirty items in this book */
   gboolean            (*is_dirty)(QofCollection *);
 
-  /* Mark this object's book clean (for after a load) */
+  /** Mark this object's book clean (for after a load) */
   void                (*mark_clean)(QofCollection *);
 
-  /* foreach() is used to execute a callback over each object
-   * stored in the particular book
+  /** Traverse over all of the items in the collection, calling
+   *  the callback on each item.  The third argument can be any 
+   *  arbitrary caller-supplied data, and is passed to the callback. 
+   *  Although (*foreach) may be NULL, allmost all objects should
+   *  provide this routine, as without it, little of interest can 
+    * be done.
    */
   void                (*foreach)(QofCollection *, QofEntityForeachCB, gpointer);
 
-  /* Given a particular object, return a printable string */
-  /* Argument should really be QofInstance not gpointer.. */
-  const char *        (*printable)(gpointer obj);
+  /** Given a particular item of this type, return a printable string. 
+   */
+  const char *        (*printable)(gpointer instance);
 
+  /** Given a pair of items of this type, this routine returns value 
+   *  indicating which item is 'newer'.  This routine is used by storage
+   *  backends to determine if the local or the remote copy of a 
+   *  particular item is the latest, 'uptodate' version.  Tis routine
+   *  should return an integer less than, equal to, or greater than zero
+   *  if 'instance_left' is found to be, respecitvely, earlier than, equal
+   *  to or later than than 'instance_right'.
+   */
+  int                 (*version_cmp)(gpointer instance_left, gpointer instance_right);
 };
 
 /* -------------------------------------------------------------- */
 
-/** Initialize the object registration subsystem */
+/** @name Initialize the object registration subsystem */
+/** @{ */
 void qof_object_initialize (void);
 void qof_object_shutdown (void);
-
-void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
-
-void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
-                         QofEntityForeachCB cb, gpointer user_data);
-
-const char * qof_object_printable (QofIdTypeConst type_name, gpointer obj);
-
-
-/* REGISTRATION AND REG-LOOKUP FUNCTIONS */
+/** @} */
 
 /** Register new types of object objects */
 gboolean qof_object_register (const QofObject *object);
+
+/** Lookup an object definition */
+const QofObject * qof_object_lookup (QofIdTypeConst type_name);
+
+/** Create an instance of the indicated type, returning a pointer to that
+ *  instance.  This routine just calls the (*new) callback on the object
+ *  definition.  
+ */
+gpointer qof_object_new_instance (QofIdTypeConst type_name, QofBook *book);
 
 /** Get the printable label for a type.  This label is *not*
  * translated; you must use _() on it if you want a translated version.
  */
 const char * qof_object_get_type_label (QofIdTypeConst type_name);
 
-/** Lookup a object definition */
-const QofObject * qof_object_lookup (QofIdTypeConst type_name);
+/** @return a Human-readable string name for an instance */
+const char * qof_object_printable (QofIdTypeConst type_name, gpointer instance);
 
+/** Invoke the callback 'cb' on every object class definition.
+ *  The user_data pointer is passed back to the callback.
+ */
+void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
+
+/** Invoke the callback 'cb' on every instance ov a particular
+ *  object type.  It is presumed that the 'book' stores or somehow
+ *  identifies a colllection of instances; thus the callback will 
+ *  be invoked only for those instances stored in the book.
+ */
+void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
+                         QofEntityForeachCB cb, gpointer user_data);
 
 /** Register and lookup backend-specific data for this particular object */
 gboolean qof_object_register_backend (QofIdTypeConst type_name,
@@ -123,4 +168,5 @@ void qof_object_foreach_backend (const char *backend_name,
                                  gpointer user_data);
 
 #endif /* QOF_OBJECT_H_ */
+/** @} */
 /** @} */

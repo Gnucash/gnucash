@@ -381,7 +381,7 @@ gnc_copy_split(Split *split, gboolean use_cut_semantics)
   if(split_type == SCM_UNDEFINED) {
     split_type = scm_c_eval_string("<gnc:Split*>");
     /* don't really need this - types are bound globally anyway. */
-    if(split_type != SCM_UNDEFINED) scm_protect_object(split_type);
+    if(split_type != SCM_UNDEFINED) scm_gc_protect_object(split_type);
   }
 
   arg = gw_wcp_assimilate_ptr(split, split_type);
@@ -430,7 +430,7 @@ gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
   if(split_type == SCM_UNDEFINED) {
     split_type = scm_c_eval_string("<gnc:Split*>");
     /* don't really need this - types are bound globally anyway. */
-    if(split_type != SCM_UNDEFINED) scm_protect_object(split_type);
+    if(split_type != SCM_UNDEFINED) scm_gc_protect_object(split_type);
   }
 
   arg = gw_wcp_assimilate_ptr(split, split_type);
@@ -750,7 +750,7 @@ gnc_copy_trans(Transaction *trans, gboolean use_cut_semantics)
   if(trans_type == SCM_UNDEFINED) {
     trans_type = scm_c_eval_string("<gnc:Transaction*>");
     /* don't really need this - types are bound globally anyway. */
-    if(trans_type != SCM_UNDEFINED) scm_protect_object(trans_type);
+    if(trans_type != SCM_UNDEFINED) scm_gc_protect_object(trans_type);
   }
 
   arg = gw_wcp_assimilate_ptr(trans, trans_type);
@@ -826,7 +826,7 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
   if(trans_type == SCM_UNDEFINED) {
     trans_type = scm_c_eval_string("<gnc:Transaction*>");
     /* don't really need this - types are bound globally anyway. */
-    if(trans_type != SCM_UNDEFINED) scm_protect_object(trans_type);
+    if(trans_type != SCM_UNDEFINED) scm_gc_protect_object(trans_type);
   }
 
   arg = gw_wcp_assimilate_ptr(trans, trans_type);

@@ -1,3 +1,12 @@
+/**
+ * @file test-engine-stuff.c
+ * @brief tools to set up random, but finanically consistent books.
+ * Create transactions with random values, random accounts, random
+ * account heirarchies, etc.
+ *
+ * Created by Linux Developers Group, 2001
+ * Updates Linas Vepstas July 2004
+ */
 #include "config.h"
 
 #include <sys/types.h>
@@ -30,10 +39,12 @@ static gint kvp_frame_max_elements = 10;
 
 static gint max_group_depth = 4;
 static gint max_group_accounts = 10;
+static gint max_total_accounts = 1000;
+static gint total_num_accounts = 0;
 
 static kvp_value* get_random_kvp_value_depth (int type, gint depth);
 static gpointer get_random_list_element (GList *list);
-static void add_random_splits(QofBook *book, Transaction *trn);
+static void add_random_splits(QofBook *book, Transaction *trn, GList *account_list);
 
 gboolean gnc_engine_debug_random = FALSE;
 
@@ -140,10 +151,38 @@ get_random_timespec(void)
   return ret;
 }
 
+#define RAND_IN_RANGE(X) (((X)*((gint64) (rand()+1)))/RAND_MAX)
+
 gnc_numeric
 get_random_gnc_numeric(void)
 {
-    return gnc_numeric_create(get_random_gint64(), rand());
+    gint64 numer;
+    gint64 deno;
+
+    if (RAND_MAX/8 > rand())
+    {
+       /* Random number between 1 and 6000 */
+       deno = RAND_IN_RANGE(6000ULL);
+    }
+    else
+    {
+       gint64 norm = RAND_IN_RANGE (10ULL);
+
+       /* multiple of 10, between 1 and 10 000 million */
+       deno = 1;
+       while (norm) 
+       {
+          deno *= 10;
+          norm --;
+       }
+    }
+
+    /* Arbitrary random numbers can cause pointless overflow 
+     * during calculations.  Limit dynamic range in hopes 
+     * of avoiding overflow. */
+    numer = get_random_gint64()/100000;
+    if (0 == numer) numer = 1;
+    return gnc_numeric_create(numer, deno);
 }
 
 const char *types[] =
@@ -541,12 +580,14 @@ account_add_subaccounts (QofBook *book, Account *account, int depth)
     return;
 
   num_accounts = get_random_int_in_range (1, 10);
-
   while (num_accounts-- > 0)
   {
     Account *sub = get_random_account (book);
 
     xaccAccountInsertSubAccount (account, sub);
+
+    total_num_accounts ++;
+    if (total_num_accounts > max_total_accounts) return;
 
     account_add_subaccounts (book, sub, depth - 1);
   }
@@ -583,6 +624,7 @@ make_random_group (QofBook *book, AccountGroup * group)
   g_return_if_fail (book);
   g_return_if_fail (group);
 
+  total_num_accounts = 0;
   depth = get_random_int_in_range (1, max_group_depth);
 
   make_random_group_depth (book, group, depth);
@@ -637,7 +679,7 @@ make_random_changes_to_transaction_and_splits (QofBook *book,
         xaccSplitDestroy (split);
       } while (split);
 
-      add_random_splits (book, trans);
+      add_random_splits (book, trans, accounts);
 
       /* fall through */
 
@@ -897,10 +939,10 @@ set_split_random_string(Split *spl,
 static char possible_chars[] = { NREC, CREC, YREC, FREC };
 
 Split*
-get_random_split(QofBook *book, gnc_numeric num)
+get_random_split(QofBook *book, Account *acct)
 {
     Split *ret;
-    gnc_numeric oneVal;
+    gnc_numeric num;
 
     ret = xaccMallocSplit(book);
 
@@ -911,11 +953,10 @@ get_random_split(QofBook *book, gnc_numeric num)
 
     xaccSplitSetDateReconciledTS(ret, get_random_timespec());
 
-    xaccSplitSetValue(ret, num);
+    /* Split must be in an account before we can set an amount */
+    xaccAccountInsertSplit (acct, ret);
+    num = get_random_gnc_numeric ();
     xaccSplitSetAmount(ret, num);
-
-    oneVal = gnc_numeric_create(1,1);
-    xaccSplitSetSharePrice(ret, oneVal);
 
     xaccSplitSetSlots_nc(ret, get_random_kvp_frame());
 
@@ -962,12 +1003,26 @@ set_tran_random_string(Transaction* trn,
 }
 
 static void
-add_random_splits(QofBook *book, Transaction *trn)
+add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
 {
-    gnc_numeric num = get_random_gnc_numeric();
+    Account *account;
+    Split *s;
 
-    xaccTransAppendSplit(trn, get_random_split(book, num));
-    xaccTransAppendSplit(trn, get_random_split(book, gnc_numeric_neg(num)));
+    /* Set up two splits whose values really are opposites. */
+    gnc_commodity *com = xaccTransGetCurrency (trn);
+    int scu = gnc_commodity_get_fraction(com);
+    gnc_numeric num = get_random_gnc_numeric();
+    num = gnc_numeric_convert (num, scu, GNC_HOW_RND_ROUND);
+
+    account = get_random_list_element (account_list);
+    s = get_random_split(book, account);
+    xaccTransAppendSplit(trn, s);
+    xaccSplitSetValue(s, num);
+
+    account = get_random_list_element (account_list);
+    s = get_random_split(book, account);
+    xaccTransAppendSplit(trn, s);
+    xaccSplitSetValue(s, gnc_numeric_neg(num));
 }
 
 static void
@@ -984,9 +1039,15 @@ trn_add_ran_timespec(Transaction *trn, void (*func)(Transaction*,
     
 Transaction *
 get_random_transaction_with_currency(QofBook *book,
-                                     gnc_commodity *currency)
+                                     gnc_commodity *currency,
+                                     GList *account_list)
 {
     Transaction* ret;
+
+    if (!account_list) 
+    {
+      account_list = xaccGroupGetSubAccounts (gnc_book_get_group (book));
+    }
 
     ret = xaccMallocTransaction(book);
 
@@ -1002,7 +1063,7 @@ get_random_transaction_with_currency(QofBook *book,
 
     xaccTransSetSlots_nc(ret, get_random_kvp_frame());
 
-    add_random_splits(book, ret);
+    add_random_splits(book, ret, account_list);
 
     if (get_random_int_in_range (1, 10) == 1)
     {
@@ -1018,7 +1079,7 @@ get_random_transaction_with_currency(QofBook *book,
 Transaction*
 get_random_transaction (QofBook *book)
 {
-  return get_random_transaction_with_currency (book, NULL);
+  return get_random_transaction_with_currency (book, NULL, NULL);
 }
 
 void
@@ -1129,7 +1190,10 @@ get_random_commodity (QofBook *book)
 
     name = get_random_string();
     xcode = get_random_string();
-    ran_int = get_random_int_in_range(1, 100000);
+
+    /* SCU == smallest currency unit -- the value of the denominator */
+#define MAX_SCU 6000
+    ran_int = get_random_int_in_range(1, MAX_SCU);
 
     ret = gnc_commodity_new (book, name, space, mn, xcode, ran_int);
 
@@ -1580,23 +1644,9 @@ add_random_transactions_to_book (QofBook *book, gint num_transactions)
   {
     gnc_commodity *com;
     Transaction *trans;
-    Account *account;
-    Split *split;
 
     com = get_random_commodity_from_table (table);
-    trans = get_random_transaction_with_currency (book, com);
-
-    xaccTransBeginEdit (trans);
-
-    split = xaccTransGetSplit (trans, 0);
-    account = get_random_list_element (accounts);
-    xaccAccountInsertSplit (account, split);
-
-    split = xaccTransGetSplit (trans, 1);
-    account = get_random_list_element (accounts);
-    xaccAccountInsertSplit (account, split);
-
-    xaccTransCommitEdit (trans);
+    trans = get_random_transaction_with_currency (book, com, accounts);
   }
   g_list_free (accounts);
 }

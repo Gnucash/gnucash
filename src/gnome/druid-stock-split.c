@@ -56,7 +56,7 @@ typedef struct
 
   /* account page data */
   GtkWidget * account_list;
-  GUID account;
+  Account   * acct;
 
   /* info page data */
   GtkWidget * date_edit;
@@ -198,7 +198,7 @@ clist_select_row (GtkCList *clist,
   if (account == NULL)
     return;
 
-  info->account = *xaccAccountGetGUID (account);
+  info->acct = account;
 }
 
 static void
@@ -207,7 +207,7 @@ refresh_details_page (StockSplitInfo *info)
   GNCPrintAmountInfo print_info;
   Account *account;
 
-  account = xaccAccountLookup (&info->account, gnc_get_current_book ());
+  account = info->acct;
 
   g_return_if_fail (account != NULL);
 
@@ -229,11 +229,8 @@ gnc_stock_split_druid_account_next (GnomeDruidPage *druidpage,
 				    gpointer user_data)
 {
   StockSplitInfo *info = user_data;
-  Account *account;
 
-  account = xaccAccountLookup (&info->account, gnc_get_current_book ());
-
-  g_return_val_if_fail (account != NULL, TRUE);
+  g_return_val_if_fail (info->acct != NULL, TRUE);
 
   refresh_details_page (info);
 
@@ -398,7 +395,7 @@ gnc_stock_split_druid_finish (GnomeDruidPage *druidpage,
   Split *split;
   time_t date;
 
-  account = xaccAccountLookup (&info->account, gnc_get_current_book ());
+  account = info->acct;
   g_return_if_fail (account != NULL);
 
   amount = gnc_amount_edit_get_amount
@@ -665,24 +662,18 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 {
   StockSplitInfo *info = user_data;
   Account *old_account;
-  Account *new_account;
-  GNCIdType id_type;
   GtkWidget *page;
   GladeXML *xml;
 
-  old_account = xaccAccountLookup (&info->account, gnc_get_current_book ());
-  id_type = xaccGUIDType (old_account, gnc_get_current_book ());
+  old_account = info->acct;
 
-  if (fill_account_list (info, old_account) == 0)
+  if (fill_account_list (info, info->acct) == 0)
   {
     gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
     return;
   }
 
-  new_account = xaccAccountLookup (&info->account, gnc_get_current_book ());
-
-  if (!safe_strcmp (id_type, GNC_ID_NULL) || old_account == new_account)
-    return;
+  if (NULL == info->acct || old_account == info->acct) return;
 
   xml = glade_get_widget_tree (info->window);
   page = glade_xml_get_widget (xml, "account_page");
@@ -714,7 +705,7 @@ gnc_stock_split_dialog (GtkWidget *parent, Account * initial)
 
   info = g_new0 (StockSplitInfo, 1);
 
-  info->account = *xaccGUIDNULL ();
+  info->acct = NULL;
 
   gnc_stock_split_druid_create (info);
 

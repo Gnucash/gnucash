@@ -19,11 +19,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * Copyright (C) 2001, 2002 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
+/** @addtogroup Business
+    @{ */
+/** @addtogroup Vendor
+    @{ */
+/** @file gncVendor.h
+    @brief  Vendor Interface 
+    @author Copyright (C) 2001,2002 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_VENDOR_H_
 #define GNC_VENDOR_H_
@@ -107,3 +110,5 @@ int gncVendorCompare (GncVendor *a, GncVendor *b);
 #define gncVendorLookupDirect(G,B) gncVendorLookup((B),&(G))
 
 #endif /* GNC_VENDOR_H_ */
+/** @} */
+/** @} */

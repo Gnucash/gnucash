@@ -1,3 +1,8 @@
+2004-07-06  David Hampton  <hampton@employees.org>
+
+	* various files: Merge in changes to HEAD from 2004-05-02
+	  (gnome2-merge-8) through yesterday (gnome2-merge-9).
+
 2004-06-13  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: add support for gtkhtml-3.1, remove src/experimental
@@ -2681,6 +2686,163 @@
 
 -=-=-=- cvs HEAD ChangeLog is below this line -=-=-=-
 
+
+2004-07-04  Derek Atkins  <derek@ihtfp.com>
+
+	* acinclude.m4: create a SCANF_QD_CHECK and make sure both
+	  that and SCANF_LLD_CHECK are "long long" constant-safe 
+	* configure.in: use the new SCANF_QD_CHECK and use it
+	  earlier in the configuration.
+
+2004-07-02  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/dialog-print-check.c:
+	* src/gnome/glade/print.glade:
+	* src/scm/printing/print-check.scm:
+	  Apply David Reiser's patch for Quicken(tm) cheques with stub.
+
+	* src/engine/gnc-commodity.c:
+	  Apply David Grant's patch to add TD Efunds.  Fixes #145297.
+
+2004-06-30  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/report-gnome/window-report.c: Add toolbar element for
+	saving the current report.
+
+	* src/report/report-system/report.scm, report-system.scm: Add
+	function for saving one particular report to the
+	~/.gnucash/saved-reports-1.8 file. Add extra menu only for
+	customized reports.
+
+	* src/scm/main-window.scm, src/scm/main.scm: Remove the previous
+	function for saving all reports since it is no longer necessary.
+
+2004-06-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnc-module/gnc-module.scm: create (and export) a re-export macro
+	  is guile doesn't already provide one.  Then re-export the symbols
+	  instead of exporting them.  Fixes some deprecated guile warnings.
+	* src/guile-mappings.h: convert scm_gc_{un,}protect_object() back
+	  to its pre-1.6 type for earlier guiles, but upconvert to the new
+	  type to fix a deprecated warning.  Note that g-wrap is still
+	  outputting deprecated code.
+	* lots of other files:
+	  convert scm_{un,}protect_object -> scm_gc_{un,}protect_object because
+	  the former is now deprecated in guile.  Fixes a bunch of
+	  GUILE_WARN_DEPRECATED warnings (but probably not all of them).
+
+2004-06-25  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-numeric.c: small change to the 128-bit math
+	  routines to actually mark a 'carry bit' to denote numbers
+	  >= 2^63 to fix bug #144980.
+
+2004-06-24  Derek Atkins  <derek@ihtfp.com>
+
+	* Makefile.am: be sure to rebuild make-gnucash-patch and
+	  make-gnucash-potfiles when the Makefile changes (which means the
+	  PERL paths might have changed).
+	* src/scm/paths.scm: change the default config file to 1.9, so we
+	  don't screw up users of 1.8.
+
+2004-06-23  David Montenegro  <sunrise2000@comcast.net>
+
+	* src/report/report-system/html-acct-table.scm:
+	  Added file implementing gnc:html-acct-table utility
+	  object for easier creation of HTML reports.
+
+        * src/report/standard-reports/balance-sheet.scm:
+	  Updated to use the new gnc:html-acct-table object.
+	  Added many new options, including report/account
+	  form option.
+
+        * src/report/standard-reports/equity-statement.scm:
+	  Created Statement of Owner's Equity.
+	  (Unsure if correct exchange-fn's are being used.)
+
+        * src/report/report-system/commodity-utilities.scm:
+	* src/report/report-system/html-table.scm:
+	* src/report/report-system/html-utilities.scm:
+	* src/report/report-system/report-system.scm:
+	* src/report/report-system/report-utilities.scm:
+	  miscellaneous small additions and/or fixes
+	Fixes #144243.
+
+2004-06-18  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/main-window.scm, src/scm/main.scm: Added example Menu
+	item "File -> Save all reports" that will call the new report
+	saving function for all reports. Reports are appended to
+	~/.gnucash/saved-reports-1.8 . This would need more work so that
+	not all reports are saved but only the currently selected one --
+	any volunteer may feel free to add that.
+
+	* src/report/report-system/report.scm, report-system.scm: Added
+	gnc:report-generate-saved-forms that will generate the scheme code
+	necessary to create a new report from the saved options of an old
+	report (merged from 1-8-branch).
+
+2004-06-18  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/paths.scm: create gnc:current-saved-reports, as
+	  the file to store saved reports from cstim.  Autoload the
+	  saved-reports file at startup (after config.user/config.auto
+	  is loaded).	  
+	* src/scm/main.scm: export gnc:current-saved-reports
+
+2004-05-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Transaction.c:
+	  Don't recompute balances or write to the translog when we're
+	  shutting down.  Destroy the parent transaction from xaccSplitDestroy()
+	  if we're shutting down.
+	* src/engine/qofbook-p.h:
+	* src/engine/qofbook.h:
+	* src/engine/qofbook.c:
+	  add "shutting_down" parameter and getter-method, so that
+	  objects can detect when the book is shutting down and
+	  ignore non-necessary reprocessing.  Fixes a memory corruption
+	  bug during book-closing.
+
+2004-05-24  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/transaction.cm: applied Vasil's
+	  patch to improve the transaction report for HTML export
+	  purposes.  Fixes bug #142942.
+
+	* src/gnome-search/dialog-search.c:
+	* src/gnome-search/gnc-general-search.c:
+	* src/gnome-utils/gnc-query-list.c:
+	  Linas missed a few QOF_QUERY_PARAM_GUID -> QOF_PARAM_GUID
+	  conversions.
+
+2004-05-17  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/locale-specific/us/taxtxf.scm: guile-1.6 complains
+	  about string->symbol when passed a symbol.  Fixes #131201
+	  Also add some code to handle accounts that are expected to
+	  have parents but do not (also described in #131201).
+
+2004-05-15  Derek Atkins  <derek@ihtfp.com>
+
+	* Luigi Ballabio's automake patch to gnucash.m4
+
+2004-05-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-match-map.c
+	(gnc_imap_add_account_bayes): Skip the case when a token is the
+	empty string. This caused many warnings about a NULL kvp_frame
+	lookup.
+
+2004-05-07  David Hampton  <hampton@employees.org>
+
+	* src/engine/gnc-commodity.c: Added quote sources for Indian
+	Mutual Funds.
+
+2004-05-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/iso-currencies-to-c: don't automatically try to
+	  (require 'format), so gnucash will build on an slib-3 system.
 
 2004-05-02  David Hampton  <hampton@employees.org>
 

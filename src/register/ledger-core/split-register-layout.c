@@ -1,5 +1,6 @@
 /********************************************************************\
  * split-register-layout.c -- split register layout object          *
+ * Copyright (C) 1998 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -111,7 +112,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
           gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 6);
         }
         gnc_table_layout_set_cell (layout, curs, BALN_CELL,  0, 7);
-	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 8);
+        gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 8);
 
         curs_last = curs;
         curs = gnc_table_layout_get_cursor (layout,
@@ -132,7 +133,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         gnc_table_layout_set_cell (layout, curs, TDEBT_CELL, 0, 5);
         gnc_table_layout_set_cell (layout, curs, TCRED_CELL, 0, 6);
         gnc_table_layout_set_cell (layout, curs, TBALN_CELL, 0, 7);
-	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 8);
+        gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 8);
 
         curs_last = curs;
         curs = gnc_table_layout_get_cursor (layout,
@@ -160,7 +161,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
           gnc_table_layout_set_cell (layout, curs, DEBT_CELL, 0, 5);
           gnc_table_layout_set_cell (layout, curs, CRED_CELL, 0, 6);
         }
-	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 8);
+        gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 8);
 
         break;
       }
@@ -173,13 +174,13 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
                                             CURSOR_SINGLE_LEDGER);
 
         gnc_table_layout_set_cell (layout, curs, DATE_CELL,  0, 0);
-	gnc_table_layout_set_cell (layout, curs, TYPE_CELL,  0, 1);
-	gnc_table_layout_set_cell (layout, curs, DDUE_CELL,  0, 2);
+        gnc_table_layout_set_cell (layout, curs, TYPE_CELL,  0, 1);
+        gnc_table_layout_set_cell (layout, curs, DDUE_CELL,  0, 2);
         gnc_table_layout_set_cell (layout, curs, NUM_CELL,   0, 3);
         gnc_table_layout_set_cell (layout, curs, DESC_CELL,  0, 4);
         gnc_table_layout_set_cell (layout, curs, MXFRM_CELL, 0, 5);
-	gnc_table_layout_set_cell (layout, curs, DEBT_CELL,  0, 6);
-	gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 7);
+        gnc_table_layout_set_cell (layout, curs, DEBT_CELL,  0, 6);
+        gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 7);
         gnc_table_layout_set_cell (layout, curs, BALN_CELL,  0, 8);
 
         curs_last = curs;
@@ -195,8 +196,8 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
                                             CURSOR_SINGLE_JOURNAL);
 
         gnc_table_layout_set_cell (layout, curs, DATE_CELL,  0, 0);
-	gnc_table_layout_set_cell (layout, curs, TYPE_CELL,  0, 1);
-	gnc_table_layout_set_cell (layout, curs, DDUE_CELL,  0, 2);
+        gnc_table_layout_set_cell (layout, curs, TYPE_CELL,  0, 1);
+        gnc_table_layout_set_cell (layout, curs, DDUE_CELL,  0, 2);
         gnc_table_layout_set_cell (layout, curs, NUM_CELL,   0, 3);
         gnc_table_layout_set_cell (layout, curs, DESC_CELL,  0, 4);
 
@@ -218,8 +219,8 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         gnc_table_layout_set_cell (layout, curs, ACTN_CELL, 0, 3);
         gnc_table_layout_set_cell (layout, curs, MEMO_CELL, 0, 4);
         gnc_table_layout_set_cell (layout, curs, XFRM_CELL, 0, 5);
-	gnc_table_layout_set_cell (layout, curs, DEBT_CELL, 0, 6);
-	gnc_table_layout_set_cell (layout, curs, CRED_CELL, 0, 7);
+        gnc_table_layout_set_cell (layout, curs, DEBT_CELL, 0, 6);
+        gnc_table_layout_set_cell (layout, curs, CRED_CELL, 0, 7);
 
         break;
       }
@@ -247,7 +248,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
           gnc_table_layout_set_cell (layout, curs, DEBT_CELL,  0, 5);
           gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 6);
         }
-	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 7);
+        gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 7);
 
         curs_last = curs;
         curs = gnc_table_layout_get_cursor (layout,
@@ -267,7 +268,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         gnc_table_layout_set_cell (layout, curs, DESC_CELL,  0, 2);
         gnc_table_layout_set_cell (layout, curs, TDEBT_CELL, 0, 5);
         gnc_table_layout_set_cell (layout, curs, TCRED_CELL, 0, 6);
-	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 7);
+        gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 7);
 
         curs_last = curs;
         curs = gnc_table_layout_get_cursor (layout,
@@ -295,7 +296,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
           gnc_table_layout_set_cell (layout, curs, DEBT_CELL,  0, 5);
           gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 6);
         }
-	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 7);
+        gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 7);
 
         break;
       }
@@ -522,11 +523,11 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
   gnc_register_add_cell (layout,
                          NUM_CELL,
                          NUM_CELL_TYPE_NAME,
-			 /* Translators: The 'sample:' items are
-			    strings which are not displayed, but only
-			    used to estimate widths. Please only
-			    translate the portion after the ':' and
-			    leave the rest ("sample:") as is. */
+                         /* Translators: The 'sample:' items are
+                            strings which are not displayed, but only
+                            used to estimate widths. Please only
+                            translate the portion after the ':' and
+                            leave the rest ("sample:") as is. */
                          N_("sample:99999") + 7,
                          CELL_ALIGN_LEFT,
                          FALSE,

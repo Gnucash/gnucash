@@ -139,7 +139,7 @@ do_test_call(
 		failure_args( test_title, filename, line, "" );
 	}
 
-        return result;
+	return result;
 }
 
 gboolean
@@ -161,7 +161,7 @@ do_test_args(
 	}
 	va_end(ap);
 
-        return result;
+	return result;
 }
 
 void

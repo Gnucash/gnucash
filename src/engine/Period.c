@@ -546,8 +546,8 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    /* hack alert -- FIXME -- this should really be a merge, not a
     * clobber copy, but I am too lazy to write a kvp merge routine,
     * and it is not needed for the current usage. */
-   kvp_frame_delete (dest_book->kvp_data);
-   dest_book->kvp_data = kvp_frame_copy (src_book->kvp_data);
+   kvp_frame_delete (dest_book->inst.kvp_data);
+   dest_book->inst.kvp_data = kvp_frame_copy (src_book->inst.kvp_data);
 
    /* Next, copy the commodity tables */
    src_tbl = gnc_commodity_table_get_table (src_book);
@@ -598,11 +598,11 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
 
    /* Make note of the sibling books */
    now = time(0);
-   gnc_kvp_bag_add (src_book->kvp_data, "gemini", now, 
-                          "book_guid", &dest_book->entity.guid, 
+   gnc_kvp_bag_add (src_book->inst.kvp_data, "gemini", now, 
+                          "book_guid", &dest_book->inst.entity.guid, 
                            NULL);
-   gnc_kvp_bag_add (dest_book->kvp_data, "gemini", now, 
-                          "book_guid", &src_book->entity.guid, 
+   gnc_kvp_bag_add (dest_book->inst.kvp_data, "gemini", now, 
+                          "book_guid", &src_book->inst.entity.guid, 
                            NULL);
    LEAVE (" ");
 }
@@ -693,7 +693,7 @@ add_closing_balances (AccountGroup *closed_grp,
       xaccAccountBeginEdit (twin);
       cwd = xaccAccountGetSlots (twin);
       kvp_frame_set_guid (cwd, "/book/prev-acct", xaccAccountGetGUID (candidate));
-      kvp_frame_set_guid (cwd, "/book/prev-book", &closed_book->entity.guid);
+      kvp_frame_set_guid (cwd, "/book/prev-book", &closed_book->inst.entity.guid);
 
       xaccAccountSetSlots_nc (twin, twin->inst.kvp_data);
       
@@ -702,7 +702,7 @@ add_closing_balances (AccountGroup *closed_grp,
        * the next book is. */
       xaccAccountBeginEdit (candidate);
       cwd = xaccAccountGetSlots (candidate);
-      kvp_frame_set_guid (cwd, "/book/next-book", &open_book->entity.guid);
+      kvp_frame_set_guid (cwd, "/book/next-book", &open_book->inst.entity.guid);
       kvp_frame_set_guid (cwd, "/book/next-acct", xaccAccountGetGUID (twin));
 
       xaccAccountSetSlots_nc (candidate, candidate->inst.kvp_data);
@@ -760,7 +760,7 @@ add_closing_balances (AccountGroup *closed_grp,
             /* Add KVP data showing where the balancing 
              * transaction came from */
             cwd = xaccTransGetSlots (trans);
-            kvp_frame_set_guid (cwd, "/book/closed-book", &closed_book->entity.guid);
+            kvp_frame_set_guid (cwd, "/book/closed-book", &closed_book->inst.entity.guid);
             kvp_frame_set_guid (cwd, "/book/closed-acct", xaccAccountGetGUID(candidate));
             
             xaccTransCommitEdit (trans);
@@ -805,7 +805,7 @@ period_begin_edit (QofBook *src_book, QofBook *dest_book)
    be = src_book->backend;
    if (be && be->begin)
    {
-      (*be->begin)(be, GNC_ID_PERIOD, dest_book);
+      // (*be->begin)(be, GNC_ID_PERIOD, dest_book);
    }
 }
    
@@ -816,7 +816,7 @@ period_commit_edit (QofBook *src_book, QofBook *dest_book)
    be = src_book->backend;
    if (be && be->commit)
    {
-      (*be->commit)(be, GNC_ID_PERIOD, dest_book);
+      // (*be->commit)(be, GNC_ID_PERIOD, dest_book);
    }
 }
 
@@ -870,8 +870,8 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
 
    /* Now add the various identifying kvp's */
    /* cwd == 'current working directory' */
-   exist_cwd = existing_book->kvp_data;
-   partn_cwd = closing_book->kvp_data;
+   exist_cwd = existing_book->inst.kvp_data;
+   partn_cwd = closing_book->inst.kvp_data;
    
    /* Mark the boundary date between the books */
    kvp_frame_set_timespec (exist_cwd, "/book/open-date", calve_date);
@@ -883,8 +883,8 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
    kvp_frame_set_timespec (partn_cwd, "/book/log-date", ts);
 
    /* Set up pointers to each book from the other. */
-   kvp_frame_set_guid (partn_cwd, "/book/next-book", &existing_book->entity.guid);
-   kvp_frame_set_guid (exist_cwd, "/book/prev-book", &closing_book->entity.guid);
+   kvp_frame_set_guid (partn_cwd, "/book/next-book", &existing_book->inst.entity.guid);
+   kvp_frame_set_guid (exist_cwd, "/book/prev-book", &closing_book->inst.entity.guid);
 
    /* add in transactions to equity accounts that will
     * hold the colsing balances */

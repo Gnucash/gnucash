@@ -406,7 +406,7 @@ gboolean gncOwnerRegister (void)
     { OWNER_PARENT, GNC_ID_OWNER, (QofAccessFunc)gncOwnerGetEndOwner, NULL },
     { OWNER_PARENTG, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetEndGUID, NULL },
     { OWNER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncOwnerGetName, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetGUID, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetGUID, NULL },
     { NULL },
   };
 

@@ -2019,9 +2019,9 @@ gnc_option_set_ui_value_string (GNCOption *option, gboolean use_default,
 {
   if (SCM_STRINGP(value))
   {
-    char *string = gh_scm2newstr(value, NULL);
+    /* char *string = gh_scm2newstr(value, NULL); */
+    char *string = SCM_STRING_CHARS(value);
     gtk_entry_set_text(GTK_ENTRY(widget), string);
-    free(string);
     return FALSE;
   }
   else
@@ -2041,7 +2041,8 @@ gnc_option_set_ui_value_text (GNCOption *option, gboolean use_default,
 
   if (SCM_STRINGP(value))
   {
-    char *string = gh_scm2newstr(value, NULL);
+    /* char *string = gh_scm2newstr(value, NULL); */
+    char *string = SCM_STRING_CHARS(value);
     gtk_text_buffer_set_text (buffer, string, strlen (string));
     free(string);
     return FALSE;
@@ -2308,14 +2309,13 @@ gnc_option_set_ui_value_font (GNCOption *option, gboolean use_default,
 {
   if (SCM_STRINGP(value))
   {
-    char *string = gh_scm2newstr(value, NULL);
+    /* char *string = gh_scm2newstr(value, NULL); */
+    char *string = SCM_STRING_CHARS(value);
     if ((string != NULL) && (*string != '\0'))
     {
       GnomeFontPicker *picker = GNOME_FONT_PICKER(widget);
       gnome_font_picker_set_font_name(picker, string);
     }
-    if(string)
-      free(string);
     return FALSE;
   }
   else
@@ -2329,7 +2329,8 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
   ENTER("option %p(%s)", option, gnc_option_name(option));
   if (SCM_STRINGP(value))
   {
-    char * string = gh_scm2newstr(value, NULL);
+    /* char * string = gh_scm2newstr(value, NULL); */
+    char *string = SCM_STRING_CHARS(value);
 
     if (string && *string)
     {
@@ -2338,8 +2339,6 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
       entry = GTK_ENTRY(gnome_pixmap_entry_gtk_entry(GNOME_PIXMAP_ENTRY(widget)));
       gtk_entry_set_text(entry, string);
     }
-    if(string)
-      free(string);
     LEAVE("FALSE");
     return FALSE;
   }
@@ -2770,11 +2769,11 @@ scm_close_cb (GNCOptionWin *win, gpointer data)
 
   if (cbdata->close_cb != SCM_BOOL_F) {
     scm_call_0 (cbdata->close_cb);
-    scm_unprotect_object (cbdata->close_cb);
+    scm_gc_unprotect_object (cbdata->close_cb);
   }
 
   if (cbdata->apply_cb != SCM_BOOL_F)
-    scm_unprotect_object (cbdata->apply_cb);
+    scm_gc_unprotect_object (cbdata->apply_cb);
 
   g_free (cbdata);
 }
@@ -2793,10 +2792,10 @@ gnc_options_dialog_set_scm_callbacks (GNCOptionWin *win, SCM apply_cb,
   cbdata->close_cb = close_cb;
 
   if (apply_cb != SCM_BOOL_F)
-    scm_protect_object (cbdata->apply_cb);
+    scm_gc_protect_object (cbdata->apply_cb);
 
   if (close_cb != SCM_BOOL_F)
-    scm_protect_object (cbdata->close_cb);
+    scm_gc_protect_object (cbdata->close_cb);
 
   gnc_options_dialog_set_apply_cb (win, scm_apply_cb, cbdata);
   gnc_options_dialog_set_close_cb (win, scm_close_cb, cbdata);

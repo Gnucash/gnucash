@@ -1,4 +1,5 @@
-/* This file declares testing functions for the engine.
+/** @file test-engine-stuff.h
+ *  $brief This file declares testing functions for the engine.
  */
 
 #ifndef TEST_ENGINE_STUFF_H
@@ -46,10 +47,11 @@ void make_random_pricedb (QofBook *book, GNCPriceDB *pdb);
 GNCPriceDB * get_random_pricedb(QofBook *book);
 AccountGroup * get_random_group(QofBook * book);
 Account* get_random_account(QofBook * book);
-Split* get_random_split(QofBook *book, gnc_numeric num);
+Split* get_random_split(QofBook *book, Account *account);
 Transaction* get_random_transaction(QofBook *book);
 Transaction* get_random_transaction_with_currency(QofBook *book,
-                                                  gnc_commodity *currency);
+                                                  gnc_commodity *currency,
+                                                  GList *account_list);
 gnc_commodity* get_random_commodity(QofBook *book);
 const char *get_random_commodity_namespace(void);
 

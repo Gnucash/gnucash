@@ -34,8 +34,8 @@
 #include "gnc-numeric.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -527,7 +527,7 @@ void gncTaxTableChanged (GncTaxTable *table)
 
 void gncTaxTableBeginEdit (GncTaxTable *table)
 {
-  GNC_BEGIN_EDIT (&table->inst);
+  QOF_BEGIN_EDIT (&table->inst);
 }
 
 static inline void gncTaxTableOnError (QofInstance *inst, QofBackendError errcode)
@@ -545,8 +545,8 @@ static inline void table_free (QofInstance *inst)
 
 void gncTaxTableCommitEdit (GncTaxTable *table)
 {
-  GNC_COMMIT_EDIT_PART1 (&table->inst);
-  GNC_COMMIT_EDIT_PART2 (&table->inst, gncTaxTableOnError,
+  QOF_COMMIT_EDIT_PART1 (&table->inst);
+  QOF_COMMIT_EDIT_PART2 (&table->inst, gncTaxTableOnError,
                          gncTaxTableOnDone, table_free);
 }
 
@@ -799,19 +799,21 @@ static QofObject gncTaxTableDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Tax Table",
+  create:             NULL,
   book_begin:         _gncTaxTableCreate,
   book_end:           _gncTaxTableDestroy,
   is_dirty:           qof_collection_is_dirty,
   mark_clean:         qof_collection_mark_clean,
   foreach:            qof_collection_foreach,
   printable:          NULL,
+  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncTaxTableRegister (void)
 {
   static QofParam params[] = {
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

@@ -55,6 +55,7 @@ static GCache * qf_string_cache = NULL;
 
 /********************************************************************\
 \********************************************************************/
+
 static guint
 quickfill_hash (gconstpointer key)
 {
@@ -72,6 +73,7 @@ quickfill_compare (gconstpointer key1, gconstpointer key2)
 
 /********************************************************************\
 \********************************************************************/
+
 QuickFill *
 gnc_quickfill_new (void)
 {
@@ -99,6 +101,7 @@ gnc_quickfill_new (void)
 
 /********************************************************************\
 \********************************************************************/
+
 static void
 destroy_helper (gpointer key, gpointer value, gpointer data)
 {
@@ -125,6 +128,7 @@ gnc_quickfill_destroy (QuickFill *qf)
 
 /********************************************************************\
 \********************************************************************/
+
 const char *
 gnc_quickfill_string (QuickFill *qf)
 {
@@ -136,21 +140,29 @@ gnc_quickfill_string (QuickFill *qf)
 
 /********************************************************************\
 \********************************************************************/
+
 QuickFill *
 gnc_quickfill_get_char_match (QuickFill *qf, gunichar uc)
 {
   guint key = g_unichar_toupper (uc);
 
-  if (qf == NULL)
-    return NULL;
+  if (NULL == qf) return NULL;
 
   DEBUG ("xaccGetQuickFill(): index = %u\n", key);
+#if DEBUG_ME
+  GdkWChar s[2];
+  s[0] = wc;
+  s[1] = 0;
+  char * r= gnc_wcstombs (s);
+  PINFO ("ascii char=%s (%d)\n", r, (int) r[0]);
+#endif
 
   return g_hash_table_lookup (qf->matches, GUINT_TO_POINTER (key));
 }
 
 /********************************************************************\
 \********************************************************************/
+
 QuickFill *
 gnc_quickfill_get_string_len_match (QuickFill *qf,
                                     const char *str, int len)
@@ -158,8 +170,8 @@ gnc_quickfill_get_string_len_match (QuickFill *qf,
   const char *c;
   gunichar uc;
 
-  if (str == NULL)
-    return NULL;
+  if (NULL == qf) return NULL;
+  if (NULL == str) return NULL;
 
   c = str;
   while (*c && (len > 0))
@@ -179,17 +191,19 @@ gnc_quickfill_get_string_len_match (QuickFill *qf,
 
 /********************************************************************\
 \********************************************************************/
+
 QuickFill *
 gnc_quickfill_get_string_match (QuickFill *qf, const char *str)
 {
-  if (str == NULL)
-    return NULL;
+  if (NULL == qf) return NULL;
+  if (NULL == str) return NULL;
 
   return gnc_quickfill_get_string_len_match (qf, str, g_utf8_strlen (str, -1));
 }
 
 /********************************************************************\
 \********************************************************************/
+
 static void
 unique_len_helper (gpointer key, gpointer value, gpointer data)
 {
@@ -214,7 +228,9 @@ gnc_quickfill_get_unique_len_match (QuickFill *qf, int *length)
     count = g_hash_table_size (qf->matches);
 
     if (count != 1)
+    {
       return qf;
+    }
 
     g_hash_table_foreach (qf->matches, unique_len_helper, &qf);
 
@@ -225,13 +241,15 @@ gnc_quickfill_get_unique_len_match (QuickFill *qf, int *length)
 
 /********************************************************************\
 \********************************************************************/
+
 void
 gnc_quickfill_insert (QuickFill *qf, const char *text, QuickFillSort sort)
 {
   gchar *normalized_str;
 
-  if ((qf == NULL) || (text == NULL))
-    return;
+  if (NULL == qf) return;
+  if (NULL == text) return;
+
 
   normalized_str = g_utf8_normalize (text, -1, G_NORMALIZE_DEFAULT);
   quickfill_insert_recursive (qf, normalized_str, 0, sort);
@@ -240,6 +258,7 @@ gnc_quickfill_insert (QuickFill *qf, const char *text, QuickFillSort sort)
 
 /********************************************************************\
 \********************************************************************/
+
 static void
 quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
                             QuickFillSort sort)

@@ -40,6 +40,8 @@
   	gh_new_procedure(nm,fn,req,opt,rst)
   #define scm_num2long(a,b,c)	scm_num2long(a, (char *)b, c)
   #define scm_num2ulong(a,b,c)	scm_num2ulong(a, (char *)b, c)
+  #define scm_gc_project_object(x) scm_protect_object(x)
+  #define scm_gc_unprotect_object(x) scm_unprotect_object(x)
 
   #if ((GNC_GUILE_MAJOR_VERSION == 1) && (GNC_GUILE_MINOR_VERSION < 4))
     #define scm_make_real	gh_double2scm
@@ -59,6 +61,12 @@
   #else
     #define scm_str2symbol(a)	gh_symbol2scm(a)
   #endif /* Guile < 1.4 */
+#else /* Guile >= 1.6 */
+
+/* This fixes some g-wrap problems..  Once g-wrap fixes this, we can remove this */
+#define scm_protect_object(x)	scm_gc_protect_object(x)
+#define scm_unprotect_object(x)	scm_gc_unprotect_object(x)
+
 #endif /* Guile < 1.6 */
 
 

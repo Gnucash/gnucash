@@ -22,7 +22,7 @@
 /** @file policy.c
  *  @breif Implement FIFO Accounting Policy.
  *  @author Created by Linas Vepstas August 2003
- *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
+ *  @author Copyright (c) 2003,2004 Linas Vepstas <linas@linas.org>
  *
  *  This file implements the FIFO Accounting Policy (and, in the 
  *  future, others as well).  The Accounting Polciy determines 
@@ -46,35 +46,81 @@
 
 /* static short module = MOD_LOT; */
 
+static Split * 
+DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
+{
+   Split *split;
+   SplitList *node;
+   gnc_commodity *common_currency;
+   gboolean want_positive;
+   gnc_numeric baln;
+
+   if (!pcy || !lot || !lot->account || !lot->splits) return NULL;
+
+   /* Recomputing the balance re-evaluates the lot closure */
+   baln = gnc_lot_get_balance (lot);
+   if (gnc_lot_is_closed(lot)) return NULL;
+
+   want_positive = gnc_numeric_negative_p (baln);
+
+   /* All splits in lot must share a common transaction currency. */
+   split = lot->splits->data;
+   common_currency = split->parent->common_currency;
+
+   /* Walk over *all* splits in the account, till we find one that
+    * hasn't been assigned to a lot.  Return that split.
+    * Make use of the fact that the splits in an account are 
+    * already in date order; so we don't have to sort. */
+   node = xaccAccountGetSplitList (lot->account);
+   if (reverse)
+   {
+       node = g_list_last (node);
+   }
+   while (node)
+   {
+      gboolean is_match;
+      gboolean is_positive;
+      split = node->data;
+      if (split->lot) goto donext;
+
+      /* Allow equiv currencies */
+      is_match = gnc_commodity_equiv (common_currency, 
+                                      split->parent->common_currency);
+      if (FALSE == is_match) goto donext;
+
+      /* Disallow zero-amount splits in general. */
+      if (gnc_numeric_zero_p(split->amount)) goto donext;
+
+      is_positive = gnc_numeric_positive_p (split->amount);
+      if ((want_positive && is_positive) ||
+          ((!want_positive) && (!is_positive))) return split;
+donext:
+      if (reverse)
+      {
+         node=node->prev;
+      }
+      else
+      {
+         node=node->next;
+      }
+   }
+   return NULL;
+}
+
 /* ============================================================== */
 
 static GNCLot * 
 FIFOPolicyGetLot (GNCPolicy *pcy, Split *split)
 {
-   return xaccAccountFindEarliestOpenLot (split->acc, split->amount);
+   if (!split) return NULL;
+   return xaccAccountFindEarliestOpenLot (split->acc, split->amount,
+                                          split->parent->common_currency);
 }
 
 static Split * 
 FIFOPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot)
 {
-   SplitList *node;
-   gboolean want_positive;
-
-   want_positive = gnc_numeric_negative_p (gnc_lot_get_balance (lot));
-
-   /* Make use of the fact that the splits in a lot are already
-    * in date order; so we don't have to search for the earliest. */
-   for (node = xaccAccountGetSplitList (lot->account); node; node=node->next)
-   {
-      gboolean is_positive;
-      Split *split = node->data;
-      if (split->lot) continue;
-
-      is_positive = gnc_numeric_positive_p (split->amount);
-      if ((want_positive && is_positive) ||
-          ((!want_positive) && (!is_positive))) return split;
-   }
-   return NULL;
+   return DirectionPolicyGetSplit (pcy, lot, 0);
 }
 
 static void
@@ -128,33 +174,15 @@ xaccGetFIFOPolicy (void)
 static GNCLot * 
 LIFOPolicyGetLot (GNCPolicy *pcy, Split *split)
 {
-   return xaccAccountFindLatestOpenLot (split->acc, split->amount);
+   if (!split) return NULL;
+   return xaccAccountFindLatestOpenLot (split->acc, split->amount,
+                                        split->parent->common_currency);
 }
 
 static Split * 
 LIFOPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot)
 {
-   SplitList *node;
-   gboolean want_positive;
-
-   want_positive = gnc_numeric_negative_p (gnc_lot_get_balance (lot));
-
-   /* Make use of the fact that the splits in a lot are already
-    * in date order; so we don't have to search for the latest,
-    * we merely start at the end and go backwards. */
-   node = xaccAccountGetSplitList (lot->account);
-   node = g_list_last (node);
-   for (; node; node=node->prev)
-   {
-      gboolean is_positive;
-      Split *split = node->data;
-      if (split->lot) continue;
-
-      is_positive = gnc_numeric_positive_p (split->amount);
-      if ((want_positive && is_positive) ||
-          ((!want_positive) && (!is_positive))) return split;
-   }
-   return NULL;
+   return DirectionPolicyGetSplit (pcy, lot, 1);
 }
 
 /* This routine is actually identical to FIFO... */

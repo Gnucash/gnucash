@@ -1,4 +1,5 @@
 /********************************************************************\
+ * qofbook.h -- Encapsulate all the information about a dataset.    *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -17,15 +18,21 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Engine
+/** @addtogroup Object
+    @{ */
+/** @addtogroup Book
+    A QOF Book is a dataset.  It provides a single handle 
+    through which all the various collections of entities
+    can be found.   In particular, given only the type of
+    the entity, the collection can be found.
+    
+    Books also provide the 'natural' place to working with
+    a storage backend, as a book can encapsulate everything 
+    held in storage.
     @{ */
 /** @file qofbook.h
- * @brief dataset access (an "accounting book")
- * Encapsulate all the information about a dataset.
- * See src/docs/books.txt for implementation overview.
+ * @brief Encapsulate all the information about a dataset.
  *
- * HISTORY:
- * Created by Linas Vepstas December 1998
  * @author Copyright (c) 1998, 1999, 2001, 2003 Linas Vepstas <linas@linas.org>
  * @author Copyright (c) 2000 Dave Peticolas
  */
@@ -60,6 +67,8 @@ typedef struct _QofBook       QofBook;
 /** GList of QofBook */
 typedef GList                 QofBookList;
 
+typedef void (*QofBookFinalCB) (QofBook *, gpointer key, gpointer user_data);
+
 /** Register the book object with the QOF object system. */
 gboolean qof_book_register (void);
                                                                                 
@@ -83,18 +92,32 @@ QofCollection  * qof_book_get_collection (QofBook *, QofIdType);
 typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);
 void qof_book_foreach_collection (QofBook *, QofCollectionForeachCB, gpointer);
 
-/** \return The kvp data for the book */
-KvpFrame   * qof_book_get_slots (QofBook *book);
+/** \return The kvp data for the book.
+ *  Note that the boom KVP data is persistant, and is stored/retrevied
+ *  from the file/database.  Thus, the book KVP is the correct place to
+ *  store data that needs to be persistant accross sessions (or shared
+ *  between multiple users).  To store application runtime data, use
+ *  qof_book_set_data() isntead.
+ */
+#define qof_book_get_slots(book) qof_instance_get_slots(QOF_INSTANCE(book))
 
 /** The qof_book_set_data() allows arbitrary pointers to structs 
  *    to be stored in QofBook. This is the "prefered" method for 
- *    extending QofBook to hold new data types.
+ *    extending QofBook to hold new data types.  This is also
+ *    the ideal location to store other arbitrary runtime data 
+ *    that the application may need.
  *
- * XXX FIXME: we need to add a destroy callback, so that when the
- * book gets destroyed, the user gets notified and thus has a chance
- * to clean up.
+ *    The book data differs from the book KVP in that the contents
+ *    of the book KVP are persistant (are saved and restored to file 
+ *    or database), whereas the data pointers exist only at runtime.
  */
 void qof_book_set_data (QofBook *book, const char *key, gpointer data);
+
+/** Same as qof_book_set_data(), except that the callback will be called
+ *  when the book is destroyed.  The argument to the callback will be 
+ *  the book followed by the data pointer.
+ */
+void qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFinalCB);
 
 /** Retreives arbitrary pointers to structs stored by qof_book_set_data. */
 gpointer qof_book_get_data (QofBook *book, const char *key);
@@ -103,6 +126,9 @@ gpointer qof_book_get_data (QofBook *book, const char *key);
 QofBackend *qof_book_get_backend (QofBook *book);
 
 void qof_book_set_backend (QofBook *book, QofBackend *);
+
+/** Is the book shutting down? */
+gboolean qof_book_shutting_down (QofBook *book);
 
 /** qof_book_not_saved() will return TRUE if any 
  *    data in the book hasn't been saved to long-term storage.
@@ -128,21 +154,9 @@ gboolean qof_book_equal (QofBook *book_1, QofBook *book_2);
  */
 gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
 
-/** Book parameter names */
-/**@{*/ 
-
-#define QOF_BOOK_KVP     "qof-kvp"
-
-/**@}*/
-
-/**
- * @return The releveant QofEntity for the given GUID across all collections
- * in the book, or NULL if one cannot be found.
- **/
-QofEntity* qof_book_get_entity_by_guid( QofBook *book, GUID *entity );
-
 /** deprecated */
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_ENTITY(X))
 
 #endif /* QOF_BOOK_H */
+/** @} */
 /** @} */

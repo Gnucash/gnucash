@@ -1,17 +1,17 @@
 /********************************************************************\
- * FreqSpec.c -- Frequency specifier implementation.      *
- * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>     *
- * Copyright (C) 2001 Ben Stanley <bds02@uow.edu.au>      *
- *                          *
+ * FreqSpec.c -- Frequency specifier implementation.                *
+ * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2001 Ben Stanley <bds02@uow.edu.au>                *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.         *
- *                          *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
  * This program is distributed in the hope that it will be useful,  *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.           *
+ * GNU General Public License for more details.                     *
  *                          *
  * You should have received a copy of the GNU General Public License*
  * along with this program; if not, contact:         *
@@ -88,8 +88,8 @@
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "messages.h"
 #include "gnc-trace.h"
+#include "messages.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
@@ -181,8 +181,8 @@ xaccFreqSpecInit( FreqSpec *fs, QofBook *book )
    g_return_if_fail( fs );
    g_return_if_fail (book);
 
-   col = qof_book_get_collection (book, GNC_ID_FREQSPEC);
-   qof_entity_init (&fs->entity, GNC_ID_FREQSPEC, col);
+   col = qof_book_get_collection (book, QOF_ID_FREQSPEC);
+   qof_entity_init (&fs->entity, QOF_ID_FREQSPEC, col);
 
    fs->type = INVALID;
    fs->uift = UIFREQ_ONCE;

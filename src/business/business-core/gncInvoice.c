@@ -30,6 +30,7 @@
 
 #include <glib.h>
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -49,7 +50,6 @@
 
 #include "gnc-event-p.h"
 #include "gnc-lot.h"
-#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncBillTermP.h"
@@ -1295,7 +1295,7 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice)
 
 void gncInvoiceBeginEdit (GncInvoice *invoice)
 {
-  GNC_BEGIN_EDIT (&invoice->inst);
+  QOF_BEGIN_EDIT (&invoice->inst);
 }
 
 static inline void gncInvoiceOnError (QofInstance *inst, QofBackendError errcode)
@@ -1313,8 +1313,8 @@ static inline void invoice_free (QofInstance *inst)
 
 void gncInvoiceCommitEdit (GncInvoice *invoice)
 {
-  GNC_COMMIT_EDIT_PART1 (&invoice->inst);
-  GNC_COMMIT_EDIT_PART2 (&invoice->inst, gncInvoiceOnError,
+  QOF_COMMIT_EDIT_PART1 (&invoice->inst);
+  QOF_COMMIT_EDIT_PART2 (&invoice->inst, gncInvoiceOnError,
 			 gncInvoiceOnDone, invoice_free);
 }
 
@@ -1363,12 +1363,14 @@ static QofObject gncInvoiceDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Invoice",
+  create:             NULL,
   book_begin:         NULL,
   book_end:           NULL,
   is_dirty:           qof_collection_is_dirty,
   mark_clean:         qof_collection_mark_clean,
   foreach:            qof_collection_foreach,
   printable:          _gncInvoicePrintable,
+  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 static void
@@ -1413,9 +1415,9 @@ gboolean gncInvoiceRegister (void)
     { INVOICE_TYPE, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetType, NULL },
     { INVOICE_TERMS, GNC_ID_BILLTERM, (QofAccessFunc)gncInvoiceGetTerms, NULL },
     { INVOICE_BILLTO, GNC_ID_OWNER, (QofAccessFunc)gncInvoiceGetBillTo, NULL },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceGetActive, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceGetActive, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

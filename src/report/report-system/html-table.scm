@@ -3,6 +3,8 @@
 ;; for simple style elements. 
 ;; Copyright 2000 Bill Gribble <grib@gnumatic.com>
 ;; 
+;; * 2004.06.18: David Montenegro, added gnc:html-table-get-cell
+;; 
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
 ;; published by the Free Software Foundation; either version 2 of   
@@ -20,6 +22,16 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 
+;; NB: In this code, "markup" and "/markup" *do not* refer to
+;; style information.  Rather, they let you override the tag
+;; associated with an html-table row or cell.  Style
+;; information is stored in addition to this "markup" (in
+;; an entirely different record field).
+;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <html-table>
   (make-record-type "<html-table>"
@@ -125,6 +137,11 @@
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
          (style (gnc:html-table-cell-style cell)))
+    
+;    ;; why dont colspans export??!
+;    (gnc:html-table-cell-set-style! cell "td"
+;	'attribute (list "colspan"
+;	    (or (gnc:html-table-cell-colspan cell) 1)))
     (gnc:html-document-push-style doc style)
     (push (gnc:html-document-markup-start 
            doc (gnc:html-table-cell-tag cell)
@@ -384,6 +401,19 @@
     
     new-num-rows))
 
+;; list-set! is 0-based...
+;;   (let ((a '(0 1 2))) (list-set! a 1 "x") a)
+;;    => (0 "x" 2)
+(define (gnc:html-table-get-cell table row col)
+  (list-ref-safe (gnc:html-table-get-row table row) col))
+
+(define (gnc:html-table-get-row table row)
+  (let* ((dd (gnc:html-table-data table))
+	 (len (length dd))
+	 )
+    (list-ref-safe dd (- (- len 1) row))
+    ))
+
 (define (gnc:html-table-set-cell! table row col . objects)
   (let ((rowdata #f)
 	(row-loc #f)
@@ -517,6 +547,26 @@
              (gnc:html-table-append-row! table (list element)))
            remaining-elements)
           #f))))
+
+;; 
+;; It would be nice to have table row/col/cell accessor functions in here.
+;; It would also be nice to have table juxtaposition functions, too.
+;; i.e., (gnc:html-table-nth-row table n)
+;;       (gnc:html-table-append-table-horizontal table add-table)
+;; (An old merge-table used to exist inside balance-sheet.scm/GnuCash 1.8.9.)
+;; Feel free to contribute! :-)
+;; 
+
+;; This function was moved here from balance-sheet.scm.
+(define (gnc:html-table-merge t1 t2)
+  (begin 
+    (gnc:html-table-set-data! t1
+			      (append
+			       (gnc:html-table-data t2)
+			       (gnc:html-table-data t1)))
+    (gnc:html-table-set-num-rows-internal!
+     t1 (+ (gnc:html-table-num-rows t1)
+           (gnc:html-table-num-rows t2)))))
 
 (define (gnc:html-table-render table doc)
   (let* ((retval '())

@@ -30,6 +30,7 @@ libgncmod_engine_la_SOURCES = \
   gnc-engine-util.c \
   gnc-engine.c \
   gnc-event.c \
+  gnc-filepath-utils.c \
   gnc-lot.c \
   gnc-numeric.c \
   gnc-pricedb.c \
@@ -77,13 +78,13 @@ gncinclude_HEADERS = \
   engine-helpers.h \
   glib-helpers.h \
   gnc-associate-account.h \
-  gnc-be-utils.h \
   gnc-book.h \
   gnc-commodity.h \
   gnc-date.h \
   gnc-engine-util.h \
   gnc-engine.h \
   gnc-event.h \
+  gnc-filepath-utils.h \
   gnc-numeric.h \
   gnc-pricedb.h \
   gnc-session.h \
@@ -98,10 +99,13 @@ gncinclude_HEADERS = \
   policy.h \
   qof.h \
   qofbackend.h \
+  qof-be-utils.h \
   qofbook.h \
   qofclass.h \
   qofid.h \
   qofinstance.h \
+  qofmath128.c \
+  qofmath128.h \
   qofobject.h \
   qofquery.h \
   qofquerycore.h \

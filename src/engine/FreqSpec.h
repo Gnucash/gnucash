@@ -17,7 +17,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Engine_SchedXaction
+/** @addtogroup QOF
+    @{ */
+/** @addtogroup FreqSpec Specifying Recurring Dates (Periods)
     @{ */
 /** @file FreqSpec.h
     @brief Period / Date Frequency Specification
@@ -32,7 +34,7 @@
 
 #include <glib.h>
 
-#include "gnc-engine.h"
+#include "qofid.h"
 #include "guid.h"
 #include "qofbook.h"
 
@@ -232,4 +234,5 @@ void xaccFreqSpecGetNextInstance( FreqSpec *fs,
 int gnc_freq_spec_compare( FreqSpec *a, FreqSpec *b );
 
 #endif /* XACC_FREQSPEC_H */
+/**@}*/
 /**@}*/

@@ -24,16 +24,30 @@
 #ifndef GUID_H
 #define GUID_H 
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <glib.h>
 #include <stddef.h>
 
-/* This file defines an API for using globally unique identifiers. */
+/** @addtogroup Entity
+    @{ */
+/** @addtogroup GUID
+    Globally Unique ID's provide a way to uniquely identify 
+    some thing.  A GUID is a unique, cryptographically
+    random 128-bit value.  The identifier is so random that
+    it is safe to assume that there is no other such item
+    on the planet Earth, and indeed, not even in the Galaxy
+    or beyond.
 
-/* The type used to store guids */
+    QOF GUID's can be used independently of any other subsystem
+    in QOF.   In particular, they do not require the use of
+    other parts of the object subsystem.
+
+    @{ */
+/** @file guid.h
+    @brief  globally unique ID User API 
+    @author Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
+*/
+
+/** The type used to store guids */
 typedef union _GUID
 {
   unsigned char data[16];
@@ -43,7 +57,7 @@ typedef union _GUID
 } GUID;
 
 
-/* number of characters needed to encode a guid as a string
+/** number of characters needed to encode a guid as a string
  * not including the null terminator. */
 #define GUID_ENCODING_LENGTH 32
 
@@ -179,4 +193,6 @@ guint guid_hash_to_guint(gconstpointer ptr);
 
 GHashTable *guid_hash_table_new(void);
 
+/* @} */
+/* @} */
 #endif

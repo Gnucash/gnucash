@@ -91,7 +91,7 @@ listen_for_account_events (GUID *guid, QofIdType type,
   name = xaccAccountGetFullName (account, gnc_get_account_separator ());
   if (NULL == name) return;
 
-  match = gnc_quickfill_get_string_match_mb (qf, name);
+  match = gnc_quickfill_get_string_match (qf, name);
   if (!match) goto add_string;
   match_str = gnc_quickfill_string (match);
   if (!match_str) goto add_string;

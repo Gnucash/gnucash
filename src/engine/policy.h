@@ -18,16 +18,20 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup Policy Accounting Policy (FIFO/LIFO)
+ *  This file implements Accounting Policy.  The Accounting Policy 
+ *  determines how Splits are assigned to Lots.  The contents
+ *  of a Lot determines the Gains on that Lot.  The default policy
+ *  is the FIFO policy: the first thing bought is also the first 
+ *  thing sold.  
+ @{ */
 
 /** @file policy.h
- *  @breif Implement Accounting Policy.
+ *  @brief Implement Accounting Policy.
  *  @author Created by Linas Vepstas August 2003
- *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
- *
- *  This file implements Accounting Policy.  The Accounting Policy 
- *  determines how splits are assigned to lots.  The default policy
- *  is the FIFO policy: the first thing bought is also the first 
- *  thing sold. 
+ *  @author Copyright (c) 2003,2004 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef XACC_POLICY_H 
@@ -35,7 +39,27 @@
 
 typedef struct gncpolicy_s GNCPolicy;
 
+/** First-in, First-out Policy 
+ *  This policy will create FIFO Lots.  FIFO Lots have the following
+ *  properties:
+ *  -- The lot is started with the earliest posted split that isn't
+ *     a part of another lot already.
+ *  -- Splits are added to the lot in date order, with earliest splits
+ *     added first.
+ *  -- All splits in the lot share the same transaction currency as
+ *     the split that opened the lot.
+ */
 GNCPolicy *xaccGetFIFOPolicy (void); 
+
+/** Last-in, First-out Policy
+ *  This policy will create LIFO Lots.  LIFO Lots have the following
+ *  properties:
+ *  -- XXX  I think the implementation is broken right now.
+ *  -- All splits in the lot share the same transaction currency as
+ *     the split that opened the lot.
+ */
 GNCPolicy *xaccGetLIFOPolicy (void); 
 
 #endif /* XACC_POLICY_H */
+/** @} */
+/** @} */

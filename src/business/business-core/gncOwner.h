@@ -19,11 +19,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * Copyright (C) 2001, 2002 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
+/** @addtogroup Business
+    @{ */
+/** @addtogroup Owner
+    @{ */
+/** @file gncOwner.h
+    @brief Business Interface:  Object OWNERs
+    @author Copyright (C) 2001,2002 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_OWNER_H_
 #define GNC_OWNER_H_
@@ -78,23 +81,23 @@ int gncOwnerCompare (const GncOwner *a, const GncOwner *b);
 const char * gncOwnerGetName (GncOwner *owner);
 gnc_commodity * gncOwnerGetCurrency (GncOwner *owner);
 
-/* Get the GUID of the immediate owner */
+/** Get the GUID of the immediate owner */
 const GUID * gncOwnerGetGUID (GncOwner *owner);
 GUID gncOwnerRetGUID (GncOwner *owner);
 
 gboolean gncOwnerIsValid (GncOwner *owner);
 
-/*
+/**
  * Get the "parent" Owner or GUID thereof.  The "parent" owner
  * is the Customer or Vendor, or the Owner of a Job
  */
 GncOwner * gncOwnerGetEndOwner (GncOwner *owner);
 const GUID * gncOwnerGetEndGUID (GncOwner *owner);
 
-/* attach an owner to a lot */
+/** attach an owner to a lot */
 void gncOwnerAttachToLot (GncOwner *owner, GNCLot *lot);
 
-/* Get the owner from the lot.  If an owner is found in the lot,
+/** Get the owner from the lot.  If an owner is found in the lot,
  * fill in "owner" and return TRUE.  Otherwise return FALSE.
  */
 gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
@@ -110,7 +113,7 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
 
 #define OWNER_FROM_LOT    "owner-from-lot"
 
-/*
+/**
  * These two functions are mainly for the convenience of scheme code.
  * Normal C code has no need to ever use these two functions, and rather
  * can just use a GncOwner directly and just pass around a pointer to it.
@@ -119,3 +122,5 @@ GncOwner * gncOwnerCreate (void);
 void gncOwnerDestroy (GncOwner *owner);
 
 #endif /* GNC_OWNER_H_ */
+/** @} */
+/** @} */

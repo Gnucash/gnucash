@@ -19,10 +19,12 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Business-Engine
+/** @addtogroup Business
+    @{ */
+/** @addtogroup TaxTable
     @{ */
 /** @file gncTaxTable.h
-    @breif Tax Table programming interface
+    @brief Tax Table programming interface
     @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
 */
 
@@ -67,7 +69,8 @@ gboolean gncAmountStringToType (const char *str, GncAmountType *type);
 const char * gncTaxIncludedTypeToString (GncTaxIncluded type);
 gboolean gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type);
 
-/** Create/Destroy Functions */
+/** @name Create/Destroy Functions */
+/** @{ */
 GncTaxTable * gncTaxTableCreate (QofBook *book);
 void gncTaxTableDestroy (GncTaxTable *table);
 GncTaxTableEntry * gncTaxTableEntryCreate (void);
@@ -88,8 +91,10 @@ void gncTaxTableRemoveEntry (GncTaxTable *table, GncTaxTableEntry *entry);
 void gncTaxTableChanged (GncTaxTable *table);
 void gncTaxTableBeginEdit (GncTaxTable *table);
 void gncTaxTableCommitEdit (GncTaxTable *table);
+/** @} */
 
-/** Get Functions */
+/** @name Get Functions */
+/** @{ */
 
 /** Return a pointer to the instance gncTaxTable that is identified
  *  by the guid, and is residing in the book. Returns NULL if the 
@@ -115,6 +120,7 @@ Timespec gncTaxTableLastModified (GncTaxTable *table);
 Account * gncTaxTableEntryGetAccount (GncTaxTableEntry *entry);
 GncAmountType gncTaxTableEntryGetType (GncTaxTableEntry *entry);
 gnc_numeric gncTaxTableEntryGetAmount (GncTaxTableEntry *entry);
+/** @} */
 
 int gncTaxTableCompare (GncTaxTable *a, GncTaxTable *b);
 int gncTaxTableEntryCompare (GncTaxTableEntry *a, GncTaxTableEntry *b);
@@ -141,10 +147,11 @@ gnc_numeric gncAccountValueTotal (GList *list);
 /** Destroy a list of accountvalues */
 void gncAccountValueDestroy (GList *list);
 
-/** deprecated routine */
+/** @deprecated routine */
 #define gncTaxTableGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 #define gncTaxTableRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
 #define gncTaxTableLookupDirect(G,B) gncTaxTableLookup((B), &(G))
 
 #endif /* GNC_TAXTABLE_H_ */
+/** @} */
 /** @} */

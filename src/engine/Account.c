@@ -32,7 +32,6 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
-#include "gnc-be-utils.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
@@ -48,6 +47,7 @@
 
 #include "qofbackend.h"
 #include "qofbackend-p.h"
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofclass.h"
@@ -318,7 +318,7 @@ xaccFreeAccount (Account *acc)
 void 
 xaccAccountBeginEdit (Account *acc) 
 {
-  GNC_BEGIN_EDIT (&acc->inst);
+  QOF_BEGIN_EDIT (&acc->inst);
 }
 
 static inline void noop(QofInstance *inst) {}
@@ -338,7 +338,7 @@ static inline void acc_free (QofInstance *inst)
 void 
 xaccAccountCommitEdit (Account *acc) 
 {
-  GNC_COMMIT_EDIT_PART1 (&acc->inst);
+  QOF_COMMIT_EDIT_PART1 (&acc->inst);
 
   /* If marked for deletion, get rid of subaccounts first,
    * and then the splits ... */
@@ -385,7 +385,7 @@ xaccAccountCommitEdit (Account *acc)
     xaccGroupInsertAccount(acc->parent, acc); 
   }
 
-  GNC_COMMIT_EDIT_PART2 (&acc->inst, on_err, noop, acc_free);
+  QOF_COMMIT_EDIT_PART2 (&acc->inst, on_err, noop, acc_free);
 
   gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }
@@ -895,7 +895,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
    * denominator AKA 'SCU Smallest Currency Unit'. */
   /* xaccSplitSetAmount(split, old_amt); */
   split->amount = gnc_numeric_convert (old_amt,
-                xaccAccountGetCommoditySCU(acc), GNC_RND_ROUND);
+                xaccAccountGetCommoditySCU(acc), GNC_HOW_RND_ROUND);
   xaccTransCommitEdit(trans);
   xaccAccountCommitEdit(acc);
   LEAVE ("(acc=%p, split=%p)", acc, split);
@@ -1818,7 +1818,7 @@ xaccAccountBalanceHelper (Account *account, gpointer data)
   balance = xaccAccountGetXxxBalanceInCurrency (account, cb->fn, cb->currency);
   cb->balance = gnc_numeric_add (cb->balance, balance,
                                  gnc_commodity_get_fraction (cb->currency),
-                                 GNC_RND_ROUND);
+                                 GNC_HOW_RND_ROUND);
   return NULL;
 }
 
@@ -2836,12 +2836,14 @@ static QofObject account_object_def = {
   interface_version:     QOF_OBJECT_VERSION,
   e_type:                GNC_ID_ACCOUNT,
   type_label:            "Account",
+  create:                NULL,
   book_begin:            NULL,
   book_end:              NULL,
   is_dirty:              NULL,
   mark_clean:            NULL,
   foreach:               qof_collection_foreach,
-  printable:             (const char* (*)(gpointer)) xaccAccountGetName
+  printable:             (const char* (*)(gpointer)) xaccAccountGetName,
+  version_cmp:           (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
 };
 
 gboolean xaccAccountRegister (void)
@@ -2857,8 +2859,8 @@ gboolean xaccAccountRegister (void)
     { ACCOUNT_RECONCILED_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetReconciledBalance, NULL },
     { ACCOUNT_FUTURE_MINIMUM_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetProjectedMinimumBalance, NULL },
     { ACCOUNT_TAX_RELATED, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_guid, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { ACCOUNT_KVP, QOF_TYPE_KVP, (QofAccessFunc)qof_instance_get_slots, NULL },
     { NULL },
   };

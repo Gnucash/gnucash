@@ -564,6 +564,20 @@ gnc_report_window_params_cb(GtkWidget * w, gpointer data)
   return TRUE;
 }
 
+static int
+gnc_report_window_save_cb(GtkWidget * w, gpointer data)
+{
+  gnc_report_window * report = data;
+  SCM save_func = gh_eval_str("gnc:report-save-to-savefile");
+
+  if(report->cur_report != SCM_BOOL_F)
+  {
+    gh_call1(save_func, report->cur_report);
+  }
+
+  return TRUE;
+}
+
 /* We got a draw event.  See if we need to reload the report */
 static void
 gnc_report_window_draw_cb(GtkWidget *unused, GdkRectangle *unused1, gpointer data)
@@ -697,9 +711,9 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
   }
 
   if(win->initial_report == SCM_BOOL_F) {    
-    scm_unprotect_object(win->initial_report);
+    scm_gc_unprotect_object(win->initial_report);
     win->initial_report = inst_report;
-    scm_protect_object(win->initial_report);
+    scm_gc_protect_object(win->initial_report);
     
     scm_call_2(set_needs_save, inst_report, SCM_BOOL_T);
 
@@ -719,9 +733,9 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
   }
   
   if(win->cur_report != SCM_BOOL_F)
-    scm_unprotect_object(win->cur_report);
+    scm_gc_unprotect_object(win->cur_report);
   win->cur_report = inst_report;
-  scm_protect_object(win->cur_report);
+  scm_gc_protect_object(win->cur_report);
 
   win->cur_odb = gnc_option_db_new(scm_call_1(get_options, inst_report));  
   win->option_change_cb_id = 
@@ -821,9 +835,9 @@ gnc_report_window_new(GNCMDIChildInfo * mc)
   report->edited_reports   = SCM_EOL;
   report->name_change_cb_id = SCM_BOOL_F;
 
-  scm_protect_object(report->cur_report);
-  scm_protect_object(report->initial_report);
-  scm_protect_object(report->edited_reports);
+  scm_gc_protect_object(report->cur_report);
+  scm_gc_protect_object(report->initial_report);
+  scm_gc_protect_object(report->edited_reports);
 
   gnc_html_history_set_node_destroy_cb(gnc_html_get_history(report->html),
                                        gnc_report_window_history_destroy_cb,
@@ -931,6 +945,15 @@ gnc_report_window_create_toolbar(gnc_report_window * win,
       GNOME_STOCK_PIXMAP_PRINT,
       0, 0, NULL
     },
+    { GNOME_APP_UI_ITEM,
+      _("Save report"),
+      _("Save the current report for later use in ~/.gnucash/saved-reports-1.8 so that they are accessible as menu entries in the report menu. Will go into effect at the next startup of gnucash."),
+      gnc_report_window_save_cb, win,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK,
+      GNOME_STOCK_PIXMAP_SAVE,
+      0, 0, NULL
+    },    
     GNOMEUIINFO_END
   };
   
@@ -987,8 +1010,8 @@ gnc_report_window_destroy(gnc_report_window * win)
   win->container     = NULL;
   win->html          = NULL;
   
-  scm_unprotect_object(win->cur_report);
-  scm_unprotect_object(win->edited_reports);
+  scm_gc_unprotect_object(win->cur_report);
+  scm_gc_unprotect_object(win->edited_reports);
   
   g_free(win);
 }
@@ -1087,7 +1110,7 @@ gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
   
   scm_call_2(set_editor, win->cur_report, SCM_BOOL_F);
   gnc_option_db_destroy(win->db);
-  scm_unprotect_object(win->scm_options);
+  scm_gc_unprotect_object(win->scm_options);
   gnc_options_dialog_destroy(win->win);
   g_free(win);
 }
@@ -1126,8 +1149,8 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
       free(title);
     }
 
-    scm_protect_object(prm->scm_options);
-    scm_protect_object(prm->cur_report);
+    scm_gc_protect_object(prm->scm_options);
+    scm_gc_protect_object(prm->cur_report);
     
     gnc_build_options_dialog_contents(prm->win, prm->db);
     gnc_option_db_clean(prm->db);
@@ -1149,18 +1172,18 @@ void
 gnc_report_window_remove_edited_report(gnc_report_window * win, SCM report)
 { 
   SCM new_edited = scm_delete(win->edited_reports, report);
-  scm_unprotect_object(win->edited_reports);
+  scm_gc_unprotect_object(win->edited_reports);
   win->edited_reports = new_edited;
-  scm_protect_object(win->edited_reports);
+  scm_gc_protect_object(win->edited_reports);
 }
 
 void
 gnc_report_window_add_edited_report(gnc_report_window * win, SCM report)
 {
   SCM new_edited = scm_cons(report, win->edited_reports);
-  scm_unprotect_object(win->edited_reports);
+  scm_gc_unprotect_object(win->edited_reports);
   win->edited_reports = new_edited;
-  scm_protect_object(win->edited_reports);
+  scm_gc_protect_object(win->edited_reports);
 }
 
 void

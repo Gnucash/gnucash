@@ -32,6 +32,7 @@
 #include <string.h>
 
 #include "guid.h"
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -47,7 +48,6 @@
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 
 #include "gncAddressP.h"
 #include "gncBusiness.h"
@@ -349,7 +349,7 @@ gboolean gncEmployeeIsDirty (GncEmployee *employee)
 
 void gncEmployeeBeginEdit (GncEmployee *employee)
 {
-  GNC_BEGIN_EDIT (&employee->inst);
+  QOF_BEGIN_EDIT (&employee->inst);
 }
 
 static inline void gncEmployeeOnError (QofInstance *employee, QofBackendError errcode)
@@ -372,8 +372,8 @@ static inline void emp_free (QofInstance *inst)
 
 void gncEmployeeCommitEdit (GncEmployee *employee)
 {
-  GNC_COMMIT_EDIT_PART1 (&employee->inst);
-  GNC_COMMIT_EDIT_PART2 (&employee->inst, gncEmployeeOnError,
+  QOF_COMMIT_EDIT_PART1 (&employee->inst);
+  QOF_COMMIT_EDIT_PART2 (&employee->inst, gncEmployeeOnError,
                          gncEmployeeOnDone, emp_free);
 }
 
@@ -403,12 +403,14 @@ static QofObject gncEmployeeDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Employee",
+  create:             NULL,
   book_begin:         NULL,
   book_end:           NULL,
   is_dirty:           qof_collection_is_dirty,
   mark_clean:         qof_collection_mark_clean,
   foreach:            qof_collection_foreach,
   printable:          _gncEmployeePrintable,
+  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncEmployeeRegister (void)
@@ -417,9 +419,9 @@ gboolean gncEmployeeRegister (void)
     { EMPLOYEE_ID, QOF_TYPE_STRING, (QofAccessFunc)gncEmployeeGetID, NULL },
     { EMPLOYEE_USERNAME, QOF_TYPE_STRING, (QofAccessFunc)gncEmployeeGetUsername, NULL },
     { EMPLOYEE_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncEmployeeGetAddr, NULL },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEmployeeGetActive, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEmployeeGetActive, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

@@ -114,12 +114,14 @@ static gnc_quote_source currency_quote_source =
 
 static gnc_quote_source single_quote_sources[] = {
   { FALSE, 0, 0, "AEX", "AEX", "aex" },
+  { FALSE, 0, 0, "AMFI India", "AMFIINDIA", "amfiindia" },
   { FALSE, 0, 0, "ASX", "ASX", "asx" },
   { FALSE, 0, 0, "DWS", "DWS", "dwsfunds" },
   { FALSE, 0, 0, "Fidelity Direct", "FIDELITY_DIRECT", "fidelity_direct" },
   { FALSE, 0, 0, "Motley Fool", "FOOL", "fool" },
   { FALSE, 0, 0, "Fund Library", "FUNDLIBRARY", "fundlibrary" },
   { FALSE, 0, 0, "TD Waterhouse Canada", "TDWATERHOUSE", "tdwaterhouse" },
+  { FALSE, 0, 0, "TD Efunds", "TDEFUNDS", "tdefunds" },
   { FALSE, 0, 0, "TIAA-CREF", "TIAACREF", "tiaacref" },
   { FALSE, 0, 0, "T. Rowe Price", "TRPRICE_DIRECT", "troweprice_direct" },
   { FALSE, 0, 0, "Trustnet", "TRUSTNET", "trustnet" },
@@ -139,6 +141,7 @@ static gnc_quote_source multiple_quote_sources[] = {
   { FALSE, 0, 0, "Canada Mutual (Fund Library, ...)", "CANADAMUTUAL", "canadamutual" },
   { FALSE, 0, 0, "Dutch (AEX, ...)", "DUTCH", "dutch" },
   { FALSE, 0, 0, "Europe (Yahoo, ...)", "EUROPE", "europe" },
+  { FALSE, 0, 0, "India Mutual (AMFI, ...)", "INDIAMUTUAL", "indiamutual" },
   { FALSE, 0, 0, "Fidelity (Fidelity, ...)", "FIDELITY", "fidelity" },
   { FALSE, 0, 0, "Nasdaq (Yahoo, ...)", "NASDAQ", "nasdaq" },
   { FALSE, 0, 0, "NYSE (Yahoo, ...)", "NYSE", "nyse" },
@@ -1743,12 +1746,14 @@ static QofObject commodity_table_object_def =
   interface_version: QOF_OBJECT_VERSION,
   e_type:            GNC_ID_COMMODITY_TABLE,
   type_label:        "CommodityTable",
+  create:            NULL,
   book_begin:        commodity_table_book_begin,
   book_end:          commodity_table_book_end,
   is_dirty:          NULL,
   mark_clean:        NULL,
   foreach:           NULL,
   printable:         NULL,
+  version_cmp:       NULL,
 };
 
 gboolean 

@@ -5,6 +5,7 @@
 
 #include "test-stuff.h"
 #include "gnc-engine-util.h"
+#include "gnc-filepath-utils.h"
 #include "qofsession.h"
 
 struct test_strings_struct

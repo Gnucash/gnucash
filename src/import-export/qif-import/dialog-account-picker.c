@@ -266,7 +266,7 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
   wind->selected_name = g_strdup(scmname);
   free(scmname);
 
-  scm_protect_object(wind->map_entry);
+  scm_gc_protect_object(wind->map_entry);
 
   gtk_signal_connect(GTK_OBJECT(wind->treeview), "tree_select_row",
                      GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_select_cb),
@@ -292,7 +292,7 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
   } while (response == GNC_RESPONSE_NEW);
   gtk_widget_destroy(wind->dialog);
 
-  scm_unprotect_object(wind->map_entry);
+  scm_gc_unprotect_object(wind->map_entry);
   g_free(wind->selected_name);
   g_free(wind);
 
