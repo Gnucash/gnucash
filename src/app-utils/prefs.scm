@@ -685,6 +685,30 @@ without one.")
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
+  "__gui" "sx_list_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "sx_list_win_height" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "sx_editor_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "sx_editor_win_height" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "sx_sincelast_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "sx_sincelast_win_height" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
   "__exp_parser" "defined_variables" '()))
 
 (gnc:register-configuration-option

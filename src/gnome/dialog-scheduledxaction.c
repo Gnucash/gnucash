@@ -58,12 +58,14 @@ static short module = MOD_SX;
 #define DIALOG_SCHEDXACTION_CM_CLASS "dialog-scheduledtransactions"
 #define DIALOG_SCHEDXACTION_EDITOR_CM_CLASS "dialog-scheduledtransaction-editor"
 
+#define SX_LIST_WIN_PREFIX "sx_list_win"
 #define SX_LIST_GLADE_NAME "Scheduled Transaction List"
 #define SX_LIST "sched_xact_list"
 #define SX_LIST_UPCOMING_FRAME "upcoming_cal_frame"
 #define SX_EDITOR_GLADE_NAME "Scheduled Transaction Editor"
 #define SX_OPT_STR "Scheduled Transactions"
 
+#define SXED_WIN_PREFIX "sx_editor_win"
 #define SXED_NAME_ENTRY "sxe_name"
 #define AUTOCREATE_OPT "autocreate_opt"
 #define NOTIFY_OPT "notify_opt"
@@ -148,13 +150,13 @@ static void new_button_clicked( GtkButton *b, gpointer d );
 static void edit_button_clicked( GtkButton *b, gpointer d );
 static void delete_button_clicked( GtkButton *b, gpointer d );
 static void close_button_clicked( GtkButton *b, gpointer d );
+static void gnc_sxl_record_size( SchedXactionDialog *sxd );
 
-static void _gnc_sxed_get_widgets( SchedXactionEditorDialog *sxed );
-
+static void gnc_sxed_record_size( SchedXactionEditorDialog *sxed );
+static void gnc_sxed_get_widgets( SchedXactionEditorDialog *sxed );
 static void endgroup_rb_toggled( GtkButton *b, gpointer d );
 static void set_endgroup_toggle_states( SchedXactionEditorDialog *sxed, EndType t );
 static void advance_toggle( GtkButton *b, SchedXactionEditorDialog *sxed );
-
 static gboolean gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed );
 static gboolean gnc_sxed_check_changed( SchedXactionEditorDialog *sxed );
 
@@ -178,7 +180,7 @@ void
 sxd_close_handler ( gpointer user_data )
 {
         SchedXactionDialog        *sxd = user_data;
-
+        gnc_sxl_record_size( sxd );
         gnome_dialog_close( GNOME_DIALOG( sxd->dialog ) );
 }
 
@@ -189,6 +191,7 @@ sxed_close_handler ( gpointer user_data )
         SchedXactionEditorDialog        *sxed = user_data;
 
         gnc_sxed_reg_check_close( sxed );
+        gnc_sxed_record_size( sxed );
         /* Real dialog cleanup occurs in "destroy" callback. */
         gnome_dialog_close( GNOME_DIALOG( sxed->dialog ) );
 }
@@ -462,10 +465,10 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
          * Do checks on validity and such, interrupting the user if
          * things aren't right.
          *
-         * . the 'will ever be valid' check should take num-occur vals into
-         *   account.
          * . balancing the SX if contain numeric-only formula data.
          *   . agreement with create-automagically/notification controls
+         * X the 'will ever be valid' check should take num-occur vals into
+         *   account.
          * X SX name is unique
          * X SX has a name
          * X "weekly" FS has some days set.
@@ -951,6 +954,16 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         gtk_signal_connect( GTK_OBJECT(button), "clicked",
                             GTK_SIGNAL_FUNC(close_button_clicked), sxd );
 
+        {
+                int width, height;
+
+                gnc_get_window_size( SX_LIST_WIN_PREFIX, &width, &height );
+                if ( width != 0 && height != 0 ) {
+                        gtk_window_set_default_size( GTK_WINDOW(sxd->dialog),
+                                                     width, height );
+                }
+        }
+
         gnc_register_gui_component( DIALOG_SCHEDXACTION_CM_CLASS,
                                     NULL, /* no refresh handler */
                                     sxd_close_handler,
@@ -963,12 +976,21 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         return sxd;
 }
 
+static
+void
+gnc_sxl_record_size( SchedXactionDialog *sxd )
+{
+        gint x, y, w, h, d;
+        gdk_window_get_geometry( sxd->dialog->window,
+                                 &x, &y, &w, &h, &d );
+        gnc_save_window_size( SX_LIST_WIN_PREFIX, w, h );
+}
+
 void
 gnc_ui_scheduled_xaction_dialog_destroy(SchedXactionDialog *sxd)
 {
         if (sxd == NULL)
                 return;
-
         gnc_close_gui_component_by_data (DIALOG_SCHEDXACTION_CM_CLASS, sxd);
 }
 
@@ -1042,7 +1064,7 @@ sxed_delete_event( GtkWidget *widget, GdkEvent *evt, gpointer ud )
 
 static
 void
-_gnc_sxed_get_widgets( SchedXactionEditorDialog *sxed )
+gnc_sxed_get_widgets( SchedXactionEditorDialog *sxed )
 {
         GtkWidget *w;
 
@@ -1134,7 +1156,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         /* NOTE: this must occur before processing the widget list, above, so
          * the gpointers stored with the advance_ and remind_opts are
          * correct. */
-        _gnc_sxed_get_widgets( sxed );
+        gnc_sxed_get_widgets( sxed );
 
         gnc_register_gui_component( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
                                     NULL, /* no refresh handler */
@@ -1147,6 +1169,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         gtk_signal_connect(GTK_OBJECT(sxed->dialog), "destroy",
                            GTK_SIGNAL_FUNC(scheduledxaction_editor_dialog_destroy),
                            sxed);
+
         /* FIXME: want delete-event, too. [?] */
 
         for ( i=0; widgets[i].name != NULL; i++ ) {
@@ -1171,6 +1194,15 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 	/* Allow grow, allow shrink, auto-shrink */
         gtk_window_set_policy (GTK_WINDOW(sxed->dialog), TRUE, TRUE, FALSE);
 
+        {
+                int width, height;
+                gnc_get_window_size( SXED_WIN_PREFIX, &width, &height );
+                if ( width != 0 && height != 0 ) {
+                        gtk_window_set_default_size( GTK_WINDOW( sxed->dialog ),
+                                                     width, height );
+                }
+        }
+
         /* create the frequency-selection macrowidget */
         schedXact_editor_create_freq_sel( sxed );
         /* create the template-transaction ledger window */
@@ -1181,6 +1213,16 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         gtk_widget_show_all(sxed->dialog);
         
         return sxed;
+}
+
+static
+void
+gnc_sxed_record_size( SchedXactionEditorDialog *sxed )
+{
+        gint x, y, w, h, d;
+        gdk_window_get_geometry( sxed->dialog->window,
+                                 &x, &y, &w, &h, &d );
+        gnc_save_window_size( SXED_WIN_PREFIX, w, h );
 }
 
 static

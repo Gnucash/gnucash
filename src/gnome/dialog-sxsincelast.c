@@ -75,6 +75,7 @@
 
 #define DIALOG_SXSINCELAST_GLADE_NAME "Since Last Run Druid"
 #define SXSLD_DRUID_GLADE_NAME "sincelast_druid"
+#define SXSLD_WIN_PREFIX "sx_sincelast_win"
 
 #define SINCELAST_DRUID   "sincelast_druid"
 #define WHAT_TO_DO_PG "what_to_do"
@@ -226,6 +227,7 @@ static void sxsincelast_close_handler( gpointer ud );
 
 static void sxsincelast_entry_changed( GtkEditable *e, gpointer ud );
 static void sxsincelast_destroy( GtkObject *o, gpointer ud );
+static void sxsincelast_save_size( sxSinceLastData *sxsld );
 static void create_transactions_on( SchedXaction *sx,
                                     GDate *gd,
                                     toCreateInstance *tci,
@@ -914,6 +916,15 @@ sxsincelast_init( sxSinceLastData *sxsld )
         create_autoCreate_ledger( sxsld );
         create_created_ledger( sxsld );
 
+        {
+                int width, height;
+                gnc_get_window_size( SXSLD_WIN_PREFIX, &width, &height );
+                if ( width != 0 && height != 0 ) {
+                        gtk_window_set_default_size( GTK_WINDOW(sxsld->sincelast_window),
+                                                     width, height );
+                }
+        }
+
         //reminders_page_prep( sxsld );
         gtk_widget_show_all( sxsld->sincelast_window );
 
@@ -921,6 +932,16 @@ sxsincelast_init( sxSinceLastData *sxsld )
 
         w = glade_xml_get_widget( sxsld->gxml, REMINDERS_PG );
         gnome_druid_set_page( sxsld->sincelast_druid, GNOME_DRUID_PAGE(w) );
+}
+
+static
+void
+sxsincelast_save_size( sxSinceLastData *sxsld )
+{
+        gint x, y, w, h, d;
+        gdk_window_get_geometry( sxsld->sincelast_window->window,
+                                 &x, &y, &w, &h, &d );
+        gnc_save_window_size( SXSLD_WIN_PREFIX, w, h );
 }
 
 static void
@@ -1490,6 +1511,7 @@ sxsincelast_close_handler( gpointer ud )
 
         DEBUG( "sxsincelast_close_handler" );
         gtk_widget_hide( sxsld->sincelast_window );
+        sxsincelast_save_size( sxsld );
         clean_sincelast_dlg( sxsld );
         gtk_widget_destroy( sxsld->sincelast_window );
         clean_sincelast_data( sxsld );
