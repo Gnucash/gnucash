@@ -169,7 +169,10 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
 
   /* Check for valid company name */
   if (check_entry_nonempty (vw->dialog, vw->company_entry,
-		   _("You must enter a company name.")))
+		   _("You must enter a company name.\n"
+		     "If this vendor is an individual (and not a company) "
+		     "you should set the \"company name\" and \"contact name\" "
+		     "the same.")))
     return;
 
   /* Make sure we have an address */
@@ -246,7 +249,7 @@ gnc_vendor_name_changed_cb (GtkWidget *widget, gpointer data)
   if (!vw)
     return;
 
-  name = gtk_entry_get_text (GTK_ENTRY (vw->name_entry));
+  name = gtk_entry_get_text (GTK_ENTRY (vw->company_entry));
   if (!name || *name == '\0')
     name = _("<No name>");
 
