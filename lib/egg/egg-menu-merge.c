@@ -907,7 +907,7 @@ egg_menu_merge_add_ui (EggMenuMerge        *self,
 
   egg_menu_merge_queue_update (self);
 
-  g_object_notify (G_OBJECT (self), "ui");      
+  //g_object_notify (G_OBJECT (self), "ui");      
 }
 
 

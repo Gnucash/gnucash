@@ -56,6 +56,9 @@
               ;;(set! menu-path
               ;; (append menu-path '(""))))
 
+          (if (not menu-path)
+              (set! menu-path '()))
+
           (set! menu-path (append (list gnc:window-name-main gnc:menuname-reports) menu-path))
 
           (if (not menu-tip)

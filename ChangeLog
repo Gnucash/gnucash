@@ -1,3 +1,13 @@
+2004-05-05  Derek Atkins  <derek@ihtfp.com>
+
+	* lib/egg/egg-menu-merge.c:
+	  we don't have a "ui" so dont notify ourself when merging.
+	* src/gnome-utils/gnc-menu-extensions.scm:
+	  Use empty strings instead of #f for menu items so we don't
+	  cause problems later where we expect to get an actual string.
+	* src/report/report-gnome/report-gnome.scm:
+	  Make sure we actually have a menu-path list!
+
 2004-05-02  David Hampton  <hampton@employees.org>
 
 	* various files: Merge in changes to HEAD from 2004-03-03

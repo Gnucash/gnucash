@@ -49,10 +49,10 @@
   (gnc:make-extension 'menu-item name documentation-string path script))
 
 (define (gnc:make-menu name path)
-  (gnc:make-extension 'menu name #f path #f))
+  (gnc:make-extension 'menu name "" path #f))
 
 (define (gnc:make-separator path)
-  (gnc:make-extension 'separator #f #f path #f))
+  (gnc:make-extension 'separator "" "" path #f))
 
 (define gnc:*add-extension-hook*
   (gnc:hook-define 
