@@ -9,8 +9,10 @@ entities are the central data structures of the GnuCash financial data
 model.
 
 In addition, the Engine provides the abstraction of Account Groups
-(collections of releated accounts) and Sessions. A Session abstracts
-a file-editing session allowing transparent support for locking and
+(collections of related accounts) and GNCBooks. A GNCBook abstracts both
+a set of related GnuCash data (financial entities plus additional
+information such as budgets, per-file preferences, etc.) plus a
+file-editing session allowing transparent support for locking and
 implementation with other backends such as SQL.
 
 The Engine code contains no GUI code whatsoever and is designed to
@@ -25,7 +27,7 @@ be created as a shared library for use by other programs.
 * Transactions::                
 * Accounts::                    
 * Account Groups::              
-* Sessions::                    
+* GNCBooks::                    
 @end menu
 
 
@@ -1085,23 +1087,24 @@ Set the description field of @var{trans} to @var{desc}.
 @tindex Account
 
 
-@node Account Groups, Sessions, Accounts, Engine
+@node Account Groups, GNCBooks, Accounts, Engine
 @section Account Groups
 @tindex AccountGroup
 
 
-@node Sessions,  , Account Groups, Engine
-@section Sessions
-@tindex Session
+@node GNCBooks,  , Account Groups, Engine
+@section GNCBooks
+@tindex GNCBook
 
-The @dfn{Session} interface provides wrappers for initiating/concluding
-a file-editing session. This class provides several important services:
+The @dfn{GNCBook} interface encapsulate all the information about a
+gnucash dataset, including the methods used to read and write the
+dataset to datastores.  This class provides several important services:
 
 @itemize
 
 @item
 Prevents multiple users from editing the same file at the same time,
-thus avoiding lost data due to race conditions. Thus an open session
+thus avoiding lost data due to race conditions. Thus an 'open book'
 implies that the associated file is locked.
 
 @item
@@ -1115,3 +1118,113 @@ The current implementation assumes the use of files and file locks;
 however, the API was designed to be general enough to allow the use
 of generic URL's, and/or implementation on top of SQL or other
 database/persistant object technology.
+
+@menu
+* GNCBook API::                 
+@end menu
+
+
+@node GNCBook API,  , GNCBooks, GNCBooks
+@subsection GNCBook API
+
+@deftypefun {GNCBook *} gnc_book_new (void)
+Allocate, initialize, and return a new GNCBook. The new book will contain
+a newly allocated AccountGroup.
+@end deftypefun
+
+@deftypefun void gnc_book_destroy (GNCBook * @var{book})
+End any editing session associated with @var{book}, and free all
+memory associated with it.
+@end deftypefun
+
+@deftypefun gboolean gnc_book_begin (GNCBook * @var{book}, const char * @var{book_id})
+Begins a new book editing sesssion. It takes as an argument the book id.
+The book id must be a string in the form of a URI/URL.  In the current
+implementation, only one type of URI is supported, and that is the file
+URI: anything of the form @url{file:/home/somewhere/somedir/file.xac}
+The path part must be a valid path.  The file-part must be a valid
+gnucash data file. Paths may be relative or absolute. If the path is
+relative; that is, if the argument is @url{file:somefile.xac} then a
+sequence of search paths are checked for a file of this name.
+
+If the file exists, can be opened and read, and a lock can be obtained
+then a lock will be obtained and the function returns TRUE. Otherwise
+the function returns FALSE.
+@end deftypefun
+
+@deftypefun gboolean (*GNCBookLockFailHandler) (const char * @var{file})
+A function prototype for lock fail handlers used below.
+@end deftypefun
+
+@deftypefun gboolean gnc_book_begin_file (GNCBook * @var{book}, const char * @var{filename}, GNCBookLockFailHandler @var{handler})
+This routine is identical to the gnc_book_begin() routine, except that
+the argument is a filename (i.e. the five letters @code{file:} should
+not be prepended) and there is an additional function argument. This
+function is called if gnc_book_begin_file fails to obtain a lock for the
+file. If it returns TRUE, the file is loaded anyway. If it returns
+FALSE, or the handler is NULL, a failed lock attempt will abort the
+load. The lock fail handler is passed the filename of the data file
+being loaded.
+@end deftypefun
+
+@deftypefun gboolean gnc_book_load (GNCBook * @var{book})
+Load the data associated with the book. The function returns TRUE on
+success.
+@end deftypefun
+
+@deftypefun int gnc_book_get_error (GNCBook * @var{book})
+Obtain the reason for a failure. Standard errno values are used. Calling
+this routine resets the error value. This routine allows an
+implementation of multiple error values, e.g. in a stack, where this
+routine pops the top value. The current implementation has a stack that
+is one-deep.
+
+Some important error values:
+
+@table @code
+
+@item EINVAL
+bad argument
+
+@item ETXTBSY
+book id is in use; it's locked by someone else
+
+@item ENOSYS
+unsupported URI type
+
+@item ERANGE
+file path too long
+
+@item ENOLCK
+book not open when SessionSave() was called.
+
+@end table
+@end deftypefun
+
+@deftypefun {AccountGroup *} gnc_book_get_group (GNCBook * @var{book})
+Return the current top-level account group.
+@end deftypefun
+
+@deftypefun void gnc_book_set_group (GNCBook * @var{book}, AccountGroup * @var{topgroup})
+Set the topgroup to a new value.
+@end deftypefun
+
+@deftypefun {const char *} gnc_book_get_file_path (GNCBook * @var{book})
+Return the fully-qualified file path for the book. That is, if a
+relative or partial filename was for the book, then it had to have been
+fully resolved to open the book. This routine returns the result of this
+resolution.
+@end deftypefun
+
+@deftypefun gboolean gnc_book_save_may_clobber_data (GNCBook * @var{book})
+Return TRUE if saving the book would overwrite other information.
+@end deftypefun
+
+@deftypefun void gnc_book_save (GNCBook * @var{book})
+Commit all changes that have been made to the book.
+@end deftypefun
+
+@deftypefun void gnc_book_end (GNCBook * @var{book})
+Release the session lock. It will @emph{not} save the account group to
+a file. Thus, this method acts as an "abort" or "rollback" primitive.
+@end deftypefun

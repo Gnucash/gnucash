@@ -73,7 +73,8 @@ of the @cite{GnuCash Design Document}, version @value{VERSION}.
 * Data Type Index::             
 * Concept Index::               
 
-@detailmenu --- The Detailed Node Listing ---
+@detailmenu
+ --- The Detailed Node Listing ---
 
 Engine
 
@@ -85,7 +86,7 @@ Engine
 * Transactions::                
 * Accounts::                    
 * Account Groups::              
-* Sessions::                    
+* GNCBooks::                    
 
 Globally Unique Identifiers
 
@@ -113,6 +114,10 @@ The Transaction Edit Cycle
 * General Transaction API::     
 * Transaction Getters::         
 * Transaction Setters::         
+
+GNCBooks
+
+* GNCBook API::                 
 
 Register
 
