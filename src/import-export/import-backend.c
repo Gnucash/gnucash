@@ -244,17 +244,17 @@ void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
     /*If the transaction is still open, it must be destroyed*/
     if(xaccTransIsOpen(info->trans)==TRUE)
       {
-	xaccTransDestroy(info->trans);
-	xaccTransCommitEdit(info->trans);
+        xaccTransDestroy(info->trans);
+        xaccTransCommitEdit(info->trans);
       }
     if (info->match_tokens)
       {
-	GList *node;
+        GList *node;
 
-	for (node = info->match_tokens; node; node = node->next)
-	  g_free (node->data);
+        for (node = info->match_tokens; node; node = node->next)
+          g_free (node->data);
 
-	g_list_free (info->match_tokens);
+        g_list_free (info->match_tokens);
       }
     g_free(info);
   }
