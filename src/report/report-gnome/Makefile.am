@@ -11,11 +11,11 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-file \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
+  ${GTKHTML_CFLAGS} \
+  ${GNOME_PRINT_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS} \
-  ${GLADE_CFLAGS} \
-  ${GLIB_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
-  ${GNOME_PRINT_CFLAGS}
+  ${GLIB_CFLAGS}
 
 libgncmod_report_gnome_la_SOURCES = \
   dialog-column-view.c \
@@ -37,9 +37,9 @@ libgncmod_report_gnome_la_LIBADD = \
   ${top_srcdir}/src/app-file/libgncmod-app-file.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
+  ${GNOME_PRINT_LIBS} \
   ${GNOME_LIBDIR} \
   ${GNOMEUI_LIBS} \
-  ${GNOME_PRINT_LIBS} \
   ${GLIB_LIBS}
 
 libgw_report_gnome_la_SOURCES = gw-report-gnome.c
