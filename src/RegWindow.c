@@ -2431,6 +2431,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				 xmFormWidgetClass, pane,
 				 XmNfractionBase,   6,
 				 XmNresizable,      False,
+                                 XmNtraversalOn,    True,
+                                 XmNnavigationType, XmSTICKY_TAB_GROUP,
 				 NULL );
   
   position = 0;                    /* puts the buttons in the right place */
@@ -2445,6 +2447,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
+                                    XmNnavigationType,     XmTAB_GROUP, 
 				    NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
@@ -2462,6 +2465,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
+                                    XmNnavigationType,     XmEXCLUSIVE_TAB_GROUP,
 				    NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
@@ -2478,7 +2482,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
-                                    XmNnavigationType,     XmNONE,  /* stop tabbing ! */
+                                    XmNnavigationType,     XmEXCLUSIVE_TAB_GROUP,
 				    NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
