@@ -30,6 +30,7 @@ Let's go:
 * Install the following packages:
   + from series d
        eperl  guile  nana  swig  xmhtml  xmhtmld gettext
+       libxml libxmld
     and optionally
        autoconf  automake  libtool
     (You must install libtool if you have autoconf/automake
@@ -40,6 +41,8 @@ Let's go:
        lesstiff  lesstifd
   + from series gnm
        gnlibs gnlibsd
+    for (check) printing
+       gnprint gnprintd
   + from series gra
        imlib imlibdev
 
