@@ -658,7 +658,7 @@ gnc_handle_date_accelerator (GdkEventKey *event,
   if (event->type != GDK_KEY_PRESS)
     return FALSE;
 
-  if ((tm->tm_mday == -1) || (tm->tm_mon == -1) || (tm->tm_year == -1))
+  if ((tm->tm_mday <= 0) || (tm->tm_mon == -1) || (tm->tm_year == -1))
     return FALSE;
 
   g_date_set_dmy (&gdate, 
