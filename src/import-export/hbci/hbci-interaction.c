@@ -75,12 +75,18 @@ void GNCInteractor_show(GNCInteractor *i)
 			      "HBCI Remember PIN in memory",
 			      FALSE);
   g_assert(i);
+  /* Show widgets */
   gtk_widget_show_all (i->dialog);
+
+  /* Make sure the cache_pin option is up to date. */
   if (cache_pin != i->cache_pin) {
     i->cache_pin = cache_pin;
     if (cache_pin == FALSE)
       GNCInteractor_erasePIN (i);
   }
+
+  /* Clear log window. */
+  gtk_editable_delete_text (GTK_EDITABLE (i->log_text), 0, -1);
 }
 
 
@@ -116,14 +122,26 @@ void GNCInteractor_erasePIN(GNCInteractor *i)
 void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
 {
   g_assert (i);
-  i->parent = new_parent;
-  if (GTK_WIDGET (i->dialog) -> parent != NULL)
-    gtk_widget_reparent (GTK_WIDGET (i->dialog), new_parent);
-  else
-    gtk_widget_set_parent (GTK_WIDGET (i->dialog), new_parent);
+  if (new_parent != i->parent)
+    {
+      i->parent = new_parent;
+      /*if (GTK_WIDGET (i->dialog) -> parent != NULL)
+	gtk_widget_reparent (GTK_WIDGET (i->dialog), new_parent);
+	else
+	gtk_widget_set_parent (GTK_WIDGET (i->dialog), new_parent);*/
+      gnome_dialog_set_parent (GNOME_DIALOG (i->dialog), 
+			       GTK_WINDOW (new_parent));
+    }
 }
 
-
+/* Helper functions */
+static const char *bank_to_str (const HBCI_Bank *bank)
+{
+  g_assert (bank);
+  return ((strlen(HBCI_Bank_name (bank)) > 0) ?
+	  HBCI_Bank_name (bank) :
+	  HBCI_Bank_bankCode(bank));
+}
 
 /********************************************************
  * Now all the callback functions 
@@ -164,7 +182,7 @@ static int msgInputPin(const HBCI_User *user,
 				      "user '%s' at bank '%s',\n"
 				      "with at least %d characters."),
 				    username, 
-				    HBCI_Bank_bankCode(bank),
+				    bank_to_str (bank),
 				    minsize);
 	}
 	else 
@@ -200,7 +218,7 @@ static int msgInputPin(const HBCI_User *user,
 	    msgstr = g_strdup_printf (_("Please enter PIN for \n"
 					"user '%s' at bank '%s'."),
 				      username, 
-				      HBCI_Bank_bankCode(bank));
+				      bank_to_str (bank));
 	  }
 	  else {
 	    /* xgettext:c-format */	    
@@ -277,7 +295,7 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
       /* xgettext:c-format */	    
       msgstr = g_strdup_printf ( _("Please insert chip card for \n"
 				   "user '%s' at bank '%s'."), 
-				 username, HBCI_Bank_bankCode(b));
+				 username, bank_to_str (b));
     else 
       /* xgettext:c-format */	    
       msgstr = g_strdup_printf ( _("Please insert chip card for \n"
@@ -317,7 +335,7 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
       /* xgettext:c-format */	    
       msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"
 				   "user '%s' at bank '%s'."), 
-				 username, HBCI_Bank_bankCode(b));
+				 username, bank_to_str (b));
     else 
       /* xgettext:c-format */	    
       msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"

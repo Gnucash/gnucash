@@ -1,3 +1,13 @@
+2002-12-27  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c: Fix reparent
+	warnings. Make the PIN dialog a bit nicer.
+
+	* src/import-export/hbci/gnc-hbci-getbalance.c: Always use the
+	"booked balance" instead of sometimes one or the other.
+
+	* po/de.po: Updated translation.
+
 2002-12-23  David Hampton  <hampton@employees.org>
 
 	* src/import-export/qif-import/qif-parse.scm: Fix regexps to

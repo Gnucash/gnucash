@@ -108,45 +108,44 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 
     {
       const HBCI_AccountBalance *acc_bal;
-      const HBCI_Balance *bal1, *bal2;
-      const HBCI_Value *val;
-      time_t tt1, tt2;
-      int choose1;
-      Timespec ts1, ts2;
+      const HBCI_Balance *noted_bal, *booked_bal;
+      const HBCI_Value *noted_val, *booked_val;
+      time_t noted_tt, booked_tt;
+      char *noted_str, *booked_str;
       gboolean dialogres;
 	    
       acc_bal = HBCI_OutboxJobGetBalance_getBalance (balance_job);
-      bal1 = HBCI_AccountBalance_notedBalance (acc_bal);
-      bal2 = HBCI_AccountBalance_bookedBalance (acc_bal);
 
-      tt1 = HBCI_DateTime_to_time_t (HBCI_Balance_date (bal1), 
-				     HBCI_Balance_time (bal1));
-      tt2 = HBCI_DateTime_to_time_t (HBCI_Balance_date (bal2), 
-				     HBCI_Balance_time (bal2));
+      noted_bal = HBCI_AccountBalance_notedBalance (acc_bal);
+      noted_tt = HBCI_DateTime_to_time_t (HBCI_Balance_date (noted_bal), 
+					  HBCI_Balance_time (noted_bal));
+      noted_val = HBCI_Balance_value (noted_bal);
+      noted_str = HBCI_Value_toReadableString (noted_val);
 
-      val = HBCI_Balance_value (bal1);
+      booked_bal = HBCI_AccountBalance_bookedBalance (acc_bal);
+      booked_tt = HBCI_DateTime_to_time_t (HBCI_Balance_date (booked_bal), 
+					   HBCI_Balance_time (booked_bal));
+      booked_val = HBCI_Balance_value (booked_bal);
+      booked_str = HBCI_Value_toReadableString (booked_val);
+
       printf("Noted balance: %s for account no. %s at date %s",
-	     HBCI_Value_toReadableString (val), // this ought to be free'd
+	     noted_str, 
 	     HBCI_Account_accountId (h_acc),
-	     ctime(&tt1));
-
-      val = HBCI_Balance_value (bal2);
+	     ctime(&noted_tt));
       printf("Booked balance: %s for account no. %s at date %s",
-	     HBCI_Value_toReadableString (val),
+	     booked_str,
 	     HBCI_Account_accountId (h_acc),
-	     ctime(&tt2));
+	     ctime(&booked_tt));
 
-      timespecFromTime_t (&ts1, tt1);
-      timespecFromTime_t (&ts2, tt2);
-
-      choose1 = (timespec_cmp (&ts1, &ts2) == 1);
-      
-      val = HBCI_Balance_value (choose1 ? bal1 : bal2);
-
-      if ((HBCI_Value_getValue (HBCI_Balance_value (bal1)) == 0) &&
-	  (HBCI_Value_getValue (HBCI_Balance_value (bal2)) == 0))
+      if ((HBCI_Value_getValue (HBCI_Balance_value (noted_bal)) == 0) &&
+	  (HBCI_Value_getValue (HBCI_Balance_value (booked_bal)) == 0))
 	{
 	  gnome_ok_dialog_parented 
+	    /* Translators: Strings from this file are really only
+	     * needed inside Germany (HBCI is not supported anywhere
+	     * else). You may safely ignore strings from the
+	     * import-export/hbci subdirectory in other countries.
+	     */
 	    (_("The downloaded HBCI Balance was zero.\n"
 	       "It seems as if your bank does not support Balance download \n"
 	       "in this HBCI version. You should choose a higher HBCI version \n"
@@ -157,34 +156,28 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 	}
       else
       {
-	 char *str = HBCI_Value_toReadableString (val);
 	dialogres = gnc_verify_dialog_parented
 	  (parent, 
 	   TRUE,
-	   /* Translators: Strings from this file are really only
-	    * needed inside Germany (HBCI is not supported anywhere
-	    * else). You may safely ignore strings from the
-	    * import-export/hbci subdirectory in other countries.
-	    *
-	    * %s is either the string 'noted balance' or 'booked
-	    * balance'. %s is the amount. */
+	   /* Translators: %s is the amount. */
 	   _("Result of HBCI job: \n"
-	     "Account %s is %s\n"
+	     "Account booked balance is %s\n"
 	     "Reconcile account now?"),
-	   (choose1 ? _("noted balance") : _("booked balance")),
-	   str);
-	free (str);
+	   booked_str);
       }
 
+      free (noted_str);
+      free (booked_str);
+      
       GNCInteractor_hide (interactor);
       if (dialogres) 
 	recnWindowWithBalance (parent, 
 			       gnc_acc, 
 			       double_to_gnc_numeric 
-			       (HBCI_Value_getValue (val),
+			       (HBCI_Value_getValue (booked_val),
 				xaccAccountGetCommoditySCU(gnc_acc),
 				GNC_RND_ROUND),
-			       (choose1 ? tt1 : tt2));
+			       booked_tt);
       HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
       
     }

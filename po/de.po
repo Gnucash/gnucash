@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2002-12-22 23:58+0100\n"
-"PO-Revision-Date: 2002-12-23 00:09+0100\n"
+"POT-Creation-Date: 2002-12-27 14:07+0100\n"
+"PO-Revision-Date: 2002-12-27 14:32+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -744,7 +744,7 @@ msgstr "Einmal"
 
 #: src/gnome/glade/print.glade.h:27 src/gnome/glade/sched-xact.glade.h:130
 #: src/gnome/window-acct-tree.c:896
-#: src/report/report-gnome/window-report.c:842
+#: src/report/report-gnome/window-report.c:859
 msgid "Options"
 msgstr "Optionen"
 
@@ -1126,7 +1126,7 @@ msgid "Check Register"
 msgstr "Kassenbericht überprüfen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:9
-#: src/gnome-utils/window-help.c:651 src/gnome/glade/register.glade.h:6
+#: src/gnome-utils/window-help.c:674 src/gnome/glade/register.glade.h:6
 #: src/gnome/window-main.c:1040
 msgid "Close"
 msgstr "Schließen"
@@ -1295,9 +1295,9 @@ msgid "Paste the transaction from the clipboard"
 msgstr "Den Geschäftsvorgangs von der Zwischenablage einfügen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:48
-#: src/gnome-utils/window-help.c:641 src/gnome/glade/register.glade.h:45
+#: src/gnome-utils/window-help.c:664 src/gnome/glade/register.glade.h:45
 #: src/import-export/hbci/glade/hbci.glade.h:116
-#: src/report/report-gnome/window-report.c:851
+#: src/report/report-gnome/window-report.c:868
 msgid "Print"
 msgstr "Drucken"
 
@@ -1333,7 +1333,7 @@ msgstr "Gegenbuchungen entfernen"
 #. src/report/report-gnome/report-gnome.scm
 #: intl-scm/guile-strings.c:1223 src/gnome/glade/register.glade.h:53
 #: src/report/report-gnome/report.glade.h:16
-#: src/report/report-gnome/window-report.c:112
+#: src/report/report-gnome/window-report.c:113
 msgid "Report"
 msgstr "Bericht"
 
@@ -2557,10 +2557,10 @@ msgstr "Quelle:"
 #: src/engine/FreqSpec.c:950 src/gnome/glade/price.glade.h:30
 #: src/import-export/hbci/druid-hbci-initial.c:807
 #: src/import-export/hbci/druid-hbci-initial.c:1200
-#: src/import-export/hbci/hbci-interaction.c:149
 #: src/import-export/hbci/hbci-interaction.c:150
-#: src/import-export/hbci/hbci-interaction.c:274
-#: src/import-export/hbci/hbci-interaction.c:314
+#: src/import-export/hbci/hbci-interaction.c:151
+#: src/import-export/hbci/hbci-interaction.c:275
+#: src/import-export/hbci/hbci-interaction.c:315
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -2649,11 +2649,11 @@ msgstr "Sie müssen eine Währung/Aktie auswählen."
 msgid "You must select a currency."
 msgstr "Sie müssen eine Währung auswählen."
 
-#: src/gnome-utils/dialog-transfer.c:1331 src/gnome/dialog-price-editor.c:185
+#: src/gnome-utils/dialog-transfer.c:1348 src/gnome/dialog-price-editor.c:185
 msgid "You must enter a valid amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
-#: src/gnome-utils/dialog-transfer.c:483 src/gnome-utils/gnc-html.c:115
+#: src/gnome-utils/dialog-transfer.c:472 src/gnome-utils/gnc-html.c:115
 #: src/gnome/druid-stock-split.c:228
 msgid "Error"
 msgstr "Fehler"
@@ -2890,7 +2890,7 @@ msgid "<No information>"
 msgstr "<keine Informationen>"
 
 #: src/gnome/gnc-split-reg.c:828
-#: src/register/ledger-core/split-register-control.c:1438
+#: src/register/ledger-core/split-register-control.c:1437
 #: src/register/ledger-core/split-register.c:496
 msgid ""
 "The current transaction has been changed.\n"
@@ -2939,7 +2939,9 @@ msgstr ""
 msgid ""
 "This is the split anchoring this transaction to the register. You may not "
 "delete it from this register window."
-msgstr "Diese Buchung verankert diesen Geschäftsvorgang im Kassenbericht. Sie können sie nicht in diesem Kassenbericht löschen."
+msgstr ""
+"Diese Buchung verankert diesen Geschäftsvorgang im Kassenbericht. Sie können "
+"sie nicht in diesem Kassenbericht löschen."
 
 #: src/gnome/gnc-split-reg.c:1069
 msgid "(no memo)"
@@ -3288,7 +3290,7 @@ msgstr "_Tipp des Tages"
 msgid "_Windows"
 msgstr "_Fenster"
 
-#: src/app-file/gnc-file.c:706 src/gnome/window-main.c:1030
+#: src/app-file/gnc-file.c:711 src/gnome/window-main.c:1030
 msgid "Save"
 msgstr "Speichern"
 
@@ -3465,8 +3467,8 @@ msgstr ""
 msgid "You must select an account to check and repair."
 msgstr "Sie müssen ein Konto wählen, daß überprüft und repariert werden soll."
 
-#: src/app-file/gnc-file.c:526 src/app-file/gnome/gnc-file-dialog.c:77
-#: src/gnome-utils/window-help.c:622 src/gnome/window-acct-tree.c:875
+#: src/app-file/gnc-file.c:531 src/app-file/gnome/gnc-file-dialog.c:77
+#: src/gnome-utils/window-help.c:645 src/gnome/window-acct-tree.c:875
 #: src/gnome/window-reconcile.c:1427
 msgid "Open"
 msgstr "Öffnen"
@@ -4331,6 +4333,16 @@ msgstr ""
 #: src/app-file/gnc-file.c:174
 #, c-format
 msgid ""
+"There was an error parsing the file \n"
+"    %s\n"
+msgstr ""
+"Beim Leser der Datei\n"
+"   %s\n"
+"ist ein Fehler aufgetreten.\n"
+
+#: src/app-file/gnc-file.c:179
+#, c-format
+msgid ""
 "The file \n"
 "    %s\n"
 " is empty."
@@ -4339,7 +4351,7 @@ msgstr ""
 "    %s\n"
 " ist leer."
 
-#: src/app-file/gnc-file.c:179
+#: src/app-file/gnc-file.c:184
 #, c-format
 msgid ""
 "The file \n"
@@ -4350,7 +4362,7 @@ msgstr ""
 "    %s\n"
 " konnte nicht gefunden werden."
 
-#: src/app-file/gnc-file.c:184
+#: src/app-file/gnc-file.c:189
 msgid ""
 "This file is from an older version of GnuCash.\n"
 "Do you want to continue?"
@@ -4358,11 +4370,11 @@ msgstr ""
 "Diese Datei ist von einer älteren Version von GnuCash.  \n"
 "Möchten Sie fortfahren?"
 
-#: src/app-file/gnc-file.c:190
+#: src/app-file/gnc-file.c:195
 msgid "Unknown file type"
 msgstr "Unbekannter Dateityp"
 
-#: src/app-file/gnc-file.c:195
+#: src/app-file/gnc-file.c:200
 msgid ""
 "This database is from an older version of GnuCash.\n"
 "Do you want to want to upgrade the database to the current version?"
@@ -4370,7 +4382,7 @@ msgstr ""
 "Diese Datei ist von einer älteren Version von GnuCash.  \n"
 "Möchten Sie die Datei zur aktuellen GnuCash-Version aktualisieren?"
 
-#: src/app-file/gnc-file.c:202
+#: src/app-file/gnc-file.c:207
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff.\n"
@@ -4386,29 +4398,29 @@ msgstr ""
 "bitte das Handbuch, um Anweisungen zum Löschen von 'dangling login\n"
 "sessions' zu finden."
 
-#: src/app-file/gnc-file.c:212
+#: src/app-file/gnc-file.c:217
 msgid "An unknown I/O error occurred."
 msgstr "Ein unbekannter Eingabe/Ausgabefehler ist aufgetreten."
 
-#: src/app-file/gnc-file.c:304
+#: src/app-file/gnc-file.c:309
 msgid "Changes have been made since the last Save. Save the data to file?"
 msgstr ""
 "Es wurden Änderungen seit dem letzten Speichern vorgenommen.\n"
 "Änderungen jetzt speichern?"
 
-#: src/app-file/gnc-file.c:376
+#: src/app-file/gnc-file.c:381
 msgid "Quit"
 msgstr "Beenden"
 
-#: src/app-file/gnc-file.c:376
+#: src/app-file/gnc-file.c:381
 msgid "Open Anyway"
 msgstr "Trotzdem öffnen"
 
-#: src/app-file/gnc-file.c:377
+#: src/app-file/gnc-file.c:382
 msgid "Create New File"
 msgstr "Neue Datei anlegen"
 
-#: src/app-file/gnc-file.c:378
+#: src/app-file/gnc-file.c:383
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for\n"
@@ -4426,16 +4438,16 @@ msgstr ""
 "\n"
 "Was möchten Sie tun?"
 
-#: src/app-file/gnc-file.c:443
+#: src/app-file/gnc-file.c:448
 msgid "Reading file..."
 msgstr "Datei lesen..."
 
-#: src/app-file/gnc-file.c:562 src/report/report-gnome/window-report.c:833
+#: src/app-file/gnc-file.c:567 src/report/report-gnome/window-report.c:850
 msgid "Export"
 msgstr "Exportieren"
 
-#: src/app-file/gnc-file.c:591 src/app-file/gnc-file.c:782
-#: src/report/report-gnome/window-report.c:439
+#: src/app-file/gnc-file.c:596 src/app-file/gnc-file.c:787
+#: src/report/report-gnome/window-report.c:447
 #, c-format
 msgid ""
 "The file \n"
@@ -4448,12 +4460,12 @@ msgstr ""
 " existiert bereits.\n"
 "Sind Sie sicher, daß sie überschrieben werden soll?"
 
-#: src/app-file/gnc-file.c:607
+#: src/app-file/gnc-file.c:612
 msgid "Exporting file..."
 msgstr "Datei exportieren..."
 
 #. %s is the strerror(3) error string of the error that occurred.
-#: src/app-file/gnc-file.c:621
+#: src/app-file/gnc-file.c:626
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -4464,7 +4476,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/app-file/gnc-file.c:652
+#: src/app-file/gnc-file.c:657
 msgid "Writing file..."
 msgstr "Datei schreiben..."
 
@@ -4778,31 +4790,31 @@ msgstr "Vorlage für Stilvorlage:"
 msgid "Style sheets"
 msgstr "Stilvorlage"
 
-#: src/report/report-gnome/window-report.c:106
+#: src/report/report-gnome/window-report.c:107
 msgid "(Report not found)"
 msgstr "(Bericht nicht gefunden)"
 
-#: src/report/report-gnome/window-report.c:361
-#: src/report/report-gnome/window-report.c:397
+#: src/report/report-gnome/window-report.c:369
+#: src/report/report-gnome/window-report.c:405
 msgid "HTML"
 msgstr "HTML"
 
-#: src/report/report-gnome/window-report.c:364
+#: src/report/report-gnome/window-report.c:372
 msgid "Choose export format"
 msgstr "Wählen Sie das Export-Format"
 
-#: src/report/report-gnome/window-report.c:365
+#: src/report/report-gnome/window-report.c:373
 msgid "Choose the export format for this report:"
 msgstr "Wählen Sie das Export-Format für diesen Bericht:"
 
 #. %s is the type of what is about to be saved, e.g. "HTML".
-#: src/report/report-gnome/window-report.c:406
+#: src/report/report-gnome/window-report.c:414
 #, c-format
 msgid "Save %s To File"
 msgstr "%s in Datei speichern"
 
 #. %s is the strerror(3) string of the error that occurred.
-#: src/report/report-gnome/window-report.c:422
+#: src/report/report-gnome/window-report.c:430
 #, c-format
 msgid ""
 "You cannot save to that filename.\n"
@@ -4813,11 +4825,11 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/report/report-gnome/window-report.c:431
+#: src/report/report-gnome/window-report.c:439
 msgid "You cannot save to that file."
 msgstr "Sie können nicht in diese Datei speichern."
 
-#: src/report/report-gnome/window-report.c:494
+#: src/report/report-gnome/window-report.c:502
 #, c-format
 msgid ""
 "Could not open the file\n"
@@ -4829,82 +4841,82 @@ msgstr ""
 " nicht öffnen.\n"
 "%s"
 
-#: src/report/report-gnome/window-report.c:513
+#: src/report/report-gnome/window-report.c:521
 msgid "There are no options for this report."
 msgstr "Es gibt für diesen Bericht keine Optionen."
 
-#: src/gnome-utils/window-help.c:594
-#: src/report/report-gnome/window-report.c:796
+#: src/gnome-utils/window-help.c:617
+#: src/report/report-gnome/window-report.c:813
 msgid "Back"
 msgstr "Zurück"
 
-#: src/gnome-utils/window-help.c:595
-#: src/report/report-gnome/window-report.c:797
+#: src/gnome-utils/window-help.c:618
+#: src/report/report-gnome/window-report.c:814
 msgid "Move back one step in the history"
 msgstr "Einen Schritt zurück"
 
-#: src/gnome-utils/window-help.c:603
-#: src/report/report-gnome/window-report.c:805
+#: src/gnome-utils/window-help.c:626
+#: src/report/report-gnome/window-report.c:822
 msgid "Forward"
 msgstr "Vorwärts"
 
-#: src/gnome-utils/window-help.c:604
-#: src/report/report-gnome/window-report.c:806
+#: src/gnome-utils/window-help.c:627
+#: src/report/report-gnome/window-report.c:823
 msgid "Move forward one step in the history"
 msgstr "Einen Schritt vorwärts"
 
-#: src/gnome-utils/window-help.c:613
-#: src/report/report-gnome/window-report.c:814
+#: src/gnome-utils/window-help.c:636
+#: src/report/report-gnome/window-report.c:831
 msgid "Reload"
 msgstr "Erneut laden"
 
-#: src/report/report-gnome/window-report.c:815
+#: src/report/report-gnome/window-report.c:832
 msgid "Reload the current report"
 msgstr "Aktuellen Bericht neu laden"
 
-#: src/gnome-utils/window-help.c:631
-#: src/report/report-gnome/window-report.c:823
+#: src/gnome-utils/window-help.c:654
+#: src/report/report-gnome/window-report.c:840
 msgid "Stop"
 msgstr "Abbrechen"
 
-#: src/gnome-utils/window-help.c:632
-#: src/report/report-gnome/window-report.c:824
+#: src/gnome-utils/window-help.c:655
+#: src/report/report-gnome/window-report.c:841
 msgid "Cancel outstanding HTML requests"
 msgstr "Unbeantwortete HTML-Anfragen abbrechen "
 
-#: src/report/report-gnome/window-report.c:834
+#: src/report/report-gnome/window-report.c:851
 msgid "Export HTML-formatted report to file"
 msgstr "HTML-formatierten Bericht in Datei exportieren"
 
 #. src/report/report-system/html-utilities.scm
 #: intl-scm/guile-strings.c:1209 intl-scm/guile-strings.c:1215
-#: src/report/report-gnome/window-report.c:843
+#: src/report/report-gnome/window-report.c:860
 msgid "Edit report options"
 msgstr "Berichtsoptionen ändern"
 
-#: src/report/report-gnome/window-report.c:852
+#: src/report/report-gnome/window-report.c:869
 msgid "Print report window"
 msgstr "Bericht ausdrucken"
 
-#: src/report/report-gnome/window-report.c:994
+#: src/report/report-gnome/window-report.c:1021
 msgid "Set the report options you want using this dialog."
 msgstr "Mit diesem Dialog können Sie die Berichtsoptionen bearbeiten."
 
-#: src/report/report-gnome/window-report.c:1102
+#: src/report/report-gnome/window-report.c:1134
 msgid "Report error"
 msgstr "Fehler im Bericht"
 
-#: src/report/report-gnome/window-report.c:1103
+#: src/report/report-gnome/window-report.c:1135
 msgid "An error occurred while running the report."
 msgstr "Beim Erstellen des Berichts ist ein Fehler aufgetreten."
 
-#: src/report/report-gnome/window-report.c:1128
-#: src/report/report-gnome/window-report.c:1150
+#: src/report/report-gnome/window-report.c:1161
+#: src/report/report-gnome/window-report.c:1183
 #, c-format
 msgid "Badly formed options URL: %s"
 msgstr "Fehlerhafte Optionen-URL: %s"
 
-#: src/report/report-gnome/window-report.c:1138
+#: src/report/report-gnome/window-report.c:1171
 #, c-format
 msgid "Badly report id: %s"
 msgstr "Fehlerhafte Berichts ID: %s"
@@ -5073,7 +5085,12 @@ msgstr "Unbekannter OFX CMA Konto"
 msgid "Unknown OFX credit card account"
 msgstr "Unbekanntes OFX Kreditkartenkonto"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:150
+#. Translators: Strings from this file are really only
+#. * needed inside Germany (HBCI is not supported anywhere
+#. * else). You may safely ignore strings from the
+#. * import-export/hbci subdirectory in other countries.
+#.
+#: src/import-export/hbci/gnc-hbci-getbalance.c:149
 msgid ""
 "The downloaded HBCI Balance was zero.\n"
 "It seems as if your bank does not support Balance download \n"
@@ -5088,31 +5105,17 @@ msgstr ""
 "eine höhere HBCI-Version auswählen. Versuchen Sie anschließend erneut,\n"
 "den Saldo abzufragen.  \n"
 
-#. Translators: Strings from this file are really only
-#. * needed inside Germany (HBCI is not supported anywhere
-#. * else). You may safely ignore strings from the
-#. * import-export/hbci subdirectory in other countries.
-#. *
-#. * %s is either the string 'noted balance' or 'booked
-#. * balance'. %s is the amount.
-#: src/import-export/hbci/gnc-hbci-getbalance.c:171
+#. Translators: %s is the amount.
+#: src/import-export/hbci/gnc-hbci-getbalance.c:163
 #, c-format
 msgid ""
 "Result of HBCI job: \n"
-"Account %s is %s\n"
+"Account booked balance is %s\n"
 "Reconcile account now?"
 msgstr ""
 "Ergebnis des HBCI Auftrag:\n"
-"%s des Kontos ist %s\n"
+"Gebuchter Saldo des Kontos ist %s\n"
 "Konto jetzt abgleichen?"
-
-#: src/import-export/hbci/gnc-hbci-getbalance.c:174
-msgid "noted balance"
-msgstr "Vorgemerkter Saldo"
-
-#: src/import-export/hbci/gnc-hbci-getbalance.c:174
-msgid "booked balance"
-msgstr "Gebuchter Saldo"
 
 #: src/import-export/hbci/glade/hbcipass.glade.h:1
 msgid "Confirm Password:"
@@ -5753,7 +5756,7 @@ msgstr "Online Banking & Import"
 #. * else). You may safely ignore strings from the
 #. * import-export/hbci subdirectory in other countries.
 #. *
-#: src/import-export/hbci/hbci-interaction.c:163
+#: src/import-export/hbci/hbci-interaction.c:164
 #, c-format
 msgid ""
 "Please enter and confirm new PIN for \n"
@@ -5764,7 +5767,7 @@ msgstr ""
 "Benutzer '%s' der Bank '%s' eingeben\n"
 "und bestätigen. (Mindestens %d Zeichen)"
 
-#: src/import-export/hbci/hbci-interaction.c:172
+#: src/import-export/hbci/hbci-interaction.c:173
 #, c-format
 msgid ""
 "Please enter and confirm a new PIN for \n"
@@ -5775,7 +5778,7 @@ msgstr ""
 "Benutzer '%s' einer unbekannten Bank eingeben\n"
 "und bestätigen. (Mindestens %d Zeichen)"
 
-#: src/import-export/hbci/hbci-interaction.c:179
+#: src/import-export/hbci/hbci-interaction.c:180
 #, c-format
 msgid ""
 "Please enter and confirm a new PIN\n"
@@ -5784,17 +5787,17 @@ msgstr ""
 "Bitte eine neue PIN eingeben und \n"
 "bestätigen. (Mindestens %d Zeichen)"
 
-#: src/import-export/hbci/hbci-interaction.c:200
+#: src/import-export/hbci/hbci-interaction.c:201
 #, c-format
 msgid ""
 "Please enter PIN for \n"
 "user '%s' at bank '%s'."
 msgstr ""
 "Bitte die PIN für \n"
-"Benutzer '%s' \n"
-"der Bank '%s' eingeben."
+"Benutzer '%s' der Bank \n"
+"'%s' eingeben."
 
-#: src/import-export/hbci/hbci-interaction.c:207
+#: src/import-export/hbci/hbci-interaction.c:208
 #, c-format
 msgid ""
 "Please enter PIN for \n"
@@ -5803,7 +5806,7 @@ msgstr ""
 "Bitte die PIN für \n"
 "Benutzer '%s' einer unbekannten Bank eingeben."
 
-#: src/import-export/hbci/hbci-interaction.c:213
+#: src/import-export/hbci/hbci-interaction.c:214
 msgid ""
 "Please enter PIN for \n"
 "unknown user at unknown bank."
@@ -5811,7 +5814,7 @@ msgstr ""
 "Bitte die PIN für unbekannten Benutzer\n"
 "einer unbekannten Bank eingeben."
 
-#: src/import-export/hbci/hbci-interaction.c:230
+#: src/import-export/hbci/hbci-interaction.c:231
 #, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
@@ -5820,7 +5823,7 @@ msgstr ""
 "Die PIN muß mindestens %d Zeichen lang \n"
 "sein.  Erneut versuchen?"
 
-#: src/import-export/hbci/hbci-interaction.c:278
+#: src/import-export/hbci/hbci-interaction.c:279
 #, c-format
 msgid ""
 "Please insert chip card for \n"
@@ -5829,7 +5832,7 @@ msgstr ""
 "Bitte die Chipkarte für \n"
 "Benutzer '%s' der Bank '%s' einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:283
+#: src/import-export/hbci/hbci-interaction.c:284
 #, c-format
 msgid ""
 "Please insert chip card for \n"
@@ -5838,7 +5841,7 @@ msgstr ""
 "Bitte die Chipkarte für \n"
 "Benutzer '%s' einer unbekannten Bank einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:288
+#: src/import-export/hbci/hbci-interaction.c:289
 msgid ""
 "Please insert chip card for \n"
 "unknown user at unknown bank."
@@ -5846,7 +5849,7 @@ msgstr ""
 "Bitte die Chipkarte für unbekannten Benutzer \n"
 "einer unbekannten Bank einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:318
+#: src/import-export/hbci/hbci-interaction.c:319
 #, c-format
 msgid ""
 "Please insert the correct chip card for \n"
@@ -5855,7 +5858,7 @@ msgstr ""
 "Bitte die korrekte Chipkarte für \n"
 "Benutzer '%s' der Bank '%s' einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:323
+#: src/import-export/hbci/hbci-interaction.c:324
 #, c-format
 msgid ""
 "Please insert the correct chip card for \n"
@@ -5864,7 +5867,7 @@ msgstr ""
 "Bitte die korrekte Chipkarte für \n"
 "Benutzer '%s' einer unbekannten Bank einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:328
+#: src/import-export/hbci/hbci-interaction.c:329
 msgid ""
 "Please insert the correct chip card for \n"
 "unknown user at unknown bank."
@@ -6814,7 +6817,8 @@ msgstr ""
 "- Wählen Sie \"Neu\", um diese Buchung als neue Buchung zu importieren\n"
 "- Wählen Sie \"Abgl\", um nur eine existierende Buchung abzugleichen\n"
 "- Ist keines der beiden gewählt, wird die Buchung nicht importiert\n"
-"- Mit \"Import-Aktion auswählen\" können Sie das Gegenkonto dieser neuen Buchung wählen, \n"
+"- Mit \"Import-Aktion auswählen\" können Sie das Gegenkonto dieser neuen "
+"Buchung wählen, \n"
 "  oder die abzugleichende existierende Buchung auswählen."
 
 #: src/import-export/generic-import.glade.h:9
@@ -7085,11 +7089,11 @@ msgstr "GnuCash Einstellungen"
 msgid "Select pixmap"
 msgstr "Bild auswählen"
 
-#: src/gnome-utils/dialog-transfer.c:408
+#: src/gnome-utils/dialog-transfer.c:397
 msgid "Show the income and expense accounts"
 msgstr "Anzeige der Ertrags- und Aufwand-Konten"
 
-#: src/gnome-utils/dialog-transfer.c:1295
+#: src/gnome-utils/dialog-transfer.c:1312
 msgid ""
 "You must specify an account to transfer from,\n"
 "or to, or both, for this transaction.\n"
@@ -7098,11 +7102,11 @@ msgstr ""
 "Sie müssen ein Konto angeben, zu dem oder von dem umgebucht werden\n"
 "soll. Andernfalls wird kein Geschäftsvorgang aufgezeichnet."
 
-#: src/gnome-utils/dialog-transfer.c:1304
+#: src/gnome-utils/dialog-transfer.c:1321
 msgid "You can't transfer from and to the same account!"
 msgstr "Herkunfts- und Zielkonto können nicht identisch sein."
 
-#: src/gnome-utils/dialog-transfer.c:1314
+#: src/gnome-utils/dialog-transfer.c:1331
 #, c-format
 msgid ""
 "The account %s\n"
@@ -7111,15 +7115,15 @@ msgstr ""
 "Das Konto %s\n"
 "kann keine Buchungen enthalten.\n"
 
-#: src/gnome-utils/dialog-transfer.c:1344
+#: src/gnome-utils/dialog-transfer.c:1361
 msgid "You must enter an amount to transfer."
 msgstr "Sie müssen einen Betrag angeben."
 
-#: src/gnome-utils/dialog-transfer.c:1358
+#: src/gnome-utils/dialog-transfer.c:1375
 msgid "You must enter a valid price."
 msgstr "Sie müssen einen gültigen Preis angeben."
 
-#: src/gnome-utils/dialog-transfer.c:1369
+#: src/gnome-utils/dialog-transfer.c:1386
 msgid "You must enter a valid `to' amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
@@ -7202,23 +7206,23 @@ msgstr "Vor"
 msgid "From Now"
 msgstr "Von jetzt"
 
-#: src/gnome-utils/window-help.c:318
+#: src/gnome-utils/window-help.c:329
 msgid "Enter URI to load:"
 msgstr "Anzuzeigende URL eingeben:"
 
-#: src/gnome-utils/window-help.c:614
+#: src/gnome-utils/window-help.c:637
 msgid "Reload the current document"
 msgstr "Aktuelle Datei erneut laden"
 
-#: src/gnome-utils/window-help.c:623
+#: src/gnome-utils/window-help.c:646
 msgid "Open a new document"
 msgstr "Neue Datei öffnen"
 
-#: src/gnome-utils/window-help.c:642
+#: src/gnome-utils/window-help.c:665
 msgid "Print Help window"
 msgstr "Hilfefenster ausdrucken"
 
-#: src/gnome-utils/window-help.c:652
+#: src/gnome-utils/window-help.c:675
 msgid "Close this Help window"
 msgstr "Hilfefenster schließen"
 
@@ -7257,7 +7261,7 @@ msgstr "Beim Laden der URL ist ein Fehler aufgetreten."
 msgid "Error message"
 msgstr "Fehlermeldung"
 
-#: src/gnome-utils/gnc-html.c:596 src/gnome-utils/gnc-html.c:1047
+#: src/gnome-utils/gnc-html.c:610 src/gnome-utils/gnc-html.c:1098
 msgid ""
 "Secure HTTP access is disabled.\n"
 "You can enable it in the Network section of\n"
@@ -7267,7 +7271,7 @@ msgstr ""
 "Um ihn zu aktivieren, wählen Sie den Netzwerk Abschnitt der\n"
 "Einstellungen und aktivieren die entsprechende Option."
 
-#: src/gnome-utils/gnc-html.c:604 src/gnome-utils/gnc-html.c:1056
+#: src/gnome-utils/gnc-html.c:618 src/gnome-utils/gnc-html.c:1107
 msgid ""
 "Network HTTP access is disabled.\n"
 "You can enable it in the Network section of\n"
@@ -7276,7 +7280,7 @@ msgstr ""
 "Sie haben den \"HTTP Netzwerkzugang\" abgeschaltet.\n"
 "Sie können ihn wieder im Menü \"Voreinstellungen\"einschalten"
 
-#: src/gnome-utils/gnc-html.c:881
+#: src/gnome-utils/gnc-html.c:924
 msgid ""
 "GnuCash Network is disabled and the link you have clicked requires it.\n"
 "You can enable it in the Network section\n"
@@ -7286,7 +7290,7 @@ msgstr ""
 "Sie können das Netzwerk im 'Einstellungen'-Dialog aktivieren."
 
 #. %s is a URL (some location somewhere).
-#: src/gnome-utils/gnc-html.c:991
+#: src/gnome-utils/gnc-html.c:1040
 #, c-format
 msgid "There was an error accessing %s."
 msgstr "Beim Zugriff auf %s ist ein Fehler aufgetreten."
@@ -9115,7 +9119,7 @@ msgstr ""
 "Sie müssen den Geschäftsvorgang in den \"Mehrteilig\"-Stil aufklappen, um "
 "die Wechselkurse zu bearbeiten."
 
-#: src/register/ledger-core/split-register-control.c:1509
+#: src/register/ledger-core/split-register-control.c:1508
 msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
@@ -9482,7 +9486,6 @@ msgstr ""
 
 #. src/scm/tip-list.scm
 #: intl-scm/guile-strings.c:65
-#, fuzzy
 msgid ""
 "To transfer funds between accounts with different currencies,\n"
 "click on the Transfer button in the register toolbar, select the\n"
@@ -9490,10 +9493,9 @@ msgid ""
 "rate or the other currency's amount will be available."
 msgstr ""
 "Um Beträge zwischen Konten mit verschiedenen Währungen umzubuchen,\n"
-"benötigen Sie ein Währungskonto als Zwischenschritt. Benutzen Sie den\n"
-"\"Buchen\"-Knopf im Kassenbericht, um den zusätzlichen Geschäftsvorgang\n"
-"von GnuCash erstellen zu lassen. Siehe dazu auch das GnuCash\n"
-"Online-Handbuch."
+"klicken Sie auf den \"Buchen\"-Knopf in der Werkzeugleiste, wählen Sie\n"
+"die Konten, und die zusätzlichen Optionen für Währungstransaktionen\n"
+"werden automatisch aktiviert."
 
 #. src/scm/tip-list.scm
 #: intl-scm/guile-strings.c:70
@@ -14117,21 +14119,6 @@ msgstr "Folgendes Forderungen-Konto wollen Sie untersuchen"
 msgid "Receivable Aging"
 msgstr "Entwicklung Forderungen"
 
-#~ msgid "Payment Amount:"
-#~ msgstr "Zahlungsbetrag:"
-
-#~ msgid "Remainder to:"
-#~ msgstr "Rest an:"
-
-#~ msgid "Transaction Memo:"
-#~ msgstr "Buchungstext:"
-
-#~ msgid "Repayment - Principal Portion"
-#~ msgstr "Tilgung - Kapitalanteil"
-
-#~ msgid "Repayment - Interest Portion"
-#~ msgstr "Tilgung - Zinsanteil"
-
 #~ msgid "At least"
 #~ msgstr "Mindestens"
 
@@ -14147,29 +14134,8 @@ msgstr "Entwicklung Forderungen"
 #~ msgid "Case sensitive"
 #~ msgstr "Groß-/Kleinschreibung beachten"
 
-#~ msgid "Cleared (c)"
-#~ msgstr "Bestätigt (b)"
-
-#~ msgid "Credit or Debit"
-#~ msgstr "Gutschrift oder Belastung"
-
-#~ msgid "Ending "
-#~ msgstr "Bis "
-
-#~ msgid "Exactly"
-#~ msgstr "Genau"
-
-#~ msgid "Find "
-#~ msgstr "Suche "
-
 #~ msgid "Not Balanced"
 #~ msgstr "Nicht ausgeglichen"
-
-#~ msgid "Not cleared (n)"
-#~ msgstr "Nicht bestätigt (n)"
-
-#~ msgid "Reconciled (y)"
-#~ msgstr "Abgeglichen (j)"
 
 #~ msgid "Regular expression"
 #~ msgstr "Regulärer Ausdruck"
@@ -14191,15 +14157,6 @@ msgstr "Entwicklung Forderungen"
 
 #~ msgid "Setting up Accounts"
 #~ msgstr "Konten erstellen"
-
-#~ msgid "Importing Data"
-#~ msgstr "Daten importieren"
-
-#~ msgid "Basic Setup"
-#~ msgstr "Vorbereitende Einstellungen"
-
-#~ msgid "Gnome MDI"
-#~ msgstr "Fenstermodus"
 
 #~ msgid "Account Window"
 #~ msgstr "Kontofenster"
