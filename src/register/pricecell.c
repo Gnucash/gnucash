@@ -56,6 +56,8 @@ static void PriceSetValue (BasicCell *, const char *);
    (cell)->value = strdup (str);		\
 }
 
+#define PRTBUF 40
+
 /* ================================================ */
 /* This callback only allows numbers with a single
  * decimal point in them */
@@ -131,14 +133,14 @@ xaccDestroyPriceCell (PriceCell *cell)
 
 void xaccSetPriceCellValue (PriceCell * cell, double amt)
 {
-   char buff[40];
+   char buff[PRTBUF];
    cell->amount = amt;
 
    /* if amount is zero, and blanking is set, then print blank */
    if (cell->blank_zero && (VERY_SMALL > amt) && ((-VERY_SMALL) < amt)) {
       buff[0] = 0x0;
    } else {
-      sprintf (buff, cell->prt_format, amt);
+      snprintf (buff, PRTBUF, cell->prt_format, amt);
    }
    SET ( &(cell->cell), buff);
 
@@ -162,7 +164,7 @@ void xaccSetPriceCellFormat (PriceCell * cell, char * fmt)
 void xaccSetDebCredCellValue (PriceCell * deb, 
                               PriceCell * cred, double amt)
 {
-   char buff[40];
+   char buff[PRTBUF];
    deb->amount = -amt;
    cred->amount = amt;
 
@@ -174,11 +176,11 @@ void xaccSetDebCredCellValue (PriceCell * deb,
       SET ( &(deb->cell), "");
    } else
    if (0.0 < amt) {
-      sprintf (buff, cred->prt_format, amt);
+      snprintf (buff, PRTBUF, cred->prt_format, amt);
       SET ( &(cred->cell), buff);
       SET ( &(deb->cell), "");
    } else {
-      sprintf (buff, deb->prt_format, -amt);
+      snprintf (buff, PRTBUF, deb->prt_format, -amt);
       SET ( &(cred->cell), "");
       SET ( &(deb->cell), buff);
    }

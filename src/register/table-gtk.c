@@ -677,36 +677,44 @@ xaccCreateTable (Table *table, GtkWidget * parent)
     }
   }
   
-  /* if any of the cells have GUI specific components that 
-   * need initialization, initialize them now. 
-   * The cell realize method, if present on a cell,
-   * is how that cell can find out that now is the time to 
-   * initialize that GUI.
-   */
-  
-  curs = table->current_cursor;
-  if (curs) {
-    int i,j;
+  /* initialize any cell gui elements now, if any */
+  xaccCreateCursor (table, table->current_cursor);
+
+  return (table->table_widget);
+}
+
+/* ==================================================== */
+/* if any of the cells have GUI specific components that 
+ * need initialization, initialize them now. 
+ * The cell realize method, if present on a cell,
+ * is how that cell can find out that now is the time to 
+ * initialize that GUI.
+ */
+
+void        
+xaccCreateCursor (Table * table, CellBlock *curs)
+{ 
+  int i,j;
+
+  if (!curs || !table) return;
     
-    for (i=0; i<curs->numRows; i++) {
-      for (j=0; j<curs->numCols; j++) {
-        BasicCell *cell;
-        cell = curs->cells[i][j];
-        if (cell) {
-          void (*xt_realize) (BasicCell *,  void *gui, int pixel_width);
-          xt_realize = cell->realize;
-          if (xt_realize) {
-            int pixel_width;
-            /* cl->column[col].width */
-            /*pixel_width = XbaeMatrixGetColumnPixelWidth (reg, j);*/
-            xt_realize (cell, ((void *) table), 0);
-            /*xt_realize (cell, ((void *) reg), pixel_width);*/
-          }
+  for (i=0; i<curs->numRows; i++) {
+    for (j=0; j<curs->numCols; j++) {
+      BasicCell *cell;
+      cell = curs->cells[i][j];
+      if (cell) {
+        void (*gtk_realize) (BasicCell *,  void *gui, int pixel_width);
+        gtk_realize = cell->realize;
+        if (gtk_realize) {
+          int pixel_width;
+          /* cl->column[col].width */
+          /*pixel_width = XbaeMatrixGetColumnPixelWidth (reg, j);*/
+          /*gtk_realize (cell, ((void *) reg), pixel_width);*/
+          gtk_realize (cell, ((void *) table), 0);
         }
       }
     }
   }
-  return (table->table_widget);
 }
 
 /* ==================================================== */

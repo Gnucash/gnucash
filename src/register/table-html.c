@@ -224,7 +224,7 @@ xaccTableWebServeHTML (Table * table, unsigned short port)
  
    /* count the number of chars, for content-length */
    cnt = xaccTablePrintHTML (table, "/dev/null");
-   sprintf (buff, 
+   snprintf (buff, 255,
       "HTTP/1.0 200 OK\n"
       "Connection: close\n"
       "Content-Length: %d\n"

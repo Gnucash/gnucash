@@ -77,7 +77,12 @@ void xaccInitComboCell (ComboCell *cell)
 {
    xaccInitBasicCell ( &(cell->cell));
    cell->cell.realize = realizeCombo;
-   cell->cell.set_value = setComboValue;
+   /* calling setComboValue attemtps to load Xbae with values ...
+    * but these values may be out of bounds because the table has been
+    * resized, but Xbae hasn't been told the new size yet ... 
+    * So comment this line out ...
+    */
+   /* cell->cell.set_value = setComboValue; */
    cell->cell.destroy = destroyCombo;
    cell->menuitems = (char **) malloc (sizeof (char *));
    cell->menuitems[0] = NULL;

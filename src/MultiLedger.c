@@ -184,8 +184,7 @@ xaccLedgerDisplaySimple (Account *acc)
     }
 
   /* default to single-line display */
-  reg_type |= REG_SHOW_TAMOUNT;
-  reg_type |= REG_SHOW_TXFRM;
+  reg_type |= REG_SINGLE_LINE;
 
   retval = xaccLedgerDisplayGeneral (acc, NULL, reg_type);
   return retval;
@@ -258,8 +257,7 @@ xaccLedgerDisplayAccGroup (Account *acc)
   }
 
   /* default to single-line display */
-  ledger_type |= REG_SHOW_TAMOUNT;
-  ledger_type |= REG_SHOW_TXFRM;
+  ledger_type |= REG_SINGLE_LINE;
 
   retval = xaccLedgerDisplayGeneral (acc, list, ledger_type);
 
@@ -425,6 +423,29 @@ xaccRegisterRefresh (SplitRegister *splitreg)
 }
 
 /********************************************************************\
+ * sort of a quick hack involving the layout of the register.
+\********************************************************************/
+
+void 
+xaccRegisterCountHack (SplitRegister *splitreg)
+{
+   xaccLedgerDisplay *regData;
+   int n;
+
+   /* find the ledger which contains this register */
+   n = 0; regData = fullList[n];
+   while (regData) {
+      if (splitreg == regData->ledger) {
+        xaccSRCountRows (splitreg, 
+                      xaccAccountGetSplitList (regData->leader),
+                      regData->leader);      
+        return;
+      }
+      n++; regData = fullList[n];
+   }
+}
+
+/********************************************************************\
  * mark dirty *all* register windows which contain this account      * 
 \********************************************************************/
 
@@ -561,7 +582,7 @@ xaccDestroyLedgerDisplay (Account *acc)
 }
 
 /********************************************************************\
- * closexaccLedgerDisplay                                                   *
+ * xaccLedgerDisplayClose                                           *
  *   frees memory allocated for an regWindow, and other cleanup     *
  *   stuff                                                          *
  *                                                                  *
@@ -577,6 +598,9 @@ xaccLedgerDisplayClose (xaccLedgerDisplay *regData)
   
   /* Save any unsaved changes */
   xaccSRSaveRegEntry (regData->ledger);
+
+  /* refresh the register windows if there were changes */
+  xaccSRRedrawRegEntry (regData->ledger);
 
   xaccDestroySplitRegister (regData->ledger);
   

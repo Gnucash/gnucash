@@ -65,6 +65,7 @@ xaccInitTable (Table * table)
    table->current_cursor_phys_col = -1;
 
    table->move_cursor = NULL;
+   table->traverse = NULL;
    table->client_data = NULL;
 
    table->entries = NULL;
@@ -77,6 +78,9 @@ xaccInitTable (Table * table)
    /* invalidate the "previous" traversed cell */
    table->prev_phys_traverse_row = -1;
    table->prev_phys_traverse_col = -1;
+
+   table->reverify_phys_row = -1;
+   table->reverify_phys_col = -1;
 
    /* call the "derived" class constructor */
    TABLE_PRIVATE_DATA_INIT (table);
@@ -328,6 +332,51 @@ xaccSetCursor (Table *table, CellBlock *curs,
 /* ==================================================== */
 
 static void 
+makePassive (Table *table)
+{
+   int i,j;
+   CellBlock *curs;
+   int phys_row = table->current_cursor_phys_row;
+   int phys_col = table->current_cursor_phys_col;
+   int r_origin, c_origin;
+
+
+   /* Change the cell background colors to thier "passive" values.
+    * This denotes that the cursor has left this location (which means more or
+    * less the same thing as "the current location is no longer being edited.")
+    * (But only do this if the cursor has a valid current location) 
+    */
+   if ((0 > phys_row) || (0 > phys_col)) return;
+
+   r_origin = phys_row;
+   c_origin = phys_col;
+   r_origin -= table->locators[phys_row][phys_col]->phys_row_offset;
+   c_origin -= table->locators[phys_row][phys_col]->phys_col_offset;
+
+   curs = table->current_cursor;
+
+   for (i=0; i<curs->numRows; i++) {
+      for (j=0; j<curs->numCols; j++) {
+         BasicCell *cell;
+      
+         table->bg_colors[i+r_origin][j+c_origin] = curs->passive_bg_color;
+         cell = curs->cells[i][j];
+         if (cell) {
+            if (cell->use_bg_color) {
+               table->bg_colors[i+r_origin][j+c_origin] = cell->bg_color;
+            }
+            if (cell->use_fg_color) {
+               table->fg_colors[i+r_origin][j+c_origin] = cell->fg_color;
+            }
+         }
+      }
+   }
+}
+
+
+/* ==================================================== */
+
+static void 
 doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
 {
    int i,j;
@@ -338,38 +387,21 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
    /* Change the cell background colors to thier "passive" values.
     * This denotes that the cursor has left this location (which means more or
     * less the same thing as "the current location is no longer being edited.")
-    * (But only do this if the cursor has a valid current location) 
     */
-   if ((0 <= table->current_cursor_phys_row) &&
-       (0 <= table->current_cursor_phys_col)) 
-   {
-      int r_origin = table->current_cursor_phys_row;
-      int c_origin = table->current_cursor_phys_col;
-      curs = table->current_cursor;
-
-      for (i=0; i<curs->numRows; i++) {
-         for (j=0; j<curs->numCols; j++) {
-            BasicCell *cell;
-         
-            table->bg_colors[i+r_origin][j+c_origin] = curs->passive_bg_color;
-            cell = curs->cells[i][j];
-            if (cell) {
-               if (cell->use_bg_color) {
-                  table->bg_colors[i+r_origin][j+c_origin] = cell->bg_color;
-               }
-               if (cell->use_fg_color) {
-                  table->fg_colors[i+r_origin][j+c_origin] = cell->fg_color;
-               }
-            }
-         }
-      }
-   }
+   makePassive (table);
 
    /* call the callback, allowing the app to commit any changes 
-    * associated with the current location of the cursor.   */
+    * associated with the current location of the cursor.  
+    * Note that this callback may recursively call this routine. */
    if (table->move_cursor) {
-      (table->move_cursor) (table, new_phys_row, new_phys_col, 
+      (table->move_cursor) (table, &new_phys_row, &new_phys_col, 
                             table->client_data);
+
+      /* The above callback can cause this routine to be called recursively.
+       * As a result of this recursion, the cursor may have gotten repositioned. 
+       * we need to make sure we make passive again.
+       */
+      makePassive (table);
    }
 
    /* check for out-of-bounds conditions (which may be deliberate) */
@@ -425,9 +457,11 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
    curs = table->handlers[new_virt_row][new_virt_col];
    table->current_cursor = curs;
 
-   /* record the new virtual position ... */
+   /* record the new position ... */
    table->current_cursor_virt_row = new_virt_row;
    table->current_cursor_virt_col = new_virt_col;
+   table->current_cursor_phys_row = new_phys_row;
+   table->current_cursor_phys_col = new_phys_col;
 
    /* compute some useful offsets ... */
    phys_row_origin = new_phys_row;
@@ -435,9 +469,6 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
 
    phys_col_origin = new_phys_col;
    phys_col_origin -= table->locators[new_phys_row][new_phys_col]->phys_col_offset;
-
-   table->current_cursor_phys_row = phys_row_origin;
-   table->current_cursor_phys_col = phys_col_origin;
 
    /* setting the previous traversal value to the last of a traversal chain will
     * gaurentee that first entry into a register will occur at the first cell */
@@ -506,6 +537,8 @@ void xaccCommitCursor (Table *table)
    int i,j;
    int virt_row, virt_col;
    CellBlock *curs;
+   int phys_row, phys_col;
+   int phys_row_origin, phys_col_origin;
 
    curs = table->current_cursor;
    if (!curs) return;
@@ -518,20 +551,32 @@ void xaccCommitCursor (Table *table)
    if (virt_row >= table->num_virt_rows) return;
    if (virt_col >= table->num_virt_cols) return;
 
+   /* compute the true origin of the cell block */
+   phys_row = table->current_cursor_phys_row;
+   phys_col = table->current_cursor_phys_col;
+   phys_row_origin = table->current_cursor_phys_row;
+   phys_col_origin = table->current_cursor_phys_col;
+   phys_row_origin -= table->locators[phys_row][phys_col]->phys_row_offset;
+   phys_col_origin -= table->locators[phys_row][phys_col]->phys_col_offset;
+
    for (i=0; i<curs->numRows; i++) {
       for (j=0; j<curs->numCols; j++) {
          BasicCell *cell;
          
          cell = curs->cells[i][j];
          if (cell) {
-            int iphys = i + table->current_cursor_phys_row;
-            int jphys = j + table->current_cursor_phys_col;
+            int iphys = i + phys_row_origin;
+            int jphys = j + phys_col_origin;
             if (table->entries[iphys][jphys]) {
                free (table->entries[iphys][jphys]);
             }
             table->entries[iphys][jphys] = strdup (cell->value);
-            table->bg_colors[iphys][jphys] = cell->bg_color;
-            table->fg_colors[iphys][jphys] = cell->fg_color;
+            if (cell->use_bg_color) {
+               table->bg_colors[iphys][jphys] = cell->bg_color;
+            }
+            if (cell->use_fg_color) {
+               table->fg_colors[iphys][jphys] = cell->fg_color;
+            }
          }
       }
    }
@@ -540,7 +585,6 @@ void xaccCommitCursor (Table *table)
 }
 
 /* ==================================================== */
-/* hack alert -- will core dump if numrows has changed, etc. */
 /* hack alert -- assumes that first block is header. */
 /* hack alert -- this routine is *just like* that above,
  * except that its's committing the very first cursor.
@@ -618,6 +662,17 @@ xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col)
        * in the cursor */
       xaccCommitCursor (table);
       xaccMoveCursorGUI (table, phys_row, phys_col);
+   } else {
+
+      /* The request might be to move to a cell that is one column over.
+       * If so, then do_commit will be zero, as there will have been no 
+       * reason to actually move a cursor.  However, we want to keep 
+       * positions accurate, so record the new location.  (The move may 
+       * may also be one row up or down, which, for a two-row cursor,
+       * also might not require a cursor movement).
+       */
+      table->current_cursor_phys_row = phys_row;
+      table->current_cursor_phys_col = phys_col;
    }
 }
 

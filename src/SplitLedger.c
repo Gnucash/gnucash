@@ -58,15 +58,42 @@
 /* this callback gets called when the user clicks on the gui
  * in such a way as to leave the current transaction, and to 
  * go to a new one.  So, save the current transaction.
+ *
+ * This callback is centrally involved in the redraw sequence.
+ * When the user moves from one cell to another, the following 
+ * sequence of events get triggered and cascade down:
+ *    enterCB () {
+ *      VerifyCursorPosition() {
+ *        MoveCursor() {  
+ *         callback for move() which is this function (LedgerMoveCursor) {
+ *           SaveRegEntry() {...}
+ *           RedrawRegEntry() {
+ *              SRLoadRegister() {
+ *                SRLoadRegEntry() {
+ *                   MoveCursor () { }
+ *                }
+ *             }
+ *          } }}}}
  */
 
 static void
-LedgerMoveCursor  (Table *table, int new_phys_row, int new_phys_col, void * client_data)
+LedgerMoveCursor  (Table *table, 
+                   int *p_new_phys_row, 
+                   int *p_new_phys_col, 
+                   void * client_data)
 {
+   int new_phys_row = *p_new_phys_row;
+   int new_phys_col = *p_new_phys_col;
    SplitRegister *reg = (SplitRegister *) client_data;
+   int style;
 
+printf ("LedgerMoveCursor start calback %d %d \n",
+new_phys_row, new_phys_col);
    /* commit the contents of the cursor into the database */
    xaccSRSaveRegEntry (reg);
+   xaccSRRedrawRegEntry (reg); 
+printf ("LedgerMoveCursor after redraw %d %d \n",
+new_phys_row, new_phys_col);
 
    /* if auto-expansion is enabled, we need to redraw the register
     * to expand out the splits at the new location.  We do some
@@ -75,11 +102,80 @@ LedgerMoveCursor  (Table *table, int new_phys_row, int new_phys_col, void * clie
     * LoadRegister code into expanding the appropriate split.
     * 
     */   
-   if ((reg->type) & REG_DYNAMIC) {
-      Split * split;
+   style = ((reg->type) & REG_STYLE_MASK);
+   if ((REG_SINGLE_DYNAMIC == style) ||
+       (REG_DOUBLE_DYNAMIC == style)) 
+   {
+      Split *split, *oldsplit;
+      oldsplit = xaccSRGetCurrentSplit (reg);
       split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
       reg->table->current_cursor->user_data = (void *) split;
+
+      /* if a null split, provide a hint for where the cursor should go */
+      if (NULL == split) {
+         reg->cursor_phys_row = new_phys_row;
+         // reg->cursor_virt_row = reg->table->current_cursor_virt_row;
+         reg->user_hack = (void *) xaccSplitGetParent (oldsplit);
+      }
       xaccRegisterRefresh (reg);
+
+      /* indicate what row we *should* have gone to */
+      *p_new_phys_row = table->current_cursor_phys_row;
+printf ("LedgerMoveCursor after dynamic %d %d stored val %d\n",
+*p_new_phys_row, new_phys_col,
+reg->cursor_phys_row
+);
+   }
+}
+
+/* ======================================================== */
+/* this callback gets called when the user clicks on the gui
+ * in such a way as to leave the current transaction, and to 
+ * go to a new one.  It is called to verify what the cordinates
+ * of the new cell will be.  It really applies only for auto-expansion,
+ * where we need to calculate the coords of the target cell.
+ */
+
+static void
+LedgerTraverse  (Table *table, 
+                   int *p_new_phys_row, 
+                   int *p_new_phys_col, 
+                   void * client_data)
+{
+   int new_phys_row = *p_new_phys_row;
+   int new_phys_col = *p_new_phys_col;
+   SplitRegister *reg = (SplitRegister *) client_data;
+   int style;
+
+   /* if auto-expansion is enabled, we need to redraw the register
+    * to expand out the splits at the new location.  We do some
+    * tomfoolery here to trick the code into expanding the new location.
+    * This little futz is sleazy, but it does suceed in getting the 
+    * LoadRegister code into expanding the appropriate split.
+    */   
+   style = ((reg->type) & REG_STYLE_MASK);
+   if ((REG_SINGLE_DYNAMIC == style) ||
+       (REG_DOUBLE_DYNAMIC == style)) 
+   {
+      Split *split, *oldsplit;
+printf ("enter LedgerTraverse with %d %d \n", new_phys_row , new_phys_col);
+      oldsplit = xaccSRGetCurrentSplit (reg);
+      split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
+      reg->table->current_cursor->user_data = (void *) split;
+
+      /* if a null split, provide a hint for where the cursor should go */
+      if (NULL == split) {
+         reg->cursor_phys_row = new_phys_row;
+         // reg->cursor_virt_row = reg->table->current_cursor_virt_row;
+         reg->user_hack = (void *) xaccSplitGetParent (oldsplit);
+      }
+
+      xaccRegisterCountHack (reg);
+      reg->table->current_cursor->user_data = (void *) oldsplit;
+
+printf ("leave LedgerTraverse with %d \n", reg->cursor_phys_row);
+      /* indicate what row we *should* go to */
+      *p_new_phys_row = reg->cursor_phys_row;
    }
 }
 
@@ -118,6 +214,42 @@ xaccSRGetCurrentSplit (SplitRegister *reg)
 }
 
 /* ======================================================== */
+
+void 
+xaccSRRedrawRegEntry (SplitRegister *reg) 
+{
+   Split *split;
+   Transaction *trans;
+   Account * acc;
+   unsigned int changed;
+   int i;
+
+   /* use the changed flag to avoid heavy-weight redraws
+    * This will help cut down on uneccessary register redraws.  */
+   changed = xaccSplitRegisterGetChangeFlag (reg);
+   if (!changed) return;
+
+   split = xaccSRGetCurrentSplit (reg);
+   trans = xaccSplitGetParent (split);
+
+   /* refresh the register windows */
+   /* This split belongs to a transaction that might be displayed
+    * in any number of windows.  Changing any one split is likely
+    * to affect any account windows associated with the other splits
+    * in this transaction.  So basically, send redraw events to all
+    * of the splits.
+    */
+   i = 0;
+   split = xaccTransGetSplit (trans, i);
+   while (split) {
+      acc = xaccSplitGetAccount (split);
+      xaccAccountDisplayRefresh (acc);
+      i++;
+      split = xaccTransGetSplit (trans, i);
+   }
+}
+
+/* ======================================================== */
 /* Copy from the register object to the engine */
 
 void 
@@ -127,14 +259,16 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    Transaction *trans;
    Account * acc;
    unsigned int changed;
-   int i;
+   int style;
 
    /* use the changed flag to avoid heavy-weight updates
     * of the split & transaction fields. This will help
     * cut down on uneccessary register redraws.  */
    changed = xaccSplitRegisterGetChangeFlag (reg);
    if (!changed) return;
-   
+
+   style = (reg->type) & REG_STYLE_MASK;   
+
    /* get the handle to the current split and transaction */
    split = xaccSRGetCurrentSplit (reg);
 printf ("save split is %p \n", split);
@@ -170,6 +304,10 @@ printf ("save split is %p \n", split);
       xaccTransBeginEdit (trans);
       xaccTransAppendSplit (trans, split);
       xaccAccountInsertSplit (acc, split);
+
+      assert (reg->table->current_cursor);
+      reg->table->current_cursor->user_data = (void *) split;
+
    } else {
       trans = xaccSplitGetParent (split);
       xaccTransBeginEdit (trans);
@@ -191,43 +329,24 @@ printf ("save split is %p \n", split);
       xaccSplitSetReconcile (split, reg->recnCell->value[0]);
    }
 
-   if (MOD_TAMNT & changed) {
-      double new_amount;
-      new_amount = (reg->creditTransCell->amount) - (reg->debitTransCell->amount);
-      if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-          (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
-          (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
-      { 
-         xaccSplitSetShareAmount (split, new_amount);
-      } else {
-         xaccSplitSetValue (split, new_amount);
-      }
-   }
-
-   if (MOD_TPRIC & changed) {
-      xaccSplitSetSharePrice (split, reg->priceTransCell->amount);
-   }
-
-   if (MOD_TVALU & changed) {
-      xaccSplitSetValue (split, -(reg->valueTransCell->amount));
-   }
-
-   /* -------------------------------------------------------------- */
-
    if (MOD_ACTN & changed) 
       xaccSplitSetAction (split, reg->actionCell->cell.value);
 
+   /* -------------------------------------------------------------- */
    /* OK, the handling of transfers gets complicated because it 
     * depends on what was displayed to the user.  For a multi-line
     * display, we just reparent the indicated split, its it,
     * and that's that.  For a two-line display, we want to reparent
     * the "other" split, but only if there is one ...
     */
-   if ((MOD_XFRM | MOD_TXFRM) & changed) {
+   if (MOD_XFRM & changed) {
       Account *old_acc=NULL, *new_acc=NULL;
       Split *split_to_modify = NULL;
 
-      if (reg->type & REG_MULTI_LINE) {
+      if ((REG_MULTI_LINE == style) ||
+          (REG_SINGLE_DYNAMIC == style) || 
+          (REG_DOUBLE_DYNAMIC == style))
+      {
          split_to_modify = split;
       } else {
          split_to_modify = xaccGetOtherSplit(split);
@@ -239,11 +358,7 @@ printf ("save split is %p \n", split);
          /* do some reparenting. Insertion into new account will automatically
           * delete from the old account */
          old_acc = xaccSplitGetAccount (split_to_modify);
-         if (MOD_XFRM & changed) {
-           new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
-         } else  {
-            new_acc = xaccGetAccountByName (trans, reg->xfrmTransCell->cell.value);
-         }
+         new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
          xaccAccountInsertSplit (new_acc, split_to_modify);
    
          /* make sure any open windows of the old account get redrawn */
@@ -258,10 +373,18 @@ printf ("save split is %p \n", split);
    if (MOD_MEMO & changed) 
       xaccSplitSetMemo (split, reg->memoCell->value);
 
-   if (MOD_AMNT & changed) {
+   /* The AMNT and NAMNT updates only differ by sign.  Basically, 
+    * the split and transaction cursors show minus the quants that
+    * the single and double cursors show, and so when updates happen,
+    * the extra minus sign must also be handled.
+    */
+   if ((MOD_AMNT | MOD_NAMNT) & changed) {
       double new_amount;
-      new_amount = (reg->creditCell->amount) - (reg->debitCell->amount);
-      new_amount = -new_amount;
+      if (MOD_AMNT & changed) {
+         new_amount = (reg->creditCell->amount) - (reg->debitCell->amount);
+      } else {
+         new_amount = (reg->ndebitCell->amount) - (reg->ncreditCell->amount);
+      }
       if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
           (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
           (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
@@ -277,9 +400,8 @@ printf ("save split is %p \n", split);
    }
 
    if (MOD_VALU & changed) {
-      xaccSplitSetValue (split, reg->valueCell->amount);
+      xaccSplitSetValue (split, (reg->valueCell->amount));
    }
-
 
    xaccTransCommitEdit (trans);
 
@@ -296,48 +418,8 @@ xaccTransGetDescription(trans));
    if (split == ((Split *) (reg->user_hook))) {
       reg->user_hook = NULL;
    }
-
-   /* refresh the register windows */
-   /* This split belongs to a transaction that might be displayed
-    * in any number of windows.  Changing any one split is likely
-    * to affect any account windows associated with the other splits
-    * in this transaction.  So basically, send redraw events to all
-    * of the splits.
-    */
-   i = 0;
-   split = xaccTransGetSplit (trans, i);
-   while (split) {
-      acc = xaccSplitGetAccount (split);
-      xaccAccountDisplayRefresh (acc);
-      i++;
-      split = xaccTransGetSplit (trans, i);
-   }
 }
 
-/* ======================================================== */
-
-#define LOAD_XFRM(cellname) {							\
-   char * accname=NULL;								\
-										\
-   /* Show the transfer-from account name.                               */	\
-   /* What gets displayed depends on the display format.                 */	\
-   /* For a multi-line display, show the account for each member split.  */	\
-   /* For a one or two-line display, show the other account, but only    */	\
-   /* if there are exactly two splits.                                   */	\
-   if (reg->type & REG_MULTI_LINE) {						\
-      accname = xaccAccountGetName (xaccSplitGetAccount (split));		\
-      xaccSetComboCellValue (reg->cellname, accname);				\
-   } else {									\
-      Split *s = xaccGetOtherSplit (split);					\
-      if (s) {									\
-         accname = xaccAccountGetName (xaccSplitGetAccount (s));		\
-      } else {									\
-         accname = SPLIT_STR;							\
-      }										\
-      xaccSetComboCellValue (reg->cellname, accname);				\
-   } 										\
-}
-   
 /* ======================================================== */
 
 static void
@@ -346,6 +428,8 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
    char buff[2];
    time_t secs;
    double baln;
+   int typo = reg->type & REG_TYPE_MASK;
+   int style = reg->type & REG_STYLE_MASK;
 
    /* don't even bother doing a load if there is no current cursor */
    if (!(reg->table->current_cursor)) return;
@@ -354,42 +438,35 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       /* we interpret a NULL split as a blank split */
       xaccSetDateCellValueSecs (reg->dateCell, 0);
       xaccSetBasicCellValue (reg->numCell, "");
-      xaccSetComboCellValue (reg->xfrmTransCell, "");
       xaccSetQuickFillCellValue (reg->descCell, "");
       xaccSetBasicCellValue (reg->recnCell, "");
-      xaccSetDebCredCellValue (reg->debitTransCell, 
-                               reg->creditTransCell, 0.0);
-      xaccSetPriceCellValue (reg->priceTransCell, 0.0);
-      xaccSetPriceCellValue (reg->valueTransCell, 0.0);
       xaccSetPriceCellValue  (reg->shrsCell,  0.0);
       xaccSetPriceCellValue (reg->balanceCell, 0.0);
 
+      xaccSetComboCellValue (reg->actionCell, "");
+      xaccSetBasicCellValue (reg->memoCell, "");
+      xaccSetComboCellValue (reg->xfrmCell, "");
+      xaccSetDebCredCellValue (reg->debitCell, 
+                               reg->creditCell, 0.0);
+      xaccSetDebCredCellValue (reg->ndebitCell, 
+                               reg->ncreditCell, 0.0);
+      xaccSetPriceCellValue (reg->priceCell, 0.0);
+      xaccSetPriceCellValue (reg->valueCell, 0.0);
+
    } else {
       double amt;
+      char * accname=NULL;
       Transaction *trans = xaccSplitGetParent (split);
    
       secs = xaccTransGetDate (trans);
       xaccSetDateCellValueSecs (reg->dateCell, secs);
    
       xaccSetBasicCellValue (reg->numCell, xaccTransGetNum (trans));
-      LOAD_XFRM (xfrmTransCell);
       xaccSetQuickFillCellValue (reg->descCell, xaccTransGetDescription (trans));
    
       buff[0] = xaccSplitGetReconcile (split);
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recnCell, buff);
-   
-      if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-          (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
-          (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
-      { 
-         amt = xaccSplitGetShareAmount (split);
-      } else {
-         amt = xaccSplitGetValue (split);
-      }
-      xaccSetDebCredCellValue (reg->debitTransCell, reg->creditTransCell, amt);
-      xaccSetPriceCellValue (reg->priceTransCell, xaccSplitGetSharePrice (split));
-      xaccSetPriceCellValue (reg->valueTransCell, xaccSplitGetValue (split));
    
       /* For income and expense acounts, we have to reverse
        * the meaning of balance, since, in a dual entry
@@ -397,13 +474,56 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
        * bank account, and a debit to the income account.
        * Thus, positive and negative are interchanged */
       baln = xaccSplitGetBalance (split);
-      if ((INCOME_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-          (EXPENSE_REGISTER == (reg->type & REG_TYPE_MASK))) { 
+      if ((INCOME_REGISTER == typo) ||
+          (EXPENSE_REGISTER == typo)) { 
          baln = -baln;
       }
       xaccSetPriceCellValue (reg->balanceCell, baln);
    
       xaccSetPriceCellValue (reg->shrsCell,  xaccSplitGetShareBalance (split));
+
+      xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
+
+      /* Show the transfer-from account name.                            
+       * What gets displayed depends on the display format.                
+       * For a multi-line display, show the account for each member split.  
+       * For a one or two-line display, show the other account, but only    
+       * if there are exactly two splits.                                   
+       */
+      if ((REG_MULTI_LINE == style) ||
+          (REG_SINGLE_DYNAMIC == style) || 
+          (REG_DOUBLE_DYNAMIC == style))
+      {
+         accname = xaccAccountGetName (xaccSplitGetAccount (split));
+         xaccSetComboCellValue (reg->xfrmCell, accname);
+      } else {
+         Split *s = xaccGetOtherSplit (split);
+         if (s) {
+            accname = xaccAccountGetName (xaccSplitGetAccount (s));
+         } else {
+            accname = SPLIT_STR;
+         }
+         xaccSetComboCellValue (reg->xfrmCell, accname);
+      }
+   
+      xaccSetBasicCellValue (reg->memoCell, xaccSplitGetMemo (split));
+   
+      buff[0] = xaccSplitGetReconcile (split);
+      buff[1] = 0x0;
+      xaccSetBasicCellValue (reg->recnCell, buff);
+   
+      if ((EQUITY_REGISTER == typo) ||
+          (STOCK_REGISTER  == typo) ||
+          (PORTFOLIO       == typo)) 
+      { 
+         amt = xaccSplitGetShareAmount (split);
+      } else {
+         amt = xaccSplitGetValue (split);
+      }
+      xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, amt);
+      xaccSetDebCredCellValue (reg->ndebitCell, reg->ncreditCell, -amt);
+      xaccSetPriceCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
+      xaccSetPriceCellValue (reg->valueCell, xaccSplitGetValue (split));
    }
 
    reg->table->current_cursor->user_data = (void *) split;
@@ -416,46 +536,16 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
 
 /* ======================================================== */
 
+#define xaccSRLoadSplitEntry  xaccSRLoadTransEntry
+
+#ifdef LATER
 static void
 xaccSRLoadSplitEntry (SplitRegister *reg, Split *split, int do_commit)
 {
    char buff[2];
 
-   /* don't even bother doing a load if there is no current cursor */
-   if (!(reg->table->current_cursor)) return;
-
    if (!split) {
-      /* we interpret a NULL split as a blank split */
-      xaccSetComboCellValue (reg->actionCell, "");
-      xaccSetBasicCellValue (reg->memoCell, "");
-      xaccSetComboCellValue (reg->xfrmCell, "");
-      xaccSetDebCredCellValue (reg->debitCell, 
-                               reg->creditCell, 0.0);
-      xaccSetPriceCellValue (reg->priceCell, 0.0);
-      xaccSetPriceCellValue (reg->valueCell, 0.0);
-
    } else {
-      double amt;
-   
-      xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
-      LOAD_XFRM (xfrmCell);
-      xaccSetBasicCellValue (reg->memoCell, xaccSplitGetMemo (split));
-   
-      buff[0] = xaccSplitGetReconcile (split);
-      buff[1] = 0x0;
-      xaccSetBasicCellValue (reg->recsCell, buff);
-   
-      if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-          (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
-          (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
-      { 
-         amt = xaccSplitGetShareAmount (split);
-      } else {
-         amt = xaccSplitGetValue (split);
-      }
-      xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, -amt);
-      xaccSetPriceCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
-      xaccSetPriceCellValue (reg->valueCell, -xaccSplitGetValue (split));
    }
 
    reg->table->current_cursor->user_data = (void *) split;
@@ -465,6 +555,7 @@ xaccSRLoadSplitEntry (SplitRegister *reg, Split *split, int do_commit)
       xaccCommitCursor (reg->table);
    }
 }
+#endif 
 
 /* ======================================================== */
 
@@ -472,7 +563,7 @@ void
 xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
 {
    xaccSRLoadTransEntry (reg, split, 0);
-   xaccSRLoadSplitEntry (reg, split, 0);
+   /* xaccSRLoadSplitEntry (reg, split, 0); */
 
    /* copy cursor contents into the table */
    xaccCommitCursor (reg->table);
@@ -481,143 +572,216 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
 /* ======================================================== */
 
 void
-xaccSRLoadRegister (SplitRegister *reg, Split **slist, 
+xaccSRCountRows (SplitRegister *reg, Split **slist, 
                       Account *default_source_acc)
 {
    int i;
-   Split *split=NULL, *last_split=NULL;
+   Split *split=NULL;
    Split *save_current_split=NULL;
    int save_cursor_phys_row = -1;
+   int save_cursor_virt_row = -1;
    Table *table;
    int num_phys_rows;
-   int num_phys_cols;
    int num_virt_rows;
-   int phys_row;
-   int vrow;
-   int double_line, multi_line, dynamic;
+   int style;
+   int multi_line, dynamic;
+   CellBlock *lead_cursor;
 
    table = reg->table;
-   double_line = (reg->type) & REG_DOUBLE_LINE;
-   multi_line  = (reg->type) & REG_MULTI_LINE;
-   dynamic = (reg->type) & REG_DYNAMIC;
+   style = (reg->type) & REG_STYLE_MASK;
+   multi_line  = (REG_MULTI_LINE == style);
+   dynamic = ((REG_SINGLE_DYNAMIC == style) || (REG_DOUBLE_DYNAMIC == style));
+   if ((REG_SINGLE_LINE == style) ||
+       (REG_SINGLE_DYNAMIC == style)) {
+      lead_cursor = reg->single_cursor;
+   } else {
+      lead_cursor = reg->double_cursor;
+   }
 
    /* save the current cursor location; we do this by saving
     * a pointer to the currently edited split; we restore the 
     * cursor to this location when we are done. */
-   if (reg->table->current_cursor) {
-      save_current_split = (Split *) (reg->table->current_cursor->user_data);
+   save_current_split = xaccSRGetCurrentSplit (reg);
+   if (NULL == save_current_split) {
+      save_cursor_phys_row = reg->cursor_phys_row;
+      save_cursor_virt_row = reg->cursor_virt_row;
    }
 
-   /* disable move callback -- we con't want the cascade of 
-    * callbacks while we are fiddling with loading the register */
-   table->move_cursor = NULL;
-   xaccMoveCursorGUI (table, -1, -1);
-
-   /* set table size to number of items in list */
-   /* compute the corresponding number of physical & virtual rows. */
-   /* num_phys_cols is easy ... just the total number of columns 
-    * in the header */
-   num_phys_cols = reg->header->numCols;
-
-   /* num_phys_rows is the number of rows in all the cursors */
-   num_phys_rows = reg->header->numRows;
-
-   /* Count the number of rows needed.  
-    * the count will be equal to 
+   /* num_phys_rows is the number of rows in all the cursors.
+    * num_virt_rows is the number of cursors (including the header).
+    * Count the number of rows needed.  
+    * the phys row count will be equal to 
     * +1   for the header
     * +n   that is, one (transaction) row for each split passed in,
     * +n   one blank edit row for each transaction
     * +p   where p is the sum total of all the splits in the transaction
     * +2   an editable transaction and split at the end.
     */
+   num_phys_rows = reg->header->numRows;
    num_virt_rows = 1;
 
    i=0;
    split = slist[0]; 
    while (split) {
-      Transaction *trans;
-      int j;
+      /* do not count the blank split */
+      if (split != ((Split *) reg->user_hook)) {
+         Transaction *trans;
+         int do_expand = 0;
 
-      trans = xaccSplitGetParent (split);
-      if (!trans) {
-         /* hack assert */
-         printf ("Internal Error: xaccSRLoadRegister(): "
-                 "Split without a parent \n");
-         break;
-      } 
-
-      /* add one row for a transaction */
-      num_virt_rows ++;
-      num_phys_rows += reg->trans_cursor->numRows; 
-      
-      if (double_line) {
-         /* add one split row for each transaction */
-         num_virt_rows ++;
-         num_phys_rows += reg->split_cursor->numRows; 
-      }
-
-      /* if multi-line, then show all splits.  If dynamic then
-       * show all splits only if this is the hot split. 
-       */
-      if (multi_line || (dynamic && (split == save_current_split))) {
-         /* add a row for each split, minus one, plus one */
-         j = xaccTransCountSplits (trans);
-         num_virt_rows += j;
-         num_phys_rows += j * reg->split_cursor->numRows; 
-         if (double_line) {
-            /* fix prior double-counting */
-            num_virt_rows --;
-            num_phys_rows -= reg->split_cursor->numRows; 
+         /* lets determine where to locate the cursor ... */
+         if (split == save_current_split) {
+            save_cursor_phys_row = num_phys_rows;
+            save_cursor_virt_row = num_virt_rows;
          }
-      } 
-      
+
+         /* if multi-line, then show all splits.  If dynamic then
+          * show all splits only if this is the hot split. 
+          */
+         do_expand = multi_line;
+         do_expand = do_expand || 
+                     (dynamic && xaccIsPeerSplit(split,save_current_split)); 
+         if (NULL == save_current_split) {
+            trans = xaccSplitGetParent (split);
+            do_expand = do_expand || (trans == reg->user_hack);
+         }
+
+         if (do_expand) 
+         {
+            Split * secondary;
+            int j = 0;
+
+            /* add one row for a transaction */
+            num_virt_rows ++;
+            num_phys_rows += reg->trans_cursor->numRows; 
+
+            /* Add a row for each split, minus one, plus one.
+             * Essentially, do the following:
+             * j = xaccTransCountSplits (trans);
+             * num_virt_rows += j;
+             * num_phys_rows += j * reg->split_cursor->numRows; 
+             * except that we also have to find teh saved cursor row,
+             * Thus, we need a real looop over the splits.
+             * The do..while will automaticaly put a blank (null) 
+             * split at the end 
+             */
+            trans = xaccSplitGetParent (split);
+            j = 0;
+            do {
+               secondary = xaccTransGetSplit (trans, j);
+               if (secondary != split) {
+
+                  /* lets determine where to locate the cursor ... */
+                  if (secondary == save_current_split) {
+                     save_cursor_phys_row = num_phys_rows;
+                     save_cursor_virt_row = num_virt_rows;
+                  }
+                  num_virt_rows ++;
+                  num_phys_rows += reg->split_cursor->numRows; 
+               }
+               j++;
+            } while (secondary);
+         } else {
+
+            /* the simple case ... add one row for a transaction */
+            num_virt_rows ++;
+            num_phys_rows += lead_cursor->numRows; 
+         }
+      }
       i++;
       split = slist[i];
    }
 
-   /* If user_hook is null, then we haven't set up the blank split yet,
-    * so add two lines for it: one blank transaction, one blank split.  
-    * But if we have set it up yet, then we've counted one split too 
-    * many: the blank-blank at the very end.  Subtract it back out.
-    */
+   /* ---------------------------------------------------------- */
+   /* the "blank split", if it exists, is at the end */
+   if (reg->user_hook) {
+      split = (Split *) reg->user_hook;
+
+      /* lets determine where to locate the cursor ... */
+      if (split == save_current_split) {
+         save_cursor_phys_row = num_phys_rows;
+         save_cursor_virt_row = num_virt_rows;
+      }
+   }
+
    if (multi_line) {
-      if (!(reg->user_hook)) {
-         i++;
-         num_virt_rows += 2; 
-         num_phys_rows += reg->trans_cursor->numRows;
-         num_phys_rows += reg->split_cursor->numRows;
-      } else {
-         num_virt_rows -= 1; 
-         num_phys_rows -= reg->split_cursor->numRows;
-      }
+      num_virt_rows += 2; 
+      num_phys_rows += reg->trans_cursor->numRows;
+      num_phys_rows += reg->split_cursor->numRows;
+   } else {
+      num_virt_rows += 1; 
+      num_phys_rows += lead_cursor->numRows;
    }
 
-   if (double_line) {
-      /* add two rows */
-      if (!(reg->user_hook)) {
-         i++;
-         num_virt_rows ++;
-         num_phys_rows += reg->trans_cursor->numRows; 
-         num_virt_rows ++;
-         num_phys_rows += reg->split_cursor->numRows; 
-      }
+   /* check to make sure we got a good cursor position */
+   if ((num_phys_rows <= save_cursor_phys_row) ||
+       (num_virt_rows <= save_cursor_virt_row)) 
+   {
+       save_cursor_phys_row = num_phys_rows - reg->split_cursor->numRows;
+       save_cursor_virt_row = num_virt_rows - 1;
+   }
+   if ((save_cursor_phys_row < (reg->header->numRows)) ||
+       (save_cursor_virt_row < 1))
+   {
+      save_cursor_phys_row = reg->header->numRows;
+      save_cursor_virt_row = 1;
    }
 
-   if (!multi_line && !double_line) {
-      if (!(reg->user_hook)) {
-         i++;
-         num_virt_rows += 1; 
-         num_phys_rows += reg->trans_cursor->numRows;
-      }
+   /* finally, record the values */
+   reg->num_phys_rows = num_phys_rows;
+   reg->num_virt_rows = num_virt_rows;
+   reg->cursor_phys_row = save_cursor_phys_row;
+   reg->cursor_virt_row = save_cursor_virt_row;
+}
+
+/* ======================================================== */
+
+void
+xaccSRLoadRegister (SplitRegister *reg, Split **slist, 
+                      Account *default_source_acc)
+{
+   int i = 0;
+   Split *split=NULL, *last_split=NULL;
+   Split *save_current_split=NULL;
+   Table *table;
+   int phys_row;
+   int vrow;
+   int style;
+   int multi_line, dynamic;
+   CellBlock *lead_cursor;
+
+   table = reg->table;
+   style = (reg->type) & REG_STYLE_MASK;
+   multi_line  = (REG_MULTI_LINE == style);
+   dynamic = ((REG_SINGLE_DYNAMIC == style) || (REG_DOUBLE_DYNAMIC == style));
+   if ((REG_SINGLE_LINE == style) ||
+       (REG_SINGLE_DYNAMIC == style)) {
+      lead_cursor = reg->single_cursor;
+   } else {
+      lead_cursor = reg->double_cursor;
    }
+
+   /* count the number of rows */
+   xaccSRCountRows (reg, slist, default_source_acc);
+
+   /* save the current cursor location; we do this by saving
+    * a pointer to the currently edited split; we restore the 
+    * cursor to this location when we are done. */
+   save_current_split = xaccSRGetCurrentSplit (reg);
+
+   /* disable move callback -- we con't want the cascade of 
+    * callbacks while we are fiddling with loading the register */
+   table->move_cursor = NULL;
+   xaccMoveCursorGUI (table, -1, -1);
 
    /* num_virt_cols is always one. */
-   xaccSetTableSize (table, num_phys_rows, num_phys_cols, num_virt_rows, 1);
+   xaccSetTableSize (table, reg->num_phys_rows, reg->num_cols, 
+                            reg->num_virt_rows, 1);
 
    /* make sure that the header is loaded */
    xaccSetCursor (table, reg->header, 0, 0, 0, 0);
 
-printf ("load register of %d virtual entries %d phys rows ----------- \n", i, num_phys_rows);
+printf ("load register of %d phys rows ----------- \n", reg->num_phys_rows);
+
    /* populate the table */
    i=0;
    vrow = 1;   /* header is vrow zero */
@@ -625,44 +789,41 @@ printf ("load register of %d virtual entries %d phys rows ----------- \n", i, nu
    split = slist[0]; 
    while (split) {
 
-      /* lets determine where to locate the cursor ... */
-      if (split == save_current_split) {
-         save_cursor_phys_row = phys_row;
-      }
-
       /* do not load the blank split */
       if (split != ((Split *) reg->user_hook)) {
          Transaction *trans;
-         Split * secondary;
-         int j = 0;
+         int do_expand;
 
 printf ("load trans %d at phys row %d \n", i, phys_row);
-         xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
-         xaccMoveCursor (table, phys_row, 0);
-         xaccSRLoadTransEntry (reg, split, 1);
-         vrow ++;
-         phys_row += reg->trans_cursor->numRows; 
    
-         if (double_line) {
-            xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
-            xaccMoveCursor (table, phys_row, 0);
-            xaccSRLoadSplitEntry (reg, split, 1);
-            vrow ++;
-            phys_row += reg->split_cursor->numRows; 
+         /* if multi-line, then show all splits.  If dynamic then
+          * show all splits only if this is the hot split. 
+          */
+         do_expand = multi_line;
+         do_expand = do_expand || 
+                     (dynamic && xaccIsPeerSplit(split,save_current_split)); 
+         if (NULL == save_current_split) {
+            trans = xaccSplitGetParent (split);
+            do_expand = do_expand || (trans == reg->user_hack);
          }
 
-         if (multi_line || (dynamic && (split == save_current_split))) {
+         if (do_expand) 
+         {
+            Split * secondary;
+            int j = 0;
+
+            xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
+            xaccMoveCursor (table, phys_row, 0);
+            xaccSRLoadTransEntry (reg, split, 1);
+            vrow ++;
+            phys_row += reg->trans_cursor->numRows; 
+
             /* loop over all of the splits in the transaction */
             /* the do..while will automaticaly put a blank (null) split at the end */
             trans = xaccSplitGetParent (split);
             j = 0;
             do {
                secondary = xaccTransGetSplit (trans, j);
-
-               /* lets determine where to locate the cursor ... */
-               if (secondary == save_current_split) {
-                  save_cursor_phys_row = phys_row;
-               }
 
                if (secondary != split) {
 printf ("load split %d at phys row %d \n", j, phys_row);
@@ -675,7 +836,15 @@ printf ("load split %d at phys row %d \n", j, phys_row);
 
                j++;
             } while (secondary);
-         } 
+
+         } else {
+            /* the simple case ... */
+            xaccSetCursor (table, lead_cursor, phys_row, 0, vrow, 0);
+            xaccMoveCursor (table, phys_row, 0);
+            xaccSRLoadTransEntry (reg, split, 1);
+            vrow ++;
+            phys_row += lead_cursor->numRows; 
+         }
       }
 
       last_split = split;
@@ -709,21 +878,17 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       xaccSplitSetSharePrice (split, last_price);
    }
 
-   /* lets determine where to locate the cursor ... */
-   if (split == save_current_split) {
-      save_cursor_phys_row = phys_row;
-   }
-
-   /* do the transaction row of the blank split */
-   xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
-   xaccMoveCursor (table, phys_row, 0);
-   xaccSRLoadTransEntry (reg, split, 1);
-   vrow ++;
-   phys_row += reg->trans_cursor->numRows; 
-   
    /* do the split row of the blank split */
-   if (double_line || multi_line) {
+   if (multi_line) {
       Transaction *trans;
+
+      /* do the transaction row of the blank split */
+      xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
+      xaccMoveCursor (table, phys_row, 0);
+      xaccSRLoadTransEntry (reg, split, 1);
+      vrow ++;
+      phys_row += reg->trans_cursor->numRows; 
+   
       trans = xaccSplitGetParent (split);
       split = xaccTransGetSplit (trans, 1);
       xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
@@ -731,20 +896,21 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       xaccSRLoadSplitEntry (reg, split, 1);
       vrow ++;
       phys_row += reg->split_cursor->numRows; 
+   } else {
+      xaccSetCursor (table, lead_cursor, phys_row, 0, vrow, 0);
+      xaccMoveCursor (table, phys_row, 0);
+      xaccSRLoadTransEntry (reg, split, 1);
+      vrow ++;
+      phys_row += lead_cursor->numRows; 
    }
 
-   /* restore the cursor to its original location */
-   if (!save_current_split || (phys_row <= save_cursor_phys_row)) {
-       save_cursor_phys_row = phys_row - reg->split_cursor->numRows;
-   }
-   if (save_cursor_phys_row < (reg->header->numRows)) {
-      save_cursor_phys_row = reg->header->numRows;
-   }
-   xaccMoveCursorGUI (table, save_cursor_phys_row, 0);
+   /* restor the cursor to its rightful position */
+   xaccMoveCursorGUI (table, reg->cursor_phys_row, 0);
    xaccRefreshTableGUI (table);
 
    /* enable callback for cursor user-driven moves */
    table->move_cursor = LedgerMoveCursor;
+   table->traverse = LedgerTraverse;
    table->client_data = (void *) reg;
 }
 
