@@ -958,6 +958,7 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
 				gboolean signal_after,
 				gpointer user_data)
 {
+  gpointer ptr;
   GCallback func;
 
   if (allsymbols == NULL) {
@@ -965,11 +966,12 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
     allsymbols = g_module_open(NULL, 0);
   }
 
-  if (!g_module_symbol(allsymbols, handler_name, (gpointer *)&func)) {
+  if (!g_module_symbol(allsymbols, handler_name, &ptr)) {
     g_warning("could not find signal handler '%s'.", handler_name);
     return;
   }
 
+  func = G_CALLBACK(ptr);
   if (other_object) {
     if (signal_after)
       g_signal_connect_object (signal_object, signal_name, func,

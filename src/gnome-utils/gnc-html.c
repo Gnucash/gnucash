@@ -448,11 +448,13 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
   char     * label    = NULL;
   GList    * documents  = NULL;
   GList    * current;
+  gpointer loc_tmp, doc_tmp;
   
   DEBUG("uri %s, ok %d, body %10.10s, body len %d", uri, completed_ok, body, body_len);
   g_hash_table_lookup_extended(html->request_info, uri,
-			       (gpointer *)&location,
-			       (gpointer *)&documents);
+			       &loc_tmp, &doc_tmp);
+  location = (char *)loc_tmp;
+  documents = (GList *)doc_tmp;
   
   /* documents will be NULL for an HTTP POST transaction, where we are
    * displaying the reply data. */
