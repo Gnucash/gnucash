@@ -94,6 +94,7 @@ gnc_hbci_trans (GtkWidget *parent,
 		GNCInteractor *interactor,
 		const HBCI_Account *h_acc,
 		const HBCI_Customer *customer,
+		Account *gnc_acc,
 		GNC_HBCI_Transtype trans_type,
 		GList **templ)
 {
@@ -186,6 +187,8 @@ gnc_hbci_trans (GtkWidget *parent,
     gtk_box_pack_start_defaults(GTK_BOX(amount_hbox), td.amount_edit);
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (td.amount_edit), 
       TRUE);
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (td.amount_edit),
+				  xaccAccountGetCommoditySCU (gnc_acc));
 
     /* Check for what kind of transaction this should be, and change
        the labels accordingly. */
