@@ -189,10 +189,15 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb )
     PopBox *ab = (PopBox *) cd;
     XmComboBoxSelectionCallbackStruct *selection = 
                (XmComboBoxSelectionCallbackStruct *) cb;
-    char * choice;
+    char * choice = 0x0;
 
-    choice = XmCvtXmStringToCT (selection->value);
-    if (0x0 == choice) choice = "";
+    /* check the reason, because the unslect callback 
+     * doesn't even have a value field! */
+    if ( (XmCR_SINGLE_SELECT == selection->reason) ||
+         (XmCR_SINGLE_SELECT == selection->reason) ) {
+       choice = XmCvtXmStringToCT (selection->value);
+    }
+    if (!choice) choice = "";
 
     XbaeMatrixSetCell (ab->reg, ab->currow, ab->curcol, choice); 
 
