@@ -399,7 +399,14 @@ gnc_gui_init (SCM command_line)
       SCM run_danglers = scm_c_eval_string("gnc:hook-run-danglers");
       SCM hook = scm_c_eval_string("gnc:*ui-startup-hook*");
       scm_call_1(run_danglers, hook); 
-    }    
+    }
+
+    // return ( main_window . command_line )
+    {
+      SCM gncWindowType;
+      gncWindowType = scm_c_eval_string("<gnc:Window*>");
+      ret = scm_cons( gw_wcp_assimilate_ptr(main_window, gncWindowType), ret );
+    }
   }
 
   LEAVE (" ");

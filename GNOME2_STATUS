@@ -69,14 +69,12 @@ Stock Split Dialog
 
 - Main Window
 
-  - Startup progress bar not working; default "window" needs to be set.
-
-  - [low-priority] New registers should open in new top-level windows.
-
   - View Summary Bar
 
     - Summarybar restored into GncMainWindow UI; summary-select list does not
       respond to button-pressing.
+
+  - [low-priority] New registers should open in new top-level windows.
 
 - Register Core - mostly functional
 

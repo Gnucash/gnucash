@@ -622,23 +622,25 @@ string and 'directories' must be a list of strings."
       ;; We're not in batch mode; we can go ahead and do the normal thing.
       (begin
         (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
-        (set! gnc:*command-line-remaining*
-              (gnc:gui-init gnc:*command-line-remaining*))
-        (if (and
-             (not (gnc:account-file-to-load))
-             (not (string? (gnc:history-get-last)))
-             (gnc:option-value
-              (gnc:lookup-global-option "__new_user" "first_startup")))
-            (begin
-	      (gnc:destroy-splash-screen)
-	      (gnc:new-user-dialog))
-            (begin
-	      (gnc:load-account-file)
-	      (gnc:destroy-splash-screen)))
-	(gnc:hook-run-danglers gnc:*ui-post-startup-hook*)
-        (gnc:start-ui-event-loop)
-        (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish))
-
+        (let* ((init-pair (gnc:gui-init gnc:*command-line-remaining*))
+               (main-window (car init-pair)))
+          (set! gnc:*command-line-remaining* (cdr init-pair))
+          (if (and
+               (not (gnc:account-file-to-load))
+               (not (string? (gnc:history-get-last)))
+               (gnc:option-value
+                (gnc:lookup-global-option "__new_user" "first_startup")))
+              (begin
+                (gnc:destroy-splash-screen)
+                (gnc:new-user-dialog))
+              (begin
+                (gnc:destroy-splash-screen)
+                (gnc:window-set-progressbar-window main-window)
+                (gnc:load-account-file)))
+          (gnc:hook-run-danglers gnc:*ui-post-startup-hook*)
+          (gnc:start-ui-event-loop)
+          (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)))
+        
       ;; else: we're in batch mode.  Just do what the user said on the
       ;; command line
       (map handle-batch-mode-item (reverse gnc:*batch-mode-things-to-do*)))

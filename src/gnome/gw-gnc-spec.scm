@@ -45,6 +45,7 @@
       "#include <top-level.h>\n"
       "#include <gnc-html.h>\n"
       "#include <gnc-main-window.h>\n"
+      "#include <gnc-window.h>\n"
       "#include <gnc-plugin-account-tree.h>\n"
       "#include <gnc-splash.h>\n"
       "#include <dialog-find-transactions.h>\n"
@@ -97,7 +98,7 @@
    '<gw:scm>
    "gnc_gui_init"
    '((<gw:scm> command-line))
-   "Initialize the remaining parts of the lower level ui. Returns remaining command line.")
+   "Initialize the remaining parts of the lower level ui. Returns main-window and remaining command line.")
 
   (gw:wrap-function
    ws
@@ -138,6 +139,18 @@
    "gnc_gui_destroy"
    '()
    "Destroy the UI.")
+
+  (gw:wrap-as-wct ws
+                  '<gnc:Window*>
+                  "GncWindow *" "const GncWindow *")
+
+  (gw:wrap-function
+   ws
+   'gnc:window-set-progressbar-window
+   '<gw:void>
+   "gnc_window_set_progressbar_window"
+   '((<gnc:Window*> window))
+   "Set the progressbar window from the given GncWindow.")
 
   (gw:wrap-as-wct ws
                   '<gnc:MainWindow*>

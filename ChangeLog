@@ -1,3 +1,11 @@
+2005-02-23  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/gw-gnc-spec.scm: Expose
+	gnc:window-set-progressbar-window.
+
+	* src/scm/main.scm (gnc:main): Set progress bar window
+	appropriately on startup so file-load feedback is in place.
+
 2005-02-22  Joshua Sled  <jsled@asynchronous.org>
 
 	* GNOME2_STATUS: Reverted from tabular to straight-text formatting
