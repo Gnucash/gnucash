@@ -196,6 +196,7 @@ datecmp( Date *date1, Date *date2 )
     return 0;
   else
     {
+#ifdef  OLD_DATE_COMPARISON_CODE
     /* to sort properly, must have 32 > days in month, and 500 > 12*32 */
     unsigned int d1 = date1->day + (32 * date1->month) + (500 * date1->year);
     unsigned int d2 = date2->day + (32 * date2->month) + (500 * date2->year);
@@ -206,16 +207,17 @@ datecmp( Date *date1, Date *date2 )
       return 0;
     else
       return 1;
+#endif /* OLD_DATE_COMPARISON_CODE */
 
-/* ================== EQUIVALENT CODE ====================== 
- 	  if ( date1->year > date2->year ) return 1;
-	  if ( date1->year < date2->year ) return -1;
-	  if ( date1->month > date2->month ) return 1;
-	  if ( date1->month < date2->month ) return -1;
-	  if ( date1->day > date2->day ) return 1;
-	  if ( date1->day < date2->day ) return -1;
-	  return 0;
- * ======================================================= */
+    /* this date comparison code executes faster than multiply
+     * code above, according to Dave Freese of USCG */
+    if ( date1->year > date2->year ) return 1;
+    if ( date1->year < date2->year ) return -1;
+    if ( date1->month > date2->month ) return 1;
+    if ( date1->month < date2->month ) return -1;
+    if ( date1->day > date2->day ) return 1;
+    if ( date1->day < date2->day ) return -1;
+    return 0;
     }
   }
 
