@@ -98,6 +98,11 @@
    'book-opened-hook
    "Run after book open.  Hook args: book URL."))
 
+(define gnc:*new-book-hook*
+  (gnc:hook-define 
+   'new-book-hook
+   "Run after a new (empty) book is opened, before the book-opened-hook. Hook args: ()"))
+
 (define gnc:*book-closed-hook*
   (gnc:hook-define 
    'book-closed-hook

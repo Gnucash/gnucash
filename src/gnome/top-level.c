@@ -605,19 +605,6 @@ gnc_ui_destroy (void)
 
 /* ============================================================== */
 
-int
-gnc_ui_show_main_window (void)
-{
-  /* Initialize gnome */
-  gnucash_ui_init();
-  
-  /* Get the main window on screen. */
-  while (gtk_events_pending())
-    gtk_main_iteration();
-
-  return 0;
-}
-
 static gboolean
 gnc_ui_check_events (gpointer not_used)
 {

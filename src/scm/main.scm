@@ -168,6 +168,22 @@
   (gnc:depend "price-quotes.scm")
   (gnc:depend "tip-of-the-day.scm")
 
+  (gnc:hook-add-dangler gnc:*book-opened-hook*
+                        (lambda (file)
+                          (if ((gnc:option-getter
+                                (gnc:lookup-global-option
+                                 "Scheduled Transactions"
+                                 "Run on GnuCash start" )))
+                              (gnc:sx-since-last-run-wrapper file))))
+
+  (gnc:hook-add-dangler gnc:*new-book-hook*
+                        (lambda ()
+                          (let ((option (gnc:lookup-global-option
+                                         "General"
+                                         "No account list setup on new file")))
+                            (if (and option (not (gnc:option-value option)))
+                                (gnc:ui-hierarchy-druid)))))
+
   (if (not (gnc:handle-command-line-args))
       (gnc:shutdown 1))
 
@@ -259,7 +275,6 @@
   (if (null? gnc:*batch-mode-things-to-do*)
       ;; We're not in batch mode; we can go ahead and do the normal thing.
       (begin
-        ;; (gnc:load-account-file)
         (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:ui-finish)
         (gnc:ui-init)
         (if (and
@@ -267,13 +282,9 @@
              (not (string? (gnc:history-get-last)))
              (gnc:option-value
               (gnc:lookup-global-option "__new_user" "first_startup")))
-            (begin
-              (gnc:new-user-dialog)
-              (gnc:start-ui-event-loop))
-            (begin
-              (gnc:load-account-file)
-              (gnc:show-main-window)
-              (gnc:start-ui-event-loop)))
+            (gnc:new-user-dialog)
+            (gnc:load-account-file))
+        (gnc:start-ui-event-loop)
         (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:ui-finish))
 
       ;; else: we're in batch mode.  Just do what the user said on the

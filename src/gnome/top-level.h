@@ -35,7 +35,6 @@ gboolean      gnucash_ui_open_file(const char * name);
 GNCMainInfo * gnc_ui_get_data(void);
 void          gnc_ui_shutdown(void);
 void          gnc_ui_destroy(void);
-int           gnc_ui_show_main_window(void);
 int           gnc_ui_start_event_loop(void);
 gboolean      gnc_reverse_balance_type(GNCAccountType type);
 gboolean      gnc_reverse_balance(Account *account);

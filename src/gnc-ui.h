@@ -102,9 +102,6 @@ gboolean gnc_get_username_password (gncUIWidget parent,
                                     char **username,
                                     char **password);
 
-void gnc_ui_new_user_dialog (void);
-void gnc_ui_hierarchy_druid (void);
-
 /* Managing the GUI Windows *****************************************/
 
 void        gnc_ui_shutdown (void);

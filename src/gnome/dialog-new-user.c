@@ -124,6 +124,5 @@ gnc_ui_new_user_cancel_dialog (void)
 void
 gncp_new_user_finish (void)
 {
-  gh_eval_str("(gnc:show-main-window)");
   gh_eval_str("(gnc:hook-run-danglers gnc:*book-opened-hook* #f)");
 }

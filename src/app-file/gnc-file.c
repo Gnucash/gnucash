@@ -237,6 +237,14 @@ gnc_add_history (GNCBook *book)
   g_free (url);
 }
 
+static void
+gnc_book_opened (void)
+{
+  gh_call2 (gh_eval_str("gnc:hook-run-danglers"),
+            gh_eval_str("gnc:*book-opened-hook*"),
+            gh_str02scm(gnc_book_get_url(current_book))); 
+}
+
 void
 gnc_file_new (void)
 {
@@ -255,7 +263,7 @@ gnc_file_new (void)
 
   gh_call2(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*book-closed-hook*"),
-           gh_str02scm(gnc_book_get_url(book)));           
+           gh_str02scm(gnc_book_get_url(book)));
   
   gnc_book_destroy (book);
   current_book = NULL;
@@ -265,18 +273,10 @@ gnc_file_new (void)
   /* start a new book */
   gnc_get_current_book_internal ();
 
-  if(gnc_lookup_boolean_option("General",
-                               "No account list setup on new file",
-                               TRUE))
-  {
-    gh_call2(gh_eval_str("gnc:hook-run-danglers"),
-             gh_eval_str("gnc:*book-opened-hook*"),
-             gh_str02scm(gnc_book_get_url(current_book))); 
-  }
-  else
-  {
-    gnc_ui_hierarchy_druid ();
-  }
+  gh_call1(gh_eval_str("gnc:hook-run-danglers"),
+           gh_eval_str("gnc:*new-book-hook*"));
+
+  gnc_book_opened ();
 
   gnc_engine_resume_events ();
   gnc_gui_refresh_all ();
@@ -451,9 +451,7 @@ gnc_post_file_open (const char * filename)
     gnc_engine_resume_events ();
     gnc_gui_refresh_all ();
 
-    gh_call2(gh_eval_str("gnc:hook-run-danglers"),
-             gh_eval_str("gnc:*book-opened-hook*"),
-             gh_str02scm(gnc_book_get_url(current_book))); 
+    gnc_book_opened ();
 
     return FALSE;
   }
@@ -462,9 +460,7 @@ gnc_post_file_open (const char * filename)
   /* close up the old file session (if any) */
   current_book = new_book;
 
-  gh_call2(gh_eval_str("gnc:hook-run-danglers"),
-           gh_eval_str("gnc:*book-opened-hook*"),
-           gh_str02scm(gnc_book_get_url(current_book))); 
+  gnc_book_opened ();
 
   /* --------------- END CORE SESSION CODE -------------- */
 

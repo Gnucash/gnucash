@@ -188,11 +188,3 @@ the account instead of opening a register.") #f))
                       gnc:main-window-book-open-handler)
 (gnc:hook-add-dangler gnc:*book-closed-hook* 
                       gnc:main-window-book-close-handler)
-
-(gnc:hook-add-dangler gnc:*book-opened-hook*
-                      (lambda (file)
-                        (if ((gnc:option-getter
-                              (gnc:lookup-global-option
-                               (N_ "Scheduled Transactions")
-                               (N_ "Run on GnuCash start" ))))
-                            (gnc:sx-since-last-run-wrapper file))) )

@@ -225,6 +225,7 @@
 (export gnc:*ui-startup-hook*)
 (export gnc:*ui-shutdown-hook*)
 (export gnc:*book-opened-hook*)
+(export gnc:*new-book-hook*)
 (export gnc:*book-closed-hook*)
 
 ;; utilities
