@@ -68,10 +68,12 @@ gnc_column_view_set_option(GNCOptionDB * odb, char * section, char * name,
   GNCOption *  option = 
     gnc_option_db_get_option_by_name(odb, section, name);
   
-  if(option) {
+  if(option)
+  {
     gnc_option_db_set_option(odb, section, name, new_value);
+
     /* set_option doesn't do this */
-    option->changed = TRUE;
+    gnc_option_set_changed (option, TRUE);
   }
 }
 

@@ -39,6 +39,8 @@
      (list 
       "#include <global-options.h>\n"
       "#include <option-util.h>\n"
+      "#include <global-options.h>\n"
+      "#include <option-util.h>\n"
       "#include <gnc-euro.h>\n"
       "#include <gnc-ui-util.h>\n"
       "#include <gnc-gettext-util.h>\n"
@@ -80,7 +82,7 @@
   
   (gw:wrap-non-native-type 
    mod '<gnc:OptionChangeCallback> 
-   "OptionChangeCallback" "const OptionChangeCallback")
+   "GNCOptionChangeCallback" "const GNCOptionChangeCallback")
 
   (gw:wrap-function
    mod
@@ -108,6 +110,35 @@
 
   (gw:wrap-function
    mod
+   'gnc:set-option-selectable-by-name
+   '<gw:void>
+   "gnc_set_option_selectable_by_name"
+   '(((<gw:m-chars-caller-owned> gw:const) section)
+     ((<gw:m-chars-caller-owned> gw:const) name)
+     (<gw:bool> selectable))
+   "Set the appropriate option widget to be selectable or not selectable, depending on if <gw:bool> selectable is true or false respectively.")
+
+  (gw:wrap-function
+   mod
+   'gnc:option-db-set-option-selectable-by-name
+   '<gw:void>
+   "gnc_option_db_set_option_selectable_by_name"
+   '((<gw:scm> guile-options)
+     ((<gw:m-chars-caller-owned> gw:const) section)
+     ((<gw:m-chars-caller-owned> gw:const) name)
+     (<gw:bool> selectable))
+   "Set the appropriate option widget to be selectable or not selectable, depending on if <gw:bool> selectable is true or false respectively.")
+
+  (gw:wrap-function
+   mod
+   'gnc:default-currency
+   '(<gnc:commodity*> gw:const)
+   "gnc_default_currency"
+   '()
+   "Return the default currency set by the user.")
+
+  (gw:wrap-function
+   mod
    'gnc:amount->string-helper
    '(<gw:m-chars-callee-owned> gw:const)
    "xaccPrintAmount"
@@ -120,7 +151,7 @@ determines formatting details.")
    mod
    'gnc:option-refresh-ui
    '<gw:void>
-   "_gnc_option_refresh_ui"
+   "gncp_option_refresh_ui"
    '((<gw:scm> option))
    "Refresh the gui option with the current values.")
 
@@ -128,7 +159,7 @@ determines formatting details.")
    mod
    'gnc:option-invoke-callback
    '<gw:void>
-   "_gnc_option_invoke_callback"
+   "gncp_option_invoke_callback"
    '((<gnc:OptionChangeCallback> callback) (<gw:void*> data))
    "Invoke the c option callback on the given data.")
 
@@ -136,7 +167,7 @@ determines formatting details.")
    mod
    'gnc:option-db-register-option
    '<gw:void>
-   "_gnc_option_db_register_option"
+   "gncp_option_db_register_option"
    '((<gw:int> db_handle) (<gw:scm> option))
    "Register the option with the option database db_handle.")
 

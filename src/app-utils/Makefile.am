@@ -6,7 +6,9 @@ CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}
 
 INCLUDES = -I${top_srcdir}/src/gnc-module \
            -I${top_srcdir}/src/calculation \
-           -I${top_srcdir}/src/engine ${GUILE_INCS}
+           -I${top_srcdir}/src/engine \
+           ${GNOME_INCLUDEDIR} \
+           ${GUILE_INCS}
 
 libgncmod_app_utils_la_SOURCES = \
   gfec.c \

@@ -34,7 +34,7 @@
 void gnc_options_init(void);
 void gnc_options_shutdown(void);
 
-SCM gnc_register_option_change_callback(OptionChangeCallback callback,
+SCM gnc_register_option_change_callback(GNCOptionChangeCallback callback,
                                         gpointer user_data,
                                         char *section,
                                         char *name);
@@ -88,7 +88,7 @@ gboolean gnc_set_number_option(const char *section, const char *name,
 
 gboolean gnc_set_boolean_option(const char *section, const char *name,
                                 gboolean value);
-    
+
 void gnc_option_refresh_ui_by_name(const char *section_name, 
 				   const char *name);
 
@@ -98,7 +98,7 @@ void gnc_set_option_selectable_by_name(const char *section,
 
 /* private */
 
-void _gnc_option_refresh_ui(SCM option);
+void gncp_option_refresh_ui(SCM option);
 GNCOptionDB * gnc_get_global_options(void);
 
 #endif /* GLOBAL_OPTIONS_H */

@@ -88,7 +88,7 @@ gnc_options_shutdown(void)
  * Returns: SCM handle for unregistering                            *
 \********************************************************************/
 SCM
-gnc_register_option_change_callback(OptionChangeCallback callback,
+gnc_register_option_change_callback(GNCOptionChangeCallback callback,
                                     gpointer user_data,
                                     char *section,
                                     char *name)
@@ -436,7 +436,7 @@ gnc_set_boolean_option(const char *section, const char *name, gboolean value)
  * Return: nothing                                                  *
 \********************************************************************/
 void
-_gnc_option_refresh_ui(SCM guile_option)
+gncp_option_refresh_ui(SCM guile_option)
 {
   GNCOption *option;
 
@@ -480,7 +480,7 @@ gnc_set_option_selectable_by_name(const char *section_name,
   option = gnc_option_db_get_option_by_name(global_options, section_name,
                                             name);
   if (option)
-    gnc_set_option_selectable (option, selectable);
+    gnc_option_set_selectable (option, selectable);
 }
 
 /********************************************************************\

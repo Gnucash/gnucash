@@ -31,36 +31,45 @@
 
 #include "gnc-common.h"
 #include "gnc-commodity.h"
+#include "gnc-ui-common.h"
 #include "date.h"
 
 
-typedef struct _GNCOption GNCOption;
-struct _GNCOption
-{
-  /* Handle to the scheme-side option */
-  SCM guile_option;
-
-  /* Flag to indicate change by the UI */
-  gboolean changed;
-
-  /* The widget which is holding this option */
-  gpointer widget;
-};
-
-typedef struct _GNCOptionSection GNCOptionSection;
-typedef struct _GNCOptionDB GNCOptionDB;
+typedef struct gnc_option GNCOption;
+typedef struct gnc_option_section GNCOptionSection;
+typedef struct gnc_option_db GNCOptionDB;
 
 typedef int GNCOptionDBHandle;
 
-typedef void (*OptionChangeCallback)(gpointer user_data);
+typedef SCM (*GNCOptionGetUIValue) (GNCOption *option);
+typedef void (*GNCOptionSetUIValue) (GNCOption *option,
+                                     gboolean use_default);
+typedef void (*GNCOptionSetSelectable) (GNCOption *option,
+                                        gboolean selectable);
+typedef void (*GNCOptionChangeCallback) (gpointer user_data);
 
 /***** Prototypes ********************************************************/
+
+gboolean gnc_option_get_changed (GNCOption *option);
+void gnc_option_set_changed (GNCOption *option, gboolean changed);
+
+gncUIWidget gnc_option_get_widget (GNCOption *option);
+void gnc_option_set_widget (GNCOption *option, gncUIWidget widget);
+
+SCM  gnc_option_get_ui_value(GNCOption *option);
+void gnc_option_set_ui_value(GNCOption *option, gboolean use_default);
+void gnc_option_set_selectable (GNCOption *option, gboolean selectable);
 
 GNCOptionDB * gnc_option_db_new(SCM guile_options);
 void          gnc_option_db_destroy(GNCOptionDB *odb);
 
+void gnc_option_db_set_ui_callbacks (GNCOptionDB *odb,
+                                     GNCOptionGetUIValue get_ui_value,
+                                     GNCOptionSetUIValue set_ui_value,
+                                     GNCOptionSetSelectable set_selectable);
+
 SCM gnc_option_db_register_change_callback(GNCOptionDB *odb,
-                                           OptionChangeCallback callback,
+                                           GNCOptionChangeCallback callback,
                                            gpointer data,
                                            const char *section,
                                            const char *name);
@@ -227,16 +236,10 @@ void gnc_option_db_set_option_selectable_by_name(SCM guile_options,
                                                  gboolean selectable);
 
 /* private */
-void _gnc_option_db_register_option(GNCOptionDBHandle handle,
+void gncp_option_db_register_option(GNCOptionDBHandle handle,
                                     SCM guile_option);
 
-void _gnc_option_invoke_callback(OptionChangeCallback callback, void *data);
-
-
-/* These must be defined in gui-specific code */
-SCM  gnc_option_get_ui_value(GNCOption *option);
-void gnc_option_set_ui_value(GNCOption *option, gboolean use_default);
-void gnc_set_option_selectable (GNCOption *option, gboolean selectable);
-
+void gncp_option_invoke_callback(GNCOptionChangeCallback callback,
+                                 gpointer data);
 
 #endif /* OPTION_UTIL_H */

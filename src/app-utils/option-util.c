@@ -37,14 +37,29 @@
 
 /****** Structures *************************************************/
 
-struct _GNCOptionSection
+struct gnc_option
+{
+  /* Handle to the scheme-side option */
+  SCM guile_option;
+
+  /* Flag to indicate change by the UI */
+  gboolean changed;
+
+  /* The widget which is holding this option */
+  gncUIWidget widget;
+
+  /* The option db which holds this option */
+  GNCOptionDB *odb;
+};
+
+struct gnc_option_section
 {
   char * section_name;
 
   GSList * options;
 };
 
-struct _GNCOptionDB
+struct gnc_option_db
 {
   SCM guile_options;
 
@@ -53,6 +68,10 @@ struct _GNCOptionDB
   gboolean options_dirty;
 
   GNCOptionDBHandle handle;
+
+  GNCOptionGetUIValue get_ui_value;
+  GNCOptionSetUIValue set_ui_value;
+  GNCOptionSetSelectable set_selectable;
 };
 
 typedef struct _Getters Getters;
@@ -96,6 +115,63 @@ static int last_db_handle = 0;
 
 /*******************************************************************/
 
+gboolean
+gnc_option_get_changed (GNCOption *option)
+{
+  if (!option) return FALSE;
+  return option->changed;
+}
+
+void
+gnc_option_set_changed (GNCOption *option, gboolean changed)
+{
+  g_return_if_fail (option != NULL);
+  option->changed = changed;
+}
+
+gncUIWidget
+gnc_option_get_widget (GNCOption *option)
+{
+  if (!option) return NULL;
+  return option->widget;
+}
+
+void
+gnc_option_set_widget (GNCOption *option, gncUIWidget widget)
+{
+  g_return_if_fail (option != NULL);
+  option->widget = widget;
+}
+
+SCM
+gnc_option_get_ui_value (GNCOption *option)
+{
+  g_return_val_if_fail (option != NULL, SCM_UNDEFINED);
+  g_return_val_if_fail (option->odb != NULL, SCM_UNDEFINED);
+  g_return_val_if_fail (option->odb->get_ui_value != NULL, SCM_UNDEFINED);
+
+  return option->odb->get_ui_value (option);
+}
+
+void
+gnc_option_set_ui_value (GNCOption *option, gboolean use_default)
+{
+  g_return_if_fail (option != NULL);
+  g_return_if_fail (option->odb != NULL);
+  g_return_if_fail (option->odb->set_ui_value != NULL);
+
+  option->odb->set_ui_value (option, use_default);
+}
+
+void
+gnc_option_set_selectable (GNCOption *option, gboolean selectable)
+{
+  g_return_if_fail (option != NULL);
+  g_return_if_fail (option->odb != NULL);
+  g_return_if_fail (option->odb->set_selectable != NULL);
+
+  option->odb->set_selectable (option, selectable);
+}
 
 /********************************************************************\
  * gnc_option_db_init                                               *
@@ -239,6 +315,18 @@ gnc_option_db_destroy(GNCOptionDB *odb)
   g_free(odb);
 }
 
+void
+gnc_option_db_set_ui_callbacks (GNCOptionDB *odb,
+                                GNCOptionGetUIValue get_ui_value,
+                                GNCOptionSetUIValue set_ui_value,
+                                GNCOptionSetSelectable set_selectable)
+{
+  g_return_if_fail (odb != NULL);
+
+  odb->get_ui_value = get_ui_value;
+  odb->set_ui_value = set_ui_value;
+  odb->set_selectable = set_selectable;
+}
 
 /********************************************************************\
  * gnc_option_db_register_change_callback                           *
@@ -256,7 +344,7 @@ gnc_option_db_destroy(GNCOptionDB *odb)
 \********************************************************************/
 SCM
 gnc_option_db_register_change_callback(GNCOptionDB *odb,
-                                       OptionChangeCallback callback,
+                                       GNCOptionChangeCallback callback,
                                        gpointer data,
                                        const char *section,
                                        const char *name)
@@ -351,9 +439,9 @@ gnc_option_db_unregister_change_callback_id(GNCOptionDB *odb, SCM callback_id)
 }
 
 void
-_gnc_option_invoke_callback(OptionChangeCallback callback, void *data)
+gncp_option_invoke_callback (GNCOptionChangeCallback callback, void *data)
 {
-  callback(data);
+  callback (data);
 }
 
 static void
@@ -1188,7 +1276,7 @@ gnc_option_db_clean(GNCOptionDB *odb)
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-_gnc_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
+gncp_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
 {
   GNCOptionDB *odb;
   GNCOption *option;
@@ -1196,7 +1284,7 @@ _gnc_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
 
   odb = g_hash_table_lookup(option_dbs, &handle);
 
-  assert(odb != NULL);
+  g_return_if_fail (odb != NULL);
 
   odb->options_dirty = TRUE;
 
@@ -1205,6 +1293,7 @@ _gnc_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
   option->guile_option = guile_option;
   option->changed = FALSE;
   option->widget = NULL;
+  option->odb = odb;
 
   /* Prevent guile from garbage collecting the option */
   scm_protect_object(guile_option);
@@ -2303,5 +2392,5 @@ gnc_option_db_set_option_selectable_by_name(SCM guile_option,
   if (!option)
     return;
 
-  gnc_set_option_selectable (option, selectable);
+  gnc_option_set_selectable (option, selectable);
 }
