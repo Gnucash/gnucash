@@ -33,8 +33,10 @@
 #include <stdlib.h>
 
 #include "messages.h"
+#include "recncell.h"
 #include "register.h"
 #include "table-allgui.h"
+#include "textcell.h"
 
 /* utility defines for cell configuration data */
 #define DATE_CELL      0
