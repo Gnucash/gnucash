@@ -130,9 +130,11 @@ delete_initial_druid (HBCIInitialInfo *info)
 
 static gchar *gnc_hbci_account_longname(const AB_ACCOUNT *hacc)
 {
+  const char *bankname;
+  const char *bankcode;
   g_assert(hacc);
-  const char *bankname = AB_Account_GetBankName (hacc);
-  const char *bankcode = AB_Account_GetBankCode (hacc);
+  bankname = AB_Account_GetBankName (hacc);
+  bankcode = AB_Account_GetBankCode (hacc);
   /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
   if (bankname)
     return g_strdup_printf(_("%s at %s (code %s)"),
