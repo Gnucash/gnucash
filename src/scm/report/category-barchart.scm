@@ -330,148 +330,152 @@ developing over time"))
 	    
 	    
 	    ;;(gnc:warn "all-data" all-data)
-	    
-	    (let ((all-data-amounts (map cadr all-data)))
-	      (if 
-	       (and (not (null? all-data-amounts))
-		    (gnc:not-all-zeros all-data-amounts))
-		  ;; Set chart title, subtitle etc.
-	       (begin 
-		 (gnc:html-barchart-set-title! chart report-title)
-		 (gnc:html-barchart-set-subtitle!
-		  chart (sprintf #f
-				 (if do-intervals?
-				     (_ "%s to %s")
-				     (_ "Balances %s to %s"))
-				 (gnc:timepair-to-datestring from-date-tp) 
-				 (gnc:timepair-to-datestring to-date-tp)))
-		 (gnc:html-barchart-set-width! chart width)
-		 (gnc:html-barchart-set-height! chart height)
-		 
-		 ;; row labels etc.
-		 (gnc:html-barchart-set-row-labels! chart date-string-list)
-		 ;; FIXME: why doesn't the y-axis label get printed?!?
-		 (gnc:html-barchart-set-y-axis-label!
-		  chart (gnc:commodity-get-mnemonic report-currency))
-		 (gnc:html-barchart-set-row-labels-rotated?! chart #t)
-		 (gnc:html-barchart-set-stacked?! chart stacked?)
-		 ;; If this is a stacked barchart, then reverse the legend.
-		 (gnc:html-barchart-set-legend-reversed?! chart stacked?)
-		 
-		 ;; If we have too many categories, we sum them into a new
-		 ;; 'other' category and add a link to a new report with just
-		 ;; those accounts.
-		 (if (> (length all-data) max-slices)
-		     (let* ((start (take all-data (- max-slices 1)))
-			    (finish (drop all-data (- max-slices 1)))
-			    (other-sum (map 
-					(lambda (l) (apply + l))
-					(apply zip (map cadr finish)))))
-		       (set! all-data
-			     (append start
-				     (list (list (_ "Other") other-sum))))
-		       (let* ((options (gnc:make-report-options reportname))
-			      (id #f))
-			 ;; now copy all the options
-			 (gnc:options-copy-values 
-			  (gnc:report-options report-obj) options)
-			 ;; and set the destination accounts
-			 (gnc:option-set-value
-			  (gnc:lookup-option options gnc:pagename-accounts 
-					     optname-accounts)
-			  (map car finish))
-			 ;; Set the URL to point to this report.
-			 (set! id (gnc:make-report reportname options))
-			 (set! other-anchor (gnc:report-anchor-text id)))))
-		 
-		 
-		 ;; This adds the data. Note the apply-zip stuff: This
-		 ;; transposes the data, i.e. swaps rows and columns. Pretty
-		 ;; cool, eh? Courtesy of dave_p.
-		 (if (not (null? all-data))
-		     (gnc:html-barchart-set-data! chart 
-						  (apply zip all-data-amounts)))
-	    
-		 ;; Labels and colors
-	    (gnc:html-barchart-set-col-labels!
-	     chart (map (lambda (pair)
-			  (if (string? (car pair))
-			      (car pair)
-			      ((if show-fullname?
-				   gnc:account-get-full-name
-				   gnc:account-get-name) (car pair))))
-			all-data))
-	    (gnc:html-barchart-set-col-colors! 
-	     chart
-	     (gnc:assign-colors (length all-data)))
-	    
-	    ;; set the URLs; the slices are links to other reports
-	    (let ((urls
-		   (map 
-		    (lambda (pair)
-		      (if (string? (car pair))
-			  other-anchor
-			  (let* ((acct (car pair))
-				 (subaccts 
-				  (gnc:account-get-immediate-subaccounts acct)))
-			    (if (null? subaccts)
-				;; if leaf-account, make this an anchor
-				;; to the register.
-				(gnc:account-anchor-text acct)
-				;; if non-leaf account, make this a link
-				;; to another report which is run on the
-				;; immediate subaccounts of this account
-				;; (and including this account).
-				(gnc:make-report-anchor
-				 reportname
-				 report-obj
-				 (list
-				  (list gnc:pagename-accounts optname-accounts
-					(cons acct subaccts))
-				  (list gnc:pagename-accounts optname-levels
-					(+ 1 tree-depth))
-				  (list gnc:pagename-general 
-					gnc:optname-reportname
-					((if show-fullname?
-					     gnc:account-get-full-name
-					     gnc:account-get-name) acct))))))))
-		    all-data)))
-	      (gnc:html-barchart-set-button-1-bar-urls! chart (append urls urls))
-	      ;; The legend urls do the same thing.
-	      (gnc:html-barchart-set-button-1-legend-urls! chart 
-							   (append urls urls)))
-	    
-	    (gnc:html-document-add-object! document chart) 
-	    
-	    (if (gnc:option-value 
-		 (gnc:lookup-global-option "General" 
-					   "Display \"Tip of the Day\""))
-		(gnc:html-document-add-object! 
-		 document 
-		 (gnc:make-html-text 
-		  (gnc:html-markup-p 
-		   "If you don't see a stacked barchart i.e. you only see \
+
+	    ;; Proceed if the data is non-zeros
+	    (if 
+	     (and (not (null? all-data))
+		  (gnc:not-all-zeros (map cadr all-data)))
+	     (begin 
+	       ;; Set chart title, subtitle etc.
+	       (gnc:html-barchart-set-title! chart report-title)
+	       (gnc:html-barchart-set-subtitle!
+		chart (sprintf #f
+			       (if do-intervals?
+				   (_ "%s to %s")
+				   (_ "Balances %s to %s"))
+			       (gnc:timepair-to-datestring from-date-tp) 
+			       (gnc:timepair-to-datestring to-date-tp)))
+	       (gnc:html-barchart-set-width! chart width)
+	       (gnc:html-barchart-set-height! chart height)
+	       
+	       ;; row labels etc.
+	       (gnc:html-barchart-set-row-labels! chart date-string-list)
+	       ;; FIXME: axis labels are not yet supported by
+	       ;; libguppitank.
+	       (gnc:html-barchart-set-y-axis-label!
+		chart (gnc:commodity-get-mnemonic report-currency))
+	       (gnc:html-barchart-set-row-labels-rotated?! chart #t)
+	       (gnc:html-barchart-set-stacked?! chart stacked?)
+	       ;; If this is a stacked barchart, then reverse the legend.
+	       (gnc:html-barchart-set-legend-reversed?! chart stacked?)
+	       
+	       ;; If we have too many categories, we sum them into a new
+	       ;; 'other' category and add a link to a new report with just
+	       ;; those accounts.
+	       (if (> (length all-data) max-slices)
+		   (let* ((start (take all-data (- max-slices 1)))
+			  (finish (drop all-data (- max-slices 1)))
+			  (other-sum (map 
+				      (lambda (l) (apply + l))
+				      (apply zip (map cadr finish)))))
+		     (set! all-data
+			   (append start
+				   (list (list (_ "Other") other-sum))))
+		     (let* ((options (gnc:make-report-options reportname))
+			    (id #f))
+		       ;; now copy all the options
+		       (gnc:options-copy-values 
+			(gnc:report-options report-obj) options)
+		       ;; and set the destination accounts
+		       (gnc:option-set-value
+			(gnc:lookup-option options gnc:pagename-accounts 
+					   optname-accounts)
+			(map car finish))
+		       ;; Set the URL to point to this report.
+		       (set! id (gnc:make-report reportname options))
+		       (set! other-anchor (gnc:report-anchor-text id)))))
+	       
+	       
+	       ;; This adds the data. Note the apply-zip stuff: This
+	       ;; transposes the data, i.e. swaps rows and columns. Pretty
+	       ;; cool, eh? Courtesy of dave_p.
+	       (if (not (null? all-data))
+		   (gnc:html-barchart-set-data! 
+		    chart 
+		    (apply zip (map cadr all-data))))
+	       
+	       ;; Labels and colors
+	       (gnc:html-barchart-set-col-labels!
+		chart (map (lambda (pair)
+			     (if (string? (car pair))
+				 (car pair)
+				 ((if show-fullname?
+				      gnc:account-get-full-name
+				      gnc:account-get-name) (car pair))))
+			   all-data))
+	       (gnc:html-barchart-set-col-colors! 
+		chart
+		(gnc:assign-colors (length all-data)))
+	       
+	       ;; set the URLs; the slices are links to other reports
+	       (let 
+		   ((urls
+		     (map 
+		      (lambda (pair)
+			(if 
+			 (string? (car pair))
+			 other-anchor
+			 (let* ((acct (car pair))
+				(subaccts 
+				 (gnc:account-get-immediate-subaccounts acct)))
+			   (if (null? subaccts)
+			       ;; if leaf-account, make this an anchor
+			       ;; to the register.
+			       (gnc:account-anchor-text acct)
+			       ;; if non-leaf account, make this a link
+			       ;; to another report which is run on the
+			       ;; immediate subaccounts of this account
+			       ;; (and including this account).
+			       (gnc:make-report-anchor
+				reportname
+				report-obj
+				(list
+				 (list gnc:pagename-accounts optname-accounts
+				       (cons acct subaccts))
+				 (list gnc:pagename-accounts optname-levels
+				       (+ 1 tree-depth))
+				 (list gnc:pagename-general 
+				       gnc:optname-reportname
+				       ((if show-fullname?
+					    gnc:account-get-full-name
+					    gnc:account-get-name) acct))))))))
+		      all-data)))
+		 (gnc:html-barchart-set-button-1-bar-urls! 
+		  chart (append urls urls))
+		 ;; The legend urls do the same thing.
+		 (gnc:html-barchart-set-button-1-legend-urls! 
+		  chart (append urls urls)))
+	       
+	       (gnc:html-document-add-object! document chart) 
+	       
+	       (if (gnc:option-value 
+		    (gnc:lookup-global-option "General" 
+					      "Display \"Tip of the Day\""))
+		   (gnc:html-document-add-object! 
+		    document 
+		    (gnc:make-html-text 
+		     (gnc:html-markup-p 
+		      "If you don't see a stacked barchart i.e. you only see \
 lots of thin bars next to each other for each date, then you \
 should upgrade Guppi to version 0.35.5.")
-		  (gnc:html-markup-p
-		   "Double-click on any legend box or any bar opens \
+		     (gnc:html-markup-p
+		      "Double-click on any legend box or any bar opens \
 another barchart report with the subaccounts of that account or, \
 if that account doesn't have subaccounts, the register for the account.")
-		  (gnc:html-markup-p "Remove this text by disabling \
+		     (gnc:html-markup-p "Remove this text by disabling \
 the global Preference \"Display Tip of the Day\".")))))
 
-	       ;; else if empty data
-	       (gnc:html-document-add-object!
-		document
-		(gnc:html-make-empty-data-warning)))))
+	     ;; else if empty data
+	     (gnc:html-document-add-object!
+	      document
+	      (gnc:html-make-empty-data-warning))))
 	  
 	  ;; else if no accounts selected
 	  (gnc:html-document-add-object! 
 	   document 
 	   (gnc:html-make-no-account-warning)))
       
-	      
-	      document))
+      document))
 	  
   (for-each 
    (lambda (l)
