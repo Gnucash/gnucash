@@ -29,6 +29,26 @@
 #include "BackendP.h"
 #include "gnc-pricedb.h"
 
+struct _GNCPrice {
+  /* 'public' data fields */
+  GUID    guid;                  /* globally unique price id */
+  GNCPriceDB *db;
+  gnc_commodity *commodity;
+  gnc_commodity *currency;
+  Timespec time;
+  char *source;
+  char *type;
+  gnc_numeric value;
+
+  /* 'private' object management fields */
+  guint32  refcount;             /* garbage collection reference count */
+  gint32   editlevel;            /* nesting level of begin/end edit calls */
+  gboolean not_saved;            /* price edit saved flag */
+  gboolean do_free;              /* price is going to be destroyed soon */
+};
+
+
+
 struct _GNCPriceDB {
   GHashTable *commodity_hash;
   Backend *backend;

@@ -40,23 +40,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
 
-struct _GNCPrice {
-  /* 'public' data fields */
-  GUID    guid;                  /* globally unique price id */
-  GNCPriceDB *db;
-  gnc_commodity *commodity;
-  gnc_commodity *currency;
-  Timespec time;
-  char *source;
-  char *type;
-  gnc_numeric value;
-
-  /* 'private' object management fields */
-  guint32  refcount;             /* garbage collection reference count */
-  gint32   editlevel;            /* nesting level of begin/end edit calls */
-  gboolean not_saved;            /* price edit saved flag */
-};
-
 /* ==================================================================== */
 /* GNCPrice functions
  */
@@ -69,10 +52,24 @@ gnc_price_create()
   p->refcount = 1;
   p->editlevel = 0;
   p->not_saved = FALSE;
+  p->do_free = FALSE;
   xaccGUIDNew (&p->guid);
   xaccStoreEntity(p, &p->guid, GNC_ID_PRICE); 
   gnc_engine_generate_event (&p->guid, GNC_EVENT_CREATE);
   return p;
+}
+
+static void 
+gnc_price_destroy (GNCPrice *p)
+{
+  gnc_engine_generate_event (&p->guid, GNC_EVENT_DESTROY);
+  xaccRemoveEntity(&p->guid);
+
+  if(p->type) g_cache_remove(gnc_engine_get_string_cache(), p->type);
+  if(p->source) g_cache_remove(gnc_engine_get_string_cache(), p->source);
+
+  memset(p, 0, sizeof(GNCPrice));
+  g_free(p);
 }
 
 void
@@ -87,21 +84,17 @@ gnc_price_unref(GNCPrice *p)
 {
   if(!p) return;
   if(p->refcount == 0) {
-    PERR("refcount == 0!");
+    PERR("refcount == 0 !!!!");
     assert(p->refcount != 0);
   }
-  if(p->db != NULL && p->refcount == 1) {
-    PERR("last unref while price in database");
-  }
-  p->refcount--;
-  if(p->refcount == 0) {
-    if(p->type) g_cache_remove(gnc_engine_get_string_cache(), p->type);
-    if(p->source) g_cache_remove(gnc_engine_get_string_cache(), p->source);
 
-    gnc_engine_generate_event (&p->guid, GNC_EVENT_DESTROY);
-    xaccRemoveEntity(&p->guid);
-    memset(p, 0, sizeof(GNCPrice));
-    g_free(p);
+  p->refcount--;
+
+  if(p->refcount == 0) {
+    gnc_price_begin_edit (p);
+    p->do_free = TRUE;
+    gnc_price_commit_edit (p);
+    gnc_price_destroy (p);
   }
 }
 
@@ -477,7 +470,6 @@ destroy_pricedb_commodity_hash_data(gpointer key,
                         destroy_pricedb_currency_hash_data,
                         NULL);
   g_hash_table_destroy(currency_hash);
-  currency_hash = NULL;
 }
 
 gboolean
@@ -556,6 +548,7 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
 gboolean
 gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
 {
+  guint num_currencies;
   GList *price_list;
   gnc_commodity *commodity;
   gnc_commodity *currency;
@@ -577,13 +570,25 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
     gnc_price_unref(p);
     return FALSE;
   }
+
+  /* if the price list is empty, then remove this currency from the commodity hash */
   if(price_list) {
     g_hash_table_insert(currency_hash, currency, price_list);
   } else {
     g_hash_table_remove(currency_hash, currency);
+
+    /* chances are good that this commodity had only one currency ... 
+     * if there are no currencies, we may as well destroy the commodity  too. */
+    num_currencies = g_hash_table_size (currency_hash);
+    if (0 == num_currencies) {
+      g_hash_table_remove (db->commodity_hash, commodity);
+      g_hash_table_destroy (currency_hash);
+    }
   }
   db->dirty = TRUE;
-  p->db = NULL;
+
+  /* don't set p->db to NULL, we need this pointer to successfully
+   * invoke the backend to delete the price. */
   gnc_price_unref(p);
   return TRUE;
 }

@@ -165,8 +165,8 @@ Core bugs/features that still need work:
 
 -- add support for rlb's price db. Partial support is in place.
    mass save & restore for mode=single-file is implemented.
-   To Be Done: price deletion and price queries.
-   implement pgend_price_commit_edit()
+   price editing and deletion for mode=single-update is implemented.
+   To Be Done: price queries.
 
 -- error code should include strings passed back, to be shown in 
    GUI dialogs. This is because the backend needs to return things
@@ -227,6 +227,9 @@ This list only affects the multi-user and advanced/optional features.
    -- use postgres aggregates ?? 
 
 -- provide support for more query types in gncquery.c
+
+-- add versioning support for price db.  We should add version numbers 
+   to the prices, and check version numbers when updating prices.
 
 -- multi-user 'save-as' is incorrect:
    As it currently works, save-as (sync) is a mass-copy of all data 

@@ -1676,7 +1676,20 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
 
    /* hack alert -- we should check a version number, to make
     * sure we aren't clobbering something newer in the database */
-   pgendStorePriceNoLock (be, pr);
+   if (pr->do_free) 
+   {
+      bufp = be->buff; 
+      bufp = stpcpy (bufp, "DELETE FROM gncPrice WHERE priceGuid='");
+      bufp = guid_to_string_buff (gnc_price_get_guid(pr), bufp);
+      bufp = stpcpy (bufp, "';");
+      PINFO ("%s\n", be->buff ? be->buff : "(null)");
+      SEND_QUERY (be,be->buff, 444);
+      FINISH_QUERY(be->connection);
+   }
+   else 
+   { 
+      pgendStorePriceNoLock (be, pr);
+   }
 
    bufp = "COMMIT;";
    SEND_QUERY (be,bufp,333);
