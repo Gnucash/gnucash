@@ -5262,3 +5262,193 @@ create_Report_Window (void)
   return Report_Window;
 }
 
+GtkWidget*
+create_Tax_Information_Dialog (void)
+{
+  GtkWidget *Tax_Information_Dialog;
+  GtkWidget *dialog_vbox14;
+  GtkWidget *hbox81;
+  GtkWidget *account_frame;
+  GtkWidget *account_scroll;
+  GtkWidget *frame40;
+  GtkWidget *vbox92;
+  GtkWidget *tax_related_button;
+  GtkWidget *hseparator1;
+  GtkWidget *hbox82;
+  GtkWidget *label847667;
+  GtkWidget *txf_category_combo;
+  GtkWidget *combo_entry1;
+  GtkWidget *txf_help_text;
+  GtkWidget *hseparator2;
+  GtkWidget *hbox83;
+  GtkWidget *label847668;
+  GtkWidget *payer_name_source_option;
+  GtkWidget *payer_name_source_option_menu;
+  GtkWidget *dialog_action_area14;
+  GtkWidget *button73;
+  GtkWidget *button74;
+  GtkWidget *button75;
+
+  Tax_Information_Dialog = gnome_dialog_new (_("Tax Information"), NULL);
+  gtk_object_set_data (GTK_OBJECT (Tax_Information_Dialog), "Tax_Information_Dialog", Tax_Information_Dialog);
+  gtk_window_set_policy (GTK_WINDOW (Tax_Information_Dialog), FALSE, FALSE, FALSE);
+
+  dialog_vbox14 = GNOME_DIALOG (Tax_Information_Dialog)->vbox;
+  gtk_object_set_data (GTK_OBJECT (Tax_Information_Dialog), "dialog_vbox14", dialog_vbox14);
+  gtk_widget_show (dialog_vbox14);
+
+  hbox81 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_ref (hbox81);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "hbox81", hbox81,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox81);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox14), hbox81, TRUE, TRUE, 0);
+
+  account_frame = gtk_frame_new (_("Accounts"));
+  gtk_widget_ref (account_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "account_frame", account_frame,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (account_frame);
+  gtk_box_pack_start (GTK_BOX (hbox81), account_frame, TRUE, TRUE, 0);
+
+  account_scroll = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (account_scroll);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "account_scroll", account_scroll,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (account_scroll);
+  gtk_container_add (GTK_CONTAINER (account_frame), account_scroll);
+  gtk_container_set_border_width (GTK_CONTAINER (account_scroll), 3);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (account_scroll), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+
+  frame40 = gtk_frame_new (_("Tax Information"));
+  gtk_widget_ref (frame40);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "frame40", frame40,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame40);
+  gtk_box_pack_start (GTK_BOX (hbox81), frame40, TRUE, TRUE, 0);
+
+  vbox92 = gtk_vbox_new (FALSE, 3);
+  gtk_widget_ref (vbox92);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "vbox92", vbox92,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox92);
+  gtk_container_add (GTK_CONTAINER (frame40), vbox92);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox92), 3);
+
+  tax_related_button = gtk_check_button_new_with_label (_("Tax Related"));
+  gtk_widget_ref (tax_related_button);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "tax_related_button", tax_related_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (tax_related_button);
+  gtk_box_pack_start (GTK_BOX (vbox92), tax_related_button, FALSE, FALSE, 0);
+
+  hseparator1 = gtk_hseparator_new ();
+  gtk_widget_ref (hseparator1);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "hseparator1", hseparator1,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hseparator1);
+  gtk_box_pack_start (GTK_BOX (vbox92), hseparator1, TRUE, TRUE, 4);
+
+  hbox82 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_ref (hbox82);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "hbox82", hbox82,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox82);
+  gtk_box_pack_start (GTK_BOX (vbox92), hbox82, TRUE, TRUE, 0);
+
+  label847667 = gtk_label_new (_("TXF Category:"));
+  gtk_widget_ref (label847667);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "label847667", label847667,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847667);
+  gtk_box_pack_start (GTK_BOX (hbox82), label847667, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label847667), 1, 0.5);
+
+  txf_category_combo = gtk_combo_new ();
+  gtk_widget_ref (txf_category_combo);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "txf_category_combo", txf_category_combo,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (txf_category_combo);
+  gtk_box_pack_start (GTK_BOX (hbox82), txf_category_combo, TRUE, TRUE, 0);
+  gtk_combo_set_value_in_list (GTK_COMBO (txf_category_combo), TRUE, FALSE);
+  gtk_combo_set_use_arrows_always (GTK_COMBO (txf_category_combo), TRUE);
+
+  combo_entry1 = GTK_COMBO (txf_category_combo)->entry;
+  gtk_widget_ref (combo_entry1);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "combo_entry1", combo_entry1,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (combo_entry1);
+  gtk_entry_set_editable (GTK_ENTRY (combo_entry1), FALSE);
+
+  txf_help_text = gtk_entry_new ();
+  gtk_widget_ref (txf_help_text);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "txf_help_text", txf_help_text,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (txf_help_text);
+  gtk_box_pack_start (GTK_BOX (vbox92), txf_help_text, FALSE, FALSE, 0);
+  gtk_entry_set_editable (GTK_ENTRY (txf_help_text), FALSE);
+
+  hseparator2 = gtk_hseparator_new ();
+  gtk_widget_ref (hseparator2);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "hseparator2", hseparator2,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hseparator2);
+  gtk_box_pack_start (GTK_BOX (vbox92), hseparator2, TRUE, TRUE, 4);
+
+  hbox83 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_ref (hbox83);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "hbox83", hbox83,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox83);
+  gtk_box_pack_start (GTK_BOX (vbox92), hbox83, TRUE, TRUE, 0);
+
+  label847668 = gtk_label_new (_("Payer Name Source:"));
+  gtk_widget_ref (label847668);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "label847668", label847668,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847668);
+  gtk_box_pack_start (GTK_BOX (hbox83), label847668, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label847668), 1, 0.5);
+
+  payer_name_source_option = gtk_option_menu_new ();
+  gtk_widget_ref (payer_name_source_option);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "payer_name_source_option", payer_name_source_option,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (payer_name_source_option);
+  gtk_box_pack_start (GTK_BOX (hbox83), payer_name_source_option, TRUE, TRUE, 0);
+  payer_name_source_option_menu = gtk_menu_new ();
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (payer_name_source_option), payer_name_source_option_menu);
+
+  dialog_action_area14 = GNOME_DIALOG (Tax_Information_Dialog)->action_area;
+  gtk_object_set_data (GTK_OBJECT (Tax_Information_Dialog), "dialog_action_area14", dialog_action_area14);
+  gtk_widget_show (dialog_action_area14);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area14), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area14), 8);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Tax_Information_Dialog), GNOME_STOCK_BUTTON_OK);
+  button73 = g_list_last (GNOME_DIALOG (Tax_Information_Dialog)->buttons)->data;
+  gtk_widget_ref (button73);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "button73", button73,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button73);
+  GTK_WIDGET_SET_FLAGS (button73, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Tax_Information_Dialog), GNOME_STOCK_BUTTON_APPLY);
+  button74 = g_list_last (GNOME_DIALOG (Tax_Information_Dialog)->buttons)->data;
+  gtk_widget_ref (button74);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "button74", button74,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button74);
+  GTK_WIDGET_SET_FLAGS (button74, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Tax_Information_Dialog), GNOME_STOCK_BUTTON_CANCEL);
+  button75 = g_list_last (GNOME_DIALOG (Tax_Information_Dialog)->buttons)->data;
+  gtk_widget_ref (button75);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "button75", button75,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button75);
+  GTK_WIDGET_SET_FLAGS (button75, GTK_CAN_DEFAULT);
+
+  return Tax_Information_Dialog;
+}
+
