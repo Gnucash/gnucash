@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.6.5\n"
 "POT-Creation-Date: 2001-12-16 21:58-0800\n"
-"PO-Revision-Date: 2002-06-11 01:27MSK\n"
+"PO-Revision-Date: 2002-10-18 18:07+0200\n"
 "Last-Translator: Vitaly Lipatov <lav@altlinux.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -5607,7 +5607,7 @@ msgstr "Включить поддержку клиента HTTP, содержащегося в GnuCash."
 
 #: src/scm/guile-strings.c:400
 msgid "Allow https connections using OpenSSL"
-msgstr "Поддерживать htpps соединения с использованием OpenSSL"
+msgstr "Поддерживать https соединения с использованием OpenSSL"
 
 #: src/scm/guile-strings.c:401
 msgid "Enable secure HTTP connections using OpenSSL"
