@@ -1545,13 +1545,24 @@ regRefresh(xaccLedgerDisplay *ledger)
 
   if (regData->window != NULL)
   {
-    gnc_set_label_color(regData->balance_label, ledger->balance);
-    gtk_label_set_text(GTK_LABEL(regData->balance_label),
-		       xaccPrintAmount(ledger->balance, print_flags));
+    gboolean reverse = gnc_reverse_balance(ledger->leader);
+    double amount;
 
-    gnc_set_label_color(regData->cleared_label, ledger->clearedBalance);
+    amount = ledger->balance;
+    if (reverse)
+      amount = -amount;
+
+    gnc_set_label_color(regData->balance_label, amount);
+    gtk_label_set_text(GTK_LABEL(regData->balance_label),
+		       xaccPrintAmount(amount, print_flags));
+
+    amount = ledger->clearedBalance;
+    if (reverse)
+      amount = -amount;
+
+    gnc_set_label_color(regData->cleared_label, amount);
     gtk_label_set_text(GTK_LABEL(regData->cleared_label),
-                       xaccPrintAmount(ledger->clearedBalance, print_flags));
+                       xaccPrintAmount(amount, print_flags));
 
     gnc_reg_set_window_name(regData);
   }

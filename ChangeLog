@@ -1,3 +1,8 @@
+2000-03-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c (regRefresh): print
+ 	reversed-balanced account balances appropriately.
+
 2000-03-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/scm/report/transaction-report.scm: a few bug fixes.
