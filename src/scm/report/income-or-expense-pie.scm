@@ -113,7 +113,8 @@
                                                     report-currency #t)))))
 		 profit-collector-list))
            (combined (zip double-list accounts))
-           (accounts-or-names '()))
+           (accounts-or-names '())
+           (other-anchor ""))
 
       (set! combined
             (filter (lambda (pair) (not (= 0.0 (car pair))))
@@ -123,13 +124,27 @@
             (sort combined
                   (lambda (a b) (> (car a) (car b)))))
 
+      ;; if too many slices, condense them to an 'other' slice
+      ;; and add a link to a new pie report with just those
+      ;; accounts
       (if (> (length combined) max-slices)
           (let* ((start (take combined (- max-slices 1)))
                  (finish (drop combined (- max-slices 1)))
                  (sum (apply + (unzip1 finish))))
             (set! combined
                   (append start
-                          (list (list sum (_ "Other")))))))
+                          (list (list sum (_ "Other")))))
+            (let* ((name (if is-income? "Income Piechart" "Expense Piechart"))
+                   (options (gnc:make-report-options name))
+                   (account-op (gnc:lookup-option options
+                                                  "Report Options"
+                                                  "Accounts")))
+              (call-with-values (lambda () (unzip2 finish))
+                                (lambda (ds as)
+                                  (gnc:option-set-value account-op as)))
+              (set! other-anchor
+                    (gnc:report-anchor-text
+                     (gnc:make-report name options))))))
 
       (call-with-values (lambda () (unzip2 combined))
                         (lambda (ds as)
@@ -157,7 +172,9 @@
       (gnc:html-piechart-set-colors! chart
                                      (gnc:assign-colors (length combined)))
       (let ((urls (map (lambda (a)
-                         (if (string? a) "" (gnc:account-anchor-text a)))
+                         (if (string? a)
+                             other-anchor
+                             (gnc:account-anchor-text a)))
                        accounts-or-names)))
         (gnc:html-piechart-set-button-1-slice-urls! chart urls)
         (gnc:html-piechart-set-button-1-legend-urls! chart urls))

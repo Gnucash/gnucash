@@ -270,6 +270,19 @@ gnc_progress_dialog_set_limits (GNCProgressDialog *progress,
 }
 
 void
+gnc_progress_dialog_set_activity_mode (GNCProgressDialog *progress,
+                                       gboolean activity_mode)
+{
+  if (progress == NULL)
+    return;
+
+  gtk_progress_set_activity_mode (GTK_PROGRESS (progress->progress_bar),
+                                  activity_mode);
+
+  gnc_progress_dialog_update (progress);
+}
+
+void
 gnc_progress_dialog_set_cancel_func (GNCProgressDialog *progress,
                                      GNCProgressCancelFunc cancel_func,
                                      gpointer user_data)

@@ -1,5 +1,23 @@
 2001-03-20  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/dialog-progress.c
+	(gnc_progress_dialog_set_activity_mode): new func
+
+	* src/guile/gnc.gwp: add new progress dialog api
+
+	* src/engine/date.h: remove unneeded includes
+
+	* src/scm/report/income-or-expense-pie.scm: make 'other' slice
+	a link to a new pie report
+
+	* src/scm/report.scm (gnc:make-report-options): new func
+
+	* src/register/splitreg.c (configLayout): don't show balance
+	column in stock registers
+
+	* src/gnc-ui-util.c (xaccSPrintAmount): put currency symbol
+	after quantity for shares values
+
 	* src/guile/option-util.c (gnc_commit_option): update GUI value
 
 	* src/gnome/gnc-html-guppi.c: new func for shutting down guppi

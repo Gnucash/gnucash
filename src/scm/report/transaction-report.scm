@@ -566,28 +566,6 @@
 	  (end-string (strftime "%x" (localtime (car end)))))
       (string-append (_ "From") " " begin-string (_"To") " " end-string)))
 
- (define (make-account-subheading acc-name from-date)
-   (let* ((separator (string-ref (gnc:account-separator-char) 0))
-	  (acc (gnc:get-account-from-full-name
-		(gnc:get-current-group)
-		acc-name
-		separator))
-          (unsigned-balance (d-gnc:account-get-balance-at-date
-                            acc
-			     from-date
-			     #f))
-	  (signed-balance (if (gnc:account-reverse-balance? acc)
-			      (- unsigned-balance)
-			      unsigned-balance)))
-     (string-append acc-name
-                    " ("
-                    (_ "Opening Balance")
-		    " "
-		    (gnc:amount->string signed-balance
-                                        (gnc:account-value-print-info acc #f))
-		    ")"
-		    )))
-
   (define (get-primary-subtotal-style options)
    (let ((bgcolor (gnc:lookup-option options 
                                      (N_ "Colors")

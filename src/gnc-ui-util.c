@@ -875,6 +875,7 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
    char sign_posn;
 
    gboolean print_sign = TRUE;
+   gboolean is_shares = FALSE;
 
    if (!bufp)
      return 0;
@@ -887,6 +888,11 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
        currency_symbol = lc->currency_symbol;
      else
      {
+       if (info.commodity &&
+           safe_strcmp (GNC_COMMODITY_NS_ISO,
+                        gnc_commodity_get_namespace (info.commodity)) != 0)
+         is_shares = TRUE;
+
        currency_symbol = gnc_commodity_get_mnemonic (info.commodity);
        info.use_locale = 0;
      }
@@ -899,8 +905,8 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 
    if (!info.use_locale)
    {
-     cs_precedes = 1;  /* currency symbol precedes amount */
-     sep_by_space = 1; /* they are separated by a space  */
+     cs_precedes = is_shares ? 0 : 1;
+     sep_by_space = 1;
    }
    else
    {

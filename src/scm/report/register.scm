@@ -466,8 +466,7 @@
    'in-menu? #f))
 
 (define (gnc:apply-register-report func query journal?)
-  (let* ((template (hash-ref *gnc:_report-templates_* "Register"))
-         (options (gnc:report-template-new-options template))
+  (let* ((options (gnc:make-report-options "Register"))
          (qo (gnc:lookup-option options "__reg" "query"))
          (jo (gnc:lookup-option options "__reg" "journal")))
     (gnc:option-set-value qo query)

@@ -455,7 +455,6 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, DEBT_CELL,    0,  7);
         set_cell (reg, curs, CRED_CELL,    0,  8);
         set_cell (reg, curs, SHRBALN_CELL, 0,  9);
-        set_cell (reg, curs, BALN_CELL,    0, 10);
 
         curs = reg->cursor_ledger_double;
         copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
@@ -471,7 +470,6 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, TDEBT_CELL,    0,  7);
         set_cell (reg, curs, TCRED_CELL,    0,  8);
         set_cell (reg, curs, TSHRBALN_CELL, 0,  9);
-        set_cell (reg, curs, TBALN_CELL,    0, 10);
 
         curs = reg->cursor_journal_double;
         copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);

@@ -43,6 +43,11 @@
                        (gnc:account-anchor-text acct)
 		       (gnc:account-get-name acct))))
 
+(define (gnc:report-anchor-text report-id)
+  (string-append
+   "gnc-report:id="
+   (number->string report-id)))
+
 (define (gnc:assign-colors num-colors)
   (define base-colors '("red" "orange" "yellow" "green"
                         "blue" "purple" "violet"))

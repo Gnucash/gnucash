@@ -51,6 +51,11 @@ void gnc_progress_dialog_set_heading (GNCProgressDialog *progress,
 void gnc_progress_dialog_set_limits (GNCProgressDialog *progress,
                                      gfloat min, gfloat max);
 
+/* Set the activity mode. If TRUE, the dialog just indicates
+ * that stuff is happening, rather than a percentage complete. */
+void gnc_progress_dialog_set_activity_mode (GNCProgressDialog *progress,
+                                            gboolean activity_mode);
+
 /* Set the C function which will be called if the user hits the
  * 'cancel' button. The cancel function returns a boolean value.
  * If the value is TRUE, the window is hidden. */

@@ -74,6 +74,8 @@
                           (let ((dialog (gnc:progress-dialog-new
                                          (gnc:get-ui-data) #f))
                                 (canceled #f))
+                            (gnc:progress-dialog-set-activity-mode dialog #t)
+                            (gnc:progress-dialog-set-heading dialog #f)
                             (gnc:progress-dialog-set-cancel-scm-func
                              dialog
                              (lambda ()
@@ -82,8 +84,6 @@
                                #t))
                             (let loop ((value 0.0))
                               (gnc:progress-dialog-set-value dialog value)
-                              (gnc:progress-dialog-set-heading
-                               dialog (number->string value))
                               (sleep 1)
                               (if (and (not canceled) (< value 90.0))
                                   (loop (+ value 5.0))))

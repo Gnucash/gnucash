@@ -205,6 +205,12 @@
     (hash-set! *gnc:_reports_* (gnc:report-id r) r)
     id))
 
+(define (gnc:make-report-options template-name)
+  (let ((template (hash-ref *gnc:_report-templates_* template-name)))
+    (if template
+        (gnc:report-template-new-options template)
+        #f)))
+
 (define (gnc:report-remove-by-id id)
   (let ((r (hash-ref *gnc:_reports_* id)))
     (for-each 
@@ -214,7 +220,7 @@
     (hash-remove! *gnc:_reports_* id)))
 
 (define (gnc:find-report id) 
-  (hash-ref  *gnc:_reports_* id))
+  (hash-ref *gnc:_reports_* id))
 
 (define (gnc:report-tree-collapse tree)
   (let ((retval '()))
