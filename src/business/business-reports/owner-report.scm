@@ -480,7 +480,7 @@
        (owner-report-create-internal "Customer Report" owner query account))
 
       ((gnc-owner-vendor)
-       (owner-report-create-internal "Vendor Reprt" owner query account)))
+       (owner-report-create-internal "Vendor Report" owner query account)))
   ))
 
 (define (gnc:owner-report-create-internal
