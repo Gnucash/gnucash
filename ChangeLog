@@ -23,6 +23,11 @@
 
 	* src/engine/sixtp-dom-parsers.c (dom_tree_to_integer): fix mem leak
 
+2001-05-18  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/FileDialog.c (gncFileNew): create new user dialog on new
+	file new.
+
 2001-05-18  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/io-gncxml-w.c: remove
