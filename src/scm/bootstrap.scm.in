@@ -81,6 +81,13 @@
 (define gnc:*load-path* #f)
 (define gnc:*debugging?* (if (getenv "GNC_DEBUG") #t #f))
 
+;; Function to get debugging
+(define (gnc:debugging?)
+  (if (boolean? gnc:*debugging?*)
+      gnc:*debugging?*
+      (gnc:config-var-value-get gnc:*debugging?*)))
+
+
 ;;;; Status output functions.
 
 (define (gnc:warn . items)
@@ -99,14 +106,12 @@
   (newline))
 
 (define (gnc:debug . items)
-  (let ((debugging? (if (boolean? gnc:*debugging?*)
-                        gnc:*debugging?*
-                        (gnc:config-var-value-get gnc:*debugging?*))))
-    (if debugging?
-        (begin
-          (display "gnucash: [D] ")
-          (for-each (lambda (i) (write i)) items)
-          (newline)))))
+  (if (gnc:debugging?)
+      (begin
+        (display "gnucash: [D] ")
+        (for-each (lambda (i) (write i)) items)
+        (newline))))
+
 
 ;;; Set up gnc:load.
 

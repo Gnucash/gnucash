@@ -104,7 +104,7 @@ int     xaccGroupGetDepth (AccountGroup *grp);
  *
  * The xaccFillInAccounts() routine performs the same function as the
  *    above routine, except that it fills in the array provided by the
- *    user.  The array provioded by the user *must* be large enough,
+ *    user.  The array provided by the user *must* be large enough,
  *    including a terminating NULL pointer.
  */
 Account ** xaccGetAccounts (AccountGroup *grp);
@@ -135,7 +135,7 @@ int        xaccFillInAccounts ( AccountGroup *root, Account **arr );
  *    in the same AccountGroup anchor group. It returns NULL if the
  *    account was not found.
  *
- * The xaccGetPeerAccountFromFullName() subroute works like
+ * The xaccGetPeerAccountFromFullName() subroutine works like
  *     xaccGetPeerAccountFromName, but uses fully-qualified
  *     names using the given separator.
  */
@@ -147,9 +147,9 @@ Account *xaccGetAccountFromFullName (AccountGroup *,
                                      const char *name,
                                      const char separator);
 Account *xaccGetPeerAccountFromName (Account *, const char *);
-Account * xaccGetPeerAccountFromFullName (Account *acc,
-                                          const char * name,
-                                          const char separator);
+Account *xaccGetPeerAccountFromFullName (Account *acc,
+                                         const char * name,
+                                         const char separator);
 
 /*
  * The xaccRecomputeGroupBalance() subroutine recursively totals
@@ -178,7 +178,7 @@ AccountGroup * xaccGetAccountRoot (Account *);
  *    duplicates may occur when accounts from multiple sources are 
  *    merged.  Note that this can be a dangerous operation to perform 
  *
- *    Note that this suborutine merely walks the acount group
+ *    Note that this subroutine merely walks the account group
  *    tree, and calls ConsolidateTransacations on each account
  */
 
@@ -203,8 +203,8 @@ Account * xaccGroupGetParentAccount (AccountGroup *);
  *    are blank.  It uses the algorithm used in xaccAccountAutoCode()
  *    to pick an account code.
  *
- * The xaccGroupDepthAutoCode() first measures teh depth of the account
- *    tree, and uses that depth to pck the number of digits in the account
+ * The xaccGroupDepthAutoCode() first measures the depth of the account
+ *    tree, and uses that depth to pick the number of digits in the account
  *    code.
  */
 
@@ -247,7 +247,7 @@ void   xaccGroupDepthAutoCode (AccountGroup *grp);
  * FileIO.c.
  *
  * Note that currently, there is a hard limit of 256 stages, which
- * can be changed by enlarging "marker" in the tranaction struct.
+ * can be changed by enlarging "marker" in the transaction struct.
  * */
 
 /* xaccGroupBeginStagedTransactionTraversals() resets the traversal

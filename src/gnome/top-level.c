@@ -1,7 +1,7 @@
 /********************************************************************\
  * top-level.c -- Gnome GUI main for GnuCash                        *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998 Linas Vepstas                                 *
+ * Copyright (C) 1998-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -25,6 +25,7 @@
 #include <guile/gh.h>
 #include <gnome.h>
 
+#include "gnome-top-level.h"
 #include "window-main.h"
 #include "global-options.h"
 #include "gnucash-sheet.h"
@@ -60,6 +61,8 @@ static void gnc_configure_register_colors_cb(void *);
 static void gnc_configure_register_colors(void);
 static void gnc_configure_register_borders_cb(void *);
 static void gnc_configure_register_borders(void);
+static void gnc_configure_reverse_balance_cb(void *);
+static void gnc_configure_reverse_balance(void);
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -76,25 +79,29 @@ static SCM currency_callback_id = SCM_UNDEFINED;
 static SCM account_separator_callback_id = SCM_UNDEFINED;
 static SCM register_colors_callback_id = SCM_UNDEFINED;
 static SCM register_borders_callback_id = SCM_UNDEFINED;
+static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 
 /* ============================================================== */
 
 int 
-gnucash_ui_is_running() {
+gnucash_ui_is_running()
+{
   return gnome_is_running;
 }
 
 /* ============================================================== */
 
 int 
-gnucash_ui_is_terminating() {
+gnucash_ui_is_terminating()
+{
   return gnome_is_terminating;
 }
 
 /* ============================================================== */
 
 gncUIWidget
-gnc_get_ui_data() {
+gnc_get_ui_data()
+{
   return app;
 }
 
@@ -151,6 +158,11 @@ gnucash_ui_init()
       gnc_register_option_change_callback(gnc_configure_register_borders_cb,
                                           NULL, "Register", NULL);
     
+    gnc_configure_reverse_balance();
+    reverse_balance_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_reverse_balance_cb,
+                                          NULL, "General",
+                                          "Reversed-balance account types");
 
     mainWindow();
 
@@ -201,6 +213,7 @@ gnc_ui_destroy (void)
   gnc_unregister_option_change_callback_id(account_separator_callback_id);
   gnc_unregister_option_change_callback_id(register_colors_callback_id);
   gnc_unregister_option_change_callback_id(register_borders_callback_id);  
+  gnc_unregister_option_change_callback_id(reverse_balance_callback_id);  
 
   if (app != NULL)
   {
@@ -234,14 +247,14 @@ gnc_ui_main()
   return 0;
 }
 
-/* hack alert -- all we do below is rename some functions ... fix this someday */
+/* hack alert -- all we do below is rename some functions. fix this someday */
 /* ============================================================== */
 
 int
 gnucash_ui_open_file(const char name[])
 {
   gncFileOpenFile(name);
-  return (1);
+  return 1;
 }
 
 /* ============================================================== */
@@ -250,7 +263,7 @@ int
 gnucash_ui_select_file()
 {
   gncFileOpen();
-  return (1);
+  return 1;
 }
 
 /* ============================================================== */
@@ -258,7 +271,7 @@ gnucash_ui_select_file()
 /* gnc_configure_date_format_cb
  *    Callback called when options change - sets dateFormat to the current
  *    value on the scheme side and refreshes register windows
- *  
+ *
  * Args: Nothing
  * Returns: Nothing
  */
@@ -272,7 +285,7 @@ gnc_configure_date_format_cb(void *data)
 
 /* gnc_configure_date_format
  *    sets dateFormat to the current value on the scheme side
- *  
+ *
  * Args: Nothing
  * Returns: Nothing
  */
@@ -325,7 +338,7 @@ gnc_configure_date_format (void)
 /* gnc_configure_date_format_cb
  *    Callback called when options change - sets default currency to
  *    the current value on the scheme side
- *  
+ *
  * Args: Nothing
  * Returns: Nothing
  */
@@ -338,7 +351,7 @@ gnc_configure_newacc_currency_cb(void *data)
 /* gnc_configure_newacc_currency
  *    sets the default currency for new accounts to the 
  *    current value on the scheme side
- *  
+ *
  * Args: Nothing
  * Returns: Nothing
  */
@@ -358,7 +371,7 @@ gnc_configure_newacc_currency(void)
 /* gnc_configure_account_separator_cb
  *    Callback called when options change - sets account separator
  *    to the current value on the scheme side
- *  
+ *
  * Args: Nothing
  * Returns: Nothing
  */
@@ -372,7 +385,7 @@ gnc_configure_account_separator_cb(void *data)
 /* gnc_configure_account_separator
  *    sets the accoutn separator to the
  *    current value on the scheme side
- *  
+ *
  * Args: Nothing
  * Returns: Nothing
  */
@@ -387,7 +400,7 @@ gnc_configure_account_separator(void)
 /* gnc_configure_register_colors_cb
  *    Callback called when options change - sets
  *    register colors to their guile values
- *  
+ *
  * Args: Nothing
  * Returns: Nothing
  */
@@ -400,7 +413,7 @@ gnc_configure_register_colors_cb(void *data)
 
 /* gnc_configure_register_colors_cb
  *    sets register colors to their guile values
- *  
+ *
  * Args: Nothing
  * Returns: Nothing
  */
@@ -476,7 +489,7 @@ gnc_configure_register_colors(void)
 /* gnc_configure_register_borders_cb
  *    Callback called when options change - sets
  *    register borders to their guile values
- *  
+ *
  * Args: Nothing
  * Returns: Nothing
  */
@@ -487,9 +500,9 @@ gnc_configure_register_borders_cb(void *data)
   gnc_group_ui_refresh(gncGetCurrentGroup());
 }
 
-/* gnc_configure_register_colors_cb
+/* gnc_configure_register_border
  *    sets register borders to their guile values
- *  
+ *
  * Args: Nothing
  * Returns: Nothing
  */
@@ -511,5 +524,83 @@ gnc_configure_register_borders(void)
   gnucash_style_set_register_borders (reg_borders);
 }
 
+/* gnc_configure_reverse_balance_cb
+ *    Callback called when options change - sets
+ *    reverse balance info for the callback
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_reverse_balance_cb(void *not_used)
+{
+  gnc_configure_reverse_balance();
+  gnc_group_ui_refresh(gncGetCurrentGroup());
+  gnc_refresh_main_window();
+}
+
+static gncBoolean reverse_type[NUM_ACCOUNT_TYPES];
+
+gncBoolean
+gnc_reverse_balance(Account *account)
+{
+  int type;
+
+  if (account == NULL)
+    return GNC_F;
+
+  type = xaccAccountGetType(account);
+  if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
+    return GNC_F;
+
+  return reverse_type[type];
+}
+
+/* gnc_configure_reverse_balance
+ *    sets reverse balance info for the callback
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_reverse_balance(void)
+{
+  gchar *choice;
+  gint i;
+
+  xaccSRSetReverseBalanceCallback(gnc_reverse_balance);
+
+  for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
+    reverse_type[i] = GNC_F;
+
+  choice = gnc_lookup_multichoice_option("General",
+                                         "Reversed-balance account types",
+                                         "default");
+
+  if (safe_strcmp(choice, "default") == 0)
+  {
+    reverse_type[INCOME]  = GNC_T;
+    reverse_type[EXPENSE] = GNC_T;
+  }
+  else if (safe_strcmp(choice, "credit") == 0)
+  {
+    reverse_type[LIABILITY] = GNC_T;
+    reverse_type[EQUITY]    = GNC_T;
+    reverse_type[INCOME]    = GNC_T;
+  }
+  else if (safe_strcmp(choice, "none") == 0)
+  {
+  }
+  else
+  {
+    PERR("gnc_configure_reverse_balance: bad value\n");
+
+    reverse_type[INCOME]  = GNC_T;
+    reverse_type[EXPENSE] = GNC_T;
+  }
+
+  if (choice != NULL)
+    free(choice);
+}
 
 /****************** END OF FILE **********************/

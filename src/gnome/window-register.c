@@ -24,10 +24,6 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-/* hack alert -- much of the code in here should be chopped
- * it is moving to the device-independent MultiLedger.c file 
- */
-
 #define _GNU_SOURCE
 
 #include "top-level.h"

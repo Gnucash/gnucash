@@ -1,7 +1,7 @@
 /********************************************************************\
  * Group.c -- the main data structure of the program                *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998 Linas Vepstas                           *
+ * Copyright (C) 1997-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -38,7 +38,7 @@
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
- * can't pretend to!  These functions perform actions on the       *
+ * can't pretend to!  These functions perform actions on the        *
  * AccountGroup data structure, in order to encapsulate the         *
  * knowledge of the internals of the AccountGroup in one file.      *
 \********************************************************************/
@@ -47,7 +47,7 @@
 \********************************************************************/
 void
 xaccInitializeAccountGroup (AccountGroup *grp)
-  {
+{
   grp->saved       = GNC_T;
   
   grp->parent      = NULL;
@@ -56,19 +56,19 @@ xaccInitializeAccountGroup (AccountGroup *grp)
   grp->account[0]  = NULL;   /* null-terminated array */
   
   grp->balance     = 0.0;
-  }
+}
 
 /********************************************************************\
 \********************************************************************/
 AccountGroup *
 xaccMallocAccountGroup( void )
-  {
+{
   AccountGroup *grp = (AccountGroup *)_malloc(sizeof(AccountGroup));
   
   xaccInitializeAccountGroup (grp);
 
   return grp;
-  }
+}
 
 /********************************************************************\
 \********************************************************************/

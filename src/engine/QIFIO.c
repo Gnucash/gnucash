@@ -421,8 +421,6 @@ xaccParseQIFDate (char * str)
 
    if (!str) return 0;  /* If the string is null, we're done. */
 
-   fprintf(stderr, "1: %s\n", str);
-
    /* First, figure out the delimiter. */
    /* Choices: "." or "-" or "/" */
    favechar = FindDateDelimiter(str);
@@ -453,8 +451,6 @@ xaccParseQIFDate (char * str)
    dat.tm_year = atoi (str);
    if (add_2k)
      dat.tm_year += 2000;
-
-   fprintf(stderr, "2: %s\n", str);
 
    TryToFixDate(&dat);
 

@@ -3,6 +3,7 @@
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Linas Vepstas                                 *
  * Copyright (C) 1999 Jeremy Collins ( gtk-xmhtml port )            *
+ * Copyright (C) 2000 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

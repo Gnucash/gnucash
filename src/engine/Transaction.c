@@ -642,11 +642,11 @@ FindCommonCurrency (Split **slist, char * ra, char * rb)
   if (!slist) return NULL;
 
   if (rb && (0x0==rb[0])) rb = 0x0;
-  
+
   i=0; s = slist[0];
   while (s) {
     char *sa, *sb;
-  
+
     /* Novice/casual users may not want or use the double entry 
      * features of this engine.   Because of this, there
      * may be the occasional split without a parent account. 
@@ -658,7 +658,7 @@ FindCommonCurrency (Split **slist, char * ra, char * rb)
     if (NULL == s->acc) {
        i++; s=slist[i]; continue;
     }
-  
+
     sa = s->acc->currency;
     sb = s->acc->security;
     if (sb && (0x0==sb[0])) sb = 0x0;
@@ -816,7 +816,7 @@ xaccSplitRebalance (Split *split)
        if (force_double_entry) {
           if (! (DEQ (0.0, split->damount))) {
              value = split->share_price * split->damount;
-   
+
              /* malloc a new split, mirror it to the source split */
              s = xaccMallocSplit ();
              s->damount = -value;
@@ -824,7 +824,7 @@ xaccSplitRebalance (Split *split)
              s->memo = strdup (split->memo);
              free (s->action);
              s->action = strdup (split->action);
-   
+
              /* insert the new split into the transaction and 
               * the same account as the source split */
              MARK_SPLIT (s);
@@ -837,7 +837,7 @@ xaccSplitRebalance (Split *split)
 
     /* The indicated split is a destination split.
      * Compute grand total of all destination splits,
-     * and force the source split to blanace.
+     * and force the source split to balance.
      */
     s = trans->splits[0];
     value = ComputeValue (trans->splits, s, base_currency);

@@ -2,6 +2,7 @@
  * cursor.c -- functions for changing cursors                       *
  *                                                                  *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1998-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -52,13 +53,16 @@ gnc_ui_set_cursor (GdkWindow *win, int type)
 
   gdk_window_set_cursor (win, cursor);
 
+  while (gtk_events_pending())
+    gtk_main_iteration();
+
   if (type != GNC_CURSOR_NORMAL)
     gdk_cursor_destroy(cursor);
 }
 
 
 /********************************************************************\
- * gnc_set_busy_cursor                                                    * 
+ * gnc_set_busy_cursor                                              * 
  *   sets the cursor to the busy watch                              * 
  *                                                                  * 
  * Args:   w - the widget over which to make cursor busy            * 
@@ -73,7 +77,7 @@ gnc_set_busy_cursor(GtkWidget *w)
 
 
 /********************************************************************\
- * gnc_unset_busy_cursor                                                  * 
+ * gnc_unset_busy_cursor                                            * 
  *   sets the cursor to the default cursor                          * 
  *                                                                  * 
  * Args:   w - the widget over which to make cursor normal          * 

@@ -56,22 +56,22 @@
  * Open two registers, showing each account. Change the amount in one window.
  * Note that the other window also redraws, to show the new correct amount.
  * 
- * Since you changed an amount value, potentially *all* displayed balances change
- * in *both* register windows (as well as the ledger balance in the main window).
- * Three or more windows may be involved if you have e.g. windows open for bank,
- * employer, taxes and your entering a paycheck...  (or correcting a typo in an
- * old paycheck)... changing a date might even cause all entries in all three
- * windows to be re-ordered.
- * 
- * The only thing I can think of is a bit stored with every table entry, stating
- * 'this entry has changed since lst time, redraw it'.  But that still doesn't
- * avoid the overhead of reloading the table from the engine.
- * 
+ * Since you changed an amount value, potentially *all* displayed
+ * balances change in *both* register windows (as well as the ledger
+ * balance in the main window).  Three or more windows may be involved
+ * if you have e.g. windows open for bank, employer, taxes and your
+ * entering a paycheck (or correcting a typo in an old paycheck).
+ * Changing a date might even cause all entries in all three windows
+ * to be re-ordered.
+ *
+ * The only thing I can think of is a bit stored with every table
+ * entry, stating 'this entry has changed since lst time, redraw it'.
+ * But that still doesn't avoid the overhead of reloading the table
+ * from the engine.
  * 
  *
  * HISTORY:
- * Copyright (c) 1998,1999 Linas Vepstas
- */
+ * Copyright (c) 1998-2000 Linas Vepstas */
 
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
@@ -88,6 +88,8 @@
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
+
+#define _GNU_SOURCE
 
 #include <stdio.h>
 #include <time.h>
@@ -161,6 +163,9 @@ static short module = MOD_LEDGER;
 
 /* The character used to separate accounts. */
 static char account_separator = ':';
+
+/* The reverse balance callback, if any. */
+static SRReverseBalanceCallback reverse_balance = NULL;
 
 /* static prototypes */
 static Transaction * xaccSRGetTrans (SplitRegister *reg,
@@ -242,6 +247,13 @@ xaccSRSetAccountSeparator(char separator)
 {
   account_separator = separator;
 }
+
+void
+xaccSRSetReverseBalanceCallback(SRReverseBalanceCallback callback)
+{
+  reverse_balance = callback;
+}
+
 
 /* ======================================================== */
 /* this callback gets called when the user clicks on the gui
@@ -338,10 +350,6 @@ LedgerTraverse  (Table *table,
                  void * client_data)
 {
 #ifdef GNOME
-  static const char *message =
-    "You have made changes to the current transaction.\n"
-    "Do you want to record your changes?";
-
   SplitRegister *reg = client_data;
   SRInfo *info = xaccSRGetInfo(reg);
   Transaction *trans, *new_trans;
@@ -381,7 +389,8 @@ LedgerTraverse  (Table *table,
    * changed. See what the user wants to do. */
 
   result = gnc_verify_cancel_dialog_parented(xaccSRGetParent(reg),
-                                             message, GNC_VERIFY_YES);
+                                             TRANS_CHANGED_MSG,
+                                             GNC_VERIFY_YES);
 
   switch (result)
   {
@@ -971,7 +980,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
    }
    
    if (MOD_DESC & changed) {
-      DEBUG ("xaccSRSaveRegEntry(): MOD_DESC: %s\n", reg->descCell->cell.value);
+      DEBUG ("xaccSRSaveRegEntry(): MOD_DESC: %s\n",
+             reg->descCell->cell.value);
       xaccTransSetDescription (trans, reg->descCell->cell.value);
    }
 
@@ -981,12 +991,14 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
    }
 
    if (MOD_ACTN & changed) {
-      DEBUG ("xaccSRSaveRegEntry(): MOD_ACTN: %s\n", reg->actionCell->cell.value);
+      DEBUG ("xaccSRSaveRegEntry(): MOD_ACTN: %s\n",
+             reg->actionCell->cell.value);
       xaccSplitSetAction (split, reg->actionCell->cell.value);
    }
 
    if (MOD_MEMO & changed) {
-      DEBUG ("xaccSRSaveRegEntry(): MOD_MEMO: %s\n", reg->memoCell->cell.value);
+      DEBUG ("xaccSRSaveRegEntry(): MOD_MEMO: %s\n",
+             reg->memoCell->cell.value);
       xaccSplitSetMemo (split, reg->memoCell->cell.value);
    }
 
@@ -1000,7 +1012,9 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
     */
    if (MOD_XFRM & changed) {
       Account *old_acc=NULL, *new_acc=NULL;
-      DEBUG ("xaccSRSaveRegEntry(): MOD_XFRM: %s\n", reg->xfrmCell->cell.value);
+
+      DEBUG ("xaccSRSaveRegEntry(): MOD_XFRM: %s\n",
+             reg->xfrmCell->cell.value);
 
       /* do some reparenting. Insertion into new account will automatically
        * delete this split from the old account */
@@ -1008,9 +1022,33 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
       new_acc = xaccGetAccountByFullName (trans, reg->xfrmCell->cell.value,
                                           account_separator);
 
-      if (old_acc != new_acc)
+      if ((new_acc != NULL) && (old_acc != new_acc))
       {
-        xaccAccountInsertSplit (new_acc, split);
+        char *currency = NULL;
+        char *security = NULL;
+
+        currency = xaccAccountGetCurrency(new_acc);
+        currency = xaccTransIsCommonCurrency(trans, currency);
+
+        if (currency == NULL) {
+          security = xaccAccountGetSecurity(new_acc);
+          security = xaccTransIsCommonCurrency(trans, security);
+        }
+
+        if ((currency != NULL) || (security != NULL))
+          xaccAccountInsertSplit (new_acc, split);
+        else {
+#ifdef GNOME
+          char *message = NULL;
+
+          asprintf(&message, REG_CURR_MSG, xaccAccountGetName(new_acc));
+          assert(message != NULL);
+
+          gnc_warning_dialog_parented(xaccSRGetParent(reg), message);
+          free(message);
+#endif
+        }
+
 
         /* make sure any open windows of the old account get redrawn */
         gnc_account_ui_refresh(old_acc);
@@ -1020,7 +1058,9 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
 
    if (MOD_MXFRM & changed) {
       Split *other_split = NULL;
-      DEBUG ("xaccSRSaveRegEntry(): MOD_MXFRM: %s\n", reg->mxfrmCell->cell.value);
+
+      DEBUG ("xaccSRSaveRegEntry(): MOD_MXFRM: %s\n",
+             reg->mxfrmCell->cell.value);
 
       other_split = xaccGetOtherSplit(split);
 
@@ -1039,10 +1079,13 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
          if (!other_split) {
             double  amt = xaccSplitGetShareAmount (split);
             double  prc = xaccSplitGetSharePrice (split);
+
             other_split = xaccMallocSplit ();
+
             xaccSplitSetMemo (other_split, xaccSplitGetMemo (split));
             xaccSplitSetAction (other_split, xaccSplitGetAction (split));
             xaccSplitSetSharePriceAndAmount (other_split, prc, -amt);
+
             xaccTransAppendSplit (trans, other_split);
          }
       }
@@ -1056,9 +1099,32 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
          new_acc = xaccGetAccountByFullName (trans, reg->mxfrmCell->cell.value,
                                              account_separator);
 
-         if (old_acc != new_acc)
+         if ((new_acc != NULL) && (old_acc != new_acc))
          {
-           xaccAccountInsertSplit (new_acc, other_split);
+           char *currency = NULL;
+           char *security = NULL;
+
+           currency = xaccAccountGetCurrency(new_acc);
+           currency = xaccTransIsCommonCurrency(trans, currency);
+
+           if (currency == NULL) {
+             security = xaccAccountGetSecurity(new_acc);
+             security = xaccTransIsCommonCurrency(trans, security);
+           }
+
+           if ((currency != NULL) || (security != NULL))
+             xaccAccountInsertSplit (new_acc, other_split);
+           else {
+#ifdef GNOME
+             char *message = NULL;
+
+             asprintf(&message, REG_CURR_MSG, xaccAccountGetName(new_acc));
+             assert(message != NULL);
+
+             gnc_warning_dialog_parented(xaccSRGetParent(reg), message);
+             free(message);
+#endif
+           }
 
            /* make sure any open windows of the old account get redrawn */
            gnc_account_ui_refresh(old_acc);
@@ -1178,9 +1244,10 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
 static void
 xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
 {
+   SRInfo *info = xaccSRGetInfo(reg);
+   int typo = reg->type & REG_TYPE_MASK;
    char buff[2];
    double baln;
-   int typo = reg->type & REG_TYPE_MASK;
 
    /* don't even bother doing a load if there is no current cursor */
    if (!(reg->table->current_cursor)) return;
@@ -1217,25 +1284,33 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       xaccSetDateCellValueSecsL (reg->dateCell, secs);
 
       xaccSetBasicCellValue (reg->numCell, xaccTransGetNum (trans));
-      xaccSetQuickFillCellValue (reg->descCell, xaccTransGetDescription (trans));
+      xaccSetQuickFillCellValue (reg->descCell,
+                                 xaccTransGetDescription (trans));
 
       buff[0] = xaccSplitGetReconcile (split);
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recnCell, buff);
 
-      /* For income and expense acounts, we have to reverse
-       * the meaning of balance, since, in a dual entry
-       * system, income will show up as a credit to a
-       * bank account, and a debit to the income account.
-       * Thus, positive and negative are interchanged */
+      /* If the reverse_balance callback is present use that.
+       * Otherwise, reverse income and expense by default. */
       baln = xaccSplitGetBalance (split);
-      if ((INCOME_REGISTER == typo) ||
-          (EXPENSE_REGISTER == typo)) { 
+      if (reverse_balance != NULL) {
+        Account *account;
+
+        account = xaccSplitGetAccount(split);
+        if (account == NULL)
+          account = info->default_source_account;
+        
+        if (reverse_balance(account))
+          baln = -baln;
+      }
+      else if ((INCOME_REGISTER == typo) ||
+               (EXPENSE_REGISTER == typo)) { 
          baln = -baln;
       }
       xaccSetPriceCellValue (reg->balanceCell, baln);
 
-      xaccSetPriceCellValue (reg->shrsCell,  xaccSplitGetShareBalance (split));
+      xaccSetPriceCellValue (reg->shrsCell, xaccSplitGetShareBalance (split));
 
       xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
 
@@ -1264,22 +1339,22 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
              * or more splits, or whether there is only one ... */
             s = xaccTransGetSplit (xaccSplitGetParent(split), 1);
             if (s) {
-               accname = SPLIT_STR;    /* three or more .. */
+               accname = SPLIT_STR;   /* three or more .. */
             } else {
-               accname  = "";          /* none ... */
+               accname = "";          /* none ... */
             }
          }
          xaccSetComboCellValue (reg->mxfrmCell, accname);
          if (need_to_free)
            free(accname);
       }
-   
+
       xaccSetQuickFillCellValue (reg->memoCell, xaccSplitGetMemo (split));
-   
+
       buff[0] = xaccSplitGetReconcile (split);
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recnCell, buff);
-   
+
       if ((EQUITY_REGISTER   == typo) ||
           (STOCK_REGISTER    == typo) ||
           (CURRENCY_REGISTER == typo) ||
@@ -1289,6 +1364,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       } else {
          amt = xaccSplitGetValue (split);
       }
+
       xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, amt);
       xaccSetDebCredCellValue (reg->ndebitCell, reg->ncreditCell, -amt);
       xaccSetPriceCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
@@ -1301,6 +1377,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
    if (do_commit) {
       xaccCommitCursor (reg->table);
    }
+
    LEAVE("SRLoadTransEntry():\n");
 }
 

@@ -1,4 +1,44 @@
+2000-03-01  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/extensions.scm: add the extensions menu if  debugging.
+
+	* src/scm/bootstrap.scm: new function to check debugging status.
+
+	* src/FileDialog.c (gncFileQIFImport): set the busy cursor when
+	reading and processing the qif.
+
+	* src/SplitLedger.c: added a sign-reversal callback.
+
+	* src/gnome/dialog-utils.c (gnc_ui_get_account_full_balance): used
+ 	the sign-reversal option in computation.
+
+	* src/gnome/top-level.c: implement the sign-reversal configuration
+	and callbacks.
+
+	* src/gnome/window-main.c (gnc_ui_refresh_statusbar): used
+ 	sign-reversal option in computation.
+
+	* src/scm/prefs.scm: add an option to choose how accounts
+	are sign-reversed.
+
 2000-02-29  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/cursors.c (gnc_ui_set_cursor): let the gtk main loop
+ 	catch up before we exit. This makes sure the cursor gets changed
+	before we return.
+
+	* src/gnome/dialog-filebox.c: hide the window before exiting
+	the gtk main loop.
+
+	* src/scm/prefs.scm: added a new option for expanding parent
+	accounts with double-clicks instead of opening them.
+
+	* src/gnome/window-main.c (gnc_account_tree_activate_cb): use
+ 	expansion option to decide whether to open or expand.
+
+	* src/SplitLedger.c: check for common currency when saving a
+ 	register entry. If there is none, don't perform the split
+ 	insertion; instead show a warning dialog.
 
 	* src/scm/prefs.scm: converted account type and account field
  	options to list options.

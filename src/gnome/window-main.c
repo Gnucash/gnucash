@@ -25,6 +25,7 @@
 #include <guile/gh.h>
 #include <string.h>
 
+#include "gnome-top-level.h"
 #include "AccWindow.h"
 #include "AdjBWindow.h"
 #include "global-options.h"
@@ -69,6 +70,7 @@ gnc_ui_refresh_statusbar()
   GNCMainInfo *main_info;
   double assets  = 0.0;
   double profits = 0.0;
+  double amount;
   AccountGroup *group;
   AccountGroup *children;
   Account *account;
@@ -100,17 +102,28 @@ gnc_ui_refresh_statusbar()
       case MUTUAL:
       case CREDIT:
       case LIABILITY:
-	assets += xaccAccountGetBalance(account);
+	amount = xaccAccountGetBalance(account);
 	if (children != NULL)
-	  assets += xaccGroupGetBalance(children);
+	  amount += xaccGroupGetBalance(children);
+
+        if (gnc_reverse_balance(account))
+          amount = -amount;
+
+        assets += amount;
 	break;
       case INCOME:
       case EXPENSE:
-	profits -= xaccAccountGetBalance(account); /* flip the sign !! */
+	amount = xaccAccountGetBalance(account);
 	if (children != NULL)
-	  profits -= xaccGroupGetBalance(children); /* flip the sign !! */
+	  amount += xaccGroupGetBalance(children);
+
+        if (gnc_reverse_balance(account))
+          amount = -amount;
+
+        profits += amount;
 	break;
       case EQUITY:
+      case CURRENCY:
       default:
 	break;
     }
@@ -462,6 +475,23 @@ gnc_account_tree_activate_cb(GNCAccountTree *tree,
                              gpointer user_data)
 {
   RegWindow *regData;
+  gboolean expand;
+
+  expand = gnc_lookup_boolean_option("Main Window",
+                                     "Double click expands parent accounts",
+                                     FALSE);
+
+  if (expand)
+  {
+    AccountGroup *group;
+
+    group = xaccAccountGetChildren(account);
+    if (xaccGroupGetNumAccounts(group) > 0)
+    {
+      gnc_account_tree_toggle_account_expansion(tree, account);
+      return;
+    }
+  }
 
   regData = regWindowSimple(account);
   gnc_register_raise(regData);

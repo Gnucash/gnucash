@@ -93,18 +93,18 @@ http://www.gnucash.org/source_code.php3
 
 Running:
 --------
-Only the Motif version of GnuCash is currently functional.  The Gnome version
-will give you a taste for Gnome, and is coming along fine, but is probably not
-stable enough for regular use.   The qt/kde version doesn't compile, most 
-functions are missing.  See below for OS's other than GNU/Linux/*BSD support.
+Only the Motif version of GnuCash is currently stable. The Gnome
+version is a development version, but will soon be stable enough for
+regular use. Development of the Motif version has ceased. The qt/kde
+version doesn't compile, most functions are missing. See below for
+OS's other than GNU/Linux/*BSD support.
 
 The following packages are required to be installed to run the gnucash 
 Motif binary:
 
 guile   -- Provides main extension language infrastructure.
            This is used extensively in gnucash for initialization & startup.
-           Require version 1.3.4 or later.
-           The guile-1.3.4-1 rpm works.
+           Require version 1.3 or later. The guile-1.3-7 rpm works.
 
 Motif or Lesstif  --
            Either a commercial Motif, or the free software clone Lesstif is
@@ -123,7 +123,9 @@ Motif or Lesstif  --
            Lesstif 0.88.1  works
            Lesstif 0.89.0  works
 
-XmHTML  -- Provides HTML display capabilities. Used for Help Dialogues, Reports.
+XmHTML  -- Provides HTML display capabilities.
+           Used for Help Dialogues and Reports.
+
            Require version 1.1.4 or later
            http://www.llp.fu-berlin.de/lsoft/F/5/XMHTML.html
            http://www.xs4all.nl/~ripley/XmHTML/XmHTML.html
@@ -132,9 +134,9 @@ XmHTML  -- Provides HTML display capabilities. Used for Help Dialogues, Reports.
 
            Note: some precompiled versions of XmHTML have been compiled with 
            Motif.  When used with most precompiled versions of Lesstif, you 
-           will get a "undefined symbol XmeDrawShadows" error.  There are several
-           solutions; the simplest is probably to download the XmHTML source
-           package and compile it yourself.
+           will get a "undefined symbol XmeDrawShadows" error. There are
+           several solutions; the simplest is probably to download the
+           XmHTML source package and compile it yourself.
 
 slib    -- scheme libraries for guile. Need version slib2c4 or later.
 
@@ -165,6 +167,17 @@ perl-HTML/HTML-Parser-2.20
            http://linas.org/linux/gnucash (last resort)
            or sources at
            http://www.cpan.org/CPAN.html
+
+
+The following packages are required to be installed to run the GnuCash
+Gnome binary:
+
+gnome-libs -- version 1.0.40 or higher should work. These libraries
+              require numerous other supporting libraries, such as
+              gtk and glib.
+
+guile  -- same as Motif
+slib   -- same as Motif
 
 
 Invocation:
@@ -245,7 +258,8 @@ here).
 
 Building & Installing:
 ----------------------
-These steps does not apply to binary distributions; only to source distributions.  
+These steps does not apply to binary distributions; only to source
+distributions.
 
 Prior to building GnuCash, you will have to obtain and install the following
 packages:

@@ -70,11 +70,17 @@
 ;; Main Window options
 
 (gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Main Window" "Double click expands parent accounts"
+  "a" "Double clicking on an account with children expands \
+the account instead of opening a register." #f))
+
+(gnc:register-configuration-option
  (gnc:make-list-option
   "Main Window" "Account types to display"
-  "a" ""
-  (list 'equity 'expense 'income 'currency 'mutual
-        'stock 'liability 'asset 'credit 'cash 'bank)
+  "b" ""
+  (list 'bank 'cash 'credit 'asset 'liability 'stock
+        'mutual 'currency 'income 'expense 'equity)
   (list #(bank "Bank" "")
         #(cash "Cash" "")
         #(credit "Credit" "")
@@ -90,8 +96,8 @@
 (gnc:register-configuration-option
  (gnc:make-list-option
   "Main Window" "Account fields to display"
-  "b" ""
-  (list 'balance 'description)
+  "c" ""
+  (list 'description 'balance)
   (list #(type "Type" "")
         #(code "Code" "")
         #(description "Description" "")
@@ -297,6 +303,15 @@
         #(backslash "\\ (Backslash)" "Income\\Salary\\Taxable")
         #(dash "- (Dash)" "Income-Salary-Taxable")
         #(period ". (Period)" "Income.Salary.Taxable"))))
+
+(gnc:register-configuration-option
+ (gnc:make-multichoice-option
+  "General" "Reversed-balance account types"
+  "d" "The types of accounts for which balances are sign-reversed"
+  'default
+  (list #(default "Income & Expense" "Reverse Income and Expense Accounts")
+        #(credit "Credit Accounts" "Reverse Liability, Equity, and Income Accounts")
+        #(none "None" "Don't reverse any accounts"))))
 
 
 ;; Configuation variables

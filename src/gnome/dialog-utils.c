@@ -1,7 +1,7 @@
 /********************************************************************\
  * dialog-utils.c -- utility functions for creating dialogs         *
  *                   for GnuCash                                    *
- * Copyright (C) 1999 Linas Vepstas                                 *
+ * Copyright (C) 1999-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,6 +20,7 @@
 
 #include "top-level.h"
 
+#include "gnome-top-level.h"
 #include "account-tree.h"
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -27,7 +28,7 @@
 #include "util.h"
 
 
-/* This static indicates the debugging module that this .o belongs to.  */
+/* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_GUI;
 
 
@@ -607,11 +608,8 @@ gnc_ui_get_account_full_balance(Account *account)
   if (acc_children)
     balance += xaccGroupGetBalance(acc_children);
 
-  /* the meaning of "balance" for income and expense
-   * accounts is reversed, since a deposit of a paycheck in a
-   * bank account will appear as a debit of the corresponding
-   * amount in the income account */
-  if ((type == EXPENSE) || (type == INCOME))
+  /* reverse sign if needed */
+  if (gnc_reverse_balance(account))
     balance = -balance;
 
   return balance;

@@ -31,8 +31,8 @@ extern "C" {
 #define GTK_TYPE_GNC_ACCOUNT_TREE (gnc_account_tree_get_type ())
 #define GNC_ACCOUNT_TREE(obj)     (GTK_CHECK_CAST ((obj), GTK_TYPE_GNC_ACCOUNT_TREE, GNCAccountTree))
 #define GNC_ACCOUNT_TREE_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_GNC_ACCOUNT_TREE, GNCAccountTreeClass))
-#define GTK_IS_GNC_ACCOUNT_TREE(obj)  (GTK_CHECK_TYPE ((obj), GTK_TYPE_GNC_ACCOUNT_TREE))
-#define GTK_IS_GNC_ACCOUNT_TREE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GNC_ACCOUNT_TREE))
+#define IS_GNC_ACCOUNT_TREE(obj)  (GTK_CHECK_TYPE ((obj), GTK_TYPE_GNC_ACCOUNT_TREE))
+#define IS_GNC_ACCOUNT_TREE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GNC_ACCOUNT_TREE))
 
 typedef struct _GNCAccountTree      GNCAccountTree;
 typedef struct _GNCAccountTreeClass GNCAccountTreeClass;
@@ -111,6 +111,9 @@ gboolean gnc_account_tree_select_accounts(GNCAccountTree *tree,
 
 void gnc_account_tree_expand_account (GNCAccountTree *tree,
                                       Account *account);
+
+void gnc_account_tree_toggle_account_expansion (GNCAccountTree *tree,
+                                                Account *account);
 
 void gnc_account_tree_insert_account (GNCAccountTree *tree,
 				      Account *account);

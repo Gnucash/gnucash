@@ -1,6 +1,6 @@
 /********************************************************************\
  * AccInfo.h -- the Account Info data structures                    *
- * Copyright (C) 1998, 1999 Linas Vepstas                           *
+ * Copyright (C) 1998-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -74,9 +74,10 @@ enum
    */
 
   CURRENCY = 7, 
-  /* The currency account type indicates that the account is a currency trading 
-   * account.  In many ways, a currency trading account is like a stock trading
-   * account, where both quantities and prices are set.
+  /* The currency account type indicates that the account is a
+   * currency trading account.  In many ways, a currency trading
+   * account is like a stock trading account, where both quantities
+   * and prices are set.
    */
 
   INCOME = 8,
@@ -97,8 +98,6 @@ enum
   SAVINGS = 12,
   MONEYMRKT = 13,
   CREDITLINE = 14,     /* line of credit */
-
-
 };
 
 char * xaccAccountGetTypeStr (int type); /* GUI names */

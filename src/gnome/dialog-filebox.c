@@ -2,6 +2,7 @@
  * dialog-filebox.c -- the file dialog box                          *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998-99 Rob Browning <rlb@cs.utexas.edu>           *
+ * Copyright (C) 2000 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -78,13 +79,14 @@ fileBox(const char * title, const char * filter)
 
   fb_info.file_box = GTK_FILE_SELECTION(gtk_file_selection_new(title));
   fb_info.file_name = NULL;
-/* hack alert - this was filtering directory names as well as file 
- * names, so I think we should not do this by default (rgmerk)
- */
+
+  /* hack alert - this was filtering directory names as well as file 
+   * names, so I think we should not do this by default (rgmerk) */
 #if 0
   if (filter != NULL)
     gtk_file_selection_complete(fb_info.file_box, filter);
 #endif
+
   gtk_window_set_modal(GTK_WINDOW(fb_info.file_box), TRUE);
   gtk_window_set_transient_for(GTK_WINDOW(fb_info.file_box),
 			       GTK_WINDOW(gnc_get_ui_data()));
@@ -142,12 +144,16 @@ store_filename(GtkWidget *w, gpointer data)
 static void
 gnc_file_box_close_cb(GtkWidget *w, gpointer data)
 {
+  gtk_widget_hide(GTK_WIDGET(fb_info.file_box));
+
   gtk_main_quit();
 }
 
 static gboolean
 gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
+  gtk_widget_hide(GTK_WIDGET(fb_info.file_box));
+
   gtk_main_quit();
 
   /* Don't delete the window, we'll handle things ourselves. */

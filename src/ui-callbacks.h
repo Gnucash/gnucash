@@ -43,6 +43,8 @@ gnc_verify_cancel_dialog_parented(gncUIWidget parent,
                                   const char *message,
                                   GNCVerifyResult default_result);
 
+void gnc_warning_dialog_parented(gncUIWidget parent, const char *message);
+
 gncBoolean gnc_verify_dialog( const char *message,
 			      gncBoolean yes_is_default );
 void       gnc_error_dialog( const char *message );

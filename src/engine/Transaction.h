@@ -56,7 +56,7 @@ typedef struct _split         Split;
 typedef struct _transaction   Transaction;
 
 /* struct timespec64 is just like timespec except that we use 
- * a 64-bit signed int to store the seconds.  This should adequetely
+ * a 64-bit signed int to store the seconds.  This should adequately
  * cover dates in the distant future as well as the distant past, as long
  * as they're not more than a couple dozen times the age of the universe.
  * Note that both gcc and the IBM Toronto xlC compiler (aka CSet,
@@ -119,7 +119,7 @@ void          xaccTransDestroy (Transaction *);
  *    are made to a transaction or any of its component splits.  If 
  *    this is not done, errors will result.  If the defer flag is set, 
  *    then the automated re-balancing of all splits in this transaction
- *    is defered until the xaccTransCommitEdit() call. This allows 
+ *    is deferred until the xaccTransCommitEdit() call. This allows 
  *    multiple splits to be edited, and prices fiddled with, and the whole
  *    system sent temporarily out of balance, up until the Commit
  *    call is made when double-entry is once again enforced.
@@ -194,14 +194,14 @@ void          xaccTransSetDocref (Transaction *, const char *);
 /*
  * The xaccTransAppendSplit() method will append the indicated 
  *    split to the collection of splits in this transaction.
- *    If the split is alredy a part of another transaction,
+ *    If the split is already a part of another transaction,
  *    it will be removed from that transaction first.
  */
 void          xaccTransAppendSplit (Transaction *, Split *);
 
 /* 
  * The xaccSplitDestroy() method will update its parent account and 
- *    transaction in a consistent maner, resulting in the complete 
+ *    transaction in a consistent manner, resulting in the complete 
  *    unlinking of the split, and the freeing of its associated memory.
  *    The goal of this routine is to perform the removal and destruction
  *    of the split in an atomic fashion, with no chance of accidentally
@@ -222,8 +222,8 @@ void          xaccSplitDestroy (Split *);
 /* The xaccTransGetSplit() method returns a pointer to each of the 
  *    splits in this transaction.  Valid values for i are zero to 
  *    (number_of__splits-1).  An invalid value of i will cause NULL to
- *    be returned.  A conenient way of cycling through all splits is
- *    to start at zero, and kep incrementing until a null value is returned.
+ *    be returned.  A convenient way of cycling through all splits is
+ *    to start at zero, and keep incrementing until a null value is returned.
  */
 Split *       xaccTransGetSplit (Transaction *trans, int i);
 
@@ -256,7 +256,7 @@ gncBoolean xaccIsCommonCurrency(char *currency_1, char *security_1,
  *    indicating a currency denomination that all of the splits in this
  *    transaction have in common.  This routine is useful in dealing
  *    with currency trading accounts and/or with "stock boxes", where
- *    securities of differing types are moved accross accounts.
+ *    securities of differing types are moved across accounts.
  *    It returns NULL if the transaction is internally inconsistent.
  *    (This should never ??? happen, as it would be an internal error).
  *
@@ -271,7 +271,7 @@ char * xaccTransFindCommonCurrency (Transaction *trans);
  *    all the splits, otherwise, it returns NULL.
  *
  *    Note that this routine is *not* merely a string compare on the
- *    value returned by cTransFindCommonCurrency().  This is because
+ *    value returned by TransFindCommonCurrency().  This is because
  *    all of the splits in a transaction may share *both* a common
  *    currency and a common security.  If the desired match is the
  *    security, a simple string match won't reveal this fact.
@@ -279,7 +279,7 @@ char * xaccTransFindCommonCurrency (Transaction *trans);
  *    This routine is useful in dealing
  *    with currency trading accounts and/or with "stock boxes", where
  *    transaction have in common.  This routine is useful in dealing
- *    securities of differing types are moved accross accounts.
+ *    securities of differing types are moved across accounts.
  */
 char * xaccTransIsCommonCurrency (Transaction *trans, char * currency);
 
@@ -341,7 +341,7 @@ void          xaccSplitGetDateReconciledTS (Split *, Timespec *);
  *     update the share price and the number of shares. This 
  *     is a utility routine that is equivalent to a xaccSplitSetSharePrice()
  *     followed by and xaccSplitSetAmount(), except that it incurs the
- *     processing overhead of balancing only once, instead of twise.
+ *     processing overhead of balancing only once, instead of twice.
  */
 
 void         xaccSplitSetSharePriceAndAmount (Split *, double price,

@@ -356,7 +356,7 @@ gnc_info_dialog_parented(GtkWindow *parent, const char *message)
 void 
 gnc_warning_dialog(const char *message)
 {
-  gnc_warning_dialog_parented(GTK_WINDOW(gnc_get_ui_data()), message);
+  gnc_warning_dialog_parented(gnc_get_ui_data(), message);
 }
 
 /********************************************************************\
@@ -368,11 +368,11 @@ gnc_warning_dialog(const char *message)
  * Return: none                                                     * 
 \********************************************************************/
 void 
-gnc_warning_dialog_parented(GtkWindow *parent, const char *message)
+gnc_warning_dialog_parented(GtkWidget *parent, const char *message)
 {
   GtkWidget *warning_box = NULL;
   
-  warning_box = gnome_warning_dialog_parented(message, parent);
+  warning_box = gnome_warning_dialog_parented(message, GTK_WINDOW(parent));
 
   gnome_dialog_run_and_close(GNOME_DIALOG(warning_box));
 }

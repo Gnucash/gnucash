@@ -63,7 +63,9 @@
   (gnc:add-extension export-item)
   (gnc:add-extension qif-item))
 
-;(gnc:hook-add-dangler gnc:*main-window-opened-hook* gnc:extensions-menu-setup)
+(if (gnc:debugging?)
+    (gnc:hook-add-dangler gnc:*main-window-opened-hook*
+                          gnc:extensions-menu-setup))
 
 ;; Automatically pick accelerators for menu names
 (define (gnc:new-menu-namer)

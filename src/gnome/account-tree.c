@@ -348,7 +348,7 @@ gnc_account_tree_refresh_all()
 void
 gnc_account_tree_set_view_info(GNCAccountTree *tree, AccountViewInfo *info)
 {
-  assert(GTK_IS_GNC_ACCOUNT_TREE(tree));
+  assert(IS_GNC_ACCOUNT_TREE(tree));
   assert(info != NULL);
 
   tree->avi = *info;
@@ -368,18 +368,31 @@ gnc_account_tree_set_view_info(GNCAccountTree *tree, AccountViewInfo *info)
 void
 gnc_account_tree_get_view_info(GNCAccountTree *tree, AccountViewInfo *info)
 {
-  assert(GTK_IS_GNC_ACCOUNT_TREE(tree));
+  assert(IS_GNC_ACCOUNT_TREE(tree));
   assert(info != NULL);
 
   *info = tree->avi;
 }
 
 
+/********************************************************************\
+ * gnc_account_tree_expand_account                                  *
+ *   expand the account node                                        *
+ *                                                                  *
+ * Args: tree   - the tree to expand an account for                 *
+ *       accout - the account to expand                             *
+ * Returns: nothing                                                 *
+\********************************************************************/
 void
 gnc_account_tree_expand_account(GNCAccountTree *tree, Account *account)
 {
-  GtkCTree *ctree = GTK_CTREE(tree);
+  GtkCTree *ctree;
   GtkCTreeNode *node;
+
+  g_return_if_fail(tree != NULL);
+  g_return_if_fail(IS_GNC_ACCOUNT_TREE(tree));
+
+  ctree = GTK_CTREE(tree);
 
   /* Get the node with the account */
   node = gtk_ctree_find_by_row_data(ctree, NULL, account);
@@ -387,6 +400,35 @@ gnc_account_tree_expand_account(GNCAccountTree *tree, Account *account)
     return;
 
   gtk_ctree_expand(ctree, node);
+}
+
+
+/********************************************************************\
+ * gnc_account_tree_toggle_account_expansion                        *
+ *   toggle the expansion status for the given account              *
+ *                                                                  *
+ * Args: tree   - the tree to toggle expansion status for           *
+ *       accout - the account to toggle expansion status            *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_account_tree_toggle_account_expansion (GNCAccountTree *tree,
+                                           Account *account)
+{
+  GtkCTree *ctree;
+  GtkCTreeNode *node;
+
+  g_return_if_fail(tree != NULL);
+  g_return_if_fail(IS_GNC_ACCOUNT_TREE(tree));
+
+  ctree = GTK_CTREE(tree);
+
+  /* Get the node with the account */
+  node = gtk_ctree_find_by_row_data(ctree, NULL, account);
+  if (node == NULL)
+    return;
+
+  gtk_ctree_toggle_expansion(ctree, node);
 }
 
 
@@ -672,7 +714,7 @@ gnc_account_tree_set_filter(GNCAccountTree *tree,
                             gpointer user_data)
 {
   g_return_if_fail(tree != NULL);
-  g_return_if_fail(GTK_IS_GNC_ACCOUNT_TREE(tree));
+  g_return_if_fail(IS_GNC_ACCOUNT_TREE(tree));
 
   tree->filter = filter;
   tree->filter_data = user_data;

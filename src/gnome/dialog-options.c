@@ -283,6 +283,8 @@ gnc_option_get_ui_value(GNCOption *option)
       if (selected)
         result = gh_cons(gnc_option_permissible_value(option, row), result);
     }
+
+    result = gh_reverse(result);
   }
   else if (safe_strcmp(type, "number-range") == 0)
   {
