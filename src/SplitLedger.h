@@ -205,7 +205,10 @@ void     xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand);
 /* Return TRUE if current trans is expanded and style is REG_STYLE_LEDGER. */
 gboolean xaccSRCurrentTransExpanded (SplitRegister *reg);
 
-/* Private function, for MultiLedger.c only */
+/* Private functions, for MultiLedger.c only */
+gboolean xaccSRFullRefreshOK (SplitRegister *reg);
+void     xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);
+
 const char * xaccSRGetEntryHandler (VirtualLocation virt_loc,
                                     gboolean *changed,
                                     gpointer user_data);

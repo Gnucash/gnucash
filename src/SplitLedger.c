@@ -162,6 +162,9 @@ struct _SRInfo
   /* set to TRUE after register is loaded */
   gboolean reg_loaded;
 
+  /* flag indicating whether full refresh is ok */
+  gboolean full_refresh;
+
   /* The default account where new splits are added */
   GUID default_account;
 
@@ -233,7 +236,6 @@ static void xaccSRSetTransVisible (SplitRegister *reg,
                                    VirtualCellLocation vcell_loc,
                                    gboolean visible,
                                    gboolean only_blank_split);
-static void xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);
 static gboolean trans_has_reconciled_splits (Transaction *trans);
 
 
@@ -277,6 +279,7 @@ xaccSRInitRegisterData(SplitRegister *reg)
   info->default_account = *xaccGUIDNULL ();
   info->last_date_entered = get_today_midnight ();
   info->first_pass = TRUE;
+  info->full_refresh = TRUE;
 
   reg->user_data = info;
 }
@@ -747,6 +750,24 @@ xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand)
                                   sr_get_active_cursor (reg));
   xaccSRSetTransVisible (reg, reg->table->current_cursor_loc.vcell_loc,
                          expand, FALSE);
+
+  if (expand)
+  {
+    VirtualLocation virt_loc;
+
+    virt_loc = reg->table->current_cursor_loc;
+
+    if (!gnc_table_virtual_loc_valid (reg->table, virt_loc, FALSE))
+    {
+      if (gnc_table_find_close_valid_cell (reg->table, &virt_loc, FALSE))
+        gnc_table_move_cursor_gui (reg->table, virt_loc);
+      else
+      {
+        PERR ("Can't find place to go!");
+        return;
+      }
+    }
+  }
 
   gnc_table_refresh_gui (reg->table);
 }
@@ -1326,9 +1347,13 @@ LedgerTraverse (Table *table,
         break;
     }
 
+    info->full_refresh = FALSE;
+
     account = gnc_ui_new_accounts_from_name_window (name);
     if (!account)
       break;
+
+    info->full_refresh = TRUE;
 
     name = xaccAccountGetFullName (account, account_separator);
     xaccSetComboCellValue (cell, name);
@@ -4590,7 +4615,7 @@ xaccLoadXferCell (ComboCell *cell,
 
 /* ======================================================== */
 
-static void
+void
 xaccSRLoadXferCells (SplitRegister *reg, Account *base_account)
 {
   AccountGroup *group;
@@ -4701,6 +4726,19 @@ void
 xaccSetSplitRegisterColorizeNegative (gboolean use_red)
 {
   use_red_for_negative = use_red;
+}
+
+/* ======================================================== */
+
+gboolean
+xaccSRFullRefreshOK (SplitRegister *reg)
+{
+  SRInfo *info = xaccSRGetInfo (reg);
+
+  if (!info)
+    return FALSE;
+
+  return info->full_refresh;
 }
 
 /* =======================  end of file =================== */

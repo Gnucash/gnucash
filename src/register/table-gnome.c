@@ -228,7 +228,6 @@ gnc_table_refresh_cursor_gui (Table * table,
         gnucash_sheet_cursor_set_from_table (sheet, do_scroll);
         if (gnucash_sheet_block_set_from_table (sheet, vcell_loc))
         {
-                g_warning ("woops");
                 gnucash_sheet_recompute_block_offsets (sheet);
                 gnucash_sheet_set_scroll_region (sheet);
                 gnucash_sheet_compute_visible_range (sheet);

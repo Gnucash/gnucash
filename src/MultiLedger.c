@@ -800,6 +800,12 @@ xaccLedgerDisplayRefreshInternal (xaccLedgerDisplay *ld, GList *splits)
   if (!ld || ld->loading)
     return;
 
+  if (!xaccSRFullRefreshOK (ld->reg))
+  {
+    xaccSRLoadXferCells (ld->reg, xaccLedgerDisplayLeader (ld));
+    return;
+  }
+
   ld->loading = TRUE;
 
   xaccSRLoadRegister (ld->reg, splits, xaccLedgerDisplayLeader (ld));
