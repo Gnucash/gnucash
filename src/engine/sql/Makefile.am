@@ -22,6 +22,7 @@ noinst_HEADERS = \
   putil.h
 
 EXTRA_DIST = \
+  .cvsignore \
   README \
   base-objects.m4 \
   check-objects.m4 \
