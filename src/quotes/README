@@ -14,5 +14,6 @@ update_prices is a stand-alone perl script  for updating the prices
 Finance::Quote
     This is a perl 5 module that will pull one or more stock and/or mutual
     fund quotes from a variety of sources, including Yahoo! Finance.  
-    Derived from version 0.06 by Dj Padzensky <djpadz@padz.net>.
-    Home site at http://www.padz.net/~djpadz/
+    Now maintained in SourceForge by Paul Fenwick (<pjf@schools.net.au>)
+    http://sourceforge.net/project/?group_id=4232
+
