@@ -1,3 +1,9 @@
+2002-06-25  David Hampton  <hampton@employees.org>
+
+	* Makefile.am:
+	* configure.in:
+	* macros/autogen.sh: Update to work with recent toolchains.
+
 2002-06-21  Christian Stimming  <stimming@tuhh.de>
 
 	* po/ru.po: updated Russian translation by Vitaly Lipatov

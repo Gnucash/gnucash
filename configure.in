@@ -89,7 +89,7 @@ GNOME_XML_CHECK
 
 dnl Set of available languages.
 ALL_LINGUAS="az da de el en_GB es es_NI fr hu it ja nl no pl pt pt_BR ru sk sv zh_CN zh_TW"
-AM_GNU_GETTEXT
+AM_GNU_GETTEXT([use-libtool])
 
 if test "x${XGETTEXT}" != x; then
   XGETTEXT="${XGETTEXT} --keyword=Q_ "

@@ -1,5 +1,5 @@
 
-SUBDIRS = macros debian intl doc-tools doc lib src po rpm accounts
+SUBDIRS = macros debian doc-tools doc lib src po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
@@ -91,3 +91,5 @@ TAGS:
 endif
 
 .PHONY: TAGS
+
+ACLOCAL_AMFLAGS = -I m4
