@@ -109,7 +109,9 @@ donext:
 static GNCLot * 
 FIFOPolicyGetLot (GNCPolicy *pcy, Split *split)
 {
-   return xaccAccountFindEarliestOpenLot (split->acc, split->amount);
+   if (!split) return NULL;
+   return xaccAccountFindEarliestOpenLot (split->acc, split->amount,
+                                          split->parent->common_currency);
 }
 
 static Split * 
@@ -169,7 +171,9 @@ xaccGetFIFOPolicy (void)
 static GNCLot * 
 LIFOPolicyGetLot (GNCPolicy *pcy, Split *split)
 {
-   return xaccAccountFindLatestOpenLot (split->acc, split->amount);
+   if (!split) return NULL;
+   return xaccAccountFindLatestOpenLot (split->acc, split->amount,
+                                        split->parent->common_currency);
 }
 
 static Split * 

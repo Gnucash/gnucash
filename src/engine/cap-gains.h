@@ -40,7 +40,7 @@
 /** @file cap-gains.h
  *  @brief Utilities to Automatically Compute Capital Gains/Losses.
  *  @author Created by Linas Vepstas August 2003
- *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
+ *  @author Copyright (c) 2003,2004 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef XACC_CAP_GAINS_H
@@ -81,9 +81,15 @@ gboolean xaccAccountHasTrades (Account *);
  *   The sign comparison helps identify a lot that can be 
  *   added to: usually, one wants to add splits to a lot so
  *   that the balance only decreases.
+ *   If 'currency' is non-null, then this attempts to find
+ *   a lot whose opening transaction has the same currency.
  */
-GNCLot * xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign);
-GNCLot * xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign);
+GNCLot * xaccAccountFindEarliestOpenLot (Account *acc, 
+                                         gnc_numeric sign,
+                                         gnc_commodity *currency);
+GNCLot * xaccAccountFindLatestOpenLot (Account *acc, 
+                                       gnc_numeric sign,
+                                       gnc_commodity *currency);
 
 /** The xaccAccountGetDefaultGainAccount() routine will return
  *   the account to which realized gains/losses may be posted.  

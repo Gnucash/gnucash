@@ -22,7 +22,7 @@
 /** @file cap-gains.c
  *  @breif Utilities to Automatically Compute Capital Gains/Losses.
  *  @author Created by Linas Vepstas August 2003
- *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
+ *  @author Copyright (c) 2003,2004 Linas Vepstas <linas@linas.org>
  *
  *  This file implements the various routines to automatically
  *  compute and handle Cap Gains/Losses resulting from trading 
@@ -110,6 +110,7 @@ xaccAccountHasTrades (Account *acc)
 struct find_lot_s
 {
    GNCLot *lot;
+   gnc_commodity *currency;
    Timespec ts;
    int (*numeric_pred)(gnc_numeric);
    gboolean (*date_pred)(Timespec e, Timespec tr);
@@ -145,6 +146,13 @@ finder_helper (GNCLot *lot,  gpointer user_data)
    
    s = gnc_lot_get_earliest_split (lot);
    trans = s->parent;
+   if (els->currency && 
+       (FALSE == gnc_commodity_equiv (els->currency,
+                                      trans->common_currency)))
+   {
+      return NULL;
+   }
+
    if (els->date_pred (els->ts, trans->date_posted))
    {
       els->ts = trans->date_posted;
@@ -156,12 +164,14 @@ finder_helper (GNCLot *lot,  gpointer user_data)
 
 static inline GNCLot *
 xaccAccountFindOpenLot (Account *acc, gnc_numeric sign, 
+   gnc_commodity *currency,
    long long guess,
    gboolean (*date_pred)(Timespec, Timespec))
 {
    struct find_lot_s es;
 
    es.lot = NULL;
+   es.currency = currency;
    es.ts.tv_sec = guess;
    es.ts.tv_nsec = 0;
    es.date_pred = date_pred;
@@ -174,24 +184,26 @@ xaccAccountFindOpenLot (Account *acc, gnc_numeric sign,
 }
 
 GNCLot *
-xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign)
+xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign, 
+                                gnc_commodity *currency)
 {
    GNCLot *lot;
    ENTER (" sign=%lld/%lld", sign.num, sign.denom);
       
-   lot = xaccAccountFindOpenLot (acc, sign, 
+   lot = xaccAccountFindOpenLot (acc, sign, currency,
                    10000000LL * ((long long) LONG_MAX), earliest_pred);
    LEAVE ("found lot=%p %s", lot, gnc_lot_get_title (lot));
    return lot;
 }
 
 GNCLot *
-xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign)
+xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign,
+                              gnc_commodity *currency)
 {
    GNCLot *lot;
    ENTER (" sign=%lld/%lld", sign.num, sign.denom);
       
-   lot = xaccAccountFindOpenLot (acc, sign, 
+   lot = xaccAccountFindOpenLot (acc, sign, currency,
                    -10000000LL * ((long long) LONG_MAX), latest_pred);
    LEAVE ("found lot=%p %s", lot, gnc_lot_get_title (lot));
    return lot;
@@ -539,8 +551,8 @@ xaccSplitAssign (Split *split)
     * block is written in the form of a while loop, since we
     * may have to bust a split across several lots.
     */
-  while (split)
-  {
+   while (split)
+   {
      PINFO ("have split amount=%s", gnc_numeric_to_string (split->amount));
      split->gains |= GAINS_STATUS_VDIRTY;
      lot = pcy->PolicyGetLot (pcy, split);
