@@ -52,7 +52,7 @@
 
 static short module = MOD_SCRUB;
 static Account * GetOrMakeAccount (AccountGroup *root, Transaction *trans,
-                                   const char *name_root, GNCBook *book);
+                                   const char *name_root);
 
 /* ================================================================ */
 
@@ -125,7 +125,7 @@ xaccTransScrubOrphans (Transaction *trans, AccountGroup *root,
 
     DEBUG ("Found an orphan \n");
 
-    orph = GetOrMakeAccount (root, trans, _("Orphan"), book);
+    orph = GetOrMakeAccount (root, trans, _("Orphan"));
     if (!orph)
       continue;
 
@@ -314,7 +314,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
       return;
 
     if (!parent)
-      account = GetOrMakeAccount (root, trans, _("Imbalance"), book);
+      account = GetOrMakeAccount (root, trans, _("Imbalance"));
     else
       account = parent;
 
@@ -533,7 +533,7 @@ xaccGroupScrubCommodities (AccountGroup *group, GNCBook *book)
 
 static Account *
 GetOrMakeAccount (AccountGroup *root, Transaction *trans,
-                  const char *name_root, GNCBook *book)
+                  const char *name_root)
 {
   gnc_commodity * currency;
   char * accname;
@@ -558,7 +558,7 @@ GetOrMakeAccount (AccountGroup *root, Transaction *trans,
   if (acc == NULL)
   {
     /* guess not. We'll have to build one */
-    acc = xaccMallocAccount (book);
+    acc = xaccMallocAccount (root->book);
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, accname);
     xaccAccountSetCommodity (acc, currency);
