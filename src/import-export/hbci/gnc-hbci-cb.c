@@ -28,6 +28,8 @@
 #include "window-register.h"
 
 #include "gnc-hbci-actions.h"
+#include "gnc-hbci-getbalance.h"
+#include "gnc-hbci-gettrans.h"
 
 void
 gnc_hbci_acct_tree_menu_getbalance_cb (GtkWidget * widget, 
@@ -81,8 +83,9 @@ gnc_hbci_register_menu_getbalance_cb (GtkWidget * widget,
   ledger = gnc_RegWindow_ledger (regData);
   g_assert (ledger);
   account = gnc_ledger_display_leader (ledger);
-  g_assert (account);
-    
+  if (!account)
+      return;
+      
   gnc_hbci_getbalance (gnc_RegWindow_window (regData), account);
 }
 
@@ -98,8 +101,9 @@ gnc_hbci_register_menu_gettrans_cb (GtkWidget * widget,
   ledger = gnc_RegWindow_ledger (regData);
   g_assert (ledger);
   account = gnc_ledger_display_leader (ledger);
-  g_assert (account);
-    
+  if (!account)
+      return;
+      
   gnc_hbci_gettrans (gnc_RegWindow_window (regData), account);
 }
 
@@ -115,7 +119,8 @@ gnc_hbci_register_menu_maketrans_cb (GtkWidget * widget,
   ledger = gnc_RegWindow_ledger (regData);
   g_assert (ledger);
   account = gnc_ledger_display_leader (ledger);
-  g_assert (account);
+  if (!account)
+      return;
     
   gnc_hbci_maketrans (gnc_RegWindow_window (regData), account);
 }

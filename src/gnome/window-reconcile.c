@@ -2,6 +2,7 @@
  * window-reconcile.c -- the reconcile window                       *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998-2000 Linas Vepstas                            *
+ * Copyright (C) 2002 Christian Stimming                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -157,6 +158,8 @@ static gboolean find_by_account (gpointer find_data, gpointer user_data);
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to. */
 /* static short module = MOD_GUI; */
+
+static time_t gnc_reconcile_last_statement_date = 0;
 
 
 /** IMPLEMENTATIONS *************************************************/
@@ -1612,14 +1615,52 @@ close_handler (gpointer user_data)
 RecnWindow *
 recnWindow (GtkWidget *parent, Account *account)
 {
-  static time_t last_statement_date = 0;
+  gnc_numeric new_ending;
+  time_t statement_date;
 
+  if (account == NULL)
+    return NULL;
+
+  /* The last time reconciliation was attempted during the current
+   * execution of gnucash, the date was stored. Use that date if
+   * possible. This helps with balancing multiple accounts for which
+   * statements are issued at the same time, like multiple bank
+   * accounts on a single statement. */
+  if (!gnc_reconcile_last_statement_date)
+     statement_date = time (NULL);
+  else
+     statement_date = gnc_reconcile_last_statement_date;
+
+  gnc_get_reconcile_info (account, &new_ending, &statement_date);
+
+  /* Popup a little window to prompt the user to enter the
+   * ending balance for his/her bank statement */
+  if (!startRecnWindow (parent, account, &new_ending, &statement_date))
+    return NULL;
+
+  return recnWindowWithBalance (parent, account, new_ending, statement_date);
+}
+
+/********************************************************************\
+ * recnWindowWithBalance                                            
+ *
+ *   Opens up the window to reconcile an account, but with ending
+ *   balance and statement date already given.
+ *                                                                  
+ * Args:   parent         - The parent widget of the new window
+ *         account        - The account to reconcile           
+ *         new_ending     - The amount for ending balance      
+ *         statement_date - The date of the statement          
+ * Return: recnData - the instance of this RecnWindow          
+\********************************************************************/
+RecnWindow *
+recnWindowWithBalance (GtkWidget *parent, Account *account, 
+		       gnc_numeric new_ending, time_t statement_date)
+{
   RecnWindow *recnData;
   GtkWidget *statusbar;
   GtkWidget *vbox;
   GtkWidget *dock;
-  gnc_numeric new_ending;
-  time_t statement_date;
 
   if (account == NULL)
     return NULL;
@@ -1633,25 +1674,6 @@ recnWindow (GtkWidget *parent, Account *account)
 
   recnData->account = *xaccAccountGetGUID (account);
 
-  /* The last time reconciliation was attempted during the current
-   * execution of gnucash, the date was stored. Use that date if
-   * possible. This helps with balancing multiple accounts for which
-   * statements are issued at the same time, like multiple bank
-   * accounts on a single statement. */
-  if (!last_statement_date)
-     statement_date = time (NULL);
-  else
-     statement_date = last_statement_date;
-
-  gnc_get_reconcile_info (account, &new_ending, &statement_date);
-
-  /* Popup a little window to prompt the user to enter the
-   * ending balance for his/her bank statement */
-  if (!startRecnWindow (parent, account, &new_ending, &statement_date))
-  {
-    g_free (recnData);
-    return NULL;
-  }
 
   recnData->component_id =
     gnc_register_gui_component (WINDOW_RECONCILE_CM_CLASS,
@@ -1660,7 +1682,7 @@ recnWindow (GtkWidget *parent, Account *account)
 
   recn_set_watches (recnData);
 
-  last_statement_date = statement_date;
+  gnc_reconcile_last_statement_date = statement_date;
 
   recnData->new_ending = new_ending;
   recnData->statement_date = statement_date;

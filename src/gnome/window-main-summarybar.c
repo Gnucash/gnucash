@@ -99,6 +99,9 @@ gnc_ui_build_currency_item(gnc_commodity * currency)
   GNCCurrencyItem *item;
   const char *mnemonic;
   char *label_str;
+  struct lconv *lc;
+
+  lc = gnc_localeconv();
 
   item = g_new0 (GNCCurrencyItem, 1);
 
@@ -112,7 +115,13 @@ gnc_ui_build_currency_item(gnc_commodity * currency)
   gtk_widget_show(topbox);
   gtk_container_add(GTK_CONTAINER(listitem), topbox);
 
-  mnemonic = gnc_commodity_get_mnemonic (currency);
+  if (gnc_commodity_equiv (currency, gnc_locale_default_currency ()))
+    mnemonic = lc->currency_symbol;
+  else
+    mnemonic = gnc_commodity_get_mnemonic (currency);
+
+  if (mnemonic == NULL)
+    mnemonic = "";
 
   hbox = gtk_hbox_new(FALSE, 2);
   gtk_widget_show(hbox);

@@ -340,9 +340,9 @@ gnc_hbci_new_pmonitor(GNCInteractor *data)
   GtkWidget *dialog;
   GladeXML *xml;
 
-  xml = gnc_glade_xml_new ("hbci.glade", "HBCI_connection_window");
+  xml = gnc_glade_xml_new ("hbci.glade", "HBCI_connection_dialog");
 
-  g_assert (dialog = glade_xml_get_widget (xml, "HBCI_connection_window"));
+  g_assert (dialog = glade_xml_get_widget (xml, "HBCI_connection_dialog"));
   data->dialog = dialog;
   g_assert (data->job_entry = glade_xml_get_widget (xml, "job_entry"));
   g_assert (data->action_entry = glade_xml_get_widget (xml, "action_entry"));
@@ -358,8 +358,10 @@ gnc_hbci_new_pmonitor(GNCInteractor *data)
   gtk_signal_connect (GTK_OBJECT (data->close_button), "clicked", 
 		      GTK_SIGNAL_FUNC (on_button_clicked), data);
 
-  //if (data->parent)
+  if (data->parent)
+    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (data->parent));
   //gtk_widget_set_parent (GTK_WIDGET (dialog), data->parent);
+
   gtk_widget_hide_all (dialog);
 
   pmon = HBCI_ProgressMonitorCB_new(&destr,

@@ -1,3 +1,27 @@
+2002-10-03  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-gettrans.[hc]: Separate the
+	Get-Transaction related HBCI functions into this file. Much more
+	work here, so that most of transaction information is now filled
+	into the right places. Requires totally up-to-date OpenHBCI CVS,
+	though.
+
+	* src/import-export/hbci/gnc-hbci-getbalance.[hc]: Separate the
+	Get-Balance related functions to a seperate file. Add invocation
+	of account reconcile upon successful balance retrieval.
+
+	* src/import-export/hbci/hbci-progressmon.c: Change to a
+	GnomeDialog here, and fix handling of parent window.
+
+	* src/gnome/window-main-summarybar.c: Introduce lookup of currency
+	symbol. However, this doesn't quite fix bug #91724, since that one
+	is related to the currency_item->assets_label and not to the label
+	in front of that. What a pity.
+
+	* src/RecnWindow.h (recnWindowWithBalance),
+	src/gnome/window-reconcile.c: Add function to invoke account
+	reconciliation with balance and date given.
+
 2002-10-03  Derek Atkins <derek@ihtfp.com>
 	* src/scm/main.scm -- move (setlocale ...) earlier in the startup.
 	  it needs to run before app-utils is loaded (because gnc_localeconv()

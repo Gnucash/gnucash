@@ -11,6 +11,8 @@ libgncmod_hbci_la_SOURCES = \
   gnc-hbci-utils.c \
   gnc-hbci-cb.c \
   gnc-hbci-actions.c \
+  gnc-hbci-getbalance.c \
+  gnc-hbci-gettrans.c \
   hbci-interaction.c \
   hbci-progressmon.c \
   hbci-account-picker.c \

@@ -2,6 +2,7 @@
  * RecnWindow.h -- the reconcile window                             *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998-2000 Linas Vepstas                            *
+ * Copyright (C) 2002 Christian Stimming                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -37,6 +38,34 @@ typedef struct _RecnWindow RecnWindow;
 
 
 /** PROTOTYPES ******************************************************/
+
+/********************************************************************\
+ * recnWindow                                                       *
+ *   opens up the window to reconcile an account                    *
+ *                                                                  *
+ * Args:   parent  - the parent of this window                      *
+ *         account - the account to reconcile                       *
+ *
+ * Return: recnData - the instance of this RecnWindow, or NULL if the
+ * user pressed Cancel in the initial date query.
+\********************************************************************/
 RecnWindow *recnWindow (gncUIWidget parent, Account *account);
+
+/********************************************************************\
+ * recnWindowWithBalance                                            
+ *
+ *   Opens up the window to reconcile an account, but with ending
+ *   balance and statement date already given.
+ *                                                                  
+ * Args:   parent         - The parent widget of the new window
+ *         account        - The account to reconcile           
+ *         new_ending     - The amount for ending balance      
+ *         statement_date - The date of the statement          
+ * Return: recnData - the instance of this RecnWindow
+\********************************************************************/
+RecnWindow *recnWindowWithBalance (GtkWidget *parent, 
+				   Account *account, 
+				   gnc_numeric new_ending, 
+				   time_t statement_date);
 
 #endif

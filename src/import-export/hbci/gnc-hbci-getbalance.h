@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-hbci-actions.h -- hbci action functions                      *
+ * gnc-hbci-getbalance.h -- hbci getbalance function                *
  * Copyright (C) 2002 Christian Stimming                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,15 +20,15 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef GNC_HBCI_ACTIONS_H
-#define GNC_HBCI_ACTIONS_H
+#ifndef GNC_HBCI_GETBALANCE_H
+#define GNC_HBCI_GETBALANCE_H
 
 #include <gnome.h>
 #include "Account.h"
 
-void 
-gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc);
+void
+gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc);
 
 
 
-#endif /* GNC_HBCI_ACTIONS_H */
+#endif /* GNC_HBCI_GETBALANCE_H */
