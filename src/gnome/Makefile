@@ -36,7 +36,8 @@ INCLPATH = -I/usr/include \
            -I../register \
            -I/usr/local/include \
            -I/usr/X11R6/include/. \
-           -I./../../include 
+           -I./../../include \
+           -I/usr/lib/gnome-libs/include 
 
 # libhtmlw eliminated due to license restrictions 
 # and general brokenness
@@ -52,9 +53,8 @@ CFLAGS := $(shell gtk-config --cflags) -g -Wall
 LFLAGS := -g -Wall
 
 # LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
-# LIBS     = -lgtk -lgdk -lglib -lXpm -lXext -lXmu -lXt -lXext  \
-#            -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
-LIBS     := $(shell gtk-config --libs) 
+GNOMELIBS= -lgnomeui -lgnome -lgnomesupport -ldl -lgdk_imlib -ltiff -lgif -ljpeg -lpng -lz -lSM -lICE -L/usr/local/lib -L/usr/X11R6/lib -lgtk -lgdk -lglib -lXext -lX11 -lm 
+LIBS     := $(shell gtk-config --libs) $(GNOMELIBS)
 LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib -L/usr/X11R6/lib/.
 TARGET   = ../../xacc.gtk.bin
 
