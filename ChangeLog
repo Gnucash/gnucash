@@ -1,3 +1,9 @@
+2003-01-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-model.c:
+	* src/register/ledger-core/split-register-control.c:
+	  Ignore certain splits with an "amount" of zero.
+
 2003-01-09  Christian Stimming  <stimming@tuhh.de>
 
 	* po/el.po: Updated translation, reviewed by

@@ -1372,6 +1372,11 @@ gnc_split_register_get_conv_rate (Transaction *txn, Account *acc)
       continue;
 
     amount = xaccSplitGetAmount (s);
+
+    /* Ignore splits with "zero" amount */
+    if (gnc_numeric_zero_p (amount))
+      continue;
+
     value = xaccSplitGetValue (s);
     convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
     return convrate;

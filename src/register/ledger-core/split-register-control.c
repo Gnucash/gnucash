@@ -1111,6 +1111,13 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   /* Ok, we need to grab the exchange rate */
   amount = gnc_split_register_debcred_cell_value (reg);
 
+  /*
+   * If "amount" is zero then we don't need an exchange-rate.. Return
+   * FALSE to let the user continue on.
+   */
+  if (gnc_numeric_zero_p (amount))
+    return FALSE;
+
   /* We know that "amount" is always in the reg_com currency.
    * Unfortunately it is possible that neither xfer_com or txn_cur are
    * the same as reg_com, in which case we need to convert to the txn
