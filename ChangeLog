@@ -1,3 +1,7 @@
+2001-06-04  Dave Peticolas  <dave@krondo.com>
+
+	* lib/srfi/srfi-19.scm: fix bug.
+
 2001-06-04  Rob Browning  <rlb@cs.utexas.edu>
 
 	* lib/srfi/srfi-19.scm: updated to include guile-core bug fixes.

@@ -121,7 +121,7 @@
 
 ;; Guile's prior to 1.5.X didn't have this.
 
-(if (not (defined? open-input-string))
+(if (not (defined? 'open-input-string))
     (define (open-input-string str)
       (call-with-input-string str (lambda (port) port))))
 
