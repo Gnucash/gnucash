@@ -40,9 +40,9 @@
 ToDo List:
  o Need to have some sort of modified event handling watcher,
    so that the peered gains split gets notified when the source
-	split gets modified, etc. etc.
-	Also, need to use xaccTransSetReadOnly on the gains split.
-	XXX one readonly usage is not i18n'ed !!
+   split gets modified, etc. etc.
+   Also, need to use xaccTransSetReadOnly on the gains split.
+   XXX one readonly usage is not i18n'ed !!
 
  o If the amount in a split is changed, then the lot has to be recomputed.
    This has a potential trickle-through effect on all later lots. 
@@ -51,7 +51,7 @@ ToDo List:
 
  o XXX if the split has been split, and the lots need to be recomputed,
    then the peers need to be reunified first!   And that implies that
-	gain transactions need to be 'reunified' too.
+   gain transactions need to be 'reunified' too.
 
  */
 
@@ -330,7 +330,8 @@ xaccSplitAssignToLot (Split *split,
      {
         /* If the amount is smaller than open balance ... */
         gnc_numeric baln = gnc_lot_get_balance (lot);
-        int cmp = gnc_numeric_compare (split->amount, baln);
+        int cmp = gnc_numeric_compare (gnc_numeric_abs(split->amount),
+                                       gnc_numeric_abs(baln));
 
         PINFO ("found open lot with baln=%s", gnc_numeric_to_string (baln));
         /* cmp == +1 if amt > baln */
@@ -340,6 +341,7 @@ xaccSplitAssignToLot (Split *split,
            Split * new_split;
            gnc_numeric amt_a, amt_b, amt_tot;
            gnc_numeric val_a, val_b, val_tot;
+           gnc_numeric tmp;
            Transaction *trans;
            Timespec ts;
 
@@ -350,15 +352,26 @@ xaccSplitAssignToLot (Split *split,
            amt_a = gnc_numeric_neg (baln);
            amt_b = gnc_numeric_sub_fixed (amt_tot, amt_a);
 
-           PINFO ("XXXXXXXXXXXXXXXX splitting split ");
+           PINFO ("++++++++++++++ splitting split into amt = %s + %s",
+                   gnc_numeric_to_string(amt_a),
+                   gnc_numeric_to_string(amt_b) );
+
            /* Compute the value so that it holds in the same proportion:
             * i.e. so that (amt_a / amt_tot) = (val_a / val_tot)
             */
            val_tot = split->value;
-           val_a = gnc_numeric_mul (amt_a, val_tot, GNC_DENOM_AUTO, GNC_RND_NEVER);
-           val_a = gnc_numeric_div (val_a, amt_tot, gnc_numeric_denom(val_tot), GNC_DENOM_EXACT);
+           val_a = gnc_numeric_mul (amt_a, val_tot, 
+                             GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+           tmp = gnc_numeric_div (val_a, amt_tot, 
+                             gnc_numeric_denom(val_tot), GNC_DENOM_EXACT);
 
+           val_a = tmp;
            val_b = gnc_numeric_sub_fixed (val_tot, val_a);
+
+           PINFO ("split value is = %s = %s + %s",
+                   gnc_numeric_to_string(val_tot),
+                   gnc_numeric_to_string(val_a),
+                   gnc_numeric_to_string(val_b) );
      
            xaccSplitSetAmount (split, amt_a);
            xaccSplitSetValue (split, val_a);
@@ -367,8 +380,8 @@ xaccSplitAssignToLot (Split *split,
             * because the new balance should be precisely zero. */
            gnc_lot_add_split (lot, split);
 
-           /* Put the remainder of the balance into a new split, which is
-            * in other respects just a clone of this one */
+           /* Put the remainder of the balance into a new split, 
+            * which is in other respects just a clone of this one. */
            new_split = xaccMallocSplit (acc->book);
 
            /* Copy most of the split attributes */
@@ -434,7 +447,7 @@ xaccSplitAssignToLot (Split *split,
    }
    xaccAccountCommitEdit (acc);
 
-   LEAVE ("split=%p added=%d", split, splits_added);
+   LEAVE ("added=%d", splits_added);
    return splits_added;
 }
 
