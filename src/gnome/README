@@ -1,0 +1,18 @@
+
+This directory contains the Gtk GUI code for the xacc application.
+
+Whats been done so far:
+
+File Selection box pops up if no file is specified on the 
+command line.  Otherwise the main window starts up.
+
+
+
+This directory contains the Gtk GUI code for the xacc application.
+
+Whats been done so far:
+
+File Selection box pops up if no file is specified on the 
+command line.  Otherwise the main window starts up.
+
+
