@@ -584,50 +584,50 @@
       <tr>
         <td><a href="#reports">Reports</a></td>
 
-        <td>Small</td>
-        <td>?</td>
+        <td>Medium</td>
+        <td>Stimming/Gribble</td>
       </tr>
 
       <tr>
         <td><a href="#graphs">Graphs</a></td>
 
         <td>Medium</td>
-        <td>Guppi/Bill</td>
+        <td>Guppi/Gribble</td>
       </tr>
 
       <tr>
         <td><a href="#query">Transaction Query</a></td>
 
         <td>Small</td>
-        <td>Biil</td>
+        <td>Linas/LewisMoss</td>
       </tr>
 
       <tr>
         <td><a href="#ledger">Simplified Ledger</a></td>
 
-        <td>Small</td>
-        <td>Dave,Linas</td>
+        <td>Done</td>
+        <td>-</td>
       </tr>
 
       <tr>
         <td><a href="#glitz">Themes, Icons, Glitz</a></td>
 
-        <td>Medium</td>
-        <td>RGM,Bill,Rob</td>
+        <td>Small</td>
+        <td>Various</td>
       </tr>
 
       <tr>
         <td><a href="#misc">Miscellaneous Small Tasks</a></td>
 
-        <td>Medium</td>
-        <td>?</td>
+        <td>Done</td>
+        <td>Various</td>
       </tr>
 
       <tr>
         <td><a href="#alerts">Alerts, Recurring & Scheduled Transactions</a></td>
 
         <td>Medium</td>
-        <td>RLB</td>
+        <td>?</td>
       </tr>
 
       <tr>
@@ -642,6 +642,13 @@
 
         <td>Small</td>
         <td>?</td>
+      </tr>
+
+      <tr>
+        <td><a href="#book">Books, Accounting Periods</a></td>
+
+        <td>Small</td>
+        <td>Linas</td>
       </tr>
 
       <tr>
@@ -684,13 +691,6 @@
 
         <td>Small</td>
         <td>Dave, Bill-qif</td>
-      </tr>
-
-      <tr>
-        <td><a href="#book">Books, Accounting Periods</a></td>
-
-        <td>Small</td>
-        <td>Linas</td>
       </tr>
 
       <tr>
@@ -857,15 +857,15 @@
       <tr>
         <td><a href="#sql">SQL I/O</a></td>
 
-        <td>Medium</td>
+        <td>Done</td>
         <td>Linas</td>
       </tr>
 
       <tr>
         <td><a href="#multiuser">Multi-User Support</a></td>
 
-        <td>Medium</td>
-        <td>?</td>
+        <td>Small</td>
+        <td>Linas</td>
       </tr>
 
       <tr>
@@ -926,7 +926,7 @@
         in the local country conventions. 
 
         <p><b>Current status:</b>
-
+        Essentially Done (?)
         <ul>
           <li>All GUI messages currently use GNU <tt>gettext()</tt>
           for the message catalogs. Translations exist for English,
@@ -965,7 +965,11 @@
         run the report generator in a stand-alone, read-only
         fashion without having to start up the main application. It
         should be possible to run reports nightly from a
-        command-line and/or cron job.</p>
+        command-line and/or cron job.
+	The GUI should remember what reports were run last time, and
+	these should be re-run/redisplayed whenever the report generator
+	is used.
+	</p>
 
         <p>One difficult aspect of reporting is designing a
         configurable interface, so that people can build custom
@@ -973,7 +977,8 @@
         Reporting Infrastructure</a> is seeking to build this up
         using Guile.   Note there are several flavours of customization:
         <ul>
-        <li>Adding a custom logo (e.g. company logo/address) to every page
+        <li>Allow user to specify a custom logo (e.g. company 
+	    logo/address) on every page
             (generically, having a header and footer for every page).
         <li>Allowing user to modify report title/subtitle on the fly
             (and possibly add notes at the top or bottom of the report,
@@ -994,16 +999,18 @@
         <p>Generated reports should be exportable to other gnome
         systems (probably using bonobo). 
         Reports should also be exportable to
-        the Gnumeric spreadsheet (possibly by writing out gnumeric
-        file format?? or writing out csv (comma separated values) ?? ).  
-        Tables & etc should be exportable to AbiWord,
+        the Gnumeric spreadsheet (probably by writing out gnumeric
+        file format).  Export of CSV (comma separated values) and
+	tab-delimited formats (for other spreadsheet import) would
+	be good.  Tables & etc. should be exportable to AbiWord,
         StarOffice, other word processors. (formats: docbook sgml?
         would then make convert to richtext, TeX easy.)
+	Export should be as wysiwyg as possible.
         </p>
 
-        <p>Must be possible to e-mail reports (including html) to
-        users. This might be a built-in function of gtk-html?
-        or a little bitty evolution bonobo part?
+        <p>Must be possible to e-mail reports (for example,
+	invoices) to users.  Suggest an evolution addressbok
+	/mailer bonobo plugin.
         </p>
 
         <p>
@@ -1014,8 +1021,8 @@
         report, Market Index report, Stock Option values,
         Estimation of capital gains tax liabilities.</p>
 
-        <p>Reports should be printable to printer. (this should 
-        be automatic with the gtk-html widget.)</p>
+        <p>Reports should be printable to printer (postscript/
+	Adobe Acrobat). 
 
         <p>
         <b>Status:</b>
@@ -1032,22 +1039,20 @@
 
           <li>A general reporting infrastructure has been <a href=
               "xacc-reports.html#NEWREP">implemented in Scheme</a>.
-              Currently, there are simple reports for Profit/Loss,
-              Balance Sheet, and portfolio valuation.</li>
+              Currently, there are a variety of reports for Profit/Loss,
+              Balance Sheet, and portfolio valuation; none are 
+	      particularly sophisticated.</li>
 
-          <li>Reports are currently displayed with the gtk-xmhtml
-              widget but are being ported to the gtk-html widget. The
-              gtkhtml widget should provide printing abilities through
-              gnome-print (right ????).</li>
+          <li>Done: Reports are displayed with the gtk-html widget.
+	      This widget provides postscript printing and Acrobat 
+	      output.
+              </li>
 
           <li>There is currently no way (no longer any way??) to
               generate reports from the command line ...</li>
 
-          <li>A list of 'required reports' is needed. Then these
-              need to be implemented.
-          </li>
-
-          <li>Heavy discussion by Matt martin, Robert Merkel ...
+          <li>While many reports have been implemented, there is
+	      no master list of what we should have.  We should have ....
           </li>
 
           <li>The following technologies were rejected/unused mostly
@@ -1093,6 +1098,10 @@
               totally settable/controllable -- drag/move callbacks 
               when segments are click-dragged.
           </li>
+	  <li>Basic pie charts and bar charts are used in GnuCash
+	      reports.  There are problems: dates along the bottom
+	      of a bar-chart are not well-spaced/autoscaled. 
+	      The over look is a bit klunky.
         </ul>
         </p>
       </dd>
@@ -1116,9 +1125,16 @@
           <li>The GUI for creating queries has been implemented
               (as of 1.4.0, grib)
           </li>
+          <li>The queries are handled by the Postgres SQL backend.
+	      (as of 1.6.0, linas)
+          </li>
+	  <li>Queries can be turned into XML and back, for file 
+	      storage or network transmission.  This used to work
+	      for XML version 1 but was broken in version 2.
+          </li>
           <li>The ability to memorize queries has <b>not</b>
-              been implemented and awaits further action (see reports,
-              above).
+              been implemented and awaits further action (needed
+	      for reports, above).
           </li>
         </ul>
       </dd>
@@ -1126,37 +1142,29 @@
       <dt><a name="ledger"><b>Simplified Ledger</b></a></dt>
 
       <dd>
-        Ledger needs various fixes/cleanups.  Before any fixups can be
-        done, agreement needs to be gotten as to what the register 
-        *should* look like.
+        Ledger should look clean, work easily.
 
-        <p>Multi-Line splits look confusing when viewed from
-           Income/Expense Accounts.
-           Stock splits & reverse splits are not displayed correctly.
-           Currency trading Ledger is confusing.
-        </p>
         <p>
-           Stocks and Mutual funds are handled by placing them each in
-           their own account. Each account can be viewed individually.
-           If all of the stock accounts are children of a master
-           trading account, then the trading account can be viewed and
-           modified in a General Ledger window. The current stock
-           general ledger window is a bit obtuse, and difficult to
-           understand and use. A simplified but still powerful ledger
-           window is desperately needed. 
-        </p>
-
-        <p>How to most simply allow the user to
-           enter loads and fees?
-           Through multi-line transactions. Unfortunately, some users
-           may not properly understand multi-line transactions, 
-           at least not initially.
-           Thus, a little pop-up is needed to allow the user to type in
-           the sales load or fee and such, and then auto-create the
-           needed journal entries.</p>
-
-        <p>Note the current transfer window does <em>NOT</em> allow
-           a share price to be specified !! Needs fixing ...</p>
+        <b>Status:</b></p>
+	Essentially done.
+        <ul>
+	   <li>Multi-line ledger confusion fixed by using correct 
+	       left-right journal display style.
+	       Fixed in 1.6.0, Peticolas, Champaigne.
+	   </li>
+	   <li>
+               Stocks and Mutual funds are handled by placing them each in
+               their own account. Each account can be viewed individually.
+               If all of the stock accounts are children of a master
+               trading account, then the trading account can be viewed and
+               modified in a General Ledger window. 
+	       Layout problems fixed in 1.6.0.
+	   </li>
+	   <li>
+              How to most simply allow the user to enter loads and fees?
+              Through multi-line transactions. Seems to work well in
+	      1.6.0.
+	   </li>
       </dd>
 
       <dt><a name="glitz"><b>Themes, Icons, Glitz</b></a></dt>
@@ -1170,9 +1178,9 @@
             50-100 hints-of-the-day: short (2-4 sentence)
             hints/tips on how to use gnucash. Every time the user
             starts gnucash, an new hint shows up ...
-            <b>Status:</b> Hint infrastructure complete (RGM, version
-            1.4.0).  Need to add
-            hints  (only 6 are currently available).
+            <b>Status:</b> Hint infrastructure complete (RGMerkel, 
+	    version 1.4.0).  Need to add
+            hints  (only a dozen are currently available).
             </p>
           </li>
 
@@ -1183,24 +1191,6 @@
             window, might be a gtk bug ???</p>
           </li>
 
-          <li>
-            <p><b>Static Currency Exchange Table</b> 
-            Keep a (semi-)static exchange-rate table. (possibly updated
-            via net).  The table is used to auto-fill currency
-            exchanges. (the finance::quote perl module now handles 
-            currency exchange rate fetches)
-            </p>
-          </li>
-
-          <li>
-            <p><b>Button Bar</b> A user-configurable button-bar
-            would be nice too. The button bar is the set of
-            'buttons' (open, edit...) at the top of a register
-            window and the main window.
-            See the section <a href="#arrangements">Arrangements</a> for
-            a discussion of the customization issues.
-            </p>
-          </li>
 
           <li>
             <p><b>Household Assets/House Inventory</b> 
@@ -1222,27 +1212,6 @@
           </li>
 
           <li>
-            <p><b>Bank name in combo-box pull-down</b> When user
-            enters a new bank name, should be presented with a
-            combo-box listing other bank-account names ... (note
-            this may require implementation of engine callbacks so
-            that relevant code can be informed when there are new
-            bank names?)</p>
-          </li>
-
-          <li>
-            <p><b>Pop-up Calculator</b> All price/amount fields
-            should pop up a calculator widget; output of calculator
-            gets entered in field.</p>
-          </li>
-
-          <li>
-            <p><b>Pop-up Calendar</b> All date fields should pop up
-            a calendar widget; selected date should get entered in
-            field.</p>
-          </li>
-
-          <li>
             <p><b>Register View</b> Allow user to view only
             non-reconciled transactions ...</p>
           </li>
@@ -1253,6 +1222,11 @@
             income-expense (profits). Make this configurable, so
             that user can show arbitrary sums of arbitrary
             accounts.
+	    This is mostly solved by having the MDI interface 
+	    have reports, and the use of multi-paning.  But the
+	    default display for gnucash should be changed to 
+	    show a very small (1-4 line) networth and P&L report,
+	    and maybe a cash-flow report.
             See the section <a href="#arrangements">Arrangements</a> for
             a discussion of the customization issues.
             </p>
@@ -1266,7 +1240,8 @@
             'backward/forward' buttons to navigate through
             different registers (the way that a browser navigates
             web pages.) This of course would be a user
-            preference.</p>
+            preference.  Possiblity for doing this exists with MDI.
+	    Maybe we shouldn't bother doing this ?? </p>
           </li>
 
           <li>
@@ -1282,7 +1257,8 @@
             menu. It would be nice to be able to examine different
             account types (Asset, Liability, Income, Expense,
             Payables, Receivables, Inventory) by selecting a tab
-            folder.</p>
+            folder. This is maybe a bs. request that shoudn't 
+	    be implemented.</p>
           </li>
 
         </ul>
@@ -1290,6 +1266,40 @@
       The following have been completed, but possibly not fully
       documented:
         <ul>
+          <li>
+            <p><b>Pop-up Calendar</b> All date fields should pop up
+            a calendar widget; selected date should get entered in
+            field. (peticolas, version 1.4 ??)</p>
+          </li>
+
+          <li>
+            <p><b>Pop-up Calculator</b> All price/amount fields
+            should pop up a calculator widget; output of calculator
+            gets entered in field. Instead of a popup calculator,
+	    this was implemented by allowing all fields to take 
+	    algebraic expressions (plus, minus, times, divide).
+	    (rlb ?? version 1.6.0)
+	    </p>
+          </li>
+
+          <li>
+            <p><b>Button Bar</b> A user-configurable button-bar.
+	    Solved in version 1.6.0 with tabs, not buttons, via
+	    gnome MDI (gribble, version 1.6.0)
+            See also the section <a href="#arrangements">Arrangements</a> 
+	    for a discussion of the customization issues.
+            </p>
+          </li>
+          <li>
+            <p><b>Currency Exchange Table</b> 
+            Keep a currency exchange-rate table.  This is now 
+	    automatically handled via the 'price database'
+	    (rlbrowning, version 1.6.0)
+            (the finance::quote perl module handles currency 
+	    exchange rate fetches)
+            </p>
+          </li>
+
           <li>
             <p><b>Currency Selection Pop-up</b> Currency field
             should get replaced by menu of long-hand currency
@@ -1370,14 +1380,14 @@
       <dt><a name="misc"><b>Miscellaneous Small Projects</b></a></dt>
 
       <dd>
-        A variety of small internal projects (mostly in the one
-        person-week range): 
+        A variety of small internal projects. All have been 
+        completed as of 1.6.0
 
         <ul>
           <li>
             <p><b>File Format</b>. Rework to use text file format. Will be 
                 XML-based.
-               <b>Status:</b> RLB, 2 weeks, half-done.
+               <b>Status:</b> RLB, LewisMoss. Version 1.6.0 Done.
             </p>
           </li>
           <li>
@@ -1385,23 +1395,22 @@
                Auto-pay credit card when reconciling credit card 
                accounts (Done, Dave).  
                Auto-add bank fee when reconciling bank accounts.
-               (Not done, Dave).
+               (Not done?, Dave).
             </p>
           </li>
           <li>
             <p><b>Print Register Window</b>. Output register window to
                printer.
-               <b>Status:</b> defer indefinitely.
+               <b>Status:</b> Done: there is a register report which
+	       is printable, there is botton on register. Done in 1.6.0
             </p>
           </li>
           <li>
             <p><b># of decimal places in prices (penny stock)</b>. 
-               Part of the big numeric overhaul.
+               Part of the big numeric overhaul. Done, Gribble, others, 
+	       version 1.6.0
             </p>
           </li>
-        </ul>
-        The following have been completed:
-        <ul>
           <li>
             <p><b>gtkhtml</b>. Move to gtkhtml from gtk-xmhtml. 
                Done in 1.5, Grib.
@@ -1470,8 +1479,11 @@
 
         <p><b>Status:</b>
         <ul>
-          <li>A mini-design Doc exists in
-              src/engine/future.txt</li>
+          <li>A mini-design Doc exists in <tt>src/engine/extensions.txt</tt>
+	      A far more extensive, four-part proposal is ??? somewhere
+	      in the mailing list archives (by Linas Vepstas, circa Feb-May 
+	      2001)
+	      </li>
         </ul>
         </p>
       </dd>
@@ -1483,11 +1495,17 @@
         Computer Readable) check printing abilities.
         <a href="http://dir.yahoo.com/business_and_economy/shopping_and_services/financial_services/banking/checks/">
         Yahoo Check Printing</a> provides a list of vendors & printers.
+	<p>
+	Print vendor/client/payee address on the check (so that check
+	can be mailed with window envelopes.) This requires gnucash
+	to integrate with addressbook.
 
         <p><b>Status:</b>
         <ul>
-          <li>Bill Gribble has built a prototype based on the
-              gnome-print. Waiting for gnome-print to mature ...</li>
+	  <li>More check formats need to be supported.
+          <li>Done, except for address part, in version 1.4.0.
+	      (gribble)
+              </li>
           <li>Need a sample check/sample transaction to print out
               so that user can test printer.
           <li>MICR Fonts are available & brought to mailing list.
