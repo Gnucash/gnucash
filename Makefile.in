@@ -94,4 +94,9 @@ install: $(TARGET)
 	$(INSTALL) $(TARGET) $(PREFIX)/bin/$(TARGET)
 	$(INSTALL) $(TARGET).bin $(PREFIX)/bin/$(TARGET).bin
 	@mkdir -p $(PREFIX)/$(DOCDIR)
-	$(INSTALL_DATA) Docs/* $(PREFIX)/$(DOCDIR)
+	$(INSTALL_DATA) Docs/*.html $(PREFIX)/$(DOCDIR)
+	$(INSTALL_DATA) Docs/*.gif $(PREFIX)/$(DOCDIR)
+	$(INSTALL_DATA) Docs/*.jpg $(PREFIX)/$(DOCDIR)
+	$(INSTALL_DATA) Docs/*.xpm $(PREFIX)/$(DOCDIR)
+	@mkdir -p $(PREFIX)/$(DOCDIR)/logos
+	$(INSTALL_DATA) Docs/logos/* $(PREFIX)/$(DOCDIR)/logos
