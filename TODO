@@ -56,6 +56,7 @@ Well, some of the infrastructure now in place
 
 35) balance sheet, profit&loss sheet.  I wanna know what my net worth is,
     what percentage of it is bank, stocks, car, house.
+Done, except for the percentage bit.
 
 36) business features, for tracking inventory, costing jobs, etc.
 
@@ -66,10 +67,6 @@ Well, some of the infrastructure now in place
 40) add check-printing ability.
 
 41) add short-cut button-bar, like quicken/lotus
-
-42) add icons for minimized windows
-
-43) write docs for date accelerator keys
 
 44) write docs explaining what "open Subaccount" means.
 
@@ -171,6 +168,12 @@ fixed.
     which is an intuit/microsoft/checkfree proposal.  No other
     financial standards seem to exist. The ofx dtd's are included
     in version 1.1
+
+42) add icons for minimized windows
+Dup of 30)
+
+43) write docs for date accelerator keys
+Done.
 
 46) fix traversal for ledger windows
 fixed.
