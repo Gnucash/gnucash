@@ -477,8 +477,9 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
       GET_OR_ADD_ACCVAL (splitinfo, this_acc, acc_val);
 
       if (gnc_numeric_check (value) == GNC_ERROR_OK) {
-	acc_val->val = gnc_numeric_add_fixed (acc_val->val, value);
-	total = gnc_numeric_add_fixed (total, value);
+	acc_val->val = gnc_numeric_add (acc_val->val, value, GNC_DENOM_AUTO,
+					GNC_DENOM_LCD);
+	total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
       } else
 	g_warning ("bad value in our entry");
     }
@@ -490,7 +491,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
       GET_OR_ADD_ACCVAL (splitinfo, this_acc, acc_val);
       if (gnc_numeric_check (tax) == GNC_ERROR_OK) {
 	acc_val->val = gnc_numeric_add_fixed (acc_val->val, tax);
-	total = gnc_numeric_add_fixed (total, tax);
+	total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_DENOM_LCD);
       } else
 	g_warning ("bad tax in our entry");
     }
