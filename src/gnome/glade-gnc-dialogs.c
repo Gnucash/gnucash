@@ -4900,11 +4900,29 @@ create_Transfer_Dialog (void)
   GtkWidget *frame34;
   GtkWidget *vbox82;
   GtkWidget *from_window;
+  GtkWidget *hbox77;
+  GtkWidget *label820;
+  GtkWidget *from_currency_label;
   GtkWidget *from_show_button;
   GtkWidget *frame35;
   GtkWidget *vbox83;
   GtkWidget *to_window;
+  GtkWidget *hbox78;
+  GtkWidget *label822;
+  GtkWidget *to_currency_label;
   GtkWidget *to_show_button;
+  GtkWidget *curr_transfer_frame;
+  GtkWidget *hbox79;
+  GtkWidget *vbox85;
+  GtkWidget *curr_acct_label;
+  GSList *price_amount_group_group = NULL;
+  GtkWidget *price_radio;
+  GtkWidget *amount_radio;
+  GtkWidget *vbox86;
+  GtkWidget *curr_acct_combo;
+  GtkWidget *curr_acct_combo_entry;
+  GtkWidget *price_hbox;
+  GtkWidget *to_amount_hbox;
   GtkWidget *dialog_action_area13;
   GtkWidget *button66;
   GtkWidget *button68;
@@ -5068,6 +5086,30 @@ create_Transfer_Dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox82), from_window, TRUE, TRUE, 0);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (from_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
+  hbox77 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox77);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "hbox77", hbox77,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox77);
+  gtk_box_pack_start (GTK_BOX (vbox82), hbox77, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox77), 3);
+
+  label820 = gtk_label_new (_("Currency:"));
+  gtk_widget_ref (label820);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "label820", label820,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label820);
+  gtk_box_pack_start (GTK_BOX (hbox77), label820, TRUE, TRUE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label820), 0, 0.5);
+
+  from_currency_label = gtk_label_new (_(" "));
+  gtk_widget_ref (from_currency_label);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "from_currency_label", from_currency_label,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (from_currency_label);
+  gtk_box_pack_start (GTK_BOX (hbox77), from_currency_label, TRUE, TRUE, 0);
+  gtk_misc_set_alignment (GTK_MISC (from_currency_label), 1, 0.5);
+
   from_show_button = gtk_check_button_new_with_label (_("Show Income/Expense"));
   gtk_widget_ref (from_show_button);
   gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "from_show_button", from_show_button,
@@ -5099,12 +5141,120 @@ create_Transfer_Dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox83), to_window, TRUE, TRUE, 0);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (to_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
+  hbox78 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox78);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "hbox78", hbox78,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox78);
+  gtk_box_pack_start (GTK_BOX (vbox83), hbox78, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox78), 3);
+
+  label822 = gtk_label_new (_("Currency:"));
+  gtk_widget_ref (label822);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "label822", label822,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label822);
+  gtk_box_pack_start (GTK_BOX (hbox78), label822, TRUE, TRUE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label822), 0, 0.5);
+
+  to_currency_label = gtk_label_new (_(" "));
+  gtk_widget_ref (to_currency_label);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "to_currency_label", to_currency_label,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (to_currency_label);
+  gtk_box_pack_start (GTK_BOX (hbox78), to_currency_label, TRUE, TRUE, 0);
+  gtk_misc_set_alignment (GTK_MISC (to_currency_label), 1, 0.5);
+
   to_show_button = gtk_check_button_new_with_label (_("Show Income/Expense"));
   gtk_widget_ref (to_show_button);
   gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "to_show_button", to_show_button,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (to_show_button);
   gtk_box_pack_start (GTK_BOX (vbox83), to_show_button, FALSE, FALSE, 0);
+
+  curr_transfer_frame = gtk_frame_new (_("Currency Transfer"));
+  gtk_widget_ref (curr_transfer_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "curr_transfer_frame", curr_transfer_frame,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (curr_transfer_frame);
+  gtk_box_pack_start (GTK_BOX (vbox78), curr_transfer_frame, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (curr_transfer_frame), 3);
+
+  hbox79 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox79);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "hbox79", hbox79,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox79);
+  gtk_container_add (GTK_CONTAINER (curr_transfer_frame), hbox79);
+
+  vbox85 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox85);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "vbox85", vbox85,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox85);
+  gtk_box_pack_start (GTK_BOX (hbox79), vbox85, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox85), 3);
+
+  curr_acct_label = gtk_label_new (_("Currency Account:"));
+  gtk_widget_ref (curr_acct_label);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "curr_acct_label", curr_acct_label,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (curr_acct_label);
+  gtk_box_pack_start (GTK_BOX (vbox85), curr_acct_label, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (curr_acct_label), 1, 0.5);
+
+  price_radio = gtk_radio_button_new_with_label (price_amount_group_group, _("Exchange Rate:"));
+  price_amount_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (price_radio));
+  gtk_widget_ref (price_radio);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "price_radio", price_radio,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (price_radio);
+  gtk_box_pack_start (GTK_BOX (vbox85), price_radio, FALSE, FALSE, 0);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (price_radio), TRUE);
+
+  amount_radio = gtk_radio_button_new_with_label (price_amount_group_group, _("To Amount:"));
+  price_amount_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (amount_radio));
+  gtk_widget_ref (amount_radio);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "amount_radio", amount_radio,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (amount_radio);
+  gtk_box_pack_start (GTK_BOX (vbox85), amount_radio, FALSE, FALSE, 0);
+
+  vbox86 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox86);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "vbox86", vbox86,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox86);
+  gtk_box_pack_start (GTK_BOX (hbox79), vbox86, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox86), 3);
+
+  curr_acct_combo = gtk_combo_new ();
+  gtk_widget_ref (curr_acct_combo);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "curr_acct_combo", curr_acct_combo,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (curr_acct_combo);
+  gtk_box_pack_start (GTK_BOX (vbox86), curr_acct_combo, FALSE, FALSE, 0);
+
+  curr_acct_combo_entry = GTK_COMBO (curr_acct_combo)->entry;
+  gtk_widget_ref (curr_acct_combo_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "curr_acct_combo_entry", curr_acct_combo_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (curr_acct_combo_entry);
+  gtk_entry_set_editable (GTK_ENTRY (curr_acct_combo_entry), FALSE);
+
+  price_hbox = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (price_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "price_hbox", price_hbox,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (price_hbox);
+  gtk_box_pack_start (GTK_BOX (vbox86), price_hbox, TRUE, TRUE, 0);
+
+  to_amount_hbox = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (to_amount_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "to_amount_hbox", to_amount_hbox,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (to_amount_hbox);
+  gtk_box_pack_start (GTK_BOX (vbox86), to_amount_hbox, TRUE, TRUE, 0);
 
   dialog_action_area13 = GNOME_DIALOG (Transfer_Dialog)->action_area;
   gtk_object_set_data (GTK_OBJECT (Transfer_Dialog), "dialog_action_area13", dialog_action_area13);
