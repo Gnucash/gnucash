@@ -109,6 +109,7 @@
 #include "FileDialog.h"
 #include "MultiLedger.h"
 #include "Refresh.h"
+#include "Scrub.h"
 #include "SplitLedger.h"
 #include "global-options.h"
 #include "gnc-engine-util.h"
@@ -896,7 +897,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
 
 /* This function determines if auto-completion is appropriate and,
  * if so, performs it. This should only be called by LedgerTraverse. */
-static void
+static gboolean
 LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
                      VirtualLocation *p_new_virt_loc)
 {
@@ -914,12 +915,12 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
 
   /* auto-completion is only triggered by a tab out */
   if (dir != GNC_TABLE_TRAVERSE_RIGHT)
-    return;
+    return FALSE;
 
   split = xaccSRGetCurrentSplit(reg);
   trans = xaccSRGetCurrentTrans(reg);
   if (trans == NULL)
-    return;
+    return FALSE;
 
   cursor_class = xaccSplitRegisterGetCurrentCursorClass(reg);
   cell_type = xaccSplitRegisterGetCurrentCellType(reg);
@@ -934,28 +935,28 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
 
       /* there must be a blank transaction * */
       if (blank_trans == NULL)
-        return;
+        return FALSE;
 
       /* we must be on the blank split */
       if (trans != blank_trans)
-        return;
+        return FALSE;
 
       /* and leaving the description cell */
       if (cell_type != DESC_CELL)
-        return;
+        return FALSE;
 
       /* nothing but the date, num, and description should be changed */
       if ((changed & ~(MOD_DATE | MOD_NUM | MOD_DESC)) != 0)
-        return;
+        return FALSE;
 
       /* and the description should be changed */
       if ((changed & MOD_DESC) == 0)
-        return;
+        return FALSE;
 
       /* to a non-empty value */
       desc = reg->descCell->cell.value;
       if ((desc == NULL) || (*desc == '\0'))
-        return;
+        return FALSE;
 
       /* find a transaction to auto-complete on */
       if (info->default_source_account != NULL)
@@ -968,7 +969,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
         auto_trans = gnc_find_trans_in_reg_by_desc(reg, desc);
 
       if (auto_trans == NULL)
-        return;
+        return FALSE;
 
       xaccTransBeginEdit (trans, TRUE);
       gnc_copy_trans_onto_trans (auto_trans, trans, FALSE, FALSE);
@@ -1042,24 +1043,24 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
 
       /* we must be on a blank split of a transaction */
       if (split != NULL)
-        return;
+        return FALSE;
 
       /* and leaving the memo cell */
       if (cell_type != MEMO_CELL)
-        return;
+        return FALSE;
 
-      /* nothing but the action and memo should be changed */
-      if ((changed & ~(MOD_ACTN | MOD_MEMO)) != 0)
-        return;
+      /* nothing but the action memo, and amounts should be changed */
+      if ((changed & ~(MOD_ACTN | MOD_MEMO | MOD_AMNT)) != 0)
+        return FALSE;
 
       /* and the memo should be changed */
       if ((changed & MOD_MEMO) == 0)
-        return;
+        return FALSE;
 
       /* to a non-empty value */
       memo = reg->memoCell->cell.value;
       if ((memo == NULL) || (*memo == '\0'))
-        return;
+        return FALSE;
 
       /* if there is no price field, only auto-complete from splits with
        * a unit share price. */
@@ -1078,7 +1079,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
                                                    unit_price);
 
       if (auto_split == NULL)
-        return;
+        return FALSE;
 
       /* the auto-complete code below is taken from xaccSRGetEntryHandler */
 
@@ -1095,11 +1096,14 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
 
       xaccBasicCellSetChanged(&(reg->xfrmCell->cell), TRUE);
 
-      amount = xaccSplitGetValue (auto_split);
+      if (!(changed & MOD_AMNT))
+      {
+        amount = xaccSplitGetValue (auto_split);
 
-      xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, amount);
-      xaccBasicCellSetChanged (&(reg->debitCell->cell), TRUE);
-      xaccBasicCellSetChanged (&(reg->creditCell->cell), TRUE);
+        xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, amount);
+        xaccBasicCellSetChanged (&(reg->debitCell->cell), TRUE);
+        xaccBasicCellSetChanged (&(reg->creditCell->cell), TRUE);
+      }
 
       /* and refresh the gui */
       gnc_table_refresh_gui (reg->table);
@@ -1117,6 +1121,8 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
     default:
       break;
   }
+
+  return TRUE;
 }
 
 /* ======================================================== */
@@ -1162,12 +1168,8 @@ LedgerTraverse (Table *table,
    * auto-complete. */
   if (!gnc_table_virtual_cell_out_of_bounds (table, virt_loc.vcell_loc))
   {
-    if (virt_cell_loc_equal (virt_loc.vcell_loc,
-                             table->current_cursor_loc.vcell_loc))
-    {
-      LedgerAutoCompletion(reg, dir, p_new_virt_loc);
+    if (LedgerAutoCompletion(reg, dir, p_new_virt_loc))
       return;
-    }
   }
 
   if (changed && (split == NULL) && (dir == GNC_TABLE_TRAVERSE_RIGHT))
@@ -1310,7 +1312,7 @@ xaccSRGetTrans (SplitRegister *reg, VirtualCellLocation vcell_loc)
 {
   Split *split;
 
-  if (reg == NULL)
+  if (!reg || !reg->table)
     return NULL;
 
   split = sr_get_split (reg, vcell_loc);
@@ -2900,7 +2902,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
   {
     gnc_numeric amount = xaccGetPriceCellValue(reg->sharesCell);
     gnc_numeric price  = xaccGetPriceCellValue(reg->priceCell);
-    
+
     DEBUG ("MOD_SHRS");
 
     xaccSplitSetShareAmount (split, amount);
@@ -2918,10 +2920,6 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     xaccSplitSetSharePrice (split, price);
   }
 
-  /* The AMNT and NAMNT updates only differ by sign. Basically, 
-   * the split cursors show minus the quants that the single,
-   * double and transaction cursors show, and so when updates
-   * happen, the extra minus sign must also be handled. */
   if (MOD_AMNT & changed)
   {
     gnc_numeric new_amount;
@@ -2934,10 +2932,12 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     DEBUG ("MOD_AMNT");
 
-    /* FIXME : make sure amount gets updated? -- bg */
     xaccSplitSetValue (split, new_amount);
   }
-  
+
+  if ((MOD_AMNT | MOD_PRIC | MOD_SHRS) & changed)
+    xaccSplitScrubImbalance (split);
+
   return refresh_accounts;
 }
 
@@ -3028,19 +3028,53 @@ get_trans_total_balance (SplitRegister *reg, Transaction *trans)
 /* ======================================================== */
 
 const char *
-xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
-                       gpointer user_data)
+xaccSRGetEntryHandler (VirtualLocation virt_loc, short _cell_type,
+                       gboolean *changed, gpointer user_data)
 {
-  GUID *guid = vcell_data;
   CellType cell_type = _cell_type;
   SplitRegister *reg = user_data;
   const char *value = "";
   Transaction *trans;
   Split *split;
 
-  split = xaccSplitLookup (guid);
+  if (changed)
+    *changed = FALSE;
+
+  split = sr_get_split (reg, virt_loc.vcell_loc);
   if (split == NULL)
-    return value;
+  {
+    gnc_numeric imbalance;
+
+    trans = xaccSRGetTrans (reg, virt_loc.vcell_loc);
+    imbalance = xaccTransGetImbalance (trans);
+
+    if (gnc_numeric_zero_p (imbalance))
+      return value;
+
+    switch (cell_type)
+    {
+      case CRED_CELL:
+      case DEBT_CELL:
+        imbalance = gnc_numeric_neg (imbalance);
+
+        if (gnc_numeric_negative_p (imbalance) && (cell_type == DEBT_CELL))
+          return "";
+
+        if (gnc_numeric_positive_p (imbalance) && (cell_type == CRED_CELL))
+          return "";
+
+        if (changed)
+          *changed = TRUE;
+
+        imbalance = gnc_numeric_abs (imbalance);
+
+        return xaccPrintAmount (imbalance,
+                                gnc_split_value_print_info (split, FALSE));
+
+      default:
+        return value;
+    }
+  }
 
   trans = xaccSplitGetParent (split);
 
@@ -3421,10 +3455,13 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc, gpointer user_data)
 
     case CURSOR_TYPE_SPLIT:
       {
-        Split *split = sr_get_split (reg, virt_loc.vcell_loc);
-        Transaction *trans = xaccSplitGetParent (split);
+        Transaction *trans;
+        gnc_numeric imbalance;
 
-        if (split && (split == xaccTransGetBalanceSplit (trans)))
+        trans = xaccSRGetTrans (reg, virt_loc.vcell_loc);
+        imbalance = xaccTransGetImbalance (trans);
+
+        if (!gnc_numeric_zero_p (imbalance))
           return 0xffff00;
 
         if (is_current)

@@ -440,10 +440,10 @@ xaccAccountInsertSplit ( Account *acc, Split *split ) {
   {
     Account *oldacc;
     CHECK (acc);
-    
+
     acc->balance_dirty = TRUE;
     acc->sort_dirty = TRUE;
-    
+
     /* convert the split to the new account's denominators */
     /* if the denominator can't be exactly converted, it's an error */
     /* FIXME : need to enforce ordering of insertion/value */
@@ -462,7 +462,7 @@ xaccAccountInsertSplit ( Account *acc, Split *split ) {
     oldacc = split->acc;
     if (split->acc) xaccAccountRemoveSplit (split->acc, split);
     split->acc = acc;
-    
+
     if(acc->editlevel == 1) {
       acc->splits = g_list_insert_sorted(acc->splits, split, split_sort_func);
       acc->sort_dirty = FALSE;

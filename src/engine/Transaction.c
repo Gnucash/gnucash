@@ -369,7 +369,8 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price,
   if (!s) return;
 
   MARK_SPLIT(s);
-  s->damount = amt;
+
+  s->damount = gnc_numeric_convert(amt, get_security_denom(s), GNC_RND_ROUND);;
   s->value   = gnc_numeric_mul(s->damount, price, 
                                get_currency_denom(s), GNC_RND_ROUND);
 
@@ -424,9 +425,10 @@ DxaccSplitSetShareAmount (Split *s, double damt) {
 void 
 xaccSplitSetShareAmount (Split *s, gnc_numeric amt) {
   if(!s) return;
+
   MARK_SPLIT(s);
-  
-  s->damount = amt;
+
+  s->damount = gnc_numeric_convert(amt, get_security_denom(s), GNC_RND_ROUND);
 
   xaccSplitRebalance (s);
 }
@@ -466,7 +468,7 @@ xaccSplitSetValue (Split *s, gnc_numeric amt) {
   if(!s) return;
   MARK_SPLIT(s);
   
-  s->value = amt;
+  s->value = gnc_numeric_convert(amt, get_currency_denom(s), GNC_RND_ROUND);;
 
   xaccSplitRebalance (s);
 }
@@ -970,55 +972,13 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
 gnc_numeric
 xaccTransGetImbalance (Transaction * trans)
 {
-  const gnc_commodity * currency = xaccTransFindCommonCurrency (trans);
-  gnc_numeric imbal = xaccSplitsComputeValue (trans->splits, NULL, currency);
-  return imbal;
-}
-
-Split *
-xaccTransGetBalanceSplit (Transaction *trans)
-{
-  Split *split;
-  kvp_value *kvp;
-  GUID *guid;
+  const gnc_commodity * currency;
 
   if (!trans)
-    return NULL;
+    return gnc_numeric_zero ();
 
-  kvp = kvp_frame_get_slot (xaccTransGetSlots (trans), "balance-split");
-  if (!kvp)
-    return NULL;
-
-  guid = kvp_value_get_guid (kvp);
-  if (!guid)
-    return NULL;
-
-  split = xaccSplitLookup (guid);
-  if (g_list_find (trans->splits, split))
-    return split;
-
-  xaccTransSetBalanceSplit (trans, NULL);
-
-  return NULL;
-}
-
-void
-xaccTransSetBalanceSplit (Transaction *trans, Split *split)
-{
-  kvp_value *new_value;
-
-  if (!trans)
-    return;
-
-  if (split)
-    new_value = kvp_value_new_guid (xaccSplitGetGUID (split));
-  else
-    new_value = NULL;
-
-  kvp_frame_set_slot(xaccTransGetSlots (trans), "balance-split", new_value);
-
-  if (new_value)
-    kvp_value_delete(new_value);
+  currency = xaccTransFindCommonCurrency (trans);
+  return xaccSplitsComputeValue (trans->splits, NULL, currency);
 }
 
 /********************************************************************\
@@ -1128,6 +1088,8 @@ xaccTransFindCommonCurrency (Transaction *trans)
   const gnc_commodity * ra, * rb;
   Split *split;
 
+  if (!trans) return NULL;
+
   if (trans->splits == NULL) return NULL;
 
   split = trans->splits->data;
@@ -1143,6 +1105,7 @@ xaccTransFindCommonCurrency (Transaction *trans)
 const gnc_commodity *
 xaccTransIsCommonCurrency (Transaction *trans, const gnc_commodity * ra)
 {
+  if (!trans) return NULL;
   return FindCommonCurrency (trans->splits, ra, NULL);
 }
 
@@ -1151,6 +1114,7 @@ xaccTransIsCommonExclSCurrency (Transaction *trans,
 				const gnc_commodity * ra, 
                                 Split *excl_split)
 {
+  if (!trans) return NULL;
   return FindCommonExclSCurrency (trans->splits, ra, NULL, excl_split);
 }
 
@@ -1166,6 +1130,8 @@ xaccTransIsCommonExclSCurrency (Transaction *trans,
 static void
 xaccTransRebalance (Transaction * trans)
 {
+  return;
+
   if (!trans || !trans->splits)
     return;
 
@@ -1178,6 +1144,13 @@ xaccSplitRebalance (Split *split)
   Transaction *trans;
   gnc_numeric value;
   const gnc_commodity * base_currency = NULL;
+
+#if 0
+  if (split->acc &&
+      gnc_commodity_equiv (xaccAccountGetCurrency (split->acc),
+                           xaccAccountGetSecurity (split->acc)))
+    split->damount = split->value;
+#endif
 
   /* let's see how we do without all this stuff */
   return;

@@ -144,25 +144,19 @@ xaccAccountScrubImbalance (Account *acc)
 void
 xaccTransScrubImbalance (Transaction *trans)
 {
-  Split *balance_split;
+  Split *balance_split = NULL;
   gnc_numeric imbalance;
-  gboolean trans_was_open;
-  gboolean had_balance_split;
 
   if (!trans)
     return;
 
-  trans_was_open = xaccTransIsOpen (trans);
-
-  balance_split = xaccTransGetBalanceSplit (trans);
-
-  had_balance_split = balance_split != NULL;
-
-  if (!had_balance_split)
   {
     GList *node;
     Account *account;
     Account *peer = NULL;
+
+    for (node = trans->splits; node; node = node->next)
+      xaccSplitScrubImbalance (node->data);
 
     imbalance = xaccTransGetImbalance (trans);
     if (gnc_numeric_zero_p (imbalance))
@@ -192,33 +186,17 @@ xaccTransScrubImbalance (Transaction *trans)
     xaccAccountInsertSplit (account, balance_split);
     xaccAccountCommitEdit (account);
   }
-  else
-  {
-    const gnc_commodity * currency = xaccTransFindCommonCurrency (trans);
 
-    imbalance = xaccSplitsComputeValue (trans->splits,
-                                        balance_split, currency);
-    if (gnc_numeric_zero_p (imbalance)) /* balances without balance split */
-    {
-      if (!trans_was_open)
-        xaccTransBeginEdit (trans, TRUE);
-
-      xaccSplitDestroy (balance_split);
-      xaccTransSetBalanceSplit (trans, NULL);
-
-      if (!trans_was_open)
-        xaccTransCommitEdit (trans);
-
-      return;
-    }
-
-    imbalance = xaccTransGetImbalance (trans);
-  }
+  PWARN ("unbalanced transaction: %s",
+         guid_to_string (xaccTransGetGUID (trans)));
 
   {
     const gnc_commodity *common_currency;
     const gnc_commodity *commodity;
+    gboolean trans_was_open;
     Account *account;
+
+    trans_was_open = xaccTransIsOpen (trans);
 
     if (!trans_was_open)
       xaccTransBeginEdit (trans, TRUE);
@@ -235,28 +213,66 @@ xaccTransScrubImbalance (Transaction *trans)
 
       xaccSplitSetValue (balance_split, new_value);
     }
-    else
+
+    commodity = xaccAccountGetSecurity (account);
+    if (gnc_commodity_equiv (common_currency, commodity))
     {
-      commodity = xaccAccountGetSecurity (account);
-      if (gnc_commodity_equiv (common_currency, commodity))
-      {
-        gnc_numeric new_share_amount = xaccSplitGetShareAmount (balance_split);
+      gnc_numeric new_share_amount = xaccSplitGetShareAmount (balance_split);
 
-        new_share_amount = gnc_numeric_sub_fixed (new_share_amount, imbalance);
+      new_share_amount = gnc_numeric_sub_fixed (new_share_amount, imbalance);
 
-        xaccSplitSetShareAmount (balance_split, new_share_amount);
-      }
+      xaccSplitSetShareAmount (balance_split, new_share_amount);
     }
 
-    if (!had_balance_split)
-    {
-      xaccTransAppendSplit (trans, balance_split);
-      xaccTransSetBalanceSplit (trans, balance_split);
-    }
+    xaccTransAppendSplit (trans, balance_split);
 
     if (!trans_was_open)
       xaccTransCommitEdit (trans);
   }
+}
+
+void xaccSplitScrubImbalance (Split *split)
+{
+  Account *account;
+  Transaction *trans;
+  gboolean trans_was_open;
+  int scu;
+
+  if (!split)
+    return;
+
+  trans = xaccSplitGetParent (split);
+  if (!trans)
+    return;
+
+  account = xaccSplitGetAccount (split);
+  if (!account)
+    return;
+
+  if (!gnc_commodity_equiv (xaccAccountGetCurrency (account),
+                            xaccAccountGetSecurity (account)))
+    return;
+
+  scu = MIN (xaccAccountGetCurrencySCU (account),
+             xaccAccountGetSecuritySCU (account));
+
+  if (gnc_numeric_same (xaccSplitGetShareAmount (split),
+                        xaccSplitGetValue (split),
+                        scu, GNC_RND_ROUND))
+    return;
+
+  PWARN ("split with mismatched values: %s",
+         guid_to_string (xaccSplitGetGUID (split)));
+
+  trans_was_open = xaccTransIsOpen (trans);
+
+  if (!trans_was_open)
+    xaccTransBeginEdit (trans, TRUE);
+
+  xaccSplitSetShareAmount (split, xaccSplitGetValue (split));
+
+  if (!trans_was_open)
+    xaccTransCommitEdit (trans);
 }
 
 /* ================================================================ */

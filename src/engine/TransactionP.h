@@ -197,7 +197,4 @@ void  xaccFreeSplit (Split *split);    /* frees memory */
 gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
                                     const gnc_commodity * base_currency);
 
-/* Set the balance split of a transaction. */
-void xaccTransSetBalanceSplit (Transaction *trans, Split *split);
-
 #endif /* __XACC_TRANSACTION_P_H__ */

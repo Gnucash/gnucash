@@ -150,8 +150,9 @@ typedef void (*TableSetHelpFunc) (Table *table,
 
 typedef void (*TableDestroyFunc) (Table *table);
 
-typedef const char * (*TableGetEntryHandler) (gpointer vcell_data,
+typedef const char * (*TableGetEntryHandler) (VirtualLocation virt_loc,
                                               short cell_type,
+                                              gboolean *changed,
                                               gpointer user_data);
 
 typedef guint32 (*TableGetFGColorHandler) (VirtualLocation virt_loc,

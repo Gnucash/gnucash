@@ -167,7 +167,8 @@ gnc_table_get_header_cell (Table *table)
 /* ==================================================== */
 
 static const char *
-gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc)
+gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc,
+                              gboolean *changed)
 {
   VirtualCell *vcell;
   CellBlockCell *cb_cell;
@@ -184,7 +185,7 @@ gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc)
   if (cb_cell->cell_type < 0)
     return "";
 
-  return table->entry_handler (vcell->vcell_data, cb_cell->cell_type,
+  return table->entry_handler (virt_loc, cb_cell->cell_type, changed,
                                table->handler_user_data);
 }
 
@@ -216,7 +217,7 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
       return cb_cell->cell->value;
   }
 
-  return table->entry_handler (vcell->vcell_data, cb_cell->cell_type,
+  return table->entry_handler (virt_loc, cb_cell->cell_type, NULL,
                                table->handler_user_data);
 }
 
@@ -602,12 +603,13 @@ gnc_table_move_cursor_internal (Table *table,
         if (XACC_CELL_ALLOW_SHADOW & (cell->input_output))
         {
           const char *entry;
+          gboolean changed = FALSE;
 
-          entry = gnc_table_get_entry_internal (table, virt_loc);
+          entry = gnc_table_get_entry_internal (table, virt_loc, &changed);
 
           xaccSetBasicCellValue (cell, entry);
 
-          cell->changed = 0;
+          cell->changed = changed ? GNC_CELL_CHANGED : 0;
         }
       }
     }

@@ -296,13 +296,6 @@ xaccTransIsCommonExclSCurrency (Transaction *trans,
  */
 gnc_numeric xaccTransGetImbalance (Transaction * trans);
 
-/* The xaccTransGetBalanceSplit method returns the 'balance' split of
- *    a transaction or NULL if there is no balance split. The balance
- *    split is an 'artificial' split created to make the transaction
- *    balance. This split is automatically managed by the rebalancing
- *    routines and is created and destroyed as needed. */
-Split * xaccTransGetBalanceSplit (Transaction *trans);
-
 /* ------------- splits --------------- */
 Split       * xaccMallocSplit (void);
 

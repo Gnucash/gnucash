@@ -203,7 +203,9 @@ void     xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
 void     xaccSetSplitRegisterColorizeNegative (gboolean use_red);
 
 /* Private function, for MultiLedger.c only */
-const char * xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
+const char * xaccSRGetEntryHandler (VirtualLocation virt_loc,
+                                    short _cell_type,
+                                    gboolean *changed,
                                     gpointer user_data);
 guint32      xaccSRGetFGColorHandler (VirtualLocation virt_loc,
                                       gpointer user_data);
