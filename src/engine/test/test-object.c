@@ -1,3 +1,6 @@
+/*
+ * Lightly test the QofObject infrastructure.
+ */
 #include <glib.h>
 #include <libguile.h>
 
@@ -30,8 +33,13 @@ static QofObject bus_obj = {
   printable,
 };
 
-static void test_object (void)
+static void 
+test_object (void)
 {
+  QofBook *book = qof_book_new();
+
+  do_test ((NULL != book), "book null");
+
   /* Test the global registration and lookup functions */
   {
     do_test (!qof_object_register (NULL), "register NULL");
@@ -47,7 +55,7 @@ static void test_object (void)
 	     "test description return");
   }
 
-  test_foreach ((QofBook*)1, TEST_MODULE_NAME);
+  test_foreach (book, TEST_MODULE_NAME);
   test_printable (TEST_MODULE_NAME, (gpointer)1);
 }
 
