@@ -577,6 +577,13 @@ gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
                         borders->right = CELL_BORDER_LINE_NORMAL;
 
         gnc_table_get_borders (sheet->table, virt_loc, borders);
+
+        if (virt_cell_loc_equal (virt_loc.vcell_loc,
+                                 sheet->table->current_cursor_loc.vcell_loc))
+        {
+                borders->top    = CELL_BORDER_LINE_NORMAL;
+                borders->bottom = CELL_BORDER_LINE_NORMAL;
+        }
 }
 
 

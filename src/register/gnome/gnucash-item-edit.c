@@ -395,10 +395,10 @@ item_edit_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_path,
 	if (!item_edit->is_popup)
 		return;
 
-	toggle_height = h - 10;
-	toggle_width = toggle_height;
-	toggle_x = x + w - (toggle_width + 3);
-	toggle_y = y + 5;
+	toggle_height = h - (2 * (CELL_VPADDING + 1));
+	toggle_width  = toggle_height;
+	toggle_x      = x + w - (toggle_width + 3);
+	toggle_y      = y + (h / 2) - (toggle_height / 2);
 
         item_edit->popup_toggle.toggle_offset = toggle_width + 3;
 
