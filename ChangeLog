@@ -8,6 +8,15 @@
 	* src/gnome/glade/print.glade: remove data that is now part of the
 	  date-format widget.
 
+	* src/gnome/glade/print.glade: add "Deluxe Personal Check" type
+	* src/gnome/dialog-print-check.c: add support for choosing
+	  a "deluxe" check type.
+	* src/scm/printing/print-check.scm: add support for printing
+	  to "deluxe" personal checks.  This prints the check "sideways"
+	  on a US-Letter configuration.
+	* src/scm/printing/print-check.scm: some finer adjustments on
+	  the locations for Deluxe personal checks.
+
 2003-05-30  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-gnome/dialog-customer.c:

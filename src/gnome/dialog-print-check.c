@@ -39,7 +39,7 @@
 #include "gnc-ui.h"
 #include "gnc-date-format.h"
 
-#define CHECK_PRINT_NUM_FORMATS 2
+#define CHECK_PRINT_NUM_FORMATS 3
 #define CHECK_PRINT_NUM_POSITIONS 4
 #define CHECK_PRINT_NUM_UNITS 4
 
@@ -178,7 +178,7 @@ gnc_ui_print_check_dialog_ok_cb(GtkButton * button,
   int        sel_option;
   double     multip = 72.0;
 
-  char       * formats[]   = { "quicken", "custom" };
+  char       * formats[]   = { "quicken", "deluxe", "custom" };
   char       * positions[] = { "top", "middle", "bottom", "custom" };
 
   sel_option = gnc_option_menu_get_active(pcd->format_picker);
