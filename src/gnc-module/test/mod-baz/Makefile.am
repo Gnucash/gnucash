@@ -1,6 +1,6 @@
 AM_CFLAGS = \
-  -I../.. \
-  -I../mod-foo \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/gnc-module/test/mod-foo \
   ${GLIB_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS}
@@ -28,7 +28,7 @@ EXTRA_DIST = \
 baz-gwrap.c baz-gwrap.h: baz-gwrap.scm
 	FLAVOR=gnome guile -c \
 	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	  (primitive-load \"./baz-gwrap.scm\") \
+	  (primitive-load \"${srcdir}/baz-gwrap.scm\") \
 	  (gw:generate-wrapset \"baz-gwrap\")"
 
 BUILT_SOURCES = baz-gwrap.c baz-gwrap.h

@@ -1,5 +1,5 @@
 AM_CFLAGS = \
-  -I../.. \
+  -I${top_srcdir}/src/gnc-module \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}
@@ -23,7 +23,7 @@ EXTRA_DIST = \
 bar-gwrap.c bar-gwrap.h: bar-gwrap.scm
 	FLAVOR=gnome guile -c \
 	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	  (primitive-load \"./bar-gwrap.scm\") \
+	  (primitive-load \"${srcdir}/bar-gwrap.scm\") \
 	  (gw:generate-wrapset \"bar-gwrap\")"
 
 BUILT_SOURCES = bar-gwrap.c bar-gwrap.h

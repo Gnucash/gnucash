@@ -12,7 +12,7 @@ AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} ${GLIB_CFLAGS}
 .scm-links:
 	rm -f gnucash report
 	ln -sf . gnucash
-	ln -sf . report 
+	ln -sf ${srcdir} report 
 	touch .scm-links
 
 noinst_DATA = .scm-links

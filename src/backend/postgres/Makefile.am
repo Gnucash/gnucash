@@ -5,7 +5,7 @@ pkglib_LTLIBRARIES = libgncmod-backend-postgres.la
 libgncmod_backend_postgres_la_LDFLAGS = -module 
 
 libgncmod_backend_postgres_la_LIBADD  =  -lpq  \
-  ${top_srcdir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
   ${GLIB_LIBS}
 
 libgncmod_backend_postgres_la_SOURCES = \

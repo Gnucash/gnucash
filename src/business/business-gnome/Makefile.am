@@ -51,8 +51,8 @@ noinst_HEADERS = \
 libgncmod_business_gnome_la_LDFLAGS = -module
 
 libgncmod_business_gnome_la_LIBADD = \
-  ../business-ledger/libgnc-business-ledger.la \
-  ${top_srcdir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/business/business-ledger/libgnc-business-ledger.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GUILE_LIBS} \
   ${GNOMEUI_LIBS} \
   ${G_WRAP_LINK_ARGS} \
@@ -87,10 +87,20 @@ EXTRA_DIST = \
   ${gncmod_DATA} \
   ${gwmod_DATA}
 
+if GNUCASH_SEPARATE_BUILDDIR
+#Only needed when srcdir and builddir are different
+SCM_FILE_LINKS = gw-business-gnome-spec.scm
+endif
+
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
 gncmod-business-gnome.c: gw-business-gnome.h
@@ -107,4 +117,7 @@ gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h: .scm-links gw-bus
 	 (gw:generate-wrapset \"gw-business-gnome\")"
 
 BUILT_SOURCES = gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h
-CLEANFILES = gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h gw-business-gnome.html
+CLEANFILES = ${BUILT_SOURCES} gw-business-gnome.html \
+             ${SCM_FILE_LINKS} g-wrapped gnucash .scm-links
+
+

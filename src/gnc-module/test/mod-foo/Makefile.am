@@ -23,7 +23,7 @@ EXTRA_DIST = \
 foo-gwrap.c foo-gwrap.h: foo-gwrap.scm
 	FLAVOR=gnome guile -c \
 	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-           (primitive-load \"./foo-gwrap.scm\") \
+           (primitive-load \"${srcdir}/foo-gwrap.scm\") \
            (gw:generate-wrapset \"foo-gwrap\")"
 
 BUILT_SOURCES = foo-gwrap.c foo-gwrap.h

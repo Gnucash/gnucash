@@ -19,7 +19,7 @@ AM_CFLAGS = \
 
 #FIXME remove the following deps
 #  -I${top_srcdir}/src \
-#  -I${top_srcdir}/src/gnome \
+#  -I${top_srcdir}/src/gnome
 
 libgncmod_binary_import_la_SOURCES = \
   druid-commodity.c \
@@ -32,12 +32,12 @@ gncinclude_HEADERS = \
 libgncmod_binary_import_la_LDFLAGS = -module
 
 libgncmod_binary_import_la_LIBADD = \
-  ${top_srcdir}/src/gnc-module/libgncmodule.la \
-  ${top_srcdir}/src/engine/libgncmod-engine.la \
-  ${top_srcdir}/src/calculation/libgncmod-calculation.la \
-  ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
-  ${top_srcdir}/src/app-file/libgncmod-app-file.la \
-  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/calculation/libgncmod-calculation.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/app-file/libgncmod-app-file.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${GUILE_LIBS} \
   ${GLADE_LIBS} \
   ${GNOMEUI_LIBS} \
@@ -64,14 +64,22 @@ EXTRA_DIST = \
   ${gwmod_DATA} \
   ${glade_DATA}
 
+if GNUCASH_SEPARATE_BUILDDIR
+#Only needed when srcdir and builddir are different
+SCM_FILE_LINKS = gw-binary-import-spec.scm
+endif
+
 .scm-links: 
 	rm -f import-export gnucash g-wrapped
 	ln -sf . import-export
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
-CLEANFILES = import-export gnucash g-wrapped .scm-links
-
 
 gw-binary-import.scm gw-binary-import.c gw-binary-import.h: .scm-links gw-binary-import-spec.scm
 	FLAVOR=gnome guile -c \
@@ -81,4 +89,6 @@ gw-binary-import.scm gw-binary-import.c gw-binary-import.h: .scm-links gw-binary
 	  (gw:generate-wrapset \"gw-binary-import\")"
 
 BUILT_SOURCES = gw-binary-import.scm gw-binary-import.c gw-binary-import.h
-CLEANFILES += gw-binary-import.scm gw-binary-import.c gw-binary-import.h gw-binary-import.html
+CLEANFILES = ${BUILT_SOURCES} gw-binary-import.html \
+             ${SCM_FILE_LINKS} gnucash g-wrapped import-export .scm-links
+

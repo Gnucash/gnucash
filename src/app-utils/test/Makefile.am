@@ -10,12 +10,15 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/calculation \
   --gnc-module-dir ${top_builddir}/src/app-utils \
+  --gnc-module-dir ${top_srcdir}/src/engine \
+  --gnc-module-dir ${top_srcdir}/src/app-utils \
   --guile-load-dir ${G_WRAP_MODULE_DIR} \
   --guile-load-dir ${top_srcdir}/lib \
   --guile-load-dir ${top_srcdir}/src/scm \
-  --guile-load-dir ${top_srcdir}/src/gnome-utils \
-  --guile-load-dir ${top_srcdir}/src/gnome \
-  --library-dir    ${top_srcdir}/src/gnome-utils \
+  --guile-load-dir ${top_builddir}/src/scm \
+  --guile-load-dir ${top_builddir}/src/gnome-utils \
+  --guile-load-dir ${top_builddir}/src/gnome \
+  --library-dir    ${top_builddir}/src/gnome-utils \
   --library-dir    ${top_srcdir}/src/gnome
 
 TESTS_ENVIRONMENT := \
@@ -26,8 +29,8 @@ LDADD = \
    ../../gnc-module/libgncmodule.la \
    ../libgncmod-app-utils.la \
    ../../engine/libgw-engine.la \
-   ${top_srcdir}/src/test-core/libgncmod-test.la \
-   ${top_srcdir}/src/engine/test-core/libgncmod-test-engine.la 
+   ${top_builddir}/src/test-core/libgncmod-test.la \
+   ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la 
 
 noinst_PROGRAMS = \
   test-link-module \
@@ -42,5 +45,5 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
-  -I.. \
+  -I${top_srcdir}/src/app-utils \
   ${GLIB_CFLAGS}

@@ -27,7 +27,7 @@ PWD := $(shell pwd)
 
 guile: guile.in
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
 	    -e 's:@-GUILE-@:${GUILE}:'
 	mv $@.tmp $@
 	chmod u+x $@
@@ -36,7 +36,7 @@ CLEANFILES = guile
 
 gnucash-env: gnucash-env.in
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
 	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
 	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:g' \
 	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:g' \
@@ -51,7 +51,7 @@ CLEANFILES += gnucash-env
 
 gnucash-build-env: gnucash-build-env.in
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
 	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
             -e 's:@-GNC_BUILDDIR-@:${PWD}/${top_builddir}:g' \
             -e 's:@-GNC_SRCDIR-@:${PWD}/${top_srcdir}:g'

@@ -16,7 +16,7 @@ noinst_PROGRAMS = \
 test_link_module_SOURCES=test-link-module.c
 test_link_module_LDADD=../libgncmod-network-utils.la
 
-#EXTRA_DIST = test-load-module
+EXTRA_DIST = test-load-module
 
 AM_CFLAGS = \
   -I${top_srcdir}/src/test-core \

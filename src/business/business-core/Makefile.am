@@ -70,10 +70,22 @@ EXTRA_DIST = \
   ${gncmod_DATA} \
   ${gwmod_DATA}
 
+if GNUCASH_SEPARATE_BUILDDIR
+#For compiling
+SCM_FILE_LINKS = gw-business-core-spec.scm
+#For executing test cases
+SCM_FILE_LINKS += business-core.scm
+endif
+
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
 gncmod-business-core.c: gw-business-core.h
@@ -87,4 +99,5 @@ gw-business-core.scm gw-business-core.c gw-business-core.h: .scm-links gw-busine
 	 (gw:generate-wrapset \"gw-business-core\")"
 
 BUILT_SOURCES = gw-business-core.scm gw-business-core.c gw-business-core.h
-CLEANFILES = gw-business-core.scm gw-business-core.c gw-business-core.h gw-business-core.html
+CLEANFILES = ${BUILT_SOURCES} gw-business-core.html \
+             ${SCM_FILE_LINKS} g-wrapped gnucash .scm-links

@@ -62,20 +62,21 @@ CLEANFILES = gnucash-config
 ## the sed substitutions.
 make-gnucash-patch: make-gnucash-patch.in
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
 make-gnucash-potfiles: make-gnucash-potfiles.in
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
 DISTCLEANFILES = \
-  cscope.files cscope.out etags.files make-gnucash-patch
+  intltool-extract intltool-update intltool-merge\
+  cscope.files cscope.out etags.files make-gnucash-patch make-gnucash-potfiles
 
 cscope.files:
 	find . -name '*.[ch]' > cscope.files

@@ -14,10 +14,10 @@ noinst_HEADERS = \
 libgncmod_qif_import_la_LDFLAGS = -module 
 
 libgncmod_qif_import_la_LIBADD = \
-  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_srcdir}/src/app-file/libgncmod-app-file.la \
-  ${top_srcdir}/src/gnc-module/libgncmodule.la \
-  ${top_srcdir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-file/libgncmod-app-file.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \

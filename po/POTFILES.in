@@ -102,8 +102,6 @@ src/business/business-core/gncEntry.c
 src/business/business-core/gncInvoice.c
 src/business/business-core/gncOrder.c
 src/business/business-core/gncOwner.c
-src/business/business-gnome/business-chooser.c
-src/business/business-gnome/business-chooser.glade
 src/business/business-gnome/businessmod-gnome.c
 src/business/business-gnome/customer.glade
 src/business/business-gnome/dialog-customer.c

@@ -22,7 +22,7 @@ gncinclude_HEADERS = \
 libgncmod_network_utils_la_LDFLAGS = -module
 
 libgncmod_network_utils_la_LIBADD = \
-  ${top_srcdir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GHTTP_LIBS} \
   ${GNOME_LIBDIR} \
   ${GNOME_LIBS} \

@@ -1,4 +1,6 @@
-AM_CFLAGS = ${GLIB_CFLAGS} -I../../
+AM_CFLAGS = \
+  -I${top_srcdir}/src/gnc-module \
+  ${GLIB_CFLAGS}
 
 LDADD = -L../.. -L../../.libs
 

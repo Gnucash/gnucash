@@ -33,10 +33,10 @@ gncinclude_HEADERS = \
 libgncmod_report_gnome_la_LDFLAGS = -module
 
 libgncmod_report_gnome_la_LIBADD = \
-  ${top_srcdir}/src/gnc-module/libgncmodule.la \
-  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_srcdir}/src/app-file/libgncmod-app-file.la \
-  ${top_srcdir}/src/report/report-system/libgncmod-report-system.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-file/libgncmod-app-file.la \
+  ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GNOME_PRINT_LIBS} \
@@ -64,23 +64,33 @@ EXTRA_DIST = \
   ${gwmod_DATA} \
   ${gncmod_DATA}
 
+if GNUCASH_SEPARATE_BUILDDIR
+#Only needed when srcdir and builddir are different
+SCM_FILE_LINKS = gw-report-gnome-spec.scm
+endif
+
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
-	ln -sf . report 
+	ln -sf ${srcdir} report 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
 gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h: .scm-links gw-report-gnome-spec.scm
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
-	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
-	  (set! %load-path (cons \"${top_srcdir}/src/app-utils\" %load-path)) \
-	  (set! %load-path (cons \"${top_srcdir}/src/gnome-utils\" %load-path)) \
+	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \
+	  (set! %load-path (cons \"${top_builddir}/src/app-utils\" %load-path)) \
+	  (set! %load-path (cons \"${top_builddir}/src/gnome-utils\" %load-path)) \
 	  (primitive-load \"./gw-report-gnome-spec.scm\") \
 	  (gw:generate-wrapset \"gw-report-gnome\")"
 
 BUILT_SOURCES = gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h
-CLEANFILES = gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h \
-             gw-report-gnome.html gnucash g-wrapped report .scm-links
+CLEANFILES = ${BUILT_SOURCES} gw-report-gnome.html \
+             ${SCM_FILE_LINKS} gnucash g-wrapped report .scm-links

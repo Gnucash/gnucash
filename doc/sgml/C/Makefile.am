@@ -96,10 +96,23 @@ install-data-local: gnucash/index.html gnucash/help-search-index.db
               $(DESTDIR)$(gnucash_helpdir)/stylesheet-images/$$basefile; \
 	  done)
 
+uninstall-local:
+	-rm -f $(DESTDIR)$(gnucash_helpdir)/topic.dat;
+	-rm -f $(DESTDIR)$(gnucash_helpdir)/help-search-index.db;
+	-(for file in $(DESTDIR)$(gnucash_helpdir)/*.html; do \
+	    echo " rm -f $$file"; \
+	    rm -f $$file; \
+	  done)
+	-(for file in $(DESTDIR)$(gnucash_helpdir)/*.css; do \
+	    echo " rm -f $$file"; \
+	    rm -f $$file; \
+	  done)
+	-(for file in $(DESTDIR)$(gnucash_helpdir)/stylesheet-images/*.gif; do \
+	    echo " rm -f $$file"; \
+	    rm -f $$file; \
+	  done)
 
 EXTRA_DIST = \
-	$(GNUCASH_SGML_FILES) \
-	$(GNUCASH_HTML_FILES) \
 	topic.dat
 
 manual-html: gnucash/index.html
@@ -115,16 +128,16 @@ clean:
 	rm -rf gnucash.junk
 
 gnucash/gnucash.dvi: $(GNUCASH_SGML_FILES)
-	db2dvi gnucash.sgml
+	db2dvi ${srcdir}/gnucash.sgml
 
 gnucash/gnucash.ps: $(GNUCASH_SGML_FILES)
-	db2ps gnucash.sgml
+	db2ps ${srcdir}/gnucash.sgml
 
 gnucash/gnucash.rtf: $(GNUCASH_SGML_FILES)
-	db2rtf gnucash.sgml
+	db2rtf ${srcdir}/gnucash.sgml
 
 gnucash/index.html: $(GNUCASH_SGML_FILES) $(GNUCASH_HTML_FILES)
-	-(db2html gnucash.sgml \
+	-(db2html ${srcdir}/gnucash.sgml \
 	  && cp $(GNUCASH_HTML_FILES) gnucash \
 	  && mkdir -p gnucash/image \
 	  && cp $(srcdir)/image/*.png gnucash/image || exit 1) 
@@ -139,7 +152,14 @@ dist-hook:
 	mkdir $(distdir)/gnucash
 	mkdir $(distdir)/gnucash/image
 	mkdir $(distdir)/gnucash/stylesheet-images
-	cp gnucash/*.html $(distdir)/gnucash
-	cp gnucash/image/*.png $(distdir)/gnucash/image
-	-cp gnucash/*.css $(distdir)/gnucash
-	-cp gnucash/stylesheet-images/*.gif $(distdir)/gnucash/stylesheet-images
+	-(if test -f gnucash.sgml; then dir=.; \
+	  else dir="${srcdir}"; fi; \
+	  for file in $(GNUCASH_SGML_FILES); do \
+	    cp $${dir}/$$file $(distdir)/$$file; \
+	  done)
+	-(if test -f gnucash/index.html; then dir=.; \
+	  else dir="${srcdir}"; fi; \
+	  cp $${dir}/gnucash/*.html $(distdir)/gnucash; \
+	  cp $${dir}/gnucash/image/*.png $(distdir)/gnucash/image; \
+	  cp $${dir}/gnucash/*.css $(distdir)/gnucash; \
+	  cp $${dir}/gnucash/stylesheet-images/*.gif $(distdir)/gnucash/stylesheet-images)

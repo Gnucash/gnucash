@@ -77,11 +77,11 @@ noinst_HEADERS = \
 libgncmod_gnome_utils_la_LDFLAGS = -module
 
 libgncmod_gnome_utils_la_LIBADD = \
-  ${top_srcdir}/src/gnc-module/libgncmodule.la \
-  ${top_srcdir}/src/engine/libgncmod-engine.la \
-  ${top_srcdir}/src/calculation/libgncmod-calculation.la \
-  ${top_srcdir}/src/network-utils/libgncmod-network-utils.la \
-  ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/calculation/libgncmod-calculation.la \
+  ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${GUILE_LIBS} \
   ${GUPPI_LIBS} \
   ${GNOMEUI_LIBS} \
@@ -126,7 +126,7 @@ dialog-utils.c: gnc-dir.h
 ## the sed substitutions.
 gnc-dir.h: gnc-dir.h.in
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
 	    -e 's:@-GNC_ACCOUNTS_DIR-@:${GNC_ACCOUNTS_DIR}:g' \
 	    -e 's:@-GNC_GLADE_DIR-@:${GNC_GLADE_DIR}:g' \
 	    -e 's:@-GNC_PIXMAP_DIR-@:${GNC_PIXMAP_DIR}:g'
@@ -139,21 +139,33 @@ BUILT_SOURCES = gnc-dir.h
 dist-hook:
 	rm ${distdir}/gnc-dir.h
 
+if GNUCASH_SEPARATE_BUILDDIR
+#For compiling
+SCM_FILE_LINKS = gw-gnome-utils-spec.scm
+#For executing test cases
+SCM_FILE_LINKS += gnome-utils-spec.scm gnome-utils.scm
+endif
+
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
 gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: .scm-links gw-gnome-utils-spec.scm
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
-	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
-	  (set! %load-path (cons \"${top_srcdir}/src/app-utils\" %load-path)) \
+	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \
+	  (set! %load-path (cons \"${top_builddir}/src/app-utils\" %load-path)) \
 	  (primitive-load \"./gw-gnome-utils-spec.scm\") \
 	  (gw:generate-wrapset \"gw-gnome-utils\")"
 
 BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
-CLEANFILES = ${BUILT_SOURCES} \
-             gw-gnome-utils.html gnucash g-wrapped .scm-links
+CLEANFILES = ${BUILT_SOURCES} gw-gnome-utils.html \
+             ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links

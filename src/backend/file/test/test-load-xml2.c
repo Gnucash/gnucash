@@ -53,7 +53,7 @@ test_load_file(const char *filename)
 
     remove_locks(filename);
 
-    gnc_session_begin(session, filename, FALSE, FALSE);
+    gnc_session_begin(session, filename, TRUE, FALSE);
 
     gnc_session_load_from_xml_file_v2(session, NULL);
 
@@ -73,8 +73,13 @@ test_load_file(const char *filename)
 static void
 guile_main(int argc, char **argv)
 {
-    const char *location = "test-files/xml2";
+    const char *location = getenv("GNC_TEST_FILES");
     DIR *xml2_dir;
+
+    if (!location)
+    {
+	location = "test-files/xml2";
+    }
 
     gnc_module_system_init();
     gnc_module_load("gnucash/engine", 0);

@@ -19,9 +19,14 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/backend/file \
+  --gnc-module-dir ${top_srcdir}/src/gnc-module \
+  --gnc-module-dir ${top_srcdir}/src/engine \
   --guile-load-dir ${G_WRAP_MODULE_DIR}
 
 TESTS_ENVIRONMENT := \
+  GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
+  GNC_TEST_FILES=${srcdir}/test-files/xml2 \
+  SRCDIR=${srcdir} \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 noinst_LTLIBRARIES = libgnc-test-file-stuff.la
@@ -44,13 +49,13 @@ noinst_PROGRAMS = \
 
 noinst_HEADERS = test-file-stuff.h
 
-LDADD = ${top_srcdir}/src/test-core/libgncmod-test.la \
-        ${top_srcdir}/src/gnc-module/libgncmodule.la \
-        ${top_srcdir}/src/engine/libgncmod-engine.la \
-        ${top_srcdir}/src/engine/libgw-engine.la \
-        ${top_srcdir}/src/engine/libgw-kvp.la \
-        ${top_srcdir}/src/engine/test-core/libgncmod-test-engine.la \
-        ../libgncmod-backend-file.la \
+LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
+        ${top_builddir}/src/gnc-module/libgncmodule.la \
+        ${top_builddir}/src/engine/libgncmod-engine.la \
+        ${top_builddir}/src/engine/libgw-engine.la \
+        ${top_builddir}/src/engine/libgw-kvp.la \
+        ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
+        ${top_builddir}/src/backend/file/libgncmod-backend-file.la \
         ./libgnc-test-file-stuff.la 
 
 AM_CFLAGS = \
@@ -59,7 +64,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
-  -I.. \
+  -I${top_srcdir}/src/backend/file \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS}
 
@@ -67,4 +72,5 @@ EXTRA_DIST = \
   grab-types.pl \
   test-dom-parser1.c \
   test-load-module \
-  test-real-data.sh
+  test-real-data.sh \
+  test-xml2-is-file.c

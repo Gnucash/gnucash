@@ -27,7 +27,7 @@ config_DATA = config
 
 .scm-links: 
 	rm -f gnucash
-	ln -sf . gnucash
+	ln -sf ${srcdir} gnucash
 	touch .scm-links
 
 CLEANFILES = .scm-links gnucash 
@@ -47,7 +47,7 @@ EXTRA_DIST = \
 ## the sed substitutions.  *sigh*
 build-config.scm: build-config.scm.in Makefile
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:' \
             -e 's:@-GNC_CONFIGDIR-@:${GNC_CONFIGDIR}:' \
             -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:' \

@@ -100,9 +100,9 @@ noinst_SCRIPTS = iso-currencies-to-c
 
 libgncmod_engine_la_LDFLAGS = -module
 libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
- ${top_srcdir}/src/gnc-module/libgncmodule.la \
- ${top_srcdir}/src/engine/libgw-engine.la \
- ${top_srcdir}/src/engine/libgw-kvp.la 
+ ${top_builddir}/src/gnc-module/libgncmodule.la \
+ ${top_builddir}/src/engine/libgw-engine.la \
+ ${top_builddir}/src/engine/libgw-kvp.la 
 
 libgw_kvp_la_SOURCES = gw-kvp.c kvp-scm.c
 libgw_kvp_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
@@ -140,19 +140,31 @@ EXTRA_DIST = \
   ${gncscm_DATA} \
   ${gwmod_DATA}
 
+if GNUCASH_SEPARATE_BUILDDIR
+#For compiling
+SCM_FILE_LINKS = gw-engine-spec.scm gw-kvp-spec.scm iso-4217-currencies.scm
+#For executing test cases
+SCM_FILE_LINKS += engine.scm
+endif
+
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
 gncmod-engine.c: gw-engine.h
 
 gnc-commodity.c: iso-4217-currencies.c
 
-iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
-	chmod u+x ./iso-currencies-to-c
-	GUILE_LOAD_PATH=${top_srcdir}/lib/ ./iso-currencies-to-c
+iso-4217-currencies.c: .scm-links iso-4217-currencies.scm iso-currencies-to-c
+	chmod u+x ${srcdir}/iso-currencies-to-c
+	GUILE_LOAD_PATH=${top_srcdir}/lib/ ${srcdir}/iso-currencies-to-c
 
 gw-engine.scm gw-engine.c gw-engine.h: .scm-links gw-engine-spec.scm
 	FLAVOR=gnome guile -c \
@@ -168,4 +180,9 @@ gw-kvp.scm gw-kvp.c gw-kvp.h: .scm-links gw-kvp-spec.scm
 	 (primitive-load \"./gw-kvp-spec.scm\") \
 	 (gw:generate-wrapset \"gw-kvp\")"
 
-CLEANFILES = gw-engine.scm gw-engine.c gw-engine.h gw-engine.html gnucash g-wrapped .scm-links gw-kvp.scm gw-kvp.c gw-kvp.h iso-4217-currencies.c
+BUILT_SOURCES = \
+  gw-engine.scm gw-engine.c gw-engine.h \
+  gw-kvp.scm gw-kvp.c gw-kvp.h 
+CLEANFILES = ${BUILT_SOURCES} gw-engine.html gw-kvp.html \
+             iso-4217-currencies.c \
+             ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links

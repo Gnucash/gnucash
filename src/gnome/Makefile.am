@@ -4,6 +4,7 @@ lib_LTLIBRARIES = libgncgnome.la libgw-gnc.la
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-gnc-spec.scm gw-gnc.scm
+#nodist_gwmod_DATA = gw-gnc.scm
 
 libgncgnome_la_LDFLAGS = -module
 libgncgnome_la_LIBADD = \
@@ -92,7 +93,7 @@ EXTRA_DIST = \
   gnucash.desktop.in \
   gnucash.keys.in \
   gnucash.mime \
-  ${gwmod_DATA}
+  gw-gnc-spec.scm
 
 
 AM_CFLAGS = \
@@ -136,19 +137,30 @@ AM_CFLAGS = \
 ## the sed substitutions.
 gnucash.keys: gnucash.keys.in
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
             -e 's:@-icondir-@:${appicondir}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
 noinst_DATA = .scm-links
 
+if GNUCASH_SEPARATE_BUILDDIR
+#For compiling
+SCM_FILE_LINKS = gw-gnc-spec.scm
+endif
+
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
-DISTCLEANFILES = .scm-links gnucash g-wrapped
+
+DISTCLEANFILES = .scm-links gnucash g-wrapped ${SCM_FILE_LINKS}
 
 gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: gw-gnc-spec.scm .scm-links
 	FLAVOR=gnome guile -c \
@@ -160,4 +172,4 @@ gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: gw-gnc-spec.scm .scm-links
            (primitive-load \"./gw-gnc-spec.scm\") \
            (gw:generate-wrapset \"gw-gnc\")"
 BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c
-CLEANFILES = gw-gnc.scm gw-gnc.h gw-gnc.c 
+CLEANFILES = ${BUILT_SOURCES} gw-gnc.html gnucash.keys gnucash.desktop

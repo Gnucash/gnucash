@@ -6,7 +6,9 @@ TESTS = test-version test-run-script test-guile-env-override
 # arrangement as possible.
 
 TEST_PWD := $(shell pwd)
-TESTS_ENVIRONMENT=PATH="${TEST_PWD}/overrides:${PATH}"
+TESTS_ENVIRONMENT := \
+  SRCDIR=${srcdir} \
+  PATH="${TEST_PWD}/overrides:${PATH}"
 
 noinst_DATA = overrides.stamp
 
@@ -23,3 +25,5 @@ CLEANFILES = overrides.stamp
 
 clean-local:
 	rm -rf overrides
+EXTRA_DIST = \
+  fake-guile test-version test-run-script test-guile-env-override

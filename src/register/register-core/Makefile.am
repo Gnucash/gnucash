@@ -4,10 +4,10 @@ pkglib_LTLIBRARIES = libgncmod-register-core.la libgw-register-core.la
 
 libgncmod_register_core_la_LDFLAGS = -module
 libgncmod_register_core_la_LIBADD = \
-  ${top_srcdir}/src/gnc-module/libgncmodule.la \
-  ${top_srcdir}/src/engine/libgncmod-engine.la \
-  ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
-  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${GLIB_LIBS}
 
 libgncmod_register_core_la_SOURCES = \
@@ -70,6 +70,23 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS}
 
 
+if GNUCASH_SEPARATE_BUILDDIR
+#Only needed when srcdir and builddir are different
+SCM_FILE_LINKS = gw-register-core-spec.scm
+endif
+
+.scm-links: 
+	rm -f gnucash g-wrapped
+	ln -sf . gnucash 
+	ln -sf . g-wrapped 
+	ln -sf . register
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
+	touch .scm-links
+
 gw-register-core.scm gw-register-core.c gw-register-core.h: .scm-links gw-register-core-spec.scm
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
@@ -79,12 +96,5 @@ gw-register-core.scm gw-register-core.c gw-register-core.h: .scm-links gw-regist
 	  (gw:generate-wrapset \"gw-register-core\")"
 
 BUILT_SOURCES = gw-register-core.scm gw-register-core.c gw-register-core.h
-CLEANFILES = gw-register-core.scm gw-register-core.c gw-register-core.h \
-             gw-register-core.html gnucash g-wrapped register .scm-links
-
-.scm-links: 
-	rm -f gnucash g-wrapped
-	ln -sf . gnucash 
-	ln -sf . g-wrapped 
-	ln -sf . register
-	touch .scm-links
+CLEANFILES = ${BUILT_SOURCES} gw-register-core.html \
+             ${SCM_FILE_LINKS} gnucash g-wrapped register .scm-links

@@ -749,6 +749,7 @@ GNUCASH_REGISTER_CORE_LIBS="${GNUCASH_GNOME_UTILS_LIBS} -lgncmod-register-core"
 AC_SUBST(GNUCASH_REGISTER_CORE_CFLAGS)
 AC_SUBST(GNUCASH_REGISTER_CORE_LIBS)
 
+AM_CONDITIONAL(GNUCASH_SEPARATE_BUILDDIR, test "x${srcdir}" != "x.")
 
 ### --------------------------------------------------------------------------
 ### Adjustments -- especially executables that aren't generated via
@@ -778,6 +779,7 @@ AC_OUTPUT(
           doc/Makefile
           doc/examples/Makefile
           doc/html/Makefile
+          doc/html/C/Makefile
           doc/html/fr/Makefile
           doc/html/fr/image/Makefile
           doc/sgml/Makefile

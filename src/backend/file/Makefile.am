@@ -4,8 +4,9 @@ pkglib_LTLIBRARIES = libgncmod-backend-file.la
 
 AM_CFLAGS = \
   -I.. -I../.. \
-  -I../../engine \
-  -I../../gnc-module \
+  -I${top_srcdir}/src/backend \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/gnc-module \
   ${GLIB_CFLAGS}
 
 libgncmod_backend_file_la_SOURCES = \
@@ -50,4 +51,4 @@ noinst_HEADERS = \
 libgncmod_backend_file_la_LDFLAGS = -module
 libgncmod_backend_file_la_LIBADD = \
    ${GLIB_LIBS} ${GNOME_XML_LIB} \
-   ${top_srcdir}/src/engine/libgncmod-engine.la 
+   ${top_builddir}/src/engine/libgncmod-engine.la 

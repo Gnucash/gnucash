@@ -27,6 +27,6 @@ EXTRA_DIST = .cvsignore generate-gnc-script
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
 ${gnc_common_scripts}: generate-gnc-script
-	./generate-gnc-script $@ "${gncoverridesdir}"
+	${srcdir}/generate-gnc-script $@ "${gncoverridesdir}"
 
 CLEANFILES = ${gnc_common_scripts}

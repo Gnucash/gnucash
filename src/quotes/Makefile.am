@@ -18,7 +18,7 @@ EXTRA_DIST = \
 ## the sed substitutions.
 finance-quote-helper: finance-quote-helper.in
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g' \
             -e 's:@-PERLINCL-@:${PERLINCL}:g'
 	chmod +x $@.tmp
@@ -27,7 +27,7 @@ CLEANFILES = finance-quote-helper
 
 update-finance-quote: update-finance-quote.in
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g' \
             -e 's:@-PERLINCL-@:${PERLINCL}:g'
 	chmod +x $@.tmp

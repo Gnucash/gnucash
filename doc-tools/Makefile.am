@@ -20,7 +20,7 @@ noinst_DATA = build-help-index
 ## the sed substitutions.
 build-help-index: build-help-index.in
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@

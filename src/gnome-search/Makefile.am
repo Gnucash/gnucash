@@ -28,6 +28,10 @@ libgncmod_gnome_search_la_SOURCES = \
   search-param.c \
   search-string.c
 
+gncincludedir = ${GNC_INCLUDE_DIR}
+gncinclude_HEADERS = \
+  dialog-search.h
+
 noinst_HEADERS = \
   search-account.h \
   search-boolean.h \
@@ -42,7 +46,7 @@ noinst_HEADERS = \
 libgncmod_gnome_search_la_LDFLAGS = -module
 
 libgncmod_gnome_search_la_LIBADD = \
-  ${top_srcdir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GUILE_LIBS} \
   ${GNOME_LIBDIR} \
   ${GNOMEUI_LIBS} \
@@ -71,10 +75,20 @@ EXTRA_DIST = \
   ${gncmod_DATA} \
   ${gwmod_DATA}
 
+if GNUCASH_SEPARATE_BUILDDIR
+#Only needed when srcdir and builddir are different
+SCM_FILE_LINKS = gw-gnome-search-spec.scm
+endif
+
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
 gncmod-gnome-search.c: gw-gnome-search.h
@@ -90,4 +104,5 @@ gw-gnome-search.scm gw-gnome-search.c gw-gnome-search.h: .scm-links gw-gnome-sea
 	 (gw:generate-wrapset \"gw-gnome-search\")"
 
 BUILT_SOURCES = gw-gnome-search.scm gw-gnome-search.c gw-gnome-search.h
-CLEANFILES = gw-gnome-search.scm gw-gnome-search.c gw-gnome-search.h gw-gnome-search.html
+CLEANFILES = ${BUILT_SOURCES} gw-gnome-search.html \
+             ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links

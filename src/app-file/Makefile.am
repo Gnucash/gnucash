@@ -46,20 +46,30 @@ noinst_DATA = .scm-links
 EXTRA_DIST = \
   ${gwmod_DATA}
 
+if GNUCASH_SEPARATE_BUILDDIR
+#Only needed when srcdir and builddir are different
+SCM_FILE_LINKS = gw-app-file-spec.scm
+endif
+
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
 gw-app-file.scm gw-app-file.c gw-app-file.h: .scm-links gw-app-file-spec.scm
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
-	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
+	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \
 	  (primitive-load \"./gw-app-file-spec.scm\") \
 	  (gw:generate-wrapset \"gw-app-file\")"
 
 BUILT_SOURCES = gw-app-file.scm gw-app-file.c gw-app-file.h
-CLEANFILES = gw-app-file.scm gw-app-file.c gw-app-file.h gw-app-file.html \
-              gnucash g-wrapped .scm-links
+CLEANFILES = ${BUILT_SOURCES} gw-app-file.html \
+             ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links

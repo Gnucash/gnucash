@@ -4,11 +4,11 @@ pkglib_LTLIBRARIES = libgncmod-register-gnome.la
 
 libgncmod_register_gnome_la_LDFLAGS = -module 
 libgncmod_register_gnome_la_LIBADD = \
-  ${top_srcdir}/src/register/register-core/libgncmod-register-core.la \
-  ${top_srcdir}/src/gnc-module/libgncmodule.la \
-  ${top_srcdir}/src/engine/libgncmod-engine.la \
-  ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
-  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${GLIB_LIBS} \
   ${GNOMEUI_LIBS}
 
