@@ -77,7 +77,7 @@ run_test (void)
   xaccSetAccountGroup (book, group1);
   if (!group_has_book (group1, book))
   {
-    failure("gnc_book_set_group didn't take");
+    failure("xaccSetAccountGroup didn't take");
     exit(get_rv());
   }
 
@@ -94,14 +94,14 @@ run_test (void)
   /* a group cannot have a 'null' book; this test is nonsense. */
   if (!group_has_book (group1, NULL))
   {
-    failure("gnc_book_set_group didn't clear old");
+    failure("xaccSetAccountGroup didn't clear old");
     exit(get_rv());
   }
 #endif
 
   if (!group_has_book (group2, book))
   {
-    failure("gnc_book_set_group didn't take");
+    failure("xaccSetAccountGroup didn't take");
     exit(get_rv());
   }
 
