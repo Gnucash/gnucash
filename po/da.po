@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 0.1\n"
-"POT-Creation-Date: 2001-05-27 23:32-0700\n"
+"POT-Creation-Date: 2001-06-04 01:05-0700\n"
 "PO-Revision-Date: 2001-03-24 12:48+01:00\n"
 "Last-Translator: Johnny Ernst Nielsen <j.e.nielsen@iname.com>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -195,8 +195,8 @@ msgstr ""
 " eksisterer allerede.\n"
 "Er du sikker på at du vil overskrive den?"
 
-#: src/SplitLedger.c:125 src/engine/Transaction.c:2000
-#: src/engine/Transaction.c:2021 src/register/splitreg.c:739
+#: src/SplitLedger.c:125 src/engine/Transaction.c:2001
+#: src/engine/Transaction.c:2022 src/register/splitreg.c:739
 #: src/scm/report/guile-strings.c:344
 #, fuzzy
 msgid "-- Split Transaction --"
@@ -243,7 +243,7 @@ msgstr ""
 "Vil du gemme den?"
 
 #: src/SplitLedger.c:1589 src/SplitLedger.c:2034
-#: src/gnome/window-register.c:3103
+#: src/gnome/window-register.c:3107
 msgid ""
 "The current transaction has been changed.\n"
 "Would you like to record it?"
@@ -282,7 +282,7 @@ msgstr ""
 "Værdierne indtastet til denne transaktion stemmer ikke overens.\n"
 "Hvilken værdi vil du genberegne?\n"
 
-#: src/SplitLedger.c:3096 src/SplitLedger.c:3098 src/SplitLedger.c:4054
+#: src/SplitLedger.c:3096 src/SplitLedger.c:3098 src/SplitLedger.c:4060
 #: src/gnome/glade-gnc-dialogs.c:1304 src/gnome/glade-gnc-dialogs.c:6562
 #: src/scm/report/guile-strings.c:341 src/scm/report/guile-strings.c:373
 #: src/scm/report/guile-strings.c:585 src/scm/report/guile-strings.c:602
@@ -295,8 +295,8 @@ msgstr "Aktier"
 msgid "Changed"
 msgstr "Afgift"
 
-#: src/SplitLedger.c:3103 src/SplitLedger.c:3105 src/SplitLedger.c:4048
-#: src/gnome/dialog-price-editor.c:738 src/gnome/glade-gnc-dialogs.c:1374
+#: src/SplitLedger.c:3103 src/SplitLedger.c:3105 src/SplitLedger.c:4054
+#: src/gnome/dialog-price-editor.c:739 src/gnome/glade-gnc-dialogs.c:1374
 #: src/gnome/glade-gnc-dialogs.c:7421 src/register/splitreg.c:229
 #: src/scm/report/guile-strings.c:290 src/scm/report/guile-strings.c:297
 #: src/scm/report/guile-strings.c:334 src/scm/report/guile-strings.c:342
@@ -325,20 +325,20 @@ msgstr ""
 msgid "(no name)"
 msgstr "(ingen)"
 
-#: src/SplitLedger.c:3979 src/gnome/glade-gnc-dialogs.c:1125
+#: src/SplitLedger.c:3982 src/gnome/glade-gnc-dialogs.c:1125
 #: src/guile/guile-util.c:1063 src/scm/report/guile-strings.c:345
 #: src/scm/report/guile-strings.c:605
 msgid "Debit"
 msgstr "Debet"
 
-#: src/SplitLedger.c:3996 src/gnome/glade-gnc-dialogs.c:1122
+#: src/SplitLedger.c:4002 src/gnome/glade-gnc-dialogs.c:1122
 #: src/guile/guile-util.c:1108 src/register/splitreg.c:177
 #: src/register/splitreg.c:193 src/scm/guile-strings.c:144
 #: src/scm/report/guile-strings.c:346 src/scm/report/guile-strings.c:606
 msgid "Credit"
 msgstr "Kredit"
 
-#: src/SplitLedger.c:4012 src/gnome/dialog-price-editor.c:735
+#: src/SplitLedger.c:4018 src/gnome/dialog-price-editor.c:736
 #: src/gnome/glade-gnc-dialogs.c:960 src/gnome/glade-gnc-dialogs.c:4794
 #: src/gnome/glade-gnc-dialogs.c:4842 src/gnome/glade-gnc-dialogs.c:7400
 #: src/gnome/reconcile-list.c:147 src/scm/report/guile-strings.c:32
@@ -349,14 +349,14 @@ msgstr "Kredit"
 msgid "Date"
 msgstr "Dato"
 
-#: src/SplitLedger.c:4015 src/gnome/reconcile-list.c:148
+#: src/SplitLedger.c:4021 src/gnome/reconcile-list.c:148
 #: src/scm/report/guile-strings.c:337 src/scm/report/guile-strings.c:364
 #: src/scm/report/guile-strings.c:577 src/scm/report/guile-strings.c:597
 #: src/scm/report/guile-strings.c:662
 msgid "Num"
 msgstr "Tal"
 
-#: src/SplitLedger.c:4018 src/gnc-ui-util.c:123
+#: src/SplitLedger.c:4024 src/gnc-ui-util.c:124
 #: src/gnome/glade-gnc-dialogs.c:1018 src/gnome/glade-gnc-dialogs.c:4801
 #: src/gnome/glade-gnc-dialogs.c:4849 src/gnome/glade-gnc-dialogs.c:6106
 #: src/gnome/new-user-interface.c:203 src/gnome/reconcile-list.c:149
@@ -368,28 +368,28 @@ msgid "Description"
 msgstr "Beskrivelse"
 
 #. desc cell
-#: src/SplitLedger.c:4021 src/gnome/reconcile-list.c:151
+#: src/SplitLedger.c:4027 src/gnome/reconcile-list.c:151
 #: src/register/splitreg.c:96
 msgid "Reconciled:R"
 msgstr "Afstemt:A"
 
-#: src/SplitLedger.c:4024 src/SplitLedger.c:4097
+#: src/SplitLedger.c:4030 src/SplitLedger.c:4103
 #, fuzzy
 msgid "Share Balance"
 msgstr "Startsaldo"
 
-#: src/SplitLedger.c:4027 src/SplitLedger.c:4100 src/gnc-ui-util.c:135
-#: src/gnc-ui-util.c:138 src/gnome/glade-gnc-dialogs.c:1527
+#: src/SplitLedger.c:4033 src/SplitLedger.c:4106 src/gnc-ui-util.c:136
+#: src/gnc-ui-util.c:139 src/gnome/glade-gnc-dialogs.c:1527
 #: src/scm/guile-strings.c:126 src/scm/guile-strings.c:161
 #: src/scm/report/guile-strings.c:343 src/scm/report/guile-strings.c:607
 msgid "Balance"
 msgstr "Balance"
 
-#: src/SplitLedger.c:4030 src/gnome/glade-gnc-dialogs.c:1432
+#: src/SplitLedger.c:4036 src/gnome/glade-gnc-dialogs.c:1432
 msgid "Action"
 msgstr "Handling"
 
-#: src/SplitLedger.c:4033 src/gnome/dialog-account.c:828
+#: src/SplitLedger.c:4039 src/gnome/dialog-account.c:828
 #: src/gnome/glade-gnc-dialogs.c:77 src/gnome/glade-gnc-dialogs.c:878
 #: src/gnome/glade-gnc-dialogs.c:6548 src/scm/report/guile-strings.c:38
 #: src/scm/report/guile-strings.c:91 src/scm/report/guile-strings.c:266
@@ -399,45 +399,45 @@ msgstr "Handling"
 msgid "Account"
 msgstr "Konto"
 
-#: src/SplitLedger.c:4036 src/gnome/glade-gnc-dialogs.c:1234
+#: src/SplitLedger.c:4042 src/gnome/glade-gnc-dialogs.c:1234
 #: src/scm/report/guile-strings.c:595 src/scm/report/guile-strings.c:599
 #: src/scm/report/guile-strings.c:638 src/scm/report/guile-strings.c:666
 msgid "Memo"
 msgstr "Note"
 
 #. balance cell
-#: src/SplitLedger.c:4057 src/gnome/window-register.c:892
+#: src/SplitLedger.c:4063 src/gnome/window-register.c:896
 #: src/register/splitreg.c:99 src/register/splitreg.c:179
 #: src/scm/report/guile-strings.c:340
 msgid "Transfer"
 msgstr "Overfør"
 
-#: src/SplitLedger.c:4066 src/SplitLedger.c:4083
+#: src/SplitLedger.c:4072 src/SplitLedger.c:4089
 #, fuzzy, c-format
 msgid "Tot %s"
 msgstr "Totaler"
 
-#: src/SplitLedger.c:4072
+#: src/SplitLedger.c:4078
 #, fuzzy
 msgid "Tot Credit"
 msgstr "Kredit"
 
-#: src/SplitLedger.c:4089
+#: src/SplitLedger.c:4095
 #, fuzzy
 msgid "Tot Debit"
 msgstr "Debet"
 
-#: src/SplitLedger.c:4094
+#: src/SplitLedger.c:4100
 #, fuzzy
 msgid "Tot Shares"
 msgstr "Totalt aktier"
 
-#: src/SplitLedger.c:4103 src/gnc-ui-util.c:126
+#: src/SplitLedger.c:4109 src/gnc-ui-util.c:127
 #: src/gnome/glade-gnc-dialogs.c:3711 src/scm/guile-strings.c:158
 msgid "Notes"
 msgstr "Noter"
 
-#: src/SplitLedger.c:4465
+#: src/SplitLedger.c:4471
 #, fuzzy
 msgid ""
 "You are about to change a reconciled split.\n"
@@ -446,7 +446,7 @@ msgstr ""
 "Kontoen er ikke balanceret.\n"
 "Er du sikker på at du vil afslutte?"
 
-#: src/SplitLedger.c:4492
+#: src/SplitLedger.c:4498
 msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
@@ -484,8 +484,8 @@ msgstr "Aktie"
 msgid "Mutual Fund"
 msgstr "Aktiefond"
 
-#: src/engine/Account.c:1865 src/gnc-ui-util.c:129
-#: src/gnome/dialog-price-editor.c:734 src/gnome/glade-gnc-dialogs.c:7393
+#: src/engine/Account.c:1865 src/gnc-ui-util.c:130
+#: src/gnome/dialog-price-editor.c:735 src/gnome/glade-gnc-dialogs.c:7393
 #: src/scm/guile-strings.c:95 src/scm/guile-strings.c:149
 #: src/scm/guile-strings.c:159
 msgid "Currency"
@@ -504,7 +504,7 @@ msgstr "Indtægt"
 msgid "Expense"
 msgstr "Udgift"
 
-#: src/engine/Account.c:1868 src/gnc-ui-util.c:528 src/register/splitreg.c:222
+#: src/engine/Account.c:1868 src/gnc-ui-util.c:529 src/register/splitreg.c:222
 #: src/scm/guile-strings.c:152 src/scm/report/guile-strings.c:107
 msgid "Equity"
 msgstr "Aktier"
@@ -517,8 +517,8 @@ msgstr "Forældreløs"
 msgid "Imbalance"
 msgstr "Ubalance"
 
-#: src/engine/Transaction.c:2042 src/gnome/druid-stock-split.c:395
-#: src/gnome/window-register.c:865 src/register/splitreg.c:241
+#: src/engine/Transaction.c:2043 src/gnome/druid-stock-split.c:395
+#: src/gnome/window-register.c:869 src/register/splitreg.c:241
 msgid "Split"
 msgstr "Del"
 
@@ -556,70 +556,70 @@ msgstr ""
 msgid "Numeric error"
 msgstr ""
 
-#: src/gnc-ui-util.c:114 src/gnome/dialog-commodities.c:339
-#: src/gnome/dialog-price-editor.c:737 src/gnome/glade-gnc-dialogs.c:7414
+#: src/gnc-ui-util.c:115 src/gnome/dialog-commodities.c:339
+#: src/gnome/dialog-price-editor.c:738 src/gnome/glade-gnc-dialogs.c:7414
 #: src/gnome/glade-gnc-dialogs.c:7816 src/gnome/new-user-interface.c:380
 #: src/scm/guile-strings.c:155
 msgid "Type"
 msgstr "Type"
 
-#: src/gnc-ui-util.c:117 src/gnome/new-user-interface.c:372
+#: src/gnc-ui-util.c:118 src/gnome/new-user-interface.c:372
 #: src/scm/report/guile-strings.c:545 src/scm/report/guile-strings.c:620
 msgid "Account Name"
 msgstr "Kontonavn"
 
-#: src/gnc-ui-util.c:120 src/scm/report/guile-strings.c:622
+#: src/gnc-ui-util.c:121 src/scm/report/guile-strings.c:622
 msgid "Account Code"
 msgstr "Kontokode"
 
-#: src/gnc-ui-util.c:132 src/scm/guile-strings.c:160
+#: src/gnc-ui-util.c:133 src/scm/guile-strings.c:160
 msgid "Security"
 msgstr "Sikkerhed"
 
-#: src/gnc-ui-util.c:141 src/gnc-ui-util.c:144 src/scm/guile-strings.c:124
+#: src/gnc-ui-util.c:142 src/gnc-ui-util.c:145 src/scm/guile-strings.c:124
 #: src/scm/guile-strings.c:162 src/scm/report/guile-strings.c:47
 #: src/scm/report/guile-strings.c:292 src/scm/report/guile-strings.c:391
 #: src/scm/report/guile-strings.c:546
 msgid "Total"
 msgstr "Total"
 
-#: src/gnc-ui-util.c:147 src/scm/guile-strings.c:163
+#: src/gnc-ui-util.c:148 src/scm/guile-strings.c:163
 #, fuzzy
 msgid "Tax Info"
 msgstr "Overfør information"
 
-#: src/gnc-ui-util.c:364
+#: src/gnc-ui-util.c:365
 msgid "not cleared:n"
 msgstr "ikke nulstillet:i"
 
-#: src/gnc-ui-util.c:365
+#: src/gnc-ui-util.c:366
 msgid "cleared:c"
 msgstr "nulstillet:n"
 
-#: src/gnc-ui-util.c:366
+#: src/gnc-ui-util.c:367
 msgid "reconciled:y"
 msgstr "Afstemt:a"
 
-#: src/gnc-ui-util.c:367
+#: src/gnc-ui-util.c:368
 msgid "frozen:f"
 msgstr "frosset:f"
 
-#: src/gnc-ui-util.c:382
+#: src/gnc-ui-util.c:383
 msgid "(none)"
 msgstr "(ingen)"
 
-#: src/gnc-ui-util.c:461
+#: src/gnc-ui-util.c:462
 #, fuzzy
 msgid "Opening Balances"
 msgstr "Startsaldo"
 
-#: src/gnc-ui-util.c:464 src/scm/qif-import/guile-strings.c:7
+#: src/gnc-ui-util.c:465 src/scm/qif-import/guile-strings.c:7
 #: src/scm/qif-import/guile-strings.c:8
 #, fuzzy
 msgid "Retained Earnings"
 msgstr "Periodeslut"
 
-#: src/gnc-ui-util.c:584 src/gnome/dialog-account.c:241
+#: src/gnc-ui-util.c:585 src/gnome/dialog-account.c:241
 #: src/gnome/glade-gnc-dialogs.c:3872 src/gnome/new-user-interface.c:388
 #: src/gnome/new-user-interface.c:404
 msgid "Opening Balance"
@@ -786,24 +786,24 @@ msgstr ""
 msgid "Help"
 msgstr "Hjælp"
 
-#: src/gnome/dialog-fincalc.c:325
+#: src/gnome/dialog-fincalc.c:326
 msgid "You must enter values for the other quantities."
 msgstr ""
 
-#: src/gnome/dialog-fincalc.c:326
+#: src/gnome/dialog-fincalc.c:327
 #, fuzzy
 msgid "You must enter a valid expression."
 msgstr "Du skal vælge en gyldig samlekonto."
 
-#: src/gnome/dialog-fincalc.c:367
+#: src/gnome/dialog-fincalc.c:368
 msgid "The interest rate cannot be zero."
 msgstr ""
 
-#: src/gnome/dialog-fincalc.c:386
+#: src/gnome/dialog-fincalc.c:387
 msgid "The number of payments cannot be zero."
 msgstr ""
 
-#: src/gnome/dialog-fincalc.c:391
+#: src/gnome/dialog-fincalc.c:392
 msgid "The number of payments cannot be negative."
 msgstr ""
 
@@ -835,53 +835,53 @@ msgstr "Vælg Dato"
 msgid "Select pixmap"
 msgstr "Vælg Dato"
 
-#: src/gnome/dialog-options.c:2114
+#: src/gnome/dialog-options.c:2118
 #, fuzzy
 msgid "No options!"
 msgstr "Den gode option"
 
-#: src/gnome/dialog-options.c:2134
+#: src/gnome/dialog-options.c:2138
 msgid "GnuCash Preferences"
 msgstr "GnuCash Indstillinger"
 
-#: src/gnome/dialog-price-editor.c:346
+#: src/gnome/dialog-price-editor.c:347
 #, fuzzy
 msgid "You must select a commodity."
 msgstr "Du skal vælge en kontotype."
 
-#: src/gnome/dialog-price-editor.c:351
+#: src/gnome/dialog-price-editor.c:352
 #, fuzzy
 msgid "You must select a currency."
 msgstr "Du skal angive en valuta."
 
-#: src/gnome/dialog-price-editor.c:360 src/gnome/dialog-transfer.c:1074
+#: src/gnome/dialog-price-editor.c:361 src/gnome/dialog-transfer.c:1074
 #, fuzzy
 msgid "You must enter a valid amount."
 msgstr "Du skal vælge en gyldig samlekonto."
 
-#: src/gnome/dialog-price-editor.c:513
+#: src/gnome/dialog-price-editor.c:514
 #, fuzzy
 msgid ""
 "Are you sure you want to delete the\n"
 "current price?"
 msgstr "Er du sikker på at du vil slette den nuværende transaktion?"
 
-#: src/gnome/dialog-price-editor.c:540
+#: src/gnome/dialog-price-editor.c:541
 #, fuzzy
 msgid "Remove old prices"
 msgstr "Gem den aktuelle transaktion"
 
-#: src/gnome/dialog-price-editor.c:554
+#: src/gnome/dialog-price-editor.c:555
 msgid "All prices before the date below will be deleted."
 msgstr ""
 
-#: src/gnome/dialog-price-editor.c:733 src/gnome/glade-gnc-dialogs.c:7386
+#: src/gnome/dialog-price-editor.c:734 src/gnome/glade-gnc-dialogs.c:7386
 #: src/scm/guile-strings.c:79
 #, fuzzy
 msgid "Commodity"
 msgstr "Udfør"
 
-#: src/gnome/dialog-price-editor.c:736 src/gnome/glade-gnc-dialogs.c:7407
+#: src/gnome/dialog-price-editor.c:737 src/gnome/glade-gnc-dialogs.c:7407
 msgid "Source"
 msgstr ""
 
@@ -1557,7 +1557,7 @@ msgstr "Tilføj resultater til nuværende søgning"
 msgid "Delete results from current search"
 msgstr "Slet resultater fra nuværende søgning"
 
-#: src/gnome/glade-gnc-dialogs.c:1663 src/gnome/window-register.c:901
+#: src/gnome/glade-gnc-dialogs.c:1663 src/gnome/window-register.c:905
 msgid "Find"
 msgstr "Find"
 
@@ -1592,7 +1592,7 @@ msgstr "Tilføj ny række eller delrække"
 
 #: src/gnome/glade-gnc-dialogs.c:1929 src/gnome/glade-gnc-dialogs.c:6384
 #: src/gnome/window-acct-tree.c:765 src/gnome/window-reconcile.c:1347
-#: src/gnome/window-register.c:847
+#: src/gnome/window-register.c:851
 msgid "Delete"
 msgstr "Slet"
 
@@ -2705,8 +2705,8 @@ msgstr ""
 msgid "Size..."
 msgstr "Vælg..."
 
-#: src/gnome/glade-gnc-dialogs.c:7138 src/gnome/window-register.c:910
-#: src/gnome/window-register.c:1345 src/gnome/window-report.c:113
+#: src/gnome/glade-gnc-dialogs.c:7138 src/gnome/window-register.c:914
+#: src/gnome/window-register.c:1349 src/gnome/window-report.c:113
 #: src/scm/guile-strings.c:437
 msgid "Report"
 msgstr "Rapport"
@@ -2748,8 +2748,8 @@ msgstr "Pris"
 msgid "Sort by Commodity"
 msgstr "Sortér efter note"
 
-#: src/gnome/glade-gnc-dialogs.c:7444 src/gnome/window-register.c:1283
-#: src/gnome/window-register.c:1284
+#: src/gnome/glade-gnc-dialogs.c:7444 src/gnome/window-register.c:1287
+#: src/gnome/window-register.c:1288
 msgid "Sort by Date"
 msgstr "Sortér efter Dato"
 
@@ -3152,7 +3152,7 @@ msgid "New"
 msgstr "Ny"
 
 #: src/gnome/window-acct-tree.c:756 src/gnome/window-acct-tree.c:871
-#: src/gnome/window-register.c:1451
+#: src/gnome/window-register.c:1455
 msgid "Create a new account"
 msgstr "Opret en ny konto"
 
@@ -3198,11 +3198,11 @@ msgid "Open the selected account and all its subaccounts"
 msgstr "Åbn den valgte konto og alle dens underkonti"
 
 #: src/gnome/window-acct-tree.c:836 src/gnome/window-reconcile.c:1161
-#: src/gnome/window-register.c:1416
+#: src/gnome/window-register.c:1420
 msgid "_Edit Account"
 msgstr "_Redigér konto"
 
-#: src/gnome/window-acct-tree.c:845 src/gnome/window-register.c:1425
+#: src/gnome/window-acct-tree.c:845 src/gnome/window-register.c:1429
 msgid "_Reconcile..."
 msgstr "_Afstem..."
 
@@ -3211,24 +3211,24 @@ msgid "Reconcile the selected account"
 msgstr "Afstem den valgte konto"
 
 #: src/gnome/window-acct-tree.c:853 src/gnome/window-reconcile.c:1169
-#: src/gnome/window-register.c:1433
+#: src/gnome/window-register.c:1437
 msgid "_Transfer..."
 msgstr "_Overfør..."
 
 #: src/gnome/window-acct-tree.c:854 src/gnome/window-reconcile.c:1169
-#: src/gnome/window-register.c:893 src/gnome/window-register.c:1434
+#: src/gnome/window-register.c:897 src/gnome/window-register.c:1438
 msgid "Transfer funds from one account to another"
 msgstr "Overfør beløb fra en konto til en anden"
 
-#: src/gnome/window-acct-tree.c:861 src/gnome/window-register.c:1441
+#: src/gnome/window-acct-tree.c:861 src/gnome/window-register.c:1445
 msgid "Stock S_plit..."
 msgstr ""
 
-#: src/gnome/window-acct-tree.c:862 src/gnome/window-register.c:1442
+#: src/gnome/window-acct-tree.c:862 src/gnome/window-register.c:1446
 msgid "Record a stock split or a stock merger"
 msgstr ""
 
-#: src/gnome/window-acct-tree.c:870 src/gnome/window-register.c:1450
+#: src/gnome/window-acct-tree.c:870 src/gnome/window-register.c:1454
 msgid "_New Account..."
 msgstr "_Ny konto..."
 
@@ -3246,7 +3246,7 @@ msgid "Setup tax information for all income and expense accounts"
 msgstr "Vis indtægts- og udgiftskonti."
 
 #: src/gnome/window-acct-tree.c:901 src/gnome/window-reconcile.c:1227
-#: src/gnome/window-register.c:1577
+#: src/gnome/window-register.c:1581
 msgid "_Account"
 msgstr "_Konto"
 
@@ -3294,8 +3294,8 @@ msgstr "Aktie"
 msgid "Cancel outstanding HTML requests"
 msgstr ""
 
-#: src/gnome/window-help.c:622 src/gnome/window-register.c:919
-#: src/gnome/window-register.c:1361 src/gnome/window-report.c:686
+#: src/gnome/window-help.c:622 src/gnome/window-register.c:923
+#: src/gnome/window-register.c:1365 src/gnome/window-report.c:686
 msgid "Print"
 msgstr "Udskriv"
 
@@ -3305,7 +3305,7 @@ msgid "Print Help window"
 msgstr "Vis udskrift"
 
 #: src/gnome/window-help.c:632 src/gnome/window-main.c:1094
-#: src/gnome/window-register.c:929 src/gnome/window-register.c:1370
+#: src/gnome/window-register.c:933 src/gnome/window-register.c:1374
 msgid "Close"
 msgstr "Luk"
 
@@ -3456,7 +3456,7 @@ msgstr ""
 msgid "_Find Transactions"
 msgstr "Find transaktioner"
 
-#: src/gnome/window-main.c:1021 src/gnome/window-register.c:902
+#: src/gnome/window-main.c:1021 src/gnome/window-register.c:906
 #, fuzzy
 msgid "Find transactions with a search"
 msgstr "Find transaktioner med en søgning."
@@ -3548,7 +3548,7 @@ msgstr "Kreditter"
 msgid "Total:"
 msgstr "Total"
 
-#: src/gnome/window-reconcile.c:819 src/gnome/window-register.c:3005
+#: src/gnome/window-reconcile.c:819 src/gnome/window-register.c:3009
 msgid "Are you sure you want to delete the current transaction?"
 msgstr "Er du sikker på at du vil slette den nuværende transaktion?"
 
@@ -3582,8 +3582,8 @@ msgstr ""
 msgid "Postpone the reconciliation of this account"
 msgstr "Afbryd afstemning af denne konto"
 
-#: src/gnome/window-reconcile.c:1086 src/gnome/window-register.c:1471
-#: src/gnome/window-register.c:1660
+#: src/gnome/window-reconcile.c:1086 src/gnome/window-register.c:1475
+#: src/gnome/window-register.c:1664
 msgid "_Cancel"
 msgstr "_Annullér"
 
@@ -3592,30 +3592,30 @@ msgid "Cancel the reconciliation of this account"
 msgstr "Afbryd afstemning af denne konto"
 
 #: src/gnome/window-reconcile.c:1097 src/gnome/window-reconcile.c:1120
-#: src/gnome/window-register.c:1280
+#: src/gnome/window-register.c:1284
 msgid "Standard order"
 msgstr "Standard sorteringsorden"
 
 #: src/gnome/window-reconcile.c:1098 src/gnome/window-reconcile.c:1121
-#: src/gnome/window-register.c:1281
+#: src/gnome/window-register.c:1285
 msgid "Keep normal account order"
 msgstr "Behold normal kontorækkefølge"
 
 #: src/gnome/window-reconcile.c:1100 src/gnome/window-reconcile.c:1101
 #: src/gnome/window-reconcile.c:1123 src/gnome/window-reconcile.c:1124
-#: src/gnome/window-register.c:1295 src/gnome/window-register.c:1296
+#: src/gnome/window-register.c:1299 src/gnome/window-register.c:1300
 msgid "Sort by Num"
 msgstr "Sortér efter nummer"
 
 #: src/gnome/window-reconcile.c:1103 src/gnome/window-reconcile.c:1104
 #: src/gnome/window-reconcile.c:1126 src/gnome/window-reconcile.c:1127
-#: src/gnome/window-register.c:1304 src/gnome/window-register.c:1305
+#: src/gnome/window-register.c:1308 src/gnome/window-register.c:1309
 msgid "Sort by Description"
 msgstr "Sortér efter Beskrivelse"
 
 #: src/gnome/window-reconcile.c:1106 src/gnome/window-reconcile.c:1107
 #: src/gnome/window-reconcile.c:1129 src/gnome/window-reconcile.c:1130
-#: src/gnome/window-register.c:1298 src/gnome/window-register.c:1299
+#: src/gnome/window-register.c:1302 src/gnome/window-register.c:1303
 msgid "Sort by Amount"
 msgstr "Sortér efter Beløb"
 
@@ -3623,7 +3623,7 @@ msgstr "Sortér efter Beløb"
 msgid "Open the account"
 msgstr "Åbn kontoen"
 
-#: src/gnome/window-reconcile.c:1161 src/gnome/window-register.c:1417
+#: src/gnome/window-reconcile.c:1161 src/gnome/window-register.c:1421
 msgid "Edit the main account for this register"
 msgstr "Rediger hovedkontoen for dette register"
 
@@ -3646,21 +3646,21 @@ msgid "Edit the current transaction"
 msgstr "Redigér den nuværende transaktion"
 
 #: src/gnome/window-reconcile.c:1203 src/gnome/window-reconcile.c:1287
-#: src/gnome/window-register.c:1479 src/gnome/window-register.c:1668
+#: src/gnome/window-register.c:1483 src/gnome/window-register.c:1672
 msgid "_Delete"
 msgstr "_Slet"
 
 #: src/gnome/window-reconcile.c:1203 src/gnome/window-reconcile.c:1287
-#: src/gnome/window-reconcile.c:1347 src/gnome/window-register.c:848
-#: src/gnome/window-register.c:1480 src/gnome/window-register.c:1669
+#: src/gnome/window-reconcile.c:1347 src/gnome/window-register.c:852
+#: src/gnome/window-register.c:1484 src/gnome/window-register.c:1673
 msgid "Delete the current transaction"
 msgstr "Slet den nuværende transaktion"
 
-#: src/gnome/window-reconcile.c:1215 src/gnome/window-register.c:1564
+#: src/gnome/window-reconcile.c:1215 src/gnome/window-register.c:1568
 msgid "_Help"
 msgstr "_Hjælp"
 
-#: src/gnome/window-reconcile.c:1215 src/gnome/window-register.c:1565
+#: src/gnome/window-reconcile.c:1215 src/gnome/window-register.c:1569
 msgid "Open the GnuCash help window"
 msgstr "Åbn GnuCash hjælpevinduet"
 
@@ -3668,11 +3668,11 @@ msgstr "Åbn GnuCash hjælpevinduet"
 msgid "_Reconcile"
 msgstr "_Afstem"
 
-#: src/gnome/window-reconcile.c:1226 src/gnome/window-register.c:1340
+#: src/gnome/window-reconcile.c:1226 src/gnome/window-register.c:1344
 msgid "Sort _Order"
 msgstr "Sorterings_orden"
 
-#: src/gnome/window-reconcile.c:1228 src/gnome/window-register.c:1578
+#: src/gnome/window-reconcile.c:1228 src/gnome/window-register.c:1582
 msgid "_Transaction"
 msgstr "_Transaktion"
 
@@ -3716,217 +3716,217 @@ msgstr ""
 "Du har lavet ændringer i dette afstemningsvindue.\n"
 "Er du sikker på at du vil afbryde?"
 
-#: src/gnome/window-register.c:680
+#: src/gnome/window-register.c:684
 msgid "Register date ranges"
 msgstr "Registers datoområder"
 
-#: src/gnome/window-register.c:717
+#: src/gnome/window-register.c:721
 msgid "Show Earliest"
 msgstr "Vis tidligste"
 
-#: src/gnome/window-register.c:728
+#: src/gnome/window-register.c:732
 #, fuzzy
 msgid "Start date:"
 msgstr "Startdato"
 
-#: src/gnome/window-register.c:767
+#: src/gnome/window-register.c:771
 msgid "Show Latest"
 msgstr "Vis seneste"
 
-#: src/gnome/window-register.c:778
+#: src/gnome/window-register.c:782
 #, fuzzy
 msgid "End date:"
 msgstr "Slutdato"
 
-#: src/gnome/window-register.c:804 src/scm/guile-strings.c:49
+#: src/gnome/window-register.c:808 src/scm/guile-strings.c:49
 msgid "Today"
 msgstr "Idag"
 
-#: src/gnome/window-register.c:810
+#: src/gnome/window-register.c:814
 #, fuzzy
 msgid "Set Date Range"
 msgstr "Datointerval"
 
-#: src/gnome/window-register.c:831
+#: src/gnome/window-register.c:835
 #, fuzzy
 msgid "Enter"
 msgstr "Indgang"
 
-#: src/gnome/window-register.c:832 src/gnome/window-register.c:1464
-#: src/gnome/window-register.c:1653
+#: src/gnome/window-register.c:836 src/gnome/window-register.c:1468
+#: src/gnome/window-register.c:1657
 msgid "Record the current transaction"
 msgstr "Gem den aktuelle transaktion"
 
-#: src/gnome/window-register.c:839
+#: src/gnome/window-register.c:843
 msgid "Cancel"
 msgstr "Annullér"
 
-#: src/gnome/window-register.c:840 src/gnome/window-register.c:1472
-#: src/gnome/window-register.c:1661
+#: src/gnome/window-register.c:844 src/gnome/window-register.c:1476
+#: src/gnome/window-register.c:1665
 msgid "Cancel the current transaction"
 msgstr "Afbryd den nuværende transaktion"
 
-#: src/gnome/window-register.c:856
+#: src/gnome/window-register.c:860
 msgid "Duplicate"
 msgstr "Duplikér"
 
-#: src/gnome/window-register.c:857 src/gnome/window-register.c:1489
-#: src/gnome/window-register.c:1678
+#: src/gnome/window-register.c:861 src/gnome/window-register.c:1493
+#: src/gnome/window-register.c:1682
 msgid "Make a copy of the current transaction"
 msgstr "Lav en kopi af den nuværende transaktion"
 
-#: src/gnome/window-register.c:866 src/gnome/window-register.c:1498
-#: src/gnome/window-register.c:1687
+#: src/gnome/window-register.c:870 src/gnome/window-register.c:1502
+#: src/gnome/window-register.c:1691
 #, fuzzy
 msgid "Show all splits in the current transaction"
 msgstr "Redigér den nuværende transaktion"
 
-#: src/gnome/window-register.c:873
+#: src/gnome/window-register.c:877
 msgid "Blank"
 msgstr "Tom"
 
-#: src/gnome/window-register.c:874 src/gnome/window-register.c:1506
-#: src/gnome/window-register.c:1695
+#: src/gnome/window-register.c:878 src/gnome/window-register.c:1510
+#: src/gnome/window-register.c:1699
 msgid "Move to the blank transaction at the bottom of the register"
 msgstr "Flyt til den tomme transaktion i slutningen af registret"
 
-#: src/gnome/window-register.c:882
+#: src/gnome/window-register.c:886
 msgid "Jump"
 msgstr "Spring"
 
-#: src/gnome/window-register.c:883 src/gnome/window-register.c:1515
-#: src/gnome/window-register.c:1704
+#: src/gnome/window-register.c:887 src/gnome/window-register.c:1519
+#: src/gnome/window-register.c:1708
 msgid "Jump to the corresponding transaction in the other account"
 msgstr "Spring til den tilsvarende transaktion i den anden konto."
 
-#: src/gnome/window-register.c:911 src/gnome/window-register.c:1346
+#: src/gnome/window-register.c:915 src/gnome/window-register.c:1350
 #, fuzzy
 msgid "Open a report window for this register"
 msgstr "Afstem hovedkontoen i dette register"
 
-#: src/gnome/window-register.c:920 src/gnome/window-register.c:1362
+#: src/gnome/window-register.c:924 src/gnome/window-register.c:1366
 #, fuzzy
 msgid "Print a report for this register"
 msgstr "Rediger hovedkontoen for dette register"
 
-#: src/gnome/window-register.c:930 src/gnome/window-register.c:1371
+#: src/gnome/window-register.c:934 src/gnome/window-register.c:1375
 msgid "Close this register window"
 msgstr "Luk dette registereringsvindue"
 
-#: src/gnome/window-register.c:1027
+#: src/gnome/window-register.c:1031
 #, fuzzy
 msgid "Present:"
 msgstr "Printer:"
 
-#: src/gnome/window-register.c:1028
+#: src/gnome/window-register.c:1032
 msgid "Future:"
 msgstr ""
 
-#: src/gnome/window-register.c:1029
+#: src/gnome/window-register.c:1033
 #, fuzzy
 msgid "Cleared:"
 msgstr "Nulstillet"
 
-#: src/gnome/window-register.c:1031
+#: src/gnome/window-register.c:1035
 #, fuzzy
 msgid "Reconciled:"
 msgstr "Afstemt:A"
 
-#: src/gnome/window-register.c:1035
+#: src/gnome/window-register.c:1039
 #, fuzzy
 msgid "Shares:"
 msgstr "Aktier"
 
-#: src/gnome/window-register.c:1037
+#: src/gnome/window-register.c:1041
 #, fuzzy
 msgid "Current Value:"
 msgstr "Valuta:"
 
-#: src/gnome/window-register.c:1253
+#: src/gnome/window-register.c:1257
 #, fuzzy
 msgid "Basic Ledger"
 msgstr "Hovedbog"
 
-#: src/gnome/window-register.c:1254 src/scm/guile-strings.c:254
+#: src/gnome/window-register.c:1258 src/scm/guile-strings.c:254
 #, fuzzy
 msgid "Show transactions on one or two lines"
 msgstr "Vis transaktioner på enkelte linjer"
 
-#: src/gnome/window-register.c:1256
+#: src/gnome/window-register.c:1260
 msgid "Auto-Split Ledger"
 msgstr ""
 
-#: src/gnome/window-register.c:1257 src/scm/guile-strings.c:256
+#: src/gnome/window-register.c:1261 src/scm/guile-strings.c:256
 #, fuzzy
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
 msgstr "Vis transaktioner på to linjer med mere information"
 
-#: src/gnome/window-register.c:1260
+#: src/gnome/window-register.c:1264
 #, fuzzy
 msgid "Transaction Journal"
 msgstr "Transaktionsrapport"
 
-#: src/gnome/window-register.c:1261 src/scm/guile-strings.c:258
+#: src/gnome/window-register.c:1265 src/scm/guile-strings.c:258
 #, fuzzy
 msgid "Show expanded transactions with all splits"
 msgstr "Find transaktioner med en søgning."
 
-#: src/gnome/window-register.c:1271
+#: src/gnome/window-register.c:1275
 #, fuzzy
 msgid "_Double Line"
 msgstr "Dobbelt linje"
 
-#: src/gnome/window-register.c:1272 src/scm/guile-strings.c:261
+#: src/gnome/window-register.c:1276 src/scm/guile-strings.c:261
 msgid "Show two lines of information for each transaction"
 msgstr ""
 
-#: src/gnome/window-register.c:1286
+#: src/gnome/window-register.c:1290
 msgid "Sort by date of entry"
 msgstr "Sortér efter indtastningsdato"
 
-#: src/gnome/window-register.c:1287
+#: src/gnome/window-register.c:1291
 msgid "Sort by the date of entry"
 msgstr "Sortér efter indtastningsdato"
 
-#: src/gnome/window-register.c:1290
+#: src/gnome/window-register.c:1294
 msgid "Sort by statement date"
 msgstr "Sortér efter udskriftsdato"
 
-#: src/gnome/window-register.c:1291
+#: src/gnome/window-register.c:1295
 #, fuzzy
 msgid "Sort by the statement date (unreconciled items last)"
 msgstr "Sortér efter udskriftsdato (uopgjorte elementer sidst"
 
-#: src/gnome/window-register.c:1301 src/gnome/window-register.c:1302
+#: src/gnome/window-register.c:1305 src/gnome/window-register.c:1306
 msgid "Sort by Memo"
 msgstr "Sortér efter Note"
 
-#: src/gnome/window-register.c:1320
+#: src/gnome/window-register.c:1324
 msgid "Show _All"
 msgstr "Vis _alt"
 
-#: src/gnome/window-register.c:1321
+#: src/gnome/window-register.c:1325
 msgid "Show all of the transactions in the account"
 msgstr "Vis alle transaktioner i kontoen"
 
-#: src/gnome/window-register.c:1328
+#: src/gnome/window-register.c:1332
 msgid "Set _Range..."
 msgstr "Sæt _interval..."
 
-#: src/gnome/window-register.c:1329
+#: src/gnome/window-register.c:1333
 msgid "Set the date range of this register"
 msgstr "Sæt datointervallet for dette register"
 
-#: src/gnome/window-register.c:1339
+#: src/gnome/window-register.c:1343
 msgid "_Style"
 msgstr "_Stil"
 
-#: src/gnome/window-register.c:1341
+#: src/gnome/window-register.c:1345
 msgid "_Date Range"
 msgstr "_Datointerval"
 
-#: src/gnome/window-register.c:1353 src/gnome/window-register.c:1543
+#: src/gnome/window-register.c:1357 src/gnome/window-register.c:1547
 #: src/scm/report/guile-strings.c:347 src/scm/report/guile-strings.c:350
 #: src/scm/report/guile-strings.c:353 src/scm/report/guile-strings.c:394
 #: src/scm/report/guile-strings.c:398
@@ -3934,128 +3934,128 @@ msgstr "_Datointerval"
 msgid "Invoice"
 msgstr "Indtægt"
 
-#: src/gnome/window-register.c:1354
+#: src/gnome/window-register.c:1358
 #, fuzzy
 msgid "Open an invoice report window for this register"
 msgstr "Afstem hovedkontoen i dette register"
 
-#: src/gnome/window-register.c:1387
+#: src/gnome/window-register.c:1391
 msgid "Cut Transaction"
 msgstr "Klip transaktion"
 
-#: src/gnome/window-register.c:1388
+#: src/gnome/window-register.c:1392
 msgid "Cut the selected transaction"
 msgstr "Klip den valgte transaktion ud"
 
-#: src/gnome/window-register.c:1395
+#: src/gnome/window-register.c:1399
 msgid "Copy Transaction"
 msgstr "Kopiér transaktion"
 
-#: src/gnome/window-register.c:1396
+#: src/gnome/window-register.c:1400
 msgid "Copy the selected transaction"
 msgstr "Kopiér den valgte transaktion"
 
-#: src/gnome/window-register.c:1403
+#: src/gnome/window-register.c:1407
 msgid "Paste Transaction"
 msgstr "Indsæt transaktion"
 
-#: src/gnome/window-register.c:1404
+#: src/gnome/window-register.c:1408
 msgid "Paste the transaction clipboard"
 msgstr "Indsæt transaktionsklippebordet"
 
-#: src/gnome/window-register.c:1426
+#: src/gnome/window-register.c:1430
 msgid "Reconcile the main account for this register"
 msgstr "Afstem hovedkontoen i dette register"
 
-#: src/gnome/window-register.c:1463 src/gnome/window-register.c:1652
+#: src/gnome/window-register.c:1467 src/gnome/window-register.c:1656
 #, fuzzy
 msgid "_Enter"
 msgstr "Indgang"
 
-#: src/gnome/window-register.c:1488 src/gnome/window-register.c:1677
+#: src/gnome/window-register.c:1492 src/gnome/window-register.c:1681
 msgid "D_uplicate"
 msgstr "D_uplikér"
 
-#: src/gnome/window-register.c:1497 src/gnome/window-register.c:1686
+#: src/gnome/window-register.c:1501 src/gnome/window-register.c:1690
 #, fuzzy
 msgid "_Split"
 msgstr "Del"
 
-#: src/gnome/window-register.c:1505 src/gnome/window-register.c:1694
+#: src/gnome/window-register.c:1509 src/gnome/window-register.c:1698
 msgid "_Blank"
 msgstr "_Tom"
 
-#: src/gnome/window-register.c:1514 src/gnome/window-register.c:1703
+#: src/gnome/window-register.c:1518 src/gnome/window-register.c:1707
 msgid "_Jump"
 msgstr "_Spring"
 
-#: src/gnome/window-register.c:1524
+#: src/gnome/window-register.c:1528
 #, fuzzy
 msgid "_Scrub All"
 msgstr "Ryd alt op"
 
-#: src/gnome/window-register.c:1525
+#: src/gnome/window-register.c:1529
 #, fuzzy
 msgid ""
 "Identify and fix problems in the transactions displayed in this register"
 msgstr "Identificér og reparér problemer i konti i dette register"
 
-#: src/gnome/window-register.c:1533
+#: src/gnome/window-register.c:1537
 #, fuzzy
 msgid "_Scrub Current"
 msgstr "Ryd konto op"
 
-#: src/gnome/window-register.c:1534
+#: src/gnome/window-register.c:1538
 #, fuzzy
 msgid "Identify and fix problems in the current transaction"
 msgstr "Identificér og reparér problemer i kontoen"
 
-#: src/gnome/window-register.c:1544
+#: src/gnome/window-register.c:1548
 #, fuzzy
 msgid "Open an invoice report window for this transaction"
 msgstr "Afstem hovedkontoen i dette register"
 
-#: src/gnome/window-register.c:1551
+#: src/gnome/window-register.c:1555
 #, fuzzy
 msgid "_Print Check..."
 msgstr "Udskriftskontrol"
 
-#: src/gnome/window-register.c:1552
+#: src/gnome/window-register.c:1556
 msgid "Print a check using a standard format"
 msgstr "Udskriv en check ved brug af et standard format"
 
-#: src/gnome/window-register.c:1575
+#: src/gnome/window-register.c:1579
 msgid "_Register"
 msgstr "_Register"
 
-#: src/gnome/window-register.c:1865
+#: src/gnome/window-register.c:1869
 msgid "General Ledger"
 msgstr "Hovedbog"
 
-#: src/gnome/window-register.c:1867
+#: src/gnome/window-register.c:1871
 #, fuzzy
 msgid "General Ledger Report"
 msgstr "Hovedbog"
 
-#: src/gnome/window-register.c:1872
+#: src/gnome/window-register.c:1876
 msgid "Portfolio"
 msgstr "Portefølje"
 
-#: src/gnome/window-register.c:1874
+#: src/gnome/window-register.c:1878
 #, fuzzy
 msgid "Portfolio Report"
 msgstr "Portefølje"
 
-#: src/gnome/window-register.c:1879
+#: src/gnome/window-register.c:1883
 msgid "Search Results"
 msgstr "Søgeresultater"
 
-#: src/gnome/window-register.c:1881
+#: src/gnome/window-register.c:1885
 #, fuzzy
 msgid "Search Results Report"
 msgstr "Søgeresultater"
 
-#: src/gnome/window-register.c:1886 src/scm/guile-strings.c:250
+#: src/gnome/window-register.c:1890 src/scm/guile-strings.c:250
 #: src/scm/guile-strings.c:259 src/scm/guile-strings.c:262
 #: src/scm/guile-strings.c:265 src/scm/guile-strings.c:268
 #: src/scm/guile-strings.c:271 src/scm/guile-strings.c:274
@@ -4065,24 +4065,24 @@ msgstr "Søgeresultater"
 msgid "Register"
 msgstr "Register"
 
-#: src/gnome/window-register.c:1888 src/scm/report/guile-strings.c:359
+#: src/gnome/window-register.c:1892 src/scm/report/guile-strings.c:359
 #, fuzzy
 msgid "Register Report"
 msgstr "Registerfarver"
 
-#: src/gnome/window-register.c:2389
+#: src/gnome/window-register.c:2393
 #, fuzzy
 msgid "<No information>"
 msgstr "Kontoinformation"
 
-#: src/gnome/window-register.c:2818
+#: src/gnome/window-register.c:2822
 msgid ""
 "This selection will delete the whole transaction. This is what you usually "
 "want."
 msgstr ""
 "Dette valg vil slette hele transaktionen. Det er normalt det man vil gøre."
 
-#: src/gnome/window-register.c:2820
+#: src/gnome/window-register.c:2824
 #, fuzzy
 msgid ""
 "This selection will delete the whole transaction.\n"
@@ -4091,7 +4091,7 @@ msgid ""
 msgstr ""
 "Dette valg vil slette hele transaktionen. Det er normalt det man vil gøre."
 
-#: src/gnome/window-register.c:2824
+#: src/gnome/window-register.c:2828
 #, fuzzy
 msgid ""
 "Warning: Just deleting all the other splits will make your account "
@@ -4103,24 +4103,24 @@ msgstr ""
 "Du bør nok ikke gøre dette medmindre du har tænkt dig at tilføje en ny\n"
 "deling lige bagefter, så transaktionen igen bliver balanceret."
 
-#: src/gnome/window-register.c:2829
+#: src/gnome/window-register.c:2833
 msgid "You would be deleting reconciled splits!"
 msgstr ""
 
-#: src/gnome/window-register.c:2837
+#: src/gnome/window-register.c:2841
 msgid "Delete Transaction"
 msgstr "Slet transaktion"
 
-#: src/gnome/window-register.c:2859
+#: src/gnome/window-register.c:2863
 msgid "Delete the whole transaction"
 msgstr "Slet hele transaktionen"
 
-#: src/gnome/window-register.c:2869
+#: src/gnome/window-register.c:2873
 #, fuzzy
 msgid "Delete all the other splits"
 msgstr "Slet alle opdelinger"
 
-#: src/gnome/window-register.c:2962
+#: src/gnome/window-register.c:2966
 #, c-format
 msgid ""
 "Are you sure you want to delete\n"
@@ -4133,21 +4133,21 @@ msgstr ""
 "fra transaktionen\n"
 "   %s ?"
 
-#: src/gnome/window-register.c:2964
+#: src/gnome/window-register.c:2968
 msgid "You would be deleting a reconciled split!"
 msgstr ""
 
-#: src/gnome/window-register.c:2970
+#: src/gnome/window-register.c:2974
 #, fuzzy
 msgid "(no memo)"
 msgstr "(ingen)"
 
-#: src/gnome/window-register.c:2973
+#: src/gnome/window-register.c:2977
 #, fuzzy
 msgid "(no description)"
 msgstr "Ingen beskrivelse"
 
-#: src/gnome/window-register.c:3007
+#: src/gnome/window-register.c:3011
 #, fuzzy
 msgid "You would be deleting a transaction with reconciled splits!"
 msgstr "Find transaktioner med en søgning."
