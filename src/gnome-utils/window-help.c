@@ -43,6 +43,7 @@
 #  define _BSD_SOURCE 1
 #endif
 
+#undef HAVE_DB1_DB_H
 #ifdef PREFER_DB1
 #ifdef HAVE_DB1_DB_H
 # include <db1/db.h>

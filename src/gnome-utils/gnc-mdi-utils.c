@@ -27,10 +27,12 @@
 
 #include "dialog-utils.h"
 #include "global-options.h"
+#include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-html.h"
 #include "gnc-mdi-utils.h"
+#include "gnc-session.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 
