@@ -1,3 +1,8 @@
+2003-03-11  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: get the configure script to actually attempt to do
+	  something real in terms of gnome-print, gdk-pixbuf, and guppi.
+
 2003-03-11 TomF changes for Gnome-2 branch, 5th batch
 
 	* src/network-utils/Makefile.am: add src/engine

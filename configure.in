@@ -87,8 +87,10 @@ if test "x$ac_cv_header_ltdl_h" = xno; then
   AC_MSG_ERROR([Cannot find ltdl.h -- libtool-devel not installed?])
 fi
 
-AM_PATH_GLIB_2_0
-
+AM_PATH_GLIB_2_0(2.0.0,,AC_MSG_ERROR([
+*** GLIB >= 2.0 is required to build Gnucash; please make sure you have the
+*** development headers installed. The latest version of GLIB is
+*** always available at ftp://ftp.gnome.org/pub/gnome/sources/glib/.]))
 
 if test ${no_glib}x = yesx
 then
@@ -774,19 +776,24 @@ then
 # 2/27/03 Add Gnome2 version of GNOME_INIT
     GNOME_INIT
     GNOME_COMPILE_WARNINGS
-#    GNOME_CHECK_GDK_PIXBUF
-#    GNOME_PRINT_CHECK
-    
-    # gnome-print-check appears tobe sort of b0rked for the time being
-# 3/9/03 Disable gnome-print for Gnome2.
-#    GNOME_PRINT_CFLAGS=`${PKG_CONFIG} --cflags print`
-#    AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
 
-# 3/9/03 Add LIBGUPPI for Gnome2
-LIBGUPPI_CFLAGS=
-LIBGUPPI_LIBS=
-AC_SUBST(LIBGUPPI_CFLAGS)
-AC_SUBST(LIBGUPPI_LIBS)
+    # look for gdk-pixbuf
+    AM_PATH_GDK_PIXBUF(2.0.0,,AC_MSG_ERROR([
+*** GDK_PIXBUF >= 2.0 is required to build Gnucash; please make sure you have the
+*** development headers installed. The latest version of GDK_PIXBUF is
+*** always available at ftp://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/.]))
+
+    # Gnome-Print
+    PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.0)
+    AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
+    AC_SUBST(GNOME_PRINT_CFLAGS)
+    AC_SUBST(GNOME_PRINT_LIBS)
+    
+    # There is no libguppi.  Just substitute empty stuff
+    LIBGUPPI_CFLAGS=
+    LIBGUPPI_LIBS=
+    AC_SUBST(LIBGUPPI_CFLAGS)
+    AC_SUBST(LIBGUPPI_LIBS)
     
     ### ----------------------------------------------------------------------
     ### Check for glade, gtkhtml
