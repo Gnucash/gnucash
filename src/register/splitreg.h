@@ -11,6 +11,10 @@
  *
  * Handles splits
  *
+ * If the SHOW_TDETAIL flag is set, then transaction blah blah is shown.
+ * Otherwise it is not (useful when not displaying splits, gives old-styule reg).
+ * Hack alert -- finish documenting this
+ *
  * DESIGN HOPES:
  * Should probably move at least some of the layout to a config 
  * file.  Might make good sense to use scheme/guile for the layout.
