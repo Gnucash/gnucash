@@ -1389,6 +1389,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    gint64 num, denom;
    gnc_numeric value;
    GUID guid = nullguid;
+   int not_found = 0;
 
    gnc_commodity * modity;
 
@@ -1401,11 +1402,13 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       pr = gnc_price_create();
       gnc_price_begin_edit (pr);
       gnc_price_set_guid (pr, &guid);
+      not_found = 1;
    } 
    else
    {
       gnc_price_ref (pr);
       gnc_price_begin_edit (pr);
+      not_found = 0;
    }
 
    modity = gnc_string_to_commodity (DB_GET_VAL("commodity",j));
@@ -1425,7 +1428,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    value = gnc_numeric_create (num, denom);
    gnc_price_set_value (pr, value);
 
-   gnc_pricedb_add_price(prdb, pr);
+   if (not_found) gnc_pricedb_add_price(prdb, pr);
    gnc_price_commit_edit (pr);
    gnc_price_unref (pr);
 
@@ -2374,6 +2377,11 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
       g_free (be->hostname);
       be->hostname = NULL;
    }
+/* hack alert -- we should connect to template1 first, and look for an
+entry in the system table pgdatabase i.e. SELECT datname FROM
+pg_database; this should tell us if it exists already, or if it needs to
+be created. 
+*/
 
    be->connection = PQsetdbLogin (be->hostname, 
                                   be->portno,

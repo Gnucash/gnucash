@@ -153,7 +153,12 @@ Core bugs/features that still need work:
    this.  So something is marking teh data 'not saved'. 
    fix this (again  ...)
 
--- allow user to enter URL in GUI dialog, get GUI to remember the URL 
+-- allow user to enter URL in GUI dialog.  User can currently type url
+   into the file dialog window; it would be nice to have something 
+   slightly nicer tan this.
+
+-- change code for initial db access. We should query the pg_database
+   table to see if the database already exists.
 
 -- Wire in the GUI to ask user for username/password to log onto the
    server.  (GUI already implemented, just not yet used).
