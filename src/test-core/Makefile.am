@@ -8,4 +8,4 @@ libgncmod_test_la_LIBADD = \
 
 noinst_HEADERS=test-stuff.h
 
-INCLUDES=-I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS}
+CFLAGS = @CFLAGS@ -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS}
