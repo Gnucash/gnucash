@@ -33,7 +33,7 @@ m4data_DATA = gnucash.m4
 # Don't list any directories or you'll get *everything*, including the
 # CVS dirs.
 
-EXTRA_DIST = config.rpath  \
+EXTRA_DIST = config.rpath  config.rpath  \
   .cvsignore \
   ChangeLog.1 \
   HACKING \

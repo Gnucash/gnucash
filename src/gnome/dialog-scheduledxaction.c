@@ -102,6 +102,16 @@ typedef enum _EndTypeEnum {
         END_OCCUR,
 } EndType;
 
+/* Runtime/dialog information about a particular SX. */
+typedef struct _SxRuntimeInfo
+{
+        SchedXaction *sx;
+        // the gnc-dense-cal mark-tag
+        gint         markTag;
+        // which row in the GTK CList this SX is.
+        gint         row;
+} SxRuntimeInfo;
+
 struct _SchedXactionDialog
 {
         GtkWidget   *dialog;
@@ -212,6 +222,10 @@ static gboolean sxed_confirmed_cancel( SchedXactionEditorDialog *sxed );
 static gboolean editor_component_sx_equality( gpointer find_data,
                                               gpointer user_data );
 
+static SxRuntimeInfo* _new_sx_runtime_info( SchedXaction *sx );
+static void _clear_runtime_info_row( gpointer key, gpointer value, gpointer user_data );
+
+
 /** Implementations *****************************************************/
 
 static
@@ -224,6 +238,15 @@ sxd_close_handler ( gpointer user_data )
         gnome_dialog_close( GNOME_DIALOG( sxd->dialog ) );
 }
 
+static
+void
+_clear_runtime_info_row( gpointer key, gpointer value, gpointer user_data )
+{
+        SxRuntimeInfo *sxri;
+        sxri = (SxRuntimeInfo*)value;
+        sxri->row = -1;
+}
+
 void
 gnc_sxd_list_refresh( SchedXactionDialog *sxd )
 {
@@ -233,9 +256,13 @@ gnc_sxd_list_refresh( SchedXactionDialog *sxd )
         /* Update the clist. */
         cl = GTK_CLIST( glade_xml_get_widget( sxd->gxml, SX_LIST ) );
         gtk_clist_freeze( cl );
+
         gtk_clist_clear( cl );
+        // Also, flush the row-numbers from storage
+        g_hash_table_foreach( sxd->sxData, _clear_runtime_info_row, NULL );
         sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
         g_list_foreach( sxList, putSchedXactionInDialog, sxd );
+
         gtk_clist_thaw( cl );
 }
 
@@ -342,9 +369,10 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                 sxList = gnc_book_get_schedxactions( book );
                 sxList = g_list_append( sxList, sxed->sx );
                 gnc_book_set_schedxactions( book, sxList );
-                sxed->sx = NULL;
                 sxed->newsxP = FALSE;
         }
+        // regardless, do this so the close handler won't complain.
+        sxed->sx = NULL;
 
         /* update lists */
         /* We now do this by getting the list of SX Lists and updating them
@@ -607,7 +635,7 @@ static
 gboolean
 gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
 {
-        gint ttVarCount;
+        gint ttVarCount, splitCount;
         FreqSpec *fs;
 
         /* Do checks on validity and such, interrupting the user if
@@ -630,6 +658,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
          */
 
         ttVarCount = 0;
+        splitCount = 0;
         {
                 static const int NUM_ITERS_WITH_VARS = 5;
                 static const int NUM_ITERS_NO_VARS = 1;
@@ -685,8 +714,11 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                               (gpointer)vars );
                         g_hash_table_foreach( txns, set_sums_to_zero, NULL );
                         tmp = gnc_numeric_zero();
-                        for ( splitList = xaccSchedXactionGetSplits( sxed->sx );
-                              splitList; splitList = splitList->next )
+
+                        splitList = xaccSchedXactionGetSplits( sxed->sx );
+                        splitCount += g_list_length( splitList );
+
+                        for ( ; splitList; splitList = splitList->next )
                         {
                                 txnCreditDebitSums *tcds;
                                 s = (Split*)splitList->data;
@@ -833,6 +865,15 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                         gnc_warning_dialog( sxed->dialog,
 					    _("Scheduled Transactions with variables\n"
 					      "cannot be automatically created.") );
+                        return FALSE;
+                }
+
+                /* Fix for part of Bug#121740 -- auto-create transactions are
+                 * only valid if there's actually a transaction to create. */
+                if ( autocreateState && splitCount == 0 ) {
+                        gnc_warning_dialog( sxed->dialog,
+                                            _("Scheduled Transactions without a template\n"
+                                              "transaction cannot be automatically created.") );
                         return FALSE;
                 }
         }
@@ -1004,6 +1045,10 @@ gnc_sxed_save_sx( SchedXactionEditorDialog *sxed )
                 fs = xaccSchedXactionGetFreqSpec( sxed->sx );
                 gnc_frequency_save_state( sxed->gncfreq, fs, &gdate );
 
+                GString *str = g_string_new( "" );
+                xaccFreqSpecGetFreqStr( fs, str );
+                DEBUG( "fs: %s", str->str );
+
                 /* now that we have it, set the start date */
                 xaccSchedXactionSetStartDate( sxed->sx, &gdate );
         }
@@ -1048,6 +1093,8 @@ scheduledxaction_dialog_destroy(GtkObject *object, gpointer data)
 
         gnc_unregister_gui_component_by_data
                 (DIALOG_SCHEDXACTION_CM_CLASS, sxd);
+
+        // FIXME: um.  We should free memory and stuff, here.
 
         g_free( sxd );
 }
@@ -1143,6 +1190,8 @@ gnc_ui_scheduled_xaction_dialog_create(void)
                            GTK_SIGNAL_FUNC(row_select_handler), sxd );
         gtk_signal_connect( GTK_OBJECT(w), "click-column",
                             GTK_SIGNAL_FUNC(gnc_sxd_row_click_handler), sxd );
+
+        // gtk_clist_column_titles_active( GTK_CLIST( w ) );
 
         /* Default to sorting by ascending next-instance date. */
         sxd->currentSortCol = 2;
@@ -1400,6 +1449,10 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         gtk_widget_set_sensitive( GTK_WIDGET(sxed->remindSpin), FALSE );
         gtk_widget_set_sensitive( GTK_WIDGET(sxed->endCountEntry), FALSE );
         gtk_widget_set_sensitive( GTK_WIDGET(sxed->endRemainEntry), FALSE );
+
+        gtk_editable_set_editable( GTK_EDITABLE(sxed->advanceSpin), TRUE );
+        gtk_editable_set_editable( GTK_EDITABLE(sxed->remindSpin), TRUE );
+
 	/* Allow grow, allow shrink, auto-shrink */
         gtk_window_set_policy (GTK_WINDOW(sxed->dialog), TRUE, TRUE, FALSE);
 
@@ -1795,18 +1848,19 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 book = gnc_get_current_book ();
                 sxList = gnc_book_get_schedxactions( book );
                 for ( sel = cl->selection; sel; sel = sel->next ) {
-                        gint tag;
-                        gint *p_tag = &tag;
+                        SxRuntimeInfo *sxri;
+                        SxRuntimeInfo **p_sxri = &sxri;
                         gpointer unused;
                         gboolean foundP;
 
                         sx = (SchedXaction*)gtk_clist_get_row_data( cl, (int)sel->data );
                         sxList = g_list_remove( sxList, (gpointer)sx );
                         foundP = g_hash_table_lookup_extended( sxd->sxData, sx,
-                                                               &unused, (gpointer*)p_tag );
+                                                               &unused,
+                                                               (gpointer*)p_sxri );
                         g_assert( foundP );
-                        if ( tag != -1 ) {
-                                gnc_dense_cal_mark_remove( sxd->gdcal, tag );
+                        if ( sxri->markTag != -1 ) {
+                                gnc_dense_cal_mark_remove( sxd->gdcal, sxri->markTag );
                         }
                         g_hash_table_remove( sxd->sxData, sx );
                         xaccSchedXactionFree( sx );
@@ -1899,6 +1953,19 @@ _gnc_sxd_free_dates( gpointer data, gpointer user_data )
 }
 
 static
+SxRuntimeInfo*
+_new_sx_runtime_info( SchedXaction *sx )
+{
+        SxRuntimeInfo *sxri;
+
+        sxri = g_new0( SxRuntimeInfo, 1 );
+        sxri->sx      = sx;
+        sxri->row     = -1;
+        sxri->markTag = -1;
+        return sxri;
+}
+
+static
 void
 putSchedXactionInDialog( gpointer data, gpointer user_data )
 {
@@ -1908,14 +1975,17 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
         char *text[3];
         GString *freqStr;
         GString *nextDate;
-        gint row;
         int i;
         GDate *nextInstDate = NULL, *calEndDate;
         int instArraySize;
         GDate **instArray;
         GList *instList;
-        gint gdcMarkTag, oldMarkTag;
-        gint *p_oldMarkTag = &oldMarkTag;
+        gpointer unused;
+        SxRuntimeInfo *sxri = NULL;
+        SxRuntimeInfo **p_sxri = &sxri;
+        gboolean foundP;
+        gint gdcMarkTag;
+        gint row;
 
         sx = (SchedXaction*)data;
         sxd = (SchedXactionDialog*)user_data;
@@ -1986,38 +2056,47 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
                 nextInstDate = NULL;
         }
 
+        foundP = g_hash_table_lookup_extended( sxd->sxData,
+                                               (gpointer)sx,
+                                               &unused,
+                                               (gpointer*)p_sxri );
+        if ( ! foundP )
+        {
+                // new SX -- create runtime storage for it
+                sxri = _new_sx_runtime_info( sx );
+                sxri->markTag = gdcMarkTag;
+        }
+        else
+        {
+                // existing SX; remove it's 
+                if ( sxri->markTag != -1 ) {
+                        gnc_dense_cal_mark_remove( sxd->gdcal, sxri->markTag );
+                        sxri->markTag = gdcMarkTag;
+                }
+        }
+
+
         text[0] = xaccSchedXactionGetName( sx );
         text[1] = freqStr->str;
         text[2] = nextDate->str;
 
         clist = GTK_CLIST( glade_xml_get_widget( sxd->gxml, SX_LIST ) );
         gtk_clist_freeze( clist );
-        row = gtk_clist_find_row_from_data( clist, sx );
-        if ( row != -1 ) {
-                gpointer unused;
-                gboolean foundP =
-                        g_hash_table_lookup_extended( sxd->sxData,
-                                                      (gpointer)sx,
-                                                      &unused,
-                                                      (gpointer*)p_oldMarkTag );
-                g_assert( foundP );
-        }
-        if ( row == -1 ) {
+
+        row = gtk_clist_find_row_from_data( clist, (gpointer)sx );
+        if ( sxri->row == -1 ) {
                 /* new item to be inserted */
-                row = gtk_clist_append( clist, text );
-                gtk_clist_set_row_data( clist, row, sx );
+                sxri->row = gtk_clist_append( clist, text );
+                gtk_clist_set_row_data( clist, sxri->row, sx );
         } else {
-                /* old item being replaced. */
-                if ( oldMarkTag != -1 ) {
-                        gnc_dense_cal_mark_remove( sxd->gdcal, oldMarkTag );
-                }
                 for ( i=0; i<3; i++ ) {
-                        gtk_clist_set_text( clist, row, i, text[i] );
+                        gtk_clist_set_text( clist, sxri->row, i, text[i] );
                 }
         }
         gtk_clist_sort( clist );
         gtk_clist_thaw( clist );
-        g_hash_table_insert( sxd->sxData, (gpointer)sx, (gpointer)gdcMarkTag );
+        g_hash_table_insert( sxd->sxData, (gpointer)sx, (gpointer)sxri );
+        sxri = NULL;
 
         g_string_free( freqStr,  TRUE );
         g_string_free( nextDate, TRUE );
@@ -2272,10 +2351,8 @@ gnc_sxed_update_cal( SchedXactionEditorDialog *sxed )
         }
 
         i = 0;
-        gnc_dense_cal_set_month( sxed->example_cal,
-                                 g_date_month( &d ) );
-        gnc_dense_cal_set_year( sxed->example_cal,
-                                g_date_year( &d ) );
+        gnc_dense_cal_set_month( sxed->example_cal, g_date_month( &d ) );
+        gnc_dense_cal_set_year(  sxed->example_cal, g_date_year( &d ) );
         while ( (i < EX_CAL_NUM_MONTHS * 31)
                 && g_date_valid( &d )
                 /* Restrict based on end date */
@@ -2307,8 +2384,12 @@ gnc_sxed_update_cal( SchedXactionEditorDialog *sxed )
                                                    sxed->cal_marks,
                                                    name, info->str );
                 gtk_widget_queue_draw( GTK_WIDGET( sxed->example_cal ) );
-                g_free( name );
+
                 g_string_free( info, TRUE );
+                if ( name != NULL )
+                {
+                        g_free( name );
+                }
         }
 
         xaccFreqSpecFree( fs );

@@ -38,6 +38,7 @@
 #include "gnc-book.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
+#include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-dense-cal.h"
 
@@ -59,6 +60,9 @@
 #define SXFTD_END_DATE_BOX "end_date_hbox"
 
 #define SX_OPT_STR "Scheduled Transactions"
+
+#define SXFTD_ERRNO_UNBALANCED_XACTION 3
+#define SXFTD_ERRNO_OPEN_XACTION -3
 
 #define SXFTD_EXCAL_NUM_MONTHS 4
 #define SXFTD_EXCAL_MONTHS_PER_COL 4
@@ -212,13 +216,16 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
 {
   
   Transaction *tr = sxfti->trans;
-  GList *tt_list= NULL;
+  GList *tt_list = NULL;
   GList *splits, *template_splits = NULL;
   TTInfo *tti = gnc_ttinfo_malloc();
   TTSplitInfo *ttsi;
   Split *sp;
+  gnc_numeric runningBalance;
   gnc_numeric split_value;
   const char *tmpStr;
+
+  runningBalance = gnc_numeric_zero();
 
   gnc_ttinfo_set_description(tti, xaccTransGetDescription(tr));
   gnc_ttinfo_set_num(tti, xaccTransGetNum(tr));
@@ -231,6 +238,9 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
     gnc_ttsplitinfo_set_action(ttsi, xaccSplitGetAction(sp));
     split_value = xaccSplitGetValue(sp);
     gnc_ttsplitinfo_set_memo(ttsi, xaccSplitGetMemo(sp));
+
+    runningBalance = gnc_numeric_add( runningBalance, split_value,
+                                      100, (GNC_DENOM_AUTO | GNC_DENOM_LCD) );
 
     if(gnc_numeric_positive_p(split_value))
     {
@@ -250,6 +260,17 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
     gnc_ttsplitinfo_set_account( ttsi, xaccSplitGetAccount( sp ) );
 
     template_splits = g_list_append(template_splits, ttsi);
+  }
+
+  if ( ! gnc_numeric_zero_p( runningBalance )
+          && !gnc_verify_dialog( (gncUIWidget)sxfti->dialog,
+                                 FALSE, "%s",
+                                 _("The Scheduled Transaction Editor "
+                                   "cannot automatically\nbalance "
+                                   "this transaction. "
+                                   "Should it still be "
+                                   "entered?") ) ) {
+        return SXFTD_ERRNO_UNBALANCED_XACTION;
   }
 
   gnc_ttinfo_set_template_splits(tti, template_splits);
@@ -338,7 +359,10 @@ sxftd_init( SXFromTransInfo *sxfti )
   if ( ! sxfti->trans ) {
     return -2;
   }
-
+  if ( xaccTransIsOpen( sxfti->trans ) ) {
+          return SXFTD_ERRNO_OPEN_XACTION;
+  }
+          
   sxfti_attach_callbacks(sxfti);
 
   /* Setup the example calendar and related data structures. */
@@ -512,7 +536,10 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
     xaccSchedXactionSetAdvanceReminder( sx, daysInAdvance );
   }
 
-  sxftd_add_template_trans( sxfti );
+  if ( sxftd_add_template_trans( sxfti ) != 0 )
+  {
+          sxftd_errno = SXFTD_ERRNO_UNBALANCED_XACTION;
+  }
 
   return sxftd_errno;
 }
@@ -540,13 +567,20 @@ sxftd_ok_clicked(GtkWidget *w, gpointer user_data)
   GList *sx_list;
   guint sx_error = sxftd_compute_sx(sxfti);
 
-  if (sx_error != 0)
+  if (sx_error != 0
+      && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION)
   {
     PERR( "Error in sxftd_compute_sx after ok_clicked [%d]", sx_error );
   }
   else
   {
     SchedXactionDialog *sxd;
+
+    if ( sx_error == SXFTD_ERRNO_UNBALANCED_XACTION ) {
+            gnc_error_dialog( gnc_ui_get_toplevel(), 
+                              _( "The Scheduled Transaction is unbalanced.\n"
+                                 "You are strongly encouraged to correct this situation." ) );
+    }
     book = gnc_get_current_book ();
     sx_list = gnc_book_get_schedxactions(book);
     sx_list = g_list_append(sx_list, sxfti->sx);
@@ -609,10 +643,13 @@ sxftd_advanced_clicked(GtkWidget *w, gpointer user_data)
   SchedXactionDialog *adv_dlg;
   SchedXactionEditorDialog *adv_edit_dlg;
 
-  if (sx_error != 0)
+  if ( sx_error != 0
+       && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION )
   {
-    PWARN( "something bad happened in sxftd_compute_sx [%d]", sx_error );
-    return;
+          // unbalanced-xaction is "okay", since this is also checked for by
+          // the advanced editor.
+          PWARN( "something bad happened in sxftd_compute_sx [%d]", sx_error );
+          return;
   }
   gtk_widget_hide( sxfti->dialog );
   /* force a gui update. */
@@ -645,7 +682,20 @@ gnc_sx_create_from_trans( Transaction *trans )
   sxfti->sx = xaccSchedXactionMalloc(gnc_get_current_book ());
 
   if ( (errno = sxftd_init( sxfti )) < 0 ) {
-          PERR( "Error in sxftd_init: %d", errno );
+          if ( errno == SXFTD_ERRNO_OPEN_XACTION )
+          {
+                  gnc_error_dialog( gnc_ui_get_toplevel(),
+                                    _( "Cannot create a Scheduled Transaction "
+                                       "from a Transaction currently\n"
+                                       "being edited. Please Enter the "
+                                       "Transaction before Scheduling." ) );
+                  sxftd_close( sxfti, TRUE );
+                  return;
+          }
+          else
+          {
+                  PERR( "Error in sxftd_init: %d", errno );
+          }
   }
 
   gtk_widget_show_all(sxfti->dialog);

@@ -4,6 +4,49 @@
 	glade/hbci.glade, gnc-hbci-transfer.c: Transfer template management
 	GUI added by Bernd Wagner <F.J.Bernd.Wagner@t-online.de>
 
+2004-03-07  Joshua Sled  <jsled@asynchronous.org>
+
+	* HACKING: Added instructions about running under valgrind.
+
+	* lib/gnucash_valgrind.supp: Added a large set of valgrind
+	suppressions for both guile and gnucash.
+
+	* src/register/ledger-core/gnc-ledger-display.c
+	(gnc_ledger_display_template_gl): Change the reg_type to
+	SEARCH_LEDGER so all the 'action' types appear. Bug#108833.
+
+	* src/gnome/glade/sched-xact.glade: Remove unused 'ledger_status'
+	widget. Bug#102269.
+
+	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_draw_to_buffer):
+	At least be consistent about the background coloring of the month
+	labels, even if we're still not using GTK themeage correctly.
+
+	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_destroy): Destroy
+	the transient window when the widget is destroyed. Bug#103910.
+
+	* src/gnome/dialog-scheduledxaction.c
+	(gnc_ui_scheduled_xaction_editor_dialog_create): Make the advance
+	and remind spin-buttons editable [Bug#94963].
+
+	* src/gnome/glade/sched-xact.glade: Change the upper bound on the
+	advance and remind spins to 365 [days], with a page-size of 30
+	[days].
+
+	* src/gnome/dialog-sx-from-trans.c (gnc_sx_create_from_trans):
+	Disallow the Scheduling of being-editing transactions in the
+	Register, preventing a class of unbalacned SX template
+	transactions from being entered and propogated through the
+	system. See Bug#130330.
+
+	* src/engine/FreqSpec.c (xaccFreqSpecGetFreqStr): Fix nasty
+	memory-corruption issue; insufficent bounds checking on array
+	index. Bug#125600.
+
+	* src/gnome/dialog-sxsincelast.c (create_each_transaction_helper):
+	Better handling of various error cases in
+        transaction-creation. Bug#120311; Bug#130330.
+
 2004-03-03  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-load.c: make the code a
@@ -11,6 +54,20 @@
 	  variable name inside a block of code and "over-riding" an
 	  existing variable.  Unlikely to actually fix anything, but
 	  you never know what a compiler might do.
+
+2004-03-01  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_check_consistent):
+	Fix for part of Bug#121740 -- only allow auto-create SXes which
+	have splits to be created.
+
+2004-02-07  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (editor_ok_button_clicked): 
+	* src/gnome-utils/gnc-frequency.c (gnc_frequency_save_state): 
+	* src/backend/file/gnc-freqspec-xml-v2.c (fs_none_handler): 
+	* src/engine/FreqSpec.c (xaccFreqSpecGetFreqStr):
+	Adding "NONE" as an allowable FreqSpec [Bug#103968].
 
 2004-02-14  Christian Stimming  <stimming@tuhh.de>
 
