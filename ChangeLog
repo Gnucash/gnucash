@@ -1,5 +1,8 @@
 2003-10-18  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/hbci/druid-hbci-initial.c: Fix and initially
+	implement handling of multiple banks/users/customers.
+
 	* src/import-export/hbci/dialog-hbcitrans.c: Fix handling of HBCI
 	direct debits (fix wrong textkey).
 
