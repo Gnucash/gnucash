@@ -23,6 +23,11 @@ image_DATA = \
   logo-linux.png \
   newaccwin-code.png \
   newaccwin-trade.png \
+  new-user-frame1.png \
+  new-user-frame2.png \
+  new-user-frame3.png \
+  new-user-frame4.png \
+  new-user-frame5.png \
   recnwin.png \
   recninfo.png \
   regwin-double.png \
