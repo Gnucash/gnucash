@@ -1,3 +1,31 @@
+2001-06-07  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/gnome/new-user-callbacks.c: fix test for commodity added by
+	setting data on druid rather than a global variable (bad jim.
+	global variable bad).
+	(on_chooseAccountTypesPage_prepare): remove old comment.
+	(on_chooseAccountTypesPage_prepare): set object data that account
+	lists loaded.
+
+	* src/gnome/new-user-funs.c (gnc_get_new_user_dialog): new func.
+
+	* src/gnome/new-user-callbacks.c (set_first_startup): simplify
+	using the global-options.h func gnc_set_boolean_option.
+
+	* src/FileDialog.c (gncFileNew): lookup pref and do or don't run
+	new account list druid.
+
+	* doc/sgml/C/image/Makefile.am (image_DATA): add new user images.
+
+	* src/gnome/new-user-callbacks.c
+	(on_newAccountCurrencyChoosePage_prepare): remove old comment.
+
+	* doc/sgml/C/xacc-quickstart.sgml: add link to
+	account-hierarchy-creator.
+
+	* doc/sgml/C/Makefile.am (GNUCASH_SGML_FILES): add account
+	hierarchy sgml file to list.
+
 2001-06-07  Dave Peticolas  <dave@krondo.com>
 
 	* src/doc/design/gnucash-design.texinfo: update docs
