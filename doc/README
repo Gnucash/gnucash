@@ -74,7 +74,8 @@ Features include:
   - Get Stock & Mutual Fund quotes from various web sites, 
     update portfolio automatically (more funds being added 
     regularly).
-  - European date handling, French and German translations.
+  - European date handling, French, German, Swedish, and Great
+    Britain translations.
 
 
 Home Page:
@@ -93,12 +94,12 @@ http://www.gnucash.org/source_code.php3
 
 Running:
 --------
-Only the Motif version of GnuCash is currently stable. The Gnome
+Only the 1.2.5 Motif version of GnuCash is currently stable. The Gnome
 version is a development version, but will soon be stable enough for
-regular use. Development of the Motif version has ceased and does not
-compile in current CVS. The qt/kde version doesn't compile, most
-functions are missing. See below for OS's other than GNU/Linux/*BSD
-support.
+regular use. Development of the Motif version has ceased and the Motif
+version does not compile in current CVS. The Qt version doesn't
+compile and most functions are missing. See below for OS's other
+than GNU/Linux/*BSD support.
 
 The following packages are required to be installed to run the gnucash 
 Motif binary:
@@ -234,6 +235,7 @@ German version:
 
 
 Other locales that should mostly work, but are still in development:
+
 en_US
 en_GB
 fr_CH
@@ -269,27 +271,37 @@ Normally, to build and install GnuCash, all you have to do is:
   # make 
   # make install
 
-To build French or German language versions, or to enable European date
-handling, you will need to examine & modify the language setup in the 
-/include/messages.h file.
+If you only want a particular language installed, you can set the
+LINGUAS environment variable before you run configure. For example,
+to only install the French translations, run
 
-You can build Motif, Gnome, and Qt versions. Currently, the Motif version
-is the most stable, bug-free, correct, and feature rich.  The gtk/gnome
-version compiles and is being actively developed, is not yet at the stability
-level of the Motif version. The Qt version may not compile.
+  # export LINGUAS=fr
+  # ./configure
+
+If you want to make sure that all languages get installed, run
+
+  # unset LINGUAS
+  # ./configure
+
+You can build Gnome, Motif, and Qt versions. The Gnome version
+compiles and is being actively developed, is not yet at the stability
+level of the 1.2.5 Motif version, but has more features. Currently,
+the older 1.2.5 Motif version is the most stable and bug-free. The Qt
+version may not compile.
 
 Depending on your make target, you'll produce:
 
-  gnucash.motif
-  gnucash.motif.static
   gnucash.gnome
   gnucash.gnome.static
+  gnucash.motif
+  gnucash.motif.static
   gnucash.qt
+  gnucash.qt.static
 
-The 'static' version statically link in the libraries that GnuCash uses.
-For example, gnucash.motif.static is handy when compiling against a 
-commercial version of Motif, and distributing this version to the
-general public.
+The 'static' version statically link in the libraries that GnuCash
+uses.  For example, gnucash.motif.static is handy when compiling
+against a commercial version of Motif, and distributing this version
+to the general public.
 
 Whichever one you produce last ends up the target of a local
 gnucash.bin symlink, so that you can always run the local ./gnucash
@@ -297,12 +309,11 @@ script to see the last flavor that you built.  The ./gnucash script
 also handles making sure that you're using files from the source dir
 rather than an install tree just like the old ./xacc script did.
 
-You'll use "make install" when you want to do a normal FSSTND /usr/ or
-/usr/local style install where everything scatters across the
+You'll use "make install" when you want to do a normal FSSTND /usr/
+or /usr/local style install where everything scatters across the
 filesystem in foo/gnucash/* directories.  You'll use "make
 install-opt" when you want an /opt/gnucash style install where
-everything installs into /opt/gnucash/bin, /opt/gnucash/doc, share, etc
-dirs.
+everything installs into the /opt/gnucash directory.
 
 So the two most likely sets of build instructions would be as follows:
 
@@ -315,16 +326,15 @@ So the two most likely sets of build instructions would be as follows:
 
   For an /opt style install
 
-    ./configure --prefix=/usr/local/opt/gnucash
+    ./configure --prefix=/opt/gnucash
     make motif
-    make install-opt
+    make install
 
 Examples of other funny configure options:
-    configure --with-motif=/usr/local/opt/mootif \
-              --prefix=/usr/local/opt/gnucash \
-              --with-xmhtml-includes=/home/rlb/XmHTML-1.1.5/include\
-              --with-xmhtml-libraries=/home/rlb/XmHTML-1.1.5/src
-
+    ./configure --with-motif=/usr/local/opt/mootif \
+                --prefix=/usr/local/opt/gnucash \
+                --with-xmhtml-includes=/home/rlb/XmHTML-1.1.5/include\
+                --with-xmhtml-libraries=/home/rlb/XmHTML-1.1.5/src
 
 
 Flag --with-gtk-config.  The way gtk phiolosphy goes,
@@ -340,11 +350,11 @@ configure --prefix value, then gnucash won't work until it's moved
 to that location.  This feature is mostly useful for package
 builders, but it shouldn't hurt anyone else.
 
-Only the location of startup.scm is hardcoded into the
-binary, and even that can be overridden with --startup-file on the
-command line.  The other defaults are now in startup.scm.
-path-defaults.h is now gone.  The startup file setting is in
-gnucash.h, generated from gnucash.h.in.
+Only the location of startup.scm is hardcoded into the binary, and
+even that can be overridden with --startup-file on the command line.
+The other defaults are now in startup.scm.  path-defaults.h is now
+gone. The startup file setting is in gnucash.h, generated from
+gnucash.h.in.
 
 
 Supported OS's:
@@ -452,13 +462,13 @@ A concrete example of those directories might be:
     |---- /home/me/gnucash/gnucash.mywork (original sources + my edits)
 
 Copy the make-gnucash-patch script to the home development directory
-(/home/me/gnucash above). Now edit three variables at the top of that
-file to reflect the names of your directories. Given the names above,
-you would use
+(/home/me/gnucash above). Now set three environment variables to
+reflect the names of your directories. Given the names above, you
+would use:
 
-my $old = 'gnucash.pristine';
-my $new = 'gnucash.mywork';
-my $gnc_home = '/home/me/gnucash';
+export GNC_MAKEPATCH_OLD_DIR=gnucash.pristine
+export GNC_MAKEPATCH_NEW_DIR=gnucash.mywork
+export GNC_MAKEPATCH_HOME_DIR=/home/me/gnucash
 
 Right before you make your patch, make sure *both* your working and
 your pristine directories are in sync with cvs. Run 'cvs -z3 update -dP'
