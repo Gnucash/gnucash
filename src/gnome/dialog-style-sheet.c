@@ -1,6 +1,6 @@
 /********************************************************************
- * dialog-style-sheet.c -- window for configuring HTML style       *
- *                       sheets in GnuCash                          *
+ * dialog-style-sheet.c -- window for configuring HTML style        *
+ *                         sheets in GnuCash                        *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -233,10 +233,13 @@ gnc_style_sheet_dialog_create() {
                      GTK_SIGNAL_FUNC(gnc_style_sheet_dialog_close_cb), ss); 
   
   gnc_style_sheet_dialog_fill(ss, SCM_BOOL_F);
-  gtk_window_set_policy(GTK_WINDOW(ss->toplevel), FALSE, TRUE, FALSE);
-  gtk_widget_set_usize(GTK_WIDGET(ss->toplevel), 400, 250);
+
+  gtk_window_set_policy(GTK_WINDOW(ss->toplevel), TRUE, TRUE, FALSE);
+
+  gtk_clist_columns_autosize (GTK_CLIST (ss->list));
 
   gtk_widget_show(ss->toplevel);
+
   return ss;
 }
 

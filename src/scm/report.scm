@@ -41,22 +41,23 @@
 (define (gnc:report-menu-setup win)
   (define menu (gnc:make-menu "_Reports" (list "_Accounts")))
   (define menu-namer (gnc:new-menu-namer))
-  
+
   (define (add-report-menu-item name report)
-    (let* ((title (string-append (_ "Report") ": " (_ name)))
-           (item #f))
-      
-      (set! item
-            (gnc:make-menu-item
-             ((menu-namer 'add-name) name)
-             (sprintf #f (_ "Display the %s report") name)
-             (list "_Reports" "")
-             (lambda ()
-               (let ((rept
-                      (gnc:make-report (gnc:report-template-name report))))
-                 (gnc:report-window rept)))))
-      (gnc:add-extension item)))  
-  
+    (if (gnc:report-in-menu? report)
+        (let* ((title (string-append (_ "Report") ": " (_ name)))
+               (item #f))
+
+          (set! item
+                (gnc:make-menu-item
+                 ((menu-namer 'add-name) name)
+                 (sprintf #f (_ "Display the %s report") name)
+                 (list "_Reports" "")
+                 (lambda ()
+                   (let ((rept (gnc:make-report
+                                (gnc:report-template-name report))))
+                     (gnc:report-window rept)))))
+          (gnc:add-extension item))))
+
   ;; add the menu option to edit style sheets 
   (gnc:add-extension menu)
   (gnc:add-extension
@@ -66,17 +67,17 @@
     (list "_Reports" "")
     (lambda ()
       (gnc:style-sheet-dialog-open))))
-  
+
   (gnc:add-extension 
    (gnc:make-separator (list "_Reports" "")))
-  
+
   ;; push reports (new items added on top of menu)
   (hash-for-each add-report-menu-item *gnc:_report-templates_*))
 
 (define <report-template>
   (make-record-type "<report-template>"
                     ;; The data items in a report record
-                    '(version name options-generator renderer)))
+                    '(version name options-generator renderer in-menu?)))
 
 (define (gnc:define-report . args) 
   ;; For now the version is ignored, but in the future it'll let us
@@ -88,11 +89,11 @@
   ;; This code must return as its final value a string representing
   ;; the contents of the HTML document.  preferably this should be
   ;; generated via the <html-document> class, but it's not required.
-  
+
   (define (blank-report)
     ;; Number of #f's == Number of data members
-    ((record-constructor <report-template>) #f #f #f #f))
-  
+    ((record-constructor <report-template>) #f #f #f #f #t))
+
   (define (args-to-defn in-report-rec args)
     (let ((report-rec (if in-report-rec
                           in-report-rec
@@ -104,7 +105,7 @@
                (remainder (cddr args)))
             ((record-modifier <report-template> id) report-rec value)
             (args-to-defn report-rec remainder)))))
-  
+
   (let ((report-rec (args-to-defn #f args)))
     (if (and report-rec
              (gnc:report-template-name report-rec))
@@ -120,6 +121,8 @@
   (record-accessor <report-template> 'options-generator))
 (define gnc:report-template-renderer
   (record-accessor <report-template> 'renderer))
+(define gnc:report-in-menu?
+  (record-accessor <report-template> 'in-menu?))
 
 (define (gnc:report-template-new-options report-template)
   (let ((generator (gnc:report-template-options-generator report-template))
@@ -198,7 +201,7 @@
                (car rest)
                (gnc:report-template-new-options template))))
       (gnc:report-set-options! r options))
-    
+
     (hash-set! *gnc:_reports_* (gnc:report-id r) r)
     id))
 
@@ -229,7 +232,6 @@
        list))
     (do-list tree)
     retval))
-
 
 (define (gnc:backtrace-if-exception proc . args)
   (define (dumper key . args)

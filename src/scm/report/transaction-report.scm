@@ -467,7 +467,7 @@ transferred from/to's code"))
      (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       (N_ "Display") (N_ "Num")
-      "c" (N_ "Display the cheque number?") #t))
+      "c" (N_ "Display the check number?") #t))
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       (N_ "Display") (N_ "Description")

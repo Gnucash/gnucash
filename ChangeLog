@@ -1,3 +1,18 @@
+2001-03-15  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/gnc-dialogs.glade: tweak stylesheet dialog
+
+	* src/gnome/dialog-style-sheet.c: tweak looks
+
+	* src/scm/report/register.scm: new report
+
+	* src/guile/gnc.gwp: g-wrap new query api
+
+	* src/gnome/window-register.c: add report menu and toolbar items
+
+	* src/engine/Query.c: handle NULL pointers, add api to get list
+	of splits with unique transactions
+
 2001-03-14  Dave Peticolas  <dave@krondo.com>
 
 	* rpm/gnucash.spec.in: simplify

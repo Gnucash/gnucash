@@ -236,6 +236,7 @@ GList       * xaccQueryGetTerms(Query * q);
 
 /* after the query has been set up, call this to run the query */
 GList       * xaccQueryGetSplits(Query * q);
+GList       * xaccQueryGetSplitsUniqueTrans(Query *q);
 GList       * xaccQueryGetTransactions(Query * q, query_run_t type);
 
 /* handy for debugging */

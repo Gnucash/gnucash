@@ -8904,11 +8904,11 @@ words.
   <auto_shrink>False</auto_shrink>
 
   <widget>
-    <class>GtkHPaned</class>
-    <name>hpaned1</name>
-    <handle_size>10</handle_size>
-    <gutter_size>15</gutter_size>
-    <position>175</position>
+    <class>GtkHBox</class>
+    <name>hbox96</name>
+    <border_width>5</border_width>
+    <homogeneous>False</homogeneous>
+    <spacing>2</spacing>
 
     <widget>
       <class>GtkFrame</class>
@@ -8917,8 +8917,9 @@ words.
       <label_xalign>0</label_xalign>
       <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
       <child>
-	<shrink>False</shrink>
-	<resize>True</resize>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>False</fill>
       </child>
 
       <widget>
@@ -9012,8 +9013,9 @@ words.
       <label_xalign>0</label_xalign>
       <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
       <child>
-	<shrink>False</shrink>
-	<resize>True</resize>
+	<padding>0</padding>
+	<expand>True</expand>
+	<fill>True</fill>
       </child>
 
       <widget>

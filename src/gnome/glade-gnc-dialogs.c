@@ -6016,7 +6016,7 @@ GtkWidget*
 create_HTML_Style_Sheet_Dialog (void)
 {
   GtkWidget *HTML_Style_Sheet_Dialog;
-  GtkWidget *hpaned1;
+  GtkWidget *hbox96;
   GtkWidget *frame39;
   GtkWidget *vbox92;
   GtkWidget *scrolledwindow17;
@@ -6031,21 +6031,20 @@ create_HTML_Style_Sheet_Dialog (void)
   gtk_object_set_data (GTK_OBJECT (HTML_Style_Sheet_Dialog), "HTML_Style_Sheet_Dialog", HTML_Style_Sheet_Dialog);
   gtk_window_set_title (GTK_WINDOW (HTML_Style_Sheet_Dialog), _("HTML Style Sheets"));
 
-  hpaned1 = gtk_hpaned_new ();
-  gtk_widget_ref (hpaned1);
-  gtk_object_set_data_full (GTK_OBJECT (HTML_Style_Sheet_Dialog), "hpaned1", hpaned1,
+  hbox96 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_ref (hbox96);
+  gtk_object_set_data_full (GTK_OBJECT (HTML_Style_Sheet_Dialog), "hbox96", hbox96,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hpaned1);
-  gtk_container_add (GTK_CONTAINER (HTML_Style_Sheet_Dialog), hpaned1);
-  gtk_paned_set_gutter_size (GTK_PANED (hpaned1), 15);
-  gtk_paned_set_position (GTK_PANED (hpaned1), 175);
+  gtk_widget_show (hbox96);
+  gtk_container_add (GTK_CONTAINER (HTML_Style_Sheet_Dialog), hbox96);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox96), 5);
 
   frame39 = gtk_frame_new (_("Style sheets"));
   gtk_widget_ref (frame39);
   gtk_object_set_data_full (GTK_OBJECT (HTML_Style_Sheet_Dialog), "frame39", frame39,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame39);
-  gtk_paned_pack1 (GTK_PANED (hpaned1), frame39, TRUE, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox96), frame39, FALSE, FALSE, 0);
 
   vbox92 = gtk_vbox_new (FALSE, 0);
   gtk_widget_ref (vbox92);
@@ -6104,7 +6103,7 @@ create_HTML_Style_Sheet_Dialog (void)
   gtk_object_set_data_full (GTK_OBJECT (HTML_Style_Sheet_Dialog), "style_sheet_options", style_sheet_options,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (style_sheet_options);
-  gtk_paned_pack2 (GTK_PANED (hpaned1), style_sheet_options, TRUE, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox96), style_sheet_options, TRUE, TRUE, 0);
 
   return HTML_Style_Sheet_Dialog;
 }

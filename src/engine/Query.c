@@ -1103,6 +1103,36 @@ xaccQueryGetSplits(Query * q) {
 }
 
 /********************************************************************
+ * xaccQueryGetSplitsUniqueTrans 
+ * Get splits but no more than one from a given transaction.
+ ********************************************************************/
+
+GList *
+xaccQueryGetSplitsUniqueTrans(Query *q)
+{
+  GList       * splits = xaccQueryGetSplits(q);
+  GList       * current;
+  GList       * result = NULL;
+  GHashTable  * trans_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
+
+  for (current = splits; current; current = current->next)
+  {
+    Split *split = current->data;
+
+    if (!g_hash_table_lookup (trans_hash, split))
+    {
+      g_hash_table_insert (trans_hash, split, split);
+      result = g_list_prepend (result, split);
+    }
+  }
+
+  g_list_free (splits);
+  g_hash_table_destroy (trans_hash);
+
+  return g_list_reverse (result);
+}
+
+/********************************************************************
  * xaccQueryGetTransactions 
  * Get transactions matching the query terms, specifying whether 
  * we require some or all splits to match 
@@ -2225,6 +2255,7 @@ xaccBalanceMatchPredicate(Split * s, PredicateData * pd) {
 void
 xaccQuerySetSortOrder(Query * q, sort_type_t primary, 
                       sort_type_t secondary, sort_type_t tertiary) {
+  if (!q) return;
   q->primary_sort   = primary;
   q->secondary_sort = secondary;
   q->tertiary_sort  = tertiary;
@@ -2240,6 +2271,7 @@ xaccQuerySetSortIncreasing(Query * q, gboolean prim_increasing,
 			   gboolean sec_increasing, 
 			   gboolean tert_increasing)
 {
+  if (!q) return;
   q->primary_increasing = prim_increasing;
   q->secondary_increasing = sec_increasing;
   q->tertiary_increasing = tert_increasing;
@@ -2251,11 +2283,13 @@ xaccQuerySetSortIncreasing(Query * q, gboolean prim_increasing,
  *******************************************************************/
 void
 xaccQuerySetMaxSplits(Query * q, int n) {
+  if (!q) return;
   q->max_splits = n;
 }
 
 int
 xaccQueryGetMaxSplits(Query * q) {
+  if (!q) return 0;
   return q->max_splits;
 }
 
@@ -2265,6 +2299,7 @@ xaccQueryGetMaxSplits(Query * q) {
  *******************************************************************/
 void
 xaccQuerySetGroup(Query * q, AccountGroup * g) {
+  if (!q) return;
   q->acct_group = g;
 }
 
@@ -2274,6 +2309,7 @@ xaccQuerySetGroup(Query * q, AccountGroup * g) {
  *******************************************************************/
 AccountGroup *
 xaccQueryGetGroup(Query * q) {
+  if (!q) return NULL;
   return (q->acct_group);
 }
 
@@ -2287,7 +2323,8 @@ xaccQueryGetEarliestDateFound(Query * q) {
   Split * sp;
   time_t earliest = LONG_MAX;
 
-  if(!q->split_list) { return 0; }
+  if (!q) return 0;
+  if (!q->split_list) return 0;
 
   for(spl = q->split_list; spl; spl=spl->next) {
     sp = spl->data;
@@ -2307,7 +2344,8 @@ xaccQueryGetLatestDateFound(Query * q) {
   GList  * spl;
   time_t latest = 0;
 
-  if(!q->split_list) { return 0; }
+  if(!q) return 0;
+  if(!q->split_list) return 0;
 
   for(spl = q->split_list; spl; spl=spl->next) {
     sp = spl->data;

@@ -4,6 +4,7 @@
  * Copyright (C) 1997-1998 Linas Vepstas <linas@linas.org>          *
  * Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              *
  * Copyright (C) 1999-2000 Dave Peticolas <dave@krondo.com>         *
+ * Copyright (C) 2001 Gnumatic, Inc.                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,6 +30,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <g-wrap-runtime-guile.h>
 #include <time.h>
 
 #include "AccWindow.h"
@@ -134,6 +136,7 @@ static void duplicateCB(GtkWidget *w, gpointer data);
 static void recordCB(GtkWidget *w, gpointer data);
 static void cancelCB(GtkWidget *w, gpointer data);
 static void closeCB(GtkWidget *w, gpointer data);
+static void reportCB(GtkWidget *w, gpointer data);
 static void dateCB(GtkWidget *w, gpointer data);
 static void expand_trans_cb(GtkWidget *widget, gpointer data);
 static void new_trans_cb(GtkWidget *widget, gpointer data);
@@ -897,6 +900,15 @@ gnc_register_create_tool_bar (RegWindow *regData)
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_SEARCH,
       0, 0, NULL
     },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Report"),
+      N_("Open a report window for this register"),
+      reportCB, 
+      NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ATTACH,
+      0, 0, NULL
+    },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
@@ -1310,6 +1322,15 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SUBTREE(N_("_Style"), style_menu),
     GNOMEUIINFO_SUBTREE(N_("Sort _Order"), sort_menu),
     GNOMEUIINFO_SUBTREE(N_("_Date Range"), date_menu),
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Report"),
+      N_("Open a report window for this register"),
+      reportCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
@@ -2865,6 +2886,43 @@ closeCB (GtkWidget *widget, gpointer data)
   gnc_register_check_close (regData);
 
   xaccLedgerDisplayClose (regData->ledger);
+}
+
+/********************************************************************\
+ * reportCB                                                         *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data - regData - the data struct for this register       *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+reportCB (GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegister *reg = xaccLedgerDisplayGetSR (regData->ledger);
+  Query *query;
+  SCM query_type;
+  SCM query_scm;
+  SCM journal_scm;
+  SCM func;
+
+  query_type = gh_eval_str("<gnc:Query*>");
+  g_return_if_fail (query_type != SCM_UNDEFINED);
+
+  query = xaccLedgerDisplayGetQuery (regData->ledger);
+  g_return_if_fail (query != NULL);
+
+  query = xaccQueryCopy (query);
+
+  query_scm = gw_wcp_assimilate_ptr (query, query_type);
+  g_return_if_fail (query_scm != SCM_UNDEFINED);
+
+  journal_scm = gh_bool2scm (reg->style == REG_STYLE_JOURNAL);
+
+  func = gh_eval_str ("gnc:show-register-report");
+  g_return_if_fail (gh_procedure_p (func));
+
+  gh_call2 (func, query_scm, journal_scm);
 }
 
 /********************************************************************\

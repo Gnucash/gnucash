@@ -6,6 +6,7 @@ gncscm_DATA = \
   average-balance.scm \
   pnl.scm \
   hello-world.scm \
+  register.scm \
   report-list.scm \
   stylesheet-plain.scm \
   stylesheet-fancy.scm \
