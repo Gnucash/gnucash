@@ -693,8 +693,7 @@ xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
      }
    } 
    else if (!safe_strcmp(s->acc->security, base_currency)) {
-     s->damount     = value;   
-     s->share_price = 1.0;
+     s->damount = value;   
    } 
    else if ((0x0==base_currency) && (0 == force_double_entry)) {
      if (adjust_price) {
