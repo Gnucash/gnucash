@@ -155,7 +155,13 @@ main_helper (int argc, char **argv)
 {
   int i;
 
-  gnc_module_load("gnucash/engine", 0);
+  gnc_module_system_init();
+
+  if(!gnc_module_load("gnucash/engine", 0))
+  {
+    failure("couldn't load gnucash/engine");
+    exit(get_rv());
+  }
 
   xaccLogDisable ();
 
