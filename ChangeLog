@@ -1,3 +1,8 @@
+2002-12-02  Chris Lyttle  <chris@wilddev.net>
+
+	* NEWS: update to new version 1.7.4a
+	* configure.in: update to new version 1.7.4a
+
 2002-12-02  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-utils.c, gnc-hbci-gettrans.c,
