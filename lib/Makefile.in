@@ -53,7 +53,8 @@ include @top_srcdir@/Makefile.common
 # Right now we only configure g-wrap once per make distclean, but we
 # try and re-build every make.
 g-wrap.configure:
-	(cd g-wrap && ./configure --prefix=${PWD}/g-wrap-install)
+	(cd g-wrap && \
+	 ./configure --prefix=${ABSOLUTE_TOP_SRCDIR}/lib/g-wrap-install)
 	touch g-wrap.configure
 DIST_TRASH += g-wrap.configure
 
