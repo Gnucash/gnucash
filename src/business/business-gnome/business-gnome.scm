@@ -7,24 +7,29 @@
 (gnc:module-load "gnucash/gnome-search" 0)
 (gnc:module-load "gnucash/business-core-file" 0)
 
-(define (add-customer-extensions)
-  (let ((last-cust (gnc:owner-create)))
+(define top-level "_Business")
+(define new-label "New")
+(define find-label "Find")
+
+(define (add-customer-items)
+  (let ((last-cust (gnc:owner-create))
+	(cust "Customers"))
 
     (define customer-menu
-      (gnc:make-menu (N_ "Customers")
-		     (list "Extensions" "")))
+      (gnc:make-menu (N_ cust)
+		     (list top-level "")))
 
     (define new-customer-item
       (gnc:make-menu-item (N_ "New Customer")
 			  (N_ "New Customer")
-			  (list "Extensions" "Customers" "")
+			  (list top-level cust "")
 			  (lambda ()
 			    (gnc:customer-new (gnc:get-current-book)))))
 
     (define find-customer-item
       (gnc:make-menu-item (N_ "Find Customer")
 			  (N_ "Find Customer")
-			  (list "Extensions" "Customers" "")
+			  (list top-level cust "")
 			  (lambda ()
 			    (gnc:customer-search (gnc:owner-get-customer
 						last-cust)
@@ -33,7 +38,7 @@
     (define new-invoice-item
       (gnc:make-menu-item (N_ "New Invoice")
 			  (N_ "New Invoice")
-			  (list "Extensions" "Customers" "")
+			  (list top-level cust "")
 			  (lambda ()
 			    (gnc:invoice-new last-cust
 					     (gnc:get-current-book)))))
@@ -41,7 +46,7 @@
     (define find-invoice-item
       (gnc:make-menu-item (N_ "Find Invoice")
 			  (N_ "Find Invoice")
-			  (list "Extensions" "Customers" "")
+			  (list top-level cust "")
 			  (lambda ()
 			    (gnc:invoice-search #f last-cust
 					      (gnc:get-current-book)))))
@@ -49,7 +54,7 @@
     (define new-job-item
       (gnc:make-menu-item (N_ "New Job")
 			  (N_ "New Job")
-			  (list "Extensions" "Customers" "")
+			  (list top-level cust "")
 			  (lambda ()
 			    (gnc:job-new last-cust
 					 (gnc:get-current-book)))))
@@ -57,7 +62,7 @@
     (define find-job-item
       (gnc:make-menu-item (N_ "Find Job")
 			  (N_ "Find Job")
-			  (list "Extensions" "Customers" "")
+			  (list top-level cust "")
 			  (lambda ()
 			    (gnc:job-search #f last-cust
 					  (gnc:get-current-book)))))
@@ -65,7 +70,7 @@
     (define payment-item
       (gnc:make-menu-item (N_ "Process Payment")
 			  (N_ "Process Payment")
-			  (list "Extensions" "Customers" "")
+			  (list top-level cust "")
 			  (lambda ()
 			    (gnc:payment-new last-cust
 					     (gnc:get-current-book)))))
@@ -83,17 +88,18 @@
     (gnc:add-extension new-customer-item)
     ))
 
-(define (add-vendor-extensions)
-  (let ((last-vendor (gnc:owner-create)))
+(define (add-vendor-items)
+  (let ((last-vendor (gnc:owner-create))
+	(vendor "Vendors"))
 
     (define vendor-menu
-      (gnc:make-menu (N_ "Vendors")
-		     (list "Extensions" "")))
+      (gnc:make-menu (N_ vendor)
+		     (list top-level "")))
 
     (define new-vendor-item
       (gnc:make-menu-item (N_ "New Vendor")
 			  (N_ "New Vendor")
-			  (list "Extensions" "Vendors" "")
+			  (list top-level vendor "")
 			  (lambda ()
 			    (gnc:vendor-new (gnc:get-current-book)))))
   
@@ -101,7 +107,7 @@
     (define find-vendor-item
       (gnc:make-menu-item (N_ "Find Vendor")
 			  (N_ "Find Vendor")
-			  (list "Extensions" "Vendors" "")
+			  (list top-level vendor "")
 			  (lambda ()
 			    (gnc:vendor-search (gnc:owner-get-vendor
 					      last-vendor)
@@ -110,7 +116,7 @@
     (define new-invoice-item
       (gnc:make-menu-item (N_ "New Bill")
 			  (N_ "New Bill")
-			  (list "Extensions" "Vendors" "")
+			  (list top-level vendor "")
 			  (lambda ()
 			    (gnc:invoice-new last-vendor
 					     (gnc:get-current-book)))))
@@ -118,7 +124,7 @@
     (define find-invoice-item
       (gnc:make-menu-item (N_ "Find Bill")
 			  (N_ "Find Bill")
-			  (list "Extensions" "Vendors" "")
+			  (list top-level vendor "")
 			  (lambda ()
 			    (gnc:invoice-search #f last-vendor
 					      (gnc:get-current-book)))))
@@ -126,7 +132,7 @@
     (define new-job-item
       (gnc:make-menu-item (N_ "New Job")
 			  (N_ "New Job")
-			  (list "Extensions" "Vendors" "")
+			  (list top-level vendor "")
 			  (lambda ()
 			    (gnc:job-new last-vendor
 					 (gnc:get-current-book)))))
@@ -134,7 +140,7 @@
     (define find-job-item
       (gnc:make-menu-item (N_ "Find Job")
 			  (N_ "Find Job")
-			  (list "Extensions" "Vendors" "")
+			  (list top-level vendor "")
 			  (lambda ()
 			    (gnc:job-search #f last-vendor
 					  (gnc:get-current-book)))))
@@ -143,7 +149,7 @@
     (define payment-item
       (gnc:make-menu-item (N_ "Process Payment")
 			  (N_ "Process Payment")
-			  (list "Extensions" "Vendors" "")
+			  (list top-level vendor "")
 			  (lambda ()
 			    (gnc:payment-new last-vendor
 					     (gnc:get-current-book)))))
@@ -159,6 +165,21 @@
     (gnc:add-extension find-vendor-item)
     (gnc:add-extension new-vendor-item)
     ))
+
+(define (add-business-items)
+  (define menu (gnc:make-menu top-level (list "_Tools")))
+  ;;(define new (gnc:make-menu (N_ new-label) (list top-level "")))
+  ;;(define find (gnc:make-menu (N_ find-label) (list top-level "")))
+
+  (gnc:add-extension menu)
+
+  ;;(gnc:add-extension find)
+  ;;(gnc:add-extension new)
+
+  (add-vendor-items)
+  (add-customer-items)
+  )
+
 
 (define (add-employee-extensions)
   (let ((last-employee #f))
@@ -187,7 +208,7 @@
     (gnc:add-extension new-employee-item)
     ))
 
-(define (add-business-extensions)
+(define (add-business-test)
 
   (define test-search
     (gnc:make-menu-item (N_ "Test Search Dialog")
@@ -293,11 +314,10 @@
   (gnc:add-extension test-search)
 
   (add-employee-extensions)
-  (add-vendor-extensions)
-  (add-customer-extensions)
 )
 
-(gnc:hook-add-dangler gnc:*add-extension-hook* add-business-extensions)
+(gnc:hook-add-dangler gnc:*ui-startup-hook* add-business-items)
+(gnc:hook-add-dangler gnc:*add-extension-hook* add-business-test)
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
