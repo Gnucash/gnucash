@@ -1,3 +1,8 @@
+2003-06-25  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome-utils/dialog-transfer.h: Add callback handler that is
+	notified of the newly created Transaction.
+
 2003-06-24  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/*: Refactor many HBCI functions to

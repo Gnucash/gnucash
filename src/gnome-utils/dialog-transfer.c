@@ -117,6 +117,11 @@ struct _xferDialog
    * function.
    */
   gboolean *	result_p;
+
+  /* Callback funtion to notify of the newly created Transaction */
+  gnc_xfer_dialog_cb transaction_cb;
+  /* , and its user_data */
+  gpointer transaction_user_data;
 };
 
 struct _acct_list_item
@@ -1469,6 +1474,11 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     xaccTransCommitEdit(trans);
     xaccAccountCommitEdit(from_account);
     xaccAccountCommitEdit(to_account);
+
+    /* If there is a registered callback handler that should be
+       notified of the newly created Transaction, call it now. */
+    if (xferData->transaction_cb)
+      xferData->transaction_cb(trans, xferData->transaction_user_data);
   }
 
   /* try to save this to the pricedb */
@@ -1566,6 +1576,10 @@ gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
 {
   XferDialog * xferData = data;
   GtkWidget *entry;
+
+  /* Notify transaction callback to unregister here */
+  if (xferData->transaction_cb)
+    xferData->transaction_cb(NULL, xferData->transaction_user_data);
 
   entry = gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(xferData->amount_edit));
   gtk_signal_disconnect_by_data(GTK_OBJECT(entry), xferData);
@@ -1796,6 +1810,7 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
   xferData->desc_start_selection = 0;
   xferData->desc_end_selection = 0;
   xferData->desc_didquickfill = FALSE;
+  xferData->transaction_cb = NULL;
 
   if (initial) {
     book = xaccAccountGetBook (initial);
@@ -2002,3 +2017,14 @@ gnc_xfer_dialog_quickfill_to_account(XferDialog *xferData,
   if( old != qf_to_account )
     gnc_xfer_dialog_reload_quickfill( xferData );
 }
+
+
+void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
+				gnc_xfer_dialog_cb handler, 
+				gpointer user_data)
+{
+  g_assert(xferData);
+  xferData->transaction_cb = handler;
+  xferData->transaction_user_data = user_data;
+}
+
