@@ -1,13 +1,11 @@
 
 ############## WARNING ######################
-********** ALPHA DEVELOPMENT RELEASE ********
+************ BETA  RELEASE ******************
 
-THIS IS VERSION 1.1, WHICH IS AN ALPHA RELEASE,
-AND IS OFTEN BROKEN.  IT IS FOR DEVELOPERS AND
-A FEW BRAVE, SMART USERS!!
-IT MIGHT CORRUPT DATA!!
+THIS IS VERSION 1.1, WHICH IS A BETA RELEASE.
+THINGS MAY BE BROKEN
 
-IF YOU WANT TO USE XACC, USE VERSION 1.0.17 INSTEAD!!
+IF YOU WANT TO USE XACC, USE VERSION 1.0.18 INSTEAD!!
 ##############################################
 
 
@@ -287,7 +285,7 @@ Dirk Schoenberger <schoenberger@signsoft.com> for Qt/KDE port
 Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
-Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU>  QIF import fixes
+Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
 
 ... and I am sure that I have missed many others ...
 
