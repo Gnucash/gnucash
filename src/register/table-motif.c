@@ -386,9 +386,12 @@ xaccCreateTable (Table *table, Widget parent, char * name)
 
    table->table_widget = reg;
 
+#if (!defined (LesstifVersion)) || (87 < LesstifVersion)
+   /* Coredump when using lesstif 0.80 or earlier */
    /* stop it from beeping */
    XtVaGetValues (reg, XmNtextField, &textw, NULL);
    XtVaSetValues (textw, XmNverifyBell, False, NULL);
+#endif /* LESSTIF_VERSION */
 
    return (reg);
 }
