@@ -31,6 +31,7 @@
 #include "Account.h"
 #include "date.h"
 #include "Group.h"
+#include "MultiLedger.h"
 #include "RecnWindow.h"
 #include "RegWindow.h"
 #include "MainWindow.h"
@@ -588,7 +589,7 @@ recnOkCB(GtkWidget *w, gpointer data)
                  recn_ok_cb_set_reconciled_helper, NULL);
 
   /* refresh the register window */
-  accRefresh(recnData->acc);
+  xaccAccountDisplayRefresh (recnData->acc);
   
   gnome_dialog_close(GNOME_DIALOG(recnData->dialog));
 

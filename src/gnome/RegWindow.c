@@ -47,25 +47,18 @@
 #include "MainWindow.h"
 #include "main.h"
 #include "messages.h"
+#include "MultiLedger.h"
 #include "RecnWindow.h"
 #include "RegWindow.h"
 #include "Transaction.h"
 #include "util.h"
-//#include "xtutil.h"
 
 /** STRUCTS *********************************************************/
 /* The RegWindow struct contains info needed by an instance of an open 
  * register.  Any state info for the regWindow goes here. */
 
 struct _RegWindow {
-  Account *leader;            /* leading account                         */
-  Account **blackacc;         /* The list of accounts shown here         */
-  short   numAcc;             /* number of accounts in list              */
-
-  short type;                 /* register display type, usually equal to *
-                               * account type                            */
-
-  BasicRegister *ledger;      /* main ledger window                      */
+  xaccLedgerDisplay * ledger;   
 
   /* display widgets */
   GtkWidget *   dialog;
@@ -78,14 +71,10 @@ struct _RegWindow {
 /** GLOBALS *********************************************************/
 extern GtkWidget *  toplevel;
 
-static RegWindow **regList = NULL;     /* single-account registers */
-static RegWindow **ledgerList = NULL;  /* multiple-account registers */
-static RegWindow **fullList = NULL;    /* all registers */
-
 /** PROTOTYPES ******************************************************/
 RegWindow * regWindowLedger(Account *lead, Account **acclist, int type);
-void        accRefresh (Account *acc);
-void        regRefresh (RegWindow *regData);
+static void regRefresh (xaccLedgerDisplay *ledger);
+static void regDestroy (xaccLedgerDisplay *ledger);
 
 static void closeRegWindow(GtkWidget * mw, gpointer data);
 
@@ -95,92 +84,8 @@ static void recordCB(GtkWidget *w, gpointer data);
 static void cancelCB(GtkWidget *w, gpointer data);
 
 #if 0
-
 static void startAdjBCB( GtkWidget * mw, XtPointer cd, XtPointer cb );
-
 #endif
-
-/********************************************************************\
- * Ledger utilities                                                 *
-\********************************************************************/
-
-int 
-ledgerListCount (RegWindow **list) {
-  int n = 0;
-  if (!list) return 0;
-  while (list[n]) n++;
-  return n;
-}
-
-/* ------------------------------------------------------ */
-
-RegWindow ** 
-ledgerListAdd (RegWindow **oldlist, RegWindow *addreg) {
-  RegWindow **newlist;
-  RegWindow *reg;
-  int n;
-  
-  if (!addreg) return oldlist;
-  
-  n = ledgerListCount (oldlist);
-  newlist = (RegWindow **) _malloc ((n+2) * sizeof (RegWindow *));
-  
-  n = 0;
-  if (oldlist) {
-    reg = oldlist[0];
-    while (reg) {
-      newlist[n] = reg;
-      n++;
-      reg = oldlist[n];
-    }
-    _free (oldlist);
-  }
-  newlist[n] = addreg;
-  newlist[n+1] = NULL;
-  
-  return newlist;
-}
-
-/* ------------------------------------------------------ */
-
-void
-ledgerListRemove (RegWindow **list, RegWindow *delreg) {
-  int n, i;
-  
-  if (!list) return;
-  if (!delreg) return;
-  
-  n = 0;
-  i = 0; 
-  while (list[n]) {
-    list[i] = list[n];
-    if (delreg == list[n]) i--;
-    i++;
-    n++;
-  }
-  list[i] = NULL;
-}
-
-/* ------------------------------------------------------ */
-
-int
-ledgerIsMember (RegWindow *reg, Account * acc) {
-  int n; 
-  
-  if (!acc) return 0;
-  if (!reg) return 0;
-  
-  if (acc == reg->leader) return 1;
-  
-  if (! (reg->blackacc)) return 0; 
-  
-  n = 0;
-  while (reg->blackacc[n]) {
-    if (acc == reg->blackacc[n]) return 1;
-    n++;
-  }
-  return 0;
-}
 
 /********************************************************************\
  * regWindowSimple                                                  *
@@ -193,49 +98,11 @@ ledgerIsMember (RegWindow *reg, Account * acc) {
 RegWindow *
 regWindowSimple(Account *acc) {
   RegWindow *retval = (RegWindow *) 1; /* for error case later */
-  int acc_type;
-  int reg_type = 0;
   
-  acc_type = xaccAccountGetType (acc);
-  
-  /* translate between different enumerants */
-  switch (acc_type) {
-  case BANK:
-    reg_type = BANK_REGISTER;
-    break;
-  case CASH:
-    reg_type = CASH_REGISTER;
-    break;
-  case ASSET:
-    reg_type = ASSET_REGISTER;
-    break;
-  case CREDIT:
-    reg_type = CREDIT_REGISTER;
-    break;
-  case LIABILITY:
-    reg_type = LIABILITY_REGISTER;
-    break;
-  case STOCK:
-  case MUTUAL:
-    reg_type = STOCK_REGISTER;
-    break;
-  case INCOME:
-    reg_type = INCOME_REGISTER;
-    break;
-  case EXPENSE:
-    reg_type = EXPENSE_REGISTER;
-    break;
-  case EQUITY:
-    reg_type = EQUITY_REGISTER;
-    break;
-  default:
-    fprintf(stderr,
-            "regWindowSimple: Unknown account type (serious error)\n");
-    retval = NULL;
-    break;
-  }
-  
-  if(retval) retval = regWindowLedger (acc, NULL, reg_type);
+  xaccLedgerDisplay * ledger;
+
+  ledger = xaccLedgerDisplaySimple (acc);
+  if(retval) retval = regWindowLedger (ledger);
   return retval;
 }
 
@@ -249,63 +116,11 @@ regWindowSimple(Account *acc) {
 \********************************************************************/
 RegWindow *
 regWindowAccGroup(Account *acc) {
+  xaccLedgerDisplay * ledger; 
   RegWindow *retval;
-  Account **list;
-  int ledger_type;
-  Account *le;
-  int n;
-  int acc_type, le_type;
-  
-  /* build a flat list from the tree */
-  list = xaccGroupToList (acc);
-  
-  acc_type = xaccAccountGetType (acc);
-  switch (acc_type) {
-  case BANK:
-  case CASH:
-  case ASSET:
-  case CREDIT:
-  case LIABILITY:
-    /* if any of the sub-accounts have STOCK or MUTUAL types,
-     * then we must use the PORTFOLIO type ledger.  Otherise,
-     * a plain old GEN_LEDGER will do. */
-    ledger_type = GENERAL_LEDGER;
-    
-    le = list[0];
-    n = 0;
-    while (le) {
-      le_type = xaccAccountGetType (le);
-      if ((STOCK == le_type) || (MUTUAL == le_type)) {
-        ledger_type = PORTFOLIO;
-      }
-      n++;
-      le = list[n];
-    }
-    break;
-    
-  case STOCK:
-  case MUTUAL:
-    ledger_type = PORTFOLIO;
-    break;
-    
-  case INCOME:
-  case EXPENSE:
-    ledger_type = INCOME_LEDGER;
-    break;
-    
-  case EQUITY:
-    ledger_type = GENERAL_LEDGER;
-    break;
-    
-  default:
-    PERR (" regWindowAccGroup(): unknown account type \n");
-    _free (list);
-    return NULL;
-  }
-  retval = regWindowLedger (acc, list, ledger_type);
-  
-  if (list) _free (list);
-  
+
+  ledger = xaccLedgerDisplayAccGroup (acc);  
+  retval = regWindowLedger (ledger);
   return retval;
 }
 
@@ -344,7 +159,7 @@ destroy (GtkWidget *widget, gpointer data) {
  * Return: regData  - the register window instance                  *
 \********************************************************************/
 RegWindow *
-regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
+regWindowLedger( xaccLedgerDisplay *ledger)                    
 {
   RegWindow   *regData = NULL;
   GtkWidget *reg = NULL;
@@ -353,8 +168,7 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
   GtkWidget *register_vbox = gtk_vbox_new(FALSE, 0);
   GtkWidget *table_frame = gtk_frame_new(NULL);
 
-    fprintf(stderr, "regWindowLedger(%p, %p, %d)\n",
-            lead_acc, acclist, ledger_type);
+    fprintf(stderr, "regWindowLedger\n");
 
 #if 0
   
@@ -410,56 +224,25 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
   };
 #endif
 
-  /******************************************************************\
-  \******************************************************************/
+  
+  regData = (RegWindow *) (ledger->gui_hook);
+  if (regData) return (regData);
 
-  /* the two macros below will search for a register windows associated
-   * with the leading account.  If they exist, then they will be returned,
-   * and that will be that.  If they do not exist, they will be created.
-   *
-   * There are two lists for lead-accounts: simple, single-account 
-   * registers, which display one account only, and multiple-account
-   * registers.  A leading account can have at most one of each. 
-   * For a multiple-account register with a leader, all accounts
-   * shown in the register are sub-accounts of the leader.
-   *
-   * A third possibility exists: a multiple-account register, with
-   * no leader account.  In such a case, the list of accounts being
-   * displayed have no particular relationshp to each other.  There
-   * can be an arbitrary number of multiple-account leader-less
-   * registers.
-   */
-  regData = NULL;
-  if (lead_acc) {
-    if (!acclist) {
-      FETCH_FROM_LIST (RegWindow, regList, lead_acc, leader, regData);
-    } else {
-      FETCH_FROM_LIST (RegWindow, ledgerList, lead_acc, leader, regData);
-    }
-  }
-  
-  /* if regData is null, then no leader account was specified */
-  if (!regData) {
-    regData = (RegWindow *) malloc (sizeof (RegWindow));
-    regData->leader = NULL;
-  }
-  
-  /* count the number of accounts we are supposed to display,
-   * and then, store them. */
-  regData->numAcc = accListCount (acclist);
-  regData->blackacc = accListCopy (acclist);
-  regData->type = ledger_type;
-  
-  fullList = ledgerListAdd (fullList, regData);
-  
+  regData = (RegWindow *) malloc (sizeof (RegWindow));
+
+  ledger->gui_hook = (void *) regData;
+  ledger->redraw = regRefresh;
+  ledger->destroy = regDestroy;
+  regData->ledger = ledger;
+
   /******************************************************************\
    * Start creating the Motif Widgets ...                           *
    \******************************************************************/
   
   /* pick a window name */
-  if (lead_acc) {
-    char * acc_name = xaccAccountGetName (lead_acc);
-    switch (regData->type) {
+  if (ledger->leader) {
+    char * acc_name = xaccAccountGetName (ledger->leader);
+    switch (ledger->type) {
     case GENERAL_LEDGER:
     case INCOME_LEDGER:
       asprintf(&windowname, "%s (general ledger)", acc_name);
@@ -565,22 +348,17 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
    * The main register window itself                                *
   \******************************************************************/
 
-  /* MallocBasicRegister will malloc & initialize the 
-   * register but doesn't do the gui init */
-  regData->ledger = xaccMallocBasicRegister (ledger_type);
-
   /* The CreateTable will do the actual gui init, 
    * returning a widget */
-  reg = xaccCreateTable (regData->ledger->table, regData->dialog);
-  
+  reg = xaccCreateTable (ledger->ledger->table, regData->dialog);
   regData->reg = reg;
     
   /* complete GUI initialization */
   {
     AccountGroup *grp;
-    grp = xaccGetAccountRoot (regData->leader);
-    if (!grp) grp = xaccGetAccountRoot (regData->blackacc[0]);
-    xaccLoadXferCell (regData->ledger->xfrmCell, grp);
+    grp = xaccGetAccountRoot (ledger->leader);
+    if (!grp) grp = xaccGetAccountRoot (ledger->displayed_accounts[0]);
+    xaccLoadXferCell (ledger->ledger->xfrmCell, grp);
   }
 
 #if 0
@@ -704,14 +482,12 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
   regData->balance = widget;
 #endif
   
-  regRefresh (regData);
-  
 #if 0
   unsetBusyCursor( parent );
 #endif
   
   {
-    Table *table = regData->ledger->table;
+    Table *table = ledger->ledger->table;
     CellBlock *curs;
     unsigned char * alignments;
     short * widths;
@@ -786,6 +562,10 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
   gtk_widget_show(register_window);
 
   if(windowname) free(windowname);
+
+  ledger->dirty = 1;
+  xaccLedgerDisplayRefresh (ledger);
+
   return regData;
 }
 
@@ -793,38 +573,21 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
  * refresh only the indicated register window                       *
 \********************************************************************/
 
-void regRefresh (RegWindow *regData)
+static void regRefresh (xaccLedgerDisplay *ledger)
 {
+  RegWindow *regData = (RegWindow *) (ledger->gui_hook);         
 
-   /* The leader account is used by the register gui to
-    * assign a default source account for a "blank split"
-    * that is attached to the bottom of the register.
-    * The "blank split" is what the user edits to create 
-    * new splits and get them into the system.
-    */
-
-   xaccBRLoadRegister (regData->ledger, 
-                     xaccAccountGetSplitList (regData->leader),
-                     regData->leader);
-
-   xaccAccountRecomputeBalance(regData->leader);
-  /* hack alert -- this is incorrect for multi-account ledgers */
   if( NULL != regData->dialog ) {
     char *reglabel = NULL; 
     char *balance_str, *cleared_balance_str, *reconciled_balance_str;
-    double prt_balance, prt_clearedBalance, prt_reconciledBalance;
-    prt_balance = xaccAccountGetBalance (regData->leader);
-    prt_clearedBalance = xaccAccountGetClearedBalance (regData->leader);
-    prt_reconciledBalance =
-      xaccAccountGetReconciledBalance (regData->leader);
     
-    balance_str = strdup(xaccPrintAmount(prt_balance, PRTSYM));
-    cleared_balance_str = strdup(xaccPrintAmount(prt_clearedBalance, PRTSYM));
+    balance_str = strdup(xaccPrintAmount(ledger->balance, PRTSYM));
+    cleared_balance_str = strdup(xaccPrintAmount(ledger->clearedBalance, PRTSYM));
     reconciled_balance_str =
-      strdup(xaccPrintAmount(prt_reconciledBalance, PRTSYM));
+      strdup(xaccPrintAmount(ledger->reconciledBalance, PRTSYM));
     
     asprintf(&reglabel, "%s (Reconciled: %s) (Cleared: %s) (Final: %s)",
-             xaccAccountGetName(regData->leader),
+             xaccAccountGetName(ledger->leader),
              reconciled_balance_str,
              cleared_balance_str,
              balance_str
@@ -838,97 +601,20 @@ void regRefresh (RegWindow *regData)
   }
 }
 
-/********************************************************************\
- * refresh *all* register windows which contain this account        * 
-\********************************************************************/
-
-static void Refresh (Account *acc)
-{
-   RegWindow *regData;
-   int n;
-
-   if (!acc) return;
-
-   /* find all registers whch contain this account */
-   n = 0;
-   regData = fullList[n];
-   while (regData) {
-      int got_one;
-
-      got_one = ledgerIsMember (regData, acc);
-      if (got_one) {
-        /* hack alert -- should be recomputing the list of splits */
-        /* ????? */
-        regRefresh (regData);
-      }
-      n++;
-      regData = fullList[n];
-   }
-
-   /* hack alert -- refesh adjbwindow too */
-   //recnRefresh (acc); ??? RLB
-}
 
 /********************************************************************\
-\********************************************************************/
-
-static void grpRefresh (AccountGroup *grp)
-{
-   int i;
-   Account *acc;
-   AccountGroup *acc_children;
-   int nacc;
-
-   if (!grp) return;
-
-   nacc = xaccGroupGetNumAccounts (grp);
-   for (i=0; i<nacc; i++) {
-      acc = xaccGroupGetAccount (grp, i);
-      Refresh (acc);
-      acc_children = xaccAccountGetChildren (acc);
-      grpRefresh (acc_children); 
-   }
-}
-
-void accRefresh (Account *acc)
-{
-   AccountGroup * root;
-   root = xaccGetAccountRoot (acc);
-   grpRefresh (root);
-}
-
-/********************************************************************\
- * xaccDestroyRegWindow()
+ * regDestroy()
  * It is enought to call just XtDestroy Widget.  Any allocated
  * memory will be freed by the close callbacks.
 \********************************************************************/
 
-void
-xaccDestroyRegWindow (Account *acc)
+static void
+regDestroy (xaccLedgerDisplay *ledger)
 {
-   RegWindow *regData;
-   int n;
-
-   /* find the single-account window for this account, if any */
-   FIND_IN_LIST (RegWindow, regList, acc, leader, regData);
+   RegWindow *regData = (RegWindow *) (ledger->gui_hook);
    if (regData) gtk_widget_destroy(regData->dialog);
-
-   /* find the multiple-account window for this account, if any */
-   FIND_IN_LIST (RegWindow, ledgerList, acc, leader, regData);
-   if (regData) gtk_widget_destroy(regData->dialog);
-
-   /* cruise throught the miscellanous account windows */
-   n = 0;
-   regData = fullList[n];
-   while (regData) {
-      int got_one;
-
-      got_one = ledgerIsMember (regData, acc);
-      if (got_one) gtk_widget_destroy(regData->dialog);
-      n++;
-      regData = fullList[n];
-   }
 }
+
 
 /********************************************************************\
  * closeRegWindow                                                   *
@@ -944,21 +630,8 @@ static void
 closeRegWindow( GtkWidget * mw, gpointer data)
 {
   RegWindow *regData = (RegWindow *)data;
-  Account *acc = regData->leader;
-  
   fprintf(stderr, "Closing register safely\n");
-
-  /* Save any unsaved changes */
-  xaccBRSaveRegEntry (regData->ledger);
-
-  xaccDestroyBasicRegister (regData->ledger);
-  
-  /* whether this is a single or multi-account window, remove it */
-  REMOVE_FROM_LIST (RegWindow, regList, acc, leader);
-  REMOVE_FROM_LIST (RegWindow, ledgerList, acc, leader);
-
-  ledgerListRemove (fullList, regData);
-
+  xaccLedgerDisplayClose (regData->ledger);
   free(regData);
   DEBUG("closed RegWindow\n");
 }
@@ -1008,17 +681,18 @@ static void
 startRecnCB(GtkWidget * w, gpointer data)
 {
   RegWindow *regData = (RegWindow *) data;
+  xaccLedgerDisplay *ledger = regData->ledger;
   Account *acc;
-  
+
   /* Must have number of accounts be one.  If not one,
    * then this callback should never have been called,
    * since the menu entry is supposed to be greyed out.
    */
-  if (regData->leader) {
-    acc = regData->leader;
+  if (ledger->leader) {
+    acc = ledger->leader;
   } else {
-    if (1 != regData->numAcc) return;
-    acc = regData->blackacc[0];
+    if (1 != ledger->numAcc) return;
+    acc = ledger->displayed_accounts[0];
   }
   recnWindow(w, acc);
 }
@@ -1036,7 +710,7 @@ recordCB( GtkWidget *w, gpointer data)
 {
   RegWindow *regData = (RegWindow *) data;
   
-  xaccBRSaveRegEntry (regData->ledger);
+  xaccSRSaveRegEntry (regData->ledger);
 }
 
 /********************************************************************\
@@ -1059,7 +733,7 @@ deleteCB(GtkWidget *widget, gpointer data)
   Account **affected_accounts;
   
   /* get the current split based on cursor position */
-  split = xaccBRGetCurrentSplit (regData->ledger);
+  split = xaccSRGetCurrentSplit (regData->ledger);
   if (NULL == split ) return;
 
   /* ask for user confirmation before performing 
@@ -1082,10 +756,8 @@ deleteCB(GtkWidget *widget, gpointer data)
 
   xaccSplitDestroy (split);
 
-  for (i=0; i<num_splits; i++) 
-  {
-    accRefresh (affected_accounts[i]);
-  }
+  xaccAccListDisplayRefresh (affected_accounts);
+
   free (affected_accounts);
 }
 
@@ -1104,10 +776,32 @@ cancelCB( GtkWidget *w, gpointer data)
   Split * split;
   
   /* when cancelling edits, reload the cursor from the transaction */
-  split = xaccBRGetCurrentSplit (regData->ledger);
-  xaccBRLoadRegEntry (regData->ledger, split);
+  split = xaccSRGetCurrentSplit (regData->ledger);
+  xaccSRLoadRegEntry (regData->ledger, split);
   xaccRefreshTableGUI (regData->ledger->table);
 }
+
+/********************************************************************\
+\********************************************************************/
+
+static void
+reportCB( GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = (RegWindow *) data;
+  char *outfile = fileBox( toplevel, OPEN_STR, "*.html" );
+
+  if (!outfile) return;
+  xaccTablePrintHTML (regData->ledger->ledger->table, outfile);
+}
+
+static void
+webCB( GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = (RegWindow *) data;
+  /* hack alert -- make the port number configureable */
+  xaccTableWebServeHTML (regData->ledger->ledger->table, 1080);
+}
+
 
 /************************** END OF FILE *************************/
 
