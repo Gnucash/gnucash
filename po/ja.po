@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-08-11 19:49-0700\n"
+"POT-Creation-Date: 2000-09-01 21:34-0700\n"
 "PO-Revision-Date: 2000-04-25 00:00+0900\n"
 "Last-Translator: Shimpei Yamashita <shimpei@gol.com>\n"
 "Language-Team: \n"
@@ -711,15 +711,15 @@ msgstr "勘定科目に属する取引を全部表示する"
 msgid "Show transactions on single lines"
 msgstr "取引を一行で表示する"
 
-#: messages-i18n.c:134 messages-i18n.c:267
+#: messages-i18n.c:134 messages-i18n.c:272
 msgid "Sort by Amount"
 msgstr "数量順に並べる"
 
-#: messages-i18n.c:135 messages-i18n.c:268
+#: messages-i18n.c:135 messages-i18n.c:273
 msgid "Sort by Date"
 msgstr "日付順に並べる"
 
-#: messages-i18n.c:136 messages-i18n.c:269
+#: messages-i18n.c:136 messages-i18n.c:274
 msgid "Sort by Description"
 msgstr "説明順に並べる"
 
@@ -727,11 +727,11 @@ msgstr "説明順に並べる"
 msgid "Sort by the date of entry"
 msgstr "入力日付順に並べ替え"
 
-#: messages-i18n.c:138 messages-i18n.c:271
+#: messages-i18n.c:138 messages-i18n.c:276
 msgid "Sort by Memo"
 msgstr "詳細順に並べる"
 
-#: messages-i18n.c:139 messages-i18n.c:272
+#: messages-i18n.c:139 messages-i18n.c:277
 msgid "Sort by Num"
 msgstr "番号順に並べる"
 
@@ -986,904 +986,926 @@ msgid "_Transfer..."
 msgstr "_資金移動..."
 
 #: messages-i18n.c:201
+msgid "Unbalanced parenthesis"
+msgstr ""
+
+#: messages-i18n.c:202
+#, fuzzy
+msgid "Stack overflow"
+msgstr "株式ポートフォリオ"
+
+#: messages-i18n.c:203
+#, fuzzy
+msgid "Stack underflow"
+msgstr "株式ポートフォリオ"
+
+#: messages-i18n.c:204
+msgid "Undefined character"
+msgstr ""
+
+#: messages-i18n.c:205
+msgid "Not a variable"
+msgstr ""
+
+#: messages-i18n.c:206
 msgid "Account Code"
 msgstr "勘定科目コード"
 
-#: messages-i18n.c:202 po/guile_strings.txt:7
+#: messages-i18n.c:207 po/guile_strings.txt:7
 msgid "Account Name"
 msgstr "勘定科目名"
 
-#: messages-i18n.c:203 src/gnome/glade-gnc-dialogs.c:4119
+#: messages-i18n.c:208 src/gnome/glade-gnc-dialogs.c:4119
 msgid "Account Type"
 msgstr "勘定科目型"
 
-#: messages-i18n.c:204
+#: messages-i18n.c:209
 msgid "Adjust Balance"
 msgstr "残高調整"
 
-#: messages-i18n.c:205 po/guile_strings.txt:323
+#: messages-i18n.c:210 po/guile_strings.txt:323
 msgid "Auto Double"
 msgstr "自動複式"
 
-#: messages-i18n.c:206 po/guile_strings.txt:70
+#: messages-i18n.c:211 po/guile_strings.txt:70
 msgid "Auto Single"
 msgstr "自動単式"
 
-#: messages-i18n.c:207
+#: messages-i18n.c:212
 msgid "Clear All"
 msgstr "全部クリア"
 
-#: messages-i18n.c:208
+#: messages-i18n.c:213
 msgid "Close Window"
 msgstr "ウィンドウを閉じる"
 
-#: messages-i18n.c:209
+#: messages-i18n.c:214
 msgid "Credit Card"
 msgstr "クレジットカード"
 
-#: messages-i18n.c:210
+#: messages-i18n.c:215
 msgid "Credit Line"
 msgstr "融資枠"
 
-#: messages-i18n.c:211
+#: messages-i18n.c:216
 msgid "Date Range"
 msgstr "日付範囲"
 
-#: messages-i18n.c:212
+#: messages-i18n.c:217
 msgid "Delete Account"
 msgstr "勘定科目削除"
 
-#: messages-i18n.c:213
+#: messages-i18n.c:218
 msgid "Delete Transaction"
 msgstr "取引削除"
 
-#: messages-i18n.c:214
+#: messages-i18n.c:219
 #, fuzzy
 msgid "Display this dialog next time"
 msgstr "日付を表示しますか?"
 
-#: messages-i18n.c:215 po/guile_strings.txt:23
+#: messages-i18n.c:220 po/guile_strings.txt:23
 msgid "Double Line"
 msgstr "複行"
 
-#: messages-i18n.c:216
+#: messages-i18n.c:221
 msgid "Edit Account"
 msgstr "勘定科目を編集"
 
-#: messages-i18n.c:217
+#: messages-i18n.c:222
 msgid "Ending Balance"
 msgstr "期末残高"
 
-#: messages-i18n.c:218
+#: messages-i18n.c:223
 msgid "End date"
 msgstr "期末日付"
 
-#: messages-i18n.c:219
+#: messages-i18n.c:224
 msgid "Export To"
 msgstr "エクスポート先"
 
-#: messages-i18n.c:220 src/gnome/glade-gnc-dialogs.c:3257
+#: messages-i18n.c:225 src/gnome/glade-gnc-dialogs.c:3257
 msgid "Financial Calculator"
 msgstr ""
 
-#: messages-i18n.c:221
+#: messages-i18n.c:226
 msgid "FIN_CALC_STR_N"
 msgstr ""
 
-#: messages-i18n.c:222
+#: messages-i18n.c:227
 msgid "Finish"
 msgstr "終了"
 
-#: messages-i18n.c:223
+#: messages-i18n.c:228
 msgid "From Now"
 msgstr ""
 
-#: messages-i18n.c:224
+#: messages-i18n.c:229
 msgid "General Ledger"
 msgstr "総勘定元帳"
 
-#: messages-i18n.c:225
+#: messages-i18n.c:230
 msgid "Hide Inc/Exp"
 msgstr "収入・費用を隠す"
 
-#: messages-i18n.c:226
+#: messages-i18n.c:231
 msgid "Import QIF..."
 msgstr "QIF形式ファイルのインポート..."
 
-#: messages-i18n.c:227
+#: messages-i18n.c:232
 msgid "Import QIF"
 msgstr "QIF形式ファイルのインポート"
 
-#: messages-i18n.c:228
+#: messages-i18n.c:233
 msgid "Lost Accounts"
 msgstr ""
 
-#: messages-i18n.c:229
+#: messages-i18n.c:234
 msgid "Money Market"
 msgstr "マネーマーケット"
 
-#: messages-i18n.c:230 po/guile_strings.txt:56
+#: messages-i18n.c:235 po/guile_strings.txt:56
 msgid "Multi Line"
 msgstr "複行"
 
-#: messages-i18n.c:231 po/guile_strings.txt:4
+#: messages-i18n.c:236 po/guile_strings.txt:4
 msgid "Mutual Fund"
 msgstr "投資信託"
 
-#: messages-i18n.c:232 src/gnome/glade-gnc-dialogs.c:3985
+#: messages-i18n.c:237 src/gnome/glade-gnc-dialogs.c:3985
 msgid "New Account"
 msgstr "新規勘定科目"
 
-#: messages-i18n.c:233
+#: messages-i18n.c:238
 msgid "New Balance"
 msgstr "新規残高"
 
-#: messages-i18n.c:234
+#: messages-i18n.c:239
 msgid "New File"
 msgstr "新規ファイル"
 
-#: messages-i18n.c:235
+#: messages-i18n.c:240
 msgid "New top level account"
 msgstr "新規基本勘定科目"
 
-#: messages-i18n.c:236
+#: messages-i18n.c:241
 msgid "New Value"
 msgstr "新しい値"
 
-#: messages-i18n.c:237
+#: messages-i18n.c:242
 msgid "No description"
 msgstr "説明なし"
 
-#: messages-i18n.c:238
+#: messages-i18n.c:243
 msgid "Old Value"
 msgstr "古い値"
 
-#: messages-i18n.c:239
+#: messages-i18n.c:244
 msgid "Open Account"
 msgstr "勘定科目を開く"
 
-#: messages-i18n.c:240 po/guile_strings.txt:114
+#: messages-i18n.c:245 po/guile_strings.txt:114
 msgid "Opening Balance"
 msgstr "初期残高"
 
-#: messages-i18n.c:241
+#: messages-i18n.c:246
 msgid "Open File"
 msgstr "ファイルを開く"
 
-#: messages-i18n.c:242
+#: messages-i18n.c:247
 msgid "Open Subaccounts"
 msgstr "子勘定科目を開く"
 
-#: messages-i18n.c:243
+#: messages-i18n.c:248
 msgid "Pick One"
 msgstr "一つ選択"
 
-#: messages-i18n.c:244 src/gnome/glade-gnc-dialogs.c:4152
+#: messages-i18n.c:249 src/gnome/glade-gnc-dialogs.c:4152
 msgid "Parent Account"
 msgstr "親勘定科目"
 
-#: messages-i18n.c:245
+#: messages-i18n.c:250
 msgid "Previous Balance"
 msgstr "前期残高"
 
-#: messages-i18n.c:246
+#: messages-i18n.c:251
 msgid "Purch Price"
 msgstr "購入値"
 
-#: messages-i18n.c:247 src/gnome/glade-gnc-dialogs.c:4169
+#: messages-i18n.c:252 src/gnome/glade-gnc-dialogs.c:4169
 msgid "Price Quote Source"
 msgstr ""
 
-#: messages-i18n.c:248
+#: messages-i18n.c:253
 msgid "Reconciled Balance"
 msgstr ""
 
-#: messages-i18n.c:249
+#: messages-i18n.c:254
 msgid "Reconcile Information"
 msgstr ""
 
-#: messages-i18n.c:250
+#: messages-i18n.c:255
 msgid "Register date ranges"
 msgstr "レジスタ日付範囲"
 
-#: messages-i18n.c:251
+#: messages-i18n.c:256
 msgid "Sale Price"
 msgstr "売却値"
 
-#: messages-i18n.c:252
+#: messages-i18n.c:257
 msgid "Save As"
 msgstr "名前をつけて保存"
 
-#: messages-i18n.c:253
+#: messages-i18n.c:258
 msgid "Scrub Account"
 msgstr "勘定科目を掃除"
 
-#: messages-i18n.c:254
+#: messages-i18n.c:259
 msgid "Scrub All"
 msgstr "全部掃除"
 
-#: messages-i18n.c:255
+#: messages-i18n.c:260
 msgid "Scrub Subaccounts"
 msgstr "子勘定科目を掃除"
 
-#: messages-i18n.c:256
+#: messages-i18n.c:261
 msgid "Select All"
 msgstr "全部選択"
 
-#: messages-i18n.c:257
+#: messages-i18n.c:262
 msgid "Select Default"
 msgstr "デフォルト選択"
 
-#: messages-i18n.c:258
+#: messages-i18n.c:263
 msgid "Set Date Range"
 msgstr "日付範囲設定"
 
-#: messages-i18n.c:259
+#: messages-i18n.c:264
 msgid "Set Range"
 msgstr "範囲設定"
 
-#: messages-i18n.c:260
+#: messages-i18n.c:265
 msgid "Set to default"
 msgstr "デフォルトに設定"
 
-#: messages-i18n.c:261
+#: messages-i18n.c:266
 msgid "Set Up Account"
 msgstr "勘定科目を作成"
 
-#: messages-i18n.c:262
+#: messages-i18n.c:267
 msgid "Show All"
 msgstr "全部見せる"
 
-#: messages-i18n.c:263
+#: messages-i18n.c:268
 #, fuzzy
 msgid "Show Income/Expense"
 msgstr "収入・費用を表示する"
 
-#: messages-i18n.c:264
+#: messages-i18n.c:269
 msgid "Show Earliest"
 msgstr "最古を表示する"
 
-#: messages-i18n.c:265
+#: messages-i18n.c:270
 msgid "Show Latest"
 msgstr "最新を表示する"
 
-#: messages-i18n.c:266 po/guile_strings.txt:197
+#: messages-i18n.c:271 po/guile_strings.txt:197
 msgid "Single Line"
 msgstr "単行"
 
-#: messages-i18n.c:270
+#: messages-i18n.c:275
 msgid "Sort by date of entry"
 msgstr "日付順で並べる"
 
-#: messages-i18n.c:273
+#: messages-i18n.c:278
 #, fuzzy
 msgid "Sort by statement date"
 msgstr "日付順で並べる"
 
-#: messages-i18n.c:274
+#: messages-i18n.c:279
 msgid "Sort Order"
 msgstr "ソート順番"
 
-#: messages-i18n.c:275
+#: messages-i18n.c:280
 msgid "Start date"
 msgstr "開始日付"
 
-#: messages-i18n.c:276
+#: messages-i18n.c:281
 #, fuzzy
 msgid "Starting Balance"
 msgstr "期首残高"
 
-#: messages-i18n.c:277
+#: messages-i18n.c:282
 msgid "Standard order"
 msgstr "標準の順番"
 
-#: messages-i18n.c:278
+#: messages-i18n.c:283
 #, fuzzy
 msgid "Statement Date:"
 msgstr "日付選択"
 
-#: messages-i18n.c:279
+#: messages-i18n.c:284
 msgid "Tip of the Day:"
 msgstr ""
 
-#: messages-i18n.c:280
+#: messages-i18n.c:285
 msgid "Top level account"
 msgstr "基本勘定科目"
 
-#: messages-i18n.c:281
+#: messages-i18n.c:286
 msgid "Total Shares"
 msgstr "株式合計"
 
-#: messages-i18n.c:282
+#: messages-i18n.c:287
 msgid "Verify Changes"
 msgstr "変更を確認する"
 
-#: messages-i18n.c:283
+#: messages-i18n.c:288
 msgid "Transfer Information"
 msgstr "情報を転送"
 
-#: messages-i18n.c:284
+#: messages-i18n.c:289
 msgid "Transfer Money"
 msgstr "資金を転送"
 
-#: messages-i18n.c:285
+#: messages-i18n.c:290
 msgid "Transfer From"
 msgstr "転送元"
 
-#: messages-i18n.c:286
+#: messages-i18n.c:291
 msgid "Transfer To"
 msgstr "転送先"
 
-#: messages-i18n.c:287
+#: messages-i18n.c:292
 msgid "About"
 msgstr ""
 
-#: messages-i18n.c:288 po/guile_strings.txt:64
+#: messages-i18n.c:293 po/guile_strings.txt:64
 #: src/gnome/glade-gnc-dialogs.c:1784
 msgid "Account"
 msgstr "勘定科目"
 
-#: messages-i18n.c:289 src/gnome/glade-gnc-dialogs.c:302
+#: messages-i18n.c:294 src/gnome/glade-gnc-dialogs.c:302
 #: src/gnome/glade-gnc-dialogs.c:462
 msgid "Accounts"
 msgstr "勘定科目"
 
-#: messages-i18n.c:290 src/gnome/glade-gnc-dialogs.c:4000
+#: messages-i18n.c:295 src/gnome/glade-gnc-dialogs.c:4000
 msgid "Account Information"
 msgstr "勘定科目情報"
 
-#: messages-i18n.c:291
+#: messages-i18n.c:296
 msgid "AutoDep"
 msgstr ""
 
-#: messages-i18n.c:292 src/gnome/glade-gnc-dialogs.c:2398
+#: messages-i18n.c:297 src/gnome/glade-gnc-dialogs.c:2398
 msgid "Action"
 msgstr ""
 
-#: messages-i18n.c:293
+#: messages-i18n.c:298
 msgid "Activities"
 msgstr ""
 
-#: messages-i18n.c:294
+#: messages-i18n.c:299
 msgid "Ago"
 msgstr ""
 
-#: messages-i18n.c:295 po/guile_strings.txt:55
+#: messages-i18n.c:300 po/guile_strings.txt:55
 #: src/gnome/glade-gnc-dialogs.c:2138
 msgid "Amount"
 msgstr "金額"
 
-#: messages-i18n.c:296 po/guile_strings.txt:249
+#: messages-i18n.c:301 po/guile_strings.txt:249
 msgid "Appreciation"
 msgstr "増加"
 
-#: messages-i18n.c:297
+#: messages-i18n.c:302
 msgid "Phone"
 msgstr "電話"
 
-#: messages-i18n.c:298 po/guile_strings.txt:181
+#: messages-i18n.c:303 po/guile_strings.txt:181
 #: src/gnome/glade-gnc-dialogs.c:567
 msgid "Asset"
 msgstr "資産"
 
-#: messages-i18n.c:299
+#: messages-i18n.c:304
 msgid "Assets"
 msgstr "資産"
 
-#: messages-i18n.c:300
+#: messages-i18n.c:305
 msgid "ATM"
 msgstr "キャッシュマシーン"
 
-#: messages-i18n.c:301
+#: messages-i18n.c:306
 msgid "Back"
 msgstr "戻る"
 
-#: messages-i18n.c:302 messages-i18n.c:303 po/guile_strings.txt:14
+#: messages-i18n.c:307 messages-i18n.c:308 po/guile_strings.txt:14
 msgid "Balance"
 msgstr "残高"
 
-#: messages-i18n.c:304 po/guile_strings.txt:109
+#: messages-i18n.c:309 po/guile_strings.txt:109
 #: src/gnome/glade-gnc-dialogs.c:561
 msgid "Bank"
 msgstr "銀行"
 
-#: messages-i18n.c:305
+#: messages-i18n.c:310
 msgid "Blank"
 msgstr "空白"
 
-#: messages-i18n.c:306 po/guile_strings.txt:125
+#: messages-i18n.c:311 po/guile_strings.txt:125
 msgid "Bought"
 msgstr ""
 
-#: messages-i18n.c:307
+#: messages-i18n.c:312
 msgid "Buy"
 msgstr "買う"
 
-#: messages-i18n.c:308
+#: messages-i18n.c:313
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: messages-i18n.c:309 po/guile_strings.txt:140
+#: messages-i18n.c:314 po/guile_strings.txt:140
 #: src/gnome/glade-gnc-dialogs.c:564
 msgid "Cash"
 msgstr "現金"
 
-#: messages-i18n.c:310
+#: messages-i18n.c:315
 msgid "Changed"
 msgstr ""
 
-#: messages-i18n.c:311 po/guile_strings.txt:212
+#: messages-i18n.c:316 po/guile_strings.txt:212
 msgid "Charge"
 msgstr ""
 
-#: messages-i18n.c:312
+#: messages-i18n.c:317
 msgid "Check"
 msgstr ""
 
-#: messages-i18n.c:313
+#: messages-i18n.c:318
 msgid "Checking"
 msgstr ""
 
-#: messages-i18n.c:314 src/gnome/glade-gnc-dialogs.c:2449
+#: messages-i18n.c:319 src/gnome/glade-gnc-dialogs.c:2449
 msgid "Cleared"
 msgstr ""
 
-#: messages-i18n.c:315
+#: messages-i18n.c:320
 msgid "Close"
 msgstr ""
 
-#: messages-i18n.c:316
+#: messages-i18n.c:321
 msgid "Commit"
 msgstr ""
 
-#: messages-i18n.c:317
+#: messages-i18n.c:322
 msgid "Create"
 msgstr ""
 
-#: messages-i18n.c:318 po/guile_strings.txt:266
+#: messages-i18n.c:323 po/guile_strings.txt:266
 #: src/gnome/glade-gnc-dialogs.c:570 src/gnome/glade-gnc-dialogs.c:2082
 msgid "Credit"
 msgstr "貸方"
 
-#: messages-i18n.c:319
+#: messages-i18n.c:324
 msgid "Credits"
 msgstr "貸方"
 
-#: messages-i18n.c:320 po/guile_strings.txt:137
+#: messages-i18n.c:325 po/guile_strings.txt:137
 #: src/gnome/glade-gnc-dialogs.c:582
 msgid "Currency"
 msgstr "通貨"
 
-#: messages-i18n.c:321 po/guile_strings.txt:6
+#: messages-i18n.c:326 po/guile_strings.txt:6
 #: src/gnome/glade-gnc-dialogs.c:1920
 msgid "Date"
 msgstr "日付"
 
-#: messages-i18n.c:322
+#: messages-i18n.c:327
 #, fuzzy
 msgid "Days"
 msgstr "日"
 
-#: messages-i18n.c:323 po/guile_strings.txt:38
+#: messages-i18n.c:328 po/guile_strings.txt:38
 #: src/gnome/glade-gnc-dialogs.c:2085
 msgid "Debit"
 msgstr "借方"
 
-#: messages-i18n.c:324
+#: messages-i18n.c:329
 msgid "Debits"
 msgstr "借方"
 
-#: messages-i18n.c:325
+#: messages-i18n.c:330
 msgid "Decrease"
 msgstr "減少"
 
-#: messages-i18n.c:326
+#: messages-i18n.c:331
 msgid "Deficit"
 msgstr "赤字"
 
-#: messages-i18n.c:327 src/gnome/glade-gnc-dialogs.c:2868
+#: messages-i18n.c:332 src/gnome/glade-gnc-dialogs.c:2868
 msgid "Delete"
 msgstr "削除"
 
-#: messages-i18n.c:328 po/guile_strings.txt:207
+#: messages-i18n.c:333 po/guile_strings.txt:207
 msgid "Deposit"
 msgstr "入金"
 
-#: messages-i18n.c:329 po/guile_strings.txt:164
+#: messages-i18n.c:334 po/guile_strings.txt:164
 msgid "Depreciation"
 msgstr "減価償却"
 
-#: messages-i18n.c:330 po/guile_strings.txt:157
+#: messages-i18n.c:335 po/guile_strings.txt:157
 #: src/gnome/glade-gnc-dialogs.c:1978
 msgid "Description"
 msgstr "説明"
 
-#: messages-i18n.c:331
+#: messages-i18n.c:336
 msgid "Difference"
 msgstr "差分"
 
-#: messages-i18n.c:332
+#: messages-i18n.c:337
 msgid "Direct Debit"
 msgstr ""
 
-#: messages-i18n.c:333
+#: messages-i18n.c:338
 msgid "Dist"
 msgstr ""
 
-#: messages-i18n.c:334
+#: messages-i18n.c:339
 msgid "Div"
 msgstr ""
 
-#: messages-i18n.c:335
+#: messages-i18n.c:340
 msgid "Duplicate"
 msgstr "複製"
 
-#: messages-i18n.c:336
+#: messages-i18n.c:341
 msgid "Edit"
 msgstr "編集"
 
-#: messages-i18n.c:337 po/guile_strings.txt:8
+#: messages-i18n.c:342 po/guile_strings.txt:8
 #: src/gnome/glade-gnc-dialogs.c:591
 msgid "Equity"
 msgstr "資本"
 
-#: messages-i18n.c:338
+#: messages-i18n.c:343
 msgid "EUR (total)"
 msgstr ""
 
-#: messages-i18n.c:339
+#: messages-i18n.c:344
 msgid "Exit"
 msgstr "終了"
 
-#: messages-i18n.c:340 po/guile_strings.txt:340
+#: messages-i18n.c:345 po/guile_strings.txt:340
 #: src/gnome/glade-gnc-dialogs.c:588
 msgid "Expense"
 msgstr "費用"
 
-#: messages-i18n.c:341
+#: messages-i18n.c:346
 msgid "Export"
 msgstr "出力"
 
-#: messages-i18n.c:342 po/guile_strings.txt:369
+#: messages-i18n.c:347 po/guile_strings.txt:369
 msgid "Extensions"
 msgstr "拡張機能"
 
-#: messages-i18n.c:343
+#: messages-i18n.c:348
 msgid "Fee"
 msgstr "費用"
 
-#: messages-i18n.c:344
+#: messages-i18n.c:349
 msgid "Field"
 msgstr ""
 
-#: messages-i18n.c:345
+#: messages-i18n.c:350
 msgid "File"
 msgstr "ファイル"
 
-#: messages-i18n.c:346 src/gnome/glade-gnc-dialogs.c:2523
+#: messages-i18n.c:351 src/gnome/glade-gnc-dialogs.c:2523
 msgid "Find"
 msgstr "検索"
 
-#: messages-i18n.c:347
+#: messages-i18n.c:352
 msgid "Forward"
 msgstr "先へ"
 
-#: messages-i18n.c:348 po/guile_strings.txt:127
+#: messages-i18n.c:353 po/guile_strings.txt:127
 msgid "From"
 msgstr ""
 
-#: messages-i18n.c:349
+#: messages-i18n.c:354
 msgid "GnuCash Preferences"
 msgstr "GnuCash 設定"
 
-#: messages-i18n.c:350
+#: messages-i18n.c:355
 msgid "Help"
 msgstr "ヘルプ"
 
-#: messages-i18n.c:351
+#: messages-i18n.c:356
 #, fuzzy
 msgid "Imbalance"
 msgstr "残高"
 
-#: messages-i18n.c:352
+#: messages-i18n.c:357
 msgid "Import"
 msgstr "インポート"
 
-#: messages-i18n.c:353 po/guile_strings.txt:255
+#: messages-i18n.c:358 po/guile_strings.txt:255
 #: src/gnome/glade-gnc-dialogs.c:585
 msgid "Income"
 msgstr "収入"
 
-#: messages-i18n.c:354
+#: messages-i18n.c:359
 msgid "Increase"
 msgstr "増加"
 
-#: messages-i18n.c:355
+#: messages-i18n.c:360
 msgid "Int"
 msgstr ""
 
-#: messages-i18n.c:356
+#: messages-i18n.c:361
 msgid "Jump"
 msgstr "飛ぶ"
 
-#: messages-i18n.c:357 po/guile_strings.txt:201
+#: messages-i18n.c:362 po/guile_strings.txt:201
 #: src/gnome/glade-gnc-dialogs.c:573
 msgid "Liability"
 msgstr "負債"
 
-#: messages-i18n.c:358
+#: messages-i18n.c:363
 msgid "License"
 msgstr "ライセンス"
 
-#: messages-i18n.c:359
+#: messages-i18n.c:364
 msgid "Loan"
 msgstr "借入金"
 
-#: messages-i18n.c:360
+#: messages-i18n.c:365
 msgid "LTCG"
 msgstr "長期キャピタルゲイン"
 
-#: messages-i18n.c:361 po/guile_strings.txt:32
+#: messages-i18n.c:366 po/guile_strings.txt:32
 #: src/gnome/glade-gnc-dialogs.c:2196
 msgid "Memo"
 msgstr "詳細"
 
-#: messages-i18n.c:362
+#: messages-i18n.c:367
 #, fuzzy
 msgid "Months"
 msgstr "月"
 
-#: messages-i18n.c:363
+#: messages-i18n.c:368
 msgid "New"
 msgstr ""
 
-#: messages-i18n.c:364
+#: messages-i18n.c:369
 msgid "No"
 msgstr ""
 
-#: messages-i18n.c:365 src/gnome/print-session.c:111
+#: messages-i18n.c:370 src/gnome/print-session.c:111
 #: src/gnome/print-session.c:200
 msgid "(none)"
 msgstr "(なし)"
 
-#: messages-i18n.c:366 po/guile_strings.txt:216
+#: messages-i18n.c:371 po/guile_strings.txt:216
 #: src/gnome/glade-gnc-dialogs.c:4194
 msgid "Notes"
 msgstr "詳細"
 
-#: messages-i18n.c:367 po/guile_strings.txt:183
+#: messages-i18n.c:372 po/guile_strings.txt:183
 msgid "Num"
 msgstr ""
 
-#: messages-i18n.c:368
+#: messages-i18n.c:373
 msgid "Ok"
 msgstr ""
 
-#: messages-i18n.c:369
+#: messages-i18n.c:374
 msgid "Online"
 msgstr "オンライン"
 
-#: messages-i18n.c:370
+#: messages-i18n.c:375
 msgid "Open"
 msgstr "開く"
 
-#: messages-i18n.c:371
+#: messages-i18n.c:376
 #, fuzzy
 msgid "Orphan"
 msgstr "開く"
 
-#: messages-i18n.c:372
+#: messages-i18n.c:377
 msgid "Parameters"
 msgstr "変数"
 
-#: messages-i18n.c:373 po/guile_strings.txt:115
+#: messages-i18n.c:378 po/guile_strings.txt:115
 msgid "Payment"
 msgstr "支払"
 
-#: messages-i18n.c:374
+#: messages-i18n.c:379
 msgid "Portfolio"
 msgstr "ポートフォリオ"
 
-#: messages-i18n.c:375
+#: messages-i18n.c:380
 msgid "POS"
 msgstr ""
 
-#: messages-i18n.c:376
+#: messages-i18n.c:381
 msgid "Preferences"
 msgstr "設定"
 
-#: messages-i18n.c:377 src/gnome/glade-gnc-dialogs.c:2340
+#: messages-i18n.c:382 src/gnome/glade-gnc-dialogs.c:2340
 msgid "Price"
 msgstr "価値"
 
-#: messages-i18n.c:378 src/gnome/glade-gnc-dialogs.c:937
+#: messages-i18n.c:383 src/gnome/glade-gnc-dialogs.c:937
 msgid "Print"
 msgstr "印刷"
 
-#: messages-i18n.c:379
+#: messages-i18n.c:384
 msgid "Profits"
 msgstr "利益"
 
-#: messages-i18n.c:380
+#: messages-i18n.c:385
 msgid "Quit"
 msgstr "終了"
 
-#: messages-i18n.c:381 po/guile_strings.txt:19
+#: messages-i18n.c:386 po/guile_strings.txt:19
 msgid "Rebate"
 msgstr "リベート"
 
-#: messages-i18n.c:382 po/guile_strings.txt:198
+#: messages-i18n.c:387 po/guile_strings.txt:198
 msgid "Receive"
 msgstr ""
 
-#: messages-i18n.c:383 po/guile_strings.txt:273
+#: messages-i18n.c:388 po/guile_strings.txt:273
 msgid "Reconcile"
 msgstr ""
 
-#: messages-i18n.c:384
+#: messages-i18n.c:389
 msgid "Record"
 msgstr "記録"
 
-#: messages-i18n.c:385 po/guile_strings.txt:222
+#: messages-i18n.c:390 po/guile_strings.txt:222
 msgid "Register"
 msgstr ""
 
-#: messages-i18n.c:386 po/guile_strings.txt:215
+#: messages-i18n.c:391 po/guile_strings.txt:215
 msgid "Report"
 msgstr "帳票"
 
-#: messages-i18n.c:387
+#: messages-i18n.c:392
 msgid "Reports"
 msgstr "帳票"
 
-#: messages-i18n.c:388
+#: messages-i18n.c:393
 msgid "Save"
 msgstr "保存"
 
-#: messages-i18n.c:389
+#: messages-i18n.c:394
 msgid "Savings"
 msgstr "貯蓄"
 
-#: messages-i18n.c:390
+#: messages-i18n.c:395
 msgid "Scrub"
 msgstr "掃除"
 
-#: messages-i18n.c:391
+#: messages-i18n.c:396
 msgid "Search Results"
 msgstr "検索結果"
 
-#: messages-i18n.c:392 po/guile_strings.txt:196
+#: messages-i18n.c:397 po/guile_strings.txt:196
 msgid "Security"
 msgstr "証券"
 
-#: messages-i18n.c:393
+#: messages-i18n.c:398
 msgid "Sell"
 msgstr "売る"
 
-#: messages-i18n.c:394
+#: messages-i18n.c:399
 msgid "Settings"
 msgstr "設定"
 
-#: messages-i18n.c:395
+#: messages-i18n.c:400
 msgid "Simple"
 msgstr ""
 
-#: messages-i18n.c:396 po/guile_strings.txt:326
+#: messages-i18n.c:401 po/guile_strings.txt:326
 msgid "Sold"
 msgstr ""
 
-#: messages-i18n.c:397 po/guile_strings.txt:49
+#: messages-i18n.c:402 po/guile_strings.txt:49
 msgid "Spend"
 msgstr ""
 
-#: messages-i18n.c:398
+#: messages-i18n.c:403
 msgid "Split"
 msgstr ""
 
-#: messages-i18n.c:399
+#: messages-i18n.c:404
 msgid "STCG"
 msgstr "短期キャピタルゲイン"
 
-#: messages-i18n.c:400 po/guile_strings.txt:367
+#: messages-i18n.c:405 po/guile_strings.txt:367
 #: src/gnome/glade-gnc-dialogs.c:576
 msgid "Stock"
 msgstr "株"
 
-#: messages-i18n.c:401 po/guile_strings.txt:257
+#: messages-i18n.c:406 po/guile_strings.txt:257
 msgid "Style"
 msgstr "スタイル"
 
-#: messages-i18n.c:402
+#: messages-i18n.c:407
 msgid "Surplus"
 msgstr "剰余"
 
-#: messages-i18n.c:403
+#: messages-i18n.c:408
 msgid "Teller"
 msgstr "銀行窓口"
 
-#: messages-i18n.c:404 po/guile_strings.txt:315
+#: messages-i18n.c:409 po/guile_strings.txt:315
 msgid "To"
 msgstr ""
 
-#: messages-i18n.c:405 src/gnome/glade-gnc-dialogs.c:2615
+#: messages-i18n.c:410 src/gnome/glade-gnc-dialogs.c:2615
 msgid "Today"
 msgstr "本日"
 
-#: messages-i18n.c:406 messages-i18n.c:407 po/guile_strings.txt:214
+#: messages-i18n.c:411 messages-i18n.c:412 po/guile_strings.txt:214
 msgid "Total"
 msgstr "合計"
 
-#: messages-i18n.c:408 po/guile_strings.txt:317
+#: messages-i18n.c:413 po/guile_strings.txt:317
 #: src/gnome/glade-gnc-dialogs.c:295 src/gnome/glade-gnc-dialogs.c:349
 msgid "Type"
 msgstr "型"
 
-#: messages-i18n.c:409
+#: messages-i18n.c:414
 msgid "Transaction"
 msgstr "取引"
 
-#: messages-i18n.c:410
+#: messages-i18n.c:415
 msgid "Transfer"
 msgstr "移動"
 
-#: messages-i18n.c:411
+#: messages-i18n.c:416
 msgid "Untitled"
 msgstr ""
 
-#: messages-i18n.c:412 po/guile_strings.txt:65
+#: messages-i18n.c:417 po/guile_strings.txt:65
 msgid "Value"
 msgstr "価値"
 
-#: messages-i18n.c:413
+#: messages-i18n.c:418
 msgid "WARNING"
 msgstr "警告"
 
-#: messages-i18n.c:414
+#: messages-i18n.c:419
 #, fuzzy
 msgid "Weeks"
 msgstr "週"
 
-#: messages-i18n.c:415
+#: messages-i18n.c:420
 msgid "Wire"
 msgstr ""
 
-#: messages-i18n.c:416
+#: messages-i18n.c:421
 msgid "Withdraw"
 msgstr "引出し"
 
-#: messages-i18n.c:417 po/guile_strings.txt:58
+#: messages-i18n.c:422 po/guile_strings.txt:58
 #, fuzzy
 msgid "Withdrawal"
 msgstr "引出し"
 
-#: messages-i18n.c:418
+#: messages-i18n.c:423
 #, fuzzy
 msgid "Years"
 msgstr "年"
 
-#: messages-i18n.c:419
+#: messages-i18n.c:424
 msgid "Yes"
 msgstr "はい"
 
-#: messages-i18n.c:420
+#: messages-i18n.c:425
 #, fuzzy
 msgid "cleared:c"
 msgstr "全部クリア"
 
-#: messages-i18n.c:421
+#: messages-i18n.c:426
 msgid "frozen:f"
 msgstr ""
 
-#: messages-i18n.c:422
+#: messages-i18n.c:427
 msgid "not cleared:n"
 msgstr ""
 
-#: messages-i18n.c:423
+#: messages-i18n.c:428
 #, fuzzy
 msgid "Reconciled:R"
 msgstr "_照合"
 
-#: messages-i18n.c:424
+#: messages-i18n.c:429
 #, fuzzy
 msgid "reconciled:y"
 msgstr "_照合"
