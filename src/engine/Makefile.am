@@ -34,8 +34,6 @@ libgncmod_engine_la_SOURCES = \
   md5.c \
   messages.c
 
-# NetIO.c
-
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   Account.h \
@@ -64,8 +62,6 @@ gncinclude_HEADERS = \
   guid.h \
   kvp_frame.h \
   messages.h
-
-#  NetIO.h 
 
 noinst_HEADERS = \
   AccountP.h \
