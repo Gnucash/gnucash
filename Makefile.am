@@ -3,7 +3,7 @@ SUBDIRS = macros intl doc-tools doc lib src po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
-noinst_DATA = make-gnucash-patch @GNC_TAGS_FILE@
+noinst_DATA = make-gnucash-patch make-gnucash-potfiles @GNC_TAGS_FILE@
 
 doc_DATA = \
   AUTHORS \
@@ -34,6 +34,7 @@ EXTRA_DIST = \
   README.patches \
   gnucash.lsm \
   make-gnucash-patch.in \
+  make-gnucash-potfiles.in \
   po/.cvsignore \
   po/gnc-glossary.txt \
   po/README
@@ -48,6 +49,14 @@ make-gnucash-patch: make-gnucash-patch.in
             -e 's:@-PERL-@:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
+
+make-gnucash-potfiles: make-gnucash-potfiles.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+            -e 's:@-PERL-@:${PERL}:g'
+	chmod +x $@.tmp
+	mv $@.tmp $@
+
 
 DISTCLEANFILES += \
   TAGS.stamp cscope.files cscope.out etags.files make-gnucash-patch
