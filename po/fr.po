@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: 2003-08-17 01:32-0400\n"
-"PO-Revision-Date: 2004-01-25 17:55-0500\n"
+"PO-Revision-Date: 2004-01-25 18:11-0500\n"
 "Last-Translator: Benoit Grégoire <bock@step.polymtl.ca>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
@@ -875,7 +875,7 @@ msgstr "Type :"
 #: src/business/business-gnome/glade/customer.glade.h:1
 #: src/business/business-gnome/glade/vendor.glade.h:1
 msgid "(taxincluded)"
-msgstr "(ttc)"
+msgstr "(taxeincluse)"
 
 #: src/business/business-gnome/glade/customer.glade.h:2
 #: src/business/business-gnome/glade/vendor.glade.h:2
@@ -1014,7 +1014,7 @@ msgstr "Information de livraison"
 
 #: src/business/business-gnome/glade/customer.glade.h:24
 msgid "Tax Included: "
-msgstr "TTC: "
+msgstr "Texes incluses: "
 
 #: src/business/business-gnome/glade/customer.glade.h:25
 msgid "Tax Table: "
@@ -1729,7 +1729,7 @@ msgstr "Nouveau fournisseur"
 
 #: src/business/business-gnome/glade/vendor.glade.h:18
 msgid "Tax Included:"
-msgstr "TTC"
+msgstr "Taxes incluses:"
 
 # po/guile_strings.txt:264
 #: src/business/business-gnome/glade/vendor.glade.h:19
@@ -2727,7 +2727,7 @@ msgstr "Taxable ?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:100
 msgid "Tax Included?"
-msgstr "TTC ?"
+msgstr "Taxes incluses ?"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -2804,7 +2804,7 @@ msgstr "Remise et taxe calculées sur montant avant taxe"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:630
 msgid "Discount computed after tax is applied"
-msgstr "Remise calculée sur montant TTC"
+msgstr "Remise calculée sur montant après taxes"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:633
 msgid "Select how to compute the Discount and Taxes"
@@ -2830,7 +2830,7 @@ msgstr "Cette entrée est-elle taxable?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:688
 msgid "Is the tax already included in the price of this entry?"
-msgstr "Le prix de cette ligne est-il TTC ?"
+msgstr "Le prix de cette entrée inclut-il les taxes ?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:705
 msgid "Is this entry Invoiced?"
@@ -16999,12 +16999,12 @@ msgstr "Nombre de lignes du registre à afficher sur les factures à se faire paye
 #. src/business/business-utils/business-prefs.scm
 #: intl-scm/guile-strings.c:3606
 msgid "Invoice Tax Included?"
-msgstr "Facture à se faire payer ttc?"
+msgstr "Facture à se faire payer inclut les taxes?"
 
 #. src/business/business-utils/business-prefs.scm
 #: intl-scm/guile-strings.c:3608
 msgid "Bill Tax Included?"
-msgstr "Facture à payer ttc?"
+msgstr "Facture à payer inclut les taxes?"
 
 #. src/business/business-utils/business-prefs.scm
 #: intl-scm/guile-strings.c:3610
