@@ -1,3 +1,10 @@
+2002-11-26  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/gnc-gen-transaction.[hc]
+	(gnc_gen_trans_get_fuzzy_amount): Add functions to get/set the
+	fuzzy amount matching threshold, so that this feature can be used
+	from gnc-ofx-import.c.
+
 2002-11-25  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/hbci/gnc-hbci-gettrans.c: Remove 
 	#include "gnc-generic-import.h"

@@ -53,6 +53,7 @@
 
 
 static short module = MOD_IMPORT;
+
 /********************************************************************\
  * gnc_file_ofx_import
  * Entry point
@@ -104,6 +105,9 @@ void gnc_file_ofx_import (void)
 
       /* CS: Create the Generic transaction importer GUI. */
       gnc_ofx_importer_gui = gnc_gen_trans_new(NULL, NULL);
+      /* Set the allowed fuzzy amount difference to something higher than zero. */
+      gnc_gen_trans_set_fuzzy_amount (gnc_ofx_importer_gui, 
+				      MATCH_ATM_FEE_THRESHOLD);
       DEBUG("Opening selected file");
       ofx_proc_file(2, filenames);
     }

@@ -60,5 +60,13 @@ void gnc_gen_trans_freeze (GNCGenTransaction *gui);
  * transactions. */
 void gnc_gen_trans_thaw (GNCGenTransaction *gui);
 
+/** Set the allowed amount range for fuzzy amount matching. */
+void gnc_gen_trans_set_fuzzy_amount (GNCGenTransaction *info, 
+				     double fuzzy_amount);
+/** Return the allowed amount range for fuzzy amount matching. */
+double 
+gnc_gen_trans_get_fuzzy_amount (const GNCGenTransaction *info);
+
+
 
 #endif

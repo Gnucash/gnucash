@@ -176,6 +176,7 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
 
     importer_gui = gnc_gen_trans_new (NULL, NULL);
     gnc_gen_trans_freeze (importer_gui);
+    gnc_gen_trans_set_fuzzy_amount (importer_gui, 0.0);
     
     {
       /* Now add the retrieved transactions to the gnucash account. */
@@ -207,16 +208,18 @@ static void *gnc_list_string_cb (const char *string, void *user_data)
   tmp1 = g_strdup (string);
   g_strstrip (tmp1);
 
-  if (*res != NULL) {
-    /* The " " is the separating string in between each two strings. */
-    tmp2 = g_strjoin (" ", *res, tmp1, NULL);
-    g_free (tmp1);
-
-    g_free (*res);
-    *res = tmp2;
-  }
-  else {
-    *res = tmp1;
+  if (strlen (tmp1) > 0) {
+    if (*res != NULL) {
+      /* The " " is the separating string in between each two strings. */
+      tmp2 = g_strjoin (" ", *res, tmp1, NULL);
+      g_free (tmp1);
+      
+      g_free (*res);
+      *res = tmp2;
+    }
+    else {
+      *res = tmp1;
+    }
   }
   
   return NULL;
@@ -293,7 +296,7 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
     DEBUG("HBCI Description '%s'", h_descr);
     
     g_descr = 
-      ((strlen (h_descr) > 0) ?
+      ((h_descr && (strlen (h_descr) > 0)) ?
        g_strdup_printf ("%s; %s", 
 			h_descr,
 			othername) :

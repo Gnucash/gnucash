@@ -250,6 +250,7 @@ gnc_import_MatchInfo_get_split (const GNCImportMatchInfo * info);
    debugging purposes, otherwise all transactions of every accounts 
    will be shown in the list */
 #define DEFAULT_DISPLAY_THRESHOLD 1
+#define MATCH_ATM_FEE_THRESHOLD 3.00
 
 
 #endif

@@ -227,7 +227,6 @@ void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
 \********************************************************************/
 
 static short module = MOD_IMPORT;
-static const double MATCH_ATM_FEE_THRESHOLD=3.00;
 static const int MATCH_DATE_THRESHOLD=4; /*within 4 days*/
 static const int MATCH_DATE_NOT_THRESHOLD = 16;
 static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = FALSE;

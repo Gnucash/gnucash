@@ -45,8 +45,8 @@ struct _generic_transaction_info
   int clear_threshold;
   int add_threshold;
   int display_threshold;
-
-  Account *source_acc;
+  double fuzzy_amount_difference;
+  /*Account *source_acc;*/
 };
 
 /* The GtkCList widget has 7 columns. */
@@ -69,6 +69,18 @@ void gnc_gen_trans_delete (GNCGenTransaction *info)
     return;
   gtk_widget_destroy (GTK_WIDGET (info->dialog));
   g_free (info);
+}
+
+void gnc_gen_trans_set_fuzzy_amount (GNCGenTransaction *info, 
+				     double fuzzy_amount)
+{
+  g_assert(info);
+  info->fuzzy_amount_difference = fuzzy_amount;
+}
+double gnc_gen_trans_get_fuzzy_amount (const GNCGenTransaction *info)
+{
+  g_assert(info);
+  return info->fuzzy_amount_difference;
 }
 
 
@@ -387,7 +399,7 @@ void gnc_gen_trans_add_trans(GNCGenTransaction *gui, Transaction *trans)
 					 gui->clear_threshold, 
 					 gui->clear_threshold,
 					 gui->display_threshold,
-					 0.0);
+					 gnc_gen_trans_get_fuzzy_amount (gui));
 
       row_number = gtk_clist_append(GTK_CLIST (gui->clist),
 				    text_for_transInfo (transaction_info));
