@@ -182,6 +182,11 @@ A lot does not need to maintain a balance (this is easy enough to calculate
 on the fly).  A lot has a kvp tree (for storage of lot-related date, such
 as due dates for invoices, etc.  A lot has a GUID. 
 
+From the memory-management and data-base management point of view, lots
+belong to accounts.  The GnuCash account structure maintains a list of
+lots so that all lots belonging to an account can be quickly retreived.
+(In principle, the lots can be found by scanning every split in the
+account, but this is a painful process.)
 
 
 Status
