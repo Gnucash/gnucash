@@ -2013,5 +2013,5 @@ gnc_ui_qif_import_create_menus(void)
     'i', GDK_CONTROL_MASK, NULL
   };
 
-  gnc_add_c_extension(&menuitem, WINDOW_NAME_MAIN "/File/Import/");
+  gnc_add_c_extension(&menuitem, WINDOW_NAME_MAIN "/File/_Import/");
 }

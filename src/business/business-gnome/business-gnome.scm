@@ -207,7 +207,7 @@
   (gnc:add-extension
     (gnc:make-menu-item (N_ "Properties")
 			(N_ "View and edit the properties of this file.")
-			(list "Main" "File" "Print")
+			(list "Main" "File" "_Print")
 			(lambda ()
 			  (let* ((book (gnc:get-current-book))
 				 (slots (gnc:book-get-slots book)))
@@ -218,7 +218,7 @@
 			    (gnc:kvp-option-dialog gnc:id-book
 						   slots "Book Options"
 						   changed_cb)))))
-  (gnc:add-extension (gnc:make-separator (list "Main" "File" "Print")))
+  (gnc:add-extension (gnc:make-separator (list "Main" "File" "_Print")))
 
   )
 

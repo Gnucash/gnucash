@@ -46,11 +46,11 @@ static gboolean gnc_toolbar_visible = TRUE;
  */
 static gchar *
 dispatch_menu_paths[GNC_DISP_LAST] = {
-  "File/Print",
-  "Edit/Cut",
-  "Edit/Copy",
-  "Edit/Paste",
-  "View/Refresh"
+  "_File/_Print",
+  "_Edit/C_ut",
+  "_Edit/_Copy",
+  "_Edit/_Paste",
+  "_View/_Refresh"
 };
 
 gncUIWidget

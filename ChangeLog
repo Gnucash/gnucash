@@ -1,3 +1,12 @@
+2002-11-30  Christian Stimming  <stimming@tuhh.de>
+
+	* src/business/business-gnome/business-gnome.scm,
+	src/gnome-utils/gnc-mdi-utils.c,
+	src/gnome-utils/gnc-menu-extensions.c,
+	src/import-export/ofx/ofx-import.scm,
+	src/import-export/qif-import/druid-qif-import.c: More i18n menu
+	insertion fixes.
+
 2002-11-30  Matthew Vanecek <mevanecek@yahoo.com>
 
 	* Makefile.am: Added the GNC_CTAGS_FILE token, and added the

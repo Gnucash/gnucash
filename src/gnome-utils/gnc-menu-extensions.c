@@ -354,6 +354,7 @@ gnc_extensions_menu_setup(GnomeApp * app, gchar *window)
     if ((strcmp(info->window, window) != 0) &&
 	(strcmp(info->window, WINDOW_NAME_ALL) != 0))
       continue;
+    /* fprintf(stderr, "Inserting extension menu at path '%s'\n", info->path); */
     gnome_app_insert_menus(app, info->path, info->info);
     gnome_app_install_menu_hints(app, info->info); 
   }
