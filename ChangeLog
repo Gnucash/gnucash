@@ -1,3 +1,8 @@
+2002-11-18  Chris Lyttle  <chris@wilddev.net>
+
+	* NEWS: update to new version 1.7.3
+	* configure.in: update to new version 1.7.3
+	
 2002-11-18  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c: Remove constant length 
 	strings and replace with moving pointers.  I wish _("string") 

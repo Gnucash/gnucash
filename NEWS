@@ -1,5 +1,32 @@
 Version history:
 ------- -------
+ 1.7.3  - 17 November 2002
+ 	 o first beta release
+	 o improved libofx configure support.  Add --with-ofx-prefix
+	   so users can define where to look for libofx.
+	 o fixed missing ofx files in tarball
+	 o updated gnucash.spec file to work with rh8
+	 o added new cashflow report contributed by Herbert Thoma
+	 o New functions to get/set read-only status on a transaction, 
+	   and to print a warning message if a transaction is read-only.
+	 o Added a bunch of currencies.
+	 o MAJOR improvement to OFX investment support.  All transactions 
+	   created from an investment account are now already balanced.  
+	   Explicitely support Dividend Reinvestment transactions which 
+	   will now directly create a income account -> stock account 
+	   transaction, and Income transactions which will directly create 
+	   a income account -> cash account transaction. Support memorising 
+	   the income account association. Several stock account can use the 
+	   same income account if desired.
+	 o Updated translations (merged from 1.6 branch plus updates from 
+	   the Translation Project).
+	 o Matthew Vanecek added some bug fixes for the SQL back end.
+	 o Add support for gtkhtml 1.1
+	 o Added calculate the number of remaining payments based on the start
+	   date, loan length and current date to Mortgage druid
+	 o loads of bugfixes, keep those bugs coming!
+	 o NOTE: Report bugs to bugzilla.gnome.org
+
  1.7.2  - 27 October 2002
  	 o second alpha release
 	 o you can now search by reconcile flag
