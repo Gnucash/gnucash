@@ -1,6 +1,57 @@
 Version history:
 ------- -------
 
+ 1.7.8  - 20 January 2003
+ 	 o Welcome to Release Canidate 3
+	 o Fixed build issues introduced in last release
+	 o Fix compile errors on SuSE 8.0 + 8.1
+	 o Update translations, po/ru.po by Vitaly Lipatov, po/el.po by
+	   ta_panta_rei@flashmail.com
+	 o Ignore certain splits with an "amount" of zero.
+	 o Convert from the old to new symbols for Russian Roubles.
+	 o Invoices change a couple of columns.  Enable viewing the "taxable"
+	   entry.  Enable viewing all the tax accounts individually.
+	 o Scrub hbci include paths to prevent gcc 3.x compile errors.
+	 o Default the OFX import directory to the directory of the last OFX
+	   file imported, or the user's home dir for the first export.
+	   Remembered across invocations of gnucash.
+	 o Default the save directory to the directory of the last file used.
+	   Default the exports directory to the directory of the last file
+	   exported, or the user's home dir for the first export. Remembered
+	   across invocations of gnucash.
+	 o Correctly handle the case where no stocks have been defined and the
+	   user asks gnucash to get price quotes.
+	 o Work around bug in ghttp library so that intl users whose whole
+	   units/fractions separator is a comma can request web pages.
+	 o Add "Default Report Currency" preference.
+	 o Set invoice currency based on owner's currency.
+	 o Use invoice's currency for printing the invoice.
+	 o Make the progress bar argument a double instead of an int.  This
+	   gets around an issue with guile 1.6.
+	 o Add a checkbox to search-for-all
+	 o Changes to make the build system work on multiple architectures and
+	   with multiple versions of the autotools suite.  Make generated g-wrap
+	   sources depend on config.status.
+	 o Remove restriction on guile versions > 1.4 Provide a version
+	   dependant load path variable for the SRFI location. (Empty in 1.6
+	   since they're bundled with guile.)
+	 o Limit QIF matches against only the accounts in the old group, so we
+	   don't match against ourselves.  This should limit the matches to only
+	   "reasonable" matches.
+	 o Remove "user name" and "user address" preferences, as they are no
+	   longer used by anything.
+	 o Create a taxtable option type using the new generic optionmenu code
+	 o Create a default customer and default vendor taxtable option for
+	   the "File Properties" option menu.
+	 o Reset the search-type to "New Search" if we end up displaying no
+	   results.
+	 o Use the "New Search Limit" pref to decide when to start a new
+	   search vs. when refine the search.
+	 o Create two new global preferences: "Notify Bills Due?" and "Bills
+	   Due Days"
+	 o Added sources needed for OS X to dist.
+	 o Lots more bugfixes, see changelog.
+
  1.7.7  - 05 January 2003
  	 o Welcome to Release Canidate 2
 	 o Give the user better feedback on exactly what the exchange rate
