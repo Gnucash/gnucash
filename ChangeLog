@@ -1,3 +1,8 @@
+2002-12-02  Chris Lyttle  <chris@wilddev.net>
+
+	* NEWS: update to new version 1.7.4
+	* configure.in: update to new version 1.7.4
+	
 2002-12-01  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome-utils/gnc-account-sel.c

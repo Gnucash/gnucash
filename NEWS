@@ -1,5 +1,27 @@
 Version history:
 ------- -------
+ 1.7.4  - 01 December 2002
+	 o Second beta release
+	 o Problems with importing 1.6 data files fixed
+	 o Updates to generic transaction matching
+	 o More postgres backend fixes
+	 o New progress bar when making reports
+	 o Payment schedule review page added to loan druid
+	 o Fixes to multi-currency support
+	 o Added Brazilian Portugese account templates by Lucimar Moresco
+	 o Added doxygen documentation support, and integrated it into the
+	   build system. There is a new target, make doc, that can be used to
+	   build the documentation if you have doxygen installed.
+	 o Catch the condition gracefully when OpenHBCI config file does not
+	   exist.
+	 o Compute the implicit exchange rates for ALL transactions when
+	   necessary. No longer requires the pricedb for printing split values.
+	   This will display all transactions in the currency of the current
+	   account, regardless of the number of splits in the transaction.
+	 o First pass at getting multi-currency transactions to work from the
+	   register.
+	 o Lots more bugfixes
+ 
  1.7.3  - 17 November 2002
  	 o first beta release
 	 o improved libofx configure support.  Add --with-ofx-prefix
