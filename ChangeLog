@@ -1,3 +1,11 @@
+2003-03-15  Christian Stimming  <stimming@tuhh.de>
+
+	* po/it.po: updated translation by Lorenzo Cappelletti
+	<lorenzo.cappelletti@email.it>.
+
+	* po/en_GB.po: updated translation by Nigel Titley
+	<nigel@titley.com>.
+	
 2003-03-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Makefile.am: make sure to add INTLLIBS in case
