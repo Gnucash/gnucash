@@ -477,9 +477,8 @@ gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
         if(!err_ret)
         {
             xaccBackendSetError((Backend*)be, ERR_BACKEND_MISC);
-/*                 g_strdup_printf("unable to make file backup from %s to %s: %s", */
-/*                                 orig, bkup, */
-/*                                 strerror(errno) ? strerror(errno) : "")); */
+            PWARN ("unable to make file backup from %s to %s: %s", 
+                    orig, bkup, strerror(errno) ? strerror(errno) : ""); 
             return FALSE;
         }
     }
@@ -566,9 +565,9 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
         if(unlink(datafile) != 0 && errno != ENOENT)
         {
             xaccBackendSetError((Backend*)be, ERR_BACKEND_MISC);
-/*                 g_strdup_printf("unable to unlink filename %s: %s", */
-/*                                 datafile ? datafile : "(null)", */
-/*                                 strerror(errno) ? strerror(errno) : "")); */
+            PWARN("unable to unlink filename %s: %s",
+                  datafile ? datafile : "(null)", 
+                  strerror(errno) ? strerror(errno) : ""); 
             g_free(tmp_name);
             return FALSE;
         }
@@ -580,9 +579,9 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
         if(unlink(tmp_name) != 0)
         {
             xaccBackendSetError((Backend*)be, ERR_BACKEND_MISC);
-/*                 g_strdup_printf("unable to unlink temp filename %s: %s", */
-/*                                 tmp_name ? tmp_name : "(null)", */
-/*                                 strerror(errno) ? strerror(errno) : "")); */
+            PWARN("unable to unlink temp filename %s: %s", 
+                   tmp_name ? tmp_name : "(null)", 
+                   strerror(errno) ? strerror(errno) : ""); 
             g_free(tmp_name);
             return FALSE;
         }
@@ -594,9 +593,9 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
         if(unlink(tmp_name) != 0)
         {
             xaccBackendSetError((Backend*)be, ERR_BACKEND_MISC);
-/*                 g_strdup_printf("unable to unlink temp_filename %s: %s", */
-/*                                 tmp_name ? tmp_name : "(null)", */
-/*                                 strerror(errno) ? strerror(errno) : "")); */
+            PWARN("unable to unlink temp_filename %s: %s", 
+                   tmp_name ? tmp_name : "(null)", 
+                   strerror(errno) ? strerror(errno) : ""); 
             /* already in an error just flow on through */
         }
         g_free(tmp_name);
