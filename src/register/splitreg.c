@@ -204,6 +204,7 @@ configAction (SplitRegister *reg)
       case ASSET_REGISTER:
          xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, FEE_STR);
          break;
       case CREDIT_REGISTER:
          xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
@@ -240,10 +241,12 @@ configAction (SplitRegister *reg)
          xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, PRICE_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, FEE_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, DIV_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, LTCG_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, STCG_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, INCOME_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, DIST_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, SPLIT_STR);
          break;
@@ -559,7 +562,7 @@ configCursors (SplitRegister *reg)
    /* set the color of the cells in the cursors */
    /* hack alert -- the actual color should depend on the 
     * type of register. */
-/* they used top be the following:
+/* they used to be the following, once upon a time:
   "*regbank.oddRowBackground:      #aaccff",
   "*regcash.oddRowBackground:      #ccffcc",
   "*regasset.oddRowBackground:     #aaffcc",
@@ -761,6 +764,18 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
     * The format is a printf-style format for a double.  */
    xaccSetPriceCellFormat (reg->shrsCell, "%.3f");
    xaccSetPriceCellFormat (reg->priceCell, "%.3f");
+
+   /* use three decimal places for share quantities in stock ledgers */
+   switch (type & REG_TYPE_MASK) {
+      case STOCK_REGISTER:
+      case PORTFOLIO:
+      case CURRENCY_REGISTER:
+         xaccSetPriceCellFormat (reg->debitCell, "%.3f");
+         xaccSetPriceCellFormat (reg->creditCell, "%.3f");
+         break;
+      default:
+         break;
+   }
 
    /* -------------------------------- */   
    /* define how traversal works. This must be done *after* the balance, etc.
