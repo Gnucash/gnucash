@@ -140,6 +140,9 @@ void          xaccTransBeginEdit (Transaction *, int defer);
 void          xaccTransCommitEdit (Transaction *);
 void          xaccTransRollbackEdit (Transaction *);
 
+/* Convert a day, month, and year to a Timespec */
+Timespec      gnc_dmy2timespec(int day, int month, int year);
+
 /*
  * The xaccTransSetDateSecs() method will modify the posted date 
  *    of the transaction.  (Footnote: this shouldn't matter to a user,
@@ -161,10 +164,10 @@ void          xaccTransRollbackEdit (Transaction *);
 void          xaccTransSetDate (Transaction *, int day, int mon, int year);
 void          xaccTransSetDateSecs (Transaction *, time_t);
 void          xaccTransSetDateToday (Transaction *);
-void          xaccTransSetDateTS (Transaction *, Timespec *);
+void          xaccTransSetDateTS (Transaction *, const Timespec *);
 
 void          xaccTransSetDateEnteredSecs (Transaction *, time_t);
-void          xaccTransSetDateEnteredTS (Transaction *, Timespec *);
+void          xaccTransSetDateEnteredTS (Transaction *, const Timespec *);
 
 
 /* set the Num and Description fields ... */
