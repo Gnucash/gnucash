@@ -15,7 +15,7 @@ Table of Contents:
 ------------------
 
   - Overview
-  - Upgrading from 1.8.x
+  - Upgrading from 1.6.x
   - Dependencies
   - Invocation/running
   - Internationalization
@@ -110,14 +110,13 @@ Development versions:
 http://www.gnucash.org/source_code.php3
 
 ####################
-Upgrading from 1.8.x
+Upgrading from 1.6.x
 --------------------
 
-There are many, many changes from the 1.8 series - have a look at the
-NEWS file if you want more details. In particular, GnuCash now
-requires the gtkhtml and guppi libraries. See the "dependencies"
-section of this file for more detail. The file format has changed
-from a binary format to XML. So backup your data!
+There are many changes from the 1.6 series - have a look at the
+NEWS file if you want more details.   If you are running 1.8.x
+for the first time on a 1.6.x data file, things *should* go smoothly.
+But sometimes they don't.  Backup your data!
 
 We hope you enjoy all the new features!
 
