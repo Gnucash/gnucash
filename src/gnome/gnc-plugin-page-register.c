@@ -47,7 +47,7 @@ static void gnc_plugin_page_register_cmd_duplicate_transaction (EggAction *actio
 
 static EggActionGroupEntry gnc_plugin_page_register_actions [] = {
 	/* Toplevel */
-	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL },
+	{ "FakeToplevel", "", NULL, NULL, NULL, NULL, NULL },
 
 	/* Actions menu */
 	{ "RecordTransactionAction", N_("_Enter Transaction"), GTK_STOCK_OK, NULL,
@@ -123,7 +123,6 @@ gnc_plugin_page_register_new (GNCLedgerDisplay *ld)
 			      NULL);
 	plugin_page->priv->ld = ld;
 	
-
 	return GNC_PLUGIN_PAGE (plugin_page);
 }
 
@@ -137,9 +136,37 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 	object_class->finalize = gnc_plugin_page_register_finalize;
 }
 
+/* DRH - Suggest this be added to libegg */
+static void
+gnc_plugin_page_register_init_short_names (EggActionGroup *action_group)
+{
+	EggAction *action;
+	GValue value = { 0, };
+
+	g_value_init (&value, G_TYPE_STRING);
+
+	/* Add a couple of short labels for the toolbar */
+	action = egg_action_group_get_action (action_group, "RecordTransactionAction");
+	g_value_set_static_string (&value, _("Record"));
+	g_object_set_property (G_OBJECT(action), "short_label", &value);
+
+	action = egg_action_group_get_action (action_group, "CancelTransactionAction");
+	g_value_set_static_string (&value, _("Cancel"));
+	g_object_set_property (G_OBJECT(action), "short_label", &value);
+
+	action = egg_action_group_get_action (action_group, "DeleteTransactionAction");
+	g_value_set_static_string (&value, _("Delete"));
+	g_object_set_property (G_OBJECT(action), "short_label", &value);
+
+	action = egg_action_group_get_action (action_group, "DuplicateTransactionAction");
+	g_value_set_static_string (&value, _("Duplicate"));
+	g_object_set_property (G_OBJECT(action), "short_label", &value);
+}
+
 static void
 gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 {
+	EggActionGroup *action_group;
 	gint i;
 
 	plugin_page->priv = g_new0 (GncPluginPageRegisterPrivate, 1);
@@ -149,9 +176,11 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 		gnc_plugin_page_register_actions[i].user_data = plugin_page;
 	}
 
-	plugin_page->priv->action_group = egg_action_group_new ("GncPluginPageRegisterActions");
-	egg_action_group_add_actions (plugin_page->priv->action_group, gnc_plugin_page_register_actions,
+	action_group = egg_action_group_new ("GncPluginPageRegisterActions");
+	plugin_page->priv->action_group = action_group;
+	egg_action_group_add_actions (action_group, gnc_plugin_page_register_actions,
 				      gnc_plugin_page_register_n_actions);
+	gnc_plugin_page_register_init_short_names (action_group);
 }
 
 static void
@@ -203,24 +232,30 @@ static GtkWidget *
 gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 {
 	GncPluginPageRegister *page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
-	guint numRows = 20;
+	GncPluginPageRegisterPrivate *priv = page->priv;
+	guint numRows;
 	GtkWidget *gsr;
+	SplitRegister *sr;
 
-	if (page->priv->widget == NULL) {
-		page->priv->widget = gtk_vbox_new (FALSE, 0);
-		gtk_widget_show (page->priv->widget);
+	if (priv->widget != NULL)
+		return priv->widget;
 
-		/*numRows = (guint) gnc_lookup_number_option ("_+Advanced",
-							    "Number of Rows", 20.0);*/
+	priv->widget = gtk_vbox_new (FALSE, 0);
+	gtk_widget_show (priv->widget);
+	
+	numRows = (guint) gnc_lookup_number_option ("_+Advanced",
+						    "Number of Rows", 20.0);
 
-		gsr = gnc_split_reg_new(GNC_PLUGIN_PAGE_REGISTER (plugin_page)->priv->ld,
-     					NULL,
-					numRows, 0, 0);
-		gtk_widget_show (gsr);
-		gtk_container_add (GTK_CONTAINER (page->priv->widget), gsr);
-	}
+	gsr = gnc_split_reg_new(priv->ld, NULL, numRows, 0, 0);
+	gtk_widget_show (gsr);
+	gtk_container_add (GTK_CONTAINER (priv->widget), gsr);
 
-	return page->priv->widget;
+	sr = gnc_ledger_display_get_split_register( priv->ld );
+	gnc_split_register_config( sr, sr->type, sr->style, sr->use_double_line );
+	gnc_ledger_display_refresh( priv->ld );
+
+	/* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
+	return priv->widget;
 }
 
 static void
