@@ -24,6 +24,7 @@
 
 #include "config.h"
 
+#include <glib.h>
 #include <gnome.h>
 #include <libgnomeui/gnome-window-icon.h>
 
@@ -49,10 +50,10 @@ typedef struct
   GtkWidget * window;
   GtkWidget * druid;
   GNCFrequency *period_menu;
-  // GnomeDateEdit *closing_date_edit;
-  GtkLabel  * earliest_date;
+  GtkLabel  * remarks;
 
   time_t earliest;
+  char * earliest_str;
   GDate *start_date;
   FreqSpec *period;
 
@@ -69,7 +70,8 @@ ap_window_destroy_cb (GtkObject *object, gpointer data)
 
   // gnc_frequency_destory ??
   xaccFreqSpecFree (info->period);
-  g_free (info->start_date);
+  g_date_free (info->start_date);
+  g_free (info->earliest_str);
   g_free (info);
 }
 
@@ -91,28 +93,78 @@ ap_druid_cancel (GnomeDruid *druid, gpointer user_data)
   gnc_close_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
 }
 
+/* =============================================================== */
+
+static void
+prepare_remarks (AcctPeriodInfo *info)
+{
+  int nperiods;
+  GDate *period_begin, *period_end, *date_now;
+  const char *remarks_text;
+  char * str;
+
+  remarks_text = 
+    _("The earliest transaction date found in this book is %s.\n"
+      "Based on the selection made above, this book will be split\n"
+      "into %d books, and all but the most recent one will be closed.\n");
+
+  /* Count the number of periods that would be generated */
+  period_begin = g_date_new();
+  g_date_set_time (period_begin, info->earliest);
+  nperiods = 0;
+  date_now = g_date_new();
+  g_date_set_time (date_now, time(0));
+  period_end = g_date_new();
+  do 
+  {
+    GDate *tmp;
+
+    xaccFreqSpecGetNextInstance (info->period, period_begin, period_end);
+    nperiods ++;
+printf ("duude np=%d end=%d/%d/%d\n", nperiods,
+g_date_month(period_end),
+g_date_day(period_end),
+g_date_year(period_end));
+    tmp = period_begin;
+    period_begin = period_end;
+    period_end = tmp;
+  } 
+  while (0 > g_date_compare(period_begin, date_now ));
+
+  g_date_free (period_begin);
+  g_date_free (period_end);
+  g_date_free (date_now);
+
+  
+  /* Display the results */
+  str = g_strdup_printf (remarks_text, info->earliest_str, nperiods);
+  gtk_label_set_text (info->remarks, str);
+  g_free (str);
+}
+
+/* =============================================================== */
+
 static void
 ap_changed (GtkWidget *widget,
                     gpointer arg1,
                     gpointer user_data)
 {
-  // AcctPeriodInfo *info = user_data;
+  AcctPeriodInfo *info = user_data;
   time_t closing_date = 0;
-  GtkMenuItem *item = NULL;
 
+  prepare_remarks (info);
 /*
   closing_date = gnome_date_edit_get_date (info->closing_date_edit);
 */
   
-  // item = GTK_MENU_ITEM (gtk_menu_get_active (GTK_MENU(info->period_menu->menu)));
-  printf ("something changed, time=%ld item=%p\n", closing_date, item);
-
+  printf ("something changed, time=%ld \n", closing_date);
   
 }
 
 /* =============================================================== */
 /* Find the earliest date occuring in the book.  Do this by making
- * a query and sorting by date.
+ * a query and sorting by date. Since the truncated sort returns
+ * only the *last* search results, sort in decreasing order.
  */
 static time_t
 get_earliest_in_book (QofBook *book)
@@ -123,7 +175,8 @@ get_earliest_in_book (QofBook *book)
   time_t earliest;
 
   q = qof_query_create_for(GNC_ID_SPLIT);
-  qof_query_set_max_results(q, 5);
+  qof_query_set_max_results(q, 1);
+  qof_query_set_book (q, book);
 
   /* Sort by transaction date */
   p1 = g_slist_prepend (NULL, TRANS_DATE_POSTED);
@@ -131,11 +184,11 @@ get_earliest_in_book (QofBook *book)
   p2 = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
   qof_query_set_sort_order (q, p1, p2, NULL);
 
-  qof_query_set_sort_increasing (q, TRUE, TRUE, TRUE);
+  /* Reverse the sort order */
+  qof_query_set_sort_increasing (q, FALSE, FALSE, FALSE);
 
   /* Run the query, find the earliest transaction date */
   res = qof_query_run (q);
-printf ("duude results=%p\n", res);
   earliest = xaccQueryGetEarliestDateFound (q);
 
   qof_query_destroy (q);
@@ -156,11 +209,13 @@ ap_druid_create (AcctPeriodInfo *info)
 
   info->druid = glade_xml_get_widget (xml, "acct_period_druid");
 
-  /* Set up the freq spec widget */
-
+  /* Find the date of the earliest transaction in the book, and use
+   * that to set up the freq spec widget. */
   info->earliest = get_earliest_in_book (gnc_get_current_book());
-printf ("the earliest is %ld %s\n", info->earliest, ctime (&info->earliest));
-  info->start_date = g_date_new_dmy(5,5,1988);
+  info->earliest_str = qof_print_date(info->earliest); 
+printf ("duude the earliest is %ld %s\n", info->earliest, ctime (&info->earliest));
+  info->start_date = g_date_new();
+  g_date_set_time (info->start_date, info->earliest);
 
   info->period = xaccFreqSpecMalloc( gnc_get_current_book() );
   xaccFreqSpecSetMonthly (info->period, info->start_date, 12);
@@ -178,9 +233,10 @@ printf ("the earliest is %ld %s\n", info->earliest, ctime (&info->earliest));
   gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (info->period_menu),
          TRUE, TRUE, 0);
 
-  info->earliest_date = 
-        GTK_LABEL (glade_xml_get_widget (xml, "earliest trans label"));
+  info->remarks = 
+        GTK_LABEL (glade_xml_get_widget (xml, "remarks label"));
 
+  prepare_remarks (info);
 
   /* generic finished/close/abort signals */
   gtk_signal_connect (GTK_OBJECT (info->window), "destroy",
