@@ -616,6 +616,7 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
         }
 
         xaccValidateDate(&tm);
+        mktime (&tm);
 
         gnc_date_edit_set_time(gde, mktime(&tm));
 
