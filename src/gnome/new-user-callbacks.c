@@ -39,8 +39,7 @@
 #include "new-user-funs.h"
 #include "new-user-interface.h"
 #include "query-user.h"
-
-static int commodEditAdded = 0;
+#include "global-options.h"
 
 static AccountGroup *our_final_group = NULL;
 
@@ -57,14 +56,7 @@ delete_our_final_group(void)
 static void
 set_first_startup(int first_startup)
 {
-    gchar *todo;
-
-    todo = g_strdup_printf("((gnc:option-setter "
-                           " (gnc:lookup-global-option \"__new_user\" "
-                           "                           \"first_startup\"))"
-                           " %d)", first_startup);
-    gh_eval_str(todo);
-    g_free(todo);
+    gnc_set_boolean_option("__new_user", "first_startup", first_startup);
 }
 
 
@@ -168,11 +160,11 @@ on_newAccountCurrencyChoosePage_prepare (GnomeDruidPage  *gnomedruidpage,
                                          gpointer         arg1,
                                          gpointer         user_data)
 {
-    /* need to load currency info here.  In fact drop a
-       gnc-commodity-edit widget here */
-    if(!commodEditAdded)
+    if(!(int)gtk_object_get_data(GTK_OBJECT(gnc_get_new_user_dialog()),
+                                 "commod_added"))
     {
-        commodEditAdded = 1;
+        gtk_object_set_data (GTK_OBJECT(gnc_get_new_user_dialog()),
+                             "commod_added", (void*)1);
         
         gtk_box_pack_start(
             GTK_BOX(lookup_widget(GTK_WIDGET(gnomedruidpage),
@@ -204,30 +196,30 @@ on_chooseAccountTypesPage_prepare      (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data)
 {
-    static gboolean addedAccountLists = 0;
     GSList *list;
     GtkCList *clist;
-    
-    /* Need to load the account type lists here */
 
-    list = gnc_load_example_account_list(GNC_ACCOUNTS_DIR "/C");
-
-    clist = gnc_new_user_get_clist();
-    
-    gtk_clist_freeze(clist);
-
-    gtk_clist_set_sort_column(clist, 0);
-
-    if(!addedAccountLists)
+    if(!(int)gtk_object_get_data(GTK_OBJECT(gnc_get_new_user_dialog()),
+                                 "account_list_added"))
     {
+        list = gnc_load_example_account_list(GNC_ACCOUNTS_DIR "/C");
+    
+        clist = gnc_new_user_get_clist();
+        
+        gtk_clist_freeze(clist);
+        
+        gtk_clist_set_sort_column(clist, 0);
+        
         g_slist_foreach(list, add_each_gea_to_clist, (gpointer)clist);
-        addedAccountLists = 1;
+        
+        gtk_clist_sort(clist);
+        gtk_clist_thaw(clist);
+        
+        g_slist_free (list);
+
+        gtk_object_set_data(GTK_OBJECT(gnc_get_new_user_dialog()),
+                            "account_list_added", (void*)1);
     }
-
-    gtk_clist_sort(clist);
-    gtk_clist_thaw(clist);
-
-    g_slist_free (list);
 }
 
 

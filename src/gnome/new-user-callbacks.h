@@ -143,3 +143,4 @@ gboolean
 on_finalAccountDruidPage_next          (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data);
+

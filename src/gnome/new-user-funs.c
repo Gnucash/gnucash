@@ -61,17 +61,33 @@ clone_account(const Account* from, gnc_commodity *com)
 GNCCommodityEdit *
 gnc_get_new_user_commodity_editor(void)
 {
-    static GNCCommodityEdit *cur_editor = NULL;
-    if(!cur_editor)
+    GtkWidget *tmp_wid = gtk_object_get_data(GTK_OBJECT(newUserDialog),
+                                             "commod_editor");
+
+    if(!tmp_wid)
     {
+        GNCCommodityEdit *cur_editor = NULL;
         cur_editor = GNC_COMMODITY_EDIT(gnc_commodity_edit_new());
         gtk_widget_set_name (GTK_WIDGET(cur_editor),
                              "newAccountCurrencyChooser");
         gtk_widget_show(GTK_WIDGET(cur_editor));
         gnc_commodity_edit_set_commodity(cur_editor,
                                          gnc_locale_default_currency());
+        gtk_object_set_data(GTK_OBJECT(newUserDialog), "commod_editor",
+                            cur_editor);
+        return cur_editor;
     }
-    return cur_editor;
+    else
+    {
+        return GNC_COMMODITY_EDIT(tmp_wid);
+    }
+
+}
+
+GtkWidget*
+gnc_get_new_user_dialog(void)
+{
+    return newUserDialog;
 }
 
 GNCAmountEdit *

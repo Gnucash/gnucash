@@ -487,15 +487,15 @@ accounts may have an opening balance.</label>
 	      <signal>
 		<name>tree_select_row</name>
 		<handler>on_finalAccountCTree_tree_select_row</handler>
-		<last_modification_time>Sat, 12 May 2001 09:28:43 GMT</last_modification_time>
+		<last_modification_time>Thu, 07 Jun 2001 06:52:18 GMT</last_modification_time>
 	      </signal>
 	      <signal>
 		<name>tree_unselect_row</name>
 		<handler>on_finalAccountCTree_tree_unselect_row</handler>
-		<last_modification_time>Sat, 12 May 2001 09:42:20 GMT</last_modification_time>
+		<last_modification_time>Thu, 07 Jun 2001 06:52:23 GMT</last_modification_time>
 	      </signal>
 	      <columns>3</columns>
-	      <column_widths>285,118,80</column_widths>
+	      <column_widths>80,80,80</column_widths>
 	      <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
 	      <show_titles>True</show_titles>
 	      <shadow_type>GTK_SHADOW_IN</shadow_type>
@@ -503,7 +503,7 @@ accounts may have an opening balance.</label>
 	      <widget>
 		<class>GtkLabel</class>
 		<child_name>CTree:title</child_name>
-		<name>checkAccountList_AccountNameLabel</name>
+		<name>cTreeAccountNameLabel</name>
 		<label>Account Name</label>
 		<justify>GTK_JUSTIFY_CENTER</justify>
 		<wrap>False</wrap>
@@ -516,7 +516,7 @@ accounts may have an opening balance.</label>
 	      <widget>
 		<class>GtkLabel</class>
 		<child_name>CTree:title</child_name>
-		<name>checkAccountList_TypeLabel</name>
+		<name>cTreeTypeLabel</name>
 		<label>Type</label>
 		<justify>GTK_JUSTIFY_CENTER</justify>
 		<wrap>False</wrap>
@@ -529,7 +529,7 @@ accounts may have an opening balance.</label>
 	      <widget>
 		<class>GtkLabel</class>
 		<child_name>CTree:title</child_name>
-		<name>checkAccountList_StartBalanceLabel</name>
+		<name>cTreeOpeningBalanceLabel</name>
 		<label>Opening Balance</label>
 		<justify>GTK_JUSTIFY_CENTER</justify>
 		<wrap>False</wrap>

@@ -67,9 +67,9 @@ create_newUserDialog (void)
   GtkWidget *hbox4;
   GtkWidget *scrolledwindow4;
   GtkWidget *finalAccountCTree;
-  GtkWidget *checkAccountList_AccountNameLabel;
-  GtkWidget *checkAccountList_TypeLabel;
-  GtkWidget *checkAccountList_StartBalanceLabel;
+  GtkWidget *cTreeAccountNameLabel;
+  GtkWidget *cTreeTypeLabel;
+  GtkWidget *cTreeOpeningBalanceLabel;
   GtkWidget *vbox5;
   GtkWidget *frame3;
   GtkWidget *startBalanceBox;
@@ -382,34 +382,34 @@ create_newUserDialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (finalAccountCTree);
   gtk_container_add (GTK_CONTAINER (scrolledwindow4), finalAccountCTree);
-  gtk_clist_set_column_width (GTK_CLIST (finalAccountCTree), 0, 285);
-  gtk_clist_set_column_width (GTK_CLIST (finalAccountCTree), 1, 118);
+  gtk_clist_set_column_width (GTK_CLIST (finalAccountCTree), 0, 80);
+  gtk_clist_set_column_width (GTK_CLIST (finalAccountCTree), 1, 80);
   gtk_clist_set_column_width (GTK_CLIST (finalAccountCTree), 2, 80);
   gtk_clist_column_titles_show (GTK_CLIST (finalAccountCTree));
 
-  checkAccountList_AccountNameLabel = gtk_label_new (_("Account Name"));
-  gtk_widget_set_name (checkAccountList_AccountNameLabel, "checkAccountList_AccountNameLabel");
-  gtk_widget_ref (checkAccountList_AccountNameLabel);
-  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "checkAccountList_AccountNameLabel", checkAccountList_AccountNameLabel,
+  cTreeAccountNameLabel = gtk_label_new (_("Account Name"));
+  gtk_widget_set_name (cTreeAccountNameLabel, "cTreeAccountNameLabel");
+  gtk_widget_ref (cTreeAccountNameLabel);
+  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "cTreeAccountNameLabel", cTreeAccountNameLabel,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (checkAccountList_AccountNameLabel);
-  gtk_clist_set_column_widget (GTK_CLIST (finalAccountCTree), 0, checkAccountList_AccountNameLabel);
+  gtk_widget_show (cTreeAccountNameLabel);
+  gtk_clist_set_column_widget (GTK_CLIST (finalAccountCTree), 0, cTreeAccountNameLabel);
 
-  checkAccountList_TypeLabel = gtk_label_new (_("Type"));
-  gtk_widget_set_name (checkAccountList_TypeLabel, "checkAccountList_TypeLabel");
-  gtk_widget_ref (checkAccountList_TypeLabel);
-  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "checkAccountList_TypeLabel", checkAccountList_TypeLabel,
+  cTreeTypeLabel = gtk_label_new (_("Type"));
+  gtk_widget_set_name (cTreeTypeLabel, "cTreeTypeLabel");
+  gtk_widget_ref (cTreeTypeLabel);
+  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "cTreeTypeLabel", cTreeTypeLabel,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (checkAccountList_TypeLabel);
-  gtk_clist_set_column_widget (GTK_CLIST (finalAccountCTree), 1, checkAccountList_TypeLabel);
+  gtk_widget_show (cTreeTypeLabel);
+  gtk_clist_set_column_widget (GTK_CLIST (finalAccountCTree), 1, cTreeTypeLabel);
 
-  checkAccountList_StartBalanceLabel = gtk_label_new (_("Opening Balance"));
-  gtk_widget_set_name (checkAccountList_StartBalanceLabel, "checkAccountList_StartBalanceLabel");
-  gtk_widget_ref (checkAccountList_StartBalanceLabel);
-  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "checkAccountList_StartBalanceLabel", checkAccountList_StartBalanceLabel,
+  cTreeOpeningBalanceLabel = gtk_label_new (_("Opening Balance"));
+  gtk_widget_set_name (cTreeOpeningBalanceLabel, "cTreeOpeningBalanceLabel");
+  gtk_widget_ref (cTreeOpeningBalanceLabel);
+  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "cTreeOpeningBalanceLabel", cTreeOpeningBalanceLabel,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (checkAccountList_StartBalanceLabel);
-  gtk_clist_set_column_widget (GTK_CLIST (finalAccountCTree), 2, checkAccountList_StartBalanceLabel);
+  gtk_widget_show (cTreeOpeningBalanceLabel);
+  gtk_clist_set_column_widget (GTK_CLIST (finalAccountCTree), 2, cTreeOpeningBalanceLabel);
 
   vbox5 = gtk_vbox_new (FALSE, 0);
   gtk_widget_set_name (vbox5, "vbox5");
