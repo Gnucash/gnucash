@@ -4,11 +4,7 @@
 <TITLE>GNU General Public License</TITLE>
 </ARTHEADER>
 
-<SECT1>
-<TITLE>GNU General Public License</TITLE>
-
-<SECT2>
-<TITLE>Version 2, June 1991</TITLE>
+<para>Version 2, June 1991</para>
 
 <PARA>Copyright (C) 1989, 1991 Free Software Foundation, Inc. 675
       Mass Ave, Cambridge, MA 02139, USA 
@@ -19,8 +15,8 @@
       allowed.
     </PARA>
 
-<SECT3>
-<TITLE><ANCHOR ID="SEC001">Preamble</TITLE>
+<sect1 ID="SEC001">
+<TITLE>Preamble</TITLE>
 
 <PARA>The licenses for most software are designed to take away
     your freedom to share and change it. By contrast, the GNU
@@ -84,10 +80,10 @@
 
 
     </PARA>
-</SECT3>
+</sect1>
 
-<SECT3>
-<TITLE><ANCHOR ID="SEC002">GNU GENERAL PUBLIC LICENSE TERMS AND
+<sect1 ID="SEC002">
+<TITLE>GNU GENERAL PUBLIC LICENSE TERMS AND
     CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION</TITLE>
 <PARA>0. This License applies to any program or other work which
     contains a notice placed by the copyright holder saying it may
@@ -340,10 +336,10 @@
     software generally.
 
     </PARA>
-</SECT3>
+</sect1>
 
-<SECT3>
-<TITLE><ANCHOR ID="SEC003">NO WARRANTY</TITLE>
+<sect1 ID="SEC003">
+<TITLE>NO WARRANTY</TITLE>
 <PARA>11. BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS
     NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
     APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE
@@ -368,16 +364,9 @@
     HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
     </PARA>
-</SECT3>
+      <para>END OF TERMS AND CONDITIONS</para>
+</sect1>
 
-<SECT3>
-<TITLE>END OF TERMS AND CONDITIONS</TITLE>
-<PARA></PARA>
-</SECT3>
-
-</SECT2>
-
-</SECT1>
 
 </ARTICLE>
 
