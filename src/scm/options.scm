@@ -506,7 +506,7 @@
      getter
      (lambda (account-list)
        (if (not account-list) (set! account-list (default-getter)))
-       (set! account-list (filter (lambda (x) (string? x)) account-list))
+       (set! account-list (filter (lambda (x) x) account-list))
        (let* ((result (validator account-list))
               (valid (car result))
               (value (cadr result)))
