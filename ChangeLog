@@ -4,6 +4,10 @@
 	* src/backend/file/gnc-book-xml-v2.c: make the book-string non-static
 	Fixes #114401
 
+	* src/register/ledger-core/split-register-model.c: enable the
+	  exchange-rate dialog on "search ledger" registers.
+	Fixes #113987
+
 2003-06-14  Chris Lyttle  <chris@wilddev.net>
 
 	* src/scm/help-topics-index.scm: add Jon Lapham's patch
