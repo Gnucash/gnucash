@@ -172,6 +172,9 @@ reset_initial_info (HBCIInitialInfo *info)
   if (info->gnc_hash != NULL)
     g_hash_table_destroy (info->gnc_hash);
   info->gnc_hash = NULL;
+
+  list_HBCI_Account_delete(info->hbci_accountlist);
+  info->hbci_accountlist = NULL;
 }
 
 static void
@@ -613,21 +616,30 @@ on_finish (GnomeDruidPage *gnomedruidpage,
 
 
   if (info->configfile) {
+    printf("on_finish: Got configfile %s, but the book has %s.\n", info->configfile, gnc_hbci_get_book_configfile (gnc_get_current_book ()));
     if (!gnc_hbci_get_book_configfile (gnc_get_current_book ()) ||
 	(strcmp(info->configfile, 
-		gnc_hbci_get_book_configfile (gnc_get_current_book ())) != 0)) 
+		gnc_hbci_get_book_configfile (gnc_get_current_book ())) != 0)) {
       /* Name of configfile has changed */
       gnc_hbci_set_book_configfile (gnc_get_current_book (), info->configfile);
+      if (strcmp(info->configfile, 
+		 gnc_hbci_get_book_configfile (gnc_get_current_book ())) != 0) 
+	printf("on_finish: OOOPS: I just setted the book_configfile to %s, but the book now still has %s.\n", info->configfile, gnc_hbci_get_book_configfile (gnc_get_current_book ()));
+    }
   }
   
   {
     HBCI_Error *err;
+    printf("on_finish: trying to save openhbci data to file %s.\n", info->configfile);
+    
     err = gnc_hbci_api_save (info->api);
     if (err != NULL) {
       if (!HBCI_Error_isOk (err)) 
 	printf("on_finish: Error at saving OpenHBCI data: %s.\n",
 	       HBCI_Error_message (err));
       HBCI_Error_delete (err);
+      delete_initial_druid(info);
+      return;
     }
   }
   
@@ -1056,7 +1068,7 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
 {
   HBCIInitialInfo *info = user_data;
   g_assert(info);
-
+  
   /* of course we need to know for which customer we do this */
   if (info->newcustomer == NULL) 
     info->newcustomer = choose_customer (info);
@@ -1065,39 +1077,47 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
     return FALSE;
 
   {
-    /* Execute a Synchronize job, then a GetAccounts job. */
     HBCI_OutboxJob *job;
+      
+    /* Execute a Synchronize job, then a GetAccounts job. */
+    /*job = HBCI_OutboxJob_new("JobSync", 
+    (HBCI_Customer *)info->newcustomer, "");
+    HBCI_Outbox_addJob (info->outbox, job);*/
     
-    job = HBCI_OutboxJob_new("JobSync", 
-			     (HBCI_Customer *)info->newcustomer, "");
-    HBCI_Outbox_addJob (info->outbox, job);
-
     /* Execute Outbox. */
-    if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
-			       job, info->interactor)) {
-      /* HBCI_API_executeOutbox failed. */
-      /*return FALSE;*/
-      /* -- it seems to be no problem if this fails ?! */
-    }
-
+    /*if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
+      job, info->interactor)) {*/
+    /* HBCI_API_executeOutbox failed. */
+    /*return FALSE;*/
+    /* -- it seems to be no problem if this fails ?! */
+    /*}*/
+  
     /* Now the GetAccounts job. */
     job = HBCI_OutboxJob_new("JobGetAccounts", 
 			     (HBCI_Customer *)info->newcustomer, "");
     HBCI_Outbox_addJob (info->outbox, job);
     
-    /*{
+    {
       HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
-      HBCI_Job_setIntProperty("open/ident/country", bank.ref().country());
-      HBCI_Job_setProperty("open/ident/bankcode", bank.ref().bankCode());
-      HBCI_Job_setProperty("open/ident/customerid", c.ref().custId());
-      HBCI_Job_setIntProperty("open/prepare/updversion",0);
-      }*/
+      HBCI_Job_setIntProperty
+	(jjob, "open/ident/country", 
+	 HBCI_Bank_country(HBCI_User_bank
+			   (HBCI_Customer_user(info->newcustomer))));
+      HBCI_Job_setProperty
+	(jjob, "open/ident/bankcode", 
+	 HBCI_Bank_bankCode(HBCI_User_bank
+			    (HBCI_Customer_user(info->newcustomer))));
+      HBCI_Job_setProperty
+	(jjob, "open/ident/customerid", HBCI_Customer_custId(info->newcustomer));
+      HBCI_Job_setIntProperty(jjob, "open/prepare/updversion",0);
+    }
     
 
     /* Execute Outbox. */
     if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
 			       job, info->interactor)) {
       /* HBCI_API_executeOutbox failed. */
+      printf("on_accountinfo_next: oops, executeOutbox failed.\n");
       return FALSE;
     }
 

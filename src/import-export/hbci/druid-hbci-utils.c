@@ -278,9 +278,13 @@ gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox,
   /*g_assert(accountlist);*/
   
   response = HBCI_Outbox_response(outbox);
+
+  /*printf("gnc_processOutboxResponse: Complete response:\n");
+    GWEN_DB_Dump(response, stdout, 1);*/
+
   n=GWEN_DB_GetFirstGroup(response);
   while (n){
-    if (strcasecmp(GWEN_DB_GroupName(n), "accountdata")==0) {
+    if (strcasecmp(GWEN_DB_GroupName(n), "AccountData")==0) {
       /* found account data, create account */
       const char *accountId;
       const char *accountSubId;
@@ -298,7 +302,7 @@ gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox,
       accountId=GWEN_DB_GetCharValue(n, "accountid", 0, "");
       accountSubId=GWEN_DB_GetCharValue(n, "accountsubid", 0, "");
       if (strlen(bankCode)==0 || strlen(accountId)==0 || strlen(custid)==0) {
-        fprintf(stderr, "gnc_processOutboxResponse: AccountData without bank code/account id/customer id");
+	printf("gnc_processOutboxResponse: AccountData without bank code/account id/customer id\n");
 	continue;
       }
 
@@ -345,7 +349,7 @@ gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox,
 	  const char *p;
 
 	  /* Update account information */
-	  printf("Account %d/%s/%s already exists, updating",
+	  printf("Account %d/%s/%s already exists, updating.\n",
 		 country, bankCode, accountId);
 
 	  p=GWEN_DB_GetCharValue(n, "name", 0, 0);
@@ -368,7 +372,7 @@ gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox,
 	  /* Add it to our internal list. */
 	  accountlist = g_list_append(accountlist, acc);
 
-	  printf("Added account %d/%s/%s",
+	  printf("Added account %d/%s/%s\n",
 		 country, bankCode, accountId);
 	}
       }

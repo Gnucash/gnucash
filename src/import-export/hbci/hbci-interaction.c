@@ -632,10 +632,10 @@ static void closeConnection(TransportType t, void *user_data)
   if (debug_pmonitor)
     printf("actFinished-cb: current_job %d, jobs %d, current_act %d, actions %d.\n", 
 	   data->current_job, data->jobs, data->current_act, data->actions);
-  if (data->current_act > data->actions) {
+  /*if (data->current_act > data->actions) {
     printf("actFinished-cb: oops, current_act==%d is > than actions==%d.\n",
-	   data->current_act, data->actions);
-  }
+    data->current_act, data->actions);
+    }*/
   
   GNCInteractor_setFinished (data);
  

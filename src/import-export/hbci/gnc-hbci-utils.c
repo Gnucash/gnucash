@@ -211,7 +211,7 @@ HBCI_Error * gnc_hbci_api_save (const HBCI_API *api)
   if ((file == NULL) || (strlen (file) == 0)) 
     return HBCI_Error_new ("gnc_hbci_api_save", ERROR_LEVEL_NORMAL, 0, 
 			   ERROR_ADVISE_ABORT, 
-			   "No filename for config file.", "");
+			   "No filename for config file in gnc_book.", "");
   
   return HBCI_API_saveEnvironment (api, file);
 }

@@ -83,7 +83,7 @@ void *list_HBCI_Account_foreach(GList *h_list,
   g_assert(func_cb);
   void *res = NULL;
 
-  if (h_list == NULL) return NULL;
+  if (!h_list) return NULL;
 
   iter = h_list;
   if (iter->data)
@@ -91,7 +91,7 @@ void *list_HBCI_Account_foreach(GList *h_list,
   if (res) 
     return res;
 
-  for (iter = h_list->next; iter != h_list; iter = iter->next)
+  for (iter = h_list; iter; iter = iter->next)
     {
       if (iter->data)
 	func_cb(iter->data, user_data);
@@ -112,7 +112,7 @@ static void* del_func(gnc_HBCI_Account *acc, void *user_data)
 void list_HBCI_Account_delete(GList *list_HBCI_Account)
 {
     list_HBCI_Account_foreach(list_HBCI_Account, del_func, NULL);
-    g_free (list_HBCI_Account);
+    g_list_free (list_HBCI_Account);
 }
 
 
