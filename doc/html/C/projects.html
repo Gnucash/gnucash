@@ -1068,18 +1068,66 @@
         for UNIX. <a name="currency"></a></p>
       </dd>
 
+      <dt><b>Other on-line support</b></dt>
+
+      <dd>
+<tt>
+>> the German T-Online
+>> homebanking system BTX.
+>>
+>> I Germany we have a very popular online homebanking system,
+>> based on the T-Online BTX (Datex-J) system. All of the
+>> commercial homebanking software packages like MS-Money or
+>> Quicken work with that online system. With that system,
+>> you can retrieve  account data from your bank, and also
+>> send your transfers.
+>>
+>> I am using since more than 2 years a GPL software written
+>> by a former colleague of mine, Niek Busscher, to work with
+>> the T-Online homebanking system. That software package with
+>> the name ZKA4BTX is very unknown, since Niek published it only
+>> by email.
+>>
+>> Some words to the features of ZKA4BTX :
+>>
+>>  - Completely written in Tcl
+>>  - Uses Xcept as a BTX browser
+>>  - Retrieve account data from multiple banks
+>>  - Send transfers, using TAN
+>>  - Export retrieved account data to CBB, Xfinans and QIF files      
+>>  - Export retrieved account data to CBB, Xfinans and QIF files
+>>
+>> With a simple click to an icon on my desktop, ZKA4BTX logs into
+>> T-Online, gets all my account datas from several banks, and writes
+>> (adds) it to my CBB, Xfinans or GNUcash (QIF) files.
+>>
+>> Another very important thing is that I can do all my tranfers
+>> offline, editing a transfer sheet, and ZKA4BTX sends these
+>> transfers in one step to my bank.
+>
+>One thing we could do in the short-medium term is have gnucash
+>launch ZKA4BTX to get the data, export it to QIF, and then load
+>it in, all through one command.
+
+</tt>
+
+
       <dt><b>Multiple Currencies</b></dt>
 
       <dd>
         Need to support multiple currencies. Work is needed in the
-        and the GUI. The engine currently supports multiple
+        GUI. The engine currently supports multiple
         currencies by treating them as securities, and thus
         allowing currency trading. The currency-trading register
-        needs a complete overhaul. 
+        needs a complete overhaul.   (Its obtuse and unintuitive).
+        <p>
+        A simplfied way of dealing with one-shot currency exahnges needs
+        to be implemented. basically, just a simple calculator popup.
 
-        <p> <a name="double"></a></p>
       </dd>
 
+      <p>
+      <a name="double"></a></p>
       <dt><b>Forced Double-Entry</b></dt>
 
       <dd>
