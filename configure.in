@@ -82,7 +82,7 @@ GNOME_XML_CHECK
 #])
 
 dnl Set of available languages.
-ALL_LINGUAS="da de en_GB es fr it ja ru sv"
+ALL_LINGUAS="da de en_GB es fr it ja pt_PT ru sv"
 AM_GNU_GETTEXT
 
 

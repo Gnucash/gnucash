@@ -639,6 +639,7 @@ Christiansen</GLOSSTERM>
 <PARA>for NetBSD port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email>y-le-ny@ifrance.com</email> Yannick Le
       Ny</GLOSSTERM>
@@ -646,6 +647,7 @@ Christiansen</GLOSSTERM>
 <PARA>pour la traduction en Fran&ccedil;ais</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email>glikely@nortelnetworks.com</email> Grant
       Likely</GLOSSTERM>
@@ -653,6 +655,15 @@ Christiansen</GLOSSTERM>
 <PARA>gnome and engine patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><email>happyguy_pt@hotmail.com</email> Duarte
+      Loreto</GLOSSTERM>
+<GLOSSDEF>
+<PARA>Portuguese translations</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email>martinh@pegasus.cc.ucf.edu</email> Heath
       Martin</GLOSSTERM>
@@ -660,6 +671,7 @@ Christiansen</GLOSSTERM>
 <PARA>major work on the gnome register</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email>mgmartin@abacusnet.net</email> Matt
       Martin</GLOSSTERM>
