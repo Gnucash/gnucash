@@ -7,6 +7,7 @@
 
 #include "new-user-callbacks.h"
 #include "new-user-interface.h"
+#include "new-user-funs.h"
 
 #include <guile/gh.h>
 

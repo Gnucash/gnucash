@@ -28,6 +28,9 @@ create_newUserDialog (void)
   GdkColor newUserStartPage_logo_bg_color = { 0, 65535, 65535, 65535 };
   GdkColor newUserStartPage_title_color = { 0, 65535, 65535, 65535 };
   GtkWidget *newAccountCurrencyChoosePage;
+  GdkColor newAccountCurrencyChoosePage_bg_color = { 0, 6425, 6425, 28784 };
+  GdkColor newAccountCurrencyChoosePage_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor newAccountCurrencyChoosePage_title_color = { 0, 65535, 65535, 65535 };
   GtkWidget *newAccountCurrencyChooser_vbox;
   GtkWidget *vbox2;
   GtkWidget *newUserChooseCurrencyDescrip;
@@ -90,6 +93,9 @@ create_newUserDialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show_all (newAccountCurrencyChoosePage);
   gnome_druid_append_page (GNOME_DRUID (accountChooseDruidPage), GNOME_DRUID_PAGE (newAccountCurrencyChoosePage));
+  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (newAccountCurrencyChoosePage), &newAccountCurrencyChoosePage_bg_color);
+  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (newAccountCurrencyChoosePage), &newAccountCurrencyChoosePage_logo_bg_color);
+  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (newAccountCurrencyChoosePage), &newAccountCurrencyChoosePage_title_color);
   gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (newAccountCurrencyChoosePage), _("Choose Currency"));
 
   newAccountCurrencyChooser_vbox = GNOME_DRUID_PAGE_STANDARD (newAccountCurrencyChoosePage)->vbox;
@@ -135,7 +141,7 @@ create_newUserDialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox1);
 
-  pickAccountsDescriptionLabel = gtk_label_new (_("Please check the account types you would like to have automatically setup in gnucash."));
+  pickAccountsDescriptionLabel = gtk_label_new (_("Please choose the account types you would like to have automatically setup in GnuCash."));
   gtk_widget_set_name (pickAccountsDescriptionLabel, "pickAccountsDescriptionLabel");
   gtk_widget_ref (pickAccountsDescriptionLabel);
   gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "pickAccountsDescriptionLabel", pickAccountsDescriptionLabel,
@@ -172,7 +178,7 @@ create_newUserDialog (void)
   gtk_widget_show (label2);
   gtk_clist_set_column_widget (GTK_CLIST (newAccountTypesList), 0, label2);
 
-  label3 = gtk_label_new (_("Account Type Name"));
+  label3 = gtk_label_new (_("Account Type"));
   gtk_widget_set_name (label3, "label3");
   gtk_widget_ref (label3);
   gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "label3", label3,
@@ -253,7 +259,7 @@ create_newUserDialog (void)
   gnome_druid_page_finish_set_logo_bg_color (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), &newUserDruidFinishPage_logo_bg_color);
   gnome_druid_page_finish_set_title_color (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), &newUserDruidFinishPage_title_color);
   gnome_druid_page_finish_set_title (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), _("Finish Account Setup"));
-  gnome_druid_page_finish_set_text (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), _("Please check the window for the new accounts that will be created.\nPress finish if this is OK."));
+  gnome_druid_page_finish_set_text (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), _("Please check the window for the new accounts that will be created.\nPress `Finish' if this is OK."));
 
   gtk_signal_connect (GTK_OBJECT (accountChooseDruidPage), "cancel",
                       GTK_SIGNAL_FUNC (on_accountChooseDruidPage_cancel),
@@ -421,7 +427,7 @@ create_addAccountCancelDialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area1), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (addAccountCancelDialog), GNOME_STOCK_BUTTON_OK);
-  newAccountCancelDialog_OKButton = GTK_WIDGET (g_list_last (GNOME_DIALOG (addAccountCancelDialog)->buttons)->data);
+  newAccountCancelDialog_OKButton = g_list_last (GNOME_DIALOG (addAccountCancelDialog)->buttons)->data;
   gtk_widget_set_name (newAccountCancelDialog_OKButton, "newAccountCancelDialog_OKButton");
   gtk_widget_ref (newAccountCancelDialog_OKButton);
   gtk_object_set_data_full (GTK_OBJECT (addAccountCancelDialog), "newAccountCancelDialog_OKButton", newAccountCancelDialog_OKButton,

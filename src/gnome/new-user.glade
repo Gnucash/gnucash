@@ -155,7 +155,7 @@
 	<widget>
 	  <class>GtkLabel</class>
 	  <name>pickAccountsDescriptionLabel</name>
-	  <label>Please check the account types you would like to have automatically setup in gnucash.</label>
+	  <label>Please choose the account types you would like to have automatically setup in GnuCash.</label>
 	  <justify>GTK_JUSTIFY_CENTER</justify>
 	  <wrap>False</wrap>
 	  <xalign>0.5</xalign>
@@ -209,7 +209,7 @@
 	      <class>GtkLabel</class>
 	      <child_name>CList:title</child_name>
 	      <name>label3</name>
-	      <label>Account Type Name</label>
+	      <label>Account Type</label>
 	      <justify>GTK_JUSTIFY_CENTER</justify>
 	      <wrap>False</wrap>
 	      <xalign>0.5</xalign>
@@ -313,7 +313,7 @@
       </signal>
       <title>Finish Account Setup</title>
       <text>Please check the window for the new accounts that will be created.
-Press finish if this is OK.</text>
+Press `Finish' if this is OK.</text>
       <background_color>25,25,112</background_color>
       <logo_background_color>255,255,255</logo_background_color>
       <textbox_color>255,255,255</textbox_color>

@@ -131,15 +131,15 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
   ti_dialog->dialog = dialog;
   tido = GTK_OBJECT (dialog);
 
-  gnome_dialog_button_connect (tido, 0,
+  gnome_dialog_button_connect (GNOME_DIALOG (dialog), 0,
                                GTK_SIGNAL_FUNC (tax_info_ok_clicked),
                                ti_dialog);
 
-  gnome_dialog_button_connect (tido, 1,
+  gnome_dialog_button_connect (GNOME_DIALOG (dialog), 1,
                                GTK_SIGNAL_FUNC (tax_info_apply_clicked),
                                ti_dialog);
 
-  gnome_dialog_button_connect (tido, 2,
+  gnome_dialog_button_connect (GNOME_DIALOG (dialog), 2,
                                GTK_SIGNAL_FUNC (tax_info_cancel_clicked),
                                ti_dialog);
 
