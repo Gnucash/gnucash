@@ -9,6 +9,7 @@ aclocal.m4
 configure
 config.cache
 config.guess
+config.rpath
 config.sub
 config.log
 config.status
