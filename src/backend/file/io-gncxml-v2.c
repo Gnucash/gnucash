@@ -47,6 +47,9 @@
 #include "io-utils.h"
 
 
+static short module = MOD_IO;
+
+
 #define GNC_V2_STRING "gnc-v2"
 
 static void
@@ -94,7 +97,7 @@ clear_up_account_commodity_session(
     }
     else if(!gcom)
     {
-        g_warning("unable to find global commodity for %s adding new",
+        PWARN("unable to find global commodity for %s adding new",
                   gnc_commodity_get_unique_name(com));
         gnc_commodity_table_insert(tbl, com);
     }
@@ -138,7 +141,7 @@ clear_up_account_commodity(
     }
     else if(!gcom)
     {
-        g_warning("unable to find global commodity for %s adding new",
+        PWARN("unable to find global commodity for %s adding new",
                   gnc_commodity_get_unique_name(com));
         gnc_commodity_table_insert(tbl, com);
     }
@@ -174,7 +177,7 @@ clear_up_transaction_commodity(
     }
     else if(!gcom)
     {
-        g_warning("unable to find global commodity for %s adding new",
+        PWARN("unable to find global commodity for %s adding new",
                   gnc_commodity_get_unique_name(com));
         gnc_commodity_table_insert(tbl, com);
     }
@@ -219,6 +222,15 @@ add_account_local(sixtp_gdv2 *data, Account *act)
     }
     data->counter.accounts_loaded++;
     run_callback(data, "account");
+
+    return FALSE;
+}
+
+static gboolean
+add_book_local(sixtp_gdv2 *data, GNCBook *book)
+{
+    data->counter.books_loaded++;
+    run_callback(data, "book");
 
     return FALSE;
 }
@@ -372,7 +384,7 @@ gnc_counter_end_handler(gpointer data_for_children,
     strval = dom_tree_to_text(tree);
     if(!string_to_gint64(strval, &val))
     {
-        g_warning("string_to_gint64 failed with input: %s",
+        PWARN("string_to_gint64 failed with input: %s",
                   strval ? strval : "(null)");
         g_free (strval);
         xmlFree (type);
@@ -388,6 +400,10 @@ gnc_counter_end_handler(gpointer data_for_children,
     {
         sixdata->counter.accounts_total = val;
     }
+    else if(safe_strcmp(type, "book") == 0)
+    {
+        sixdata->counter.books_total = val;
+    }
     else if(safe_strcmp(type, "commodity") == 0)
     {
         sixdata->counter.commodities_total = val;
@@ -398,7 +414,7 @@ gnc_counter_end_handler(gpointer data_for_children,
     }
     else
     {
-        g_warning("Unknown type: %s",
+        PWARN("Unknown type: %s",
                   type ? type : "(null)");
         xmlFree (type);
         return FALSE;
@@ -420,17 +436,20 @@ gnc_counter_sixtp_parser_create(void)
 static void
 print_counter_data(load_counter data)
 {
-    printf("Transactions: Total: %d, Loaded: %d\n",
+    PINFO("Transactions: Total: %d, Loaded: %d\n",
            data.transactions_total, data.transactions_loaded);
-    printf("Accounts: Total: %d, Loaded: %d\n",
+    PINFO("Accounts: Total: %d, Loaded: %d\n",
            data.accounts_total, data.accounts_loaded);
-    printf("Commodities: Total: %d, Loaded: %d\n",
+    PINFO("Books: Total: %d, Loaded: %d\n",
+           data.books_total, data.books_loaded);
+    PINFO("Commodities: Total: %d, Loaded: %d\n",
            data.commodities_total, data.commodities_loaded);
-    printf("Scheduled Tansactions: Total: %d, Loaded: %d\n",
+    PINFO("Scheduled Tansactions: Total: %d, Loaded: %d\n",
            data.schedXactions_total, data.schedXactions_loaded);
 }
 #endif
 
+static const char *BOOK_TAG = "gnc:book";
 static const char *ACCOUNT_TAG = "gnc:account";
 static const char *PRICEDB_TAG = "gnc:pricedb";
 static const char *COMMODITY_TAG = "gnc:commodity";
@@ -440,7 +459,7 @@ static const char *SCHEDXACTION_TAG = "gnc:schedxaction";
 static const char *TEMPLATE_TRANSACTION_TAG = "gnc:template-transactions";
 
 static gboolean
-generic_callback(const char *tag, gpointer globaldata, gpointer data)
+book_callback(const char *tag, gpointer globaldata, gpointer data)
 {
     sixtp_gdv2 *gd = (sixtp_gdv2*)globaldata;
 
@@ -468,6 +487,28 @@ generic_callback(const char *tag, gpointer globaldata, gpointer data)
     {
         add_template_transaction_local( gd, (gnc_template_xaction_data*)data );
     }
+    else
+    {
+        PWARN ("unexpected tag %s", tag);
+    }
+    return TRUE;
+}
+
+static gboolean
+generic_callback(const char *tag, gpointer globaldata, gpointer data)
+{
+    sixtp_gdv2 *gd = (sixtp_gdv2*)globaldata;
+
+    if(safe_strcmp(tag, BOOK_TAG) == 0)
+    {
+        add_book_local(gd, (GNCBook*)data);
+    }
+    else
+    {
+        // PWARN ("importing pre-book-style XML data file");
+    }
+// xxx move me ... 
+book_callback(tag, globaldata, data);
     return TRUE;
 }
 
@@ -488,6 +529,8 @@ gnc_session_load_from_xml_file_v2(
     gd->book = book;
     gd->counter.accounts_loaded = 0;
     gd->counter.accounts_total = 0;
+    gd->counter.books_loaded = 0;
+    gd->counter.books_total = 0;
     gd->counter.commodities_loaded = 0;
     gd->counter.commodities_total = 0;
     gd->counter.transactions_loaded = 0;

@@ -37,6 +37,9 @@
 xmlNodePtr gnc_account_dom_tree_create(Account *act);
 sixtp* gnc_account_sixtp_parser_create(void);
 
+xmlNodePtr gnc_book_dom_tree_create(GNCBook *book);
+sixtp* gnc_book_sixtp_parser_create(void);
+
 xmlNodePtr gnc_commodity_dom_tree_create(const gnc_commodity *act);
 sixtp* gnc_commodity_sixtp_parser_create(void);
 

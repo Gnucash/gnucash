@@ -46,6 +46,9 @@ typedef struct
     int accounts_total;
     int accounts_loaded;
 
+    int books_total;
+    int books_loaded;
+
     int commodities_total;
     int commodities_loaded;
 
@@ -74,8 +77,8 @@ typedef struct
  **/
 typedef struct
 {
-	GList	*accts;
-	GList	*transactions;
+	AccountList	*accts;
+	TransList	*transactions;
         GNCBook *book;
 } gnc_template_xaction_data;
 
