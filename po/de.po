@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2003-01-27 00:16+0100\n"
-"PO-Revision-Date: 2003-01-27 00:19+0100\n"
+"POT-Creation-Date: 2003-01-30 23:35+0100\n"
+"PO-Revision-Date: 2003-01-30 23:43+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -511,7 +511,7 @@ msgstr "Gutschrift"
 msgid "Lost Accounts"
 msgstr "Verlorene Konten"
 
-#: src/backend/postgres/PostgresBackend.c:1861
+#: src/backend/postgres/PostgresBackend.c:1868
 #, c-format
 msgid "Unknown database access mode '%s'. Using default mode: multi-user."
 msgstr ""
@@ -1143,7 +1143,7 @@ msgstr "Duplizieren"
 
 #: src/business/business-gnome/glade/invoice.glade.h:26
 #: src/gnome/glade/commodities.glade.h:5 src/gnome/glade/price.glade.h:11
-#: src/gnome/glade/sched-xact.glade.h:65 src/gnome/gnc-split-reg.c:2239
+#: src/gnome/glade/sched-xact.glade.h:65 src/gnome/gnc-split-reg.c:2293
 #: src/gnome/window-acct-tree.c:885 src/gnome/window-reconcile.c:1436
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -2976,7 +2976,7 @@ msgstr "Änderungen des aktuellen Geschäftsvorgangs übernehmen"
 msgid "Register date ranges"
 msgstr "Datumbereich des Kassenberichts"
 
-#: src/gnome/glade/register.glade.h:52 src/gnome/gnc-split-reg.c:953
+#: src/gnome/glade/register.glade.h:52 src/gnome/gnc-split-reg.c:957
 msgid "Remove Transaction Splits"
 msgstr "Gegenbuchungen entfernen"
 
@@ -6052,11 +6052,11 @@ msgstr "Bericht zum Kassenbericht"
 msgid "%s [Read-Only]"
 msgstr "%s [Nur-Lesen]"
 
-#: src/gnome/gnc-split-reg.c:717
+#: src/gnome/gnc-split-reg.c:721
 msgid "<No information>"
 msgstr "<keine Informationen>"
 
-#: src/gnome/gnc-split-reg.c:828
+#: src/gnome/gnc-split-reg.c:832
 #: src/register/ledger-core/split-register-control.c:1447
 #: src/register/ledger-core/split-register.c:496
 msgid ""
@@ -6066,13 +6066,13 @@ msgstr ""
 "Die aktuelle Buchung wurde verändert.\n"
 "Soll sie gespeichert werden?"
 
-#: src/gnome/gnc-split-reg.c:955
+#: src/gnome/gnc-split-reg.c:959
 msgid "Are you sure you want to remove the Splits of this transaction?"
 msgstr ""
 "Sind Sie sicher, dass Sie die Gegenbuchungen dieses Geschäftsvorgangs "
 "entfernen wollen?"
 
-#: src/gnome/gnc-split-reg.c:958
+#: src/gnome/gnc-split-reg.c:962
 msgid ""
 "You would be modifying a transaction with reconciled splits!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
@@ -6080,7 +6080,7 @@ msgstr ""
 "Sie würden einen Geschäftsvorgang mit abgeglichenen Buchungen\n"
 "ändern. Ihr abgeglichener Saldo könnte dadurch fehlerhaft werden."
 
-#: src/gnome/gnc-split-reg.c:1051
+#: src/gnome/gnc-split-reg.c:1055
 #, c-format
 msgid ""
 "Are you sure you want to delete\n"
@@ -6094,7 +6094,7 @@ msgstr ""
 "   %s \n"
 "löschen wollen?"
 
-#: src/gnome/gnc-split-reg.c:1053
+#: src/gnome/gnc-split-reg.c:1057
 msgid ""
 "You would be deleting a reconciled split!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
@@ -6102,7 +6102,7 @@ msgstr ""
 "Sie würden eine abgeglichene Buchung löschen! Das würde bewirken, daß\n"
 "Ihr Saldo nicht mehr abgeglichen ist."
 
-#: src/gnome/gnc-split-reg.c:1056
+#: src/gnome/gnc-split-reg.c:1060
 msgid ""
 "This is the split anchoring this transaction to the register. You may not "
 "delete it from this register window."
@@ -6110,20 +6110,20 @@ msgstr ""
 "Diese Buchung verankert diesen Geschäftsvorgang im Kassenbericht. Sie können "
 "sie nicht in diesem Kassenbericht löschen."
 
-#: src/gnome/gnc-split-reg.c:1069
+#: src/gnome/gnc-split-reg.c:1073
 msgid "(no memo)"
 msgstr "(kein Buchungstext)"
 
-#: src/gnome/gnc-split-reg.c:1072
+#: src/gnome/gnc-split-reg.c:1076
 msgid "(no description)"
 msgstr "(Keine Beschreibung)"
 
-#: src/gnome/gnc-split-reg.c:1105
+#: src/gnome/gnc-split-reg.c:1109
 msgid "Are you sure you want to delete the current transaction?"
 msgstr ""
 "Sind Sie sicher, dass Sie den aktuellen Geschäftsvorgang löschen wollen?"
 
-#: src/gnome/gnc-split-reg.c:1107
+#: src/gnome/gnc-split-reg.c:1111
 msgid ""
 "You would be deleting a transaction with reconciled splits!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
@@ -6132,31 +6132,35 @@ msgstr ""
 "Buchungen löschen würden. Dies bedeutet, daß ihr abgeglichener Saldo\n"
 "verändert wird."
 
-#: src/gnome/gnc-split-reg.c:1791
+#: src/gnome/gnc-split-reg.c:1796
 msgid "Present:"
 msgstr "Aktueller Wert:"
 
-#: src/gnome/gnc-split-reg.c:1792
+#: src/gnome/gnc-split-reg.c:1797
 msgid "Future:"
 msgstr "Zukünftiger Wert:"
 
-#: src/gnome/gnc-split-reg.c:1793
+#: src/gnome/gnc-split-reg.c:1798
 msgid "Cleared:"
 msgstr "Bestätigt:"
 
-#: src/gnome/gnc-split-reg.c:1794
+#: src/gnome/gnc-split-reg.c:1799
 msgid "Reconciled:"
 msgstr "Abgeglichen:"
 
-#: src/gnome/gnc-split-reg.c:1798
+#: src/gnome/gnc-split-reg.c:1800
+msgid "Projected Minimum:"
+msgstr "Voraussichtliches Minimum:"
+
+#: src/gnome/gnc-split-reg.c:1804
 msgid "Shares:"
 msgstr "Anteile:"
 
-#: src/gnome/gnc-split-reg.c:1799
+#: src/gnome/gnc-split-reg.c:1805
 msgid "Current Value:"
 msgstr "Aktueller Wert:"
 
-#: src/gnome/gnc-split-reg.c:2027
+#: src/gnome/gnc-split-reg.c:2033
 msgid ""
 "This account may not be edited.  If you want\n"
 "to edit transactions in this register, please\n"
@@ -6168,7 +6172,7 @@ msgstr ""
 "\"Konto Eigenschaften\" und deaktivieren Sie die Option\n"
 "\"Platzhalter-Konto\"."
 
-#: src/gnome/gnc-split-reg.c:2034
+#: src/gnome/gnc-split-reg.c:2040
 msgid ""
 "One of the sub-accounts selected may not be\n"
 "edited.  If you want to edit transactions in\n"
@@ -6182,7 +6186,7 @@ msgstr ""
 "Dialogfenster \"Konto Eigenschaften\" des Unterkontos und deaktivieren\n"
 "Sie die Option \"Platzhalter-Konto\"."
 
-#: src/gnome/gnc-split-reg.c:2244
+#: src/gnome/gnc-split-reg.c:2298
 msgid "View"
 msgstr "Ansicht"
 
@@ -8150,7 +8154,7 @@ msgstr "(unbekannt)"
 #. * else). You may safely ignore strings from the
 #. * import-export/hbci subdirectory in other countries.
 #.
-#: src/import-export/hbci/gnc-hbci-getbalance.c:154
+#: src/import-export/hbci/gnc-hbci-getbalance.c:175
 msgid ""
 "The downloaded HBCI Balance was zero.\n"
 "It seems as if your bank does not support Balance download \n"
@@ -8166,7 +8170,7 @@ msgstr ""
 "den Saldo abzufragen.  \n"
 
 #. Translators: %s is the amount.
-#: src/import-export/hbci/gnc-hbci-getbalance.c:168
+#: src/import-export/hbci/gnc-hbci-getbalance.c:192
 #, c-format
 msgid ""
 "Result of HBCI job: \n"
