@@ -15,6 +15,7 @@
 #include "gnc-book-p.h"
 #include "GNCIdP.h"
 #include "QueryObject.h"
+#include "gnc-event-p.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -57,6 +58,15 @@ struct _gncOrder {
 static void addObj (GncOrder *order);
 static void remObj (GncOrder *order);
 
+G_INLINE_FUNC void mark_order (GncOrder *order);
+G_INLINE_FUNC void
+mark_order (GncOrder *order)
+{
+  order->dirty = TRUE;
+
+  gnc_engine_generate_event (&order->guid, GNC_EVENT_MODIFY);
+}
+
 /* Create/Destroy Functions */
 
 GncOrder *gncOrderCreate (GNCBook *book)
@@ -77,12 +87,16 @@ GncOrder *gncOrderCreate (GNCBook *book)
   xaccGUIDNew (&order->guid, book);
   addObj (order);
 
+  gnc_engine_generate_event (&order->guid, GNC_EVENT_CREATE);
+
   return order;
 }
 
 void gncOrderDestroy (GncOrder *order)
 {
   if (!order) return;
+
+  gnc_engine_generate_event (&order->guid, GNC_EVENT_DESTROY);
 
   g_list_free (order->entries);
   CACHE_REMOVE (order->id);
@@ -111,7 +125,7 @@ void gncOrderSetID (GncOrder *order, const char *id)
 {
   if (!order || !id) return;
   SET_STR (order->id, id);
-  order->dirty = TRUE;
+  mark_order (order);
 }
 
 void gncOrderSetOwner (GncOrder *order, GncOwner *owner)
@@ -119,42 +133,42 @@ void gncOrderSetOwner (GncOrder *order, GncOwner *owner)
   if (!order || !owner) return;
 
   gncOwnerCopy (owner, &order->owner);
-  order->dirty = TRUE;
+  mark_order (order);
 }
 
 void gncOrderSetDateOpened (GncOrder *order, Timespec date)
 {
   if (!order) return;
   order->opened = date;
-  order->dirty = TRUE;
+  mark_order (order);
 }
 
 void gncOrderSetDateClosed (GncOrder *order, Timespec date)
 {
   if (!order) return;
   order->closed = date;
-  order->dirty = TRUE;
+  mark_order (order);
 }
 
 void gncOrderSetNotes (GncOrder *order, const char *notes)
 {
   if (!order || !notes) return;
   SET_STR (order->notes, notes);
-  order->dirty = TRUE;
+  mark_order (order);
 }
 
 void gncOrderSetReference (GncOrder *order, const char *reference)
 {
   if (!order || !reference) return;
   SET_STR (order->reference, reference);
-  order->dirty = TRUE;
+  mark_order (order);
 }
 
 void gncOrderSetActive (GncOrder *order, gboolean active)
 {
   if (!order) return;
   order->active = active;
-  order->dirty = TRUE;
+  mark_order (order);
 }
 
 void gncOrderSetDirty (GncOrder *order, gboolean dirty)
@@ -179,7 +193,7 @@ void gncOrderAddEntry (GncOrder *order, GncEntry *entry)
 
   /* This will send out an event -- make sure we're attached */
   gncEntrySetOrder (entry, order);
-  order->dirty = TRUE;
+  mark_order (order);
 }
 
 void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry)
@@ -188,7 +202,7 @@ void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry)
 
   gncEntrySetOrder (entry, NULL);
   order->entries = g_list_remove (order->entries, entry);
-  order->dirty = TRUE;
+  mark_order (order);
 }
 
 /* Get Functions */

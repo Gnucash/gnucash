@@ -963,7 +963,7 @@ new_invoice_cb (GtkWidget *parent, gpointer *invoice_p, gpointer user_data)
   
   g_return_val_if_fail (invoice_p && user_data, TRUE);
 
-  *invoice_p = gnc_invoice_new (sw->parent, sw->owner, sw->book);
+  *invoice_p = gnc_invoice_new (parent, sw->owner, sw->book);
   return sw->no_close;
 }
 

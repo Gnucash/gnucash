@@ -15,6 +15,7 @@
 #include "gncObject.h"
 #include "gnc-general-select.h"
 #include "window-help.h"
+#include "gnc-component-manager.h"
 
 #include "gncJob.h"
 #include "business-utils.h"
@@ -22,6 +23,8 @@
 #include "dialog-job.h"
 #include "dialog-order.h"
 #include "dialog-invoice.h"
+
+#define DIALOG_JOB_SELECT_CM_CLASS "dialog-job-select"
 
 struct select_job_window {
   GtkWidget * dialog;
@@ -31,6 +34,8 @@ struct select_job_window {
   GtkWidget * showjobs_check;
 
   GtkWidget * parent;
+
+  gint		component_id;
 
   GNCBook *	book;
   GncJob *	job;
@@ -50,6 +55,8 @@ update_job_select_picker (struct select_job_window *w)
   /* Clear out the existing choices */
   gtk_list_clear_items (GTK_LIST (w->job_list), 0, -1);
 
+  /* Clear the watches */
+  gnc_gui_component_clear_watches (w->component_id);
 
   /* 
    * Fill out the list of jobs from the current owner
@@ -71,6 +78,11 @@ update_job_select_picker (struct select_job_window *w)
     /* Save the current job */
     saved_job = w->job;
     w->job = NULL;
+
+    /* Watch the owner for changes */
+    gnc_gui_component_watch_entity (w->component_id,
+				    gncOwnerGetGUID (&(w->owner)),
+				    GNC_EVENT_MODIFY);
 
     /* Get the list of jobs */
     switch (gncOwnerGetType (&(w->owner))) {
@@ -98,6 +110,11 @@ update_job_select_picker (struct select_job_window *w)
       itemlist = g_list_prepend (itemlist, li);
       if (iterator->data == saved_job)
 	this_job = li;
+
+      /* Watch this item in case it changes */
+      gnc_gui_component_watch_entity (w->component_id,
+				      gncJobGetGUID (iterator->data),
+				      GNC_EVENT_MODIFY);
     }
 
     /* This will make sure we're in the right order at the end */
@@ -141,7 +158,7 @@ gnc_ui_select_job_ok_cb(GtkButton * button, gpointer user_data)
   struct select_job_window * w = user_data;
 
   if(w->job) {
-    gnome_dialog_close(GNOME_DIALOG (w->dialog));
+    gnc_close_gui_component (w->component_id);
   } else {
     gnc_warning_dialog(_("You must select a job.\n"
                          "To create a new one, click \"New\""));
@@ -205,8 +222,6 @@ gnc_ui_select_job_edit_cb(GtkButton * button, gpointer user_data)
     return;
 
   gnc_ui_job_window_create (w->job);
-  //  gncOwnerCopy (gncJobGetOwner (w->job), &(w->owner));
-  //  update_owner_select_picker (w);
 }
 
 static void
@@ -216,7 +231,7 @@ gnc_ui_select_job_cancel_cb(GtkButton * button, gpointer user_data)
 
   if (w) {
     w->job = NULL;
-    gnome_dialog_close(GNOME_DIALOG (w->dialog));
+    gnc_close_gui_component (w->component_id);
   }
 }
 
@@ -234,6 +249,22 @@ select_job_close (GnomeDialog *dialog, gpointer data)
 {
   gtk_main_quit ();
   return FALSE;
+}
+
+static void
+refresh_handler (GHashTable *changes, gpointer data)
+{
+  struct select_job_window * sw = data;
+
+  update_job_select_picker (sw);
+}
+
+static void
+close_handler (gpointer data)
+{
+  struct select_job_window * sw = data;
+
+  gnome_dialog_close (GNOME_DIALOG (sw->dialog));
 }
 
 static GncJob *
@@ -314,6 +345,10 @@ gnc_job_select (GtkWidget * parent, GncJob *start_job,
 		      GTK_SIGNAL_FUNC (select_job_owner_changed_cb),
 		      win);
 
+  win->component_id = gnc_register_gui_component (DIALOG_JOB_SELECT_CM_CLASS,
+						  refresh_handler,
+						  close_handler, win);
+
   gtk_signal_connect (GTK_OBJECT(win->dialog), "close",
                       GTK_SIGNAL_FUNC(select_job_close), win);
 
@@ -332,6 +367,9 @@ gnc_job_select (GtkWidget * parent, GncJob *start_job,
   gtk_main();
 
   /* exit */
+
+  gnc_unregister_gui_component (win->component_id);
+
   retval = win->job;
   g_free(win);
 

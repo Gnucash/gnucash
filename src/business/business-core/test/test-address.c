@@ -22,8 +22,8 @@ test_address (void)
 
   /* Test creation/destruction */
   {
-    do_test (gncAddressCreate (NULL) == NULL, "address create NULL");
-    address = gncAddressCreate (book);
+    do_test (gncAddressCreate (NULL, NULL) == NULL, "address create NULL");
+    address = gncAddressCreate (book, NULL);
     do_test (address != NULL, "address create");
 
     gncAddressDestroy (address);
@@ -32,7 +32,7 @@ test_address (void)
 
   /* Test setting routines */
   {
-    address = gncAddressCreate (book);
+    address = gncAddressCreate (book, NULL);
     test_string_fcn (address, "Name", gncAddressSetName, gncAddressGetName);
     test_string_fcn (address, "Addr1", gncAddressSetAddr1, gncAddressGetAddr1);
     test_string_fcn (address, "Addr2", gncAddressSetAddr2, gncAddressGetAddr2);

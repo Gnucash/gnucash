@@ -17,6 +17,7 @@
 #include "gnc-book-p.h"
 #include "GNCIdP.h"
 #include "QueryObject.h"
+#include "gnc-event-p.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -69,6 +70,15 @@ struct _gncInvoice {
 static void addObj (GncInvoice *invoice);
 static void remObj (GncInvoice *invoice);
 
+G_INLINE_FUNC void mark_invoice (GncInvoice *invoice);
+G_INLINE_FUNC void
+mark_invoice (GncInvoice *invoice)
+{
+  invoice->dirty = TRUE;
+
+  gnc_engine_generate_event (&invoice->guid, GNC_EVENT_MODIFY);
+}
+
 /* Create/Destroy Functions */
 
 GncInvoice *gncInvoiceCreate (GNCBook *book)
@@ -89,12 +99,16 @@ GncInvoice *gncInvoiceCreate (GNCBook *book)
   xaccGUIDNew (&invoice->guid, book);
   addObj (invoice);
 
+  gnc_engine_generate_event (&invoice->guid, GNC_EVENT_CREATE);
+
   return invoice;
 }
 
 void gncInvoiceDestroy (GncInvoice *invoice)
 {
   if (!invoice) return;
+
+  gnc_engine_generate_event (&invoice->guid, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (invoice->id);
   CACHE_REMOVE (invoice->notes);
@@ -122,63 +136,63 @@ void gncInvoiceSetID (GncInvoice *invoice, const char *id)
 {
   if (!invoice || !id) return;
   SET_STR (invoice->id, id);
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner)
 {
   if (!invoice || !owner) return;
   gncOwnerCopy (owner, &invoice->owner);
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date)
 {
   if (!invoice) return;
   invoice->date_opened = date;
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 void gncInvoiceSetDatePosted (GncInvoice *invoice, Timespec date)
 {
   if (!invoice) return;
   invoice->date_posted = date;
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 void gncInvoiceSetDateDue (GncInvoice *invoice, Timespec date)
 {
   if (!invoice) return;
   invoice->date_due = date;
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 void gncInvoiceSetDatePaid (GncInvoice *invoice, Timespec date)
 {
   if (!invoice) return;
   invoice->date_paid = date;
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 void gncInvoiceSetTerms (GncInvoice *invoice, const char *terms)
 {
   if (!invoice) return;
   SET_STR (invoice->terms, terms);
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes)
 {
   if (!invoice || !notes) return;
   SET_STR (invoice->notes, notes);
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active)
 {
   if (!invoice) return;
   invoice->active = active;
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 void gncInvoiceSetDirty (GncInvoice *invoice, gboolean dirty)
@@ -192,7 +206,7 @@ void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn)
   if (!invoice) return;
 
   invoice->posted_txn = txn;
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 void gncInvoiceSetPaidTxn (GncInvoice *invoice, Transaction *txn)
@@ -200,7 +214,7 @@ void gncInvoiceSetPaidTxn (GncInvoice *invoice, Transaction *txn)
   if (!invoice) return;
 
   invoice->paid_txn = txn;
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc)
@@ -208,7 +222,7 @@ void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc)
   if (!invoice) return;
 
   invoice->posted_acc = acc;
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry)
@@ -224,7 +238,7 @@ void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry)
   gncEntrySetInvoice (entry, invoice);
   invoice->entries = g_list_insert_sorted (invoice->entries, entry,
 					   (GCompareFunc)gncEntryCompare);
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry)
@@ -233,7 +247,7 @@ void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry)
 
   gncEntrySetInvoice (entry, NULL);
   invoice->entries = g_list_remove (invoice->entries, entry);
-  invoice->dirty = TRUE;
+  mark_invoice (invoice);
 }
 
 /* Get Functions */

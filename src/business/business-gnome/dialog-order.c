@@ -829,7 +829,7 @@ new_order_cb (GtkWidget *parent, gpointer *order_p, gpointer user_data)
   
   g_return_val_if_fail (order_p && user_data, TRUE);
 
-  *order_p = gnc_order_new (sw->parent, sw->owner, sw->book);
+  *order_p = gnc_order_new (parent, sw->owner, sw->book);
   return sw->no_close;
 }
 

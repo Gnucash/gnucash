@@ -16,6 +16,7 @@
 #include "gnc-book-p.h"
 #include "GNCIdP.h"
 #include "QueryObject.h"
+#include "gnc-event-p.h"
 
 #include "gncBusiness.h"
 #include "gncJob.h"
@@ -40,6 +41,15 @@ struct _gncJob {
 static void addObj (GncJob *job);
 static void remObj (GncJob *job);
 
+G_INLINE_FUNC void mark_job (GncJob *job);
+G_INLINE_FUNC void
+mark_job (GncJob *job)
+{
+  job->dirty = TRUE;
+
+  gnc_engine_generate_event (&job->guid, GNC_EVENT_MODIFY);
+}
+
 /* Create/Destroy Functions */
 
 GncJob *gncJobCreate (GNCBook *book)
@@ -60,12 +70,16 @@ GncJob *gncJobCreate (GNCBook *book)
   xaccGUIDNew (&job->guid, book);
   addObj (job);
 
+  gnc_engine_generate_event (&job->guid, GNC_EVENT_CREATE);
+
   return job;
 }
 
 void gncJobDestroy (GncJob *job)
 {
   if (!job) return;
+
+  gnc_engine_generate_event (&job->guid, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (job->id);
   CACHE_REMOVE (job->name);
@@ -101,7 +115,7 @@ void gncJobSetID (GncJob *job, const char *id)
   if (!job) return;
   if (!id) return;
   SET_STR(job->id, id);
-  job->dirty = TRUE;
+  mark_job (job);
 }
 
 void gncJobSetName (GncJob *job, const char *name)
@@ -109,7 +123,7 @@ void gncJobSetName (GncJob *job, const char *name)
   if (!job) return;
   if (!name) return;
   SET_STR(job->name, name);
-  job->dirty = TRUE;
+  mark_job (job);
 }
 
 void gncJobSetReference (GncJob *job, const char *desc)
@@ -117,7 +131,7 @@ void gncJobSetReference (GncJob *job, const char *desc)
   if (!job) return;
   if (!desc) return;
   SET_STR(job->desc, desc);
-  job->dirty = TRUE;
+  mark_job (job);
 }
 
 void gncJobSetGUID (GncJob *job, const GUID *guid)
@@ -159,7 +173,7 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
   default:
   }
 
-  job->dirty = TRUE;
+  mark_job (job);
 }
 
 void gncJobSetActive (GncJob *job, gboolean active)
@@ -167,7 +181,7 @@ void gncJobSetActive (GncJob *job, gboolean active)
   if (!job) return;
   if (active == job->active) return;
   job->active = active;
-  job->dirty = TRUE;
+  mark_job (job);
 }
 
 void gncJobCommitEdit (GncJob *job)

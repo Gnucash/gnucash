@@ -10,12 +10,15 @@
 
 #include "gnc-engine-util.h"	/* safe_strcmp */
 #include "QueryObject.h"
+#include "guid.h"
+#include "gnc-event-p.h"
 
 #include "gncAddress.h"
 #include "gncAddressP.h"
 
 struct _gncAddress {
   GNCBook *	book;
+  const GUID *	parent_guid;
   gboolean	dirty;
   char *	name;
   char *	addr1;
@@ -33,9 +36,18 @@ struct _gncAddress {
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
+G_INLINE_FUNC void mark_address (GncAddress *address);
+G_INLINE_FUNC void
+mark_address (GncAddress *address)
+{
+  address->dirty = TRUE;
+
+  gnc_engine_generate_event (address->parent_guid, GNC_EVENT_MODIFY);
+}
+
 /* Create/Destroy functions */
 
-GncAddress * gncAddressCreate (GNCBook *book)
+GncAddress * gncAddressCreate (GNCBook *book, const GUID *parent)
 {
   GncAddress *addr;
 
@@ -44,6 +56,7 @@ GncAddress * gncAddressCreate (GNCBook *book)
   addr = g_new0 (GncAddress, 1);
   addr->book = book;
   addr->dirty = FALSE;
+  addr->parent_guid = parent;
 
   addr->name = CACHE_INSERT ("");
   addr->addr1 = CACHE_INSERT ("");
@@ -88,7 +101,7 @@ void gncAddressSetName (GncAddress *addr, const char *name)
   if (!addr) return;
   if (!name) return;
   SET_STR(addr->name, name);
-  addr->dirty = TRUE;
+  mark_address (addr);
 }
 
 void gncAddressSetAddr1 (GncAddress *addr, const char *addr1)
@@ -96,7 +109,7 @@ void gncAddressSetAddr1 (GncAddress *addr, const char *addr1)
   if (!addr) return;
   if (!addr1) return;
   SET_STR(addr->addr1, addr1);
-  addr->dirty = TRUE;
+  mark_address (addr);
 }
 
 void gncAddressSetAddr2 (GncAddress *addr, const char *addr2)
@@ -104,7 +117,7 @@ void gncAddressSetAddr2 (GncAddress *addr, const char *addr2)
   if (!addr) return;
   if (!addr2) return;
   SET_STR(addr->addr2, addr2);
-  addr->dirty = TRUE;
+  mark_address (addr);
 }
 
 void gncAddressSetAddr3 (GncAddress *addr, const char *addr3)
@@ -112,7 +125,7 @@ void gncAddressSetAddr3 (GncAddress *addr, const char *addr3)
   if (!addr) return;
   if (!addr3) return;
   SET_STR(addr->addr3, addr3);
-  addr->dirty = TRUE;
+  mark_address (addr);
 }
 
 void gncAddressSetAddr4 (GncAddress *addr, const char *addr4)
@@ -120,7 +133,7 @@ void gncAddressSetAddr4 (GncAddress *addr, const char *addr4)
   if (!addr) return;
   if (!addr4) return;
   SET_STR(addr->addr4, addr4);
-  addr->dirty = TRUE;
+  mark_address (addr);
 }
 
 void gncAddressSetPhone (GncAddress *addr, const char *phone)
@@ -128,7 +141,7 @@ void gncAddressSetPhone (GncAddress *addr, const char *phone)
   if (!addr) return;
   if (!phone) return;
   SET_STR(addr->phone, phone);
-  addr->dirty = TRUE;
+  mark_address (addr);
 }
 
 void gncAddressSetFax (GncAddress *addr, const char *fax)
@@ -136,7 +149,7 @@ void gncAddressSetFax (GncAddress *addr, const char *fax)
   if (!addr) return;
   if (!fax) return;
   SET_STR(addr->fax, fax);
-  addr->dirty = TRUE;
+  mark_address (addr);
 }
 
 void gncAddressSetEmail (GncAddress *addr, const char *email)
@@ -144,7 +157,7 @@ void gncAddressSetEmail (GncAddress *addr, const char *email)
   if (!addr) return;
   if (!email) return;
   SET_STR(addr->email, email);
-  addr->dirty = TRUE;
+  mark_address (addr);
 }
 
 /* Get Functions */

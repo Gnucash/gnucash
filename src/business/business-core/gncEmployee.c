@@ -16,6 +16,7 @@
 #include "GNCIdP.h"
 #include "gncObject.h"
 #include "QueryObject.h"
+#include "gnc-event-p.h"
 
 #include "gncBusiness.h"
 #include "gncEmployee.h"
@@ -44,6 +45,15 @@ struct _gncEmployee {
 static void addObj (GncEmployee *employee);
 static void remObj (GncEmployee *employee);
 
+G_INLINE_FUNC void mark_employee (GncEmployee *employee);
+G_INLINE_FUNC void
+mark_employee (GncEmployee *employee)
+{
+  employee->dirty = TRUE;
+
+  gnc_engine_generate_event (&employee->guid, GNC_EVENT_MODIFY);
+}
+
 /* Create/Destroy Functions */
 
 GncEmployee *gncEmployeeCreate (GNCBook *book)
@@ -60,7 +70,7 @@ GncEmployee *gncEmployeeCreate (GNCBook *book)
   employee->username = CACHE_INSERT ("");
   employee->language = CACHE_INSERT ("");
   employee->acl = CACHE_INSERT ("");
-  employee->addr = gncAddressCreate (book);
+  employee->addr = gncAddressCreate (book, &employee->guid);
   employee->workday = gnc_numeric_zero();
   employee->rate = gnc_numeric_zero();
   employee->active = TRUE;
@@ -68,12 +78,16 @@ GncEmployee *gncEmployeeCreate (GNCBook *book)
   xaccGUIDNew (&employee->guid, book);
   addObj (employee);
 
+  gnc_engine_generate_event (&employee->guid, GNC_EVENT_CREATE);
+
   return employee;
 }
 
 void gncEmployeeDestroy (GncEmployee *employee)
 {
   if (!employee) return;
+
+  gnc_engine_generate_event (&employee->guid, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (employee->id);
   CACHE_REMOVE (employee->username);
@@ -101,7 +115,7 @@ void gncEmployeeSetID (GncEmployee *employee, const char *id)
   if (!employee) return;
   if (!id) return;
   SET_STR(employee->id, id);
-  employee->dirty = TRUE;
+  mark_employee (employee);
 }
 
 void gncEmployeeSetUsername (GncEmployee *employee, const char *username)
@@ -109,7 +123,7 @@ void gncEmployeeSetUsername (GncEmployee *employee, const char *username)
   if (!employee) return;
   if (!username) return;
   SET_STR(employee->username, username);
-  employee->dirty = TRUE;
+  mark_employee (employee);
 }
 
 void gncEmployeeSetLanguage (GncEmployee *employee, const char *language)
@@ -117,7 +131,7 @@ void gncEmployeeSetLanguage (GncEmployee *employee, const char *language)
   if (!employee) return;
   if (!language) return;
   SET_STR(employee->language, language);
-  employee->dirty = TRUE;
+  mark_employee (employee);
 }
 
 void gncEmployeeSetGUID (GncEmployee *employee, const GUID *guid)
@@ -134,7 +148,7 @@ void gncEmployeeSetAcl (GncEmployee *employee, const char *acl)
   if (!employee) return;
   if (!acl) return;
   SET_STR(employee->acl, acl);
-  employee->dirty = TRUE;
+  mark_employee (employee);
 }
 
 void gncEmployeeSetWorkday (GncEmployee *employee, gnc_numeric workday)
@@ -142,7 +156,7 @@ void gncEmployeeSetWorkday (GncEmployee *employee, gnc_numeric workday)
   if (!employee) return;
   if (gnc_numeric_equal (workday, employee->workday)) return;
   employee->workday = workday;
-  employee->dirty = TRUE;
+  mark_employee (employee);
 }
 
 void gncEmployeeSetRate (GncEmployee *employee, gnc_numeric rate)
@@ -150,7 +164,7 @@ void gncEmployeeSetRate (GncEmployee *employee, gnc_numeric rate)
   if (!employee) return;
   if (gnc_numeric_equal (rate, employee->rate)) return;
   employee->rate = rate;
-  employee->dirty = TRUE;
+  mark_employee (employee);
 }
 
 void gncEmployeeSetActive (GncEmployee *employee, gboolean active)
@@ -158,7 +172,7 @@ void gncEmployeeSetActive (GncEmployee *employee, gboolean active)
   if (!employee) return;
   if (active == employee->active) return;
   employee->active = active;
-  employee->dirty = TRUE;
+  mark_employee (employee);
 }
 
 /* Get Functions */

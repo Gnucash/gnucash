@@ -16,6 +16,7 @@
 #include "gnc-numeric.h"
 #include "gncObject.h"
 #include "QueryObject.h"
+#include "gnc-event-p.h"
 
 #include "gncBusiness.h"
 #include "gncCustomer.h"
@@ -47,6 +48,15 @@ struct _gncCustomer {
 static void addObj (GncCustomer *cust);
 static void remObj (GncCustomer *cust);
 
+G_INLINE_FUNC void mark_customer (GncCustomer *customer);
+G_INLINE_FUNC void
+mark_customer (GncCustomer *customer)
+{
+  customer->dirty = TRUE;
+
+  gnc_engine_generate_event (&customer->guid, GNC_EVENT_MODIFY);
+}
+
 /* Create/Destroy Functions */
 
 GncCustomer *gncCustomerCreate (GNCBook *book)
@@ -62,8 +72,8 @@ GncCustomer *gncCustomerCreate (GNCBook *book)
   cust->name = CACHE_INSERT ("");
   cust->notes = CACHE_INSERT ("");
   cust->terms = CACHE_INSERT ("Net-30");
-  cust->addr = gncAddressCreate (book);
-  cust->shipaddr = gncAddressCreate (book);
+  cust->addr = gncAddressCreate (book, &cust->guid);
+  cust->shipaddr = gncAddressCreate (book, &cust->guid);
   cust->discount = gnc_numeric_zero();
   cust->credit = gnc_numeric_zero();
   cust->taxincluded = FALSE;
@@ -73,12 +83,16 @@ GncCustomer *gncCustomerCreate (GNCBook *book)
   xaccGUIDNew (&cust->guid, book);
   addObj (cust);
 
+  gnc_engine_generate_event (&cust->guid, GNC_EVENT_CREATE);
+
   return cust;
 }
 
 void gncCustomerDestroy (GncCustomer *cust)
 {
   if (!cust) return;
+
+  gnc_engine_generate_event (&cust->guid, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (cust->id);
   CACHE_REMOVE (cust->name);
@@ -109,7 +123,7 @@ void gncCustomerSetID (GncCustomer *cust, const char *id)
   if (!cust) return;
   if (!id) return;
   SET_STR(cust->id, id);
-  cust->dirty = TRUE;
+  mark_customer (cust);
 }
 
 void gncCustomerSetName (GncCustomer *cust, const char *name)
@@ -117,7 +131,7 @@ void gncCustomerSetName (GncCustomer *cust, const char *name)
   if (!cust) return;
   if (!name) return;
   SET_STR(cust->name, name);
-  cust->dirty = TRUE;
+  mark_customer (cust);
 }
 
 void gncCustomerSetNotes (GncCustomer *cust, const char *notes)
@@ -125,7 +139,7 @@ void gncCustomerSetNotes (GncCustomer *cust, const char *notes)
   if (!cust) return;
   if (!notes) return;
   SET_STR(cust->notes, notes);
-  cust->dirty = TRUE;
+  mark_customer (cust);
 }
 
 void gncCustomerSetGUID (GncCustomer *cust, const GUID *guid)
@@ -142,7 +156,7 @@ void gncCustomerSetTerms (GncCustomer *cust, const char *terms)
 {
   if (!cust || !terms) return;
   SET_STR(cust->terms, terms);
-  cust->dirty = TRUE;
+  mark_customer (cust);
 }
 
 void gncCustomerSetTaxIncluded (GncCustomer *cust, gboolean taxincl)
@@ -150,7 +164,7 @@ void gncCustomerSetTaxIncluded (GncCustomer *cust, gboolean taxincl)
   if (!cust) return;
   if (taxincl == cust->taxincluded) return;
   cust->taxincluded = taxincl;
-  cust->dirty = TRUE;
+  mark_customer (cust);
 }
 
 void gncCustomerSetActive (GncCustomer *cust, gboolean active)
@@ -158,7 +172,7 @@ void gncCustomerSetActive (GncCustomer *cust, gboolean active)
   if (!cust) return;
   if (active == cust->active) return;
   cust->active = active;
-  cust->dirty = TRUE;
+  mark_customer (cust);
 }
 
 void gncCustomerSetDiscount (GncCustomer *cust, gnc_numeric discount)
@@ -166,7 +180,7 @@ void gncCustomerSetDiscount (GncCustomer *cust, gnc_numeric discount)
   if (!cust) return;
   if (gnc_numeric_equal (discount, cust->discount)) return;
   cust->discount = discount;
-  cust->dirty = TRUE;
+  mark_customer (cust);
 }
 
 void gncCustomerSetCredit (GncCustomer *cust, gnc_numeric credit)
@@ -174,7 +188,7 @@ void gncCustomerSetCredit (GncCustomer *cust, gnc_numeric credit)
   if (!cust) return;
   if (gnc_numeric_equal (credit, cust->credit)) return;
   cust->credit = credit;
-  cust->dirty = TRUE;
+  mark_customer (cust);
 }
 
 /* Note that JobList changes do not affect the "dirtiness" of the customer */
@@ -186,6 +200,8 @@ void gncCustomerAddJob (GncCustomer *cust, GncJob *job)
   if (g_list_index(cust->jobs, job) == -1)
     cust->jobs = g_list_insert_sorted (cust->jobs, job,
 				       (GCompareFunc)gncJobCompare);
+
+  gnc_engine_generate_event (&cust->guid, GNC_EVENT_MODIFY);
 }
 
 void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
@@ -202,6 +218,7 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
     cust->jobs = g_list_remove_link (cust->jobs, node);
     g_list_free_1 (node);
   }
+  gnc_engine_generate_event (&cust->guid, GNC_EVENT_MODIFY);
 }
 
 void gncCustomerCommitEdit (GncCustomer *cust)

@@ -15,6 +15,7 @@
 #include "gnc-book-p.h"
 #include "GNCIdP.h"
 #include "QueryObject.h"
+#include "gnc-event-p.h"
 
 #include "gncBusiness.h"
 #include "gncVendor.h"
@@ -43,6 +44,15 @@ struct _gncVendor {
 static void addObj (GncVendor *vendor);
 static void remObj (GncVendor *vendor);
 
+G_INLINE_FUNC void mark_vendor (GncVendor *vendor);
+G_INLINE_FUNC void
+mark_vendor (GncVendor *vendor)
+{
+  vendor->dirty = TRUE;
+
+  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_MODIFY);
+}
+
 /* Create/Destroy Functions */
 
 GncVendor *gncVendorCreate (GNCBook *book)
@@ -58,12 +68,14 @@ GncVendor *gncVendorCreate (GNCBook *book)
   vendor->name = CACHE_INSERT ("");
   vendor->notes = CACHE_INSERT ("");
   vendor->terms = CACHE_INSERT ("");
-  vendor->addr = gncAddressCreate (book);
+  vendor->addr = gncAddressCreate (book, &vendor->guid);
   vendor->taxincluded = FALSE;
   vendor->active = TRUE;
 
   xaccGUIDNew (&vendor->guid, book);
   addObj (vendor);
+
+  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_CREATE);
 
   return vendor;
 }
@@ -71,6 +83,8 @@ GncVendor *gncVendorCreate (GNCBook *book)
 void gncVendorDestroy (GncVendor *vendor)
 {
   if (!vendor) return;
+
+  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (vendor->id);
   CACHE_REMOVE (vendor->name);
@@ -100,7 +114,7 @@ void gncVendorSetID (GncVendor *vendor, const char *id)
   if (!vendor) return;
   if (!id) return;
   SET_STR(vendor->id, id);
-  vendor->dirty = TRUE;
+  mark_vendor (vendor);
 }
 
 void gncVendorSetName (GncVendor *vendor, const char *name)
@@ -108,7 +122,7 @@ void gncVendorSetName (GncVendor *vendor, const char *name)
   if (!vendor) return;
   if (!name) return;
   SET_STR(vendor->name, name);
-  vendor->dirty = TRUE;
+  mark_vendor (vendor);
 }
 
 void gncVendorSetNotes (GncVendor *vendor, const char *notes)
@@ -116,7 +130,7 @@ void gncVendorSetNotes (GncVendor *vendor, const char *notes)
   if (!vendor) return;
   if (!notes) return;
   SET_STR(vendor->notes, notes);
-  vendor->dirty = TRUE;
+  mark_vendor (vendor);
 }
 
 void gncVendorSetGUID (GncVendor *vendor, const GUID *guid)
@@ -133,7 +147,7 @@ void gncVendorSetTerms (GncVendor *vendor, const char *terms)
 {
   if (!vendor || !terms) return;
   SET_STR(vendor->terms, terms);
-  vendor->dirty = TRUE;
+  mark_vendor (vendor);
 }
 
 void gncVendorSetTaxIncluded (GncVendor *vendor, gboolean taxincl)
@@ -141,7 +155,7 @@ void gncVendorSetTaxIncluded (GncVendor *vendor, gboolean taxincl)
   if (!vendor) return;
   if (taxincl == vendor->taxincluded) return;
   vendor->taxincluded = taxincl;
-  vendor->dirty = TRUE;
+  mark_vendor (vendor);
 }
 
 void gncVendorSetActive (GncVendor *vendor, gboolean active)
@@ -149,7 +163,7 @@ void gncVendorSetActive (GncVendor *vendor, gboolean active)
   if (!vendor) return;
   if (active == vendor->active) return;
   vendor->active = active;
-  vendor->dirty = TRUE;
+  mark_vendor (vendor);
 }
 
 /* Get Functions */
@@ -217,6 +231,8 @@ void gncVendorAddJob (GncVendor *vendor, GncJob *job)
   if (g_list_index(vendor->jobs, job) == -1)
     vendor->jobs = g_list_insert_sorted (vendor->jobs, job,
 					 (GCompareFunc)gncJobCompare);
+
+  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_MODIFY);
 }
 
 void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
@@ -233,6 +249,8 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
     vendor->jobs = g_list_remove_link (vendor->jobs, node);
     g_list_free_1 (node);
   }
+
+  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_MODIFY);
 }
 
 void gncVendorCommitEdit (GncVendor *vendor)
