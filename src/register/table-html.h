@@ -30,8 +30,10 @@
 #ifndef __XACC_TABLE_HTML_H__
 #define __XACC_TABLE_HTML_H__
 
-void xaccTableDumpHTML (Table * table, int fd);
-void xaccTablePrintHTML (Table * table, char *filename);
+int xaccTableDumpHTML (Table * table, int fd);
+int xaccTablePrintHTML (Table * table, char *filename);
+void xaccTableWebServeHTML (Table * table, unsigned short port);
+
 
 #endif __XACC_TABLE_HTML_H__
 /* ================== end of file ======================= */
