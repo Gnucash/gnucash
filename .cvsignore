@@ -10,3 +10,5 @@ config.h
 *.diffs
 *.xac.*.xac
 make-gnucash-patch
+stamp-h
+libtool

@@ -5,3 +5,5 @@ Makefile
 *.log
 *.xac.*.xac
 gnucash
+.deps
+.libs
