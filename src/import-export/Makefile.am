@@ -6,7 +6,7 @@ libgncmod_generic_import_la_SOURCES = \
 	Account-matcher.c \
 	Commodity-matcher.c \
 	Transaction-matcher.c \
-	Utilities.c \
+	gnc-gen-utilities.c \
 	gnc-import-match-map.c \
 	gnc-gen-transaction.c \
 	gncmod-generic-import.c
@@ -18,7 +18,9 @@ gncinclude_HEADERS = \
 noinst_HEADERS = \
   gnc-gen-transaction.h \
   Transaction-matcher.h \
-  gnc-generic-import.h
+  Account-matcher.h \
+  Commodity-matcher.h \
+  gnc-gen-utilities.h
 
 libgncmod_generic_import_la_LDFLAGS = -module
 

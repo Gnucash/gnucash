@@ -34,7 +34,8 @@
 #include <glade/glade.h>
 
 #include <stdlib.h>
-#include "gnc-generic-import.h"
+#include "Account-matcher.h"
+#include "gnc-gen-utilities.h"
 #include "Account.h"
 #include "dialog-utils.h"
 #include "AccWindow.h"

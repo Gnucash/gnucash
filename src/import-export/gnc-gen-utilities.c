@@ -31,7 +31,7 @@
 #include <glib.h>
 
 #include <stdlib.h>
-#include "gnc-generic-import.h"
+#include "gnc-gen-utilities.h"
 #include "Account.h"
 #include "Transaction.h"
 

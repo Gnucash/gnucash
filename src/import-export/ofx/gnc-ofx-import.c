@@ -34,7 +34,11 @@
 #include <gmodule.h>
 
 #include "libofx/libofx.h"
-#include "gnc-generic-import.h"
+#include "Transaction-matcher.h"
+#include "Account-matcher.h"
+#include "Commodity-matcher.h"
+#include "gnc-gen-utilities.h"
+
 #include "Account.h"
 #include "Transaction.h"
 #include "gnc-associate-account.h"

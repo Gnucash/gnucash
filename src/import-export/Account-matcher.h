@@ -1,7 +1,7 @@
 /********************************************************************\
- * generic-import.h -- Functions and utilities to help writing      * 
- * import modules.  See file generic-import-design.txt for          *
- * description                                                      *
+ * Account-matcher.h -- Account selection and matching functions for* 
+ * import modules.                                                  *
+ *                                                                  *
  *                        (GnuCash)                                 *
  * Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>        *
  *                                                                  *
@@ -23,11 +23,10 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef GENERIC_IMPORT_H
-#define GENERIC_IMPORT_H
-
+#ifndef ACCOUNT_MATCHER_H
+#define ACCOUNT_MATCHER_H
+ 
 #include "Account.h"
-#include "Transaction-matcher.h"
 
 /* The gnc_import_select_account():
 
@@ -83,66 +82,5 @@ Account * gnc_import_select_account(char * account_online_id_value,
 				    char * account_human_description,
 				    gnc_commodity * new_account_default_commodity,
 				    GNCAccountType new_account_default_type);
-
-/* The gnc_import_select_commodity():
-
-  Must be called with a string containing a unique identifier for the
-  commodity.  If an commodity with a matching exchange_code is
-  found, the function immediately returns with a pointer to that
-  commodity.  Otherwise, the user may be prompted to select a GnuCash
-  account or create a new one (in both cases, the exchange_code is written
-  written to the commodity's exchange_code field, overwriting anything that
-  was there before.
-
-  Params:
-
-    char * exchange_code: The string containing the code for which you
-    want a matching commodity.  A CUISP code or similar UNIQUE code.
-    The stock ticker is NOT appropriate, unless you have no other option.
-
-    char auto_create: If 0, if the exchange_code value in unknown,
-    the function returns NULL, otherwise, the user will be asked to 
-    create a new account.
-
-    char * default_fullname: A human-readable description of the commodity, such
-    as the stock name.  Can be NULL. If it is not NULL, it will be shown
-    to the user when selecting a commodity.  It will also be used as
-    the default if a new commodity is created.
-
-     char * default_mnemonic:  Usually the stock ticker or similar. Can be NULL.
-     If it is not NULL, it will be shown
-    to the user when selecting a commodity.  It will also be used as
-    the default if a new commodity is created.
-
-
-  Return: A pointer to the found or created commodity, or NULL if no
-  account was found or created.
-
-*/
-gnc_commodity * gnc_import_select_commodity(char * exchange_code,
-				    char auto_create,
-				    char * default_fullname,
-				    char * default_mnemonic);
-
-/* Setter and getter functions for the online_id kvp_frame for 
-   Accounts and Transactions.
-*/ 
-const gchar * gnc_import_get_acc_online_id(Account * account);
-void gnc_import_set_acc_online_id(Account * account, 
-				  const gchar * string_value);
-const gchar * gnc_import_get_trans_online_id(Transaction * transaction);
-void gnc_import_set_trans_online_id(Transaction * transaction, 
-				    const gchar * string_value);
-
-typedef enum _gnc_match_probability{
-  CERTAIN,
-  PROBABLE,
-  LIKELY,
-  POSSIBLE,
-  UNLIKELY,
-  IMPOSSIBLE
-} GNC_match_probability;
-
-
 
 #endif

@@ -35,7 +35,7 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include "gnc-generic-import.h"
+#include "Commodity-matcher.h"
 #include "Account.h"
 #include "Transaction.h"
 #include "dialog-commodity.h"
