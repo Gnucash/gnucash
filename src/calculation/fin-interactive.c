@@ -429,35 +429,35 @@ unsigned char **env)
         	    			break;
 	        			case 1: /* compute number of periods, npp */
     	        			printf("Computing numbor of periods\n");
-        	    			npp = N(&fininfo);
+        	    			npp = fi_calc_num_payments(&fininfo);
         	    			printf("Number of Periods: %u\n",npp);
         	    			nval = (numeric_ptr)(predefined_fin_vars[compute].value);
         	    			nval->value.int_value = npp;
             				break;
 	       				case 2: /* compute interest, ir */
     	        			printf("Computing interest rate\n");
-        	    			ir = I(&fininfo);
+        	    			ir = fi_calc_interest(&fininfo);
         	    			printf("Nominal Interest Rate: %.*f\n",prec,ir);
         	    			nval = (numeric_ptr)(predefined_fin_vars[compute].value);
         	    			nval->value.dbl_value = ir;
             				break;
 	        			case 3: /* compute present value, pv */
     	        			printf("Computing Present Value\n");
-        	    			pv = PV(&fininfo);
+        	    			pv = fi_calc_present_value(&fininfo);
         	    			printf("Present Value: %.*f\n",prec,pv);
         	    			nval = (numeric_ptr)(predefined_fin_vars[compute].value);
         	    			nval->value.dbl_value = pv;
             				break;
 	        			case 4: /* compute periodic payment, pmt */
     	        			printf("Computing periodic payment\n");
-        	    			pmt = PMT(&fininfo);
+        	    			pmt = fi_calc_payment(&fininfo);
         	    			printf("Periodic Payment: %.*f\n",prec,pmt);
         	    			nval = (numeric_ptr)(predefined_fin_vars[compute].value);
         	    			nval->value.dbl_value = pmt;
             				break;
 	        			case 5: /* compute future value, fv */
     	        			printf("Computing Future Value\n");
-        	    			fv = FV(&fininfo);
+        	    			fv = fi_calc_future_value(&fininfo);
         	    			printf("Future Value: %.*f\n",prec,fv);
         	    			nval = (numeric_ptr)(predefined_fin_vars[compute].value);
         	    			nval->value.dbl_value = fv;

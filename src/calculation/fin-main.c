@@ -45,23 +45,23 @@ unsigned char **env)
     fininfo.ir = 8.25;
     fininfo.pv = 345725.0;
 
-    (void)PMT(&fininfo);
+    (void)fi_calc_payment(&fininfo);
     printf("With npp == %u\n     ir == %.*f\n     pv == %.*f\n",fininfo.npp,fininfo.prec,fininfo.ir,fininfo.prec,fininfo.pv);
     printf("------------>Compute pmt: -2597.32\n");
     prt_status(&fininfo,
                stdout);
 
-    I(&fininfo);
+    fi_calc_interest(&fininfo);
     printf("\n------------>Compute ir\n");
     prt_status(&fininfo,
                stdout);
 
-    N(&fininfo);
+    fi_calc_num_payments(&fininfo);
     printf("\n------------>Compute npp\n");
     prt_status(&fininfo,
                stdout);
 
-    FV(&fininfo);
+    fi_calc_future_value(&fininfo);
     printf("\n------------>Compute fv\n");
     prt_status(&fininfo,
                stdout);
@@ -71,7 +71,7 @@ unsigned char **env)
     fininfo.npp = 360;
     fininfo.ir = 8.25;
     fininfo.pv = 345725.0;
-    PMT(&fininfo);
+    fi_calc_payment(&fininfo);
 
     printf("\n\n Reset financial variables and compute amortization schedules.\n");
     printf("First Schedule - ignore delay in first payment and\noutput annual summary\n");
