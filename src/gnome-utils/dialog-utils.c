@@ -609,6 +609,9 @@ gtk_window_present (GtkWindow *window)
   }
 }
 
+#define GDK_MODIFIER_CHECK (GDK_CONTROL_MASK | GDK_MOD1_MASK | \
+			    GDK_MOD2_MASK    | GDK_MOD3_MASK | \
+			    GDK_MOD4_MASK    | GDK_MOD5_MASK)
 gboolean
 gnc_handle_date_accelerator (GdkEventKey *event,
                              struct tm *tm,
@@ -630,6 +633,13 @@ gnc_handle_date_accelerator (GdkEventKey *event,
                   tm->tm_mday,
                   tm->tm_mon + 1,
                   tm->tm_year + 1900);
+
+  /* Alphabetic keys cannot have modifiers, or they must be passed on
+     to the system. */
+  if ((gdk_keyval_is_upper(event->keyval) ||
+       gdk_keyval_is_lower(event->keyval)) &&
+      (event->state & GDK_MODIFIER_CHECK))
+      return FALSE;
 
   switch (event->keyval)
   {
