@@ -1,3 +1,8 @@
+2003-09-14  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: Release 1.8.7
+	* NEWS: Release 1.8.7
+
 2003-09-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/backend/postgres/test/run-tests.sh: small fix from

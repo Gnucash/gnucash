@@ -1,8 +1,19 @@
 Version history:
 ------- -------
 
+ 1.8.7  - 14 Sept 2003
+ 	 o Use <libofx/libofx.h> instead of "libofx/libofx.h" as it's not part
+	   of our system. Fixes a dependency problem in 1.8.6 release.
+	 o Small fix from hawkfan to get tests to work when building outside
+	   srcdir.
+	 o Fix a bug introduced by Matthew -- ANSI C does not allow you to
+	   declare a variable in the middle of an expression.  Move the
+	   declaration to the top of the function.
+	 o We don't need the trailing semi-colon because the #include adds
+	   one.  The double semi-colon causes build failures in some cases.
+
  1.8.6  - 11 Sept 2003
- 	 o Updated Spanish, Greek, French, Czech, Slovak, 
+ 	 o Updated Spanish, Greek, French, Czech, Slovak translations
 	 o Fixed extremely stupid bug in the import value setting workaround.
 	 o Fixed problem with SX formula_cell calls
 	 o Merge missing part of 2003-05-28 commit.  The log format changes
