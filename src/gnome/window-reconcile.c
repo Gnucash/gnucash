@@ -34,6 +34,7 @@
 #include "RegWindow.h"
 #include "window-reconcile.h"
 #include "reconcile-list.h"
+#include "query-user.h"
 #include "window-help.h"
 #include "messages.h"
 #include "util.h"
@@ -255,7 +256,8 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
       }
       else
       {
-        gnc_error_dialog(_("Ending balance must be a number."));
+        gnc_error_dialog_parented(GTK_WINDOW(parent),
+                                  "Ending balance must be a number.");
         continue;
       }
     }
@@ -591,8 +593,10 @@ recnOkCB(GtkWidget *w, gpointer data)
   RecnWindow  *recnData = (RecnWindow *) data;
 
   if (!DEQ(recnRecalculateBalance(recnData), 0.0))
-    if (!gnc_verify_dialog("The account is not balanced.\n" \
-                           "Are you sure you want to finish?", GNC_F))
+    if (!gnc_verify_dialog_parented(GTK_WINDOW(recnData->dialog),
+                                    "The account is not balanced.\n" \
+                                    "Are you sure you want to finish?",
+                                    GNC_F))
       return;
 
   gnc_reconcile_list_commit(GNC_RECONCILE_LIST(recnData->credit));

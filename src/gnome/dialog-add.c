@@ -24,30 +24,21 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-/* TODO: 
+/* TODO:
  * -- tooltips for the widgets in the window
- * -- history boxes (i'm not sure they are called this way) for the text 
- *    input boxes.
- * -- the user should be able to operate the window with the keybard only
- * -- the parent account widget should show up *always* with the selected
- *    account in the visible area. (if there are lots of accounts the
- *    selected account is offscreen).
- * -- make the account code work.
  */
 
 #include <gnome.h>
-#include <stdio.h>
-#include <ctype.h>
 
 #include "top-level.h"
 
 #include "AccWindow.h"
-#include "gnucash.h"
 #include "MainWindow.h"
 #include "FileDialog.h"
 #include "window-main.h"
 #include "dialog-utils.h"
 #include "account-tree.h"
+#include "query-user.h"
 #include "messages.h"
 #include "util.h"
 
@@ -64,6 +55,8 @@ struct _accwindow
   GtkCList  *type_list;
 
   AccountEditInfo edit_info;
+
+  GNCAccountTree *tree;
 
   Account *parentAccount;
   Account *newAccount;
@@ -299,13 +292,14 @@ gnc_ui_accWindow_account_tree_box_create(AccWindow * accData)
   GtkWidget *frame, *scrollWin, *accountTree;
     
   frame = gtk_frame_new(PARENT_ACC_STR);
-  gtk_widget_show (frame);
     
   accountTree = gnc_account_tree_new_with_root(accData->newAccount);
   gtk_clist_column_titles_hide(GTK_CLIST(accountTree));
   gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(accountTree));
   gnc_account_tree_refresh(GNC_ACCOUNT_TREE(accountTree));
   gtk_widget_show(accountTree);
+
+  accData->tree = GNC_ACCOUNT_TREE(accountTree);
 
   gtk_signal_connect(GTK_OBJECT (accountTree), "select_account",
 		     GTK_SIGNAL_FUNC(gnc_ui_accWindow_tree_select),
@@ -314,14 +308,10 @@ gnc_ui_accWindow_account_tree_box_create(AccWindow * accData)
 		     GTK_SIGNAL_FUNC(gnc_ui_accWindow_tree_select),
 		     accData);
 
-  gnc_account_tree_select_account(GNC_ACCOUNT_TREE(accountTree),
-				  accData->parentAccount);
-
   scrollWin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollWin),
 				  GTK_POLICY_AUTOMATIC, 
 				  GTK_POLICY_AUTOMATIC);
-  gtk_widget_show (scrollWin);
     
   gtk_container_add(GTK_CONTAINER(frame), scrollWin);
   gtk_container_border_width (GTK_CONTAINER (scrollWin), 5);
@@ -343,10 +333,8 @@ gnc_ui_accWindow_account_tree_box_create(AccWindow * accData)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-gnc_ui_accWindow_create_account(Account * account,
-				Account * parent,
-				gint type,
-				AccountFieldStrings * strings)
+gnc_ui_accWindow_create_account(Account * account, Account * parent,
+				gint type, AccountFieldStrings * strings)
 {
   xaccAccountBeginEdit(account, 0);
 
@@ -375,6 +363,7 @@ gnc_ui_accWindow_create_account(Account * account,
   gnc_account_tree_insert_account(gnc_get_current_account_tree(),
 				  account);
 }
+
 
 /********************************************************************\
  * gnc_accWindow_create                                             *
@@ -406,11 +395,8 @@ gnc_accWindow_create(AccWindow *accData)
   /* default to ok */
   gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
 
-  /* hide, don't destroy */
-  gnome_dialog_close_hides(GNOME_DIALOG(dialog), TRUE);
-
-  /* close on buttons */
-  gnome_dialog_set_close(GNOME_DIALOG(dialog), TRUE);
+  /* don't close on buttons */
+  gnome_dialog_set_close(GNOME_DIALOG(dialog), FALSE);
 
   /* Account field edit box */
   widget = gnc_ui_account_field_box_create(&accData->edit_info, FALSE);
@@ -432,7 +418,6 @@ gnc_accWindow_create(AccWindow *accData)
 
   /* Box for types and tree */
   hbox = gtk_hbox_new (FALSE, 5);
-  gtk_widget_show (hbox);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
   gtk_container_border_width (GTK_CONTAINER (hbox), 5);
 
@@ -454,8 +439,13 @@ gnc_accWindow_create(AccWindow *accData)
   widget = gnc_ui_notes_frame_create(&accData->edit_info.notes_entry);
   gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, FALSE, 0);
 
+  gtk_widget_show_all(dialog);
+
+  gnc_account_tree_select_account(accData->tree, accData->parentAccount, TRUE);
+
   return dialog;
 }
+
 
 /********************************************************************\
  * accWindow                                                        *
@@ -468,7 +458,7 @@ AccWindow *
 accWindow (AccountGroup *this_is_not_used) 
 {
   gint result;
-  AccWindow * accData = g_new0(AccWindow, 1);
+  AccWindow *accData = g_new0(AccWindow, 1);
   GtkWidget *dialog;
   AccountFieldStrings strings;
 
@@ -495,7 +485,8 @@ accWindow (AccountGroup *this_is_not_used)
     /* check for valid name */
     if (safe_strcmp(strings.name, "") == 0)
     {
-      gnc_error_dialog("You must enter a valid account name.");
+      gnc_error_dialog_parented(GTK_WINDOW(dialog),
+                                "You must enter a valid account name.");
       gnc_ui_free_field_strings(&strings);
       continue;
     }
@@ -503,7 +494,8 @@ accWindow (AccountGroup *this_is_not_used)
     /* check for valid type */
     if (accData->type == BAD_TYPE)
     {
-      gnc_error_dialog("You must select an account type.");
+      gnc_error_dialog_parented(GTK_WINDOW(dialog),
+                                "You must select an account type.");
       gnc_ui_free_field_strings(&strings);
       continue;
     }

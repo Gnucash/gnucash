@@ -69,6 +69,9 @@ static GnomeUIInfo filemenu[] = {
 			     GINT_TO_POINTER(FMB_OPEN)),
   GNOMEUIINFO_MENU_SAVE_ITEM(gnc_ui_filemenu_cb,
 			     GINT_TO_POINTER(FMB_SAVE)),
+  GNOMEUIINFO_MENU_SAVE_AS_ITEM(gnc_ui_filemenu_cb,
+				GINT_TO_POINTER(FMB_SAVEAS)),
+  GNOMEUIINFO_SEPARATOR,
   {
     GNOME_APP_UI_ITEM,
     N_("Import..."), N_("Import QIF File."),
@@ -359,10 +362,11 @@ gnc_ui_refresh_statusbar()
   g_free(label_string);
 }
 
-/* Required for compatibility with Motif code... */
+/* Required for compatibility with Motif code. */
 void
 gnc_refresh_main_window()
 {
+  xaccRecomputeGroupBalance(gncGetCurrentGroup());
   gnc_ui_refresh_statusbar();
   gnc_account_tree_refresh(gnc_get_current_account_tree());
 }
@@ -523,6 +527,9 @@ gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem)
     case FMB_SAVE:
       gncFileSave();
       break;
+    case FMB_SAVEAS:
+      gncFileSaveAs();
+      break;
     case FMB_IMPORT:
       gncFileQIFImport();
       gnc_refresh_main_window();
@@ -571,9 +578,9 @@ gnc_get_current_account()
 }
 
 static void
-gnc_account_tree_double_click_cb(GNCAccountTree *tree,
-				 Account *account,
-				 gpointer user_data)
+gnc_account_tree_activate_cb(GNCAccountTree *tree,
+                             Account *account,
+                             gpointer user_data)
 {
   regWindowSimple(account);
 }
@@ -708,8 +715,8 @@ mainWindow()
   gtk_object_set_data (GTK_OBJECT (app), "account_tree", account_tree);
   gnc_configure_account_tree();
   gnc_register_option_change_callback(gnc_configure_account_tree);
-  gtk_signal_connect(GTK_OBJECT (account_tree), "double_click_account",
-		     GTK_SIGNAL_FUNC (gnc_account_tree_double_click_cb), NULL);
+  gtk_signal_connect(GTK_OBJECT (account_tree), "activate_account",
+		     GTK_SIGNAL_FUNC (gnc_account_tree_activate_cb), NULL);
 
   popup = gnome_popup_menu_new(accountsmenu);
   gnome_popup_menu_attach(GTK_WIDGET(popup), GTK_WIDGET(account_tree), NULL);
@@ -739,7 +746,7 @@ mainWindow()
 
   gtk_container_add(GTK_CONTAINER(scrolled_win), GTK_WIDGET(account_tree));
 
-  gtk_widget_set_usize(GTK_WIDGET(app), 0, 400);
+  gtk_window_set_default_size(GTK_WINDOW(app), 0, 400);
 
   {
     SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");

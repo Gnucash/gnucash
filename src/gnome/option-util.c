@@ -50,12 +50,83 @@ static Getters getters = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 static GSList *option_sections = NULL;
 static gboolean options_dirty = FALSE;
 
-static GSList *change_callbacks;
+static GSList *change_callbacks = NULL;
 
 /* This static indicates the debugging module this .o belongs to.  */
 static short module = MOD_GUI;
 
 /*******************************************************************/
+
+
+/********************************************************************\
+ * gnc_options_init                                                 *
+ *   initialize the options structures from the guile side          *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_options_init()
+{
+  SCM func = gh_eval_str("gnc:send-ui-options");
+
+  option_sections = NULL;
+  options_dirty = FALSE;
+  change_callbacks = NULL;
+
+  if (gh_procedure_p(func))
+    gh_call0(func);
+  else
+  {
+    PERR("gnc_options_init: no guile options!");
+  }
+}
+
+
+/********************************************************************\
+ * gnc_options_shutdown                                             *
+ *   unregister the scheme options and free the structure memory    *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_options_shutdown()
+{
+  GSList *section_node;
+  GSList *option_node;
+  GNCOptionSection *section;
+  GNCOption *option;
+
+  section_node = option_sections;
+  while (section_node != NULL)
+  {
+    section = section_node->data;
+
+    option_node = section->options;
+    while (option_node != NULL)
+    {
+      option = option_node->data;
+
+      /* Should we check return value? */
+      gnc_unregister_c_side_scheme_ptr(option->guile_option_id);
+
+      option_node = option_node->next;
+    }
+
+    /* Free the option list */
+    if (section->options != NULL)
+      g_slist_free(section->options);
+
+    section_node = section_node->next;
+  }
+
+  if (option_sections != NULL)
+    g_slist_free(section->options);
+
+  option_sections = NULL;
+  options_dirty = FALSE;
+}
 
 
 /********************************************************************\
@@ -371,34 +442,40 @@ _gnc_register_option_ui(SCM guile_option)
   option->changed = FALSE;
   option->widget = NULL;
 
+  /* Prevent guile from garbage collecting the option */
+  option->guile_option_id = gnc_register_c_side_scheme_ptr(guile_option);
+  if (option->guile_option_id == SCM_UNDEFINED)
+  {
+    g_free(option);
+    PERR("_gnc_register_option_ui: couldn't register\n");
+    return;
+  }
+
   /* Make the section structure */
   section = g_new0(GNCOptionSection, 1);
   section->section_name = gnc_option_section(option);
   section->options = NULL;
 
   /* See if the section is already there */
- {
-   GSList *old;
+  {
+    GSList *old;
 
-   old = g_slist_find_custom(option_sections, section, compare_sections);
+    old = g_slist_find_custom(option_sections, section, compare_sections);
 
-   if (old != NULL)
-   {
-     if (section->section_name != NULL)
-       free(section->section_name);
-     g_free(section);
-     section = old->data;
-   }
-   else
-     option_sections = g_slist_insert_sorted(option_sections, section,
-					     compare_sections);
- }
+    if (old != NULL)
+    {
+      if (section->section_name != NULL)
+	free(section->section_name);
+      g_free(section);
+      section = old->data;
+    }
+    else
+      option_sections = g_slist_insert_sorted(option_sections, section,
+					      compare_sections);
+  }
 
- section->options = g_slist_insert_sorted(section->options, option,
-					  compare_option_tags);
-
- /* Prevent guile from garbage collecting the option */
- gnc_register_c_side_scheme_ptr(guile_option);
+  section->options = g_slist_insert_sorted(section->options, option,
+					   compare_option_tags);
 }
 
 

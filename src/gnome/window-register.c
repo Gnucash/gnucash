@@ -45,6 +45,7 @@
 #include "AdjBWindow.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "query-user.h"
 #include "messages.h"
 #include "table-gnome.h"
 #include "table-html.h"
@@ -296,7 +297,7 @@ gnc_register_date_cb(GtkWidget *widget, gpointer data)
   end   = gnome_date_edit_get_date(GNOME_DATE_EDIT(regData->end_date));
 
   xaccQuerySetDateRange(regData->ledger->query, start, end);
-			
+
   regData->ledger->dirty = 1;
   xaccLedgerDisplayRefresh(regData->ledger);
 }
@@ -551,8 +552,8 @@ gnc_register_create_menu_bar(RegWindow *regData)
 
   GnomeUIInfo register_window_menu[] =
   {
-    GNOMEUIINFO_SUBTREE("Register", register_menu),
-    GNOMEUIINFO_SUBTREE("Transaction", transaction_menu),
+    GNOMEUIINFO_SUBTREE("_Register", register_menu),
+    GNOMEUIINFO_SUBTREE("_Transaction", transaction_menu),
     GNOMEUIINFO_MENU_HELP_TREE(help_menu),
     GNOMEUIINFO_END
   };
@@ -898,8 +899,35 @@ recordCB(GtkWidget *w, gpointer data)
   trans = (Transaction *) (regData->ledger->ledger->user_huck);
   if (trans != NULL)
   {
-     xaccTransCommitEdit(trans);
-     regData->ledger->ledger->user_huck = NULL;
+    time_t start, end, new;
+    gboolean changed = FALSE;
+
+    xaccTransCommitEdit(trans);
+    regData->ledger->ledger->user_huck = NULL;
+
+    start = gnome_date_edit_get_date(GNOME_DATE_EDIT(regData->start_date));
+    end   = gnome_date_edit_get_date(GNOME_DATE_EDIT(regData->end_date));
+    new   = xaccTransGetDate(trans);
+
+    if (new < start)
+    {
+      start = new;
+      gnome_date_edit_set_time(GNOME_DATE_EDIT(regData->start_date), start);
+      changed = TRUE;
+    }
+
+    if (new > end)
+    {
+      end = new;
+      gnome_date_edit_set_time(GNOME_DATE_EDIT(regData->end_date), end);
+      changed = TRUE;
+    }
+
+    if (changed)
+    {
+      xaccQuerySetDateRange(regData->ledger->query, start, end);
+      regData->ledger->dirty = 1;
+    }
   }
 
   xaccSRRedrawRegEntry(regData->ledger->ledger);
@@ -939,7 +967,8 @@ deleteCB(GtkWidget *widget, gpointer data)
 
     assert(buf != NULL);
 
-    result = gnc_verify_dialog(buf, GNC_F);
+    result = gnc_verify_dialog_parented(GTK_WINDOW(regData->window),
+                                        buf, GNC_F);
 
     free(buf);
 

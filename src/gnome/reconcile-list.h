@@ -52,8 +52,10 @@ struct _GNCReconcileList
 
   gint current_row;
 
-  gboolean *reconciled;
+  GHashTable *reconciled;
+
   GtkStyle *reconciled_style;
+  GtkStyle *normal_style;
 
   Account *account;
 };

@@ -26,6 +26,7 @@
 #include "top-level.h"
 
 #include "window-main.h"
+#include "option-util.h"
 #include "gnucash-sheet.h"
 #include "gnucash-color.h"
 #include "gnucash-style.h"
@@ -94,17 +95,9 @@ gnucash_ui_init()
     gnome_init("GnuCash", NULL, fake_argc, fake_argv);
     gnome_is_initialized = TRUE;
 
-    app = gnome_app_new ( "GnuCash", "GnuCash" );
+    app = gnome_app_new("GnuCash", "GnuCash");
 
-    {
-      SCM func = gh_eval_str("gnc:send-ui-options");
-      if (gh_procedure_p(func))
-	gh_call0(func);
-      else
-      {
-	PERR("gnucash_ui_init: no guile options!");
-      }
-    }
+    gnc_options_init();
 
     mainWindow();
 
@@ -122,7 +115,8 @@ gnucash_ui_init()
 void
 gnc_ui_shutdown (void)
 {
-  if (gnome_is_running && !gnome_is_terminating) {
+  if (gnome_is_running && !gnome_is_terminating)
+  {
     gnome_is_terminating = TRUE;
     xaccGroupWindowDestroy(gncGetCurrentGroup());
     gtk_widget_hide(app);
@@ -138,7 +132,10 @@ gnc_ui_destroy (void)
   if (!gnome_is_initialized)
     return;
 
-  if (app != NULL) {
+  gnc_options_shutdown();
+
+  if (app != NULL)
+  {
     gtk_widget_destroy(app);
     app = NULL;
   }
@@ -170,7 +167,8 @@ gnc_ui_main()
 /* ============================================================== */
 
 int
-gnucash_ui_open_file(const char name[]) {
+gnucash_ui_open_file(const char name[])
+{
   gncFileOpenFile(name);
   return (1);
 }
@@ -178,7 +176,8 @@ gnucash_ui_open_file(const char name[]) {
 /* ============================================================== */
 
 int
-gnucash_ui_select_file() {
+gnucash_ui_select_file()
+{
   gncFileOpen();
   return (1);
 }

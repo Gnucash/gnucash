@@ -27,7 +27,7 @@ enum
 {
   SELECT_ACCOUNT,
   UNSELECT_ACCOUNT,
-  DOUBLE_CLICK_ACCOUNT,
+  ACTIVATE_ACCOUNT,
   LAST_SIGNAL
 };
 
@@ -36,6 +36,8 @@ enum
 static void gnc_account_tree_init(GNCAccountTree *tree);
 
 static void gnc_account_tree_class_init(GNCAccountTreeClass *klass);
+
+static gint gnc_account_tree_key_press(GtkWidget *widget, GdkEventKey *event);
 
 static gint gnc_account_tree_button_press(GtkWidget *widget,
 					  GdkEventButton *event);
@@ -54,6 +56,7 @@ static GtkCTreeNode * gnc_account_tree_insert_row(GNCAccountTree *tree,
 						  Account *acc);
 
 static void gnc_account_tree_fill(GNCAccountTree *tree,
+                                  GHashTable *expanded_accounts,
 				  GtkCTreeNode *parent,
 				  AccountGroup *accts);
 

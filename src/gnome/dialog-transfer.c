@@ -26,6 +26,7 @@
 #include "FileDialog.h"
 #include "Refresh.h"
 #include "window-reconcile.h"
+#include "query-user.h"
 #include "account-tree.h"
 #include "messages.h"
 #include "ui-callbacks.h"
@@ -70,12 +71,10 @@ gnc_xfer_dialog_create_tree_frame(Account *initial, gchar *title,
   int type;
 
   frame = gtk_frame_new(title);
-  gtk_widget_show (frame);
 
   vbox = gtk_vbox_new(FALSE, 5);
   gtk_container_add(GTK_CONTAINER(frame), vbox);
   gtk_container_set_border_width(GTK_CONTAINER(vbox), 10);
-  gtk_widget_show(vbox);
 
   type = xaccAccountGetType(initial);
   is_category = (type == EXPENSE) || (type == INCOME);
@@ -87,15 +86,11 @@ gnc_xfer_dialog_create_tree_frame(Account *initial, gchar *title,
   if (!is_category)
     gnc_account_tree_hide_categories(GNC_ACCOUNT_TREE(accountTree));
   gnc_account_tree_refresh(GNC_ACCOUNT_TREE(accountTree));
-  gtk_widget_show(accountTree);
-
-  gnc_account_tree_select_account(GNC_ACCOUNT_TREE(accountTree), initial);
 
   scrollWin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
 				 GTK_POLICY_AUTOMATIC, 
 				 GTK_POLICY_AUTOMATIC);
-  gtk_widget_show(scrollWin);
     
   gtk_box_pack_start(GTK_BOX(vbox), scrollWin, TRUE, TRUE, 0);
   gtk_container_add(GTK_CONTAINER(scrollWin), accountTree);
@@ -118,7 +113,6 @@ gnc_xfer_dialog_create_tree_frame(Account *initial, gchar *title,
   button = gtk_check_button_new_with_label("Show Categories");
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), is_category);
   gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
-  gtk_widget_show(button);
 
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
 		     GTK_SIGNAL_FUNC(gnc_xfer_dialog_toggle_cb),
@@ -150,11 +144,8 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
   /* default to ok */
   gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
 
-  /* hide, don't destroy */
-  gnome_dialog_close_hides(GNOME_DIALOG(dialog), TRUE);
-
-  /* close on buttons */
-  gnome_dialog_set_close(GNOME_DIALOG(dialog), TRUE);
+  /* don't close on buttons */
+  gnome_dialog_set_close(GNOME_DIALOG(dialog), FALSE);
 
   /* contains amount, date, description, and notes */
   {
@@ -162,19 +153,16 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
 
     frame = gtk_frame_new(_("Transfer Information"));
     gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
-    gtk_widget_show(frame);
 
     gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(dialog)->vbox),
 		       frame, TRUE, TRUE, 0);
 
     vbox = gtk_vbox_new(FALSE, 6);
-    gtk_widget_show(vbox);
     gtk_container_add(GTK_CONTAINER(frame), vbox);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 10);
 
     /* Contains amount and date */
     hbox = gtk_hbox_new(FALSE, 5);
-    gtk_widget_show(hbox);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
 
     {
@@ -185,11 +173,9 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
       label = gtk_label_new(string);
       g_free(string);
       gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
-      gtk_widget_show(label);
       gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
       amount = gtk_entry_new();
-      gtk_widget_show(amount);
       gtk_box_pack_start(GTK_BOX(hbox), amount, TRUE, TRUE, 0);
       xferData->amount_entry = amount;
 
@@ -201,11 +187,9 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
 
       label = gtk_label_new(DATE_STR);
       gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
-      gtk_widget_show(label);
       gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
       date = gnome_date_edit_new(time(NULL), FALSE, FALSE);
-      gtk_widget_show(date);
       gtk_box_pack_start(GTK_BOX(hbox), date, TRUE, TRUE, 0);
       xferData->date_entry = date;
     }
@@ -214,30 +198,25 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
       GtkWidget *sep;
 
       sep = gtk_hseparator_new();
-      gtk_widget_show(sep);
       gtk_box_pack_start(GTK_BOX(vbox), sep, TRUE, TRUE, 3);
     }
 
     /* Contains description and memo */
     hbox = gtk_hbox_new(FALSE, 5);
-    gtk_widget_show(hbox);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
 
     {
       GtkWidget *vbox;
 
       vbox = gtk_vbox_new(TRUE, 5);
-      gtk_widget_show(vbox);
       gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
 
       label = gtk_label_new(DESC_STR);
       gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
-      gtk_widget_show(label);
       gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
       label = gtk_label_new(MEMO_STR);
       gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
-      gtk_widget_show(label);
       gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
     }
 
@@ -245,17 +224,14 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
       GtkWidget *vbox, *desc, *memo;
 
       vbox = gtk_vbox_new(TRUE, 5);
-      gtk_widget_show(vbox);
       gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
 
       desc = gtk_entry_new();
-      gtk_widget_show(desc);
       gtk_box_pack_start(GTK_BOX(vbox), desc, TRUE, TRUE, 0);
       xferData->description_entry = desc;
       gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(desc));
 
       memo = gtk_entry_new();
-      gtk_widget_show(memo);
       gtk_box_pack_start(GTK_BOX(vbox), memo, TRUE, TRUE, 0);
       xferData->memo_entry = memo;
       gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(memo));
@@ -267,12 +243,11 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
     GtkWidget *hbox, *tree;
 
     hbox = gtk_hbox_new(TRUE, 5);
-    gtk_widget_show(hbox);
     gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(dialog)->vbox),
 		       hbox, TRUE, TRUE, 0);
 
     tree = gnc_xfer_dialog_create_tree_frame(initial, XFRM_STR,
-					     &xferData->from);
+                                             &xferData->from);
     gtk_box_pack_start(GTK_BOX(hbox), tree, TRUE, TRUE, 0);
 
     tree = gnc_xfer_dialog_create_tree_frame(initial, XFTO_STR,
@@ -312,6 +287,11 @@ gnc_xfer_dialog(GtkWidget * parent, Account * initial)
 
   dialog = gnc_xfer_dialog_create(parent, initial, &xferData);
 
+  gtk_widget_show_all(dialog);
+
+  gnc_account_tree_select_account(xferData.from, initial, TRUE);
+  gnc_account_tree_select_account(xferData.to, initial, TRUE);
+
   while (1)
   {
     result = gnome_dialog_run(GNOME_DIALOG(dialog));
@@ -324,27 +304,29 @@ gnc_xfer_dialog(GtkWidget * parent, Account * initial)
 
     if ((from == NULL) || (to == NULL))
     {
-      gnc_error_dialog(XFER_NO_ACC_MSG);
+      gnc_error_dialog_parented(GTK_WINDOW(dialog), XFER_NO_ACC_MSG);
       continue;
     }
 
     if (from == to)
     {
-      gnc_error_dialog(XFER_SAME_MSG);
+      gnc_error_dialog_parented(GTK_WINDOW(dialog), XFER_SAME_MSG);
       continue;
     }
 
     if (!xaccAccountsHaveCommonCurrency(from, to))
     {
-      gnc_error_dialog("You cannot transfer between those accounts.\n"\
-                       "They do not have a common currency.");
+      gnc_error_dialog_parented(GTK_WINDOW(dialog),
+                                "You cannot transfer between those accounts." \
+                                "\nThey do not have a common currency.");
       continue;
     }
 
     string = gtk_entry_get_text(GTK_ENTRY(xferData.amount_entry));
     if (sscanf(string, "%lf", &amount) != 1)
     {
-      gnc_error_dialog(_("The amount must be a number."));
+      gnc_error_dialog_parented(GTK_WINDOW(dialog),
+                                "The amount must be a number.");
       continue;
     }
 
@@ -390,7 +372,6 @@ gnc_xfer_dialog(GtkWidget * parent, Account * initial)
       xaccTransCommitEdit(trans);
 
       /* Refresh everything */
-      xaccRecomputeGroupBalance(gncGetCurrentGroup());
       gnc_account_ui_refresh(to);
       gnc_account_ui_refresh(from);
       gnc_refresh_main_window();

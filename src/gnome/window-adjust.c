@@ -94,7 +94,8 @@ gnc_ui_AdjBWindow_ok_cb(GtkWidget * widget, gpointer data)
 
   if(sscanf(string, "%lf", &new_balance) != 1)
   {
-    gnc_error_dialog(_("Balance must be a number."));
+    gnc_error_dialog_parented(GTK_WINDOW(adjBData->dialog),
+                              "Balance must be a number.");
     return;
   }
 

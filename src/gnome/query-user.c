@@ -206,12 +206,34 @@ gnc_foundation_query_dialog(const gchar *title,
  *                                                                  *
  * NOTE: This function does not return until the dialog is closed   *
  *                                                                  *
- * Args:   text     - the message to display                        *
+ * Args:   message - the message to display                         *
+ *         yes_is_default - If true, "Yes" is default,              *
+ *                          "No" is the default button.             *
  * Return: none                                                     *
 \********************************************************************/
 gncBoolean
-gnc_verify_dialog( const char *message,
-		   gncBoolean yes_is_default ) {
+gnc_verify_dialog(const char *message, gncBoolean yes_is_default)
+{
+  return gnc_verify_dialog_parented(GTK_WINDOW(gnc_get_ui_data()),
+                                    message, yes_is_default);
+}
+
+/********************************************************************\
+ * gnc_verify_dialog_parented                                       *
+ *   display a message, and asks the user to press "Yes" or "No"    *
+ *                                                                  *
+ * NOTE: This function does not return until the dialog is closed   *
+ *                                                                  *
+ * Args:   parent  - the parent window                              *
+ *         message - the message to display                         *
+ *         yes_is_default - If true, "Yes" is default,              *
+ *                          "No" is the default button.             *
+ * Return: none                                                     *
+\********************************************************************/
+gncBoolean
+gnc_verify_dialog_parented(GtkWindow *parent, const char *message,
+                           gncBoolean yes_is_default)
+{
   GtkWidget *verify_box = NULL;
   
   verify_box = gnome_message_box_new(message,
@@ -220,15 +242,12 @@ gnc_verify_dialog( const char *message,
 				     GNOME_STOCK_BUTTON_NO,
 				     NULL);
 
-  gnome_dialog_set_parent(GNOME_DIALOG(verify_box),
-			  GTK_WINDOW(gnc_get_ui_data()));
+  gnome_dialog_set_parent(GNOME_DIALOG(verify_box), parent);
 
-  gnome_dialog_set_default(GNOME_DIALOG(verify_box),
-			   yes_is_default ? 0 : 1);
+  gnome_dialog_set_default(GNOME_DIALOG(verify_box), yes_is_default ? 0 : 1);
 
   return (gnome_dialog_run_and_close(GNOME_DIALOG(verify_box)) == 0);
 }
-
 
 /********************************************************************\
  * gnc_info_dialog                                                  * 
@@ -238,11 +257,25 @@ gnc_verify_dialog( const char *message,
  * Return: none                                                     * 
 \********************************************************************/
 void 
-gnc_info_dialog(const char *message) {
+gnc_info_dialog(const char *message)
+{
+  gnc_info_dialog_parented(GTK_WINDOW(gnc_get_ui_data()), message);
+}
+
+/********************************************************************\
+ * gnc_info_dialog_parented                                         * 
+ *   displays an information dialog box                             * 
+ *                                                                  * 
+ * Args:   parent  - the parent window                              *  
+ *         message - the information message to display             * 
+ * Return: none                                                     * 
+\********************************************************************/
+void 
+gnc_info_dialog_parented(GtkWindow *parent, const char *message)
+{
   GtkWidget *info_box = NULL;
   
-  info_box = gnome_ok_dialog_parented(message,
-				      GTK_WINDOW(gnc_get_ui_data()));
+  info_box = gnome_ok_dialog_parented(message, parent);
 
   gnome_dialog_run_and_close(GNOME_DIALOG(info_box));
 }
@@ -257,10 +290,23 @@ gnc_info_dialog(const char *message) {
 void 
 gnc_warning_dialog(const char *message)
 {
+  gnc_warning_dialog_parented(GTK_WINDOW(gnc_get_ui_data()), message);
+}
+
+/********************************************************************\
+ * gnc_warning_dialog_parented                                      * 
+ *   displays a warning dialog box                                  * 
+ *                                                                  * 
+ * Args:   parent  - the parent window                              *  
+ *         message - the warning message to display                 * 
+ * Return: none                                                     * 
+\********************************************************************/
+void 
+gnc_warning_dialog_parented(GtkWindow *parent, const char *message)
+{
   GtkWidget *warning_box = NULL;
   
-  warning_box = gnome_warning_dialog_parented(message,
-					      GTK_WINDOW(gnc_get_ui_data()));
+  warning_box = gnome_warning_dialog_parented(message, parent);
 
   gnome_dialog_run_and_close(GNOME_DIALOG(warning_box));
 }
@@ -273,11 +319,25 @@ gnc_warning_dialog(const char *message)
  * Return: none                                                     * 
 \********************************************************************/
 void 
-gnc_error_dialog(const char *message) {
+gnc_error_dialog(const char *message)
+{
+  gnc_error_dialog_parented(GTK_WINDOW(gnc_get_ui_data()), message);
+}
+
+/********************************************************************\
+ * gnc_error_dialog_parented                                        * 
+ *   displays an error dialog box                                   * 
+ *                                                                  * 
+ * Args:   parent  - the parent window                              *
+ *         message - the error message to display                   * 
+ * Return: none                                                     * 
+\********************************************************************/
+void 
+gnc_error_dialog_parented(GtkWindow *parent, const char *message)
+{
   GtkWidget *error_box = NULL;
   
-  error_box = gnome_error_dialog_parented(message,
-					  GTK_WINDOW(gnc_get_ui_data()));
+  error_box = gnome_error_dialog_parented(message, parent);
 
   gnome_dialog_run_and_close(GNOME_DIALOG(error_box));
 }

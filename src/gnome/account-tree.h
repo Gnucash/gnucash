@@ -68,14 +68,14 @@ struct _GNCAccountTreeClass
 {
   GtkCTreeClass parent_class;
 
-  void (*select_account)       (GNCAccountTree *tree,
-				Account        *account);
+  void (*select_account)   (GNCAccountTree *tree,
+                            Account        *account);
 
-  void (*unselect_account)     (GNCAccountTree *tree,
-				Account        *account);
+  void (*unselect_account) (GNCAccountTree *tree,
+                            Account        *account);
 
-  void (*double_click_account) (GNCAccountTree *tree,
-				Account        *account);
+  void (*activate_account) (GNCAccountTree *tree,
+                            Account        *account);
 };
 
 /***********************************************************
@@ -94,7 +94,8 @@ void gnc_account_tree_set_view_info(GNCAccountTree *tree,
 				    AccountViewInfo *info);
 
 gboolean gnc_account_tree_select_account (GNCAccountTree *tree,
-					  Account *account);
+					  Account *account,
+                                          gboolean show_account);
 
 void gnc_account_tree_insert_account (GNCAccountTree *tree,
 				      Account *account);

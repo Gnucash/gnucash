@@ -34,7 +34,6 @@ INCLPATH := -I.. \
             -I@top_srcdir@/lib/g-wrap-install/include \
             -I@top_srcdir@/src/g-wrap \
             -I${includedir} \
-            -I../../lib/gtkfilesel2 \
 	    -I@top_srcdir@/src/register/gnome
 
 # All the other GNOME CFLAGS are handled in Makefile.common now
@@ -52,7 +51,6 @@ endif
 
 # Have to use wildcard here otherwise filters below won't get the expanded
 # text to work on...
-OTHER_OBJS += $(wildcard @top_srcdir@/lib/gtkfilesel2/obj/gnome/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/obj/gnome/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/engine/obj/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/register/obj/gnome/*.o)

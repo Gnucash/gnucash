@@ -35,7 +35,7 @@
 
 
 static GtkCTreeClass *parent_class = NULL;
-static guint account_tree_signals[LAST_SIGNAL] = {0};
+static guint account_tree_signals[LAST_SIGNAL];
 
 
 GtkType
@@ -194,12 +194,12 @@ gnc_account_tree_class_init(GNCAccountTreeClass *klass)
 		   GTK_TYPE_NONE, 1,
 		   GTK_TYPE_POINTER);
 
-  account_tree_signals[DOUBLE_CLICK_ACCOUNT] =
-    gtk_signal_new("double_click_account",
+  account_tree_signals[ACTIVATE_ACCOUNT] =
+    gtk_signal_new("activate_account",
 		   GTK_RUN_FIRST,
 		   object_class->type,
 		   GTK_SIGNAL_OFFSET(GNCAccountTreeClass,
-				     double_click_account),
+				     activate_account),
 		   gtk_marshal_NONE__POINTER,
 		   GTK_TYPE_NONE, 1,
 		   GTK_TYPE_POINTER);
@@ -210,14 +210,50 @@ gnc_account_tree_class_init(GNCAccountTreeClass *klass)
 
   object_class->destroy = gnc_account_tree_destroy;
 
+  widget_class->key_press_event = gnc_account_tree_key_press;
   widget_class->button_press_event = gnc_account_tree_button_press;
 
   ctree_class->tree_select_row   = gnc_account_tree_select_row;
   ctree_class->tree_unselect_row = gnc_account_tree_unselect_row;
 
-  klass->select_account       = NULL;
-  klass->unselect_account     = NULL;
-  klass->double_click_account = NULL;
+  klass->select_account   = NULL;
+  klass->unselect_account = NULL;
+  klass->activate_account = NULL;
+}
+
+/********************************************************************\
+ * gnc_account_tree_save_expanded                                   *
+ *   saves the expanded accounts in a hash table, indexed by        *
+ *   account pointers. only expanded accounts go in the table       *
+ *                                                                  *
+ * Args: tree - the tree to save expanded accounts                  *
+ * Returns: hash table containing expanded accounts                 *
+\********************************************************************/
+static GHashTable *
+gnc_account_tree_save_expanded(GNCAccountTree * tree)
+{
+  GtkCTree *ctree = GTK_CTREE(tree);
+  gboolean expanded;
+  GHashTable *ht;
+  GtkCTreeNode *node;
+  Account *account;
+  gint row = 0;
+
+  ht = g_hash_table_new(NULL, NULL);
+
+  while ((node = gtk_ctree_node_nth(ctree, row++)) != NULL)
+  {
+    gtk_ctree_get_node_info(ctree, node, NULL, NULL, NULL, NULL,
+                            NULL, NULL, NULL, &expanded);
+
+    if (!expanded)
+      continue;
+
+    account = gtk_ctree_node_get_row_data(ctree, node);
+    g_hash_table_insert(ht, account, account);
+  }
+
+  return ht;
 }
 
 /********************************************************************\
@@ -230,13 +266,22 @@ gnc_account_tree_class_init(GNCAccountTreeClass *klass)
 void
 gnc_account_tree_refresh(GNCAccountTree * tree)
 {
-  GtkCList     *clist = GTK_CLIST(tree);
+  GtkCList      *clist = GTK_CLIST(tree);
+  GHashTable    *expanded_accounts;
+  GtkAdjustment *adjustment;
+  gfloat        save_value = 0.0;
+
+  adjustment = gtk_clist_get_vadjustment(GTK_CLIST(tree));
+  if (adjustment != NULL)
+    save_value = adjustment->value;
+
+  expanded_accounts = gnc_account_tree_save_expanded(tree);
 
   gtk_clist_freeze(clist);
 
   gtk_clist_clear(clist);
 
-  gnc_account_tree_fill(tree,
+  gnc_account_tree_fill(tree, expanded_accounts,
 			gnc_account_tree_insert_row(tree, NULL, NULL,
 						    tree->root_account),
 			gncGetCurrentGroup());
@@ -247,8 +292,16 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 
   gnc_account_tree_update_column_visibility(tree);
 
-  if (!gnc_account_tree_select_account(tree, tree->current_account))
+  if (!gnc_account_tree_select_account(tree, tree->current_account, FALSE))
     tree->current_account = NULL;
+
+  if (adjustment != NULL)
+  {
+    save_value = CLAMP(save_value, adjustment->lower, adjustment->upper);
+    gtk_adjustment_set_value(adjustment, save_value);
+  }
+
+  g_hash_table_destroy(expanded_accounts);
 }
 
 
@@ -292,32 +345,46 @@ gnc_account_tree_get_view_info(GNCAccountTree *tree, AccountViewInfo *info)
 
 /********************************************************************\
  * gnc_account_tree_select_account                                  *
- *   select an account in the tree and expands the tree to ensure   *
- *   that it is shown.                                              *
+ *   select an account in the tree and possibly expands and scrolls *
+ *   the tree to ensure it is visible                               *
  *                                                                  *
- * Args: tree - tree to be modified                                 *
+ * Args: tree    - tree to be modified                              *
  *       account - account to be selected                           *
+ *       show    - if true, expand and show the tree                *
  * Returns: true if the account was found                           *
 \********************************************************************/
 gboolean
-gnc_account_tree_select_account(GNCAccountTree *tree, Account *account)
+gnc_account_tree_select_account(GNCAccountTree *tree,
+                                Account        *account,
+                                gboolean        show)
 {
-  GtkCTreeNode *node;
+  GtkCTree *ctree = GTK_CTREE(tree);
+  GtkCTreeNode *node, *n;
   GtkCTreeRow  *row;
 
-  node = gtk_ctree_find_by_row_data(GTK_CTREE(tree), NULL, account);
+  /* Get the node with the account */
+  node = gtk_ctree_find_by_row_data(ctree, NULL, account);
 
   if (node == NULL)
     return FALSE;
 
-  gtk_ctree_select(GTK_CTREE(tree), node);
+  /* Select it */
+  gtk_ctree_select(ctree, node);
 
+  if (!show)
+    return TRUE;
+
+  /* Expand all the parents */
   row = GTK_CTREE_ROW(node);
-  while ((node = row->parent) != NULL)
+  while ((n = row->parent) != NULL)
   {
-    gtk_ctree_expand(GTK_CTREE(tree), node);
-    row = GTK_CTREE_ROW(node);
+    gtk_ctree_expand(ctree, n);
+    row = GTK_CTREE_ROW(n);
   }
+
+  /* Make sure it's visible */
+  if (gtk_ctree_node_is_visible(ctree, node) != GTK_VISIBILITY_FULL)
+    gtk_ctree_node_moveto(ctree, node, 0, 0.5, 0.0);
 
   return TRUE;
 }
@@ -486,6 +553,26 @@ gnc_account_tree_set_view_info_real(GNCAccountTree *tree)
 }
 
 static gint
+gnc_account_tree_key_press(GtkWidget *widget, GdkEventKey *event)
+{
+  GNCAccountTree *account_tree = GNC_ACCOUNT_TREE(widget);
+
+  if ((event->keyval == GDK_Return) && (account_tree->current_account != NULL))
+  {
+    gtk_signal_emit(GTK_OBJECT(account_tree),
+                    account_tree_signals[ACTIVATE_ACCOUNT],
+                    account_tree->current_account);
+
+    return TRUE;
+  }
+
+  if (GTK_WIDGET_CLASS(parent_class)->key_press_event != NULL)
+    return GTK_WIDGET_CLASS(parent_class)->key_press_event(widget, event);
+
+  return FALSE;
+}
+
+static gint
 gnc_account_tree_button_press(GtkWidget *widget,
 			      GdkEventButton *event)
 {
@@ -511,14 +598,17 @@ gnc_account_tree_button_press(GtkWidget *widget,
       GNC_ACCOUNT_TREE(ctree)->ignore_unselect = GNC_T;
 
       gtk_signal_emit(GTK_OBJECT(widget),
-		      account_tree_signals[DOUBLE_CLICK_ACCOUNT],
+		      account_tree_signals[ACTIVATE_ACCOUNT],
 		      account);
 
       return TRUE;
     }
   }
 
-  return GTK_WIDGET_CLASS(parent_class)->button_press_event(widget, event);
+  if (GTK_WIDGET_CLASS(parent_class)->button_press_event != NULL)
+    return GTK_WIDGET_CLASS(parent_class)->button_press_event(widget, event);
+
+  return FALSE;
 }
 
 static void
@@ -568,10 +658,11 @@ gnc_account_tree_unselect_row(GtkCTree *ctree,
 
 static void
 gnc_account_tree_fill(GNCAccountTree *tree,
-		      GtkCTreeNode *parent,
-		      AccountGroup *accts)
+                      GHashTable     *expanded_accounts,
+		      GtkCTreeNode   *parent,
+                      AccountGroup   *accts)
 {
-  Account *acc;
+  Account *account;
   AccountGroup *acc_children;
   GtkCTreeNode *node;
   gint totalAccounts = xaccGroupGetNumAccounts(accts);
@@ -583,20 +674,23 @@ gnc_account_tree_fill(GNCAccountTree *tree,
         currentAccount < totalAccounts;
         currentAccount++ )
   {
-    acc = xaccGroupGetAccount(accts, currentAccount);
-    type = xaccAccountGetType(acc);
+    account = xaccGroupGetAccount(accts, currentAccount);
+    type = xaccAccountGetType(account);
 
     if (!tree->avi.include_type[type])
       continue;
 
-    node = gnc_account_tree_insert_row(tree, parent, NULL, acc);
+    node = gnc_account_tree_insert_row(tree, parent, NULL, account);
+
+    if (g_hash_table_lookup(expanded_accounts, account) != NULL)
+      gtk_ctree_expand(GTK_CTREE(tree), node);
 
     /* If this account has children,
      * then we need to build a subtree and fill it.
      */
-    acc_children = xaccAccountGetChildren (acc);
-    if (xaccAccountGetChildren(acc) != NULL)
-      gnc_account_tree_fill(tree, node, acc_children);
+    acc_children = xaccAccountGetChildren(account);
+    if (xaccAccountGetChildren(account) != NULL)
+      gnc_account_tree_fill(tree, expanded_accounts, node, acc_children);
   }
 }
 
