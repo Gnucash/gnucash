@@ -16,6 +16,12 @@
 (define new-label "New")
 (define find-label "Find")
 
+(define gnc:*business-label* (N_ "Business"))
+(define gnc:*company-name* (N_ "Company Name"))
+(define gnc:*company-addy* (N_ "Company Address"))
+
+(export gnc:*business-label* gnc:*company-name* gnc:*company-addy*)
+
 (define (add-customer-items)
   (let ((last-cust (gnc:owner-create))
 	(cust "Customers"))

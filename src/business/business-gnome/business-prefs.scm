@@ -19,15 +19,13 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
-(define *option-page* (N_ "Business"))
-
 (gnc:register-configuration-option
  (gnc:make-internal-option
   "__gui" "invoice_reg_width" 0))
 
 (gnc:register-configuration-option
  (gnc:make-number-range-option
-  *option-page* (N_ "Number of Rows")
+  gnc:*business-label* (N_ "Number of Rows")
   "a" (N_ "Default number of register rows to display in Invoices.")
    10.0 ;; default
     1.0 ;; lower bound
@@ -38,7 +36,7 @@
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  *option-page* (N_ "Tax Included?")
+  gnc:*business-label* (N_ "Tax Included?")
   "f" (N_ (string-append
 	   "Whether tax is included by default in entries. "
 	   "This setting is inherited by new customers and vendors"))
@@ -50,12 +48,12 @@
 
   (reg-option
    (gnc:make-string-option
-    (N_ "Business") (N_ "Company Name")
+    gnc:*business-label* gnc:*company-name*
     "a" (N_ "The name of your business") ""))
 
   (reg-option
    (gnc:make-text-option
-    (N_ "Business") (N_ "Company Address")
+    gnc:*business-label* gnc:*company-addy*
     "b" (N_ "The address of your business") "")))
 
 (gnc:register-kvp-option-generator gnc:id-book book-options-generator)
