@@ -1,5 +1,8 @@
 2002-08-03  Christian Stimming  <stimming@tuhh.de>
 
+	* po/sv.po, po/glossary/sv.po: Updated Swedish translation by
+	Christian Rose <menthos@menthos.com>.
+
 	* po/de.po: Updated German translation.
 
 	* po/glossary/gnc-glossary.txt, po/glossary/de.po: Discovered new

@@ -1,14 +1,14 @@
 # Swedish messages for gnucash-glossary.
-# Copyright (C) 2001 Free Software Foundation, Inc.
-# Christian Rose <menthos@menthos.com>, 2001.
+# Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+# Christian Rose <menthos@menthos.com>, 2001, 2002.
 #
 # $Id$
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
-"POT-Creation-Date: 2001-10-03 03:51+0200\n"
-"PO-Revision-Date: 2001-10-08 20:08+0200\n"
+"POT-Creation-Date: 2002-08-03 14:43+0200\n"
+"PO-Revision-Date: 2002-08-03 14:45+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -436,6 +436,10 @@ msgstr "betalare"
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
 msgid "payment"
 msgstr "betalning"
+
+#. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
+msgid "placeholder"
+msgstr "platshållare"
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
