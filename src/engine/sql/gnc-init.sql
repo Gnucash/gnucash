@@ -1,10 +1,18 @@
 
--- these tables roughly mirror the c structs in TransactionP.h and
--- AccountP.h
+-- these tables roughly mirror the c structs in 
+-- TransactionP.h,  AccountP.h and GroupP.h
+
+-- each child of a group will have its own record.
+DROP TABLE gncGroup;
+CREATE TABLE gncGroup (
+	groupGuid	CHAR(32),
+	parentGuid	CHAR(32),
+	childGuid	CHAR(32)
+);
 
 DROP TABLE gncAccount;
 CREATE TABLE gncAccount (
-	accountGuid	CHAR(16) PRIMARY KEY,
+	accountGuid	CHAR(32) PRIMARY KEY,
 	accountName 	VARCHAR(40) DEFAULT 'xoxo',
 	accountCode 	VARCHAR(8),
 	description 	VARCHAR(120),
@@ -25,11 +33,12 @@ INSERT INTO  gncaccount (accountguid,accountName,description) values
 
 DROP TABLE gncEntry;
 CREATE TABLE gncEntry (
-	entryGuid		CHAR(16) PRIMARY KEY,
-	accountGuid		CHAR(16),
-	transGuid		CHAR(16),
+	entryGuid		CHAR(32) PRIMARY KEY,
+	accountGuid		CHAR(32),
+	transGuid		CHAR(32),
 	memo			VARCHAR(20),
 	action			VARCHAR(20),
+	reconciled		CHAR,
 	date_reconciled 	DATETIME,
 	amount			FLOAT8 DEFAULT '0.0',
 	share_price		FLOAT8 DEFAULT '0.0'
@@ -37,7 +46,7 @@ CREATE TABLE gncEntry (
 
 DROP TABLE gncTransaction;
 CREATE TABLE gncTransaction (
-	transGuid		CHAR(16) PRIMARY KEY,
+	transGuid		CHAR(32) PRIMARY KEY,
 	date_entered	 	DATETIME,
 	date_posted	 	DATETIME,
 	num			VARCHAR(8),
