@@ -92,7 +92,7 @@ void xaccSetBasicCellValue (BasicCell *cell, const char *val)
    cb = cell->set_value;
    if (cb) {
       /* avoid recursion by disabling the  
-       * callback while it'sbeing called. */
+       * callback while it's being called. */
       cell->set_value = NULL;
       (*cb) (cell, val);
       cell->set_value = cb;

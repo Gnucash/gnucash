@@ -357,6 +357,28 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    curs = xaccMallocCellBlock (1, reg->num_cols);
    reg->trans_cursor = curs;
    
+{
+/* hack alertoid yeah */
+/* 
+make sure that "blank" cells stay blank, and don't
+get trailing garbage in them as things move about. 
+but this is broken, as when the cuirsor is moved,
+the contents of the register are copied into the 
+supposedly "blank" cell, and all is screwed up.
+Fix this later ....
+*/
+int i;
+BasicCell *nullcell;
+nullcell = xaccMallocBasicCell();
+xaccSetBasicCellValue (nullcell, "");
+nullcell->input_output = 0;
+nullcell->width = 1;
+nullcell->bg_color = 0xccccff;
+for (i=0; i<reg->num_cols; i++) {
+xaccAddCell (curs, nullcell, 0, i);
+}
+}
+
    FANCY (date,    Date,      DATE);
    BASIC (num,     Text,      NUM);
    FANCY (desc,    QuickFill, DESC);
@@ -382,6 +404,18 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    curs = xaccMallocCellBlock (1, reg->num_cols);
    reg->split_cursor = curs;
    
+{
+/* hack alertoid yeah */
+int i;
+BasicCell *nullcell;
+nullcell = xaccMallocBasicCell();
+xaccSetBasicCellValue (nullcell, "");
+nullcell->input_output = 0;
+nullcell->width = 1;
+for (i=0; i<reg->num_cols; i++) {
+xaccAddCell (curs, nullcell, 0, i);
+}
+}
    FANCY (xfrm,    Combo,     XFRM);
    FANCY (xto,     Combo,     XTO);
    FANCY (action,  Combo,     ACTN);
