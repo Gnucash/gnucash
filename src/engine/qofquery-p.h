@@ -29,10 +29,6 @@
 typedef struct _QofQueryTerm QofQueryTerm;
 typedef struct _QofQuerySort QofQuerySort;
 
-/* Initialize/Shutdown */
-void qof_query_init (void);
-void qof_query_shutdown (void);
-
 /* Functions to get Query information */
 int qof_query_get_max_results (QofQuery *q);
 
@@ -60,7 +56,7 @@ gboolean qof_query_term_is_inverted (QofQueryTerm *queryterm);
  * These are part of the query and should NOT be changed!
  */
 void qof_query_get_sorts (QofQuery *q, QofQuerySort **primary,
-		       QofQuerySort **secondary, QofQuerySort **tertiary);
+                       QofQuerySort **secondary, QofQuerySort **tertiary);
 
 GSList * qof_query_sort_get_param_path (QofQuerySort *querysort);
 gint qof_query_sort_get_sort_options (QofQuerySort *querysort);

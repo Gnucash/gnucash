@@ -280,7 +280,7 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
   return counter;
 }
 
-/* gncObject function implementation and registration */
+/* QofObject function implementation and registration */
 gboolean qof_book_register (void)
 {
   static QofQueryObject params[] = {

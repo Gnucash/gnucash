@@ -243,10 +243,10 @@ foreach (@files)
 		s/getDateFormat/qof_date_format_get/g;
 		s/setDateFormat/qof_date_format_set/g;
 		s/DateFormat/QofDateFormat/g;
-		s/printDateSecs/qof_print_date_secs_buff/g;
-		s/printDate/qof_print_date_buff/g;
+		s/printDateSecs/qof_print_date_buff/g;
+		s/printDate/qof_print_date_dmy_buff/g;
 		s/printGDate/qof_print_gdate/g;
-		s/xaccPrintDateSecs/qof_print_date_secs/g;
+		s/xaccPrintDateSecs/qof_print_date/g;
 		s/scanDate/qof_scan_date/g;
 		s/DATE_FORMAT_US/QOF_DATE_FORMAT_US/g;
   		s/DATE_FORMAT_UK/QOF_DATE_FORMAT_UK/g;

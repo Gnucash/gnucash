@@ -49,14 +49,21 @@ typedef enum {
 #define QOF_QUERY_FIRST_TERM QOF_QUERY_AND
 
 /** Default sort object type */
-#define QUERY_DEFAULT_SORT	"GnucashQueryDefaultSortObject"
+#define QUERY_DEFAULT_SORT      "QofQueryDefaultSort"
 
 /** "Known" Object Parameters -- all objects must support these */
-#define QOF_QUERY_PARAM_BOOK	"book"
-#define QOF_QUERY_PARAM_GUID	"guid"
-#define QOF_QUERY_PARAM_ACTIVE	"active" /* it's ok if an object does
-					  * not support this */
+#define QOF_QUERY_PARAM_BOOK    "book"
+#define QOF_QUERY_PARAM_GUID    "guid"
+#define QOF_QUERY_PARAM_ACTIVE  "active" /* it's ok if an object does
+                                           * not support this */
 
+/* --------------------------------------------------------- */
+/** Startup and Shutdown */
+
+void qof_query_init (void);
+void qof_query_shutdown (void);
+
+/* --------------------------------------------------------- */
 /** Basic API Functions */
 
 GSList * qof_query_build_param_list (char const *param, ...);
@@ -87,23 +94,23 @@ void qof_query_set_book (QofQuery *q, QofBook *book);
  * For example:
  *
  * acct_name_pred_data = make_string_pred_data(QOF_STRING_MATCH_CASEINSENSITIVE,
- *					       account_name);
+ *                                          account_name);
  * param_list = make_list (SPLIT_ACCOUNT, ACCOUNT_NAME, NULL);
  * qof_query_add_term (query, param_list, QOF_COMPARE_EQUAL,
- *		    acct_name_pred_data, QOF_QUERY_AND);
+ *                    acct_name_pred_data, QOF_QUERY_AND);
  */
 
 void qof_query_add_term (QofQuery *query, GSList *param_list,
-		      QofQueryPredData *pred_data, QofQueryOp op);
+                      QofQueryPredData *pred_data, QofQueryOp op);
 
 void qof_query_add_guid_match (QofQuery *q, GSList *param_list,
-			   const GUID *guid, QofQueryOp op);
+                           const GUID *guid, QofQueryOp op);
 void qof_query_add_guid_list_match (QofQuery *q, GSList *param_list,
-			       GList *guid_list, QofGuidMatch options,
-			       QofQueryOp op);
+                               GList *guid_list, QofGuidMatch options,
+                               QofQueryOp op);
 
 void qof_query_add_boolean_match (QofQuery *q, GSList *param_list, gboolean value,
-			      QofQueryOp op);
+                              QofQueryOp op);
 
 /** Run the query: */
 GList * qof_query_run (QofQuery *query);
@@ -138,15 +145,15 @@ void qof_query_merge_in_place(QofQuery *q1, QofQuery *q2, QofQueryOp op);
  * by the query when it is destroyed.
  */
 void qof_query_set_sort_order (QofQuery *q,
-			   GSList *primary_sort_params,
-			   GSList *secondary_sort_params,
-			   GSList *tertiary_sort_params);
+                           GSList *primary_sort_params,
+                           GSList *secondary_sort_params,
+                           GSList *tertiary_sort_params);
 
 void qof_query_set_sort_options (QofQuery *q, gint prim_op, gint sec_op,
-			     gint tert_op);
+                             gint tert_op);
 
 void qof_query_set_sort_increasing (QofQuery *q, gboolean prim_inc,
-				gboolean sec_inc, gboolean tert_inc);
+                                gboolean sec_inc, gboolean tert_inc);
 
 
 void qof_query_set_max_results (QofQuery *q, int n);

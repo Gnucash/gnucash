@@ -73,6 +73,13 @@ struct _QofObject {
 
 };
 
+/* -------------------------------------------------------------- */
+
+/** Initialize the object registration subsystem */
+void qof_object_initialize (void);
+void qof_object_shutdown (void);
+
+
 void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
 
 void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
