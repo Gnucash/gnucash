@@ -659,6 +659,15 @@ provide an accurate Profit & Loss statement.
 <PARA>TIAA-CREF support</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><email>stefan-ml@snobis.de</email> Stefan
+      Nobis</GLOSSTERM>
+<GLOSSDEF>
+<PARA>German translation patch</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email>spacey@inch.com</email> Peter
       Norton</GLOSSTERM>

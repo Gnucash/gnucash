@@ -45,7 +45,7 @@ msgstr "Kontobezeichnung"
 #: po/guile_strings.txt:8 src/engine/Account.c:1366
 #: src/gnome/glade-gnc-dialogs.c:189 src/register/splitreg.c:285
 msgid "Equity"
-msgstr "Nettowert"
+msgstr "Eigenkapital"
 
 #: po/guile_strings.txt:9
 msgid "'Enter' moves to blank transaction"
@@ -929,7 +929,7 @@ msgstr "/ (Slash)"
 #: po/guile_strings.txt:219 src/engine/Account.c:1358
 #: src/gnome/glade-gnc-dialogs.c:165
 msgid "Asset"
-msgstr "Haben"
+msgstr "Anlagevermögen"
 
 #: po/guile_strings.txt:220
 msgid "Use 24-hour time format"
@@ -3371,7 +3371,7 @@ msgstr "dieses HTML-Fenster schliessen"
 #: src/gnome/window-main.c:162
 #, fuzzy
 msgid "Net Assets:"
-msgstr "Haben"
+msgstr "Anlagevermögen"
 
 #: src/gnome/window-main.c:177
 #, fuzzy
