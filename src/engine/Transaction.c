@@ -553,8 +553,10 @@ G_INLINE_FUNC void gen_event_trans (Transaction *trans)
   for (node = trans->splits; node; node = node->next)
   {
     Account *account = xaccSplitGetAccount(node->data);
-    xaccGroupMarkNotSaved (account->parent);
+    if (account)
+      xaccGroupMarkNotSaved (account->parent);
   }
+
   gnc_engine_generate_event (&trans->guid, GNC_EVENT_MODIFY);
 }
 
