@@ -1,6 +1,7 @@
 
 Business Design & Implenmentation Notes
 ---------------------------------------
+Derek Atkins <warlord@mit.edu>
 Version of October 2003
 
 The gncTaxTable and gncBillTerm business objects have parent, child,
