@@ -139,13 +139,10 @@ typedef enum {
   KVP_MATCH_ACCOUNT = 1 << 2
 } kvp_match_where_t;
 
-/* query_run_t describes whether to require all splits or 
- * any to match for a transaction to be returned by 
- * xaccQueryGetTransactions */
 
 typedef enum {
-  QUERY_MATCH_ALL=1,
-  QUERY_MATCH_ANY=2
+  QUERY_MATCH_ALL=1,   /* match all accounts */
+  QUERY_MATCH_ANY=2    /* match any account */
 } query_run_t;
 
 typedef struct _querystruct Query;
@@ -281,7 +278,37 @@ GList       * xaccQueryGetTerms(Query * q);
 int           xaccQueryNumTerms(Query * q); 
 
 
-/* after the query has been set up, call this to run the query */
+/* After the query has been set up, call one of these to run the query. 
+ *
+ * The xaccQueryGetSplits() routine returns all splits matching the 
+ *    query.  Any given split will appear at most once in the result;
+ *    however, several splits from one transaction may appear in the list.
+ *
+ * The xaccQueryGetSplitsUniqueTrans() routine returns splits matching
+ *    the query, but only one matching split per transaction will be 
+ *    returned.  In other words, any given transaction will be 
+ *    represented at most once in the returned list.
+ *
+ * The xaccQueryGetTransactions() routine returns a list of 
+ *    transactions that match the query.  The query_run_t 
+ *    argument is used to provide account matching in the 
+ *    following way:
+ *
+ *    query_run_t describes how to match accounts when querying 
+ *    for transactions with xaccQueryGetTransactions().
+ *    What is the difference between 'ANY' and 'ALL', you 
+ *    may ask?  First, let us recall that a transaction consists
+ *    of splits, and each split belongs to exactly one account.
+ *    Specifying "MATCH_ALL"  means that *every* account that 
+ *    shows up in the query must also show up in some split in 
+ *    the transaction (in order for that transaction to be 
+ *    selected).  By contrast, specifying 'ANY' means that
+ *    any account in the query must show up in some split
+ *    in the transaction (in order for the transaction to 
+ *    be selected).  Thus, 'ANY' acts as a boolean-OR when
+ *    matching accounts, whereas 'AND' acts as a boolean-AND
+ *    for matching accounts.  Whew. Got that?
+ */
 SplitList   * xaccQueryGetSplits(Query * q);
 SplitList   * xaccQueryGetSplitsUniqueTrans(Query *q);
 TransList   * xaccQueryGetTransactions(Query * q, query_run_t type);
