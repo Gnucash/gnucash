@@ -1,0 +1,57 @@
+
+The main xacc web site is at http://www.cs.hmc.edu/~rclark/xacc/
+This site holds development versions & other miscellania.
+
+Current development alpha: xacc-1.1.3.tar.gz
+          -- DO NOT USE THIS CODE for production use.
+             It is very very broken. Use 1.0.17 instead.
+
+Current production code:  xacc-1.0.17.tar.gz
+          -- since 1.0.16 -- assorted core dump fixes
+                          -- MS Money QIF import fixes
+                          -- sco unixware & openserver build files
+          -- since 1.0.15 -- leap-year patch
+                          -- debian build files
+          -- since 1.0b11 -- includes date sorting, QIF, Solaris patches
+
+Binaries: 
+          All binary distributions do *not* include source code,
+          except where otherwise noted.
+
+          xacc-1.0.17-linux-i386-bin.tar.gz 
+          -- precompiled binary-only distribution, for Linux/Intel
+          -- contains version linked statically and dynamically w/ Motif
+
+          xacc_1.0.15-1_i386.deb
+          -- precompiled binary-only distribution, for Linux/Intel
+          -- use debian package manager to install
+
+          xacc-1.0.16-linux-ppc-bin.tar.gz 
+          -- precompiled distribution, for Linux/PowerPC PowerMAC
+          -- contains dynamically linked lesstif version only
+          -- includes source code
+
+          xacc-1.0.16-ibm-aix415.exe
+          -- precompiled binary for IBM AIX 4.1.5
+          -- To install, chmod ugo+x xacc-1.0.16-ibm-aix.exe,
+             then run it, then use SMIT to complete installation.
+          -- For more info, see http://www.bull.de/pub/
+
+          xacc-1.0.16-sco-osr.vols.tar
+          -- precompiled binary-only for SCO OpenServer 5.0.4
+          -- dynamically linked motif version only
+          -- for more info, see
+             http://www.sco.com/skunkware/osr5/x11/apps/xacc/
+
+          xacc-1.0.16-sco-uw7.pkg.gz
+          -- precompiled binary-only for UnixWare 7
+          -- dynamically linked motif version only
+          -- use pkgadd to install
+          -- for more info, see
+             http://www.sco.com/skunkware/uw7/x11/apps/xacc/
+
+          xacc-1.0b7-sgi-irix.inst.tar
+          -- SGI-Irix distribution, in SGI install format
+          -- Warning: old, various important bugs fixed since then.
+
+
