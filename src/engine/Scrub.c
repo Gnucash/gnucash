@@ -504,7 +504,6 @@ scrub_account_commodity_helper (Account *account, gpointer data)
 {
   xaccAccountScrubCommodity (account);
   xaccAccountDeleteOldData (account);
-
   return NULL;
 }
 
@@ -515,11 +514,10 @@ xaccGroupScrubCommodities (AccountGroup *group)
 
   xaccAccountGroupBeginEdit (group);
 
-/* XXX */
-  xaccGroupForEachTransaction (group, scrub_trans_currency_helper, group->book);
+  xaccGroupForEachTransaction (group, scrub_trans_currency_helper, NULL);
 
   xaccGroupForEachAccount (group, scrub_account_commodity_helper,
-                           group->book, TRUE);
+                           NULL, TRUE);
 
   xaccAccountGroupCommitEdit (group);
 }
