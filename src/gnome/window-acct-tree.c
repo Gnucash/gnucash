@@ -297,22 +297,58 @@ gnc_acct_tree_window_toolbar_add_account_cb (GtkWidget *widget, gpointer data)
 }
 
 
-static void
-gnc_acct_tree_window_toolbar_delete_account_cb (GtkWidget *widget, 
-                                                gpointer data)
+/********************************************************************
+ * delete_account_helper
+ * See if this account has any splits present.  Set the user data
+ * and return the same value to stop walking the account tree if
+ * appropriate.
+ ********************************************************************/
+static gpointer
+delete_account_helper (Account *account, gpointer data)
 {
-  GNCAcctTreeWin * win = data;
-  Account        * account = gnc_acct_tree_window_get_current_account(win);
+  gboolean *has_splits = data;
 
+  *has_splits = (xaccAccountGetSplitList(account) != NULL);
+  return (gpointer)*has_splits;
+}
+
+static void
+gnc_acct_tree_window_delete_common (Account *account)
+{
   if (account)
   {
-    const char *format = _("Are you sure you want to delete the %s account?");
+    const char *no_splits_no_children =
+			    _("Are you sure you want to delete the %s account?");
+    const char *no_splits = _("Are you sure you want to delete the %s\n"
+			      "account and all its children?");
+    const char *acct_has_splits = 
+			 _("This account contains transactions.  Are you sure you\n"
+			   "want to delete the %s account?");
+    const char *child_has_splits =
+			 _("One (or more) children of this account contain\n"
+			   "transactions.  Are you sure you want to delete the\n"
+			   "%s account and all its children?");
+    const char *format;
     char *message;
     char *name;
 
     name = xaccAccountGetFullName(account, gnc_get_account_separator ());
     if (!name)
       name = g_strdup ("");
+
+    if (xaccAccountGetSplitList(account) != NULL) {
+      format = acct_has_splits;
+    } else {
+      AccountGroup *children;
+      gboolean has_splits = FALSE;
+
+      children = xaccAccountGetChildren(account);
+      xaccGroupForEachAccount(children, delete_account_helper, &has_splits, TRUE);
+      if (has_splits) 
+	format= child_has_splits;
+      else
+	format = children ? no_splits : no_splits_no_children;
+    }
 
     message = g_strdup_printf(format, name);
 
@@ -335,6 +371,15 @@ gnc_acct_tree_window_toolbar_delete_account_cb (GtkWidget *widget,
   }
 }
 
+static void
+gnc_acct_tree_window_toolbar_delete_account_cb (GtkWidget *widget, 
+                                                gpointer data)
+{
+  GNCAcctTreeWin * win = data;
+  Account        * account = gnc_acct_tree_window_get_current_account(win);
+
+  gnc_acct_tree_window_delete_common (account);
+}
 
 static void
 gnc_acct_tree_window_menu_open_subs_cb(GtkWidget * widget, 
@@ -439,33 +484,7 @@ gnc_acct_tree_window_menu_delete_account_cb (GtkWidget *widget,
   GNCAcctTreeWin   * win = mc->user_data;
   Account        * account = gnc_acct_tree_window_get_current_account(win);
 
-  if (account) {
-    const char *format = _("Are you sure you want to delete the %s account?");
-    char *message;
-    char *name;
-
-    name = xaccAccountGetFullName(account, gnc_get_account_separator ());
-    if (!name)
-      name = g_strdup ("");
-
-    message = g_strdup_printf(format, name);
-
-    if (gnc_verify_dialog(message, FALSE)) {
-      gnc_suspend_gui_refresh ();
-      
-      xaccAccountBeginEdit (account);
-      xaccAccountDestroy (account);
-      
-      gnc_resume_gui_refresh ();
-    }
-    g_free(name);
-    g_free(message);
-  }
-  else {
-    const char *message = _("To delete an account, you must first\n"
-                            "choose an account to delete.\n");
-    gnc_error_dialog(message);
-  }
+  gnc_acct_tree_window_delete_common (account);
 }
 
 static void
