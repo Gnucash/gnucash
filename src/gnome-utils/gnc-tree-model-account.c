@@ -1087,7 +1087,8 @@ account_row_inserted (Account *account,
 
 	ENTER("account %p (%s), model %p",
 	      account, xaccAccountGetName(account), data);
-	gnc_tree_model_account_get_iter_from_account (GNC_TREE_MODEL_ACCOUNT (data), account, &iter);
+	if (!gnc_tree_model_account_get_iter_from_account (GNC_TREE_MODEL_ACCOUNT (data), account, &iter))
+	  return NULL;
 
 	path = gtk_tree_model_get_path (GTK_TREE_MODEL (data), &iter);
 
@@ -1221,18 +1222,22 @@ gnc_tree_model_account_get_account (GncTreeModelAccount *model,
  * routine should only be called from the file
  * gnc-tree-view-account.c.
  */
-void
+gboolean
 gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
 					      Account *account,
 					      GtkTreeIter *iter)
 {
 	AccountGroup *group;
+	gboolean found = FALSE;
 	gint i;
 	
 	ENTER("model %p, account %p, iter %p", model, account, iter);
-	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
-	g_return_if_fail (account != NULL);
-	g_return_if_fail (iter != NULL);
+	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), FALSE);
+	g_return_val_if_fail ((account != NULL), FALSE);
+	g_return_val_if_fail ((iter != NULL), FALSE);
+
+	if (model->priv->root != xaccAccountGetRoot (account))
+		return FALSE;
 
 	iter->user_data = account;
 	iter->stamp = model->stamp;
@@ -1240,13 +1245,13 @@ gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
 	if (account == model->priv->toplevel) {
 		iter->user_data2 = NULL;
 		iter->user_data3 = GINT_TO_POINTER (0);
-		return;
+		return TRUE;
 	}
 
 	group = xaccAccountGetParent (account);
-
 	for (i = 0; i < xaccGroupGetNumAccounts (group); i++) {
 		if (xaccGroupGetAccount (group, i) == account) {
+			found = TRUE;
 			break;
 		}
 	}
@@ -1254,6 +1259,7 @@ gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
 	iter->user_data2 = group;
 	iter->user_data3 = GINT_TO_POINTER (i);
 	LEAVE("iter %s", iter_to_string(iter));
+	return found;
 }
 
 /*
@@ -1272,7 +1278,9 @@ gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
 	g_return_val_if_fail (account != NULL, NULL);
 
-	gnc_tree_model_account_get_iter_from_account (model, account, &tree_iter);
+	if (!gnc_tree_model_account_get_iter_from_account (model, account, &tree_iter))
+	  return NULL;
+
 	tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &tree_iter);
 	if (tree_path) {
 	  gchar *path_string = gtk_tree_path_to_string(tree_path);
@@ -1415,11 +1423,12 @@ void gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
 	 case GNC_EVENT_ADD:
 	  /* Tell the filters/views where the new account was added. */
 	  DEBUG("create account %p (%s)", account, account_name);
-	  gnc_tree_model_account_get_iter_from_account (model, account, &iter);
-	  path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
-	  gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, &iter);
-	  gnc_tree_model_account_path_changed (model, path);
-	  gtk_tree_path_free(path);
+	  if (gnc_tree_model_account_get_iter_from_account (model, account, &iter)) {
+	    path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
+	    gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, &iter);
+	    gnc_tree_model_account_path_changed (model, path);
+	    gtk_tree_path_free(path);
+	  }
 	  break;
 
 	 case GNC_EVENT_REMOVE:

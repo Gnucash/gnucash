@@ -162,8 +162,11 @@ Account      *gnc_tree_model_account_get_account           (GncTreeModelAccount 
  *
  *  @param iter A pointer to an iter.  This iter will be rewritten to
  *  contain the results of the query.
+ *
+ *  @return TRUE if the account was found and the iter filled
+ *  in. FALSE otherwise.
  */
-void          gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
+gboolean      gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
                                                             Account *account,
                                                             GtkTreeIter *iter);
 
