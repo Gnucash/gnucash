@@ -110,7 +110,7 @@ char * xaccAccountGetTypeStr (int type); /* GUI names */
 /* Conversion routines for the account types to/from strings.
    Critical for the text communication mechanisms. i.e. INCOME ->
    "INCOME". */
-char *   xaccAccountTypeEnumAsString (int type); 
+char *   xaccAccountTypeEnumAsString (GNCAccountType type); 
 gboolean xaccAccountStringToType (const char* str, int *type);
 GNCAccountType xaccAccountStringToEnum (const char* str);
 
@@ -129,6 +129,7 @@ gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);
  *    (by calling xaccAccountBeginEdit()) before calling this routine.
  */
 Account     *xaccMallocAccount (void);
+Account * xaccCloneAccountSimple(const Account *from);
 void         xaccAccountBeginEdit (Account *account);
 void         xaccAccountCommitEdit (Account *account);
 void         xaccAccountDestroy (Account *account);

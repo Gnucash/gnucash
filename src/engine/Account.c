@@ -135,6 +135,27 @@ xaccMallocAccount (void)
   return acc;
 }
 
+Account *
+xaccCloneAccountSimple(const Account *from)
+{
+    Account *ret;
+
+    ret = xaccMallocAccount();
+    xaccInitAccount(ret);
+    
+    ret->type = from->type;
+
+    ret->accountName = g_strdup(from->accountName);
+    ret->accountCode = g_strdup(from->accountCode);
+    ret->description = g_strdup(from->description);
+
+    ret->kvp_data    = kvp_frame_copy(from->kvp_data);
+
+    ret->currency    = from->currency;
+
+    return ret;
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -1273,6 +1294,8 @@ AccountGroup *
 xaccAccountGetChildren (Account *acc)
 {
    if (!acc) return NULL;
+   if (acc->children == NULL)
+       acc->children = xaccMallocAccountGroup ();
    return (acc->children);
 }
 
@@ -1755,7 +1778,7 @@ xaccAccountHasAncestor (Account *account, Account * ancestor)
 #define GNC_RETURN_ENUM_AS_STRING(x) case (x): return #x;
 
 char *
-xaccAccountTypeEnumAsString(int type) {
+xaccAccountTypeEnumAsString(GNCAccountType type) {
   switch(type) {
     GNC_RETURN_ENUM_AS_STRING(NO_TYPE);
     GNC_RETURN_ENUM_AS_STRING(BANK);
