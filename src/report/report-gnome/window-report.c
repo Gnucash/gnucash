@@ -29,6 +29,7 @@
 
 #include <gnome.h>
 #include <guile/gh.h>
+#include <sys/stat.h>
 
 #include <g-wrap-runtime-guile.h>
 
@@ -291,62 +292,203 @@ gnc_report_window_back_cb(GtkWidget * w, gpointer data) {
 
 static int
 gnc_report_window_stop_button_cb(GtkWidget * w, gpointer data) {
-  gnc_report_window       * report = data;
+  gnc_report_window * report = data;
   gnc_html_cancel(report->html);
   return TRUE;
 }
 
+/* Returns SCM_BOOL_F if cancel. Returns SCM_BOOL_T if html.
+ * Otherwise returns pair from export_types. */
+static SCM
+gnc_get_export_type_choice (SCM export_types)
+{
+  GList * choices = NULL;
+  gboolean bad = FALSE;
+  GList * node;
+  int choice;
+  SCM tail;
 
-static int
-gnc_report_window_export_button_cb(GtkWidget * w, gpointer data) {
-  gnc_report_window       * report = data;
-  SCM get_export_thunk;
-  SCM export_thunk;
-  gboolean do_html;
+  if (!gh_list_p (export_types))
+    return SCM_BOOL_F;
 
-  get_export_thunk = gh_eval_str ("gnc:report-export-thunk");
-  export_thunk = gh_call1 (get_export_thunk, report->cur_report);
-
-  if (gh_procedure_p (export_thunk))
+  for (tail = export_types; !gh_null_p (tail); tail = gh_cdr (tail))
   {
-    SCM result;
+    SCM pair = gh_car (tail);
+    char * name;
+    SCM scm;
 
-    result = gh_call1 (export_thunk, report->cur_report);
-
-    if (gh_symbol_p (result))
+    if (!gh_pair_p (pair))
     {
-      char *symbol = gh_symbol2newstr (result, NULL);
-
-      do_html = (safe_strcmp (symbol, "html") == 0);
-
-      if (symbol)
-        free (symbol);
+      g_warning ("unexpected list element");
+      bad = TRUE;
+      break;
     }
-    else
-      do_html = FALSE;
+
+    scm = gh_car (pair);
+    if (!gh_string_p (scm))
+    {
+      g_warning ("unexpected pair element");
+      bad = TRUE;
+      break;
+    }
+
+    name = gh_scm2newstr (scm, NULL);
+    choices = g_list_prepend (choices, g_strdup (name));
+    if (name) free (name);
+  }
+
+  if (!bad)
+  {
+    choices = g_list_reverse (choices);
+
+    choices = g_list_prepend (choices, g_strdup (_("HTML")));
+
+    choice = gnc_choose_radio_option_dialog_parented
+      (NULL, _("Choose export format"),
+       _("Choose the export format for this report:"), 0, choices);
   }
   else
-    do_html = TRUE;
+    choice = -1;
 
-  if (do_html)
+  for (node = choices; node; node = node->next)
+    g_free (node->data);
+  g_list_free (choices);
+
+  if (choice < 0)
+    return SCM_BOOL_F;
+
+  if (choice == 0)
+    return SCM_BOOL_T;
+
+  choice--;
+  if (choice >= gh_length (export_types))
+    return SCM_BOOL_F;
+
+  return gh_list_ref (export_types, gh_int2scm (choice));
+}
+
+static const char *
+gnc_get_export_filename (SCM choice)
+{
+  const char * filepath;
+  struct stat statbuf;
+  char * title;
+  char * type;
+  int rc;
+
+  if (choice == SCM_BOOL_T)
+    type = g_strdup (_("HTML"));
+  else
   {
-    const char *filepath;
+    char * s = gh_scm2newstr (gh_car (choice), NULL);
+    type = g_strdup (s);
+    if (s) free (s);
+  }
 
-    filepath = gnc_file_dialog (_("Save HTML To File"), NULL, NULL);
-    if (!filepath)
-      return TRUE;
+  title = g_strdup_printf (_("Save %s To File"), type);
 
-    if (!gnc_html_export (report->html, filepath))
-    {
-      const char *fmt = _("Could not open the file\n"
-                          "     %s\n%s");
-      char *buf = g_strdup_printf (fmt, filepath ? filepath : "(null)",
-                                   strerror (errno) ? strerror (errno) : "");
+  filepath = gnc_file_dialog (title, NULL, NULL);
 
-      gnc_error_dialog (buf);
+  g_free (title);
+  g_free (type);
 
-      g_free (buf);
-    }
+  if (!filepath)
+    return NULL;
+
+  rc = stat (filepath, &statbuf);
+
+  /* Check for an error that isn't a non-existant file. */
+  if (rc != 0 && errno != ENOENT)
+  {
+    const char *message = _("You cannot save to that filename.");
+    char *string;
+
+    string = g_strconcat (message, "\n\n", strerror (errno), NULL);
+    gnc_error_dialog (string);
+    g_free (string);
+    return NULL;
+  }
+
+  /* Check for a file that isn't a regular file. */
+  if (rc == 0 && !S_ISREG (statbuf.st_mode))
+  {
+    const char *message = _("You cannot save to that file.");
+
+    gnc_error_dialog (message);
+    return NULL;
+  }
+
+  if (rc == 0)
+  {
+    const char *format = _("The file \n    %s\n already exists.\n"
+                           "Are you sure you want to overwrite it?");
+    char *string;
+    gboolean result;
+
+    string = g_strdup_printf (format, filepath);
+    result = gnc_verify_dialog (string, FALSE);
+    g_free (string);
+
+    if (!result)
+      return NULL;
+  }
+
+  return filepath;
+}
+
+static int
+gnc_report_window_export_button_cb(GtkWidget * w, gpointer data)
+{
+  gnc_report_window * report = data;
+  const char * filepath;
+  SCM export_types;
+  SCM export_thunk;
+  gboolean result;
+  SCM choice;
+
+  export_types = gh_call1 (gh_eval_str ("gnc:report-export-types"),
+                           report->cur_report);
+
+  export_thunk = gh_call1 (gh_eval_str ("gnc:report-export-thunk"),
+                           report->cur_report);
+
+  if (gh_list_p (export_types) && gh_procedure_p (export_thunk))
+    choice = gnc_get_export_type_choice (export_types);
+  else
+    choice = SCM_BOOL_T;
+
+  if (choice == SCM_BOOL_F)
+    return TRUE;
+
+  filepath = gnc_get_export_filename (choice);
+  if (!filepath)
+    return TRUE;
+
+  if (gh_pair_p (choice))
+  {
+    SCM file_scm;
+    SCM res;
+
+    choice = gh_cdr (choice);
+    file_scm = gh_str02scm (filepath);
+
+    res = gh_call3 (export_thunk, report->cur_report, choice, file_scm);
+
+    result = (res != SCM_BOOL_F);
+  }
+  else
+    result = gnc_html_export (report->html, filepath);
+
+  if (!result)
+  {
+    const char *fmt = _("Could not open the file\n"
+                        "     %s\n%s");
+    char *buf = g_strdup_printf (fmt, filepath ? filepath : "(null)",
+                                 strerror (errno) ? strerror (errno) : "");
+
+    gnc_error_dialog (buf);
+
+    g_free (buf);
   }
 
   return TRUE;
