@@ -1,0 +1,20 @@
+
+This README needs some serious help.
+
+SWIG is now used only to wrap perl5, and I make no guarantees about
+the safety of the resulting interface.  It may or may not have large
+memory leaks and other problems.  Anyone who wants to investigate this
+is welcome to. (RLB)
+
+The guile interface is now handled via g-wrap (../../lib/g-wrap).  As
+far as I know, it is reasonably solid.  Anyone who wants to know why I
+switched to g-wrap can ask, and I'll explain.  Sooner or later I'll
+probably generate a FAQ entry, but I want to get this out the door.
+Part of the reason has to do with the fact the SWIG's guile interface
+leaked memory like a sieve. (RLB)
+
+./examples contains whatever examples we've accumulated to date.
+
+----------------------
+TBD:
+-- modify configure to check perl paths
