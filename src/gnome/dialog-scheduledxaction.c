@@ -556,25 +556,25 @@ check_credit_debit_balance( gpointer key,
         *unbalanced |= !(gnc_numeric_zero_p(
                                  gnc_numeric_sub_fixed( tcds->debitSum,
                                                         tcds->creditSum ) ));
-#if 0
+#if GNC_DEBUG
 
         if ( gnc_numeric_zero_p( gnc_numeric_sub_fixed( tcds->debitSum,
                                                         tcds->creditSum ) ) ) {
-                DEBUG( "%.8x | true [%s - %s = %s]\n",
+                DEBUG( "%.8x | true [%s - %s = %s]",
                         (unsigned int)key,
                         gnc_numeric_to_string( tcds->debitSum ),
                         gnc_numeric_to_string( tcds->creditSum ),
                         gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
                                                                      tcds->creditSum )) );
         } else {
-                DEBUG( "%.8x | false [%s - %s = %s]\n",
+                DEBUG( "%.8x | false [%s - %s = %s]",
                         (unsigned int)key,
                         gnc_numeric_to_string( tcds->debitSum ),
                         gnc_numeric_to_string( tcds->creditSum ),
                         gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
                                                                      tcds->creditSum )) );
         }
-#endif /* DEBUG */
+#endif /* GNC_DEBUG */
 }
 
 /**
@@ -695,7 +695,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                                 return FALSE;
                                         }
                                         tcds->creditSum =
-                                                gnc_numeric_add( tcds->creditSum, tmp, 1,
+                                                gnc_numeric_add( tcds->creditSum, tmp, 100,
                                                                  (GNC_DENOM_AUTO | GNC_DENOM_LCD) );
                                         tmp = gnc_numeric_zero();
                                 }
@@ -712,7 +712,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                                       xaccSchedXactionGetName( sxed->sx ) );
                                                 return FALSE;
                                         }
-                                        tcds->debitSum = gnc_numeric_add( tcds->debitSum, tmp, 1,
+                                        tcds->debitSum = gnc_numeric_add( tcds->debitSum, tmp, 100,
                                                                           (GNC_DENOM_AUTO | GNC_DENOM_LCD) );
                                         tmp = gnc_numeric_zero();
                                 }
@@ -1291,9 +1291,9 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 
                 { REMAIN_ENTRY ,      "changed",      sxed_excal_update_adapt, NULL },
 
-                { "autocreate_opt", "toggled", autocreate_toggled,           NULL },
-                { "advance_opt",    "toggled", advance_toggle,               (gpointer)ADVANCE_DAYS_SPIN },
-                { "remind_opt",     "toggled", advance_toggle,               (gpointer)REMIND_DAYS_SPIN },
+                { AUTOCREATE_OPT,   "toggled", autocreate_toggled,           NULL },
+                { ADVANCE_OPT,      "toggled", advance_toggle,               (gpointer)ADVANCE_DAYS_SPIN },
+                { REMIND_OPT,       "toggled", advance_toggle,               (gpointer)REMIND_DAYS_SPIN },
 
                 { NULL,             NULL,      NULL,                         NULL }
         };

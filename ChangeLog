@@ -1,3 +1,13 @@
+2002-12-21  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-sx-from-trans.c (sxftd_compute_sx): Respect the
+	user's Prefs regarding new SXes; fixes Bug#99566.
+
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_check_consistent):
+	Don't ignore fractional currency-amounts; fixes Bug#97062.
+	(gnc_ui_scheduled_xaction_editor_dialog_create): Changed some
+	string-constants to their #defines.
+
 2002-12-20  David Hampton  <hampton@employees.org>
 
 	* src/register/ledger-core/gnc-ledger-display.c:
