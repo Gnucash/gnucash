@@ -2,7 +2,6 @@
 
 #include "config.h"
 #include "gnc-druid-gnome.h"
-#include <stdio.h> // for fprintf
 
 static void gnc_druid_gnome_class_init	(GNCDruidGnomeClass *class);
 static void gnc_druid_gnome_finalize		(GObject *obj);
@@ -116,8 +115,6 @@ gnc_druid_gnome_next_cb(GnomeDruidPage* page, GtkWidget *arg1, gpointer user_dat
   g_return_val_if_fail(IS_GNC_DRUID_GNOME(user_data), FALSE);
   druid = GNC_DRUID(user_data);
 
-  fprintf(stderr, "next page cb\n");
-
   /* Move to the next druid page */
   gnc_druid_next_page(druid);
 
@@ -132,8 +129,6 @@ gnc_druid_gnome_prev_cb(GnomeDruidPage* page, GtkWidget *arg1, gpointer user_dat
   g_return_val_if_fail(IS_GNC_DRUID_GNOME(user_data), FALSE);
   druid = GNC_DRUID(user_data);
 
-  fprintf(stderr, "prev page cb\n");
-
   /* move to the previous druid page */
   gnc_druid_prev_page(druid);
 
@@ -145,8 +140,6 @@ gnc_druid_gnome_cancel2_cb(GnomeDruidPage* page, GtkWidget *arg1,
 			   gpointer user_data)
 {
   GObject *obj = (GObject*)user_data;
-
-  fprintf(stderr, "cancel page cb\n");
 
   g_object_unref(obj);
   return TRUE;

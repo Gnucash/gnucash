@@ -27,6 +27,8 @@
 	* src/import-export/qif-import/gnc-druid-test.c:
 	  set file history_id
 
+	* src/gnome-utils/gnc-druid-gnome.c: remove debugging printfs
+
 2004-02-07  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/gnc-druid-provider-desc-file.[ch]:
