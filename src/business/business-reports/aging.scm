@@ -332,7 +332,7 @@ more than one currency.  This report is not designed to cope with this possibili
       gnc:pagename-general
       optname-multicurrency-totals
       "i"
-      (N_ "Show multi-currency totals.  If not selected, convert all\
+      (N_ "Show multi-currency totals.  If not selected, convert all \
 totals to report currency")
       #f))
 
