@@ -1,5 +1,13 @@
 Version history:
 ------- -------
+ 1.5.98 - 04 June 2001
+         o second beta release
+         o updated documentation (English & Portuguese)
+         o updated German and Portuguese translations
+         o more work on sql backend
+         o fixes for FreeBSD
+         o bug fixes
+
  1.5.97 - 27 May 2001
          o first beta release
          o feature freeze
