@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.3.3\n"
+"Project-Id-Version: gnucash 1.3.X\n"
 "POT-Creation-Date: 2000-03-27 00:01-0800\n"
-"PO-Revision-Date: 2000-03-25 10:05+0200\n"
+"PO-Revision-Date: 2000-03-27 20:35+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -366,9 +366,8 @@ msgid "Are you sure you want to delete the current transaction?"
 msgstr "Etes-vous sur de vouloir supprimer la transaction en cours?"
 
 #: messages-i18n.c:57
-#, fuzzy
 msgid "Recalculate Transaction"
-msgstr "Supprimer la transaction"
+msgstr "Recalculer la transaction"
 
 #: messages-i18n.c:58
 msgid ""
@@ -1205,9 +1204,8 @@ msgid "Cash"
 msgstr "Liquidités"
 
 #: messages-i18n.c:256
-#, fuzzy
 msgid "Changed"
-msgstr "Prix"
+msgstr "Changé"
 
 #: messages-i18n.c:257
 msgid "Charge"
@@ -1862,9 +1860,8 @@ msgid "Import QIF File - Scripted in Guile."
 msgstr "Importer des fichiers QIF - écrit en Guile."
 
 #: po/guile_strings.txt:74
-#, fuzzy
 msgid "Category"
-msgstr "Catégorie QIF"
+msgstr "Catégorie"
 
 #: po/guile_strings.txt:75
 msgid "Show Horizontal Borders"
@@ -1932,14 +1929,13 @@ msgid "Number Option"
 msgstr "Options de numérotation"
 
 #: po/guile_strings.txt:91
-#, fuzzy
 msgid "There are no accounts to report on."
-msgstr "Il n'y a aucun comptes selectionnés dans la liste d'options du compte."
+msgstr "Il n'y a aucun comptes sur lesquels créer un rapport."
 
 #: po/guile_strings.txt:92
-#, fuzzy, c-format
+#, c-format
 msgid "Report for %s."
-msgstr "Rapports pour %s."
+msgstr "Rapport pour %s."
 
 #: po/guile_strings.txt:93
 msgid "Reverse Income and Expense Accounts"
@@ -2144,9 +2140,8 @@ msgid "Do transaction report on this account"
 msgstr "Faire un rapport de transaction sur ce compte"
 
 #: po/guile_strings.txt:149
-#, fuzzy
 msgid "Net Inflow"
-msgstr "Informations fichier"
+msgstr "Flux net"
 
 #: po/guile_strings.txt:150
 msgid "Single mode default even row background"
@@ -2548,9 +2543,8 @@ msgid "Average Balance"
 msgstr "Solde moyen"
 
 #: po/guile_strings.txt:256
-#, fuzzy
 msgid "Totals"
-msgstr "Total"
+msgstr "Totaux"
 
 #: po/guile_strings.txt:257
 msgid "Show All Transactions"
