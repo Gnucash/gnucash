@@ -336,6 +336,15 @@ get_cell_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
         }
 }
 
+void
+gnucash_draw_hatching (GdkDrawable *drawable, GdkGC *gc,
+                       int x, int y, int width, int height)
+{
+        gdk_gc_set_foreground (gc, &gn_light_gray);
+
+        gdk_draw_line (drawable, gc, x, y + height / 2, x + height / 2, y);
+}
+
 static void
 draw_cell (GnucashGrid *grid,
            SheetBlock *block,
@@ -351,16 +360,21 @@ draw_cell (GnucashGrid *grid,
         GdkColor *fg_color;
         gint x_offset, y_offset;
         GdkRectangle rect;
+        gboolean hatching;
         guint32 argb;
 
         gdk_gc_set_background (grid->gc, &gn_white);
 
-        argb = gnc_table_get_bg_color (table, virt_loc);
+        argb = gnc_table_get_bg_color (table, virt_loc, &hatching);
         bg_color = gnucash_color_argb_to_gdk (argb);
 
         gdk_gc_set_foreground (grid->gc, bg_color);
         gdk_draw_rectangle (drawable, grid->gc, TRUE,
                             x + 1, y + 1, width - 1, height - 1);
+
+        if (hatching)
+                gnucash_draw_hatching (drawable, grid->gc,
+                                       x, y, width, height);
 
         get_cell_borders (grid->sheet, virt_loc, &borders);
  

@@ -281,12 +281,14 @@ gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc)
 /* ==================================================== */
 
 guint32
-gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc)
+gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
+                        gboolean *hatching)
 {
   if (!table->bg_color_handler)
     return 0xffffff; /* white */
 
-  return table->bg_color_handler (virt_loc, table->handler_user_data);
+  return table->bg_color_handler (virt_loc, hatching,
+                                  table->handler_user_data);
 }
 
 /* ==================================================== */

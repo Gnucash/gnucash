@@ -150,7 +150,7 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         block = gnucash_sheet_get_block (item_edit->sheet,
                                          item_edit->virt_loc.vcell_loc);
 
-        argb = gnc_table_get_bg_color (table, item_edit->virt_loc);
+        argb = gnc_table_get_bg_color (table, item_edit->virt_loc, NULL);
 
         info->bg_color = gnucash_color_argb_to_gdk (argb);
         info->fg_color = &gn_black;

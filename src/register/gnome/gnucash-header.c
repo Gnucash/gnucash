@@ -83,7 +83,9 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         virt_loc.vcell_loc.virt_col = 0;
         virt_loc.phys_row_offset = 0;
         virt_loc.phys_col_offset = 0;
-        argb = gnc_table_get_bg_color (table, virt_loc);
+
+        argb = gnc_table_get_bg_color (table, virt_loc, NULL);
+
         bg_color = gnucash_color_argb_to_gdk (argb);
 
         /* Assume all cells have the same color */

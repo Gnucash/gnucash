@@ -214,6 +214,10 @@ CellIOFlags  xaccSRGetIOFlagsHandler (VirtualLocation virt_loc,
 guint32      xaccSRGetFGColorHandler (VirtualLocation virt_loc,
                                       gpointer user_data);
 guint32      xaccSRGetBGColorHandler (VirtualLocation virt_loc,
+                                      gboolean *hatching,
                                       gpointer user_data);
+void         xaccSRGetCellBorderHandler (VirtualLocation virt_loc,
+                                         PhysicalCellBorders *borders,
+                                         gpointer user_data);
 
 #endif /* __XACC_SPLIT_LEDGER_H__ */

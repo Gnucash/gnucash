@@ -143,6 +143,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        TableGetCellIOFlags io_flag_handler,
                        TableGetFGColorHandler fg_color_handler,
                        TableGetBGColorHandler bg_color_handler,
+                       TableGetCellBorderHandler cell_border_handler,
                        VirtCellDataAllocator allocator,
                        VirtCellDataDeallocator deallocator,
                        VirtCellDataCopy copy);
@@ -636,6 +637,7 @@ xaccMallocSplitRegister (SplitRegisterType type,
                          TableGetCellIOFlags io_flag_handler,
                          TableGetFGColorHandler fg_color_handler,
                          TableGetBGColorHandler bg_color_handler,
+                         TableGetCellBorderHandler cell_border_handler,
                          VirtCellDataAllocator allocator,
                          VirtCellDataDeallocator deallocator,
                          VirtCellDataCopy copy)
@@ -644,10 +646,18 @@ xaccMallocSplitRegister (SplitRegisterType type,
 
   reg = g_new0 (SplitRegister, 1);
 
-  xaccInitSplitRegister (reg, type, style, use_double_line,
-                         entry_handler, io_flag_handler,
-                         fg_color_handler, bg_color_handler,
-                         allocator, deallocator, copy);
+  xaccInitSplitRegister (reg,
+                         type,
+                         style,
+                         use_double_line,
+                         entry_handler,
+                         io_flag_handler,
+                         fg_color_handler,
+                         bg_color_handler,
+                         cell_border_handler,
+                         allocator,
+                         deallocator,
+                         copy);
 
   return reg;
 }
@@ -713,39 +723,6 @@ mallocCursors (SplitRegister *reg)
 
 /* ============================================== */
 
-static void
-sr_get_cell_borders (VirtualLocation virt_loc,
-                     PhysicalCellBorders *borders,
-                     gpointer user_data)
-{
-  SplitRegister *reg = user_data;
-  VirtualCell *vcell;
-
-  vcell = gnc_table_get_virtual_cell (reg->table, virt_loc.vcell_loc);
-  if (!vcell || !vcell->cellblock)
-    return;
-
-  if ((virt_loc.phys_col_offset < vcell->cellblock->start_col) ||
-      (virt_loc.phys_col_offset > vcell->cellblock->stop_col))
-  {
-    borders->top    = CELL_BORDER_LINE_NONE;
-    borders->bottom = CELL_BORDER_LINE_NONE;
-    borders->left   = CELL_BORDER_LINE_NONE;
-    borders->right  = CELL_BORDER_LINE_NONE;
-    return;
-  }
-
-  if (vcell->cellblock->cursor_type == CURSOR_TYPE_SPLIT)
-  {
-    borders->top    = MIN (borders->top,    CELL_BORDER_LINE_LIGHT);
-    borders->bottom = MIN (borders->bottom, CELL_BORDER_LINE_LIGHT);
-    borders->left   = MIN (borders->left,   CELL_BORDER_LINE_LIGHT);
-    borders->right  = MIN (borders->right,  CELL_BORDER_LINE_LIGHT);
-  }
-}
-
-/* ============================================== */
-
 #define NEW(NAME, CN, TYPE)			\
    reg->CN##Cell = xaccMalloc##TYPE##Cell();	\
    reg->cells[NAME##_CELL] = (BasicCell *) reg->CN##Cell;
@@ -759,6 +736,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        TableGetCellIOFlags io_flag_handler,
                        TableGetFGColorHandler fg_color_handler,
                        TableGetBGColorHandler bg_color_handler,
+                       TableGetCellBorderHandler cell_border_handler,
                        VirtCellDataAllocator allocator,
                        VirtCellDataDeallocator deallocator,
                        VirtCellDataCopy copy)
@@ -923,7 +901,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                          io_flag_handler,
                          fg_color_handler,
                          bg_color_handler,
-                         sr_get_cell_borders,
+                         cell_border_handler,
                          reg,
                          allocator,
                          deallocator,

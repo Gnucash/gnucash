@@ -32,6 +32,6 @@ void      gnucash_color_alloc_gdk   (GdkColor *color);
 GdkColor *gnucash_color_argb_to_gdk (guint32 argb);
 
 extern GdkColor gn_white, gn_light_gray, gn_dark_gray;
-extern GdkColor gn_black, gn_blue, gn_red;
+extern GdkColor gn_black, gn_blue, gn_red, gn_yellow;
 
 #endif /* GNUCASH_COLOR_H */

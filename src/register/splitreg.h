@@ -237,6 +237,7 @@ xaccMallocSplitRegister (SplitRegisterType type,
                          TableGetCellIOFlags io_flag_handler,
                          TableGetFGColorHandler fg_color_handler,
                          TableGetBGColorHandler bg_color_handler,
+                         TableGetCellBorderHandler cell_border_handler,
                          VirtCellDataAllocator allocator,
                          VirtCellDataDeallocator deallocator,
                          VirtCellDataCopy copy);

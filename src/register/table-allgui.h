@@ -173,6 +173,7 @@ typedef guint32 (*TableGetFGColorHandler) (VirtualLocation virt_loc,
                                            gpointer user_data);
 
 typedef guint32 (*TableGetBGColorHandler) (VirtualLocation virt_loc,
+                                           gboolean *hatching,
                                            gpointer user_data);
 
 typedef void (*TableGetCellBorderHandler) (VirtualLocation virt_loc,
@@ -286,7 +287,8 @@ const char *   gnc_table_get_label (Table *table, VirtualLocation virt_loc);
 
 guint32        gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc);
 
-guint32        gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc);
+guint32        gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
+                                       gboolean *hatching);
 
 void           gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
                                       PhysicalCellBorders *borders);

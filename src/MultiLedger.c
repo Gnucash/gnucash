@@ -438,6 +438,7 @@ xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
                                              xaccSRGetIOFlagsHandler,
                                              xaccSRGetFGColorHandler,
                                              xaccSRGetBGColorHandler,
+                                             xaccSRGetCellBorderHandler,
                                              xaccGUIDMalloc,
                                              xaccGUIDFree,
                                              xaccGUIDCopy);

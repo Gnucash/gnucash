@@ -2800,6 +2800,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 static GList *
 xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 {
+  SRInfo *info = xaccSRGetInfo (reg);
   GList *refresh_accounts = NULL;
   Split *other_split = NULL;
   guint32 changed;
@@ -2925,7 +2926,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     }
   }
 
-  if (reg->style == REG_STYLE_LEDGER)
+  if (reg->style == REG_STYLE_LEDGER && !info->trans_expanded)
     other_split = xaccGetOtherSplit (split);
 
   if (MOD_MXFRM & changed)
@@ -3743,6 +3744,37 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
   return black;
 }
 
+void
+xaccSRGetCellBorderHandler (VirtualLocation virt_loc,
+                            PhysicalCellBorders *borders,
+                            gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  VirtualCell *vcell;
+
+  vcell = gnc_table_get_virtual_cell (reg->table, virt_loc.vcell_loc);
+  if (!vcell || !vcell->cellblock)
+    return;
+
+  if ((virt_loc.phys_col_offset < vcell->cellblock->start_col) ||
+      (virt_loc.phys_col_offset > vcell->cellblock->stop_col))
+  {
+    borders->top    = CELL_BORDER_LINE_NONE;
+    borders->bottom = CELL_BORDER_LINE_NONE;
+    borders->left   = CELL_BORDER_LINE_NONE;
+    borders->right  = CELL_BORDER_LINE_NONE;
+    return;
+  }
+
+  if (vcell->cellblock->cursor_type == CURSOR_TYPE_SPLIT)
+  {
+    borders->top    = MIN (borders->top,    CELL_BORDER_LINE_LIGHT);
+    borders->bottom = MIN (borders->bottom, CELL_BORDER_LINE_LIGHT);
+    borders->left   = MIN (borders->left,   CELL_BORDER_LINE_LIGHT);
+    borders->right  = MIN (borders->right,  CELL_BORDER_LINE_LIGHT);
+  }
+}
+
 /* ======================================================== */
 
 static SplitRegisterColors reg_colors =
@@ -3766,12 +3798,38 @@ xaccSetSplitRegisterColors (SplitRegisterColors reg_colors_new)
 }
 
 guint32
-xaccSRGetBGColorHandler (VirtualLocation virt_loc, gpointer user_data)
+xaccSRGetBGColorHandler (VirtualLocation virt_loc,
+                         gboolean *hatching,
+                         gpointer user_data)
 {
   SplitRegister *reg = user_data;
   VirtualCell *vcell;
   guint32 bg_color;
   gboolean is_current;
+
+  if (hatching)
+  {
+    CellType cell_type;
+
+    cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
+
+    if ((cell_type != DEBT_CELL)  &&
+        (cell_type != CRED_CELL)  &&
+        (cell_type != TDEBT_CELL) &&
+        (cell_type != TCRED_CELL))
+      *hatching = FALSE;
+    else
+    {
+      Transaction *trans;
+
+      trans = xaccSRGetTrans (reg, virt_loc.vcell_loc);
+
+      if (trans)
+        *hatching = !gnc_numeric_zero_p (xaccTransGetImbalance (trans));
+      else
+        *hatching = FALSE;
+    }
+  }
 
   bg_color = 0xffffff; /* white */
 
@@ -3829,15 +3887,6 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc, gpointer user_data)
 
     case CURSOR_TYPE_SPLIT:
       {
-        Transaction *trans;
-        gnc_numeric imbalance;
-
-        trans = xaccSRGetTrans (reg, virt_loc.vcell_loc);
-        imbalance = xaccTransGetImbalance (trans);
-
-        if (!gnc_numeric_zero_p (imbalance))
-          return 0xffff00;
-
         if (is_current)
           return reg_colors.split_active_bg_color;
 
