@@ -6,9 +6,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report standard-reports))
-(export gnc:show-register-report)
-(export gnc:print-register-report)
-(export gnc:show-invoice-report)
+
+(export gnc:register-report-create)
 
 (use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash report account-piecharts))
@@ -25,14 +24,4 @@
 (use-modules (gnucash report register))
 (use-modules (gnucash report transaction))
 
-(define (gnc:show-register-report . rest)
-  (apply gnc:apply-register-report
-         (cons gnc:report-window (cons #f rest))))
-
-(define (gnc:print-register-report . rest)
-  (apply gnc:apply-register-report
-         (cons gnc:print-report (cons #f rest))))
-
-(define (gnc:show-invoice-report . rest)
-  (apply gnc:apply-register-report
-         (cons gnc:report-window (cons #t rest))))
+(define gnc:register-report-create gnc:register-report-create-internal)

@@ -89,7 +89,7 @@
    '<gw:void>
    "gnc_ui_hierarchy_druid"
    '()
-   "Open the hiearchy druid for importing an account hierarchy.")
+   "Open the hierarchy druid for importing an account hierarchy.")
 
   (gw:wrap-function
    mod
@@ -149,36 +149,12 @@
 
   (gw:wrap-function
    mod
-   'gnc:report-window
-   '<gw:void>
-   "reportWindow"
-   '((<gw:int> report-id))
-   "Show report window")
-
-  (gw:wrap-function
-   mod
-   'gnc:report-window-reload
-   '<gw:void>
-   "gnc_report_window_reload"
-   '((<gnc:report-window*> wind))
-   "Force reload of a report window")
-
-  (gw:wrap-function
-   mod
-   'gnc:report-window-add-edited-report
-   '<gw:void>
-   "gnc_report_window_add_edited_report"
-   '((<gnc:report-window*> wind) (<gw:scm> report))
-   "Add a report to the list of reports with open editors")
-
-  (gw:wrap-function
-   mod
    'gnc:report-raise-editor
    '<gw:void>
    "gnc_report_raise_editor"
    '((<gw:scm> report))
    "Raise the report's editor window")
-  
+
   (gw:wrap-function
    mod
    'gnc:main-window-open-report
@@ -187,14 +163,6 @@
    '((<gw:int> report-id) (<gw:bool> top-level))
    "Show report window")
   
-  (gw:wrap-function
-   mod
-   'gnc:print-report
-   '<gw:void>
-   "gnc_print_report"
-   '((<gw:int> report-id))
-   "Print a report with dialog support")
-
   (gw:wrap-function
    mod
    'gnc:style-sheet-dialog-open

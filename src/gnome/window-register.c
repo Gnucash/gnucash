@@ -55,6 +55,7 @@
 #include "window-help.h"
 #include "window-reconcile.h"
 #include "window-register.h"
+#include "window-report.h"
 #include "top-level.h"
 
 
@@ -1002,8 +1003,6 @@ gnc_register_create_summary_bar (RegWindow *regData)
 {
   gboolean has_shares;
   GtkWidget *summarybar;
-  GtkWidget *hbox;
-  GtkWidget *label;
 
   regData->cleared_label    = NULL;
   regData->balance_label    = NULL;
@@ -1967,7 +1966,6 @@ gnc_reg_get_name (RegWindow *regData, gboolean for_window)
 static void
 gnc_reg_set_window_name (RegWindow *regData)
 {
-  SplitRegister *reg;
   gchar *windowname;
 
   if (regData == NULL)
@@ -3223,16 +3221,15 @@ closeCB (GtkWidget *widget, gpointer data)
   gnc_ledger_display_close (regData->ledger);
 }
 
-static void
-report_helper (RegWindow *regData, SCM func, Query *query)
+static int
+report_helper (RegWindow *regData, gboolean invoice, Query *query)
 {
   SplitRegister *reg = gnc_ledger_display_get_split_register (regData->ledger);
   char *str;
   SCM qtype;
   SCM args;
+  SCM func;
   SCM arg;
-
-  g_return_if_fail (gh_procedure_p (func));
 
   args = SCM_EOL;
 
@@ -3256,20 +3253,28 @@ report_helper (RegWindow *regData, SCM func, Query *query)
   args = gh_cons (arg, args);
 
   qtype = gh_eval_str("<gnc:Query*>");
-  g_return_if_fail (qtype != SCM_UNDEFINED);
+  g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
 
   if (!query)
   {
     query = gnc_ledger_display_get_query (regData->ledger);
-    g_return_if_fail (query != NULL);
+    g_return_val_if_fail (query != NULL, -1);
   }
 
   arg = gw_wcp_assimilate_ptr (query, qtype);
   args = gh_cons (arg, args);
-  if (arg == SCM_UNDEFINED)
-    return;
+  g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
-  gh_apply (func, args);
+  arg = gh_bool2scm (invoice);
+  args = gh_cons (arg, args);
+
+  func = gh_eval_str ("gnc:register-report-create");
+  g_return_val_if_fail (gh_procedure_p (func), -1);
+
+  arg = gh_apply (func, args);
+  g_return_val_if_fail (gh_exact_p (arg), -1);
+
+  return gh_scm2int (arg);
 }
 
 /********************************************************************\
@@ -3283,12 +3288,11 @@ static void
 reportCB (GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
-  SCM func;
+  int id;
 
-  func = gh_eval_str ("gnc:show-register-report");
-  g_return_if_fail (gh_procedure_p (func));
-
-  report_helper (regData, func, NULL);
+  id = report_helper (regData, FALSE, NULL);
+  if (id >= 0)
+    reportWindow (id);
 }
 
 /********************************************************************\
@@ -3302,12 +3306,11 @@ static void
 invoiceCB (GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
-  SCM func;
+  int id;
 
-  func = gh_eval_str ("gnc:show-invoice-report");
-  g_return_if_fail (gh_procedure_p (func));
-
-  report_helper (regData, func, NULL);
+  id = report_helper (regData, TRUE, NULL);
+  if (id >= 0)
+    reportWindow (id);
 }
 
 /********************************************************************\
@@ -3324,16 +3327,13 @@ invoiceTransCB (GtkWidget *widget, gpointer data)
   SplitRegister *reg;
   Split *split;
   Query *query;
-  SCM func;
+  int id;
 
   reg = gnc_ledger_display_get_split_register (regData->ledger);
 
   split = gnc_split_register_get_current_split (reg);
   if (!split)
     return;
-
-  func = gh_eval_str ("gnc:show-invoice-report");
-  g_return_if_fail (gh_procedure_p (func));
 
   query = xaccMallocQuery ();
 
@@ -3342,7 +3342,9 @@ invoiceTransCB (GtkWidget *widget, gpointer data)
   xaccQueryAddGUIDMatch (query, xaccSplitGetGUID (split),
                          GNC_ID_SPLIT, QUERY_AND);
 
-  report_helper (regData, func, query);
+  id = report_helper (regData, TRUE, query);
+  if (id >= 0)
+    reportWindow (id);
 }
 
 /********************************************************************\
@@ -3356,12 +3358,11 @@ static void
 printReportCB (GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
-  SCM func;
+  int id;
 
-  func = gh_eval_str ("gnc:print-register-report");
-  g_return_if_fail (gh_procedure_p (func));
-
-  report_helper (regData, func, NULL);
+  id = report_helper (regData, FALSE, NULL);
+  if (id >= 0)
+    gnc_print_report (id);
 }
 
 /********************************************************************\
