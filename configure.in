@@ -139,7 +139,7 @@ then
 else
   GNC_CONFIGDIR='${sysconfdir}/gnucash'
   GNC_DOC_INSTALL_DIR='${pkgdatadir}/doc'
-  GNC_INCLUDE_DIR=${includedir}
+  GNC_INCLUDE_DIR=${includedir}/gnucash
   GNC_LIBDIR='${pkglibdir}'
   GNC_SCM_INSTALL_DIR='${pkgdatadir}/scm'
   GNC_SHAREDIR='${pkgdatadir}'
