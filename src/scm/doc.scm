@@ -15,8 +15,6 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
-(gnc:support "doc.scm")
-
 (define (gnc:find-doc-file file)
   (gnc:find-in-directories file (gnc:config-var-value-get gnc:*doc-path*)))
 
