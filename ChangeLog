@@ -1,5 +1,8 @@
 2002-11-24  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/hbci/gnc-hbci-gettrans.c: Improve space
+	trimming in imported description.
+
 	* src/import-export/ofx/gnc-ofx-import.c: As a trial, use new
 	generic transaction importer GUI. Changes are marked with 'CS:'.
 

@@ -200,6 +200,29 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
   }
 }
 
+static void *gnc_list_string_cb (const char *string, void *user_data)
+{
+  gchar **res = user_data;
+  gchar *tmp1, *tmp2;
+
+  tmp1 = g_strdup (string);
+  g_strstrip (tmp1);
+
+  if (*res != NULL) {
+    /* The " " is the separating string in between each two strings. */
+    tmp2 = g_strjoin (" ", *res, tmp1, NULL);
+    g_free (tmp1);
+
+    g_free (*res);
+    *res = tmp2;
+  }
+  else {
+    *res = tmp1;
+  }
+  
+  return NULL;
+}
+
 
 /* list_HBCI_Transaction_foreach callback */
 static void *trans_list_cb (const HBCI_Transaction *h_trans, 
@@ -254,22 +277,28 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
   
   {
     /* Description */
-    char *h_descr = 
-      list_string_concat_delim (HBCI_Transaction_description (h_trans), ";");
-    char *othername = 
-      list_string_concat_delim (HBCI_Transaction_otherName (h_trans), ", ");
+    char *h_descr = NULL;
+    char *othername = NULL;
     char *g_descr;
-    
+
+    /* Don't use list_string_concat_delim here since we need to
+       g_strstrip every single element of the string list, which is
+       only done in our callback gnc_list_string_cb. The separator is
+       also set there. */
+    list_string_foreach (HBCI_Transaction_description (h_trans), 
+			 &gnc_list_string_cb,
+			 &h_descr);
+    list_string_foreach (HBCI_Transaction_otherName (h_trans), 
+			 &gnc_list_string_cb,
+			 &othername);
     DEBUG("HBCI Description '%s'", h_descr);
-    g_strstrip (h_descr);
-    g_strstrip (othername);
     
     g_descr = 
-      (strlen (h_descr) > 0) ?
-      g_strdup_printf ("%s; %s", 
-		       h_descr,
-		       othername) :
-      g_strdup (othername);
+      ((strlen (h_descr) > 0) ?
+       g_strdup_printf ("%s; %s", 
+			h_descr,
+			othername) :
+       g_strdup (othername));
     
     xaccTransSetDescription (gnc_trans, g_descr);
 
