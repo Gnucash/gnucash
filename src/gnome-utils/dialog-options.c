@@ -27,6 +27,7 @@
 #include "dialog-options.h"
 #include "dialog-utils.h"
 #include "engine-helpers.h"
+#include "glib-helpers.h"
 #include "global-options.h"
 #include "gnc-account-tree.h"
 #include "gnc-commodity-edit.h"
@@ -395,7 +396,7 @@ gnc_option_set_ui_value_internal (GNCOption *option, gboolean use_default)
   {
     GList *list;
 
-    list = gnc_scm_to_glist_account_ptr(value);
+    list = gnc_scm_list_to_glist(value);
 
     gtk_clist_unselect_all(GTK_CLIST(widget));
     gnc_account_tree_select_accounts(GNC_ACCOUNT_TREE(widget), list, TRUE);
@@ -649,7 +650,8 @@ gnc_option_get_ui_value_internal (GNCOption *option)
     list = gnc_account_tree_get_current_accounts(tree);
 
     /* handover list */
-    result = gnc_glist_account_ptr_to_scm(list);
+    result = gnc_glist_to_scm_list(list, gh_eval_str("<gnc:Account*>"));
+    g_list_free(list);
   }
   else if (safe_strcmp(type, "list") == 0)
   {
