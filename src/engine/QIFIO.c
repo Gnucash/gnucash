@@ -191,35 +191,45 @@ char * xaccReadQIFCategory (int fd, Account * acc)
 
        switch (qifline[0]) {
 	 /* N == Name */
-       case 'N':
-	 XACC_PREP_STRING (tmp);
-	 xaccAccountSetName (acc, tmp);
-	 break;
+         case 'N':
+	   XACC_PREP_STRING (tmp);
+	   xaccAccountSetName (acc, tmp);
+	   break;
 
 	 /* D == Description */
-       case 'D':
-	 XACC_PREP_STRING (tmp);
-	 xaccAccountSetDescription (acc, tmp);
-	 break;
-
+         case 'D':
+	   XACC_PREP_STRING (tmp);
+	   xaccAccountSetDescription (acc, tmp);
+	   break;
+  
 	 /* T == Taxable -- this income is taxable */
-       case 'T':
-	 break;
+         case 'T':
+	   break;
 
 	 /* E == Expense Category */
-       case 'E':
-	 xaccAccountSetType (acc, EXPENSE);
-	 break;
+         case 'E':
+	   xaccAccountSetType (acc, EXPENSE);
+	   break;
 
 	 /* I == Income Category */
-       case 'I':
-	 xaccAccountSetType (acc, INCOME);
-	 break;
+         case 'I':
+	   xaccAccountSetType (acc, INCOME);
+	   break;
 
 	 /* R == Tax Rate Indicator; -- some number ... */
-       case 'R':
-	 break;
+         case 'R':
+	   break;
+
+	 /* B == ????  ... */
+         case 'B':
+           PWARN ("Ignored: %s\n", qifline);
+	   break;
+
+         default:
+           PWARN ("Unknown transaction component %s\n", qifline);
+           break;
        }
+
        /* check for end-of-transaction marker */
        if (NSTRNCMP(qifline, "^^")) {
 	 break;
@@ -1037,7 +1047,8 @@ xaccReadQIFAccountGroup( char *datafile )
         continue;
      } else
 
-     if (STRSTR (qifline, "Type:Memorized")) {
+     if ((STRSTR (qifline, "Type:Memorized")) ||
+         (STRSTR (qifline, "Type:Memorised")) ) {
         DEBUG ("got memorized\n");
         qifline = xaccReadQIFDiscard (fd);
         continue;
