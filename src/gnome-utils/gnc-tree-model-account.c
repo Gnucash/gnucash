@@ -1260,8 +1260,10 @@ gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
 	g_return_val_if_fail ((account != NULL), FALSE);
 	g_return_val_if_fail ((iter != NULL), FALSE);
 
-	if (model->priv->root != xaccAccountGetRoot (account))
+	if (model->priv->root != xaccAccountGetRoot (account)) {
+		LEAVE("Root doesn't match");
 		return FALSE;
+	}
 
 	iter->user_data = account;
 	iter->stamp = model->stamp;
@@ -1269,10 +1271,12 @@ gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
 	if (account == model->priv->toplevel) {
 		iter->user_data2 = NULL;
 		iter->user_data3 = GINT_TO_POINTER (0);
+		LEAVE("Matched top level");
 		return TRUE;
 	}
 
 	group = xaccAccountGetParent (account);
+	DEBUG("Looking through %d accounts at this level", xaccGroupGetNumAccounts (group));
 	for (i = 0; i < xaccGroupGetNumAccounts (group); i++) {
 		if (xaccGroupGetAccount (group, i) == account) {
 			found = TRUE;
@@ -1302,14 +1306,18 @@ gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
 	g_return_val_if_fail (account != NULL, NULL);
 
-	if (!gnc_tree_model_account_get_iter_from_account (model, account, &tree_iter))
+	if (!gnc_tree_model_account_get_iter_from_account (model, account, &tree_iter)) {
+	  LEAVE("no iter");
 	  return NULL;
+	}
 
 	tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &tree_iter);
 	if (tree_path) {
 	  gchar *path_string = gtk_tree_path_to_string(tree_path);
 	  LEAVE("path (2) %s", path_string);
 	  g_free(path_string);
+	} else {
+	  LEAVE("no path");
 	}
 	return tree_path;
 }
@@ -1446,7 +1454,7 @@ void gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
 	switch (event_type) {
 	 case GNC_EVENT_ADD:
 	  /* Tell the filters/views where the new account was added. */
-	  DEBUG("create account %p (%s)", account, account_name);
+	  DEBUG("add account %p (%s)", account, account_name);
 	  if (gnc_tree_model_account_get_iter_from_account (model, account, &iter)) {
 	    path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
 	    gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, &iter);
