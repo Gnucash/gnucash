@@ -588,15 +588,17 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                          FALSE);
 
   gnc_register_add_cell (layout,
-                         PRIC_CELL,
+                         SHRS_CELL,
                          PRICE_CELL_TYPE_NAME,
                          N_("sample:999,999.000") + 7,
                          CELL_ALIGN_RIGHT,
                          FALSE,
                          FALSE);
 
+  /* Price cell must come after shares cell, as its callback performs
+   * a computation on the value set by the shares cell callback. */
   gnc_register_add_cell (layout,
-                         SHRS_CELL,
+                         PRIC_CELL,
                          PRICE_CELL_TYPE_NAME,
                          N_("sample:999,999.000") + 7,
                          CELL_ALIGN_RIGHT,
