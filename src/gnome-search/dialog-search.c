@@ -233,7 +233,7 @@ gnc_search_dialog_prepend_item (GNCSearchWindow *sw, gpointer object)
 static void
 gnc_search_dialog_display_results (GNCSearchWindow *sw)
 {
-  GList *list;
+  GList *list, *node;
   GtkAdjustment *vadjustment;
   gfloat save_value = 0.0;
   gboolean have_list = TRUE;
@@ -308,8 +308,8 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
   list = g_list_reverse (gncQueryRun (sw->q));
 
   /* Add the list of items to the clist */
-  for (; list; list = list->next) {
-    gnc_search_dialog_prepend_item (sw, list->data);
+  for (node = list; node; node = node->next) {
+    gnc_search_dialog_prepend_item (sw, node->data);
   }
 
   /* Need to reverse again for internal consistency */
