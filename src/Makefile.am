@@ -1,5 +1,15 @@
 
-SUBDIRS = engine register guile gnome scm quotes pixmaps optional
+SUBDIRS = \
+  doc \
+  engine \
+  experimental \
+  register \
+  guile \
+  gnome \
+  scm \
+  quotes \
+  pixmaps \
+  optional
 
 # Engine Makefile.am file.
 bin_PROGRAMS = gnucash
@@ -28,6 +38,28 @@ gnucash_SOURCES = \
   EuroUtils.c \
   FileDialog.c \
   Refresh.c
+
+noinst_HEADERS = \
+  AccWindow.h \
+  AdjBWindow.h \
+  Destroy.h \
+  EuroUtils.h \
+  FileBox.h \
+  FileDialog.h \
+  MainWindow.h \
+  MultiLedger.h \
+  RecnWindow.h \
+  Refresh.h \
+  RegWindow.h \
+  SplitLedger.h \
+  file-history.h \
+  messages.h \
+  messages_i18n.h \
+  top-level.h \
+  ui-callbacks.h
+
+EXTRA_DIST = \
+  .cvsignore
 
 CFLAGS = @CFLAGS@ @GNOME_CFLAGS@
 

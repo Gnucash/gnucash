@@ -7,3 +7,7 @@ gncscm_DATA = \
   srfi-19.scm \
   srfi-8.guile.scm \
   srfi-8.scm
+
+EXTRA_DIST = \
+  .cvsignore \
+  ${gncscm_DATA}

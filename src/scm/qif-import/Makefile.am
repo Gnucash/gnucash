@@ -11,3 +11,7 @@ gncscm_DATA = \
   qif-to-gnc.scm \
   qif-utils.scm \
   simple-obj.scm
+
+EXTRA_DIST = \
+  .cvsignore \
+  ${gncscm_DATA}

@@ -445,6 +445,7 @@ AC_SUBST(GUILE_LINK_ARGS)
 AC_OUTPUT(
           dnl # Makefiles
           Makefile
+          debian/Makefile
           doc/Makefile
           doc/examples/Makefile
           doc/html/Makefile
@@ -453,6 +454,7 @@ AC_OUTPUT(
           doc/html/fr/Makefile
           doc/html/fr/image/Makefile
           intl/Makefile
+          lib/Makefile
 	  po/Makefile.in
           raw/Makefile
           raw/ofx/Makefile
@@ -461,7 +463,13 @@ AC_OUTPUT(
           raw/ofx/parser/Makefile
           rpm/Makefile
           src/Makefile
+          src/doc/Makefile
           src/engine/Makefile
+          src/engine/sql/Makefile
+          src/experimental/Makefile
+          src/experimental/cbb/Makefile
+          src/experimental/cbb/cbb-engine/Makefile
+          src/experimental/gg/Makefile
           src/gnome/Makefile
           src/guile/Makefile
           src/optional/Makefile

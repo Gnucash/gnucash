@@ -35,3 +35,7 @@ doc_DATA = \
   reportwin.gif \
   ticker-a.gif \
   ticker-b.gif
+
+EXTRA_DIST = \
+  .cvsignore \
+  ${doc_DATA}

@@ -3,8 +3,10 @@ SUBDIRS = gnumeric printing qif-import report srfi
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
 
-gncscm_DATA = \
-  bootstrap.scm \
+gnc_autogen_scm_files = \
+  bootstrap.scm
+
+gnc_regular_scm_files = \
   bs-interp.scm \
   c-interface.scm \
   command-line.scm \
@@ -34,6 +36,14 @@ gncscm_DATA = \
   utilities.scm \
   xml-generator.scm
 
+gncscm_DATA = ${gnc_autogen_scm_files} ${gnc_regular_scm_files}
+
+EXTRA_DIST = \
+  .cvsignore \
+  bootstrap.scm.in \
+  design.txt \
+  startup-design.txt \
+  ${gnc_regular_scm_files}
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
@@ -46,5 +56,4 @@ bootstrap.scm: bootstrap.scm.in Makefile
             -e 's:@-GNC_CONFIGDIR-@:${GNC_CONFIGDIR}:' \
             -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:'
 	mv $@.tmp $@
-
 CLEANFILES += bootstrap.scm

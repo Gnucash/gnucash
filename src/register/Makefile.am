@@ -16,6 +16,26 @@ libgncregister_a_SOURCES = \
   table-html.c \
   textcell.c
 
+noinst_HEADERS = \
+  QuickFill.h \
+  basiccell.h \
+  cellblock.h \
+  combocell.h \
+  datecell.h \
+  numcell.h \
+  pricecell.h \
+  quickfillcell.h \
+  recncell.h \
+  splitreg.h \
+  table-allgui.h \
+  table-gnome.h \
+  table-html.h \
+  textcell.h
+
+EXTRA_DIST = \
+  .cvsignore \
+  design.txt
+
 CFLAGS = @CFLAGS@ @GNOME_CFLAGS@
 
 INCLUDES = \

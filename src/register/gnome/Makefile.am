@@ -13,6 +13,19 @@ libgncregistergnome_a_SOURCES = \
   gnucash-style.c \
   quickfillcell-gnome.c
 
+noinst_HEADERS = \
+  gnucash-color.h \
+  gnucash-cursor.h \
+  gnucash-grid.h \
+  gnucash-header.h \
+  gnucash-item-edit.h \
+  gnucash-item-list.h \
+  gnucash-sheet.h \
+  gnucash-style.h
+
+EXTRA_DIST = \
+  .cvsignore
+
 CFLAGS = @CFLAGS@ @GNOME_CFLAGS@
 
 INCLUDES = \

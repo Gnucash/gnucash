@@ -13,9 +13,13 @@ man_MANS = \
   gnucash.1
 
 EXTRA_DIST = \
+  .cvsignore \
+  ${doc_DATA} \
   Configure-osr5 \
   Configure-uw7 \
   README.build-system \
+  README.francais \
+  README.german \
   build-aix.txt \
   build-solaris.txt \
   build-suse.txt \

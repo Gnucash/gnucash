@@ -1,5 +1,6 @@
-
 # Engine Makefile.am file.
+
+SUBDIRS = sql
 
 # Build a libtool library, libhello.la for installation in libdir.
 lib_LTLIBRARIES = libgncengine.la
@@ -26,6 +27,39 @@ libgncengine_la_SOURCES = \
   md5.c
 
 libgncengine_la_LDFLAGS = -version-info 1:1:1
+
+noinst_HEADERS = \
+  AccInfo.h \
+  AccInfoP.h \
+  Account.h \
+  AccountP.h \
+  BackendP.h \
+  DateUtils.h \
+  FileIO.h \
+  FileIOP.h \
+  GNCId.h \
+  GNCIdP.h \
+  Group.h \
+  GroupP.h \
+  LedgerUtils.h \
+  Query.h \
+  Queue.h \
+  Scrub.h \
+  Session.h \
+  TransLog.h \
+  Transaction.h \
+  TransactionP.h \
+  date.h \
+  gnc-common.h \
+  guid.h \
+  md5.h \
+  util.h
+
+EXTRA_DIST = \
+  .cvsignore \
+  README.query-api \
+  design.txt \
+  extensions.txt
 
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
 

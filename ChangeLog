@@ -1,4 +1,15 @@
+2000-06-04  Rob Browning  <rlb@cs.utexas.edu>
+
+	* */Makefile.am and others: fix up make dist to build a full-blown
+	tarfile.
+
 2000-06-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/Session.c (xaccSessionSave): record file writing errors
+	in the session error code.
+
+	* src/FileDialog.c (gncFileSave): print an error message in a dialog
+	on file-writing errors.
 
 	* src/register/quickfillcell.c (quick_modify): before updating the
 	original copy, make sure it's still the same as the old value,

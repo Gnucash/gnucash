@@ -21,8 +21,6 @@
 # 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 # Boston, MA  02111-1307,  USA       gnu@gnu.org
 
-include ../../../Makefile.init
-
 INCLPATH = -I.		\
            -I..		\
            -I../..	\
@@ -45,7 +43,6 @@ all: default
 
 # This inclusion must come after the first target, and after the
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
-include ../../../Makefile.common
 
 default: ${OBJS}
 

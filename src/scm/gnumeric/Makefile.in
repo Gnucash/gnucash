@@ -120,6 +120,9 @@ gncscmdir = ${GNC_SCM_INSTALL_DIR}/gnumeric
 
 gncscm_DATA =    gnumeric-utilities.scm   table-utils.scm
 
+
+EXTRA_DIST =    .cvsignore   ${gncscm_DATA}
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 

@@ -7,6 +7,14 @@ perlsharedir = ${GNC_SHAREDIR}/perl
 perlshare_DATA = \
   Quote.pm
 
+EXTRA_DIST = \
+  .cvsignore \
+  Quote.pm \
+  Quote_example.pl \
+  gnc-prices-2.in \
+  gnc-prices.in \
+  value_portfolio
+
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of

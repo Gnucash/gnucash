@@ -116,7 +116,8 @@ USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 l = @l@
 
-SUBDIRS = engine register guile gnome scm quotes pixmaps optional
+SUBDIRS =    doc   engine   experimental   register   guile   gnome   scm   quotes   pixmaps   optional
+
 
 # Engine Makefile.am file.
 bin_PROGRAMS = gnucash
@@ -130,6 +131,12 @@ LDADD =    gnome/libgncgnome.a   register/libgncregister.a   register/gnome/libg
 
 
 gnucash_SOURCES =    MultiLedger.c   SplitLedger.c   Destroy.c   EuroUtils.c   FileDialog.c   Refresh.c
+
+
+noinst_HEADERS =    AccWindow.h   AdjBWindow.h   Destroy.h   EuroUtils.h   FileBox.h   FileDialog.h   MainWindow.h   MultiLedger.h   RecnWindow.h   Refresh.h   RegWindow.h   SplitLedger.h   file-history.h   messages.h   messages_i18n.h   top-level.h   ui-callbacks.h
+
+
+EXTRA_DIST =    .cvsignore
 
 
 CFLAGS = @CFLAGS@ @GNOME_CFLAGS@
@@ -161,6 +168,8 @@ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CF
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+HEADERS =  $(noinst_HEADERS)
+
 DIST_COMMON =  README Makefile.am Makefile.in
 
 
@@ -415,7 +424,7 @@ install-am: all-am
 install: install-recursive
 uninstall-am: uninstall-binPROGRAMS
 uninstall: uninstall-recursive
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(PROGRAMS) $(HEADERS)
 all-redirect: all-recursive
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install

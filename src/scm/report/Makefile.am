@@ -10,3 +10,7 @@ gncscm_DATA = \
   report-list.scm \
   transaction-report-2.scm \
   transaction-report.scm
+
+EXTRA_DIST = \
+  .cvsignore \
+  ${gncscm_DATA}

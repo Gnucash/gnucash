@@ -6031,6 +6031,7 @@ ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
 trap 'rm -fr `echo "          Makefile
+          debian/Makefile
           doc/Makefile
           doc/examples/Makefile
           doc/html/Makefile
@@ -6039,6 +6040,7 @@ trap 'rm -fr `echo "          Makefile
           doc/html/fr/Makefile
           doc/html/fr/image/Makefile
           intl/Makefile
+          lib/Makefile
 	  po/Makefile.in
           raw/Makefile
           raw/ofx/Makefile
@@ -6047,7 +6049,13 @@ trap 'rm -fr `echo "          Makefile
           raw/ofx/parser/Makefile
           rpm/Makefile
           src/Makefile
+          src/doc/Makefile
           src/engine/Makefile
+          src/engine/sql/Makefile
+          src/experimental/Makefile
+          src/experimental/cbb/Makefile
+          src/experimental/cbb/cbb-engine/Makefile
+          src/experimental/gg/Makefile
           src/gnome/Makefile
           src/guile/Makefile
           src/optional/Makefile
@@ -6214,6 +6222,7 @@ EOF
 cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"Makefile
+          debian/Makefile
           doc/Makefile
           doc/examples/Makefile
           doc/html/Makefile
@@ -6222,6 +6231,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
           doc/html/fr/Makefile
           doc/html/fr/image/Makefile
           intl/Makefile
+          lib/Makefile
 	  po/Makefile.in
           raw/Makefile
           raw/ofx/Makefile
@@ -6230,7 +6240,13 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
           raw/ofx/parser/Makefile
           rpm/Makefile
           src/Makefile
+          src/doc/Makefile
           src/engine/Makefile
+          src/engine/sql/Makefile
+          src/experimental/Makefile
+          src/experimental/cbb/Makefile
+          src/experimental/cbb/cbb-engine/Makefile
+          src/experimental/gg/Makefile
           src/gnome/Makefile
           src/guile/Makefile
           src/optional/Makefile

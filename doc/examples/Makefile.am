@@ -25,3 +25,7 @@ doc_DATA = \
   trading2.xac \
   web.qif \
   xfer.xac
+
+EXTRA_DIST = \
+  .cvsignore \
+  ${doc_DATA}

@@ -121,6 +121,12 @@ noinst_LIBRARIES = libgncregister.a
 libgncregister_a_SOURCES =    QuickFill.c   basiccell.c   cellblock.c   datecell.c   numcell.c   pricecell.c   quickfillcell.c   recncell.c   splitreg.c   table-allgui.c   table-gnome.c   table-html.c   textcell.c
 
 
+noinst_HEADERS =    QuickFill.h   basiccell.h   cellblock.h   combocell.h   datecell.h   numcell.h   pricecell.h   quickfillcell.h   recncell.h   splitreg.h   table-allgui.h   table-gnome.h   table-html.h   textcell.h
+
+
+EXTRA_DIST =    .cvsignore   design.txt
+
+
 CFLAGS = @CFLAGS@ @GNOME_CFLAGS@
 
 INCLUDES =    -I${top_srcdir}/src   -I${top_srcdir}/src/engine   -I${top_srcdir}/src/guile   -I${top_srcdir}/src/register/gnome
@@ -150,6 +156,8 @@ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CF
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+HEADERS =  $(noinst_HEADERS)
+
 DIST_COMMON =  README Makefile.am Makefile.in
 
 
@@ -392,7 +400,7 @@ install-am: all-am
 install: install-recursive
 uninstall-am:
 uninstall: uninstall-recursive
-all-am: Makefile $(LIBRARIES)
+all-am: Makefile $(LIBRARIES) $(HEADERS)
 all-redirect: all-recursive
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install

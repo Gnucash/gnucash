@@ -125,6 +125,12 @@ gnomeappdir = ${datadir}/gnome/apps/Applications
 
 gnomeapp_DATA = gnucash.desktop
 
+noinst_HEADERS =    account-tree.h   account-treeP.h   cursors.h   dialog-account-picker.h   dialog-budget.h   dialog-edit.h   dialog-find-transactions.h   dialog-options.h   dialog-print-check.h   dialog-qif-import.h   dialog-transfer.h   dialog-utils.h   extensions.h   glade-cb-gnc-dialogs.h   glade-gnc-dialogs.h   glade-support-gnc-dialogs.h   gnc-currency-edit.h   gnc-datedelta.h   gnc-dateedit.h   gnome-top-level.h   print-session.h   query-user.h   reconcile-list.h   reconcile-listP.h   window-help.h   window-html.h   window-main.h   window-mainP.h   window-reconcile.h   window-register.h   window-report.h
+
+
+EXTRA_DIST =    .cvsignore   gnc-dialogs.glade   gnucash.desktop
+
+
 CFLAGS =  ${GNOME_CFLAGS} ${G_WRAP_COMPILE_ARGS}
 
 INCLUDES =    -I${top_srcdir}/src   -I${top_srcdir}/src/engine   -I${top_srcdir}/src/g-wrap   -I${top_srcdir}/src/guile   -I${top_srcdir}/src/register   -I${top_srcdir}/src/register/gnome
@@ -159,6 +165,8 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
 DATA =  $(gnomeapp_DATA)
+
+HEADERS =  $(noinst_HEADERS)
 
 DIST_COMMON =  Makefile.am Makefile.in
 
@@ -358,7 +366,7 @@ install-am: all-am
 install: install-am
 uninstall-am: uninstall-gnomeappDATA
 uninstall: uninstall-am
-all-am: Makefile $(LIBRARIES) $(DATA)
+all-am: Makefile $(LIBRARIES) $(DATA) $(HEADERS)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install

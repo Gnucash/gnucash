@@ -1,4 +1,8 @@
 
+EXTRA_DIST = \
+  .cvsignore \
+  gnucash.spec.in
+
 all-local: gnucash.spec
 
 ## We borrow guile's convention and use @-...-@ as the substitution

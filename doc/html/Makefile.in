@@ -122,6 +122,9 @@ SUBDIRS = C fr
 
 doc_DATA =    gnucash.css   index.html
 
+
+EXTRA_DIST =    .cvsignore   ${doc_DATA}
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 

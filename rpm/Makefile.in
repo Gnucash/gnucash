@@ -116,6 +116,9 @@ USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 l = @l@
 
+EXTRA_DIST =    .cvsignore   gnucash.spec.in
+
+
 CLEANFILES =  gnucash.spec
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h

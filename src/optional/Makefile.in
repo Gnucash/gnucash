@@ -117,6 +117,9 @@ VERSION = @VERSION@
 l = @l@
 
 SUBDIRS = swig
+
+EXTRA_DIST =    .cvsignore
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 

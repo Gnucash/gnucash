@@ -41,4 +41,6 @@ doc_DATA = \
   xacc-y2k.html
 
 EXTRA_DIST = \
-  tidy-up
+  .cvsignore \
+  tidy-up \
+  ${doc_DATA}

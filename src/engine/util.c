@@ -43,27 +43,42 @@
 char * stpcpy (char *dest, const char *src);
 
 /** GLOBALS *********************************************************/
-/* 
-   0 == disable all messages
-   1 == enble only error messages
-   2 == print warnings
-   3 == print info messages
-   4 == print debugging messages
- */
-int loglevel[MODULE_MAX] =
-{0,      /* DUMMY */
- 2,      /* ENGINE */
- 2,      /* IO */
- 2,      /* REGISTER */
- 2,      /* LEDGER */
- 2,      /* HTML */
- 2,      /* GUI */
- 2,      /* SCRUB */
- 2,      /* GTK_REG */
- 2,      /* GUILE */
- 4,      /* BACKEND */
- 2,      /* QUERY */
+gncLogLevel loglevel[MOD_NUM] =
+{
+  GNC_LOG_NOTHING,      /* DUMMY */
+  GNC_LOG_WARNING,      /* ENGINE */
+  GNC_LOG_WARNING,      /* IO */
+  GNC_LOG_WARNING,      /* REGISTER */
+  GNC_LOG_WARNING,      /* LEDGER */
+  GNC_LOG_WARNING,      /* HTML */
+  GNC_LOG_WARNING,      /* GUI */
+  GNC_LOG_WARNING,      /* SCRUB */
+  GNC_LOG_WARNING,      /* GTK_REG */
+  GNC_LOG_WARNING,      /* GUILE */
+  GNC_LOG_DEBUG,        /* BACKEND */
+  GNC_LOG_WARNING,      /* QUERY */
 };
+
+/* Set the logging level of the given module. */
+void
+gnc_set_log_level(gncModuleType module, gncLogLevel level)
+{
+  if ((module < 0) || (module > MOD_LAST))
+    return;
+
+  loglevel[module] = level;
+}
+
+/* Set the logging level for all modules. */
+void
+gnc_set_log_level_global(gncLogLevel level)
+{
+  gncModuleType module;
+
+  for (module = GNC_LOG_NOTHING; module < MOD_NUM; module++)
+    loglevel[module] = level;
+}
+
 
 /********************************************************************\
 \********************************************************************/

@@ -28,34 +28,51 @@
 #ifndef __XACC_UTIL_H__
 #define __XACC_UTIL_H__
 
-#include <stdlib.h>
 #include "config.h"
+
+#include <assert.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "gnc-common.h"
 
 #define BUFSIZE   1024
 
 /** DEBUGGING MACROS ************************************************/
 /* The debuging macros enable the setting of trace messages */
-#include <stdio.h>
-
-#include <assert.h>
 
 #define LG(condition,args...)	if (condition) fprintf(stderr, ##args)
 
-#define MOD_ENGINE     1
-#define MOD_IO         2
-#define MOD_REGISTER   3
-#define MOD_LEDGER     4
-#define MOD_HTML       5
-#define MOD_GUI        6
-#define MOD_SCRUB      7
-#define MOD_GTK_REG    8
-#define MOD_GUILE      9
-#define MOD_BACKEND   10
-#define MOD_QUERY     11
-#define MODULE_MAX    12
+typedef enum
+{
+  MOD_DUMMY   =  0,
+  MOD_ENGINE  =  1,
+  MOD_IO      =  2,
+  MOD_REGISTER=  3,
+  MOD_LEDGER  =  4,
+  MOD_HTML    =  5,
+  MOD_GUI     =  6,
+  MOD_SCRUB   =  7,
+  MOD_GTK_REG =  8,
+  MOD_GUILE   =  9,
+  MOD_BACKEND = 10,
+  MOD_QUERY   = 11,
+  MOD_LAST    = 11,
+  MOD_NUM     = MOD_LAST + 1
+} gncModuleType;
 
-extern int loglevel[MODULE_MAX];
+typedef enum
+{
+  GNC_LOG_NOTHING    = 0,
+  GNC_LOG_ERROR      = 1,
+  GNC_LOG_WARNING    = 2,
+  GNC_LOG_INFO       = 3,
+  GNC_LOG_DEBUG      = 4,
+  GNC_LOG_EVERYTHING = 5
+} gncLogLevel;
+
+extern gncLogLevel loglevel[MOD_NUM];
 
 #define LERR    (1 <= loglevel[module])
 #define LWARN   (2 <= loglevel[module])
@@ -81,8 +98,6 @@ char * prettify (const char *);
 #define DETAIL(x...)   LG(LDETAIL, "Detail: %s: ", prettify(__FUNCTION__));  LG(LDETAIL, ##x);
 
 #define DEBUGCMD(x) { if (LINFO) { x; }}
-
-#include <errno.h>
 
 #define ERROR()     fprintf(stderr,"%s: Line %d, error = %s\n", \
 			    __FILE__, __LINE__, strerror(errno));
@@ -126,7 +141,16 @@ size_t dcoresize();
   }					\
 }
 
+/** PROTOTYPES ******************************************************/
+
 int safe_strcmp (const char * da, const char * db);
+
+/* Set the logging level of the given module. */
+void gnc_set_log_level(gncModuleType module, gncLogLevel level);
+
+/* Set the logging level for all modules. */
+void gnc_set_log_level_global(gncLogLevel level);
+
 
 /********************************************************/
 /* libc 'enhancements' */
@@ -154,7 +178,7 @@ extern char *strcasestr(const char *str1, const char *str2);
 extern char * strpskip (const char * s, const char *reject);
 
 /********************************************************/
-/* the ultostr() subroutihne is the inverse of strtoul().
+/* the ultostr() subroutine is the inverse of strtoul().
  *    It accepts a number and prints it in the indicated base.
  *    The returned string should be freed when done.
  */
@@ -174,8 +198,6 @@ struct lconv * gnc_localeconv();
 /* Returns the 3 character currency code of the current locale. */
 char * gnc_locale_default_currency();
 
-
-/** PROTOTYPES ******************************************************/
 
 /*
  * The xaccPrintAmount() and xaccSPrintAmount() routines provide

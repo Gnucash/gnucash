@@ -204,6 +204,7 @@ cat-id-tbl.o: $(srcdir)/cat-id-tbl.c $(top_srcdir)/intl/libgettext.h
 dvi info tags TAGS ID:
 
 mostlyclean:
+	rm -f extract-macros.perl
 	rm -f core core.* *.pox $(PACKAGE).po *.old.po cat-id-tbl.tmp
 	rm -f pseudo-source.c
 	rm -fr *.o
