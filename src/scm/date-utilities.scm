@@ -286,6 +286,17 @@
     (set-tm:year ddt 1)
     ddt))
 
+
+(define ThirtyDayDelta
+  (let ((ddt (make-zdate)))
+    (set-tm:mday ddt 30)
+    ddt))
+
+(define NinetyDayDelta
+  (let ((ddt (make-zdate)))
+    (set-tm:mday ddt 90)
+    ddt))
+
 ;; Find difference in seconds time 1 and time2
 (define (gnc:timepair-delta t1 t2)
   (- (gnc:timepair->secs t2) (gnc:timepair->secs t1)))

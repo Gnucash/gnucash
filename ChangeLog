@@ -1,3 +1,13 @@
+2001-07-13  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/payables.scm: New file - an 
+	"Accounts payable by creditor" report.
+
+	* src/scm/date-utilities.scm: Added a couple
+	more datedeltas.
+	
+	* src/scm/Makefile.am: update for new file.
+
 2001-07-12  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/splitreg.[hc]: same as below

@@ -21,6 +21,7 @@ gncscmmod_DATA = \
   hello-world.scm \
   iframe-url.scm \
   net-barchart.scm \
+  payables.scm \
   portfolio.scm \
   pnl.scm \
   price-scatter.scm \

@@ -15,6 +15,7 @@
 (use-modules (gnucash report hello-world))
 (use-modules (gnucash report iframe-url))
 (use-modules (gnucash report net-barchart))
+(use-modules (gnucash report payables))
 (use-modules (gnucash report pnl))
 (use-modules (gnucash report portfolio))
 (use-modules (gnucash report price-scatter))
