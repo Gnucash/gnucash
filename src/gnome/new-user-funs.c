@@ -27,6 +27,7 @@
 #include <stdio.h>
 
 #include "druid-qif-import.h"
+#include "druid-utils.h"
 #include "new-user-callbacks.h"
 #include "new-user-interface.h"
 #include "new-user-funs.h"
@@ -308,10 +309,14 @@ gnc_create_newUserDialog (void)
 {
   GtkWidget *balance_edit;
   GtkWidget *dialog;
+  GtkWidget *druid;
   GtkWidget *box;
   GHashTable *hash;
 
   dialog = create_newUserDialog();
+
+  druid = lookup_widget (dialog, "newUserDruid");
+  gnc_druid_set_colors (GNOME_DRUID (druid));
 
   balance_edit = gnc_amount_edit_new ();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (balance_edit), TRUE);

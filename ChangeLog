@@ -1,3 +1,17 @@
+2001-06-05  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/druid-commodity.c: use new func
+
+	* src/gnome/new-user-funs.c: use new func
+
+	* src/gnome/druid-qif-import.c: use new func
+
+	* src/gnome/druid-utils.c (gnc_druid_set_colors): new func
+
+	* doc/sgml/C/xacc-about.sgml: update credits
+
+	* AUTHORS: update credits
+
 2001-06-04  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/new-user.glade: tweak gui. fix strings.

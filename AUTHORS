@@ -141,6 +141,7 @@ Stefan Nobis <stefan-ml@snobis.de> German translation patch
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
 Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
+Alan Orndorff <dwarf@solarisresources.com> Solaris packager
 Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
 Dave Peticolas <dave@krondo.com> extensive intelligent patches
 Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
@@ -163,6 +164,7 @@ Robby Stephenson <robby.stephenson@usa.net> register & file history patches
 Christian Stimming <stimming@uclink.berkeley.edu> report patch
 Bartek Szady <bszx@bszxdomain.edu.eu.org> engine and build system patches
 Herbert Thoma <tma@iis.fhg.de> gnome register & euro support patches
+Arnold Troeger <troeger@samart.co.th> Mandrake packager
 Diane Trout <detrout@earthlink.net> scheme QIF import patch
 Richard -Gilligan- Uschold <uschold@cs.ucf.edu> tax report & txf export
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes

@@ -38,6 +38,7 @@
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
 #include "druid-qif-import.h"
+#include "druid-utils.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
@@ -262,6 +263,8 @@ gnc_ui_qif_import_druid_make(void)  {
     gnome_druid_set_page(GNOME_DRUID(retval->druid),
                          get_named_page(retval, "load_file_page"));
   }
+
+  gnc_druid_set_colors (GNOME_DRUID (retval->druid));
 
   gtk_widget_show_all(retval->window);
   gdk_window_raise (retval->window->window);
@@ -1569,6 +1572,8 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
     stocks = gh_cdr(stocks);
     gtk_widget_show_all(new_page->page);
   }
+
+  gnc_druid_set_colors (GNOME_DRUID (wind->druid));
 }
 
 static QIFDruidPage *

@@ -21,7 +21,7 @@ GtkWidget*
 create_newUserDialog (void)
 {
   GtkWidget *newUserDialog;
-  GtkWidget *accountChooseDruidPage;
+  GtkWidget *newUserDruid;
   GtkWidget *newUserStartPage;
   GdkColor newUserStartPage_bg_color = { 0, 6425, 6425, 28784 };
   GdkColor newUserStartPage_textbox_color = { 0, 65535, 65535, 65535 };
@@ -87,13 +87,13 @@ create_newUserDialog (void)
   gtk_window_set_position (GTK_WINDOW (newUserDialog), GTK_WIN_POS_MOUSE);
   gtk_window_set_default_size (GTK_WINDOW (newUserDialog), 640, 480);
 
-  accountChooseDruidPage = gnome_druid_new ();
-  gtk_widget_set_name (accountChooseDruidPage, "accountChooseDruidPage");
-  gtk_widget_ref (accountChooseDruidPage);
-  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "accountChooseDruidPage", accountChooseDruidPage,
+  newUserDruid = gnome_druid_new ();
+  gtk_widget_set_name (newUserDruid, "newUserDruid");
+  gtk_widget_ref (newUserDruid);
+  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "newUserDruid", newUserDruid,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (accountChooseDruidPage);
-  gtk_container_add (GTK_CONTAINER (newUserDialog), accountChooseDruidPage);
+  gtk_widget_show (newUserDruid);
+  gtk_container_add (GTK_CONTAINER (newUserDialog), newUserDruid);
 
   newUserStartPage = gnome_druid_page_start_new ();
   gtk_widget_set_name (newUserStartPage, "newUserStartPage");
@@ -101,8 +101,8 @@ create_newUserDialog (void)
   gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "newUserStartPage", newUserStartPage,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (newUserStartPage);
-  gnome_druid_append_page (GNOME_DRUID (accountChooseDruidPage), GNOME_DRUID_PAGE (newUserStartPage));
-  gnome_druid_set_page (GNOME_DRUID (accountChooseDruidPage), GNOME_DRUID_PAGE (newUserStartPage));
+  gnome_druid_append_page (GNOME_DRUID (newUserDruid), GNOME_DRUID_PAGE (newUserStartPage));
+  gnome_druid_set_page (GNOME_DRUID (newUserDruid), GNOME_DRUID_PAGE (newUserStartPage));
   gnome_druid_page_start_set_bg_color (GNOME_DRUID_PAGE_START (newUserStartPage), &newUserStartPage_bg_color);
   gnome_druid_page_start_set_textbox_color (GNOME_DRUID_PAGE_START (newUserStartPage), &newUserStartPage_textbox_color);
   gnome_druid_page_start_set_logo_bg_color (GNOME_DRUID_PAGE_START (newUserStartPage), &newUserStartPage_logo_bg_color);
@@ -116,7 +116,7 @@ create_newUserDialog (void)
   gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "newAccountCurrencyChoosePage", newAccountCurrencyChoosePage,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show_all (newAccountCurrencyChoosePage);
-  gnome_druid_append_page (GNOME_DRUID (accountChooseDruidPage), GNOME_DRUID_PAGE (newAccountCurrencyChoosePage));
+  gnome_druid_append_page (GNOME_DRUID (newUserDruid), GNOME_DRUID_PAGE (newAccountCurrencyChoosePage));
   gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (newAccountCurrencyChoosePage), &newAccountCurrencyChoosePage_bg_color);
   gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (newAccountCurrencyChoosePage), &newAccountCurrencyChoosePage_logo_bg_color);
   gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (newAccountCurrencyChoosePage), &newAccountCurrencyChoosePage_title_color);
@@ -152,7 +152,7 @@ create_newUserDialog (void)
   gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "chooseAccountTypesPage", chooseAccountTypesPage,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show_all (chooseAccountTypesPage);
-  gnome_druid_append_page (GNOME_DRUID (accountChooseDruidPage), GNOME_DRUID_PAGE (chooseAccountTypesPage));
+  gnome_druid_append_page (GNOME_DRUID (newUserDruid), GNOME_DRUID_PAGE (chooseAccountTypesPage));
   gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (chooseAccountTypesPage), &chooseAccountTypesPage_bg_color);
   gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (chooseAccountTypesPage), &chooseAccountTypesPage_logo_bg_color);
   gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (chooseAccountTypesPage), &chooseAccountTypesPage_title_color);
@@ -333,7 +333,7 @@ create_newUserDialog (void)
   gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "finalAccountDruidPage", finalAccountDruidPage,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show_all (finalAccountDruidPage);
-  gnome_druid_append_page (GNOME_DRUID (accountChooseDruidPage), GNOME_DRUID_PAGE (finalAccountDruidPage));
+  gnome_druid_append_page (GNOME_DRUID (newUserDruid), GNOME_DRUID_PAGE (finalAccountDruidPage));
   gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage), &finalAccountDruidPage_bg_color);
   gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage), &finalAccountDruidPage_logo_bg_color);
   gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage), &finalAccountDruidPage_title_color);
@@ -441,15 +441,15 @@ create_newUserDialog (void)
   gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "newUserDruidFinishPage", newUserDruidFinishPage,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (newUserDruidFinishPage);
-  gnome_druid_append_page (GNOME_DRUID (accountChooseDruidPage), GNOME_DRUID_PAGE (newUserDruidFinishPage));
+  gnome_druid_append_page (GNOME_DRUID (newUserDruid), GNOME_DRUID_PAGE (newUserDruidFinishPage));
   gnome_druid_page_finish_set_bg_color (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), &newUserDruidFinishPage_bg_color);
   gnome_druid_page_finish_set_textbox_color (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), &newUserDruidFinishPage_textbox_color);
   gnome_druid_page_finish_set_logo_bg_color (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), &newUserDruidFinishPage_logo_bg_color);
   gnome_druid_page_finish_set_title_color (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), &newUserDruidFinishPage_title_color);
   gnome_druid_page_finish_set_title (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), _("Finish Account Setup"));
-  gnome_druid_page_finish_set_text (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), _("If everything is OK, press `Finish' and GnuCash will create\nyour new account hierarchy. Press `Back' to review your selections.\nPress `Cancel' to close this dialog without creating any new accounts."));
+  gnome_druid_page_finish_set_text (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), _("Press `Finish' to create your new account hierarchy.\n\nPress `Back' to review your selections.\n\nPress `Cancel' to close this dialog without creating any new accounts."));
 
-  gtk_signal_connect (GTK_OBJECT (accountChooseDruidPage), "cancel",
+  gtk_signal_connect (GTK_OBJECT (newUserDruid), "cancel",
                       GTK_SIGNAL_FUNC (on_accountChooseDruidPage_cancel),
                       NULL);
   gtk_signal_connect (GTK_OBJECT (newUserStartPage), "next",

@@ -33,6 +33,7 @@
 
 #include "FileDialog.h"
 #include "druid-commodity.h"
+#include "druid-utils.h"
 #include "dialog-commodity.h"
 #include "query-user.h"
 #include "gnc-commodity.h"
@@ -187,6 +188,8 @@ gnc_ui_commodity_druid_create(const char * filename) {
                             GNOME_DRUID_PAGE(new_page->page));
     back_page = GNOME_DRUID_PAGE(new_page->page);
   }
+
+  gnc_druid_set_colors (GNOME_DRUID (d->druid));
 
   gtk_widget_show_all(d->window);
 

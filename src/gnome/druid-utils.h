@@ -29,4 +29,6 @@
 void gnc_druid_set_title_image (GnomeDruid *druid, char *image_path);
 void gnc_druid_set_watermark_image (GnomeDruid *druid, char *image_path);
 
+void gnc_druid_set_colors (GnomeDruid *druid);
+
 #endif

@@ -39,7 +39,7 @@
 
   <widget>
     <class>GnomeDruid</class>
-    <name>accountChooseDruidPage</name>
+    <name>newUserDruid</name>
     <signal>
       <name>cancel</name>
       <handler>on_accountChooseDruidPage_cancel</handler>
@@ -582,8 +582,10 @@ accounts may have an opening balance.</label>
 	<last_modification_time>Tue, 09 Jan 2001 18:08:04 GMT</last_modification_time>
       </signal>
       <title>Finish Account Setup</title>
-      <text>If everything is OK, press `Finish' and GnuCash will create
-your new account hierarchy. Press `Back' to review your selections.
+      <text>Press `Finish' to create your new account hierarchy.
+
+Press `Back' to review your selections.
+
 Press `Cancel' to close this dialog without creating any new accounts.</text>
       <background_color>25,25,112</background_color>
       <logo_background_color>255,255,255</logo_background_color>
