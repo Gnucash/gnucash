@@ -10,7 +10,7 @@
 
 #include "Account.h"
 #include "Group.h"
-#include "Scrub2.h"
+#include "Scrub3.h"
 #include "gnc-engine-util.h"
 #include "gnc-module.h"
 #include "test-stuff.h"
@@ -46,7 +46,7 @@ run_test (void)
   add_random_transactions_to_book (book, 720);
 
   grp = xaccGetAccountGroup (book);
-  xaccGroupScrubLotsBalance (grp);
+  xaccGroupScrubLots (grp);
 
   /* --------------------------------------------------------- */
   /* In the second test, we create an account with unrealized gains,

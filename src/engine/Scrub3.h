@@ -1,5 +1,5 @@
 /********************************************************************\
- * Scrub3.h -- Constrain Cap Gains to Track Sources of Gains        *
+ * Scrub3.h -- High-Level Lot Constraint routines.                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,17 +22,13 @@
 /** @addtogroup Engine
     @{ */
 /** @file Scrub3.h
- *  @breif Constrain Cap Gains to Track Sources of Gains
+ *  @breif Hiogh-Level API for imposing Lot constraints
  *  @author Created by Linas Vepstas Sept 2003
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  *
- * Provides a set of functions and utilities for checking and
- * repairing ('scrubbing clean') the usage of Cap Gains
- * transactions in stock and commodity accounts.  
- *
- * NOTE: Unless you have special needs, the functions you are looking
- * for and almost certainly want to use are either xaccScrubLot() or
- * xaccAccountScrubLots().
+ * Provides the high-level API for checking and repairing ('scrubbing 
+ * clean') the usage of Lots and Cap Gains transactions in stock and 
+ * commodity accounts.  
  */
 #ifndef XACC_SCRUB3_H
 #define XACC_SCRUB3_H
@@ -72,43 +68,6 @@ gboolean xaccScrubLot (GNCLot *lot);
 void xaccAccountScrubLots (Account *acc);
 void xaccGroupScrubLots (AccountGroup *grp);
 void xaccAccountTreeScrubLots (Account *acc);
-
-
-/** If a split has been pulled apart to make it fit into two (or more)
- * lots, then it becomes theoretically possible for each subsplit to
- * have a distinct price.  But this would be wrong: each subsplit should
- * have the same price, within rounding errors.  This routine will
- * examine the indicated split for sub-splits, and adjust the value
- * of each so that they all have the same price.
- *
- * There is a bit of a problem with the interpretation of 'rounding
- * errors' because there are pathological corner cases of small 
- * amounts.  So this routine is fairly loose, hopefully loose enough
- * so that the user can manually fine tune without having this routine
- * clobber thier work.
- */
-void xaccScrubSubSplitPrice (Split *split);
-
-/** The xaccScrubMergeSubSplits() routine will merge together
- *    all of the splits that were at one time split off from this
- *    split, but are no longer needed to be kept separate.  Splits
- *    might be split up if they need to be divided over multiple
- *    lots; they can be merged back together if the lots change.
- *    In particular, two sub-splits may be merged if they are in 
- *    the same lot, or in no lot.  Note that, by definition, all
- *    subsplits belong to the same transaction.
- * 
- *    The routine returns TRUE if a merger was performed, else 
- *    it returns FALSE. 
- *
- *  The xaccScrubMergeTransSubSplits() routine does the same, except 
- *    that it does it for all of the splits in the transaction.
- *  The xaccScrubMergeLotSubSplits() routine does the same, except 
- *    that it does it for all of the splits in the lot.
- */
-gboolean xaccScrubMergeSubSplits (Split *split);
-gboolean xaccScrubMergeTransSubSplits (Transaction *txn);
-gboolean xaccScrubMergeLotSubSplits (GNCLot *lot);
 
 #endif /* XACC_SCRUB3_H */
 /** @} */
