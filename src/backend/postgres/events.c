@@ -187,7 +187,7 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    }
 
    string_to_guid (guid_str, &guid);
-   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_changed",j));
+   ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_changed",j));
 
    /* Compress multiple events for the same object.  In other
     * words, keep only the last event for this object.
@@ -437,7 +437,7 @@ get_latest_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    Timespec latest;
 
    /* get event timestamp */
-   latest = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_changed",j));
+   latest = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_changed",j));
    latest.tv_sec ++;  /* ignore old, pre-logon events */
 
    be->last_account = latest;

@@ -309,7 +309,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    modity = gnc_string_to_commodity (DB_GET_VAL("currency",j), book);
    gnc_price_set_currency (pr, modity);
 
-   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("time",j));
+   ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("time",j));
    gnc_price_set_time (pr, ts);
 
    gnc_price_set_source (pr, DB_GET_VAL("source",j));
