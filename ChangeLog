@@ -1,6 +1,6 @@
 2002-11-10  Derek Atkins  <derek@ihtfp.com>
 
-	* Fix the Find-Transactions dialog so it only has "Share Price" twice
+	* Fix the Find-Transactions dialog so it only has "Share Price" once
 
 2002-11-10  David Hampton  <hampton@employees.org>
 
