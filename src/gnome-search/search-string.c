@@ -32,6 +32,7 @@
 
 #define d(x)
 
+static void editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog);
 static void grab_focus (GNCSearchCoreType *fe);
 static GNCSearchCoreType *clone(GNCSearchCoreType *fe);
 static gboolean validate (GNCSearchCoreType *fe);
@@ -90,6 +91,7 @@ gnc_search_string_class_init (GNCSearchStringClass *class)
   object_class->finalize = gnc_search_string_finalise;
 
   /* override methods */
+  gnc_search_core_type->editable_enters = editable_enters;
   gnc_search_core_type->grab_focus = grab_focus;
   gnc_search_core_type->validate = validate;
   gnc_search_core_type->get_widget = get_widget;
@@ -307,10 +309,9 @@ editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog)
   g_return_if_fail (fi);
   g_return_if_fail (IS_GNCSEARCH_STRING (fi));
   g_return_if_fail (dialog);
-  g_return_if_fail (IS_GNOME_DIALOG (dialog));
 
   if (fi->priv->entry)
-    gnome_dialog_editable_enters (GTK_EDITABLE (fi->priv->entry), dialog);
+    gnome_dialog_editable_enters (dialog, GTK_EDITABLE (fi->priv->entry));
 }
 
 static GtkWidget *
