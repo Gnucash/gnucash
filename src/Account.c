@@ -80,7 +80,6 @@ mallocAccount( void )
   acc->adjBData      = NULL;
   acc->editAccData   = NULL;
   acc->editNotesData = NULL;
-  acc->qfRoot   = mallocQuickFill();
   
   return acc;
   }
@@ -103,8 +102,6 @@ freeAccount( Account *acc )
   XtFree(acc->accountName);
   XtFree(acc->description);
   XtFree(acc->notes);
-  
-  freeQuickFill(acc->qfRoot);
   
   /* any split pointing at this account needs to be unmarked */
   i=0;
@@ -239,7 +236,8 @@ xaccInsertSplit ( Account *acc, Split *split )
 
   _free(oldsplits);
 
-  qfInsertTransaction( acc->qfRoot, trans );
+  /* hack alert -- quickfill belong in gui */
+  /* qfInsertTransaction( acc->qfRoot, trans ); */
 }
 
 
