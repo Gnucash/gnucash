@@ -34,7 +34,7 @@
 #include "config.h"
 
 #include "Account.h"
-#include "AccountP.h"
+#include "AccountP.h"  /* hack alert -- do not include P.h files !! */
 //#include "AdjBWindow.h"
 //#include "BuildMenu.h"
 #include "Group.h"
