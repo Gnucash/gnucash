@@ -72,6 +72,7 @@ static void gnc_table_resize (Table * table, int virt_rows, int virt_cols);
 
 Table * 
 gnc_table_new (TableGetEntryHandler entry_handler,
+               TableGetFGColorHandler fg_color_handler,
                gpointer entry_handler_data,
                VirtCellDataAllocator allocator,
                VirtCellDataDeallocator deallocator,
@@ -88,6 +89,7 @@ gnc_table_new (TableGetEntryHandler entry_handler,
    table = g_new0(Table, 1);
 
    table->entry_handler = entry_handler;
+   table->fg_color_handler = fg_color_handler;
    table->entry_handler_data = entry_handler_data;
    table->vcell_data_allocator = allocator;
    table->vcell_data_deallocator = deallocator;
@@ -244,32 +246,31 @@ gnc_table_get_fg_color_virtual (Table *table, VirtualLocation virt_loc)
   VirtualCell *vcell;
   CellBlockCell *cb_cell;
   BasicCell *cell;
-  guint32 fg_color;
+  guint32 fg_color = 0x0; /* black */
 
-  fg_color = 0x000000; /* black */
+  vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
+  if (vcell == NULL)
+    return fg_color;
+
+  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
+                                    virt_loc.phys_row_offset,
+                                    virt_loc.phys_col_offset);
+  if (cb_cell == NULL)
+    return fg_color;
 
   if (virt_cell_loc_equal (table->current_cursor_loc.vcell_loc,
                            virt_loc.vcell_loc))
   {
-    vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
-    if (vcell == NULL)
-      return fg_color;
-
-    cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
-                                      virt_loc.phys_row_offset,
-                                      virt_loc.phys_col_offset);
-    if (cb_cell == NULL)
-      return fg_color;
-
     cell = cb_cell->cell;
     if (cell == NULL)
       return fg_color;
 
-    if (cell->use_fg_color)
-      fg_color = cell->fg_color;
+    if (cell->use_fg_color && (XACC_CELL_ALLOW_SHADOW & cell->input_output))
+      return cell->fg_color;
   }
 
-  return fg_color;
+  return table->fg_color_handler (vcell->vcell_data, cb_cell->cell_type,
+                                  table->entry_handler_data);
 }
 
 /* ==================================================== */

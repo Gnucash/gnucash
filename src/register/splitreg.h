@@ -145,10 +145,6 @@ typedef enum
   CURSOR_NONE
 } CursorClass;
 
-/* The value of NUM_CELLS should be larger than the number of 
- * cells defined in the structure below!
- */
-#define NUM_CELLS 25
 
 typedef struct _SplitRegisterBuffer SplitRegisterBuffer;
 typedef struct _SplitRegister SplitRegister;
@@ -184,21 +180,15 @@ struct _SplitRegister {
    PriceCell     * priceCell;
    PriceCell     * sharesCell;
 
-   /* The type of the register, must be one of the enumerated types
-    * named *_REGISTER, *_LEDGER, above */
    SplitRegisterType type;
-
    SplitRegisterStyle style;
 
    /* some private data; outsiders should not access this */
-   int num_header_rows;
-
-   int num_phys_rows;
    int num_virt_rows;
 
    int cursor_virt_row;
 
-   BasicCell *header_label_cells[NUM_CELLS];
+   BasicCell *header_label_cells[CELL_TYPE_COUNT];
 
    /* user_data allows users of this object to hang
     * private data onto it */
@@ -242,6 +232,7 @@ SplitRegister *
 xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
                          TableGetEntryHandler entry_handler,
+                         TableGetFGColorHandler fg_color_handler,
                          VirtCellDataAllocator allocator,
                          VirtCellDataDeallocator deallocator,
                          VirtCellDataCopy copy);

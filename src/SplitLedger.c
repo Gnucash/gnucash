@@ -2956,6 +2956,75 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
   }
 }
 
+guint32
+xaccSRGetFGColorHandler (gpointer vcell_data, short _cell_type,
+                         gpointer user_data)
+{
+  GUID *guid = vcell_data;
+  CellType cell_type = _cell_type;
+  SplitRegister *reg = user_data;
+  const guint32 black = 0x000000;
+  const guint32 red   = 0xff0000;
+  Split *split;
+
+  split = xaccSplitLookup (guid);
+  if (split == NULL)
+    return black;
+
+  switch (cell_type)
+  {
+    case SHRBALN_CELL:
+      {
+        double balance;
+
+        balance = xaccSplitGetShareBalance (split);
+        if (DEQ (balance, 0.0))
+          balance = 0.0;
+
+        if (balance < 0.0)
+          return red;
+
+        return black;
+      }
+      break;
+
+    case BALN_CELL:
+      {
+        double balance;
+
+        /* If the reverse_balance callback is present use that.
+         * Otherwise, reverse income and expense by default. */
+        balance = xaccSplitGetBalance (split);
+        if (reverse_balance != NULL)
+        {
+          Account *account;
+
+          account = xaccSplitGetAccount(split);
+
+          if (reverse_balance(account))
+            balance = -balance;
+        }
+        else if ((INCOME_REGISTER == reg->type) ||
+                 (EXPENSE_REGISTER == reg->type))
+          balance = -balance;
+
+        if (DEQ (balance, 0.0))
+          balance = 0.0;
+
+        if (balance < 0.0)
+          return red;
+
+        return black;
+      }
+      break;
+
+    default:
+      break;
+  }
+
+  return black;
+}
+
 /* ======================================================== */
 
 static void
@@ -3356,8 +3425,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    vcell_loc.virt_row = 0;
    vcell_loc.virt_col = 0;
    gnc_table_set_cursor (table, reg->header, vcell_loc);
-
-   PINFO ("load register of %d phys rows ----------- \n", reg->num_phys_rows);
 
    /* populate the table */
    i = 0;

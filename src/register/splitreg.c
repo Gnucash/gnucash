@@ -123,6 +123,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterType type,
                        SplitRegisterStyle style,
                        TableGetEntryHandler entry_handler,
+                       TableGetFGColorHandler fg_color_handler,
                        VirtCellDataAllocator allocator,
                        VirtCellDataDeallocator deallocator,
                        VirtCellDataCopy copy);
@@ -130,11 +131,11 @@ xaccInitSplitRegister (SplitRegister *reg,
 
 /* ============================================== */
 
-#define LABEL(NAME,label)					\
-{								\
-   BasicCell *hcell;						\
-   hcell = reg->header_label_cells[NAME##_CELL];		\
-   xaccSetBasicCellValue (hcell, label);			\
+#define LABEL(NAME,label)			 \
+{						 \
+   BasicCell *hcell;				 \
+   hcell = reg->header_label_cells[NAME##_CELL]; \
+   xaccSetBasicCellValue (hcell, label);	 \
 }
 
 /* ============================================== */
@@ -590,6 +591,7 @@ SplitRegister *
 xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
                          TableGetEntryHandler entry_handler,
+                         TableGetFGColorHandler fg_color_handler,
                          VirtCellDataAllocator allocator,
                          VirtCellDataDeallocator deallocator,
                          VirtCellDataCopy copy)
@@ -598,7 +600,8 @@ xaccMallocSplitRegister (SplitRegisterType type,
 
   reg = g_new(SplitRegister, 1);
 
-  xaccInitSplitRegister (reg, type, style, entry_handler,
+  xaccInitSplitRegister (reg, type, style,
+                         entry_handler, fg_color_handler,
                          allocator, deallocator, copy);
 
   return reg;
@@ -723,8 +726,7 @@ mallocCursors (SplitRegister *reg)
       return;
   }
 
-  reg->num_header_rows = 1;
-  reg->header = gnc_cellblock_new (reg->num_header_rows, num_cols);
+  reg->header = gnc_cellblock_new (1, num_cols);
 
   /* cursors used in the single & double line displays */
   reg->single_cursor = gnc_cellblock_new (1, num_cols);
@@ -752,6 +754,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterType type,
                        SplitRegisterStyle style,
                        TableGetEntryHandler entry_handler,
+                       TableGetFGColorHandler fg_color_handler,
                        VirtCellDataAllocator allocator,
                        VirtCellDataDeallocator deallocator,
                        VirtCellDataCopy copy)
@@ -902,7 +905,9 @@ xaccInitSplitRegister (SplitRegister *reg,
   reg->cursor_virt_row = 1;
   reg->num_virt_rows = 2;  /* one header, one single_cursor */
 
-  table = gnc_table_new (entry_handler, reg, allocator, deallocator, copy);
+  table = gnc_table_new (entry_handler, fg_color_handler, reg,
+                         allocator, deallocator, copy);
+
   gnc_table_set_size (table, reg->num_virt_rows, 1);
 
   /* Set up header */
@@ -912,7 +917,7 @@ xaccInitSplitRegister (SplitRegister *reg,
     gnc_table_set_cursor (table, header, vcell_loc);
   }
 
-  /* Set up first and only cursor */
+  /* Set up first and only initial row */
   {
     VirtualLocation vloc;
 

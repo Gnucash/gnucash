@@ -179,5 +179,7 @@ void     xaccSRShowPresentDivider (SplitRegister *reg, gboolean show_present);
 /* Private function, for MultiLedger.c only */
 const char * xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
                                     gpointer user_data);
+guint32      xaccSRGetFGColorHandler (gpointer vcell_data, short _cell_type,
+                                      gpointer user_data);
 
 #endif /* __XACC_SPLIT_LEDGER_H__ */
