@@ -314,12 +314,14 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                 gint i;
                 gint maxWidth, maxHeight, maxAscent, maxLBearing;
                 gint lbearing, rbearing, width, ascent, descent;
+		GtkStyle *style;
 
                 dcal->monthLabelFont = gdk_font_load( LABEL_FONT_NAME );
                 g_assert( dcal->monthLabelFont );
 
 		/* FIXME GNOME 2 port (rework the complete font code) */
-                /* dcal->dayLabelFont = GTK_WIDGET(dcal)->style->font; */
+                style = gtk_widget_get_style(GTK_WIDGET(dcal));
+                dcal->dayLabelFont = gtk_style_get_font(style);
                 gdk_font_ref( dcal->dayLabelFont );
                 g_assert( dcal->dayLabelFont );
 
@@ -376,7 +378,6 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                             / 3.0 ),
                      gdk_string_height( dcal->dayLabelFont, "88" ) + 2 );
         dcal->dayLabelHeight = gdk_string_height( dcal->monthLabelFont, "88" );
-        
         dcal->initialized = TRUE;
 }
 
