@@ -1,0 +1,43 @@
+RAW NOTES
+---------
+These need to be beautified into real documentation.
+
+
+stock splits & cost basis
+-------------------------
+OK, here's a question for accountants of various different countries:
+What's the cost basis for a stock split? Does the rest of teh world do
+it the way the US does it?
+
+For eaxmple:
+In Jan 1995 buy 100s stock for $10 per share
+In July 1997 split 2-for-1
+In August 1997, sell 120s stock for $30 per share
+
+I beleive the following is correct for the united states:
+My cost basis is $5 per share, and my gains of $25x120 are taxable
+as long-term cap gains.
+
+--- would there ever be a case where the cost basis should be $10 for
+    the first 100 shares, and $0 for the remainder?
+--- would there ever be a case where the gains would be considered
+    'short-term' for some portion of the total?
+
+==================================================
+OK, that was easy. Here's the harder one: a spin-off:
+
+For example:
+In Jan 1995 buy 100s of stock A for $10 per share
+In July 1997 receive 1s of stock B for every 20s of stock A.
+Stock B is new, and will trade under its own new ticker symbol
+as of the date of this split.
+
+-- What's my cost basis for B? is it $0.000 ?
+-- What's my cost basis for A? is it $10, or something else?
+-- Are these questions supposed to be answered by company A,
+   or do I just 'guess'?
+
+Note there is still an invarient:
+(old price of A) * 20s == (new price of A) *20s + (price of B) * 1s
+
+
