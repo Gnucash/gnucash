@@ -1,5 +1,7 @@
 /********************************************************************\
  * split-register-load.c -- split register loading code             *
+ * Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 2000 Dave Peticolas                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -37,8 +39,7 @@
 
 
 /* This static indicates the debugging module that this .o belongs to. */
-/* static short module = MOD_REGISTER; */
-
+/* static short module = MOD_LEDGER; */
 
 static void
 gnc_split_register_load_recn_cells (SplitRegister *reg)
