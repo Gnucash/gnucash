@@ -10,11 +10,22 @@
 -- HISTORY:
 -- Copyright (C) 2000, 2001 Linas Vepstas
 --
-
--- audit trail tables
 -- The change field may be 'a' -- add, 'd' -- delete/drop, 'm' -- modify
+--
 -- The objtype field may be 'a' -- account, 'c' -- commodity, 'e' -- entry,
 --                          'k' -- kvp, 'p' -- price, 't' -- transaction
+--
+-- The objtype is the class type of the child class.
+--
+-- Note that SQL is only partially object-oriented.  Thus, we use the
+-- gncAuditTrail table to define the parent class; the children inherit
+-- from it.  Since SQL doesn't tell the parent who the child was, we use
+-- the 'objtype' field to store the class type of the child.
+--
+-- Thus, we should really enforce a constraint on this field:
+-- CREATE TABLE gncAccountTrail ( 
+--         objtype       CHAR NOT NULL CHECK (objtype == 'a')
+-- and so on.  
 
 CREATE TABLE gncAuditTrail (
 	sessionGuid		CHAR(32)  NOT NULL,   -- who changed it
