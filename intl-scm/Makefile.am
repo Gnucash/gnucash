@@ -7,12 +7,13 @@ EXTRA_DIST = \
 # for maintainers
 noinst_HEADERS = guile-strings.c
 
-BUILT_SOURCES = ${srcdir}/guile-strings.c
+BUILT_SOURCES = guile-strings.c
 
-SCMFILES = $(shell find ${top_srcdir} -name '*\.scm' | egrep -v "/${top_buildir}/" )
+SCMFILES = $(shell find ${top_srcdir}/src -name test -prune -o -name '*.scm' -print )
 
 # This needs to be generated in srcdir
-${srcdir}/guile-strings.c: $(SCMFILES)
-	cd ${srcdir} && rm -f guile-strings.c && \
-	guile -s ./xgettext.scm $(SCMFILES)
+guile-strings.c: $(SCMFILES)
+	rm -f guile-strings.c
+	cd ${srcdir} && rm -f guile-strings.c \
+	&& ${GUILE} -s ./xgettext.scm $(SCMFILES)
 

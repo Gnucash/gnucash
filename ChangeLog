@@ -4,6 +4,9 @@
 
 	* src/engine/test/test-scm-query-import.scm: add a warning message
 	  about potential "error" output which can be ignored.
+
+	* intl-scm/Makefile.am: applied John's patch to build guile-strings.c
+	  properly.
 	
 2003-01-05  Chris Lyttle  <chris@wilddev.net>
 
