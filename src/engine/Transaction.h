@@ -126,6 +126,7 @@ char *        xaccTransGetNum (Transaction *);
 char *        xaccTransGetDescription (Transaction *);
 time_t        xaccTransGetDate (Transaction *);
 
+/* ------------- splits --------------- */
 /* return the number of splits */
 int           xaccTransCountSplits (Transaction *trans);
 
@@ -220,5 +221,12 @@ int  xaccSplitOrder (Split **sa, Split **sb);
  * count the number of transactions in the null-terminated array
  */
 int xaccCountTransactions (Transaction **tarray);
+
+/* 
+ * convenience routine that is essentially identical to 
+ * xaccGetPeerrAccountFromName, except that it accepts the handy
+ * transaction as root.
+ */
+Account * xaccGetAccountByName (Transaction *, const char *);
 
 #endif /* __XACC_TRANSACTION_H__ */

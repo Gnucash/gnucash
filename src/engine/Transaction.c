@@ -1051,5 +1051,34 @@ xaccSplitGetSharePrice (Split * split)
    return (split->share_price);
 }
 
+/********************************************************************\
+\********************************************************************/
+
+Account *
+xaccGetAccountByName (Transaction *trans, const char * name)
+{
+   Split *s;
+   Account *acc;
+   int i;
+
+   if (!trans) return NULL;
+   if (!name) return NULL;
+
+   /* walk through the splits, looking for one, any one, that has a parent account */
+   i = 0;
+   s = trans->splits[0];
+   while (s) {
+      acc = s->acc;
+      if (acc) break;
+      i++;
+      s = trans->splits[i];
+   }
+   
+   if (!acc) return 0x0;
+
+   acc = xaccGetPeerAccountFromName (acc, name);
+   return acc;
+}
+
 /************************ END OF ************************************\
 \************************* FILE *************************************/
