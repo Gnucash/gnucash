@@ -1,3 +1,17 @@
+2001-11-09  Rob Browning  <rlb@defaultvalue.org>
+
+	* src/guile/Makefile.am: fix for new automake.
+
+	* src/gnome-utils/Makefile.am (BUILT_SOURCES): fix for new automake.
+
+	* src/app-file/test/.cvsignore: add Makefile.in.
+
+	* src/import-export/qif-import/test/.cvsignore: add .deps.
+
+	* src/report/locale-specific/us/test/.cvsignore: add .deps.
+
+	* src/tax/us/test/.cvsignore: add .deps.
+
 2001-11-06  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c (create_each_transaction_helper):
