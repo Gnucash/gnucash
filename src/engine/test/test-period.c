@@ -120,16 +120,13 @@ run_test (void)
     exit(get_rv());
   }
 
-
-  success ("periods work but wern't really tested yet");
+  success ("periods lightly tested and seem to work");
 }
 
 static void
 main_helper (void *closure, int argc, char **argv)
 {
   run_test ();
-
-  success ("periods aren't realy tested yet");
 
   print_test_results();
   exit(get_rv());
