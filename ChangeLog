@@ -1,4 +1,9 @@
- 2001-05-04  Conrad Canterford <conrad@mail.watersprite.com.au>
+2001-05-04  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm : Add labels
+	to subtotals.
+
+2001-05-04  Conrad Canterford <conrad@mail.watersprite.com.au>
 
 	* make-gnucash-patch.in: add --manifest option (allow use of a
 	manifest file. Also, change --file option to allow multiple files.
