@@ -21,8 +21,8 @@
 ;; None of these loads will be affected by any command line arguments
 ;; since arguments aren't parsed until gnc:main is executed.
 
-(if gnc:*load-slib-backup*
-    (gnc:load "slib-backup.scm"))
-
-(gnc:load "depend.scm")
-(gnc:load "main.scm")
+;;(if gnc:*load-slib-backup*
+;;    (gnc:load "slib-backup.scm"))
+;;
+;;(gnc:load "depend.scm")
+;;(gnc:load "main.scm")
