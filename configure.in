@@ -119,7 +119,7 @@ AM_PATH_GWRAP(1.3.2, , [AC_MSG_ERROR([
   enough.  Right now gnucash requires at least version 1.3.2 to build.
   as there were major changes between version 1.3.1 and 1.3.2
   If you need to install g-wrap, you can find it at
-  ftp://ftp.gnucash.org/pub/g-wrap.
+  http://www.gnucash.org/pub/g-wrap.
 ])])
 
 # Find out what the g-wrap compile and link flags are.
