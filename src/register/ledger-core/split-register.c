@@ -2113,7 +2113,10 @@ gnc_split_register_init (SplitRegister *reg,
 
   layout = gnc_split_register_layout_new (reg);
 
-  model = gnc_split_register_model_new ();
+  if (is_template)
+    model = gnc_template_register_model_new ();
+  else
+    model = gnc_split_register_model_new ();
   model->handler_user_data = reg;
 
   control = gnc_split_register_control_new ();
