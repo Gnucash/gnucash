@@ -108,7 +108,11 @@ X create a template register
 . SX editor
   . tab order
   . Can't click-out of the register
-  . 'ESC' while editing template register causes window to go away badly
+  B 'ESC' while editing template register causes window to go away badly
+  B Can't reliably edit the split values of an added split to a from-trans
+    created transaction -- the values get nulled after split-change.
+    B Note that this doesn't hold true for just-created splits on a fresh
+      SX...
   X attempting to create a Weekly SX with no days selected causes a segfault.
     X the user should be prevented from doing this.
     X composite SX shouldn't segfault when asked to getFreqSpecStr for this
@@ -124,7 +128,7 @@ X create a template register
     . general: there's going to be all sorts of interaction issues like these
       between these things [SX-from-trans, SX list, SX editor] that should be
       handled.
-      . creating a SX from trans with the SX list open does not update the SX
+      B creating a SX from trans with the SX list open does not update the SX
         list
       X you can delete a freshly-from-trans'd SX from the list with the
         from-trans dlg still open, then 'ok' the dlg to get a segfault.
@@ -168,16 +172,16 @@ X create a template register
     pop up the 'new scheduled transactions' dialog [option, time-of-day]
   . fix first/last page issues.
   . bugs 
-    . correct "Back" button behavior in Druid paradigm
     . tab-order on variable-entry window isn't always correct.
-    . created SXes are put in GL forever. :(
-      . But this is true of manually-created transactions, too ... is this
+    B inital "To-Create Transactions" varbinding table doesn't setup table correctly.
+    B correct "Back" button behavior in Druid paradigm
+    B created SXes are put in GL forever. :(
+      B But this is true of manually-created transactions, too ... is this
         actually correct behavior?
-    . inital "To-Create Transactions" varbinding table doesn't setup table correctly.
-    . creating a bunch [FIXME:define "bunch"] of transactions takes too long
+    B creating a bunch [FIXME:define "bunch"] of transactions takes too long
       X with no progress indication.
-    . cancelling a bunch [FIXME:define "bunch"] of xactions takes too long
-      . no progress indication.
+    B cancelling a bunch [FIXME:define "bunch"] of xactions takes too long
+      B no progress indication.
     X twunder reports [2002.01.29] register growing a little bit at a time if
       tab is hit to switch between register fields -- started with update on
       1/21.

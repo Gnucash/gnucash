@@ -31,6 +31,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-currency-edit.c \
   gnc-date-delta.c \
   gnc-date-edit.c \
+  gnc-dense-cal.c \
   gnc-frequency.c \
   gnc-general-select.c \
   gnc-gnome-utils.c \
@@ -57,6 +58,7 @@ gncinclude_HEADERS = \
   gnc-currency-edit.h \
   gnc-date-delta.h \
   gnc-date-edit.h \
+  gnc-dense-cal.h \
   gnc-frequency.h \
   gnc-general-select.h \
   gnc-gnome-utils.h \

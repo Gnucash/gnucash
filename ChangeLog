@@ -1,3 +1,23 @@
+2002-06-18  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-dense-cal.[ch]: Added; a multiply-markable,
+	visually-dense Gtk calendar widget, to be used by
+	Scheduled Transactions.
+
+	* src/gnome/dialog-scheduledxaction.c
+	(putSchedXactionInDialog): Renamed; supports marking the new
+	GncDenseCal.
+	(delete_button_clicked): Now much less lame about dealing with the
+	CList when items are removed; supports [un]marking the
+	GncDenseCal.
+
+	* src/gnome/dialog-scheduledxaction.c (editor_ok_button_clicked):
+	Query the user if they want to create an unbalanceable
+	[varible-containing] transaction. Inform the user if they try to
+	create an auto-create transaction which has variables, as this is
+	not allowed.
+	
+
 2002-06-18  David Hampton  <hampton@employees.org>
 
 	* src/gnome/window-main.c: Make a couple of functions globally
@@ -230,21 +250,6 @@
 	fields trigger the dialog default button when <enter> is pressed.
 
 2002-05-21  Joshua Sled  <jsled@asynchronous.org>
-
-	* src/gnome/dialog-sx-from-trans.c (sxftd_get_end_info): Changed
-	to do the strtoul before we free the data itself; fixes "can't
-	create once/number-of-occurance SXes" [in from-transaction dialog]
-	bug.
-
-	* src/gnome/dialog-scheduledxaction.c (editor_ok_button_clicked):
-	Do a very lame but good-enough-for-now check to see if we can
-	determine if the template transactions will still balance.  Note
-	that we don't do anything with the result of that check, yet, but
-	we perform it.
-
-	* src/app-utils/gnc-exp-parser.c (gnc_exp_parser_real_init): Added
-	so we can conditionaly add the "predefined variables" to the
-	binding table for parsing a given expression.
 
 2002-05-18  David Hampton  <hampton@employees.org>
 

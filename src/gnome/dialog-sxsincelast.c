@@ -1,6 +1,6 @@
 /********************************************************************\
  * dialog-sxsincelast.c - "since last run" dialog.                  *
- * Copyright (c) 2001 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (c) 2001,2002 Joshua Sled <jsled@asynchronous.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -1018,7 +1018,8 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
         q = xaccMallocQuery();
         gnc_suspend_gui_refresh();
         count = 0;
-        gtk_progress_configure( sxsld->prog, 0, 0, g_list_length( autoCreateList ) );
+        gtk_progress_configure( GTK_PROGRESS(sxsld->prog), 0, 0,
+                                g_list_length( autoCreateList ) );
         for ( ; autoCreateList ; autoCreateList = autoCreateList->next ) {
                 thisGUID = createdGUIDs = NULL;
                 act = (autoCreateTuple*)autoCreateList->data;
@@ -1030,7 +1031,7 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
                                         NULL, &createdGUIDs );
 
                 count += g_list_length( createdGUIDs );
-                gtk_progress_set_value( sxsld->prog, count );
+                gtk_progress_set_value( GTK_PROGRESS(sxsld->prog), count );
                 while (g_main_iteration(FALSE));
 
                 sxsld->autoCreatedSomething = TRUE;
@@ -2284,8 +2285,8 @@ create_autoCreate_ledger( sxSinceLastData *sxsld )
         gnucash_register_set_initial_rows( 4 );
 
         sxsld->ac_regWidget =
-                gnc_regWidget_new( sxsld->ac_ledger,
-                                   GTK_WINDOW( sxsld->sincelast_window ) );
+                GNC_REGWIDGET(gnc_regWidget_new( sxsld->ac_ledger,
+                                                 GTK_WINDOW( sxsld->sincelast_window ) ));
 
         vbox = glade_xml_get_widget( sxsld->gxml, AUTO_CREATE_VBOX );
         toolbar = gnc_regWidget_get_toolbar( sxsld->ac_regWidget );
@@ -2339,8 +2340,8 @@ create_created_ledger( sxSinceLastData *sxsld )
         gnucash_register_set_initial_rows( 4 );
 
         sxsld->created_regWidget =
-                gnc_regWidget_new( sxsld->created_ledger,
-                                   GTK_WINDOW( sxsld->sincelast_window ) );
+          GNC_REGWIDGET(gnc_regWidget_new( sxsld->created_ledger,
+                                           GTK_WINDOW( sxsld->sincelast_window ) ));
 
         vbox = glade_xml_get_widget( sxsld->gxml, CREATED_VBOX );
         toolbar = gnc_regWidget_get_toolbar( sxsld->created_regWidget );

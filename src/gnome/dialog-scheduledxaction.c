@@ -35,6 +35,7 @@
 #include "gnc-book-p.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
+#include "gnc-dense-cal.h"
 #include "gnc-engine-util.h"
 #include "gnc-frequency.h"
 #include "gnc-gui-query.h"
@@ -58,6 +59,7 @@ static short module = MOD_SX;
 #define DIALOG_SCHEDXACTION_EDITOR_CM_CLASS "dialog-scheduledtransaction-editor"
 
 #define SX_LIST_GLADE_NAME "Scheduled Transaction List"
+#define SX_LIST_UPCOMING_FRAME "upcoming_cal_frame"
 #define SX_EDITOR_GLADE_NAME "Scheduled Transaction Editor"
 #define SX_OPT_STR "Scheduled Transactions"
 #define AUTOCREATE_OPT "autocreate_opt"
@@ -94,10 +96,10 @@ typedef enum _EndTypeEnum {
 
 struct _SchedXactionDialog
 {
-        GtkWidget        *dialog;
-        GladeXML        *gxml;
-
-       /* other pertinant scheduled-transaction-editor info */
+        GtkWidget   *dialog;
+        GladeXML    *gxml;
+        GncDenseCal *gdcal;
+        GHashTable  *sxData;
 };
 
 struct _SchedXactionEditorDialog
@@ -106,6 +108,7 @@ struct _SchedXactionEditorDialog
         GtkWidget *dialog;
         SchedXactionDialog *sxd;
         SchedXaction *sx;
+        /* FIXME: what does "new" mean? */
         int new;
 
         GNCLedgerDisplay *ledger;
@@ -120,7 +123,10 @@ struct _SchedXactionEditorDialog
 
 /** Prototypes **********************************************************/
 
-static void putSchedXactionInClist( gpointer data, gpointer user_data );
+static void putSchedXactionInDialog( gpointer data, gpointer user_data );
+
+static void generate_instances( SchedXaction *sx,
+                                GDate *end, GList **instanceList );
 
 static void schedXact_populate( SchedXactionDialog * );
 static void schedXact_editor_init( SchedXactionEditorDialog * );
@@ -149,12 +155,15 @@ static void sxe_register_redraw_all_cb( GnucashRegister *reg, gpointer d );
 
 static void sxed_reg_recordCB( GtkWidget *w, gpointer d );
 static void sxed_reg_cancelCB( GtkWidget *w, gpointer d );
+#if 0 /* removed 2002.05.29 to get rid of compilation warnings after
+       * gncRegWidget addition. */
 static void sxed_reg_deleteCB( GtkWidget *w, gpointer d );
 static void sxed_reg_duplicateCB( GtkWidget *w, gpointer d );
 static void sxed_reg_expand_trans_checkCB( GtkWidget *w, gpointer d );
 static void sxed_reg_new_transCB( GtkWidget *w, gpointer d );
 static void sxed_reg_jumpCB( GtkWidget *w, gpointer d );
 static void sxed_reg_xferCB( GtkWidget *w, gpointer d );
+#endif /* 0 -- removed 2002.05.29 */
 
 static void gnc_sxed_reg_check_close(SchedXactionEditorDialog *sxed);
 
@@ -234,9 +243,13 @@ static void
 set_var_to_random_value( gpointer key, gpointer value, gpointer ud )
 {
         gnc_numeric *val;
+
         val = g_new0( gnc_numeric, 1 );
         *val = double_to_gnc_numeric( rand() + 2, 1,
                                       GNC_NUMERIC_RND_MASK | GNC_RND_FLOOR );
+        if ( value != NULL ) {
+                g_free( value );
+        }
         g_hash_table_insert( ud, key, val );
 }
 
@@ -249,6 +262,7 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         GList *sxList;
         FreqSpec *fs;
         GDate *gdate;
+        gboolean ttHasVars;
 
         /* FIXMEs: Do checks on validity and such, interrupting the user if
          * things aren't right.
@@ -266,11 +280,15 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
          * [X more generically, creating a "not scheduled" SX is probably not
          *   right... ]
          */
+        ttHasVars = FALSE;
         gnc_split_register_save ( gnc_ledger_display_get_split_register(sxed->ledger),
                                   FALSE );
 
         /* numeric-formulas-get-balanced determination */
         {
+                static const int NUM_ITERS_WITH_VARS = 5;
+                static const int NUM_ITERS_NO_VARS = 1;
+                int numIters, i;
                 GHashTable *vars;
                 GList *splitList = NULL;
                 char *str;
@@ -278,10 +296,11 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                 kvp_value *v;
                 Split *s;
                 gnc_numeric creditSum, debitSum, tmp;
+                gboolean unbalanceable;
 
-                creditSum = debitSum = gnc_numeric_zero();
+                unbalanceable = FALSE; /* innocent until proven guilty */
                 vars = g_hash_table_new( g_str_hash, g_str_equal );
-                splitList = xaccSchedXactionGetSplits( sxed->sx );
+                numIters = NUM_ITERS_NO_VARS;
                 /**
                  * Plan:
                  * . Do a first pass to get the variables.
@@ -291,63 +310,89 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                  *   . false: indicate to user, allow decision.
                  */
                 sxsl_get_sx_vars( sxed->sx, vars );
-                if ( g_hash_table_size( vars ) == 0 ) {
-                        /* FIXME: just balance as is, DTRT. */
+
+                ttHasVars = (g_hash_table_size( vars ) != 0);
+                if ( g_hash_table_size( vars ) != 0 ) {
+                        /* balance with random variable bindings some number
+                         * of times in an attempt to ferret out
+                         * un-balanceable transactions.
+                         * 
+                         * NOTE: The Real Way to do this is with some
+                         * symbolic math to eliminate the variables.  This is
+                         * hard, and we don't do it.  This solution will
+                         * suffice for now, and perhaps for the lifetime of
+                         * the software. --jsled */
+                        numIters = NUM_ITERS_WITH_VARS;
                 }
 
-                /* FIXME: since we have variables, we can deal with any
-                 * possible auto-create flaggage. */
-                g_hash_table_foreach( vars, set_var_to_random_value,
-                                      (gpointer)vars );
-                
-                for ( ; splitList; splitList = splitList->next ) {
-                        s = (Split*)splitList->data;
-                        f = xaccSplitGetSlots( s );
-                        v = kvp_frame_get_slot_path( f,
-                                                     GNC_SX_ID,
-                                                     GNC_SX_CREDIT_FORMULA,
-                                                     NULL );
-                        if ( v
-                             && (str = kvp_value_get_string(v))
-                             && strlen( str ) != 0 ) {
-                                if ( parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
-                                        PERR( "Couldn't parse credit formula for "
-                                              "\"%s\" on second pass",
-                                              xaccSchedXactionGetName( sxed->sx ) );
-                                        return;
+                srand(time(NULL));
+                for ( i=0; i < numIters && !unbalanceable; i++ ) {
+                        g_hash_table_foreach( vars, set_var_to_random_value,
+                                              (gpointer)vars );
+                        creditSum = debitSum = gnc_numeric_zero();
+                        for ( splitList = xaccSchedXactionGetSplits( sxed->sx );
+                              splitList; splitList = splitList->next ) {
+                                s = (Split*)splitList->data;
+                                f = xaccSplitGetSlots( s );
+                                v = kvp_frame_get_slot_path( f,
+                                                             GNC_SX_ID,
+                                                             GNC_SX_CREDIT_FORMULA,
+                                                             NULL );
+                                if ( v
+                                     && (str = kvp_value_get_string(v))
+                                     && strlen( str ) != 0 ) {
+                                        if ( parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
+                                                PERR( "Couldn't parse credit formula for "
+                                                      "\"%s\" on second pass",
+                                                      xaccSchedXactionGetName( sxed->sx ) );
+                                                return;
+                                        }
+                                        creditSum = gnc_numeric_add_fixed( creditSum, tmp );
+                                        tmp = gnc_numeric_zero();
                                 }
-                                creditSum = gnc_numeric_add_fixed( creditSum, tmp );
-                                tmp = gnc_numeric_zero();
-                        }
-                        v = kvp_frame_get_slot_path( f,
-                                                     GNC_SX_ID,
-                                                     GNC_SX_DEBIT_FORMULA,
-                                                     NULL );
-                        if ( v
-                             && (str = kvp_value_get_string(v))
-                             && strlen(str) != 0 ) {
-                                if ( parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
-                                        PERR( "Couldn't parse debit formula for "
-                                              "\"%s\" on second pass",
-                                              xaccSchedXactionGetName( sxed->sx ) );
-                                        return;
+                                v = kvp_frame_get_slot_path( f,
+                                                             GNC_SX_ID,
+                                                             GNC_SX_DEBIT_FORMULA,
+                                                             NULL );
+                                if ( v
+                                     && (str = kvp_value_get_string(v))
+                                     && strlen(str) != 0 ) {
+                                        if ( parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
+                                                PERR( "Couldn't parse debit formula for "
+                                                      "\"%s\" on second pass",
+                                                      xaccSchedXactionGetName( sxed->sx ) );
+                                                return;
+                                        }
+                                        debitSum = gnc_numeric_add_fixed( debitSum, tmp );
+                                        tmp = gnc_numeric_zero();
                                 }
-                                debitSum = gnc_numeric_add_fixed( debitSum, tmp );
-                                tmp = gnc_numeric_zero();
                         }
-                }
-                if ( gnc_numeric_zero_p( gnc_numeric_sub_fixed( debitSum, creditSum ) ) ) {
-                        printf( "true [%s - %s = %s]\n",
-                                gnc_numeric_to_string( debitSum ),
-                                gnc_numeric_to_string( creditSum ),
-                                gnc_numeric_to_string(gnc_numeric_sub_fixed( debitSum, creditSum )) );
-                } else {
-                        printf( "false [%s - %s = %s]\n",
-                                gnc_numeric_to_string( debitSum ),
-                                gnc_numeric_to_string( creditSum ),
-                                gnc_numeric_to_string(gnc_numeric_sub_fixed( debitSum, creditSum )) );
+                        unbalanceable |= !(gnc_numeric_zero_p( gnc_numeric_sub_fixed( debitSum, creditSum ) ));
+#if DEBUG
+                        if ( gnc_numeric_zero_p( gnc_numeric_sub_fixed( debitSum, creditSum ) ) ) {
+                                printf( "true [%s - %s = %s]\n",
+                                        gnc_numeric_to_string( debitSum ),
+                                        gnc_numeric_to_string( creditSum ),
+                                        gnc_numeric_to_string(gnc_numeric_sub_fixed( debitSum, creditSum )) );
+                        } else {
+                                printf( "false [%s - %s = %s]\n",
+                                        gnc_numeric_to_string( debitSum ),
+                                        gnc_numeric_to_string( creditSum ),
+                                        gnc_numeric_to_string(gnc_numeric_sub_fixed( debitSum, creditSum )) );
+                        }
+#endif /* DEBUG */
                 }
                 g_hash_table_destroy( vars );
+
+                if ( unbalanceable
+                     && !gnc_verify_dialog_parented( sxed->dialog, FALSE,
+                                                     "%s",
+                                                     _("This transaction "
+                                                       "appears unbalancable, "
+                                                       "should it still be "
+                                                       "created?") ) ) {
+                        return;
+                }
         }
 
         /* read out data back into SchedXaction object. */
@@ -436,8 +481,16 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                 w = glade_xml_get_widget( sxed->gxml, "notify_opt" );
                 notifyState = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w) );
 
+                if ( ttHasVars && autocreateState ) {
+                        gnc_info_dialog( _("You attempted to create a \"Create "
+                                           "Automatically\" "
+                                           "Scheduled Transaction which has Variables, "
+                                           "which is not allowed.\nPlease remove the "
+                                           "Create Automatically flag and try again.") );
+                        return;
+                }
                 /* "Notify" only makes sense if AutoCreate is actived;
-                   enforce that here. */
+                 * enforce that here. */
                 xaccSchedXactionSetAutoCreate( sxed->sx,
                                                autocreateState,
                                                (autocreateState & notifyState) );
@@ -495,7 +548,7 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         }
 
         /* add to list */
-        putSchedXactionInClist( sxed->sx, sxed->sxd );
+        putSchedXactionInDialog( sxed->sx, sxed->sxd );
         if ( sxed->new ) {
                 book = gnc_get_current_book ();
                 sxList = gnc_book_get_schedxactions( book );
@@ -580,6 +633,7 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         SchedXactionDialog *sxd = NULL;
         GtkObject *sxdo;
         GtkWidget *button;
+        GtkWidget *w;
         GList *alreadyExisting = NULL;
 
         alreadyExisting = 
@@ -597,13 +651,15 @@ gnc_ui_scheduled_xaction_dialog_create(void)
 
         sxd->gxml = gnc_glade_xml_new( "sched-xact.glade", SX_LIST_GLADE_NAME );
         sxd->dialog = glade_xml_get_widget( sxd->gxml, SX_LIST_GLADE_NAME );
+        sxd->sxData = g_hash_table_new( NULL, NULL );
 
         sxdo = GTK_OBJECT(sxd->dialog);
 
-        gnc_register_gui_component( DIALOG_SCHEDXACTION_CM_CLASS,
-                                    NULL, /* no refresh handler */
-                                    sxd_close_handler,
-                                    sxd );
+        w = glade_xml_get_widget( sxd->gxml, SX_LIST_UPCOMING_FRAME );
+        sxd->gdcal = GNC_DENSE_CAL( gnc_dense_cal_new() );
+        gnc_dense_cal_set_months_per_col( sxd->gdcal, 4 );
+        gnc_dense_cal_set_num_months( sxd->gdcal, 12 );
+        gtk_container_add( GTK_CONTAINER(w), GTK_WIDGET(sxd->gdcal) );
 
         gtk_signal_connect( sxdo, "destroy",
                             GTK_SIGNAL_FUNC(scheduledxaction_dialog_destroy),
@@ -622,9 +678,14 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         gtk_signal_connect( GTK_OBJECT(button), "clicked",
                             GTK_SIGNAL_FUNC(close_button_clicked), sxd );
 
+        gnc_register_gui_component( DIALOG_SCHEDXACTION_CM_CLASS,
+                                    NULL, /* no refresh handler */
+                                    sxd_close_handler,
+                                    sxd );
+
         schedXact_populate( sxd );
 
-        gtk_widget_show(sxd->dialog);
+        gtk_widget_show_all(sxd->dialog);
 
         return sxd;
 }
@@ -657,7 +718,7 @@ row_select_handler( GtkCList *clist,
 {
         SchedXactionDialog *sxd;
         SchedXaction *sx;
-        
+       
         sxd   = (SchedXactionDialog*)d;
 
         if ( event == NULL ) {
@@ -688,7 +749,7 @@ schedXact_populate( SchedXactionDialog *sxd )
         book = gnc_get_current_book ();
         sxList = gnc_book_get_schedxactions( book );
 
-        g_list_foreach( sxList, putSchedXactionInClist, sxd );
+        g_list_foreach( sxList, putSchedXactionInDialog, sxd );
 
         sx_clist = GTK_CLIST( glade_xml_get_widget( sxd->gxml,
                                                     "sched_xact_list" ) );
@@ -738,19 +799,19 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                 void     (*fn)();
                 gpointer objectData;
         } widgets[] = {
-                { "ok_button",      "clicked", editor_ok_button_clicked,    NULL },
+                { "ok_button",      "clicked", editor_ok_button_clicked,     NULL },
                 { "cancel_button",  "clicked", editor_cancel_button_clicked, NULL },
-		{ "help_button",    "clicked", editor_help_button_clicked,  NULL}, 
+		{ "help_button",    "clicked", editor_help_button_clicked,   NULL}, 
 
-                { "rb_noend",       "toggled", endgroup_rb_toggled,         GINT_TO_POINTER(END_NEVER_OPTION) },
-                { "rb_enddate",     "toggled", endgroup_rb_toggled,         GINT_TO_POINTER(END_DATE_OPTION) },
-                { "rb_num_occur",   "toggled", endgroup_rb_toggled,         GINT_TO_POINTER(NUM_OCCUR_OPTION) },
+                { "rb_noend",       "toggled", endgroup_rb_toggled,          GINT_TO_POINTER(END_NEVER_OPTION) },
+                { "rb_enddate",     "toggled", endgroup_rb_toggled,          GINT_TO_POINTER(END_DATE_OPTION) },
+                { "rb_num_occur",   "toggled", endgroup_rb_toggled,          GINT_TO_POINTER(NUM_OCCUR_OPTION) },
 
-                { "autocreate_opt", "toggled", autocreate_toggled,          NULL },
-                { "advance_opt",    "toggled", advance_toggle,              (gpointer)"advance_days" },
-                { "remind_opt",     "toggled", advance_toggle,              (gpointer)"remind_days" },
+                { "autocreate_opt", "toggled", autocreate_toggled,           NULL },
+                { "advance_opt",    "toggled", advance_toggle,               (gpointer)"advance_days" },
+                { "remind_opt",     "toggled", advance_toggle,               (gpointer)"remind_days" },
 
-                { NULL,             NULL,      NULL,                        NULL }
+                { NULL,             NULL,      NULL,                         NULL }
         };
 
         alreadyExists = gnc_find_gui_components( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
@@ -784,7 +845,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         gtk_signal_connect(GTK_OBJECT(sxed->dialog), "destroy",
                            GTK_SIGNAL_FUNC(scheduledxaction_editor_dialog_destroy),
                            sxed);
-        /* FIXME: want delete-event, too. */
+        /* FIXME: want delete-event, too. [?] */
 
         for ( i=0; widgets[i].name != NULL; i++ ) {
                 button = glade_xml_get_widget( sxed->gxml, widgets[i].name );
@@ -872,7 +933,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 {
         GtkFrame *tempxaction_frame;
         SplitRegister *splitreg;
-        GtkWidget *regWidget, *vbox, *toolbar;
+        GtkWidget *regWidget, *vbox;
         int numLedgerLines = NUM_LEDGER_LINES_DEFAULT;
 
         tempxaction_frame =
@@ -1152,14 +1213,12 @@ edit_button_clicked( GtkButton *b, gpointer d )
         SchedXactionEditorDialog *sxed;
 
         sxd = (SchedXactionDialog*)d;
-
         cl = GTK_CLIST(glade_xml_get_widget( sxd->gxml, "sched_xact_list" ));
-
         for( sel = cl->selection; sel; sel = g_list_next(sel) ) {
                 row = (int)sel->data;
                 /* get the clist row for this listitem */
-                /* get the object UD */
                 sx = (SchedXaction*)gtk_clist_get_row_data( cl, row );
+                /* get the object UD */
                 sxed = gnc_ui_scheduled_xaction_editor_dialog_create( sxd, sx, 0 );
         }
 }
@@ -1193,7 +1252,7 @@ delete_button_clicked( GtkButton *b, gpointer d )
         realConfDelOpenMsg = g_string_new( beingEditedMessage );
         beingEditedList = NULL;
         for ( ; sel ; sel = sel->next ) {
-                sx = gtk_clist_get_row_data( cl, (int)sel->data );
+                sx = (SchedXaction*)gtk_clist_get_row_data( cl, (int)sel->data );
                 g_string_sprintfa( realConfDeleteMsg, "\n\"%s\"",
                                    xaccSchedXactionGetName( sx ) );
                 if ( (l = gnc_find_gui_components( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
@@ -1240,20 +1299,39 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 }
 
                 /* Now, actually do the deletions... */
-                sel = cl->selection;
                 book = gnc_get_current_book ();
                 sxList = gnc_book_get_schedxactions( book );
-                do {
-                        sx = (SchedXaction*)
-                                gtk_clist_get_row_data( cl, (int)sel->data );
+                for ( sel = cl->selection; sel; sel = sel->next ) {
+                        guint tag;
+                        gpointer unused;
+                        gboolean foundP;
+
+                        sx = (SchedXaction*)gtk_clist_get_row_data( cl, (int)sel->data );
                         sxList = g_list_remove( sxList, (gpointer)sx );
+                        foundP = g_hash_table_lookup_extended( sxd->sxData, sx,
+                                                               &unused, &tag );
+                        g_assert( foundP );
+                        /* FIXME: this should allow the possibility that an
+                         * unscheduled transaction will have no mark tag. */
+                        if ( tag != -1 ) {
+                                gnc_dense_cal_mark_remove( sxd->gdcal, tag );
+                        }
+                        g_hash_table_remove( sxd->sxData, sx );
                         xaccSchedXactionFree( sx );
-                } while ( (sel = g_list_next(sel)) );
+                }
                 gnc_book_set_schedxactions( book, sxList );
 
                 gtk_clist_freeze( cl );
-                gtk_clist_clear( cl );
-                g_list_foreach( sxList, putSchedXactionInClist, sxd );
+                /* Remove the selected and deleted rows from the clist in
+                 * reverse order so each index is valid. */
+                sel = g_list_copy( cl->selection );
+                sel = g_list_reverse( sel );
+                gtk_clist_unselect_all( cl );
+                for ( ; sel; sel = sel->next ) {
+                        gtk_clist_remove( cl, (int)sel->data );
+                }
+                g_list_free( sel );
+                sel = NULL;
                 gtk_clist_thaw( cl );
         }
 
@@ -1292,7 +1370,49 @@ endgroup_rb_toggled( GtkButton *b, gpointer d )
 
 static
 void
-putSchedXactionInClist( gpointer data, gpointer user_data )
+generate_instances( SchedXaction *sx,
+                    GDate *end, GList **instanceList )
+{
+        GDate gd, *gdToReturn;
+        void *seqStateData;
+
+        /* Process valid next instances */
+        seqStateData = xaccSchedXactionCreateSequenceState( sx );
+        gd = xaccSchedXactionGetNextInstance( sx, seqStateData );
+        while ( g_date_valid(&gd)
+                && g_date_compare( &gd, end ) <= 0 ) {
+
+                gdToReturn = g_date_new();
+                *gdToReturn = gd;
+                *instanceList = g_list_append( *instanceList, gdToReturn );
+
+                xaccSchedXactionIncrSequenceState( sx, seqStateData );
+                gd = xaccSchedXactionGetInstanceAfter( sx, &gd, seqStateData );
+        }
+        xaccSchedXactionDestroySequenceState( seqStateData );
+        seqStateData = NULL;
+}
+
+/**
+ * In this version, we're just updating the clist so the column data is
+ * correct.  We already have valid hash table and dense-cal mappings.
+ **/
+static
+void
+update_clist( gpointer data, gpointer user_data )
+{
+        SchedXaction *sx;
+        SchedXactionDialog *sxd;
+
+        sx = (SchedXaction*)data;
+        sxd = (SchedXactionDialog*)user_data;
+
+        
+}
+
+static
+void
+putSchedXactionInDialog( gpointer data, gpointer user_data )
 {
         SchedXaction *sx;
         SchedXactionDialog *sxd;
@@ -1302,7 +1422,11 @@ putSchedXactionInClist( gpointer data, gpointer user_data )
         GString *nextDate;
         gint row;
         int i;
-        GDate gd;
+        GDate *nextInstDate, *calEndDate;
+        int instArraySize;
+        GDate **instArray;
+        GList *instList;
+        guint gdcMarkTag, oldMarkTag;
 
         sx = (SchedXaction*)data;
         sxd = (SchedXactionDialog*)user_data;
@@ -1312,37 +1436,81 @@ putSchedXactionInClist( gpointer data, gpointer user_data )
 
         xaccFreqSpecGetFreqStr( xaccSchedXactionGetFreqSpec(sx), freqStr );
 
-        gd = xaccSchedXactionGetNextInstance( sx, NULL );
+        calEndDate = g_date_new_dmy( 1,
+                                     gnc_dense_cal_get_month(sxd->gdcal),
+                                     gnc_dense_cal_get_year(sxd->gdcal) );
+        g_date_add_months( calEndDate,
+                           gnc_dense_cal_get_num_months(sxd->gdcal) );
 
-        if ( ! g_date_valid( &gd ) ) {
+        instList = NULL;
+        generate_instances( sx, calEndDate, &instList );
+        g_date_free( calEndDate );
+
+        if ( instList == NULL ) {
                 g_string_sprintf( nextDate, "not scheduled" );
         } else {
                 char tmpBuf[26];
-                       
-                g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", &gd );
+                nextInstDate = (GDate*)instList->data;
+                g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", nextInstDate );
                 g_string_sprintf( nextDate, "%s", tmpBuf );
+        }
+
+        /* Add markings to GncDenseCal */
+        gdcMarkTag = -1;
+        if ( instList != NULL ) {
+                GList *l;
+                FreqSpec *fs;
+                GString *freqDesc;
+
+                instArraySize = g_list_length( instList );
+                instArray = g_new0( GDate*, instArraySize );
+                for ( i=0, l=instList; l; l = l->next ) {
+                        instArray[i++] = (GDate*)l->data;
+                }
+                freqDesc = g_string_sized_new(64);
+                fs = xaccSchedXactionGetFreqSpec(sx);
+                xaccFreqSpecGetFreqStr(fs, freqDesc );
+                gdcMarkTag = gnc_dense_cal_mark( sxd->gdcal,
+                                                 instArraySize, instArray,
+                                                 xaccSchedXactionGetName(sx),
+                                                 freqDesc->str );
+                g_string_free( freqDesc, TRUE );
+                g_list_free( instList );
+                g_free( instArray );
         }
 
         text[0] = xaccSchedXactionGetName( sx );
         text[1] = freqStr->str;
         text[2] = nextDate->str;
 
-        /* FIXME: leaky? */
-        g_string_free( freqStr, FALSE );
-        g_string_free( nextDate, FALSE );
-
         clist = GTK_CLIST( glade_xml_get_widget( sxd->gxml, "sched_xact_list" ) );
         gtk_clist_freeze( clist );
         row = gtk_clist_find_row_from_data( clist, sx );
+        if ( row != -1 ) {
+                gpointer unused;
+                gboolean foundP =
+                        g_hash_table_lookup_extended( sxd->sxData,
+                                                      (gpointer)sx,
+                                                      &unused, &oldMarkTag );
+                g_assert( foundP );
+        }
         if ( row == -1 ) {
+                /* new item to be inserted */
                 row = gtk_clist_append( clist, text );
                 gtk_clist_set_row_data( clist, row, sx );
         } else {
+                /* old item being replaced. */
+                gnc_dense_cal_mark_remove( sxd->gdcal, oldMarkTag );
                 for ( i=0; i<3; i++ ) {
                         gtk_clist_set_text( clist, row, i, text[i] );
                 }
         }
         gtk_clist_thaw( clist );
+        g_hash_table_insert( sxd->sxData, (gpointer)sx, (gpointer)gdcMarkTag );
+
+        /* FIXME: leaky? -- shouldn't be with 'TRUE' below */
+        g_string_free( freqStr,  TRUE );
+        g_string_free( nextDate, TRUE );
 }
 
 static
@@ -1425,6 +1593,8 @@ refactor_transaction_delete_toggle_cb(GtkToggleButton *button, gpointer data)
 }
 
 /* FIXME */
+#if 0 /* removed 2002.05.29 by jsled to remove compilation warnings after
+       * gncRegWidget addition. */
 static DeleteType
 refactor_transaction_delete_query(GtkWindow *parent)
 {
@@ -1581,6 +1751,7 @@ sxed_reg_xferCB( GtkWidget *w, gpointer d )
 {
         /* FIXME: should use a "templatized" xfer dlg. */
 }
+#endif /* 0 -- removed 2002.05.29 ... */
 
 /********************************************************************\
  * gnc_register_check_close                                         *

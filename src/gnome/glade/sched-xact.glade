@@ -2576,7 +2576,7 @@ December
       <spacing>0</spacing>
       <child>
 	<padding>0</padding>
-	<expand>True</expand>
+	<expand>False</expand>
 	<fill>True</fill>
       </child>
 
@@ -2633,7 +2633,7 @@ December
 	    <class>GtkLabel</class>
 	    <child_name>CList:title</child_name>
 	    <name>label847752</name>
-	    <label>Next</label>
+	    <label>Next Occurance</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>0.5</xalign>
@@ -2685,6 +2685,24 @@ December
 	  <label>Delete</label>
 	  <relief>GTK_RELIEF_NORMAL</relief>
 	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkFrame</class>
+      <name>upcoming_cal_frame</name>
+      <border_width>2</border_width>
+      <label>Upcoming...</label>
+      <label_xalign>0.05</label_xalign>
+      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+      <child>
+	<padding>0</padding>
+	<expand>True</expand>
+	<fill>True</fill>
+      </child>
+
+      <widget>
+	<class>Placeholder</class>
       </widget>
     </widget>
   </widget>
