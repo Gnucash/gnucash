@@ -809,8 +809,10 @@ we've been, and where we're going.
       this will help the search engine (e.g. 
       <a href="http://www.htdig.org/">htdig</a>) better categorize
       the help.  
-      <a href="http:///www.senga.org/mifluz/html/">Mifluz</a> might 
+      <a href="http://www.senga.org/mifluz/html/">Mifluz</a> might 
       be more embeddable ... 
+      I am told that  htdig-API is in good solid condition for this, but
+      undocumented.
       <p>
       </p>
       </dd>
@@ -1586,7 +1588,13 @@ next due date mm/dd/yy
         that a transaction cannot be completed until two accounts
         have been specified.</p>
 
-        <p> <b>Current status:</b></p>
+        <p><b>Restricted Double</b> 
+        Note that sometimes, the words 'single-entry' have a 
+        an alternate meaning: they can mean 'a double entry account
+        which can only be credited, or debited, but not both'.  We
+        need to implement this.
+
+        <p> <b>Current status:</b>
 
         <ul>
           <li>April 1998 -- The engine has a couple of flags in it
@@ -1597,7 +1605,11 @@ next due date mm/dd/yy
           <li>Dec 1998 -- Scrubber functions implemented to crawl
           through data, and find all unbalanced or orphaned
           transactions.</li>
+
+          <li>May 2000 -- Default will be changed to double-entry
+              always. It will not be possible to disable single-entry.
         </ul>
+       </p>
 
       </dd>
 
