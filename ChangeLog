@@ -1,3 +1,8 @@
+2002-07-09  Derek Atkins  <derek@ihftp.com>
+
+	* "global-replace for-each-in-order for-each" because the former
+	  does not exist in current guiles.  Fixes bugID 87693
+
 2002-07-08  Derek Atkins  <derek@ihtfp.com>
 
 	* kvp-option-registry.scm: create a registry of kvp-options

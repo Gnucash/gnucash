@@ -477,7 +477,7 @@
               (let ((table (gnc:make-html-table)))
                 (gnc:html-table-set-col-headers!
                  table columns)
-                (for-each-in-order 
+                (for-each
                  (lambda (row)
                    (gnc:html-table-append-row! table row))
                  data)
