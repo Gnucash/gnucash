@@ -535,10 +535,9 @@ static CellIOFlags get_standard_io_flags (VirtualLocation virt_loc,
   switch (ledger->type) {
   case GNCENTRY_ORDER_VIEWER:
   case GNCENTRY_INVOICE_VIEWER:
-    /* Viewers are always immutable */
-
-    /* XXX: This is a problem... */
-    return XACC_CELL_ALLOW_SHADOW;
+    /* Viewers are always immutable, but don't worry about that here */
+    /* XXX: Can this be part of default? */
+    return XACC_CELL_ALLOW_ALL;
 
   case GNCENTRY_ORDER_ENTRY:
     {
@@ -785,7 +784,8 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
 
 /* Set Cell Handlers */
 
-static void gnc_entry_ledger_model_new_handlers (TableModel *model)
+static void gnc_entry_ledger_model_new_handlers (TableModel *model,
+						 GncEntryLedgerType type)
 {
   struct model_desc {
     const char * cell;
@@ -836,16 +836,26 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model)
   */
 
   gnc_table_model_set_post_save_handler (model, gnc_entry_ledger_save_cells);
+
+  switch (type) {
+  case GNCENTRY_ORDER_VIEWER:
+  case GNCENTRY_INVOICE_VIEWER:
+    /* make this table read-only */
+    gnc_table_model_set_read_only (model, TRUE);
+    break;
+  default:
+    break;
+  }
 }
 
 /** Public Interface ***********************************************/
 
-TableModel * gnc_entry_ledger_model_new (void)
+TableModel * gnc_entry_ledger_model_new (GncEntryLedgerType type)
 {
   TableModel * model;
 
   model = gnc_table_model_new ();
-  gnc_entry_ledger_model_new_handlers (model);
+  gnc_entry_ledger_model_new_handlers (model, type);
 
   return model;
 }

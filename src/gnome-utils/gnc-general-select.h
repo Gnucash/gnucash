@@ -45,7 +45,8 @@ typedef gpointer 	(*GNCGeneralSelectNewSelectCB) (gpointer cbarg, gpointer defau
 
 typedef enum {
   GNC_GENERAL_SELECT_TYPE_SELECT = 1,
-  GNC_GENERAL_SELECT_TYPE_EDIT = 2
+  GNC_GENERAL_SELECT_TYPE_EDIT = 2,
+  GNC_GENERAL_SELECT_TYPE_VIEW = 3
 } GNCGeneralSelectType;
 
 typedef struct {

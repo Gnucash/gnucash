@@ -168,7 +168,7 @@ gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_order_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  char *help_file = "";		/* xxx */
+  char *help_file = "";		/* XXX: FIXME */
 
   helpWindow(NULL, NULL, help_file);
 }
@@ -180,7 +180,9 @@ gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data)
 
   fprintf (stderr, "I would create an invoice now... \n");
 
-  /* XXX: now refresh this window */
+  /* XXX: now refresh this window, it's possible a number of
+   * entries have changed
+   */
 }
 
 static void
@@ -544,7 +546,7 @@ gnc_order_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
   if (ownerp)
     gncOwnerCopy (ownerp, &owner);
   else
-    gncOwnerInitCustomer (&owner, NULL); /* XXX: pass in the owner type? */
+    gncOwnerInitJob (&owner, NULL); /* XXX: pass in the owner type? */
 
   /* Make sure required options exist */
   if (!bookp) return NULL;

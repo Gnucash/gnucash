@@ -1,6 +1,6 @@
 /*
  * gncEntryLedgerModel.h -- Model of GncEntry Manipulation Widget
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001, 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -9,6 +9,6 @@
 
 #include "gncEntryLedger.h"
 
-TableModel * gnc_entry_ledger_model_new (void);
+TableModel * gnc_entry_ledger_model_new (GncEntryLedgerType type);
 
 #endif /* GNC_ENTRY_LEDGER_MODEL_H */

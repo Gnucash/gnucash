@@ -1,6 +1,6 @@
 /*
  * gncEntryLedger.c -- a Ledger widget for entering GncEntry objects
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001, 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -165,7 +165,7 @@ GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
 
   {
     TableLayout *layout = gnc_entry_ledger_layout_new (ledger);
-    TableModel *model = gnc_entry_ledger_model_new ();
+    TableModel *model = gnc_entry_ledger_model_new (type);
     TableControl *control = gnc_entry_ledger_control_new ();
     model->handler_user_data = ledger;
     control->user_data = ledger;

@@ -1,6 +1,6 @@
 /*
  * dialog-job.c -- Dialog for Job entry
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001, 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -438,23 +438,38 @@ gpointer gnc_job_edit_new_select (gpointer job, GtkWidget *toplevel,
 {
   GNCBook *book;
   GncJob *j = job;
-  struct _job_select_window sw;
 
   if (!cust) return NULL;
 
   book = gncCustomerGetBook (cust);
-  sw.toplevel = toplevel;
-  sw.book = book;
-
 
   return
     gnc_ui_select_job_new (toplevel, book, cust, j);
+}
 
-  /*
-  return
-    gnc_ui_business_chooser_new (toplevel, job,
-				 gncBusinessLookup (GNC_JOB_MODULE_NAME),
-				 gnc_job_edit_new_cb,
-				 gnc_job_edit_edit_cb, &sw, cust);
-  */
+gpointer
+gnc_job_edit_new_edit (gpointer book, gpointer jobp, GtkWidget *toplevel)
+{
+  GncJob *j = jobp;
+
+  if (!j) return NULL;
+
+  gnc_job_edit (toplevel, j);
+
+  return j;
+}
+
+gpointer
+gnc_job_select_new_select (gpointer bookp, gpointer jobp, GtkWidget *parent)
+{
+  GncJob *j = jobp;
+  GNCBook *book = bookp;
+  GncCustomer *cust = NULL;
+
+  if (!book) return NULL;
+
+  if (j)
+    cust = gncJobGetCustomer (j);
+
+  return gnc_ui_select_job_new (parent, book, cust, j);
 }

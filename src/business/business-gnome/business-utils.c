@@ -2,7 +2,7 @@
  * business-utils.c -- General GUI Utilities for GNC Business Objects
  *
  * Written By: Derek Atkins <warlord@MIT.EDU>
- * Copyright (C) 2001
+ * Copyright (C) 2001, 2002 Derek Atkins
  */
 
 #include "config.h"
@@ -43,13 +43,10 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
     break;
 
   case GNC_OWNER_JOB:
-    /* XXX: Jobs are funny things... */
-    return NULL;
-
     if (type == GNC_GENERAL_SELECT_TYPE_SELECT)
-      ; //      do_select = gnc_job_edit_new_select;
+      do_select = gnc_job_select_new_select;
     else
-      ; //      do_select = gnc_job_edit_new_edit;
+      do_select = gnc_job_edit_new_edit;
     type_name = GNC_JOB_MODULE_NAME;
     break;
 
