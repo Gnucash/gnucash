@@ -1,5 +1,7 @@
 2001-08-03  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/gnc-book.c: fix warnings
+
 	* doc/sgml/C/xacc-sxeditor.sgml: fix warning
 
 2001-08-02  Robert Graham Merkel  <rgmerk@mira.net>

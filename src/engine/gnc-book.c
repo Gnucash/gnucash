@@ -797,7 +797,7 @@ static char * searchpaths[] =
 
 typedef gboolean (*pathGenerator)(char *pathbuf, int which);
 
-gboolean
+static gboolean
 xaccAddEndPath(char *pathbuf, const char *ending, int len)
 {
     if(len + strlen(pathbuf) >= PATH_MAX)
@@ -807,7 +807,7 @@ xaccAddEndPath(char *pathbuf, const char *ending, int len)
     return TRUE;
 }
 
-gboolean
+static gboolean
 xaccCmdPathGenerator(char *pathbuf, int which)
 {
     if(which != 0)
@@ -825,7 +825,7 @@ xaccCmdPathGenerator(char *pathbuf, int which)
     }
 }
 
-gboolean
+static gboolean
 xaccDataPathGenerator(char *pathbuf, int which)
 {
     char *path;
@@ -849,7 +849,7 @@ xaccDataPathGenerator(char *pathbuf, int which)
     }
 }
 
-gboolean
+static gboolean
 xaccUserPathPathGenerator(char *pathbuf, int which)
 {
     char *path = NULL;
