@@ -207,7 +207,7 @@ sxtt_mark_clean(QofBook *book)
 
 static QofObject sxtt_object_def = 
 {
-  interface_version: GNC_OBJECT_VERSION,
+  interface_version: QOF_OBJECT_VERSION,
   name:              GNC_ID_SXTT,
   type_label:        "SXTT",
   book_begin:        sxtt_book_begin,

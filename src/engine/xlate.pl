@@ -13,6 +13,8 @@ foreach (@files)
 
 	while (<AF>)
 	{
+		# s/GNCBook/QofBook/g;
+
 		# s/GncObject_t/QofObject/g;
 		# s/gncObjectLookup/qof_object_lookup/g;
 		# s/gncObjectRegister/qof_object_register/g;
@@ -176,7 +178,25 @@ foreach (@files)
 		# s/xaccRemoveEntity/qof_entity_remove/g;
 		# s/xaccForeachEntity/qof_entity_foreach/g;
 
-		s/foreachObjectCB/QofEntityForeachCB/g;
+		# s/foreachObjectCB/QofEntityForeachCB/g;
+		s/GNC_OBJECT_VERSION/QOF_OBJECT_VERSION/g;
+
+		# s/GNCSession/QofSession/g;
+		# s/gnc_session/qof_session/g;
+		# s/GNCPercentageFunc/QofPercentageFunc/g;
+		# s/gnc_get_current_session/qof_session_get_current_session/g;
+		# s/gnc_set_current_session/qof_session_set_current_session/g;
+
+      # s/ Backend/ QofBackend/g;
+      # s/\(Backend/\(QofBackend/g;
+		# s/GNCBackendError/QofBackendError/g;
+		# s/GNCBePercentageFunc/QofBePercentageFunc/g;
+		# s/xaccBackendSetError/qof_backend_set_error/g;
+		# s/xaccBackendGetError/qof_backend_get_error/g;
+		# s/xaccBackendSetMessage/qof_backend_set_message/g;
+		# s/xaccBackendGetMessage/qof_backend_get_message/g;
+		# s/xaccInitBackend/qof_backend_init/g;
+
 
 		print OF $_;
 	}

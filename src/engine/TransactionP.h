@@ -50,10 +50,10 @@
 #include <time.h>
 #include <glib.h>
 
-#include "Backend.h"
 #include "gnc-engine.h"   /* for typedefs */
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
+#include "qofbackend.h"
 #include "qofbook.h"
 #include "qofid.h"
 
@@ -255,6 +255,6 @@ gboolean xaccTransRegister (void);
  *    persistent-data storage backend associated with this 
  *    transaction.
  */
-Backend * xaccTransactionGetBackend (Transaction *trans);
+QofBackend * xaccTransactionGetBackend (Transaction *trans);
 
 #endif /* XACC_TRANSACTION_P_H */

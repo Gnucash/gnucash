@@ -6,7 +6,7 @@
 #include "TransLog.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
-#include "gnc-session.h"
+#include "qofsession.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Transaction.h"
@@ -20,11 +20,11 @@ run_test (void)
     Account *act2;
     Split *spl;
     gnc_numeric num;
-    GNCSession *session;
-    GNCBook *book;
+    QofSession *session;
+    QofBook *book;
 
-    session = gnc_session_new ();
-    book = gnc_session_get_book (session);
+    session = qof_session_new ();
+    book = qof_session_get_book (session);
 
     act1 = get_random_account(book);
     if(!act1)

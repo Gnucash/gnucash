@@ -14,7 +14,7 @@
 static gboolean
 test_trans_query (Transaction *trans, gpointer data)
 {
-  GNCBook *book = data;
+  QofBook *book = data;
   GList *list;
   Query *q;
 
@@ -48,19 +48,19 @@ test_trans_query (Transaction *trans, gpointer data)
 static void
 run_test (void)
 {
-  GNCSession *session;
+  QofSession *session;
   AccountGroup *group;
-  GNCBook *book;
+  QofBook *book;
 
   session = get_random_session ();
-  book = gnc_session_get_book (session);
+  book = qof_session_get_book (session);
   group = xaccGetAccountGroup (book);
 
   add_random_transactions_to_book (book, 20);
 
   xaccGroupForEachTransaction (group, test_trans_query, book);
 
-  gnc_session_destroy (session);
+  qof_session_destroy (session);
 }
 
 static void

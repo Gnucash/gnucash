@@ -35,48 +35,48 @@
  * interface.  Only object modules compiled against this version
  * of the interface will load properly
  */
-#define GNC_OBJECT_VERSION 1
+#define QOF_OBJECT_VERSION 1
 
 typedef struct _QofObject QofObject;
 typedef void (*QofForeachTypeCB) (QofObject *type, gpointer user_data);
 typedef void (*QofForeachBackendTypeCB) (QofIdTypeConst type,
-				      gpointer backend_data,
-				      gpointer user_data);
+                                      gpointer backend_data,
+                                      gpointer user_data);
 
 /* This is the Object Object descriptor */
 struct _QofObject {
-  gint		interface_version;	/* of this object interface */
-  QofIdType	name;		/* the Object's GNC_ID */
-  const char *	type_label;	/* "Printable" type-label string */
+  gint                interface_version; /* of this object interface */
+  QofIdType           name;              /* the Object's QOF_ID */
+  const char *        type_label;        /* "Printable" type-label string */
 
   /* book_begin is called from within the Book routines to create
    * module-specific hooks in a book whenever a book is created.
    * book_end is called when the book is being closed, to clean
    * up (and free memory).
    */
-  void		(*book_begin)(QofBook *);
-  void		(*book_end)(QofBook *);
+  void                (*book_begin)(QofBook *);
+  void                (*book_end)(QofBook *);
 
   /* Determine if there are any dirty items in this book */
-  gboolean	(*is_dirty)(QofBook *);
+  gboolean        (*is_dirty)(QofBook *);
 
   /* Mark this object's book clean (for after a load) */
-  void		(*mark_clean)(QofBook *);
+  void                (*mark_clean)(QofBook *);
 
   /* foreach() is used to execute a callback over each object
    * stored in the particular book
    */
-  void		(*foreach)(QofBook *, QofEntityForeachCB, gpointer);
+  void                (*foreach)(QofBook *, QofEntityForeachCB, gpointer);
 
   /* Given a particular object, return a printable string */
-  const char *	(*printable)(gpointer obj);
+  const char *        (*printable)(gpointer obj);
 
 };
 
 void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
 
 void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
-		       QofEntityForeachCB cb, gpointer user_data);
+                         QofEntityForeachCB cb, gpointer user_data);
 
 const char * qof_object_printable (QofIdTypeConst type_name, gpointer obj);
 
@@ -97,15 +97,15 @@ const QofObject * qof_object_lookup (QofIdTypeConst type_name);
 
 /** Register and lookup backend-specific data for this particular object */
 gboolean qof_object_register_backend (QofIdTypeConst type_name,
-				   const char *backend_name,
-				   gpointer be_data);
+                                      const char *backend_name,
+                                      gpointer be_data);
 
 gpointer qof_object_lookup_backend (QofIdTypeConst type_name,
-				 const char *backend_name);
+                                    const char *backend_name);
 
 void qof_object_foreach_backend (const char *backend_name,
-			      QofForeachBackendTypeCB cb,
-			      gpointer user_data);
+                                 QofForeachBackendTypeCB cb,
+                                 gpointer user_data);
 
 #endif /* QOF_OBJECT_H_ */
 /** @} */

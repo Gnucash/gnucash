@@ -26,7 +26,7 @@
 static void
 run_test (void)
 {
-  GNCSession *sess;
+  QofSession *sess;
   QofBook *openbook, *closedbook;
   AccountGroup *grp;
   AccountList *acclist, *anode;
@@ -45,7 +45,7 @@ run_test (void)
   }
 
   sess = get_random_session ();
-  openbook = gnc_session_get_book (sess);
+  openbook = qof_session_get_book (sess);
   if (!openbook)
   {
     failure("book not created");

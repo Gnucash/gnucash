@@ -1,5 +1,25 @@
+/********************************************************************\
+ * gnc-be-utils.h: api for data storage backend                       *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
 /*
- * gnc-be-utils.h -- GnuCash Backend Utilities
+ * gnc-be-utils.h -- QOF Backend Utilities
  *	common code used by objects to define begin_edit() and
  *	commit_edit() functions.
  *
@@ -10,8 +30,8 @@
 #ifndef GNC_BE_UTILS_H
 #define GNC_BE_UTILS_H
 
-#include "BackendP.h"
 #include "gnc-engine-util.h"
+#include "qofbackend-p.h"
 #include "qofbook.h"
 
 /* begin_edit helper
@@ -28,7 +48,7 @@
  */
 
 #define GNC_BEGIN_EDIT(obj,type) { \
-  Backend * be; \
+  QofBackend * be; \
   if (!(obj)) return; \
   \
   (obj)->editlevel++; \
@@ -95,7 +115,7 @@
  *	obj: the object being committed
  *	type: the type of the object
  *	on_error: a function called if there is a backend error.
- *		void (*on_error)(obj, GNCBackendError)
+ *		void (*on_error)(obj, QofBackendError)
  *	on_done: a function called after the commit is complete but before
  *		the object is freed.  This is where you clear the "dirty"
  *		flag, and perform any other operations after the commit.
@@ -104,26 +124,26 @@
  *		void (*on_free)(obj)
  */
 #define GNC_COMMIT_EDIT_PART2(obj,type,on_error,on_done,on_free) { \
-  Backend * be; \
+  QofBackend * be; \
   \
   /* See if there's a backend.  If there is, invoke it. */ \
   be = gnc_book_get_backend ((obj)->book); \
   if (be && be->commit) \
   { \
-    GNCBackendError errcode; \
+    QofBackendError errcode; \
     \
     /* clear errors */ \
     do { \
-      errcode = xaccBackendGetError (be); \
+      errcode = qof_backend_get_error (be); \
     } while (ERR_BACKEND_NO_ERR != errcode); \
     \
     (be->commit) (be, (type), (obj)); \
-    errcode = xaccBackendGetError (be); \
+    errcode = qof_backend_get_error (be); \
     if (ERR_BACKEND_NO_ERR != errcode) \
     { \
       (obj)->do_free = FALSE; \
       (on_error)((obj), errcode); \
-      xaccBackendSetError (be, errcode); \
+      qof_backend_set_error (be, errcode); \
     } \
   } \
   (on_done)(obj);\

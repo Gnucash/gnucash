@@ -38,9 +38,9 @@
 
 #include "config.h"
 
-#include "BackendP.h"
 #include "Transaction.h"
 #include "gnc-numeric.h"
+#include "qofbackend.h"
 #include "qofbook.h"
 #include "qofid.h"
 
@@ -100,7 +100,7 @@ void     xaccSetAccountGroup (QofBook *book, AccountGroup *grp);
  * The xaccGroupGetBackend() subroutine will find the
  *    persistent-data storage backend associated with this account group.
  */
-Backend * xaccGroupGetBackend (AccountGroup *group);
+QofBackend * xaccGroupGetBackend (AccountGroup *group);
 
 gboolean      xaccGroupRegister (void);
 

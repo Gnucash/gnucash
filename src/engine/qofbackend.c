@@ -1,5 +1,5 @@
 /********************************************************************\
- * Backend.c -- utility routines for dealing with the data backend  *
+ * qofbackend.c -- utility routines for dealing with the data backend  *
  * Copyright (C) 2000 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -25,8 +25,8 @@
 #include <stdarg.h>
 #include <glib.h>
 
-#include "Backend.h"
-#include "BackendP.h"
+#include "qofbackend.h"
+#include "qofbackend-p.h"
 
 /* static short module = MOD_ENGINE; */
 
@@ -35,7 +35,7 @@
 \********************************************************************/
 
 void 
-xaccBackendSetError (Backend *be, GNCBackendError err)
+qof_backend_set_error (QofBackend *be, QofBackendError err)
 {
    if (!be) return;
 
@@ -44,10 +44,10 @@ xaccBackendSetError (Backend *be, GNCBackendError err)
    be->last_err = err;
 }
 
-GNCBackendError 
-xaccBackendGetError (Backend *be)
+QofBackendError 
+qof_backend_get_error (QofBackend *be)
 {
-   GNCBackendError err;
+   QofBackendError err;
    if (!be) return ERR_BACKEND_NO_BACKEND;
 
    /* use 'stack-pop' semantics */
@@ -57,7 +57,8 @@ xaccBackendGetError (Backend *be)
 }
 
 void
-xaccBackendSetMessage (Backend *be, const char *format, ...) {
+qof_backend_set_message (QofBackend *be, const char *format, ...) 
+{
    va_list args;
    char * buffer;
    
@@ -75,7 +76,8 @@ xaccBackendSetMessage (Backend *be, const char *format, ...) {
 
 /* This should always return a valid char * */
 char *
-xaccBackendGetMessage (Backend *be) {
+qof_backend_get_message (QofBackend *be) 
+{
    char * msg;
    
    if (!be) return g_strdup("ERR_BACKEND_NO_BACKEND");
@@ -86,7 +88,7 @@ xaccBackendGetMessage (Backend *be) {
     * NULL.  This is necessary, because the Backends don't seem to
     * have a destroy_backend function to take care if freeing stuff
     * up.  The calling function should free the copy.
-    * Also, this is consistent with the xaccBackendGetError() popping.
+    * Also, this is consistent with the qof_backend_get_error() popping.
     */
 
    msg = be->error_msg;
@@ -97,7 +99,7 @@ xaccBackendGetMessage (Backend *be) {
 /***********************************************************************/
 /* Get a clean backend */
 void
-xaccInitBackend(Backend *be)
+qof_backend_init(QofBackend *be)
 {
     be->session_begin = NULL;
     be->session_end = NULL;

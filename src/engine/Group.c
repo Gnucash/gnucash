@@ -29,14 +29,13 @@
 
 #include "Account.h"
 #include "AccountP.h"
-#include "Backend.h"
-#include "BackendP.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"
+#include "qofbackend.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
@@ -1280,7 +1279,7 @@ xaccGroupForEachAccount (AccountGroup *grp,
 
 /* ============================================================== */
 
-Backend *
+QofBackend *
 xaccGroupGetBackend (AccountGroup *grp)
 {
   grp = xaccGroupGetRoot (grp);
@@ -1317,7 +1316,7 @@ group_mark_clean(QofBook *book)
 
 static QofObject group_object_def = 
 {
-  interface_version: GNC_OBJECT_VERSION,
+  interface_version: QOF_OBJECT_VERSION,
   name:              GNC_ID_GROUP,
   type_label:        "AccountGroup",
   book_begin:        group_book_begin,

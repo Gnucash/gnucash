@@ -32,8 +32,6 @@
 #include <unistd.h>
 
 #include "AccountP.h"
-#include "Backend.h"
-#include "BackendP.h"
 #include "Group.h"
 #include "TransactionP.h"
 #include "TransLog.h"
@@ -46,6 +44,7 @@
 #include "gnc-lot.h"
 #include "messages.h"
 
+#include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
@@ -1718,7 +1717,7 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 void
 xaccTransBeginEdit (Transaction *trans)
 {
-   Backend *be;
+   QofBackend *be;
    if (!trans) return;
 
    trans->editlevel ++;
@@ -1748,7 +1747,7 @@ void
 xaccTransCommitEdit (Transaction *trans)
 {
    Split *split;
-   Backend *be;
+   QofBackend *be;
    const char *str;
 
    if (!trans) return;
@@ -1831,16 +1830,16 @@ xaccTransCommitEdit (Transaction *trans)
    be = xaccTransactionGetBackend (trans);
    if (be && be->commit) 
    {
-      GNCBackendError errcode;
+      QofBackendError errcode;
 
       /* clear errors */
       do {
-        errcode = xaccBackendGetError (be);
+        errcode = qof_backend_get_error (be);
       } while (ERR_BACKEND_NO_ERR != errcode);
 
       (be->commit) (be, GNC_ID_TRANS, trans);
 
-      errcode = xaccBackendGetError (be);
+      errcode = qof_backend_get_error (be);
       if (ERR_BACKEND_NO_ERR != errcode)
       {
          /* if the backend puked, then we must roll-back 
@@ -1854,7 +1853,7 @@ xaccTransCommitEdit (Transaction *trans)
         }
 
         /* push error back onto the stack */
-        xaccBackendSetError (be, errcode);
+        qof_backend_set_error (be, errcode);
 
         xaccTransRollbackEdit (trans);
         return;
@@ -1894,7 +1893,7 @@ xaccTransCommitEdit (Transaction *trans)
 void
 xaccTransRollbackEdit (Transaction *trans)
 {
-   Backend *be;
+   QofBackend *be;
    Transaction *orig;
    int force_it=0, mismatch=0;
    int i;
@@ -2077,16 +2076,16 @@ xaccTransRollbackEdit (Transaction *trans)
    be = xaccTransactionGetBackend (trans);
    if (be && be->rollback) 
    {
-      GNCBackendError errcode;
+      QofBackendError errcode;
 
       /* clear errors */
       do {
-        errcode = xaccBackendGetError (be);
+        errcode = qof_backend_get_error (be);
       } while (ERR_BACKEND_NO_ERR != errcode);
 
       (be->rollback) (be, GNC_ID_TRANS, trans);
 
-      errcode = xaccBackendGetError (be);
+      errcode = qof_backend_get_error (be);
       if (ERR_BACKEND_MOD_DESTROY == errcode)
       {
          /* The backend is asking us to delete this transaction.
@@ -2098,7 +2097,7 @@ xaccTransRollbackEdit (Transaction *trans)
          xaccFreeTransaction (trans);
 
          /* push error back onto the stack */
-         xaccBackendSetError (be, errcode);
+         qof_backend_set_error (be, errcode);
          LEAVE ("deleted trans addr=%p\n", trans);
          return;
       }
@@ -2106,7 +2105,7 @@ xaccTransRollbackEdit (Transaction *trans)
       {
         PERR ("Rollback Failed.  Ouch!");
         /* push error back onto the stack */
-        xaccBackendSetError (be, errcode);
+        qof_backend_set_error (be, errcode);
       }
    }
 
@@ -3531,7 +3530,7 @@ xaccTransReverse (Transaction *trans)
 /********************************************************************\
 \********************************************************************/
 
-Backend *
+QofBackend *
 xaccTransactionGetBackend (Transaction *trans)
 {
   if (!trans || !trans->book) return NULL;
@@ -3562,7 +3561,7 @@ split_foreach (QofBook *book, QofEntityForeachCB fcn, gpointer user_data)
 /* hook into the gncObject registry */
 
 static QofObject split_object_def = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   GNC_ID_SPLIT,
   "Split",
   NULL,				/* book_begin */
@@ -3648,7 +3647,7 @@ trans_foreach (QofBook *book, QofEntityForeachCB fcn, gpointer user_data)
 }
 
 static QofObject trans_object_def = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   GNC_ID_TRANS,
   "Transaction",
   NULL,				/* book_begin */

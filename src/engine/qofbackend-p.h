@@ -1,5 +1,5 @@
 /********************************************************************\
- * Backend.h -- private api for engine Backend                      *
+ * qofbackend-p.h -- private api for data storage backend           *
  *                                                                  *
  * Copyright (c) 2000, 2001 Linas Vepstas <linas@linas.org>         *
  *                                                                  *
@@ -24,7 +24,7 @@
 
 /* 
  * FILE:
- * BackendP.h
+ * qofbackend-p.h
  *
  * FUNCTION:
  * Pseudo-object defining how the engine can interact with different
@@ -42,10 +42,10 @@
 
 #include "config.h"
 
-#include "Backend.h"
-#include "gnc-session.h"
+#include "qofbackend.h"
 #include "qofbook.h"
 #include "qofquery.h"
+#include "qofsession.h"
 
 /*
  * The session_begin() routine gives the backend a second initialization
@@ -168,7 +168,7 @@
  *    a stack) of all the errors that have occurred.
  *
  * For support of book partitioning, use special "Book"  begin_edit()
- *    and commit_edit() GNC_ID types.
+ *    and commit_edit() QOF_ID types.
  *
  *    Call the book begin() at the begining of a book partitioning.  A
  *    'partitioning' is the splitting off of a chunk of the current
@@ -223,36 +223,36 @@
  *
  */
 
-struct backend_s
+struct _QofBackend
 {
-  void (*session_begin) (Backend *be,
-                         GNCSession *session,
+  void (*session_begin) (QofBackend *be,
+                         QofSession *session,
                          const char *book_id, 
                          gboolean ignore_lock,
                          gboolean create_if_nonexistent);
-  void (*session_end) (Backend *);
-  void (*destroy_backend) (Backend *);
+  void (*session_end) (QofBackend *);
+  void (*destroy_backend) (QofBackend *);
 
-  void (*load) (Backend *, QofBook *);
+  void (*load) (QofBackend *, QofBook *);
 
-  void (*begin) (Backend *, QofIdTypeConst, gpointer);
-  void (*commit) (Backend *, QofIdTypeConst, gpointer);
-  void (*rollback) (Backend *, QofIdTypeConst, gpointer);
+  void (*begin) (QofBackend *, QofIdTypeConst, gpointer);
+  void (*commit) (QofBackend *, QofIdTypeConst, gpointer);
+  void (*rollback) (QofBackend *, QofIdTypeConst, gpointer);
 
-  gpointer (*compile_query) (Backend *, QofQuery *);
-  void (*free_query) (Backend *, gpointer);
-  void (*run_query) (Backend *, gpointer);
+  gpointer (*compile_query) (QofBackend *, QofQuery *);
+  void (*free_query) (QofBackend *, gpointer);
+  void (*run_query) (QofBackend *, gpointer);
 
-  void (*sync) (Backend *, QofBook *);
+  void (*sync) (QofBackend *, QofBook *);
 
-  gint64 (*counter) (Backend *, const char *counter_name);
+  gint64 (*counter) (QofBackend *, const char *counter_name);
 
-  gboolean (*events_pending) (Backend *be);
-  gboolean (*process_events) (Backend *be);
+  gboolean (*events_pending) (QofBackend *be);
+  gboolean (*process_events) (QofBackend *be);
 
-  GNCBePercentageFunc percentage;
+  QofBePercentageFunc percentage;
 
-  GNCBackendError last_err;
+  QofBackendError last_err;
   char * error_msg;
 
   /* XXX price_lookup should be removed during the redesign
@@ -260,44 +260,37 @@ struct backend_s
    * the generic query mechanism.
    *
    * Note the correct signature for this call is 
-   * void (*price_lookup) (Backend *, GNCPriceLookup *);
+   * void (*price_lookup) (QofBackend *, GNCPriceLookup *);
    * we use gpointer to avoid an unwanted include file dependency. 
    */
-  void (*price_lookup) (Backend *, gpointer);
+  void (*price_lookup) (QofBackend *, gpointer);
 
   /* XXX Export should really _NOT_ be here, but is left here for now.
    * I'm not sure where this should be going to. It should be
    * removed ASAP. 
    */
-  void (*export) (Backend *, QofBook *);
+  void (*export) (QofBackend *, QofBook *);
 };
 
 /*
- * The xaccBackendSetError() routine pushes an error code onto the error
+ * The qof_backend_set_error() routine pushes an error code onto the error
  *   stack. (FIXME: the stack is 1 deep in current implementation).
  *
- * The xaccBackendGetError() routine pops an error code off the error
+ * The qof_backend_get_error() routine pops an error code off the error
  *   stack.
  *
- * The xaccBackendSetMessage() assigns a string to the backend error
+ * The qof_backend_set_message() assigns a string to the backend error
  *   message.
  *
- * The xaccBackendGetMessage() pops the error message string from
+ * The qof_backend_get_message() pops the error message string from
  *   the Backend.  This string should be freed with g_free().
  */
 
-void xaccBackendSetError (Backend *be, GNCBackendError err);
-GNCBackendError xaccBackendGetError (Backend *be);
-void xaccBackendSetMessage(Backend *be, const char *format, ...);
-char * xaccBackendGetMessage(Backend *be);
+void qof_backend_set_error (QofBackend *be, QofBackendError err);
+QofBackendError qof_backend_get_error (QofBackend *be);
+void qof_backend_set_message(QofBackend *be, const char *format, ...);
+char * qof_backend_get_message(QofBackend *be);
 
-/*
- * The xaccQofBookGetBackend() subroutine will find the
- *    persistent-data storage backend associated with 
- *    this book.
- */
-Backend * xaccQofBookGetBackend (QofBook *book);
-
-void xaccInitBackend(Backend *be);
+void qof_backend_init(QofBackend *be);
 
 #endif /* QOF_BACKEND_P_H */

@@ -27,9 +27,9 @@
 
 #include <glib.h>
 
-#include "Backend.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
+#include "qofbackend.h"
 #include "qofbook.h"
 #include "qofid.h"
 
@@ -107,6 +107,6 @@ void     gnc_price_set_guid (GNCPrice *p, const GUID *guid);
 /** register the pricedb object with the gncObject system */
 gboolean gnc_pricedb_register (void);
 
-Backend * xaccPriceDBGetBackend (GNCPriceDB *prdb);
+QofBackend * xaccPriceDBGetBackend (GNCPriceDB *prdb);
 
 #endif

@@ -29,8 +29,6 @@
 #include <string.h>
 
 #include "AccountP.h"
-#include "Backend.h"
-#include "BackendP.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
@@ -45,6 +43,8 @@
 #include "kvp-util-p.h"
 #include "messages.h"
 
+#include "qofbackend.h"
+#include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
@@ -383,7 +383,7 @@ xaccFreeAccount (Account *acc)
 void 
 xaccAccountBeginEdit (Account *acc) 
 {
-  Backend * be;
+  QofBackend * be;
   if (!acc) return;
 
   acc->editlevel++;
@@ -407,7 +407,7 @@ xaccAccountBeginEdit (Account *acc)
 void 
 xaccAccountCommitEdit (Account *acc) 
 {
-  Backend * be;
+  QofBackend * be;
 
   if (!acc) return;
 
@@ -469,15 +469,15 @@ xaccAccountCommitEdit (Account *acc)
   be = xaccAccountGetBackend (acc);
   if (be && be->commit) 
   {
-    GNCBackendError errcode;
+    QofBackendError errcode;
 
     /* clear errors */
     do {
-      errcode = xaccBackendGetError (be);
+      errcode = qof_backend_get_error (be);
     } while (ERR_BACKEND_NO_ERR != errcode);
 
     (be->commit) (be, GNC_ID_ACCOUNT, acc);
-    errcode = xaccBackendGetError (be);
+    errcode = qof_backend_get_error (be);
 
     if (ERR_BACKEND_NO_ERR != errcode)
     {
@@ -487,17 +487,17 @@ xaccAccountCommitEdit (Account *acc)
       /* XXX hack alert FIXME implement account rollback */
       PERR (" backend asked engine to rollback, but this isn't"
             " handled yet. Return code=%d", errcode);
-      err = xaccBackendGetMessage(be);
+      err = qof_backend_get_message(be);
       /* g_strdup here, because err needs to be g_freed if from Backend */
       err = err ? err : g_strdup(_("Error message not available"));
       /* Translators: %d is the (internal) error number. %s is the
        * human-readable error description. */
       PWARN_GUI(_("Error occurred while saving Account:\n%d: %s"),
-		      xaccBackendGetError(be), err);
+		      qof_backend_get_error(be), err);
     
       /* push error back onto the stack */
-      xaccBackendSetError (be, errcode);
-      xaccBackendSetMessage (be, err);
+      qof_backend_set_error (be, errcode);
+      qof_backend_set_message (be, err);
       g_free(err);
     }
   }
@@ -3153,7 +3153,7 @@ xaccAccountFindTransByDesc(Account *account, const char *description)
 
 /* ================================================================ */
 
-Backend *
+QofBackend *
 xaccAccountGetBackend (Account * acc)
 {
   if (!acc || !acc->book) return NULL;
@@ -3176,7 +3176,7 @@ account_foreach (QofBook *book, QofEntityForeachCB cb, gpointer ud)
 }
 
 static QofObject account_object_def = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   GNC_ID_ACCOUNT,
   "Account",
   NULL,				/* book_begin */

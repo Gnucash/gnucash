@@ -30,8 +30,8 @@
 #ifndef QOF_BOOK_P_H
 #define QOF_BOOK_P_H
 
-#include "Backend.h"
 #include "kvp_frame.h"
+#include "qofbackend.h"
 #include "qofbook.h"
 #include "qofid.h"
 
@@ -72,7 +72,7 @@ struct _QofBook
    * not books.  So the pointer below "really shouldn't be here", 
    * except that it provides a nice convenience, avoiding a lookup 
    * from the session.  Better solutions welcome ... */ 
-  Backend *backend;
+  QofBackend *backend;
 
   /* -------------------------------------------------------------- */
   /* Backend private expansion data */
@@ -90,7 +90,7 @@ struct _QofBook
 void qof_book_set_guid(QofBook *book, GUID guid);
 void qof_book_set_schedxactions( QofBook *book, GList *newList );
 
-void qof_book_set_backend (QofBook *book, Backend *be);
+void qof_book_set_backend (QofBook *book, QofBackend *be);
 
 /* The qof_book_mark_saved() routine marks the book as having been
  *    saved (to a file, to a database). Used by backends to mark the 

@@ -24,10 +24,10 @@
     "#include <glib.h>\n"
     "#include <guid.h>\n"
     "#include <Query.h>\n"
-    "#include <Backend.h>\n"
     "#include <Group.h>\n"
+    "#include <qofbackend.h>\n"
     "#include <qofbook.h>\n"
-    "#include <gnc-session.h>\n"
+    "#include <qofsession.h>\n"
     "#include <gnc-session-scm.h>\n"
     "#include <gnc-engine-util.h>\n"
     "#include <gnc-event.h>\n"
@@ -101,7 +101,7 @@
 (gw:wrap-as-wct ws '<gnc:AccountGroup*> "AccountGroup*" "const AccountGroup*")
 (gw:wrap-as-wct ws '<gnc:Book*> "QofBook*" "const QofBook*")
 (gw:wrap-as-wct ws '<gnc:Lot*> "GNCLot*" "const GNCLot*")
-(gw:wrap-as-wct ws '<gnc:Session*> "GNCSession*" "const GNCSession**")
+(gw:wrap-as-wct ws '<gnc:Session*> "QofSession*" "const QofSession**")
 (gw:wrap-as-wct ws '<gnc:Split*> "Split*" "const Split*")
 (gw:wrap-as-wct ws '<gnc:Transaction*> "Transaction*" "const Transaction*")  
 (gw:wrap-as-wct ws '<gnc:commodity*> "gnc_commodity*" "const gnc_commodity*")
@@ -214,7 +214,7 @@
   (gw:enum-add-value! we "CREDITLINE" 'credit-line)
   #t)
 
-(let ((we (gw:wrap-enumeration ws '<gnc:BackendError> "GNCBackendError")))
+(let ((we (gw:wrap-enumeration ws '<gnc:BackendError> "QofBackendError")))
 
   (gw:enum-add-value! we "ERR_BACKEND_NO_ERR" 'no-err)
   (gw:enum-add-value! we "ERR_BACKEND_NO_BACKEND" 'no-backend)
@@ -1367,20 +1367,20 @@ when no longer needed.")
 to time t.")
 
 ;;===========
-;; GNCSession
+;; QofSession
 
 (gw:wrap-function
  ws
  'gnc:session-new
  '<gnc:Session*>
- "gnc_session_new" '()
+ "qof_session_new" '()
  "Create a new session.")
 
 (gw:wrap-function
  ws
  'gnc:session-destroy
  '<gw:void>
- "gnc_session_destroy"
+ "qof_session_destroy"
  '((<gnc:Session*> session))
  "Destroy the given session.")
 
@@ -1388,7 +1388,7 @@ to time t.")
  ws
  'gnc:session-get-book
  '<gnc:Book*>
- "gnc_session_get_book"
+ "qof_session_get_book"
  '((<gnc:Session*> session))
  "Get the book of the given session.")
 
@@ -1396,7 +1396,7 @@ to time t.")
  ws
  'gnc:session-begin
  '<gw:void>
- "gnc_session_begin"
+ "qof_session_begin"
  '((<gnc:Session*> session)
    ((<gw:mchars> caller-owned const) id)
    (<gw:bool> ignore-lock?)
@@ -1441,7 +1441,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:session-end
  '<gw:void>
- "gnc_session_end"
+ "qof_session_end"
  '((<gnc:Session*> session))
  "Indicate you're finished with the session.")
 
@@ -1481,7 +1481,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:session-get-error
  '<gnc:BackendError>
- "gnc_session_get_error"
+ "qof_session_get_error"
  '((<gnc:Session*> session))
  "Check for a pending error.")
 
@@ -1489,7 +1489,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:session-get-url
  '(<gw:mchars> callee-owned const)
- "gnc_session_get_url"
+ "qof_session_get_url"
  '((<gnc:Session*> session))
  "Return the URL of the opened session.")
 
@@ -1497,7 +1497,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:session-pop-error
  '<gnc:BackendError>
- "gnc_session_pop_error"
+ "qof_session_pop_error"
  '((<gnc:Session*> session))
  "Remove an error, if any, from the error stack.")
 

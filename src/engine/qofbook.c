@@ -40,11 +40,10 @@
 
 #include <glib.h>
 
-#include "Backend.h"
-#include "BackendP.h"
 #include "gnc-event.h"
 #include "gnc-event-p.h"
 #include "gnc-trace.h"
+#include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
@@ -167,8 +166,8 @@ qof_book_get_entity_table (QofBook *book)
   return book->entity_table;
 }
 
-Backend * 
-xaccQofBookGetBackend (QofBook *book)
+QofBackend * 
+qof_book_get_backend (QofBook *book)
 {
    if (!book) return NULL;
    return book->backend;
@@ -190,19 +189,12 @@ qof_book_set_guid (QofBook *book, GUID uid)
 }
 
 void
-qof_book_set_backend (QofBook *book, Backend *be)
+qof_book_set_backend (QofBook *book, QofBackend *be)
 {
   if (!book) return;
   ENTER ("book=%p be=%p", book, be);
   book->backend = be;
 }
-
-gpointer qof_book_get_backend (QofBook *book)
-{
-  if (!book) return NULL;
-  return (gpointer)book->backend;
-}
-
 
 void qof_book_kvp_changed (QofBook *book)
 {
@@ -241,7 +233,7 @@ qof_book_get_data (QofBook *book, const char *key)
 gint64
 qof_book_get_counter (QofBook *book, const char *counter_name)
 {
-  Backend *be;
+  QofBackend *be;
   kvp_frame *kvp;
   kvp_value *value;
   gint64 counter;

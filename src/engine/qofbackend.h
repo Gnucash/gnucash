@@ -1,4 +1,5 @@
 /********************************************************************\
+ * qofbackend.h: api for data storage backend                       *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -19,8 +20,8 @@
 \********************************************************************/
 /** @addtogroup Engine
     @{ */
-/** @file Backend.h
-    @brief api for engine Backend
+/** @file qofbackend.h
+    @brief api for data storage Backend
     *
     The 'backend' is a pseudo-object providing an interface between the
     engine and a persistant data store (e.g. a server, a database, or
@@ -31,13 +32,13 @@
     @author Copyright (C) 2000-2001 Linas Vepstas <linas@linas.org>
 */
 
-#ifndef XACC_BACKEND_H
-#define XACC_BACKEND_H
+#ifndef QOF_BACKEND_H
+#define QOF_BACKEND_H
 
 #include "config.h"
 
 /** \brief The errors that can be reported to the GUI & other front-end users
-\warning If you modify GNCBackendError, please update src/scm/gnc.gwp */
+\warning If you modify QofBackendError, please update src/scm/gnc.gwp */
 typedef enum {
   ERR_BACKEND_NO_ERR = 0,
   ERR_BACKEND_NO_BACKEND,   /**< Backend * pointer was null the err routine 
@@ -87,7 +88,7 @@ typedef enum {
   ERR_RPC_BAD_VERSION,          /**< RPC Version Mismatch */
   ERR_RPC_FAILED,               /**< Operation failed */
   ERR_RPC_NOT_ADDED,            /**< object not added */
-} GNCBackendError;
+} QofBackendError;
 
 /** \brief Pseudo-object providing an interface between the
  * engine and a persistant data store (e.g. a server, a database, 
@@ -97,10 +98,10 @@ typedef enum {
  * engine.  The backend can, however, report errors to the GUI & other
  * front-end users.  
  */
-typedef struct backend_s Backend;
+typedef struct _QofBackend QofBackend;
 
 /** \brief DOCUMENT ME! */
-typedef void (*GNCBePercentageFunc) (const char *message, double percent);
+typedef void (*QofBePercentageFunc) (const char *message, double percent);
 
-#endif /* XACC_BACKEND_H */
+#endif /* QOF_BACKEND_H */
 /**@}*/
