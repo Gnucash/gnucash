@@ -444,7 +444,7 @@ gncPostFileOpen (const char * filename)
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* clean up old stuff, and then we're outta here. */
-  gncAddHistory (new_book);
+  gncAddHistory (current_book);
 
   g_free (newfile);
 
