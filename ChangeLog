@@ -1,5 +1,8 @@
 2003-02-10  Christian Stimming  <stimming@tuhh.de>
 
+	* po/es.po: Updated Spanish translation by Eneko Lacunza
+	<enlar@enlar.net>.
+
 	* src/import-export/hbci/glade/hbci.glade, po/de.po: Clarify some
 	HBCI strings.
 
