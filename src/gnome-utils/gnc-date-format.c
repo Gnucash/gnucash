@@ -291,7 +291,7 @@ gnc_date_format_set_months (GNCDateFormat *gdf, GNCDateMonthFormat months)
     button = gdf->priv->months_name;
     break;
   default:
-   break;
+    break;
   }
 
   g_return_if_fail(button);
