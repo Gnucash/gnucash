@@ -135,8 +135,8 @@ add_item(GNCCurrencyEdit *gce, gnc_commodity *commodity)
 static int
 currency_compare(gconstpointer a, gconstpointer b)
 {
-        return strcmp (gnc_commodity_get_fullname (a),
-                       gnc_commodity_get_fullname (b));
+        return strcmp (gnc_commodity_get_printname (a),
+                       gnc_commodity_get_printname (b));
 }
 
 static void
