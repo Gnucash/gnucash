@@ -162,7 +162,7 @@ if (not -d "diffs") {
 my $outfilename;
 
 if (not defined($diffname)) {
-  my $date = `date '+%s'`;
+  my $date = `date '+%Y%m%d-%H%M%S'`;
   chomp($date);
   my $who = `whoami`;
   chomp($who);
