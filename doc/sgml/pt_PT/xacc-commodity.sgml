@@ -4,6 +4,8 @@
 <TITLE>Criar um "activo"</TITLE>
 </ARTHEADER>
 
+    <sect1>
+      <title></title>
 <PARA>O Gnucash representa moedas nacionais, acções, certificados de aforro 
 e todos os outros activos transaccionáveis utilizando uma estrutura unificada. 
 Nesta janela, você irá especificar as propriedades de um novo activo. 
@@ -43,6 +45,7 @@ ser reconhecida nalgumas correctoras em 1/1000 de uma acção, apesar de que as
 transacções reais sobre a acção são em valores inteiros de número de acções 
 (a posse de fracções de acção é um truque contabilístico da correctora, 
 no papel).</para>
+    </sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

@@ -4,12 +4,18 @@
 <TITLE>Detailed TXF Category Descriptions</TITLE>
 </ARTHEADER>
 
+
+    <sect1>
+      <title></title>
+
+<warning>
 <PARA>
 NOTA! Este documento não foi traduzido para português por ser referente apenas à 
 realidade de preenchimento de declarações de impostos nos EUA.
 Dada a sua extenção, optou-se por não proceder à tradução. Caso haja pedidos 
 de tradução em número relevante, este documento será traduzido na íntegra. 
 </PARA>
+</warning>
 
 <PARA>
 <TABLE>
@@ -1043,7 +1049,7 @@ The fair market value of donated property, such as used clothing or furniture.</
 </TGROUP>
 </TABLE>
 </PARA>
-
+</sect1>
 </ARTICLE>
  
 <!-- Local variables: -->

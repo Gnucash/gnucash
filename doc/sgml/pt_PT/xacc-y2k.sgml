@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>Preparação do GnuCash para o Ano 2000</TITLE>
 </ARTHEADER>
-
+    <sect1>
+      <title></title>
 <PARA>A versão 1.1.25 e posteriores do GnuCash armazenam todas as datas 
 como segundos e nanosegundos, onde os segundos são armazenados como 
 inteiros de 64 bits com sinal. Isto deverá ser suficiente para guardar 
@@ -36,7 +37,7 @@ bem a transicção para o novo milénio, quer você considere que tal toma lugar em
 
 <PARA>Questões do Ano 2000 são descritas em mais detalhe em <ULINK URL=
 "http://www.ntlug.org/~cbbrowne/linuxy2k.html">Linux e o Ano 2000.</ULINK> </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

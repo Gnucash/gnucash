@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>Relatório de Controlo de Saldos</TITLE>
 </ARTHEADER>
-
+<sect1>
+      <title></title>
 <PARA>    <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/report-av-baln.png">
@@ -59,6 +60,7 @@
 
 
 </PARA>
+    </sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

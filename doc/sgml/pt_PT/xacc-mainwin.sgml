@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>Janela de Contas</TITLE>
 </ARTHEADER>
-
+    <sect1>
+      <title></title>
 <PARA>Esta é uma janela de contas. Você controla o conjunto das suas 
     contas a partir daqui.
 
@@ -47,7 +48,7 @@
     utilização é recomendada apenas a profissionais de contabilidade.
 
 </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

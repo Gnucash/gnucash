@@ -2,7 +2,11 @@
 
 <ARTHEADER>
 <TITLE>Relatório de Impostos / <LINK LINKEND="XACC-TXF-EXPORT">Exportação TXF</LINK></TITLE>
+
 </ARTHEADER>
+
+    <sect1>
+      <title></title>
 <PARA>
   <ULINK URL="xacc-tax-report-example.html">
     <INLINEMEDIAOBJECT>
@@ -61,7 +65,7 @@
     </ITEMIZEDLIST>
 
 </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

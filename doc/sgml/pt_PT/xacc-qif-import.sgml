@@ -7,9 +7,7 @@
 <SURNAME>Gribble</SURNAME>
 </AUTHOR>
 </ARTHEADER>
-<SECT1 ID="QIF">
-<TITLE> Importar Dados do Quicken Para o GnuCash</TITLE>
-<SECT2 ID="OVERVIEW">
+<sect1 ID="OVERVIEW">
 <TITLE>Introdução</TITLE>
 <PARA>    </PARA>
 <PARA>O Quicken é uma das aplicações mais vendidas da história do 
@@ -100,8 +98,8 @@ Felizmente, uma vez aprendendo o primeiro caminho, o segundo será facílimo.
       
 
 </PARA>
-</SECT2>
-<SECT2 ID="INTRO">
+</sect1>
+<sect1 ID="INTRO">
 <TITLE>Introdução ao ficheiro QIF</TITLE>
 <PARA>    
     </PARA>
@@ -234,7 +232,7 @@ Bank], o seu saldo são uns maravilhosos $0.00). Na secção de <LINK LINKEND="DIAL
 Pastas de Contas</LINK> existe um debate sobre o que fazemos com eles.
 
       </PARA>
-<SECT3>
+<sect2>
 <TITLE>Exportações Quicken de Multi-conta</TITLE>
 <PARA>O Quicken e alguns outros programas que utilizam QIF como formato 
 de exportação sabem como armazenar o histórico de múltiplas contas num 
@@ -251,9 +249,9 @@ a probabilidade de você obter incorrectamente transacções na conta de defeito
 são reduzidas.
 
       <ANCHOR ID="HOW-TO-QIF"></PARA>
-</SECT3>
-</SECT2>
-<SECT2>
+</sect2>
+</sect1>
+<sect1>
 <TITLE>Como utilizar a janela de Importação QIF</TITLE>
 <PARA>    </PARA>
 <PARA>O guia de "Início Rápido": Para carregar os seus ficheiros, prima 
@@ -334,8 +332,8 @@ mais lentos. Felizmente, você apenas tem de fazer uma importação assim tão
 grande esporadicamente, pelo que não estou muito preocupado.
 
       <ANCHOR ID="DIALOG-FILES"></PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>A Pasta "Ficheiros"</TITLE>
 <PARA>    
     </PARA>
@@ -368,8 +366,8 @@ correctamente (por ex. grave a conta "Minha Conta Bancária" como Minha-Conta-Ban
 ou Minha_Conta_Bancaria.qif).
 
 <ANCHOR ID="DIALOG-ACCOUNTS"></PARA>
-</SECT2>
-<SECT2 ID="DIALOG-CATEGORIES">
+</sect1>
+<sect1 ID="DIALOG-CATEGORIES">
 <TITLE>As Pastas de "Contas" e "Categorias"</TITLE>
 <PARA>    </PARA>
 <PARA>Cada linha na apresentação da pasta de Contas representa um mapeamento 
@@ -436,8 +434,8 @@ mapeamento que não lhe agrada. Verá a janela de <LINK LINKEND="DIALOG-PICKER">Se
 de Contas</LINK> que lhe permitirá modificar a conta.
 
 <ANCHOR ID="DIALOG-PICKER"></PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>O Selector de Contas</TITLE>
 <PARA>    </PARA>
 <PARA>Este selector de conta não está a funcionar prefeitamente. A ideia é de que você 
@@ -451,8 +449,8 @@ poderia ter sido conseguido através da aplicação em sí (uma conta de Cartão de C
 como filha de uma conta Bancária, por exemplo). Não o faça. Eu vou corrigir isto brevemente.
 
 <ANCHOR ID="OK-BUTTON"></PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>O Botão "OK"</TITLE>
 <PARA>    </PARA>
 <PARA>Na realidade tudo acontece apenas quando você prime o botão "OK", pelo que ele 
@@ -482,11 +480,11 @@ antiga com a nova árvore de contas.
 </ITEMIZEDLIST>
 
 <ANCHOR ID="MOREHINTS"></PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Mais dicas</TITLE>
 <PARA>    <ANCHOR ID="OPENING-BALANCE"></PARA>
-<SECT3>
+<sect2>
 <TITLE>Saldo Inicial</TITLE>
 <PARA>Se os seus ficheiros Quicken tiverem registos de "Saldo Inicial", você 
 verá na pasta de Contas uma conta chamada "Saldo Inicial". Justificar a 
@@ -498,8 +496,8 @@ Passivo. Eu não percebo isto completamente, mas parece-me razoável, e é o
 defeito para contas chamadas "Saldo Inicial".
 
     <ANCHOR ID="EMPTY-CATEGORY"></PARA>
-</SECT3>
-<SECT3>
+</sect2>
+<sect2>
 <TITLE>Categoria vazia</TITLE>
 <PARA>Na vista de Categorias, você poderá verificar uma entrada vazia nas 
 Categorias QIF. As transacções Quicken não são obrigadas a ter uma Categoria, 
@@ -512,8 +510,8 @@ colocar isto numa conta de passivo; diga-me se tiver uma boa explicação sobre
 como isto deveria ser.
 
     <ANCHOR ID="DIVIDEND-CATEGORY"></PARA>
-</SECT3>
-<SECT3>
+</sect2>
+<sect2>
 <TITLE>Categoria de Dividendos</TITLE>
 <PARA>As transacções de acções do Quicken têm um padrão reconhecível para pagamento 
 de dividendos. Se o importador conseguir dizer com toda a certeza que uma transacção 
@@ -522,8 +520,8 @@ de "Dividendos". Esta categoria normalmente não está presente no ficheiro Quicke
 pelo que está a ser criada a partir do nada.
 
       <ANCHOR ID="FUND-FAMILIES"></PARA>
-</SECT3>
-<SECT3>
+</sect2>
+<sect2>
 <TITLE>Famílias de fundos</TITLE>
 <PARA>O Quicken tem a abstracção de uma única conta representar uma "família de 
 fundos" com o objectivo de permitir mais facilmente transferir entre cárias contas 
@@ -537,8 +535,8 @@ duas contas na família. Se tudo correr bem eu corrigirei este problema a partir 
 momento em que alguem me diga como deveria isto funcionar.
       
       <ANCHOR ID="BROKERAGE-ACCOUNTS"></PARA>
-</SECT3>
-<SECT3>
+</sect2>
+<sect2>
 <TITLE>Contas em corretoras</TITLE>
 <PARA>Contas em correctoras são algo que realmente me confunde. Basicamente, o meu 
 raciocínio é de que a conta de corretora em si deveria ser provavelmente uma conta 
@@ -549,9 +547,8 @@ informação colocando o nome do título no campo "Destinatário" (que no GnuCash su
 no campo de Descrição para a transacção). Caso tenha uma ideia melhor avise-me.
     
   </PARA>
-</SECT3>
-</SECT2>
-</SECT1>
+</sect2>
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

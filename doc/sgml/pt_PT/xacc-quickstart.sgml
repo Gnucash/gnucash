@@ -6,11 +6,6 @@
     </artheader>
     
     <sect1>
-      <title>
-  Iniciar a Utilização
-      </title>
-      
-      <sect2>
   <title>
     Bem Vindo
   </title>
@@ -31,9 +26,9 @@
     Assim sendo, recomendamos vivamente que dispenda alguns minutos 
     a ler esta página do manual.  
   </para>
-      </sect2>
+      </sect1>
       
-      <sect2>
+      <sect1>
   <title>
     Princípios Contabilísticos
   </title>
@@ -83,9 +78,9 @@
   <para>
     Vamos então criar algumas contas!
   </para>
-      </sect2>
+      </sect1>
       
-      <sect2>
+      <sect1>
   <title>
     Definir contas desde o início
   </title>
@@ -118,9 +113,9 @@
     inicial" é criada, chamada "Saldos Iniciais", e todos os saldos 
     iniciais consistem numa transferência para (ou de) esta conta.
   </para>
-      </sect2>
+      </sect1>
 
-      <sect2 id="xacc-data-from-existing">
+      <sect1 id="xacc-data-from-existing">
   <title>
     Importar dados de outras aplicações de finanças pessoais
   </title>
@@ -153,9 +148,9 @@
       </para>
     </listitem>
         </itemizedlist>
-      </sect2>
+      </sect1>
 
-      <sect2>
+      <sect1>
   <title>
     Começar a utilizar o GnuCash
   </title>
@@ -174,7 +169,6 @@
     Por favor invista algum tempo para ler mais sobre o GnuCash neste manual 
     electrónico.  Conseguirá obter muito mais desta aplicação!
   </para>
-      </sect2>
     </sect1>
   </article>
   

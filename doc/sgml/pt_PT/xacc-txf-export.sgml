@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>Exportação TXF de dados de impostos</TITLE>
 </ARTHEADER>
-
+    <sect1>
+      <title></title>
 <PARA>O relatório de impostos permite-lhe exportar todas as Receitas e 
       Despesas relacionadas com impostos para um ficheiro <ULINK 
       URL="http://www.turbotax.com/txf/index.html">TXF (Tax eXchange Format)
@@ -70,7 +71,7 @@
     <LINK LINKEND="XACC-TXF-EXPORT-ANOMALIES">Anomalias e limitações 
       conhecidas.</LINK>
 </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

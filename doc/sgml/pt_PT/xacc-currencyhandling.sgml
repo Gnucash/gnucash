@@ -3,9 +3,8 @@
 <ARTHEADER>
 <TITLE>Gestão Cambial e Contabilidade de Dupla Entrada</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE> Gestão Cambial e Contabilidade de Dupla Entrada</TITLE> <PARA>
-</PARA> <PARA>Um <LINK LINKEND="XACC-DOUBLEENTRY">sistema contabilístico 
+
+    <PARA>Um <LINK LINKEND="XACC-DOUBLEENTRY">sistema contabilístico 
     de dupla entrada</LINK> guarda ambos os valores e requer que todas 
     as transacções fiquem saldadas, tal como descrito nas <LINK
     LINKEND="XACC-DOUBLEENTRYRULE">Regras da Contabilidade de Dupla Entrada</LINK>.
@@ -66,7 +65,7 @@ sempre zero, garantindo assim a satisfação da <LINK
 LINKEND="XACC-DOUBLEENTRYRULE">regra da contabilidade de dupla entrada</LINK>.
 
     </PARA>
-</SECT1>
+
   <SECT1>
   <TITLE>Como configurar uma conta de moeda estrangeira</TITLE>
   <PARA>Tudo o que foi dito acima pode parecer óbvio, mas você pode ter 

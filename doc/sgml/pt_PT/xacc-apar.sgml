@@ -3,8 +3,8 @@
 <artheader>
 <title>Contas a Pagar/Contas a Receber</title>
 </artheader>
-<sect1 id="xacc-ap-ar">
-<title>Contas a Pagar e Contas a Receber</title>
+<!-- <sect1 id="xacc-ap-ar"> -->
+<!-- <title>Contas a Pagar e Contas a Receber</title> -->
 <para>C/R (Contas a Receber) e C/P (Contas a Pagar) são utilizadas 
     por empresas para registar vendas pelas quais não serão imediatamente 
     pagas, ou para registar contas que receberam, mas apenas irão pagar 
@@ -15,7 +15,7 @@
     complicadas e confusas para valerem o esforço.
 
     </para>
-</sect1>
+<!-- </sect1> -->
 <sect1 id="xacc-ardef">
 <title> Contas a Receber</title>
 <para>Vamos assumir que em vez de requerer que os seus clientes 

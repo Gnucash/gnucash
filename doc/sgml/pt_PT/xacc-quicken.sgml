@@ -190,7 +190,7 @@ receitas/Despesas</LINK>. Assim, se estiver habituado a especificar uma
 
         </PARA>
 <PARA>Mais detalhes sobre o Formato de Troca de Dados QIF podem ser encontrados 
-        <LINK LINKEND="QIF">aqui.</LINK>
+        <LINK LINKEND="XACC-QIF-IMPORT">aqui.</LINK>
       
     </PARA>
 </LISTITEM>

@@ -4,6 +4,8 @@
 <TITLE>Preferências</TITLE>
 </ARTHEADER>
 
+    <sect1>
+      <title></title>
 <PARA>Você pode personalizar o comportamento do GnuCash alterando 
     as definições nesta janela. Todas as definições são automaticamente 
     gravadas pelo que as alterações se mantêm em futuras sessões.
@@ -52,6 +54,7 @@
 
 
 </PARA>
+      </sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

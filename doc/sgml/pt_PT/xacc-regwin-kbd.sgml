@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>Atalhos de Teclado do Registo</TITLE>
 </ARTHEADER>
-
+    <sect1>
+      <title></title>
 <PARA>    As seguintes teclas podem ser utilizadas para movimentação 
     no registo: <EMPHASIS>Por favor verifique que nenhuma foi esquecida</EMPHASIS> 
 
@@ -68,7 +69,7 @@
 
 
 </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

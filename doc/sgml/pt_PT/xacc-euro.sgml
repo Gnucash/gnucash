@@ -3,9 +3,7 @@
 <ARTHEADER>
 <TITLE>GnuCash e o EURO</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE>GnuCash e o EURO</TITLE>
-<SECT2>
+<sect1>
 <TITLE>Introdução</TITLE>
 <PARA>A 1 de Janeiro de 1999, onze países membros da União Europeia 
     formaram uma União Económica e Monetária (UEM) e começaram a utilizar 
@@ -23,8 +21,8 @@
     <ULINK URL="http://europa.eu.int/euro">http://europa.eu.int/euro</ULINK> .
 
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Países Membros e Taxas de Câmbio na UEM</TITLE>
 <PARA>    <ANCHOR ID="EUROISOCURR"> 
     A seguinte tabela mostra os países membros da UEM e a 
@@ -118,8 +116,8 @@
 </TABLE>
 
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Suporte para o EURO no GnuCash</TITLE>
 <PARA>Você pode activar suporte para o euro no GnuCash na categoria 
     internacional da janela de <LINK LINKEND="XACC-PREFERENCES">preferências</LINK>.
@@ -131,8 +129,7 @@
 <PARA>ARRANJAR: Actualizar documentação com imagens de ecrã e etc.
 
 </PARA>
-</SECT2>
-</SECT1>
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

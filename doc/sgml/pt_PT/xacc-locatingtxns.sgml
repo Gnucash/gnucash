@@ -3,11 +3,9 @@
 <ARTHEADER>
 <TITLE>Encontrar transacções com a janela "Procurar Transacções"</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE> Encontrar transacções com a janela "Procurar Transacções"</TITLE>
 <PARA>Bill Gribble &lt;grib@billgribble.com&gt;</PARA>
 <ANCHOR ID="FINDOVERVIEW">
-<SECT2>
+<sect1>
 <TITLE>Resumo</TITLE>
 <PARA>    
     </PARA>
@@ -53,8 +51,8 @@ transacções que deseja visualisar.</PARA>
 </LISTITEM>
 </ITEMIZEDLIST>      
     <ANCHOR ID="HOW-TO-FIND"></PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Como utilizar a janela de Procurar Transacções</TITLE>
 <PARA>    </PARA>
 <PARA>A janela de Procurar Transacções tem duas secções principais.  
@@ -98,8 +96,8 @@ primindo o botão Procurar numa janela de resultados da procura e seleccionando
 qualquer "Tipo de Procura" excepto "Nova Procura".
 
       <ANCHOR ID="SETUP"></PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Configurar uma Procura</TITLE>
 <PARA>    </PARA>
 <PARA>Pode procurar transacções por qualquer um dos (ou todos os) 
@@ -149,7 +147,7 @@ pode inserir o(s) valor(es) de busca e método de comparação.
 critérios têm de ser verdadeiros para que a transacção seja mostrada.
 
     <ANCHOR ID="ACCOUNTSEARCH"></PARA>
-<SECT3>
+<sect2>
 <TITLE>Procuras por Conta</TITLE>
 <PARA>Na pasta de contas, seleccione as contas relevantes e depois 
 escolha se deseja visualisar transacções que afectem Qualquer, Todas 
@@ -170,8 +168,8 @@ conta à ordem e conta VISA serão mostradas conjuntamente na janela de
 Resultados da Procura.
       
     </PARA>
-</SECT3>
-<SECT3 ID="DATE">
+</sect2>
+<sect2 ID="DATE">
 <TITLE>Procuras por Data</TITLE>
 <PARA>Na pasta de Data, pode especificar um intrevalo de datas para as 
 transacções que deseja encontrar.  Os campos de ano, mês e dia estão na 
@@ -187,8 +185,8 @@ coloque-a na primeira zona de entrada e coloque uma data posterior à sua última
 transacção na segunda zona.
 
       <ANCHOR ID="AMOUNT"></PARA>
-</SECT3>
-<SECT3>
+</sect2>
+<sect2>
 <TITLE>Procuras por Montante</TITLE>
 <PARA>As procuras nas pastas de Montante, Acções e Preço permitem-lhe 
 procurar por quantidades específicas em vários campos das transacções.  
@@ -201,8 +199,8 @@ caixa de entrada é sempre positivo.
 débitos, créditos ou ambos.
 
       <ANCHOR ID="STRING"></PARA>
-</SECT3>
-<SECT3>
+</sect2>
+<sect2>
 <TITLE>Procuras por Texto</TITLE>
 <PARA>Nas pastas Descrição, Número, Notas e Acção, pode especificar 
 um texto que será comparado com o campo respectivo das parcelas e 
@@ -224,9 +222,9 @@ botão "Coincidir Capitalização".</PARA>
 </ITEMIZEDLIST>
       
     <ANCHOR ID="MODIFY"></PARA>
-</SECT3>
-</SECT2>
-<SECT2>
+</sect2>
+</sect1>
+<sect1>
 <TITLE>Modificar a sua procura</TITLE>
 <PARA>    </PARA>
 <PARA>Primir o botão "Procurar" dentro da janela de Resultados da Procura 
@@ -245,8 +243,7 @@ janela de Resultados de Procura existente.
 </ITEMIZEDLIST>
       
   </PARA>
-</SECT2>
-</SECT1>
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

@@ -2,8 +2,7 @@
 <artheader>
 <title>O MDI Gnome</title>
 </artheader>
-<sect1>
-<title>O MDI Gnome</title>
+
 <para><emphasis>NECESSÁRIAS IMAGENS!!!!</emphasis> 
 </para>
 <para>O GnuCash pode apresentar várias imagens das suas finanças simultaneamente, em 
@@ -15,7 +14,6 @@ ou <link linkend="xacc-reports">relatório</link> utilizando o menu ficheiro, a
 nova imagem pode ser apresentada de várias maneiras.
 </para>
 
-</sect1>
 <sect1 id="xacc-notebook-view">
 <title>Vista em Pasta</title>
 <para><emphasis>Necessária Imagem Aqui!</emphasis></para>

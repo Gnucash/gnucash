@@ -75,7 +75,7 @@
       </listitem>
       
       <listitem>
-  <para><emphasis><link linkend="qif">Importação de Ficheiros Quicken</link>.</emphasis> 
+  <para><emphasis><link linkend="XACC-QIF-IMPORT">Importação de Ficheiros Quicken</link>.</emphasis> 
   </para>
   <para>Importa ficheiros QIF tipo-Quicken.  O ajudante de importação elimina 
     automaticamente transacções duplicadas.

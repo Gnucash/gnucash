@@ -2,8 +2,7 @@
 <artheader>
 <title>Relatórios</title>
 </artheader>
-<sect1>
-<title>Relatórios</title>
+
 <para>Uma variedade de relatórios financeiros pode ser seleccionada no 
     menu de "Relatórios":
 
@@ -56,7 +55,7 @@ com a opção de apresentar tanto tabelas como gráficos de barras.</para>
 </itemizedlist>
 
     </para>
-</sect1>
+
 <sect1 id="xacc-reportwindow">
 <title>A Janela de Relatório</title>
 <para>Após ter seleccionado um relatório, uma janela de relatório surgirá: 

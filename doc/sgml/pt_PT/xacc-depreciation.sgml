@@ -3,8 +3,8 @@
 <ARTHEADER>
 <TITLE>Depreciação e Ganhos de Capital</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE>Depreciação e Ganhos de Capital</TITLE>
+<!-- <SECT1> -->
+<!-- <TITLE>Depreciação e Ganhos de Capital</TITLE> -->
 <PARA>
 Caso detenha bens para fins empresariais, a sua desvalorização com o passar 
 do tempo pode ser tratada como uma dedução para fins fiscais, denominada 
@@ -64,7 +64,7 @@ terá de reconhecer -- para fins fiscais -- o que se chama de
 </ITEMIZEDLIST>
 
     </PARA>
-</SECT1>
+<!-- </SECT1> -->
 <SECT1 ID="XACC-CAPITALGAINS">
 <TITLE> Ganhos de Capital - Apreciação de Activos</TITLE>
 <PARA>    <ANCHOR ID="APPR"> 

@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>Relatório de Transacções</TITLE>
 </ARTHEADER>
-
+    <sect1>
+      <title></title>
 <PARA>O relatório de transacções lista os detalhes das transacções 
     numa conta específica durante um período de tempo, num formato 
     adequado para visualização e exportação.
@@ -134,7 +135,7 @@ no relatório. As hipóteses incluem:
 
 
 </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

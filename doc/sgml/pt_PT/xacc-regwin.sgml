@@ -4,8 +4,6 @@
 <TITLE>A Janela de Registo</TITLE>
 </ARTHEADER>
 
-<SECT1>
-<TITLE>A Janela de Registo</TITLE>
 <MEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/regwin-single.png">
@@ -43,7 +41,7 @@
     incorrecta e substitui-la pela informação desejada.
 
     </PARA>
-</SECT1>
+
 <SECT1 ID="XACC-MANTXN">
 <TITLE>Manipular Transacções</TITLE>
 <PARA>Você pode manipular transacções com os botões da barra de ferramentas ou o

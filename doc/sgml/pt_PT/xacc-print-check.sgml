@@ -3,8 +3,6 @@
 <ARTHEADER>
 <TITLE>Imprimir Cheques</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE>Printing Checks</TITLE>
 <PARA>Pode imprimir uma transacção GnuCash como um cheque seleccionando 
     "Imprimir Cheque" no menu de Transacções numa janela de visualização 
     de registo.
@@ -18,7 +16,7 @@
     uma impressora e tamanho de papel, e também iniciar o processo de impressão.
 
     </PARA>
-<SECT2>
+<sect1>
 <TITLE>Formato do cheque</TITLE>
 <PARA>    </PARA>
 <PARA>Por forma a imprimir um cheque, você tem de saber onde as linhas e 
@@ -30,8 +28,8 @@
     Quicken.
 
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Formatos de Cheque Personalizados</TITLE>
 <PARA>Caso deseje imprimir para um tipo de cheque que não existe 
     na opção de menu <GUIMENU>Formato de Cheque</GUIMENU>, seleccione 
@@ -54,8 +52,8 @@
     possamos incluir como opção da aplicação numa versão futura.
 
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Posição do cheque</TITLE>
 <PARA>Impressos de cheques imprimíveis estão disponíveis em vários estilos. Em 
     geral, cada folha imprimível está dividida em três secções, e cada secção 
@@ -67,8 +65,8 @@
     na janela de impressão.
 
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Posição personalizada de cheque</TITLE>
 <PARA>Se as posições de cheque pré-definidas não funcionarem correctamente 
     para os seus formulários de cheque, pode seleccionar <GUIMENU>Personalizar</GUIMENU> 
@@ -78,8 +76,8 @@
     até ao canto inferior esquerdo do cheque. As unidades desta medida são aquelas 
     seleccionadas na opção de menu "Unidades".
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Formato da data</TITLE>
 <PARA>Seleccione o seu formato de data favorito da lista. A 
     lista mostra exemplos utilizando a data de 31 de Dezembro de 2000 
@@ -91,8 +89,8 @@
     um nome de mês completo ou abreviado em vez de um número.
 
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Formatos de data personalizados</TITLE>
 <PARA>Caso deseje utilizar outro formato de data para além dos disponíveis na 
     lista, seleccione <GUIMENU>Personalizar</GUIMENU> e introduza um formato 
@@ -101,8 +99,7 @@
     texto de formatação é passado para o <FUNCTION>strftime(3)</FUNCTION> como 
     um identificador de formato.
   </PARA>
-</SECT2>
-</SECT1>
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

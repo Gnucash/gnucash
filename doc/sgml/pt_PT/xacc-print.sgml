@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>Impressão</TITLE>
 </ARTHEADER>
-
+    <sect1>
+      <title></title>
 <PARA>Actualmente, o único tipo de impressão directamente suportada pelo 
     GnuCash é a <LINK LINKEND="XACC-PRINT-CHECK">impressão de cheques</LINK>.
     Outros tipos de impressão serão adicionados na versão 1.5.
@@ -15,7 +16,7 @@ LINKEND="EXPORT">exportados como HTML</LINK>.
 
 
 </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->

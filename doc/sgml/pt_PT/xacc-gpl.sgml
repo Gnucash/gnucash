@@ -4,11 +4,7 @@
 <TITLE>Licença Pública Geral GNU</TITLE>
 </ARTHEADER>
 
-<SECT1>
-<TITLE>Licença Pública Geral GNU</TITLE>
-
-<SECT2>
-<TITLE>Versão 2, Junho 1991</TITLE>
+<para>Versão 2, Junho 1991</para>
 
 <PARA>Copyright (C) 1989, 1991 Free Software Foundation, Inc. 675
       Mass Ave, Cambridge, MA 02139, USA 
@@ -19,8 +15,8 @@
       permitido altera-lo.
     </PARA>
 
-<SECT3>
-<TITLE><ANCHOR ID="SEC001">Preâmbulo</TITLE>
+<sect1 ID="SEC001">
+<TITLE>Preâmbulo</TITLE>
 
 <PARA>As licenças da maioria das aplicações são definidas por forma a 
     impedi-lo de o partilhar ou modificar. Por contraste, a Licença 
@@ -84,10 +80,10 @@
 
 
     </PARA>
-</SECT3>
+</sect1>
 
-<SECT3>
-<TITLE><ANCHOR ID="SEC002">TERMOS E CONDIÇÕES DA LICENÇA PÚBLICA 
+<sect1 ID="SEC002">
+<TITLE>TERMOS E CONDIÇÕES DA LICENÇA PÚBLICA 
     GERAL GNU PARA COPIA, DISTRIBUIÇÃO E MODIFICAÇÃO</TITLE>
 <PARA>0. Esta Licença aplica-se a qualquer aplicação ou outro trabalho 
     que contenha um aviso colcado pelo detentor dos direitos de autor 
@@ -327,10 +323,10 @@
     e reutilização das aplicações em geral.
 
     </PARA>
-</SECT3>
+</sect1>
 
-<SECT3>
-<TITLE><ANCHOR ID="SEC003">NÃO É DADA GARANTIA</TITLE>
+<sect1 ID="SEC003">
+<TITLE>NÃO É DADA GARANTIA</TITLE>
 <PARA>11. COMO A APLICAÇÃO É LICENCIADA LIVRE DE CUSTOS, NÃO É DADA 
     QUALQUER GARANTIA PARA A APLICAÇÃO, ATÉ AO PERMITIDO PELA LEGISLAÇÃO 
     APLICÁVEL. EXCEPTO ONDE INDICADO O CONTRÁRIO POR ESCRITO OS DETENTORES 
@@ -355,16 +351,9 @@
     TENHA SIDO ADVERTIDO DA POSSIBILIDADE DE TAIS DANOS.
 
     </PARA>
-</SECT3>
+<para>FIM DOS TERMOS E CONDIÇÕES</para>
 
-<SECT3>
-<TITLE>FIM DOS TERMOS E CONDIÇÕES</TITLE>
-<PARA></PARA>
-</SECT3>
-
-</SECT2>
-
-</SECT1>
+</sect1>
 
 </ARTICLE>
 
