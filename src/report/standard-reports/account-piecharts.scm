@@ -156,6 +156,8 @@ balance at a given time"))
      (gnc:lookup-option 
       (gnc:report-options report-obj) section name)))
   
+  (gnc:report-starting reportname)
+
   ;; Get all options
   (let ((to-date-tp (gnc:timepair-end-day-time 
                      (gnc:date-option-absolute-time
@@ -181,6 +183,8 @@ balance at a given time"))
         (height (get-option gnc:pagename-display optname-plot-height))
         (width (get-option gnc:pagename-display optname-plot-width))
 
+	(work-done 0)
+	(work-to-do 0)
         (document (gnc:make-html-document))
         (chart (gnc:make-html-piechart))
         (topl-accounts (gnc:filter-accountlist-type 
@@ -230,6 +234,17 @@ balance at a given time"))
            c report-currency 
            exchange-fn))))
 
+      (define (count-accounts current-depth accts)
+	(if (< current-depth tree-depth)
+	    (let ((sum 0))
+	      (for-each
+	       (lambda (a)
+		 (set! sum (+ sum (+ 1 (count-accounts (+ 1 current-depth)
+						       (gnc:account-get-immediate-subaccounts a))))))
+	       accts)
+	      sum)
+	    (length (filter show-acct? accts))))
+
       ;; Calculates all account's balances. Returns a list of
       ;; balance <=> account pairs, like '((10.0 Earnings) (142.5
       ;; Gifts)). If current-depth >= tree-depth, then the balances
@@ -246,6 +261,8 @@ balance at a given time"))
               (for-each
                (lambda (a)
                  (begin
+		   (set! work-done (+ 1 work-done))
+		   (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
                    (if (show-acct? a)
                        (set! res (cons (list (collector->double 
                                               (profit-fn a #f)) a)
@@ -259,6 +276,8 @@ balance at a given time"))
               res)
             (map
              (lambda (a)
+	       (set! work-done (+ 1 work-done))
+	       (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
                (list (collector->double (profit-fn a #t)) a))
              (filter show-acct? accts))))
 
@@ -273,6 +292,7 @@ balance at a given time"))
 
       (if (not (null? accounts))
           (begin
+	    (set! work-to-do (count-accounts 1 topl-accounts))
             (set! combined
 		  (sort (filter (lambda (pair) (not (>= 0.0 (car pair))))
 				(fix-signs
@@ -407,6 +427,7 @@ balance at a given time"))
 	   (gnc:html-make-no-account-warning 
 	    report-title (gnc:report-id report-obj))))
 
+      (gnc:report-finished)
       document)))
 
 (for-each 

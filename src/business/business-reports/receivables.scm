@@ -59,7 +59,7 @@
   (let* ((receivables-account (op-value acc-page this-acc)))
     (gnc:debug "receivables-account" receivables-account)
 
-    (aging-renderer report-obj receivables-account #t)))
+    (aging-renderer report-obj this-acc receivables-account #t)))
 
 ;; Here we define the actual report with gnc:define-report
 (gnc:define-report

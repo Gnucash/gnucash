@@ -37,7 +37,9 @@
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/gnome-utils" 0) ;for gnc:html-build-url
 
-;; first define all option's names so that they are properly defined
+(define reportname (N_ "Cash Flow"))
+
+;; define all option's names so that they are properly defined
 ;; in *one* place.
 (define optname-from-date (N_ "From"))
 (define optname-to-date (N_ "To"))
@@ -101,9 +103,13 @@
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
 
+  (gnc:report-starting reportname)
+
   ;; get all option's values
   (let* ((accounts (get-option gnc:pagename-accounts
                                optname-accounts))	 
+	 (work-done 0)
+	 (work-to-do 0)
          (report-currency (get-option gnc:pagename-general
                                       optname-report-currency))
          (price-source (get-option gnc:pagename-general
@@ -162,7 +168,8 @@
                (money-out-alist '())
                (money-out-collector (gnc:make-commodity-collector))
 
-               (money-diff-collector (gnc:make-commodity-collector)))
+               (money-diff-collector (gnc:make-commodity-collector))
+	       (splits-to-do (gnc:accounts-count-splits accounts)))
 
           ;; function to add inflow and outflow of money
           (define (calc-money-in-out accounts)
@@ -179,6 +186,8 @@
 
                   (for-each
                     (lambda (split)
+		      (set! work-done (+ 1 work-done))
+		      (gnc:report-percent-done (* 85 (/ work-done splits-to-do)))
                       (let ((parent (gnc:split-get-parent split)))
                         (if (and (gnc:timepair-le (gnc:transaction-get-date-posted parent) to-date-tp)
                                  (gnc:timepair-ge (gnc:transaction-get-date-posted parent) from-date-tp))
@@ -254,12 +263,16 @@
           (money-diff-collector 'minusmerge money-out-collector #f)
 
 
+	  (set! work-done 0)
+	  (set! work-to-do (length accounts))
           (gnc:html-document-add-object!
            doc
            (gnc:make-html-text
             (gnc:html-markup-ul
              (map 
               (lambda (acct)
+		(set! work-done (+ 1 work-done))
+		(gnc:report-percent-done (+ 85 (* 5 (/ work-done work-to-do))))
                 (gnc:html-markup-anchor 
                  (gnc:html-build-url gnc:url-type-register
                                       (string-append "account=" 
@@ -278,8 +291,12 @@
              (_ "Money In")
              ""))
 
+	  (set! work-done 0)
+	  (set! work-to-do (length money-in-alist))
           (for-each
             (lambda (pair)
+	      (set! work-done (+ 1 work-done))
+	      (gnc:report-percent-done (+ 90 (* 5 (/ work-done work-to-do))))
               (gnc:html-table-append-row/markup!
                table
                "normal-row"
@@ -308,8 +325,12 @@
              (_ "Money Out")
              ""))
 
+	  (set! work-done 0)
+	  (set! work-to-do (length money-out-alist))
           (for-each
             (lambda (pair)
+	      (set! work-done (+ 1 work-done))
+	      (gnc:report-percent-done (+ 95 (* 5 (/ work-done work-to-do))))
               (gnc:html-table-append-row/markup!
                table
                "normal-row"
@@ -356,12 +377,14 @@
         (gnc:html-document-add-object! 
          doc 
          (gnc:html-make-no-account-warning 
-	  (_ "Cash Flow") (gnc:report-id report-obj))))
+	  reportname (gnc:report-id report-obj))))
+
+    (gnc:report-finished)
     doc))
 
 (gnc:define-report 
  'version 1
- 'name (N_ "Cash Flow")
+ 'name reportname
  'menu-path (list gnc:menuname-income-expense)
  'options-generator cash-flow-options-generator
  'renderer cash-flow-renderer)

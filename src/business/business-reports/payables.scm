@@ -58,7 +58,7 @@
 
   (let ((payables-account (opt-val acc-page this-acc)))
     (gnc:debug "payables-account" payables-account)
-    (aging-renderer report-obj payables-account #f)))
+    (aging-renderer report-obj this-acc payables-account #f)))
 
 ;; Here we define the actual report with gnc:define-report
 (gnc:define-report

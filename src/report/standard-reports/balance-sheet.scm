@@ -34,7 +34,9 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
-;; first define all option's names so that they are properly defined
+(define reportname (N_ "Balance Sheet"))
+
+;; define all option's names so that they are properly defined
 ;; in *one* place.
 (define optname-to-date (N_ "To"))
 
@@ -143,6 +145,8 @@
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
 
+  (gnc:report-starting reportname)
+
   ;; get all option's values
   (let* ((display-depth (get-option gnc:pagename-accounts 
                                     optname-display-depth))
@@ -185,11 +189,8 @@
                          (gnc:get-current-group-depth) 
                          display-depth))
          ;; calculate the exchange rates  
-         (exchange-fn (gnc:case-exchange-fn 
-                       price-source report-currency to-date-tp))
-         (totals-get-balance (lambda (account)
-                               (gnc:account-get-comm-balance-at-date 
-                                account to-date-tp #f))))
+         (exchange-fn #f)
+         (totals-get-balance #f))
 
     ;; Wrapper to call the right html-utility function.
     (define (add-subtotal-line table label balance)
@@ -213,51 +214,89 @@
 
     (if (not (null? accounts))
         ;; Get all the balances for each account group.
-        (let* ((asset-balance 
+        (let* ((asset-balance #f)
+               (liability-balance #f)
+               (equity-balance #f)
+               (sign-reversed-liability-balance #f)
+               (neg-retained-profit-balance #f)
+               (retained-profit-balance #f)
+               (total-equity-balance #f)
+               (equity-plus-liability #f)
+               (unrealized-gain-collector #f)
+
+               ;; Create the account tables below where their
+               ;; percentage time can be tracked.
+               (asset-table #f)
+               (liability-table #f)
+               (equity-table #f))
+
+	  (gnc:report-percent-done 2)
+	  (set! totals-get-balance (lambda (account)
+                               (gnc:account-get-comm-balance-at-date 
+                                account to-date-tp #f)))
+	  (gnc:report-percent-done 4)
+	  (set! asset-balance 
                 (gnc:accounts-get-comm-total-assets 
                  asset-accounts totals-get-balance))
-               (liability-balance
+	  (gnc:report-percent-done 6)
+	  (set! liability-balance
                 (gnc:accounts-get-comm-total-assets 
                  liability-accounts totals-get-balance))
-               (equity-balance
+	  (gnc:report-percent-done 8)
+	  (set! equity-balance
                 (gnc:accounts-get-comm-total-assets 
                  equity-accounts totals-get-balance))
-               (sign-reversed-liability-balance
+	  (gnc:report-percent-done 10)
+	  (set! sign-reversed-liability-balance
                 (gnc:make-commodity-collector))
-               (neg-retained-profit-balance 
+	  (gnc:report-percent-done 12)
+	  (set! neg-retained-profit-balance 
                 (accountlist-get-comm-balance-at-date
                  income-expense-accounts
                  to-date-tp))
-               (retained-profit-balance (gnc:make-commodity-collector))
-               (total-equity-balance (gnc:make-commodity-collector))
-               (equity-plus-liability (gnc:make-commodity-collector))
-               (unrealized-gain-collector (gnc:make-commodity-collector))
+	  (gnc:report-percent-done 14)
+	  (set! retained-profit-balance (gnc:make-commodity-collector))
+	  (gnc:report-percent-done 16)
+	  (set! total-equity-balance (gnc:make-commodity-collector))
+	  (gnc:report-percent-done 18)
+	  (set! equity-plus-liability (gnc:make-commodity-collector))
+	  (set! unrealized-gain-collector (gnc:make-commodity-collector))
 
-               ;; Create the account tables here.
-               (asset-table 
+	  (gnc:report-percent-done 20)
+	  (set! exchange-fn (gnc:case-exchange-fn 
+			     price-source report-currency to-date-tp))
+	  (gnc:report-percent-done 30)
+
+	  ;;; Arbitrarily declare that the building of these tables
+	  ;;; takes 50% of the total amount of time spent building
+	  ;;; this report. (from 30%-80%)
+	  (set! asset-table 
                 (gnc:html-build-acct-table 
                  #f to-date-tp 
                  tree-depth show-subaccts? 
                  asset-accounts
+		 30 20
                  #f #f #f #f #f
                  show-parent-balance? show-parent-total?
                  show-fcur? report-currency exchange-fn #t))
-               (liability-table 
+	  (set! liability-table 
                 (gnc:html-build-acct-table
                  #f to-date-tp
                  tree-depth show-subaccts?
                  liability-accounts
+		 50 20
                  #f #f #f #f #f
                  show-parent-balance? show-parent-total?
                  show-fcur? report-currency exchange-fn #t))
-               (equity-table
+	  (set! equity-table
                 (gnc:html-build-acct-table
                  #f to-date-tp
                  tree-depth show-subaccts?
                  equity-accounts
+		 70 10
                  #f #f #f #f #f 
                  show-parent-balance? show-parent-total?
-                 show-fcur? report-currency exchange-fn #t)))
+                 show-fcur? report-currency exchange-fn #t))
 
           (retained-profit-balance 'minusmerge
                                    neg-retained-profit-balance
@@ -279,6 +318,7 @@
           ;; Now concatenate the tables. This first prepend-row has
           ;; to be written out by hand -- we can't use the function
           ;; append-something because we have to prepend.
+	  (gnc:report-percent-done 80)
           (gnc:html-table-prepend-row/markup! 
            asset-table 
            "primary-subheading"
@@ -299,6 +339,7 @@
           (gnc:html-table-append-ruler! 
            asset-table (* (if show-fcur? 3 2) tree-depth))
           
+	  (gnc:report-percent-done 85)
           (add-subtotal-line 
            asset-table (_ "Liabilities") #f)
           (html-table-merge asset-table liability-table)
@@ -332,6 +373,8 @@
 
           (gnc:html-table-append-ruler! 
            asset-table (* (if show-fcur? 3 2) tree-depth))
+
+	  (gnc:report-percent-done 88)
           (add-subtotal-line
            asset-table (_ "Equity") #f)
           (html-table-merge asset-table equity-table)
@@ -347,11 +390,13 @@
           (gnc:html-document-add-object! doc asset-table)
           
           ;; add currency information
+	  (gnc:report-percent-done 90)
           (if show-rates?
               (gnc:html-document-add-object! 
                doc ;;(gnc:html-markup-p
                (gnc:html-make-exchangerates 
-                report-currency exchange-fn accounts))))
+                report-currency exchange-fn accounts)))
+	  (gnc:report-percent-done 100))
         
         
         ;; error condition: no accounts specified
@@ -360,11 +405,12 @@
          doc 
          (gnc:html-make-no-account-warning 
 	  (_ "Balance Sheet") (gnc:report-id report-obj))))
+    (gnc:report-finished)
     doc))
 
 (gnc:define-report 
  'version 1
- 'name (N_ "Balance Sheet")
+ 'name reportname
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator balance-sheet-options-generator
  'renderer balance-sheet-renderer)

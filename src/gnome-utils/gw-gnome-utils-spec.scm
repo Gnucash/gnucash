@@ -35,6 +35,7 @@
       "#include <dialog-options.h>\n"
       "#include <dialog-utils.h>\n"
       "#include <druid-utils.h>\n"
+      "#include <gtk/gtk.h>\n"
       "#include <gnc-amount-edit.h>\n"
       "#include <gnc-date-edit.h>\n"
       "#include <gnc-gnome-utils.h>\n"
@@ -66,6 +67,7 @@
    '()
    "Shutdown the GnuCash gnome system.")
 
+  (gw:wrap-as-wct ws '<gtk:Widget*> "GtkWidget*" "const GtkWidget*")
   (gw:wrap-as-wct ws '<gnc:UIWidget> "gncUIWidget" "const gncUIWidget")
   (gw:wrap-as-wct ws '<gnc:mdi-info*> "GNCMDIInfo*" "const GNCMDIInfo*")
   (gw:wrap-as-wct ws '<gnc:OptionWin*> "GNCOptionWin*" "const GNCOptionWin*")
@@ -466,4 +468,23 @@ be left empty")
    '(((<gw:mchars> caller-owned const) message)
      (<gw:int> percentage))
    "Autosize the columns of a clist including the titles.")
+
+  (gw:wrap-function
+   ws
+   'gnc:set_busy_cursor
+   '<gw:void>
+   "gnc_set_busy_cursor"
+   '((<gtk:Widget*> window)
+     (<gw:bool> update_now))
+   "Set a busy cursor for a specific window. If null, the busy cursor will be set on all windows.")
+
+  (gw:wrap-function
+   ws
+   'gnc:unset_busy_cursor
+   '<gw:void>
+   "gnc_unset_busy_cursor"
+   '((<gtk:Widget*> window))
+   "Remove a busy cursor for a specific window. If null, the busy cursor will be removed on all windows.")
 )
+
+

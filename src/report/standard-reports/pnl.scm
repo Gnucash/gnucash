@@ -37,7 +37,9 @@
 ;; something different under this name, but they are welcomed to
 ;; contribute their changes :-)
 
-;; first define all option's names so that they are properly defined
+(define reportname (N_ "Profit And Loss"))
+
+;; define all option's names so that they are properly defined
 ;; in *one* place.
 (define optname-from-date (N_ "From"))
 (define optname-to-date (N_ "To"))
@@ -129,6 +131,8 @@
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
 
+  (gnc:report-starting reportname)
+
   ;; get all option's values
   (let* ((display-depth (get-option gnc:pagename-accounts 
                                     optname-display-depth))
@@ -174,18 +178,24 @@
                                   (gnc:get-current-group-depth) 
                                   display-depth)
                               (if do-grouping? 1 0)))
-               ;; calculate the exchange rates
-               (exchange-fn (gnc:case-exchange-fn
+
+               (exchange-fn #f)
+               (table #f))
+
+	  ;; calculate the exchange rates
+	  (gnc:report-percent-done 1)
+	  (set! exchange-fn (gnc:case-exchange-fn
                              price-source report-currency to-date-tp))
-               ;; do the processing here
-               (table (gnc:html-build-acct-table 
+	  (gnc:report-percent-done 10)
+
+	  ;; do the processing here
+	  (set! table (gnc:html-build-acct-table 
                        from-date-tp to-date-tp 
-                       tree-depth show-subaccts? accounts #f
+                       tree-depth show-subaccts? accounts 10 80 #f
                        #t gnc:accounts-get-comm-total-profit 
                        (_ "Profit") do-grouping? 
                        show-parent-balance? show-parent-total?
-                       show-fcur? report-currency exchange-fn #t)))
-
+                       show-fcur? report-currency exchange-fn #t))
           ;; add the table 
           (gnc:html-document-add-object! doc table)
 
@@ -199,7 +209,8 @@
                  (lambda (a)
                    (gnc:group-get-subaccounts
                     (gnc:account-get-children a)))
-                 accounts)))))
+                 accounts))))
+	  (gnc:report-percent-done 100))
         
         ;; error condition: no accounts specified
         
@@ -207,11 +218,12 @@
          doc
 	 (gnc:html-make-no-account-warning 
 	  report-title (gnc:report-id report-obj))))
+    (gnc:report-finished)
     doc))
 
 (gnc:define-report 
  'version 1
- 'name (N_ "Profit And Loss")
+ 'name reportname
  'menu-name (N_ "Profit & Loss")
  'menu-path (list gnc:menuname-income-expense)
  'options-generator pnl-options-generator

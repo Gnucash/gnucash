@@ -362,8 +362,10 @@
       
       ;; otherwise, rerun the report 
       (let ((template (hash-ref *gnc:_report-templates_* 
-                                (gnc:report-type report))))
-        (if template
+                                (gnc:report-type report)))
+	    (doc #f))
+	(gnc:set_busy_cursor #f #t)
+        (set! doc (if template
             (let* ((renderer (gnc:report-template-renderer template))
                    (stylesheet (gnc:report-stylesheet report))
                    (doc (renderer report))
@@ -373,7 +375,9 @@
               (gnc:report-set-ctext! report html)
               (gnc:report-set-dirty?! report #f)              
               html)
-            #f))))
+            #f))
+	(gnc:unset_busy_cursor #f)
+	doc)))
 
 (define (gnc:report-run id)
   (gnc:backtrace-if-exception 

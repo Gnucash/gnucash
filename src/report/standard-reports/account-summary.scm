@@ -38,7 +38,9 @@
 ;; prints a table of account information with clickable 
 ;; links to open the corresponding register window.
 
-;; first define all option's names such that typos etc. are no longer
+(define reportname (N_ "Account Summary"))
+
+;; define all option's names such that typos etc. are no longer
 ;; possible.
 (define optname-date (N_ "Date"))
 (define optname-display-depth (N_ "Account Display Depth"))
@@ -134,6 +136,7 @@
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
   
+  (gnc:report-starting reportname)
   (let ((display-depth (get-option gnc:pagename-accounts 
                                    optname-display-depth ))
         (show-subaccts? (get-option gnc:pagename-accounts
@@ -175,19 +178,27 @@
 				  (gnc:get-current-group-depth)
 				  display-depth)
                               (if do-grouping? 1 0)))
-               (exchange-fn (gnc:case-exchange-fn 
+               (exchange-fn #f)
+	       (table #f))
+
+	  (gnc:report-percent-done 2)
+	  (set! exchange-fn (gnc:case-exchange-fn 
                              price-source report-currency date-tp))
-               ;; do the processing here
-               (table (gnc:html-build-acct-table 
+	  (gnc:report-percent-done 10)
+
+	  ;; do the processing here
+	  (set! table (gnc:html-build-acct-table 
                        #f date-tp 
                        tree-depth show-subaccts? accounts
+		       10 80
                        #t
                        #t gnc:accounts-get-comm-total-assets 
                        (_ "Total") do-grouping? 
                        show-parent-balance? show-parent-total?
-                       show-fcur? report-currency exchange-fn #t)))
+                       show-fcur? report-currency exchange-fn #t))
 
           ;; add the table 
+	  (gnc:report-percent-done 90)
           (gnc:html-document-add-object! doc table)
 
           ;; add currency information
@@ -208,10 +219,11 @@
          (gnc:html-make-no-account-warning 
 	  report-title (gnc:report-id report-obj))))
 
+    (gnc:report-finished)
     doc))
 
 (gnc:define-report 
  'version 1
- 'name (N_ "Account Summary")
+ 'name reportname
  'options-generator accsum-options-generator
  'renderer accsum-renderer)

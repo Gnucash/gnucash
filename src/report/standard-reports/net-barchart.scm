@@ -35,6 +35,8 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
+(define reportname (N_ "Income/Expense Chart"))
+
 (define optname-from-date (N_ "From"))
 (define optname-to-date (N_ "To"))
 (define optname-stepsize (N_ "Step Size"))
@@ -139,6 +141,7 @@
     (gnc:option-value 
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
+  (gnc:report-starting reportname)
   (let* ((to-date-tp (gnc:timepair-end-day-time 
                       (gnc:date-option-absolute-time
                        (get-option gnc:pagename-general 
@@ -164,14 +167,8 @@
          (height (get-option gnc:pagename-display optname-plot-height))
          (width (get-option gnc:pagename-display optname-plot-width))
 
-         (commodity-list (gnc:accounts-get-commodities 
-                          (append 
-                           (gnc:acccounts-get-all-subaccounts accounts)
-                           accounts)
-                          report-currency))
-         (exchange-fn (gnc:case-exchange-time-fn 
-                       price-source report-currency 
-                       commodity-list to-date-tp))
+         (commodity-list #f)
+         (exchange-fn #f)
 
          (dates-list ((if inc-exp? gnc:make-date-interval-list
                           gnc:make-date-list)
@@ -228,22 +225,24 @@
           (if inc-exp? (second date) date)))
        dates))
 
+    (gnc:report-percent-done 1)
+    (set! commodity-list (gnc:accounts-get-commodities 
+                          (append 
+                           (gnc:acccounts-get-all-subaccounts accounts)
+                           accounts)
+                          report-currency))
+    (gnc:report-percent-done 10)
+    (set! exchange-fn (gnc:case-exchange-time-fn 
+                       price-source report-currency 
+                       commodity-list to-date-tp
+		       10 40))
+    (gnc:report-percent-done 50)
+
     (if 
      (not (null? accounts))
-     (let* ((assets-list
-             (process-datelist
-              (if inc-exp? 
-                  accounts
-                  (assoc-ref classified-accounts 'asset))
-              dates-list #t))
-            (liability-list
-             (process-datelist
-              (if inc-exp?
-                  accounts
-                  (assoc-ref classified-accounts 'liability))
-              dates-list #f))
-            (net-list
-             (map + assets-list liability-list))
+     (let* ((assets-list #f)
+            (liability-list #f)
+            (net-list #f)
             (date-string-list (map 
                                (if inc-exp?
                                    (lambda (date-list-item)
@@ -252,6 +251,24 @@
                                    gnc:print-date)
                                dates-list)))
 
+       (set! assets-list
+             (process-datelist
+              (if inc-exp? 
+                  accounts
+                  (assoc-ref classified-accounts 'asset))
+              dates-list #t))
+       (gnc:report-percent-done 70)
+       (set! liability-list
+             (process-datelist
+              (if inc-exp?
+                  accounts
+                  (assoc-ref classified-accounts 'liability))
+              dates-list #f))
+       (gnc:report-percent-done 80)
+       (set! net-list
+             (map + assets-list liability-list))
+       (gnc:report-percent-done 90)
+          
        (gnc:html-barchart-set-title! 
         chart report-title)
        (gnc:html-barchart-set-subtitle!
@@ -351,6 +368,7 @@
       (gnc:html-make-no-account-warning 
        report-title (gnc:report-id report-obj))))
     
+    (gnc:report-finished)
     document))
 
 ;; Here we define the actual report
@@ -363,7 +381,7 @@
 
 (gnc:define-report
  'version 1
- 'name (N_ "Income/Expense Chart")
+ 'name reportname
  'menu-name (N_ "Income & Expense Chart")
  'menu-path (list gnc:menuname-income-expense)
  'options-generator (lambda () (options-generator #t))

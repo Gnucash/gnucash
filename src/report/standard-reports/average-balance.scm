@@ -15,6 +15,8 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report/report-system" 0)
 
+(define reportname (N_ "Average Balance"))
+
 (define optname-from-date (N_ "From"))
 (define optname-to-date (N_ "To"))
 (define optname-stepsize (N_ "Step Size"))
@@ -261,6 +263,7 @@
     (gnc:option-value 
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
+  (gnc:report-starting reportname)
   (let* ((report-title (get-option gnc:pagename-general 
                                    gnc:optname-reportname))
          (begindate (gnc:timepair-start-day-time
@@ -284,14 +287,8 @@
 
          (document   (gnc:make-html-document))
 
-         (commodity-list (gnc:accounts-get-commodities 
-                          (append 
-                           (gnc:acccounts-get-all-subaccounts accounts)
-                           accounts)
-                          report-currency))
-         (exchange-fn (gnc:case-exchange-time-fn 
-                       price-source report-currency 
-                       commodity-list enddate))
+	 (commodity-list #f)
+	 (exchange-fn #f)
 
          (beforebegindate (gnc:timepair-end-day-time 
                            (gnc:timepair-previous-day begindate)))
@@ -318,6 +315,26 @@
               (splits '())
               (data '()))
 
+          ;; The percentage done numbers here are a hack so that
+          ;; something gets displayed. On my system the
+          ;; gnc:case-exchange-time-fn takes about 20% of the time
+          ;; building up a list of prices for later use. Either this
+          ;; routine needs to send progress reports, or the price
+          ;; lookup should be distributed and done when actually
+          ;; needed so as to amortize the cpu time properly.
+	  (gnc:report-percent-done 1)
+	  (set! commodity-list (gnc:accounts-get-commodities 
+                                (append 
+                                 (gnc:acccounts-get-all-subaccounts accounts)
+                                 accounts)
+                                report-currency))
+	  (gnc:report-percent-done 5)
+	  (set! exchange-fn (gnc:case-exchange-time-fn 
+                             price-source report-currency 
+                             commodity-list enddate
+			     5 20))
+	  (gnc:report-percent-done 20)
+
           ;; initialize the query to find splits in the right 
           ;; date range and accounts
           (gnc:query-set-book query (gnc:get-current-book))
@@ -327,6 +344,7 @@
           (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
           ;; add accounts to the query (include subaccounts 
           ;; if requested)
+	  (gnc:report-percent-done 25)
           (if dosubs? 
               (let ((subaccts '()))
                 (for-each 
@@ -342,6 +360,7 @@
                 ;; then use a linear algorithm.
                 (set! accounts
                       (delete-duplicates (append accounts subaccts)))))
+	  (gnc:report-percent-done 30)
 
           (gnc:query-add-account-match query accounts 'guid-match-any 'query-and)
           
@@ -355,6 +374,7 @@
           
           ;; get the query results 
           (set! splits (gnc:query-get-splits query))
+	  (gnc:report-percent-done 40)
           
           ;; find the net starting balance for the set of accounts 
           (set! startbal 
@@ -363,6 +383,7 @@
                  (lambda (acct) (gnc:account-get-comm-balance-at-date 
                                  acct beforebegindate #f))
                  gnc:account-reverse-balance?))
+	  (gnc:report-percent-done 50)
 
           (set! startbal 
                 (gnc:numeric-to-double
@@ -372,11 +393,13 @@
                    report-currency 
                    (lambda (a b) 
                      (exchange-fn a b beforebegindate))))))
-          
+	  (gnc:report-percent-done 60)
+	  
           ;; and analyze the data 
           (set! data (analyze-splits splits startbal
                                      begindate enddate 
                                      stepsize monetary->double))
+	  (gnc:report-percent-done 70)
           
           ;; make a plot (optionally)... if both plot and table, 
           ;; plot comes first. 
@@ -473,6 +496,7 @@
                       report-title (gnc:report-id report-obj))))))
           
           ;; make a table (optionally)
+	  (gnc:report-percent-done 80)
           (if show-table? 
               (let ((table (gnc:make-html-table)))
                 (gnc:html-table-set-col-headers!
@@ -497,11 +521,12 @@
          document
          (gnc:html-make-no-account-warning 
 	  report-title (gnc:report-id report-obj))))
+    (gnc:report-finished)
     document))
 
 (gnc:define-report
  'version 1
- 'name (N_ "Average Balance")
+ 'name reportname
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator options-generator
  'renderer renderer)

@@ -168,6 +168,7 @@ developing over time"))
      (gnc:lookup-option 
       (gnc:report-options report-obj) section name)))
   
+  (gnc:report-starting reportname)
   (let ((to-date-tp (gnc:timepair-end-day-time 
                      (gnc:date-option-absolute-time
                       (get-option gnc:pagename-general 
@@ -193,6 +194,8 @@ developing over time"))
         (height (get-option gnc:pagename-display optname-plot-height))
         (width (get-option gnc:pagename-display optname-plot-width))
         
+	(work-done 0)
+	(work-to-do 0)
         (document (gnc:make-html-document))
         (chart (gnc:make-html-barchart))
         (topl-accounts (gnc:filter-accountlist-type 
@@ -205,19 +208,12 @@ developing over time"))
     (define (show-acct? a)
       (member a accounts))
 
-    (gnc:debug accounts)
+    ;;(gnc:debug accounts)
     (if (not (null? accounts))
         
         ;; Define more helper variables.
-        
-        (let* ((commodity-list (gnc:accounts-get-commodities 
-                                (append 
-                                 (gnc:acccounts-get-all-subaccounts accounts)
-                                 accounts)
-                                report-currency))
-               (exchange-fn (gnc:case-exchange-time-fn 
-                             price-source report-currency 
-                             commodity-list to-date-tp))
+        (let* ((commodity-list #f)
+               (exchange-fn #f)
                (tree-depth (if (equal? account-levels 'all)
                                (gnc:get-current-group-depth)
                                account-levels))
@@ -283,6 +279,17 @@ developing over time"))
              (lambda (d) (get-balance account d subacct?))
              dates-list))
           
+	  (define (count-accounts current-depth accts)
+	    (if (< current-depth tree-depth)
+		(let ((sum 0))
+		  (for-each
+		   (lambda (a)
+		     (set! sum (+ sum (+ 1 (count-accounts (+ 1 current-depth)
+							   (gnc:account-get-immediate-subaccounts a))))))
+		   accts)
+		  sum)
+		(length (filter show-acct? accts))))
+
           ;; Calculates all account's balances. Returns a list of pairs:
           ;; (<account> <balance-list>), like '((Earnings (10.0 11.2))
           ;; (Gifts (12.3 14.5))), where each element of <balance-list>
@@ -303,6 +310,8 @@ developing over time"))
                   (for-each
                    (lambda (a)
                      (begin
+		       (set! work-done (+ 1 work-done))
+		       (gnc:report-percent-done (+ 20 (* 70 (/ work-done work-to-do))))
                        (if (show-acct? a)
                            (set! res 
                                  (cons (list a (account->balance-list a #f))
@@ -317,9 +326,30 @@ developing over time"))
                 ;; else (i.e. current-depth == tree-depth)
                 (map
                  (lambda (a)
+		   (set! work-done (+ 1 work-done))
+		   (gnc:report-percent-done (+ 20 (* 70 (/ work-done work-to-do))))
                    (list a (account->balance-list a #t)))
                  (filter show-acct? accts))))
-          
+
+          ;; The percentage done numbers here are a hack so that
+          ;; something gets displayed. On my system the
+          ;; gnc:case-exchange-time-fn takes about 20% of the time
+          ;; building up a list of prices for later use. Either this
+          ;; routine needs to send progress reports, or the price
+          ;; lookup should be distributed and done when actually
+          ;; needed so as to amortize the cpu time properly.
+	  (gnc:report-percent-done 1)
+	  (set! commodity-list (gnc:accounts-get-commodities 
+                                (append 
+                                 (gnc:acccounts-get-all-subaccounts accounts)
+                                 accounts)
+                                report-currency))
+	  (set! exchange-fn (gnc:case-exchange-time-fn 
+                             price-source report-currency 
+                             commodity-list to-date-tp
+			     5 15))
+	  (set! work-to-do (count-accounts 1 topl-accounts))
+
           ;; Sort the account list according to the account code field.
           (set! all-data (sort 
                           (filter (lambda (l) 
@@ -396,12 +426,14 @@ developing over time"))
              ;; This adds the data. Note the apply-zip stuff: This
              ;; transposes the data, i.e. swaps rows and columns. Pretty
              ;; cool, eh? Courtesy of dave_p.
+	     (gnc:report-percent-done 92)
              (if (not (null? all-data))
                  (gnc:html-barchart-set-data! 
                   chart 
                   (apply zip (map cadr all-data))))
              
              ;; Labels and colors
+	     (gnc:report-percent-done 94)
              (gnc:html-barchart-set-col-labels!
               chart (map (lambda (pair)
                            (if (string? (car pair))
@@ -415,6 +447,7 @@ developing over time"))
               (gnc:assign-colors (length all-data)))
              
              ;; set the URLs; the slices are links to other reports
+	     (gnc:report-percent-done 96)
              (let 
                  ((urls
                    (map 
@@ -453,6 +486,7 @@ developing over time"))
                (gnc:html-barchart-set-button-1-legend-urls! 
                 chart (append urls urls)))
              
+	     (gnc:report-percent-done 98)
              (gnc:html-document-add-object! document chart))
 
            ;; else if empty data
@@ -467,6 +501,7 @@ developing over time"))
 	 (gnc:html-make-no-account-warning 
 	  report-title (gnc:report-id report-obj))))
     
+    (gnc:report-finished)
     document))
 
 (for-each 

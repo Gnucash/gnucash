@@ -346,7 +346,7 @@ totals to report currency")
     (set! begindate (decdate begindate ThirtyDayDelta))
     (gnc:make-date-list begindate to-date ThirtyDayDelta)))
 
-(define (aging-renderer report-obj account reverse?)
+(define (aging-renderer report-obj reportname account reverse?)
 
   (define (get-name a)
     (let* ((owner (company-get-owner-obj (cdr a))))
@@ -478,6 +478,7 @@ totals to report currency")
       (map fmt-function collector-list)))
 
 
+  (gnc:report-starting reportname)
   (let* ((companys (make-hash-table 23))
 	 (report-title (op-value gnc:pagename-general gnc:optname-reportname))
         ;; document will be the HTML document that we return.
@@ -497,6 +498,8 @@ totals to report currency")
 	(table (gnc:make-html-table))
 	(query (gnc:malloc-query))
 	(company-list '())
+	(work-done 0)
+	(work-to-do 0)
         (document (gnc:make-html-document)))
 ;    (gnc:debug "Account: " account)
 
@@ -520,7 +523,10 @@ totals to report currency")
 ;	    (gnc:debug "splits" splits)
 
 	    ;; build the table
+	    (set! work-to-do (length splits))
 	    (for-each (lambda (split)
+			(set! work-done (+ 1 work-done))
+			(gnc:report-percent-done (* 50 (/ work-done work-to-do)))
 			(update-company-hash companys 
 					      split 
 					      interval-vec 
@@ -538,7 +544,10 @@ totals to report currency")
 					    sort-pred))
 
 	    ;; build the table
+	    (set! work-to-do (length company-list))
 	    (for-each (lambda (company-list-entry)
+			(set! work-done (+ 1 work-done))
+			(gnc:report-percent-done (+ 50 (* 50 (/ work-done work-to-do))))
 			(let* ((monetary-list (convert-to-monetary-list
 					       (company-get-buckets
 						(cdr company-list-entry))
@@ -589,6 +598,7 @@ totals to report currency")
 	 (gnc:make-html-text
 	  "No Valid Account Selected")))
     (gnc:free-query query)
+    (gnc:report-finished)
     document))
 
 (export aging-options-generator)

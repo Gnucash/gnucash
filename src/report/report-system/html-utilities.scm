@@ -316,6 +316,8 @@
 ;;                       total-name, get-total-fn), group-types?,
 ;;                       show-parent-balance?, show-parent-total?
 ;;
+;; Feedback while building -- start-percent, delta-percent
+;;
 ;; Note: The returned table object will have 2*tree-depth columns if
 ;; show-other-curr?==#f, else it will have 3*tree-depth columns.
 ;;
@@ -362,14 +364,20 @@
 ;; non-report-currencies will additionally be displayed in the
 ;; second-rightmost column.
 ;;
+;; <int> start-percent, delta-percent: Fill in the [start:start+delta]
+;; section of the progress bar while running this function.
+;;
 (define (gnc:html-build-acct-table 
 	 start-date end-date 
 	 tree-depth show-subaccts? accounts 
+	 start-percent delta-percent
 	 show-col-headers?
 	 show-total? get-total-fn
 	 total-name group-types? show-parent-balance? show-parent-total? 
 	 show-other-curr? report-commodity exchange-fn show-zero-entries?)
   (let ((table (gnc:make-html-table))
+	(work-to-do 0)
+	(work-done 0)
 	(topl-accounts (gnc:group-get-account-list 
 			(gnc:get-current-group))))
 
@@ -515,6 +523,22 @@
 			   row-style
 			   boldface? group-header-line?)))
 
+    (define (count-accounts! current-depth accnts)
+      (if (<= current-depth tree-depth)
+	  (let ((sum 0))
+	    (for-each 
+	     (lambda (acct)
+	       (let ((subaccts (filter 
+				use-acct?
+				(gnc:account-get-immediate-subaccounts acct))))
+		 (set! sum (+ sum  1))
+		 (if (or (= current-depth tree-depth) (null? subaccts))
+		     sum
+		     (set! sum (+ sum (count-accounts! (+ 1 current-depth) subaccts))))))
+	     accnts)
+	    sum)
+	  0))
+
     ;; This prints *all* the rows that belong to one group: the title
     ;; row, the subaccount tree, and the Total row with the balance of
     ;; the subaccounts. groupname may be a string or a html-text
@@ -574,6 +598,10 @@
 	     (let ((subaccts (filter 
 			      use-acct?
 			      (gnc:account-get-immediate-subaccounts acct))))
+	       (set! work-done (+ 1 work-done))
+	       (if start-percent
+		   (gnc:report-percent-done
+		    (+ start-percent (* delta-percent (/ work-done work-to-do)))))
 	       (if (or (= current-depth tree-depth) (null? subaccts))
 		   (begin
 		     (if (show-acct? acct)
@@ -591,6 +619,9 @@
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
     ;; start the recursive account processing
+    (set! work-to-do (count-accounts!
+		      (if group-types? 2 1)
+		      (filter use-acct? topl-accounts)))
     (if group-types?
 	;; Print a subtotal for each group.
 	(for-each 

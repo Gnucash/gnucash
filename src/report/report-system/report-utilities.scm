@@ -669,7 +669,10 @@
     (gnc:transaction-get-void-status trans)))
 
 (define (gnc:report-starting report-name)
-  (gnc:mdi_show_progress (sprintf #f (_ "Building '%s' report ...") report-name) 0))
+  (gnc:mdi_show_progress (sprintf #f
+				  (_ "Building '%s' report ...")
+				  (gnc:gettext report-name))
+			 0))
 
 (define (gnc:report-percent-done percent)
   (gnc:mdi_show_progress #f (truncate percent)))

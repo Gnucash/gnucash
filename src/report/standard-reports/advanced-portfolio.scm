@@ -36,6 +36,8 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
+(define reportname (N_ "Advanced Portfolio"))
+
 (define optname-price-source (N_ "Price Source"))
 (define optname-zero-shares (N_ "Include accounts with no shares"))
 
@@ -91,6 +93,9 @@
 ;; defined above.
 (define (advanced-portfolio-renderer report-obj)
   
+ (let ((work-done 0)
+       (work-to-do 0))
+
   ;; These are some helper functions for looking up option values.
   (define (get-op section name)
     (gnc:lookup-option (gnc:report-options report-obj) section name))
@@ -106,7 +111,9 @@
     (string=? (gnc:split-get-guid s1) (gnc:split-get-guid s2)))
   
   (define (table-add-stock-rows table accounts to-date
-                                currency price-fn include-empty total-value total-moneyin total-moneyout total-gain)
+                                currency price-fn include-empty
+                                total-value total-moneyin total-moneyout
+                                total-gain)
 
     (define (table-add-stock-rows-internal accounts odd-row?)
       (if (null? accounts) total-value
@@ -145,6 +152,8 @@
 ;;               (gnc:debug "---" name "---")
                (for-each
                  (lambda (split)
+                   (set! work-done (+ 1 work-done))
+                   (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
                    (let ((parent (gnc:split-get-parent split)))
                      (if (gnc:timepair-le (gnc:transaction-get-date-posted parent) to-date)
                        (for-each
@@ -230,7 +239,11 @@
                 )
 		(table-add-stock-rows-internal rest odd-row?)))))
 
+    (set! work-to-do (gnc:accounts-count-splits accounts))
     (table-add-stock-rows-internal accounts #t))
+
+  ;; Tell the user that we're starting.
+  (gnc:report-starting reportname)
 
   ;; The first thing we do is make local variables for all the specific
   ;; options in the set of options given to the function. This set will
@@ -362,11 +375,12 @@
 	 (gnc:html-make-no-account-warning 
 	  report-title (gnc:report-id report-obj))))
     
-    document))
+    (gnc:report-finished)
+    document)))
 
 (gnc:define-report
  'version 1
- 'name (N_ "Advanced Portfolio")
+ 'name reportname
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator options-generator
  'renderer advanced-portfolio-renderer)

@@ -1,3 +1,17 @@
+2002-11-26  David Hampton  <hampton@employees.org>
+
+	* src/report/report-system/commodity-utilities.scm:
+	* src/report/report-system/html-utilities.scm:
+	* src/report/report-system/report-utilities.scm:
+	* src/report/report-system/report.scm:
+	* src/report/standard-reports/*.scm: 
+	* src/business/business-reports/*.scm: Provide progress updates
+	while creating reports.
+
+	* src/gnome-utils/gw-gnome-utils-spec.scm: Make the
+	set_busy_cursor and unset_busy_cursor routines available from
+	scheme.
+
 2002-11-25  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/QueryCore.c -- make sure we have a string

@@ -197,12 +197,19 @@
 ;; of the foreign-currency and the appropriate list from
 ;; gnc:get-commodity-totalavg-prices, see there.
 (define (gnc:get-commoditylist-totalavg-prices
-	 commodity-list report-currency end-date-tp)
+	 commodity-list report-currency end-date-tp
+	 start-percent delta-percent)
   (let ((currency-accounts 
 	 (filter gnc:account-has-shares? (gnc:group-get-subaccounts
-					  (gnc:get-current-group)))))
+					  (gnc:get-current-group))))
+	(work-to-do (length commodity-list))
+	(work-done 0))
     (map
      (lambda (c)
+       (set! work-done (+ 1 work-done))
+       (if start-percent
+	   (gnc:report-percent-done
+	    (+ start-percent (* delta-percent (/ work-done work-to-do)))))
        (cons c
 	     (gnc:get-commodity-totalavg-prices
 	      currency-accounts end-date-tp c report-currency)))
@@ -287,12 +294,19 @@
 ;; consists of the foreign-currency and the appropriate list from
 ;; gnc:get-commodity-inst-prices, see there.
 (define (gnc:get-commoditylist-inst-prices
-	 commodity-list report-currency end-date-tp)
+	 commodity-list report-currency end-date-tp
+	 start-percent delta-percent)
   (let ((currency-accounts 
 	 (filter gnc:account-has-shares? (gnc:group-get-subaccounts
-					  (gnc:get-current-group)))))
+					  (gnc:get-current-group))))
+	(work-to-do (length commodity-list))
+	(work-done 0))
     (map
      (lambda (c)
+       (set! work-done (+ 1 work-done))
+       (if start-percent
+	   (gnc:report-percent-done
+	    (+ start-percent (* delta-percent (/ work-done work-to-do)))))
        (cons c
 	     (gnc:get-commodity-inst-prices
 	      currency-accounts end-date-tp c report-currency)))
@@ -798,12 +812,18 @@
 ;; Return a ready-to-use function. Which one to use is determined by
 ;; the value of 'source-option', whose possible values are set in
 ;; gnc:options-add-price-source!.
+;;
+;; <int> start-percent, delta-percent: Fill in the [start:start+delta]
+;; section of the progress bar while running this function.
+;;
 (define (gnc:case-exchange-time-fn 
-	 source-option report-currency commodity-list to-date-tp)
+	 source-option report-currency commodity-list to-date-tp
+	 start-percent delta-percent)
   (case source-option
     ('weighted-average (let ((pricealist
 			      (gnc:get-commoditylist-totalavg-prices
-			       commodity-list report-currency to-date-tp)))
+			       commodity-list report-currency to-date-tp
+			       start-percent delta-percent)))
 			 (lambda (foreign domestic date)
 			   (gnc:exchange-by-pricealist-nearest
 			    pricealist foreign domestic date))))
