@@ -42,7 +42,7 @@ AM_CFLAGS = \
   ${GDK_PIXBUF_CFLAGS} \
   ${GTKHTML_CFLAGS}
 
-EXTRA_DIST = \
+EXTRA_DIST = $(glade_DATA) \
   .cvsignore
 
 CLEANFILES =
