@@ -1,0 +1,11 @@
+Makefile
+Makefile.in
+.deps
+.libs
+gw-engine.c
+gw-engine.h
+.scm-links
+gw-engine.html
+gw-glib.c
+gw-glib.h
+gw-glib.html
