@@ -237,7 +237,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (widget), 100000);
   gtk_box_pack_start (GTK_BOX (box), widget, TRUE, TRUE, 0);
 
-  box = glade_xml_get_widget (xml, "account_frame");
+  box = glade_xml_get_widget (xml, "acct_window");
   ntt->acct_tree = widget = gnc_account_tree_new ();
   gtk_clist_column_titles_hide (GTK_CLIST (widget));
   gnc_account_tree_hide_all_but_name (GNC_ACCOUNT_TREE (widget));

@@ -574,7 +574,16 @@ Percent (%)
 	    </child>
 
 	    <widget>
-	      <class>Placeholder</class>
+	      <class>GtkScrolledWindow</class>
+	      <name>acct_window</name>
+	      <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
+	      <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
+	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
 	    </widget>
 	  </widget>
 	</widget>
