@@ -88,7 +88,8 @@ gnc_argvarr_to_scheme_list(int argc, const char** argv)
 
     for(i = 0; i < argc; i++)
     {
-        ret = gh_cons(gh_str02scm(argv[i]), ret);
+      /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
+      ret = gh_cons(gh_str02scm((char *) argv[i]), ret);
     }
 
     return gh_reverse(ret);
