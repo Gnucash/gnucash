@@ -27,6 +27,7 @@ INCLPATH = \
            -I@top_srcdir@/src \
            -I@top_srcdir@/src/swig\
            -I@top_srcdir@/src/engine \
+           -I@top_srcdir@/src/engine/guid \
            -I@top_srcdir@/include \
            -I@PERLINCL@/CORE \
            -I$(prefix)/include
@@ -102,7 +103,3 @@ TRASH += gnucash.pm gnucash.so
 # 	${SWIG} ${SWIG_FLAGS} -o $@ $< 
 # 	${PERL} -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
 # TRASH += gnucash-all-guile_wrap.c
-
-# Local Variables:
-# tab-width: 2
-# End:

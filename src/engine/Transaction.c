@@ -14,13 +14,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #include <assert.h>
@@ -37,6 +36,7 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
+#include "GNCIdP.h"
 #include "util.h"
 #include "date.h"
 
@@ -102,7 +102,7 @@ xaccInitSplit(Split * split)
   split->share_reconciled_balance  = 0.0;
   split->cost_basis                = 0.0;
 
-  split->tickee = 0;
+  split->ticket = 0;
 }
 
 /********************************************************************\
@@ -112,7 +112,17 @@ Split *
 xaccMallocSplit(void)
 {
   Split *split = (Split *)_malloc(sizeof(Split));
+
   xaccInitSplit (split);
+
+  guid_new(&split->guid);
+
+  if (xaccGUIDType(&split->guid) != GNC_ID_NONE) {
+    PWARN("xaccMallocSplit: duplicate id\n");
+  }
+
+  xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
+
   return split;
 }
 
@@ -141,6 +151,8 @@ xaccCloneSplit (Split *s)
 
   split->date_reconciled.tv_sec  = s->date_reconciled.tv_sec;
   split->date_reconciled.tv_nsec = s->date_reconciled.tv_nsec;
+
+  split->guid = s->guid;
 
   /* no need to futz with the balances;  these get wiped each time ... 
    * split->balance             = s->balance;
@@ -180,6 +192,24 @@ xaccFreeSplit( Split *split )
   split->date_reconciled.tv_nsec = 0;
 
   _free(split);
+}
+
+/********************************************************************\
+\********************************************************************/
+GUID *
+xaccSplitGetGUID (Split *split)
+{
+  if (!split) return NULL;
+  return &split->guid;
+}
+
+/********************************************************************\
+\********************************************************************/
+Split *
+xaccSplitLookup (GUID *guid)
+{
+  if (!guid) return NULL;
+  return xaccLookupEntity(guid, GNC_ID_SPLIT);
 }
 
 /********************************************************************\
@@ -355,7 +385,17 @@ Transaction *
 xaccMallocTransaction( void )
 {
   Transaction *trans = (Transaction *)_malloc(sizeof(Transaction));
+
   xaccInitTransaction (trans);
+
+  guid_new(&trans->guid);
+
+  if (xaccGUIDType(&trans->guid) != GNC_ID_NONE) {
+    PWARN("xaccMallocTransaction: duplicate id\n");
+  }
+
+  xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
+
   return trans;
 }
 
@@ -380,7 +420,7 @@ xaccCloneTransaction (Transaction *t)
   trans->docref      = strdup(t->docref);
 
   n=0; while (t->splits[n]) n++;
-  trans->splits    = (Split **) _malloc ((n+1)* sizeof (Split *));
+  trans->splits = (Split **) _malloc ((n+1)* sizeof (Split *));
 
   n=0; 
   while (t->splits[n]) {
@@ -398,6 +438,8 @@ xaccCloneTransaction (Transaction *t)
   trans->open = 0;
   trans->orig = NULL;
 
+  trans->guid = t->guid;
+
   return (trans);
 }
 
@@ -412,6 +454,7 @@ xaccFreeTransaction( Transaction *trans )
   Split *s;
 
   if (!trans) return;
+
   ENTER ("xaccFreeTransaction(): addr=%p\n", trans);
 
   /* free up the destination splits */
@@ -451,7 +494,26 @@ xaccFreeTransaction( Transaction *trans )
   }
 
   _free(trans);
+
   LEAVE ("xaccFreeTransaction(): addr=%p\n", trans);
+}
+
+/********************************************************************\
+\********************************************************************/
+GUID *
+xaccTransGetGUID (Transaction *trans)
+{
+  if (!trans) return NULL;
+  return &trans->guid;
+}
+
+/********************************************************************\
+\********************************************************************/
+Transaction *
+xaccTransLookup (GUID *guid)
+{
+  if (!guid) return NULL;
+  return xaccLookupEntity(guid, GNC_ID_TRANS);
 }
 
 /********************************************************************\
@@ -752,6 +814,7 @@ xaccSplitRebalance (Split *split)
   if (!trans) return;
 
   if (DEFER_REBALANCE & (trans->open)) return;
+
   if (split->acc) {
     char *ra, *rb;
     if (ACC_DEFER_REBALANCE & (split->acc->open)) return;
@@ -908,6 +971,7 @@ xaccTransCommitEdit (Transaction *trans)
       PINFO ("xaccTransCommitEdit(): delete trans at addr=%p\n", trans);
       /* Make a log in the journal before destruction.  */
       xaccTransWriteLog (trans, 'D');
+      xaccRemoveEntity(&trans->guid);
       xaccFreeTransaction (trans);
       return;
    }
@@ -987,11 +1051,15 @@ xaccTransRollbackEdit (Transaction *trans)
    int force_it=0, mismatch=0, i;
 
    if (!trans) return;
+
    CHECK_OPEN (trans);
+
    ENTER ("xaccTransRollbackEdit(): trans addr=%p\n", trans);
 
    /* copy the original values back in. */
    orig = trans->orig;
+
+   xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
 
 #define PUT_BACK(val) { free(trans->val); trans->val=orig->val; orig->val=0x0; }
    PUT_BACK (num);
@@ -1012,7 +1080,7 @@ xaccTransRollbackEdit (Transaction *trans)
     * CheckDateOrder routine could be cpu-cyle brutal, so it maybe 
     * it could use some tuning ...
     */
-   i=0; 
+   i=0;
    s = trans->splits[0];
    so = orig->splits[0];
    while (s && so) {
@@ -1030,8 +1098,8 @@ xaccTransRollbackEdit (Transaction *trans)
       s->date_reconciled.tv_sec  = so->date_reconciled.tv_sec;
       s->date_reconciled.tv_nsec = so->date_reconciled.tv_nsec;
 
-      /* do NOT check date order until all of teh other fields 
-       * have beenproperly restored */
+      /* do NOT check date order until all of the other fields 
+       * have been properly restored */
       xaccCheckDateOrder (s->acc, s); 
       MARK_SPLIT (s);
       xaccAccountRecomputeBalance (s->acc);
@@ -1051,12 +1119,13 @@ xaccTransRollbackEdit (Transaction *trans)
          xaccFreeSplit (orig->splits[i]);
          orig->splits[i] = s;
          i++;
-         s =  trans->splits[i];
+         s = trans->splits[i];
       }
       i=mismatch; s = trans->splits[i];
       while (s) {
          acc = s->acc;
          MARK_SPLIT (s);
+         xaccRemoveEntity(&s->guid);
          xaccAccountRemoveSplit (acc, s);
          xaccAccountRecomputeBalance (acc);
          xaccFreeSplit (s);
@@ -1064,26 +1133,29 @@ xaccTransRollbackEdit (Transaction *trans)
          s =  trans->splits[i];
       }
       _free (trans->splits);
-   
+
       trans->splits = orig->splits;
       orig->splits = NULL;
-   
+
       i=mismatch; s = trans->splits[i];
       while (s) {
          acc = s->acc;
          MARK_SPLIT (s);
+         xaccStoreEntity(s, &s->guid, GNC_ID_SPLIT);
          xaccAccountInsertSplit (acc, s);
          xaccAccountRecomputeBalance (acc);
          i++;
-         s =  trans->splits[i];
+         s = trans->splits[i];
       }
    }
 
    xaccTransWriteLog (trans, 'R');
 
    xaccFreeTransaction (trans->orig);
+
    trans->orig = NULL;
    trans->open = 0;
+
    LEAVE ("xaccTransRollbackEdit(): trans addr=%p\n", trans);
 }
 
@@ -1109,11 +1181,14 @@ xaccTransDestroy (Transaction *trans)
    CHECK_OPEN (trans);
    xaccTransWriteLog (trans, 'D');
 
+   xaccRemoveEntity(&trans->guid);
+
    i=0;
    split = trans->splits[i];
    while (split) {
       MARK_SPLIT (split);
       acc = split ->acc;
+      xaccRemoveEntity(&split->guid);
       xaccAccountRemoveSplit (acc, split);
       xaccAccountRecomputeBalance (acc); 
       xaccFreeSplit (split);
@@ -1143,6 +1218,8 @@ xaccSplitDestroy (Split *split)
    assert (trans->splits);
    CHECK_OPEN (trans);
 
+   xaccRemoveEntity(&split->guid);
+
    numsplits = 0;
    s = trans->splits[0];
    while (s) {
@@ -1159,7 +1236,7 @@ xaccSplitDestroy (Split *split)
     * Or if the account has only two splits, 
     * then this destroy will leave only one split.
     * Don't rebalance, as this will goof up the
-    * value of teh remaining split.
+    * value of the remaining split.
     */
    MARK_SPLIT (split);
    xaccTransRemoveSplit (trans, split);
@@ -1248,7 +1325,7 @@ xaccTransRemoveSplit (Transaction *trans, Split *split)
  * returns a positive value if transaction a is dated later than b, 
  *
  * This function tries very hard to uniquely order all transactions.
- * If two transactions occur on the same date, then thier "num" fields
+ * If two transactions occur on the same date, then their "num" fields
  * are compared.  If the num fields are identical, then the description
  * fields are compared.  If these are identical, then the memo fields 
  * are compared.  Hopefully, there will not be any transactions that
@@ -1484,32 +1561,32 @@ xaccTransMatch (Transaction **tap, Transaction **tbp)
    * have to be in identical order to match.  So we have to cycle through them,
    * without creating bogus matches.
    */
-  na=0; while ((sa=ta->splits[na])) { sa->tickee = -1; na++; }
-  nb=0; while ((sb=tb->splits[nb])) { sb->tickee = -1; nb++; }
+  na=0; while ((sa=ta->splits[na])) { sa->ticket = -1; na++; }
+  nb=0; while ((sb=tb->splits[nb])) { sb->ticket = -1; nb++; }
 
   na=0; 
   while ((sa=ta->splits[na])) { 
-     if (-1 < sa->tickee) {na++; continue;}
+     if (-1 < sa->ticket) {na++; continue;}
     
      nb=0; 
      while ((sb=tb->splits[nb])) { 
-        if (-1 < sb->tickee) {nb++; continue;}
+        if (-1 < sb->ticket) {nb++; continue;}
         retval = xaccSplitMatch (&sa, &sb);
         if ((0 == retval) && (sa->acc == sb->acc)) {
-           sb->tickee = na;
-           sa->tickee = nb;
+           sb->ticket = na;
+           sa->ticket = nb;
            break;
         }
         nb++;
      }
 
-     if (-1 == sa->tickee) return -1;
+     if (-1 == sa->ticket) return -1;
      na++;
   }
 
   nb=0; 
   while ((sb=tb->splits[nb])) { 
-     if (-1 == sb->tickee) return +1;
+     if (-1 == sb->ticket) return +1;
      nb++;
   }
 
@@ -1550,13 +1627,12 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
    trans->date_posted.tv_nsec = 0;
 
    /* Because the date has changed, we need to make sure that each of the
-    * splits is properly ordered in each of thier accounts.  We could do that
+    * splits is properly ordered in each of their accounts.  We could do that
     * here, simply by reinserting each split into its account.  However, in
     * some ways this is bad behaviour, and it seems much better/nicer to defer
     * that until the commit phase, i.e. until the user has called the
     * xaccTransCommitEdit() routine.  So, for now, we are done.
     */
-
 }
 
 void
@@ -1670,7 +1746,6 @@ xaccTransSetDateToday (Transaction *trans)
 
    PINFO ("xaccTransSetDateToday(): addr=%p set date to %lu %s \n",
          trans, tv.tv_sec, ctime ((time_t *)&tv.tv_sec));
-
 }
 
 
@@ -1989,7 +2064,8 @@ xaccGetAccountByName (Transaction *trans, const char * name)
    if (!trans) return NULL;
    if (!name) return NULL;
 
-   /* walk through the splits, looking for one, any one, that has a parent account */
+   /* walk through the splits, looking for one, any one, that has a
+    * parent account */
    i = 0;
    s = trans->splits[0];
    while (s) {
@@ -2019,7 +2095,8 @@ xaccGetAccountByFullName (Transaction *trans, const char * name,
    if (!trans) return NULL;
    if (!name) return NULL;
 
-   /* walk through the splits, looking for one, any one, that has a parent account */
+   /* walk through the splits, looking for one, any one, that has a
+    * parent account */
    i = 0;
    s = trans->splits[0];
    while (s) {

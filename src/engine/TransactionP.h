@@ -14,13 +14,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 /*
@@ -49,12 +48,14 @@
 
 #include "config.h"
 #include "Transaction.h"   /* for typedefs */
+#include "GNCId.h"
+
 
 /** STRUCTS *********************************************************/
 /* 
  * Double-entry is forced by having at least two splits in every
  * transaction.  By convention, (and only by convention, not by
- * any inate requirement), the first split is considered to be
+ * any innate requirement), the first split is considered to be
  * the source split or the crediting split, and the others are
  * the destination, or debiting splits.  The grand total of all
  * of the splits must always be kept zero.
@@ -117,8 +118,10 @@ struct _split
   double  share_reconciled_balance;
 
   double cost_basis;
-  /* no tickee no washee */
-  int tickee;
+
+  GUID guid;  /* globally unique id */
+
+  int ticket; /* used for matching up splits for QIFIO.c */
 };
 
 
@@ -129,7 +132,7 @@ struct _transaction
 
   /* The num field is a arbitrary user-assigned field.  
    * It is intended to store a short id number, typically the check number,
-   * deposit number, invoice number or other tracking number
+   * deposit number, invoice number or other tracking number.
    */
   char  * num;  
 
@@ -149,16 +152,21 @@ struct _transaction
   Split   **splits;          /* list of splits, null terminated           */
 
   /* marker is used to track the progress of transaction traversals. 
-   * 0 is never a legitimate marker value, so we can tell is we hit a
-   * new transaction in the middle of a traversal.  All each new
-   * traversal cares about is whether or not the marker stored in a
-   * transaction is the same as or different than the one
+   * 0 is never a legitimate marker value, so we can tell is we hit
+   * a new transaction in the middle of a traversal. All each new
+   * traversal cares about is whether or not the marker stored in
+   * a transaction is the same as or different than the one
    * corresponding to the current traversal. */
   unsigned char  marker;      
 
   /* the "open" flag indicates if the transaction has been 
    * opened for editing. */
   char open;
+
+  /* guid is a globally unique identifier which can be used to
+   * reference the transaction.
+   */
+  GUID guid;
 
   /* the orig pointer points at a copy of the original transaction,
    * before editing was started.  This orig copy is used to rollback 
@@ -206,7 +214,7 @@ void  xaccTransRemoveSplit (Transaction*, Split *);
  * (the share price of the source split is not changed).
  * If the indicated split is the source split, then the value
  * of the very first destination split is adjusted so that
- * the blanace is zero.   If there is not destination split,
+ * the balance is zero.  If there is not destination split,
  * one of two outcomes are possible, depending on whether
  * "forced_double_entry" is enabled or disabled.
  * (1) if forced-double-entry is disabled, the fact that

@@ -14,22 +14,24 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #ifndef __XACC_TRANSACTION_H__
 #define __XACC_TRANSACTION_H__
 
 #include "config.h"
-#include "gnc-common.h"
 
 #include <time.h>
+
+#include "gnc-common.h"
+#include "GNCId.h"
+
 
 /* Values for the reconciled field in Transaction: */
 #define CREC 'c'              /* The transaction has been cleared        */
@@ -145,6 +147,17 @@ void          xaccTransCommitEdit (Transaction *);
 void          xaccTransRollbackEdit (Transaction *);
 
 gncBoolean    xaccTransIsOpen (Transaction *trans);
+
+/*
+ * The xaccTransGetGUID() subroutine will return the
+ *    globally unique id associated with that transaction.
+ *
+ * The xaccTransLookup() subroutine will return the
+ *    transaction associated with the given id, or NULL
+ *    if there is no such transaction.
+ */
+GUID        * xaccTransGetGUID (Transaction *trans);
+Transaction * xaccTransLookup (GUID *guid);
 
 /* Convert a day, month, and year to a Timespec */
 Timespec      gnc_dmy2timespec(int day, int month, int year);
@@ -298,6 +311,17 @@ double xaccTransGetImbalance (Transaction * trans);
 Split       * xaccMallocSplit (void);
 void          xaccInitSplit   (Split *);    /* clears a split struct */
 
+/*
+ * The xaccSplitGetGUID() subroutine will return the
+ *    globally unique id associated with that split.
+ *
+ * The xaccSplitLookup() subroutine will return the
+ *    split associated with the given id, or NULL
+ *    if there is no such split.
+ */
+GUID  * xaccSplitGetGUID (Split *split);
+Split * xaccSplitLookup (GUID *guid);
+
 /* The memo is an arbitrary string associated with a split.
  *    Users typically type in free form text from the GUI.
  */
@@ -314,7 +338,7 @@ void          xaccSplitSetAction (Split *, const char *);
 void          xaccSplitSetDocref (Split *, const char *);
 
 /* The Reconcile is a single byte, whose values are typically
- * are "no", "cleared" and "reconciled"
+ * are "N", "C" and "R"
  */
 void          xaccSplitSetReconcile (Split *, char);
 void          xaccSplitSetDateReconciledSecs (Split *, time_t);

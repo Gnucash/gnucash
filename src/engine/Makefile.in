@@ -14,27 +14,30 @@
 # GNU General Public License for more details.                     
 #                                                                  
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software      
-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        
-#                                                                  
-#   Author: Robin Clark                                            
-# Internet: rclark@rush.aero.org                                   
-#  Address: 609 8th Street                                         
-#           Huntington Beach, CA 92648-4632                        
+# along with this program; if not, contact:
+#
+# Free Software Foundation           Voice:  +1-617-542-5942
+# 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+# Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 include @top_srcdir@/Makefile.init
 
-INCLPATH = -I@srcdir@/../../include -I@srcdir@/../..  -I@prefix@/include
+INCLPATH = -I@srcdir@/../../include \
+           -I@srcdir@/../.. \
+           -I@srcdir@/guid \
+           -I@prefix@/include
 
 # add the -fpic flag to generate relocatable position independent code
-# for the engine so that in can be used in a shared module (e.g. a perl module) 
-CFLAGS   = @CFLAGS@ ${INCLPATH} -fpic
+# for the engine so that in can be used in a shared module (e.g. a perl module)
+CFLAGS   = @CFLAGS@ ${INCLPATH} -fpic ${GLIB_CFLAGS}
+LIBS     = @LIBS@ ${GLIB_LIBS}
 
 ######################################################################
 # See Makefile.common for information about these variables.
 INDEP_SRCS := AccInfo.c Account.c DateUtils.c FileIO.c Group.c \
               LedgerUtils.c QIFIO.c Query.c Queue.c Scrub.c Session.c \
-              Transaction.c TransLog.c date.c util.c
+              Transaction.c TransLog.c date.c util.c GNCId.c \
+              guid/md5.c guid/guid.c
 ######################################################################
 
 all: default

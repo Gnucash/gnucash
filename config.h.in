@@ -39,6 +39,12 @@
 /* Enable debugging stuff */
 #define  USE_DEBUG           
 
+/* Standard C headers present */
+#undef STDC_HEADERS
+
+/* memcpy present */
+#undef HAVE_MEMCPY
+
 /* check for stpcpy for Solaris */
 #undef HAVE_STPCPY
 

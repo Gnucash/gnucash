@@ -1,7 +1,6 @@
 /********************************************************************\
- * GroupP.h -- the main data structure of the program               *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
+ * GNCId.h -- Gnucash entity identifier API                         *
+ * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>      *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,40 +21,44 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * FILE:
- * GroupP.h
+#ifndef __GNC_ID__
+#define __GNC_ID__ 1
+
+/* This file defines an API for using gnucash entity identifiers.
  *
- * FUNCTION:
- * This is the *private* account group structure.
- * This header should *not* be included by any code outside of the
- * engine.
+ * Identifiers can be used to reference Account Groups, Accounts,
+ * Transactions, and Splits. These four Gnucash types are referred to
+ * as Gnucash entities. Identifiers are globally-unique and permanent,
+ * i.e., once an entity has been assigned an identifier, it retains
+ * that same identifier for its lifetime.
  *
- */
+ * Identifiers can be encoded as hex strings. */
 
-#ifndef __XACC_ACCOUNT_GROUP_P_H__
-#define __XACC_ACCOUNT_GROUP_P_H__
+#include <config.h>
 
-#include "config.h"
-#include "Transaction.h"
-#include "GNCId.h"
+#include "guid.h"
+#include "util.h"
 
 
-/** STRUCTS *********************************************************/
-struct _account_group {
-  /* The flags: */
-  unsigned int saved : 1;
-  /* unsigned int new   : 1; */
-  
-  Account *parent;                 /* back-pointer to parent */
+/* Identifiers are 'typed' with integers. The ids used in gnucash are
+ * defined below. An id with type GNC_ID_NONE does not refer to any
+ * entity. An identifier with a type other than GNC_ID_NONE may refer
+ * to an actual entity, but that is not guaranteed. If an id does
+ * refer to an entity, the type of the entity will match the type
+ * of the identifier. */
+typedef enum
+{
+  GNC_ID_NONE = 0,
+  GNC_ID_GROUP,
+  GNC_ID_ACCOUNT,
+  GNC_ID_TRANS,
+  GNC_ID_SPLIT,
+  LAST_GNC_ID = GNC_ID_SPLIT
+} GNCIdType;
 
-  int      numAcc;                 /* number of accounts in array */
-  Account  **account;              /* array of account pointers   */
 
-  GUID     guid;                   /* globally unique id */
+/* Return the type of an identifier. */
+GNCIdType xaccGUIDType(GUID * guid);
 
-  /* cached parameters */
-  double balance;
-};
 
-#endif /* __XACC_ACCOUNT_GROUP_P_H__ */
+#endif

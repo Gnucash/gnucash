@@ -97,6 +97,7 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
+#include "GNCIdP.h"
 #include "util.h"
 
 #define PERMS   0666
@@ -155,7 +156,7 @@ static int writeTSDate( int fd, Timespec *);
 /*******************************************************/
 /* backwards compatibility definitions for numeric value 
  * of account type.  These numbers are used (are to be
- * used) no where else but here, precisely because they
+ * used) nowhere else but here, precisely because they
  * are non-portable.  The values of these defines MUST
  * NOT BE CHANGED; ANY CHANGES WILL BREAK FILE COMPATIBILITY.
  * YOU HAVE BEEN WARNED!!!!
@@ -307,14 +308,14 @@ xaccReadAccountGroup( int fd )
 
   maingrp = 0x0;
   error_code = ERR_FILEIO_NO_ERROR;
-  
+
   /* check for valid file descriptor */
   if( 0 > fd ) 
     {
     error_code = ERR_FILEIO_FILE_NOT_FOUND;
     return NULL;
     }
-  
+
   /* Read in the file format token */
   err = read( fd, &token, sizeof(int) );
   if( sizeof(int) != err ) 
@@ -534,7 +535,7 @@ readAccount( int fd, AccountGroup *grp, int token )
      xaccAccountSetCurrency (acc, DEFAULT_CURRENCY);
   }
 
-  /* aux account info first appears in versin ten files */
+  /* aux account info first appears in version ten files */
   if (10 <= token) {
      readAccInfo( fd, acc, token );
   }
@@ -600,7 +601,7 @@ readAccount( int fd, AccountGroup *grp, int token )
  * With the double-entry system, the file may reference accounts 
  * that have not yet been read or properly parented.  Thus, we need 
  * a way of dealing with this, and this routine performs this
- * work. Basically, accounts are requested by thier id.  If an
+ * work. Basically, accounts are requested by their id.  If an
  * account with the indicated ID does not exist, it is created
  * and placed in a temporary holding cell.  Accounts in the
  * holding cell can be located, (so that transactions can be
@@ -632,19 +633,19 @@ locateAccount (int acc_id)
 
    /* normalize the account numbers -- positive-definite.
     * That is, the unique id must never decrease,
-    * nor must it overalp any existing account id */
+    * nor must it overlap any existing account id */
    if (next_free_unique_account_id <= acc_id) {
       next_free_unique_account_id = acc_id+1;
    }
 
    return acc;
 }
- 
+
 static Account *
 springAccount (int acc_id) 
 {
    Account * acc;
-   
+
    /* first, see if we're confused about the account */
    acc = xaccGetAccountFromID (maingrp, acc_id);
    if (acc) {
@@ -665,7 +666,7 @@ springAccount (int acc_id)
    printf ("Couldn't find account \n");
    return NULL;
 }
- 
+
 /********************************************************************\
  * readInvAcct                                                      * 
  *   reads in the auxilliary account info                           *
@@ -1005,6 +1006,7 @@ readTransaction( int fd, Account *acc, int token )
        * Later versions don't have this. */
       offset = 1;
       split = readSplit (fd, token);
+      xaccRemoveEntity(&trans->splits[0]->guid);
       xaccFreeSplit (trans->splits[0]);
       trans->splits[0] = split;
       split->parent = trans;
@@ -1024,6 +1026,7 @@ readTransaction( int fd, Account *acc, int token )
         split = readSplit (fd, token);
         if (0 == i+offset) {
            /* the first split has been malloced. just replace it */
+           xaccRemoveEntity (&trans->splits[i+offset]->guid);
            xaccFreeSplit (trans->splits[i+offset]);
            trans->splits[i+offset] = split;
            split->parent = trans;

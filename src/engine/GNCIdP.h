@@ -1,7 +1,6 @@
 /********************************************************************\
- * GroupP.h -- the main data structure of the program               *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
+ * GNCIdP.h -- Gnucash entity identifier engine-only API            *
+ * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>      *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,40 +21,25 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * FILE:
- * GroupP.h
- *
- * FUNCTION:
- * This is the *private* account group structure.
- * This header should *not* be included by any code outside of the
- * engine.
- *
- */
+#ifndef __GNC_ID_P__
+#define __GNC_ID_P__ 1
 
-#ifndef __XACC_ACCOUNT_GROUP_P_H__
-#define __XACC_ACCOUNT_GROUP_P_H__
-
-#include "config.h"
-#include "Transaction.h"
 #include "GNCId.h"
 
+/* This file defines an engine-only API for using gnucash entity
+ * identifiers. */
 
-/** STRUCTS *********************************************************/
-struct _account_group {
-  /* The flags: */
-  unsigned int saved : 1;
-  /* unsigned int new   : 1; */
-  
-  Account *parent;                 /* back-pointer to parent */
+/* Lookup an entity given an id and a type. If there is no entity
+ * associated with the id, or if it has a different type, NULL
+ * is returned. */
+void * xaccLookupEntity(GUID * guid, GNCIdType entity_type);
 
-  int      numAcc;                 /* number of accounts in array */
-  Account  **account;              /* array of account pointers   */
+/* Store the given entity under the given id with the given type. */
+void xaccStoreEntity(void * entity, GUID * guid, GNCIdType entity_type);
 
-  GUID     guid;                   /* globally unique id */
+/* Remove any existing association between an entity and the given
+ * id. The entity is not changed in any way. */
+void xaccRemoveEntity(GUID * guid);
 
-  /* cached parameters */
-  double balance;
-};
 
-#endif /* __XACC_ACCOUNT_GROUP_P_H__ */
+#endif

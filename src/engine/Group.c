@@ -14,13 +14,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #include <assert.h>
@@ -33,8 +32,11 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
+#include "GNCIdP.h"
 #include "util.h"
 #include "gnc-common.h"
+
+static short module = MOD_ENGINE; 
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
@@ -49,12 +51,12 @@ void
 xaccInitializeAccountGroup (AccountGroup *grp)
 {
   grp->saved       = GNC_T;
-  
+
   grp->parent      = NULL;
   grp->numAcc      = 0;
   grp->account     = _malloc (sizeof (Account *));
   grp->account[0]  = NULL;   /* null-terminated array */
-  
+
   grp->balance     = 0.0;
 }
 
@@ -64,8 +66,16 @@ AccountGroup *
 xaccMallocAccountGroup( void )
 {
   AccountGroup *grp = (AccountGroup *)_malloc(sizeof(AccountGroup));
-  
+
   xaccInitializeAccountGroup (grp);
+
+  guid_new(&grp->guid);
+
+  if (xaccGUIDType(&grp->guid) != GNC_ID_NONE) {
+    PWARN("xaccMallocAccountGroup: duplicate id\n");
+  }
+
+  xaccStoreEntity(grp, &grp->guid, GNC_ID_GROUP);
 
   return grp;
 }
@@ -76,12 +86,14 @@ void
 xaccFreeAccountGroup( AccountGroup *grp )
 {
   int i;
+
   if (NULL == grp) return;
 
-  for( i=0; i<grp->numAcc; i++ ) {
+  xaccRemoveEntity(&grp->guid);
+
+  for( i=0; i<grp->numAcc; i++ )
     xaccFreeAccount( grp->account[i] );
-  }
-    
+
   _free( grp->account );
 
   /* null everything out, just in case somebody 
@@ -90,7 +102,7 @@ xaccFreeAccountGroup( AccountGroup *grp )
   grp->numAcc      = 0;
   grp->account     = NULL;
   grp->balance     = 0.0;
-  
+
   _free(grp);
 }
 
@@ -134,6 +146,24 @@ xaccAccountGroupNotSaved (AccountGroup *grp)
       if (not_saved) return 1;
    }
    return 0;
+}
+
+/********************************************************************\
+\********************************************************************/
+GUID *
+xaccGroupGetGUID (AccountGroup *group)
+{
+  if (!group) return NULL;
+  return &group->guid;
+}
+
+/********************************************************************\
+\********************************************************************/
+AccountGroup *
+xaccGroupLookup (GUID *guid)
+{
+  if (!guid) return NULL;
+  return xaccLookupEntity(guid, GNC_ID_GROUP);
 }
 
 /********************************************************************\
@@ -758,7 +788,7 @@ xaccConcatGroups (AccountGroup *togrp, AccountGroup *fromgrp)
 
    if (!togrp) return;
    if (!fromgrp) return;
-   
+
    /* The act of inserting the account into togrp also causes
     * it to automatically be deleted from fromgrp. But use a
     * saved copy of fromgrp's numAcc member since, after the

@@ -14,13 +14,11 @@
 # GNU General Public License for more details.                     
 #                                                                  
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software      
-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        
-#                                                                  
-#   Author: Robin Clark                                            
-# Internet: rclark@rush.aero.org                                   
-#  Address: 609 8th Street                                         
-#           Huntington Beach, CA 92648-4632                        
+# along with this program; if not, contact:
+#
+# Free Software Foundation           Voice:  +1-617-542-5942
+# 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+# Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 include @top_srcdir@/Makefile.init
 
@@ -28,6 +26,7 @@ INCLPATH := -I.. \
             -I../.. \
             -I../guile \
             -I../engine \
+            -I../engine/guid \
             -I../register \
             -I../reports \
             -I@srcdir@/../../include \
@@ -53,6 +52,7 @@ endif
 # text to work on...
 OTHER_OBJS += $(wildcard @top_srcdir@/src/obj/gnome/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/engine/obj/*.o)
+OTHER_OBJS += $(wildcard @top_srcdir@/src/engine/obj/guid/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/register/obj/gnome/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/reports/obj/*.o) 
 OTHER_OBJS += $(wildcard @top_srcdir@/src/guile/obj/*.o)

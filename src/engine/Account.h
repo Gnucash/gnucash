@@ -28,6 +28,7 @@
 #include "config.h"
 #include "AccInfo.h"
 #include "Transaction.h"
+#include "GNCId.h"
 
 
 /** PROTOTYPES ******************************************************/
@@ -49,6 +50,19 @@ void         xaccFreeAccount( Account * );
 void         xaccAccountBeginEdit (Account *, int defer);
 void         xaccAccountCommitEdit (Account *);
 
+/*
+ * The xaccAccountGetGUID() subroutine will return the
+ *    globally unique id associated with that account.
+ *    User code should use this id to reference accounts
+ *    and *not* the integer account id below.
+ *
+ * The xaccAccountLookup() subroutine will return the
+ *    account associated with the given id, or NULL
+ *    if there is no such account.
+ */
+GUID    * xaccAccountGetGUID (Account *account);
+Account * xaccAccountLookup (GUID *guid);
+
 int          xaccGetAccountID (Account *);
 char         xaccGetAccountFlags (Account *);
 
@@ -56,11 +70,11 @@ char         xaccGetAccountFlags (Account *);
  * The xaccAccountInsertSplit() method will insert the indicated
  *    split into the indicated account.  If the split already 
  *    belongs to another account, it will be removed from that
- *    account first. 
+ *    account first.
  */
 void         xaccAccountInsertSplit (Account *, Split *);
 
-/* The xaccCheckDateOrder() surboutine checks to see if 
+/* The xaccCheckDateOrder() subroutine checks to see if 
  *    a split is in proper sorted date order with respect 
  *    to the other splits in this account.
  *
@@ -109,13 +123,13 @@ void         xaccConsolidateTransactions (Account *);
 
 /* The xaccMoveFarEnd() method changes the account to which the 
  *    "far end" of the split belongs.  The "far end" is as follows:
- *    Double-entry transactions by thier nature consist of a set of 
+ *    Double-entry transactions by their nature consist of a set of 
  *    two or more splits. If the transaction has precisely two splits,
  *    then the "far end" is the "other split" of the pair.  If
  *    the transaction consists of three or more splits, then the 
  *    "far end" is undefined.  All that the xaccMoveFareEnd() method
  *    does is reparent the "other split" to the indicated account.
- *    The first argument is the split whose fare end will be changed,
+ *    The first argument is the split whose far end will be changed,
  *    the second argument is the new far-end account.
  */
 

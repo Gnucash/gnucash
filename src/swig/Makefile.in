@@ -47,7 +47,3 @@ perl5: ${OBJS} ../engine/libengine.a
 	@cd perl5 && $(MAKE) default
 
 .PHONY: motif
-
-# Local Variables:
-# tab-width: 2
-# End:
