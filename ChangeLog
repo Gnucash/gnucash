@@ -1,5 +1,19 @@
 2001-08-20  Dave Peticolas  <dave@krondo.com>
 
+	* src/app-utils/global-options.[ch]: cleanup
+
+	* src/app-utils/option-util.[ch]: cleanup
+
+	* src/gnome/top-level.c: take out reverse balance implementations
+
+	* src/app-utils/gnc-ui-util.c: take out deprecated api
+        implementations. implement reverse balance api calls.
+
+	* src/register/ledger-core/SplitLedger.[ch]: take out reverse
+	balance callback. just use app-utils version.
+
+	* src/app-utils/gnc-ui-util.h: remove deprecated api
+
 	* src/engine/gnc-book-p.h: add const
 
 	* src/engine/gnc-book.c: strdup error message for backend

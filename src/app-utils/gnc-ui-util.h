@@ -180,9 +180,6 @@ GNCPrintAmountInfo gnc_default_price_print_info (void);
 
 GNCPrintAmountInfo gnc_integral_print_info (void);
 
-const char * DxaccPrintAmount (double val, GNCPrintAmountInfo info);
-int DxaccSPrintAmount (char *buf, double val, GNCPrintAmountInfo info);
-
 const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
 int xaccSPrintAmount (char *buf, gnc_numeric val, GNCPrintAmountInfo info);
 
@@ -200,8 +197,6 @@ int xaccSPrintAmount (char *buf, gnc_numeric val, GNCPrintAmountInfo info);
  *   non-NULL, *endstr will point to in_str. */
 gboolean xaccParseAmount (const char * in_str, gboolean monetary,
                           gnc_numeric *result, char **endstr);
-gboolean DxaccParseAmount (const char * in_str, gboolean monetary,
-                           double *result, char **endstr);
 
 
 /* Automatic decimal place conversion *******************************/

@@ -55,18 +55,12 @@ struct _SplitRegisterColors
 /* Callback function type */
 typedef gncUIWidget (*SRGetParentCallback) (gpointer user_data);
 typedef void (*SRSetHelpCallback) (gpointer user_data, const char *help_str);
-typedef gboolean (*SRReverseBalanceCallback) (Account *account);
 
 
 /* The xaccSRSetData() method sets the user data and callback
  *    hooks for the register. */
 void xaccSRSetData(SplitRegister *reg, gpointer user_data,
                    SRGetParentCallback get_parent);
-
-/* The xaccSRSetReverseBalanceCallback() method sets up
- *    a callback used to determine whether split balances
- *    should be reversed. */
-void xaccSRSetReverseBalanceCallback(SRReverseBalanceCallback callback);
 
 /* The xaccSRGetCurrentTrans() method returns the transaction
  *    which is the parent of the current split (see below). */

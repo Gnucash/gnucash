@@ -35,7 +35,7 @@ void gnc_options_init(void);
 void gnc_options_shutdown(void);
 
 SCM gnc_register_option_change_callback(OptionChangeCallback callback,
-                                        void *user_data,
+                                        gpointer user_data,
                                         char *section,
                                         char *name);
 

@@ -44,7 +44,7 @@ struct _GNCOption
   gboolean changed;
 
   /* The widget which is holding this option */
-  void * widget;
+  gpointer widget;
 };
 
 typedef struct _GNCOptionSection GNCOptionSection;
@@ -61,7 +61,7 @@ void          gnc_option_db_destroy(GNCOptionDB *odb);
 
 SCM gnc_option_db_register_change_callback(GNCOptionDB *odb,
                                            OptionChangeCallback callback,
-                                           void *data,
+                                           gpointer data,
                                            const char *section,
                                            const char *name);
 

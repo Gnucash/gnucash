@@ -257,7 +257,7 @@ gnc_option_db_destroy(GNCOptionDB *odb)
 SCM
 gnc_option_db_register_change_callback(GNCOptionDB *odb,
                                        OptionChangeCallback callback,
-                                       void *data,
+                                       gpointer data,
                                        const char *section,
                                        const char *name)
 {

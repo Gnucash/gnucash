@@ -134,9 +134,6 @@
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_LEDGER;
 
-/* The reverse balance callback, if any. */
-static SRReverseBalanceCallback reverse_balance = NULL;
-
 /* The copied split or transaction, if any */
 static CursorClass copied_class = CURSOR_CLASS_NONE;
 static SCM copied_item = SCM_UNDEFINED;
@@ -180,12 +177,6 @@ xaccSRSetData (SplitRegister *reg, void *user_data,
 
   info->user_data = user_data;
   info->get_parent = get_parent;
-}
-
-void
-xaccSRSetReverseBalanceCallback (SRReverseBalanceCallback callback)
-{
-  reverse_balance = callback;
 }
 
 static int
@@ -2647,29 +2638,26 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
     case BALN_CELL:
     case TBALN_CELL:
       {
-        SRInfo *info = xaccSRGetInfo(reg);
-        Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
+        SRInfo *info = xaccSRGetInfo (reg);
+        Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
         gnc_numeric balance;
 
         if (split == blank_split)
           return "";
 
-        /* If the reverse_balance callback is present use that.
-         * Otherwise, reverse income and expense by default. */
         if (cell_type == BALN_CELL)
           balance = xaccSplitGetBalance (split);
         else
           balance = get_trans_total_balance (reg, trans);
 
-        if (reverse_balance != NULL)
         {
           Account *account;
 
-          account = xaccSplitGetAccount(split);
+          account = xaccSplitGetAccount (split);
           if (account == NULL)
             account = sr_get_default_account (reg);
 
-          if (reverse_balance(account))
+          if (gnc_reverse_balance (account))
             balance = gnc_numeric_neg (balance);
         }
 
@@ -3118,20 +3106,17 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
       {
         gnc_numeric balance;
 
-        /* If the reverse_balance callback is present use that.
-         * Otherwise, reverse income and expense by default. */
         if (cell_type == BALN_CELL)
           balance = xaccSplitGetBalance (split);
         else
           balance = get_trans_total_balance (reg, trans);
 
-        if (reverse_balance != NULL)
         {
           Account *account;
 
           account = xaccSplitGetAccount (split);
 
-          if (reverse_balance (account))
+          if (gnc_reverse_balance (account))
             balance = gnc_numeric_neg (balance);
         }
 

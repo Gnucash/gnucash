@@ -51,6 +51,10 @@ static short module = MOD_GUI;
 static gboolean auto_decimal_enabled = FALSE;
 static int auto_decimal_places = 2;    /* default, can be changed */
 
+static gboolean reverse_balance_inited = FALSE;
+static SCM reverse_balance_callback_id = SCM_UNDEFINED;
+static gboolean reverse_type[NUM_ACCOUNT_TYPES];
+
 
 /********************************************************************\
  * gnc_color_deficits                                               *
@@ -101,6 +105,97 @@ gnc_get_account_separator (void)
     free(string);
 
   return separator;
+}
+
+
+static void
+gnc_configure_reverse_balance (void)
+{
+  gchar *choice;
+  gint i;
+
+  for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
+    reverse_type[i] = FALSE;
+
+  choice = gnc_lookup_multichoice_option ("General",
+                                          "Reversed-balance account types",
+                                          "credit");
+
+  if (safe_strcmp (choice, "income-expense") == 0)
+  {
+    reverse_type[INCOME]  = TRUE;
+    reverse_type[EXPENSE] = TRUE;
+  }
+  else if (safe_strcmp (choice, "credit") == 0)
+  {
+    reverse_type[LIABILITY] = TRUE;
+    reverse_type[EQUITY]    = TRUE;
+    reverse_type[INCOME]    = TRUE;
+    reverse_type[CREDIT]    = TRUE;
+  }
+  else if (safe_strcmp (choice, "none") == 0)
+  {
+  }
+  else
+  {
+    PERR("bad value\n");
+
+    reverse_type[INCOME]  = TRUE;
+    reverse_type[EXPENSE] = TRUE;
+  }
+
+  if (choice != NULL)
+    free (choice);
+}
+
+static void
+gnc_configure_reverse_balance_cb (gpointer not_used)
+{
+  gnc_configure_reverse_balance ();
+  gnc_gui_refresh_all ();
+}
+
+static void
+gnc_reverse_balance_init (void)
+{
+  gnc_configure_reverse_balance ();
+
+  reverse_balance_callback_id = 
+    gnc_register_option_change_callback (gnc_configure_reverse_balance_cb,
+                                         NULL, "General",
+                                         "Reversed-balance account types");
+
+  reverse_balance_inited = (reverse_balance_callback_id != SCM_UNDEFINED);
+}
+
+gboolean
+gnc_reverse_balance_type (GNCAccountType type)
+{
+  if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
+    return FALSE;
+
+  if (!reverse_balance_inited)
+    gnc_reverse_balance_init ();
+
+  return reverse_type[type];
+}
+
+gboolean
+gnc_reverse_balance (Account *account)
+{
+  int type;
+
+  if (account == NULL)
+    return FALSE;
+
+  type = xaccAccountGetType (account);
+  if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
+    return FALSE;
+
+  if (!reverse_balance_inited)
+    gnc_reverse_balance_init ();
+
+  return reverse_type[type];
 }
 
 
@@ -1358,28 +1453,6 @@ xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
   return buf;
 }
 
-const char *
-DxaccPrintAmount (double dval, GNCPrintAmountInfo info)
-{
-  gnc_numeric val;
-
-  val = double_to_gnc_numeric (dval, GNC_DENOM_AUTO,
-                               GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
-
-  return xaccPrintAmount (val, info);
-}
-
-int
-DxaccSPrintAmount (char * bufp, double dval, GNCPrintAmountInfo info)
-{
-  gnc_numeric val;
-
-  val = double_to_gnc_numeric (dval, GNC_DENOM_AUTO, 
-                               GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
-
-  return xaccSPrintAmount (bufp, val, info);
-}
-
 
 /********************************************************************\
  * xaccParseAmount                                                  *
@@ -1438,21 +1511,6 @@ multiplier (int num_decimals)
   }
 
   return 1;
-}
-
-gboolean
-DxaccParseAmount (const char * in_str, gboolean monetary, double *result,
-                  char **endstr)
-{
-  gnc_numeric answer;
-
-  if (!xaccParseAmount (in_str, monetary, &answer, endstr))
-    return FALSE;
-
-  if (result)
-    *result = gnc_numeric_to_double (answer);
-
-  return TRUE;
 }
 
 gboolean

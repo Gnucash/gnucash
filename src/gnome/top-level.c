@@ -81,8 +81,6 @@ static void gnc_configure_register_colors_cb(gpointer);
 static void gnc_configure_register_colors(void);
 static void gnc_configure_register_borders_cb(gpointer);
 static void gnc_configure_register_borders(void);
-static void gnc_configure_reverse_balance_cb(gpointer);
-static void gnc_configure_reverse_balance(void);
 static void gnc_configure_auto_raise_cb(gpointer);
 static void gnc_configure_auto_raise(void);
 static void gnc_configure_negative_color_cb(gpointer);
@@ -111,7 +109,6 @@ static SCM date_callback_id = SCM_UNDEFINED;
 static SCM account_separator_callback_id = SCM_UNDEFINED;
 static SCM register_colors_callback_id = SCM_UNDEFINED;
 static SCM register_borders_callback_id = SCM_UNDEFINED;
-static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static SCM auto_raise_callback_id = SCM_UNDEFINED;
 static SCM negative_color_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_callback_id = SCM_UNDEFINED;
@@ -274,12 +271,6 @@ gnucash_ui_init(void)
       gnc_register_option_change_callback(gnc_configure_register_borders_cb,
                                           NULL, "Register", NULL);
     
-    gnc_configure_reverse_balance();
-    reverse_balance_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_reverse_balance_cb,
-                                          NULL, "General",
-                                          "Reversed-balance account types");
-
     gnc_configure_auto_raise();
     auto_raise_callback_id = 
       gnc_register_option_change_callback(gnc_configure_auto_raise_cb,
@@ -375,7 +366,6 @@ gnc_ui_destroy (void)
   gnc_unregister_option_change_callback_id(account_separator_callback_id);
   gnc_unregister_option_change_callback_id(register_colors_callback_id);
   gnc_unregister_option_change_callback_id(register_borders_callback_id);
-  gnc_unregister_option_change_callback_id(reverse_balance_callback_id);
   gnc_unregister_option_change_callback_id(auto_raise_callback_id);
   gnc_unregister_option_change_callback_id(negative_color_callback_id);
   gnc_unregister_option_change_callback_id(register_font_callback_id);
@@ -778,93 +768,6 @@ gnc_configure_negative_color(void)
   xaccSetSplitRegisterColorizeNegative (use_red);
 }
 
-/* gnc_configure_reverse_balance_cb
- *    Callback called when options change - sets
- *    reverse balance info for the callback
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_reverse_balance_cb (gpointer not_used)
-{
-  gnc_configure_reverse_balance ();
-  gnc_gui_refresh_all ();
-}
-
-static gboolean reverse_type[NUM_ACCOUNT_TYPES];
-
-gboolean
-gnc_reverse_balance_type(GNCAccountType type)
-{
-  if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
-    return FALSE;
-
-  return reverse_type[type];
-}
-
-gboolean
-gnc_reverse_balance(Account *account)
-{
-  int type;
-
-  if (account == NULL)
-    return FALSE;
-
-  type = xaccAccountGetType(account);
-  if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
-    return FALSE;
-
-  return reverse_type[type];
-}
-
-/* gnc_configure_reverse_balance
- *    sets reverse balance info for the callback
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_reverse_balance(void)
-{
-  gchar *choice;
-  gint i;
-
-  xaccSRSetReverseBalanceCallback(gnc_reverse_balance);
-
-  for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
-    reverse_type[i] = FALSE;
-
-  choice = gnc_lookup_multichoice_option("General",
-                                         "Reversed-balance account types",
-                                         "credit");
-
-  if (safe_strcmp(choice, "income-expense") == 0)
-  {
-    reverse_type[INCOME]  = TRUE;
-    reverse_type[EXPENSE] = TRUE;
-  }
-  else if (safe_strcmp(choice, "credit") == 0)
-  {
-    reverse_type[LIABILITY] = TRUE;
-    reverse_type[EQUITY]    = TRUE;
-    reverse_type[INCOME]    = TRUE;
-    reverse_type[CREDIT]    = TRUE;
-  }
-  else if (safe_strcmp(choice, "none") == 0)
-  {
-  }
-  else
-  {
-    PERR("bad value\n");
-
-    reverse_type[INCOME]  = TRUE;
-    reverse_type[EXPENSE] = TRUE;
-  }
-
-  if (choice != NULL)
-    free(choice);
-}
 
 /* gnc_configure_auto_decimal_cb
  *     Callback called when options change -

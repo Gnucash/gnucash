@@ -66,7 +66,6 @@
   (gnc:depend "config-var.scm")
   (gnc:depend "utilities.scm")
   (gnc:depend "path.scm")
-  (gnc:depend "options.scm")
   (gnc:depend "prefs.scm")
   (gnc:depend "command-line.scm")
   (gnc:depend "doc.scm")
