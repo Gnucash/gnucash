@@ -52,6 +52,7 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-gpg.h"
 #include "gnc-report.h"
+#include "gnc-split-reg.h"
 #include "gnc-ui.h"
 #include "gnucash-color.h"
 #include "gnucash-sheet.h"
@@ -135,7 +136,7 @@ static gboolean
 gnc_html_register_url_cb (const char *location, const char *label,
                           gboolean new_window, GNCURLResult *result)
 {
-  RegWindow   * reg = NULL;
+  GNCSplitReg * gsr   = NULL;
   Split       * split = NULL;
   Account     * account;
   Transaction * trans;
@@ -152,8 +153,8 @@ gnc_html_register_url_cb (const char *location, const char *label,
     account = xaccGetAccountFromFullName (gnc_get_current_group (),
                                           location + 8, 
                                           gnc_get_account_separator ());
-    reg = regWindowSimple (account);
-    gnc_register_raise (reg);
+    gsr = regWindowSimple (account);
+    gnc_split_reg_raise( gsr );
   }
   /* href="gnc-register:guid=12345678901234567890123456789012" */
   else if (strncmp ("guid=", location, 5) == 0)
@@ -177,7 +178,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
     else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
     {
         account = xaccAccountLookup (&guid, gnc_get_current_book ());
-        reg = regWindowSimple (account);
+        gsr = regWindowSimple( account );
     }
     else if (!safe_strcmp (id_type, GNC_ID_TRANS))
     {
@@ -198,7 +199,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
           return FALSE;
         }
 
-        reg = regWindowSimple (xaccSplitGetAccount (split));
+        gsr = regWindowSimple( xaccSplitGetAccount(split) );
     }
     else if (!safe_strcmp (id_type, GNC_ID_SPLIT))
     {
@@ -210,7 +211,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
           return FALSE;
         }
 
-        reg = regWindowSimple (xaccSplitGetAccount (split));
+        gsr = regWindowSimple( xaccSplitGetAccount(split) );
     }
     else
     {
@@ -219,9 +220,9 @@ gnc_html_register_url_cb (const char *location, const char *label,
         return FALSE;
     }
 
-    gnc_register_raise(reg);
+    gnc_split_reg_raise(gsr);
     if (split)
-      gnc_register_jump_to_split (reg, split);
+      gnc_split_reg_jump_to_split( gsr, split );
   }
   else
   {

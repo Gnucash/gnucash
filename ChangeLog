@@ -1,3 +1,25 @@
+2002-11-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/window-register.c (gnc_register_delete_cb): Change the
+	order of window deletion to not cause a crash.
+
+	* src/gnome/window-register.c (regWindowSimple),
+	(regWindowAccGroup): Only return the GNCSplitReg, not the whole
+	regData.  Fixes a bunch of existing and potential crashes.
+
+	* src/gnome/window-main.c (gnc_main_window_gl_cb): 
+	* src/gnome/window-acct-tree.c
+	(gnc_acct_tree_window_toolbar_open_cb) 
+	(gnc_acct_tree_window_menu_open_subs_cb) 
+	(gnc_acct_tree_window_menu_open_cb) 
+	(gnc_acct_tree_window_activate_cb): 
+	* src/gnome/top-level.c (gnc_html_register_url_cb):
+	Modify to not necessarily expect a RegWindow for creation of a
+	ledger view.  Fixes a bunch of existing and potential crashes.
+
+	* src/gnome/gnc-split-reg.c (gnc_split_reg_delete_cb): Removed;
+	dead.
+
 2002-11-14  David Hampton  <hampton@employees.org>
 
 	* src/register/ledger-core/split-register.c: 
@@ -132,7 +154,6 @@
 	transaction matcher UI changes.  Create a pseudo-widget in first 
 	column to select the action to be taken with the transaction.
 	
->>>>>>> 1.1149
 2002-11-12  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c

@@ -181,9 +181,6 @@ void gnc_split_reg_sort_amount_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg_sort_memo_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg_sort_desc_cb (GtkWidget *w, gpointer data);
 
-gboolean gnc_split_reg_delete_cb( GtkWidget *widget,
-                                  GdkEvent *event,
-                                  gpointer data );
 void gnc_split_reg_destroy_cb(GtkWidget *widget, gpointer data);
 void gnc_split_reg_size_allocate( GtkWidget *widget,
                                   GtkAllocation *allocation,
@@ -1699,15 +1696,6 @@ void
 gnc_split_reg_record_cb (GnucashRegister *reg, gpointer data)
 {
   gsr_emit_signal( (GNCSplitReg*)data, "enter_ent" );
-}
-
-gboolean
-gnc_split_reg_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
-{
-  GNCSplitReg *gsr = data;
-  gnc_split_reg_check_close( gsr );
-  gnc_ledger_display_close( gsr->ledger );
-  return TRUE; /* don't close */
 }
 
 void

@@ -194,15 +194,22 @@ static void gnc_reg_save_size (RegWindow *regData);
  * Args:   account - the account associated with this register      *
  * Return: regData - the register window instance                   *
 \********************************************************************/
-RegWindow *
+GNCSplitReg*
 regWindowSimple (Account *account)
 {
+  GNCSplitReg *gsr;
   GNCLedgerDisplay * ledger = gnc_ledger_display_simple( account );
 
   if (ledger == NULL)
     return NULL;
- 
-  return regWindowLedger( ledger );
+
+  gsr = gnc_ledger_display_get_user_data( ledger ); 
+  if ( !gsr ) {
+    RegWindow *rw = regWindowLedger( ledger );
+    gsr = rw->gsr;
+  }
+
+  return gsr;
 }
 
 
@@ -213,15 +220,23 @@ regWindowSimple (Account *account)
  * Args:   account - the account associated with this register      *
  * Return: regData - the register window instance                   *
 \********************************************************************/
-RegWindow *
+GNCSplitReg*
 regWindowAccGroup (Account *account)
 {
+  GNCSplitReg *gsr;
   GNCLedgerDisplay * ledger = gnc_ledger_display_subaccounts (account);
 
   if (ledger == NULL)
     return NULL;
-  
-  return regWindowLedger (ledger);
+
+  gsr = gnc_ledger_display_get_user_data( ledger );
+  if ( !gsr ) {
+    RegWindow *rw;
+    rw = regWindowLedger (ledger);
+    gsr = rw->gsr;
+  }
+
+  return gsr;
 }
 
 /**
@@ -650,12 +665,12 @@ gnc_register_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnc_split_reg_check_close(regData->gsr);
-  gnc_ledger_display_close (regData->ledger);
-
   if ( regData ) {
     gnc_reg_save_size( regData );
   }
+
+  gnc_split_reg_check_close(regData->gsr);
+  gnc_ledger_display_close (regData->ledger);
 
   return TRUE; /* don't close */
 }
@@ -1495,7 +1510,7 @@ gnc_register_gl_cb(GtkWidget *widget, gpointer data)
 
   ld = gnc_ledger_display_gl();
   regData = regWindowLedger( ld );
-  gnc_register_raise( regData );
+  gnc_split_reg_raise( regData->gsr );
 }
 
 void

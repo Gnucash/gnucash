@@ -42,6 +42,7 @@
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
 #include "gnc-html.h"
+#include "gnc-split-reg.h"
 #include "gnc-ui.h"
 #include "gtkselect.h"
 #include "io-gncxml-v2.h"
@@ -340,7 +341,7 @@ gnc_main_window_open_accounts(gboolean toplevel)
 static void
 gnc_acct_tree_window_toolbar_open_cb (GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData;
+  GNCSplitReg *gsr;
   GNCAcctTreeWin * win = data;
   Account * account = gnc_acct_tree_window_get_current_account(win);
 
@@ -354,8 +355,8 @@ gnc_acct_tree_window_toolbar_open_cb (GtkWidget *widget, gpointer data)
 
   PINFO ("calling regWindowSimple(%p)\n", account);
 
-  regData = regWindowSimple(account);
-  gnc_register_raise(regData);
+  gsr = regWindowSimple(account);
+  gnc_split_reg_raise( gsr );
 }
 
 static void
@@ -491,7 +492,7 @@ gnc_acct_tree_window_menu_open_subs_cb(GtkWidget * widget,
                                        GNCMDIInfo * info)
 {
   Account   *account;
-  RegWindow *regData;
+  GNCSplitReg *gsr;
   
   account = gnc_acct_tree_find_account_from_gncmdi(info);
   if (account == NULL) {
@@ -503,8 +504,8 @@ gnc_acct_tree_window_menu_open_subs_cb(GtkWidget * widget,
   else {
     PINFO ("calling regWindowAccGroup(%p)\n", account);
     
-    regData = regWindowAccGroup(account);
-    gnc_register_raise(regData);
+    gsr = regWindowAccGroup(account);
+    gnc_split_reg_raise(gsr);
   }
 }
 
@@ -655,7 +656,7 @@ static void
 gnc_acct_tree_window_menu_open_cb (GtkWidget *widget, GNCMDIInfo * info)
 {
   Account   *account;
-  RegWindow *regData;
+  GNCSplitReg *gsr;
   
   account = gnc_acct_tree_find_account_from_gncmdi(info);
   if (account == NULL) {
@@ -667,8 +668,8 @@ gnc_acct_tree_window_menu_open_cb (GtkWidget *widget, GNCMDIInfo * info)
   else {
     PINFO ("calling regWindowSimple(%p)\n", account);
     
-    regData = regWindowSimple(account);
-    gnc_register_raise(regData);
+    gsr = regWindowSimple(account);
+    gnc_split_reg_raise(gsr);
   }
 }
 
@@ -679,7 +680,7 @@ gnc_acct_tree_window_activate_cb(GNCMainWinAccountTree *tree,
                                  gpointer user_data)
 {
   GNCAcctTreeWin * win = user_data;
-  RegWindow *regData;
+  GNCSplitReg *gsr;
   gboolean expand;
 
   expand =
@@ -700,8 +701,8 @@ gnc_acct_tree_window_activate_cb(GNCMainWinAccountTree *tree,
     }
   }
 
-  regData = regWindowSimple(account);
-  gnc_register_raise(regData);
+  gsr = regWindowSimple(account);
+  gnc_split_reg_raise(gsr);
 }
 
 static void

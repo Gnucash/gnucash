@@ -25,6 +25,7 @@
 #define WINDOW_REGISTER_H
 
 #include "gnc-ledger-display.h"
+#include "gnc-split-reg.h"
 
 /** STRUCTS *********************************************************/
 typedef struct _RegWindow RegWindow;
@@ -33,9 +34,10 @@ GtkWidget *gnc_RegWindow_window (RegWindow *data);
 GNCLedgerDisplay *gnc_RegWindow_ledger (RegWindow *data);
 
 /** PROTOTYPES ******************************************************/
-RegWindow * regWindowSimple(Account *account);
-RegWindow * regWindowAccGroup(Account *account_group);
-RegWindow * regWindowLedger(GNCLedgerDisplay *ledger);
+GNCSplitReg* regWindowSimple(Account *account);
+GNCSplitReg* regWindowAccGroup(Account *account_group);
+
+RegWindow* regWindowLedger(GNCLedgerDisplay *ledger);
 
 gpointer gnc_RegWindow_get_pcd (RegWindow *data);
 void     gnc_RegWindow_set_pcd (RegWindow *data, gpointer);

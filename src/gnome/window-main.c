@@ -53,6 +53,7 @@
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-menu-extensions.h"
+#include "gnc-split-reg.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
 #include "mainwindow-account-tree.h"
@@ -623,13 +624,17 @@ void
 gnc_main_window_gl_cb(GtkWidget *widget, gpointer data)
 {
   GNCLedgerDisplay *ld;
+  GNCSplitReg *gsr;
   RegWindow *regData;
 
   ld = gnc_ledger_display_gl ();
-
-  regData = regWindowLedger (ld);
-
-  gnc_register_raise (regData);
+  gsr = gnc_ledger_display_get_user_data( ld );
+  if ( ! gsr ) {
+    regData = regWindowLedger (ld);
+    gnc_register_raise (regData);
+  } else {
+    gnc_split_reg_raise( gsr );
+  }
 }
 
 void
@@ -694,16 +699,16 @@ gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
                            "http://www.gnucash.org/");
   const gchar *copyright = "(C) 1998-2002 Linas Vepstas";
   const gchar *authors[] = {
+    "Derek Atkins <derek@ihtfp.com>",
     "Rob Browning <rlb@cs.utexas.edu>",
     "Bill Gribble <grib@billgribble.com>",
+    "David Hampton <hampton@employees.org>",
     "James LewisMoss <dres@debian.org>",
     "Robert Graham Merkel <rgmerk@mira.net>",
     "Dave Peticolas <dave@krondo.com>",
+    "Joshua Sled <jsled@asynchronous.org>",
     "Christian Stimming <stimming@tuhh.de>",
     "Linas Vepstas <linas@linas.org>",
-    "Joshua Sled <jsled@asynchronous.org>",
-    "Derek Atkins <derek@ihtfp.com>",
-    "David Hampton <hampton@employees.org>",
     NULL
   };
 
