@@ -53,7 +53,7 @@ gnc_register_init (void)
 
   gnc_register_add_cell_type (DATE_CELL_TYPE_NAME, xaccMallocDateCell);
 
-  gnc_register_add_cell_type (NUM_CELL_TYPE_NAME, xaccMallocNumCell);
+  gnc_register_add_cell_type (NUM_CELL_TYPE_NAME, gnc_num_cell_new);
 
   gnc_register_add_cell_type (PRICE_CELL_TYPE_NAME, gnc_price_cell_new);
 

@@ -44,9 +44,9 @@ typedef struct _NumCell
   gboolean next_num_set;
 } NumCell;
 
-BasicCell * xaccMallocNumCell (void);
+BasicCell * gnc_num_cell_new (void);
 
-void      xaccSetNumCellValue (NumCell *cell, const char *str);
-gboolean  xaccSetNumCellLastNum (NumCell *cell, const char *str);
+void      gnc_num_cell_set_value (NumCell *cell, const char *str);
+gboolean  gnc_num_cell_set_last_num (NumCell *cell, const char *str);
 
-#endif /* NUM_CELL_H */
+#endif

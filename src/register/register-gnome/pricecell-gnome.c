@@ -37,11 +37,11 @@
 
 
 static gboolean
-PriceDirect (BasicCell *bcell,
-	     int *cursor_position,
-	     int *start_selection,
-	     int *end_selection,
-	     void *gui_data)
+gnc_price_cell_direct_update (BasicCell *bcell,
+                              int *cursor_position,
+                              int *start_selection,
+                              int *end_selection,
+                              void *gui_data)
 {
     PriceCell *cell = (PriceCell *) bcell;
     GdkEventKey *event = gui_data;
@@ -141,15 +141,15 @@ PriceDirect (BasicCell *bcell,
 }
 
 
-void xaccPriceGUIInit (PriceCell *cell);
+void gnc_price_cell_gui_init (PriceCell *cell);
 
 void
-xaccPriceGUIInit (PriceCell *cell)
+gnc_price_cell_gui_init (PriceCell *cell)
 {
     if (cell == NULL)
 	return;
 
-    cell->cell.direct_update = PriceDirect;
+    cell->cell.direct_update = gnc_price_cell_direct_update;
 }
 
 /*

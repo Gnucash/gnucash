@@ -50,7 +50,7 @@
 
 
 /* GUI-dependent */
-extern void xaccPriceGUIInit (PriceCell *cell);
+extern void gnc_price_cell_gui_init (PriceCell *cell);
 
 static void gnc_price_cell_init (PriceCell *cell);
 static void gnc_price_cell_set_value_internal (BasicCell *bcell,
@@ -214,7 +214,7 @@ gnc_price_cell_init (PriceCell *cell)
   cell->cell.set_value = gnc_price_cell_set_value_internal;
   cell->cell.get_help_value = PriceHelp;
 
-  xaccPriceGUIInit (cell);
+  gnc_price_cell_gui_init (cell);
 }
 
 static const char *

@@ -42,23 +42,23 @@
 /* This static indicates the debugging module that this .o belongs to. */
 /* static short module = MOD_REGISTER; */
 
-static void xaccInitNumCell (NumCell *cell);
+static void gnc_num_cell_init (NumCell *cell);
 
 
 /* Parses the string value and returns true if it is a
  * number. In that case, *num is set to the value parsed. */
 static gboolean
-parse_num(const char *string, long int *num)
+gnc_parse_num (const char *string, long int *num)
 {
   long int number;
 
   if (string == NULL)
     return FALSE;
 
-  if (!gnc_strisnum(string))
+  if (!gnc_strisnum (string))
     return FALSE;
 
-  number = strtol(string, NULL, 10);
+  number = strtol (string, NULL, 10);
 
   if ((number == LONG_MIN) || (number == LONG_MAX))
     return FALSE;
@@ -70,14 +70,14 @@ parse_num(const char *string, long int *num)
 }
 
 static void
-NumMV (BasicCell *_cell, 
-       const GdkWChar *change,
-       int change_len,
-       const GdkWChar *newval,
-       int new_val_len,
-       int *cursor_position,
-       int *start_selection,
-       int *end_selection)
+gnc_num_cell_modify_verify (BasicCell *_cell, 
+                            const GdkWChar *change,
+                            int change_len,
+                            const GdkWChar *newval,
+                            int new_val_len,
+                            int *cursor_position,
+                            int *start_selection,
+                            int *end_selection)
 {
   NumCell *cell = (NumCell *) _cell;
   gboolean accel = FALSE;
@@ -94,7 +94,7 @@ NumMV (BasicCell *_cell,
 
   /* otherwise, it may be an accelerator key. */
 
-  is_num = parse_num (_cell->value, &number);
+  is_num = gnc_parse_num (_cell->value, &number);
 
   if (is_num && (number < 0))
     is_num = FALSE;
@@ -143,7 +143,7 @@ NumMV (BasicCell *_cell,
     strcpy (buff, "");
     snprintf (buff, sizeof(buff), "%ld", number);
 
-    if (safe_strcmp(buff, "") == 0)
+    if (safe_strcmp (buff, "") == 0)
       return;
 
     gnc_basic_cell_set_value_internal (&cell->cell, buff);
@@ -157,19 +157,19 @@ NumMV (BasicCell *_cell,
 }
 
 BasicCell *
-xaccMallocNumCell (void)
+gnc_num_cell_new (void)
 {
   NumCell *cell;
 
   cell = g_new0 (NumCell, 1);
 
-  xaccInitNumCell (cell);
+  gnc_num_cell_init (cell);
 
   return &cell->cell;
 }
 
 static void 
-setNumCellValue (BasicCell *_cell, const char *str)
+gnc_num_cell_set_value_internal (BasicCell *_cell, const char *str)
 {
   NumCell *cell = (NumCell *) _cell;
 
@@ -177,31 +177,31 @@ setNumCellValue (BasicCell *_cell, const char *str)
   {
     long int number;
 
-    if (parse_num(str, &number))
+    if (gnc_parse_num (str, &number))
       cell->next_num = number + 1;
   }
 
   gnc_basic_cell_set_value_internal (_cell, str);
 }
 
-void 
-xaccSetNumCellValue (NumCell *cell, const char *str)
+void
+gnc_num_cell_set_value (NumCell *cell, const char *str)
 {
   if (!cell)
     return;
 
-  setNumCellValue (&cell->cell, str);
+  gnc_num_cell_set_value_internal (&cell->cell, str);
 }
 
 gboolean
-xaccSetNumCellLastNum (NumCell *cell, const char *str)
+gnc_num_cell_set_last_num (NumCell *cell, const char *str)
 {
   long int number;
 
   if (!cell)
     return FALSE;
 
-  if (parse_num (str, &number))
+  if (gnc_parse_num (str, &number))
   {
     cell->next_num = number + 1;
     cell->next_num_set = TRUE;
@@ -212,13 +212,13 @@ xaccSetNumCellLastNum (NumCell *cell, const char *str)
 }
 
 static void
-xaccInitNumCell (NumCell *cell)
+gnc_num_cell_init (NumCell *cell)
 {
   gnc_basic_cell_init (&(cell->cell));
 
   cell->next_num = 0;
   cell->next_num_set = FALSE;
  
-  cell->cell.modify_verify = NumMV;
-  cell->cell.set_value = setNumCellValue;
+  cell->cell.modify_verify = gnc_num_cell_modify_verify;
+  cell->cell.set_value = gnc_num_cell_set_value_internal;
 }

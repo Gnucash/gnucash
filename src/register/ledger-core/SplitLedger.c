@@ -675,7 +675,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 
     num_cell = (NumCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                       NUM_CELL);
-    if (xaccSetNumCellLastNum (num_cell, out_num))
+    if (gnc_num_cell_set_last_num (num_cell, out_num))
       sr_set_last_num (reg, out_num);
 
     g_free (out_num);
@@ -2055,7 +2055,7 @@ xaccSRActuallySaveChangedCells (SplitRegister *reg,
 
     cell = gnc_table_layout_get_cell (reg->table->layout, NUM_CELL);
 
-    if (xaccSetNumCellLastNum ((NumCell *) cell, value))
+    if (gnc_num_cell_set_last_num ((NumCell *) cell, value))
     {
       SRInfo *info = xaccSRGetInfo (reg);
       Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
@@ -3667,7 +3667,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
 
         cell = (NumCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                       NUM_CELL);
-        xaccSetNumCellLastNum (cell, last_num);
+        gnc_num_cell_set_last_num (cell, last_num);
         has_last_num = TRUE;
       }
     }
@@ -3727,7 +3727,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
          xaccTransGetNotes (trans));
 
       if (!has_last_num)
-        xaccSetNumCellLastNum
+        gnc_num_cell_set_last_num
           ((NumCell *)
            gnc_table_layout_get_cell (reg->table->layout, NUM_CELL),
            xaccTransGetNum (trans));
