@@ -231,13 +231,15 @@ gpointer pgendGetResults (PGBackend *be,
 }
 
 /* Compare the date of last modification. 
- * This is a special date comp to make the m4 macros simpler.
+ * This is a special date comp to 
+ * (1) make the m4 macros simpler, and
+ * (2) avoid needless updates 
  */
 #define COMP_NOW(sqlname,fun,ndiffs) { 	 			\
     Timespec eng_time = xaccTransRetDateEnteredTS(ptr);		\
     Timespec sql_time = gnc_iso8601_to_timespec_local(		\
                      DB_GET_VAL(sqlname,0)); 			\
-    if (eng_time.tv_sec != sql_time.tv_sec) {			\
+    if (eng_time.tv_sec > sql_time.tv_sec) {			\
        char buff[80];						\
        gnc_timespec_to_iso8601_buff(eng_time, buff);		\
        PINFO("mis-match: %s sql='%s' eng=%s", sqlname, 		\

@@ -2,7 +2,7 @@
 # Build the postgres backend as its own loadable shared object.
 
 lib_LTLIBRARIES = libgnc_postgres.la
-libgnc_postgres_la_LDFLAGS = -version-info 5:3:5
+libgnc_postgres_la_LDFLAGS = -version-info 6:0:6
 
 
 libgnc_postgres_la_SOURCES = \

@@ -12,6 +12,7 @@ define(`account', `gncAccount, Account, Account,
        notes,          , char *, xaccAccountGetNotes(ptr),
        type,           , char *, xaccAccountTypeEnumAsString(xaccAccountGetType(ptr)),
        commodity,      , char *, gnc_commodity_get_unique_name(xaccAccountGetCommodity(ptr)),
+       version,        , int32,  xaccAccountGetVersion(ptr),
        parentGUID,     , GUID *, xaccAccountGetGUID(xaccAccountGetParentAccount(ptr)),
        accountGUID, KEY, GUID *, xaccAccountGetGUID(ptr),
        ')
@@ -44,6 +45,7 @@ define(`transaction', `gncTransaction, Transaction, Transaction,
        currency,       , commod,   gnc_commodity_get_unique_name(xaccTransGetCurrency(ptr)),
        date_entered,   , now,      "NOW",
        date_posted,    , Timespec, xaccTransRetDatePostedTS(ptr),
+       version,        , int32,    xaccTransGetVersion(ptr),
        transGUID,   KEY, GUID *,   xaccTransGetGUID(ptr),
        ')
 

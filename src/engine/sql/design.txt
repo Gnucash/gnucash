@@ -2,7 +2,7 @@
 SQL Tables
 ----------
 These mostly parallel the data structures in the gnc engine.
-See gnc-init.txt for more info.
+See table-create.sql for more info.
 
 
 Session Table, Session Modes
@@ -20,10 +20,10 @@ functioning.
    to debug, and has reasonable demands on the database for small
    datasets.
 
-   This mode is guarenteed to clobber any sort of changes made by
+   This mode is guaranteed to clobber any sort of changes made by
    other users (in the same way that multiple file writers clobber
    each other).  Thus, this mode is mutually exclusive of any other,
-   and te engine prevents more than one concurrent user.  
+   and the engine prevents more than one concurrent user.  
 
 
 -- "Single User Update Mode" -- 
@@ -34,18 +34,18 @@ functioning.
    of a crash.
 
 -- "Multi-User Polled" -- 
-   Multiple users are assumed, Gnucash polls the database to detect 
+   Multiple users are assumed, GnuCash polls the database to detect 
    changes in the data.  Partially Implemented. 
 
 
 -- "Multi-User Events" --
-   Gnucash uses the SQL LISTEN/NOTIFY async message delivery routines.
+   GnuCash uses the SQL LISTEN/NOTIFY async message delivery routines.
    Not implemented.
 
 Safety Lockout
 --------------
 There is a safety lockout that prevents a single-user mode database from
-being ccessed by another user, and from having a multi-user mode 
+being accessed by another user, and from having a multi-user mode 
 database from being accessed by a single-user-mode client.
 
 
@@ -62,7 +62,7 @@ If you want incremental deletion, then use the 'Single Update' mode.
 
 m4 macros
 ---------
-Some of the code is auto-gen'ed from m4 macros.  This mopstly just
+Some of the code is auto-gen'ed from m4 macros.  This mostly just
 simplifies some rather repetitive, cut-n-paste code that's identical
 from function to function.  If you can think of a better way ...
 
@@ -75,14 +75,14 @@ sql corruption.
 KVP frames
 ----------
 Storage of KVP values in the sql database is treated more or less as
-described in the main kvp docs.  The hierarchical structure is converted
+described in the main KVP docs.  The hierarchical structure is converted
 into 'paths' by concatenating key names, and using / as the separator.
 (Thus, paths look like file-paths).  The root of each frame is
 associated with a guid (and thus, a url kvp://12341234/some/kvp/keys, 
 where 12341234 is the guid).
 
 The implementation caches the paths, associating a 32-bit inode number
-with each path.  Caching is done because the same path names will recurr 
+with each path.  Caching is done because the same path names will recur 
 frequently for different guids (e.g. /reconcile-info/last-date will
 occur in most accounts). 
 
@@ -95,3 +95,17 @@ the type.  Note that the binary type and the glist type are not currently
 implemented.  The glist type could be implemented, as long as the glist
 only stored strings ... The binary type could be implemented with blobs.
 
+Version Numbers
+---------------
+Both the Account structure, and the Transaction structure, have version
+numbers in them.  These are used to compare the sql and the engine
+contents, and update the one or the other as appropriate.  Version
+numbers would not be necessary for single-user access, but are important
+for multi-user access, where several engines must be kept in sync with
+the database contents.   An alternative to version numbers might have
+been the date of the last update.  However, version numbers are better
+than dates in the case where the engines reside on machines whose clocks
+are not closely synchronized.  (e.g. which may happen if the machines
+are not using NTP for time synchronization; or, e.g. if one machine failed 
+to have daylight-savings time set correctly: its transactions would be 
+an hour newer/older than the others, leading to bad updates).

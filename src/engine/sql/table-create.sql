@@ -47,7 +47,8 @@ CREATE TABLE gncAccount (
 	description 	TEXT,
 	notes	 	TEXT,
 	type		TEXT NOT NULL,
-	commodity	TEXT NOT NULL CHECK (commodity <>'')
+	commodity	TEXT NOT NULL CHECK (commodity <>''),
+	version		INT4 NOT NULL
 );
 
 -- CREATE INDEX gncAccount_pg_idx ON gncAccount (parentGuid);
@@ -56,12 +57,13 @@ CREATE TABLE gncAccount (
 -- hack alert -- add kvp frames ??
 
 CREATE TABLE gncTransaction (
-	transGuid		CHAR(32) PRIMARY KEY,
-	date_entered	 	DATETIME DEFAULT 'NOW',
-	date_posted	 	DATETIME,
-	num			TEXT,
-	description		TEXT,
-        currency                TEXT NOT NULL CHECK (currency <> '')
+	transGuid	CHAR(32) PRIMARY KEY,
+	date_entered 	DATETIME DEFAULT 'NOW',
+	date_posted 	DATETIME,
+	num		TEXT,
+	description	TEXT,
+        currency	TEXT NOT NULL CHECK (currency <> ''),
+	version		INT4 NOT NULL
 );
 
 CREATE INDEX gncTransaction_posted_idx ON gncTransaction (date_posted);

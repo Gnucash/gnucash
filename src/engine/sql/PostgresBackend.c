@@ -171,16 +171,69 @@ static const char *table_drop_str =
 ;
 
 /* ============================================================= */
-/* This routine updates the account structure if needed, and/or
- * stores it the first time if it hasn't yet been stored.
- * Note that it sets a mark to avoid excessive recursion:
- * This routine shouldn't be used outside of locks,
- * where the recursion prevention clears the marks ...
+/* ============================================================= */
+/*               ACCOUNT AND GROUP STUFF                         */
+/*      (UTILITIES FIRST, THEN SETTERS, THEN GETTERS)            */
+/* ============================================================= */
+/* ============================================================= */
+/* The pgendAccountCompareVersion() routine compares the version 
+ * number of the account in the engine and the sql database. It 
+ * returns a negative number if the sql version is older (or the 
+ * acount is not present in the sql db). It returns a positive 
+ * number if the sql version is newer.  It returns zero if the 
+ * two are equal.
+ */
+
+static gpointer
+acc_version_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   if (-1 != (int) data || 0 != j) return (gpointer) -1;
+   return ((gpointer) atoi(DB_GET_VAL ("version", 0)));
+}
+
+static int
+pgendAccountCompareVersion (PGBackend *be, Account *acct)
+{
+   char *p;
+   int sql_version = 0;
+
+   p = be->buff; *p = 0;
+   p = stpcpy (p, "SELECT version FROM gncAccount WHERE accountGuid ='");
+   p = guid_to_string_buff (&(acct->guid), p);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be,be->buff, -1);
+   sql_version = (int) pgendGetResults (be, acc_version_cb, (gpointer) -1);
+
+   if (-1 == sql_version) return -1;
+   return (sql_version - xaccAccountGetVersion (acct));
+}
+
+/* ============================================================= */
+/* the pgendStoreAccount() routine stores an account to the 
+ * database.  That is, the engine data is written out to the 
+ * database.  It does not do any of the account children; nor 
+ * does it handle any of the splits or transactions associated 
+ * with the account.  It does, however, store the associated 
+ * commodity. 
+ *
+ * If do_mark is set to TRUE, then this routine sets a mark
+ * to terminate recursion.  That is,  it will only store the
+ * account once; a second call on a marked account will simply 
+ * return.  Be sure to clear the mark when done!
+ *
+ * If the do_check_version flag is set, then this routine
+ * will compare the engine and sql db version numbrs, and
+ * perform the store only if the engine version is equal 
+ * or newer than the sql version.
+ *
+ * This routine doesn't perform any locks, and shouldn't be 
+ * used outside of locks,
  */
 
 static void
 pgendStoreAccountNoLock (PGBackend *be, Account *acct,
-                         gboolean do_mark)
+                         gboolean do_mark, 
+                         gboolean do_check_version)
 {
    const gnc_commodity *com;
 
@@ -201,6 +254,12 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
       xaccAccountSetMark (acct, 1);
    }
 
+   if (do_check_version)
+   {
+     if (0 < pgendAccountCompareVersion (be, acct)) return;
+   }
+   acct->version ++;  /* be sure to update the version !! */
+
    pgendPutOneAccountOnly (be, acct);
 
    /* make sure the account's commodity is in the commodity table */
@@ -214,10 +273,328 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
 }
 
 /* ============================================================= */
-/* This routine traverses the transaction structure and stores/updates
- * it in the database.  If checks the transaction splits as well,
- * updating those.  Finally, it makes sure that each account is present
- * as well. 
+/* The pgendStoreGroup() routine stores the account heirarchy to
+ * the sql database.  That is, it stores not oonly the top-level
+ * accounts, but all of thier children too.   It also stores the
+ * commodities associated with the accounts.  It does *not* store
+ * any of the transactions.
+ *
+ * Note that it checks the version numbers, and only stores 
+ * those accounts whose version number is equal or newer than 
+ * what's in the DB.
+ *
+ * The NoLock version doesn't lock up the tables.
+ */
+
+static void
+pgendStoreGroupNoLock (PGBackend *be, AccountGroup *grp, 
+                       gboolean do_mark, gboolean do_check_version)
+{
+   GList *start, *node;
+
+   if (!be || !grp) return;
+   ENTER("grp=%p mark=%d", grp, do_mark);
+
+   /* walk the account tree, and store subaccounts */
+   start = xaccGroupGetAccountList (grp);
+   for (node=start; node; node=node->next) 
+   {
+      AccountGroup *subgrp;
+      Account *acc = node->data;
+
+      pgendStoreAccountNoLock (be, acc, do_mark, do_check_version);
+
+      /* recursively walk to child accounts */
+      subgrp = xaccAccountGetChildren (acc);
+      if (subgrp) pgendStoreGroupNoLock(be, subgrp, do_mark,
+                                        do_check_version);
+   }
+   LEAVE(" ");
+}
+
+
+static void
+pgendStoreGroup (PGBackend *be, AccountGroup *grp)
+{
+   char *p;
+   ENTER ("be=%p, grp=%p", be, grp);
+   if (!be || !grp) return;
+
+   /* lock it up so that we store atomically */
+   p = "BEGIN;\n"
+       "LOCK TABLE gncAccount IN EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncCommodity IN EXCLUSIVE MODE;\n";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+
+   /* Clear the account marks; this is used to avoid visiting
+    * the same account more than once. */
+   xaccClearMarkDownGr (grp, 0);
+
+   pgendStoreGroupNoLock (be, grp, TRUE, TRUE);
+
+   /* reset the write flags again */
+   xaccClearMarkDownGr (grp, 0);
+
+   p = "COMMIT;";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+   LEAVE(" ");
+}
+
+/* ============================================================= */
+/*        ACCOUNT GETTERS (SETTERS ARE ABOVE)                    */
+/* ============================================================= */
+/* This routine walks the account group, gets all KVP values */
+
+static gpointer
+restore_cb (Account *acc, void * cb_data)
+{
+   PGBackend *be = (PGBackend *) cb_data;
+   acc->kvp_data = pgendKVPFetch (be, &(acc->guid), acc->kvp_data);
+   return NULL;
+}
+
+static void 
+pgendGetAllAccountKVP (PGBackend *be, AccountGroup *grp)
+{
+   if (!grp) return;
+
+   xaccGroupForEachAccountDeeply (grp, restore_cb, be);
+}
+
+/* ============================================================= */
+/* This routine restores all commodities in the database.
+ */
+
+static gpointer
+get_commodities_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   gnc_commodity_table *comtab = (gnc_commodity_table *) data;
+   gnc_commodity *com;
+
+   /* first, lets see if we've already got this one */
+   com = gnc_commodity_table_lookup(comtab, 
+         DB_GET_VAL("namespace",j), DB_GET_VAL("mnemonic",j));
+
+   if (com) return comtab;
+
+   /* no we don't ... restore it */
+   com = gnc_commodity_new (
+                    DB_GET_VAL("fullname",j), 
+                     DB_GET_VAL("namespace",j), 
+                     DB_GET_VAL("mnemonic",j),
+                     DB_GET_VAL("code",j),
+                     atoi(DB_GET_VAL("fraction",j)));
+
+   gnc_commodity_table_insert (comtab, com);
+   return comtab;
+}
+
+static void
+pgendGetAllCommodities (PGBackend *be)
+{
+   gnc_commodity_table *comtab;
+   char * p;
+   if (!be) return;
+
+   ENTER ("be=%p", be);
+
+   comtab = gnc_engine_commodities();
+   if (!comtab) {
+      PERR ("can't get global commodity table");
+      return;
+   }
+
+   /* Get them ALL */
+   p = "SELECT * FROM gncCommodity;";
+   SEND_QUERY (be, p, );
+   pgendGetResults (be, get_commodities_cb, comtab);
+
+   LEAVE (" ");
+}
+
+/* ============================================================= */
+/* The pgendGetAllAccounts() routine restores the account heirarchy 
+ * of *all* accounts in the DB.
+ * It implicitly assumes that the database has only one account
+ * heirarchy in it, i.e. any accounts without a parent will be stuffed
+ * into the same top group.
+ */
+
+static gpointer
+get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   AccountGroup *topgrp = (AccountGroup *) data;
+   Account *parent;
+   Account *acc;
+   GUID guid;
+
+   /* first, lets see if we've already got this one */
+   PINFO ("account GUID=%s", DB_GET_VAL("accountGUID",j));
+   guid = nullguid;  /* just in case the read fails ... */
+   string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
+   acc = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
+   if (!acc) 
+   {
+      acc = xaccMallocAccount();
+      xaccAccountBeginEdit(acc);
+      xaccAccountSetGUID(acc, &guid);
+   }
+   else 
+   {
+      xaccAccountBeginEdit(acc);
+   }
+
+   xaccAccountSetName(acc, DB_GET_VAL("accountName",j));
+   xaccAccountSetDescription(acc, DB_GET_VAL("description",j));
+   xaccAccountSetCode(acc, DB_GET_VAL("accountCode",j));
+   xaccAccountSetType(acc, xaccAccountStringToEnum(DB_GET_VAL("type",j)));
+   xaccAccountSetCommodity(acc, 
+                 gnc_string_to_commodity (DB_GET_VAL("commodity",j)));
+   xaccAccountSetVersion(acc, atoi(DB_GET_VAL("version",j)));
+
+   /* try to find the parent account */
+   PINFO ("parent GUID=%s", DB_GET_VAL("parentGUID",j));
+   guid = nullguid;  /* just in case the read fails ... */
+   string_to_guid (DB_GET_VAL("parentGUID",j), &guid);
+   if (guid_equal(xaccGUIDNULL(), &guid)) 
+   {
+      /* if the parent guid is null, then this
+       * account belongs in the top group */
+      xaccGroupInsertAccount (topgrp, acc);
+   }
+   else
+   {
+      /* if we haven't restored the parent account, create
+       * an empty holder for it */
+      parent = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
+      if (!parent)
+      {
+         parent = xaccMallocAccount();
+         xaccAccountBeginEdit(parent);
+         xaccAccountSetGUID(parent, &guid);
+      }
+      else
+      {
+         xaccAccountBeginEdit(parent);
+      }
+      xaccAccountInsertSubAccount(parent, acc);
+      xaccAccountCommitEdit(parent);
+   }
+   xaccAccountCommitEdit(acc);
+
+   return topgrp;
+}
+
+static AccountGroup *
+pgendGetAllAccounts (PGBackend *be, AccountGroup *topgrp)
+{
+   char * bufp;
+
+   ENTER ("be=%p", be);
+   if (!be) return NULL;
+
+   /* first, make sure commodities table is up to date */
+   pgendGetAllCommodities (be);
+
+   if (!topgrp)
+   {
+      topgrp = xaccMallocAccountGroup();
+   }
+
+   /* Get them ALL */
+   bufp = "SELECT * FROM gncAccount;";
+   SEND_QUERY (be, bufp, NULL);
+   pgendGetResults (be, get_account_cb, topgrp);
+
+   pgendGetAllAccountKVP (be, topgrp);
+
+   /* Mark the newly read group as saved, since the act of putting
+    * it together will have caused it to be marked up as not-saved.
+    */
+   xaccGroupMarkSaved (topgrp);
+
+   LEAVE (" ");
+   return topgrp;
+}
+
+/* ============================================================= */
+/* ============================================================= */
+/*            TRANSACTION STUFF                                  */
+/* ============================================================= */
+/* ============================================================= */
+/* The is_trans_empty() routine returns TRUE if this appears to 
+ * be a fresh, 'null' transaction.  It would be better if somehow 
+ * we could get the gui to mark this as a fresh transaction, rather 
+ * than having to scan a bunch of fields.  But, oh well, this is 
+ * a minor quibble in the grand scheme of things.
+ */
+
+static gboolean
+is_trans_empty (Transaction *trans)
+{
+   Split *s;
+   if (!trans) return TRUE;
+   if (0 != (xaccTransGetDescription(trans))[0]) return FALSE;
+   if (0 != (xaccTransGetNum(trans))[0]) return FALSE;
+   if (1 != xaccTransCountSplits(trans)) return FALSE;
+
+   s = xaccTransGetSplit(trans, 0);
+   if (TRUE != gnc_numeric_zero_p(xaccSplitGetShareAmount(s))) return FALSE;
+   if (TRUE != gnc_numeric_zero_p(xaccSplitGetValue(s))) return FALSE;
+   if ('n' != xaccSplitGetReconcile(s)) return FALSE;
+   if (0 != (xaccSplitGetMemo(s))[0]) return FALSE;
+   if (0 != (xaccSplitGetAction(s))[0]) return FALSE;
+   return TRUE;
+}
+
+/* ============================================================= */
+/* The pgendTransCompareVersion() routine compares the version 
+ * number of the transaction in the engine and the sql database. It 
+ * returns a negative number if the sql version is older (or the 
+ * acount is not present in the sql db). It returns a positive 
+ * number if the sql version is newer.  It returns zero if the 
+ * two are equal.
+ */
+
+static gpointer
+trans_version_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   if (-1 != (int) data || 0 != j) return (gpointer) -1;
+   return ((gpointer) atoi(DB_GET_VAL ("version", 0)));
+}
+
+static int
+pgendTransCompareVersion (PGBackend *be, Transaction *trans)
+{
+   char *p;
+   int sql_version = 0;
+
+   p = be->buff; *p = 0;
+   p = stpcpy (p, "SELECT version FROM gncTransaction WHERE transGuid ='");
+   p = guid_to_string_buff (&(trans->guid), p);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be,be->buff, -1);
+   sql_version = (int) pgendGetResults (be, trans_version_cb, (gpointer) -1);
+
+   if (-1 == sql_version) return -1;
+   return (sql_version - xaccTransGetVersion (trans));
+}
+
+/* ============================================================= */
+/* The pgendStoreTransactionNoLock() routine traverses the transaction 
+ * structure and stores/updates it in the database.  If checks the 
+ * transaction splits as well, updating those.  If the database
+ * has splits which the transaction doesn't, those are deleted.  
+ * Then any new splits are poked into the database.
+ *
+ * If the do_check_version flag is set, then the database version
+ * is compared to the engine version.  If the database version is 
+ * newer, then the engine transaction is not stored.
+ *
+ * The pgendStoreTransaction() routine does the same, except that
+ * it locks the tables appropriately.
  */
 
 static gpointer
@@ -238,15 +615,21 @@ delete_list_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 }
 
 static void
-pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans, 
-                             gboolean do_mark)
+pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
+                             gboolean do_check_version)
 {
    GList *start, *deletelist=NULL, *node;
    char * p;
 
    if (!be || !trans) return;
-   ENTER ("trans=%p, mark=%d", trans, do_mark);
+   ENTER ("trans=%p", trans);
 
+   /* don't update the database if the database is newer ... */
+   if (do_check_version)
+   {
+      if (0 < pgendTransCompareVersion (be, trans)) return;
+   }
+   trans->version ++;  /* be sure to update the version !! */
 
    /* first, we need to see which splits are in the database
     * since what is there may not match what we have cached in 
@@ -333,15 +716,13 @@ pgendStoreTransaction (PGBackend *be, Transaction *trans)
    ENTER ("be=%p, trans=%p", be, trans);
 
    /* lock it up so that we store atomically */
-   bufp = "BEGIN;"
-          "LOCK TABLE gncTransaction IN EXCLUSIVE MODE; "
-          "LOCK TABLE gncEntry IN EXCLUSIVE MODE; "
-          "LOCK TABLE gncAccount IN EXCLUSIVE MODE; "
-          "LOCK TABLE gncCommodity IN EXCLUSIVE MODE; ";
+   bufp = "BEGIN;\n"
+          "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
+          "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
    SEND_QUERY (be,bufp, );
    FINISH_QUERY(be->connection);
 
-   pgendStoreTransactionNoLock (be, trans, FALSE);
+   pgendStoreTransactionNoLock (be, trans, TRUE);
 
    bufp = "COMMIT;";
    SEND_QUERY (be,bufp, );
@@ -350,130 +731,42 @@ pgendStoreTransaction (PGBackend *be, Transaction *trans)
 }
 
 /* ============================================================= */
-/* This routine traverses the group structure and stores it into 
- * the database.  The NoLock version doesn't lock up the tables.
+/* The pgendStoreAllTransactions() routine traverses through *all*
+ * transactions in the account group, storing these to the database.
+ * During the store, it checks the transaction version numbers,
+ * and only stores those transactions that were newer in the engine.
  */
 
 static int
-traverse_cb (Transaction *trans, void *cb_data)
+trans_traverse_cb (Transaction *trans, void *cb_data)
 {
-   /* the callback is only called when marking... */
    pgendStoreTransactionNoLock ((PGBackend *) cb_data, trans, TRUE);
    return 0;
 }
 
-static void
-pgendStoreGroupNoLock (PGBackend *be, AccountGroup *grp, 
-                       gboolean do_mark)
-{
-   GList *start, *node;
-
-   if (!be || !grp) return;
-   ENTER("grp=%p mark=%d", grp, do_mark);
-
-   /* walk the account tree, and store subaccounts */
-   start = xaccGroupGetAccountList (grp);
-   for (node=start; node; node=node->next) 
-   {
-      AccountGroup *subgrp;
-      Account *acc = node->data;
-
-      pgendStoreAccountNoLock (be, acc, do_mark);
-
-      /* recursively walk to child accounts */
-      subgrp = xaccAccountGetChildren (acc);
-      if (subgrp) pgendStoreGroupNoLock(be, subgrp, do_mark);
-   }
-   LEAVE(" ");
-}
-
 
 static void
-pgendStoreGroup (PGBackend *be, AccountGroup *grp)
+pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
 {
-   char *bufp;
+   char *p;
    ENTER ("be=%p, grp=%p", be, grp);
    if (!be || !grp) return;
 
    /* lock it up so that we store atomically */
-/* hack alert ---- we need to lock a bunch of tables, right??!! */
-   bufp = "BEGIN;";
-   SEND_QUERY (be,bufp, );
-   FINISH_QUERY(be->connection);
-
-   /* Clear the account marks; useful later to avoid recurision
-    * during account consistency checks. */
-   xaccClearMarkDownGr (grp, 0);
-
-   /* reset the write flags. We use this to make sure we don't
-    * get caught in infinite recursion */
-   xaccGroupBeginStagedTransactionTraversals(grp);
-   pgendStoreGroupNoLock (be, grp, TRUE);
-
-   /* recursively walk transactions */
-   xaccGroupStagedTransactionTraversal (grp, 1, traverse_cb, be);
-
-   /* reset the write flags again */
-   xaccClearMarkDownGr (grp, 0);
-
-   bufp = "COMMIT;";
-   SEND_QUERY (be,bufp, );
-   FINISH_QUERY(be->connection);
-   LEAVE(" ");
-}
-
-/* ============================================================= */
-
-static void
-pgendSync (Backend *bend, AccountGroup *grp)
-{
-   PGBackend *be = (PGBackend *)bend;
-   ENTER ("be=%p, grp=%p", be, grp);
-
-   /* hack alert -- this is *not* the correct implementation
-    * of what the synchronize function is supposed to do. 
-    * This is a sick placeholder.
-    */
-   pgendStoreGroup (be, grp);
-
-   if ((MODE_SINGLE_FILE != be->session_mode) &&
-       (MODE_SINGLE_UPDATE != be->session_mode))
-   {
-      /* Maybe this should be part of store group ?? */
-      pgendGroupRecomputeAllCheckpoints (be, grp);
-   }
-
-   LEAVE(" ");
-}
-
-/* ============================================================= */
-
-static void
-pgendSyncSingleFile (Backend *bend, AccountGroup *grp)
-{
-   char *p;
-   PGBackend *be = (PGBackend *)bend;
-   ENTER ("be=%p, grp=%p", be, grp);
-
-   /* In single file mode, we treat 'sync' as 'file save'.
-    * We start by deleting *everything*, and then writing 
-    * everything out.  This is rather nasty, ugly and dangerous,
-    * but that's the nature of single-file mode.  Note: we
-    * have to delete everything because there is no other way 
-    * of finding out that an account, transaction or split
-    * was deleted. i.e. there's no other way to delete.  So
-    * start with a clean slate.
-    */
-    
-   p = "DELETE FROM gncEntry; "
-       "DELETE FROM gncTransaction; "
-       "DELETE FROM gncAccount; "
-       "DELETE FROM gncCommodity; ";
+   p = "BEGIN;\n"
+       "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
-   pgendStoreGroup (be, grp);
+   /* Recursively walk transactions. Start by reseting the write 
+    * flags. We use this to avoid infinite recursion */
+   xaccGroupBeginStagedTransactionTraversals(grp);
+   xaccGroupStagedTransactionTraversal (grp, 1, trans_traverse_cb, be);
 
+   p = "COMMIT;";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
    LEAVE(" ");
 }
 
@@ -483,23 +776,23 @@ pgendSyncSingleFile (Backend *bend, AccountGroup *grp)
  *    the SQL database and into the engine, for the indicated 
  *    Transaction GUID.  It starts by looking for an existing
  *    transaction in the engine with such a GUID.  If found, then
- *    it compares the date of last update to what's in the sql DB.
+ *    it compares the version of last update to what's in the sql DB.
  *    If the engine data is older, or the engine doesn't yet have 
  *    this transaction, then the full update happens.  The full
- *    update sets up the stransaction structure, all of the splits
+ *    update sets up the transaction structure, all of the splits
  *    in the transaction, and makes sure that all of the splits 
  *    are in the proper accounts.  If the pre-existing tranasaction
  *    in the engine has more splits than what's in the DB, then these
  *    are pruned so that the structure exactly matches what's in the 
- *    DB.  This routine then returns FALSE.
+ *    DB.  This routine then returns -1.
  *
  *    If this routine finds a pre-existing transaction in the engine,
- *    and the date of last modification of this transaction is 
- *    *newer* then what the DB holds, then this routine returns
- *    TRUE, and does *not* perform any update.
+ *    and the version of last modification of this transaction is 
+ *    equal to or *newer* then what the DB holds, then this routine
+ *    returns TRUE, and does *not* perform any update.
  */
 
-static gboolean
+static int
 pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
 {
    const gnc_commodity *modity=NULL;
@@ -508,12 +801,12 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
    PGresult *result;
    Account *acc, *previous_acc=NULL;
    gboolean do_set_guid=FALSE;
-   gboolean engine_data_is_newer = FALSE;
+   int engine_data_is_newer = 0;
    int i, j, nrows;
    GList *node, *db_splits=NULL, *engine_splits, *delete_splits=NULL;
    
    ENTER ("be=%p", be);
-   if (!be || !trans_guid) return FALSE;
+   if (!be || !trans_guid) return 0;
 
    /* disable callbacks into the backend, and events to GUI */
    gnc_engine_suspend_events();
@@ -525,7 +818,7 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
    {
       trans = xaccMallocTransaction();
       do_set_guid=TRUE;
-      engine_data_is_newer = FALSE;
+      engine_data_is_newer = -1;
    }
 
    /* build the sql query to get the transaction */
@@ -536,7 +829,7 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
    pbuff = guid_to_string_buff(trans_guid, pbuff);
    pbuff = stpcpy (pbuff, "';");
 
-   SEND_QUERY (be,be->buff, FALSE);
+   SEND_QUERY (be,be->buff, 0);
    i=0; nrows=0;
    do {
       GET_RESULTS (be->connection, result);
@@ -545,10 +838,10 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
          int ncols = PQnfields (result);
          jrows = PQntuples (result);
          nrows += jrows;
-         j = 0;
          PINFO ("query result %d has %d rows and %d cols",
             i, nrows, ncols);
 
+         j = 0;
          if (1 < nrows)
          {
              /* since the guid is primary key, this error is totally
@@ -558,33 +851,35 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
                     guid_to_string (trans_guid));
              if (jrows != nrows) xaccTransCommitEdit (trans);
              xaccBackendSetError (&be->be, ERR_SQL_CORRUPT_DB);
-             return FALSE;
+             pgendEnable(be);
+             gnc_engine_resume_events();
+             return 0;
          }
 
          /* First order of business is to determine whose data is
           * newer: the engine cache, or the database.  If the 
-          * database has newer stuff, we update eh engine. If the
-          * engine is newer, we need to poke into the database.
+          * database has newer stuff, we update the engine. If the
+          * engine is equal or newer, we do nothing in this routine.
           * Of course, we know the database has newer data if this
           * transaction doesn't exist in the engine yet.
-          * Also, make the date comparison so that engine
-          * is considered newer only if engine is strictly newer,
-          * so that 'equals' doesn't cause a database write.
           */
          if (!do_set_guid)
          {
-            Timespec db_ts, cache_ts;
-            db_ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_entered",j));
-            cache_ts = xaccTransRetDateEnteredTS (trans);
-            if (0 < timespec_cmp (&db_ts, &cache_ts)) {
-               engine_data_is_newer = TRUE;
+            gint32 db_version, cache_version;
+            db_version = atoi (DB_GET_VAL("version",j));
+            cache_version = xaccTransGetVersion (trans);
+            if (db_version == cache_version) {
+               engine_data_is_newer = 0;
+            } else 
+            if (db_version < cache_version) {
+               engine_data_is_newer = +1;
             } else {
-               engine_data_is_newer = FALSE;
+               engine_data_is_newer = -1;
             }
          }
 
          /* if the DB data is newer, copy it to engine */
-         if (FALSE == engine_data_is_newer)
+         if (0 > engine_data_is_newer)
          {
             Timespec ts;
             xaccTransBeginEdit (trans);
@@ -595,6 +890,7 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
             xaccTransSetDatePostedTS (trans, &ts);
             ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_entered",j));
             xaccTransSetDateEnteredTS (trans, &ts);
+            xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
 
             /* hack alert -- don't set the transaction currency until
              * after all splits are restored. This hack is used to set
@@ -618,11 +914,18 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
        * punt for now ... */
       PERR ("no such transaction in the database. This is unexpected ...\n");
       xaccBackendSetError (&be->be, ERR_SQL_MISSING_DATA);
-      return FALSE;
+      pgendEnable(be);
+      gnc_engine_resume_events();
+      return 0;
    }
 
    /* if engine data was newer, we are done */
-   if (TRUE == engine_data_is_newer) return TRUE;
+   if (0 <= engine_data_is_newer) 
+   {
+      pgendEnable(be);
+      gnc_engine_resume_events();
+      return engine_data_is_newer;
+   }
 
    /* ------------------------------------------------- */
    /* If we are here, then the sql database contains data that is
@@ -638,7 +941,7 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
    pbuff = guid_to_string_buff(trans_guid, pbuff);
    pbuff = stpcpy (pbuff, "';");
 
-   SEND_QUERY (be,be->buff, FALSE);
+   SEND_QUERY (be,be->buff, 0);
    i=0; nrows=0;
    do {
       GET_RESULTS (be->connection, result);
@@ -779,7 +1082,7 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
    gnc_engine_resume_events();
 
    LEAVE (" ");
-   return FALSE;
+   return -1;
 }
 
 /* ============================================================= */
@@ -799,7 +1102,7 @@ static void
 pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
 {
    Transaction *trans;
-   gboolean engine_data_is_newer = FALSE;
+   int engine_data_is_newer = 0;
    
    ENTER ("be=%p", be);
    if (!be || !trans_guid) return;
@@ -811,7 +1114,7 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
    engine_data_is_newer = pgendCopyTransactionToEngine (be, trans_guid);
 
    /* if engine data was newer, we save to the db. */
-   if (TRUE == engine_data_is_newer) 
+   if (0 < engine_data_is_newer) 
    {
       /* XXX hack alert -- fixme */
       PERR ("Data in the local cache is newer than the data in\n"
@@ -836,6 +1139,8 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
    LEAVE (" ");
 }
 
+/* ============================================================= */
+/*             QUERY STUFF                                       */
 /* ============================================================= */
 /* The pgendRunQuery() routine performs a search on the SQL database for 
  * all of the splits that correspond to gnc-style query, and then 
@@ -930,169 +1235,7 @@ pgendRunQuery (Backend *bend, Query *q)
 }
 
 /* ============================================================= */
-/* This routine walks the account group, gets all KVP values */
-
-static gpointer
-restore_cb (Account *acc, void * cb_data)
-{
-   PGBackend *be = (PGBackend *) cb_data;
-   acc->kvp_data = pgendKVPFetch (be, &(acc->guid), acc->kvp_data);
-   return NULL;
-}
-
-static void 
-pgendGetAllAccountKVP (PGBackend *be, AccountGroup *grp)
-{
-   if (!grp) return;
-
-   xaccGroupForEachAccountDeeply (grp, restore_cb, be);
-}
-
-/* ============================================================= */
-/* This routine restores all commodities in the database.
- */
-
-static gpointer
-get_commodities_cb (PGBackend *be, PGresult *result, int j, gpointer data)
-{
-   gnc_commodity_table *comtab = (gnc_commodity_table *) data;
-   gnc_commodity *com;
-
-   /* first, lets see if we've already got this one */
-   com = gnc_commodity_table_lookup(comtab, 
-         DB_GET_VAL("namespace",j), DB_GET_VAL("mnemonic",j));
-
-   if (com) return comtab;
-
-   /* no we don't ... restore it */
-   com = gnc_commodity_new (
-                    DB_GET_VAL("fullname",j), 
-                     DB_GET_VAL("namespace",j), 
-                     DB_GET_VAL("mnemonic",j),
-                     DB_GET_VAL("code",j),
-                     atoi(DB_GET_VAL("fraction",j)));
-
-   gnc_commodity_table_insert (comtab, com);
-   return comtab;
-}
-
-static void
-pgendGetAllCommodities (PGBackend *be)
-{
-   gnc_commodity_table *comtab;
-   char * p;
-   if (!be) return;
-
-   ENTER ("be=%p", be);
-
-   comtab = gnc_engine_commodities();
-   if (!comtab) {
-      PERR ("can't get global commodity table");
-      return;
-   }
-
-   /* Get them ALL */
-   p = "SELECT * FROM gncCommodity;";
-   SEND_QUERY (be, p, );
-   pgendGetResults (be, get_commodities_cb, comtab);
-
-   LEAVE (" ");
-}
-
-/* ============================================================= */
-/* This routine restores the account heirarchy of *all* accounts in the DB.
- * It implicitly assumes that the database has only one account
- * heirarchy in it, i.e. any accounts without a parent will be stuffed
- * into the same top group.
- */
-
-static gpointer
-get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
-{
-   AccountGroup *topgrp = (AccountGroup *) data;
-   Account *parent;
-   Account *acc;
-   GUID guid;
-
-   /* first, lets see if we've already got this one */
-   PINFO ("account GUID=%s", DB_GET_VAL("accountGUID",j));
-   guid = nullguid;  /* just in case the read fails ... */
-   string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-   acc = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
-   if (!acc) 
-   {
-      acc = xaccMallocAccount();
-      xaccAccountBeginEdit(acc);
-      xaccAccountSetGUID(acc, &guid);
-   }
-
-   xaccAccountSetName(acc, DB_GET_VAL("accountName",j));
-   xaccAccountSetDescription(acc, DB_GET_VAL("description",j));
-   xaccAccountSetCode(acc, DB_GET_VAL("accountCode",j));
-   xaccAccountSetType(acc, xaccAccountStringToEnum(DB_GET_VAL("type",j)));
-   xaccAccountSetCommodity(acc, 
-       gnc_string_to_commodity (DB_GET_VAL("commodity",j)));
-
-   /* try to find the parent account */
-   PINFO ("parent GUID=%s", DB_GET_VAL("parentGUID",j));
-   guid = nullguid;  /* just in case the read fails ... */
-   string_to_guid (DB_GET_VAL("parentGUID",j), &guid);
-   if (guid_equal(xaccGUIDNULL(), &guid)) 
-   {
-      /* if the parent guid is null, then this
-       * account belongs in the top group */
-      xaccGroupInsertAccount (topgrp, acc);
-   }
-   else
-   {
-      /* if we haven't restored the parent account, create
-       * an empty holder for it */
-      parent = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
-      if (!parent)
-      {
-         parent = xaccMallocAccount();
-         xaccAccountBeginEdit(parent);
-         xaccAccountSetGUID(parent, &guid);
-      }
-      xaccAccountInsertSubAccount(parent, acc);
-   }
-   xaccAccountCommitEdit(acc);
-
-   return topgrp;
-}
-
-static AccountGroup *
-pgendGetAllAccounts (PGBackend *be)
-{
-   AccountGroup *topgrp;
-   char * bufp;
-
-   ENTER ("be=%p", be);
-   if (!be) return NULL;
-
-   /* first, make sure commodities table is up to date */
-   pgendGetAllCommodities (be);
-
-   topgrp = xaccMallocAccountGroup();
-
-   /* Get them ALL */
-   bufp = "SELECT * FROM gncAccount;";
-   SEND_QUERY (be, bufp, NULL);
-   pgendGetResults (be, get_account_cb, topgrp);
-
-   pgendGetAllAccountKVP (be, topgrp);
-
-   /* Mark the newly read group as saved, since the act of putting
-    * it together will have caused it to be marked up as not-saved.
-    */
-   xaccGroupMarkSaved (topgrp);
-
-   LEAVE (" ");
-   return topgrp;
-}
-
-/* ============================================================= */
-/* Like the title suggests, this one sucks *all* of the 
+/* The pgendGetAllTransactions() routine sucks *all* of the 
  * transactions out of the database.  This is a potential 
  * CPU and memory-burner; its use is not suggested for anything
  * but single-user mode.
@@ -1115,28 +1258,77 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
 }
 
 /* ============================================================= */
-/* return TRUE if this appears to be a fresh, 'null' transaction */
-/* it would be better is somehow we could get the gui to mark this
- * as a fresh transaction, rather than having to scan a bunch of 
- * fields.  But this is minor in the scheme of things.
- */
+/* ============================================================= */
+/*         HIGHER LEVEL ROUTINES AND BACKEND PROPER              */
+/* ============================================================= */
+/* ============================================================= */
 
-static gboolean
-is_trans_empty (Transaction *trans)
+static int
+pgend_account_commit_edit (Backend * bend, 
+                           Account * acct)
 {
-   Split *s;
-   if (!trans) return TRUE;
-   if (0 != (xaccTransGetDescription(trans))[0]) return FALSE;
-   if (0 != (xaccTransGetNum(trans))[0]) return FALSE;
-   if (1 != xaccTransCountSplits(trans)) return FALSE;
+   char *p;
+   PGBackend *be = (PGBackend *)bend;
 
-   s = xaccTransGetSplit(trans, 0);
-   if (TRUE != gnc_numeric_zero_p(xaccSplitGetShareAmount(s))) return FALSE;
-   if (TRUE != gnc_numeric_zero_p(xaccSplitGetValue(s))) return FALSE;
-   if ('n' != xaccSplitGetReconcile(s)) return FALSE;
-   if (0 != (xaccSplitGetMemo(s))[0]) return FALSE;
-   if (0 != (xaccSplitGetAction(s))[0]) return FALSE;
-   return TRUE;
+   ENTER ("be=%p, acct=%p", be, acct);
+   if (!be || !acct) return 1;  /* hack alert hardcode literal */
+   if (FALSE == acct->core_dirty) return 0;
+
+   /* lock it up so that we query and store atomically */
+   /* its not at all clear to me that this isn't rife with deadlocks. */
+   p = "BEGIN;\n"
+       "LOCK TABLE gncAccount IN EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncCommodity IN EXCLUSIVE MODE;\n";
+
+   SEND_QUERY (be,p, 555);
+   FINISH_QUERY(be->connection);
+
+   /* check to see that the engine version is equal or newer than 
+    * whats in the database.  It its not, then some other user has 
+    * made changes, and we must roll back. */
+   if (0 < pgendAccountCompareVersion (be, acct))
+   {
+      acct->do_free = FALSE;
+      p = "ROLLBACK;";
+      SEND_QUERY (be,p,444);
+      FINISH_QUERY(be->connection);
+
+      /* hack alert -- we should restore the account data from the 
+       * sql back end at this point ! !!! */
+PWARN(" account data in engine is newer\n"
+      " account must be rolled back.  This function\n"
+      " is not completely implemented !! \n");
+      LEAVE ("rolled back");
+      return 445;
+   }
+   acct->version ++;   /* be sure to update the version !! */
+
+   if (acct->do_free)
+   {
+      p = be->buff; *p = 0;
+      p = stpcpy (p, "DELETE FROM gncAccount WHERE accountGuid='");
+      p = guid_to_string_buff (xaccAccountGetGUID(acct), p);
+      p = stpcpy (p, "';");
+      SEND_QUERY (be,be->buff, 444);
+      FINISH_QUERY(be->connection);
+   }
+   else
+   {
+      pgendStoreAccountNoLock (be, acct, FALSE, FALSE);
+   }
+
+   p = "COMMIT;";
+   SEND_QUERY (be,p,333);
+   FINISH_QUERY(be->connection);
+
+   /* Mark this up so that we don't get that annoying gui dialog
+    * about having to save to file.  unfortunately,however, this
+    * is too liberal, and could screw up synchronization if we've lost
+    * contact with the back end at some point.  So hack alert -- fix 
+    * this. */
+   xaccGroupMarkSaved (xaccAccountGetParent(acct));
+   LEAVE ("commited");
+   return 0;
 }
 
 /* ============================================================= */
@@ -1146,21 +1338,17 @@ pgend_trans_commit_edit (Backend * bend,
                          Transaction * trans,
                          Transaction * oldtrans)
 {
-   GList *start, *node;
    char * bufp;
-   int ndiffs, rollback=0;
+   int rollback=0;
    PGBackend *be = (PGBackend *)bend;
 
    ENTER ("be=%p, trans=%p", be, trans);
    if (!be || !trans) return 1;  /* hack alert hardcode literal */
 
    /* lock it up so that we query and store atomically */
-   /* its not at all clear to me that this isn't rife with deadlocks. */
-   bufp = "BEGIN; "
-          "LOCK TABLE gncTransaction IN EXCLUSIVE MODE; "
-          "LOCK TABLE gncEntry IN EXCLUSIVE MODE; "
-          "LOCK TABLE gncAccount IN EXCLUSIVE MODE; "
-          "LOCK TABLE gncCommodity IN EXCLUSIVE MODE; ";
+   bufp = "BEGIN;\n"
+          "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
+          "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
    SEND_QUERY (be,bufp, 555);
    FINISH_QUERY(be->connection);
 
@@ -1178,10 +1366,19 @@ pgend_trans_commit_edit (Backend * bend,
        * and thus, any further action on our part would be unsafe.  It
        * is recommended that this be spit back at the GUI, and let a 
        * human decide what to do next.
+       *
+       * We could directly compare all of the data ... but instead,
+       * its more efficient to just compare the version number.
        */
+ 
+#ifdef COMPARE_ALL_TRANSACTION_DATA
+      {
+      int ndiffs;
+      GList *start, *node;
+
       ndiffs = pgendCompareOneTransactionOnly (be, oldtrans); 
       if (0 < ndiffs) rollback++;
-   
+
       /* be sure to check the old splits as well ... */
       start = xaccTransGetSplitList (oldtrans);
       for (node=start; node; node=node->next) 
@@ -1190,15 +1387,17 @@ pgend_trans_commit_edit (Backend * bend,
          ndiffs = pgendCompareOneSplitOnly (be, s);
          if (0 < ndiffs) rollback++;
       }
+      }
+#else
+      if (0 < pgendTransCompareVersion (be, oldtrans)) rollback ++;
+#endif
    
       if (rollback) {
          bufp = "ROLLBACK;";
          SEND_QUERY (be,bufp,444);
          FINISH_QUERY(be->connection);
    
-         PWARN ("Some other user changed this transaction. Please\n"
-                "refresh your GUI, type in your changes and try again.\n"
-                "(old tranasction didn't match DB, edit rolled back)\n");
+         PINFO ("old tranasction didn't match DB, edit rolled back)\n");
          return 666;   /* hack alert */
       } 
    }
@@ -1228,57 +1427,128 @@ pgend_trans_commit_edit (Backend * bend,
 }
 
 /* ============================================================= */
+/* hack alert -- the sane-ness of this algorithm should be reviewed.
+ * I can't vouch that there aren't any subtle issues or race conditions
+ * lurking in this.  Anyway, with that introduction:
+ *
+ * The pgendSync() routine 'synchronizes' the accounts & commodities 
+ * cached in the engine to those in the database.  It does this first 
+ * by writing out all of the accounts and transactions, from the 
+ * top-group down, and then re-reading from the database.  This
+ * write-then-read cycle has the effect of merging the engine data
+ * into the sql database.  Note that version checking is done during
+ * the writing: only accounts and transactions that are 'newer' in
+ * the engine are written out.  Then during the read cycle, anything
+ * in the DB that is newer than what's in the engine is sucked back 
+ * into the engine.
+ *
+ * There are three scenarios to contemplate with the update with
+ * this 'sync' operation:
+ *
+ * 1) Database merge:  the user has two substantialy similar copies
+ *    of the same data; the first copy was read into the engine earlier,
+ *    and now, in this routine, it is being written into the second. 
+ *    Because the merge uses version numbers, this merge should be
+ *    'safe' in that only the newer copy of any account or transaction
+ *    is merged.  But this 'safety' can break down, in certain cases;
+ *    see below.
+ * 1a) Same situation as above, except the 'first' copy is a file
+ *    that resulted because the user was kicked off-line (off-network)
+ *    and saved the data to a file.  Now, coming back on-line, they
+ *    are merging the file data back into the central store.
+ *
+ * This merge is *not* safe when two different users made a change
+ * to the same account or transaction.  This routine does not check
+ * for such conflicts or report them.  Hack alert: this is a bug that
+ * should be fixed.
+ */
 
-static int
-pgend_account_commit_edit (Backend * bend, 
-                           Account * acct)
+
+static void
+pgendSync (Backend *bend, AccountGroup *grp)
+{
+   PGBackend *be = (PGBackend *)bend;
+   ENTER ("be=%p, grp=%p", be, grp);
+
+   /* store the account group heirarchy, and then all transactions */
+   pgendStoreGroup (be, grp);
+   pgendStoreAllTransactions (be, grp);
+
+   if ((MODE_SINGLE_FILE != be->session_mode) &&
+       (MODE_SINGLE_UPDATE != be->session_mode))
+   {
+      pgendGroupRecomputeAllCheckpoints (be, grp);
+   }
+
+   /* don't send events  to GUI, don't accept callaback to backend */
+   gnc_engine_suspend_events();
+   pgendDisable(be);
+
+   pgendKVPInit(be);
+   pgendGetAllAccounts (be, grp);
+   if ((MODE_SINGLE_FILE != be->session_mode) &&
+       (MODE_SINGLE_UPDATE != be->session_mode))
+   {
+      pgendGroupGetAllCheckpoints (be, grp);
+   } 
+   else
+   {
+      /* in single user mode, read all the transactions */
+      pgendGetAllTransactions (be, grp);
+   }
+
+   /* re-enable events */
+   pgendEnable(be);
+   gnc_engine_resume_events();
+
+   LEAVE(" ");
+}
+
+/* ============================================================= */
+/* In single file mode, we treat 'sync' as 'file save'.
+ * We start by deleting *everything*, and then writing 
+ * everything out.  This is rather nasty, ugly and dangerous,
+ * but that's the nature of single-file mode.  Note: we
+ * have to delete everything because in this mode, there is 
+ * no other way of finding out that an account, transaction 
+ * or split was deleted. i.e. there's no other way to delete.  
+ * So start with a clean slate.
+ */
+
+static void
+pgendSyncSingleFile (Backend *bend, AccountGroup *grp)
 {
    char *p;
    PGBackend *be = (PGBackend *)bend;
-
-   ENTER ("be=%p, acct=%p", be, acct);
-   if (!be || !acct) return 1;  /* hack alert hardcode literal */
-   if (FALSE == acct->core_dirty) return 0;
-
-   /* lock it up so that we query and store atomically */
-   /* its not at all clear to me that this isn't rife with deadlocks. */
-   p = "BEGIN; "
-       "LOCK TABLE gncAccount IN EXCLUSIVE MODE; "
-       "LOCK TABLE gncCommodity IN EXCLUSIVE MODE; ";
-
-   SEND_QUERY (be,p, 555);
+   ENTER ("be=%p, grp=%p", be, grp);
+    
+   p = "BEGIN;\n"
+       "LOCK TABLE gncAccount IN EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncCommodity IN EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n"
+       "DELETE FROM gncEntry;\n"
+       "DELETE FROM gncTransaction;\n"
+       "DELETE FROM gncAccount;\n"
+       "DELETE FROM gncCommodity;\n";
+   SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
-   /* hack alert -- we should compare old to new, 
-    * i.e. compare version numbers, to see if 
-    * we're clobbering someone elses changes.  */
+   /* Store accounts and commodities */
+   xaccClearMarkDownGr (grp, 0);
+   pgendStoreGroupNoLock (be, grp, TRUE, TRUE);
+   xaccClearMarkDownGr (grp, 0);
 
-   if (acct->do_free)
-   {
-      p = be->buff; *p = 0;
-      p = stpcpy (p, "DELETE FROM gncAccount WHERE accountGuid='");
-      p = guid_to_string_buff (xaccAccountGetGUID(acct), p);
-      p = stpcpy (p, "';");
-      SEND_QUERY (be,be->buff, 444);
-      FINISH_QUERY(be->connection);
-   }
-   else
-   {
-      pgendStoreAccountNoLock (be, acct, FALSE);
-   }
+   /* Recursively walk transactions. Start by reseting the write 
+    * flags. We use this to avoid infinite recursion */
+   xaccGroupBeginStagedTransactionTraversals(grp);
+   xaccGroupStagedTransactionTraversal (grp, 1, trans_traverse_cb, be);
 
    p = "COMMIT;";
-   SEND_QUERY (be,p,333);
+   SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
-   /* Mark this up so that we don't get that annoying gui dialog
-    * about having to save to file.  unfortunately,however, this
-    * is too liberal, and could screw up synchronization if we've lost
-    * contact with the back end at some point.  So hack alert -- fix 
-    * this. */
-   xaccGroupMarkSaved (xaccAccountGetParent(acct));
-   LEAVE ("commited");
-   return 0;
+   LEAVE(" ");
 }
 
 /* ============================================================= */
@@ -1349,7 +1619,7 @@ get_session_cb (PGBackend *be, PGresult *result, int j, gpointer data)
              username, hostname, gecos, mode, datestr);
       PWARN ("The above messages should be handled by the GUI\n");
 
-      if (lock_holder) return be;
+      if (lock_holder) return lock_holder;
       lock_holder = g_strdup (DB_GET_VAL("sessionGUID",j));
    }
    return lock_holder;
@@ -1526,7 +1796,7 @@ pgend_book_load_poll (Backend *bend)
    pgendDisable(be);
 
    pgendKVPInit(be);
-   grp = pgendGetAllAccounts (be);
+   grp = pgendGetAllAccounts (be, NULL);
    pgendGroupGetAllCheckpoints (be, grp);
 
    /* re-enable events */
@@ -1552,7 +1822,7 @@ pgend_book_load_single (Backend *bend)
    pgendDisable(be);
 
    pgendKVPInit(be);
-   grp = pgendGetAllAccounts (be);
+   grp = pgendGetAllAccounts (be, NULL);
    pgendGetAllTransactions (be, grp);
 
    /* re-enable events */
@@ -1755,6 +2025,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
    /* hack alert -- we hard-code the access mode here,
     * but it should be user-adjustable.  */
    be->session_mode = MODE_SINGLE_UPDATE;
+   // be->session_mode = MODE_POLL;
    rc = pgendSessionValidate (be, ignore_lock);
 
    /* set up pointers for appropriate behaviour */
@@ -1805,7 +2076,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.trans_rollback_edit = NULL;
             be->be.run_query = pgendRunQuery;
             be->be.sync = pgendSync;
-            PWARN ("MODE_POLL is experimental -- you will corrupt your data\n");
+            PWARN ("MODE_POLL is experimental -- you might corrupt your data\n");
             break;
 
          case MODE_EVENT:

@@ -260,9 +260,12 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
             PQclear (result);
             return;
          }
-         chk->balance = atoll(DB_GET_VAL("balance", j));
-         chk->cleared_balance = atoll(DB_GET_VAL("cleared_balance", j));
-         chk->reconciled_balance = atoll(DB_GET_VAL("reconciled_balance", j));
+         if (0 < nrows )
+         {
+            chk->balance = atoll(DB_GET_VAL("balance", j));
+            chk->cleared_balance = atoll(DB_GET_VAL("cleared_balance", j));
+            chk->reconciled_balance = atoll(DB_GET_VAL("reconciled_balance", j));
+         }
       }
 
       PQclear (result);

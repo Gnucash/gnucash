@@ -50,12 +50,6 @@ To Be Done
 ----------
 Core bugs/features that still need work:
 
--- bug/feature: the 'save as' semantics are ... unexpected, if 
-   the database already exists and has data in it ... 
-
--- bug: group sync doesn't pull in newer data from the db ...
-   (related to the 'save as' above)
-
 -- allow user to enter URL in GUI dialog, get GUI to remember the URL 
 
 -- Implement GUI to ask user for username/password to log onto the
@@ -65,20 +59,46 @@ Core bugs/features that still need work:
    mods to gnc-book to keep it happy about lock files & such.
    (coord with rlb on gnc-book redesign)
 
+-- review (actually, design & architect) the communications error
+   handling policy.  For example, CopyToEngine() will leave
+   the backend in a disabled state if a communication error occurs;
+   there will be other debiliting conditions if the backend disappears,
+   leaving the engine in a possibly confused state.
+
+-- during sync, detect and report conflicting edits to accounts 
+   and transactions.  See the notes for pgendSync() for details
+   as to what this is about.  For the first pass, this is not a 
+   serious issue; its a 'nice to have' thing.
+
 
 To Be Done, Part II
 -------------------
 This list only affects the multi-user and advanced/optional features.
 
+-- saving as single-user, then re-opening in multi-user mains missing
+   checkpoints, and thus no balances.
 
--- implement account commit edit (actually, the check&rollback part)
-   (need to check the account version number beofer the commit happens)
+-- checkpoint ending balance is showing up as starting balance
 
--- use version numbers for accounts, commodities, splits & transactions,
-   as this will provide a far more efficient 'compare' for 
-   user changes.
+-- transaction rollbck is 'incorrect'; sort of ?? since we should
+   roll back to what's in the db, and not the old stored transaction ...
+   but the way the register works, it hides this problem ...
+
+-- store account balances in database.  This will be tricky ...
+   -- split query gets hard ... 
+   -- use postgres aggregates ?? 
 
 -- provide support for more query types in gncquery.c
+
+-- implement account rollback (i.e. of other user has modified the
+   account, we need to do something to merge thier work into ours...)
+
+-- fix caching in the face of lost contact to the backend.  If the
+   backend can't contact its server, then we should just save up caches,
+   and then when contact with backend re-established, we should spit
+   them out.  The pgendSync routine should more or less dothe trick;
+   note, however, that the file format needs to save the version number
+   ...
 
 -- Implement logging history in the SQL server.  i.e. save the old
    copies of stuff in log tables.  Make the username part of the 
@@ -93,40 +113,32 @@ This list only affects the multi-user and advanced/optional features.
    tries to write to something they're not allowed to write to,
    then they should be bounced back.
 
--- versioning verification in backend. The desired semantic for updates
-   should be like CVS: multiple nearly-simultaneous writers are allowed;
-   however, only one wins, and others are kicked back.  The losers know
-   themselves because they are trying to update info of the wrong
-   version. But right now, version is not done everywhere, nor is it
-   done uniformly:
-   -- pgend_transaction_commit does it correctly.
-   -- pgTransactionSync  does not, it clobbers.
-   -- pgend_account_commit clobbers.
-   -- pgendAccountGroupSync is unfinished.
+-- Review versioning verification in backend. The desired semantic for 
+   updates should be like CVS: multiple nearly-simultaneous writers 
+   are allowed; however, only one wins, and others are kicked back. 
+   The losers know themselves because they are trying to update info 
+   of the wrong version. 
+   -- pgend_transaction_commit does it correctly; but the gui doesn't
+      report a rollback.
+   -- pgTransactionSync() is broken, but its not used anywher.
+   -- pgend_account_commit checks version but doesn't rollback.
+      (nor does the dui report a rollback.
+   -- pgendSync does the right thing, except that it doesn't
+      detect any version conflicts, nor does it notify the user
+      of such conflicts.
+
    I'm not sure how critical this all is; with a small number of users
    it shouldn't be a problem.  With a huge number of users, each editing
    the same transaction (unlikely!?) then there is risk of clobbered
-   data, but so what?
-
--- fix rollback bug in GUI.  If backend tells engine to rollback,
-   (e.g. on a new transaction), the GUI still shows traces, instead
-   of kicking back.
-   This is a symptom of a lack of kick-back detection in GUI.
--- finish implementing pgendAccountGroupSync
-
--- store account balances in database.  This will be tricky ...
-   -- split query gets hard ... 
-   -- use postgres aggregates ?? 
-
--- review multiuser operation for correctness 
-
--- fix caching in the face of lost contact to the backend.  If the
-   backend can't contact its server, then we should just save up caches,
-   and then when contact with backend re-established, we should spit
-   them out.  But right now, this is broken.  In particular, 
-   the use of xaccGrouparkSaved screws up some status bits ...
+   data, but so what?  ersioning is at least partly a people-management
+   problem.  Anyway, what's there now should be pretty good & should
+   work for now.  Except its mostly untested.
 
 -- review & match up against docs at 
    http://www.lupercalia.net/gnc-db/
+
+-- use version numbers for commodities.  Right now, multi-user
+   updates of commodities are not detected (this seem OK for
+   now, since this is a rare occurrance, right ???)
 
 
