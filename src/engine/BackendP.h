@@ -262,10 +262,6 @@ GNCBackendError xaccBackendGetError (Backend *be);
 /*
  * The xaccGetAccountBackend() subroutine will find the
  *    persistent-data storage backend associated with this account.
- *    This routine traverses up the account hierarchy until it
- *    finds and account-group node that has a backend associated with
- *    it.  The assumption is that all accounts in that account-group
- *    share a common back-end.
  *
  * The xaccGetTransactionBackend() subroutine does the same, for a given
  *    transaction.
@@ -273,14 +269,8 @@ GNCBackendError xaccBackendGetError (Backend *be);
 
 Backend * xaccAccountGetBackend (Account *account);
 Backend * xaccTransactionGetBackend (Transaction *trans);
-
 Backend * xaccGroupGetBackend (AccountGroup *group);
 Backend * xaccGNCBookGetBackend (GNCBook *book);
-
-/* 
- * Put a link to the backend that handles this pricedb 
- */
-void xaccPriceDBSetBackend (GNCPriceDB *prdb, Backend *be);
 Backend * xaccPriceDBGetBackend (GNCPriceDB *prdb);
 
 void xaccInitBackend(Backend *be);
