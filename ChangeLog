@@ -6,6 +6,14 @@
 	* src/gnome/gnc-plugin-page.[ch]: Derive the GncPluginPage widget
 	from a GObject instead of a GInterface.
 
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome-utils/gnc-tree-view-account.[ch]: Double clicking an
+	account in the account tree now opens it.  Handle the new gtk2
+	'popup-menu' signal.
+
+	* src/register/register-gnome/gnucash-sheet.c: Use the new glib2
+	methods to create objects.
+
 2003-09-27  David Hampton  <hampton@employees.org>
 
 	* lib/egg/egg-action-group.[ch]:

@@ -203,6 +203,9 @@ void          gnc_tree_view_account_refilter              (GncTreeViewAccount *v
 Account     * gnc_tree_view_account_get_top_level         (GncTreeViewAccount *view);
 
 
+Account     * gnc_tree_view_account_get_account_from_path (GncTreeViewAccount *view,
+							   GtkTreePath *path);
+
 /** This function returns the account associated with the selected
  *  item in the account tree view.
  *

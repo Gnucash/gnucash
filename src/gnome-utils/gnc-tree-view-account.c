@@ -221,6 +221,7 @@ gnc_tree_view_account_new (gboolean show_root)
 
   /* Set default visibilities */
   gtk_tree_view_set_headers_visible (tree_view, FALSE);
+  //  gtk_tree_view_set_rules_hint (tree_view, TRUE);
   gnc_tree_view_account_init_view_info(&account_view->priv->avi);
 
   /* Set up the "account name" column */
@@ -429,6 +430,35 @@ gnc_tree_view_account_get_top_level (GncTreeViewAccount *view)
   model = egg_tree_model_filter_get_model (EGG_TREE_MODEL_FILTER (filter_model));
 
   return gnc_tree_model_account_get_toplevel (GNC_TREE_MODEL_ACCOUNT(model));
+}
+
+/*
+ * Retrieve the selected account from an account tree view.  The
+ * account tree must be in single selection mode.
+ */
+Account *
+gnc_tree_view_account_get_account_from_path (GncTreeViewAccount *view,
+					     GtkTreePath *path)
+{
+    GtkTreeModel *model;
+    GtkTreeIter iter, child_iter;
+    Account *account;
+
+    ENTER("view %p", view);
+    g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
+
+    
+    model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+    if (!gtk_tree_model_get_iter (model, &iter, path)) {
+      LEAVE("no iter");
+      return NULL;
+    }
+
+    egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER (model),
+						      &child_iter, &iter);
+    account = child_iter.user_data;
+    LEAVE("account %p (%s)", account, xaccAccountGetName (account));
+    return account;
 }
 
 /*

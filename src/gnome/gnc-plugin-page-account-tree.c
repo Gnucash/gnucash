@@ -75,9 +75,16 @@ static void gnc_plugin_page_account_tree_merge_actions (GncPluginPage *plugin_pa
 static void gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
 
 /* Callbacks */
-static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
+static gboolean gnc_plugin_page_account_tree_popup_menu_cb (GtkTreeView *treeview,
+							    GncPluginPageAccountTree *page);
+static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkTreeView *treeview,
 							      GdkEventButton *event,
 			       				      GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_double_click_cb (GtkTreeView        *treeview,
+							  GtkTreePath        *path,
+							  GtkTreeViewColumn  *col,
+							  GncPluginPageAccountTree *page);
+
 static void gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 							       GncPluginPageAccountTree *page);
 
@@ -468,8 +475,12 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 	selection = gtk_tree_view_get_selection(tree_view);
 	g_signal_connect (G_OBJECT (selection), "changed",
 			  G_CALLBACK (gnc_plugin_page_account_tree_selection_changed_cb), page);
+	g_signal_connect (G_OBJECT (tree_view), "popup-menu",
+			  G_CALLBACK (gnc_plugin_page_account_tree_popup_menu_cb), page);
 	g_signal_connect (G_OBJECT (tree_view), "button-press-event",
 			  G_CALLBACK (gnc_plugin_page_account_tree_button_press_cb), page);
+	g_signal_connect (G_OBJECT (tree_view), "row-activated",
+			  G_CALLBACK (gnc_plugin_page_account_tree_double_click_cb), page);
 
 	gtk_tree_view_set_headers_visible(tree_view, TRUE);
 	gnc_plugin_page_account_tree_configure (page->priv);
@@ -564,22 +575,71 @@ gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page,
 
 /* Callbacks */
 static gboolean
-gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
+gnc_plugin_page_account_tree_button_press_cb (GtkTreeView *treeview,
 					      GdkEventButton *event,
 	       				      GncPluginPageAccountTree *page)
 {
 	GtkWidget *menu;
+	gint button;
+	guint32 time;
 
-	if (event->button == 3 && page->priv->ui_merge != NULL) {
-		/* Maybe show a different popup menu if no account is selected. */
-		menu = egg_menu_merge_get_widget (page->priv->ui_merge, "/AccountPopup");
-		if (menu)
-		  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-				  event->button, event->time);
-		return TRUE;
+	ENTER("tree %p, event %p, page %p", treeview, event, page);
+
+	if (event && event->button != 3) {
+	  LEAVE("not button 3");
+	  return FALSE;
 	}
 
-	return FALSE;
+	if (page->priv->ui_merge == NULL) {
+	  LEAVE("no ui merge");
+	  return FALSE;
+	}
+
+	button = event ? event->button : 0;
+	time = event ? event->time : 0;
+
+	/* Maybe show a different popup menu if no account is selected. */
+	menu = egg_menu_merge_get_widget (page->priv->ui_merge, "/AccountPopup");
+	if (!menu) {
+	  LEAVE("no menu");
+	  return FALSE;
+	}
+
+	gtk_menu_popup (GTK_MENU(menu), NULL, NULL, NULL, NULL, button, time);
+	LEAVE(" ");
+	return TRUE;
+}
+
+static gboolean
+gnc_plugin_page_account_tree_popup_menu_cb (GtkTreeView *treeview,
+					    GncPluginPageAccountTree *page)
+{
+	gboolean result;
+
+	ENTER("tree %p, page %p", treeview, page);
+	result = gnc_plugin_page_account_tree_button_press_cb (treeview, NULL, page);
+	LEAVE("result %d", result);
+	return result;
+}
+
+static void
+gnc_plugin_page_account_tree_double_click_cb (GtkTreeView        *treeview,
+					      GtkTreePath        *path,
+					      GtkTreeViewColumn  *col,
+					      GncPluginPageAccountTree *page)
+{
+	GtkWidget *window;
+	GncPluginPage *new_page;
+	Account *account;
+
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
+	account = gnc_tree_view_account_get_account_from_path (GNC_TREE_VIEW_ACCOUNT(treeview), path);
+	if (account == NULL)
+	  return;
+
+	window = GNC_PLUGIN_PAGE (page)->window;
+	new_page = gnc_plugin_page_register_new (account, FALSE);
+	gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }
 
 static void
