@@ -426,7 +426,6 @@
                    (set! reparse-ok 
                          (qif-acct:reparse acct self))))
              (qif-file:accounts self))
-            (display "reparse-ok == ") (write reparse-ok) (newline)
             reparse-ok))
         (begin 
           (display "There was a heinous error.  Failed to read file.")
