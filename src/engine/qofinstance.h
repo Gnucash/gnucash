@@ -12,8 +12,9 @@
 #include "kvp_frame.h"
 
 /* --- type macros --- */
-/* cheesy, but will do for now, eventually should be more gtk-like */
-#define QOF_INSTANCE(object) (&((object)->inst))
+/* cheesy, but will do for now, eventually should be more gtk-like, handle
+ * thunks, etc.  */
+#define QOF_INSTANCE(object) ((QofInstance *)(object))
 
 typedef struct QofInstance_s QofInstance;
 
