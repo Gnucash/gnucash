@@ -151,67 +151,6 @@ MarkChanged (Transaction *trans)
 /********************************************************************\
 \********************************************************************/
 
-void
-xaccSplitDestroy (Split *split)
-{
-   Account *acc;
-   Transaction *trans;
-   int numsplits = 0;
-   int ismember = 0;
-   Split *s;
-
-   trans = split->parent;
-   assert (trans);
-   assert (trans->splits);
-
-   numsplits = 0;
-   s = trans->splits[0];
-   while (s) {
-/* xxxxxxx */
-printf ("SplitDestroy(): trans=%p, %d'th split=%p\n", trans, numsplits, s);
-      MARK_SPLIT(s);
-      if (s == split) ismember = 1;
-      numsplits ++;
-      s = trans->splits[numsplits];
-   }
-   assert (ismember);
-
-   /* if the account has three or more splits, 
-    * merely unlink & free the split. 
-    */
-   if (2 < numsplits) {
-      MARK_SPLIT (split);
-      xaccTransRemoveSplit (trans, split);
-      acc = split->acc;
-      xaccAccountRemoveSplit (acc, split);
-      xaccAccountRecomputeBalance (acc);
-      xaccFreeSplit (split);
-      xaccSplitRebalance (trans->splits[0]);
-   } else {
-      /* if the transaction has only two splits,
-       * remove both of them, and them destroy the 
-       * transaction. 
-       */
-      s = trans->splits[0];
-      acc = s->acc;
-      MARK_SPLIT (s);
-      xaccAccountRemoveSplit (acc, s);
-      xaccAccountRecomputeBalance (acc);
-
-      s = trans->splits[1];
-      if (s) {
-         acc = s->acc;
-         MARK_SPLIT (s);
-         xaccAccountRemoveSplit (acc, s);
-         xaccAccountRecomputeBalance (acc);
-         xaccFreeTransaction (trans);
-      }
-   }
-}
-
-/********************************************************************\
-\********************************************************************/
-
 int
 xaccCountSplits (Split **tarray)
 {
@@ -590,6 +529,70 @@ xaccTransDestroy (Transaction *trans)
    }
 
    xaccFreeTransaction (trans);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccSplitDestroy (Split *split)
+{
+   Account *acc;
+   Transaction *trans;
+   int numsplits = 0;
+   int ismember = 0;
+   Split *s;
+
+   trans = split->parent;
+   assert (trans);
+   assert (trans->splits);
+   CHECK_OPEN (trans);
+
+   numsplits = 0;
+   s = trans->splits[0];
+   while (s) {
+/* xxxxxxx */
+printf ("SplitDestroy(): trans=%p, %d'th split=%p\n", trans, numsplits, s);
+      MARK_SPLIT(s);
+      if (s == split) ismember = 1;
+      numsplits ++;
+      s = trans->splits[numsplits];
+   }
+   assert (ismember);
+
+   /* if the account has three or more splits, 
+    * merely unlink & free the split. 
+    */
+   if (2 < numsplits) {
+      MARK_SPLIT (split);
+      xaccTransRemoveSplit (trans, split);
+      acc = split->acc;
+      xaccAccountRemoveSplit (acc, split);
+      xaccAccountRecomputeBalance (acc);
+      xaccFreeSplit (split);
+      xaccSplitRebalance (trans->splits[0]);
+   } else {
+      /* if the transaction has only two splits,
+       * remove both of them, and them destroy the 
+       * transaction. Make a log in the journal before 
+       * destruction.
+       */
+      xaccTransWriteLog (trans, 'D');
+      s = trans->splits[0];
+      acc = s->acc;
+      MARK_SPLIT (s);
+      xaccAccountRemoveSplit (acc, s);
+      xaccAccountRecomputeBalance (acc);
+
+      s = trans->splits[1];
+      if (s) {
+         acc = s->acc;
+         MARK_SPLIT (s);
+         xaccAccountRemoveSplit (acc, s);
+         xaccAccountRecomputeBalance (acc);
+         xaccFreeTransaction (trans);
+      }
+   }
 }
 
 /********************************************************************\
