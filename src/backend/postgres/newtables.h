@@ -255,7 +255,7 @@ const char *drop_old_tables =
 
 const char *version_sql =
 "INSERT INTO gncVersion (major, minor, rev, name, date) "
-"VALUES (1, 5, 0, 'Change timestamp definition', now());\n"
+"VALUES (1, 5, 1, 'Change timestamp definition', now());\n"
 ;
 
 #endif
