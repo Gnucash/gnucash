@@ -17,7 +17,7 @@ libgncswig_la_SOURCES = \
   helperfuncs.c \
   gnucash-engine-perl5_wrap.c
 
-libgncswig_la_LDFLAGS = -version-info 1:1:1
+libgncswig_la_LDFLAGS = -version-info 1:2:1
 
 noinst_HEADERS = \
   helperfuncs.h
@@ -28,7 +28,8 @@ EXTRA_DIST = \
   perl5_swig_annotations.i \
   gnucash-swig-defines.c
 
-CFLAGS = @CFLAGS@ -Dbool=char
+# CFLAGS = @CFLAGS@ -Dbool=char
+CFLAGS = @CFLAGS@ 
 
 #
 # technically, the engine is independent of the gnome libs, however,
@@ -39,21 +40,9 @@ INCLUDES = \
   -I${top_srcdir}/src/engine
 
 libgncswig_la_LIBADD = \
-  @GLIB_LIBS@ \
-  ${top_srcdir}/src/engine/Account.lo \
-  ${top_srcdir}/src/engine/DateUtils.lo \
-  ${top_srcdir}/src/engine/GNCId.lo \
-  ${top_srcdir}/src/engine/Group.lo \
-  ${top_srcdir}/src/engine/Query.lo \
-  ${top_srcdir}/src/engine/Queue.lo \
-  ${top_srcdir}/src/engine/Scrub.lo \
-  ${top_srcdir}/src/engine/TransLog.lo \
-  ${top_srcdir}/src/engine/Transaction.lo \
-  ${top_srcdir}/src/engine/date.lo \
-  ${top_srcdir}/src/engine/util.lo \
-  ${top_srcdir}/src/engine/gnc-book.lo \
-  ${top_srcdir}/src/engine/guid.lo \
-  ${top_srcdir}/src/engine/md5.lo
+  -lgncengine \
+  @GLIB_LIBS@ 
+
 
 SWIG_INPUT_HDRS := \
   ${top_srcdir}/src/engine/Account.h \
@@ -61,9 +50,7 @@ SWIG_INPUT_HDRS := \
   ${top_srcdir}/src/engine/GNCId.h \
   ${top_srcdir}/src/engine/Group.h \
   ${top_srcdir}/src/engine/Query.h \
-  ${top_srcdir}/src/engine/Queue.h \
   ${top_srcdir}/src/engine/Scrub.h \
-  ${top_srcdir}/src/engine/TransLog.h \
   ${top_srcdir}/src/engine/Transaction.h \
   ${top_srcdir}/src/engine/date.h \
   ${top_srcdir}/src/engine/gnc-book.h
@@ -75,9 +62,9 @@ install-data-local: libgncswig.la
 	cd ${DESTDIR}${perllibdir} && rm -f gnucash.so
 	if [ -f ${DESTDIR}${perllibdir}/libgncswig.so ]; then \
 		cd ${DESTDIR}${perllibdir} && ln -s libgncswig.so gnucash.so; \
-	elif [ -f ${DESTDIR}${perllibdir}/libgncswig.so.1.1 ]; then \
+	elif [ -f ${DESTDIR}${perllibdir}/libgncswig.so.0 ]; then \
 		cd ${DESTDIR}${perllibdir} && \
-                ln -s libgncswig.so.1.1 gnucash.so; \
+                ln -s libgncswig.so.0 gnucash.so; \
 	else \
 		echo "Can't find libgncswig shared library!" \
 		exit 1; \
@@ -98,7 +85,7 @@ gnucash.engine.i: ${SWIG_INPUT_HDRS} perl5_swig_annotations.i
 	@echo "%}" >> $@
 	@for file in ${SWIG_INPUT_HDRS}; \
         do \
-          echo "%include `basename $$file`" >> $@; \
+          echo "%include \"`basename $$file`\"" >> $@; \
 	done
 
 CLEANFILES += gnucash.engine.i

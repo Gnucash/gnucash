@@ -16,5 +16,3 @@ leaked memory like a sieve. (RLB)
 ./examples contains whatever examples we've accumulated to date.
 
 ----------------------
-TBD:
--- modify configure to check perl paths
