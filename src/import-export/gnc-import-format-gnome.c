@@ -71,7 +71,7 @@ add_menu_item (GtkWidget *menu, gpointer user_data, char *label,
 }
 
 #define ADD_MENU_ITEM(str,op) { \
-	if (formats && op) { \
+	if (formats & op) { \
 	    item = add_menu_item(menu, prov_f, str, op); \
 	    if (!first) first = item; \
 	} \
@@ -85,8 +85,8 @@ make_menu (GNCImportProvFormatGnome *prov_f, GncImportFormat formats)
   menu = gtk_menu_new();
 
   /* Numeric formats */
-  ADD_MENU_ITEM("1,000.00", GNCIF_NUM_PERIOD);
-  ADD_MENU_ITEM("1.000,00", GNCIF_NUM_COMMA);
+  ADD_MENU_ITEM(_("Period-as-decimal (1,000.00)"), GNCIF_NUM_PERIOD);
+  ADD_MENU_ITEM(_("Comma-as-decimal (1.000,00)"), GNCIF_NUM_COMMA);
 
   /* Date formats */
   ADD_MENU_ITEM(_("m-d-y"), GNCIF_DATE_MDY);
@@ -111,14 +111,14 @@ gnc_ip_format_gnome_first_page(GNCDruidProvider* prov)
   const gchar* sample;
 
   /* See if we have anything to do. */
-  formats = desc_f->get_formats(prov->druid->be_ctx);
+  formats = desc_f->get_formats(prov_f->cb);
 
   /* If nothing to do, return NULL */
   if (formats == GNCIF_NONE)
     return NULL;
 
   /* Otherwise set up the menu and sample, then let the user at it */
-  sample = desc_f->get_sample(prov->druid->be_ctx);
+  sample = desc_f->get_sample(prov_f->cb);
 
   if (sample)
     gtk_label_set_text(prov_f->sample_label, sample);

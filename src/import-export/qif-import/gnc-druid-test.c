@@ -4,6 +4,7 @@
 #include "gnc-druid-provider-desc-edge.h"
 #include "gnc-druid-provider-desc-file.h"
 #include "gnc-druid-provider-desc-multifile.h"
+#include "gnc-import-desc-format.h"
 #include "gnc-druid-test.h"
 
 #include <stdio.h>
@@ -52,6 +53,26 @@ gnc_dt_test_files_done(GNCDruidCB *cb)
   return TRUE;
 }
 
+static GncImportFormat
+gnc_dt_test_get_formats(GNCImportFormatCB *cb)
+{
+  return GNCIF_DATE_YMD|GNCIF_DATE_YDM;
+}
+
+static const gchar *
+gnc_dt_test_get_sample(GNCImportFormatCB *cb)
+{
+  return "2004-10-11";
+}
+
+static gboolean
+gnc_dt_test_formats_done(GNCDruidCB *cb)
+{
+  GNCImportFormatCB *cb_f = GNC_IMPORT_FORMAT_CB(cb);
+  fprintf(stderr, "User selected format: %d\n", cb_f->format);
+  return TRUE;
+}
+
 static GList *
 gnc_dt_test_build_providers(void)
 {
@@ -85,6 +106,13 @@ gnc_dt_test_build_providers(void)
   desc_file->multifile_provider = desc_multifile;
 
   list = g_list_prepend(list, desc_multifile);
+  list = g_list_prepend(list,
+			gnc_import_desc_format_new_with_data("Formats are Ambiguous",
+							     "Choose your format!",
+							     gnc_dt_test_formats_done,
+							     gnc_dt_test_get_formats,
+							     gnc_dt_test_get_sample));
+
   list = g_list_prepend(list, desc_file);
   list =
     g_list_prepend(list,

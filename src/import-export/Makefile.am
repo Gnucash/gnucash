@@ -34,7 +34,8 @@ noinst_HEADERS = \
   import-match-map.h \
   import-match-picker.h \
   import-settings.h \
-  import-utilities.h 
+  import-utilities.h \
+  gnc-import-format-gnome.h
 
 libgncmod_generic_import_la_LDFLAGS = -module
 

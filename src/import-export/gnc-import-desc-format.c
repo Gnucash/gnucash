@@ -49,8 +49,8 @@ GNCImportDescFormat*
 gnc_import_desc_format_new_with_data(const gchar* title,
 				     const gchar* text,
 				     gboolean (*next_cb)(GNCDruidCB*),
-				     GncImportFormat (*get_formats)(GNCDruidCB*),
-				     const gchar* (*get_sample)(GNCDruidCB*))
+				     GncImportFormat (*get_formats)(GNCImportFormatCB*),
+				     const gchar* (*get_sample)(GNCImportFormatCB*))
 {
   GNCImportDescFormat* desc;
 

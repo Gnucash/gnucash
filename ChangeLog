@@ -9,6 +9,18 @@
 	* src/import-export/import-provider-format.glade:  glade file
 	  for the format provider
 
+	* src/import-export/Makefile.am: add missing header file to noinst list
+	* src/import-export/gnc-import-desc-format.[ch]: callbacks should
+	  take a GNCImportFormatCB*.
+	* src/import-export/gnc-import-format-gnome.c: fix a couple bugs.
+	  - make sure we only include available choices.
+	  - send the right callback.
+	* src/import-export/gncmod-generic-import.c: register the format provider
+	* src/import-export/qif-import/Makefile.am: include and link against
+	  generic import library (for test druid)
+	* src/import-export/qif-import/gnc-druid-test.c: add "format" provider
+	  to druid test
+
 2004-03-05  Tomas Cernaj  <tcernaj@gmx.de>
 
 	* src/register/register-gnome/gnucash-grid.c:

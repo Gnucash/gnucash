@@ -8,6 +8,8 @@
 #include <glib.h>
 #include <libguile.h>
 
+#include "gnc-import-format-gnome.h"
+
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 /* version of the gnc module system interface we require */
@@ -53,6 +55,11 @@ libgncmod_generic_import_LTX_gnc_module_init(int refcount)
     return FALSE;
   }
   scm_c_eval_string("(load-from-path \"generic-import/generic-import.scm\")");
+
+  if (!refcount) {
+    gnc_import_format_gnome_register();
+  }
+
   return TRUE;
 }
 

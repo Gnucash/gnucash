@@ -20,6 +20,8 @@ typedef struct _GNCImportDescFormatClass GNCImportDescFormatClass;
 #include "gnc-druid.h"
 #include "import-parse.h"
 
+#include "gnc-import-format-cb.h"
+
 #define GNC_IMPORT_DESC_TYPE_FORMAT	"import:format"
 
 struct _GNCImportDescFormat
@@ -27,8 +29,8 @@ struct _GNCImportDescFormat
   GNCDruidProviderDesc parent;
 
   gchar* text;
-  GncImportFormat (*get_formats)(GNCDruidCB*);
-  const gchar* (*get_sample)(GNCDruidCB*);
+  GncImportFormat (*get_formats)(GNCImportFormatCB*);
+  const gchar* (*get_sample)(GNCImportFormatCB*);
 
 };
 
@@ -43,8 +45,8 @@ GNCImportDescFormat*
 gnc_import_desc_format_new_with_data(const gchar* title,
 				     const gchar* text,
 				     gboolean (*next_cb)(GNCDruidCB*),
-				     GncImportFormat (*get_formats)(GNCDruidCB*),
-				     const gchar* (*get_sample)(GNCDruidCB*));
+				     GncImportFormat (*get_formats)(GNCImportFormatCB*),
+				     const gchar* (*get_sample)(GNCImportFormatCB*));
 
 void	gnc_import_desc_format_set_text(GNCImportDescFormat*,
 					       const gchar* text);
