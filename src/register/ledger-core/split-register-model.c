@@ -1259,6 +1259,57 @@ gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
   return xaccPrintAmount (total, gnc_split_amount_print_info (split, FALSE));
 }
 
+static gnc_numeric
+gnc_split_register_convert_amount (Split *split, Account * account,
+				   gnc_commodity * to_commodity)
+{
+  GNCPrice *price;
+  GNCPriceDB *pricedb;
+  gnc_commodity *currency;
+  Transaction *txn;
+  Timespec date;
+  gnc_numeric amount, convrate;
+  gboolean div = FALSE;
+
+  amount = xaccSplitGetAmount (split);
+
+  /* If this split is attached to this account, then grab the amount
+   * because we know what it is
+   */
+  if (xaccSplitGetAccount (split) == account)
+    return amount;
+
+  /* otherwise, we need to compute the amount from the conversion
+   * rate from the pricedb
+   */
+  pricedb = gnc_book_get_pricedb (xaccSplitGetBook (split));
+  txn = xaccSplitGetParent (split);
+  currency = xaccTransGetCurrency (txn);
+  xaccTransGetDatePostedTS (txn, &date);
+
+  price = gnc_pricedb_lookup_nearest_in_time (pricedb, to_commodity,
+					      currency, date);
+  if (price)
+    div = TRUE;
+  else
+    price = gnc_pricedb_lookup_nearest_in_time (pricedb, currency, to_commodity,
+						date);
+  if (!price)
+    return amount;
+
+  convrate = gnc_price_get_value (price);
+  gnc_price_unref (price);
+
+  if (div)
+    return gnc_numeric_div (amount, convrate,
+			    gnc_commodity_get_fraction (to_commodity),
+			    GNC_RND_ROUND);    
+  else
+    return gnc_numeric_mul (amount, convrate,
+			    gnc_commodity_get_fraction (to_commodity),
+			    GNC_RND_ROUND);
+}
+
 static const char *
 gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
                                       gboolean translate,
@@ -1268,19 +1319,23 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
   SplitRegister *reg = user_data;
   gboolean is_debit;
   Split *split;
+  Transaction *trans;
+  gnc_commodity *currency;
 
   is_debit = gnc_cell_name_equal
     (gnc_table_get_cell_name (reg->table, virt_loc), DEBT_CELL);
 
   split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+  trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
+
+  currency = xaccTransGetCurrency (trans);
+  if (!currency)
+    currency = gnc_default_currency ();
 
   if (!split)
   {
-    Transaction *trans;
     gnc_numeric imbalance;
-    gnc_commodity *currency;
 
-    trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
     imbalance = xaccTransGetImbalance (trans);
 
     if (gnc_numeric_zero_p (imbalance))
@@ -1298,11 +1353,6 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
       *conditionally_changed = TRUE;
 
     imbalance = gnc_numeric_abs (imbalance);
-
-    currency = xaccTransGetCurrency (trans);
-    if (!currency)
-      currency = gnc_default_currency ();
-
     imbalance = gnc_numeric_convert (imbalance,
                                      gnc_commodity_get_fraction (currency),
                                      GNC_RND_ROUND);
@@ -1314,7 +1364,31 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
   {
     gnc_numeric amount;
 
-    amount = xaccSplitGetValue (split);
+    /* If this account is not a stock/mutual/currency account, and currency !=
+     * the account commodity, then use the SplitAmount instead of the SplitValue.
+     */
+    switch (reg->type) {
+    case STOCK_REGISTER:
+    case CURRENCY_REGISTER:
+      amount = xaccSplitGetValue (split);
+      break;
+
+    default:
+      {
+	Account *account;
+	gnc_commodity * commodity;
+
+	account = gnc_split_register_get_default_account (reg);
+	commodity = xaccAccountGetCommodity (account);
+
+	if (commodity && !gnc_commodity_equal (commodity, currency))
+	  /* Convert this to the "local" value */
+	  amount = gnc_split_register_convert_amount (split, account, commodity);
+	else
+	  amount = xaccSplitGetValue (split);
+      }
+    }
+
     if (gnc_numeric_zero_p (amount))
       return NULL;
 

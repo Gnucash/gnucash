@@ -1351,6 +1351,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
     edit = gnc_amount_edit_new();
     gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(edit),
                                    gnc_default_price_print_info ());
+    gnc_amount_edit_set_fraction(GNC_AMOUNT_EDIT(edit), 100000);
     hbox = glade_xml_get_widget (xml, "price_hbox");
     gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
     xferData->price_edit = edit;

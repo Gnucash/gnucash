@@ -18,6 +18,13 @@
 
 	* src/register/ledger-core/split-register-load.c -- set the txn
 	  currency based on the currency of the "default account"
+
+	* src/register/ledger-core/split-register-model.c -- Always
+	  display amounts in the currency of the current account.  Use the
+	  pricedb to lookup converstion values if the transaction currency
+	  is not the same as the current account commodity.
+	* src/gnome/dialog-transfer.c -- Make sure the exchange rate stays
+	  a decimal number instead of converting to a fraction.
 	
 2002-11-24  David Hampton  <hampton@employees.org>
 
