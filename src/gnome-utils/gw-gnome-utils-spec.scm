@@ -467,7 +467,7 @@ be left empty")
    "gnc_mdi_show_progress"
    '(((<gw:mchars> caller-owned const) message)
      (<gw:double> percentage))
-   "Autosize the columns of a clist including the titles.")
+   "Show progress bar with the associated percentage (from 0 to 100).")
 
   (gw:wrap-function
    ws

@@ -1,3 +1,11 @@
+2003-04-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/transaction.scm: Applied Tomas
+	  Pospisek's patch to the transaction report (fixes bug #110598)
+
+	* src/gnome-utils/gw-gnome-utils-spec.scm: fix the description
+	  of gnc:mdi-show-progress.
+
 2003-04-18  Herbert Thoma  <herbie@hthoma.de>
 
 	* src/engine/Account.c: move currency conversion to gnc-pricedb.c
