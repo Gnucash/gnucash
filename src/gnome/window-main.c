@@ -498,8 +498,10 @@ gnc_main_window_restore(GNCMainInfo * wind, char * filename) {
   GList * old_children = g_list_copy(wind->mdi->children);
   GList * c;
 
-  if(!filename || !gnome_mdi_restore_state(GNOME_MDI(wind->mdi), session_name,
-                                           gnc_main_window_create_child)) {
+  if(!filename ||
+     !gnome_mdi_restore_state(GNOME_MDI(wind->mdi), session_name,
+                              gnc_main_window_create_child) ||
+     wind->mdi->children == NULL) {
     gnc_main_window_open_accounts(0);
   }
   g_free(session_name);
