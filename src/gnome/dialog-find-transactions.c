@@ -94,7 +94,7 @@ struct _FindTransactionsDialog {
 
   GtkWidget  * credit_debit_picker;
   GtkWidget  * amount_comp_picker;
-  GtkWidget  * amount_edit;
+  GtkWidget  * value_edit;
 
   GtkWidget  * memo_entry;
   GtkWidget  * memo_case_toggle;
@@ -282,7 +282,7 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg) {
   edit = gnc_amount_edit_new ();
   gtk_widget_show (edit);
   gtk_box_pack_start (GTK_BOX (box), edit, TRUE, TRUE, 0);
-  ftd->amount_edit = edit;
+  ftd->value_edit = edit;
 
   ftd->memo_entry = glade_xml_get_widget (xml, "memo_entry");
   ftd->memo_case_toggle = glade_xml_get_widget (xml, "memo_case_toggle");
@@ -476,7 +476,8 @@ gnc_ui_find_transactions_dialog_late_date_toggle_cb(GtkToggleButton * button,
 
 static void
 gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button, 
-                                      gpointer user_data) {
+                                      gpointer user_data) 
+{
   FindTransactionsDialog * ftd = user_data;
 
   GNCLedgerDisplay *ledger;
@@ -565,11 +566,11 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
                             QUERY_AND);
   }
 
-  amt_temp = gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (ftd->amount_edit));
+  amt_temp = gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (ftd->value_edit));
   amt_type = gnc_option_menu_get_active(ftd->credit_debit_picker) + 1;
 
   if((amt_temp > 0.00001) || (amt_type != AMT_SGN_MATCH_EITHER)) {
-    DxaccQueryAddAmountMatch(q, 
+    DxaccQueryAddValueMatch(q, 
                             amt_temp,
                             amt_type,
                             gnc_option_menu_get_active
