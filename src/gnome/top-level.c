@@ -25,13 +25,15 @@
 
 #include "config.h"
 
+#include "Account.h"
 #include "FileIO.h"
 #include "Group.h"
 #include "top-level.h"
 #include "MainWindow.h"
 #include "messages.h"
-#include "TransLog.h"
+#include "Transastion.h"
 #include "util.h"
+#include "xtutil.h"
 
 /** PROTOTYPES ******************************************************/
 
