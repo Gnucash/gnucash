@@ -36,11 +36,11 @@ G_BEGIN_DECLS
 
 
 typedef struct {
-	GtkScrolledWindow scrollwin;
+  GtkScrolledWindow scrollwin;
 } GncScrolledWindow;
 
 typedef struct {
-	GtkScrolledWindowClass parent_class;
+  GtkScrolledWindowClass parent_class;
 } GncScrolledWindowClass;
 
 

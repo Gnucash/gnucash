@@ -86,27 +86,27 @@ static void gnc_account_tree_update_column_visibility (GNCAccountTree *tree);
 GType
 gnc_account_tree_get_type (void)
 {
-	static GType gnc_account_tree_type = 0;
+  static GType gnc_account_tree_type = 0;
 
-	if (gnc_account_tree_type == 0) {
-		static const GTypeInfo gnc_account_tree_info = {
-			sizeof (GNCAccountTreeClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) gnc_account_tree_class_init,
-			NULL,
-			NULL,
-		       	sizeof (GNCAccountTree),
-			0,
-			(GInstanceInitFunc) gnc_account_tree_init
-		};
+  if (gnc_account_tree_type == 0) {
+    static const GTypeInfo gnc_account_tree_info = {
+      sizeof (GNCAccountTreeClass),
+      NULL,
+      NULL,
+      (GClassInitFunc) gnc_account_tree_class_init,
+      NULL,
+      NULL,
+      sizeof (GNCAccountTree),
+      0,
+      (GInstanceInitFunc) gnc_account_tree_init
+    };
 		
-		gnc_account_tree_type = g_type_register_static (GTK_TYPE_CTREE,
-								"GNCAccountTree",
-		   						&gnc_account_tree_info, 0);
-	}
+    gnc_account_tree_type = g_type_register_static (GTK_TYPE_CTREE,
+						    "GNCAccountTree",
+						    &gnc_account_tree_info, 0);
+  }
 	
-	return gnc_account_tree_type;
+  return gnc_account_tree_type;
 }
 
 
@@ -127,23 +127,23 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 GtkWidget *
 gnc_account_tree_new (void)
 {
-	GNCAccountTree *tree;
-	gint component_id;
+  GNCAccountTree *tree;
+  gint component_id;
 
-	tree = g_object_new (GNC_TYPE_ACCOUNT_TREE,
-			     "n-columns", 12,
-			     "tree-column", 0,
-			     NULL);
+  tree = g_object_new (GNC_TYPE_ACCOUNT_TREE,
+		       "n-columns", 12,
+		       "tree-column", 0,
+		       NULL);
 
-	component_id = gnc_register_gui_component (ACCOUNT_TREE_CM_CLASS,
-						   refresh_handler, NULL,
-      						   GTK_WIDGET (tree));
+  component_id = gnc_register_gui_component (ACCOUNT_TREE_CM_CLASS,
+                                             refresh_handler, NULL,
+					     GTK_WIDGET (tree));
 
-	gnc_gui_component_watch_entity_type (component_id,
-					     GNC_ID_ACCOUNT,
-      					     GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
-	
-      	return GTK_WIDGET (tree);
+  gnc_gui_component_watch_entity_type (component_id,
+                                       GNC_ID_ACCOUNT,
+                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+  return GTK_WIDGET (tree);
 }
 
 
@@ -227,62 +227,62 @@ gnc_account_tree_init (GNCAccountTree *tree)
 }
 
 static void
-gnc_account_tree_class_init (GNCAccountTreeClass *klass)
+gnc_account_tree_class_init(GNCAccountTreeClass *klass)
 {
-	GObjectClass      *object_class;
-       	GtkWidgetClass    *widget_class;
-	GtkCTreeClass     *ctree_class;
-	
-	object_class = G_OBJECT_CLASS (klass);
-	widget_class = GTK_WIDGET_CLASS (klass);
-	ctree_class = GTK_CTREE_CLASS (klass);
+  GObjectClass      *object_class;
+  GtkWidgetClass    *widget_class;
+  GtkCTreeClass     *ctree_class;
+  
+  object_class = G_OBJECT_CLASS (klass);
+  widget_class = GTK_WIDGET_CLASS (klass);
+  ctree_class = GTK_CTREE_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
+  parent_class = g_type_class_peek_parent (klass);
 
-	account_tree_signals[SELECT_ACCOUNT] =
-		g_signal_new ("select_account",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_FIRST,
-	   		      G_STRUCT_OFFSET(GNCAccountTreeClass, select_account),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__POINTER,
-			      G_TYPE_NONE,
-			      1,
-	   		      G_TYPE_POINTER);
+  account_tree_signals[SELECT_ACCOUNT] =
+    g_signal_new ("select_account",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET(GNCAccountTreeClass, select_account),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__POINTER,
+		  G_TYPE_NONE,
+		  1,
+		  G_TYPE_POINTER);
 
-	account_tree_signals[UNSELECT_ACCOUNT] =
-		g_signal_new ("unselect_account",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET(GNCAccountTreeClass, unselect_account),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__POINTER,
-			      G_TYPE_NONE,
-			      1,
-	   		      G_TYPE_POINTER);
+  account_tree_signals[UNSELECT_ACCOUNT] =
+    g_signal_new ("unselect_account",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET(GNCAccountTreeClass, unselect_account),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__POINTER,
+		  G_TYPE_NONE,
+		  1,
+		  G_TYPE_POINTER);
 
-	account_tree_signals[ACTIVATE_ACCOUNT] =
-	    	g_signal_new ("activate_account",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET(GNCAccountTreeClass, activate_account),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__POINTER,
-			      G_TYPE_NONE,
-			      1,
-	   		      G_TYPE_POINTER);
+  account_tree_signals[ACTIVATE_ACCOUNT] =
+    g_signal_new ("activate_account",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET(GNCAccountTreeClass, activate_account),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__POINTER,
+		  G_TYPE_NONE,
+		  1,
+		  G_TYPE_POINTER);
 
-	object_class->finalize = gnc_account_tree_finalize;
-	object_class->dispose = gnc_account_tree_dispose;
+  object_class->finalize = gnc_account_tree_finalize;
+  object_class->dispose = gnc_account_tree_dispose;
 
-	widget_class->key_press_event = gnc_account_tree_key_press;
-	widget_class->button_press_event = gnc_account_tree_button_press;
+  widget_class->key_press_event = gnc_account_tree_key_press;
+  widget_class->button_press_event = gnc_account_tree_button_press;
 
-	ctree_class->tree_select_row   = gnc_account_tree_select_row;
-	ctree_class->tree_unselect_row = gnc_account_tree_unselect_row;
+  ctree_class->tree_select_row   = gnc_account_tree_select_row;
+  ctree_class->tree_unselect_row = gnc_account_tree_unselect_row;
 }
 
 /********************************************************************\
@@ -391,12 +391,12 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 void
 gnc_account_tree_set_view_info(GNCAccountTree *tree, AccountViewInfo *info)
 {
-	g_return_if_fail (GNC_IS_ACCOUNT_TREE (tree));
-	g_return_if_fail (info != NULL);
+  g_return_if_fail(GNC_IS_ACCOUNT_TREE(tree));
+  g_return_if_fail(info != NULL);
 
-	tree->avi = *info;
+  tree->avi = *info;
 
-	gnc_account_tree_refresh (tree);
+  gnc_account_tree_refresh(tree);
 }
 
 
@@ -411,10 +411,10 @@ gnc_account_tree_set_view_info(GNCAccountTree *tree, AccountViewInfo *info)
 void
 gnc_account_tree_get_view_info(GNCAccountTree *tree, AccountViewInfo *info)
 {
-	g_return_if_fail (GNC_IS_ACCOUNT_TREE (tree));
-	g_return_if_fail(info != NULL);
-	
-	*info = tree->avi;
+  g_return_if_fail(GNC_IS_ACCOUNT_TREE(tree));
+  g_return_if_fail(info != NULL);
+
+  *info = tree->avi;
 }
 
 
@@ -429,20 +429,20 @@ gnc_account_tree_get_view_info(GNCAccountTree *tree, AccountViewInfo *info)
 void
 gnc_account_tree_expand_account(GNCAccountTree *tree, Account *account)
 {
-	GtkCTree *ctree;
-	GtkCTreeNode *node;
+  GtkCTree *ctree;
+  GtkCTreeNode *node;
 
-	g_return_if_fail (tree != NULL);
-	g_return_if_fail (GNC_IS_ACCOUNT_TREE (tree));
+  g_return_if_fail(tree != NULL);
+  g_return_if_fail(GNC_IS_ACCOUNT_TREE(tree));
 
-	ctree = GTK_CTREE (tree);
+  ctree = GTK_CTREE(tree);
 
-	/* Get the node with the account */
-	node = gtk_ctree_find_by_row_data (ctree, NULL, account);
-	if (node == NULL)
-		return;
+  /* Get the node with the account */
+  node = gtk_ctree_find_by_row_data(ctree, NULL, account);
+  if (node == NULL)
+    return;
 
-	gtk_ctree_expand (ctree, node);
+  gtk_ctree_expand(ctree, node);
 }
 
 
@@ -458,20 +458,20 @@ void
 gnc_account_tree_toggle_account_expansion (GNCAccountTree *tree,
                                            Account *account)
 {
-	GtkCTree *ctree;
-	GtkCTreeNode *node;
+  GtkCTree *ctree;
+  GtkCTreeNode *node;
 
-	g_return_if_fail (tree != NULL);
-	g_return_if_fail (GNC_IS_ACCOUNT_TREE (tree));
+  g_return_if_fail(tree != NULL);
+  g_return_if_fail(GNC_IS_ACCOUNT_TREE(tree));
 
-	ctree = GTK_CTREE (tree);
+  ctree = GTK_CTREE(tree);
 
-	/* Get the node with the account */
-	node = gtk_ctree_find_by_row_data (ctree, NULL, account);
-	if (node == NULL)
-		return;
+  /* Get the node with the account */
+  node = gtk_ctree_find_by_row_data(ctree, NULL, account);
+  if (node == NULL)
+    return;
 
-	gtk_ctree_toggle_expansion(ctree, node);
+  gtk_ctree_toggle_expansion(ctree, node);
 }
 
 
@@ -485,14 +485,14 @@ gnc_account_tree_toggle_account_expansion (GNCAccountTree *tree,
 void
 gnc_account_tree_expand_all (GNCAccountTree *tree)
 {
-	GtkCTree *ctree;
+  GtkCTree *ctree;
 
-	g_return_if_fail (tree != NULL);
-	g_return_if_fail (GNC_IS_ACCOUNT_TREE (tree));
+  g_return_if_fail (tree != NULL);
+  g_return_if_fail (GNC_IS_ACCOUNT_TREE(tree));
 
-	ctree = GTK_CTREE (tree);
+  ctree = GTK_CTREE(tree);
 
-	gtk_ctree_expand_recursive (ctree, NULL);
+  gtk_ctree_expand_recursive (ctree, NULL);
 }
 
 
@@ -893,11 +893,11 @@ gnc_account_tree_set_view_filter(GNCAccountTree *tree,
                                  AccountFilter filter,
                                  gpointer user_data)
 {
-	g_return_if_fail (tree != NULL);
-	g_return_if_fail (GNC_IS_ACCOUNT_TREE (tree));
+  g_return_if_fail(tree != NULL);
+  g_return_if_fail(GNC_IS_ACCOUNT_TREE(tree));
 
-	tree->view_filter = filter;
-	tree->view_filter_data = user_data;
+  tree->view_filter = filter;
+  tree->view_filter_data = user_data;
 }
 
 /********************************************************************\
@@ -914,11 +914,11 @@ gnc_account_tree_set_selectable_filter (GNCAccountTree *tree,
                                         AccountFilter filter,
                                         gpointer user_data)
 {
-	g_return_if_fail (tree != NULL);
-	g_return_if_fail (GNC_IS_ACCOUNT_TREE (tree));
+  g_return_if_fail(tree != NULL);
+  g_return_if_fail(GNC_IS_ACCOUNT_TREE(tree));
 
-	tree->selectable_filter = filter;
-	tree->selectable_filter_data = user_data;
+  tree->selectable_filter = filter;
+  tree->selectable_filter_data = user_data;
 }
 
 static void
@@ -1210,25 +1210,26 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
 static void
 gnc_account_tree_finalize (GObject *object)
 {
-	GNCAccountTree *tree = GNC_ACCOUNT_TREE(object);
+  GNCAccountTree *tree = GNC_ACCOUNT_TREE(object);
 
-	g_list_free(tree->current_accounts);
-	tree->current_accounts = NULL;
+  g_list_free(tree->current_accounts);
+  tree->current_accounts = NULL;
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
 gnc_account_tree_dispose (GObject *object)
 {
-	GNCAccountTree *tree = GNC_ACCOUNT_TREE(object);
+  GNCAccountTree *tree = GNC_ACCOUNT_TREE(object);
 
-	gnc_unregister_gui_component_by_data (ACCOUNT_TREE_CM_CLASS, tree);
+  gnc_unregister_gui_component_by_data (ACCOUNT_TREE_CM_CLASS, tree);
 
-	if (tree->deficit_style != NULL) {
-		g_object_unref(tree->deficit_style);
-		tree->deficit_style = NULL;
-	}
+  if (tree->deficit_style != NULL)
+  {
+    g_object_unref(tree->deficit_style);
+    tree->deficit_style = NULL;
+  }
 
-	G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (parent_class)->dispose (object);
 }

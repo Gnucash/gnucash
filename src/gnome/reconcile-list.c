@@ -80,27 +80,28 @@ static void gnc_reconcile_list_size_allocate_cb(GtkWidget *w,
 GType
 gnc_reconcile_list_get_type (void)
 {
-	static GType gnc_reconcile_list_type = 0;
+  static GType gnc_reconcile_list_type = 0;
 
-	if (gnc_reconcile_list_type == 0) {
-		static const GTypeInfo gnc_reconcile_list_info = {
-			sizeof (GNCReconcileListClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) gnc_reconcile_list_class_init,
-			NULL,
-			NULL,
-			sizeof (GNCReconcileList),
-			0,
-			(GInstanceInitFunc) gnc_reconcile_list_init
-		};
+  if (gnc_reconcile_list_type == 0)
+  {
+    static const GTypeInfo gnc_reconcile_list_info = {
+      sizeof (GNCReconcileListClass),
+      NULL,
+      NULL,
+      (GClassInitFunc) gnc_reconcile_list_class_init,
+      NULL,
+      NULL,
+      sizeof (GNCReconcileList),
+      0,
+      (GInstanceInitFunc) gnc_reconcile_list_init
+    };
 
-		gnc_reconcile_list_type = g_type_register_static (GTK_TYPE_CLIST,
-								  "GNCReconcileList",
-								  &gnc_reconcile_list_info, 0);
-	}
+    gnc_reconcile_list_type = g_type_register_static (GTK_TYPE_CLIST,
+						      "GNCReconcileList",
+						      &gnc_reconcile_list_info, 0);
+  }
 
-	return gnc_reconcile_list_type;
+  return gnc_reconcile_list_type;
 }
 
 
@@ -271,40 +272,40 @@ gnc_reconcile_list_init (GNCReconcileList *list)
 static void
 gnc_reconcile_list_class_init (GNCReconcileListClass *klass)
 {
-	GObjectClass    *object_class;
-	GtkCListClass   *clist_class;
+  GObjectClass    *object_class;
+  GtkCListClass   *clist_class;
 
-	object_class =  G_OBJECT_CLASS (klass);
-	clist_class = GTK_CLIST_CLASS (klass);
+  object_class =  G_OBJECT_CLASS (klass);
+  clist_class = GTK_CLIST_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
+  parent_class = g_type_class_peek_parent (klass);
 
-	reconcile_list_signals[TOGGLE_RECONCILED] =
-		g_signal_new("toggle_reconciled",
-			     G_OBJECT_CLASS_TYPE (object_class),
-	  		     G_SIGNAL_RUN_FIRST,
-			     G_STRUCT_OFFSET (GNCReconcileListClass,
-					      toggle_reconciled),
-			     NULL, NULL,
-			     g_cclosure_marshal_VOID__POINTER,
-			     G_TYPE_NONE, 1,
-			     G_TYPE_POINTER);
+  reconcile_list_signals[TOGGLE_RECONCILED] =
+    g_signal_new("toggle_reconciled",
+		 G_OBJECT_CLASS_TYPE (object_class),
+		 G_SIGNAL_RUN_FIRST,
+		 G_STRUCT_OFFSET (GNCReconcileListClass,
+				  toggle_reconciled),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__POINTER,
+		 G_TYPE_NONE, 1,
+		 G_TYPE_POINTER);
 
-	reconcile_list_signals[DOUBLE_CLICK_SPLIT] =
-		g_signal_new("double_click_split",
-			     G_OBJECT_CLASS_TYPE (object_class),
-			     G_SIGNAL_RUN_FIRST,
-			     G_STRUCT_OFFSET (GNCReconcileListClass,
-					      double_click_split),
-			     NULL, NULL,
-			     g_cclosure_marshal_VOID__POINTER,
-			     G_TYPE_NONE, 1,
-			     G_TYPE_POINTER);
+  reconcile_list_signals[DOUBLE_CLICK_SPLIT] =
+    g_signal_new("double_click_split",
+		 G_OBJECT_CLASS_TYPE (object_class),
+		 G_SIGNAL_RUN_FIRST,
+		 G_STRUCT_OFFSET (GNCReconcileListClass,
+				  double_click_split),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__POINTER,
+		 G_TYPE_NONE, 1,
+		 G_TYPE_POINTER);
 
-	object_class->finalize = gnc_reconcile_list_finalize;
+  object_class->finalize = gnc_reconcile_list_finalize;
 
-	clist_class->select_row = gnc_reconcile_list_select_row;
-	clist_class->unselect_row = gnc_reconcile_list_unselect_row;
+  clist_class->select_row = gnc_reconcile_list_select_row;
+  clist_class->unselect_row = gnc_reconcile_list_unselect_row;
 }
 
 static void
@@ -475,19 +476,19 @@ gnc_reconcile_list_unselect_row (GtkCList *clist, gint row, gint column,
 static void
 gnc_reconcile_list_finalize (GObject *object)
 {
-	GNCReconcileList *list = GNC_RECONCILE_LIST(object);
+  GNCReconcileList *list = GNC_RECONCILE_LIST(object);
 
-	if (list->reconciled != NULL) {
-		g_hash_table_destroy(list->reconciled);
-		list->reconciled = NULL;
-	}
+  if (list->reconciled != NULL) {
+    g_hash_table_destroy(list->reconciled);
+    list->reconciled = NULL;
+  }
 
-	if (list->query != NULL) {
-		xaccFreeQuery(list->query);
-		list->query = NULL;
-	}
+  if (list->query != NULL) {
+    xaccFreeQuery(list->query);
+    list->query = NULL;
+  }
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 gint

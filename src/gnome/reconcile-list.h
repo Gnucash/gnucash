@@ -39,49 +39,49 @@ G_BEGIN_DECLS
 typedef struct GNCReconcileList GNCReconcileList;
 
 typedef enum {
-	RECLIST_DEBIT,
-	RECLIST_CREDIT
+  RECLIST_DEBIT,
+  RECLIST_CREDIT
 } GNCReconcileListType;
 
 struct GNCReconcileList {
-	GtkCList clist;
+  GtkCList clist;
 
-	GNCReconcileListType list_type;
+  GNCReconcileListType list_type;
 
-	gint num_splits;
-	gint num_columns;
+  gint num_splits;
+  gint num_columns;
 
-	gint current_row;
-	Split *current_split;
+  gint current_row;
+  Split *current_split;
 
-	gboolean no_toggle;
-	gboolean always_unselect;
-	gboolean first_fill;
+  gboolean no_toggle;
+  gboolean always_unselect;
+  gboolean first_fill;
 
-	GHashTable *reconciled;
+  GHashTable *reconciled;
 
-	Account *account;
-	Query *query;
+  Account *account;
+  Query *query;
 
-	GNCReconcileList *sibling;
+  GNCReconcileList *sibling;
 
-	/* Sorting info */
-	gint key;
-	gboolean increasing;
-	GtkWidget *title_arrow[5];
+  /* Sorting info */
+  gint key;
+  gboolean increasing;
+  GtkWidget *title_arrow[5];
 
-	/* Column resizing */
-	gint prev_allocation;
-	gint title_width[5];
+  /* Column resizing */
+  gint prev_allocation;
+  gint title_width[5];
 };
 
 typedef struct {
-	GtkCListClass parent_class;
+  GtkCListClass parent_class;
 
-	void (*toggle_reconciled)  (GNCReconcileList *list,
-				    Split            *split);
-	void (*double_click_split) (GNCReconcileList *list,
-				    Split            *split);
+  void (*toggle_reconciled)  (GNCReconcileList *list,
+			      Split            *split);
+  void (*double_click_split) (GNCReconcileList *list,
+			      Split            *split);
 } GNCReconcileListClass;
 
 /***********************************************************

@@ -36,23 +36,23 @@
 #define GNC_MAINWIN_ACCOUNT_TREE_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_MAINWIN_ACCOUNT_TREE, GNCMainWinAccountTreeClass))
 #define GNC_IS_MAINWIN_ACCOUNT_TREE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_MAINWIN_ACCOUNT_TREE))
 
-typedef struct  { 
-	GtkVBox vbox;
-	GtkScrolledWindow *scrolled_window;
-	GNCAccountTree *acc_tree; 
+typedef struct {
+  GtkVBox vbox;
+  GtkScrolledWindow *scrolled_window;
+  GNCAccountTree *acc_tree; 
 } GNCMainWinAccountTree;
 
 typedef struct {
-	GtkVBoxClass parent_class;  
+  GtkVBoxClass parent_class;  
 
-	void (*select_account)   (GNCMainWinAccountTree *tree,
-		       		  Account        *account);
+  void (*select_account)   (GNCMainWinAccountTree *tree,
+                            Account        *account);
 
-	void (*unselect_account) (GNCMainWinAccountTree *tree,
-				  Account        *account);
+  void (*unselect_account) (GNCMainWinAccountTree *tree,
+                            Account        *account);
 
-	void (*activate_account) (GNCMainWinAccountTree *tree,
-		       		  Account        *account);
+  void (*activate_account) (GNCMainWinAccountTree *tree,
+                            Account        *account);
 } GNCMainWinAccountTreeClass;
 
 GType          gnc_mainwin_account_tree_get_type (void);

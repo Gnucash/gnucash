@@ -59,27 +59,27 @@
 
 
 struct gnc_html_struct {
-	GtkWidget   *container;         /* parent of the gtkhtml widget */
-	HtmlView    *view;
-	gchar       *current_link;      /* link under mouse pointer */
+  GtkWidget   * container;         /* parent of the gtkhtml widget */
+  HtmlView    * view;
+  gchar       * current_link;      /* link under mouse pointer */
 
-	URLType     base_type;           /* base of URL (path - filename) */
-	gchar       *base_location;
+  URLType     base_type;           /* base of URL (path - filename) */
+  gchar       * base_location;
 
-	gnc_http    *http;              /* documents HTTP requests */ 
-	GHashTable  *request_info;      /* hash uri to GList of HtmlDocument * */
+  gnc_http    * http;              /* documents HTTP requests */ 
+  GHashTable  * request_info;      /* hash uri to GList of HtmlDocument * */
 
-	/* callbacks */
-	GncHTMLUrltypeCB  urltype_cb;     /* is this type OK for this instance? */
-	GncHTMLLoadCB     load_cb;
-	GncHTMLFlyoverCB  flyover_cb;
-	GncHTMLButtonCB   button_cb;
+  /* callbacks */
+  GncHTMLUrltypeCB  urltype_cb;     /* is this type OK for this instance? */
+  GncHTMLLoadCB     load_cb;
+  GncHTMLFlyoverCB  flyover_cb;
+  GncHTMLButtonCB   button_cb;
   
-	gpointer          flyover_cb_data;
-	gpointer          load_cb_data;
-	gpointer          button_cb_data;
+  gpointer          flyover_cb_data;
+  gpointer          load_cb_data;
+  gpointer          button_cb_data;
   
-	gnc_html_history * history;
+  gnc_html_history * history; 
 };
 
 
@@ -408,7 +408,7 @@ gnc_build_url (URLType type, const gchar * location, const gchar * label)
 static gboolean
 http_allowed()
 {
-	return TRUE;
+  return TRUE;
 //return gnc_lookup_boolean_option("Network", "Allow http network access", 
 //                                 TRUE);
 }
@@ -416,7 +416,7 @@ http_allowed()
 static gboolean
 https_allowed()
 {
-	return TRUE;
+  return TRUE;
 //return gnc_lookup_boolean_option("Network", "Allow https network access using OpenSSL", 
 //                                 TRUE);
 }
@@ -424,7 +424,7 @@ https_allowed()
 static gboolean
 gnc_network_allowed()
 {
-	return FALSE;
+  return FALSE;
 //return gnc_lookup_boolean_option("Network", "Enable GnuCash Network", 
 //                                 TRUE);
 }
@@ -441,81 +441,83 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
                          const gchar * body, gint body_len, 
                          gpointer user_data)
 {
-	gnc_html *html = user_data; 
-	URLType  type;
-	char     *location = NULL;
-	char     *label    = NULL;
-	GList    *documents  = NULL;
-	GList    *current;
+  gnc_html * html = user_data; 
+  URLType  type;
+  char     * location = NULL;
+  char     * label    = NULL;
+  GList    * documents  = NULL;
+  GList    * current;
   
-  	DEBUG("uri %s, ok %d, body %10.10s, body len %d", uri, completed_ok, body, body_len);
-	g_hash_table_lookup_extended (html->request_info, uri,
-				      (gpointer *)&location,
-       				      (gpointer *)&documents);
+  DEBUG("uri %s, ok %d, body %10.10s, body len %d", uri, completed_ok, body, body_len);
+  g_hash_table_lookup_extended(html->request_info, uri,
+			       (gpointer *)&location,
+			       (gpointer *)&documents);
+  
+  /* documents will be NULL for an HTTP POST transaction, where we are
+   * displaying the reply data. */
+  if (documents == NULL) {
+    HtmlDocument *document = html->view->document;
 
-	/* documents will be NULL for an HTTP POST transaction, where we are
-	 * displaying the reply data. */
-	if (documents == NULL) {
-		HtmlDocument *document = html->view->document;
+    html_document_open_stream  (document, "text/html");
+    if(completed_ok) {
+      html_document_write_stream (document, body, body_len);
+    }
+    else {
+      char *data;
 
-		html_document_open_stream  (document, "text/html");
-		if (completed_ok) {
-			html_document_write_stream (document, body, body_len);
-		} else {
-			char *data;
+      data = g_strdup_printf(error_format, 
+			     _(error_title), _(error_body1), _(error_body2));
+      html_document_write_stream (document, data, strlen (data));
+      g_free (data);
+      html_document_write_stream (document, body, body_len);
+      html_document_write_stream (document,
+				  error_end, strlen(error_end));
+      html_document_close_stream (document);
+    }
+  }
+  /* otherwise, it's a normal SUBMIT transaction */ 
+  else {
+    /* before writing to the documents, make sure any new traffic won't
+     * see them while we're working */
+    g_hash_table_remove(html->request_info, uri);
+    g_free(location);
+    location = NULL;
 
-			data = g_strdup_printf(error_format, 
-					       _(error_title), _(error_body1), _(error_body2));
-			html_document_write_stream (document, data, strlen (data));
-			g_free (data);
-			html_document_write_stream (document, body, body_len);
-			html_document_write_stream (document,
-					            error_end, strlen(error_end));
-			html_document_close_stream (document);
-		}
-	} /* otherwise, it's a normal SUBMIT transaction */ 
-	else {
-		  /* before writing to the documents, make sure any new traffic won't
-		   * see them while we're working */
-		  g_hash_table_remove(html->request_info, uri);
-		  g_free(location);
-		  location = NULL;
+    for(current = documents; current; current = current->next) {
+      /* request completed OK... write the HTML to the documents that
+       * asked for that URI. */
+      if(completed_ok) {
+	html_document_write_stream (HTML_DOCUMENT (current->data),
+				    body, body_len);
+	html_document_close_stream (HTML_DOCUMENT (current->data));
+	type = gnc_html_parse_url(html, uri, &location, &label);
+        if(label) {
+          html_view_jump_to_anchor(html->view, label);
+        }
+        g_free(location);
+        g_free(label);
+        location = label = NULL;
+      }
+      /* request failed... body is the ghttp error text. */
+      else {
+        char *data;
 
-		  for(current = documents; current; current = current->next) {
-			  /* request completed OK... write the HTML to the documents that
-			   * asked for that URI. */
-			  if (completed_ok) {
-				  html_document_write_stream (HTML_DOCUMENT (current->data),
-						  	      body, body_len);
-				  html_document_close_stream (HTML_DOCUMENT (current->data));
-				  type = gnc_html_parse_url(html, uri, &location, &label);
-				  if (label) {
-					  html_view_jump_to_anchor(html->view, label);
-				  }
-				  g_free(location);
-				  g_free(label);
-				  location = label = NULL;
-			  }
-			  /* request failed... body is the ghttp error text. */
-			  else {
-				  char *data;
+	data = g_strdup_printf(error_format, 
+			       _(error_title), _(error_body1), _(error_body2));
+	html_document_write_stream (HTML_DOCUMENT (current->data),
+				    data, strlen(data));
+	g_free (data);
+	html_document_write_stream (HTML_DOCUMENT (current->data),
+				    body, body_len);
+	html_document_write_stream (HTML_DOCUMENT (current->data),
+				    error_end, strlen(error_end));
+	html_document_close_stream (HTML_DOCUMENT (current->data));
+      }
+    }
+    g_list_free(documents);
+  }
 
-				  data = g_strdup_printf(error_format,
-						         _(error_title), _(error_body1), _(error_body2));
-				  html_document_write_stream (HTML_DOCUMENT (current->data),
-						  	      data, strlen(data));
-				  g_free (data);
-				  html_document_write_stream (HTML_DOCUMENT (current->data),
-						  	      body, body_len);
-				  html_document_write_stream (HTML_DOCUMENT (current->data),
-						  	      error_end, strlen(error_end));
-				  html_document_close_stream (HTML_DOCUMENT (current->data));
-			  }
-		  }
-		  g_list_free(documents);
-	}
-
-	gnc_unset_busy_cursor (GTK_WIDGET (html->view));
+  gnc_unset_busy_cursor (GTK_WIDGET (html->view));
 }
 
 
@@ -527,27 +529,27 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
 static void 
 gnc_html_start_request(gnc_html *html, gchar *uri, HtmlDocument *document)
 {
-	GList *documents = NULL;
-	gint  need_request = FALSE;
+  GList *documents = NULL;
+  gint  need_request = FALSE;
 
-	/* we want to make a list of documents to fill with this URI.
-	 * multiple documents with the same URI will all get filled when the
-	 * request comes in. */
-	DEBUG ("requesting %s", uri);
+  /* we want to make a list of documents to fill with this URI.
+   * multiple documents with the same URI will all get filled when the
+   * request comes in. */
+  DEBUG("requesting %s", uri);
 	
-	documents = g_hash_table_lookup (html->request_info, uri);
-	if (documents == NULL) {
-		need_request = TRUE;
-	}
+  documents = g_hash_table_lookup (html->request_info, uri);
+  if (documents == NULL) {
+    need_request = TRUE;
+  }
 
-	documents = g_list_append (documents, document);
-	g_hash_table_insert (html->request_info, uri, documents);
+  documents = g_list_append (documents, document);
+  g_hash_table_insert (html->request_info, uri, documents);
   
-	if (need_request) {
-		gnc_set_busy_cursor (GTK_WIDGET (html->view), FALSE);
-		gnc_http_start_request (html->http, uri, gnc_html_http_request_cb, 
-				        (gpointer)html);
-	}
+  if(need_request) {
+    gnc_set_busy_cursor (GTK_WIDGET (html->view), FALSE);
+    gnc_http_start_request (html->http, uri, gnc_html_http_request_cb, 
+			    (gpointer)html);
+  }
 }
 
 
@@ -559,85 +561,89 @@ gnc_html_start_request(gnc_html *html, gchar *uri, HtmlDocument *document)
 
 static void
 gnc_html_load_to_stream(gnc_html *html, HtmlDocument *document,
-                        URLType type, const gchar *location, 
-                        const gchar *label)
+                        URLType type, const gchar * location, 
+                        const gchar * label)
 {
-	char *fdata = NULL;
-	int fdata_len = 0;
+  char * fdata = NULL;
+  int fdata_len = 0;
 
-	DEBUG ("type %s, location %s, label %s", type, location, label);
+  DEBUG("type %s, location %s, label %s", type, location, label);
 
-	if (html == NULL) {
-		return;
+  if (html == NULL) {
+    return;
+  }
+
+  if (gnc_html_stream_handlers) {
+    GncHTMLStreamCB stream_handler;
+
+    stream_handler = g_hash_table_lookup (gnc_html_stream_handlers, type);
+    if (stream_handler) {
+      gboolean ok = stream_handler (location, &fdata, &fdata_len);
+
+      if(ok) {
+        fdata = fdata ? fdata : g_strdup ("");
+	html_document_write_stream (document, fdata, fdata_len);
+	html_document_close_stream (document);
+      }
+      else {
+        fdata = fdata ? fdata : 
+	  g_strdup_printf (error_404_format, 
+			   _(error_404_title), _(error_404_body));
+	html_document_write_stream (document, fdata, fdata_len);
+	html_document_close_stream (document);
+      }
+
+      g_free(fdata);
+
+      if(label) {
+	while (gtk_events_pending ())
+	  gtk_main_iteration ();
+	html_view_jump_to_anchor(html->view, label);
+      }
+
+      return;
+    }
+  }
+
+  do {
+    if (!safe_strcmp (type, URL_TYPE_SECURE) ||
+	!safe_strcmp (type, URL_TYPE_HTTP)) {
+      if (!safe_strcmp (type, URL_TYPE_SECURE)) {
+	if(!https_allowed()) {
+	  gnc_error_dialog(_("Secure HTTP access is disabled.\n"
+			     "You can enable it in the Network section of\n"
+			     "the Preferences dialog."));
+	  break;
 	}
+      }
 
-	if (gnc_html_stream_handlers) {
-		GncHTMLStreamCB stream_handler;
-
-		stream_handler = g_hash_table_lookup (gnc_html_stream_handlers, type);
-		if (stream_handler) {
-			gboolean ok = stream_handler (location, &fdata, &fdata_len);
-
-			if (ok) {
-				fdata = fdata ? fdata : g_strdup ("");
-				html_document_write_stream (document, fdata, fdata_len);
-				html_document_close_stream (document);
-			} else {
-				fdata = fdata ? fdata : 
-					g_strdup_printf (error_404_format, 
-							 _(error_404_title), _(error_404_body));
-       				html_document_write_stream (document, fdata, fdata_len);
-				html_document_close_stream (document);
-			}
-
-			g_free (fdata);
-
-			if (label) {
-				while (gtk_events_pending ())
-					gtk_main_iteration ();
-				html_view_jump_to_anchor(html->view, label);
-			}
-			
-			return;
-		}
-	}
-
-	do {
-		if (!safe_strcmp (type, URL_TYPE_SECURE) ||
-				!safe_strcmp (type, URL_TYPE_HTTP)) {
-			if (!safe_strcmp (type, URL_TYPE_SECURE)) {
-				if (!https_allowed()) {
-					gnc_error_dialog (_("Secure HTTP access is disabled.\n"
-				   			  "You can enable it in the Network section of\n"
-							  "the Preferences dialog."));
-					break;
-				}
-			}
-
-			if (!http_allowed()) {
-				gnc_error_dialog(_("Network HTTP access is disabled.\n"
-						 "You can enable it in the Network section of\n"
-						 "the Preferences dialog."));
-			} else {
-				char *fullurl;
+      if(!http_allowed()) {
+	gnc_error_dialog(_("Network HTTP access is disabled.\n"
+			   "You can enable it in the Network section of\n"
+			   "the Preferences dialog."));
+      } else {
+	char *fullurl;
       
-				fullurl = gnc_build_url(type, location, label);
-				gnc_html_start_request(html, fullurl, document);
-			}
-		} else {
-			PWARN ("load_to_stream for inappropriate type\n"
-			       "\turl = '%s#%s'\n",
-			       location ? location : "(null)",
-			       label ? label : "(null)");
+	fullurl = gnc_build_url(type, location, label);
+	gnc_html_start_request(html, fullurl, document);
+      }
+    } else {
+      PWARN("load_to_stream for inappropriate type\n"
+	    "\turl = '%s#%s'\n",
+	    location ? location : "(null)",
+	    label ? label : "(null)");
 			
-			fdata = g_strdup_printf (error_404_format, 
-					         _(error_404_title), _(error_404_body));
-			html_document_write_stream (document, fdata, fdata_len);
-			html_document_close_stream (document);
-			g_free (fdata);
-		}
-	} while (FALSE);
+      fdata = g_strdup_printf (error_404_format, 
+			       _(error_404_title), _(error_404_body));
+      html_document_write_stream (document, fdata, fdata_len);
+      html_document_close_stream (document);
+      g_free (fdata);
+    }
+
+  } while (FALSE);
+
 }
+
 
 /********************************************************************
  * gnc_html_link_clicked_cb - called when user left-clicks on html
@@ -647,18 +653,18 @@ gnc_html_load_to_stream(gnc_html *html, HtmlDocument *document,
 static void 
 gnc_html_link_clicked_cb (HtmlDocument *document, const gchar *url, gpointer data)
 {
-	URLType   type;
-	char      *location = NULL;
-	char      *label = NULL;
-	gnc_html  *gnchtml = (gnc_html *)data;
+  URLType   type;
+  char      * location = NULL;
+  char      * label = NULL;
+  gnc_html  * gnchtml = (gnc_html *)data;
 
-	DEBUG ("Clicked %s", url);
+  DEBUG("Clicked %s", url);
 	
-	type = gnc_html_parse_url(gnchtml, url, &location, &label);
-	gnc_html_show_url(gnchtml, type, location, label, 0);
+  type = gnc_html_parse_url(gnchtml, url, &location, &label);
+  gnc_html_show_url(gnchtml, type, location, label, 0);
 	
-	g_free(location);
-	g_free(label);
+  g_free(location);
+  g_free(label);
 }
 
 
@@ -671,18 +677,18 @@ static void
 gnc_html_request_url_cb (HtmlDocument *document, const gchar *url,
 		         HtmlStream *stream, gpointer data)
 {
-	URLType       type;
-	char          *location = NULL;
-	char          *label = NULL;
-	gnc_html      *gnchtml = (gnc_html *)data;
+  URLType       type;
+  char          * location=NULL;
+  char          * label=NULL;
+  gnc_html      * gnchtml = (gnc_html *)data;
 
-	DEBUG ("requesting %s", url);
+  DEBUG("requesting %s", url);
 	
-	type = gnc_html_parse_url (gnchtml, url, &location, &label);
-	gnc_html_load_to_stream (gnchtml, document, type, location, label);
+  type = gnc_html_parse_url(gnchtml, url, &location, &label);
+  gnc_html_load_to_stream(gnchtml, document, type, location, label);
 	
-	g_free(location);
-	g_free(label);
+  g_free(location);
+  g_free(label);
 }
 
 
@@ -693,29 +699,30 @@ gnc_html_request_url_cb (HtmlDocument *document, const gchar *url,
 
 static int
 gnc_html_object_requested_cb (HtmlView *view, HtmlEmbedded *widget,
-			      gpointer data)
+                             gpointer data)
 {
-	gnc_html         *gnchtml = data;
-	DomNamedNodeMap  *attributes;
-	DomAttr		 *classid;
-	GncHTMLObjectCB  h;
+  gnc_html  * gnchtml = data;
+  DomNamedNodeMap  *attributes;
+  DomAttr		 *classid;
+  GncHTMLObjectCB h;
 
-	DEBUG (" ");
+  DEBUG(" ");
 	
-	g_return_val_if_fail (widget != NULL && widget->node != NULL, FALSE);
-	g_return_val_if_fail (gnc_html_object_handlers != NULL, FALSE);
+  g_return_val_if_fail (widget != NULL && widget->node != NULL, FALSE);
+  g_return_val_if_fail (gnc_html_object_handlers != NULL, FALSE);
 
-	attributes = dom_Node__get_attributes (widget->node);
-	classid = DOM_ATTR (dom_NamedNodeMap_getNamedItem (attributes, "classid"));
+  attributes = dom_Node__get_attributes (widget->node);
+  classid = DOM_ATTR (dom_NamedNodeMap_getNamedItem (attributes, "classid"));
 
-	g_return_val_if_fail (classid != NULL, FALSE);
+  g_return_val_if_fail (classid != NULL, FALSE);
 
-	h = g_hash_table_lookup(gnc_html_object_handlers, dom_Attr__get_value (classid));
-	if (h != NULL) {
-		return h (gnchtml, widget, data);
-	} else {
-		return FALSE;
-	}
+  h = g_hash_table_lookup(gnc_html_object_handlers, dom_Attr__get_value (classid));
+  if (h != NULL) {
+    return h (gnchtml, widget, data);
+  }
+  else {
+    return FALSE;
+  }
 }
 
 
@@ -726,15 +733,15 @@ gnc_html_object_requested_cb (HtmlView *view, HtmlEmbedded *widget,
 static void 
 gnc_html_on_url_cb (HtmlView *html_view, const gchar *url, gpointer data)
 {
-	gnc_html * gnchtml = (gnc_html *) data;
+  gnc_html * gnchtml = (gnc_html *) data;
 
-	DEBUG ("Rollover %s", url);
+  DEBUG("Rollover %s", url);
 	
-	g_free (gnchtml->current_link);
-	gnchtml->current_link = g_strdup (url);
-	if (gnchtml->flyover_cb) {
-		(gnchtml->flyover_cb)(gnchtml, url, gnchtml->flyover_cb_data);
-	}
+  g_free(gnchtml->current_link);
+  gnchtml->current_link = g_strdup(url);
+  if(gnchtml->flyover_cb) {
+    (gnchtml->flyover_cb)(gnchtml, url, gnchtml->flyover_cb_data);
+  }
 }
 
 
@@ -744,22 +751,22 @@ gnc_html_on_url_cb (HtmlView *html_view, const gchar *url, gpointer data)
 
 static void 
 gnc_html_set_base_cb (HtmlDocument *document, const gchar *url,
-                      gpointer data)
+                     gpointer data)
 {
-	gnc_html *html = (gnc_html *)data;
-	URLType  type;
-	char     *location = NULL;
-	char     *label = NULL;
+  gnc_html * html = (gnc_html *)data;
+  URLType  type;
+  char     * location = NULL;
+  char     * label = NULL;
 
-	DEBUG ("Setting base location to %s", url);
+  DEBUG("Setting base location to %s", url);
 	
-	type = gnc_html_parse_url(html, url, &location, &label);
+  type = gnc_html_parse_url(html, url, &location, &label);
 
-	g_free(html->base_location);
-	g_free(label);
+  g_free(html->base_location);
+  g_free(label);
 
-	html->base_type     = type;
-	html->base_location = location;
+  html->base_type     = type;
+  html->base_location = location;
 }
 
 
@@ -894,9 +901,9 @@ gnc_html_pack_form_data(GHashTable * form_data)
  ********************************************************************/
 
 static int
-gnc_html_submit_cb (HtmlDocument *document, const gchar *method, 
-                    const gchar *action, const gchar *encoded_form_data,
-                    gpointer user_data)
+gnc_html_submit_cb(HtmlDocument *document, const gchar *method, 
+                   const gchar * action, const gchar * encoded_form_data,
+                   gpointer user_data)
 {
   gnc_html * gnchtml = user_data;
   char     * location = NULL;
@@ -964,7 +971,7 @@ static void
 gnc_html_open_scm(gnc_html * html, const gchar * location,
                   const gchar * label, int newwin)
 {
-	PINFO ("location='%s'", location ? location : "(null)");
+  PINFO("location='%s'", location ? location : "(null)");
 }
 
 
@@ -975,17 +982,17 @@ gnc_html_open_scm(gnc_html * html, const gchar * location,
  ********************************************************************/
 
 void
-gnc_html_show_data (gnc_html * html, const char * data, 
-                    int datalen)
+gnc_html_show_data(gnc_html * html, const char * data, 
+                   int datalen)
 {
-	HtmlDocument *document;
+  HtmlDocument *document;
 
-	DEBUG ("datalen %d, data %20.20s", datalen, data);
+  DEBUG("datalen %d, data %20.20s", datalen, data);
 
-	document = html->view->document;
+  document = html->view->document;
 
-	html_document_write_stream (document, data, datalen);
-       	html_document_close_stream (document);  
+  html_document_write_stream (document, data, datalen);
+  html_document_close_stream (document);  
 }
 
 
@@ -998,67 +1005,69 @@ gnc_html_show_data (gnc_html * html, const char * data,
  ********************************************************************/
 
 void 
-gnc_html_show_url(gnc_html *html, URLType type, 
-                  const gchar *location, const gchar *label,
+gnc_html_show_url(gnc_html * html, URLType type, 
+                  const gchar * location, const gchar * label,
                   gboolean new_window_hint)
 {
-	GncHTMLUrlCB  url_handler;
-	HtmlDocument  *document;
-	gboolean      new_window;
+  GncHTMLUrlCB url_handler;
+  HtmlDocument *document;
+  gboolean new_window;
 
-	DEBUG (" ");
+  DEBUG(" ");
 
-	g_return_if_fail (html != NULL);
-	g_return_if_fail (location != NULL);
+  g_return_if_fail (html != NULL);
+  g_return_if_fail (location != NULL);
 
-	/* make sure it's OK to show this URL type in this window */
-	if (new_window_hint == 0) {
-		if (html->urltype_cb) {
-			new_window = !((html->urltype_cb)(type));
-		} else {
-			new_window = FALSE;
-		}
-	} else {
-		new_window = TRUE;
-	}
+  /* make sure it's OK to show this URL type in this window */
+  if (new_window_hint == 0) {
+    if (html->urltype_cb) {
+      new_window = !((html->urltype_cb)(type));
+    } else {
+      new_window = FALSE;
+    }
+  } else {
+    new_window = TRUE;
+  }
 
-	if (!new_window) {
-		gnc_html_cancel(html);
-	}
+  if (!new_window) {
+    gnc_html_cancel(html);
+  }
 
-	if (gnc_html_url_handlers) {
-		url_handler = g_hash_table_lookup (gnc_html_url_handlers, type);
-	} else {
-		url_handler = NULL;
-	}
+  if (gnc_html_url_handlers) {
+    url_handler = g_hash_table_lookup (gnc_html_url_handlers, type);
+  } else {
+    url_handler = NULL;
+  }
 
-	if (url_handler) {
-		GNCURLResult result;
-		gboolean ok;
+  if (url_handler)
+  {
+    GNCURLResult result;
+    gboolean ok;
 
-		result.load_to_stream = FALSE;
-	       	result.url_type = type;
-	       	result.location = NULL;
-	       	result.label = NULL;
-	       	result.base_type = URL_TYPE_FILE;
-	       	result.base_location = NULL;
-	       	result.error_message = NULL;
+    result.load_to_stream = FALSE;
+    result.url_type = type;
+    result.location = NULL;
+    result.label = NULL;
+    result.base_type = URL_TYPE_FILE;
+    result.base_location = NULL;
+    result.error_message = NULL;
 
-		ok = url_handler (location, label, new_window, &result);
-		if (!ok) {
-			if (result.error_message) {
-				gnc_error_dialog(result.error_message);
-			} else {
-				/* %s is a URL (some location somewhere). */
-				gnc_error_dialog(_("There was an error accessing %s."), location);
-			}
+    ok = url_handler (location, label, new_window, &result);
+    if (!ok)
+    {
+      if (result.error_message) {
+	gnc_error_dialog(result.error_message);
+      } else {
+	/* %s is a URL (some location somewhere). */
+        gnc_error_dialog(_("There was an error accessing %s."), location);
+      }
 
-			if (html->load_cb) {
-				html->load_cb (html, result.url_type,
-					       location, label,
-					       html->load_cb_data);
-			}
-		} else if (result.load_to_stream) {
+      if (html->load_cb) {
+        html->load_cb (html, result.url_type,
+                       location, label,
+                       html->load_cb_data);
+      }
+    } else if (result.load_to_stream) {
       gnc_html_history_node *hnode;
       const char *new_location;
       const char *new_label;
@@ -1160,16 +1169,16 @@ gnc_html_show_url(gnc_html *html, URLType type,
  ********************************************************************/
 
 void
-gnc_html_reload (gnc_html *html)
+gnc_html_reload(gnc_html * html)
 {
-	gnc_html_history_node * n;
+  gnc_html_history_node * n;
 
-	DEBUG (" ");
+  DEBUG(" ");
 	
-	n = gnc_html_history_get_current (html->history);
-	if (n != NULL) {
-		gnc_html_show_url (html, n->type, n->location, n->label, 0);
-	}
+  n = gnc_html_history_get_current(html->history);
+  if (n != NULL) {
+    gnc_html_show_url(html, n->type, n->location, n->label, 0);
+  }
 }
 
 
@@ -1181,56 +1190,56 @@ gnc_html_reload (gnc_html *html)
 gnc_html * 
 gnc_html_new(void)
 {
-	gnc_html *html = g_new0(gnc_html, 1);
+  gnc_html *html = g_new0(gnc_html, 1);
   
-	html->container = gtk_scrolled_window_new (NULL, NULL);
-	html->view      = HTML_VIEW (html_view_new());
+  html->container = gtk_scrolled_window_new (NULL, NULL);
+  html->view      = HTML_VIEW (html_view_new());
 
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(html->container),
-				       GTK_POLICY_AUTOMATIC,
-      				       GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(html->container),
+				 GTK_POLICY_AUTOMATIC,
+				 GTK_POLICY_AUTOMATIC);
 
-	gtk_container_add(GTK_CONTAINER(html->container), 
-	      		  GTK_WIDGET(html->view));
+  gtk_container_add(GTK_CONTAINER(html->container), 
+		    GTK_WIDGET(html->view));
 
-	html->request_info = g_hash_table_new (g_str_hash, g_str_equal);
-	html->http         = gnc_http_new();
-	html->history      = gnc_html_history_new();
+  html->request_info = g_hash_table_new (g_str_hash, g_str_equal);
+  html->http         = gnc_http_new();
+  html->history      = gnc_html_history_new();
 
-	g_object_ref (html->container);
-	gtk_object_sink (GTK_OBJECT (html->container));
+  g_object_ref (html->container);
+  gtk_object_sink (GTK_OBJECT (html->container));
 
-	/* signals */
-	g_signal_connect (G_OBJECT (html->view->document), "request_url",
-		          G_CALLBACK (gnc_html_request_url_cb),
-			  (gpointer)html);
+  /* signals */
+  g_signal_connect (G_OBJECT (html->view->document), "request_url",
+		    G_CALLBACK (gnc_html_request_url_cb),
+		    (gpointer)html);
 
-	g_signal_connect (G_OBJECT (html->view), "on_url",
-		       	  G_CALLBACK (gnc_html_on_url_cb),
-			  (gpointer)html);
+  g_signal_connect (G_OBJECT (html->view), "on_url",
+		    G_CALLBACK (gnc_html_on_url_cb),
+		    (gpointer)html);
 
-	g_signal_connect (G_OBJECT (html->view->document), "set_base",
-		       	  G_CALLBACK (gnc_html_set_base_cb),
-			  (gpointer)html);
+  g_signal_connect (G_OBJECT (html->view->document), "set_base",
+		    G_CALLBACK (gnc_html_set_base_cb),
+		    (gpointer)html);
 
-	g_signal_connect (G_OBJECT(html->view->document), "link_clicked",
-			  G_CALLBACK (gnc_html_link_clicked_cb),
-			  (gpointer)html);
+  g_signal_connect (G_OBJECT(html->view->document), "link_clicked",
+		    G_CALLBACK (gnc_html_link_clicked_cb),
+		    (gpointer)html);
 
-	g_signal_connect (G_OBJECT (html->view), "object_requested",
-		       	  G_CALLBACK (gnc_html_object_requested_cb), 
-			  (gpointer)html);
+  g_signal_connect (G_OBJECT (html->view), "object_requested",
+		    G_CALLBACK (gnc_html_object_requested_cb), 
+		    (gpointer)html);
 
-	g_signal_connect (G_OBJECT (html->view), "button_press_event",
-			  G_CALLBACK (gnc_html_button_press_cb), 
-    			  (gpointer)html);
+  g_signal_connect (G_OBJECT (html->view), "button_press_event",
+		    G_CALLBACK (gnc_html_button_press_cb), 
+		    (gpointer)html);
 
-	g_signal_connect (G_OBJECT(html->view->document), "submit", 
-			  G_CALLBACK (gnc_html_submit_cb), (gpointer)html);
+  g_signal_connect (G_OBJECT(html->view->document), "submit", 
+		    G_CALLBACK (gnc_html_submit_cb), (gpointer)html);
 
-	/* html_view_set_document (html->view, html_document_new ()); */
+  /* html_view_set_document (html->view, html_document_new ()); */
 
-	return html;
+  return html;
 }
 
 
@@ -1242,19 +1251,19 @@ gnc_html_new(void)
 static gboolean
 html_cancel_helper(gpointer key, gpointer value, gpointer user_data)
 {
-	g_free(key);
-	g_list_free((GList *)value);
+  g_free(key);
+  g_list_free((GList *)value);
 
-	return TRUE;
+  return TRUE;
 }
 
 void
 gnc_html_cancel(gnc_html * html)
 {
-	/* remove our own references to requests */ 
-	gnc_http_cancel_requests(html->http);
-	
-	g_hash_table_foreach_remove(html->request_info, html_cancel_helper, NULL);
+  /* remove our own references to requests */ 
+  gnc_http_cancel_requests(html->http);
+  
+  g_hash_table_foreach_remove(html->request_info, html_cancel_helper, NULL);
 }
 
 
@@ -1266,161 +1275,161 @@ gnc_html_cancel(gnc_html * html)
 void
 gnc_html_destroy(gnc_html * html)
 {
-	g_return_if_fail (html != NULL);
-	
-	/* cancel any outstanding HTTP requests */
-	gnc_html_cancel(html);
+  g_return_if_fail (html != NULL);
 
-	gnc_html_history_destroy(html->history);
+  /* cancel any outstanding HTTP requests */
+  gnc_html_cancel(html);
+  
+  gnc_html_history_destroy(html->history);
 
-	gtk_widget_destroy(html->container);
-	g_object_unref(html->container);
+  gtk_widget_destroy(html->container);
+  g_object_unref(html->container);
 
-	g_free(html->current_link);
-	g_free(html->base_location);
+  g_free(html->current_link);
+  g_free(html->base_location);
 
-	html->container     = NULL;
-	html->view          = NULL;
-	html->history       = NULL;
-	html->current_link  = NULL;
-	html->base_location = NULL;
+  html->container     = NULL;
+  html->view          = NULL;
+  html->history       = NULL;
+  html->current_link  = NULL;
+  html->base_location = NULL;
 
-	g_free(html);
+  g_free(html);
 }
 
 void
-gnc_html_set_urltype_cb (gnc_html * html, GncHTMLUrltypeCB urltype_cb)
+gnc_html_set_urltype_cb(gnc_html * html, GncHTMLUrltypeCB urltype_cb)
 {
-	html->urltype_cb = urltype_cb;
+  html->urltype_cb = urltype_cb;
 }
 
 void
-gnc_html_set_load_cb (gnc_html * html, GncHTMLLoadCB load_cb,
-                      gpointer data)
+gnc_html_set_load_cb(gnc_html * html, GncHTMLLoadCB load_cb,
+                     gpointer data)
 {
-	html->load_cb = load_cb;
-	html->load_cb_data = data;
+  html->load_cb = load_cb;
+  html->load_cb_data = data;
 }
 
 void
-gnc_html_set_flyover_cb (gnc_html * html, GncHTMLFlyoverCB flyover_cb,
-                         gpointer data)
-{
-	html->flyover_cb       = flyover_cb;
-	html->flyover_cb_data  = data;
-}
-
-void
-gnc_html_set_button_cb (gnc_html * html, GncHTMLButtonCB button_cb,
+gnc_html_set_flyover_cb(gnc_html * html, GncHTMLFlyoverCB flyover_cb,
                         gpointer data)
 {
-	html->button_cb       = button_cb;
-	html->button_cb_data  = data;
+  html->flyover_cb       = flyover_cb;
+  html->flyover_cb_data  = data;
+}
+
+void
+gnc_html_set_button_cb(gnc_html * html, GncHTMLButtonCB button_cb,
+                        gpointer data)
+{
+  html->button_cb       = button_cb;
+  html->button_cb_data  = data;
 }
 
 /**************************************************************
  * gnc_html_export : wrapper around the builtin function in gtkhtml
  **************************************************************/
-/*
+#if 0
 static gboolean 
 raw_html_receiver (gpointer     engine,
                    const gchar *data,
                    guint        len,
                    gpointer     user_data)
 {
-	FILE *fh = (FILE *) user_data;
-
-	fwrite (data, len, 1, fh);
-
-	return TRUE;
-}*/
+  FILE *fh = (FILE *) user_data;
+  fwrite (data, len, 1, fh);
+  return TRUE;
+}
+#endif
 
 gboolean
-gnc_html_export(gnc_html *html, const char *filepath)
+gnc_html_export(gnc_html * html, const char *filepath)
 {
-	/* Export need to be added to gtkhtml 2.0 */
+  /* Export need to be added to gtkhtml 2.0 */
 
-	/*
-	FILE *fh;
+#if 0
+  FILE *fh;
 
-	g_return_val_if_fail (html != NULL, FALSE);
-	g_return_val_if_fail (filepath != NULL, FALSE);
+  g_return_val_if_fail (html != NULL, FALSE);
+  g_return_val_if_fail (filepath != NULL, FALSE);
 
-	fh = fopen (filepath, "w");
-	if (!fh)
-		return FALSE;
+  fh = fopen (filepath, "w");
+  if (!fh)
+    return FALSE;
 
-	gtk_html_save (GTK_HTML(html->html), raw_html_receiver, fh);
+  gtk_html_save (GTK_HTML(html->html), raw_html_receiver, fh);
 
-	fclose (fh);
+  fclose (fh);
 
-	return TRUE;
-	*/
+  return TRUE;
+#endif
 
-	return FALSE;
+  return FALSE;
 }
 
 void
 gnc_html_print(gnc_html * html)
 {
-	/* Printing need to be added to gtkhtml 2.0 */
-	
-	/*PrintSession * ps = gnc_print_session_create(FALSE);
+  /* Printing need to be added to gtkhtml 2.0 */
+  
+#if 0
+  PrintSession * ps = gnc_print_session_create(FALSE);
 
-	gtk_html_print(GTK_HTML(html->html),
-		       GNOME_PRINT_CONTEXT(ps->meta));
-	gnc_print_session_done(ps, FALSE);
-	gnc_print_session_print(ps);*/
+  gtk_html_print(GTK_HTML(html->html),
+                 GNOME_PRINT_CONTEXT(ps->meta));
+  gnc_print_session_done(ps, FALSE);
+  gnc_print_session_print(ps);
+#endif
 }
 
 gnc_html_history * 
 gnc_html_get_history(gnc_html * html)
 {
-	g_return_val_if_fail (html != NULL, NULL);
+  g_return_val_if_fail (html != NULL, NULL);
 
-	return html->history;
+  return html->history;
 }
 
 
 GtkWidget * 
 gnc_html_get_widget(gnc_html * html)
 {
-	g_return_val_if_fail (html != NULL, NULL);
+  g_return_val_if_fail (html != NULL, NULL);
 
-	return html->container;
+  return html->container;
 }
 
 void
-gnc_html_register_object_handler (const char * classid, 
-				    GncHTMLObjectCB hand)
+gnc_html_register_object_handler(const char * classid, 
+                                 GncHTMLObjectCB hand)
 {
-	g_return_if_fail (classid != NULL);
-	g_return_if_fail (hand != NULL);
+  g_return_if_fail (classid != NULL);
+  g_return_if_fail (hand != NULL);
 
-	if(gnc_html_object_handlers == NULL) {
-		gnc_html_object_handlers = g_hash_table_new (g_str_hash, g_str_equal);
-	}
+  if (gnc_html_object_handlers == NULL) {
+    gnc_html_object_handlers = g_hash_table_new(g_str_hash, g_str_equal);
+  }
 
-	gnc_html_unregister_object_handler (classid);
+  gnc_html_unregister_object_handler (classid);
 
-	g_hash_table_insert(gnc_html_object_handlers, g_strdup (classid), hand);
+  g_hash_table_insert(gnc_html_object_handlers, g_strdup(classid), hand);
 }
 
 void
-gnc_html_unregister_object_handler (const char * classid)
+gnc_html_unregister_object_handler(const char * classid)
 {
-	gchar *keyptr = NULL;
-	gchar *valptr = NULL;
+  gchar * keyptr=NULL;
+  gchar * valptr=NULL;
 
-	if (!g_hash_table_lookup_extended (gnc_html_object_handlers,
-					   classid,
-					   (gpointer *) &keyptr, 
-					   (gpointer *) &valptr)) {
-		return;
-	}
+  if (!g_hash_table_lookup_extended(gnc_html_object_handlers,
+                                    classid, 
+                                    (gpointer *)&keyptr, 
+                                    (gpointer *)&valptr))
+    return;
 
-	g_hash_table_remove(gnc_html_object_handlers, classid);
-	g_free(keyptr);
+  g_hash_table_remove(gnc_html_object_handlers, classid);
+  g_free(keyptr);
 }
 
 void

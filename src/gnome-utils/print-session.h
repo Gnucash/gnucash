@@ -34,32 +34,33 @@
 #include <libgnomeprintui/gnome-print-preview.h>
 
 typedef struct {
-	GnomePrintMaster  *master;
-	GnomePrintContext *meta;
-	GnomeFont         *default_font;
-	GnomePrintPaper   *paper;
+  GnomePrintMaster   * master;
+  GnomePrintContext  * meta;
+  GnomeFont          * default_font;
+  GnomePrintPaper    * paper;
 } PrintSession;
 
 typedef struct {
-	GtkWidget         *toplevel;
-	GtkWidget         *canvas;
-	GnomePrintContext *meta;
-	PrintSession      *session;
+  GtkWidget         * toplevel;
+  GtkWidget         * canvas;
+  GnomePrintContext * meta;
+  PrintSession      * session;
 } PrintPreviewDialog;
 
 typedef struct {
-	GtkWidget         *toplevel;
-	GtkWidget         *printer_entry;
-	GtkWidget         *paper_entry;
-	PrintSession      *session;
+  GtkWidget         * toplevel;
+  GtkWidget         * printer_entry;
+  GtkWidget         * paper_entry;
+  PrintSession      * session;
 } PrintDialog;
 
 typedef struct {
-	GtkWidget         *toplevel;
-	GtkWidget         *papersel;
-	GtkWidget         *entry;
-	PrintSession      *session;
+  GtkWidget         * toplevel;
+  GtkWidget         * papersel;
+  GtkWidget         * entry;
+  PrintSession      * session;
 } PaperDialog;
+
 
 /* paper selector dialog */
 PaperDialog * gnc_ui_paper_dialog_create(PrintSession * ps, GtkWidget * entry);

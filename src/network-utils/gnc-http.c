@@ -79,7 +79,7 @@ gnc_http_new(void) {
 #if 0 
 gnc_http *
 gnc_http_new(void) {
-   gnc_http * ret = g_new0(struct _gnc_http, 1);
+  gnc_http * ret = g_new0(struct _gnc_http, 1);
   ret->requests         = NULL;
   ret->callback_tag     = 0;
   ret->callback_enabled = FALSE;
@@ -118,7 +118,6 @@ gnc_http_cancel_requests(gnc_http * http) {
     g_list_free(http->requests);
     http->requests = NULL;
   }  
-
 }
 
 static gint

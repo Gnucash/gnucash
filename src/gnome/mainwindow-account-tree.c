@@ -90,39 +90,39 @@ select_account_callback(GNCAccountTree  *tree, Account *account, gpointer user_d
 static void
 gnc_mainwin_account_tree_class_init (GNCMainWinAccountTreeClass *klass)
 {
-	GObjectClass *object_class;
-
-	object_class = G_OBJECT_CLASS (klass);
+  GObjectClass *object_class;
+  
+  object_class = G_OBJECT_CLASS (klass);
       
-	mainwinaccounttree_signals[SELECT_ACCOUNT_SIGNAL] = 
-		g_signal_new("select_account",
-			     G_OBJECT_CLASS_TYPE (object_class),
-	  		     G_SIGNAL_RUN_FIRST,
-	  		     G_STRUCT_OFFSET(GNCMainWinAccountTreeClass, select_account),
-			     NULL, NULL,
-			     g_cclosure_marshal_VOID__POINTER,
-			     G_TYPE_NONE, 1,
-			     G_TYPE_POINTER);
+  mainwinaccounttree_signals[SELECT_ACCOUNT_SIGNAL] = 
+    g_signal_new("select_account",
+		 G_OBJECT_CLASS_TYPE (object_class),
+		 G_SIGNAL_RUN_FIRST,
+		 G_STRUCT_OFFSET(GNCMainWinAccountTreeClass, select_account),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__POINTER,
+		 G_TYPE_NONE, 1,
+		 G_TYPE_POINTER);
 
-	mainwinaccounttree_signals[UNSELECT_ACCOUNT_SIGNAL] =
-		g_signal_new("unselect_account",
-			     G_OBJECT_CLASS_TYPE (object_class),
-	  		     G_SIGNAL_RUN_FIRST,
-	  		     G_STRUCT_OFFSET(GNCMainWinAccountTreeClass, unselect_account),
-			     NULL, NULL,
-			     g_cclosure_marshal_VOID__POINTER,
-			     G_TYPE_NONE, 1,
-			     G_TYPE_POINTER);
+  mainwinaccounttree_signals[UNSELECT_ACCOUNT_SIGNAL] =
+    g_signal_new("unselect_account",
+		 G_OBJECT_CLASS_TYPE (object_class),
+		 G_SIGNAL_RUN_FIRST,
+		 G_STRUCT_OFFSET(GNCMainWinAccountTreeClass, unselect_account),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__POINTER,
+		 G_TYPE_NONE, 1,
+		 G_TYPE_POINTER);
 
-	mainwinaccounttree_signals[ACTIVATE_ACCOUNT_SIGNAL] =
-		g_signal_new("activate_account",
-			     G_OBJECT_CLASS_TYPE (object_class),
-	  		     G_SIGNAL_RUN_FIRST,
-	  		     G_STRUCT_OFFSET(GNCMainWinAccountTreeClass, activate_account),
-			     NULL, NULL,
-			     g_cclosure_marshal_VOID__POINTER,
-			     G_TYPE_NONE, 1,
-			     G_TYPE_POINTER);
+  mainwinaccounttree_signals[ACTIVATE_ACCOUNT_SIGNAL] =
+    g_signal_new("activate_account",
+		 G_OBJECT_CLASS_TYPE (object_class),
+		 G_SIGNAL_RUN_FIRST,
+		 G_STRUCT_OFFSET(GNCMainWinAccountTreeClass, activate_account),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__POINTER,
+		 G_TYPE_NONE, 1,
+		 G_TYPE_POINTER);
 }
 
 static void
@@ -154,26 +154,28 @@ gnc_mainwin_account_tree_init(GNCMainWinAccountTree *mwac_tree)
 GType
 gnc_mainwin_account_tree_get_type ()
 {
-	static GType mwactree = 0;
+  static GType mwactree = 0;
 
-	if (mwactree == 0) {
-		static const GTypeInfo mwactree_info = {
-			sizeof (GNCMainWinAccountTreeClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) gnc_mainwin_account_tree_class_init,
-			NULL,
-			NULL,
-			sizeof (GNCMainWinAccountTree),
-			0,
-			(GInstanceInitFunc) gnc_mainwin_account_tree_init
-		};
-		mwactree = g_type_register_static (GTK_TYPE_HBOX,
-						   "GNCMainWinAccountTree",
-						   &mwactree_info, 0);
-	}
-
-	return mwactree;
+  if (mwactree == 0)
+    {
+      static const GTypeInfo mwactree_info =
+	{
+	 sizeof (GNCMainWinAccountTreeClass),
+	 NULL,
+	 NULL,
+	 (GClassInitFunc) gnc_mainwin_account_tree_class_init,
+	 NULL,
+	 NULL,
+	 sizeof (GNCMainWinAccountTree),
+	 0,
+	 (GInstanceInitFunc) gnc_mainwin_account_tree_init
+	};
+      mwactree = g_type_register_static (GTK_TYPE_HBOX,
+					 "GNCMainWinAccountTree",
+					 &mwactree_info, 0);
+    }
+  
+  return mwactree;
 }
 
 

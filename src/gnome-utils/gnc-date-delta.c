@@ -73,83 +73,83 @@ static GtkHBoxClass *parent_class;
 GType
 gnc_date_delta_get_type (void)
 {
-	static GType date_delta_type = 0;
+  static GType date_delta_type = 0;
 	
-	if (date_delta_type == 0) {
-		GTypeInfo date_delta_info = {
-			sizeof (GNCDateDeltaClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) gnc_date_delta_class_init,
-			NULL,
-			NULL,
-			sizeof (GNCDateDelta),
-			0,
-			(GInstanceInitFunc) gnc_date_delta_init
-		};
-		
-		date_delta_type = g_type_register_static (gtk_hbox_get_type (),
-							  "GNCDateDelta",
-		   					  &date_delta_info,
-							  0);
-	}
+  if (date_delta_type == 0) {
+    GTypeInfo date_delta_info = {
+      sizeof (GNCDateDeltaClass),
+      NULL,
+      NULL,
+      (GClassInitFunc) gnc_date_delta_class_init,
+      NULL,
+      NULL,
+      sizeof (GNCDateDelta),
+      0,
+      (GInstanceInitFunc) gnc_date_delta_init
+    };
+    
+    date_delta_type = g_type_register_static (gtk_hbox_get_type (),
+					      "GNCDateDelta",
+					      &date_delta_info,
+					      0);
+  }
 	
-	return date_delta_type;
+  return date_delta_type;
 }
 
 static void
 gnc_date_delta_class_init (GNCDateDeltaClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
+  parent_class = g_type_class_peek_parent (klass);
 
-	date_delta_signals [VALUE_CHANGED] =
-		g_signal_new ("value_changed",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (GNCDateDeltaClass, value_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
+  date_delta_signals [VALUE_CHANGED] =
+    g_signal_new ("value_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GNCDateDeltaClass, value_changed),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
 
-	date_delta_signals [UNITS_CHANGED] =
-		g_signal_new ("units_changed",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (GNCDateDeltaClass, units_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
+  date_delta_signals [UNITS_CHANGED] =
+    g_signal_new ("units_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GNCDateDeltaClass, units_changed),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
 
-	date_delta_signals [POLARITY_CHANGED] =
-		g_signal_new ("polarity_changed",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (GNCDateDeltaClass, polarity_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
+  date_delta_signals [POLARITY_CHANGED] =
+    g_signal_new ("polarity_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GNCDateDeltaClass, polarity_changed),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
                
-	date_delta_signals [DELTA_CHANGED] =
-		g_signal_new ("delta_changed",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (GNCDateDeltaClass, delta_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
+  date_delta_signals [DELTA_CHANGED] =
+    g_signal_new ("delta_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GNCDateDeltaClass, delta_changed),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
 
-	container_class->forall = gnc_date_delta_forall;
+  container_class->forall = gnc_date_delta_forall;
 }
 
 static void

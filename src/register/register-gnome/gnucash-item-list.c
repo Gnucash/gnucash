@@ -35,21 +35,23 @@
 
 /* Item list signals */
 enum {
-	SELECT_ITEM,
-	CHANGE_ITEM,
-	ACTIVATE_ITEM,
-	KEY_PRESS_EVENT,
-	LAST_SIGNAL
+  SELECT_ITEM,
+  CHANGE_ITEM,
+  ACTIVATE_ITEM,
+  KEY_PRESS_EVENT,
+  LAST_SIGNAL
 };
+
 
 static GnomeCanvasWidgetClass *gnc_item_list_parent_class;
 static guint gnc_item_list_signals[LAST_SIGNAL];
 
+
 void
 gnc_item_list_clear (GncItemList *item_list)
 {
-	g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
-	g_return_if_fail (item_list->list_store != NULL);
+	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
+	g_return_if_fail(item_list->list_store != NULL);
 
 	gtk_list_store_clear (item_list->list_store);
 }
@@ -60,9 +62,9 @@ gnc_item_list_append (GncItemList *item_list, char *string)
 {
 	GtkTreeIter iter;
 
-	g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
-	g_return_if_fail (item_list->list_store != NULL);
-	g_return_if_fail (string != NULL);
+	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
+	g_return_if_fail(item_list->list_store != NULL);
+	g_return_if_fail(string != NULL);
 
 	gtk_list_store_append (item_list->list_store, &iter);
 	gtk_list_store_set (item_list->list_store, &iter, 0, string, -1);
@@ -72,83 +74,95 @@ gnc_item_list_append (GncItemList *item_list, char *string)
 void
 gnc_item_list_select (GncItemList *item_list, const char *string)
 {
-/*	gint row = 0;
+#if 0
+	gint row = 0;
 	gchar *text;
 
 	g_return_if_fail(item_list != NULL);
-	g_return_if_fail(IS_GNC_ITEM_LIST (item_list));
+	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
 
 	if (string == NULL) {
-		gtk_clist_unselect_all (item_list->clist);
+		gtk_clist_unselect_all(item_list->clist);
 		return;
 	}
 
-	while (gtk_clist_get_text (item_list->clist, row, 0, &text)) {
+	while (gtk_clist_get_text(item_list->clist, row, 0, &text)) {
 
-		if (safe_strcmp (string, text) != 0) {
+		if (safe_strcmp(string, text) != 0) {
 			row++;
 			continue;
 		}
 
-                gtk_clist_freeze (item_list->clist);
+                gtk_clist_freeze(item_list->clist);
                 item_list->clist->focus_row = row;
-		gtk_clist_select_row (item_list->clist, row, 0);
-                gtk_clist_thaw (item_list->clist);
+		gtk_clist_select_row(item_list->clist, row, 0);
+                gtk_clist_thaw(item_list->clist);
 
-                gnc_item_list_show_selected (item_list);
+                gnc_item_list_show_selected(item_list);
 
 		return;
-	}*/
+	}
+#endif
 }
 
 
 void
 gnc_item_list_show_selected (GncItemList *item_list)
 {
-/*	GtkVisibility visibility;
+#if 0
+	GtkVisibility visibility;
         gint row;
 
-	g_return_if_fail (item_list != NULL);
-	g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
+	g_return_if_fail(item_list != NULL);
+	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
 
         row = item_list->clist->focus_row;
 
-        visibility = gtk_clist_row_is_visible (item_list->clist, row);
+        visibility = gtk_clist_row_is_visible(item_list->clist, row);
 
         if (visibility != GTK_VISIBILITY_FULL)
-                gtk_clist_moveto (item_list->clist, row, 0, 0.5, 0.0);*/
+                gtk_clist_moveto(item_list->clist, row, 0, 0.5, 0.0);
+#endif
 }
 
 
 void
 gnc_item_list_sort (GncItemList *item_list)
 {
-        g_return_if_fail (item_list != NULL);
-	g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
+        g_return_if_fail(item_list != NULL);
+	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
 
-/*        gtk_clist_sort (item_list->clist);*/
+#if 0
+        gtk_clist_sort(item_list->clist);
+#endif
 }
 
 
 int
 gnc_item_list_autosize (GncItemList *item_list)
 {
-        g_return_val_if_fail (item_list != NULL, 0);
-        g_return_val_if_fail (IS_GNC_ITEM_LIST (item_list), 0);
+        g_return_val_if_fail(item_list != NULL, 0);
+        g_return_val_if_fail(IS_GNC_ITEM_LIST(item_list), 0);
 
-        return 100; /*gtk_clist_columns_autosize (item_list->clist);*/
+#if 0
+        return gtk_clist_columns_autosize (item_list->clist);
+#endif
+        return 100;
 }
 
 
 static void
 gnc_item_list_init (GncItemList *item_list)
 {
+#if 0
+        item_list->clist = NULL;
+#endif
 }
 
 
 static gboolean
-gnc_item_list_button_event (GtkWidget *widget, GdkEventButton *event,
-			    gpointer data)
+gnc_item_list_button_event(GtkWidget *widget, GdkEventButton *event,
+			   gpointer data)
 {
 	/* So the sheet doesn't use it. */
 	g_signal_stop_emission_by_name (G_OBJECT(widget), "button_press_event");
@@ -160,26 +174,30 @@ static gboolean
 gnc_item_list_key_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	GncItemList *item_list = GNC_ITEM_LIST (data);
-/*        GtkCList *clist;
+#if 0
+        GtkCList *clist;
         gboolean got_text;
         gchar *string;
-        gint row;*/
+        gint row;
+#endif
 
         switch (event->keyval) {
                 case GDK_Return:
-/*                        clist = item_list->clist;
+#if 0
+                        clist = item_list->clist;
                         row = clist->focus_row;
                         if (row < 0)
                                 return FALSE;
 
-                        got_text = gtk_clist_get_text (clist, row, 0, &string);
+                        got_text = gtk_clist_get_text(clist, row, 0, &string);
 
                         if (!got_text)
                                 return FALSE;
 
                         g_signal_emit (G_OBJECT (item_list),
                                        gnc_item_list_signals[ACTIVATE_ITEM], 0, string);
-                        return TRUE;*/
+                        return TRUE;
+#endif
 		case GDK_Page_Up:
 		case GDK_Page_Down:
 		case GDK_Up:
@@ -299,7 +317,7 @@ tree_view_selection_changed (GtkTreeSelection *selection,
 }
 
 GnomeCanvasItem *
-gnc_item_list_new (GnomeCanvasGroup *parent)
+gnc_item_list_new(GnomeCanvasGroup *parent)
 {
         GtkWidget *frame;
 	GtkWidget *tree_view;
@@ -333,7 +351,7 @@ gnc_item_list_new (GnomeCanvasGroup *parent)
 	gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
 	gtk_container_add (GTK_CONTAINER (scrollwin), tree_view);
-	gtk_widget_show_all (frame);
+        gtk_widget_show_all (frame);
 
         item = gnome_canvas_item_new (parent, gnc_item_list_get_type(),
                                       "widget", frame,

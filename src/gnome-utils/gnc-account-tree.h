@@ -41,52 +41,52 @@ typedef gboolean (*AccountFilter) (Account *account, gpointer user_data);
 
 typedef struct
 {
-	gboolean include_type[NUM_ACCOUNT_TYPES];
+  gboolean include_type[NUM_ACCOUNT_TYPES];
 
-	gboolean show_field[NUM_ACCOUNT_FIELDS];
+  gboolean show_field[NUM_ACCOUNT_FIELDS];
 } AccountViewInfo;
 
 typedef struct GNCAccountTree_s
 {
-	GtkCTree ctree;
+  GtkCTree ctree;
 
-	AccountFilter view_filter;
-	gpointer view_filter_data;
+  AccountFilter view_filter;
+  gpointer view_filter_data;
 
-	AccountFilter selectable_filter;
-	gpointer selectable_filter_data;
+  AccountFilter selectable_filter;
+  gpointer selectable_filter_data;
 
-	AccountViewInfo avi;
+  AccountViewInfo avi;
 
-	gint num_columns;
-	gint description_column;
-	gint balance_column;
-	gint total_column;
-	AccountFieldCode column_fields[NUM_ACCOUNT_FIELDS];
+  gint num_columns;
+  gint description_column;
+  gint balance_column;
+  gint total_column;
+  AccountFieldCode column_fields[NUM_ACCOUNT_FIELDS];
 
-	const gchar * column_headings[NUM_ACCOUNT_FIELDS + 1];
+  const gchar * column_headings[NUM_ACCOUNT_FIELDS + 1];
 
-	GtkStyle *deficit_style;
+  GtkStyle *deficit_style;
 
-	GUID root_account;
+  GUID root_account;
 
-	GList *current_accounts;
+  GList * current_accounts;
 
-	gboolean ignore_unselect;
+  gboolean ignore_unselect;
 } GNCAccountTree;
 
 typedef struct
 {
-	GtkCTreeClass parent_class;
+  GtkCTreeClass parent_class;
 
-	void (*select_account)   (GNCAccountTree *tree,
-			          Account        *account);
+  void (*select_account)   (GNCAccountTree *tree,
+                            Account        *account);
 
-	void (*unselect_account) (GNCAccountTree *tree,
-				  Account        *account);
+  void (*unselect_account) (GNCAccountTree *tree,
+                            Account        *account);
 
-	void (*activate_account) (GNCAccountTree *tree,
-				  Account        *account);
+  void (*activate_account) (GNCAccountTree *tree,
+                            Account        *account);
 } GNCAccountTreeClass;
 
 /***********************************************************
