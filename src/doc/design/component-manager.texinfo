@@ -20,7 +20,12 @@ The CM also provides the ability to search for existing components.
 @menu
 * Component Manager Introduction::  
 * Refresh Mechanism::           
-* Component Manager API::       
+* CM Initialization and Shutdown::  
+* Refresh Handlers::            
+* Close Handlers::              
+* Registering and Unregistering Components::  
+* Watching Engine Objects::     
+* Controlling Refreshes::       
 @end menu
 
 
@@ -82,7 +87,7 @@ to avoid unnecessary refreshing.
 @end itemize
 
 
-@node Refresh Mechanism, Component Manager API, Component Manager Introduction, Component Manager
+@node Refresh Mechanism, CM Initialization and Shutdown, Component Manager Introduction, Component Manager
 @section Refresh Mechanism
 @cindex Refresh Mechanism
 
@@ -133,6 +138,198 @@ provided by the GUI components (such as which specific Engine
 entities the components are 'watching').
 
 
-@node Component Manager API,  , Refresh Mechanism, Component Manager
-@section Component Manager API
-@cindex Component Manager API
+@node CM Initialization and Shutdown, Refresh Handlers, Refresh Mechanism, Component Manager
+@section Initialization and Shutdown
+
+@deftypefun void gnc_component_manager_init (void)
+Initialize the Component Manager. This should be called
+before using an other CM functions.
+@end deftypefun
+
+@deftypefun void gnc_component_manager_shutdown (void)
+Shutdown the Component Manager. This should be called
+to release Component Manager resources.
+@end deftypefun
+
+
+@node Refresh Handlers, Close Handlers, CM Initialization and Shutdown, Component Manager
+@section Refresh Handlers
+@tindex EventInfo
+
+When a component registers itself with the CM, it may specify two
+different handlers: a refresh handler and a close handler. A refresh
+handler is a function with the following type signature:
+
+@deftypefun void (*GNCComponentRefreshHandler) (GHashTable *@var{changes}, gpointer @var{user_data})
+This is the type signature of a refresh handler. The @var{changes} hash
+describes the Engine events which have occurred since the last refresh.
+It is used to determine whether a refresh is actually needed. It may,
+however, be @code{NULL}, meaning the component must perform a refresh.
+The @code{user_data} pointer is the data pointer supplied when the
+component was registered.
+@end deftypefun
+
+When a refresh handler is invoked, it should perform the following actions:
+
+@enumerate
+
+@item Check if the component should be closed. When a refresh handler
+is invoked, any and all of the Engine objects which the component was
+referencing may have been destroyed, possibly making the component
+obsolete. For example, a dialog to edit the parameters of a specific
+Account should be automatically closed when the account is deleted. On
+the other hand, a list of all Accounts in a hierarchy should be updated
+when an Account is deleted, but not necessarily closed.
+
+Components must test for the destruction of critical Engine objects
+in two ways.
+
+@enumerate
+
+@item Use the @code{GUID} lookup functions (such as
+@code{xaccAccountLookup}), to determine if the engine object is still
+bound to its @code{GUID}. Of course, this means that components should
+store the @code{GUID}s of critical Engine objects instead of simply
+storing their C pointers.
+
+@item If the first test succeeds and the @var{changes} hash table
+of the refresh handler is non-NULL, the component should use the hash to
+determine of the GNC_EVENT_DESTROY event has ocurred for the Engine
+object in question. The @var{changes} hash is a mapping from
+@code{GUID}s to @code{EventInfo} structures. An @code{EventInfo}
+structure has a single member, @code{event_mask}, of type
+@code{GNCEngineEventType}. The @code{event_mask} is a logical or of the
+@code{GNC_EVENT_CREATE}, @code{GNC_EVENT_MODIFY}, and
+@code{GNC_EVENT_DESTROY} event types. Since refreshes may not occur with
+every Engine event, @code{event_mask} may have all three values.
+
+There is a utility function for accessing the @var{changes} hash:
+
+@deftypefun {const EventInfo *} gnc_gui_get_entity_events (GHashTable * @var{changes}, GUID * @var{entity})
+Return the event info for the entity specified by @var{entity}. If there
+are no events for that entity, @code{NULL} is returned.
+@end deftypefun
+
+@end enumerate
+
+If the @var{changes} hash is NULL, then the first test is sufficient
+to determine whether an object has been destroyed.
+
+If the refresh handler determines the component should be destroyed,
+it should destroy the component and return.
+
+@item Check if the component should be refreshed. If the @var{changes}
+hash is @code{NULL}, then the component must refresh itself. Otherwise,
+it may use the @var{changes} hash to determine whether or not a refresh
+is actually necessary. However, since the component may specify which
+particular Engine objects are relevant (see "Watching Components"
+below), generally a component will simply refresh unconditionally.
+
+@item Refresh the component if necessary. This includes updating the
+GUI as well as internal structures to reflect the new state of Engine
+objects.
+
+@end enumerate
+
+
+@node Close Handlers, Registering and Unregistering Components, Refresh Handlers, Component Manager
+@section Close Handlers
+
+A close handler is a function with the following type signature:
+
+@deftypefun void (*GNCComponentCloseHandler) (gpointer @var{user_data})
+This is the type signature of a close handler. The @code{user_data}
+pointer is the data pointer supplied when the component was registered.
+@end deftypefun
+
+The invocation of a close handler is a command to the component to close
+itself. The component must close itself -- the handler should not be
+ignored. The component is still responsible for unregistering itself
+with the Component Manager.
+
+
+@node Registering and Unregistering Components, Watching Engine Objects, Close Handlers, Component Manager
+@section Registering and Unregistering Components
+
+@deftypefun gint gnc_register_gui_component (const char * @var{component_class}, GNCComponentRefreshHandler @var{refresh_handler}, GNCComponentCloseHandler @var{close_handler}, gpointer @var{user_data})
+Register a gui component with the Component Manager.
+
+The variable @var{component_class} is a string specifying a class of
+components. Certain CM functions can be performed on all components in a
+class. For that reason, components in the same class should all use the
+same type for @var{user_data}.
+
+@var{refresh_handler} and @var{close_handler} specify the refresh and close
+handlers, respectively. Either or both may be @code{NULL}.
+
+The @var{user_data} is supplied as an argument when the handlers are invoked.
+
+The function returns the id of the newly-registered component, or
+@code{NO_COMPONENT} if there was an error.
+@end deftypefun
+
+After a refresh handler is registered, the component must use the API
+calls under "Watching Engine Objects" below to inform the Component
+Manager which engine entities are being watched, i.e., which engine
+entities may cause the component to need refreshing. When a component is
+first registered, it is not watching anything, and thus will not receive
+refresh events.
+
+@deftypefun void gnc_unregister_gui_component (gint @var{component_id})
+Unregister the component with id @var{component} from the CM.
+@end deftypefun
+
+@deftypefun void gnc_unregister_gui_component_by_data (const char * @var{component_class}, gpointer @var{user_data})
+Unregister all gui components in the class @var{component_class} which have
+@var{user_data} as a user data pointer.
+@end deftypefun
+
+
+@node Watching Engine Objects, Controlling Refreshes, Registering and Unregistering Components, Component Manager
+@section Watching Engine Objects
+
+@deftypefun void gnc_gui_component_watch_entity (gint @var{component_id}, const GUID * @var{entity}, GNCEngineEventType @var{event_mask})
+If @var{event_mask} is non-zero, add the Engine entity specified by
+@var{entity} to the list of entities being watched by the component with
+id @var{component_id}. Only the events specified by @var{events} are
+watched. If @var{event_mask} is 0, the call turns off watching for the
+entity.
+@end deftypefun
+
+@deftypefun void gnc_gui_component_watch_entity_type (gint @var{component_id}, GNCIdType @var{entity_type}, GNCEngineEventType @var{event_mask})
+if @var{event_mask}, turn on watching for all entities of @var{entity_type}.
+Only events specified by @var{event_mask} are watched. If @var{event_mask}
+is 0, turns off watching for the entity type.
+@end deftypefun
+
+@deftypefun void gnc_gui_component_clear_watches (gint @var{component_id})
+Clear all watches for the component with id @var{component_id}.
+@end deftypefun
+
+
+@node Controlling Refreshes,  , Watching Engine Objects, Component Manager
+@section Controlling Refreshes
+
+@deftypefun void gnc_suspend_gui_refresh (void)
+Suspend the invocation of refresh handlers by the Component Manager.
+This routine may be called multiple times. Each call increases the
+suspend counter which starts at zero. When refreshes are not suspended,
+any engine event causes a refresh cycle in which the refresh handler for
+every component watching for that event is invoked.
+@end deftypefun
+
+@deftypefun void gnc_resume_gui_refresh (void)
+Resume the invocation of refresh handlers by the Component Manager.
+Each call reduces the suspend counter by one. When the counter reaches
+zero, all events which have occured since the last refresh are collected
+and passed to refresh handlers via the @var{changes} argument. Refresh
+handlers will still be excluded based on their watches.
+@end deftypefun
+
+@deftypefun void gnc_gui_refresh_all (void)
+Force all components to refresh, i.e., invoke all refresh handlers
+with a @code{NULL} value for @var{changes}.
+
+This routine may only be invoked when the suspend counter is zero. It
+should never be mixed with the suspend/resume refresh routines.
+@end deftypefun
