@@ -1,3 +1,8 @@
+2005-04-06  Christian Stimming  <stimming@tuhh.de>
+
+	* po/rw.po, po/glossary/rw.po: Add Kinyarwanda translation by
+	Steven Michael Murphy <murf@e-tools.com>
+
 2005-04-02  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-hbcitrans.c: Fix warning about
