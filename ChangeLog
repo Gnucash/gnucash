@@ -1,5 +1,10 @@
 2001-06-27  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/QuickFill.c: same as below
+
+	* src/register/quickfillcell.c: use wide character conversion
+	functions
+
 	* AUTHORS: credits
 
 	* doc/sgml/C/xacc-about.sgml: credits
