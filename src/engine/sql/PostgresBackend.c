@@ -1110,7 +1110,7 @@ pgend_session_end (Backend *bend)
           * it might be opened in multi-user mode next time. Thus, update
           * the account balance checkpoints just in case. 
           */
-         pgendGroupRecomputeAllCheckpoints (be, be->topgroup);
+         /* pgendGroupRecomputeAllCheckpoints (be, be->topgroup); */
          break;
 
       case MODE_POLL:
