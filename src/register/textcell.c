@@ -70,4 +70,13 @@ xaccInitTextCell (BasicCell *cell)
    cell->modify_verify = TextMV;
 }
 
+/* ================================================ */
+
+void
+xaccDestroyTextCell (BasicCell *cell)
+{
+   cell->modify_verify = NULL;
+   xaccDestroyBasicCell (cell);
+}
+
 /* --------------- end of file ---------------------- */
