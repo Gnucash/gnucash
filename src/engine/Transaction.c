@@ -915,6 +915,19 @@ xaccFreeTransaction (Transaction *trans)
 
  ********************************************************************/
 
+/* return 0 when splits have equal guids */
+static gint
+compare_split_guids (gconstpointer a, gconstpointer b)
+{
+  Split *sa = (Split *) a;
+  Split *sb = (Split *) b;
+
+  if (sa == sb) return 0;
+  if (!sa || !sb) return 1;
+
+  return guid_compare (xaccSplitGetGUID (sa), xaccSplitGetGUID (sb));
+}
+
 gboolean
 xaccTransEqual(const Transaction *ta, const Transaction *tb,
                gboolean check_guids,
@@ -989,26 +1002,46 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 
   if (check_splits)
   {
-    GList *sa = ta->splits;
-    GList *sb = tb->splits;
-
-    if ((!sa && sb) || (!sb && sa))
+    if ((!ta->splits && tb->splits) || (!tb->splits && ta->splits))
     {
       PWARN ("only one has splits");
       return FALSE;
     }
 
-    if (sa && sb)
+    if (ta->splits && tb->splits)
     {
-      /* presume that the splits are in the same order */
-      while (sa && sb)
+      GList *node_a;
+
+      for (node_a = ta->splits; node_a; node_a = node_a->next)
       {
-        if (!xaccSplitEqual(sa->data, sb->data, check_guids, FALSE))
+        Split *split_a = node_a->data;
+        Split *split_b;
+        GList *node_b;
+
+        /* don't presume that the splits are in the same order */
+        node_b = g_list_find_custom (tb->splits, split_a, compare_split_guids);
+
+        if (!node_b)
+        {
+          char *str_a;
+
+          str_a = guid_to_string (xaccSplitGetGUID (split_a));
+
+          PWARN ("first has split %s and second does not", str_a);
+
+          g_free (str_a);
+
+          return(FALSE);
+        }
+
+        split_b = node_b->data;
+
+        if (!xaccSplitEqual (split_a, split_b, check_guids, FALSE))
         {
           char *str_a, *str_b;
 
-          str_a = guid_to_string (xaccSplitGetGUID (sa->data));
-          str_b = guid_to_string (xaccSplitGetGUID (sb->data));
+          str_a = guid_to_string (xaccSplitGetGUID (split_a));
+          str_b = guid_to_string (xaccSplitGetGUID (split_b));
 
           PWARN ("splits %s and %s differ", str_a, str_b);
 
@@ -1017,12 +1050,9 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 
           return(FALSE);
         }
-
-        sa = sa->next;
-        sb = sb->next;
       }
 
-      if ((sa != NULL) || (sb != NULL))
+      if (g_list_length (ta->splits) != g_list_length (tb->splits))
       {
         PWARN ("different number of splits");
         return(FALSE);
