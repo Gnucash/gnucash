@@ -54,6 +54,7 @@ struct _gncTaxTable
   char *          name;
   GList *         entries;
 
+  /* See src/doc/business.txt for an explanation of the following */
   Timespec        modtime;        /* internal date of last modtime */
   gint64          refcount;
   GncTaxTable *   parent;         /* if non-null, we are an immutable child */
@@ -255,15 +256,45 @@ gncCloneTaxTable (GncTaxTable *from, QofBook *book)
 #if LATER_FIXME
   GList *         entries;
   gint64          refcount;
-  GncTaxTable *   parent;  
-  GncTaxTable *   child;   
-  GList *         children;   
 #endif 
+
+  /* XXX this treats parent-child as double-linked list, not sure
+   * if that's true .. */
+  /* Make copies of parents and children. Note that this can be
+   * a recursive copy ... */
+  if (from->child)
+  {
+    table->child = gncTaxTableObtainTwin (from->child, book);
+    table->child->parent = table;
+    table->child->refcount = 0; /* XXX is this right ?? */
+    table->children = g_list_prepend(table->children, table->child);
+  }
+
+  if (from->parent)
+  {
+    table->parent = gncTaxTableObtainTwin (from->parent, book);
+    table->parent->child = table;
+  }
 
   addObj (table);
   gnc_engine_generate_event (&table->inst.guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
   return table;
 }
+
+GncTaxTable *
+gncTaxTableObtainTwin (GncTaxTable *from, QofBook *book)
+{
+  GncTaxTable *table;
+  if (!from) return NULL;
+
+  table = (GncTaxTable *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!table)
+  {
+    table = gncCloneTaxTable (table, book);
+  }
+  return table;
+}
+
 
 void 
 gncTaxTableDestroy (GncTaxTable *table)

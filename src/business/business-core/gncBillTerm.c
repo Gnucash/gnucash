@@ -38,6 +38,7 @@
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
 #include "kvp_frame.h"
+
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -60,6 +61,7 @@ struct _gncBillTerm
   gnc_numeric     discount;
   gint            cutoff;
 
+  /* See src/doc/business.txt for an explanation of the following */
   gint64          refcount;
   GncBillTerm *   parent;      /* if non-null, we are an immutable child */
   GncBillTerm *   child;       /* if non-null, we have not changed */
@@ -97,14 +99,36 @@ static void maybe_resort_list (GncBillTerm *term);
 /* ============================================================== */
 /* Misc inl;ine utilities */
 
-G_INLINE_FUNC void mark_term (GncBillTerm *term);
-G_INLINE_FUNC void
+static inline void
 mark_term (GncBillTerm *term)
 {
   term->inst.dirty = TRUE;
   gncBusinessSetDirtyFlag (term->inst.book, _GNC_MOD_NAME, TRUE);
 
   gnc_engine_generate_event (&term->inst.guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+}
+
+static inline void maybe_resort_list (GncBillTerm *term)
+{
+  struct _book_info *bi;
+
+  if (term->parent || term->invisible) return;
+  bi = gnc_book_get_data (term->inst.book, _GNC_MOD_NAME);
+  bi->terms = g_list_sort (bi->terms, (GCompareFunc)gncBillTermCompare);
+}
+
+static inline void add_or_rem_object (GncBillTerm *term, gboolean add)
+{
+  struct _book_info *bi;
+
+  if (!term) return;
+  bi = gnc_book_get_data (term->inst.book, _GNC_MOD_NAME);
+
+  if (add)
+    bi->terms = g_list_insert_sorted (bi->terms, term,
+                                       (GCompareFunc)gncBillTermCompare);
+  else
+    bi->terms = g_list_remove (bi->terms, term);
 }
 
 static inline void addObj (GncBillTerm *term)
@@ -197,7 +221,6 @@ static void gncBillTermFree (GncBillTerm *term)
   g_free (term);
 }
 
-
 GncBillTerm *
 gncCloneBillTerm (GncBillTerm *from, QofBook *book)
 {
@@ -216,12 +239,44 @@ gncCloneBillTerm (GncBillTerm *from, QofBook *book)
   term->disc_days = from->disc_days;
   term->discount = from->discount;
   term->cutoff = from->cutoff;
+  term->invisible = from->invisible;
 
-  /** xxx I don't know what to do about parent, children, disconnect ... 
-   * FIXME XXX  */
+  /** xxx I don't know what to do about refcount ... FIXME XXX  */
+
+  /* XXX this treats parent-child as double-linked list, not sure 
+   * if that's true .. */
+  /* Make copies of parents and children. Note that this can be
+   * a recursive copy ... */
+  if (from->child)
+  {
+    term->child = gncBillTermObtainTwin (from->child, book);
+    term->child->parent = term;
+    term->child->refcount = 0; /* XXX is this right ?? */
+    term->children = g_list_prepend(term->children, term->child);
+  }
+
+  if (from->parent)
+  {
+    term->parent = gncBillTermObtainTwin (from->parent, book);
+    term->parent->child = term;
+  }
 
   addObj (term);
   gnc_engine_generate_event (&term->inst.guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+  return term;
+}
+
+GncBillTerm *
+gncBillTermObtainTwin (GncBillTerm *from, QofBook *book)
+{
+  GncBillTerm *term;
+  if (!from) return NULL;
+
+  term = (GncBillTerm *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!term)
+  {
+    term = gncCloneBillTerm (from, book);
+  }
   return term;
 }
 
@@ -309,6 +364,11 @@ void gncBillTermSetCutoff (GncBillTerm *term, gint cutoff)
   gncBillTermCommitEdit (term);
 }
 
+/* XXX this doesn't seem right. If the parent/child relationship
+ * is a doubly-linked list, then there shouldn't be separate set-parent,
+ * set-child routines, else misuse of the routines will goof up
+ * relationships.  These ops should be atomic, I think.
+ */
 void gncBillTermSetParent (GncBillTerm *term, GncBillTerm *parent)
 {
   if (!term) return;
@@ -622,29 +682,6 @@ gncBillTermComputeDiscountDate (GncBillTerm *term, Timespec post_date)
 }
 
 /* Package-Private functions */
-
-static void maybe_resort_list (GncBillTerm *term)
-{
-  struct _book_info *bi;
-
-  if (term->parent || term->invisible) return;
-  bi = gnc_book_get_data (term->inst.book, _GNC_MOD_NAME);
-  bi->terms = g_list_sort (bi->terms, (GCompareFunc)gncBillTermCompare);
-}
-
-static void add_or_rem_object (GncBillTerm *term, gboolean add)
-{
-  struct _book_info *bi;
-
-  if (!term) return;
-  bi = gnc_book_get_data (term->inst.book, _GNC_MOD_NAME);
-
-  if (add)
-    bi->terms = g_list_insert_sorted (bi->terms, term,
-                                       (GCompareFunc)gncBillTermCompare);
-  else
-    bi->terms = g_list_remove (bi->terms, term);
-}
 
 static void _gncBillTermCreate (QofBook *book)
 {

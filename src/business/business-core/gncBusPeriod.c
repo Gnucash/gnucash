@@ -1,14 +1,14 @@
 
 XXX TODO:
 -- billterms is incompletely cloned, not sure what to do 
-   with certain fields, ask warlord
+   with refcount, ask warlord, need to explore.
 
 -- taxtable is incompletely cloned, not sure what to do 
    with certain fields, ask warlord
 
 -- customer incomplete cloned, neeed to handle jobs
 
--- Ask warlord is *all bill terms should eb copied, or just
+-- Ask warlord if all bill terms should be copied, or just
    thiose on customers ... 
 
 

@@ -173,13 +173,7 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
    * else clone that too. */
   if (from->terms)
   {
-    GncBillTerm *bitty;
-    bitty = (GncBillTerm *) qof_instance_lookup_twin (QOF_INSTANCE(from->terms), book);
-    if (!bitty)
-    {
-      bitty = gncCloneBillTerm (from->terms, book);
-    }
-    cust->terms = bitty;
+    cust->terms = gncBillTermObtainTwin(from->terms, book);
   }
 
   /* Find the matching taxtable in the new book, 

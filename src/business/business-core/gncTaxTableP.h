@@ -52,4 +52,18 @@ gboolean gncTaxTableGetInvisible (GncTaxTable *table);
 
 GncTaxTable * gncCloneTaxTable (GncTaxTable *from, QofBook *book);
 
+/** The gncTaxTableObtainTwin() will find the 'twin' of the
+ *  indicated tax table in the indicated book.  If the twin doesn't
+ *  yet exist in the book, it will be created (by calling
+ *  gncCloneTaxTable()) and placed into the book.
+ *
+ * We called this routine 'Obtain' instead of "Get" to distinguish
+ * it from the other Get routines, which work in fundamentally
+ * different ways.
+ */
+GncTaxTable * gncTaxTableObtainTwin (GncTaxTable *from, QofBook *book);
+                                                                                
+                                                                                
+
+
 #endif /* GNC_TAXTABLEP_H_ */

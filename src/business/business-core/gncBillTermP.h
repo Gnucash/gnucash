@@ -43,12 +43,27 @@ gboolean gncBillTermGetInvisible (GncBillTerm *term);
 
 /** The gncCloneBillTerm() routine makes a copy of the indicated
  *  bill term, placing it in the indicated book.  It copies
- *  the etc. 
- *  It does not copy parent/child relationships ???
- * XXX the above need fixin....
+ *  the name, description, type, due-days, discount, etc. 
+ *  It also copies (as needed) both parents and children, so that
+ *  the parent-child relationship is correctly mirrored in the 
+ *  clone.
+ * XXX the refcount is mis-handled. This needs fixin....
  *  It then adds a pair of 'gemini' kvp pointers so that each copy
  *  can be found from the other.
  */
 
 GncBillTerm * gncCloneBillTerm (GncBillTerm *from, QofBook *);
+
+/** The gncBillTermObtainTwin() will find the 'twin' of the
+ *  indicated bill term in the indicated book.  If the twin doesn't
+ *  yet exist in the book, it will be created (by calling
+ *  gncCloneBillTerm()) and placed into the book.
+ *
+ * We called this routine 'Obtain' instead of "Get" to distinguish
+ * it from the other Get routines, which work in fundamentally  
+ * different ways.
+ */
+GncBillTerm * gncBillTermObtainTwin (GncBillTerm *from, QofBook *book);
+
+
 #endif /* GNC_BILLTERMP_H_ */
