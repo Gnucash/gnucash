@@ -2416,7 +2416,7 @@ gnc_register_check_close(RegWindow *regData)
         (GTK_WINDOW(regData->window), TRANS_CHANGED_MSG, TRUE))
       recordCB(regData->window, regData);
     else
-      xaccSRCancelCursorSplitChanges(regData->ledger->ledger);
+      xaccSRCancelCursorTransChanges(regData->ledger->ledger);
   }
 }
 

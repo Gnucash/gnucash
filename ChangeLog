@@ -1,3 +1,8 @@
+2000-08-22  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-register.c (gnc_register_check_close): use
+	xaccSRCancelCursorTransChanges to cancel any pending changes.
+
 2000-08-21  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/reconcile-list.c (gnc_reconcile_list_fill): fix
