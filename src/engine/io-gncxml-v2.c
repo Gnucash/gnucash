@@ -31,6 +31,7 @@
 
 #include "sixtp.h"
 #include "sixtp-parsers.h"
+#include "sixtp-utils.h"
 #include "gnc-xml.h"
 #include "gnc-book-p.h"
 #include "gnc-pricedb-p.h"
@@ -166,9 +167,9 @@ gnc_counter_end_handler(gpointer data_for_children,
 
     type = xmlGetProp(tree, "cd:type");
     strval = dom_tree_to_text(tree);
-    if(!string_to_integer(strval, &val))
+    if(!string_to_gint64(strval, &val))
     {
-        g_warning("string_to_integer failed with input: %s",
+        g_warning("string_to_gint64 failed with input: %s",
                   strval ? strval : "(null)");
         g_free (strval);
         xmlFree (type);
