@@ -218,14 +218,14 @@ xaccSRGetInfo(SplitRegister *reg)
 static gncUIWidget
 xaccSRGetParent(SplitRegister *reg)
 {
-   SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = xaccSRGetInfo(reg);
 
-   assert(reg != NULL);
+  assert(reg != NULL);
 
-   if (info->get_parent == NULL)
-     return NULL;
+  if (info->get_parent == NULL)
+    return NULL;
 
-   return (info->get_parent)(info->user_data);
+  return (info->get_parent)(info->user_data);
 }
 
 void
@@ -233,13 +233,13 @@ xaccSRSetData(SplitRegister *reg, void *user_data,
               SRGetParentCallback get_parent,
               SRSetHelpCallback set_help)
 {
-   SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = xaccSRGetInfo(reg);
 
-   assert(reg != NULL);
+  assert(reg != NULL);
 
-   info->user_data = user_data;
-   info->get_parent = get_parent;
-   info->set_help = set_help;
+  info->user_data = user_data;
+  info->get_parent = get_parent;
+  info->set_help = set_help;
 }
 
 void
@@ -339,62 +339,78 @@ gnc_copy_trans(Transaction *from, Transaction *to)
  */
 
 static void
-LedgerMoveCursor  (Table *table, 
-                   int *p_new_phys_row, 
-                   int *p_new_phys_col, 
-                   void * client_data)
+LedgerMoveCursor (Table *table, 
+                  int *p_new_phys_row, 
+                  int *p_new_phys_col, 
+                  void * client_data)
 {
-   int new_phys_row = *p_new_phys_row;
-   int new_phys_col = *p_new_phys_col;
-   SplitRegister *reg = (SplitRegister *) client_data;
-   Transaction *newtrans = NULL;
-   Locator *locator;
-   int style;
+  int new_phys_row = *p_new_phys_row;
+  int new_phys_col = *p_new_phys_col;
+  SplitRegister *reg = (SplitRegister *) client_data;
+  SRInfo *info = xaccSRGetInfo(reg);
+  Transaction *newtrans;
+  Transaction *trans;
+  gncBoolean saved;
+  Locator *locator;
+  int style;
 
-   PINFO ("LedgerMoveCursor(): start callback %d %d \n",
-          new_phys_row, new_phys_col);
+  PINFO ("LedgerMoveCursor(): start callback %d %d \n",
+         new_phys_row, new_phys_col);
 
-   /* The transaction where we are moving to */
-   newtrans = xaccSRGetTrans(reg, new_phys_row, new_phys_col);
+  /* The transaction we are coming from */
+  trans = xaccSRGetCurrentTrans(reg);
 
-   /* commit the contents of the cursor into the database */
-   xaccSRSaveRegEntry (reg, newtrans);
-   xaccSRRedrawRegEntry (reg); 
+  /* The transaction where we are moving to */
+  newtrans = xaccSRGetTrans(reg, new_phys_row, new_phys_col);
 
-   PINFO ("LedgerMoveCursor(): after redraw %d %d \n",
-          new_phys_row, new_phys_col);
+  /* commit the contents of the cursor into the database */
+  saved = xaccSRSaveRegEntry (reg, newtrans);
+  if ((info->pending_trans != NULL) &&
+      (info->pending_trans == trans) &&
+      (trans != newtrans))
+  {
+     xaccTransCommitEdit (trans);
+     info->pending_trans = NULL;
+     saved = GNC_T;
+  }
 
-   reg->cursor_phys_row = new_phys_row;
-   reg->cursor_phys_col = new_phys_col;
+  if (saved)
+    xaccSRRedrawRegEntry (reg);
 
-   locator = table->locators[new_phys_row][new_phys_col];
-   reg->cursor_virt_row = locator->virt_row;
+  PINFO ("LedgerMoveCursor(): after redraw %d %d \n",
+         new_phys_row, new_phys_col);
 
-   /* if auto-expansion is enabled, we need to redraw the register
-    * to expand out the splits at the new location.  We do some
-    * tomfoolery here to trick the code into expanding the new location.
-    * This little futz is sleazy, but it does succeed in getting the 
-    * LoadRegister code into expanding the appropriate split.
-    */   
-   style = ((reg->type) & REG_STYLE_MASK);
-   if ((REG_SINGLE_DYNAMIC == style) ||
-       (REG_DOUBLE_DYNAMIC == style)) 
-   {
-      Split *split;
+  reg->cursor_phys_row = new_phys_row;
+  reg->cursor_phys_col = new_phys_col;
 
-      split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
-      reg->table->current_cursor->user_data = (void *) split;
+  locator = table->locators[new_phys_row][new_phys_col];
+  reg->cursor_virt_row = locator->virt_row;
 
-      xaccRegisterRefresh (reg);
-      gnc_refresh_main_window();
+  /* if auto-expansion is enabled, we need to redraw the register
+   * to expand out the splits at the new location.  We do some
+   * tomfoolery here to trick the code into expanding the new location.
+   * This little futz is sleazy, but it does succeed in getting the 
+   * LoadRegister code into expanding the appropriate split.
+   */   
+  style = ((reg->type) & REG_STYLE_MASK);
+  if ((REG_SINGLE_DYNAMIC == style) ||
+      (REG_DOUBLE_DYNAMIC == style)) 
+  {
+    Split *split;
 
-      /* indicate what row we *should* have gone to */
-      *p_new_phys_row = table->current_cursor_phys_row;
-      *p_new_phys_col = table->current_cursor_phys_col;
+    split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
+    reg->table->current_cursor->user_data = (void *) split;
 
-      PINFO ("LedgerMoveCursor(): after dynamic %d %d stored val %d\n",
-             *p_new_phys_row, *p_new_phys_col, reg->cursor_phys_row);
-   }
+    xaccRegisterRefresh (reg);
+    gnc_refresh_main_window();
+
+    /* indicate what row we *should* have gone to */
+    *p_new_phys_row = table->current_cursor_phys_row;
+    *p_new_phys_col = table->current_cursor_phys_col;
+
+    PINFO ("LedgerMoveCursor(): after dynamic %d %d stored val %d\n",
+           *p_new_phys_row, *p_new_phys_col, reg->cursor_phys_row);
+  }
 }
 
 /* ======================================================== */
@@ -1076,22 +1092,15 @@ void
 xaccSRRedrawRegEntry (SplitRegister *reg) 
 {
    Transaction *trans;
-   unsigned int changed;
-
-   /* use the changed flag to avoid heavy-weight redraws
-    * This will help cut down on uneccessary register redraws.  */
-   changed = xaccSplitRegisterGetChangeFlag (reg);
-   if (!changed) return;
 
    trans = xaccSRGetCurrentTrans (reg);
 
    /* refresh the register windows */
    /* This split belongs to a transaction that might be displayed
-    * in any number of windows.  Changing any one split is likely
+    * in any number of windows. Changing any one split is likely
     * to affect any account windows associated with the other splits
-    * in this transaction.  So basically, send redraw events to all
-    * of the splits.
-    */
+    * in this transaction. So basically, send redraw events to all
+    * of the splits. */
    gnc_transaction_ui_refresh(trans);
    gnc_refresh_main_window();
 }
@@ -1112,7 +1121,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
     * of the split & transaction fields. This will help
     * cut down on uneccessary register redraws.  */
    changed = xaccSplitRegisterGetChangeFlag (reg);
-   if (!changed) return GNC_F;
+   if (!changed)
+     return GNC_F;
 
    style = (reg->type) & REG_STYLE_MASK;   
 
@@ -1426,6 +1436,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
      info->pending_trans = NULL;
    }
 
+   xaccSplitRegisterClearChangeFlag(reg);
+
    return GNC_T;
 }
 
@@ -1581,7 +1593,7 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
 
 /* ======================================================== */
 
-static void
+static gncBoolean
 xaccSRCountRows (SplitRegister *reg, Split **slist)
 {
    SRInfo *info = xaccSRGetInfo(reg);
@@ -1659,9 +1671,8 @@ xaccSRCountRows (SplitRegister *reg, Split **slist)
            }             
          }
 
-         /* if multi-line, then show all splits.  If dynamic then
-          * show all splits only if this is the hot split. 
-          */
+         /* if multi-line, then show all splits. If dynamic then
+          * show all splits only if this is the hot split. */
          do_expand = multi_line;
          do_expand = do_expand || 
                      (dynamic && xaccIsPeerSplit(split,save_current_split)); 
@@ -1762,6 +1773,8 @@ xaccSRCountRows (SplitRegister *reg, Split **slist)
    reg->num_virt_rows = num_virt_rows;
    reg->cursor_phys_row = save_cursor_phys_row;
    reg->cursor_virt_row = save_cursor_virt_row;
+
+   return found_split;
 }
 
 /* ======================================================== */
@@ -1782,6 +1795,9 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    int multi_line, dynamic;
    CellBlock *lead_cursor;
    gncBoolean found_pending = GNC_F;
+   gncBoolean found_current = GNC_F;
+   SplitRegisterBuffer *reg_buffer;
+   unsigned int changed;
 
    xaccSplitRegisterConfigColors (reg);
 
@@ -1810,7 +1826,19 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
      info->cursor_hint_trans = xaccSRGetCurrentTrans(reg);
 
    /* count the number of rows */
-   xaccSRCountRows (reg, slist);
+   found_current = xaccSRCountRows (reg, slist);
+
+   /* If the current cursor has changed, and the 'current split'
+    * is still among the living, we save the values for later
+    * restoration. */
+   changed = xaccSplitRegisterGetChangeFlag(reg);
+   if (found_current && changed)
+   {
+     reg_buffer = xaccMallocSplitRegisterBuffer();
+     xaccSplitRegisterSaveCursor(reg, reg_buffer);
+   }
+   else
+     reg_buffer = NULL;
 
    /* disable move callback -- we con't want the cascade of 
     * callbacks while we are fiddling with loading the register */
@@ -1873,7 +1901,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
             phys_row += reg->trans_cursor->numRows; 
 
             /* loop over all of the splits in the transaction. The
-             * do..while will automaticaly put a blank (null) split
+             * do..while will automatically put a blank (null) split
              * at the end. */
             trans = xaccSplitGetParent (split);
             j = 0;
@@ -1979,6 +2007,14 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
        xaccMoveCursorGUI(table, row, col);
        reg->cursor_phys_row = row;
        reg->cursor_phys_col = col;
+
+       if (reg_buffer != NULL)
+       {
+         xaccSplitRegisterRestoreCursorChanged(reg, reg_buffer);
+         xaccCommitCursor (reg->table);
+         xaccDestroySplitRegisterBuffer(reg_buffer);
+         reg_buffer = NULL;
+       }
      }
    }
 

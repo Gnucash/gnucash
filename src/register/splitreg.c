@@ -43,6 +43,34 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
+typedef struct _CellBuffer CellBuffer;
+struct _CellBuffer
+{
+  char * value;
+  unsigned int changed;
+};
+
+struct _SplitRegisterBuffer
+{
+  CellBuffer dateCell;
+  CellBuffer numCell;
+  CellBuffer descCell;
+  CellBuffer recnCell;
+  CellBuffer shrsCell;
+  CellBuffer balanceCell;
+  CellBuffer actionCell;
+  CellBuffer xfrmCell;
+  CellBuffer mxfrmCell;
+  CellBuffer xtoCell;
+  CellBuffer memoCell;
+  CellBuffer creditCell;
+  CellBuffer debitCell;
+  CellBuffer priceCell;
+  CellBuffer valueCell;
+  CellBuffer ncreditCell;
+  CellBuffer ndebitCell;
+};
+
 static SplitRegisterColors reg_colors = {
   0xffdddd, /* pale red, single cursor active */
   0xccccff, /* pale blue, single cursor passive */
@@ -1225,6 +1253,149 @@ xaccSplitRegisterGetCursorType (SplitRegister *reg)
     return CURSOR_SPLIT;
 
   return CURSOR_NONE;
+}
+
+/* ============================================== */
+
+SplitRegisterBuffer *
+xaccMallocSplitRegisterBuffer ()
+{
+  SplitRegisterBuffer *srb;
+
+  srb = calloc(1, sizeof(SplitRegisterBuffer));
+
+  assert(srb != NULL);
+
+  return srb;
+}
+
+/* ============================================== */
+
+static void
+destroyCellBuffer(CellBuffer *cb)
+{
+  if (cb == NULL)
+    return;
+
+  if (cb->value != NULL)
+    free(cb->value);
+
+  cb->value = NULL;
+}
+
+void
+xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb)
+{
+  if (srb == NULL)
+    return;
+
+  destroyCellBuffer(&srb->dateCell);
+  destroyCellBuffer(&srb->numCell);
+  destroyCellBuffer(&srb->descCell);
+  destroyCellBuffer(&srb->recnCell);
+  destroyCellBuffer(&srb->shrsCell);
+  destroyCellBuffer(&srb->balanceCell);
+  destroyCellBuffer(&srb->actionCell);
+  destroyCellBuffer(&srb->xfrmCell);
+  destroyCellBuffer(&srb->mxfrmCell);
+  destroyCellBuffer(&srb->xtoCell);
+  destroyCellBuffer(&srb->memoCell);
+  destroyCellBuffer(&srb->creditCell);
+  destroyCellBuffer(&srb->debitCell);
+  destroyCellBuffer(&srb->priceCell);
+  destroyCellBuffer(&srb->valueCell);
+  destroyCellBuffer(&srb->ncreditCell);
+  destroyCellBuffer(&srb->ndebitCell);
+
+  free(srb);
+}
+
+/* ============================================== */
+
+static void
+saveCell(BasicCell *bcell, CellBuffer *cb)
+{
+  if ((bcell == NULL) || (cb == NULL))
+    return;
+
+  if (cb->value != NULL)
+    free(cb->value);
+
+  cb->value = bcell->value;
+
+  if (cb->value != NULL)
+  {
+    cb->value = strdup(cb->value);
+    assert(cb->value != NULL);
+  }
+
+  cb->changed = bcell->changed;
+}
+
+void
+xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb)
+{
+  if ((sr == NULL) || (srb == NULL))
+    return;
+
+  saveCell(&sr->dateCell->cell, &srb->dateCell);
+  saveCell(&sr->numCell->cell, &srb->numCell);
+  saveCell(&sr->descCell->cell, &srb->descCell);
+  saveCell(sr->recnCell, &srb->recnCell);
+  saveCell(&sr->shrsCell->cell, &srb->shrsCell);
+  saveCell(&sr->balanceCell->cell, &srb->balanceCell);
+  saveCell(&sr->actionCell->cell, &srb->actionCell);
+  saveCell(&sr->xfrmCell->cell, &srb->xfrmCell);
+  saveCell(&sr->mxfrmCell->cell, &srb->mxfrmCell);
+  saveCell(&sr->xtoCell->cell, &srb->xtoCell);
+  saveCell(&sr->memoCell->cell, &srb->memoCell);
+  saveCell(&sr->creditCell->cell, &srb->creditCell);
+  saveCell(&sr->debitCell->cell, &srb->debitCell);
+  saveCell(&sr->priceCell->cell, &srb->priceCell);
+  saveCell(&sr->valueCell->cell, &srb->valueCell);
+  saveCell(&sr->ncreditCell->cell, &srb->ncreditCell);
+  saveCell(&sr->ndebitCell->cell, &srb->ndebitCell);
+}
+
+/* ============================================== */
+
+static void
+restoreCellChanged(BasicCell *bcell, CellBuffer *cb)
+{
+  if ((bcell == NULL) || (cb == NULL))
+    return;
+
+  if (cb->changed)
+  {
+    xaccSetBasicCellValue(bcell, cb->value);
+    bcell->changed = cb->changed;
+  }
+}
+
+void
+xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
+                                      SplitRegisterBuffer *srb)
+{
+  if ((sr == NULL) || (srb == NULL))
+    return;
+
+  restoreCellChanged(&sr->dateCell->cell, &srb->dateCell);
+  restoreCellChanged(&sr->numCell->cell, &srb->numCell);
+  restoreCellChanged(&sr->descCell->cell, &srb->descCell);
+  restoreCellChanged(sr->recnCell, &srb->recnCell);
+  restoreCellChanged(&sr->shrsCell->cell, &srb->shrsCell);
+  restoreCellChanged(&sr->balanceCell->cell, &srb->balanceCell);
+  restoreCellChanged(&sr->actionCell->cell, &srb->actionCell);
+  restoreCellChanged(&sr->xfrmCell->cell, &srb->xfrmCell);
+  restoreCellChanged(&sr->mxfrmCell->cell, &srb->mxfrmCell);
+  restoreCellChanged(&sr->xtoCell->cell, &srb->xtoCell);
+  restoreCellChanged(&sr->memoCell->cell, &srb->memoCell);
+  restoreCellChanged(&sr->creditCell->cell, &srb->creditCell);
+  restoreCellChanged(&sr->debitCell->cell, &srb->debitCell);
+  restoreCellChanged(&sr->priceCell->cell, &srb->priceCell);
+  restoreCellChanged(&sr->valueCell->cell, &srb->valueCell);
+  restoreCellChanged(&sr->ncreditCell->cell, &srb->ncreditCell);
+  restoreCellChanged(&sr->ndebitCell->cell, &srb->ndebitCell);
 }
 
 /* ============ END OF FILE ===================== */

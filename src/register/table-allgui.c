@@ -353,10 +353,9 @@ xaccSetCursor (Table *table, CellBlock *curs,
 
    table->rev_locators[virt_row][virt_col]->phys_row = phys_row_origin;
    table->rev_locators[virt_row][virt_col]->phys_col = phys_col_origin;
-   
 
    /* intialize the mapping so that we will be able to find
-    * the handler, given this range of physical cell addressses */
+    * the handler, given this range of physical cell addresses */
    for (i=0; i<curs->numRows; i++) {
       for (j=0; j<curs->numCols; j++) {
          Locator *loc;

@@ -17,14 +17,14 @@ d'actions.
 Gnucash est convenablement configur&eacute;, et l'ordinateur h&ocirc;te
 est connect&eacute; sur internet, le programme <tt>gnc-prices</tt> peut
 &ecirc;tre utilis&eacute; pour r&eacute;cup&eacute;rer&nbsp; les cotations
-des cours d'actions ou FCP et SICAV &agrave; partir de divers sites web
-directement dans GnuCash.
+des cours d'actions et de fonds communs (pas de FCP et de SICAV pour la
+france) &agrave; partir de divers sites web directement dans GnuCash.
 <p>Pour utiliser cette fonctionnalit&eacute;, ce qui suit doit &ecirc;tre
 fait:
 <ul>
 <li>
-Cr&eacute;er un compte et marquer le comme &eacute;tant du type "FCP/SICAV"
-ou "Actions".</li>
+Cr&eacute;er un compte et marquer le comme &eacute;tant du type "Fonds
+communs" ou "Actions".</li>
 
 <li>
 Entrer un code de titre valide (ndt : code SICOVAM en france) dans le champ
@@ -33,16 +33,43 @@ marqu&eacute; "Valeur:"</li>
 <li>
 S&eacute;lectionner une source de cotations depuis le menu d&eacute;roulant.
 Actuellement les sources de cotations support&eacute;s incluent <b>Yahoo</b>,
-<b>Fidelity
-Investments</b>, <b>T. Rowe Price</b> et le <b>Vanguard Group</b>. Noter
-que Yahoo fournira le cours des valeurs pour la plupart des fonds communs
-, <i>incluant</i> Fidelity, T.Rowe Price and Vanguard, et que les valeurs
-cot&eacute;es &agrave; Yahoo devrait &ecirc;tre identique &agrave; ceux
-qui sont sur les sites sources.(Autrement, quelqu'un rapportera une mauvaise
-information!)</li>
+<b>Yahoo
+Europe</b> , <b>Fidelity Investments</b>, <b>T. Rowe Price</b> et le <b>Vanguard
+Group</b>. Noter que Yahoo fournira le cours des valeurs pour la plupart
+des fonds communs , <i>incluant</i> Fidelity, T.Rowe Price and Vanguard,
+et que les cours des valeurs cot&eacute;es &agrave; Yahoo devrait &ecirc;tre
+identique &agrave; ceux qui sont sur les sites sources.(Autrement, quelqu'un
+rapportera une mauvaise information!).Si vous choisissez Yahoo Europe,
+vous devrez accoller le code du march&eacute; pour la valeur, tel que PA
+pour Paris, BE pour Berlin, etc. Example: 12150.PA (la valeur Peugot au
+march&eacute; de Paris).</li>
+
+<li>
+Liste des codes de march&eacute;s europ&eacute;ens:</li>
 </ul>
-Un exemple d'image est montr&eacute; ci-dessous:
-<p><img SRC="Ticker-a.gif" NOSAVE height=347 width=405>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=PA>Paris
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=BC>Barcelone
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=BE>Berlin
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=BI>Bilbao
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=BM>Br&ecirc;me
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=CO>Copenhague
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=D>Dusseldorf
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=F>Francfort
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=H>Hambourg
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=HA>Hanovre
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=L>London
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=MA>Madrid
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=MC>Madrid
+(M.C.)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=MI>Milan
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=MU>Munich
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=O>Oslo
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=ST>Stockholm
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=SG>Stuttgart
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=VA>Valence
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value=FX>Xetra
+<p>Un exemple d'image est montr&eacute; ci-dessous:
+<p><img SRC="pix/TICKER-A.GIF" NOSAVE height=347 width=405>
 <p>Pour mettre &agrave; jour les cours stock&eacute;s dans un fichier de
 compte de gnucash, lancez en ligne de commande <tt>gnc-price</tt>, en specifiant
 le nom du fichier; par exemple:
@@ -52,7 +79,7 @@ vers l'&eacute;cran tandis qu'elle chargera les donn&eacute;es. Elle fonctionner
 seulement quand l'ordinateur h&ocirc;te est connect&eacute; &agrave; internet.
 Elle <i>peut</i> fonctionner ensemble avec un parefeu/firewall de style
 masqu&eacute;. Elle ne fonctionne pas actuellement depuis derri&egrave;re
-un proxy ou des parefeu de style socks.
+des parefeu de style socks.
 <p>La commande peut &ecirc;tre lanc&eacute;e plusieurs fois dans une journ&eacute;e;&nbsp;
 pourtant, elle mettra les comptes &agrave; jour au maximum une fois avec
 les plus r&eacute;centes donn&eacute;es du cours des &eacute;changes de
@@ -68,7 +95,7 @@ marquez simplement les donn&eacute;es source pour ce compte comme "(aucun)".
 Vous pouvez le faire depuis la fen&ecirc;tre "<tt>Afficher un compte</tt>".
 <p>Apr&egrave;s avoir lanc&eacute; gnc-prices pendant quelques jours, vos
 comptes commenceront &agrave; ressembler&nbsp; &agrave; ce qui suit:
-<p><img SRC="Ticker-b.gif" NOSAVE height=372 width=881>
+<p><img SRC="pix/TICKER-B.GIF" NOSAVE height=372 width=881>
 <hr>
 <br>Retour &agrave; la <a href="xacc-main.html">Page principale de la documentation.</a>
 </body>

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.3.3\n"
 "POT-Creation-Date: 2000-03-24 14:08-0800\n"
-"PO-Revision-Date: 2000-03-23 22:24+0200\n"
+"PO-Revision-Date: 2000-03-25 10:05+0200\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2005,7 +2005,7 @@ msgstr "Affichage du format de date"
 
 #: po/guile_strings.txt:114
 msgid "Ending"
-msgstr "Final"
+msgstr "Fin"
 
 #: po/guile_strings.txt:115
 msgid "Reversed-balance account types"
@@ -2799,49 +2799,43 @@ msgstr "Fonds communs"
 
 #: src/gnome/glade-gnc-dialogs.c:786
 msgid "Print Dialog"
-msgstr ""
+msgstr "Dialogue d'impression"
 
 #: src/gnome/glade-gnc-dialogs.c:794
-#, fuzzy
 msgid "Print Setup"
-msgstr "Imprimer chèque"
+msgstr "Configuration imprimante"
 
 #: src/gnome/glade-gnc-dialogs.c:815
-#, fuzzy
 msgid "Printer:"
-msgstr "Imprimer"
+msgstr "Imprimante:"
 
 #: src/gnome/glade-gnc-dialogs.c:823
 msgid "Paper size:"
-msgstr ""
+msgstr "Taille papier:"
 
 #: src/gnome/glade-gnc-dialogs.c:831
 msgid "Pages to print:"
-msgstr ""
+msgstr "Pages à imprimer:"
 
 #: src/gnome/glade-gnc-dialogs.c:876
 msgid "All"
-msgstr ""
+msgstr "Tous"
 
 #: src/gnome/glade-gnc-dialogs.c:884
-#, fuzzy
 msgid "Selected"
-msgstr "Sélectionner un fichier"
+msgstr "Sélectionné"
 
 #: src/gnome/glade-gnc-dialogs.c:906
-#, fuzzy
 msgid "From:"
-msgstr "Depuis"
+msgstr "Depuis:"
 
 #: src/gnome/glade-gnc-dialogs.c:921
-#, fuzzy
 msgid "To:"
-msgstr "Vers"
+msgstr "Vers:"
 
 #: src/gnome/glade-gnc-dialogs.c:943 src/gnome/glade-gnc-dialogs.c:950
-#, fuzzy
 msgid "Select..."
-msgstr "Tout sélectionner"
+msgstr "Sélectionner..."
 
 #: src/gnome/glade-gnc-dialogs.c:986
 msgid "Preview"

@@ -16,7 +16,9 @@
 
 /* quickfillcell-gnome.c
  *
- * Implements gnome dependant quickfill cell functions.
+ * Implements gnome dependent quickfill cell functions.
+ *
+ * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
  */
 
 #include "config.h"
@@ -57,6 +59,13 @@ QuickFillDirect (BasicCell *bcell,
                 default:
                         return GNC_F;
         }
+
+        if ((*start_selection <= *cursor_position) &&
+            (*end_selection >= *cursor_position))
+                *cursor_position = *start_selection;
+        else if ((*end_selection <= *cursor_position) &&
+                 (*start_selection >= *cursor_position))
+                *cursor_position = *end_selection;
 
         match = xaccGetQuickFillStrLen(cell->qfRoot, oldval, *cursor_position);
         if (match == NULL)

@@ -1,4 +1,20 @@
+2000-03-26  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/splitreg.c: several new functions for saving and
+	restore the contents of the cursor.
+
+	* src/SplitLedger.c (xaccSRRedrawRegEntry): always redraw, caller
+ 	knows best!
+	(LedgerMoveCursor): if we are leaving the pending transaction,
+ 	commit it.
+	(xaccSRLoadRegister): save and restore changed cursor values.
+	(xaccSRSaveRegEntry): clear the register change flags.
+
 2000-03-24  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/quickfillcell-gnome.c (QuickFillDirect): if
+ 	the cursor is in the selection, move it to the start of the
+ 	selection.
 
 	* Makefile.common: add the value of DEFS to the compile flags
 

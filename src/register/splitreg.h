@@ -22,7 +22,7 @@
  * Implements a basic display register/ledger.
  * This object makes specific cell have specific properties
  * (price, text, date, etc).  and specific names that correspond.
- * it also determines the actual phyisical layout, arrengement
+ * it also determines the actual physical layout, arrangement
  * of columns, etc.
  *
  * Handles splits
@@ -79,7 +79,7 @@
  * REG_MULTI_LINE   -- show multiple lines per transaction
  * REG_DYNAMIC      -- dynamically expand edited transaction
  */
- 
+
 #define REG_SINGLE_LINE        (1 << 8)
 #define REG_DOUBLE_LINE        (2 << 8)
 #define REG_MULTI_LINE         (3 << 8)
@@ -119,6 +119,7 @@ typedef enum
  */
 #define NUM_CELLS 25
 
+typedef struct _SplitRegisterBuffer SplitRegisterBuffer;
 typedef struct _SplitRegister SplitRegister;
 
 struct _SplitRegister {
@@ -221,6 +222,14 @@ void            xaccSplitRegisterClearChangeFlag (SplitRegister *reg);
 
 /* Returns the type of the current cursor */
 CursorType      xaccSplitRegisterGetCursorType (SplitRegister *reg);
+
+/* Functions for working with split register buffers */
+SplitRegisterBuffer * xaccMallocSplitRegisterBuffer ();
+void xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb);
+
+void xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb);
+void xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
+                                           SplitRegisterBuffer *srb);
 
 
 #endif /* __XACC_SPLITREG_H__ */

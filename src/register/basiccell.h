@@ -60,7 +60,7 @@
  *     XACC_CELL_ALLOW_SHADOW copy ("shadow") the contents
  *       of register cells.   
  *
- *   If ALLOW_INPUT is not set, the cell is supposed  to
+ *   If ALLOW_INPUT is not set, the cell is supposed to
  *   to only display values, but not accept user input. If
  *   set, then the callbacks below are used to when the
  *   cell is entered.
