@@ -32,6 +32,12 @@
 (define (gnc:amount->formatted-string amount shares_value?)
   (gnc:amount->string amount #t #t shares_value?))
 
+(define (gnc:amount->formatted-currency-string amount 
+					       this_currency shares_value?)
+  (gnc:amount->string-helper (exact->inexact amount)
+			     #t #t shares_value?
+                             this_currency))
+
 (define (gnc:account-has-shares? account)
   (let ((type (gnc:account-type->symbol (gnc:account-get-type account))))
     (member type '(STOCK MUTUAL CURRENCY))))
@@ -308,6 +314,26 @@
                     (gnc:split-get-balance split)
                     (gnc:account-get-split account (+ index 1))))))))
 
+;; get the account balance just before the specified date. if
+;; include-children? is true, the balances of all children (not just
+;; direct children) are included in the calculation.
+(define (gnc:account-get-balance-before-date account date include-children?)
+  (let ((children-balance
+         (if include-children?
+             (gnc:group-get-balance-before-date
+              (gnc:account-get-children account) date)
+             0)))
+    (let loop ((index 0)
+               (balance 0)
+               (split (gnc:account-get-split account 0)))
+      (if (pointer-token-null? split)
+          (+ children-balance balance)
+          (if (gnc:timepair-le date (gnc:split-get-transaction-date split))
+              (+ children-balance balance)
+              (loop (+ index 1)
+                    (gnc:split-get-balance split)
+                    (gnc:account-get-split account (+ index 1))))))))
+
 ;; get the balance of a group of accounts at the specified date.
 ;; all children are included in the calculation
 (define (gnc:group-get-balance-at-date group date)
@@ -316,12 +342,20 @@
           (lambda (account)
             (gnc:account-get-balance-at-date account date #t)) group)))
 
-;; get the change in balance from the 'from' date to the 'to' date.
-;; this isn't quite as efficient as it could be, but it's a whole lot
-;; simpler :)
+;; get the balance of a group of accounts before the specified date.
+;; all children are included in the calculation
+(define (gnc:group-get-balance-before-date group date)
+  (apply +
+         (gnc:group-map-accounts
+          (lambda (account)
+            (gnc:account-get-balance-before-date account date #t)) group)))
+
+;; get the change in balance from the 'from' date to the 'to' date,
+;; including transaction on 'from' and 'to'. this isn't quite as
+;; efficient as it could be, but it's a whole lot simpler :)
 (define (gnc:account-get-balance-interval account from to include-children?)
   (- (gnc:account-get-balance-at-date account to include-children?)
-     (gnc:account-get-balance-at-date account from include-children?)))
+     (gnc:account-get-balance-before-date account from include-children?)))
 
 (define (gnc:group-get-balance-interval group from to)
   (apply +

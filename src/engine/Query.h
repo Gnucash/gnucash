@@ -71,7 +71,9 @@ typedef struct _querystruct Query;
 
 typedef struct {
   pd_type_t    type;
+  int          use_start;
   Timespec     start;
+  int          use_end;
   Timespec     end;
 } DatePredicateData;
 
@@ -167,14 +169,16 @@ void xaccQueryAddSharePriceMatch(Query * q, double amount,
 void xaccQueryAddSharesMatch(Query * q, double amount, 
                              amt_match_t how, QueryOp op);
 void xaccQueryAddDateMatch(Query * q, 
-                           int syear, int smonth, int sday, 
-                           int eyear, int emonth, int eday,
+                           int use_start, int syear, int smonth, int sday, 
+                           int use_end, int eyear, int emonth, int eday,
                            QueryOp op);
 void xaccQueryAddDateMatchTS(Query * q, 
-                             Timespec sts, Timespec ets,
+                             int use_start, Timespec sts, 
+                             int use_end, Timespec ets,
                              QueryOp op);
 void xaccQueryAddDateMatchTT(Query * q, 
-                             time_t stt, time_t ett,
+                             int use_start, time_t stt, 
+                             int use_end, time_t ett,
                              QueryOp op);
 void xaccQueryAddMemoMatch(Query * q, char * matchstring, 
                            int case_sens, int use_regexp, QueryOp op);

@@ -79,6 +79,7 @@ FreeCellBlockMem (CellBlock *arr)
          if (arr->cells[i]) free (arr->cells[i]);
       }
       free (arr->cells);
+      arr->cells = NULL;
    }
 
    /* free label array, if any */
@@ -86,18 +87,24 @@ FreeCellBlockMem (CellBlock *arr)
       for (i=0; i<oldrows; i++) {
          if (arr->cell_types[i]) free (arr->cell_types[i]);
       }
+      free (arr->cell_types);
+      arr->cell_types = NULL;
    }
-   
+
    /* free right traversal chain */
    if (arr->right_traverse_r) {
       for (i=0; i<oldrows; i++) {
          if (arr->right_traverse_r[i]) free (arr->right_traverse_r[i]);
       }
+      free (arr->right_traverse_r);
+      arr->right_traverse_r = NULL;
    }
    if (arr->right_traverse_c) {
       for (i=0; i<oldrows; i++) {
          if (arr->right_traverse_c[i]) free (arr->right_traverse_c[i]);
       }
+      free (arr->right_traverse_c);
+      arr->right_traverse_c = NULL;
    }
 
    /* free left traversal chain */
@@ -105,11 +112,15 @@ FreeCellBlockMem (CellBlock *arr)
       for (i=0; i<oldrows; i++) {
          if (arr->left_traverse_r[i]) free (arr->left_traverse_r[i]);
       }
+      free (arr->left_traverse_r);
+      arr->left_traverse_r = NULL;
    }
    if (arr->left_traverse_c) {
       for (i=0; i<oldrows; i++) {
          if (arr->left_traverse_c[i]) free (arr->left_traverse_c[i]);
       }
+      free (arr->left_traverse_c);
+      arr->left_traverse_c = NULL;
    }
 
    /* free widths, alignments */

@@ -78,9 +78,6 @@
 /* If configure found libXpm, then use it */
 #define  HAVE_XPM            
 
-/* use gnomeprint if it's available */
-#undef HAVE_LIBGNOMEPRINT
-
 /* misc image and compression libs needed by html widget */
 #undef HAVE_ZLIB               
 #undef HAVE_PNG             

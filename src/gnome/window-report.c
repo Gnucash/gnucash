@@ -306,7 +306,7 @@ static void
 gnc_report_export(ReportData *report_data)
 {
   GtkWindow *parent;
-  char *export_filename;
+  const char *export_filename;
   struct stat file_status;
   FILE *export_dest;
   char *message;
@@ -330,7 +330,7 @@ gnc_report_export(ReportData *report_data)
     gncBoolean result;
 
     message = g_strdup_printf(FMB_EEXIST_MSG, export_filename);
-    result = gnc_verify_dialog_parented(parent, message, GNC_F);
+    result = gnc_verify_dialog_parented(GTK_WIDGET(parent), message, GNC_F);
     g_free(message);
 
     if (!result)

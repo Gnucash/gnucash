@@ -505,10 +505,10 @@
 
 ; Create a column entry
 (define (html-table-col val)
-  (string-append "<TD align=right>" (tostring val) "</TD>"))
+  (string-append "<TD align=right>" (tostring val) "</TD>\n"))
 
 (define (html-table-col-align val align)
-  (string-append "<TD align=" align ">" (tostring val) "</TD>"))
+  (string-append "<TD align=" align ">" (tostring val) "</TD>\n"))
 
 ; Create an html table row from a list of entries
 (define (html-table-row lst)
@@ -517,7 +517,7 @@
 	 (string-append
 	  "<TR>"
 	  (apply string-append (map html-table-col lst))
-	  "</TR>"))))
+	  "</TR>\n"))))
 
 ; Create an html table row from a list of entries
 (define (html-table-row-align lst align-list)
@@ -526,7 +526,7 @@
 	 (string-append
 	  "<TR>"
 	  (apply string-append (map html-table-col-align lst align-list))
-	  "</TR>"))))
+	  "</TR>\n"))))
 
 ; Create an html table from a list of rows, each containing 
 ;   a list of column entries

@@ -13,6 +13,7 @@ EXTRA_DIST = \
   Quote_example.pl \
   gnc-prices-2.in \
   gnc-prices.in \
+  gnc-restore.pl \
   value_portfolio
 
 ## We borrow guile's convention and use @-...-@ as the substitution

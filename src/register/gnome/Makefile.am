@@ -11,7 +11,8 @@ libgncregistergnome_a_SOURCES = \
   gnucash-item-list.c \
   gnucash-sheet.c \
   gnucash-style.c \
-  quickfillcell-gnome.c
+  quickfillcell-gnome.c \
+  pricecell-gnome.c
 
 noinst_HEADERS = \
   gnucash-color.h \
@@ -26,7 +27,7 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore
 
-CFLAGS = @CFLAGS@ ${GNOME_CFLAGS}
+CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} ${GLIB_CFLAGS}
 
 INCLUDES = \
   -I${top_srcdir}/src \

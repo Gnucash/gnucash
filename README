@@ -1,15 +1,10 @@
-###########################################################################
-                       DEVELOPMENT  RELEASE
+============================================================
+          Gnucash 1.4.x README file.
+------------------------------------------------------------
 
-The version 1.3.x series of GnuCash are experimental development
-releases.  They may or may not work. Use at your own risk.
-
-The last stable, production version was gnucash-1.2.5.
-The next stable, production version will be gnucash-1.4.x
-
-###########################################################################
-
+==================
 Table of Contents:
+------------------
 
   - Overview
   - Upgrading from 1.2.x
@@ -128,7 +123,7 @@ Dependencies
 The following packages are required to be installed to run gnucash:
 
   guile: provides main extension language infrastructure, used
-    extensively in gnucash for initialization & startup.  Requires
+    extensively in gnucash for initialization & startup. Requires
     version 1.3 or later. (The guile-1.3-7 rpm works.)
 
   slib: scheme libraries for guile. Need version slib2c4 or later.
@@ -278,6 +273,9 @@ following packages:
 
   g-wrap: RPM's, debs, and source available at 
           ftp://ftp.gnucash.org/pub/g-wrap.
+          If you are using guile version 1.4 or later, you need
+          g-wrap 0.9.5 or later. If you are using an earlier version
+          of guile, you should use g-wrap 0.9.4.
 
 GnuCash understands a few non-standard ./configure options.  You
 should run ./configure --help for the most up to date summary of the
@@ -342,14 +340,10 @@ Supported OS's
 
 GnuCash 1.3.x is known to work with the following operating systems:
 
-GNU/Linux             -- x86 & Alpha
+GNU/Linux             -- x86, Sparc, Alpha
 Solaris		      -- Sparc
 FreeBSD               -- x86
-
-It probably works with the following :
-
-OpenBSD               -- x86 (needs to be confirmed one way or another)
-
+OpenBSD               -- x86
 
 Previous versions have been known to work on the following platforms, but
 their current status is unknown:
@@ -407,11 +401,11 @@ The password is "guest"
 
 To get a copy of the source in the experimental development tree do a
 
-  cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rHEAD gnucash
+  cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -r HEAD gnucash
 
-To get a copy of the source in the gnucash-1.2 stable production tree do a
+To get a copy of the source in the gnucash-1.4 stable production tree do a
 
-  cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rxacc-12-patch gnucash
+  cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -r gnucash-1-4-branch gnucash
 
 
 ==================
