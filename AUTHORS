@@ -81,6 +81,7 @@ Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Dennis Björklund <dennisb@cs.chalmers.se> Swedish translation
 Per Bojsen <bojsen@worldnet.att.net> several core dump fixes
 Terry Boldt <tboldt@attglobal.net> financial calculator and expression parser
+Richard Braakman <dark@xs4all.nl) xml version configure patch
 Simon Britnell <simon.britnell@peace.com> patch to RPM spec
 Christopher B. Browne <cbbrowne@hex.net> for perl, lots of scheme and documentation updates
 Conrad Canterford <conrad@mail.watersprite.com.au> register bug fix

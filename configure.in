@@ -285,6 +285,13 @@ AC_SUBST(GLADE_CFLAGS)
 
 
 ### --------------------------------------------------------------------------
+### Check for lib uri and do the right thing
+# AC_CHECK_LIB(uri, uri_alloc)
+
+# if [ -z "$HAVE_LIBURI" ] ; then
+    
+
+### --------------------------------------------------------------------------
 ### Check for perl
 
 # Check for perl, force version 5
@@ -374,6 +381,9 @@ AC_SUBST(DB_LIBS)
 GNOME_XML_CFLAGS=`$GNOME_CONFIG --cflags xml`
 
 AC_SUBST(GNOME_XML_CFLAGS)
+AC_CHECK_LIB(xml, xmlElemDump, [:], [
+  AC_MSG_ERROR([libxml 1.8.3 or newer required for GnuCash])
+  ])
 
 
 ### --------------------------------------------------------------------------
