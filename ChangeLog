@@ -1,3 +1,7 @@
+2003-07-02  Chris Lyttle  <chris@wilddev.net>
+
+	* src/scm/help-topics-index.scm: add Jon Lapham's patch
+
 2003-07-03  Matthew Vanecek  <mevanecek@yahoo.com>
 
     * po/POTFILES.in: ran make-gnucash-potfile, to pick up all the
