@@ -1,5 +1,10 @@
 2002-10-27  David Hampton  <hampton@employees.org>
 
+	* src/import-export/qif-import/druid-qif-import.c: Add a working
+	directory for the qif-import code; defaults to user homedir. Use
+	the working directory in the file selection dialog and track any
+	directory changes by the user. #95668
+
 	* src/gnome-utils/gnc-mdi-utils.c (various routines): When
 	switching between MDI styles, the gnome MDI code creates and
 	destroys widgets at will.  Because of this, remember the list of

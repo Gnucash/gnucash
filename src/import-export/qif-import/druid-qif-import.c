@@ -126,6 +126,8 @@ static GdkColor std_bg_color = { 0, 39835, 49087, 40092 };
 static GdkColor std_logo_bg_color = { 0, 65535, 65535, 65535 };
 static GdkColor std_title_color =  { 0, 65535, 65535, 65535 };
 
+static char *qif_import_wd = NULL;
+
 #define NUM_PRE_PAGES 13
 #define NUM_POST_PAGES 3
 #define NUM_DOC_PAGES  6
@@ -344,20 +346,31 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
                                  gpointer user_data) {
   QIFImportWindow * wind = user_data;
   const char * new_file_name;
+  char *file_name, *tmp;
 
-  new_file_name = gnc_file_dialog (_("Select QIF File"), "*.qif", "");
+  /* Default to whatever's already present */
+  tmp = gtk_entry_get_text(GTK_ENTRY(wind->filename_entry));
+  new_file_name = gnc_file_dialog (_("Select QIF File"), "*.qif", tmp);
+
+  /* Insure valid data, and something that can be freed. */
+  if (new_file_name == NULL)
+    file_name = g_strdup(qif_import_wd);
+  else if (*new_file_name != '/')
+    file_name = g_strdup_printf("%s%s", qif_import_wd, new_file_name);
+  else
+    file_name = g_strdup(new_file_name);
 
   /* set the filename entry for what was selected */
-  if(wind->filename_entry) {
-    if(new_file_name) {
-      gtk_entry_set_text(GTK_ENTRY(wind->filename_entry),
-                         new_file_name);
-    }
-    else {
-      gtk_entry_set_text(GTK_ENTRY(wind->filename_entry),
-                         "");
-    }      
+  gtk_entry_set_text(GTK_ENTRY(wind->filename_entry), file_name);
+
+  /* Update the working directory */
+  tmp = rindex(file_name, '/');
+  if (tmp != NULL) {
+    *(tmp+1) = '\0';
+    g_free(qif_import_wd);
+    qif_import_wd = g_strdup(file_name);
   }
+  g_free(file_name);
 }
 
 
@@ -537,7 +550,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     gnc_unset_busy_cursor(NULL);
 
     /* we're leaving the page, so clear the entry text */
-    gtk_entry_set_text(GTK_ENTRY(wind->filename_entry), "");
+    gtk_entry_set_text(GTK_ENTRY(wind->filename_entry), qif_import_wd);
 
     if(ask_date_format) {
       /* we need to get a date format, so go to the next page */
@@ -1877,6 +1890,10 @@ gnc_ui_qif_import_druid_make(void)  {
     gnc_lookup_boolean_option("QIF Import",
                               "Verbose documentation",
                               TRUE);
+
+  if (qif_import_wd == NULL)
+    qif_import_wd = g_strdup_printf("%s/", getenv("HOME"));
+  gtk_entry_set_text(GTK_ENTRY(retval->filename_entry), qif_import_wd);
   
   for(i=0; i < NUM_PRE_PAGES; i++) {
     retval->pre_comm_pages = 
