@@ -1,3 +1,8 @@
+2003-04-26  David Hampton  <hampton@employees.org>
+
+	* src/backend/file/gnc-commodity-xml-v2.c: Consolidate duplicate
+	strings.
+
 2003-04-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Adapt to latest
