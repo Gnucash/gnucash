@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
 "POT-Creation-Date: 2003-11-18 22:20+0100\n"
-"PO-Revision-Date: 2003-12-02 21:47+0100\n"
+"PO-Revision-Date: 2003-12-28 13:14+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -3952,7 +3952,7 @@ msgstr "Zuletzt"
 
 #: src/gnome/glade/price.glade.h:16
 msgid "Net Asset Value"
-msgstr "Netto Anlagevermögen"
+msgstr "Reinvermögen"
 
 #. src/report/standard-reports/price-scatter.scm
 #: src/gnome/glade/price.glade.h:17 src/gnome/dialog-price-edit-db.c:504
@@ -5746,7 +5746,7 @@ msgstr "_Unterkonten öffnen"
 
 #: src/gnome/window-main-summarybar.c:130
 msgid "Net Assets"
-msgstr "Netto Anlagevermögen"
+msgstr "Reinvermögen"
 
 #: src/gnome/window-main-summarybar.c:148
 msgid "Profits"
@@ -11101,9 +11101,8 @@ msgstr "Kreditkarten (englisch)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:479
-#, fuzzy
 msgid "Concepts"
-msgstr "Inhalt"
+msgstr ""
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:483
