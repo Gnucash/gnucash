@@ -1,3 +1,8 @@
+2003-08-28  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c: Aaarg. Fixed extremely
+	stupid bug in the import value setting workaround.
+
 2003-08-21  Christian Stimming  <stimming@tuhh.de>
 
 	* po/es.po, el.po, fr.po: Updated Spanish and Greek translation by
