@@ -23,6 +23,7 @@
 /*
  * HISTORY:
  * Copyright (c) 2001 Linux Developers Group
+ * Copyright (c) 2002 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef GNC_SESSION_P_H
