@@ -1,6 +1,6 @@
 /********************************************************************\
  * book.h -- implements books for the postgres backend              *
- * Copyright (c) 2000, 2001 Linas Vepstas                           *
+ * Copyright (c) 2000, 2001 Linas Vepstas <linas@linas.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -32,5 +32,8 @@
 void pgendGetBook (PGBackend *be, GNCBook *book);
 void pgendStoreBookNoLock (PGBackend *be, GNCBook *book, int do_check_version);
 void pgendStoreBook (PGBackend *be, GNCBook *book);
+
+void pgend_book_transfer_begin (Backend *, GNCBook*);
+void pgend_book_transfer_commit (Backend *, GNCBook*);
 
 #endif /* POSTGRES_BOOK_H */

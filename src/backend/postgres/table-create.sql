@@ -41,14 +41,15 @@ CREATE TABLE gncCommodity (
 	namespace	TEXT NOT NULL,
 	mnemonic	TEXT NOT NULL,
 	code		TEXT,
-	fraction	INT DEFAULT '100'
+	fraction	INT DEFAULT '100',
+	bookGuid	CHAR(32) NOT NULL
 );
 
 CREATE TABLE gncBook (
 	bookGuid	CHAR(32) PRIMARY KEY,
 	book_open	CHAR DEFAULT 'n',
 	version		INT4 NOT NULL,
-	iguid		INT4 UNIQUE DEFAULT nextval('gnc_iguid_seq')
+	iguid		INT4 DEFAULT 0
 );
 
 -- Account structure -- parentGUID points to parent account
@@ -136,7 +137,8 @@ CREATE TABLE gncPrice (
 	type		TEXT,
 	valueNum	INT8 DEFAULT '0',
 	valueDenom	INT4 DEFAULT '100',
-	version		INT4 NOT NULL
+	version		INT4 NOT NULL,
+	bookGuid	CHAR(32) NOT NULL
 );
 
 

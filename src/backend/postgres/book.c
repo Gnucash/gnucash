@@ -1,6 +1,6 @@
 /********************************************************************\
  * book.c -- implements book handling for postgres backend          *
- * Copyright (c) 2000, 2001 Linas Vepstas                           *
+ * Copyright (c) 2000, 2001, 2002 Linas Vepstas <linas@linas.org>   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -172,6 +172,30 @@ pgendGetBook (PGBackend *be, GNCBook *book)
    {
       book->kvp_data = pgendKVPFetch (be, book->idata, book->kvp_data);
    }
+
+   LEAVE (" ");
+}
+
+/* ============================================================= */
+
+void 
+pgend_book_transfer_begin(Backend *bend, GNCBook *newbook)
+{
+   PGBackend *be = (PGBackend *) bend;
+
+   ENTER (" ");
+
+   /* first, store the new book */
+   pgendStoreBook (be, newbook);
+
+   LEAVE (" ");
+}
+
+void 
+pgend_book_transfer_commit(Backend *bend, GNCBook *newbook)
+{
+   PGBackend *be = (PGBackend *) bend;
+   ENTER (" ");
 
    LEAVE (" ");
 }

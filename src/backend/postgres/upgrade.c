@@ -295,6 +295,10 @@ add_multiple_book_support (PGBackend *be)
  
    p = "LOCK TABLE gncAccount IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncAccountTrail IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncCommodity IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncCommodityTrail IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncPrice IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncPriceTrail IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n"
        "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,4,0,'Start Add multiple book support');";
@@ -321,29 +325,50 @@ add_multiple_book_support (PGBackend *be)
    FINISH_QUERY(be->connection);
  
    p = "ALTER TABLE gncAccount ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
-       "ALTER TABLE gncAccountTrail ADD COLUMN bookGuid CHAR(32) NOT NULL;\n";
+       "ALTER TABLE gncAccountTrail ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
+       "ALTER TABLE gncCommodity ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
+       "ALTER TABLE gncCommodityTrail ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
+       "ALTER TABLE gncPrice ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
+       "ALTER TABLE gncPriceTrail ADD COLUMN bookGuid CHAR(32) NOT NULL;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
  
    p = buff;
    p = stpcpy (p, "UPDATE gncAccount SET bookGuid = '");
    p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
-   p = stpcpy (p, "';");
+   p = stpcpy (p, "';\n");
+   p = stpcpy (p, "UPDATE gncAccountTrail SET bookGuid = '");
+   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = stpcpy (p, "';\n");
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 
    p = buff;
-   p = stpcpy (p, "UPDATE gncAccountTrail SET bookGuid = '");
+   p = stpcpy (p, "UPDATE gncPrice SET bookGuid = '");
    p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
-   p = stpcpy (p, "';");
+   p = stpcpy (p, "';\n");
+   p = stpcpy (p, "UPDATE gncPriceTrail SET bookGuid = '");
+   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = stpcpy (p, "';\n");
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
+
+   p = buff;
+   p = stpcpy (p, "UPDATE gncCommodity SET bookGuid = '");
+   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = stpcpy (p, "';\n");
+   p = stpcpy (p, "UPDATE gncCommodityTrail SET bookGuid = '");
+   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = stpcpy (p, "';\n");
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
 
    p = buff;
    p = stpcpy (p, "INSERT INTO gncBook (bookGuid, book_open, version, iguid) "
                   "VALUES ('");
    p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
-   p = stpcpy (p, "', 'y', 1, nextval('gnc_iguid_seq') );");
+   p = stpcpy (p, "', 'y', 1, 0);");
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 
