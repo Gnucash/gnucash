@@ -336,7 +336,7 @@ gnucash_cursor_set (GnucashCursor *cursor, VirtualLocation virt_loc)
         gnucash_cursor_configure (cursor);
 
         gnome_canvas_item_set (GNOME_CANVAS_ITEM(sheet->header_item),
-                               "GnucashHeader::cursor_name",
+                               "cursor_name",
                                cursor->style->cursor->cursor_name,
                                NULL);
 
