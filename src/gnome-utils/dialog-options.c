@@ -391,6 +391,33 @@ gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
 }
 
 static void
+gnc_option_radiobutton_cb(GtkWidget *w, gpointer data)
+{
+  GNCOption *option = data;
+  GtkWidget *widget;
+  gpointer _current, _new_value;
+  gint current, new_value;
+
+  widget = gnc_option_get_widget (option);
+
+  _current = gtk_object_get_data(GTK_OBJECT(widget), "gnc_radiobutton_index");
+  current = GPOINTER_TO_INT (_current);
+
+  _new_value = gtk_object_get_data (GTK_OBJECT(w), "gnc_radiobutton_index");
+  new_value = GPOINTER_TO_INT (_new_value);
+
+  if (current == new_value)
+    return;
+
+  gtk_object_set_data (GTK_OBJECT(widget), "gnc_radiobutton_index",
+		       GINT_TO_POINTER(new_value));
+
+  gnc_option_set_changed (option, TRUE);
+  gnc_option_call_option_widget_changed_proc(option);
+  gnc_options_dialog_changed_internal (widget);
+}
+
+static void
 gnc_option_rd_combo_cb(GtkWidget *w, gint index, gpointer data)
 {
   GtkWidget *widget, *omenu;
@@ -597,6 +624,71 @@ gnc_option_create_multichoice_widget(GNCOption *option)
   g_free(info);
 
   return widget;
+}
+
+static void
+radiobutton_destroy_cb (GtkObject *obj, gpointer data)
+{
+  GtkTooltips *tips = data;
+
+  gtk_object_unref (GTK_OBJECT (tips));
+}
+
+static GtkWidget *
+gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
+{
+  GtkTooltips *tooltips;
+  GtkWidget *frame, *box;
+  GtkWidget *widget = NULL;
+  int num_values;
+  char *label;
+  char *tip;
+  int i;
+
+  num_values = gnc_option_num_permissible_values(option);
+
+  g_return_val_if_fail(num_values >= 0, NULL);
+
+  /* Create our button frame */
+  frame = gtk_frame_new (name);
+
+  /* Create the button box */
+  box = gtk_vbutton_box_new ();
+  gtk_container_add (GTK_CONTAINER (frame), box);
+
+  /* Create the tooltips */
+  tooltips = gtk_tooltips_new ();
+  gtk_object_ref (GTK_OBJECT (tooltips));
+  gtk_object_sink (GTK_OBJECT (tooltips));
+
+  /* Iterate over the options and create a radio button for each one */
+  for (i = 0; i < num_values; i++)
+  {
+    label = gnc_option_permissible_value_name(option, i);
+    tip = gnc_option_permissible_value_description(option, i);
+
+    widget =
+      gtk_radio_button_new_with_label_from_widget (widget ?
+						   GTK_RADIO_BUTTON (widget) :
+						   NULL,
+						   label ? _(label) : "");
+    gtk_object_set_data (GTK_OBJECT (widget), "gnc_radiobutton_index",
+			 GINT_TO_POINTER (i));
+    gtk_tooltips_set_tip(tooltips, widget, tip ? _(tip) : "", NULL);
+    gtk_signal_connect(GTK_OBJECT(widget), "toggled",
+		       GTK_SIGNAL_FUNC(gnc_option_radiobutton_cb), option);
+    gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
+
+    if (label)
+      free (label);
+    if (tip)
+      free (tip);
+  }
+
+  gtk_signal_connect (GTK_OBJECT (frame), "destroy",
+                      GTK_SIGNAL_FUNC (radiobutton_destroy_cb), tooltips);
+
+  return frame;
 }
 
 static void
@@ -1885,6 +1977,29 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   return value;
 }
 
+static GtkWidget *
+gnc_option_set_ui_widget_radiobutton (GNCOption *option, GtkBox *page_box,
+				  GtkTooltips *tooltips,
+				  char *name, char *documentation,
+				  /* Return values */
+				  GtkWidget **enclosing, gboolean *packed)
+{
+  GtkWidget *value;
+
+  *enclosing = gtk_hbox_new(FALSE, 5);
+
+  value = gnc_option_create_radiobutton_widget(name, option);
+  gnc_option_set_widget (option, value);
+
+  gnc_option_set_ui_value(option, FALSE);
+  gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
+  gtk_box_pack_end(GTK_BOX(*enclosing),
+		   gnc_option_create_default_button(option, tooltips),
+		   FALSE, FALSE, 0);
+  gtk_widget_show_all(*enclosing);
+  return value;
+}
+
 /* SET VALUE */
 
 static gboolean
@@ -2210,6 +2325,41 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
     return TRUE;
 }
 
+static gboolean
+gnc_option_set_ui_value_radiobutton (GNCOption *option, gboolean use_default,
+				     GtkWidget *widget, SCM value)
+{
+  int index;
+
+  index = gnc_option_permissible_value_index(option, value);
+  if (index < 0)
+    return TRUE;
+  else
+  {
+    GtkWidget *box, *button;
+    GList *list;
+    int i;
+    gpointer val;
+
+    list = gtk_container_children (GTK_CONTAINER (widget));
+    box = list->data;
+
+    list = gtk_container_children (GTK_CONTAINER (box));
+    for (i = 0; i < index && list; i++)
+      list = list->next;
+    g_return_val_if_fail (list, TRUE);
+
+    button = list->data;
+    val = gtk_object_get_data (GTK_OBJECT (button), "gnc_radiobutton_index");
+    g_return_val_if_fail (GPOINTER_TO_INT (val) == index, TRUE);
+
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+    //    gtk_object_set_data(GTK_OBJECT(widget), "gnc_radiobutton_index",
+    //			GINT_TO_POINTER(index));
+    return FALSE;
+  }
+}
+
 /* GET VALUE */
 
 static SCM
@@ -2428,6 +2578,18 @@ gnc_option_get_ui_value_pixmap (GNCOption *option, GtkWidget *widget)
   return (gh_str02scm(string ? string : ""));
 }
 
+static SCM
+gnc_option_get_ui_value_radiobutton (GNCOption *option, GtkWidget *widget)
+{
+  gpointer _index;
+  int index;
+
+  _index = gtk_object_get_data(GTK_OBJECT(widget), "gnc_radiobutton_index");
+  index = GPOINTER_TO_INT(_index);
+
+  return (gnc_option_permissible_value(option, index));
+}
+
 /* INITIALIZATION */
 
 static void gnc_options_initialize_options (void)
@@ -2459,6 +2621,8 @@ static void gnc_options_initialize_options (void)
       gnc_option_set_ui_value_font, gnc_option_get_ui_value_font },
     { "pixmap", gnc_option_set_ui_widget_pixmap,
       gnc_option_set_ui_value_pixmap, gnc_option_get_ui_value_pixmap },
+    { "radiobutton", gnc_option_set_ui_widget_radiobutton,
+      gnc_option_set_ui_value_radiobutton, gnc_option_get_ui_value_radiobutton },
     { NULL, NULL, NULL, NULL }
   };
   int i;

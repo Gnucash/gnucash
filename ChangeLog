@@ -1,3 +1,11 @@
+2002-05-27  Derek Atkins   <derek@ihtfp.com>
+
+	* dialog-options.c: implement a radiobutton option type.
+	* options.scm: implement a radiobutton option type.
+	* app-utils.scm: export the new radiobutton option creators
+	* prefs.scm: change the Account Separator to a radiobutton; move
+	to its own page
+	
 2002-05-26  Derek Atkins   <derek@ihtfp.com>
 
 	* src/gnome-util/dialog-options.[ch]: Create an option-type

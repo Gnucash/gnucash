@@ -62,6 +62,8 @@
 (export gnc:multichoice-list-lookup)
 (export gnc:make-multichoice-option)
 (export gnc:make-multichoice-callback-option)
+(export gnc:make-radiobutton-option)
+(export gnc:make-radiobutton-callback-option)
 (export gnc:make-list-option)
 
 (export gnc:make-number-range-option)

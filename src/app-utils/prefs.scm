@@ -417,8 +417,8 @@ through Window menu)")))
 Control Center"))))))
 
 (gnc:register-configuration-option
- (gnc:make-multichoice-option
-  (N_ "General") (N_ "Account Separator")
+ (gnc:make-radiobutton-option
+  (N_ "Accounts") (N_ "Account Separator")
   "c" (N_ "The character used to separate fully-qualified account names")
   'colon
   (list (list->vector
@@ -444,7 +444,7 @@ Control Center"))))))
 
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
-  (N_ "General") (N_ "Reversed-balance account types")
+  (N_ "Accounts") (N_ "Reversed-balance account types")
   "d" (N_ "The types of accounts for which balances are sign-reversed")
  'credit
   (list (list->vector
@@ -463,7 +463,7 @@ Accounts")))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  (N_ "General") (N_ "Use accounting labels")
+  (N_ "Accounts") (N_ "Use accounting labels")
   "e" (N_ "Only use 'debit' and 'credit' instead of informal synonyms") #f))
 
 (gnc:register-configuration-option

@@ -613,6 +613,87 @@
 	  (lambda (x) (option-widget-changed-cb x))))))
 
 
+;; radiobutton options use the option-data as a list of vectors.
+;; Each vector contains a permissible value (scheme symbol), a
+;; name, and a description string.
+(define (gnc:make-radiobutton-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-value
+         ok-values)
+  (gnc:make-radiobutton-callback-option section
+					name
+					sort-tag
+					documentation-string
+					default-value
+					ok-values
+					#f
+					#f))
+
+;; The radiobutton-option with callback function is the same as the
+;; usual radiobutton options (see above), with the addition of two
+;; function arguments. (If both of them are #f, you have exactly a
+;; radiobutton-option.) Both functions should expect one argument.
+;; When the option's value is changed, the function
+;; option-widget-changed-cb will be called with the new option value
+;; at the time that the GUI widget representing the option is changed,
+;; and the function setter-function-called-cb will be called when the
+;; option's setter is called (that is, when the user selects "OK" or
+;; "Apply").
+(define (gnc:make-radiobutton-callback-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-value
+         ok-values
+         setter-function-called-cb
+         option-widget-changed-cb)
+  (define (radiobutton-legal val p-vals)
+    (cond ((null? p-vals) #f)
+          ((eq? val (vector-ref (car p-vals) 0)) #t)
+          (else (radiobutton-legal val (cdr p-vals)))))
+
+  (define (radiobutton-strings p-vals)
+    (if (null? p-vals)
+        ()
+        (cons (vector-ref (car p-vals) 1)
+              (cons (vector-ref (car p-vals) 2)
+                    (radiobutton-strings (cdr p-vals))))))
+
+  (let* ((value default-value)
+         (value->string (lambda ()
+                          (string-append "'" (gnc:value->string value)))))
+    (gnc:make-option
+     section name sort-tag 'radiobutton documentation-string
+     (lambda () value)
+     (lambda (x)
+       (if (radiobutton-legal x ok-values)
+           (begin
+	     (set! value x)
+	     (if (procedure? setter-function-called-cb)
+		 (setter-function-called-cb x)))
+           (gnc:error "Illegal Radiobutton option set")))
+     (lambda () default-value)
+     (gnc:restore-form-generator value->string)
+     (lambda (x)
+       (if (radiobutton-legal x ok-values)
+           (list #t x)
+           (list #f "radiobutton-option: illegal choice")))
+     ok-values
+     (vector (lambda () (length ok-values))
+       (lambda (x) (vector-ref (list-ref ok-values x) 0))
+       (lambda (x) (vector-ref (list-ref ok-values x) 1))
+       (lambda (x) (vector-ref (list-ref ok-values x) 2))
+       (lambda (x)
+	 (gnc:multichoice-list-lookup ok-values x)))
+     (lambda () (radiobutton-strings ok-values)) 
+     (and option-widget-changed-cb
+	  (lambda (x) (option-widget-changed-cb x))))))
+
+
 ;; list options use the option-data in the same way as multichoice
 ;; options. List options allow the user to select more than one option.
 (define (gnc:make-list-option
