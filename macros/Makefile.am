@@ -2,6 +2,7 @@
 
 MACROS=						\
   aclocal-include.m4				\
+  acx_pthread.m4				\
   as-scrub-include.m4				\
   compiler-flags.m4				\
   curses.m4					\
