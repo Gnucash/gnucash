@@ -37,6 +37,10 @@
 	  (e.g. the check print dialog) and use '%' instead of '~'.
 	  This is an interim fix for #99574, at least until we can
 	  centralize the functionality.
+
+	* src/business/business-utils/business-prefs.scm: make the 
+	  Bill Due Days option selectable based on the setting of
+	  Notify Bills Due?
 	
 2003-05-23  Derek Atkins  <derek@ihtfp.com>
 
