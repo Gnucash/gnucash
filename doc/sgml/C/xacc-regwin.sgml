@@ -1,11 +1,11 @@
 <ARTICLE ID="XACC-REGWIN">
 
 <ARTHEADER>
-<TITLE>Register Window</TITLE>
+<TITLE>The Register Window</TITLE>
 </ARTHEADER>
 
 <SECT1>
-<TITLE> Register Window</TITLE>
+<TITLE>The Register Window</TITLE>
 <MEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/regwin-single.png">
@@ -14,12 +14,11 @@
 
 <PARA>This is the "Register" or the "Ledger" window. Transactions
     are entered here.
-
-    </PARA>
-<PARA>To enter a new transaction, just type into the last blank
-    transaction. As well as just typing them in, you can use
+    To enter a new transaction, just type into the last blank
+    transaction. You can use
     the <LINK LINKEND="DATE">Date Accelerator keys</LINK> to
-    quickly enter dates. Use the mouse or the <LINK LINKEND="XACC-REGWIN-KBD">Register Keyboard Shortcuts</LINK>to move
+    quickly enter dates. Use the mouse or the
+    <LINK LINKEND="XACC-REGWIN-KBD">Register Keyboard Shortcuts</LINK>to move
     between fields, and press the <KEYCAP>Enter</KEYCAP> key or click
     <GUIBUTTON>record</GUIBUTTON> on the toolbar to record
     the transaction:
@@ -47,7 +46,7 @@
     </PARA>
 </SECT1>
 <SECT1 ID="XACC-MANTXN">
-<TITLE> Manipulating transactions</TITLE>
+<TITLE>Manipulating Transactions</TITLE>
 <PARA>You can manipulate transactions with the toolbar buttons or the
     <GUIMENU>Transaction</GUIMENU> menu:
 
@@ -170,7 +169,7 @@
     reconciled.  You can toggle
     the reconciliation status between '<LITERAL>n</LITERAL>' and '<LITERAL>c</LITERAL>' by clicking in the
     (<GUILABEL>R</GUILABEL>) field; you can set it to '<LITERAL>y</LITERAL>' by using the <LINK
-    LINKEND=XACC-RECNWIN>Reconcile Window</LINK>. 
+    LINKEND=XACC-RECNWIN>Reconciliation Window</LINK>. 
 
     </PARA>
 <PARA>At the bottom of the account window, there are two running
@@ -181,7 +180,8 @@
     transactions.
 
     </PARA>
-<PARA>Reconciliation can be done in the <LINK LINKEND="XACC-RECNWIN">Reconcile Window</LINK>
+<PARA>Reconciliation can be done in the 
+      <LINK LINKEND="XACC-RECNWIN">Reconciliation Window</LINK>
 
     </PARA>
 </SECT1>
@@ -203,44 +203,30 @@
 </MEDIAOBJECT>
 
 <PARA>The portfolio ledger can seem a bit daunting at first
-    sight.
-
-    </PARA>
-<PARA>If you have trouble understanding it, then you may wish to
+    sight.  If you have trouble understanding it, then you may wish to 
     create an account for each stock you wish to track.
-
     </PARA>
+
 <PARA>Some important points to remember about the portfolio
     window:
 
     <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>        It shows <EMPHASIS>all</EMPHASIS> stocks in your portfolio, not just
-        one. 
-
-        </PARA>
-<PARA>The share amounts shown are for each particular
-        stock.
-      
-
+<PARA>It shows <EMPHASIS>all</EMPHASIS> stocks in your portfolio, not just
+      one.  The share amounts shown are for each particular
+      stock.
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        Note that it uses a two line display. 
-
-        </PARA>
-<PARA>Debited accounts and debited amounts are on the upper
-        line, and credited amounts and accounts are on the lower
-        line.
-      
-
+<PARA>Note that it uses a two line display. 
+      Debited accounts and debited amounts are on the upper
+      line, and credited amounts and accounts are on the lower line.
       </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>If you buy or sell a stock with money from the brokerage
       account, the total balance will not change, since the value
       of the stock equals the amount of money exchanged.
-
       </PARA>
 </LISTITEM>
 <LISTITEM>
@@ -257,7 +243,8 @@
 <LISTITEM>
 <PARA>If you are having trouble indicating a share
       purchase/sale in the portfolio ledger, then make sure that
-      <GUILABEL>Transfer From</GUILABEL> and <GUILABEL>Transfer To</GUILABEL> accounts are in
+      <GUILABEL>Transfer From</GUILABEL> and 
+      <GUILABEL>Transfer To</GUILABEL> accounts are in
       the right order. A transfer from a stock account is always
       interpreted as a sale, even if you entered the data as a
       purchase. The vice-versa is also true.

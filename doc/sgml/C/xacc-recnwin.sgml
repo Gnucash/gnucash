@@ -1,28 +1,49 @@
 <ARTICLE ID="XACC-RECNWIN">
 
 <ARTHEADER>
-<TITLE>Reconcile Window</TITLE>
+<TITLE>The Reconciliation Window</TITLE>
 </ARTHEADER>
-<PARA>The Reconcile window is used to reconcile a GnuCash account with
+<PARA>The Reconciliation window is used to reconcile a GnuCash account with
     a statement that a bank or other institution has sent you.
-
+    Reconciliation is useful not only to double-check your records
+    against those of your bank,  but also to get a better idea of
+    outstanding transactions, e.g. uncashed checks.
     </PARA>
-
-
-<PARA>For example, when you write a check for something, you should enter
+    <PARA>
+    At the bottom of the account window, there are two running balances:
+    the "cleared and reconciled" balance, and the "total" balance.
+    The "cleared and reconciled" balance should correspond to how much
+    money the bank thinks you have in your account, and the "total" balance
+    includes outstanding transactions.
+    </PARA>
+    <PARA>
+    For example, when you write a check for something, you should enter
     the transaction into GnuCash.  The reconciliation
     (<GUILABEL>R</GUILABEL>) field of the transaction will initially
-    contain <LITERAL>n</LITERAL> (not reconciled).  Later, if you think
+    contain <LITERAL>n</LITERAL> (new).  Your new entry will contribute
+    to the "total" balance, but not to the "cleared and reconciled"
+    balance.  Later, if you think
     that the check has been cashed, you might click on the transaction's
     <GUILABEL>R</GUILABEL> field to change it to <LITERAL>c</LITERAL>
-    (cleared, but not reconciled).
-
+    (cleared).  When you do this, the "cleared and reconciled" balance
+    will change to include this amount. 
+    When the bank statement arrives, you can then compare
+    it to what you've recorded in GnuCash in the Reconciliation window.
+    There, you will be able to change the <GUILABEL>R</GUILABEL> field
+    to <LITERAL>y</LITERAL> (reconciled).   You cannot reconcile in the
+    register window, you must use the reconciliation window. Once a
+    transaction has been marked "reconciled", it can no longer
+    be easily changed.
     </PARA>
 
+<SECT1>
+<TITLE>Reconciling</TITLE>
+<PARA>
     <ITEMIZEDLIST>
 <LISTITEM>
 
-<PARA>Choose <GUIMENU>Reconcile</GUIMENU> from the Accounts menu, and GnuCash will prompt you to
+<PARA>Choose <GUIMENU>Reconcile</GUIMENU> from the Accounts menu, 
+      and GnuCash will prompt you to
       enter the ending balance from the bank statement.
 
     </PARA>
@@ -116,5 +137,7 @@
     </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
+</PARA>
+</SECT1>
 
 </ARTICLE>
