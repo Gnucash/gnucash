@@ -74,6 +74,7 @@ struct _trans_data
 };
 typedef struct _trans_data TransData;
 
+
 static void TransData_delete_helper(TransData *td)
 {
   if (!td) return;
@@ -87,6 +88,17 @@ static void TransData_delete_helper(TransData *td)
 /* -------------------------------------- */
 /* Prototypes; callbacks for dialog function */
 /* -------------------------------------- */
+
+HBCI_Transaction *
+hbci_trans_fill_values(const HBCI_Account *h_acc, TransData *td);
+gboolean
+check_ktoblzcheck(GtkWidget *parent, const TransData *td, 
+		  const HBCI_Transaction *trans);
+HBCI_OutboxJob *
+hbci_trans_create_outboxjob(const HBCI_Customer *customer,
+			    HBCI_Account *h_acc, 
+			    const HBCI_Transaction *trans, 
+			    GNC_HBCI_Transtype trans_type);
 
 void template_selection_cb(GtkButton *b, gpointer user_data);
 void add_template_cb(GtkButton *b, gpointer user_data);
@@ -295,12 +307,14 @@ gnc_hbci_trans (GtkWidget *parent,
 	/* Make sure to show the dialog here */
 	gtk_widget_show_all (dialog); 
 
+	/* Now run the dialog until it gets closed by a button press. */
 	result = gnome_dialog_run (GNOME_DIALOG (dialog));
 	/* printf("hbci_trans: result button was %d.\n", result); */
 
 	/* The dialog gets hidden anyway as soon as any button is pressed. */
 	gtk_widget_hide_all (dialog);
 
+	/* Set the template list in case the dialog got cancelled. */
 	*templ = td.templ;
 
 	/* Was cancel pressed or dialog closed? 0 == execute now, 1 ==
@@ -310,42 +324,12 @@ gnc_hbci_trans (GtkWidget *parent,
 	  TransData_delete_helper(&td);
 	  return NULL;
 	}
-	
-	/* Fill in the user-entered values */
-	trans = HBCI_Transaction_new();
+
+	/* Now fill in the values from the entry fields into a new
+	   HBCI_Transaction. */
+	trans = hbci_trans_fill_values(h_acc, &td);
 	values_ok = TRUE;
-	
-	/* OpenHBCI newer than 0.9.8: use account's bankCode values
-	 * instead of the bank's ones since this is what some banks
-	 * require. */
-	HBCI_Transaction_setOurCountryCode (trans, 
-					    HBCI_Account_countryCode (h_acc));
-	HBCI_Transaction_setOurBankCode (trans, 
-					 HBCI_Account_instituteCode (h_acc));
-	HBCI_Transaction_setOurAccountId (trans, HBCI_Account_accountId (h_acc));
-	HBCI_Transaction_setOurSuffix (trans, HBCI_Account_accountSuffix (h_acc));
-	
-	HBCI_Transaction_setOtherCountryCode (trans, 280);
-	HBCI_Transaction_setOtherBankCode 
-	  (trans, gtk_entry_get_text (GTK_ENTRY (td.recp_bankcode_entry)));
-	/* printf("Got otherBankCode %s.\n",
-	   HBCI_Transaction_otherBankCode (trans)); */
-	HBCI_Transaction_setOtherAccountId
-	  (trans, gtk_entry_get_text (GTK_ENTRY (td.recp_account_entry)));
-	/* printf("Got otherAccountId %s.\n",
-	   HBCI_Transaction_otherAccountId (trans)); */
-	HBCI_Transaction_addOtherName
-	  (trans, gtk_entry_get_text (GTK_ENTRY (td.recp_name_entry)));
-	
-	HBCI_Transaction_addDescription
-	  (trans, gtk_entry_get_text (GTK_ENTRY (td.purpose_entry)));
-	HBCI_Transaction_addDescription
-	  (trans, gtk_entry_get_text (GTK_ENTRY (td.purpose_cont_entry)));
-	
-	/* FIXME: Replace "EUR" by account-dependent string here. */
-	HBCI_Transaction_setValue 
-	  (trans, HBCI_Value_new_double 
-	   (gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (td.amount_edit)), "EUR"));
+
 	/*printf("dialog-hbcitrans: Got value as %s .\n", 
 	  HBCI_Value_toReadableString (HBCI_Transaction_value (trans)));*/
 	if (HBCI_Value_getValue (HBCI_Transaction_value (trans)) == 0.0) {
@@ -353,6 +337,7 @@ gnc_hbci_trans (GtkWidget *parent,
 	  values_ok = !gnc_verify_dialog_parented
 	    (GTK_WIDGET (dialog),
 	     TRUE,
+	     "%s",
 	     _("The amount is zero or the amount field could not be \n"
 	       "interpreted correctly. You might have mixed up decimal \n"
 	       "point and comma, compared to your locale settings. \n"
@@ -368,78 +353,26 @@ gnc_hbci_trans (GtkWidget *parent,
 	  continue;
 	} /* check Transaction_value */
 
-#if HAVE_KTOBLZCHECK_H
-	{
-	  int blzresult;
-	  const char *blztext;
-	
-	  blzresult = AccountNumberCheck_check
-	    (td.blzcheck, 
-	     HBCI_Transaction_otherBankCode (trans),
-	     HBCI_Transaction_otherAccountId (trans));
-	  switch (blzresult) {
-	  case 2:
-	    gtk_widget_show_all (dialog); 
-	    values_ok = gnc_verify_dialog_parented
-	      (GTK_WIDGET (dialog),
-	       TRUE,
-	       _("The internal check of the destination account number '%s' \n"
-		 "at the specified bank with bank code '%s' failed. This means \n"
-		 "the account number might contain an error. Should the online \n"
-		 "transfer job be sent with this account number anyway?"),
-	       HBCI_Transaction_otherAccountId (trans),
-	       HBCI_Transaction_otherBankCode (trans));
-	    blztext = "Kontonummer wahrscheinlich falsch";
-	    break;
-	  case 0:
-	    blztext = "Kontonummer ok";
-	    break;
-	  case 3:
-	    blztext = "bank unbekannt";
-	    break;
-	  default:
-	  case 1:
-	    blztext = "unbekannt aus unbekanntem grund";
-	    break;
-	  }
-	
-	  printf("gnc_hbci_trans: KtoBlzCheck said check is %d = %s\n",
-		 blzresult, blztext);
-	}
-#endif    
+	/* And finally check the account code, if ktoblzcheck is available. */
+	values_ok = check_ktoblzcheck(GTK_WIDGET (dialog), &td, trans);
+
       } while (!values_ok);
 
       /* Make really sure the dialog is hidden now. */
       gtk_widget_hide_all (dialog);
 
       {
-	/* Create a Do-Transaction (Transfer) job. */
-	HBCI_OutboxJobTransfer *transfer_job;
-	HBCI_OutboxJobDebitNote *debit_job;
-	HBCI_OutboxJob *job = NULL;
-    
-	switch (trans_type) {
-	case SINGLE_DEBITNOTE:
-	  debit_job =
-	    HBCI_OutboxJobDebitNote_new (customer, (HBCI_Account *)h_acc, trans);
-	  job = HBCI_OutboxJobDebitNote_OutboxJob (debit_job);
-	  break;
-	case SINGLE_TRANSFER:
-	  transfer_job = 
-	    HBCI_OutboxJobTransfer_new (customer, (HBCI_Account *)h_acc, trans);
-	  job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
-	  break;
-	default:
-	  printf("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
-		 trans_type);
-	  transfer_job = 
-	    HBCI_OutboxJobTransfer_new (customer, (HBCI_Account *)h_acc, trans);
-	  job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
-	}
+	HBCI_OutboxJob *job;
 
+	/* Create a Do-Transaction (Transfer) job. */
+	job = hbci_trans_create_outboxjob(customer, (HBCI_Account *)h_acc, 
+					  trans, trans_type);
+	g_assert (job);
+
+	/* Make really sure there is no other job in the queue */
 	HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
 
-	g_assert (job);
+	/* Add job to queue */
 	HBCI_API_addJob (api, job);
 
 	if (result == 0) {
@@ -457,6 +390,7 @@ gnc_hbci_trans (GtkWidget *parent,
 	      	successful = !gnc_verify_dialog_parented
 		  (parent, 
 		   FALSE,
+		   "%s",
 		   _("The job was successfully sent to the bank, but the \n"
 		     "bank is refusing to execute the job. Please check \n"
 		     "the log window for the exact error message of the \n"
@@ -467,6 +401,8 @@ gnc_hbci_trans (GtkWidget *parent,
 
 	    HBCI_Transaction_delete (trans);
 	    trans = NULL;
+	    /* Watch out! The job *has* to be removed from the queue
+	       here because otherwise it might be executed again. */
 	    HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
 	  }
 	} /* result == 0 */
@@ -488,6 +424,137 @@ gnc_hbci_trans (GtkWidget *parent,
   return trans;
 }
 
+
+
+/** Fills the values from the entry fields into a new HBCI_Transaction
+    and returns it. The caller must delete() it when finished. */
+HBCI_Transaction *
+hbci_trans_fill_values(const HBCI_Account *h_acc, TransData *td)
+{
+  /* Fill in the user-entered values */
+  HBCI_Transaction *trans = HBCI_Transaction_new();
+	
+  /* OpenHBCI newer than 0.9.8: use account's bankCode values
+   * instead of the bank's ones since this is what some banks
+   * require. */
+  HBCI_Transaction_setOurCountryCode (trans, 
+				      HBCI_Account_countryCode (h_acc));
+  HBCI_Transaction_setOurBankCode (trans, 
+				   HBCI_Account_instituteCode (h_acc));
+  HBCI_Transaction_setOurAccountId (trans, HBCI_Account_accountId (h_acc));
+  HBCI_Transaction_setOurSuffix (trans, HBCI_Account_accountSuffix (h_acc));
+	
+  HBCI_Transaction_setOtherCountryCode (trans, 280);
+  HBCI_Transaction_setOtherBankCode 
+    (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_bankcode_entry)));
+  /* printf("Got otherBankCode %s.\n",
+     HBCI_Transaction_otherBankCode (trans)); */
+  HBCI_Transaction_setOtherAccountId
+    (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_account_entry)));
+  /* printf("Got otherAccountId %s.\n",
+     HBCI_Transaction_otherAccountId (trans)); */
+  HBCI_Transaction_addOtherName
+    (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_name_entry)));
+	
+  HBCI_Transaction_addDescription
+    (trans, gtk_entry_get_text (GTK_ENTRY (td->purpose_entry)));
+  HBCI_Transaction_addDescription
+    (trans, gtk_entry_get_text (GTK_ENTRY (td->purpose_cont_entry)));
+	
+  /* FIXME: Replace "EUR" by account-dependent string here. */
+  HBCI_Transaction_setValue 
+    (trans, HBCI_Value_new_double 
+     (gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (td->amount_edit)), "EUR"));
+
+  return trans;
+}
+
+/** Checks the account code in the HBCI_Transaction, if the
+    ktoblzcheck package is available. Returns TRUE if everything is
+    fine, or FALSE if this transaction should be entered again. */
+gboolean
+check_ktoblzcheck(GtkWidget *parent, const TransData *td, 
+		  const HBCI_Transaction *trans)	
+{
+#if HAVE_KTOBLZCHECK_H
+  int blzresult;
+  const char *blztext;
+  gboolean values_ok = TRUE;
+  
+  blzresult = AccountNumberCheck_check
+    (td->blzcheck, 
+     HBCI_Transaction_otherBankCode (trans),
+     HBCI_Transaction_otherAccountId (trans));
+  switch (blzresult) {
+  case 2:
+    gtk_widget_show_all (parent); 
+    values_ok = gnc_verify_dialog_parented
+      (parent,
+       TRUE,
+       _("The internal check of the destination account number '%s' \n"
+	 "at the specified bank with bank code '%s' failed. This means \n"
+	 "the account number might contain an error. Should the online \n"
+	 "transfer job be sent with this account number anyway?"),
+       HBCI_Transaction_otherAccountId (trans),
+       HBCI_Transaction_otherBankCode (trans));
+    blztext = "Kontonummer wahrscheinlich falsch";
+    break;
+  case 0:
+    blztext = "Kontonummer ok";
+    break;
+  case 3:
+    blztext = "bank unbekannt";
+    break;
+  default:
+  case 1:
+    blztext = "unbekannt aus unbekanntem grund";
+    break;
+  }
+	
+  printf("gnc_hbci_trans: KtoBlzCheck said check is %d = %s\n",
+	 blzresult, blztext);
+  return values_ok;
+#else
+  return TRUE;
+#endif    
+}
+
+/** Create and return the HBCI_OutboxJob according to the given
+    trans_type. */
+HBCI_OutboxJob *
+hbci_trans_create_outboxjob(const HBCI_Customer *customer,
+			    HBCI_Account *h_acc, 
+			    const HBCI_Transaction *trans, 
+			    GNC_HBCI_Transtype trans_type) 
+{
+  HBCI_OutboxJob *job = NULL;
+    
+  switch (trans_type) {
+  case SINGLE_DEBITNOTE:
+    {
+      HBCI_OutboxJobDebitNote *debit_job =
+	HBCI_OutboxJobDebitNote_new (customer, h_acc, trans);
+      job = HBCI_OutboxJobDebitNote_OutboxJob (debit_job);
+    }
+    break;
+  case SINGLE_TRANSFER:
+    {
+      HBCI_OutboxJobTransfer *transfer_job = 
+	HBCI_OutboxJobTransfer_new (customer, h_acc, trans);
+      job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
+    }
+    break;
+  default:
+    {
+      printf("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
+	     trans_type);
+      HBCI_OutboxJobTransfer *transfer_job = 
+	HBCI_OutboxJobTransfer_new (customer, h_acc, trans);
+      job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
+    }
+  }
+  return job;
+}
 
 
 

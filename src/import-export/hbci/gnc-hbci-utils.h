@@ -117,5 +117,11 @@ char *gnc_hbci_descr_tognc (const HBCI_Transaction *h_trans);
  * string must be g_free'd by the caller. */
 char *gnc_hbci_memo_tognc (const HBCI_Transaction *h_trans);
 
+/** Return the first customer that can act on the specified account,
+    or NULL if none was found (and an error message is printed on
+    stdout). */
+const HBCI_Customer *
+gnc_hbci_get_first_customer(const HBCI_Account *h_acc);
+
 
 #endif
