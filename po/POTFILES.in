@@ -91,7 +91,6 @@ src/backend/rpc/gncRpc_svc.c
 src/backend/rpc/gncmod-backend-rpc.c
 src/backend/rpc/svc_thrd.c
 src/backend/rpc/xprt_thrd.c
-src/bin/strsub.c
 src/business/business-core/file/gnc-address-xml-v2.c
 src/business/business-core/file/gnc-bill-term-xml-v2.c
 src/business/business-core/file/gnc-customer-xml-v2.c
