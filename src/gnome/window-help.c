@@ -159,6 +159,58 @@ gnc_help_window_set_fwd_button(gnc_help_window * win, int enabled) {
 }
 
 
+static gint
+compare_locations (gconstpointer a, gconstpointer b)
+{
+  return safe_strcmp (a, b);
+}
+
+static void
+gnc_help_show_topic (gnc_help_window *help, const char * location)
+{
+  GtkCTreeNode *node, *n;
+  GtkCTree *ctree;
+  GtkCTreeRow *row;
+
+  g_warning (location);
+
+  ctree = GTK_CTREE (help->topics_tree);
+
+  node = gtk_ctree_find_by_row_data_custom (ctree, NULL, (gpointer) location,
+                                            compare_locations);
+
+  if (!node)
+  {
+    char *help_loc = g_strconcat ("gnc-help:", location, NULL);
+    node = gtk_ctree_find_by_row_data_custom (ctree, NULL, help_loc,
+                                              compare_locations);
+    g_free (help_loc);
+  }
+
+  if (!node)
+  {
+    gtk_ctree_unselect_recursive (ctree, NULL);
+    return;
+  }
+
+  /* Select it */
+  gtk_signal_handler_block_by_data (GTK_OBJECT (ctree), help);
+  gtk_ctree_select (ctree, node);
+  gtk_signal_handler_unblock_by_data (GTK_OBJECT (ctree), help);
+
+  /* Expand all the parents */
+  row = GTK_CTREE_ROW (node);
+  while ((n = row->parent) != NULL)
+  {
+    gtk_ctree_expand (ctree, n);
+    row = GTK_CTREE_ROW (n);
+  }
+
+  /* Make sure it's visible */
+  if (gtk_ctree_node_is_visible(ctree, node) != GTK_VISIBILITY_FULL)
+    gtk_ctree_node_moveto(ctree, node, 0, 0.5, 0.0);
+}
+
 static void 
 gnc_help_window_load_cb(gnc_html * html, URLType type, 
                         const gchar * location, const gchar * label, 
@@ -178,6 +230,8 @@ gnc_help_window_load_cb(gnc_html * html, URLType type,
   else {
     gnc_help_window_set_back_button(win, FALSE); 
   }
+
+  gnc_help_show_topic (win, location);
 }
 
 
@@ -352,6 +406,7 @@ gnc_help_window_load_topics(gnc_help_window * help, const gchar * file) {
 
   topics = gh_call1(load_topics, gh_str02scm(file));
   topics_add_children(topics, GTK_CTREE(help->topics_tree), NULL, help);
+  gtk_ctree_expand_to_depth (GTK_CTREE(help->topics_tree), NULL, 1);
   gtk_widget_show_all(help->topics_tree);
 }
 
@@ -679,7 +734,6 @@ gnc_help_window_destroy(gnc_help_window * help) {
 
   gtk_widget_destroy(GTK_WIDGET(help->toplevel)); 
 }
-
 
 void
 gnc_help_window_show_help(gnc_help_window * help, const char * location,

@@ -1,3 +1,11 @@
+2001-04-01  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-help.c: expand the top nodes initially
+	(gnc_help_show_topic): show the topic in the tree when it
+	can be found
+
+	* src/gnome/gnc-html.c: set busy cursor before start request
+
 2001-03-31  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-utils.c (gnc_get_gdk_imlib_image): new func
