@@ -119,4 +119,3 @@ gnc_entry_ledger_display_refresh (GncEntryLedger *ledger)
   gnc_entry_ledger_refresh_internal (ledger,
 				     gnc_entry_ledger_get_entries (ledger));
 }
-

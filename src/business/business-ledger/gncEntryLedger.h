@@ -78,8 +78,6 @@ Table * gnc_entry_ledger_get_table (GncEntryLedger *ledger);
 
 void gnc_entry_ledger_set_colors (GncEntryLedgerColors reg_colors_new);
 
-gboolean gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit);
-
 void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent);
 
 void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger);
@@ -88,6 +86,6 @@ gboolean gnc_entry_ledger_changed (GncEntryLedger *ledger);
 
 void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger);
 
-gboolean gnc_entry_ledger_verify_can_save (GncEntryLedger *ledger);
+gboolean gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger);
 
 #endif /* GNC_ENTRY_LEDGER_H */

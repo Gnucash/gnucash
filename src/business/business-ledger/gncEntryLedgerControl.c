@@ -24,6 +24,125 @@
 #include "gncEntryLedgerP.h"
 #include "gncEntryLedgerControl.h"
 
+static gboolean
+gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
+{
+  GncEntry *blank_entry;
+  GncEntry *entry;
+
+  if (!ledger) return FALSE;
+
+  blank_entry = gncEntryLookup (ledger->book, &(ledger->blank_entry_guid));
+
+  entry = gnc_entry_ledger_get_current_entry (ledger);
+  if (entry == NULL) return FALSE;
+
+  /* Try to avoid heavy-weight updates if nothing has changed */
+  if (!gnc_table_current_cursor_changed (ledger->table, FALSE)) {
+    if (!do_commit) return FALSE;
+
+    if (entry == blank_entry) {
+      if (ledger->blank_entry_edited) {
+	ledger->last_date_entered = gncEntryGetDate (entry);
+	ledger->blank_entry_guid = *xaccGUIDNULL ();
+	ledger->blank_entry_edited = FALSE;
+	blank_entry = NULL;
+      } else
+	return FALSE;
+    }
+
+    return TRUE;
+  }
+
+  gnc_suspend_gui_refresh ();
+
+  if (entry == blank_entry)
+    switch (ledger->type) {
+    case GNCENTRY_ORDER_ENTRY:
+      gncOrderAddEntry (ledger->order, blank_entry);
+      break;
+    case GNCENTRY_INVOICE_ENTRY:
+      /* Anything entered on an invoice entry must be part of the invoice! */
+      gncInvoiceAddEntry (ledger->invoice, blank_entry);
+      break;
+    default:
+      /* Nothing to do for viewers */
+      break;
+    }
+
+  gnc_table_save_cells (ledger->table, entry);
+
+  if (entry == blank_entry) {
+    if (do_commit) {
+      ledger->blank_entry_guid = *xaccGUIDNULL ();
+      blank_entry = NULL;
+      ledger->last_date_entered = gncEntryGetDate (entry);
+    } else
+      ledger->blank_entry_edited = TRUE;
+  }
+
+  if (do_commit)
+    gncEntryCommitEdit (entry);
+
+  gnc_table_clear_current_cursor_changes (ledger->table);
+
+  gnc_resume_gui_refresh ();
+
+  return TRUE;
+}
+
+static gboolean
+gnc_entry_ledger_verify_acc_cell_ok (GncEntryLedger *ledger,
+				     const char *cell_name,
+				     const char *cell_msg)
+{
+  ComboCell *cell;
+  const char *name;
+
+  cell = (ComboCell *) gnc_table_layout_get_cell (ledger->table->layout,
+						  cell_name);
+  g_return_val_if_fail (cell, TRUE);
+  name = cell->cell.value;
+  if (!name || *name == '\0') {
+    const char *format = _("Invalid Entry:  You need to supply %s.");
+    char *message;
+
+    message = g_strdup_printf (format, cell_msg);
+    gnc_error_dialog_parented (GTK_WINDOW (ledger->parent), message);
+
+    return FALSE;
+  }
+  return TRUE;
+}
+
+/* Verify whether we can save the entry, or warn the user when we can't
+ * return TRUE if we can save, FALSE if there is a problem
+ */
+static gboolean
+gnc_entry_ledger_verify_can_save (GncEntryLedger *ledger)
+{
+  gnc_numeric value, tax_value;
+
+  /* Compute the value and tax value of the current cursor */
+  gnc_entry_ledger_compute_value (ledger, &value, &tax_value);
+
+  /* If there is a value, make sure there is an account */
+  if (! gnc_numeric_zero_p (value)) {
+    if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_ACCT_CELL,
+					      _("an Account")))
+      return FALSE;
+  }
+
+  /* If there is a tax value, make sure there is a tax account */
+  if (! gnc_numeric_zero_p (tax_value)) {
+    if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_TAXACC_CELL,
+					      _("a Tax Account")))
+      return FALSE;
+  }
+
+  return TRUE;
+}
+
 static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
 					  gpointer user_data)
 {
@@ -391,123 +510,6 @@ TableControl * gnc_entry_ledger_control_new (void)
 }
 
 
-static gboolean
-gnc_entry_ledger_verify_acc_cell_ok (GncEntryLedger *ledger,
-				     const char *cell_name,
-				     const char *cell_msg)
-{
-  ComboCell *cell;
-  const char *name;
-
-  cell = (ComboCell *) gnc_table_layout_get_cell (ledger->table->layout,
-						  cell_name);
-  g_return_val_if_fail (cell, TRUE);
-  name = cell->cell.value;
-  if (!name || *name == '\0') {
-    const char *format = _("Invalid Entry:  You need to supply %s.");
-    char *message;
-
-    message = g_strdup_printf (format, cell_msg);
-    gnc_error_dialog_parented (GTK_WINDOW (ledger->parent), message);
-
-    return FALSE;
-  }
-  return TRUE;
-}
-
-/* Verify whether we can save the entry, or warn the user when we can't
- * return TRUE if we can save, FALSE if there is a problem
- */
-gboolean gnc_entry_ledger_verify_can_save (GncEntryLedger *ledger)
-{
-  gnc_numeric value, tax_value;
-
-  /* Compute the value and tax value of the current cursor */
-  gnc_entry_ledger_compute_value (ledger, &value, &tax_value);
-
-  /* If there is a value, make sure there is an account */
-  if (! gnc_numeric_zero_p (value)) {
-    if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_ACCT_CELL,
-					      _("an Account")))
-      return FALSE;
-  }
-
-  /* If there is a tax value, make sure there is a tax account */
-  if (! gnc_numeric_zero_p (tax_value)) {
-    if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_TAXACC_CELL,
-					      _("a Tax Account")))
-      return FALSE;
-  }
-
-  return TRUE;
-}
-
-gboolean gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
-{
-  GncEntry *blank_entry;
-  GncEntry *entry;
-
-  if (!ledger) return FALSE;
-
-  blank_entry = gncEntryLookup (ledger->book, &(ledger->blank_entry_guid));
-
-  entry = gnc_entry_ledger_get_current_entry (ledger);
-  if (entry == NULL) return FALSE;
-
-  /* Try to avoid heavy-weight updates if nothing has changed */
-  if (!gnc_table_current_cursor_changed (ledger->table, FALSE)) {
-    if (!do_commit) return FALSE;
-
-    if (entry == blank_entry) {
-      if (ledger->blank_entry_edited) {
-	ledger->last_date_entered = gncEntryGetDate (entry);
-	ledger->blank_entry_guid = *xaccGUIDNULL ();
-	ledger->blank_entry_edited = FALSE;
-	blank_entry = NULL;
-      } else
-	return FALSE;
-    }
-
-    return TRUE;
-  }
-
-  gnc_suspend_gui_refresh ();
-
-  if (entry == blank_entry)
-    switch (ledger->type) {
-    case GNCENTRY_ORDER_ENTRY:
-      gncOrderAddEntry (ledger->order, blank_entry);
-      break;
-    case GNCENTRY_INVOICE_ENTRY:
-      /* Anything entered on an invoice entry must be part of the invoice! */
-      gncInvoiceAddEntry (ledger->invoice, blank_entry);
-      break;
-    default:
-      /* Nothing to do for viewers */
-      break;
-    }
-
-  gnc_table_save_cells (ledger->table, entry);
-
-  if (entry == blank_entry) {
-    if (do_commit) {
-      ledger->blank_entry_guid = *xaccGUIDNULL ();
-      blank_entry = NULL;
-      ledger->last_date_entered = gncEntryGetDate (entry);
-    } else
-      ledger->blank_entry_edited = TRUE;
-  }
-
-  if (do_commit)
-    gncEntryCommitEdit (entry);
-
-  gnc_table_clear_current_cursor_changes (ledger->table);
-
-  gnc_resume_gui_refresh ();
-
-  return TRUE;
-}
-
 void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger)
 {
   VirtualLocation virt_loc;
@@ -527,4 +529,31 @@ void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger)
     gnc_table_move_cursor_gui (ledger->table, virt_loc);
 
   gnc_table_refresh_gui (ledger->table, TRUE);
+}
+
+gboolean
+gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger)
+{
+  if (!ledger) return TRUE;
+
+  if (gnc_entry_ledger_changed (ledger)) {
+    VirtualLocation virt_loc;
+    const char *message = _("The current entry has been changed.\n"
+			    "Would you like to save it?");
+
+    virt_loc = ledger->table->current_cursor_loc;
+
+    if (gnc_entry_ledger_traverse (&virt_loc, GNC_TABLE_TRAVERSE_POINTER,
+				   ledger))
+      return FALSE;
+
+    if (!gnc_entry_ledger_verify_can_save (ledger))
+      return FALSE;
+
+    if (gnc_verify_dialog_parented (parent, message, TRUE))
+      gnc_entry_ledger_save (ledger, TRUE);
+    else
+      gnc_entry_ledger_cancel_cursor_changes (ledger);
+  }
+  return TRUE;
 }

@@ -76,20 +76,6 @@ ow_get_order (OrderWindow *ow)
   return gncOrderLookup (ow->book, &ow->order_guid);
 }
 
-static void gnc_entry_check_close (OrderWindow *ow)
-{
-  if (!ow || !ow->ledger) return;
-
-  if (gnc_entry_ledger_changed (ow->ledger)) {
-    const char *message = _("The current entry has been changed.\n"
-			    "Would you like to save it?");
-    if (gnc_verify_dialog_parented (ow->dialog, message, TRUE))
-      gnc_entry_ledger_save (ow->ledger, TRUE);
-    else
-      gnc_entry_ledger_cancel_cursor_changes (ow->ledger);
-  }
-}
-
 static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
 {
   Timespec ts;
@@ -155,10 +141,11 @@ gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   OrderWindow *ow = data;
 
-  gnc_entry_check_close (ow);
+  if (!gnc_entry_ledger_check_close (ow->dialog, ow->ledger))
+    return;
 
   if (!gnc_order_window_verify_ok (ow))
-      return;
+    return;
   
   /* Now save it off */
   {
@@ -218,7 +205,8 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
   gboolean non_inv = FALSE;
   Timespec ts;
 
-  gnc_entry_check_close (ow);
+  if (!gnc_entry_ledger_check_close (ow->dialog, ow->ledger))
+    return;
 
   /* Make sure the order is ok */
   if (!gnc_order_window_verify_ok (ow))

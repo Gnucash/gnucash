@@ -78,20 +78,6 @@ iw_get_invoice (InvoiceWindow *iw)
   return gncInvoiceLookup (iw->book, &iw->invoice_guid);
 }
 
-static void gnc_entry_check_close (InvoiceWindow *iw)
-{
-  if (!iw || !iw->ledger) return;
-
-  if (gnc_entry_ledger_changed (iw->ledger)) {
-    const char *message = _("The current entry has been changed.\n"
-			    "Would you like to save it?");
-    if (gnc_verify_dialog_parented (iw->dialog, message, TRUE))
-      gnc_entry_ledger_save (iw->ledger, TRUE);
-    else
-      gnc_entry_ledger_cancel_cursor_changes (iw->ledger);
-  }
-}
-
 static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
 {
   Timespec ts;
@@ -157,7 +143,9 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
 static gboolean
 gnc_invoice_window_ok_save (InvoiceWindow *iw)
 {
-  gnc_entry_check_close (iw);	/* save the current entry? */
+  /* save the current entry in the ledger? */
+  if (!gnc_entry_ledger_check_close (iw->dialog, iw->ledger))
+    return FALSE;
 
   if (!gnc_invoice_window_verify_ok (iw))
     return FALSE;
