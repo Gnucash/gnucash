@@ -1,4 +1,6 @@
+Open, known bugs, desired enhancements:
 
+> 0) For SGI Irix, 
 > Xbae-4.6.2-linas/src/Matrix.h:
 >   - Uncomment lines 225 and 269  ( XmNtextField & XmCTextField
 >                                    definitions )
@@ -10,7 +12,8 @@ The redme should indicate how to reach the author;  since the
 maintainer seems busy at the moment, try sending them a unified diff.
 
 
-> xacc-0.9g/Makefile:
+> 1) For SGI Irix,
+>     xacc-0.9g/Makefile:
 >   - CC=cc
 >   - RANLIB=true
 
@@ -40,4 +43,27 @@ Yes, I know, haven't figured out why yet ...
 >     Only the first does anything at all, and it just goes to the
 >     "License" information.  Sometimes I need to resize this window
 >     before I can use the scrollbar.
+
+8) traversing  doesn't work for mutla, stock funds
+
+9) For SGI Irix, mystery core dump when creating mubmenus ...
+   related to menu initialization complaints with sgi compiler.
+
+10) cleared balances are incorrectly shown for stock accounts
+
+11) stock portfolio should indicate total $ amount of transaction
+
+12) all messages should be moved out so that translation to foreign
+    languages would be possible.
+
+13) transfer window should allow share prices to be entered;
+    but these should grey out when dealing with ordinary bank accounts.
+
+14) Allow transfers of funds to be done in-line
+
+15) Allow an account to be designated as a double-entry-only account.
+
+
+Fixed bugs:
+-----------
 
