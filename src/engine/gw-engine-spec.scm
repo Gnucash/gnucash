@@ -2143,8 +2143,7 @@ of having a parent transaction with which one is working...")
      ((<gw:m-chars-caller-owned> gw:const) namespace)
      ((<gw:m-chars-caller-owned> gw:const) mnemonic)
      ((<gw:m-chars-caller-owned> gw:const) exchange-code)
-     (<gw:int> smallest-fraction)
-     (<gnc:Book*> book))
+     (<gw:int> smallest-fraction) )
    "Create a new gnc_commodity object.")
 
   (gw:wrap-function

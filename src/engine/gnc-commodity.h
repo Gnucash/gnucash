@@ -41,8 +41,7 @@ gnc_commodity * gnc_commodity_new(const char * fullname,
                                   const char * namespace,
                                   const char * mnemonic,
                                   const char * exchange_code,
-                                  int fraction,
-                                  GNCBook *);
+                                  int fraction);
 
 void  gnc_commodity_destroy(gnc_commodity * cm);
 
@@ -54,7 +53,6 @@ const char * gnc_commodity_get_exchange_code(const gnc_commodity * cm);
 const char * gnc_commodity_get_unique_name(const gnc_commodity * cm);
 int     gnc_commodity_get_fraction(const gnc_commodity * cm);
 gint16  gnc_commodity_get_mark(const gnc_commodity * cm);
-GNCBook * gnc_commodity_get_book(const gnc_commodity * cm);
 
 void  gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic);
 void  gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace);
@@ -117,6 +115,6 @@ gboolean gnc_commodity_table_foreach_commodity(gnc_commodity_table * table,
                                                      gpointer user_data),
                                        gpointer user_data);
 
-gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table, GNCBook*);
+gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table);
 
 #endif

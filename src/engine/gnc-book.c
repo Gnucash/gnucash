@@ -86,7 +86,7 @@ gnc_book_init (GNCBook *book)
 
   if(book->commodity_table)
   {
-    if(!gnc_commodity_table_add_default_data(book->commodity_table, book))
+    if(!gnc_commodity_table_add_default_data(book->commodity_table))
       PWARN("unable to initialize book's commodity_table");
   }
 

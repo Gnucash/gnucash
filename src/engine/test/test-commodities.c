@@ -16,7 +16,7 @@ test_commodity(void)
     gnc_commodity *com;
 
     {
-        com = gnc_commodity_new(NULL, NULL, NULL, NULL, 0, NULL);
+        com = gnc_commodity_new(NULL, NULL, NULL, NULL, 0);
 
         gnc_commodity_destroy(com);
 
@@ -38,7 +38,7 @@ test_commodity(void)
         fraction = get_random_int_in_range(0, 10000);
 
         com = gnc_commodity_new(fullname, namespace, mnemonic,
-                                exchange_code, fraction, NULL);
+                                exchange_code, fraction);
 
         do_test(
             com != NULL, "commodity with data new and destroy");
@@ -94,7 +94,7 @@ test_commodity(void)
             "reset fraction code equal test");
 
         com2 = gnc_commodity_new(fullname, namespace, mnemonic,
-                                 exchange_code, fraction, NULL);
+                                 exchange_code, fraction);
         do_test(
             gnc_commodity_equiv(com, com2), "commodity equiv");
 

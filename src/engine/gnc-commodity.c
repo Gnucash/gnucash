@@ -43,7 +43,6 @@ static short module = MOD_ENGINE;
  * in a 'unitname' unit. */ 
 
 struct gnc_commodity_s { 
-  GNCBook * book;
   char    * fullname;  
   char    * namespace;
   char    * mnemonic;
@@ -90,11 +89,10 @@ gnc_commodity *
 gnc_commodity_new(const char * fullname, 
                   const char * namespace, const char * mnemonic, 
                   const char * exchange_code, 
-                  int fraction, GNCBook *book)
+                  int fraction)
 {
   gnc_commodity * retval = g_new0(gnc_commodity, 1);
 
-  retval->book = book;
   retval->fullname  = g_strdup(fullname);
   retval->namespace = g_strdup(namespace);
   retval->mnemonic  = g_strdup(mnemonic);
@@ -232,13 +230,6 @@ gnc_commodity_get_mark(const gnc_commodity * cm)
 {
   if(!cm) return 0;
   return cm->mark;
-}
-
-GNCBook *
-gnc_commodity_get_book(const gnc_commodity * cm) 
-{
-  if(!cm) return NULL;
-  return cm->book;
 }
 
 /********************************************************************
@@ -876,8 +867,7 @@ gnc_commodity_table_equal(gnc_commodity_table *t_1,
  ********************************************************************/
 
 gboolean
-gnc_commodity_table_add_default_data(gnc_commodity_table *table, 
-                                     GNCBook *book)
+gnc_commodity_table_add_default_data(gnc_commodity_table *table)
 {
 
   #include "./iso-4217-currencies.c"
