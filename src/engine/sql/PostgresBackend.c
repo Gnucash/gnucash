@@ -904,14 +904,15 @@ pgendNew (void)
    be = (PGBackend *) malloc (sizeof (PGBackend));
 
    /* generic backend handlers */
-   be->be.session_begin = pgend_session_begin;
-   be->be.session_end = NULL;
+   be->be.book_load = pgend_session_begin;
+   be->be.book_end = NULL;
 
    be->be.account_begin_edit = NULL;
    be->be.account_commit_edit = NULL;
    be->be.trans_begin_edit = NULL;
    be->be.trans_commit_edit = pgend_trans_commit_edit;
    be->be.trans_rollback_edit= NULL;
+   be->be.run_query= NULL;
 
    /* postgres specific data */
    be->dbName = NULL;

@@ -25,8 +25,8 @@
 #ifndef __XACC_NET_IO_H__
 #define __XACC_NET_IO_H__
 
-#include "Group.h"
+#include "BackendP.h"
 
-AccountGroup * xaccRecvAccountGroup (char *url); 
+Backend * xmlendNew (void);
 
 #endif /* __XACC_NET_IO_H__ */

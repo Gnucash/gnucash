@@ -1,7 +1,7 @@
 /* 
- * PostgressBackend.h
+ * PostgresBackend.h
  *
- * Implements the callbacks for the postgress backend.
+ * Implements the callbacks for the postgres backend.
  * 
  */
 

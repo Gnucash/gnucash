@@ -22,8 +22,11 @@
 \********************************************************************/
 
 /*
- * ultra super reudimentary right now 
- * this will be very very different in final verisn
+ * ultra super rudimentary right now 
+
+ * HACK ALRT -- this should be moved into its own sbdirectory
+ * Mostly so that the engine build doesn't require libghttp
+ * as a dependency.  
  */
 
 
@@ -33,25 +36,50 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "BackendP.h"
 #include "NetIO.h"
+#include "gnc-book.h"
 #include "gnc-engine-util.h"
 #include "io-gncxml.h"
 
 static short module = MOD_IO;
 
-/* ==================================================================== */
+typedef struct _xmlend XMLBackend;
 
-AccountGroup *
-xaccRecvAccountGroup (char *url) 
+struct _xmlend {
+  Backend be;
+
+  ghttp_request *request;
+  char * query_url;
+};
+
+Backend *xmlendNew (void);
+
+
+/* ==================================================================== */
+/* Load a set of accounts and currencies from the indicated URL. */
+
+static AccountGroup *
+xmlbeBookLoad (GNCBook *book, const char *url) 
 {
+  XMLBackend *be;
   AccountGroup *grp;
   ghttp_request *request;
   char *bufp;
   int len;
 
+  if (!book) return NULL;
+
   ENTER ("url is %s\n", url);
-  request = ghttp_request_new();
-  ghttp_set_uri (request, url);
+
+  be = (XMLBackend *) xaccGNCBookGetBackend (book); 
+
+  /* hack alert -- some bogus url for sending queries to */
+  /* this should be made customizable, I suppose ???? */
+  be->query_url = g_strdup (url);
+
+  request = be->request;
+  ghttp_set_uri (request, (char *) url);
   ghttp_set_type (request, ghttp_type_get);
   ghttp_set_header (request, http_hdr_Connection, "close");
   ghttp_set_sync (request, ghttp_sync);
@@ -71,18 +99,110 @@ xaccRecvAccountGroup (char *url)
   }
   else 
   {
-     char * errstr = ghttp_get_error (request);
-     char * reason = ghttp_reason_phrase (request);
+     const char * errstr = ghttp_get_error (request);
+     const char * reason = ghttp_reason_phrase (request);
      PERR ("connection failed: %s %s\n", errstr, reason);
-
-     ghttp_request_destroy(request);
      return NULL;
   }
 
-  ghttp_request_destroy(request);
 
   LEAVE("\n");
   return NULL;
 }
+
+/* ==================================================================== */
+
+static int
+xmlbeRunQuery (Backend *b, Query *q) 
+{
+  XMLBackend *be = (XMLBackend *) b;
+  ghttp_request *request;
+  char *bufp;
+  int len;
+
+  if (!be || !q) return 999;
+
+  /* set up a new http request, of type POST */
+  request = ghttp_request_new();
+  ghttp_set_uri (request, be->query_url);
+  ghttp_set_type (request, ghttp_type_post);
+  ghttp_set_header (request, http_hdr_Connection, "close");
+  ghttp_set_sync (request, ghttp_sync);
+  ghttp_clean (request);
+
+  /* convert the query to XML */
+  gncxml_write_query_to_buf (q, &bufp, &len);
+
+  /* put the XML into the request body */
+  ghttp_set_body (request, bufp, len);
+
+  /* send it off the the webserver, wait for the reply */
+  ghttp_prepare (request);
+  ghttp_process (request);
+
+  /* free the query xml */
+  free (bufp);
+
+  len = ghttp_get_body_len(request);
+
+  if (0 < len)
+  {
+     bufp = ghttp_get_body(request);
+     PINFO ("reply length=%d\n", len);
+     DEBUG ("%s\n", bufp);
+
+     /* we got back a list of splits, these need to be merged in */
+     // grp = gncxml_read_from_buf (bufp, len);
+     return 0;
+  }
+  else 
+  {
+     const char * errstr = ghttp_get_error (request);
+     const char * reason = ghttp_reason_phrase (request);
+     PERR ("connection failed: %s %s\n", errstr, reason);
+
+     return 444;
+  }
+
+
+  LEAVE("\n");
+  return 0;
+}
+
+/* ==================================================================== */
+#if 0
+
+xmlbeBookEnd () 
+{
+  ghttp_request_destroy (be->request);
+  g_free (be->query_url);
+}
+#endif
+
+/* ==================================================================== */
+
+Backend *
+xmlendNew (void)
+{
+  XMLBackend *be;
+  be = (XMLBackend *) malloc (sizeof (XMLBackend));
+
+  /* generic backend handlers */
+  be->be.book_load = xmlbeBookLoad;
+  be->be.book_end = NULL;
+
+  be->be.account_begin_edit = NULL;
+  be->be.account_commit_edit = NULL;
+  be->be.trans_begin_edit = NULL;
+  be->be.trans_commit_edit = NULL;
+  be->be.trans_rollback_edit = NULL;
+  be->be.run_query = xmlbeRunQuery;
+
+  be->request = ghttp_request_new();
+  be->query_url = NULL;
+
+  return (Backend *) be;
+}
+
 
 /* ============================== END OF FILE ======================== */

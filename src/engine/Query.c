@@ -22,23 +22,24 @@
 
 #include <ctype.h>
 #include <glib.h>
-#include <sys/types.h>
+#include <math.h>
+#include <string.h>
 #include <regex.h>
 #include <sys/time.h>
+#include <sys/types.h>
 #include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 #include <assert.h>
 
 #include "gnc-common.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
-#include "TransactionP.h"
-#include "Transaction.h"
 #include "Account.h"
+#include "BackendP.h"
 #include "Group.h"
 #include "Query.h"
+#include "Transaction.h"
+#include "TransactionP.h"
 
 static short module = MOD_QUERY;
 
@@ -955,12 +956,14 @@ xaccQueryGetSplits(Query * q) {
   GList     * all_accts, * node;
   Account   * current;
   QueryTerm * qt;
+  Backend   * be;
 
   int       total_splits_checked = 0;
   int       split_count = 0;
   int       acct_ok;
 
   if (!q) return NULL;
+  ENTER("query=%p", q);
 
   /* tmp hack alert */
   q->changed = 1;
@@ -982,6 +985,12 @@ xaccQueryGetSplits(Query * q) {
   /* prepare the terms for processing */
   xaccQueryCompileTerms (q);
 
+  /* if there is a backend, query the backend, let it fetch the data */
+  be = xaccGroupGetBackend (q->acct_group);
+  if (be && be->run_query) {
+   (be->run_query) (be, q);
+  }
+  
   /* iterate over accounts */
   all_accts = xaccGroupGetSubAccounts (q->acct_group);
 
@@ -2162,6 +2171,15 @@ xaccQuerySetMaxSplits(Query * q, int n) {
 void
 xaccQuerySetGroup(Query * q, AccountGroup * g) {
   q->acct_group = g;
+}
+
+
+/*******************************************************************
+ *  xaccQueryGetGroup
+ *******************************************************************/
+AccountGroup *
+xaccQueryGetGroup(Query * q) {
+  return (q->acct_group);
 }
 
 

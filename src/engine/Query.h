@@ -206,20 +206,23 @@ typedef struct {
  *  basic Query API
  *******************************************************************/
 
-Query   * xaccMallocQuery(void);
-void    xaccFreeQuery(Query *);
-Query * xaccQueryCopy(Query *q);
-void    xaccQuerySetGroup(Query * q, AccountGroup * group);
-Query   * xaccQueryInvert(Query * q1);
-Query   * xaccQueryMerge(Query * q1, Query * q2, QueryOp op);
-void    xaccQueryClear(Query * q);
-void    xaccQueryPurgeTerms(Query * q, pd_type_t type);
+Query       * xaccMallocQuery(void);
+void          xaccFreeQuery(Query *);
+Query       * xaccQueryCopy(Query *q);
+void          xaccQuerySetGroup(Query * q, AccountGroup * group);
+AccountGroup *xaccQueryGetGroup(Query * q);
 
-int     xaccQueryHasTerms(Query * q);
-gboolean xaccQueryHasTermType(Query * q, pd_type_t type);
-GList   * xaccQueryGetTerms(Query * q);
+Query       * xaccQueryInvert(Query * q1);
+Query       * xaccQueryMerge(Query * q1, Query * q2, QueryOp op);
+void          xaccQueryClear(Query * q);
 
-GList   * xaccQueryGetSplits(Query * q);
+void          xaccQueryPurgeTerms(Query * q, pd_type_t type);
+int           xaccQueryHasTerms(Query * q);
+gboolean      xaccQueryHasTermType(Query * q, pd_type_t type);
+GList       * xaccQueryGetTerms(Query * q);
+
+/* after the query has been set up, call this to run the query */
+GList       * xaccQueryGetSplits(Query * q);
 
 /* handy for debugging */
 void    xaccQueryPrint(Query *q);

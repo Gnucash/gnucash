@@ -16,6 +16,7 @@
 
 #include "Account.h"
 #include "Group.h"
+#include "Query.h"
 #include "Transaction.h"
 #include "gnc-book.h"
 
@@ -32,13 +33,15 @@ typedef struct _backend Backend;
 
 struct _backend 
 {
-  AccountGroup * (*book_begin) (GNCBook *, const char * book_id);
+  AccountGroup * (*book_load) (GNCBook *, const char * book_id);
   int (*book_end) (GNCBook *);
   int (*account_begin_edit) (Backend *, Account *, int defer);
   int (*account_commit_edit) (Backend *, Account *);
   int (*trans_begin_edit) (Backend *, Transaction *);
   int (*trans_commit_edit) (Backend *, Transaction *new, Transaction *orig);
   int (*trans_rollback_edit) (Backend *, Transaction *);
+
+  int (*run_query) (Backend *, Query *);
 };
 
 /*

@@ -1,9 +1,9 @@
 
 This directory contains very broken, very experimental code
-for sql support.  It doesn't work.  The instructions bwlow are for
+for sql support.  It doesn't work.  The instructions below are for
 developers who want to hack this code.
 
-1) Install postgresl server, client and devel packages.
+1) Install postgresql server, client and devel packages.
 2) if installed from redhat, then running /etc/rc.d/init.d/postgresql 
    will setup and initialize all first-time setup & config.
 3) as root, su - postgres then run 'createuser' to add your user id
@@ -17,7 +17,14 @@ developers who want to hack this code.
 
 Development Notes
 -----------------
-Just about everything done in this demo is wrong.
+There has got to be a far more elegant way of 'converting' c structs
+to sql and back.  Because basically, that's all tat this code wants
+to do: just convert the engine structs to/from corresponding records 
+in an sql database.
+
+This code only implements writing to the DB, not reading.  Its mostly 
+cut-n-paste code that does the same thing over & over again.
+
 -- 
 
 

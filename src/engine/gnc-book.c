@@ -83,7 +83,8 @@ struct _gnc_book
   int lockfd;
 
   /* ---------------------------------------------------- */
-  /* this struct member applies only for SQL i/o */
+  /* This struct member applies for network and SQL i/o */
+  /* It is not currently used for file i/o, but maybe it should be ?? */
   Backend *backend;
 };
 
@@ -173,39 +174,6 @@ gnc_book_get_file_path (GNCBook *book)
 
    return book->fullpath;
 }
-
-/* ============================================================== */
-
-#if 0
-static AccountGroup *
-xaccSessionBeginSQL (Session *sess, const char * dbname)
-{
-   Backend *be = NULL;
-   AccountGroup *grp = NULL;
-
-   if (!sess) return NULL;
-
-/* #define SQLHACK */
-#ifdef SQLHACK
-   {
-     /* for testing the sql, just a hack, remove later ... */
-extern Backend * pgendNew (void);
-     be = pgendNew ();
-   }
-#endif
-
-   sess->backend = be;
-
-   if (be && be->session_begin) {
-      grp = (be->session_begin) (sess, dbname);
-   }
-   /* comment out until testing done, else clobber file ...*/
-   /* sess->topgroup = grp; */
-   xaccGroupSetBackend (sess->topgroup, be);
-
-   return (sess->topgroup);
-}
-#endif
 
 /* ============================================================== */
 
@@ -319,21 +287,6 @@ gnc_book_begin_file (GNCBook *book, const char * filefrag,
 }
 
 /* ============================================================== */
-/* URL mostly a noop --- maybe this would be a login dialog ??? */
-
-static gboolean
-gnc_book_begin_http (GNCBook *book, const char * pathfrag)
-{
-  ENTER ("pathfrag=%s\n", pathfrag);
-
-  /* Store the sessionid URL  */
-  book->book_id = g_strdup (pathfrag);
-
-  LEAVE ("\n");
-  return TRUE;
-}
-
-/* ============================================================== */
 
 gboolean
 gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
@@ -369,24 +322,45 @@ gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
     return rc;
   }
 
-  if (!strncmp(book_id, "http://", 7))
+  /* -------------------------------------------------- */
+  if ((!strncmp(book_id, "http://", 7)) ||
+      (!strncmp(book_id, "https://", 8)))
   {
-    rc = gnc_book_begin_http (book, book_id);
-    return rc;
+    /* Store the sessionid URL  */
+    book->book_id = g_strdup (book_id);
+
+    /* create the backend */
+    book->backend = xmlendNew();
+
+    /* not sure what else should happen here ... should we check to see
+     * if the URL is reachable ?? Should we login the user ??
+     */
+    return TRUE;
   }
 
-  if (!strncmp(book_id, "https://", 8))
-  {
-    rc = gnc_book_begin_http (book, book_id);
-    return rc;
-  }
-
+  /* -------------------------------------------------- */
   if (!strncmp(book_id, "postgres://", 11))
   {
- 
+    /* Store the sessionid URL  */
+    /* we expect this to be in the format
+     * postgres://some.hostname.com/databasename.pql
+     * or maybe
+     * postgres://localhost/databasename.pql
+     * or one can specify the postgres socket port number explicitly:
+     * postgres://some.hostname.com:5432/databasename.pql
+     */
+    book->book_id = g_strdup (book_id);
+
+/* #define SQLHACK */
+#ifdef SQLHACK
+     extern Backend * pgendNew (void);
+     book->backend = pgendNew ();
+#endif
+
     book->errtype = ENOSYS;
     return FALSE;
   }
+  /* -------------------------------------------------- */
 
 
   /* otherwise, lets just assume its a file. */
@@ -436,14 +410,34 @@ gnc_book_load (GNCBook *book)
     LEAVE("\n");
     return TRUE;
   }
-  else if (strncmp(book->book_id, "http://", 7) == 0)
+
+  else if ((strncmp(book->book_id, "http://", 7) == 0) ||
+           (strncmp(book->book_id, "https://", 8) == 0) ||
+           (strncmp(book->book_id, "postgres://", 11) == 0))
   {
+    /* This code should be sufficient to initiliaze *any* backend,
+     * whether http, postgres, or anything else that might come along.
+     * Basically, the idea is that by now, a backend has already been
+     * created & set up.  At this point, we only need to get the
+     * top-level account group out of the backend, and that is a
+     * generic, backend-independent operation.
+     */
+    Backend *be = book->backend;
     xaccFreeAccountGroup (book->topgroup);
     book->topgroup = NULL;
 
     book->errtype = 0;
     book->last_file_err = ERR_FILEIO_NONE;
-    book->topgroup = xaccRecvAccountGroup (book->book_id);
+
+    /* starting the session should result in a bunch of accounts
+     * and currencies being downloaded, but probably no transactions;
+     * The GUI will need to do a query for that.
+     */
+    if (be && be->book_load) {
+       book->topgroup = (be->book_load) (book, book->book_id);
+    }
+
+    xaccGroupSetBackend (book->topgroup, be);
 
     if (!book->topgroup || (book->last_file_err != ERR_FILEIO_NONE))
     {
@@ -453,16 +447,6 @@ gnc_book_load (GNCBook *book)
 
     LEAVE("\n");
     return TRUE;
-  }
-  else if (strncmp(book->book_id, "postgres://", 11) == 0)
-  {
-#ifdef SQLHACK
-    /* for testing the sql, just a hack, remove later ... */
-    /* this should never ever appear here ...  */
-    xaccSessionBeginSQL (sess, book->book_id);
-#endif
-    book->errtype = ENOSYS;
-    return FALSE;
   }
   else
   {
