@@ -1,6 +1,7 @@
 2002-10-19  Derek Atkins  <derek@ihtfp.com>
 	* gnome/gw-gnc-spec.scm -- add "#include <gnc-splash.h>"
-
+	* configure.in -- don't let GNOME_COMPILE_WARNINGS overwrite our list
+	
 2002-10-19  Christian Stimming  <stimming@tuhh.de>
 
 	* po/POTFILES.in: Update potfile.in for upcoming translations.

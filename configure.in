@@ -342,18 +342,6 @@ AC_ARG_ENABLE(error-on-warning,
    esac]
   [  CFLAGS="${CFLAGS} -Werror"; enable_compile_warnings=no ])
 
-# This has to come after AC_PROG_CC
-if test ${GCC}x = yesx
-then
-  # These two are because of g-wrap -- it can't avoid unused and uninitialized.
-  CFLAGS="${CFLAGS} -Wno-unused"
-  CFLAGS="${CFLAGS} -Wno-uninitialized"
-  # other flags...
-  CFLAGS="${CFLAGS} -Wmissing-prototypes"
-  CFLAGS="${CFLAGS} -Wmissing-declarations"
-  CFLAGS="${CFLAGS} -Werror-implicit-function-declaration"
-fi
-
 AC_ARG_ENABLE( debug,
   [  --enable-debug               compile with debugging flags set],
        CFLAGS="${CFLAGS} -g"
@@ -771,6 +759,22 @@ then
     GNOME=1
     AC_DEFINE(GNOME)  
 
+fi
+
+###-------------------------------------------------------------------------
+### Additional compiler warnings (or not) if we're running GCC
+###-------------------------------------------------------------------------
+
+# This has to come after AC_PROG_CC _AND_ GNOME_COMPILE_WARNINGS
+if test ${GCC}x = yesx
+then
+  # These two are because of g-wrap -- it can't avoid unused and uninitialized.
+  CFLAGS="${CFLAGS} -Wno-uninitialized"
+  CFLAGS="${CFLAGS} -Wno-unused"
+  # other flags...
+  CFLAGS="${CFLAGS} -Wmissing-prototypes"
+  CFLAGS="${CFLAGS} -Wmissing-declarations"
+  CFLAGS="${CFLAGS} -Werror-implicit-function-declaration"
 fi
 
 ###-------------------------------------------------------------------------
