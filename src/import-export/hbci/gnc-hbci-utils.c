@@ -74,17 +74,29 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
 };
 
 static HBCI_API *gnc_hbci_api = NULL;
+static char *gnc_hbci_configfile = NULL;
 static GNCInteractor *gnc_hbci_inter = NULL;
 
 HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent, 
 					 GNCInteractor **inter)
 {
   if (gnc_hbci_api == NULL) {
-    gnc_hbci_api = gnc_hbci_api_new 
-      (gnc_hbci_get_book_configfile (gnc_get_current_book ()), 
-       FALSE, parent, inter);
+    /* No API cached -- create new one. */
+    gnc_hbci_configfile = 
+      g_strdup (gnc_hbci_get_book_configfile (gnc_get_current_book ()));
+    gnc_hbci_api = gnc_hbci_api_new (gnc_hbci_configfile, 
+				     FALSE, parent, inter);
     gnc_hbci_inter = *inter;
+  } else if ((gnc_hbci_configfile != NULL) && 
+	     (strcmp(gnc_hbci_configfile, 
+		     gnc_hbci_get_book_configfile (gnc_get_current_book ()))
+	     != 0)) {
+    /* Wrong API cached -- delete old and create new. */
+    gnc_hbci_api_delete (gnc_hbci_api);
+    printf("gnc_hbci_api_new_currentbook: Wrong HBCI_API cached; creating new one.\n");
+    return gnc_hbci_api_new_currentbook (parent, inter);
   }
+  /* Correct API cached. */
   *inter = gnc_hbci_inter;
   return gnc_hbci_api;
 };
@@ -94,6 +106,8 @@ void gnc_hbci_api_delete (HBCI_API *api)
   if (api == gnc_hbci_api) {
     gnc_hbci_api = NULL;
     gnc_hbci_inter = NULL;
+    g_free (gnc_hbci_configfile);
+    gnc_hbci_configfile = NULL;
   }
   HBCI_API_delete (api);
 }
