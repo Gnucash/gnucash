@@ -9,7 +9,9 @@
 #include <glib.h>
 
 #include "gncBusiness.h"
+#include "gncBusinessP.h"
 
 /* This file is currently unused; 
  * its contents have been moved to qofid.[ch] 
  */
+// void gncBusinessInitialize (int argc, char **argv) {}
