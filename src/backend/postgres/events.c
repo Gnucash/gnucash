@@ -36,7 +36,7 @@
 #include "gnc-event-p.h"
 #include "guid.h"
 #include "GNCId.h"
-#include "GNCIdP.h"
+#include "qofid-p.h"
 
 #include "PostgresBackend.h"
 #include "account.h"
