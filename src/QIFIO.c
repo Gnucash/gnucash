@@ -230,8 +230,15 @@ double xaccParseQIFAmount (char * str)
 {
    char * tok;
    double dollars = 0.0;
+   int len;
+   int isneg = 0;
 
    if (!str) return 0.0;
+
+   if ('-' == str[0]) {
+      isneg = 1;
+      str += sizeof(char);
+   }
 
    tok = strchr (str, ',');
    if (tok) {
@@ -257,19 +264,47 @@ double xaccParseQIFAmount (char * str)
       tok = strchr (str, '\r');
       if (!tok) return dollars;
       *tok = 0x0;
-      dollars += 0.01 * ((double) atoi (str));
-      return dollars;
+
+      /* strip off garbage at end of the line */
+      tok = strchr (str, '\n');
+      if (tok) *tok = 0x0;
+
+      tok = strchr (str, ' ');
+      if (tok) *tok = 0x0;
+
+      /* adjust for number of decimal places */
+      len = strlen(str);
+      if (6 == len) {
+         dollars += 0.000001 * ((double) atoi (str));
+      } else
+      if (5 == len) {
+         dollars += 0.00001 * ((double) atoi (str));
+      } else
+      if (4 == len) {
+         dollars += 0.0001 * ((double) atoi (str));
+      } else
+      if (3 == len) {
+         dollars += 0.001 * ((double) atoi (str));
+      } else
+      if (2 == len) {
+         dollars += 0.01 * ((double) atoi (str));
+      } else 
+      if (1 == len) {
+         dollars += 0.1 * ((double) atoi (str));
+      } 
 
    } else {
       tok = strchr (str, '\r');
-      if (tok) {
-         *tok = 0x0;
-         dollars += ((double) (atoi (str)));
-         return dollars;
-      } else {
-         return 0.0;
-      }
+      if (tok) *tok = 0x0;
+      tok = strchr (str, '\n');
+      if (tok) *tok = 0x0;
+      tok = strchr (str, ' ');
+      if (tok) *tok = 0x0;
+
+      dollars += ((double) (atoi (str)));
    }
+
+   if (isneg) dollars = -dollars;
 
    return dollars;
 }
@@ -376,6 +411,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    int is_security = 0;
    Account *sub_acc = 0x0;
    Account *xfer_acc = 0x0;
+   double adjust = 0.0;
 
    if (!acc) return NULL;
    trans = (Transaction *)_malloc(sizeof(Transaction));
@@ -486,21 +522,36 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      /* $ == dollar amount -- always preceeded by 'L' */
      if ('$' == qifline [0]) {   
          /* Currently, it appears that the $ amount is a redundant 
-          * number that we can safely ignore.  If we wanted to get
-          * fancy, we could use it to double-check the above work,
-          * since it appears to always appear the last entry in the
-          * transaction. */
-        double got, wanted;
-        wanted = xaccParseQIFAmount (&qifline[1]);
-        got = (trans->damount) * (trans->share_price);
-        if (isneg) got = -got;
+          * number that we can safely ignore.  To get fancy,
+          * we use it to double-check the above work, since it 
+          * appears to always appear the last entry in the
+          * transaction.  Round things out to pennies, to 
+          * handle round-off errors. */
+        double parse, pute;
+        int got, wanted;
+        parse = xaccParseQIFAmount (&qifline[1]);
+        pute = (trans->damount) * (trans->share_price);
+        if (isneg) pute = -pute;
+
+        wanted = (int) (100.0 * parse + 0.5);
+        got = (int) (100.0 * (pute+adjust) + 0.5);
         if (wanted != got) {
-           printf ("QIF Parse Error: wanted %f got %f \n", wanted, got);
+           printf ("QIF Parse Error: wanted %f got %f \n", parse, pute);
         }
      } else 
 
-     if ('O' == qifline [0]) {   /* O == round-off error ??? */
-         /* hack alert */
+     /* O == adjustments */
+     /* hack alert -- sometimes adjustments are quite large.
+      * I have no clue why, and what to do about it.  For what 
+      * its worth, I can prove that Quicken version 3.0 makes 
+      * math errors ... */
+     if ('O' == qifline [0]) {   
+        double pute;
+        adjust = xaccParseQIFAmount (&qifline[1]);
+        pute = (trans->damount) * (trans->share_price);
+        if (isneg) pute = -pute;
+
+        printf ("QIF Warning: Adjustment of %.2f to amount %.2f not handled \n", adjust, pute);
      } else 
 
      /* check for end-of-transaction marker */
@@ -636,12 +687,6 @@ xaccReadQIFData( char *datafile )
     }
   
   while (qifline) {
-     if (!strcmp (qifline, "!Type:Class\r\n")) {
-        DEBUG ("got class\n");
-        qifline = xaccReadQIFDiscard (fd);
-        continue;
-     } else
-
      if (!strcmp (qifline, "!Type:Bank \r\n")) {
         Account *acc   = mallocAccount();
         DEBUG ("got bank\n");
@@ -660,6 +705,12 @@ xaccReadQIFData( char *datafile )
         continue;
      } else
 
+     if (!strcmp (qifline, "!Type:Class\r\n")) {
+        DEBUG ("got class\n");
+        qifline = xaccReadQIFDiscard (fd);
+        continue;
+     } else
+
      if (!strcmp (qifline, "!Type:Invst\r\n")) {
         Account *acc   = mallocAccount();
         DEBUG ("got Invst\n");
@@ -672,6 +723,12 @@ xaccReadQIFData( char *datafile )
         continue;
      } else
 
+     if (!strcmp (qifline, "!Type:Memorized\r\n")) {
+        DEBUG ("got memorized\n");
+        qifline = xaccReadQIFDiscard (fd);
+        continue;
+     } else
+
      if (!strcmp (qifline, "!Option:AutoSwitch\r\n")) {
         DEBUG ("got autoswitch on\n");
         skip = 1;
@@ -680,7 +737,7 @@ xaccReadQIFData( char *datafile )
      } else
 
      if (!strcmp (qifline, "!Clear:AutoSwitch\r\n")) {
-        DEBUG ("got autoswitch clear");
+        DEBUG ("got autoswitch clear\n");
         skip = 0;
         qifline = xaccReadQIFDiscard (fd);
         continue;
@@ -698,7 +755,7 @@ xaccReadQIFData( char *datafile )
         } else {
            /* read account name, followed by dollar data ... */
            Account *acc   = mallocAccount();
-           DEBUG ("got account");
+           DEBUG ("got account\n");
            qifline = xaccReadQIFAccount (fd, acc);
            if (!qifline) {  /* free up malloced data if the read bombed. */
               freeAccount(acc); 
