@@ -31,7 +31,7 @@
 
 /** PROTOTYPES ******************************************************/
 
-gncBoolean accListHasAccount (Account **list, Account *findme);
+gboolean   accListHasAccount (Account **list, Account *findme);
 int        accListCount (Account **list);
 Account ** accListCopy (Account **list);
 Account ** xaccGroupToList (Account *);

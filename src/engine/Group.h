@@ -275,8 +275,8 @@ void xaccAccountsBeginStagedTransactionTraversals (Account **accounts);
  *    the given split.
  */
 
-gncBoolean xaccTransactionTraverse(Transaction *trans, int stage);
-gncBoolean xaccSplitTransactionTraverse(Split *split, int stage);
+gboolean xaccTransactionTraverse(Transaction *trans, int stage);
+gboolean xaccSplitTransactionTraverse(Split *split, int stage);
 
 /* xaccGroupStagedTransactionTraversal() calls thunk on each
  *    transaction in the group whose current marker is less than the

@@ -135,18 +135,18 @@ DateMV (BasicCell *_cell,
         int *end_selection)
 {
    DateCell *cell = (DateCell *) _cell;
-   gboolean accept = GNC_F;
+   gboolean accept = FALSE;
    struct tm *date;
    char buff[30];
 
    /* if user hit backspace, accept the change */
-   if (change == NULL) accept = GNC_T;
-   else if (0x0 == change[0]) accept = GNC_T;
+   if (change == NULL) accept = TRUE;
+   else if (0x0 == change[0]) accept = TRUE;
    else
    {
       int i, count = 0;
       char separator = dateSeparator();
-      gncBoolean ok = TRUE;
+      gboolean ok = TRUE;
 
       for (i = 0; 0 != change[i]; i++)
       {
@@ -154,7 +154,7 @@ DateMV (BasicCell *_cell,
          * separator of '-' (for DATE_FORMAT_ISO) takes precedence
          * over the accelerator below! */
         if (!isdigit(change[i]) && (separator != change[i]))
-          ok = GNC_F;
+          ok = FALSE;
 
         if (separator == change[i])
           count++;
@@ -165,10 +165,10 @@ DateMV (BasicCell *_cell,
           count++;
 
       if (2 < count)
-        ok = GNC_F;
+        ok = FALSE;
 
       if (ok)
-        accept = GNC_T;
+        accept = TRUE;
    }
 
    /* keep a copy of the new value */

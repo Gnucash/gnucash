@@ -110,7 +110,7 @@ char * xaccAccountGetTypeStr (int type); /* GUI names */
    Used for text exports */
 char * xaccAccountTypeEnumAsString (int type); 
 
-gncBoolean xaccAccountTypesCompatible (int parent_type, int child_type);
+gboolean xaccAccountTypesCompatible (int parent_type, int child_type);
 
 
 typedef struct _BankAcct BankAcct;

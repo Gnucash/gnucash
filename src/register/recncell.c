@@ -84,7 +84,7 @@ ToggleRecn (BasicCell *_cell,
      still perhaps not optimal. */
 
   if (cell->reconciled_flag == YREC)
-    if (!gnc_verify_dialog(CHANGE_RECN_MSG, GNC_T))
+    if (!gnc_verify_dialog(CHANGE_RECN_MSG, TRUE))
       return NULL;
 
   if (cell->reconciled_flag == NREC)

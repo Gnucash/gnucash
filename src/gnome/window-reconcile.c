@@ -269,7 +269,7 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
 
   string = gtk_entry_get_text(entry);
 
-  value = xaccParseAmount(string, GNC_T);
+  value = xaccParseAmount(string, TRUE);
 
   account_type = xaccAccountGetType(account);
   if ((account_type == STOCK) || (account_type == MUTUAL) ||
@@ -362,7 +362,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     GtkWidget *start_value = gtk_label_new(amount);
     GtkWidget *vbox = GNOME_DIALOG(dialog)->vbox;
 
-    date_value = gnc_date_edit_new(*statement_date, GNC_F, GNC_F);
+    date_value = gnc_date_edit_new(*statement_date, FALSE, FALSE);
     end_value = gtk_entry_new();
 
     amount = xaccPrintAmount(*new_ending, flags & ~PRTSYM, currency);
@@ -412,7 +412,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
       string = gtk_entry_get_text(GTK_ENTRY(end_value));
 
-      *new_ending = xaccParseAmount(string, GNC_T);
+      *new_ending = xaccParseAmount(string, TRUE);
       *statement_date = gnc_date_edit_get_date(GNC_DATE_EDIT(date_value));
 
       if (gnc_reverse_balance(account))
@@ -489,7 +489,7 @@ gnc_reconcile_window_set_titles(RecnWindow *recnData)
   gchar *title;
 
   formal = gnc_lookup_boolean_option("General",
-                                     "Use accounting labels", GNC_F);
+                                     "Use accounting labels", FALSE);
 
   if (formal)
     title = DEBITS_STR;
@@ -591,8 +591,8 @@ gnc_recn_create_status_bar(RecnWindow *recnData)
 {
   GtkWidget *statusbar;
 
-  statusbar = gnome_appbar_new(GNC_F, /* no progress bar */
-			       GNC_T, /* has status area */
+  statusbar = gnome_appbar_new(FALSE, /* no progress bar */
+			       TRUE,  /* has status area */
 			       GNOME_PREFERENCES_USER);
 
   return statusbar;
@@ -670,7 +670,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
     gboolean result;
 
     result = gnc_verify_dialog_parented(GTK_WINDOW(recnData->window),
-                                        TRANS_DEL2_MSG, GNC_F);
+                                        TRANS_DEL2_MSG, FALSE);
 
     if (!result)
       return;
@@ -1639,7 +1639,7 @@ recnFinishCB(GtkWidget *w, gpointer data)
 
   if (!DEQ(recnRecalculateBalance(recnData), 0.0))
     if (!gnc_verify_dialog_parented(GTK_WINDOW(recnData->window),
-                                    RECN_BALN_WARN, GNC_F))
+                                    RECN_BALN_WARN, FALSE))
       return;
 
   date = recnData->statement_date;
@@ -1686,7 +1686,7 @@ recnCancelCB(GtkWidget *w, gpointer data)
 
   if (changed)
     if (!gnc_verify_dialog_parented(GTK_WINDOW(recnData->window),
-                                    RECN_CANCEL_WARN, GNC_F))
+                                    RECN_CANCEL_WARN, FALSE))
       return;
 
   gtk_widget_destroy(recnData->window);

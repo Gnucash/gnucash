@@ -394,7 +394,7 @@ gnc_option_get_ui_value(GNCOption *option)
 void
 gnc_set_option_selectable_by_name( const char *section,
                                    const char *name,
-                                   gncBoolean selectable)
+                                   gboolean selectable)
 {
   GNCOption *option = gnc_get_option_by_name( section, name );
 

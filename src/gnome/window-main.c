@@ -515,7 +515,7 @@ gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
     name = xaccAccountGetName(account);
     message = g_strdup_printf(ACC_DEL_SURE_MSG, name);
 
-    if (gnc_verify_dialog(message, GNC_F))
+    if (gnc_verify_dialog(message, FALSE))
       gnc_ui_delete_account(account);
 
     g_free(message);
@@ -1332,8 +1332,8 @@ mainWindow()
                      GTK_SIGNAL_FUNC(gnc_account_cb), NULL);
 
   /* create statusbar and add it to the application. */
-  statusbar = gnome_appbar_new(GNC_F, /* no progress bar, maybe later? */
-			       GNC_T, /* has status area */
+  statusbar = gnome_appbar_new(FALSE, /* no progress bar, maybe later? */
+			       TRUE,  /* has status area */
 			       GNOME_PREFERENCES_USER /* recommended */);
 
   gnome_app_set_statusbar(GNOME_APP(app), GTK_WIDGET(statusbar));

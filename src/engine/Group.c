@@ -52,7 +52,7 @@
 void
 xaccInitializeAccountGroup (AccountGroup *grp)
 {
-  grp->saved       = GNC_T;
+  grp->saved       = TRUE;
 
   grp->parent      = NULL;
   grp->numAcc      = 0;
@@ -131,7 +131,7 @@ xaccGroupMarkSaved (AccountGroup *grp)
    int i;
 
    if (!grp) return;
-   grp->saved = GNC_T;
+   grp->saved = TRUE;
 
    for (i=0; i<grp->numAcc; i++) {
       xaccGroupMarkSaved (grp->account[i]->children); 
@@ -145,7 +145,7 @@ void
 xaccGroupMarkNotSaved (AccountGroup *grp)
 {
    if (!grp) return;
-   grp->saved = GNC_F;
+   grp->saved = FALSE;
 }
 
 /********************************************************************\
@@ -158,7 +158,7 @@ xaccGroupNotSaved (AccountGroup *grp)
    int i;
 
    if (!grp) return 0;
-   if (GNC_F == grp->saved) return 1;
+   if (FALSE == grp->saved) return 1;
 
    for (i=0; i<grp->numAcc; i++) {
       not_saved = xaccGroupNotSaved (grp->account[i]->children); 
@@ -479,7 +479,7 @@ xaccRemoveGroup (AccountGroup *grp)
    grp = acc -> parent;
    if (!grp) return;
 
-   grp->saved = GNC_F;
+   grp->saved = FALSE;
 }
 
 /********************************************************************\
@@ -512,7 +512,7 @@ xaccRemoveAccount (Account *acc)
    nacc --;
    arr[nacc] = NULL;
    grp->numAcc = nacc;
-   grp->saved = GNC_F;
+   grp->saved = FALSE;
 
    /* if this was the last account in a group, delete
     * the group as well (unless its a root group) */
@@ -566,7 +566,7 @@ xaccGroupInsertAccount( AccountGroup *grp, Account *acc )
     if (grp == acc->parent) ralo = 0;
     xaccRemoveAccount (acc);
   }
-  grp->saved = GNC_F;
+  grp->saved = FALSE;
 
   /* set back-pointer to the account's parent */
   acc->parent = grp;
@@ -954,24 +954,24 @@ xaccAccountsBeginStagedTransactionTraversals (Account **accounts)
     xaccAccountBeginStagedTransactionTraversals(*aptr);
 }
 
-gncBoolean
+gboolean
 xaccTransactionTraverse(Transaction *trans, int stage)
 {
-  if (trans == NULL) return GNC_F;
+  if (trans == NULL) return FALSE;
 
   if (trans->marker < stage)
   {
     trans->marker = stage;
-    return GNC_T;
+    return TRUE;
   }
 
-  return GNC_F;
+  return FALSE;
 }
 
-gncBoolean
+gboolean
 xaccSplitTransactionTraverse(Split *split, int stage)
 {
-  if (split == NULL) return GNC_F;
+  if (split == NULL) return FALSE;
 
   return xaccTransactionTraverse(split->parent, stage);
 }

@@ -28,8 +28,4 @@
 #include "config.h"
 #include <glib.h>
 
-typedef gboolean gncBoolean;
-#define GNC_F (FALSE)
-#define GNC_T (TRUE)
-
 #endif

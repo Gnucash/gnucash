@@ -208,8 +208,8 @@ static GUID copied_leader_guid;
 static Split * xaccSRGetTransSplit (SplitRegister *reg,
                                     int phys_row, int phys_col);
 static void xaccSRLoadRegEntry (SplitRegister *reg, Split *split);
-static gncBoolean xaccSRSaveRegEntryToSCM (SplitRegister *reg,
-                                           SCM trans_scm, SCM split_scm);
+static gboolean xaccSRSaveRegEntryToSCM (SplitRegister *reg,
+                                         SCM trans_scm, SCM split_scm);
 static Transaction * xaccSRGetTrans (SplitRegister *reg,
                                      int phys_row, int phys_col);
 static Split * xaccSRGetCurrentTransSplit (SplitRegister *reg);
@@ -699,7 +699,7 @@ LedgerMoveCursor (Table *table,
       xaccTransCommitEdit (trans);
     info->pending_trans_guid = *xaccGUIDNULL();
     pending_trans = NULL;
-    saved = GNC_T;
+    saved = TRUE;
   }
 
   /* redrawing the register can muck everything up */
@@ -799,7 +799,7 @@ LedgerMoveCursor (Table *table,
     info->cursor_hint_phys_col = -1;
   }
 
-  info->hint_set_by_traverse = GNC_F;
+  info->hint_set_by_traverse = FALSE;
 }
 
 /* This function determines if auto-completion is appropriate and,
@@ -874,8 +874,8 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       if (auto_trans == NULL)
         return;
 
-      xaccTransBeginEdit(trans, GNC_F);
-      gnc_copy_trans_onto_trans(auto_trans, trans, GNC_F);
+      xaccTransBeginEdit(trans, FALSE);
+      gnc_copy_trans_onto_trans(auto_trans, trans, FALSE);
 
       if (info->default_source_account != NULL)
       {
@@ -916,7 +916,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       pending_trans = trans;
       info->pending_trans_guid = *xaccTransGetGUID(pending_trans);
 
-      info->blank_split_edited = GNC_T;
+      info->blank_split_edited = TRUE;
 
       refresh_accounts = xaccSRSaveChangedCells(reg, trans, blank_split);
 
@@ -998,13 +998,13 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       fullname = xaccAccountGetFullName (xaccSplitGetAccount (auto_split),
                                          account_separator);
       xaccSetComboCellValue (reg->xfrmCell, fullname);
-      xaccBasicCellSetChanged(&(reg->xfrmCell->cell), GNC_T);
+      xaccBasicCellSetChanged(&(reg->xfrmCell->cell), TRUE);
 
       amount = xaccSplitGetValue (auto_split);
 
       xaccSetDebCredCellValue (reg->ndebitCell, reg->ncreditCell, -amount);
-      xaccBasicCellSetChanged (&(reg->ndebitCell->cell), GNC_T);
-      xaccBasicCellSetChanged (&(reg->ncreditCell->cell), GNC_T);
+      xaccBasicCellSetChanged (&(reg->ndebitCell->cell), TRUE);
+      xaccBasicCellSetChanged (&(reg->ncreditCell->cell), TRUE);
 
       /* copy cursor contents into the table */
       gnc_table_commit_cursor (reg->table);
@@ -1114,7 +1114,7 @@ LedgerTraverse (Table *table,
     info->cursor_hint_split = split;
     info->cursor_hint_trans_split = xaccSRGetCurrentTransSplit (reg);
     info->cursor_hint_phys_col = -1;
-    info->hint_set_by_traverse = GNC_T;
+    info->hint_set_by_traverse = TRUE;
 
     return;
   }
@@ -1460,11 +1460,11 @@ xaccSRGetSplitRowCol (SplitRegister *reg, Split *split,
         if (virt_col != NULL)
           *virt_col = v_col;
 
-        return GNC_T;
+        return TRUE;
       }
     }
 
-  return GNC_F;
+  return FALSE;
 }
 
 /* ======================================================== */
@@ -1475,9 +1475,9 @@ xaccSRGetTransSplitRowCol (SplitRegister *reg, Transaction *trans,
                            int *virt_row, int *virt_col)
 {
   Table *table = reg->table;
-  gboolean found_trans = GNC_F;
-  gboolean found_trans_split = GNC_F;
-  gboolean found_something = GNC_F;
+  gboolean found_trans = FALSE;
+  gboolean found_trans_split = FALSE;
+  gboolean found_something = FALSE;
   CursorType cursor_type;
   int v_row, v_col;
   Transaction *t;
@@ -1492,10 +1492,10 @@ xaccSRGetTransSplitRowCol (SplitRegister *reg, Transaction *trans,
       cursor_type = xaccSplitRegisterGetCursorTypeRowCol(reg, v_row, v_col);
 
       if (t == trans)
-        found_trans = GNC_T;
+        found_trans = TRUE;
 
       if ((cursor_type == CURSOR_TRANS) && (s == trans_split))
-        found_trans_split = GNC_T;
+        found_trans_split = TRUE;
 
       if (found_trans && (s == split))
       {
@@ -1504,7 +1504,7 @@ xaccSRGetTransSplitRowCol (SplitRegister *reg, Transaction *trans,
         if (virt_col != NULL)
           *virt_col = v_col;
 
-        found_something = GNC_T;
+        found_something = TRUE;
       }
 
       if (found_trans_split && (s == split))
@@ -1514,7 +1514,7 @@ xaccSRGetTransSplitRowCol (SplitRegister *reg, Transaction *trans,
         if (virt_col != NULL)
           *virt_col = v_col;
 
-        return GNC_T;
+        return TRUE;
       }
     }
 
@@ -1573,7 +1573,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
     if (result == GNC_VERIFY_CANCEL)
       return NULL;
 
-    xaccSRSaveRegEntry(reg, GNC_T);
+    xaccSRSaveRegEntry(reg, TRUE);
 
     /* If the split is NULL, then we were on a blank split row
      * in an expanded transaction. The new split (created by
@@ -1594,7 +1594,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 
     new_split = xaccMallocSplit();
 
-    xaccTransBeginEdit(trans, GNC_T);
+    xaccTransBeginEdit(trans, TRUE);
     xaccTransAppendSplit(trans, new_split);
     xaccTransCommitEdit(trans);
 
@@ -1621,9 +1621,9 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 
     new_trans = xaccMallocTransaction();
 
-    gnc_copy_trans_onto_trans(trans, new_trans, GNC_T);
+    gnc_copy_trans_onto_trans(trans, new_trans, TRUE);
 
-    xaccTransBeginEdit(new_trans, GNC_T);
+    xaccTransBeginEdit(new_trans, TRUE);
     xaccTransSetDateSecs(new_trans, info->last_date_entered);
     xaccTransCommitEdit(new_trans);
 
@@ -1823,7 +1823,7 @@ xaccSRPasteCurrent (SplitRegister *reg)
     { /* We are on a null split in an expanded transaction. */
       split = xaccMallocSplit();
 
-      xaccTransBeginEdit(trans, GNC_T);
+      xaccTransBeginEdit(trans, TRUE);
       xaccTransAppendSplit(trans, split);
       xaccTransCommitEdit(trans);
     }
@@ -1857,10 +1857,10 @@ xaccSRPasteCurrent (SplitRegister *reg)
       new_guid = xaccAccountGetGUID(info->default_source_account);
       gnc_copy_trans_scm_onto_trans_swap_accounts(copied_item, trans,
                                                   &copied_leader_guid,
-                                                  new_guid, GNC_T);
+                                                  new_guid, TRUE);
     }
     else
-      gnc_copy_trans_scm_onto_trans(copied_item, trans, GNC_T);
+      gnc_copy_trans_scm_onto_trans(copied_item, trans, TRUE);
 
     num_splits = xaccTransCountSplits(trans);
     if (split_index >= num_splits)
@@ -2098,7 +2098,7 @@ xaccSRCancelCursorSplitChanges (SplitRegister *reg)
   xaccSRLoadRegEntry(reg, split);
   xaccSplitRegisterClearChangeFlag(reg);
 
-  if (gnc_table_find_valid_cell_horiz(reg->table, &row, &col, GNC_F))
+  if (gnc_table_find_valid_cell_horiz(reg->table, &row, &col, FALSE))
     gnc_table_move_cursor_gui(reg->table, row, col);
 
   gnc_table_refresh_gui(reg->table);
@@ -2175,12 +2175,12 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
    * cut down on uneccessary register redraws. */
   changed = xaccSplitRegisterGetChangeFlag (reg);
   if (!changed)
-    return GNC_F;
+    return FALSE;
 
   /* get the handle to the current split and transaction */
   trans = xaccSRGetCurrentTrans (reg);
   if (trans == NULL)
-    return GNC_F;
+    return FALSE;
 
   /* copy the contents from the cursor to the split */
   if (MOD_DATE & changed) {
@@ -2316,7 +2316,7 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
     gnc_split_scm_set_share_price_and_amount(split_scm, price, value);
   }
 
-  return GNC_T;
+  return TRUE;
 }
 
 /* ======================================================== */
@@ -2338,7 +2338,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
    split = xaccSRGetCurrentSplit (reg);
    trans = xaccSRGetCurrentTrans (reg);
    if (trans == NULL)
-     return GNC_F;
+     return FALSE;
 
    /* use the changed flag to avoid heavy-weight updates
     * of the split & transaction fields. This will help
@@ -2347,7 +2347,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
    if (!changed)
    {
      if (!do_commit)
-       return GNC_F;
+       return FALSE;
 
      if (trans == blank_trans)
      {
@@ -2355,14 +2355,14 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
        {
          info->last_date_entered = xaccTransGetDate(trans);
          info->blank_split_guid = *xaccGUIDNULL();
-         info->blank_split_edited = GNC_F;
+         info->blank_split_edited = FALSE;
          blank_split = NULL;
        }
        else
-         return GNC_F;
+         return FALSE;
      }
      else if (!xaccTransIsOpen(trans))
-       return GNC_F;
+       return FALSE;
 
      if (xaccTransIsOpen(trans))
        xaccTransCommitEdit(trans);
@@ -2373,7 +2373,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
        info->pending_trans_guid = *xaccGUIDNULL();
      }
 
-     return GNC_T;
+     return TRUE;
    }
 
    ENTER ("xaccSRSaveRegEntry(): save split is %p \n", split);
@@ -2382,7 +2382,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
    if (pending_trans != trans) {
      if (xaccTransIsOpen (pending_trans))
        xaccTransCommitEdit (pending_trans);
-     xaccTransBeginEdit (trans, GNC_F);
+     xaccTransBeginEdit (trans, FALSE);
      pending_trans = trans;
      info->pending_trans_guid = *xaccTransGetGUID(trans);
    }
@@ -2439,7 +2439,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
        info->last_date_entered = xaccTransGetDate(trans);
      }
      else
-       info->blank_split_edited = GNC_T;
+       info->blank_split_edited = TRUE;
    }
 
    /* If requested, commit the current transaction and set the pending
@@ -2462,7 +2462,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
      g_list_free(refresh_accounts);
    }
 
-   return GNC_T;
+   return TRUE;
 }
 
 /* ======================================================== */
@@ -2923,12 +2923,12 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
 
       {
          Split *s = xaccGetOtherSplit (split);
-         gboolean need_to_free = GNC_F;
+         gboolean need_to_free = FALSE;
 
          if (s) {
             accname = xaccAccountGetFullName (xaccSplitGetAccount (s),
                                               account_separator);
-            need_to_free = GNC_T;
+            need_to_free = TRUE;
          } else {
             /* determine whether s is null because threre are three
              * or more splits, or whether there is only one ... */
@@ -2977,10 +2977,10 @@ xaccSRCountRows (SplitRegister *reg,
                  Transaction   *find_trans,
                  Split         *find_split,
                  Split         *find_trans_split,
-                 gncBoolean    *ext_found_trans,
-                 gncBoolean    *ext_found_split,
-                 gncBoolean    *ext_found_trans_split,
-                 gncBoolean    *ext_on_blank_split)
+                 gboolean      *ext_found_trans,
+                 gboolean      *ext_found_split,
+                 gboolean      *ext_found_trans_split,
+                 gboolean      *ext_on_blank_split)
 {
    SRInfo *info = xaccSRGetInfo(reg);
    Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
@@ -2990,11 +2990,11 @@ xaccSRCountRows (SplitRegister *reg,
    Split *split;
    Table *table;
 
-   gboolean found_split = GNC_F;
-   gboolean found_trans = GNC_F;
-   gboolean found_trans_split = GNC_F;
-   gboolean on_blank_split = GNC_F;
-   gboolean did_expand = GNC_F;
+   gboolean found_split = FALSE;
+   gboolean found_trans = FALSE;
+   gboolean found_trans_split = FALSE;
+   gboolean on_blank_split = FALSE;
+   gboolean did_expand = FALSE;
    gboolean on_trans_split;
    gboolean multi_line;
    gboolean dynamic;
@@ -3054,7 +3054,7 @@ xaccSRCountRows (SplitRegister *reg,
    while (split) {
      if (split == find_trans_split)
      {
-       found_trans_split = GNC_T;
+       found_trans_split = TRUE;
        break;
      }
      i++;
@@ -3063,7 +3063,7 @@ xaccSRCountRows (SplitRegister *reg,
 
    split = blank_split;
    if ((split != NULL) && (split == find_trans_split))
-     found_trans_split = GNC_T;
+     found_trans_split = TRUE;
 
    /* now count the rows */
    i=0;
@@ -3088,8 +3088,8 @@ xaccSRCountRows (SplitRegister *reg,
              save_cursor_phys_row = num_phys_rows;
              save_cursor_virt_row = num_virt_rows;
              if (on_trans_split || !found_trans_split)
-               found_split = GNC_T;
-             found_trans = GNC_T;
+               found_split = TRUE;
+             found_trans = TRUE;
            }
            /* Otherwise, check for a close match. This could happen
             * if, e.g., we are collapsing from multi-line to single. */
@@ -3097,12 +3097,12 @@ xaccSRCountRows (SplitRegister *reg,
              save_cursor_phys_row = num_phys_rows;
              save_cursor_virt_row = num_virt_rows;
              if (trans == find_trans)
-               found_trans = GNC_T;
+               found_trans = TRUE;
            }
            else if (!found_trans && (trans == find_trans)) {
              save_cursor_phys_row = num_phys_rows;
              save_cursor_virt_row = num_virt_rows;
-             found_trans = GNC_T;
+             found_trans = TRUE;
            }
          }
 
@@ -3116,7 +3116,7 @@ xaccSRCountRows (SplitRegister *reg,
 
          /* make sure we only expand once on dynamic */
          if (dynamic && do_expand)
-           did_expand = GNC_T;
+           did_expand = TRUE;
 
          if (do_expand) 
          {
@@ -3152,8 +3152,8 @@ xaccSRCountRows (SplitRegister *reg,
                      save_cursor_phys_row = num_phys_rows;
                      save_cursor_virt_row = num_virt_rows;
                      if (on_trans_split || !found_trans_split)
-                       found_split = GNC_T;
-                     found_trans = GNC_T;
+                       found_split = TRUE;
+                     found_trans = TRUE;
                    }
                  }
 
@@ -3184,7 +3184,7 @@ xaccSRCountRows (SplitRegister *reg,
 
    on_trans_split = (find_trans_split == split);
    if (on_trans_split)
-     found_trans_split = GNC_T;
+     found_trans_split = TRUE;
 
    if (split != NULL) {
       /* lets determine where to locate the cursor ... */
@@ -3192,15 +3192,15 @@ xaccSRCountRows (SplitRegister *reg,
          save_cursor_phys_row = num_phys_rows;
          save_cursor_virt_row = num_virt_rows;
          if (on_trans_split || !found_trans_split)
-           found_split = GNC_T;
-         found_trans = GNC_T;
-         on_blank_split = GNC_T;
+           found_split = TRUE;
+         found_trans = TRUE;
+         on_blank_split = TRUE;
       }
       else if (!found_split && (trans == find_trans)) {
          save_cursor_phys_row = num_phys_rows;
          save_cursor_virt_row = num_virt_rows;
-         found_trans = GNC_T;
-         on_blank_split = GNC_T;
+         found_trans = TRUE;
+         on_blank_split = TRUE;
       }
    }
 
@@ -3230,8 +3230,8 @@ xaccSRCountRows (SplitRegister *reg,
                 save_cursor_phys_row = num_phys_rows;
                 save_cursor_virt_row = num_virt_rows;
                 if (on_trans_split || !found_trans_split)
-                  found_split = GNC_T;
-                found_trans = GNC_T;
+                  found_split = TRUE;
+                found_trans = TRUE;
               }
             }
 
@@ -3297,11 +3297,11 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    Split *split;
    Table *table;
 
-   gboolean found_pending = GNC_F;
-   gboolean found_split = GNC_F;
-   gboolean found_trans = GNC_F;
-   gboolean found_trans_split = GNC_F;
-   gboolean did_expand = GNC_F;
+   gboolean found_pending = FALSE;
+   gboolean found_split = FALSE;
+   gboolean found_trans = FALSE;
+   gboolean found_trans_split = FALSE;
+   gboolean did_expand = FALSE;
    gboolean on_blank_split;
    gboolean multi_line;
    gboolean dynamic;
@@ -3329,7 +3329,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
      blank_split = xaccTransGetSplit (trans, 0);
      info->blank_split_guid = *xaccSplitGetGUID (blank_split);
 
-     info->blank_split_edited = GNC_F;
+     info->blank_split_edited = FALSE;
    }
 
    info->default_source_account = default_source_acc;
@@ -3408,7 +3408,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    while (split) {
 
      if (pending_trans == xaccSplitGetParent (split))
-       found_pending = GNC_T;
+       found_pending = TRUE;
 
       /* do not load the blank split */
       if (split != blank_split) {
@@ -3429,14 +3429,14 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
          if (dynamic && !found_trans && !found_trans_split &&
              (vrow == reg->cursor_virt_row)) {
            reg->cursor_phys_row = phys_row;
-           do_expand = GNC_T;
+           do_expand = TRUE;
          }
 
          /* make sure we only expand once on dynamic */
          do_expand = do_expand && !did_expand;
 
          if (dynamic && do_expand)
-           did_expand = GNC_T;
+           did_expand = TRUE;
 
          if (do_expand) 
          {
@@ -3492,7 +3492,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* add the blank split at the end. */
    split = blank_split;
    if (pending_trans == xaccSplitGetParent(split))
-     found_pending = GNC_T;
+     found_pending = TRUE;
 
    if (multi_line || (dynamic && info->blank_split_edited)) {
       /* do the transaction row of the blank split */
@@ -3539,7 +3539,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
      int row = reg->cursor_phys_row;
      int col = save_phys_col;
 
-     if (gnc_table_find_valid_cell_horiz(table, &row, &col, GNC_F))
+     if (gnc_table_find_valid_cell_horiz(table, &row, &col, FALSE))
      {
        gnc_table_move_cursor_gui(table, row, col);
        reg->cursor_phys_row = row;
@@ -3574,8 +3574,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    info->cursor_hint_split = xaccSRGetCurrentSplit (reg);
    info->cursor_hint_trans_split = xaccSRGetCurrentTransSplit (reg);
    info->cursor_hint_phys_col = -1;
-   info->hint_set_by_traverse = GNC_F;
-   info->exact_traversal = GNC_F;
+   info->hint_set_by_traverse = FALSE;
+   info->exact_traversal = FALSE;
 
    gnc_table_refresh_gui (table);
 
@@ -3701,11 +3701,11 @@ xaccSRHasPendingChanges (SplitRegister *reg)
   guint32 changed;
   
   if (reg == NULL)
-    return GNC_F;
+    return FALSE;
 
   changed = xaccSplitRegisterGetChangeFlag (reg);
   if (changed)
-    return GNC_T;
+    return TRUE;
 
   return xaccTransIsOpen(pending_trans);
 }

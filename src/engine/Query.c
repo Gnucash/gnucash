@@ -56,7 +56,7 @@ struct _querystruct {
   sort_type_t primary_sort;
   sort_type_t secondary_sort;
   sort_type_t tertiary_sort;
-  gncBoolean  sort_increasing;
+  gboolean    sort_increasing;
   int         max_splits;
 
   /* cache the results so we don't have to run the whole search 
@@ -152,7 +152,7 @@ xaccInitQuery(Query * q, QueryTerm * initial_term) {
   q->secondary_sort = BY_NONE;
   q->tertiary_sort = BY_NONE;
 
-  q->sort_increasing = GNC_T;
+  q->sort_increasing = TRUE;
 }
 
 
@@ -1812,7 +1812,7 @@ xaccQuerySetSortOrder(Query * q, sort_type_t primary,
  *  xaccQuerySetSortIncreasing
  *******************************************************************/
 void
-xaccQuerySetSortIncreasing(Query * q, gncBoolean increasing)
+xaccQuerySetSortIncreasing(Query * q, gboolean increasing)
 {
   q->sort_increasing = increasing;
 }

@@ -864,7 +864,7 @@ subentry_amount_entry_focus_out(GtkWidget *widget, GdkEventFocus *event,
   if ((string == NULL) || (*string == '\0'))
     return FALSE;
 
-  value = xaccParseAmount(string, GNC_T);
+  value = xaccParseAmount(string, TRUE);
 
   new_string = xaccPrintAmount(value, PRTSEP, NULL);
 

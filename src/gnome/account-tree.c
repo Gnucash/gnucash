@@ -116,7 +116,7 @@ gnc_account_tree_init(GNCAccountTree *tree)
 {
   tree->root_account     = NULL;
   tree->current_accounts = NULL;
-  tree->ignore_unselect  = GNC_F;
+  tree->ignore_unselect  = FALSE;
   tree->filter           = NULL;
   tree->filter_data      = NULL;
 
@@ -598,8 +598,8 @@ gnc_account_tree_insert_account(GNCAccountTree *tree, Account *account)
 void
 gnc_account_tree_show_income_expense(GNCAccountTree *tree)
 {
-  tree->avi.include_type[EXPENSE] = GNC_T;
-  tree->avi.include_type[INCOME] = GNC_T;
+  tree->avi.include_type[EXPENSE] = TRUE;
+  tree->avi.include_type[INCOME] = TRUE;
 
   gnc_account_tree_refresh(tree);
 }
@@ -615,8 +615,8 @@ gnc_account_tree_show_income_expense(GNCAccountTree *tree)
 void
 gnc_account_tree_hide_income_expense(GNCAccountTree *tree)
 {
-  tree->avi.include_type[EXPENSE] = GNC_F;
-  tree->avi.include_type[INCOME] = GNC_F;
+  tree->avi.include_type[EXPENSE] = FALSE;
+  tree->avi.include_type[INCOME] = FALSE;
 
   gnc_account_tree_refresh(tree);
 }
@@ -702,14 +702,14 @@ gnc_init_account_view_info(AccountViewInfo *avi)
   int i;
 
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
-    avi->include_type[i] = GNC_T;
+    avi->include_type[i] = TRUE;
 
   for (i = 0; i < NUM_ACCOUNT_FIELDS; i++)
-    avi->show_field[i] = GNC_F;
+    avi->show_field[i] = FALSE;
 
-  avi->show_field[ACCOUNT_NAME] = GNC_T;
-  avi->show_field[ACCOUNT_DESCRIPTION] = GNC_T;
-  avi->show_field[ACCOUNT_TOTAL] = GNC_T;
+  avi->show_field[ACCOUNT_NAME] = TRUE;
+  avi->show_field[ACCOUNT_DESCRIPTION] = TRUE;
+  avi->show_field[ACCOUNT_TOTAL] = TRUE;
 }
 
 /********************************************************************\
@@ -806,7 +806,7 @@ gnc_account_tree_button_press(GtkWidget *widget,
       node = gtk_ctree_node_nth(ctree, row);
       account = gtk_ctree_node_get_row_data(ctree, node);
 
-      GNC_ACCOUNT_TREE(ctree)->ignore_unselect = GNC_T;
+      GNC_ACCOUNT_TREE(ctree)->ignore_unselect = TRUE;
 
       gtk_signal_emit(GTK_OBJECT(widget),
 		      account_tree_signals[ACTIVATE_ACCOUNT],
@@ -831,7 +831,7 @@ gnc_account_tree_select_row(GtkCTree *ctree,
   Account *account;
   GList *node;
 
-  tree->ignore_unselect = GNC_F;
+  tree->ignore_unselect = FALSE;
 
   account = gtk_ctree_node_get_row_data(ctree, GTK_CTREE_NODE(row));
   node = g_list_find(tree->current_accounts, account);
@@ -856,7 +856,7 @@ gnc_account_tree_unselect_row(GtkCTree *ctree,
 
   if (tree->ignore_unselect)
   {
-    tree->ignore_unselect = GNC_F;
+    tree->ignore_unselect = FALSE;
     return;
   }
 

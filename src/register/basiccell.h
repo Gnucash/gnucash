@@ -286,7 +286,7 @@ void         xaccSetBasicCellValue (BasicCell *, const char *);
 void         xaccSetBasicCellBlankHelp (BasicCell *, const char *);
 char *       xaccBasicCellGetHelp (BasicCell *);
 
-void         xaccBasicCellSetChanged (BasicCell *, gncBoolean);
+void         xaccBasicCellSetChanged (BasicCell *, gboolean);
 
 #endif /* __BASIC_CELL_H__ */
 /* ------------------ end of file ---------------------- */

@@ -287,7 +287,7 @@ change_func(gpointer key, gpointer value, gpointer field_code)
   if (account == NULL)
     return;
 
-  xaccAccountBeginEdit(account, GNC_T);
+  xaccAccountBeginEdit(account, TRUE);
 
   switch (field)
   {
@@ -1053,7 +1053,7 @@ gnc_parent_tree_select(GNCAccountTree *tree,
   /* Deleselect any or select top account */
   if (account == NULL || account == aw->top_level_account)
     for (type = 0; type < NUM_ACCOUNT_TYPES; type++)
-      gnc_type_list_row_set_active(GTK_CLIST(aw->type_list), type, GNC_T);
+      gnc_type_list_row_set_active(GTK_CLIST(aw->type_list), type, TRUE);
   else /* Some other account was selected */
   {
     parent_type = xaccAccountGetType(account);

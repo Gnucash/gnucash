@@ -153,7 +153,7 @@ void gnc_set_log_level(gncModuleType module, gncLogLevel level);
 void gnc_set_log_level_global(gncLogLevel level);
 
 /* enable/disable the auto decimal option */
-void gnc_set_auto_decimal_enabled(gncBoolean enabled);
+void gnc_set_auto_decimal_enabled(gboolean enabled);
 
 
 /********************************************************/
@@ -191,7 +191,7 @@ char * ultostr (unsigned long val, int base);
 
 /* Returns true if string s is a number, possibly
  * surrounded by whitespace. */
-gncBoolean gnc_strisnum(const char *s);
+gboolean gnc_strisnum(const char *s);
 
 /* The gnc_localeconv() subroutine returns an lconv structure
  * containing locale information. If no locale is set, the
@@ -258,13 +258,13 @@ int xaccSPrintAmountGeneral (char * bufp, double val,
                              int min_trailing_zeros,
                              const char *curr_sym);
 char * xaccPrintAmountArgs (double val,
-                            gncBoolean print_currency_symbol,
-                            gncBoolean print_separators,
-                            gncBoolean is_shares_value,
+                            gboolean print_currency_symbol,
+                            gboolean print_separators,
+                            gboolean is_shares_value,
                             const char *curr_code);
 
 /* Parse i18n amount strings */
-double xaccParseAmount (const char * instr, gncBoolean monetary);
+double xaccParseAmount (const char * instr, gboolean monetary);
 
 
 /** TEMPLATES ******************************************************/

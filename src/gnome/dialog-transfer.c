@@ -158,7 +158,7 @@ gnc_xfer_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
   if ((string == NULL) || (*string == 0))
     return FALSE;
 
-  value = xaccParseAmount(string, GNC_T);
+  value = xaccParseAmount(string, TRUE);
 
   currency = xaccAccountGetCurrency(account);
 
@@ -325,14 +325,14 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   }
 
   string = gtk_entry_get_text(GTK_ENTRY(xferData->amount_entry));
-  amount = xaccParseAmount(string, GNC_T);
+  amount = xaccParseAmount(string, TRUE);
 
   time = gnc_date_edit_get_date(GNC_DATE_EDIT(xferData->date_entry));
 
   /* Create the transaction */
   trans = xaccMallocTransaction();
 
-  xaccTransBeginEdit(trans, GNC_T);
+  xaccTransBeginEdit(trans, TRUE);
   xaccTransSetDateSecs(trans, time);
 
   string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
@@ -355,12 +355,12 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   xaccTransSetMemo(trans, string);
 
   /* Now do the 'to' account */
-  xaccAccountBeginEdit(to, GNC_F);
+  xaccAccountBeginEdit(to, FALSE);
   xaccAccountInsertSplit(to, to_split);
   xaccAccountCommitEdit(to);
 
   /* Now do the 'from' account */
-  xaccAccountBeginEdit(from, GNC_F);
+  xaccAccountBeginEdit(from, FALSE);
   xaccAccountInsertSplit(from, from_split);
   xaccAccountCommitEdit(from);
 

@@ -65,7 +65,7 @@ typedef struct _PopBox
         QuickFill *qf;
         gboolean in_list_select;
 
-        gncBoolean strict;
+        gboolean strict;
 
         char complete_char; /* char to be used for auto-completion */
 
@@ -526,7 +526,7 @@ ComboMV (BasicCell *_cell,
 
 /* =============================================== */
 
-static gncBoolean
+static gboolean
 ComboDirect (BasicCell *bcell,
              const char *oldval,
              char **newval_ptr,
@@ -818,7 +818,7 @@ leaveCombo (BasicCell *bcell, const char *value)
 /* =============================================== */
 
 void
-xaccComboCellSetStrict (ComboCell *cell, gncBoolean strict)
+xaccComboCellSetStrict (ComboCell *cell, gboolean strict)
 {
 	PopBox *box;
 
@@ -878,7 +878,7 @@ xaccComboCellSetIgnoreHelp (ComboCell *cell, const char *ignore_help)
 /* =============================================== */
 
 void
-xaccComboCellSetAutoPop (gncBoolean auto_pop_combos_arg)
+xaccComboCellSetAutoPop (gboolean auto_pop_combos_arg)
 {
         auto_pop_combos = auto_pop_combos_arg;
 }

@@ -118,7 +118,7 @@ gnc_ui_AdjBWindow_ok_cb(GtkWidget * widget, gpointer data)
   gchar * string;
 
   string = gtk_entry_get_text(GTK_ENTRY(adjBData->balance_entry));
-  new_balance = xaccParseAmount(string, GNC_T);
+  new_balance = xaccParseAmount(string, TRUE);
   if (gnc_reverse_balance(adjBData->account))
     new_balance = -new_balance;
 
@@ -164,7 +164,7 @@ gnc_adjust_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 
   string = gtk_entry_get_text(entry);
 
-  value = xaccParseAmount(string, GNC_T);
+  value = xaccParseAmount(string, TRUE);
 
   currency = xaccAccountGetCurrency(account);
 

@@ -147,7 +147,7 @@ void          xaccTransBeginEdit (Transaction *, int defer);
 void          xaccTransCommitEdit (Transaction *);
 void          xaccTransRollbackEdit (Transaction *);
 
-gncBoolean    xaccTransIsOpen (Transaction *trans);
+gboolean      xaccTransIsOpen (Transaction *trans);
 
 /*
  * The xaccTransGetGUID() subroutine will return the
@@ -273,8 +273,8 @@ int           xaccTransCountSplits (Transaction *trans);
  * xaccTransFindCommonCurrency. This method is useful for determining
  * whether two accounts can have transactions in common.
  */
-gncBoolean xaccIsCommonCurrency(const char *currency_1, const char *security_1,
-				const char *currency_2, const char *security_2);
+gboolean xaccIsCommonCurrency(const char *currency_1, const char *security_1,
+                              const char *currency_2, const char *security_2);
 
 /* The xaccTransFindCommonCurrency () method returns a string value 
  *    indicating a currency denomination that all of the splits in this

@@ -105,10 +105,10 @@ gnc_foundation_query_dialog(gncUIWidget parent,
                             const gchar *title,
                             GtkWidget *contents,
                             int default_answer,
-                            gncBoolean yes_allowed,
-                            gncBoolean ok_allowed,
-                            gncBoolean no_allowed,
-                            gncBoolean cancel_allowed,
+                            gboolean yes_allowed,
+                            gboolean ok_allowed,
+                            gboolean no_allowed,
+                            gboolean cancel_allowed,
                             int *dialog_result) {
 
   FoundationCBData * cb_data;
@@ -196,7 +196,7 @@ gnc_foundation_query_dialog(gncUIWidget parent,
 		     cb_data);
 
   /* Setup window settings */
-  gtk_window_set_modal(GTK_WINDOW(query_dialog), GNC_T);
+  gtk_window_set_modal(GTK_WINDOW(query_dialog), TRUE);
   gnome_dialog_set_default(GNOME_DIALOG(query_dialog), default_button);
   gnome_dialog_set_close(GNOME_DIALOG(query_dialog), TRUE);
   if (parent != NULL)
@@ -341,8 +341,8 @@ gnc_verify_cancel_dialog_parented(GtkWidget *parent, const char *message,
  *                          "No" is the default button.             *
  * Return: true for "Yes", false for "No"                           *
 \********************************************************************/
-gncBoolean
-gnc_verify_dialog(const char *message, gncBoolean yes_is_default)
+gboolean
+gnc_verify_dialog(const char *message, gboolean yes_is_default)
 {
   return gnc_verify_dialog_parented(GTK_WINDOW(gnc_get_ui_data()),
                                     message, yes_is_default);
@@ -360,9 +360,9 @@ gnc_verify_dialog(const char *message, gncBoolean yes_is_default)
  *                          "No" is the default button.             *
  * Return: true for "Yes", false for "No"                           *
 \********************************************************************/
-gncBoolean
+gboolean
 gnc_verify_dialog_parented(GtkWindow *parent, const char *message,
-                           gncBoolean yes_is_default)
+                           gboolean yes_is_default)
 {
   GtkWidget *verify_box = NULL;
   
@@ -527,7 +527,7 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items)
   GtkWidget *vbox;
   GtkWidget *query_box;
   SCM listcursor;
-  gncBoolean status_ok;
+  gboolean status_ok;
   unsigned long i;
 
   if(title == NULL)
@@ -541,21 +541,21 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items)
 
   /* Convert the scm data to C callback structs */
   i = 0;
-  status_ok = GNC_T;
+  status_ok = TRUE;
   listcursor = list_items;
   while(status_ok && !gh_null_p(listcursor)) {
     SCM scm_item = gh_car(listcursor);
 
     if(!gh_pair_p(scm_item)) {
       fprintf(stderr, "Dying: not a pair.\n");
-      status_ok = GNC_F;
+      status_ok = FALSE;
     } else {
       SCM item_scm_name = gh_car(scm_item);
       SCM item_scm_thunk = gh_cdr(scm_item);
       
       if(!(gh_string_p(item_scm_name) && gh_procedure_p(item_scm_thunk))) {
         fprintf(stderr, "Dying: bad pair item(s).\n");
-        status_ok = GNC_F;
+        status_ok = FALSE;
       } else {
         cb_data[i].name = gh_scm2newstr(item_scm_name, NULL);
         cb_data[i].closure = item_scm_thunk;
@@ -564,7 +564,7 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items)
 
         if(!cb_data[i].name) {
           fprintf(stderr, "Dying: no C name.\n");
-          status_ok = GNC_F;
+          status_ok = FALSE;
         } else {
           listcursor = gh_cdr(listcursor);
           i++;
@@ -585,7 +585,7 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items)
   for(i = 0; i < num_items; i++) {
     GtkWidget *b = gtk_button_new_with_label(cb_data[i].name);
     if(b == NULL) {
-      status_ok = GNC_F;
+      status_ok = FALSE;
     } else {
       gtk_signal_connect(GTK_OBJECT(b), "clicked",
                          GTK_SIGNAL_FUNC(gnc_choose_item_cb),
@@ -608,10 +608,10 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items)
                                           title,
 					  vbox,
 					  GNC_QUERY_CANCEL, /* cancel */
-					  GNC_F, /* yes_allowed */
-					  GNC_F, /* ok_allowed */
-					  GNC_F, /* no_allowed */
-					  GNC_T, /* cancel_allowed */
+					  FALSE, /* yes_allowed */
+					  FALSE, /* ok_allowed */
+					  FALSE, /* no_allowed */
+					  TRUE,  /* cancel_allowed */
 					  &dialog_result);
 
   if(query_box == NULL) {
@@ -724,10 +724,10 @@ gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
                                           title,
 					  main_vbox,
 					  GNC_QUERY_YES, /* ok */
-					  GNC_F, /* yes_allowed */
-					  GNC_T, /* ok_allowed */
-					  GNC_F, /* no_allowed */
-					  GNC_F, /* cancel_allowed */
+					  FALSE, /* yes_allowed */
+					  TRUE,  /* ok_allowed */
+					  FALSE, /* no_allowed */
+					  FALSE, /* cancel_allowed */
 					  &dialog_result);
 
   gnome_dialog_run_and_close(GNOME_DIALOG(query_box));

@@ -52,9 +52,9 @@ gnc_ok_cancel_dialog_parented(gncUIWidget parent,
 
 void gnc_warning_dialog_parented(gncUIWidget parent, const char *message);
 
-gncBoolean gnc_verify_dialog( const char *message,
-			      gncBoolean yes_is_default );
-void       gnc_error_dialog( const char *message );
+gboolean gnc_verify_dialog( const char *message,
+                            gboolean yes_is_default );
+void     gnc_error_dialog( const char *message );
 
 int gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
                                             const char *title,

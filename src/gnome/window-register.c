@@ -95,7 +95,7 @@ struct _RegWindow
   RegDateWindow *date_window;
 
   /* Do we close the ledger when the window closes? */
-  gncBoolean close_ledger;
+  gboolean close_ledger;
 };
 
 
@@ -888,8 +888,8 @@ gnc_register_create_status_bar(RegWindow *regData)
   GtkWidget *hbox;
   GtkWidget *label;
 
-  statusbar = gnome_appbar_new(GNC_F, /* no progress bar */
-			       GNC_T, /* has status area */
+  statusbar = gnome_appbar_new(FALSE, /* no progress bar */
+			       TRUE,  /* has status area */
 			       GNOME_PREFERENCES_USER);
 
   regData->statusbar = statusbar;
@@ -956,7 +956,7 @@ new_trans_cb(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
 
-  if (xaccSRSaveRegEntry(regData->ledger->ledger, GNC_T))
+  if (xaccSRSaveRegEntry(regData->ledger->ledger, TRUE))
     xaccSRRedrawRegEntry(regData->ledger->ledger);
 
   gnc_register_jump_to_blank(regData);
@@ -1420,11 +1420,11 @@ static void
 gnc_register_record_cb(GnucashRegister *reg, gpointer data)
 {
   RegWindow *regData = data;
-  gncBoolean goto_blank;
+  gboolean goto_blank;
 
   goto_blank = gnc_lookup_boolean_option("Register",
                                          "'Enter' moves to blank transaction",
-                                         GNC_F);
+                                         FALSE);
 
   /* If we are in single or double line mode and we hit enter
    * on the blank split, go to the blank split instead of the
@@ -1447,7 +1447,7 @@ gnc_register_record_cb(GnucashRegister *reg, gpointer data)
         current_split = xaccSRGetCurrentSplit(sr);
 
         if (blank_split == current_split)
-          goto_blank = GNC_T;
+          goto_blank = TRUE;
       }
     }
   }
@@ -1502,19 +1502,19 @@ gnc_reg_set_window_name(RegWindow *regData)
     case GENERAL_LEDGER:
     case INCOME_LEDGER:
       reg_name = GENERAL_LEDGER_STR;
-      single_account = GNC_F;
+      single_account = FALSE;
       break;
     case PORTFOLIO_LEDGER:
       reg_name = PORTFOLIO_STR;
-      single_account = GNC_F;
+      single_account = FALSE;
       break;
     case SEARCH_LEDGER:
       reg_name = SEARCH_RESULTS_STR;
-      single_account = GNC_F;
+      single_account = FALSE;
       break;
     default:
       reg_name = REGISTER_STR;
-      single_account = GNC_T;
+      single_account = TRUE;
       break;
   }
 
@@ -1582,7 +1582,7 @@ regWindowLedger(xaccLedgerDisplay *ledger)
   gtk_box_pack_start(GTK_BOX(vbox), register_dock, TRUE, TRUE, 0);
 
   regData->ledger = ledger;
-  regData->close_ledger = GNC_T;
+  regData->close_ledger = TRUE;
   regData->window = register_window;
   regData->sort_type = BY_STANDARD;
 
@@ -1842,7 +1842,7 @@ regDestroy(xaccLedgerDisplay *ledger)
     gnc_register_check_close(regData);
 
     /* It will be closed elsewhere */
-    regData->close_ledger = GNC_F;
+    regData->close_ledger = FALSE;
 
     gnc_reg_save_size(regData);
 
@@ -2134,12 +2134,12 @@ static void
 recordCB(GtkWidget *w, gpointer data)
 {
   RegWindow *regData = (RegWindow *) data;
-  gncBoolean really_saved;
+  gboolean really_saved;
   Transaction *trans;
 
   trans = xaccSRGetCurrentTrans(regData->ledger->ledger);
 
-  really_saved = xaccSRSaveRegEntry(regData->ledger->ledger, GNC_T);
+  really_saved = xaccSRSaveRegEntry(regData->ledger->ledger, TRUE);
   if (!really_saved)
     return;
 
@@ -2312,7 +2312,7 @@ deleteCB(GtkWidget *widget, gpointer data)
                           xaccTransGetDescription(trans));
 
     result = gnc_verify_dialog_parented(GTK_WINDOW(regData->window),
-                                        buf, GNC_F);
+                                        buf, FALSE);
 
     g_free(buf);
 
@@ -2331,7 +2331,7 @@ deleteCB(GtkWidget *widget, gpointer data)
       ((style == REG_SINGLE_LINE) || (style == REG_DOUBLE_LINE)))
   {
     result = gnc_verify_dialog_parented(GTK_WINDOW(regData->window),
-                                        TRANS_DEL2_MSG, GNC_F);
+                                        TRANS_DEL2_MSG, FALSE);
 
     if (!result)
       return;
@@ -2407,13 +2407,13 @@ cancelCB(GtkWidget *w, gpointer data)
 static void
 gnc_register_check_close(RegWindow *regData)
 {
-  gncBoolean pending_changes;
+  gboolean pending_changes;
 
   pending_changes = xaccSRHasPendingChanges(regData->ledger->ledger);
   if (pending_changes)
   {
     if (gnc_verify_dialog_parented
-        (GTK_WINDOW(regData->window), TRANS_CHANGED_MSG, GNC_T))
+        (GTK_WINDOW(regData->window), TRANS_CHANGED_MSG, TRUE))
       recordCB(regData->window, regData);
     else
       xaccSRCancelCursorSplitChanges(regData->ledger->ledger);

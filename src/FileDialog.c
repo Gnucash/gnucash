@@ -66,14 +66,14 @@ static AccountGroup *topgroup = NULL; /* the current top of the hierarchy */
         uh_oh = 1;						\
         break;							\
      case ERR_FILEIO_FILE_TOO_OLD:				\
-        if (!gnc_verify_dialog( FILE_TOO_OLD_MSG, GNC_T )) {    \
+        if (!gnc_verify_dialog( FILE_TOO_OLD_MSG, TRUE )) {     \
            xaccFreeAccountGroup (newgrp);			\
            newgrp = NULL;					\
            uh_oh = 1;						\
         }							\
         break;							\
      case ERR_FILEIO_FILE_BAD_READ:				\
-        if (!gnc_verify_dialog( FILE_BAD_READ_MSG, GNC_T )) {	\
+        if (!gnc_verify_dialog( FILE_BAD_READ_MSG, TRUE )) {	\
            xaccFreeAccountGroup (newgrp);			\
            newgrp = NULL;					\
            uh_oh = 1;						\
@@ -151,7 +151,7 @@ gncFileNew (void)
 
 /* ======================================================== */
 
-gncBoolean
+gboolean
 gncFileQuerySave (void)
 {
   Session *sess;
@@ -498,7 +498,7 @@ gncFileSaveAs (void)
     tmpmsg = alloca (strlen (FMB_EEXIST_MSG) + strlen (newfile));
     sprintf (tmpmsg, FMB_EEXIST_MSG, newfile);
     /* if user says cancel, we should break out */
-    if (! gnc_verify_dialog (tmpmsg, GNC_F)) return;
+    if (! gnc_verify_dialog (tmpmsg, FALSE)) return;
 
     /* Whoa-ok. Blow away the previous file. 
      * Do not disable logging ... we want to capture the 

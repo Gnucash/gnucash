@@ -243,7 +243,7 @@ struct _Table
    * colors alternate between odd and even virt
    * rows, or between the first and non-first
    * physical rows within cellblocks. */
-  gncBoolean alternate_bg_colors;
+  gboolean alternate_bg_colors;
 
 
   /* private data */
@@ -378,7 +378,7 @@ gboolean   gnc_table_physical_cell_valid(Table *table,
 
 void       gnc_table_refresh_cursor_gui (Table * table, CellBlock *curs,
                                          int phys_row, int phys_col,
-                                         gncBoolean do_scroll);
+                                         gboolean do_scroll);
 
 
 /* gnc_table_enter_update() is a utility function used to determine

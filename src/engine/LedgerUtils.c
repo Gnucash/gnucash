@@ -35,20 +35,20 @@ static short module = MOD_ENGINE;
 
 /* ------------------------------------------------------ */
 
-gncBoolean accListHasAccount (Account **list, Account *findme)
+gboolean accListHasAccount (Account **list, Account *findme)
 {
    Account *acc;
    int nacc = 0;
-   if (!list || !findme) return GNC_F;
+   if (!list || !findme) return FALSE;
 
    acc = list[0];
    while (acc) {
       if (acc == findme)
-        return GNC_T;
+        return TRUE;
       nacc++;
       acc = list[nacc];
    }
-   return GNC_F;
+   return FALSE;
 }   
    
 /* ------------------------------------------------------ */

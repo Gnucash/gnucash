@@ -170,7 +170,7 @@ xaccBasicCellGetHelp (BasicCell *cell)
 /* ===================================================== */
 
 void
-xaccBasicCellSetChanged (BasicCell *cell, gncBoolean changed)
+xaccBasicCellSetChanged (BasicCell *cell, gboolean changed)
 {
   if (cell == NULL)
     return;

@@ -322,10 +322,10 @@ gnc_report_export(ReportData *report_data)
   /* See if the file exists */
   if ((stat(export_filename, &file_status) == 0))
   {
-    gncBoolean result;
+    gboolean result;
 
     message = g_strdup_printf(FMB_EEXIST_MSG, export_filename);
-    result = gnc_verify_dialog_parented(parent, message, GNC_F);
+    result = gnc_verify_dialog_parented(parent, message, FALSE);
     g_free(message);
 
     if (!result)

@@ -813,14 +813,14 @@ xaccTransGetImbalance (Transaction * trans)
 
 /********************************************************************\
 \********************************************************************/
-gncBoolean
+gboolean
 xaccIsCommonCurrency(const char *currency_1, const char *security_1,
                      const char *currency_2, const char *security_2)
 {
   int c1c2, c1s2, s1c2, s1s2;
 
   if ((currency_1 == NULL) || (currency_2 == NULL))
-    return GNC_F;
+    return FALSE;
 
   if ((security_1 != NULL) && (security_1[0] == 0x0))
     security_1 = NULL;
@@ -1345,10 +1345,10 @@ xaccTransRollbackEdit (Transaction *trans)
    LEAVE ("trans addr=%p\n", trans);
 }
 
-gncBoolean
+gboolean
 xaccTransIsOpen (Transaction *trans)
 {
-  if (!trans) return GNC_F;
+  if (!trans) return FALSE;
   return (0 != (trans->open & BEGIN_EDIT));
 }
 

@@ -53,7 +53,7 @@ gncUIWidget gnc_get_ui_data();
 
 void gnc_ui_shutdown();
 
-gncBoolean gnc_reverse_balance(Account *account);
-gncBoolean gnc_reverse_balance_type(GNCAccountType type);
+gboolean gnc_reverse_balance(Account *account);
+gboolean gnc_reverse_balance_type(GNCAccountType type);
 
 #endif

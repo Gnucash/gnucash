@@ -645,12 +645,12 @@ gnc_configure_register_borders(void)
 
   if (gnc_lookup_boolean_option("Register",
                                 "Show Vertical Borders",
-                                GNC_T))
+                                TRUE))
     reg_borders |= STYLE_BORDER_LEFT | STYLE_BORDER_RIGHT;
   
   if (gnc_lookup_boolean_option("Register",
                                 "Show Horizontal Borders",
-                                GNC_T))
+                                TRUE))
     reg_borders |= STYLE_BORDER_TOP | STYLE_BORDER_BOTTOM;
   
   gnucash_style_set_register_borders (reg_borders);
@@ -671,28 +671,28 @@ gnc_configure_reverse_balance_cb(void *not_used)
   gnc_refresh_main_window();
 }
 
-static gncBoolean reverse_type[NUM_ACCOUNT_TYPES];
+static gboolean reverse_type[NUM_ACCOUNT_TYPES];
 
-gncBoolean
+gboolean
 gnc_reverse_balance_type(int type)
 {
   if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
-    return GNC_F;
+    return FALSE;
 
   return reverse_type[type];
 }
 
-gncBoolean
+gboolean
 gnc_reverse_balance(Account *account)
 {
   int type;
 
   if (account == NULL)
-    return GNC_F;
+    return FALSE;
 
   type = xaccAccountGetType(account);
   if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
-    return GNC_F;
+    return FALSE;
 
   return reverse_type[type];
 }
@@ -712,7 +712,7 @@ gnc_configure_reverse_balance(void)
   xaccSRSetReverseBalanceCallback(gnc_reverse_balance);
 
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
-    reverse_type[i] = GNC_F;
+    reverse_type[i] = FALSE;
 
   choice = gnc_lookup_multichoice_option("General",
                                          "Reversed-balance account types",
@@ -720,15 +720,15 @@ gnc_configure_reverse_balance(void)
 
   if (safe_strcmp(choice, "default") == 0)
   {
-    reverse_type[INCOME]  = GNC_T;
-    reverse_type[EXPENSE] = GNC_T;
+    reverse_type[INCOME]  = TRUE;
+    reverse_type[EXPENSE] = TRUE;
   }
   else if (safe_strcmp(choice, "credit") == 0)
   {
-    reverse_type[LIABILITY] = GNC_T;
-    reverse_type[EQUITY]    = GNC_T;
-    reverse_type[INCOME]    = GNC_T;
-    reverse_type[CREDIT]    = GNC_T;
+    reverse_type[LIABILITY] = TRUE;
+    reverse_type[EQUITY]    = TRUE;
+    reverse_type[INCOME]    = TRUE;
+    reverse_type[CREDIT]    = TRUE;
   }
   else if (safe_strcmp(choice, "none") == 0)
   {
@@ -737,8 +737,8 @@ gnc_configure_reverse_balance(void)
   {
     PERR("bad value\n");
 
-    reverse_type[INCOME]  = GNC_T;
-    reverse_type[EXPENSE] = GNC_T;
+    reverse_type[INCOME]  = TRUE;
+    reverse_type[EXPENSE] = TRUE;
   }
 
   if (choice != NULL)
@@ -767,12 +767,13 @@ gnc_configure_auto_decimal_cb(void *not_used)
 static void
 gnc_configure_auto_decimal(void)
 {
-   gnc_set_auto_decimal_enabled
-      ( 
-         (gncBoolean) gnc_lookup_boolean_option("General",
-                                                "Automatic Decimal Point",
-                                                GNC_F)
-      );
+  gboolean enabled;
+
+  enabled = gnc_lookup_boolean_option("General",
+                                      "Automatic Decimal Point",
+                                      FALSE);
+
+  gnc_set_auto_decimal_enabled(enabled);
 }
 
 /* gnc_configure_register_font_cb

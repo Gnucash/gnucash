@@ -240,7 +240,7 @@ void gnucash_sheet_block_set_from_table (GnucashSheet *sheet, gint virt_row,
 void gnucash_sheet_set_scroll_region (GnucashSheet *sheet);
 
 void gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet,
-                                          gncBoolean do_scroll);
+                                          gboolean do_scroll);
 
 void gnucash_sheet_move_cursor (GnucashSheet *sheet, int col, int row);
 

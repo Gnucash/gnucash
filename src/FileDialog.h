@@ -68,9 +68,9 @@
  *    otherwise no action will be performed. If there is no currently
  *    locked session, a popup will query the user for a filename
  *    (using the gncFileSaveAs() routine). The routine will return
- *    GNC_T if the user hits "Yes" or "No" and GNC_F if the user
+ *    TRUE if the user hits "Yes" or "No" and GNC_F if the user
  *    hits "Cancel". If nothing needed to be saved, the routine
- *    will return GNC_T.
+ *    will return TRUE.
  *
  * The gncFileNew() routine will check for an existing edit session.
  *    If one exists, it will ask the user if they want to save it, 
@@ -123,7 +123,7 @@
 
 #include "Group.h"
 #include "Session.h"
-      
+
 void gncFileNew (void);
 void gncFileOpen (void);
 void gncFileQIFImport (void);
@@ -132,7 +132,7 @@ void gncFileSaveAs (void);
 
 void gncFileOpenFile (const char *);
 
-gncBoolean gncFileQuerySave (void);
+gboolean gncFileQuerySave (void);
 
 void gncFileQuit (void);
 

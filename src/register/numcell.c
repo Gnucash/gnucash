@@ -97,8 +97,8 @@ NumMV (BasicCell *_cell,
        int *end_selection)
 {
   NumCell *cell = (NumCell *) _cell;
-  gncBoolean accel = FALSE;
-  gncBoolean is_num;
+  gboolean accel = FALSE;
+  gboolean is_num;
   long int number = 0;
 
   if ((change == NULL) || (change[0] == 0) || /* if we are deleting       */

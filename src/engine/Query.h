@@ -190,7 +190,7 @@ void xaccQueryAddClearedMatch(Query * q, int how,
 
 void xaccQuerySetSortOrder(Query * q, sort_type_t primary, 
                            sort_type_t secondary, sort_type_t tertiary);
-void xaccQuerySetSortIncreasing(Query * q, gncBoolean increasing);
+void xaccQuerySetSortIncreasing(Query * q, gboolean increasing);
 void xaccQuerySetMaxSplits(Query * q, int n);
 
 

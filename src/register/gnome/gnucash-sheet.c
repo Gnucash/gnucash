@@ -138,7 +138,7 @@ gnucash_sheet_cursor_set (GnucashSheet *sheet, int virt_row, int virt_col,
 }
 
 void
-gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet, gncBoolean do_scroll)
+gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet, gboolean do_scroll)
 {
         Table *table;
         gint cell_row, cell_col;
@@ -1324,7 +1324,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         int new_v_row, new_v_col, new_c_row, new_c_col;
 
         Table *table;
-        gncBoolean exit_register;
+        gboolean exit_register;
 
         g_return_val_if_fail(widget != NULL, TRUE);
         g_return_val_if_fail(GNUCASH_IS_SHEET(widget), TRUE);
@@ -1641,8 +1641,8 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 	CellBlock *header;
 	int direction = 0;
 	gboolean pass_on = FALSE;
-        gncBoolean exit_register;
-        gncBoolean set_selection = TRUE;
+        gboolean exit_register;
+        gboolean set_selection = TRUE;
         int current_p_row, current_p_col, new_p_row, new_p_col;
 
         g_return_val_if_fail(widget != NULL, TRUE);
@@ -1824,7 +1824,7 @@ gnucash_sheet_goto_virt_row_col (GnucashSheet *sheet,
 {
         Table *table;
         VirtualCell *vcell;
-        gncBoolean exit_register;
+        gboolean exit_register;
         int current_p_row, current_p_col, new_p_row, new_p_col;
 
         g_return_if_fail(GNUCASH_IS_SHEET(sheet));

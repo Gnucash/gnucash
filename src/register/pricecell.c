@@ -201,15 +201,15 @@ xaccInitPriceCell (PriceCell *cell)
    xaccInitBasicCell (&(cell->cell));
 
    cell->amount = 0.0;
-   cell->blank_zero = GNC_T;
-   cell->monetary = GNC_T;
-   cell->is_currency = GNC_F;
-   cell->shares_value = GNC_F;
+   cell->blank_zero = TRUE;
+   cell->monetary = TRUE;
+   cell->is_currency = FALSE;
+   cell->shares_value = FALSE;
 
    SET (&(cell->cell), "");
    COLORIZE (cell, 0.0);
 
-   cell->cell.use_fg_color = GNC_T;
+   cell->cell.use_fg_color = TRUE;
    cell->cell.enter_cell = PriceEnter;
    cell->cell.modify_verify = PriceMV;
    cell->cell.leave_cell = PriceLeave;
@@ -294,7 +294,7 @@ xaccSetPriceCellBlank (PriceCell *cell)
 /* ================================================ */
 
 void
-xaccSetPriceCellSharesValue (PriceCell * cell, gncBoolean shares_value)
+xaccSetPriceCellSharesValue (PriceCell * cell, gboolean shares_value)
 {
   if (cell == NULL)
     return;
@@ -305,7 +305,7 @@ xaccSetPriceCellSharesValue (PriceCell * cell, gncBoolean shares_value)
 /* ================================================ */
 
 void
-xaccSetPriceCellMonetary (PriceCell * cell, gncBoolean monetary)
+xaccSetPriceCellMonetary (PriceCell * cell, gboolean monetary)
 {
   if (cell == NULL)
     return;
@@ -316,7 +316,7 @@ xaccSetPriceCellMonetary (PriceCell * cell, gncBoolean monetary)
 /* ================================================ */
 
 void
-xaccSetPriceCellIsCurrency (PriceCell *cell, gncBoolean is_currency)
+xaccSetPriceCellIsCurrency (PriceCell *cell, gboolean is_currency)
 {
   if (cell == NULL)
     return;
@@ -327,7 +327,7 @@ xaccSetPriceCellIsCurrency (PriceCell *cell, gncBoolean is_currency)
 /* ================================================ */
 
 void
-xaccSetPriceCellBlankZero (PriceCell *cell, gncBoolean blank_zero)
+xaccSetPriceCellBlankZero (PriceCell *cell, gboolean blank_zero)
 {
   if (cell == NULL)
     return;

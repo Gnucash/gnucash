@@ -176,7 +176,7 @@ historyInsert(HTMLHistory *history, HTMLData *data)
   if (history->current_node == NULL)
   {
     history->current_node = new;
-    return GNC_T;
+    return TRUE;
   }
 
   /* delete all next pages: */
@@ -195,7 +195,7 @@ historyInsert(HTMLHistory *history, HTMLData *data)
   history->current_node->next = new;
   history->current_node = new;
 
-  return GNC_F;
+  return FALSE;
 }
 
 /* Move forward in history, and return current history data */

@@ -234,7 +234,7 @@ struct _SplitRegisterColors
   guint32 double_cursor_passive_bg_color;
   guint32 double_cursor_passive_bg_color2;
 
-  gncBoolean double_alternate_virt;
+  gboolean double_alternate_virt;
 
   guint32 trans_cursor_active_bg_color;
   guint32 trans_cursor_passive_bg_color;
@@ -287,7 +287,7 @@ CellType        xaccSplitRegisterGetCellTypeRowCol (SplitRegister *reg,
 /* Returns the physical row and column in the current cursor of the
  * given cell using the pointer values. The function returns true if
  * the given cell type is in the current cursor, false otherwise. */
-gncBoolean      xaccSplitRegisterGetCellRowCol (SplitRegister *reg,
+gboolean        xaccSplitRegisterGetCellRowCol (SplitRegister *reg,
                                                 CellType cell_type,
                                                 int *p_phys_row,
                                                 int *p_phys_col);
