@@ -95,7 +95,7 @@ GncVendor * gncOwnerGetVendor (const GncOwner *owner)
   return owner->owner.vendor;
 }
 
-gnc_commodity * gncOwnerGetCommodity (GncOwner *owner)
+gnc_commodity * gncOwnerGetCurrency (GncOwner *owner)
 {
   if (!owner) return NULL;
   switch (owner->type) {
@@ -108,7 +108,7 @@ gnc_commodity * gncOwnerGetCommodity (GncOwner *owner)
   case GNC_OWNER_VENDOR:
     return gncVendorGetCommodity (owner->owner.vendor);
   case GNC_OWNER_JOB:
-    return gncOwnerGetCommodity (gncJobGetOwner (owner->owner.job));
+    return gncOwnerGetCurrency (gncJobGetOwner (owner->owner.job));
   }
 }
 

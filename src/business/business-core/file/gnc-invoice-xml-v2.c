@@ -69,7 +69,7 @@ const gchar *invoice_version_string = "2.0.0";
 #define invoice_posttxn_string "invoice:posttxn"
 #define invoice_postlot_string "invoice:postlot"
 #define invoice_postacc_string "invoice:postacc"
-#define invoice_commodity_string "invoice:commodity"
+#define invoice_currency_string "invoice:currency"
 #define invoice_billto_string "invoice:billto"
 
 static void
@@ -144,8 +144,8 @@ invoice_dom_tree_create (GncInvoice *invoice)
 
     xmlAddChild
       (ret,
-       commodity_ref_to_dom_tree(invoice_commodity_string,
-				 gncInvoiceGetCommonCommodity (invoice)));
+       commodity_ref_to_dom_tree(invoice_currency_string,
+				 gncInvoiceGetCurrency (invoice)));
 
     billto = gncInvoiceGetBillTo (invoice);
     if (billto && billto->owner.undefined != NULL)
@@ -355,7 +355,7 @@ invoice_postacc_handler (xmlNodePtr node, gpointer invoice_pdata)
 }
 
 static gboolean
-invoice_commodity_handler (xmlNodePtr node, gpointer invoice_pdata)
+invoice_currency_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata *pdata = invoice_pdata;
     gnc_commodity *com;
@@ -363,7 +363,7 @@ invoice_commodity_handler (xmlNodePtr node, gpointer invoice_pdata)
     com = dom_tree_to_commodity_ref(node, pdata->book);
     g_return_val_if_fail (com, FALSE);
 
-    gncInvoiceSetCommonCommodity (pdata->invoice, com);
+    gncInvoiceSetCurrency (pdata->invoice, com);
 
     return TRUE;
 }
@@ -395,7 +395,8 @@ static struct dom_tree_handler invoice_handlers_v2[] = {
     { invoice_posttxn_string, invoice_posttxn_handler, 0, 0 },
     { invoice_postlot_string, invoice_postlot_handler, 0, 0 },
     { invoice_postacc_string, invoice_postacc_handler, 0, 0 },
-    { invoice_commodity_string, invoice_commodity_handler, 1, 0 },
+    { invoice_currency_string, invoice_currency_handler, 0, 0 },
+    { "invoice:commodity", invoice_currency_handler, 0, 0 },
     { invoice_billto_string, invoice_billto_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };

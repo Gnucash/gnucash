@@ -137,9 +137,8 @@
 	table)
       (gnc:make-gnc-monetary currency numeric)))      
 
-(define (add-entry-row table entry column-vector row-style invoice?)
+(define (add-entry-row table currency entry column-vector row-style invoice?)
   (let* ((row-contents '())
-         (currency (gnc:default-currency)) ; XXX: FIXME
 	 (entry-value (gnc:make-gnc-monetary
 		       currency
 		       (gnc:entry-get-value entry invoice?)))
@@ -324,7 +323,8 @@
   (let ((show-payments (opt-val "Display" "Payments"))
 	(display-all-taxes (opt-val "Display" "Individual Taxes"))
 	(lot (gnc:invoice-get-posted-lot invoice))
-	(txn (gnc:invoice-get-posted-txn invoice)))
+	(txn (gnc:invoice-get-posted-txn invoice))
+	(currency (gnc:invoice-get-currency invoice)))
 
     (define (colspan monetary used-columns)
       (cond
@@ -443,6 +443,7 @@
 		 (next (if (null? rest) #f
 			   (car rest)))
 		 (entry-values (add-entry-row table
+					      currency
 					      current
 					      used-columns
 					      current-row-style

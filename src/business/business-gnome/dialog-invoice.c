@@ -235,6 +235,9 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
     else
       gncInvoiceSetOwner (invoice, &(iw->owner));
 
+    /* Set the invoice currency based on the owner */
+    gncInvoiceSetCurrency (invoice, gncOwnerGetCurrency (&iw->owner));
+
     /* Only set the BillTo if we've actually got one */
     if (gncOwnerGetJob (&iw->proj_job))
       gncInvoiceSetBillTo (invoice, &iw->proj_job);
@@ -1873,7 +1876,7 @@ gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
   if (invoice == NULL) {
     iw->dialog_type = NEW_INVOICE;
     invoice = gncInvoiceCreate (bookp);
-    gncInvoiceSetCommonCommodity (invoice, gnc_default_currency ()); /* XXX */
+    gncInvoiceSetCurrency (invoice, gnc_default_currency ());
     iw->book = bookp;
   } else {
     iw->dialog_type = MOD_INVOICE;

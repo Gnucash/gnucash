@@ -31,7 +31,7 @@ void gncInvoiceSetDatePosted (GncInvoice *invoice, Timespec date);
 void gncInvoiceSetTerms (GncInvoice *invoice, GncBillTerm *terms);
 void gncInvoiceSetBillingID (GncInvoice *invoice, const char *billing_id);
 void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes);
-void gncInvoiceSetCommonCommodity (GncInvoice *invoice, gnc_commodity *com);
+void gncInvoiceSetCurrency (GncInvoice *invoice, gnc_commodity *currency);
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active);
 void gncInvoiceSetBillTo (GncInvoice *invoice, GncOwner *billto);
 
@@ -55,7 +55,7 @@ GncBillTerm * gncInvoiceGetTerms (GncInvoice *invoice);
 const char * gncInvoiceGetBillingID (GncInvoice *invoice);
 const char * gncInvoiceGetNotes (GncInvoice *invoice);
 const char * gncInvoiceGetType (GncInvoice *invoice); 
-gnc_commodity * gncInvoiceGetCommonCommodity (GncInvoice *invoice);
+gnc_commodity * gncInvoiceGetCurrency (GncInvoice *invoice);
 GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice);
 gboolean gncInvoiceGetActive (GncInvoice *invoice);
 

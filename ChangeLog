@@ -7,6 +7,23 @@
 	  preference to choose the "default" report currency.
 	FIXES Bug #103160
 
+	* src/business/business-core/gncOwner.[ch]: rename ...Commodity() to
+	  ...Currency()
+	* src/business/business-core/gncInvoice.[ch]: rename ...CommonCommodity()
+	  to ...Currency()
+	  use new gncOwner function name
+	* src/business/business-core/gncEntry.c: use new Currency() functions
+	* src/business/business-core/gw-business-core-spec.scm:
+	  wrap gncInvoiceSetCurrency()
+	  wrap gncInvoiceGetCurrency()
+	  wrap gncOwnerGetCurrency()
+	* src/business/business-core/file/gnc-invoice-xml-v2.c: use new funcs
+	* src/business/business-gnome/dialog-invoice.c: use new functions --
+	  set invoice currency based on owner's currency
+	* src/business/business-reports/invoice.scm: use invoice's currency
+	  for printing the invoice.
+	PARTITAL fix for #101001
+
 2003-01-12  David Hampton  <hampton@employees.org>
 
 	* src/register/register-gnome/gnucash-sheet.c

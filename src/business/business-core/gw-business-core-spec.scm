@@ -571,11 +571,11 @@
 
   (gw:wrap-function
    ws
-   'gnc:invoice-set-common-commodity
+   'gnc:invoice-set-currency
    '<gw:void>
-   "gncInvoiceSetCommonCommodity"
+   "gncInvoiceSetCurrency"
    '((<gnc:GncInvoice*> invoice) (<gnc:commodity*> commodity))
-   "Set the Invoice Commodity")
+   "Set the Invoice Currency")
 
   ; Get Functions
 
@@ -653,11 +653,11 @@
 
   (gw:wrap-function
    ws
-   'gnc:invoice-get-common-commodity
+   'gnc:invoice-get-currency
    '<gnc:commodity*>
-   "gncInvoiceGetCommonCommodity"
+   "gncInvoiceGetCurrency"
    '((<gnc:GncInvoice*> invoice))
-   "Return the invoice's commodity")
+   "Return the invoice's currency")
 
   (gw:wrap-function
    ws
@@ -1030,6 +1030,14 @@
    "gncOwnerIsValid"
    '((<gnc:GncOwner*> owner))
    "Is this a real owner?  Return TRUE IFF there is an actual owner.")
+
+  (gw:wrap-function
+   ws
+   'gnc:owner-get-currency
+   '<gnc:commodity*>
+   "gncOwnerGetCurrency"
+   '((<gnc:GncOwner*> owner))
+   "Return the owner's currency")
 
   ;;
   ;; gncVendor.h

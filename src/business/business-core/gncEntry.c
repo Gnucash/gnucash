@@ -925,12 +925,12 @@ get_commodity_denom (GncEntry *entry)
   if (!entry)
     return 0;
   if (entry->invoice) {
-    c = gncInvoiceGetCommonCommodity (entry->invoice);
+    c = gncInvoiceGetCurrency (entry->invoice);
     if (c)
       return (gnc_commodity_get_fraction (c));
   }
   if (entry->bill) {
-    c = gncInvoiceGetCommonCommodity (entry->bill);
+    c = gncInvoiceGetCurrency (entry->bill);
     if (c)
       return (gnc_commodity_get_fraction (c));
   }

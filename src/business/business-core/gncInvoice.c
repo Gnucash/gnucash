@@ -44,7 +44,7 @@ struct _gncInvoice {
   Timespec 	date_opened;
   Timespec 	date_posted;
 
-  gnc_commodity * common_commodity;
+  gnc_commodity * currency;
 
   Account * 	posted_acc;
   Transaction * posted_txn;
@@ -233,14 +233,14 @@ void gncInvoiceSetActive (GncInvoice *invoice, gboolean active)
   gncInvoiceCommitEdit (invoice);
 }
 
-void gncInvoiceSetCommonCommodity (GncInvoice *invoice, gnc_commodity *com)
+void gncInvoiceSetCurrency (GncInvoice *invoice, gnc_commodity *currency)
 {
-  if (!invoice || !com) return;
-  if (invoice->common_commodity &&
-      gnc_commodity_equal (invoice->common_commodity, com))
+  if (!invoice || !currency) return;
+  if (invoice->currency &&
+      gnc_commodity_equal (invoice->currency, currency))
     return;
   gncInvoiceBeginEdit (invoice);
-  invoice->common_commodity = com;
+  invoice->currency = currency;
   mark_invoice (invoice);
   gncInvoiceCommitEdit (invoice);
 }
@@ -465,10 +465,10 @@ const char * gncInvoiceGetType (GncInvoice *invoice)
   }
 }
 
-gnc_commodity * gncInvoiceGetCommonCommodity (GncInvoice *invoice)
+gnc_commodity * gncInvoiceGetCurrency (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
-  return invoice->common_commodity;
+  return invoice->currency;
 }
 
 GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice)
@@ -685,7 +685,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   /* Set Transaction Description (Owner Name) , Num (invoice ID), Currency */
   xaccTransSetDescription (txn, name);
   xaccTransSetNum (txn, gncInvoiceGetID (invoice));
-  xaccTransSetCurrency (txn, invoice->common_commodity);
+  xaccTransSetCurrency (txn, invoice->currency);
 
   /* Entered and Posted at date */
   if (post_date) {
@@ -759,7 +759,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (acc_val->value)
 				   : acc_val->value),
-			   invoice->common_commodity);
+			   invoice->currency);
     xaccAccountBeginEdit (acc_val->account);
     xaccAccountInsertSplit (acc_val->account, split);
     xaccAccountCommitEdit (acc_val->account);
@@ -775,7 +775,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccSplitSetAction (split, gncInvoiceGetType (invoice));
 			   
     xaccSplitSetBaseValue (split, (reverse ? total : gnc_numeric_neg (total)),
-			   invoice->common_commodity);
+			   invoice->currency);
     xaccAccountBeginEdit (acc);
     xaccAccountInsertSplit (acc, split);
     xaccAccountCommitEdit (acc);
@@ -820,7 +820,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     /* Set Transaction Description (Owner Name), Currency */
     xaccTransSetDescription (t2, name);
-    xaccTransSetCurrency (t2, invoice->common_commodity);
+    xaccTransSetCurrency (t2, invoice->currency);
 
     /* Entered and Posted at date */
     if (post_date) {
@@ -832,7 +832,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     split = xaccMallocSplit (invoice->book);
     xaccSplitSetMemo (split, memo2);
     xaccSplitSetBaseValue (split, gnc_numeric_neg (total),
-			   invoice->common_commodity);
+			   invoice->currency);
     xaccAccountInsertSplit (acc, split);
     xaccTransAppendSplit (t2, split);
     gnc_lot_add_split (lot, split);
@@ -840,7 +840,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     /* And apply the pre-payment to a new lot */
     split = xaccMallocSplit (invoice->book);
     xaccSplitSetMemo (split, memo2);
-    xaccSplitSetBaseValue (split, total, invoice->common_commodity);
+    xaccSplitSetBaseValue (split, total, invoice->currency);
     xaccAccountInsertSplit (acc, split);
     xaccTransAppendSplit (t2, split);
     gnc_lot_add_split (lot2, split);
@@ -961,7 +961,7 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
   /* Compute the ancillary data */
   book = xaccAccountGetBook (posted_acc);
   name = gncOwnerGetName (gncOwnerGetEndOwner (owner));
-  commodity = gncOwnerGetCommodity (owner);
+  commodity = gncOwnerGetCurrency (owner);
   reverse = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER);
 
   txn = xaccMallocTransaction (book);
