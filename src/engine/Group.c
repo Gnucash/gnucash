@@ -721,6 +721,8 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
   }
   else
   {
+    xaccAccountBeginEdit (acc);
+
     if (acc->parent)
       xaccGroupRemoveAccount (acc->parent, acc);
 
@@ -729,6 +731,9 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 
     grp->accounts = g_list_insert_sorted (grp->accounts, acc,
                                           group_sort_helper);
+
+    acc->core_dirty = TRUE;
+    xaccAccountCommitEdit (acc);
   }
 
   grp->saved = 0;
