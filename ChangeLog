@@ -37,6 +37,9 @@
 	  are runtime (and via a new menu item) that displays all the bills
 	  that are due withing "Bills Due Days" days from now.  It's ugly,
 	  but it's functional.  Fixes #102439.
+
+	* configure.in -- scrub the CFLAGS for postgres, as per Roland Roberts'
+	  report.
 	
 2003-01-18  Derek Atkins  <derek@ihtfp.com>
 

@@ -413,6 +413,8 @@ AC_ARG_ENABLE( sql,
           done
 	fi
         
+	AS_SCRUB_INCLUDE(CFLAGS)
+
         saved_LIBS="$LIBS"
 
         PGSQL_LIBS=`${PG_CONFIG} --libdir`
