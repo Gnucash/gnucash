@@ -1,3 +1,7 @@
+2001-05-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-main.c: put child menu after tools menu
+
 2001-05-25  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-column-view.c (gnc_column_view_edit_size_cb):

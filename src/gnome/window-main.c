@@ -538,7 +538,7 @@ gnc_main_window_new(void) {
   /* set up the position where the child menus/toolbars will be 
    * inserted  */
   gnome_mdi_set_child_menu_path(GNOME_MDI(retval->mdi),
-                                "_File");
+                                "_Tools");
   gnome_mdi_set_child_list_path(GNOME_MDI(retval->mdi),
                                 "_Windows/");
 
@@ -661,10 +661,6 @@ gnc_main_window_file_new_file_cb(GtkWidget * widget) {
 
 static void
 gnc_main_window_file_new_window_cb(GtkWidget * widget, GnomeMDI * mdi) {
-  URLType type;
-  char * location;
-  char * label;
-  
   if(mdi->active_child && mdi->active_view) {
     if(!strcmp(mdi->active_child->name, _("Accounts"))) {
       gnc_main_window_open_accounts(TRUE);
