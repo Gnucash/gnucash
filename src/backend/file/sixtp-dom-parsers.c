@@ -259,6 +259,10 @@ dom_tree_to_list_kvp_value(xmlNodePtr node)
     for(mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
         kvp_value *new_val;
+
+        if (safe_strcmp (mark->name, "text") == 0)
+          continue;
+
         new_val = dom_tree_to_kvp_value(mark);
         if(new_val)
         {
@@ -266,11 +270,8 @@ dom_tree_to_list_kvp_value(xmlNodePtr node)
         }
     }
 
-    if(list)
-    {
-        ret = kvp_value_new_glist_nc(list);
-    }
-    
+    ret = kvp_value_new_glist_nc(list);
+
     return ret;
 }
 
@@ -326,9 +327,7 @@ dom_tree_to_kvp_value(xmlNodePtr node)
         xmlFree (xml_type);
     }
     else
-    {
-        type = g_strdup_printf("string");
-    }
+      type = NULL;
 
     for(mark = val_converters; mark->tag; mark++)
     {
@@ -376,7 +375,8 @@ dom_tree_to_kvp_frame_given(xmlNodePtr node, kvp_frame *frame)
                 }
                 else
                 {
-                    /* FIXME: should put some error here */
+                    /* FIXME: should put some error here. 
+                     *        But ignore text type! */
                 }
             }
 
@@ -509,6 +509,7 @@ dom_tree_to_timespec(xmlNodePtr node)
   for(n = node->xmlChildrenNode; n; n = n->next) {
     switch(n->type) {
     case XML_COMMENT_NODE:
+    case XML_TEXT_NODE:
       break;
     case XML_ELEMENT_NODE:
       if(safe_strcmp("ts:date", n->name) == 0) {
@@ -591,6 +592,7 @@ dom_tree_to_gdate(xmlNodePtr node)
   for(n = node->xmlChildrenNode; n; n = n->next) {
     switch(n->type) {
     case XML_COMMENT_NODE:
+    case XML_TEXT_NODE:
       break;
     case XML_ELEMENT_NODE:
       if(safe_strcmp("gdate", n->name) == 0) {
@@ -659,6 +661,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node)
   for(n = node->xmlChildrenNode; n; n = n->next) {
     switch(n->type) {
     case XML_COMMENT_NODE:
+    case XML_TEXT_NODE:
       break;
     case XML_ELEMENT_NODE:
       if(safe_strcmp("cmdty:space", n->name) == 0) {
@@ -680,7 +683,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node)
       }
       break;
     default:
-      PERR("dom_tree_to_timespec: unexpected sub-node.");
+      PERR("unexpected sub-node.");
       return NULL;
       break;
     }
@@ -787,6 +790,10 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
 
     for(achild = node->xmlChildrenNode; achild; achild = achild->next)
     {
+        /* ignore stray text nodes */
+        if (safe_strcmp (achild->name, "text") == 0)
+          continue;
+
         if(!gnc_xml_set_data(achild->name, achild, data, handlers))
         {
             PERR("gnc_xml_set_data failed");

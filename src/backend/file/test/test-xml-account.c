@@ -30,6 +30,9 @@ node_and_account_equal(xmlNodePtr node, Account *act)
 {
     xmlNodePtr mark;
 
+    while (safe_strcmp (node->name, "text") == 0)
+      node = node->next;
+
     if(!check_dom_tree_version(node, "2.0.0"))
     {
         return g_strdup("version wrong.  Not 2.0.0 or not there");
@@ -42,7 +45,10 @@ node_and_account_equal(xmlNodePtr node, Account *act)
 
     for(mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        if(safe_strcmp(mark->name, "act:name") == 0)
+        if(safe_strcmp(mark->name, "text") == 0)
+        {
+        }
+        else if(safe_strcmp(mark->name, "act:name") == 0)
         {
             if(!equals_node_val_vs_string(mark, xaccAccountGetName(act)))
             {

@@ -386,7 +386,7 @@ gnc_register_sort (RegWindow *regData, sort_type_t sort_code)
       xaccQuerySetSortOrder(query, BY_DESC, BY_STANDARD, BY_NONE);
       break;
     default:
-      assert(0); /* we should never be here */
+      g_return_if_fail (FALSE);
   }
 
   reg = gnc_ledger_display_get_split_register (regData->ledger);
@@ -608,7 +608,7 @@ show_all_cb(GtkWidget *widget, gpointer data)
   RegDateWindow *regDateData;
   GtkToggleButton *toggle;
 
-  assert(regData != NULL);
+  g_return_if_fail(regData != NULL);
 
   regDateData = regData->date_window;
   if (regDateData == NULL)
@@ -629,7 +629,7 @@ gnc_register_today_cb(GtkWidget *widget, gpointer data)
   RegWindow *regData = data;
   RegDateWindow *regDateData;
 
-  assert(regData != NULL);
+  g_return_if_fail(regData != NULL);
 
   regDateData = regData->date_window;
   gnc_date_edit_set_time(GNC_DATE_EDIT(regDateData->end_date), time(NULL));
@@ -3073,7 +3073,7 @@ deleteCB(GtkWidget *widget, gpointer data)
     return;
   }
 
-  assert(cursor_class == CURSOR_CLASS_TRANS);
+  g_return_if_fail(cursor_class == CURSOR_CLASS_TRANS);
 
   /* On a transaction cursor with 2 or fewer splits in single or double
    * mode, we just delete the whole transaction, kerblooie */

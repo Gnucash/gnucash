@@ -99,7 +99,7 @@ gnc_price_unref(GNCPrice *p)
   ENTER("pr=%p refcount=%d", p, p->refcount);
   if(p->refcount == 0) {
     PERR("refcount == 0 !!!!");
-    assert(p->refcount != 0);
+    return;
   }
 
   p->refcount--;

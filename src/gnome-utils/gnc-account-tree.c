@@ -403,8 +403,8 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 void
 gnc_account_tree_set_view_info(GNCAccountTree *tree, AccountViewInfo *info)
 {
-  assert(IS_GNC_ACCOUNT_TREE(tree));
-  assert(info != NULL);
+  g_return_if_fail(IS_GNC_ACCOUNT_TREE(tree));
+  g_return_if_fail(info != NULL);
 
   tree->avi = *info;
 
@@ -423,8 +423,8 @@ gnc_account_tree_set_view_info(GNCAccountTree *tree, AccountViewInfo *info)
 void
 gnc_account_tree_get_view_info(GNCAccountTree *tree, AccountViewInfo *info)
 {
-  assert(IS_GNC_ACCOUNT_TREE(tree));
-  assert(info != NULL);
+  g_return_if_fail(IS_GNC_ACCOUNT_TREE(tree));
+  g_return_if_fail(info != NULL);
 
   *info = tree->avi;
 }

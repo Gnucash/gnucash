@@ -162,6 +162,7 @@ price_parse_xml_end_handler(gpointer data_for_children,
   for(child = price_xml->xmlChildrenNode; child; child = child->next) {
     switch(child->type) {
     case XML_COMMENT_NODE:
+    case XML_TEXT_NODE:
       break;
     case XML_ELEMENT_NODE:
       if(!price_parse_xml_sub_node(p, child, session)) {

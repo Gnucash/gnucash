@@ -24,7 +24,6 @@
 #define _GNU_SOURCE
 #include "config.h"
 
-#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -264,7 +263,7 @@ xaccSplitAsString(Split *split, const char prefix[]) {
   const char *dest_name =
     split_dest ? xaccAccountGetName(split_dest) : NULL;
 
-  assert(stream);
+  g_return_val_if_fail (stream, NULL);
 
   fputc('\n', stream);
   fputs(prefix, stream);
@@ -303,7 +302,7 @@ xaccTransAsString(Transaction *txn, const char prefix[]) {
   const char *memo = xaccSplitGetMemo(xaccTransGetSplit(txn, 0));
   const double total = DxaccSplitGetValue(xaccTransGetSplit(txn, 0));
   
-  assert(stream);
+  g_return_val_if_fail (stream, NULL);
 
   fputs(prefix, stream);
   if(date) {

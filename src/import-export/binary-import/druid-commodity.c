@@ -29,7 +29,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <glib.h>
-#include <assert.h>
 
 #include "Scrub.h"
 #include "dialog-commodity.h"
@@ -426,8 +425,8 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
     return TRUE;
   }
   new_comm = g_hash_table_lookup(cd->new_map, dpage->old_name);
-  assert(new_comm);
-    
+  g_assert(new_comm);
+
   /* fill in the commodity structure info */
   gnc_commodity_set_fullname(new_comm, new_name);
   gnc_commodity_set_namespace(new_comm, new_type);

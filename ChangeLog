@@ -1,5 +1,71 @@
 2001-10-11  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/register-core/table-allgui.c
+	(gnc_table_traverse_update): remove assert
+
+	* src/import-export/binary-import/druid-commodity.c: use g_assert
+
+	* src/guile/gnucash.c.in (gnc_main): use g_assert
+
+	* src/gnome-utils/gnc-account-tree.c: remove asserts
+
+	* src/gnome/dialog-fincalc.c (normalize_period): remove asserts
+
+	* src/gnome/dialog-find-transactions.c: remove asserts
+
+	* src/gnome/dialog-scheduledxaction.c: remove asserts
+
+	* src/gnome/reconcile-list.c: remove asserts
+
+	* src/gnome/window-register.c: remove asserts
+
+	* src/engine/Account.c: remove asserts
+
+	* src/engine/Group.c: remove asserts
+
+	* src/engine/Query.c:remove asserts
+
+	* src/engine/TransLog.c: remove asserts
+
+	* src/engine/Transaction.c: remove asserts
+
+	* src/engine/gnc-engine-util.h: don't include assert.h
+
+	* src/engine/gnc-engine.c: remove asserts
+
+	* src/engine/gnc-numeric.c: remove asserts
+
+	* src/engine/gnc-pricedb.c (gnc_price_unref): remove asserts
+
+	* src/engine/messages.c: remove asserts
+
+	* src/backend/file/test/test-xml-account.c: fix text handling
+
+	* src/backend/file/test/test-xml-commodity.c: fix text handling
+
+	* src/backend/file/test/test-xml-transaction.c: fix text handling
+
+	* src/backend/file/gnc-freqspec-xml-v2.c: fix text handling
+
+	* src/backend/file/gnc-pricedb-xml-v2.c: fix text handling
+
+	* src/backend/file/gnc-schedxaction-xml-v2.c: fix text handling
+
+	* src/backend/file/gnc-transaction-xml-v2.c: fix text handling
+
+	* src/backend/file/io-gncxml-v1.c: fix text handling
+
+	* src/backend/file/sixtp-dom-parsers.c: fix text handling
+
+	* src/backend/file/sixtp-to-dom-parser.c (dom_chars_handler): don't
+	ignore whitespace. This fixes text handling for strings like "< <"
+
+	* src/app-utils/gnc-ui-util.c: remove asserts
+
+	* src/app-utils/option-util.c: remove asserts
+
+2001-10-11  Dave Peticolas  <dave@krondo.com>
+
 	* src/test-core/test-stuff.c: allow option of including funky
 	characters in random strings
 

@@ -1251,7 +1251,7 @@ sxed_reg_deleteCB( GtkWidget *w, gpointer d )
     return;
   }
 
-  assert(cursor_class == CURSOR_CLASS_TRANS);
+  g_return_if_fail (cursor_class == CURSOR_CLASS_TRANS);
 
   /* On a transaction cursor with 2 or fewer splits in single or double
    * mode, we just delete the whole transaction, kerblooie */

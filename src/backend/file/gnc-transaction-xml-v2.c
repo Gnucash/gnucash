@@ -468,11 +468,14 @@ trn_splits_handler(xmlNodePtr node, gpointer trans_pdata)
     {
         Split *spl;
         
+        if(safe_strcmp("text", mark->name) == 0)
+          continue;
+
         if(safe_strcmp("trn:split", mark->name))
         {
             return FALSE;
         }
-        
+
         spl = dom_tree_to_split(mark, pdata->session);
 
         if(spl)

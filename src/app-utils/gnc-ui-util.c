@@ -1336,7 +1336,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   char temp_buf[64];
   gnc_numeric whole;
 
-  g_assert (info != NULL);
+  g_return_val_if_fail (info != NULL, 0);
 
   if (gnc_numeric_check (val))
   {

@@ -32,8 +32,6 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-#include <assert.h>
-
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "AccountP.h"
@@ -706,8 +704,8 @@ acct_query_matches(QueryTerm * qt, Account * acct) {
   gboolean account_in_set = FALSE;
   gboolean first_account = TRUE;
 
-  assert(qt && acct);
-  assert(qt->data.type == PD_ACCOUNT);
+  g_return_val_if_fail(qt && acct, FALSE);
+  g_return_val_if_fail(qt->data.type == PD_ACCOUNT, FALSE);
 
   for(node = qt->data.acct.accounts; node ; node = node->next) {
     if(acct == node->data) {
@@ -922,8 +920,7 @@ static int
 split_sort_func(gconstpointer a, gconstpointer b) {
   int retval;
  
-
-  assert(split_sort_query);
+  g_return_val_if_fail (split_sort_query, 0);
 
   retval = split_cmp_func(split_sort_query->primary_sort, a, b);
   if((retval == 0) && 
@@ -2227,7 +2224,7 @@ string_match_predicate(const char * s, PredicateData * pd)
 {
   regmatch_t match;
 
-  assert(s && pd && (pd->type == PD_STRING));
+  g_return_val_if_fail(s && pd && (pd->type == PD_STRING), FALSE);
 
   if(!pd->str.matchstring) return 0;
 
@@ -2285,16 +2282,15 @@ xaccAccountMatchPredicate(Split * s, PredicateData * pd) {
   int         i;
   int         numsplits;
 
-  assert(s && pd);
-  assert(pd->type == PD_ACCOUNT);
-
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_ACCOUNT, FALSE);
 
   switch(pd->acct.how) {
   case ACCT_MATCH_ALL:
     /* there must be a split in parent that matches each of the 
      * accounts listed in pd. */
     parent = xaccSplitGetParent(s);
-    assert(parent);
+    g_return_val_if_fail(parent, FALSE);
     numsplits = xaccTransCountSplits(parent);
     for(acct_node=pd->acct.accounts; acct_node; acct_node=acct_node->next) {
       for(i=0; i < numsplits; i++) {
@@ -2341,11 +2337,11 @@ xaccDescriptionMatchPredicate(Split * s, PredicateData * pd) {
   Transaction * parent;
   const char  * descript;
   
-  assert(s && pd);  
-  assert(pd->type == PD_STRING);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_STRING, FALSE);
 
   parent = xaccSplitGetParent(s);
-  assert(parent);
+  g_return_val_if_fail(parent, FALSE);
 
   descript = xaccTransGetDescription(parent);
   return string_match_predicate(descript, pd);
@@ -2394,11 +2390,11 @@ xaccNumberMatchPredicate(Split * s, PredicateData * pd) {
   Transaction * parent;
   const char  * number;
   
-  assert(s && pd);  
-  assert(pd->type == PD_STRING);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_STRING, FALSE);
 
   parent = xaccSplitGetParent(s);
-  assert(parent);
+  g_return_val_if_fail(parent, FALSE);
 
   number = xaccTransGetNum(parent);
   return string_match_predicate(number, pd);
@@ -2412,8 +2408,8 @@ static int
 xaccActionMatchPredicate(Split * s, PredicateData * pd) {
   const char  * action;
   
-  assert(s && pd);  
-  assert(pd->type == PD_STRING);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_STRING, FALSE);
 
   action = xaccSplitGetAction(s);
   return string_match_predicate(action, pd);
@@ -2427,7 +2423,7 @@ static int
 xaccMemoMatchPredicate(Split * s, PredicateData * pd) {
   const char  * memo;
   
-  assert(s && pd);  
+  g_return_val_if_fail(s && pd, FALSE);
   memo = xaccSplitGetMemo(s);
   
   return string_match_predicate(memo, pd);
@@ -2441,8 +2437,8 @@ static int
 xaccAmountMatchPredicate(Split * s, PredicateData * pd) {
   double splitamt;
 
-  assert(s && pd);
-  assert(pd->type == PD_AMOUNT);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_AMOUNT, FALSE);
 
   splitamt = DxaccSplitGetValue(s);
   
@@ -2469,8 +2465,8 @@ xaccSharePriceMatchPredicate(Split * s, PredicateData * pd) {
   Account  * acct;
   int      type;
 
-  assert(s && pd);
-  assert(pd->type == PD_AMOUNT);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_AMOUNT, FALSE);
   
   acct = xaccSplitGetAccount(s);
   type = xaccAccountGetType(acct);
@@ -2493,8 +2489,8 @@ xaccSharesMatchPredicate(Split * s, PredicateData * pd) {
   Account  * acct;
   int      type;
 
-  assert(s && pd);
-  assert(pd->type == PD_AMOUNT);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_AMOUNT, FALSE);
   
   acct = xaccSplitGetAccount(s);
   type = xaccAccountGetType(acct);
@@ -2516,8 +2512,8 @@ static int
 xaccDateMatchPredicate(Split * s, PredicateData * pd) {
   Timespec transtime;
 
-  assert(s && pd);
-  assert(pd->type == PD_DATE);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_DATE, FALSE);
   
   xaccTransGetDatePostedTS(xaccSplitGetParent(s), &transtime);
 
@@ -2543,8 +2539,8 @@ static int
 xaccClearedMatchPredicate(Split * s, PredicateData * pd) {
   int      cstate;
 
-  assert(s && pd);
-  assert(pd->type == PD_CLEARED);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_CLEARED, FALSE);
   
   cstate = xaccSplitGetReconcile(s);
   switch(cstate) {
@@ -2576,8 +2572,8 @@ static int
 xaccBalanceMatchPredicate(Split * s, PredicateData * pd) {
   gboolean balanced;
 
-  assert(s && pd);
-  assert(pd->type == PD_BALANCE);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_BALANCE, FALSE);
 
   if ((pd->balance.how & BALANCE_BALANCED) &&
       (pd->balance.how & BALANCE_UNBALANCED))

@@ -1258,7 +1258,7 @@ compare_option_names(gconstpointer a, gconstpointer b)
 gboolean
 gnc_option_db_dirty(GNCOptionDB *odb)
 {
-  assert(odb != NULL);
+  g_return_val_if_fail (odb, FALSE);
 
   return odb->options_dirty;
 }
@@ -1272,7 +1272,7 @@ gnc_option_db_dirty(GNCOptionDB *odb)
 void
 gnc_option_db_clean(GNCOptionDB *odb)
 {
-  assert(odb != NULL);
+  g_return_if_fail (odb);
 
   odb->options_dirty = FALSE;
 }
@@ -1620,7 +1620,7 @@ gnc_option_db_commit(GNCOptionDB *odb)
   GNCOption *option;
   gboolean changed_something = FALSE;
 
-  assert(odb != NULL);
+  g_return_if_fail (odb);
 
   section_node = odb->option_sections;
   while (section_node != NULL)

@@ -100,7 +100,7 @@ static gboolean dom_chars_handler(
     GSList *sibling_data, gpointer parent_data, gpointer global_data,
     gpointer *result, const char *text, int length)
 {
-    if(length > 0 && !isspace_str(text, length))
+    if(length > 0)
     {
         xmlNodeAddContentLen((xmlNodePtr)parent_data, text, length);
     }

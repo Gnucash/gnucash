@@ -27,7 +27,6 @@
 #ifndef GNC_ENGINE_UTIL_H
 #define GNC_ENGINE_UTIL_H
 
-#include <assert.h>
 #include <errno.h>
 #include <glib.h>
 #include <stddef.h>

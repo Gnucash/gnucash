@@ -270,13 +270,13 @@ gnc_freqSpec_dom_tree_create( FreqSpec *fs )
         return ret;
 }
 
+static struct dom_tree_handler fs_dom_handlers[];
+
 static
 gboolean
 gnc_fs_handler( xmlNodePtr node, gpointer d )
 {
-        /* we ignore the wrapper... we were just called at the wrong
-           level. */
-        return TRUE;
+  return dom_tree_generic_parse( node, fs_dom_handlers, d );
 }
 
 static
@@ -530,7 +530,7 @@ fs_composite_handler( xmlNodePtr node, gpointer data)
         return TRUE;
 }
 
-struct dom_tree_handler fs_dom_handlers[] = {
+static struct dom_tree_handler fs_dom_handlers[] = {
         { "gnc:freqspec",      gnc_fs_handler,            0, 0 },
         { "fs:ui_type",        fs_uift_handler,           1, 0 },
         { "fs:id",             fs_guid_handler,           1, 0 },
@@ -598,6 +598,7 @@ dom_tree_to_freqSpec(xmlNodePtr node, GNCSession *session)
     fspd.fs = xaccFreqSpecMalloc(session);
     successful = dom_tree_generic_parse( node, fs_dom_handlers, &fspd );
     if ( !successful ) {
+        xmlElemDump(stdout, NULL, node);
         xaccFreqSpecFree( fspd.fs );
         fspd.fs = NULL;
     }

@@ -25,7 +25,6 @@
 
 #include "config.h"
 
-#include <assert.h>
 #include <string.h>
 #include <sys/time.h>
 #include <time.h>
@@ -85,7 +84,6 @@ check_open (Transaction *trans)
   if (trans && 0 >= trans->editlevel)
   {
     PERR ("transaction %p not open for editing\n", trans);
-    // assert (trans->editlevel); 
     PERR ("\t%s:%d \n", __FILE__, __LINE__);
   }
 }
@@ -1056,7 +1054,7 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
   if (!xaccSplitGetAccount(s)) {
     if (force_double_entry) {
       PERR ("split must have a parent\n");
-      assert (xaccSplitGetAccount(s));
+      g_return_if_fail (xaccSplitGetAccount(s));
     } 
     else { 
       /* this is a change in semantics.  previously, calling 
@@ -1122,7 +1120,7 @@ xaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency)
    */
   if (!xaccSplitGetAccount(s)) {
     if (force_double_entry) {
-      assert (xaccSplitGetAccount(s));
+      g_return_val_if_fail (xaccSplitGetAccount(s), gnc_numeric_zero ());
     } 
     else { 
       return s->value;
@@ -1180,7 +1178,7 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
      * go with the flow. */
     if (!xaccSplitGetAccount(s)) {
       if (force_double_entry) {
-        assert (xaccSplitGetAccount(s));
+        g_return_val_if_fail (xaccSplitGetAccount(s), gnc_numeric_zero ());
       } 
       else { 
         value = gnc_numeric_add(value, s->value,
@@ -1218,7 +1216,7 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
                gnc_commodity_get_printname(base_currency),
                gnc_commodity_get_printname(currency),
                gnc_commodity_get_printname(commodity));
-        assert (0);
+        g_return_val_if_fail (FALSE, gnc_numeric_zero ());
       }
     }
   }
@@ -1870,8 +1868,13 @@ xaccSplitDestroy (Split *split)
    if (trans)
    {
      gboolean ismember = (g_list_find (trans->splits, split) != NULL);
-     assert (ismember);
-     xaccTransRemoveSplit (trans, split);
+
+     if (!ismember)
+     {
+       PERR ("split not in transaction");
+     }
+     else
+       xaccTransRemoveSplit (trans, split);
    }
 
    xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);

@@ -1661,8 +1661,7 @@ gnc_table_traverse_update(Table *table,
       break;
 
     default:
-      /* shouldn't be reached */
-      assert(0);
+      g_return_val_if_fail (FALSE, TRUE);
       break;
   }
 

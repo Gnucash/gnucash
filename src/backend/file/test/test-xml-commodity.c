@@ -29,6 +29,9 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
 {
     xmlNodePtr mark;
 
+    while (safe_strcmp (node->name, "text") == 0)
+      node = node->next;
+
     if(!check_dom_tree_version(node, "2.0.0"))
     {
         return "version wrong.  Not 2.0.0 or not there";
@@ -41,7 +44,10 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
 
     for(mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        if(safe_strcmp(mark->name, "cmdty:space") == 0)
+        if(safe_strcmp(mark->name, "text") == 0)
+        {
+        }
+        else if(safe_strcmp(mark->name, "cmdty:space") == 0)
         {
             if(!equals_node_val_vs_string(
                    mark, gnc_commodity_get_namespace(com)))

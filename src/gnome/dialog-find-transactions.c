@@ -24,7 +24,6 @@
 
 #include "config.h"
 
-#include <assert.h>
 #include <gnome.h>
 #include <guile/gh.h>
 #include <stdio.h>
@@ -508,7 +507,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     ftd->q = xaccMallocQuery();    
   }
 
-  assert(ftd->q);
+  g_assert(ftd->q);
 
   q = xaccMallocQuery();
   xaccQuerySetGroup(q, gnc_get_current_group ());

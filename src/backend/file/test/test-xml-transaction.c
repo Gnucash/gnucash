@@ -192,6 +192,9 @@ node_and_transaction_equal(xmlNodePtr node, Transaction *trn)
 {
     xmlNodePtr mark;
     
+    while (safe_strcmp (node->name, "text") == 0)
+      node = node->next;
+
     if(!check_dom_tree_version(node, "2.0.0"))
     {
         return "version wrong.  Not 2.0.0 or not there";
@@ -204,7 +207,10 @@ node_and_transaction_equal(xmlNodePtr node, Transaction *trn)
 
     for(mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        if(safe_strcmp(mark->name, "trn:id") == 0)
+        if(safe_strcmp(mark->name, "text") == 0)
+        {
+        }
+        else if(safe_strcmp(mark->name, "trn:id") == 0)
         {
             if(!equals_node_val_vs_guid(mark, xaccTransGetGUID(trn)))
             {
@@ -281,6 +287,7 @@ really_get_rid_of_transaction(Transaction *trn)
 struct tran_data_struct
 {
     Transaction *trn;
+    Transaction *new_trn;
     gnc_commodity *com;
     int value;
 };
@@ -301,7 +308,7 @@ test_add_transaction(const char *tag, gpointer globaldata, gpointer data)
                  __FILE__, __LINE__,
                  "%d", gdata->value);
 
-    really_get_rid_of_transaction(trans);
+    gdata->new_trn = trans;
 
     return TRUE;
 }
@@ -310,6 +317,7 @@ static void
 test_transaction(void)
 {
     int i;
+
     for(i = 0; i < 20; i++)
     {
         Transaction *ran_trn;
@@ -375,6 +383,8 @@ test_transaction(void)
                 failure_args("gnc_xml_parse_file returned FALSE", 
 			     __FILE__, __LINE__, "%d", i);
             }
+            else
+              really_get_rid_of_transaction (data.new_trn);
 
             /* no handling of circular data structures.  We'll do that later */
             /* sixtp_destroy(parser); */

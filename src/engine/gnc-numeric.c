@@ -29,7 +29,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <assert.h>
 
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"

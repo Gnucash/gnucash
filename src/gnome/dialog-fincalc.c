@@ -104,7 +104,7 @@ normalize_period(unsigned int *period)
 {
   int i;
 
-  assert(period != NULL);
+  g_return_val_if_fail (period, 0);
 
   for (i = (sizeof(periods) / sizeof(unsigned int)) - 1; i >= 0; i--)
     if (*period >= periods[i])

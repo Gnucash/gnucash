@@ -40,7 +40,7 @@
 gchar *
 gnc_qualifier_prefix_gettext (const gchar *string)
 {
-	g_assert (string != NULL);
+        g_return_val_if_fail (string, NULL);
 
 	if (*string != Q_PREFIX_START) {
 		return gettext (string);
@@ -83,7 +83,7 @@ gnc_qualifier_prefix_gettext (const gchar *string)
 gchar *
 gnc_qualifier_prefix_noop (const gchar *string)
 {
-	g_assert (string != NULL);
+	g_return_val_if_fail (string, NULL);
 
 	if (*string != Q_PREFIX_START) {
 		return (gchar *) string;

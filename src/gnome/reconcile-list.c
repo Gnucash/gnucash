@@ -100,8 +100,9 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
   GNCReconcileList *list;
   gboolean include_children;
 
-  g_assert(account != NULL);
-  g_assert((type == RECLIST_DEBIT) || (type == RECLIST_CREDIT));
+  g_return_val_if_fail(account, NULL);
+  g_return_val_if_fail((type == RECLIST_DEBIT) ||
+                       (type == RECLIST_CREDIT), NULL);
 
   list = GNC_RECONCILE_LIST(gtk_type_new(gnc_reconcile_list_get_type()));
 
@@ -261,8 +262,8 @@ gnc_reconcile_list_toggle_row(GNCReconcileList *list, gint row)
 {
   Split *split, *current;
 
-  g_assert (IS_GNC_RECONCILE_LIST(list));
-  g_assert (list->reconciled != NULL);
+  g_return_if_fail (IS_GNC_RECONCILE_LIST(list));
+  g_return_if_fail (list->reconciled != NULL);
 
   if (list->no_toggle)
     return;
@@ -338,8 +339,8 @@ gnc_reconcile_list_toggle (GNCReconcileList *list)
   Account * account;
   gboolean include_children;
 
-  g_assert (IS_GNC_RECONCILE_LIST(list));
-  g_assert (list->reconciled != NULL);
+  g_return_if_fail (IS_GNC_RECONCILE_LIST(list));
+  g_return_if_fail (list->reconciled != NULL);
 
   if (list->no_toggle)
     return;
