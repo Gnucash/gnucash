@@ -1,3 +1,20 @@
+2001-04-25  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/html-utilities.scm:
+	(gnc:html-table-append-ruler/markup!) new function.  Also modify
+	(gnc:html-build-acct-table) and other functions to use global row
+	styles.
+
+	* src/scm/html-table.scm:(gnc:html-table-prepend-row/markup!)  fix
+	bug.  
+
+	* src/scm/report/balance-sheet.scm: use new global row styles.
+
+	* src/scm/report/stylesheet-*.scm: add new global row styles.
+
+	* src/scm/report/transaction-report.scm: use new global row styles,
+	fix bug with memo display.  Remove local color options.
+
 2001-04-24  Bill Gribble  <grib@billgribble.com>
 
 	* src/FileDialog.c: call book-opened-hook and book-closed-hook

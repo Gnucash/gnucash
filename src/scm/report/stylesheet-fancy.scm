@@ -20,7 +20,7 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "report/stylesheet-plain.scm")
+(gnc:support "report/stylesheet-fancy.scm")
 (gnc:depend  "report-html.scm")
 (gnc:depend  "date-utilities.scm")
 
@@ -81,18 +81,21 @@
         (N_ "Background Color") "a" (N_ "General background color for report.")
         (list #xff #x88 #xff 0)
         255 #f))      
+
       (opt-register
        (gnc:make-color-option
         (N_ "Colors")
         (N_ "Text Color") "b" (N_ "Normal body text color.")
         (list #x00 #x00 #x00 0)
         255 #f))      
+
       (opt-register
        (gnc:make-color-option
         (N_ "Colors")
         (N_ "Link Color") "c" (N_ "Link text color.")
         (list #x00 #xff #xff 0)
-        255 #f))      
+        255 #f))
+      
       (opt-register
        (gnc:make-color-option
         (N_ "Colors")
@@ -100,6 +103,39 @@
         (list #xff #x00 #xff 0)
         255 #f))      
 
+      (opt-register
+       (gnc:make-color-option
+	(N_ "Colors")
+	(N_ "Alternate Table Cell Color") "d"
+	(N_ "Default alternate background for table cells.")
+	(list #x00 #x00 #x00 0)
+	255 #f))
+
+      (opt-register
+       (gnc:make-color-option
+	(N_ "Colors")
+	(N_ "Subheading/Subtotal Cell Color") "e"
+	(N_ "Default color for subtotal rows.")
+	(list #x00 #x00 #x00 0)
+	255 #f))
+
+      (opt-register
+       (gnc:make-color-option
+	(N_ "Colors")
+	(N_ "Sub-subheading/total Cell Color") "f"
+	(N_ "Color for subsubtotals")
+	(list #x00 #x00 #x00 0)
+	255 #f))
+
+      (opt-register
+       (gnc:make-color-option
+	(N_ "Colors")
+	(N_ "Grand Total Cell Color") "g"
+	(N_ "Color for grand totals")
+	(list #x00 #x00 #x00 0)
+	255 #f))
+          
+	    
       (opt-register 
        (gnc:make-number-range-option 
         (N_ "Tables")
@@ -134,7 +170,13 @@
            (bgcolor (color-val (N_ "Colors") (N_ "Background Color")))
            (textcolor (color-val (N_ "Colors") (N_ "Text Color")))
            (linkcolor (color-val (N_ "Colors") (N_ "Link Color")))
-           (cellcolor (color-val (N_ "Colors") (N_ "Table Cell Color")))
+           (normal-row-color (color-val (N_ "Colors") (N_ "Table Cell Color")))
+	   (alternate-row-color (color-val (N_ "Colors") (N_ "Alternate Table Cell Color")))
+	   (primary-subheading-color (color-val (N_ "Colors") (N_ "Subheading/Subtotal Cell Color")))
+	   (secondary-subheading-color (color-val (N_ "Colors") 
+						(N_ "Sub-subheading/total Cell Color")))
+	   (grand-total-color (color-val (N_ "Colors")
+					 (N_ "Grand Total Cell Color")))
            (bgpixmap (opt-val (N_ "Images") (N_ "Background Tile")))
            (headpixmap (opt-val (N_ "Images") (N_ "Heading Banner")))
            (logopixmap (opt-val (N_ "Images") (N_ "Logo")))
@@ -147,7 +189,12 @@
        'attribute (list "bgcolor" bgcolor)
        'attribute (list "text" textcolor)
        'attribute (list "link" linkcolor))
-      
+   
+      (gnc:html-document-set-style!
+       ssdoc "number-cell"
+       'tag "td"
+       'attribute (list "align" "right"))
+
       (if (and bgpixmap
                (not (string=? bgpixmap "")))
           (gnc:html-document-set-style!
@@ -161,9 +208,32 @@
        'attribute (list "cellpadding" padding))
 
       (gnc:html-document-set-style!
+       ssdoc "normal-row"
+       'attribute (list "bgcolor" normal-row-color)
+       'tag "tr")
+      (gnc:html-document-set-style!
+       ssdoc "alternate-row"
+       'attribute (list "bgcolor" alternate-row-color)
+       'tag "tr")       
+      (gnc:html-document-set-style!
+       ssdoc "primary-subheading"
+       'attribute (list "bgcolor" primary-subheading-color)
+       'tag "tr")       
+      (gnc:html-document-set-style!
+       ssdoc "secondary-subheading"
+       'attribute (list "bgcolor" secondary-subheading-color)
+       'tag "tr")       
+      (gnc:html-document-set-style!
+       ssdoc "grand-total"
+       'attribute (list "bgcolor" grand-total-color)
+       'tag "tr")   
+      
+      (gnc:html-document-set-style!
        ssdoc "text-cell"
        'tag "td"
        'attribute (list "align" "left"))
+
+
 
       (gnc:html-document-set-style!
        ssdoc "total-number-cell"
@@ -174,7 +244,8 @@
        ssdoc "total-label-cell"
        'tag '("td" "b")
        'attribute (list "align" "left"))
-      
+
+
       ;; don't surround marked-up links with <a> </a>
       (if (not links?)
           (gnc:html-document-set-style!
@@ -236,3 +307,4 @@
    'options-generator fancy-options)
   
   #t)
+(gnc:make-html-style-sheet "Fancy" "Technicolor")

@@ -124,6 +124,27 @@
        'tag '("td" "b")
        'attribute (list "align" "left"))
       
+      (gnc:html-document-set-style!
+       ssdoc "normal-row"
+       'tag "tr")
+      
+      (gnc:html-document-set-style!
+       ssdoc "alternate-row"
+       'attribute (list "bgcolor" bgcolor)
+       'tag "tr")       
+      (gnc:html-document-set-style!
+       ssdoc "primary-subheading"
+       'attribute (list "bgcolor" bgcolor) 
+       'tag "tr")       
+      (gnc:html-document-set-style!
+       ssdoc "secondary-subheading"
+       'attribute (list "bgcolor" bgcolor) 
+       'tag "tr")
+      (gnc:html-document-set-style!
+       ssdoc "grand-total"
+       'attribute (list "bgcolor" bgcolor) 
+       'tag "tr")
+      
       ;; don't surround marked-up links with <a> </a>
       (if (not links?)
           (gnc:html-document-set-style!

@@ -173,16 +173,15 @@
 	   table tree-depth report-currency exchange-fn
 	   1 label report-currency 
 	   (gnc:sum-collector-stocks balance report-currency exchange-fn)
-	   #f #f #t #f)
+	   #f #f "primary-subheading" "primary-subheading" #t #f)
 	  (gnc:html-acct-table-row-helper! 
 	   table tree-depth 1 label 	   
 	   (gnc:sum-collector-commodity
 	    balance report-currency exchange-fn)
-	   #f #t #f)))
+	   #f "primary-subheading" #t #f)))
       
       ;;(gnc:warn "account names" liability-account-names)
       (gnc:html-document-set-title! 
-       ;; FIXME: Use magic sprintf code (goonie: which one?).
        doc (sprintf #f (_ "Balance sheet at %s")
 		    (gnc:timepair-to-datestring to-date-tp)))
 
@@ -253,8 +252,9 @@
 	    ;; Now concatenate the tables. This first prepend-row has
 	    ;; to be written out by hand -- we can't use the function
 	    ;; append-something because we have to prepend.
-	    (gnc:html-table-prepend-row! 
+	    (gnc:html-table-prepend-row/markup! 
 	     asset-table 
+	     "primary-subheading"
 	     (list (gnc:html-acct-table-cell (* (if show-fcur? 3 2) 
 						tree-depth) 
 					     (_ "Assets") #t)))

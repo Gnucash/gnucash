@@ -116,6 +116,14 @@
     (gnc:make-html-table-cell/size
      1 colspan (gnc:make-html-text (gnc:html-markup-hr))))))
 
+(define (gnc:html-table-append-ruler/markup! table markup colspan)
+  (gnc:html-table-append-row/markup!
+   table
+   markup
+   (list
+    (gnc:make-html-table-cell/size
+     1 colspan (gnc:make-html-text (gnc:html-markup-hr))))))
+
 ;; Creates a table cell with some text in it. The cell will be created
 ;; with the colspan 'colspan' (the rowspan==1), the content 'content'
 ;; and in boldface if 'boldface?' is true. 'content' may be #f, or a
@@ -139,13 +147,13 @@
 (define (gnc:html-acct-table-row-helper! 
 	 table tree-depth
 	 current-depth my-name my-balance 
-	 reverse-balance? boldface? group-header-line?)
+	 reverse-balance? row-style boldface? group-header-line?)
   ;; just a stupid little helper
   (define (identity a)
     a)
-
-  (gnc:html-table-append-row! 
+  (gnc:html-table-append-row/markup! 
    table
+   row-style
    (append
     ;; left half of the table
     (gnc:html-make-empty-cells (- current-depth 1))
@@ -179,16 +187,18 @@
 (define (gnc:html-acct-table-comm-row-helper!
 	 table tree-depth report-commodity exchange-fn
 	 current-depth my-name my-commodity balance 
-	 reverse-balance? is-stock-account? boldface? group-header-line?) 
+	 reverse-balance? is-stock-account? main-row-style other-rows-style 
+	 boldface? group-header-line?) 
   ;; Adds one row to the table. my-name is the html-object
   ;; displayed in the name column; foreign-balance is the
   ;; <gnc-monetary> for the foreign column or #f if to be left
   ;; empty; domestic-balance is the <gnc-monetary> for the
   ;; domestic column.
   (define (commodity-row-helper! 
-	   my-name foreign-balance domestic-balance)
-    (gnc:html-table-append-row! 
+	   my-name foreign-balance domestic-balance row-style)
+    (gnc:html-table-append-row/markup!
      table
+     row-style
      (append
       ;; left third of the table
       (gnc:html-make-empty-cells (- current-depth 1))
@@ -220,7 +230,8 @@
        my-name #f
        (if balance 
 	   (balance 'getmonetary report-commodity reverse-balance?)
-	   #f))
+	   #f)
+       main-row-style)
       ;; Special case for stock-accounts: then the foreign commodity
       ;; gets displayed in this line rather then the following lines
       ;; (loop below). Is also used if is-stock-account? is true.
@@ -230,7 +241,8 @@
 	(commodity-row-helper! 
 	 my-name
 	 my-balance
-	 (exchange-fn my-balance report-commodity))))
+	 (exchange-fn my-balance report-commodity)
+	 main-row-style)))
   
   ;; The additional rows: show no name, but the foreign currency
   ;; balance and its corresponding value in the
@@ -251,7 +263,8 @@
 		;; print the account balance in the respective
 		;; commodity
 		bal
-		(exchange-fn bal report-commodity)))))
+		(exchange-fn bal report-commodity)
+		other-rows-style))))
        #f)))
 
 
@@ -389,25 +402,27 @@
     ;; Wrapper for gnc:html-acct-table-row-helper!
     (define (add-row-helper! 
 	     current-depth my-name my-balance 
-	     reverse-balance? boldface? group-header-line?)
+	     reverse-balance? row-style boldface? group-header-line?)
       (gnc:html-acct-table-row-helper! 
        table tree-depth
        current-depth my-name my-balance 
-       reverse-balance? boldface? group-header-line?))
+       reverse-balance? row-style boldface? group-header-line?))
     
     ;; Wrapper
     (define (add-commodity-rows! 
 	     current-depth my-name my-commodity balance 
-	     reverse-balance? is-stock-account? boldface? group-header-line?) 
+	     reverse-balance? is-stock-account? 
+	     main-row-style other-rows-style boldface? group-header-line?) 
       (gnc:html-acct-table-comm-row-helper!
        table tree-depth report-commodity exchange-fn
        current-depth my-name my-commodity balance 
-       reverse-balance? is-stock-account? boldface? group-header-line?))
+       reverse-balance? is-stock-account? main-row-style other-rows-style boldface? group-header-line?))
         
     ;; Adds all appropriate rows to the table which belong to one
     ;; account. Uses the above helper function, i.e. here the
     ;; necessary values only are "extracted" from the account.
-    (define (add-account-rows! acct current-depth) 
+    (define (add-account-rows! acct current-depth alternate-row?) 
+      (let ((row-style (if alternate-row? "alternate-row" "normal-row")))
       (if show-other-curr?
 	  (add-commodity-rows! current-depth 
 			       (gnc:html-account-anchor acct)
@@ -415,6 +430,7 @@
 			       (my-get-balance acct)
 			       (gnc:account-reverse-balance? acct)
 			       (gnc:account-has-shares? acct)
+			       row-style row-style
 			       #f #f)
 	  (add-row-helper! 
 	   current-depth 
@@ -422,24 +438,28 @@
 	   (gnc:sum-collector-commodity (my-get-balance acct) 
 					report-commodity exchange-fn)
 	   (gnc:account-reverse-balance? acct)
-	   #f #f)))
+	   row-style
+	       #f #f))))
   
     ;; Generalization of add-account-rows! for a subtotal or for the
     ;; total balance.
     (define (add-subtotal-row! 
-	     current-depth subtotal-name balance boldface? group-header-line?)
+	     current-depth subtotal-name balance row-style boldface? group-header-line?)
       (if show-other-curr?
 	  (add-commodity-rows! current-depth subtotal-name 
 			       report-commodity 
 			       (gnc:sum-collector-stocks 
 				balance report-commodity exchange-fn)
-			       #f #f boldface? group-header-line?)
+			       #f #f row-style row-style
+			       boldface? group-header-line?)
 	  ;; Show no other currencies. Therefore just calculate
 	  ;; one total via sum-collector-commodity and show it.
 	  (add-row-helper! current-depth subtotal-name 
 			   (gnc:sum-collector-commodity 
 			    balance report-commodity exchange-fn)
-			   #f boldface? group-header-line?)))
+			   #f 
+			   row-style
+			   boldface? group-header-line?)))
 
     ;; This prints *all* the rows that belong to one group: the title
     ;; row, the subaccount tree, and the Total row with the balance of
@@ -449,10 +469,14 @@
     ;; balance is calculated from the subaccounts list.
     (define (add-group! current-depth groupname subaccounts 
 			thisbalance group-total-line?)
-      (begin
+      (let ((heading-style (if (= current-depth 1)
+				"primary-subheading"
+				"secondary-subheading")))
+	    
 	;; first the group name
 	(add-subtotal-row! current-depth groupname 
 			   (and show-parent-balance? thisbalance) 
+			   heading-style
 			   (not (and show-parent-balance? thisbalance)) #t)
 	;; then all the subaccounts
 	(traverse-accounts! subaccounts (+ 1 current-depth))
@@ -479,15 +503,17 @@
 		 (if thisbalance 
 		     (subbalance 'merge thisbalance #f))
 		 subbalance)
-	       #t #f)
+	       heading-style
+	       #t #f)))))
 	      ;; and an empty line
-	      (add-subtotal-row! current-depth #f #f #f #f)))))
+	;      (add-subtotal-row! current-depth #f #f heading-style #f #f)))))
 
     ;; Adds rows to the table. Therefore it goes through the list of
     ;; accounts, runs add-account-rows! on each account.  If
     ;; tree-depth and current-depth require, it will recursively call
     ;; itself on the list of children accounts.
     (define (traverse-accounts! accnts current-depth)
+      (let ((alternate #f))
       (if (<= current-depth tree-depth)
 	  (for-each 
 	   (lambda (acct)
@@ -495,7 +521,9 @@
 			      show-acct?
 			      (gnc:account-get-immediate-subaccounts acct))))
 	       (if (or (= current-depth tree-depth) (null? subaccts))
-		   (add-account-rows! acct current-depth)
+		   (begin
+		     (add-account-rows! acct current-depth alternate)
+		     (set! alternate (not alternate)))
 		   (add-group! current-depth 
 			       (gnc:html-account-anchor acct)
 			       subaccts
@@ -503,7 +531,7 @@
 				(list acct) my-get-balance-nosub 
 				gnc:account-reverse-balance?)
 			       show-parent-total?))))
-	   (sort-fn accnts))))
+	   (sort-fn accnts)))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
@@ -528,11 +556,12 @@
     ;; Show the total sum.
     (if show-total?
         (begin
-	  (gnc:html-table-append-ruler!
-	   table (* (if show-other-curr? 3 2) tree-depth))
+	  (gnc:html-table-append-ruler/markup!
+	   table "grand-total" (* (if show-other-curr? 3 2) tree-depth))
           (add-subtotal-row! 
            1 total-name 
            (get-total-fn (filter show-acct? topl-accounts) my-get-balance)
+	   "grand-total"
            #t #f)))
     
     ;; set default alignment to right, and override for the name

@@ -314,7 +314,7 @@
   (let ((max 0))
     (for-each 
      (lambda (row)
-       (let ((l (length row)))
+       (let ((l (length row))) 
          (if (> l max)
              (set! max l))))
      (gnc:html-table-data table))
@@ -325,7 +325,10 @@
     (gnc:html-table-set-row-markup! table (- rownum 1) markup)))
 
 (define (gnc:html-table-prepend-row/markup! table markup newrow)
-  (gnc:html-table-set-row-markup! table 0 markup))
+  (begin
+    (gnc:html-table-prepend-row! table newrow)
+    (gnc:html-table-set-row-markup! table 0 markup)))
+    
 
 (define (gnc:html-table-append-row! table newrow)
   (let* ((dd (gnc:html-table-data table))
