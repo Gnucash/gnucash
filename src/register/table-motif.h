@@ -123,6 +123,10 @@ typedef struct _Table {
 Table     * xaccMallocTable (void);
 void        xaccInitTable (Table *);
 
+/* rsize the table to the indicated dimensions.
+ * calls the gui-independent xaccTableResize() routine,
+ * and then does some motif-specific cleanup.
+ */
 void        xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
                                              int virt_rows, int virt_cols);
 

@@ -72,11 +72,6 @@ xaccInitTable (Table * table)
    table->num_virt_rows = 0;
    table->num_virt_cols = 0;
 
-   table->cnt_phys_rows = 0;
-   table->cnt_phys_cols = 0;
-   table->cnt_virt_rows = 0;
-   table->cnt_virt_cols = 0;
-
    table->current_cursor = NULL;
    table->current_cursor_row = -1;
    table->current_cursor_col = -1;
@@ -84,9 +79,10 @@ xaccInitTable (Table * table)
    table->move_cursor = NULL;
    table->client_data = NULL;
 
-   table->header = NULL;
    table->entries = NULL;
+   table->locators = NULL;
    table->user_data = NULL;
+   table->handlers = NULL;
 
    /* invalidate the "previous" traversed cell */
    table->prev_phys_traverse_row = -1;
@@ -99,8 +95,7 @@ void
 xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
                                  int virt_rows, int virt_cols)
 {
-   xaccTableResizeStringArr (table, phys_rows, phys_cols);
-   xaccTableResizeUserData (table, virt_rows, virt_cols);
+   xaccTableResize (table, phys_rows, phys_cols, virt_rows, virt_cols);
 
    /* invalidate the "previous" traversed cell */
    table->prev_phys_traverse_row = -1;
@@ -111,6 +106,7 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
        (table->current_cursor_col >= table->num_virt_cols)) {
       table->current_cursor_row = -1;
       table->current_cursor_col = -1;
+      table->current_cursor = NULL;
    }
 }
 

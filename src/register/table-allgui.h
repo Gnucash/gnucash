@@ -41,13 +41,16 @@
 #include "table-gtk.h"
 #endif 
 
+/* resize the various arrays that compose the table */
 extern void 
 xaccTableResize (Table * table, int num_phys_rows, int num_phys_cols,
                                 int new_virt_rows, int new_virt_cols);
 
+/* indicate what handler should be used for a given virtual block */
 extern void 
-xaccAddCursor (Table *table, CellBlock *curs);
-
+xaccSetCursor (Table *table, CellBlock *curs,
+              int phys_row_origin, int phys_col_origin,
+              int virt_row, int virt_col);
 
 #endif /* __XACC_TABLE_ALLGUI_H__ */
 

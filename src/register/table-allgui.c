@@ -157,6 +157,8 @@ xaccTableResize (Table * table,
                  int new_phys_rows, int new_phys_cols,
                  int new_virt_rows, int new_virt_cols)
 {
+   /* hack alert -- should check to make sure that no null pointers
+    * or bad values were passed in ... */
 
    /* resize the string data array */
    RESIZE_ARR ((table->num_phys_rows),
@@ -210,8 +212,25 @@ xaccTableResize (Table * table,
 /* ==================================================== */
 
 void
-xaccAddCursor (Table *table, CellBlock *curs)
+xaccSetCursor (Table *table, CellBlock *curs,
+               int phys_row_origin, int phys_col_origin,
+               int virt_row, int virt_col)
 {
+   int i,j;
+
+   /* hack alert -- should check to make sure that no null pointers
+    * or bad values were passed in ... */
+
+   for (i=0; i<curs->numRows; i++) {
+      for (j=0; j<curs->numCols; j++) {
+         Locator *loc;
+         loc = table->locators[phys_row_origin+i][phys_col_origin+j];
+         loc->phys_row_offset = i;
+         loc->phys_col_offset = j;
+         loc->virt_row = virt_row;
+         loc->virt_col = virt_col;
+      }
+   }
 }
 
 /* ================== end of file ======================= */
