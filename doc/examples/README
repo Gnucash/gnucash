@@ -1,4 +1,22 @@
 
+Guide to *.qfx Files:
+---------------------
+QFX is the extension given to files that contain OFX XML data.
+Some banks allow users to download QFX files containing statement
+data, instead of allowing the PFM to talk to the bank directly.
+(Presumably, these banks block direct PFM OFX exchanges for security
+reasons).  The goal here is to be sure that we can import QFX files
+properly.
+
+rbc_gi.qfx
+    Royal Bank of Canada statement.
+
+cibc_checking.qfx
+cibc_visa.qfx
+    Canadian Bank of Commerce checking and visa card statements.
+    Note dissimilarities.
+
+
 Guide to *.xac Files:
 ---------------------
 Many of the *.xac files are from older versions of X-Accountant,
@@ -25,6 +43,17 @@ taxreport.xac
 
 Guide to QIF Files:
 -------------------
+QIF Files are 'quicken interchange format' files, and may com from
+from a large variety of sources.
+
+Money95*_fr.qif 
+    QIF files for Microsoft Money95, French edition.
+
+ms-money.qif
+    QIF from Microsoft Money95, US edition.
+
+web.qif
+    QIF downloaded from a bank via web page
 
 cbb-export.qif
     QIF file that is exported by Olsen's CBB version 0.73
