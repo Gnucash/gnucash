@@ -40,15 +40,15 @@
 
 #include "gnc-book.h"
 #include "gnc-book-p.h"
-
 #include "gnc-engine.h"
-// #include "gnc-engine-util.h"
+#include "gnc-trace.h"
+#include "Group.h"
+#include "GroupP.h"
 #include "SchedXaction.h"
-// #include "SchedXactionP.h"
 #include "SX-book.h"
 #include "SX-book-p.h"
 
-/* static short module = MOD_SX; */
+static short module = MOD_SX;
 
 /* ====================================================================== */
 
@@ -88,6 +88,37 @@ gnc_book_set_schedxactions( GNCBook *book, GList *newList )
   gnc_book_set_data (book, GNC_SCHEDXACTIONS, new_list);
 
   g_free (old_list);
+}
+
+/* ====================================================================== */
+
+#define GNC_TEMPLATE_GROUP "gnc_template_group"
+AccountGroup *
+gnc_book_get_template_group( GNCBook *book )
+{
+  if (!book) return NULL;
+  return gnc_book_get_data (book, GNC_TEMPLATE_GROUP);
+}
+
+void
+gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
+{
+  AccountGroup *old_grp;
+  if (!book) return;
+
+  if (templateGroup && templateGroup->book != book)
+  {
+     PERR ("cannot mix and match books freely!");
+     return;
+  }
+
+  old_grp = gnc_book_get_template_group (book);
+  if (old_grp == templateGroup) return;
+
+  gnc_book_set_data (book, GNC_TEMPLATE_GROUP, templateGroup);
+
+  xaccAccountGroupBeginEdit (old_grp);
+  xaccAccountGroupDestroy (old_grp);
 }
 
 /* ========================== END OF FILE =============================== */

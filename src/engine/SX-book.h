@@ -19,29 +19,30 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/*
- * FILE:
- * SX-book.h
- *
- * FUNCTION:
- * Anchor Scheduled Transaction info in a book.
- * See src/doc/books.txt for design overview.
- *
- * HISTORY:
- * Copyright (c) 2003 Linas Vepstas <linas@linas.org>
- */
+/**
+ * @addtogroup Engine_SchedXaction
+ * @{ */
+/**
+ * @file SX-book.h
+ * @brief Anchor Scheduled Transaction info in a book.
+ *        See src/doc/books.txt for design overview.
+ * @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
+ **/
 
 #ifndef GNC_SX_BOOK_H
 #define GNC_SX_BOOK_H
 
 #include <glib.h>
-#include "gnc-book.h"
+#include "gnc-engine.h"
 
 typedef struct xaccSchedXactionsDef SchedXactions;
 
 SchedXactions * gnc_book_get_schedxaction_list( GNCBook *book );
 GList * gnc_book_get_schedxactions( GNCBook *book );
 
-#endif /* GNC_SX_BOOK_H */
+/** Returns the template group from the book.
+ **/
+AccountGroup * gnc_book_get_template_group (GNCBook *book);
 
-/* ========================== END OF FILE =============================== */
+#endif /* GNC_SX_BOOK_H */
+/** @} */
