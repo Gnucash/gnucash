@@ -1,5 +1,6 @@
 /********************************************************************\
- * version.h -- handle back-ward compatible database table upgrades *
+ * upgrade.h -- handle back-ward compatible database table upgrades *
+ * Copyright (c) 2001 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -19,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef PGEND_VERSION_H
-#define PGEND_VERSION_H
+#ifndef PGEND_UPGRADE_H
+#define PGEND_UPGRADE_H
 
 #include "PostgresBackend.h"
 
@@ -29,7 +30,7 @@
  *   Return -1 if we are older and so we can't run.
  */
 
-int pgendVersionIsCurrent (PGBackend *be);
+int pgendDBVersionIsCurrent (PGBackend *be);
 
 /* The pgendUpgradeDB() routine installs upgrade features
  *    into the sql database
@@ -37,4 +38,4 @@ int pgendVersionIsCurrent (PGBackend *be);
 
 void pgendUpgradeDB (PGBackend *be);
 
-#endif PGEND_VERSION_H
+#endif PGEND_UPGRADE_H

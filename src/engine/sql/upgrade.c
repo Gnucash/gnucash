@@ -1,5 +1,6 @@
 /********************************************************************\
  * version.c -- handle back-ward compatible database table upgrades *
+ * Copyright (c) 2001 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -30,10 +31,9 @@ handle versions
 
 #include <libpq-fe.h> 
 
-#include "Backend.h"
-#include "BackendP.h"
+#include "PostgresBackend.h"
+#include "upgrade.h"
 
-#include "version.h"
 #include "putil.h"
 
 static short module = MOD_BACKEND; 
@@ -62,7 +62,7 @@ pgendVersionTable (PGBackend *be)
    /* First, see if we can find the table that stores 
     * the version info. */
 
-   p = "SELECT tablename FROM pg_tables WHERE tablename='gncVersion';";
+   p = "SELECT tablename FROM pg_tables WHERE tablename='gncversion';";
    SEND_QUERY (be,p, );
    table_exists = (gboolean) pgendGetResults (be, version_table_cb, FALSE);
    
@@ -78,6 +78,7 @@ pgendVersionTable (PGBackend *be)
        "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,0,0,'Version Table');";
    SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
 }
 
 /* ============================================================= */
@@ -137,6 +138,7 @@ put_iguid_in_tables (PGBackend *be)
    p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,1,0,'Start Put iGUID in Main Tables');";
    SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
 
    p = "ALTER TABLE gncEntry ADD COLUMN iguid INT4 DEFAULT 0;\n"
        "UPDATE gncEntry SET iguid = 0;\n" 
@@ -146,6 +148,7 @@ put_iguid_in_tables (PGBackend *be)
        " WHERE gncGUIDCache.guid = gncEntry.entryGUID "
        " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
    SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
    
    p = "ALTER TABLE gncTransaction ADD COLUMN iguid INT4 DEFAULT 0;\n"
        "UPDATE gncTransaction SET iguid = 0;\n" 
@@ -155,6 +158,7 @@ put_iguid_in_tables (PGBackend *be)
        " WHERE gncGUIDCache.guid = gncTransaction.transGUID "
        " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
    SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
 	   
    p = "ALTER TABLE gncAccount ADD COLUMN iguid INT4 DEFAULT 0;\n"
        "UPDATE gncAccount SET iguid = 0;\n" 
@@ -164,6 +168,7 @@ put_iguid_in_tables (PGBackend *be)
        " WHERE gncGUIDCache.guid = gncAccount.accountGUID "
        " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
    SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
 
    p = "SELECT iguid FROM gncGUIDCache ORDER BY iguid DESC LIMIT 1;";
    SEND_QUERY (be,p, );
@@ -174,11 +179,10 @@ put_iguid_in_tables (PGBackend *be)
    SEND_QUERY (be,buff, );
 	   
    p = "DROP TABLE gncGUIDCache;";
-   SEND_QUERY (be,p, );
-   
-   p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+       "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,1,1,'End Put iGUID in Main Tables');";
    SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
 }
 
 /* ============================================================= */
@@ -188,7 +192,7 @@ put_iguid_in_tables (PGBackend *be)
  */
 
 int
-pgendVersionIsCurrent (PGBackend *be)
+pgendDBVersionIsCurrent (PGBackend *be)
 {
    pgendVersion vers;
    
@@ -197,7 +201,7 @@ pgendVersionIsCurrent (PGBackend *be)
 
    if (1 > vers.major)
    {
-      PERR ("something in the database is broken\n");
+      xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
       return -1;
    }
    if ((PGEND_CURRENT_MAJOR_VERSION == vers.major) &&
@@ -206,8 +210,7 @@ pgendVersionIsCurrent (PGBackend *be)
    /* check to see if this client can connect */
    if (PGEND_CURRENT_MAJOR_VERSION < vers.major)
    {
-      PINFO ("you need a newer gnucash client to connect "
-	     "to this database");
+      xaccBackendSetError (&be->be, ERR_BACKEND_TOO_NEW);
       return -1;
    }
 
@@ -229,7 +232,8 @@ pgendUpgradeDB (PGBackend *be)
       /* version 1.1.0 add iguids to transaction and entry tables */
       if (1> vers.minor)
       {
-         put_iguid_in_tables(be);
+         // put_iguid_in_tables(be);
+PWARN (" pretending to upgrade database !xxxxxxxxxxxxxxxx\nm");
       }
    }
 

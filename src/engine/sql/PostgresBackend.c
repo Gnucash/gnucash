@@ -75,6 +75,7 @@
 #include "price.h"
 #include "txn.h"
 #include "txnmass.h"
+#include "upgrade.h"
 
 #include "putil.h"
 
@@ -1466,8 +1467,7 @@ pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid,
       be->hostname = NULL;
    }
 
-#define NEW_LOGIN
-#ifdef NEW_LOGIN
+   /* ---------------------------------------------------------------- */
    /* New login algorithm.  If we haven't been told that we'll
     * need to be creating a database, then lets try to connect,
     * and see if that succeeds.  If it fails, we'll tell gui
@@ -1549,6 +1549,27 @@ pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid,
 
          /* Let GUI know that we connected, but we couldn't find it. */
          xaccBackendSetError (&be->be, ERR_BACKEND_NO_SUCH_DB);
+         return;
+      }
+
+      /* Check to see if we have a database version that we can 
+       * live with */
+      rc = pgendDBVersionIsCurrent (be);
+      if (0 > rc)
+      {
+         /* The server is newer than we are, or another error occured,
+          * we don't know how to talk to it.  The err code is already set. */
+         PQfinish (be->connection);
+         be->connection = NULL;
+         return;
+      }
+      if (0 < rc)
+      {
+         /* The server is older than we are; ask user if they want to 
+          * upgrade the database contents. */
+         PQfinish (be->connection);
+         be->connection = NULL;
+         xaccBackendSetError (&be->be, ERR_SQL_DB_TOO_OLD);
          return;
       }
    }
@@ -1646,12 +1667,10 @@ pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid,
       }
       else 
       {
-         /* Wierd. We were asked to create something that exists.
-          * This shouldn't really happen ... */
-         PWARN ("Asked to create the database %s,\n"
-                "\tbut it already exists!\n"
-                "\tThis shouldn't really happen.",
-                be->dbName);
+         /* Database exists, although we were asked to create it.
+          * We interpret this to mean that its downlevel, and
+          * user wants us to upgrade it.  So connect and upgrade.
+          */
          
          PQfinish (be->connection);
          
@@ -1681,131 +1700,37 @@ pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid,
             xaccBackendSetError (&be->be, ERR_BACKEND_PERM);
             return;
          }
-      }
-   }
 
-#else
-   /* Old login algorithm.  We try to connect to the database that
-    * the user requested.  If it fails, we get a fatal message from
-    * postgres. (Problem: we don't really know why there was a fatal
-    * error, there may be many reasons.  This is the fundamental 
-    * problem with this approach.)  If the connect failed, then we
-    * create the database, and try again.
-    */
-   be->connection = PQsetdbLogin (be->hostname, 
-                                  be->portno,
-                                  pg_options, /* trace/debug options */
-                                  pg_tty, /* file or tty for debug output */
-                                  be->dbName, 
-                                  be->username,  /* login */
-                                  password);  /* pwd */
-
-
-   /* check the connection status */
-   if (CONNECTION_BAD == PQstatus(be->connection))
-   {
-      PWARN("Connection to database '%s' failed:\n"
-            "\t%s", 
-            be->dbName ? be->dbName : "(null)",
-            PQerrorMessage(be->connection));
-
-      PQfinish (be->connection);
-      be->connection = NULL;
-
-      /* OK, this part is convoluted.
-       * I wish that postgres returned usable error codes. 
-       * Alas, it does not, so we guess the true error.
-       * If the host is 'localhost', and we couldn't connect,
-       * then we assume that its because the database doesn't
-       * exist (although this might also happen if the database
-       * existed, but the user supplied a bad username/password)
-       */
-      if (NULL == be->hostname)
-      {
-         if (create_new_db) {
-            really_do_create = TRUE;
-         } else {
-            xaccBackendSetError (&be->be, ERR_BACKEND_NO_SUCH_DB);
+         rc = pgendDBVersionIsCurrent (be);
+         if (0 > rc)
+         {
+            /* The server is newer than we are, or another error occured,
+             * we don't know how to talk to it.  The err code is already set. */
+            PQfinish (be->connection);
+            be->connection = NULL;
             return;
          }
-      }
-      else
-      {
-         xaccBackendSetError (&be->be, ERR_BACKEND_CANT_CONNECT);
-         return;
+         if (0 < rc)
+         {
+            /* The server is older than we are; lets upgrade */
+            pgendUpgradeDB (be);
+         }
+         else
+         {
+            /* Wierd. We were asked to create something that exists.
+             * This shouldn't really happen ... */
+            PWARN ("Asked to create the database %s,\n"
+                   "\tbut it already exists!\n"
+                   "\tThis shouldn't really happen.",
+                   be->dbName);
+         }
       }
    }
-
-   if (really_do_create)
-   {
-      be->connection = PQsetdbLogin (be->hostname,
-                                     be->portno,
-                                     pg_options, /* trace/debug options */
-                                     pg_tty, /* file or tty for debug output */
-                                     "template1",
-                                     be->username,  /* login */
-                                     password);  /* pwd */
-
-      /* check the connection status */
-      if (CONNECTION_BAD == PQstatus(be->connection))
-      {
-         PERR("Can't connect to database 'template1':\n"
-              "\t%s", 
-              PQerrorMessage(be->connection));
-         PQfinish (be->connection);
-         be->connection = NULL;
-         xaccBackendSetError (&be->be, ERR_BACKEND_CANT_CONNECT);
-         return;
-      }
-
-      /* create the database */
-      p = be->buff; *p =0;
-      p = stpcpy (p, "CREATE DATABASE ");
-      p = stpcpy (p, be->dbName);
-      p = stpcpy (p, ";");
-      SEND_QUERY (be,be->buff, );
-      FINISH_QUERY(be->connection);
-      PQfinish (be->connection);
-
-      /* now connect to the newly created database */
-      be->connection = PQsetdbLogin (be->hostname, 
-                                  be->portno,
-                                  pg_options, /* trace/debug options */
-                                  pg_tty, /* file or tty for debug output */
-                                  be->dbName, 
-                                  be->username,  /* login */
-                                  password);  /* pwd */
-
-      /* check the connection status */
-      if (CONNECTION_BAD == PQstatus(be->connection))
-      {
-         PERR("Can't connect to the newly created database '%s':\n"
-              "\t%s", 
-              be->dbName ? be->dbName : "(null)",
-              PQerrorMessage(be->connection));
-         PQfinish (be->connection);
-         be->connection = NULL;
-         xaccBackendSetError (&be->be, ERR_BACKEND_CANT_CONNECT);
-         return;
-      }
-
-      /* Finally, create all the tables and indexes.
-       * We do this in pieces, so as not to exceed the max length
-       * for postgres queries (which is 8192). 
-       */
-      SEND_QUERY (be,table_create_str, );
-      FINISH_QUERY(be->connection);
-      SEND_QUERY (be,table_audit_str, );
-      FINISH_QUERY(be->connection);
-      SEND_QUERY (be,sql_functions_str, );
-      FINISH_QUERY(be->connection);
-      be->freshly_created_db = TRUE;
-      be->freshly_created_prdb = TRUE;
-   }
-#endif
 
    /* free url only after login completed */
    g_free(url);
+
+   /* ---------------------------------------------------------------- */
 
    // DEBUGCMD (PQtrace(be->connection, stderr));
 
@@ -1813,6 +1738,7 @@ pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid,
    p = "SET DATESTYLE='ISO';";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
+
 
    /* OK, lets see if we can get a valid session */
    rc = pgendSessionValidate (be, ignore_lock);

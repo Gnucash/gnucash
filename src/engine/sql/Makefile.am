@@ -17,7 +17,7 @@ libgnc_postgres_la_SOURCES = \
   price.c \
   txn.c \
   txnmass.c \
-  version.c
+  upgrade.c
 
 noinst_HEADERS = \
   PostgresBackend.h \
@@ -32,7 +32,7 @@ noinst_HEADERS = \
   putil.h \
   txn.h \
   txnmass.h \
-  version.h
+  upgrade.h
 
 EXTRA_DIST = \
   .cvsignore \
