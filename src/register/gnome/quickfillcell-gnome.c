@@ -1,4 +1,6 @@
 /********************************************************************\
+ * quickfillcell-gnome.c --  implement gnome part of quickfill cell *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
