@@ -14,6 +14,8 @@
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
+#include "gnc-component-manager.h"
+
 /* version of the gnc module system interface we require */
 int gnc_module_system_interface = 0;
 
@@ -41,7 +43,8 @@ lmod(char * mn)
 }
 
 int
-gnc_module_init(int refcount) {
+gnc_module_init(int refcount)
+{
   /* load the engine (we depend on it) */
   if(!gnc_module_load("gnucash/engine", 0)) {
     return FALSE;
@@ -57,10 +60,17 @@ gnc_module_init(int refcount) {
   lmod("(g-wrapped gw-app-utils)");
   lmod("(gnucash app-utils)");
 
+  if (refcount == 0)
+    gnc_component_manager_init ();
+
   return TRUE;
 }
 
 int
-gnc_module_end(int refcount) {
+gnc_module_end(int refcount)
+{
+  if (refcount == 0)
+    gnc_component_manager_shutdown ();
+
   return TRUE;
 }
