@@ -16,7 +16,7 @@
   
   (if (not (gnc:load-user-config-if-needed))
       (gnc:shutdown 1))
-  
+
   (gnc:hook-run-danglers gnc:*startup-hook*)
   
   (if (or (gnc:config-var-value-get gnc:*arg-show-usage*)
