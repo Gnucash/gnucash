@@ -1,3 +1,10 @@
+2004-10-13  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/qif-object.scm:
+	  provide a default account name so we don't crash when someone
+	  imports a broken QIF that has a !Account without an account name.
+	  Fixes bug #155244.
+
 2004-10-08  Derek Atkins  <derek@ihtfp.com>
 
 	* engine/gw-engine-spec.scm:
