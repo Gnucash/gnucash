@@ -32,6 +32,7 @@
 
 /** GLOBALS **********************************************************/
 main_window    *mwindow;
+char		*HELP_ROOT = "";
 
 gchar *clist_titles[] =
 {

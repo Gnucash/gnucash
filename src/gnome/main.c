@@ -269,7 +269,7 @@ gnucash_lowlev_app_init()
   int fake_argc = 1;
   char *fake_argv[] = {"gnucash"};
 
-  gnome_init("GnuCash", NULL, fake_argc, fake_argv, 0, NULL);  
+  gnome_init("GnuCash", NULL, fake_argc, fake_argv);  
   prepare_app(); 
 
   {

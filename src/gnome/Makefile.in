@@ -24,7 +24,11 @@
 
 include @top_srcdir@/Makefile.init
 
-INCLPATH = -I.. -I../.. -I../engine -I../register -I../guile \
+INCLPATH = -I.. \
+           -I../.. \
+           -I../engine \
+           -I../register \
+           -I../swig \
            -I@srcdir@/../../include \
            -I$(includedir)
 
@@ -42,7 +46,7 @@ TARGET   = ../../gnucash.gnome
 STATIC   = ../../gnucash.gnome.static
 
 OTHER_OBJS := ../obj/gnome/*.o ../engine/obj/*.o ../register/obj/gnome/*.o \
-              ../guile/obj/*.o ../swig/guile/gnucash-guile_wrap.o
+              ../guile/obj/*.o ../swig/guile/gnucash-all-guile_wrap.o
 
 ######################################################################
 # See Makefile.common for information about these variables.
