@@ -1,3 +1,9 @@
+2003-03-15  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/gnc-book.h, src/engine/*.h: Added a lot of
+	documentation comments, improved doxygen output. At least the most
+	important header files will now show up in doxygen.
+
 2003-03-13  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/option-util.c (gnc_option_get_range_info): Reapply

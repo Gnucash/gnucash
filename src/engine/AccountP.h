@@ -22,11 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * FILE:
- * AccountP.h
+/** @file AccountP.h
  *
- * FUNCTION:
  * This is the *private* header for the account structure.
  * No one outside of the engine should ever include this file.
  *
@@ -53,6 +50,12 @@
 
 
 /** STRUCTS *********************************************************/
+
+/** This is the data that describes an account. 
+ *
+ * This is the *private* header for the account structure.
+ * No one outside of the engine should ever include this file.
+*/
 struct account_s
 {
   /* public data, describes account */

@@ -21,6 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
+/** @file TransLog.h The transaction logger */
+
 #ifndef XACC_TRANS_LOG_H
 #define XACC_TRANS_LOG_H
 

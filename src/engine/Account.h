@@ -254,9 +254,11 @@ const char *   xaccAccountGetLastNum (Account *account);
  * New commodity access routines.
  *
  * The account structure no longer stores two commodities ('currency'
- * and 'security'). Instead it stores only one commodity, that is the
- * one formerly known as 'security'.  Use xaccAccountSetCommodity()
- * and xaccAccountGetCommodity() to set and fetch it.
+ * and 'security'). Instead it stores only one commodity. This single
+ * commodity is the one formerly known as 'security'.  Use
+ * xaccAccountSetCommodity() and xaccAccountGetCommodity() to set and
+ * fetch it. (This transition has been done between version 1.6.x and
+ * 1.7.0.)
  *
  * Basically, the engine eliminates the 'currency' field of the
  * Account structure. Instead, the common currency is stored with the

@@ -19,6 +19,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+/** @file messages.h @brief National-language messages for GnuCash     */
+
 #ifndef XACC_MESSAGES_H
 #define XACC_MESSAGES_H
 

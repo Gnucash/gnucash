@@ -20,11 +20,8 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * FILE:
- * gnc-book.h
+/** @file gnc-book.h
  *
- * FUNCTION:
  * Encapsulate all the information about a gnucash dataset.
  * See src/docs/books.txt for implementation overview.
  *
@@ -46,7 +43,7 @@
 GNCBook * gnc_book_new (void);
 void      gnc_book_destroy (GNCBook *book);
 
-/* 
+/** 
  * The gnc_book_get_guid() routine returns the GUID for this book.
  * The gnc_book_get_slots() method will return the kvp data 
  *    for the book 
@@ -65,7 +62,7 @@ gnc_commodity_table * gnc_book_get_commodity_table(GNCBook *book);
 GList               * gnc_book_get_schedxactions( GNCBook *book );
 AccountGroup        * gnc_book_get_template_group( GNCBook *book );
 
-/* The gnc_book_set_data() and gnc_book_get_data() routines allow
+/** The gnc_book_set_data() and gnc_book_get_data() routines allow
  *    arbitrary pointers to structs to be stored in GNCBook.
  *    This is the "prefered" method for extending GNCBook to hold
  *    new data types.
@@ -86,25 +83,25 @@ gpointer gnc_book_get_backend (GNCBook *book);
  */
 gboolean gnc_book_not_saved (GNCBook *book);
 
-/* Call this function when you change the book kvp, to make sure the book
+/** Call this function when you change the book kvp, to make sure the book
  * is marked 'dirty'.
  */
 void gnc_book_kvp_changed (GNCBook *book);
 
-/* The gnc_book_equal() method returns TRUE if the engine data
+/** The gnc_book_equal() method returns TRUE if the engine data
  * in the two given books is equal. */
 gboolean gnc_book_equal (GNCBook *book_1, GNCBook *book_2);
 
-/* XXX FIXME count_transactions is a utility function, needs 
+/** XXX FIXME count_transactions is a utility function, needs 
  * to be moved to some utility/support file.  */
 guint gnc_book_count_transactions(GNCBook *book);
 
-/* This will 'get and increment' the named counter for this book.
+/** This will 'get and increment' the named counter for this book.
  * The return value is -1 on error or the incremented counter.
  */
 gint64 gnc_book_get_counter (GNCBook *book, const char *counter_name);
 
-/* Book parameter names */
+/** Book parameter names */
 
 #define BOOK_KVP		"kvp"
 

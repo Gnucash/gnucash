@@ -1,13 +1,22 @@
 
-/*! \mainpage GnuCash design and developer's manual
+/*! \mainpage GnuCash design and developer's reference
   
 \section intro Introduction
-This is the new GnuCash developper and design manual for GnuCash.  Previous documentation will slowly be integrated into this, and eventually it should always be up to date since it is generated directly from the source files using Doxygen.
+
+This is the new GnuCash developer and design manual for GnuCash.
+Previous documentation will slowly be integrated into this, and
+eventually it should always be up to date since it is generated
+directly from the source files using Doxygen.
 
 \section hacking Hacking on this documentation
-I will eventually post a style guide for documenting, and document one of the files "by the book".  Until then, feel free to start documenting or playing with doxygen configuration. 
+
+I will eventually post a style guide for documenting, and document one
+of the files "by the book".  Until then, feel free to start
+documenting or playing with doxygen configuration. This main page can
+be found in src/doc/doxygen_main_page.c .
 
 \subsection config Editing Doxygen configuration
+
 To edit the doxygen configuration, you can use:
 *
 cd src/doc
@@ -15,6 +24,7 @@ cd src/doc
 doxywizard doxygen.cfg &
 
 \subsection reference Doxygen reference documentation
+
 The Doxygen web site (http://www.stack.nl/~dimitri/doxygen/) has a complete user manual.  For the impatient, here are the most interesting sections:
 - How to write documentation blocks for files, functions, variables, etc.: http://www.stack.nl/~dimitri/doxygen/docblocks.html.
  Do not forget to add a file documentation block (@file) at the top of your file,

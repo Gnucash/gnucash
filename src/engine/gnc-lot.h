@@ -20,11 +20,8 @@
 \********************************************************************/
 
 
-/*
- * FILE:
- * gnc-lot.h
+/** @file gnc-lot.h
  * 
- * FUNCTION:
  * Lots implement the fundamental conceptual idea behind invoices,
  * inventory lots, and stock market investment lots.  See the file
  * src/doc/lots.txt for implmentation overview.
@@ -47,13 +44,13 @@ const GUID * gnc_lot_get_guid (GNCLot *p);
 GNCLot * gnc_lot_lookup (const GUID *guid, GNCBook *book);
 GNCBook * gnc_lot_get_book (GNCLot *);		  
 
-/* The gnc_lot_add_split() routine adds a split to this lot.  Note
+/** The gnc_lot_add_split() routine adds a split to this lot.  Note
  *    that *all* splits in a lot must also be in the same account.
  */
 void gnc_lot_add_split (GNCLot *, Split *);
 void gnc_lot_remove_split (GNCLot *, Split *);
 
-/* The gnc_lot_get_split_list() routine returns a GList of all the
+/** The gnc_lot_get_split_list() routine returns a GList of all the
  *    splits in this lot.  Do *not* not free this list when done;
  *    it is a pointer straight into the lots intenal list.  Do
  *    *not* add to or remove from this list directly.  Calling
@@ -63,23 +60,23 @@ void gnc_lot_remove_split (GNCLot *, Split *);
 SplitList * gnc_lot_get_split_list (GNCLot *);
 gint gnc_lot_count_splits (GNCLot *);
 
-/* The gnc_lot_get_account() routine returns the account with which 
+/** The gnc_lot_get_account() routine returns the account with which 
  *    this lot is associated. */
 Account * gnc_lot_get_account (GNCLot *);
 
-/* The gnc_lot_get_balance() routine returns the balance of the lot. 
+/** The gnc_lot_get_balance() routine returns the balance of the lot. 
  *    The commodity in which this balance is expressed is the commodity 
  *    of the account. */
 gnc_numeric gnc_lot_get_balance (GNCLot *);
 
-/* The gnc_lot_is_closed() routine returns a boolean flag: is this 
+/** The gnc_lot_is_closed() routine returns a boolean flag: is this 
  *    lot closed?  A lot is closed if its balance is zero.  This 
  *    routine is faster than using gnc_lot_get_balance() because
  *    once the balance goes to zero, this fact is cached.  
  */
 gboolean gnc_lot_is_closed (GNCLot *);
 
-/* Every lot has a place to hang kvp data.  This routine returns that
+/** Every lot has a place to hang kvp data.  This routine returns that
  * place. 
  * */
 kvp_frame * gnc_lot_get_slots (GNCLot *);

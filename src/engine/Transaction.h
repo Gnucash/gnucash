@@ -111,7 +111,7 @@ Transaction * xaccMallocTransaction (GNCBook *book);
  original order. */
 void          xaccTransDestroy (Transaction *trans);
 
-/** @brief DOCUMENT ME!*/
+/** DOCUMENT ME!*/
 gboolean xaccTransEqual(const Transaction *ta,
                         const Transaction *tb,
                         gboolean check_guids,
@@ -186,26 +186,26 @@ void	      xaccTransSetTxnType (Transaction *trans, char type);
 char	      xaccTransGetTxnType (const Transaction *trans);
 
 
-/** @brief Sets the transaction Number (or ID) field*/
+/** Sets the transaction Number (or ID) field*/
 void          xaccTransSetNum (Transaction *trans, const char *num);
-/** @brief Sets the transaction Description */
+/** Sets the transaction Description */
 void          xaccTransSetDescription (Transaction *trans, const char *desc);
-/** @brief Sets the transaction Notes
+/** Sets the transaction Notes
  *
  The Notes field is only visible in the register in double-line mode */
 void          xaccTransSetNotes (Transaction *trans, const char *notes);
 
-/** @brief Gets the transaction Number (or ID) field*/
+/** Gets the transaction Number (or ID) field*/
 const char *  xaccTransGetNum (const Transaction *trans);
-/** @brief Gets the transaction Description */
+/** Gets the transaction Description */
 const char *  xaccTransGetDescription (const Transaction *trans);
-/** @brief Gets the transaction Notes
+/** Gets the transaction Notes
  *
  The Notes field is only visible in the register in double-line mode */
 const char *  xaccTransGetNotes (const Transaction *trans);
 
 
-/** @brief Add a split to the transaction
+/** Add a split to the transaction
  * 
  The xaccTransAppendSplit() method will append the indicated 
  split to the collection of splits in this transaction.
@@ -306,8 +306,10 @@ int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
 void          xaccTransSetDate (Transaction *trans,
                                 int day, int mon, int year);
 
-/** The xaccTransSetDateSecs() method will modify the posted date of
-    the transaction, specified by a time_t (see ctime(3)). */
+/** The xaccTransSetDateSecs() method will modify the <i>posted</i>
+    date of the transaction, specified by a time_t (see ctime(3)). The
+    posted date is the date when this transaction was posted at the
+    bank. */
 void          xaccTransSetDateSecs (Transaction *trans, time_t time);
 
 /**     xaccTransSetDatePostedSecs() is just an alias for
@@ -319,28 +321,43 @@ void          xaccTransSetDatePostedSecs (Transaction *trans, time_t time);
 void          xaccTransSetDatePostedTS (Transaction *trans,
                                         const Timespec *ts);
 
-/** @brief Modify the date of when the transaction was entered. */
+/** Modify the date of when the transaction was entered. The entered
+ * date is the date when the register entry was made. */
 void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
-/** @brief Modify the date of when the transaction was entered. */
+/** Modify the date of when the transaction was entered. The entered
+ * date is the date when the register entry was made. */
 void          xaccTransSetDateEnteredTS (Transaction *trans,
                                         const Timespec *ts);
 
 /** Dates and txn-type for A/R and A/P "invoice" postings */
 void	      xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts);
 
-/** Retrieve the posted date of the transaction. (Although having
-   different function names, GetDate and GetDatePosted refer to the
-   same single date.)*/
+/** Retrieve the posted date of the transaction. The posted date is
+    the date when this transaction was posted at the bank. (Although
+    having different function names, GetDate and GetDatePosted refer
+    to the same single date.)*/
 time_t        xaccTransGetDate (const Transaction *trans);
+/** Retrieve the posted date of the transaction. The posted date is
+    the date when this transaction was posted at the bank. (Although
+    having different function names, GetDate and GetDatePosted refer
+    to the same single date.)*/
 void          xaccTransGetDatePostedTS (const Transaction *trans, Timespec *ts);
+/** Retrieve the posted date of the transaction. The posted date is
+    the date when this transaction was posted at the bank. (Although
+    having different function names, GetDate and GetDatePosted refer
+    to the same single date.)*/
 Timespec      xaccTransRetDatePostedTS (const Transaction *trans);
 
-/** Retrieve the date of when the transaction was entered. */
+/** Retrieve the date of when the transaction was entered. The entered
+ * date is the date when the register entry was made.*/
 void          xaccTransGetDateEnteredTS (const Transaction *trans, Timespec *ts);
+/** Retrieve the date of when the transaction was entered. The entered
+ * date is the date when the register entry was made.*/
 Timespec      xaccTransRetDateEnteredTS (const Transaction *trans);
 
 /** Dates and txn-type for A/R and A/P "invoice" postings */
 Timespec      xaccTransRetDateDueTS (const Transaction *trans);
+/** Dates and txn-type for A/R and A/P "invoice" postings */
 void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
 
 /**@}*/

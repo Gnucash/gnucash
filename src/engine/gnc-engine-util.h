@@ -24,6 +24,8 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
+/** @file gnc-engine-util.h @brief GnuCash engine utility functions */
+
 #ifndef GNC_ENGINE_UTIL_H
 #define GNC_ENGINE_UTIL_H
 

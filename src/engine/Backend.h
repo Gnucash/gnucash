@@ -22,11 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-/* 
- * FILE:
- * Backend.h
+/** @file Backend.h
  *
- * FUNCTION:
  * The 'backend' is a pseudo-object providing an interface between the
  * engine and a persistant data store (e.g. a server, a database, or
  * a file).  There are no backend functions that are 'public' to
@@ -39,7 +36,7 @@
 
 #include "config.h"
 
-/* NOTE: if you modify GNCBackendError, please update src/scm/gnc.gwp */
+/** NOTE: if you modify GNCBackendError, please update src/scm/gnc.gwp */
 typedef enum {
   ERR_BACKEND_NO_ERR = 0,
   ERR_BACKEND_NO_BACKEND,   /* Backend * pointer was null the err routine */
@@ -93,6 +90,14 @@ typedef enum {
 } GNCBackendError;
 /* NOTE: if you modify GNCBackendError, please update src/scm/gnc.gwp */
 
+/** The Backend is a pseudo-object providing an interface between the
+ * engine and a persistant data store (e.g. a server, a database, or
+ * a file).  
+ *
+ * There are no backend functions that are 'public' to users of the
+ * engine.  The backend can, however, report errors to the GUI & other
+ * front-end users.  
+ */
 typedef struct backend_s Backend;
 
 typedef void (*GNCBePercentageFunc) (const char *message, double percent);

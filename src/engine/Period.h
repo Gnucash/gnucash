@@ -1,8 +1,5 @@
-/*
- * FILE:
- * Period.h
+/** @file Period.h
  *
- * FUNCTION:
  * Implement accounting periods.
  *
  * CAUTION: this is currently a semi-functional, untested implementation
@@ -22,7 +19,7 @@
 #include "Query.h"
 
 
-/* The gnc_book_close_period() routine will 'close' a book at
+/** The gnc_book_close_period() routine will 'close' a book at
  *    the indicated date.  It returns a pointer to the closed book,
  *    while the argument remains open.  This routine will move
  *    all of the older transactions from the open book to the
@@ -105,7 +102,7 @@ GNCBook * gnc_book_close_period (GNCBook *, Timespec,
                                  Account *equity_acct, 
                                  const char *memo);
 
-/* The gnc_book_partition() uses the result of the indicated query
+/** The gnc_book_partition() uses the result of the indicated query
  *    to move a set of transactions from the "src" book to the "dest"
  *    book.  Before moving the transactions, it will first place a 
  *    copy of all of the accounts in "src" into "dest".  This is done 
@@ -135,7 +132,7 @@ GNCBook * gnc_book_close_period (GNCBook *, Timespec,
  */
 void gnc_book_partition (GNCBook *dest, GNCBook *src, Query *);
 
-/* The gnc_book_insert_trans_clobber() routine takes an existing 
+/** The gnc_book_insert_trans_clobber() routine takes an existing 
  *    transaction that is located in one book, and moves it to 
  *    another book.  It moves all of the splits as well.  In the 
  *    course of the move, the transaction is literally deleted 

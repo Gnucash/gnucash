@@ -22,7 +22,7 @@
 \********************************************************************/
 
 /**
- * @addtogroup Engine
+ * @addtogroup SchedXaction
  * @{ */
 /**
  * @file SchedXaction.h

@@ -20,9 +20,7 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * FILE:
- * gnc-session.h
+/** @file gnc-session.h
  *
  * FUNCTION:
  * Encapsulates a connection to a GnuCash backend.  That is, it
@@ -97,12 +95,12 @@ void         gnc_session_destroy (GNCSession *session);
 GNCSession * gnc_get_current_session (void);
 void	     gnc_set_current_session (GNCSession *session);
 
-/* The gnc_session_swap_data () method swaps the book of
+/** The gnc_session_swap_data () method swaps the book of
  *    the two given sessions. It is useful
  *    for 'Save As' type functionality. */
 void gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2);
 
-/* The gnc_session_begin () method begins a new session.
+/** The gnc_session_begin () method begins a new session.
  *    It takes as an argument the book id. The book id must be a string
  *    in the form of a URI/URL.
  *    In the current implementation, the following URL's are supported
@@ -142,7 +140,7 @@ void gnc_session_begin (GNCSession *session, const char * book_id,
                          gboolean ignore_lock, gboolean create_if_nonexistent);
 
 
-/* 
+/**
  * The gnc_session_load() method causes the GNCBook to be made ready to 
  *    to use with this URL/datastore.   When the URL points at a file, 
  *    then this routine would load the data from the file.  With remote
@@ -157,7 +155,7 @@ gboolean gnc_session_export (GNCSession *tmp_session,
 			     GNCSession *real_session,
 			     GNCPercentageFunc percentage_func);
 
-/* The gnc_session_get_error() routine can be used to obtain the reason
+/** The gnc_session_get_error() routine can be used to obtain the reason
  *    for any failure.  Calling this routine returns the current error.
  *
  * The gnc_session_pop_error() routine can be used to obtain the reason
@@ -177,7 +175,7 @@ GNCBackendError gnc_session_pop_error (GNCSession *session);
 GNCBook * gnc_session_get_book (GNCSession *session);
 void gnc_session_set_book (GNCSession *session, GNCBook *book);
 
-/* The gnc_session_get_file_path() routine returns the fully-qualified file
+/** The gnc_session_get_file_path() routine returns the fully-qualified file
  *    path for the session. That is, if a relative or partial filename
  *    was for the session, then it had to have been fully resolved to
  *    open the session. This routine returns the result of this resolution.
@@ -193,16 +191,16 @@ void gnc_session_set_book (GNCSession *session, GNCBook *book);
 const char * gnc_session_get_file_path (GNCSession *session);
 const char * gnc_session_get_url (GNCSession *session);
 
-/*
+/**
  * The gnc_session_not_saved() subroutine will return TRUE
  *    if any data in the session hasn't been saved to long-term storage.
  */
 gboolean gnc_session_not_saved(GNCSession *session);
 
-/* FIXME: This isn't as thorough as we might want it to be... */
+/** FIXME: This isn't as thorough as we might want it to be... */
 gboolean gnc_session_save_may_clobber_data (GNCSession *session);
 
-/* The gnc_session_save() method will commit all changes that have been
+/** The gnc_session_save() method will commit all changes that have been
  *    made to the session. For the file backend, this is nothing
  *    more than a write to the file of the current AccountGroup & etc.
  *    For the SQL backend, this is typically a no-op (since all data
@@ -219,7 +217,7 @@ void     gnc_session_save (GNCSession *session,
 			   GNCPercentageFunc percentage_func);
 void     gnc_session_end  (GNCSession *session);
 
-/* The gnc_session_events_pending() method will return TRUE if the backend
+/** The gnc_session_events_pending() method will return TRUE if the backend
  *    has pending events which must be processed to bring the engine
  *    up to date with the backend.
  *
@@ -230,7 +228,7 @@ void     gnc_session_end  (GNCSession *session);
 gboolean gnc_session_events_pending (GNCSession *session);
 gboolean gnc_session_process_events (GNCSession *session);
 
-/* The xaccResolveFilePath() routine is a utility that will accept
+/** The xaccResolveFilePath() routine is a utility that will accept
  *    a fragmentary filename as input, and resolve it into a fully
  *    qualified path in the file system, i.e. a path that begins with
  *    a leading slash.  First, the current working directory is
@@ -243,7 +241,7 @@ gboolean gnc_session_process_events (GNCSession *session);
 char * xaccResolveFilePath (const char * filefrag);
 char * xaccResolveURL (const char * pathfrag);
 
-/* Run the RPC Server */
+/** Run the RPC Server */
 void gnc_run_rpc_server (void);
 
 #endif /* GNC_SESSION_H */

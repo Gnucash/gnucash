@@ -21,6 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
+/** @file kvp_frame.h @brief A key-value frame system for gnucash.*/
+
 #ifndef KVP_FRAME_H
 #define KVP_FRAME_H
 
@@ -30,7 +32,7 @@
 #include "guid.h"
 #include "date.h"
 
-/* a kvp_frame is a set of associations between character strings
+/** a kvp_frame is a set of associations between character strings
  * (keys) and kvp_value structures.  A kvp_value is a union with
  * possible types enumerated in the kvp_value_t enum.
  * 
@@ -41,7 +43,12 @@
  * kvp_frame_delete and kvp_value_delete are deep (recursive) deletes.
  * kvp_frame_copy and kvp_value_copy are deep value copies. 
  */
+typedef struct _kvp_frame kvp_frame;
+
+/** */
+typedef struct _kvp_value kvp_value;
  
+/** */
 typedef enum {
   KVP_TYPE_GINT64,
   KVP_TYPE_DOUBLE,
@@ -54,11 +61,9 @@ typedef enum {
   KVP_TYPE_FRAME
 } kvp_value_t;
 
-typedef struct _kvp_frame kvp_frame;
-typedef struct _kvp_value kvp_value;
 
 
-/* kvp_frame functions */
+/** kvp_frame functions */
 kvp_frame   * kvp_frame_new(void);
 void          kvp_frame_delete(kvp_frame * frame);
 kvp_frame   * kvp_frame_copy(const kvp_frame * frame);
@@ -70,7 +75,7 @@ gchar* kvp_value_glist_to_string(const GList *list);
 
 GHashTable* kvp_frame_get_hash(const kvp_frame *frame);
 
-/* The kvp_frame_set_slot() routine copies the value into the frame,
+/** The kvp_frame_set_slot() routine copies the value into the frame,
  *    associating it with 'key'.
  * The kvp_frame_set_slot_nc() routine puts the value (without copying
  *    it) into the frame, associating it with 'key'.  This routine is
@@ -86,7 +91,7 @@ void          kvp_frame_set_slot_nc(kvp_frame * frame,
 kvp_value   * kvp_frame_get_slot(kvp_frame * frame, 
                                  const char * key);
 
-/* The kvp_frame_set_slot_path() routines walk the hierarchy,
+/** The kvp_frame_set_slot_path() routines walk the hierarchy,
  * using the key values to pick each branch.  When the terminal node
  * is reached, the value is copied into it.
  */
@@ -98,7 +103,7 @@ void          kvp_frame_set_slot_path_gslist (kvp_frame *frame,
                                               const kvp_value *value,
                                               GSList *key_path);
 
-/* The following routines return the last frame of the path.
+/** The following routines return the last frame of the path.
  * If the frame path doesn't exist, it is created.  
  *
  * The kvp_frame_get_frame_slash() routine takes a single string
@@ -118,7 +123,7 @@ kvp_frame    * kvp_frame_get_frame_gslist (kvp_frame *frame,
 kvp_frame    * kvp_frame_get_frame_slash (kvp_frame *frame,
                                           const char *path);
 
-/* The following routines return the value at the end of the
+/** The following routines return the value at the end of the
  * path, or NULL if any portion of the path doesn't exist.
  */
 kvp_value   * kvp_frame_get_slot_path (kvp_frame *frame,
@@ -137,20 +142,20 @@ kvp_value   * kvp_value_copy(const kvp_value * value);
  **/
 gint          kvp_value_compare(const kvp_value *va, const kvp_value *vb);
 
-/* list convenience funcs. */
+/** list convenience funcs. */
 gint        kvp_glist_compare(const GList * list1, const GList * list2);
 
-/* kvp_glist_copy() performs a deep copy: same as mapping 
+/** kvp_glist_copy() performs a deep copy: same as mapping 
  *     kvp_value_copy() over the elements and then copying the spine. 
  */
 GList     * kvp_glist_copy(const GList * list);
 
-/* kvp_glist_delete() performs a deep delete: same as mapping 
+/** kvp_glist_delete() performs a deep delete: same as mapping 
  *    kvp_value_delete() over the elements and then deleting the GList. 
  */
 void        kvp_glist_delete(GList * list);
 
-/* The following routines are constructors for kvp_value.
+/** The following routines are constructors for kvp_value.
  *    Those with pointer arguments copy in the value.
  *    The *_nc() versions do *not* copy in thier values, 
  *    but use them directly.
@@ -165,13 +170,13 @@ kvp_value   * kvp_value_new_binary(const void * data, guint64 datasize);
 kvp_value   * kvp_value_new_glist(const GList * value);
 kvp_value   * kvp_value_new_frame(const kvp_frame * value);
 
-/* value constructors (non-copying - kvp_value takes pointer ownership)
+/** value constructors (non-copying - kvp_value takes pointer ownership)
    values *must* have been allocated via glib allocators! (gnew, etc.) */
 kvp_value   * kvp_value_new_binary_nc(void * data, guint64 datasize);
 kvp_value   * kvp_value_new_glist_nc(GList *lst);
 kvp_value   * kvp_value_new_frame_nc(kvp_frame * value);
 
-/* Value accessors. Those for GUID, binary, GList, kvp_frame and
+/** Value accessors. Those for GUID, binary, GList, kvp_frame and
   string are non-copying -- the caller can modify the value directly.
 
   Note that the above non-copying list did not include the
@@ -193,14 +198,14 @@ Timespec    kvp_value_get_timespec(const kvp_value * value);
 
 gchar* kvp_value_to_string(const kvp_value *val);
 
-/* manipulators */
+/** manipulators */
 
 gboolean kvp_value_binary_append(kvp_value *v, void *data, guint64 size);
 /* copying - but more efficient than creating a new kvp_value manually. */
 
 /* iterators */
 
-/* Traverse all of the slots in the given kvp_frame.  This function
+/** Traverse all of the slots in the given kvp_frame.  This function
    does not descend recursively to traverse any kvp_frames stored as
    slot values.  You must handle that in proc, with a suitable
    recursive call if desired. */
