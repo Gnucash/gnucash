@@ -19,16 +19,10 @@
 #ifndef __GTT_UTIL_H__
 #define __GTT_UTIL_H__
 
-#include <gtk/gtktext.h>
-#define GNOME2_PORT_IS_READY
+#include <gtk/gtk.h>
 
 /* Some gtk-like utilities */
-#ifdef GNOME2_PORT_IS_READY
 void xxxgtk_textview_set_text (GtkTextView *text, const char *str);
 const char * xxxgtk_textview_get_text (GtkTextView *text);
-#else
-void xxxgtk_text_set_text (GtkText *text, const char *str);
-const char * xxxgtk_text_get_text (GtkText *text);
-#endif
 
 #endif /* __GTT_UTIL_H__ */
