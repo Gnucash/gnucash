@@ -12,41 +12,6 @@
  * Copyright (c) 1998 Linas Vepstas
  */
 
-#ifndef __XACC_SCRUB_H__
-#define __XACC_SCRUB_H__
-#include "Account.h"
-#include "Transaction.h"
-
-/* The ScrubOrphans() methods search for transacations that contain
- *    splits that do not have a parent account. These "orphaned splits"
- *    are placed into an "orphan account" which the user will have to 
- *    go into and clean up.  Kind of like the unix "Lost+Found" directory
- *    for orphaned inodes.
- *
- * The xaccAccountScrubOrphans() method performs this scrub only for the 
- *    indicated account, and not for any of its children.
- *
- * The xaccAccountTreeScrubOrphans() method performs this scrub for the 
- *    indicated account and its children.
- *
- * The xaccGroupScrubOrphans() method performs this scrub for the 
- *    child accounts of this group.
- */
-void xaccAccountScrubOrphans (Account *acc);
-void xaccAccountTreeScrubOrphans (Account *acc);
-void xaccGroupScrubOrphans (AccountGroup *grp);
-
-/* The xaccScrubImbalance() method searches for transactions that do
- *    not balance to zero. If any such transactions are found, a split
- *    is created to offset this amount and is added to an "imbalance"
- *    account.
- */
-void xaccAccountScrubImbalance (Account *acc);
-void xaccAccountTreeScrubImbalance (Account *acc);
-void xaccGroupScrubImbalance (AccountGroup *grp);
-
-#endif /* __XACC_SCRUB_H__ */
-
 #include <nana.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,6 +20,7 @@ void xaccGroupScrubImbalance (AccountGroup *grp);
 #include "Account.h"
 #include "Group.h"
 #include "GroupP.h"
+#include "Scrub.h"
 #include "Transaction.h"
 #include "util.h"
 
