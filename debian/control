@@ -1,12 +1,13 @@
 Source: gnucash
 Section: utils
 Priority: extra
-Maintainer: Tyson Dowd <trd@cs.mu.oz.au>
+Maintainer: John Goerzen <jgoerzen@complete.org>
 Standards-Version: 3.1.0.0
 
 Package: gnucash
 Architecture: any
 Depends: ${shlibs:Depends}, libwww-perl, slib, scm, guile1.3, libguile6-slib, perl-5.005, eperl
+Suggests: gnuplot
 Description: A personal finance tracking program.
  Gnucash can track finances in multiple accounts, keeping running
  and reconciled balances. It has an X based graphical user interface,

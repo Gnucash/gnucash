@@ -1,8 +1,9 @@
 gnucash for DEBIAN
 ----------------------
 
-This is BETA software.  It works to a degree but there are still many
+This is BETA software.  It works to a degree but there may still be
 bugs and unimplemented features.  If you want a stable version, it
 is recommended you use "xacc" which is also packaged for Debian.
 
 Tyson Dowd <trd@cs.mu.oz.au>, Wed, 10 Mar 1999 13:00:12 +1100
+John Goerzen <jgoerzen@complete.org> June 2, 2000

@@ -1,7 +1,7 @@
 Source: xacc
 Section: utils
 Priority: extra
-Maintainer: Tyson Dowd <trd@cs.mu.oz.au>
+Maintainer: John Goerzen <jgoerzen@complete.org>
 Standards-Version: 2.3.0.1
 
 Package: xacc

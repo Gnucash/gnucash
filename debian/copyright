@@ -3,8 +3,9 @@ This is the Debian GNU/Linux prepackaged version of gnucash, an application
 to track finances in multiple accounts, keeping running and reconciled
 balances.  Gnucash was written by Robin D. Clark and Linas Vepstas.
 
-This package was debianized by Tyson Dowd <trd@cs.mu.oz.au>
-Wed, 10 Mar 1999 13:02:16 +1100. It was downloaded from
+This package was debianized by Tyson Dowd <trd@cs.mu.oz.au> Wed, 10 Mar 1999
+13:02:16 +1100.  John Goerzen <jgoerzen@complete.org> is the Debian
+maintainer effective June 2, 2000.  It was downloaded from
 ftp://ftp.gnucash.org/pub/gnucash/gnucash/sources/unstable/1.3.x/1.3.3/gnucash-1.3.3.tar.gz
 
 Copyright:

@@ -1,3 +1,19 @@
+gnucash (1.3.8-1) unstable; urgency=low
+
+  * New Debian maintainer: John Goerzen <jgoerzen@complete.org>
+  * Closing already-fixed bugs.  Closes: #62410, #62424, #62550.
+  * Updated package.  Closes: #60387, #65000.
+  * Upstream bugfixes.  Closes: #56979, #52990, #60901.
+  * Fixed 64-bit cleanliness issues.  Now loads files without segfaulting
+    on Alpha.
+  * Print feature now here.  It's in Reports -> Transaction Report
+    from the main menu.  Closes: #57311.
+  * esd deps fixed.  Closes: #60655.
+  * Strings longer.  Closes: #44720.
+  * Suggests gnuplot.  Closes: #62553.
+
+ -- John Goerzen <jgoerzen@complete.org>  Wed, 31 May 2000 12:50:19 -0500
+
 gnucash (1.3.4-3) frozen unstable; urgency=high
 
   * Make wrapper script executable when installed.

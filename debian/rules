@@ -21,7 +21,9 @@ clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp install-stamp
-	#-$(MAKE) distclean
+	-$(MAKE) distclean
+	-rm `find . -name "*.cache"`
+	-rm `find . -name "*.log"`
 	dh_clean
 
 install: install-stamp
