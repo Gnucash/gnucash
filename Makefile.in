@@ -118,7 +118,7 @@ install:
 	@mkdir -p ${GNC_LIBDIR}
 	$(INSTALL_DATA) src/swig/perl5/gnucash.pm ${GNC_LIBDIR}
 	$(INSTALL_DATA) src/swig/perl5/gnucash.so ${GNC_LIBDIR}
-	$(INSTALL_DATA) src/swig/perl5/Quote.pm ${GNC_LIBDIR}
+	$(INSTALL_DATA) src/quotes/Quote.pm ${GNC_LIBDIR}
 
 	@mkdir -p ${GNC_DOCDIR}
 	$(INSTALL_DATA) README* ${GNC_DOCDIR}
