@@ -817,7 +817,7 @@ void regRefresh (RegWindow *regData)
 
    /* hack alert -- should be recomputing the list of splits */
 /* ???? */
-   xaccLoadRegister (regData->ledger, 
+   xaccBRLoadRegister (regData->ledger, 
                      xaccAccountGetSplitList (regData->leader),
                      regData->leader);
 
@@ -963,7 +963,7 @@ closeRegWindow( GtkWidget * mw, gpointer data)
   fprintf(stderr, "Closing register safely\n");
 
   /* Save any unsaved changes */
-  xaccSaveRegEntry (regData->ledger);
+  xaccBRSaveRegEntry (regData->ledger);
 
   xaccDestroyBasicRegister (regData->ledger);
   
@@ -1050,7 +1050,7 @@ recordCB( GtkWidget *w, gpointer data)
 {
   RegWindow *regData = (RegWindow *) data;
   
-  xaccSaveRegEntry (regData->ledger);
+  xaccBRSaveRegEntry (regData->ledger);
 }
 
 /********************************************************************\
@@ -1073,7 +1073,7 @@ deleteCB(GtkWidget *widget, gpointer data)
   Account **affected_accounts;
   
   /* get the current split based on cursor position */
-  split = xaccGetCurrentSplit (regData->ledger);
+  split = xaccBRGetCurrentSplit (regData->ledger);
   if (NULL == split ) return;
 
   /* ask for user confirmation before performing 
@@ -1118,8 +1118,8 @@ cancelCB( GtkWidget *w, gpointer data)
   Split * split;
   
   /* when cancelling edits, reload the cursor from the transaction */
-  split = xaccGetCurrentSplit (regData->ledger);
-  xaccLoadRegEntry (regData->ledger, split);
+  split = xaccBRGetCurrentSplit (regData->ledger);
+  xaccBRLoadRegEntry (regData->ledger, split);
   xaccRefreshTableGUI (regData->ledger->table);
 }
 
