@@ -1,81 +1,81 @@
 <ARTICLE ID="XACC-USERDOCS">
 <ARTHEADER>
-<TITLE>GnuCash Help Main Window</TITLE>
+<TITLE>Ventana Principal de Ayuda de GnuCash</TITLE>
 </ARTHEADER>
 <SECT1>
-<TITLE> User Documentation Overview</TITLE>
+<TITLE> Introducción a la Documentación de Usuario</TITLE>
 
-<PARA> For help on a specific topic:
+<PARA> Para obtener ayuda de un elemento en concreto:
 
 <ITEMIZEDLIST>
 
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-ABOUT">About GnuCash</LINK>
+<PARA><LINK LINKEND="XACC-ABOUT">Acerca GnuCash</LINK>
 
 </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-ACCTYPES">Account Types</LINK>
+<PARA><LINK LINKEND="XACC-ACCTYPES">Tipos de Cuenta</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-APAR">Accounts Payable and Accounts
-      Receivable</LINK>
+<PARA><LINK LINKEND="XACC-APAR">Cuentas Pagables y Cuentas
+      Recibibles</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-CHARTOFACCTS">Chart of Accounts</LINK>
+<PARA><LINK LINKEND="XACC-CHARTOFACCTS">Gráfico de Cuentas</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-NEWACCTWIN">Creating a new
-      account</LINK>
+<PARA><LINK LINKEND="XACC-NEWACCTWIN">Crear una nueva
+      cuenta</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="DATE">Date Input</LINK>
+<PARA><LINK LINKEND="DATE">Entrada de Fechas</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-DEPRECIATION">Depreciation and Capital
-      Gains</LINK>
+<PARA><LINK LINKEND="XACC-DEPRECIATION">Depreciación y Ganancia de
+      Capital</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-CURRENCYHANDLING">Foreign Currency
-      Accounts</LINK>
+<PARA><LINK LINKEND="XACC-CURRENCYHANDLING">Cuentas en Moneda
+      Extranjera</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-EURO">GnuCash and the EURO</LINK>
+<PARA><LINK LINKEND="XACC-EURO">GnuCash y el EURO</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><ULINK URL="bofa-mym.html">Importing MYM (Managing Your
-      Money) Files</ULINK>
+<PARA><ULINK URL="bofa-mym.html">Importar archivos MYM (Manejar Su
+      Dinero)</ULINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-QIF-IMPORT">A Guide for Former Users
-      of Quicken(TM)</LINK>
+<PARA><LINK LINKEND="XACC-QIF-IMPORT">Guía para Usuarios Noveles
+      de Quicken(TM)</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        <LINK LINKEND="XACC-GPL">License - GPL</LINK> 
+<PARA>        <LINK LINKEND="XACC-GPL">Licencia - GPL</LINK> 
 
         <ITEMIZEDLIST>
 <LISTITEM>
-<PARA><LINK LINKEND="SEC003">Warranty</LINK>
+<PARA><LINK LINKEND="SEC003">Garantía</LINK>
     </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -84,55 +84,54 @@
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-MAINWIN">The Main Window</LINK>
+<PARA><LINK LINKEND="XACC-MAINWIN">La Ventana Principal</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-RECNWIN">The Reconcile Window</LINK>
+<PARA><LINK LINKEND="XACC-RECNWIN">La Ventana de Reconciliación</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-REGWIN">The Register Window</LINK>
+<PARA><LINK LINKEND="XACC-REGWIN">La Ventana de Registros</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-TICKER">Stock Ticker</LINK>
+<PARA><LINK LINKEND="XACC-TICKER">Comprobantes de Acciones</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-DOUBLEENTRY">Using Double Entry</LINK>
+<PARA><LINK LINKEND="XACC-DOUBLEENTRY">Utilizar Doble Entrada</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-INCOMEEXPENSE">Using Income/Expense
-      Accounts</LINK>
+<PARA><LINK LINKEND="XACC-INCOMEEXPENSE">Utilizar Cuentas de
+      Cobros/Gastos</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-PREFERENCES">Personalising
-      Gnucash</LINK>
+<PARA><LINK LINKEND="XACC-PREFERENCES">Configurar Gnucash</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-ACCOUNTEDIT">Changing Account
-      Properties</LINK>
+<PARA><LINK LINKEND="XACC-ACCOUNTEDIT">Modificar Propiedades de la
+      Cuenta</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-Y2K">Y2K Considerations</LINK>
+<PARA><LINK LINKEND="XACC-Y2K">Consideraciones de Y2K</LINK>
 
   </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-REPORTS">Reports</LINK>
+<PARA><LINK LINKEND="XACC-REPORTS">Listados</LINK>
 </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -140,25 +139,26 @@
 </PARA>
 </SECT1>
 <SECT1 ID="XACC-EXTHELP">
-<TITLE> Extended Help/System Documentation</TITLE>
+<TITLE> Ayuda Avanzada/Sistema de Documentación</TITLE>
 
-<PARA>The following documentation is about the <EMPHASIS>
-implementation</EMPHASIS> of GnuCash as opposed to being
-<EMPHASIS>user documentation</EMPHASIS> on how to
-<EMPHASIS>use</EMPHASIS> it.
+<PARA>La siguiente documentación es acerca de la <EMPHASIS>
+implementación</EMPHASIS> de GnuCash en oposición a la
+<EMPHASIS>documentación de Usuario</EMPHASIS> que explica como
+se debe <EMPHASIS>utilizar</EMPHASIS>.
 </PARA>
 
-<PARA>Some of it represents preliminary documentation for subsystems
-that are not yet sufficiently functional for use by end users.
+<PARA>Algunas representan documentaciones preliminares de
+partes del sistema que no están suficientemente probadas para
+ser utilizadas por los usuarios finales.
 
 <ITEMIZEDLIST>
 <LISTITEM>
-<PARA><ULINK URL="projects.html">GnuCash Project Goals</ULINK>
+<PARA><ULINK URL="projects.html">Objetivos del Proyecto GnuCash</ULINK>
 
 </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><LINK LINKEND="XACC-PRINT">Printing</LINK>
+<PARA><LINK LINKEND="XACC-PRINT">Impresión</LINK>
 </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -166,7 +166,3 @@ that are not yet sufficiently functional for use by end users.
 </PARA>
 </SECT1>
 </ARTICLE>
-
-<!-- Local variables: -->
-<!-- sgml-parent-document: "gnucash.sgml" -->
-<!-- End: -->

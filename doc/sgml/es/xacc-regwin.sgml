@@ -1,27 +1,29 @@
 <ARTICLE ID="XACC-REGWIN">
 
 <ARTHEADER>
-<TITLE>The Register Window</TITLE>
+<TITLE>Ventana de Registros</TITLE>
 </ARTHEADER>
 
 <SECT1>
-<TITLE>The Register Window</TITLE>
+<TITLE> Ventana de Registros</TITLE>
 <MEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/regwin-single.png">
 </IMAGEOBJECT>
 </MEDIAOBJECT> 
 
-<PARA>This is the "Register" or the "Ledger" window. Transactions
-    are entered here.
-    To enter a new transaction, just type into the last blank
-    transaction. You can use
-    the <LINK LINKEND="DATE">Date Accelerator keys</LINK> to
-    quickly enter dates. Use the mouse or the
-    <LINK LINKEND="XACC-REGWIN-KBD">Register Keyboard Shortcuts</LINK>to move
-    between fields, and press the <KEYCAP>Enter</KEYCAP> key or click
-    <GUIBUTTON>record</GUIBUTTON> on the toolbar to record
-    the transaction:
+<PARA>Esto es la ventana de "Registros" o de "Libro Mayor". Las
+    transacciones se introducen aquí.
+
+    </PARA>
+<PARA>Para introducir una nueva transacción, simplemente escriba
+    en la transacción en blanco que es la última. A medida que
+    escribe en ella, puede utilizar las <LINK LINKEND="DATE">Teclas aceleradoras
+    de Fechas</LINK> para introducir las fechas con mayor rapidez.
+    También puede utilizar el ratón o <LINK LINKEND="XACC-REGWIN-KBD">Teclas
+    aceleradoras del Registro</LINK> para moverse entre los campos,
+    y apretar la tecla <KEYCAP>Enter</KEYCAP> o el botón <GUIBUTTON>registro</GUIBUTTON>
+    en la barra de herramientas de la transacción:
 
     </PARA>
     <MEDIAOBJECT>
@@ -29,68 +31,68 @@
 <IMAGEDATA FILEREF="image/regwin-single2.png">
 </IMAGEOBJECT>
 </MEDIAOBJECT> 
-<PARA>Notice how a the transaction has been recorded and a new,
-    blank transaction has been created.
+<PARA>Observe que cuando una transacción se graba se crea
+    otra transacción en blanco.
 
     </PARA>
-<PARA>You can edit existing transactions in a similar manner.
-    GnuCash will prompt you to confirm any changes you make.
+<PARA>Puede modificar transacciones existentes de forma similar.
+    GnuCash le pedirá que confirme lo cambios que haga.
 
     </PARA>
-<PARA>After you have entered a few transactions, GnuCash will try
-    to guess some or all of the remaining details of a transaction
-    when you type into the <GUILABEL>Description</GUILABEL> field. If GnuCash has
-    guessed wrong, simply type over or delete the incorrect
-    information and replace it with the correct information.
+<PARA>Después de que haya introducido varias transacciones, GnuCash
+    intentará adivinar algunos datos de la transacción que esté
+    creando cuando escriba en el campo <GUILABEL>Descripción</GUILABEL>.
+    Si GnuCash no acierta, simplemente modifique o elimine
+    la información incorrecta.
 
     </PARA>
 </SECT1>
 <SECT1 ID="XACC-MANTXN">
-<TITLE>Manipulating Transactions</TITLE>
-<PARA>You can manipulate transactions with the toolbar buttons or the
-    <GUIMENU>Transaction</GUIMENU> menu:
+<TITLE> Modificar transacciones</TITLE>
+<PARA>Puede modificar las transacciones con los botones de la barra de
+    herramientas o con el menú <GUIMENU>Transacción</GUIMENU>:
 
     </PARA>
 <VARIABLELIST>
-<VARLISTENTRY><TERM><GUIBUTTON>Delete</GUIBUTTON></TERM>
-<LISTITEM><PARA> You can delete a transaction or an
-      individual split.
+<VARLISTENTRY><TERM><GUIBUTTON>Eliminar</GUIBUTTON></TERM>
+<LISTITEM><PARA> Puede eliminar una transacción o un elemento
+      individual.
 
       </PARA>
 </LISTITEM>
 </VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>Cancel</GUIBUTTON></TERM>
-<LISTITEM><PARA> This undoes any changes you have made to
-      the transaction you are currently entering or changing.
+<VARLISTENTRY><TERM><GUIBUTTON>Cancelar</GUIBUTTON></TERM>
+<LISTITEM><PARA> Esto deshace todos los cambios que haya hecho
+      en la transacción que esté introduciendo o modificando.
 
       </PARA>
 </LISTITEM>
 </VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>New</GUIBUTTON></TERM>
-<LISTITEM><PARA> This moves the cursor to the last line of the
-      register where new transactions are entered.
+<VARLISTENTRY><TERM><GUIBUTTON>Nuevo</GUIBUTTON></TERM>
+<LISTITEM><PARA> Esto mueve el cursor a la última linea de los
+      registros donde se introducen las nuevas transacciones.
 
       </PARA>
 </LISTITEM>
 </VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>Jump</GUIBUTTON></TERM>
-<LISTITEM><PARA> When you have selected an existing transaction or split, this
-      takes you to the corresponding register entry in the other account
-      that is involved in the transaction or split.
+<VARLISTENTRY><TERM><GUIBUTTON>Mover</GUIBUTTON></TERM>
+<LISTITEM><PARA> Cuando ha seleccionado una transacción o elemento
+      existente, esto le muestra la entrada del registro correspondiente
+      en la otra cuenta a que afecta la transacción o elemento.
 
       </PARA>
 </LISTITEM>
 </VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>Transfer</GUIBUTTON></TERM>
-<LISTITEM><PARA>This is an alternative way to enter a
-      transaction. You can do a transfer between any two accounts
-      without opening up other registers.
+<VARLISTENTRY><TERM><GUIBUTTON>Transferir</GUIBUTTON></TERM>
+<LISTITEM><PARA>Es una forma diferente de introducir una transacción.
+      Puede hacer una transferencia dos cuentas diferentes cualesquiera
+      sin abrir otros registros.
 
       </PARA>
 </LISTITEM>
 </VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>Close</GUIBUTTON></TERM>
-<LISTITEM><PARA>Closes this register.
+<VARLISTENTRY><TERM><GUIBUTTON>Cerrar</GUIBUTTON></TERM>
+<LISTITEM><PARA>Cierra este registro.
     </PARA>
 </LISTITEM>
 </VARLISTENTRY>
@@ -98,97 +100,99 @@
 
 </SECT1>
 <SECT1 ID="XACC-VIEWTXN">
-<TITLE> Viewing Transactions</TITLE>
-<PARA>The register can show transactions in a variety of different
-    ways, controlled by entries on the <GUIMENU>Register</GUIMENU> menu.
+<TITLE> Mostrar Transacciones</TITLE>
+<PARA>En la ventana de registros se pueden mostrar las transacciones
+    de varias formas diferentes, que se controlan mediante las opciones
+    del menú <GUIMENU>Registro</GUIMENU>.
 
     </PARA>
-<PARA>The register can display transactions in several different
-    styles:
+<PARA>La ventana de registros puede mostrar las transacciones en
+    diferentes estilos:
 
     </PARA>
     <VARIABLELIST>
-<VARLISTENTRY><TERM><GUIMENUITEM>single-line</GUIMENUITEM> mode</TERM>
-<LISTITEM><PARA>Transactions are displayed on a single line.
+<VARLISTENTRY><TERM>Modo <GUIMENUITEM>línea-única</GUIMENUITEM></TERM>
+<LISTITEM><PARA>Las transacciones se muestran en una sola línea.
 
       </PARA>
 </LISTITEM>
 </VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIMENUITEM>double-line</GUIMENUITEM> mode</TERM>
-<LISTITEM><PARA>Transactions are displayed over
-      two lines, with more information about each transaction
-      shown.
+<VARLISTENTRY><TERM>Modo <GUIMENUITEM>doble-línea</GUIMENUITEM></TERM>
+<LISTITEM><PARA>Las transacciones se muestran en dos líneas,
+      mostrando más información de cada transacción.
 
       </PARA>
 </LISTITEM>
 </VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIMENUITEM>multi-line</GUIMENUITEM> mode</TERM>
-<LISTITEM><PARA>Transactions are displayed over
-      multiple lines, allowing the display of multiple entries.
-      This allows you to enter multi-split transactions (for
-      instance, when you pay multiple bills with one check).
+<VARLISTENTRY><TERM>Modo <GUIMENUITEM>multi-línea</GUIMENUITEM></TERM>
+<LISTITEM><PARA>Las transacciones se muestran en múltiples líneas,
+      permitiendo mostrar múltiples entradas. Esto le permite
+      introducir transacciones multi-elemento (por ejemplo,
+      cuando paga varias facturas con un solo cheque).
 
       </PARA>
 </LISTITEM>
 </VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIMENUITEM>auto-single</GUIMENUITEM> and
-      <GUIMENUITEM>auto-double</GUIMENUITEM> modes</TERM>
-<LISTITEM><PARA>Like single
-      and double-line modes, except that the currently-edited
-      transaction is displayed in multi-line form. This is a very
-      convenient way of entering multi-account transactions.
+<VARLISTENTRY><TERM>Modos <GUIMENUITEM>auto-único</GUIMENUITEM> y
+      <GUIMENUITEM>auto-doble</GUIMENUITEM></TERM>
+<LISTITEM><PARA>Son como los modos de linea-única o doble-línea,
+      excepto que la transacción que se está editando se muestra
+      en el modo multi-línea. Esta es un modo muy adecuado para
+      introducir transacciones multi-elemento.
     </PARA>
 </LISTITEM>
 </VARLISTENTRY>
 </VARIABLELIST>
 
-<PARA>To change the display style, to go the <GUIMENU>Register</GUIMENU>
-    menu and select a style from the <GUISUBMENU>Style</GUISUBMENU> submenu.
+<PARA>Para modificar el estilo de mostrar transacciones, vaya al
+    menú <GUIMENU>Registro</GUIMENU> y selecciones el estilo del
+    submenú <GUISUBMENU>Estilo</GUISUBMENU>.
 
     </PARA>
-<PARA>Existing transactions are normally displayed in date order,
-    but this can also be changed with the <GUIMENU>Register</GUIMENU>
-    menu's <GUISUBMENU>Sort Order</GUISUBMENU> submenu. You can also
-    select a date rate from which transactions will be displayed
-    with <GUISUBMENU>Date Range</GUISUBMENU>.
+<PARA>Las transacciones existentes se muestran normalmente ordenadas
+    por fechas pero se puede cambiar con el submenú <GUISUBMENU>Ordenación</GUISUBMENU>
+    del menú <GUIMENU>Registro</GUIMENU>. También puede seleccionar el
+    formato de fecha en que se verán las fechas con el submenú
+    <GUISUBMENU>Formato Fecha</GUISUBMENU>.
 
     </PARA>
 </SECT1>
 <SECT1 ID="XACC-RECONCILIATION">
-<TITLE> Reconciliation</TITLE>
-<PARA>Transactions are typically checked against bank statements -
-    a process known as "reconciliation". GnuCash keeps track of the
-    reconciliation status of each transaction.
+<TITLE> Reconciliación</TITLE>
+<PARA>Las transacciones normalmente están marcadas en contra de
+    los extractos bancarios - proceso conocido como "reconciliación".
+    GnuCash permite modificar el estado de reconciliación de cada
+    transacción.
 
     </PARA>
-<PARA>The reconciliation status of a transaction is shown by the
-    reconciliation (<GUILABEL>R</GUILABEL>) field. '<LITERAL>y</LITERAL>'
-    indicates that a transaction has been reconciled,
-    '<LITERAL>n</LITERAL>' indicates that it has not, and
-    '<LITERAL>c</LITERAL>' indicates that it has been cleared, but not
-    reconciled.  You can toggle
-    the reconciliation status between '<LITERAL>n</LITERAL>' and '<LITERAL>c</LITERAL>' by clicking in the
-    (<GUILABEL>R</GUILABEL>) field; you can set it to '<LITERAL>y</LITERAL>' by using the <LINK
-    LINKEND=XACC-RECNWIN>Reconciliation Window</LINK>. 
+<PARA>El estado de reconciliación de una transacción se muestra
+    en el campo reconciliación (<GUILABEL>R</GUILABEL>).
+    '<LITERAL>y</LITERAL>' indica que la transacción ha
+    sido reconciliada, '<LITERAL>n</LITERAL>' indica que no, y
+    '<LITERAL>c</LITERAL>' indica que ha sido limpiada, pero no
+    reconciliada. Cuando una transacción es limpiada, puede
+    cambiar su estado a '<LITERAL>c</LITERAL>' apretando en su
+    campo <GUILABEL>R</GUILABEL>.
 
     </PARA>
-<PARA>At the bottom of the account window, there are two running
-    totals: '<GUILABEL>Balance</GUILABEL>', and
-    '<GUILABEL>Cleared</GUILABEL>'. '<GUILABEL>Cleared</GUILABEL>' should
-    correspond to how much money the bank thinks you have in your
-    account, while '<GUILABEL>Balance</GUILABEL>' includes outstanding
-    transactions.
+<PARA>En la parte inferior de la ventana de cuentas, hay dos totales:
+    '<GUILABEL>Balance</GUILABEL>', y '<GUILABEL>Caja</GUILABEL>'.
+    '<GUILABEL>Caja</GUILABEL>' debería corresponde con el dinero
+    que el banco piensa que tiene en su cuenta, mientras 
+    '<GUILABEL>Balance</GUILABEL>' muestra las transacciones
+    salientes.
 
     </PARA>
-<PARA>Reconciliation can be done in the 
-      <LINK LINKEND="XACC-RECNWIN">Reconciliation Window</LINK>
+<PARA>La reconciliación se puede hacer en la
+    <LINK LINKEND="XACC-RECNWIN">Ventana de Reconciliación</LINK>
 
     </PARA>
 </SECT1>
 <SECT1 ID="XACC-STKPTLO">
-<TITLE> Stock Portfolios</TITLE>
-<PARA>You can do stock transactions either from a single-stock
-    window, or from a portfolio-view window, shown below.
+<TITLE> Portafolio de Acciones</TITLE>
+<PARA>Puede hacer las transacciones de acciones tanto desde
+    la ventana de "stock" simple, o desde la ventana
+    de ver-portafolio, que se muestra a continuación.
 
     </PARA>
 <MEDIAOBJECT>
@@ -202,58 +206,72 @@
 </IMAGEOBJECT>
 </MEDIAOBJECT>
 
-<PARA>The portfolio ledger can seem a bit daunting at first
-    sight.  If you have trouble understanding it, then you may wish to 
-    create an account for each stock you wish to track.
-    </PARA>
+<PARA>El libro mayor (portafolio) puede dar un poco de miedo a
+    simple vista.
 
-<PARA>Some important points to remember about the portfolio
-    window:
+    </PARA>
+<PARA>Si tiene problemas para entenderlo, entonces quizás desea
+    crear una cuenta para cada acción que desee registrar.
+
+    </PARA>
+<PARA>Algunos puntos importantes acerca de la ventana de
+    portafolios para recordar son:
 
     <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>It shows <EMPHASIS>all</EMPHASIS> stocks in your portfolio, not just
-      one.  The share amounts shown are for each particular
-      stock.
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Note that it uses a two line display. 
-      Debited accounts and debited amounts are on the upper
-      line, and credited amounts and accounts are on the lower line.
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>If you buy or sell a stock with money from the brokerage
-      account, the total balance will not change, since the value
-      of the stock equals the amount of money exchanged.
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>If you buy or sell a stock with money from the brokerage
-      account, the value of the transaction will appear twice, once
-      in red, and once in black. If shares are purchased, the
-      amount of money debited from the brokerage account will be in
-      red, and the value of the shares in black. If shares are
-      sold, then value of the shares is in red, and the money
-      credited to the brokerage account in black.
+<PARA>        Muestra <EMPHASIS>todas</EMPHASIS> las acciones ("stocks") en su
+        portafolio, no solamente una.
+
+        </PARA>
+<PARA>La cantidad de la participación se muestra para cada acción
+        particular.
+     
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>If you are having trouble indicating a share
-      purchase/sale in the portfolio ledger, then make sure that
-      <GUILABEL>Transfer From</GUILABEL> and 
-      <GUILABEL>Transfer To</GUILABEL> accounts are in
-      the right order. A transfer from a stock account is always
-      interpreted as a sale, even if you entered the data as a
-      purchase. The vice-versa is also true.
+<PARA>        Observe que utiliza el estilo de doble-línea.
+
+        </PARA>
+<PARA>Cuentas debidas y cantidades debidas están en la línea superior,
+        y las cuentas y cantidades de crédito están en la línea inferior.
+      
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>Eventually, an alternative simpler portfolio ledger
-      window may be provided.
+<PARA>Si vende o compra una acción con dinero de una cuenta
+      "brokerage" (de origen desconocido), el balance
+      total no cambiará, ya que el valor de la acción es
+      igual a la cantidad de dinero intercambiado.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Si vende o compra una acción con dinero de una cuenta
+      "brokerage" (de origen desconocido), el valor de la
+      transacción aparecerá dos veces, uno en rojo, y uno en
+      blanco. Si la acción es comprada, la cantidad de dinero
+      debido de la cuenta "brokerage" aparecerá en rojo, y el
+      valor de las participaciones en blanco. Si las participaciones
+      son vendidas, entonces su valor esta en rojo, y la
+      cantidad de crédito a la cuenta "brokerage" en blanco.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Si tiene problemas introduciendo una compra/venta de
+      acciones en el libro mayor (portafolio), luego asegúrese que
+      las cuentas <GUILABEL>Transferir Desde</GUILABEL> y <GUILABEL>Transferir a</GUILABEL>
+      están en el orden correcto. Una transferencia desde una cuenta
+      de acciones se interpreta siempre como una venta, incluso si
+      introduce los datos como una compra, y vice-versa.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Quizás, una ventana de libro mayor (portafolio) más
+      simple se podría hacer.
     </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -261,7 +279,3 @@
 </PARA>
 </SECT1>
 </ARTICLE>
-
-<!-- Local variables: -->
-<!-- sgml-parent-document: "gnucash.sgml" -->
-<!-- End: -->

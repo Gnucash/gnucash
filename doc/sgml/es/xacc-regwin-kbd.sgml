@@ -1,68 +1,72 @@
 <ARTICLE ID="XACC-REGWIN-KBD">
 
 <ARTHEADER>
-<TITLE>Register Keyboard Shortcuts</TITLE>
+<TITLE>Teclas aceleradoras para los Registros</TITLE>
 </ARTHEADER>
 
-<PARA>    The following keys can be used to move around in the register:
-    <EMPHASIS>Please check that I didn't miss any</EMPHASIS> 
+<PARA>    Las siguientes teclas se pueden utilizar para moverse
+    en el registro: 
+    <EMPHASIS>Por favor verifique que no falte ninguna</EMPHASIS>
 
     <ITEMIZEDLIST>
 <LISTITEM>
-<PARA><KEYCAP>Right Arrow, Left Arrow</KEYCAP>move left and right
-      within one field
+<PARA><KEYCAP>Fecha Derecha, Fecha Izquierda</KEYCAP> mueve a izquierda
+      y derecha dentro del campo
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><KEYCAP>Home</KEYCAP> move to the left of the field
+<PARA><KEYCAP>Inicio</KEYCAP> mueve al inicio (izquierda) del campo
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><KEYCAP>End</KEYCAP> move to the right of the field
+<PARA><KEYCAP>Fin</KEYCAP> mueve al final (derecha) del campo
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><KEYCAP>TAB</KEYCAP> move to the next field
+<PARA><KEYCAP>TAB</KEYCAP> mueve al próximo campo
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><KEYCAP>Shift + TAB</KEYCAP> move to the previous field
+<PARA><KEYCAP>May + TAB</KEYCAP> mueve al campo previo
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><KEYCAP>Enter, Down Arrow</KEYCAP> move to the next transaction
-      (if necessary, a new blank transaction will be created)
+<PARA><KEYCAP>Enter, Fecha Abajo</KEYCAP> mueve hacia la próxima
+      transacción (si es necesario, se creará una transacción nueva
+      en blanco)
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><KEYCAP>Up Arrow</KEYCAP> move to the previous transaction
+<PARA><KEYCAP>Fecha Arriba</KEYCAP> mueve hacia la transacción previa
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><KEYCAP>Page Up</KEYCAP> move up one screenful
+<PARA><KEYCAP>Retroceder Página</KEYCAP> mueve hacia arriba una ventana
+       de datos visualizados
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><KEYCAP>Page Down</KEYCAP> move down one screenful
+<PARA><KEYCAP>Avanzar Página</KEYCAP> mueve hacia abajo una ventana
+       de datos visualizados
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><KEYCAP>Shift + Page Up</KEYCAP>Go to the first transaction
+<PARA><KEYCAP>May + Retroceder Página</KEYCAP>Va a la primera transacción
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><KEYCAP>Shift + Page Down</KEYCAP>Go to the blank (last)
-      transaction
+<PARA><KEYCAP>May + Avanzar Página</KEYCAP>Va a la última transacción
+       (en blanco)
     </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -71,7 +75,3 @@
 </PARA>
 
 </ARTICLE>
-
-<!-- Local variables: -->
-<!-- sgml-parent-document: "gnucash.sgml" -->
-<!-- End: -->

@@ -1,45 +1,42 @@
 <ARTICLE ID="XACC-Y2K">
 
 <ARTHEADER>
-<TITLE>GnuCash Y2K Readiness</TITLE>
+<TITLE>Guía Y2K de GnuCash</TITLE>
 </ARTHEADER>
 
-<PARA>GnuCash versions 1.1.25 and later store all dates as seconds and
-nanoseconds, where the seconds are stored in a 64-bit signed
-integer. This should suffice to store dates into both the distant past
-as well as the distant future, so long as they fall not
-<EMPHASIS>too</EMPHASIS> many orders of magnitude outside
-cosmologists' estimations of the age of the universe.  </PARA>
+<PARA>Las versiones 1.1.25 o posteriores de GnuCash almacenan todas
+las fechas como segundos y nanosegundos, donde los segundos se
+almacenan como enteros con signo de 64 bits. Esto es suficiente para
+almacenar fechas tanto del pasado distante como del futuro distante,
+tan lejos que permite almacenar hasta dos millones de años. </PARA>
 
-<PARA>The file format for version 1.1.25 and later stores dates in the
-above-described fashion.  </PARA>
+<PARA>El formato de archivo para la versión 1.1.25 y posteriores
+almacenan las fechas en el forma descrita.  </PARA>
 
-<PARA>Some internal routines use the <FUNCTION>time_t</FUNCTION> type
-to express seconds. Note that on most OSes, this is a 32-bit quantity,
-and is thus limited to the Unix epoch, roughly December 1901 thru Jan
-2038. It is reasonable to expect that <FUNCTION>time_t</FUNCTION> will
-migrate to the use of 64 bit values by that time.  </PARA>
+<PARA>Algunas rutinas internas utilizan el tipo <FUNCTION>time_t</FUNCTION>
+para expresar segundos. Observe que en la mayoría de sistemas operativos,
+este valor es una cantidad de 32 bits, y está limitado a valores de UNIX,
+desde Diciembre de 1901 a Enero de 2038. Es razonable esperar que 
+<FUNCTION>time_t</FUNCTION> pasará a utilizar valores de 64 bits con
+el tiempo.  </PARA>
 
-<PARA>Backup and log files are time-stamped using the standard Unix
-<FUNCTION>ctime()</FUNCTION> routine, which takes a
-<FUNCTION>time_t</FUNCTION> argument. Thus, the backup and log
-mechanism may experience trouble in 2038, assuming your present Unix
-continues to be in service at that time without any remediation.
+<PARA>Los archivos de "backup" y de "log" son marcados con fechas
+utilizando la función estándar de Unix <FUNCTION>ctime()</FUNCTION> que
+tiene un parámetro <FUNCTION>time_t</FUNCTION>. Por lo que,
+este mecanismo puede presentar problemas en el 2038, asumiendo que
+el sistema UNIX actual continuará en servicio entonces sin ninguna
+modificación.
 </PARA>
 
-<PARA>Note that GnuCash also correctly recognizes February 29th, 2000
-as a "leap day," another of the "critical Y2K dates."  </PARA>
+<PARA>Observe que GnuCash también reconoce correctamente el 29 de
+Febrero del 2000 por ser año bisiesto, otro de los "problemas críticos
+con fechas" Y2K.  </PARA>
 
-<PARA>This is all highly suggestive that GnuCash should cope
-reasonably well with the transition to the new millennium, whether you
-consider that takes place in 2000 or in 2001...  </PARA>
+<PARA>Todo esto sugiere que GnuCash puede pasar razonablemente
+bien por la transición al nuevo milenio, tanto si considera
+que tiene lugar en el 2000 o en el 2001...  </PARA>
 
-<PARA>Y2K issues are described in more detail at <ULINK URL=
-"http://www.ntlug.org/~cbbrowne/linuxy2k.html">Linux and Year
-2000.</ULINK> </PARA>
+<PARA>Las característica Y2K se describen con mayor detalle en
+ <ULINK URL="http://www.ntlug.org/~cbbrowne/linuxy2k.html">Linux y el Año 2000.</ULINK> </PARA>
 
 </ARTICLE>
-
-<!-- Local variables: -->
-<!-- sgml-parent-document: "gnucash.sgml" -->
-<!-- End: -->

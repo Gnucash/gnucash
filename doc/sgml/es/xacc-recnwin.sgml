@@ -1,50 +1,38 @@
 <ARTICLE ID="XACC-RECNWIN">
 
 <ARTHEADER>
-<TITLE>The Reconciliation Window</TITLE>
+<TITLE>Ventana de Reconciliación</TITLE>
 </ARTHEADER>
-<PARA>The Reconciliation window is used to reconcile a GnuCash account with
-    a statement that a bank or other institution has sent you.
-    Reconciliation is useful not only to double-check your records
-    against those of your bank,  but also to get a better idea of
-    outstanding transactions, e.g. uncashed checks.
+
+<PARA>La ventana de Reconciliación se utiliza para reconciliar una 
+    cuenta GnuCash con el extracto que el banco u otra institución
+    le envía.
+
     </PARA>
-    <PARA>
-    At the bottom of the account window, there are two running balances:
-    the "cleared and reconciled" balance, and the "total" balance.
-    The "cleared and reconciled" balance should correspond to how much
-    money the bank thinks you have in your account, and the "total" balance
-    includes outstanding transactions.
+<PARA>Por ejemplo, cuando escribe un cheque para alguien, debe introducir
+    la transacción en GnuCash. El campo (<GUILABEL>R</GUILABEL>) de la
+    reconciliación de la transacción inicialmente contendrá
+    <LITERAL>n</LITERAL> (no reconciliado). Más adelante, si piensa
+    que el cheque se ha hecho efectivo, puede apretar el campo
+    <GUILABEL>R</GUILABEL> de la transacción para cambiarlo a
+    <LITERAL>c</LITERAL> (limpio, pero no reconciliado).
+
     </PARA>
-    <PARA>
-    For example, when you write a check for something, you should enter
-    the transaction into GnuCash.  The reconciliation
-    (<GUILABEL>R</GUILABEL>) field of the transaction will initially
-    contain <LITERAL>n</LITERAL> (new).  Your new entry will contribute
-    to the "total" balance, but not to the "cleared and reconciled"
-    balance.  Later, if you think
-    that the check has been cashed, you might click on the transaction's
-    <GUILABEL>R</GUILABEL> field to change it to <LITERAL>c</LITERAL>
-    (cleared).  When you do this, the "cleared and reconciled" balance
-    will change to include this amount. 
-    When the bank statement arrives, you can then compare
-    it to what you've recorded in GnuCash in the Reconciliation window.
-    There, you will be able to change the <GUILABEL>R</GUILABEL> field
-    to <LITERAL>y</LITERAL> (reconciled).   You cannot reconcile in the
-    register window, you must use the reconciliation window. Once a
-    transaction has been marked "reconciled", it can no longer
-    be easily changed.
+<PARA>A final de mes, recibe el extracto bancario, quizás incluyendo
+    cheques cancelados. En este momento, debe "reconciliar" su cuenta,
+    esto es, corresponden sus registros personales con la documentación
+    proporcionada por el banco.
+
     </PARA>
 
-<SECT1>
-<TITLE>Reconciling</TITLE>
-<PARA>
     <ITEMIZEDLIST>
 <LISTITEM>
-
-<PARA>Choose <GUIMENU>Reconcile</GUIMENU> from the Accounts menu, 
-      and GnuCash will prompt you to
-      enter the ending balance from the bank statement.
+<PARA>Abra la ventana de reconciliación seleccionando
+    <GUIMENUITEM>Reconciliar...</GUIMENUITEM> del menú
+    <GUIMENU>Cuentas</GUIMENU> de la
+    <LINK LINKEND="xacc-regwin">ventana de registros</LINK>
+    de la cuenta. GnuCash le pedirá alguna información del
+    extracto.
 
     </PARA>
     
@@ -53,13 +41,11 @@
     <IMAGEDATA FILEREF="image/recninfo.png">
     </IMAGEOBJECT>
     </MEDIAOBJECT>
-
 </LISTITEM>
 <LISTITEM>
-<PARA>Enter the date of the end of the period that the statement covers,
-     and the final balance from the statement, and press
-     <GUIBUTTON>OK</GUIBUTTON>.  The Reconcile window will pop up.  It
-     looks like this:
+<PARA>Introduzca la fecha del final del periodo que extracto cubre,
+     y el balance final del extracto, y apriete <GUIBUTTON>Aceptar</GUIBUTTON>.
+     La ventana de Reconciliación aparecerá. Se parece a esto:
 
      </PARA>
       
@@ -69,79 +55,74 @@
      </IMAGEOBJECT>
      </MEDIAOBJECT>
 
-     <PARA>The <GUILABEL>Debits</GUILABEL> and <GUILABEL>Credits</GUILABEL>
-     groups list all the unreconciled transactions.  The
-     '<GUILABEL>R</GUILABEL>' columns show whether the transactions have 
-     been cleared or reconciled.
+     <PARA>Los grupos <GUILABEL>Fondos Entrantes</GUILABEL> y
+     <GUILABEL>Fondos Salientes</GUILABEL> muestran todas las
+     transacciones no reconciliadas. Las columnas '<GUILABEL>?</GUILABEL>'
+     muestran el estado de las transacciones (limpias o reconciliadas).
 
      </PARA>
 </LISTITEM>
-
 <LISTITEM>
-<PARA>Now, examine each item on the bank statement, and look for the
-     matching item in the Reconcile window.   
+<PARA>Ahora, examine cada elemento en el extracto bancario, y busque
+     el elemento correspondiente en la ventana de Reconciliación.
 
      </PARA>
-<PARA>If you cannot find one, then perhaps you forgot to enter a
-     transaction, or did not know that the transaction had happened.  You
-     can use the <GUIBUTTON>New</GUIBUTTON> button on the tool bar, or the
-     <GUIMENUITEM>New</GUIMENUITEM> menu item in the
-     <GUIMENU>Transaction</GUIMENU> menu, to open a register window and
-     enter the missing transaction.  The new item will appear in the
-     Reconcile window when you press <GUIBUTTON>enter</GUIBUTTON> after
-     entering the transaction.
+<PARA>Si no puede encontrar ninguno, entonces quizás se olvidó de
+     introducir la transacción, o no conocía que la transacción tuvo
+     lugar. Puede utilizar el botón <GUIBUTTON>Nuevo</GUIBUTTON> en
+     la barra de herramientas, o la opción de menú <GUIMENUITEM>Nuevo</GUIMENUITEM>
+     del menú <GUIMENU>Transacción</GUIMENU>, para abrir una ventan
+     de registros y introducir la transacción que falta. El nuevo
+     elemento aparecerá en la ventana de Reconciliación cuando apriete
+     <GUIBUTTON>enter</GUIBUTTON> después de introducir la transacción.
 
      </PARA>
-<PARA>When you find the item in the Reconcile window, compare the amount in
-     the item to the amount on the statement.  If they disagree, you may
-     have made an error when you entered the transaction in GnuCash.  You
-     can use the <GUIBUTTON>Edit</GUIBUTTON> button on the tool bar, or the
-     <GUIMENUITEM>Edit</GUIMENUITEM> menu item in the
-     <GUIMENU>Transaction</GUIMENU> menu, to open a register window and
-     correct the transaction.
+<PARA>Cuando encuentre el elemento en la ventana de Reconciliación,
+     compare la cantidad con la cantidad del extracto. Si no son iguales,
+     debe haber cometido un error cuando introdució la transacción en
+     GnuCash. Puede utilizar el botón <GUIBUTTON>Editar</GUIBUTTON> de la 
+     barra de herramientas, o la opción del menú <GUIMENUITEM>Editar</GUIMENUITEM>
+     del menú <GUIMENU>Transacción</GUIMENU>, para abrir la ventana de
+     Registros y corregir el problema (transacción).
 
      </PARA>
-<PARA>If the amounts agree, click on the item in the Reconcile window. The
-     '<GUILABEL>R</GUILABEL>' column will change to '<LITERAL>y</LITERAL>'
-     (reconciled) from '<LITERAL>n</LITERAL>' or '<LITERAL>c</LITERAL>'.
+<PARA>Si las cantidades coinciden, apriete en el elemento en la ventana
+     de Reconciliación. El valor de la columna '<GUILABEL>?</GUILABEL>'
+     cambiará de '<LITERAL>n</LITERAL>' o '<LITERAL>c</LITERAL>' a '<LITERAL>y</LITERAL>' (reconciliado).
 
      </PARA>
-<PARA>You then repeat this for each item that appears on the
-        bank statement, verifying that the amounts match with the
-        amounts in GnuCash, and marking off transactions in GnuCash
-        as they are reconciled.
+<PARA>Entonces repita este proceso para cada elemento que aparece
+        en el extracto bancario, verificando que las cantidades
+        correspondan con las de GnuCash, y marcando las transacciones
+        de GnuCash como reconciliadas.
       
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>At the bottom of the "Reconcile" window is a "Difference" field, which
-      should show $0.00 when you are done reconciling. If it shows some other value,
-      then either you have missed transactions, or some amounts may
-      be incorrect in GnuCash. (Or, less likely,
-      the bank may have made an error.)
-      </PARA>
 
+      </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>When you have marked off all the items on the
-      bank statement, and when the difference is $0.00, press the
-      <GUIBUTTON>Finish</GUIBUTTON> button on the tool bar or select
-      <GUIMENUITEM>Finish</GUIMENUITEM> from the
-      <GUIMENU>Reconcile</GUIMENU> menu (the latter method will work
-      even if your "Difference" isn't $0.00).
-					The Reconcile window will close.
-      In the <LINK LINKEND="xacc-regwin">Register window</LINK>, the
-      <GUILABEL>R</GUILABEL> field of the reconciled transactions will
-      change to '<LITERAL>y</LITERAL>'.
+<PARA>En la parte inferior de la ventanas hay un campo diferencia,
+      que debe ser 0.00 cuando haya finalizado la reconciliación.
+      Si no lo es, entonces o ha omitido transacciones, o algunas
+      cantidades quizás sean incorrectas en GnuCash. (O, menos 
+      probable, el banco haya cometido un error.)
+      
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Cuando haya completado el proceso para todos los elementos
+      en el extracto bancario, y la diferencia sea 0.00, debe
+      apretar el botón <GUIBUTTON>Finalizar</GUIBUTTON> en la
+      barra de herramientas o seleccionar <GUIMENUITEM>Finalizar</GUIMENUITEM>
+      del menú <GUIMENU>Reconciliar</GUIMENU>. La ventana de Reconciliación
+      se cerrará. En la <LINK LINKEND="xacc-regwin">Ventana de
+      Reconciliación</LINK>, el campo <GUILABEL>R</GUILABEL> de las
+      transacciones reconciliadas se cambiará a '<LITERAL>y</LITERAL>'.
+      
       
     </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
-</PARA>
-</SECT1>
 
 </ARTICLE>
-
-<!-- Local variables: -->
-<!-- sgml-parent-document: "gnucash.sgml" -->
-<!-- End: -->

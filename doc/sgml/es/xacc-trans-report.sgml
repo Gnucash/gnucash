@@ -1,66 +1,69 @@
 <ARTICLE ID="XACC-TRANS-REPORT">
 
 <ARTHEADER>
-<TITLE>Transaction Report</TITLE>
+<TITLE>Listado de Transacciones</TITLE>
 </ARTHEADER>
 
-<PARA>Transaction reports list details for transactions in a
-    specified account over a specified period, in a convenient
-    format for viewing and exporting.
+<PARA>Los listados de transacciones listan los detalles de las
+    transacciones en una cuenta determinada durante un periodo
+    especificado, en un formato conveniente para ser visualizado
+    o exportado.
 
     </PARA>
-<PARA>Options specifiable for this report include:
+<PARA>Las opciones especificables para estos listados incluyen:
     
     <ITEMIZEDLIST>
 
-<LISTITEM><PARA> <EMPHASIS>Display:</EMPHASIS>Select fields to display
-in the report. The choices include:
+<LISTITEM><PARA> <EMPHASIS>Ver:</EMPHASIS>Selecciona los campos
+que se mostrarán en el listado. Las opciones son:
 
         <ITEMIZEDLIST>
 <LISTITEM>
-<PARA><EMPHASIS>Date</EMPHASIS>
+<PARA><EMPHASIS>Fecha</EMPHASIS>
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Number</EMPHASIS>
+<PARA><EMPHASIS>Número</EMPHASIS>
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Description</EMPHASIS>
+<PARA><EMPHASIS>Descripción</EMPHASIS>
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Memo</EMPHASIS>
+<PARA><EMPHASIS>Explicación (Memo)</EMPHASIS>
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Account</EMPHASIS>
+<PARA><EMPHASIS>Cuenta</EMPHASIS>
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Other Account</EMPHASIS>
+<PARA><EMPHASIS>Otra Cuenta</EMPHASIS>
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Amount</EMPHASIS> - note that you can choose a
-          single-column or two-column amount display. Two column
-          displays credits and debits in separate columns.
+<PARA><EMPHASIS>Cantidad</EMPHASIS> - Observe que puede escoger
+          ver la cantidad en una columna simple o en doble columna.
+          La doble columna muestra los créditos y los débitos en
+          columnas separadas. 
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Column Headers</EMPHASIS> - labels naming the fields
+<PARA><EMPHASIS>Títulos de Columna</EMPHASIS> - Nombres de la etiquetas
+          de los campos.
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Totals</EMPHASIS> - numeric fields will be totalled.
+<PARA><EMPHASIS>Totales</EMPHASIS> - campos numéricos que se totalizarán.
         </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -69,27 +72,26 @@ in the report. The choices include:
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        <EMPHASIS>Report Options:</EMPHASIS> This is for general report options,
-        including: 
+<PARA>        <EMPHASIS>Opciones de Listados:</EMPHASIS> Son opciones generales de los listados,
+        incluyen: 
 
         <ITEMIZEDLIST>
 <LISTITEM>
-<PARA><EMPHASIS>Date To and Date From:</EMPHASIS> the date range for the
-          report to cover.
+<PARA><EMPHASIS>Desde Fecha y Hasta Fecha:</EMPHASIS> El periodo de fechas que
+          cubre el listado. 
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Account:</EMPHASIS> the account(s) to do the report
-          on.
+<PARA><EMPHASIS>Cuenta:</EMPHASIS> la cuenta(s) para incluir en el listado.
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Style:</EMPHASIS> Choose from either single-line (in
-          which all transactions will be displayed on a single
-          line), or multi-line (on which each split of a
-          transaction is displayed on a separate line).
+<PARA><EMPHASIS>Estilo:</EMPHASIS> Selecciones entre línea simple (en la
+          que todas las transacciones se mostrarán en una sola
+          línea), o multi-línea (en la que cada elemento de la
+          transacción se muestra en una línea separada).
         </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -98,33 +100,33 @@ in the report. The choices include:
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        <EMPHASIS>Sorting:</EMPHASIS>
+<PARA>        <EMPHASIS>Ordenación:</EMPHASIS>
 
         <ITEMIZEDLIST>
 <LISTITEM>
-<PARA><EMPHASIS>Primary Sort Key:</EMPHASIS> the field to sort on
-          first.
+<PARA><EMPHASIS>Clave de Ordenación Primaria:</EMPHASIS> El campo ha ordenar
+          es el primero.
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Primary Sort Order:</EMPHASIS> the order in which to
-          sort. "Ascending" specifies smallest/largest,
-          alphabetical ordering, earliest-&gt;latest, or smallest
-          amounts first. Descending produces the opposite
-          effects.
+<PARA><EMPHASIS>Orden de Ordenación Primaria:</EMPHASIS> El orden en que
+          se realiza la ordenación. "Ascendente" significa de menor a
+          mayor, ordenación alfabética, del primero al último, o la
+          cantidad menor primero. "Descendente" produce el efecto
+          opuesto.
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Secondary Sort Key:</EMPHASIS> the field to sort on if
-          the primary sort keys are equal
+<PARA><EMPHASIS>Clave de Ordenación Secundaria:</EMPHASIS> El campo a ordenar
+          si los valores de la clave de ordenación primaria son iguales.
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA><EMPHASIS>Secondary Sort Order:</EMPHASIS> the ordering on which to
-          sort the secondary key.
+<PARA><EMPHASIS>Orden de Ordenación Secundaria:</EMPHASIS> El orden en que
+          se realiza la ordenación de la clave secundaria.
         </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -137,7 +139,3 @@ in the report. The choices include:
 </PARA>
 
 </ARTICLE>
-
-<!-- Local variables: -->
-<!-- sgml-parent-document: "gnucash.sgml" -->
-<!-- End: -->

@@ -1,74 +1,76 @@
 <ARTICLE ID="XACC-TICKER">
 
 <ARTHEADER>
-<TITLE>Stock Ticker</TITLE>
+<TITLE>Comprobantes de Acciones</TITLE>
 </ARTHEADER>
 
 <SECT1 ID="XACC-STOCKTICKER">
 
-<TITLE>Stock Pricing and Ticker Symbols</TITLE>
+<TITLE>Precios de las acciones y Símbolos de Comprobantes</TITLE>
 
-<PARA>GnuCash provides a somewhat rudimentary automated stock quote
-gathering system.
-If a GnuCash <LINK LINKEND="STOCKACCT">stock account</LINK> is
-suitably configured, and the host computer is connected to the
-Internet, the program <APPLICATION>gnc-prices</APPLICATION> may be
-used to load stock and mutual fund price quotes from various web sites
-directly into GnuCash.
+<PARA>GnuCash proporciona un sistema rudimentario de cargar el valor
+de las acciones de forma automática.
 </PARA>
 
-<PARA>This is what you do:
+<PARA>Si una <LINK LINKEND="STOCKACCT">cuenta de acciones</LINK>
+de GnuCash está debidamente configurada, y el ordenador está conectado
+a Internet, el programa <APPLICATION>gnc-prices</APPLICATION> se puede
+utilizar para cargar el valor de los precios de las acciones y de los
+bonos desde diversos sitios WEB directamente en GnuCash.
+</PARA>
+
+<PARA>Para hacer uso de esta facultad, se debe hacer lo siguiente:
 
 <ITEMIZEDLIST>
   <LISTITEM>
-    <PARA>Create an account and mark it as being of type "Mutual
-      Fund" or "Stock".
+    <PARA>Crear una cuenta y marcarla como del tipo "Fondos Mutuales"
+      (bonos) o "Acciones".
     </PARA>
   </LISTITEM>
   <LISTITEM>
-    <PARA>Enter a valid ticker symbol in the box marked "Security:"
+    <PARA>Introduzca un símbolo de comprobante válido en la caja
+      llamada "Seguridad:"
      </PARA>
   </LISTITEM>
   <LISTITEM>
-    <PARA>Select a quote source from the pull-down menu. Currently
-    supported quote sources include <EMPHASIS>Yahoo</EMPHASIS>,
-    <EMPHASIS>Yahoo Europe</EMPHASIS>, <EMPHASIS>Fidelity
-    Investments</EMPHASIS>, <EMPHASIS>T. Rowe Price</EMPHASIS>, the
-    <EMPHASIS>Vanguard Group</EMPHASIS>, <EMPHASIS>the Australian
-    Stock Exchange</EMPHASIS> (ASX) and
-    <EMPHASIS>TIAA-CREF</EMPHASIS>.  Note that Yahoo will provide
-    price quotes for many mutual funds <EMPHASIS>including</EMPHASIS>
-    Fidelity, T.Rowe Price and Vanguard, and that the quoted prices at
-    Yahoo <EMPHASIS>should</EMPHASIS> be identical to those that may
-    be found at the source sites (otherwise, somebody's reporting
-    wrong information!). If you choose Yahoo Europe, you should append
-    the market code for the security, such as PA for Paris, BE for
-    Berlin, etc. Example: 12150.PA (a Peugeot security in the Paris
-    market).
+    <PARA>Seleccione un lugar de consulta de precios en el menú
+    desplegable. Actualmente los lugares de consulta soportados son
+    <EMPHASIS>Yahoo</EMPHASIS>, <EMPHASIS>Yahoo Europe</EMPHASIS>, <EMPHASIS>Fidelity Investments</EMPHASIS>,
+    <EMPHASIS>T. Rowe Price</EMPHASIS>, la <EMPHASIS>Vanguard Group</EMPHASIS>,
+    la <EMPHASIS>Australian Stock Exchange</EMPHASIS> (ASX) y la
+    <EMPHASIS>TIAA-CREF</EMPHASIS>. Observe que Yahoo proporciona valores
+    de precios para muchos fondos mutuales <EMPHASIS>incluyendo</EMPHASIS>
+    Fidelity, T.Rowe Price y Vanguard, y esos precios de Yahoo
+    <EMPHASIS>deben</EMPHASIS> ser idénticos a aquellos que se
+    pueden encontrar en otras fuentes (de otra forma, alguien está
+    suministrando información errónea!). Si selecciona Yahoo Europe,
+    debe añadir el código de mercado para seguridad, como PA para París,
+    BE para Berlín, etc. Ejemplo: 12150.PA (la seguridad Peugeot en
+    el mercado de París).
     </PARA>
   </LISTITEM>
   <LISTITEM>
-    <PARA>Ensure that the currency of the account matches the source
-    of the stock you have selected. This means:
+    <PARA>Asegúrese que la cantidad se expresa en la moneda que
+    corresponda con el lugar de consulta de precios de la acción que
+    ha seleccionado. Esto significa:
 
         <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>Quotes from the <EMPHASIS>Australian Stock Exchange</EMPHASIS>
-          (ASX) should be in Australian dollars (AUD).
+<PARA>Las participaciones de la fuente <EMPHASIS>Australian Stock
+          Exchange</EMPHASIS> (ASX) se calculan en dólares australianos (AUD).
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>Quotes from <EMPHASIS>Yahoo Europe</EMPHASIS> should be in Euros
-          (ECU)
+<PARA>Las participaciones de la fuente <EMPHASIS>Yahoo Europe</EMPHASIS>
+          se calculan en euros (ECU).
 
           </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>Quotes from <EMPHASIS>Yahoo</EMPHASIS>, <EMPHASIS>Fidelity
-      Investments</EMPHASIS>, <EMPHASIS>T. Rowe Price</EMPHASIS> 
-      and the <EMPHASIS>Vanguard
-      Group</EMPHASIS> should be in US Dollars (USD).
+<PARA>Las participaciones de <EMPHASIS>Yahoo</EMPHASIS>, <EMPHASIS> Fidelity
+          Investments</EMPHASIS>, <EMPHASIS>T. Rowe Price</EMPHASIS> y de <EMPHASIS>Vanguard
+          Group</EMPHASIS> se calculan en dólares americanos (USD).
         </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -78,12 +80,13 @@ directly into GnuCash.
 </ITEMIZEDLIST>
 
     <TABLE>
-<TITLE>Code List for European Markets</TITLE>
+<TITLE>        Lista de códigos de los mercados europeos
+      </TITLE>
 <TGROUP COLS="2">
 <THEAD>
 <ROW>
-<ENTRY>Code</ENTRY>
-<ENTRY>Market</ENTRY>
+<ENTRY>Código</ENTRY>
+<ENTRY>Mercado</ENTRY>
 </ROW>
 </THEAD>
 <TBODY>
@@ -97,7 +100,7 @@ directly into GnuCash.
 </ROW>
 <ROW>
 <ENTRY>BE</ENTRY>
-<ENTRY>Berlin</ENTRY>
+<ENTRY>Berlín</ENTRY>
 </ROW>
 <ROW>
 <ENTRY>BI</ENTRY>
@@ -109,7 +112,7 @@ directly into GnuCash.
 </ROW>
 <ROW>
 <ENTRY>CO</ENTRY>
-<ENTRY>Copenhagen</ENTRY>
+<ENTRY>Copenagen</ENTRY>
 </ROW>
 <ROW>
 <ENTRY>D</ENTRY>
@@ -121,7 +124,7 @@ directly into GnuCash.
 </ROW>
 <ROW>
 <ENTRY>H</ENTRY>
-<ENTRY>Hamburg</ENTRY>
+<ENTRY>Hamburgo</ENTRY>
 </ROW>
 <ROW>
 <ENTRY>HA</ENTRY>
@@ -141,7 +144,7 @@ directly into GnuCash.
 </ROW>
 <ROW>
 <ENTRY>MI</ENTRY>
-<ENTRY>Milan</ENTRY>
+<ENTRY>Milán</ENTRY>
 </ROW>
 <ROW>
 <ENTRY>MU</ENTRY>
@@ -153,7 +156,7 @@ directly into GnuCash.
 </ROW>
 <ROW>
 <ENTRY>ST</ENTRY>
-<ENTRY>Stockholm</ENTRY>
+<ENTRY>Estocolmo</ENTRY>
 </ROW>
 <ROW>
 <ENTRY>SG</ENTRY>
@@ -161,7 +164,7 @@ directly into GnuCash.
 </ROW>
 <ROW>
 <ENTRY>VA</ENTRY>
-<ENTRY>Valence</ENTRY>
+<ENTRY>Valencia</ENTRY>
 </ROW>
 <ROW>
 <ENTRY>FX</ENTRY>
@@ -172,114 +175,117 @@ directly into GnuCash.
 </TABLE>
 
     <TABLE>
-<TITLE>Pseudo-symbols that can be used for TIAA-CREF quotes</TITLE>
+<TITLE>        Seudo-símbolos que pueden se utilizados para las
+         partipaciones de TIAA-CREF.
+      </TITLE>
 <TGROUP COLS="2">
 <THEAD>
 <ROW>
-<ENTRY>Name</ENTRY>
-<ENTRY>Pseudo-symbol</ENTRY>
+<ENTRY>Nombre</ENTRY>
+<ENTRY>Seudo-símbolo</ENTRY>
 </ROW>
 </THEAD>
 <TBODY>
 <ROW>
-<ENTRY>Stock</ENTRY>
+<ENTRY>Acción</ENTRY>
 <ENTRY>CREFstok</ENTRY>
 </ROW>
 <ROW>
-<ENTRY>Money Market</ENTRY>
+<ENTRY>Mercado de Dinero</ENTRY>
 <ENTRY>CREFmony</ENTRY>
 </ROW>
 <ROW>
-<ENTRY>Equity Index</ENTRY>
+<ENTRY>Índice de Equidad</ENTRY>
 <ENTRY>CREFequi</ENTRY>
 </ROW>
 <ROW>
-<ENTRY>Inflation-Linked Bond</ENTRY>
+<ENTRY>Bonos de Interés garantizado</ENTRY>
 <ENTRY>CREFinfb</ENTRY>
 </ROW>
 <ROW>
-<ENTRY>Bond Market</ENTRY>
+<ENTRY>Mercado de Bonos</ENTRY>
 <ENTRY>CREFbond</ENTRY>
 </ROW>
 <ROW>
-<ENTRY>TIAA Real Estate</ENTRY>
+<ENTRY>Bonos del Gobierno (TIAA)</ENTRY>
 <ENTRY>TIAAreal</ENTRY>
 </ROW>
 <ROW>
-<ENTRY>Social Choice</ENTRY>
+<ENTRY>Opciones Sociales</ENTRY>
 <ENTRY>CREFsoci</ENTRY>
 </ROW>
 <ROW>
-<ENTRY>Teachers PA Stock Index</ENTRY>
+<ENTRY>Índice de Acciones de PA</ENTRY>
 <ENTRY>TIAAsndx</ENTRY>
 </ROW>
 <ROW>
-<ENTRY>Global Equities</ENTRY>
+<ENTRY>Equidades Globales</ENTRY>
 <ENTRY>CREFglob</ENTRY>
 </ROW>
 <ROW>
-<ENTRY>Teachers PA Select Stock</ENTRY>
+<ENTRY>Acciones seleccionadas de PA</ENTRY>
 <ENTRY>TIAAsele</ENTRY>
 </ROW>
 <ROW>
-<ENTRY>Growth</ENTRY>
+<ENTRY>Crecimiento</ENTRY>
 <ENTRY>CREFgrow</ENTRY>
 </ROW>
 </TBODY>
 </TGROUP>
 </TABLE>
 
-</PARA>
-
-<PARA>A sample image is shown below:
-<INLINEMEDIAOBJECT>
+    </PARA>
+<PARA>Una imagen de ejemplo se muestra a continuación:
+     <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/ticker-a.png">
 </IMAGEOBJECT>
 <TEXTOBJECT>
-<PHRASE>Sample Diagram</PHRASE>
+<PHRASE>Diagrama de Ejemplo</PHRASE>
 </TEXTOBJECT>
 </INLINEMEDIAOBJECT>
 
     </PARA>
-<PARA>To update the prices stored in a gnucash account file, run
-    the command line command <APPLICATION>gnc-price</APPLICATION>, specifying the
-    filename; for example:
+<PARA>Para actualizar los precios almacenados en los archivos de cuentas
+    de GnuCash, ejecute la orden <APPLICATION>gnc-price</APPLICATION>,
+    desde la línea de comandos, especificando el nombre del archivo;
+    por ejemplo:
 <COMMAND>    gnc-prices myaccts.xac</COMMAND>
 
     </PARA>
-<PARA>Running this command will print various diagnostic messages
-    to the screen while it loads data. It will work only when the
-    host computer is attached to the Internet. It can function in
-    conjunction with masquerading-style firewalls and proxy
-    servers.
+<PARA>Cuando se ejecuta este programa se muestran varios mensajes
+    de diagnóstico en la pantalla durante la carga de los datos.
+    Este programa solamente funcionará si su ordenador está conectado
+    a Internet. Puede funcionar en conjunción con cortafuegos
+    ("firewalls") del tipo enmascaramiento y con servidores "proxy".
 
     </PARA>
-<PARA>The command can be run many times in one day; however, it
-    will update the accounts at most once with the most recent
-    trading days price data.
-
-    Thus, if <APPLICATION>gnc-prices</APPLICATION> is run on Friday, Saturday,
-    Sunday and Monday, only two price entries will be made: one
-    containing Friday's data, and one containing Monday's data,
-    since the Saturday and Sunday runs will only retrieve the
-    Friday closing price.
+<PARA>El programa puede ser ejecutado varias veces el mismo día;
+    de todos modos, se actualizará las cuentas con los datos más
+    recientes.
 
     </PARA>
-<PARA>To keep <APPLICATION>gnc-prices</APPLICATION> from updating one account, while
-    allowing it to update another account, merely mark the data
-    source for that account as <SCREEN>(none)</SCREEN>. You can do this
-    from the <GUIMENU>Edit Account</GUIMENU> window.
+<PARA>Por lo que, si <APPLICATION>gnc-prices</APPLICATION> se ejecuta
+    en viernes, sábado, domingo y lunes, solamente se harán dos
+    actualizaciones de precios: uno conteniendo los datos del viernes,
+    y otro conteniendo los datos del lunes, ya que el sábado y domingo
+    devolverán los precios de la sesión del viernes.
 
     </PARA>
-<PARA>After running <APPLICATION>gnc-prices</APPLICATION> for a few days, your
-    accounts will begin to resemble the following:
+<PARA>Para evitar que <APPLICATION>gnc-prices</APPLICATION> actualice una
+    cuenta, mientras le permite que actualice otra cuenta, simplemente
+    marque el lugar de consulta para la cuenta como <SCREEN>(none)</SCREEN>.
+    Puede hacer esto desde la ventana <GUIMENU>Editar Cuenta</GUIMENU>.
+
+    </PARA>
+<PARA>Después de ejecutar <APPLICATION>gnc-prices</APPLICATION> durante
+    unos días, sus cuentas empezarán a parecer a lo siguiente:
      <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/ticker-b.png">
 </IMAGEOBJECT>
 <TEXTOBJECT>
-<PHRASE>Later Ticker Listing</PHRASE>
+<PHRASE>Listados de Comprobantes Posteriores</PHRASE>
 </TEXTOBJECT>
 </INLINEMEDIAOBJECT>
 
@@ -287,7 +293,3 @@ directly into GnuCash.
 </PARA>
 </SECT1>
 </ARTICLE>
-
-<!-- Local variables: -->
-<!-- sgml-parent-document: "gnucash.sgml" -->
-<!-- End: -->

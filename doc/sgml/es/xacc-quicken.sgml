@@ -1,127 +1,129 @@
 
 <ARTICLE ID="XACC-QUICKEN">
 <ARTHEADER>
-<TITLE>A Guide for Former Users of Quicken</TITLE>
+<TITLE>Guía para Usuarios Principiantes de Quicken</TITLE>
 </ARTHEADER>
 <SECT1 ID="XACC-QUICKENGUIDE">
-<TITLE> Quicken (TM) User's Guide</TITLE>
+<TITLE> Guía de Usuario de Quicken (TM)</TITLE>
 <PARA>    </PARA>
-<PARA>Not all accounting systems use the same words to describe
-    the same concepts. The following are some notes that may be
-    helpful to users accustomed to Intuit's products.
+<PARA>No todos los sistemas de contabilidad utilizan las mismas
+    palabras para describir los mismos conceptos. A continuación se
+    detalla alguna información que puede ser útil par los usuarios
+    acostumbrados con los productos de Intuit.
 
     </PARA>
 </SECT1>
 <SECT1 ID="XACC-QUICKENCATS">
-<TITLE> Quicken Categories</TITLE>
-<PARA>What Quicken calls <EMPHASIS>Categories</EMPHASIS> are
-really just <LINK LINKEND="XACC-INCOMEEXPENSE">Income/Expense
-accounts. </LINK> Thus, if
-    you are used to specifying a category in Quicken, just create
-    an income/expense account of the same name in GnuCash, and use
-    that as the name of the account.
+<TITLE> Categoría Quicken</TITLE>
+<PARA>Lo que Quicken llama <EMPHASIS>Categorías</EMPHASIS> son en
+    realidad simplemente <LINK LINKEND="XACC-INCOMEEXPENSE">Cuentas de Cobros/Gastos.</LINK>. Por lo que,
+    si está acostumbrado a crear una categoría en Quicken, simplemente
+    cree una cuenta de cobros/gastos con el mismo nombre en GnuCash,
+    y utilícela como el nombre de la cuenta. 
 
     </PARA>
 </SECT1>
 <SECT1 ID="XACC-QIF">
-<TITLE> Quicken QIF File Import</TITLE>
-<PARA> GnuCash supports the import of Quicken
-    Import Files (QIF). (Note: Only Quicken Version 3.0 QIF has
-    been formally tested so far.) 
+<TITLE> Importación de archivos QIF de Quicken</TITLE>
+<PARA> GnuCash soporta la importación de archivos QIF de Quicken.
+    (Nota: Solamente los archivos QIF de Quicken version 3.0 han
+    sido realmente probados a fondo.)
 
     </PARA>
-<PARA>Note that the QIF format is representative of a somewhat
-    peculiar data model that is not as expressive as one might
-    wish; it requires dumping out a separate data file for each
-    account, rather than permitting you to have one file that
-    represents <EMPHASIS>all</EMPHASIS> of the accounts you might have had in
+<PARA>Observe que le formato QIF representa a un modelo de datos
+    peculiar que no es realmente como uno desea; requiere descargar
+    en archivos de datos separados las diferentes cuentas (un archivo
+    por cuenta), en vez de permitirle tener un archivo único que
+    contenga <EMPHASIS>todas</EMPHASIS> las cuentas que tiene en
     Quicken.
 
     </PARA>
-<PARA>Furthermore, while there are plans to do so in the future,
-    there is not, at this point, a way of mapping the account or
-    category names used in Quicken to a <EMPHASIS>different</EMPHASIS> set of
-    account names that you might be using in GnuCash.
+<PARA>Mas aún, mientras que hay planes de hacerlo en el futuro,
+    en este momento, no hay forma de relacionar los nombres de cuentas
+    o categorías utilizadas en Quicken a <EMPHASIS>diferentes</EMPHASIS>
+    conjuntos de nombres de cuentas que pueda estar utilizando en GnuCash.
 
     </PARA>
-<PARA>As a result, please read this section carefully. You may be
-    somewhat disappointed with the results of a QIF import; this
-    will at least give you some more accurate expectations as to
-    what will happen.
+<PARA>Como resultado, por favor lea esta sección detalladamente. Puede
+    estar en desacuerdo con alguno de los resultados de la importación
+    QIF; esto le dará una idea más detalla de lo que pasará.
 
     </PARA>
 <SECT2>
-<TITLE>Creating QIF Files</TITLE>
+<TITLE>Crear Archivos QIF</TITLE>
 <PARA>    </PARA>
-<PARA>To create a set of Quicken <FILENAME>QIF</FILENAME> files, perform the
-    following procedure:
+<PARA>Para crear un conjunto de archivos <FILENAME>QIF</FILENAME> de Quicken,
+    siga el procedimiento siguiente:
 
     <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>        Start Quicken. 
+<PARA>        Ejecute Quicken. 
 
         </PARA>
-<PARA>It works on <ULINK URL="http://www.winehq.com/">Wine,</ULINK>
-        Caldera's Wabi, and doubtless on VMWare, so this may not
-        forcibly require that you run Windows.
+<PARA>Funciona en <ULINK URL="http://www.winehq.com/">Wine,</ULINK>
+        de Caldera, y puede que en VMWare, por lo que no es
+        forzosamente necesario que ejecutar Windows.
       
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        Select the account that you wish to export. 
+<PARA>        Seleccione la cuenta que desea exportar. 
 
         </PARA>
-<PARA>Quicken can only export one account to each data file,
-        which means that if you have many accounts, this may prove
-        to be a somewhat tedious process. (On the other hand, it
-        should be a whole lot <EMPHASIS>less</EMPHASIS> tedious than entering
-        the data from scratch.)
+<PARA>Quicken solamente puede exportar un cuenta en cada archivo
+        de datos, lo que significa que si tiene muchas cuentas,
+        puede llegar a ser un proceso algo pesado. (Por otro lado
+        suele ser mucho <EMPHASIS>menos</EMPHASIS> pesado que
+        introducir todos los datos de nuevo.)
       
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        Choose the menu <GUIMENU>File</GUIMENU> and select the <GUIMENU>        Export...</GUIMENU> menu entry. 
+<PARA>        Seleccione el menú <GUIMENU>Archivo</GUIMENU> y seleccione
+        la opción de menú <GUIMENU>       Exportar...</GUIMENU>.
 
         </PARA>
-<PARA>This will provide a dialog that requests a filename,
-        effective dates, as well as a series of checkboxes,
-        including <GUIMENU>Transactions</GUIMENU>, <GUIMENU>Accounts List</GUIMENU>,
-        <GUIMENU>Category List</GUIMENU>, and so forth.
+<PARA>Esto le mostrará un diálogo que le pedirá el archivo,
+        fechas efectivas, así como una conjunto de cajas de
+        verificación que contienen <GUIMENU>Transacciones</GUIMENU>,
+        <GUIMENU>Listas de Cuentas</GUIMENU>, <GUIMENU>Lista de Categorías</GUIMENU>,
+        y así.
 
         </PARA>
-<PARA>For best results, you should make sure that those three
-        are checked.
+<PARA>Para asegurar el proceso, asegúrese que las tres opciones, todas,
+        están marcadas.
 
         </PARA>
-<PARA>If you do <EMPHASIS>not</EMPHASIS> check the <GUIMENU>Accounts List</GUIMENU>
-        box, then the name of your account will likely be lost, and
-        that will cause problems when you try to import the data
-        into GnuCash later.
+<PARA>Si <EMPHASIS>no</EMPHASIS> marca la opción <GUIMENU>Lista de Cuentas</GUIMENU>,
+        luego el nombre de su cuenta seguramente se perderá, y provocará
+        problemas cuando intente importar los datos en GnuCash
+        posteriormente.
       
     </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
-    Now you have a set of <FILENAME>.QIF</FILENAME> files, and should run
-    GnuCash. 
+    Ahora tiene un conjunto de archivos <FILENAME>.QIF</FILENAME>, y debe
+    ejecutar GnuCash.
 
     </PARA>
 </SECT2>
 <SECT2>
-<TITLE>Loading QIF files into GnuCash</TITLE>
+<TITLE>Cargar archivos QIF en GnuCash</TITLE>
 <PARA>    <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>To import a Quicken QIF file, choose the menu <GUIMENU>      File</GUIMENU> and select the entry <GUIMENU>Import QIF</GUIMENU>.
+<PARA>Para importar un archivo QIF de Quicken, selecciones el menú
+      <GUIMENU>     Archivo</GUIMENU> y seleccione la opción <GUIMENU>Importar QIF</GUIMENU>.
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>The imported file will be merged with whatever other data
-      you currently have in GnuCash. The merge allows multiple
-      Quicken accounts to be imported and merged into one account
-      group.
-      
+<PARA>Los datos del archivo importado se unirán con los demás datos que
+      tenga en ese momento en GnuCash. El proceso de introducción
+      de los datos permite que múltiples cuentas Quicken sean
+      importadas y unidas en un grupo de cuentas.
+     
       
     </PARA>
 </LISTITEM>
@@ -130,68 +132,70 @@ accounts. </LINK> Thus, if
     </PARA>
 </SECT2>
 <SECT2>
-<TITLE>Things To Note About QIF Import</TITLE>
+<TITLE>Notas sobre la Importación QIF</TITLE>
 <PARA>    <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>        <EMPHASIS>Duplicate Entry Scanning</EMPHASIS> 
+<PARA>        <EMPHASIS>Verificación de Entradas Duplicadas</EMPHASIS> 
 
         </PARA>
-<PARA>Note that during merge, a scan is made for duplicate
-        transactions, and duplicates are removed. A duplicate
-        transaction is one where the date, description (payee),
-        memo, quantity, share price, and debited/credited accounts
-        or categories match <EMPHASIS>exactly.</EMPHASIS> Thus, the merge <EMPHASIS>        should</EMPHASIS> be safe unless you have multiple transactions
-        on the same date, to the same account, for the same amount,
-        with the same description and memo.
+<PARA>Observe que durante la unión de datos, se realiza un proceso
+        de verificación para buscar transacciones duplicadas, y
+        las que son duplicadas se eliminan. Una transacción duplicada
+        es aquella que tiene la fecha, descripción (pagador),
+        memo, cantidad, precio de acción, y cuentas de débito/crédito o
+        categorías <EMPHASIS>exactamente</EMPHASIS> igual a otra.
+        Por lo que, la unión de datos <EMPHASIS>    debe</EMPHASIS> ser
+        segura si no hay varias transacciones con la misma fecha,
+        a la misma cuenta, por la misma cantidad, con la misma
+        descripción y memo.
 
         </PARA>
-<PARA>This unfortunately <EMPHASIS>can</EMPHASIS> occur, the typical
-        scenario involving where you make multiple withdrawals of
-        identical amounts from ATM machines on the same day.
+<PARA>Desafortunadamente esto <EMPHASIS>puede</EMPHASIS> ocurrir,
+        el caso típico se produce cuando crea entradas múltiples de
+        idénticas cantidades con equipos ATM el mismo día.
       
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        <EMPHASIS>Empty Accounts</EMPHASIS> 
+<PARA>        <EMPHASIS>Cuentas Vacías</EMPHASIS> 
 
         </PARA>
-<PARA>Note that when the <GUIMENU>Accounts List</GUIMENU> and <GUIMENU>        Category List</GUIMENU> is exported from Quicken, <EMPHASIS>all</EMPHASIS>
-        accounts and categories will be exported, even if they are
-        empty and contain no transactions. When these are imported,
-        they will appear as accounts with a balance of zero. If you
-        do not plan to use such accounts, feel free to delete them.
-        Future enhancements may allow you to delete them "en
-        masse," or to make them invisible without deleting
-        them.
+<PARA>Observe que cuando la <GUIMENU>Lista de Cuentas</GUIMENU> y la
+        <GUIMENU>Lista de Categorías</GUIMENU> se exportan desde Quicken,
+        <EMPHASIS>todas</EMPHASIS> las cuentas y categorías serán exportadas,
+        incluso si son vacías y no contienen transacciones. Cuando éstas
+        se importan, aparecen como cuentas con balance cero. Si no
+        piensa utilizar estas cuentas, puede eliminarlas. Futuras
+        mejoras le permitirán borrarlas todas "en masa", o hacerlas
+        invisibles sin eliminarlas.
       
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        <EMPHASIS>QIF Mark II</EMPHASIS> An ongoing project is to build an
-        alternative import utility in Guile that will be more
-        flexible, and which, by virtue of being stored as a set of
-        Scheme scripts, may be modified without needing to
-        recompile the whole application. 
+<PARA>        <EMPHASIS>QIF Mark II</EMPHASIS> Un proyecto en marcha, está
+        creando otra utilidad de importación en Guile que será más
+        flexible, y que, tendrá la virtud de tener una serie de
+        rutinas ("scripts") de Scheme, que se podrán modificar sin
+        necesidad de recompilar la aplicación entera.
 
         </PARA>
-<PARA>At this point, it successfully parses <FILENAME>QIF</FILENAME>
-        files; what remains is the (rather complex task) of
-        determine appropriate correspondences between the Quicken
-        <EMPHASIS>Categories</EMPHASIS> and the GnuCash equivalents. That is one
-        of the most significant weaknesses with the present QIF
-        import scheme.
+<PARA>En este punto, se leerá correctamente los archivos <FILENAME>QIF</FILENAME>;
+        lo que queda es la (tarea bastante más compleja) de determinar
+        las correspondencias apropiadas entre las <EMPHASIS>Categorías</EMPHASIS>
+        y las cuentas GnuCash. Este es uno de las mayores debilidades
+        del sistema de importación QIF actual en Scheme.
       
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        <EMPHASIS>More about QIF</EMPHASIS> 
+<PARA>        <EMPHASIS>Más sobre QIF</EMPHASIS> 
 
         </PARA>
-<PARA>Further details about the QIF Interchange Format may be
-        found <LINK LINKEND="QIF">        here.</LINK>
+<PARA>Más detalles sobre el Formato de Intercambio QIF se pueden
+        encontrar <LINK LINKEND="QIF">     aquí.</LINK>
       
     </PARA>
 </LISTITEM>
@@ -202,7 +206,3 @@ accounts. </LINK> Thus, if
 </SECT2>
 </SECT1>
 </ARTICLE>
-
-<!-- Local variables: -->
-<!-- sgml-parent-document: "gnucash.sgml" -->
-<!-- End: -->
