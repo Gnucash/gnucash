@@ -562,7 +562,7 @@ htmlRead( char *file )
   int   size=0;
   int   fd;
 
-  /* construct absolute path */
+  /* construct absolute path -- twiddle the relative path we recieved */
   strcpy (filename, helpPath);
   strcat (filename, "/");
   strcat (filename, file);
@@ -610,7 +610,7 @@ htmlReadImageProc (Widget w, String file)
   char  filename[BUFSIZE];
   XmImageInfo *retval;
 
-  /* construct absolute path -- twiddle teh relative path we recieved */
+  /* construct absolute path -- twiddle the relative path we recieved */
   strcpy (filename, helpPath);
   strcat (filename, "/");
   strcat (filename, file);
@@ -642,7 +642,10 @@ htmlResolveImage( Widget mw, char *file, int nl )
   int err;
   char filename[BUFSIZE];
   
-  sprintf( (char *)&filename, "%s/%s", helpPath, file );
+  /* construct absolute path -- twiddle the relative path we recieved */
+  strcpy (filename, helpPath);
+  strcat (filename, "/");
+  strcat (filename, file);
   
   /* initialize stuff: */
   memset( img, 0, sizeof(ImageInfo) );

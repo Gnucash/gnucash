@@ -334,7 +334,7 @@ insertTransaction( Account *acc, Transaction *trans )
     else
       {
       dj = &(oldTrans[j]->date);
-      if( (datecmp(dj,dt) > 0) & !inserted )
+      if( (datecmp(dj,dt) > 0) && !inserted )
         {
         position = i;
         acc->transaction[i] = trans;
