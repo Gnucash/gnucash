@@ -74,8 +74,8 @@ void    xaccAccountGroupMarkSaved (AccountGroup *grp);
  */
 void    xaccRemoveAccount (Account *);
 void    xaccRemoveGroup (AccountGroup *);
-int     xaccGroupInsertAccount( AccountGroup *grp, Account *acc );
-int     xaccInsertSubAccount( Account *parent, Account *child );
+void    xaccGroupInsertAccount( AccountGroup *grp, Account *acc );
+void    xaccInsertSubAccount( Account *parent, Account *child );
 
 /*
  * The xaccGetNumAccounts() subroutine returns the number

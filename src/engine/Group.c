@@ -335,7 +335,9 @@ xaccRemoveAccount (Account *acc)
          arr[i] = arr[j];
          if( acc == arr[j] ) { i--; }
       }
+      arr[grp->numAcc] = NULL;
    } else {
+      arr[grp->numAcc] = NULL;
       grp->account = NULL;
 
       /* if this was the last account in a group, delete
@@ -345,17 +347,14 @@ xaccRemoveAccount (Account *acc)
          xaccFreeAccountGroup (grp);
       }
    }
-   arr[grp->numAcc] = NULL;
 }
 
 /********************************************************************\
 \********************************************************************/
-int
+void
 xaccInsertSubAccount( Account *adult, Account *child )
 {
-  int retval;
-
-  if (NULL == adult) return -1;
+  if (NULL == adult) return;
 
   /* if a container for the children doesn't yet exist, add it */
   if (NULL == adult->children) {
@@ -366,42 +365,47 @@ xaccInsertSubAccount( Account *adult, Account *child )
   adult->children->parent = adult;
 
   /* allow side-effect of creating a child-less account group */
-  if (NULL == child) return -1;
+  if (NULL == child) return;
 
-  retval = xaccGroupInsertAccount (adult->children, child);
-  return retval;
+  xaccGroupInsertAccount (adult->children, child);
 }
 
 /********************************************************************\
 \********************************************************************/
-int
+
+void
 xaccGroupInsertAccount( AccountGroup *grp, Account *acc )
   {
   int i=-1;
-  Account **oldAcc;
+  Account **arr;
   
-  if (NULL == grp) return -1;
-  if (NULL == acc) return -1;
+  if (NULL == grp) return;
+  if (NULL == acc) return;
+
+  /* If the account is currently in another group, remove it there first.
+   * Basically, we can't have accounts being in two places at once. */
+  if (acc->parent) {
+    xaccRemoveAccount (acc);
+  }
 
   /* set back-pointer to the accounts parent */
   acc->parent = grp;
 
-  oldAcc = grp->account;
+  arr = grp->account;
     
   grp->saved = FALSE;
   
   grp->account = (Account **)_malloc(((grp->numAcc)+2)*sizeof(Account *));
 
   for( i=0; i<(grp->numAcc); i++ ) {
-    grp->account[i] = oldAcc[i];
+    grp->account[i] = arr[i];
   }
-  _free(oldAcc);
+  _free(arr);
 
   grp->account[(grp->numAcc)] = acc;
   grp->numAcc++;
   grp->account[(grp->numAcc)] = NULL;
 
-  return i;
   }
 
 /********************************************************************\
