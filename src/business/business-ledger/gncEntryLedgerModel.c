@@ -20,6 +20,16 @@
 #include "gncEntryLedgerP.h"
 #include "gncEntryLedgerModel.h"
 
+static GncEntryLedgerColors reg_colors =
+{
+  0xffffff, /* white */
+  0xffffff,
+  0xffffff,
+
+  0xffffff,
+  0xffffff
+};
+
 /** Private Interfaces ***********************************************/
 
 /* GET_LABEL */
@@ -414,6 +424,47 @@ static CellIOFlags get_standard_io_flags (VirtualLocation virt_loc,
   return XACC_CELL_ALLOW_ALL;
 }
 
+/* GET BG_COLORS */
+
+static guint32
+gnc_entry_ledger_get_bg_color (VirtualLocation virt_loc,
+			       gboolean *hatching, gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+  VirtualCell *vcell;
+  guint32 bg_color;
+  gboolean is_current;
+
+  if (hatching)
+    *hatching = FALSE;
+
+  bg_color = 0xffffff; /* white */
+
+  if (!ledger) return bg_color;
+
+  if (gnc_table_virtual_location_in_header (ledger->table, virt_loc))
+    return reg_colors.header_bg_color;
+
+  vcell = gnc_table_get_virtual_cell (ledger->table, virt_loc.vcell_loc);
+  if (!vcell || !vcell->cellblock)
+    return bg_color;
+
+  if ((virt_loc.phys_col_offset < vcell->cellblock->start_col) ||
+      (virt_loc.phys_col_offset > vcell->cellblock->stop_col))
+    return bg_color;
+
+  is_current = virt_cell_loc_equal
+    (ledger->table->current_cursor_loc.vcell_loc, virt_loc.vcell_loc);
+
+  if (is_current)
+    return vcell->start_primary_color ?
+      reg_colors.primary_active_bg_color :
+    reg_colors.secondary_active_bg_color;
+
+  return vcell->start_primary_color ?
+    reg_colors.primary_bg_color : reg_colors.secondary_bg_color;
+}
+
 /* SAVE CELLS */
 
 static void gnc_entry_ledger_save_cells (gpointer save_data,
@@ -568,6 +619,10 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model)
   };
   int i;
 
+  gnc_table_model_set_default_bg_color_handler
+    (model, gnc_entry_ledger_get_bg_color);
+
+
   for (i = 0; i < (sizeof(models)/sizeof(*models)); i++) {
     if (models[i].entry_handler)
       gnc_table_model_set_entry_handler (model, models[i].entry_handler,
@@ -602,4 +657,9 @@ TableModel * gnc_entry_ledger_model_new (void)
   gnc_entry_ledger_model_new_handlers (model);
 
   return model;
+}
+
+void gnc_entry_ledger_set_colors (GncEntryLedgerColors reg_colors_new)
+{
+  reg_colors = reg_colors_new;
 }

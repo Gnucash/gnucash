@@ -17,6 +17,17 @@ typedef enum {
   GNCENTRY_NUM_REGISTER_TYPES
 } GncEntryLedgerType;
 
+typedef struct entry_ledger_colors
+{
+  guint32 header_bg_color;
+
+  guint32 primary_bg_color;
+  guint32 secondary_bg_color;
+
+  guint32 primary_active_bg_color;
+  guint32 secondary_active_bg_color;
+} GncEntryLedgerColors;
+
 #define ENTRY_ACCT_CELL		"account"
 #define ENTRY_ACTN_CELL		"action"
 #define ENTRY_DATE_CELL		"date"
@@ -47,5 +58,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list);
 
 /* Get the Table */
 Table * gnc_entry_ledger_get_table (GncEntryLedger *ledger);
+
+void gnc_entry_ledger_set_colors (GncEntryLedgerColors reg_colors_new);
 
 #endif /* GNC_ENTRY_LEDGER_H */
