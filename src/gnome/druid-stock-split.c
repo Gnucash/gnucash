@@ -35,6 +35,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
+#include "gnc-engine-util.h"
 #include "gnc-exp-parser.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
@@ -689,7 +690,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 
   new_account = xaccAccountLookup (&info->account, gnc_get_current_book ());
 
-  if (id_type == GNC_ID_NULL || old_account == new_account)
+  if (!safe_strcmp (id_type, GNC_ID_NULL) || old_account == new_account)
     return;
 
   xml = glade_get_widget_tree (info->window);

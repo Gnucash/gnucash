@@ -30,6 +30,8 @@
 #include "gnc-engine-util.h"
 #include "gnc-book-p.h"
 
+#define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
+#define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
 /** #defines ********************************************************/
 #define GNCID_DEBUG 0
@@ -93,6 +95,7 @@ entity_node_destroy(gpointer key, gpointer value, gpointer not_used)
   GUID *guid = key;
   EntityNode *e_node = value;
 
+  CACHE_REMOVE (e_node->entity_type);
   e_node->entity_type = GNC_ID_NONE;
   e_node->entity = NULL;
 
@@ -156,7 +159,7 @@ print_node(gpointer key, gpointer value, gpointer not_used)
   GUID *guid = key;
   EntityNode *node = value;
 
-  fprintf(stderr, "%s %d %p\n",
+  fprintf(stderr, "%s %s %p\n",
           guid_to_string(guid), node->entity_type, node->entity);
 }
 
@@ -188,7 +191,6 @@ GNCIdType
 xaccGUIDTypeEntityTable (const GUID * guid, GNCEntityTable *entity_table)
 {
   EntityNode *e_node;
-  GNCIdType entity_type;
 
   if (guid == NULL)
     return GNC_ID_NONE;
@@ -199,11 +201,7 @@ xaccGUIDTypeEntityTable (const GUID * guid, GNCEntityTable *entity_table)
   if (e_node == NULL)
     return GNC_ID_NONE;
 
-  entity_type = e_node->entity_type;
-  if ((entity_type <= GNC_ID_NONE) || (entity_type > LAST_GNC_ID))
-    return GNC_ID_NONE;
-
-  return entity_type;
+  return e_node->entity_type;
 }
 
 GNCIdType
@@ -272,7 +270,7 @@ xaccLookupEntity (GNCEntityTable *entity_table,
   if (e_node == NULL)
     return NULL;
 
-  if (e_node->entity_type != entity_type)
+  if (safe_strcmp (e_node->entity_type, entity_type))
     return NULL;
 
   return e_node->entity;
@@ -290,15 +288,14 @@ xaccStoreEntity (GNCEntityTable *entity_table, gpointer entity,
   if (guid == NULL)
     return;
 
-  if ((entity_type <= GNC_ID_NONE) || (entity_type > LAST_GNC_ID))
-    return;
+  if (!entity_type) return;
 
   if (guid_equal(guid, xaccGUIDNULL())) return;
 
   xaccRemoveEntity (entity_table, guid);
 
   e_node = g_new(EntityNode, 1);
-  e_node->entity_type = entity_type;
+  e_node->entity_type = CACHE_INSERT (entity_type);
   e_node->entity = entity;
 
   new_guid = xaccGUIDMalloc ();
@@ -325,7 +322,8 @@ xaccRemoveEntity (GNCEntityTable *entity_table, const GUID * guid)
   if (g_hash_table_lookup_extended(entity_table->hash, guid, &old_guid, &node))
   {
     e_node = node;
-    if (e_node->entity_type == GNC_ID_NULL)
+
+    if (!safe_strcmp (e_node->entity_type, GNC_ID_NULL))
       return;
 
     g_hash_table_remove (entity_table->hash, old_guid);

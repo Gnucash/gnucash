@@ -32,7 +32,7 @@ struct _gncBusinessObject {
 GncBusiness *gncBusinessCreate (GNCBook *book);
 void gncBusinessDestroy (GncBusiness *business);
 
-/* Return the GNC Session from the Business Object */
+/* Return the GNCBook from the Business Object */
 GNCBook * gncBusinessGetBook (const GncBusiness *bus);
 
 /* Obtain an object from the type and GUID */

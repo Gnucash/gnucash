@@ -1250,7 +1250,7 @@ free_random_kvp_path (GSList *path)
 static GNCIdType
 get_random_id_type (void)
 {
-  return get_random_int_in_range (0, LAST_GNC_ID);
+  return get_random_string ();
 }
 
 Query *

@@ -451,9 +451,10 @@ gnc_tracking_dissociate_account(Account *inc_or_expense_account)
 					    "associated-stock-account");
   
   stock_account_guid = kvp_value_get_guid(stock_account_kvpval);
-  if(xaccGUIDTypeEntityTable(stock_account_guid,
-                             inc_or_expense_account->entity_table) ==
-     GNC_ID_NULL)
+  if(!safe_strcmp
+     (xaccGUIDTypeEntityTable(stock_account_guid,
+			      inc_or_expense_account->entity_table),
+      GNC_ID_NULL))
     return;
 
   category_kvpval = kvp_frame_get_slot(current_account_kvpframe,

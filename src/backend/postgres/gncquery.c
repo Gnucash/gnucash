@@ -813,20 +813,11 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCBook *book)
                break;
 
             case PR_GUID:
-               switch (pd->guid.id_type)
-               {
-                 case GNC_ID_ACCOUNT:
-                   need_account = TRUE;
-                   break;
-
-                 case GNC_ID_SPLIT:
-                   need_entry = TRUE;
-                   break;
-
-                 default:
-                   break;
-               }
-               break;
+	      if (!safe_strcmp (pd->guid.id_type, GNC_ID_ACCOUNT))
+		need_account = TRUE;
+	      else if (!safe_strcmp (pd->guid.id_type, GNC_ID_SPLIT))
+		need_entry = TRUE;
+	      break;
 
             case PR_KVP:
               if (pd->kvp.where & KVP_MATCH_SPLIT)
@@ -1064,32 +1055,27 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCBook *book)
 
                sq->pq = stpcpy (sq->pq, " (");
 
-               switch (pd->guid.id_type)
-               {
-                 default:
-                 case GNC_ID_NULL:
-                 case GNC_ID_NONE:
+	       if (pd->guid.id_type == GNC_ID_NONE ||
+		   !safe_strcmp (pd->guid.id_type, GNC_ID_NULL))
                    sq->pq = stpcpy(sq->pq, "FALSE ");
-                   break;
-
-                 case GNC_ID_ACCOUNT:
+	       else if (!safe_strcmp (pd->guid.id_type, GNC_ID_ACCOUNT))
+	       {
                    sq->pq = stpcpy(sq->pq, "gncAccount.accountGuid = '");
                    sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
                    sq->pq = stpcpy(sq->pq, "' ");
-                   break;
-
-                 case GNC_ID_TRANS:
+	       }
+	       else if (!safe_strcmp (pd->guid.id_type, GNC_ID_TRANS))
+	       {
                    sq->pq = stpcpy(sq->pq, "gncTransaction.transGuid = '");
                    sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
                    sq->pq = stpcpy(sq->pq, "' ");
-                   break;
-
-                 case GNC_ID_SPLIT:
+	       }
+	       else if (!safe_strcmp (pd->guid.id_type, GNC_ID_SPLIT))
+	       {
                    sq->pq = stpcpy(sq->pq, "gncEntry.entryGuid = '");
                    sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
                    sq->pq = stpcpy(sq->pq, "' ");
-                   break;
-               }
+	       }
 
                sq->pq = stpcpy (sq->pq, ") ");
 

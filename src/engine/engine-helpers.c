@@ -330,18 +330,6 @@ gnc_scm2sort_type (SCM sort_type_scm)
 }
 
 static SCM
-gnc_id_type2scm (GNCIdType id_type)
-{
-  return gnc_gw_enum_val2scm ("<gnc:id-type>", id_type);
-}
-
-static GNCIdType
-gnc_scm2id_type (SCM id_type_scm)
-{
-  return gnc_gw_enum_scm2val ("<gnc:id-type>", id_type_scm);
-}
-
-static SCM
 gnc_bitfield2scm (const char *typestr, int value)
 {
   SCM field = SCM_EOL;
@@ -857,7 +845,7 @@ gnc_queryterm2scm (QueryTerm *qt)
 
     case PD_GUID:
       qt_scm = gh_cons (gnc_guid2scm (qt->data.guid.guid), qt_scm);
-      qt_scm = gh_cons (gnc_id_type2scm (qt->data.guid.id_type), qt_scm);
+      qt_scm = gh_cons (gh_str02scm (qt->data.guid.id_type), qt_scm);
       break;
 
     case PD_KVP:
@@ -1164,6 +1152,7 @@ gnc_scm2query_term_query (SCM query_term_scm)
       {
         GUID guid;
         GNCIdType id_type;
+	char *tmp;
 
         /* guid */
         if (gh_null_p (query_term_scm))
@@ -1179,7 +1168,9 @@ gnc_scm2query_term_query (SCM query_term_scm)
         scm = gh_car (query_term_scm);
         query_term_scm = gh_cdr (query_term_scm);
 
-        id_type = gnc_scm2id_type (scm);
+	tmp = gh_scm2newstr (scm, NULL);
+	id_type = g_strdup (tmp);
+	if (tmp) free (tmp);
 
         xaccQueryAddGUIDMatch (q, &guid, id_type, QUERY_OR);
       }

@@ -198,7 +198,7 @@ xaccQueryPrint(Query * q)
           printf ("guid sense=%d\n", qt->data.guid.sense);
           guid_to_string_buff (&qt->data.guid.guid, buff);
           printf ("\tguid=%s\n", buff);
-          printf ("\tid type=%d\n", qt->data.guid.id_type);
+          printf ("\tid type=%s\n", qt->data.guid.id_type);
           break;
         }
         case PR_KVP: {
@@ -1431,7 +1431,7 @@ xaccQueryTermEqual (QueryTerm *qt1, QueryTerm *qt2)
     case PD_GUID:
       if (!guid_equal (&qt1->data.guid.guid, &qt2->data.guid.guid))
         return FALSE;
-      if (qt1->data.guid.id_type != qt2->data.guid.id_type)
+      if (safe_strcmp (qt1->data.guid.id_type, qt2->data.guid.id_type))
         return FALSE;
       break;
 
@@ -2483,24 +2483,19 @@ xaccGUIDMatchPredicate(Split * s, PredicateData * pd)
 
   guid = &pd->guid.guid;
 
-  switch (pd->guid.id_type)
-  {
-    case GNC_ID_NONE:
-    case GNC_ID_NULL:
-    default:
-      return 0;
-
-    case GNC_ID_ACCOUNT:
-      return (xaccSplitGetAccount (s) ==
-              xaccAccountLookupEntityTable (guid, s->entity_table));
-
-    case GNC_ID_TRANS:
+  if (pd->guid.id_type == GNC_ID_NONE ||
+      !safe_strcmp (pd->guid.id_type, GNC_ID_NULL))
+    return 0;
+  else if (!safe_strcmp (pd->guid.id_type, GNC_ID_ACCOUNT))
+    return (xaccSplitGetAccount (s) ==
+	    xaccAccountLookupEntityTable (guid, s->entity_table));
+  else if (!safe_strcmp (pd->guid.id_type, GNC_ID_TRANS))
       return (xaccSplitGetParent (s) ==
               xaccTransLookupEntityTable (guid, s->entity_table));
-
-    case GNC_ID_SPLIT:
-      return s == xaccSplitLookupEntityTable (guid, s->entity_table);
-  }
+  else if (!safe_strcmp (pd->guid.id_type, GNC_ID_SPLIT))
+    return s == xaccSplitLookupEntityTable (guid, s->entity_table);
+  else
+    return 0;
 }
 
 /*******************************************************************

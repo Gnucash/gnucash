@@ -266,89 +266,83 @@ pgendProcessEvents (Backend *bend)
 
       /* lets see if the local cache has this item in it */
       local_obj_type = xaccGUIDType (&(ev->guid), be->book);
-      if ((local_obj_type != GNC_ID_NONE) && (local_obj_type != ev->obj_type))
+      if ((local_obj_type != GNC_ID_NONE) && (safe_strcmp (local_obj_type,
+							   ev->obj_type)))
       {
-         PERR ("ouch! object type mismatch, local=%d, event=%d",
+         PERR ("ouch! object type mismatch, local=%s, event=%s",
                local_obj_type, ev->obj_type);
          g_free (ev);
          continue;
       }
 
-      switch (ev->obj_type)
+      if (!safe_strcmp (ev->obj_type, GNC_ID_ACCOUNT))
       {
-         case GNC_ID_NONE:
-         case GNC_ID_NULL:
-            PERR ("bad event type");
-            break;
-         case GNC_ID_ACCOUNT:
-            if (0 < timespec_cmp(&(ev->stamp), &(be->last_account))) 
-            {
-               be->last_account = ev->stamp;
-            }
-            switch (ev->type)
-            {
-               default:
-                  PERR ("account: cant' happen !!!!!!!");
-                  break;
-               case GNC_EVENT_CREATE:
-               case GNC_EVENT_MODIFY: 
-                  /* if the remote user created an account, mirror it here */
-                  pgendCopyAccountToEngine (be, &(ev->guid));
-                  xaccGroupMarkSaved (pgendGetTopGroup (be));
-                  break;
-               case GNC_EVENT_DESTROY: {
-                  Account * acc = xaccAccountLookup (&(ev->guid), be->book);
-                  xaccAccountBeginEdit (acc);
-                  xaccAccountDestroy (acc);
-                  xaccGroupMarkSaved (pgendGetTopGroup (be));
-                  break;
-               }
-            }
-
-            break;
-
-         case GNC_ID_TRANS:
-            if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction))) 
-            {
-               be->last_transaction = ev->stamp;
-            }
-            switch (ev->type)
-            {
-               default:
-                  PERR ("transaction: cant' happen !!!!!!!");
-                  break;
-               case GNC_EVENT_CREATE:
-                  /* don't mirror transaction creations. If a register needs
-                   * it, it will do a query. */
-                  PINFO ("create transaction");
-                  break;
-               case GNC_EVENT_MODIFY: 
-                  pgendCopyTransactionToEngine (be, &(ev->guid));
-                  break;
-               case GNC_EVENT_DESTROY: {
-                  Transaction *trans = xaccTransLookup (&(ev->guid),
-                                                        be->book);
-                  xaccTransBeginEdit (trans);
-                  xaccTransDestroy (trans);
-                  xaccTransCommitEdit (trans);
-                  break;
-               }
-            }
-
-            break;
-
-         case GNC_ID_SPLIT:
-            if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction)))
-              be->last_transaction = ev->stamp;
-            break;
-
-         case GNC_ID_PRICE:
-            if (0 < timespec_cmp(&(ev->stamp), &(be->last_price)))
-              be->last_price = ev->stamp;
-            break;
-
-         default:
-            PERR ("unknown guid type %d", ev->obj_type);
+	if (0 < timespec_cmp(&(ev->stamp), &(be->last_account))) 
+	{
+	  be->last_account = ev->stamp;
+	}
+	switch (ev->type)
+	{
+	default:
+	  PERR ("account: cant' happen !!!!!!!");
+	  break;
+	case GNC_EVENT_CREATE:
+	case GNC_EVENT_MODIFY: 
+	  /* if the remote user created an account, mirror it here */
+	  pgendCopyAccountToEngine (be, &(ev->guid));
+	  xaccGroupMarkSaved (pgendGetTopGroup (be));
+	  break;
+	case GNC_EVENT_DESTROY: {
+	  Account * acc = xaccAccountLookup (&(ev->guid), be->book);
+	  xaccAccountBeginEdit (acc);
+	  xaccAccountDestroy (acc);
+	  xaccGroupMarkSaved (pgendGetTopGroup (be));
+	  break;
+	}
+	}
+      }
+      else if (!safe_strcmp (ev->obj_type, GNC_ID_TRANS))
+      {
+	if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction))) 
+	{
+	  be->last_transaction = ev->stamp;
+	}
+	switch (ev->type)
+	{
+	default:
+	  PERR ("transaction: cant' happen !!!!!!!");
+	  break;
+	case GNC_EVENT_CREATE:
+	  /* don't mirror transaction creations. If a register needs
+	   * it, it will do a query. */
+	  PINFO ("create transaction");
+	  break;
+	case GNC_EVENT_MODIFY: 
+	  pgendCopyTransactionToEngine (be, &(ev->guid));
+	  break;
+	case GNC_EVENT_DESTROY: {
+	  Transaction *trans = xaccTransLookup (&(ev->guid),
+						be->book);
+	  xaccTransBeginEdit (trans);
+	  xaccTransDestroy (trans);
+	  xaccTransCommitEdit (trans);
+	  break;
+	}
+	}
+      }
+      else if (!safe_strcmp (ev->obj_type, GNC_ID_SPLIT))
+      {
+	if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction)))
+	  be->last_transaction = ev->stamp;
+      }
+      else if (!safe_strcmp (ev->obj_type, GNC_ID_PRICE))
+      {
+	if (0 < timespec_cmp(&(ev->stamp), &(be->last_price)))
+	  be->last_price = ev->stamp;
+      }
+      else
+      {
+	PERR ("unknown guid type %s", ev->obj_type);
       }
    
       /* get the local type again, since we created guid above */

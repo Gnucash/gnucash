@@ -37,7 +37,7 @@
 #include "guid.h"
 #include "gnc-engine.h"
 
-/* Identifiers are 'typed' with integers. The ids used in gnucash are
+/* Identifiers are 'typed' with strings. The ids used in gnucash are
  * defined below. An id with type GNC_ID_NONE does not refer to any
  * entity, although that may change as new ids are created. An id with
  * type GNC_ID_NULL does not refer to any entity, and will never refer
@@ -45,21 +45,19 @@
  * actual entity, but that is not guaranteed. If an id does refer to
  * an entity, the type of the entity will match the type of the
  * identifier. */
-typedef enum
-{
-  GNC_ID_NONE = 0,
-  GNC_ID_NULL,
-  GNC_ID_ACCOUNT,
-  GNC_ID_TRANS,
-  GNC_ID_SPLIT,
-  GNC_ID_PRICE,
-  GNC_ID_BOOK,
-  GNC_ID_SESSION,
-  GNC_ID_SCHEDXACTION,
-  GNC_ID_FREQSPEC,
-  LAST_GNC_ID = GNC_ID_FREQSPEC
-} GNCIdType;
 
+typedef char * GNCIdType;
+
+#define GNC_ID_NONE	NULL
+#define GNC_ID_NULL	"null"
+#define GNC_ID_ACCOUNT	"Account"
+#define GNC_ID_TRANS	"Trans"
+#define GNC_ID_SPLIT	"Split"
+#define GNC_ID_PRICE	"Price"
+#define GNC_ID_BOOK	"Book"
+#define GNC_ID_SESSION	"Session"
+#define GNC_ID_SCHEDXACTION	"SchedXaction"
+#define GNC_ID_FREQSPEC	"FreqSpec"
 
 /* Return the type of an identifier. */
 GNCIdType xaccGUIDType (const GUID * guid, GNCBook *book);

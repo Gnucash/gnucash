@@ -202,6 +202,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
   else if (strncmp ("guid=", location, 5) == 0)
   {
     GUID guid;
+    GNCIdType id_type;
 
     if (!string_to_guid (location + 5, &guid))
     {
@@ -209,20 +210,20 @@ gnc_html_register_url_cb (const char *location, const char *label,
       return FALSE;
     }
 
-    switch (xaccGUIDType (&guid, gnc_get_current_book ()))
+    id_type = xaccGUIDType (&guid, gnc_get_current_book ());
+    if (id_type == GNC_ID_NONE || !safe_strcmp (id_type, GNC_ID_NULL))
     {
-      case GNC_ID_NONE:
-      case GNC_ID_NULL:
         result->error_message = g_strdup_printf (_("No such entity: %s"),
                                                  location);
         return FALSE;
-
-      case GNC_ID_ACCOUNT:
+    }
+    else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
+    {
         account = xaccAccountLookup (&guid, gnc_get_current_book ());
         reg = regWindowSimple (account);
-        break;
-
-      case GNC_ID_TRANS:
+    }
+    else if (!safe_strcmp (id_type, GNC_ID_TRANS))
+    {
         trans = xaccTransLookup (&guid, gnc_get_current_book ());
         split = NULL;
 
@@ -241,9 +242,9 @@ gnc_html_register_url_cb (const char *location, const char *label,
         }
 
         reg = regWindowSimple (xaccSplitGetAccount (split));
-        break;
-
-      case GNC_ID_SPLIT:
+    }
+    else if (!safe_strcmp (id_type, GNC_ID_SPLIT))
+    {
         split = xaccSplitLookup (&guid, gnc_get_current_book ());
         if (!split)
         {
@@ -253,9 +254,9 @@ gnc_html_register_url_cb (const char *location, const char *label,
         }
 
         reg = regWindowSimple (xaccSplitGetAccount (split));
-        break;
-
-      default:
+    }
+    else
+    {
         result->error_message =
           g_strdup_printf (_("Unsupported entity type: %s"), location);
         return FALSE;
