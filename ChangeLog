@@ -4,6 +4,11 @@
 	  < 1.1, in order to try to fix #84707 on systems with multiple
 	  versions of gtkhtml.
 
+	* src/import-export/qif-import/qif-dialog-utils.scm:
+	  Perry Smith's Null Account Patch.  Make sure the security is
+	  a real string before appending an account separator, so we
+	  don't try to create a "null" account.
+
 2004-08-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/gnucash.desktop.in: make the desktop HIG compliant.
