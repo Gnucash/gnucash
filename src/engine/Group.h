@@ -50,25 +50,25 @@ void 	      xaccAccountGroupCommitEdit (AccountGroup *grp);
 
 /*
  * The xaccGroupConcatGroup() subroutine will move (reparent) 
- *    all accounts from the "from" group to the "to" group,
+ *    all accounts from the "src" group to the "dest" group,
  *    preserving the account heirarchy.  It will also take care 
- *    that the moved accounts will have the "to" group's book
+ *    that the moved accounts will have the "dest" group's book
  *    parent as well.
  *
  * The xaccGroupCopyGroup() subroutine will copy all accounts
- *    from the "from" group to the "to" group, preserving the 
+ *    from the "src" group to the "dest" group, preserving the 
  *    account heirarchy.  It will also take care that the moved 
- *    accounts will have the "to" groups book parent as well.
+ *    accounts will have the "dest" group's book parent as well.
  *    This routine will *NOT* copy any splits/transactions.
- *    It will copy the KVP tree.
+ *    It will copy the KVP trees in each account.
  *
  * The xaccGroupMergeAccounts() subroutine will go through a group,
  *    merging all accounts that have the same name and description.
  *    This function is useful when importing Quicken(TM) files.
  */
 
-void    xaccGroupConcatGroup (AccountGroup *to, AccountGroup *from);
-void    xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from);
+void    xaccGroupConcatGroup (AccountGroup *dest, AccountGroup *src);
+void    xaccGroupCopyGroup (AccountGroup *dest, AccountGroup *src);
 void    xaccGroupMergeAccounts (AccountGroup *grp);
 
 /*
