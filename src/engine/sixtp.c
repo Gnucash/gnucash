@@ -606,13 +606,15 @@ sixtp_parse_file(sixtp *sixtp,
     
     if(ctxt->data.parsing_ok)
     {
-        *parse_result = ctxt->top_frame->frame_data;
+        if(parse_result)
+            *parse_result = ctxt->top_frame->frame_data;
         sixtp_context_destroy(ctxt);
         return TRUE;
     }
     else
     {
-        *parse_result = NULL;
+        if(parse_result)
+            *parse_result = NULL;
         sixtp_handle_catastrophe(&ctxt->data);
         sixtp_context_destroy(ctxt);
         return FALSE;
@@ -653,4 +655,3 @@ sixtp_parse_buffer(sixtp *sixtp,
         return FALSE;
     }
 }
-    

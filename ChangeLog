@@ -1,3 +1,11 @@
+2001-02-08  James LewisMoss  <dres@phoenixdsl.com>
+
+	* src/engine/sixtp.c (sixtp_parse_file): Only set parse_result if
+	it points somewhere.
+
+	* src/engine/sixtp-to-dom-parser.c (dom_chars_handler): fix
+	character adding.
+
 2001-02-07  James LewisMoss  <dres@phoenixdsl.com>
 
 	* make-gnucash-patch.in: Add a file ending that is ignored.

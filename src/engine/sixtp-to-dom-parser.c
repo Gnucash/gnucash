@@ -1,5 +1,7 @@
 #include <glib.h>
 
+#include <ctype.h>
+
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
 #include "sixtp.h"
@@ -22,15 +24,32 @@ static gboolean dom_start_handler(
     {
         thing = xmlNewChild(parent_data, global_namespace, tag, NULL);
     }
-    
-    while(*atptr != 0)
+
+    if(attrs != NULL)
     {
-        xmlSetProp(thing, atptr[0], atptr[1]);
-        atptr += 2;
+        while(*atptr != 0)
+        {
+            xmlSetProp(thing, atptr[0], atptr[1]);
+            atptr += 2;
+        }
     }
 
     *result = thing;
+    *data_for_children = thing;
     
+    return TRUE;
+}
+
+static gboolean is_whitespace(const char *text, int len)
+{
+    int i;
+    for(i = 0; i < len; i++)
+    {
+        if(!isspace(text[i]))
+        {
+            return FALSE;
+        }
+    }
     return TRUE;
 }
 
@@ -38,8 +57,13 @@ static gboolean dom_chars_handler(
     GSList *sibling_data, gpointer parent_data, gpointer global_data,
     gpointer *result, const char *text, int length)
 {
-    xmlNodeSetContent((xmlNodePtr)result, text);
+    if(length > 0 && !is_whitespace(text, length))
+    {
+        gchar *stuff = g_strndup(text, length);
+        xmlNodeSetContent((xmlNodePtr)parent_data, stuff);
+    }
     return TRUE;
+        
 }
 
 static gboolean dom_before_handler(
