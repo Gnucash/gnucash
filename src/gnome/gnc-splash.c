@@ -26,6 +26,7 @@
 
 #include "dialog-utils.h"
 #include "gnc-splash.h"
+#include "gnc-version.h"
 
 
 static GtkWidget * splash = NULL;
