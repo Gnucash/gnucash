@@ -52,32 +52,33 @@
 #include "gncBusiness.h"
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
+#include "gncJobP.h"
 #include "gncTaxTableP.h"
 
 struct _gncCustomer 
 {
-  QofInstance inst;
-  char *	id;
-  char *	name;
-  char *	notes;
-  GncBillTerm *	terms;
-  GncAddress *	addr;
-  GncAddress *	shipaddr;
-  gnc_commodity	* currency;
-  gnc_numeric	discount;
-  gnc_numeric	credit;
-  GncTaxIncluded taxincluded;
+  QofInstance     inst;
+  char *          id;
+  char *          name;
+  char *          notes;
+  GncBillTerm *   terms;
+  GncAddress *    addr;
+  GncAddress *    shipaddr;
+  gnc_commodity * currency;
+  gnc_numeric     discount;
+  gnc_numeric     credit;
+  GncTaxIncluded  taxincluded;
 
-  gboolean	active;
-  GList *	jobs;
+  gboolean        active;
+  GList *         jobs;
 
-  GncTaxTable*	taxtable;
-  gboolean	taxtable_override;
+  GncTaxTable*    taxtable;
+  gboolean        taxtable_override;
 };
 
-static short	module = MOD_BUSINESS;
+static short module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME	GNC_CUSTOMER_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_CUSTOMER_MODULE_NAME
 
 /* ============================================================== */
 /* misc inline funcs */
@@ -137,6 +138,7 @@ GncCustomer *gncCustomerCreate (QofBook *book)
 GncCustomer *
 gncCloneCustomer (GncCustomer *from, QofBook *book)
 {
+  GList *node;
   GncCustomer *cust;
 
   cust = g_new0 (GncCustomer, 1);
@@ -152,8 +154,6 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
   cust->taxincluded = from->taxincluded;
   cust->active = from->active;
   cust->taxtable_override = from->taxtable_override;
-
-  /* cust->jobs = ??? XXXXXXXXXXXXXXXXXXXXXXX fixme not sure what to do here */
 
   cust->addr = gncCloneAddress (from->addr, book);
   cust->shipaddr = gncCloneAddress (from->shipaddr, book);
@@ -177,6 +177,13 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
   if (from->taxtable)
   {
     cust->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
+  }
+
+  for (node=g_list_last(cust->jobs); node; node=node->next)
+  {
+    GncJob *job = node->data;
+    job = gncJobObtainTwin (job, book);
+    cust->jobs = g_list_prepend(cust->jobs, job);
   }
 
   addObj (cust);
@@ -221,14 +228,14 @@ static void gncCustomerFree (GncCustomer *cust)
 /* Set Functions */
 
 #define SET_STR(obj, member, str) { \
-	char * tmp; \
-	\
-	if (!safe_strcmp (member, str)) return; \
-	gncCustomerBeginEdit (obj); \
-	tmp = CACHE_INSERT (str); \
-	CACHE_REMOVE (member); \
-	member = tmp; \
-	}
+        char * tmp; \
+        \
+        if (!safe_strcmp (member, str)) return; \
+        gncCustomerBeginEdit (obj); \
+        tmp = CACHE_INSERT (str); \
+        CACHE_REMOVE (member); \
+        member = tmp; \
+        }
 
 void gncCustomerSetID (GncCustomer *cust, const char *id)
 {
@@ -368,7 +375,7 @@ void gncCustomerAddJob (GncCustomer *cust, GncJob *job)
 
   if (g_list_index(cust->jobs, job) == -1)
     cust->jobs = g_list_insert_sorted (cust->jobs, job,
-				       (GCompareFunc)gncJobCompare);
+                                       (GCompareFunc)gncJobCompare);
 
   gnc_engine_generate_event (&cust->inst.guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
@@ -418,7 +425,7 @@ void gncCustomerCommitEdit (GncCustomer *cust)
 {
   GNC_COMMIT_EDIT_PART1 (&cust->inst);
   GNC_COMMIT_EDIT_PART2 (&cust->inst, _GNC_MOD_NAME, gncCustomerOnError,
-			 gncCustomerOnDone, cust_free);
+                         gncCustomerOnDone, cust_free);
 }
 
 /* Get Functions */
@@ -512,7 +519,7 @@ GList * gncCustomerGetJoblist (GncCustomer *cust, gboolean show_all)
     for (iterator = cust->jobs; iterator; iterator=iterator->next) {
       GncJob *j = iterator->data;
       if (gncJobGetActive (j))
-	list = g_list_append (list, j);
+        list = g_list_append (list, j);
     }
     return list;
   }
@@ -536,15 +543,15 @@ GncCustomer * gncCustomerLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
   return qof_entity_lookup (gnc_book_get_entity_table (book),
-			   guid, _GNC_MOD_NAME);
+                           guid, _GNC_MOD_NAME);
 }
 
 gboolean gncCustomerIsDirty (GncCustomer *cust)
 {
   if (!cust) return FALSE;
   return (cust->inst.dirty ||
-	  gncAddressIsDirty (cust->addr) ||
-	  gncAddressIsDirty (cust->shipaddr));
+          gncAddressIsDirty (cust->addr) ||
+          gncAddressIsDirty (cust->shipaddr));
 }
 
 /* Other functions */
@@ -581,7 +588,7 @@ static void _gncCustomerMarkClean (QofBook *book)
 }
 
 static void _gncCustomerForeach (QofBook *book, QofEntityForeachCB cb,
-				 gpointer user_data)
+                                 gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }

@@ -1,15 +1,19 @@
 
 XXX TODO:
--- billterms is incompletely cloned, not sure what to do 
-   with refcount, ask warlord, need to explore.
+-- billterm and taxtermss are incompletely cloned, not sure 
+   what to do with refcount, ask warlord, need to explore.
 
--- taxtable is incompletely cloned, not sure what to do 
-   with certain fields, ask warlord
+-- jobs incomplete cloned, neeed to handle owners
 
--- customer incomplete cloned, neeed to handle jobs
+-- turn clone into a generic object callback, so that 
+   the ObtainTwin could be qof_instance_obtain_twin,
+   a generic function. (right now its copied everywhere)
 
--- Ask warlord if all bill terms should be copied, or just
-   thiose on customers ... 
+-- most of the busienss objects have an id/name/desc 
+   this could be abstracted into an common object.
+
+-- TaxTable and BillTerm have common parent/child code.
+   this could be abstracted into common code.
 
 
 #include "gncBusiness.h"

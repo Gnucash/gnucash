@@ -37,10 +37,7 @@ void gncCustomerSetGUID (GncCustomer *customer, const GUID *guid);
 
 /** The gncCloneCustomer() routine makes a copy of the indicated
  *  customer, placing it in the indicated book.  It copies
- *  the addresses, credits, etc.
- *  It copies the bill term, if needed.
- *  It does not copy jobs??  Or tax terms ???
- * XXX the above need fixin....
+ *  the addresses, credits, currency, billing terms and jobs.
  *  It then adds a pair of 'gemini' kvp pointers so that each copy 
  *  can be found from the other.
  */

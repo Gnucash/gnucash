@@ -22,6 +22,7 @@
 
 /*
  * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -33,5 +34,25 @@
 gboolean gncJobRegister (void);
 gint64 gncJobNextID (QofBook *book);
 void gncJobSetGUID (GncJob *job, const GUID *guid);
+
+/** The gncCloneTaxTable() routine makes a copy of the indicated
+ *  tax table, placing it in the indicated book.  It copies
+ *  the id, name description and owner.
+ *  It then adds a pair of 'gemini' kvp pointers so that each copy
+ *  can be found from the other.
+ */
+GncJob * gncCloneJob (GncJob *from, QofBook *book);
+
+/** The gncJobObtainTwin() will find the 'twin' of the
+ *  indicated tax table in the indicated book.  If the twin doesn't
+ *  yet exist in the book, it will be created (by calling
+ *  gncCloneJob()) and placed into the book.
+ *
+ * We called this routine 'Obtain' instead of "Get" to distinguish
+ * it from the other Get routines, which work in fundamentally
+ * different ways.
+ */
+GncJob * gncJobObtainTwin (GncJob *from, QofBook *book);
+
 
 #endif /* GNC_JOBP_H_ */

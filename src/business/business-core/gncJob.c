@@ -106,9 +106,35 @@ GncJob *gncJobCreate (QofBook *book)
   job->desc = CACHE_INSERT ("");
   job->active = TRUE;
 
+  /* GncOwner not initialized */
   addObj (job);
   gnc_engine_generate_event (&job->inst.guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
 
+  return job;
+}
+
+GncJob *
+gncCloneJob (GncJob *from, QofBook *book)
+{
+  GncJob *job;
+                                                                                
+  if (!book) return NULL;
+                                                                                
+  job = g_new0 (GncJob, 1);
+  qof_instance_init (&job->inst, book);
+  qof_instance_gemini (&job->inst, &from->inst);
+                                                                                
+  job->id = CACHE_INSERT (from->id);
+  job->name = CACHE_INSERT (from->name);
+  job->desc = CACHE_INSERT (from->desc);
+  job->active = from->active;
+
+  /* XXX need to clone too */
+  job->owner = from->owner;
+
+  addObj (job);
+  gnc_engine_generate_event (&job->inst.guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+                                                                                
   return job;
 }
 
@@ -144,6 +170,20 @@ static void gncJobFree (GncJob *job)
   qof_instance_release (&job->inst);
 
   g_free (job);
+}
+
+GncJob *
+gncJobObtainTwin (GncJob *from, QofBook *book)
+{
+  GncJob *job;
+  if (!from) return NULL;
+                                                                                
+  job = (GncJob *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!job)
+  {
+    job = gncCloneJob (from, book);
+  }
+  return job;
 }
 
 /* ================================================================== */

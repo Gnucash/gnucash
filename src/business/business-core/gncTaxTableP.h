@@ -43,13 +43,14 @@ gboolean gncTaxTableGetInvisible (GncTaxTable *table);
 
 /** The gncCloneTaxTable() routine makes a copy of the indicated
  *  tax table, placing it in the indicated book.  It copies
- *  the etc.
- *  It does not copy parent/child relationships ???
- * XXX the above need fixin....
+ *  the tax table name and list of entries.
+ *  It also copies (as needed) both parents and children, so that
+ *  the parent-child relationship is correctly mirrored in the
+ *  clone.
+ * XXX the refcount is mis-handled. This needs fixin....
  *  It then adds a pair of 'gemini' kvp pointers so that each copy
  *  can be found from the other.
  */
-
 GncTaxTable * gncCloneTaxTable (GncTaxTable *from, QofBook *book);
 
 /** The gncTaxTableObtainTwin() will find the 'twin' of the
