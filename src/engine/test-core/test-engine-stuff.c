@@ -661,7 +661,7 @@ get_random_account(GNCSession *session)
 
     set_account_random_string(ret, xaccAccountSetName);
 
-    tmp_int = get_random_int_in_range(BANK, CREDITLINE);
+    tmp_int = get_random_int_in_range(BANK, NUM_ACCOUNT_TYPES - 1);
     xaccAccountSetType(ret, tmp_int);
 
     set_account_random_string(ret, xaccAccountSetCode);
