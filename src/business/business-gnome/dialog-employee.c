@@ -643,20 +643,19 @@ gnc_employee_search (GncEmployee *start, GNCBook *book)
 				   sw, free_employee_cb);
 }
 
-gpointer gnc_employee_edit_new_select (gpointer bookp, gpointer employee,
-				       GtkWidget *toplevel)
+GNCSearchWindow *
+gnc_employee_search_select (gpointer start, gpointer book)
 {
-  gnc_employee_search (employee, bookp); /* XXX */
-  return employee;
+  if (!book) return NULL;
+
+  return gnc_employee_search (start, book);
 }
 
-gpointer gnc_employee_edit_new_edit (gpointer bookp, gpointer v,
-				     GtkWidget *toplevel)
+GNCSearchWindow *
+gnc_employee_search_edit (gpointer start, gpointer book)
 {
-  GncEmployee *employee = v;
+  if (start)
+    gnc_ui_employee_edit (start);
 
-  g_return_val_if_fail (employee != NULL, NULL);
-
-  gnc_ui_employee_edit (employee);
-  return employee;
+  return NULL;
 }

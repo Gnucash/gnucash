@@ -6,6 +6,35 @@
 	* src/business/business-core/file/gnc-entry-xml-v2.c:
 	  add support for the bill payment type.
 
+	* src/business/business-core/business-core.scm:
+	  don't need gnc:owner-get-name in scheme
+	  add employee support to owners
+	  fix bug in (gnc:owner-get-id)
+	* src/business/business-core/gncEmployee.[ch]:
+	  add APIs to get-guid and lookup from scheme
+	* src/business/business-core/gw-business-core-spec.scm:
+	  wrap employee-get-guid, employee-lookup, employee-get-id,
+	  employee-get-username, employee-get-addr, owner-init-employee,
+	  owner-get-employee, owner-get-name
+	* src/business/business-gnome/business-options-gnome.c:
+	  create an "employee option" widget set
+	* src/business/business-gnome/business-urls.c:
+	  define an 'employee' URL type
+	* src/business/business-gnome/dialog-employee.[ch]:
+	  remove old, unused search APIs,
+	  add new search APIs
+	* src/business/business-gnome/dialog-invoice.c:
+	  add _some_ employee support.  Still doesn't contain the code
+	  to display an employee-owned invoice (expense voucher).
+	* src/business/business-utils/business-options.scm:
+	  create an employee option type	  
+	* src/business/business-core/gncInvoice.c:
+	* src/business/business-core/gncOwner.[ch]:
+	* src/business/business-core/file/gnc-owner-xml-v2.c:
+	* src/business/business-gnome/business-gnome-utils.c
+	* src/business/business-gnome/search-owner.c:
+	  add employee support
+
 2003-03-02  Christian Stimming  <stimming@tuhh.de>
 
 	* src/app-utils/prefs.scm: Adjust the names of register styles in

@@ -290,6 +290,20 @@ GncEmployee * gncEmployeeLookup (GNCBook *book, const GUID *guid)
 			   guid, _GNC_MOD_NAME);
 }
 
+GUID gncEmployeeRetGUID (GncEmployee *employee)
+{
+  if (!employee)
+    return *xaccGUIDNULL();
+
+  return employee->guid;
+}
+
+GncEmployee * gncEmployeeLookupDirect (GUID guid, GNCBook *book)
+{
+  if (!book) return NULL;
+  return gncEmployeeLookup (book, &guid);
+}
+
 gboolean gncEmployeeIsDirty (GncEmployee *employee)
 {
   if (!employee) return FALSE;
