@@ -1,3 +1,8 @@
+2001-05-07  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/commodity-utilities.scm: Always use the absolute value
+	when building a weighted average.
+
 2001-05-06  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/price-scatter.scm: add options for marker shape

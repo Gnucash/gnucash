@@ -220,8 +220,11 @@
 				     (gnc:split-get-parent a)))
 		  (account-comm (gnc:account-get-commodity 
 				 (gnc:split-get-account a)))
-		  (share-amount (gnc:split-get-share-amount a))
-		  (value-amount (gnc:split-get-value a))
+		  ;; Always use the absolute value here.
+		  (share-amount (gnc:numeric-abs 
+				 (gnc:split-get-share-amount a)))
+		  (value-amount (gnc:numeric-abs
+				 (gnc:split-get-value a)))
 		  (tmp (assoc transaction-comm sumlist))
 		  (comm-list (if (not tmp) 
 				 (assoc account-comm sumlist)
@@ -240,16 +243,14 @@
 		   (set! sumlist (cons comm-list sumlist)))
 		 ;; yes, check for second commodity.
 		 (let* 
+		     ;; Put the amounts in the right place.
 		     ((foreignlist 
-		       ;; this will adjust the signs appropriately
 		       (if (gnc:commodity-equiv? transaction-comm
 						 (car comm-list))
 			   (list account-comm 
-				 (gnc:numeric-neg share-amount)
-				 (gnc:numeric-neg value-amount))
+				 share-amount value-amount)
 			   (list transaction-comm 
-				 value-amount 
-				 share-amount)))
+				 value-amount share-amount)))
 		      ;; second commodity already existing in comm-list?
 		      (pair (assoc (car foreignlist) (cadr comm-list))))
 		   ;; if not, create a new entry in comm-list.
