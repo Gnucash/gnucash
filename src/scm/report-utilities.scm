@@ -323,3 +323,22 @@
          (gnc:group-map-accounts
           (lambda (account)
             (gnc:account-get-balance-interval account from to #t)) group)))
+
+(define (gnc:transaction-get-splits transaction)
+  (let* ((num-splits (gnc:transaction-get-split-count transaction)))
+    (let loop ((index 0))
+      (if (= index num-splits)
+	  '()
+	  (cons
+	   (gnc:transaction-get-split transaction index)
+	   (loop (+ index 1)))))))
+
+;; given one split, return the other splits in a transaction
+(define (gnc:split-get-other-splits split)
+  (let loop ((splits 
+	      (gnc:transaction-get-splits (gnc:split-get-parent split))))
+    (if (null? splits) 
+	'()
+	(if (equal? (car splits) split)
+	    (loop (cdr splits))
+	    (cons (car splits) (loop (cdr splits)))))))

@@ -6,14 +6,12 @@
 ;; with contributions from Christopher Browne (cbbrowne@hex.net)
 
 ;; TODO
-;; properly handle income as well
 ;; "upcoming/overdue bills" report
 ;; druids to enter budget
 ;; save/load budget
 ;; internationalization
 ;; speedup:  move subexpressions outside loops
 ;;           don't calculate values that aren't needed
-;; clean up/prettify report
 ;; graph budget progress
 ;; save report parameters - "favorite" reports
 ;; "unbudgeted" report
@@ -131,7 +129,7 @@
    (make-budget-entry 
     "gross" '("Income:Gross Employment Income") #f 
     (list
-     (make-budget-subentry #f -9999999.99 1 'gnc:budget-month 
+     (make-budget-subentry #f -99999.99 1 'gnc:budget-month 
 			   (make-bill-mechanism -1 2))) #t)	
    (make-budget-entry 
     "bank interest" '("Expense:Bank Charges:Interest") #f 
@@ -461,9 +459,8 @@
        (subreport-proc subreport))
      (budget-report-get-subreports (budget-line-get-report line)))))
 
-(define (budget-line-get-false-subentries line)
-  (map
-   (lambda (subentry) #f)
+(define (budget-line-count-subentries line)
+  (length
    (budget-entry-get-subentries (budget-line-get-entry line))))
 
 (define budget-report-set-actual!
@@ -1191,7 +1188,7 @@
 				   gnc:budget-full-report-specs
 				   gnc:budget-full-report-sort-specs
 				   html-table-entry-render-entries-first
-				   budget-line-get-false-subentries)
+				   budget-line-count-subentries)
 	(html-table-totals budget-list gnc:budget-full-report-specs)
 	(html-end-table)
 	(html-end-document)))
@@ -1206,7 +1203,7 @@
 				   gnc:budget-balance-report-specs
 				   gnc:budget-balance-report-sort-specs
 				   html-table-entry-render-subentries-merged
-				   budget-line-get-false-subentries)
+				   budget-line-count-subentries)
 	(html-table-totals budget-list gnc:budget-balance-report-specs)
 	(html-end-table)
 	(html-end-document)))
@@ -1221,7 +1218,7 @@
 				   gnc:budget-status-report-specs
 				   gnc:budget-status-report-sort-specs
 				   html-table-entry-render-entries-only
-				   budget-line-get-false-subentries)
+				   budget-line-count-subentries)
 	(html-table-totals budget-list gnc:budget-status-report-specs)
 	(html-end-table)
 	(html-end-document))))))

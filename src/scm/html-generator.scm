@@ -6,7 +6,7 @@
 
 (gnc:support "html-generator.scm")
 
-
+ 
 ;; How this mechanism works:
 ;;
 ;; To do a report, first collect all of your results into a list.
@@ -24,11 +24,7 @@
 ;; Subentries are handled several different ways, depending on what
 ;; function is used to convert the results into an html table.  If
 ;; subs-list-proc and subentry-html-proc are #f, there are no
-;; subentries in this column.  Instead, false-proc is called to
-;; assemble the list.  false-proc is a parameter that is passed to the
-;; function that converts the results into an HTML table.  false-proc,
-;; when passed an entry, returns a list of #f's the same length as the
-;; number of subentries.
+;; subentries in this column.  
 ;;
 ;; Subsections (which are not yet implemented) are defined in the
 ;; report-sort-spec-structure.  Define subtotal-html-proc to allow
@@ -141,38 +137,40 @@
   (record-accessor report-spec-structure 'first-last-preference))
 
 ;; convert a list of entries into html
-(define (html-table-render-entries entry-list specs sort-specs line-render-proc false-proc)
+(define (html-table-render-entries entry-list specs sort-specs line-render-proc count-subentries-proc)
   (html-table-do-subsection
    (html-table-sort entry-list sort-specs)
-   specs sort-specs line-render-proc false-proc 1))
+   specs sort-specs line-render-proc count-subentries-proc 1))
 
 ;; the next 3 functions can be passed to html-table-render-entries
 
 ;; convert an entry into html.  subentries follow entries
-(define (html-table-entry-render-entries-first line specs false-proc)
+(define (html-table-entry-render-entries-first line specs count-subentries-proc)
   (html-table-row-group
    (cons
     (html-table-row-manual (html-table-do-entry line specs))
     (map
      html-table-row-manual
-     (html-table-collect-subentries line specs false-proc)))))
+     (html-table-collect-subentries line specs count-subentries-proc)))))
 
 ;; convert an entry into html.  first subentry is merged with the entry
-(define (html-table-entry-render-subentries-merged line specs false-proc)
-  (let ((subs-lines (html-table-collect-subentries line specs false-proc)))
+(define (html-table-entry-render-subentries-merged line specs count-subentries-proc)
+  (let ((subs-lines (html-table-collect-subentries line specs count-subentries-proc)))
     (html-table-row-group
-     (list
-      (html-table-row-manual
-       (map
-	(lambda (entry sub)
-	  (if (not sub) entry sub))
-	(html-table-do-entry line specs)
-	(car subs-lines)))
-      (map html-table-row-manual (cdr subs-lines))))))
+     (if (null? subs-lines)
+	 (html-table-row-manual (html-table-do-entry line specs))
+	 (list
+	  (html-table-row-manual
+	   (map
+	    (lambda (entry sub)
+	      (if (not sub) entry sub))
+	    (html-table-do-entry line specs)
+	    (car subs-lines)))
+	  (map html-table-row-manual (cdr subs-lines)))))))
 
 
 ;; convert an entry into html.  ignore sub entries
-(define (html-table-entry-render-entries-only line specs false-proc)
+(define (html-table-entry-render-entries-only line specs count-subentries-proc)
   (html-table-row-group
    (html-table-row-manual (html-table-do-entry line specs))))
 
@@ -216,48 +214,15 @@
     specs)))
 
 
-;(define (html-table-subtotals subtotals sort-spec specs depth)
-;  (html-table-subtotals-row 
-;   depth
-;   (map
-;    (lambda (subtotal spec)
-;      (cond 
-;       ((report-spec-get-subtotal-html-proc spec)
-;	((report-spec-get-subtotal-html-proc spec) subtotal))
-;       (else #f)))
-;    subtotals specs)))
-
-;(define (html-table-init-subtotals specs sort-specs)
-;  (map
-;   (lambda (sort-spec)
-;     (map
-;      (lambda (spec) 0.0)
-;      specs))
-;   sort-specs))
-
-;(define (html-table-accumulate-subtotals subtotals specs sort-specs line)
-;  (map
-;   (lambda (subtotal sort-spec)
-;     (cond 
-;      ((report-sort-spec-get-subsection-pred sort-spec)
-;       (map
-;	(lambda (sub spec)
-;	  (cond
-;	   ((report-spec-get-subtotal-html-proc spec)
-;	    (+ sub ((report-spec-get-get-value-proc spec) line)))
-;	   (else 0.0)))
-;	subtotal specs))
-;      (else '())))
-;   subtotals sort-specs))
 
 (define (html-table-sort lst sort-specs)
   (sort lst (html-table-make-sort-pred sort-specs)))
 
-(define (html-table-do-subsection lst specs sort-specs line-render-proc false-proc depth)
+(define (html-table-do-subsection lst specs sort-specs line-render-proc count-subentries-proc depth)
   (cond
    ((null? sort-specs)
     (map 
-     (lambda (line) (line-render-proc line specs false-proc))
+     (lambda (line) (line-render-proc line specs count-subentries-proc))
      lst))
    (else
     (let loop ((lst2 lst))
@@ -289,47 +254,13 @@
 		   depth))
 		 (else '()))
 	   (html-table-do-subsection 
-	    front specs (cdr sort-specs) line-render-proc false-proc (+ depth 1))
+	    front specs (cdr sort-specs) line-render-proc count-subentries-proc (+ depth 1))
 	   (cond (subsection-pred
 		  (html-table-subtotals front sort-spec specs depth))
 		 (else '()))
 	   (loop back)))))))))
 	    
      
-;(define (html-table-do-subsection-stuff line1 line2 sort-specs report-specs subtotals)
-;  (let loop ((depth 1)
-;	     (specs sort-specs)
-;	     (totals subtotals))
-;    (cond 
-;     ((null? specs) '())
-;     ((not line1)
-;      (if (report-sort-spec-get-subsection-title-proc (car specs))
-;	  (cons
-;	   (html-table-subsection-title 
-;	    ((report-sort-spec-get-subsection-title-proc (car specs))
-;	     ((report-sort-spec-get-get-value-proc (car specs)) line2))
-;	    depth)
-;	   (loop (+ depth 1) (cdr specs) (cdr totals)))
-;	  (loop (+ depth 1) (cdr specs) (cdr totals))))
-;     (else
-;      (cond
-;       ((report-sort-spec-get-subsection-pred (car specs))
-;	(let ((get-value-proc (report-sort-spec-get-get-value-proc (car specs)))
-;	      (subtitle-proc (report-sort-spec-get-subsection-title-proc (car specs))))
-;	  (cond
-;	   ((not
-;	     ((report-sort-spec-get-subsection-pred (car specs))
-;	      (get-value-proc line1) (get-value-proc line2)))
-;	    (if subtitle-proc
-;		(cons
-;		 (html-table-subtotals (car totals) (car specs) report-specs depth)
-;		 (cons
-;		  (html-table-subsection-title
-;		   (subtitle-proc (get-value-proc line2)) depth)
-;		  (loop (+ depth 1) (cdr specs) (cdr totals))))
-;		(loop (+ depth 1) (cdr specs) (cdr totals))))
-;	   (else (loop (+ depth 1) (cdr specs) (cdr totals))))))
-;       (else '()))))))
 	   
 (define (html-table-make-sort-pred sort-specs)
   (lambda (entry1 entry2)
@@ -352,7 +283,7 @@
 
 ;; converts subentries into html and collects into a list of lists of
 ;; html cells.
-(define (html-table-collect-subentries line specs false-proc)
+(define (html-table-collect-subentries line specs count-subentries-proc)
   (col-list->row-list
    (map
     (lambda (spec)
@@ -360,7 +291,9 @@
 	     (map
 	      (report-spec-get-subentry-html-proc spec)
 	      ((report-spec-get-subs-list-proc spec) line)))
-	    (else (false-proc line))))
+	    (else (gnc:map-for
+		   (lambda (n) #f)
+		   0 (count-subentries-proc line) 1))))
     specs)))
 
 ;; converts entry into a list of html cells.
@@ -391,7 +324,9 @@
 
 (define (html-table-subtotals-row depth cells)
   (list
-   "<TR bgcolor=#ffff99 cellspacing=10 rules=\"rows\">"
+   "<TR bgcolor=" 
+   (number->string (+ #xffff40 (* depth #x30)) 16)
+   "cellspacing=10 rules=\"rows\">"
    (map
     (lambda (cell)
       (cond (cell cell)
@@ -411,7 +346,9 @@
    "</TR>\n"))
 
 (define (html-table-subsection-title title depth)
-  (list "<TR bgcolor=#ffff99><TH>" title "</TH></TR>"))
+  (list "<TR bgcolor=#"
+	   (number->string (+ #xffff40 (* depth #x30)) 16)
+	   "><TH>" title "</TH></TR>"))
 
 ;; help! this doesn't work!  I want something to group several rows
 ;; together so that an "entry" is noticably one unit.

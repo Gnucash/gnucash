@@ -1,7 +1,8 @@
 ;; -*-scheme-*-
 ;; transaction-report.scm
-;; Report on all transactions in an account
-;; Robert Merkel (rgmerk@mira.net)
+;; Report on all transactions in account(s)
+;; original report by Robert Merkel (rgmerk@mira.net)
+;; redone from scratch by Bryan Larsen (blarsen@ada-works.com)
 
 (gnc:support "report/transaction-report.scm")
 (gnc:depend "report-utilities.scm")
@@ -10,107 +11,278 @@
 
 (let ()
 
-  (define (trans-report-make-split-parent-proc parent-proc)
-    (lambda (split)
-      (parent-proc (gnc:split-get-parent split))))
+  (define (make-split-report-spec options)
+    (remove-if-not
+     (lambda (x) x)
+     (list
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "x Display" "Date"))
+       (make-report-spec 
+	"Date"
+	(lambda (split) 
+	  (gnc:transaction-get-date-posted 
+	   (gnc:split-get-parent split)))
+	(lambda (date) 
+	  (html-left-cell (html-string (gnc:print-date date))))
+	#f ; total-proc
+	#f ; subtotal-html-proc
+	#f ; total-html-proc
+	#t ; first-last-preference
+	#f ; subs-list-proc
+	#f)
+       #f)
 
-  ;; given a split, find the account-full-name from the other split.
-  ;; not useful when there is more than one split in a transaction
-  (define (split-get-other-account-full-name split)
-    (gnc:account-get-full-name
-     (gnc:split-get-account
-      (let ((trans (gnc:split-get-parent split)))
-	(let ((split0 (gnc:transaction-get-split trans 0))
-	      (split1 (gnc:transaction-get-split trans 1)))
-	  (if (equal? split0 split) split1 split0))))))
-  
-  (define trans-report-specs
-    (list
-     (make-report-spec 
-      "Date"
-      (trans-report-make-split-parent-proc gnc:transaction-get-date-posted)
-      (html-make-left-cell
-       (lambda (date) (html-string (gnc:print-date date))))
-      #f ; total-proc
-      #f ; subtotal-html-proc
-      #f ; total-html-proc
-      #t ; first-last-preference
-      #f ; subs-list-proc
-      #f) ; subentry-html-proc
-     (make-report-spec 
-      "Num"
-      (trans-report-make-split-parent-proc gnc:transaction-get-num)
-      (html-make-left-cell html-string)
-      #f ; total-proc
-      #f ; subtotal-html-proc
-      #f ; total-html-proc
-      #t ; first-last-preference
-      #f ; subs-list-proc
-      #f) ; subentry-html-proc
-     (make-report-spec 
-      "Description"
-      (trans-report-make-split-parent-proc gnc:transaction-get-description)
-      (html-make-left-cell html-string)
-      #f ; total-proc
-      #f ; subtotal-html-proc
-      #f ; total-html-proc
-      #t ; first-last-preference
-      #f ; subs-list-proc
-      #f) ; subentry-html-proc
-     (make-report-spec 
-      "Memo"
-      gnc:split-get-memo
-      (html-make-left-cell html-string)
-      #f ; total-proc
-      #f ; subtotal-html-proc
-      #f ; total-html-proc
-      #t ; first-last-preference
-      #f ; subs-list-proc
-      #f) ; subentry-html-proc
-     (make-report-spec 
-      "Account"
-      split-get-other-account-full-name
-      (html-make-left-cell html-string)			   
-      #f ; total-proc
-      #f ; subtotal-html-proc
-      #f ; total-html-proc
-      #t ; first-last-preference
-      #f ; subs-list-proc
-      #f) ; subentry-html-proc
-     (make-report-spec
-      "Amount"
-      gnc:split-get-value
-      (html-make-right-cell html-currency)
-      + ; total-proc
-      (html-make-right-cell (html-make-strong html-currency))
-      (html-make-right-cell (html-make-strong html-currency))
-      #t ; first-last-preference
-      #f ; subentry-list-proc
-      #f))) ; subentry-html-proc
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "x Display" "Num"))
+       (make-report-spec 
+	"Num"
+	(lambda (split)
+	  (gnc:transaction-get-num
+	   (gnc:split-get-parent split)))
+	(lambda (num) (html-left-cell (html-string num)))
+	#f ; total-proc
+	#f ; subtotal-html-proc
+	#f ; total-html-proc
+	#t ; first-last-preference
+	#f ; subs-list-proc
+	#f) ; subentry-html-proc
+       #f)
 
-  (define trans-report-sort-specs
-    (list
-     (make-report-sort-spec
-      (lambda (split) (gnc:account-get-full-name (gnc:split-get-account split)))
-      string-ci<?
-      string-ci=?
-      string-ci=?
-      (lambda (x) x))
-     (make-report-sort-spec
-      (trans-report-make-split-parent-proc gnc:transaction-get-date-posted)
-      (lambda (a b) (< (car a) (car b)))
-      (lambda (a b) (= (car a) (car b)))
-      #f
-      #f)))
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "x Display" "Description"))
+       (make-report-spec 
+	"Description"
+	(lambda (split)
+	  (gnc:transaction-get-description
+	   (gnc:split-get-parent split)))
+	(lambda (desc) (html-left-cell (html-string desc)))
+	#f ; total-proc
+	#f ; subtotal-html-proc
+	#f ; total-html-proc
+	#t ; first-last-preference
+	#f ; subs-list-proc
+	#f) ; subentry-html-proc
+       #f)
+
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "x Display" "Memo"))
+       (make-report-spec 
+	"Memo"
+	gnc:split-get-memo
+	(lambda (memo) (html-left-cell (html-string memo)))
+	#f ; total-proc
+	#f ; subtotal-html-proc
+	#f ; total-html-proc
+	#t ; first-last-preference
+	(lambda (split)
+	  (map gnc:split-get-memo (gnc:split-get-other-splits split)))
+	(lambda (memo) (html-left-cell (html-string memo))))
+       #f)
+
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "x Display" "Account"))
+       (make-report-spec 
+	"Account"
+	(lambda (split) 
+	  (gnc:account-get-full-name 
+	   (gnc:split-get-account split)))
+	(lambda (account-name) (html-left-cell (html-string account-name)))
+	#f ; total-proc
+	#f ; subtotal-html-proc
+	#f ; total-html-proc
+	#t ; first-last-preference
+	(lambda (split)
+	  (map 
+	   (lambda (other)
+	     (gnc:account-get-full-name (gnc:split-get-account other)))
+	   (gnc:split-get-other-splits split)))
+	(lambda (account-name) (html-left-cell (html-string account-name))))
+       #f)
+
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "x Display" "Other Account"))
+       (make-report-spec 
+	"Other Account"
+	(lambda (split)
+	  (let ((others (gnc:split-get-other-splits split)))
+	    (if (null? others)
+		""
+		(gnc:account-get-full-name 
+		 (gnc:split-get-account (car others))))))
+	(lambda (account-name) (html-left-cell (html-string account-name)))
+	#f ; total-proc
+	#f ; subtotal-html-proc
+	#f ; total-html-proc
+	#t ; first-last-preference
+	#f
+	#f)
+       #f)
+
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "x Display" "Amount"))
+       (make-report-spec
+	"Amount"
+	gnc:split-get-value
+	(lambda (value) (html-right-cell (html-currency value)))
+	+ ; total-proc
+	(lambda (value) 
+	  (html-right-cell (html-strong (html-currency value))))
+	(lambda (value) 
+	  (html-right-cell (html-strong (html-currency value))))
+	#t ; first-last-preference
+	(lambda (split)
+	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
+	(lambda (value) 
+	  (html-right-cell (html-ital (html-currency value)))))
+       #f))))
+
+  (define (split-report-get-sort-spec-entry key ascending?)
+    (case key
+      ((account)
+       (make-report-sort-spec
+	(lambda (split) (gnc:account-get-full-name (gnc:split-get-account split)))
+	(if ascending? string-ci<? string-ci>?)
+	string-ci=?
+	string-ci=?
+	(lambda (x) x)))
+
+      ((date)
+       (make-report-sort-spec
+	(lambda (split) 
+	  (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
+	(if ascending? 
+	    (lambda (a b) (< (car a) (car b)))
+	    (lambda (a b) (> (car a) (car b))))
+	(lambda (a b) (= (car a) (car b)))
+	#f
+	#f))
+
+      ((date-monthly)
+       (make-report-sort-spec
+	(lambda (split) 
+	  (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
+	(if ascending? 
+	    (lambda (a b) (< (car a) (car b)))
+	    (lambda (a b) (> (car a) (car b))))
+	(lambda (a b) (= (car a) (car b)))
+	(lambda (a b)
+	  (= (gnc:date-get-month (localtime (car a)))
+	     (gnc:date-get-month (localtime (car b)))))
+	(lambda (date) 
+	  (gnc:date-get-month-string (localtime (car date))))))
+
+      ((date-yearly)
+       (make-report-sort-spec
+	(lambda (split) 
+	  (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
+	(if ascending? 
+	    (lambda (a b) (< (car a) (car b)))
+	    (lambda (a b) (> (car a) (car b))))
+	(lambda (a b) (= (car a) (car b)))
+	(lambda (a b)
+	  (= (gnc:date-get-year (localtime (car a)))
+	     (gnc:date-get-year (localtime (car b)))))
+	(lambda (date) 
+	  (number->string (gnc:date-get-year (localtime (car date)))))))
+
+      ((time)
+       (make-report-sort-spec
+	(lambda (split) 
+	  (gnc:transaction-get-date-entered (gnc:split-get-parent split)))
+	(if ascending?
+	    (lambda (a b) (< (car a) (car b)))
+	    (lambda (a b) (> (car a) (car b))))
+	(lambda (a b) (and (= (car a) (car b)) (= (cadr a) (cadr b))))
+	#f
+	#f))
+
+      ((description)
+       (make-report-sort-spec
+	(lambda (split) 
+	  (gnc:transaction-get-description (gnc:split-get-parent split)))
+	(if ascending? string-ci<? string-ci>?)
+	string-ci=?
+	#f
+	#f))
+
+      ((number)
+       (make-report-sort-spec
+	(lambda (split) 
+	  (gnc:transaction-get-num (gnc:split-get-parent split)))
+	(if ascending? string-ci<? string-ci>?)
+	string-ci=?
+	#f
+	#f))
+
+      ((memo)
+       (make-report-sort-spec
+	gnc:split-get-memo
+	(if ascending? string-ci<? string-ci>?)
+	stri1ng-ci=?
+	#f
+	#f))
+
+      ((corresponding-acc)
+       (make-report-sort-spec
+	(lambda (split)
+	  (gnc:account-get-full-name
+	   (gnc:split-get-account
+	    (car (append
+		  (gnc:split-get-other-splits split) ;;may return null
+		  (list split))))))
+	(if ascending? string-ci<? string-ci>?)
+	string-ci=?
+	#f
+	#f))
+
+      ((corresponding-acc-subtotal)
+       (make-report-sort-spec
+	(lambda (split)
+	  (gnc:account-get-full-name
+	   (gnc:split-get-account
+	    (car (append
+		  (gnc:split-get-other-splits split)
+		  (list split))))))
+	(if ascending? string-ci<? string-ci>?)
+	string-ci=?
+	string-ci=?
+	(lambda (x) x)))
+
+      ((amount)
+       (make-report-sort-spec
+	gnc:split-get-amount
+	(if ascending? < >)
+	=
+	#f
+	#f))
+
+      ((none) #f)
+      (else (gnc:error "invalid sort argument"))))
+       
 
   (define (make-split-list account split-filter-pred)
-    (remove-if-not 
-     split-filter-pred 
-     (gnc:account-get-split-list account)))
+    (let ((num-splits (gnc:account-get-split-count account)))
+      (let loop ((index 0)
+		 (split (gnc:account-get-split account 0))
+		 (slist '()))
+	(if (= index num-splits)
+	    (reverse slist)
+	    (loop (+ index 1)
+		  (gnc:account-get-split account (+ index 1))
+		  (if (split-filter-pred split)
+		      (cons split slist)
+		      slist))))))
 
-  ;; returns a predicate that returns true only if a split-scm is
+  ;; returns a predicate that returns true only if a split is
   ;; between early-date and late-date
-  (define (gnc:tr-report-make-date-filter-predicate begin-date-secs end-date-secs)
+  (define (split-report-make-date-filter-predicate begin-date-secs end-date-secs)
     (lambda (split) 
       (let ((date 
 	     (car (gnc:timepair-canonical-day-time 
@@ -164,87 +336,141 @@
                 (else ()))))
       #f #t))
 
-    ;; primary sorting criterion
     (gnc:register-trep-option
      (gnc:make-multichoice-option
-      "Sorting" "Primary Key"
-      "a" "Sort by this criterion first"
-      'date
-      (list #(date
-              "Date"
-              "Sort by date")
-            #(time
-              "Time"
-              "Sort by EXACT entry time")
-            #(corresponding-acc
-              "Transfer from/to"
-              "Sort by account transferred from/to's name")
-            #(amount
-              "Amount"
-              "Sort by amount")
-            #(description
-              "Description"
-              "Sort by description")
-            #(number
-              "Number"
-              "Sort by check/transaction number")
-            #(memo
-              "Memo"
-              "Sort by memo"))))
+      "Report Options" "Style"
+      "d" "Report style"
+      'merged
+      (list #(merged
+	      "Merged"
+	      "Display N-1 lines")
+	    #(multi-line
+	      "Multi-Line"
+	      "Display N lines")
+	    #(single
+	      "Single"
+	      "Display 1 line"))))
+	      
+
+    (let ((key-choice-list 
+	   (list #(account
+		   "Account (w/subtotal)"
+		   "Sort & subtotal by account")
+		 #(date
+		   "Date"
+		   "Sort by date")
+		 #(date-monthly
+		   "Date (subtotal monthly)"
+		   "Sort by date & subtotal each month")
+		 #(date-yearly
+		   "Date (subtotal yearly)"
+		   "Sort by date & subtotal each year")
+		 #(time
+		   "Time"
+		   "Sort by EXACT entry time")
+		 #(corresponding-acc
+		   "Transfer from/to"
+		   "Sort by account transferred from/to's name")
+		 #(corresponding-acc-subtotal
+		   "Transfer from/to (w/subtotal)"
+		   "Sort and subtotal by account transferred from/to's name")
+		 #(amount
+		   "Amount"
+		   "Sort by amount")
+		 #(description
+		   "Description"
+		   "Sort by description")
+		 #(number
+		   "Number"
+		   "Sort by check/transaction number")
+		 #(memo
+		   "Memo"
+		   "Sort by memo")
+		 #(none
+		   "None"
+		   "Do not sort"))))
+
+      ;; primary sorting criterion
+      (gnc:register-trep-option
+       (gnc:make-multichoice-option
+	"Sorting" "Primary Key"
+	"a" "Sort by this criterion first"
+	'account
+	key-choice-list))
+
+      (gnc:register-trep-option
+       (gnc:make-multichoice-option
+	"Sorting" "Primary Sort Order"
+	"b" "Order of primary sorting"
+	'ascend
+	(list
+	 #(ascend "Ascending" "smallest to largest, earliest to latest")
+	 #(descend "Descending" "largest to smallest, latest to earliest"))))
+      
+      (gnc:register-trep-option
+       (gnc:make-multichoice-option
+	"Sorting" "Secondary Key"
+	"c"
+	"Sort by this criterion second"
+	'date
+	key-choice-list))
+      
+      (gnc:register-trep-option
+       (gnc:make-multichoice-option
+	"Sorting" "Secondary Sort Order"
+	"d" "Order of Secondary sorting"
+	'ascend
+	(list
+	 #(ascend "Ascending" "smallest to largest, earliest to latest")
+	 #(descend "Descending" "largest to t, latest to earliest")))))
+    
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "x Display" "Date"
+      "b" "Display the date?" #t))
 
     (gnc:register-trep-option
-     (gnc:make-multichoice-option
-      "Sorting" "Primary Sort Order"
-      "b" "Order of primary sorting"
-      'ascend
-      (list
-       #(ascend "Ascending" "smallest to largest, earliest to latest")
-       #(descend "Descending" "largest to smallest, latest to earliest"))))
+     (gnc:make-simple-boolean-option
+      "x Display" "Num"
+      "c" "Display the cheque number?" #t))
 
     (gnc:register-trep-option
-     (gnc:make-multichoice-option
-      "Sorting" "Secondary Key"
-      "c"
-      "Sort by this criterion second"
-      'corresponding-acc
-      (list #(date
-              "Date"
-              "Sort by date")
-            #(time
-              "Time"
-              "Sort by EXACT entry time")
-            #(corresponding-acc
-              "Transfer from/to"
-              "Sort by account transferred from/to's name")
-            #(amount
-              "Amount"
-              "Sort by amount")
-            #(description
-              "Description"
-              "Sort by description")
-            #(number
-              "Number"
-              "Sort by check/transaction number")
-            #(memo
-              "Memo"
-              "Sort by memo"))))
+     (gnc:make-simple-boolean-option
+      "x Display" "Description"
+      "d" "Display the description?" #t))
 
     (gnc:register-trep-option
-     (gnc:make-multichoice-option
-      "Sorting" "Secondary Sort Order"
-      "d" "Order of Secondary sorting"
-      'ascend
-      (list
-       #(ascend "Ascending" "smallest to largest, earliest to latest")
-       #(descend "Descending" "largest to smallest, latest to earliest"))))
+     (gnc:make-simple-boolean-option
+      "x Display" "Memo"
+      "f" "Display the memo?" #t))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "x Display" "Account"
+      "g" "Display the account?" #t))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "x Display" "Other Account"
+      "h" "Display the other account?  (if this is a split transaction, this parameter is guessed." #f))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "x Display" "Amount"
+      "i" "Display the amount?" #t))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "x Display" "Headers"
+      "j" "Display the headers?" #t))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "x Display" "Totals"
+      "k" "Display the totals?" #t))
+
 
     gnc:*transaction-report-options*)
-
-  (define string-db (gnc:make-string-database))
-
-  (define (gnc:titles)
-    (map (lambda (key) (string-append "<TH>" (string-db 'lookup key) "</TH>"))
-         (list 'date 'num 'desc 'memo 'category 'credit 'debit 'balance)))
 
   (define (gnc:trep-renderer options)
     (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
@@ -262,29 +488,57 @@
                                                           "Secondary Key"))
            (tr-report-secondary-order-op
             (gnc:lookup-option options "Sorting" "Secondary Sort Order"))
+	   (tr-report-style-op (gnc:lookup-option options 
+					       "Report Options"
+					       "Style"))
            (accounts (gnc:option-value tr-report-account-op))
-           (date-filter-pred (gnc:tr-report-make-date-filter-predicate
+           (date-filter-pred (split-report-make-date-filter-predicate
                               (car (gnc:option-value begindate))
-                              (car (gnc:option-value enddate))))	   
-	   (split-list 
+                              (car (gnc:option-value enddate))))
+	   (s1 (split-report-get-sort-spec-entry
+		(gnc:option-value tr-report-primary-key-op)
+		(eq? (gnc:option-value tr-report-primary-order-op) 'ascend)))
+	   (s2 (split-report-get-sort-spec-entry
+		(gnc:option-value tr-report-secondary-key-op)
+		(eq? (gnc:option-value tr-report-secondary-order-op) 'ascend)))
+	   (s2b (if s2 (list s2) '()))
+	   (sort-specs (if s1 (cons s1 s2b) s2b))
+	   (split-list
 	    (apply
 	     append
 	     (map
 	      (lambda (account)
 		(make-split-list account date-filter-pred))
-	      accounts))))
-      (gnc:debug split-list)
+	      accounts)))
+	   (split-report-specs (make-split-report-spec options)))
+
       (list
        (html-start-document-title "Transaction Report")
 	(html-para "Transaction report using the new reporting framework in html-generator.scm")
 	(html-start-table)
-	(html-table-headers trans-report-specs)
+	(if 
+	 (gnc:option-value
+	  (gnc:lookup-option options "x Display" "Headers"))
+	 (html-table-headers split-report-specs)
+	 '())
 	(html-table-render-entries split-list
-				   trans-report-specs
-				   trans-report-sort-specs
-				   html-table-entry-render-entries-only
-				   #f)
-	(html-table-totals split-list trans-report-specs)
+				   split-report-specs
+				   sort-specs
+				   (case (gnc:option-value tr-report-style-op)
+				     ((multi-line)
+				      html-table-entry-render-entries-first)
+				     ((merged)
+				      html-table-entry-render-subentries-merged)
+				     ((single)
+				      html-table-entry-render-entries-only))
+				   (lambda (split)
+				     (length
+				      (gnc:split-get-other-splits split))))
+	(if 
+	 (gnc:option-value
+	  (gnc:lookup-option options "x Display" "Totals"))
+	 (html-table-totals split-list split-report-specs)
+	 '())
 	(html-end-table)
 	(html-end-document))))
 
