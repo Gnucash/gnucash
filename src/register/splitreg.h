@@ -67,10 +67,11 @@
 #define EXPENSE_REGISTER    7
 #define EQUITY_REGISTER     8
 #define STOCK_REGISTER      9
+#define CURRENCY_REGISTER   10
 
-#define GENERAL_LEDGER      10
-#define INCOME_LEDGER       11
-#define PORTFOLIO           12
+#define GENERAL_LEDGER      11
+#define INCOME_LEDGER       12
+#define PORTFOLIO           13
 #define REG_TYPE_MASK       0xff
 
 /* 
