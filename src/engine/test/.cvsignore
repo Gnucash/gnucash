@@ -9,3 +9,4 @@ test-group-vs-book
 test-resolve-file-path
 test-scm-query
 test-split-vs-account
+test-transaction-voiding
