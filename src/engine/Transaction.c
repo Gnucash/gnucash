@@ -1720,6 +1720,18 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
    /* now, insert the split into the array */
    split->parent = trans;
    trans->splits = g_list_append (trans->splits, split);
+
+   /* convert the split to the new transaction's commodity denominator */
+   /* if the denominator can't be exactly converted, it's an error */
+   if (trans->common_currency)
+   {
+     int fraction = gnc_commodity_get_fraction (trans->common_currency);
+     gnc_numeric new_value;
+
+     new_value = gnc_numeric_convert(split->value, fraction, GNC_RND_ROUND);
+     if (gnc_numeric_check (new_value) == GNC_ERROR_OK)
+       split->value = new_value;
+   }
 }
 
 /********************************************************************\
