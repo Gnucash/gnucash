@@ -24,8 +24,91 @@
 
 #include "config.h"
 
+#include <glib.h>
+
 #include "table-model.h"
 
+
+#define DEFAULT_HANDLER (-1)
+
+typedef struct
+{
+  int cell_type;
+  gpointer handler;
+} HandlerNode;
+
+
+static GHashTable *
+gnc_table_model_handler_hash_new (void)
+{
+  return g_hash_table_new (g_int_hash, g_int_equal);
+}
+
+static void
+hash_destroy_helper (gpointer key, gpointer value, gpointer user_data)
+{
+  HandlerNode *node = value;
+
+  g_free (node);
+}
+
+static void
+gnc_table_model_handler_hash_destroy (GHashTable *hash)
+{
+  if (!hash) return;
+
+  g_hash_table_foreach (hash, hash_destroy_helper, NULL);
+  g_hash_table_destroy (hash);
+}
+
+static void
+gnc_table_model_handler_hash_remove (GHashTable *hash, int cell_type)
+{
+  HandlerNode *node;
+
+  if (!hash) return;
+
+  node = g_hash_table_lookup (hash, &cell_type);
+  if (!node) return;
+
+  g_free (node);
+}
+
+static void
+gnc_table_model_handler_hash_insert (GHashTable *hash, int cell_type,
+                                     gpointer handler)
+{
+  HandlerNode *node;
+
+  if (!hash) return;
+
+  gnc_table_model_handler_hash_remove (hash, cell_type);
+  if (!handler) return;
+
+  node = g_new0 (HandlerNode, 1);
+
+  node->cell_type = cell_type;
+  node->handler = handler;
+
+  g_hash_table_insert (hash, &node->cell_type, node);
+}
+
+static gpointer
+gnc_table_model_handler_hash_lookup (GHashTable *hash, int cell_type)
+{
+  HandlerNode *node;
+
+  if (!hash) return NULL;
+
+  node = g_hash_table_lookup (hash, &cell_type);
+  if (node) return node->handler;
+
+  cell_type = DEFAULT_HANDLER;
+  node = g_hash_table_lookup (hash, &cell_type);
+  if (node) return node->handler;
+
+  return NULL;
+}
 
 TableModel *
 gnc_table_model_new (void)
@@ -33,6 +116,8 @@ gnc_table_model_new (void)
   TableModel *model;
 
   model = g_new0 (TableModel, 1);
+
+  model->entry_handlers = gnc_table_model_handler_hash_new ();
 
   model->dividing_row = -1;
 
@@ -44,5 +129,40 @@ gnc_table_model_destroy (TableModel *model)
 {
   if (!model) return;
 
+  gnc_table_model_handler_hash_destroy (model->entry_handlers);
+  model->entry_handlers = NULL;
+
   g_free (model);
+}
+
+void
+gnc_table_model_set_entry_handler (TableModel *model,
+                                   TableGetEntryHandler entry_handler,
+                                   int cell_type)
+{
+  g_return_if_fail (model != NULL);
+  g_return_if_fail (cell_type < 0);
+
+  gnc_table_model_handler_hash_insert (model->entry_handlers, cell_type,
+                                       entry_handler);
+}
+
+void
+gnc_table_model_set_default_entry_handler
+(TableModel *model, TableGetEntryHandler entry_handler)
+{
+  g_return_if_fail (model != NULL);
+
+  gnc_table_model_handler_hash_insert (model->entry_handlers,
+                                       DEFAULT_HANDLER,
+                                       entry_handler);
+}
+
+TableGetEntryHandler
+gnc_table_model_get_entry_handler (TableModel *model, int cell_type)
+{
+  g_return_val_if_fail (model != NULL, NULL);
+
+  return gnc_table_model_handler_hash_lookup (model->entry_handlers,
+                                              cell_type);
 }

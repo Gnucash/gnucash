@@ -69,7 +69,6 @@ gnc_table_new (TableControl *control, TableModel *model)
 
   g_return_val_if_fail (control != NULL, NULL);
   g_return_val_if_fail (model != NULL, NULL);
-  g_return_val_if_fail (model->entry_handler, NULL);
 
   table = g_new0 (Table, 1);
 
@@ -229,11 +228,18 @@ static const char *
 gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc,
                               gboolean *conditionally_changed)
 {
+  TableGetEntryHandler entry_handler;
   const char *entry;
+  int cell_type;
 
-  entry = table->model->entry_handler (virt_loc, FALSE,
-                                       conditionally_changed,
-                                       table->model->handler_user_data);
+  cell_type = gnc_table_get_cell_type (table, virt_loc);
+
+  entry_handler = gnc_table_model_get_entry_handler (table->model, cell_type);
+  if (!entry_handler) return "";
+
+  entry = entry_handler (virt_loc, FALSE,
+                         conditionally_changed,
+                         table->model->handler_user_data);
   if (!entry)
     entry = "";
 
@@ -243,8 +249,9 @@ gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc,
 const char *
 gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
 {
-  BasicCell *cell;
+  TableGetEntryHandler entry_handler;
   const char *entry;
+  BasicCell *cell;
 
   cell = gnc_table_get_cell (table, virt_loc);
   if (!cell || cell->cell_type < 0)
@@ -261,8 +268,12 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
       return cell->value;
   }
 
-  entry = table->model->entry_handler (virt_loc, TRUE, NULL,
-                                       table->model->handler_user_data);
+  entry_handler = gnc_table_model_get_entry_handler (table->model,
+                                                     cell->cell_type);
+  if (!entry_handler) return "";
+
+  entry = entry_handler (virt_loc, TRUE, NULL,
+                         table->model->handler_user_data);
   if (!entry)
     entry = "";
 

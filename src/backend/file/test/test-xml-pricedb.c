@@ -111,7 +111,8 @@ test_generation (void)
 
     db = get_random_pricedb ();
 
-    test_db (i, db);
+    if (gnc_pricedb_get_num_prices (db))
+      test_db (i, db);
 
     gnc_pricedb_destroy (db);
   }

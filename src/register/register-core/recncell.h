@@ -37,8 +37,8 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
-#ifndef __RECN_CELL_C__
-#define __RECN_CELL_C__
+#ifndef RECN_CELL_H
+#define RECN_CELL_H
 
 #include <glib.h>
 

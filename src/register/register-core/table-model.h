@@ -90,7 +90,8 @@ typedef void     (*VirtCellDataCopy)        (gpointer to, gconstpointer from);
 
 typedef struct
 {
-  TableGetEntryHandler entry_handler;
+  GHashTable *entry_handlers;
+
   TableGetLabelHandler label_handler;
   TableGetCellIOFlags io_flag_handler;
   TableGetFGColorHandler fg_color_handler;
@@ -113,5 +114,13 @@ typedef struct
 
 TableModel * gnc_table_model_new (void);
 void         gnc_table_model_destroy (TableModel *model);
+
+void gnc_table_model_set_entry_handler (TableModel *model,
+                                        TableGetEntryHandler entry_handler,
+                                        int cell_type);
+void gnc_table_model_set_default_entry_handler
+(TableModel *model, TableGetEntryHandler entry_handler);
+TableGetEntryHandler gnc_table_model_get_entry_handler (TableModel *model,
+                                                        int cell_type);
 
 #endif

@@ -100,7 +100,7 @@
 #include "date.h"
 
 
-typedef struct _DateCell
+typedef struct date_cell
 {
   BasicCell cell;
 } DateCell;

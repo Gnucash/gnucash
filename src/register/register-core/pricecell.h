@@ -41,8 +41,8 @@
  * Copyright (c) 2001 Free Software Foundation
  */
 
-#ifndef __PRICE_CELL_C__
-#define __PRICE_CELL_C__
+#ifndef PRICE_CELL_H
+#define PRICE_CELL_H
 
 #include "basiccell.h"
 #include "gnc-common.h"

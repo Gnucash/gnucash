@@ -1,7 +1,8 @@
 TESTS = \
   test-link-module \
   test-load-module \
-  test-exp-parser
+  test-exp-parser \
+  test-print-parse-amount
 
 TESTS_ENVIRONMENT= \
    GNC_MODULE_PATH=../../engine:../../gnc-module:../../calculation:.. \
@@ -18,17 +19,20 @@ LDADD = \
    ../libgncmod-app-utils.la \
    ../../engine/libgw-engine.la \
    ${top_srcdir}/src/engine/libgw-glib.la \
-   ${top_srcdir}/src/test-core/libgncmod-test.la
+   ${top_srcdir}/src/test-core/libgncmod-test.la \
+   ${top_srcdir}/src/engine/test-core/libgncmod-test-engine.la
 
 bin_PROGRAMS = \
   test-link-module \
-  test-exp-parser
+  test-exp-parser \
+  test-print-parse-amount
 
 EXTRA_DIST = test-load-module
 
 INCLUDES = \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/engine/test-core \
   -I..
 
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}

@@ -1048,11 +1048,13 @@ gnc_split_register_model_new (void)
 
   model = gnc_table_model_new ();
 
+  gnc_table_model_set_default_entry_handler (model,
+                                             gnc_split_register_get_entry);
+
   model->label_handler       = gnc_split_register_get_label;
   model->fg_color_handler    = gnc_split_register_get_fg_color;
   model->bg_color_handler    = gnc_split_register_get_bg_color;
   model->cell_border_handler = gnc_split_register_get_border;
-  model->entry_handler       = gnc_split_register_get_entry;
   model->io_flag_handler     = gnc_split_register_get_io_flags;
   model->confirm_handler     = gnc_split_register_confirm;
 
@@ -1072,7 +1074,8 @@ gnc_template_register_model_new (void)
 
   model = gnc_split_register_model_new ();
 
-  model->entry_handler = gnc_template_register_get_entry;
+  gnc_table_model_set_default_entry_handler (model,
+                                             gnc_template_register_get_entry);
 
   gnc_template_register_model_add_save_handlers (model);
 
