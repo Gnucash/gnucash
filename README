@@ -376,9 +376,20 @@ provided the libraries and toolchain are available.
 Additional Download Sites
 -------------------------
 
+You can also download gnucash from:
+
+  - http://download.sourceforge.net/gnucash
+  - ftp://ftp.krondo.com
+
+You can dowload GnuCash Solaris packages from:
+
+  - http://www.unixrealm.com/downloads/
+
+You can get GnuCash Mandrake packages on Mandrake Cooker sites.
+
 Precompiled binaries & pre-requisite packages can be found at the
-following sites.  The gnucash versions here are all *extremely*
-old, and were indeed from gnucash's ancestor "xacc".
+following sites. The GnuCash versions here are all *extremely*
+old, and were indeed from GnuCash's ancestor "x-accountant".
 
 IBM AIX 4.1.5 
       -- SMIT-installable images 
