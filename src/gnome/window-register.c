@@ -3,7 +3,7 @@
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-1998 Linas Vepstas <linas@linas.org>          *
  * Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              *
- * Copyright (C) 1999-2000 Dave Peticolas <peticola@cs.ucdavis.edu> *
+ * Copyright (C) 1999-2000 Dave Peticolas <dave@krondo.com>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
