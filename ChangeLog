@@ -1,5 +1,13 @@
 2001-04-07  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/md5.h: include stddef.h for size_t
+
+	* src/engine/sql/PostgresBackend.c: include ctype.h for tolower
+
+	* src/engine/guid.h: include stddef.h for size_t
+
+	* src/engine/gnc-engine-util.h: include stddef.h for size_t
+
 	* src/scm/report/taxtxf.scm: fix bug
 
 	* src/scm/text-export.scm: fix for api change

@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include <ctype.h>
 #include <glib.h>
 #include <pwd.h>
 #include <stdio.h>  

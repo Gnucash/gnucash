@@ -28,8 +28,8 @@
 # include "config.h"
 #endif
 
-#include <ctype.h>
 #include <glib.h>
+#include <stddef.h>
 
 /* This file defines an API for using globally unique identifiers. */
 

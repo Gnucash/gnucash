@@ -21,6 +21,7 @@
 #ifndef _MD5_H
 #define _MD5_H 1
 
+#include <stddef.h>
 #include <stdio.h>
 
 #if defined HAVE_LIMITS_H || _LIBC
