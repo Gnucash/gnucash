@@ -1,3 +1,12 @@
+2002-06-11  David Hampton  <hampton@employees.org>
+
+	* src/gnome/druid-stock-split.c: Add automatic focusing on a
+	couple of the druid pages.
+
+	* src/gnome/window-acct-tree.c: Fix a compile of broken menu
+	items.  Only enable the reconcile menu item when an account has
+	been selected.
+
 2002-06-10  David Hampton  <hampton@employees.org>
 
 	* src/gnome/window-main.c: Update the view items to use

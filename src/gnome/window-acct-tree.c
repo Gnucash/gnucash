@@ -270,6 +270,7 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data)
     gnc_acct_tree_window_find_popup_item(win, popup, "Open Subaccounts");
     gnc_acct_tree_window_find_popup_item(win, popup, "Edit Account");
     gnc_acct_tree_window_find_popup_item(win, popup, "Delete Account");
+    gnc_acct_tree_window_find_popup_item(win, popup, "Reconcile...");
   }
 
   /*
@@ -1283,14 +1284,14 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
   };
 
   GnomeUIInfo * dup_scrub = g_memdup(scrubmenu, sizeof(scrubmenu));
-  GnomeUIInfo actionsitems[] =
+  GnomeUIInfo actionitems[] =
   {
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
       N_("_Transfer..."),
       N_("Transfer funds from one account to another"),
-      gnc_acct_tree_window_menu_transfer_cb, NULL, NULL,
+      gnc_acct_tree_window_menu_transfer_cb, mc->child, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       't', GDK_CONTROL_MASK, NULL
     },
@@ -1298,7 +1299,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
       GNOME_APP_UI_ITEM,
       N_("_Reconcile..."),
       N_("Reconcile the selected account"),
-      gnc_acct_tree_window_menu_reconcile_cb, NULL, NULL,
+      gnc_acct_tree_window_menu_reconcile_cb, mc->child, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       'r', GDK_CONTROL_MASK, NULL
     },
@@ -1306,7 +1307,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
       GNOME_APP_UI_ITEM,
       N_("Stock S_plit..."),
       N_("Record a stock split or a stock merger"),
-      gnc_acct_tree_window_menu_stock_split_cb, NULL, NULL,
+      gnc_acct_tree_window_menu_stock_split_cb, mc->child, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -1330,17 +1331,21 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
     return;
     
   /* Do not i18n these strings!!! */
+  dup_scrub[0].user_data = mc->child;
+  dup_scrub[1].user_data = mc->child;
+  dup_scrub[2].user_data = mc->child;
   gnome_app_insert_menus (mc->app, "File/New File", fileitems1);
   gnome_app_insert_menus (mc->app, "File/Open...", fileitems2);
   gnome_app_insert_menus (mc->app, "Edit/Paste", edititems);
   gnome_app_insert_menus (mc->app, "Actions/Scheduled Transactions",
-			  actionsitems);
+			  actionitems);
 
   win = (GNCAcctTreeWin *)mc->user_data;
   gnc_acct_tree_window_add_sensitive(win, fileitems2[0].widget);
   gnc_acct_tree_window_add_sensitive(win, fileitems2[1].widget);
   gnc_acct_tree_window_add_sensitive(win, edititems[1].widget);
   gnc_acct_tree_window_add_sensitive(win, edititems[2].widget);
+  gnc_acct_tree_window_add_sensitive(win, actionitems[2].widget);
 
   /* Do not i18n these strings!!! */
   widget = gnc_mdi_child_find_toolbar_item(mc, "Open");

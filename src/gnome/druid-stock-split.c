@@ -229,6 +229,16 @@ gnc_parse_error_dialog (StockSplitInfo *info, const char *error_string)
 			     parse_error_string);
 }
 
+static void
+details_prepare (GnomeDruidPage *druidpage,
+		 gpointer arg1,
+		 gpointer user_data)
+{
+  StockSplitInfo *info = user_data;
+
+  gtk_widget_grab_focus(info->distribution_edit);
+}
+
 static gboolean
 details_next (GnomeDruidPage *druidpage,
               gpointer arg1,
@@ -288,6 +298,8 @@ cash_prepare (GnomeDruidPage *druidpage,
   gnc_account_tree_refresh (GNC_ACCOUNT_TREE (info->asset_tree));
   gnc_account_tree_expand_all (GNC_ACCOUNT_TREE (info->asset_tree));
   gtk_clist_select_row (GTK_CLIST (info->asset_tree), 0, 0);
+
+  gtk_widget_grab_focus(info->cash_edit);
 }
 
 static gboolean
@@ -571,6 +583,8 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     page = glade_xml_get_widget (xml, "details_page");
 
+    gtk_signal_connect (GTK_OBJECT (page), "prepare",
+                        GTK_SIGNAL_FUNC (details_prepare), info);
     gtk_signal_connect (GTK_OBJECT (page), "next",
                         GTK_SIGNAL_FUNC (details_next), info);
   }
