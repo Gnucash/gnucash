@@ -463,19 +463,6 @@ typedef struct
   gint total;
 } QueryTestData;
 
-static Query *
-make_little_trans_query (Transaction *trans)
-{
-  Query *q;
-
-  q = xaccMallocQuery ();
-
-  xaccQueryAddDescriptionMatch (q, xaccTransGetDescription (trans),
-                                TRUE, FALSE, QUERY_AND);
-
-  return q;
-}
-
 static gboolean
 test_raw_query (GNCSession *session, Query *q)
 {
