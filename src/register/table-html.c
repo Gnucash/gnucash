@@ -79,6 +79,8 @@ xaccTableDumpHTML (Table * table, int fd)
    CellBlock *curs, *head, *trans;
    int cnt = 0;
 
+   if ((!table) || (0 > fd)) return 0;
+
    /* fd could be a file descriptor for a file, or for a socket. */
    fh = fdopen (fd, "a");
    if (!fh) {
@@ -145,6 +147,8 @@ xaccTablePrintHTML (Table * table, char *filename)
    int fd;
    int cnt;
 
+   if ((!table) || (!filename)) return 0;
+
    fd = open (filename, O_CREAT | O_APPEND | O_WRONLY);
    if (0 > fd) {
       int norr = errno;
@@ -184,6 +188,8 @@ xaccTableWebServeHTML (Table * table, unsigned short port)
    struct timeval timeout;
    char buff[255];
    int cnt;
+
+   if (!table) return;
 
    /* don't slow down the parent, fork into background */
    pid = fork(); 
