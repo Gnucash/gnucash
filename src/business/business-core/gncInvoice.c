@@ -373,13 +373,6 @@ const char * gncInvoiceGetNotes (GncInvoice *invoice)
   return invoice->notes;
 }
 
-gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice)
-{
-  gnc_numeric total = { 200, 100 };
-  if (!invoice) return gnc_numeric_zero();
-  return total;
-}
-
 static GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice)
 {
   GncOwner *owner;
@@ -387,6 +380,35 @@ static GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice)
 
   owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
   return (gncOwnerGetType (owner));
+}
+
+gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice)
+{
+  GList *node;
+  gnc_numeric total = gnc_numeric_zero();
+  gboolean reverse;
+
+  if (!invoice) return total;
+
+  reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
+
+  for (node = gncInvoiceGetEntries(invoice); node; node = node->next) {
+    GncEntry *entry = node->data;
+    gnc_numeric value, tax;
+
+    gncEntryGetValue (entry, reverse, &value, NULL, &tax, NULL);
+    
+    if (gnc_numeric_check (value) == GNC_ERROR_OK)
+      total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    else
+      g_warning ("bad value in our entry");
+
+    if (gnc_numeric_check (value) == GNC_ERROR_OK)
+      total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    else
+      g_warning ("bad tax-value in our entry");
+  }
+  return total;
 }
 
 const char * gncInvoiceGetType (GncInvoice *invoice)

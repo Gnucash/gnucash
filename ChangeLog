@@ -5,6 +5,8 @@
 	* invoice.glade: add a summary bar dock at the bottom of the page.
 	Partial fix for bug #96833
 
+	* gncInvoice.c -- implement GetTotal() -- fixes #96833
+	
 2002-10-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/*.c: add #include config.h for correct
