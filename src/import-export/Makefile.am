@@ -34,6 +34,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/dialog-account \
   ${G_WRAP_COMPILE_ARGS} \
+  ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
