@@ -757,15 +757,16 @@ gnc_reg_get_name (RegWindow *regData, gboolean for_window)
 {
   Account *leader;
   SplitRegister *reg;
-  gboolean single_account;
   gchar *account_name;
   gchar *reg_name;
   gchar *name;
+  GNCLedgerDisplayType ledger_type;
 
   if (regData == NULL)
     return NULL;
 
   reg = gnc_ledger_display_get_split_register (regData->ledger);
+  ledger_type = gnc_ledger_display_type (regData->ledger);
 
   switch (reg->type)
   {
@@ -775,40 +776,42 @@ gnc_reg_get_name (RegWindow *regData, gboolean for_window)
         reg_name = _("General Ledger");
       else
         reg_name = _("General Ledger Report");
-      single_account = FALSE;
       break;
     case PORTFOLIO_LEDGER:
       if (for_window)
         reg_name = _("Portfolio");
       else
         reg_name = _("Portfolio Report");
-      single_account = FALSE;
       break;
     case SEARCH_LEDGER:
       if (for_window)
         reg_name = _("Search Results");
       else
         reg_name = _("Search Results Report");
-      single_account = FALSE;
       break;
     default:
       if (for_window)
         reg_name = _("Register");
       else
         reg_name = _("Register Report");
-      single_account = TRUE;
       break;
   }
 
   leader = gnc_ledger_display_leader (regData->ledger);
 
-  if ((leader != NULL) && single_account)
+  if ((leader != NULL) && (ledger_type != LD_GL))
   {
     account_name = xaccAccountGetFullName (leader,
                                            gnc_get_account_separator ());
 
-    name = g_strconcat (account_name, " - ", reg_name, NULL);
-
+    if (ledger_type == LD_SINGLE)
+    {
+      name = g_strconcat (account_name, " - ", reg_name, NULL);
+    }
+    else 
+    {
+      name = g_strconcat (account_name, " ", _("and subaccounts"), " - ", reg_name, NULL);
+    }
     g_free(account_name);
   }
   else
