@@ -8,6 +8,10 @@
 	  from it's parent's list of children, in addition to removing
 	  itself from it's children's pointer-to-parent.
 
+	* src/business/business-gnome/business-gnome.scm: sort the
+	  bills before displaying them, so they appear in a consistent
+	  order (by date due).
+
 2003-07-09  Christian Stimming  <stimming@tuhh.de>
 
 	* README: Added remark about gnucash-docs.

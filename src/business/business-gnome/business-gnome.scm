@@ -107,14 +107,18 @@
 			   (string-append
 			    message
 			    (gnc:print-date due-date)
-			    "      "
+			    "        "
 			    (gnc:owner-get-name owner)
 			    "      "
 			    (gnc:amount->string
 			     (gnc:numeric-abs (gnc:lot-get-balance lot))
 			     print-info)
 			    "\n"))))
-		 bills)
+		 (sort bills
+		       (lambda (a b)
+			 (gnc:timepair-later
+			  (gnc:invoice-get-date-due a)
+			  (gnc:invoice-get-date-due b)))))
 
 		(gnc:info-dialog message)))))))
 
