@@ -22,40 +22,76 @@
 ;; that *everything* should be loaded via gnc:load, starting with
 ;; startup.scm
 
-(define (display-slib-error)
-        (display "Obtain slib at: http://swissnet.ai.mit.edu/~jaffer/SLIB.html\n")
-        (newline)
-        (display "If you have slib installed, you may need to create\n")
-        (display "a symbolic link named 'slib' from the guile directory\n")
-        (display "(usually /usr/share/guile) to the directory where slib\n")
-        (display "is installed.\n\n")
-        (display "You may also need to run GnuCash once as root.")
-        (newline)
-        (newline))
+(define-module (gnucash bootstrap))
 
-;; Test for slib.
-(let* ((try-slib (lambda () (use-modules (ice-9 slib)) (require 'format)))
-       (handler (lambda args #f))
-       (result (catch #t try-slib handler)))
-  (if (not result)
-      (begin
-        (newline)
-        (display "It appears you do not have the 'slib' scheme ")
-        (display "library installed.\nYou need slib2c4 or later ")
-        (display "to run GnuCash.\n")
-        (newline)
-        (display-slib-error)
-        (exit 1))))
+(use-modules (ice-9 slib))
+(use-modules (g-wrapped gw-gnc))
+(use-modules (g-wrapped gw-runtime))
 
-;; This variable determines whether slib-backup.scm gets loaded.
-(define gnc:*load-slib-backup* #f)
+;; from bootstrap.scm
+(export gnc:version)
+(export gnc:debugging?)
+(export gnc:warn)
+(export gnc:error)
+(export gnc:msg)
+(export gnc:debug)
+(export build-path)
+(export gnc:load)
+(export gnc:use-module-here!)
 
-;; Test for slib >= 2c6.
-(let* ((try-slib (lambda () (require 'printf) (sprintf #f "test")))
-       (handler (lambda args #f))
-       (result (catch #t try-slib handler)))
-  (if (not result)
-      (set! gnc:*load-slib-backup* #t)))
+;; from main.scm
+(export gnc:main)
+
+;; from path.scm
+(export gnc:make-home-dir)
+(export gnc:current-config-auto)
+
+;; from command-line.scm
+(export gnc:*command-line-remaining*)
+(export gnc:*config-dir*)
+(export gnc:*share-dir*)
+
+;; from doc.scm
+(export gnc:find-doc-file)
+(export gnc:load-help-topics)
+
+;; from extensions.scm
+(export gnc:extension-type)
+(export gnc:extension-name)
+(export gnc:extension-documentation)
+(export gnc:extension-path)
+(export gnc:extension-script)
+
+;; from main-window.scm
+(export gnc:find-acct-tree-window-options)
+(export gnc:make-new-acct-tree-window)  
+(export gnc:free-acct-tree-window)
+(export gnc:main-window-save-state)
+
+;; from printing/print-check.scm
+(export make-print-check-format)
+(export gnc:print-check)
+
+;; from tip-of-the-day.scm
+(export gnc:get-current-tip)
+(export gnc:increment-tip-number)
+(export gnc:decrement-tip-number)
+
+(define gnc:use-guile-module-here!
+  ;; FIXME: this should be a temporary fix.  We need to check to see
+  ;; if there's a more approved way to do this.  As I recall, there's
+  ;; not, but I belive a better way will be added to Guile soon.
+
+  ;; module == '(ice-9 slib)
+  (cond
+   ((or (string=? "1.3" (version))
+        (string=? "1.3.4" (version))
+        (string=? "1.4" (version)))
+    (lambda (module)
+      (process-use-modules (list module))))
+   (else
+    (lambda (module)
+      (process-use-modules (list (list module)))))))
 
 ;; Test for simple-format
 (if (not (defined? 'simple-format))
@@ -69,6 +105,7 @@
 (define gnc:_help-dir-default_ "@-GNC_HELPDIR-@")
 (define gnc:_lib-dir-default_ "@-GNC_LIB_INSTALLDIR-@")
 (define gnc:_pkglib-dir-default_ "@-GNC_PKGLIB_INSTALLDIR-@")
+
 (define gnc:version "@-VERSION-@")
 
 (set! %load-path
@@ -220,3 +257,5 @@ file in all of the directories specified by gnc:*load-path*."
                       load-path-override (lambda (p) (read p)))
                      '(default))))
   (set! gnc:*load-path* (gnc:expand-load-path new-path)))
+
+(gnc:load "main.scm")
