@@ -31,7 +31,6 @@
 #include <unistd.h>
 
 #include <guile/gh.h>
-#include <g-wrap.h>
 #include "druid-qif-import.h"
 #include "dialog-account-picker.h"
 #include "dialog-commodity.h"
@@ -46,6 +45,7 @@
 #include "query-user.h"
 #include "gnc-ui-util.h"
 
+#include <g-wrap-runtime-guile.h>
 
 struct _qifimportwindow {
   GtkWidget * window;
@@ -1046,7 +1046,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   /* insert new pages, one for each stock */
   while(!gh_null_p(stock_names)) {
     comm_ptr_token = gh_call2(hash_ref, wind->stock_hash, gh_car(stock_names));
-    commodity      = ((POINTER_TOKEN)(SCM_CDR(comm_ptr_token)))->pdata;
+    commodity      = gw_wcp_get_ptr(comm_ptr_token);
     
     new_page = make_qif_druid_page(commodity);
 

@@ -97,7 +97,7 @@ list.  Return '() for a null group."
 ;; Pull a scheme list of accounts (including subaccounts) from group grp
 (define (gnc:group-get-account-list grp)
   "Return a flat list of all the accounts in grp, or #f if there's a problem."
-  (if (pointer-token-null? grp)
+  (if (not grp)
       #f
       (let ((account-array (gnc:get-accounts grp)))
         ;; FIXME: Need to check for account-array being null, but we can't
@@ -105,7 +105,7 @@ list.  Return '() for a null group."
         (let loop ((account (gnc:account-nth-account account-array 0))
                    (index 1))
           
-          (if (pointer-token-null? account)
+          (if (not account)
               '()
               (cons account
                     (loop (gnc:account-nth-account account-array index)

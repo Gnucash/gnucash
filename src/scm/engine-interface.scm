@@ -111,7 +111,7 @@
 ;; status and date are not copied. The C split's guid is,
 ;; of course, unchanged.
 (define (gnc:split-scm-onto-split split-scm split)
-  (if (pointer-token-null? split)
+  (if (not split)
       #f
       (begin
         (let ((memo     (gnc:split-scm-get-memo split-scm))
@@ -223,7 +223,7 @@
 (define (gnc:transaction->transaction-scm trans use-cut-semantics?)
   (define (trans-splits i)
     (let ((split (gnc:transaction-get-split trans i)))
-      (if (pointer-token-null? split)
+      (if (not split)
           '()
           (cons (gnc:split->split-scm split use-cut-semantics?)
                 (trans-splits (+ i 1))))))
@@ -245,7 +245,7 @@
 ;; used to use alternate account guids when creating splits.
 (define (gnc:transaction-scm-onto-transaction trans-scm trans guid-mapping
                                               commit?)
-  (if (pointer-token-null? trans)
+  (if (not trans)
       #f
       (begin
         ;; open the transaction for editing
@@ -265,7 +265,7 @@
 
         ;; strip off the old splits
         (let loop ((split (gnc:transaction-get-split trans 0)))
-          (if (not (pointer-token-null? split))
+          (if split
               (begin
                 (gnc:split-destroy split)
                 (loop (gnc:transaction-get-split trans 0)))))

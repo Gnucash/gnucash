@@ -46,7 +46,6 @@
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "extensions.h"
-#include "g-wrap.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
@@ -64,6 +63,7 @@
 #include "window-main.h"
 #include "window-report.h"
 
+#include <g-wrap-runtime-guile.h>
 
 /** PROTOTYPES ******************************************************/
 static void gnc_configure_date_format_cb(void *);
@@ -361,7 +361,7 @@ gnc_ui_main(void)
   {
     SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
     SCM hook = gh_eval_str("gnc:*main-window-opened-hook*");
-    SCM window = POINTER_TOKEN_to_SCM(make_POINTER_TOKEN("gncUIWidget", app));
+    SCM window = gw_wcp_assimilate_ptr(app, gh_lookup("<gw:wt-gncUIWidget>"));
     gh_call2(run_danglers, hook, window); 
   }
 

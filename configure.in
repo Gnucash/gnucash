@@ -253,10 +253,12 @@ AC_DEFINE(GNOME)
 G_WRAP_COMPILE_ARGS=""
 G_WRAP_LINK_ARGS=""
 
-AM_PATH_GWRAP(0.9.11, , [AC_MSG_ERROR([
+AM_PATH_GWRAP(1.1.1, , [AC_MSG_ERROR([
 
-  g-wrap does not appear to be installed correctly.  If you need to
-  install g-wrap, you can find it at ftp://ftp.gnucash.org/pub/g-wrap.
+  g-wrap does not appear to be installed correctly, or is not new
+  enough.  Right now gnucash requires at least version 1.1.1 to build.
+  If you need to install g-wrap, you can find it at
+  ftp://ftp.gnucash.org/pub/g-wrap.
 ])])
 
 # Find out what the g-wrap compile and link flags are.
@@ -265,16 +267,57 @@ G_WRAP_COMPILE_ARGS=`${G_WRAP_CONFIG} --c-compile-args guile`
 AC_MSG_RESULT($G_WRAP_COMPILE_ARGS)
 
 AC_MSG_CHECKING(for g-wrap link args)
-G_WRAP_LINK_ARGS=`${G_WRAP_CONFIG} --c-static-link-args guile`
+G_WRAP_LINK_ARGS=`${G_WRAP_CONFIG} --c-link-args guile`
 AC_MSG_RESULT($G_WRAP_LINK_ARGS)
+
+AC_MSG_CHECKING(for g-wrap module directory)
+G_WRAP_MODULE_DIR=`${G_WRAP_CONFIG} --guile-module-directory`
+AC_MSG_RESULT($G_WRAP_MODULE_DIR)
 
 AC_GWRAP_CHECK_GUILE
 
-AC_SUBST(G_WRAP)
 AC_SUBST(G_WRAP_CONFIG)
 AC_SUBST(G_WRAP_COMPILE_ARGS)
 AC_SUBST(G_WRAP_LINK_ARGS)
+AC_SUBST(G_WRAP_MODULE_DIR)
 
+### --------------------------------------------------------------------------
+### Check size of long_long - some guile's are broken.
+AC_MSG_CHECKING(if guile long_long is at least as big as gint64)
+GNC_OLDCFLAGS="$CFLAGS"
+CFLAGS="${GNOME_INCLUDEDIR} ${GUILE_INCS} ${CFLAGS}"
+AC_TRY_RUN([
+  #include <glib.h>
+  #include <libguile/__scm.h>
+  int main(int argc, char *argv[]) {
+    return(!(sizeof(long_long) >= sizeof(gint64)));
+  }
+],[
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(GUILE_LONG_LONG_OK,1,is sizeof(long_long) >= sizeof(gint64))
+],[
+  AC_MSG_RESULT(no)
+])
+CFLAGS="$GNC_OLDCFLAGS"
+
+# One of the places this is critical is in gnc_scm_to_gint64 and inverse.
+# However, I'm sure we require this elsewhere, so don't remove this test
+# unless you've done sufficient code review/testing.
+AC_MSG_CHECKING(if unsigned long is at least as big as guint32)
+GNC_OLDCFLAGS="$CFLAGS"
+CFLAGS="${GNOME_INCLUDEDIR} ${GUILE_INCS} ${CFLAGS}"
+AC_TRY_RUN([
+  #include <glib.h>
+  int main(int argc, char *argv[]) {
+    return(!(sizeof(unsigned long) >= sizeof(guint32)));
+  }
+],[
+  AC_MSG_RESULT(yes)
+],[
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR(cannot continue, size of unsigned long too small.)
+])
+CFLAGS="$GNC_OLDCFLAGS"
 
 ### --------------------------------------------------------------------------
 ### Makefile creation

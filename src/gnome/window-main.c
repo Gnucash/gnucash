@@ -60,7 +60,6 @@
 #include "window-register.h"
 
 /* FIXME get rid of these */
-#include <g-wrap.h>
 #include "gnc.h"
 
 /* Main Window information structure */

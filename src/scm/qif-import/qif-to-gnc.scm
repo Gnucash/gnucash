@@ -29,8 +29,8 @@
           (gnc:get-account-from-full-name acct-group gnc-name separator))
          (make-new-acct #f))
 
-    (if (or (pointer-token-null? same-gnc-account) 
-            (and (not (pointer-token-null? same-gnc-account))
+    (if (or (not same-gnc-account) 
+            (and same-gnc-account
                  (not (string=? 
                        (gnc:account-get-full-name same-gnc-account)
                        gnc-name))))
@@ -955,7 +955,7 @@
     (let loop ((i 0)
                (last-split #f))
       (let ((ith-split (gnc:account-get-split account i)))        
-        (if (pointer-token-eq? ith-split split)
+        (if (gw:wcp=? ith-split split)
             (if last-split
                 (d-gnc:split-set-share-price 
                  split (d-gnc:split-get-share-price last-split)))

@@ -29,7 +29,7 @@
 
 (define (qif-import:load-map-prefs)
   (define (extract-all-account-info agroup root-name)
-    (if (pointer-token-null? agroup)
+    (if (not agroup)
         '()
         (let ((children (gnc:get-accounts agroup))
               (children-list '())

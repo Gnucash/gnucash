@@ -455,8 +455,9 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
   if(!ns) {
     ns = g_new0(gnc_commodity_namespace, 1);
     ns->table = g_hash_table_new(g_str_hash, g_str_equal);
-    g_hash_table_insert(table->table, (gpointer)(namespace), 
-                        (gpointer)ns);
+    g_hash_table_insert(table->table,
+                        (gpointer) g_strdup(namespace), 
+                        (gpointer) ns);
   }
 }
 
@@ -468,13 +469,16 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
 void 
 gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
                                      const char * namespace) {
-  gnc_commodity_namespace * ns = NULL; 
-  
+  gpointer orig_key;
+  gpointer value;
+
   if(table) { 
-    ns = g_hash_table_lookup(table->table, (gpointer)namespace);
-  }
-  
-  if(ns) {
-    g_hash_table_remove(table->table, namespace);
+    if(g_hash_table_lookup_extended(table->table,
+                                    (gpointer) namespace,
+                                    &orig_key,
+                                    &value)) {
+      g_hash_table_remove(table->table, namespace);
+      g_free(orig_key);
+    }
   }
 }

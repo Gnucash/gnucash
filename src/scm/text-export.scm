@@ -111,7 +111,7 @@
      (list 'account
            (let ((xfer-account (gnc:split-get-account split))
                  (xfer-account-id #f))
-             (if (not (pointer-token-null? xfer-account))
+             (if xfer-account
                  (set! xfer-account-id (gnc:account-get-id xfer-account)))
              xfer-account-id))))
   
@@ -133,7 +133,7 @@
   (define (account-info->output-form a)
     (let* ((accinfo (gnc:account-get-acc-info a))
            (invacct (gnc:cast-to-inv-acct accinfo)))
-      (if (not (pointer-token-null? invacct))
+      (if invacct
           (gnc:inv-acct-get-price-src invacct)
           #f)))
 
@@ -142,7 +142,7 @@
      'account
      (list 'guid (gnc:account-get-guid a))
      (list 'name (gnc:account-get-name a))
-     (list 'type (gnc:account-type->symbol (gnc:account-get-type a)))
+     (list 'type (gnc:account-get-type-string a))
      (list 'code (gnc:account-get-code a))
      (list 'description (gnc:account-get-description a))
      (list 'notes (gnc:account-get-notes a))

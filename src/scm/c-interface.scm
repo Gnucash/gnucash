@@ -17,12 +17,6 @@
 
 (require 'hash-table)
 
-
-;; Provides pointer-token-null? if needed (g-wrap >= 0.9.4 doesn't provide)
-(if (not (defined? 'pointer-token-null?))
-   (define (pointer-token-null? ptr)
-     (eq? ptr #f)))
-
 (define (gnc:error->string tag args)
   (define (write-error port)
     (if (and (list? args) (not (null? args)))

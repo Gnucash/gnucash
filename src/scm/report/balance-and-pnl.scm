@@ -284,7 +284,7 @@
 
   (define (is-it-on-balance-sheet? type balance?)
     (eq? 
-     (not (member type '(INCOME EXPENSE)))
+     (not (member type '(income expense)))
      (not balance?)))
 
   (define (generate-balance-sheet-or-pnl report-name
@@ -365,7 +365,9 @@
 	       #f))))
     
       (define (handle-level-1-account account options)
-	(let ((type (gnc:account-type->symbol (gnc:account-get-type account))))
+	(let ((type (gw:enum-GNCAccountType-val->sym
+                     (gnc:account-get-type account)
+                     #f)))
           (if (is-it-on-balance-sheet? type balance-sheet?)
               ;; Ignore
               '()
@@ -411,7 +413,9 @@
 
     (define (handle-level-2-account account options)
       (let
-	  ((type (gnc:account-type->symbol (gnc:account-get-type account)))
+	  ((type (gw:enum-GNCAccountType-val->sym
+                  (gnc:account-get-type account)
+                  #f))
 	   (this-balance (make-currency-collector))
 	   (balance (make-currency-collector))
 	   (rawbal
@@ -432,7 +436,7 @@
 	    '()
 	    ;; add in balances for any sub-sub groups
 	    (let ((grandchildren (gnc:account-get-children account)))
-	      (if (not (pointer-token-null? grandchildren))
+	      (if grandchildren
 		  (handle-collector-merging
 		   balance (if balance-sheet? 'merge 'minusmerge) 
 		   (if balance-sheet? 
@@ -472,7 +476,7 @@
 		       (gnc:commodity-get-mnemonic report-currency)
 		       ")"))))
       
-      (if (not (pointer-token-null? current-group))
+      (if current-group
 	  (set! output
 		(list
 		 (gnc:group-map-accounts

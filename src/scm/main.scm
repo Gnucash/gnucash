@@ -110,6 +110,22 @@
 
 (define (gnc:main)
 
+  (define (handle-batch-mode-item item)
+    (cond
+     ((procedure? item) (item))
+     ((string? item)
+      (call-with-input-string
+       item
+       (lambda (port)
+         (let loop ((next-form (read port)))
+           (if (not (eof-object? next-form))
+               (begin
+                 (eval next-form)
+                 (loop (read port))))))))
+     (else
+      (display "gnucash: unknown batch-mode item - ignoring.")
+      (newline))))
+
   ;; Now the fun begins.
   (gnc:startup)
 

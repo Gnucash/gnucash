@@ -24,8 +24,10 @@
   (gnc:amount->string-helper (exact->inexact amount) info))
 
 (define (gnc:account-has-shares? account)
-  (let ((type (gnc:account-type->symbol (gnc:account-get-type account))))
-    (member type '(STOCK MUTUAL CURRENCY))))
+  (let ((type (gw:enum-GNCAccountType-val->sym
+               (gnc:account-get-type account)
+               #f)))
+    (member type '(stock mutual-fund currency))))
 
 (define (gnc:account-separator-char)
   (let ((option (gnc:lookup-option gnc:*options-entries*
@@ -43,7 +45,7 @@
 ;; get a full account name
 (define (gnc:account-get-full-name account)
   (let ((separator (gnc:account-separator-char)))
-    (if (pointer-token-null? account) 
+    (if (not account)
 	""
 	(let ((parent-name
 	       (gnc:account-get-full-name 
@@ -110,7 +112,7 @@
   (let loop ((index 0)
              (split (gnc:ith-split split-array 0))
              (slist '()))
-    (if (pointer-token-null? split)
+    (if (not split)
         (reverse slist)
         (loop (+ index 1)
               (gnc:ith-split split-array (+ index 1))
@@ -366,7 +368,7 @@
     (let loop ((index 0)
                (balance 0)
                (split (gnc:account-get-split account 0)))
-      (if (pointer-token-null? split)
+      (if (not split)
           (+ children-balance balance)
           (if (gnc:timepair-lt date (gnc:split-get-transaction-date split))
               (+ children-balance balance)
@@ -386,7 +388,7 @@
     (let loop ((index 0)
 	       (balance 0)
 	       (split (gnc:account-get-split account 0)))
-      (if (pointer-token-null? split)
+      (if (not split)
 	  (balance-collector 'add (gnc:account-get-currency account)
 			     balance)
 	  (if (gnc:timepair-lt date (gnc:split-get-transaction-date split))

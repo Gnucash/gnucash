@@ -83,9 +83,10 @@
     (define (report-rows-main)
       (gnc:group-map-all-accounts
        (lambda (account)
-         (let ((type (gnc:account-type->symbol
-                      (gnc:account-get-type account))))
-           (if (member type '(STOCK MUTUAL))
+         (let ((type (gw:enum-GNCAccountType-val->sym
+                      (gnc:account-get-type account)
+                      #f)))
+           (if (member type '(stock mutual-fund))
                (report-row account)
                #f)))
        (gnc:get-current-group)))

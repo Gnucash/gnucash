@@ -9,23 +9,25 @@ use Finance::Quote;
 ## Modified by Paul Fenwick <pjf@cpan.org>, June 2000, to take
 ## advantage of new Finance::Quote features.
 
-## Input (on standard input - one line per entry)
+## Input (on standard input - one entry per line and one line per entry)
 ##
-## ("IBM" "YAHOO")
-## ("NT" "ASX")
-## ...
+## (fetch "NYSE" "IBM")
+## (fetch "nyse" "ibm" "axp")
+## (fetch "nasdaq" "jdsu")
+## (fetch "nasdaq" "CSCO" "jdsu")
 
 ## Output (on standard output, one output form per input line)
-##
-## on success:
-##   (quote (name . <security-name>) (date . <date>) (price . <price>)) 
-##
-## on failure:
-##   (error bad-input-line "some details")
-##   (error bad-quote-source "some details")
-##   (error quote-lookup-failed "some details")
-##   (error price-not-found "some details")
-##   (error misc "some details")
+
+## Schemified version of finance-quote's output, so basically an alist
+## of alists, as in the example below.  Only fields that this script
+## knows about (and knows how to convert to scheme) are returned, so
+## the conversion function will have to be updated whenever
+## Finance::Quote changes.
+
+
+
+## On error, result may be just #f, or errors may be stored with each
+## quote as indicated in Finance::Quote.
 
 ## Exit status
 ##
@@ -34,10 +36,7 @@ use Finance::Quote;
 
 # TODO:
 
-# Right now schemify_str is a hack.  It just supresses double quotes
-# in the output by replacing them with single quotes.  We should do
-# better, but that'll work for now.  I haven't thought it through
-# carefully, but can we just double all backslashes and backslash
+# Is this safe?  Can we just double all backslashes and backslash
 # escape all double quotes and get the right answer?
 
 # Right now this is more inefficient than it needs to be.  We ask for
@@ -70,11 +69,11 @@ my @lookup_items = ();
 while(<>) {
 
   # This big ugly nasty thing just matches something like this
-  #
+
   # ("FOO" "BAR")
-  #
+
   # where, rougly speaking, whitespace is allowed almost everywhere,
-  # this text constitute the entire line, and the double-quotes and
+  # this text constitutes the entire line, and the double-quotes and
   # parens shown are the only occurences of those characters allowed
   # in the line.
 

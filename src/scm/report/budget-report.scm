@@ -1,5 +1,5 @@
 ;; -*-scheme-*-
-;; $ID$
+;;
 ;; budget-report.scm
 ;; Report on budget
 ;; Bryan Larsen (blarsen@ada-works.com)
@@ -658,7 +658,7 @@
 (define (budget-calculate-actual! budget-hash others begin-date-secs end-date-secs)
   (let loop ((group (gnc:get-current-group)))
     (cond 
-     ((not (pointer-token-null? group))
+     (group
       (gnc:group-map-accounts
        (lambda (account)
 	 (let* ((line
@@ -1239,10 +1239,20 @@
      "Budget (Testing, Unfinished)"
      "Test the budget dialog"
      (list "_Tools" "")
+     ;; FIXME: need update.
      (lambda ()
-       (gnc:budget-dialog-create
-        gnc:budget-entries
-        (lambda () (display "Applied the budget.\n"))))))
+       (display
+        (string-append
+         "FIXME: Please update calls to gnc:account-type->symbol.\n"
+         "FIXME: If you need a string, use gnc:account-type-string,\n"
+         "FIXME: otherwise use (gw:enum-GNCAccountType-val->sym\n"
+         "FIXME:                (gnc:account-get-type acct)\n"
+         "FIXME:                #f)\n")))))
 
+;     (lambda ()
+;       (gnc:budget-dialog-create
+;        gnc:budget-entries
+;        (lambda () (display "Applied the budget.\n"))))));
+  
   (gnc:hook-add-dangler gnc:*main-window-opened-hook*
                         (lambda (win) (gnc:add-extension budget-item))))

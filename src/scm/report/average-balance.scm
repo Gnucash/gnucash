@@ -17,9 +17,21 @@
 (gnc:depend "date-utilities.scm")
 
 ;; Plot strings
-(define AvgBalPlot "using 2:3:4:5 t 'Average Balance' with errorbars, '' using 2:3 smooth sbezier t '' with lines")
-(define GainPlot "using 2:6 t 'Net Gain' with linespoints, '' using 2:6 smooth sbezier t '' with lines" )
-(define GLPlot "using 2:8 t 'Losses' with lp, '' using 2:7 t 'Gains' with lp")
+
+(define AvgBalPlot
+  (string-append
+   "using 2:3:4:5 t 'Average Balance' with errorbars, "
+   "'' using 2:3 smooth sbezier t '' with lines"))
+
+(define GainPlot
+  (string-append
+   "using 2:6 t 'Net Gain' with linespoints, "
+   "'' using 2:6 smooth sbezier t '' with lines" ))
+
+(define GLPlot
+  (string-append "using 2:8 t 'Losses' with lp, "
+                 "'' using 2:7 t 'Gains' with lp"))
+
 (define NoPlot "")
 
 (let ()
@@ -427,7 +439,7 @@
                           "<p>\n"))
                 (list rept-text)
                 suffix))))
-
+  
   ;; Define the strings
   (string-db 'store 'beginning "Beginning")
   (string-db 'store 'ending "Ending")

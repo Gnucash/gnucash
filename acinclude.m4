@@ -32,8 +32,8 @@ AC_DEFUN(AC_GWRAP_CHECK_GUILE,
 dnl AM_PATH_GWRAP ([MINIMUM-VERSION, [ACTION-IF-FOUND.
 dnl	           [ACTION-IF-NOT-FOUND]]])
 
-dnl tests for minimum versions of g-wrap and g-wrap-config.
-dnl sets G_WRAP and G_WRAP_CONFIG
+dnl tests for minimum version of g-wrap.
+dnl sets G_WRAP_CONFIG and GWRAP_OLD_GUILE_SMOB if needed.
 
 AC_DEFUN(AM_PATH_GWRAP,
 [dnl
@@ -50,16 +50,9 @@ fi
 
 dnl if prefix set, then set them explicitly
 if test x${gwrap_prefix} != x ; then
-   G_WRAP = ${gwrap_prefix}/bin/g-wrap
    G_WRAP_CONFIG = ${gwrap_prefix}/bin/g-wrap-config
 else
 
-   AC_PATH_PROG(G_WRAP, g-wrap, no)
-   if test x${G_WRAP} = xno ; then
-	CHECK_VERSION="no"
-	ifelse([$3], , true , [AC_MSG_WARN(g-wrap failed)
-	$3])
-   fi
   AC_PATH_PROG(G_WRAP_CONFIG, g-wrap-config, no)
   if test x${G_WRAP_CONFIG} = xno ; then
 	CHECK_VERSION="no"
@@ -71,12 +64,12 @@ fi
 if test x$CHECK_VERSION != xno ; then
 AC_MSG_CHECKING(for g-wrap - version >= ${min_gwrap_version})
 
-gwrap_major_version=`${G_WRAP} --version | \
-	sed 's/g-wrap \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
-gwrap_minor_version=`${G_WRAP} --version | \
-	sed 's/g-wrap \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
-gwrap_micro_version=`${G_WRAP} --version | \
-	sed 's/g-wrap \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+gwrap_major_version=`${G_WRAP_CONFIG} --version | \
+	sed 's/g-wrap-config \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+gwrap_minor_version=`${G_WRAP_CONFIG} --version | \
+	sed 's/g-wrap-config \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
+gwrap_micro_version=`${G_WRAP_CONFIG} --version | \
+	sed 's/g-wrap-config \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
 
 
 major_required=`echo ${min_gwrap_version} |\
@@ -100,4 +93,4 @@ else
 	$3])
 fi
 dnl check version
-fi])#### End of Patch data ####
+fi])

@@ -538,6 +538,3 @@
   (with-output-to-string 
     (lambda ()
       (write num))))
-
-(define (qif-parse:print-acct-type t)
-  (symbol->string (gnc:account-type->symbol t)))

@@ -1,3 +1,104 @@
+2000-12-13  Rob Browning  <rlb@cs.utexas.edu>
+
+	* src/scm/text-export.scm: kill pointer-token*
+
+	* src/scm/report/transaction-report.scm: minor formatting changes.
+
+	* src/scm/report/taxtxf.scm: kill pointer-token*
+
+	* src/scm/report/folio.scm: use new g-wrap enum support.
+
+	* src/scm/report/budget-report.scm:
+	disable report until we fix the enumeration usage.
+
+	* src/scm/report/balance-and-pnl.scm: kill pointer-token*
+
+	* src/scm/report/average-balance.scm: minor formatting changes.
+
+	* src/scm/report-utilities.scm: kill pointer-token*
+	(gnc:account-has-shares?): use new g-wrap enum support.
+
+	* src/scm/qif-import/qif-to-gnc.scm: kill pointer-token*
+
+	* src/scm/qif-import/qif-parse.scm:
+	delete unusd gif-parse:print-acct-type
+
+	* src/scm/qif-import/qif-guess-map.scm: kill pointer-token*
+
+	* src/scm/main.scm
+	(gnc:main): add handle-batch-mode-item so --evaluate works.
+
+	* src/scm/engine-interface.scm: kill pointer-token*.
+
+	* src/scm/c-interface.scm: kill pointer-token*.
+
+	* src/quotes/gnc-prices-2.in: various small fixes (big ones later).
+
+	* src/optional/swig/.cvsignore: add Makefile Makefile.in
+
+	* src/guile/option-util.c
+	(gnc_option_db_register_change_callback): update for new g-wrap.
+
+	* src/guile/guile-util.c
+	(gnc_copy_split): update for new g-wrap.
+	(gnc_copy_split_scm_onto_split): update for new g-wrap.
+	(gnc_copy_trans): update for new g-wrap.
+	(gnc_copy_trans_scm_onto_trans_swap_accounts): update for new g-wrap.
+	(gnc_glist_account_ptr_to_scm): use gnc_glist_to_scm_list.
+	(gnc_scm_to_glist_account_ptr): use gnc_scm_list_to_glist.
+	(gnc_scm_to_commodity): update for new g-wrap.
+	(gnc_commodity_to_scm): update for new g-wrap.
+	(gnc_glist_string_to_scm): double speed - use stack.
+	(gnc_scm_to_glist_string): don't reverse result.
+	(gnc_glist_commodity_ptr_to_scm): update for new g-wrap.
+	use gnc_glist_to_scm_list.
+	(gnc_scm_to_glist_commodity_ptr): use gnc_scm_list_to_glist.
+
+	* src/guile/gnucash.c.in
+	(gnucash_main_helper): add g-wrap module dir to %load-path.
+	(gnucash_main_helper): call init_g_wrapped_gnc, not init_gnc.
+
+	* src/guile/gnc.gwp: update for the new g-wrap.
+
+	* src/guile/gnc-helpers.h: add prototypes for new functions.
+
+	* src/guile/gnc-helpers.c
+	(glist_to_scm_list_helper): new (private) function.
+	(gnc_glist_to_scm_list): new public function.
+	(gnc_scm_list_to_glist): new public function.
+	(glist_map_helper): new (private) function.
+	(gnc_glist_scm_map): new public function.
+	(gnc_glist_scm_for_each): new public function.
+	(gnc_gettext_helper): always strdup result.
+	(gnc_timespec2timepair): use gint64, not long long.
+	(gnc_timepair2timespec): use gint64, not long long.
+	(gnc_timepair_p): use more accurate test (including range check).
+	(gnc_scm_traversal_adapter): use new g-wrap wcp code.
+	(gnc_gint64_to_scm): new public function.
+	(gnc_scm_to_gint64): new public function.
+	(gnc_gh_gint64_p): new public function.
+	(gnc_scm_to_numeric): use gint64, not long long.
+	(gnc_numeric_to_scm): use gint64, not long long.
+	(gnc_numeric_p): use gint64, not long long.
+
+	* src/guile/Makefile.am: update for new g-wrap.
+
+	* src/gnome/top-level.c (gnc_ui_main): use new g-wrap wcp code.
+
+	* src/gnome/druid-qif-import.c: use new g-wrap wcp code.
+
+	* src/engine/gnc-commodity.c: g_strdup the key.
+	(gnc_commodity_table_delete_namespace): g_free the key.
+	These fixes are probably not sufficient.
+
+	* src/engine/Account.c: make temp warnings more informative.
+
+	* configure.in: update for new g-wrap.
+	check for guile bug (sizeof long_long >= long long).
+	check that sizeof unsigned long >= guint32.
+
+	* acinclude.m4: update for new g-wrap.
+
 2000-12-08  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/gnc-dateedit.c: use more care when using parsed

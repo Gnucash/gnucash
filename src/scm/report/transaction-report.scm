@@ -645,25 +645,28 @@
 
 
   (define (gnc:trep-renderer options)
-    (let* ((begindate (gnc:date-option-absolute-time (gnc:option-value (gnc:lookup-option options "Report Options" "From"))))
-           (enddate (gnc:date-option-absolute-time (gnc:option-value (gnc:lookup-option options "Report Options" "To"))))
-           (tr-report-account-op (gnc:lookup-option
-                                  options "Report Options" "Account"))
-           (tr-report-primary-key-op (gnc:lookup-option options
-                                                        "Sorting"
-                                                        "Primary Key"))
-           (tr-report-primary-order-op (gnc:lookup-option
-                                        options "Sorting"
-                                        "Primary Sort Order"))
-           (tr-report-secondary-key-op (gnc:lookup-option options
-                                                          "Sorting"
-                                                          "Secondary Key"))
-           (tr-report-secondary-order-op
-	    (gnc:lookup-option options "Sorting" "Secondary Sort Order"))
-	   (tr-report-style-op (gnc:lookup-option options 
-						  "Report Options"
-						  "Style"))
-           (accounts (gnc:option-value tr-report-account-op))
+    
+     (let* ((begindate
+             (gnc:date-option-absolute-time
+              (gnc:option-value
+               (gnc:lookup-option options "Report Options" "From"))))
+            (enddate
+             (gnc:date-option-absolute-time
+              (gnc:option-value
+               (gnc:lookup-option options "Report Options" "To"))))
+            (tr-report-account-op
+             (gnc:lookup-option options "Report Options" "Account"))
+            (tr-report-primary-key-op
+             (gnc:lookup-option options "Sorting" "Primary Key"))
+            (tr-report-primary-order-op
+             (gnc:lookup-option options "Sorting" "Primary Sort Order"))
+            (tr-report-secondary-key-op
+             (gnc:lookup-option options "Sorting" "Secondary Key"))
+            (tr-report-secondary-order-op
+             (gnc:lookup-option options "Sorting" "Secondary Sort Order"))
+            (tr-report-style-op
+             (gnc:lookup-option options "Report Options" "Style"))
+            (accounts (gnc:option-value tr-report-account-op))
            (date-filter-pred (split-report-make-date-filter-predicate 
 			      begindate 
 			      (gnc:timepair-end-day-time
@@ -686,43 +689,41 @@
 		begindate))
 	   (s2b (if s2 (list s2) '()))
 	   (sort-specs (if s1 (cons s1 s2b) s2b))
-	   (split-list
-	    (apply
-	     append
-	     (map
-	      (lambda (account)
-		(make-split-list account filter-pred))
-	      accounts)))
-	   (split-report-specs (make-split-report-spec options)))
-   
-      (list
-       (html-start-document-title (string-db 'lookup 'title) #f)
-       (html-start-table)
-       (if
-        (gnc:option-value
-         (gnc:lookup-option options "Display" "Headers"))
-        (html-table-headers split-report-specs)
-        '())
-       (html-table-render-entries split-list
-                                  split-report-specs
-                                  sort-specs
-                                  (case (gnc:option-value tr-report-style-op)
-                                    ((multi-line)
-                                     html-table-entry-render-entries-first)
-                                    ((merged)
-                                     html-table-entry-render-subentries-merged)
-                                    ((single)
-                                     html-table-entry-render-entries-only))
-                                  (lambda (split)
-                                    (length
-                                     (gnc:split-get-other-splits split))))
-       (if
-        (gnc:option-value
-         (gnc:lookup-option options "Display" "Totals"))
-        (html-table-totals split-list split-report-specs)
-        '())
-       (html-end-table)
-       (html-end-document))))
+ 	   (split-list
+ 	    (apply
+ 	     append
+ 	     (map
+ 	      (lambda (account)
+ 		(make-split-list account filter-pred))
+ 	      accounts)))
+ 	   (split-report-specs (make-split-report-spec options)))
+       
+       (list
+        (html-start-document-title (string-db 'lookup 'title) #f)
+        (html-start-table)
+        (if (gnc:option-value (gnc:lookup-option options "Display" "Headers"))
+            (html-table-headers split-report-specs)
+            '())
+
+        (html-table-render-entries
+         split-list
+         split-report-specs
+         sort-specs
+         (case (gnc:option-value tr-report-style-op)
+           ((multi-line)
+            html-table-entry-render-entries-first)
+           ((merged)
+            html-table-entry-render-subentries-merged)
+           ((single)
+            html-table-entry-render-entries-only))
+         (lambda (split)
+           (length
+            (gnc:split-get-other-splits split))))
+        (if (gnc:option-value (gnc:lookup-option options "Display" "Totals"))
+            (html-table-totals split-list split-report-specs)
+            '())
+        (html-end-table)
+        (html-end-document))))
 
 
   (string-db 'store 'title "Transaction Report")

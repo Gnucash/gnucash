@@ -78,7 +78,7 @@
 
 ;; make a list of accounts from a group pointer
 (define (gnc:group-ptr->list group-prt)
-  (if (pointer-token-null? group-prt)
+  (if (not group-prt)
       '()
       (gnc:group-map-accounts (lambda (x) x) group-prt)))
 
@@ -735,7 +735,7 @@
     ;; the number of account generations: children, grandchildren etc.
     (define (num-generations account gen)
       (let ((children (gnc:account-get-children account)))
-	(if (pointer-token-null? children)
+	(if (not children)
 	    (if (and (gnc:account-get-txf account)
 		     (equal? "N521" (gnc:account-get-txf-code account)))
 		(+ gen 1)		; Est Fed Tax has a extra generation

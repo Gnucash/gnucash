@@ -1281,7 +1281,10 @@ xaccAccountGetShareReconciledBalance (Account *acc)
 Split *
 xaccAccountGetSplit(Account *acc, int i) {
   GList *result;
+  /* we'll take out these warnings once we've checked to see that the uses
+     are really appropriate */
   PWARN ("welcome to pokeyland");
+  PWARN ("  try to avoid this function, it's O(splits)");
 
   if (!acc) return(NULL);
   result = g_list_nth(acc->splits, i);
@@ -1297,7 +1300,10 @@ xaccAccountGetSplitList (Account *acc) {
 
 int
 xaccAccountGetNumSplits (Account *acc) {
-  PWARN ("welcome to pokeyland");
+  /* we'll take out these warnings once we've checked to see that the uses
+     are really appropriate */
+  PWARN ("welcome to pokeyland - try to avoid this function.");
+  PWARN ("  try to avoid this function, it's O(splits)");
   if (!acc) return 0;
   return g_list_length(acc->splits);
 }
