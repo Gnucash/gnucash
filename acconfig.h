@@ -91,4 +91,7 @@
 
 /*** End i18n ***/
 
+#undef GNOME_XML_HEADER_VERSION_1
+#undef GNOME_XML_HEADER_VERSION_2
+
 #endif

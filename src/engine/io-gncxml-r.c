@@ -7,6 +7,8 @@
  *
  */
 
+#include <config.h>
+
 #ifndef _GNU_SOURCE
 #  define _GNU_SOURCE
 #  include <time.h>
@@ -21,10 +23,17 @@
 
 #include <glib.h>
 
+#ifdef GNOME_XML_HEADER_VERSION_1
 #include <gnome-xml/tree.h>
 #include <gnome-xml/parser.h>
 #include <gnome-xml/xmlmemory.h>
 #include <gnome-xml/parserInternals.h>
+#elif defined(GNOME_XML_HEADER_VERSION_2)
+#include <libxml/tree.h>
+#include <libxml/parser.h>
+#include <libxml/xmlmemory.h>
+#include <libxml/parserInternals.h>
+#endif
 
 #include "Account.h"
 #include "date.h"
