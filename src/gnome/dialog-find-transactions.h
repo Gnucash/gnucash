@@ -47,8 +47,8 @@ typedef struct {
 typedef struct {
   GtkWidget  * dialog;
   Query      * q;
-  xaccLedgerDisplay * ledger;
-  
+  Query      * ledger_q;
+
   char       * ymd_format;
 
   int        search_type;

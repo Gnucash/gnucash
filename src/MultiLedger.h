@@ -73,19 +73,17 @@ xaccLedgerDisplay * xaccLedgerDisplaySimple (Account *account);
  * its children. */
 xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *account);
 
-/* display list of accounts in a general ledger. */
-xaccLedgerDisplay * xaccLedgerDisplayGeneral (Account *lead_account,
-                                              GList *accounts,
-                                              SplitRegisterType type,
-                                              SplitRegisterStyle style);
-
-/* display a register for an arbitrary query */
+/* display a general ledger for an arbitrary query */
 xaccLedgerDisplay * xaccLedgerDisplayQuery (Query *query,
                                             SplitRegisterType type,
                                             SplitRegisterStyle style);
 
 /* Set the query used for a register. */
 void xaccLedgerDisplaySetQuery (xaccLedgerDisplay *ledger_display, Query *q);
+
+/* If the given ledger display still exists, return it. Otherwise,
+ * return NULL */
+xaccLedgerDisplay * xaccFindGeneralLedgerByQuery (Query *q);
 
 /* redisplay/redraw all windows that contain any transactions that are
  * associated with the indicated account. */

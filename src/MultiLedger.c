@@ -73,6 +73,18 @@ find_by_account (gpointer find_data, gpointer user_data)
   return TRUE;
 }
 
+static gboolean
+find_by_query (gpointer find_data, gpointer user_data)
+{
+  Query *q = find_data;
+  xaccLedgerDisplay *ld = user_data;
+
+  if (!q || !ld)
+    return FALSE;
+
+  return ld->query == q;
+}
+
 static SplitRegisterStyle
 gnc_get_default_register_style ()
 {
@@ -151,8 +163,8 @@ xaccLedgerDisplaySimple (Account *account)
       return NULL;
   }
 
-  return xaccLedgerDisplayGeneral (account, NULL, reg_type,
-                                   gnc_get_default_register_style ());
+  return xaccLedgerDisplayInternal (account, NULL, NULL, reg_type,
+                                    gnc_get_default_register_style ());
 }
 
 static GList *
@@ -245,8 +257,8 @@ xaccLedgerDisplayAccGroup (Account *account)
       return NULL;
   }
 
-  ld = xaccLedgerDisplayGeneral (account, accounts, reg_type,
-                                 REG_STYLE_JOURNAL);
+  ld = xaccLedgerDisplayInternal (account, accounts, NULL,
+                                  reg_type, REG_STYLE_JOURNAL);
 
   g_list_free (accounts);
 
@@ -286,9 +298,9 @@ xaccGUIDMalloc (void)
 {
   GUID *guid;
 
-  guid = g_new(GUID, 1);
+  guid = g_new (GUID, 1);
 
-  *guid = *xaccGUIDNULL();
+  *guid = *xaccGUIDNULL ();
 
   return guid;
 }
@@ -301,9 +313,9 @@ xaccGUIDFree (gpointer _guid)
   if (guid == NULL)
     return;
 
-  *guid = *xaccGUIDNULL();
+  *guid = *xaccGUIDNULL ();
 
-  g_free(guid);
+  g_free (guid);
 }
 
 static void
@@ -312,10 +324,10 @@ xaccGUIDCopy (gpointer _to, gconstpointer _from)
   GUID *to = _to;
   const GUID *from = _from;
 
-  g_return_if_fail(to != NULL);
+  g_return_if_fail (to != NULL);
 
   if (from == NULL)
-    *to = *xaccGUIDNULL();
+    *to = *xaccGUIDNULL ();
   else
     *to = *from;
 }
@@ -370,25 +382,6 @@ make_ledger_query (xaccLedgerDisplay *ld, gboolean show_all,
 }
 
 /********************************************************************\
- * xaccLedgerDisplayGeneral                                         *
- *   opens up a ledger window for a list of accounts                *
- *                                                                  *
- * Args:   lead_account - the account associated with this register *
- *                        (may be NULL)                             *
- *         accounts     - the list of accounts to display           *
- *                        (may be NULL)                             *
- *         type         - the type of split register to open        *
- *         style        - the style of register to use              *
- * Return: the register window instance                             *
-\********************************************************************/
-xaccLedgerDisplay *
-xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
-                          SplitRegisterType type, SplitRegisterStyle style)
-{
-  return xaccLedgerDisplayInternal (lead_account, accounts, NULL, type, style);
-}
-
-/********************************************************************\
  * xaccLedgerDisplayQuery                                           *
  *   opens up a ledger window for an arbitrary query                *
  *                                                                  *
@@ -402,16 +395,6 @@ xaccLedgerDisplayQuery (Query *query, SplitRegisterType type,
                         SplitRegisterStyle style)
 {
   return xaccLedgerDisplayInternal (NULL, NULL, query, type, style);
-}
-
-void
-xaccLedgerDisplaySetQuery (xaccLedgerDisplay *ledger_display, Query *q)
-{
-  if (!ledger_display || !q)
-    return;
-
-  xaccFreeQuery (ledger_display->query);
-  ledger_display->query = xaccQueryCopy (q);
 }
 
 static xaccLedgerDisplay *
@@ -430,6 +413,12 @@ xaccLedgerDisplayInternal (Account *lead_account, GList *accounts, Query *q,
       return NULL;
     }
 
+    if (q)
+    {
+      PWARN ("single-account register with external query");
+      q = NULL;
+    }
+
     class = REGISTER_SINGLE_CM_CLASS;
 
     ld = gnc_find_first_gui_component (class, find_by_account, lead_account);
@@ -443,11 +432,24 @@ xaccLedgerDisplayInternal (Account *lead_account, GList *accounts, Query *q,
 
     ld = gnc_find_first_gui_component (class, find_by_account, lead_account);
 
+    if (q)
+    {
+      PWARN ("account register with external query");
+      q = NULL;
+    }
+
     if (ld)
       return ld;
   }
   else
+  {
     class = REGISTER_GL_CM_CLASS;
+
+    if (!q)
+    {
+      PWARN ("general ledger with no query");
+    }
+  }
 
   ld = g_new (xaccLedgerDisplay, 1);
 
@@ -500,6 +502,25 @@ xaccLedgerDisplayInternal (Account *lead_account, GList *accounts, Query *q,
   xaccLedgerDisplayRefresh (ld);
 
   return ld;
+}
+
+void
+xaccLedgerDisplaySetQuery (xaccLedgerDisplay *ledger_display, Query *q)
+{
+  if (!ledger_display || !q)
+    return;
+
+  xaccFreeQuery (ledger_display->query);
+  ledger_display->query = xaccQueryCopy (q);
+}
+
+xaccLedgerDisplay *
+xaccFindGeneralLedgerByQuery (Query *q)
+{
+  if (!q)
+    return NULL;
+
+  return gnc_find_first_gui_component (REGISTER_GL_CM_CLASS, find_by_query, q);
 }
 
 /********************************************************************\
