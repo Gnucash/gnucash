@@ -1,3 +1,9 @@
+2002-08-11  David Hampton  <hampton@employees.org>
+
+	* acinclude.m4: 
+	* configure.in: Add upper bounds checking on the versions of
+	guile and g-wrap.
+
 2002-08-11  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-pass.h: Added dialogs for password

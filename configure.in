@@ -116,10 +116,17 @@ GNOME_CHECK_GUILE
 G_WRAP_COMPILE_ARGS=""
 G_WRAP_LINK_ARGS=""
 
+AM_GUILE_VERSION_CHECK(1.3.4, 1.5.0, , [AC_MSG_ERROR([
+
+  guile does not appear to be installed correctly, or is not in the
+  correct version range.  Right now gnucash requires at least version
+  1.3.4 to build, but does not work with 1.5 or greater.
+])])
+
 AM_PATH_GWRAP(1.3.2, , [AC_MSG_ERROR([
 
   g-wrap does not appear to be installed correctly, or is not new
-  enough.  Right now gnucash requires at least version 1.3.2 to build.
+  enough.  Right now gnucash requires at least version 1.3.2 to build
   as there were major changes between version 1.3.1 and 1.3.2
   If you need to install g-wrap, you can find it at
   http://www.gnucash.org/pub/g-wrap.
