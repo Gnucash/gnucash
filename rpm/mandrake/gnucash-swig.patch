@@ -1,0 +1,16 @@
+diff -urN gnucash-1.4.2-old/src/optional/Makefile gnucash-1.4.2/src/optional/swig/Makefile
+--- gnucash-1.4.2-old/src/optional/swig/Makefile	Mon Jan 10 04:32:44 2000
++++ gnucash-1.4.2/src/optional/swig/Makefile	Mon Mar 13 12:26:46 2000
+
+432,436c432,436
+< 	cd ${perllibdir} && rm -f gnucash.so
+< 	if [ -f ${perllibdir}/libgncswig.so ]; then \
+< 		cd ${perllibdir} && ln -s libgncswig.so gnucash.so; \
+< 	elif [ -f ${perllibdir}/libgncswig.so.1.1 ]; then \
+< 		cd ${perllibdir} && ln -s libgncswig.so.1.1 gnucash.so; \
+---
+> 	cd ${DESTDIR}/${perllibdir} && rm -f gnucash.so
+> 	if [ -f ${DESTDIR}/${perllibdir}/libgncswig.so ]; then \
+> 		cd ${DESTDIR}/${perllibdir} && ln -s libgncswig.so gnucash.so; \
+> 	elif [ -f ${DESTDIR}/${perllibdir}/libgncswig.so.1.1 ]; then \
+> 		cd ${DESTDIR}/${perllibdir} && ln -s libgncswig.so.1.1 gnucash.so; \
