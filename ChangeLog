@@ -1,3 +1,8 @@
+2003-05-26  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* src/import-export/import-settings.c: Fix pref page define to the proper page, should fix the problem of all prefs being ignored.  Also make strings in the lookup code translatable so that the matching won't be lost when changing language.
+	* src/import-export/generic-import.scm: Add note not to forget to change the c file as well when changing preference page.
+
 2003-05-25  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-gnome/dialog-view-column.c:

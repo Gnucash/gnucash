@@ -29,7 +29,8 @@
 #include "config.h"
 
 #include <glib.h>
-
+#include <stdlib.h>
+#include "dialog-utils.h"
 #include "global-options.h"
 #include "import-settings.h"
 
@@ -38,7 +39,7 @@
  * If you modify the value of any of these, you must do the same in *
  * generic-import.scm                                               *
 \********************************************************************/
-#define MATCHER_PREF_PAGE "Transaction Matcher"
+#define MATCHER_PREF_PAGE _("Online Banking & Importing")
 
 /** Transaction who's best match probability is equal or higher than
    this will reconcile their best match by default */
@@ -46,7 +47,7 @@
 /** Transaction who's best match probability is below or equal to 
    this will be added as new by default */
 #define DEFAULT_ADD_THRESHOLD 3
-/** Transaction's match probability must be at least this much to be 
+/** Transaction's match probability must be at least this much to be
    displayed in the match list.  Dont set this to 0 except for 
    debugging purposes, otherwise all transactions of every accounts 
    will be shown in the list */
@@ -64,7 +65,7 @@ static const int DEFAULT_ACTION_CLEAR_ENABLED = TRUE;
 \********************************************************************/
 
 struct _genimportsettings {
-  
+
   gboolean action_skip_enabled;
   gboolean action_edit_enabled;
   gboolean action_add_enabled;
@@ -101,26 +102,26 @@ gnc_import_Settings_new (void)
   
   settings->action_skip_enabled = 
     gnc_lookup_boolean_option(MATCHER_PREF_PAGE,
-			      "Enable SKIP transaction action",
+			      _("Enable SKIP transaction action"),
 			      DEFAULT_ACTION_SKIP_ENABLED);
   settings->action_edit_enabled =
     gnc_lookup_boolean_option(MATCHER_PREF_PAGE,
-			      "Enable EDIT match action",
+			      _("Enable EDIT match action"),
 			      DEFAULT_ACTION_EDIT_ENABLED);
   settings->action_add_enabled=DEFAULT_ACTION_ADD_ENABLED;
   settings->action_clear_enabled=DEFAULT_ACTION_CLEAR_ENABLED;
   settings->clear_threshold=gnc_lookup_number_option(MATCHER_PREF_PAGE,
-						     "Auto-CLEAR threshold",
+						     _("Auto-CLEAR threshold"),
 						     DEFAULT_CLEAR_THRESHOLD);
   settings->add_threshold=gnc_lookup_number_option(MATCHER_PREF_PAGE,
-						   "Auto-ADD threshold",
+						   _("Auto-ADD threshold"),
 						   DEFAULT_ADD_THRESHOLD);
   settings->display_threshold =
-    gnc_lookup_number_option(MATCHER_PREF_PAGE,"Match display threshold",
+    gnc_lookup_number_option(MATCHER_PREF_PAGE,_("Match display threshold"),
 			     DEFAULT_DISPLAY_THRESHOLD);
 
   settings->fuzzy_amount =
-    gnc_lookup_number_option(MATCHER_PREF_PAGE,"Commercial ATM fees threshold",
+    gnc_lookup_number_option(MATCHER_PREF_PAGE,_("Commercial ATM fees threshold"),
 			     DEFAULT_ATM_FEE_THRESHOLD);
   
   return settings;
