@@ -1844,14 +1844,12 @@ regRefresh(xaccLedgerDisplay *ledger)
       if (euro)
       {
 	strcat(string, " / ");
-	DxaccSPrintAmount(string + strlen(string),
-                          gnc_convert_to_euro(currency,
-                                              gnc_numeric_to_double (amount)),
-                          gnc_commodity_print_info (gnc_get_euro (), TRUE));
+	xaccSPrintAmount(string + strlen(string),
+                         gnc_convert_to_euro(currency, amount),
+                         gnc_commodity_print_info (gnc_get_euro (), TRUE));
       }
 
-      gnc_set_label_color(regData->balance_label,
-                          gnc_numeric_to_double (amount));
+      gnc_set_label_color(regData->balance_label, amount);
       gtk_label_set_text(GTK_LABEL(regData->balance_label), string);
     }
 
@@ -1865,14 +1863,12 @@ regRefresh(xaccLedgerDisplay *ledger)
       if (euro)
       {
 	strcat(string, " / ");
-	DxaccSPrintAmount(string + strlen(string),
-                          gnc_convert_to_euro(currency,
-                                              gnc_numeric_to_double (amount)),
-                          gnc_commodity_print_info (gnc_get_euro (), TRUE));
+	xaccSPrintAmount(string + strlen(string),
+                         gnc_convert_to_euro(currency, amount),
+                         gnc_commodity_print_info (gnc_get_euro (), TRUE));
       }
 
-      gnc_set_label_color(regData->cleared_label,
-                          gnc_numeric_to_double (amount));
+      gnc_set_label_color(regData->cleared_label, amount);
       gtk_label_set_text(GTK_LABEL(regData->cleared_label), string);
     }
 

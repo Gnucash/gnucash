@@ -29,34 +29,33 @@
 #include <string.h>
 
 #include "AccWindow.h"
-#include "global-options.h"
-#include "dialog-options.h"
-#include "FileDialog.h"
-#include "gnucash.h"
-#include "MainWindow.h"
 #include "Destroy.h"
-#include "gnc-ui.h"
-#include "messages.h"
-#include "RegWindow.h"
+#include "EuroUtils.h"
+#include "FileDialog.h"
+#include "MainWindow.h"
 #include "Refresh.h"
-#include "window-main.h"
-#include "window-reconcile.h"
-#include "window-register.h"
-#include "window-help.h"
+#include "RegWindow.h"
+#include "Scrub.h"
 #include "account-tree.h"
-#include "dialog-transfer.h"
 #include "dialog-account.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
+#include "dialog-options.h"
 #include "dialog-totd.h"
+#include "dialog-transfer.h"
 #include "file-history.h"
-#include "gtkselect.h"
-#include "EuroUtils.h"
-#include "Scrub.h"
-#include "gnc-engine-util.h"
+#include "global-options.h"
 #include "gnc-commodity.h"
+#include "gnc-engine-util.h"
 #include "gnc-engine.h"
+#include "gnc-ui.h"
+#include "gnucash.h"
 #include "gtkselect.h"
+#include "messages.h"
+#include "window-help.h"
+#include "window-main.h"
+#include "window-reconcile.h"
+#include "window-register.h"
 
 /* FIXME get rid of these */
 #include <g-wrap.h>
@@ -102,8 +101,8 @@ static GNCMainInfo * gnc_get_main_info(void);
  * be better ways to do this, but none occurred. */
 struct _GNCCurrencyAcc {
   const gnc_commodity * currency;
-  double assets;
-  double profits;
+  gnc_numeric assets;
+  gnc_numeric profits;
 };
 typedef struct _GNCCurrencyAcc GNCCurrencyAcc;
 
@@ -117,7 +116,7 @@ struct _GNCCurrencyItem {
   GtkWidget *listitem;
   GtkWidget *assets_label;
   GtkWidget *profits_label;
-  gint touched:1;
+  gint touched : 1;
 };
 typedef struct _GNCCurrencyItem GNCCurrencyItem;
 
@@ -208,11 +207,11 @@ gnc_ui_get_currency_accumulator(GList **list, const gnc_commodity * currency)
     }
   }
 
-  found = g_new0(GNCCurrencyAcc, 1);
+  found = g_new0 (GNCCurrencyAcc, 1);
   found->currency = currency;
-  found->assets = 0.0;
-  found->profits = 0.0;
-  *list = g_list_append(*list, found);
+  found->assets = gnc_numeric_zero ();
+  found->profits = gnc_numeric_zero ();
+  *list = g_list_append (*list, found);
 
   return found;
 }
@@ -253,7 +252,7 @@ static void
 gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
                          gboolean euro)
 {
-  double amount;
+  gnc_numeric amount;
   AccountGroup *children;
   Account *account;
   int num_accounts;
@@ -276,6 +275,8 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
     euro_accum = gnc_ui_get_currency_accumulator(currency_list,
                                                  euro_commodity);
   }
+  else
+    euro_commodity = NULL;
 
   num_accounts = xaccGroupGetNumAccounts(group);
   for (i = 0; i < num_accounts; i++)
@@ -297,20 +298,35 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
       case MUTUAL:
       case CREDIT:
       case LIABILITY:
-	amount = DxaccAccountGetBalance(account);
-        currency_accum->assets += amount;
-	if(euro)
-	  euro_accum->assets += gnc_convert_to_euro(account_currency, amount);
+	amount = xaccAccountGetBalance(account);
+        currency_accum->assets =
+          gnc_numeric_add (currency_accum->assets, amount,
+                           gnc_commodity_get_fraction (account_currency),
+                           GNC_RND_ROUND);
+
+	if (euro)
+	  euro_accum->assets =
+            gnc_numeric_add (euro_accum->assets,
+                             gnc_convert_to_euro(account_currency, amount),
+                             gnc_commodity_get_fraction (euro_commodity),
+                             GNC_RND_ROUND);
 
 	if (children != NULL)
 	  gnc_ui_accounts_recurse(children, currency_list, euro);
 	break;
       case INCOME:
       case EXPENSE:
-	amount = DxaccAccountGetBalance(account);
-        currency_accum->profits -= amount;
-	if(euro)
-	  euro_accum->profits -= gnc_convert_to_euro(account_currency, amount);
+	amount = xaccAccountGetBalance(account);
+        currency_accum->profits =
+          gnc_numeric_sub (currency_accum->profits, amount,
+                           gnc_commodity_get_fraction (account_currency),
+                           GNC_RND_ROUND);
+
+        if (euro)
+          gnc_numeric_sub (euro_accum->profits,
+                           gnc_convert_to_euro(account_currency, amount),
+                           gnc_commodity_get_fraction (euro_commodity),
+                           GNC_RND_ROUND);
 
 	if (children != NULL)
 	  gnc_ui_accounts_recurse(children, currency_list, euro);
@@ -392,15 +408,13 @@ gnc_ui_refresh_statusbar (void)
 					     main_info->totals_combo);
     currency_item->touched = 1;
 
-    DxaccSPrintAmount(asset_string, currency_accum->assets,
-                      gnc_commodity_print_info (currency_accum->currency,
-                                                TRUE));
+    xaccSPrintAmount(asset_string, currency_accum->assets,
+                     gnc_commodity_print_info(currency_accum->currency, TRUE));
     gtk_label_set_text(GTK_LABEL(currency_item->assets_label), asset_string);
     gnc_set_label_color(currency_item->assets_label, currency_accum->assets);
 
-    DxaccSPrintAmount(profit_string, currency_accum->profits,
-                      gnc_commodity_print_info (currency_accum->currency,
-                                                TRUE));
+    xaccSPrintAmount(profit_string, currency_accum->profits,
+                     gnc_commodity_print_info(currency_accum->currency, TRUE));
     gtk_label_set_text(GTK_LABEL(currency_item->profits_label), profit_string);
     gnc_set_label_color(currency_item->profits_label, currency_accum->profits);
 
@@ -479,16 +493,16 @@ gnc_refresh_main_window()
 }
 
 static void
-gnc_ui_find_transactions_cb ( GtkWidget *widget, gpointer data )
+gnc_ui_find_transactions_cb (GtkWidget *widget, gpointer data)
 {
   gnc_ui_find_transactions_dialog_create(NULL);
 }
 
 
 static void
-gnc_ui_exit_cb ( GtkWidget *widget, gpointer data )
+gnc_ui_exit_cb (GtkWidget *widget, gpointer data)
 {
-  gnc_shutdown(0);
+  gnc_shutdown (0);
 }
 
 static void
@@ -517,19 +531,19 @@ gnc_ui_totd_cb (GtkWidget *widget, gpointer data)
 }
     
 static void
-gnc_ui_help_cb ( GtkWidget *widget, gpointer data )
+gnc_ui_help_cb (GtkWidget *widget, gpointer data)
 {
   helpWindow(NULL, NULL, HH_MAIN);
 }
 
 static void
-gnc_ui_add_account ( GtkWidget *widget, gpointer data )
+gnc_ui_add_account (GtkWidget *widget, gpointer data)
 {
   gnc_ui_new_account_window (NULL);
 }
 
 static void
-gnc_ui_delete_account ( Account *account )
+gnc_ui_delete_account (Account *account)
 {
   /* Step 1: Delete associated windows */
   xaccAccountWindowDestroy(account);
@@ -547,7 +561,7 @@ gnc_ui_delete_account ( Account *account )
 }
 
 static void
-gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
+gnc_ui_delete_account_cb (GtkWidget *widget, gpointer data)
 {
   Account *account = gnc_get_current_account();
 
@@ -575,7 +589,7 @@ gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
 }
 
 static void
-gnc_ui_mainWindow_toolbar_open ( GtkWidget *widget, gpointer data )
+gnc_ui_mainWindow_toolbar_open (GtkWidget *widget, gpointer data)
 {
   RegWindow *regData;
   Account *account = gnc_get_current_account();
@@ -615,7 +629,7 @@ gnc_ui_mainWindow_toolbar_open_subs(GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_ui_mainWindow_toolbar_edit ( GtkWidget *widget, gpointer data )
+gnc_ui_mainWindow_toolbar_edit (GtkWidget *widget, gpointer data)
 {
   Account *account = gnc_get_current_account();
   AccountWindow *edit_window_data;

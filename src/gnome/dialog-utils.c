@@ -215,27 +215,27 @@ gnc_ui_get_account_field_name(int field)
 }
 
 
-double
+gnc_numeric
 gnc_ui_account_get_balance(Account *account, gboolean include_children)
 {
-  double balance;
+  gnc_numeric balance;
 
   if (account == NULL)
-    return 0.0;
+    return gnc_numeric_zero ();
 
-  balance = DxaccAccountGetBalance (account);
+  balance = xaccAccountGetBalance (account);
 
   if (include_children)
   {
     AccountGroup *children;
 
     children = xaccAccountGetChildren (account);
-    balance += DxaccGroupGetBalance (children);
+    balance = gnc_numeric_add_fixed (balance, xaccGroupGetBalance (children));
   }
 
   /* reverse sign if needed */
   if (gnc_reverse_balance (account))
-    balance = -balance;
+    balance = gnc_numeric_neg (balance);
 
   return balance;
 }
@@ -274,42 +274,44 @@ gnc_ui_get_account_field_value_string(Account *account, int field)
       break;
     case ACCOUNT_BALANCE :
       {
-        double balance = gnc_ui_account_get_balance(account, FALSE);
+        gnc_numeric balance = gnc_ui_account_get_balance(account, FALSE);
 
-        return DxaccPrintAmount(balance,
-                                gnc_account_value_print_info (account, TRUE));
+        return xaccPrintAmount(balance,
+                               gnc_account_value_print_info (account, TRUE));
       }
       break;
     case ACCOUNT_BALANCE_EURO :
       {
 	const gnc_commodity * account_currency = 
           xaccAccountGetCurrency(account);
-        double balance = gnc_ui_account_get_balance(account, FALSE);
-	double euro_balance = gnc_convert_to_euro(account_currency, balance);
+        gnc_numeric balance = gnc_ui_account_get_balance(account, FALSE);
+	gnc_numeric euro_balance = gnc_convert_to_euro(account_currency,
+                                                       balance);
 
-	return DxaccPrintAmount(euro_balance,
-                                gnc_commodity_print_info (gnc_get_euro (),
-                                                          TRUE));
+        return xaccPrintAmount(euro_balance,
+                               gnc_commodity_print_info (gnc_get_euro (),
+                                                         TRUE));
       }
       break;
     case ACCOUNT_TOTAL :
       {
-	double balance = gnc_ui_account_get_balance(account, TRUE);
+	gnc_numeric balance = gnc_ui_account_get_balance(account, TRUE);
 
-        return DxaccPrintAmount(balance,
-                                gnc_account_value_print_info (account, TRUE));
+        return xaccPrintAmount(balance,
+                               gnc_account_value_print_info (account, TRUE));
       }
       break;
     case ACCOUNT_TOTAL_EURO :
       {
-	const gnc_commodity * account_currency = 
+	const gnc_commodity * account_currency =
           xaccAccountGetCurrency(account);
-	double balance = gnc_ui_account_get_balance(account, TRUE);
-	double euro_balance = gnc_convert_to_euro(account_currency, balance);
+	gnc_numeric balance = gnc_ui_account_get_balance(account, TRUE);
+	gnc_numeric euro_balance = gnc_convert_to_euro(account_currency,
+                                                       balance);
 
-	return DxaccPrintAmount(euro_balance,
-                                gnc_commodity_print_info (gnc_get_euro (),
-                                                          TRUE));
+	return xaccPrintAmount(euro_balance,
+                               gnc_commodity_print_info (gnc_get_euro (),
+                                                         TRUE));
       }
       break;
   }
@@ -465,7 +467,7 @@ gnc_get_deficit_color(GdkColor *color)
  * Returns: none                                                    *
  \*******************************************************************/
 void
-gnc_set_label_color(GtkWidget *label, double value)
+gnc_set_label_color(GtkWidget *label, gnc_numeric value)
 {
   gboolean deficit;
   GdkColormap *cm;
@@ -479,7 +481,7 @@ gnc_set_label_color(GtkWidget *label, double value)
 
   style = gtk_style_copy(style);
 
-  deficit = (value < 0) && !DEQ(value, 0);
+  deficit = gnc_numeric_negative_p (value);
 
   if (deficit)
   {

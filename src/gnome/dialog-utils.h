@@ -82,7 +82,8 @@ const char * gnc_ui_get_account_field_name(int field);
 const char * gnc_ui_get_account_field_value_string(Account *account,
                                                    int field);
 
-double gnc_ui_account_get_balance(Account *account, gboolean include_children);
+gnc_numeric gnc_ui_account_get_balance(Account *account,
+                                       gboolean include_children);
 
 GtkWidget * gnc_ui_source_menu_create(Account *account);
 
@@ -98,7 +99,7 @@ GtkToolbarStyle gnc_get_toolbar_style(void);
 gboolean gnc_color_deficits (void);
 
 void gnc_get_deficit_color(GdkColor *color);
-void gnc_set_label_color(GtkWidget *label, double value);
+void gnc_set_label_color(GtkWidget *label, gnc_numeric value);
 
 char gnc_get_account_separator(void);
 

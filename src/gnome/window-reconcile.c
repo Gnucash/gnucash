@@ -199,8 +199,7 @@ recnRecalculateBalance(RecnWindow *recnData)
     starting = gnc_numeric_neg (starting);
 
   amount = xaccPrintAmount(starting, print_info);
-  gnc_set_label_color(recnData->starting,
-                      gnc_numeric_to_double (starting));
+  gnc_set_label_color(recnData->starting, starting);
   gtk_label_set_text(GTK_LABEL(recnData->starting), amount);
   if (reverse_balance)
     starting = gnc_numeric_neg (starting);
@@ -210,8 +209,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   if (reverse_balance)
     ending = gnc_numeric_neg (ending);
   amount = xaccPrintAmount(ending, print_info);
-  gnc_set_label_color(recnData->ending,
-                      gnc_numeric_to_double (ending));
+  gnc_set_label_color(recnData->ending, ending);
   gtk_label_set_text(GTK_LABEL(recnData->ending), amount);
   if (reverse_balance)
     ending = gnc_numeric_neg (ending);
@@ -236,8 +234,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   if (reverse_balance)
     reconciled = gnc_numeric_neg (reconciled);
   amount = xaccPrintAmount(reconciled, print_info);
-  gnc_set_label_color(recnData->reconciled,
-                      gnc_numeric_to_double (reconciled));
+  gnc_set_label_color(recnData->reconciled, reconciled);
   gtk_label_set_text(GTK_LABEL(recnData->reconciled), amount);
   if (reverse_balance)
     reconciled = gnc_numeric_neg (reconciled);
@@ -247,8 +244,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   if (reverse_balance)
     diff = gnc_numeric_neg (diff);
   amount = xaccPrintAmount(diff, print_info);
-  gnc_set_label_color(recnData->difference,
-                      gnc_numeric_to_double (diff));
+  gnc_set_label_color(recnData->difference, diff);
   gtk_label_set_text(GTK_LABEL(recnData->difference), amount);
   if (reverse_balance)
     diff = gnc_numeric_neg (diff);

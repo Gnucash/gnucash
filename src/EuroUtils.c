@@ -71,7 +71,9 @@ _gnc_euro_rate_compare_(const void * key,
 {
   const gnc_commodity * curr = key;
   const gnc_euro_rate_struct * euro = value;
-  if(!key || !value) return -1;
+
+  if (!key || !value)
+    return -1;
 
   return strcasecmp(gnc_commodity_get_mnemonic(curr), euro->currency);
 
@@ -109,21 +111,21 @@ gnc_is_euro_currency(const gnc_commodity * currency) {
 
 /* ------------------------------------------------------ */
 
-double
-gnc_convert_to_euro(const gnc_commodity * currency, double value) {
+gnc_numeric
+gnc_convert_to_euro(const gnc_commodity * currency, gnc_numeric value) {
 
   gnc_euro_rate_struct *result;
   const char *namespace;
 
   if (currency == NULL)
-    return 0.0;
+    return gnc_numeric_zero ();
 
   namespace = gnc_commodity_get_namespace (currency);
   if (namespace == NULL)
-    return FALSE;
+    return gnc_numeric_zero ();
 
   if (strcmp (namespace, GNC_COMMODITY_NS_ISO) != 0)
-    return FALSE;
+    return gnc_numeric_zero ();
 
   result = bsearch(currency,
                    _gnc_euro_rate_,
@@ -132,29 +134,35 @@ gnc_convert_to_euro(const gnc_commodity * currency, double value) {
                    _gnc_euro_rate_compare_);
 
   if (result == NULL)
-    return 0.0;
+    return gnc_numeric_zero ();
 
   /* round to 2 decimal places */
-  return (floor(((value / result->rate) * 100.0) + 0.5) / 100.0); 
+  {
+    gnc_numeric rate;
+
+    rate = double_to_gnc_numeric (result->rate, 100000, GNC_RND_ROUND);
+
+    return gnc_numeric_div (value, rate, 100, GNC_RND_FLOOR);
+  }
 }
 
 /* ------------------------------------------------------ */
 
-double 
-gnc_convert_from_euro(const gnc_commodity * currency, double value) {
+gnc_numeric
+gnc_convert_from_euro(const gnc_commodity * currency, gnc_numeric value) {
 
   gnc_euro_rate_struct * result;
   const char *namespace;
 
   if (currency == NULL)
-    return 0.0;
+    return gnc_numeric_zero ();
 
   namespace = gnc_commodity_get_namespace (currency);
   if (namespace == NULL)
-    return FALSE;
+    return gnc_numeric_zero ();
 
   if (strcmp (namespace, GNC_COMMODITY_NS_ISO) != 0)
-    return FALSE;
+    return gnc_numeric_zero ();
 
   result = bsearch(currency,
                    _gnc_euro_rate_,
@@ -163,9 +171,16 @@ gnc_convert_from_euro(const gnc_commodity * currency, double value) {
                    _gnc_euro_rate_compare_);
 
   if (result == NULL)
-    return 0.0;
+    return gnc_numeric_zero ();
 
-  return (value * result->rate);
+  {
+    gnc_numeric rate;
+
+    rate = double_to_gnc_numeric (result->rate, 100000, GNC_RND_ROUND);
+
+    return gnc_numeric_mul (value, rate, gnc_commodity_get_fraction (currency),
+                            GNC_RND_ROUND);
+  }
 }
 
 /* ------------------------------------------------------ */

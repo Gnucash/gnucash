@@ -996,11 +996,11 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
   if (gnc_color_deficits())
   {
     GtkStyle *style;
-    double balance;
+    gnc_numeric balance;
     gboolean deficit;
 
-    balance = gnc_ui_account_get_balance(acc, FALSE);
-    deficit = (balance < 0) && !DEQ(balance, 0);
+    balance = gnc_ui_account_get_balance (acc, FALSE);
+    deficit = gnc_numeric_negative_p (balance);
 
     if (deficit)
       style = tree->deficit_style;
@@ -1012,7 +1012,7 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
 				    tree->balance_column, style);
 
     balance = gnc_ui_account_get_balance(acc, TRUE);
-    deficit = (balance < 0) && !DEQ(balance, 0);
+    deficit = gnc_numeric_negative_p (balance);
 
     if (deficit)
       style = tree->deficit_style;
