@@ -475,6 +475,8 @@ static void
 gnc_ui_about_cb (GtkWidget *widget, gpointer data)
 {
   GtkWidget *about;
+  const gchar *message = _("The GnuCash personal finance manager.\n"
+                           "The GNU way to manage your money!");
   const gchar *copyright = "(C) 1998-2000 Linas Vepstas";
   const gchar *authors[] = {
     "Linas Vepstas <linas@linas.org>",
@@ -482,7 +484,7 @@ gnc_ui_about_cb (GtkWidget *widget, gpointer data)
   };
 
   about = gnome_about_new("GnuCash", VERSION, copyright,
-                          authors, ABOUT_MSG, NULL);
+                          authors, message, NULL);
 
   gnome_dialog_run_and_close(GNOME_DIALOG(about));
 }
@@ -531,19 +533,26 @@ gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
 
   if (account)
   {
-    const gchar *name;
-    gchar *message;
+    const char *format = _("Are you sure you want to delete the %s account?");
+    char *message;
+    char *name;
 
-    name = xaccAccountGetName(account);
-    message = g_strdup_printf(ACC_DEL_SURE_MSG, name);
+    name = xaccAccountGetFullName(account, gnc_get_account_separator ());
+    message = g_strdup_printf(format, name);
 
     if (gnc_verify_dialog(message, FALSE))
       gnc_ui_delete_account(account);
 
     g_free(message);
+    if (name)
+      free (name);
   }
   else
-    gnc_error_dialog(ACC_DEL_MSG);
+  {
+    const char *message = _("To delete an account, you must first\n"
+                            "choose an account to delete.\n");
+    gnc_error_dialog(message);
+  }
 }
 
 static void
@@ -554,7 +563,9 @@ gnc_ui_mainWindow_toolbar_open ( GtkWidget *widget, gpointer data )
   
   if (account == NULL)
   {
-    gnc_error_dialog(ACC_OPEN_MSG);
+    const char *message = _("To open an account, you must first\n"
+                            "choose an account to open.");
+    gnc_error_dialog(message);
     return;
   }
 
@@ -572,7 +583,9 @@ gnc_ui_mainWindow_toolbar_open_subs(GtkWidget *widget, gpointer data)
   
   if (account == NULL)
   {
-    gnc_error_dialog(ACC_OPEN_MSG);
+    const char *message = _("To open an account, you must first\n"
+                            "choose an account to open.");
+    gnc_error_dialog(message);
     return;
   }
 
@@ -594,7 +607,11 @@ gnc_ui_mainWindow_toolbar_edit ( GtkWidget *widget, gpointer data )
     gnc_ui_edit_account_window_raise(edit_window_data);
   }
   else
-    gnc_error_dialog(ACC_EDIT_MSG);
+  {
+    const char *message = _("To edit an account, you must first\n"
+                            "choose an account to edit.\n");
+    gnc_error_dialog(message);
+  }
 }
 
 static void
@@ -609,7 +626,11 @@ gnc_ui_mainWindow_reconcile(GtkWidget *widget, gpointer data)
     gnc_ui_reconcile_window_raise(recnData);
   }
   else
-    gnc_error_dialog(ACC_RECONCILE_MSG);
+  {
+    const char *message = _("To reconcile an account, you must first\n"
+                            "choose an account to reconcile.");
+    gnc_error_dialog(message);
+  }
 }
 
 static void
@@ -625,7 +646,8 @@ gnc_ui_mainWindow_scrub(GtkWidget *widget, gpointer data)
 
   if (account == NULL)
   {
-    gnc_error_dialog(ACC_SCRUB_MSG);
+    const char *message = _("You must select an account to scrub.");
+    gnc_error_dialog(message);
     return;
   }
 
@@ -643,7 +665,8 @@ gnc_ui_mainWindow_scrub_sub(GtkWidget *widget, gpointer data)
 
   if (account == NULL)
   {
-    gnc_error_dialog(ACC_SCRUB_MSG);
+    const char *message = _("You must select an account to scrub.");
+    gnc_error_dialog(message);
     return;
   }
 

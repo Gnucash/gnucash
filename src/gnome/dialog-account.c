@@ -679,14 +679,16 @@ gnc_edit_account_ok(AccountWindow *aw)
   name = gtk_entry_get_text(GTK_ENTRY(aw->name_entry));
   if (safe_strcmp(name, "") == 0)
   {
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), ACC_NO_NAME_MSG);
+    const char *message = _("The account must be given a name.");
+    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
     return;
   }
 
   /* check for valid type */
   if (aw->type == BAD_TYPE)
   {
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), ACC_TYPE_MSG);
+    const char *message = _("You must select an account type.");
+    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
     return;
   }
 
@@ -696,7 +698,8 @@ gnc_edit_account_ok(AccountWindow *aw)
   /* Parent check, probably not needed, but be safe */
   if (!gnc_filter_parent_accounts(new_parent, aw))
   {
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), ACC_BAD_PARENT_MSG);
+    const char *message = _("You must choose a valid parent account.");
+    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
     return;
   }
 
@@ -798,7 +801,8 @@ gnc_new_account_ok (AccountWindow *aw)
   name = gtk_entry_get_text(GTK_ENTRY(aw->name_entry));
   if (safe_strcmp(name, "") == 0)
   {
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), ACC_NO_NAME_MSG);
+    const char *message = _("The account must be given a name.");
+    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
     return;
   }
 
@@ -839,7 +843,8 @@ gnc_new_account_ok (AccountWindow *aw)
 
     if (account != NULL)
     {
-      gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), ACC_DUP_NAME_MSG);
+      const char *message = _("There is already an account with that name.");
+      gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
       return;
     }
   }
@@ -847,7 +852,8 @@ gnc_new_account_ok (AccountWindow *aw)
   /* check for valid type */
   if (aw->type == BAD_TYPE)
   {
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), ACC_TYPE_MSG);
+    const char *message = _("You must select an account type.");
+    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
     return;
   }
 

@@ -445,7 +445,7 @@ gnc_localeconv(void)
   gnc_lconv_set(&lc.thousands_sep, ",");
   gnc_lconv_set(&lc.grouping, "\003");
   gnc_lconv_set(&lc.int_curr_symbol, "USD ");
-  gnc_lconv_set(&lc.currency_symbol, CURRENCY_SYMBOL);
+  gnc_lconv_set(&lc.currency_symbol, "$");
   gnc_lconv_set(&lc.mon_decimal_point, ".");
   gnc_lconv_set(&lc.mon_thousands_sep, ",");
   gnc_lconv_set(&lc.mon_grouping, "\003");

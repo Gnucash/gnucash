@@ -83,8 +83,13 @@ RecnEnter (BasicCell *_cell,
      still perhaps not optimal. */
 
   if (cell->reconciled_flag == YREC)
-    if (!gnc_verify_dialog(CHANGE_RECN_MSG, TRUE))
+  {
+    const char *message = _("Do you really want to mark this transaction "
+                            "not reconciled?\nDoing so might make future "
+                            "reconciliation difficult!");
+    if (!gnc_verify_dialog(message, TRUE))
       return FALSE;
+  }
 
   if (cell->reconciled_flag == NREC)
     cell->reconciled_flag = CREC;

@@ -2203,8 +2203,13 @@ gnc_transaction_delete_query(GtkWindow *parent)
   gint       pos = 0;
   gint       result;
 
-  gchar *usual = DEL_USUAL_MSG;
-  gchar *warn  = DEL_WARN_MSG;
+  const char *usual = _("This selection will delete the whole "
+                        "transaction. This is what you usually want.");
+  const char *warn  = _("Warning: Just deleting all the splits will "
+                        "make your account unbalanced. You probably "
+                        "shouldn't do this unless you're going to "
+                        "immediately add another split to bring the "
+                        "transaction back into balance.");
 
   DeleteType return_value;
 
@@ -2228,20 +2233,25 @@ gnc_transaction_delete_query(GtkWindow *parent)
 
   text = gtk_text_new(NULL, NULL);
 
-  trans_button = gtk_radio_button_new_with_label(NULL, DEL_TRANS_MSG);
+  trans_button =
+    gtk_radio_button_new_with_label(NULL,
+                                    _("Delete the whole transaction"));
   gtk_object_set_user_data(GTK_OBJECT(trans_button), text);
   gtk_box_pack_start(GTK_BOX(vbox), trans_button, TRUE, TRUE, 0);
 
   gtk_signal_connect(GTK_OBJECT(trans_button), "toggled",
-                     GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb), usual);
+                     GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb),
+                     (gpointer) usual);
 
   group = gtk_radio_button_group(GTK_RADIO_BUTTON(trans_button));
-  splits_button = gtk_radio_button_new_with_label(group, DEL_SPLITS_MSG);
+  splits_button = gtk_radio_button_new_with_label(group,
+                                                  _("Delete all the splits"));
   gtk_object_set_user_data(GTK_OBJECT(splits_button), text);
   gtk_box_pack_start(GTK_BOX(vbox), splits_button, TRUE, TRUE, 0);
 
   gtk_signal_connect(GTK_OBJECT(splits_button), "toggled",
-                     GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb), warn);
+                     GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb),
+                     (gpointer) warn);
 
   gtk_box_pack_start(GTK_BOX(dvbox), frame, TRUE, TRUE, 0);
 

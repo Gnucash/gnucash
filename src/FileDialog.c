@@ -43,6 +43,13 @@
 static Session *current_session = NULL;
 static AccountGroup *topgroup = NULL; /* the current top of the hierarchy */
 
+/* ======================================================== */
+
+static const char *
+file_not_found_msg (void)
+{
+  return _("The file \n    %s\n could not be found.");
+}
 
 /* ======================================================== */
 
@@ -57,25 +64,33 @@ show_file_error (int io_error, char *newfile)
     case ERR_FILEIO_NO_ERROR:
       break;
     case ERR_FILEIO_FILE_NOT_FOUND:
-      buf = g_strdup_printf (FILE_NOT_FOUND_MSG, newfile);
+      buf = g_strdup_printf (file_not_found_msg(), newfile);
       gnc_error_dialog (buf);
       uh_oh = TRUE;
       break;
     case ERR_FILEIO_FILE_EMPTY:
-      buf = g_strdup_printf (FILE_EMPTY_MSG, newfile);
+      buf = _("The file \n    %s\n is empty.");
+      buf = g_strdup_printf (buf, newfile);
       gnc_error_dialog (buf);
       uh_oh = TRUE;
       break;
     case ERR_FILEIO_FILE_TOO_NEW:
-      gnc_error_dialog (FILE_TOO_NEW_MSG);
+      buf = _("This file appears to be from a newer version "
+              "of GnuCash. You must upgrade GnuCash to read "
+              "this file.");
+      gnc_error_dialog (buf);
       uh_oh = TRUE;
       break;
     case ERR_FILEIO_FILE_TOO_OLD:
-      if (!gnc_verify_dialog (FILE_TOO_OLD_MSG, TRUE))
+      buf = _("This file is from an older version of "
+              "GnuCash.\nDo you want to continue?");
+      if (!gnc_verify_dialog (buf, TRUE))
         uh_oh = TRUE;
       break;
     case ERR_FILEIO_FILE_BAD_READ:
-      if (!gnc_verify_dialog (FILE_BAD_READ_MSG, TRUE))
+      buf = _("There was an error reading the file.\n"
+              "Do you want to continue?");
+      if (!gnc_verify_dialog (buf, TRUE))
         uh_oh = TRUE;
       break;
     default:
@@ -102,7 +117,7 @@ show_session_error(Session *session, char *newfile)
   }
   else if (ERANGE == norr)
   {
-    buf = g_strdup_printf (FILE_NOT_FOUND_MSG, newfile);
+    buf = g_strdup_printf (file_not_found_msg(), newfile);
     gnc_error_dialog (buf);
     uh_oh = TRUE;
   }
@@ -182,10 +197,10 @@ gncFileQuerySave (void)
   while ( xaccGroupNotSaved (grp) ) 
   {
     GNCVerifyResult result;
+    const char *message = _("Changes have been made since the last "
+                            "Save. Save the data to file?");
 
-    result = gnc_verify_cancel_dialog_parented( app,
-                                                FMB_SAVE_MSG,
-                                                GNC_VERIFY_YES );
+    result = gnc_verify_cancel_dialog_parented (app, message, GNC_VERIFY_YES);
 
     if (result == GNC_VERIFY_CANCEL)
       return FALSE;
@@ -238,7 +253,7 @@ gncPostFileOpen (const char * filename)
   if (!filename) return;
   newfile = xaccResolveFilePath (filename); 
   if (!newfile) {
-     char *buf = g_strdup_printf (FILE_NOT_FOUND_MSG, filename);
+     char *buf = g_strdup_printf (file_not_found_msg(), filename);
      gnc_error_dialog (buf);
      g_free(buf);
      return;
@@ -281,7 +296,7 @@ gncPostFileOpen (const char * filename)
     /* This is almost certainly not what the user wanted. */
     if (!uh_oh && !newgrp && !io_error) 
     {
-      char *buf = g_strdup_printf (FILE_NOT_FOUND_MSG, newfile);	
+      char *buf = g_strdup_printf (file_not_found_msg(), newfile);	
       gnc_error_dialog (buf);
       g_free (buf);
       uh_oh = TRUE;
@@ -467,7 +482,7 @@ gncFileSaveAs (void)
    */
   newfile = xaccResolveFilePath (filename);
   if (!newfile) {
-     char *buf = g_strdup_printf (FILE_NOT_FOUND_MSG, filename);
+     char *buf = g_strdup_printf (file_not_found_msg(), filename);
      gnc_error_dialog (buf);
      g_free (buf);
      return;

@@ -3,10 +3,17 @@
 
 po/pseudo-source.c
 po/guile_strings.txt
+src/gnome/dialog-account.c
 src/gnome/dialog-account-picker.c
 src/gnome/dialog-fincalc.c
 src/gnome/dialog-progress.c
 src/gnome/dialog-qif-import.c
+src/gnome/dialog-totd.c
 src/gnome/glade-gnc-dialogs.c
 src/gnome/print-session.c
+src/gnome/window-main.c
+src/gnome/window-reconcile.c
+src/gnome/window-register.c
+src/register/recncell.c
+src/FileDialog.c
 src/SplitLedger.c

@@ -1662,8 +1662,12 @@ recnFinishCB(GtkWidget *w, gpointer data)
   time_t date;
 
   if (!DEQ(recnRecalculateBalance(recnData), 0.0))
-    if (!gnc_verify_dialog_parented(recnData->window, RECN_BALN_WARN, FALSE))
+  {
+    const char *message = _("The account is not balanced.\n"
+                            "Are you sure you want to finish?");
+    if (!gnc_verify_dialog_parented(recnData->window, message, FALSE))
       return;
+  }
 
   date = recnData->statement_date;
 

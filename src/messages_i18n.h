@@ -55,69 +55,13 @@
 
 /** MISC INTERNATIONALIZATION PIECES-PARTS: ******************************/
 
-/* This will be used if localeconv cannot find a value. */
-#define CURRENCY_SYMBOL  _("$")
-
-
 /** DIALOG BOX MESSAGES: ********************************************/
-#define ABOUT_MSG         _("The GnuCash personal finance manager.\n"\
-                            "The GNU way to manage your money!")
-#define ACC_ADJUST_MSG    _("To adjust an account's balance, you must "\
-                            "first\nchoose an account to adjust.\n")
-#define ACC_BAD_PARENT_MSG _("You must choose a valid parent account.")
-#define ACC_DUP_NAME_MSG  _("There is already an account with that name.")
-#define ACC_NEW_MSG       _("Do you want to create a new account?\n"\
-                            "If not, then please select an account\n"\
-                            "to open in the main window.\n")
-#define ACC_EDIT_MSG      _("To edit an account, you must first\n"\
-                            "choose an account to edit.\n")
-#define ACC_DEL_MSG       _("To delete an account, you must first\n"\
-                            "choose an account to delete.\n")
-#define ACC_DEL_SURE_MSG  _("Are you sure you want to delete the %s account?")
-#define ACC_NO_NAME_MSG   _("The account must be given a name! \n")
-#define ACC_OPEN_MSG      _("To open an account, you must first\n"\
-                            "choose an account to open.\n")
-#define ACC_SCRUB_MSG     _("You must select an account to scrub.")
-#define ACC_TYPE_MSG      _("You must select an account type.")
-#define ACC_RECONCILE_MSG _("To reconcile an account, you must first\n"\
-                            "choose an account to reconcile.\n")
-#define AMOUNT_NUM_MSG    _("The amount must be a number.")
-#define BALANCE_NUM_MSG   _("The balance must be a number.")
-#define CHANGE_RECN_MSG   _("Do you really want to mark this transaction "\
-                            "not reconciled?\nDoing so might make future "\
-                            "reconciliation difficult!")
-#define DEL_SPLITS_MSG    _("Delete all the splits")
-#define DEL_TRANS_MSG     _("Delete the whole transaction")
-#define DEL_USUAL_MSG     _("This selection will delete the whole "\
-                            "transaction. This is what you usually want.")
-#define DEL_WARN_MSG      _("Warning: Just deleting all the splits will "\
-                            "make your account unbalanced. You probably "\
-                            "shouldn't do this unless you're going to "\
-                            "immediately add another split to bring the "\
-                            "transaction back into balance.")
-#define EDIT_CURRENCY_MSG _("It is dangerous to change the currency type\n"\
-                            "of an account. You asked to change it\n"\
-                            "from %s to %s.\nAre You Sure?\n") 
-#define EDIT_SECURITY_MSG _("It is dangerous to change the security\n"\
-                            "of an account. You asked to change it\n"\
-                            "from %s to %s.\nAre You Sure?\n") 
-#define FILE_TOO_OLD_MSG  _("This file is from an older version of "\
-                            "GnuCash.  \nDo you want to continue?")
-#define FILE_TOO_NEW_MSG  _("This file appears to be from a newer version "\
-                            "of GnuCash. You must upgrade GnuCash to read "\
-                            "this file.")
-#define FILE_BAD_READ_MSG _("There was an error reading the file. \n"\
-                            "Do you want to continue?")
 #define FILE_EWRITE_MSG   _("There was an error writing the file\n     %s" \
                             "\n\n%s")
 #define FILE_EOPEN_MSG    _("There was an error opening the file\n     %s" \
                             "\n\n%s")
 #define FILE_ECLOSE_MSG   _("There was an error closing the file\n     %s" \
                             "\n\n%s")
-#define FILE_NOT_FOUND_MSG _("The file \n    %s\n could not be found.")
-#define FILE_EMPTY_MSG    _("The file \n    %s\n is empty.")
-#define FMB_SAVE_MSG      _("Changes have been made since the last " \
-                            "Save. Save the data to file?")
 #define FMB_EEXIST_MSG    _("The file \n    %s\n already exists.\n" \
                             "Are you sure you want to overwrite it?")
 #define FMB_INVALID_MSG   _("The filepath \n    %s\n" \
@@ -126,23 +70,16 @@
                             "appears to be in use by another user.\n" \
                             "If this is not right, remove the .LCK file " \
                             "and try again.")
-#define GNOME_PRINT_MSG   _("You need to install the gnome-print library.")
 #define QIF_LOAD_FAILED_FORMAT_MSG _("QIF file load failed:\n%s")
 #define QIF_LOAD_WARNING_FORMAT_MSG _("QIF file load warning:\n%s")
 #define QIF_PARSE_FAILED_FORMAT_MSG _("QIF file parse failed:\n%s")
 #define QIF_PARSE_WARNING_FORMAT_MSG _("QIF file parse warning:\n%s")
 
-#define QUOTE_SRC_MSG     _("The source for price quotes")
-#define RECN_BALN_WARN    _("The account is not balanced.\n" \
-                            "Are you sure you want to finish?")
 #define RECN_CANCEL_WARN  _("You have made changes to this reconcile " \
                             "window.\nAre you sure you want to cancel?")
 #define RECN_TRANS_WARN   _("Warning! This is a reconciled transaction. " \
                             "Do you want do continue?")
 
-#define REENABLE_TIPS_MSG _("You have disabled \"Tip of the Day\"\n" \
-                            "You can re-enable tips from the General\n" \
-                            "section of the Preferences menu")
 #define REG_CURR_MSG      _("You cannot transfer funds from the %s " \
                             "account.\nIt does not have a matching " \
                             "currency.\nTo transfer funds between " \
@@ -158,15 +95,6 @@
                             "from the transaction\n   %s ?")
 #define TRANS_DEL2_MSG    _("Are you sure you want to delete the current "\
                             "transaction?")
-#define TRANS_RECALC_TITLE _("Recalculate Transaction") 
-#define TRANS_RECALC_MSG  _("The values entered for this transaction "\
-                            "are inconsistent.\nWhich value would you "\
-                            "like to have recalculated?\n")
-#define TYPE_WARN1_MSG    _("The types of all the parent accounts and their "\
-                            "subaccounts must be changed to %s.\nIs that "\
-                            "what you want to do?")
-#define TYPE_WARN2_MSG    _("The types of all the subaccounts must be "\
-                            "changed to %s.\nIs that what you want to do?")
 #define VERIFY_CHANGE_MSG _("The following changes must be made. Continue?")
 #define XFER_NSF_MSG      _("There must be at least two accounts\n"\
                             "created before you can transfer funds.")

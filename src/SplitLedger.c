@@ -2647,6 +2647,10 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       int choice;
       int default_value;
       char *radio_list[4] = { NULL, NULL, NULL, NULL };
+      const char *title = _("Recalculate Transaction");
+      const char *message = _("The values entered for this transaction "
+                              "are inconsistent.\nWhich value would you "
+                              "like to have recalculated?");
 
       if (MOD_SHRS & changed)
         radio_list[0] = g_strdup_printf("%s (%s)", SHARES_STR, CHANGED_STR);
@@ -2673,8 +2677,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
         default_value = 1;
 
       choice = gnc_choose_radio_option_dialog_parented(xaccSRGetParent(reg),
-                                                       TRANS_RECALC_TITLE,
-                                                       TRANS_RECALC_MSG,
+                                                       title,
+                                                       message,
                                                        default_value,
                                                        radio_list);
 
