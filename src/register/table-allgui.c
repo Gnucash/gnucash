@@ -6,7 +6,7 @@
  * Implements the gui-independent parts of the table infrastructure.
  *
  * HISTORY:
- * Copyright (c) 1988 Linas Vepstas
+ * Copyright (c) 1998 Linas Vepstas
  */
 
 /********************************************************************\
@@ -136,6 +136,42 @@
          }								\
       }									\
    }									\
+}
+
+/* ==================================================== */
+
+void
+xaccFreeTableEntries (Table * table)
+{
+   int i,j;
+   /* free the entries and locators */
+   for (i=0; i<table->num_phys_rows; i++) {
+      for (j=0; j<table->num_phys_cols; j++) {
+         free (table->entries[i][j]);
+         table->entries[i][j] = NULL;
+
+         free (table->locators[i][j]);
+         table->locators[i][j] = NULL;
+      }
+      free (table->entries[i]);
+      table->entries[i] = NULL;
+
+      free (table->locators[i]);
+      table->locators[i] = NULL;
+   }
+   free (table->entries);
+   table->entries = NULL;
+
+   free (table->locators);
+   table->locators = NULL;
+
+   /* null out user data and handlers */
+   for (i=0; i<table->num_virt_rows; i++) {
+      for (j=0; j<table->num_virt_cols; j++) {
+         table->handlers = NULL;
+         table->user_data = NULL;
+      }
+   }
 }
 
 /* ==================================================== */

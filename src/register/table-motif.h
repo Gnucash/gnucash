@@ -123,6 +123,7 @@ typedef struct _Table {
 
 Table     * xaccMallocTable (void);
 void        xaccInitTable (Table *);
+void        xaccDestroyTable (Table *);
 
 /* rsize the table to the indicated dimensions.
  * calls the gui-independent xaccTableResize() routine,
@@ -134,8 +135,6 @@ void        xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
 /* create the widget */
 Widget      xaccCreateTable (Table *, Widget parent, char * name);
 void        xaccNextTabGroup (Table *, Widget);
-
-void        xaccDestroyTable (Table *);
 
 /* redraw the table GUI */
 void        xaccRefreshTableGUI (Table *);

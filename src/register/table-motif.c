@@ -8,7 +8,7 @@
  * ported to GTK, etc. 
  *
  * HISTORY:
- * Copyright (c) 1988 Linas Vepstas
+ * Copyright (c) 1998 Linas Vepstas
  */
 
 /********************************************************************\
@@ -90,6 +90,21 @@ xaccInitTable (Table * table)
    /* invalidate the "previous" traversed cell */
    table->prev_phys_traverse_row = -1;
    table->prev_phys_traverse_col = -1;
+}
+
+/* ==================================================== */
+
+void 
+xaccDestroyTable (Table * table)
+{
+   /* free the gui-independent parts */
+   xaccFreeTableEntries (table);
+
+   /* hmmm what about the motif widget ??? */
+
+   /* intialize vars to null value so that any access is voided. */
+   xaccInitTable (table);
+   free (table);
 }
 
 /* ==================================================== */
@@ -236,7 +251,7 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
    XbaeMatrixEnterCellCallbackStruct *cbs;
    int row, col;
    int rel_row, rel_col;
-   const char * (*enter) (struct _BasicCell *, const char *);
+   const char * (*enter) (BasicCell *, const char *);
 
    table = (Table *) cd;
    arr = table->current_cursor;
@@ -295,7 +310,7 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    XbaeMatrixModifyVerifyCallbackStruct *cbs;
    int row, col;
    int rel_row, rel_col;
-   const char * (*mv) (struct _BasicCell *, 
+   const char * (*mv) (BasicCell *, 
                        const char *, 
                        const char *, 
                        const char *);
@@ -383,7 +398,7 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
    XbaeMatrixLeaveCellCallbackStruct *cbs;
    int row, col;
    int rel_row, rel_col;
-   const char * (*leave) (struct _BasicCell *, const char *);
+   const char * (*leave) (BasicCell *, const char *);
    char * newval;
 
    table = (Table *) cd;
@@ -597,15 +612,14 @@ xaccCreateTable (Table *table, Widget parent, char * name)
             BasicCell *cell;
             cell = curs->cells[i][j];
             if (cell) {
-               void (*xt_realize) (struct _BasicCell *, 
+               void (*xt_realize) (BasicCell *, 
                                    void *gui,
                                    int pixel_width);
                xt_realize = cell->realize;
                if (xt_realize) {
                   int pixel_width;
                   pixel_width = XbaeMatrixGetColumnPixelWidth (reg, j);
-                  xt_realize (((struct _BasicCell *) cell), 
-                              ((void *) reg), pixel_width);
+                  xt_realize (cell, ((void *) reg), pixel_width);
                }
             }
          }

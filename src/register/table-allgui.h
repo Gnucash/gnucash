@@ -6,7 +6,7 @@
  * Implements the gui-independent parts of the table infrastructure.
  *
  * HISTORY:
- * Copyright (c) 1988 Linas Vepstas
+ * Copyright (c) 1998 Linas Vepstas
  */
 
 /********************************************************************\
@@ -28,10 +28,12 @@
 #ifndef __XACC_TABLE_ALLGUI_H__
 #define __XACC_TABLE_ALLGUI_H__
 
-/* hack-alert, to pick up the table definition.
- * since C lacks the inheritance of C++ 
- * fix this someday.
+/* hack alert -- move a portion of the gui-independent
+ * table structure definition, currentlu in table-motif.h, 
+ * to here.  But C lacks the inheritance of C++, so this
+ * is ugly. 
  */
+
 #define XMOTIF
 #ifdef XMOTIF
 #include "table-motif.h"
@@ -41,13 +43,16 @@
 #include "table-gtk.h"
 #endif 
 
+/* free the gui-independent parts of the table structure. */
+void  xaccFreeTableEntries (Table *);
+
 /* resize the various arrays that compose the table */
-extern void 
+void 
 xaccTableResize (Table * table, int num_phys_rows, int num_phys_cols,
                                 int new_virt_rows, int new_virt_cols);
 
 /* indicate what handler should be used for a given virtual block */
-extern void 
+void 
 xaccSetCursor (Table *table, CellBlock *curs,
               int phys_row_origin, int phys_col_origin,
               int virt_row, int virt_col);
