@@ -167,6 +167,9 @@
 /* Tooltip phrases */
 #define TOOLTIP_ADJUST_N       N_("Adjust the balance of the selected account")
 #define TOOLTIP_ADJUST          _(TOOLTIP_ADJUST_N)
+#define TOOLTIP_ADJUST_AMOUNT   _("Enter the new balance")
+#define TOOLTIP_ADJUST_DATE     _("Enter the date you want the balance "\
+                                  "adjusted")
 #define TOOLTIP_ADJUST_END_N   N_("Adjust the ending balance")
 #define TOOLTIP_ADJUST_END      _(TOOLTIP_ADJUST_END_N)
 #define TOOLTIP_ADJUST_REG_N   N_("Adjust the balance of the main account "\

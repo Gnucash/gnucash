@@ -70,7 +70,7 @@ GNOME_SRCS := top-level.c window-main.c window-register.c window-adjust.c \
               extensions.c query-user.c reconcile-list.c \
 	      window-report.c global-options.c gnc-dateedit.c \
 	      dialog-qif-import.c glade-gnc-dialogs.c gnc-datedelta.c \
-	      dialog-account-picker.c print-session.c \
+	      dialog-account-picker.c print-session.c file-history.c \
 	      dialog-print-check.c dialog-find-transactions.c
 ######################################################################
 

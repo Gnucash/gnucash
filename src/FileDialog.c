@@ -34,6 +34,7 @@
 #include "Destroy.h"
 #include "util.h"
 #include "ui-callbacks.h"
+#include "file-history.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 // static short module = MOD_GUI;
@@ -279,6 +280,7 @@ gncPostFileOpen (const char * filename)
   /* clean up old stuff, and then we're outta here. */
   xaccLogDisable();
   xaccLogSetBaseName (newfile);
+  gnc_history_add_file (newfile);
   /* destroy open windows first, before destroying the group itself */
   xaccGroupWindowDestroy (oldgrp);
   xaccFreeAccountGroup (oldgrp);
@@ -375,6 +377,7 @@ gncFileSave (void)
   /* check for i/o error, put up appropriate error message */
   io_error = xaccGetFileIOError();
   newfile = xaccSessionGetFilePath(current_session);
+  gnc_history_add_file(newfile);
   SHOW_IO_ERR_MSG(io_error);
 
   /* going down -- abandon ship */

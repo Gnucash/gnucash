@@ -50,6 +50,7 @@
 #include "dialog-edit.h"
 #include "dialog-qif-import.h"
 #include "dialog-find-transactions.h"
+#include "file-history.h"
 #include "Scrub.h"
 #include "util.h"
 #include "gnc.h"
@@ -194,6 +195,7 @@ gnc_refresh_main_window()
 {
   xaccRecomputeGroupBalance(gncGetCurrentGroup());
   gnc_ui_refresh_statusbar();
+  gnc_history_update_menu(GNOME_APP(gnc_get_ui_data()));
   gnc_account_tree_refresh_all();
 }
 

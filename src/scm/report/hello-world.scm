@@ -155,6 +155,9 @@
                          "Your reports probably shouldn't have an "
                          "option like this.") #f))
 
+    (gnc:options-set-default-section gnc:*hello-world-options*
+                                     "Hello, World!")
+
     gnc:*hello-world-options*)
 
 

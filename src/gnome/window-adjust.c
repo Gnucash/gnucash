@@ -217,7 +217,7 @@ adjBWindow(Account *account)
   GtkWidget *dialog, *frame, *vbox;
   AdjBWindow *adjBData;
   gchar *title;
-   
+
   FETCH_FROM_LIST(AdjBWindow, adjBList, account, account, adjBData);
 
   title = gnc_adjb_make_window_name(account);
@@ -245,11 +245,14 @@ adjBWindow(Account *account)
   gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
 
   {
+    GtkTooltips *tooltips;
     GtkWidget *hbox, *vbox;
     GtkWidget *amount, *date;
-    GtkWidget *label;
+    GtkWidget *label, *entry;
     gchar *currency;
     gchar *string;
+
+    tooltips = gtk_tooltips_new();
 
     hbox = gtk_hbox_new(FALSE, 5);
     gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
@@ -281,9 +284,14 @@ adjBWindow(Account *account)
     gtk_box_pack_start(GTK_BOX(vbox), date, TRUE, TRUE, 0);
     adjBData->date_entry = date;
 
+    entry = GNC_DATE_EDIT(date)->date_entry;
+    gtk_tooltips_set_tip(tooltips, entry, TOOLTIP_ADJUST_DATE, NULL);
+
     amount = gtk_entry_new();
     gtk_box_pack_start(GTK_BOX(vbox), amount, TRUE, TRUE, 0);
     adjBData->balance_entry = amount;
+
+    gtk_tooltips_set_tip(tooltips, amount, TOOLTIP_ADJUST_AMOUNT, NULL);
 
     currency = xaccAccountGetCurrency(account);
     string = xaccPrintAmount(0.0, PRTSEP, currency);
