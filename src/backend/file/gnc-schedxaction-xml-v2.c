@@ -547,6 +547,7 @@ tt_trn_handler( xmlNodePtr node, gpointer data )
 struct dom_tree_handler tt_dom_handlers[] = {
         { GNC_ACCOUNT_TAG,     tt_act_handler, 0, 0 },
         { GNC_TRANSACTION_TAG, tt_trn_handler, 0, 0 },
+        { NULL, NULL, 0, 0 },
 };
 
 static gboolean

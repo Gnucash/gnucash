@@ -1,3 +1,16 @@
+2001-08-14  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/backend/file/gnc-schedxaction-xml-v2.c: add null stuff to
+	end of struct.
+
+2001-08-13  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/gw-engine-spec.scm (((mod (gw:new-module
+	"gw-engine")))): move some funcs to kvp-spec.
+
+	* src/scm/report/balance-sheet.scm (optname-show-parent-balance):
+	wrap all var usages with N_'ed vars with (_ ... )
+
 2001-08-14  Dave Peticolas  <dave@krondo.com>
 
 	* all others: update for api/reorganization
