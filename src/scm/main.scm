@@ -598,7 +598,7 @@ string and 'directories' must be a list of strings."
 
   ;; Now the fun begins.
   (gnc:startup-pass-1)
-  (gnc:print-unstable-message)
+  ;;(gnc:print-unstable-message)
   (if (null? gnc:*batch-mode-things-to-do*)
       (begin
         (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
