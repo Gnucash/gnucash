@@ -39,7 +39,7 @@ sub setprice
 
    $trans = gnucash::xaccMallocTransaction();
    gnucash::xaccTransBeginEdit ($trans, 1);
-   gnucash::xaccTransSetDescription ($trans, "aPrice");
+   gnucash::xaccTransSetDescription ($trans, "Price");
    gnucash::xaccTransSetDateStr ($trans,$dayte);
 
    $split = gnucash::xaccTransGetSplit ($trans, 0);
