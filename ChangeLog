@@ -6,6 +6,11 @@
 
 	* configure.in: search for db-4.1.  Fixes #116509.
 
+	* src/gnome-util/dialog-transfer.c: fix a bunch more rounding
+	  errors, and add more precision to the price.  There is still a
+	  problem when acquiring a high-precision price out of the pricedb
+	  where it will get truncated in the AmountEdit widget.
+
 2003-07-10  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/import-parse.[ch]: routines to parse numbers
