@@ -4,9 +4,48 @@
 </artheader>
 <sect1>
 <title></title>
-<para><emphasis>PICTURES NEEDED!!!!</emphasis> 
-</para>
-<para>This is not yet documented.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="image/income-barchart.png">
+</imageobject>
+</mediaobject>
+</screenshot>
+
+<para>These reports allow you to track how various expenses change over 
+      a period of time.</para>
+
+<para>Options available for this report include:</para>
+      <itemizedlist>
+	<listitem><para><emphasis><link linkend="xacc-options-accounts">
+		Accounts</link></emphasis></para>
+	</listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-report-title">
+		Report Title</link></emphasis></para></listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-date">
+		From & To</link></emphasis></para></listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-interval">
+		Step Size</link></emphasis></para>
+	</listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-style-sheet">
+		Style Sheet</link></emphasis></para>
+	</listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-price-source">
+		Price Source</link></emphasis></para>
+	</listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-max-slices">
+		Maximum Slices</link></emphasis></para>
+	</listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-plot-dimensions">
+		Width & Height</link></emphasis></para>
+	</listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-graph-totals">Show Totals:</link></emphasis></para></listitem>
+	<listitem>
+	  <para><emphasis><link linkend="xacc-options-show-full-names">Show Long Account Names</link></emphasis></para>
+	</listitem>
+
+      </itemizedlist>
 </sect1>
 </article>
 

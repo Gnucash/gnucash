@@ -6,7 +6,7 @@
   </artheader>
   <sect1>
     <title>
-      Que Novidades Há no GnuCash 1.5 (brevemente 1.6)?
+      Que Novidades Há no GnuCash 1.6?
     </title>
     
     <para>
@@ -161,10 +161,17 @@
   disponibilizada através da utilização da ferramenta gráfica GUPPI.
       </para>
       <para>
-  Poderiamos passar o resto do dia a falar dos gráficos, mas talvez seja 
-  mais interessante mostrar-lhe quão bom aspecto eles têm:
-      </para>
-      <para><emphasis>SÃO NECESSÁRIAS IMAGENS!</emphasis></para>
+  Poderiamos falar dos gráficos o dia todo, mas é muito mais interessante 
+  olhar para eles do que falar sobre os mesmos - 
+  por exemplo:
+    </para>
+  <screenshot>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="image/asset-piechart.png">
+      </imageobject>
+    </mediaobject>
+  </screenshot>
     </sect2>
 
     <sect2>
@@ -206,6 +213,24 @@
   suportar contabilidade empresarial o suporte a bases de dados 
   será necessário para gerir quantidades massivas de dados.</para>
       
+      <para>O motor Postgres permite que vários utilizadores trabalhem 
+        simultaneamente no mesmo conjunto de contas. Quando um utilizador 
+        faz uma modificação a uma transacção, a modificação é enviada 
+        para a base de dados Postgres, e os outros utilizadores vêem a 
+        modificação nos (10) segundos seguintes. O motor Postgres também 
+        mantém um registo de segurança das transacções modificadas, 
+        permitindo-lhe ver o que mudou e quando. (Actualmente, não existe 
+        ambiente gráfico para analise do registo de segurança, pelo que 
+        se tem de ser utilizador SQL para poder analisar o registo).  O 
+        motor Postgres também faz 'cache' dos dados, pelo que um utilizador 
+        apenas vê os dados com que está a trabalhar, sem requerer que a 
+        totalidade do conteudo da base de dados seja carregada para o 
+        GnucCash.  Isto deverá tornar possíveç trabalhar com bases de dados 
+        muito maiores.  O motor Postgres é actualmente 'beta', o que significa 
+        que funciona, mas ainda não foi correctamente testado, e poderá 
+        conter erros (bugs).
+      </para>
+
       <para>Similarmente, existe um motor RPC, que lhe permite separar 
   o motor do interface e te-los a correr em máquinas totalmente distintas. 
   Desenvolvimentos para utilizar esta funcionalidade que permite 

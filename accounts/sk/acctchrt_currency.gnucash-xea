@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+  	Úèet na obchodovanie s menou
+    </gnc-act:title>
+    <gnc-act:short-description>
+  	Úèet na obchodovanie a konvertovanie zahranièných mien
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+	Tento úèet budete potrebova», ak budete konvertova» zahranièné meny.
+
+	Poznámka: úèet je aktuálne v DEM; ak chcete, mo¾ete to zmeni».
+    </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Aktíva</act:name>
+  <act:id type="new">b3c65be1c5d163746ddc0c506f3f4619</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Aktíva</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Investície</act:name>
+  <act:id type="new">d9c796b35784533aee4309e28a3cbfc5</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Investície</act:description>
+  <act:parent type="new">b3c65be1c5d163746ddc0c506f3f4619</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Menové obchody</act:name>
+  <act:id type="new">9206632307989cb5b244ad5da5d3131b</act:id>
+  <act:type>CURRENCY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DEM</cmdty:id>
+  </act:currency>
+  <act:description>Obchody s menou</act:description>
+  <act:parent type="new">d9c796b35784533aee4309e28a3cbfc5</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

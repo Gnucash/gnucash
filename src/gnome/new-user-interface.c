@@ -71,6 +71,7 @@ create_newUserDialog (void)
   GtkWidget *cTreeTypeLabel;
   GtkWidget *cTreeOpeningBalanceLabel;
   GtkWidget *vbox5;
+  GtkWidget *placeholder;
   GtkWidget *frame3;
   GtkWidget *startBalanceBox;
   GtkWidget *newUserDruidFinishPage;
@@ -419,6 +420,14 @@ create_newUserDialog (void)
   gtk_widget_show (vbox5);
   gtk_box_pack_start (GTK_BOX (hbox4), vbox5, FALSE, TRUE, 0);
 
+  placeholder = gtk_check_button_new_with_label (_("Placeholder"));
+  gtk_widget_set_name (placeholder, "placeholder");
+  gtk_widget_ref (placeholder);
+  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "placeholder", placeholder,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (placeholder);
+  gtk_box_pack_start (GTK_BOX (vbox5), placeholder, FALSE, FALSE, 2);
+
   frame3 = gtk_frame_new (_("Opening Balance"));
   gtk_widget_set_name (frame3, "frame3");
   gtk_widget_ref (frame3);
@@ -491,6 +500,9 @@ create_newUserDialog (void)
                       NULL);
   gtk_signal_connect (GTK_OBJECT (finalAccountCTree), "tree_unselect_row",
                       GTK_SIGNAL_FUNC (on_finalAccountCTree_tree_unselect_row),
+                      NULL);
+  gtk_signal_connect (GTK_OBJECT (placeholder), "toggled",
+                      GTK_SIGNAL_FUNC (on_finalAccountCTree_tree_placeholder_toggled),
                       NULL);
   gtk_signal_connect (GTK_OBJECT (newUserDruidFinishPage), "finish",
                       GTK_SIGNAL_FUNC (on_newUserDruidFinishPage_finish),

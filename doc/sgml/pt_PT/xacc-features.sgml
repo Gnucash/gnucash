@@ -17,10 +17,10 @@
 
     <itemizedlist>
       <listitem> 
-  <para><emphasis>Multiplas Contas.</emphasis> Crie uma conta GnuCash
-   para cada uma das suas contas bancárias.  Cada conta mantém um saldo 
-    corrente e um saldo reconciliado, pelo que pode manter um controlo 
-    dos cheques que já foram descontados da sua conta.
+  <para><emphasis>Multiplas Contas.</emphasis></para>
+  <para>Crie uma conta GnuCash para cada uma das suas contas bancárias.  Cada 
+    conta mantém um saldo corrente e um saldo reconciliado, pelo que pode 
+    manter um controlo dos cheques que já foram descontados da sua conta.
   </para>
       </listitem>
 
@@ -62,20 +62,19 @@
       </listitem>
       
       <listitem>
-  <para>Suporte para <emphasis><link linkend="xacc-currencyhandling">multiplas
-        moedas</link></emphasis> e <emphasis>contas de câmbio.
-    </emphasis>
-    (parcial, ainda limitado). 
-    Contas bancárias podem ser estabelecidas em diferentes moedas, e transacções 
-    a taxas de câmbios diferentes podem ser efectuadas, à semelhança das acções 
-    que são transaccionadas a cotações variáveis.
+  <para><emphasis><link linkend="xacc-currencyhandling">Multiplas
+        moedas</link></emphasis></para>
+  <para>Contas bancárias podem ser estabelecidas em diferentes 
+    moedas, e transacções a taxas de câmbios diferentes podem ser 
+    efectuadas, à semelhança das acções que são transaccionadas a 
+    cotações variáveis.
     
     
   </para>
       </listitem>
       
       <listitem>
-  <para><emphasis><link linkend="XACC-QIF-IMPORT">Importação de Ficheiros Quicken</link>.</emphasis> 
+  <para><emphasis><link linkend="XACC-QIF-IMPORT">Importação de Ficheiros Quicken.</link></emphasis> 
   </para>
   <para>Importa ficheiros QIF tipo-Quicken.  O ajudante de importação elimina 
     automaticamente transacções duplicadas.
@@ -83,7 +82,7 @@
       </listitem>
       
       <listitem>
-  <para><emphasis>Interface MDI Gnome</emphasis></para>
+  <para><emphasis>Interface MDI Gnome.</emphasis></para>
   <para>Tenha várias vistas dos seus dados financeiros, defina como os quer 
     ver, numa ou mais janelas que persistem entre sessões do GnuCash.
   </para>
@@ -91,12 +90,12 @@
       
       <listitem>
   <para><emphasis><link
-  linkend="xacc-reports">Relatórios</link>.</emphasis> Visualize,
-  exporte como HTML, ou imprima uma variedade de relatórios, incluindo 
-  Folhas de Saldos, Resumos de Contas, Lucros e Prejuizos, Protfólios 
+  linkend="xacc-reports">Relatórios.</link></emphasis></para>
+  <para>Visualize, exporte como HTML, ou imprima uma variedade de relatórios, 
+  incluindo Folhas de Saldos, Resumos de Contas, Lucros e Prejuizos, Portfólios 
   de Acções, e Relatórios de Transacções.  Os relatórios são gravados 
   entre sessões, e são possíveis relatórios deslizantes utilizando datas 
-  relativas.  O GnuCash também suporta uma variedade de gráficos de barras 
+  relativas. O GnuCash também suporta uma variedade de gráficos de barras 
   e circulares customizáveis e passíveis de serem impressos.
   </para>
       </listitem>
@@ -111,7 +110,7 @@
 
     <itemizedlist>
 <listitem>
-<para> <emphasis><link linkend="xacc-chartofaccts">Lista de Contas</link></emphasis> 
+<para> <emphasis><link linkend="xacc-chartofaccts">Lista de Contas.</link></emphasis> 
 
  </para>
 <para>Uma conta pai pode ter uma hierarqui de contas mais detalhadas 
@@ -122,7 +121,7 @@
  </para>
 </listitem>
 <listitem>
-<para><emphasis><link linkend="xacc-doubleentry">Dupla Entrada</link></emphasis> 
+<para><emphasis><link linkend="xacc-doubleentry">Dupla Entrada.</link></emphasis> 
 
  </para>
 <para>Toda a transacção tem de debitar uma conta e creditar outras 
@@ -134,7 +133,7 @@
 </listitem>
 <listitem>
 <para><emphasis><link linkend="xacc-incomeexpense">Tipos (Categorias) de 
-      Contas de Receitas/Despesas</link></emphasis> 
+      Contas de Receitas/Despesas.</link></emphasis> 
  </para>
 <para>Estas servem não apenas para categorizar os seus fluxos financeiros mas, 
 quando utilizadas adequadamente com a funcionalidade de dupla entrada e contas 
@@ -143,7 +142,7 @@ de saldos, podem também proporcionar um relatório preciso dos Lucros & Prejuizos
 </listitem>
 
 <listitem>
-<para><emphasis>Plano de Contas</emphasis> </para>
+<para><emphasis>Plano de Contas.</emphasis> </para>
 
 <para>Multiplas contas podem ser apresentadas simultaneamente 
         numa janela de registo. Isto pode tornar mais fácil 

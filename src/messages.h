@@ -19,10 +19,13 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#ifndef __XACC_MESSAGES_H__
-#define __XACC_MESSAGES_H__
+#ifndef XACC_MESSAGES_H
+#define XACC_MESSAGES_H
 
 #include "config.h"
+
+char *gnc_qualifier_prefix_gettext (const char *s);
+char *gnc_qualifier_prefix_noop (const char *s);
 
 #if defined(HAVE_GETTEXT)             /* HAVE_GETTEXT */
 
@@ -30,18 +33,23 @@
 #include <locale.h>
 
 #undef _
+#undef Q_
 
 #ifdef DISABLE_GETTEXT_UNDERSCORE
 #define _(String) (String)
+#define Q_(String) gnc_qualifier_prefix_noop(String)
 #else                                 /* ENABLE_GETTEXT_UNDERSCORE */
 #define _(String) gettext(String)
+#define Q_(String) gnc_qualifier_prefix_gettext(String)
 #endif		                      /* End ENABLE_GETTEXT_UNDERSCORE */
 
 #else                                 /* Not HAVE_GETTEXT */
 
 #undef _
+#undef Q_
 
 #define _(String)       (String)
+#define Q_(String) gnc_qualifier_prefix_noop(String)
 #define gettext(String) (String)
 
 #endif                                /* End Not HAVE_GETTEXT */
@@ -49,4 +57,4 @@
 #undef  N_
 #define N_(String) (String)
 
-#endif /* __XACC_MESSAGES_H__ */
+#endif /* XACC_MESSAGES_H */

@@ -1462,8 +1462,21 @@ LedgerTraverse (Table *table,
                                           cell->cell.value,
                                           account_separator);
     if (account)
-      break;
+    {
+      if (xaccAccountGetPlaceholder (account))
+      {
+        const char *format = _("The account %s does not allow transactions.\n");
+	char *message;
+	gboolean result;
 
+	message = g_strdup_printf (format, name);
+
+	gnc_error_dialog_parented2 (xaccSRGetParent (reg),
+				    message);
+      }
+      break;
+    }
+    else
     {
       const char *format = _("The account %s does not exist.\n"
                              "Would you like to create it?");
@@ -2922,6 +2935,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 
    DEBUG ("updating trans addr=%p\n", trans);
 
+   gnc_table_leave_update (reg->table, reg->table->current_cursor_loc);
+
    xaccSRSaveChangedCells (reg, trans, split);
 
    memo = xaccSplitGetMemo (split);
@@ -3110,7 +3125,7 @@ sr_split_auto_calc (SplitRegister *reg, Split *split, guint32 changed)
 
     if (!(MOD_PRIC & changed))
       default_value = 1;
-    if (!(MOD_SHRS & changed))
+    else if (!(MOD_SHRS & changed))
       default_value = 0;
     else if (!(MOD_AMNT & changed))
       default_value = 2;
@@ -3153,6 +3168,9 @@ sr_split_auto_calc (SplitRegister *reg, Split *split, guint32 changed)
 
       xaccSetPriceCellValue (reg->sharesCell, amount);
       changed |= MOD_SHRS;
+
+      if (MOD_AMNT & changed)
+        changed &= ~MOD_PRIC;
     }
 
   if (recalc_price)
@@ -3182,6 +3200,9 @@ sr_split_auto_calc (SplitRegister *reg, Split *split, guint32 changed)
 
     xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, value);
     changed |= MOD_AMNT;
+
+    if (MOD_SHRS & changed)
+      changed &= ~MOD_PRIC;
   }
 
   return changed;
@@ -3226,7 +3247,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
       Transaction *blank_trans = xaccSplitGetParent (blank_split);
 
-      if (trans != blank_trans)
+      if (trans == blank_trans)
         sr_set_last_num (reg, reg->numCell->cell.value);
     }
   }
@@ -3424,12 +3445,10 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
   if (MOD_SHRS & changed)
   {
     gnc_numeric amount = xaccGetPriceCellValue (reg->sharesCell);
-    gnc_numeric price  = xaccGetPriceCellValue (reg->priceCell);
 
     DEBUG ("MOD_SHRS");
 
     xaccSplitSetShareAmount (split, amount);
-    xaccSplitSetSharePrice (split, price);
   }
 
   if (MOD_PRIC & changed)
@@ -3464,12 +3483,15 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     if (other_split)
     {
-      gnc_numeric amount = xaccSplitGetShareAmount (split);
-      gnc_numeric price = xaccSplitGetSharePrice (split);
+      gnc_numeric amount;
+      gnc_commodity *currency;
 
+      currency = xaccTransGetCurrency (trans);
+
+      amount = xaccSplitGetBaseValue (split, currency);
       amount = gnc_numeric_neg (amount);
 
-      xaccSplitSetSharePriceAndAmount (other_split, price, amount);
+      xaccSplitSetBaseValue (other_split, amount, currency);
       xaccSplitScrub (other_split);
     }
   }
@@ -5015,7 +5037,7 @@ LoadXferCell (ComboCell * cell,
         (secu && (gnc_commodity_equiv (secu,base_security))))
     {
       name = xaccAccountGetFullName (account, account_separator);
-      if (name != NULL)
+      if ((name != NULL) && !xaccAccountGetPlaceholder (account))
       {
         xaccAddComboCellMenuItem (cell, name);
         g_free(name);

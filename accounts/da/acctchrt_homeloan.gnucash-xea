@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Realkreditlån
+    </gnc-act:title>
+    <gnc-act:short-description>
+     Konti i forbindelse med realkreditlån og tilhørende renter
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Du vil have nytte af disse konti, hvis du har et realkreditlån.
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Passiver</act:name>
+  <act:id type="new">6664763bd1ea41462cba5ef856d9c00c</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Passiver</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Lån</act:name>
+  <act:id type="new">2e6e2d91551cff7b1fd8d6eb34c12117</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Lån</act:description>
+  <act:parent type="new">6664763bd1ea41462cba5ef856d9c00c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Realkreditlån</act:name>
+  <act:id type="new">4df1b393c218d9047dd22d33d2737e83</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Realkreditlån</act:description>
+  <act:parent type="new">2e6e2d91551cff7b1fd8d6eb34c12117</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Udgifter</act:name>
+  <act:id type="new">2f076f5ae073173a11d33420cd39fa4d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Udgifter</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Renter</act:name>
+  <act:id type="new">3dc58d8a51b5deaa22e0c65d81e90346</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Renter</act:description>
+  <act:parent type="new">2f076f5ae073173a11d33420cd39fa4d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Realkreditrenter</act:name>
+  <act:id type="new">c1e23fa813d3c8c4a8ea1228a7615b79</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Realkreditrenter</act:description>
+  <act:parent type="new">3dc58d8a51b5deaa22e0c65d81e90346</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

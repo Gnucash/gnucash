@@ -43,12 +43,12 @@
  *
  *
  * The gncFileSave() routine will check for an existing edit session,
- *    and if one exists, it will save the account info to a file.
- *    If an error occurs, a popup dialogue will inform the user of 
- *    the error.  If there is no existing filename open, then the
- *    user will be prompted for a file to save to (using the
- *    gncFileSaveAs() routine).  The existing session will remain 
- *    open for further editing.
+ *    and if one exists, it will save the account info to a file.  If
+ *    an error occurs, a popup dialogue will inform the user of the
+ *    error.  The existing session will remain open for further
+ *    editing.  If there is no existing filename open, then the user
+ *    will be prompted for a file to save to (using the gncFileSaveAs()
+ *    routine) and all the caveats of that function apply.
  *
  * The gncFileSaveAs() routine will prompt the user for a filename
  *    to save the account data to (using the standard GUI file dialogue

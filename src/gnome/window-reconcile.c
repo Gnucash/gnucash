@@ -191,7 +191,7 @@ recnRecalculateBalance (RecnWindow *recnData)
   gnc_numeric reconciled;
   gnc_numeric diff;
   GNCPrintAmountInfo print_info;
-  gboolean reverse_balance;
+  gboolean reverse_balance, include_children;
 
   account = recn_get_account (recnData);
   if (!account)
@@ -200,19 +200,14 @@ recnRecalculateBalance (RecnWindow *recnData)
   reverse_balance = gnc_reverse_balance(account);
 
   /* update the starting balance */
+  include_children = xaccAccountGetReconcileChildrenStatus (account);
+  starting = gnc_ui_account_get_reconciled_balance (account,
+                                                    recnData->use_shares,
+                                                    include_children);
   if (recnData->use_shares)
-  {
-    starting = xaccAccountGetShareReconciledBalance(account);
     print_info = gnc_account_quantity_print_info (account, TRUE);
-  }
   else
-  {
-    starting = xaccAccountGetReconciledBalance(account);
     print_info = gnc_account_value_print_info (account, TRUE);
-  }
-
-  if (reverse_balance)
-    starting = gnc_numeric_neg (starting);
 
   amount = xaccPrintAmount(starting, print_info);
   gnc_set_label_color(recnData->starting, starting);
@@ -338,6 +333,10 @@ gnc_start_recn_date_changed (GtkWidget *widget, gpointer data)
       xaccAccountGetShareBalanceAsOfDate (acc, new_date) :
       xaccAccountGetBalanceAsOfDate (acc, new_date);
 
+    /* make sure to display is non-negative */
+    if (gnc_reverse_balance (cb_data->account))
+      new_balance = gnc_numeric_neg (new_balance);
+
     gae = cb_data->gae;
 
     /* Update the balance display widget, first blocking the "changed"
@@ -372,12 +371,14 @@ gnc_start_recn_date_changed (GtkWidget *widget, gpointer data)
  * Return: True, if the user presses "Ok", else False               *
 \********************************************************************/
 static gboolean
-startRecnWindow(GtkWidget *parent, Account *account,
-                gnc_numeric *new_ending, time_t *statement_date)
+startRecnWindow (GtkWidget *parent, Account *account,
+                 gnc_numeric *new_ending, time_t *statement_date)
 {
-  GtkWidget *dialog, *end_value, *date_value;
+  GtkWidget *dialog, *end_value, *date_value, *include_children;
+  gboolean include_children_state;
   GNCAccountType account_type;
   GNCPrintAmountInfo print_info;
+  gboolean use_shares;
   gnc_numeric ending;
   char *title;
   int result;
@@ -389,23 +390,23 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
   account_type = xaccAccountGetType(account);
 
-  if ((account_type == STOCK) || (account_type == MUTUAL) ||
-      (account_type == CURRENCY))
-  {
-    ending = xaccAccountGetShareReconciledBalance(account);
+  include_children_state = xaccAccountGetReconcileChildrenStatus(account);
+
+  use_shares = ((account_type == STOCK) ||
+                (account_type == MUTUAL) ||
+                (account_type == CURRENCY));
+
+  ending = gnc_ui_account_get_reconciled_balance (account,
+                                                  use_shares,
+                                                  include_children_state);
+
+  if (use_shares)
     print_info = gnc_account_quantity_print_info (account, TRUE);
-  }
   else
-  {
-    ending = xaccAccountGetReconciledBalance(account);
     print_info = gnc_account_value_print_info (account, TRUE);
-  }
 
   if (gnc_reverse_balance(account))
-  {
-    ending = gnc_numeric_neg (ending);
     *new_ending = gnc_numeric_neg (*new_ending);
-  }
 
   /* Create the dialog box */
   title = gnc_recn_make_window_name (account);
@@ -431,9 +432,15 @@ startRecnWindow(GtkWidget *parent, Account *account,
     GtkWidget *end_title = gtk_label_new(_("Ending Balance:"));
     GtkWidget *start_value =
       gtk_label_new(xaccPrintAmount (ending, print_info));
+    GtkWidget *blank_label = gtk_label_new("");
     GtkWidget *vbox = GNOME_DIALOG(dialog)->vbox;
     GtkWidget *entry;
     start_recn_callback_data cb_data = { NULL };
+
+    include_children =
+      gtk_check_button_new_with_label(_("Include Subaccounts"));
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(include_children),
+                                 include_children_state);
 
     date_value = gnc_date_edit_new(*statement_date, FALSE, FALSE);
 
@@ -489,10 +496,12 @@ startRecnWindow(GtkWidget *parent, Account *account,
     gtk_box_pack_start(GTK_BOX(left_column), date_title, TRUE, TRUE, 3);
     gtk_box_pack_start(GTK_BOX(left_column), start_title, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(left_column), end_title, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(left_column), blank_label, TRUE, TRUE, 0);
 
     gtk_box_pack_start(GTK_BOX(right_column), date_value, TRUE, TRUE, 3);
     gtk_box_pack_start(GTK_BOX(right_column), start_value, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(right_column), end_value, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(right_column), include_children, TRUE, TRUE, 0);
 
     gtk_widget_show_all(dialog);
 
@@ -511,6 +520,9 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
       if (gnc_reverse_balance(account))
         *new_ending = gnc_numeric_neg (*new_ending);
+
+      xaccAccountSetReconcileChildrenStatus
+        (account, GTK_TOGGLE_BUTTON(include_children)->active);
     }
 
     /* cancel or delete */
@@ -1174,7 +1186,9 @@ gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      N_("_Scrub"), N_("Identify and fix problems in the account"),
+      N_("_Check & Repair"),
+      N_("Check for and repair unbalanced transactions and orphan splits "
+	 "in this account"),
       gnc_recn_scrub_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1407,12 +1421,14 @@ gnc_get_reconcile_info (Account *account,
     /* if the account wasn't previously postponed, try to predict
      * the statement balance based on the statement date.
      */
-    if (use_shares)
-      *new_ending = xaccAccountGetShareBalanceAsOfDate(account, *statement_date);
-    else
-      *new_ending = xaccAccountGetBalanceAsOfDate(account, *statement_date);
-  }
+    *new_ending =
+      gnc_ui_account_get_balance_as_of_date
+      (account, *statement_date, use_shares,
+       xaccAccountGetReconcileChildrenStatus(account));
 
+    if (gnc_reverse_balance (account))
+      *new_ending = gnc_numeric_neg (*new_ending);
+  }
 }
 
 static gboolean
@@ -1658,6 +1674,9 @@ recnWindow (GtkWidget *parent, Account *account)
     credits_box = gnc_reconcile_window_create_list_box
       (account, RECLIST_CREDIT, recnData,
        &recnData->credit, &recnData->total_credit);
+
+    GNC_RECONCILE_LIST(recnData->debit)->sibling = GNC_RECONCILE_LIST(recnData->credit);
+    GNC_RECONCILE_LIST(recnData->credit)->sibling = GNC_RECONCILE_LIST(recnData->debit);
 
     popup = gnc_recn_create_popup_menu(recnData);
     gnome_popup_menu_attach(popup, recnData->debit, recnData);

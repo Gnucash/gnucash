@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Dépenses de propriétaire immobilier
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Dépenses associés avec la possesion d'un logement
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Vous devriez sélectionner cet ensemble de comptes si vous avez un logement. Cet ensemble fournit un groupe de comptes pour suivre les dépenses du logement (assurance, taxes, entretien du logement).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Dépenses</act:name>
+  <act:id type="new">84732f5fdd27b6463d75bf958e3a4b06</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Dépenses</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Entretien logement</act:name>
+  <act:id type="new">fa27de57090e107fa99fe1db53790f23</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Entretien logement</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Assurance</act:name>
+  <act:id type="new">4677fe36914ebcf23758f3bf20686b4a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Assurance</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Assurance habitation</act:name>
+  <act:id type="new">3b5909f31bda0e0f76149fd600e0cb1d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Assurance habitation</act:description>
+  <act:parent type="new">4677fe36914ebcf23758f3bf20686b4a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Taxes</act:name>
+  <act:id type="new">a931b8ffe2917ff9a069333623da96ca</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Taxes</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Taxe d'habitation</act:name>
+  <act:id type="new">3994b8f5a6a8b2a0a48126fa955e03f7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Taxe d'habitation</act:description>
+  <act:parent type="new">a931b8ffe2917ff9a069333623da96ca</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

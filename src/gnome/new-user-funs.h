@@ -42,6 +42,8 @@ int gnc_ui_delete_nu_cancel_dialog(void);
 void gnc_new_user_set_balance (Account *account, gnc_numeric balance);
 gnc_numeric gnc_new_user_get_balance (Account *account);
 
+GtkToggleButton* gnc_new_user_get_placeholder_checkbox (void);
+
 GtkCList* gnc_new_user_get_clist(void);
 GtkCTree * gnc_new_user_get_final_account_tree (void);
 GtkWidget* gnc_new_user_get_widget(const char *name);

@@ -151,11 +151,11 @@
             (list (gnc:make-html-text 
                    (gnc:html-markup-anchor
                     (sprintf #f "gnc-options:report-id=%a" (car report-info))
-                    "Edit Options")
+                    (_ "Edit Options"))
                    "&nbsp;"
                    (gnc:html-markup-anchor
                     (sprintf #f "gnc-report:id=%a" (car report-info))
-                    "Single Report"))))
+                    (_ "Single Report")))))
 
            ;; add the report-table to the toplevel-cell
            (gnc:html-table-cell-append-objects!

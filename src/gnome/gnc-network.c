@@ -121,7 +121,7 @@ char *
 gnc_network_build_url(const char * action) {
   char * server = 
     gnc_lookup_string_option("Network", "GnuCash Network server",
-                             "www.gnumatic.com");
+                             "www.gnucash.org");
   char * retval = g_strconcat("http://", server, "/", action, NULL);
   g_free(server);
   return retval;

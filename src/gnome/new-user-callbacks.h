@@ -144,3 +144,7 @@ on_finalAccountDruidPage_next          (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data);
 
+void
+on_finalAccountCTree_tree_placeholder_toggled
+                                        (GtkToggleButton *togglebutton,
+                                        gpointer         user_data);

@@ -103,10 +103,14 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
     if(safe_strcmp(node->name, "cmdty:fraction") == 0)
     {
         gint64 val;
-        if(string_to_gint64(node->xmlChildrenNode->content, &val))
+        char *string;
+
+        string = xmlNodeGetContent (node->xmlChildrenNode);
+        if(string_to_gint64(string, &val))
         {
             gnc_commodity_set_fraction(com, val);
         }
+        xmlFree (string);
     }
     else 
     {
@@ -117,6 +121,7 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
             if(safe_strcmp(mark->tag, node->name) == 0)
             {
                 gchar* val = dom_tree_to_text(node);
+                g_strstrip(val);
                 (mark->func)(com, val);
                 g_free(val);
                 break;

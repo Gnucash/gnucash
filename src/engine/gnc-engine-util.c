@@ -61,6 +61,7 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* PRICE */
   GNC_LOG_WARNING,      /* EVENT */
   GNC_LOG_WARNING,      /* TXN */
+  GNC_LOG_WARNING,      /* KVP */
 };
 
 
@@ -276,6 +277,17 @@ gnc_strisnum(const char *s)
   if (*s == 0) return TRUE;
 
   return FALSE;
+}
+
+/********************************************************************\
+ * our own version of stpcpy
+\********************************************************************/
+
+char *
+gnc_stpcpy (char *dest, const char *src)
+{
+  strcpy (dest, src);
+  return (dest + strlen (src));
 }
 
 /********************************************************************\

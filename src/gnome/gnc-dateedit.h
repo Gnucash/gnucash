@@ -5,7 +5,7 @@
  * All rights reserved.
  *
  * This file was part of the Gnome Library. It was modifed by
- * Dave Peticolas <peticola@cs.ucdavis.edu> for use in GnuCash.
+ * Dave Peticolas <dave@krondo.com> for use in GnuCash.
  *
  * GnuCash is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -29,8 +29,8 @@
   @NOTATION@
  */
 
-#ifndef __GNC_DATE_EDIT_H_
-#define __GNC_DATE_EDIT_H_ 
+#ifndef GNC_DATE_EDIT_H
+#define GNC_DATE_EDIT_H 
 
 #include <gnome.h>
 

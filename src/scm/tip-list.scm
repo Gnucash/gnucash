@@ -1,8 +1,8 @@
 (
- (N_ "Warning!! This is a DEVELOPMENT version of GnuCash.
-It probably has lots of bugs and unstable features!
-If you are looking for a stable personal finance application,
-you should use the latest release of GnuCash 1.4.")
+; (N_ "Warning!! This is a DEVELOPMENT version of GnuCash.
+;It probably has lots of bugs and unstable features!
+;If you are looking for a stable personal finance application,
+;you should use the latest release of GnuCash 1.4.")
 
  (N_ "The GnuCash online manual has lots of helpful information.  
 If you are upgrading from GnuCash 1.4, the section \"What's new in

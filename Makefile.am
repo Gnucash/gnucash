@@ -1,5 +1,5 @@
 
-SUBDIRS = macros debian intl doc-tools doc lib src po rpm accounts
+SUBDIRS = macros debian doc-tools doc lib src po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
@@ -35,7 +35,15 @@ EXTRA_DIST = \
   gnucash.lsm \
   make-gnucash-patch.in \
   po/.cvsignore \
-  po/README
+  po/README \
+  po/glossary/da.po \
+  po/glossary/de.po \
+  po/glossary/es.po \
+  po/glossary/es_NI-policy.txt \
+  po/glossary/no.po \
+  po/glossary/sv.po \
+  po/glossary/gnc-glossary.txt \
+  po/glossary/txt-to-pot.sh
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
@@ -48,7 +56,7 @@ make-gnucash-patch: make-gnucash-patch.in
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-DISTCLEANFILES += \
+DISTCLEANFILES = \
   TAGS.stamp cscope.files cscope.out etags.files make-gnucash-patch
 
 cscope.files:
@@ -83,3 +91,5 @@ TAGS:
 endif
 
 .PHONY: TAGS
+
+ACLOCAL_AMFLAGS = -I m4

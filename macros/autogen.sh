@@ -17,6 +17,18 @@ fi
   DIE=1
 }
 
+GETTEXTIZE_VERSION=`gettextize --version`
+gettextize_major_version=`echo ${GETTEXTIZE_VERSION} | \
+	sed 's/^.*GNU gettext.* \([0-9]*\)\.\([0-9]*\).\([0-9]*\).*$/\1/'`
+gettextize_minor_version=`echo ${GETTEXTIZE_VERSION} | \
+	sed 's/^.*GNU gettext.* \([0-9]*\)\.\([0-9]*\).\([0-9]*\).*$/\2/'`
+if [  $gettextize_major_version -gt 0   -o \
+      $gettextize_minor_version -gt 10  ]; then
+  INTL="--intl";
+else
+  INTL="";
+fi
+
 (grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
   (libtool --version) < /dev/null > /dev/null 2>&1 || {
     echo
@@ -125,7 +137,7 @@ do
 	  echo "Creating $dr/aclocal.m4 ..."
 	  test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
 	  echo "Running gettextize...  Ignore non-fatal messages."
-	  echo "no" | gettextize --force --copy
+	  echo "no" | gettextize --force --copy $INTL
 	  echo "Making $dr/aclocal.m4 writable ..."
 	  test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
         fi
@@ -134,7 +146,7 @@ do
 	echo "Creating $dr/aclocal.m4 ..."
 	test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
 	echo "Running gettextize...  Ignore non-fatal messages."
-	echo "no" | gettextize --force --copy
+	echo "no" | gettextize --force --copy $INTL
 	echo "Making $dr/aclocal.m4 writable ..."
 	test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
       fi

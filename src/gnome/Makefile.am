@@ -24,6 +24,7 @@ libgncgnome_a_SOURCES = \
   dialog-transfer.c \
   dialog-userpass.c \
   dialog-utils.c \
+  druid-euro-conv.c \
   druid-commodity.c \
   druid-qif-import.c \
   druid-stock-split.c \
@@ -123,16 +124,6 @@ noinst_HEADERS = \
   window-register.h \
   window-report.h
 
-GLADE_FILES = \
-  glade-gnc-dialogs.c \
-  glade-cb-gnc-dialogs.h \
-  glade-gnc-dialogs.h \
-  glade-support.c \
-  glade-support.h
-
-#${GLADE_FILES}: gnc-dialogs.glade
-#	${GLADE} --write-source ${srcdir}/gnc-dialogs.glade
-
 EXTRA_DIST = \
   .cvsignore \
   gnc-dialogs.glade \
@@ -145,6 +136,7 @@ EXTRA_DIST = \
 CFLAGS = @CFLAGS@ \
          ${G_WRAP_COMPILE_ARGS} \
          ${GNOME_PRINT_CFLAGS} \
+         ${GDK_PIXBUF_CFLAGS} \
          ${GTKHTML_CFLAGS} \
 	 ${GHTTP_CFLAGS} \
 	 ${GUPPI_CFLAGS} 
@@ -157,6 +149,7 @@ INCLUDES = \
   -I${top_srcdir}/src/guile \
   -I${top_srcdir}/src/register \
   -I${top_srcdir}/src/register/gnome \
+  ${GUPPI_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}
 
@@ -182,10 +175,12 @@ gnc-dir.h: gnc-dir.h.in
 	    -e 's:@-GNC_PIXMAP_DIR-@:${GNC_PIXMAP_DIR}:g' \
 	    -e 's:@-GNC_ACCOUNTS_DIR-@:${GNC_ACCOUNTS_DIR}:g'
 	mv $@.tmp $@
-BUILT_SOURCES += gnc-dir.h
+BUILT_SOURCES = gnc-dir.h
 
 # We have to do this because otherwise automake insists on putting
 # these files into the dist tarfile.  If there's a a better way,
 # by all means, let us know...
 dist-hook:
 	rm ${distdir}/gnc-dir.h
+
+CLEANFILES = ${BUILT_SOURCES}

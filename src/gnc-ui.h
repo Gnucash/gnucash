@@ -73,6 +73,7 @@ GNCVerifyResult gnc_ok_cancel_dialog_parented(gncUIWidget parent,
                                               GNCVerifyResult default_result);
 
 void     gnc_warning_dialog_parented(gncUIWidget parent, const char *message);
+void     gnc_error_dialog_parented2(gncUIWidget parent, const char *message);
 
 gboolean gnc_verify_dialog(const char *message, gboolean yes_is_default);
 void     gnc_error_dialog(const char *message);
@@ -87,6 +88,7 @@ gboolean gnc_dup_trans_dialog (gncUIWidget parent, time_t *date_p,
                                const char *num, char **out_num);
 void     gnc_tax_info_dialog (gncUIWidget parent);
 void     gnc_stock_split_dialog (Account * initial);
+void     gnc_euro_conv_dialog ();
 void     gnc_prices_dialog (gncUIWidget parent);
 void     gnc_commodities_dialog (gncUIWidget parent);
 
@@ -109,6 +111,8 @@ gboolean gnc_get_username_password (gncUIWidget parent,
 void        gnc_ui_shutdown (void);
 void        gnc_ui_destroy_all_subwindows (void);
 gncUIWidget gnc_ui_get_toplevel(void);
+
+gboolean    gnc_ui_can_cancel_save (void);
 
 /* Changing the GUI Cursor ******************************************/
 

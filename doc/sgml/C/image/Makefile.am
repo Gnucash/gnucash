@@ -3,11 +3,11 @@ imagedir = ${GNC_HELPDIR}/C/image
 image_DATA = \
   appr-asset1.png \
   appr-asset2.png \
-  appr-income.png \
   appr-main1.png \
   appr-main2.png \
+  asset-barchart.png \
+  asset-piechart.png \
   autosplitledger.png \
-  bal-graph.png \
   basicledger.png \
   basicledger-transfer.png \
   contract.png \
@@ -15,12 +15,20 @@ image_DATA = \
   depr-main.png \
   editaccount.png \
   expand.png \
+  financial-calculator.png \
   foliowin-single.png \
   foliowin.png \
   foreign-currency.png \
+  general-ledger.png \
+  income-barchart.png \
+  income-piechart.png \
   logo-NetBSD-banner.png \
   logo-debian.png \
   logo-linux.png \
+  mdi-notebook.png \
+  mdi-onewindow.png \
+  mdi-toplevel.png \
+  menu-and-toolbar.png \
   newaccwin-code.png \
   newaccwin-trade.png \
   new-user-frame1.png \
@@ -36,12 +44,9 @@ image_DATA = \
   prefs-register-colors.png \
   prefs-register.png \
   prefs-user-info.png \
+  pricedb.png \
   recnwin.png \
   recninfo.png \
-  regwin-double.png \
-  regwin-multi.png \
-  regwin-single.png \
-  regwin-single2.png \
   report-av-baln.png \
   report-baln.png \
   report-folio.png \
@@ -51,8 +56,6 @@ image_DATA = \
   report-tax-options.png \
   reportwin.png \
   tax-info-dialog.png \
-  ticker-a.png \
-  ticker-b.png \
   transactionjrnl.png
 
 EXTRA_DIST = \

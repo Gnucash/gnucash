@@ -18,7 +18,14 @@
       <para>O editor de preços encontra-se disponível no menu "Ferramentas". 
   Ao selecciona-lo surge o editor:</para>
       
-      <para><emphasis>NECESSÁRIA IMAGEM</emphasis></para>
+      <screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="image/pricedb.png">
+      
+    </imageobject>
+  </mediaobject>
+      </screenshot>
       
       <para>Cada entrada no editor mostra o registo de um preço:</para>
       <itemizedlist>

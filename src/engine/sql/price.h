@@ -33,7 +33,7 @@ GNCPriceDB * pgendGetAllPrices (PGBackend *be, GNCPriceDB *prdb);
 void pgendPriceLookup (Backend *bend, GNCPriceLookup *look);
 
 
-int pgend_price_begin_edit (Backend * bend, GNCPrice *pr);
-int pgend_price_commit_edit (Backend * bend, GNCPrice *pr);
+void pgend_price_begin_edit (Backend * bend, GNCPrice *pr);
+void pgend_price_commit_edit (Backend * bend, GNCPrice *pr);
 
 #endif /* __POSTGRES_PRICE_H__ */

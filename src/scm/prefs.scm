@@ -328,6 +328,13 @@ not each row")
 to enter a credit card payment")
   #t))
 
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "Reconcile") (N_ "Check off cleared transactions")
+  "b" (N_ "Automatically check off cleared transactions when reconciling")
+  #t))
+
+
 ;;; User Info Options
 
 (gnc:register-configuration-option
@@ -514,7 +521,7 @@ without one.")
  (gnc:make-string-option
   (N_ "Network") (N_ "GnuCash Network server") 
   "d" (N_ "Host to connect to for user registration and support services")
-  "www.gnumatic.com"))
+  "www.gnucash.org"))
 
 ;;; Configuation variables
 
@@ -689,7 +696,7 @@ the current value of the path.")
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
-  "__new_user" "first_startup" 1))
+  "__new_user" "first_startup" #t))
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
