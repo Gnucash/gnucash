@@ -92,7 +92,7 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    const gnc_commodity *com;
 
    if (!be || !acct) return;
-   if ((FALSE == do_mark) && (FALSE == acct->core_dirty)) return;
+   if ((FALSE == do_mark) && (FALSE == acct->inst.dirty)) return;
 
    ENTER ("acct=%p, mark=%d", acct, do_mark);
 
@@ -139,7 +139,7 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    if (acct->idata)
    {
       pgendKVPDelete (be, acct->idata);
-      pgendKVPStore (be, acct->idata, acct->kvp_data);
+      pgendKVPStore (be, acct->idata, acct->inst.kvp_data);
    }
    LEAVE(" ");
 }
@@ -227,7 +227,7 @@ restore_cb (Account *acc, void * cb_data)
 {
    PGBackend *be = (PGBackend *) cb_data;
    if (0 == acc->idata) return NULL;
-   acc->kvp_data = pgendKVPFetch (be, acc->idata, acc->kvp_data);
+   acc->inst.kvp_data = pgendKVPFetch (be, acc->idata, acc->inst.kvp_data);
    return NULL;
 }
 
@@ -552,7 +552,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
       {
          if (acc->idata)
          {
-            acc->kvp_data = pgendKVPFetch (be, acc->idata, acc->kvp_data);
+            acc->inst.kvp_data = pgendKVPFetch (be, acc->idata, acc->inst.kvp_data);
          }
 
          acc->version_check = be->version_check;
@@ -585,7 +585,7 @@ pgend_account_commit_edit (QofBackend * bend,
    ENTER ("be=%p, acct=%p", be, acct);
    if (!be || !acct) return;
 
-   if (FALSE == acct->core_dirty)
+   if (FALSE == acct->inst.dirty)
    {
       parent = xaccAccountGetParent(acct);
       if (parent) parent->saved = 1;
@@ -607,7 +607,7 @@ pgend_account_commit_edit (QofBackend * bend,
     * made changes, and we must roll back. */
    if (0 < pgendAccountCompareVersion (be, acct))
    {
-      acct->do_free = FALSE;
+      acct->inst.do_free = FALSE;
       p = "ROLLBACK;";
       SEND_QUERY (be,p,);
       FINISH_QUERY(be->connection);
@@ -624,7 +624,7 @@ pgend_account_commit_edit (QofBackend * bend,
    acct->version ++;   /* be sure to update the version !! */
    acct->version_check = be->version_check;
 
-   if (acct->do_free)
+   if (acct->inst.do_free)
    {
       const GUID *guid = xaccAccountGetGUID(acct);
       pgendKVPDelete (be, acct->idata);
