@@ -1,6 +1,6 @@
 /* 
  * FILE:
- * perl5_swig_annotations.i
+ * perl5_typemaps.i
  *
  * FUNCTION:
  * Clean up various aspects of the gnucash engine interface with 
@@ -12,6 +12,9 @@
  * Created by Linas Vepstas January 1999
  * Copyright (c) 1999,2001 Linas Vepstas  <linas@linas.org>
  */
+
+/* --------------------------------------------------------- */
+/* first, some basic typemaps */
 
 #ifdef DOESNT_WORK_DONT_KNOW_WHY
 %apply int {time_t }
@@ -70,7 +73,7 @@
    *    sv_setiv ($target, (IV) $source);
    */
   argvi ++;
-  // printf ("Info: converted return GNCBackendError secs to %d \n", (int) SvIV($target));
+  // printf ("Info: converted return GNCBackendError to %d \n", (int) SvIV($target));
 }
 
 /* --------------------------------------------------------- */

@@ -25,7 +25,7 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore \
   examples/scan-acct.pl \
-  perl5_swig_annotations.i \
+  perl5_typemaps.i \
   gnucash-swig-defines.c
 
 # CFLAGS = @CFLAGS@ -Dbool=char
@@ -40,7 +40,7 @@ INCLUDES = \
   -I${top_srcdir}/src/engine
 
 libgncswig_la_LIBADD = \
-  -lgncengine -lxml \
+  -lgncengine -lxml -lgnc_postgres \
   @GLIB_LIBS@ 
 
 
@@ -75,10 +75,10 @@ install-data-local: libgncswig.la
 uninstall-local:
 	rm -f ${DESTDIR}${perllibdir}/gnucash.so
 
-gnucash.engine.i: ${SWIG_INPUT_HDRS} perl5_swig_annotations.i
+gnucash.engine.i: ${SWIG_INPUT_HDRS} perl5_typemaps.i
 	@echo Making $@.
 	@echo "%module gnucash" > $@
-	@echo "%include perl5_swig_annotations.i" >> $@
+	@echo "%include perl5_typemaps.i" >> $@
 	@echo "%{" >> $@
 	@for file in ${SWIG_INPUT_HDRS}; \
         do \
