@@ -1264,7 +1264,7 @@ gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
 
   /* XXX: I'm not sure -- should we change the terms if this happens? */
   iw->terms = term;
-  gnc_ui_billterms_optionmenu (iw->terms_menu, iw->book, TRUE, &iw->terms);
+  gnc_ui_optionmenu_set_value (iw->terms_menu, iw->terms);
 
   gnc_invoice_update_job_choice (iw);
 
@@ -1596,7 +1596,7 @@ gnc_invoice_update_window (InvoiceWindow *iw)
 
     /* fill in the terms menu */
     iw->terms = gncInvoiceGetTerms (invoice);
-    gnc_ui_billterms_optionmenu (iw->terms_menu, iw->book, TRUE, &iw->terms);
+    gnc_ui_optionmenu_set_value (iw->terms_menu, iw->terms);
 
     /*
      * Next, figure out if we've been posted, and if so set the
@@ -2035,6 +2035,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   gtk_widget_show_all (iw->dialog);
 
   /* Now fill in a lot of the pieces and display properly */
+  gnc_ui_billterms_optionmenu (iw->terms_menu, iw->book, TRUE, &iw->terms);
   gnc_invoice_update_window (iw);
 
   gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
@@ -2154,6 +2155,7 @@ gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   /* Now fill in a lot of the pieces and display properly */
+  gnc_ui_billterms_optionmenu (iw->terms_menu, iw->book, TRUE, &iw->terms);
   gnc_invoice_update_window (iw);
   gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
 
