@@ -94,6 +94,8 @@ GNCPrintAmountInfo gnc_split_value_print_info (Split *split,
 GNCPrintAmountInfo gnc_default_share_print_info (void);
 GNCPrintAmountInfo gnc_default_price_print_info (void);
 
+GNCPrintAmountInfo gnc_integral_print_info (void);
+
 const char * DxaccPrintAmount (double val, GNCPrintAmountInfo info);
 int DxaccSPrintAmount (char *buf, double val, GNCPrintAmountInfo info);
 

@@ -377,6 +377,30 @@ gnc_default_price_print_info (void)
   return info;
 }
 
+GNCPrintAmountInfo
+gnc_integral_print_info (void)
+{
+  static GNCPrintAmountInfo info;
+  static gboolean got_it = FALSE;
+
+  if (got_it)
+    return info;
+
+  info.commodity = NULL;
+
+  info.max_decimal_places = 0;
+  info.min_decimal_places = 0;
+
+  info.use_separators = 1;
+  info.use_symbol = 0;
+  info.use_locale = 1;
+  info.monetary = 1;
+
+  got_it = TRUE;
+
+  return info;
+}
+
 /* Utility function for printing non-negative amounts */
 static int
 PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
@@ -786,16 +810,17 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
   gboolean is_negative;
   gboolean got_decimal;
   gboolean need_paren;
-  GList  * group_data;
-  int      group_count;
+  GList * group_data;
   long long numer;
   long long denom;
+  int group_count;
 
   ParseState state;
 
   char negative_sign;
   char decimal_point;
   char group_separator;
+
   const char *in;
   char *out_str;
   char *out;
@@ -1061,7 +1086,7 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
     {
       *out = '\0';
 
-      if (sscanf(out_str, "%lld", &numer) < 1)
+      if (*out_str != '\0' && sscanf(out_str, "%lld", &numer) < 1)
       {
         next_state = NO_NUM_ST;
       }

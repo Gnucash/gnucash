@@ -2724,7 +2724,7 @@ create_Financial_Calculator_Dialog (void)
   GtkWidget *label790;
   GtkWidget *payment_periods_clear_button;
   GtkWidget *payment_periods_calc_button;
-  GtkWidget *payment_periods_entry;
+  GtkWidget *payment_periods_hbox;
   GtkWidget *vbox67;
   GtkWidget *hbox55;
   GtkWidget *label799;
@@ -2848,12 +2848,12 @@ create_Financial_Calculator_Dialog (void)
   gtk_widget_show (payment_periods_calc_button);
   gtk_box_pack_end (GTK_BOX (hbox46), payment_periods_calc_button, FALSE, FALSE, 0);
 
-  payment_periods_entry = gtk_entry_new ();
-  gtk_widget_ref (payment_periods_entry);
-  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "payment_periods_entry", payment_periods_entry,
+  payment_periods_hbox = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (payment_periods_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "payment_periods_hbox", payment_periods_hbox,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (payment_periods_entry);
-  gtk_box_pack_start (GTK_BOX (vbox66), payment_periods_entry, FALSE, FALSE, 0);
+  gtk_widget_show (payment_periods_hbox);
+  gtk_box_pack_start (GTK_BOX (vbox66), payment_periods_hbox, FALSE, FALSE, 0);
 
   vbox67 = gtk_vbox_new (FALSE, 2);
   gtk_widget_ref (vbox67);
