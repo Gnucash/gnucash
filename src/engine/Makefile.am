@@ -3,7 +3,7 @@ SUBDIRS = . test-core test
 pkglib_LTLIBRARIES = \
  libgw-glib.la libgw-engine.la libgw-kvp.la libgncmod-engine.la 
 
-AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GNUCASH_ENGINE_BASE_CFLAGS}
+AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GNUCASH_ENGINE_CFLAGS}
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
@@ -109,8 +109,7 @@ gncscm_DATA = \
   engine-init.scm \
   engine-interface.scm \
   engine-utilities.scm \
-  gnc-numeric.scm \
-  iso-4217-currencies.scm 
+  gnc-numeric.scm
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \
@@ -126,6 +125,7 @@ EXTRA_DIST = \
   README.query-api \
   design.txt \
   extensions.txt \
+  iso-4217-currencies.scm \
   kvp_doc.txt \
   ${gncmod_DATA} \
   ${gncscm_DATA} \
@@ -138,6 +138,12 @@ EXTRA_DIST = \
 	touch .scm-links
 
 gncmod-engine.c: gw-engine.h
+
+gnc-commodity.c: iso-4217-currencies.c
+
+iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
+	chmod u+x ./iso-currencies-to-c
+	GUILE_LOAD_PATH=${top_srcdir}/lib/ ./iso-currencies-to-c
 
 gw-engine.scm gw-engine.c gw-engine.h: .scm-links gw-engine-spec.scm
 	FLAVOR=gnome guile -c \
@@ -160,4 +166,4 @@ gw-kvp.scm gw-kvp.c gw-kvp.h: .scm-links gw-kvp-spec.scm
 	 (gw:generate-module \"gw-kvp\")"
 
 BUILT_SOURCES = gw-engine.scm gw-engine.c gw-engine.h gw-glib.scm gw-glib.c gw-glib.h gw-kvp.scm gw-kvp.c gw-kvp.h
-CLEANFILES = gw-engine.scm gw-engine.c gw-engine.h gw-engine.html gw-glib.scm gw-glib.c gw-glib.h gw-glib.html gnucash g-wrapped .scm-links gw-kvp.scm gw-kvp.c gw-kvp.h
+CLEANFILES = gw-engine.scm gw-engine.c gw-engine.h gw-engine.html gw-glib.scm gw-glib.c gw-glib.h gw-glib.html gnucash g-wrapped .scm-links gw-kvp.scm gw-kvp.c gw-kvp.h iso-4217-currencies.c
