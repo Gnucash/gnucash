@@ -65,8 +65,7 @@
 
 (define (make-split-list account split-filter-pred)
   (reverse (filter split-filter-pred
-                   (gnc:glist->list (gnc:account-get-split-list account)
-                                    <gnc:Split*>))))
+                   (gnc:account-get-split-list account))))
 
 ;; returns a predicate that returns true only if a split is
 ;; between early-date and late-date
