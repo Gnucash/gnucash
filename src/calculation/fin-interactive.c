@@ -29,6 +29,7 @@
 #include "finvar.h"
 #include "finproto.h"
 #include "fin_spl_protos.h"
+#include "numeric_ops.h"
 
 static void  prt_status(
 fi_ptr       fi,
@@ -65,7 +66,7 @@ static var_store      predefined_fin_vars[PREDEFINED_FIN_VARS];
 
 /* declare array of finacial varibale names used by user to access financial variables
  */
-static unsigned char *fin_var_names[] = {
+static char *fin_var_names[] = {
 	"n",
 	"i",
 	"pv",
@@ -93,8 +94,8 @@ static void *fin_vars[] = {
 
 /* declare array of financial variable basic numeric types
  */
-static unsigned char fin_type[] = {
-	INT_TYPE,
+static char fin_type[] = {
+    INT_TYPE,
     DBL_TYPE,
     DBL_TYPE,
     DBL_TYPE,
@@ -105,7 +106,7 @@ static unsigned char fin_type[] = {
     INT_TYPE,
 };
 
-static unsigned char sl_commands[] = "acdqsv";
+static char sl_commands[] = "acdqsv";
 
 /* function to set local financial variables into array for use by expression parser
  * as pre-defined variables
@@ -153,7 +154,7 @@ void)
 void            chk_vars(
 var_store_ptr   predefined_vars,
 void          **var_array,
-unsigned char  *var_type,
+char           *var_type,
 unsigned        var_cnt)
 {
     unsigned    cntr;
@@ -196,12 +197,11 @@ unsigned        var_cnt)
 /* error encountered by expression parser - output error message
  * and offending string
  */
-void           parse_error(
-unsigned       error_code,
-unsigned char *buf_start,
-unsigned char *buf_err)
+void           parse_error(unsigned error_code,
+                           char *buf_start,
+                           char *buf_err)
 {
-	unsigned char *err_str;
+	char *err_str;
 	unsigned       bc = (unsigned)(buf_err - buf_start);
 	
 	switch ( error_code ) {
@@ -229,13 +229,9 @@ unsigned char *buf_err)
 	printf("\n");
 } /* parse_error */
 
-int             main(
-unsigned        argc,
-unsigned char **argv,
-unsigned char **env)
+int             main(int argc, char **argv, char **env)
 {
-    unsigned char   buffer[200],
-    			   *errp;
+    char   buffer[200], *errp;
     size_t          sbuf;
     size_t          retcnt;
     var_store       value;

@@ -82,10 +82,10 @@ static double pos_table[] = {
  *
  */
 void           *trans_numeric(
-unsigned char  *str,              /* pointer to string to translate */
-unsigned char   radix_point,      /* radix character                */
-unsigned char   group_char,       /* grouping character to left of radix  */
-unsigned char **endstr)           /* where to return pointer to first unrecognized character */
+char  *str,              /* pointer to string to translate */
+char   radix_point,      /* radix character                */
+char   group_char,       /* grouping character to left of radix  */
+char **endstr)           /* where to return pointer to first unrecognized character */
 {
 	double         dblval = 0.0;
 	int            exp = 0,
@@ -99,7 +99,7 @@ unsigned char **endstr)           /* where to return pointer to first unrecogniz
 	unsigned       radix = 0,
 	               sign = 0,
 	               digit_cnt = 0;
-	unsigned char *strinit = str;
+	char          *strinit = str;
 	numeric_ptr    rslt = NULL;
 
 	while ( isspace(*str) ) str++;
@@ -147,8 +147,8 @@ unsigned char **endstr)           /* where to return pointer to first unrecogniz
 	    unsigned      exp_dcnt = 0;
 	
     	if ( (*str == 'e') || (*str == 'E') ) {
-	        unsigned char exp_sign = EOS;
-	        int           ex_exp = 0;
+	        char exp_sign = EOS;
+	        int  ex_exp = 0;
 
 	        switch (*++str) {
 	        	case '-':
@@ -270,9 +270,9 @@ void *value)
  *  r_value - pointer to right hand value
  */
 void          *numeric_ops(
-unsigned char  op_symbol,
-void          *l_value,
-void          *r_value)
+                           char  op_symbol,
+                           void *l_value,
+                           void *r_value)
 {
 	numeric_ptr lval = (numeric_ptr)l_value,
 				rval = (numeric_ptr)r_value,

@@ -1149,7 +1149,7 @@ double        x,
 unsigned      places)
 {
     double        r;
-    unsigned char buf[50]; /* make buffer large enough */
+    char buf[50]; /* make buffer large enough */
 
     if ( places >= 0 ) {
         sprintf(buf,"%.*f",(int)places,x);
@@ -1676,7 +1676,7 @@ amort_sched_ptr amortsched)
     double             cpmt = 0;
     double             final_pmt = 0;
     double             delayed_int = amortsched->delayed_int;
-    unsigned char      summary = amortsched->summary;
+    char               summary = amortsched->summary;
     unsigned           option = amortsched->option;
     unsigned           yr_pmt = amortsched->yr_pmt;
     unsigned           fv_case = amortsched->fv_case;

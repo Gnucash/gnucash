@@ -66,11 +66,11 @@ typedef enum
 typedef struct var_store *var_store_ptr;
 
 typedef struct var_store {
-    unsigned char *variable_name;   /* variable name if variable, NULL otherwise        */
-    unsigned char  use_flag;        /* flag if variable has been assigned to            */
-    unsigned char  assign_flag;     /* flag if variable is used                         */
-    void          *value;           /* pointer to imp[lementation defined numeric value */
-    var_store_ptr  next_var;        /* pointer to next variable in linked list          */
+  char *variable_name;   /* variable name if variable, NULL otherwise        */
+  char  use_flag;        /* flag if variable has been assigned to            */
+  char  assign_flag;     /* flag if variable is used                         */
+  void *value;           /* pointer to imp[lementation defined numeric value */
+  var_store_ptr next_var; /* pointer to next variable in linked list         */
 } var_store;
 
 
@@ -81,7 +81,7 @@ typedef struct var_store {
  * evaluate arithmetic operators '+', '-', '/', '*' */
 typedef struct numeric *numeric_ptr;
 typedef struct numeric {
-    unsigned char  type;            /* designates type of value */
+    char  type;                     /* designates type of value */
     union {
         long int  int_value;        /* long integer value   */
         double    dbl_value;        /* double value         */
@@ -154,7 +154,7 @@ functions */
  * to compute and which type of schedule
  */
 	unsigned       option;      /* option flag from 1 to 6 inclusive        */
-	unsigned char  summary;     /* summary flag == 'y', 'p', 'a' or 'f'     */	
+	char  summary;     /* summary flag == 'y', 'p', 'a' or 'f'     */
 
 /* following information set by amortization functions
  */	

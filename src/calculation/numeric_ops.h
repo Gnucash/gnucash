@@ -19,24 +19,21 @@
  *
  ***************************************************************************/
 
-#ifndef __FIN_SPL_PROTOS_H__
-#define __FIN_SPL_PROTOS_H__
+#ifndef __NUMERIC_OPS_H__
+#define __NUMERIC_OPS_H__
 
-/*==================================================*/
-/* expression_parser.c */
-/* Line Number:  344 */
-parser_env_ptr init_parser(
-                           var_store_ptr  predefined_vars,
-                           char  radix_point,
-                           char  group_char,
-                           void          *trans_numeric(char  *digit_str,
-                                                        char   radix_point,
-                                                        char   group_char,
-                                                        char **rstr),
-                           void          *numeric_ops(char  op_sym,
-                                                      void *left_value,
-                                                      void *right_value),
-                           void          *negate_numeric(void *value),
-                           void           free_numeric(void *numeric_value));
+void *trans_numeric(char *str, /* pointer to string to translate */
+                    char radix_point, /* radix character */
+                    char group_char, /* grouping character to left of radix */
+                    char **endstr); /* where to return pointer to first
+                                     * unrecognized character */
+
+void free_numeric(void *numeric_value);
+
+void *negate_numeric(void *value);
+
+void *numeric_ops(char op_symbol,
+                  void *l_value,
+                  void *r_value);
 
 #endif

@@ -122,48 +122,21 @@ ParseError               get_parse_error(parser_env_ptr pe);
 /* Line Number: 408 */
 var_store_ptr            get_vars(parser_env_ptr pe);
 /* Line Number: 417 */
-unsigned                 delete_var(unsigned char *var_name,
+unsigned                 delete_var(char *var_name,
                                     parser_env_ptr pe);
 /* Line Number: 451 */
-unsigned char           *parse_string(var_store_ptr value,
-                                      unsigned char *string,
+char                    *parse_string(var_store_ptr value,
+                                      char *string,
                                       parser_env_ptr pe);
 
 /*==================================================*/
-/* numeric_ops.c */
-
-/* Line Number: 85 */
-void                    *trans_numeric(
-                                       unsigned char *str, /* pointer to string to translate */
-                                       unsigned char radix_point, /* radix character */
-                                       unsigned char group_char, /* grouping character to left of radix */
-                                       unsigned char **endstr); /* where to return pointer to first unrecognized character */
-/* Line Number: 238 */
-void                     free_numeric(
-                                      void *numeric_value);
-/* Line Number: 246 */
-void                    *negate_numeric(
-                                        void *value);
-/* Line Number: 273 */
-void                    *numeric_ops(
-                                     unsigned char op_symbol,
-                                     void *l_value,
-                                     void *r_value);
-
-/*==================================================*/
-/* amort_opt.c
- */
-/* Line Number: 32 */
-amort_sched_ptr          amort_opt(
-                                   amort_sched_ptr amortsched,
+/* amort_opt.c */
+amort_sched_ptr          amort_opt(amort_sched_ptr amortsched,
                                    void *parse_env);
 
 /*==================================================*/
-/* amort_prt.c
- */
-/* Line Number: 34 */
-void                     prt_amortization_schedule(
-                                                   amort_sched_ptr amortsched, /* amortization schedule to print */
-                                                   FILE *ofile); /* output file */
+/* amort_prt.c */
+void prt_amortization_schedule (amort_sched_ptr amortsched, /* amortization schedule to print */
+                                FILE *ofile); /* output file */
 
 #endif

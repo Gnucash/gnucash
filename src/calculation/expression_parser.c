@@ -29,9 +29,9 @@
  * typedef struct var_store *var_store_ptr;
  *
  * typedef struct var_store {
- *     unsigned char *variable_name;
- *     unsigned char  use_flag;
- *     unsigned char  assign_flag;
+ *     char *variable_name;
+ *     char  use_flag;
+ *     char  assign_flag;
  *     void          *value;
  *     var_strore_ptr next_var;
  * } var_store;
@@ -128,7 +128,7 @@
  *
  * typedef struct numeric *numeric_ptr;
  * typedef struct numeric {
- *     unsigned char  type;
+ *     char  type;
  *     union {
  *         long int  int_value;
  *         double    dbl_value;
@@ -256,13 +256,13 @@
  *
  * void                    *init_parser(
  *                                      var_store_ptr  predefined_vars,
- *                                      unsigned char  radix_point,
- *                                      unsigned char  group_char,
- *                                      void          *trans_numeric(unsigned char  *digit_str,
- *                                                                   unsigned char   radix_point,
- *                                                                   unsigned char   group_char,
- *                                                                   unsigned char **rstr),
- *                                      void          *numeric_ops(unsigned char  op_sym,
+ *                                      char  radix_point,
+ *                                      char  group_char,
+ *                                      void          *trans_numeric(char  *digit_str,
+ *                                                                   char   radix_point,
+ *                                                                   char   group_char,
+ *                                                                   char **rstr),
+ *                                      void          *numeric_ops(char  op_sym,
  *                                                                 void          *left_value,
  *                                                                 void          *right_value),
  *                                      void          *negate_numeric(void *value),
@@ -318,7 +318,7 @@
  *         they are doing.
  *
  * unsigned                 delete_var(
- *                                     unsigned char *var_name,
+ *                                     char *var_name,
  *                                     void *vp);
  *
  *         This function will delete the user defined named variable
@@ -327,9 +327,9 @@
  *         identical name, zero, 0, is returned. If the delete
  *         operation is successful, one, 1, is returned.
  *
- * unsigned char           *parse_string(
+ * char           *parse_string(
  *                                       var_store_ptr value,
- *                                       unsigned char *string,
+ *                                       char *string,
  *                                       void *vp);
  *
  *         This function parses the string passed in the second
@@ -382,23 +382,24 @@ typedef struct parser_env {
 
     var_store_ptr  unnamed_vars;
 
-    unsigned char *parse_str;
-    unsigned char  radix_point;
-    unsigned char  group_char;
-    unsigned char  name[50];
+    char *parse_str;
+    char  radix_point;
+    char  group_char;
+    char  name[50];
 
-    unsigned char  Token;
-    unsigned char  asn_op;
-    ParseError     error_code;
+    char  Token;
+    char  asn_op;
+
+    ParseError error_code;
 
     void          *numeric_value;
-    void         *(*trans_numeric)(unsigned char  *digit_str,
-                                   unsigned char   radix_point,
-                                   unsigned char   group_char,
-                                   unsigned char **rstr);
-    void         *(*numeric_ops)(unsigned char  op_sym,
-                                 void          *left_value,
-                                 void          *right_value);
+    void         *(*trans_numeric)(char  *digit_str,
+                                   char   radix_point,
+                                   char   group_char,
+                                   char **rstr);
+    void         *(*numeric_ops)(char  op_sym,
+                                 void *left_value,
+                                 void *right_value);
     void         *(*negate_numeric)(void *value);
     void          (*free_numeric)(void *numeric_value);
 } parser_env;
@@ -416,19 +417,19 @@ typedef struct parser_env {
 
 #define NAMED_INCR 5
 
-static unsigned char allowed_operators[] = "+-*/()=";
+static char allowed_operators[] = "+-*/()=";
 
 parser_env_ptr
 init_parser(var_store_ptr  predefined_vars,
-            unsigned char  radix_point,
-            unsigned char  group_char,
-            void          *trans_numeric(unsigned char  *digit_str,
-                                         unsigned char   radix_point,
-                                         unsigned char   group_char,
-                                         unsigned char **rstr),
-            void          *numeric_ops(unsigned char  op_sym,
-                                       void          *left_value,
-                                       void          *right_value),
+            char  radix_point,
+            char  group_char,
+            void          *trans_numeric(char  *digit_str,
+                                         char   radix_point,
+                                         char   group_char,
+                                         char **rstr),
+            void          *numeric_ops(char  op_sym,
+                                       void *left_value,
+                                       void *right_value),
             void          *negate_numeric(void *value),
             void           free_numeric(void *numeric_value))
 {
@@ -496,7 +497,7 @@ var_store_ptr get_vars(parser_env_ptr pe)
 
 /* function to delete variable with specified name from named variables
  * if it exists. If it exists return TRUE, 1, else return FALSE, 0 */
-unsigned       delete_var(unsigned char *var_name,
+unsigned       delete_var(char *var_name,
                           parser_env_ptr pe)
 {
 	unsigned       ret = FALSE;
@@ -527,9 +528,10 @@ unsigned       delete_var(unsigned char *var_name,
  * evaluated value in numeric structure passed, return NULL if no
  * parse error if parse error, return pointer to character at which
  * error occured. */
-unsigned char *parse_string(var_store_ptr  value,
-                            unsigned char *string,
-                            parser_env_ptr pe)
+char *
+parse_string(var_store_ptr value,
+             char *string,
+             parser_env_ptr pe)
 {
     var_store_ptr  retv;
     var_store      unnamed_vars[UNNAMED_VARS];
@@ -668,9 +670,9 @@ static void    free_var(var_store_ptr  value,
  */
 static void next_token(parser_env_ptr       pe)
 {
-    unsigned char *nstr,
-                  *str_parse = pe->parse_str;
-    void          *number;
+    char *nstr,
+         *str_parse = pe->parse_str;
+    void *number;
 
     while ( isspace(*str_parse) ) str_parse++;
 
@@ -726,7 +728,7 @@ static void    assignment_op(parser_env_ptr pe)
     var_store_ptr  vl,  /* left value       */
                    vr;  /* right value      */
     void          *sp;  /* for swapping values */
-    unsigned char  ao;
+    char           ao;
 
     add_sub_op(pe);
     while ( pe->Token == '=' ) {
@@ -767,7 +769,7 @@ static void    add_sub_op(parser_env_ptr pe)
     var_store_ptr vl,     /* left value   */
                   vr,     /* right value  */
                   rslt;
-    unsigned char op;
+    char op;
 
     multiply_divide_op(pe);
     while ( (pe->Token == '+') || (pe->Token == '-') ) {
@@ -791,7 +793,7 @@ static void    multiply_divide_op(parser_env_ptr pe)
     var_store_ptr vl,     /* left value   */
                   vr,     /* right value  */
                   rslt;
-    unsigned char op;
+    char op;
 
     primary_exp(pe);
     while ( (pe->Token == '*') || (pe->Token == '/') ) {
@@ -818,7 +820,7 @@ static void    multiply_divide_op(parser_env_ptr pe)
 static void    primary_exp(parser_env_ptr pe)
 {
     var_store_ptr rslt = NULL;
-    unsigned char LToken = pe->Token;
+    char LToken = pe->Token;
 
     next_token(pe);
     switch ( LToken ) {

@@ -34,17 +34,15 @@ amort_sched_ptr  amort_opt(
 amort_sched_ptr  amortsched,
 void            *parse_env)
 {
-    unsigned char   buffer[200],
-    			   *errp;
+    char            buffer[200], *errp;
     unsigned long   ii;
     unsigned        prec = amortsched->prec;
     var_store       value;
     numeric_ptr     nval;
     struct tm      *times_E,
                    *times_I;
-    	
-    /* print amortization options
-     */
+
+    /* print amortization options */
     times_E = (struct tm *)calloc(1,sizeof(struct tm));
     ii = amortsched->Eff_Date_jdn;
     times_E->tm_mday = amortsched->day_E;

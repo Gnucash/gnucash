@@ -18,6 +18,7 @@ EXTRA_DIST = \
   amort_prt.c \
   fin-interactive.c \
   fin-main.c \
-  numeric-ops.c
+  numeric_ops.c \
+  numeric_ops.h
 
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
