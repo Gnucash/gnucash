@@ -101,8 +101,8 @@ source distributions.
 Normally, to build and install xacc, all you have to do is:
 
   # ./configure
-  # make
   # make depend
+  # make
   # make install
 
 You can also build xacc in a seperate directory, which is
@@ -113,6 +113,7 @@ single copy of the source tree:
   # mkdir BUILD/debug
   # cd BUILD/debug
   # ../../configure --enable-debug
+  # make depend
   # make
   # make install
 

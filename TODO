@@ -92,7 +92,7 @@ the docs or change the menu entry name.
     to avoid record locking. Something that is CVS, as opposed to 
     RCS, in style & philosophy.
 
-53)
+53) mnemonics don't work in the menus
 
 
 Fixed bugs:
