@@ -1,5 +1,23 @@
 2001-07-17  Dave Peticolas  <dave@krondo.com>
 
+	* doc/sgml/C/xacc-features.sgml: Matt Krai's doc patch
+
+	* doc/sgml/C/xacc-about.sgml: Matt Krai's doc patch
+
+	* AUTHORS: credits
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* src/gnome/gnc-dateedit.c: Matt Kraai's date accelerator bug fix
+
+	* src/engine/io-gncbin-r.c: fix bug with price import (use
+	posted date, not entered date).
+
+	* src/engine/gnc-pricedb.[ch]: fix bugs with setting currency and
+	commodity and with converting from legacy commodities.
+
+2001-07-17  Dave Peticolas  <dave@krondo.com>
+
 	* AUTHORS: credits
 
 	* doc/sgml/C/xacc-about.sgml: credits

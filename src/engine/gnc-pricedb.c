@@ -243,12 +243,14 @@ gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c)
     /* Changing the commodity requires the hash table 
      * position to be modified. The easiest way of doing 
      * this is to remove and reinsert. */
-    remove_price (p->db, p, FALSE);
+    gnc_price_ref (p);
+    remove_price (p->db, p, TRUE);
     gnc_price_begin_edit (p);
     p->commodity = c;
     if(p->db) p->db->dirty = TRUE;
     gnc_price_commit_edit (p);
     add_price (p->db, p);
+    gnc_price_unref (p);
   }
 }
 
@@ -257,17 +259,20 @@ void
 gnc_price_set_currency(GNCPrice *p, gnc_commodity *c)
 {
   if(!p) return;
+
   if(!gnc_commodity_equiv(p->currency, c)) 
   {
     /* Changing the currency requires the hash table 
      * position to be modified. The easiest way of doing 
      * this is to remove and reinsert. */
-    remove_price (p->db, p, FALSE);
+    gnc_price_ref (p);
+    remove_price (p->db, p, TRUE);
     gnc_price_begin_edit (p);
     p->currency = c;
     if(p->db) p->db->dirty = TRUE;
     gnc_price_commit_edit (p);
     add_price (p->db, p);
+    gnc_price_unref (p);
   }
 }
 
@@ -573,6 +578,32 @@ gnc_pricedb_mark_clean(GNCPriceDB *p)
 {
   if(!p) return;
   p->dirty = FALSE;
+}
+
+/* ==================================================================== */
+
+static gboolean
+num_prices_helper (GNCPrice *p, gpointer user_data)
+{
+  guint *count = user_data;
+
+  *count += 1;
+
+  return TRUE;
+}
+
+guint
+gnc_pricedb_get_num_prices(GNCPriceDB *db)
+{
+  guint count;
+
+  if (!db) return 0;
+
+  count = 0;
+
+  gnc_pricedb_foreach_price(db, num_prices_helper, &count, FALSE);
+
+  return count;
 }
 
 /* ==================================================================== */
@@ -1059,36 +1090,31 @@ typedef struct {
 } GNCPriceFixupData;
 
 static gboolean
-gnc_price_fixup_legacy_commods(GNCPrice *p, gpointer data)
+add_price_to_list (GNCPrice *p, gpointer data)
 {
-  GNCPriceFixupData *fixup_data = (GNCPriceFixupData *) data;
-  gnc_commodity *price_c;
+  GList **list = data;
 
-  if (!p) return FALSE;
+  *list = g_list_prepend (*list, p);
 
-  price_c = gnc_price_get_commodity(p);
-  if (gnc_commodity_equiv(price_c, fixup_data->old_c)) {
-    gnc_price_set_commodity(p, fixup_data->new_c);
-  }
-  price_c = gnc_price_get_currency(p);
-  if (gnc_commodity_equiv(price_c, fixup_data->old_c)) {
-    gnc_price_set_currency(p, fixup_data->new_c);
-  }
   return TRUE;
 }
 
-
 static void
-remap_currency_hash_keys(gpointer key, gpointer val, gpointer user_data)
+gnc_price_fixup_legacy_commods(gpointer data, gpointer user_data)
 {
-  GHashTable *currencies_hash = (GHashTable *) val;
-  GNCPriceFixupData *fixup_data = (GNCPriceFixupData *) user_data;
-  GList *price_list;
-  
-  price_list = g_hash_table_lookup(currencies_hash, fixup_data->old_c);
-  if(price_list) {
-    g_hash_table_remove(currencies_hash, fixup_data->old_c);
-    g_hash_table_insert(currencies_hash, fixup_data->new_c, price_list);
+  GNCPrice *p = data;
+  GNCPriceFixupData *fixup_data = user_data;
+  gnc_commodity *price_c;
+
+  if (!p) return;
+
+  price_c = gnc_price_get_commodity(p);
+  if (gnc_commodity_equiv(price_c, fixup_data->old_c)) {
+    gnc_price_set_commodity (p, fixup_data->new_c);
+  }
+  price_c = gnc_price_get_currency(p);
+  if (gnc_commodity_equiv(price_c, fixup_data->old_c)) {
+    gnc_price_set_currency (p, fixup_data->new_c);
   }
 }
 
@@ -1099,27 +1125,18 @@ gnc_pricedb_substitute_commodity(GNCPriceDB *db,
 {
   GHashTable *currency_hash;
   GNCPriceFixupData data;
+  GList *prices = NULL;
 
   if(!db || !old_c || !new_c) return;
 
   data.old_c = old_c;
   data.new_c = new_c;
 
-  /* first remap the relevant commodity -> currency hash, if any */
-  currency_hash = g_hash_table_lookup(db->commodity_hash, old_c);
-  if(currency_hash) {
-    g_hash_table_remove(db->commodity_hash, old_c);
-    g_hash_table_insert(db->commodity_hash, new_c, currency_hash);
-  }
+  gnc_pricedb_foreach_price (db, add_price_to_list, &prices, FALSE);
 
-  g_hash_table_foreach(db->commodity_hash, remap_currency_hash_keys, &data);
+  g_list_foreach (prices, gnc_price_fixup_legacy_commods, &data);
 
-  if(!gnc_pricedb_foreach_price(db,
-                                gnc_price_fixup_legacy_commods,
-                                &data,
-                                FALSE)) {
-    PERR("Adjustments to legacy commodity pointers in pricedb failed!");
-  }   
+  g_list_free (prices);
 }
 
 /***************************************************************************/
@@ -1149,7 +1166,7 @@ gnc_price_print(GNCPrice *p, FILE *f, int indent)
   fprintf(f, "%s  <pdb:commodity pointer=%p>\n", istr, commodity);
   str = gnc_commodity_get_namespace(commodity);
   str = str ? str : "(null)";
-  fprintf(f, "%s    <cmdty:ref-space> %s</gnc:cmdty:ref-space>\n", istr, str);
+  fprintf(f, "%s    <cmdty:ref-space>%s</gnc:cmdty:ref-space>\n", istr, str);
   str = gnc_commodity_get_mnemonic(commodity);
   str = str ? str : "(null)";
   fprintf(f, "%s    <cmdty:ref-id>%s</cmdty:ref-id>\n", istr, str);
