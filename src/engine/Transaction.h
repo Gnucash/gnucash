@@ -1,8 +1,4 @@
 /********************************************************************\
- * Transaction.h -- api for transactions & splits (journal entries) *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -21,10 +17,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
+/** @addtogroup Engine
+    @{ */
 /** @file Transaction.h 
- * @brief API for Transaction and Split
- */
+    @brief API for Transactions and Splits (journal entries)
+    @author Copyright (C) 1997 Robin D. Clark
+    @author Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>
+*/
 
 #ifndef XACC_TRANSACTION_H
 #define XACC_TRANSACTION_H
@@ -37,27 +36,29 @@
 #include "GNCId.h"
 #include "date.h"
 
+/** @name Split Reconciled field values
+    If you change these
+    be sure to change gnc-ui-util.c:gnc_get_reconciled_str() and
+    associated functions
+*/
+/**@{*/
+#define CREC 'c'              /**< The Split has been cleared    */
+#define YREC 'y'              /**< The Split has been reconciled */
+#define FREC 'f'              /**< frozen into accounting period */
+#define NREC 'n'              /**< not reconciled or cleared     */
+#define VREC 'v'              /**< split is void                 */
+/**@}*/
 
-/* Values for the reconciled field in Splits.. If you change these
- * be sure to change gnc-ui-util.c:gnc_get_reconciled_str() and
- * associated functions
- */
-#define CREC 'c'              /* The Split has been cleared        */
-#define YREC 'y'              /* The Split has been reconciled     */
-#define FREC 'f'              /* frozen into accounting period     */
-#define NREC 'n'              /* not reconciled or cleared         */
-#define VREC 'v'              /* split is void                     */
-
-
-/* Values for the Transaction Type field in Transactions */
-#define TXN_TYPE_NONE	 '\0'
-#define TXN_TYPE_INVOICE 'I'
-#define TXN_TYPE_PAYMENT 'P'
-
+/** @name Transaction Type field values */
+/**@{*/
+#define TXN_TYPE_NONE	 '\0' /**< No transaction type       */
+#define TXN_TYPE_INVOICE 'I'  /**< Transaction is an invoice */
+#define TXN_TYPE_PAYMENT 'P'  /**< Transaction is a payment  */
+/**@}*/
 
 /** PROTOTYPES ******************************************************/
 
-/*
+/** @name Transaction ForceDoubleEntry getters/setters
  * The xaccConfigSetForceDoubleEntry() and xaccConfigGetForceDoubleEntry()
  *    set and get the "force_double_entry" flag.  This flag determines how
  *    the splits in a transaction will be balanced.
@@ -73,145 +74,120 @@
  *    2 -- splits without parents will be forced into a
  *         lost & found account.  (Not implemented)
  */
-
+/**@{*/
 void   xaccConfigSetForceDoubleEntry (int force);
 int    xaccConfigGetForceDoubleEntry (void);
+/**@}*/
 
-/*
- * The xaccMallocTransaction() will malloc memory and initialize it.
- *    Once created, it is usually unsafe to merely "free" this memory;
- *    the xaccTransDestroy() method should be called.
- */ 
+/** 
+ The xaccMallocTransaction() will malloc memory and initialize it.
+ Once created, it is usually unsafe to merely "free" this memory;
+ the xaccTransDestroy() method should be called. */ 
 Transaction * xaccMallocTransaction (GNCBook *book); 
 
+/**
+ The xaccTransDestroy() method will remove all 
+ of the splits from each of their accounts, free the memory
+ associated with them.  This routine must be followed by either
+ an xaccTransCommitEdit(), in which case the transaction 
+ memory will be freed, or by xaccTransRollbackEdit(), in which 
+ case nothing at all is freed, and everything is put back into 
+ original order. */
+void          xaccTransDestroy (Transaction *trans);
+
+/** @brief DOCUMENT ME!*/
 gboolean xaccTransEqual(const Transaction *ta,
                         const Transaction *tb,
                         gboolean check_guids,
                         gboolean check_splits);
 
-
-/* The xaccTransDestroy() method will remove all 
- *    of the splits from each of their accounts, free the memory
- *    associated with them.  This routine must be followed by either
- *    an xaccTransCommitEdit(), in which case the transaction 
- *    memory will be freed, or by xaccTransRollbackEdit(), in which 
- *    case nothing at all is freed, and everything is put back into 
- *    original order.
- */
-void          xaccTransDestroy (Transaction *trans);
-
-/* The xaccTransBeginEdit() method must be called before any changes
- *    are made to a transaction or any of its component splits.  If 
- *    this is not done, errors will result.
- *
- * The xaccTransCommitEdit() method indicates that the changes to the
- *    transaction and its splits are complete and should be made
- *    permanent. Note this routine may result in the deletion of the
- *    transaction, if the transaction is "empty" (has no splits), or
- *    of xaccTransDestroy() was called on the transaction.
- *
- * The xaccTransRollbackEdit() routine rejects all edits made, and 
- *    sets the transaction back to where it was before the editing 
- *    started.  This includes restoring any deleted splits, removing
- *    any added splits, and undoing the effects of xaccTransDestroy,
- *    as well as restoring share quantities, memos, descriptions, etc.
- *
- * The xaccTransIsOpen() method returns TRUE if the transaction
- *    is open for editing. Otherwise, it returns false.  */
+/** The xaccTransBeginEdit() method must be called before any changes
+    are made to a transaction or any of its component splits.  If 
+    this is not done, errors will result. */
 void          xaccTransBeginEdit (Transaction *trans);
+
+/** The xaccTransCommitEdit() method indicates that the changes to the
+    transaction and its splits are complete and should be made
+    permanent. Note this routine may result in the deletion of the
+    transaction, if the transaction is "empty" (has no splits), or
+    of xaccTransDestroy() was called on the transaction. */
 void          xaccTransCommitEdit (Transaction *trans);
+
+/** The xaccTransRollbackEdit() routine rejects all edits made, and 
+    sets the transaction back to where it was before the editing 
+    started.  This includes restoring any deleted splits, removing
+    any added splits, and undoing the effects of xaccTransDestroy,
+    as well as restoring share quantities, memos, descriptions, etc. */
 void          xaccTransRollbackEdit (Transaction *trans);
 
+/** The xaccTransIsOpen() method returns TRUE if the transaction
+    is open for editing. Otherwise, it returns false.  */
 gboolean      xaccTransIsOpen (const Transaction *trans);
 
-/*
- * The xaccTransGetGUID() subroutine will return the
- *    globally unique id associated with that transaction.
- *    xaccTransReturnGUID() does the same thing but
- *    returns a GUID struct.
- *
- * The xaccTransLookup() subroutine will return the
- *    transaction associated with the given id, or NULL
- *    if there is no such transaction.
- */
+/** The xaccTransGetGUID() subroutine will return the
+    globally unique id associated with that transaction. */
 const GUID  * xaccTransGetGUID (const Transaction *trans);
+
+/** xaccTransReturnGUID() will returns a GUID struct 
+    associated with that transaction. */
 GUID          xaccTransReturnGUID (const Transaction *trans);
+
+/** The xaccTransLookup() subroutine will return the
+    transaction associated with the given id, or NULL
+    if there is no such transaction. */
 Transaction * xaccTransLookup (const GUID *guid, GNCBook *book);
 Transaction * xaccTransLookupDirect (GUID guid, GNCBook *book);
+
+/** Returns the book in which the transaction is stored */
 GNCBook *     xaccTransGetBook (const Transaction *trans);
 
-/* Transaction slots are used to store arbitrary strings, numbers, and
- * structures which aren't members of the transaction struct.  */
 
+/** @name Transaction KVP frames setters/getters
+ *
+ Transaction slots are used to store arbitrary strings, numbers, and
+ structures which aren't members of the transaction struct.  */
+
+/**@{*/
 kvp_frame *xaccTransGetSlots(const Transaction *trans);
 void xaccTransSetSlots_nc(Transaction *t, kvp_frame *frm);
+/**@}*/
 
-/* The xaccTransSetDateSecs() method will modify the posted date of
- *     the transaction, specified by a time_t (see ctime(3)).
- *     xaccTransSetDatePostedSecs() is just an alias for
- *     xaccTransSetDateSecs() -- both functions access the same date.
+/** @name Transaction date setters/getters
  *
- * (Footnote: this shouldn't matter to a user, but anyone modifying
- * the engine should understand that when xaccTransCommitEdit() is
- * called, the date order of each of the component splits will be
- * checked, and will be restored in ascending date order.)
- *
- * The xaccTransSetDate() method does the same thing as
- * xaccTransSetDate[Posted]Secs(), but takes a convenient
- * day-month-year format.
- *
- * The xaccTransSetDatePostedTS() method does the same thing as
- * xaccTransSetDate[Posted]Secs(), but takes a struct timespec64.
- *
- */
+ (Footnote: this shouldn't matter to a user, but anyone modifying
+ the engine should understand that when xaccTransCommitEdit() is
+ called, the date order of each of the component splits will be
+ checked, and will be restored in ascending date order.) */
+
+/**@{*/
+   
+/** The xaccTransSetDate() method does the same thing as
+    xaccTransSetDate[Posted]Secs(), but takes a convenient
+    day-month-year format.*/
 void          xaccTransSetDate (Transaction *trans,
                                 int day, int mon, int year);
+
+/** The xaccTransSetDateSecs() method will modify the posted date of
+    the transaction, specified by a time_t (see ctime(3)). */
 void          xaccTransSetDateSecs (Transaction *trans, time_t time);
+
+/**     xaccTransSetDatePostedSecs() is just an alias for
+	xaccTransSetDateSecs() -- both functions access the same date. */
 void          xaccTransSetDatePostedSecs (Transaction *trans, time_t time);
+
+/**  The xaccTransSetDatePostedTS() method does the same thing as
+     xaccTransSetDate[Posted]Secs(), but takes a struct timespec64. */
 void          xaccTransSetDatePostedTS (Transaction *trans,
                                         const Timespec *ts);
 
-/* Modify the date of when the transaction was entered. */
+/** @brief Modify the date of when the transaction was entered. */
 void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
+/** @brief Modify the date of when the transaction was entered. */
 void          xaccTransSetDateEnteredTS (Transaction *trans,
-                                         const Timespec *ts);
+                                        const Timespec *ts);
 
 /* Dates and txn-type for A/R and A/P "invoice" postings */
 void	      xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts);
-void	      xaccTransSetTxnType (Transaction *trans, char type);
-
-/* set the Num, Description, and Notes fields */
-void          xaccTransSetNum (Transaction *trans, const char *num);
-void          xaccTransSetDescription (Transaction *trans, const char *desc);
-void          xaccTransSetNotes (Transaction *trans, const char *notes);
-
-/* The xaccTransAppendSplit() method will append the indicated 
- *    split to the collection of splits in this transaction.
- *    If the split is already a part of another transaction,
- *    it will be removed from that transaction first.
- */
-void          xaccTransAppendSplit (Transaction *trans, Split *split);
-
-/* ------------- gets --------------- */
-/* The xaccTransGetSplit() method returns a pointer to each of the 
- *    splits in this transaction.  Valid values for i are zero to 
- *    (number_of__splits-1).  An invalid value of i will cause NULL to
- *    be returned.  A convenient way of cycling through all splits is
- *    to start at zero, and keep incrementing until a null value is returned.
- */
-Split *       xaccTransGetSplit (const Transaction *trans, int i);
-
-/* The xaccTransGetSplitList() method returns a GList of the splits
- * in a transaction.  This list must not be modified.  Do *NOT* free
- * this list when you are done with it. */
-SplitList *   xaccTransGetSplitList (const Transaction *trans);
-
-/* These routines return the Num (or ID field), the description, 
- * the notes, and the date field.
- */
-const char *  xaccTransGetNum (const Transaction *trans);
-const char *  xaccTransGetDescription (const Transaction *trans);
-const char *  xaccTransGetNotes (const Transaction *trans);
 
 /* Retrieve the posted date of the transaction. (Although having
    different function names, GetDate and GetDatePosted refer to the
@@ -227,53 +203,115 @@ Timespec      xaccTransRetDateEnteredTS (const Transaction *trans);
 /* Dates and txn-type for A/R and A/P "invoice" postings */
 Timespec      xaccTransRetDateDueTS (const Transaction *trans);
 void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
-char	      xaccTransGetTxnType (const Transaction *trans);
 
+/**@}*/
+
+/** @name Transaction Type getters/setters
+ *
+ See #define TXN_TYPE_NONE, TXN_TYPE_INVOICE and TXN_TYPE_PAYMENT */
+/**@{*/
+void	      xaccTransSetTxnType (Transaction *trans, char type);
+char	      xaccTransGetTxnType (const Transaction *trans);
+/**@}*/
+
+/** @name Transaction general getters/setters */
+/**@{*/
+
+/* @brief Sets the transaction Number (or ID) field*/
+void          xaccTransSetNum (Transaction *trans, const char *num);
+/* @brief Sets the transaction Description */
+void          xaccTransSetDescription (Transaction *trans, const char *desc);
+/* @brief Sets the transaction Notes
+ *
+ The Notes field is only visible in the register in double-line mode */
+void          xaccTransSetNotes (Transaction *trans, const char *notes);
+
+/* @brief Gets the transaction Number (or ID) field*/
+const char *  xaccTransGetNum (const Transaction *trans);
+/* @brief Gets the transaction Description */
+const char *  xaccTransGetDescription (const Transaction *trans);
+/* @brief Gets the transaction Notes
+ *
+ The Notes field is only visible in the register in double-line mode */
+const char *  xaccTransGetNotes (const Transaction *trans);
+
+/**@}*/
+
+/** @brief Add a split to the transaction
+ * 
+ The xaccTransAppendSplit() method will append the indicated 
+ split to the collection of splits in this transaction.
+ @note If the split is already a part of another transaction,
+ it will be removed from that transaction first.
+*/
+void          xaccTransAppendSplit (Transaction *trans, Split *split);
+
+/** The xaccTransGetSplit() method returns a pointer to each of the 
+    splits in this transaction.
+    @param trans The transaction  
+    @param i The split number.  Valid values for i are zero to 
+    (number_of__splits-1).  An invalid value of i will cause NULL to
+    be returned.  A convenient way of cycling through all splits is
+    to start at zero, and keep incrementing until a null value is returned. */
+Split *       xaccTransGetSplit (const Transaction *trans, int i);
+
+/** The xaccTransGetSplitList() method returns a GList of the splits
+    in a transaction.  
+    @return The list of splits. This list must NOT be modified.  Do *NOT* free
+    this list when you are done with it. */
+SplitList *   xaccTransGetSplitList (const Transaction *trans);
+
+
+/** @name Transaction ReadOnly functions */
+/**@{*/
 void          xaccTransSetReadOnly (Transaction *trans, const char *reason);
 const char *  xaccTransGetReadOnly (const Transaction *trans);
 gboolean      xaccTransWarnReadOnly (const Transaction *trans);
+/**@}*/
 
-/* The xaccTransCountSplits() method returns the number of splits
- * in a transaction.
- */
+/** @brief returns the number of splits in a transaction. */
 int           xaccTransCountSplits (const Transaction *trans);
 
 gboolean      xaccTransHasReconciledSplits (const Transaction *trans);
 gboolean      xaccTransHasReconciledSplitsByAccount (const Transaction *trans,
 						     const Account *account);
 
-/* --------------------------------------------------------------- */
-/* Commmodity routines. Each transaction's 'currency' is by definition
+
+/** @name Transaction Commmodity routines.
+ *
+ * Each transaction's 'currency' is by definition
  * the balancing common currency for the splits in that transaction.
- * */
+ * @note What happens if the Currency isn't set? */
+/**@{*/
 gnc_commodity * xaccTransGetCurrency (const Transaction *trans);
 void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
+/**@}*/
 
-/* The xaccTransGetImbalance() method returns the total value of the
- *    transaction.  In a pure double-entry system, this imbalance
- *    should be exactly zero, and if it is not, something is broken.
- *    However, when double-entry semantics are not enforced, unbalanced
- *    transactions can sneak in, and this routine can be used to find
- *    out how much things are off by.  The value returned is denominated
- *    in the currency that is returned by the xaccTransFindCommonCurrency()
- *    method.
- */
+/** The xaccTransGetImbalance() method returns the total value of the
+ * transaction.  In a pure double-entry system, this imbalance
+ * should be exactly zero, and if it is not, something is broken.
+ * However, when double-entry semantics are not enforced, unbalanced
+ * transactions can sneak in, and this routine can be used to find
+ * out how much things are off by.  The value returned is denominated
+ * in the currency that is returned by the xaccTransFindCommonCurrency()
+ * method. */
 gnc_numeric xaccTransGetImbalance (const Transaction * trans);
 
-/* The xaccTransGetAccountValue() method returns the total value applied
- *    to a paricular account.  In some cases there may be multiple Splits
- *    in a single Transaction applied to one account (in particular when
- *    trying to balance Lots) -- this function is just a convienience to
- *    view everything at once.
+/** The xaccTransGetAccountValue() method returns the total value applied
+ *  to a paricular account.  In some cases there may be multiple Splits
+ *  in a single Transaction applied to one account (in particular when
+ *  trying to balance Lots) -- this function is just a convienience to
+ *  view everything at once.
  */
 gnc_numeric xaccTransGetAccountValue (const Transaction *trans, 
 				      const Account *account);
 
 
 
-/************************************************************************
+/*-----------------------------------------------------------------------
  * Splits
- ************************************************************************/
+ *-----------------------------------------------------------------------*/
+
 /** @name Split general getters/setters */
 /*@{*/
 
@@ -357,8 +395,10 @@ void          xaccSplitSetAction (Split *split, const char *action);
 
 /** Returns the action string. */
 const char *  xaccSplitGetAction (const Split *split);
+/**@}*/
 
-
+/** @name Split Date getters/setters */
+/**@{*/
 /** Set the reconcile flag. The Reconcile flag is a single char, whose
  * values are typically are 'n', 'y', 'c'.  In Transaction.h, macros
  * are defined for typical values (e.g. CREC, YREC). */
@@ -379,7 +419,7 @@ void          xaccSplitGetDateReconciledTS (const Split *split,
 /** Returns the date (as Timespec) on which this split was reconciled. */
 Timespec      xaccSplitRetDateReconciledTS (const Split *split);
 
-/*@}*/
+/**@}*/
 
 
 /** @name Split amount getters/setters 
@@ -437,7 +477,7 @@ gnc_numeric   xaccSplitGetSharePrice (const Split * split);
  * commodity, set the value.  If it's the account's commodity, set the
  * amount. If both, set both.
  *
- * FIXME: is this function deprecated, or is this function supposed to
+ * @note FIXME: is this function deprecated, or is this function supposed to
  * be used? */
 void         xaccSplitSetBaseValue (Split *split, gnc_numeric value,
                                     const gnc_commodity * base_currency);
@@ -449,12 +489,10 @@ void         xaccSplitSetBaseValue (Split *split, gnc_numeric value,
  * is false, return the value. If is is neither and force_double_entry
  * is true, print a warning message and return gnc_numeric_zero(). 
  *
- * FIXME: is this function deprecated, or is this function supposed to
+ * @note FIXME: is this function deprecated, or is this function supposed to
  * be used? */
 gnc_numeric xaccSplitGetBaseValue (const Split *split, 
                                    const gnc_commodity * base_currency);
-
-
 
 /** Returns the running balance up to and including the indicated split. 
  * The balance is the currency-denominated balance.  For accounts
@@ -481,12 +519,12 @@ gnc_numeric xaccSplitGetClearedBalance (const Split *split);
  */
 gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
 
-/*@}*/
+/**@}*/
 
 
 
 /** @name Split utility functions */
-/*@{*/
+/**@{*/
 
 /** Equality.
  *
@@ -596,33 +634,33 @@ const char * xaccSplitGetCorrAccountCode(const Split *sa);
 /** @name Split deprecated functions */
 /*@{*/
 
-/** The xaccSplitSetSharePrice() method sets the price of the
+/** @deprecated The xaccSplitSetSharePrice() method sets the price of the
  * split. DEPRECATED - set the value and amount instead. */
 void         xaccSplitSetSharePrice (Split *split, gnc_numeric price);
 
-/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
 void         DxaccSplitSetAmount (Split *s, double damt); 
-/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. 
+/** @deprecated Don't use doubles anymore, only use gnc_numerics. 
  *
  * WARNING:  The xaccSplitSetValue and DxaccSplitSetValue do NOT have the same
  * behavior.  The later divides the value given by the current value and set's 
  * the result as the new split value.  Is that a but or just strange undocumented
  * feature?  Benoit Grégoire 2002-6-12 */
 void         DxaccSplitSetValue (Split *split, double value);
-/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
 double        DxaccSplitGetValue (const Split * split);
-/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
 void         DxaccSplitSetSharePriceAndAmount (Split *split, double price,
                                                double amount);
-/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
 void         DxaccSplitSetShareAmount (Split *split, double amount);
-/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
 double        DxaccSplitGetShareAmount (const Split * split);
-/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
 void         DxaccSplitSetSharePrice (Split *split, double price);
-/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
 double        DxaccSplitGetSharePrice (const Split * split);
-/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
 void         DxaccSplitSetBaseValue (Split *split, double value,
                                      const gnc_commodity * base_currency);
 /*@}*/
@@ -646,15 +684,12 @@ int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
 \********************************************************************/
 
 
-/* 
- * The xaccGetAccountByName() is a convenience routine that 
- *    is essentially identical to xaccGetPeerAccountFromName(),
- *    except that it accepts the handy transaction as root.
- *
- * The xaccGetAccountByFullName routine is similar, but uses
- *    full names using the given separator.
- */
+/** The xaccGetAccountByName() is a convenience routine that 
+ *  is essentially identical to xaccGetPeerAccountFromName(),
+ *  except that it accepts the handy transaction as root.*/
 Account * xaccGetAccountByName (Transaction *trans, const char *name);
+/** The xaccGetAccountByFullName routine is similar to xaccGetAccountByName, but uses
+ *  full names using the given separator.*/
 Account * xaccGetAccountByFullName (Transaction *trans,
                                     const char *name,
                                     const char separator);
@@ -662,15 +697,13 @@ Account * xaccGetAccountByFullName (Transaction *trans,
 
 /** @name Transaction voiding */
 /*@{*/
-/*
- * xaccTransactionVoid voids a transaction.  A void transaction
+/** xaccTransactionVoid voids a transaction.  A void transaction
  * has no values, is unaffected by reconciliation, and, by default
  * is not included in any queries.  A voided transaction 
  * should not be altered (and we'll try to make it so it can't be).
  * voiding is irreversible.  Once voided, a transaction cannot be
  * un-voided.
  */
-
 void xaccTransVoid(Transaction *transaction, 
 			 const char *reason);
 
@@ -682,10 +715,18 @@ gnc_numeric xaccSplitVoidFormerAmount(const Split *split);
 gnc_numeric xaccSplitVoidFormerValue(const Split *split);
 
 Timespec xaccTransGetVoidTime(const Transaction *tr);
-/*@}*/
+/**@}*/
 
-/* Parameter names */
+/** @name Split Parameter names
+ * Note, if you want to get the equivalent of "ACCT_MATCH_ALL" you
+ * need to create a search on the following parameter list:
+ * SPLIT->SPLIT_TRANS->TRANS_SPLITLIST->SPLIT_ACCOUNT_GUID.  If you do
+ * this, you might want to use the ACCOUNT_MATCH_ALL_TYPE as the
+ * override so the gnome-search dialog displays the right type.
+ */
+/**@{*/
 #define SPLIT_KVP		"kvp"
+
 #define SPLIT_DATE_RECONCILED	"date-reconciled"
 #define SPLIT_BALANCE		"balance"
 #define SPLIT_CLEARED_BALANCE	"cleared-balance"
@@ -702,13 +743,15 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 #define SPLIT_LOT		"lot"
 #define SPLIT_TRANS		"trans"
 #define SPLIT_ACCOUNT		"account"
-#define SPLIT_ACCOUNT_GUID	"account-guid" /* for guid_match_all */
-
+#define SPLIT_ACCOUNT_GUID	"account-guid" /**< for guid_match_all */
 /* used for SORTING ONLY */
 #define SPLIT_ACCT_FULLNAME	"acct-fullname"
 #define SPLIT_CORR_ACCT_NAME	"corr-acct-fullname"
 #define SPLIT_CORR_ACCT_CODE	"corr-acct-code"
+/**@}*/
 
+/** @name Transaction Parameter names */
+/**@{*/
 #define TRANS_KVP		"kvp"
 #define TRANS_NUM		"num"
 #define TRANS_DESCRIPTION	"desc"
@@ -722,14 +765,9 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 #define TRANS_VOID_REASON	"void-reason"
 #define TRANS_VOID_TIME		"void-time"
 #define TRANS_SPLITLIST		"split-list" /* for guid_match_all */
-
-/* Note, if you want to get the equivalent of "ACCT_MATCH_ALL" you
- * need to create a search on the following parameter list:
- * SPLIT->SPLIT_TRANS->TRANS_SPLITLIST->SPLIT_ACCOUNT_GUID.  If you do
- * this, you might want to use the ACCOUNT_MATCH_ALL_TYPE as the
- * override so the gnome-search dialog displays the right type.
- */
+/**@}*/
 
 #define RECONCILED_MATCH_TYPE	"reconciled-match"
 
 #endif /* XACC_TRANSACTION_H */
+/** @} */
