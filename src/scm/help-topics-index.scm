@@ -51,6 +51,11 @@
    ((N_ "More on GnuCash") ""
     (((N_ "Hacking Documentation") "gnc-help:xacc-dochack.html" #f)
      ((N_ "GNU GPL") "gnc-help:xacc-gpl.html" #f)))))
+ ((N_ "Support") ""
+  (((N_ "Register GnuCash") 
+    "gnc-action:get?url=user-reg.php" #f)
+   ((N_ "GnuCash Network Home") 
+    "gnc-action:get/auth?url=gnc-network-home.php" #f)))
  ((N_ "Guppi Demos") "" 
   (((N_ "Pie chart") "gnc-help:guppi-pie-demo.html" #f)
    ((N_ "Bar graph") "gnc-help:guppi-bar-demo.html" #f)

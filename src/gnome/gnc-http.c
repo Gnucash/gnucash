@@ -34,9 +34,12 @@
 #include <ghttp.h>
 #include <glib.h>
 #include <gtk/gtkmain.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "gnc-http.h"
+#include "messages.h"
+
 
 struct _gnc_http {
   GList  * requests; 
@@ -80,10 +83,11 @@ gnc_http_cancel_requests(gnc_http * http) {
     for(current = http->requests; current; current = current->next) {
       if(current->data) {
         struct request_info * r = current->data;
+        current->data = NULL;
         ghttp_request_destroy(r->request);
+        r->request = NULL;
         g_free(r->uri);
         g_free(r);
-        current->data = NULL;
       }
     }
     
@@ -96,14 +100,19 @@ gnc_http_cancel_requests(gnc_http * http) {
 static gint
 ghttp_check_callback(gpointer data) {
   gnc_http            * http = data;
-  GList               * current; 
+  GList               * current = NULL; 
   ghttp_status        status;
-  struct request_info * req;
+  struct request_info * req = NULL;
   
   /* walk the request list to deal with any complete requests */
   for(current = http->requests; current; current = current->next) {
     req = current->data;
-    
+
+    if(!req) {
+      printf(_("NULL request. \n"));
+      continue;
+    }
+
     status = ghttp_process(req->request);
     switch(status) {
     case ghttp_done:
@@ -165,9 +174,9 @@ ghttp_check_callback(gpointer data) {
 static int
 gnc_http_certificate_check_cb(ghttp_request * req, X509 * cert, 
                               void * user_data) {
-  printf("checking SSL certificate...");
+  printf(_("checking SSL certificate..."));
   X509_print_fp(stdout, cert);
-  printf(" ... done\n");
+  printf(_(" ... done\n"));
   return TRUE;
 }
 #endif
@@ -189,10 +198,9 @@ gnc_http_start_request(gnc_http * http, const gchar * uri,
                                      gnc_http_certificate_check_cb, 
                                      (void *)http);
 #endif
-  ghttp_set_uri(info->request, (char *)uri);
+  ghttp_set_uri(info->request, strdup(uri));
   ghttp_set_header(info->request, http_hdr_User_Agent,
-                   PACKAGE "/" VERSION
-                   " (Financial Browser for Linux; http://gnucash.org)");
+                   strdup(PACKAGE "/" VERSION " ; http://gnucash.org"));
   ghttp_set_sync(info->request, ghttp_async);
   ghttp_set_type(info->request, ghttp_type_get);
   ghttp_prepare(info->request);
@@ -216,6 +224,7 @@ gnc_http_start_post(gnc_http * http, const char * uri,
                     const char * data, int datalen,
                     GncHTTPRequestCB cb, gpointer user_data) {
   struct request_info * info = g_new0(struct request_info, 1);
+  char                * new_body = malloc(datalen);
   
   info->request = ghttp_request_new();
   info->uri     = g_strdup (uri);
@@ -227,14 +236,14 @@ gnc_http_start_post(gnc_http * http, const char * uri,
                                      gnc_http_certificate_check_cb, 
                                      (void *)http);
 #endif
-  ghttp_set_uri(info->request, (char *)uri);
+  ghttp_set_uri(info->request, strdup(uri));
   ghttp_set_header(info->request, http_hdr_User_Agent,
-                   PACKAGE "/" VERSION
-                   " (Financial Browser for Linux; http://gnucash.org)");
+                   strdup(PACKAGE "/" VERSION " ; http://gnucash.org"));
   ghttp_set_header(info->request, http_hdr_Content_Type, content_type);
   ghttp_set_sync(info->request, ghttp_async);
   ghttp_set_type(info->request, ghttp_type_post);
-  ghttp_set_body(info->request, (char*)data, datalen);
+  memcpy(new_body, data, datalen);
+  ghttp_set_body(info->request, (char*)new_body, datalen);
 
   ghttp_prepare(info->request);
   ghttp_process(info->request);

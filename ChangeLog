@@ -1,5 +1,28 @@
 2001-03-21  Dave Peticolas  <dave@krondo.com>
 
+	* configure.in: take out --enable-gpg argument, is run-time dep
+
+2001-03-21  Bill Gribble  <grib@billgribble.com>
+
+	* gnc-network.{c,h}: new files.  Functions for user registration
+	and authentication. 
+
+	* gnc-gpg.c: fix bugs.  make gpg operations optionally
+	asynchronous via gdk_input_add().
+
+	* gnc-html.c: fix URL base name handling.  Rework processing of
+	http requests. 
+
+	* gnc-http.c: memory management in gnome_http.  Still some 
+	memory leaks in there, I think.
+
+	* gnc-html-actions.{c,h}: remove files.  Content moved into
+	gnc-network.
+
+	* prefs.scm: Add hidden preference for GnuCash Network user ID.
+
+2001-03-21  Dave Peticolas  <dave@krondo.com>
+
 	* src/scm/report-utilities.scm
 	(gnc:accounts-get-comm-total-income): new func
 	(gnc:accounts-get-comm-total-expense): new func

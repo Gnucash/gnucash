@@ -1,6 +1,7 @@
 /********************************************************************
- * gnc-html-actions.h -- basic form submission actions              * 
- * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * gnc-network.h -- handlers for forms and objects relevant to      *
+ * GnuCash Network functions                                        *
+ * Copyright (C) 2001 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,13 +19,19 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
-\********************************************************************/
+ ********************************************************************/
 
-#ifndef __GNC_HTML_ACTIONS_H__
-#define __GNC_HTML_ACTIONS_H__
+#ifndef __GNC_NETWORK_H__
+#define __GNC_NETWORK_H__
 
-#include "gnc-html.h"
+#include "config.h"
 
-void gnc_html_actions_init(void);
+void     gnc_network_init(void);
 
+char   * gnc_network_get_passphrase(void);
+char   * gnc_network_ask_passphrase(const char * prompt);
+char   * gnc_network_build_url(const char * gnc_action);
+char   * gnc_network_get_session_id(void);
+void     gnc_network_set_session_id(char * sid);
+char   * gnc_network_get_uid(void);
 #endif

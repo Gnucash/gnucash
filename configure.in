@@ -155,13 +155,6 @@ AC_ARG_ENABLE( profile,
        CFLAGS="${CFLAGS} -pg"
        LDFLAGS="${LDFLAGS} -pg")
 
-# --enable-gpg doesn't mean GPG actually gets used; it just gets compiled
-# in.  It can be potentially used to both receive and send information; 
-# see src/gnome/gnc-gpg.c and PRIVACY for more information. 
-
-AC_ARG_ENABLE( gpg,
-  [  --enable-gpg                 use GNU Privacy Guard for communications ],
-       AC_DEFINE(USE_GPG,1),)
 
 ### --------------------------------------------------------------------------
 ### SQL

@@ -54,8 +54,8 @@ typedef int  (* GncHTMLButtonCB)(gnc_html * html, GdkEventButton * event,
 typedef int  (* GncHTMLObjectCB)(gnc_html * html, GtkHTMLEmbedded * eb,
                                  gpointer data); 
 typedef int  (* GncHTMLActionCB)(gnc_html * html, const char * method,
-                                 const char * action, const char * act_args, 
-                                 GHashTable * form_data);
+                                 const char * action, GHashTable * form_data);
+
 gnc_html    * gnc_html_new(void);
 void          gnc_html_destroy(gnc_html * html);
 void          gnc_html_show_url(gnc_html * html, 
@@ -93,8 +93,18 @@ void          gnc_html_multipart_post_submit(gnc_html * html, const char * a,
 
 URLType       gnc_html_parse_url(gnc_html * html, const gchar * url, 
                                  char ** url_location, char ** url_label);
+
+/* some string coding/decoding routines */
 char          * gnc_html_encode_string(const char * in);
 char          * gnc_html_decode_string(const char * in);
+char          * gnc_html_escape_newlines(const char * in);
+char          * gnc_html_unescape_newlines(const char * in);
+
+/* utilities for dealing with encoded argument strings for forms */
+char          * gnc_html_pack_form_data(GHashTable * form_data);
+GHashTable    * gnc_html_unpack_form_data(const char * encoding);
+void            gnc_html_merge_form_data(GHashTable * fdata, const char * enc);
+void            gnc_html_free_form_data(GHashTable * fdata);
 
 gnc_html_history * gnc_html_get_history(gnc_html * html);
 GtkWidget   * gnc_html_get_widget(gnc_html * html);

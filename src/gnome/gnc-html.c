@@ -55,12 +55,14 @@
 #include "gnc-engine-util.h"
 #include "gnc-gpg.h"
 #include "gnc-html.h"
-#include "gnc-html-actions.h"
 #include "gnc-http.h"
 #include "gnc-html-history.h"
+#include "gnc-network.h"
 #include "query-user.h"
 #include "window-help.h"
 #include "window-report.h"
+#include "messages.h"
+
 
 struct _gnc_html {
   GtkWidget   * container;         /* parent of the gtkhtml widget */
@@ -106,6 +108,30 @@ static char error_end[] = "</body></html>";
 
 static char error_report[] = 
 "<html><body><h3>Report error</h3><p>An error occurred while running the report.</body></html>";
+
+
+static char * 
+extract_machine_name(const gchar * path) {
+  char       machine_rexp[] = "^(//[^/]*)/*(.*)?$";
+  regex_t    compiled_m;
+  regmatch_t match[4];
+  char       * machine=NULL;
+
+  if(!path) return NULL;
+  
+  regcomp(&compiled_m, machine_rexp, REG_EXTENDED);
+  
+  /* step 1: split the machine name away from the path
+   * components */
+  if(!regexec(&compiled_m, path, 4, match, 0)) {
+    /* $1 is the machine name */ 
+    if(match[1].rm_so != -1) {
+      machine = g_strndup(path+match[1].rm_so, 
+                          match[1].rm_eo - match[1].rm_so);
+    } 
+  }
+  return machine;
+}
 
 
 /********************************************************************
@@ -197,21 +223,20 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
   switch(retval) {
   case URL_TYPE_FILE:    
     if(!found_protocol && path && html->base_location) {
-      *url_location = g_new0(char, 
-                             strlen(path) + strlen(html->base_location) + 1);
-      *url_location[0] = 0;
-
-      strcpy(*url_location, html->base_location);      
-      strcat(*url_location, "/");
-      strcat(*url_location, path);
-      
+      if(path[0] == '/') {
+        *url_location = g_strdup(path);
+      }
+      else {
+        *url_location = g_strconcat(html->base_location, path, NULL);
+      }
       g_free(path);
     }
     else {
-      *url_location = path;
+      *url_location = g_strdup(path);
+      g_free(path);
     }
     break;
-
+    
   case URL_TYPE_JUMP:
     *url_location = NULL;
     g_free(path);
@@ -220,15 +245,19 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
   case URL_TYPE_OTHER:
   default:
     if(!found_protocol && path && html->base_location) {
-      *url_location = g_new0(char, 
-                             strlen(path) + strlen(html->base_location) + 1);
-      *url_location[0] = 0;
-      strcpy(*url_location, html->base_location);
-      strcat(*url_location, path);
+      if(path[0] == '/') {
+        *url_location = 
+          g_strconcat(extract_machine_name(html->base_location),
+                      "/", path+1, NULL);
+      }
+      else {
+        *url_location = g_strconcat(html->base_location, path, NULL);
+      }
       g_free(path);
     }
     else {
-      *url_location = path;
+      *url_location = g_strdup(path);
+      g_free(path);
     }
     break;
   }
@@ -240,71 +269,83 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
 
 static char * 
 extract_base_name(URLType type, const gchar * path) {
-  char       http_rexp[] = "^(//[^/]*)(/.*)?$";
-  char       other_rexp[] = "^(.*)(/([^/]*))?$";
-  regex_t    compiled_h, compiled_o;
+  char       machine_rexp[] = "^(//[^/]*)/*(/.*)?$";
+  char       path_rexp[] = "^/*(.*)/+([^/]*)$";
+  regex_t    compiled_m, compiled_p;
   regmatch_t match[4];
   char       * machine=NULL, * location = NULL, * base=NULL;
-
-  regcomp(&compiled_h, http_rexp, REG_EXTENDED);
-  regcomp(&compiled_o, other_rexp, REG_EXTENDED);
+  char       * basename=NULL;
 
   if(!path) return NULL;
+  
+  regcomp(&compiled_m, machine_rexp, REG_EXTENDED);
+  regcomp(&compiled_p, path_rexp, REG_EXTENDED);
 
   switch(type) {
   case URL_TYPE_HTTP:
   case URL_TYPE_SECURE:
   case URL_TYPE_FTP:
-    if(!regexec(&compiled_h, path, 4, match, 0)) {
+    /* step 1: split the machine name away from the path
+     * components */
+    if(!regexec(&compiled_m, path, 4, match, 0)) {
+      /* $1 is the machine name */ 
       if(match[1].rm_so != -1) {
-        machine = g_new0(char, strlen(path) + 2);
-        strncpy(machine, path+match[1].rm_so, 
-                match[1].rm_eo - match[1].rm_so);
+        machine = g_strndup(path+match[1].rm_so, 
+                            match[1].rm_eo - match[1].rm_so);
       } 
+      /* $2 is the path */
       if(match[2].rm_so != -1) {
-        location = g_new0(char, match[2].rm_eo - match[2].rm_so + 1);
-        strncpy(location, path+match[2].rm_so, 
-                match[2].rm_eo - match[2].rm_so);
+        location = g_strndup(path+match[2].rm_so, 
+                             match[2].rm_eo - match[2].rm_so);
       }
     }  
     break;
   default:
     location = g_strdup(path);
   }
-   
+  /* step 2: split up the path into prefix and file components */ 
   if(location) {
-    if(!regexec(&compiled_o, location, 4, match, 0)) {
-      if(match[2].rm_so != -1) {
-        base = g_new0(char,  match[1].rm_eo - match[1].rm_so + 1);
-        strncpy(base, path+match[1].rm_so, 
-                match[1].rm_eo - match[1].rm_so);
+    if(!regexec(&compiled_p, location, 4, match, 0)) {
+      if(match[1].rm_so != -1) {
+        base = g_strndup(location+match[1].rm_so, 
+                         match[1].rm_eo - match[1].rm_so);
+      }
+      else {
+        base = NULL;
       }
     }
   }
   
-  regfree(&compiled_h);
-  regfree(&compiled_o);
-
-  g_free(location);
-
+  regfree(&compiled_m);
+  regfree(&compiled_p);
+  
   if(machine) {
-    strcat(machine, "/");
-    if(base) { 
-      strcat(machine, base);
+    if(base && (strlen(base) > 0)) {
+      basename = g_strconcat(machine, "/", base, "/", NULL);
     }
-    g_free(base);
-    return machine;
+    else {
+      basename = g_strconcat(machine, "/", NULL);
+    }
   }
   else {
-    g_free(machine);
-    return base;
+    if(base && (strlen(base) > 0)) {
+      basename = g_strdup(base);
+    }
+    else {
+      basename = NULL;
+    }
   }
+
+  g_free(machine);
+  g_free(base);
+  g_free(location);
+  return basename;
 }
 
 static char * url_type_names[] = {
   "file:", "", "http:", "ftp:", "https:", 
   "gnc-register:", "gnc-report:", "gnc-scm:",
-  "gnc-help:", ""
+  "gnc-help:", "gnc-xml:", "gnc-action:", ""
 };
 
 
@@ -353,20 +394,38 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
   URLType  type;
   char     * location = NULL;
   char     * label    = NULL;
-  GList    * handles;
+  GList    * handles  = NULL;
   GList    * current;
-
-  handles = g_hash_table_lookup(html->request_info, uri);
-
+  
+  g_hash_table_lookup_extended(html->request_info, uri, 
+                               (gpointer *)&location, 
+                               (gpointer *)&handles);
+  
   /* handles will be NULL for an HTTP POST transaction, where we are
    * displaying the reply data. */
-  if(!handles) {
+  if(!handles) {    
     GtkHTMLStream * handle = gtk_html_begin(GTK_HTML(html->html));
-    gtk_html_write(GTK_HTML(html->html), handle, body, body_len);
-    gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);
+    if(completed_ok) {
+      gtk_html_write(GTK_HTML(html->html), handle, body, body_len);
+    }
+    else {
+      gtk_html_write(GTK_HTML(html->html), handle,
+                     error_start, strlen(error_start));
+      gtk_html_write(GTK_HTML(html->html), handle, 
+                     body, body_len);
+      gtk_html_write(GTK_HTML(html->html), handle,
+                     error_end, strlen(error_end));
+      gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);
+    }
   }
   /* otherwise, it's a normal SUBMIT transaction */ 
   else {
+    /* before writing to the handles, make sure any new traffic won't
+     * see them while we're working */
+    g_hash_table_remove(html->request_info, uri);
+    g_free(location);
+    location = NULL;
+
     for(current = handles; current; current = current->next) {
       /* request completed OK... write the HTML to the handles that
        * asked for that URI. */
@@ -395,19 +454,9 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
                      GTK_HTML_STREAM_ERROR);
       }
     }
-  
-    /* now clean up the request info from the hash table */ 
-    handles  = NULL;
-    if(g_hash_table_lookup_extended(html->request_info, uri, 
-                                    (gpointer *)&location, 
-                                    (gpointer *)&handles)) {
-      /* free the URI and the list of handles */ 
-      g_free(location);
-      g_list_free(handles);
-      g_hash_table_remove(html->request_info, uri);
-    }
+    g_list_free(handles);    
   }
-
+  
   gnc_unset_busy_cursor (html->html);
 }
 
@@ -495,8 +544,10 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
                        "You can enable it in the Network section of\n"
                        "the Preferences dialog.");
     }
-    fullurl = rebuild_url(type, location, label);
-    gnc_html_start_request(html, fullurl, handle);
+    else {
+      fullurl = rebuild_url(type, location, label);
+      gnc_html_start_request(html, fullurl, handle);
+    }
     break;
     
   case URL_TYPE_REPORT:
@@ -758,24 +809,35 @@ gnc_html_button_press_cb(GtkWidget * widg, GdkEventButton * event,
   }
 }
 
+
 /********************************************************************
  * gnc_html_pack/unpack_form_data
  * convert an encoded arg string to/from a name-value hash table
  ********************************************************************/
 
-static GHashTable *
+GHashTable *
 gnc_html_unpack_form_data(const char * encoding) {
   GHashTable * rv = g_hash_table_new(g_str_hash, g_str_equal);
+  gnc_html_merge_form_data(rv, encoding);
+  return rv;
+}
 
-  char * next_pair = g_strdup(encoding);
+void
+gnc_html_merge_form_data(GHashTable * rv, const char * encoding) {
+  char * next_pair = NULL; 
   char * name  = NULL;
   char * value = NULL;
   char * extr_name  = NULL;
   char * extr_value = NULL;
+  
+  if(!encoding) {
+    return;
+  }
+  next_pair = g_strdup(encoding);
 
   while(next_pair) {
     name = next_pair;
-    if((value = strchr(name, '='))) {
+    if((value = strchr(name, '=')) != NULL) {
       extr_name = g_strndup(name, value-name);
       next_pair = strchr(value, '&');
       if(next_pair) {
@@ -796,8 +858,6 @@ gnc_html_unpack_form_data(const char * encoding) {
       next_pair = NULL;
     }
   }
-
-  return rv;
 }
 
 static gboolean
@@ -807,7 +867,7 @@ free_form_data_helper(gpointer k, gpointer v, gpointer user) {
   return TRUE;
 }
 
-static void 
+void 
 gnc_html_free_form_data(GHashTable * d) {
   g_hash_table_foreach_remove(d, free_form_data_helper, NULL);
   g_hash_table_destroy(d);
@@ -831,7 +891,7 @@ pack_form_data_helper(gpointer key, gpointer val,
   g_free(old_str);
 }
 
-static char *
+char *
 gnc_html_pack_form_data(GHashTable * form_data) {
   char * encoded = NULL;
   g_hash_table_foreach(form_data, pack_form_data_helper, &encoded);
@@ -865,9 +925,10 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
       if(gnc_html_action_handlers) {
         action_parts = g_strsplit(location, "?", 2);
         if(action_parts && action_parts[0]) {
+          gnc_html_merge_form_data(form_data, action_parts[1]);
           cb = g_hash_table_lookup(gnc_html_action_handlers, action_parts[0]);
           if(cb) {
-            cb(gnchtml, method, action_parts[0], action_parts[1], form_data);
+            cb(gnchtml, method, action_parts[0], form_data);
           }
           else {
             PWARN ("no handler for gnc-network action '%s'\n", action);
@@ -879,10 +940,10 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
       }
     }
     else {
-      gnc_error_dialog("GnuCash Network is disabled and this page "
-                       "requires it.\n"
-                       "You can enable it in the Network section\n"
-                       "of the Preferences dialog.");
+      gnc_error_dialog(_("GnuCash Network is disabled and the link "
+                         "you have clicked requires it.\n"
+                         "You can enable it in the Network section\n"
+                         "of the Preferences dialog."));
     }
   }
   else {
@@ -1091,6 +1152,10 @@ gnc_html_show_url(gnc_html * html, URLType type,
     newwin = 1;
   }
 
+  if(!newwin) {
+    gnc_html_cancel(html);
+  }
+
   switch(type) {
   case URL_TYPE_REGISTER:
     gnc_html_open_register(html, location);
@@ -1114,16 +1179,16 @@ gnc_html_show_url(gnc_html * html, URLType type,
     
   case URL_TYPE_SECURE:
     if(!https_allowed()) {
-      gnc_error_dialog("Secure HTTP access is disabled.\n"
-                       "You can enable it in the Network section of\n"
-                       "the Preferences dialog.");
+      gnc_error_dialog(_("Secure HTTP access is disabled.\n"
+                         "You can enable it in the Network section of\n"
+                         "the Preferences dialog."));
       break;
     }
   case URL_TYPE_HTTP:
     if(!http_allowed()) {
-      gnc_error_dialog("Network HTTP access is disabled.\n"
-                       "You can enable it in the Network section of\n"
-                       "the Preferences dialog.");
+      gnc_error_dialog(_("Network HTTP access is disabled.\n"
+                         "You can enable it in the Network section of\n"
+                         "the Preferences dialog."));
       break;
     }
   case URL_TYPE_FILE:
@@ -1131,12 +1196,21 @@ gnc_html_show_url(gnc_html * html, URLType type,
     
     if(html->base_location) g_free(html->base_location);
     html->base_location = extract_base_name(type, location);
-    
+
     /* FIXME : handle newwin = 1 */
     gnc_html_history_append(html->history,
                             gnc_html_history_node_new(type, location, label));
     handle = gtk_html_begin(GTK_HTML(html->html));
     gnc_html_load_to_stream(html, handle, type, location, label);
+    break;
+    
+  case URL_TYPE_ACTION:
+    gnc_html_history_append(html->history,
+                            gnc_html_history_node_new(type, 
+                                                      location, label));
+    gnc_html_submit_cb(GTK_HTML(html->html), "get", 
+                       rebuild_url(type, location, label), NULL,
+                       (gpointer)html);
     break;
     
   default:
@@ -1233,9 +1307,19 @@ gnc_html_new(void) {
  * cancel any outstanding HTML fetch requests. 
  ********************************************************************/
 
+static gboolean
+html_cancel_helper(gpointer key, gpointer value, gpointer user_data) {
+  g_free(key);
+  g_list_free((GList *)value);
+  return TRUE;
+}
+
 void
 gnc_html_cancel(gnc_html * html) {
+  /* remove our own references to requests */ 
   gnc_http_cancel_requests(html->http);
+  
+  g_hash_table_foreach_remove(html->request_info, html_cancel_helper, NULL);
 }
 
 
@@ -1423,6 +1507,8 @@ gnc_html_encode_string(const char * str) {
   gchar buffer[5], *ptr;
   guchar c;
   
+  if(!str) return NULL;
+
   while(pos < strlen(str)) {
     c = (unsigned char) str[pos];
     
@@ -1461,6 +1547,9 @@ gnc_html_decode_string(const char * str) {
   guchar  c;
   guint   hexval;
   ptr = str;
+  
+  if(!str) return NULL;
+
   while(*ptr) {
     c = (unsigned char) *ptr;
     if ((( c >= 'A') && ( c <= 'Z')) ||
@@ -1488,6 +1577,52 @@ gnc_html_decode_string(const char * str) {
   g_string_free (decoded, FALSE);  
 
   return (char *)ptr;  
+}
+
+/********************************************************************
+ * escape/unescape_newlines : very simple string encoding for GPG
+ * ASCII-armored text.
+ ********************************************************************/
+
+char * 
+gnc_html_unescape_newlines(const gchar * in) {
+  const char * ip = in;
+  char    * cstr = NULL;
+  GString * rv = g_string_new("");
+
+  for(ip=in; *ip; ip++) {
+    if((*ip == '\\') && (*(ip+1)=='n')) {
+      g_string_append(rv, "\n");
+      ip++; 
+    }
+    else {
+      g_string_append_c(rv, *ip);
+    }
+  }
+
+  g_string_append_c(rv, 0);
+  cstr = rv->str;
+  g_string_free(rv, FALSE);
+  return cstr;
+}
+
+char * 
+gnc_html_escape_newlines(const gchar * in) {
+  const char * ip   = in;
+  GString * escaped = g_string_new("");
+
+  for(ip=in; *ip; ip++) {
+    if(*ip == '\012') {
+      g_string_append(escaped, "\\n");
+    }
+    else {
+      g_string_append_c(escaped, *ip);      
+    }
+  }
+  g_string_append_c(escaped, 0);
+  ip = escaped->str;
+  g_string_free(escaped, FALSE);
+  return ip;
 }
 
 
@@ -1524,9 +1659,10 @@ void
 gnc_html_generic_post_submit(gnc_html * html, const char * action, 
                              GHashTable * form_data) {
   char * encoded = gnc_html_pack_form_data(form_data);
+  char * copy = strdup(encoded);
   gnc_http_start_post(html->http, action, 
                       "application/x-www-form-urlencoded",
-                      encoded, strlen(encoded), 
+                      copy, strlen(copy), 
                       gnc_html_http_request_cb, html);
   g_free(encoded);
 }
@@ -1574,7 +1710,5 @@ gnc_html_multipart_post_submit(gnc_html * html, const char * action,
                       htmlstr, strlen(htmlstr), 
                       gnc_html_http_request_cb, html);
 
-  printf("==== multipart submit ====\n");
-  printf("%s\n==== end ====\n", htmlstr);
   g_free(htmlstr);
 }

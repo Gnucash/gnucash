@@ -1,7 +1,7 @@
 /********************************************************************
  * gnc-gpg.h -- encrypt/decrypt data using GPG and the gnucash      *
  * keyrings                                                         *
- * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (C) 2000-2001 Bill Gribble <grib@billgribble.com>      *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,15 +24,31 @@
 #ifndef __GNC_GPG_H__
 #define __GNC_GPG_H__
 
-#include "config.h"
+#include <glib.h>
 
-void  gnc_gpg_init(void);
+typedef void (* GncGPGCb)(char * output, gpointer data);
+
 char  * gnc_gpg_export(const gchar * keyname);
+void    gnc_gpg_export_async(const gchar * keyname, GncGPGCb cb, 
+                             gpointer data);
+
 char  * gnc_gpg_encrypt(const gchar * cleartext, int cleartext_size, 
                         const gchar * recipient, const gchar * passphrase);
-char  * gnc_gpg_decrypt(const gchar * cleartext, int cleartext_size,
+void    gnc_gpg_encrypt_async(const gchar * cleartext, int cleartext_size, 
+                              const gchar * recipient, const gchar * pp,
+                              GncGPGCb cb, gpointer data);
+
+char  * gnc_gpg_decrypt(const gchar * crypttext, int crypttext_size,
                         const gchar * passphrase);
-void  gnc_gpg_make_keypair(const gchar * name, const gchar * id,
-                           const gchar * email, const gchar * passphrase);
+void    gnc_gpg_decrypt_async(const gchar * crypttext, int crypttext_size,
+                              const gchar * passphrase,
+                              GncGPGCb cb, gpointer data);
+
+char *  gnc_gpg_make_keypair(const gchar * name, const gchar * id,
+                             const gchar * email, const gchar * passphrase);
+void    gnc_gpg_make_keypair_async(const gchar * name, const gchar * id,
+                                   const gchar * email, const gchar * pp,
+                                   GncGPGCb cb, gpointer data);
+
 
 #endif

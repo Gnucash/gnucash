@@ -46,13 +46,11 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-splash.h"
-#include "gnc-html-actions.h"
+#include "gnc-network.h"
 #ifdef USE_GUPPI
 #include "gnc-html-guppi.h"
 #endif
-#ifdef USE_GPG
 #include "gnc-gpg.h"
-#endif
 #include "gnc-ui.h"
 #include "gnc.h"
 #include "gnucash-color.h"
@@ -216,14 +214,11 @@ gnucash_ui_init(void)
     gtk_widget_set_default_visual (gdk_rgb_get_visual ());
     
     /* load default HTML action handlers */ 
-    gnc_html_actions_init();
+    gnc_network_init();
+
 #ifdef USE_GUPPI    
     /* initialize guppi handling in gnc-html */
     gnc_html_guppi_init();
-#endif
-#ifdef USE_GPG
-    /* initialize gpg handling in gnc-html */
-    gnc_gpg_init();
 #endif
 
     /* put up splash screen */

@@ -73,9 +73,6 @@
 #undef HAVE_LIBGHTTP
 #undef HAVE_OPENSSL
 
-/* GPG support.  This is an --enable option */
-#undef USE_GPG
-
 /* misc image and compression libs needed by html widget */
 #undef HAVE_ZLIB               
 #undef HAVE_PNG             

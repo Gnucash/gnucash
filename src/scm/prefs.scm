@@ -652,3 +652,8 @@ the current value of the path."
 (gnc:register-configuration-option
  (gnc:make-internal-option
   "__new_user" "first_startup" 1))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gnc_network" "uid" ""))
+
