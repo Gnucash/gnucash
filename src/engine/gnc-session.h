@@ -21,6 +21,7 @@
 \********************************************************************/
 
 /** @file gnc-session.h
+ * @brief Encapsulates a connection to a backednd (persistent store)
  *
  * FUNCTION:
  * Encapsulates a connection to a GnuCash backend.  That is, it
@@ -86,9 +87,11 @@
 #define GNC_SESSION_H
 
 #include "Backend.h"
-#include "gnc-engine.h"
+#include "gnc-book.h"
 
 /* PROTOTYPES ******************************************************/
+
+typedef struct gnc_session_struct    GNCSession;
 
 GNCSession * gnc_session_new (void);
 void         gnc_session_destroy (GNCSession *session);

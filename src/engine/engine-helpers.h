@@ -25,14 +25,16 @@
 #ifndef ENGINE_HELPERS_H
 #define ENGINE_HELPERS_H
 
-#include <gnc-engine.h>
-#include <gnc-book.h>
-#include <Transaction.h>
-#include <Account.h>
-#include <GNCId.h>
-#include <Query.h>
 #include <glib.h>
 #include <libguile.h>
+
+#include "gnc-engine.h"
+#include "gnc-book.h"
+#include "gnc-session.h"
+#include "Account.h"
+#include "GNCId.h"
+#include "Query.h"
+#include "Transaction.h"
 #include "guile-mappings.h"
 
 Timespec gnc_transaction_get_date_posted(Transaction *t);

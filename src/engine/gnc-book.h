@@ -20,8 +20,8 @@
 /** @addtogroup Engine
     @{ */
 /** @file gnc-book.h
- * @brief dataset access (set of accounting books)
- * Encapsulate all the information about a gnucash dataset.
+ * @brief dataset access (an "accounting book")
+ * Encapsulate all the information about a dataset.
  * See src/docs/books.txt for implementation overview.
  *
  * HISTORY:
@@ -34,9 +34,14 @@
 #define GNC_BOOK_H
 
 #include "GNCId.h"
-#include "gnc-engine.h"
 #include "kvp_frame.h"
 
+/** @brief Encapsulates all the information about a dataset
+ * manipulated by GnuCash.  This is the top-most structure
+ * used for anchoring data.
+ */
+typedef struct gnc_book_struct       GNCBook;
+                                                                                
 /** Allocate, initialise and return a new GNCBook.  The new book will
     contain a newly allocated AccountGroup */
 GNCBook * gnc_book_new (void);

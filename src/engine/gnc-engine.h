@@ -72,13 +72,6 @@ typedef struct split_s               Split;
  * through the functions in Transaction.h .*/
 typedef struct transaction_s         Transaction;
 
-/** @brief Encapsulates all the information about a dataset
- * manipulated by GnuCash.
- *
- * A GNCBook holds the actual data.
- */
-typedef struct gnc_book_struct       GNCBook;
-
 /** @brief An article that is bought and sold. 
  *
  * A Commodity is the most general term of what an account keeps track
@@ -106,61 +99,6 @@ typedef struct gnc_commodity_table_s gnc_commodity_table;
  * See the file src/doc/lots.txt for implmentation overview.
  */
 typedef struct gnc_lot_struct        GNCLot;
-
-/** @brief Encapsulates a connection to a GnuCash backend.  
- *
- * A GNCSession manages the connection to a persistant data store,
- * whereas the backend is the thing that performs the actual datastore
- * access.
- *
- * This class provides several important services:
- *
- * 1) It resolves and loads the appropriate backend, based on 
- *    the URL.
- *    
- * 2) It reports backend errors (e.g. network errors, storage 
- *    corruption errors) through a single, backend-independent 
- *    API.
- *
- * 3) It reports non-error events received from the backend.
- *
- * 4) It helps manage global dataset locks.  For example, for the
- *    file backend, the lock prevents multiple users from editing 
- *    the same file at the same time, thus avoiding lost data due 
- *    to race conditions.  Thus, an open session implies that the 
- *    associated file is locked.
- *
- * 5) Misc utilities, such as a search path for the file to be 
- *    edited, and/or other URL resolution utilities.  This should 
- *    simplify install & maintenance problems for naive users who
- *    may not have a good grasp on what a file system is, or where
- *    they want to keep their data files.
- *
- * 6) In the future, this class is probably a good place to manage 
- *    a portion of the user authentication process, and hold user
- *    credentials/cookies/keys/tokens.  This is because at the 
- *    coarsest level, authorization can happen at the datastore
- *    level: i.e. does this user even have the authority to connect
- *    to and open this datastore?
- *
- * A brief note about books & sessions: A GNCBook encapsulates the
- * datasets manipulated by GnuCash.  A GNCBook holds the actual data.
- * By contrast, the session mediates the connection between a book
- * (the thing that lives in virtual memory in the local process) and
- * the datastore (the place where book data lives permanently, e.g.,
- * file, database).
- *
- * In the current design, a session may hold multiple books.  For 
- * now, exactly what this means is somewhat vague, and code in  
- * various places makes some implicit assumptions: first, only
- * one book is 'current' and open for editing.  Next, its assumed 
- * that all of the books in a session are related in some way.
- * i.e. that they are all earlier accounting periods of the
- * currently open book.  In particular, the backends probably 
- * make that assumption, in order to store the different accounting
- * periods in a clump so that one can be found, given another.
- */
-typedef struct gnc_session_struct    GNCSession;
 
 /** GList of Account */
 typedef GList                  AccountList;

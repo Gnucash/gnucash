@@ -1101,21 +1101,6 @@ gnc_commodity_table_add_default_data(gnc_commodity_table *table)
  ********************************************************************/
 /* gncObject function implementation and registration */
 
-static void
-commodity_table_foreach (GNCBook *book, foreachObjectCB cb, gpointer ud)
-{
-  // GNCEntityTable *et;
-
-  g_return_if_fail (book);
-  g_return_if_fail (cb);
-
-printf ("duude calling commodity_table foreach \n");
-/*
-  et = gnc_book_get_entity_table (book);
-  xaccForeachEntity (et, GNC_ID_COMMODITY, cb, ud);
-*/
-}
-
 static void 
 commodity_table_book_begin (GNCBook *book)
 {
@@ -1150,7 +1135,7 @@ static GncObject_t commodity_table_object_def =
   book_end:          commodity_table_book_end,
   is_dirty:          NULL,
   mark_clean:        NULL,
-  foreach:           commodity_table_foreach,
+  foreach:           NULL,
   printable:         NULL,
 };
 

@@ -1279,21 +1279,6 @@ xaccGroupForEachAccount (AccountGroup *grp,
 /* ============================================================== */
 /* gncObject function implementation and registration */
 
-static void
-group_foreach (GNCBook *book, foreachObjectCB cb, gpointer ud)
-{
-  // GNCEntityTable *et;
-
-  g_return_if_fail (book);
-  g_return_if_fail (cb);
-
-printf ("duude calling group foreach \n");
-/*
-  et = gnc_book_get_entity_table (book);
-  xaccForeachEntity (et, GNC_ID_GROUP, cb, ud);
-*/
-}
-
 static void 
 group_book_begin (GNCBook *book)
 {
@@ -1327,7 +1312,7 @@ static GncObject_t group_object_def =
   book_end:          group_book_end,
   is_dirty:          group_is_dirty,
   mark_clean:        group_mark_clean,
-  foreach:           group_foreach,
+  foreach:           NULL,
   printable:         NULL,
 };
 

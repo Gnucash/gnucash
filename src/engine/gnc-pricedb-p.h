@@ -106,4 +106,6 @@ void     gnc_price_set_guid (GNCPrice *p, const GUID *guid);
 /** register the pricedb object with the gncObject system */
 gboolean gnc_pricedb_register (void);
 
+Backend * xaccPriceDBGetBackend (GNCPriceDB *prdb);
+
 #endif

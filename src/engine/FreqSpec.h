@@ -33,6 +33,7 @@
 #include <glib.h>
 
 #include "GNCId.h"
+#include "gnc-book.h"
 #include "gnc-engine.h"
 
 /**

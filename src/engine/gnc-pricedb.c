@@ -1915,21 +1915,6 @@ gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f)
 /* ==================================================================== */
 /* gncObject function implementation and registration */
 
-static void
-pricedb_foreach (GNCBook *book, foreachObjectCB cb, gpointer ud)
-{
-  // GNCEntityTable *et;
-
-  g_return_if_fail (book);
-  g_return_if_fail (cb);
-
-printf ("duude calling pricedb foreach \n");
-/*
-  et = gnc_book_get_entity_table (book);
-  xaccForeachEntity (et, GNC_ID_PRICEDB, cb, ud);
-*/
-}
-
 static void 
 pricedb_book_begin (GNCBook *book)
 {
@@ -1964,7 +1949,7 @@ static GncObject_t pricedb_object_def =
   book_end:          pricedb_book_end,
   is_dirty:          pricedb_is_dirty,
   mark_clean:        pricedb_mark_clean,
-  foreach:           pricedb_foreach,
+  foreach:           NULL,
   printable:         NULL,
 };
 

@@ -33,7 +33,6 @@
 #include "Backend.h"
 #include "GNCIdP.h"
 #include "gnc-book.h"
-#include "gnc-engine.h"
 #include "kvp_frame.h"
 
 struct gnc_book_struct

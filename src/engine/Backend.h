@@ -90,10 +90,8 @@ typedef enum {
 } GNCBackendError;
 
 /** \brief Pseudo-object providing an interface between the
- * engine and a persistant data store
- *
- * (e.g. a server, a database, or
- * a file).  
+ * engine and a persistant data store (e.g. a server, a database, 
+ * or a file).  
  *
  * There are no backend functions that are 'public' to users of the
  * engine.  The backend can, however, report errors to the GUI & other
