@@ -72,9 +72,20 @@ int          xaccCheckDateOrder   (Account *, Split *);
 int          xaccCheckTransDateOrder (Transaction *);
 
 /* The xaccIsAccountInList() subroutine returns the number of times
- * that an account appears in the account list. */
+ *    that an account appears in the account list. 
+ */
 int          xaccIsAccountInList (Account * acc, Account **list);
 void         xaccZeroRunningBalances (Account **list);
+
+/* The xaccAccountOrder() subroutine defines a sorting order 
+ *    on accounts.  It takes pointers to two accounts, and
+ *    returns -1 if the first account is "less than" the second,
+ *    returns +1 if the first is "greater than" the second, and
+ *    0 if they are equal.  To determine the sort order, first
+ *    the account codes are compared, and if these are equal, then 
+ *    account types, and, if these are queal, the account names.
+ */
+int          xaccAccountOrder (Account**, Account **);
 
 /* The xaccConsolidateTransactions() subroutine scans through
  *    all of the transactions in an account, and compares them.

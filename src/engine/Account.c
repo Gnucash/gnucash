@@ -563,6 +563,70 @@ xaccCheckTransDateOrder (Transaction *trans )
 /********************************************************************\
 \********************************************************************/
 
+/* The sort order is used to implicitly define an 
+ * order for report generation */
+
+static int typeorder[NUM_ACCOUNT_TYPES] = {
+     BANK, STOCK, MUTUAL, CURRENCY, CASH, ASSET, 
+     CREDIT, LIABILITY, INCOME, EXPENSE, EQUITY };
+
+static int revorder[NUM_ACCOUNT_TYPES] = {
+     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+
+
+int
+xaccAccountOrder (Account **aa, Account **ab)
+{
+  char *da, *db; 
+  int ta, tb;
+
+  if ( (*aa) && !(*ab) ) return -1;
+  if ( !(*aa) && (*ab) ) return +1;
+  if ( !(*aa) && !(*ab) ) return 0;
+
+  /* sort on accountCode strings */
+  da = (*aa)->accountCode;
+  db = (*ab)->accountCode;
+  SAFE_STRCMP (da, db);
+
+  /* if acccount-type-order array not initialized, initialize it */
+  /* this will happen at most once during program invocation */
+  if (-1 == revorder[0]) {
+    int i;
+    for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+      revorder [typeorder[i]] = i;
+    }
+  }
+
+  /* otherwise, sort on account type */
+  ta = (*aa)->type;
+  tb = (*ab)->type;
+  ta = revorder[ta];
+  tb = revorder[tb];
+  if (ta < tb) return -1;
+  if (ta > tb) return +1;
+
+  /* otherwise, sort on accountName strings */
+  da = (*aa)->accountName;
+  db = (*ab)->accountName;
+  SAFE_STRCMP (da, db);
+
+  /* accountName strings should really, really be unique, and so in theory
+   * we should never ever get here.  But just in case theory is broke ... */
+  da = (*aa)->currency;
+  db = (*ab)->currency;
+  SAFE_STRCMP (da, db);
+
+  da = (*aa)->security;
+  db = (*ab)->security;
+  SAFE_STRCMP (da, db);
+
+  return 0;
+}
+
+/********************************************************************\
+\********************************************************************/
+
 int
 xaccIsAccountInList (Account * acc, Account **list)
 {
