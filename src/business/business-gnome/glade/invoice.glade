@@ -449,7 +449,7 @@
       <band>0</band>
       <position>0</position>
       <offset>0</offset>
-      <locked>True</locked>
+      <locked>False</locked>
       <exclusive>True</exclusive>
       <never_floating>False</never_floating>
       <never_vertical>True</never_vertical>
@@ -464,12 +464,12 @@
     <widget>
       <class>GnomeDockItem</class>
       <name>toolbar_dock</name>
-      <border_width>1</border_width>
+      <border_width>2</border_width>
       <placement>GNOME_DOCK_TOP</placement>
       <band>1</band>
       <position>0</position>
       <offset>0</offset>
-      <locked>True</locked>
+      <locked>False</locked>
       <exclusive>True</exclusive>
       <never_floating>False</never_floating>
       <never_vertical>False</never_vertical>
@@ -477,7 +477,174 @@
       <shadow_type>GTK_SHADOW_OUT</shadow_type>
 
       <widget>
-	<class>Placeholder</class>
+	<class>GtkToolbar</class>
+	<name>toolbar1</name>
+	<border_width>2</border_width>
+	<orientation>GTK_ORIENTATION_HORIZONTAL</orientation>
+	<type>GTK_TOOLBAR_BOTH</type>
+	<space_size>5</space_size>
+	<space_style>GTK_TOOLBAR_SPACE_LINE</space_style>
+	<relief>GTK_RELIEF_NORMAL</relief>
+	<tooltips>True</tooltips>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>close_button</name>
+	  <tooltip>Close this invoice window</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_invoice_window_closeCB</handler>
+	    <data>Invoice Entry Window</data>
+	    <last_modification_time>Tue, 02 Jul 2002 03:52:00 GMT</last_modification_time>
+	  </signal>
+	  <label>Close</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_CLOSE</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>edit_button</name>
+	  <tooltip>Edit this Invoice</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_invoice_window_editCB</handler>
+	    <data>Invoice Entry Window</data>
+	    <last_modification_time>Tue, 02 Jul 2002 03:54:57 GMT</last_modification_time>
+	  </signal>
+	  <label>Edit</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_PREFERENCES</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkVSeparator</class>
+	  <name>vseparator1</name>
+	  <child>
+	    <new_group>True</new_group>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>enter_button</name>
+	  <tooltip>Record the current entry</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_invoice_window_recordCB</handler>
+	    <data>Invoice Entry Window</data>
+	    <last_modification_time>Tue, 02 Jul 2002 03:22:58 GMT</last_modification_time>
+	  </signal>
+	  <label>Enter</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_ADD</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>cancel_button</name>
+	  <tooltip>Cancel the current entry</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_invoice_window_cancelCB</handler>
+	    <data>Invoice Entry Window</data>
+	    <last_modification_time>Tue, 02 Jul 2002 03:22:47 GMT</last_modification_time>
+	  </signal>
+	  <label>Cancel</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_UNDELETE</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>delete_button</name>
+	  <tooltip>Delete the current entry</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_invoice_window_deleteCB</handler>
+	    <data>Invoice Entry Window</data>
+	    <last_modification_time>Tue, 02 Jul 2002 03:24:15 GMT</last_modification_time>
+	  </signal>
+	  <label>Delete</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_TRASH</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkVSeparator</class>
+	  <name>vseparator2</name>
+	  <child>
+	    <new_group>True</new_group>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>duplicate_button</name>
+	  <tooltip>Make a copy of the current entry</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_invoice_window_duplicateCB</handler>
+	    <data>Invoice Entry Window</data>
+	    <last_modification_time>Tue, 02 Jul 2002 03:25:45 GMT</last_modification_time>
+	  </signal>
+	  <label>Duplicate</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_COPY</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>blank_button</name>
+	  <tooltip>Move to the blank entry at the end of the Invoice</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_invoice_window_blankCB</handler>
+	    <data>Invoice Entry Window</data>
+	    <last_modification_time>Tue, 02 Jul 2002 03:26:55 GMT</last_modification_time>
+	  </signal>
+	  <label>Blank</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_NEW</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkVSeparator</class>
+	  <name>vseparator3</name>
+	  <child>
+	    <new_group>True</new_group>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>print_button</name>
+	  <tooltip>Make a printable Invoice</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_invoice_window_printCB</handler>
+	    <data>Invoice Entry Window</data>
+	    <last_modification_time>Tue, 02 Jul 2002 03:29:05 GMT</last_modification_time>
+	  </signal>
+	  <label>Print</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_PRINT</stock_pixmap>
+	</widget>
+
+	<widget>
+	  <class>GtkButton</class>
+	  <child_name>Toolbar:button</child_name>
+	  <name>post_button</name>
+	  <tooltip>Post this Invoice to your Chart of Accounts</tooltip>
+	  <signal>
+	    <name>clicked</name>
+	    <handler>gnc_invoice_window_postCB</handler>
+	    <data>Invoice Entry Window</data>
+	    <last_modification_time>Tue, 02 Jul 2002 03:30:17 GMT</last_modification_time>
+	  </signal>
+	  <label>Post</label>
+	  <stock_pixmap>GNOME_STOCK_PIXMAP_JUMP_TO</stock_pixmap>
+	</widget>
       </widget>
     </widget>
 

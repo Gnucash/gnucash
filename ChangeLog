@@ -1,3 +1,9 @@
+2002-07-01  Derek Atkins  <derek@ihtfp.com>
+
+	* business-gnome/dialog-invoice.c: make all my callbacks
+	non-static; remove the toolbar creation code.
+	* business-gnome/glade/invoice.glade: create the toolbar in glade.
+	
 2002-07-01  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-scheduledxaction.c:

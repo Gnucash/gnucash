@@ -62,11 +62,10 @@ struct _invoice_window {
 
   GtkWidget *	menubar_dock;
   GtkWidget *	menubar;
-  GtkWidget *	toolbar_dock;
-  GtkWidget *	toolbar;
   GtkWidget *	statusbar;
 
   /* Toolbar Widgets */
+  GtkWidget *	toolbar_dock;
   GtkWidget *	edit_button;
   GtkWidget *	enter_button;
   GtkWidget *	cancel_button;
@@ -107,6 +106,17 @@ struct _invoice_window {
   GncOwner	job;
 
 };
+
+/* Forward definitions for CB functions */
+void gnc_invoice_window_closeCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_editCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_recordCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_cancelCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_deleteCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_duplicateCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_printCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_postCB (GtkWidget *widget, gpointer data);
 
 #define WIDTH_PREFIX "invoice_reg"
 static int last_width = 0;
@@ -248,7 +258,151 @@ gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_invoice_window_print_invoice_cb (GtkWidget *widget, gpointer data)
+gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  GncInvoice *invoice = iw_get_invoice (iw);
+
+  gnc_suspend_gui_refresh ();
+
+  if (iw->dialog_type == NEW_INVOICE && invoice != NULL) {
+    gncInvoiceDestroy (invoice);
+    iw->invoice_guid = *xaccGUIDNULL ();
+  }
+
+  gnc_entry_ledger_destroy (iw->ledger);
+  gnc_unregister_gui_component (iw->component_id);
+  gnc_resume_gui_refresh ();
+
+  g_free (iw);
+}
+
+void
+gnc_invoice_window_closeCB (GtkWidget *widget, gpointer data)
+{
+  gnc_invoice_window_ok_cb (widget, data);
+}
+
+void
+gnc_invoice_window_editCB (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  GncInvoice *invoice = iw_get_invoice (iw);
+
+  if (invoice)
+    gnc_ui_invoice_modify (invoice);
+}
+
+void
+gnc_invoice_window_recordCB (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+
+  if (!iw || !iw->ledger)
+    return;
+
+  if (!gnc_entry_ledger_commit_entry (iw->ledger))
+    return;
+
+  gnucash_register_goto_next_virt_row (iw->reg);
+}
+
+void
+gnc_invoice_window_cancelCB (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+
+  if (!iw || !iw->ledger)
+    return;
+
+  gnc_entry_ledger_cancel_cursor_changes (iw->ledger);
+}
+
+void
+gnc_invoice_window_deleteCB (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  GncEntry *entry;
+
+  if (!iw || !iw->ledger)
+    return;
+
+  /* get the current entry based on cursor position */
+  entry = gnc_entry_ledger_get_current_entry (iw->ledger);
+  if (!entry) {
+    gnc_entry_ledger_cancel_cursor_changes (iw->ledger);
+    return;
+  }
+
+  /* deleting the blank entry just cancels */
+  if (entry == gnc_entry_ledger_get_blank_entry (iw->ledger)) {
+    gnc_entry_ledger_cancel_cursor_changes (iw->ledger);
+    return;
+  }
+
+  /* Verify that the user really wants to delete this entry */
+  {
+    const char *message = _("Are you sure you want to delete the "
+			    "current entry?");
+    const char *order_warn = _("This entry is attached to an order and "
+			       "will be deleted from that as well!");
+    char *msg;
+    gboolean result;
+
+    if (gncEntryGetOrder (entry))
+      msg = g_strconcat (message, "\n\n", order_warn, NULL);
+    else
+      msg = g_strdup (message);
+
+    result = gnc_verify_dialog_parented (iw->dialog, FALSE, msg);
+    g_free (msg);
+
+    if (!result)
+      return;
+  }
+
+  /* Yep, let's delete */
+  gnc_entry_ledger_delete_current_entry (iw->ledger);
+  return;
+}
+
+void
+gnc_invoice_window_duplicateCB (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+
+  if (!iw || !iw->ledger)
+    return;
+
+  gnc_entry_ledger_duplicate_current_entry (iw->ledger);
+}
+
+void
+gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+
+  if (!iw || !iw->ledger)
+    return;
+
+  if (!gnc_entry_ledger_commit_entry (iw->ledger))
+    return;
+
+  {
+    VirtualCellLocation vcell_loc;
+    GncEntry *blank;
+
+    blank = gnc_entry_ledger_get_blank_entry (iw->ledger);
+    if (blank == NULL)
+      return;
+
+    if (gnc_entry_ledger_get_entry_virt_loc (iw->ledger, blank, &vcell_loc))
+      gnucash_register_goto_virt_cell (iw->reg, vcell_loc);
+  }
+}
+
+void
+gnc_invoice_window_printCB (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
   GncInvoice *invoice = iw_get_invoice (iw);
@@ -275,8 +429,8 @@ gnc_invoice_window_print_invoice_cb (GtkWidget *widget, gpointer data)
     reportWindow (report_id);
 }
 
-static void
-gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
+void
+gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
   GncInvoice *invoice;
@@ -346,251 +500,6 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
   gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
 }
 
-static void
-gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data)
-{
-  InvoiceWindow *iw = data;
-  GncInvoice *invoice = iw_get_invoice (iw);
-
-  gnc_suspend_gui_refresh ();
-
-  if (iw->dialog_type == NEW_INVOICE && invoice != NULL) {
-    gncInvoiceDestroy (invoice);
-    iw->invoice_guid = *xaccGUIDNULL ();
-  }
-
-  gnc_entry_ledger_destroy (iw->ledger);
-  gnc_unregister_gui_component (iw->component_id);
-  gnc_resume_gui_refresh ();
-
-  g_free (iw);
-}
-
-static void
-recordCB (GtkWidget *widget, gpointer data)
-{
-  InvoiceWindow *iw = data;
-
-  if (!iw || !iw->ledger)
-    return;
-
-  if (!gnc_entry_ledger_commit_entry (iw->ledger))
-    return;
-
-  gnucash_register_goto_next_virt_row (iw->reg);
-}
-
-static void
-cancelCB (GtkWidget *widget, gpointer data)
-{
-  InvoiceWindow *iw = data;
-
-  if (!iw || !iw->ledger)
-    return;
-
-  gnc_entry_ledger_cancel_cursor_changes (iw->ledger);
-}
-
-static void
-deleteCB (GtkWidget *widget, gpointer data)
-{
-  InvoiceWindow *iw = data;
-  GncEntry *entry;
-
-  if (!iw || !iw->ledger)
-    return;
-
-  /* get the current entry based on cursor position */
-  entry = gnc_entry_ledger_get_current_entry (iw->ledger);
-  if (!entry) {
-    gnc_entry_ledger_cancel_cursor_changes (iw->ledger);
-    return;
-  }
-
-  /* deleting the blank entry just cancels */
-  if (entry == gnc_entry_ledger_get_blank_entry (iw->ledger)) {
-    gnc_entry_ledger_cancel_cursor_changes (iw->ledger);
-    return;
-  }
-
-  /* Verify that the user really wants to delete this entry */
-  {
-    const char *message = _("Are you sure you want to delete the "
-			    "current entry?");
-    const char *order_warn = _("This entry is attached to an order and "
-			       "will be deleted from that as well!");
-    char *msg;
-    gboolean result;
-
-    if (gncEntryGetOrder (entry))
-      msg = g_strconcat (message, "\n\n", order_warn, NULL);
-    else
-      msg = g_strdup (message);
-
-    result = gnc_verify_dialog_parented (iw->dialog, FALSE, msg);
-    g_free (msg);
-
-    if (!result)
-      return;
-  }
-
-  /* Yep, let's delete */
-  gnc_entry_ledger_delete_current_entry (iw->ledger);
-  return;
-}
-
-static void
-duplicateCB (GtkWidget *widget, gpointer data)
-{
-  InvoiceWindow *iw = data;
-
-  if (!iw || !iw->ledger)
-    return;
-
-  gnc_entry_ledger_duplicate_current_entry (iw->ledger);
-}
-
-static void
-blank_entry_cb (GtkWidget *widget, gpointer data)
-{
-  InvoiceWindow *iw = data;
-
-  if (!iw || !iw->ledger)
-    return;
-
-  if (!gnc_entry_ledger_commit_entry (iw->ledger))
-    return;
-
-  {
-    VirtualCellLocation vcell_loc;
-    GncEntry *blank;
-
-    blank = gnc_entry_ledger_get_blank_entry (iw->ledger);
-    if (blank == NULL)
-      return;
-
-    if (gnc_entry_ledger_get_entry_virt_loc (iw->ledger, blank, &vcell_loc))
-      gnucash_register_goto_virt_cell (iw->reg, vcell_loc);
-  }
-}
-
-static void
-gnc_invoice_window_edit_cb (GtkWidget *widget, gpointer data)
-{
-  InvoiceWindow *iw = data;
-  GncInvoice *invoice = iw_get_invoice (iw);
-
-  if (invoice)
-    gnc_ui_invoice_modify (invoice);
-}
-
-static GtkWidget *
-gnc_invoice_window_create_toolbar (InvoiceWindow *iw)
-{
-  GtkWidget *toolbar;
-
-  GnomeUIInfo toolbar_info[] =
-  {
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Close"),
-      N_("Close this invoice window"),
-      gnc_invoice_window_ok_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CLOSE,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Edit"),
-      N_("Edit the invoice"),
-      gnc_invoice_window_edit_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_PREFERENCES,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Enter"),
-      N_("Record the current entry"),
-      recordCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Cancel"),
-      N_("Cancel the current entry"),
-      cancelCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_UNDELETE,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Delete"),
-      N_("Delete the current entry"),
-      deleteCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Duplicate"),
-      N_("Make a copy of the current entry"),
-      duplicateCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_COPY,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Blank"),
-      N_("Move to the blank entry at the "
-         "bottom of the invoice"),
-      blank_entry_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_NEW,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Print"),
-      N_("Print this invoice"),
-      gnc_invoice_window_print_invoice_cb,
-      NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_PRINT,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Post"),
-      N_("Post this invoice"),
-      gnc_invoice_window_post_invoice_cb,
-      NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_JUMP_TO,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_END
-  };
-
-  toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
-
-  gnome_app_fill_toolbar_with_data (GTK_TOOLBAR(toolbar), toolbar_info,
-                                    NULL, iw);
-
-  iw->toolbar = toolbar;
-
-  iw->edit_button = toolbar_info[1].widget;
-  iw->enter_button = toolbar_info[3].widget;
-  iw->cancel_button = toolbar_info[4].widget;
-  iw->delete_button = toolbar_info[5].widget;
-  iw->duplicate_button = toolbar_info[7].widget;
-  iw->blank_button = toolbar_info[8].widget;
-  iw->print_button = toolbar_info[10].widget;
-  iw->post_button = toolbar_info[11].widget;
-
-  return toolbar;
-}
-
 static GtkWidget *
 gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
 {
@@ -602,7 +511,7 @@ gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
       GNOME_APP_UI_ITEM,
       N_("_Enter"),
       N_("Record the current entry"),
-      recordCB, NULL, NULL,
+      gnc_invoice_window_recordCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -610,7 +519,7 @@ gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
       GNOME_APP_UI_ITEM,
       N_("_Cancel"),
       N_("Cancel the current entry"),
-      cancelCB, NULL, NULL,
+      gnc_invoice_window_cancelCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -618,7 +527,7 @@ gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
       GNOME_APP_UI_ITEM,
       N_("_Delete"),
       N_("Delete the current entry"),
-      deleteCB, NULL, NULL,
+      gnc_invoice_window_deleteCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -627,7 +536,7 @@ gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
       GNOME_APP_UI_ITEM,
       N_("D_uplicate"),
       N_("Make a copy of the current entry"),
-      duplicateCB, NULL, NULL,
+      gnc_invoice_window_duplicateCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -637,7 +546,7 @@ gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
       N_("_Blank"),
       N_("Move to the blank entry at the "
          "bottom of the register"),
-      blank_entry_cb, NULL, NULL,
+      gnc_invoice_window_blankCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -1192,6 +1101,9 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
 
   gtk_object_set_data (GTK_OBJECT (iw->dialog), "dialog_info", iw);
 
+  /* Autoconnect all the signals */
+  glade_xml_signal_autoconnect_full (xml, gnc_glade_autoconnect_full_func, iw);
+
   /* Grab the widgets */
   iw->id_entry = glade_xml_get_widget (xml, "id_entry");
   iw->billing_id_entry = glade_xml_get_widget (xml, "billing_id_entry");
@@ -1202,8 +1114,21 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   iw->owner_label = glade_xml_get_widget (xml, "owner_label");
   iw->job_box = glade_xml_get_widget (xml, "job_hbox");
 
-  iw->menubar_dock = glade_xml_get_widget (xml, "menu_dock");
+  /* grab the toolbar widgets */
   iw->toolbar_dock = glade_xml_get_widget (xml, "toolbar_dock");
+  iw->edit_button = glade_xml_get_widget (xml, "edit_button");
+  iw->enter_button = glade_xml_get_widget (xml, "enter_button");
+  iw->cancel_button = glade_xml_get_widget (xml, "cancel_button");
+  iw->delete_button = glade_xml_get_widget (xml, "delete_button");
+  iw->duplicate_button = glade_xml_get_widget (xml, "duplicate_button");
+  iw->blank_button = glade_xml_get_widget (xml, "blank_button");
+  iw->print_button = glade_xml_get_widget (xml, "print_button");
+  iw->post_button = glade_xml_get_widget (xml, "post_button");
+
+  /* grab the menubar widgets */
+  iw->menubar_dock = glade_xml_get_widget (xml, "menu_dock");
+
+  /* grab the statusbar */
   iw->statusbar = glade_xml_get_widget (xml, "status_bar");
 
   hbox = glade_xml_get_widget (xml, "date_opened_hbox");
@@ -1249,16 +1174,6 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   }
   */
 
-  /* Load the tool bar */
-  {
-    GtkWidget *toolbar;
-
-    toolbar = gnc_invoice_window_create_toolbar (iw);
-    gtk_container_set_border_width (GTK_CONTAINER (toolbar), 2);
-    gtk_container_add (GTK_CONTAINER (iw->toolbar_dock), toolbar);
-    gtk_widget_show_all (iw->toolbar_dock);
-  }
-
   gtk_widget_show_all (glade_xml_get_widget (xml, "dock1"));
 
   /* Setup initial values */
@@ -1303,7 +1218,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
     GNUCASH_SHEET (iw->reg->sheet)->window = iw->dialog;
 
     gtk_signal_connect (GTK_OBJECT(regWidget), "activate_cursor",
-			GTK_SIGNAL_FUNC(recordCB), iw);
+			GTK_SIGNAL_FUNC(gnc_invoice_window_recordCB), iw);
     gtk_signal_connect (GTK_OBJECT(regWidget), "redraw_all",
 			GTK_SIGNAL_FUNC(gnc_invoice_redraw_all_cb), iw);
     gtk_signal_connect (GTK_OBJECT(regWidget), "redraw_help",
