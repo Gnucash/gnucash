@@ -147,7 +147,7 @@
     (gnc:html-document-set-title!
      document (string-append 
                report-title
-               (sprintf #f " %s" (gnc:timepair-to-datestring to-date))))
+               (sprintf #f " %s" (gnc:print-date to-date))))
 
     (gnc:debug "accounts" accounts)
     (if (not (null? accounts))

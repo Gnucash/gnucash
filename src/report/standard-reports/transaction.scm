@@ -346,8 +346,7 @@
     (if (used-date column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (gnc:timepair-to-datestring 
-                     (gnc:transaction-get-date-posted parent))
+                    (gnc:print-date (gnc:transaction-get-date-posted parent))
                     " ")))
     (if (used-num column-vector)
         (addto! row-contents

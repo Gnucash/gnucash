@@ -33,22 +33,20 @@ libgncmod_app_file_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
-#libgw_app_file_la_SOURCES = gw-app-file.c
-#libgw_app_file_la_LDFLAGS = -module
+libgw_app_file_la_SOURCES = gw-app-file.c
+libgw_app_file_la_LDFLAGS = -module
 
 #gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 #gncmod_DATA = app-file.scm 
 
-#gwmoddir = ${GNC_GWRAP_LIBDIR}
-#gwmod_LTLIBRARIES = libgw-app-file.la
-#gwmod_DATA = gw-app-file-spec.scm
+gwmoddir = ${GNC_GWRAP_LIBDIR}
+gwmod_LTLIBRARIES = libgw-app-file.la
+gwmod_DATA = gw-app-file-spec.scm
 
 noinst_DATA = .scm-links
 
-#EXTRA_DIST = \
-#  ${gncmod_DATA} \
-#  ${gncscm_DATA} \
-#  ${gwmod_DATA}
+EXTRA_DIST = \
+  ${gwmod_DATA}
 
 .scm-links: 
 	rm -f gnucash g-wrapped
@@ -56,14 +54,14 @@ noinst_DATA = .scm-links
 	ln -sf . g-wrapped 
 	touch .scm-links
 
-#gw-app-file.c gw-app-file.h: .scm-links gw-app-file-spec.scm
-#	FLAVOR=gnome guile -c \
-#	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-#	  (set! %load-path (cons \"${PWD}\" %load-path)) \
-#	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
-#	  (primitive-load \"./gw-app-file-spec.scm\") \
-#	  (gw:generate-module \"gw-app-file\")"
+gw-app-file.c gw-app-file.h: .scm-links gw-app-file-spec.scm
+	FLAVOR=gnome guile -c \
+	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
+	  (set! %load-path (cons \"${PWD}\" %load-path)) \
+	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
+	  (primitive-load \"./gw-app-file-spec.scm\") \
+	  (gw:generate-module \"gw-app-file\")"
 
-#BUILT_SOURCES += gw-app-file.c gw-app-file.h
-#CLEANFILES += gw-app-file.c gw-app-file.h gw-app-file.html \
-#              gnucash g-wrapped .scm-links
+BUILT_SOURCES += gw-app-file.c gw-app-file.h
+CLEANFILES += gw-app-file.c gw-app-file.h gw-app-file.html \
+              gnucash g-wrapped .scm-links

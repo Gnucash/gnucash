@@ -134,8 +134,8 @@
                         gain-loss-accum)
       (set! data-rows
             (cons 
-             (list (gnc:timepair-to-datestring interval-start)
-                   (gnc:timepair-to-datestring interval-end)
+             (list (gnc:print-date interval-start)
+                   (gnc:print-date interval-end)
                    (/ (stats-accum 'total #f)
                       (gnc:timepair-delta interval-start 
                                           interval-end))

@@ -273,7 +273,7 @@
 	    (gnc:html-markup-b prepared-for)
 	    (gnc:html-markup-br)
 	    (_ "Date: ")
-	    (gnc:timepair-to-datestring 
+	    (gnc:print-date 
 	     (cons (current-time) 0)))
 
 	   ;; title only 

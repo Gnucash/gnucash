@@ -233,7 +233,7 @@ developing over time"))
                ;; created.
                (date-string-list
                 (map (lambda (date-list-item)
-                       (gnc:timepair-to-datestring
+                       (gnc:print-date
                         (if do-intervals?
                             (car date-list-item)
                             date-list-item)))
@@ -348,8 +348,8 @@ developing over time"))
                              (if do-intervals?
                                  (_ "%s to %s")
                                  (_ "Balances %s to %s"))
-                             (gnc:timepair-to-datestring from-date-tp) 
-                             (gnc:timepair-to-datestring to-date-tp)))
+                             (gnc:print-date from-date-tp) 
+                             (gnc:print-date to-date-tp)))
              (gnc:html-barchart-set-width! chart width)
              (gnc:html-barchart-set-height! chart height)
              

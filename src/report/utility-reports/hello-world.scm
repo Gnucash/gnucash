@@ -247,7 +247,7 @@ option like this.")
 
     ;; these are samples of different date options. for a simple
     ;; date with day, month, and year but no time you should use
-    ;; gnc:print-date or gnc:timepair-to-datestring
+    ;; gnc:print-date
     (let ((time-string (strftime "%X" (localtime (current-time))))
           (date-string (strftime "%x" (localtime (car date-val))))
           (date-string2 (strftime "%x %X" (localtime (car date2-val))))

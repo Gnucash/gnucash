@@ -245,7 +245,7 @@
 (define (gnc:load-account-file)
   (let ((file (gnc:account-file-to-load)))
     (if file 
-        (and (not (gnc:ui-open-file file))
+        (and (not (gnc:file-open-file file))
              (gnc:hook-run-danglers gnc:*book-opened-hook* #f))
         (gnc:hook-run-danglers gnc:*book-opened-hook* #f))))
 

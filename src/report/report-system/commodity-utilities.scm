@@ -317,11 +317,11 @@
 		       (last earlierlist))))
     ;;		(if earlier
     ;;		    (warn "earlier" 
-    ;;			  (gnc:timepair-to-datestring (first earlier))
+    ;;			  (gnc:print-date (first earlier))
     ;;			  (gnc:numeric-to-double (second earlier))))
     ;;		(if later
     ;;		    (warn "later" 
-    ;;			  (gnc:timepair-to-datestring (first later))
+    ;;			  (gnc:print-date (first later))
     ;;			  (gnc:numeric-to-double (second later))))
     
     (if (and earlier later)

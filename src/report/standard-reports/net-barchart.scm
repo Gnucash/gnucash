@@ -245,9 +245,9 @@
             (date-string-list (map 
                                (if inc-exp?
                                    (lambda (date-list-item)
-                                     (gnc:timepair-to-datestring
+                                     (gnc:print-date
                                       (car date-list-item)))
-                                   gnc:timepair-to-datestring)
+                                   gnc:print-date)
                                dates-list)))
 
        (gnc:html-barchart-set-title! 
@@ -255,8 +255,8 @@
        (gnc:html-barchart-set-subtitle!
         chart (sprintf #f
                        (_ "%s to %s")
-                       (gnc:timepair-to-datestring from-date-tp) 
-                       (gnc:timepair-to-datestring to-date-tp)))
+                       (gnc:print-date from-date-tp) 
+                       (gnc:print-date to-date-tp)))
        (gnc:html-barchart-set-width! chart width)
        (gnc:html-barchart-set-height! chart height)
        (gnc:html-barchart-set-row-labels! chart date-string-list)

@@ -354,11 +354,11 @@ balance at a given time"))
                        (if do-intervals?
                            (sprintf #f
                                     (_ "%s to %s")
-                                    (gnc:timepair-to-datestring from-date-tp) 
-                                    (gnc:timepair-to-datestring to-date-tp))
+                                    (gnc:print-date from-date-tp) 
+                                    (gnc:print-date to-date-tp))
                            (sprintf #f
                                     (_ "Balance at %s")
-                                    (gnc:timepair-to-datestring to-date-tp)))
+                                    (gnc:print-date to-date-tp)))
                        (if show-total?
                            (let ((total (apply + (unzip1 combined))))
                              (sprintf

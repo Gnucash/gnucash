@@ -53,6 +53,8 @@ gnc_module_init(int refcount) {
     return FALSE;
   }
 
+  lmod ("(g-wrapped gw-app-file)");
+
   if (refcount == 0)
   {
     gnc_file_init ();

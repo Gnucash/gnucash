@@ -159,8 +159,8 @@
                                      optname-from-date))))
          (report-title (sprintf #f
                                 (_ "Profit and Loss - %s to %s")
-                                (gnc:timepair-to-datestring from-date-tp)
-                                (gnc:timepair-to-datestring to-date-tp)))
+                                (gnc:print-date from-date-tp)
+                                (gnc:print-date to-date-tp)))
          (doc (gnc:make-html-document)))
     
     (gnc:html-document-set-title! 

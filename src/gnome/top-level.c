@@ -683,14 +683,6 @@ gnc_ui_start_event_loop (void)
 
 /* ============================================================== */
 
-gboolean
-gnucash_ui_open_file(const char name[])
-{
-  return gnc_file_open_file (name);
-}
-
-/* ============================================================== */
-
 /* gnc_configure_date_format_cb
  *    Callback called when options change - sets dateFormat to the current
  *    value on the scheme side and refreshes register windows

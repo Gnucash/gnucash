@@ -169,7 +169,6 @@
 (export NinetyDayDelta)
 (export gnc:timepair-delta)
 (export gnc:time-elapsed)
-(export gnc:timepair-to-datestring)
 (export gnc:timepair-start-day-time)
 (export gnc:timepair-end-day-time)
 (export gnc:timepair-previous-day)

@@ -2384,6 +2384,21 @@ of having a parent transaction with which one is working...")
    '<gnc:time-pair>
    "timespecCanonicalDayTime" '((<gnc:time-pair> tp))
    "Convert a timepair on a certain day (localtime) to\
-the timepair representing midday on that day"))
+the timepair representing midday on that day")
+
+
+  ;; src/engine/gnc-engine-util.h
+
+  (gw:wrap-function
+   mod
+   'gnc:safe-strcmp
+   '<gw:int>
+   "safe_strcmp" '(((<gw:m-chars-caller-owned> gw:const) a)
+		   ((<gw:m-chars-caller-owned> gw:const) b))
+   "Do a string comparison - in the C case it handles NULLs as the earliest string\
+but in this case it doesn't really matter as a NULL should never be passed to it
+over the scheme interface.")
+
+  )
 
 

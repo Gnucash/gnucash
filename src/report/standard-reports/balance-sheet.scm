@@ -207,7 +207,7 @@
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
      doc (sprintf #f (_ "Balance sheet at %s")
-                  (gnc:timepair-to-datestring to-date-tp)))
+                  (gnc:print-date to-date-tp)))
 
     (if (not (null? accounts))
         ;; Get all the balances for each account group.

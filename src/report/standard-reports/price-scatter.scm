@@ -184,8 +184,8 @@
             " - "
             (sprintf #f
                      (_ "%s to %s")
-                     (gnc:timepair-to-datestring from-date-tp) 
-                     (gnc:timepair-to-datestring to-date-tp))))
+                     (gnc:print-date from-date-tp) 
+                     (gnc:print-date to-date-tp))))
     (gnc:html-scatter-set-width! chart width)
     (gnc:html-scatter-set-height! chart height)
     (gnc:html-scatter-set-marker! chart 
@@ -240,7 +240,7 @@
 
        ;; some output
        ;;(warn "data" (map (lambda (x) (list
-       ;;			(gnc:timepair-to-datestring (car x))
+       ;;			(gnc:print-date (car x))
        ;;		(gnc:numeric-to-double (second x))))
        ;; data))
        

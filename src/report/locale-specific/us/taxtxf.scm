@@ -36,6 +36,7 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/tax/us" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/app-file" 0)
 
 (define (make-level-collector num-levels)
   (let ((level-collector (make-vector num-levels)))
