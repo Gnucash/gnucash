@@ -1,3 +1,8 @@
+2001-11-28  Rob Browning  <rlb@defaultvalue.org>
+
+	* lib/guile-www/Makefile.am
+	(.scm-links): create so we can run from gnucash build dir.
+
 2001-02-04  Marius Vollmer  <mvo@zagadka.ping.de>
 
 	* http.scm: Use (ice-9 rdelim) if `read-line' not defined.  Thanks
