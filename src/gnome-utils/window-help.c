@@ -43,7 +43,11 @@
 #  define _BSD_SOURCE 1
 #endif
 
-#undef HAVE_DB1_DB_H
+/* This is just WRONG, and breaks the build...  If you think you need
+ * to undef HAVE_DB1_DB_H, then clearly the configure scripts are wrong,
+ * not this!
+ * #undef HAVE_DB1_DB_H
+ */
 #ifdef PREFER_DB1
 #ifdef HAVE_DB1_DB_H
 # include <db1/db.h>
