@@ -11,20 +11,15 @@ lib_LTLIBRARIES = libgncengine.la
 
 # Build hell from main.c and libhello.la
 libgncengine_la_SOURCES = \
-  Account-xml-parser-v1.c \
   Account.c \
   Backend.c \
-  Commodity-xml-parser-v1.c \
   DateUtils.c \
   GNCId.c \
   Group.c \
-  Ledger-xml-parser-v1.c \
   NetIO.c \
-  Query-xml-parser-v1.c \
   Query.c \
   Scrub.c \
   TransLog.c \
-  Transaction-xml-parser-v1.c \
   Transaction.c \
   date.c \
   gnc-account-xml-v2.c \
@@ -44,7 +39,7 @@ libgncengine_la_SOURCES = \
   io-example-account.c \
   io-gncbin-r.c \
   io-gncxml-gen.c \
-  io-gncxml-r.c \
+  io-gncxml-v1.c \
   io-gncxml-v2.c \
   io-utils.c \
   kvp_frame.c \
@@ -99,7 +94,6 @@ noinst_HEADERS = \
   io-example-account.h \
   io-gncbin.h \
   io-gncxml-gen.h \
-  io-gncxml-p.h \
   io-gncxml-v2.h \
   io-gncxml.h \
   io-utils.h \
