@@ -264,6 +264,7 @@ src/import-export/hbci/glade/hbci.glade
 src/import-export/hbci/gnc-hbci-utils.c
 src/import-export/hbci/gnc-hbci-cb.c
 src/import-export/hbci/gnc-hbci-gettrans.c
+src/import-export/hbci/dialog-daterange.c
 src/import-export/hbci/druid-hbci-initial.c
 src/import-export/hbci/hbci-interaction.c
 src/import-export/hbci/druid-hbci-final.c
@@ -277,10 +278,6 @@ src/import-export/hbci/druid-hbci-utils.c
 src/import-export/test/test-link.c
 src/import-export/Transaction-matcher.c
 src/import-export/Account-matcher.c
-src/import-export/grc-import/grc.glade
-src/import-export/grc-import/druid-grc-import.c
-src/import-export/grc-import/dialog-account-picker.c
-src/import-export/grc-import/gncmod-grc-import.c
 src/import-export/qif-io-core/gncmod-qifiocore.c
 src/import-export/qif-import/test/test-link.c
 src/import-export/qif-import/dialog-account-picker.c
