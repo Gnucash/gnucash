@@ -2,7 +2,8 @@
 <ARTHEADER>
 <TITLE>Profit And Loss Statement</TITLE>
 </ARTHEADER>
-
+    <sect1>
+      <title></title>
 <PARA>    <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/report-pnl.png">
@@ -18,7 +19,7 @@
     the "parameters" toolbar button.
 
 </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
