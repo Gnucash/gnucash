@@ -744,7 +744,7 @@
 
       <widget>
 	<class>GtkLabel</class>
-	<name>label847774</name>
+	<name>freq label</name>
 	<label>Frequency:</label>
 	<justify>GTK_JUSTIFY_RIGHT</justify>
 	<wrap>False</wrap>
@@ -770,7 +770,7 @@
 
       <widget>
 	<class>GtkLabel</class>
-	<name>label847775</name>
+	<name>startdate label</name>
 	<label>Start Date:</label>
 	<justify>GTK_JUSTIFY_CENTER</justify>
 	<wrap>False</wrap>
