@@ -2864,29 +2864,40 @@ static inline void
 handle_gains_date (Transaction *trans)
 {
    SplitList *node;
-printf ("duude handel gains=========================================\n");
-printf ("duuud before=%s\n", qof_print_date(trans->date_posted.tv_sec));
+   Timespec ts = {0,0};
+   gboolean do_set;
+restart_search:
+   do_set = FALSE;
    for (node = trans->splits; node; node=node->next)
    {
       Split *s = node->data;
       if (GAINS_STATUS_UNKNOWN == s->gains) DetermineGainStatus(s);
-
-printf ("duude split=%p gan=%x ptr=%p\n", s, s->gains, s->gains_split);
-if (s->gains_split) printf ("duude other stat= %x\n", s->gains_split->gains);
 
       if ((GAINS_STATUS_GAINS & s->gains) && 
           s->gains_split &&
           ((s->gains_split->gains & GAINS_STATUS_DATE_DIRTY) ||
            (s->gains & GAINS_STATUS_DATE_DIRTY)))
       {
-         Transaction *source_trans = s->parent;
-         xaccTransBeginEdit (trans);
-         xaccTransSetDatePostedTS(trans, &source_trans->date_posted);
-         xaccTransCommitEdit (trans);
-         s->gains_split->gains &= ~GAINS_STATUS_DATE_DIRTY;
+         Transaction *source_trans = s->gains_split->parent;
+         ts = source_trans->date_posted;
+         do_set = TRUE;
          s->gains &= ~GAINS_STATUS_DATE_DIRTY;
-printf ("duuud yeeeeeeeha! %s\n", qof_print_date(trans->date_posted.tv_sec));
+         s->gains_split->gains &= ~GAINS_STATUS_DATE_DIRTY;
+         break;
       }
+   }
+
+   if (do_set)
+   {
+      xaccTransBeginEdit (trans);
+      xaccTransSetDatePostedTS(trans, &ts);
+      xaccTransCommitEdit (trans);
+      for (node = trans->splits; node; node=node->next)
+      {
+         Split *s = node->data;
+         s->gains &= ~GAINS_STATUS_DATE_DIRTY;
+      }
+      goto restart_search;
    }
 }
 
