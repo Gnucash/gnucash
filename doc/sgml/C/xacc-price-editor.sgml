@@ -1,0 +1,159 @@
+
+  <article id="xacc-price-editor">
+    <artheader>
+      <title>Updating Share Prices and Currency Values</title>
+    </artheader>
+    <sect1>
+      <title>Introduction</title>
+      <para>When trading currencies, mutual funds, or stocks, and trying to
+	track the growth of your investment, you need to be able to
+	keep track of the value of those things. The <emphasis>price
+	  editor</emphasis> provides a unified  interface for doing
+	just that.
+      </para>
+    </sect1>
+    <sect1>
+      <title>
+	The Price Editor
+      </title>
+      <para>The price editor is available from the "Tools" menu. Selecting
+	it brings up the editor:</para>
+      
+      <para><emphasis>PICTURE NEEDED</emphasis></para>
+      
+      <para>Each entry in the editor shows a record of a price:</para>
+      <itemizedlist>
+	<listitem>
+	  <para><emphasis>Commodity</emphasis>: what the price  is
+	    for.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    <emphasis>Currency</emphasis>: what the price is recorded
+	    in.  To take a simple example, IBM stock's commodity is
+	    IBM, and the currency would be USD, as prices are almost
+	    always quoted in US dollars.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    <emphasis>Date</emphasis>: when the price is/was
+	    for.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    <emphasis>Source</emphasis>: where the price quote
+	  came from.  Typically, this will be either "user:price-editor"
+	    (indicating you entered it directly) or "Finance::Quote",
+	    indicating that it was retrieved from an online source by
+	    the Finance::Quote module that GnuCash uses for this task.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    <emphasis>Type</emphasis>: There are several different
+	    types of stock price quotes, and to explain the technicalities
+	    requires a little understanding of the stock market.  Most
+	    stocks, on most markets, have specialist dealers who are 
+	    almost always willing to buy and sell that stock, and
+	    make a little profit along the way by by buying and selling
+	    at slightly different prices.<
+	    </para>
+	  
+	  <itemizedlist>
+	    <listitem>
+	      <para><emphasis>Bid</emphasis> prices indicate what 
+		a specialist  dealer is prepared to pay for a stock.
+	      </para>
+	    </listitem>
+	    <listitem>
+	      <para><emphasis>Ask</emphasis> prices indicates what
+		the dealers are prepared to sell a stock for - naturally,
+		this is slightly higher than the bid price.
+	      <para>
+	    </listitem>
+	    <listitem>
+	      <para><emphasis>Last</emphasis> prices indicate the
+		    price at which the last trade in that stock/security
+		  occurred at.  This is the price most commonly
+		  quoted in the media.
+	      </para>
+	    </listitem>
+	    <listitem>
+	      <para><emphasis>Net Asset Value</emphasis> prices
+		are typically used for mutual funds.  They are calculated
+		on the net value of the fund's assets.
+	      </para>
+	    </listitem>
+	    <listitem>
+	      <para><emphasis>Unknown</emphasis>As the name suggests,
+		use this if the type of price quoted is not known.
+	      </para>
+	    </listitem>
+	  </itemizedlist>
+	</listitem>
+	<listitem>
+	  <para>
+	    <emphasis>Price</emphasis>: the actual price.
+	  </para>
+	</listitem>
+      </itemizedlist>
+      <para>
+	You can choose how you'd like the list of prices sorted by
+	clicking on the appropriate "Sort by . . ." radio button
+	directly below the price list.
+      </para>
+    <sect1>
+      <title>
+	Updating prices manually
+      </title>
+      <para>To add a new price, click on "Add", and enter the details
+	of the price into the dialog box.  Similarly, to edit an
+	existing price, click on the price in the price list, click the
+	"Edit" button, and edit the figures.</para>
+      <para>
+	To remove just one price, just click the "Remove button", 
+	or, if you want to remove all prices older than a certain time,
+	Click on the "Remove Old..." button and use the dialog box.
+	</para>
+    </sect1>
+    
+    <sect1>
+      <title>
+	Getting quotes online
+      </title>
+      <para>
+      GnuCash is able to get quotes online from a variety of sources,
+      through the Finance::Quote module.  To support online quotations
+      for a particular stock or mutual fund account, you must first 
+      enable online price quoting and select a price source.  
+      You can do this in the <link linkend="xacc-accountedit">edit account
+	</link>
+	dialog box.  More details on exactly how to choose a price
+	source can be found in the <link linkend="xacc-price-sources">
+	  price sources</link> help entry.
+      </para>
+      <para>
+      Once that is done, you can update prices for your stocks and 
+      mutual funds by clicking the "get quotes" button.
+      </para>
+
+      <para>
+	If you wish to update price quotes from the command line, 
+	you can do so by the following command
+      </para>
+      <para>
+	gnucash --add-price-quotes &lt;gnucash-file&gt;
+      </para>
+      
+      <para>
+	GnuCash 1.4 had a helper script for getting price quotes,
+	but this is no longer needed.
+      </para>
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

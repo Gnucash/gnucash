@@ -1,13 +1,13 @@
-<ARTICLE ID="XACC-TICKER">
+<ARTICLE ID="xacc-price-sources">
 
 <ARTHEADER>
 <TITLE>Stock Ticker</TITLE>
 </ARTHEADER>
+<sect1>
+<TITLE>Price Sources </TITLE>
 
-<SECT1 ID="XACC-STOCKTICKER">
-
-<TITLE>Stock Pricing and Ticker Symbols</TITLE>
-
+<para><emphasis>THIS MATERIAL NEEDS TO BE REWRITTEN FOR 1.6!!!</emphasis
+</para>
 <PARA>GnuCash provides a somewhat rudimentary automated stock quote
 gathering system.
 If a GnuCash <LINK LINKEND="STOCKACCT">stock account</LINK> is

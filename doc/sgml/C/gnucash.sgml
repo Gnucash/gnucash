@@ -31,6 +31,8 @@
 <!entity xaccnetworthbarchart system "xacc-net-worth-barchart.sgml">
 <!entity xaccpnl system "xacc-pnl.sgml">
 <!entity xaccportfolioreport system "xacc-portfolio-report.sgml">
+<!entity xaccpriceeditor system "xacc-price-editor.sgml">
+<!entity xaccpricesources system "xacc-price-sources.sgml">
 <!entity xaccprintcheck system "xacc-print-check.sgml">
 <!entity xaccprint system "xacc-print.sgml">
 <!entity xaccqifimport system "xacc-qif-import.sgml">
@@ -42,7 +44,6 @@
 <!entity xaccreports system "xacc-reports.sgml">
 <!entity xaccrepdev system "xacc-repdev.sgml">
 <!entity xaccstockpricereport system "xacc-stock-price-report.sgml">
-<!entity xaccticker system "xacc-ticker.sgml">
 <!entity xacctaxreport system "xacc-tax-report.sgml">
 <!entity xacctransreport system "xacc-trans-report.sgml">
 <!entity xacctxfcategories system "xacc-txf-categories.sgml">
@@ -90,6 +91,8 @@
 &xaccnetworthbarchart;
 &xaccpnl;
 &xaccportfolioreport;
+&xaccpriceeditor;
+&xaccpricesources;
 &xaccprintcheck;
 &xaccprint;
 &xaccqifimport;
@@ -100,7 +103,6 @@
 &xaccregwinkbd;
 &xaccreports;
 &xacctaxreport;
-&xaccticker;
 &xacctransreport;
 &xacctxfcategories;
 &xacctxfexportanomalies;

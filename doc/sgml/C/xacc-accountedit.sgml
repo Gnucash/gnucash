@@ -21,7 +21,7 @@
     account are shown.
 
     </PARA>
-<PARA>The source for <EMPHASIS>Stock Quotes</EMPHASIS> can be selected. See <LINK LINKEND="XACC-TICKER">the ticker</LINK> for more
+<PARA>The source for <EMPHASIS>Stock Quotes</EMPHASIS> can be selected. See <LINK LINKEND="xacc-price-sources">Selecting price sources</LINK> for more
     information.
 
     </PARA>

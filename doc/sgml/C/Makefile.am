@@ -38,6 +38,8 @@ GNUCASH_SGML_FILES = \
 	xacc-newacctwin.sgml \
 	xacc-pnl.sgml \
 	xacc-portfolio-report.sgml \
+	xacc-price-editor.sgml \
+	xacc-price-sources.sgml \
 	xacc-preferences.sgml \
 	xacc-print-check.sgml \
 	xacc-print.sgml \
@@ -52,7 +54,6 @@ GNUCASH_SGML_FILES = \
 	xacc-scheme.sgml \
 	xacc-stock-price-report.sgml \
 	xacc-tax-report.sgml \
-	xacc-ticker.sgml \
 	xacc-trans-report.sgml \
 	xacc-txf-categories.sgml \
 	xacc-txf-export.sgml \

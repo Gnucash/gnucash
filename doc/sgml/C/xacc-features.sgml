@@ -59,7 +59,7 @@
 	  portfolio of accounts (a group of accounts that can be
 	  displayed together).
 	  There are tools to 
-	  <link linkend="xacc-ticker">automatically collect stock quotes.</link>
+	  <link linkend="xacc-price-editor">automatically collect stock quotes.</link>
 	</para>
       </listitem>
       

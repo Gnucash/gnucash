@@ -115,7 +115,8 @@ decide.
 </LISTITEM>
 </ITEMIZEDLIST>
       </PARA>
-<PARA>More details may be found in the <LINK LINKEND="XACC-TICKER">Stock Ticker</LINK> section.</PARA>
+<PARA>More details may be found in the <LINK LINKEND="xacc-price-editor">price editor</LINK> and 
+		<link linkend="xacc-price-sources">price sources</link>sections.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
