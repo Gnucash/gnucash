@@ -29,7 +29,7 @@ require Exporter;
 use strict;
 use vars qw($VERSION @EXPORT @ISA $YAHOO_URL $FIDELITY_GANDI_URL
             $FIDELITY_GROWTH_URL $FIDELITY_CORPBOND_URL $FIDELITY_GLBND_URL
-            $FIDELITY_MM_URL $FIDELITY_ASSET_URL);
+            $FIDELITY_MM_URL $FIDELITY_ASSET_URL $TROWEPRICE_URL);
 
 use LWP::UserAgent;
 use HTTP::Request::Common;
@@ -44,6 +44,7 @@ $FIDELITY_CORPBOND_URL = ("http://personal441.fidelity.com/gen/prices/corpbond.c
 $FIDELITY_GLBND_URL = ("http://personal441.fidelity.com/gen/prices/glbnd.csv");
 $FIDELITY_MM_URL = ("http://personal441.fidelity.com/gen/prices/mm.csv");
 $FIDELITY_ASSET_URL = ("http://personal441.fidelity.com/gen/prices/asset.csv");
+$TROWEPRICE_URL = ("http://www.troweprice.com/funds/prices.csv");
 
 # Don't export; let user invoke with Quote::getquote syntax.
 # @EXPORT = qw(&quote_yahoo);
@@ -227,6 +228,30 @@ sub fidelity_mm {
             $aa {$sym, "number"} = $q[1];
             $aa {$sym, "yield"} = $q[3];
             $aa {$sym, "date"} = $dayte;
+        }
+    }
+    return %aa;
+}
+
+# =======================================================================
+
+sub troweprice {
+    my(@q,%aa,$ua,$url,$sym);
+
+    # for T Rowe Price,  we get them all. 
+    $url = $TROWEPRICE_URL;
+    $ua = LWP::UserAgent->new;
+    foreach (split('\n',$ua->request(GET $url)->content)) {
+	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
+
+        # extract the date which is usually on the second line fo the file.
+        ($sym = $q[0]) =~ s/^ +//;
+        if ($sym) {
+            $aa {$sym, "exchange"} = "T. Rowe Price";  # TRP
+            # ($aa {$sym, "name"} = $q[0]) =~ s/^ +//;
+            $aa {$sym, "name"} = $sym;  # no name supplied ... 
+            $aa {$sym, "nav"} = $q[1];
+            $aa {$sym, "date"} = $q[2];
         }
     }
     return %aa;
