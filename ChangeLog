@@ -1,3 +1,21 @@
+2001-08-17  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/gnc-module/gnc-module.c (gnc_module_system_setup_load_path):
+	add in void for empty argument list.
+
+	* src/gnc-module/Makefile.am (libgw_gnc_module_la_SOURCES): add
+	-lgncmodule to link link and libgncmodule.la to dependencies.
+
+	* src/register/register-gnome/Makefile.am
+	(libgncmod_register_gnome_la_LDFLAGS): add GNOMEUILIBS to module
+	link line.
+
+	* src/guile/Makefile.am: remove file-utils.[ch] &
+	argv-list-encoders.[ch] 
+
+	* src/gnome/Makefile.am (SUBDIRS): add file-utils.[ch] &
+	argv-list-encoders.[ch] 
+
 2001-08-16  Bill Gribble  <grib@billgribble.com>
 
 	* move report system into gnc-modules. This required a new
@@ -16,6 +34,11 @@
 
 	* src/report/stylesheet: report style sheet definitions
 
+2001-08-16  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/guile/argv-list-converters.c (print_argv): remove unused
+	function. 
+
 2001-08-16  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/FreqSpec.c: Take out day and month name arrays - use 
@@ -25,11 +48,14 @@
 	buttons to obsolete-sx dialog.
 	
 	* src/gnome/dialog-sxsincelast.c: Remove string literals and magic
-	numbers.  (freq_type_to_string) remove.
-	(_create_transactions_on): catch errors a bit
-	better. (sx_obsolete_row_{un}sel): remove unnecessary warnings.
-	(sx_obsolete_{un}select_all_clicked): add callbacks for "select
-	all" and "unselect all" buttons.
+	numbers.  (freq_type_to_string) remove.  (_create_transactions_on):
+	catch errors a bit better. (sx_obsolete_row_{un}sel): remove unnecessary
+	warnings.  (sx_obsolete_{un}select_all_clicked): add callbacks for
+	"select all" and "unselect all" buttons.
+
+2001-08-15  James LewisMoss  <jimdres@mindspring.com>
+
+	* Makefile.am: remove TAGS.stamp stuff.
 
 2001-08-15  Christian Stimming  <stimming@tuhh.de>
 
