@@ -143,16 +143,13 @@ gnc_get_ui_data(void)
 int
 gnucash_ui_init(void)
 {
-  int fake_argc = 1;
-  char *fake_argv[] = {"gnucash"};
-
   ENTER ("\n");
 
   /* We're going to have to have other ways to handle X and GUI
      specific args... */
   if (!gnome_is_initialized)
   {
-    gnome_init("GnuCash", NULL, get_global_argc(), get_global_argv());
+    gnome_init("GnuCash", NULL, gnc_get_global_argc(), gnc_get_global_argv());
     gnome_is_initialized = TRUE;
     
     /* initialization required for gtkhtml */
