@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
-"POT-Creation-Date: 2003-05-01 18:24+0200\n"
-"PO-Revision-Date: 2003-05-01 18:32+0200\n"
+"POT-Creation-Date: 2003-05-03 13:26+0200\n"
+"PO-Revision-Date: 2003-05-03 13:33+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -3274,31 +3274,31 @@ msgstr "_Storniert"
 
 #: src/gnome/glade/account.glade.h:1
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: src/gnome/glade/account.glade.h:2
 msgid "1/10"
-msgstr ""
+msgstr "1/10"
 
 #: src/gnome/glade/account.glade.h:3
 msgid "1/100"
-msgstr ""
+msgstr "1/100"
 
 #: src/gnome/glade/account.glade.h:4
 msgid "1/1000"
-msgstr ""
+msgstr "1/1000"
 
 #: src/gnome/glade/account.glade.h:5
 msgid "1/10000"
-msgstr ""
+msgstr "1/10000"
 
 #: src/gnome/glade/account.glade.h:6
 msgid "1/100000"
-msgstr ""
+msgstr "1/100000"
 
 #: src/gnome/glade/account.glade.h:7
 msgid "1/1000000"
-msgstr ""
+msgstr "1/1000000"
 
 #. src/report/standard-reports/cash-flow.scm
 #: src/gnome/glade/account.glade.h:8 src/gnome/glade/stocks.glade.h:1
@@ -3807,11 +3807,11 @@ msgstr "Neuen Preis hinzufügen."
 
 #: src/gnome/glade/price.glade.h:3
 msgid "Ask"
-msgstr ""
+msgstr "Briefkurs"
 
 #: src/gnome/glade/price.glade.h:4
 msgid "Bid"
-msgstr ""
+msgstr "Geldkurs"
 
 #. COMMODITY
 #: src/gnome/glade/price.glade.h:5 src/gnome/dialog-price-edit-db.c:495
@@ -4021,7 +4021,7 @@ msgstr "Scheck drucken"
 
 #: src/gnome/glade/print.glade.h:31
 msgid "Quicken/QuickBooks (tm) US-Letter"
-msgstr ""
+msgstr "Quicken/QuickBooks (tm) US-Letter"
 
 #: src/gnome/glade/print.glade.h:32
 msgid "Sample:"
@@ -4118,115 +4118,115 @@ msgstr "... Treuhandkonto für Zahlungen verwenden?"
 
 #: src/gnome/glade/sched-xact.glade.h:7
 msgid "10th"
-msgstr ""
+msgstr "10."
 
 #: src/gnome/glade/sched-xact.glade.h:8
 msgid "11th"
-msgstr ""
+msgstr "11."
 
 #: src/gnome/glade/sched-xact.glade.h:9
 msgid "12th"
-msgstr ""
+msgstr "12."
 
 #: src/gnome/glade/sched-xact.glade.h:10
 msgid "13th"
-msgstr ""
+msgstr "13."
 
 #: src/gnome/glade/sched-xact.glade.h:11
 msgid "14th"
-msgstr ""
+msgstr "14."
 
 #: src/gnome/glade/sched-xact.glade.h:12
 msgid "15th"
-msgstr ""
+msgstr "15."
 
 #: src/gnome/glade/sched-xact.glade.h:13
 msgid "16th"
-msgstr ""
+msgstr "16."
 
 #: src/gnome/glade/sched-xact.glade.h:14
 msgid "17th"
-msgstr ""
+msgstr "17."
 
 #: src/gnome/glade/sched-xact.glade.h:15
 msgid "18th"
-msgstr ""
+msgstr "18."
 
 #: src/gnome/glade/sched-xact.glade.h:16
 msgid "19th"
-msgstr ""
+msgstr "19."
 
 #: src/gnome/glade/sched-xact.glade.h:17
 msgid "1st"
-msgstr ""
+msgstr "1."
 
 #: src/gnome/glade/sched-xact.glade.h:18
 msgid "20th"
-msgstr ""
+msgstr "20."
 
 #: src/gnome/glade/sched-xact.glade.h:19
 msgid "21st"
-msgstr ""
+msgstr "21."
 
 #: src/gnome/glade/sched-xact.glade.h:20
 msgid "22nd"
-msgstr ""
+msgstr "22."
 
 #: src/gnome/glade/sched-xact.glade.h:21
 msgid "23rd"
-msgstr ""
+msgstr "23."
 
 #: src/gnome/glade/sched-xact.glade.h:22
 msgid "24th"
-msgstr ""
+msgstr "24."
 
 #: src/gnome/glade/sched-xact.glade.h:23
 msgid "25th"
-msgstr ""
+msgstr "25."
 
 #: src/gnome/glade/sched-xact.glade.h:24
 msgid "26th"
-msgstr ""
+msgstr "26."
 
 #: src/gnome/glade/sched-xact.glade.h:25
 msgid "27th"
-msgstr ""
+msgstr "27."
 
 #: src/gnome/glade/sched-xact.glade.h:26
 msgid "28th"
-msgstr ""
+msgstr "28."
 
 #: src/gnome/glade/sched-xact.glade.h:27
 msgid "2nd"
-msgstr ""
+msgstr "2."
 
 #: src/gnome/glade/sched-xact.glade.h:28
 msgid "3rd"
-msgstr ""
+msgstr "3."
 
 #: src/gnome/glade/sched-xact.glade.h:29
 msgid "4th"
-msgstr ""
+msgstr "4."
 
 #: src/gnome/glade/sched-xact.glade.h:30
 msgid "5th"
-msgstr ""
+msgstr "5."
 
 #: src/gnome/glade/sched-xact.glade.h:31
 msgid "6th"
-msgstr ""
+msgstr "6."
 
 #: src/gnome/glade/sched-xact.glade.h:32
 msgid "7th"
-msgstr ""
+msgstr "7."
 
 #: src/gnome/glade/sched-xact.glade.h:33
 msgid "8th"
-msgstr ""
+msgstr "8."
 
 #: src/gnome/glade/sched-xact.glade.h:34
 msgid "9th"
-msgstr ""
+msgstr "9."
 
 #: src/gnome/glade/sched-xact.glade.h:35
 msgid "<repayment type>"
@@ -4243,19 +4243,19 @@ msgstr "Betrag:"
 
 #: src/gnome/glade/sched-xact.glade.h:38
 msgid "Apr, Jul, Dec"
-msgstr ""
+msgstr "Apr, Jul, Dez"
 
 #: src/gnome/glade/sched-xact.glade.h:39
 msgid "Apr, Oct"
-msgstr ""
+msgstr "Apr, Okt"
 
 #: src/gnome/glade/sched-xact.glade.h:40
 msgid "April"
-msgstr ""
+msgstr "April"
 
 #: src/gnome/glade/sched-xact.glade.h:41
 msgid "August"
-msgstr ""
+msgstr "August"
 
 #: src/gnome/glade/sched-xact.glade.h:42
 msgid "Auto-Created Transactions Notification"
@@ -4325,7 +4325,7 @@ msgstr "Tage in der Zukunft"
 
 #: src/gnome/glade/sched-xact.glade.h:61
 msgid "December"
-msgstr ""
+msgstr "Dezember"
 
 #: src/gnome/glade/sched-xact.glade.h:63
 msgid "Disposition?"
@@ -4373,19 +4373,19 @@ msgstr "Alle "
 
 #: src/gnome/glade/sched-xact.glade.h:75
 msgid "Feb, Apr, Oct"
-msgstr ""
+msgstr "Feb, Apr, Okt"
 
 #: src/gnome/glade/sched-xact.glade.h:76
 msgid "Feb, Aug"
-msgstr ""
+msgstr "Feb, Aug"
 
 #: src/gnome/glade/sched-xact.glade.h:77
 msgid "Feb, May, Aug, Nov"
-msgstr ""
+msgstr "Feb, Mai, Aug, Nov"
 
 #: src/gnome/glade/sched-xact.glade.h:78
 msgid "February"
-msgstr ""
+msgstr "Februar"
 
 #: src/gnome/glade/sched-xact.glade.h:79
 msgid "First on the:"
@@ -4422,31 +4422,31 @@ msgstr "Zinsen nach:"
 
 #: src/gnome/glade/sched-xact.glade.h:87
 msgid "Jan, Apr, Jul, Oct"
-msgstr ""
+msgstr "Jan, Apr, Jul, Okt"
 
 #: src/gnome/glade/sched-xact.glade.h:88
 msgid "Jan, Jul"
-msgstr ""
+msgstr "Jan, Jul"
 
 #: src/gnome/glade/sched-xact.glade.h:89
 msgid "Jan, May, Sep"
-msgstr ""
+msgstr "Jan, Mai, Sep"
 
 #: src/gnome/glade/sched-xact.glade.h:90
 msgid "January"
-msgstr ""
+msgstr "Januar"
 
 #: src/gnome/glade/sched-xact.glade.h:91
 msgid "July"
-msgstr ""
+msgstr "Juli"
 
 #: src/gnome/glade/sched-xact.glade.h:92
 msgid "Jun, Dec"
-msgstr ""
+msgstr "Jun, Dez"
 
 #: src/gnome/glade/sched-xact.glade.h:93
 msgid "June"
-msgstr ""
+msgstr "Juni"
 
 #: src/gnome/glade/sched-xact.glade.h:94
 msgid "Last Occurred: "
@@ -4470,27 +4470,27 @@ msgstr "Terminierte Buchung erstellen"
 
 #: src/gnome/glade/sched-xact.glade.h:99
 msgid "Mar, Jun, Nov"
-msgstr ""
+msgstr "Mär, Jun, Nov"
 
 #: src/gnome/glade/sched-xact.glade.h:100
 msgid "Mar, Jun, Sep, Dec"
-msgstr ""
+msgstr "Mär, Jun, Sep, Dez"
 
 #: src/gnome/glade/sched-xact.glade.h:101
 msgid "Mar, Sep"
-msgstr ""
+msgstr "Mär, Sep"
 
 #: src/gnome/glade/sched-xact.glade.h:102
 msgid "March"
-msgstr ""
+msgstr "März"
 
 #: src/gnome/glade/sched-xact.glade.h:103
 msgid "May"
-msgstr ""
+msgstr "Mai"
 
 #: src/gnome/glade/sched-xact.glade.h:104
 msgid "May, Nov"
-msgstr ""
+msgstr "Mai, Nov"
 
 #. src/report/standard-reports/daily-reports.scm
 #: src/gnome/glade/sched-xact.glade.h:105 intl-scm/guile-strings.c:2770
@@ -4550,11 +4550,11 @@ msgstr "Bei Erstellung benachrichtigen"
 
 #: src/gnome/glade/sched-xact.glade.h:120
 msgid "November"
-msgstr ""
+msgstr "November"
 
 #: src/gnome/glade/sched-xact.glade.h:121
 msgid "Now + 1 Year"
-msgstr ""
+msgstr "Jetzt + 1 Jahr"
 
 #: src/gnome/glade/sched-xact.glade.h:122
 msgid "Number of Occurences:"
@@ -4578,7 +4578,7 @@ msgstr "In den Monaten"
 
 #: src/gnome/glade/sched-xact.glade.h:127
 msgid "October"
-msgstr ""
+msgstr "Oktober"
 
 #: src/gnome/glade/sched-xact.glade.h:128
 msgid "On the"
@@ -4701,7 +4701,7 @@ msgstr "Halbjährlich"
 
 #: src/gnome/glade/sched-xact.glade.h:159
 msgid "September"
-msgstr ""
+msgstr "September"
 
 #: src/gnome/glade/sched-xact.glade.h:160
 msgid "Since Last Run"
@@ -4847,7 +4847,7 @@ msgstr "Was ist zu tun?"
 
 #: src/gnome/glade/sched-xact.glade.h:199
 msgid "Whole Loan"
-msgstr ""
+msgstr "Ganzes Darlehen"
 
 #: src/gnome/glade/sched-xact.glade.h:200
 msgid "YYYY-MM-DD"
@@ -4861,15 +4861,15 @@ msgstr "Jährlich"
 
 #: src/gnome/glade/sched-xact.glade.h:202
 msgid "[29th/last]"
-msgstr ""
+msgstr "[29./letzter Tag]"
 
 #: src/gnome/glade/sched-xact.glade.h:203
 msgid "[30th/last]"
-msgstr ""
+msgstr "[30./letzter Tag]"
 
 #: src/gnome/glade/sched-xact.glade.h:204
 msgid "[31st/last]"
-msgstr ""
+msgstr "[31./letzter Tag]"
 
 #: src/gnome/glade/sched-xact.glade.h:205
 msgid "days."
@@ -15120,23 +15120,14 @@ msgstr "Entwicklung Forderungen"
 #~ msgid "Balanced"
 #~ msgstr "Ausgeglichen"
 
-#~ msgid "Case sensitive"
-#~ msgstr "Groß-/Kleinschreibung beachten"
-
 #~ msgid "Not Balanced"
 #~ msgstr "Nicht ausgeglichen"
 
 #~ msgid "Transaction"
 #~ msgstr "Geschäftsvorgang"
 
-#~ msgid "Destination Account"
-#~ msgstr "Gegenkonto"
-
 #~ msgid "Double Entry"
 #~ msgstr "Doppelte Buchführung"
 
 #~ msgid "Preferences"
 #~ msgstr "Einstellungen"
-
-#~ msgid "Types"
-#~ msgstr "Arten"
