@@ -1200,7 +1200,7 @@ xaccAccountRecomputeBalance (Account * acc)
 
     balance = gnc_numeric_add_fixed(balance, split->amount);
 
-    if (CREC == split->reconciled)
+    if (NREC != split->reconciled)
       cleared_balance = gnc_numeric_add_fixed(cleared_balance, split->amount);
 
     if (YREC == split->reconciled ||

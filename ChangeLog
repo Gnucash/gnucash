@@ -1,3 +1,11 @@
+2003-08-29  David Hampton  <hampton@employees.org>
+
+	* src/engine/Account.c: Fix bug in computing cleared balance.  The
+	bug was introdiced 4/1.
+
+	* lots of scm files: Remove the RCS "Id:" tag.  Its a PITA when
+	syncing between branches.
+
 2003-08-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/import-backend.c: Aaarg. Fixed extremely
