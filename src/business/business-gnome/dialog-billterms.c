@@ -165,7 +165,7 @@ ui_to_billterm (NewBillTerm *nbt)
 {
   BillTermNB *notebook;
   GncBillTerm *term;
-  char *text;
+  const char *text;
 
   term = nbt->this_term;
   notebook = &nbt->notebook;
@@ -244,7 +244,7 @@ new_billterm_ok_cb (GtkWidget *widget, gpointer data)
 {
   NewBillTerm *nbt = data;
   BillTermsWindow *btw;
-  char *name = NULL;
+  const char *name = NULL;
   char *message;
 
   g_return_if_fail (nbt);

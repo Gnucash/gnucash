@@ -193,7 +193,8 @@ static void
 gnc_job_name_changed_cb (GtkWidget *widget, gpointer data)
 {
   JobWindow *jw = data;
-  char *name, *id, *fullname, *title;
+  char *fullname, *title;
+  const char *name, *id;
 
   if (!jw)
     return;

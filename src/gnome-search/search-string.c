@@ -100,9 +100,11 @@ gnc_search_string_class_init (GNCSearchStringClass *class)
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
 
+#if 0
   /* signals */
 #if LAST_SIGNAL > 0
   gtk_object_class_add_signals(object_class, signals, LAST_SIGNAL);
+#endif
 #endif
 }
 
@@ -240,7 +242,7 @@ option_changed (GtkWidget *widget, GNCSearchString *fe)
 static void
 entry_changed (GtkEntry *entry, GNCSearchString *fe)
 {
-  char *new;
+  const char *new;
 	
   new = gtk_entry_get_text(entry);
   gnc_search_string_set_value (fe, new);

@@ -101,9 +101,11 @@ gnc_search_numeric_class_init (GNCSearchNumericClass *class)
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
 
+#if 0
   /* signals */
 #if LAST_SIGNAL > 0
   gtk_object_class_add_signals(object_class, signals, LAST_SIGNAL);
+#endif
 #endif
 }
 

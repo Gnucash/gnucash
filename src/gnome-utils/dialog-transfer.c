@@ -484,7 +484,7 @@ gnc_parse_error_dialog (XferDialog *xferData, const char *error_string)
 static gboolean
 gnc_xfer_dialog_quickfill( XferDialog *xferData )
 {
-  char *desc;
+  const char *desc;
   Account *match_account;  /* the matched text was from this account */
   Split *split;            /* the split to autocomplete from */
   Split *other = NULL;     /* the other split of the transaction */
@@ -1293,7 +1293,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   gnc_commodity *from_commodity;
   gnc_commodity *to_commodity;
   gnc_numeric amount, to_amount;
-  char * string;
+  const char * string;
   Timespec ts;
 
   gboolean curr_trans;

@@ -54,7 +54,7 @@ new_tax_table_ok_cb (GtkWidget *widget, gpointer data)
 {
   NewTaxTable *ntt = data;
   TaxTableWindow *ttw;
-  char *name = NULL;
+  const char *name = NULL;
   char *message;
   Account *acc;
   gnc_numeric amount;

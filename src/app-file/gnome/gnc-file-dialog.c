@@ -140,7 +140,7 @@ store_filename (GtkWidget *w, gpointer data)
 {
   FileBoxInfo *fb_info = data;
   GtkFileSelection *fs;
-  char *file_name;
+  const char *file_name;
 
   fs = GTK_FILE_SELECTION (fb_info->file_box);
 

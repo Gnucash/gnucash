@@ -109,9 +109,11 @@ gnc_amount_edit_class_init (GNCAmountEditClass *class)
                                        amount_changed),
                     gtk_signal_default_marshaller,
                     GTK_TYPE_NONE, 0);
-	
+
+#if 0	
   gtk_object_class_add_signals (object_class, amount_edit_signals,
                                 LAST_SIGNAL);
+#endif
 
   widget_class->key_press_event = gnc_amount_edit_key_press;
 

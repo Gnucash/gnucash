@@ -234,10 +234,13 @@ gnc_dense_cal_class_init (GncDenseCalClass *class)
         gnc_dense_cal_signals[MARKS_LOST_SIGNAL] =
                 gtk_signal_new( MARKS_LOST_SIGNAL_NAME,
                                 GTK_RUN_LAST,
-                                object_class->type,
+                                object_class->g_type,
                                 GTK_SIGNAL_OFFSET( GncDenseCalClass, marks_lost_cb ),
                                 gtk_signal_default_marshaller, GTK_TYPE_NONE, 0 );
+
+#if 0
         gtk_object_class_add_signals (object_class, gnc_dense_cal_signals, LAST_SIGNAL);
+#endif
 
         object_class->destroy = gnc_dense_cal_destroy;
         widget_class->realize = gnc_dense_cal_realize;

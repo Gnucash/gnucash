@@ -24,13 +24,21 @@ The categorized list:
 gnucash-gnome2-dev	Gnome2 port
 
 	Build	Problems to solve before running gnucash the first time
-		Make errors in gnc-html.c
+	  Delete declare of gnc_html_register_object_handler	(FIXME)
+	  Delete typedef of GncHTMLObjectCB			(FIXME)	
+	
+	Run	Problems which affect running gnucash
+		Is deprecated gtk_object_class_add_signals handled correctly?
 		
-	gtk-changes-2-0 
+	gtk-changes-2-0 Handle the changes documented in:
 		http://developer.gnome.org/doc/API/2.0/gtk/gtk-changes-2-0.html
-	GNOME 2.0 platform	http://developer.gnome.org/dotplan/porting/
+
+	GNOME 2.0 platform  Handle the changes documented in:	
+		http://developer.gnome.org/dotplan/porting/
+
 	doc
 		Add links to examples in GTK+ Reference Manual.
 		Update *.glade files for GNOME_BUTTON changes
+
 	Misc 
 		

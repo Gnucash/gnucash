@@ -97,7 +97,7 @@ gnc_mainwin_account_tree_class_init (GNCMainWinAccountTreeClass *klass)
   mainwinaccounttree_signals[SELECT_ACCOUNT_SIGNAL] = 
     gtk_signal_new("select_account",
 		   GTK_RUN_FIRST,
-		   object_class->type,
+		   object_class->g_type,
 		   GTK_SIGNAL_OFFSET(GNCMainWinAccountTreeClass,
 				     select_account),
 		   gtk_marshal_NONE__POINTER,
@@ -107,7 +107,7 @@ gnc_mainwin_account_tree_class_init (GNCMainWinAccountTreeClass *klass)
   mainwinaccounttree_signals[UNSELECT_ACCOUNT_SIGNAL] =
     gtk_signal_new("unselect_account",
 		   GTK_RUN_FIRST,
-		   object_class->type,
+		   object_class->g_type,
 		   GTK_SIGNAL_OFFSET(GNCMainWinAccountTreeClass,
 				     unselect_account),
 		   gtk_marshal_NONE__POINTER,
@@ -117,14 +117,16 @@ gnc_mainwin_account_tree_class_init (GNCMainWinAccountTreeClass *klass)
   mainwinaccounttree_signals[ACTIVATE_ACCOUNT_SIGNAL] =
     gtk_signal_new("activate_account",
 		   GTK_RUN_FIRST,
-		   object_class->type,
+		   object_class->g_type,
 		   GTK_SIGNAL_OFFSET(GNCMainWinAccountTreeClass,
 				     activate_account),
 		   gtk_marshal_NONE__POINTER,
 		   GTK_TYPE_NONE, 1,
 		   GTK_TYPE_POINTER);
-
+#if 0
   gtk_object_class_add_signals(object_class,
+#endif
+
 			       mainwinaccounttree_signals,
 			       LAST_SIGNAL);
 

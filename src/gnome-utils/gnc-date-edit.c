@@ -386,7 +386,7 @@ gnc_date_edit_class_init (GNCDateEditClass *class)
 
 	date_edit_signals [TIME_CHANGED] =
 		gtk_signal_new ("time_changed",
-				GTK_RUN_FIRST, object_class->type, 
+				GTK_RUN_FIRST, object_class->g_type, 
 				GTK_SIGNAL_OFFSET (GNCDateEditClass,
                                                    time_changed),
 				gtk_signal_default_marshaller,
@@ -394,14 +394,17 @@ gnc_date_edit_class_init (GNCDateEditClass *class)
 
 	date_edit_signals [DATE_CHANGED] =
 		gtk_signal_new ("date_changed",
-				GTK_RUN_FIRST, object_class->type, 
+				GTK_RUN_FIRST, object_class->g_type, 
 				GTK_SIGNAL_OFFSET (GNCDateEditClass,
                                                    date_changed),
 				gtk_signal_default_marshaller,
                                 GTK_TYPE_NONE, 0);
-	
-	gtk_object_class_add_signals (object_class, date_edit_signals,
-                                      LAST_SIGNAL);
+
+#if 0	
+	gtk_object_class_add_signals (object_class, date_edit_signals, LAST_SIGNAL);
+	/* Deprecated function.  It seems that this call should just be deleted. 
+	*  See gtkclist.c for an example. */
+#endif
 
 	container_class->forall = gnc_date_edit_forall;
 
@@ -527,7 +530,7 @@ static int
 date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	GNCDateEdit *gde = data;
-        char *string;
+  	G_CONST_RETURN char *string;
         struct tm tm;
 
         string = gtk_entry_get_text (GTK_ENTRY (widget));

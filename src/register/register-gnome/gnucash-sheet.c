@@ -2365,7 +2365,7 @@ gnucash_register_class_init (GnucashRegisterClass *class)
         register_signals[ACTIVATE_CURSOR] =
                 gtk_signal_new("activate_cursor",
                                GTK_RUN_LAST,
-                               object_class->type,
+                               object_class->g_type,
                                GTK_SIGNAL_OFFSET(GnucashRegisterClass,
                                                  activate_cursor),
                                gtk_marshal_NONE__NONE,
@@ -2374,7 +2374,7 @@ gnucash_register_class_init (GnucashRegisterClass *class)
         register_signals[REDRAW_ALL] =
                 gtk_signal_new("redraw_all",
                                GTK_RUN_LAST,
-                               object_class->type,
+                               object_class->g_type,
                                GTK_SIGNAL_OFFSET(GnucashRegisterClass,
                                                  redraw_all),
                                gtk_marshal_NONE__NONE,
@@ -2383,14 +2383,16 @@ gnucash_register_class_init (GnucashRegisterClass *class)
         register_signals[REDRAW_HELP] =
                 gtk_signal_new("redraw_help",
                                GTK_RUN_LAST,
-                               object_class->type,
+                               object_class->g_type,
                                GTK_SIGNAL_OFFSET(GnucashRegisterClass,
                                                  redraw_help),
                                gtk_marshal_NONE__NONE,
                                GTK_TYPE_NONE, 0);
 
+#if 0
         gtk_object_class_add_signals(object_class, register_signals,
                                      LAST_SIGNAL);
+#endif
 
         class->activate_cursor = NULL;
         class->redraw_all = NULL;

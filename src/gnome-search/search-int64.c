@@ -100,9 +100,11 @@ gnc_search_int64_class_init (GNCSearchInt64Class *class)
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
 
+#if 0
   /* signals */
 #if LAST_SIGNAL > 0
   gtk_object_class_add_signals(object_class, signals, LAST_SIGNAL);
+#endif
 #endif
 }
 

@@ -158,8 +158,8 @@ gnc_style_sheet_new_cb(GtkWidget * w, gpointer user_data) {
   GList            * strings=NULL;
   GList            * lptr;
   gint             dialog_retval;
-  char             * template_str = NULL;
-  char             * name_str = NULL;
+  const char       * template_str = NULL;
+  const char       * name_str = NULL;
 
   /* get the new name for the style sheet */
   GladeXML *xml = gnc_glade_xml_new ("report.glade",

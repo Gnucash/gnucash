@@ -1587,7 +1587,8 @@ static void
 gnc_invoice_id_changed_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
-  char *id, *wintitle = NULL, *title;
+  char *wintitle = NULL, *title;
+  const char *id;
 
   if (!iw) return;
 

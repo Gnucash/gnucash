@@ -72,9 +72,11 @@ gnc_search_param_class_init (GNCSearchParamClass *class)
 
   /* override methods */
 
+#if 0
   /* signals */
 #if LAST_SIGNAL > 0
   gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
+#endif
 #endif
 }
 

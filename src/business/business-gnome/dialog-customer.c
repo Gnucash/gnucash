@@ -318,7 +318,8 @@ static void
 gnc_customer_name_changed_cb (GtkWidget *widget, gpointer data)
 {
   CustomerWindow *cw = data;
-  char *name, *id, *fullname, *title;
+  char *fullname, *title;
+  const char *id,  *name;
 
   if (!cw)
     return;

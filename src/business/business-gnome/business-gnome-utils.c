@@ -147,7 +147,7 @@ gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
 			       GList *acct_types)
 {
   GList *list, *node, *names = NULL;
-  char *text;
+  const char *text;
   gboolean found = FALSE;
 
   g_return_if_fail (combo);

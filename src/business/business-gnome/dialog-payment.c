@@ -75,7 +75,7 @@ static void
 gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
 {
   PaymentWindow *pw = data;
-  char *text;
+  const char *text;
   Account *post, *acc;
   gnc_numeric amount;
 
@@ -130,7 +130,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
   /* Ok, now post the damn thing */
   gnc_suspend_gui_refresh ();
   {
-    char *memo, *num;
+    const char *memo, *num;
     Timespec date;
     
     /* Obtain all our ancillary information */

@@ -100,9 +100,11 @@ gnc_search_core_type_class_init (GNCSearchCoreTypeClass *class)
   class->grab_focus = grab_focus;
   class->editable_enters = editable_enters;
 
+#if 0
   /* signals */
 #if LAST_SIGNAL > 0
   gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
+#endif
 #endif
 }
 

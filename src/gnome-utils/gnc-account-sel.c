@@ -127,10 +127,13 @@ gnc_account_sel_class_init (GNCAccountSelClass *class)
                                                    account_sel_changed),
                                 gtk_signal_default_marshaller,
                                 GTK_TYPE_NONE, 0);
-	
+
+#if 0	
         gtk_object_class_add_signals (object_class,
                                       account_sel_signals,
                                       LAST_SIGNAL);
+
+#endif
 
         class->account_sel_changed = NULL;
 }

@@ -256,7 +256,7 @@ gnc_account_tree_class_init(GNCAccountTreeClass *klass)
   account_tree_signals[SELECT_ACCOUNT] =
     gtk_signal_new("select_account",
 		   GTK_RUN_FIRST,
-		   object_class->type,
+		   object_class->g_type,
 		   GTK_SIGNAL_OFFSET(GNCAccountTreeClass,
 				     select_account),
 		   gtk_marshal_NONE__POINTER,
@@ -266,7 +266,7 @@ gnc_account_tree_class_init(GNCAccountTreeClass *klass)
   account_tree_signals[UNSELECT_ACCOUNT] =
     gtk_signal_new("unselect_account",
 		   GTK_RUN_FIRST,
-		   object_class->type,
+		   object_class->g_type,
 		   GTK_SIGNAL_OFFSET(GNCAccountTreeClass,
 				     unselect_account),
 		   gtk_marshal_NONE__POINTER,
@@ -282,10 +282,11 @@ gnc_account_tree_class_init(GNCAccountTreeClass *klass)
 		   gtk_marshal_NONE__POINTER,
 		   GTK_TYPE_NONE, 1,
 		   GTK_TYPE_POINTER);
-
+#if 0
   gtk_object_class_add_signals(object_class,
 			       account_tree_signals,
 			       LAST_SIGNAL);
+#endif
 
   object_class->destroy = gnc_account_tree_destroy;
 

@@ -1,4 +1,109 @@
 
+2003-04-29 TomF changes for gnucash-gnome2-dev, 12th batch
+	* src/gnome-utils/gnc-date-edit.c:gnc_date_edit_class_init:
+	  Replace object_class->type by object_class->g_type 
+	  to reflect change in GtkObjectClass
+	  Delete call of deprecated  gtk_object_class_add_signals
+	* src/gnome-utils/gnc-date-edit.c:date_accel_key_press
+	  Change declare to G_CONST_RETURN char *string; 
+	  to reflect change in gtk_entry_get_text
+	* src/business/business-gnome/search-owner.c:gnc_search_owner_class_init:
+	  Delete call of deprecated  gtk_object_class_add_signals
+	* src/gnome/gnc-split-reg.c:gnc_split_reg_get_type:  
+	  GtkObjectClass *object_class; Replace object_class->type by 
+	  object_class->g_type to reflect change in GtkObjectClass
+	  Delete call of deprecated  gtk_object_class_add_signals
+	* src/gnome/mainwindow-account-tree.c:gnc_mainwin_account_tree_class_init:
+	  Replace object_class->type by object_class->g_type to 
+	  reflect change in GtkObjectClass
+	  Delete call of deprecated  gtk_object_class_add_signals
+	* src/gnome/reconcile-list.c:gnc_reconcile_list_class_init
+	  Replace object_class->type by object_class->g_type to 
+	  reflect change in GtkObjectClass
+	  Delete call of deprecated  gtk_object_class_add_signals
+	  
+	  In the following:
+	  Delete call of deprecated  gtk_object_class_add_signals
+	  Replace object_class->type by object_class->g_type to 
+	  reflect change in GtkObjectClass
+	* src/gnome-search/gnc-general-search.c:gnc_general_search_class_init:
+	* src/gnome-utils/gnc-account-tree.c:gnc_account_tree_class_init:
+	* src/gnome-utils/gnc-date-delta.c:gnc_date_delta_class_init:	
+	* src/gnome-utils/gnc-dense-cal.c: gnc_dense_cal_class_init:
+	* src/gnome-utils/gnc-frequency.c:  gnc_frequency_class_init:
+	* src/gnome-utils/gnc-general-select.c:gnc_general_select_class_init:
+	* src/register/register-gnome/gnucash-item-list.c:  gnc_item_list_class_init:
+	* src/register/register-gnome/gnucash-sheet.c:gnucash_register_class_init:
+
+
+	  In the following, Delete call of deprecated gtk_object_class_add_signals
+	* src/gnome-search/search-account.c:gnc_search_account_class_init:
+	* src/gnome-search/search-boolean.c:gnc_search_boolean_class_init: 
+	* src/gnome-search/search-core-type.c:gnc_search_core_type_class_init:
+	* src/gnome-search/search-date.c:gnc_search_date_class_init:
+	* src/gnome-search/search-double.c: gnc_search_double_class_init:
+	* src/gnome-search/search-int64.c:gnc_search_int64_class_init:
+	* src/gnome-search/search-numeric.c:gnc_search_numeric_class_init:
+	* src/gnome-search/search-string.c:gnc_search_string_class_init:
+	* src/gnome-utils/gnc-account-sel.c:gnc_account_sel_class_init:
+	* src/gnome-utils/gnc-amount-edit.c:gnc_amount_edit_class_init:
+	* src/gnome-utils/search-param.c: gnc_search_param_class_init:
+
+
+	  In the following,
+	  Change declare to const char * 
+	  to reflect change in gtk_entry_get_text
+	* src/app-file/gnome/gnc-file-dialog.c:store_filename:
+	* src/business/business-gnome/business-gnome-utils.c:
+	  gnc_fill_account_select_combo:
+	* src/business/business-gnome/dialog-billterms.c:get_int, new_billterm_ok_cb:
+	* src/business/business-gnome/dialog-customer.c:  
+	  gnc_customer_name_changed_cb:
+	* src/business/business-gnome/dialog-employee.c:  
+	  gnc_employee_name_changed_cb:
+	* src/business/business-gnome/dialog-invoice.c:  gnc_invoice_id_changed_cb:
+	* src/business/business-gnome/dialog-job.c: gnc_job_name_changed_cb:
+	* src/business/business-gnome/dialog-payment.c:  gnc_payment_ok_cb:
+	* src/business/dialog-tax-table/dialog-tax-table.c:new_tax_table_ok_cb: 
+	* src/gnome/dialog-print-check.c:   entry_to_double:
+	* src/gnome-search/search-string.c:  entry_changed:
+	* src/gnome-utils/dialog-transfer.c:  
+	  gnc_xfer_dialog_quickfill,gnc_xfer_dialog_ok_cb: 
+	* src/gnome-utils/window-help.c:  gnc_help_window_search_button_cb:
+	* src/import-export/binary-import/druid-commodity.c: 
+	  gnc_ui_commodity_druid_comm_check_cb
+	* src/import-export/qif-import/druid-qif-import.c:  
+	  gnc_ui_qif_import_load_file_next_cb,
+	  gnc_ui_qif_import_convert, gnc_ui_qif_import_comm_check_cb, 
+	  gnc_ui_qif_import_default_acct_next_cb:
+	* src/report/report-gnome/dialog-style-sheet.c:  gnc_style_sheet_new_cb:
+
+	* TODO:
+	  Is deprecated gtk_object_class_add_signals handled correctly?
+
+
+2003-04-26 TomF changes for gnucash-gnome2-dev, 11th batch
+	* src/gnome-utils/cursors.c:
+	  Fix incorrect g_list_free.
+
+	* src/gnome/window-main.c,
+	* src/gnome-utils/gnc-mdi-utils.c,
+	* src/app-file/gnome/gnc-file-history.c:
+	  Replace calls of deprecated gtk_container_get_toplevels by
+	  gtk_window_list_toplevels
+	  
+	* src/gnome-utils/dialog-options.c:
+	  Move gnc_options_register_stocks call to gnc_options_ui_initialize, 
+	  to be called just once for all stock items at module initialization.
+	  Remove include gtk/gtktextview.h.  It is included under gnome.h
+	* src/gnome-search/dialog-search.c: attach_element, 
+	  gnc_search_dialog_init_widgets:
+	  Replace deprecated gnome_stock_new_with_icon, gnome_pixmap_button 
+	  by gtk_button_new_from_stock
+	* src/gnome-utils/gnc-date-edit.c: select_clicked:
+	  Remove inactivated block referencing deprecated gnome_stock_cursor_new  
+
+
 2003-04-26 TomF changes for gnucash-gnome2-dev, 11th batch
 
 	* src/gnome-utils/cursors.c:

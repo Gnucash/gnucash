@@ -133,13 +133,15 @@ gnc_frequency_class_init( GNCFrequencyClass *klass )
         gnc_frequency_signals[GNCFREQ_CHANGED] =
                 gtk_signal_new( "changed",
                                 GTK_RUN_FIRST,
-                                objectClass->type,
+                                objectClass->g_type,
                                 GTK_SIGNAL_OFFSET( GNCFrequencyClass, changed ),
                                 gtk_signal_default_marshaller, GTK_TYPE_NONE, 0 );
 
+#if 0
         gtk_object_class_add_signals( objectClass,
                                       gnc_frequency_signals,
                                       LAST_SIGNAL );
+#endif
 
         klass->changed = NULL;
 }

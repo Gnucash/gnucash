@@ -300,7 +300,7 @@ gnc_ui_print_check_dialog_hide(PrintCheckDialog * pcd)
 static double 
 entry_to_double(GtkWidget * entry)
 {
-  char  * text = gtk_entry_get_text(GTK_ENTRY(entry));
+  const char  * text = gtk_entry_get_text(GTK_ENTRY(entry));
   double retval = 0.0;
   
   sscanf(text, "%le", &retval);

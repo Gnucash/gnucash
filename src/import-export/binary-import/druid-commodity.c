@@ -400,8 +400,8 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
     (CommodityDruidPage *)gtk_object_get_data(GTK_OBJECT(page),
                                               "page_struct");
   const char * new_type;
-  char * new_name;
-  char * new_mnemonic;
+  const char * new_name;
+  const char * new_mnemonic;
   gnc_commodity * new_comm;
 
   new_type     = gnc_ui_namespace_picker_ns (dpage->new_type_combo);

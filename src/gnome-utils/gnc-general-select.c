@@ -114,15 +114,17 @@ gnc_general_select_class_init (GNCGeneralSelectClass *klass)
         general_select_signals[SELECTION_CHANGED] =
                 gtk_signal_new("changed",
                                GTK_RUN_FIRST,
-                               object_class->type,
+                               object_class->g_type,
                                GTK_SIGNAL_OFFSET(GNCGeneralSelectClass,
                                                  changed),
                                gtk_marshal_NONE__NONE,
                                GTK_TYPE_NONE, 0);
 
+#if 0
         gtk_object_class_add_signals(object_class,
                                      general_select_signals,
                                      LAST_SIGNAL);
+#endif
 
 	container_class->forall = gnc_general_select_forall;
 

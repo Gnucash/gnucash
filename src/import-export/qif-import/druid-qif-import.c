@@ -417,7 +417,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 {
   QIFImportWindow * wind = user_data;
 
-  char * path_to_load;
+  const char * path_to_load;
   char * default_acctname = NULL;
 
   GList * format_strings;
@@ -813,7 +813,7 @@ gnc_ui_qif_import_default_acct_next_cb(GnomeDruidPage * page,
                                        gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
-  char   * acct_name = gtk_entry_get_text(GTK_ENTRY(wind->acct_entry));
+  const char   * acct_name = gtk_entry_get_text(GTK_ENTRY(wind->acct_entry));
   SCM    fix_default = gh_eval_str("qif-import:fix-from-acct");
   SCM    scm_name;
 
@@ -1131,14 +1131,14 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
   Split        * gnc_split;
   gnc_commodity * old_commodity;
 
-  char * mnemonic = NULL; 
+  const char * mnemonic = NULL; 
   const char * namespace = NULL;
-  char * fullname = NULL;
+  const char * fullname = NULL;
   const gchar * row_text[4] = { NULL, NULL, NULL, NULL };
   int  rownum;
 
   /* get the default currency */
-  char * currname = gtk_entry_get_text(GTK_ENTRY(wind->currency_entry));
+  const char * currname = gtk_entry_get_text(GTK_ENTRY(wind->currency_entry));
 
   /* busy cursor */
   gnc_suspend_gui_refresh ();
@@ -1385,8 +1385,8 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
     gtk_object_get_data(GTK_OBJECT(page), "page_struct");
   
   const char * namespace = gnc_ui_namespace_picker_ns(qpage->new_type_combo);
-  char * name      = gtk_entry_get_text(GTK_ENTRY(qpage->new_name_entry));
-  char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->new_mnemonic_entry));
+  const char * name      = gtk_entry_get_text(GTK_ENTRY(qpage->new_name_entry));
+  const char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->new_mnemonic_entry));
   int  show_matches;
 
   if(!namespace || (namespace[0] == 0)) {

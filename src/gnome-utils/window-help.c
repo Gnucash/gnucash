@@ -546,7 +546,7 @@ static void
 gnc_help_window_search_button_cb(GtkButton * button, gpointer data)
 {
   gnc_help_window * help = data;
-  char            * search_string = 
+  const char * search_string = 
     gtk_entry_get_text(GTK_ENTRY(help->search_entry));
   DBT             key, value;
   int             err=1;
