@@ -301,12 +301,9 @@ gboolean xaccSplitEqual(const Split *sa, const Split *sb,
 /* Split slots are used to store arbitrary strings, numbers, and
  * structures which aren't members of the transaction struct.
  *
- * Reserved slot names:
- *
- * gnc:split-type -- a string representing the type of split, if not normal.
- *
+ * See kvp_doc.txt for reserved slot names.
  */
-kvp_frame *xaccSplitGetSlots(Split *trans);
+kvp_frame *xaccSplitGetSlots(Split *split);
 
 /* The xaccSplitGetGUID() subroutine will return the
  *    globally unique id associated with that split.

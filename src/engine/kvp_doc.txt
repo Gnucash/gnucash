@@ -36,6 +36,11 @@ Please put the keys in alphabetical order.
 
 --------------------------------------------------------------------------
 
+Name: gnc:split-type
+Entities: Split
+Use: xaccSplitGetType, xaccSplitMakeStockSplit
+     Store a string representing the type of split, if not normal.
+
 Name: memo
 Type: string
 Entities: Split
