@@ -108,118 +108,190 @@ use_security_cells (SplitRegister *reg, VirtualLocation virt_loc)
 }
 
 static const char *
-gnc_split_register_get_label (VirtualLocation virt_loc, gpointer user_data)
+gnc_split_register_get_date_label (VirtualLocation virt_loc,
+                                   gpointer user_data)
+{
+  return _("Date");
+}
+
+static const char *
+gnc_split_register_get_num_label (VirtualLocation virt_loc,
+                                  gpointer user_data)
+{
+  return _("Num");
+}
+
+static const char *
+gnc_split_register_get_desc_label (VirtualLocation virt_loc,
+                                   gpointer user_data)
+{
+  return _("Description");
+}
+
+static const char *
+gnc_split_register_get_recn_label (VirtualLocation virt_loc,
+                                   gpointer user_data)
+{
+  return _("Reconciled:R") + 11;
+}
+
+static const char *
+gnc_split_register_get_baln_label (VirtualLocation virt_loc,
+                                   gpointer user_data)
+{
+  return _("Balance");
+}
+
+static const char *
+gnc_split_register_get_action_label (VirtualLocation virt_loc,
+                                     gpointer user_data)
+{
+  return _("Action");
+}
+
+static const char *
+gnc_split_register_get_xfrm_label (VirtualLocation virt_loc,
+                                   gpointer user_data)
+{
+  return _("Account");
+}
+
+static const char *
+gnc_split_register_get_mxfrm_label (VirtualLocation virt_loc,
+                                    gpointer user_data)
+{
+  return _("Transfer");
+}
+
+static const char *
+gnc_split_register_get_memo_label (VirtualLocation virt_loc,
+                                   gpointer user_data)
+{
+  return _("Memo");
+}
+
+static const char *
+gnc_split_register_get_debit_label (VirtualLocation virt_loc,
+                                    gpointer user_data)
 {
   SplitRegister *reg = user_data;
-  CellType cell_type;
 
-  cell_type = gnc_table_get_cell_type (reg->table, virt_loc);
+  return xaccSRGetDebitString (reg);
+}
 
-  switch (cell_type)
+static const char *
+gnc_split_register_get_credit_label (VirtualLocation virt_loc,
+                                     gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+
+  return xaccSRGetCreditString (reg);
+}
+
+static const char *
+gnc_split_register_get_price_label (VirtualLocation virt_loc,
+                                    gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+
+  if (!use_security_cells (reg, virt_loc))
+    return NULL;
+
+  return _("Price");
+}
+
+static const char *
+gnc_split_register_get_shares_label (VirtualLocation virt_loc,
+                                     gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+
+  if (!use_security_cells (reg, virt_loc))
+    return NULL;
+
+  return _("Shares");
+}
+
+static const char *
+gnc_split_register_get_tcredit_label (VirtualLocation virt_loc,
+                                      gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+
+  if (reg->tcredit_str)
+    return reg->tcredit_str;
+
   {
-    case DATE_CELL:
-      return _("Date");
+    const char *string = xaccSRGetCreditString (reg);
 
-    case NUM_CELL:
-      return _("Num");
-
-    case DESC_CELL:
-      return _("Description");
-
-    case RECN_CELL:
-      return _("Reconciled:R") + 11;
-
-    case BALN_CELL:
-      return _("Balance");
-
-    case ACTN_CELL:
-      return _("Action");
-
-    case XFRM_CELL:
-      return _("Account");
-
-    case MEMO_CELL:
-      return _("Memo");
-
-    case CRED_CELL:
-      return xaccSRGetCreditString (reg);
-
-    case DEBT_CELL:
-      return xaccSRGetDebitString (reg);
-
-    case PRIC_CELL:
-      if (!use_security_cells (reg, virt_loc))
-        return "";
-
-      return _("Price");
-
-    case SHRS_CELL:
-      if (!use_security_cells (reg, virt_loc))
-        return "";
-
-      return _("Shares");
-
-    case MXFRM_CELL:
-      return _("Transfer");
-
-    case TCRED_CELL:
-      if (reg->tcredit_str)
-        return reg->tcredit_str;
-
-      {
-        const char *string = xaccSRGetCreditString (reg);
-        if (string)
-          reg->tcredit_str = g_strdup_printf (_("Tot %s"), string);
-      }
-
-      if (reg->tcredit_str)
-        return reg->tcredit_str;
-
-      reg->tcredit_str = g_strdup (_("Tot Credit"));
-
-      return reg->tcredit_str;
-
-    case TDEBT_CELL:
-      if (reg->tdebit_str)
-        return reg->tdebit_str;
-
-      {
-        const char *string = xaccSRGetDebitString (reg);
-        if (string)
-          reg->tdebit_str = g_strdup_printf (_("Tot %s"), string);
-      }
-
-      if (reg->tdebit_str)
-        return reg->tdebit_str;
-
-      reg->tdebit_str = g_strdup (_("Tot Debit"));
-
-      return reg->tdebit_str;
-
-    case TSHRS_CELL:
-      return _("Tot Shares");
-
-    case TBALN_CELL:
-      return _("Balance");
-
-    case NOTES_CELL:
-      return _("Notes");
-
-    case FCRED_CELL:
-      return _("Credit Formula");
-    case FDEBT_CELL:
-      return _("Debit Formula");
-
-    case NO_CELL:
-      return "";
-
-    default:
-      break;
+    if (string)
+      reg->tcredit_str = g_strdup_printf (_("Tot %s"), string);
   }
 
-  PERR ("bad cell type: %d", cell_type);
+  if (reg->tcredit_str)
+    return reg->tcredit_str;
 
-  return "";
+  reg->tcredit_str = g_strdup (_("Tot Credit"));
+
+  return reg->tcredit_str;
+}
+
+static const char *
+gnc_split_register_get_tdebit_label (VirtualLocation virt_loc,
+                                     gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+
+  if (reg->tdebit_str)
+    return reg->tdebit_str;
+
+  {
+    const char *string = xaccSRGetDebitString (reg);
+    if (string)
+      reg->tdebit_str = g_strdup_printf (_("Tot %s"), string);
+  }
+
+  if (reg->tdebit_str)
+    return reg->tdebit_str;
+
+  reg->tdebit_str = g_strdup (_("Tot Debit"));
+
+  return reg->tdebit_str;
+}
+
+static const char *
+gnc_split_register_get_tshares_label (VirtualLocation virt_loc,
+                                      gpointer user_data)
+{
+  return _("Tot Shares");
+}
+
+static const char *
+gnc_split_register_get_tbalance_label (VirtualLocation virt_loc,
+                                       gpointer user_data)
+{
+  return _("Balance");
+}
+
+static const char *
+gnc_split_register_get_notes_label (VirtualLocation virt_loc,
+                                    gpointer user_data)
+{
+  return _("Notes");
+}
+
+static const char *
+gnc_split_register_get_fdebit_label (VirtualLocation virt_loc,
+                                     gpointer user_data)
+{
+  return _("Debit Formula");
+}
+
+static const char *
+gnc_split_register_get_fcredit_label (VirtualLocation virt_loc,
+                                      gpointer user_data)
+{
+  return _("Credit Formula");
 }
 
 static gnc_numeric
@@ -1240,7 +1312,87 @@ gnc_split_register_model_new (void)
                                      gnc_split_register_get_debcred_entry,
                                      CRED_CELL);
 
-  model->label_handler       = gnc_split_register_get_label;
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_date_label,
+                                     DATE_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_num_label,
+                                     NUM_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_desc_label,
+                                     DESC_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_recn_label,
+                                     RECN_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_baln_label,
+                                     BALN_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_action_label,
+                                     ACTN_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_xfrm_label,
+                                     XFRM_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_memo_label,
+                                     MEMO_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_debit_label,
+                                     DEBT_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_credit_label,
+                                     CRED_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_price_label,
+                                     PRIC_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_shares_label,
+                                     SHRS_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_mxfrm_label,
+                                     MXFRM_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_tcredit_label,
+                                     TCRED_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_tdebit_label,
+                                     TDEBT_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_tshares_label,
+                                     TSHRS_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_tbalance_label,
+                                     TBALN_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_notes_label,
+                                     NOTES_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_fdebit_label,
+                                     FDEBT_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_fcredit_label,
+                                     FCRED_CELL);
+
   model->fg_color_handler    = gnc_split_register_get_fg_color;
   model->bg_color_handler    = gnc_split_register_get_bg_color;
   model->cell_border_handler = gnc_split_register_get_border;

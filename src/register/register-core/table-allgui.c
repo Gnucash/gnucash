@@ -293,11 +293,24 @@ gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 const char *
 gnc_table_get_label (Table *table, VirtualLocation virt_loc)
 {
-  if (!table || !table->model->label_handler)
+  TableGetLabelHandler label_handler;
+  const char *label;
+  int cell_type;
+
+  if (!table || !table->model)
     return "";
 
-  return table->model->label_handler (virt_loc,
-                                      table->model->handler_user_data);
+  cell_type = gnc_table_get_cell_type (table, virt_loc);
+
+  label_handler = gnc_table_model_get_label_handler (table->model, cell_type);
+  if (!label_handler)
+    return "";
+
+  label = label_handler (virt_loc, table->model->handler_user_data);
+  if (!label)
+    return "";
+
+  return label;
 }
 
 guint32
