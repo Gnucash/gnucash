@@ -1,3 +1,8 @@
+2001-08-08  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/register-gnome/pricecell-gnome.c: better 'return'
+	handling.
+
 2001-08-06  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/pricecell.c: fix bugs
