@@ -90,7 +90,7 @@ struct _GNCSearchWindow {
   /* What we're searching for, and how */
   GNCIdTypeConst search_for;
   GNCSearchType	grouping;	/* Match Any, Match All */
-  QueryAccess	get_guid;	/* Function to GetGUID from the object */
+  const QofParam * get_guid;	/* Function to GetGUID from the object */
   int		search_type;	/* New, Narrow, Add, Delete */
 
   /* Our query status */
@@ -441,14 +441,15 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
 
   res = (sw->new_item_cb)(sw->user_data);
 
-  if (res) {
-    const GUID *guid = (const GUID *) ((sw->get_guid)(res));
+  if (res) 
+  {
+    const GUID *guid = (const GUID *) ((sw->get_guid->param_getfcn)(res, sw->get_guid));
     QueryOp op = QUERY_OR;
 
     if (!sw->q) {
       if (!sw->start_q) {
-	sw->start_q = gncQueryCreateFor (sw->search_for);
-	gncQuerySetBook (sw->start_q, gnc_get_current_book ());
+        sw->start_q = gncQueryCreateFor (sw->search_for);
+        gncQuerySetBook (sw->start_q, gnc_get_current_book ());
       }
       sw->q = gncQueryCopy (sw->start_q);
       op = QUERY_AND;
@@ -882,8 +883,8 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
   sw->free_cb = free_cb;
 
   /* Grab the get_guid function */
-  sw->get_guid = gncQueryObjectGetParameterGetter (sw->search_for,
-						   QUERY_PARAM_GUID);
+  sw->get_guid = qof_class_get_parameter (sw->search_for,
+						   QOF_QUERY_PARAM_GUID);
   if (start_query)
     sw->start_q = gncQueryCopy (start_query);
   sw->q = show_start_query;

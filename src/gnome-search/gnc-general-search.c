@@ -62,7 +62,7 @@ struct _GNCGeneralSearchPrivate {
 	GNCSearchCB		search_cb;
 	gpointer		user_data;
 	GNCSearchWindow *	sw;
-	QueryAccess		get_guid;
+	const QofParam * get_guid;
 	gint			component_id;
 };
 
@@ -295,11 +295,11 @@ gnc_general_search_new (GNCIdTypeConst type, const char *label,
 			GNCSearchCB search_cb, gpointer user_data)
 {
 	GNCGeneralSearch *gsl;
-	QueryAccess get_guid;
+	const QofParam *get_guid;
 
 	g_return_val_if_fail (type && label && search_cb, NULL);
 
-	get_guid = gncQueryObjectGetParameterGetter (type, QUERY_PARAM_GUID);
+	get_guid = qof_class_get_parameter (type, QOF_QUERY_PARAM_GUID);
 	g_return_val_if_fail (get_guid, NULL);
 
 	gsl = gtk_type_new (gnc_general_search_get_type ());
@@ -341,9 +341,11 @@ gnc_general_search_set_selected (GNCGeneralSearch *gsl, gpointer selection)
 
 	gnc_gui_component_clear_watches (gsl->priv->component_id);
 
-	if (selection) {
-		gsl->priv->guid = * ((GUID *)(gsl->priv->get_guid
-					      (gsl->selected_item)));
+	if (selection) 
+   {
+      const QofParam *get_guid = gsl->priv->get_guid;
+		gsl->priv->guid = * ((GUID *)(get_guid->param_getfcn
+					      (gsl->selected_item, get_guid)));
 		gnc_gui_component_watch_entity
 			(gsl->priv->component_id, &(gsl->priv->guid),
 			 GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);

@@ -43,9 +43,10 @@ enum
   LAST_SIGNAL
 };
 
-struct _GNCQueryListPriv {
-  QueryAccess	get_guid;
-  gint		component_id;
+struct _GNCQueryListPriv 
+{
+  const QofParam * get_guid;
+  gint	          component_id;
 };
 
 /* Impossible to get at runtime. Assume this is a reasonable number */
@@ -125,8 +126,8 @@ gnc_query_list_construct (GNCQueryList *list, GList *param_list, Query *query)
 
   /* cache the function to get the guid of this query type */
   list->priv->get_guid =
-    gncQueryObjectGetParameterGetter (gncQueryGetSearchFor (query),
-				      QUERY_PARAM_GUID);
+    qof_class_get_parameter (qof_query_get_search_for(query),
+                  QOF_QUERY_PARAM_GUID);
 
   /* Initialize the CList */
   gnc_query_list_init_clist(list);
@@ -776,6 +777,7 @@ gnc_query_list_fill(GNCQueryList *list)
   {
     GList *node;
     gint row;
+    QofParam *qp= NULL;
 
     for (i = 0, node = list->column_params; node; node = node->next)
     {
@@ -783,33 +785,35 @@ gnc_query_list_fill(GNCQueryList *list)
       GSList *converters = gnc_search_param_get_converters (param);
       const char *type = gnc_search_param_get_param_type (param);
       gpointer res = item->data;
-      QueryAccess fcn = NULL;
 
       /* if this is a boolean, ignore it now -- we'll use a checkmark later */
       if (!safe_strcmp (type, QUERYCORE_BOOLEAN)) {
-	strings[i++] = g_strdup("");
-	continue;
+        strings[i++] = g_strdup("");
+        continue;
       }
 
       /* Do all the object conversions */
-      for (; converters; converters = converters->next) {
-	fcn = converters->data;
-
-	if (converters->next)
-	  res = fcn (res);
+      for (; converters; converters = converters->next) 
+      {
+         qp = converters->data;
+         if (converters->next)
+         {
+            res = (qp->param_getfcn)(res, qp);
+         }
       }
 
       /* Now convert this to a text value for the row */
       if (!safe_strcmp(type, QUERYCORE_DEBCRED) ||
-	  !safe_strcmp(type, QUERYCORE_NUMERIC))
+          !safe_strcmp(type, QUERYCORE_NUMERIC))
       {
-	gnc_numeric (*nfcn)(gpointer) = (gnc_numeric(*)(gpointer))fcn;
-	gnc_numeric value = nfcn(res);
-	if (list->numeric_abs)
-	  value = gnc_numeric_abs (value);
-	strings[i++] = g_strdup(xaccPrintAmount(value,gnc_default_print_info(FALSE)));
+        gnc_numeric (*nfcn)(gpointer, QofParam *) = 
+                (gnc_numeric(*)(gpointer, QofParam *))(qp->param_getfcn);
+        gnc_numeric value = nfcn(res, qp);
+        if (list->numeric_abs)
+          value = gnc_numeric_abs (value);
+        strings[i++] = g_strdup(xaccPrintAmount(value,gnc_default_print_info(FALSE)));
       } else
-	strings[i++] = gncQueryCoreToString (type, res, fcn);
+        strings[i++] = gncQueryCoreToString (type, res, qp);
     }
 
     row = gtk_clist_append (GTK_CLIST(list), (gchar **) strings);
@@ -818,14 +822,15 @@ gnc_query_list_fill(GNCQueryList *list)
     /* Free up our strings */
     for (i = 0; i < list->num_columns; i++) {
       if (strings[i])
-	g_free (strings[i]);
+        g_free (strings[i]);
     }
 
     /* Now update any checkmarks */
     update_booleans (list, row);
 
     /* and set a watcher on this item */
-    guid = (const GUID*)((list->priv->get_guid)(item->data));
+    const QofParam *gup = list->priv->get_guid;
+    guid = (const GUID*)((gup->param_getfcn)(item->data, gup));
     gnc_gui_component_watch_entity (list->priv->component_id, guid,
 				    GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 

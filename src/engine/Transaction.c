@@ -3196,7 +3196,7 @@ static QofObject split_object_def = {
 };
 
 static gpointer 
-split_account_guid_getter (gpointer obj)
+split_account_guid_getter (gpointer obj, const QofParam *p)
 {
   Split *s = obj;
   Account *acc;
@@ -3214,7 +3214,8 @@ DxaccSplitGetShareAmount (const Split * split)
   return gnc_numeric_to_double(xaccSplitGetAmount(split));
 }
 
-static gpointer no_op (gpointer obj)
+static gpointer 
+no_op (gpointer obj, const QofParam *p)
 {
   return obj;
 }

@@ -134,7 +134,12 @@ typedef void (*QofEntityForeachCB) (QofEntity *, gpointer user_data);
 void qof_collection_foreach (QofCollection *, 
                        QofEntityForeachCB, gpointer user_data);
 
-/** store and retreive arbitrary object-defined data */
+/** Store and retreive arbitrary object-defined data 
+ *
+ * XXX We need to add a callback for when the collection is being
+ * destroyed, so that the user has a chance to clean up anything
+ * that was put in the 'data' member here.
+ */
 gpointer qof_collection_get_data (QofCollection *col);
 void qof_collection_set_data (QofCollection *col, gpointer user_data);
 

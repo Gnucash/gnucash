@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofsql.h -- QOF cleint-side SQL parser                           *
+ * qofsql.h -- QOF client-side SQL parser                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,6 +20,8 @@
  *                                                                  *
 \********************************************************************/
 
+/** @addtogroup Engine
+    @{ */
 /**
     @file qofsql.h
     @breif QOF client-side SQL parser.
@@ -111,3 +113,4 @@ GList * qof_sql_query_run (QofSqlQuery *query, const char * str);
 void qof_sql_query_set_kvp (QofSqlQuery *, KvpFrame *);
 
 #endif /* QOF_SQL_QUERY_H */
+/** @} */

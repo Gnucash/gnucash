@@ -171,7 +171,7 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
       break;
 
     /* Save the converter */
-    converters = g_slist_prepend (converters, objDef->param_getfcn);
+    converters = g_slist_prepend (converters, (gpointer) objDef);
 
     /* And reset for the next parameter */
     type = search_type = objDef->param_type;
@@ -372,13 +372,13 @@ gnc_search_param_compute_value (GNCSearchParam *param, gpointer object)
   else
   {
     GSList *converters = gnc_search_param_get_converters (param);
-    QueryAccess fcn = NULL;
     gpointer res = object;
 
     /* Do all the object conversions */
-    for (; converters; converters = converters->next) {
-      fcn = converters->data;
-      res = fcn (res);
+    for (; converters; converters = converters->next) 
+    {
+      QofParam *qp = converters->data;
+      res = (qp->param_getfcn) (res, qp);
     }
 
     return res;

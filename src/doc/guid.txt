@@ -49,4 +49,14 @@ transactions, while the 'open book' looks just like it (has the
 same accounts, etc), but doesn't have the old transactions.
 
 
+The Issue:
+----------
+The current book-closing code makes a copy of the account tree,
+and sorts all transactions, by date, into the new or the old
+account tree.  With the goal of not confusing the new and the
+old account trees, the book closing code issues the old accounts
+a new set of guids.  The Pro's & Con's of this scheme:
+
+Pro: The 'old', closed accounts can be uniquely accessed according 
+to thier GUID's, without causing confusion with similar/same.
 

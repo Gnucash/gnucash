@@ -56,14 +56,24 @@
 /** Type of Paramters (String, Date, Numeric, GUID, etc.) */
 typedef const char * QofType;
 
+typedef struct _QofParam QofParam;
+
 /** The QofAccessFunc defines an arbitrary function pointer
  *  for access functions.  This is needed because C doesn't have
  *  templates, so we just cast a lot.  Real functions must be of
  *  the form:
  *
- * param_type getter_func (object_type *self);
+ *        param_type getter_func (object_type *self);
+ *  or
+ *        param_type getter_func (object_type *self, QofParam *param);
+ *
+ * The additional argument 'param' allows generic getter functions
+ * to be implemented, because this argument provides for a way to
+ * identify the expected getter_func return type at runtime.  It
+ * also provides a place for the user to hang additional user-defined
+ * data.
  */
-typedef gpointer (*QofAccessFunc)(gpointer);
+typedef gpointer (*QofAccessFunc)(gpointer object, const QofParam *param);
 
 /** The QofSetterFunc defines an function pointer for parameter
  *  setters. Real functions must be of the form:
@@ -79,16 +89,24 @@ typedef void (*QofSetterFunc) (gpointer, gpointer);
  *    object (QofIdType) or it can be a core data type (QofType).
  * -- param_getfcn is the function to actually obtain the parameter
  * -- param_setfcn is the function to actually set the parameter
+ * -- param_userdata is a place where the user can place any desiered
+ *    user-defined data (and thus can be used by the user-defined
+ *    setter/getter).
  *
  * Either the getter or the setter may be NULL.
+ *
+ *  XXX todo/fixme: need to define a destroy callback, so that when
+ * the param memory is freed, the callback can be used to release the 
+ * user-defined data.
  */
-typedef struct _QofParam 
+struct _QofParam 
 {
   const char       * param_name;
   QofType            param_type;
   QofAccessFunc      param_getfcn;
   QofSetterFunc      param_setfcn;
-} QofParam;
+  gpointer           param_userdata;
+};
 
 /** This function is the default sort function for a particular object type */
 typedef int (*QofSortFunc)(gpointer, gpointer);

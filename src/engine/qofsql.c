@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofsql.h -- QOF cleint-side SQL parser                           *
+ * qofsql.c -- QOF client-side SQL parser                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -25,8 +25,6 @@
     @breif QOF client-side SQL parser.
     @author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
 
-    XXX: todo: replace printf error with proper error
-        handling/reporting.
 */
 
 #include <glib.h>
@@ -34,10 +32,15 @@
 #include <qof/kvp_frame.h>
 #include <qof/gnc-date.h>
 #include <qof/gnc-numeric.h>
+#include <qof/gnc-trace.h>
 #include <qof/guid.h>
 #include <qof/qofbook.h>
 #include <qof/qofquery.h>
 #include <qof/qofsql.h>
+
+static short module = MOD_QUERY;
+
+/* =================================================================== */
 
 struct _QofSqlQuery
 {
@@ -168,7 +171,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 	
 	if (NULL == cond)
 	{
-		printf ("Error: missing condition\n");
+		PWARN("missing condition");
 		return NULL;
 	}
 			
@@ -177,19 +180,20 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 	/* XXX fix this so it can be either left or right */
 	if (NULL == cond->d.pair.left)
 	{
-		printf ("Error: missing left paramter\n");
+		PWARN("missing left paramter");
 		return NULL;
 	}
 	sql_field_item * sparam = cond->d.pair.left->item;
 	if (SQL_name != sparam->type)
 	{
-		printf ("Error: we support only paramter names\n");
+		PWARN("we support only paramter names at this time (parsed %d)",
+          sparam->type);
 		return NULL;
 	}
 	char * qparam_name = sparam->d.name->data;
 	if (NULL == qparam_name)
 	{
-		printf ("Error: we missing paramter name\n");
+		PWARN ("missing paramter name");
 		return NULL;
 	}
 
@@ -198,19 +202,19 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 	/* XXX fix this so it can be either left or right */
 	if (NULL == cond->d.pair.right)
 	{
-		printf ("Error: missing right paramter\n");
+		PWARN ("missing right paramter");
 		return NULL;
 	}
 	sql_field_item * svalue = cond->d.pair.right->item;
 	if (SQL_name != svalue->type)
 	{
-		printf ("Error: we support only simple values\n");
+		PWARN("we support only simple values (parsed as %d)", svalue->type);
 		return NULL;
 	}
 	char * qvalue_name = svalue->d.name->data;
 	if (NULL == qvalue_name)
 	{
-		printf ("Error: we missing value\n");
+		PWARN("missing value");
 		return NULL;
 	}
 	qvalue_name = dequote_string (qvalue_name);
@@ -222,7 +226,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 	{
 		if (NULL == query->kvp_join)
 		{
-			printf ("Error: missing kvp frame\n");
+			PWARN ("missing kvp frame");
 			return NULL;
 		}
 		KvpValue *kv = kvp_frame_get_value (query->kvp_join, qvalue_name+5);
@@ -259,7 +263,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 			case KVP_TYPE_GLIST:
 			case KVP_TYPE_NUMERIC:
 			case KVP_TYPE_FRAME:
-				printf ("Error: unhandled kvp type=%d\n", kvt);
+				PWARN ("unhandled kvp type=%d", kvt);
 				return NULL;
 		}
 	}
@@ -281,7 +285,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		default:
 			/* XXX for string-type queries, we should be able to
 			 * support 'IN' for substring search.  Also regex. */
-			printf ("Error: unsupported compare op for now\n");
+			PWARN ("Unsupported compare op (parsed as %s)", cond->op);
 			return NULL;
 	}
 
@@ -298,11 +302,12 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		
 	if (NULL == table_name)
 	{
-		printf ("Error: Need to specify a table to query\n");
+		PWARN ("Need to specify an object class to query");
 		return NULL;
 	}
 			
 	QofType param_type = qof_class_get_parameter_type (table_name, param_name);
+	if (!param_type) return NULL;  /* Can't happen */
 
 	if (!strcmp (param_type, QOF_TYPE_STRING))
 	{
@@ -347,7 +352,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		int rc = qof_scan_date_secs (qvalue_name, &exact);
 		if (0 == rc) 
 		{
-			printf ("Error: unable to parse date: %s\n", qvalue_name);
+			PWARN ("unable to parse date: %s", qvalue_name);
 			return NULL;
 		}
 		Timespec ts;
@@ -374,7 +379,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		gboolean rc = string_to_guid (qvalue_name, guid);
 		if (0 == rc)
 		{
-			printf ("Error: unable to parse guid: %s\n", qvalue_name);
+			PWARN ("unable to parse guid: %s", qvalue_name);
 			return NULL;
 		}
 
@@ -395,7 +400,7 @@ xxxxxhd
 #endif
 	else
 	{
-		printf ("Error: predicate type unsupported for now \n");
+		PWARN ("The predicate type \"%s\" is unsupported for now", param_type);
 		return NULL;
 	}
 
@@ -510,14 +515,14 @@ qof_sql_query_run (QofSqlQuery *query, const char *str)
 
 	if (!query->parse_result) 
 	{
-		printf ("parse error\n"); // XXX replace 
+		PWARN ("parse error"); 
 		return NULL;
 	}
 
 	if (SQL_select != query->parse_result->type)
 	{
-		printf ("Error: currently, only SELECT statements are supported, "
-		                     "got type=%d\n", query->parse_result);
+		PWARN("currently, only SELECT statements are supported, "
+		                     "got type=%d", query->parse_result);
 		return NULL;
 	}
 

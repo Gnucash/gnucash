@@ -135,6 +135,11 @@ qof_object_foreach (QofIdTypeConst type_name, QofBook *book,
   ENTER ("type=%s", type_name);
 
   obj = qof_object_lookup (type_name);
+  if (!obj)
+  {
+    PERR ("No object of type %s", type_name);
+    return;
+  }
   col = qof_book_get_collection (book, obj->e_type);
   PINFO ("lookup obj=%p for type=%s", obj, type_name);
   if (!obj) return;
