@@ -218,7 +218,7 @@ gnc_column_view_edit_options(SCM options, SCM view) {
   else {
     gnc_column_view_edit * r = g_new0(gnc_column_view_edit, 1);
 
-    r->optwin = gnc_options_dialog_new(TRUE);
+    r->optwin = gnc_options_dialog_new(TRUE, NULL);
     
     tlo = GTK_OBJECT(create_Edit_Column_View_Page());
     

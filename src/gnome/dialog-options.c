@@ -1935,7 +1935,7 @@ gnc_options_dialog_ok_cb(GtkWidget * w, gpointer data) {
 }
 
 GNCOptionWin *
-gnc_options_dialog_new(gboolean make_toplevel) {
+gnc_options_dialog_new(gboolean make_toplevel, gchar *title) {
   GNCOptionWin * retval = g_new0(GNCOptionWin, 1);
   GtkWidget * vbox;
   GtkWidget * buttonbox;
@@ -1951,6 +1951,10 @@ gnc_options_dialog_new(gboolean make_toplevel) {
 
   if(make_toplevel) {
     retval->container = gtk_window_new(GDK_WINDOW_TOPLEVEL);
+    if(title)
+    {
+      gtk_window_set_title(GTK_WINDOW(retval->container), title);
+    }
   }
   else {
     retval->container = vbox;
@@ -2125,7 +2129,7 @@ gnc_show_options_dialog(void)
 
   if (options_dialog == NULL)
   {
-    options_dialog = gnc_options_dialog_new(TRUE);
+    options_dialog = gnc_options_dialog_new(TRUE, NULL);
 
     gnc_build_options_dialog_contents(options_dialog, global_options);
     gnc_option_db_clean(global_options);

@@ -1108,7 +1108,7 @@ gnc_acct_tree_window_toolbar_options_cb(GtkWidget * widget, gpointer data) {
                      (gnc_options_dialog_widget(win->editor_dialog))->window);
   }
   else {
-    win->editor_dialog = gnc_options_dialog_new(TRUE);
+    win->editor_dialog = gnc_options_dialog_new(TRUE, NULL);
     gnc_build_options_dialog_contents(win->editor_dialog, 
                                       win->odb);
     

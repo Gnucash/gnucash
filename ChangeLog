@@ -1,3 +1,15 @@
+2001-05-29  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/gnome/dialog-options.{ch} (gnc_options_dialog_new):
+	provide the ability to (optionally) set a title for
+	the options dialog box.  API changed.
+
+	* src/gnome/dialog-column-view.c, dialog-style-sheet.c,
+	window-acct-tree.c :modify to use changed API.
+
+	* src/gnome/window-report.c: use new API to title report
+	options dialogs.
+
 2001-05-28  Dave Peticolas  <dave@krondo.com>
 
 	* doc/sgml/pt_PT/*: add Duarte Loreto's updated transations

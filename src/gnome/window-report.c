@@ -847,9 +847,12 @@ gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
 GtkWidget * 
 gnc_report_window_default_params_editor(SCM options, SCM report) {
   SCM get_editor = gh_eval_str("gnc:report-editor-widget");
+  SCM get_title = gh_eval_str("gnc:report-type");
   SCM ptr;
   SCM new_edited;
   
+  char *title = NULL;
+
   ptr = gh_call1(get_editor, report);
   if(ptr != SCM_BOOL_F) {
     GtkWidget * w = gw_wcp_get_ptr(ptr);
@@ -863,8 +866,17 @@ gnc_report_window_default_params_editor(SCM options, SCM report) {
     prm->scm_options = options;
     prm->cur_report  = report;
     prm->db          = gnc_option_db_new(prm->scm_options);
-    prm->win         = gnc_options_dialog_new(TRUE);
+
+    ptr = gh_call1(get_title, report);
+    if (ptr != SCM_BOOL_F) {
+      title = gh_scm2newstr(ptr, NULL);
+    }
+    prm->win         = gnc_options_dialog_new(TRUE, title);
     
+    if (title) {
+      free(title);
+    }
+
     scm_protect_object(prm->scm_options);
     scm_protect_object(prm->cur_report);
     

@@ -32,7 +32,7 @@ typedef struct _gnc_option_win GNCOptionWin;
 
 typedef void (* GNCOptionWinCallback)(GNCOptionWin *, gpointer data);
 
-GNCOptionWin * gnc_options_dialog_new(gboolean make_toplevel);
+GNCOptionWin * gnc_options_dialog_new(gboolean make_toplevel, gchar *title);
 void gnc_options_dialog_destroy(GNCOptionWin * win);
 
 GtkWidget * gnc_options_dialog_widget(GNCOptionWin * win);

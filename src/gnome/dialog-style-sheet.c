@@ -109,7 +109,7 @@ gnc_style_sheet_dialog_fill(StyleSheetDialog * ss, SCM selected) {
     char           * c_name;
 
     /* make the options DB and dialog, but don't parent it yet */ 
-    ssinfo->odialog = gnc_options_dialog_new(FALSE);
+    ssinfo->odialog = gnc_options_dialog_new(FALSE, NULL);
     ssinfo->odb     = gnc_option_db_new(scm_options);
     ssinfo->stylesheet = gh_car(stylesheets);
 
