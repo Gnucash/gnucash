@@ -51,7 +51,6 @@ EXTRA_DIST = \
 
 bin_SCRIPTS = gnucash-config
 
-BUILT_SOURCES = gnucash-config
 CLEANFILES = gnucash-config
 
 ## We borrow guile's convention and use @-...-@ as the substitution
@@ -71,24 +70,6 @@ make-gnucash-potfiles: make-gnucash-potfiles.in
             -e 's:@-PERL-@:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
-
-gnucash-config: gnucash-config.in
-	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
-            -e 's:@-VERSION-@:${VERSION}:g' \
-            -e 's:@-GNUCASH_ENGINE_CFLAGS-@:${GNUCASH_ENGINE_CFLAGS}:g' \
-            -e 's:@-GNUCASH_ENGINE_LIBS-@:${GNUCASH_ENGINE_LIBS}:g' \
-            -e 's:@-GNUCASH_APP_UTILS_CFLAGS-@:${GNUCASH_APP_UTILS_CFLAGS}:g' \
-            -e 's:@-GNUCASH_APP_UTILS_LIBS-@:${GNUCASH_APP_UTILS_LIBS}:g' \
-            -e 's:@-GNUCASH_NETWORK_UTILS_CFLAGS-@:${GNUCASH_NETWORK_UTILS_CFLAGS}:g' \
-            -e 's:@-GNUCASH_NETWORK_UTILS_LIBS-@:${GNUCASH_NETWORK_UTILS_LIBS}:g' \
-            -e 's:@-GNUCASH_GNOME_UTILS_CFLAGS-@:${GNUCASH_GNOME_UTILS_CFLAGS}:g' \
-            -e 's:@-GNUCASH_GNOME_UTILS_LIBS-@:${GNUCASH_GNOME_UTILS_LIBS}:g' \
-            -e 's:@-GNUCASH_REGISTER_CORE_CFLAGS-@:${GNUCASH_REGISTER_CORE_CFLAGS}:g' \
-            -e 's:@-GNUCASH_REGISTER_CORE_LIBS-@:${GNUCASH_REGISTER_CORE_LIBS}:g'
-	chmod +x $@.tmp
-	mv $@.tmp $@
-
 
 DISTCLEANFILES = \
   cscope.files cscope.out etags.files make-gnucash-patch

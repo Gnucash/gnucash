@@ -14,6 +14,7 @@ Options:
 	[--version]
 	[--libs]
 	[--cflags]
+        [--ld-library-path]
 Libraries:
 	engine
         network-utils
@@ -38,6 +39,9 @@ while test $# -gt 0; do
   esac
 
   case $1 in
+    --ld-library-path)
+      echo_ld_library_path=yes
+      ;;
     --prefix=*)
       prefix=$optarg
       if test $exec_prefix_set = no ; then
@@ -55,7 +59,7 @@ while test $# -gt 0; do
       echo_exec_prefix=yes
       ;;
     --version)
-      echo @-VERSION-@
+      echo @VERSION@
       exit 0
       ;;
     --cflags)
@@ -95,6 +99,14 @@ while test $# -gt 0; do
   shift
 done
 
+datadir=@datadir@
+libdir=@libdir@
+pkgdatadir=${datadir}/@PACKAGE@
+pkglibdir=${libdir}/@PACKAGE@
+pkgincludedir=${includedir}/@PACKAGE@
+GNC_LIBDIR=@GNC_LIBDIR@
+GNC_MODULE_DIR=@GNC_MODULE_DIR@
+GNC_SHAREDIR=@GNC_SHAREDIR@
 
 # Trim the link and compile lines down.
 
@@ -139,23 +151,23 @@ if test "$echo_cflags" = "yes"; then
     cflags=""
 
     if test "$lib_engine" = "yes"; then
-        cflags="$cflags @-GNUCASH_ENGINE_CFLAGS-@"
+        cflags="$cflags @GNUCASH_ENGINE_CFLAGS@"
     fi
 
     if test "$lib_network_utils" = "yes"; then
-        cflags="$cflags @-GNUCASH_NETWORK_UTILS_CFLAGS-@"
+        cflags="$cflags @GNUCASH_NETWORK_UTILS_CFLAGS@"
     fi
 
     if test "$lib_app_utils" = "yes"; then
-        cflags="$cflags @-GNUCASH_APP_UTILS_CFLAGS-@"
+        cflags="$cflags @GNUCASH_APP_UTILS_CFLAGS@"
     fi
 
     if test "$lib_register_core" = "yes"; then
-        cflags="$cflags @-GNUCASH_REGISTER_CORE_CFLAGS-@"
+        cflags="$cflags @GNUCASH_REGISTER_CORE_CFLAGS@"
     fi
 
     if test "$lib_gnome_utils" = "yes"; then
-        cflags="$cflags @-GNUCASH_GNOME_UTILS_CFLAGS-@"
+        cflags="$cflags @GNUCASH_GNOME_UTILS_CFLAGS@"
     fi
 
     echo $cflags
@@ -165,24 +177,29 @@ if test "$echo_libs" = "yes"; then
     libs=""
 
     if test "$lib_engine" = "yes"; then
-        libs="$libs @-GNUCASH_ENGINE_LIBS-@"
+        libs="$libs @GNUCASH_ENGINE_LIBS@"
     fi
 
     if test "$lib_network_utils" = "yes"; then
-        libs="$libs @-GNUCASH_NETWORK_UTILS_LIBS-@"
+        libs="$libs @GNUCASH_NETWORK_UTILS_LIBS@"
     fi
 
     if test "$lib_app_utils" = "yes"; then
-        libs="$libs @-GNUCASH_APP_UTILS_LIBS-@"
+        libs="$libs @GNUCASH_APP_UTILS_LIBS@"
     fi
 
     if test "$lib_register_core" = "yes"; then
-        libs="$libs @-GNUCASH_REGISTER_CORE_LIBS-@"
+        libs="$libs @GNUCASH_REGISTER_CORE_LIBS@"
     fi
 
     if test "$lib_gnome_utils" = "yes"; then
-        libs="$libs @-GNUCASH_GNOME_UTILS_LIBS-@"
+        libs="$libs @GNUCASH_GNOME_UTILS_LIBS@"
     fi
 
     echo $libs
+fi
+
+if test "$echo_ld_library_path" = "yes"; then
+    path="$libdir:$GNC_LIBDIR:$GNC_MODULE_DIR"
+    echo $path
 fi
