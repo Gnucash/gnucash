@@ -1,40 +1,38 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Copyright (C) 2000 Free Software Foundation, Inc.
+# Valek Filippov <frob@df.ru>, 2000.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-06-12 15:20-0700\n"
-"PO-Revision-Date: 2000-04-25 00:00+0900\n"
-"Last-Translator: Shimpei Yamashita <shimpei@gol.com>\n"
-"Language-Team: \n"
+"Project-Id-Version: gnucash 1.5.0\n"
+"POT-Creation-Date: 2000-10-02 00:16-0700\n"
+"PO-Revision-Date: 2000-08-06 20:43+00:00\n"
+"Last-Translator: Valek Filippov <frob@df.ru>\n"
+"Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=euc-jp\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=koi8-r\n"
+"Content-Transfer-Encoding: 8-bit\n"
 
 #: messages-i18n.c:10
 msgid "$"
-msgstr "║О"
+msgstr "$"
 
 #: messages-i18n.c:11
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
 msgstr ""
+"Личный финансовый диспетчер GnuCash.\n"
+"Способ GNU управлять вашими деньгами!"
 
 #: messages-i18n.c:12
 msgid ""
 "To adjust an account's balance, you must first\n"
 "choose an account to adjust.\n"
 msgstr ""
-"╩д╧Б╓Рйя╧╧╓╥╓©╓╓╢╙дЙ╡йлэ╓Р\n"
-"а╙бР╓╥╓ф╡╪╓╣╓╓║ё\n"
 
 #: messages-i18n.c:13
 msgid "You must choose a valid parent account."
-msgstr "е╛ю╣╓й©ф╢╙дЙ╡йлэ╓Ра╙бР╓╥╓ф╡╪╓╣╓╓║ё"
+msgstr ""
 
 #: messages-i18n.c:14
 msgid ""
@@ -42,64 +40,64 @@ msgid ""
 "If not, then please select an account\n"
 "to open in the main window.\n"
 msgstr ""
-"©╥╓╥╓╓╢╙дЙ╡йлэ╓н╨Ню╝╓г╓Х╓М╓╥╓╓╓г╓╧╓╚?\n"
-"╨Ню╝╓╥╓й╓╓╓н╓й╓И║╒╪Г╔╕╔ё╔С╔и╔╕╓╚╓И\n"
-"╢╙дЙ╡йлэ╓Ра╙бР╓╥╓ф╡╪╓╣╓╓║ё\n"
+"Вы хотите создать новый счет?\n"
+"Если нет, выберите счет для\n"
+"открытия в главном окне.\n"
 
 #: messages-i18n.c:15
 msgid ""
 "To edit an account, you must first\n"
 "choose an account to edit.\n"
 msgstr ""
-"йт╫╦╓╥╓©╓╓╢╙дЙ╡йлэ╓Р\n"
-"а╙бР╓╥╓ф╡╪╓╣╓╓║ё\n"
+"Для правки счета, вы должны сначала\n"
+"выбрать счет.\n"
 
 #: messages-i18n.c:16
 msgid ""
 "To delete an account, you must first\n"
 "choose an account to delete.\n"
 msgstr ""
-"╨О╫Э╓╥╓©╓╓╢╙дЙ╡йлэ╓Р\n"
-"а╙бР╓╥╓ф╡╪╓╣╓╓║ё\n"
+"Для удаления счета, вы должны сначала\n"
+"выбрать счет.\n"
 
 #: messages-i18n.c:17
 #, c-format
 msgid "Are you sure you want to delete the %s account?"
-msgstr "%s╓н╢╙дЙ╡йлэ╓РкэеЖ╓к╨О╫Э╓╥╓ф╓Б╓Х╓М╓╥╓╓╓г╓╧╓╚║╘"
+msgstr "Вы уверены, что хотите удалить счет %s?"
 
 #: messages-i18n.c:18
 msgid "The account must be given a name! \n"
-msgstr "╢╙дЙ╡йлэ╓к╓ол╬а╟╓╛и╛мв╓г╓╧║ё \n"
+msgstr "У счета должно быть задано имя!\n"
 
 #: messages-i18n.c:19
 msgid ""
 "To open an account, you must first\n"
 "choose an account to open.\n"
 msgstr ""
-"Ё╚╓╜╓©╓╓╢╙дЙ╡йлэ╓Р\n"
-"а╙бР╓╥╓ф╡╪╓╣╓╓║ё\n"
+"Чтобы открыть счет, вы должны сначала\n"
+"выбрать счет.\n"
 
 #: messages-i18n.c:20
 msgid "You must select an account to scrub."
-msgstr "ащ╫Э╓╧╓К╢╙дЙ╡йлэ╓Ра╙бР╓╥╓ф╡╪╓╣╓╓║ё"
+msgstr ""
 
 #: messages-i18n.c:21
 msgid "You must select an account type."
-msgstr "╢╙дЙ╡йлэ╓н╪ОнЮ╓Ра╙бР╓╥╓ф╡╪╓╣╓╓║ё"
+msgstr "Вы должны выбрать тип счета."
 
 #: messages-i18n.c:22
 msgid ""
 "To reconcile an account, you must first\n"
 "choose an account to reconcile.\n"
-msgstr "╬х╧Г╓╧╓К╢╙дЙ╡йлэ╓Ра╙бР╓╥╓ф╡╪╓╣╓╓║ё\n"
+msgstr ""
 
 #: messages-i18n.c:23
 msgid "The amount must be a number."
-msgstr "©Т╩З╓г╓й╓╠╓Л╓п╓╓╓╠╓ч╓╩╓С║ё"
+msgstr "Количество должно быть числом."
 
 #: messages-i18n.c:24
 msgid "The balance must be a number."
-msgstr "╩д╧Б╓о©Т╩З╓г╓й╓╠╓Л╓п╓╓╓╠╓ч╓╩╓С║ё"
+msgstr "Баланс должен быть числом."
 
 #: messages-i18n.c:25
 msgid ""
@@ -113,13 +111,13 @@ msgstr ""
 
 #: messages-i18n.c:27
 msgid "Delete the whole transaction"
-msgstr "а╢╪Х╟З╓Р╨О╫Э╓╧╓К"
+msgstr "Удалить всю транзакцию"
 
 #: messages-i18n.c:28
 msgid ""
 "This selection will delete the whole transaction. This is what you usually "
 "want."
-msgstr "╓Ё╓на╙бР╩Х╓о╪Х╟За╢бн╓Р╨О╫Э╓╥╓ч╓╧║ёиАдл╓о╓Ё╓Л╓Ра╙бР╓╧╓К╓ы╓╜╓г╓╥╓Г╓╕║ё"
+msgstr "Этот выбор удалит всю транзакцию. Это то чего вы обычно хотите."
 
 #: messages-i18n.c:29
 msgid ""
@@ -136,8 +134,6 @@ msgid ""
 "from %s to %s.\n"
 "Are You Sure?\n"
 msgstr ""
-"╢╙дЙ╡йлэ╓ндл╡ъ╓Рйя╧╧╓╧╓К╓н╓о╢М╦╠╓г╓╧║ё\n"
-"кэеЖ╓к%s╓╚╓И%s╓кйя╧╧╓╥╓ф╓Б╓Х╓М╓╥╓╓╓г╓╧╓╚?\n"
 
 #: messages-i18n.c:31
 #, c-format
@@ -147,65 +143,69 @@ msgid ""
 "from %s to %s.\n"
 "Are You Sure?\n"
 msgstr ""
-"╢╙дЙ╡йлэ╓нм╜╡а╬з╥Т╓Рйя╧╧╓╧╓К╓н╓о╢М╦╠╓г╓╧║ё\n"
-"кэеЖ╓к%s╓╚╓И%s╓кйя╧╧╓╥╓ф╓Б╓Х╓М╓╥╓╓╓г╓╧╓╚?\n"
 
 #: messages-i18n.c:32
 msgid ""
 "This file is from an older version of GnuCash.  \n"
 "Do you want to continue?"
 msgstr ""
-"╓Ё╓н╔у╔║╔╓╔К╓о╦е╓╓╔п║╪╔╦╔Г╔С╓н GnuCash ╓╛╨Ню╝╓╥╓©╓Б╓н╓н╓Х╓╕╓г╓╧║ё\n"
-"╓Ё╓н╓ч╓чбЁ╧т╓╥╓ч╓╧╓╚?"
+"Это файл из старой версии GnuCash.\n"
+"Хотите продолжить?"
 
 #: messages-i18n.c:33
 msgid ""
 "This file appears to be from a newer version of GnuCash. You must upgrade "
 "GnuCash to read this file."
 msgstr ""
-"╓Ё╓н╔у╔║╔╓╔К╓оGnuCash╓н©╥╓╥╓╓╔п║╪╔╦╔Г╔С╓к╓Х╓ц╓ф╨Ню╝╓╣╓Л╓©╓Б╓н╓н╓Х╓╕╓г╓╧║ёGnuC"
-"ash╓Р╔╒╔ц╔в╔╟╔Л║╪╔и╓╥╓й╓╓╓хфи╓ъ╧Ч╓А╓ч╓╩╓С║ё"
+"Возможно это файл из более новой версии GnuCash. Вам надо обновить GnuCash "
+"для чтения этого файла."
 
 #: messages-i18n.c:34
 msgid ""
 "There was an error reading the file. \n"
 "Do you want to continue?"
 msgstr ""
-"╔у╔║╔╓╔Кфи╓ъ╧Ч╓ъцФ╓к╔╗╔И║╪╓╛х╞ю╦╓╥╓ч╓╥╓©║ё \n"
-"╓Ё╓н╓ч╓чбЁ╧т╓╥╓ч╓╧╓╚?"
+"При чтении файла возникла ошибка.\n"
+"Хотите продолжить?"
 
 #: messages-i18n.c:35
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error writing the file\n"
 "     %s\n"
 "\n"
 "%s"
 msgstr ""
-"╔у╔║╔╓╔К╓к╫Я╓╜╧Ч╓Ю╨щ╓к╔╗╔И║╪╓╛х╞ю╦╓╥╓ч╓╥╓©\n"
-"     %s║ё"
+"При записи файла возникла ошибка\n"
+"     %s\n"
+"\n"
+"%s"
 
 #: messages-i18n.c:36
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error opening the file\n"
 "     %s\n"
 "\n"
 "%s"
 msgstr ""
-"╔у╔║╔╓╔К╓РЁ╚╓╞╨щ╓к╔╗╔И║╪╓╛х╞ю╦╓╥╓ч╓╥╓©\n"
-"     %s║ё"
+"При открытии файла возникла ошибка\n"
+"     %s\n"
+"\n"
+"%s"
 
 #: messages-i18n.c:37
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error closing the file\n"
 "     %s\n"
 "\n"
 "%s"
 msgstr ""
-"╔у╔║╔╓╔К╓Рйд╓╦╓К╨щ╓к╔╗╔И║╪╓╛х╞ю╦╓╥╓ч╓╥╓©\n"
-"     %s║ё"
+"При закрытии файла возникла ошибка\n"
+"     %s\n"
+"\n"
+"%s"
 
 #: messages-i18n.c:38
 #, c-format
@@ -214,9 +214,9 @@ msgid ""
 "    %s\n"
 " could not be found."
 msgstr ""
-"╔у╔║╔╓╔К \n"
-"    %s\n"
-" ╓о╦╚╓д╓╚╓Й╓ч╓╩╓С╓г╓╥╓©║ё"
+"Файл\n"
+"     %s\n"
+" не удалось найти."
 
 #: messages-i18n.c:39
 #, c-format
@@ -225,12 +225,15 @@ msgid ""
 "    %s\n"
 " is empty."
 msgstr ""
-"╔у╔║╔╓╔К    %s\n"
-" ╓о╤У╓г╓╧║ё"
+"Файл\n"
+"     %s\n"
+" пуст."
 
 #: messages-i18n.c:40
 msgid "Changes have been made since the last Save. Save the data to file?"
-msgstr "йщб╦╓╣╓Л╓ф╓╓╓й╓╓йя╧╧╓╛╓╒╓Й╓ч╓╧║ё╔у╔║╔╓╔К╓кйщб╦╓╥╓ч╓╧╓╚?"
+msgstr ""
+"С момента последнего сохранения были сделаны изменения. Сохранить данные в "
+"файл?"
 
 #: messages-i18n.c:41
 #, c-format
@@ -240,9 +243,10 @@ msgid ""
 " already exists.\n"
 "Are you sure you want to overwrite it?"
 msgstr ""
-"%s\n"
-" ╓х╓╓╓╕л╬а╟╓н╔у╔║╔╓╔К╓о╓╧╓г╓к╓╒╓Й╓ч╓╧║ё\n"
-" кэеЖ╓к╬Е╫Я╓╜╓╥╓ф╓Х╓М╓╥╓╓╓г╓╧╓╚?"
+"Файл\n"
+"     %s\n"
+"уже существует.\n"
+"Вы уверены, в том что хотите перезаписать его?"
 
 #: messages-i18n.c:42
 #, c-format
@@ -251,9 +255,6 @@ msgid ""
 "    %s\n"
 "is not a valid location in the filesystem."
 msgstr ""
-"╔я╔╧л╬ \n"
-"    %s\n"
-" ╓о╔у╔║╔╓╔К╔╥╔╧╔ф╔ЮфБ╓кб╦╨ъ╓╥╓ч╓╩╓С║ё"
 
 #: messages-i18n.c:43
 #, c-format
@@ -263,42 +264,50 @@ msgid ""
 "appears to be in use by another user.\n"
 "If this is not right, remove the .LCK file and try again."
 msgstr ""
-"╔у╔║╔╓╔К \n"
-"    %s\n"
-" ╓ойл╓н╔Ф║╪╔╤║╪╓к╩хмя╓╣╓Л╓ф╓╓╓К╓Х╓╕╓г╓╧║ё\n"
-" ╓Б╓╥╓╫╓╕╓г╓й╓╠╓Л╓п║╒.LCK╔у╔║╔╓╔К╓Р╨О╫Э╓╥╓ф╓Б╓╕╟Леы╩Н╓╥╓ф╓ъ╓ф╡╪╓╣╓╓║ё"
+"Файл\n"
+"     %s\n"
+"возможно используется другим пользователем.\n"
+"Если это не так, удалите файл .LCK и попробуйте еще раз."
 
 #: messages-i18n.c:44
 msgid "You need to install the gnome-print library."
-msgstr "gnome-print ╔И╔╓╔ж╔И╔Й╓Р╔╓╔С╔╧╔х║╪╔К╓╧╓Ки╛мв╓╛╓╒╓Й╓ч╓╧║ё"
+msgstr "Вам надо установить библиотеку gnome-print."
 
 #: messages-i18n.c:45
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "QIF file load failed:\n"
 "%s"
-msgstr "QIF╥а╪╟╔у╔║╔╓╔К╓н╔М║╪╔и╪╨гт║ё %s"
+msgstr ""
+"Сбой загрузки файла QIF:\n"
+"%s"
 
 #: messages-i18n.c:46
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "QIF file load warning:\n"
 "%s"
-msgstr "QIF╥а╪╟╔у╔║╔╓╔К╓н╔М║╪╔и╪╨гт║ё %s"
+msgstr ""
+"Предупреждение при загрузке файла QIF:\n"
+"%s"
 
 #: messages-i18n.c:47
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "QIF file parse failed:\n"
 "%s"
-msgstr "QIF╥а╪╟╔у╔║╔╓╔К╓н╔М║╪╔и╪╨гт║ё %s"
+msgstr ""
+"Сбой разбора файла QIF:\n"
+"%s"
 
 #: messages-i18n.c:48
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "QIF file parse warning:\n"
 "%s"
-msgstr "QIF╥а╪╟╔у╔║╔╓╔К╓н╔М║╪╔и╪╨гт║ё %s"
+msgstr ""
+"Предупреждение разбора файла QIF:\n"
+"%s"
 
 #: messages-i18n.c:49
 msgid "The source for price quotes"
@@ -309,20 +318,16 @@ msgid ""
 "The account is not balanced.\n"
 "Are you sure you want to finish?"
 msgstr ""
-"╡йлэ╓н╢╙дЙ╓╛╧Г╓╓╓ч╓╩╓С║ё\n"
-"кэеЖ╓к╫╙н╩╓╥╓ф╓Х╓М╓╥╓╓╓г╓╧╓╚?"
 
 #: messages-i18n.c:51
 msgid ""
 "You have made changes to this reconcile window.\n"
 "Are you sure you want to cancel?"
 msgstr ""
-"╓Ё╓н╬х╧Г╔╕╔ё╔С╔и╔╕╓к╓ойя╧╧╓╛╓╒╓Й╓ч╓╧║ё\n"
-"кэеЖ╓к╔╜╔Ц╔С╔╩╔К╓╥╓ф╓Б╓Х╓М╓╥╓╓╓г╓╧╓╚?"
 
 #: messages-i18n.c:52
 msgid "Warning! This is a reconciled transaction. Do you want do continue?"
-msgstr "цМ╟у! ╓Ё╓Л╓о╬х╧Г╓╣╓Л╓©╪Х╟З╓г╓╧║ёбЁ╧т╓╥╓ч╓╧╓╚?"
+msgstr ""
 
 #: messages-i18n.c:53
 #, c-format
@@ -330,28 +335,26 @@ msgid ""
 "You cannot transfer funds from the %s account.\n"
 "It does not have a matching currency."
 msgstr ""
-"дл╡ъц╠╟л╓╛╟Ц╓╕╓н╓г║╒\n"
-"%s ╓н╢╙дЙ╓╚╓И╩Я╤Б╓Р╟эф╟╓╧╓К╓Ё╓х╓о╫пмХ╓ч╓╩╓С║ё"
 
 #: messages-i18n.c:54
 msgid "Error executing scheme report."
-msgstr "scheme д╒и╪╫ХмЩцФ╔╗╔И║╪"
+msgstr ""
 
 #: messages-i18n.c:55
 msgid "This report has no parameters."
-msgstr "╓Ё╓нд╒и╪╓к╓ойя©Т╓о╓╒╓Й╓ч╓╩╓С║ё"
+msgstr "Этот отчет не имеет параметров."
 
 #: messages-i18n.c:56
 msgid "Show the income and expense accounts."
-msgstr "╪ЩфЧ╓ххЯмя╓н╢╙дЙ╡йлэ╓Ри╫╪╗╓╧╓К║ё"
+msgstr ""
 
 #: messages-i18n.c:57
 msgid ""
 "The current transaction has been changed.\n"
 "Would you like to record it?"
 msgstr ""
-"╓Ё╓н╪Х╟З╓н╬ПйС╓ойя╧╧╓╣╓Л╓ч╓╥╓©║ё\n"
-"╣╜о©╓╥╓ч╓╧╓╚?"
+"Текущая транзакция была изменена.\n"
+"Вы хотите записать ее?"
 
 #: messages-i18n.c:58
 #, c-format
@@ -361,22 +364,24 @@ msgid ""
 "from the transaction\n"
 "   %s ?"
 msgstr ""
+"Вы уверены, что хотите удалить\n"
+"   %s\n"
+"из транзакции\n"
+"   %s ?"
 
 #: messages-i18n.c:59
 msgid "Are you sure you want to delete the current transaction?"
-msgstr "кэеЖ╓к╓Ё╓н╪Х╟З╓Р╨О╫Э╓╥╓ф╓Б╓Х╓М╓╥╓╓╓г╓╧╓╚?"
+msgstr "Вы уверены, в том что хотите удалить текущую транзакцию?"
 
 #: messages-i18n.c:60
 msgid "Recalculate Transaction"
-msgstr "╪Х╟З╓н╨ф╥в╩╩"
+msgstr "Пересчитать транзакцию"
 
 #: messages-i18n.c:61
 msgid ""
 "The values entered for this transaction are inconsistent.\n"
 "Which value would you like to have recalculated?\n"
 msgstr ""
-"╓Ё╓н╪Х╟З╓кфЧно╓╣╓Л╓©цм╓о╥в╩╩╓╛╧Г╓╓╓ч╓╩╓С║ё\n"
-"╓и╓нцм╓Р╨ф╥в╩╩╓╧╓Л╓п╓Х╓М╓╥╓╓╓г╓╧╓╚?\n"
 
 #: messages-i18n.c:62
 #, c-format
@@ -385,8 +390,6 @@ msgid ""
 "to %s.\n"
 "Is that what you want to do?"
 msgstr ""
-"©ф╢╙дЙ╡йлэ╓х╓╫╓н╩р╢╙дЙ╡йлэ╓н╥©╓Ра╢иТ%s╓кйя╓╗╓К╓Ё╓х╓к╓й╓Й╓ч╓╧║ё\n"
-"╓╫╓Л╓г╓Х╓М╓╥╓╓╓г╓╧╓╚?"
 
 #: messages-i18n.c:63
 #, c-format
@@ -394,40 +397,38 @@ msgid ""
 "The types of all the subaccounts must be changed to %s.\n"
 "Is that what you want to do?"
 msgstr ""
-"╩р╢╙дЙ╡йлэ╓н╥©╓Ра╢иТ%s╓кйя╓╗╓К╓Ё╓х╓к╓й╓Й╓ч╓╧║ё\n"
-"╓╫╓Л╓г╓Х╓М╓╥╓╓╓г╓╧╓╚?"
 
 #: messages-i18n.c:64
 msgid "The following changes must be made. Continue?"
-msgstr "╡╪╓н╓Х╓╕╓ййя╧╧╓╛и╛мв╓г╓╧║ёбЁ╧т╓╥╓ч╓╧╓╚?"
+msgstr "Следующие изменения должны быть сделаны. Продолжить?"
 
 #: messages-i18n.c:65
 msgid ""
 "There must be at least two accounts\n"
 "created before you can transfer funds."
 msgstr ""
-"╩Я╤Б╓Р╟эф╟╓╧╓К╓к╓о║╒╢╙дЙ╡йлэ╓╛\n"
-"╨гдЦфС╓ди╛мв╓г╓╧║ё"
+"Должно быть создано хотя бы 2 счета\n"
+"до того как вы сможете передать фонды."
 
 #: messages-i18n.c:66
 msgid ""
 "You cannot transfer between those accounts.\n"
 "They do not have a common currency."
 msgstr ""
-"╓Ё╓Л╓И╓н╢╙дЙ╡йлэ╢ж╓н╩Я╤Б╓н╟эф╟╓о╫пмХ╓ч╓╩╓С║ё\n"
-"╤╕дл╓ндл╡ъ╓Р╩х╓ц╓ф╓╓╓ч╓╩╓С║ё"
+"Передача между этими счетами не возможна.\n"
+"Они не имеют общей валюты."
 
 #: messages-i18n.c:67
 msgid ""
 "The \"From\" and \"To\" accounts\n"
 " must be different!"
 msgstr ""
-"║ж╦╣║в╓х║жюХ║в╓н╢╙дЙ╡йлэ╓╛\n"
-"ф╠╓╦╓г╓о╓╓╓╠╓ч╓╩╓С║ё"
+"Счета \"С\" и \"На\" должны\n"
+"быть разными!"
 
 #: messages-i18n.c:68
 msgid "You can't transfer from and to the same account!"
-msgstr "ф╠╟Л╓н╢╙дЙ╡йлэ╓ь╓н╩Я╤Б╓н╟эф╟╓о╫пмХ╓ч╓╩╓С║ё"
+msgstr "Вы не можете передавать со счета на тот же счет!"
 
 #: messages-i18n.c:69
 msgid ""
@@ -435,189 +436,183 @@ msgid ""
 "or to, or both, for this transaction.\n"
 "Otherwise, it will not be recorded."
 msgstr ""
-"╓Ё╓н╪Х╟З╓к╓о╟эф╟╦╣╓х╟эф╟юХ╓н\n"
-"╢╙дЙ╡йлэ╓Р╩ьдЙ╓╥╓й╓╠╓Л╓п╓╓╓╠╓ч╓╩╓С║ё\n"
-"╩ьдЙ╓╥╓й╓╠╓Л╓п║╒╓Ё╓н╪Х╟З╓о╣╜о©╓╣╓Л╓ч╓╩╓С║ё"
+"Вы должны указать счет, с которого или на\n"
+"который производится передача или оба счета для\n"
+"этой транзакции. Иначе она не будет записана."
 
 #: messages-i18n.c:70
 msgid "Adjust the balance of the selected account"
-msgstr "а╙бР╓╣╓Л╓©╢╙дЙ╡йлэ╓н╩д╧Б╓Рд╢ю╟╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:71
 msgid "Enter the new balance"
-msgstr "©╥╓╥╓╓╩д╧Б╓РфЧно╓╧╓К"
+msgstr "Ввести новый баланс"
 
 #: messages-i18n.c:72
 msgid "Enter the date you want the balance adjusted"
-msgstr "╩д╧Б╓Рд╢ю╟╓╥╓©╓╓фЭиу╓РфЧно╓╧╓К"
+msgstr "Введите дату, к которой вы хотите свести баланс"
 
 #: messages-i18n.c:73
 msgid "Adjust the ending balance"
-msgstr "╢ЭкЖ╩д╧Б╓Рд╢ю╟╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:74
 msgid "Adjust the balance of the main account for this register"
-msgstr "╓Ё╓н╔Л╔╦╔╧╔©╓н╪Г╢╙дЙ╡йлэ╓н╩д╧Б╓Рд╢ю╟╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:75 po/guile_strings.txt:120
 msgid "Double line mode with a multi-line cursor"
-msgstr "фС╧т╔Б║╪╔и(йё╧т╔╚║╪╔╫╔Киу╓╜)"
+msgstr "Режим двойной строки с многострочным курсором"
 
 #: messages-i18n.c:76 po/guile_strings.txt:121
 msgid "Single line mode with a multi-line cursor"
-msgstr "╟Л╧т╔Б║╪╔и(йё╧т╔╚║╪╔╫╔Киу╓╜)"
+msgstr "Режим одиночной строки с многострочным курсором"
 
 #: messages-i18n.c:77
 msgid "Move to the blank transaction at the bottom of the register"
-msgstr "╔Л╔╦╔╧╔©╓н╟Лхж╡╪╓н╤УгР╓н╪Х╟З╓к╟эф╟╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:78
 msgid "Cancel the current transaction"
-msgstr "╦╫╨ъ╓н╪Х╟З╓Р╔╜╔Ц╔С╔╩╔К╓╧╓К"
+msgstr "Отменить текущую транзакцию"
 
 #: messages-i18n.c:79
 msgid "Close this HTML window"
-msgstr "╓Ё╓нHTML╔╕╔ё╔С╔и╔╕╓Рйд╓╦╓К"
+msgstr "Закрыть это HTML-окно"
 
 #: messages-i18n.c:80
 msgid "Close this register window"
-msgstr "╓Ё╓н╔Л╔╦╔╧╔©╓н╔╕╔ё╔С╔и╔╕╓Рйд╓╦╓К"
+msgstr ""
 
 #: messages-i18n.c:81
-#, fuzzy
 msgid "Copy the selected transaction"
-msgstr "а╙бР╓╣╓Л╓©╢╙дЙ╡йлэ╓РЁ╚╓╞"
+msgstr "Скорировать выбранную транзакцию"
 
 #: messages-i18n.c:82
 msgid "Enter a 3-letter ISO currency code such as USD (US Dollars)"
-msgstr ""
+msgstr "Введите 3-х буквенный ISO код валюты такой как USD (Доллары США)"
 
 #: messages-i18n.c:83
-#, fuzzy
 msgid "Cut the selected transaction"
-msgstr "а╙бР╓╣╓Л╓ф╓╓╓К╢╙дЙ╡йлэ╓Рйт╫╦╓╧╓К"
+msgstr "Вырезать выбранную транзакцию"
 
 #: messages-i18n.c:84
 msgid "Set the date range of this register"
-msgstr "╓Ё╓н╣╜д╒╓нфЭиухо╟о╓РюъдЙ╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:85
 msgid "Delete selected account"
-msgstr "а╙бР╓╣╓Л╓©╢╙дЙ╡йлэ╓Р╨О╫Э╓╧╓К"
+msgstr "Удалить выбранный счет"
 
 #: messages-i18n.c:86
 msgid "Delete the current transaction"
-msgstr "╓Ё╓н╪Х╟З╓Р╨О╫Э╓╧╓К"
+msgstr "Удалить текущую транзакцию"
 
 #: messages-i18n.c:87 po/guile_strings.txt:148
 msgid "Show transactions on two lines with more information"
-msgstr "╪Х╟З╓РфС╧т╓кй╛╓╠║╒╓Б╓ц╓х╬э╓╥╓╓╬ПйС╓Ри╫╪╗╓╧╓К"
+msgstr "Показать транзакции на двух строках с дополнительной информацией"
 
 #: messages-i18n.c:88
 msgid "Make a copy of the current transaction"
-msgstr "╓Ё╓н╪Х╟З╓н╔Ё╔т║╪╓Р╨Ню╝╓╧╓К"
+msgstr "Сделать копию текущей транзакции"
 
 #: messages-i18n.c:89
 msgid "Edit the selected account"
-msgstr "а╙бР╓╣╓Л╓ф╓╓╓К╢╙дЙ╡йлэ╓Рйт╫╦╓╧╓К"
+msgstr "Правка выбранного счета"
 
 #: messages-i18n.c:90
 msgid "Edit the main account for this register"
-msgstr "╓Ё╓н╔Л╔╦╔╧╔©╓н╪Г╢╙дЙ╡йлэ╓Рйт╫╦╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:91
 msgid "Edit the current transaction"
-msgstr "╦╫╨ъ╓н╪Х╟З╓Рйт╫╦╓╧╓К"
+msgstr "Правка текущей транзакции"
 
 #: messages-i18n.c:92
 msgid "Exit GnuCash"
-msgstr "GnuCash╫╙н╩"
+msgstr "Выйти из GnuCash"
 
 #: messages-i18n.c:93
 msgid "Export HTML-formatted report to file"
-msgstr "HTML╥а╪╟╓нд╒и╪╓Р╔у╔║╔╓╔К╓к╫пно"
+msgstr "Вывод отчета в файл в формате HTML"
 
 #: messages-i18n.c:94
 msgid "Find transactions with a search."
-msgstr "╪Х╟З╓Р╦║╨В╓г╦╚╓д╓╠╓К║ё"
+msgstr "Поиск транзакций."
 
 #: messages-i18n.c:95
 msgid "Open the GnuCash help window"
-msgstr "GnuCash╔ь╔К╔в╔╕╔ё╔С╔и╔╕╓РЁ╚╓╞"
+msgstr "Открыть окно справки GnuCash"
 
 #: messages-i18n.c:96
 msgid "Move back one step in the history"
-msgstr "мЗнРфБ╓г╟ЛйБлА╓К"
+msgstr "Перейти на один шаг назад в истории"
 
 #: messages-i18n.c:97
 msgid "Move forward one step in the history"
-msgstr "мЗнРфБ╓г╟ЛйБ©й╓Ю"
+msgstr "Перейти на один шаг вперед в истории"
 
 #: messages-i18n.c:98
 msgid "Import a Quicken QIF file"
-msgstr "Quicken╓нQIF╥а╪╟╔у╔║╔╓╔К╓Рйя╢╧"
+msgstr "Импортировать файл Quicken QIF"
 
 #: messages-i18n.c:99
 msgid "Jump to the corresponding transaction in the other account"
-msgstr "╓Б╓╕йрйЩ╓н╢╙дЙ╡йлэфБ╓г╓Ё╓Л╓кЁ╨еЖ╓╧╓К╪Х╟З╓кхТ╓ж"
+msgstr "Перейти к соответствующей транзакции в другом счете"
 
 #: messages-i18n.c:100
-#, fuzzy
 msgid "Open the GnuCash Manual"
-msgstr "GnuCash╔ь╔К╔в╔╕╔ё╔С╔и╔╕╓РЁ╚╓╞"
+msgstr "Открыть руководство GnuCash"
 
 #: messages-i18n.c:101
 msgid "Show transactions on multiple lines with one line for each split"
-msgstr "╪Х╟З╓Рйё©Т╧т╓ки╫╪╗╓╥║╒╟Лй╛ЁД╓╢╓х╓к╟Л╧т╓РЁД╓ЙеЖ╓ф╓К"
+msgstr ""
 
 #: messages-i18n.c:102
 msgid ""
 "This transaction has multiple splits; switch to multi-line mode to see them "
 "all"
 msgstr ""
-"╓Ё╓н╪Х╟З╓к╓ойё©Т╓нй╛ЁД╓╛╓╒╓Й╓ч╓╧║ёа╢иТ╦╚╓©╓╓╩Ч╓к╓ойё©Т╧т╔Б║╪╔и╓кюзбь╓╗╓ф╡╪╓╣╓"
-"╓║ё"
 
 #: messages-i18n.c:103
 msgid "Create a new account"
-msgstr "©╥╓╥╓╓╢╙дЙ╡йлэ╓Р╨Ню╝"
+msgstr "Создать новый счет"
 
 #: messages-i18n.c:104
 msgid "Create a new file"
-msgstr "©╥╓╥╓╓╔у╔║╔╓╔К╓Р╨Ню╝"
+msgstr "Создать новый файл"
 
 #: messages-i18n.c:105
 msgid "Add a new transaction to the account"
-msgstr "╢╙дЙ╡йлэ╓к©╥╓╥╓╓╪Х╟З╓Рди╡ц"
+msgstr "Добавить новую транзакцию к счету"
 
 #: messages-i18n.c:106
 msgid "Open the selected account"
-msgstr "а╙бР╓╣╓Л╓©╢╙дЙ╡йлэ╓РЁ╚╓╞"
+msgstr "Открыть выбранный счет"
 
 #: messages-i18n.c:107
 msgid "Open the account"
-msgstr "╢╙дЙ╡йлэ╓РЁ╚╓╞"
+msgstr "Открыть счет"
 
 #: messages-i18n.c:108
 msgid "Open the selected account and all its subaccounts"
-msgstr "а╙бР╓╣╓Л╓©╢╙дЙ╡йлэ╓х╓╫╓н╩р╢╙дЙ╡йлэ╓Ра╢иТЁ╚╓╞"
+msgstr "Открыть выбранный счет и все его подсчета"
 
 #: messages-i18n.c:109
 msgid "Open a file"
-msgstr "╔у╔║╔╓╔К╓РЁ╚╓╞"
+msgstr "Открыть файл"
 
 #: messages-i18n.c:110
-#, fuzzy
 msgid "Paste the transaction clipboard"
-msgstr "а╢╪Х╟З╓Р╨О╫Э╓╧╓К"
+msgstr "Вставить транзакцию из буфера обмена"
 
 #: messages-i18n.c:111
 msgid "Open the global preferences dialog"
-msgstr "а╢хлюъдЙ╔ю╔╓╔╒╔М╔╟╓РЁ╚╓╞"
+msgstr "Открыть глобальный диалог настроек"
 
 #: messages-i18n.c:112
 msgid "Print a check using a standard format"
-msgstr "и╦╫Ю╥а╪╟╓н╬╝юз╪Й╓Р╟У╨Ч╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:113
 msgid "Reconcile the selected account"
@@ -642,67 +637,67 @@ msgstr ""
 
 #: messages-i18n.c:118
 msgid "Record the current transaction"
-msgstr "╦╫╨ъ╓н╪Х╟З╓Р╣╜о©╓╧╓К"
+msgstr "Записать текущую транзакцию"
 
 #: messages-i18n.c:119
 msgid "Set the parameters for this report"
-msgstr "╓Ё╓нд╒и╪╓нйя©Т╓РюъдЙ╓╧╓К"
+msgstr "Установить параметры для этого отчета"
 
 #: messages-i18n.c:120
 msgid "Save the file to disk"
-msgstr "╔у╔║╔╓╔К╓Р╔г╔ё╔╧╔╞╓кйщб╦╓╧╓К"
+msgstr "Сохранить файл на диске"
 
 #: messages-i18n.c:121
 msgid "Identify and fix problems in the account"
-msgstr "╢╙дЙ╡йлэ╓нцФ╓нлДбЙею╓Р╦╚╓д╓╠║╒╫╓ю╣╓╧╓К"
+msgstr "Идентифицировать и исправить проблемы со счетом"
 
 #: messages-i18n.c:122
 msgid "Identify and fix problems in all the accounts"
-msgstr "а╢╓ф╓н╢╙дЙ╡йлэ╓нцФ╓нлДбЙею╓Р╦╚╓д╓╠║╒╫╓ю╣╓╧╓К"
+msgstr "Идентифицировать и исправить проблемы со всеми считами"
 
 #: messages-i18n.c:123
 msgid "Identify and fix problems in the account and its subaccounts"
-msgstr "╢╙дЙ╡йлэ╓х╓╫╓н╩р╢╙дЙ╡йлэ╓нцФ╓нлДбЙею╓Р╦╚╓д╓╠║╒╫╓ю╣╓╧╓К"
+msgstr "Идентифицировать и исправить проблемы со счетом и его подсчетами."
 
 #: messages-i18n.c:124
 msgid "Identify and fix problems in the accounts of this register"
-msgstr "╓Ё╓н╔Л╔╦╔╧╔©╓н╢╙дЙ╡йлэ╓нцФ╓нлДбЙею╓Р╦╚╓д╓╠║╒╫╓ю╣╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:125
 msgid "Set the option to its default value"
-msgstr "╔╙╔в╔╥╔Г╔С╓Р╫И╢Эцм╓кюъдЙ╓╧╓К"
+msgstr "Установить параметр в его исходное значение"
 
 #: messages-i18n.c:126
 msgid "Show all of the transactions in the account"
-msgstr "╢╙дЙ╡йлэ╓кб╟╓╧╓К╪Х╟З╓Ра╢иТи╫╪╗╓╧╓К"
+msgstr "Показать все транзакции счета"
 
 #: messages-i18n.c:127 po/guile_strings.txt:152
 msgid "Show transactions on single lines"
-msgstr "╪Х╟З╓Р╟Л╧т╓ги╫╪╗╓╧╓К"
+msgstr "Показать транзакции на одной строке"
 
 #: messages-i18n.c:128 messages-i18n.c:255
 msgid "Sort by Amount"
-msgstr "©Тнл╫Г╓кйб╓ы╓К"
+msgstr "Сортировать по количеству"
 
 #: messages-i18n.c:129 messages-i18n.c:256
 msgid "Sort by Date"
-msgstr "фЭиу╫Г╓кйб╓ы╓К"
+msgstr "Сортировать по дате"
 
 #: messages-i18n.c:130 messages-i18n.c:257
 msgid "Sort by Description"
-msgstr "юБлю╫Г╓кйб╓ы╓К"
+msgstr "Сортировать по описанию"
 
 #: messages-i18n.c:131
 msgid "Sort by the date of entry"
-msgstr "фЧнофЭиу╫Г╓кйб╓ыбь╓╗"
+msgstr "Сортировать по дате ввода"
 
 #: messages-i18n.c:132 messages-i18n.c:259
 msgid "Sort by Memo"
-msgstr "╬э╨ы╫Г╓кйб╓ы╓К"
+msgstr "Сортировать по памятке"
 
 #: messages-i18n.c:133 messages-i18n.c:260
 msgid "Sort by Num"
-msgstr "хж╧Ф╫Г╓кйб╓ы╓К"
+msgstr "Сортировать по номеру"
 
 #: messages-i18n.c:134
 msgid "Sort by the statement date (unreconciled items last"
@@ -710,200 +705,195 @@ msgstr ""
 
 #: messages-i18n.c:135
 msgid "Keep normal account order"
-msgstr "иАдл╓н╢╙дЙ╡йлэ╓н╫Гхж╓Р╟щ╩Щ╓╧╓К"
+msgstr "Сохранять нормальный порядок счета"
 
 #: messages-i18n.c:136
 msgid "Transfer funds from one account to another"
-msgstr "╩Я╤Б╓Рйл╓н╢╙дЙ╡йлэ╓ь╟эф╟╓╧╓К"
+msgstr "Передать фонды с одного счета на другой"
 
 #: messages-i18n.c:137
 msgid "Enter the type of transaction, or choose one from the list"
-msgstr "╪Х╟З╓н╥©╓РфЧно╓╧╓К╓╚║╒╔Й╔╧╔х╓╚╓Иа╙бР╓╧╓К"
+msgstr "Введите тип транзакции или выберите один из списка"
 
 #: messages-i18n.c:138
 msgid "Enter a description of the transaction"
-msgstr "╪Х╟З╓нюБлю╓РфЧно╓╧╓К"
+msgstr "Введите описание транзакции"
 
 #: messages-i18n.c:139
 msgid "Enter a description of the split"
-msgstr "й╛ЁД╓нюБлю╓РфЧно╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:140
 msgid "Enter the transaction number, such as the check number"
-msgstr "╪Х╟Зхж╧Ф╓РфЧно╓╧╓К║й╬╝юз╪Й╓нхж╧Ф╓й╓и║к"
+msgstr ""
 
 #: messages-i18n.c:141
 msgid "Enter the share price"
-msgstr "ЁТ╡а╓РфЧно╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:142
 msgid "Enter the number of shares sold"
-msgstr "гД╣я╓╥╓©ЁТ©Т╓РфЧно╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:143
 msgid "Enter the total value of the shares"
-msgstr "ЁТ╓наМ╡ацм╓РфЧно╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:144
 msgid "Enter the account to transfer from, or choose one from the list"
-msgstr "╟эф╟╦╣╓н╢╙дЙ╡йлэ╓РфЧно╓╧╓К╓╚║╒╔Й╔╧╔х╓╚╓Иа╙бР╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:145
 msgid "Enter the account to transfer to, or choose one from the list"
-msgstr "╟эф╟юХ╓н╢╙дЙ╡йлэ╓РфЧно╓╧╓К╓╚║╒╔Й╔╧╔х╓╚╓Иа╙бР╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:146
 msgid "_Account"
-msgstr "_╢╙дЙ"
+msgstr "Счет"
 
 #: messages-i18n.c:147
 msgid "_Accounts"
-msgstr "_╢╙дЙ"
+msgstr "Счета"
 
 #: messages-i18n.c:148
 msgid "_Adjust Balance"
-msgstr "_╩д╧Б╓нд╢ю╟"
+msgstr "Свести баланс"
 
 #: messages-i18n.c:149
 msgid "_Adjust Balance..."
-msgstr "_╩д╧Б╓нд╢ю╟..."
+msgstr "Сведение баланса..."
 
 #: messages-i18n.c:150
 msgid "_Blank"
-msgstr "_╤УгР"
+msgstr "Пустое"
 
 #: messages-i18n.c:151
 msgid "_Cancel"
-msgstr "_╔╜╔Ц╔С╔╩╔К"
+msgstr "Отменить"
 
 #: messages-i18n.c:152
-#, fuzzy
 msgid "Copy Transaction"
-msgstr "╪Х╟З"
+msgstr "Скопировать транзакцию"
 
 #: messages-i18n.c:153
-#, fuzzy
 msgid "Cut Transaction"
-msgstr "╪Х╟З"
+msgstr "Вырезать транзакцию"
 
 #: messages-i18n.c:154
 msgid "_Date Range"
-msgstr "_фЭиухо╟о"
+msgstr "Диапазон дат"
 
 #: messages-i18n.c:155
 msgid "_Delete Account"
-msgstr "_╢╙дЙ╡йлэ╓н╨О╫Э"
+msgstr "Удалить счет"
 
 #: messages-i18n.c:156
 msgid "_Delete"
-msgstr "_╨О╫Э"
+msgstr "Удалить"
 
 #: messages-i18n.c:157
 msgid "D_uplicate"
-msgstr "_йёю╫"
+msgstr "Сдублировать"
 
 #: messages-i18n.c:158
 msgid "_Edit"
-msgstr "_йт╫╦"
+msgstr "Правка"
 
 #: messages-i18n.c:159
 msgid "_Edit Account"
-msgstr "_╢╙дЙ╡йлэ╓нйт╫╦"
+msgstr "Правка счета"
 
 #: messages-i18n.c:160
 msgid "_Ending Balance"
-msgstr "_╢ЭкЖ╩д╧Б"
+msgstr ""
 
 #: messages-i18n.c:161
 msgid "_Ending Balance..."
-msgstr "_╢ЭкЖ╩д╧Б..."
+msgstr ""
 
 #: messages-i18n.c:162
 msgid "_Finish"
-msgstr "_╫╙н╩"
+msgstr "Завершить"
 
 #: messages-i18n.c:163
 msgid "_Help"
-msgstr "_╔ь╔К╔в"
+msgstr "Справка"
 
 #: messages-i18n.c:164
 msgid "_Jump"
-msgstr "_хТ╓ж"
+msgstr "Перейти"
 
 #: messages-i18n.c:165
-#, fuzzy
 msgid "_Manual"
-msgstr "аЙ╦ъ"
+msgstr "Руководство"
 
 #: messages-i18n.c:166
 msgid "_New"
-msgstr "_©╥╣╛"
+msgstr "Новый"
 
 #: messages-i18n.c:167
 msgid "_New Account"
-msgstr "_╢╙дЙ╡йлэ╓н©╥╣╛╨Ню╝"
+msgstr "Новый счет"
 
 #: messages-i18n.c:168
 msgid "_New Account..."
-msgstr "_╢╙дЙ╡йлэ╓н©╥╣╛╨Ню╝..."
+msgstr "Новый счет..."
 
 #: messages-i18n.c:169
 msgid "_Open Account"
-msgstr "_╢╙дЙ╡йлэ╓РЁ╚╓╞"
+msgstr "Открыть счет"
 
 #: messages-i18n.c:170
 msgid "Open S_ubaccounts"
-msgstr "_╩р╢╙дЙ╡йлэ╓РЁ╚╓╞"
+msgstr "Открыть подсчета"
 
 #: messages-i18n.c:171
-#, fuzzy
 msgid "Paste Transaction"
-msgstr "╪Х╟З╨О╫Э"
+msgstr "Вставить транзакцию"
 
 #: messages-i18n.c:172
 msgid "_Preferences"
-msgstr "_юъдЙ"
+msgstr "Настройки"
 
 #: messages-i18n.c:173
 msgid "_Preferences..."
-msgstr "_юъдЙ..."
+msgstr "Настройки..."
 
 #: messages-i18n.c:174
 msgid "_Print Check... (unfinished!)"
-msgstr "_╬╝юз╪Й╓Р╟У╨Ч... (л╓╢╟ю╝╓г╓╧!)"
+msgstr ""
 
 #: messages-i18n.c:175
-#, fuzzy
 msgid "_Reconcile Information..."
-msgstr "_╬х╧Г..."
+msgstr ""
 
 #: messages-i18n.c:176
 msgid "_Reconcile..."
-msgstr "_╬х╧Г..."
+msgstr ""
 
 #: messages-i18n.c:177
 msgid "_Reconcile"
-msgstr "_╬х╧Г"
+msgstr ""
 
 #: messages-i18n.c:178
 msgid "_Record"
-msgstr "_╣╜о©"
+msgstr "Записать"
 
 #: messages-i18n.c:179
 msgid "_Register"
-msgstr "_╔Л╔╦╔╧╔©"
+msgstr ""
 
 #: messages-i18n.c:180
 msgid "_Scrub"
-msgstr "_ащ╫Э"
+msgstr ""
 
 #: messages-i18n.c:181
 msgid "Scrub A_ccount"
-msgstr "_╢╙дЙ╓Ращ╫Э╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:182
 msgid "Scrub A_ll"
-msgstr "_а╢╢╙дЙ╓Ращ╫Э╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:183
 msgid "Scrub Su_baccounts"
@@ -911,111 +901,111 @@ msgstr ""
 
 #: messages-i18n.c:184
 msgid "Set _Range..."
-msgstr "_хо╟оюъдЙ..."
+msgstr "Установить диапазон..."
 
 #: messages-i18n.c:185
 msgid "Set _Range"
-msgstr "хо╟оюъдЙ"
+msgstr "Установить диапазон"
 
 #: messages-i18n.c:186
 msgid "Show _All"
-msgstr "_а╢иТ╦╚╓╩╓К"
+msgstr "Показать все"
 
 #: messages-i18n.c:187
 msgid "Sort _Order"
-msgstr "_йб╓ыбь╓╗╫Г"
+msgstr "Порядок сортировки"
 
 #: messages-i18n.c:188
 msgid "_Style"
-msgstr "_╔╧╔©╔╓╔К"
+msgstr "Стиль"
 
 #: messages-i18n.c:189
 msgid "_Transaction"
-msgstr "_╪Х╟З"
+msgstr "Транзакция"
 
 #: messages-i18n.c:190
 msgid "_Transfer"
-msgstr "_╩Я╤Б╟эф╟"
+msgstr "Передача"
 
 #: messages-i18n.c:191
 msgid "_Transfer..."
-msgstr "_╩Я╤Б╟эф╟..."
+msgstr "Передача..."
 
 #: messages-i18n.c:192
 msgid "Account Code"
-msgstr "╢╙дЙ╡йлэ╔Ё║╪╔и"
+msgstr "Код счета"
 
 #: messages-i18n.c:193 po/guile_strings.txt:7
 msgid "Account Name"
-msgstr "╢╙дЙ╡йлэл╬"
+msgstr "Название счета"
 
 #: messages-i18n.c:194
 msgid "Account Type"
-msgstr "╢╙дЙ╡йлэ╥©"
+msgstr "Тип счета"
 
 #: messages-i18n.c:195
 msgid "Adjust Balance"
-msgstr "╩д╧Бд╢ю╟"
+msgstr "Сведение баланса"
 
 #: messages-i18n.c:196 po/guile_strings.txt:310
 msgid "Auto Double"
-msgstr "╪╚ф╟йё╪╟"
+msgstr ""
 
 #: messages-i18n.c:197 po/guile_strings.txt:71
 msgid "Auto Single"
-msgstr "╪╚ф╟ц╠╪╟"
+msgstr ""
 
 #: messages-i18n.c:198
 msgid "Clear All"
-msgstr "а╢иТ╔╞╔Й╔╒"
+msgstr "Очистить все"
 
 #: messages-i18n.c:199
 msgid "Close Window"
-msgstr "╔╕╔ё╔С╔и╔╕╓Рйд╓╦╓К"
+msgstr "Закрыть окно"
 
 #: messages-i18n.c:200
 msgid "Credit Card"
-msgstr "╔╞╔Л╔╦╔ц╔х╔╚║╪╔и"
+msgstr "Кредитная карта"
 
 #: messages-i18n.c:201
 msgid "Credit Line"
-msgstr "м╩╩Яох"
+msgstr "Кредитная линия"
 
 #: messages-i18n.c:202
 msgid "Date Range"
-msgstr "фЭиухо╟о"
+msgstr "Диапазон дат"
 
 #: messages-i18n.c:203
 msgid "Delete Account"
-msgstr "╢╙дЙ╡йлэ╨О╫Э"
+msgstr "Удалить счет"
 
 #: messages-i18n.c:204
 msgid "Delete Transaction"
-msgstr "╪Х╟З╨О╫Э"
+msgstr "Удалить транзакцию"
 
 #: messages-i18n.c:205 po/guile_strings.txt:22
 msgid "Double Line"
-msgstr "йё╧т"
+msgstr "Двойная строка"
 
 #: messages-i18n.c:206
 msgid "Edit Account"
-msgstr "╢╙дЙ╡йлэ╓Рйт╫╦"
+msgstr "Правка счета"
 
 #: messages-i18n.c:207
 msgid "Ending Balance"
-msgstr "╢ЭкЖ╩д╧Б"
+msgstr ""
 
 #: messages-i18n.c:208
 msgid "End date"
-msgstr "╢ЭкЖфЭиу"
+msgstr ""
 
 #: messages-i18n.c:209
 msgid "Export To"
-msgstr "╔╗╔╞╔╧╔щ║╪╔хюХ"
+msgstr "Экспортировать в"
 
 #: messages-i18n.c:210
 msgid "Finish"
-msgstr "╫╙н╩"
+msgstr "Завершить"
 
 #: messages-i18n.c:211
 msgid "From Now"
@@ -1023,95 +1013,95 @@ msgstr ""
 
 #: messages-i18n.c:212
 msgid "General Ledger"
-msgstr "аМ╢╙дЙ╦╣д╒"
+msgstr ""
 
 #: messages-i18n.c:213
 msgid "Hide Inc/Exp"
-msgstr "╪ЩфЧ║╕хЯмя╓Р╠ё╓╧"
+msgstr ""
 
 #: messages-i18n.c:214
 msgid "Import QIF..."
-msgstr "QIF╥а╪╟╔у╔║╔╓╔К╓н╔╓╔С╔щ║╪╔х..."
+msgstr "Импортировать QIF..."
 
 #: messages-i18n.c:215
 msgid "Import QIF"
-msgstr "QIF╥а╪╟╔у╔║╔╓╔К╓н╔╓╔С╔щ║╪╔х"
+msgstr "Импортировать QIF"
 
 #: messages-i18n.c:216
 msgid "Lost Accounts"
-msgstr ""
+msgstr "Потерянные счета"
 
 #: messages-i18n.c:217
 msgid "Money Market"
-msgstr "╔ч╔м║╪╔ч║╪╔╠╔ц╔х"
+msgstr ""
 
 #: messages-i18n.c:218 po/guile_strings.txt:58
 msgid "Multi Line"
-msgstr "йё╧т"
+msgstr "Многострочный"
 
 #: messages-i18n.c:219 po/guile_strings.txt:4
 msgid "Mutual Fund"
-msgstr "еЙ╩Я©╝бВ"
+msgstr "Сберегательный фонд"
 
 #: messages-i18n.c:220
 msgid "New Account"
-msgstr "©╥╣╛╢╙дЙ╡йлэ"
+msgstr "Новый счет"
 
 #: messages-i18n.c:221
 msgid "New Balance"
-msgstr "©╥╣╛╩д╧Б"
+msgstr "Новый баланс"
 
 #: messages-i18n.c:222
 msgid "New File"
-msgstr "©╥╣╛╔у╔║╔╓╔К"
+msgstr "Новый файл"
 
 #: messages-i18n.c:223
 msgid "New top level account"
-msgstr "©╥╣╛╢Пкэ╢╙дЙ╡йлэ"
+msgstr "Новый счет верхнего уровня"
 
 #: messages-i18n.c:224
 msgid "New Value"
-msgstr "©╥╓╥╓╓цм"
+msgstr "Новое значение"
 
 #: messages-i18n.c:225
 msgid "No description"
-msgstr "юБлю╓й╓╥"
+msgstr "Нет описания"
 
 #: messages-i18n.c:226
 msgid "Old Value"
-msgstr "╦е╓╓цм"
+msgstr "Старое значение"
 
 #: messages-i18n.c:227
 msgid "Open Account"
-msgstr "╢╙дЙ╡йлэ╓РЁ╚╓╞"
+msgstr "Открыть счет"
 
 #: messages-i18n.c:228 po/guile_strings.txt:113
 msgid "Opening Balance"
-msgstr "╫И╢Э╩д╧Б"
+msgstr "Открыть баланс"
 
 #: messages-i18n.c:229
 msgid "Open File"
-msgstr "╔у╔║╔╓╔К╓РЁ╚╓╞"
+msgstr "Открыть файл"
 
 #: messages-i18n.c:230
 msgid "Open Subaccounts"
-msgstr "╩р╢╙дЙ╡йлэ╓РЁ╚╓╞"
+msgstr "Открыть подсчета"
 
 #: messages-i18n.c:231
 msgid "Pick One"
-msgstr "╟Л╓да╙бР"
+msgstr "Выбрать один"
 
 #: messages-i18n.c:232
 msgid "Parent Account"
-msgstr "©ф╢╙дЙ╡йлэ"
+msgstr "Родительский счет"
 
 #: messages-i18n.c:233
 msgid "Previous Balance"
-msgstr "а╟╢Э╩д╧Б"
+msgstr "Предыдущий баланс"
 
 #: messages-i18n.c:234
 msgid "Purch Price"
-msgstr "╧ьфЧцм"
+msgstr ""
 
 #: messages-i18n.c:235
 msgid "Price Quote Source"
@@ -1127,149 +1117,145 @@ msgstr ""
 
 #: messages-i18n.c:238
 msgid "Register date ranges"
-msgstr "╔Л╔╦╔╧╔©фЭиухо╟о"
+msgstr ""
 
 #: messages-i18n.c:239
 msgid "Sale Price"
-msgstr "гД╣яцм"
+msgstr ""
 
 #: messages-i18n.c:240
 msgid "Save As"
-msgstr "л╬а╟╓Р╓д╓╠╓фйщб╦"
+msgstr "Сохранить как"
 
 #: messages-i18n.c:241
 msgid "Scrub Account"
-msgstr "╢╙дЙ╡йлэ╓Ращ╫Э"
+msgstr ""
 
 #: messages-i18n.c:242
 msgid "Scrub All"
-msgstr "а╢иТащ╫Э"
+msgstr ""
 
 #: messages-i18n.c:243
 msgid "Scrub Subaccounts"
-msgstr "╩р╢╙дЙ╡йлэ╓Ращ╫Э"
+msgstr ""
 
 #: messages-i18n.c:244
 msgid "Select All"
-msgstr "а╢иТа╙бР"
+msgstr "Выбрать все"
 
 #: messages-i18n.c:245
 msgid "Select Default"
-msgstr "╔г╔у╔╘╔К╔ха╙бР"
+msgstr "Выбрать исходное"
 
 #: messages-i18n.c:246
 msgid "Set Date Range"
-msgstr "фЭиухо╟оюъдЙ"
+msgstr "Установить диапазон дат"
 
 #: messages-i18n.c:247
 msgid "Set Range"
-msgstr "хо╟оюъдЙ"
+msgstr "Установить диапазон"
 
 #: messages-i18n.c:248
 msgid "Set to default"
-msgstr "╔г╔у╔╘╔К╔х╓кюъдЙ"
+msgstr "Установить в исходное"
 
 #: messages-i18n.c:249
 msgid "Set Up Account"
-msgstr "╢╙дЙ╡йлэ╓Р╨Ню╝"
+msgstr "Установить счет"
 
 #: messages-i18n.c:250
 msgid "Show All"
-msgstr "а╢иТ╦╚╓╩╓К"
+msgstr "Показать все"
 
 #: messages-i18n.c:251
-#, fuzzy
 msgid "Show Income/Expense"
-msgstr "╪ЩфЧ║╕хЯмя╓Ри╫╪╗╓╧╓К"
+msgstr ""
 
 #: messages-i18n.c:252
 msgid "Show Earliest"
-msgstr "╨г╦е╓Ри╫╪╗╓╧╓К"
+msgstr "Показать наиболее ранние"
 
 #: messages-i18n.c:253
 msgid "Show Latest"
-msgstr "╨г©╥╓Ри╫╪╗╓╧╓К"
+msgstr "Показать последние"
 
 #: messages-i18n.c:254 po/guile_strings.txt:190
 msgid "Single Line"
-msgstr "ц╠╧т"
+msgstr "Одиночная строка"
 
 #: messages-i18n.c:258
 msgid "Sort by date of entry"
-msgstr "фЭиу╫Г╓гйб╓ы╓К"
+msgstr "Сортировать по дате ввода"
 
 #: messages-i18n.c:261
-#, fuzzy
 msgid "Sort by statement date"
-msgstr "фЭиу╫Г╓гйб╓ы╓К"
+msgstr ""
 
 #: messages-i18n.c:262
 msgid "Sort Order"
-msgstr "╔╫║╪╔х╫Гхж"
+msgstr "Порядок сортировки"
 
 #: messages-i18n.c:263
 msgid "Start date"
-msgstr "Ё╚╩офЭиу"
+msgstr "Начальная дата"
 
 #: messages-i18n.c:264
-#, fuzzy
 msgid "Starting Balance"
-msgstr "╢Э╪С╩д╧Б"
+msgstr ""
 
 #: messages-i18n.c:265
 msgid "Standard order"
-msgstr "и╦╫Ю╓н╫Гхж"
+msgstr "Стандартный порядок"
 
 #: messages-i18n.c:266
-#, fuzzy
 msgid "Statement Date:"
-msgstr "фЭиуа╙бР"
+msgstr ""
 
 #: messages-i18n.c:267
 msgid "Top level account"
-msgstr "╢Пкэ╢╙дЙ╡йлэ"
+msgstr "Счет верхнего уровня"
 
 #: messages-i18n.c:268
 msgid "Total Shares"
-msgstr "ЁТ╪╟╧Г╥в"
+msgstr ""
 
 #: messages-i18n.c:269
 msgid "Verify Changes"
-msgstr "йя╧╧╓РЁнг╖╓╧╓К"
+msgstr "Проверить изменения"
 
 #: messages-i18n.c:270
 msgid "Transfer Information"
-msgstr "╬ПйС╓Ре╬аВ"
+msgstr "Информация о передаче"
 
 #: messages-i18n.c:271
 msgid "Transfer Money"
-msgstr "╩Я╤Б╓Ре╬аВ"
+msgstr "Передача денег"
 
 #: messages-i18n.c:272
 msgid "Transfer From"
-msgstr "е╬аВ╦╣"
+msgstr "Передать с"
 
 #: messages-i18n.c:273
 msgid "Transfer To"
-msgstr "е╬аВюХ"
+msgstr "Передать на"
 
 #: messages-i18n.c:274
 msgid "About"
-msgstr ""
+msgstr "О программе"
 
 #: messages-i18n.c:275 po/guile_strings.txt:65
 #: src/gnome/glade-gnc-dialogs.c:1784
 msgid "Account"
-msgstr "╢╙дЙ╡йлэ"
+msgstr "Счет"
 
 #: messages-i18n.c:276 src/gnome/glade-gnc-dialogs.c:302
 #: src/gnome/glade-gnc-dialogs.c:462
 msgid "Accounts"
-msgstr "╢╙дЙ╡йлэ"
+msgstr "Счета"
 
 #: messages-i18n.c:277
 msgid "Account Information"
-msgstr "╢╙дЙ╡йлэ╬ПйС"
+msgstr "Информация о счете"
 
 #: messages-i18n.c:278
 msgid "AutoDep"
@@ -1277,7 +1263,7 @@ msgstr ""
 
 #: messages-i18n.c:279 src/gnome/glade-gnc-dialogs.c:2398
 msgid "Action"
-msgstr ""
+msgstr "Действие"
 
 #: messages-i18n.c:280
 msgid "Activities"
@@ -1285,50 +1271,50 @@ msgstr ""
 
 #: messages-i18n.c:281
 msgid "Ago"
-msgstr ""
+msgstr "Возраст"
 
 #: messages-i18n.c:282 po/guile_strings.txt:57
 #: src/gnome/glade-gnc-dialogs.c:2138
 msgid "Amount"
-msgstr "╤БЁш"
+msgstr "Количество"
 
 #: messages-i18n.c:283 po/guile_strings.txt:239
 msgid "Appreciation"
-msgstr "аЩ╡ц"
+msgstr ""
 
 #: messages-i18n.c:284
 msgid "Phone"
-msgstr "ееоц"
+msgstr "Телефон"
 
 #: messages-i18n.c:285 po/guile_strings.txt:174
 #: src/gnome/glade-gnc-dialogs.c:567
 msgid "Asset"
-msgstr "╩Я╩╨"
+msgstr ""
 
 #: messages-i18n.c:286
 msgid "Assets"
-msgstr "╩Я╩╨"
+msgstr ""
 
 #: messages-i18n.c:287
 msgid "ATM"
-msgstr "╔╜╔Ц╔ц╔╥╔Е╔ч╔╥║╪╔С"
+msgstr ""
 
 #: messages-i18n.c:288
 msgid "Back"
-msgstr "лА╓К"
+msgstr "Назад"
 
 #: messages-i18n.c:289 messages-i18n.c:290 po/guile_strings.txt:13
 msgid "Balance"
-msgstr "╩д╧Б"
+msgstr "Баланс"
 
 #: messages-i18n.c:291 po/guile_strings.txt:107
 #: src/gnome/glade-gnc-dialogs.c:561
 msgid "Bank"
-msgstr "╤Д╧т"
+msgstr "Банк"
 
 #: messages-i18n.c:292
 msgid "Blank"
-msgstr "╤УгР"
+msgstr "Пустое"
 
 #: messages-i18n.c:293 po/guile_strings.txt:124
 msgid "Bought"
@@ -1336,20 +1322,20 @@ msgstr ""
 
 #: messages-i18n.c:294
 msgid "Buy"
-msgstr "гЦ╓╕"
+msgstr ""
 
 #: messages-i18n.c:295
 msgid "Cancel"
-msgstr "╔╜╔Ц╔С╔╩╔К"
+msgstr "Отменить"
 
 #: messages-i18n.c:296 po/guile_strings.txt:137
 #: src/gnome/glade-gnc-dialogs.c:564
 msgid "Cash"
-msgstr "╦╫╤Б"
+msgstr "Наличные"
 
 #: messages-i18n.c:297
 msgid "Changed"
-msgstr ""
+msgstr "Изменено"
 
 #: messages-i18n.c:298 po/guile_strings.txt:205
 msgid "Charge"
@@ -1369,77 +1355,76 @@ msgstr ""
 
 #: messages-i18n.c:302
 msgid "Close"
-msgstr ""
+msgstr "Закрыть"
 
 #: messages-i18n.c:303
 msgid "Commit"
-msgstr ""
+msgstr "Зафиксировать"
 
 #: messages-i18n.c:304
 msgid "Create"
-msgstr ""
+msgstr "Создать"
 
 #: messages-i18n.c:305 po/guile_strings.txt:254
 #: src/gnome/glade-gnc-dialogs.c:570 src/gnome/glade-gnc-dialogs.c:2082
 msgid "Credit"
-msgstr "бъйЩ"
+msgstr "Кредит"
 
 #: messages-i18n.c:306
 msgid "Credits"
-msgstr "бъйЩ"
+msgstr "Кредиты"
 
 #: messages-i18n.c:307 po/guile_strings.txt:134
 #: src/gnome/glade-gnc-dialogs.c:582
 msgid "Currency"
-msgstr "дл╡ъ"
+msgstr "Валюта"
 
 #: messages-i18n.c:308 po/guile_strings.txt:6
 #: src/gnome/glade-gnc-dialogs.c:1920
 msgid "Date"
-msgstr "фЭиу"
+msgstr "Дата"
 
 #: messages-i18n.c:309
-#, fuzzy
 msgid "Days"
-msgstr "фЭ"
+msgstr "Дни"
 
 #: messages-i18n.c:310 po/guile_strings.txt:38
 #: src/gnome/glade-gnc-dialogs.c:2085
 msgid "Debit"
-msgstr "╪зйЩ"
+msgstr "Дебет"
 
 #: messages-i18n.c:311
 msgid "Debits"
-msgstr "╪зйЩ"
+msgstr "Дебеты"
 
 #: messages-i18n.c:312
 msgid "Decrease"
-msgstr "╦╨╬╞"
+msgstr "Уменьшить"
 
 #: messages-i18n.c:313
 msgid "Deficit"
-msgstr "юж╩З"
+msgstr "Дефицит"
 
 #: messages-i18n.c:314 src/gnome/glade-gnc-dialogs.c:2868
 msgid "Delete"
-msgstr "╨О╫Э"
+msgstr "Удалить"
 
 #: messages-i18n.c:315 po/guile_strings.txt:200
 msgid "Deposit"
-msgstr "фЧ╤Б"
+msgstr "Депозит"
 
 #: messages-i18n.c:316 po/guile_strings.txt:160
 msgid "Depreciation"
-msgstr "╦╨╡а╫Ч╣я"
+msgstr ""
 
 #: messages-i18n.c:317 po/guile_strings.txt:153
 #: src/gnome/glade-gnc-dialogs.c:1978
 msgid "Description"
-msgstr "юБлю"
+msgstr "Описание"
 
 #: messages-i18n.c:318
 msgid "Difference"
-msgstr "╨╧й╛"
+msgstr "Разница"
 
 #: messages-i18n.c:319
 msgid "Direct Debit"
@@ -1455,369 +1440,372 @@ msgstr ""
 
 #: messages-i18n.c:322
 msgid "Duplicate"
-msgstr "йёю╫"
+msgstr "Сдублировать"
 
 #: messages-i18n.c:323
 msgid "Edit"
-msgstr "йт╫╦"
+msgstr "Правка"
 
 #: messages-i18n.c:324 po/guile_strings.txt:8
 #: src/gnome/glade-gnc-dialogs.c:591
 msgid "Equity"
-msgstr "╩Якэ"
+msgstr ""
 
 #: messages-i18n.c:325
-msgid "Exit"
-msgstr "╫╙н╩"
+msgid "EUR (total)"
+msgstr ""
 
-#: messages-i18n.c:326 po/guile_strings.txt:327
+#: messages-i18n.c:326
+msgid "Exit"
+msgstr "Выход"
+
+#: messages-i18n.c:327 po/guile_strings.txt:327
 #: src/gnome/glade-gnc-dialogs.c:588
 msgid "Expense"
-msgstr "хЯмя"
+msgstr ""
 
-#: messages-i18n.c:327
+#: messages-i18n.c:328
 msgid "Export"
-msgstr "╫пно"
+msgstr "Экспортировать"
 
-#: messages-i18n.c:328 po/guile_strings.txt:355
+#: messages-i18n.c:329 po/guile_strings.txt:355
 msgid "Extensions"
-msgstr "Ёхд╔╣║г╫"
-
-#: messages-i18n.c:329
-msgid "Fee"
-msgstr "хЯмя"
+msgstr "Расширения"
 
 #: messages-i18n.c:330
-msgid "Field"
+msgid "Fee"
 msgstr ""
 
 #: messages-i18n.c:331
+msgid "Field"
+msgstr "Поле"
+
+#: messages-i18n.c:332
 msgid "File"
-msgstr "╔у╔║╔╓╔К"
+msgstr "Файл"
 
-#: messages-i18n.c:332 src/gnome/glade-gnc-dialogs.c:2523
+# Quicken
+#: messages-i18n.c:333 src/gnome/glade-gnc-dialogs.c:2523
 msgid "Find"
-msgstr "╦║╨В"
+msgstr "Найти"
 
-#: messages-i18n.c:333
+#: messages-i18n.c:334
 msgid "Forward"
-msgstr "юХ╓ь"
+msgstr "Вперед"
 
-#: messages-i18n.c:334 po/guile_strings.txt:126
+#: messages-i18n.c:335 po/guile_strings.txt:126
 msgid "From"
-msgstr ""
-
-#: messages-i18n.c:335
-msgid "GnuCash Preferences"
-msgstr "GnuCash юъдЙ"
+msgstr "С"
 
 #: messages-i18n.c:336
-msgid "Help"
-msgstr "╔ь╔К╔в"
+msgid "GnuCash Preferences"
+msgstr "Настройки GnuCash"
 
 #: messages-i18n.c:337
-#, fuzzy
-msgid "Imbalance"
-msgstr "╩д╧Б"
+msgid "Help"
+msgstr "Справка"
 
 #: messages-i18n.c:338
-msgid "Import"
-msgstr "╔╓╔С╔щ║╪╔х"
+msgid "Imbalance"
+msgstr ""
 
-#: messages-i18n.c:339 po/guile_strings.txt:244
+#: messages-i18n.c:339
+msgid "Import"
+msgstr "Импортировать"
+
+#: messages-i18n.c:340 po/guile_strings.txt:244
 #: src/gnome/glade-gnc-dialogs.c:585
 msgid "Income"
-msgstr "╪ЩфЧ"
-
-#: messages-i18n.c:340
-msgid "Increase"
-msgstr "аЩ╡ц"
+msgstr ""
 
 #: messages-i18n.c:341
+msgid "Increase"
+msgstr "Увеличить"
+
+#: messages-i18n.c:342
 msgid "Int"
 msgstr ""
 
-#: messages-i18n.c:342
+#: messages-i18n.c:343
 msgid "Jump"
-msgstr "хТ╓ж"
+msgstr "Перейти"
 
-#: messages-i18n.c:343 po/guile_strings.txt:194
+#: messages-i18n.c:344 po/guile_strings.txt:194
 #: src/gnome/glade-gnc-dialogs.c:573
 msgid "Liability"
-msgstr "иИ╨д"
-
-#: messages-i18n.c:344
-msgid "License"
-msgstr "╔И╔╓╔╩╔С╔╧"
+msgstr ""
 
 #: messages-i18n.c:345
-msgid "Loan"
-msgstr "╪зфЧ╤Б"
+msgid "License"
+msgstr "Лицензия"
 
 #: messages-i18n.c:346
-msgid "LTCG"
-msgstr "д╧╢Э╔╜╔Ц╔т╔©╔К╔╡╔╓╔С"
+msgid "Loan"
+msgstr ""
 
-#: messages-i18n.c:347 po/guile_strings.txt:32
+#: messages-i18n.c:347
+msgid "LTCG"
+msgstr ""
+
+#: messages-i18n.c:348 po/guile_strings.txt:32
 #: src/gnome/glade-gnc-dialogs.c:2196
 msgid "Memo"
-msgstr "╬э╨ы"
-
-#: messages-i18n.c:348
-#, fuzzy
-msgid "Months"
-msgstr "╥Н"
+msgstr "Заметка"
 
 #: messages-i18n.c:349
-msgid "New"
-msgstr ""
+msgid "Months"
+msgstr "Месяцы"
 
 #: messages-i18n.c:350
+msgid "New"
+msgstr "Новый"
+
+#: messages-i18n.c:351
 msgid "No"
-msgstr ""
+msgstr "Нет"
 
-#: messages-i18n.c:351 src/gnome/print-session.c:111
-#: src/gnome/print-session.c:200
+#: messages-i18n.c:352 src/gnome/print-session.c:112
+#: src/gnome/print-session.c:207
 msgid "(none)"
-msgstr "(╓й╓╥)"
+msgstr "(нет)"
 
-#: messages-i18n.c:352 po/guile_strings.txt:209
+#: messages-i18n.c:353 po/guile_strings.txt:209
 msgid "Notes"
-msgstr "╬э╨ы"
+msgstr "Заметки"
 
-#: messages-i18n.c:353 po/guile_strings.txt:176
+#: messages-i18n.c:354 po/guile_strings.txt:176
 msgid "Num"
-msgstr ""
-
-#: messages-i18n.c:354
-msgid "Ok"
-msgstr ""
+msgstr "Число"
 
 #: messages-i18n.c:355
-msgid "Online"
-msgstr "╔╙╔С╔И╔╓╔С"
+msgid "Ok"
+msgstr "Ок"
 
 #: messages-i18n.c:356
-msgid "Open"
-msgstr "Ё╚╓╞"
+msgid "Online"
+msgstr ""
 
 #: messages-i18n.c:357
-#, fuzzy
-msgid "Orphan"
-msgstr "Ё╚╓╞"
+msgid "Open"
+msgstr "Открыть"
 
 #: messages-i18n.c:358
+msgid "Orphan"
+msgstr ""
+
+#: messages-i18n.c:359
 msgid "Parameters"
-msgstr "йя©Т"
+msgstr "Параметры"
 
-#: messages-i18n.c:359 po/guile_strings.txt:114
+#: messages-i18n.c:360 po/guile_strings.txt:114
 msgid "Payment"
-msgstr "╩ый╖"
-
-#: messages-i18n.c:360
-msgid "Portfolio"
-msgstr "╔щ║╪╔х╔у╔╘╔Й╔╙"
+msgstr ""
 
 #: messages-i18n.c:361
-msgid "POS"
+msgid "Portfolio"
 msgstr ""
 
 #: messages-i18n.c:362
+msgid "POS"
+msgstr ""
+
+#: messages-i18n.c:363
 msgid "Preferences"
-msgstr "юъдЙ"
+msgstr "Настройки"
 
-#: messages-i18n.c:363 src/gnome/glade-gnc-dialogs.c:2340
+#: messages-i18n.c:364 src/gnome/glade-gnc-dialogs.c:2340
 msgid "Price"
-msgstr "╡ацм"
+msgstr "Цена"
 
-#: messages-i18n.c:364 src/gnome/glade-gnc-dialogs.c:937
+#: messages-i18n.c:365 src/gnome/glade-gnc-dialogs.c:937
 msgid "Print"
-msgstr "╟У╨Ч"
-
-#: messages-i18n.c:365
-msgid "Profits"
-msgstr "мЬ╠в"
+msgstr "Печать"
 
 #: messages-i18n.c:366
+msgid "Profits"
+msgstr ""
+
+#: messages-i18n.c:367
 msgid "Quit"
-msgstr "╫╙н╩"
+msgstr "Выход"
 
-#: messages-i18n.c:367 po/guile_strings.txt:18
+#: messages-i18n.c:368 po/guile_strings.txt:18
 msgid "Rebate"
-msgstr "╔Й╔ы║╪╔х"
+msgstr "Рибейт"
 
-#: messages-i18n.c:368 po/guile_strings.txt:191
+#: messages-i18n.c:369 po/guile_strings.txt:191
 msgid "Receive"
 msgstr ""
 
-#: messages-i18n.c:369
+#: messages-i18n.c:370
 msgid "Reconcile"
 msgstr ""
 
-#: messages-i18n.c:370
+#: messages-i18n.c:371
 msgid "Record"
-msgstr "╣╜о©"
+msgstr "Записать"
 
-#: messages-i18n.c:371 po/guile_strings.txt:215
+#: messages-i18n.c:372 po/guile_strings.txt:215
 msgid "Register"
 msgstr ""
 
-#: messages-i18n.c:372 po/guile_strings.txt:208
+#: messages-i18n.c:373 po/guile_strings.txt:208
 msgid "Report"
-msgstr "д╒и╪"
-
-#: messages-i18n.c:373
-msgid "Reports"
-msgstr "д╒и╪"
+msgstr "Отчет"
 
 #: messages-i18n.c:374
-msgid "Save"
-msgstr "йщб╦"
+msgid "Reports"
+msgstr "Отчеты"
 
 #: messages-i18n.c:375
-msgid "Savings"
-msgstr "цЫцъ"
+msgid "Save"
+msgstr "Сохранить"
 
 #: messages-i18n.c:376
-msgid "Scrub"
-msgstr "ащ╫Э"
+msgid "Savings"
+msgstr "Сохранения"
 
 #: messages-i18n.c:377
-msgid "Search Results"
-msgstr "╦║╨В╥К╡л"
-
-#: messages-i18n.c:378 po/guile_strings.txt:189
-msgid "Security"
-msgstr "╬з╥Т"
-
-#: messages-i18n.c:379
-msgid "Sell"
-msgstr "гД╓К"
-
-#: messages-i18n.c:380
-msgid "Settings"
-msgstr "юъдЙ"
-
-#: messages-i18n.c:381
-msgid "Simple"
+msgid "Scrub"
 msgstr ""
 
-#: messages-i18n.c:382 po/guile_strings.txt:313
+#: messages-i18n.c:378
+msgid "Search Results"
+msgstr "Результаты поиска"
+
+#: messages-i18n.c:379 po/guile_strings.txt:189
+msgid "Security"
+msgstr ""
+
+#: messages-i18n.c:380
+msgid "Sell"
+msgstr ""
+
+#: messages-i18n.c:381
+msgid "Settings"
+msgstr "Установки"
+
+#: messages-i18n.c:382
+msgid "Simple"
+msgstr "Простое"
+
+#: messages-i18n.c:383 po/guile_strings.txt:313
 msgid "Sold"
 msgstr ""
 
-#: messages-i18n.c:383 po/guile_strings.txt:51
+#: messages-i18n.c:384 po/guile_strings.txt:51
 msgid "Spend"
 msgstr ""
 
-#: messages-i18n.c:384
+#: messages-i18n.c:385
 msgid "Split"
 msgstr ""
 
-#: messages-i18n.c:385
+#: messages-i18n.c:386
 msgid "STCG"
-msgstr "ц╩╢Э╔╜╔Ц╔т╔©╔К╔╡╔╓╔С"
+msgstr ""
 
-#: messages-i18n.c:386 po/guile_strings.txt:353
+#: messages-i18n.c:387 po/guile_strings.txt:353
 #: src/gnome/glade-gnc-dialogs.c:576
 msgid "Stock"
-msgstr "ЁТ"
+msgstr ""
 
-#: messages-i18n.c:387 po/guile_strings.txt:246
+#: messages-i18n.c:388 po/guile_strings.txt:246
 msgid "Style"
-msgstr "╔╧╔©╔╓╔К"
-
-#: messages-i18n.c:388
-msgid "Surplus"
-msgstr "╬Йм╬"
+msgstr "Стиль"
 
 #: messages-i18n.c:389
-msgid "Teller"
-msgstr "╤Д╧таК╦Щ"
+msgid "Surplus"
+msgstr ""
 
-#: messages-i18n.c:390 po/guile_strings.txt:302
+#: messages-i18n.c:390
+msgid "Teller"
+msgstr ""
+
+#: messages-i18n.c:391 po/guile_strings.txt:302
 msgid "To"
 msgstr ""
 
-#: messages-i18n.c:391 src/gnome/glade-gnc-dialogs.c:2615
+#: messages-i18n.c:392 src/gnome/glade-gnc-dialogs.c:2615
 msgid "Today"
-msgstr "кэфЭ"
+msgstr "Сегодня"
 
-#: messages-i18n.c:392 messages-i18n.c:393 po/guile_strings.txt:207
+#: messages-i18n.c:393 messages-i18n.c:394 po/guile_strings.txt:207
 msgid "Total"
-msgstr "╧Г╥в"
+msgstr "Всего"
 
-#: messages-i18n.c:394 po/guile_strings.txt:304
+#: messages-i18n.c:395 po/guile_strings.txt:304
 #: src/gnome/glade-gnc-dialogs.c:295 src/gnome/glade-gnc-dialogs.c:349
 msgid "Type"
-msgstr "╥©"
-
-#: messages-i18n.c:395
-msgid "Transaction"
-msgstr "╪Х╟З"
+msgstr "Тип"
 
 #: messages-i18n.c:396
-msgid "Transfer"
-msgstr "╟эф╟"
+msgid "Transaction"
+msgstr "Транзакция"
 
-#: messages-i18n.c:397 po/guile_strings.txt:66
-msgid "Value"
-msgstr "╡ацм"
+#: messages-i18n.c:397
+msgid "Transfer"
+msgstr "Передача"
 
 #: messages-i18n.c:398
-msgid "WARNING"
-msgstr "╥ы╧П"
+msgid "Untitled"
+msgstr "Неозаглавленное"
 
-#: messages-i18n.c:399
-#, fuzzy
-msgid "Weeks"
-msgstr "╫╣"
+#: messages-i18n.c:399 po/guile_strings.txt:66
+msgid "Value"
+msgstr "Значение"
 
 #: messages-i18n.c:400
+msgid "WARNING"
+msgstr "ВНИМАНИЕ"
+
+#: messages-i18n.c:401
+msgid "Weeks"
+msgstr "Недели"
+
+#: messages-i18n.c:402
 msgid "Wire"
 msgstr ""
 
-#: messages-i18n.c:401
-msgid "Withdraw"
-msgstr "╟З╫п╓╥"
-
-#: messages-i18n.c:402 po/guile_strings.txt:60
-#, fuzzy
-msgid "Withdrawal"
-msgstr "╟З╫п╓╥"
-
 #: messages-i18n.c:403
-#, fuzzy
-msgid "Years"
-msgstr "г╞"
+msgid "Withdraw"
+msgstr ""
 
-#: messages-i18n.c:404
+#: messages-i18n.c:404 po/guile_strings.txt:60
+msgid "Withdrawal"
+msgstr ""
+
+#: messages-i18n.c:405
+msgid "Years"
+msgstr "Годы"
+
+#: messages-i18n.c:406
 msgid "Yes"
-msgstr "╓о╓╓"
+msgstr "Да"
 
 #: po/guile_strings.txt:1
 msgid "String Option"
-msgstr "й╦╩ЗнС╓н╔╙╔в╔╥╔Г╔С"
+msgstr "Параметр строки"
 
 #: po/guile_strings.txt:2
 msgid "Second Option"
-msgstr "фСхжлэ╓н╔╙╔в╔╥╔Г╔С"
+msgstr ""
 
 #: po/guile_strings.txt:3
 msgid "Cost"
-msgstr "╔Ё╔╧╔х"
+msgstr "Стоимость"
 
 #: po/guile_strings.txt:5
 msgid "Status"
-msgstr "╔╧╔ф║╪╔©╔╧"
+msgstr "Состояние"
 
 #: po/guile_strings.txt:9
 msgid "Other Account"
-msgstr "б╬╓н╢╙дЙ╡йлэ"
+msgstr "Другой счет"
 
 #: po/guile_strings.txt:10
 msgid "Account Separator"
-msgstr "╢╙дЙ╡йлэл╬й╛ЁД╣╜╧Ф"
+msgstr "Разделитель счета"
 
 #: po/guile_strings.txt:11
 msgid ""
@@ -1826,52 +1814,52 @@ msgstr ""
 
 #: po/guile_strings.txt:12
 msgid "Auto-Raise Lists"
-msgstr "╔Й╔╧╔х╓Р╪╚ф╟е╙╓ка╟лл╓к╫п╓╧"
+msgstr ""
 
 #: po/guile_strings.txt:14
 msgid "Secondary Sort Order"
-msgstr "фС╪║е╙╔╫║╪╔х╫Гхж"
+msgstr "Порядок вторичной сортировки"
 
 #: po/guile_strings.txt:15
 msgid "Stock Portfolio Valuation"
-msgstr "ЁТ╪╟╔щ║╪╔х╔у╔╘╔Й╔╙╓н╡ацм╥в╩╩"
+msgstr ""
 
 #: po/guile_strings.txt:16
 msgid "Stock Portfolio"
-msgstr "ЁТ╪╟╔щ║╪╔х╔у╔╘╔Й╔╙"
+msgstr ""
 
 #: po/guile_strings.txt:17
 msgid "The types of accounts for which balances are sign-reversed"
-msgstr "╩д╧Б╓╛ю╣иИ╣у╓к╓й╓К╢╙дЙ╡йлэ╓н╥©"
+msgstr ""
 
 #: po/guile_strings.txt:19
 msgid "The Good"
-msgstr "╓╓╓╓еш"
+msgstr ""
 
 #: po/guile_strings.txt:20
 #, c-format
 msgid "The current time is %s."
-msgstr "╦╫╨ъ╩Ч╧О╓о%s╓г╓╧║ё"
+msgstr "Текущее время %s"
 
 #: po/guile_strings.txt:21
 msgid "Headers"
-msgstr "╔ь╔ц╔ю"
+msgstr "Заголовки"
 
 #: po/guile_strings.txt:23
 msgid "Display N-1 lines"
-msgstr "N-1 ╧ти╫╪╗"
+msgstr "Показать N-1 строку"
 
 #: po/guile_strings.txt:24
 msgid "Use a 24 hour (instead of a 12 hour) time format."
-msgstr "12╩Ч╢ж╥а╪╟╓г╓о╓й╓╞║╒24╩Ч╢ж╥а╪╟╓г╩Ч╧О╓Ри╫╪╗╓╧╓К║ё"
+msgstr "Использовать 24-х часовой формат времени."
 
 #: po/guile_strings.txt:25
 msgid "Income:Salary:Taxable"
-msgstr "╪ЩфЧ║╖╣Км©║╖╡щюг"
+msgstr ""
 
 #: po/guile_strings.txt:26
 msgid "Type of budget report"
-msgstr "м╫╩╩йС╧П╓н╥©"
+msgstr ""
 
 #: po/guile_strings.txt:27
 msgid "Balancing"
@@ -1879,7 +1867,7 @@ msgstr ""
 
 #: po/guile_strings.txt:28
 msgid "Date (subtotal monthly)"
-msgstr "фЭиу (╥Н╪║╬╝╥в)"
+msgstr ""
 
 #: po/guile_strings.txt:29
 msgid "Single Column Display"
@@ -1887,15 +1875,15 @@ msgstr ""
 
 #: po/guile_strings.txt:30
 msgid "Time"
-msgstr "╩Ч╧О"
+msgstr "Время"
 
 #: po/guile_strings.txt:31
 msgid "Account (w/subtotal)"
-msgstr "╢╙дЙ╡йлэ (╬╝╥виу)"
+msgstr ""
 
 #: po/guile_strings.txt:33
 msgid "International"
-msgstr "╧Я╨щ"
+msgstr "Международный"
 
 #: po/guile_strings.txt:34
 msgid ""
@@ -1909,32 +1897,32 @@ msgstr ""
 
 #: po/guile_strings.txt:36
 msgid "This is a string option"
-msgstr "й╦╩ЗнС╓н╔╙╔в╔╥╔Г╔С╓г╓╧"
+msgstr "Это параметр строки"
 
 #: po/guile_strings.txt:37
 msgid "Main Window"
-msgstr "╪Г╔╕╔ё╔С╔и╔╕"
+msgstr "Главное окно"
 
 #: po/guile_strings.txt:39
 msgid "_Account Transactions"
-msgstr "╢╙дЙ╡йлэ╪Х╟З(_A)"
+msgstr "Транзакции счета"
 
 #: po/guile_strings.txt:40
 #, c-format
 msgid "The date option is %s."
-msgstr "фЭиу╓н╔╙╔в╔╥╔Г╔С╓о%s╓г╓╧║ё"
+msgstr ""
 
 #: po/guile_strings.txt:41
 msgid "Account Transactions"
-msgstr ""
+msgstr "Транзакции счета"
 
 #: po/guile_strings.txt:42
 msgid "UK"
-msgstr "╔╓╔╝╔Й╔╧"
+msgstr ""
 
 #: po/guile_strings.txt:43
 msgid "Sort by date"
-msgstr "фЭиу╫Г╓гйб╓ы╓К"
+msgstr "Сортировать по дате"
 
 #: po/guile_strings.txt:44
 msgid "Budget Dialog (Testing)"
@@ -1943,11 +1931,11 @@ msgstr ""
 #: po/guile_strings.txt:45
 #, c-format
 msgid "Report for %s and all subaccounts."
-msgstr "%s╓х╩р╢╙дЙ╡йлэа╢╓ф╓к╓д╓╓╓ф╓нд╒и╪║ё"
+msgstr ""
 
 #: po/guile_strings.txt:46
 msgid "Account types to display"
-msgstr "и╫╪╗╓╧╓К╢╙дЙ╡йлэ"
+msgstr "Типы счетов для отображения"
 
 #: po/guile_strings.txt:47
 msgid "Gain And Loss"
@@ -1955,35 +1943,35 @@ msgstr ""
 
 #: po/guile_strings.txt:48
 msgid "Double click expands parent accounts"
-msgstr "╔ю╔ж╔К╔╞╔Й╔ц╔╞╓╧╓К╓х©ф╢╙дЙ╡йлэ╓╛е╦Ё╚╓╣╓Л╓К"
+msgstr ""
 
 #: po/guile_strings.txt:49
 msgid "Boolean Option"
-msgstr "╔ж║╪╔Й╔╒╔С╓н╔╙╔в╔╥╔Г╔С"
+msgstr "Логический параметр"
 
 #: po/guile_strings.txt:50
 msgid "Income-Salary-Taxable"
-msgstr "╪ЩфЧ-╣Кна-╡щюг"
+msgstr ""
 
 #: po/guile_strings.txt:52
 msgid "_Stock Portfolio"
-msgstr "ЁТ╪╟╔щ║╪╔х╔у╔╘╔Й╔╙(_S)"
+msgstr ""
 
 #: po/guile_strings.txt:53
 msgid "Testing"
-msgstr "╔ф╔╧╔хцФ"
+msgstr "Тестирование"
 
 #: po/guile_strings.txt:54
 msgid "US-style: mm/dd/yyyy"
-msgstr "╔╒╔А╔Й╔╚╪╟: ╥Н╥Н/фЭфЭ/г╞г╞г╞г╞"
+msgstr "Американский стиль: мм/дд/гггг"
 
 #: po/guile_strings.txt:55
 msgid "You have not selected an account."
-msgstr "╢╙дЙ╡йлэ╓Ра╙бР╓╥╓ф╡╪╓╣╓╓║ё"
+msgstr ""
 
 #: po/guile_strings.txt:56
 msgid "By default, show every transaction in an account."
-msgstr "╢ШдЙюъдЙ╓г╓о║╒╪Х╟З╓оа╢╓ф╢╙дЙ╡йлэфБ╓ги╫╪╗╓╧╓К║ё"
+msgstr "По умолчанию показывать каждую транзакцию счета."
 
 #: po/guile_strings.txt:59
 msgid "No amount display"
@@ -1991,39 +1979,39 @@ msgstr ""
 
 #: po/guile_strings.txt:61
 msgid "View"
-msgstr "и╫╪╗"
+msgstr "Просмотр"
 
 #: po/guile_strings.txt:62
 msgid "The default background color for odd rows in double mode"
-msgstr "йё╪╟╔Б║╪╔и╓г╤Ж©Т╧т╓к╢ШдЙ╓г╩х╓╕╔п╔ц╔╞╓н©╖"
+msgstr ""
 
 #: po/guile_strings.txt:63
 msgid "UK-style dd/mm/yyyy"
-msgstr "╔╓╔╝╔Й╔╧╪╟: фЭфЭ/╥Н╥Н/г╞г╞г╞г╞"
+msgstr "Европейский стиль дд/мм/гггг"
 
 #: po/guile_strings.txt:64
 msgid "Show all columns"
-msgstr "а╢нС╓Ри╫╪╗"
+msgstr "Показать все столбцы"
 
 #: po/guile_strings.txt:67
 msgid "Header background"
-msgstr "╔ь╔ц╔ю╓н╔п╔ц╔╞©╖"
+msgstr "Фон заголовка"
 
 #: po/guile_strings.txt:68
 msgid "Sorting"
-msgstr "йб╓сбь╓╗╓К"
+msgstr "Сортировка"
 
 #: po/guile_strings.txt:69
 msgid "Show icons only"
-msgstr "╔╒╔╓╔Ё╔С╓н╓ъи╫╪╗"
+msgstr "Показать только пиктограммы"
 
 #: po/guile_strings.txt:70
 msgid "The default background color for odd rows in single mode"
-msgstr "ц╠╪╟╔Б║╪╔и╓г╢Я©Т╧т╓н╢ШдЙ╓н╔п╔ц╔╞╓н©╖"
+msgstr ""
 
 #: po/guile_strings.txt:72
 msgid "Display the Hello, World report."
-msgstr "╓Ё╓С╓к╓а╓о║╒ю╓Ё╕╓нд╒и╪╓Р╦╚╓╩╓К║ё"
+msgstr ""
 
 #: po/guile_strings.txt:73
 msgid "Gain"
@@ -2031,40 +2019,40 @@ msgstr ""
 
 #: po/guile_strings.txt:74
 msgid "Hello Again"
-msgstr "╓ч╓©╓Ё╓С╓к╓а╓о"
+msgstr ""
 
 #: po/guile_strings.txt:75
 msgid "This page shows your profits and losses."
-msgstr "╓Ё╓н╔з║╪╔╦╓омЬ╠в╓хб╩╪╨╓Ри╫╪╗╓╥╓ч╓╧║ё"
+msgstr ""
 
 #: po/guile_strings.txt:76
 msgid "Show Vertical Borders"
-msgstr "╫д╓н╤╜Ё╕юЧ╓Р╦╚╓╩╓К"
+msgstr "Показать вертикальные рамки"
 
 #: po/guile_strings.txt:77
 msgid "This is a boolean option."
-msgstr "╓Ё╓Л╓о╔ж║╪╔Й╔╒╔С╓н╔╙╔в╔╥╔Г╔С╓г╓╧║ё"
+msgstr ""
 
 #: po/guile_strings.txt:78
 msgid "_Profit and Loss"
-msgstr "_б╩╠в╥в╩╩╫Я"
+msgstr ""
 
 #: po/guile_strings.txt:79
 msgid "Display 1 line"
-msgstr "╟Л╧ти╫╪╗"
+msgstr "Показать одну строку"
 
 #: po/guile_strings.txt:80
 msgid "Background Color"
-msgstr "╔п╔ц╔╞╓н©╖"
+msgstr "Цвет фона"
 
 #: po/guile_strings.txt:81
 #, c-format
 msgid "The number option formatted as currency is %s."
-msgstr "©Т╩З╔╙╔в╔╥╔Г╔С╓Рдл╡ъ╓х╓╥╓ф╔у╔╘║╪╔ч╔ц╔х╓╧╓К╓х%s╓к╓й╓Й╓ч╓╧║ё"
+msgstr ""
 
 #: po/guile_strings.txt:82
 msgid "Income/Salary/Taxable"
-msgstr "╪ЩфЧ/╣Кна/╡щюг"
+msgstr ""
 
 #: po/guile_strings.txt:83
 msgid "There are no selected accounts in the account list option."
@@ -2076,52 +2064,52 @@ msgstr ""
 
 #: po/guile_strings.txt:85
 msgid "This page shows your net worth."
-msgstr "╓Ё╓н╔з║╪╔╦╓о╓╒╓й╓©╓н╫Ц╩Я╩╨╡ацм╓Ри╫╪╗╓╥╓ч╓╧║ё"
+msgstr ""
 
 #: po/guile_strings.txt:86
 msgid "_Budget"
-msgstr "_м╫╩╩"
+msgstr "Бюджет"
 
 #: po/guile_strings.txt:87
 msgid "Continental Europe: dd.mm.yyyy"
-msgstr "╔Х║╪╔М╔ц╔ябГн╕╪╟: фЭфЭ.╥Н╥Н.г╞г╞г╞г╞"
+msgstr "Континентальная Европа: дд.мм.гггг"
 
 #: po/guile_strings.txt:88
 msgid "Category"
-msgstr "╤Хй╛"
+msgstr "Категория"
 
 #: po/guile_strings.txt:89
 msgid "Single"
-msgstr "ц╠╪╟"
+msgstr "Одиночный"
 
 #: po/guile_strings.txt:90
 msgid "Show Horizontal Borders"
-msgstr "╡ё╓н╤╜Ё╕юЧ╓Р╦╚╓╩╓К"
+msgstr "Показать горизонтальные рамки"
 
 #: po/guile_strings.txt:91
 msgid "Sort by check/transaction number"
-msgstr "╬╝юз╪Й║╕╪Х╟Зхж╧Ф╫Г╓кйб╓ыбь╓╗╓К"
+msgstr ""
 
 #: po/guile_strings.txt:92
 msgid "The background color for the active transaction in double mode"
-msgstr "йё╪╟╔Б║╪╔и╓гйт╫╦цФ╓н╪Х╟З╓н╔п╔ц╔╞╓н©╖"
+msgstr ""
 
 #: po/guile_strings.txt:93
 msgid "Register Colors"
-msgstr "╔Л╔╦╔╧╔©╓н©╖"
+msgstr ""
 
 #: po/guile_strings.txt:94
 #, c-format
 msgid "The boolean option is %s."
-msgstr "╔ж║╪╔Й╔╒╔С╓н╔╙╔в╔╥╔Г╔С╓о %s ╓г╓╧║ё"
+msgstr ""
 
 #: po/guile_strings.txt:95
 msgid "Display the memo?"
-msgstr "╬э╨ы╓Ри╫╪╗╓╥╓ч╓╧╓╚?"
+msgstr ""
 
 #: po/guile_strings.txt:96
 msgid "(subaccounts)"
-msgstr "(╩р╢╙дЙ╡йлэ)"
+msgstr "(подсчета)"
 
 #: po/guile_strings.txt:97
 msgid "Multi mode default transaction background"
@@ -2139,71 +2127,70 @@ msgstr ""
 
 #: po/guile_strings.txt:100
 msgid "Loss"
-msgstr "б╩╪╨"
+msgstr ""
 
 #: po/guile_strings.txt:101
 msgid "Credit Accounts"
-msgstr "бъйЩ╢╙дЙ╡йлэ"
+msgstr ""
 
 #: po/guile_strings.txt:102
 msgid "Sort by description"
-msgstr "юБлю╫Г╓кйб╓ыбь╓╗╓К"
+msgstr "Сортировать по описанию"
 
 #: po/guile_strings.txt:103
 msgid "largest to smallest, latest to earliest"
-msgstr "╨гбГ╓╚╓И╨г╬╝║╒╨г©╥╓╚╓И╨г╦е"
+msgstr "от большего к меньшему, от позднего к раннему"
 
 #: po/guile_strings.txt:104
 msgid "Display the description?"
-msgstr "юБлю╓Ри╫╪╗╓╥╓ч╓╧╓╚?"
+msgstr "Показать описание?"
 
 #: po/guile_strings.txt:105
 msgid "Secondary Key"
-msgstr "фС╪║╔╜║╪"
+msgstr "Вторичный ключ"
 
 #: po/guile_strings.txt:106
 msgid "Save window sizes and positions."
-msgstr "╔╕╔ё╔С╔и╔╕╓нбГ╓╜╓╣╓Д╟лцж╓Рйщб╦╓╧╓К║ё"
+msgstr "Сохранить размер и положение окна."
 
 #: po/guile_strings.txt:108
 msgid "Number Option"
-msgstr "©Т╩З╔╙╔в╔╥╔Г╔С"
+msgstr "Числовой параметр"
 
 #: po/guile_strings.txt:109
 msgid "There are no accounts to report on."
-msgstr "д╒и╪╓Р╫п╓╧╓Х╓╕╓й╢╙дЙ╡йлэ╓о╓╒╓Й╓ч╓╩╓С║ё"
+msgstr ""
 
 #: po/guile_strings.txt:110
 #, c-format
 msgid "Report for %s."
-msgstr "%s╓нйС╧П║ё"
+msgstr "Отчет для %s."
 
 #: po/guile_strings.txt:111
 msgid "Reverse Income and Expense Accounts"
-msgstr "╪ЩфЧ╓ххЯмя╓н╢╙дЙ╡йлэ╓Р╣у╓к╓╧╓К"
+msgstr ""
 
 #: po/guile_strings.txt:112
 msgid "Europe"
-msgstr "╔Х║╪╔М╔ц╔я"
+msgstr "Европа"
 
 #: po/guile_strings.txt:115
 msgid "Day"
-msgstr "фЭ"
+msgstr "День"
 
 #: po/guile_strings.txt:116
 msgid ""
 "This is for testing. Your reports probably shouldn't have an option like "
 "this."
 msgstr ""
-"╓Ё╓Л╓о╔ф╔╧╔хмя╓г╓╧║ё╓╒╓й╓©╓нд╒и╪╓к╓о╓Ё╓С╓й╔╙╔в╔╥╔Г╔С╓о╓й╓╓йЩ╓╛╓╓╓╓╓г╓╥╓Г╓╕║ё"
 
 #: po/guile_strings.txt:117
 msgid "Display the headers?"
-msgstr "╔ь╔ц╔ю╓Ри╫╪╗╓╥╓ч╓╧╓╚?"
+msgstr "Показать заголовки?"
 
 #: po/guile_strings.txt:118
 msgid "Do transaction report on these accounts"
-msgstr "╓Ё╓Л╓И╓н╢╙дЙ╡йлэ╓к╪Х╟Зд╒и╪╓Р╨Ню╝╓╧╓К"
+msgstr "Сделать отчет о транзакциях для этих счетов"
 
 #: po/guile_strings.txt:119
 msgid "Sort and subtotal by account transferred from/to's name"
@@ -2215,19 +2202,19 @@ msgstr ""
 
 #: po/guile_strings.txt:123
 msgid "Average"
-msgstr "й©╤я"
+msgstr "Среднее"
 
 #: po/guile_strings.txt:125
 msgid "A_ccount Balance Tracker"
-msgstr "мб╤Б╩д╧Б╢ф╩К╔Б╔к╔©"
+msgstr ""
 
 #: po/guile_strings.txt:127
 msgid "Start of reporting period"
-msgstr "╥Х╩╩╢Э╪С"
+msgstr "Начало отчетного периода"
 
 #: po/guile_strings.txt:128
 msgid "Sort by exact entry time"
-msgstr "фЧно╩Ч╢ж╫Г╓кйб╓ыбь╓╗"
+msgstr ""
 
 #: po/guile_strings.txt:129
 msgid "Use accounting labels"
@@ -2235,15 +2222,15 @@ msgstr ""
 
 #: po/guile_strings.txt:130
 msgid "Full"
-msgstr "а╢бн"
+msgstr "Полный"
 
 #: po/guile_strings.txt:131
 msgid "The amount of time between data points"
-msgstr "╔г║╪╔©ею╢ж╓н╩Ч╢ж"
+msgstr ""
 
 #: po/guile_strings.txt:132
 msgid "Upper Limit"
-msgstr "╬Е╦б"
+msgstr ""
 
 #: po/guile_strings.txt:133
 msgid "Multi mode default split background"
@@ -2251,11 +2238,11 @@ msgstr ""
 
 #: po/guile_strings.txt:135
 msgid "Week"
-msgstr "╫╣"
+msgstr "Неделя"
 
 #: po/guile_strings.txt:136
 msgid "Crash the report"
-msgstr "д╒и╪╓Р╔╞╔И╔ц╔╥╔Е╓╣╓╩╓К"
+msgstr ""
 
 #: po/guile_strings.txt:138
 msgid "Step Size"
@@ -2263,27 +2250,27 @@ msgstr ""
 
 #: po/guile_strings.txt:139
 msgid "Hello, World!"
-msgstr "╓Ё╓С╓к╓а╓О║╒ю╓Ё╕!"
+msgstr "Здравствуй, Мир!"
 
 #: po/guile_strings.txt:140
 msgid "ISO"
-msgstr "ISO (╧Я╨щ╢П╫Ю)"
+msgstr "ISO"
 
 #: po/guile_strings.txt:141
 msgid "A report useful for balancing the budget"
-msgstr ""
+msgstr "Отчет полезный для балансировки бюджета"
 
 #: po/guile_strings.txt:142
 msgid "Display the amount?"
-msgstr ""
+msgstr "Показать количество?"
 
 #: po/guile_strings.txt:143
 msgid "Multi-Line"
-msgstr ""
+msgstr "Многострочный"
 
 #: po/guile_strings.txt:144
 msgid "Two Column Display"
-msgstr ""
+msgstr "Двухколоночное отображение"
 
 #: po/guile_strings.txt:145
 msgid "Date Format Display"
@@ -2291,35 +2278,35 @@ msgstr ""
 
 #: po/guile_strings.txt:146
 msgid "Ending"
-msgstr "╢ЭкЖ"
+msgstr ""
 
 #: po/guile_strings.txt:147
 msgid "Reversed-balance account types"
-msgstr "╩д╧Б╓Р╣у╓к╓╧╓К╢╙дЙ╡йлэ╓н╥©"
+msgstr ""
 
 #: po/guile_strings.txt:149
 msgid "Account fields to display"
-msgstr ""
+msgstr "Отображаемые поля счета"
 
 #: po/guile_strings.txt:150
 msgid "Account Balance Tracker"
-msgstr "╩д╧Б╢ф╩К╔Б╔к╔©"
+msgstr ""
 
 #: po/guile_strings.txt:151
 msgid "Report Options"
-msgstr "╔Л╔щ║╪╔х╓нюъдЙ"
+msgstr "Параметры отчета"
 
 #: po/guile_strings.txt:154
 msgid "Calculate balance sheet up to this date"
-msgstr "╓Ё╓нфЭиу╓ч╓г╓нбъ╪збп╬хи╫╓Р╥в╩╩╓╧╓К"
+msgstr ""
 
 #: po/guile_strings.txt:155
 msgid "Transaction Report"
-msgstr "╪Х╟З╔Л╔щ║╪╔х"
+msgstr "Отчет о транзакциях"
 
 #: po/guile_strings.txt:156
 msgid "Alternate the even and odd colors with each transaction, not each row"
-msgstr "╤Ж©Т╢Я©Т╧т╓н©╖╓Р║╒╧ткХ╓г╓о╓й╓╞╪Х╟ЗкХ╓кйя╓╗╓К"
+msgstr ""
 
 #: po/guile_strings.txt:157
 msgid "Gain/Loss"
@@ -2327,23 +2314,23 @@ msgstr ""
 
 #: po/guile_strings.txt:158
 msgid "Transfer from/to"
-msgstr "╟эф╟юХ/╦╣"
+msgstr ""
 
 #: po/guile_strings.txt:159
 msgid "Text only"
-msgstr "й╦╩З╓н╓ъ"
+msgstr "Только текст"
 
 #: po/guile_strings.txt:161
 msgid "Toolbar Buttons"
-msgstr "╔д║╪╔К╔п║╪╓н╔э╔©╔С"
+msgstr "Кнопки панели инструментов"
 
 #: po/guile_strings.txt:162
 msgid "Report Items from this date"
-msgstr "╓Ё╓нфЭиу╓Х╓ЙюХ╓н╧Юлэ╓к╓д╓╓╓фйС╧П"
+msgstr ""
 
 #: po/guile_strings.txt:163
 msgid "Period"
-msgstr "╥Х╩╩╢Э"
+msgstr "Период"
 
 #: po/guile_strings.txt:164
 msgid ""
@@ -2353,68 +2340,67 @@ msgstr ""
 
 #: po/guile_strings.txt:165
 msgid "Fourth Options"
-msgstr "╩мхжлэ╓н╔╙╔в╔╥╔Г╔С"
+msgstr ""
 
 #: po/guile_strings.txt:166
 msgid "Sort by this criterion first"
-msgstr "╓Ё╓н╬Р╥О╓г╓ч╓╨йб╓ыбь╓╗╓К"
+msgstr ""
 
 #: po/guile_strings.txt:167
-#, fuzzy
 msgid "Double"
-msgstr "╪╚ф╟йё╪╟"
+msgstr ""
 
 #: po/guile_strings.txt:168
 msgid "Ugly option"
-msgstr "╠Ь╓╓╔╙╔в╔╥╔Г╔С"
+msgstr ""
 
 #: po/guile_strings.txt:169
 msgid "How are you doing on your budget?"
-msgstr "м╫╩╩╓нд╢╩р╓о╓и╓╕╓г╓╧╓╚?"
+msgstr ""
 
 #: po/guile_strings.txt:170
 msgid "Save Translatable Strings"
-msgstr "кщлУ╡дг╫╓йй╦╩ЗнС╓Рйщб╦╓╧╓К"
+msgstr "Сохранить строки для перевода"
 
 #: po/guile_strings.txt:171
 msgid "Save strings that need to be translated"
-msgstr "кщлУ╓╛и╛мв╓йй╦╩ЗнС╓Рйщб╦╓╧╓К"
+msgstr "Сохранить строки, которые должны быть переведены"
 
 #: po/guile_strings.txt:172
 msgid "Number of Rows"
-msgstr "╧т©Т"
+msgstr "Число строк"
 
 #: po/guile_strings.txt:173
 msgid "/ (Slash)"
-msgstr "/ (╔╧╔И╔ц╔╥╔Е)"
+msgstr "/ (косая)"
 
 #: po/guile_strings.txt:175
 msgid "Use 24-hour time format"
-msgstr "24╩Ч╢ж╥а╪╟╓Р╩хмя╓╧╓К"
+msgstr "Использовать 24-часовой формат времени"
 
 #: po/guile_strings.txt:177
 msgid "Date Format"
-msgstr "╔г║╪╔©╥а╪╟"
+msgstr "Формат даты"
 
 #: po/guile_strings.txt:178
 msgid "A list option"
-msgstr "гшнС╓н╔╙╔в╔╥╔Г╔С"
+msgstr ""
 
 #: po/guile_strings.txt:179
 msgid "ISO Standard: yyyy-mm-dd"
-msgstr "ISO╧Я╨щ╢П╫Ю: г╞г╞г╞г╞-╥Н╥Н-фЭфЭ"
+msgstr "Стандарт ISO: гггг-мм-дд"
 
 #: po/guile_strings.txt:180
 msgid "Default Currency"
-msgstr "╢ШдЙ╓ндл╡ъ"
+msgstr "Валюта по умолчанию"
 
 #: po/guile_strings.txt:181
 msgid "Do transaction report on this account"
-msgstr "╓Ё╓н╢╙дЙ╡йлэ╓к╓д╓╓╓ф╪Х╟З╔Л╔щ║╪╔х╓Р╪б╧т╓╧╓К"
+msgstr ""
 
 #: po/guile_strings.txt:182
 msgid "Recent Price"
-msgstr "╨г╤А╓нцмцй"
+msgstr ""
 
 #: po/guile_strings.txt:183
 msgid "Net Inflow"
@@ -2422,16 +2408,16 @@ msgstr ""
 
 #: po/guile_strings.txt:184
 msgid "Single mode default even row background"
-msgstr "ц╠╪╟╤Ж©Т╧т╔п╔ц╔╞©╖"
+msgstr ""
 
 #: po/guile_strings.txt:185
 msgid "Double mode default even row background"
-msgstr "йё╪╟╤Ж©Т╧т╔п╔ц╔╞©╖"
+msgstr ""
 
 #: po/guile_strings.txt:186
 #, c-format
 msgid "The multi-choice option is %s."
-msgstr "%s╓ойёа╙бР╩Х╓н╔╙╔в╔╥╔Г╔С╓г╓╧║ё"
+msgstr ""
 
 #: po/guile_strings.txt:187
 msgid "Double mode colors alternate with transactions"
@@ -2439,53 +2425,52 @@ msgstr ""
 
 #: po/guile_strings.txt:188
 msgid "General"
-msgstr "а╢хл"
+msgstr "Общие"
 
 #: po/guile_strings.txt:192
 msgid "Sub-Accounts"
-msgstr "йД╫У╢╙дЙ╡йлэ"
+msgstr "Подсчета"
 
 #: po/guile_strings.txt:193
 #, c-format
 msgid "The date and time option is %s."
-msgstr "%s╓офЭиу╩Ч╢ж╓н╔╙╔в╔╥╔Г╔С╓г╓╧║ё"
+msgstr ""
 
 #: po/guile_strings.txt:195
 msgid "End of reporting period"
-msgstr "╥Х╩╩╢ЭкЖ"
+msgstr "Конец отчетного периода"
 
 #: po/guile_strings.txt:196
 msgid "Don't reverse any accounts"
-msgstr "╓и╓н╢╙дЙ╡йлэ╓Б╣у╢╙дЙ╓к╓╥╓й╓╓"
+msgstr ""
 
 #: po/guile_strings.txt:197
 msgid "Good option"
-msgstr "╓Х╓╓╔╙╔в╔╥╔Г╔С"
+msgstr ""
 
 #: po/guile_strings.txt:198
 msgid "US"
-msgstr "╔╒╔А╔Й╔╚"
+msgstr ""
 
 #: po/guile_strings.txt:199
-#, fuzzy
 msgid "_Transaction Report"
-msgstr "╪Х╟З╔Л╔щ║╪╔х"
+msgstr "Отчет о транзакции"
 
 #: po/guile_strings.txt:201
 msgid "Ba_lance sheet"
-msgstr "_бъ╪збп╬хи╫"
+msgstr ""
 
 #: po/guile_strings.txt:202
 msgid "Help for first option"
-msgstr "╨г╫И╓н╔╙╔в╔╥╔Г╔С╓н╔ь╔К╔в"
+msgstr ""
 
 #: po/guile_strings.txt:203 src/gnome/glade-gnc-dialogs.c:2036
 msgid "Number"
-msgstr "©Т"
+msgstr "Число"
 
 #: po/guile_strings.txt:204
 msgid "Show both icons and text"
-msgstr "╔╒╔╓╔Ё╔С╓хй╦╩Зн╬йЩи╫╪╗"
+msgstr "Показать пиктограммы и текст"
 
 #: po/guile_strings.txt:206
 msgid "Transfer from/to (w/subtotal)"
@@ -2494,36 +2479,36 @@ msgstr ""
 #: po/guile_strings.txt:210
 #, c-format
 msgid "The number option is %s."
-msgstr "╔╙╔в╔╥╔Г╔С╓н©Т╓о%s╓г╓╧║ё"
+msgstr ""
 
 #: po/guile_strings.txt:211
 #, c-format
 msgid "The string option is %s."
-msgstr "й╦╩ЗнС╓н╔╙╔в╔╥╔Г╔С╓о%s╓г╓╧║ё"
+msgstr ""
 
 #: po/guile_strings.txt:212
 msgid "Report style"
-msgstr "д╒и╪╓н╔╧╔©╔╓╔К"
+msgstr "Стиль отчета"
 
 #: po/guile_strings.txt:213
 msgid "_Reports"
-msgstr "_д╒и╪"
+msgstr "Отчеты"
 
 #: po/guile_strings.txt:214
 msgid "Single mode active background"
-msgstr "ц╠╪╟йт╫╦цФ╓н╔п╔ц╔╞©╖"
+msgstr ""
 
 #: po/guile_strings.txt:216
 msgid "Year"
-msgstr "г╞"
+msgstr "Год"
 
 #: po/guile_strings.txt:217
 msgid "Profit and Loss"
-msgstr "б╩╠в╥в╩╩╫Я"
+msgstr ""
 
 #: po/guile_strings.txt:218
 msgid "Month"
-msgstr "╥Н"
+msgstr "Месяц"
 
 #: po/guile_strings.txt:219
 msgid "Multi mode active transaction background"
@@ -2531,59 +2516,59 @@ msgstr ""
 
 #: po/guile_strings.txt:220
 msgid ". (Period)"
-msgstr ". (╔т╔Й╔╙╔и)"
+msgstr ". (Точка)"
 
 #: po/guile_strings.txt:221
 msgid "Primary Sort Order"
-msgstr "йб╓ыбь╓╗╓н╢Пкэ╫Г╫Ь"
+msgstr "Первичный порядок сортировки"
 
 #: po/guile_strings.txt:222
 msgid "Name"
-msgstr "л╬а╟"
+msgstr "Название"
 
 #: po/guile_strings.txt:223
 msgid "Display the date?"
-msgstr "фЭиу╓Ри╫╪╗╓╥╓ч╓╧╓╚?"
+msgstr "Показать дату?"
 
 #: po/guile_strings.txt:224
 msgid "Descending"
-msgstr "╧ъ╫Г"
+msgstr "Убывающий"
 
 #: po/guile_strings.txt:225
 msgid "This is a date option"
-msgstr "╓Ё╓Л╓офЭиу╓н╔╙╔в╔╥╔Г╔С╓г╓╒╓К"
+msgstr ""
 
 #: po/guile_strings.txt:226
 msgid "Two Week"
-msgstr "фС╫╣╢ж"
+msgstr "Две недели"
 
 #: po/guile_strings.txt:227
 msgid "Save Window Geometry"
-msgstr "╔╕╔ё╔С╔и╔╕╓н╟лцж║╕бГ╓╜╓╣╓Рйщб╦╓╧╓К"
+msgstr "Сохранить геометрию окна"
 
 #: po/guile_strings.txt:228
 msgid "Income\\Salary\\Taxable"
-msgstr "╪ЩфЧ\\╣Кна\\╡щюг"
+msgstr ""
 
 #: po/guile_strings.txt:229
 msgid "Code"
-msgstr "╔Ё║╪╔и"
+msgstr "Код"
 
 #: po/guile_strings.txt:230
 msgid "Balance sheet"
-msgstr "бъ╪збп╬хи╫"
+msgstr ""
 
 #: po/guile_strings.txt:231
 msgid "Export data as text."
-msgstr "╔г║╪╔©╓Р╔ф╔╜╔╧╔х╔у╔║╔╓╔К╓х╓╥╓ф╫пно"
+msgstr "Экспортировать данные как текст."
 
 #: po/guile_strings.txt:232
 msgid "Balance Sheet"
-msgstr "бъ╪збп╬хи╫"
+msgstr ""
 
 #: po/guile_strings.txt:233
 msgid "- (Dash)"
-msgstr "- (╔ю╔ц╔╥╔Е)"
+msgstr "- (Дефис)"
 
 #: po/guile_strings.txt:234
 msgid "Funds In"
@@ -2591,48 +2576,47 @@ msgstr ""
 
 #: po/guile_strings.txt:235
 msgid "Order of primary sorting"
-msgstr "йб╓ыбь╓╗╓н╢Пкэ╫Г╫Ь"
+msgstr "Порядок первичной сортировки"
 
 #: po/guile_strings.txt:236
 msgid "Default Currency For New Accounts"
-msgstr "©╥╣╛╢╙дЙ╡йлэ╓к╩х╓╕╢ШдЙ╓ндл╡ъ"
+msgstr "Исходная валюта для новых счетов"
 
 #: po/guile_strings.txt:237
 msgid "Sort by this criterion second"
-msgstr "╓Ё╓н╬Р╥О╓гфСхжлэ╓кйб╓ыбь╓╗╓К"
+msgstr ""
 
 #: po/guile_strings.txt:238
 msgid "true"
-msgstr "©©"
+msgstr "истина"
 
 #: po/guile_strings.txt:240
 msgid "Do not sort"
-msgstr "йб╓ыбь╓╗╓й╓╓"
+msgstr "Не сортировать"
 
 #: po/guile_strings.txt:241
 msgid "Period Ending"
-msgstr ""
+msgstr "Завершение периода"
 
 #: po/guile_strings.txt:242
 msgid "Income.Salary.Taxable"
-msgstr "╪ЩфЧ.╣Кна.╡щюг"
+msgstr ""
 
 #: po/guile_strings.txt:243
-#, fuzzy
 msgid "Only use 'debit' and 'credit' instead of informal synonyms"
-msgstr "║ж╪зйЩ║в╓х║жбъйЩ║в╓Р╔Л╔╦╔╧╔©╓ннС╦╚╫п╓╥╓х╓╥╓ф╓╥╓╚╩х╓О╓й╓╓"
+msgstr ""
 
 #: po/guile_strings.txt:245
 msgid "Include sub-accounts of all selected accounts"
-msgstr "а╙бР╓╣╓Л╓©╢╙дЙ╡йлэа╢╓ф╓нйД╫У╡йлэ╓Р╢ч╓Ю"
+msgstr ""
 
 #: po/guile_strings.txt:247
 msgid "The Ugly"
-msgstr "╠Ь╓╓еш"
+msgstr ""
 
 #: po/guile_strings.txt:248
 msgid "Max"
-msgstr "╨гбГ"
+msgstr "Макс."
 
 #: po/guile_strings.txt:249
 msgid "Test the budget dialog."
@@ -2640,35 +2624,35 @@ msgstr ""
 
 #: po/guile_strings.txt:250
 msgid "By default, show horizontal borders on the cells."
-msgstr ""
+msgstr "По умолчанию, показывать горизонтальные рамки ячеек."
 
 #: po/guile_strings.txt:251
 msgid "Display the totals?"
-msgstr "╧Г╥в╓Ри╫╪╗╓╥╓ч╓╧╓╚?"
+msgstr ""
 
 #: po/guile_strings.txt:252
 msgid ": (Colon)"
-msgstr ": (╔Ё╔М╔С)"
+msgstr ": (Двоеточие)"
 
 #: po/guile_strings.txt:253
 msgid "By default, show vertical borders on the cells."
-msgstr ""
+msgstr "По умолчанию, показывать вертикальные рамки ячеек."
 
 #: po/guile_strings.txt:255
 msgid "Actual"
-msgstr "╪б╨щ"
+msgstr "Действительное"
 
 #: po/guile_strings.txt:256
 msgid "Enable EURO support"
-msgstr "╔Ф║╪╔М╓Р╩хмя╡дг╫╓к╓╧╓К"
+msgstr "Включить поддержку Евро"
 
 #: po/guile_strings.txt:257
 msgid "Ascending"
-msgstr "╬╨╫Г"
+msgstr "Возрастающий"
 
 #: po/guile_strings.txt:258
 msgid "The Bad"
-msgstr "╟╜╓╓еш"
+msgstr ""
 
 #: po/guile_strings.txt:259
 msgid "Just a Date Option"
@@ -2684,13 +2668,10 @@ msgid ""
 "This is a sample GnuCash report. See the guile (scheme) source code in %s "
 "for details on writing your own reports, or extending existing reports."
 msgstr ""
-"╓Ё╓Л╓оGnuCash╓нд╒и╪╓ннЦ╓г╓╧║ёguile (scheme) ╓г╫Я╓╚╓Л╓©╔╫║╪╔╧╔Ё║╪╔и╓╛ %s "
-"╓к╓╒╓Й╓ч╓╧╓н╓г║╒╪╚й╛╓гд╒и╪╓Р╫Я╓╓╓©╓Й║╒╢Шб╦╓нд╒и╪╓РЁхд╔╓╥╓©╓Й╓╧╓К╟ы╓н╔р╔С╔х╓к╓"
-"╥╓ф╡╪╓╣╓╓║ё"
 
 #: po/guile_strings.txt:262
 msgid "Enables support for the European Union EURO currency"
-msgstr "╔Х║╪╔М╔ц╔яо╒╧Г╓н╔Ф║╪╔Мдл╡ъ╓Р╩хмя╡дг╫╓к╓╧╓К"
+msgstr ""
 
 #: po/guile_strings.txt:263
 msgid "Merged"
@@ -2698,39 +2679,39 @@ msgstr ""
 
 #: po/guile_strings.txt:264
 msgid "The default background color for even rows in single mode"
-msgstr "ц╠╪╟╤Ж©Т╧т╓н╢ШдЙ╔п╔ц╔╞©╖"
+msgstr ""
 
 #: po/guile_strings.txt:265
 msgid "The default background color for even rows in double mode"
-msgstr "йё╪╟╤Ж©Т╧т╓н╢ШдЙ╔п╔ц╔╞©╖"
+msgstr ""
 
 #: po/guile_strings.txt:266
 msgid "Display the Budget report."
-msgstr "м╫╩╩д╒и╪╓Ри╫╪╗║ё"
+msgstr ""
 
 #: po/guile_strings.txt:267
 msgid "Display the account?"
-msgstr "╢╙дЙ╡йлэ╓Ри╫╪╗╓╥╓ч╓╧╓╚?"
+msgstr "Показать счет?"
 
 #: po/guile_strings.txt:268
 msgid "Display the cheque number?"
-msgstr "╬╝юз╪Йхж╧Ф╓Ри╫╪╗╓╥╓ч╓╧╓╚?"
+msgstr ""
 
 #: po/guile_strings.txt:269
 msgid "Display N lines"
-msgstr "N╧ти╫╪╗"
+msgstr "Показать N строк"
 
 #: po/guile_strings.txt:270
 msgid "_Hello, World"
-msgstr "_╓Ё╓С╓к╓а╓о║╒ю╓Ё╕"
+msgstr "Здравствуй, Мир"
 
 #: po/guile_strings.txt:271
 msgid "First Option"
-msgstr ""
+msgstr "Первый параметр"
 
 #: po/guile_strings.txt:272
 msgid "Display the Stock Portfolio report."
-msgstr "ЁТ╪╟╔щ║╪╔х╔у╔╘╔Й╔╙╓нд╒и╪╓Ри╫╪╗║ё"
+msgstr ""
 
 #: po/guile_strings.txt:273
 msgid ""
@@ -2740,44 +2721,46 @@ msgstr ""
 
 #: po/guile_strings.txt:274
 msgid "Plot Type"
-msgstr ""
+msgstr "Тип графика"
 
 #: po/guile_strings.txt:275 src/gnome/glade-gnc-dialogs.c:2724
 #: src/gnome/glade-gnc-dialogs.c:2732
 msgid "Budget"
-msgstr "м╫╩╩"
+msgstr "Бюджет"
 
 #: po/guile_strings.txt:276
 msgid "Choose whether to display icons, text, or both for toolbar buttons"
 msgstr ""
+"Выбрать, будут ли кнопки на панели инструментов показываться как текст, "
+"пиктограммы или и то и другое"
 
 #: po/guile_strings.txt:277
 msgid "Sort by date & subtotal each year"
-msgstr "фЭиу╓х╬╝╥в╫Г╓гг╞╪║╓кйб╓ыбь╓╗"
+msgstr ""
 
 #: po/guile_strings.txt:278
 msgid "Show text only"
-msgstr "╔ф╔╜╔╧╔х╓н╓ъи╫╪╗"
+msgstr "Показать только текст"
 
 #: po/guile_strings.txt:279
 msgid "Icons and Text"
-msgstr "╔╒╔╓╔Ё╔С╓х╔ф╔╜╔╧╔х"
+msgstr "Пиктограммы и текст"
 
 #: po/guile_strings.txt:280
 msgid "The type of graph to generate"
-msgstr "ю╦ю╝╓╧╓К╔╟╔И╔у╓н╥©"
+msgstr "Тип создаваемого графика"
 
 #: po/guile_strings.txt:281
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr "фЧноцФ╢╙дЙ╡йлэ╓Д╫ХмЩ╓н╔Й╔╧╔х╓Р╪╚ф╟е╙╓ка╟лл╓к╫п╓╧"
+msgstr ""
 
 #: po/guile_strings.txt:282
 msgid "Sort by account transferred from/to's name"
-msgstr "е╬аВ╦╣║╕е╬аВюХ╓н╢╙дЙ╡йлэл╬╓н╫Г╓гйб╓ы╓╚╓╗╓К"
+msgstr ""
 
 #: po/guile_strings.txt:283
 msgid "Net Gain"
-msgstr "╫ЦаЩЁш"
+msgstr ""
 
 #: po/guile_strings.txt:284
 msgid "The fourth option rules!"
@@ -2789,15 +2772,15 @@ msgstr ""
 
 #: po/guile_strings.txt:286
 msgid "The header background color"
-msgstr "╔ь╔ц╔ю╓н╔п╔ц╔╞©╖"
+msgstr "Цвет фона заголовка"
 
 #: po/guile_strings.txt:287
 msgid "Sort by memo"
-msgstr "╬э╨ы╫Г╓кйб╓ыбь╓╗"
+msgstr "Сортировать по заметкам"
 
 #: po/guile_strings.txt:288
 msgid "Third Option"
-msgstr ""
+msgstr "Третий параметр"
 
 #: po/guile_strings.txt:289
 msgid "Choose the default mode for register windows"
@@ -2809,23 +2792,23 @@ msgstr ""
 
 #: po/guile_strings.txt:291
 msgid "Report end date"
-msgstr "д╒и╪╓хфЭиу"
+msgstr ""
 
 #: po/guile_strings.txt:292 src/gnome/glade-gnc-dialogs.c:1763
 msgid "None"
-msgstr "╓й╓╥"
+msgstr "Нет"
 
 #: po/guile_strings.txt:293
 msgid "Export data as text (Danger: Unfinished)"
-msgstr "╔ф╔╜╔╧╔х╔у╔║╔╓╔К╓х╓╥╓ф╔г║╪╔©╓Р╫Я╓╜╫п╓╧ (╥ы╧П: л╓╢╟ю╝╓г╓╧)"
+msgstr "Экспортировать данные как текст (Внимание: незавершено!)"
 
 #: po/guile_strings.txt:294
 msgid "Primary Key"
-msgstr "╪Г╔╜║╪"
+msgstr "Первичный ключ"
 
 #: po/guile_strings.txt:295
 msgid "Ticker"
-msgstr "б╝йС"
+msgstr ""
 
 #: po/guile_strings.txt:296
 msgid ""
@@ -2835,56 +2818,55 @@ msgstr ""
 
 #: po/guile_strings.txt:297
 msgid "Time and Date Option"
-msgstr "╩Ч╧О╓хфЭиу╓нюъдЙ"
+msgstr "Параметр даты и времени"
 
 #: po/guile_strings.txt:298
 msgid "Single mode default odd row background"
-msgstr "ц╠╪╟╢Я©Т╧т╓н╢ШдЙ╔п╔ц╔╞©╖"
+msgstr ""
 
 #: po/guile_strings.txt:299
 msgid "Double mode default odd row background"
-msgstr "йё╪╟╢Я©Т╧т╓н╢ШдЙ╔п╔ц╔╞©╖"
+msgstr ""
 
 #: po/guile_strings.txt:300
 msgid "The character used to separate fully-qualified account names"
-msgstr "ю╣╪╟╓й╢╙дЙ╡йлэл╬╓Р╤Хюз╓К╓н╓к╩х╓╕й╦╩З"
+msgstr ""
 
 #: po/guile_strings.txt:301
 msgid "Report start date"
-msgstr "д╒и╪Ё╚╩офЭиу"
+msgstr ""
 
 #: po/guile_strings.txt:303
 msgid "smallest to largest, earliest to latest"
-msgstr "╨г╬╝╓╚╓И╨гбГ║╒╨г╦е╓╚╓И╨г©╥"
+msgstr ""
 
 #: po/guile_strings.txt:305
-#, fuzzy
 msgid "Display the Transaction Report report."
-msgstr "╢╙дЙ╡йлэ╪Х╟Зи╫╓Ри╫╪╗╓╧╓К║ё"
+msgstr ""
 
 #: po/guile_strings.txt:306
 msgid "\\ (Backslash)"
-msgstr "\\ (╔п╔ц╔╞╔╧╔И╔ц╔╥╔Е)"
+msgstr "\\ (обратная косая)"
 
 #: po/guile_strings.txt:307
 msgid "Icons only"
-msgstr "╔╒╔╓╔Ё╔С╓н╓ъ"
+msgstr "Только пиктограммы"
 
 #: po/guile_strings.txt:308
 msgid "Help for third option"
-msgstr ""
+msgstr "Справка о третьем параметре"
 
 #: po/guile_strings.txt:309
 msgid "Default Register Mode"
-msgstr "╢ШдЙ╓н╔Л╔╦╔╧╔©╓н╔Б║╪╔и"
+msgstr ""
 
 #: po/guile_strings.txt:311
 msgid "Lower Limit"
-msgstr "╡╪╦б"
+msgstr "Нижний предел"
 
 #: po/guile_strings.txt:312
 msgid "Sort by amount"
-msgstr ""
+msgstr "Сортировать по количеству"
 
 #: po/guile_strings.txt:314
 msgid "This is an account list option"
@@ -2892,43 +2874,43 @@ msgstr ""
 
 #: po/guile_strings.txt:315
 msgid "Average Balance"
-msgstr "й©╤я╩д╧Б"
+msgstr "Средний баланс"
 
 #: po/guile_strings.txt:316
 msgid "Totals"
-msgstr "╧Г╥в"
+msgstr "Итоги"
 
 #: po/guile_strings.txt:317
 msgid "Profit/Loss"
-msgstr "мЬ╠в║╕б╩╪╨"
+msgstr ""
 
 #: po/guile_strings.txt:318 src/gnome/glade-gnc-dialogs.c:2268
 msgid "Shares"
-msgstr "ЁТ╪╟"
+msgstr ""
 
 #: po/guile_strings.txt:319
 msgid "Show All Transactions"
-msgstr "а╢╪Х╟З╓Ри╫╪╗"
+msgstr "Показать все транзакции"
 
 #: po/guile_strings.txt:320
 msgid "Display the Profit and Loss report."
-msgstr "б╩╠в╥в╩╩╫Я╓Ри╫╪╗║ё"
+msgstr ""
 
 #: po/guile_strings.txt:321
 msgid "Date (subtotal yearly)"
-msgstr "фЭиу (г╞╪║╬╝╥в)"
+msgstr ""
 
 #: po/guile_strings.txt:322
 msgid "Display the Account Balance Tracker report."
-msgstr "╩д╧Б╢ф╩К╔Б╔к╔©╓Ри╫╪╗║ё"
+msgstr ""
 
 #: po/guile_strings.txt:323
 msgid "2Week"
-msgstr "2╫╣"
+msgstr "2 недели"
 
 #: po/guile_strings.txt:324
 msgid "Nothing"
-msgstr ""
+msgstr "Ничего"
 
 #: po/guile_strings.txt:325
 msgid "You have selected no values in the list option."
@@ -2936,7 +2918,7 @@ msgstr ""
 
 #: po/guile_strings.txt:326
 msgid "false"
-msgstr "╣╤"
+msgstr "ложь"
 
 #: po/guile_strings.txt:328
 msgid "An account list option"
@@ -2956,11 +2938,11 @@ msgstr ""
 
 #: po/guile_strings.txt:332
 msgid "Bad option"
-msgstr ""
+msgstr "Плохой параметр"
 
 #: po/guile_strings.txt:333
 msgid "Display the Balance sheet report."
-msgstr "бъ╪збп╬хи╫╓Ри╫╪╗╓╧╓К║ё"
+msgstr ""
 
 #: po/guile_strings.txt:334
 msgid "Sort by date & subtotal each month"
@@ -2968,15 +2950,15 @@ msgstr ""
 
 #: po/guile_strings.txt:335
 msgid "Display the Account Transactions report."
-msgstr "╢╙дЙ╡йлэ╪Х╟Зи╫╓Ри╫╪╗╓╧╓К║ё"
+msgstr ""
 
 #: po/guile_strings.txt:336
 msgid "Net"
-msgstr "╫ЦЁш"
+msgstr ""
 
 #: po/guile_strings.txt:337
 msgid "Have a nice day!"
-msgstr "╓╦╓Ц╓╒╓м!"
+msgstr ""
 
 #: po/guile_strings.txt:338
 msgid "This is a list option"
@@ -2984,15 +2966,15 @@ msgstr ""
 
 #: po/guile_strings.txt:339
 msgid "Min"
-msgstr ""
+msgstr "Мин."
 
 #: po/guile_strings.txt:340
 msgid "Order of Secondary sorting"
-msgstr "фС╪║╔╫║╪╔х╫Г╫Ь"
+msgstr "Порядок вторичной сортировки"
 
 #: po/guile_strings.txt:341
 msgid "Help for second option"
-msgstr ""
+msgstr "Справка о втором параметре"
 
 #: po/guile_strings.txt:342
 msgid "Report items up to and including this date"
@@ -3000,15 +2982,15 @@ msgstr ""
 
 #: po/guile_strings.txt:343
 msgid "Display"
-msgstr "и╫╪╗"
+msgstr "Отобразить"
 
 #: po/guile_strings.txt:344 src/gnome/glade-gnc-dialogs.c:3114
 msgid "Nominal"
-msgstr ""
+msgstr "Номинал"
 
 #: po/guile_strings.txt:345
 msgid "Beginning"
-msgstr "Ё╚╩о"
+msgstr ""
 
 #: po/guile_strings.txt:346
 #, c-format
@@ -3017,9 +2999,6 @@ msgid ""
 "report, consult the mailing list %s. For details on subscribing to that "
 "list, see %s."
 msgstr ""
-"©╥╓╥╓╓д╒и╪╓Р╫Я╓╞╪Й╫У╓╠╓╛мъ╓╥╓╓йЩ║╒╓ч╓©╓о╪╚й╛╓╛╫Я╓╓╓©╓А╓ц╓а╓Ц╓С╓Ё╔╚╔ц╔Ё╓╓╓╓д╒и"
-"╪╓Р╓ъ╓С╓й╓х╤╕м╜╓╥╓©╓╓╓╪╓х╓╓╓╕йЩ╓о║╒%s "
-"╓н╔А║╪╔Й╔С╔╟╔Й╔╧╔х╓ч╓г╓╢аЙцл╡╪╓╣╓╓║ё╧ьфи╬ПйС╓о%s ╓Р╦ФмВ╡╪╓╣╓╓║ё"
 
 #: po/guile_strings.txt:347
 msgid ""
@@ -3033,19 +3012,19 @@ msgstr ""
 
 #: po/guile_strings.txt:349
 msgid "Income & Expense"
-msgstr "╪ЩфЧ║╕хЯмя"
+msgstr ""
 
 #: po/guile_strings.txt:350
 msgid "Hello, World"
-msgstr "╓Ё╓С╓к╓а╓о║╒ю╓Ё╕"
+msgstr "Здравствуй, Мир"
 
 #: po/guile_strings.txt:351
 msgid "Sort & subtotal by account"
-msgstr "╢╙дЙ╡йлэйл╓кйб╓сбь╓╗║╕╬╝╥в"
+msgstr ""
 
 #: po/guile_strings.txt:352
 msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
-msgstr "╔╞╔Л╔╦╔ц╔х╔╚║╪╔и║╒иИ╨д║╒╩Якэ║╒╪ЩфЧ╓нЁф╢╙дЙ╡йлэ╓Р╓╫╓Л╓╬╓Л╣у╓к╓╧╓К"
+msgstr ""
 
 #: po/guile_strings.txt:354
 msgid "This is a number option."
@@ -3057,239 +3036,239 @@ msgstr ""
 
 #: src/gnome/dialog-account-picker.c:95
 msgid "All Accounts"
-msgstr "а╢╢╙дЙ╡йлэ"
+msgstr "Все счета"
 
 #: src/gnome/dialog-qif-import.c:190
 msgid "Select QIF File"
-msgstr "QIF ╔у╔║╔╓╔Ка╙бР"
+msgstr "Выбрать QIF файл"
 
 #: src/gnome/dialog-qif-import.c:251
 msgid "You must specify a file to load."
-msgstr "фи╓ъ╧Ч╓Ю╔у╔║╔╓╔К╓Р╩ьдЙ╓╥╓ф╡╪╓╣╓╓║ё"
+msgstr "Вы должны указать файл для загрузки."
 
 #: src/gnome/dialog-qif-import.c:255
 msgid "You must specify a currency."
-msgstr "дл╡ъ╓Р╩ьдЙ╓╥╓ф╡╪╓╣╓╓║ё"
+msgstr "Вы должны указать валюту."
 
 #: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
 #: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
 msgid "QIF File scheme code not loaded properly."
-msgstr "QIF╔у╔║╔╓╔К╫ХмЩмя╓н scheme ╔Ё║╪╔и╓╛ю╣╬О╓к╔М║╪╔и╓╣╓Л╓ф╓╓╓ч╓╩╓С║ё"
+msgstr ""
 
 #: src/gnome/dialog-qif-import.c:291
 msgid "QIF File already loaded. Reload with current settings?"
-msgstr "QIF╔у╔║╔╓╔К╓офи╓ъ╧Ч╓ъ╨я╓ъ╓г╓╧║ё╨ё╓нюъдЙ╓Р╩х╓ц╓ф╓Б╓╕╟Леыфи╓ъ╧Ч╓ъ╓ч╓╧╓╚?"
+msgstr "Файл QIF уже загружен. Перезагрузить с текущими установками?"
 
 #: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
 msgid "Something is very wrong with QIF Importing."
-msgstr "QIFфи╓ъ╧Ч╓ъ╓╛кэЁйе╙╓к╓╙╓╚╓╥╓╓╓Х╓╕╓г╓╧║ё"
+msgstr "Что-то очень неправильное с импортированием QIF."
 
 #: src/gnome/glade-gnc-dialogs.c:68
 msgid "Import QIF Files"
-msgstr "QIF╔у╔║╔╓╔Кфи╓ъ╧Ч╓ъ"
+msgstr "Импортирование файлов QIF"
 
 #: src/gnome/glade-gnc-dialogs.c:90
 msgid "Loaded Files"
-msgstr "╔М║╪╔и╓╣╓Л╓©╔у╔║╔╓╔К"
+msgstr "Загруженные файлы"
 
 #: src/gnome/glade-gnc-dialogs.c:121
 msgid "File Info"
-msgstr "╔у╔║╔╓╔К╬ПйС"
+msgstr "Информация о файле"
 
 #: src/gnome/glade-gnc-dialogs.c:149
 msgid "QIF Filename:"
-msgstr "QIF╔у╔║╔╓╔Кл╬:"
+msgstr "Название файла QIF:"
 
 #: src/gnome/glade-gnc-dialogs.c:158
 msgid "Default QIF acct:"
-msgstr "╢ШдЙQIF╢╙дЙ:"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:167
 msgid "Currency:"
-msgstr "дл╡ъ:"
+msgstr "Валюта:"
 
 #: src/gnome/glade-gnc-dialogs.c:198 src/gnome/glade-gnc-dialogs.c:1861
 #: src/gnome/glade-gnc-dialogs.c:1913
 msgid "Select ..."
-msgstr "а╙бР...."
+msgstr "Выбор..."
 
 #: src/gnome/glade-gnc-dialogs.c:219
 msgid "Auto"
-msgstr "╪╚ф╟"
+msgstr "Авто"
 
 #: src/gnome/glade-gnc-dialogs.c:241
 msgid "Load file"
-msgstr "╔у╔║╔╓╔К╓Р╔М║╪╔и╓╧╓К"
+msgstr "Загрузить файл"
 
 #: src/gnome/glade-gnc-dialogs.c:248
 msgid "Files"
-msgstr "╔у╔║╔╓╔К"
+msgstr "Файлы"
 
 #: src/gnome/glade-gnc-dialogs.c:274
 msgid "QIF Account"
-msgstr "QIF╢╙дЙ╡йлэ"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:281 src/gnome/glade-gnc-dialogs.c:335
 msgid "Transactions"
-msgstr "╪Х╟З"
+msgstr "Транзакции"
 
 #: src/gnome/glade-gnc-dialogs.c:288 src/gnome/glade-gnc-dialogs.c:342
 msgid "GNUCash Account Name"
-msgstr "GNUCash╓н╢╙дЙ╡йлэл╬"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:328
 msgid "QIF Category"
-msgstr "QIF╤Хй╛"
+msgstr "Категория QIF"
 
 #: src/gnome/glade-gnc-dialogs.c:356
 msgid "Categories"
-msgstr "╤Хй╛"
+msgstr "Категории"
 
 #: src/gnome/glade-gnc-dialogs.c:447
 msgid "Select Account"
-msgstr "╢╙дЙ╡йлэ╓Ра╙бР"
+msgstr "Выбрать счет"
 
 #: src/gnome/glade-gnc-dialogs.c:505
 msgid "Selected account:"
-msgstr "а╙бР╓╣╓Л╓©╢╙дЙ╡йлэ:"
+msgstr "Выбранный счет:"
 
 #: src/gnome/glade-gnc-dialogs.c:514 src/gnome/glade-gnc-dialogs.c:2931
 #: src/gnome/glade-gnc-dialogs.c:3018
 msgid "Description:"
-msgstr "юБлю:"
+msgstr "Описание:"
 
 #: src/gnome/glade-gnc-dialogs.c:523
 msgid "Account type:"
-msgstr "╢╙дЙ╡йлэ╥©:"
+msgstr "Тип счета:"
 
 #: src/gnome/glade-gnc-dialogs.c:579
 msgid "Mutual"
-msgstr "аЙ╦ъ"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:644 src/gnome/glade-gnc-dialogs.c:652
 msgid "Print Preview"
-msgstr "╟У╨Ч╔в╔Л╔с╔Е║╪"
+msgstr "Просмотр печати"
 
 #: src/gnome/glade-gnc-dialogs.c:694
 msgid "Zoom in"
-msgstr "ЁхбГ"
+msgstr "Масштаб +"
 
 #: src/gnome/glade-gnc-dialogs.c:702
 msgid "Zoom out"
-msgstr "╫л╬╝"
+msgstr "Масштаб -"
 
 #: src/gnome/glade-gnc-dialogs.c:752
 msgid "Print Setup"
-msgstr "╟У╨ЧюъдЙ"
+msgstr "Настройка печати"
 
 #: src/gnome/glade-gnc-dialogs.c:774
 msgid "Printer:"
-msgstr "╔в╔Й╔С╔©:"
+msgstr "Принтер:"
 
 #: src/gnome/glade-gnc-dialogs.c:782
 msgid "Paper size:"
-msgstr "╩Ф╓нбГ╓╜╓╣:"
+msgstr "Размер бумаги:"
 
 #: src/gnome/glade-gnc-dialogs.c:790
 msgid "Pages to print:"
-msgstr "╟У╨Ч╔з║╪╔╦©Т:"
+msgstr "Страницы для печати:"
 
 #: src/gnome/glade-gnc-dialogs.c:835 src/gnome/glade-gnc-dialogs.c:1757
 msgid "All"
-msgstr "а╢иТ"
+msgstr "Все"
 
 #: src/gnome/glade-gnc-dialogs.c:843
 msgid "Selected"
-msgstr "а╙бРиТй╛"
+msgstr "Выбранные"
 
 #: src/gnome/glade-gnc-dialogs.c:865
 msgid "From:"
-msgstr "╨г╫И:"
+msgstr "C:"
 
 #: src/gnome/glade-gnc-dialogs.c:880
 msgid "To:"
-msgstr "╨г╦Е:"
+msgstr "По:"
 
 #: src/gnome/glade-gnc-dialogs.c:902 src/gnome/glade-gnc-dialogs.c:909
 msgid "Select..."
-msgstr "а╙бР..."
+msgstr "Выбрать..."
 
 #: src/gnome/glade-gnc-dialogs.c:945
 msgid "Preview"
-msgstr "╔в╔Л╔с╔Е║╪"
+msgstr "Просмотр"
 
 #: src/gnome/glade-gnc-dialogs.c:1002
 msgid "Select Paper Size"
-msgstr "╩Ф╓нбГ╓╜╓╣╓Ра╙бР"
+msgstr "Выбрать размер бумаги"
 
 #: src/gnome/glade-gnc-dialogs.c:1127
 msgid "Print Check"
-msgstr "╬╝юз╪Й╟У╨Ч"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1156
 msgid "Check format:"
-msgstr "╬╝юз╪Й╥а╪╟:"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1164 src/gnome/glade-gnc-dialogs.c:1334
 msgid "Check position:"
-msgstr "╬╝юз╪Й╓н╟лцж:"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1172 src/gnome/glade-gnc-dialogs.c:1342
 msgid "Date format:"
-msgstr "фЭиу╥а╪╟:"
+msgstr "Формат даты:"
 
 #: src/gnome/glade-gnc-dialogs.c:1194
 msgid "Quicken/QuickBooks (tm) US-Letter"
-msgstr "Quicken/QuickZBooks (tm) US╔Л╔©║╪"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1197 src/gnome/glade-gnc-dialogs.c:1218
 #: src/gnome/glade-gnc-dialogs.c:1254
 msgid "Custom"
-msgstr ""
+msgstr "Другой"
 
 #: src/gnome/glade-gnc-dialogs.c:1209
 msgid "Top"
-msgstr "╬Е"
+msgstr "Сверху"
 
 #: src/gnome/glade-gnc-dialogs.c:1212
 msgid "Middle"
-msgstr "©©цФ"
+msgstr "В середине"
 
 #: src/gnome/glade-gnc-dialogs.c:1215
 msgid "Bottom"
-msgstr "╡╪"
+msgstr "Снизу"
 
 #: src/gnome/glade-gnc-dialogs.c:1230
 msgid "December  31, 2000"
-msgstr ""
+msgstr "Декабрь  31, 2000"
 
 #: src/gnome/glade-gnc-dialogs.c:1233
 msgid "31 December, 2000"
-msgstr ""
+msgstr "31 Декабрь, 2000"
 
 #: src/gnome/glade-gnc-dialogs.c:1236
 msgid "Dec 31, 2000"
-msgstr ""
+msgstr "Дек 31, 2000"
 
 #: src/gnome/glade-gnc-dialogs.c:1239
 msgid "31 Dec, 2000"
-msgstr ""
+msgstr "31 Дек, 2000"
 
 #: src/gnome/glade-gnc-dialogs.c:1242
 msgid "12/31/2000"
-msgstr ""
+msgstr "12/31/2000"
 
 #: src/gnome/glade-gnc-dialogs.c:1245
 msgid "12/31/00"
-msgstr ""
+msgstr "12/31/00"
 
 #: src/gnome/glade-gnc-dialogs.c:1248
 msgid "31/12/2000"
-msgstr ""
+msgstr "31/12/2000"
 
 #: src/gnome/glade-gnc-dialogs.c:1251
 msgid "31/12/00"
-msgstr ""
+msgstr "31/12/00"
 
 #: src/gnome/glade-gnc-dialogs.c:1259
 msgid "Custom check parameters"
@@ -3297,27 +3276,27 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1294
 msgid "Payee:"
-msgstr "╪У╪Х©м:"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1302
 msgid "Date:"
-msgstr "фЭиу:"
+msgstr "Дата:"
 
 #: src/gnome/glade-gnc-dialogs.c:1310
 msgid "Amount (words):"
-msgstr "©Тнл (╦юму):"
+msgstr "Количество (слова):"
 
 #: src/gnome/glade-gnc-dialogs.c:1318
 msgid "Amount (numbers):"
-msgstr "©Тнл (©Т╩З):"
+msgstr "Количество (числа):"
 
 #: src/gnome/glade-gnc-dialogs.c:1326
 msgid "Memo:"
-msgstr "╬э╨ы:"
+msgstr "Заметки:"
 
 #: src/gnome/glade-gnc-dialogs.c:1350
 msgid "Units:"
-msgstr "ц╠╟л:"
+msgstr "Единицы:"
 
 #: src/gnome/glade-gnc-dialogs.c:1365
 msgid "x"
@@ -3325,35 +3304,35 @@ msgstr "x"
 
 #: src/gnome/glade-gnc-dialogs.c:1442
 msgid "Inches"
-msgstr "╔╓╔С╔а"
+msgstr "Дюймы"
 
 #: src/gnome/glade-gnc-dialogs.c:1445
 msgid "Centimeters"
-msgstr "╔╩╔С╔а"
+msgstr "Сантиметры"
 
 #: src/gnome/glade-gnc-dialogs.c:1448
 msgid "Millimeters"
-msgstr "╔ъ╔Й"
+msgstr "Миллиметры"
 
 #: src/gnome/glade-gnc-dialogs.c:1451
 msgid "Points"
-msgstr "╔щ"
+msgstr "Пункты"
 
 #: src/gnome/glade-gnc-dialogs.c:1464
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: src/gnome/glade-gnc-dialogs.c:1523
 msgid "                                  "
-msgstr ""
+msgstr "                                  "
 
 #: src/gnome/glade-gnc-dialogs.c:1530
 msgid "                    "
-msgstr ""
+msgstr "                    "
 
 #: src/gnome/glade-gnc-dialogs.c:1707
 msgid "Find Transactions"
-msgstr "╪Х╟З╓Р╦║╨В"
+msgstr "Найти транзакции"
 
 #: src/gnome/glade-gnc-dialogs.c:1722
 msgid "Match Accounts"
@@ -3365,46 +3344,46 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1760
 msgid "Any"
-msgstr ""
+msgstr "Любые"
 
 #: src/gnome/glade-gnc-dialogs.c:1769
 msgid "selected accounts:"
-msgstr "а╙бР╓╣╓Л╓©╢╙дЙ╧Юлэ:"
+msgstr "выбранные счета:"
 
 #: src/gnome/glade-gnc-dialogs.c:1791
 msgid "Match Date"
-msgstr ""
+msgstr "Совпадение даты"
 
 #: src/gnome/glade-gnc-dialogs.c:1806
 msgid "Find transactions occurring between the dates:"
-msgstr ""
+msgstr "Найти транзакции произошедншие между датами:"
 
 #: src/gnome/glade-gnc-dialogs.c:1830 src/gnome/glade-gnc-dialogs.c:1846
 #: src/gnome/glade-gnc-dialogs.c:1883 src/gnome/glade-gnc-dialogs.c:1898
 msgid "/"
-msgstr ""
+msgstr "/"
 
 #: src/gnome/glade-gnc-dialogs.c:1927 src/gnome/glade-gnc-dialogs.c:1985
 msgid "Match Description"
-msgstr ""
+msgstr "Совпадение описания"
 
 #: src/gnome/glade-gnc-dialogs.c:1942
 msgid "Find transactions whose Description matches:"
-msgstr ""
+msgstr "Найти транзакции чье описание совпадают с:"
 
 #: src/gnome/glade-gnc-dialogs.c:1964 src/gnome/glade-gnc-dialogs.c:2022
 #: src/gnome/glade-gnc-dialogs.c:2182 src/gnome/glade-gnc-dialogs.c:2384
 msgid "Case sensitive"
-msgstr "бГй╦╩З╬╝й╦╩З╓н╤Хйл╓Р╓╧╓К"
+msgstr "Регистрозависимое"
 
 #: src/gnome/glade-gnc-dialogs.c:1971 src/gnome/glade-gnc-dialogs.c:2029
 #: src/gnome/glade-gnc-dialogs.c:2189 src/gnome/glade-gnc-dialogs.c:2391
 msgid "Regular expression"
-msgstr "ю╣╣╛и╫╦╫"
+msgstr "Регулярное выражение"
 
 #: src/gnome/glade-gnc-dialogs.c:2000
 msgid "Find transactions whose Number matches:"
-msgstr ""
+msgstr "Найти транзакции, номера которых совпадают с:"
 
 #: src/gnome/glade-gnc-dialogs.c:2043
 msgid "Match Amount"
@@ -3412,170 +3391,165 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2065
 msgid "Find "
-msgstr ""
+msgstr "Найти "
 
 #: src/gnome/glade-gnc-dialogs.c:2079
 msgid "Credit or Debit"
-msgstr "бъйЩ╓╚╪зйЩ╓╚"
+msgstr "Кредит или Дебет"
 
 #: src/gnome/glade-gnc-dialogs.c:2090
 msgid "splits having amounts of:"
-msgstr "╓Ё╓нЁш╓Р╩Щ╓дй╛ЁД:"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2111 src/gnome/glade-gnc-dialogs.c:2240
 #: src/gnome/glade-gnc-dialogs.c:2312
 msgid "At least"
-msgstr "╨гдЦ╓г╓Б"
+msgstr "Не меньше"
 
 #: src/gnome/glade-gnc-dialogs.c:2114
 msgid "At most "
-msgstr "╨гбГ╓г╓Б"
+msgstr "Не больше"
 
 #: src/gnome/glade-gnc-dialogs.c:2117 src/gnome/glade-gnc-dialogs.c:2246
 #: src/gnome/glade-gnc-dialogs.c:2318
 msgid "Exactly"
-msgstr "╓а╓Г╓╕╓и"
+msgstr "Точно"
 
 #: src/gnome/glade-gnc-dialogs.c:2145
 msgid "Match Memo"
-msgstr "╬э╨ы╓кЁ╨еЖ"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2160
 msgid "Find splits whose Memo matches:"
-msgstr "╬э╨ы╓╛Ё╨еЖ╓╧╓Кй╛ЁД╓Р╦║╨В: "
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2203
 msgid "Match number of shares"
-msgstr "ЁТ╪╟©Т╓кЁ╨еЖ"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2218
 msgid "Find securities transactions of:"
-msgstr "╓Ё╓н╡йлэ╓н╬з╥Т╪Х╟З╓Р╦║╨В:"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2243 src/gnome/glade-gnc-dialogs.c:2315
 msgid "At most"
-msgstr "╨гбГ╓г╓Б"
+msgstr "Не больше"
 
 #: src/gnome/glade-gnc-dialogs.c:2260
 msgid "shares"
-msgstr "ЁТ╪╟"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2275
 msgid "Match share price"
-msgstr "ЁТ╡а╓кЁ╨еЖ"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2290
 msgid "Find securities transactions with share price of:"
-msgstr "╓Ё╓нЁТ╡а╓Р╩Щ╓д╬з╥Т╪Х╟З╓Р╦║╨В:"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2347
 msgid "Match Action"
-msgstr "╫ХмЩ╓Р╦║╨В"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2362
 msgid "Find transactions whose Action matches:"
-msgstr "╫ХмЩ╓╛Ё╨еЖ╓╧╓К╪Х╟З╓Р╦║╨В"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2405
-#, fuzzy
 msgid "Match Cleared state"
-msgstr "ЁТ╡а╓кЁ╨еЖ"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2420
-#, fuzzy
 msgid "Find transactions whose Cleared status is:"
-msgstr "╫ХмЩ╓╛Ё╨еЖ╓╧╓К╪Х╟З╓Р╦║╨В"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2428
 msgid "Not cleared (n)"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2435
-#, fuzzy
 msgid "Cleared (c)"
-msgstr "а╢иТ╔╞╔Й╔╒"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2442
-#, fuzzy
 msgid "Reconciled (y)"
-msgstr "_╬х╧Г"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2470
 msgid "Type of search"
-msgstr "╦║╨В╓н╥©"
+msgstr "Тип поиска"
 
 #: src/gnome/glade-gnc-dialogs.c:2484
 msgid "New search"
-msgstr "©╥╣╛╦║╨В"
+msgstr "Новый поиск"
 
 #: src/gnome/glade-gnc-dialogs.c:2492
 msgid "Refine current search"
-msgstr "╦╫╨ъ╓н╦║╨В╓Ркы╓Й╡╪╓╡╓К"
+msgstr "Уточнить текущий поиск"
 
 #: src/gnome/glade-gnc-dialogs.c:2500
 msgid "Add results to current search"
-msgstr "╦╫╨ъ╓н╦║╨В╓к╥К╡л╓Рди╡ц╓╧╓К"
+msgstr "Добавить результаты к текущему поиску"
 
 #: src/gnome/glade-gnc-dialogs.c:2508
 msgid "Delete results from current search"
-msgstr "╥К╡л╓Р╦╫╨ъ╓н╦║╨В╓╚╓И╨О╫Э╓╧╓К"
+msgstr "Удалить результаты из текущего поиска"
 
 #: src/gnome/glade-gnc-dialogs.c:2590
 msgid "Select Date"
-msgstr "фЭиуа╙бР"
+msgstr "Выбрать дату"
 
 #: src/gnome/glade-gnc-dialogs.c:2756
 msgid "Name:"
-msgstr "л╬а╟:"
+msgstr "Название:"
 
 #: src/gnome/glade-gnc-dialogs.c:2778
 msgid "The name of this budget"
-msgstr ""
+msgstr "Название этого бюджета"
 
 #: src/gnome/glade-gnc-dialogs.c:2787
 msgid "Budget Entries"
-msgstr "м╫╩╩╧Юлэ"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2835
 msgid "label773"
-msgstr ""
+msgstr "метка773"
 
 #: src/gnome/glade-gnc-dialogs.c:2859
 msgid "Add"
-msgstr "ди╡ц"
+msgstr "Добавить"
 
 #: src/gnome/glade-gnc-dialogs.c:2866
 msgid "Add a new entry or subentry"
-msgstr "╧Юлэ╓ч╓©╓оиШ╧Юлэ╓Рди╡ц"
+msgstr "Добавить новую запись или подзапись"
 
 #: src/gnome/glade-gnc-dialogs.c:2875
 msgid "Delete the selected entry or subentry"
-msgstr "а╙бР╓╣╓Л╓©╢╙дЙ╡йлэ╓Р╨О╫Э╓╧╓К"
+msgstr "Удалить выбранную запись или подзапись"
 
 #: src/gnome/glade-gnc-dialogs.c:2890
 msgid "Move the selected item up"
-msgstr "а╙бР╓╣╓Л╓©╢╙дЙ╡йлэ╓Р╬Е╓к╟эф╟"
+msgstr "Переместить выбранный элемент вверх"
 
 #: src/gnome/glade-gnc-dialogs.c:2898
-#, fuzzy
 msgid "Move the selected item down"
-msgstr "а╙бР╓╣╓Л╓©╢╙дЙ╡йлэ╓Р╡╪╓к╟эф╟"
+msgstr "Переместить выбранный элемент вниз"
 
 #: src/gnome/glade-gnc-dialogs.c:2907
 msgid "Entry"
-msgstr "╧Юлэ"
+msgstr "Запись"
 
 #: src/gnome/glade-gnc-dialogs.c:2940
 msgid "Type:"
-msgstr "╥©:"
+msgstr "Тип:"
 
 #: src/gnome/glade-gnc-dialogs.c:2979
 msgid "Normal"
-msgstr "дл╬О"
+msgstr "Нормальный"
 
 #: src/gnome/glade-gnc-dialogs.c:2982
 msgid "No Total"
-msgstr "╧Г╥в╓й╓╥"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2987
 msgid "Matching Transactions..."
@@ -3583,31 +3557,31 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2994
 msgid "Subentry"
-msgstr ""
+msgstr "Подзапись"
 
 #: src/gnome/glade-gnc-dialogs.c:3027
 msgid "Amount:"
-msgstr "╤БЁш:"
+msgstr "Количество:"
 
 #: src/gnome/glade-gnc-dialogs.c:3036
 msgid "Period:"
-msgstr "╥Х╩╩╢Э:"
+msgstr "Период:"
 
 #: src/gnome/glade-gnc-dialogs.c:3045
 msgid "Mechanism:"
-msgstr ""
+msgstr "Механизм:"
 
 #: src/gnome/glade-gnc-dialogs.c:3054
 msgid "Bill Day:"
-msgstr "юа╣АфЭ:"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:3063
 msgid "Grace Period:"
-msgstr "м╠м╫╢Э╢ж:"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:3117
 msgid "Bill"
-msgstr "юа╣А╫Я"
+msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:3120
 msgid "Recurring"
@@ -3619,62 +3593,49 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:3199
 msgid "window1"
+msgstr "окно1"
+
+#: src/gnome/print-session.c:241
+msgid "You must select a printer first."
+msgstr "Сначала вы должны выбрать принтер."
+
+#: src/SplitLedger.c:1816
+#, fuzzy
+msgid ""
+"You are about to overwrite an existing split.\n"
+"Are you sure you want to do that?"
+msgstr ""
+"Файл\n"
+"     %s\n"
+"уже существует.\n"
+"Вы уверены, в том что хотите перезаписать его?"
+
+#: src/SplitLedger.c:1846
+msgid ""
+"You are about to overwrite an existing transaction.\n"
+"Are you sure you want to do that?"
 msgstr ""
 
-#: src/gnome/print-session.c:233
-msgid "You must select a printer first."
-msgstr "╔в╔Й╔С╔©║╪╓Р╓ч╓╨а╙бР╓╥╓ф╡╪╓╣╓╓║ё"
+#~ msgid "There is already an account with that name."
+#~ msgstr "Счет с таким именем уже есть."
 
-#~ msgid "Show Categories"
-#~ msgstr "╤Хй╛╓Ри╫╪╗╓╧╓К"
+#~ msgid ""
+#~ "You have disabled \"Tip of the Day\"\n"
+#~ "You can re-enable tips from the General\n"
+#~ "section of the Preferences menu"
+#~ msgstr ""
+#~ "Вы отключили \"Совет дня\"\n"
+#~ "Вы можете включить его в разделе\n"
+#~ "\"Общие\" меню \"Настройки\""
 
-#~ msgid "Import QIF File - Scripted in Guile."
-#~ msgstr "QIF╥а╪╟╔у╔║╔╓╔К╓н╔╓╔С╔щ║╪╔х - Guile╓н╔╧╔╞╔Й╔в╔х╓г╫Я╓╚╓Л╓ф╓╓╓ч╓╧║ё"
+#~ msgid "Tips of the Day"
+#~ msgstr "Советы дня"
 
-#~ msgid "largest to t, latest to earliest"
-#~ msgstr "╨гбГ╓╚╓Иt╓ч╓г║╒╨г©╥╓╚╓И╨г╦е╓ч╓г"
+#~ msgid "_Tips Of The Day"
+#~ msgstr "Советы дня"
 
-#~ msgid "QIF File Import (Danger: Unfinished)"
-#~ msgstr "QIF╥а╪╟╔у╔║╔╓╔Кфи╓ъ╧Ч╓ъ (╥ы╧П: л╓╢╟ю╝╓г╓╧)"
+#~ msgid "Display this dialog next time"
+#~ msgstr "Показывать этот диалог в следующий раз"
 
-#~ msgid "QIF file load failed. Check settings and reload."
-#~ msgstr "QIF╥а╪╟╔у╔║╔╓╔К╓н╔М║╪╔и╪╨гт║ёюъдЙ╓РЁн╓╚╓А╓ф╨ф╔М║╪╔и╓╥╓ф╡╪╓╣╓╓║ё"
-
-#~ msgid "Sort by Amount, then Date, then Num"
-#~ msgstr "©Тнл║╒фЭиу║╒хж╧Ф╓н╫Г╓кйб╓ыбь╓╗╓К"
-
-#~ msgid "Sort by Date, then Num, then Amount"
-#~ msgstr "фЭиу║╒хж╧Ф║╒©Тнл╓н╫Г╓кйб╓ыбь╓╗╓К"
-
-#~ msgid "Sort by Description, then Date, then Num"
-#~ msgstr "юБлю║╒фЭиу║╒хж╧Ф╓н╫Г╓кйб╓ыбь╓╗╓К"
-
-#~ msgid "Sort by Memo, then Date, then Num"
-#~ msgstr "╬э╨ы║╒фЭиу║╒хж╧Ф╓н╫Г╓кйб╓ыбь╓╗╓К"
-
-#~ msgid "Sort by Num, then Date, then Amount"
-#~ msgstr "хж╧Ф║╒фЭиу║╒©Тнл╓н╫Г╓кйб╓ыбь╓╗╓К"
-
-#~ msgid "Autodetect"
-#~ msgstr "╪╚ф╟ц╣цн"
-
-#~ msgid "Decimal (1,000.00)"
-#~ msgstr "╬╝©Тею (1,000.00)"
-
-#~ msgid "Comma (1.000,00)"
-#~ msgstr "╔Ё╔С╔ч (1.000,00)"
-
-#~ msgid "Autodetect           "
-#~ msgstr "╪╚ф╟ц╣цн              "
-
-#~ msgid "MM/DD/YYYY"
-#~ msgstr "╥Н╥Н/фЭфЭ/г╞г╞г╞г╞"
-
-#~ msgid "DD/MM/YYYY"
-#~ msgstr "фЭфЭ/╥Н╥Н/г╞г╞г╞г╞"
-
-#~ msgid "YYYY/MM/DD"
-#~ msgstr "г╞г╞г╞г╞/╥Н╥Н/фЭфЭ"
-
-#~ msgid "YYYY/DD/MM"
-#~ msgstr "г╞г╞г╞г╞/фЭфЭ/╥Н╥Н"
+#~ msgid "Tip of the Day:"
+#~ msgstr "Совет дня:"

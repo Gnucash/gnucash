@@ -143,7 +143,7 @@ gnc_history_add_file(char *newfile)
   __gnc_history_config_write();
 }
 
-char *
+const char *
 gnc_history_get_last()
 {
   if(history_list == NULL)

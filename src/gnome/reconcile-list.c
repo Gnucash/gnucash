@@ -634,5 +634,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     gnc_reconcile_list_set_row_style(list, row, reconciled);
 
     list->num_splits++;
+
+    free (strings[0]);
   }
 }

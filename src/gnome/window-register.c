@@ -47,7 +47,6 @@
 #include "query-user.h"
 #include "enriched-messages.h"
 #include "table-gnome.h"
-#include "table-html.h"
 #include "gnucash-sheet.h"
 #include "global-options.h"
 #include "dialog-find-transactions.h"
@@ -1269,6 +1268,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+#if 0
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
@@ -1277,6 +1277,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+#endif
     GNOMEUIINFO_END
   };
 
@@ -1737,8 +1738,15 @@ regRefresh(xaccLedgerDisplay *ledger)
   const char *currency = xaccAccountGetCurrency(ledger->leader);
 
   /* no EURO converson, if account is already EURO or no EURO currency */
-  euro = (euro && strncasecmp("EUR", currency, 3) &&
-          gnc_is_euro_currency(currency));
+  if(currency != NULL)
+  {
+    euro = (euro && strncasecmp("EUR", currency, 3) &&
+	    gnc_is_euro_currency(currency));
+  }
+  else
+  {
+    euro = FALSE;
+  }
 
   xaccSRLoadXferCells(ledger->ledger, ledger->leader);
 
@@ -2303,8 +2311,7 @@ deleteCB(GtkWidget *widget, gpointer data)
     buf = g_strdup_printf(TRANS_DEL_MSG, xaccSplitGetMemo(split),
                           xaccTransGetDescription(trans));
 
-    result = gnc_verify_dialog_parented(GTK_WINDOW(regData->window),
-                                        buf, GNC_F);
+    result = gnc_verify_dialog_parented(regData->window, buf, GNC_F);
 
     g_free(buf);
 
@@ -2322,7 +2329,7 @@ deleteCB(GtkWidget *widget, gpointer data)
   if ((xaccTransCountSplits(trans) <= 2) &&
       ((style == REG_SINGLE_LINE) || (style == REG_DOUBLE_LINE)))
   {
-    result = gnc_verify_dialog_parented(GTK_WINDOW(regData->window),
+    result = gnc_verify_dialog_parented(regData->window,
                                         TRANS_DEL2_MSG, GNC_F);
 
     if (!result)
@@ -2408,7 +2415,7 @@ gnc_register_check_close(RegWindow *regData)
         (GTK_WINDOW(regData->window), TRANS_CHANGED_MSG, GNC_T))
       recordCB(regData->window, regData);
     else
-      xaccSRCancelCursorSplitChanges(regData->ledger->ledger);
+      xaccSRCancelCursorTransChanges(regData->ledger->ledger);
   }
 }
 
