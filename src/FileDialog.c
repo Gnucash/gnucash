@@ -369,21 +369,21 @@ gncPostFileOpen (const char * filename)
 
   /* clean up old stuff, and then we're outta here. */
   gnc_history_add_file (newfile);
-  g_free (newfile);
 
   /* run a file-opened hook. For now, the main thing it will do 
    * is notice if legacy currencies are being imported. */
   {
     SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
     SCM hook = gh_eval_str("gnc:*file-opened-hook*");
-    SCM filename;
+    SCM scm_filename;
 
     if (newfile)
     {
-      filename = gh_str02scm(newfile);
-      gh_call2(run_danglers, hook, filename); 
+      scm_filename = gh_str02scm(newfile);
+      gh_call2(run_danglers, hook, scm_filename); 
     }
   }  
+  g_free (newfile);
 }
 
 /* ======================================================== */
