@@ -1018,7 +1018,7 @@ QueryPredData_t gncQueryKVPPredicate (query_compare_t how,
 
 static void init_tables (void)
 {
-  int i;
+  unsigned int i;
   struct {
     char const *name;
     QueryPredicate pred;

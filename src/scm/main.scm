@@ -318,8 +318,8 @@ string and 'directories' must be a list of strings."
     ;; LC_ALL for those systems.
     (let* ((locale (or (false-if-exception (setlocale LC_MESSAGES))
 		       (setlocale LC_ALL)))
-           (strings (cond ((not (string? locale)) ())
-                          ((equal? locale "C") ())
+           (strings (cond ((not (string? locale)) '())
+                          ((equal? locale "C") '())
                           ((<= (string-length locale) 4) (list locale))
                           (else (list (substring locale 0 2)
                                       (substring locale 0 5)
@@ -598,7 +598,7 @@ string and 'directories' must be a list of strings."
 
   ;; Now the fun begins.
   (gnc:startup-pass-1)
-  (gnc:print-unstable-message)
+  ;;(gnc:print-unstable-message)
   (if (null? gnc:*batch-mode-things-to-do*)
       (begin
         (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)

@@ -444,14 +444,16 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
   gnc_html * html = user_data; 
   URLType  type;
   char     * location = NULL;
+  char    ** p_location = &location;
   char     * label    = NULL;
   GList    * handles  = NULL;
+  GList   ** p_handles = &handles;
   GList    * current;
   
   DEBUG("uri %s, ok %d, body %10.10s, body len %d", uri, completed_ok, body, body_len);
   g_hash_table_lookup_extended(html->request_info, uri, 
-                               (gpointer *)&location, 
-                               (gpointer *)&handles);
+                               (gpointer *)p_location, 
+                               (gpointer *)p_handles);
   
   /* handles will be NULL for an HTTP POST transaction, where we are
    * displaying the reply data. */
@@ -1388,11 +1390,13 @@ gnc_html_unregister_object_handler(const char * classid)
 {
   gchar * keyptr=NULL;
   gchar * valptr=NULL;
+  gchar ** p_keyptr = &keyptr;
+  gchar ** p_valptr = &valptr;
 
   if (!g_hash_table_lookup_extended(gnc_html_object_handlers,
                                     classid, 
-                                    (gpointer *)&keyptr, 
-                                    (gpointer *)&valptr))
+                                    (gpointer *)p_keyptr, 
+                                    (gpointer *)p_valptr))
     return;
 
   g_hash_table_remove(gnc_html_object_handlers, classid);
@@ -1421,13 +1425,15 @@ gnc_html_unregister_action_handler(const char * actionid)
 {
   gchar * keyptr=NULL;
   gchar * valptr=NULL;
+  gchar ** p_keyptr = &keyptr;
+  gchar ** p_valptr = &valptr;
 
   g_return_if_fail (actionid != NULL);
 
   if (!g_hash_table_lookup_extended(gnc_html_action_handlers,
                                     actionid, 
-                                    (gpointer *)&keyptr, 
-                                    (gpointer *)&valptr))
+                                    (gpointer *)p_keyptr, 
+                                    (gpointer *)p_valptr))
     return;
 
   g_hash_table_remove(gnc_html_action_handlers, actionid);

@@ -17,6 +17,12 @@
       (string=? "1.4" (substring (version) 0 3))) #f)
  (else (use-modules (ice-9 rdelim))))
 
+(define qif-bad-numeric-rexp 
+  (make-regexp "^\.\.\."))
+
+(define (not-bad-numeric-string? input)
+  (if (regexp-exec qif-bad-numeric-rexp input) #f #t))
+
 (define (qif-file:read-file self path ticker-map)
   (false-if-exception
    (let* ((qstate-type #f)
@@ -115,7 +121,7 @@
                        
                        ;; T : total amount 
                        ((#\T)
-                        (if default-split 
+                        (if (and default-split (not-bad-numeric-string? value))
                             (qif-split:set-amount! default-split value)))
                        
                        ;; P : payee
@@ -174,8 +180,14 @@
                             (qif-split:set-category! default-split value)))
                        
                        ;; S : split category 
+		       ;; At this point we are ignoring the default-split
+		       ;; completely, but save it for later -- we need to use
+		       ;; it to determine whether to reverse the split
+		       ;; values.
                        ((#\S)
                         (set! current-split (make-qif-split))
+			(if default-split
+			    (qif-xtn:set-default-split! current-xtn default-split))
                         (set! default-split #f)
                         (qif-split:set-category! current-split value)
                         (qif-xtn:set-splits! 
@@ -189,8 +201,8 @@
                        
                        ;; $ : split amount (if there are splits)
                        ((#\$)
-                        (if current-split
-                            (qif-split:set-amount! current-split value)))
+                        (if (and current-split (not-bad-numeric-string? value))
+			    (qif-split:set-amount! current-split value)))
                        
                        ;; ^ : end-of-record 
                        ((#\^)
@@ -453,7 +465,7 @@
    (qif-file:xtns self)
    qif-parse:print-date
    'error-on-ambiguity
-   (lambda (t e) e)))
+   (lambda (t e) e) 'date))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file:parse-fields-results results type

@@ -518,7 +518,7 @@ gnc_option_menu_init(GtkWidget * w)
 {
   GtkWidget * menu;
   GtkWidget * active;
-  int i;
+  unsigned int i;
 
   menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(w));
 
@@ -658,7 +658,7 @@ gnc_handle_date_accelerator (GdkEventKey *event,
   if (event->type != GDK_KEY_PRESS)
     return FALSE;
 
-  if ((tm->tm_mday == -1) || (tm->tm_mon == -1) || (tm->tm_year == -1))
+  if ((tm->tm_mday <= 0) || (tm->tm_mon == -1) || (tm->tm_year == -1))
     return FALSE;
 
   g_date_set_dmy (&gdate, 
@@ -1115,13 +1115,14 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
 				gpointer user_data)
 {
   GtkSignalFunc func;
+  GtkSignalFunc *p_func = &func;
 
   if (allsymbols == NULL) {
     /* get a handle on the main executable -- use this to find symbols */
     allsymbols = g_module_open(NULL, 0);
   }
 
-  if (!g_module_symbol(allsymbols, handler_name, (gpointer *)&func)) {
+  if (!g_module_symbol(allsymbols, handler_name, (gpointer *)p_func)) {
     g_warning("could not find signal handler '%s'.", handler_name);
     return;
   }

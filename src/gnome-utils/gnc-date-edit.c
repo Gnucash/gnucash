@@ -169,12 +169,11 @@ delete_popup (GtkWidget *widget, gpointer data)
 static gint
 key_press_popup (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	GNCDateEdit *gde;
+	GNCDateEdit *gde = data;
 
 	if (event->keyval != GDK_Escape)
-		return date_accel_key_press(widget, event, data);
+		return date_accel_key_press(gde->date_entry, event, data);
 
-	gde = data;
 	gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
 	hide_popup (gde);
 
@@ -567,9 +566,17 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
                                    1900 + tm.tm_year);
         gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), tm.tm_mday);
 
-        gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
-
         return TRUE;
+}
+
+static gint
+key_press_entry (GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	if (!date_accel_key_press(widget, event, data))
+		return FALSE;
+
+	gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+	return TRUE;
 }
 
 static int
@@ -603,7 +610,7 @@ create_children (GNCDateEdit *gde)
 	gtk_box_pack_start (GTK_BOX (gde), gde->date_entry, TRUE, TRUE, 0);
 	gtk_widget_show (gde->date_entry);
 	gtk_signal_connect (GTK_OBJECT (gde->date_entry), "key_press_event",
-			    GTK_SIGNAL_FUNC(date_accel_key_press), gde);
+			    GTK_SIGNAL_FUNC(key_press_entry), gde);
 	gtk_signal_connect (GTK_OBJECT (gde->date_entry), "focus_out_event",
 			    GTK_SIGNAL_FUNC(date_focus_out_event), gde);
 

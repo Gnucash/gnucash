@@ -1,3 +1,798 @@
+2003-05-10  Chris Lyttle  <chris@wilddev.net>
+	* configure.in: release 1.8.3
+	* NEWS: release 1.8.3
+
+2003-05-10  Derek Atkins  <derek@ihtfp.com>
+
+	* po/POTFILES.in: removed src/engine/DateUtils.c -- it no longer
+	  exists in the build.
+
+2003-05-09  Christian Stimming  <stimming@tuhh.de>
+
+	* macros/openhbci.m4: Fix openhbci macro again so that it uses a C
+	check program.
+
+2003-05-08  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/pt_BR.po: New Brazilian Portugese glossary by Jon
+	Lapham <lapham@extracta.com.br>
+
+2003-05-08  Derek Atkins  <derek@ihtfp.com>
+
+	* macros/openhbci.m4: revert cstim's and hampton's changes to make
+	  it work again on both older and newer autoconf versions.
+
+2003-05-07  Christian Stimming  <stimming@tuhh.de>
+
+	* po/en_GB.po: Updated British english translation by Nigel Titley
+	<nigel@titley.com>
+
+2003-05-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c, gnc-hbci-utils.h,
+	gnc-hbci-utils.c, hbci-interaction.h, hbci-interaction.c,
+	po/de.po: Add *much* better error checking -- the user now gets
+	almost always correct feedback if an online transfer cannot be
+	executed. Yeah well I know this introduced one more string even
+	though it's string freeze time -- but the feature itself is so
+	immensly useful for German users that I couldn't resist. ;-)
+
+2003-05-05  David Hampton  <hampton@employees.org>
+
+	* macros/openhbci.m4: Fix problem with latest versions of autoconf.
+
+2003-05-03  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in: Fix hbci and ofx test for handling --disable
+	correctly.
+
+2003-05-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/qif-parse.scm: Don't assume that a
+	  date of the form XXXXXXXX is always YYYYMMDD.  There is at least
+	  one example where it is MMDDYYYY.  So, test it both ways:
+	  xxxxYYYY and YYYYxxxx.  Make sure a 4-digit year "makes sense"
+	  (e.g., the year is after 1930). Fixes bug #111889.
+
+2003-05-01  Christian Stimming  <stimming@tuhh.de>
+
+	* po/en_GB.po: Updated British English translation by Nigel Titley
+	<nigel@titley.com>
+
+	* po/it.po: Updated Italian translation by Lorenzo Cappelletti
+	<lorenzo.cappelletti@email.it>.
+
+2003-04-29  Herbert Thoma  <herbie@hthoma.de>
+
+	* src/engine/Account.c: move currency conversion to gnc-pricedb.c
+
+        * src/engine/gnc-pricedb.c
+        * src/engine/gnc-pricedb.h: add functions
+	  gnc_pricedb_convert_balance_latest_price and
+          gnc_pricedb_convert_balance_nearest_price
+
+        * src/engine/gw-engine-spec.scm: wrap functions
+          gnc_price_list_destroy, gnc_pricedb_lookup_latest_any_currency,
+          gnc_pricedb_lookup_nearest_in_time_any_currency,
+          gnc_pricedb_convert_balance_latest_price and
+          gnc_pricedb_convert_balance_nearest_price
+
+        * src/report/report-system/commodity-utilities.scm: use
+          gnc:pricedb-convert-balance-latest-price and
+          gnc:pricedb-convert-balance-nearest-price to improve
+          multiple currency reports
+
+        * src/report/standard-reports/advanced-portfolio.scm:
+          improve report for stocks and funds not denominated in report currency
+
+2003-04-27  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/test/Makefile.am: disable the test-scm-query-import
+	  test, since it breaks on guile-1.6 (which does mean that
+	  importing into a guile-1.6-based system will fail, but so much
+	  else fails when upgrading from 1.6 to 1.8 that it really doesn't
+	  matter.  Users will have to reset their reports anyways.
+
+2003-04-26  Christian Stimming  <stimming@tuhh.de>
+
+	* po/zh_TW.po: Updated (complete!) Traditional Chinese translation
+	by Chao-Hsiung Liao <pesder.liao@msa.hinet.net>
+
+2003-04-24  Christian Stimming  <stimming@tuhh.de>
+
+	* po/ta.po: Initial Tamil translation by Ganesan Rajesh
+	<ganesanrajish@eth.net>.
+
+2003-04-23  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Adapt to latest
+	OpenHBCI changes.
+
+2003-04-21  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-reports/aging.scm: fix the percentage
+	  calculations so we don't get GtkCritical warnings.
+
+2003-04-21  Christian Stimming  <stimming@tuhh.de>
+
+	* po/de.po: Update German translation (latest transaction.scm
+	patch broke string freeze).
+
+2003-04-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/transaction.scm: Applied Tomas
+	  Pospisek's patch to the transaction report (fixes bug #110598)
+
+	* src/gnome-utils/gw-gnome-utils-spec.scm: fix the description
+	  of gnc:mdi-show-progress.
+
+	* src/business/business-gnome/dialog-customer.c:
+	* src/business/business-gnome/dialog-employee.c:
+	* src/business/business-gnome/dialog-job.c:
+	* src/business/business-gnome/dialog-vendor.c:
+	  Enable changing the "ID" for different business objects.
+	  Fixes #108563.
+	
+	* src/import-export/qif-import/qif-file.scm: Don't try to
+	  parse values that begin "..." because it is clearly not
+	  valid (regardless of the locale).  Fixes #109868.
+
+2003-04-16  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c,
+	src/import-export/hbci/hbci-interaction.c: Adapt to latest changes
+	in OpenHBCI CVS. 
+
+2003-04-14  Christian Stimming  <stimming@tuhh.de>
+
+	* po/de.po: Updated German translation. Changed "Kassenbericht" to
+	"Kontobuch" and "Belastung/Gutschrift" to "Soll/Haben".
+
+	* src/import-export/hbci/hbci-interaction.c: Fix some user
+	messages where chip cards were confused with key files.
+
+2003-04-12  Herbert Thoma  <herbie@hthoma.de>
+
+        * src/backend/file/sixtp-dom-parsers.c
+        * src/backend/file/sixtp-utils.c
+        * src/backend/file/test/test-dom-converters1.c
+        * src/backend/file/test/test-string-converters.c
+        * src/business/business-ledger/gncEntryLedgerLayout.c
+        * src/business/business-ledger/gncEntryLedgerModel.c
+        * src/calculation/fin.c
+        * src/engine/GNCId.c
+        * src/engine/QueryCore.c
+        * src/engine/gnc-engine-util.c
+        * src/engine/guid.c
+        * src/engine/test/test-commodities.c
+        * src/gnome-utils/dialog-options.c
+        * src/gnome-utils/dialog-utils.c
+        * src/gnome-utils/gnc-dense-cal.c
+        * src/gnome-utils/gnc-frequency.c
+        * src/gnome-utils/gnc-html.c
+        * src/gnome/dialog-fincalc.c
+        * src/gnome/dialog-scheduledxaction.c
+        * src/gnome/dialog-sx-from-trans.c
+        * src/gnome/gnc-split-reg.h
+        * src/gnome/reconcile-list.h
+        * src/import-export/import-account-matcher.c
+        * src/network-utils/gnc-gpg.c
+        * src/register/register-core/formulacell.c
+        * src/register/register-core/pricecell.c
+        * src/register/register-gnome/combocell-gnome.c
+        * src/register/register-gnome/datecell-gnome.c
+        * src/register/register-gnome/gnucash-sheet.h:
+	  fixes for GCC 3.3 warnings
+	  comparison between signed and unsigned and
+	  dereferencing type-punned pointer will break strict-aliasing rules
+	  fixes #110320
+	
+2003-04-12  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/import-commodity-matcher.c: Fix debian bug #187061
+	Crash during import of investment accounts. Patch pulled from head, 
+	also fixes http://bugzilla.gnome.org/show_bug.cgi?id=103075
+
+2003-04-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Transaction.c: xaccSplitGetCorrAccountCode() should
+	  actually return the account Code, not the account Name!  Fixes
+	  #110561.
+
+2003-04-06  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-util/transfer-dialog.c: Pop up a dialog if the user
+	  tries to transfer from a non-currency account, and don't let
+	  them do it.  Yes, this means you cannot transfer between mutual
+	  funds, but the logic for that can be added later.  This fixes
+	  bug #109641.
+
+	* src/gnome-search/search-date.c: Evaluate the date during
+	  get_predicate() in case the user just "hit return" (and the
+	  auto-evaluate didn't happen).  Fixes bug #106444.
+	
+2003-04-04  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-report/transactions.scm: symbols are not
+	  strings in guile-1.6.  Fixes debian bug #186004.
+	* doc/gnucash.1.in: it's --add-price-quotes (not quote)
+	* src/app-utils/date-utilities.scm: fix "WeekDelta" and add
+	  TwoWeekDelta.  Fixes debian #185860.
+
+2003-04-03  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/main.scm: guile-1.6 requires empty lists to be quoted
+	  (fixes debian bug #186188)
+
+2003-04-02  Benoit Grégoire <bock@step.polymtl.ca>
+
+	* po/fr.po: Updated Frensh translation.
+
+2003-04-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncEntry.h:  Move the definitions
+	  of PaymentType and DiscountHow higher earlier in the file
+	  to prevent problems of circular dependencies.
+	* src/business/business-core/gncInvoice.[ch]:
+	  - Add the storage of the to_charge_amount.
+	  - Add GetTotalOf() to find the total of Cash and Charge amounts
+	  - Use the to_charge_amount when posting an invoice
+	* src/business/business-core/dialog-invoice.c:
+	  - add a to_charge_amount for Exp. Vouchers
+	  - add a "Total Cash" and "Total Charge" summary
+	* src/business/business-gnome/glade/invoice.glade:
+	  - add the to_charge_amount frame and labels.
+	* src/busines/business-core/file/gnc-invoice-xml-v2.c: Add support
+	  for the to-charge amount.
+
+	* src/business/business-gnome/dialog-invoice.c: fix an assertion
+	  failure -- don't try to set the to_charge_amount value unless
+	  we're in a VIEW/EDIT invoice.
+
+	* src/business/business-ledger/gncEntryLedgerControl.c:
+	  Don't ask the user in the general case when making changes
+	  to entries.  Generally the user should be allowed to make
+	  whatever changes they want without being pestered.
+
+	* src/business/business-ledger/gncEntryLedgerControl.c:
+	  Save the entry cells before adding an it to the invoice,
+	  otherwise it wont get sorted properly.  Fixes #108910.
+
+	* src/business/business-gnome/glade/date-close.glade:
+	  Fix the glade settings so resizing the window will properly
+	  resize the widgets.  Fixes #107586.
+
+	* src/business/business-core/business-core.scm:
+	  When building the "name + address" string, check if the
+	  company name and contact name are the same and, if so,
+	  only print one of them.  Fixes #109753.
+
+	* src/business/business-reports/owner-report.scm:
+	* src/business/business-reports/aging-report.scm:
+	  Fix a couple strings to improve comments when owners and accounts
+	  are missing.  Direct the user to select them in the report options.
+	
+2003-04-01  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/report-system/options-utilities.scm: Fix missing i18n
+	markup on some option names.
+
+2003-03-31  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/test/test-employee.c:  fix the test
+	  to reflect the change in Employee->Printable()
+
+2003-03-29  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/standard-reports/daily-reports.scm: New report
+	"income vs. day of week" by Andy Wingo <wingo@pobox.com>.
+
+	* src/engine/gnc-session.c: OpenBSD fix by Todd T. Fries
+	<todd@flare.fries.net>
+
+	* src/engine/Transaction.c: OpenBSD fix by Todd T. Fries
+	<todd@flare.fries.net>: time_t is not long everywhere.
+
+2003-03-25  Christian Stimming  <stimming@tuhh.de>
+
+	* po/zh_TW.po: Updated traditional Chinese complete translation by
+	Chao-Hsiung Liao <pesder.liao@msa.hinet.net>.
+
+2003-03-23  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c (GNCInteractor_hide):
+	Fix close-on-finished checkbutton.
+
+	* src/import-export/hbci/hbci-progressmon.c: Add descriptions of
+	new HBCI actions.
+
+2003-03-20  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: don't add -I$(GNC_INCLUDE_DIR) to the engine
+	  cflags, because it can cause build warnings on platforms with
+	  gcc-3.2, and frankly we don't need it since we don't install
+	  before we're building.
+
+2003-03-15  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-date-edit.c: Fix the keypress handlers so
+	they work properly for both the text entry widget and the calendar
+	popup widget.
+
+	* src/gnome-utils/dialog-utils.c (gnc_handle_date_accelerator):
+	Eliminate a critical warning message. #106675
+
+	* src/register/ledger-core/split-register.c
+	(gnc_split_register_config): Force the cursor to the first line of
+	a transaction split before disabling "double line" mode in the
+	register.  This prevents the register refresh code from trying to
+	update a cell that is no longer visible.  #105346
+
+2003-03-15  Christian Stimming  <stimming@tuhh.de>
+
+	* po/it.po: updated translation by Lorenzo Cappelletti
+	<lorenzo.cappelletti@email.it>.
+
+	* po/en_GB.po: updated translation by Nigel Titley
+	<nigel@titley.com>.
+	
+2003-03-14  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-reconcile.c (gnc_start_recn_date_changed):
+	Don't reverse the account balance here. The routine called to
+	retrieve the account balance has already taken care of reversing
+	the sign where necessary.
+
+2003-03-13  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Makefile.am: make sure to add INTLLIBS in case
+	  we're compiling against an external -lintl (like on Solaris)
+
+	* src/calculation/Makefile.am: fix to build on systems that don't
+	  have GUILE installed in the system path or in the same place
+	  as GLIB.
+
+2003-03-12  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/dialog-transfer.c: the Euroland currency rates
+	  were inverted in the transfer dialog.
+
+	* src/business/business-core/gncInvoice.c:
+	* src/business/business-gnome/business-urls.c:
+	* src/business/business-gnome/dialog-invoice.c:
+	  Add strings to be translated for expense vouchers
+
+	  From HEAD:
+	* src/import-export/import-backend.c:
+	* src/import-export/import-match-map.c:
+	* src/import-export/import-match-map.h:
+          Chris Morgan's Baysian Matching code, to match transactions
+          based on Bayesian filtering of previously matched transactions.
+
+	  From HEAD:
+	* src/business/business-core/gncEmployee.c: name the employee name
+	  the specific 'printable' name.
+	* src/business/business-core/gncInvoice.c: if an invoice is owned
+	  by an EMPLOYEE, then consider it an expense voucher.  Check the
+	  entry payment-type and post directly to a CC account if one is
+	  available.
+	* src/business/business-core/gncOwner.c: use the employee->address->name
+	  instead of the employee->username
+	* src/business/business-gnome/business-gnome.scm: add employee items
+	  to the main menu
+	* src/business/business-gnome/dialog-employee.c:
+	  - add a UI to choose an employee credit-card account
+	  - add "expense vouchers" and "payments" to the employee search results
+	  - change the search criteria and result column order
+	* src/business/business-gnome/dialog-invoice.c:
+	  - hide the 'job' if this is an expense voucher
+	  - create an expense-voucher register is the invoice owner is an employee
+	* src/business/business-gnome/gw-business-gnome-spec.scm:
+	  add gnc:url-type-employee
+	* src/business/business-gnome/glade/employee.glade: add the
+	  UI for the CCard account
+	* src/business/business-gnome/glade/invoice.glade: name the job label
+	  widget
+	* src/business/business-ledger/gncEntryLedger.[ch]:
+	  - define an expense voucher register
+	* src/business/business-ledger/gncEntryLedgerControl.c:
+	  add support for expense vouchers
+	* src/business/business-ledger/gncEntryLedgerDisplay.c:
+	  - add support for expense vouchers
+	  - add a component watch on the employee and refresh if it changes.
+	    this lets us change the available payment options based on whether
+	    the employee has a ccard account assigned.
+	* src/business/business-ledger/gncEntryLedgerLayout.c:
+	  - create the layout for an expense voucher register
+	  - widen the account columns
+	* src/business/business-ledger/gncEntryLedgerLoad.c:
+	  - add support for expense vouchers
+	  - load the payment cell based on the invoice owner -- don't allow
+	    'charge' unless the employee actually has an assigned ccard account.
+	* src/business/business-ledger/gncEntryLedgerModel.c:
+	  - add functions to support the payment cell
+	  - add support for expense vouchers
+	* src/business/business-reports/business-reports.scm:
+	  - add gnc:employee-anchor-text
+	  - add support for employee "owner reports" and an employee link
+	* src/business/business-reports/invoice.scm:
+	  label the Expense Report "properly"
+	* src/business/busines-reports/owner-report.scm:
+	  create an "employee report"
+	* src/business/business-utils/business-prefs.scm:
+	  save the voucher register width
+	Implements RFE #90371	
+
+	  From HEAD:
+	* src/gnome-utils/gnc-account-sel.c:
+	  If the nameList == NULL then add a blank line, to make sure
+	  the selector list is really empty, rather than defaulting to all of
+	  the accounts in the tree if there are none matching.
+
+	  From HEAD:
+	* src/app-utils/gnc-ui-util.c:
+	* src/gnome/top-level.c:
+	  the Account Separator option was moved to the Accounts page --
+	  reference is correctly.
+	Fixes #106673
+
+2003-03-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/main-window.scm:  turn off the report-total by default
+
+2003-03-10  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/da.po: Updated glossary translation by Keld Simonsen
+	<keld@dkuug.dk>.
+
+	* po/glossary/sv.po: Updated glossary translation by Christian
+	Rose <menthos@menthos.com>.
+
+	* po/it.po: Updated Italian translation by Lorenzo Cappelletti
+	<lorenzo.cappelletti@email.it>.
+
+2003-03-09  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: release 1.8.2
+	* NEWS: release 1.8.2
+
+2003-03-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncEmployee.[ch]: added APIs to
+	  store a Credit Card account for the employee.
+	* src/business/business-core/file/gnc-employee-xml-v2.c:
+	  store the employee's CC Account in the XML file.
+
+	* src/business/business-ledger/gncEntryLedgerLayout.c: reuse
+	  the "sample" account string from the split-register to make
+	  the account column a bit wider.
+
+2003-03-08  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-ledger/gncEntryLedger.c: allow the user
+	  to enter any Action they wish.
+
+2003-03-06  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Include a latest
+	change in OpenHBCI: Use bank code from HBCI account instead of
+	HBCI bank, if the available openhbci version supports it.
+
+2003-03-03  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: change to 1.8.1.5 version
+	* src/quotes/Makefile.am: add dump-finance-quote to EXTRA_DIST
+
+2003-03-03  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/business-core.scm: don't export
+	  gnc:owner-get-name -- it overrides the g-wrap'ed version
+
+2003-03-02  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncEntry.[ch]: add interfaces
+	  to deal with bill 'payment types', in preparation for
+	  employee expense vouchers.
+	* src/business/business-core/file/gnc-entry-xml-v2.c:
+	  add support for the bill payment type.
+
+	* src/business/business-core/business-core.scm:
+	  don't need gnc:owner-get-name in scheme
+	  add employee support to owners
+	  fix bug in (gnc:owner-get-id)
+	* src/business/business-core/gncEmployee.[ch]:
+	  add APIs to get-guid and lookup from scheme
+	* src/business/business-core/gw-business-core-spec.scm:
+	  wrap employee-get-guid, employee-lookup, employee-get-id,
+	  employee-get-username, employee-get-addr, owner-init-employee,
+	  owner-get-employee, owner-get-name
+	* src/business/business-gnome/business-options-gnome.c:
+	  create an "employee option" widget set
+	* src/business/business-gnome/business-urls.c:
+	  define an 'employee' URL type
+	* src/business/business-gnome/dialog-employee.[ch]:
+	  remove old, unused search APIs,
+	  add new search APIs
+	* src/business/business-gnome/dialog-invoice.c:
+	  add _some_ employee support.  Still doesn't contain the code
+	  to display an employee-owned invoice (expense voucher).
+	* src/business/business-utils/business-options.scm:
+	  create an employee option type	  
+	* src/business/business-core/gncInvoice.c:
+	* src/business/business-core/gncOwner.[ch]:
+	* src/business/business-core/file/gnc-owner-xml-v2.c:
+	* src/business/business-gnome/business-gnome-utils.c
+	* src/business/business-gnome/search-owner.c:
+	  add employee support
+
+2003-03-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.h: Pull missing prototype from
+	HEAD, for gnc_import_TransInfo_refresh_destacc.
+
+2003-03-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/dialog-sxsincelast.c: make sure to resume gui refresh events
+
+2003-03-01  Christian Stimming  <stimming@tuhh.de>
+
+	* po/de.po: Updated German translation.
+
+	* src/app-utils/prefs.scm: Adjust the names of register styles in
+	the preferences to those names used in the register View
+	menu. This didn't require changes in any option lookup code.
+
+	* src/gnome/glade/register.glade: 'Duplicate Transaction' could
+	either mean 'to duplicate a transaction' or 'the duplicate of a
+	transaction'. Both need very different translations. Therefore
+	changed 'Duplicate Transaction' in the register into 'Duplicate a
+	Transaction' to resolve that ambiguity here.
+
+	* po/sk.po: Updated Slovak translation by Zdenko Podobný
+	<zdpo@mailbox.sk>.
+
+2003-02-26  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/import-backend.c: Pull from HEAD
+	-Disable -3 punishment for transactions which have an online ID.  This punished credit card transfer yet added no tangible benefit.
+
+2003-02-26  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (EXTRA_DIST): Add config.rpath.
+	* configure.in (AC_OUTPUT): Add intl/Makefile,
+
+2003-02-22  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-register.c: Don't override the user's toolbar
+	style preference by calling gtk_widget_show_all() on the toolbar.
+	#102041
+
+2003-02-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/glade/account.glade: Increase height of
+	  account-hierarchy druid.
+
+2003-02-22  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Quick fix to avoid
+	online transfers being sent twice to the bank.
+
+2003-02-19  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: move AS_SCRUB_INCLUDE _before_ tests so it wont
+	  fail on gcc 3.2.2 which actually cares.  This is particularly
+	  important for AC_CHECK_HEADER(S)
+
+	* configure.in: change the configure help message from
+	  "--enable-gui" to "--disable-gui", because the default is
+	  enabled.  Also changed "--enable-error-on-warning" for the
+	  same reason.
+	
+2003-02-18  David Hampton  <hampton@employees.org>
+
+	* configure.in: Add new variable for conditionally including the
+	SRFI directory when doing 'make check'.  Should be null when using
+	guile 1.6.
+
+	* Various Makefile.am files: Use new conditional include for the
+	SRFI directory when running 'make check'.
+
+2003-02-17  Derek Atkins  <derek@ihtfp.com>
+
+	Move some files around in preparation for re-factoring the
+	reconcile-list code (pull from HEAD):
+	* src/gnome-search/Makefile.am: removed search-param.[ch]
+	* src/gnome-search/search-param.[ch]: moved the search-param to gnome-utils
+	* src/gnome-utils/search-parah.[ch]: moved search-param from gnome-search
+	* src/gnome-utils/Makefile.am: added search-param.[ch]
+	* po/POTFILES.in: fix for the search-param.c move
+
+	Pull up from HEAD
+	* src/gnome-utils/dialog-transfer.c: don't round the exchange
+	  rate when returning it to callers...  Compute it from the
+	  from_amount and to_amount.
+	* src/register/ledger-core/split-register.c: change the rate-cell
+	  to a shares_print_info so we don't lose accuracy due to rounding
+	  errors.
+	  Fixes bug #106332
+
+2003-02-16  Herbert Thoma  <herbie@hthoma.de>
+
+	Pull up from HEAD:
+	* src/gnome/gnc-split-reg.c:
+	  only display an euro amount in the status bar of a register window
+	  if the account currency is a euro currency but NOT euro itself
+
+	* src/gnome-utils/gnc-account-tree.c:
+	  auto resize balance and total columns
+
+	* src/app-utils/gnc-ui-util.c:
+	* src/app-utils/gnc-ui-util.h:
+	* src/gnome-utils/gnc-account-tree.c:
+	* src/gnome/window-acct-tree.c:
+	* src/scm/main-window.scm:
+	  recycle ACCOUNT_BALANCE_EURO and ACCOUNT_TOTAL_EURO account tree 
+	  columns to display balance resp. total in default report currency
+
+2003-02-16  Derek Atkins  <derek@ihtfp.com>
+
+	Pull up from HEAD:
+	* src/import-export/qif-import/qif-file.scm:
+	  - No need to use the 'negative' field anymore
+	  - Save the default split, even if we've got a split transaction.
+	    It will be useful later to make sure we have a properly balanced
+	    transaction and everything has the "right sign"
+	* src/import-export/qif-import/qif-objects.scm:
+	  - remove the 'negative' field of a split
+	  - add a 'default-split' field of a transaction
+	  - change the split-amounts and set-split-amounts! functions
+	    the split-amounts will also return the default-split, if it
+	    exists.  set-split-amounts! will figure out if we need to
+	    reverse the splits by seeing if the amounts add up to 0 and
+	    coping appropriately..  This is to fix a bug where SOME programs
+	    make splits positive, and some make them negative.  This should
+	    deal properly in both cases, so it's a better fix for #105139.
+
+2003-02-14  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/glade/hbci.glade: Clarify some HBCI
+	strings.
+
+2003-02-14  David Hampton  <hampton@employees.org>
+
+	* src/quotes/dump-finance-quote: Do a runtime check for
+	Finance::Quote instead of including the perl 'use' declaration.
+	The latter causes RPM to add a dependancy on F::Q.
+
+2003-02-13  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/dialog-options.c:  guile-1.6 doesn't like
+	  "()" as an empty list.  Change it to "'()" to make it happy.
+	  This is backwards compatible with older guiles.
+
+2003-02-12  Derek Atkins  <derek@ihtfp.com>
+
+	* applied Matthew Vanecek's patch to postgres/kvp-sql.c
+
+2003-02-10  Christian Stimming  <stimming@tuhh.de>
+
+	* po/es.po: Updated Spanish translation by Eneko Lacunza
+	<enlar@enlar.net>.
+
+	* src/import-export/hbci/glade/hbci.glade, po/de.po: Clarify some
+	HBCI strings.
+
+	* configure.in: require newer openhbci: 0.9.6, from Jan 31.
+
+2003-02-09  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: release 1.8.1
+	* rpm/gnucash.spec.in: fix info files prob
+	* NEWS: update for release
+	* src/quotes/Makefile.am: remove dump-finance-quote from build
+	  to fix problems with rpm wanting Finance::Quote
+
+2003-02-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-control.c
+	  If we're expanded, ignore TRANS cursor classes.  This prevents
+	  a bug where the exchange-rate dialog is realized when there really
+	  is nothing to do (because we're in an expanded transaction).
+  	* src/register/ledger-core/split-register-model.c
+	  Don't PERR() if we have no account -- this prevents annoying
+	  messages when handling multi-currency txns in the GL.  Note:
+	  all GL txns are displayed in the locale currency (if possible).	
+	* src/register/ledger-core/split-register.c
+	  AUTO_LEDGER and JOURNAL register types _ARE_ expanded -- return
+	  TRUE, not FALSE.
+	Fixes 105319
+
+	* src/report/standard-report/advanced-portfolio.scm: add extra
+	  arguments to prevent scheme crash.
+	Fixes 105405
+
+	* src/gnome/glade/sched-xact.glade: Need to start the Editor dialog
+	  as non-visible so the ledger get's sized properly
+	* src/gnome/dialog-scheduledxaction.c: resize the cal after the
+	  dialog is shown, so it get's sized properly.
+
+	* src/register/register-gnome/gnucash-style.c: temporary fix to
+	  prevent 105346, until a real fix can be created.  There is still
+	  a visual artifact leftover, but at least it doesn't crash.
+	
+2003-02-07  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/tip-list.scm: remove the tip that says that this is a development
+	  version.  (Thanks, pogma)
+
+	* src/scm/command-line.scm: remove the "development version" string
+	  when running "gnucash --version"
+
+	Pull up from HEAD:
+	* src/import-export/import-backend.c: Add heuristic for duplicate
+	  matching by check number.  
+	* doc/README.OFX: Update
+
+2003-02-05  Derek Atkins  <derek@ihtfp.com>
+
+	Pull up from HEAD:
+	* src/engine/gnc-lot-p.h: some strange platforms assume "char" is
+	  0..255 instead of -128..127.  Force a "signed char" to make sure
+	  we get the latter interpretation.
+
+	* src/app-utils/gnc-ui-utils.c: Don't round unless force_fit is true.
+	  Fixes Debian Bug #179802.
+
+	* src/bin/overrides/gnucash-build-env.in: add business-utils
+
+	* src/business/business-utils/Makefile.am: make scm-links so you
+	  can run gnucash from within the build tree
+	
+2003-02-04  Christian Stimming  <stimming@tuhh.de>
+
+	* po/it.po: Updated Italian translation by Lorenzo Cappelletti
+	<L.Cappelletti@mail.com>.
+
+2003-02-04  Derek Atkins  <derek@ihtfp.com>
+
+	Pull up from HEAD:
+	* src/import-export/qif-import/qif-file.scm: mark "splits" as negative
+	  to make sure the numbers are reflected appropriately.
+	* src/import-export/qif-import/qif-objects.scm: add a neg? value to
+	  a qif-split; use this when converting the split-amount.
+	Fixes bug #105179	
+
+2003-02-03  Derek Atkins  <derek@ihtfp.com>
+
+	Pull up from HEAD:
+
+	* src/calculation/Makefile.am: need to add GUILE_INCS
+
+	* src/engine/Makefile.am: add ${INTLLIBS} for gettext() et al on
+	  platforms that don't have it in libc
+
+	* src/backend/file/io-gncbin-r.c: don't need to define functions
+	  that are never used, so move the #ifdef around.  Fixes # 105124
+
+	* rpm/gnucash.in: don't call autoconf
+
+	Pull up from HEAD:
+
+	* src/import-export/qif-import/qif-file.scm: fix a
+	  wrong-number-of-arguments fatal crash when trying to reparse
+	  dates.
+
+2003-02-02  Chris Lyttle  <chris@wilddev.net>
+
+	* README: Changed to suit new stable release
+	* configure.in: release 1.8.0
+	* src/scm/main.scm: turn off devel version message
+	* NEWS: add whats news
+
+2003-02-02  Chris Lyttle  <chris@wilddev.net>
+
+	* rpm/gnucash.spec.in: add options to build ofx,hbci and postgresql
+
 2003-02-02  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	* doc/README.OFX: I've quickly put together some docs for the ofx module and transaction matching.  Also includes a FAQ. Not perfect, but should closebug 99478.

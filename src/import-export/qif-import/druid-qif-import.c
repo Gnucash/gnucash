@@ -675,7 +675,7 @@ gnc_ui_qif_import_select_loaded_file_cb(GtkCList   * list,
   QIFImportWindow * wind = user_data;
 
   if(gh_list_p(wind->imported_files) && 
-     (gh_length(wind->imported_files) > row)) {
+     ((int)gh_length(wind->imported_files) > row)) {
     scm_unprotect_object(wind->selected_file);
     wind->selected_file = gh_list_ref(wind->imported_files,
                                       gh_int2scm(row));   

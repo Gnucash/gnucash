@@ -1382,7 +1382,9 @@ gnc_split_register_get_conv_rate (Transaction *txn, Account *acc)
     return convrate;
   }
 
-  PERR ("Cannot convert transaction -- no splits with proper conversion ratio");
+  /* Don't error if we're in a GENERAL_LEDGER and have no account */
+  if (acc)
+    PERR ("Cannot convert transaction -- no splits with proper conversion ratio");
   return gnc_numeric_create (100, 100);
 }
 

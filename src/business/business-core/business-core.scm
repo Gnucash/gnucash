@@ -21,31 +21,19 @@
      ((null? (cdr lst)) (car lst))
      (else (string-append (build-string (cdr lst)) "\n" (car lst)))))
 
+  (define (unique str)
+    (if (and name str (string=? name str)) #f str))
+
   (let ((lst '()))
 
     (set! lst (add-if-exists lst name))
-    (set! lst (add-if-exists lst (gnc:address-get-name addr)))
+    (set! lst (add-if-exists lst (unique (gnc:address-get-name addr))))
     (set! lst (add-if-exists lst (gnc:address-get-addr1 addr)))
     (set! lst (add-if-exists lst (gnc:address-get-addr2 addr)))
     (set! lst (add-if-exists lst (gnc:address-get-addr3 addr)))
     (set! lst (add-if-exists lst (gnc:address-get-addr4 addr)))
 
     (build-string lst)))
-
-(define (gnc:owner-get-name owner)
-  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type owner) #f)))
-    (case type
-      ((gnc-owner-customer)
-       (let ((c (gnc:owner-get-customer owner)))
-	 (gnc:customer-get-name c)))
-      ((gnc-owner-vendor)
-       (let ((v (gnc:owner-get-vendor owner)))
-	  (gnc:vendor-get-name v)))
-      ((gnc-owner-job)
-       (gnc:owner-get-name (gnc:job-get-owner
-			    (gnc:owner-get-job owner))))
-      (else ""))))
 
 (define (gnc:owner-get-address owner)
   (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
@@ -57,6 +45,9 @@
       ((gnc-owner-vendor)
        (let ((v (gnc:owner-get-vendor owner)))
 	 (gnc:vendor-get-addr v)))
+      ((gnc-owner-employee)
+       (let ((e (gnc:owner-get-employee owner)))
+	 (gnc:employee-get-addr e)))
       ((gnc-owner-job)
        (gnc:owner-get-address (gnc:job-get-owner
 			       (gnc:owner-get-job owner))))
@@ -76,6 +67,11 @@
 	 (name-and-addr
 	  (gnc:vendor-get-name v)
 	  (gnc:vendor-get-addr v))))
+      ((gnc-owner-employee)
+       (let ((e (gnc:owner-get-employee owner)))
+	 (name-and-addr
+	  ""
+	  (gnc:employee-get-addr e))))
       ((gnc-owner-job)
        (gnc:owner-get-address-dep (gnc:job-get-owner
 				   (gnc:owner-get-job owner))))
@@ -87,10 +83,13 @@
     (case type
       ((gnc-owner-customer)
        (let ((c (gnc:owner-get-customer owner)))
-	 (gnc:customer-get-id)))
+	 (gnc:customer-get-id c)))
       ((gnc-owner-vendor)
        (let ((v (gnc:owner-get-vendor owner)))
-	 (gnc:vendor-get-id)))
+	 (gnc:vendor-get-id v)))
+      ((gnc-owner-employee)
+       (let ((e (gnc:owner-get-employee owner)))
+	 (gnc:employee-get-id e)))
       ((gnc-owner-job)
        (gnc:owner-get-id (gnc:job-get-owner (gnc:owner-get-job owner))))
       (else ""))))
@@ -134,7 +133,6 @@
 	  #f))))
 
 
-(export gnc:owner-get-name)
 (export gnc:owner-get-address)
 (export gnc:owner-get-address-dep)
 (export gnc:owner-get-owner-id)

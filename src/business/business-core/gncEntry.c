@@ -53,6 +53,10 @@ struct _gncEntry {
   gboolean	billable;
   GncOwner	billto;
 
+  /* employee bill data */
+  GncEntryPaymentType b_payment;
+
+  /* my parent(s) */
   GncOrder *	order;
   GncInvoice *	invoice;
   GncInvoice *	bill;
@@ -104,14 +108,36 @@ gncEntryDiscountHowToString (GncDiscountHow how)
   }
   return(NULL);
 }
+
+const char * gncEntryPaymentTypeToString (GncEntryPaymentType type)
+{
+  switch(type)
+  {
+    GNC_RETURN_ENUM_AS_STRING(GNC_PAYMENT_CASH, "CASH");
+    GNC_RETURN_ENUM_AS_STRING(GNC_PAYMENT_CARD, "CARD");
+    default:
+      g_warning ("asked to translate unknown payment type %d.\n", type);
+      break;
+  }
+  return(NULL);
+}
 #undef GNC_RETURN_ENUM_AS_STRING
-#define GNC_RETURN_ON_MATCH(s,x) \
-  if(safe_strcmp((s), (str)) == 0) { *how = x; return(TRUE); }
+#define GNC_RETURN_ON_MATCH(s,x,r) \
+  if(safe_strcmp((s), (str)) == 0) { *(r) = x; return(TRUE); }
 gboolean gncEntryDiscountStringToHow (const char *str, GncDiscountHow *how)
 {
-  GNC_RETURN_ON_MATCH ("PRETAX", GNC_DISC_PRETAX);
-  GNC_RETURN_ON_MATCH ("SAMETIME", GNC_DISC_SAMETIME);
-  GNC_RETURN_ON_MATCH ("POSTTAX", GNC_DISC_POSTTAX);
+  GNC_RETURN_ON_MATCH ("PRETAX", GNC_DISC_PRETAX, how);
+  GNC_RETURN_ON_MATCH ("SAMETIME", GNC_DISC_SAMETIME, how);
+  GNC_RETURN_ON_MATCH ("POSTTAX", GNC_DISC_POSTTAX, how);
+  g_warning ("asked to translate unknown discount-how string %s.\n",
+       str ? str : "(null)");
+
+  return(FALSE);
+}
+gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type)
+{
+  GNC_RETURN_ON_MATCH ("CASH", GNC_PAYMENT_CASH, type);
+  GNC_RETURN_ON_MATCH ("CARD", GNC_PAYMENT_CARD, type);
   g_warning ("asked to translate unknown discount-how string %s.\n",
        str ? str : "(null)");
 
@@ -173,6 +199,7 @@ GncEntry *gncEntryCreate (GNCBook *book)
   entry->b_price = zero;
   entry->b_taxable = TRUE;
   entry->billto.type = GNC_OWNER_CUSTOMER;
+  entry->b_payment = GNC_PAYMENT_CASH;
 
   entry->values_dirty = TRUE;
 
@@ -455,6 +482,16 @@ void gncEntrySetBillTo (GncEntry *entry, GncOwner *billto)
   gncEntryCommitEdit (entry);
 }
 
+void gncEntrySetBillPayment (GncEntry *entry, GncEntryPaymentType type)
+{
+  if (!entry) return;
+  if (entry->b_payment == type) return;
+  gncEntryBeginEdit (entry);
+  entry->b_payment = type;
+  mark_entry (entry);
+  gncEntryCommitEdit (entry);
+}
+
 /* Called from gncOrder when we're added to the Order */
 void gncEntrySetOrder (GncEntry *entry, GncOrder *order)
 {
@@ -689,6 +726,12 @@ GncOwner * gncEntryGetBillTo (GncEntry *entry)
 {
   if (!entry) return NULL;
   return &entry->billto;
+}
+
+GncEntryPaymentType gncEntryGetBillPayment (GncEntry* entry)
+{
+  if (!entry) return 0;
+  return entry->b_payment;
 }
 
 GncInvoice * gncEntryGetInvoice (GncEntry *entry)

@@ -1,6 +1,122 @@
 Version history:
 ------- -------
 
+ 1.8.3  - 03 May 2003
+ 	 o Updated translations: Italian, Swedish, Danish, British,
+	   Traditional Chinese, French, German, Tamil, Brazilian Portugese.
+	 o Turn off the report-total by default
+	 o The Euroland currency rates were inverted in the transfer dialog.
+	 o Chris Morgan's Baysian Matching code, to match transactions based
+	   on Bayesian filtering of previously matched transactions.
+	 o Fix a bug in the account name list when you you filtered down to no
+	   accounts it would ignore the filter.
+	 o The Account Separator option was moved to the Accounts page,
+	   reference correctly.
+	 o Fix the keypress handlers so they work properly for both the text
+	   entry widget and the calendar popup widget.
+	 o Force the cursor to the first line of a transaction split before
+	   disabling "double line" mode in the register.  This prevents the
+	   register refresh code from trying to update a cell that is no longer
+	   visible.
+	 o Fix HBCI close-on-finished checkbutton.
+	 o Add descriptions of new HBCI actions.
+	 o OpenBSD fixes by Todd T. Fries
+	 o New report "income vs. day of week" by Andy Wingo
+	 o Fix a couple strings to improve comments when owners and accounts
+	   are missing.  Direct the user to select them in the report options.
+	 o When building the "name + address" string, check if the company
+	   name and contact name are the same and, if so, only print one of
+	   them.
+	 o Fix the glade settings so resizing the window will properly resize
+	   the widgets.
+	 o Save the entry cells before adding an it to the invoice, otherwise
+	   it wont get sorted properly.
+	 o Add support in business code for the to-charge amount.
+	 o Don't ask the user in the general case when making changes to
+	   entries.  Generally the user should be allowed to make whatever
+	   changes they want without being pestered.
+	 o Guile-1.6 requires empty lists to be quoted.
+	 o Symbols are not strings in guile-1.6.
+	 o Fix "WeekDelta" and add TwoWeekDelta.
+	 o Pop up a dialog if the user tries to transfer from a non-currency
+	   account, and don't let them do it.
+	 o Evaluate the date during get_predicate() in case the user just "hit
+	   return" (and the auto-evaluate didn't happen).
+	 o Fix crash during import of investment accounts.
+	 o Fixes for GCC 3.3 warnings
+	 o Fix HBCI user messages where chip cards were confused with key
+	   files.
+	 o Adapt to latest changes in OpenHBCI CVS.
+	 o Applied Tomas Pospisek's patch to the transaction report.
+	 o Fix the description of gnc:mdi-show-progress.
+	 o Enable changing the "ID" for different business objects.
+	 o Fix the percentage calculations so we don't get GtkCritical
+	   warnings.
+	 o Disable the test-scm-query-import test, since it breaks on
+	   guile-1.6
+	 o Move currency conversion to gnc-pricedb.c
+	 o Improve report for stocks and funds not denominated in report
+	   currency.
+	 o QIF imports don't assume that a date of the form XXXXXXXX is always
+	   YYYYMMDD. Make sure a 4-digit year "makes sense"
+	 o Fix hbci and ofx test for handling --disable correctly.
+	 o Fix openhbci macro again so that it uses a C check program.
+
+ 1.8.2  - 09 March 2003
+ 	 o Updated translations: German, Slovak, Spanish
+	 o Updated HBCI requirement to 0.9.6
+	 o Postgres fix for PG-7.3.x
+	 o More fixes for guile-1.6 support
+	 o Fix QIF Import for split transactions (#105139)
+	 o Remove "display balance in Euro" columns from the main window
+	 o Add "display balance in Report Currency" columns to the main window
+	 o Fix the transfer dialog / exchange-rate dialog so it doesn't round
+	   the values input by the user. (#106332)
+	 o Fix configure so tests wont fail on GCC 3.2.2
+	 o HBCI: avoid sending online transfers twice
+	 o Dont override the user's toolbar style (#102041)
+	 o Import: don't punish transactions with an online ID
+	 o Add engine support for employee expense vouchers
+
+ 1.8.1  - 09 February 2003
+	 o Release of new stable version 1.8.1
+	 o Fixes for qif import crashes
+	 o Update translation po/it.po by Lorenzo Cappelletti
+	 o Remove the tip that says that this is a development version.
+	 o Remove the "development version" string when running "gnucash
+	   --version"
+	 o Add heuristic for duplicate matching by check number.
+	 o Various bug fixes, remove Finance::Quote requirement for rpms
+	   built on RH 8.0
+	 
+ 1.8.0  - 02 February 2003
+ 	 o Release of new stable version 1.8.0
+	 o Fix problem getting quotes from trustnet.
+	 o Add new script that dumps all the data returned by F::Q for a
+	   stock.
+	 o Apply Bill Nottingham's patch to use db4/db_185.h
+	 o Updated translations, po/en_GB.po by Nigel Titley, po/it.po by
+	   Lorenzo Cappelletti
+	 o Fix HBCI problem with negative account balances.
+	 o Add preference (on advanced tab) to enable HBCI debug messages.
+	 o Fix the Recurrence-Frequency example-calendar date calculation to
+	   show upcoming instances correctly.
+	 o Add HBCI user messages about what is supported by the bank.
+	 o Fixes for gcc 3.x build problems with postgresql backend
+	 o Many more fixes for the postgresql backend
+	 o Fix the "bill reminder" so it doesn't create a query if there are
+	   no payables accounts.
+	 o Fix some of the accounts in the tree to be more accurate to the
+	   real world.
+	 o Only set ReadOnly status for Invoices, not Payments.
+	 o Fix several bugs in QIF importer
+	 o Recognize even more error codes from OpenHBCI.
+	 o No longer assume that transaction with type OFX_OTHER are
+	   investment transactions.
+	 o Don't add income accounts to bills, or expense accounts to
+	   invoices.  This should help further reduce user confusion with what
+	   to do when entering invoices.
+	 
  1.7.8  - 20 January 2003
  	 o Welcome to Release Canidate 3
 	 o Fixed build issues introduced in last release

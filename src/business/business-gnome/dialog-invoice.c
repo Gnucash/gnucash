@@ -19,6 +19,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-date-edit.h"
 #include "gnc-menu-extensions.h"
+#include "gnc-amount-edit.h"
 #include "gnucash-sheet.h"
 #include "window-help.h"
 #include "window-report.h"
@@ -94,6 +95,8 @@ struct _invoice_window {
   /* Summary Bar Widgets */
   GtkWidget *	summarybar_dock;
   GtkWidget *	total_label;
+  GtkWidget *	total_cash_label;
+  GtkWidget *	total_charge_label;
 
   /* Menu Widgets */
   GtkWidget *	menu_print;
@@ -113,6 +116,7 @@ struct _invoice_window {
   GtkWidget *	owner_box;
   GtkWidget *	owner_label;
   GtkWidget *	owner_choice;
+  GtkWidget *	job_label;
   GtkWidget *	job_box;
   GtkWidget *	job_choice;
   GtkWidget *	billing_id_entry;
@@ -124,6 +128,10 @@ struct _invoice_window {
   GtkWidget *	proj_cust_choice;
   GtkWidget *	proj_job_box;
   GtkWidget *	proj_job_choice;
+
+  /* Exp Voucher Widgets */
+  GtkWidget *	to_charge_frame;
+  GtkWidget *	to_charge_edit;
 
   gint		width;
 
@@ -184,8 +192,10 @@ void gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event,
 
 #define INV_WIDTH_PREFIX "invoice_reg"
 #define BILL_WIDTH_PREFIX "bill_reg"
+#define VOUCHER_WIDTH_PREFIX "voucher_reg"
 static int inv_last_width = 0;
 static int bill_last_width = 0;
+static int voucher_last_width = 0;
 
 static void gnc_invoice_update_window (InvoiceWindow *iw);
 static InvoiceWindow * gnc_ui_invoice_modify (GncInvoice *invoice);
@@ -216,6 +226,11 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
 
   gncInvoiceSetNotes (invoice, gtk_editable_get_chars
 		      (GTK_EDITABLE (iw->notes_text), 0, -1));
+
+  if (iw->to_charge_edit)
+    gncInvoiceSetToChargeAmount (invoice,
+				 gnc_amount_edit_get_amount
+				 (GNC_AMOUNT_EDIT (iw->to_charge_edit)));
 
   /* Only set these values for NEW/MOD INVOICE types */
   if (iw->dialog_type != EDIT_INVOICE) {
@@ -881,6 +896,25 @@ gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event,
 		      (GTK_EDITABLE (widget), 0, -1));
 }
 
+static void
+gnc_invoice_window_leave_to_charge_cb (GtkWidget *widget, GdkEventFocus *event,
+				       gpointer data)
+{
+  gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (widget));
+}
+
+static void
+gnc_invoice_window_changed_to_charge_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  GncInvoice *invoice = iw_get_invoice(iw);
+
+  if (!invoice) return;
+
+  gncInvoiceSetToChargeAmount (invoice, gnc_amount_edit_get_amount
+			       (GNC_AMOUNT_EDIT (widget)));
+}
+
 static GtkWidget *
 add_summary_label (GtkWidget *summarybar, const char *label_str)
 {
@@ -907,10 +941,17 @@ gnc_invoice_window_create_summary_bar (InvoiceWindow *iw)
   GtkWidget *summarybar;
 
   iw->total_label	    = NULL;
+  iw->total_cash_label      = NULL;
+  iw->total_charge_label    = NULL;
 
   summarybar = gtk_hbox_new (FALSE, 4);
 
   iw->total_label	    = add_summary_label (summarybar, _("Total:"));
+
+  if (gncOwnerGetType (&iw->owner) == GNC_OWNER_EMPLOYEE) {
+    iw->total_cash_label    = add_summary_label (summarybar, _("Total Cash:"));
+    iw->total_charge_label  = add_summary_label (summarybar, _("Total Charge:"));
+  }
 
   return summarybar;
 }
@@ -949,7 +990,9 @@ gnc_invoice_get_width_prefix (InvoiceWindow *iw)
   case GNC_OWNER_CUSTOMER:
     return INV_WIDTH_PREFIX;
   case GNC_OWNER_VENDOR:
-    return  BILL_WIDTH_PREFIX;
+    return BILL_WIDTH_PREFIX;
+  case GNC_OWNER_EMPLOYEE:
+    return VOUCHER_WIDTH_PREFIX;
   default:
     g_warning ("invalid owner");
     return INV_WIDTH_PREFIX;
@@ -963,7 +1006,9 @@ gnc_invoice_get_width_integer (InvoiceWindow *iw)
   case GNC_OWNER_CUSTOMER:
     return &inv_last_width;
   case GNC_OWNER_VENDOR:
-    return  &bill_last_width;
+    return &bill_last_width;
+  case GNC_OWNER_EMPLOYEE:
+    return &voucher_last_width; 
   default:
     g_warning ("invalid owner");
     return &inv_last_width;
@@ -1203,6 +1248,9 @@ gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
   case GNC_OWNER_VENDOR:
     term = gncVendorGetTerms (gncOwnerGetVendor (&(iw->owner)));
     break;
+  case GNC_OWNER_EMPLOYEE:
+    term = NULL;
+    break;
   default:
     g_warning ("Unknown owner type: %d\n", gncOwnerGetType (&(iw->owner)));
     break;
@@ -1274,12 +1322,21 @@ gnc_invoice_window_close_handler (gpointer user_data)
 }
 
 static void
+gnc_invoice_reset_total_label (GtkLabel *label, gnc_numeric amt)
+{
+  char string[256];
+
+  xaccSPrintAmount (string, amt, gnc_default_print_info (TRUE));
+  gtk_label_set_text (label, string);
+}
+
+static void
 gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 {
   InvoiceWindow *iw = data;
   GncInvoice * invoice;
-  gnc_numeric amount;
-  char string[256];
+  gnc_commodity * currency;
+  gnc_numeric amount, to_charge_amt = gnc_numeric_zero();
 
   if (!iw)
     return;
@@ -1292,9 +1349,31 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     return;
 
   if (iw->total_label) {
-    amount = gncInvoiceGetTotal(invoice);
-    xaccSPrintAmount (string, amount, gnc_default_print_info (TRUE));
-    gtk_label_set_text (GTK_LABEL (iw->total_label), string);
+    amount = gncInvoiceGetTotal (invoice);
+    gnc_invoice_reset_total_label (GTK_LABEL (iw->total_label), amount);
+  }
+
+  /* Deal with extra items for the expense voucher */
+
+  currency = gncInvoiceGetCurrency (invoice);
+
+  if (iw->to_charge_edit) {
+    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (iw->to_charge_edit));
+    to_charge_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(iw->to_charge_edit));
+  }
+
+  if (iw->total_cash_label) {
+    amount = gncInvoiceGetTotalOf (invoice, GNC_PAYMENT_CASH);
+    amount = gnc_numeric_sub (amount, to_charge_amt,
+			      gnc_commodity_get_fraction (currency), GNC_RND_ROUND);
+    gnc_invoice_reset_total_label (GTK_LABEL (iw->total_cash_label), amount);
+  }
+
+  if (iw->total_charge_label) {
+    amount = gncInvoiceGetTotalOf (invoice, GNC_PAYMENT_CARD);
+    amount = gnc_numeric_add (amount, to_charge_amt, 
+			      gnc_commodity_get_fraction (currency), GNC_RND_ROUND);
+    gnc_invoice_reset_total_label (GTK_LABEL (iw->total_charge_label), amount);
   }
 }
 
@@ -1459,6 +1538,12 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   if (iw->owner.type == GNC_OWNER_CUSTOMER)
     gtk_widget_hide_all (iw->proj_frame);
 
+  /* Hide the "job" label and entry for employee invoices */
+  if (iw->owner.type == GNC_OWNER_EMPLOYEE) {
+    gtk_widget_hide_all (iw->job_label);
+    gtk_widget_hide_all (iw->job_box);
+  }
+
   acct_entry = glade_xml_get_widget (iw->xml, "acct_entry");
 
   /* We know that "invoice" (and "owner") exist now */
@@ -1523,6 +1608,14 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   if (iw->dialog_type == NEW_INVOICE || iw->dialog_type == MOD_INVOICE)
     return;
 
+  /* Fill in the to_charge amount (only in VIEW/EDIT modes) */
+  {
+    gnc_numeric amount;
+
+    amount = gncInvoiceGetToChargeAmount (invoice);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (iw->to_charge_edit), amount);
+  }
+
   /* Hide/show the appropriate widgets based on our posted/paid state */
 
   {
@@ -1560,7 +1653,6 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   gtk_widget_set_sensitive (iw->delete_button, !is_posted);
   gtk_widget_set_sensitive (iw->duplicate_button, !is_posted);
   gtk_widget_set_sensitive (iw->blank_button, !is_posted);
-  gtk_widget_set_sensitive (iw->print_button, is_posted);
   gtk_widget_set_sensitive (iw->post_button, !is_posted);
   gtk_widget_set_sensitive (iw->unpost_button, can_unpost);
 
@@ -1571,6 +1663,19 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   gtk_widget_set_sensitive (iw->menu_edit_invoice, !is_posted);
   gtk_widget_set_sensitive (iw->menu_actions, !is_posted);
 
+  /* Set the to-change widget */
+  gtk_widget_set_sensitive (iw->to_charge_edit, !is_posted);
+
+  /* Hide the to_charge frame for all non-employee invoices,
+   * or set insensitive if the employee does not have a charge card
+   */
+  if (iw->owner.type == GNC_OWNER_EMPLOYEE) {
+    if (!gncEmployeeGetCCard (gncOwnerGetEmployee(&iw->owner)))
+      gtk_widget_set_sensitive (iw->to_charge_edit, FALSE);
+  } else {
+    gtk_widget_hide_all (iw->to_charge_frame);
+  }
+
   if (is_posted) {
     //    GtkWidget *hide;
 
@@ -1579,7 +1684,6 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     gtk_widget_set_sensitive (iw->id_entry, FALSE);
     gtk_widget_set_sensitive (iw->terms_menu, FALSE);
     gtk_widget_set_sensitive (iw->notes_text, FALSE); *//* XXX: should notes remain writable? */
-
   }  
 }
 
@@ -1625,6 +1729,21 @@ gnc_invoice_id_changed_cb (GtkWidget *widget, gpointer data)
 	  break;
 	}
       break;
+    case GNC_OWNER_EMPLOYEE:
+      switch (iw->dialog_type) 
+	{
+	case NEW_INVOICE:
+	  wintitle = _("New Expense Voucher");
+	  break;
+	case MOD_INVOICE:
+	case EDIT_INVOICE:
+	  wintitle = _("Edit Expense Voucher");
+	  break;
+	case VIEW_INVOICE:
+	  wintitle = _("View Expense Voucher");
+	  break;
+	}
+      break;
     default:
       break;
     }  
@@ -1656,6 +1775,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   GncOwner *billto;
 
   g_assert (type != NEW_INVOICE && type != MOD_INVOICE);
+  g_assert (invoice != NULL);
 
   /*
    * Find an existing window for this invoice.  If found, bring it to
@@ -1714,6 +1834,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   iw->active_check = glade_xml_get_widget (xml, "active_check");
   iw->owner_box = glade_xml_get_widget (xml, "owner_hbox");
   iw->owner_label = glade_xml_get_widget (xml, "owner_label");
+  iw->job_label = glade_xml_get_widget (xml, "job_label");
   iw->job_box = glade_xml_get_widget (xml, "job_hbox");
 
   /* grab the project widgets */
@@ -1739,6 +1860,33 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   iw->menu_paste = glade_xml_get_widget (xml, "menu_paste");
   iw->menu_edit_invoice = glade_xml_get_widget (xml, "menu_edit_invoice");
   iw->menu_actions = glade_xml_get_widget (xml, "menu_actions");
+
+  /* grab the to_charge widgets */
+  {
+    GtkWidget *edit;
+    gnc_commodity *currency = gncInvoiceGetCurrency (invoice);
+    GNCPrintAmountInfo print_info;
+
+    iw->to_charge_frame = glade_xml_get_widget (xml, "to_charge_frame");
+    edit = gnc_amount_edit_new();
+    print_info = gnc_commodity_print_info (currency, FALSE);
+    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
+    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit),
+				  gnc_commodity_get_fraction (currency));
+    iw->to_charge_edit = edit;
+    gtk_widget_show (edit);
+    hbox = glade_xml_get_widget (xml, "to_charge_box");
+    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+
+    gtk_signal_connect (GTK_OBJECT(gnc_amount_edit_gtk_entry
+				   (GNC_AMOUNT_EDIT(edit))),
+			"focus-out-event",
+			GTK_SIGNAL_FUNC(gnc_invoice_window_leave_to_charge_cb), iw);
+    gtk_signal_connect (GTK_OBJECT (edit), "amount_changed",
+			GTK_SIGNAL_FUNC(gnc_invoice_window_changed_to_charge_cb),
+			iw);
+  }
 
   /* grab the statusbar */
   iw->statusbar = glade_xml_get_widget (xml, "status_bar");
@@ -1777,6 +1925,9 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
     case GNC_OWNER_VENDOR:
       ledger_type = GNCENTRY_BILL_ENTRY;
       break;
+    case GNC_OWNER_EMPLOYEE:
+      ledger_type = GNCENTRY_EXPVOUCHER_ENTRY;
+      break;
     default:
       g_warning ("Invalid owner type");
     }
@@ -1789,6 +1940,9 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
       break;
     case GNC_OWNER_VENDOR:
       ledger_type = GNCENTRY_BILL_VIEWER;
+      break;
+    case GNC_OWNER_EMPLOYEE:
+      ledger_type = GNCENTRY_EXPVOUCHER_VIEWER;
       break;
     default:
       g_warning ("Invalid owner type");
@@ -1934,6 +2088,7 @@ gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
   iw->notes_text = glade_xml_get_widget (xml, "notes_text");
   iw->owner_box = glade_xml_get_widget (xml, "owner_hbox");
   iw->owner_label = glade_xml_get_widget (xml, "owner_label");
+  iw->job_label = glade_xml_get_widget (xml, "job_label");
   iw->job_box = glade_xml_get_widget (xml, "job_hbox");
 
   /* grab the project widgets */

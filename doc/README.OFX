@@ -56,8 +56,8 @@ Implemented features (some of these are from the generic import module):
 -Commodity import and matching, for investment transactions.
 -Transaction duplicate detection, using the unique OFX transaction ID.  Even if
  downloaded twice, transactions are only imported once.
--Transaction duplicate detection, using amount, date, full or partial memo,
- full or partial description.
+-Transaction duplicate detection, using amount, date, check number,
+ full or partial memo, full or partial description.
 -"Destination" account matching, using exact string match on either
  memo or description.
 -Saves ALL transaction data currently supported by LibOFX.
@@ -66,7 +66,9 @@ Implemented features (some of these are from the generic import module):
 -Files containing multiple statements are supported, and transactions can
  be matched at the same time.
 
-4.The import process and transaction matching----------
+
+4.The import process and transaction matching
+----------
 
 First, you must successfully download an OFX response file from your bank.
 
@@ -228,9 +230,9 @@ version of GnuCash from.
 (4) When I import in OFX/HBCI, and change the destination account in the
 matcher, why doesn't other transaction with the same memo/description change?
 
-The matcher already "learns" where transactions are assigned.  The only problem 
-is thatcurrently, it only uses what it has learned on the next import.  
-Re-processing the list during the import process is a feature you can hopefor 
+The matcher already "learns" where transactions are assigned.  The only problem
+is thatcurrently, it only uses what it has learned on the next import.
+Re-processing the list during the import process is a feature you can hopefor
 early in the 1.8 series.
 
 (5) Can GnuCash support QFX files (Quicken Financial eXchange?)

@@ -52,7 +52,7 @@
 #include "engine-helpers.h"
 #include "gnc-engine-util.h"
 #include "gnc-pricedb-p.h"
-#include "DateUtils.h"
+#include "date.h"
 #include "gnc-book.h"
 #include "gnc-book-p.h"
 #include "gnc-engine.h"

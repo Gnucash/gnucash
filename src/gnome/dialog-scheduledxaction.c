@@ -1423,6 +1423,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 
         gtk_widget_show_all(sxed->dialog);
 
+	/* Refresh the cal and the ledger */
+	gtk_widget_queue_resize( GTK_WIDGET( sxed->example_cal ) );
         gnc_ledger_display_refresh( sxed->ledger );
 
         return sxed;
@@ -1794,14 +1796,15 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 book = gnc_get_current_book ();
                 sxList = gnc_book_get_schedxactions( book );
                 for ( sel = cl->selection; sel; sel = sel->next ) {
-                        guint tag;
+                        gint tag;
+                        gint *p_tag = &tag;
                         gpointer unused;
                         gboolean foundP;
 
                         sx = (SchedXaction*)gtk_clist_get_row_data( cl, (int)sel->data );
                         sxList = g_list_remove( sxList, (gpointer)sx );
                         foundP = g_hash_table_lookup_extended( sxd->sxData, sx,
-                                                               &unused, (gpointer*)&tag );
+                                                               &unused, (gpointer*)p_tag );
                         g_assert( foundP );
                         if ( tag != -1 ) {
                                 gnc_dense_cal_mark_remove( sxd->gdcal, tag );
@@ -1912,7 +1915,8 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
         int instArraySize;
         GDate **instArray;
         GList *instList;
-        guint gdcMarkTag, oldMarkTag;
+        gint gdcMarkTag, oldMarkTag;
+        gint *p_oldMarkTag = &oldMarkTag;
 
         sx = (SchedXaction*)data;
         sxd = (SchedXactionDialog*)user_data;
@@ -1996,7 +2000,7 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
                         g_hash_table_lookup_extended( sxd->sxData,
                                                       (gpointer)sx,
                                                       &unused,
-                                                      (gpointer*)&oldMarkTag );
+                                                      (gpointer*)p_oldMarkTag );
                 g_assert( foundP );
         }
         if ( row == -1 ) {

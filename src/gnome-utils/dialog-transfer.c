@@ -227,7 +227,7 @@ gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
   if (gnc_numeric_zero_p (from_rate) || gnc_numeric_zero_p (to_rate))
     gnc_xfer_dialog_update_price (xferData);
 
-  price = gnc_numeric_div (from_rate, to_rate, GNC_DENOM_AUTO, 
+  price = gnc_numeric_div (to_rate, from_rate, GNC_DENOM_AUTO, 
                            GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
 
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(xferData->price_edit), price);
@@ -1341,6 +1341,16 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       g_free(name);
       return;
     }
+
+    if (safe_strcmp (gnc_commodity_get_namespace (xferData->from_commodity),
+		     GNC_COMMODITY_NS_ISO))
+    {
+      const char *message = _("You can't transfer from a non-currency account.  "
+			      "Try reversing the \"from\" and \"to\" accounts "
+			      "and making the \"amount\" negative.");
+      gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+      return;
+    }
   }
 
   if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit)))
@@ -1398,15 +1408,14 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   if (xferData->exch_rate)
   {
-    /* If the to_amount is active, then call the callback, just in case the
-     * user hit "return" -- because the exit-focus signal handler was probably
-     * not executed.
-     */
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (xferData->amount_radio)))
-      gnc_xfer_to_amount_update_cb(xferData->to_amount_edit, NULL, xferData);
+    gnc_numeric to_amt, from_amt;
+
+    from_amt = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(xferData->amount_edit));
+    to_amt = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(xferData->to_amount_edit));
 
     *(xferData->exch_rate) =
-      gnc_numeric_abs(gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit)));
+      gnc_numeric_abs (gnc_numeric_div (to_amount, amount, GNC_DENOM_AUTO,
+					GNC_DENOM_REDUCE));
   }
   else
   {

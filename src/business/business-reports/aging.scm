@@ -532,9 +532,10 @@ totals to report currency")
 
 	    ;; build the table
 	    (set! work-to-do (length splits))
+	    ;; work-done is already zero
 	    (for-each (lambda (split)
-			(set! work-done (+ 1 work-done))
 			(gnc:report-percent-done (* 50 (/ work-done work-to-do)))
+			(set! work-done (+ 1 work-done))
 			(update-company-hash companys 
 					      split 
 					      interval-vec 
@@ -553,9 +554,10 @@ totals to report currency")
 
 	    ;; build the table
 	    (set! work-to-do (length company-list))
+	    (set! work-done 0)
 	    (for-each (lambda (company-list-entry)
-			(set! work-done (+ 1 work-done))
 			(gnc:report-percent-done (+ 50 (* 50 (/ work-done work-to-do))))
+			(set! work-done (+ 1 work-done))
 			(let* ((monetary-list (convert-to-monetary-list
 					       (company-get-buckets
 						(cdr company-list-entry))
@@ -604,7 +606,9 @@ totals to report currency")
 	(gnc:html-document-add-object!
 	 document
 	 (gnc:make-html-text
-	  "No Valid Account Selected")))
+	  (string-append
+	   "No Valid Account Selected.  "
+	   "Click on the Options button and select the account to use."))))
     (gnc:free-query query)
     (gnc:report-finished)
     document))

@@ -93,7 +93,9 @@ gnc_commodity * gnc_import_select_commodity(char * exchange_code,
 	  tmp_commodity=commodity_list->data;
 	  DEBUG("Looking at commodity %s",gnc_commodity_get_fullname(tmp_commodity));
 	  
-	  if(strncmp(gnc_commodity_get_exchange_code(tmp_commodity),exchange_code,strlen(exchange_code))==0)
+	  if(gnc_commodity_get_exchange_code(tmp_commodity)!=NULL &&
+	     exchange_code != NULL &&
+	     strncmp(gnc_commodity_get_exchange_code(tmp_commodity),exchange_code,strlen(exchange_code))==0)
 	    {
 	      retval = tmp_commodity;
 	      DEBUG("Commodity %s%s",gnc_commodity_get_fullname(retval)," matches.");
@@ -115,14 +117,17 @@ gnc_commodity * gnc_import_select_commodity(char * exchange_code,
     {
       retval=gnc_ui_select_commodity_modal_full(NULL,
 						NULL,
-						_("Please select a commodity to match the following exchange code.\nPlease note that the exchange code of the commodity you select will be overwritten."),
+						_("Please select a commodity to match the following exchange code.\nPlease note that the exchange code of the commodity you select will be overwritten.\n"),
 						exchange_code,
 						default_fullname,
 						default_mnemonic,
 						0);
       
     }
-  if (retval != NULL&&(strncmp(gnc_commodity_get_exchange_code(retval),exchange_code,strlen(exchange_code))!=0))
+  if (retval != NULL&&
+      gnc_commodity_get_exchange_code(tmp_commodity)!=NULL &&
+      exchange_code != NULL &&
+      (strncmp(gnc_commodity_get_exchange_code(retval),exchange_code,strlen(exchange_code))!=0))
     {
       gnc_commodity_set_exchange_code(retval,
 				      exchange_code);

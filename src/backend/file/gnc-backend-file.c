@@ -24,7 +24,7 @@
 #include "TransLog.h"
 #include "gnc-engine-util.h"
 #include "gnc-pricedb-p.h"
-#include "DateUtils.h"
+#include "date.h"
 #include "io-gncxml.h"
 #include "io-gncbin.h"
 #include "io-gncxml-v2.h"
