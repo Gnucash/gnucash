@@ -517,6 +517,32 @@
     (qif-map-entry:set-display?! me (qif-map-entry:display? orig))
     me))
 
+(define (qif-map-entry:allowed-parent-types self) 
+  (let ((types-list (qif-map-entry:allowed-types self)))
+    (define (add-types . rest)
+      (for-each 
+       (lambda (t)
+         (if (not (memv t types-list))
+             (set! types-list (cons t types-list))))
+       rest))
+    
+    (for-each 
+     (lambda (t)
+       (cond 
+        ((memv t (list GNC-BANK-TYPE GNC-CASH-TYPE GNC-CCARD-TYPE 
+                       GNC-STOCK-TYPE GNC-MUTUAL-TYPE
+                       GNC-ASSET-TYPE GNC-LIABILITY-TYPE))
+         (add-types GNC-BANK-TYPE GNC-CASH-TYPE GNC-CCARD-TYPE 
+                    GNC-STOCK-TYPE GNC-MUTUAL-TYPE
+                    GNC-ASSET-TYPE GNC-LIABILITY-TYPE))
+        ((memv t (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE))
+         (add-types GNC-INCOME-TYPE GNC-EXPENSE-TYPE))
+        (#t
+         (add-types t))))
+     (qif-map-entry:allowed-types self))
+    (reverse types-list)))
+
+
 (define qif-map-entry:qif-name
   (simple-obj-getter <qif-map-entry> 'qif-name))
 

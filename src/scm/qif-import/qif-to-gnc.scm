@@ -29,7 +29,7 @@
           (qif-map-entry:allowed-types acct-info))
          (make-new-acct #f)
          (incompatible-acct #f))
-
+    
     (define (make-unique-name-variant long-name short-name)
       (if (gnc:get-account-from-full-name old-group long-name separator)
           (let loop ((count 2))
@@ -38,9 +38,9 @@
               (if (gnc:get-account-from-full-name 
                    old-group test-name separator)
                   (loop (+ 1 count))
-                  test-name)))
+                  (string-append short-name (sprintf #f " %a" count)))))
           short-name))
-
+    
     ;; just because we found an account doesn't mean we can use it.
     ;; if the name is in use but the currency, security, or type are
     ;; incompatible, we need to create a new account with a modified
@@ -52,7 +52,7 @@
                      (gnc:commodity-equiv? 
                       security (gnc:account-get-security same-gnc-account)))
                  (list? allowed-types)
-                 (memq (gnc:account-get-type same-gnc-account)
+                 (memv (gnc:account-get-type same-gnc-account)
                        allowed-types))
             (begin 
               ;; everything is ok, so we can just use the same
@@ -83,7 +83,7 @@
           (set! last-colon (string-rindex gnc-name separator))
           
           (gnc:account-begin-edit new-acct)
-
+          
           ;; if this is a copy of an existing gnc account, copy the
           ;; account properties.  For incompatible existing accts,
           ;; we'll do something different later.
@@ -114,7 +114,7 @@
                 (qif-map-entry:set-qif-name! pinfo parent-name)
                 (qif-map-entry:set-gnc-name! pinfo parent-name)
                 (qif-map-entry:set-allowed-types! 
-                 pinfo (qif-map-entry:allowed-types acct-info))
+                 pinfo (qif-map-entry:allowed-parent-types acct-info))
                 
                 (set! parent-acct (qif-import:find-or-make-acct 
                                    pinfo currency security 
@@ -244,7 +244,7 @@
                                  (qif-import:get-account-name 
                                   (qif-map-entry:qif-name acctinfo)))))
                  (ok-types (qif-map-entry:allowed-types acctinfo))
-                 (equity? (memq GNC-EQUITY-TYPE ok-types)))
+                 (equity? (memv GNC-EQUITY-TYPE ok-types)))
             
             (cond ((and equity? security)  ;; a "retained holdings" acct
                    (qif-import:find-or-make-acct acctinfo 

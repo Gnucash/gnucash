@@ -1,3 +1,15 @@
+2001-02-14  Bill Gribble  <grib@billgribble.com>
+
+	* src/scm/qif-import/*.scm: fuzzify account type rules a bit to
+	make imports more likely to match up with existing accounts.  Fix
+	broken "New" detection.
+
+	* src/gnome/druid-qif-import.c: add default acct based on file 
+	name
+
+	* src/gnome/dialog-account-picker.c: make sure picker gets
+	scrolled to initial selection.
+	
 2001-02-14  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/html-utilities.scm (gnc:html-build-acct-table): Add

@@ -489,7 +489,8 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   
   char * path_to_load;
   char * error_string = NULL;
-  
+  char * default_acctname = NULL;
+
   GList * format_strings;
   GList * listit;
 
@@ -499,6 +500,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   SCM qif_file_loaded = gh_eval_str("qif-dialog:qif-file-loaded?");
   SCM unload_qif_file = gh_eval_str("qif-dialog:unload-qif-file");
   SCM check_from_acct = gh_eval_str("qif-file:check-from-acct");
+  SCM default_acct    = gh_eval_str("qif-file:path-to-accountname");
   SCM date_formats;
   SCM scm_filename;
   SCM scm_qiffile;
@@ -660,6 +662,13 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     }
     else if(gh_call1(check_from_acct, gh_car(imported_files)) != SCM_BOOL_T) {
       /* skip to the "ask account name" page */
+      default_acctname = gh_scm2newstr(gh_call1(default_acct, 
+                                                gh_car(imported_files)),
+                                       NULL);
+      gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
+      
+      if(default_acctname) free(default_acctname);
+      
       gnome_druid_set_page(GNOME_DRUID(wind->druid),
                            get_named_page(wind, "account_name_page"));
       return TRUE;
@@ -864,7 +873,6 @@ gnc_ui_qif_import_default_acct_next_cb(GnomeDruidPage * page,
   else {
     scm_name = gh_str02scm(acct_name);
     gh_call2(fix_default, wind->selected_file, scm_name);
-    gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), "");
     return FALSE;
   }
 }
@@ -1535,6 +1543,7 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
       gnome_druid_set_page(GNOME_DRUID(wind->druid),
                            get_named_page(wind, "end_page"));
     } 
+    return TRUE;
   }
   else {
     return FALSE;

@@ -3848,7 +3848,6 @@ create_QIF_Import_Druid (void)
   GdkColor memo_match_page_logo_bg_color = { 0, 65535, 65535, 65535 };
   GdkColor memo_match_page_title_color = { 0, 65535, 65535, 65535 };
   GtkWidget *druid_vbox40;
-  GtkWidget *label847713;
   GtkWidget *scrolledwindow25;
   GtkWidget *memo_page_list;
   GtkWidget *label847708;
@@ -4375,13 +4374,6 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox40);
   gtk_container_set_border_width (GTK_CONTAINER (druid_vbox40), 25);
-
-  label847713 = gtk_label_new (_("This doesn't actually affect the QIF import yet. \nGive it a couple more days :)"));
-  gtk_widget_ref (label847713);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label847713", label847713,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label847713);
-  gtk_box_pack_start (GTK_BOX (druid_vbox40), label847713, FALSE, FALSE, 0);
 
   scrolledwindow25 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_ref (scrolledwindow25);

@@ -144,40 +144,27 @@
                             (string-remove-leading-space read-value)))))
     (cond
      ((string=? mangled-string "bank")
-      GNC-BANK-TYPE)
+      (list GNC-BANK-TYPE))
      ((string=? mangled-string "port")
-      GNC-BANK-TYPE)
+      (list GNC-BANK-TYPE))
      ((string=? mangled-string "cash")
-      GNC-CASH-TYPE)
+      (list GNC-CASH-TYPE))
      ((string=? mangled-string "ccard")
-      GNC-CCARD-TYPE)
+      (list GNC-CCARD-TYPE))
      ((string=? mangled-string "invst") ;; these are brokerage accounts.
-      GNC-BANK-TYPE)
+      (list GNC-BANK-TYPE))
      ((string=? mangled-string "oth a")
-      GNC-ASSET-TYPE)
+      (list GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE GNC-STOCK-TYPE 
+            GNC-MUTUAL-TYPE))
      ((string=? mangled-string "oth l")
-      GNC-LIABILITY-TYPE)
+      (list GNC-LIABILITY-TYPE GNC-CCARD-TYPE))
      ((string=? mangled-string "mutual")
-      GNC-MUTUAL-TYPE)
+      (list GNC-MUTUAL-TYPE GNC-STOCK-TYPE))
      (#t
       (display "qif-parse:parse-acct-type : unhandled account type ")
       (display read-value)
       (display "... substituting Bank.")
-      GNC-BANK-TYPE))))
-
-(define (qif-parse:state-to-account-type qstate)
-  (cond ((eq? qstate 'type:bank)
-         GNC-BANK-TYPE)
-        ((eq? qstate 'type:cash)
-         GNC-CASH-TYPE)
-        ((eq? qstate 'type:ccard)
-         GNC-CCARD-TYPE)
-        ((eq? qstate 'type:invst) ;; these are brokerage accounts in quicken
-         GNC-BANK-TYPE)        
-        ((eq? qstate '#{type:oth\ a}#)
-         GNC-ASSET-TYPE)
-        ((eq? qstate '#{type:oth\ l}#)
-         GNC-LIABILITY-TYPE)))
+      (list GNC-BANK-TYPE)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  parse-bang-field : the bang fields switch the parse context for 

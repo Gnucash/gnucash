@@ -210,7 +210,7 @@
         (begin           
           (qif-map-entry:set-gnc-name! retval (car mapped-gnc-acct))
           (qif-map-entry:set-allowed-types! retval 
-                                            (list (cadr mapped-gnc-acct)))
+                                            (cadr mapped-gnc-acct))
           (qif-map-entry:set-new-acct?! retval #f))
         ;; we haven't found a match, so by default just create a new
         ;; one.  Try to put the new account in a similar place in
@@ -219,7 +219,7 @@
                (qif-import:find-new-acct acct-name allowed-types 
                                          gnc-acct-info)))
           (qif-map-entry:set-gnc-name! retval (car new-acct-info))
-          (qif-map-entry:set-allowed-types! retval (list (cadr new-acct-info)))
+          (qif-map-entry:set-allowed-types! retval (cadr new-acct-info))
           (qif-map-entry:set-new-acct?! retval #t)))
     retval))
 
@@ -239,7 +239,7 @@
        (let ((acct-matches? #f))
          (for-each
           (lambda (type)
-            (if (eq? type (gnc:account-get-type (caddr gnc-acct)))
+            (if (= type (gnc:account-get-type (caddr gnc-acct)))
                 (set! acct-matches? #t)))
           allowed-types)
          (if acct-matches? 
@@ -260,8 +260,8 @@
     (if (not (null? matching-name-accts))
         (set! retval (list 
                       (cadr (car matching-name-accts))
-                      (gnc:account-get-type 
-                       (caddr (car matching-name-accts)))))
+                      (list (gnc:account-get-type 
+                             (caddr (car matching-name-accts))))))
         #f)
     retval))
 
@@ -305,11 +305,11 @@
                                               (list GNC-EQUITY-TYPE)
                                               gnc-acct-info)))
            (if existing-equity 
-               (cdr existing-equity)
-               (list (default-equity-account) GNC-EQUITY-TYPE))))
+               existing-equity
+               (list (default-equity-account) (list GNC-EQUITY-TYPE)))))
         ((and (string? qif-acct)
               (not (string=? qif-acct "")))
-         (list qif-acct (car allowed-types)))
+         (list qif-acct allowed-types))
         (#t 
-         (list (default-unspec-acct) (car allowed-types)))))
+         (list (default-unspec-acct) allowed-types))))
 

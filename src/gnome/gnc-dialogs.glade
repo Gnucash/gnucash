@@ -6484,24 +6484,6 @@ files. </label>
 	</child>
 
 	<widget>
-	  <class>GtkLabel</class>
-	  <name>label847713</name>
-	  <label>This doesn't actually affect the QIF import yet. 
-Give it a couple more days :)</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-	</widget>
-
-	<widget>
 	  <class>GtkScrolledWindow</class>
 	  <name>scrolledwindow25</name>
 	  <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>

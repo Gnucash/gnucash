@@ -118,7 +118,6 @@ build_acct_tree(QIFAccountPickerDialog * picker, QIFImportWindow * import) {
   int row = 0;
 
   gtk_clist_clear(GTK_CLIST(picker->treeview));
-
   gtk_clist_set_column_justification (GTK_CLIST(picker->treeview),
                                       1, GTK_JUSTIFY_CENTER);
 
@@ -217,8 +216,22 @@ gnc_ui_qif_account_picker_unselect_cb(GtkCTree   * tree,
   wind->selected_name = NULL;
 }
 
+
+static int
+gnc_ui_qif_account_picker_map_cb(GtkWidget * w, gpointer user_data) {
+  QIFAccountPickerDialog * wind = 
+    gtk_object_get_data(GTK_OBJECT(user_data),
+                        "account_picker_struct");
+  
+  /* update the tree display with all the existing accounts plus all
+   * the ones the QIF importer thinks it will be creating.  this will
+   * also select the map_entry line. */
+  build_acct_tree(wind, wind->qif_wind);
+  return FALSE;
+}
+
 /****************************************************************
- * accountPickerBox 
+ * qif_account_picker_dialog
  * select an account from the ones that the engine knows about, plus
  * the ones that will be created newly by the QIF import.  this is
  * sort of like fileBox... it returns a string for the account name or
@@ -259,11 +272,14 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry) {
                      GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_unselect_cb),
                      wind->dialog);
 
-  /* update the tree display with all the existing accounts plus all
-   * the ones the QIF importer thinks it will be creating.  this will
-   * also select the map_entry line. */
-  build_acct_tree(wind, qif_wind);
+  gtk_signal_connect_after(GTK_OBJECT(wind->dialog), "map",
+                           GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_map_cb),
+                           wind->dialog);
   
+  /* this is to get the checkmarks set up right.. it will get called 
+   * again after the window is mapped. */
+  build_acct_tree(wind, wind->qif_wind);
+
   retval = gnome_dialog_run_and_close(GNOME_DIALOG(wind->dialog));  
   
   scm_unprotect_object(wind->map_entry);
@@ -277,3 +293,4 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry) {
     return saved_entry;
   }
 }
+
