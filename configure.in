@@ -140,8 +140,8 @@ AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
 # Don't build the xmhtml source if user already has it installed...
 # this is ugly, there must be a nicer way of setting this up ...
 AC_CHECK_LIB(XmHTML,  XmHTMLTextScrollToLine,
-        X_LIBS="-lXmHTML $X_LIBS",
-        X_LIBS="-lXmHTML $X_LIBS"
+        MOTIF_LIBS="-lXmHTML $MOTIF_LIBS",
+        MOTIF_LIBS="-lXmHTML $MOTIF_LIBS"
         XMHTML_TARGET=default 
         XMHTML_INC=/lib/XmHTML-1.1.0/src 
         LIBS="-L $srcdir/lib/XmHTML-1.1.0 $LIBS" , 

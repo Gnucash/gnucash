@@ -2270,10 +2270,10 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  X_LIBS="-lXmHTML $X_LIBS"
+  MOTIF_LIBS="-lXmHTML $MOTIF_LIBS"
 else
   echo "$ac_t""no" 1>&6
-X_LIBS="-lXmHTML $X_LIBS"
+MOTIF_LIBS="-lXmHTML $MOTIF_LIBS"
         XMHTML_TARGET=default 
         XMHTML_INC=/lib/XmHTML-1.1.0/src 
         LIBS="-L $srcdir/lib/XmHTML-1.1.0 $LIBS" 
