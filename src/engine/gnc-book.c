@@ -69,6 +69,7 @@ gnc_book_init (GNCBook *book, GNCSession *session)
 
   if (!book) return;
 
+  book->entity_table = xaccEntityTableNew ();
   book->topgroup = xaccMallocAccountGroup(session);
   book->pricedb = gnc_pricedb_create();
 
@@ -97,6 +98,15 @@ gnc_book_new (GNCSession *session)
   gnc_book_init(book, session);
 
   return book;
+}
+
+/* ---------------------------------------------------------------------- */
+
+GNCEntityTable *
+gnc_book_get_entity_table (GNCBook *book)
+{
+  if (!book) return NULL;
+  return book->entity_table;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -310,6 +320,9 @@ gnc_book_destroy (GNCBook *book)
   book->commodity_table = NULL;
 
   /* FIXME: destroy SX data members here, too */
+
+  xaccEntityTableDestroy (book->entity_table);
+  book->entity_table = NULL;
 
   xaccLogEnable();
 

@@ -77,8 +77,8 @@
 GNCSession * gnc_session_new (void);
 void         gnc_session_destroy (GNCSession *session);
 
-/* The gnc_session_swap_data () method swaps the book and
- *    entity tables of the two given sessions. It is useful
+/* The gnc_session_swap_data () method swaps the book of
+ *    the two given sessions. It is useful
  *    for 'Save As' type functionality. */
 void gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2);
 

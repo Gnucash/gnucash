@@ -127,8 +127,8 @@ gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);
  *    account.  The account should have been opened for editing 
  *    (by calling xaccAccountBeginEdit()) before calling this routine.
  */
-Account    * xaccMallocAccount (GNCSession *session);
-Account    * xaccCloneAccountSimple(const Account *from, GNCSession *session);
+Account    * xaccMallocAccount (GNCBook *book);
+Account    * xaccCloneAccountSimple(const Account *from, GNCBook *book);
 void         xaccAccountBeginEdit (Account *account);
 void         xaccAccountCommitEdit (Account *account);
 void         xaccAccountDestroy (Account *account);
@@ -150,8 +150,8 @@ void xaccAccountSetSlots_nc(Account *account, kvp_frame *frame);
  */
 const GUID * xaccAccountGetGUID (Account *account);
 GUID         xaccAccountReturnGUID (Account *account);
-Account    * xaccAccountLookup (const GUID *guid, GNCSession *session);
-Account    * xaccAccountLookupDirect (GUID guid, GNCSession *session);
+Account    * xaccAccountLookup (const GUID *guid, GNCBook *book);
+Account    * xaccAccountLookupDirect (GUID guid, GNCBook *book);
 
 /*
  * The xaccAccountInsertSplit() method will insert the indicated
@@ -217,13 +217,13 @@ void xaccAccountSetCommoditySCU (Account *account, int frac);
  */
 /* these two funcs take control of their gnc_commodity args. Don't free */
 void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency,
-                              GNCSession *session);
+                              GNCBook *book);
 void DxaccAccountSetSecurity (Account *account, gnc_commodity *security,
-                              GNCSession *session);
+                              GNCBook *book);
 gnc_commodity * DxaccAccountGetCurrency (Account *account,
-                                         GNCSession *session);
+                                         GNCBook *book);
 gnc_commodity * DxaccAccountGetSecurity (Account *account,
-                                         GNCSession *session);
+                                         GNCBook *book);
 void DxaccAccountSetCurrencySCU (Account *account, int frac);
 int  DxaccAccountGetCurrencySCU (Account *account);
 

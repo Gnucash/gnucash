@@ -52,6 +52,7 @@ typedef struct gnc_book_struct GNCBook;
 GNCBook * gnc_book_new (GNCSession *session);
 void      gnc_book_destroy (GNCBook *book);
 
+
 AccountGroup *gnc_book_get_group (GNCBook *book);
 void gnc_book_set_group(GNCBook *book, AccountGroup *group);
 GNCPriceDB   *gnc_book_get_pricedb (GNCBook *book);

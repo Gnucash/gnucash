@@ -154,7 +154,7 @@ struct account_s
 
 
 /* The xaccAccountLookupEntityTable() routine is like xaccAccountLookup
- *    but accepts and entity table instead of a session. */
+ *    but accepts and entity table instead of a book. */
 Account * xaccAccountLookupEntityTable (const GUID *guid,
                                         GNCEntityTable *entity_table);
 
