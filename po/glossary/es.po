@@ -1,14 +1,16 @@
-# Glossary of terms in GnuCash translated into Spanish
-# Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
+# Glosario de términos de GnuCash traducido al español
+# Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 # Raúl Miró <cotin@geocities.com>, 2001.
 # Eneko Lacunza <enlar@enlar.net>, 2003.
 # Raúl Miró <cotin@geocities.com>, 2003.
+# Eneko Lacunza <enlar@enlar.net>, 2004.
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-glossary 1.7.4\n"
-"POT-Creation-Date: 2002-12-02 14:51MET\n"
-"PO-Revision-Date: 2003-08-15 18:31+0200\n"
+"Project-Id-Version: gnucash-glossary 1.8.9\n"
+"Report-Msgid-Bugs-To: Eneko Lacunza <enlar@enlar.net>\n"
+"POT-Creation-Date: 2004-11-20 10:32+0100\n"
+"PO-Revision-Date: 2004-11-23 22:19+0100\n"
 "Last-Translator: Eneko Lacunza <enlar@enlar.net>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -529,19 +531,19 @@ msgstr "libro de cuentas/anotaciones"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr "asiento múltiple"
+msgstr "anotación de libro de cuentas: asiento múltiple"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr ""
+msgstr "anotación en libro de cuentas: división de valor"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr "libro de cuentas con autodesglose"
+msgstr "libro de cuentas: libro con asientos desglosados"
 
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr "libro diario"
+msgstr "libro de cuentas: libro básico"
 
 #. "another form of register"
 msgid "register: general ledger"

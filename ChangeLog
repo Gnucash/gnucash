@@ -1,3 +1,8 @@
+2004-11-24  Christian Stimming  <stimming@tuhh.de>
+
+	* po/es.po, po/glossary/es.po: Updated Spanish translation by
+	Eneko Lacunza <enlar@enlar.net>.
+
 2004-11-22  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in, README: Add configure check for libofx version
