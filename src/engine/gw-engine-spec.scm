@@ -30,6 +30,7 @@
     "#include <gnc-session.h>\n"
     "#include <gnc-engine-util.h>\n"
     "#include <gnc-event.h>\n"
+    "#include <gnc-lot.h>\n"
     "#include <date.h>\n"
     "#include <engine-helpers.h>\n"
     "#include <gnc-engine.h>\n"
@@ -97,6 +98,7 @@
 (gw:wrap-as-wct ws '<gnc:AccInfo*> "AccInfo*" "const AccInfo*")
 (gw:wrap-as-wct ws '<gnc:AccountGroup*> "AccountGroup*" "const AccountGroup*")
 (gw:wrap-as-wct ws '<gnc:Book*> "GNCBook*" "const GNCBook*")
+(gw:wrap-as-wct ws '<gnc:Lot*> "GNCLot*" "const GNCLot*")
 (gw:wrap-as-wct ws '<gnc:Session*> "GNCSession*" "const GNCSession**")
 (gw:wrap-as-wct ws '<gnc:Split*> "Split*" "const Split*")
 (gw:wrap-as-wct ws '<gnc:Transaction*> "Transaction*" "const Transaction*")  
@@ -283,6 +285,13 @@
 	       "SPLIT_CORR_ACCT_NAME")
 (gw:wrap-value ws 'gnc:split-corr-account-code '<gnc:id-type>
 	       "SPLIT_CORR_ACCT_CODE")
+
+;
+; Transaction Types
+;
+(gw:wrap-value ws 'gnc:transaction-type-none '<gw:char> "TXN_TYPE_NONE")
+(gw:wrap-value ws 'gnc:transaction-type-invoice '<gw:char> "TXN_TYPE_INVOICE")
+(gw:wrap-value ws 'gnc:transaction-type-payment '<gw:char> "TXN_TYPE_PAYMENT")
 
 
 (gw:wrap-function
@@ -639,6 +648,22 @@ number of nanoseconds.")
  "xaccTransSetCurrency"
  '((<gnc:Transaction*> trans) (<gnc:commodity*> comm))
  "Sets the commodity common for this transaction.")
+
+(gw:wrap-function
+ ws
+ 'gnc:transaction-get-account-value
+ '<gnc:numeric>
+ "xaccTransGetAccountValue"
+ '((<gnc:Transaction*> trans) (<gnc:Account*> acc))
+ "Compute the sum of all Splits in trans that are applied to Account acc.")
+
+(gw:wrap-function
+ ws
+ 'gnc:transaction-get-txn-type
+ '<gw:char>
+ "xaccTransGetTxnType"
+ '((<gnc:Transaction*> trans))
+ "Return the transaction type.")
 
 (gw:wrap-function
  ws
@@ -1112,6 +1137,14 @@ when no longer needed.")
    (<gw:unsigned-int> stage)
    (<gw:scm> thunk))
  "FIXME: For now, see Group.h for info...")
+
+(gw:wrap-function
+ ws
+ 'gnc:account-get-lot-list
+ '(gw:glist-of <gnc:Lot*> callee-owned)
+ "xaccAccountGetLotList"
+ '((<gnc:Account*> account))
+ "Return the list of Lots for this account.")
 
 ;;============
 ;; GNCPriceDB
@@ -2277,3 +2310,22 @@ of having a parent transaction with which one is working...")
  "Convert a timepair on a certain day (localtime) to\
 the timepair representing midday on that day")
 
+;;
+;; gnc-lot.h
+;;
+
+(gw:wrap-function
+ ws
+ 'gnc:lot-get-balance
+ '<gnc:numeric>
+ "gnc_lot_get_balance"
+ '((<gnc:Lot*> lot))
+ "Return the balance of the lot")
+
+(gw:wrap-function
+ ws
+ 'gnc:lot-closed?
+ '<gw:bool>
+ "gnc_lot_is_closed"
+ '((<gnc:Lot*> lot))
+ "Is this Lot closed (is the balance zero)?")

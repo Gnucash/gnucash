@@ -255,6 +255,14 @@ void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
  */
 gnc_numeric xaccTransGetImbalance (Transaction * trans);
 
+/* The xaccTransGetAccountValue() method returns the total value applied
+ *    to a paricular account.  In some cases there may be multiple Splits
+ *    in a single Transaction applied to one account (in particular when
+ *    trying to balance Lots) -- this function is just a convienience to
+ *    view everything at once.
+ */
+gnc_numeric xaccTransGetAccountValue (Transaction *trans, Account *account);
+
 /* ------------- splits --------------- */
 Split       * xaccMallocSplit (GNCBook *book);
 

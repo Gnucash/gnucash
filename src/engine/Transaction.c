@@ -1358,6 +1358,26 @@ xaccTransGetImbalance (Transaction * trans)
   return xaccSplitsComputeValue (trans->splits, NULL, currency);
 }
 
+gnc_numeric
+xaccTransGetAccountValue (Transaction *trans, Account *account)
+{
+  gnc_numeric total = gnc_numeric_zero ();
+  GList *splits;
+
+  if (!trans || !account)
+    return total;
+
+  for (splits = xaccTransGetSplitList (trans); splits; splits = splits->next)
+  {
+    Split *s = splits->data;
+    Account *a = xaccSplitGetAccount (s);
+    if (a == account)
+      total = gnc_numeric_add (total, xaccSplitGetValue (s),
+			       GNC_DENOM_AUTO, GNC_DENOM_LCD);
+  }
+  return total;
+}
+
 /********************************************************************\
 \********************************************************************/
 
