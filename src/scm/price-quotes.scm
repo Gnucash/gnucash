@@ -222,8 +222,8 @@
 ;; src/engine/gnc-pricedb.h
 
 (define gnc:*finance-quote-helper*
-  (string-append (gnc:config-var-value-get gnc:*share-dir*)
-                 "/finance-quote-helper"))
+  (gnc:find-file "finance-quote-helper"
+                 (gnc:config-var-value-get gnc:*share-path*)))
 
 (define (gnc:fq-get-quotes requests)
   ;; requests should be a list where each item is of the form
