@@ -1,79 +1,35 @@
+# Order is important here.
+SUBDIRS = . overrides test
 
-bin_SCRIPTS = gnucash-env gnucash gnucash-run-script gnucash-make-guids
+# We handle gnucash scripts in a somewhat unexpected way, but we do
+# this so that a user who doesn't necessarily have the right
+# directories in their path can still invoke these commands via their
+# full path, say /some/dir/not/in/path/gnucash and still have the
+# right thing happen (i.e. they'll still get the right guile, and the
+# right scripts if the sub-exec anything from their scripts).  If you
+# want to add another gnucash script, please add the name here (which
+# will cause the bindir wrapper to be created, and then put the actual
+# code in a script of the same name in ./overrides.  Oh, and don't
+# forget to add your script to configure.in's "Adjustments" section if
+# you need to.
+#
+# For testing and other reasons, overrides/* scripts should not modify
+# the path to re-insert the overrides dir.  This should only be done
+# by these top-level "common" scripts.
+gnc_common_scripts = gnucash gnucash-env gnucash-run-script gnucash-make-guids
 
-gncoverridedir = ${GNC_LIBEXECDIR}/script-override
-gncoverride_SCRIPTS = guile
+bin_SCRIPTS = ${gnc_common_scripts}
 
-EXTRA_DIST = \
-  .cvsignore \
-  gnucash-env \
-  gnucash.in \
-  guile.in \
-  gnucash-make-guids.in \
-  gnucash-run-script.in
+# if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
+gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets below, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.  *sigh*
+EXTRA_DIST = .cvsignore gnucash-build-env.in generate-gnc-script
 
-guile: guile.in
-	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
-	    -e 's:@-GUILE-@:${GUILE}:'
-	mv $@.tmp $@
-BUILT_SOURCES = guile
-CLEANFILES = guile
+## Gnucash scripts -- real code is in overrides, these just get you there.
+${gnc_common_scripts}: generate-gnc-script
+	./generate-gnc-script $@ "${gncoverridesdir}"
 
-gnucash-run-script: gnucash-run-script.in
-	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
-	    -e 's:@-GUILE-@:${GUILE}:' \
-	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:' \
-	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:' \
-	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:' \
-            -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
-            -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:' \
-	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g'
-	mv $@.tmp $@
-BUILT_SOURCES = gnucash-run-script
-CLEANFILES = gnucash-run-script
+BUILT_SOURCES = ${gnc_common_scripts}
+CLEANFILES = ${gnc_common_scripts}
 
-gnucash-make-guids: gnucash-make-guids.in
-	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
-	    -e 's:@-GNUCASH_RUN_SCRIPT-@:${bindir}/gnucash-run-script:' \
-	    -e 's:@-THIS_SCRIPT-@:${bindir}/$@:'
-	mv $@.tmp $@
-BUILT_SOURCES += gnucash-make-guids
-CLEANFILES += gnucash-make-guids
 
-gnucash-env: gnucash-env.in
-	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
-	    -e 's:@-GUILE-@:${GUILE}:g' \
-	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
-	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:g' \
-	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:g' \
-            -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
-            -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:g' \
-	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g' \
-            -e 's:@-GNC_SCRIPT_OVERRIDE_DIR-@:${gncoverridedir}:g'
-	mv $@.tmp $@
-	chmod u+x $@
-BUILT_SOURCES += gnucash-env
-CLEANFILES += gnucash-env
-
-gnucash: gnucash.in
-	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
-	    -e 's:@-GUILE-@:${GUILE}:' \
-	    -e 's:@-GNUCASH_ENV-@:${bindir}/gnucash-env:g' \
-	    -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:g' \
-	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
-	    -e 's:@-GNC_LIBDIR-@:${GNC_LIBDIR}:g' \
-	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g'
-	mv $@.tmp $@
-	chmod u+x $@
-BUILT_SOURCES += gnucash
-CLEANFILES += gnucash
