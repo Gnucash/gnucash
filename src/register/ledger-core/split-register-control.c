@@ -128,17 +128,17 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
 
       case 1:
         xaccTransScrubImbalance (trans, gnc_get_current_group (), NULL,
-                                 gnc_get_current_session ());
+                                 gnc_get_current_book ());
         break;
 
       case 2:
         xaccTransScrubImbalance (trans, gnc_get_current_group (),
-                                 default_account, gnc_get_current_session ());
+                                 default_account, gnc_get_current_book ());
         break;
 
       case 3:
         xaccTransScrubImbalance (trans, gnc_get_current_group (),
-                                 other_account, gnc_get_current_session ());
+                                 other_account, gnc_get_current_book ());
         break;
     }
 
@@ -197,7 +197,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
 
   info = gnc_split_register_get_info (reg);
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                   gnc_get_current_session ());
+                                   gnc_get_current_book ());
 
   PINFO ("start callback %d %d \n",
          new_virt_loc.vcell_loc.virt_row,
@@ -558,11 +558,11 @@ gnc_split_register_auto_completion (SplitRegister *reg,
   Split *split;
 
   blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                 gnc_get_current_session ());
+                                 gnc_get_current_book ());
   blank_trans = xaccSplitGetParent (blank_split);
 
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                   gnc_get_current_session ());
+                                   gnc_get_current_book ());
 
   /* auto-completion is only triggered by a tab out */
   if (dir != GNC_TABLE_TRAVERSE_RIGHT)
@@ -853,7 +853,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     return FALSE;
 
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                   gnc_get_current_session ());
+                                   gnc_get_current_book ());
   virt_loc = *p_new_virt_loc;
 
   info->exact_traversal = (dir == GNC_TABLE_TRAVERSE_POINTER);

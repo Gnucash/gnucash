@@ -849,7 +849,7 @@ gnc_split_register_get_balance_entry (VirtualLocation virt_loc,
   split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
   if (split == xaccSplitLookup (&info->blank_split_guid,
-                                gnc_get_current_session ()))
+                                gnc_get_current_book ()))
     return NULL;
 
   is_trans = gnc_cell_name_equal
@@ -1325,7 +1325,7 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
                                 "account",
                                 NULL));
 
-    account = xaccAccountLookup (guid, gnc_get_current_session ());
+    account = xaccAccountLookup (guid, gnc_get_current_book ());
 
     name = xaccAccountGetFullName (account, gnc_get_account_separator ());
   }
