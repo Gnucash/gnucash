@@ -7,8 +7,6 @@ Main Scheduled Transaction todo list
 . FreqSpec.c
   . xaccFreqSpecGetFreqStr [display] needs to go away
 
-. finish the GNCFrequency widget
-  . finish/recreate restoring UI state from FreqSpec.
 X add the ...GetFreqStr() code for the complex composite FreqSpecs
 X fix the ...GetNextInstance() code
 X XMLv2 I/O
@@ -27,11 +25,16 @@ X fix GetNextInstance and GetInstanceAfter, mostly for composite FreqSpecs
   . based off template-transaction data, some big existing-transaction
     scanning code.
 . need "since-last-run" UI for instanatiation.
-  . create transactions
+  X/O create transactions
     X numeric
     . formula
       . need variable fill-in UI...
         . re-use gnome-sheet code for a variable-binding table?
+. need way to expire/purge scheduled transactions which have no chance of
+  being created [outside their end date; once-scheduled and past].
+. need 'reminders' of upcoming scheduled transactions during since-last-run
+. need some configuration for constantly-running GnuCash users of when to pop
+  up the 'new scheduled transactions' dialog [option, time-of-day]
 . register mods
   . to see upcoming xactions, modifying future balance
   . to instantiate xactions.
@@ -43,13 +46,20 @@ X fix GetNextInstance and GetInstanceAfter, mostly for composite FreqSpecs
   . recognize purely numeric template transactions and balance at
     template-creation time.
 . GNCFrequency
-  . weekly options
-  . restoring FreqSpec into GNCFrequency UI
   . initial-settings synchronization [start date, optionmenus]
 . backend support
   . PostgreSQL
   . others? 
 
+Bugs:
+. GNCFreqency
+  . Can't click-out of the register
+  . transitioning to a new tab doesn't correctly setup the agreement between
+    the startdate and the page elements.
+. Scheduled Transaction Editor
+  . auto-shrink on window create [the register is too wide]
+. Scheduled Transaction List
+  . Dates earlier than the start date/today are listed in the "next" column.
 
 Enhancements:
 . SX name should be default value for template transaction description
@@ -57,6 +67,8 @@ Enhancements:
   . integrate "Financial Calculator"
   . auto-determine number of occurances/end condition from liability
     account amount.
+. SX since-last-run should be able to sort by Date [conditional on the dialog
+  staying around].
 
 ========================================
 
@@ -128,6 +140,9 @@ Example...
 |      |	    |			| gal  	   | 13.43 |		    |
 +---------------------------------------------------------------------------+
 
+** Of course, "cost/gal" is going to be interpreted as division; perhaps we
+can a) not handle it or b) have a heuristic. :(
+
 I believe this means we can use the existing gnc-sheet/register-style
 thingy.
 
@@ -142,3 +157,55 @@ involving the function FLOOR.
 
 It'd be nice if this formula could be either a simple infix syntax for
 normal people, or a sexp for Schemers.
+
+=================================================
+
+Instantiation
+-------------
+
+<jsled> Wilddev, conrad:  Something that came out of Aaron's mail [see my reply to -devel] that I'd like your comment on:
+<jsled> How do you intend to use scheduled transactions?
+<jsled> Do you intend to use it to create things have should be in there since you last ran GnuCash?
+<jsled> Or, do you intend to use it to create future transactions [perhaps a weeks worth] before they occur?
+<jsled> Or, just primarily the former, but use the fact that the future transaction will be in the register to remind you to pay things, &c.?
+<conrad> Personally, I'd be looking at future transactions as a reminder thing. But then, I run gnucash every day.
+<jsled> conrad: Do you re-invoke it every day, or leave it running?
+<conrad> I can see other people wanting case 1 though.
+<conrad> I leave it running.
+<jsled> conrad: Interesting.  You'd want some sort of "new-day" check/timer, then, to re-display the "create new transactions" dialog... or do you want to control it?
+<jsled> the idea is that upon startup, if there are new transactions to create, the dialog will come up [configurable, but that should be the default].
+<conrad> I think a further configurable sub-option should be "redisplay on change of day" (possibly with an "at time <blah> option?)")
+<conrad> without that option, it will not do what I'm counting on it to do - remind my I'm supposed to pay my bills.
+<jsled> Yup yup.
+* jsled takes notes this.
+
+
+Summary...
+
+conrad wants to use this to remind him to pay his bills.  He runs GnuCash
+continuously, and thus wants an option to "pop-up on day change [at time
+HH:MM]".  He's interested in seeing future transactions as well as what's
+being created ATM.
+
+-----
+
+<Wilddev> There are 2 reasons to create scheduled transactions
+<Wilddev> as a reminder you have to pay this bill by this day or I'll remind you until you do something, either skip me or mark me as paid, if the first I do nothing other than remind you, if the second I enter a transaction in the register
+<Wilddev> and second
+<Wilddev> as an actual transaction that goes into the register on a future date, ie I know that this money leaves my account in 2 days, so I want it to go in automatically on that day. If I leave gnucash running all the time, it'll wait until that day then enter the transaction
+<Wilddev> as you can see the purpose of each is quite different
+ Wilddev WildWEnd 
+<jsled> Wilddev: Indeed...
+<jsled> For the first, you're saying that reminders should start some number of days before the transaction is usually due/paid... and that there are two acknowledgements of that... 'remind me later' or 'here's the amount/create'.
+<jsled> For the second, you're looking at ad-hoc once-scheduled transactions... which should go away immediately afterwards.
+<Wilddev> yes, tho it would be nice to have when you actually get reminded configurable :)
+<jsled> Wilddev: On a per-scheduled-transaction basis, I think.
+<Wilddev> yup
+<jsled> Okay... so this brings up something that isn't presently in the scheme at all: reminders.
+<jsled> I think it's as simple as a "[ ] Remind me __ days in advance" element in the SXEditor, and the appropriate logic in the since-last-run code... 
+<Wilddev> how often is the last run code 'run'?
+ Wilddev WildWEnd 
+<jsled> Wilddev: On startup, or when the timer [a-la conrad's requirement] goes off.
+<Wilddev> yes that would work
+<jsled> So the "since-last-run" dialog has three panes: 1) auto-created, notification requested.  2) To-create. 3) To-create-soon + reminders.
+<Wilddev> that sounds good
