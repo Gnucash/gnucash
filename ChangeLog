@@ -37,6 +37,10 @@
 	an info. This clause is hit every time a user saves a changed
 	transaction by clicking on another transaction.
 
+	* src/gnome/window-reconcile.c: If the user has manually entered
+	an amount, then stop automatically updated the amount when the
+	date is changed. #110806
+
 2003-06-22  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-commodity.[ch]: Clean up usage of the

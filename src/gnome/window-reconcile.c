@@ -119,6 +119,8 @@ typedef struct _startRecnWindowData
   GtkWidget     *xfer_button;     /* the dialog's interest transfer button   */
   GtkWidget     *date_value;      /* the dialog's ending date field          */
   GNCAmountEdit *end_value;       /* the dialog's ending balance amount edit */
+  gnc_numeric    original_value;  /* the dialog's original ending balance    */
+  gboolean       user_set_value;  /* the user changed the ending value       */
 
   XferDialog    *xferData;        /* the interest xfer dialog (if it exists) */
   gboolean       include_children;
@@ -301,10 +303,14 @@ recnRecalculateBalance (RecnWindow *recnData)
 
 static gboolean
 gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
-                         gpointer data)
+                         startRecnWindowData *data)
 {
-  gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(data));
+  gnc_numeric value;
 
+  gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(data->end_value));
+
+  value = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(data->end_value));
+  data->user_set_value = !gnc_numeric_equal(value, data->original_value);
   return FALSE;
 }
 
@@ -318,6 +324,9 @@ gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
   GNCDateEdit *gde = GNC_DATE_EDIT (widget);
   gnc_numeric new_balance;
   time_t new_date;
+
+  if (data->user_set_value)
+    return;
 
   new_date = gnc_date_edit_get_date_end (gde);
 
@@ -525,6 +534,8 @@ gnc_reconcile_interest_xfer_run(startRecnWindowData *data)
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), after);
     gtk_widget_grab_focus(GTK_WIDGET(entry));
     gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
+    data->original_value = after;
+    data->user_set_value = FALSE;
   }
 }
 
@@ -686,6 +697,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
     end_value = gnc_amount_edit_new ();
     data.end_value = GNC_AMOUNT_EDIT(end_value);
+    data.original_value = *new_ending;
+    data.user_set_value = FALSE;
 
     /* need to get a callback on date changes to update the recn balance */
     gtk_signal_connect ( GTK_OBJECT (date_value), "date_changed",
@@ -703,7 +716,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
 
     gtk_signal_connect(GTK_OBJECT(entry), "focus-out-event",
-                       GTK_SIGNAL_FUNC(gnc_start_recn_update_cb), end_value);
+                       GTK_SIGNAL_FUNC(gnc_start_recn_update_cb), (gpointer) &data);
 
     gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
 
