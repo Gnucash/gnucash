@@ -38,7 +38,8 @@ gnc_hbci_trans (GtkWidget *parent,
 		HBCI_API *api,
 		GNCInteractor *interactor,
 		const HBCI_Account *h_acc,
-		const HBCI_Customer *customer)
+		const HBCI_Customer *customer,
+		GNC_HBCI_Transtype trans_type)
 {
   GtkWidget *dialog;
   GladeXML *xml;
@@ -60,10 +61,14 @@ gnc_hbci_trans (GtkWidget *parent,
     gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
   
   {
+    GtkWidget *heading_label;
     GtkWidget *recp_name_entry;
     GtkWidget *recp_account_entry;
     GtkWidget *recp_bankcode_entry;
     GtkWidget *recp_bankname_label;
+    GtkWidget *recp_name_heading;
+    GtkWidget *recp_account_heading;
+    GtkWidget *recp_bankcode_heading;
     GtkWidget *amount_hbox;
     GtkWidget *purpose_entry;
     GtkWidget *purpose_cont_entry;
@@ -71,15 +76,27 @@ gnc_hbci_trans (GtkWidget *parent,
     GtkWidget *orig_account_label;
     GtkWidget *orig_bankname_label;
     GtkWidget *orig_bankcode_label;
+    GtkWidget *orig_name_heading;
+    GtkWidget *orig_account_heading;
+    GtkWidget *orig_bankname_heading;
+    GtkWidget *orig_bankcode_heading;
     GtkWidget *amount_edit;
     GtkWidget *exec_later_button;
     
     g_assert 
+      (heading_label = glade_xml_get_widget (xml, "heading_label"));
+    g_assert 
       (recp_name_entry = glade_xml_get_widget (xml, "recp_name_entry"));
+    g_assert 
+      (recp_name_heading = glade_xml_get_widget (xml, "recp_name_heading"));
     g_assert
       (recp_account_entry = glade_xml_get_widget (xml, "recp_account_entry"));
     g_assert
+      (recp_account_heading = glade_xml_get_widget (xml, "recp_account_heading"));
+    g_assert
       (recp_bankcode_entry = glade_xml_get_widget (xml, "recp_bankcode_entry"));
+    g_assert
+      (recp_bankcode_heading = glade_xml_get_widget (xml, "recp_bankcode_heading"));
     g_assert
       (recp_bankname_label = glade_xml_get_widget (xml, "recp_bankname_label"));
     g_assert
@@ -97,6 +114,14 @@ gnc_hbci_trans (GtkWidget *parent,
     g_assert
       (orig_bankcode_label = glade_xml_get_widget (xml, "orig_bankcode_label"));
     g_assert
+      (orig_name_heading = glade_xml_get_widget (xml, "orig_name_heading"));
+    g_assert
+      (orig_account_heading = glade_xml_get_widget (xml, "orig_account_heading"));
+    g_assert
+      (orig_bankname_heading = glade_xml_get_widget (xml, "orig_bankname_heading"));
+    g_assert
+      (orig_bankcode_heading = glade_xml_get_widget (xml, "orig_bankcode_heading"));
+    g_assert
       (exec_later_button = glade_xml_get_widget (xml, "exec_later_button"));
 
     amount_edit = gnc_amount_edit_new();
@@ -104,6 +129,36 @@ gnc_hbci_trans (GtkWidget *parent,
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount_edit), 
       TRUE);
 
+    /* Check for what kind of transaction this should be, and change
+       the labels accordingly. */
+    switch (trans_type) {
+    case SINGLE_TRANSFER:
+      /* all labels are already set */
+      break;
+    case SINGLE_DEBITNOTE:
+      gtk_label_set_text (GTK_LABEL (heading_label), 
+			  _("Enter an Online Direct Debit Note"));
+
+      gtk_label_set_text (GTK_LABEL (recp_name_heading),
+			  _("Debited Account Owner"));
+      gtk_label_set_text (GTK_LABEL (recp_account_heading),
+			  _("Debited Account Number"));
+      gtk_label_set_text (GTK_LABEL (recp_bankcode_heading),
+			  _("Debited Account Bank Code"));
+
+      gtk_label_set_text (GTK_LABEL (orig_name_heading),
+			  _("Credited Account Owner"));
+      gtk_label_set_text (GTK_LABEL (orig_account_heading),
+			  _("Credited Account Number"));
+      gtk_label_set_text (GTK_LABEL (orig_bankcode_heading),
+			  _("Credited Account Bank Code"));
+      break;
+
+    default:
+      printf("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
+	     trans_type);
+    }
+    
     /* Make this button insensitive since it's still unimplemented. */
     gtk_widget_set_sensitive (GTK_WIDGET (exec_later_button), FALSE);
     
@@ -170,10 +225,10 @@ gnc_hbci_trans (GtkWidget *parent,
       (trans, HBCI_Value_new_double 
        (gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (amount_edit)), "EUR"));
     /* FIXME: Replace "EUR" by account-dependent string here. */
-    printf("Got value as %s .\n", 
-	   HBCI_Value_toReadableString (HBCI_Transaction_value (trans)));
+    /*printf("dialog-hbcitrans: Got value as %s .\n", 
+      HBCI_Value_toReadableString (HBCI_Transaction_value (trans)));*/
     if (HBCI_Value_getValue (HBCI_Transaction_value (trans)) == 0.0) {
-      printf("Oops, value is zero. Cancelling HBCI job.\n");
+      printf("dialog-hbcitrans: Oops, value is zero. Cancelling HBCI job.\n");
       gtk_widget_destroy (GTK_WIDGET (dialog));
       HBCI_Transaction_delete (trans);
       return NULL;
@@ -182,43 +237,42 @@ gnc_hbci_trans (GtkWidget *parent,
     {
       /* Create a Do-Transaction (Transfer) job. */
       HBCI_OutboxJobTransfer *transfer_job;
-      HBCI_OutboxJob *job;
+      HBCI_OutboxJobDebitNote *debit_job;
+      HBCI_OutboxJob *job = NULL;
     
-      transfer_job = 
-	HBCI_OutboxJobTransfer_new (customer, (HBCI_Account *)h_acc, trans);
-      job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
+      switch (trans_type) {
+      case SINGLE_DEBITNOTE:
+	debit_job =
+	  HBCI_OutboxJobDebitNote_new (customer, (HBCI_Account *)h_acc, trans);
+	job = HBCI_OutboxJobDebitNote_OutboxJob (debit_job);
+	break;
+      case SINGLE_TRANSFER:
+	transfer_job = 
+	  HBCI_OutboxJobTransfer_new (customer, (HBCI_Account *)h_acc, trans);
+	job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
+	break;
+      default:
+	printf("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
+	       trans_type);
+	transfer_job = 
+	  HBCI_OutboxJobTransfer_new (customer, (HBCI_Account *)h_acc, trans);
+	job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
+      }
+
       g_assert (job);
       HBCI_API_addJob (api, job);
 
-      /* If the user pressed "execute now", then execute this job now. */
       if (result == 0) {
-	HBCI_Error *err;
-	  
-	if (interactor)
-	  GNCInteractor_show (interactor);
 
-	HBCI_Hbci_setDebugLevel(0);
-	do {
-	  err = HBCI_API_executeQueue (api, TRUE);
-	  g_assert (err);
-	} while (gnc_hbci_error_retry (parent, err, interactor));
+	/* If the user pressed "execute now", then execute this job now. */
+	if (!gnc_hbci_api_execute (parent, api, job, interactor)) {
 
-	if (!HBCI_Error_isOk(err)) {
-	  char *errstr = g_strdup_printf("gnc_hbci_maketrans: Error at executeQueue: %s",
-					 HBCI_Error_message (err));
-	  printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
-		 HBCI_OutboxJob_result(job));
-	  HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor 
-					    (HBCI_API_Hbci (api)), errstr);
-	  g_free (errstr);
-	  HBCI_Error_delete (err);
-	  gnc_hbci_debug_outboxjob (job);
+	  /* HBCI_API_executeOutbox failed. */
 	  gtk_widget_destroy (GTK_WIDGET (dialog));
 	  HBCI_Transaction_delete (trans);
 	  return NULL;
 	}
-	/*HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);*/
-	HBCI_Error_delete (err);
+
       }
       
     }

@@ -93,14 +93,21 @@ accounts_save_kvp (GHashTable *hash)
 
 
 static void 
-update_accounts_forbank (HBCI_API *api, const HBCI_Bank *bank);
+update_accounts_forbank (GtkWidget *parent, HBCI_API *api, 
+			 const HBCI_Bank *bank, 
+			 GNCInteractor *inter);
 static void 
-update_accounts_foruser (HBCI_API *api, const HBCI_User *user);
-static HBCI_Error *
-update_accounts_forcustomer (HBCI_API *api, const HBCI_Customer *cust);
+update_accounts_foruser (GtkWidget *parent, HBCI_API *api, 
+			 const HBCI_User *user, 
+			 GNCInteractor *inter);
+static gboolean
+update_accounts_forcustomer (GtkWidget *parent, HBCI_API *api, 
+			     const HBCI_Customer *cust, 
+			     GNCInteractor *inter);
+
 
 void
-update_accounts (HBCI_API *api) 
+update_accounts (GtkWidget *parent, HBCI_API *api, GNCInteractor *inter) 
 {
   const list_HBCI_Bank *banklist;
   list_HBCI_Bank_iter *begin;
@@ -114,7 +121,8 @@ update_accounts (HBCI_API *api)
   }
   else if (list_HBCI_Bank_size (banklist) == 1) {
     begin = list_HBCI_Bank_begin (banklist);
-    update_accounts_forbank (api, list_HBCI_Bank_iter_get (begin));
+    update_accounts_forbank (parent, api, 
+			     list_HBCI_Bank_iter_get (begin), inter);
     list_HBCI_Bank_iter_delete (begin);
   }
   else {
@@ -122,7 +130,9 @@ update_accounts (HBCI_API *api)
   }
 }
 static void 
-update_accounts_forbank (HBCI_API *api, const HBCI_Bank *bank)
+update_accounts_forbank (GtkWidget *parent, HBCI_API *api, 
+			 const HBCI_Bank *bank, 
+			 GNCInteractor *inter)
 {
   const list_HBCI_User *userlist;
   list_HBCI_User_iter *begin;
@@ -136,7 +146,8 @@ update_accounts_forbank (HBCI_API *api, const HBCI_Bank *bank)
   }
   else if (list_HBCI_User_size (userlist) == 1) {
     begin = list_HBCI_User_begin (userlist);
-    update_accounts_foruser (api, list_HBCI_User_iter_get (begin));
+    update_accounts_foruser (parent, api, 
+			     list_HBCI_User_iter_get (begin), inter);
     list_HBCI_User_iter_delete (begin);
   }
   else {
@@ -144,11 +155,12 @@ update_accounts_forbank (HBCI_API *api, const HBCI_Bank *bank)
   }
 }
 static void 
-update_accounts_foruser (HBCI_API *api, const HBCI_User *user)
+update_accounts_foruser (GtkWidget *parent, HBCI_API *api, 
+			 const HBCI_User *user, 
+			 GNCInteractor *inter)
 {
   const list_HBCI_Customer *customerlist;
   list_HBCI_Customer_iter *begin;
-  HBCI_Error *err;
   g_assert(user);
 
   customerlist = HBCI_User_customers (user);
@@ -159,35 +171,32 @@ update_accounts_foruser (HBCI_API *api, const HBCI_User *user)
   }
   else if (list_HBCI_Customer_size (customerlist) == 1) {
     begin = list_HBCI_Customer_begin (customerlist);
-    err = update_accounts_forcustomer (api, 
-				       list_HBCI_Customer_iter_get (begin));
-    if (!HBCI_Error_isOk(err)) {
-      char *errstr = HBCI_Error_errorString(err);
-      fprintf (stderr, "update_accounts_foruser: Encountered an error: %s\n",
-	       errstr);
-      free (errstr);
-      HBCI_Error_delete (err);
+    if (!update_accounts_forcustomer (parent, api, 
+				      list_HBCI_Customer_iter_get (begin),
+				      inter))
       return;
-    }
-    HBCI_Error_delete (err);
     list_HBCI_Customer_iter_delete (begin);
   }
   else {
     printf("update_accounts_foruser: Sorry, multiple customers not yet supported.\n");
   }
 }
-static HBCI_Error *
-update_accounts_forcustomer (HBCI_API *api, const HBCI_Customer *cust)
+
+static gboolean
+update_accounts_forcustomer (GtkWidget *parent, HBCI_API *api, 
+			     const HBCI_Customer *cust, GNCInteractor *inter)
 {
-  HBCI_OutboxJobGetAccounts* job; 
+  HBCI_OutboxJobGetAccounts* get_job; 
+  HBCI_OutboxJob *job;
   g_assert(cust);
   
   // this const-warning is okay and can be ignored.
-  job = HBCI_OutboxJobGetAccounts_new((HBCI_Customer *)cust); 
-  HBCI_API_addJob(api, HBCI_OutboxJobGetAccounts_OutboxJob(job));
-    
-  // execute queue
-  return HBCI_API_executeQueue(api, 1);
+  get_job = HBCI_OutboxJobGetAccounts_new((HBCI_Customer *)cust); 
+  job = HBCI_OutboxJobGetAccounts_OutboxJob(get_job);
+  HBCI_API_addJob(api, job);
+  
+  /* Execute Outbox. */
+  return gnc_hbci_api_execute (parent, api, job, inter);
 }
 
 

@@ -521,9 +521,15 @@ without one.")
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  (N_ "QIF Import") (N_ "Verbose documentation")
+  (N_ "Importing/Online") (N_ "QIF Verbose documentation")
   "a" (N_ "Show some documentation-only pages in QIF Import druid")
   #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "Importing/Online") (N_ "HBCI Remember PIN in memory")
+  "b" (N_ "Remember the PIN for HBCI in memory during a session")
+  #f))
 
 
 ;; Network/security options 

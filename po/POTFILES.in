@@ -273,6 +273,7 @@ src/import-export/hbci/dialog-pass.c
 src/import-export/hbci/hbci-progressmon.c
 src/import-export/hbci/gnc-hbci-actions.c
 src/import-export/hbci/hbci-account-picker.c
+src/import-export/hbci/gnc-hbci-transfer.c
 src/import-export/hbci/gncmod-hbci.c
 src/import-export/hbci/druid-hbci-utils.c
 src/import-export/test/test-link.c

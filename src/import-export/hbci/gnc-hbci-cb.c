@@ -27,9 +27,9 @@
 #include "window-acct-tree.h"
 #include "window-register.h"
 
-#include "gnc-hbci-actions.h"
 #include "gnc-hbci-getbalance.h"
 #include "gnc-hbci-gettrans.h"
+#include "gnc-hbci-transfer.h"
 
 void
 gnc_hbci_acct_tree_menu_getbalance_cb (GtkWidget * widget, 
@@ -67,8 +67,8 @@ gnc_hbci_acct_tree_menu_gettrans_cb (GtkWidget * widget,
   account = gnc_acct_tree_window_get_current_account (win);
   g_assert (account);
     
-  gnc_hbci_maketrans (gnc_acct_tree_window_get_widget (win),
-		      account);
+  gnc_hbci_gettrans (gnc_acct_tree_window_get_widget (win),
+		     account);
 }
 
 void
@@ -122,5 +122,25 @@ gnc_hbci_register_menu_maketrans_cb (GtkWidget * widget,
   if (!account)
       return;
     
-  gnc_hbci_maketrans (gnc_RegWindow_window (regData), account);
+  gnc_hbci_maketrans (gnc_RegWindow_window (regData), account, 
+		      SINGLE_TRANSFER);
+}
+
+void
+gnc_hbci_register_menu_makedebnote_cb (GtkWidget * widget, 
+				       gpointer data)
+{
+  RegWindow *regData = data;
+  GNCLedgerDisplay *ledger = NULL;
+  Account *account = NULL;
+
+  g_assert (regData);
+  ledger = gnc_RegWindow_ledger (regData);
+  g_assert (ledger);
+  account = gnc_ledger_display_leader (ledger);
+  if (!account)
+      return;
+    
+  gnc_hbci_maketrans (gnc_RegWindow_window (regData), account, 
+		      SINGLE_DEBITNOTE);
 }

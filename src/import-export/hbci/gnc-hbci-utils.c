@@ -178,27 +178,29 @@ gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job)
 /*     return; */
 /*   if (HBCI_OutboxJob_result (job) != HBCI_JOB_RESULT_FAILED) */
 /*     return; */
-  printf("OutboxJob failed. resultcodes were: \n");
   list = HBCI_OutboxJob_resultCodes (job);
-  print_list_int (list);
-  cause = get_resultcode_error (list);
-  switch (cause) {
-  case 9310:
-    msg = "Schluessel noch nicht hinterlegt";
-    break;
-  case 9320:
-    msg = "Schluessel noch nicht freigeschaltet";
-    break;
-  case 9330:
-    msg = "Schluessel gesperrt";
-    break;
-  case 9340:
-    msg = "Schluessel falsch";
-    break;
-  default:
-    msg = "Unknown";
+  if (list_int_size (list) > 0) {
+    printf("OutboxJob failed. Resultcodes were: ");
+    print_list_int (list);
+    cause = get_resultcode_error (list);
+    switch (cause) {
+    case 9310:
+      msg = "Schluessel noch nicht hinterlegt";
+      break;
+    case 9320:
+      msg = "Schluessel noch nicht freigeschaltet";
+      break;
+    case 9330:
+      msg = "Schluessel gesperrt";
+      break;
+    case 9340:
+      msg = "Schluessel falsch";
+      break;
+    default:
+      msg = "Unknown";
+    }
+    printf("Probable cause of error was: code %d, msg: %s\n", cause, msg);
   }
-  printf("Probable cause of error was: code %d, msg: %s\n", cause, msg);
   list_int_delete (list);
 }
 
@@ -217,7 +219,7 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
 				       _("The PIN you entered was wrong.\n"
 					 "Do you want to try again?"));
   case HBCI_ERROR_CODE_PIN_ABORTED:
-    printf("gnc_hbci_error_feedback: PIN dialog was aborted.\n");
+    /*     printf("gnc_hbci_error_feedback: PIN dialog was aborted.\n"); */
     return FALSE;
   case HBCI_ERROR_CODE_PIN_TOO_SHORT:
     GNCInteractor_erasePIN (inter);
@@ -226,12 +228,51 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
 				       _("The PIN you entered was too short.\n"
 					 "Do you want to try again?"));
   case HBCI_ERROR_CODE_FILE_NOT_FOUND:
-    printf("gnc_hbci_error_feedback: File not found error.\n");
+    /*     printf("gnc_hbci_error_feedback: File not found error.\n"); */
     return FALSE;
-    
+  case HBCI_ERROR_CODE_JOB_NOT_SUPPORTED:
+    GNCInteractor_hide (inter);
+    gnc_error_dialog_parented 
+      (GTK_WINDOW (parent),
+       _("Unfortunately this HBCI job is not supported \n"
+	 "by your bank or for your account. Aborting."));
+    return FALSE;
+      
   default:
   }
   
   return FALSE;
+}
+
+gboolean
+gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
+		      HBCI_OutboxJob *job, GNCInteractor *inter)
+{
+  HBCI_Error *err;
+	  
+  if (inter)
+    GNCInteractor_show (inter);
+
+  HBCI_Hbci_setDebugLevel(0);
+  do {
+    err = HBCI_API_executeQueue (api, TRUE);
+    g_assert (err);
+  } while (gnc_hbci_error_retry (parent, err, inter));
+  
+  if (!HBCI_Error_isOk(err)) {
+    char *errstr = 
+      g_strdup_printf("gnc_hbci_api_execute: Error at executeQueue: %s",
+		      HBCI_Error_message (err));
+    printf("%s\n", errstr);
+    HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor 
+				      (HBCI_API_Hbci (api)), errstr);
+    g_free (errstr);
+    HBCI_Error_delete (err);
+    gnc_hbci_debug_outboxjob (job);
+    return FALSE;
+  }
+
+  HBCI_Error_delete (err);
+  return TRUE;
 }
 

@@ -11,7 +11,7 @@ libgncmod_hbci_la_SOURCES = \
   gnc-hbci-kvp.c \
   gnc-hbci-utils.c \
   gnc-hbci-cb.c \
-  gnc-hbci-actions.c \
+  gnc-hbci-transfer.c \
   gnc-hbci-getbalance.c \
   gnc-hbci-gettrans.c \
   hbci-interaction.c \

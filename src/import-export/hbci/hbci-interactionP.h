@@ -53,17 +53,26 @@ struct _inter_data
   /* Buttons */
   GtkWidget *abort_button;
   GtkWidget *close_button;
+
+  const char *format_pin_user_bank;
+  const char *format_pin_min_char;
   
+  /* Flags to keep track on whether an HBCI action is running or
+     not. */
   gboolean keepAlive;
   PMon_state state;
 
+  /* Counters for progress bar */
   int jobs;
   int current_job;
   int actions;
   int current_act;
 
-  const HBCI_User *user;
+  /* Flag on Whether the PIN should be cached. */
+  gboolean cache_pin;
+  /* The cached PIN and the HBCI_User it's cached for. */
   char *pw;
+  const HBCI_User *user;
 };
 
 void delete_GNCInteractor (GNCInteractor *data);

@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-hbci-cb.h -- hbci callback functions                         *
+ * gnc-hbci-transfer.h -- hbci transfer functions                   *
  * Copyright (C) 2002 Christian Stimming                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,40 +20,17 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef GNC_HBCI_CB_H
-#define GNC_HBCI_CB_H
+#ifndef GNC_HBCI_TRANSFER_H
+#define GNC_HBCI_TRANSFER_H
 
 #include <gnome.h>
+#include "Account.h"
+#include "dialog-hbcitrans.h"
 
-/* Callback from account tree window to invoke Get Balance. */
-void
-gnc_hbci_acct_tree_menu_getbalance_cb (GtkWidget * widget, 
-                                       GnomeMDIChild * child);
+void 
+gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
+		    GNC_HBCI_Transtype trans_type);
 
-/* Callback from account tree window to invoke Get Transactions (not
- * yet implemented). */
-void
-gnc_hbci_acct_tree_menu_gettrans_cb (GtkWidget * widget, 
-				     GnomeMDIChild * child);
 
-/* Callback from register window to invoke Get Balance. */
-void
-gnc_hbci_register_menu_getbalance_cb (GtkWidget * widget, 
-				      gpointer data);
 
-/* Callback from register window to invoke Get Transactions. */
-void
-gnc_hbci_register_menu_gettrans_cb (GtkWidget * widget, 
-				      gpointer data);
-
-/* Callback from register window to invoke Transaction invocation. */
-void
-gnc_hbci_register_menu_maketrans_cb (GtkWidget * widget, 
-				     gpointer data);
-
-/* Callback from register window to invoke Debit Note invocation. */
-void
-gnc_hbci_register_menu_makedebnote_cb (GtkWidget * widget, 
-				       gpointer data);
-
-#endif /* GNC_HBCI_CB_H */
+#endif /* GNC_HBCI_TRANSFER_H */

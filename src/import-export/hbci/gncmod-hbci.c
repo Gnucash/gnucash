@@ -98,9 +98,13 @@ gnc_hbci_addmenus(void)
 			 N_("Get the transactions online through HBCI"),
 			 gnc_hbci_register_menu_gettrans_cb, 
 			 GNOME_APP_PIXMAP_NONE),
-      GNOMEUIINFO_ITEM ( N_("HBCI Make Transaction"),
-			 N_("Invoke a new transaction online through HBCI"),
+      GNOMEUIINFO_ITEM ( N_("HBCI Issue Transaction"),
+			 N_("Issue a new transaction online through HBCI"),
 			 gnc_hbci_register_menu_maketrans_cb, 
+			 GNOME_APP_PIXMAP_NONE),
+      GNOMEUIINFO_ITEM ( N_("HBCI Issue Direct Debit"),
+			 N_("Issue a new direct debit note online through HBCI"),
+			 gnc_hbci_register_menu_makedebnote_cb, 
 			 GNOME_APP_PIXMAP_NONE),
       GNOMEUIINFO_END
     };

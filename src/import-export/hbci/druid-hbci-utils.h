@@ -25,6 +25,7 @@
 
 #include <gnome.h>
 #include <openhbci/api.h>
+#include "hbci-interaction.h"
 
 
 /** Save the reference strings to the HBCI accounts in the kvp's of
@@ -34,11 +35,12 @@
 void accounts_save_kvp (GHashTable *hash);
 
 
-/** Update the account list in the banks stored in this
+/** Update the account list in all the banks stored in this
  * HBCI_API. Straightforward, if we have only one bank and one user
  * with one customer. All other cases are not currently
  * implemented. */
-void update_accounts (HBCI_API *api);
+void update_accounts (GtkWidget *parent, HBCI_API *api, 
+		      GNCInteractor *inter);
 
 /** Builds a new hash table mapping all HBCI accounts to Gnucash
  * accounts, where the Gnucash accounts already have the reference

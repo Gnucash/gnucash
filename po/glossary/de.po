@@ -361,7 +361,7 @@ msgstr "Rechnung"
 
 #. "In small business accounting: A piece of work or task undertaken on order at a stated rate?????"
 msgid "job"
-msgstr ""
+msgstr "Auftrag"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"

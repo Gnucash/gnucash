@@ -9,6 +9,7 @@ AC_DEFUN(AM_PATH_OPENHBCI,
 [dnl 
 dnl Get the c[xx]flags and libraries from openhbci-config
 dnl
+AC_MSG_CHECKING(for OpenHBCI)
 AC_ARG_ENABLE(openhbcitest, [  --disable-openhbcitest      do not try to compile and run a test OpenHBCI program],
 		    , enable_openhbcitest=yes)
 
@@ -17,12 +18,14 @@ AC_ARG_WITH( openhbci-prefix,
   OPENHBCI_PREFIX="$with_openhbci_prefix",
   OPENHBCI_PREFIX="${prefix} \
 		/usr/local \
+		/usr/local/openhbci \
 		/usr")
 
 hbci_config=""
 for li in $OPENHBCI_PREFIX; do
   if test -x "${li}/bin/openhbci-config"; then
     hbci_config="${li}/bin/openhbci-config"
+    hbci_dir="${li}"
     break
   fi
 done
@@ -32,10 +35,12 @@ if test -x "${hbci_config}" ; then
   OPENHBCI_CFLAGS="`${hbci_config} --includes`"
   OPENHBCI_CXXFLAGS="`${hbci_config} --includes`"
 else
-  echo "*** Could not find bin/openhbci-config in prefix ${OPENHBCI_PREFIX}."
-  echo "*** Please specify the right path by --with-openhbci-prefix=PREFIX."
-  exit 1
+  AC_MSG_ERROR([
+  Could not find bin/openhbci-config in prefix ${OPENHBCI_PREFIX}.
+  Please specify the right path by --with-openhbci-prefix=PREFIX.
+  ])
 fi  
+AC_MSG_RESULT($hbci_dir)
 
 min_openhbci_version=ifelse([$1], ,0.9.0,$1)
 AC_MSG_CHECKING(for OpenHBCI - version >= $min_openhbci_version)

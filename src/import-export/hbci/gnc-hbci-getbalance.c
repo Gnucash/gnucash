@@ -91,7 +91,6 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
     /* Execute a GetBalance job. */
     HBCI_OutboxJobGetBalance *balance_job;
     HBCI_OutboxJob *job;
-    HBCI_Error *err;
     
     balance_job = 
       HBCI_OutboxJobGetBalance_new (customer, (HBCI_Account *)h_acc);
@@ -99,28 +98,12 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
     g_assert (job);
     HBCI_API_addJob (api, job);
 
-    if (interactor)
-      GNCInteractor_show (interactor);
+    /* Execute Outbox. */
+    if (!gnc_hbci_api_execute (parent, api, job, interactor)) {
 
-    HBCI_Hbci_setDebugLevel(0);
-    do {
-      err = HBCI_API_executeQueue (api, TRUE);
-      g_assert (err);
-    } while (gnc_hbci_error_retry (parent, err, interactor));
-    if (!HBCI_Error_isOk(err)) {
-      char *errstr = g_strdup_printf("gnc_hbci_getbalance: Error at executeQueue: %s",
-				     HBCI_Error_message (err));
-      printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
-	     HBCI_OutboxJob_result(job));
-      HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor 
-					(HBCI_API_Hbci (api)), errstr);
-      g_free (errstr);
-      HBCI_Error_delete (err);
-      gnc_hbci_debug_outboxjob (job);
+      /* HBCI_API_executeOutbox failed. */
       return;
     }
-    /*HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);*/
-    HBCI_Error_delete (err);
     
     {
       const HBCI_AccountBalance *acc_bal;

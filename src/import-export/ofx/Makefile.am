@@ -1,7 +1,7 @@
 SUBDIRS = . test
 
 # FIXME: this ought to be a configure option
-LIBOFX_PREFIX = /usr/local
+LIBOFX_PREFIX = ${HOME}/lib/unstable
 
 LIBOFX_LIBS = -L${LIBOFX_PREFIX}/lib -lofx -lstdc++
 LIBOFX_CFLAGS = -I${LIBOFX_PREFIX}/include

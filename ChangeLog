@@ -1,3 +1,19 @@
+2002-10-27  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/*: Add Direct Debit HBCI action. More
+	work on error handling and user feedback. Make the caching of the
+	PIN a user preference.
+
+	* po/de.po, po/glossary/de.po, po/POTFILES.in: Update German
+	Translation.
+
+	* configure.in, macros/openhbci.m4: Update required OpenHBCI
+	version (now 0.9.3 i.e. current OpenHBCI's CVS).
+
+	* src/app-utils/prefs.scm,
+	src/import-export/qif-import/druid-qif-import.c: Add cache-PIN
+	preference for HBCI. Rename preference tab to "Importing/Online".
+
 2002-10-27  David Hampton  <hampton@employees.org>
 
 	* accounts/fr_FR/*: Frederic Lespez's fixes for the

@@ -897,59 +897,32 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
   {
     /* Execute a Synchronize job, then a GetAccounts job. */
     HBCI_OutboxJob *job;
-    HBCI_Error *err;
 
     job = HBCI_OutboxJobGetSystemId_OutboxJob 
       (HBCI_OutboxJobGetSystemId_new (info->api,
 				      (HBCI_Customer *)info->newcustomer));
     HBCI_API_addJob (info->api, job);
 
-    if (info->interactor)
-      GNCInteractor_show (info->interactor);
-
-    HBCI_Hbci_setDebugLevel(3);
-    err = HBCI_API_executeQueue (info->api, TRUE);
-    g_assert (err);
-    if (!HBCI_Error_isOk(err)) {
-      char *errstr = g_strdup_printf("on_accountinfo_next: Error at executeQueue: %s",
-				     HBCI_Error_message (err));
-      printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
-	     HBCI_OutboxJob_result(job));
-      HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor 
-					(HBCI_API_Hbci (info->api)), errstr);
-      g_free (errstr);
-      HBCI_Error_delete (err);
-      gnc_hbci_debug_outboxjob (job);
+    /* Execute Outbox. */
+    if (!gnc_hbci_api_execute (info->window, info->api, 
+			       job, info->interactor)) {
+      /* HBCI_API_executeOutbox failed. */
       return FALSE;
     }
-    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
-    HBCI_Error_delete (err);
 
     /* Now the GetAccounts job. */
     job = HBCI_OutboxJobGetAccounts_OutboxJob 
       (HBCI_OutboxJobGetAccounts_new ((HBCI_Customer *)info->newcustomer));
     HBCI_API_addJob (info->api, job);
 
-    if (info->interactor)
-      GNCInteractor_show (info->interactor);
-
-    HBCI_Hbci_setDebugLevel(0);
-    err = HBCI_API_executeQueue (info->api, TRUE);
-    g_assert (err);
-    if (!HBCI_Error_isOk(err)) {
-      char *errstr = g_strdup_printf("on_accountinfo_next: Error at executeQueue: %s",
-				     HBCI_Error_message (err));
-      printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
-	     HBCI_OutboxJob_result(job));
-      HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor 
-					(HBCI_API_Hbci (info->api)), errstr);
-      g_free (errstr);
-      HBCI_Error_delete (err);
-      gnc_hbci_debug_outboxjob (job);
+    /* Execute Outbox. */
+    if (!gnc_hbci_api_execute (info->window, info->api, 
+			       job, info->interactor)) {
+      /* HBCI_API_executeOutbox failed. */
       return FALSE;
     }
+
     HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
-    HBCI_Error_delete (err);
   }
   //update_accountlist(info->api);
   
@@ -1058,30 +1031,18 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
   if (info->gotkeysforCustomer == NULL) {
     /* Execute a GetKey job. */
     HBCI_OutboxJob *job;
-    HBCI_Error *err;
     
     job = HBCI_OutboxJobGetKeys_OutboxJob 
       (HBCI_OutboxJobGetKeys_new (info->api, info->newcustomer));
     HBCI_API_addJob (info->api, job);
 
-    if (info->interactor)
-      GNCInteractor_show (info->interactor);
-  
-    HBCI_Hbci_setDebugLevel(0);
-    err = HBCI_API_executeQueue (info->api, TRUE);
-    g_assert (err);
-    if (!HBCI_Error_isOk(err)) {
-      char *errstr = g_strdup_printf("on_iniletter_info_next: Error at executeQueue: %s",
-				     HBCI_Error_message (err));
-      printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
-	     HBCI_OutboxJob_result(job));
-      HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor (HBCI_API_Hbci (info->api)), errstr);
-      g_free (errstr);
-      HBCI_Error_delete (err);
-      gnc_hbci_debug_outboxjob (job);
+    /* Execute Outbox. */
+    if (!gnc_hbci_api_execute (info->window, info->api, 
+			       job, info->interactor)) {
+      /* HBCI_API_executeOutbox failed. */
       return FALSE;
     }
-    HBCI_Error_delete (err);
+
     HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
     info->gotkeysforCustomer = info->newcustomer;
 
@@ -1202,36 +1163,18 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
   if (info->gotkeysforCustomer == info->newcustomer) {
     /* Execute a SendKey job. */
     HBCI_OutboxJob *job;
-    HBCI_Error *err;
     
     job = HBCI_OutboxJobSendKeys_OutboxJob 
       (HBCI_OutboxJobSendKeys_new (info->api, info->newcustomer));
     HBCI_API_addJob (info->api, job);
 
-    if (info->interactor)
-      GNCInteractor_show (info->interactor);
-    else
-      printf("on_iniletter_userinfo_next: Ooops, GNCInteractor is broken! Crash will follow.\n");
-
-    /*gnc_warning_dialog_parented(gnc_ui_get_toplevel (), 
-      "Sorry, Sending Keys not yet implemented/disabled until it works correctly. 
-      Nothing has been sent to the bank.");*/
-
-    HBCI_Hbci_setDebugLevel(0);
-    err = HBCI_API_executeQueue (info->api, TRUE);
-    g_assert (err);
-    if (!HBCI_Error_isOk(err)) {
-      char *errstr = g_strdup_printf("on_iniletter_userinfo_next: Error at executeQueue: %s",
-				     HBCI_Error_message (err));
-      printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
-	     HBCI_OutboxJob_result(job));
-      HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor (HBCI_API_Hbci (info->api)), errstr);
-      g_free (errstr);
-      HBCI_Error_delete (err);
-      gnc_hbci_debug_outboxjob (job);
+    /* Execute Outbox. */
+    if (!gnc_hbci_api_execute (info->window, info->api, 
+			       job, info->interactor)) {
+      /* HBCI_API_executeOutbox failed. */
       return FALSE;
     }
-    HBCI_Error_delete (err);
+
     HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
   }
   else {

@@ -23,12 +23,10 @@
 #ifndef GNC_HBCI_ACTIONS_H
 #define GNC_HBCI_ACTIONS_H
 
-#include <gnome.h>
-#include "Account.h"
+/*#include <gnome.h>
+  #include "Account.h"*/
 
-void 
-gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc);
-
+/* File intentionally left blank. */
 
 
 #endif /* GNC_HBCI_ACTIONS_H */

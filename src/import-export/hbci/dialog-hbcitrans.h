@@ -32,12 +32,19 @@
 
 #include "hbci-interaction.h"
 
+typedef enum GNC_HBCI_Transtype {
+  SINGLE_TRANSFER = 0,
+  SINGLE_DEBITNOTE
+} GNC_HBCI_Transtype;
+
+
 HBCI_Transaction *
 gnc_hbci_trans (GtkWidget *parent,
 		HBCI_API *api,
 		GNCInteractor *interactor,
 		const HBCI_Account *h_acc,
-		const HBCI_Customer *customer);
+		const HBCI_Customer *customer,
+		GNC_HBCI_Transtype type);
 
 
 

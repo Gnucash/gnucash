@@ -155,28 +155,15 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     g_assert (job);
     HBCI_API_addJob (api, job);
 
-    if (interactor)
-      GNCInteractor_show (interactor);
+    /* Execute Outbox. */
+    if (!gnc_hbci_api_execute (parent, api, job, interactor)) {
 
-    HBCI_Hbci_setDebugLevel(0);
-    do {
-      err = HBCI_API_executeQueue (api, TRUE);
-      g_assert (err);
-    } while (gnc_hbci_error_retry (parent, err, interactor));
-    
-    if (!HBCI_Error_isOk(err)) {
-      char *errstr = g_strdup_printf("gnc_hbci_gettrans: Error at executeQueue: %s",
-				     HBCI_Error_message (err));
-      printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
-	     HBCI_OutboxJob_result(job));
-      HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor 
-					(HBCI_API_Hbci (api)), errstr);
-      g_free (errstr);
-      HBCI_Error_delete (err);
-      gnc_hbci_debug_outboxjob (job);
-      return;
+      /* HBCI_API_executeOutbox failed. */
+      HBCI_Date_delete (from_date);
+      HBCI_Date_delete (to_date);
+      return NULL;
     }
-    HBCI_Error_delete (err);
+
     HBCI_Date_delete (from_date);
     HBCI_Date_delete (to_date);
 
@@ -256,13 +243,18 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
   {
     /* Description */
     char *h_descr = 
-	list_string_concat (HBCI_Transaction_description (h_trans));
+      list_string_concat (HBCI_Transaction_description (h_trans));
     char *othername = 
-	list_string_concat_delim (HBCI_Transaction_otherName (h_trans), ", ");
-    char *g_descr = 
-	g_strdup_printf ("%s %s", 
-			 othername, 
-			 h_descr);
+      list_string_concat_delim (HBCI_Transaction_otherName (h_trans), ", ");
+    char *g_descr;
+    
+    g_strstrip (h_descr);
+    g_strstrip (othername);
+    
+    g_descr = 
+      g_strdup_printf ("%s %s", 
+		       othername, 
+		       h_descr);
     
     xaccTransSetDescription (gnc_trans, g_descr);
 
@@ -292,12 +284,28 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
   {
     /* Memo in the Split. HBCI's transactionText contains strings like
      * "STANDING ORDER", "UEBERWEISUNGSGUTSCHRIFT", etc.  */
-    char *g_memo = 
-      g_strdup_printf ("%s Account %s Bank %s",
-		       HBCI_Transaction_transactionText (h_trans),
-		       HBCI_Transaction_otherAccountId (h_trans),
-		       HBCI_Transaction_otherBankCode (h_trans));
+    char *h_transactionText = 
+      g_strdup (HBCI_Transaction_transactionText (h_trans));
+    char *h_otherAccountId =
+      g_strdup (HBCI_Transaction_otherAccountId (h_trans));
+    char *h_otherBankCode =
+      g_strdup (HBCI_Transaction_otherBankCode (h_trans));
+    char *g_memo;
+
+    g_strstrip (h_transactionText);
+    g_strstrip (h_otherAccountId);
+    g_strstrip (h_otherBankCode);
+
+    g_memo = 
+      g_strdup_printf ("%s %s %s %s %s",
+		       h_transactionText,
+		       _("Account"), h_otherAccountId,
+		       _("Bank"), h_otherBankCode);
     xaccSplitSetMemo(split, g_memo);
+
+    g_free (h_transactionText);
+    g_free (h_otherAccountId);
+    g_free (h_otherBankCode);
     g_free (g_memo);
   }
   

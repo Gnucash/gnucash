@@ -95,4 +95,14 @@ gboolean
 gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error, 
 		      GNCInteractor *inter);
 
+/* Calls HBCI_API_executeQueue with some supplementary stuff around
+ * it: set the debugLevel, show the GNCInteractor, and do some error
+ * checking. Returns TRUE upon success or FALSE if the calling dialog
+ * should abort. */
+gboolean
+gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
+		      HBCI_OutboxJob *job, GNCInteractor *inter);
+
+
+
 #endif
