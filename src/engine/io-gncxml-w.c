@@ -1100,7 +1100,7 @@ gncxml_new_query_doc (Query *q)
 /* create a new xml document and poke all account & txn data into it. */
 
 static xmlDocPtr
-gncxml_newdoc (AccountGroup *group)
+gncxml_newdoc (AccountGroup *group, int do_txns)
 {
   xmlDocPtr doc;
   xmlNodePtr ledger_data;
@@ -1135,10 +1135,12 @@ gncxml_newdoc (AccountGroup *group)
     return 0x0;
   }
 
-  if(!xml_add_txn_and_split_restorers(ledger_data, group)) {
-    PERR ("couldn't txn restore");
-    xmlFreeDoc(doc);
-    return 0x0;
+  if (do_txns) {
+    if(!xml_add_txn_and_split_restorers(ledger_data, group)) {
+      PERR ("couldn't txn restore");
+      xmlFreeDoc(doc);
+      return 0x0;
+    }
   }
 
   return doc;
@@ -1151,7 +1153,22 @@ gncxml_write_to_buf (AccountGroup *group, char **bufp, int *sz)
 {
   xmlDocPtr doc;
 
-  doc = gncxml_newdoc (group);
+  doc = gncxml_newdoc (group, 1);
+  if (!doc) return;
+
+  xmlDocDumpMemory (doc, (xmlChar **)bufp, sz);
+
+  PINFO ("wrote %d bytes", *sz);
+}
+
+/* =============================================================== */
+
+void
+gncxml_write_group_to_buf (AccountGroup *group, char **bufp, int *sz)
+{
+  xmlDocPtr doc;
+
+  doc = gncxml_newdoc (group, 0);
   if (!doc) return;
 
   xmlDocDumpMemory (doc, (xmlChar **)bufp, sz);
@@ -1185,7 +1202,7 @@ gncxml_write(AccountGroup *group, const gchar *filename)
 
   if (!group || !filename) return FALSE;
 
-  doc = gncxml_newdoc (group);
+  doc = gncxml_newdoc (group, 1);
   if (!doc) return FALSE;
 
   xmlIndentTreeOutput = TRUE;

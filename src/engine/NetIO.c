@@ -23,7 +23,7 @@
 
 /*
  * ultra super reudimentary right now 
- * this will be very very different in fianl verisn
+ * this will be very very different in final verisn
  */
 
 

@@ -72,6 +72,11 @@ typedef enum
 
 extern gncLogLevel loglevel[MOD_LAST + 1];
 
+/* FIXME: these logging functions should proably get replaced by
+ * the glib.h g_error(), etc functions. That way, we would have
+ * unified logging mechanism, instead of having some messages
+ * work one way, and other a different way ... 
+ */
 void gnc_log (gncModuleType module, gncLogLevel log_level,
               const char *prefix, const char *function_name,
               const char *format, ...) G_GNUC_PRINTF(5,6);

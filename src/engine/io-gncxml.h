@@ -44,6 +44,12 @@ gboolean is_gncxml_file(const gchar *name);
  */
 void gncxml_write_to_buf (AccountGroup *group, char **bufp, int *sz);
 
+/*
+ * write only the account and currency info to the buf, do *not*
+ * write any of the splits or transactions
+ */
+void gncxml_write_group_to_buf (AccountGroup *group, char **bufp, int *sz);
+
 /* write the query terms to memory */
 void gncxml_write_query_to_buf (Query *q, char **bufp, int *sz);
 
