@@ -952,35 +952,48 @@ gnc_plugin_page_account_tree_cmd_view_options (EggAction *action, GncPluginPageA
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_reconcile (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_reconcile (EggAction *action,
+					    GncPluginPageAccountTree *page)
 {
-	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+	GtkWidget *window;
+	Account *account;
 	RecnWindow *recnData;
 
+	account = gnc_plugin_page_account_tree_get_current_account (page);
 	g_return_if_fail (account != NULL);
 
-	recnData = recnWindow (gnc_ui_get_toplevel (), account);
+	window = GNC_PLUGIN_PAGE (page)->window;
+	recnData = recnWindow (window, account);
 	gnc_ui_reconcile_window_raise (recnData);
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_transfer (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_transfer (EggAction *action,
+					   GncPluginPageAccountTree *page)
 {
-	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+	GtkWidget *window;
+	Account *account;
 
-	gnc_xfer_dialog (gnc_ui_get_toplevel (), account);
+	account = gnc_plugin_page_account_tree_get_current_account (page);
+	window = GNC_PLUGIN_PAGE (page)->window;
+	gnc_xfer_dialog (window, account);
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_stock_split (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_stock_split (EggAction *action,
+					      GncPluginPageAccountTree *page)
 {
-	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+	GtkWidget *window;
+	Account *account;
 
-	gnc_stock_split_dialog (NULL, account);
+	account = gnc_plugin_page_account_tree_get_current_account (page);
+	window = GNC_PLUGIN_PAGE (page)->window;
+	gnc_stock_split_dialog (window, account);
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_lots (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_lots (EggAction *action,
+				       GncPluginPageAccountTree *page)
 {
 	Account *account;
 
