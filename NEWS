@@ -1,5 +1,9 @@
 Version history:
 ------- -------
+ 1.6.8  - 20 August 2002
+ 	 o Fix for acinclude.m4 problem with guile-config
+	 o Removed rpm spec file depenedncy on Postgresql
+
  1.6.7  - 11 August 2002
  	 o Updated or new translations for Japanese, Italian, Traditional
 	   Chinese, Simplified Chinese, Russian, French, German, Swedish,

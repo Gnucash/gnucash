@@ -1,3 +1,9 @@
+2002-08-21  Chris Lyttle  <chris@wilddev.net>
+
+        * rpm/gnucash.spec.in: removed dependency on Postgres
+        * rpm/gnucash-sql.spec.in: copy of old spec file requiring Postgres
+        * rpm/Makefile.am: changed to generate version number in both specs
+
 2002-08-15  Derek Atkins  <derek@ihtfp.com>
 
 	* acinclude.m4: re-add dependency on guile-config, but make it
