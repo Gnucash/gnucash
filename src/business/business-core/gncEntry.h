@@ -22,7 +22,7 @@ typedef struct _gncEntry GncEntry;
  */
 #define GNC_ENTRY_INTERP_VALUE		0x00
 #define GNC_ENTRY_INTERP_PERCENT	0x01
-#define GNC_ENTRY_INTERP_PRETAX		0x02
+#define GNC_ENTRY_PRETAX_FLAG		0x02
 
 #define GNC_ENTRY_INTERP_IS_VALUE(x)	(((x)&0x01) == GNC_ENTRY_INTERP_VALUE)
 #define GNC_ENTRY_INTERP_IS_PERCENT(x)	(((x)&0x01) == GNC_ENTRY_INTERP_PERCENT)
@@ -58,9 +58,12 @@ gnc_numeric gncEntryGetQuantity (GncEntry *entry);
 gnc_numeric gncEntryGetPrice (GncEntry *entry);
 gnc_numeric gncEntryGetTax (GncEntry *entry);
 gint gncEntryGetTaxType (GncEntry *entry);
+const char * gncEntryGetTaxTypeStr (gint type);
 gnc_numeric gncEntryGetDiscount (GncEntry *entry);
 gint gncEntryGetDiscountType (GncEntry *entry);
+const char * gncEntryGetDiscountTypeStr (gint type);
 
+gint gncEntryGetTypeFromStr (const char *type);
 
 Account * gncEntryGetAccount (GncEntry *entry);
 Account * gncEntryGetTaxAccount (GncEntry *entry);

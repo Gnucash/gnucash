@@ -434,7 +434,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 	disc = gnc_numeric_mul (subtotal, disc, 100 /* XXX */, GNC_RND_ROUND);
 
       value = gnc_numeric_sub_fixed (subtotal, disc);
-      if (disc_type & GNC_ENTRY_INTERP_PRETAX)
+      if (disc_type & GNC_ENTRY_PRETAX_FLAG)
 	subtotal = value;
 
       acc_val->val = gnc_numeric_add_fixed (acc_val->val, value);

@@ -59,6 +59,33 @@ struct _gncEntry {
 static void addObj (GncEntry *entry);
 static void remObj (GncEntry *entry);
 
+static char * typeStrs[] = {
+  N_("Value"),
+  N_("Percent"),
+  N_("Value/Pretax"),
+  N_("Percent/Pretax")
+};
+
+const char *gncEntryGetTaxTypeStr (gint type)
+{
+  return typeStrs[type & 0x01];	/* Only 0, 1 */
+}
+
+const char *gncEntryGetDiscountTypeStr (gint type)
+{
+  return typeStrs[type & 0x03];	/* Only 0, 1, 2, 3 */
+}
+
+gint gncEntryGetTypeFromStr (const char *type)
+{
+  gint i;
+  for (i = 0; i < 3; i++)
+    if (!safe_strcmp (typeStrs[i], type))
+      return i;
+
+  return -1;
+}
+
 /* Create/Destroy Functions */
 
 GncEntry *gncEntryCreate (GNCBook *book)
@@ -193,7 +220,7 @@ void gncEntrySetInvoice (GncEntry *entry, GncInvoice *invoice)
 void gncEntrySetTaxType (GncEntry *entry, gint type)
 {
   if (!entry) return;
-  if (type < 0 || type > 3) return;
+  if (type < 0 || type > 1) return;
 
   entry->tax_type = type;
   entry->dirty = TRUE;
