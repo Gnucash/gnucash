@@ -28,28 +28,11 @@
 
 #include "gnc-engine-util.h"
 #include "gnc-file-dialog.h"
-#include "gnc-file-history.h"
 #include "gnc-ui.h"
 #include "messages.h"
 
-typedef struct
-{
-  GtkFileSelection *file_box;
-  char *file_name;
-} FileBoxInfo;
-
-/* Global filebox information */
-static FileBoxInfo fb_info = {NULL, NULL};
-
 /* This static indicates the debugging module that this .o belongs to.   */
 static short module = MOD_GUI;
-
-
-/** PROTOTYPES ******************************************************/
-static void store_filename(GtkWidget *w, gpointer data);
-static void gnc_file_box_close_cb(GtkWidget *w, gpointer data);
-static gboolean gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event,
-				       gpointer user_data);
 
 
 /********************************************************************\
@@ -65,108 +48,49 @@ static gboolean gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event,
  * Return: containing the name of the file the user selected        *
 \********************************************************************/
 
-const char *
+char *
 gnc_file_dialog (const char * title,
                  const char * filter,
                  const char *default_name)
 {
+  GtkFileSelection *file_box;
+  const char *internal_name;
+  char *file_name = NULL;
+  gint response;
+
   ENTER("\n");
 
   /* Set a default title if nothing was passed in */  
   if (title == NULL)
     title = _("Open");
 
-  if (fb_info.file_name != NULL)
-    g_free(fb_info.file_name);
-
-  fb_info.file_box = GTK_FILE_SELECTION(gtk_file_selection_new(title));
-  fb_info.file_name = NULL;
+  file_box = GTK_FILE_SELECTION(gtk_file_selection_new(title));
 
   if (default_name)
-    gtk_file_selection_set_filename(fb_info.file_box, default_name);
+    gtk_file_selection_set_filename(file_box, default_name);
 
   /* hack alert - this was filtering directory names as well as file 
    * names, so I think we should not do this by default (rgmerk) */
 #if 0
   if (filter != NULL)
-    gtk_file_selection_complete(fb_info.file_box, filter);
+    gtk_file_selection_complete(file_box, filter);
 #endif
 
-  gtk_window_set_modal(GTK_WINDOW(fb_info.file_box), TRUE);
-  gtk_window_set_transient_for(GTK_WINDOW(fb_info.file_box),
+  gtk_window_set_modal(GTK_WINDOW(file_box), TRUE);
+  gtk_window_set_transient_for(GTK_WINDOW(file_box),
 			       GTK_WINDOW(gnc_ui_get_toplevel()));
+  response = gtk_dialog_run(GTK_DIALOG(file_box));
 
-  gtk_signal_connect(GTK_OBJECT(fb_info.file_box->ok_button),
-		     "clicked", GTK_SIGNAL_FUNC(store_filename),
-		     (gpointer) &fb_info);
-
-  /* Ensure that the dialog box is destroyed when the user clicks a button. */
-  gtk_signal_connect(GTK_OBJECT(fb_info.file_box->ok_button),
-		     "clicked", GTK_SIGNAL_FUNC(gnc_file_box_close_cb),
-		     (gpointer) &fb_info);
-
-  gtk_signal_connect(GTK_OBJECT(fb_info.file_box->cancel_button),
-		     "clicked", GTK_SIGNAL_FUNC(gnc_file_box_close_cb),
-		     (gpointer) &fb_info);
-
-  gtk_signal_connect(GTK_OBJECT(fb_info.file_box), "delete_event",
-		     GTK_SIGNAL_FUNC(gnc_file_box_delete_cb), NULL);
-
-  gtk_signal_connect(GTK_OBJECT(fb_info.file_box), "destroy_event",
-		     GTK_SIGNAL_FUNC(gnc_file_box_delete_cb), NULL);
-
-  gtk_widget_show(GTK_WIDGET(fb_info.file_box));
-
-  gtk_main();
-
-  gtk_widget_destroy(GTK_WIDGET(fb_info.file_box));
-
-  LEAVE("\n");
-
-  return fb_info.file_name;
-}
-
-
-/********************************************************************\
- * store_filename                                                   * 
- *   callback that saves the name of the file                       * 
- *                                                                  * 
- * Args:   w - the widget that called us                            * 
- *         data - pointer to filebox info structure                 * 
- * Return: none                                                     * 
-\********************************************************************/
-static void
-store_filename (GtkWidget *w, gpointer data)
-{
-  FileBoxInfo *fb_info = data;
-  GtkFileSelection *fs;
-  const char *file_name;
-
-  fs = GTK_FILE_SELECTION (fb_info->file_box);
-
-  file_name = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
-
-  if (!strstr (file_name, "://"))
-    file_name = gtk_file_selection_get_filename (fb_info->file_box);
-
-  fb_info->file_name = g_strdup (file_name);
-}
-
-static void
-gnc_file_box_close_cb(GtkWidget *w, gpointer data)
-{
-  gtk_widget_hide(GTK_WIDGET(fb_info.file_box));
-
-  gtk_main_quit();
-}
-
-static gboolean
-gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer user_data)
-{
-  gtk_widget_hide(GTK_WIDGET(fb_info.file_box));
-
-  gtk_main_quit();
-
-  /* Don't delete the window, we'll handle things ourselves. */
-  return TRUE;
+  if (response == GTK_RESPONSE_OK) {
+    /* look for constructs like postgres://foo */
+    internal_name = gtk_entry_get_text(GTK_ENTRY(file_box->selection_entry));
+    if (strstr (internal_name, "://") == 0) {
+      /* nope, a local file name */
+      internal_name = gtk_file_selection_get_filename(file_box);
+    }
+    file_name = g_strdup(internal_name);
+  }
+  gtk_widget_destroy(GTK_WIDGET(file_box));
+  LEAVE("%s", file_name);
+  return file_name;
 }

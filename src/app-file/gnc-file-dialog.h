@@ -24,8 +24,8 @@
 #include "config.h"
 
 /** PROTOTYPES ******************************************************/
-const char * gnc_file_dialog (const char * title,
-                              const char * filter,
-                              const char * default_name);
+char * gnc_file_dialog (const char * title,
+			const char * filter,
+			const char * default_name);
 
 #endif

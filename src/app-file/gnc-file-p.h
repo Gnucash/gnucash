@@ -27,9 +27,9 @@ void gnc_file_init (void);
 typedef void (*GNCHistoryAddFileFunc) (const char *filename);
 typedef const char * (*GNCHistoryGetLastFunc) (void);
 
-typedef const char * (*GNCFileDialogFunc) (const char * title,
-                                           const char * filter,
-                                           const char * default_name);
+typedef char * (*GNCFileDialogFunc) (const char * title,
+				     const char * filter,
+				     const char * default_name);
 
 void gnc_file_set_handlers (GNCHistoryAddFileFunc history_add_file_func,
                             GNCHistoryGetLastFunc history_get_last_func,

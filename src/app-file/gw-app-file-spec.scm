@@ -59,15 +59,4 @@ if they say 'Yes'. The return is false if the user says 'Cancel'.")
    '()
    "Get the last file opened by the user.")
 
-  (gw:wrap-function
-   ws
-   'gnc:file-selection-dialog
-   '(<gw:mchars> callee-owned const)
-   "gnc_file_dialog"
-   '(((<gw:mchars> caller-owned const) title)
-     ((<gw:mchars> caller-owned const) filter)
-     ((<gw:mchars> caller-owned const) default))
-   "Lets the user select a file. Dialog has given title, filter,
-or default name. Either filter, default, or both should be NULL.")
-
   )
