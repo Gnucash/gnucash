@@ -523,22 +523,6 @@ configCursors (SplitRegister *reg)
    curs->active_bg_color = 0xffdddd; /* pale red */
    curs->passive_bg_color = 0xccccff; /* pale blue */
 
-   /* Need to declare the cell backgrounds as well, otherwise, 
-    * the cell default will override ehte cursor
-    */
-   reg->dateCell ->  cell.bg_color = 0xccccff;
-   reg->numCell ->        bg_color = 0xccccff;
-   reg->xfrmTransCell ->  cell.bg_color = 0xccccff;
-   reg->descCell ->  cell.bg_color = 0xccccff;
-   reg->recnCell ->       bg_color = 0xccccff;
-   reg->creditTransCell->  cell.bg_color = 0xccccff;
-   reg->debitTransCell ->  cell.bg_color = 0xccccff;
-   reg->priceTransCell ->  cell.bg_color = 0xccccff;
-   reg->valueTransCell ->  cell.bg_color = 0xccccff;
-   reg->shrsCell ->  cell.bg_color = 0xccccff;
-   reg->balanceCell->cell.bg_color = 0xccccff;
-   reg->nullTransCell ->  bg_color = 0xccccff;
-
    /* --------------------------- */
    /* define the ledger cursor that handles splits */
    /* the cursor is 1 row tall */
@@ -552,7 +536,6 @@ configCursors (SplitRegister *reg)
    reg -> nullSplitCell -> input_output = XACC_CELL_ALLOW_NONE;
    xaccSetBasicCellValue (reg->nullSplitCell, "");
    for (i=0; i<reg->num_cols; i++) {
-      xaccAddCell (curs, reg->nullSplitCell, 0, i);
       curs->cells[0][i] = reg->nullSplitCell;
    }
 
