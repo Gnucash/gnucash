@@ -717,8 +717,12 @@ gnc_mdi_configure_toolbar_cb (gpointer data)
   {
     GNCMDIChildInfo * mc = child->data;
 
-    if (mc && mc->toolbar)
+    if (mc && mc->toolbar) {
       gtk_toolbar_set_style (GTK_TOOLBAR(mc->toolbar), tbstyle);
+      if (mc->app) {
+	gtk_widget_queue_resize(mc->app->dock);
+      }
+    }
   }
 }
 
