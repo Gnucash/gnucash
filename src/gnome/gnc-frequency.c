@@ -775,14 +775,18 @@ mark_calendar( GtkCalendar *cal, FreqSpec *fs )
   gtk_calendar_select_day( cal, 0 );
   
   xaccFreqSpecGetNextInstance( fs, gdNow, gdNext );
-  g_date_to_struct_tm( gdNext, tmpTm );
+  if ( g_date_valid( gdNext ) ) {
+          g_date_to_struct_tm( gdNext, tmpTm );
+  } else {
+          tmpTm->tm_mon = -1;
+  }
   while ( tmpTm->tm_mon == month && g_date_valid(gdNext) ) {
-    gtk_calendar_mark_day( cal, tmpTm->tm_mday );
-    *gdNow = *gdNext;
-    xaccFreqSpecGetNextInstance( fs, gdNow, gdNext );
-    if ( g_date_valid( gdNow ) ) {
-            g_date_to_struct_tm( gdNext, tmpTm );
-    }
+          gtk_calendar_mark_day( cal, tmpTm->tm_mday );
+          *gdNow = *gdNext;
+          xaccFreqSpecGetNextInstance( fs, gdNow, gdNext );
+          if ( g_date_valid( gdNow ) ) {
+                  g_date_to_struct_tm( gdNext, tmpTm );
+          }
   }
   gtk_calendar_thaw( cal );
 
