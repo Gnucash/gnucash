@@ -690,6 +690,15 @@ check_mult_div (void)
 	check_binary_op (gnc_numeric_create(-2939846940LL, 19873),
 	                 val_a, val_tot, frac,
 	                 "expected %s got %s = %s * %s for mult round");
+
+	frac = gnc_numeric_create (396226789777979LL, 328758834367851752LL);
+	val_tot = gnc_numeric_create (467013515494988LL, 100);
+	val_a = gnc_numeric_mul (frac, val_tot,
+                        gnc_numeric_denom(val_tot),
+                        GNC_HOW_RND_ROUND| GNC_HOW_DENOM_EXACT);
+	check_binary_op (gnc_numeric_create(562854125307LL, 100),
+	                 val_a, val_tot, frac,
+	                 "expected %s got %s = %s * %s for mult round");
 }
   
 /* ======================================================= */
