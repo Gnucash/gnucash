@@ -196,6 +196,8 @@ xaccSetComboCellValue (ComboCell *cell, const char * str)
 {
    PopBox * box;
 
+   if (!str) str = "";
+
    SET (&(cell->cell), str);
    box = (PopBox *) (cell->cell.gui_private);
 
@@ -203,28 +205,21 @@ xaccSetComboCellValue (ComboCell *cell, const char * str)
     * If so, then be sure to bail out now. */
    if (!box) return;
 
-   if (str) {
-      if (0x0 != str[0]) {
-         XmString choosen;
-         /* convert String to XmString ... arghhh */
-         choosen = XmCvtCTToXmString ((char *) str);
-         XmComboBoxSelectItem (box->combobox, choosen, False);
-         XmStringFree (choosen);
-      } else {
-         XmComboBoxClearItemSelection (box->combobox);
-      } 
-
-      if ((0 < box->currow) && (0 < box->curcol)) {
-         /* be sure to set the string into the matrix widget as well,
-          * so that we don't end up blanking out the cell when we 
-          * unmap the combobox widget */
-         XbaeMatrixSetCell (box->parent, box->currow, box->curcol, (char *) str); 
-      }
+   if (0x0 != str[0]) {
+      XmString choosen;
+      /* convert String to XmString ... arghhh */
+      choosen = XmCvtCTToXmString ((char *) str);
+      XmComboBoxSelectItem (box->combobox, choosen, False);
+      XmStringFree (choosen);
    } else {
       XmComboBoxClearItemSelection (box->combobox);
-      if ((0 < box->currow) && (0 < box->curcol)) {
-         XbaeMatrixSetCell (box->parent, box->currow, box->curcol, "");
-      }
+   } 
+
+   if ((0 < box->currow) && (0 < box->curcol)) {
+      /* be sure to set the string into the matrix widget as well,
+       * so that we don't end up blanking out the cell when we 
+       * unmap the combobox widget */
+      XbaeMatrixSetCell (box->parent, box->currow, box->curcol, (char *) str); 
    }
 }
 
