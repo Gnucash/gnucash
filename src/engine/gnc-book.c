@@ -49,6 +49,7 @@
 #include "gnc-book.h"
 #include "gnc-engine-util.h"
 
+static short module = MOD_IO;
 
 struct _gnc_book
 {
@@ -175,9 +176,12 @@ gnc_book_get_file_path (GNCBook *book)
 /* ============================================================== */
 
 gboolean
-gnc_book_begin (GNCBook *book, const char * book_id)
+gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
 {
+  int rc;
+
   if (!book) return FALSE;
+  ENTER (" book-id=%s\n", book_id);
 
   /* clear the error condition of previous errors */
   book->errtype = 0;
@@ -198,14 +202,35 @@ gnc_book_begin (GNCBook *book, const char * book_id)
   }
 
   /* check to see if this is a type we know how to handle */
-  if (strncmp(book_id, "file:", 5) != 0)
+  if (!strncmp(book_id, "file:", 5))
+  {
+    /* add 5 to space past 'file:' */
+    rc = gnc_book_begin_file (book, book_id + 5, ignore_lock);
+    return rc;
+  }
+
+  if (!strncmp(book_id, "http://", 7))
   {
     book->errtype = ENOSYS;
     return FALSE;
   }
 
-  /* add 5 to space past 'file:' */
-  return gnc_book_begin_file (book, book_id + 5, NULL);
+  if (!strncmp(book_id, "https://", 8))
+  {
+    book->errtype = ENOSYS;
+    return FALSE;
+  }
+
+  if (!strncmp(book_id, "postgres://", 11))
+  {
+    book->errtype = ENOSYS;
+    return FALSE;
+  }
+
+
+  /* otherwise, lets just assume its a file. */
+  rc = gnc_book_begin_file (book, book_id, ignore_lock);
+  return rc;
 }
 
 /* ============================================================== */
@@ -317,9 +342,10 @@ gnc_book_get_file_lock (GNCBook *book)
 
 gboolean
 gnc_book_begin_file (GNCBook *book, const char * filefrag,
-                     GNCBookLockFailHandler handler)
+                     gboolean ignore_lock)
 {
   if (!book) return FALSE;
+  ENTER ("filefrag=%s\n", filefrag);
 
   /* clear the error condition of previous errors */
   book->errtype = 0;
@@ -358,17 +384,16 @@ gnc_book_begin_file (GNCBook *book, const char * filefrag,
 
   book->lockfile = g_strconcat(book->fullpath, ".LCK", NULL);
 
-  if (!gnc_book_get_file_lock (book))
+  if (!ignore_lock && !gnc_book_get_file_lock (book))
   {
-    if (!handler || !handler (book->fullpath))
-    {
-      g_free (book->book_id);  book->book_id = NULL;
-      g_free (book->fullpath); book->fullpath = NULL;
-      g_free (book->lockfile); book->lockfile = NULL;
-      return FALSE;
-    }
+    book->errtype = EBUSY;  
+    g_free (book->book_id);  book->book_id = NULL;
+    g_free (book->fullpath); book->fullpath = NULL;
+    g_free (book->lockfile); book->lockfile = NULL;
+    return FALSE;
   }
 
+  LEAVE ("\n");
   return TRUE;
 }
 
@@ -386,6 +411,7 @@ gnc_book_load (GNCBook *book)
   if (!book) return FALSE;
   if (!book->book_id) return FALSE;
 
+  ENTER ("book_id=%s\n", book->book_id);
   if (strncmp(book->book_id, "file:", 5) == 0)
   {
     /* file: */
@@ -415,6 +441,7 @@ gnc_book_load (GNCBook *book)
 
     xaccGroupScrubSplits (book->topgroup);
 
+    LEAVE("\n");
     return TRUE;
   }
   else
@@ -561,7 +588,6 @@ MakeHomeDir (void)
 }
 
 /* ============================================================== */
-
 /* XXX hack alert -- we should be yanking this out of some config file */
 static char * searchpaths[] =
 {
@@ -569,7 +595,7 @@ static char * searchpaths[] =
    NULL,
 };
 
-char * 
+static char * 
 xaccResolveFilePath (const char * filefrag)
 {
   struct stat statbuf;
@@ -580,6 +606,7 @@ xaccResolveFilePath (const char * filefrag)
 
   /* seriously invalid */
   if (!filefrag) return NULL;
+  ENTER ("filefrag=%s\n", filefrag);
 
   /* ---------------------------------------------------- */
   /* OK, now we try to find or build an absolute file path */
@@ -690,6 +717,37 @@ xaccResolveFilePath (const char * filefrag)
   }
 
   return NULL;
+}
+
+/* ============================================================== */
+
+char * 
+xaccResolveURL (const char * pathfrag)
+{
+  /* seriously invalid */
+  if (!pathfrag) return NULL;
+
+  /* At this stage of checking, URL's are always, by definition,
+   * resolved.  If there's an error connecting, we'll find out later.
+   */
+  if (!strncmp (pathfrag, "http://", 7)) {
+    return (char *) pathfrag;
+  }
+
+  if (!strncmp (pathfrag, "https://", 8)) {
+    return (char *) pathfrag;
+  }
+
+  if (!strncmp (pathfrag, "postgres://", 11)) {
+    PERR ("not implemented")
+    return (char *) pathfrag;
+  }
+
+  if (!strncmp (pathfrag, "file:", 5)) {
+    return (xaccResolveFilePath (pathfrag+5));
+  }
+
+  return (xaccResolveFilePath (pathfrag));
 }
 
 /* ==================== END OF FILE ================== */

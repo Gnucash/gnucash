@@ -23,11 +23,11 @@ main (int argc, char *argv[])
    char * fake_argv[] = {"hello2", 0};
    GNCBook *book;
    AccountGroup *grp;
-   Query *q;
-   GList *split_list, *node;
+   Query *q, *qq;
+   GList *split_list, *sl2, *node;
    Split *s;
    char *bufp;
-   int i, rc, sz;
+   int i, ii, rc, sz;
    
 
    /* intitialize the engine */
@@ -64,8 +64,8 @@ main (int argc, char *argv[])
    
    /* Get everything between some random dates */
    /* In real life, we would use a query as specified by the user */
-   xaccQueryAddDateMatch (q, TRUE, 1982, 2, 28,
-		             FALSE, 2010, 10, 16,
+   xaccQueryAddDateMatch (q, TRUE, 28, 2, 1982,
+		             FALSE, 16, 10, 2010,
 			     QUERY_OR);
 
    split_list = xaccQueryGetSplits (q);
@@ -79,7 +79,19 @@ main (int argc, char *argv[])
    }
 		       
    gncxml_write_query_to_buf(q, &bufp, &sz);
+   qq = gncxml_read_query (bufp, sz);
+xaccQuerySetMaxSplits (qq, 30);
+   xaccQuerySetGroup (qq, grp);
+   sl2 = xaccQueryGetSplits (qq);
 
+   /* count number of splits */
+   ii = 0;
+   for (node = sl2; node; node = node->next)
+   {
+      s = node->data;
+      ii++;
+   }
+		       
    /* print the HTTP header */
    printf ("HTTP/1.1 200 OK\n");
    printf ("Content-Type: text/xml\n");
@@ -88,9 +100,11 @@ main (int argc, char *argv[])
 
    printf ("%s", bufp);
 
-   free (bufp);
+   printf (" its %d and %d \n", i, ii);
 
+   free (bufp);
    xaccFreeQuery (q);
+
 
 bookerrexit:
    /* close the book */

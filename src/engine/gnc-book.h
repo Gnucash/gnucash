@@ -60,9 +60,6 @@
 /** TYPEDEFS ********************************************************/
 typedef struct _gnc_book GNCBook;
 
-typedef gboolean (*GNCBookLockFailHandler) (const char *file);
-
-
 /** PROTOTYPES ******************************************************/
 
 GNCBook * gnc_book_new (void);
@@ -83,19 +80,19 @@ void      gnc_book_destroy (GNCBook *book);
  *    then a lock will be obtained and the function returns TRUE. Otherwise
  *    the function returns FALSE.
  */
-gboolean gnc_book_begin (GNCBook *book, const char * book_id);
+gboolean gnc_book_begin (GNCBook *book, const char * book_id,
+                             gboolean ignore_lock);
 
 /* The gnc_book_begin_file() routine is identical to the gnc_book_begin()
- *    routine, except that the argument is a filename (i.e. the five
- *    letters "file:" should not be prepended) and there is an additional
- *    function argument. This function is called if gnc_book_begin_file
- *    fails to obtain a lock for the file. If it returns TRUE, the file
- *    is loaded anyway. If it returns FALSE, or the handler is NULL, a
- *    failed lock attempt will abort the load. The lock fail handler is
- *    passed the filename of the data file being loaded.
+ *    routine, except that the argument is assumed to be a filename, not
+ *    a URL.
+ *
+ *    The 'ignore_lock' argument, if set to TRUE, will cause this routine
+ *    to ignore any file locks that it finds.  If set to FALSE, then
+ *    file locks will be tested and obeyed.
  */
 gboolean gnc_book_begin_file (GNCBook *book, const char * filename,
-                              GNCBookLockFailHandler handler);
+                              gboolean ignore_lock);
 
 /* The gnc_book_load() method loads the data associated with the book.
  *    The function returns TRUE on success.
@@ -166,5 +163,6 @@ void     gnc_book_end  (GNCBook *book);
  *    used.
  */
 char * xaccResolveFilePath (const char * filefrag);
+char * xaccResolveURL (const char * pathfrag);
 
 #endif /* __GNC_BOOK_H__ */

@@ -114,9 +114,8 @@ show_file_error (GNCFileIOError io_error, const char *newfile)
 /* ======================================================== */
 
 static gboolean
-show_book_error(GNCBook *book, const char *newfile)
+show_book_error(GNCBook *book, const char *newfile, int norr)
 {
-  int norr = gnc_book_get_error (book);
   gboolean uh_oh = FALSE;
   char *buf = NULL;
 
@@ -249,10 +248,11 @@ gncPostFileOpen (const char * filename)
   gboolean uh_oh = FALSE;
   AccountGroup *new_group;
   char * newfile;
+  int norr = 0;
 
   if (!filename) return;
 
-  newfile = xaccResolveFilePath (filename); 
+  newfile = xaccResolveURL (filename); 
   if (!newfile)
   {
      char *buf = g_strdup_printf (file_not_found_msg(), filename);
@@ -277,16 +277,46 @@ gncPostFileOpen (const char * filename)
   gnc_set_busy_cursor (NULL);
   xaccLogDisable ();
   new_group = NULL;
-  if (gnc_book_begin_file (new_book, newfile, gncLockFailHandler))
+
+  /* hack alert -- there has got to be a simpler way of dealing with 
+   * errors than this spaghetti code!  I beleive that this would simplify
+   * a whole lot if all functions returned void, and one *always* used
+   * try-throw semantics, instead of this hodge-podge of testing 
+   * return values.  -- linas jan 2001
+   */
+  if (gnc_book_begin (new_book, newfile, FALSE))
   {
-    if (gnc_book_load (new_book))
-      new_group = gnc_book_get_group (new_book);
+    if (gnc_book_load (new_book)) 
+    {
+       new_group = gnc_book_get_group (new_book);
+    }
+  } 
+  else
+  {
+    norr = gnc_book_get_error (new_book);
+    /* if file appears to be locked, ask the user ... */
+    if (EBUSY == norr) 
+    {
+       norr = 0;
+       if (gncLockFailHandler (newfile))
+       {
+          /* user told us to ignore locks. So ignore them. */
+          if (gnc_book_begin (new_book, newfile, TRUE))
+          {
+             if (gnc_book_load (new_book)) 
+             {
+                new_group = gnc_book_get_group (new_book);
+             } 
+          }
+       }
+     }
   }
   xaccLogEnable ();
   gnc_unset_busy_cursor (NULL);
 
   /* check for book errors, put up appropriate dialog */
-  uh_oh = show_book_error (new_book, newfile);
+  if (!norr) norr = gnc_book_get_error (new_book);
+  uh_oh = show_book_error (new_book, newfile, norr);
 
   if (!uh_oh)
   {
@@ -338,7 +368,6 @@ gncPostFileOpen (const char * filename)
   current_book = new_book;
 
   xaccLogEnable();
-
   gnc_engine_resume_events ();
   gnc_gui_refresh_all ();
 
@@ -475,6 +504,7 @@ gncFileSaveAs (void)
   char *newfile;
   const char *oldfile;
   gboolean uh_oh = FALSE;
+  int norr = 0;
 
   filename = fileBox(_("Save"), "*.gnc", NULL);
   if (!filename) return;
@@ -482,7 +512,7 @@ gncFileSaveAs (void)
   /* Check to see if the user specified the same file as the current
    * file. If so, then just do that, instead of the below, which
    * assumes a truly new name was given. */
-  newfile = xaccResolveFilePath (filename);
+  newfile = xaccResolveURL (filename);
   if (!newfile)
   {
      char *buf = g_strdup_printf (file_not_found_msg(), filename);
@@ -508,11 +538,24 @@ gncFileSaveAs (void)
    * switchover is not something we want to keep in a journal. */
   xaccLogDisable ();
   new_book = gnc_book_new ();
-  gnc_book_begin_file (new_book, newfile, gncLockFailHandler);
+  gnc_book_begin (new_book, newfile, FALSE);
+
+  norr = gnc_book_get_error (new_book);
+  /* if file appears to be locked, ask the user ... */
+  if (EBUSY == norr) 
+  {
+    norr = 0;
+    if (gncLockFailHandler (newfile))
+    {
+       /* user told us to ignore locks. So ignore them. */
+       gnc_book_begin (new_book, newfile, TRUE);
+    }
+  }
   xaccLogEnable ();
 
   /* check for session errors (e.g. file locked by another user) */
-  uh_oh = show_book_error (new_book, newfile);
+  if (!norr) norr = gnc_book_get_error (new_book);
+  uh_oh = show_book_error (new_book, newfile, norr);
 
   /* No check for file errors since we didn't read a file... */
 
