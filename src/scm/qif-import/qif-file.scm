@@ -445,7 +445,7 @@
 ;; if the date format was ambiguous, this will get called to reparse.
 (define (qif-file:reparse-dates self new-format)
   (check-and-parse-field 
-   qif-xtn:date qif-xtn:set-date! 
+   qif-xtn:date qif-xtn:set-date! equal?
    qif-parse:check-date-format (list new-format)
    qif-parse:parse-date/format 
    (qif-file:xtns self)
