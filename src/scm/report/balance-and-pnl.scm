@@ -70,31 +70,38 @@
     gnc:*pnl-report-options*)
 
   (define (render-level-2-account level-2-account l2-value)
-    (let ((account-name (gnc:account-get-name level-2-account))
+    (let ((account-name (string-append "&nbsp;&nbsp;"
+                                       (gnc:account-get-full-name
+                                        level-2-account)))
           (type-name (gnc:account-get-type-string
                       (gnc:account-get-type level-2-account))))
-      (html-table-row
+      (html-table-row-align
        (list
-	account-name type-name (gnc:amount->formatted-string l2-value #f)))))
-;       (list "left" "center" "right"))))
+	account-name type-name (gnc:amount->formatted-string l2-value #f))
+       (list "left" "center" "right"))))
 
   (define (render-level-1-account account l1-value l2-value)
-    (let ((name (gnc:account-get-name account))
+    (let ((name (gnc:account-get-full-name account))
           (type (gnc:account-get-type-string (gnc:account-get-type account))))
-      (html-table-row
+      (html-table-row-align
        (list name type
-             (gnc:amount->formatted-string l2-value #f)
+             (if l2-value
+                 (gnc:amount->formatted-string l2-value #f)
+                 "&nbsp;")
              (gnc:amount->formatted-string l1-value #f)
-	     "&nbsp;" "&nbsp;"))))
-;       (list "left" "center" "right" "right" "right" "right"))))
+	     "&nbsp;" "&nbsp;")
+       (list "left" "center" "right" "right" "right" "right"))))
 
   (define (render-total l0-value)
-    (html-table-row
+    (html-table-row-align
      (list "&nbsp;" "&nbsp;" "&nbsp;"
            (html-strong (string-db 'lookup 'net))
            "&nbsp;"
-           (gnc:amount->formatted-string l0-value #f))))
-;     (list "left" "center" "right" "right" "right" "right")))
+           (gnc:amount->formatted-string l0-value #f))
+     (list "left" "center" "right" "right" "right" "right")))
+
+  (define blank-line
+    (html-table-row '()))
 
   (define (is-it-on-balance-sheet? type balance?)
     (eq? 
@@ -116,20 +123,22 @@
           (if (is-it-on-balance-sheet? type balance-sheet?)
               ;; Ignore
               '()
-              (let
-                  ((childrens-output (gnc:group-map-accounts
-                                      (lambda (x)
-                                        (handle-level-2-account x options))
-                                      (gnc:account-get-children account)))
+              (let* ((children (gnc:account-get-children account))
+                     (num-children (gnc:group-get-num-accounts children))
 
-                   (account-balance (if balance-sheet?
-                                        (gnc:account-get-balance-at-date
-                                         account
-                                         to-value #f)
-                                        (gnc:account-get-balance-interval
-                                         account
-                                         from-value
-                                         to-value #f))))
+                     (childrens-output (gnc:group-map-accounts
+                                        (lambda (x)
+                                          (handle-level-2-account x options))
+                                        children))
+
+                     (account-balance (if balance-sheet?
+                                          (gnc:account-get-balance-at-date
+                                           account
+                                           to-value #f)
+                                          (gnc:account-get-balance-interval
+                                           account
+                                           from-value
+                                           to-value #f))))
 
                 (if (not balance-sheet?)
                     (set! account-balance (- account-balance)))
@@ -139,10 +148,17 @@
                 (let ((level-1-output
                        (render-level-1-account account
                                                (l1-collector 'total #f)
-                                               (l2-collector 'total #f))))
+                                               (if (> num-children 0)
+                                                   (l2-collector 'total #f)
+                                                   #f))))
                   (l1-collector 'reset #f)
                   (l2-collector 'reset #f)
-                  (list childrens-output level-1-output))))))
+                  (if (null? childrens-output)
+                      level-1-output
+                      (list blank-line
+                            level-1-output
+                            childrens-output
+                            blank-line)))))))
 
     (define (handle-level-2-account account options)
       (let
@@ -204,11 +220,14 @@
        report-description
        "<p>"
 
-       "<table cellpadding=1>"
+       "<table cellpadding=2>"
        "<caption><b>" report-name "</b></caption>"
-       "<tr><th>" (string-db 'lookup 'account-name)
-       "<th align=center>" (string-db 'lookup 'type)
-       "<th> <th align=center>" (string-db 'lookup 'balance)
+       "<tr>"
+       "<th>" (string-db 'lookup 'account-name) "</th>"
+       "<th align=center>" (string-db 'lookup 'type)  "</th>"
+       "<th align=right>" (string-db 'lookup 'subaccounts) "</th>"
+       "<th align=right>" (string-db 'lookup 'balance) "</th>"
+       "</tr>"
 
        output
 
@@ -219,6 +238,7 @@
   (string-db 'store 'net "Net")
   (string-db 'store 'type "Type")
   (string-db 'store 'account-name "Account Name")
+  (string-db 'store 'subaccounts "(subaccounts)")
   (string-db 'store 'balance "Balance")
   (string-db 'store 'bal-title "Balance Sheet")
   (string-db 'store 'bal-desc "This page shows your net worth.")

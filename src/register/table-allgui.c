@@ -1,14 +1,3 @@
-/*
- * FILE:
- * table-allgui.c
- *
- * FUNCTION:
- * Implements the gui-independent parts of the table infrastructure.
- *
- * HISTORY:
- * Copyright (c) 1998,1999,2000 Linas Vepstas
- */
-
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,6 +13,17 @@
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
+
+/*
+ * FILE:
+ * table-allgui.c
+ *
+ * FUNCTION:
+ * Implements the gui-independent parts of the table infrastructure.
+ *
+ * HISTORY:
+ * Copyright (c) 1998,1999,2000 Linas Vepstas
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -461,7 +461,7 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col,
        * passive again. */
       makePassive (table);
       if (do_move_gui)
-        xaccRefreshCursorGUI(table, FALSE);
+        xaccRefreshCursorGUI(table, GNC_F);
    }
 
    /* check for out-of-bounds conditions (which may be deliberate) */
@@ -583,13 +583,17 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col,
 
 void xaccMoveCursor (Table *table, int new_phys_row, int new_phys_col)
 {
-   doMoveCursor (table, new_phys_row, new_phys_col, 0);
+  if (!table) return;
+
+  doMoveCursor (table, new_phys_row, new_phys_col, 0);
 }
 
 /* same as above, but be sure to deal with GUI elements as well */
 void xaccMoveCursorGUI (Table *table, int new_phys_row, int new_phys_col)
 {
-   doMoveCursor (table, new_phys_row, new_phys_col, 1);
+  if (!table) return;
+
+  doMoveCursor (table, new_phys_row, new_phys_col, 1);
 }
 
 /* ==================================================== */
@@ -601,6 +605,8 @@ void xaccCommitCursor (Table *table)
    CellBlock *curs;
    int phys_row, phys_col;
    int phys_row_origin, phys_col_origin;
+
+   if (!table) return;
 
    curs = table->current_cursor;
    if (!curs) return;
@@ -661,6 +667,7 @@ xaccRefreshHeader (Table *table)
    int i,j;
    CellBlock *arr;
 
+   if (!table) return;
    if (!(table->entries)) return;
 
    /* copy header data into entries cache */
@@ -699,7 +706,7 @@ xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col)
    gncBoolean do_commit = GNC_F;
    gncBoolean moved_cursor = GNC_F;
 
-   if (!table) return FALSE;
+   if (!table) return GNC_F;
 
    /* Someone may be trying to intentionally invalidate the cursor, 
     * in which case the physical addresses could be out of bounds.
@@ -759,6 +766,8 @@ xaccGetUserData (Table *table, int phys_row, int phys_col)
 {
    int virt_row, virt_col;
 
+   if (!table) return NULL;
+
    /* check for out-of-bounds conditions */
    if ((0 > phys_row) || (0 > phys_col) ||
       (phys_row >= table->num_phys_rows) ||
@@ -813,6 +822,8 @@ wrapVerifyCursorPosition (Table *table, int row, int col)
    const int save_phys_col = table->current_cursor_phys_col;
    gncBoolean moved_cursor;
 
+   if (!table) return;
+
    ENTER("wrapVerifyCursorPosition(): (%d %d) val=%s\n", 
          row,col, table->entries[row][col]);
 
@@ -835,10 +846,12 @@ wrapVerifyCursorPosition (Table *table, int row, int col)
 void        
 xaccRefreshCursorGUI (Table * table, gncBoolean do_scroll)
 {
-   doRefreshCursorGUI (table, table->current_cursor,
-                       table->current_cursor_phys_row,
-                       table->current_cursor_phys_col,
-                       do_scroll);
+  if (!table) return;
+
+  doRefreshCursorGUI (table, table->current_cursor,
+                      table->current_cursor_phys_row,
+                      table->current_cursor_phys_col,
+                      do_scroll);
 }
 
 /* ==================================================== */
@@ -852,6 +865,8 @@ gnc_register_cell_valid(Table *table, int row, int col, gncBoolean exact_cell)
   int virt_row, virt_col;
   CellBlock *arr, *header;
 
+  if (!table) return GNC_F;
+
   /* can't edit outside of the physical space */
   invalid = (0 > row) || (0 > col) ;
   invalid = invalid || (row >= table->num_phys_rows);
@@ -860,7 +875,7 @@ gnc_register_cell_valid(Table *table, int row, int col, gncBoolean exact_cell)
   /* In case we're called after table has been destroyed. */
   invalid = invalid || (table->handlers == NULL);
 
-  if(invalid) return GNC_F;
+  if (invalid) return GNC_F;
 
   /* header rows cannot be modified */
   /* hack alert -- assumes that header is first cell */

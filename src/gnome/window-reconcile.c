@@ -14,8 +14,11 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
  *   Author: Rob Clark                                              *
  * Internet: rclark@cs.hmc.edu                                      *
@@ -681,121 +684,123 @@ gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
   GtkWidget *menubar;
   GtkAccelGroup *accel_group;
 
-  GnomeUIInfo reconcile_menu[] =
+  static GnomeUIInfo reconcile_menu[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      END_BALN_MENU_E_STR, TOOLTIP_ADJUST_END,
-      gnc_ui_reconcile_window_change_cb, recnData, NULL,
+      END_BALN_MENU_E_STR_N, TOOLTIP_ADJUST_END_N,
+      gnc_ui_reconcile_window_change_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      FINISH_MENU_STR, TOOLTIP_RECN_FINISH,
-      recnFinishCB, recnData, NULL,
+      FINISH_MENU_STR_N, TOOLTIP_RECN_FINISH_N,
+      recnFinishCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       'f', GDK_CONTROL_MASK, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      CANCEL_MENU_STR, TOOLTIP_RECN_CANCEL,
-      recnCancelCB, recnData, NULL,
+      CANCEL_MENU_STR_N, TOOLTIP_RECN_CANCEL_N,
+      recnCancelCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo account_menu[] =
+  static GnomeUIInfo account_menu[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      OPEN_ACC_MENU_STR, TOOLTIP_OPEN_ACC,
-      gnc_recn_open_cb, recnData, NULL,
+      OPEN_ACC_MENU_STR_N, TOOLTIP_OPEN_ACC_N,
+      gnc_recn_open_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      EDIT_ACC_MENU_STR, TOOLTIP_EDIT_REG,
-      gnc_recn_edit_account_cb, recnData, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      TRANSFER_MENU_E_STR, TOOLTIP_TRANSFER,
-      gnc_recn_xfer_cb, recnData, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      ADJ_BALN_MENU_E_STR, TOOLTIP_ADJUST,
-      gnc_recn_adjust_cb, recnData, NULL,
+      EDIT_ACC_MENU_STR_N, TOOLTIP_EDIT_REG_N,
+      gnc_recn_edit_account_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      SCRUB_MENU_STR, TOOLTIP_SCRUB_ACCT,
-      gnc_recn_scrub_cb, recnData, NULL,
+      TRANSFER_MENU_E_STR_N, TOOLTIP_TRANSFER_N,
+      gnc_recn_xfer_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      ADJ_BALN_MENU_E_STR_N, TOOLTIP_ADJUST_N,
+      gnc_recn_adjust_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      SCRUB_MENU_STR_N, TOOLTIP_SCRUB_ACCT_N,
+      gnc_recn_scrub_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo transaction_menu[] =
+  static GnomeUIInfo transaction_menu[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      NEW_MENU_STR, TOOLTIP_NEW_TRANS,
-      gnc_ui_reconcile_window_new_cb, recnData, NULL,
+      NEW_MENU_STR_N, TOOLTIP_NEW_TRANS_N,
+      gnc_ui_reconcile_window_new_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       'n', GDK_CONTROL_MASK, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      EDIT_MENU_STR, TOOLTIP_EDIT_TRANS,
-      gnc_ui_reconcile_window_edit_cb, recnData, NULL,
+      EDIT_MENU_STR_N, TOOLTIP_EDIT_TRANS_N,
+      gnc_ui_reconcile_window_edit_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       'e', GDK_CONTROL_MASK, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      DELETE_MENU_STR, TOOLTIP_DEL_TRANS,
-      gnc_ui_reconcile_window_delete_cb, recnData, NULL,
+      DELETE_MENU_STR_N, TOOLTIP_DEL_TRANS_N,
+      gnc_ui_reconcile_window_delete_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       'd', GDK_CONTROL_MASK, NULL
     },
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo help_menu[] =
+  static GnomeUIInfo help_menu[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      HELP_MENU_STR, TOOLTIP_HELP,
-      gnc_ui_reconcile_window_help_cb, recnData, NULL,
+      HELP_MENU_STR_N, TOOLTIP_HELP_N,
+      gnc_ui_reconcile_window_help_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_END
   };
 
-  GnomeUIInfo reconcile_window_menu[] =
+  static GnomeUIInfo reconcile_window_menu[] =
   {
-    GNOMEUIINFO_SUBTREE(RECONCILE_MENU_STR, reconcile_menu),
-    GNOMEUIINFO_SUBTREE(ACCOUNT_MENU_STR, account_menu),
-    GNOMEUIINFO_SUBTREE(TRANSACTION_MENU_STR, transaction_menu),
+    GNOMEUIINFO_SUBTREE(RECONCILE_MENU_STR_N, reconcile_menu),
+    GNOMEUIINFO_SUBTREE(ACCOUNT_MENU_STR_N, account_menu),
+    GNOMEUIINFO_SUBTREE(TRANSACTION_MENU_STR_N, transaction_menu),
     GNOMEUIINFO_MENU_HELP_TREE(help_menu),
     GNOMEUIINFO_END
   };
+
+  gnc_fill_menu_with_data(reconcile_window_menu, recnData);
 
   menubar = gtk_menu_bar_new();
 
