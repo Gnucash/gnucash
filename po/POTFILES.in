@@ -230,7 +230,6 @@ src/gnome/dialog-sx-from-trans.c
 src/gnome/argv-list-converters.c
 src/gnome/file-utils.c
 src/guile/tip-of-the-day.c
-src/guile/guile-util.c
 src/import-export/qif-import/dialog-account-picker.c
 src/import-export/qif-import/druid-qif-import.c
 src/import-export/qif-import/gncmod-qif-import.c
