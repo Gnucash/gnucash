@@ -34,6 +34,7 @@ Bill Gribble <grib@billgribble.com> works magic. If your checks print
    checks, blame him. If you don't like your your bank balances,
    your bank, or your life, blame him too.
 
+Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches
 
 Fixes & Patches:
 ----------------
@@ -91,7 +92,8 @@ Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches
 Juan Manuel García Molina <juanmagm@mail.com> spanish translation
 Christopher Molnar <molnarc@mandrakesoft.com> build system patch
 Tim Mooney <mooney@dogbert.cc.ndsu.NoDak.edu> port to alpha-dec-osf4.0f
-G. Allen Morris III <gam3@ann.softgams.com> for QIF core dump 
+G. Allen Morris III <gam3@ann.softgams.com> for QIF core dump
+James LewisMoss <dres@phoenixdsl.com> design doc patches
 Steven Murdoch <sjmurdoch@linuxfan.com> gnc-prices fix for London exchange
 Brent Neal <brent@baton.phys.lsu.edu> TIAA-CREF support.
 Stefan Nobis <stefan-ml@snobis.de> German translation patch
