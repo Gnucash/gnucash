@@ -6,6 +6,8 @@
 
 #include "config.h"
 
+#include <sys/types.h>
+#include <time.h>
 #include <glib.h>
 #include <regex.h>
 #include <string.h>
