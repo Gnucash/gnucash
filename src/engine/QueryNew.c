@@ -1318,8 +1318,8 @@ gboolean gncQueryEqual (QueryNew *q1, QueryNew *q2)
 */
 
 /* Static prototypes */
-static GList *gncQueryPrintSearchFor (Query * query, GList * output);
-static GList *gncQueryPrintTerms (Query * query, GList * output);
+static GList *gncQueryPrintSearchFor (QueryNew * query, GList * output);
+static GList *gncQueryPrintTerms (QueryNew * query, GList * output);
 static GList *gncQueryPrintSorts (QueryNewSort_t s[], const gint numSorts,
                                   GList * output);
 static GList *gncQueryPrintAndTerms (GList * terms, GList * output);
@@ -1395,7 +1395,7 @@ gncQueryPrintOutput (GList * output)
         we are searching for (SPLIT, TRANS, etc)
 */
 static GList *
-gncQueryPrintSearchFor (Query * query, GList * output)
+gncQueryPrintSearchFor (QueryNew * query, GList * output)
 {
   GNCIdType searchFor;
   GString *gs;
@@ -1414,7 +1414,7 @@ gncQueryPrintSearchFor (Query * query, GList * output)
         elements of the inner loop are ANDed.
 */
 static GList *
-gncQueryPrintTerms (Query * query, GList * output)
+gncQueryPrintTerms (QueryNew * query, GList * output)
 {
 
   GList *terms, *lst;
