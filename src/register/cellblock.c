@@ -1,6 +1,34 @@
+/*
+ * FILE:
+ * cellblock.c
+ * 
+ * FUNCTION:
+ * implements a rectangular array of cells. See the header file for
+ * additional documentation.
+ *
+ * HISTORY:
+ * Copyright (c) 1998 Linas Vepstas
+ */
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
 
 #include <stdlib.h>
 #include "cellblock.h"
+
+/* =================================================== */
 
 CellBlock * xaccMallocCellBlock (int numrows, int numcols)
 {
@@ -24,18 +52,16 @@ CellBlock * xaccMallocCellBlock (int numrows, int numcols)
 
 /* =================================================== */
 
-void        
-xaccInitCellBlock (CellBlock *arr, int numrows, int numcols)
+static void        
+FreeCellBlockMem (CellBlock *arr)
 {
-   int i, j;
+   int i;
    int oldrows, oldcols;
-
-   if (!arr) return;
 
    oldrows = arr->numRows;
    oldcols = arr->numCols;
 
-   /* free old cell array, if any */
+   /* free cell array, if any */
    if (arr->cells) {
       for (i=0; i<oldrows; i++) {
          if (arr->cells[i]) free (arr->cells[i]);
@@ -43,7 +69,7 @@ xaccInitCellBlock (CellBlock *arr, int numrows, int numcols)
       free (arr->cells);
    }
 
-   /* free old traversal chain */
+   /* free traversal chain */
    if (arr->right_traverse_r) {
       for (i=0; i<oldrows; i++) {
          if (arr->right_traverse_r[i]) free (arr->right_traverse_r[i]);
@@ -55,11 +81,21 @@ xaccInitCellBlock (CellBlock *arr, int numrows, int numcols)
       }
    }
 
-   /* free old widths, alignments */
+   /* free widths, alignments */
    if (arr->widths) free (arr->widths);
    if (arr->alignments) free (arr->alignments);
+}
 
-   /* -------------------------------------------------- */
+/* =================================================== */
+
+void        
+xaccInitCellBlock (CellBlock *arr, int numrows, int numcols)
+{
+   int i, j;
+   if (!arr) return;
+
+   FreeCellBlockMem (arr);
+
    /* record new size */
    arr->numRows = numrows;
    arr->numCols = numcols;
@@ -99,6 +135,19 @@ xaccInitCellBlock (CellBlock *arr, int numrows, int numcols)
       arr->widths[j] = 0;
       arr->alignments[j] = 0;
    }
+}
+
+/* =================================================== */
+
+void        
+xaccDestroyCellBlock (CellBlock *arr)
+{
+   if (!arr) return;
+
+   FreeCellBlockMem (arr);
+
+   /* finally, free this object itself */
+   free (arr);
 }
 
 /* =================================================== */
