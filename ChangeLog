@@ -1,3 +1,7 @@
+2001-08-11  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/md5.c: include string.h to get bcopy def.
+
 2001-08-11  Christian Stimming  <stimming@tuhh.de>
 
 	* src/FileDialog.c (show_book_error): fix message.
@@ -163,6 +167,14 @@
 
 	* doc/sgml/C/xacc-sxeditor.sgml: fix warning
 
+2001-08-02  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/scm/prefs.scm (((current-value gnc:*debugging?*))): add
+	devel mode setting.
+
+	* src/scm/command-line.scm (gnc:*arg-defs*): add devel mode
+	command line option.
+
 2001-08-02  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/SchedXaction.c (xaccSchedXactionSetEndDate): Reject
@@ -196,6 +208,12 @@
 	* src/scm/html-utilities.scm: Fixed bug with sub-balances in
 	account tables with non-default account selection.
 
+2001-07-30  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/Query.c: move test code to a test-queries in test
+	directory. 
+
+	* src/engine/io-gncbin-r.c: remove #if 0'ed code.
 2001-07-30  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/glade/sched-xact.glade: Added seperate reminders
