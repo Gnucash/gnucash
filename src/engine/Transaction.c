@@ -283,6 +283,7 @@ xaccFreeSplit (Split *split)
   split->date_reconciled.tv_sec = 0;
   split->date_reconciled.tv_nsec = 0;
 
+  if (split->gains_split) split->gains_split->gains_split = NULL;
   g_free(split);
 }
 
