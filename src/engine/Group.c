@@ -27,6 +27,7 @@
 
 #include "Account.h"
 #include "Group.h"
+#include "TransactionP.h"
 #include "util.h"
 
 #ifndef FALSE

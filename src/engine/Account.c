@@ -30,6 +30,7 @@
 #include "date.h"
 #include "messages.h"
 #include "Transaction.h"
+#include "TransactionP.h"
 #include "util.h"
 
 int next_free_unique_account_id = 0;

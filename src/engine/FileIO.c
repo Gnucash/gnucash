@@ -87,6 +87,7 @@
 #include "FileIO.h"
 #include "Group.h"
 #include "messages.h"
+#include "TransactionP.h"
 #include "util.h"
 
 #define PERMS   0666

@@ -48,38 +48,8 @@
  * between "dining", "tips" and "taxes" categories.
  */
 
-typedef struct _split {
-  struct _account *acc;     /* back-pointer to debited/credited account   */
-  struct _transaction *parent; /* parent of split                         */
-  char  * memo;
-  char  * action;            /* Buy, Sell, Div, etc.                      */
-  char    reconciled;
-  double  damount;           /* num-shares; if > 0.0, deposit, else paymt */
-  double  share_price;       /* the share price, ==1.0 for bank account   */
-
-  /* the various "balances" are the sum of all of the values of 
-   * all the splits in the account, up to and including this split */
-  double  balance;
-  double  cleared_balance;
-  double  reconciled_balance;
-
-  double  share_balance;
-  double  share_cleared_balance;
-  double  share_reconciled_balance;
-
-} Split;
-
-
-typedef struct _transaction {
-  char  * num;               /* transaction id                            */
-  Date    date;              /* transaction date                          */
-  char  * description;        
-
-  Split   source_split;      /* source (creidted) account                 */
-  Split   **dest_splits;     /* list of splits, null terminated           */
-
-  char    write_flag;        /* used only during file IO                  */
-} Transaction;
+typedef struct _split        Split;
+typedef struct _transaction  Transaction;
 
 
 /** PROTOTYPES ******************************************************/
@@ -98,11 +68,18 @@ Transaction * xaccMallocTransaction (void);       /* mallocs and inits */
 void          xaccInitTransaction (Transaction *);/* clears a trans struct */
 
 void          xaccTransSetDate (Transaction *, int day, int mon, int year);
+
+/* set the transaction date to the current system time. */
+void          xaccTransSetDateToday (Transaction *);
+
 void          xaccTransSetNum (Transaction *, const char *);
 void          xaccTransSetDescription (Transaction *, const char *);
 void          xaccTransSetMemo (Transaction *, const char *);
 void          xaccTransSetAction (Transaction *, const char *);
 void          xaccTransSetReconcile (Transaction *, char);
+
+/* return pointer to the source split */
+Split *       xaccTransGetSourceSplit (Transaction *);
 
 void          xaccSplitSetMemo (Split *, const char *);
 void          xaccSplitSetAction (Split *, const char *);

@@ -36,6 +36,7 @@
 #include "Account.h"
 #include "Group.h"
 #include "FileIO.h"
+#include "TransactionP.h"
 #include "util.h"
 
 #define PERMS   0666

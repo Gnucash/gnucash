@@ -30,6 +30,7 @@
 #include "Account.h"
 #include "date.h"
 #include "Transaction.h"
+#include "TransactionP.h"
 #include "util.h"
 
 /********************************************************************\
@@ -584,6 +585,21 @@ xaccTransSetReconcile (Transaction *trans, char recn)
    trans->source_split.reconciled = recn;
    MARK_SPLIT (&(trans->source_split));
 }
+
+void
+xaccTransSetDateToday (Transaction *trans)
+{
+   todaysDate( &(trans->date) );
+}
+
+/********************************************************************\
+\********************************************************************/
+Split *
+xaccTransGetSourceSplit (Transaction *trans) 
+{
+   return (&(trans->source_split));
+}
+
 
 /********************************************************************\
 \********************************************************************/
