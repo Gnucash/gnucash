@@ -232,6 +232,14 @@ const GUID * gncJobGetGUID (GncJob *job)
   return &job->guid;
 }
 
+GUID gncJobRetGUID (GncJob *job)
+{
+  const GUID *guid = gncJobGetGUID (job);
+  if (guid)
+    return *guid;
+  return *xaccGUIDNULL ();
+}
+
 gboolean gncJobGetActive (GncJob *job)
 {
   if (!job) return FALSE;
@@ -243,6 +251,12 @@ GncJob * gncJobLookup (GNCBook *book, const GUID *guid)
   if (!book || !guid) return NULL;
   return xaccLookupEntity (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);
+}
+
+GncJob * gncJobLookupDirect (GUID guid, GNCBook *book)
+{
+  if (!book) return NULL;
+  return gncJobLookup (book, &guid);
 }
 
 gboolean gncJobIsDirty (GncJob *job)

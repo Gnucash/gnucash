@@ -54,6 +54,7 @@ gnc_commodity * gncOwnerGetCommodity (GncOwner *owner);
 
 /* Get the GUID of the immediate owner */
 const GUID * gncOwnerGetGUID (GncOwner *owner);
+GUID gncOwnerRetGUID (GncOwner *owner);
 
 /*
  * Get the "parent" Owner or GUID thereof.  The "parent" owner

@@ -10,7 +10,10 @@
 (gnc:module-load "gnucash/report/standard-reports" 0)
 
 (export gnc:invoice-report-create)
+(export gnc:owner-report-create)
 
 (use-modules (gnucash report invoice))
+(use-modules (gnucash report owner-report))
 
 (define gnc:invoice-report-create gnc:invoice-report-create-internal)
+(define gnc:owner-report-create gnc:owner-report-create-internal)

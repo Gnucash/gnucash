@@ -39,6 +39,9 @@ const char * gncJobGetReference (GncJob *job);
 GncOwner * gncJobGetOwner (GncJob *job);
 gboolean gncJobGetActive (GncJob *job);
 
+GUID gncJobRetGUID (GncJob *job);
+GncJob *gncJobLookupDirect (GUID guid, GNCBook *book);
+
 GncJob * gncJobLookup (GNCBook *book, const GUID *guid);
 gboolean gncJobIsDirty (GncJob *job);
 

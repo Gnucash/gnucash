@@ -161,6 +161,14 @@ const GUID * gncOwnerGetGUID (GncOwner *owner)
   }
 }
 
+GUID gncOwnerRetGUID (GncOwner *owner)
+{
+  const GUID *guid = gncOwnerGetGUID (owner);
+  if (guid)
+    return *guid;
+  return *xaccGUIDNULL ();
+}
+
 GncOwner * gncOwnerGetEndOwner (GncOwner *owner)
 {
   if (!owner) return NULL;

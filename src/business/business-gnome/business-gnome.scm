@@ -8,6 +8,9 @@
 (gnc:module-load "gnucash/business-core-file" 0)
 (gnc:module-load "gnucash/dialog-tax-table" 0)
 
+(gnc:module-load "gnucash/report/report-gnome" 0)
+(use-modules (gnucash report business-reports))
+
 (define top-level "_Business")
 (define new-label "New")
 (define find-label "Find")
@@ -225,6 +228,25 @@
 
 (define (add-business-test)
 
+  (define test-report
+    (gnc:make-menu-item (N_ "Test Owner Report")
+			(N_ "Test Owner Report")
+			(list "Extensions" "")
+			(lambda ()
+			  (let* ((book (gnc:get-current-book))
+				 (group (gnc:book-get-group book))
+				 (sep (string-ref (gnc:account-separator-char)
+						  0))
+				 (acc (gnc:get-account-from-full-name
+				       group "A/R" sep))
+				 (query (gnc:malloc-query)))
+
+			    (gnc:query-add-single-account-match
+			     query acc 'query-and)
+			    (gnc:report-window
+			     (gnc:owner-report-create #f query acc))))))
+				 
+
   (define test-search
     (gnc:make-menu-item (N_ "Test Search Dialog")
 			(N_ "Test Search Dialog")
@@ -235,11 +257,20 @@
 
   (define reload-invoice
     (gnc:make-menu-item (N_ "Reload invoice report")
-			(N_ "Reload invoice report")
+			(N_ "Reload invoice report scheme file")
 			(list "Extensions" "")
 			(lambda ()
 			  (let ((m (current-module)))
 			    (load-from-path "gnucash/report/invoice.scm")
+			    (set-current-module m)))))
+
+  (define reload-owner
+    (gnc:make-menu-item (N_ "Reload owner report")
+			(N_ "Reload owner report scheme file")
+			(list "Extensions" "")
+			(lambda ()
+			  (let ((m (current-module)))
+			    (load-from-path "gnucash/report/owner-report.scm")
 			    (set-current-module m)))))
 
   (define init-data
@@ -326,7 +357,9 @@
 
   (gnc:add-extension init-data)
   (gnc:add-extension reload-invoice)
+  (gnc:add-extension reload-owner)
   (gnc:add-extension test-search)
+  (gnc:add-extension test-report)
 
   (add-employee-extensions)
 )

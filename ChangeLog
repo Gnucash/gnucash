@@ -1,3 +1,25 @@
+2002-06-27  Derek Atkins   <derek@ihtfp.com>
+
+	* Create an "owner-report" which prints out a set of Invoice and
+	Payment transactions and also an aging report for a single "owner"
+	(e.g. Customer or Vendor).  This is still a first pass, so it
+	might not be correct.  It uses Lots, but it assumes that the
+	Account is periodically closed and re-opened (does not have a
+	'start-date').  It still needs to be tied into the main GUI.
+
+	* gncJob: add gncJobRetGUID() and gncJobLookupDirect()
+
+	* gncOwner: add gncOwnerRetGUID()
+
+	* gw-business-core-spec.scm: wrap GncAmountType, GncTaxIncluded
+	GncBillTermType, gncInvoiceGetInvoiceFromLot(), gncJobRetGUID(),
+	jobJobLookupDirect(), gncOwnerGetEndOwner(),
+	gncOwnerGetOwnerFromLot(), gncOwnerRetGUID()
+
+	* business-gnome.scm: add extensions to test the owner-report
+
+	* business-options.scm: add an "owner" option-type
+
 2002-06-25  Derek Atkins   <derek@ihtfp.com>
 
 	* gncOwner.[ch]: Provide functions to store/lookup an owner in a

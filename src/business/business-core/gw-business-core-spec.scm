@@ -53,7 +53,6 @@
          (gw:inline-scheme '(use-modules (gnucash business-core))))))
   
   ;; The core Business Object Types
-  ;; XXX: Need to add lists of all of these!
 
   (gw:wrap-as-wct ws '<gnc:GncAddress*> "GncAddress*" "const GncAddress*")
   (gw:wrap-as-wct ws '<gnc:GncBillTerm*> "GncBillTerm*" "const GncBillTerm*")
@@ -73,6 +72,22 @@
     (gw:enum-add-value! wt "GNC_OWNER_CUSTOMER" 'gnc-owner-customer)
     (gw:enum-add-value! wt "GNC_OWNER_JOB" 'gnc-owner-job)
     (gw:enum-add-value! wt "GNC_OWNER_VENDOR" 'gnc-owner-vendor)
+    #t)
+
+  (let ((wt (gw:wrap-enumeration ws '<gnc:GncAmountType> "GncAmountType")))
+    (gw:enum-add-value! wt "GNC_AMT_TYPE_VALUE" 'gnc-amount-type-value)
+    (gw:enum-add-value! wt "GNC_AMT_TYPE_PERCENT" 'gnc-amount-type-percent)
+    #t)
+
+  (let ((wt (gw:wrap-enumeration ws '<gnc:GncTaxIncluded> "GncTaxIncluded")))
+    (gw:enum-add-value! wt "GNC_TAXINCLUDED_YES" 'gnc-tax-included-yes)
+    (gw:enum-add-value! wt "GNC_TAXINCLUDED_NO" 'gnc-tax-included-no)
+    (gw:enum-add-value! wt "GNC_TAXINCLUDED_USEGLOBAL" 'gnc-tax-included-useglobal)
+    #t)
+
+  (let ((wt (gw:wrap-enumeration ws '<gnc:GncBillTermType> "GncBillTermType")))
+    (gw:enum-add-value! wt "GNC_TERM_TYPE_DAYS" 'gnc-term-type-days)
+    (gw:enum-add-value! wt "GNC_TERM_TYPE_PROXIMO" 'gnc-term-type-proximo)
     #t)
 
   ;;
@@ -575,6 +590,14 @@
    '((<gnc:GncInvoice*> invoice))
    "Return the invoice's list of Entries")
 
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-invoice-from-lot
+   '<gnc:GncInvoice*>
+   "gncInvoiceGetInvoiceFromLot"
+   '((<gnc:Lot*> lot))
+   "Return the Invoice attached to a Lot.")
+
   ;;
   ;; gncJob.h
   ;;
@@ -654,6 +677,22 @@
    "gncJobGetOwner"
    '((<gnc:GncJob*> job))
    "Return the Job's Owner")
+
+  (gw:wrap-function
+   ws
+   'gnc:job-get-guid
+   '<gnc:guid-scm>
+   "gncJobRetGUID"
+   '((<gnc:GncJob*> job))
+   "Return the guid of the job")
+
+  (gw:wrap-function
+   ws
+   'gnc:job-lookup
+   '<gnc:GncJob*>
+   "gncJobLookupDirect"
+   '((<gnc:guid-scm> guid) (<gnc:Book*> book))
+   "Lookup the job with GUID guid.")
 
   ;;
   ;; gncOrder.h
@@ -842,6 +881,30 @@
    "gncOwnerEqual"
    '((<gnc:GncOwner*> owner1) (<gnc:GncOwner*> owner2))
    "Compare owner1 and owner2 and return if they are equal")
+
+  (gw:wrap-function
+   ws
+   'gnc:owner-get-end-owner
+   '<gnc:GncOwner*>
+   "gncOwnerGetEndOwner"
+   '((<gnc:GncOwner*> owner))
+   "Returns the End Owner of this owner")
+
+  (gw:wrap-function
+   ws
+   'gnc:owner-get-owner-from-lot
+   '<gw:bool>
+   "gncOwnerGetOwnerFromLot"
+   '((<gnc:Lot*> lot) (<gnc:GncOwner*> owner))
+   "Compute the owner from the Lot, and fills in owner.  Returns TRUE if successful.")
+
+  (gw:wrap-function
+   ws
+   'gnc:owner-get-guid
+   '<gnc:guid-scm>
+   "gncOwnerRetGUID"
+   '((<gnc:GncOwner*> owner))
+   "Return the GUID of this owner")
 
   ;;
   ;; gncVendor.h

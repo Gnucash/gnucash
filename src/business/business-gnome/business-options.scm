@@ -182,6 +182,85 @@
      validator
      #f #f #f #f)))
 
+;; Internally, values are always a type/guid pair. Externally, both
+;; type/guid pairs and owner pointers may be used to set the value of
+;; the option. The option always returns a single owner pointer.
+
+(define (gnc:make-owner-option
+	 section
+	 name
+	 sort-tag
+	 documentation-string
+	 default-getter
+	 value-validator)
+
+  (let ((option-value (gnc:owner-create)))
+
+    (define (convert-to-pair item)
+      (if (pair? item)
+	  item
+	  (cons (gnc:owner-get-type item) (gnc:owner-get-guid item))))
+
+    (define (convert-to-owner pair)
+      (if (pair? pair)
+	  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym (car pair) #f)))
+	    (case type
+	      ((gnc-owner-customer)
+	       (gnc:owner-init-customer
+		option-value
+		(gnc:customer-lookup (cdr pair) (gnc:get-current-book)))
+	       option-value)
+
+	       ((gnc-owner-vendor)
+		(gnc:owner-init-vendor
+		 option-value
+		 (gnc:vendor-lookup (cdr pair) (gnc:get-current-book)))
+		option-value)
+
+	       ((gnc-owner-job)
+		(gnc:owner-init-job
+		 option-value
+		 (gnc:job-lookup (cdr pair) (gnc:get-current-book)))
+		option-value)
+
+	       (else #f)))
+	  pair))
+
+    (let* ((option (convert-to-pair (default-getter)))
+	   (option-set #f)
+	   (getter (lambda () (convert-to-owner
+			       (if option-set
+				   option
+				   (default-getter)))))
+	   (value->string (lambda ()
+			    (string-append
+			     "'" (gnc:value->string
+				  (if option-set option #f)))))
+	   (validator
+	    (if (not value-validator)
+		(lambda (owner) (list #t owner))
+		(lambda (owner)
+		  (value-validator (convert-to-owner owner))))))
+
+      (gnc:make-option
+       section name sort-tag 'owner documentation-string getter
+       (lambda (owner)
+	 (if (not owner) (set! owner (default-getter)))
+	 (set! owner (convert-to-owner owner))
+	 (let* ((result (validator owner))
+		(valid (car result))
+		(value (cadr result)))
+	   (if valid
+	       (begin
+		 (set! option (convert-to-pair value))
+		 (set! option-set #t))
+	       (gnc:error "Illegal owner value set"))))
+       (lambda () (convert-to-owner (default-getter)))
+       (gnc:restore-form-generator value->string)
+       validator
+       #f #f #f #f))))
+
 (export gnc:make-invoice-option)
 (export gnc:make-customer-option)
 (export gnc:make-vendor-option)
+(export gnc:make-owner-option)
