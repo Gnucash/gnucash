@@ -69,7 +69,16 @@ void gncBillTermBeginEdit (GncBillTerm *term);
 void gncBillTermCommitEdit (GncBillTerm *term);
 
 /* Get Functions */
-GncBillTerm *gncBillTermLookup (QofBook *book, const GUID *guid);
+
+/** Return a pointer to the instance gncBillTerm that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the 
+ *  instance can't be found.
+ *  Equivalent function prototype is
+ *  GncBillTerm * gncBillTermLookup (QofBook *book, const GUID *guid);
+ */
+#define gncBillTermLookup(book,guid)    \
+       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_BILLTERM, GncBillTerm)
+
 GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name);
 GList * gncBillTermGetTerms (QofBook *book);
 KvpFrame* gncBillTermGetSlots (GncBillTerm *term);

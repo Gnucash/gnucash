@@ -290,11 +290,6 @@ GList * gncOrderGetEntries (GncOrder *order)
   return order->entries;
 }
 
-GncOrder * gncOrderLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP(GncOrder);
-}
-
 gboolean gncOrderIsClosed (GncOrder *order)
 {
   if (!order) return FALSE;

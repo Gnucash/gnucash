@@ -83,12 +83,12 @@ test_customer (void)
   {
     GList *list;
 
-    list = gncBusinessGetList (book, GNC_CUSTOMER_MODULE_NAME, TRUE);
+    list = gncBusinessGetList (book, GNC_ID_CUSTOMER, TRUE);
     do_test (list != NULL, "getList all");
     do_test (g_list_length (list) == count, "correct length: all");
     g_list_free (list);
 
-    list = gncBusinessGetList (book, GNC_CUSTOMER_MODULE_NAME, FALSE);
+    list = gncBusinessGetList (book, GNC_ID_CUSTOMER, FALSE);
     do_test (list != NULL, "getList active");
     do_test (g_list_length (list) == 1, "correct length: active");
     g_list_free (list);
@@ -99,7 +99,7 @@ test_customer (void)
     const char *res;
 
     gncCustomerSetName (customer, str);
-    res = gncObjectPrintable (GNC_CUSTOMER_MODULE_NAME, customer);
+    res = gncObjectPrintable (GNC_ID_CUSTOMER, customer);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    

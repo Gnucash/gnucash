@@ -72,13 +72,21 @@ gboolean gncOrderGetActive (GncOrder *order);
 /* Get the list Entries */
 GList * gncOrderGetEntries (GncOrder *order);
 
-GncOrder * gncOrderLookup (QofBook *book, const GUID *guid);
 gboolean gncOrderIsDirty (GncOrder *order);
 void gncOrderBeginEdit (GncOrder *order);
 void gncOrderCommitEdit (GncOrder *order);
 int gncOrderCompare (GncOrder *a, GncOrder *b);
 
 gboolean gncOrderIsClosed (GncOrder *order);
+
+/** Return a pointer to the instance gncOrder that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the 
+ *  instance can't be found.
+ *  Equivalent function prototype is
+ *  GncOrder * gncOrderLookup (QofBook *book, const GUID *guid);
+ */
+#define gncOrderLookup(book,guid)    \
+       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_ORDER, GncOrder)
 
 #define ORDER_ID	"id"
 #define ORDER_REFERENCE	"reference"

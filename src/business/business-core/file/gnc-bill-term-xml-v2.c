@@ -51,7 +51,7 @@
 
 #include "xml-helpers.h"
 
-#define _GNC_MOD_NAME	GNC_BILLTERM_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_BILLTERM
 
 static short module = MOD_IO;
 
@@ -561,7 +561,7 @@ billterm_find_senior (GncBillTerm *term)
 static void
 billterm_scrub_cb (QofEntity *term_p, gpointer list_p)
 {
-  GncBillTerm *term = (GncBillTerm *) term_p;
+  GncBillTerm *term = GNC_BILLTERM(term_p);
   GList **list = list_p;
 
   if (billterm_is_grandchild(term)) {
@@ -596,7 +596,7 @@ static void
 billterm_scrub_invoices (QofEntity * invoice_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncInvoice *invoice = (GncInvoice *) invoice_p;
+  GncInvoice *invoice = GNC_INVOICE(invoice_p);
   GncBillTerm *term, *new_bt;
   gint32 count;
 
@@ -623,7 +623,7 @@ static void
 billterm_scrub_cust (QofEntity * cust_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncCustomer *cust = (GncCustomer *) cust_p;
+  GncCustomer *cust = GNC_CUSTOMER(cust_p);
   GncBillTerm *term;
   gint32 count;
   
@@ -639,7 +639,7 @@ static void
 billterm_scrub_vendor (QofEntity * vendor_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncVendor *vendor = (GncVendor *) vendor_p;
+  GncVendor *vendor = GNC_VENDOR(vendor_p);
   GncBillTerm *term;
   gint32 count;
 
@@ -673,10 +673,10 @@ billterm_scrub (GNCBook *book)
   GncBillTerm *parent, *term;
   GHashTable *ht = g_hash_table_new(g_direct_hash, g_direct_equal);
 
-  qof_object_foreach (GNC_INVOICE_MODULE_NAME, book, billterm_scrub_invoices, ht);
-  qof_object_foreach (GNC_CUSTOMER_MODULE_NAME, book, billterm_scrub_cust, ht);
-  qof_object_foreach (GNC_VENDOR_MODULE_NAME, book, billterm_scrub_vendor, ht);
-  qof_object_foreach (_GNC_MOD_NAME, book, billterm_scrub_cb, &list);
+  qof_object_foreach (GNC_ID_INVOICE,  book, billterm_scrub_invoices, ht);
+  qof_object_foreach (GNC_ID_CUSTOMER, book, billterm_scrub_cust, ht);
+  qof_object_foreach (GNC_ID_VENDOR,   book, billterm_scrub_vendor, ht);
+  qof_object_foreach (GNC_ID_BILLTERM, book, billterm_scrub_cb, &list);
 
   /* destroy the list of "grandchildren" bill terms */
   for (node = list; node; node = node->next) {

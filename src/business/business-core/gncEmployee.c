@@ -294,11 +294,6 @@ Account * gncEmployeeGetCCard (GncEmployee *employee)
   return employee->ccard_acc;
 }
 
-GncEmployee * gncEmployeeLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP(GncEmployee);
-}
-
 gboolean gncEmployeeIsDirty (GncEmployee *employee)
 {
   if (!employee) return FALSE;

@@ -48,7 +48,7 @@
 
 #include "gncObject.h"
 
-#define _GNC_MOD_NAME	GNC_ORDER_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_ORDER
 
 static short module = MOD_IO;
 

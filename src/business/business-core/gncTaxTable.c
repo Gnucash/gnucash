@@ -565,10 +565,6 @@ void gncTaxTableCommitEdit (GncTaxTable *table)
 
 /* =============================================================== */
 /* Get Functions */
-GncTaxTable * gncTaxTableLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP(GncTaxTable);
-}
 
 GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name)
 {

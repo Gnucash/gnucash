@@ -49,7 +49,7 @@
 #include "qofobject.h"
 #include "xml-helpers.h"
 
-#define _GNC_MOD_NAME	GNC_JOB_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_JOB
 
 static short module = MOD_IO;
 

@@ -62,9 +62,16 @@ const char * gncJobGetName (GncJob *job);
 const char * gncJobGetReference (GncJob *job);
 GncOwner * gncJobGetOwner (GncJob *job);
 gboolean gncJobGetActive (GncJob *job);
-
-GncJob * gncJobLookup (QofBook *book, const GUID *guid);
 gboolean gncJobIsDirty (GncJob *job);
+
+/** Return a pointer to the instance gncJob that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the 
+ *  instance can't be found.
+ *  Equivalent function prototype is
+ *  GncJob * gncJobLookup (QofBook *book, const GUID *guid);
+ */
+#define gncJobLookup(book,guid)    \
+       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_JOB, GncJob)
 
 /* Other functions */
 

@@ -165,12 +165,6 @@ static void gncInvoiceFree (GncInvoice *invoice)
   g_free (invoice);
 }
 
-GncInvoice *
-gncInvoiceLookup(QofBook *book, const GUID *guid)
-{
-  ELOOKUP(GncInvoice);
-}
-
 /* Set Functions */
 
 void gncInvoiceSetID (GncInvoice *invoice, const char *id)

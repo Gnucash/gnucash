@@ -76,12 +76,12 @@ test_job (void)
   {
     GList *list;
 
-    list = gncBusinessGetList (book, GNC_JOB_MODULE_NAME, TRUE);
+    list = gncBusinessGetList (book, GNC_ID_JOB, TRUE);
     do_test (list != NULL, "getList all");
     do_test (g_list_length (list) == count, "correct length: all");
     g_list_free (list);
 
-    list = gncBusinessGetList (book, GNC_JOB_MODULE_NAME, FALSE);
+    list = gncBusinessGetList (book, GNC_ID_JOB, FALSE);
     do_test (list != NULL, "getList active");
     do_test (g_list_length (list) == 1, "correct length: active");
     g_list_free (list);
@@ -92,7 +92,7 @@ test_job (void)
     const char *res;
 
     gncJobSetName (job, str);
-    res = qof_object_printable (GNC_JOB_MODULE_NAME, job);
+    res = qof_object_printable (GNC_ID_JOB, job);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    

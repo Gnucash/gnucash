@@ -745,11 +745,6 @@ GncOrder * gncEntryGetOrder (GncEntry *entry)
   return entry->order;
 }
 
-GncEntry * gncEntryLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP(GncEntry);
-}
-
 /*
  * This is the logic of computing the total for an Entry, so you know
  * what values to put into various Splits or to display in the ledger.

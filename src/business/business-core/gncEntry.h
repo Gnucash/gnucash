@@ -41,13 +41,14 @@ typedef enum {
   GNC_DISC_POSTTAX
 } GncDiscountHow;
 
-#include "gnc-date.h"
-#include "gncTaxTable.h"
-#include "gncOrder.h"
-#include "gncInvoice.h"
-
 #include "qofbook.h"
 #include "qofinstance.h"
+
+#include "gnc-date.h"
+#include "gncBusiness.h"
+#include "gncInvoice.h"
+#include "gncOrder.h"
+#include "gncTaxTable.h"
 
 #define GNC_ID_ENTRY "gncEntry"
 #define GNC_IS_ENTRY(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ENTRY))
@@ -171,7 +172,14 @@ GncOrder * gncEntryGetOrder (GncEntry *entry);
 GncInvoice * gncEntryGetInvoice (GncEntry *entry);
 GncInvoice * gncEntryGetBill (GncEntry *entry);
 
-GncEntry * gncEntryLookup (QofBook *book, const GUID *guid);
+/** Return a pointer to the instance gncEntry that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the 
+ *  instance can't be found.
+ *  Equivalent function prototype is
+ *  GncEntry * gncEntryLookup (QofBook *book, const GUID *guid);
+ */
+#define gncEntryLookup(book,guid)    \
+       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_ENTRY, GncEntry)
 
 gboolean gncEntryIsOpen (GncEntry *entry);
 void gncEntryBeginEdit (GncEntry *entry);

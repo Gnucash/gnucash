@@ -326,11 +326,6 @@ gboolean gncJobGetActive (GncJob *job)
   return job->active;
 }
 
-GncJob * gncJobLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP(GncJob);
-}
-
 /* Other functions */
 
 int gncJobCompare (const GncJob * a, const GncJob *b) {

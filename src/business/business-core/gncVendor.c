@@ -404,11 +404,6 @@ GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all)
   }
 }
 
-GncVendor * gncVendorLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP (GncVendor);
-}
-
 gboolean gncVendorIsDirty (GncVendor *vendor)
 {
   if (!vendor) return FALSE;

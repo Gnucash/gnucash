@@ -455,10 +455,6 @@ void gncBillTermCommitEdit (GncBillTerm *term)
 }
 
 /* Get Functions */
-GncBillTerm * gncBillTermLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP(GncBillTerm);
-}
 
 GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name)
 {

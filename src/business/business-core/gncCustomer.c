@@ -524,25 +524,6 @@ GList * gncCustomerGetJoblist (GncCustomer *cust, gboolean show_all)
   }
 }
 
-GUID gncCustomerRetGUID (GncCustomer *customer)
-{
-  if (!customer)
-    return *guid_null();
-
-  return customer->inst.entity.guid;
-}
-
-GncCustomer * gncCustomerLookupDirect (GUID guid, QofBook *book)
-{
-  if (!book) return NULL;
-  return gncCustomerLookup (book, &guid);
-}
-
-GncCustomer * gncCustomerLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP (GncCustomer);
-}
-
 gboolean gncCustomerIsDirty (GncCustomer *cust)
 {
   if (!cust) return FALSE;

@@ -50,7 +50,7 @@
 #include "qofinstance.h"
 #include "qofobject.h"
 
-#define _GNC_MOD_NAME	GNC_INVOICE_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_INVOICE
 
 static short module = MOD_IO;
 

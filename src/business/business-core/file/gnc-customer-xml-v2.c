@@ -53,7 +53,7 @@
 
 #include "xml-helpers.h"
 
-#define _GNC_MOD_NAME	GNC_CUSTOMER_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_CUSTOMER
 
 static short module = MOD_IO;
 
