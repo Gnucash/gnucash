@@ -77,6 +77,11 @@ restart_loop:
 
       /* If already in lot, then no-op */
       if (split->lot) continue;
+
+      /* Skip voided transactions */
+      if (gnc_numeric_zero_p (split->amount) &&
+          xaccTransGetVoidStatus(split->parent)) continue;
+
       if (xaccSplitAssign (split)) goto restart_loop;
    }
    xaccAccountCommitEdit (acc);
@@ -113,6 +118,10 @@ xaccLotFill (GNCLot *lot)
    split = pcy->PolicyGetSplit (pcy, lot);
    if (!split) return;   /* Handle the common case */
 
+   /* Reject voided transactions */
+   if (gnc_numeric_zero_p(split->amount) &&
+       xaccTransGetVoidStatus(split->parent)) return;
+
    xaccAccountBeginEdit (acc);
 
    /* Loop until we've filled up the lot, (i.e. till the 
@@ -121,8 +130,6 @@ xaccLotFill (GNCLot *lot)
    {
       Split *subsplit;
 
-PINFO ("duuuuude split=%s %s", gnc_numeric_to_string
-(split->amount),gnc_numeric_to_string (split->value));
       subsplit = xaccSplitAssignToLot (split, lot);
       if (subsplit == split)
       {
@@ -179,7 +186,7 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
          /* This lot has mixed currencies. Can't double-balance.
           * Silently punt */
          PWARN ("Lot with multiple currencies:\n"
-               "\ttrans=%s curr=%s\n", xaccTransGetDescription(trans), 
+               "\ttrans=%s curr=%s", xaccTransGetDescription(trans), 
                gnc_commodity_get_fullname(trans->common_currency)); 
          break;
       }
@@ -198,10 +205,19 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
       /* Unhandled error condition. Not sure what to do here,
        * Since the ComputeCapGains should have gotten it right. 
        * I suppose there might be small rounding errors, a penny or two,
-       * the ideal thing would to figure out why there's a roudning
+       * the ideal thing would to figure out why there's a rounding
        * error, and fix that.
        */
-      PERR ("Closed lot fails to double-balance !!\n");
+      PERR ("Closed lot fails to double-balance !! lot value=%s",
+            gnc_numeric_to_string (value));
+      GList *node;
+      for (node=lot->splits; node; node=node->next)
+      {
+        Split *s = node->data;
+        PERR ("s=%p amt=%s val=%s", s, 
+              gnc_numeric_to_string(s->amount),
+              gnc_numeric_to_string(s->value));
+      }
    }
 
    LEAVE ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
@@ -408,6 +424,10 @@ restart:
       merge_splits (split, s);
       rc = TRUE;
       goto restart;
+   }
+   if (gnc_numeric_zero_p (split->amount))
+   {
+      PWARN ("Result of merge has zero amt!");
    }
    LEAVE (" splits merged=%d", rc);
    return rc;
