@@ -28,6 +28,7 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-customer.c \
   dialog-date-close.c \
   dialog-employee.c \
+  dialog-invoice.c \
   dialog-job.c \
   dialog-job-select.c \
   dialog-order.c \
@@ -39,6 +40,7 @@ noinst_HEADERS = \
   dialog-customer.h \
   dialog-date-close.h \
   dialog-employee.h \
+  dialog-invoice.h \
   dialog-job.h \
   dialog-job-select.h \
   dialog-order.h \
@@ -72,6 +74,7 @@ glade_DATA = \
   customer.glade \
   date-close.glade \
   employee.glade \
+  invoice.glade \
   job.glade \
   order.glade \
   vendor.glade

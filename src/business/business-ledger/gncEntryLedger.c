@@ -238,6 +238,13 @@ void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,
   ledger->order = order;
 }
 
+void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
+					 GncInvoice *invoice)
+{
+  if (!ledger) return;
+  ledger->invoice = invoice;
+}
+
 void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent)
 {
   if (!ledger) return;
@@ -267,6 +274,9 @@ gboolean gnc_entry_ledger_find_entry (GncEntryLedger *ledger, GncEntry *entry,
 
 void gnc_entry_ledger_redraw (GncEntryLedger *ledger)
 {
-  /* XXX: FIXME */
-  gnc_entry_ledger_load (ledger, gncOrderGetEntries (ledger->order));
+  /* XXX: FIXME -- Use a Query! */
+  if (ledger->order)
+    gnc_entry_ledger_load (ledger, gncOrderGetEntries (ledger->order));
+  if (ledger->invoice)
+    gnc_entry_ledger_load (ledger, gncInvoiceGetEntries (ledger->invoice));
 }

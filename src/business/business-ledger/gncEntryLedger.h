@@ -58,6 +58,10 @@ GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type);
 void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,
 					 GncOrder *order);
 
+/* Set the default invoice for this ledger */
+void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
+					   GncInvoice *invoice);
+
 /* Destroy the GncEntry Ledger */
 void gnc_entry_ledger_destroy (GncEntryLedger *ledger);
 

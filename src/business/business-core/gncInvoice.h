@@ -27,7 +27,7 @@ void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner);
 void gncInvoiceSetDateOpened (GncInvoice *invoice, const Timespec *date);
 void gncInvoiceSetDateDue (GncInvoice *invoice, const Timespec *date);
 void gncInvoiceSetDateClosed (GncInvoice *invoice, const Timespec *date);
-void gncInvoiceSetTerms (GncInvoice *invoice, gint terms);
+void gncInvoiceSetTerms (GncInvoice *invoice, const char *terms);
 void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes);
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active);
 
@@ -43,7 +43,7 @@ GncOwner * gncInvoiceGetOwner (GncInvoice *invoice);
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice);
 Timespec gncInvoiceGetDateDue (GncInvoice *invoice);
 Timespec gncInvoiceGetDateClosed (GncInvoice *invoice);
-gint gncInvoiceGetTerms (GncInvoice *invoice);
+const char * gncInvoiceGetTerms (GncInvoice *invoice);
 const char * gncInvoiceGetNotes (GncInvoice *invoice);
 gboolean gncInvoiceGetActive (GncInvoice *invoice);
 
@@ -54,10 +54,13 @@ GList * gncInvoiceGetEntries (GncInvoice *invoice);
 
 /* Post this invoice to an account.  Returns the new Transaction
  * that is tied to this invoice.   The transaction is set with
- * the posted date.
+ * the posted date.  Set reverse to TRUE to reverse the sense of
+ * the splits (necessary for posting to A/R accounts from Income
+ * splits).
  */
-Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
-				       Timespec *date);
+Transaction *
+gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
+			 Timespec *posted_date, gboolean reverse);
 
 /* Given a transaction, find and return the Invoice */
 GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn);

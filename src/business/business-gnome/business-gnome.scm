@@ -18,6 +18,7 @@
           gnc:extensions-temp-book)))
 
   (define gnc:extensions-last-order #f)
+  (define gnc:extensions-last-invoice #f)
   (define gnc:extensions-owner #f)
 
   (define new-job-item
@@ -83,7 +84,25 @@
 			(lambda ()
 			  (gnc:order-edit #f gnc:extensions-last-order))))
 
+  (define new-invoice-item
+    (gnc:make-menu-item (N_ "Test New Invoice Dialog")
+			(N_ "Test New Invoice Dialog")
+			(list "Extensions" "")
+			(lambda ()
+			  (set! gnc:extensions-last-invoice
+				(gnc:invoice-new #f gnc:extensions-owner
+					       (gnc:extensions-get-book))))))
 
+  (define edit-invoice-item
+    (gnc:make-menu-item (N_ "Test Edit/View Invoice Dialog")
+			(N_ "Test Edit/View Invoice Dialog")
+			(list "Extensions" "")
+			(lambda ()
+			  (gnc:invoice-edit #f gnc:extensions-last-invoice))))
+
+
+  (gnc:add-extension edit-invoice-item)
+  (gnc:add-extension new-invoice-item)
   (gnc:add-extension edit-order-item)
   (gnc:add-extension new-order-item)
   (gnc:add-extension select-employee-item)

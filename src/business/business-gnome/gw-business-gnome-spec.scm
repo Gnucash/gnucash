@@ -104,6 +104,36 @@
    "Dialog: Select a GncEmployee.  Parent and start_selection may be NULL.")
 
   ;;
+  ;; dialog-invoice.h
+  ;;
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-new
+   '<gnc:GncInvoice*>
+   "gnc_invoice_new"
+   '((<gnc:UIWidget> parent) (<gnc:GncOwner*> owner) (<gnc:Book*> book))
+   "Dialog: create a new GncInvoice.  Parent may be NULL.")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-edit
+   '<gw:void>
+   "gnc_invoice_edit"
+   '((<gnc:UIWidget> parent) (<gnc:GncInvoice*> invoice))
+   "Dialog: Edit a GncInvoice.  Parent may be NULL.")
+
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-select
+   '<gnc:GncInvoice*>
+   "gnc_invoice_edit_new_select"
+   '((<gnc:Book*> book) (<gnc:GncInvoice*> start_selection)
+     (<gnc:UIWidget> parent))
+   "Dialog: Select a GncInvoice.  Parent and start_selection may be NULL.")
+  
+  ;;
   ;; dialog-job.h
   ;;
 

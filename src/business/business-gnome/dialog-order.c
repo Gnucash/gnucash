@@ -24,13 +24,14 @@
 #include "gncEntryLedger.h"
 
 #include "dialog-order.h"
+#include "dialog-invoice.h"
 #include "business-chooser.h"
 #include "business-utils.h"
 #include "dialog-date-close.h"
 
 #define DIALOG_NEW_ORDER_CM_CLASS "dialog-new-order"
 #define DIALOG_EDIT_ORDER_CM_CLASS "dialog-edit-order"
-#define DIALOG_VIEW_ORDER_CM_CLASS "dialog-edit-order"
+#define DIALOG_VIEW_ORDER_CM_CLASS "dialog-view-order"
 
 typedef enum
 {
@@ -175,13 +176,19 @@ gnc_order_window_help_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data)
 {
-  /* XXX: create a new invoice for this customer/vendor */
+  OrderWindow *ow = data;
 
-  fprintf (stderr, "I would create an invoice now... \n");
+  /* make sure we're ok */
+  if (!gnc_order_window_verify_ok (ow))
+      return;
+
+  /* Ok, go make an invoice */
+  gnc_invoice_new (ow->dialog, &(ow->owner), ow->book); 
 
   /* XXX: now refresh this window, it's possible a number of
    * entries have changed
    */
+  return;
 }
 
 static void
@@ -560,7 +567,7 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
     gtk_widget_set_sensitive (ow->id_entry, FALSE);
     gtk_widget_set_sensitive (ow->opened_date, FALSE);
     gtk_widget_set_sensitive (ow->closed_date, FALSE);
-    gtk_widget_set_sensitive (ow->notes_text, FALSE);
+    gtk_widget_set_sensitive (ow->notes_text, FALSE); /* XXX: Should notes remain writable? */
 
     /* Hide the 'close order' button */
     hide = glade_xml_get_widget (xml, "close_order_button");

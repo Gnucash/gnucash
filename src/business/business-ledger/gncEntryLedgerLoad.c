@@ -45,7 +45,7 @@ static void load_tax_type_cells (GncEntryLedger *ledger)
 
   if (!cell) return;
 
-  gnc_recn_cell_set_valid_flags (cell, "01", '0');
+  gnc_recn_cell_set_valid_flags (cell, "01", '1');
   gnc_recn_cell_set_flag_order (cell, "01");
   gnc_recn_cell_set_string_getter (cell, gnc_entry_ledger_type_string_getter);
 }
@@ -61,8 +61,8 @@ static void load_discount_type_cells (GncEntryLedger *ledger)
 
   if (!cell) return;
 
-  gnc_recn_cell_set_valid_flags (cell, "0123", '0');
-  gnc_recn_cell_set_flag_order (cell, "0123");
+  gnc_recn_cell_set_valid_flags (cell, "0123", '1');
+  gnc_recn_cell_set_flag_order (cell, "1032");
   gnc_recn_cell_set_string_getter (cell, gnc_entry_ledger_type_string_getter);
 }
 

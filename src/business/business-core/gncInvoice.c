@@ -30,12 +30,12 @@ struct _gncInvoice {
   GUID		guid;
   char *	id;
   char *	notes;
+  char *	terms;
   GList * 	entries;
   GncOwner	owner;
   Timespec 	date_opened;
   Timespec 	date_due;
   Timespec 	date_closed;
-  gint 		terms;
 
   Account * 	posted_acc;
   Transaction * posted_txn;
@@ -78,6 +78,7 @@ GncInvoice *gncInvoiceCreate (GNCBook *book)
 
   invoice->id = CACHE_INSERT ("");
   invoice->notes = CACHE_INSERT ("");
+  invoice->terms = CACHE_INSERT ("");
 
   invoice->active = TRUE;
 
@@ -146,10 +147,10 @@ void gncInvoiceSetDateClosed (GncInvoice *invoice, const Timespec *date)
   invoice->dirty = TRUE;
 }
 
-void gncInvoiceSetTerms (GncInvoice *invoice, gint terms)
+void gncInvoiceSetTerms (GncInvoice *invoice, const char *terms)
 {
   if (!invoice) return;
-  invoice->terms = terms;
+  SET_STR (invoice->terms, terms);
   invoice->dirty = TRUE;
 }
 
@@ -260,7 +261,7 @@ Timespec gncInvoiceGetDateClosed (GncInvoice *invoice)
   return invoice->date_closed;
 }
 
-gint gncInvoiceGetTerms (GncInvoice *invoice)
+const char * gncInvoiceGetTerms (GncInvoice *invoice)
 {
   if (!invoice) return 0;
   return invoice->terms;
@@ -341,7 +342,7 @@ void gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn)
 }
 
 Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
-				       Timespec *date)
+				       Timespec *date, gboolean reverse)
 {
   Transaction *txn;
   GList *iter;
@@ -421,7 +422,9 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     split = xaccMallocSplit (invoice->book);
     /* set action and memo? */
 
-    xaccSplitSetBaseValue (split, acc_val->val, commonCommodity);
+    xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (acc_val->val)
+				   : acc_val->val),
+			   commonCommodity);
     xaccAccountBeginEdit (acc_val->acc);
     xaccAccountInsertSplit (acc_val->acc, split);
     xaccAccountCommitEdit (acc_val->acc);
@@ -432,7 +435,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   {
     Split *split = xaccMallocSplit (invoice->book);
     /* Set action/memo */
-    xaccSplitSetBaseValue (split, gnc_numeric_neg (total), commonCommodity);
+    xaccSplitSetBaseValue (split, (reverse ? total : gnc_numeric_neg (total)),
+			   commonCommodity);
     xaccAccountBeginEdit (acc);
     xaccAccountInsertSplit (acc, split);
     xaccAccountCommitEdit (acc);
