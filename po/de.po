@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
 "POT-Creation-Date: 2003-06-09 11:31+0200\n"
-"PO-Revision-Date: 2003-06-09 11:31+0200\n"
+"PO-Revision-Date: 2003-06-14 12:31+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -11187,7 +11187,7 @@ msgstr "Hintergrundfarbe der aktiven Buchung im Kontobuch"
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:713
 msgid "Double mode colors alternate with transactions"
-msgstr "Zweizweilenstil: Farben abwechselnd pro Geschäftsvorgang"
+msgstr "Zweizeilenstil: Farben abwechselnd pro Geschäftsvorgang"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:715
