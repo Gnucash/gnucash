@@ -114,6 +114,17 @@
     (cons 'credit-line (_ "Credit Lines")))
    type))
 
+;; Get the list of all different commodities that are used within the
+;; 'accounts', excluding the 'exclude-commodity'.
+(define (gnc:accounts-get-commodities accounts exclude-commodity)
+  (delete exclude-commodity
+	  (delete-duplicates
+	   (sort (map gnc:account-get-commodity accounts) 
+		 (lambda (a b) 
+		   (string<? (gnc:commodity-get-mnemonic a)
+			     (gnc:commodity-get-mnemonic b)))))))
+
+
 ;; Returns the depth of the current account hierarchy, that is, the
 ;; maximum level of subaccounts in the current-group.
 (define (gnc:get-current-group-depth)
@@ -205,6 +216,28 @@
 
 ;;; It would be a logical extension to throw in a "slot" for x^2 so
 ;;; that you could also extract the variance and standard deviation
+
+;; An IRC discussion on the performance of this: <cstim> rlb: I was
+;; wondering which one would perform better: The directly stored
+;; lambda in make-{stats,commodity}-collector, or just a value
+;; somewhere with an exhaustive set of functions on it?  <rlb> cstim:
+;; my guess in the long run, a goops object would be most appropriate,
+;; and barring that, a record with a suitable set of functions defined
+;; to manipulate it would be faster, but in the short run (i.e. until
+;; we switch to requiring goops), it might not be worth changing.
+;; However, a record for the data (or vector) and a set of 7 functions
+;; would still be faster, if for no other reason than because you
+;; don't have to do the "case" lookup.  That penalty can be avoided if
+;; you follow the other strategy where passing in 'adder simply
+;; returns the function, rather than calling it.  Then the user's code
+;; can cache the value when repeated lookups would be expensive.  Also
+;; everyone should note that in some tests Bill and I did here, plain
+;; old alists were faster than hash tables until you got to a
+;; reasonable size (i.e. greater than 10 elements, maybe greater than
+;; 30...)  <cstim> rlb: hm, that makes sense. However, any change
+;; would break existing code, so if I would go for speed optimization
+;; I might just go for the record-and-function-set way.  <rlb> cstim:
+;; yes.  I think that would still be faster.
 
 (define (gnc:make-stats-collector)
   (let ;;; values

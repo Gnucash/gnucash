@@ -601,19 +601,16 @@
     table))
 
 
-;; Returns a html-object which is a table of all exchange rates.
-;; Where the report's commodity is common-commodity.
+;; Create a html-table of all exchange rates. The report-commodity is
+;; 'common-commodity', the exchange rates are given through the
+;; function 'exchange-fn' and the 'accounts' determine which
+;; commodities to show. Returns a html-object, a <html-table>.
 (define (gnc:html-make-exchangerates
 	 common-commodity exchange-fn accounts) 
-  (let ((comm-list (delete
-		    common-commodity
-		    (delete-duplicates
-		     (sort (map gnc:account-get-commodity accounts) 
-			   (lambda (a b) 
-			     (string<? (gnc:commodity-get-mnemonic a)
-				       (gnc:commodity-get-mnemonic b)))))))
+  (let ((comm-list 
+	 (gnc:accounts-get-commodities accounts common-commodity))
 	(table (gnc:make-html-table)))
-    
+
     (if (not (null? comm-list))
 	;; Do something with each exchange rate.
 	(begin

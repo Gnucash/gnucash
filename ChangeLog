@@ -1,3 +1,19 @@
+2001-05-12  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/price-scatter.scm: Extended option to use the
+	pricedb as a price source.
+
+	* src/scm/commodity-utilities.scm: Added functions for getting
+	sorted commodity splits, for total-average-prices of a
+	commodity-list, for instantaneous prices, for instantaneous prices
+	of a commodity-list, and for cooking your morning coffee :)
+
+	* src/scm/report-utilites.scm, html-utilities.scm: create new
+	function (gnc:accounts-get-commodities), use it in
+	html-utilities.scm.
+
+	* src/scm/html-scatter.scm: add workaround for rgba color.
+
 2001-05-12  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/main-window.scm: create .gnucash if it doesn't exist 

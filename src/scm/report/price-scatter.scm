@@ -28,8 +28,9 @@
 (let ((optname-from-date (N_ "From"))
       (optname-to-date (N_ "To"))
       (optname-stepsize (N_ "Step Size"))
-      (optname-report-currency (N_ "Report's currency"))
 
+      (pagename-price (N_ "Price"))
+      (optname-report-currency (N_ "Report's currency"))
       (optname-price-commodity (N_ "Price of Commodity"))
       (optname-price-source (N_ "Price Source"))
 
@@ -61,18 +62,18 @@
        options gnc:pagename-general optname-stepsize "b" 'MonthDelta)
 
       (gnc:options-add-currency! 
-       options gnc:pagename-general optname-report-currency "d")
+       options pagename-price optname-report-currency "d")
       
       (add-option
        (gnc:make-currency-option 
-	gnc:pagename-general optname-price-commodity
+	pagename-price optname-price-commodity
 	"e"
 	(N_ "Calculate the price of this commodity.")
 	(gnc:locale-default-currency)))
       
       (add-option
        (gnc:make-multichoice-option
-	gnc:pagename-general optname-price-source
+	pagename-price optname-price-source
 	"f" (N_ "The source of price information") 
 	'actual-transactions
 	(list (vector 'weighted-average 
@@ -81,9 +82,9 @@
 	      (vector 'actual-transactions
 		      (N_ "Actual Transactions")
 		      (N_ "The instantaneous price of actual currency transactions in the past"))
-	      ;;(vector 'pricedb-nearest
-	      ;;      (N_ "Pricedb: Nearest in time")
-	      ;;    (N_ "The price recorded nearest in time to the report date"))
+	      (vector 'pricedb
+		      (N_ "Price Database")
+		      (N_ "The recorded prices"))
 	      )))
 
       
@@ -142,11 +143,11 @@
 	     (gnc:lookup-option (gnc:report-options report-obj)
 				gnc:pagename-display optname-markercolor)))
 	   
-           (report-currency (op-value gnc:pagename-general
+           (report-currency (op-value pagename-price
                                       optname-report-currency))
-	   (price-commodity (op-value gnc:pagename-general 
+	   (price-commodity (op-value pagename-price
 				      optname-price-commodity))
-	   (price-source (op-value gnc:pagename-general
+	   (price-source (op-value pagename-price
 				   optname-price-source))
 
 	   (dates-list (gnc:make-date-list
@@ -166,10 +167,13 @@
       (gnc:html-scatter-set-title! 
        chart report-title)
       (gnc:html-scatter-set-subtitle!
-       chart (sprintf #f
-                      (_ "%s to %s")
-                      (gnc:timepair-to-datestring from-date-tp) 
-                      (gnc:timepair-to-datestring to-date-tp)))
+       chart (string-append
+	      (gnc:commodity-get-mnemonic price-commodity)
+	      " - "
+	      (sprintf #f
+		       (_ "%s to %s")
+		       (gnc:timepair-to-datestring from-date-tp) 
+		       (gnc:timepair-to-datestring to-date-tp))))
       (gnc:html-scatter-set-width! chart width)
       (gnc:html-scatter-set-height! chart height)
       (gnc:html-scatter-set-marker! chart 
@@ -180,9 +184,6 @@
 				      ('asterisk "asterisk")
 				      ('filledcircle "filled circle")
 				      ('filledsquare "filled square")))
-      ;;(warn marker mcolor)
-      ;; FIXME: workaround to set the alpha channel
-      (set! mcolor (string-append mcolor "ff"))
       (gnc:html-scatter-set-markercolor! chart mcolor)
       (gnc:html-scatter-set-y-axis-label!
        chart (gnc:commodity-get-mnemonic report-currency))
@@ -198,81 +199,37 @@
        (not (gnc:commodity-equiv? report-currency price-commodity))
        (begin
 	 (if (not (null? currency-accounts))
-	     ;; This is an experiment, and if the code is good, it could
-	     ;; go into commodity-utilities.scm or even start a new file.
 	     (set!
 	      data
 	      (case price-source
 		('actual-transactions
-		 ;; go through all splits; convert all splits into a
-		 ;; price. 
-		 (map
-		  (lambda (a)
-		    (let* ((transaction-comm (gnc:transaction-get-commodity 
-					      (gnc:split-get-parent a)))
-			   (account-comm (gnc:account-get-commodity 
-					  (gnc:split-get-account a)))
-			   (share-amount (gnc:split-get-share-amount a))
-			   (value-amount (gnc:split-get-value a))
-			   (transaction-date (gnc:transaction-get-date-posted
-					      (gnc:split-get-parent a)))
-			   (foreignlist
-			    (if (gnc:commodity-equiv? transaction-comm 
-						      price-commodity)
-				(list account-comm
-				      (gnc:numeric-neg share-amount)
-				      (gnc:numeric-neg value-amount))
-				(list transaction-comm
-				      value-amount
-				      share-amount))))
-		      
-		      ;;(warn "render-scatterplot: value " 
-		      ;;    (commodity-numeric->string
-		      ;;   (first foreignlist) (second foreignlist))
-		      ;; " bought shares "
-		      ;;(commodity-numeric->string
-		      ;; price-commodity (third foreignlist)))
-		      
-		      (list
-		       transaction-date
-		       (if (not (gnc:commodity-equiv? (first foreignlist) 
-						      report-currency))
-			   (begin
-			     (warn "render-scatterplot: " 
-				   "Sorry, currency exchange not yet implemented:"
-				   (commodity-numeric->string
-				    (first foreignlist) (second foreignlist))
-				   " (buying "
-				   (commodity-numeric->string
-				    price-commodity (third foreignlist))
-				   ") =? "
-				   (commodity-numeric->string
-				    report-currency (gnc:numeric-zero)))
-			     (gnc:numeric-zero))
-			   (gnc:numeric-div 
-			    (second foreignlist)
-			    (third foreignlist)
-			    GNC-DENOM-AUTO 
-			    (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))))))
-		  ;; Get all the interesting splits
-		  (gnc:get-match-commodity-splits 
-		   currency-accounts 
-		   to-date-tp price-commodity)))
-		('weighted-average
-		 (gnc:get-commodity-totalaverage-prices
+		 (gnc:get-commodity-inst-prices
 		  currency-accounts to-date-tp 
 		  price-commodity report-currency))
+		('weighted-average
+		 (gnc:get-commodity-totalavg-prices
+		  currency-accounts to-date-tp 
+		  price-commodity report-currency))
+		('pricedb
+		 (map (lambda (p)
+			(list (gnc:price-get-time p)
+			      (gnc:price-get-value p)))
+		      (gnc:pricedb-get-prices
+		       (gnc:book-get-pricedb (gnc:get-current-book))
+		       price-commodity report-currency)))
 		)))
 
 	 (set! data (filter
 		     (lambda (x) 
-		       (gnc:timepair-lt from-date-tp (first x)))
+		       (and 
+			(gnc:timepair-ge to-date-tp (first x))
+			(gnc:timepair-ge (first x) from-date-tp)))
 		     data))
 	 
 	 ;; some output
-	 ;;(warn (map (lambda (x) (list
-	 ;;		     (gnc:timepair-to-datestring (car x))
-	 ;;	     (gnc:numeric-to-double (second x))))
+	 ;;(warn "data" (map (lambda (x) (list
+	 ;;    (gnc:timepair-to-datestring (car x))
+	 ;;    (gnc:numeric-to-double (second x))))
 	 ;;data))
 
 	 ;; convert the gnc:numeric's to doubles
@@ -307,20 +264,21 @@
       
       (gnc:html-document-add-object! document chart) 
       
-      (gnc:html-document-add-object! 
-       document 
-       (gnc:make-html-text 
-	(gnc:html-markup-p 
-	 "This report calculates the 'prices of commodity' transactions \
-versus the 'report commodity'. (I.e. it won't work if there's another \
-commodity involved in between.) cstim.")))
+;;      (gnc:html-document-add-object! 
+;;       document 
+;;       (gnc:make-html-text 
+;;	(gnc:html-markup-p 
+;;	 "This report calculates the 'prices of commodity' transactions \
+;;versus the 'report commodity'. (I.e. it won't work if there's another \
+;;commodity involved in between.) cstim.")))
       
       document))
 
   ;; Here we define the actual report
   (gnc:define-report
    'version 1
-   'name (N_ "Price Scatter Plot (Test)")
-   ;;'menu-path (list gnc:menuname-asset-liability)
+   'name (N_ "Price")
+   'menu-path (list gnc:menuname-asset-liability)
+   'menu-name (N_ "Price Scatterplot")
    'options-generator options-generator
    'renderer renderer))

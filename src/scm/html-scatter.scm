@@ -163,7 +163,10 @@
          (y-label (gnc:html-scatter-y-axis-label scatter))
          (data (gnc:html-scatter-data scatter))
          (marker (gnc:html-scatter-marker scatter))
-         (markercolor (gnc:html-scatter-markercolor scatter)))
+	 ;; Workaround to set the alpha channel, since libguppitank
+	 ;; requires a rgba value here.
+	 (markercolor (string-append (gnc:html-scatter-markercolor scatter) 
+				     "ff")))
     (if (and (list? data)
              (not (null? data)))
         (begin 
