@@ -180,6 +180,7 @@ gnc_frequency_init( GNCFrequency *gf )
                 { "weekly_spin",      spin_changed_helper },
                 { "semimonthly_spin", spin_changed_helper },
                 { "monthly_spin",     spin_changed_helper },
+                { "yearly_spin",      spin_changed_helper },
                 { NULL,               NULL }
         };
 
@@ -564,7 +565,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
 {
         gint page;
         struct tm *tmpTm;
-        guint day;
+        gint day;
         GtkWidget *o;
         UIFreqType uift;
         FreqSpec *tmpFS;

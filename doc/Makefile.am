@@ -21,7 +21,9 @@ EXTRA_DIST = \
   README.francais \
   README.german \
   README.HBCI \
+  README.OFX \
   README.translator.txt \
+  TRANSLATION_HOWTO \
   build-aix.txt \
   build-solaris.txt \
   build-suse.txt \

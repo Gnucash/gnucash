@@ -5,6 +5,7 @@ AM_CFLAGS = \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS}
 
+PWD := $(shell pwd)
 checklibdir = ${PWD}
 checklib_LTLIBRARIES = libbaz.la libgncmodbaz.la
 

@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Taþýt Kredisi 
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Taþýt Kredisi ve faizleri
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Taþýt kredisi ve faizlerini takip etmenizi saðlayan hesaplar (taþýt kredisi, kredi faizleri).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Borçlar</act:name>
+  <act:id type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Borçlar</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Krediler</act:name>
+  <act:id type="new">023e2343114b3d695feaeb96904e0da6</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Krediler</act:description>
+  <act:parent type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Taþýt Kredisi</act:name>
+  <act:id type="new">3e5f44fd7bfaa9cae737a4113a749e36</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Taþýt Kredisi</act:description>
+  <act:parent type="new">023e2343114b3d695feaeb96904e0da6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Giderler</act:name>
+  <act:id type="new">acacdcb998e45fb741766622e8542f0b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Giderler</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Faiz</act:name>
+  <act:id type="new">9e8495e80ebfb762089be917dff7ab72</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Faiz</act:description>
+  <act:parent type="new">acacdcb998e45fb741766622e8542f0b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Taþýt Kredi Faizi</act:name>
+  <act:id type="new">e9bd8477e27361238d2f53c4fe7594ab</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Taþýt Kredi Faizi</act:description>
+  <act:parent type="new">9e8495e80ebfb762089be917dff7ab72</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

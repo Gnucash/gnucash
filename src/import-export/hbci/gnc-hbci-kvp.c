@@ -26,7 +26,6 @@
 #define HBCI_ACCOUNT_ID "account-id"
 #define HBCI_BANK_CODE "bank-code"
 #define HBCI_COUNTRY_CODE "country-code"
-#define HBCI_CONFIGFILE "config-filename"
 #define HBCI_TRANS_RETRIEVAL "trans-retrieval"
 
 /* Account */
@@ -90,6 +89,9 @@ void gnc_hbci_set_account_trans_retrieval (Account *a, Timespec time)
 
 
 /* GNCBook */
+#define HBCI_CONFIGFILE "config-filename"
+#define HBCI_TEMPLATES "template-list"
+
 char *gnc_hbci_get_book_configfile (GNCBook *b)
 {
   kvp_frame *frame = gnc_hbci_get_book_kvp (b);
@@ -103,6 +105,20 @@ void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename)
   kvp_frame_set_slot_nc (frame, HBCI_CONFIGFILE, value);
   gnc_book_kvp_changed (b);
 }
+GList *gnc_hbci_get_book_template_list (GNCBook *b)
+{
+  kvp_frame *frame = gnc_hbci_get_book_kvp (b);
+  kvp_value *value = kvp_frame_get_slot (frame, HBCI_TEMPLATES);
+  return kvp_value_get_glist (value);
+}
+void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list)
+{
+  kvp_frame *frame = gnc_hbci_get_book_kvp (b);
+  kvp_value *value = kvp_value_new_glist_nc (template_list);
+  kvp_frame_set_slot_nc (frame, HBCI_TEMPLATES, value);
+  gnc_book_kvp_changed (b);
+}
+
 
 /* lowlevel */
 /* getters  for kvp frame in book */

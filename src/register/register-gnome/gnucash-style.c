@@ -701,10 +701,17 @@ gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
 
         cd = gnucash_style_get_cell_dimensions (style, cell_row, cell_col);
 
-        *x = cd->origin_x;
-        *y = cd->origin_y;
-        *h = cd->pixel_height;
-        *w = cd->pixel_width;
+	/* XXX: FIXME: this is a STUPID workaround to fix #105346, and
+	 * while it fixes the crash it does not fix the actual problem.
+	 */
+	if (!cd) {
+	  *x = *y = *h = *w = 0;
+	} else {
+	  *x = cd->origin_x;
+	  *y = cd->origin_y;
+	  *h = cd->pixel_height;
+	  *w = cd->pixel_width;
+	}
 }
 
 
