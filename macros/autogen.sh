@@ -9,7 +9,7 @@ if [ -n "$GNOME2_PATH" ]; then
 	export PATH
 fi
 
-(autoconf2.50 --version) < /dev/null > /dev/null 2>&1 || {
+(autoconf --version) < /dev/null > /dev/null 2>&1 || {
   echo
   echo "**Error**: You must have \`autoconf' installed to compile Gnome."
   echo "Download the appropriate package for your distribution,"
@@ -157,13 +157,13 @@ do
 
       if grep "^AM_CONFIG_HEADER" configure.in >/dev/null; then
 	echo "Running autoheader..."
-	autoheader2.50 || { echo "**Error**: autoheader failed."; exit 1; }
+	autoheader || { echo "**Error**: autoheader failed."; exit 1; }
       fi
       echo "Running automake --gnu $am_opt ..."
       automake --add-missing --gnu $am_opt ||
 	{ echo "**Error**: automake failed."; exit 1; }
       echo "Running autoconf ..."
-      autoconf2.50 || { echo "**Error**: autoconf failed."; exit 1; }
+      autoconf || { echo "**Error**: autoconf failed."; exit 1; }
     ) || exit 1
   fi
 done
