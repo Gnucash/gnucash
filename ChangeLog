@@ -1,3 +1,10 @@
+2003-05-17  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/qif-file.scm:  the numeric test
+	  regex was broken and would fail on ALL numerics, causing all
+	  imports to be of value zero.  Oops.  I _thought_ I tested this,
+	  but clearly not sufficiently.  :(
+
 2003-05-16  David Hampton  <hampton@employees.org>
 
 	* src/gnome/window-main.c: 
