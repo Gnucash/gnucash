@@ -1,14 +1,17 @@
 
 This directory contains the Gtk GUI code for the xacc application.
 
-Whats been done so far:
+TODO:
 
-File Selection box pops up if no file is specified on the 
-command line.  Otherwise the main window starts up.
+1) FileBox routines
+2) Code the rest of AccWindow.c see src/motif/AccWindow.c to see
+   what is needed there.
+3) Change mainWindow to use a ctree instead of a tree
+4) Register (nuff said)
+5) Lots of other stuff.. 
 
 ------------------------------------------------------
 
-Please coordinate with Jeremy Collins <linux@cyberramp.net>
-for changes to this code.
-
+Please coordinate with Jeremy Collins <jcollins@gnucash.org> or
+Rob Browning   <rlb@cs.utexas.edu> for changes to this code.
 
