@@ -61,22 +61,22 @@
                               "Export data as text (Danger: Unfinished)")
                         (lambda () (gnc:extensions-qif-import win))))
 
+  (define strings-item
+    (gnc:make-menu-item
+     "Save Translatable Strings"
+     "Save strings that need to be translated"
+     (list "Extensions" "")
+     (lambda ()
+       (let ((file-name (gnc:file-selection-dialog
+                         "Select file to save strings in" "")))
+         (if file-name (gnc:save-translatable-strings file-name))))))
+
   (gnc:add-extension menu)
   (gnc:add-extension export-item)
   (gnc:add-extension qif-item)
 
   (if (gnc:debugging?)
-      (begin
-        (define strings-item
-          (gnc:make-menu-item
-           "Save Translatable Strings"
-           "Save strings that need to be translated"
-           (list "Extensions" "")
-           (lambda ()
-             (let ((file-name (gnc:file-selection-dialog
-                               "Select file to save strings in" "")))
-               (if file-name (gnc:save-translatable-strings file-name))))))
-        (gnc:add-extension strings-item))))
+      (gnc:add-extension strings-item)))
 
 
 (if (gnc:debugging?)
