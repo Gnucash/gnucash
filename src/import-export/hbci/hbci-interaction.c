@@ -323,7 +323,7 @@ static int inputBoxCB(AB_BANKING *ab,
 					      &passwd);
     }
     else {
-      if (data->cache_valid && text &&
+      if (data->cache_valid && text && data->cache_text &&
 	  (strcmp(text, data->cache_text)==0)) {
 	/* Cached user matches, so use cached PIN. */
 	/*printf("Got the cached PIN for user %s.\n", HBCI_User_userId (user));*/
