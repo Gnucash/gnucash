@@ -1,4 +1,6 @@
 /********************************************************************\
+ * gtable.h -- glib -- basic datatype for 2D array of values        *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -27,7 +29,10 @@
 
 
 /* This is the API for GTables, a datatype for 2-dimensional tables
- * with automatic resizing and memory management. */
+ * with automatic resizing and memory management. 
+ *
+ * HACK ALERT -- this thing should proably become a part of glib (??)
+ */
 
 typedef struct GTable GTable;
 
