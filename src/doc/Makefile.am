@@ -43,10 +43,14 @@ dist-hook: doc
 	echo "dist-hook: " && pwd
 	cp -rp html ${distdir}
 
+distclean-local:
+	echo "distclean-local: " && pwd
+	rm -f doxygen.cfg doxygen.log
+
 maintainer-clean-local:
-	echo "clean-local: " && pwd
+	echo "maintainer-clean-local: " && pwd
 	rm -rf html latex
-	rm -f doxygen.cfg doxygen.log refman.pdf
+	rm -f refman.pdf
 
 install-data-hook:
 	$(mkinstalldirs) $(DESTDIR)$(docdir)/html

@@ -1,3 +1,12 @@
+2003-01-20  John Pierce <john@killterm.org>
+
+	* Makefile.am
+	  Added distributed generated files to distcleancheckfiles.
+          Added distcheck-hook to deal with automake1.5 stupidity.
+
+	* src/doc/Makefile.am
+	  Move doxygen log and cache to distclean-local.
+
 2003-01-20  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/QueryNew.c -- g_list_append() can take a LONG time

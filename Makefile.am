@@ -155,5 +155,17 @@ dist-hook:
 	rm -f $(distdir)/distdep-automake1.4-hack
 	rm -f distdep-automake1.4-hack
 
+distcleancheck_listfiles = \
+  find -type f -exec sh -c 'test -f ${srcdir}/{} || echo {}' ';'
+
+# ack this is stupid
+distcheck-hook:
+	: > "$(distdir)/=build/distcleancheck1.5-is-stupid"
+
+distclean-local:
+	-test -f distcleancheck1.5-is-stupid \
+	&& rm -f distcleancheck1.5-is-stupid \
+	&& find . -type f -exec sh -c 'test -f ${srcdir}/{} && rm -f {}' ';'
+
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
