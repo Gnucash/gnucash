@@ -41,6 +41,12 @@ AC_DEFINE_UNQUOTED(GNUCASH_MAJOR_VERSION, $GNUCASH_MAJOR_VERSION)
 AC_DEFINE_UNQUOTED(GNUCASH_MINOR_VERSION, $GNUCASH_MINOR_VERSION)
 AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION)
 
+dnl Set of available languages.
+ALL_LINGUAS="da de en_GB es fr it ja no pt_PT ru sv"
+AM_GNU_GETTEXT
+
+AM_PROG_XML_I18N_TOOLS
+
 AC_CANONICAL_HOST
 AM_MAINTAINER_MODE
 AM_ACLOCAL_INCLUDE(macros)
@@ -100,12 +106,6 @@ GNOME_XML_CHECK
 #  HAVE_XML_VERSION_HEADER=1
 #  AC_DEFINE(HAVE_XML_VERSION_HEADER)
 #])
-
-dnl Set of available languages.
-ALL_LINGUAS="da de en_GB es fr it ja no pt_PT ru sv"
-AM_GNU_GETTEXT
-
-AM_PROG_XML_I18N_TOOLS
 
 
 ### --------------------------------------------------------------------------
@@ -667,6 +667,12 @@ GNUCASH_GNOME_UTILS_LIBS="${GNUCASH_APP_UTILS_LIBS} ${GNUCASH_NETWORK_UTILS_LIBS
 AC_SUBST(GNUCASH_GNOME_UTILS_CFLAGS)
 AC_SUBST(GNUCASH_GNOME_UTILS_LIBS)
 
+GNUCASH_REGISTER_CORE_CFLAGS="${GNUCASH_GNOME_UTILS_CFLAGS}"
+GNUCASH_REGISTER_CORE_LIBS="${GNUCASH_GNOME_UTILS_LIBS} -lgncmod-register-core"
+
+AC_SUBST(GNUCASH_REGISTER_CORE_CFLAGS)
+AC_SUBST(GNUCASH_REGISTER_CORE_LIBS)
+
 
 ### --------------------------------------------------------------------------
 ### Makefile creation
@@ -742,6 +748,7 @@ AC_OUTPUT(
           src/guile/Makefile
           src/import-export/Makefile
           src/import-export/binary-import/Makefile
+          src/import-export/binary-import/test/Makefile
           src/import-export/qif-import/Makefile
           src/import-export/qif-io-core/Makefile
           src/import-export/qif-io-core/test/Makefile

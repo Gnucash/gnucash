@@ -82,7 +82,9 @@ gnucash-config: gnucash-config.in
             -e 's:@-GNUCASH_NETWORK_UTILS_CFLAGS-@:${GNUCASH_NETWORK_UTILS_CFLAGS}:g' \
             -e 's:@-GNUCASH_NETWORK_UTILS_LIBS-@:${GNUCASH_NETWORK_UTILS_LIBS}:g' \
             -e 's:@-GNUCASH_GNOME_UTILS_CFLAGS-@:${GNUCASH_GNOME_UTILS_CFLAGS}:g' \
-            -e 's:@-GNUCASH_GNOME_UTILS_LIBS-@:${GNUCASH_GNOME_UTILS_LIBS}:g'
+            -e 's:@-GNUCASH_GNOME_UTILS_LIBS-@:${GNUCASH_GNOME_UTILS_LIBS}:g' \
+            -e 's:@-GNUCASH_REGISTER_CORE_CFLAGS-@:${GNUCASH_REGISTER_CORE_CFLAGS}:g' \
+            -e 's:@-GNUCASH_REGISTER_CORE_LIBS-@:${GNUCASH_REGISTER_CORE_LIBS}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 

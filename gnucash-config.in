@@ -16,8 +16,9 @@ Options:
 	[--cflags]
 Libraries:
 	engine
-        app-utils
         network-utils
+        app-utils
+        register-core
         gnome-utils
         gnucash
 EOF
@@ -79,6 +80,10 @@ while test $# -gt 0; do
       lib_gnome_utils=yes
       any_lib=yes
       ;;
+    register-core)
+      lib_register_core=yes
+      any_lib=yes
+      ;;
     gnucash)
       lib_gnucash=yes
       any_lib=yes
@@ -91,6 +96,8 @@ while test $# -gt 0; do
 done
 
 
+# Trim the link and compile lines down.
+
 if test "$any_lib" = "no"; then
   lib_gnucash=yes
 fi
@@ -99,15 +106,25 @@ if test "$lib_app_utils" = "yes"; then
   lib_engine=no
 fi
 
-if test "$lib_gnucash" = "yes"; then
+if test "$lib_register_core" = "yes"; then
   lib_engine=no
+  lib_network_utils=no
   lib_app_utils=no
+  lib_gnome_utils=no
 fi
 
 if test "$lib_gnome_utils" = "yes"; then
   lib_engine=no
-  lib_app_utils=no
   lib_network_utils=no
+  lib_app_utils=no
+fi
+
+if test "$lib_gnucash" = "yes"; then
+  lib_engine=no
+  lib_network_utils=no
+  lib_app_utils=no
+  lib_register_core=no
+  lib_gnome_utils=no
 fi
 
 if test "$echo_prefix" = "yes"; then
@@ -125,12 +142,16 @@ if test "$echo_cflags" = "yes"; then
         cflags="$cflags @-GNUCASH_ENGINE_CFLAGS-@"
     fi
 
+    if test "$lib_network_utils" = "yes"; then
+        cflags="$cflags @-GNUCASH_NETWORK_UTILS_CFLAGS-@"
+    fi
+
     if test "$lib_app_utils" = "yes"; then
         cflags="$cflags @-GNUCASH_APP_UTILS_CFLAGS-@"
     fi
 
-    if test "$lib_network_utils" = "yes"; then
-        cflags="$cflags @-GNUCASH_NETWORK_UTILS_CFLAGS-@"
+    if test "$lib_register_core" = "yes"; then
+        cflags="$cflags @-GNUCASH_REGISTER_CORE_CFLAGS-@"
     fi
 
     if test "$lib_gnome_utils" = "yes"; then
@@ -147,12 +168,16 @@ if test "$echo_libs" = "yes"; then
         libs="$libs @-GNUCASH_ENGINE_LIBS-@"
     fi
 
+    if test "$lib_network_utils" = "yes"; then
+        libs="$libs @-GNUCASH_NETWORK_UTILS_LIBS-@"
+    fi
+
     if test "$lib_app_utils" = "yes"; then
         libs="$libs @-GNUCASH_APP_UTILS_LIBS-@"
     fi
 
-    if test "$lib_network_utils" = "yes"; then
-        libs="$libs @-GNUCASH_NETWORK_UTILS_LIBS-@"
+    if test "$lib_register_core" = "yes"; then
+        libs="$libs @-GNUCASH_REGISTER_CORE_LIBS-@"
     fi
 
     if test "$lib_gnome_utils" = "yes"; then

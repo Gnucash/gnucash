@@ -1,4 +1,5 @@
 SUBDIRS = . #test
+DIST_SUBDIRS = test
 
 pkglib_LTLIBRARIES = libgncmod-binary-import.la
 

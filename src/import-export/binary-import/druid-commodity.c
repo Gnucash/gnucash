@@ -33,17 +33,17 @@
 
 #include "FileDialog.h"
 #include "Scrub.h"
+#include "dialog-commodity.h"
 #include "dialog-utils.h"
 #include "druid-commodity.h"
 #include "druid-utils.h"
-#include "dialog-commodity.h"
 #include "gnc-commodity.h"
+#include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
-#include "gnc-ui.h"
 #include "gnc-pricedb-p.h"
-
-#include "gnc-engine-util.h"
+#include "gnc-ui-util.h"
+#include "gnc-ui.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -442,7 +442,7 @@ finish_helper(gpointer key, gpointer value, gpointer data) {
   gnc_commodity  * old_comm = g_hash_table_lookup(cd->old_map, key);
   GList          * accts;
   GList          * node;
-  GNCBook        * book = gncGetCurrentBook();
+  GNCBook        * book = xaccGroupGetBook (gnc_get_current_group ());
 
   if(!book) {
     PERR("finish_helper - no current book.");
@@ -459,7 +459,7 @@ finish_helper(gpointer key, gpointer value, gpointer data) {
 				   comm);
 
   /* now replace all the accounts using old_comm with new_comm */
-  accts = xaccGroupGetSubAccounts(gncGetCurrentGroup());
+  accts = xaccGroupGetSubAccounts(gnc_get_current_group ());
 
   for(node = accts; node; node = node->next) {
     Account *account = node->data;
@@ -491,10 +491,10 @@ gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
   g_hash_table_foreach(cd->new_map, &finish_helper, (gpointer)cd);
 
   /* Fix account and transaction commodities */
-  xaccGroupScrubCommodities (gncGetCurrentGroup());
+  xaccGroupScrubCommodities (gnc_get_current_group ());
 
   /* Fix split amount/value */
-  xaccGroupScrubSplits (gncGetCurrentGroup());
+  xaccGroupScrubSplits (gnc_get_current_group ());
 
   /* destroy the dialog */
   gnc_ui_commodity_druid_destroy(cd);
