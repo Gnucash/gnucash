@@ -38,6 +38,11 @@
 	* src/scm/printing/print-check.scm: add support for printing
 	  to "deluxe" personal checks.  This prints the check "sideways"
 	  on a US-Letter configuration.
+
+	* src/engine/QueryCore.c:
+	* src/engine/guid.c:
+	* src/engine/kvp-util.c:
+	  Fixes for 64-bit architectures.  Fixes bug #113231.
 	
 2003-05-18  Derek Atkins  <derek@ihtfp.com>
 
