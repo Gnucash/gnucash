@@ -325,13 +325,9 @@
 	  
 	  
 	  ;; error condition: no accounts specified
-          (let ((p (gnc:make-html-text)))
-            (gnc:html-text-append! 
-             p 
-             (gnc:html-markup-h2 (_ "No accounts selected"))
-             (gnc:html-markup-p
-              (_ "This report requires accounts to be selected.")))
-            (gnc:html-document-add-object! doc p)))      
+         
+	  (gnc:html-document-add-object! 
+	   doc (gnc:html-make-no-account-warning)))
       doc))
 
   (gnc:define-report 

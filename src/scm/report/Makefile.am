@@ -5,6 +5,7 @@ gncscm_DATA = \
   account-piecharts.scm \
   account-summary.scm \
   average-balance.scm \
+  average-balance-2.scm \
   balance-sheet.scm \
   category-barchart.scm \
   hello-world.scm \

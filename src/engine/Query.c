@@ -702,6 +702,18 @@ date_cmp_func(Timespec *t1, Timespec *t2) {
   return 0;
 }
 
+/* compared by dates but return 0 if on same day */
+
+static int
+date_rounded_cmp_func(Timespec *t1, Timespec *t2)
+{
+  Timespec canon_t1, canon_t2;
+  canon_t1 = timespecCanonicalDayTime(*t1);
+  canon_t2 = timespecCanonicalDayTime(*t2);
+  return date_cmp_func(&canon_t1, &canon_t2);
+}
+
+
 static int
 split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) 
 {
@@ -739,13 +751,29 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb)
 
     break;
 
+  case BY_DATE_ROUNDED:
+    return date_rounded_cmp_func(&(ta->date_posted), &(tb->date_posted));
+    
+    break;
+    
+
   case BY_DATE_ENTERED:
     return date_cmp_func(&(ta->date_entered), &(tb->date_entered));
+
+    break;
+ 
+  case BY_DATE_ENTERED_ROUNDED:
+    return date_rounded_cmp_func(&(ta->date_entered), &(tb->date_entered));
 
     break;
 
   case BY_DATE_RECONCILED:
     return date_cmp_func(&(sa->date_reconciled), &(sb->date_reconciled));
+
+    break;
+
+  case BY_DATE_RECONCILED_ROUNDED:
+    return date_rounded_cmp_func(&(sa->date_reconciled), &(sb->date_reconciled));
 
     break;
 

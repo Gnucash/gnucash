@@ -153,6 +153,8 @@
 (define (incdate adate delta)(moddate + adate delta ))
 
 ;; Time comparison, true if t2 is later than t1
+;; FIXME: RENAME THIS FUNCTION!!!!
+
 (define (gnc:timepair-later t1 t2)
   (cond ((< (car t1) (car t2)) #t)
         ((= (car t1) (car t2)) (< (cdr t2) (cdr t2)))
@@ -162,6 +164,9 @@
 
 (define (gnc:timepair-earlier t1 t2)
   (gnc:timepair-later t2 t1))
+
+(define (gnc:timepair-gt t1 t2)
+  (gnc:timepair-earlier t1 t2))
 
 ;; t1 <= t2
 (define (gnc:timepair-le t1 t2)
@@ -295,15 +300,6 @@
 
 ;; given a timepair contains any time on a certain day (local time)
 ;; converts it to be midday that day.
-
-(define (gnc:timepair-canonical-day-time tp)
-  (let ((bdt (gnc:timepair->date tp)))
-    (set-tm:sec bdt 0)
-    (set-tm:min bdt 0)
-    (set-tm:hour bdt 12)
-    (set-tm:isdst bdt -1)
-    (let ((newtime (car (mktime bdt))))
-      (cons newtime 0))))
 
 (define (gnc:timepair-start-day-time tp)
   (let ((bdt (gnc:timepair->date tp)))

@@ -393,15 +393,14 @@
     ;; depends on the structure of html-table-data, i.e. if those are
     ;; changed then this might break.
     (define (remove-last-empty-row)
-      (if (not (null? (gnc:html-table-data table)))
-	  (if (not (or-map
-		    (lambda (e) 
-		      (if (gnc:html-table-cell? e)
-			  (car (gnc:html-table-cell-data e))
-			  e))
-		    (car (gnc:html-table-data table))))
-	      (gnc:html-table-remove-last-row! table))))
-
+      (if (and (not (null? (gnc:html-table-data table))) 
+	       (not (or-map
+		(lambda (e) 
+		  (if (gnc:html-table-cell? e)
+		      (car (gnc:html-table-cell-data e))
+		      e))
+		    (car (gnc:html-table-data table)))))
+	  (gnc:html-table-remove-last-row! table)))
 
     ;; Wrapper for gnc:html-acct-table-row-helper!
     (define (add-row-helper! 
@@ -654,3 +653,12 @@
 			  (_ "Exchange rates")))))))
     
     table))
+
+(define (gnc:html-make-no-account-warning)
+  (let ((p (gnc:make-html-text)))
+    (gnc:html-text-append! 
+     p 
+     (gnc:html-markup-h2 (_ "No accounts selected"))
+     (gnc:html-markup-p
+      (_ "This report requires accounts to be selected.")))
+    p))

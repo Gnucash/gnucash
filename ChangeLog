@@ -1,3 +1,32 @@
+2001-05-01  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/Query.{ch}: added date-granularity sorting functionality
+	to queries.
+
+	* src/engine/date.[ch] (timespecCanonicalDayTime): new function
+	migrated from the scheme code.
+
+	* src/guile/gnc.gwp: added wrappers for the above.
+
+	* src/scm/date-utilities.scm (gnc:timepair-canonical-day-time):
+	removed, replaced by new C function.
+
+	* src/scm/report/*.scm: added checks for "no-accounts-selected".
+		
+	* src/scm/report/average-balance-2.scm: New (temporary) file. 
+	The average balance report with a rewritten calculation engine.
+
+	* src/scm/report/register.scm: Modified to use global styles
+
+	* src/scm/report/transaction-report.scm: use improved sorting ability,
+	get report title from options.
+
+	* src/scm/html-utilities.scm (gnc:html-make-no-account-warning): new
+	function. (remove-last-empty-row): minor changes.
+
+	* src/scm/report-utilities.scm: added the ability to get "numitems"
+	out of a stats collector for debugging purposes.
+
 2001-04-30  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/net-worth-timeseries.scm,

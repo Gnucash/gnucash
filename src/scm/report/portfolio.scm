@@ -54,50 +54,56 @@
     (define (op-value section name)
       (gnc:option-value (get-op section name)))
     
-    (define (table-add-stock-rows table accounts to-date
+    (define (table-add-stock-rows table accounts to-date currency pricedb collector)
+
+      (define (table-add-stock-rows-internal table accounts to-date odd-row?
                                   currency pricedb collector)
-      (if (null? accounts) collector
-	  (let* ((current (car accounts))
-		 (rest (cdr accounts))
-		 (name (gnc:account-get-name current))
-		(commodity (gnc:account-get-commodity current))
-		(ticker-symbol (gnc:commodity-get-mnemonic commodity))
-		(listing (gnc:commodity-get-namespace commodity))
-		(unit-collector (gnc:account-get-comm-balance-at-date
-                                 current to-date #f))
-		(units (cadr (unit-collector 'getpair commodity #f)))
-
-		(price (gnc:pricedb-lookup-nearest-in-time pricedb
-                                                           commodity
-                                                           currency
-                                                           to-date))
-
-                (price-value (if price
-                                 (gnc:price-get-value price)
-                                 (gnc:numeric-zero)))
-
-		(value-num (gnc:numeric-mul
-                            units 
-                            price-value
-                            (gnc:commodity-get-fraction currency)
-                            GNC-RND-ROUND))
-
-		(value (gnc:make-gnc-monetary currency value-num)))
-	    (collector 'add currency value-num)
-	    (gnc:html-table-append-row!
-             table
-             (list name
-                   ticker-symbol
-                   listing
-                   (gnc:make-html-table-header-cell/markup
-                    "number-cell" (gnc:numeric-to-double units))
-                   (gnc:make-html-table-header-cell/markup
-                    "number-cell" (gnc:make-gnc-monetary currency price-value))
-                   (gnc:make-html-table-header-cell/markup
-                    "number-cell" value)))
-            (gnc:price-unref price)
-	    (table-add-stock-rows
-             table rest to-date currency pricedb collector))))
+	(if (null? accounts) collector
+	    (let* ((row-style (if odd-row? "normal-row" "alternate-row"))
+		   (current (car accounts))
+		   (rest (cdr accounts))
+		   (name (gnc:account-get-name current))
+		   (commodity (gnc:account-get-commodity current))
+		   (ticker-symbol (gnc:commodity-get-mnemonic commodity))
+		   (listing (gnc:commodity-get-namespace commodity))
+		   (unit-collector (gnc:account-get-comm-balance-at-date
+				    current to-date #f))
+		   (units (cadr (unit-collector 'getpair commodity #f)))
+		   
+		   (price (gnc:pricedb-lookup-nearest-in-time pricedb
+							      commodity
+							      currency
+							      to-date))
+		   
+		   (price-value (if price
+				    (gnc:price-get-value price)
+				    (gnc:numeric-zero)))
+		   
+		   (value-num (gnc:numeric-mul
+			       units 
+			       price-value
+			       (gnc:commodity-get-fraction currency)
+			       GNC-RND-ROUND))
+		   
+		   (value (gnc:make-gnc-monetary currency value-num)))
+	      (collector 'add currency value-num)
+	      (gnc:html-table-append-row/markup!
+	       table
+	       row-style
+	       (list name
+		     ticker-symbol
+		     listing
+		     (gnc:make-html-table-header-cell/markup
+		      "number-cell" (gnc:numeric-to-double units))
+		     (gnc:make-html-table-header-cell/markup
+		      "number-cell" (gnc:make-gnc-monetary currency price-value))
+		     (gnc:make-html-table-header-cell/markup
+		      "number-cell" value)))
+	      (gnc:price-unref price)
+	      (table-add-stock-rows-internal
+	       table rest to-date currency (not odd-row?) pricedb collector))))
+      (table-add-stock-rows-internal table accounts to-date 
+				     currency #t pricedb collector))
 
     ;; The first thing we do is make local variables for all the specific
     ;; options in the set of options given to the function. This set will
@@ -116,39 +122,48 @@
          document (sprintf #f
                            (_ "Investment Portfolio Report: %s")
                            (gnc:timepair-to-datestring to-date)))
+	(gnc:debug "accounts" accounts)
+	(if (not (null? accounts))
+	    (begin
+	      (gnc:html-table-set-col-headers!
+	       table
+	       (list (_ "Account")
+		     (_ "Symbol")
+		     (_ "Listing")
+		     (_ "Units")
+		     (_ "Price")
+		     (_ "Value")))
+	      
+	      (table-add-stock-rows
+	       table accounts to-date currency pricedb collector)
+	      
+	      (gnc:html-table-append-row/markup!
+	       table
+	       "grand-total"
+	       (list
+		(gnc:make-html-table-cell/size
+		 1 6 (gnc:make-html-text (gnc:html-markup-hr)))))
+	      
+	      (collector
+	       'format 
+	       (lambda (currency amount)
+		 (gnc:html-table-append-row/markup! 
+		  table
+		  "grand-total"
+		  (list (gnc:make-html-table-cell/markup
+			 "total-label-cell" (_ "Total"))
+			(gnc:make-html-table-cell/size/markup
+			 1 5 "total-number-cell"
+			 (gnc:make-gnc-monetary currency amount)))))
+	       #f)
+	      
+	      (gnc:html-document-add-object! document table))
 
-	(gnc:html-table-set-col-headers!
-	 table
-	 (list (_ "Account")
-               (_ "Symbol")
-               (_ "Listing")
-               (_ "Units")
-               (_ "Price")
-               (_ "Value")))
-
-	(table-add-stock-rows
-         table accounts to-date currency pricedb collector)
-
-        (gnc:html-table-append-row!
-         table
-         (list
-          (gnc:make-html-table-cell/size
-           1 6 (gnc:make-html-text (gnc:html-markup-hr)))))
-
-	(collector
-         'format 
-         (lambda (currency amount)
-           (gnc:html-table-append-row! 
-            table
-            (list (gnc:make-html-table-cell/markup
-                   "total-label-cell" (_ "Total"))
-                  (gnc:make-html-table-cell/size/markup
-                   1 5 "total-number-cell"
-                   (gnc:make-gnc-monetary currency amount)))))
-         #f)
-
-	(gnc:html-document-add-object! document table)
-
+	    ;if no accounts selected.
+            (gnc:html-document-add-object!
+	     document (gnc:html-make-no-account-warning)))
+	
+	      
 	document))
 
   (gnc:define-report

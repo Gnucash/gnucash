@@ -128,6 +128,29 @@ timespec_abs(const Timespec *t)
   
   return retval;
 }
+
+/**
+ * timespecCanonicalDayTime
+ * given a timepair contains any time on a certain day (local time)
+ * converts it to be midday that day.  
+ */
+
+Timespec
+timespecCanonicalDayTime(Timespec t)
+{
+  struct tm tm, *result;
+  Timespec retval;
+  time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
+  result = localtime(&t_secs);
+  tm = *result;
+  tm.tm_sec = 0;
+  tm.tm_min = 0;
+  tm.tm_hour = 12;
+  tm.tm_isdst = -1;
+  retval.tv_sec = mktime(&tm);
+  retval.tv_nsec = 0;
+  return retval;
+}
     
 /**
  * setDateFormat

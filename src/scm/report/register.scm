@@ -199,8 +199,7 @@
                                                (gnc:split-get-balance split))))
                       " ")))
 
-      (gnc:html-table-append-row! table (reverse row-contents))
-      (apply set-last-row-style! (cons table (cons "tr" row-style)))
+      (gnc:html-table-append-row/markup! table row-style (reverse row-contents))
       (if (and double? transaction-info? (description-col column-vector))
           (begin
             (let ((count 0))
@@ -217,8 +216,7 @@
                       (gnc:make-html-table-cell/size
                        1 (- (num-columns-required column-vector) count)
                        (gnc:transaction-get-notes parent)))
-              (gnc:html-table-append-row! table (reverse row-contents))
-              (apply set-last-row-style! (cons table (cons "tr" row-style))))))
+              (gnc:html-table-append-row/markup! table row-style (reverse row-contents)))))
       split-value))
 
   (define (lookup-sort-key sort-option)
@@ -314,31 +312,6 @@
       (N_ "Display") (N_ "Totals")
       "l" (N_ "Display the totals?") #t))
 
-    (gnc:register-reg-option
-     (gnc:make-color-option
-      (N_ "Colors")  (N_ "Split Odd")
-      "c" (N_ "Background color for odd-numbered splits (or main splits in a
- multi-line report)")
-      (list #xff #xff #xff 0)
-      255 
-      #f))
-
-    (gnc:register-reg-option
-     (gnc:make-color-option
-      (N_ "Colors") (N_ "Split Even")
-      "d" (N_ "Background color for even-numbered splits
- (or \"other\" splits in a multi-line report)")
-      (list #xff #xff #xff 0)
-      255
-      #f))
-
-    (gnc:register-reg-option
-     (gnc:make-color-option
-      (N_ "Colors") (N_ "Grand Total")
-      "e" (N_ "Background color for total")
-      (list #xff #xff #xff 0)
-      255
-      #f))
 
     (gnc:options-set-default-section gnc:*report-options* "General")
 
@@ -349,24 +322,7 @@
 	  (end-string (strftime "%x" (localtime (car end)))))
       (sprintf #f (_ "From %s To %s") begin-string end-string)))
 
-  (define (get-grand-total-style options)
-    (let ((bgcolor (gnc:lookup-option options
-                                      (N_ "Colors")
-                                      (N_ "Grand Total"))))
-      (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
-
-  (define (get-odd-row-style options)
-    (let ((bgcolor (gnc:lookup-option options
-                                      (N_ "Colors")
-                                      (N_ "Split Odd"))))
-      (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
-
-  (define (get-even-row-style options)
-    (let ((bgcolor (gnc:lookup-option options
-                                      (N_ "Colors")
-                                      (N_ "Split Even"))))
-      (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
-
+ 
   (define (make-split-table splits options
                             debit-string credit-string amount-string)
     (define (opt-val section name)
@@ -399,8 +355,9 @@
                (gnc:make-html-text (gnc:html-markup-hr))))))
 
         (for-each (lambda (currency)
-                    (gnc:html-table-append-row! 
+                    (gnc:html-table-append-row/markup! 
                      table 
+		     subtotal-style
                      (append (cons (gnc:make-html-table-cell/markup
                                     "total-label-cell" (_ "Total"))
                                    '())
@@ -412,9 +369,7 @@
                                           (gnc:numeric-negative-p
                                            (gnc:gnc-monetary-amount currency)))
                                      (gnc:monetary-neg currency)
-                                     currency)))))
-                    (apply set-last-row-style! 
-                           (cons table (cons "tr" subtotal-style))))
+                                     currency))))))
                   currency-totals)))
 
     (define (add-other-split-rows split table used-columns row-style)
@@ -436,18 +391,15 @@
                                     multi-rows?
                                     double?
                                     odd-row?
-                                    main-row-style
-                                    alternate-row-style
-                                    grand-total-style
                                     total-collector)
       (if (null? splits)
           (add-subtotal-row table used-columns
-                            total-collector grand-total-style)
+                            total-collector "grand-total")
 
 	  (let* ((current (car splits))
-                 (current-row-style (if multi-rows? main-row-style
-                                        (if odd-row? main-row-style 
-                                            alternate-row-style)))
+                 (current-row-style (if multi-rows? "normal-row"
+                                        (if odd-row? "normal-row"
+                                            "alternate-row")))
 		 (rest (cdr splits))
 		 (next (if (null? rest) #f
 			   (car rest)))
@@ -461,7 +413,7 @@
 
 	    (if multi-rows?
                 (add-other-split-rows 
-                 current table used-columns alternate-row-style))
+                 current table used-columns "alternate-row"))
 
 	    (total-collector 'add
 			     (gnc:gnc-monetary-commodity split-value)
@@ -473,23 +425,14 @@
                                     width 
 				    multi-rows?
                                     double?
-                                    (not odd-row?)
-                                    main-row-style
-                                    alternate-row-style
-                                    grand-total-style
+                                    (not odd-row?)                       
 				    total-collector))))
 
     (let* ((table (gnc:make-html-table))
            (used-columns (build-column-used options))
            (width (num-columns-required used-columns))
            (multi-rows? (reg-report-journal?))
-           (double? (reg-report-double?))
-           (grand-total-style 
-            (get-grand-total-style options))
-           (odd-row-style 
-            (get-odd-row-style options))
-           (even-row-style
-            (get-even-row-style options)))
+           (double? (reg-report-double?)))
 
       (gnc:html-table-set-col-headers!
        table
@@ -504,9 +447,6 @@
                               multi-rows?
                               double?
                               #t
-                              odd-row-style
-                              even-row-style
-                              grand-total-style
                               (gnc:make-commodity-collector))
       table))
 

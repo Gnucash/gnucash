@@ -381,6 +381,9 @@
 		 (vector 'date
                          (N_ "Date")
                          (N_ "Sort by date"))
+		 (vector 'exact-time
+			 (N_ "Exact Time")
+			 (N_ "Sort by exact time"))
 
                  (vector 'corresponding-acc-name
                          (N_ "Other Account Name")
@@ -434,7 +437,7 @@
 	   (and (member x subtotal-enabled) #t))
 	  (gnc:option-db-set-option-selectable-by-name
 	   options pagename-sorting optname-prime-date-subtotal
-	   (equal? 'date x)))))
+	   (if (member x (list 'exact-time 'date)) #t #f))))) 
 
       (gnc:register-trep-option
        (gnc:make-simple-boolean-option
@@ -471,7 +474,7 @@
 	   (and (member x subtotal-enabled) #t))
 	  (gnc:option-db-set-option-selectable-by-name
 	   options pagename-sorting optname-sec-date-subtotal
-	   (equal? 'date x)))))
+	   (if (member x (list 'exact-time 'date )) #t #f)))))
       
       (gnc:register-trep-option
        (gnc:make-simple-boolean-option
@@ -783,7 +786,9 @@ and Income accounts")))))
 				  'by-account-code 
 				  split-account-code-same-p
 				  render-account-code-subheading))
-	    (cons 'date          (vector 'by-date #f #f))
+	    (cons 'exact-time          (vector 'by-date #f #f))
+	    (cons 'date          (vector
+				  'by-date-rounded #f #f))
 	    (cons 'corresponding-acc-name
 		  (vector 'by-corr-account-full-name 
 			  split-same-corr-account-full-name-p 
@@ -812,7 +817,7 @@ and Income accounts")))))
 	     comp-index date-index)
       ;; The value of the sorting-key multichoice option.
       (let ((sortkey (opt-val pagename-sorting name-sortkey)))
-	(if (eq? 'date sortkey)
+	(if (member sortkey (list 'date 'exact-time))
 	    ;; If sorting by date, look up the value of the
 	    ;; date-subtotalling multichoice option and return the
 	    ;; corresponding funcs in the assoc-list.
@@ -855,6 +860,9 @@ and Income accounts")))))
 	  (enddate (gnc:timepair-end-day-time
 		    (gnc:date-option-absolute-time
 		     (opt-val gnc:pagename-general "To"))))
+	  (report-title (opt-val 
+			 gnc:pagename-general
+			 gnc:optname-reportname))
 	  (primary-key (opt-val pagename-sorting optname-prime-sortkey))
 	  (primary-order (opt-val pagename-sorting "Primary Sort Order"))
 	  (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
@@ -904,7 +912,7 @@ and Income accounts")))))
 						 optname-sec-date-subtotal))))
 	    
 		  (gnc:html-document-set-title! document
-						(_ "Transaction Report"))
+						report-title)
 		  (gnc:html-document-add-object! 
 		   document
 		   (gnc:make-html-text
@@ -926,13 +934,10 @@ match the given time interval and account selection.")))
 		  (gnc:html-document-add-object! document p))))
 
 	  ;; error condition: no accounts specified
-          (let ((p (gnc:make-html-text)))
-            (gnc:html-text-append! 
-             p 
-             (gnc:html-markup-h2 (_ "No accounts selected"))
-             (gnc:html-markup-p
-              (_ "This report requires accounts to be selected.")))
-            (gnc:html-document-add-object! document p)))
+          
+	  (gnc:html-document-add-object!
+	   document 
+	   (gnc:html-make-no-account-warning)))
 
       document))
 

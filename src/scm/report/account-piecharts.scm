@@ -251,138 +251,145 @@ balance at a given time"))
 	       (filter show-acct? accts))))
 	
 	;; Now do the work here.
-	(set! combined
-	      (sort (filter (lambda (pair) (not (= 0.0 (car pair))))
-			    (traverse-accounts 
-			     1 topl-accounts))
-		    (lambda (a b) (> (car a) (car b)))))
 
-	;; if too many slices, condense them to an 'other' slice
-	;; and add a link to a new pie report with just those
-	;; accounts
-	(if (> (length combined) max-slices)
-	    (let* ((start (take combined (- max-slices 1)))
-		   (finish (drop combined (- max-slices 1)))
-		   (sum (apply + (unzip1 finish))))
+	(if (not (null? accounts))
+	    (begin
 	      (set! combined
-		    (append start
-			    (list (list sum (_ "Other")))))
-	      (let ((options (gnc:make-report-options reportname))
-                    (id #f))
-		;; now copy all the options
-		(gnc:options-copy-values (gnc:report-options report-obj)
-					 options)
-		;; and set the destination accounts
-		(gnc:option-set-value
-		 (gnc:lookup-option options gnc:pagename-accounts 
-				    optname-accounts)
-		 (map cadr finish))
-                (set! id (gnc:make-report reportname options))
-                (gnc:report-add-child-by-id! report-obj id)
-                (gnc:report-set-parent! (gnc:find-report id) report-obj)
-                
-		;; set the URL.
-		(set! other-anchor (gnc:report-anchor-text id)))))
-
-	;; set the URLs; the slices are links to other reports
-	(let 
-	    ((urls
-	      (map 
-	       (lambda (pair)
-		 (if (string? (cadr pair))
-		     other-anchor
-		     (let* ((acct (cadr pair))
-			    (subaccts 
-			     (gnc:account-get-immediate-subaccounts acct)))
-		       (if (null? subaccts)
-			   ;; if leaf-account, make this an anchor
-			   ;; to the register.
-			   (gnc:account-anchor-text (cadr pair))
-			   ;; if non-leaf account, make this a link
-			   ;; to another report which is run on the
-			   ;; immediate subaccounts of this account
-			   ;; (and including this account).
-			   (gnc:make-report-anchor
-			    reportname 
-			    report-obj
-			    (list
-			     (list gnc:pagename-accounts optname-accounts
-				   (cons acct subaccts))
-			     (list gnc:pagename-accounts optname-levels
-				   (+ 1 tree-depth))
-			     (list gnc:pagename-general 
-				   gnc:optname-reportname
-				   ((if show-fullname?
-					gnc:account-get-full-name
-					gnc:account-get-name) acct))))))))
-	       combined)))
-	  (gnc:html-piechart-set-button-1-slice-urls! 
-	   chart urls)
-	  (gnc:html-piechart-set-button-1-legend-urls! 
-	   chart urls))
-	
-	(gnc:html-piechart-set-title!
-	 chart report-title)
-	(gnc:html-piechart-set-width! chart width)
-	(gnc:html-piechart-set-height! chart height)
-	(gnc:html-piechart-set-data! chart (unzip1 combined))
-	(gnc:html-piechart-set-colors! chart
-				       (gnc:assign-colors (length combined)))
-
-	(gnc:html-piechart-set-subtitle!
-	 chart (string-append
-		(if do-intervals?
-		    (sprintf #f
-			     (_ "%s to %s")
-			     (gnc:timepair-to-datestring from-date-tp) 
-			     (gnc:timepair-to-datestring to-date-tp))
-		    (sprintf #f
-			     (_ "Balance at %s")
-			     (gnc:timepair-to-datestring to-date-tp)))
-		(if show-total?
-		    (let ((total (apply + (unzip1 combined))))
-		      (sprintf #f ": %s"
-			       (gnc:amount->string total print-info)))
-		    
-		    "")))
-
-	(let ((legend-labels
-	       (map 
-		(lambda (pair)
-		  (string-append
-		   (if (string? (cadr pair))
-		       (cadr pair)
-		       ((if show-fullname?
-			    gnc:account-get-full-name
-			    gnc:account-get-name) (cadr pair)))
-		   (if show-total?
-		       (string-append 
-			" - "
-			(gnc:amount->string (car pair) print-info))
-		       "")))
-		combined)))
-	  (gnc:html-piechart-set-labels! chart legend-labels))
-	
-	(gnc:html-document-add-object! document chart) 
-
-	(if (gnc:option-value 
-	     (gnc:lookup-global-option "General" 
-				       "Display \"Tip of the Day\""))
-	    (gnc:html-document-add-object! 
-	     document 
-	     (gnc:make-html-text 
-	      (gnc:html-markup-p 
-	       "Double-click on any legend box or pie slice opens either the \
+		  (sort (filter (lambda (pair) (not (= 0.0 (car pair))))
+				(traverse-accounts 
+				 1 topl-accounts))
+			(lambda (a b) (> (car a) (car b)))))
+	      
+	      ;; if too many slices, condense them to an 'other' slice
+	      ;; and add a link to a new pie report with just those
+	      ;; accounts
+	      (if (> (length combined) max-slices)
+		  (let* ((start (take combined (- max-slices 1)))
+			 (finish (drop combined (- max-slices 1)))
+			 (sum (apply + (unzip1 finish))))
+		    (set! combined
+			  (append start
+				  (list (list sum (_ "Other")))))
+		    (let ((options (gnc:make-report-options reportname))
+			  (id #f))
+		      ;; now copy all the options
+		      (gnc:options-copy-values (gnc:report-options report-obj)
+					       options)
+		      ;; and set the destination accounts
+		      (gnc:option-set-value
+		       (gnc:lookup-option options gnc:pagename-accounts 
+					  optname-accounts)
+		       (map cadr finish))
+		      (set! id (gnc:make-report reportname options))
+		      (gnc:report-add-child-by-id! report-obj id)
+		      (gnc:report-set-parent! (gnc:find-report id) report-obj)
+		      
+		      ;; set the URL.
+		      (set! other-anchor (gnc:report-anchor-text id)))))
+	      
+	      ;; set the URLs; the slices are links to other reports
+	      (let 
+		  ((urls
+		    (map 
+		     (lambda (pair)
+		       (if (string? (cadr pair))
+			   other-anchor
+			   (let* ((acct (cadr pair))
+				  (subaccts 
+				   (gnc:account-get-immediate-subaccounts acct)))
+			     (if (null? subaccts)
+				 ;; if leaf-account, make this an anchor
+				 ;; to the register.
+				 (gnc:account-anchor-text (cadr pair))
+				 ;; if non-leaf account, make this a link
+				 ;; to another report which is run on the
+				 ;; immediate subaccounts of this account
+				 ;; (and including this account).
+				 (gnc:make-report-anchor
+				  reportname
+				  report-obj
+				  (list
+				   (list gnc:pagename-accounts optname-accounts
+					 (cons acct subaccts))
+				   (list gnc:pagename-accounts optname-levels
+					 (+ 1 tree-depth))
+				   (list gnc:pagename-general 
+					 gnc:optname-reportname
+					 ((if show-fullname?
+					      gnc:account-get-full-name
+					      gnc:account-get-name) acct))))))))
+		     combined)))
+		(gnc:html-piechart-set-button-1-slice-urls! 
+		 chart urls)
+		(gnc:html-piechart-set-button-1-legend-urls! 
+		 chart urls))
+	      
+	      (gnc:html-piechart-set-title!
+	       chart report-title)
+	      (gnc:html-piechart-set-width! chart width)
+	      (gnc:html-piechart-set-height! chart height)
+	      (gnc:html-piechart-set-data! chart (unzip1 combined))
+	      (gnc:html-piechart-set-colors! chart
+					     (gnc:assign-colors (length combined)))
+	      
+	      (gnc:html-piechart-set-subtitle!
+	       chart (string-append
+		      (if do-intervals?
+			  (sprintf #f
+				   (_ "%s to %s")
+				   (gnc:timepair-to-datestring from-date-tp) 
+				   (gnc:timepair-to-datestring to-date-tp))
+			  (sprintf #f
+				   (_ "Balance at %s")
+				   (gnc:timepair-to-datestring to-date-tp)))
+		      (if show-total?
+			  (let ((total (apply + (unzip1 combined))))
+			    (sprintf #f ": %s"
+				     (gnc:amount->string total print-info)))
+			  
+			  "")))
+	      
+	      (let ((legend-labels
+		     (map 
+		      (lambda (pair)
+			(string-append
+			 (if (string? (cadr pair))
+			     (cadr pair)
+			     ((if show-fullname?
+				  gnc:account-get-full-name
+				  gnc:account-get-name) (cadr pair)))
+			 (if show-total?
+			     (string-append 
+			      " - "
+			      (gnc:amount->string (car pair) print-info))
+			     "")))
+		      combined)))
+		(gnc:html-piechart-set-labels! chart legend-labels))
+	      
+	      (gnc:html-document-add-object! document chart) 
+	      
+	      (if (gnc:option-value 
+		   (gnc:lookup-global-option "General" 
+					     "Display \"Tip of the Day\""))
+		  (gnc:html-document-add-object! 
+		   document 
+		   (gnc:make-html-text 
+		    (gnc:html-markup-p 
+		     "Double-click on any legend box or pie slice opens either the \
 register or, if the account has subaccounts, opens \
 another piechart report with precisely those subaccounts.")
-	      (gnc:html-markup-p "Dragging with left button \
+		    (gnc:html-markup-p "Dragging with left button \
 lets you drag single slices out of the pie. \
 Dragging with right button lets you rotate the pie. ")
-	      (gnc:html-markup-p "Remove this text by disabling \
-the global Preference \"Display Tip of the Day\"."))))
+		    (gnc:html-markup-p "Remove this text by disabling \
+the global Preference \"Display Tip of the Day\".")))))
 	
-	document)))
-  
+	(gnc:html-document-add-object!
+	  document
+	  (gnc:html-make-no-account-warning)))
+	    
+	    document)))
+    
   (for-each 
    (lambda (l)
      (gnc:define-report
@@ -390,10 +397,10 @@ the global Preference \"Display Tip of the Day\"."))))
       'name (car l)
       'menu-path (if (caddr l)
                      (list gnc:menuname-income-expense)
-                     (list gnc:menuname-asset-liability))
-      'menu-name (cadddr l)
-      'menu-tip (car (cddddr l))
-      'options-generator (lambda () (options-generator (cadr l) 
+                     (list gnc:menuname-asset-liability)) 
+      'menu-name (cadddr l) 
+      'menu-tip (car (cddddr l)) 
+      'options-generator (lambda () (options-generator (cadr l)  
 						       (caddr l)))
       'renderer (lambda (report-obj)
 		  (piechart-renderer report-obj 

@@ -191,255 +191,265 @@ developing over time"))
       (define (show-acct? a)
 	(member a accounts))
 
-      ;; Define more helper variables.
-      (let* ((exchange-alist (gnc:make-exchange-alist
-			      report-currency to-date-tp))
-	     (exchange-fn (gnc:make-exchange-function exchange-alist))
-	     (tree-depth (if (equal? account-levels 'all)
-			     (gnc:get-current-group-depth)
-			     account-levels))
-	     ;; This is the list of date intervals to calculate.
-	     (dates-list (if do-intervals?
-			     (gnc:make-date-interval-list
-			      (gnc:timepair-start-day-time from-date-tp) 
-			      (gnc:timepair-end-day-time to-date-tp)
-			      (eval interval))
-			     (gnc:make-date-list
-			      (gnc:timepair-end-day-time from-date-tp) 
-			      (gnc:timepair-end-day-time to-date-tp)
-			      (eval interval))))
-	     ;; Here the date strings for the x-axis labels are
-	     ;; created.
-	     (date-string-list
-	      (map (lambda (date-list-item)
-		     (gnc:timepair-to-datestring
-		      (if do-intervals?
-			  (car date-list-item)
-			  date-list-item)))
-		   dates-list))
-	     (other-anchor "")
-	     (all-data '()))
-	
-	;; Converts a commodity-collector into one single double
-	;; number, depending on the report currency and the
-	;; exchange-alist calculated above. Returns a double.
-	(define (collector->double c)
-	  ;; Future improvement: Let the user choose which kind of
-	  ;; currency combining she want to be done. 
-	  (gnc:numeric-to-double 
-	   (gnc:gnc-monetary-amount
-	    (gnc:sum-collector-commodity 
-	     c report-currency 
-	     exchange-fn))))
-	
-	;; Calculates the net balance (profit or loss) of an account in
-	;; the given time interval. date-list-entry is a pair containing
-	;; the start- and end-date of that interval. If subacct?==#t,
-	;; the subaccount's balances are included as well. Returns a
-	;; double, exchanged into the report-currency by the above
-	;; conversion function, and possibly with reversed sign.
-	(define (get-balance account date-list-entry subacct?)
-	  ((if (gnc:account-reverse-balance? account)
-	       - +)
-	   (collector->double
-	    (if do-intervals?
-		(gnc:account-get-comm-balance-interval 
-		 account 
-		 (car date-list-entry) 
-		 (cadr date-list-entry) subacct?)
-		(gnc:account-get-comm-balance-at-date
-		 account date-list-entry subacct?)))))
-	
-	;; Creates the <balance-list> to be used in the function
-	;; below. 
-	(define (account->balance-list account subacct?)
-	  (map 
-	   (lambda (d) (get-balance account d subacct?))
-	   dates-list))
-	
-	;; Calculates all account's balances. Returns a list of pairs:
-	;; (<account> <balance-list>), like '((Earnings (10.0 11.2))
-	;; (Gifts (12.3 14.5))), where each element of <balance-list>
-	;; is the balance corresponding to one element in
-	;; <dates-list>.
-	;;
-	;; If current-depth >= tree-depth, then the balances are
-	;; calculated *with* subaccount's balances. Else only the
-	;; current account is regarded. Note: All accounts in accts
-	;; and all their subaccounts are processed, but a balances is
-	;; calculated and returned *only* for those accounts where
-	;; show-acct? is true. This is necessary because otherwise we
-	;; would forget an account that is selected but not its
-	;; parent.
-	(define (traverse-accounts current-depth accts)
-	  (if (< current-depth tree-depth)
-	      (let ((res '()))
-		(for-each
-		 (lambda (a)
-		   (begin
-		     (if (show-acct? a)
-			 (set! res 
-			       (cons (list a (account->balance-list a #f))
-				     res)))
-		     (set! res (append
-				(traverse-accounts
-				 (+ 1 current-depth)
-				 (gnc:account-get-immediate-subaccounts a))
-				res))))
-		 accts)
-		res)
-	      ;; else (i.e. current-depth == tree-depth)
-	      (map
-	       (lambda (a)
-		 (list a (account->balance-list a #t)))
-	       (filter show-acct? accts))))
-	
-	;; Sort the account list according to the account code field.
-	(set! all-data (sort 
-			(filter (lambda (l) 
-				  (not (= 0.0 (apply + (cadr l))))) 
-				(traverse-accounts 1 topl-accounts))
-			(lambda (a b) 
-			  (string<? (gnc:account-get-code (car a))
-				    (gnc:account-get-code (car b))))))
-	;; Or rather sort by total amount?
-	;;(< (apply + (cadr a)) 
-	;;   (apply + (cadr b))))))
-	;; Other sort criteria: max. amount, standard deviation of amount,
-	;; min. amount; ascending, descending. FIXME: Add user options to
-	;; choose sorting.
-
-
-	;;(warn "all-data" all-data)
-
-	;; Set chart title, subtitle etc.
-	(gnc:html-barchart-set-title! chart report-title)
-	(gnc:html-barchart-set-subtitle!
-	 chart (sprintf #f
-			(if do-intervals?
-			    (_ "%s to %s")
-			    (_ "Balances %s to %s"))
-			(gnc:timepair-to-datestring from-date-tp) 
-			(gnc:timepair-to-datestring to-date-tp)))
-	(gnc:html-barchart-set-width! chart width)
-	(gnc:html-barchart-set-height! chart height)
-
-	;; row labels etc.
-	(gnc:html-barchart-set-row-labels! chart date-string-list)
-	;; FIXME: why doesn't the y-axis label get printed?!?
-	(gnc:html-barchart-set-y-axis-label!
-	 chart (gnc:commodity-get-mnemonic report-currency))
-	(gnc:html-barchart-set-row-labels-rotated?! chart #t)
-	(gnc:html-barchart-set-stacked?! chart stacked?)
-	;; If this is a stacked barchart, then reverse the legend.
-	(gnc:html-barchart-set-legend-reversed?! chart stacked?)
-
-	;; If we have too many categories, we sum them into a new
-	;; 'other' category and add a link to a new report with just
-	;; those accounts.
-	(if (> (length all-data) max-slices)
-	    (let* ((start (take all-data (- max-slices 1)))
-		   (finish (drop all-data (- max-slices 1)))
-		   (other-sum (map 
-			       (lambda (l) (apply + l))
-			       (apply zip (map cadr finish)))))
-	      (set! all-data
-		    (append start
-			    (list (list (_ "Other") other-sum))))
-	      (let* ((options (gnc:make-report-options reportname))
-                     (id #f))
-		;; now copy all the options
-		(gnc:options-copy-values 
-		 (gnc:report-options report-obj) options)
-		;; and set the destination accounts
-		(gnc:option-set-value
-		 (gnc:lookup-option options gnc:pagename-accounts 
-				    optname-accounts)
-		 (map car finish))
-		;; Set the URL to point to this report.
-                (set! id (gnc:make-report reportname options))
-                (gnc:report-add-child-by-id! report-obj id)
-                (gnc:report-set-parent! (gnc:find-report id) report-obj)
-		(set! other-anchor (gnc:report-anchor-text id)))))
-        
-	
-	;; This adds the data. Note the apply-zip stuff: This
-	;; transposes the data, i.e. swaps rows and columns. Pretty
-	;; cool, eh? Courtesy of dave_p.
-        (if (not (null? all-data))
-            (gnc:html-barchart-set-data! chart 
-                                         (apply zip (map cadr all-data))))
-        
-	;; Labels and colors
-	(gnc:html-barchart-set-col-labels!
-	 chart (map (lambda (pair)
+      (gnc:debug accounts)
+      (if (not (null? accounts))
+	  
+	  ;; Define more helper variables.
+	  
+	  (let* ((exchange-alist (gnc:make-exchange-alist
+				  report-currency to-date-tp))
+		 (exchange-fn (gnc:make-exchange-function exchange-alist))
+		 (tree-depth (if (equal? account-levels 'all)
+				 (gnc:get-current-group-depth)
+				 account-levels))
+		 ;; This is the list of date intervals to calculate.
+		 (dates-list (if do-intervals?
+				 (gnc:make-date-interval-list
+				  (gnc:timepair-start-day-time from-date-tp) 
+				  (gnc:timepair-end-day-time to-date-tp)
+				  (eval interval))
+				 (gnc:make-date-list
+				  (gnc:timepair-end-day-time from-date-tp) 
+				  (gnc:timepair-end-day-time to-date-tp)
+				  (eval interval))))
+		 ;; Here the date strings for the x-axis labels are
+		 ;; created.
+		 (date-string-list
+		  (map (lambda (date-list-item)
+			 (gnc:timepair-to-datestring
+			  (if do-intervals?
+			      (car date-list-item)
+			      date-list-item)))
+		       dates-list))
+		 (other-anchor "")
+		 (all-data '()))
+	    
+	    ;; Converts a commodity-collector into one single double
+	    ;; number, depending on the report currency and the
+	    ;; exchange-alist calculated above. Returns a double.
+	    (define (collector->double c)
+	      ;; Future improvement: Let the user choose which kind of
+	      ;; currency combining she want to be done. 
+	      (gnc:numeric-to-double 
+	       (gnc:gnc-monetary-amount
+		(gnc:sum-collector-commodity 
+		 c report-currency 
+		 exchange-fn))))
+	    
+	    ;; Calculates the net balance (profit or loss) of an account in
+	    ;; the given time interval. date-list-entry is a pair containing
+	    ;; the start- and end-date of that interval. If subacct?==#t,
+	    ;; the subaccount's balances are included as well. Returns a
+	    ;; double, exchanged into the report-currency by the above
+	    ;; conversion function, and possibly with reversed sign.
+	    (define (get-balance account date-list-entry subacct?)
+	      ((if (gnc:account-reverse-balance? account)
+		   - +)
+	       (collector->double
+		(if do-intervals?
+		    (gnc:account-get-comm-balance-interval 
+		     account 
+		     (car date-list-entry) 
+		     (cadr date-list-entry) subacct?)
+		    (gnc:account-get-comm-balance-at-date
+		     account date-list-entry subacct?)))))
+	    
+	    ;; Creates the <balance-list> to be used in the function
+	    ;; below. 
+	    (define (account->balance-list account subacct?)
+	      (map 
+	       (lambda (d) (get-balance account d subacct?))
+	       dates-list))
+	    
+	    ;; Calculates all account's balances. Returns a list of pairs:
+	    ;; (<account> <balance-list>), like '((Earnings (10.0 11.2))
+	    ;; (Gifts (12.3 14.5))), where each element of <balance-list>
+	    ;; is the balance corresponding to one element in
+	    ;; <dates-list>.
+	    ;;
+	    ;; If current-depth >= tree-depth, then the balances are
+	    ;; calculated *with* subaccount's balances. Else only the
+	    ;; current account is regarded. Note: All accounts in accts
+	    ;; and all their subaccounts are processed, but a balances is
+	    ;; calculated and returned *only* for those accounts where
+	    ;; show-acct? is true. This is necessary because otherwise we
+	    ;; would forget an account that is selected but not its
+	    ;; parent.
+	    (define (traverse-accounts current-depth accts)
+	      (if (< current-depth tree-depth)
+		  (let ((res '()))
+		    (for-each
+		     (lambda (a)
+		       (begin
+			 (if (show-acct? a)
+			     (set! res 
+				   (cons (list a (account->balance-list a #f))
+					 res)))
+			 (set! res (append
+				    (traverse-accounts
+				     (+ 1 current-depth)
+				     (gnc:account-get-immediate-subaccounts a))
+				    res))))
+		     accts)
+		    res)
+		  ;; else (i.e. current-depth == tree-depth)
+		  (map
+		   (lambda (a)
+		     (list a (account->balance-list a #t)))
+		   (filter show-acct? accts))))
+	    
+	    ;; Sort the account list according to the account code field.
+	    (set! all-data (sort 
+			    (filter (lambda (l) 
+				      (not (= 0.0 (apply + (cadr l))))) 
+				    (traverse-accounts 1 topl-accounts))
+			    (lambda (a b) 
+			      (string<? (gnc:account-get-code (car a))
+					(gnc:account-get-code (car b))))))
+	    ;; Or rather sort by total amount?
+	    ;;(< (apply + (cadr a)) 
+	    ;;   (apply + (cadr b))))))
+	    ;; Other sort criteria: max. amount, standard deviation of amount,
+	    ;; min. amount; ascending, descending. FIXME: Add user options to
+	    ;; choose sorting.
+	    
+	    
+	    ;;(warn "all-data" all-data)
+	    
+	    ;; Set chart title, subtitle etc.
+	    (gnc:html-barchart-set-title! chart report-title)
+	    (gnc:html-barchart-set-subtitle!
+	     chart (sprintf #f
+			    (if do-intervals?
+				(_ "%s to %s")
+				(_ "Balances %s to %s"))
+			    (gnc:timepair-to-datestring from-date-tp) 
+			    (gnc:timepair-to-datestring to-date-tp)))
+	    (gnc:html-barchart-set-width! chart width)
+	    (gnc:html-barchart-set-height! chart height)
+	    
+	    ;; row labels etc.
+	    (gnc:html-barchart-set-row-labels! chart date-string-list)
+	    ;; FIXME: why doesn't the y-axis label get printed?!?
+	    (gnc:html-barchart-set-y-axis-label!
+	     chart (gnc:commodity-get-mnemonic report-currency))
+	    (gnc:html-barchart-set-row-labels-rotated?! chart #t)
+	    (gnc:html-barchart-set-stacked?! chart stacked?)
+	    ;; If this is a stacked barchart, then reverse the legend.
+	    (gnc:html-barchart-set-legend-reversed?! chart stacked?)
+	    
+	    ;; If we have too many categories, we sum them into a new
+	    ;; 'other' category and add a link to a new report with just
+	    ;; those accounts.
+	    (if (> (length all-data) max-slices)
+		(let* ((start (take all-data (- max-slices 1)))
+		       (finish (drop all-data (- max-slices 1)))
+		       (other-sum (map 
+				   (lambda (l) (apply + l))
+				   (apply zip (map cadr finish)))))
+		  (set! all-data
+			(append start
+				(list (list (_ "Other") other-sum))))
+		  (let* ((options (gnc:make-report-options reportname))
+			 (id #f))
+		    ;; now copy all the options
+		    (gnc:options-copy-values 
+		     (gnc:report-options report-obj) options)
+		    ;; and set the destination accounts
+		    (gnc:option-set-value
+		     (gnc:lookup-option options gnc:pagename-accounts 
+					optname-accounts)
+		     (map car finish))
+		    ;; Set the URL to point to this report.
+		    (set! id (gnc:make-report reportname options))
+		    (gnc:report-add-child-by-id! report-obj id)
+		    (gnc:report-set-parent! (gnc:find-report id) report-obj)
+		    (set! other-anchor (gnc:report-anchor-text id)))))
+	    
+	    
+	    ;; This adds the data. Note the apply-zip stuff: This
+	    ;; transposes the data, i.e. swaps rows and columns. Pretty
+	    ;; cool, eh? Courtesy of dave_p.
+	    (if (not (null? all-data))
+		(gnc:html-barchart-set-data! chart 
+					     (apply zip (map cadr all-data))))
+	    
+	    ;; Labels and colors
+	    (gnc:html-barchart-set-col-labels!
+	     chart (map (lambda (pair)
+			  (if (string? (car pair))
+			      (car pair)
+			      ((if show-fullname?
+				   gnc:account-get-full-name
+				   gnc:account-get-name) (car pair))))
+			all-data))
+	    (gnc:html-barchart-set-col-colors! 
+	     chart
+	     (gnc:assign-colors (length all-data)))
+	    
+	    ;; set the URLs; the slices are links to other reports
+	    (let ((urls
+		   (map 
+		    (lambda (pair)
 		      (if (string? (car pair))
-			  (car pair)
-			  ((if show-fullname?
-			       gnc:account-get-full-name
-			       gnc:account-get-name) (car pair))))
-		    all-data))
-	(gnc:html-barchart-set-col-colors! 
-	 chart
-	 (gnc:assign-colors (length all-data)))
-
-	;; set the URLs; the slices are links to other reports
-	(let ((urls
-	       (map 
-		(lambda (pair)
-		  (if (string? (car pair))
-		      other-anchor
-		      (let* ((acct (car pair))
-			     (subaccts 
-			      (gnc:account-get-immediate-subaccounts acct)))
-			(if (null? subaccts)
-			    ;; if leaf-account, make this an anchor
-			    ;; to the register.
-			    (gnc:account-anchor-text acct)
-			    ;; if non-leaf account, make this a link
-			    ;; to another report which is run on the
-			    ;; immediate subaccounts of this account
-			    ;; (and including this account).
-			    (gnc:make-report-anchor
-			     reportname
-			     report-obj
-			     (list
-			      (list gnc:pagename-accounts optname-accounts
-				    (cons acct subaccts))
-			      (list gnc:pagename-accounts optname-levels
-				    (+ 1 tree-depth))
-			      (list gnc:pagename-general 
-				    gnc:optname-reportname
-				    ((if show-fullname?
-					 gnc:account-get-full-name
-					 gnc:account-get-name) acct))))))))
-		all-data)))
-	  (gnc:html-barchart-set-button-1-bar-urls! chart (append urls urls))
-	  ;; The legend urls do the same thing.
-	  (gnc:html-barchart-set-button-1-legend-urls! chart 
-						       (append urls urls)))
-
-	(gnc:html-document-add-object! document chart) 
-
-	(if (gnc:option-value 
-	     (gnc:lookup-global-option "General" 
-				       "Display \"Tip of the Day\""))
-	    (gnc:html-document-add-object! 
-	     document 
-	     (gnc:make-html-text 
-	      (gnc:html-markup-p 
-	       "If you don't see a stacked barchart i.e. you only see \
+			  other-anchor
+			  (let* ((acct (car pair))
+				 (subaccts 
+				  (gnc:account-get-immediate-subaccounts acct)))
+			    (if (null? subaccts)
+				;; if leaf-account, make this an anchor
+				;; to the register.
+				(gnc:account-anchor-text acct)
+				;; if non-leaf account, make this a link
+				;; to another report which is run on the
+				;; immediate subaccounts of this account
+				;; (and including this account).
+				(gnc:make-report-anchor
+				 reportname
+				 report-obj
+				 (list
+				  (list gnc:pagename-accounts optname-accounts
+					(cons acct subaccts))
+				  (list gnc:pagename-accounts optname-levels
+					(+ 1 tree-depth))
+				  (list gnc:pagename-general 
+					gnc:optname-reportname
+					((if show-fullname?
+					     gnc:account-get-full-name
+					     gnc:account-get-name) acct))))))))
+		    all-data)))
+	      (gnc:html-barchart-set-button-1-bar-urls! chart (append urls urls))
+	      ;; The legend urls do the same thing.
+	      (gnc:html-barchart-set-button-1-legend-urls! chart 
+							   (append urls urls)))
+	    
+	    (gnc:html-document-add-object! document chart) 
+	    
+	    (if (gnc:option-value 
+		 (gnc:lookup-global-option "General" 
+					   "Display \"Tip of the Day\""))
+		(gnc:html-document-add-object! 
+		 document 
+		 (gnc:make-html-text 
+		  (gnc:html-markup-p 
+		   "If you don't see a stacked barchart i.e. you only see \
 lots of thin bars next to each other for each date, then you \
 should upgrade Guppi to version 0.35.4 or, \
 if that isn't out yet, use the Guppi CVS version.")
-	      (gnc:html-markup-p
-	       "Double-click on any legend box or any bar opens \
+		  (gnc:html-markup-p
+		   "Double-click on any legend box or any bar opens \
 another barchart report with the subaccounts of that account or, \
 if that account doesn't have subaccounts, the register for the account.")
-	      (gnc:html-markup-p "Remove this text by disabling \
-the global Preference \"Display Tip of the Day\"."))))
-	
-	document)))
+		  (gnc:html-markup-p "Remove this text by disabling \
+the global Preference \"Display Tip of the Day\".")))))
+
+	  ;; else if no accounts selected
+	  (gnc:html-document-add-object! 
+	   document 
+	   (gnc:html-make-no-account-warning)))
+					 
+	    
+	    document))
 
   (for-each 
    (lambda (l)

@@ -9,6 +9,7 @@
 (gnc:depend "report/net-barchart.scm")
 (gnc:depend "report/account-summary.scm")
 (gnc:depend "report/average-balance.scm")
+(gnc:depend "report/average-balance-2.scm")
 (gnc:depend "report/balance-sheet.scm")
 (gnc:depend "report/account-piecharts.scm")
 (gnc:depend "report/category-barchart.scm")

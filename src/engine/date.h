@@ -92,6 +92,13 @@ Timespec timespec_diff(const Timespec *ta, const Timespec *tb);
  */
 Timespec timespec_abs(const Timespec *t);
 
+/* 
+ * convert a timepair on a certain day (localtime) to
+ * the timepair representing midday on that day
+ */
+
+Timespec timespecCanonicalDayTime(Timespec t);
+
 void setDateFormat(DateFormat df);
 
 /**
