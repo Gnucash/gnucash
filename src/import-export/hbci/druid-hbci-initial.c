@@ -126,6 +126,24 @@ delete_initial_druid (HBCIInitialInfo *info)
 }
 
 
+static gchar *gnc_hbci_account_longname(const AB_ACCOUNT *hacc)
+{
+  g_assert(hacc);
+  const char *bankname = AB_Account_GetBankName (hacc);
+  const char *bankcode = AB_Account_GetBankCode (hacc);
+  /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
+  if (bankname)
+    return g_strdup_printf(_("%s at %s (code %s)"),
+			   AB_Account_GetAccountNumber (hacc),
+			   bankname,
+			   bankcode);
+  else
+    return g_strdup_printf(_("%s at bank code %s"),
+			   AB_Account_GetAccountNumber (hacc),
+			   bankcode);
+}
+
+
 /*******************************************************************
  * update_accountlist widget
  */
@@ -142,7 +160,7 @@ update_accountlist_acc_cb (AB_ACCOUNT *hacc, gpointer user_data)
   g_assert(info);
   row_text[2] = "";
   
-  row_text[0] = g_strdup(AB_Account_GetOwnerName(hacc));
+  row_text[0] = gnc_hbci_account_longname(hacc);
 		
   /* Get corresponding gnucash account */
   gacc = g_hash_table_lookup (info->gnc_hash, hacc);
@@ -174,9 +192,12 @@ static void
 update_accountlist (HBCIInitialInfo *info)
 {
   int sel_row = 0;
+  AB_BANKING *banking;
+  AB_ACCOUNT_LIST2 *acclist;
 
   g_assert(info);
-  g_assert(info->api);
+  banking = info->api;
+  g_assert(banking);
   g_assert(info->gnc_hash);
 
   /* Store old selected row here. */
@@ -192,12 +213,16 @@ update_accountlist (HBCIInitialInfo *info)
   g_hash_table_freeze (info->hbci_hash);
   
   /* Go through all HBCI accounts */
-  AB_Account_List2_ForEach (AB_Banking_GetAccounts(info->api),
-			    update_accountlist_acc_cb,
-			    info);
+  acclist = AB_Banking_GetAccounts(banking);
+  if (acclist)
+    AB_Account_List2_ForEach (acclist,
+			      update_accountlist_acc_cb,
+			      info);
+  else
+    printf("update_accountlist: Oops, account list from AB_Banking is NULL.\n");
 
-  //printf("update_accountlist: HBCI hash has %d entries.\n", g_hash_table_size(info->hbci_hash));
-  //printf("update_accountlist: GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash));
+  // printf("update_accountlist: HBCI hash has %d entries.\n", g_hash_table_size(info->hbci_hash));
+  // printf("update_accountlist: GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash));
   
   g_hash_table_thaw (info->hbci_hash);
   gtk_clist_thaw (GTK_CLIST (info->accountlist));
@@ -238,12 +263,34 @@ druid_disable_next_button(HBCIInitialInfo *info)
  */
 
 
+static gboolean banking_has_accounts(AB_BANKING *banking)
+{
+  AB_ACCOUNT_LIST2 *accl;
+  gboolean result;
+  g_assert(banking);
+
+  accl = AB_Banking_GetAccounts(banking);
+  
+  if (accl && (AB_Account_List2_GetSize(accl) > 0))
+    result = TRUE;
+  else
+    result = FALSE;
+
+  if (accl)
+    AB_Account_List2_free(accl);
+  return result;
+}
+
+
 static void
 on_cancel (GnomeDruid *gnomedruid,
 	   gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
-  
+
+  /* FIXME: Need to choose a fixed ending procedure here */
+  gnc_AB_BANKING_save (info->api);
+  AB_Banking_Fini(info->api);
   delete_initial_druid(info);
 }
 
@@ -259,10 +306,11 @@ on_finish (GnomeDruidPage *gnomedruidpage,
   if (successful && info->gnc_hash)
     accounts_save_kvp (info->gnc_hash);
   
+  /* FIXME: Need to choose a fixed ending procedure here */
   gnc_AB_BANKING_save (info->api);
+  AB_Banking_Fini(info->api);
   delete_initial_druid(info);
 }
-
 
 
 static void
@@ -271,7 +319,13 @@ on_aqbutton_prepare (GnomeDruidPage *gnomedruidpage,
 		     gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
-  druid_disable_next_button(info);
+  AB_BANKING *banking = info->api;
+  g_assert(banking);
+
+  if (banking_has_accounts(banking))
+    druid_enable_next_button(info);
+  else
+    druid_disable_next_button(info);
 }
 
 
@@ -310,16 +364,6 @@ on_accountlist_prepare (GnomeDruidPage *gnomedruidpage,
   update_accountlist(info);
 }
 
-
-static gchar *gnc_hbci_account_longname(const AB_ACCOUNT *hacc)
-{
-  g_assert(hacc);
-  /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
-  return g_strdup_printf(_("%s at %s (code %s)"),
-			 AB_Account_GetAccountNumber (hacc),
-			 AB_Account_GetBankName (hacc),
-			 AB_Account_GetBankCode (hacc));
-}
 
 static void
 on_accountlist_select_row (GtkCList *clist, gint row,
@@ -400,16 +444,41 @@ on_aqhbci_button (GtkButton *button,
   HBCIInitialInfo *info = user_data;
   GWEN_BUFFER *buf;
   int res;
+  const char *backend_name = "aqhbci";
+  const char *wizard_name = "kde_wizard";
+  AB_BANKING *banking = info->api;
   g_assert(info->druid);
 
   buf = GWEN_Buffer_new(NULL, 200, 0, 0);
-  AB_Banking_GetWizardPath(info->api, "aqhbci", buf);
-  GWEN_Buffer_AppendString(buf, "/kde_wizard");
+  AB_Banking_GetWizardPath(banking, backend_name, buf);
 
+  GWEN_Buffer_AppendString(buf, "/");
+  GWEN_Buffer_AppendString(buf, wizard_name);
+  /* {
+    GWEN_PLUGIN_DESCRIPTION_LIST2 *l = 
+      AB_Banking_GetWizardDescrs(banking, backend_name);
+    const GWEN_PLUGIN_DESCRIPTION *x = GWEN_PluginDescription_List2_GetFront(l);
+    // There needs to be a way to find the name here. Currently this doesnt work yet.
+    wizard_name = GWEN_PluginDescription_GetName(x);
+    GWEN_Buffer_AppendString(buf, wizard_name);
+    GWEN_PluginDescription_List2_freeAll(l);
+    } */
+
+  AB_Banking_DeactivateProvider(banking, backend_name);
   if (strlen(GWEN_Buffer_GetStart(buf)) > 0) {
+
+    /* FIXME: This program call has to be improved !!! */
     res = system(GWEN_Buffer_GetStart(buf));
-    if (res == 0)
-      druid_enable_next_button(info);
+
+    if (res == 0) {
+      res = AB_Banking_ActivateProvider(banking, backend_name);
+      if (res == 0)
+	druid_enable_next_button(info);
+      else {
+	printf("on_aqhbci_button: Oops, after successful aqhbci wizard the activation return nonzero value: %d. \n", res);
+	druid_disable_next_button(info);
+      }
+    }
     else {
       printf("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, GWEN_Buffer_GetStart(buf));
       druid_disable_next_button(info);
@@ -446,6 +515,7 @@ void gnc_hbci_initial_druid (void)
 				 GTK_SIGNAL_FUNC (on_cancel), info);
   
   info->api = gnc_AB_BANKING_new_currentbook(info->window, &(info->interactor));
+  g_assert(info->api);
 
   {
     /* Page with config file entry widget */

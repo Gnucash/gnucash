@@ -47,14 +47,15 @@ static GNCInteractor *gnc_hbci_inter = NULL;
 /* ------------------------------------------------------------ */
 AB_BANKING *
 gnc_AB_BANKING_new (const char *filename, gboolean allowNewFile,
-		  GtkWidget *parent, GNCInteractor **inter)
+		    GtkWidget *parent, GNCInteractor **inter)
 {
   AB_BANKING *api = NULL;
 /*   int *err = NULL; */
 /*   char *errstring; */
   
   g_assert(inter);
-  
+
+#if 0  
   if (!filename)
       return NULL;
   if (!allowNewFile && 
@@ -72,11 +73,18 @@ gnc_AB_BANKING_new (const char *filename, gboolean allowNewFile,
       g_free (errstring);
       return NULL;
     }
-  
+#endif  
 
   api = AB_Banking_new ("gnucash", 0);
+  g_assert(api);
+  {
+    int r = AB_Banking_Init(api);
+    if (r != 0)
+      printf("gnc_AB_BANKING_new: Warning: Error %d on AB_Banking_init\n", r);
+  }
   /* FIXME: The configfile is ignored here */
-  
+  g_assert(api);
+
   *inter = gnc_AB_BANKING_interactors (api, parent);
 
 #if 0
@@ -102,6 +110,7 @@ gnc_AB_BANKING_new (const char *filename, gboolean allowNewFile,
   }
 #endif
 
+  g_assert(api);
   return api;
 }
 
