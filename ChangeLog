@@ -1,5 +1,8 @@
 2000-12-14  Robert Graham Merkel  <rgmerk@mira.net>
 
+	* src/guile/Makefile.am: replace hardwired g-wrap module dir
+	with value from configure.in.
+
 	* src/engine/gnc-associate-account.[ch] : New files with code for associating
 	income/expense accounts with a stock account.  Not yet hooked up to the UI.
 
