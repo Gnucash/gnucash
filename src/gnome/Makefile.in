@@ -42,7 +42,8 @@ LDFLAGS  = @LDFLAGS@
 
 GUILELIBS = @GUILELIBS@
 LIBS     = -L$(prefix)/lib @LIBS@ -lgtkxmhtml \
-           $(shell ${GNOME_CONFIG_BIN} --libs gnomeui) $(GUILELIBS)
+           $(shell ${GNOME_CONFIG_BIN} --libs gnomeui) $(GUILELIBS) \
+            ../../lib/g-wrap-install/lib/libgwrapguile.a  
 
 ifeq (${HAVE_PLOTUTILS},1)
   LIBS += @PLOTUTILS_LIBS@
