@@ -33,6 +33,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "config.h"
+
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
 
@@ -233,7 +235,6 @@ char * gnc_stpcpy (char *dest, const char *src);
 #ifndef HAVE_STPCPY
 #define stpcpy gnc_stpcpy
 #endif
-
 
 /***********************************************************************\
 
