@@ -127,7 +127,7 @@
         (cons 'CURRENCY  (N_ "Sell"))
         (cons 'INCOME    (N_ "Income"))
         (cons 'EXPENSE   (N_ "Rebate"))
-	(cons 'PAYABLE   (N_ "Invoice"))
+	(cons 'PAYABLE   (N_ "Bill"))
 	(cons 'RECEIVABLE (N_ "Payment"))
         (cons 'EQUITY    (N_ "Increase"))))
 
