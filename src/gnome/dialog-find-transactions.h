@@ -111,5 +111,4 @@ void gnc_ui_select_date_dialog_destroy(SelectDateDialog * sdd);
 void gnc_ui_select_date_cancel_cb(GtkWidget * w, gpointer user_data);
 void gnc_ui_select_date_ok_cb(GtkWidget * w, gpointer user_data);
 
-Split ** gnc_make_split_array(int nsplits);
 #endif

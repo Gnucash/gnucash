@@ -144,3 +144,7 @@ gnc_ui_select_date_dialog_ok_cb        (GtkButton       *button,
 void
 gnc_ui_select_date_dialog_cancel_cb    (GtkButton       *button,
                                         gpointer         user_data);
+
+void
+on_Budget_Dialog_destroy               (GtkObject       *object,
+                                        gpointer         user_data);

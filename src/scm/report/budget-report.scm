@@ -1230,3 +1230,17 @@
  'options-generator budget-report-options-generator
  'renderer gnc:budget-renderer)
 
+(if (gnc:debugging?)
+    (let ()
+      (define budget-item
+        (gnc:make-menu-item
+         "Budget Dialog (Testing)"
+         "Test the budget dialog."
+         (list "Extensions" "")
+         (lambda ()
+           (gnc:budget-dialog-create
+            gnc:budget-entries
+            (lambda () (display "Applied the budget.\n"))))))
+
+      (gnc:hook-add-dangler gnc:*main-window-opened-hook*
+                            (lambda (win) (gnc:add-extension budget-item)))))

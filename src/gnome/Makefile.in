@@ -64,7 +64,7 @@ OTHER_OBJS += $(wildcard @top_srcdir@/src/register/gnome/obj/gnome/*.o)
 ######################################################################
 # See Makefile.common for information about these variables.
 GNOME_SRCS := top-level.c window-main.c window-register.c window-adjust.c \
-              window-help.c cursors.c account-tree.c \
+              window-help.c cursors.c account-tree.c dialog-budget.c \
               window-reconcile.c option-util.c window-html.c \
               dialog-options.c dialog-filebox.c dialog-transfer.c \
               dialog-add.c dialog-edit.c dialog-utils.c \

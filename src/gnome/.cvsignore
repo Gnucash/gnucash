@@ -3,3 +3,5 @@ tmp
 obj
 *.diff
 backup.glade
+glade-cb-gnc-dialogs.c
+glade-support-gnc-dialogs.c

@@ -1,5 +1,9 @@
 2000-04-24  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/scm/report/average-balance.scm: the min and max columns
+	were swapped. Also, the last average balance entry wasn't being
+	calculated correctly.
+
 	* src/gnome/dialog-options.c: modified to use gnc-dateedit.
 
 	* src/gnome/window-adjust.c: modified to use gnc-dateedit.

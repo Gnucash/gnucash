@@ -46,13 +46,13 @@
 
 (define (gnc:extensions-menu-setup win)
   (define menu (gnc:make-menu "Extensions" (list "_Settings")))
-  
+
   (define export-item
     (gnc:make-menu-item "Export data as text (Danger: Unfinished)"
                         "Export data as text."
                         (list "Extensions" "")
                         (lambda () (gnc:main-win-export-data-as-text win))))
-  
+
   (define qif-item
     (gnc:make-menu-item "QIF File Import (Danger: Unfinished)"
                         "Import QIF File - Scripted in Guile."
