@@ -1,3 +1,12 @@
+2003-03-09 TomF changes for Gnome-2 branch, 4th batch
+
+	* src/gnome-utils/dialog-utils.h: Disabled declarations of 
+	  functions not used in QuickFill to bypass missing typedef
+	  for GdkImlibImage
+	* Next make problems are in:
+	    cursors.c, in function `gnc_set_busy_cursor'
+	    references to ghttp in gnc-http.c
+
 2003-03-09 TomF changes for Gnome-2 branch
 
 	* configure.in: Disabled gnome-print.  Added LIBGUPPI.
