@@ -1,3 +1,13 @@
+2001-07-05  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/gnome/druid-qif-import.c: fix syntax bug.
+
+	* doc/sgml/C/image/<lots.png>: new and updated screenshots.
+
+	* doc/sgml/C/image/Makefile.am: include new files.
+
+	* doc/sgml/C/{lots}.sgml: update for new screenshots.
+
 2001-07-04  Bill Gribble  <grib@billgribble.com>
 
 	* src/gnome/druid-qif-import.c: fix cut-n-paste error in 

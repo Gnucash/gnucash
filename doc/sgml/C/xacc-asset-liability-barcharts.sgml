@@ -4,14 +4,20 @@
 </artheader>
 <sect1>
 <title></title>
-<para><emphasis>PICTURES NEEDED!!!!</emphasis> 
-</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="image/asset-barchart.png">
+</imageobject>
+</mediaobject>
+</screenshot>
 <para>These reports allow you to display home one, some,
 or all of your assets or liabilities change over time.  
 If you want a barchart showing an overall picture of
 your net worth, use the <link linkend="xacc-net-worth-barchart">
 	  Net Worth Barchart</link> instead.</para>
-      
+
+<para>Options available for this report include:</para>
       <itemizedlist>
 	<listitem><para><emphasis><link linkend="xacc-options-accounts">
 		Accounts</link></emphasis></para>

@@ -1396,7 +1396,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
 
   /* insert new pages, one for each stock */
   stocks = wind->new_stocks;
-  while(!gh_null_p(stocks) && (stocks != SCM_BOOL_F))) {
+  while(!gh_null_p(stocks) && (stocks != SCM_BOOL_F)) {
     comm_ptr_token = gh_call2(hash_ref, wind->stock_hash, gh_car(stocks));
     commodity      = gw_wcp_get_ptr(comm_ptr_token);
     
