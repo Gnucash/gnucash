@@ -127,9 +127,6 @@ xaccScrubSubSplitPrice (Split *split)
 
 /* ================================================================= */
 
-#define LATER 1
-#if LATER
-
 /* Remove the guid of b from a */
 static void
 remove_guids (Split *sa, Split *sb)
@@ -188,19 +185,17 @@ merge_splits (Split *sa, Split *sb)
    xaccAccountCommitEdit (act);
 }
 
-/* XXX need describtiion */
-void xaccScrubMergeSubSplits (Split *split);
-
-void 
+gboolean 
 xaccScrubMergeSubSplits (Split *split)
 {
+   gboolean rc = FALSE;
    Transaction *txn;
    KvpFrame *sf;
    SplitList *node;
    GNCLot *lot;
 
    sf = is_subsplit (split);
-   if (!sf) return;
+   if (!sf) return FALSE;
 
    txn = split->parent;
    lot = xaccSplitGetLot (split);
@@ -217,10 +212,33 @@ restart:
        * we should double-check the kvp's to be sure).  Merge the
        * two back together again. */
       merge_splits (split, s);
+      rc = TRUE;
       goto restart;
    }
-   LEAVE (" ");
+   LEAVE (" splits merged=%d", rc);
+   return rc;
 }
-#endif
+
+gboolean 
+xaccScrubMergeTxnSubSplits (Transaction *txn)
+{
+   gboolean rc = FALSE;
+   SplitList *node;
+
+   if (!txn) return FALSE;
+
+   ENTER (" ");
+restart:
+   for (node=txn->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      if (!xaccScrubMergeSubSplits(s)) continue;
+
+      rc = TRUE;
+      goto restart;
+   }
+   LEAVE (" splits merged=%d", rc);
+   return rc;
+}
 
 /* ========================== END OF FILE  ========================= */
