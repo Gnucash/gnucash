@@ -1,3 +1,123 @@
+2001-11-28  Rob Browning  <rlb@defaultvalue.org>
+
+	* src/bin/Makefile.am: handle new overrides arrangement.
+
+	* src/bin/generate-gnc-script: new script to generate all the
+	trivial top-level gnucash redirection scripts.
+
+	* src/scm/tip-of-the-day.scm (gnc:read-tips): use
+	%search-load-path to find the tips, not gnc:find-in-directories
+	and gnc:*load-path*.  In truth, the tips should be in sharedir
+	anyway, but we'll handle that later.
+
+	* src/scm/main.scm (gnc:startup): call gnc:setup-gettext and
+	setlocale just after loading app-utils.  If this isn't early
+	enough, we'll need to try something else.
+
+	* src/scm/command-line.scm (gnc:*config-dir*): add GNC_CONFIG_DIR
+	environment variable override.
+
+	* src/scm/bootstrap.scm.in: switch to use load-from-path for
+	main.scm.
+
+	* src/bin/test/test-run-script: new file.
+
+	* src/bin/overrides/gnucash-run-script: new file -- mostly content
+	of ../gnucash-run-script.
+
+	* configure.in: add adjustments for new static overrides scripts.
+
+	* src/import-export/binary-import/Makefile.am
+	(.scm-links): add some more links so runs from build dir will
+	actually work.
+
+	* src/gnome/Makefile.am: accomodate the removal of gnucash.h,
+	gnucash.c.in, and the move of i18n.h.in which all resulted in the
+	removal of libgncguile.la.
+
+	* src/gnc-module/gnc-module.c
+	(gnc_module_system_setup_load_path): don't do anything when dir
+	list is empty.
+
+	* src/business/business-core/gncInvoice.c
+	(gncInvoiceGetInvoiceFromTxn): initialize book to NULL so warnings
+	won't kill -Werror compiles.
+
+	* src/app-utils/.cvsignore: add i18n.h.
+
+	* src/app-utils/Makefile.am
+	(gncinclude_HEADERS): add i18n.h
+	(EXTRA_DIST): add i18n.h.in
+	(i18n.h): new target.
+
+	* src/app-utils/gw-app-utils-spec.scm: add wrapper for
+	gnc:setup-gettext.
+
+	* src/app-utils/README: new file.
+
+	* src/bin/overrides/guile.in: moved from ../.
+
+	* src/bin/overrides/gnucash-make-guids: new file -- mostly content
+	of ../gnucash-make-guids.in.
+
+	* src/bin/overrides/gnucash-env.in: moved from ../.
+
+	* src/bin/overrides/gnucash-build-env.in: moved from ../.
+
+	* src/bin/.cvsignore: update for file rearrangements.
+
+	* src/bin/test/test-version: new file.
+
+	* src/bin/test/test-guile-env-override: new file.
+
+	* src/bin/test/fake-guile: new file.
+
+	* src/bin/test/Makefile.am: new file.
+
+	* src/bin/test/.cvsignore: new file.
+
+	* src/bin/overrides/gnucash: new file.
+
+	* src/bin/overrides/Makefile.am: new file.
+
+	* src/bin/overrides/.cvsignore: new file.
+
+	* src/bin/gnucash.in: removed. 
+
+	* src/bin/gnucash-make-guids.in: removed. 
+
+	* src/bin/gnucash-run-script.in: removed. 
+
+	* src/bin/guile.in: moved to src/bin/overrides.
+
+	* src/bin/gnucash-env.in: moved to src/bin/overrides. 
+
+	* src/import-export/qif-import/Makefile.am (.scm-links): new target.
+
+	* src/gnome/gnucash.h: removed. 
+
+	* src/gnome/gnucash.c.in: removed. 
+
+	* src/gnome/i18n.h.in: moved to src/app-utils.
+
+	* src/import-export/qif-import/.cvsignore: add .scm-links.
+
+	* src/gnome/top-level.c: remove gnucash.h include.
+
+	* src/gnome/gw-gnc-spec.scm: remove gnucash.h include.
+
+	* src/core-utils/.cvsignore: add .scm-links.
+
+	* src/core-utils/gw-core-utils-spec.scm: new file.
+
+	* src/core-utils/Makefile.am: accomodate new g-wrappers.
+
+	* src/app-utils/gnc-gettext-util.c (gnc_setup_gettext): move here.
+
+	* src/app-utils/gnc-gettext-util.h (gnc_setup_gettext): move here.
+
+	* src/app-utils/i18n.h.in: move here from src/gnome.
+
 2001-11-26  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/*/Makefile.am: add ${GLADE_CFLAGS} to AM_CFLAGS.
