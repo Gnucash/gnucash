@@ -61,7 +61,10 @@ Things to do:
 
  - better way to kill the server (currently can only 'kill' it or ^C it)
 
-
+ - test whether rpcgen supports '-M'..  For now, supply the stubs as a
+   part of the release and let anyone who changes the .x files also
+   change the stubs and header.  Only the xdr routines are built on the
+   build host, because that doesn't depend on the -M flag at all.
 
 
 				Derek Atkins <warlord@MIT.EDU>

@@ -45,26 +45,27 @@ INCLUDES = -I.. -I/usr/lib/glib/include
 
 LDFLAGS = -lpthread
 
-RPCGEN=rpcgen -M
+#RPCGEN=rpcgen -M
+RPCGEN=rpcgen
 
 RPCGEN_SRCS = gncAccount.x gncCommodity.x gncKVP.x gncGUID.x \
 	gncPrice.x gncQuery.x gncRpc.x gncSplit.x gncTxn.x
 
-gncRpc.h: $(RPCGEN_SRCS)
-	$(RM) $@
-	$(RPCGEN) -h -o $@ gncRpc.x
+#gncRpc.h: $(RPCGEN_SRCS)
+#	$(RM) $@
+#	$(RPCGEN) -h -o $@ gncRpc.x
 
 gncRpc_xdr.c: $(RPCGEN_SRCS)
 	$(RM) $@
 	$(RPCGEN) -c -o $@ gncRpc.x
 
-gncRpc_clnt.c: $(RPCGEN_SRCS)
-	$(RM) $@
-	$(RPCGEN) -l -o $@ gncRpc.x
+#gncRpc_clnt.c: $(RPCGEN_SRCS)
+#	$(RM) $@
+#	$(RPCGEN) -l -o $@ gncRpc.x
 
-gncRpc_svc.c: $(RPCGEN_SRCS)
-	$(RM) $@
-	$(RPCGEN) -m -o $@ gncRpc.x
+#gncRpc_svc.c: $(RPCGEN_SRCS)
+#	$(RM) $@
+#	$(RPCGEN) -m -o $@ gncRpc.x
 
 #gncRpc_server_stubs.c: $(RPCGEN_SRCS)
 #	$(RPCGEN) -Ss -o $@ gncRpc.x
