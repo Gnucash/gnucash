@@ -33,6 +33,7 @@
 #include "gnc-engine-util.h"
 #include "global-options.h"
 #include "gnc-event.h"
+#include "gnc-file-dialog.h"
 
 #define EQUITY_ACCOUNT_NAME  _("Opening Balances")
 #define OPENING_BALANCE_DESC _("Opening Balance")
@@ -202,7 +203,6 @@ on_dateok_clicked (GtkButton *button, gpointer user_data)
 	chart_data  *data;
 	GtkCalendar *calendar;
 	struct tm *chart_tm;
-	GtkWidget   *qsffilechooser;
 	GtkWindow   *parent;
 	gchar *filename;
 	QofSession *current_session, *chart_session;
@@ -234,12 +234,10 @@ on_dateok_clicked (GtkButton *button, gpointer user_data)
 	book = qof_session_get_book(current_session);
 	filename = g_strdup("/tmp/qsf-chartofaccounts.xml");
 	chart_session = qof_session_new();
-	qsffilechooser = gtk_file_chooser_dialog_new("Export Chart of Accounts to QSF XML", 
-		parent, GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, 
-		GTK_RESPONSE_CANCEL, GTK_STOCK_CONVERT, GTK_RESPONSE_ACCEPT, NULL);
-	if (gtk_dialog_run (GTK_DIALOG (qsffilechooser)) == GTK_RESPONSE_ACCEPT)
+	filename = gnc_file_dialog(_("Export Chart of Accounts to QSF XML"),
+				   NULL, NULL);
+	if (filename)
 	{
-		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (qsffilechooser));
 		gnc_engine_suspend_events();
 	qof_session_begin(chart_session, filename, TRUE, TRUE);
 		data->chart_session = chart_session;
@@ -266,7 +264,6 @@ on_dateok_clicked (GtkButton *button, gpointer user_data)
 		gnc_engine_resume_events();
 	}
 	qof_session_end(chart_session);
-	gtk_widget_destroy(qsffilechooser);
 	g_free(data);
 	qof_session_set_current_session(current_session);
 }

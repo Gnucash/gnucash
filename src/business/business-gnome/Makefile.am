@@ -10,6 +10,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/app-file \
   -I${top_srcdir}/src/gnome-search \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/src/business/business-core \
