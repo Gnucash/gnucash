@@ -6,14 +6,16 @@
 # zij hadden het grootste gedeelte vertaald, ik heb het
 # slechts afgewerkt, dus de meeste credits hebben zij
 # verdiend en niet ik, Jeroen.
+# Dank gaat uit naar Wannes voor veel belangrijke verbeteringen
+# en voor de uitgebreide controle van de vertalingen!
 # Hendrik-Jan Heins <hjh@passys.nl>, 2003
 # "Last-Translator: Hendrik-Jan Heins <hjh@passys.nl>\n" << this is true !
 # But cannot submit, so :
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.8.7\n"
-"POT-Creation-Date: 2003-09-14 18:59-0700\n"
-"PO-Revision-Date: 2003-11-07 17:28+0100\n"
+"Project-Id-Version: gnucash 1.8.8\n"
+"POT-Creation-Date: 2003-11-17 22:01-0800\n"
+"PO-Revision-Date: 2004-02-25 23:30+0100\n"
 "Last-Translator: Jeroen ten Berge <twinbit@home.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -254,7 +256,7 @@ msgstr "Toch openen"
 
 #: src/app-file/gnc-file.c:389
 msgid "Create New File"
-msgstr "Genereer een nieuw bestand"
+msgstr "Nieuw bestand maken"
 
 #: src/app-file/gnc-file.c:391
 #, c-format
@@ -482,7 +484,7 @@ msgstr "Gegenereerd vanaf een factuur. Probeer de verzending van de factuur onge
 
 #: src/business/business-core/gncInvoice.c:925
 msgid "Automatic Payment Forward"
-msgstr "Doorsturen naar automatische betaling"
+msgstr "Automatische betaling doorsturen"
 
 #: src/business/business-core/gncInvoice.c:926
 msgid "Auto Split"
@@ -502,7 +504,7 @@ msgstr "Betaling"
 
 #: src/business/business-core/gncInvoice.c:1181
 msgid "Pre-Payment"
-msgstr "Vooruitbetaling"
+msgstr "Aanbetaling"
 
 #: src/business/business-core/gncInvoice.c:1329
 msgid " (posted)"
@@ -727,7 +729,7 @@ msgstr "Vaste dag van de maand"
 #: src/business/business-gnome/glade/billterms.glade:1093
 #: src/business/business-gnome/dialog-billterms.c:481
 msgid "Proximo"
-msgstr "Volgende"
+msgstr "In volgende maand"
 
 #: src/business/business-gnome/glade/billterms.glade:684
 msgid "window1"
@@ -752,7 +754,7 @@ msgstr "Het aantal dagen om de factuur te betalen na de verzend datum."
 
 #: src/business/business-gnome/glade/billterms.glade:821
 msgid "The number of days after the post date during which a discount will be applied for early payment."
-msgstr "Het aantal dagen na de verzend datum waarin een korting wordt gegeven voor vroeg betalen."
+msgstr "Het aantal dagen na de verzenddatum waarin een korting wordt gegeven voor vroeg betalen."
 
 #: src/business/business-gnome/glade/billterms.glade:845
 msgid "The percentage discount applied for early payment."
@@ -827,14 +829,14 @@ msgstr "Het ID nummer van de klant. Indien u dit niet invult, dan zal een bruikb
 
 #: src/business/business-gnome/glade/customer.glade:257
 msgid "Billing Address"
-msgstr "Rekening adres"
+msgstr "Factuuradres"
 
 #: src/business/business-gnome/glade/customer.glade:305
 #: src/business/business-gnome/glade/customer.glade:951
 #: src/business/business-gnome/glade/employee.glade:305
 #: src/business/business-gnome/glade/vendor.glade:306
 msgid "Address: "
-msgstr "adres: "
+msgstr "Adres: "
 
 #: src/business/business-gnome/glade/customer.glade:373
 #: src/business/business-gnome/glade/customer.glade:1019
@@ -909,20 +911,20 @@ msgstr "Krediet limiet: "
 
 #: src/business/business-gnome/glade/customer.glade:711
 msgid "Tax Included: "
-msgstr "Inclusief belastingen: "
+msgstr "Inclusief BTW: "
 
 #: src/business/business-gnome/glade/customer.glade:728
 msgid "Tax Table: "
-msgstr "Belasting tabel: "
+msgstr "BTW tabel: "
 
 #: src/business/business-gnome/glade/customer.glade:845
 #: src/business/business-gnome/glade/vendor.glade:780
 msgid "Override the global Tax Table?"
-msgstr "De globale belastingtabel negeren?"
+msgstr "De globale BTW negeren?"
 
 #: src/business/business-gnome/glade/customer.glade:860
 msgid "What Tax Table should be applied to this customer?"
-msgstr "Welke belastingtabel moet worden toegepast op deze klant?"
+msgstr "Welk BTW tarief moet worden toegepast op deze klant?"
 
 #: src/business/business-gnome/glade/customer.glade:904
 msgid "Shipping Information"
@@ -943,7 +945,7 @@ msgstr "verzenddatum"
 
 #: src/business/business-gnome/glade/date-close.glade:338
 msgid "duedate"
-msgstr "te betalen datum"
+msgstr "Uiterste betaaldatum"
 
 #: src/business/business-gnome/glade/date-close.glade:355
 #: src/business/business-ledger/gncEntryLedgerModel.c:60
@@ -968,7 +970,7 @@ msgstr "Omschrijving"
 
 #: src/business/business-gnome/glade/date-close.glade:372
 msgid "acct"
-msgstr "dagboek"
+msgstr "grtbrek"
 
 #: src/business/business-gnome/glade/employee.glade:22
 #: src/business/business-gnome/dialog-employee.c:284
@@ -1096,13 +1098,13 @@ msgstr "_Nieuwe factuur"
 
 #: src/business/business-gnome/glade/invoice.glade:604
 msgid "Create a new Account"
-msgstr "Maak een nieuw dagboek"
+msgstr "Nieuwe debiteur maken"
 
 #: src/business/business-gnome/glade/invoice.glade:610
 #: src/gnome/glade/register.glade:96 src/gnome/glade/account.glade:22
 #: src/gnome-utils/dialog-account.c:1717
 msgid "New Account"
-msgstr "Nieuw dagboek"
+msgstr "Nieuwe debiteur"
 
 #: src/business/business-gnome/glade/invoice.glade:741
 #: src/business/business-gnome/glade/invoice.glade:1236
@@ -1115,12 +1117,12 @@ msgstr "B_ewerk factuur"
 
 #: src/business/business-gnome/glade/invoice.glade:771
 msgid "Display the toolbar"
-msgstr "Gereedschapsbalk weergeven"
+msgstr "Werkbalk weergeven"
 
 #: src/business/business-gnome/glade/invoice.glade:777
 #: src/gnome/glade/register.glade:248 src/gnome/window-main.c:810
 msgid "_Toolbar"
-msgstr "_Gereedschapsbalk"
+msgstr "_Werkbalk"
 
 #: src/business/business-gnome/glade/invoice.glade:785
 msgid "Display the Summary Bar"
@@ -1285,12 +1287,12 @@ msgstr "_Gereedschappen"
 #: src/business/business-gnome/glade/invoice.glade:1047
 #: src/gnome/glade/register.glade:565 src/gnome/window-main.c:871
 msgid "Open a general ledger window"
-msgstr "Open een algemeen grootboek venster"
+msgstr "Open een grootboek venster"
 
 #: src/business/business-gnome/glade/invoice.glade:1053
 #: src/gnome/glade/register.glade:571 src/gnome/window-main.c:870
 msgid "_General Ledger"
-msgstr "_Algemeen grootboek"
+msgstr "_Grootboek"
 
 #: src/business/business-gnome/glade/invoice.glade:1060
 #: src/gnome/glade/register.glade:578 src/gnome/window-main.c:879
@@ -1305,12 +1307,12 @@ msgstr "_Prijs bewerken"
 #: src/business/business-gnome/glade/invoice.glade:1073
 #: src/gnome/glade/register.glade:591 src/gnome/window-main.c:887
 msgid "View and edit the commodities for stocks and mutual funds"
-msgstr "Bekijk en bewerk de randvoorwaarden voor aandelen en beleggingsfondsen"
+msgstr "Bekijk en bewerk de handelsgoederen voor aandelen en beleggingsfondsen"
 
 #: src/business/business-gnome/glade/invoice.glade:1079
 #: src/gnome/glade/register.glade:597
 msgid "_Commodity Editor"
-msgstr "Vlottende a_ctiva bewerken"
+msgstr "A_rtikelen bewerken"
 
 #: src/business/business-gnome/glade/invoice.glade:1086
 #: src/gnome/glade/register.glade:604 src/gnome/window-main.c:895
@@ -1344,7 +1346,7 @@ msgstr "Voer een betaling in voor de eigenaar van deze factuur"
 
 #: src/business/business-gnome/glade/invoice.glade:1131
 msgid "Process Pa_yment"
-msgstr "_Periodieke afbetaling"
+msgstr "Betaling _uitvoeren"
 
 #: src/business/business-gnome/glade/invoice.glade:1154
 msgid "_Gnucash Users Manual"
@@ -1411,33 +1413,33 @@ msgstr "Afdrukken"
 
 #: src/business/business-gnome/glade/invoice.glade:1365
 msgid "Post this Invoice to your Chart of Accounts"
-msgstr "Plaats deze factuur in uw dagboek overzicht"
+msgstr "Boek deze factuur naar de resultaatrekening"
 
 #: src/business/business-gnome/glade/invoice.glade:1372
 #: intl-scm/guile-strings.c:3609 intl-scm/guile-strings.c:3647
 msgid "Post"
-msgstr "Plaats"
+msgstr "Boek"
 
 #: src/business/business-gnome/glade/invoice.glade:1380
 msgid "Unpost this Invoice and make it editable"
-msgstr "Maak de plaatsing van deze factuur ongedaan en maak deze bewerkbaar"
+msgstr "Maak de boeking van deze factuur ongedaan en maak deze bewerkbaar"
 
 #: src/business/business-gnome/glade/invoice.glade:1387
 msgid "Unpost"
-msgstr "Plaatsing ongedaan maken"
+msgstr "Boeking ongedaan maken"
 
 #: src/business/business-gnome/glade/invoice.glade:1496
 #: src/business/business-gnome/dialog-invoice.c:2300
 msgid "Date Posted"
-msgstr "Datum geplaatst"
+msgstr "Datum geboekt"
 
 #: src/business/business-gnome/glade/invoice.glade:1513
 msgid "Posted Account"
-msgstr "Geplaatst dagboek"
+msgstr "Geboekt op rekening"
 
 #: src/business/business-gnome/glade/invoice.glade:1942
 msgid "Customer: "
-msgstr "Klant:"
+msgstr "Klant: "
 
 #: src/business/business-gnome/glade/invoice.glade:1975
 msgid "Job: "
@@ -1566,15 +1568,15 @@ msgstr "Leverancier"
 
 #: src/business/business-gnome/glade/vendor.glade:678
 msgid "Tax Included:"
-msgstr "Inclusief belastingen:"
+msgstr "Inclusief BTW:"
 
 #: src/business/business-gnome/glade/vendor.glade:695
 msgid "Tax Table:"
-msgstr "Belastingtabel:"
+msgstr "BTW tabel:"
 
 #: src/business/business-gnome/glade/vendor.glade:795
 msgid "What Tax Table should be applied to this vendor?"
-msgstr "Welke belastingschaal moet er toegepast worden op deze leverancier?"
+msgstr "Welk BTW tarief moet er toegepast worden op deze leverancier?"
 
 #: src/business/business-gnome/business-urls.c:43
 #: src/business/business-gnome/business-urls.c:93
@@ -1664,7 +1666,7 @@ msgstr "Procentuele getallen moeten tussen de 0 en 100 liggen."
 
 #: src/business/business-gnome/dialog-billterms.c:259
 msgid "You must provide a name for this Billing Term."
-msgstr "U moet een naam opgeven voor deze rekeningvoorwaarden."
+msgstr "U moet een naam opgeven voor deze factureringsvoorwaarden."
 
 #: src/business/business-gnome/dialog-billterms.c:265
 #, c-format
@@ -1672,17 +1674,17 @@ msgid ""
 "You must provide a unique name for this Billing Term.\n"
 "Your choice \"%s\" is already in use."
 msgstr ""
-"U moet een unieke naam voor deze factuur voorwaarden opgeven.\n"
+"U moet een unieke naam voor deze factureringsvoorwaarden opgeven.\n"
 "De keuze \"%s\" is al in gebruik."
 
 #: src/business/business-gnome/dialog-billterms.c:484
-#: src/engine/FreqSpec.c:970 src/import-export/hbci/druid-hbci-initial.c:892
-#: src/import-export/hbci/druid-hbci-initial.c:1290
-#: src/import-export/hbci/hbci-interaction.c:178
-#: src/import-export/hbci/hbci-interaction.c:179
-#: src/import-export/hbci/hbci-interaction.c:303
-#: src/import-export/hbci/hbci-interaction.c:369
-#: src/import-export/hbci/hbci-interaction.c:491
+#: src/engine/FreqSpec.c:970 src/import-export/hbci/druid-hbci-initial.c:820
+#: src/import-export/hbci/druid-hbci-initial.c:1218
+#: src/import-export/hbci/hbci-interaction.c:170
+#: src/import-export/hbci/hbci-interaction.c:171
+#: src/import-export/hbci/hbci-interaction.c:295
+#: src/import-export/hbci/hbci-interaction.c:371
+#: src/import-export/hbci/hbci-interaction.c:493
 #: src/import-export/hbci/hbci-progressmon.c:192 intl-scm/guile-strings.c:1081
 msgid "Unknown"
 msgstr "Onbekend"
@@ -1704,7 +1706,7 @@ msgid ""
 "If this customer is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
 "U moet een bedrijfsnaam opgeven.\n"
-"Wanneer deze klant een privépersoon is (en geen bedrijf), dan kunt u het beste de \"bedrijfsnaam\" en de \"contactpersoon\" naam hetzelfde opgeven."
+"Als deze klant een privé-persoon is (en geen bedrijf), dan kunt u het beste de \"bedrijfsnaam\" en de \"contactpersoon\" naam hetzelfde opgeven."
 
 #: src/business/business-gnome/dialog-customer.c:245
 msgid "You must enter a billing address."
@@ -1751,16 +1753,16 @@ msgstr "Facturen van klant"
 #: intl-scm/guile-strings.c:635 intl-scm/guile-strings.c:3619
 #: intl-scm/guile-strings.c:3653
 msgid "Process Payment"
-msgstr "Periodieke afbetaling"
+msgstr "Verwerk betaling"
 
 #: src/business/business-gnome/dialog-customer.c:807
 msgid "Shipping Contact"
-msgstr "Verzendings contactpersoon"
+msgstr "Contactpersoon verzending"
 
 #: src/business/business-gnome/dialog-customer.c:809
 #: src/business/business-gnome/dialog-vendor.c:666
 msgid "Billing Contact"
-msgstr "Facturerings contactpersoon"
+msgstr "Contactpersoon facturering"
 
 #: src/business/business-gnome/dialog-customer.c:811
 msgid "Customer ID"
@@ -1865,7 +1867,7 @@ msgstr "De factuur moet tenminste één boeking bevatten."
 
 #: src/business/business-gnome/dialog-invoice.c:562
 msgid "Do you really want to post the invoice?"
-msgstr "Weet u zeker dat u de factuur wilt versturen?"
+msgstr "Weet u zeker dat u de factuur boeken?"
 
 #: src/business/business-gnome/dialog-invoice.c:563
 #: src/register/ledger-core/split-register-model.c:123
@@ -1876,15 +1878,15 @@ msgstr "Verval datum"
 
 #: src/business/business-gnome/dialog-invoice.c:564
 msgid "Post Date"
-msgstr "Datum geplaatst"
+msgstr "Boekingsdatum"
 
 #: src/business/business-gnome/dialog-invoice.c:565
 msgid "Post to Account"
-msgstr "Plaatsen in dagboek"
+msgstr "Boeken op rekening"
 
 #: src/business/business-gnome/dialog-invoice.c:619
 msgid "Unposting this Invoice will delete the posted transaction.  Are you sure you want to unpost it?"
-msgstr "Ongedaan maken van het plaatsen van deze factuur zal ook de geplaatste transactie ongedaan maken. Weet u zeker dat u ongedaan wilt maken?"
+msgstr "Ongedaan maken van het boeken van deze factuur zal ook de geboekte transactie ongedaan maken. Weet u zeker dat u ongedaan wilt maken?"
 
 #: src/business/business-gnome/dialog-invoice.c:954
 #: src/gnome/window-reconcile.c:1013
@@ -1941,15 +1943,15 @@ msgstr "Bekijk rekening"
 #: src/business/business-gnome/dialog-invoice.c:1756
 #: intl-scm/guile-strings.c:625 intl-scm/guile-strings.c:627
 msgid "New Expense Voucher"
-msgstr "Nieuwe uitgaven bonnen"
+msgstr "Nieuwe onkostendeclaratie"
 
 #: src/business/business-gnome/dialog-invoice.c:1760
 msgid "Edit Expense Voucher"
-msgstr "Bewerk uitgaven bon"
+msgstr "Bewerk onkostendeclaratie"
 
 #: src/business/business-gnome/dialog-invoice.c:1763
 msgid "View Expense Voucher"
-msgstr "Bekijk uitgaven bon"
+msgstr "Bekijk onkostendeclaratie"
 
 #: src/business/business-gnome/dialog-invoice.c:2283
 msgid "View/Edit Invoice"
@@ -1966,11 +1968,11 @@ msgstr "Factuur opmerkingen"
 
 #: src/business/business-gnome/dialog-invoice.c:2298
 msgid "Is Paid?"
-msgstr "Is betaald?"
+msgstr "Betaald?"
 
 #: src/business/business-gnome/dialog-invoice.c:2302
 msgid "Is Posted?"
-msgstr "Is geplaatst?"
+msgstr "Geboekt?"
 
 #: src/business/business-gnome/dialog-invoice.c:2306
 msgid "Company Name "
@@ -1993,7 +1995,7 @@ msgstr "Betaald"
 
 #: src/business/business-gnome/dialog-invoice.c:2321
 msgid "Posted"
-msgstr "Geplaatst"
+msgstr "Geboekt"
 
 #: src/business/business-gnome/dialog-invoice.c:2326
 #: src/business/business-gnome/dialog-order.c:864
@@ -2002,7 +2004,7 @@ msgstr "Geopend"
 
 #: src/business/business-gnome/dialog-job.c:104
 msgid "The Job must be given a name."
-msgstr "De opdracht moet benoemd worden."
+msgstr "Geef de opdracht een naam."
 
 #: src/business/business-gnome/dialog-job.c:113
 msgid "You must choose an owner for this job."
@@ -2070,7 +2072,7 @@ msgstr "Order opmerkingen"
 
 #: src/business/business-gnome/dialog-order.c:845
 msgid "Is Closed?"
-msgstr "Is gesloten?"
+msgstr "Afgesloten?"
 
 #: src/business/business-gnome/dialog-order.c:849
 msgid "Owner Name "
@@ -2078,7 +2080,7 @@ msgstr "Naam eigenaar"
 
 #: src/business/business-gnome/dialog-order.c:862
 msgid "Closed"
-msgstr "Gesloten"
+msgstr "Afgesloten"
 
 #: src/business/business-gnome/dialog-payment.c:88
 msgid "You must enter the amount of the payment.  The payment amount must be greater than zero."
@@ -2094,12 +2096,12 @@ msgstr "U moet een transactie dagboek uit de balans selecteren."
 
 #: src/business/business-gnome/dialog-payment.c:113
 msgid "You must enter an account name for posting."
-msgstr "U moet een dagboeknaam voor plaatsing opgeven."
+msgstr "U moet een grootboekrekening voor boeking opgeven."
 
 #: src/business/business-gnome/dialog-payment.c:123
 #, c-format
 msgid "Your selected post account, %s, does not exist"
-msgstr "Het door u geselecteerde verzend dagboek, %s, bestaat niet"
+msgstr "De door u geselecteerde grootboekrekening, %s, bestaat niet"
 
 #: src/business/business-gnome/dialog-vendor.c:172
 msgid ""
@@ -2107,7 +2109,7 @@ msgid ""
 "If this vendor is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
 "U moet een bedrijfsnaam opgeven.\n"
-"Wanneer de verkoper een privépersoon is (en geen bedrijf), dan kunt u het beste de \"bedrijsnaam\" en de \"contactpersoon\" naam hetzelfde opgeven."
+"Wanneer de verkoper een privé-persoon is (en geen bedrijf), dan kunt u het beste de \"bedrijsnaam\" en de \"contactpersoon\" naam hetzelfde opgeven."
 
 #: src/business/business-gnome/dialog-vendor.c:183
 msgid "You must enter a payment address."
@@ -2177,7 +2179,7 @@ msgstr "Gebruik globale instellingen"
 #: src/register/ledger-core/split-register.c:1488
 #, c-format
 msgid "The account %s does not allow transactions.\n"
-msgstr "Het dagboek %s staat geen transacties toe.\n"
+msgstr "Op grootboekrekening %s kan niet geboekt worden.\n"
 
 #: src/business/business-ledger/gncEntryLedger.c:66
 #: src/register/ledger-core/split-register.c:1489
@@ -2186,7 +2188,7 @@ msgid ""
 "The account %s does not exist.\n"
 "Would you like to create it?"
 msgstr ""
-"Het dagboek %s bestaat niet.\n"
+"Grootboekrekening %s bestaat niet.\n"
 "Wilt u deze aanmaken?"
 
 #: src/business/business-ledger/gncEntryLedger.c:213
@@ -2208,7 +2210,7 @@ msgid ""
 "Would you like to save it?"
 msgstr ""
 "De huidige boeking is veranderd.\n"
-"Wilt u het opslaan?"
+"Wilt u ze opslaan?"
 
 #: src/business/business-ledger/gncEntryLedgerControl.c:124
 #, c-format
@@ -2218,7 +2220,7 @@ msgstr "Ongeldige waarde: u moet %s aangeven."
 #: src/business/business-ledger/gncEntryLedgerControl.c:148
 #: src/business/business-ledger/gncEntryLedgerControl.c:154
 msgid "an Account"
-msgstr "Een dagboek"
+msgstr "Een grootboekrekening"
 
 #: src/business/business-ledger/gncEntryLedgerControl.c:358
 #, c-format
@@ -2226,8 +2228,8 @@ msgid ""
 "The tax table %s does not exist.\n"
 "Would you like to create it?"
 msgstr ""
-"De belasting tabel %s bestaat niet.\n"
-"Wilt u deze aanmaken?"
+"Het BTW tarief %s bestaat niet.\n"
+"Wilt u dit aanmaken?"
 
 #: src/business/business-ledger/gncEntryLedgerControl.c:473
 msgid ""
@@ -2238,7 +2240,7 @@ msgid ""
 msgstr ""
 "De huidige boeking is veranderd.\n"
 "Deze boeking is onderdeel van een bestaande order.\n"
-"Wilt u de verandering opslaan en\n"
+"Wilt u de wijzigingen opslaan en\n"
 "daarmee uw order aanpassen ?"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:58
@@ -2296,7 +2298,7 @@ msgstr "Voorbeeld: TI"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:89
 msgid "sample:Tax Table 1"
-msgstr "Voorbeeld: Belasting tabel 1"
+msgstr "Voorbeeld: BTW tarief 1"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:93
 msgid "sample:999.00"
@@ -2351,11 +2353,11 @@ msgstr "Verreken"
 #: src/business/business-ledger/gncEntryLedgerModel.c:40
 #: src/gnome/glade/stocks.glade:635
 msgid "Income Account"
-msgstr "Inkomsten dagboek"
+msgstr "Inkomsten rekening"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:45
 msgid "Expense Account"
-msgstr "Onkosten dagboek"
+msgstr "Kosten rekening"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:50
 #: src/register/ledger-core/split-register-model.c:184
@@ -2391,7 +2393,7 @@ msgstr "Hoeveelheid"
 #: src/business/business-ledger/gncEntryLedgerModel.c:90
 #: src/business/dialog-tax-table/tax-tables.glade:380
 msgid "Tax Table"
-msgstr "Belastingtabel"
+msgstr "BTW tarief"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:95
 msgid "Taxable?"
@@ -2399,7 +2401,7 @@ msgstr "Belastbaar?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:100
 msgid "Tax Included?"
-msgstr "Inclusief belasting?"
+msgstr "Inclusief BTW?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:105
 msgid "Invoiced?"
@@ -2413,7 +2415,7 @@ msgstr "Subtotaal"
 #: src/business/business-ledger/gncEntryLedgerModel.c:115
 #: intl-scm/guile-strings.c:861 intl-scm/guile-strings.c:1025
 msgid "Tax"
-msgstr "Belasting"
+msgstr "BTW"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:120
 msgid "Billable?"
@@ -2421,7 +2423,7 @@ msgstr "Factureerbaar?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:515
 msgid "Enter the income/expense account for the Entry, or choose one from the list"
-msgstr "Geef het inkomsten/uitgaven dagboek op voor de boeking, of kies er een uit de lijst"
+msgstr "Geef het inkomsten/kosten rekening op voor de boeking, of kies er een uit de lijst"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:528
 msgid "Enter the type of Entry"
@@ -2441,7 +2443,7 @@ msgstr "Geef het kortingspercentage op"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:585
 msgid "Enter the Discount ... unknown type"
-msgstr "Geef korting ... onbekend type"
+msgstr "Geef korting onbekend type op"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:602
 msgid "Discount Type: Monetary Value"
@@ -2457,47 +2459,47 @@ msgstr "Selecteer het kortings type"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:624
 msgid "Tax computed after discount is applied"
-msgstr "Belasting wordt berekend nadat de korting is gegeven"
+msgstr "BTW wordt berekend over nettobedrag, na korting"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:627
 msgid "Discount and tax both applied on pretax value"
-msgstr "Korting en belasting worden beiden toegepast op de waarde van voor belasting"
+msgstr "Korting en BTW worden berekend op bedrag exclusief BTW"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:630
 msgid "Discount computed after tax is applied"
-msgstr "Korting wordt berekend op de waarde van na belasting"
+msgstr "Korting wordt berekend op het bedrag inclusief BTW"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:633
 msgid "Select how to compute the Discount and Taxes"
-msgstr "Kies hoe de korting en belastingen moeten worden berekend"
+msgstr "Kies hoe de korting en BTW moeten worden berekend"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:646
 msgid "Enter the unit-Price for this Entry"
-msgstr "Geef de eenheidsprijs op voor deze boeking"
+msgstr "Geef de eenheidsprijs op voor dit artikel"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:658
 msgid "Enter the Quantity of units for this Entry"
-msgstr "Geef de hoeveelheid eenheden op voor deze boeking"
+msgstr "Geef het aantal eenheden op voor dit artikel"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:670
 msgid "Enter the Tax Table to apply to this entry"
-msgstr "Geef de toe te passen belastingtabel voor deze boeking op"
+msgstr "Geef het toepasbaar BTW tarief op voor dit artikel"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:679
 msgid "Is this entry taxable?"
-msgstr "Is deze boeking belastbaar?"
+msgstr "Wordt dit artikel met BTW belast?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:688
 msgid "Is the tax already included in the price of this entry?"
-msgstr "Is belasting al meegerekend in de prijs van deze boeking ?"
+msgstr "Is de BTW al meegerekend in de prijs van dit artikel?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:705
 msgid "Is this entry Invoiced?"
-msgstr "Is deze boeking gefactureerd?"
+msgstr "Is dit artikel gefactureerd?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:709
 msgid "Include this entry on this invoice?"
-msgstr "Deze boeking meenemen op deze factuur?"
+msgstr "Dit artikel meenemen op deze factuur?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:712
 msgid "Unknown EntryLedger Type"
@@ -2505,15 +2507,15 @@ msgstr "Onbekend grootboek type"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:725
 msgid "The subtotal value of this entry "
-msgstr "Het subtotaal van deze boeking"
+msgstr "Het subtotaal van dit artikel"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:737
 msgid "The total tax of this entry "
-msgstr "De totale belastingen van deze boeking"
+msgstr "Het totale BTW bedrag over dit artikel"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:746
 msgid "Is this entry billable to a customer or job?"
-msgstr "Is de boeking factureerbaar aan een klant of opdracht?"
+msgstr "Is dit artikel factureerbaar aan een klant of opdracht?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:755
 msgid "How did you pay for this item?"
@@ -2523,11 +2525,11 @@ msgstr "Hoe heeft u dit onderdeel betaald ?"
 #: src/business/dialog-tax-table/tax-tables.glade:86
 #: intl-scm/guile-strings.c:645
 msgid "Tax Tables"
-msgstr "Belastingtabellen"
+msgstr "BTW tarieven"
 
 #: src/business/dialog-tax-table/tax-tables.glade:184
 msgid "Tax Table Entries"
-msgstr "Belastingtabel waarden"
+msgstr "BTW tarief waarden"
 
 #: src/business/dialog-tax-table/tax-tables.glade:227
 msgid "label8"
@@ -2539,7 +2541,7 @@ msgstr "label9"
 
 #: src/business/dialog-tax-table/tax-tables.glade:434
 msgid "Tax Table Entry"
-msgstr "Belasting tabel waarde"
+msgstr "BTW tarief waarde"
 
 #: src/business/dialog-tax-table/tax-tables.glade:492
 msgid "Value: "
@@ -2547,11 +2549,11 @@ msgstr "Waarde:"
 
 #: src/business/dialog-tax-table/tax-tables.glade:567
 msgid "Tax Account"
-msgstr "Belasting dagboek"
+msgstr "BTW grootboekrekening"
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:71
 msgid "You must provide a name for this Tax Table."
-msgstr "U moet een naam opgeven voor deze belastingtabel."
+msgstr "U moet een naam opgeven voor dit BTW tarief."
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:77
 #, c-format
@@ -2559,12 +2561,12 @@ msgid ""
 "You must provide a unique name for this Tax Table.\n"
 "Your choice \"%s\" is already in use."
 msgstr ""
-"U moet een unieke naam voor deze belasting tabel opgeven.\n"
+"U moet een unieke naam voor dit BTW tarief opgeven.\n"
 "Uw keuze \"%s\" is al in gebruik."
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:104
 msgid "You must choose a Tax Account."
-msgstr "U moet een belastingdagboek kiezen."
+msgstr "U moet een grootboekrekening voor BTW kiezen."
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:195
 msgid "Value $"
@@ -2578,19 +2580,19 @@ msgstr "Procent %"
 #: src/business/dialog-tax-table/dialog-tax-table.c:510
 #, c-format
 msgid "Tax table \"%s\" is in use.  You cannot delete it."
-msgstr "Belastingtabel \"%s\" is in gebruik. U kunt deze niet verwijderen"
+msgstr "BTW tarief \"%s\" is in gebruik. U kunt deze niet verwijderen"
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:555
 msgid ""
 "You cannot remove the last entry from the tax table.\n"
 "Try deleting the tax table if you want to do that."
 msgstr ""
-"U kunt de laatste opgave uit de belastingtabel niet verwijderen.\n"
-"Probeert u de belastingtabel te verwijderen als u dat wilt."
+"U kunt de laatste opgave uit de BTW tabel niet verwijderen.\n"
+"Probeert u de BTW tabel te verwijderen als u dat wilt."
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:562
 msgid "Are you sure you want to delete this entry?"
-msgstr "Weet u zeker dat u de laatste opgave wilt verwijderen?"
+msgstr "Weet u zeker dat u het laatste artikel wilt verwijderen?"
 
 #: src/engine/Account.c:488
 msgid "Error message not available"
@@ -2602,12 +2604,12 @@ msgid ""
 "Error occurred while saving Account:\n"
 "%d: %s"
 msgstr ""
-"Er is een fout opgetreden tijdens het verwerken van\n"
+"Er is een fout opgetreden tijdens het opslaan van\n"
 "%d: %s"
 
 #: src/engine/Account.c:2478 src/import-export/hbci/glade/hbci.glade:444
-#: src/import-export/hbci/gnc-hbci-utils.c:522
-#: src/import-export/hbci/gnc-hbci-utils.c:526 intl-scm/guile-strings.c:1565
+#: src/import-export/hbci/gnc-hbci-utils.c:527
+#: src/import-export/hbci/gnc-hbci-utils.c:531 intl-scm/guile-strings.c:1565
 #: intl-scm/guile-strings.c:3909
 msgid "Bank"
 msgstr "Bank"
@@ -2692,7 +2694,7 @@ msgstr "Wekelijks: %s"
 #: src/engine/FreqSpec.c:812
 #, c-format
 msgid "Bi-Weekly, %ss"
-msgstr "Twee maal per week: %ss"
+msgstr "Twee-wekelijks: %ss"
 
 #: src/engine/FreqSpec.c:835
 #, c-format
@@ -2762,24 +2764,24 @@ msgstr "Verweesd"
 msgid "Imbalance"
 msgstr "Niet in balans"
 
-#: src/engine/Transaction.c:1718
+#: src/engine/Transaction.c:1717
 msgid ""
 "Another user has modified this transaction\n"
 "\tjust a moment ago. Please look at their changes,\n"
 "\tand try again, if needed.\n"
 msgstr ""
 "Een andere gebruiker heeft deze transactie \tnet\n"
-"veranderd. Controleert u de veranderingen\n"
+"gewijzigd. Controleert u de wijzigingen\n"
 "\ten probeer zonodig opnieuw.\n"
 
-#: src/engine/Transaction.c:2358 src/engine/Transaction.c:2379
-#: src/register/ledger-core/split-register-control.c:977
+#: src/engine/Transaction.c:2357 src/engine/Transaction.c:2378
+#: src/register/ledger-core/split-register-control.c:982
 #: src/register/ledger-core/split-register.c:2089
 #: intl-scm/guile-strings.c:2325 intl-scm/guile-strings.c:2809
 msgid "-- Split Transaction --"
 msgstr "-- Transactie opsplitsen --"
 
-#: src/engine/Transaction.c:2400 src/gnome/glade/register.glade:1608
+#: src/engine/Transaction.c:2399 src/gnome/glade/register.glade:1608
 #: src/gnome/druid-stock-split.c:410
 #: src/register/ledger-core/split-register.c:2073
 #: intl-scm/guile-strings.c:2435
@@ -2788,7 +2790,7 @@ msgstr "Splits"
 
 #: src/gnome/glade/register.glade:38
 msgid "Check Register"
-msgstr "Controleer het kasboek"
+msgstr "Controleer het boekingsformulier"
 
 #: src/gnome/glade/register.glade:90 src/gnome/window-acct-tree.c:879
 #: src/gnome/window-acct-tree.c:1015 src/gnome/window-acct-tree.c:1276
@@ -2847,7 +2849,7 @@ msgstr "_Alles"
 
 #: src/gnome/glade/register.glade:367
 msgid "_Reconciled"
-msgstr "Geco_rrigeerd"
+msgstr "Verwe_rkt"
 
 #: src/gnome/glade/register.glade:380
 msgid "_Cleared"
@@ -2863,7 +2865,7 @@ msgstr "Be_vroren"
 
 #: src/gnome/glade/register.glade:419
 msgid "_Unreconciled"
-msgstr "_niet gecorrigeerd"
+msgstr "_niet verwerkt"
 
 #: src/gnome/glade/register.glade:448 src/gnome/glade/register.glade:765
 #: src/gnome/window-acct-tree.c:997 src/gnome/window-acct-tree.c:1334
@@ -2874,7 +2876,7 @@ msgstr "_Transactie..."
 #: src/gnome/glade/register.glade:460 src/gnome/glade/register.glade:778
 #: src/gnome/window-acct-tree.c:989 src/gnome/window-acct-tree.c:1342
 msgid "_Reconcile..."
-msgstr "Co_rrigeren..."
+msgstr "Verwe_rken..."
 
 #: src/gnome/glade/register.glade:472 src/gnome/glade/register.glade:791
 msgid "_Stock Split..."
@@ -2882,7 +2884,7 @@ msgstr "Aandelen _Splitsen --"
 
 #: src/gnome/glade/register.glade:479
 msgid "Chec_k & Repair"
-msgstr "Contro_leer & repareer"
+msgstr "Contro_leer & herstel"
 
 #: src/gnome/glade/register.glade:494
 msgid "_All transactions"
@@ -2894,7 +2896,7 @@ msgstr "_Deze transactie"
 
 #: src/gnome/glade/register.glade:527 src/gnome/glade/register.glade:540
 msgid "Open a register report window for this transaction"
-msgstr "Open een kasboek rapportage venster voor deze transactie"
+msgstr "Open een boekingsformulier rapportage venster voor deze transactie"
 
 #: src/gnome/glade/register.glade:533
 msgid "_Account Report"
@@ -2902,7 +2904,7 @@ msgstr "_Dagboek rapport"
 
 #: src/gnome/glade/register.glade:546
 msgid "_Transaction Report"
-msgstr "_Transactie Rapport"
+msgstr "Boe_kingsrapport"
 
 #: src/gnome/glade/register.glade:628 src/gnome/window-main.c:915
 msgid "Open the GnuCash Tutorial"
@@ -2932,7 +2934,7 @@ msgstr "Boek fondsen over van het ene dagboek naar een ander"
 
 #: src/gnome/glade/register.glade:772
 msgid "Reconcile the main account for this register"
-msgstr "Corrigeer het hoofddagboek voor dit kasboek"
+msgstr "Corrigeer het hoofddagboek voor dit boekingsformulier"
 
 #: src/gnome/glade/register.glade:785 src/gnome/window-acct-tree.c:1006
 #: src/gnome/window-acct-tree.c:1351
@@ -2957,7 +2959,7 @@ msgstr "Verwijder de huidige transactie"
 #: src/gnome/glade/register.glade:843 src/gnome/glade/register.glade:1620
 #: src/gnome/glade/register.glade:2059 src/gnome/glade/register.glade:2302
 msgid "Move to the blank transaction at the bottom of the register"
-msgstr "Ga naar een lege transactie onderaan het kasboek"
+msgstr "Ga naar een lege boekingsregel onderaan het scherm"
 
 #: src/gnome/glade/register.glade:862 src/gnome/glade/register.glade:1572
 #: src/gnome/glade/register.glade:2078 src/gnome/glade/register.glade:2321
@@ -2967,12 +2969,12 @@ msgstr "Maak een copie van de huidige transactie "
 #: src/gnome/glade/register.glade:868 src/gnome/glade/register.glade:2084
 #: src/gnome/glade/register.glade:2327
 msgid "Dup_licate Transaction..."
-msgstr "Dup_liceer de transactie..."
+msgstr "Cop_ieer de boeking..."
 
 #: src/gnome/glade/register.glade:880 src/gnome/glade/register.glade:2097
 #: src/gnome/glade/register.glade:2339 src/gnome/gnc-split-reg.c:1042
 msgid "Remove Transaction Splits"
-msgstr "Verwijder transactie opsplitsing"
+msgstr "Verwijder boekingsopsplitsing"
 
 #: src/gnome/glade/register.glade:887 src/gnome/glade/register.glade:2104
 #: src/gnome/glade/register.glade:2346
@@ -3001,11 +3003,11 @@ msgstr "_Spring"
 
 #: src/gnome/glade/register.glade:927
 msgid "Duplicate this Transaction"
-msgstr "Dupliceer deze transactie"
+msgstr "Copieer deze boeking"
 
 #: src/gnome/glade/register.glade:986
 msgid "Transaction Information"
-msgstr "Transactie gegevens"
+msgstr "Boekingsinformatie"
 
 #: src/gnome/glade/register.glade:1016 src/gnome/glade/account.glade:717
 #: src/gnome/glade/price.glade:464 src/gnome/glade/print.glade:343
@@ -3048,11 +3050,11 @@ msgstr "Vandaag"
 
 #: src/gnome/glade/register.glade:1359
 msgid "Delete Transaction"
-msgstr "Verwijder de transactie"
+msgstr "Verwijder boekingsregel"
 
 #: src/gnome/glade/register.glade:1450
 msgid "Delete the whole transaction"
-msgstr "Verwijder de gehele transactie"
+msgstr "Verwijder de gehele boeking"
 
 #: src/gnome/glade/register.glade:1465
 msgid "Delete all the other splits"
@@ -3060,7 +3062,7 @@ msgstr "Verwijder alle andere opsplitsingen"
 
 #: src/gnome/glade/register.glade:1507
 msgid "[rtw] THIS WINDOW SHOULD NOT BE CREATED"
-msgstr "Foutje... [dit venster zou niet zichtbaar moeten zijn]"
+msgstr "[Foutje] DIT VENSTER ZOU NIET ZICHTBAAR MOETEN ZIJN"
 
 #: src/gnome/glade/register.glade:1589
 msgid "Create a Scheduled Transaction with the current transaction as a template"
@@ -3068,7 +3070,7 @@ msgstr "Maak een geplande transactie aan met de huidige transactie als sjabloon"
 
 #: src/gnome/glade/register.glade:1595 src/gnome/glade/fincalc.glade:66
 msgid "Schedule"
-msgstr "Kalender"
+msgstr "Plan"
 
 #: src/gnome/glade/register.glade:1640
 msgid "Jump"
@@ -3076,7 +3078,7 @@ msgstr "Spring"
 
 #: src/gnome/glade/register.glade:1649
 msgid "[rmw] THIS WINDOW SHOULD NOT BE CREATED"
-msgstr "Foutje... [dit venster zou niet zichtbaar moeten zijn]"
+msgstr "[Foutje] DIT VENSTER ZOU NIET ZICHTBAAR MOETEN ZIJN"
 
 #: src/gnome/glade/register.glade:1713
 msgid "Cut the selected transaction"
@@ -3478,8 +3480,8 @@ msgstr "GnuCash dagboek selecteren of toevoegen"
 #: src/import-export/generic-import.glade:161
 #: src/import-export/generic-import.glade:389
 #: src/import-export/generic-import.glade:899
-#: src/import-export/hbci/gnc-hbci-utils.c:521
-#: src/import-export/hbci/gnc-hbci-utils.c:525
+#: src/import-export/hbci/gnc-hbci-utils.c:526
+#: src/import-export/hbci/gnc-hbci-utils.c:530
 #: src/import-export/qif-import/qif.glade:125
 #: src/register/ledger-core/split-register-model.c:191
 #: intl-scm/guile-strings.c:1055 intl-scm/guile-strings.c:1765
@@ -3506,7 +3508,7 @@ msgstr "Nieuw dagboek (nog niet ge-implementeerd)"
 
 #: src/gnome/glade/commodities.glade:22 src/gnome/glade/commodities.glade:85
 msgid "Commodities"
-msgstr "Vlottende activa"
+msgstr "Handelsgoederen"
 
 #: src/gnome/glade/commodities.glade:105
 msgid "Show National Currencies"
@@ -3529,7 +3531,7 @@ msgstr "Deel"
 
 #: src/gnome/glade/commodities.glade:225
 msgid "Add a new commodity."
-msgstr "Voeg een nieuwe vlottende activa toe"
+msgstr "Voeg een nieuwe portefeuille toe"
 
 #: src/gnome/glade/commodities.glade:228 src/gnome/glade/price.glade:276
 msgid "Add"
@@ -3537,7 +3539,7 @@ msgstr "Toevoegen"
 
 #: src/gnome/glade/commodities.glade:235
 msgid "Remove the current commodity."
-msgstr "Verwijder de huidige vlottende activa"
+msgstr "Verwijder de huidige portefeuille"
 
 #: src/gnome/glade/commodities.glade:238 src/gnome/glade/price.glade:286
 #: src/gnome-search/dialog-search.c:494
@@ -3911,24 +3913,24 @@ msgstr "Einddatum:"
 #: src/gnome/glade/sched-xact.glade:523 src/gnome/glade/sched-xact.glade:3075
 #: src/gnome/glade/sched-xact.glade:3547
 msgid "Number of Occurrences:"
-msgstr "Aantal keren voorgekomen:"
+msgstr "Aantal gebeurtenissen:"
 
 #: src/gnome/glade/sched-xact.glade:541
 msgid "Number of Occurrences"
-msgstr "Aantal keren voorgekomen"
+msgstr "Aantal gebeurtenissen"
 
 #: src/gnome/glade/sched-xact.glade:564
 msgid "Remaining Occurrences:"
-msgstr "Resterende voorkomens:"
+msgstr "Resterende gebeurtenissen:"
 
 #: src/gnome/glade/sched-xact.glade:582
 msgid "Remaining Number of Occurrences"
-msgstr "Resterend aantal voorkomens"
+msgstr "Resterend aantal gebeurtenissen"
 
 #: src/gnome/glade/sched-xact.glade:610 src/gnome/glade/sched-xact.glade:3130
 #: src/gnome/glade/sched-xact.glade:3143
 msgid "Recurrence Frequency"
-msgstr "Voorkomens frequentie"
+msgstr "Gebeurtenis frequentie"
 
 #: src/gnome/glade/sched-xact.glade:674
 msgid "Template Transaction"
@@ -4051,7 +4053,7 @@ msgstr "Maandelijks"
 #: src/gnome/glade/sched-xact.glade:1812 src/gnome/glade/sched-xact.glade:1952
 #: src/gnome/glade/sched-xact.glade:2093
 msgid "Occuring in"
-msgstr "Voorkomend in"
+msgstr "Komt voor in"
 
 #: src/gnome/glade/sched-xact.glade:1922
 msgid "Quarterly"
@@ -4099,7 +4101,7 @@ msgstr "Frequentie"
 
 #: src/gnome/glade/sched-xact.glade:2556
 msgid "Next Occurrence"
-msgstr "Volgende voorkomen"
+msgstr "Volgende gebeurtenis"
 
 #: src/gnome/glade/sched-xact.glade:2587 src/gnome/window-acct-tree.c:878
 #: src/gnome/window-reconcile.c:1438 intl-scm/guile-strings.c:541
@@ -4122,7 +4124,7 @@ msgstr "Veld"
 
 #: src/gnome/glade/sched-xact.glade:3186
 msgid "REPLACEME with the Register control box"
-msgstr "REPLACEME door een kasboek bewerkingsvak"
+msgstr "REPLACEME door een boekingsformulier bewerkingsvak"
 
 #: src/gnome/glade/sched-xact.glade:3210
 msgid "Template Transactions"
@@ -4271,18 +4273,18 @@ msgid ""
 "If you make a mistake or want to make changes later, you can edit\n"
 "the created Scheduled Transactions directly."
 msgstr ""
-"Dit is een stap-voor-stap methode om de aflossing van een lening in te stellen.\n"
+"Dit is een stap-voor-stap methode om de aflossing van een lening in te stellen\n"
 "binnen GnuCash. In deze Hulp kunt u de randvoorwaarden voor\n"
-"uw lening en de aflossing met details over de aflossing opgeven.\n"
-"Met deze gegevens worden de juiste geplande transacties\n"
-"automatisch aangemaakt.\n"
+"uw lening en de aflossing met details over de betalingen opgeven.\n"
+"Op basis daarvan zal een betalingsschema worden\n"
+"gemaakt.\n"
 "\n"
 "Wanneer u een fout maakt, of later veranderingen aan wilt brengen, kunt u\n"
-"de gecreëerde geplande transacties direct bewerken."
+"het betalingsschema direct bewerken."
 
 #: src/gnome/glade/sched-xact.glade:4316
 msgid "Loan Information"
-msgstr "Lenings gegevens"
+msgstr "Lening gegevens"
 
 #: src/gnome/glade/sched-xact.glade:4352
 msgid "Interest Rate:"
@@ -4316,11 +4318,11 @@ msgstr "Wilt u..."
 
 #: src/gnome/glade/sched-xact.glade:4818
 msgid "... utilize an escrow account for payments?"
-msgstr "... een onderpand-dagboek voor de betalingen?"
+msgstr "... een borg-rekening voor de betalingen gebruiken?"
 
 #: src/gnome/glade/sched-xact.glade:4850
 msgid "Escrow Account:"
-msgstr "Onderpand-dagboek:"
+msgstr "Borg rekening:"
 
 #: src/gnome/glade/sched-xact.glade:4896
 msgid "Repayment"
@@ -4348,11 +4350,11 @@ msgstr "<aflossingstype>"
 
 #: src/gnome/glade/sched-xact.glade:5294
 msgid "Payment To (Escrow):"
-msgstr "Betaling aan (onderpand):"
+msgstr "Betaling aan (borg):"
 
 #: src/gnome/glade/sched-xact.glade:5393
 msgid "Payment From (Escrow):"
-msgstr "Betaling vanaf (onderpand):"
+msgstr "Betaling van (borg):"
 
 #: src/gnome/glade/sched-xact.glade:5419
 msgid "Payment To:"
@@ -4364,11 +4366,11 @@ msgstr "Geef bron dagboek aan"
 
 #: src/gnome/glade/sched-xact.glade:5469
 msgid "Use Escrow Account"
-msgstr "Gebruik onderpand-dagboek"
+msgstr "Gebruik borg rekening"
 
 #: src/gnome/glade/sched-xact.glade:5506
 msgid "Payment Frequency"
-msgstr "Aflossings frequentie"
+msgstr "Aflossingsfrequentie"
 
 #: src/gnome/glade/sched-xact.glade:5520
 msgid "Part of Payment Transaction"
@@ -4456,7 +4458,7 @@ msgid ""
 "If you want to record a stock price for the split, enter it below.\n"
 "You may safely leave it blank."
 msgstr ""
-"Als u een aandelenprijs wilt archiveren voor de opsplitsing. Geef deze dan \n"
+"Als u een aandelenprijs wilt vastleggen voor de opsplitsing. Geef deze dan \n"
 "hieronder op.\n"
 "U kunt hier ook niets invullen."
 
@@ -4473,12 +4475,12 @@ msgid ""
 "If you received a cash disbursement as a result of the stock split,\n"
 "enter the details of that payment here. Otherwise, just click `Next'."
 msgstr ""
-"Als u een contante betaling heeft gedaan voor de aandelen opsplitsing,\n"
-"geef dan hier de details op van die betaling. Kies anders 'volgende'."
+"Als u een contante betaling heeft ontvangen als resultaat van de aandelen opsplitsing,\n"
+"geef dan hier de details van die betaling op. Kies anders 'volgende'."
 
 #: src/gnome/glade/stocks.glade:545
 msgid "Cash Amount:"
-msgstr "Hoeveelheid contanten:"
+msgstr "Contant bedrag:"
 
 #: src/gnome/glade/stocks.glade:662
 msgid "Asset Account"
@@ -4550,7 +4552,7 @@ msgid ""
 "at least one of your accounts. You may\n"
 "not delete it."
 msgstr ""
-"Deze vlottende activa is op dit moment in gebruik\n"
+"Deze portefeuille is op dit moment in gebruik\n"
 "door een of meer van uw dagboeken. U kunt\n"
 "hem niet verwijderen."
 
@@ -4560,16 +4562,16 @@ msgid ""
 "you sure you want to delete the selected\n"
 "commodity and its price quotes?"
 msgstr ""
-"Dit goed bevat prijsopgaven. Weet\n"
-"u zeker dat u de geselecteerde goederen\n"
-"en de bijbehorende prijsopgaven wilt verwijderen?"
+"Deze portefeuille bevat prijsnoteringen. Weet\n"
+"u zeker dat u de geselecteerde artikelen\n"
+"en de bijbehorende prijsnoteringen wilt verwijderen?"
 
 #: src/gnome/dialog-commodities.c:281
 msgid ""
 "Are you sure you want to delete the\n"
 "selected commodity?"
 msgstr ""
-"Weet u zeker dat u de geselecteerde vlottende activa\n"
+"Weet u zeker dat u de geselecteerde artikelen\n"
 "wilt verwijderen?"
 
 #: src/gnome/dialog-fincalc.c:340
@@ -4582,11 +4584,11 @@ msgstr "U moet een geldige uitdrukking opgeven."
 
 #: src/gnome/dialog-fincalc.c:379
 msgid "The interest rate cannot be zero."
-msgstr "Het rentepercentage kan geen nul zijn."
+msgstr "Het rentepercentage kan niet nul zijn."
 
 #: src/gnome/dialog-fincalc.c:398
 msgid "The number of payments cannot be zero."
-msgstr "Het aantal betalingen kan geen nul zijn."
+msgstr "Het aantal betalingen kan niet nul zijn."
 
 #: src/gnome/dialog-fincalc.c:403
 msgid "The number of payments cannot be negative."
@@ -4602,7 +4604,7 @@ msgstr "gebruiker: prijs bewerken"
 
 #: src/gnome/dialog-price-edit-db.c:76
 msgid "user:stock-split"
-msgstr "gebruiker: andelen opsplitsen"
+msgstr "gebruiker: aandelen opsplitsen"
 
 #: src/gnome/dialog-price-edit-db.c:77
 msgid "user:xfer-dialog"
@@ -4626,11 +4628,11 @@ msgstr "Alle prijzen ouder dan onderstaande datum worden verwijderd."
 
 #: src/gnome/dialog-price-editor.c:171
 msgid "You must select a commodity."
-msgstr "U moet een vlottende activa selecteren."
+msgstr "U moet een artikel selecteren."
 
 #: src/gnome/dialog-price-editor.c:176
 msgid "You must select a currency."
-msgstr "U moet een valuta selecteren."
+msgstr "U moet een munteenheid selecteren."
 
 #: src/gnome/dialog-price-editor.c:185 src/gnome-utils/dialog-transfer.c:1383
 msgid "You must enter a valid amount."
@@ -4649,8 +4651,8 @@ msgid ""
 "The Scheduled Transaction Editor cannot automatically\n"
 "balance this transaction. Should it still be entered?"
 msgstr ""
-"De automatische transactie bewerker kan deze transactie niet\n"
-"automatisch ballanceren. Moet de transactie echt worden aangemaakt?"
+"De automatische transactie editor kan deze transactie niet\n"
+"automatisch boeken. Moet de transactie echt worden aangemaakt?"
 
 #: src/gnome/dialog-scheduledxaction.c:785
 msgid "Please name the Scheduled Transaction."
@@ -4679,19 +4681,19 @@ msgstr "Geef een geldige eindselectie"
 
 #: src/gnome/dialog-scheduledxaction.c:865
 msgid "There must be some number of occurrences."
-msgstr "Het moet een aantal keer voorkomen."
+msgstr "Er moet een aantal gebeurtenissen zijn."
 
 #: src/gnome/dialog-scheduledxaction.c:873
 #, c-format
 msgid "The number of remaining occurrences (%d) is greater than the number of total occurrences (%d)."
-msgstr "Het aantal overgebleven voorkomens (%d) is groter dan het totaal aantal voorkomens (%d)."
+msgstr "Het aantal overgebleven gebeurtenissen (%d) is groter dan het totaal aantal gebeurtenissen (%d)."
 
 #: src/gnome/dialog-scheduledxaction.c:907
 msgid ""
 "You have attempted to create a Scheduled Transaction which will never run.\n"
 "Do you really want to do this?"
 msgstr ""
-"U heeft getracht een transactie te genereren die nooit zal starten.\n"
+"U heeft getracht een transactieschema te maken dat nooit zal werken.\n"
 "Weet u zeker dat u dit wilt doen?"
 
 #: src/gnome/dialog-scheduledxaction.c:1542
@@ -4708,7 +4710,7 @@ msgstr ""
 
 #: src/gnome/dialog-scheduledxaction.c:1723
 msgid "Delete the selected Scheduled Transactions?"
-msgstr "Moeten de geselecteerde geplande transacties verwijderd worden?"
+msgstr "Het geselecteerde transactieschema verwijderen?"
 
 #: src/gnome/dialog-scheduledxaction.c:2039
 msgid ""
@@ -4736,8 +4738,8 @@ msgid ""
 "Cancelling the Since-Last-Run dialog will revert all changes.\n"
 "Are you sure you want to lose all Scheduled Transaction changes?"
 msgstr ""
-"Het annuleren van de laatste-programmastart venster zal alle veranderingen ongedaan maken.\n"
-"Weet u zeker dat u alle veranderingen aan de geplande transacties ongedaan wilt maken?"
+"Het annuleren van het \"Sinds-laatste-programmastart-venster\" zal alle veranderingen ongedaan maken.\n"
+"Weet u zeker dat u alle veranderingen aan het geplande transactieschema ongedaan wilt maken?"
 
 #: src/gnome/dialog-sxsincelast.c:1799
 msgid "Ready to create"
@@ -4827,7 +4829,7 @@ msgstr "... betaal \"%s\"?"
 
 #: src/gnome/druid-loan.c:614
 msgid "via Escrow account?"
-msgstr "via het onderpand dagboek?"
+msgstr "via borg rekening?"
 
 #: src/gnome/druid-loan.c:785 src/register/ledger-core/split-register.c:2027
 msgid "Loan"
@@ -4843,7 +4845,7 @@ msgstr "Selecteer een geldig leningsdagboek."
 
 #: src/gnome/druid-loan.c:1220
 msgid "Please select a valid Escrow Account."
-msgstr "Selecteer een geldig onderpand dagboek."
+msgstr "Selecteer een geldige borg rekening."
 
 #: src/gnome/druid-loan.c:1286 src/gnome/druid-loan.c:1507
 msgid "Please select a valid \"from\" account."
@@ -4874,7 +4876,7 @@ msgstr "Rente"
 
 #: src/gnome/druid-loan.c:2221
 msgid "Escrow "
-msgstr "Onderpand "
+msgstr "Borg "
 
 #: src/gnome/druid-stock-split.c:229 src/gnome-utils/gnc-html.c:115
 #: src/gnome-utils/dialog-transfer.c:489
@@ -4935,7 +4937,7 @@ msgstr "Fout bij het toevoegen van de prijs."
 
 #: src/gnome/druid-stock-split.c:731
 msgid "You don't have any stock accounts with balances!"
-msgstr "U hebt geen enkel aandelen dagboek dat in balans is!"
+msgstr "Geen van uw aandelen rekeningen vertoont een saldo!"
 
 #: src/gnome/gnc-network.c:168
 msgid "Enter GnuCash Network passphrase:"
@@ -4975,7 +4977,7 @@ msgstr "Inladen..."
 #: src/register/ledger-core/split-register-layout.c:548
 #: src/register/ledger-core/split-register-model.c:169
 msgid "Reconciled:R"
-msgstr "Gecorrigeerd:R"
+msgstr "Verwerkt:R"
 
 #: src/gnome/top-level.c:201
 #, c-format
@@ -4996,7 +4998,7 @@ msgstr "Niet ondersteund type: %s"
 #: intl-scm/guile-strings.c:3891 intl-scm/guile-strings.c:3899
 #: intl-scm/guile-strings.c:3905 intl-scm/guile-strings.c:3935
 msgid "Account Tree"
-msgstr "Dagboek hiërarchie"
+msgstr "Rekening schema"
 
 #: src/gnome/window-acct-tree.c:266 intl-scm/guile-strings.c:3893
 msgid "Name of account view"
@@ -5008,16 +5010,16 @@ msgid ""
 "To open an account, you must first\n"
 "choose an account to open."
 msgstr ""
-"om een dagboek te kunnen openen, moet u eerst\n"
-"een dagboek selecteren om te openen."
+"U dient een grootboekrekening eerst te selecteren\n"
+"voordat u hem kunt openen."
 
 #: src/gnome/window-acct-tree.c:378 src/gnome/window-acct-tree.c:570
 msgid ""
 "To edit an account, you must first\n"
 "choose an account to edit.\n"
 msgstr ""
-"Om een dagboek te kunnen bewerken, moet u eerst\n"
-"een dagboek selecteren om te bewerken.\n"
+"U dient een grootboekrekening eerst te selecteren\n"
+"voordat u hem kunt bewerken.\n"
 
 #: src/gnome/window-acct-tree.c:433
 #, c-format
@@ -5097,7 +5099,7 @@ msgstr "Bewerk het geselecteerde dagboek"
 
 #: src/gnome/window-acct-tree.c:868
 msgid "Edit the account view options"
-msgstr "Bewerk de dagboek venster opties"
+msgstr "Bewerk de grootboekrekening venster opties"
 
 #: src/gnome/window-acct-tree.c:889 src/gnome/window-acct-tree.c:1023
 #: src/gnome/window-acct-tree.c:1317
@@ -5122,7 +5124,7 @@ msgstr "Controleer op- en repareer niet-gebalanceerde transacties en verweesde o
 
 #: src/gnome/window-acct-tree.c:929
 msgid "Check & Repair A_ll"
-msgstr "Controleer & repareer a_llen"
+msgstr "Controleer & repareer a_lle"
 
 #: src/gnome/window-acct-tree.c:930
 msgid "Check for and repair unbalanced transactions and orphan splits in all accounts"
@@ -5261,7 +5263,7 @@ msgstr "Vernieuw dit venster"
 
 #: src/gnome/window-main.c:811
 msgid "Show/hide the toolbar on this window"
-msgstr "Toon/verberg de gereedschapsbalk in dit venster"
+msgstr "Toon/verberg de werkbalk in dit venster"
 
 #: src/gnome/window-main.c:818
 msgid "Show/hide the summary bar on this window"
@@ -5301,7 +5303,7 @@ msgstr "Geplande transactie_s"
 
 #: src/gnome/window-main.c:886
 msgid "Commodity _Editor"
-msgstr "Vlottende activa b_ewerken"
+msgstr "Artikelen b_ewerken"
 
 #: src/gnome/window-main.c:894
 msgid "Financial _Calculator"
@@ -5309,11 +5311,11 @@ msgstr "Financiële rekenmachine"
 
 #: src/gnome/window-main.c:901
 msgid "_Find Transactions"
-msgstr "_Vindt transacties"
+msgstr "_Vind transacties"
 
 #: src/gnome/window-main.c:902
 msgid "Find transactions with a search"
-msgstr "Vindt transacties met een zoekopdracht"
+msgstr "Vind transacties met een zoekopdracht"
 
 #: src/gnome/window-main.c:922
 msgid "_Tips Of The Day"
@@ -5373,7 +5375,7 @@ msgstr "Correctie informatie"
 
 #: src/gnome/window-reconcile.c:677
 msgid "Statement Date:"
-msgstr "Opgave datum:"
+msgstr "Datum afschrift:"
 
 #: src/gnome/window-reconcile.c:678 src/gnome/window-reconcile.c:1849
 msgid "Starting Balance:"
@@ -5447,7 +5449,7 @@ msgstr "Open het dagboek"
 
 #: src/gnome/window-reconcile.c:1276
 msgid "Edit the main account for this register"
-msgstr "Bewerk het hoofd dagboek van dit kasboek"
+msgstr "Bewerk het hoofd dagboek van dit boekingsformulier"
 
 #: src/gnome/window-reconcile.c:1306 src/gnome/window-reconcile.c:1378
 msgid "_New"
@@ -5542,11 +5544,11 @@ msgstr "Zoekresultaat rapport"
 #: intl-scm/guile-strings.c:242 intl-scm/guile-strings.c:2415
 #: intl-scm/guile-strings.c:3375 intl-scm/guile-strings.c:3855
 msgid "Register"
-msgstr "kasboek"
+msgstr "boekingsformulier"
 
 #: src/gnome/window-register.c:827 intl-scm/guile-strings.c:2337
 msgid "Register Report"
-msgstr "kasboek rapport"
+msgstr "boekingsformulier rapport"
 
 #: src/gnome/window-register.c:844
 msgid "and subaccounts"
@@ -5562,7 +5564,7 @@ msgid "<No information>"
 msgstr "<Geen gegevens>"
 
 #: src/gnome/gnc-split-reg.c:902
-#: src/register/ledger-core/split-register-control.c:1462
+#: src/register/ledger-core/split-register-control.c:1467
 #: src/register/ledger-core/split-register.c:496
 msgid ""
 "The current transaction has been changed.\n"
@@ -5606,7 +5608,7 @@ msgstr ""
 
 #: src/gnome/gnc-split-reg.c:1145
 msgid "This is the split anchoring this transaction to the register. You may not delete it from this register window."
-msgstr "Dit is de opsplitsing die deze transactie kopppelt aan het kasboek. U kunt het niet verwijderen uit dit kasboek venster."
+msgstr "Dit is de opsplitsing die deze transactie kopppelt aan het boekingsformulier. U kunt het niet verwijderen uit dit boekingsformulier venster."
 
 #: src/gnome/gnc-split-reg.c:1158
 msgid "(no memo)"
@@ -5664,7 +5666,7 @@ msgid ""
 "placeholder checkbox."
 msgstr ""
 "Dit dagboek mag niet bewerkt worden. Wanneer u transacties\n"
-"wilt bewerken in dit kasboek, open dan de dagboek opties\n"
+"wilt bewerken in dit boekingsformulier, open dan de dagboek opties\n"
 "en deselecteer de opvul-optie."
 
 #: src/gnome/gnc-split-reg.c:2148
@@ -5678,7 +5680,7 @@ msgid ""
 msgstr ""
 "Een van de geselecteerde sub-dagboeken mag niet\n"
 "worden bewerkt. Wanneer u transacties wilt bewerken in\n"
-"dit kasboek, open dan de sub-dagboek opties en deselecteer\n"
+"dit boekingsformulier, open dan de sub-dagboek opties en deselecteer\n"
 "de opvul-optie. U kunt ook een enkel dagboek openen in plaats\n"
 "van een aantal dagboeken."
 
@@ -5982,19 +5984,19 @@ msgstr "Verhandeld deel:"
 
 #: src/gnome-utils/commodity.glade:463
 msgid "Enter the full name of the commodity. Example: US Dollars"
-msgstr "Geef de volledige naam van het goed. Voorbeeld: EU Euro"
+msgstr "Geef de volledige naam van de stukken. Voorbeeld: EU Euro"
 
 #: src/gnome-utils/commodity.glade:480
 msgid "Enter the ticker symbol or currency code for the commodity. Example: USD"
-msgstr "Geef het ticker-symbool of valuta code voor het goed. Voorbeeld: EUR"
+msgstr "Geef het ticker-symbool of valuta code voor het stuk. Voorbeeld: EUR"
 
 #: src/gnome-utils/commodity.glade:512
 msgid "Enter the type of commodity. For stocks, this is often an exchange on which the stock is traded. You can choose an existing type from the list or enter a new type with the keyboard."
-msgstr "Geef het type goed. Voor aandelen is dit meestal de beurs waar het verhandeld wordt. U kunt een bestaand type uit de lijst kiezen of een nieuw type met het toetsenbord invoeren."
+msgstr "Geef het soort stuk. Voor aandelen is dit meestal de beurs waar het verhandeld wordt. U kunt een bestaand soort uit de lijst kiezen of een nieuw soort met het toetsenbord invoeren."
 
 #: src/gnome-utils/commodity.glade:524
 msgid "Enter a unique code used to identify the commodity. Or, you may safely leave this field blank."
-msgstr "Geef een unieke code op die wordt gebruikt om het goed te identificeren. Dit veld kunt u ook zonder problemen leeg laten."
+msgstr "Geef een unieke code op die wordt gebruikt om het stuk te identificeren. Dit veld kunt u ook zonder problemen leeg laten."
 
 #: src/gnome-utils/commodity.glade:551
 msgid "1 /"
@@ -6002,7 +6004,7 @@ msgstr "1 /"
 
 #: src/gnome-utils/commodity.glade:568
 msgid "Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1."
-msgstr "Geef het kleinste deel op waarin het goed kan worden verhandeld. Voor aandelen die enkel in hele getallen worden verhandeld geeft u 1 op."
+msgstr "Geef het kleinste deel op waarin het stuk kan worden verhandeld. Voor aandelen die enkel in hele getallen worden verhandeld geeft u 1 op."
 
 #: src/gnome-utils/dialog-commodity.c:132
 msgid ""
@@ -6010,7 +6012,7 @@ msgid ""
 "Please select a commodity to match:"
 msgstr ""
 "\n"
-"Selecteer een overeenkomend goed:"
+"Selecteer een overeenkomend stuk:"
 
 #: src/gnome-utils/dialog-commodity.c:136
 msgid ""
@@ -6018,7 +6020,7 @@ msgid ""
 "Commodity: "
 msgstr ""
 "\n"
-"Product: "
+"Stuk: "
 
 #: src/gnome-utils/dialog-commodity.c:141
 msgid ""
@@ -6041,8 +6043,8 @@ msgid ""
 "You must select a commodity.\n"
 "To create a new one, click \"New\""
 msgstr ""
-"U moet goed selecteren.\n"
-"Om een nieuw goed te maken, kiest u \"Nieuw\""
+"U moet een artikel selecteren.\n"
+"Om een nieuw artikel te maken, kiest u \"Nieuw\""
 
 #: src/gnome-utils/dialog-commodity.c:731
 msgid "You may not create a new national currency."
@@ -6050,7 +6052,7 @@ msgstr "U kunt geen nieuwe (nationale) valuta maken."
 
 #: src/gnome-utils/dialog-commodity.c:745
 msgid "That commodity already exists."
-msgstr "Dat goed bestaat al."
+msgstr "Dat artikel bestaat al."
 
 #: src/gnome-utils/dialog-commodity.c:778
 msgid ""
@@ -6058,7 +6060,7 @@ msgid ""
 "and \"Type\" for the commodity."
 msgstr ""
 "U moet een \"Volledige naam\", \"Symbool/afkorting\",\n"
-"en \"Type\" voor dit goed opgeven."
+"en \"Type\" voor dit artikel opgeven."
 
 #: src/gnome-utils/dialog-options.c:806 src/gnome-utils/dialog-options.c:951
 msgid "Select Default"
@@ -6122,7 +6124,7 @@ msgstr "U moet een geldig bovenliggend dagboek kiezen."
 
 #: src/gnome-utils/dialog-account.c:878 src/gnome-utils/dialog-account.c:1029
 msgid "You must choose a commodity."
-msgstr "U moet een goed kiezen."
+msgstr "U moet een artikel kiezen."
 
 #: src/gnome-utils/dialog-account.c:1009
 msgid "There is already an account with that name."
@@ -6138,7 +6140,7 @@ msgid ""
 "the opening balances equity account."
 msgstr ""
 "U moet een transactie dagboek selecteren of\n"
-"het openingsbalans actief vermogens dagboek kiezen."
+"de openingsbalans eigen vemogen rekening kiezen."
 
 #: src/gnome-utils/dialog-account.c:1581
 msgid "New top level account"
@@ -6563,7 +6565,7 @@ msgstr ""
 #: src/import-export/binary-import/druid-commodity.c:425
 #: src/import-export/qif-import/druid-qif-import.c:1416
 msgid "You must enter an existing national currency or enter a different type."
-msgstr "U moet een bestaande (nationale) valuta of een ander type invoeren."
+msgstr "U moet een bestaande (nationale) munteenheid of een ander type invoeren."
 
 #: src/import-export/generic-import.glade:86
 msgid "Please select or create an appropriate Gnucash account for:"
@@ -6624,9 +6626,9 @@ msgstr ""
 "- Groene transacties worden gebalanceerd geïmporteerd (maar misschien wilt u ze nog controleren op doel dagboek).\n"
 "\n"
 "- Selecteer \"A\" om de transactie als een nieuwe toe te voegen\n"
-"- Selecteer \"R\" om een overeenkomende transactie te corrigeren\n"
+"- Selecteer \"R\" om een overeenkomende transactie bij te werken\n"
 "- Selecteer geen van beiden om over te slaan (de transactie wordt helemaal niet geïmporteerd)\n"
-"- \"Selecteer importeer actie\" laat u de overeenkomende transactie aanpassen, corrigeren, of het doel dagboek of de automatische balans opsplitsing (wanneer nodig)."
+"- \"Selecteer importeer actie\" laat u de overeenkomende transactie aanpassen, corrigeren, het doel dagboek of de automatische balans opsplitsing (waar nodig), aanpassen."
 
 #: src/import-export/generic-import.glade:712
 msgid "Duplicate Transaction"
@@ -7281,7 +7283,7 @@ msgstr ""
 msgid "%s at %s (code %s)"
 msgstr "%s op %s (code %s)"
 
-#: src/import-export/hbci/druid-hbci-initial.c:562
+#: src/import-export/hbci/druid-hbci-initial.c:490
 msgid ""
 "You have changed the HBCI version. GnuCash will now need to \n"
 "update various system parameters, including the account list.\n"
@@ -7291,7 +7293,7 @@ msgstr ""
 "instellingen wijzigen, inclusief de dagboekenlijst.\n"
 "Kies nu 'Ok' om de wijzigingen door te voeren in het systeem en de dagboekenlijst."
 
-#: src/import-export/hbci/druid-hbci-initial.c:605
+#: src/import-export/hbci/druid-hbci-initial.c:533
 #, c-format
 msgid ""
 "Enter account id for new account \n"
@@ -7300,15 +7302,15 @@ msgstr ""
 "Geen een rekening ID op voor een nieuwe rekening \n"
 "bij bank %s (bank code %s):"
 
-#: src/import-export/hbci/druid-hbci-initial.c:620
+#: src/import-export/hbci/druid-hbci-initial.c:548
 msgid "An account with this account id at this bank already exists."
 msgstr "Een rekening met deze rekening ID bestaat al bij deze bank."
 
-#: src/import-export/hbci/druid-hbci-initial.c:1057
+#: src/import-export/hbci/druid-hbci-initial.c:985
 msgid "Default Customer"
 msgstr "Standaard klant"
 
-#: src/import-export/hbci/druid-hbci-initial.c:1549
+#: src/import-export/hbci/druid-hbci-initial.c:1477
 msgid ""
 "Since the cryptographic keys of the bank cannot be verified,\n"
 "you should stop contacting this Server Internet Address\n"
@@ -7455,10 +7457,58 @@ msgstr ""
 "Uw beveiligingsmedium wordt niet ondersteund. Er is geen bruikbare plugin \n"
 "gevonden voor het medium. Nu beëindigen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:494 intl-scm/guile-strings.c:1277
+#: src/import-export/hbci/gnc-hbci-utils.c:499 intl-scm/guile-strings.c:1277
 #: intl-scm/guile-strings.c:1317
 msgid "Unspecified"
 msgstr "Niet gespecificeerd"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:607
+msgid "Choose HBCI bank"
+msgstr "Kies HBCI bank"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:608
+msgid ""
+"More than one HBCI bank is available for \n"
+"the requested operation. Please choose \n"
+"the one that should be used."
+msgstr ""
+"Er is meer dan één HBCI bank beschikbaar voor \n"
+"de gevraagde operatie. Kies degene die u \n"
+"wilt gebruiken."
+
+#: src/import-export/hbci/gnc-hbci-utils.c:677
+#: src/import-export/hbci/gnc-hbci-utils.c:753
+#, c-format
+msgid "%s (%s) at bank %s (%s)"
+msgstr "%s (%s) bij bank %s (%s)"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:687
+msgid "Choose HBCI customer"
+msgstr "Kies HBCI klant"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:688
+msgid ""
+"More than one HBCI customer is available for \n"
+"the requested operation. Please choose \n"
+"the one that should be used."
+msgstr ""
+"Er is meer dan één HBCI klant beschikbaar voor \n"
+"de gevraagde operatie. Kies degene die u \n"
+"wilt gebruiken."
+
+#: src/import-export/hbci/gnc-hbci-utils.c:763
+msgid "Choose HBCI user"
+msgstr "Kies HBCI gebruiker"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:764
+msgid ""
+"More than one HBCI user is available for \n"
+"the requested operation. Please choose \n"
+"the one that should be used."
+msgstr ""
+"Er is meer dan éé HBCI gebruiker beschikbaar voor \n"
+"de gevraagde operatie. Kies degene die u \n"
+"wilt gebruiken."
 
 #: src/import-export/hbci/gncmod-hbci.c:89
 msgid "HBCI Get Balance"
@@ -7470,7 +7520,7 @@ msgstr "Haal de dagboek balans online op via HBCI"
 
 #: src/import-export/hbci/gncmod-hbci.c:93
 msgid "HBCI Get Transactions"
-msgstr "Transacties zoeken"
+msgstr "HBCI Transacties halen"
 
 #: src/import-export/hbci/gncmod-hbci.c:94
 msgid "Get the transactions online through HBCI"
@@ -7496,14 +7546,14 @@ msgstr "Geef online een nieuwe directe afschrijvingstoestemming op via HBCI"
 msgid "Online Actions"
 msgstr "Online Acties"
 
-#: src/import-export/hbci/hbci-interaction.c:43 intl-scm/guile-strings.c:433
+#: src/import-export/hbci/hbci-interaction.c:44 intl-scm/guile-strings.c:433
 #: intl-scm/guile-strings.c:1209 intl-scm/guile-strings.c:1215
 #: intl-scm/guile-strings.c:1221 intl-scm/guile-strings.c:1227
 #: intl-scm/guile-strings.c:1237 intl-scm/guile-strings.c:3851
 msgid "Online Banking & Importing"
 msgstr "Online bankieren & importeren"
 
-#: src/import-export/hbci/hbci-interaction.c:192
+#: src/import-export/hbci/hbci-interaction.c:184
 #, c-format
 msgid ""
 "Please enter and confirm new PIN for \n"
@@ -7514,18 +7564,18 @@ msgstr ""
 "voor gebruiker '%s' bij bank '%s'.\n"
 "met tenminste %d karakters."
 
-#: src/import-export/hbci/hbci-interaction.c:201
+#: src/import-export/hbci/hbci-interaction.c:193
 #, c-format
 msgid ""
 "Please enter and confirm a new PIN for \n"
-"user '%s' at unknown bank,\n"
+"user '%s',\n"
 "with at least %d characters."
 msgstr ""
 "Geeft u alstublieft een nieuwe PIN met bevestiging op\n"
-"voor gebruiker '%s' bij onbekende bank,\n"
+"voor gebruiker '%s',\n"
 "met tenminste %d karakters."
 
-#: src/import-export/hbci/hbci-interaction.c:208
+#: src/import-export/hbci/hbci-interaction.c:200
 #, c-format
 msgid ""
 "Please enter and confirm a new PIN\n"
@@ -7534,7 +7584,7 @@ msgstr ""
 "Geeft u alstublieft een nieuwe PIN met bevestiging op\n"
 "met tenminste %d karakters."
 
-#: src/import-export/hbci/hbci-interaction.c:229
+#: src/import-export/hbci/hbci-interaction.c:221
 #, c-format
 msgid ""
 "Please enter PIN for \n"
@@ -7543,7 +7593,7 @@ msgstr ""
 "Geeft u alstublieft het PIN op voor\n"
 "gebruiker '%s' bij bank '%s'."
 
-#: src/import-export/hbci/hbci-interaction.c:236
+#: src/import-export/hbci/hbci-interaction.c:228
 #, c-format
 msgid ""
 "Please enter PIN for \n"
@@ -7552,15 +7602,15 @@ msgstr ""
 "Geeft u alstublieft het PIN op voor\n"
 "gebruiker '%s' bij onbekende bank."
 
-#: src/import-export/hbci/hbci-interaction.c:242
+#: src/import-export/hbci/hbci-interaction.c:234
 msgid ""
-"Please enter PIN for \n"
-"unknown user at unknown bank."
+"Please enter the PIN for \n"
+"the newly created user."
 msgstr ""
 "Geeft u alstublieft het PIN op voor\n"
-"onbekende gebruiker bij onbekende bank."
+"de nieuw aangemaakte gebruiker."
 
-#: src/import-export/hbci/hbci-interaction.c:259
+#: src/import-export/hbci/hbci-interaction.c:251
 #, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
@@ -7569,25 +7619,33 @@ msgstr ""
 "Het PIN moet tenminste %d karakters lang zijn.\n"
 "Wilt u het nogmaals proberen?"
 
-#: src/import-export/hbci/hbci-interaction.c:310
+#: src/import-export/hbci/hbci-interaction.c:303
 #, c-format
 msgid ""
-"Please make sure the key file for \n"
-"user '%s' at bank '%s' can be accessed."
+"Please make sure the key file for user '%s' at bank '%s' can be \n"
+"accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
+"the key file is on a floppy disk or other removable media, please make \n"
+"sure the floppy disk or medium is correctly mounted."
 msgstr ""
-"Verzeker u ervan dat het sleutelbestand voor\n"
-"gebruiker '%s' bij bank '%s' toegankelijk is."
+"Controleer of het sleutelbestand voor gebruiker '%s' bij bank '%s' \n"
+"toegankelijk is. Als het sleutelbestand op uw harde schijf staat, kies dan \n"
+"'Ok'. Als het sleutelbestand op een diskette of ander verwisselbaar medium staat, \n"
+"controleer dan of de diskette of het medium correct geplaatst is."
 
-#: src/import-export/hbci/hbci-interaction.c:315
+#: src/import-export/hbci/hbci-interaction.c:311
 #, c-format
 msgid ""
-"Please make sure the key file for \n"
-"user '%s' at unknown bank can be accessed."
+"Please make sure the key file for user '%s' can be \n"
+"accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
+"the key file is on a floppy disk or other removable media, please make \n"
+"sure the floppy disk or medium is correctly mounted."
 msgstr ""
-"Verzeker u ervan dat het sleutelbestand voor\n"
-"gebruiker '%s' bij onbekende bank toegankelijk is."
+"Controleer of het sleutelbestand voor gebruiker '%s' toegankelijk is. \n"
+"Als het sleutelbestand op uw harde schijf staat, kies dan 'Ok'. Als \n"
+"Als het sleutelbestand op een diskette of ander verwisselbaar medium staat, \n"
+"controleer dan of de diskette of het medium correct geplaatst is."
 
-#: src/import-export/hbci/hbci-interaction.c:323
+#: src/import-export/hbci/hbci-interaction.c:321
 #, c-format
 msgid ""
 "Please insert chip card for \n"
@@ -7596,32 +7654,37 @@ msgstr ""
 "Plaatst u alstublieft de chipkaart voor \n"
 "gebruiker '%s' bij bank '%s'."
 
-#: src/import-export/hbci/hbci-interaction.c:328
+#: src/import-export/hbci/hbci-interaction.c:326
 #, c-format
 msgid ""
 "Please insert chip card for \n"
-"user '%s' at unknown bank."
+"user '%s'."
 msgstr ""
 "Plaatst u alstublieft de chipkaart voor \n"
-"gebruiker '%s' bij onbekende bank."
+"gebruiker '%s'."
 
-#: src/import-export/hbci/hbci-interaction.c:337
+#: src/import-export/hbci/hbci-interaction.c:336
 msgid ""
-"Please make sure the key file for \n"
-"unknown user at unknown bank can be accessed."
+"Please make sure the key file for the newly created user can be \n"
+"accessed. If you want to create the key file on your harddisk, simply \n"
+"press 'Ok'. If you want to create the key on a floppy disk or other \n"
+"removable media, please make sure the floppy disk or medium is \n"
+"correctly mounted."
 msgstr ""
-"Verzeker u ervan dat het sleutelbestand voor\n"
-"onbekende gebruiker bij onbekende bank toegankelijk is."
+"Controleer of het sleutelbestand voor de nieuw aangemaakte gebruiker \n"
+"toegankelijk is. Als u het sleutelbestand op uw harde schijf wilt zetten, \n"
+"kies dan 'Ok'. Als u de sleutel op een diskette of ander verwisselbaar medium \n"
+"wilt zetten, controleer dan of de diskette of het medium correct geplaatst is."
 
-#: src/import-export/hbci/hbci-interaction.c:342
+#: src/import-export/hbci/hbci-interaction.c:344
 msgid ""
 "Please insert chip card for \n"
-"unknown user at unknown bank."
+"the newly created user."
 msgstr ""
 "Plaatst u alstublieft de chipkaart voor \n"
-"onbekende gebruiker bij onbekende bank."
+"de nieuw aangemaakte gebruiker."
 
-#: src/import-export/hbci/hbci-interaction.c:376
+#: src/import-export/hbci/hbci-interaction.c:378
 #, c-format
 msgid ""
 "The key file does not seem to be the correct \n"
@@ -7632,19 +7695,18 @@ msgstr ""
 "te zijn voor gebruiker '%s' bij bank '%s'. Zorg ervoor\n"
 "dat het juiste sleutelbestand toegankelijk is."
 
-#: src/import-export/hbci/hbci-interaction.c:382
+#: src/import-export/hbci/hbci-interaction.c:384
 #, c-format
 msgid ""
 "The key file does not seem to be the correct \n"
-"file for user '%s' at unknown bank. Please make \n"
-"sure the correct key file can be accessed."
+"file for user '%s'. Please make sure the \n"
+"correct key file can be accessed."
 msgstr ""
-"Het sleutelbestand lijkt niet het juiste bestand\n"
-"te zijn voor gebruiker '%s' bij bank onbekend.\n"
-"Zorg ervoor dat het juiste sleutelbestand\n"
-"toegankelijk is."
+"Het sleutelbestand lijkt niet het correcte bestand\n"
+"te zijn voor gebruiker '%s'. Zorg ervoor\n"
+"dat het juiste sleutelbestand toegankelijk is."
 
-#: src/import-export/hbci/hbci-interaction.c:391
+#: src/import-export/hbci/hbci-interaction.c:393
 #, c-format
 msgid ""
 "Please insert the correct chip card for \n"
@@ -7653,34 +7715,34 @@ msgstr ""
 "Plaatst u alstublieft de juiste chipkaart voor \n"
 "gebruiker '%s' bij bank '%s'."
 
-#: src/import-export/hbci/hbci-interaction.c:396
+#: src/import-export/hbci/hbci-interaction.c:398
 #, c-format
 msgid ""
 "Please insert the correct chip card for \n"
-"user '%s' at unknown bank."
+"user '%s'."
 msgstr ""
-"Plaatst u alstublieft de juiste chipcard voor \n"
-"gebruiker '%s'bij onbekende bank."
+"Plaatst u alstublieft de juiste chipkaart voor \n"
+"gebruiker '%s'."
 
-#: src/import-export/hbci/hbci-interaction.c:405
+#: src/import-export/hbci/hbci-interaction.c:407
 msgid ""
 "The key file does not seem to be the correct \n"
-"file for unknown user at unknown bank. Please make \n"
+"file for the newly created user. Please make \n"
 "sure the correct key file can be accessed."
 msgstr ""
 "Het sleutelbestand lijkt niet het correcte bestand\n"
-"te zijn voor gebruiker onbekend bij bank onbekend.\n"
-"Zorg ervoor dat het juiste sleutelbestand toegankelijk is."
+"te zijn voor de nieuw aangemaakte gebruiker. Zorg ervoor\n"
+"dat het juiste sleutelbestand toegankelijk is."
 
-#: src/import-export/hbci/hbci-interaction.c:411
+#: src/import-export/hbci/hbci-interaction.c:413
 msgid ""
 "Please insert the correct chip card for \n"
-"unknown user at unknown bank."
+"the newly created user."
 msgstr ""
 "Plaatst u alstublieft de juiste chipkaart voor \n"
-"onbekende gebruiker bij onbekende bank."
+"de nieuw aangemaakte gebruiker."
 
-#: src/import-export/hbci/hbci-interaction.c:495
+#: src/import-export/hbci/hbci-interaction.c:497
 #, c-format
 msgid ""
 "Please enter PIN for \n"
@@ -7691,26 +7753,26 @@ msgstr ""
 "gebruiker '%s' bij bank '%s'.\n"
 "op het toetsenbord van uw chiplezer."
 
-#: src/import-export/hbci/hbci-interaction.c:503
+#: src/import-export/hbci/hbci-interaction.c:505
 #, c-format
 msgid ""
 "Please enter PIN for \n"
-"user '%s' at unknown bank\n"
+"user '%s'\n"
 "at the keypad of your chip card reader."
 msgstr ""
-"Geeft u het PIN op voor\n"
-"gebruiker '%s' bij onbekende bank\n"
-"op het toetsenbord van uw chipkaart lezer."
+"Geeft u het PIN op voor \n"
+"gebruiker '%s'.\n"
+"op het toetsenbord van uw chiplezer."
 
-#: src/import-export/hbci/hbci-interaction.c:510
+#: src/import-export/hbci/hbci-interaction.c:512
 msgid ""
 "Please enter PIN for \n"
-"unknown user at unknown bank\n"
+"the newly created user \n"
 "at the keypad of your chip card reader."
 msgstr ""
-"Geeft u het PIN op voor\n"
-"onbekende gebruiker bij onbekende bank\n"
-"op het toetsenbord van uw chipkaart lezer."
+"Geeft u het PIN op voor \n"
+"de nieuw aangemaakte gebruiker.\n"
+"op het toetsenbord van uw chiplezer."
 
 #: src/import-export/hbci/hbci-progressmon.c:98
 #: src/import-export/hbci/hbci-progressmon.c:99
@@ -7822,41 +7884,41 @@ msgstr "Lokale systeem bijwerken"
 msgid "Closing connection"
 msgstr "Verbinding sluiten"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:291
+#: src/import-export/hbci/dialog-hbcitrans.c:295
 msgid "Enter an Online Direct Debit Note"
 msgstr "Geef online directe afschrijvingsrechten af"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:294
+#: src/import-export/hbci/dialog-hbcitrans.c:298
 msgid "Debited Account Owner"
 msgstr "Eigenaar gedebiteerde rekening"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:296
+#: src/import-export/hbci/dialog-hbcitrans.c:300
 msgid "Debited Account Number"
 msgstr "Gedebiteerde rekening nummer"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:298
+#: src/import-export/hbci/dialog-hbcitrans.c:302
 msgid "Debited Account Bank Code"
 msgstr "Bank code voor gedebiteerde rekening"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:301
+#: src/import-export/hbci/dialog-hbcitrans.c:305
 msgid "Credited Account Owner"
 msgstr "Eigenaar gecrediteerde rekening"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:303
+#: src/import-export/hbci/dialog-hbcitrans.c:307
 msgid "Credited Account Number"
 msgstr "Gecrediteerd rekeningnummer"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:305
+#: src/import-export/hbci/dialog-hbcitrans.c:309
 msgid "Credited Account Bank Code"
 msgstr "Bank code gecrediteerde rekening"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:326
-#: src/import-export/hbci/dialog-hbcitrans.c:647
-#: src/import-export/hbci/dialog-hbcitrans.c:656
+#: src/import-export/hbci/dialog-hbcitrans.c:330
+#: src/import-export/hbci/dialog-hbcitrans.c:661
+#: src/import-export/hbci/dialog-hbcitrans.c:670
 msgid "(unknown)"
 msgstr "(onbekend)"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:401
+#: src/import-export/hbci/dialog-hbcitrans.c:405
 msgid ""
 "The amount is zero or the amount field could not be \n"
 "interpreted correctly. You might have mixed up decimal \n"
@@ -7872,7 +7934,7 @@ msgstr ""
 "Dit resulteert niet in een geldige online transactie.\n"
 "Wilt u de transactie nogmaals opgeven?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:489
+#: src/import-export/hbci/dialog-hbcitrans.c:503
 #, c-format
 msgid ""
 "The internal check of the destination account number '%s' \n"
@@ -7885,7 +7947,7 @@ msgstr ""
 "dat het rekeningnummer misschien fout is. Moet de online transactie \n"
 "toch naar dit rekeningnummer worden gestuurd?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:583
+#: src/import-export/hbci/dialog-hbcitrans.c:597
 msgid ""
 "The job was successfully sent to the bank, but the \n"
 "bank is refusing to execute the job. Please check \n"
@@ -7903,34 +7965,45 @@ msgstr ""
 "\n"
 "Wilt u de opdracht opnieuw invoeren ?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:686
+#: src/import-export/hbci/dialog-hbcitrans.c:700
 msgid "Enter name for new template:"
 msgstr "Voer een naam in voor nieuw sjabloon"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:207
+#: src/import-export/hbci/gnc-hbci-getbalance.c:221
 msgid ""
 "The downloaded HBCI Balance was zero.\n"
-"It seems as if your bank does not support Balance download \n"
-"in this HBCI version. You should choose a higher HBCI version \n"
-"number in the HBCI Setup. After that, try again to download \n"
-"the HBCI Balance.\n"
+"Either this is the correct balance, or your bank does not \n"
+"support Balance download in this HBCI version. In the latter \n"
+"case you should choose a higher HBCI version number in the HBCI \n"
+"Setup. After that, try again to download the HBCI Balance.\n"
 msgstr ""
 "De opgehaalde HBCI balans was nul.\n"
-"Het lijkt erop dat uw bank het ophalen van de balans niet ondersteunt \n"
-"in deze versie van HBCI. U moet een hogere versie van HBCI kiezen \n"
+"Het lijkt erop dat dit de juiste balans is, of uw bank ondersteunt het ophalen van de balans niet \n"
+"in deze versie van HBCI. In dat laatste geval moet u een hogere versie van HBCI kiezen \n"
 "in de setup van HBCI. Probeer daarna opnieuw de HBCI balans \n"
 "op te halen.\n"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:223
+#: src/import-export/hbci/gnc-hbci-getbalance.c:237
 #, c-format
 msgid ""
 "Result of HBCI job: \n"
 "Account booked balance is %s%s\n"
-"Reconcile account now?"
 msgstr ""
 "Resultaat van HBCI opdracht: \n"
 "Dagboek geboekte balans is %s%s\n"
-"Het dagboek nu consolideren ?"
+
+#: src/import-export/hbci/gnc-hbci-getbalance.c:248
+#, c-format
+msgid ""
+"For your information: This account also \n"
+"has a noted balance of %s%s\n"
+msgstr ""
+"Ter informatie: Dit dagboek heeft ook een \n"
+"gemarkeerde balans van %s%s\n"
+
+#: src/import-export/hbci/gnc-hbci-getbalance.c:252
+msgid "Reconcile account now?"
+msgstr "Dagboek nu Corrigeren?"
 
 #: src/import-export/hbci/gnc-hbci-gettrans.c:230
 msgid "The HBCI import returned no transactions for the selected time period."
@@ -7970,7 +8043,7 @@ msgstr "Inkomsten dagboek voor waardepapier \"%s\""
 
 #: src/import-export/ofx/gnc-ofx-import.c:600
 msgid "Unknown OFX checking account"
-msgstr "Onbekende OFX rekeningcourant"
+msgstr "Onbekende OFX bankrekening"
 
 #: src/import-export/ofx/gnc-ofx-import.c:604
 msgid "Unknown OFX savings account"
@@ -7978,11 +8051,11 @@ msgstr "Onbekende OFX spaarrekening"
 
 #: src/import-export/ofx/gnc-ofx-import.c:608
 msgid "Unknown OFX money market account"
-msgstr "Onbekende OFX valuta rekening"
+msgstr "Onbekende OFX vreemde valuta rekening"
 
 #: src/import-export/ofx/gnc-ofx-import.c:612
 msgid "Unknown OFX credit line account"
-msgstr "Onbekende OFX creditrekening"
+msgstr "Onbekende OFX rekening courant"
 
 #: src/import-export/ofx/gnc-ofx-import.c:616
 msgid "Unknown OFX CMA account"
@@ -8074,7 +8147,7 @@ msgid ""
 "Click \"Next\" to finish loading files and move to the next step \n"
 "of the OFX import process. "
 msgstr ""
-"Kies \"laadt een ander bestand\" als u nu meer gegevens wilt importeren.\n"
+"Kies \"laad een ander bestand\" als u nu meer gegevens wilt importeren.\n"
 "Doe dit wanneer u uw dagboek gegevens in gescheiden OFX bestanden heeft opgeslagen.\n"
 "\n"
 "Kies \"Volgende\" om de bestanden in te laden en door te gaan naar de volgende stap \n"
@@ -8083,12 +8156,12 @@ msgstr ""
 #: src/import-export/ofx/ofx.glade:323
 #: src/import-export/qif-import/qif.glade:702
 msgid "Load another file"
-msgstr "Laadt een ander bestand"
+msgstr "Laad een ander bestand"
 
 #: src/import-export/ofx/ofx.glade:342
 #: src/import-export/qif-import/qif.glade:721
 msgid "Unload selected file"
-msgstr "Laadt het geselecteerde bestand uit"
+msgstr "Laad het geselecteerde bestand uit"
 
 #: src/import-export/ofx/ofx.glade:358
 msgid "OFX import complete"
@@ -8172,15 +8245,15 @@ msgstr "(opsplitsing)"
 
 #: src/import-export/qif-import/druid-qif-import.c:1397
 msgid "You must enter a Type for the commodity."
-msgstr "U moet een type opgeven voor het goed."
+msgstr "U moet een type opgeven voor het stuk."
 
 #: src/import-export/qif-import/druid-qif-import.c:1402
 msgid "You must enter a name for the commodity."
-msgstr "U moet een naam opgeven voor het goed."
+msgstr "U moet een naam opgeven voor het stuk."
 
 #: src/import-export/qif-import/druid-qif-import.c:1407
 msgid "You must enter an abbreviation for the commodity."
-msgstr "U moet een afkorting opgeven voor het goed."
+msgstr "U moet een afkorting opgeven voor het stuk."
 
 #: src/import-export/qif-import/druid-qif-import.c:1551
 #, c-format
@@ -8189,11 +8262,11 @@ msgstr "Geef informatie op over \"%s\""
 
 #: src/import-export/qif-import/druid-qif-import.c:1563
 msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-msgstr "Kies de koers van het goed, of de list-prijs (AEX, MIDCAP enz)."
+msgstr "Kies de koers van het stuk, of de list-prijs (AEX, MIDCAP enz)."
 
 #: src/import-export/qif-import/druid-qif-import.c:1587
 msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
-msgstr "Geef de volledige naam voor het goed op, zoals \"Red Hat Aandelen\""
+msgstr "Geef de volledige naam voor het stuk op, zoals \"Red Hat Aandelen\""
 
 #: src/import-export/qif-import/druid-qif-import.c:1609
 msgid "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for the name."
@@ -8319,7 +8392,7 @@ msgid ""
 "Click \"Next\" to finish loading files and move to the next step \n"
 "of the QIF import process. "
 msgstr ""
-"Kies \"Laadt een ander bestand\" als u nu meer gegevens wilt importeren .\n"
+"Kies \"Laad een ander bestand\" als u nu meer gegevens wilt importeren .\n"
 "Doe dit wanneer u uw dagboeken in verschillende QIF bestanden heeft bewaard.\n"
 "\n"
 "Kies \"Volgende\" als u geen bestanden meer wilt inladen en door wilt gaan naar de\n"
@@ -8402,7 +8475,7 @@ msgstr ""
 
 #: src/import-export/qif-import/qif.glade:1008
 msgid "Match QIF categories with GnuCash accounts"
-msgstr "Overeenkomende QIF categorieën en GnuCash dagboeken"
+msgstr "Breng QIF categorieën in overeenstemming met GnuCash dagboeken"
 
 #: src/import-export/qif-import/qif.glade:1059
 msgid "QIF category name"
@@ -8433,14 +8506,14 @@ msgstr ""
 "niet correct aan GnuCash dagboeken kunnen worden gekoppeld. \n"
 "\n"
 "Op de volgende pagina ziet u de tekst die verschijnt in de begunstigden en\n"
-"memo velden van die geen QIF dagboek of categorie hebben. Standaard worden\n"
+"memo velden die geen QIF dagboek of categorie hebben. Standaard worden\n"
 "deze transacties toegewezen aan het 'Niet-gespecificeerd' dagboek in GnuCash.\n"
 "Wanneer u een ander dagboek selecteert, wordt dit voor toekomstige QIF\n"
 "bestanden onthouden."
 
 #: src/import-export/qif-import/qif.glade:1196
 msgid "Match payees/memos to GnuCash accounts"
-msgstr "Overeenkomende begunstigden/memo's voor GnuCash dagboeken"
+msgstr "Breng begunstigden/memo's in overeenstemming met GnuCash dagboeken"
 
 #: src/import-export/qif-import/qif.glade:1247
 msgid "QIF payee/memo"
@@ -8475,7 +8548,7 @@ msgstr ""
 
 #: src/import-export/qif-import/qif.glade:1410
 msgid "Tradable commodities"
-msgstr "Verhandelbare goederen"
+msgstr "Verhandelbare handelsgoederen"
 
 #: src/import-export/qif-import/qif.glade:1431
 msgid ""
@@ -8494,11 +8567,11 @@ msgid ""
 "or listing for its type."
 msgstr ""
 "Op de volgende pagina's wordt u gevraagd informatie te geven over aandelen,\n"
-"beleggingsfondsen en andere verhandelbare goederen die voorkomen in de QIF\n"
-"bestanden die u importeert. GnuCash heeft meer informatie nodig over verhandelbare\n"
-"goederen dan het QIF format bevat.\n"
+"beleggingsfondsen en andere verhandelbare handelsgoederen die voorkomen in de QIF\n"
+"bestanden die u importeert. GnuCash heeft meer informatie nodig over handelsgoederen\n"
+"stukken dan het QIF format bevat.\n"
 "\n"
-"Ieder aandeel, beleggingsfonds of anderssoortig goed moet getypeerd zijn; dit\n"
+"Ieder aandeel, beleggingsfonds of beurs handelsgoed moet getypeerd zijn; dit\n"
 "is de koers of list-prijs die gevonden kan worden op (AEX, MIDCAP, enz.), een\n"
 "een volledige naam en een afkorting.\n"
 "\n"
@@ -8565,7 +8638,7 @@ msgstr "Dup?"
 
 #: src/import-export/qif-import/qif.glade:1757
 msgid "Update your GnuCash accounts"
-msgstr "Uw GnuCash dagboek bijwerken?"
+msgstr "Uw GnuCash dagboek bijwerken"
 
 #: src/import-export/qif-import/qif.glade:1758
 msgid ""
@@ -8605,8 +8678,8 @@ msgid ""
 "Please select a commodity to match the following exchange code.\n"
 "Please note that the exchange code of the commodity you select will be overwritten.\n"
 msgstr ""
-"Selecteer een voorwerp dat overeenkomt met de volgende wisselkoers-code.\n"
-"Let erop dat de wisselkoers-code van het voorwerp dat u kiest, wordt overschreven.\n"
+"Selecteer een stuk dat overeenkomt met de volgende wisselkoers-code.\n"
+"Let erop dat de wisselkoers-code van het stuk dat u kiest, wordt overschreven.\n"
 
 #: src/import-export/import-main-matcher.c:258
 msgid "Destination account for the auto-balance split."
@@ -8653,7 +8726,7 @@ msgstr "Transactie Opnieuw Balanceren"
 
 #: src/register/ledger-core/split-register-control.c:62
 msgid "The current transaction is not balanced."
-msgstr "De huidige transactie is niet in gebalanceerd."
+msgstr "De huidige transactie is niet in balans."
 
 #: src/register/ledger-core/split-register-control.c:98
 msgid "Balance it manually"
@@ -8671,11 +8744,11 @@ msgstr "Huidige dagboek opsplitsings totaal bijstellen"
 msgid "Adjust other account split total"
 msgstr "Een ander dagboek opsplitsings totaal bijstellen"
 
-#: src/register/ledger-core/split-register-control.c:1060
+#: src/register/ledger-core/split-register-control.c:1065
 msgid "You need to expand the transaction in order to modify its exchange rates."
 msgstr "U moet de transactie uitbereiden om z'n wisselkoers te wijzigen."
 
-#: src/register/ledger-core/split-register-control.c:1533
+#: src/register/ledger-core/split-register-control.c:1538
 msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
@@ -8732,7 +8805,7 @@ msgstr "Tot %s"
 
 #: src/register/ledger-core/split-register-model.c:277
 msgid "Tot Credit"
-msgstr "Totaal Crediet"
+msgstr "Totaal Credit"
 
 #: src/register/ledger-core/split-register-model.c:301
 msgid "Tot Debit"
@@ -8756,11 +8829,11 @@ msgstr "Gepland"
 
 #: src/register/ledger-core/split-register-model.c:820
 msgid "Enter the transaction reference, such as the invoice or check number"
-msgstr "Geef de transactie referentie op, zoals het factuur of cheque nummer"
+msgstr "Geef de transactiereferentie op, zoals het factuur- of cheque nummer"
 
 #: src/register/ledger-core/split-register-model.c:824
 msgid "Enter the transaction number, such as the check number"
-msgstr "Geef het transactienummer op, bijvoorbeeld het cheque nummer"
+msgstr "Geef het transactienummer op, bijvoorbeeld het chequenummer"
 
 #: src/register/ledger-core/split-register-model.c:858
 msgid "Enter the name of the Customer"
@@ -8780,7 +8853,7 @@ msgstr "Notitie voor deze transactie"
 
 #: src/register/ledger-core/split-register-model.c:987
 msgid "Enter the type of transaction, or choose one from the list"
-msgstr "Geef het type transctie op of kies er een uit de lijst"
+msgstr "Geef het type transactie op of kies er een uit de lijst"
 
 #: src/register/ledger-core/split-register-model.c:1015
 msgid "Enter a description of the split"
@@ -8801,11 +8874,11 @@ msgstr "Geef het dagboek op van waaruit de transactie plaatsvindt, of kies er ee
 
 #: src/register/ledger-core/split-register-model.c:1255
 msgid "This transaction has multiple splits; press the Split button to see them all"
-msgstr "Deze transactie bevat meerdere opsplitsingen; kies de Opsplits knop om ze allemaal te zien"
+msgstr "Deze transactie bevat meerdere opsplitsingen; kies de knop \"Opsplitsen\" om ze allemaal te zien"
 
 #: src/register/ledger-core/split-register-model.c:1258
 msgid "This transaction is a stock split; press the Split button to see details"
-msgstr "Deze transactie is een aandelen opsplitsing; kies de opsplitsing knop om details te bekijken"
+msgstr "Deze transactie is een aandelen opsplitsing; kies de knop \"opsplitsen\" om details te bekijken"
 
 #: src/register/ledger-core/split-register-model.c:1697
 msgid ""
@@ -9049,15 +9122,15 @@ msgstr "Rapport grootte"
 
 #: src/report/report-gnome/report.glade:694
 msgid "Enter report row/column span"
-msgstr "Geef rapport rij/kolom omvang op"
+msgstr "Geef rijhoogte/kolombreedte op voor rapport"
 
 #: src/report/report-gnome/report.glade:723
 msgid "Row span:"
-msgstr "Rij omvang:"
+msgstr "Rij hoogte:"
 
 #: src/report/report-gnome/report.glade:740
 msgid "Column span:"
-msgstr "Kolom omvang:"
+msgstr "Kolom breedte:"
 
 #: src/report/report-gnome/window-report.c:110
 msgid "(Report not found)"
@@ -9113,7 +9186,7 @@ msgstr "Er zijn geen opties voor dit rapport"
 
 #: src/report/report-gnome/window-report.c:857
 msgid "Reload the current report"
-msgstr "Laadt het huidige rapport opnieuw in"
+msgstr "Laad het huidige rapport opnieuw"
 
 #: src/report/report-gnome/window-report.c:876
 msgid "Export HTML-formatted report to file"
@@ -9144,7 +9217,7 @@ msgstr "Er is een fout opgetreden tijdens het aanmaken van het rapport."
 #: src/report/report-gnome/window-report.c:1208
 #, c-format
 msgid "Badly formed options URL: %s"
-msgstr "Slecht opgesteld optie URL: %s"
+msgstr "Slecht opgestelde opties URL: %s"
 
 #: src/report/report-gnome/window-report.c:1196
 #, c-format
@@ -9253,7 +9326,7 @@ msgstr "Begin van het huidige kwartaal"
 
 #: intl-scm/guile-strings.c:52
 msgid "The start of the latest quarterly accounting period"
-msgstr "Het begin het laatste kwartaal van de boekhoud periode "
+msgstr "Begin van het laatste boekhoudkundige kwartaal"
 
 #: intl-scm/guile-strings.c:54
 msgid "End of current quarter"
@@ -9261,23 +9334,23 @@ msgstr "Einde van het huidige kwartaal"
 
 #: intl-scm/guile-strings.c:56
 msgid "The end of the latest quarterly accounting period"
-msgstr "Het einde van het laaste kwartaal van de boekhoud periode"
+msgstr "Einde van het meest recente boekhoudkundige kwartaal"
 
 #: intl-scm/guile-strings.c:58
 msgid "Start of previous quarter"
-msgstr "Begin van het voorgaande kwartaal"
+msgstr "Begin van het voorafgaande kwartaal"
 
 #: intl-scm/guile-strings.c:60
 msgid "The start of the previous quarterly accounting period"
-msgstr "Het begin van het voorgande kwartaal van de boekhoud periode"
+msgstr "Begin van het voorafgaande boekhoudkundige kwartaal"
 
 #: intl-scm/guile-strings.c:62
 msgid "End of previous quarter"
-msgstr "Einde van het voorgaande kwartaal"
+msgstr "Einde van het voorafgaande kwartaal"
 
 #: intl-scm/guile-strings.c:64
 msgid "End of previous quarterly accounting period"
-msgstr "Einde van het voorgaande kwartaal van de boekhoud periode"
+msgstr "Einde van het voorafgaande boekhoudkundige kwartaal"
 
 #: intl-scm/guile-strings.c:68
 msgid "The current date"
@@ -9390,7 +9463,7 @@ msgstr "Locatie"
 
 #: intl-scm/guile-strings.c:172
 msgid "Default system locale format"
-msgstr "Standaard systeem locatie format"
+msgstr "Standaard systeem locatie formaat"
 
 #: intl-scm/guile-strings.c:176
 msgid "New Account Default Currency"
@@ -9426,11 +9499,11 @@ msgstr "Activeer ondersteuning voor de Europeese Unie EURO valuta"
 
 #: intl-scm/guile-strings.c:200
 msgid "Default Register Style"
-msgstr "Standaard kasboek stijl"
+msgstr "Standaard boekingsformulier stijl"
 
 #: intl-scm/guile-strings.c:202
 msgid "Default style for register windows"
-msgstr "Standaard stijl voor kasboek vensters"
+msgstr "Standaard stijl voor boekingsformulier vensters"
 
 #: intl-scm/guile-strings.c:204
 msgid "Basic Ledger"
@@ -9458,27 +9531,27 @@ msgstr "Wanneer geselecteerd, springt naar lege transactie op 'Enter'. Anders, v
 
 #: intl-scm/guile-strings.c:230
 msgid "Confirm before changing reconciled"
-msgstr "Bevestig voor verandering aan correcties"
+msgstr "Bevestig voor verandering verwerkte gegevens"
 
 #: intl-scm/guile-strings.c:232
 msgid "If selected, use a dialog to confirm a change to a reconciled transaction."
-msgstr "Wanneer geselecteerd, gebruik een venster om de verandering van een gecorrigeerde transactie te bevestigen."
+msgstr "Wanneer geselecteerd, gebruik een venster om de verandering van een verwerkte transactie te bevestigen."
 
 #: intl-scm/guile-strings.c:236
 msgid "Register font"
-msgstr "kasboek font"
+msgstr "Boekingsformulier lettertype"
 
 #: intl-scm/guile-strings.c:238
 msgid "The font to use in the register"
-msgstr "Het in het kasboek te gebruiken font"
+msgstr "Het in het boekingsformulier te gebruiken lettertype"
 
 #: intl-scm/guile-strings.c:244
 msgid "Register hint font"
-msgstr "kasboek hint font"
+msgstr "Boekingsformulier hint-lettertype"
 
 #: intl-scm/guile-strings.c:246
 msgid "The font used to show hints in the register"
-msgstr "Het in het kasboek te gebruiken font om hints weer te geven."
+msgstr "Het in het boekingsformulier te gebruiken lettertype om hints weer te geven."
 
 #: intl-scm/guile-strings.c:250 intl-scm/guile-strings.c:256
 #: intl-scm/guile-strings.c:262 intl-scm/guile-strings.c:268
@@ -9486,7 +9559,7 @@ msgstr "Het in het kasboek te gebruiken font om hints weer te geven."
 #: intl-scm/guile-strings.c:286 intl-scm/guile-strings.c:292
 #: intl-scm/guile-strings.c:3377 intl-scm/guile-strings.c:3857
 msgid "Register Colors"
-msgstr "kasboek kleuren"
+msgstr "Boekingsformulier kleuren"
 
 #: intl-scm/guile-strings.c:252
 msgid "Header color"
@@ -9502,7 +9575,7 @@ msgstr "Primaire kleur"
 
 #: intl-scm/guile-strings.c:260
 msgid "The default background color for register rows"
-msgstr "De standaard achtergrond kleur voor kasboek rijen"
+msgstr "De standaard achtergrond kleur voor boekingsformulier rijen"
 
 #: intl-scm/guile-strings.c:264
 msgid "Secondary color"
@@ -9510,7 +9583,7 @@ msgstr "Secundaire kleur"
 
 #: intl-scm/guile-strings.c:266
 msgid "The default secondary background color for register rows"
-msgstr "De standaard secundaire achtergrond kleur voor kasboek rijen."
+msgstr "De standaard secundaire achtergrond kleur voor boekingsformulier rijen."
 
 #: intl-scm/guile-strings.c:270
 msgid "Primary active color"
@@ -9518,7 +9591,7 @@ msgstr "Primaire actieve kleur"
 
 #: intl-scm/guile-strings.c:272
 msgid "The background color for the current register row"
-msgstr "De achtergrond kleur voor de huidige kasboek rij"
+msgstr "De achtergrond kleur voor de huidige boekingsformulier rij"
 
 #: intl-scm/guile-strings.c:276
 msgid "Secondary active color"
@@ -9526,7 +9599,7 @@ msgstr "Secundaire actieve kleur"
 
 #: intl-scm/guile-strings.c:278
 msgid "The secondary background color for the current register row"
-msgstr "De secundaire achtergrondkleur voor de huidige kasboek rij"
+msgstr "De secundaire achtergrondkleur voor de huidige boekingsformulier rij"
 
 #: intl-scm/guile-strings.c:282
 msgid "Split color"
@@ -9534,7 +9607,7 @@ msgstr "Kleur opsplitsing"
 
 #: intl-scm/guile-strings.c:284
 msgid "The default background color for split rows in the register"
-msgstr "De standaard achtergrondkleur voor opgesplitste rijen in het kasboek"
+msgstr "De standaard achtergrondkleur voor opgesplitste rijen in het boekingsformulier"
 
 #: intl-scm/guile-strings.c:288
 msgid "Split active color"
@@ -9542,7 +9615,7 @@ msgstr "Kleur actieve opsplitsing"
 
 #: intl-scm/guile-strings.c:290
 msgid "The background color for the current split row in the register"
-msgstr "De achtergrond kleur voor de huidige opgesplitste rij in het kasboek"
+msgstr "De achtergrond kleur voor de huidige opgesplitste rij in het boekingsformulier"
 
 #: intl-scm/guile-strings.c:294
 msgid "Double mode colors alternate with transactions"
@@ -9561,8 +9634,8 @@ msgid ""
 "Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment.\n"
 "Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts."
 msgstr ""
-"Voordat een dagboek dat rente berekent of betaalt, corrigeert, wordt u gevraagd een transactie voor de rente berekening of betaling op te geven.\n"
-"Om dit moment werkt dat alleen voor bank, credit, beleggingsfonds, activa te ontvangen, te betalen en passiva dagboeken."
+"Alvorens een rentedragende rekening te verwerken, de gebruiker vragen een transactie voor te ontvangen of te betalen rente in te voeren.\n"
+"Op dit ogenblik werkt dit alleen voor de Bank-, Creditcard-, Beleggins-, Vorderings-, Debiteuren-, Crediteuren- en Schuldendagboeken."
 
 #: intl-scm/guile-strings.c:307
 msgid "Automatic credit card payments"
@@ -9570,7 +9643,7 @@ msgstr "Automatische creditcard afbetaling"
 
 #: intl-scm/guile-strings.c:309
 msgid "After reconciling a credit card statement, prompt the user to enter a credit card payment"
-msgstr "Na het corrigeren van een creditcard boeking, wordt u gevraagd een creditcard betaling op te geven."
+msgstr "Na het verwerken van een creditcard boeking, wordt u gevraagd een creditcard betaling op te geven."
 
 #: intl-scm/guile-strings.c:313
 msgid "Check off cleared transactions"
@@ -9578,7 +9651,7 @@ msgstr "Vink goedgekeurde transacties af"
 
 #: intl-scm/guile-strings.c:315
 msgid "Automatically check off cleared transactions when reconciling"
-msgstr "Controleer automatisch afgevinkte transacties tijdens het corrigeren."
+msgstr "Automatisch afvinken van goedgekeurde transacties tijdens het verwerken."
 
 #: intl-scm/guile-strings.c:317 intl-scm/guile-strings.c:323
 #: intl-scm/guile-strings.c:391 intl-scm/guile-strings.c:397
@@ -9608,11 +9681,11 @@ msgstr "Sta veranderingen toe van weinig gebruikte instellingen."
 
 #: intl-scm/guile-strings.c:325
 msgid "Toolbar Buttons"
-msgstr "Gereedschapsbalk knoppen"
+msgstr "Werkbalk knoppen"
 
 #: intl-scm/guile-strings.c:327
 msgid "Choose whether to display icons, text, or both for toolbar buttons"
-msgstr "Kies om iconen, tekst of beiden te tonen op gereedschapsbalk knoppen"
+msgstr "Kies om iconen, tekst of beide te tonen op werkbalk knoppen"
 
 #: intl-scm/guile-strings.c:329
 msgid "Icons and Text"
@@ -9644,7 +9717,7 @@ msgstr "Dagboek scheidingsteken"
 
 #: intl-scm/guile-strings.c:345
 msgid "The character used to separate fully-qualified account names"
-msgstr "Het karakter gebruikt om dagboeknamen te scheiden"
+msgstr "Het karakter dat gebruikt wordt om dagboeknamen te scheiden"
 
 #: intl-scm/guile-strings.c:347
 msgid ": (Colon)"
@@ -9728,7 +9801,7 @@ msgstr "Toon \"Tip van de dag\""
 
 #: intl-scm/guile-strings.c:395
 msgid "Display hints for using GnuCash at startup"
-msgstr "Toon hints voor het gebruik vn GnuCash bij het opstarten"
+msgstr "Toon hints voor het gebruik van GnuCash bij het opstarten"
 
 #: intl-scm/guile-strings.c:399 intl-scm/guile-strings.c:401
 msgid "Display negative amounts in red"
@@ -9736,11 +9809,11 @@ msgstr "Toon negatieve bedragen in het rood"
 
 #: intl-scm/guile-strings.c:405
 msgid "Automatic Decimal Point"
-msgstr "Automatische decimale punt"
+msgstr "Automatische decimale komma"
 
 #: intl-scm/guile-strings.c:407
 msgid "Automatically insert a decimal point into values that are entered without one."
-msgstr "Plaats automatisch een decimale punt in waardes die zonder punt worden gegeven."
+msgstr "Plaats automatisch een decimale komma in waardes die zonder komma worden gegeven."
 
 #: intl-scm/guile-strings.c:411
 msgid "Auto Decimal Places"
@@ -9784,7 +9857,7 @@ msgstr "Toon alleen enkele documentatie pagina's in de QIF import Hulp"
 
 #: intl-scm/guile-strings.c:441
 msgid "Run on GnuCash start"
-msgstr "Start GnuCash bij het opstarten"
+msgstr "Starten bij het opstarten van GnuCash"
 
 #: intl-scm/guile-strings.c:443
 msgid "Should the Since-Last-Run window appear on GnuCash startup?"
@@ -9824,11 +9897,11 @@ msgstr "Standaard aantal dagen van tevoren herinneren bij nieuwe geplande transa
 
 #: intl-scm/guile-strings.c:471
 msgid "Template Register Lines"
-msgstr "Sjabloon kasboek regels"
+msgstr "Sjabloon boekingsformulier regels"
 
 #: intl-scm/guile-strings.c:473
 msgid "How many lines in the template register?"
-msgstr "Hoeveel regels in het sjabloon kasboek?"
+msgstr "Hoeveel regels in het sjabloon boekingsformulier?"
 
 #: intl-scm/guile-strings.c:475 intl-scm/guile-strings.c:481
 #: intl-scm/guile-strings.c:503 intl-scm/guile-strings.c:509
@@ -9868,7 +9941,7 @@ msgstr "Bovenste niveau"
 
 #: intl-scm/guile-strings.c:493
 msgid "Create a new top-level window for each report or account tree"
-msgstr "Maak een nieuw hoofdvenster aan voor ieder rapport of alle dagboeken"
+msgstr "Maak een nieuw hoofdvenster aan voor ieder rapport of rekeningschema"
 
 #: intl-scm/guile-strings.c:495
 msgid "Single window"
@@ -9876,7 +9949,7 @@ msgstr "Enkel venster"
 
 #: intl-scm/guile-strings.c:497
 msgid "One window is used for all displays (select contents through Window menu)"
-msgstr "Een venster wordt gebruikt voor alle displays (selecteer de inhoud via het venster menu)"
+msgstr "Een venster wordt gebruikt voor alle schermen (selecteer de inhoud via het venster menu)"
 
 #: intl-scm/guile-strings.c:499
 msgid "Use GNOME default"
@@ -9884,7 +9957,7 @@ msgstr "Gebruik GNOME standaarden"
 
 #: intl-scm/guile-strings.c:501
 msgid "Default MDI mode can be set in the GNOME Control Center"
-msgstr "Standaard MDI modus kan in worden gesteld in het GNOME configuratie scherm"
+msgstr "Standaard MDI modus kan worden ingesteld in het GNOME configuratie scherm"
 
 #: intl-scm/guile-strings.c:505
 msgid "Show Vertical Borders"
@@ -9904,11 +9977,11 @@ msgstr "Toon standaard de horizontale grenzen van cellen."
 
 #: intl-scm/guile-strings.c:517
 msgid "Auto-Raise Lists"
-msgstr "Automatisch scrollende lijsten"
+msgstr "Automatisch uitklappende lijsten"
 
 #: intl-scm/guile-strings.c:519
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr "Laat de dagboeklijst of actielijst automatisch scrollen tijdens invoeren"
+msgstr "Laat de dagboeklijst of actielijst automatisch uitklappen tijdens invoeren"
 
 #: intl-scm/guile-strings.c:523
 msgid "Show All Transactions"
@@ -9924,7 +9997,7 @@ msgstr "Aantal rijen"
 
 #: intl-scm/guile-strings.c:531
 msgid "Default number of register rows to display."
-msgstr "Standaard aantal weer te geven kasboek rijen"
+msgstr "Standaard aantal weer te geven boekingsformulier rijen"
 
 #: intl-scm/guile-strings.c:535
 msgid "New Search Limit"
@@ -9940,11 +10013,11 @@ msgstr "_Zakelijk"
 
 #: intl-scm/guile-strings.c:545
 msgid "The following bills are due:"
-msgstr "De volgende rekeningen moeten betaald zijn:"
+msgstr "De volgende rekeningen moeten betaald worden:"
 
 #: intl-scm/guile-strings.c:547
 msgid "The following bill is due:"
-msgstr "De volgende rekening moet betaald zijn:"
+msgstr "De volgende rekening moet betaald worden:"
 
 #: intl-scm/guile-strings.c:555 intl-scm/guile-strings.c:3597
 msgid "Customers"
@@ -10014,27 +10087,27 @@ msgstr "Test zoekvenster"
 
 #: intl-scm/guile-strings.c:653
 msgid "Reload invoice report"
-msgstr "Laadt factureringsrapport opnieuw"
+msgstr "Factureringsrapport opnieuw inladen"
 
 #: intl-scm/guile-strings.c:655
 msgid "Reload invoice report scheme file"
-msgstr "Laat factureringsrapportschema bestand opnieuw"
+msgstr "Factureringsrapportschema bestand opnieuw inladen"
 
 #: intl-scm/guile-strings.c:657
 msgid "Reload owner report"
-msgstr "Laadt eigenaar rapport opnieuw"
+msgstr "Gebruikersrapport opnieuw inladen"
 
 #: intl-scm/guile-strings.c:659
 msgid "Reload owner report scheme file"
-msgstr "Laadt eigenaar rapport schema bestand opnieuw"
+msgstr "Gebruikersrapport schema bestand opnieuw inladen"
 
 #: intl-scm/guile-strings.c:661
 msgid "Reload receivable report"
-msgstr "Laadt te ontvangen rapport opnieuw"
+msgstr "Debiteuren rapport opnieuw laden"
 
 #: intl-scm/guile-strings.c:663
 msgid "Reload receivable report scheme file"
-msgstr "Laadt te ontvangen rapport schema bestand opnieuw"
+msgstr "Debiteurenrapport schema bestand opnieuw laden"
 
 #: intl-scm/guile-strings.c:665 intl-scm/guile-strings.c:667
 msgid "Initialize Test Data"
@@ -10098,7 +10171,7 @@ msgstr "Groep totaal verschuldigd"
 
 #: intl-scm/guile-strings.c:695
 msgid "Amount owed in oldest bracket - if same go to next oldest"
-msgstr "Bedrag te betalen in oudste gegeven - wanneer gelijk, ga dan naar voorlaatste"
+msgstr "Bedrag te betalen in oudste groep - wanneer gelijk, ga dan naar voorlaatste"
 
 #: intl-scm/guile-strings.c:697
 msgid "Sort order"
@@ -10122,7 +10195,7 @@ msgstr "EUR999,999.99 -> EUR0, Z->A"
 
 #: intl-scm/guile-strings.c:707
 msgid "Show multi-currency totals.  If not selected, convert all totals to report currency"
-msgstr "Toon totalen in meerdere valuta. Wanneer deze niet geselecteerd is, converteer alle totalen naar rapport valuta"
+msgstr "Toon totalen in meerdere munteenheden. Wanneer deze niet geselecteerd is, converteer alle totalen naar de munteenheid van het rapport"
 
 #: intl-scm/guile-strings.c:711 intl-scm/guile-strings.c:1071
 msgid "0-30 days"
@@ -10134,11 +10207,11 @@ msgstr "31-60 dagen"
 
 #: intl-scm/guile-strings.c:715 intl-scm/guile-strings.c:1075
 msgid "61-90 days"
-msgstr "61-91 dagen"
+msgstr "61-90 dagen"
 
 #: intl-scm/guile-strings.c:717 intl-scm/guile-strings.c:1077
 msgid "91+ days"
-msgstr "Meer dan 91 dagen"
+msgstr "91 dagen of meer"
 
 #: intl-scm/guile-strings.c:725 intl-scm/guile-strings.c:3829
 msgid "Business Reports"
@@ -10197,11 +10270,11 @@ msgstr "De actie weergeven ?"
 
 #: intl-scm/guile-strings.c:773 intl-scm/guile-strings.c:937
 msgid "Display the quantity of items?"
-msgstr "Het aantal artikellen weergeven ?"
+msgstr "Het aantal artikelen weergeven ?"
 
 #: intl-scm/guile-strings.c:783 intl-scm/guile-strings.c:947
 msgid "Display the entry's discount"
-msgstr "De korting voor dit artikel weergeven ?"
+msgstr "De korting voor dit artikel weergeven"
 
 #: intl-scm/guile-strings.c:789 intl-scm/guile-strings.c:953
 msgid "Display the entry's taxable status"
@@ -10292,12 +10365,12 @@ msgstr "Extra opmerkingen"
 
 #: intl-scm/guile-strings.c:849 intl-scm/guile-strings.c:1013
 msgid "Extra notes to put on the invoice"
-msgstr "Extra opmerkingen voor op de factuur"
+msgstr "Extra opmerkingen om op de factuur te plaatsen"
 
 #: intl-scm/guile-strings.c:853 intl-scm/guile-strings.c:1017
 #: intl-scm/guile-strings.c:1119 intl-scm/guile-strings.c:1141
 msgid "Today Date Format"
-msgstr "Datum format vandaag"
+msgstr "Datum formaat vandaag"
 
 #: intl-scm/guile-strings.c:855 intl-scm/guile-strings.c:1019
 #: intl-scm/guile-strings.c:1121
@@ -10340,7 +10413,7 @@ msgstr "Geen geldige factuur geselecteerd"
 #: intl-scm/guile-strings.c:885 intl-scm/guile-strings.c:887
 #: intl-scm/guile-strings.c:889
 msgid "Fancy Invoice"
-msgstr "Fancy factuur"
+msgstr "Kunstige factuur"
 
 #: intl-scm/guile-strings.c:1037
 msgid "Invoice Date"
@@ -10409,15 +10482,15 @@ msgstr "Werknemer rapport"
 
 #: intl-scm/guile-strings.c:1157
 msgid "Payable Account"
-msgstr "Te betalen dagboek"
+msgstr "Crediteur"
 
 #: intl-scm/guile-strings.c:1159
 msgid "The payable account you wish to examine"
-msgstr "Het te betalen dagboek dat u wilt onderzoeken"
+msgstr "De crediteur die u wilt bekijken"
 
 #: intl-scm/guile-strings.c:1161 intl-scm/guile-strings.c:1163
 msgid "Payable Aging"
-msgstr "Te betalen verouderd"
+msgstr "Crediteur over vervaldatum"
 
 #: intl-scm/guile-strings.c:1165
 msgid "Receivables Account"
@@ -10425,27 +10498,27 @@ msgstr "Ontvangsten dagboek"
 
 #: intl-scm/guile-strings.c:1167
 msgid "The receivables account you wish to examine"
-msgstr "Het ontvangsten dagboek dat u wilt onderzoeken"
+msgstr "Debiteuren die u wilt nakijken"
 
 #: intl-scm/guile-strings.c:1169 intl-scm/guile-strings.c:1171
 msgid "Receivable Aging"
-msgstr "Ontvangsten verouderd"
+msgstr "Debiteuren over vervaldatum"
 
 #: intl-scm/guile-strings.c:1175
 msgid "Default number of register rows to display in Invoices."
-msgstr "Standaard aantal te tonen kasboekregels in facturen."
+msgstr "Standaard aantal te tonen boekingsregels in facturen."
 
 #: intl-scm/guile-strings.c:1177
 msgid "Invoice Tax Included?"
-msgstr "Factuur inclusief belastingen?"
+msgstr "Factuur inclusief BTW?"
 
 #: intl-scm/guile-strings.c:1179
 msgid "Bill Tax Included?"
-msgstr "Factuur inclusief belasting?"
+msgstr "Rekening inclusief BTW?"
 
 #: intl-scm/guile-strings.c:1181
 msgid "Notify Bills Due?"
-msgstr "Waarschuwen voor rekeningen die betaald moeten zijn?"
+msgstr "Waarschuwen voor rekeningen waarvan de betaaltermijn vervalt?"
 
 #: intl-scm/guile-strings.c:1183
 msgid "Whether to display the list of Bills Due at startup."
@@ -10453,7 +10526,7 @@ msgstr "Of de lijst met rekeningen die betaald moeten zijn, getoond moet worden 
 
 #: intl-scm/guile-strings.c:1185
 msgid "Bills Due Days"
-msgstr "Dagen dat rekeningen betaald moeten zijn"
+msgstr "Aantal dagen betalingstermijn voor de rekeningen"
 
 #: intl-scm/guile-strings.c:1187
 msgid "How many days in the future to warn about Bills coming due."
@@ -10490,7 +10563,7 @@ msgstr "Zakelijk"
 
 #: intl-scm/guile-strings.c:1205
 msgid "Company Address"
-msgstr "Bedrijfs adres"
+msgstr "Bedrijfsadres"
 
 #: intl-scm/guile-strings.c:1207
 msgid "Extensions"
@@ -10502,31 +10575,31 @@ msgstr "Minime overeenkomst waarde"
 
 #: intl-scm/guile-strings.c:1213
 msgid "The minimum score a potential match must have to be displayed in the match list."
-msgstr "De minimum overeenkomst van een potentiëel overeenkomende, die moet worden getoond in de overeenkomsten lijst."
+msgstr "De minimum overeenkomst van een potentiëel overeenkomende waarde, die moet worden getoond in de overeenkomsten lijst."
 
 #: intl-scm/guile-strings.c:1217
 msgid "Auto-ADD threshold"
-msgstr "Automatische toevoegingsgrens"
+msgstr "Automatische drempelwaardegrens"
 
 #: intl-scm/guile-strings.c:1219
 msgid "A transaction whose best match's score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default."
-msgstr "Een transactie die als beste score nog steeds in de rode zone zit (boven de getoonde grenswaarde, maar onder of gelijk aan de automatisch toevoegengrenswaarde) wordt automatisch toegevoegd."
+msgstr "Een transactie die als beste score nog steeds in de rode zone ligt (boven de getoonde drempelwaarde, maar onder of gelijk aan de automatisch toevoegengrenswaarde) wordt automatisch toegevoegd."
 
 #: intl-scm/guile-strings.c:1223
 msgid "Auto-CLEAR threshold"
-msgstr "Automatische goedkeurings-grenswaarde "
+msgstr "Automatische goedkeurings-drempelwaarde "
 
 #: intl-scm/guile-strings.c:1225
 msgid "A transaction whose best match's score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default."
-msgstr "Een transactie waarvan de beste score in de groene zone ligt (boven of gelijk aan de Automatische goedkeurings-grenswaarde), wordt automatisch goedgekeurd."
+msgstr "Een transactie waarvan de beste score in de groene zone ligt (boven of gelijk aan de Automatische goedkeurings-drempelwaarde), wordt automatisch goedgekeurd."
 
 #: intl-scm/guile-strings.c:1229
 msgid "Commercial ATM fees threshold"
-msgstr "Grenswaarde voor commerciële PIN-automaat kosten"
+msgstr "Drempelwaarde voor commerciële PIN-automaat kosten"
 
 #: intl-scm/guile-strings.c:1231
 msgid "In some places commercial ATMs (not belonging to a financial institution) are installed in places like convienience store.  These ATM add its fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw 100$, and you are charged 101,50$ plus Interac fees.  If you manually entered that 100$, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
-msgstr "Op sommige plaatsen staan commerciële PIN automaten (die niet zijn van een financiële instelling), zoals in warenhuizen. Deze pinautomaten tellen hun kosten op bij het te pinnen bedrag in plaats dat ze te zien zijn als losse transactie of bij uw maandelijkse bankkosten. Wanneer u bijvoorbeeld $100 opneemt, wordt u $101,50 in rekening gebracht wegens de automaatkosten. Als u handmatig aan heeft gegeven dat u $100 heeft opgenomen, komen de bedragen niet overeen. U moet dit dan instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale valuta), zodat de transactie erkend wordt als overeenkomstig."
+msgstr "Op sommige plaatsen staan commerciële PIN automaten (die niet zijn van een financiële instelling), zoals in warenhuizen. Deze pinautomaten tellen hun kosten op bij het te pinnen bedrag in plaats dat ze te zien zijn als losse transactie of bij uw maandelijkse bankkosten. Wanneer u bijvoorbeeld EUR 100 opneemt, wordt u EUR 101,50 in rekening gebracht wegens de automaatkosten. Als u handmatig aan heeft gegeven dat u EUR 100 heeft opgenomen, komen de bedragen niet overeen. U moet dit dan instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale munteenheid), zodat de transactie herkend wordt als overeenkomstig."
 
 #: intl-scm/guile-strings.c:1239
 msgid "HBCI Remember PIN in memory"
@@ -10636,7 +10709,7 @@ msgstr "Gebruik van - tot periode"
 
 #: intl-scm/guile-strings.c:1333
 msgid "1st Est Tax Quarter"
-msgstr "1e geschatte belastingkwartaal"
+msgstr "Geschatte BTW: 1e kwartaal"
 
 #: intl-scm/guile-strings.c:1335
 msgid "Jan 1 - Mar 31"
@@ -10644,7 +10717,7 @@ msgstr "1 jan. - 31 mrt."
 
 #: intl-scm/guile-strings.c:1337
 msgid "2nd Est Tax Quarter"
-msgstr "2e geschatte belastingkwartaal"
+msgstr "Geschatte BTW: 2e kwartaal"
 
 #: intl-scm/guile-strings.c:1339
 msgid "Apr 1 - May 31"
@@ -10652,7 +10725,7 @@ msgstr "1 apr. - 31 mei"
 
 #: intl-scm/guile-strings.c:1341
 msgid "3rd Est Tax Quarter"
-msgstr "3e geschatte belastingkwartaal"
+msgstr "Geschatte BTW: 3e kwartaal"
 
 #: intl-scm/guile-strings.c:1343
 msgid "Jun 1 - Aug 31"
@@ -10660,7 +10733,7 @@ msgstr "1 jun. - 31 aug."
 
 #: intl-scm/guile-strings.c:1345
 msgid "4th Est Tax Quarter"
-msgstr "4e geschatte belastingkwrtaal"
+msgstr "Geschatte BTW: 4e kwartaal"
 
 #: intl-scm/guile-strings.c:1347
 msgid "Sep 1 - Dec 31"
@@ -10672,7 +10745,7 @@ msgstr "Afgelopen jaar"
 
 #: intl-scm/guile-strings.c:1353
 msgid "Last Yr 1st Est Tax Qtr"
-msgstr "Afgelopen jaar 1e geschatte belastingkwartaal"
+msgstr "Afgelopen jaar geschatte BTW 1e kwartaal"
 
 #: intl-scm/guile-strings.c:1355
 msgid "Jan 1 - Mar 31, Last year"
@@ -10680,7 +10753,7 @@ msgstr "1 jan. - 31 mrt. afgelopen jaar"
 
 #: intl-scm/guile-strings.c:1357
 msgid "Last Yr 2nd Est Tax Qtr"
-msgstr "Afgelopen jaar 2e geschatte belastingkwartaal"
+msgstr "Afgelopen jaar geschatte BTW 2e kwartaal"
 
 #: intl-scm/guile-strings.c:1359
 msgid "Apr 1 - May 31, Last year"
@@ -10688,7 +10761,7 @@ msgstr "1 apr. - 31 mei afgelopen jaar"
 
 #: intl-scm/guile-strings.c:1361
 msgid "Last Yr 3rd Est Tax Qtr"
-msgstr "Afgelopen jaar 3e geschatte belastingkwartaal"
+msgstr "Afgelopen jaar geschatte BTW 3e kwartaal"
 
 #: intl-scm/guile-strings.c:1363
 msgid "Jun 1 - Aug 31, Last year"
@@ -10696,7 +10769,7 @@ msgstr "1 jun. - 31 aug. afgelopen jaar"
 
 #: intl-scm/guile-strings.c:1365
 msgid "Last Yr 4th Est Tax Qtr"
-msgstr "Afgelopen jaar 4e geschatte belastingkwartaal"
+msgstr "Afgelopen jaar geschatte BTW 4e kwartaal"
 
 #: intl-scm/guile-strings.c:1367
 msgid "Sep 1 - Dec 31, Last year"
@@ -10883,7 +10956,7 @@ msgstr "Zesde niveau"
 
 #: intl-scm/guile-strings.c:1493
 msgid "Show accounts to this depth, overriding any other option."
-msgstr "Toon alle dgboeken tot dit niveau, ongeacht andere instellingen."
+msgstr "Toon alle dagboeken tot dit niveau, ongeacht andere instellingen."
 
 #: intl-scm/guile-strings.c:1495
 msgid "Override account-selection and show sub-accounts of all selected accounts?"
@@ -10891,7 +10964,7 @@ msgstr "De dagboek selectie negeren en de sub-dagboeken van alle geselecteerde d
 
 #: intl-scm/guile-strings.c:1497
 msgid "Report on these accounts, if display depth allows."
-msgstr "Rapporteer over deze dagboeken, wanneerde ingestelde toonbare niveaudiepte dit toestaat."
+msgstr "Rapporteer over deze dagboeken, als de ingestelde toonbare niveaudiepte dit toestaat."
 
 #: intl-scm/guile-strings.c:1499
 msgid "Include sub-account balances in printed balance?"
@@ -10903,12 +10976,12 @@ msgstr "De dagboeken groeperen in hoofd categorieën?"
 
 #: intl-scm/guile-strings.c:1503
 msgid "Select the currency to display the values of this report in."
-msgstr "Selecteer de valuta die gebruikt moet worden voor dit rapport."
+msgstr "Selecteer de munteenheid die gebruikt moet worden voor dit rapport."
 
 #: intl-scm/guile-strings.c:1505 intl-scm/guile-strings.c:1729
 #: intl-scm/guile-strings.c:1891 intl-scm/guile-strings.c:2181
 msgid "Display the account's foreign currency amount?"
-msgstr "De hoeveelheid vreemde valuta van het dagboek weergeven ?"
+msgstr "Het saldo in de vreemde munteenheid van het dagboek weergeven ?"
 
 #: intl-scm/guile-strings.c:1507 intl-scm/guile-strings.c:1747
 #: intl-scm/guile-strings.c:2257
@@ -10937,7 +11010,7 @@ msgstr "Meest recent in tijd"
 
 #: intl-scm/guile-strings.c:1519 intl-scm/guile-strings.c:1755
 msgid "The price recorded nearest in time to the report date"
-msgstr "De meest recent in tijd tot de rapportage datum opgeslagen prijs"
+msgstr "De in verhouding tot de rapportdatum, meest recente opgeslagen prijs"
 
 #: intl-scm/guile-strings.c:1521
 msgid "Width of plot in pixels."
@@ -10953,15 +11026,15 @@ msgstr "Kies de markering voor ieder data punt"
 
 #: intl-scm/guile-strings.c:1527 intl-scm/guile-strings.c:1529
 msgid "Circle"
-msgstr "Omcirkelen"
+msgstr "Cirkel"
 
 #: intl-scm/guile-strings.c:1531 intl-scm/guile-strings.c:1533
 msgid "Cross"
-msgstr "Kruisend"
+msgstr "Kruis"
 
 #: intl-scm/guile-strings.c:1535 intl-scm/guile-strings.c:1537
 msgid "Square"
-msgstr "Vierkantje"
+msgstr "Vierkant"
 
 #: intl-scm/guile-strings.c:1539 intl-scm/guile-strings.c:1541
 msgid "Asterisk"
@@ -10977,15 +11050,15 @@ msgstr "Met kleur gevulde cirkel"
 
 #: intl-scm/guile-strings.c:1547
 msgid "Filled square"
-msgstr "Gevulde rechthoek"
+msgstr "Gevuld vierkant"
 
 #: intl-scm/guile-strings.c:1549
 msgid "Square filled with color"
-msgstr "Met kleur gevulde rechthoek"
+msgstr "Met kleur gevuld vierkant"
 
 #: intl-scm/guile-strings.c:1551
 msgid "Choose the method for sorting accounts."
-msgstr "Kies de te gebruiken methode om dagboeken te sorteren."
+msgstr "Kies de methode om dagboeken te sorteren."
 
 #: intl-scm/guile-strings.c:1555
 msgid "Alphabetical by account code"
@@ -11001,7 +11074,7 @@ msgstr "Alfabetisch op dagboeknaam"
 
 #: intl-scm/guile-strings.c:1563
 msgid "By amount, largest to smallest"
-msgstr "Op aantal, groot naar klein"
+msgstr "Op bedrag, groot naar klein"
 
 #: intl-scm/guile-strings.c:1571 intl-scm/guile-strings.c:1655
 #: intl-scm/guile-strings.c:1895 intl-scm/guile-strings.c:1897
@@ -11033,15 +11106,15 @@ msgstr "uitgaven"
 
 #: intl-scm/guile-strings.c:1585
 msgid "Equities"
-msgstr "Actief vermogen"
+msgstr "Eigen vermogen"
 
 #: intl-scm/guile-strings.c:1587
 msgid "Checking"
-msgstr "Betaalrekening(en)"
+msgstr "Bankrekening"
 
 #: intl-scm/guile-strings.c:1589
 msgid "Savings"
-msgstr "Spaarrekening(en)"
+msgstr "Spaarrekening"
 
 #: intl-scm/guile-strings.c:1591
 msgid "Money Market"
@@ -11050,16 +11123,16 @@ msgstr "Valutamarkt"
 #: intl-scm/guile-strings.c:1593 intl-scm/guile-strings.c:3583
 #: intl-scm/guile-strings.c:3933
 msgid "Accounts Receivable"
-msgstr "Te ontvangen dagboek"
+msgstr "Debiteuren dagboek"
 
 #: intl-scm/guile-strings.c:1595 intl-scm/guile-strings.c:3623
 #: intl-scm/guile-strings.c:3931
 msgid "Accounts Payable"
-msgstr "Te betalen dagboek"
+msgstr "Crediteuren dagboek"
 
 #: intl-scm/guile-strings.c:1597
 msgid "Credit Lines"
-msgstr "Crediet regels"
+msgstr "Kredieten"
 
 #: intl-scm/guile-strings.c:1599
 #, c-format
@@ -11130,15 +11203,15 @@ msgstr "Toont een taartgrafiek met inkomsten over een gegeven tijdsinterval"
 
 #: intl-scm/guile-strings.c:1645
 msgid "Shows a piechart with the Expenses per given time interval"
-msgstr "Toont een taartgrafiek met uitgaven over en gegeven tijdsinterval"
+msgstr "Toont een taartgrafiek met uitgaven per gegeven tijdsinterval"
 
 #: intl-scm/guile-strings.c:1647
 msgid "Shows a piechart with the Assets balance at a given time"
-msgstr "Toont een taartgrafiek met de activa balans op een gegeven moment"
+msgstr "Toont een taartgrafiek met het saldo van de activa op een gegeven moment"
 
 #: intl-scm/guile-strings.c:1649
 msgid "Shows a piechart with the Liabilities balance at a given time"
-msgstr "Toont een taartgrafiek met de passiva balns op een gegeven moment"
+msgstr "Toont een taartgrafiek met het saldo van de passiva op een gegeven moment"
 
 #: intl-scm/guile-strings.c:1651
 msgid "Income Accounts"
@@ -11201,7 +11274,7 @@ msgstr "De complete dagboeknaam in de legenda weergeven ?"
 
 #: intl-scm/guile-strings.c:1689 intl-scm/guile-strings.c:2071
 msgid "Show the total balance in legend?"
-msgstr "De totaalbalans in de legenda weergeven ?"
+msgstr "Het totaal saldo in de legenda weergeven ?"
 
 #: intl-scm/guile-strings.c:1691
 msgid "Maximum number of slices in pie"
@@ -11217,7 +11290,7 @@ msgstr "%s tot %s"
 #: intl-scm/guile-strings.c:1697
 #, c-format
 msgid "Balance at %s"
-msgstr "Balsans op %s"
+msgstr "Balans op %s"
 
 #: intl-scm/guile-strings.c:1699 intl-scm/guile-strings.c:2025
 msgid "and"
@@ -11230,7 +11303,7 @@ msgstr "Dagboek samenvatting"
 #: intl-scm/guile-strings.c:1705 intl-scm/guile-strings.c:1869
 #: intl-scm/guile-strings.c:1923 intl-scm/guile-strings.c:2157
 msgid "Account Display Depth"
-msgstr "Zichtbaar Dagboek niveau"
+msgstr "Weergaveniveau dagboek"
 
 #: intl-scm/guile-strings.c:1707
 msgid "Show Foreign Currencies/Shares of Stock"
@@ -11239,7 +11312,7 @@ msgstr "Toon buitenlandse valuta / aandelen in bezit"
 #: intl-scm/guile-strings.c:1713 intl-scm/guile-strings.c:1871
 #: intl-scm/guile-strings.c:1925 intl-scm/guile-strings.c:2159
 msgid "Always show sub-accounts"
-msgstr "Toon de sub-dagboeken altijd"
+msgstr "Sub-dagboeken altijd tonen"
 
 #: intl-scm/guile-strings.c:1717 intl-scm/guile-strings.c:2163
 msgid "Group the accounts"
@@ -11249,7 +11322,7 @@ msgstr "Groepeer de dagboeken"
 #: intl-scm/guile-strings.c:1875 intl-scm/guile-strings.c:1887
 #: intl-scm/guile-strings.c:2165 intl-scm/guile-strings.c:2177
 msgid "Show balances for parent accounts"
-msgstr "Toon de balans voor de hoger liggende dagboeken"
+msgstr "Toon de saldi van de bovenliggende dagboeken"
 
 #: intl-scm/guile-strings.c:1721 intl-scm/guile-strings.c:1877
 #: intl-scm/guile-strings.c:2167
@@ -11277,7 +11350,7 @@ msgstr "Geavanceerde Portofolio"
 
 #: intl-scm/guile-strings.c:1739 intl-scm/guile-strings.c:2195
 msgid "Share decimal places"
-msgstr "Stel aantal decimalen in voor aandelen"
+msgstr "Stel decimalen in voor aandelen"
 
 #: intl-scm/guile-strings.c:1741 intl-scm/guile-strings.c:2197
 msgid "Include accounts with no shares"
@@ -11289,7 +11362,7 @@ msgstr "Valuta rapportage"
 
 #: intl-scm/guile-strings.c:1757 intl-scm/guile-strings.c:2203
 msgid "The number of decimal places to use for share numbers"
-msgstr "Het aantal decimale plaatsen te gebruiken voor aandelen aantallen"
+msgstr "Het aantal plaatsen achter de komma bij aandeel getallen"
 
 #: intl-scm/guile-strings.c:1761 intl-scm/guile-strings.c:2207
 msgid "Stock Accounts to report on"
@@ -11297,7 +11370,7 @@ msgstr "Aandelen dagboeken om over te rapporteren"
 
 #: intl-scm/guile-strings.c:1763 intl-scm/guile-strings.c:2209
 msgid "Include accounts that have a zero share balances."
-msgstr "Inclusief dagboeken die een nul hebben op de aandelenbalans."
+msgstr "Inclusief dagboeken met nul aandelensaldo."
 
 #: intl-scm/guile-strings.c:1769 intl-scm/guile-strings.c:2215
 msgid "Listing"
@@ -11321,7 +11394,7 @@ msgstr "Totale inkomsten"
 
 #: intl-scm/guile-strings.c:1787 intl-scm/guile-strings.c:1821
 msgid "Average Balance"
-msgstr "Gemiddelde balans"
+msgstr "Gemiddeld saldo"
 
 #: intl-scm/guile-strings.c:1793 intl-scm/guile-strings.c:1987
 #: intl-scm/guile-strings.c:2095 intl-scm/guile-strings.c:2229
@@ -11375,7 +11448,7 @@ msgstr "Winst"
 
 #: intl-scm/guile-strings.c:1825
 msgid "Profit (Gain minus Loss)"
-msgstr "Netto winst (bruto winst min verlies)"
+msgstr "Winst (bruto winst min verlies)"
 
 #: intl-scm/guile-strings.c:1827
 msgid "Gain/Loss"
@@ -11423,15 +11496,15 @@ msgstr "Netto winst"
 
 #: intl-scm/guile-strings.c:1911
 msgid "Total Equity"
-msgstr "Totaal"
+msgstr "Totaal Eigen Vermogen"
 
 #: intl-scm/guile-strings.c:1913
 msgid "Liabilities & Equity"
-msgstr "Passiva & actief vermogen"
+msgstr "Vreemd Vermogen & Eigen Vermogen"
 
 #: intl-scm/guile-strings.c:1917
 msgid "Cash Flow"
-msgstr "Geldstromen"
+msgstr "Cash Flow"
 
 #: intl-scm/guile-strings.c:1935
 msgid "Show Full Account Names"
@@ -11486,7 +11559,7 @@ msgstr "Passiva balkgrafiek"
 
 #: intl-scm/guile-strings.c:1967
 msgid "Shows a barchart with the Income per interval developing over time"
-msgstr "Toont een balkgrafiek met inkomsten op een interval dat zich over tijd ontwikkelt"
+msgstr "Toont een balkgrafiek met de ontwikkeling van de inkomsten per tijdsinterval."
 
 #: intl-scm/guile-strings.c:1969
 msgid "Shows a barchart with the Expenses per interval developing over time"
@@ -11494,27 +11567,27 @@ msgstr "Toont een balkgrafiek met uitgaven op een interval dat zich over tijd on
 
 #: intl-scm/guile-strings.c:1971
 msgid "Shows a barchart with the Assets developing over time"
-msgstr "Toont een balkgrafiek met de ontwikkeling van actva over tijd"
+msgstr "Toont een balkgrafiek met de periodieke ontwikkeling van de Activa"
 
 #: intl-scm/guile-strings.c:1973
 msgid "Shows a barchart with the Liabilities developing over time"
-msgstr "Toont een balkgrafiek met de ontwikkeling van passiva over tijd"
+msgstr "Toont een balkgrafiek met de periodieke ontwikkeling van de Passiva"
 
 #: intl-scm/guile-strings.c:1975
 msgid "Income Over Time"
-msgstr "Inkomsten over tijd"
+msgstr "Inkomsten over periode"
 
 #: intl-scm/guile-strings.c:1977
 msgid "Expense Over Time"
-msgstr "Uitgaven over tijd"
+msgstr "Uitgaven over periode"
 
 #: intl-scm/guile-strings.c:1979
 msgid "Assets Over Time"
-msgstr "Activa over tijd"
+msgstr "Activa over periode"
 
 #: intl-scm/guile-strings.c:1981
 msgid "Liabilities Over Time"
-msgstr "Passiva over tijd"
+msgstr "Passiva over periode"
 
 #: intl-scm/guile-strings.c:1999
 msgid "Use Stacked Bars"
@@ -11535,7 +11608,7 @@ msgstr "Maximum aantal balken in de grafiek"
 #: intl-scm/guile-strings.c:2021
 #, c-format
 msgid "Balances %s to %s"
-msgstr "Balansen %s tot %s"
+msgstr "Saldi %s tot %s"
 
 #: intl-scm/guile-strings.c:2027 intl-scm/guile-strings.c:2035
 msgid "Income vs. Day of Week"
@@ -11567,7 +11640,7 @@ msgstr "Toon activa en passiva balken"
 
 #: intl-scm/guile-strings.c:2109 intl-scm/guile-strings.c:2245
 msgid "Show Net Worth bars"
-msgstr "Toon netto waarde balken"
+msgstr "Toon Eigen vermogen balken"
 
 #: intl-scm/guile-strings.c:2117
 msgid "Show Income and Expenses?"
@@ -11583,11 +11656,11 @@ msgstr "De netto winst weergeven ?"
 
 #: intl-scm/guile-strings.c:2123
 msgid "Show a Net Worth bar?"
-msgstr "Een netto waarde balk weergeven ?"
+msgstr "Een balk met Eigen Vermogen weergeven ?"
 
 #: intl-scm/guile-strings.c:2137
 msgid "Net Worth"
-msgstr "Netto waarde"
+msgstr "Eigen Vermogen"
 
 #: intl-scm/guile-strings.c:2139
 msgid "Income Chart"
@@ -11607,7 +11680,7 @@ msgstr "Passiva grafiek"
 
 #: intl-scm/guile-strings.c:2147
 msgid "Net Worth Barchart"
-msgstr "Netto waarde balkgrafiek"
+msgstr "Eigen Vermogen balkgrafiek"
 
 #: intl-scm/guile-strings.c:2149
 msgid "Income & Expense Chart"
@@ -11636,7 +11709,7 @@ msgstr "Eenheden"
 
 #: intl-scm/guile-strings.c:2235
 msgid "Price of Commodity"
-msgstr "Prijs van goed"
+msgstr "Prijs van het stuk"
 
 #: intl-scm/guile-strings.c:2247
 msgid "Marker"
@@ -11680,7 +11753,7 @@ msgstr "Alle prijzen zijn gelijk"
 
 #: intl-scm/guile-strings.c:2287
 msgid "All the prices found are equal. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
-msgstr "Al de gevonden prijzen zijn gelijk. Dit zou resulteren in een afbeelding met een rechte lijn. Helaas kan het afdruk gereedschap daar niet mee omgaan."
+msgstr "Alle gevonden prijzen zijn gelijk. Dit zou resulteren in een afbeelding met een rechte lijn. Helaas kan het afdrukgereedschap daar niet mee omgaan."
 
 #: intl-scm/guile-strings.c:2289
 msgid "All Prices at the same date"
@@ -11688,7 +11761,7 @@ msgstr "Alle prijzen van dezelfde datum"
 
 #: intl-scm/guile-strings.c:2291
 msgid "All the prices found are from the same date. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
-msgstr "Al de gevonde prijzen hebben dezelfde datum. Dit zou resulteren in een afbeelding met een rechte lijn. Helaas kan het afdruk gereesschap daar niet mee omgaan."
+msgstr "Alle gevonden prijzen hebben dezelfde datum. Dit zou resulteren in een afbeelding met een rechte lijn. Helaas kan het afdrukgereedschap daar niet mee omgaan."
 
 #: intl-scm/guile-strings.c:2293
 msgid "Only one price"
@@ -11696,23 +11769,23 @@ msgstr "Slechts een prijs"
 
 #: intl-scm/guile-strings.c:2295
 msgid "There was only one single price found for the selected commodities in the selected time period. This doesn't give a useful plot."
-msgstr "Er is slechts een prijs gevonden voor de geselecteerde goederen in de gekozen tijdsspanne. Dit geeft geen bruikbare grafiek."
+msgstr "Er is slechts een prijs gevonden voor de geselecteerde handelsgoederen in de gekozen tijdsspanne. Dit geeft geen bruikbare grafiek."
 
 #: intl-scm/guile-strings.c:2299
 msgid "There is no price information available for the selected commodities in the selected time period."
-msgstr "Er is geen prijsinformatie beschikbaar voor de geselecteerde goederen in de gekozen tijdsspanne"
+msgstr "Er is geen prijsinformatie beschikbaar voor de geselecteerde handelsgoederen in de gekozen periode"
 
 #: intl-scm/guile-strings.c:2301
 msgid "Identical commodities"
-msgstr "Identieke goederen"
+msgstr "Identieke handelsgoederen"
 
 #: intl-scm/guile-strings.c:2303
 msgid "Your selected commodity and the currency of the report are identical. It doesn't make sense to show prices for identical commodities."
-msgstr "De door u geselecteerde goederen en de valuta van het rapport zijn identiek. Het is zinloos om de prijzen te tonen voor identieke goederen."
+msgstr "De door u geselecteerde stukken en de munteenheid van het rapport zijn identiek. Het is zinloos om de prijzen te tonen voor identieke handelsgoederen."
 
 #: intl-scm/guile-strings.c:2307
 msgid "Price Scatterplot"
-msgstr "Prijs spreidings grafiek"
+msgstr "Prijs spreidingsgrafiek"
 
 #: intl-scm/guile-strings.c:2333
 msgid "Title"
@@ -11758,11 +11831,11 @@ msgstr "Toon dubbele kolom"
 #: intl-scm/guile-strings.c:2389 intl-scm/guile-strings.c:2479
 #: intl-scm/guile-strings.c:2741
 msgid "Running Balance"
-msgstr "Lopende balans"
+msgstr "Lopend saldo"
 
 #: intl-scm/guile-strings.c:2391 intl-scm/guile-strings.c:2743
 msgid "Display a running balance"
-msgstr "Toon een lopende balans"
+msgstr "Toon een lopend saldo"
 
 #: intl-scm/guile-strings.c:2399
 msgid "Total Debits"
@@ -11910,19 +11983,19 @@ msgstr "Filter niets"
 
 #: intl-scm/guile-strings.c:2567
 msgid "Include Transactions to/from Filter Accounts"
-msgstr "Inclusief transacties van/naar gefilterde dagboeken"
+msgstr "Inclusief transacties van/naar filter rekeningen"
 
 #: intl-scm/guile-strings.c:2569
 msgid "Include transactions to/from filter accounts only"
-msgstr "Alleen inclusief transacties van/naar gefilterde dagboeken"
+msgstr "Alleen inclusief transacties van/naar filter rekeningen"
 
 #: intl-scm/guile-strings.c:2571
 msgid "Exclude Transactions to/from Filter Accounts"
-msgstr "Exclusief transacties van/naar gefilterde dagboeken"
+msgstr "Exclusief transacties van/naar filter rekeningen"
 
 #: intl-scm/guile-strings.c:2573
 msgid "Exclude transactions to/from all filter accounts"
-msgstr "Exclusief transacties van/naar alle gefilterde dagboeken"
+msgstr "Exclusief transacties van/naar alle filter rekeningen"
 
 #: intl-scm/guile-strings.c:2575
 msgid "How to handle void transactions"
@@ -11946,11 +12019,11 @@ msgstr "Toon alleen lege transacties"
 
 #: intl-scm/guile-strings.c:2585
 msgid "Both"
-msgstr "Beiden"
+msgstr "Beide"
 
 #: intl-scm/guile-strings.c:2587
 msgid "Show both (and include void transactions in totals)"
-msgstr "Toon beiden (en neem lege transacties op in totalen)"
+msgstr "Toon beide (en neem lege transacties op in totalen)"
 
 #: intl-scm/guile-strings.c:2591
 msgid "Do not sort"
@@ -11978,7 +12051,7 @@ msgstr "Sorteer op correctie datum"
 
 #: intl-scm/guile-strings.c:2613
 msgid "Register Order"
-msgstr "Kasboek volgorde"
+msgstr "Op volgorde van boekingsformulier"
 
 #: intl-scm/guile-strings.c:2615
 msgid "Sort as with the register"
@@ -12026,15 +12099,15 @@ msgstr "Grootste naar kleinste, jongste naar oudste"
 
 #: intl-scm/guile-strings.c:2661
 msgid "Sort by this criterion first"
-msgstr "Sorteer in eerste instantie op dit criterium"
+msgstr "Sorteer eerste volgens dit criterium"
 
 #: intl-scm/guile-strings.c:2665
 msgid "Show the full account name for subtotals and subtitles?"
-msgstr "De complete dagboeknaam voor subtotalen en ondertitels weergeven ?"
+msgstr "De complete dagboeknaam voor subtotalen en subtitels weergeven ?"
 
 #: intl-scm/guile-strings.c:2669
 msgid "Show the account code for subtotals and subtitles?"
-msgstr "Dagboekcode tonen voor subtotalen en ondertitels ?"
+msgstr "Dagboekcode tonen voor subtotalen en subtitels?"
 
 #: intl-scm/guile-strings.c:2671
 msgid "Subtotal according to the primary key?"
@@ -12090,11 +12163,11 @@ msgstr "De dagboekcode weergeven ?"
 
 #: intl-scm/guile-strings.c:2723
 msgid "Display the other account name? (if this is a split transaction, this parameter is guessed)."
-msgstr "Het andere dagboeknaam weergeven ? (wanneer dit een opgesplitste transactie is, wordt deze randvoorwaarde gegokt)."
+msgstr "De andere dagboeknaam weergeven? (wanneer dit een opgesplitste transactie is, wordt deze parameter geraden)."
 
 #: intl-scm/guile-strings.c:2731
 msgid "Display the other account code"
-msgstr "Het andere dagboekcode weergeven ?"
+msgstr "De andere dagboekcode weergeven"
 
 #: intl-scm/guile-strings.c:2739
 msgid "Display the shares price?"
@@ -12895,7 +12968,7 @@ msgstr "Kas dagboek venster"
 #: intl-scm/guile-strings.c:3355 intl-scm/guile-strings.c:3713
 #: intl-scm/guile-strings.c:3725 intl-scm/guile-strings.c:3737
 msgid "Tool Bar Buttons"
-msgstr "Gereedschapsbalk knoppen"
+msgstr "Werkbalk knoppen"
 
 #: intl-scm/guile-strings.c:3357
 msgid "Menu Items"
@@ -13025,7 +13098,7 @@ msgstr "Mogelijkheden van het Kas dagboek"
 
 #: intl-scm/guile-strings.c:3441
 msgid "Choosing a Register Style"
-msgstr "Een kasboek stijl kiezen"
+msgstr "Een boekingsformulier stijl kiezen"
 
 #: intl-scm/guile-strings.c:3443
 msgid "Using Entry Shortcuts"
@@ -13094,7 +13167,7 @@ msgstr "Investeringen"
 
 #: intl-scm/guile-strings.c:3491
 msgid "Types of Investments"
-msgstr "Typen investeringen"
+msgstr "Soorten investeringen"
 
 #: intl-scm/guile-strings.c:3495
 msgid "Predefined Accounts"
@@ -13147,7 +13220,7 @@ msgstr "Configuratie initiële prijs editor"
 
 #: intl-scm/guile-strings.c:3517
 msgid "Setting Stock Price Manually"
-msgstr "Stel aandelenprijs handmatig in"
+msgstr "Aandelenprijs handmatig instellen"
 
 #: intl-scm/guile-strings.c:3519
 msgid "Setting Stock Price Automatically"
@@ -13171,7 +13244,7 @@ msgstr "Kapitaal inkomsten"
 
 #: intl-scm/guile-strings.c:3535 intl-scm/guile-strings.c:3575
 msgid "Estimating Valuation"
-msgstr "Geschatte waarde"
+msgstr "Waardering schatten"
 
 #: intl-scm/guile-strings.c:3541
 msgid "Unrealized Gains"
@@ -13203,7 +13276,7 @@ msgstr "Internationale voorkeuren instellen"
 
 #: intl-scm/guile-strings.c:3559
 msgid "Recording Currency Exchange (How-To)"
-msgstr "Opname van valuta wisselkoersen (HowTo)"
+msgstr "Opname van wisselkoersen (HowTo)"
 
 #: intl-scm/guile-strings.c:3561
 msgid "Recording Purchases in a Foreign Currency (How-To)"
@@ -13227,11 +13300,11 @@ msgstr "Alles samenvoegen (voorbeelden)"
 
 #: intl-scm/guile-strings.c:3571
 msgid "Depreciation"
-msgstr "Afwaardering"
+msgstr "Afschrijving"
 
 #: intl-scm/guile-strings.c:3577
 msgid "Depreciation Schemes"
-msgstr "Afwaardeerschema's"
+msgstr "Afschrijvingsschema's"
 
 #: intl-scm/guile-strings.c:3585
 msgid "Overview of Business Features"
@@ -13251,7 +13324,7 @@ msgstr "Systeemonderdelen"
 
 #: intl-scm/guile-strings.c:3601 intl-scm/guile-strings.c:3639
 msgid "Find and Edit"
-msgstr "Vindt en bewerk"
+msgstr "Vind en bewerk"
 
 #: intl-scm/guile-strings.c:3615
 msgid "Assign Starting Invoice Number"
@@ -13295,7 +13368,7 @@ msgstr "Stap 3: betaal de werknemer"
 
 #: intl-scm/guile-strings.c:3669
 msgid "Step 4: Pay the Government"
-msgstr "Stap 4: betaal de regering"
+msgstr "Stap 4: betaal de overheid"
 
 #: intl-scm/guile-strings.c:3673
 msgid "Build Protocol"
@@ -13319,7 +13392,7 @@ msgstr "Appendix B: veel gestelde vragen"
 
 #: intl-scm/guile-strings.c:3683
 msgid "Appendix C: Contributed Account Trees"
-msgstr "Appendix C: Bijgedragen dagboek bomen"
+msgstr "Appendix C: Bijgedragen rekeningschema's"
 
 #: intl-scm/guile-strings.c:3685
 msgid "Appendix D: GNU Free Documentation License"
@@ -13375,7 +13448,7 @@ msgstr "Rapportage venster"
 
 #: intl-scm/guile-strings.c:3741
 msgid "Tool Windows"
-msgstr "GereeschapsVensters"
+msgstr "Gereesdchap vensters"
 
 #: intl-scm/guile-strings.c:3743
 msgid "Scheduled Transactions Window"
@@ -13387,7 +13460,7 @@ msgstr "correctie venster"
 
 #: intl-scm/guile-strings.c:3749
 msgid "Commodity Editor"
-msgstr "Goederen bewerken"
+msgstr "Stukken bewerken"
 
 #: intl-scm/guile-strings.c:3753
 msgid "Find Transactions"
@@ -13403,7 +13476,7 @@ msgstr "Configureer en bewerk dagboeken"
 
 #: intl-scm/guile-strings.c:3759
 msgid "Types of GnuCash Accounts"
-msgstr "Typen GnuCash dagboeken"
+msgstr "Soorten GnuCash dagboeken"
 
 #: intl-scm/guile-strings.c:3761
 msgid "To Create a Chart of Accounts"
@@ -13431,7 +13504,7 @@ msgstr "Spring naar een ander dagboek"
 
 #: intl-scm/guile-strings.c:3777
 msgid "To Reconcile an Account to a Statement"
-msgstr "Om een dagboek te corrigeren naar een verklaring"
+msgstr "Om een rekening te verwerken in een afschrift"
 
 #: intl-scm/guile-strings.c:3783
 msgid "To Perform a Stock Split"
@@ -13443,27 +13516,27 @@ msgstr "Aandelen opsplitsings-Hulp"
 
 #: intl-scm/guile-strings.c:3787
 msgid "Using the Register to Record Transactions"
-msgstr "Gebruik het kasboek om transacties te archiveren"
+msgstr "Het journaal gebruiken om transacties te boeken"
 
 #: intl-scm/guile-strings.c:3789
 msgid "Changing the Register View"
-msgstr "Verander het kasboek venster"
+msgstr "Verander het boekingsformulier venster"
 
 #: intl-scm/guile-strings.c:3791
 msgid "To Enter a Transaction"
-msgstr "Om een transactie te openen"
+msgstr "Om een transactie te boeken"
 
 #: intl-scm/guile-strings.c:3793
 msgid "Enter Directly in the Register Window"
-msgstr "Geef direct op in het kasboekvenster"
+msgstr "Direct boeken in het boekingsvenster"
 
 #: intl-scm/guile-strings.c:3795
 msgid "Enter in the Transfer Funds Window"
-msgstr "Geef direct op in het fondstransactie venster"
+msgstr "Direct boeken op in het fondstransactie venster"
 
 #: intl-scm/guile-strings.c:3797
 msgid "To Enter Multiple Split Transactions"
-msgstr "Geef meervoudig opgesplitste transacties op"
+msgstr "Om meervoudig opgesplitste transacties te boeken"
 
 #: intl-scm/guile-strings.c:3799
 msgid "To Enter Multiple Currency Transactions"
@@ -13483,7 +13556,7 @@ msgstr "Om transactie opsplitsingen te verwijderen"
 
 #: intl-scm/guile-strings.c:3807
 msgid "To Copy a Transaction"
-msgstr "Om een transactie te Copieren"
+msgstr "Om een transactie te kopiëren"
 
 #: intl-scm/guile-strings.c:3809
 msgid "To Schedule Transactions"
@@ -13511,7 +13584,7 @@ msgstr "GnuCash rapporten en grafieken gebruiken"
 
 #: intl-scm/guile-strings.c:3821
 msgid "Types of Reports and Graphs"
-msgstr "Typen rapporten en grafieken"
+msgstr "Soorten rapporten en grafieken"
 
 #: intl-scm/guile-strings.c:3823
 msgid "General Reports"
@@ -13547,7 +13620,7 @@ msgstr "Uw voorkeuren instellen"
 
 #: intl-scm/guile-strings.c:3861
 msgid "User Info"
-msgstr "Gebruikers gegevens"
+msgstr "Gebruikersgegevens"
 
 #: intl-scm/guile-strings.c:3863
 msgid "Advanced"
@@ -13583,59 +13656,59 @@ msgstr "Dubbelklikken vergroot de bovenliggende dagboeken"
 
 #: intl-scm/guile-strings.c:3903
 msgid "Double clicking on an account with children expands the account instead of opening a register."
-msgstr "Dubbelklikken op een dagboek met sub-dagboeken vergroot het dagboek en opent niet het kasboek."
+msgstr "Dubbelklikken op een dagboek met sub-dagboeken vergroot het dagboek en opent niet het boekingsformulier."
 
 #: intl-scm/guile-strings.c:3907
 msgid "Account types to display"
-msgstr "Te weergeven dagboek types"
+msgstr "Weer te geven dagboek soorten"
 
 #: intl-scm/guile-strings.c:3937
 msgid "Account fields to display"
-msgstr "Te weergeven velden"
+msgstr "Weer te geven velden"
 
 #: intl-scm/guile-strings.c:3951
 msgid "Balance in Report Currency"
-msgstr "Valuta in balansrapport"
+msgstr "Saldo munteenheid van het rapport"
 
 #: intl-scm/guile-strings.c:3953
 msgid "Present Balance"
-msgstr "Huidige balans"
+msgstr "Huidig saldo"
 
 #: intl-scm/guile-strings.c:3955
 msgid "Present Balance in Report Currency"
-msgstr "Toon balans in rapport's valuta"
+msgstr "Huidig saldo in de munteenheid van het rapport"
 
 #: intl-scm/guile-strings.c:3957
 msgid "Cleared Balance"
-msgstr "Verhelderde balans"
+msgstr "Goedgekeurd saldo"
 
 #: intl-scm/guile-strings.c:3959
 msgid "Cleared Balance in Report Currency"
-msgstr "Verhelderde balans in rapport's valuta"
+msgstr "Goedgekeurd saldo in de munteenheid van het rapport"
 
 #: intl-scm/guile-strings.c:3961
 msgid "Reconciled Balance"
-msgstr "Gecorrigeerde balans"
+msgstr "Verwerkt saldo"
 
 #: intl-scm/guile-strings.c:3963
 msgid "Reconciled Balance in Report Currency"
-msgstr "Gecorrigeerde balans in rapport's valuta"
+msgstr "Verwerkt saldo in de munteenheid van het rapport"
 
 #: intl-scm/guile-strings.c:3965
 msgid "Future Minimum Balance"
-msgstr "Toekomstig minimum balans"
+msgstr "Toekomstig minimum saldo"
 
 #: intl-scm/guile-strings.c:3967
 msgid "Future Minimum Balance in Report Currency"
-msgstr "Toekomstig minimum balans in rapport's valuta"
+msgstr "Toekomstig minimum saldo in de munteenheid van het rapport"
 
 #: intl-scm/guile-strings.c:3971
 msgid "Total in Report Currency"
-msgstr "Valuta in totaalrapport"
+msgstr "Totaal in de munteenheid van het rapport"
 
 #: intl-scm/guile-strings.c:3975
 msgid "Can't save window state"
-msgstr "Kan de venster staat niet bewaren"
+msgstr "Kan de vensterstaat niet bewaren"
 
 #: intl-scm/guile-strings.c:3977
 msgid "Properties"
@@ -13647,7 +13720,7 @@ msgstr "Bekijk en bewerk de eigenschappen van dit bestand"
 
 #: intl-scm/guile-strings.c:3981
 msgid "This is a development version. It may or may not work.\n"
-msgstr "Dit is een ontwikkelings versie. Hij werkt misschien niet geheel.\n"
+msgstr "Dit is een ontwikkelversie. Zij werkt misschien niet.\n"
 
 #: intl-scm/guile-strings.c:3983
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org.\n"
@@ -13667,7 +13740,7 @@ msgstr "De volgende stabiele versie zal zijn "
 
 #: intl-scm/guile-strings.c:3991
 msgid "Loading modules... "
-msgstr "Modules inladen... "
+msgstr "Bezig modules te laden... "
 
 #: intl-scm/guile-strings.c:3993
 msgid "Checking Finance::Quote..."
@@ -13675,11 +13748,11 @@ msgstr "Financiën controleren:: Citaat..."
 
 #: intl-scm/guile-strings.c:3995
 msgid "Loading tip-of-the-day..."
-msgstr "Tip van de dag inladen..."
+msgstr "Bezig tip van de dag te laden..."
 
 #: intl-scm/guile-strings.c:3997
 msgid "Loading configs..."
-msgstr "Instellingen inladen..."
+msgstr "Bezig instellingen te laden..."
 
 #: intl-scm/guile-strings.c:3999
 msgid "_Style Sheets..."
@@ -13699,11 +13772,11 @@ msgstr "Welkom bij het GnuCash rapportage scherm"
 
 #: intl-scm/guile-strings.c:4007
 msgid "Loading data..."
-msgstr "Gegevens inladen..."
+msgstr "Bezig gegevens te laden..."
 
 #: intl-scm/guile-strings.c:4009 intl-scm/guile-strings.c:4011
 msgid "No accounts marked for quote retrieval."
-msgstr "Geen dagboeken gemarkeerd voor citataat opvraag."
+msgstr "Geen dagboeken gemarkeerd voor citaat opvraag."
 
 #: intl-scm/guile-strings.c:4013 intl-scm/guile-strings.c:4015
 #: intl-scm/guile-strings.c:4031 intl-scm/guile-strings.c:4033
@@ -13716,28 +13789,28 @@ msgid ""
 "Run 'update-finance-quote' as root to install them."
 msgstr ""
 "U mist enkele noodzakelijke Perl bestanden. \n"
-"Start 'update-financiële-bron' als root om ze te installeren."
+"Start 'update-financiële-notering' als root om ze te installeren."
 
 #: intl-scm/guile-strings.c:4023 intl-scm/guile-strings.c:4025
 msgid "There was a system error while retrieving the price quotes."
-msgstr "Er is een systeemfout opgetreden bij het ophalen van de prijscitaten."
+msgstr "Er is een systeemfout opgetreden tijdens het ophalen van de prijsnoteringen."
 
 #: intl-scm/guile-strings.c:4027 intl-scm/guile-strings.c:4029
 msgid "There was an unknown error while retrieving the price quotes."
-msgstr "Er is een onbekende fout opgetreden bij het ophalen van de prijscitaten."
+msgstr "Er is een onbekende fout opgetreden tijdens het ophalen van de prijsnoteringen."
 
 #: intl-scm/guile-strings.c:4035 intl-scm/guile-strings.c:4039
 #: intl-scm/guile-strings.c:4041
 msgid "Unable to retrieve quotes for these items:"
-msgstr "Kan geen bronnen voor deze items vinden:"
+msgstr "Kan geen noteringen voor deze items vinden:"
 
 #: intl-scm/guile-strings.c:4037
 msgid "Continue using only the good quotes?"
-msgstr "Doorgaan met alleen de goede bronnen?"
+msgstr "Doorgaan met alleen de goede noteringen?"
 
 #: intl-scm/guile-strings.c:4043
 msgid "Continuing with good quotes."
-msgstr "Doorgaan met de goede bronnen."
+msgstr "Doorgaan met de goede noteringen."
 
 #: intl-scm/guile-strings.c:4045 intl-scm/guile-strings.c:4049
 msgid "Unable to create prices for these items:"
@@ -13745,11 +13818,11 @@ msgstr "Kan geen prijzen genereren voor deze items."
 
 #: intl-scm/guile-strings.c:4047
 msgid "Add remaining good quotes?"
-msgstr "Overgebleven juiste bronnen toevoegen?"
+msgstr "Overgebleven goede noteringen toevoegen?"
 
 #: intl-scm/guile-strings.c:4051
 msgid "Adding remaining good quotes."
-msgstr "Toevoegen overgebleven juiste bronnen."
+msgstr "Toevoegen overgebleven goede noteringen."
 
 #: intl-scm/guile-strings.c:4053
 msgid ""
@@ -13795,7 +13868,7 @@ msgid ""
 "or setting up a chart of accounts, please see the GnuCash online\n"
 "manual."
 msgstr ""
-"Maak nieuwe dagboeken aan door de Nieuw-knop te kiezen in de gereedschapsbalk\n"
+"Maak nieuwe dagboeken aan door de Nieuw-knop te kiezen in de werkbalk\n"
 "in het hoofdvenster. Hierdoor wordt er een venster geopend waarin u meer gegevens\n"
 "over het dagboek kunt aangeven. Voor meer informatie over het kiezen van een dagboek\n"
 "type of het instellen van een serie dagboeken, zie de GnuCash online handleiding."
@@ -13807,7 +13880,7 @@ msgid ""
 "mouse button brings up the transaction menu options."
 msgstr ""
 "Gebruik de rechter muisknop in het hoofvenster om de opties voor\n"
-"de dagboeken te kiezen. In ieder kasboek opent de rechtermuis knop\n"
+"de dagboeken te kiezen. In ieder boekingsformulier opent de rechtermuis knop\n"
 "de transactie menu opties."
 
 #: intl-scm/guile-strings.c:4078
@@ -13818,8 +13891,8 @@ msgid ""
 "style Auto-Split Ledger or Transaction Journal."
 msgstr ""
 "Om meervoudig opgesplitste transacties zoals een betaalcheque met meervoudige\n"
-"aftrekposten, kiest u de opsplits knop in de gereedschapsbalk. U kunt\n"
-"ook in het Toon -> Stijl en het kasboek kiezen, of Stijl splits automatisch grootboek\n"
+"kostensoorten, kiest u de opsplits knop in de werkbalk. U kunt\n"
+"ook in het Toon -> Stijl en het boekingsformulier kiezen, of Stijl splits automatisch grootboek\n"
 "of transactie journaal."
 
 #: intl-scm/guile-strings.c:4083
@@ -13829,9 +13902,9 @@ msgid ""
 "the first value, then select '+', '-','*', or '/'.  Type the\n"
 "second value and press Enter to record the calculated amount."
 msgstr ""
-"Wanneer u bedragen ingeeft in het kasboek, kunt u GnuCash gebruiken\n"
+"Als u bedragen boekt in het kasboek, kunt u GnuCash gebruiken\n"
 "als rekenmachine voor optellen, aftrekken, vermenigvuldigen en delen. Type\n"
-"simpleweg de eerste waarde, selecteer vervolgens '+', '-', '*' of '/'. Type\n"
+"simpelweg de eerste waarde, selecteer vervolgens '+', '-', '*' of '/'. Type\n"
 "vervolgens de tweede waarde en kies 'Enter' om de berekende waarde op te slaan."
 
 #: intl-scm/guile-strings.c:4088
@@ -13854,9 +13927,9 @@ msgid ""
 "of the parent account, followed by ':' and the first letter(s) of\n"
 "the subaccount (e.g. A:C for Assets:Cash.)"
 msgstr ""
-"Type de eerste letter(s) van een besaandde dagboeknaam in de\n"
-"transactie kasboek kolom, en GnuCash zal de naam uit uw dagboeklijst\n"
-"afmaken. Voor sub-dagboeken, typed u de eerste letters van het bovenliggende\n"
+"Typ de eerste letter(s) van een bestaande dagboeknaam in de\n"
+"transactie boekingskolom, en GnuCash zal de naam uit uw dagboeklijst\n"
+"afmaken. Voor sub-dagboeken, typt u de eerste letters van het bovenliggende\n"
 "dagboek, gevolgd door ':' en de eerste letter(s) van het sub-dagboek\n"
 "zoals A:K voor activa:kas.)"
 
@@ -13866,7 +13939,7 @@ msgid ""
 "From the main menu, highlight the parent account and select\n"
 "Accounts -> Open Subaccounts from the menu."
 msgstr ""
-"Wilt u al uw sub-dagboek transacties zien in een kasboek?\n"
+"Wilt u al uw sub-dagboek transacties zien in een boekingsformulier?\n"
 "Markeer in het hoofdmenu het bovenliggende dagboek en selecteer\n"
 "Dagboeken -> Open sub-dagboeken in het menu."
 
@@ -13876,9 +13949,9 @@ msgid ""
 "decrement the selected date. You can use '+' and '-' to increment and\n"
 "decrement check numbers as well."
 msgstr ""
-"Wanneer u data opgeeft, kunt u '+' of '-' om naar boven of naar beneden te \n"
-"gaan vanaf de geselecteerde datum. U kunt '+' en '-' ook gebruiken om in \n"
-"getallen een naar boven of naar beneden te gaan."
+"Wanneer u data opgeeft, kunt u '+' of '-' om naar voren of naar achteren te \n"
+"gaan vanaf de geselecteerde datum. U kunt '+' en '-' ook gebruiken om met \n"
+"getallen een stap naar boven of naar beneden te gaan."
 
 #: intl-scm/guile-strings.c:4107
 msgid ""
@@ -13886,8 +13959,8 @@ msgid ""
 "transactions as reconciled.  You can also press Tab and Shift-Tab to\n"
 "move between deposits and withdrawals."
 msgstr ""
-"In het correctievenster, kunt u de spatiebalk gebruiken om\n"
-"transacties te markeren als gecorrigeerd.\n"
+"In het verwerkingsvenster, kunt u de spatiebalk gebruiken om\n"
+"transacties te markeren als zijnde verwerkt.\n"
 "U kunt ook Tab en Shift+Tab gebruiken om te wisselen tussen\n"
 "Stortingen en opnames."
 
@@ -13899,9 +13972,9 @@ msgid ""
 "rate or the other currency's amount will be available."
 msgstr ""
 "Om geld over te boeken tussen dagboeken met verschillende valuta,\n"
-"klikt u op de transactie knop in de kasboek gereedschapsbalk. Kies de \n"
-"dagboeken, en de valuta transactie opties om de wisselkoers in te geven \n"
-"anders is de hoeveelheid van de vorige valuta nog beschikbaar."
+"klikt u op de transactie knop in de boekingsformulier werkbalk. Kies de \n"
+"dagboeken, en de valuta transactie opties om de wisselkoers in te voeren \n"
+"zoniet, wordt het bedrag in de andere munteenheid gebruikt."
 
 #: intl-scm/guile-strings.c:4116
 msgid ""
@@ -13930,7 +14003,7 @@ msgid ""
 "a style sheet for your report as a report option, and use\n"
 "the Edit -> Style Sheets menu to customize style sheets."
 msgstr ""
-"Sjablonen hebben invloed op hoe rapporten worden weergegeven.\n"
+"Sjablonen hebben invloed op de weergave van uw rapporten.\n"
 "Kies een sjabloon voor uw rapport onder rapport opties, en\n"
 "gebruik het Bewerk -> Sjabloon menu om uw sjablonen aan te passen."
 
@@ -13960,6 +14033,108 @@ msgstr ""
 "\n"
 "Er is een andere theorie die zegt dat dit al gebeurd is,\n"
 "Douglas Adams \"The Restaurant at the End of the Universe\""
+
+#~ msgid ""
+#~ "Please enter and confirm a new PIN for \n"
+#~ "user '%s' at unknown bank,\n"
+#~ "with at least %d characters."
+#~ msgstr ""
+#~ "Geeft u alstublieft een nieuwe PIN met bevestiging op\n"
+#~ "voor gebruiker '%s' bij onbekende bank,\n"
+#~ "met tenminste %d karakters."
+
+#~ msgid ""
+#~ "Please enter PIN for \n"
+#~ "unknown user at unknown bank."
+#~ msgstr ""
+#~ "Geeft u alstublieft het PIN op voor\n"
+#~ "onbekende gebruiker bij onbekende bank."
+
+#~ msgid ""
+#~ "Please make sure the key file for \n"
+#~ "user '%s' at bank '%s' can be accessed."
+#~ msgstr ""
+#~ "Verzeker u ervan dat het sleutelbestand voor\n"
+#~ "gebruiker '%s' bij bank '%s' toegankelijk is."
+
+#~ msgid ""
+#~ "Please make sure the key file for \n"
+#~ "user '%s' at unknown bank can be accessed."
+#~ msgstr ""
+#~ "Verzeker u ervan dat het sleutelbestand voor\n"
+#~ "gebruiker '%s' bij onbekende bank toegankelijk is."
+
+#~ msgid ""
+#~ "Please insert chip card for \n"
+#~ "user '%s' at unknown bank."
+#~ msgstr ""
+#~ "Plaatst u alstublieft de chipkaart voor \n"
+#~ "gebruiker '%s' bij onbekende bank."
+
+#~ msgid ""
+#~ "Please make sure the key file for \n"
+#~ "unknown user at unknown bank can be accessed."
+#~ msgstr ""
+#~ "Verzeker u ervan dat het sleutelbestand voor\n"
+#~ "onbekende gebruiker bij onbekende bank toegankelijk is."
+
+#~ msgid ""
+#~ "Please insert chip card for \n"
+#~ "unknown user at unknown bank."
+#~ msgstr ""
+#~ "Plaatst u alstublieft de chipkaart voor \n"
+#~ "onbekende gebruiker bij onbekende bank."
+
+#~ msgid ""
+#~ "The key file does not seem to be the correct \n"
+#~ "file for user '%s' at unknown bank. Please make \n"
+#~ "sure the correct key file can be accessed."
+#~ msgstr ""
+#~ "Het sleutelbestand lijkt niet het juiste bestand\n"
+#~ "te zijn voor gebruiker '%s' bij bank onbekend.\n"
+#~ "Zorg ervoor dat het juiste sleutelbestand\n"
+#~ "toegankelijk is."
+
+#~ msgid ""
+#~ "Please insert the correct chip card for \n"
+#~ "user '%s' at unknown bank."
+#~ msgstr ""
+#~ "Plaatst u alstublieft de juiste chipcard voor \n"
+#~ "gebruiker '%s'bij onbekende bank."
+
+#~ msgid ""
+#~ "The key file does not seem to be the correct \n"
+#~ "file for unknown user at unknown bank. Please make \n"
+#~ "sure the correct key file can be accessed."
+#~ msgstr ""
+#~ "Het sleutelbestand lijkt niet het correcte bestand\n"
+#~ "te zijn voor gebruiker onbekend bij bank onbekend.\n"
+#~ "Zorg ervoor dat het juiste sleutelbestand toegankelijk is."
+
+#~ msgid ""
+#~ "Please insert the correct chip card for \n"
+#~ "unknown user at unknown bank."
+#~ msgstr ""
+#~ "Plaatst u alstublieft de juiste chipkaart voor \n"
+#~ "onbekende gebruiker bij onbekende bank."
+
+#~ msgid ""
+#~ "Please enter PIN for \n"
+#~ "user '%s' at unknown bank\n"
+#~ "at the keypad of your chip card reader."
+#~ msgstr ""
+#~ "Geeft u het PIN op voor\n"
+#~ "gebruiker '%s' bij onbekende bank\n"
+#~ "op het toetsenbord van uw chipkaart lezer."
+
+#~ msgid ""
+#~ "Please enter PIN for \n"
+#~ "unknown user at unknown bank\n"
+#~ "at the keypad of your chip card reader."
+#~ msgstr ""
+#~ "Geeft u het PIN op voor\n"
+#~ "onbekende gebruiker bij onbekende bank\n"
+#~ "op het toetsenbord van uw chipkaart lezer."
 
 #~ msgid "You must enter a company name."
 #~ msgstr "U moet een bedrijfsnaam opgeven."
