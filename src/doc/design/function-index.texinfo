@@ -1,0 +1,4 @@
+@node Function Index, Data Type Index, Reports, Top
+@unnumbered Function Index
+
+@printindex fn

@@ -88,8 +88,9 @@ of the @cite{GnuCash Design Document}, version @value{VERSION}.
 * Engine::                      
 * Register::                    
 * Reports::                     
-* Data Type Index::             
-* Concept Index::               
+* Function Index::              
+* Data Type Index::
+* Concept Index::
 
 @detailmenu --- The Detailed Node Listing ---
 
@@ -102,6 +103,11 @@ Engine
 * Accounts::                    
 * Transactions::                
 * Splits::                      
+
+Key-Value Pair Frames
+
+* kvp_frame::                   
+* kvp_value::                   
 
 Register
 
@@ -122,6 +128,7 @@ Cells
 @include engine.texinfo
 @include register.texinfo
 @include reports.texinfo
+@include function-index.texinfo
 @include type-index.texinfo
 @include concept-index.texinfo
 

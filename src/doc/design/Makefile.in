@@ -116,7 +116,7 @@ VERSION = @VERSION@
 l = @l@
 
 info_TEXINFOS = gnucash-design.texinfo
-gnucash_design_TEXINFOS = concept-index.texinfo                           engine.texinfo                           intro.texinfo                           register.texinfo                           reports.texinfo                           top-level.texinfo                           type-index.texinfo
+gnucash_design_TEXINFOS = concept-index.texinfo                           engine.texinfo                           function-index.texinfo                           intro.texinfo                           register.texinfo                           reports.texinfo                           top-level.texinfo                           type-index.texinfo
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
@@ -126,7 +126,7 @@ INFO_DEPS = gnucash-design.info
 DVIS = gnucash-design.dvi
 TEXINFOS = gnucash-design.texinfo
 DIST_COMMON =  $(gnucash_design_TEXINFOS) Makefile.am Makefile.in \
-mdate-sh stamp-vti texinfo.tex version.texi
+mdate-sh texinfo.tex
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -144,31 +144,8 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 
-$(srcdir)/version.texi: stamp-vti
-	@:
-
-$(srcdir)/stamp-vti: gnucash-design.texinfo $(top_srcdir)/configure.in
-	@echo "@set UPDATED `$(SHELL) $(srcdir)/mdate-sh $(srcdir)/gnucash-design.texinfo`" > vti.tmp
-	@echo "@set EDITION $(VERSION)" >> vti.tmp
-	@echo "@set VERSION $(VERSION)" >> vti.tmp
-	@cmp -s vti.tmp $(srcdir)/version.texi \
-	  || (echo "Updating $(srcdir)/version.texi"; \
-	      cp vti.tmp $(srcdir)/version.texi)
-	-@rm -f vti.tmp
-	@cp $(srcdir)/version.texi $@
-
-mostlyclean-vti:
-	-rm -f vti.tmp
-
-clean-vti:
-
-distclean-vti:
-
-maintainer-clean-vti:
-	-rm -f $(srcdir)/stamp-vti $(srcdir)/version.texi
-
-gnucash-design.info: gnucash-design.texinfo version.texi $(gnucash_design_TEXINFOS)
-gnucash-design.dvi: gnucash-design.texinfo version.texi $(gnucash_design_TEXINFOS)
+gnucash-design.info: gnucash-design.texinfo $(gnucash_design_TEXINFOS)
+gnucash-design.dvi: gnucash-design.texinfo $(gnucash_design_TEXINFOS)
 
 
 DVIPS = dvips
@@ -347,32 +324,31 @@ distclean-generic:
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
-mostlyclean-am:  mostlyclean-vti mostlyclean-aminfo mostlyclean-generic
+mostlyclean-am:  mostlyclean-aminfo mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-vti clean-aminfo clean-generic mostlyclean-am
+clean-am:  clean-aminfo clean-generic mostlyclean-am
 
 clean: clean-am
 
-distclean-am:  distclean-vti distclean-aminfo distclean-generic clean-am
+distclean-am:  distclean-aminfo distclean-generic clean-am
 	-rm -f libtool
 
 distclean: distclean-am
 
-maintainer-clean-am:  maintainer-clean-vti maintainer-clean-aminfo \
-		maintainer-clean-generic distclean-am
+maintainer-clean-am:  maintainer-clean-aminfo maintainer-clean-generic \
+		distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: mostlyclean-vti distclean-vti clean-vti maintainer-clean-vti \
-install-info-am uninstall-info mostlyclean-aminfo distclean-aminfo \
-clean-aminfo maintainer-clean-aminfo tags distdir info-am info dvi-am \
-dvi check check-am installcheck-am installcheck install-exec-am \
-install-exec install-data-am install-data install-am install \
-uninstall-am uninstall all-redirect all-am all installdirs \
+.PHONY: install-info-am uninstall-info mostlyclean-aminfo \
+distclean-aminfo clean-aminfo maintainer-clean-aminfo tags distdir \
+info-am info dvi-am dvi check check-am installcheck-am installcheck \
+install-exec-am install-exec install-data-am install-data install-am \
+install uninstall-am uninstall all-redirect all-am all installdirs \
 mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 

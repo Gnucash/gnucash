@@ -33,9 +33,7 @@ be created as a shared library for use by other programs.
 
 @node Key-Value Pair Frames, Sessions, Globally Unique Identifiers, Engine
 @section Key-Value Pair Frames
-@tindex kvp_frame
-@tindex kvp_value
-@tindex kvp_value_t
+@cindex Key-Value Pairs
 @tindex kvp_list
 
 The number and types of data items which are associated with the
@@ -55,10 +53,61 @@ possible types enumerated in the @code{kvp_value_t} enum which
 indicates the type of data stored in a @code{kvp_value} object.
 Possible @code{kvp_value_t} values and their meanings are:
 
+@menu
+* kvp_frame::                   
+* kvp_value::                   
+@end menu
+
+
+@node kvp_frame, kvp_value, Key-Value Pair Frames, Key-Value Pair Frames
+@subsection kvp_frame
+@tindex kvp_frame
+
+A @code{kvp_frame} is the datatype used to associate key strings with
+@code{kvp_value} objects (@pxref{kvp_value}).
+
+@deftypefun kvp_frame* kvp_frame_new (void)
+Create and initialize a new @code{kvp_frame} object and return
+a pointer to it.
+@end deftypefun
+
+@deftypefun void kvp_frame_delete(kvp_frame * @var{frame})
+Free all memory associated with @var{frame}.
+@end deftypefun
+
+@deftypefun kvp_frame* kvp_frame_copy(const kvp_frame * frame)
+Return a deep copy of @var{frame}.
+@end deftypefun
+
+@deftypefun void kvp_frame_set_slot(kvp_frame * @var{frame}, const char * @var{key}, const kvp_value * @var{value})
+Associate @var{key} with @var{value} in @var{frame}.
+@end deftypefun
+
+@deftypefun kvp_value* kvp_frame_get_slot(kvp_frame * @var{frame}, const char * @var{key})
+Return the @code{kvp_value} object associated with @var{key}
+in @var{frame} or return @code{NULL} if there is no association
+for @var{key}. The value returned is not a copy.
+@end deftypefun
+
+
+@node kvp_value,  , kvp_frame, Key-Value Pair Frames
+@subsection kvp_value
+@tindex kvp_value
+@tindex kvp_value_t
+
+The @code{kvp_value} object stores the 'value' part of a key-value
+association in a @code{kvp_frame} object.
+
+@deftypefun kvp_value_t kvp_value_get_type(const kvp_value * @var{value})
+Return the type of value stored in @var{value}.
+@end deftypefun
+
+A @code{kvp_value_t} enum must have one of the following values:
+
 @table @code
 
 @item KVP_TYPE_NONE
-Indicates the abscence of a value in a kvp_frame.
+Indicates the abscence of a value in a @code{kvp_frame}.
 
 @item KVP_TYPE_INT64
 A @code{gint64} value.
@@ -101,9 +150,8 @@ implies that the associated file is locked.
 
 @item
 Provides a search path for the file to be edited. This should simplify
-install & maintenance problems for naive users who may not have a good
-grasp on what a file ssytem is, or where they want to keep their data
-files.
+install & maintenance problems for users who may not have a good grasp
+of what a file system is, or where they want to keep their data files.
 
 @end itemize
 
