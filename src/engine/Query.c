@@ -81,7 +81,6 @@ struct _querystruct {
 
 static int  xaccAccountMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccActionMatchPredicate(Split * s, PredicateData * pd);
-static int  xaccAmountMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccBalanceMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccClearedMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccDateMatchPredicate(Split * s, PredicateData * pd);
@@ -92,6 +91,7 @@ static int  xaccMemoMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccNumberMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccSharePriceMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccSharesMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccValueMatchPredicate(Split * s, PredicateData * pd);
 
 /********************************************************************
  ********************************************************************/
@@ -155,12 +155,6 @@ xaccQueryPrint(Query * q)
           printf ("action sense=%d case sensitive=%d\n", qt->data.str.sense,
                   qt->data.str.case_sens);
           printf ("\tmatch string=%s \n", qt->data.str.matchstring);
-          break;
-        case PR_AMOUNT:
-          printf ("amount sense=%d how=%d\n", qt->data.amount.sense,
-                  qt->data.amount.how);
-          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn,
-                  qt->data.amount.amount);
           break;
         case PR_BALANCE:
           printf ("balance sense=%d how=%d\n", qt->data.balance.sense,
@@ -240,6 +234,13 @@ xaccQueryPrint(Query * q)
           break;
         case PR_SHRS:
           printf ("shrs sense=%d how=%d\n", qt->data.amount.sense,
+                  qt->data.amount.how);
+          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn,
+                  qt->data.amount.amount);
+          break;
+
+        case PR_VALUE:
+          printf ("value sense=%d how=%d\n", qt->data.amount.sense,
                   qt->data.amount.how);
           printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn,
                   qt->data.amount.amount);
@@ -1533,9 +1534,6 @@ xaccQueryGetPredicate (pr_type_t term_type)
     case PR_ACTION:
       p = & xaccActionMatchPredicate;
       break;
-    case PR_AMOUNT:
-      p = & xaccAmountMatchPredicate;
-      break;
     case PR_BALANCE:
       p = & xaccBalanceMatchPredicate;
       break;
@@ -1565,6 +1563,9 @@ xaccQueryGetPredicate (pr_type_t term_type)
       break;
     case PR_SHRS:
       p = & xaccSharesMatchPredicate;
+      break;
+    case PR_VALUE:
+      p = & xaccValueMatchPredicate;
       break;
     case PR_MISC:
       PERR ("misc term must not appear");
@@ -2011,13 +2012,13 @@ xaccQueryAddActionMatch(Query * q, const char * matchstring, int case_sens,
 
 
 /********************************************************************
- * DxaccQueryAddAmountMatch
+ * DxaccQueryAddValueMatch
  * Add a value filter to an existing query. 
  * FIXME ?? fix what ??
  ********************************************************************/
 
 void
-DxaccQueryAddAmountMatch(Query * q, double amt, 
+DxaccQueryAddValueMatch(Query * q, double amt, 
                          amt_match_sgn_t amt_sgn, 
                          amt_match_t how,
                          QueryOp op) 
@@ -2026,9 +2027,9 @@ DxaccQueryAddAmountMatch(Query * q, double amt,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
 
-  qt->p                     = & xaccAmountMatchPredicate;
+  qt->p                     = & xaccValueMatchPredicate;
   qt->data.type             = PD_AMOUNT;
-  qt->data.base.term_type   = PR_AMOUNT;
+  qt->data.base.term_type   = PR_VALUE;
   qt->data.base.sense       = 1;
   qt->data.amount.how       = how;
   qt->data.amount.amt_sgn   = amt_sgn;
@@ -2647,7 +2648,8 @@ xaccActionMatchPredicate(Split * s, PredicateData * pd)
  *  xaccMemoMatchPredicate 
  *******************************************************************/
 static int
-xaccMemoMatchPredicate(Split * s, PredicateData * pd) {
+xaccMemoMatchPredicate(Split * s, PredicateData * pd) 
+{
   const char  * memo;
   
   g_return_val_if_fail(s && pd, FALSE);
@@ -2658,10 +2660,12 @@ xaccMemoMatchPredicate(Split * s, PredicateData * pd) {
 
 
 /*******************************************************************
- *  xaccAmountMatchPredicate 
+ *  xaccValueMatchPredicate 
  *******************************************************************/
+
 static int
-xaccAmountMatchPredicate(Split * s, PredicateData * pd) {
+xaccValueMatchPredicate(Split * s, PredicateData * pd) 
+{
   double splitamt;
 
   g_return_val_if_fail(s && pd, FALSE);

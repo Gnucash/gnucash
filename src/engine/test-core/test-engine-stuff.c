@@ -1312,15 +1312,6 @@ get_random_query(void)
         g_free (string);
         break;
 
-      case PR_AMOUNT:
-        DxaccQueryAddAmountMatch
-          (q,
-           get_random_double (),
-           get_random_int_in_range (1, AMT_SGN_MATCH_DEBIT),
-           get_random_int_in_range (1, AMT_MATCH_EXACTLY),
-           get_random_queryop ());
-        break;
-
       case PR_BALANCE:
         xaccQueryAddBalanceMatch
           (q,
@@ -1423,6 +1414,15 @@ get_random_query(void)
         DxaccQueryAddSharesMatch
           (q,
            get_random_double (), 
+           get_random_int_in_range (1, AMT_MATCH_EXACTLY),
+           get_random_queryop ());
+        break;
+
+      case PR_VALUE:
+        DxaccQueryAddValueMatch
+          (q,
+           get_random_double (),
+           get_random_int_in_range (1, AMT_SGN_MATCH_DEBIT),
            get_random_int_in_range (1, AMT_MATCH_EXACTLY),
            get_random_queryop ());
         break;
@@ -1637,7 +1637,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
                              TRUE, FALSE, QUERY_AND);
 
     d = gnc_numeric_to_double (xaccSplitGetValue (s));
-    DxaccQueryAddAmountMatch (q, d, AMT_SGN_MATCH_EITHER,
+    DxaccQueryAddValueMatch (q, d, AMT_SGN_MATCH_EITHER,
                               AMT_MATCH_EXACTLY, QUERY_AND);
 
     d = gnc_numeric_to_double (xaccSplitGetAmount (s));

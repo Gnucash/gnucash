@@ -74,7 +74,6 @@ typedef enum {
 typedef enum {
   PR_ACCOUNT=1,
   PR_ACTION,
-  PR_AMOUNT,   /* FIXME: misnamed, should be PR_VALUE */
   PR_BALANCE,
   PR_CLEARED,
   PR_DATE,
@@ -85,7 +84,8 @@ typedef enum {
   PR_MISC,
   PR_NUM,
   PR_PRICE,
-  PR_SHRS   /* FIXME: misnamed, should be PR_AMT */
+  PR_SHRS,   /* FIXME: misnamed, should be PR_QUANT or PR_AMOUNT */
+  PR_VALUE,   
 } pr_type_t;
 
 typedef enum {
@@ -338,7 +338,7 @@ void xaccQueryAddNumberMatch(Query * q, const char * matchstring,
                              int case_sens, int use_regexp, QueryOp op);
 void xaccQueryAddActionMatch(Query * q, const char * matchstring, 
                              int case_sens, int use_regexp, QueryOp op);
-void DxaccQueryAddAmountMatch(Query * q, double amount, 
+void DxaccQueryAddValueMatch(Query * q, double amount, 
                               amt_match_sgn_t amt_sgn,
                               amt_match_t how, QueryOp op);
 void DxaccQueryAddSharePriceMatch(Query * q, double amount, 

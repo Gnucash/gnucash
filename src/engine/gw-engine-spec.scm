@@ -469,7 +469,6 @@
                                  "pr_type_t" "const pr_type_t")))
     (gw:enum-add-value! wt "PR_ACCOUNT" 'pr-account)
     (gw:enum-add-value! wt "PR_ACTION" 'pr-action)
-    (gw:enum-add-value! wt "PR_AMOUNT" 'pr-amount)
     (gw:enum-add-value! wt "PR_BALANCE" 'pr-balance)
     (gw:enum-add-value! wt "PR_CLEARED" 'pr-cleared)
     (gw:enum-add-value! wt "PR_DATE" 'pr-date)
@@ -480,6 +479,7 @@
     (gw:enum-add-value! wt "PR_NUM" 'pr-num)
     (gw:enum-add-value! wt "PR_PRICE" 'pr-price)
     (gw:enum-add-value! wt "PR_SHRS" 'pr-shares)
+    (gw:enum-add-value! wt "PR_VALUE" 'pr-value)
     #t)
 
   (let ((wt (gw:wrap-enumeration mod '<gnc:acct-match-how>
@@ -2002,18 +2002,6 @@ of having a parent transaction with which one is working...")
 
   (gw:wrap-function
    mod
-   'd-gnc:query-add-amount-match
-   '<gw:void>
-   "DxaccQueryAddAmountMatch"
-   '((<gnc:Query*> q)
-     (<gw:double> amount)
-     (<gnc:amt-match-sign> sgn)
-     (<gnc:amt-match-how> mhow)
-     (<gnc:query-op> how))
-   "Match the amount (including inequalities)")
-
-  (gw:wrap-function
-   mod
    'd-gnc:query-add-share-price-match
    '<gw:void>
    "DxaccQueryAddSharePriceMatch"
@@ -2033,6 +2021,18 @@ of having a parent transaction with which one is working...")
      (<gnc:amt-match-how> mhow)
      (<gnc:query-op> how))
    "Match the share price (ncluding inequalities)")
+
+  (gw:wrap-function
+   mod
+   'd-gnc:query-add-value-match
+   '<gw:void>
+   "DxaccQueryAddValueMatch"
+   '((<gnc:Query*> q)
+     (<gw:double> value)
+     (<gnc:amt-match-sign> sgn)
+     (<gnc:amt-match-how> mhow)
+     (<gnc:query-op> how))
+   "Match the value (including inequalities)")
 
   (gw:wrap-function
    mod

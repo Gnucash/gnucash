@@ -969,11 +969,6 @@ gnc_scm2query_term_query (SCM query_term_scm)
 
         switch (pr_type)
         {
-          case PR_AMOUNT:
-            DxaccQueryAddAmountMatch (q, amount, amt_sgn, how, QUERY_OR);
-            ok = TRUE;
-            break;
-
           case PR_PRICE:
             DxaccQueryAddSharePriceMatch (q, amount, how, QUERY_OR);
             ok = TRUE;
@@ -981,6 +976,11 @@ gnc_scm2query_term_query (SCM query_term_scm)
 
           case PR_SHRS:
             DxaccQueryAddSharesMatch (q, amount, how, QUERY_OR);
+            ok = TRUE;
+            break;
+
+          case PR_VALUE:
+            DxaccQueryAddValueMatch (q, amount, amt_sgn, how, QUERY_OR);
             ok = TRUE;
             break;
 
