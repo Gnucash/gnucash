@@ -73,9 +73,12 @@ Stock Split Dialog
 
   - [low-priority] New registers should open in new top-level windows.
 
-- Register Core
+  - View Summary Bar
 
-  - MOSTLY FUNCTIONAL
+    - Summarybar restored into GncMainWindow UI; summary-select list does not
+      respond to button-pressing.
+
+- Register Core - mostly functional
 
   - Insertion point not shown. (fix gnucash-item-edit.c)
 
@@ -107,25 +110,15 @@ Stock Split Dialog
     (gnucash:26380): GLib-GObject-WARNING **: gsignal.c:989: no emission of
     signal "key-press-event" to stop for instance `0x855a240'
 
-  - selection events on the combo-cells aren't working.
-
-    (gnucash:26380): GLib-GObject-WARNING **: gsignal.c:989: no emission of
-    signal "key-press-event" to stop for instance `0x855a240'
-
   - Word wrap on transaction cells appears to be on.  Eg. Long account names
     are truncated to the last space.  Specifically an account Named:
     "Assets:XXXXXX Credit Union:XXXXXXX" is truncated to "Assets:XXXXXX
     Credit" with no hope of seeing the remainder of the text.  PJK
 
-- Find [somewhat functional]
+- Find - somewhat functional
 
   - Can generate a query in the dialog; but it seems to not work or crash on
     query-execution.
-
-- View Summary Bar
-
-  - Summarybar restored into GncMainWindow UI; summary-select list does not
-    respond to button-pressing.
 
 - Business Functions
 
@@ -167,15 +160,13 @@ Stock Split Dialog
 
   - Probably more TODO but these are the main points.
 
-
-------------------------------------------------------------------------------
 - Preferences
 
   - Business -> Accumulate splits on Post?  option not present.  Not sure if
     this is intentionally missing. PJK [ tested after g2 merge of 30 Dec 04?
     -derek ]
 
-- Hierarchy Merge [BROKEN]
+- Hierarchy Merge - BROKEN
 
   - Doesn't let you complete the conflict resolution process, thus you can never complete the druid.
 
