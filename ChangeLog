@@ -1,3 +1,8 @@
+2000-03-28  Robert Graham Merkel  <rgmerk@mira.net>
+
+ 	* man/gnc-prices.1: new file.  Man page for gnc-prices. Somebody
+ 	please add installation from makefile!
+
 2000-03-27  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/scm/report/budget-report.scm: removed use of transaction
