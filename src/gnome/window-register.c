@@ -722,8 +722,10 @@ gnc_register_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
     gnc_reg_save_size( regData );
   }
 
-  gnc_split_reg_check_close(regData->gsr);
-  gnc_ledger_display_close (regData->ledger);
+  if (gnc_split_reg_check_close(regData->gsr) != FALSE) {
+    gnc_ledger_display_close (regData->ledger);
+    return FALSE;
+  }
 
   return TRUE; /* don't close */
 }
@@ -1551,8 +1553,9 @@ void
 gnc_register_close_cb (GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
-  gnc_split_reg_check_close( GNC_SPLIT_REG(regData->gsr) );
-  gnc_ledger_display_close( regData->ledger );
+
+  if (gnc_split_reg_check_close(regData->gsr) != FALSE)
+    gnc_ledger_display_close( regData->ledger );
 }
 
 static int

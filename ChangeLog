@@ -23,6 +23,20 @@
 	* src/report/standard-reports/register.scm: Show the running
 	balance column by default. #92052.
 
+	* src/gnome/window-register.c: Annotate the window title to
+	indicate whether a register is for a single account or it includes
+	all subaccounts. #107927
+
+	* src/gnome/gnc-split-reg.c: Change the register close dialog to
+	include a cancel option. #105742
+
+	* src/gnome/window-register.c: Don't close the register if the
+	user cancelled. #105742
+
+	* src/engine/Scrub.c (xaccSplitScrub): Change a warning message to
+	an info. This clause is hit every time a user saves a changed
+	transaction by clicking on another transaction.
+
 2003-06-22  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-commodity.[ch]: Clean up usage of the

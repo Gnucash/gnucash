@@ -243,7 +243,11 @@ xaccSplitScrub (Split *split)
     return;
   }
 
-  PWARN ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
+  /*
+   * This will be hit every time you answer yes to the dialog "The
+   * current transaction has changed. Would you like to record it.
+   */
+  PINFO ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
          " old amount %s %s, new amount %s",
             trans->description, split->memo,
             gnc_numeric_to_string (split->amount),

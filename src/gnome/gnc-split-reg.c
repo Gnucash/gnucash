@@ -911,25 +911,34 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
 gboolean
 gnc_split_reg_check_close( GNCSplitReg *gsr )
 {
+  GNCVerifyResult result;
   gboolean pending_changes;
   SplitRegister *reg;
+  const char *message = _("The current transaction has been changed.\n"
+			  "Would you like to record it?");
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
   pending_changes = gnc_split_register_changed( reg );
   if ( !pending_changes )
-    return FALSE;
+    return TRUE;
 
+  result = gnc_verify_cancel_dialog_parented(gsr->window, GNC_VERIFY_YES,
+					     message);
+  switch (result)
   {
-    const char *message = _("The current transaction has been changed.\n"
-                            "Would you like to record it?");
-    if ( gnc_verify_dialog_parented( gsr->window, TRUE, message) ) {
+    case GNC_VERIFY_YES:
+    case GNC_VERIFY_OK:
       gnc_split_reg_record_trans_cb( gsr->window, gsr );
       return TRUE;
-    } else {
+
+    case GNC_VERIFY_NO:
       gnc_split_register_cancel_cursor_trans_changes( reg );
+      return TRUE;
+
+    case GNC_VERIFY_CANCEL:
       return FALSE;
-    }
   }
+  return TRUE;
 }
 
 void
