@@ -217,20 +217,20 @@ xaccTransWriteLog (Transaction *trans, char flag)
                "%s	%s	%s	%c	%Ld/%Ld	%Ld/%Ld	%s\n",
                flag,
                trans, split,  /* trans+split make up unique id */
-               dnow,
-               dent, 
-               dpost, 
-               accname,
-               trans->num, 
-               trans->description,
-               split->memo,
-               split->action,
+               dnow ? dnow : "",
+               dent ? dent : "", 
+               dpost ? dpost : "", 
+               accname ? accname : "",
+               trans->num ? trans->num : "", 
+               trans->description ? trans->description : "",
+               split->memo ? split->memo : "",
+               split->action ? split->action : "",
                split->reconciled,
                gnc_numeric_num(split->damount), 
                gnc_numeric_denom(split->damount),
                gnc_numeric_num(split->value), 
                gnc_numeric_denom(split->value),
-               drecn
+               drecn ? drecn : ""
                );
       free (drecn);
    }
