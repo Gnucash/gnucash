@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>Printing</TITLE>
 </ARTHEADER>
-
+    <sect1>
+      <title></title>
 <PARA>At present, the only type of printing directly supported by
     GnuCash is <LINK LINKEND="XACC-PRINT-CHECK">check printing</LINK>.
     Other types of printing will be added in version 1.5.
@@ -15,7 +16,7 @@ LINKEND="EXPORT">exported as HTML</LINK>.
 
 
 </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
