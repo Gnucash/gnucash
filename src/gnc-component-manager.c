@@ -589,7 +589,7 @@ gnc_gui_refresh_internal (gboolean force)
   fprintf (stderr, "refresh!\n");
 #endif
 
-  if (!got_events)
+  if (!got_events && !force)
     return;
 
   list = find_component_ids_by_class (NULL);

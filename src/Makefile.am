@@ -45,7 +45,6 @@ gnucash_SOURCES = \
   Destroy.c \
   EuroUtils.c \
   FileDialog.c \
-  Refresh.c \
   gnc-component-manager.c \
   gnc-exp-parser.c \
   gnc-ui-util.c
@@ -59,7 +58,6 @@ noinst_HEADERS = \
   MainWindow.h \
   MultiLedger.h \
   RecnWindow.h \
-  Refresh.h \
   RegWindow.h \
   SplitLedger.h \
   file-history.h \

@@ -36,7 +36,6 @@
 #include "AccWindow.h"
 #include "MainWindow.h"
 #include "MultiLedger.h"
-#include "Refresh.h"
 #include "RegWindow.h"
 #include "Scrub.h"
 #include "date.h"
@@ -707,10 +706,8 @@ static void
 gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
 {
   RecnWindow *recnData = data;
-  GList *affected_accounts = NULL;
   Transaction *trans;
   Split *split;
-  int i, num_splits;
 
   split = gnc_reconcile_window_get_current_split(recnData);
   /* This should never be true, but be paranoid */
@@ -728,32 +725,16 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
       return;
   }
 
-  /* make a copy of all of the accounts that will be  
-   * affected by this deletion, so that we can update
-   * their register windows after the deletion. */
+  gnc_suspend_gui_refresh ();
+
   trans = xaccSplitGetParent(split);
-  num_splits = xaccTransCountSplits(trans);
-
-  for (i = 0; i < num_splits; i++) 
-  {
-    Account *a;
-    Split *s;
-
-    s = xaccTransGetSplit(trans, i);
-    a = xaccSplitGetAccount(s);
-    if (a != NULL)
-      affected_accounts = g_list_prepend(affected_accounts, a);
-  }
 
   xaccTransBeginEdit(trans);
   xaccTransDestroy(trans);
   xaccTransCommitEdit(trans);
 
-  gnc_account_glist_ui_refresh(affected_accounts);
-
-  g_list_free(affected_accounts);
-
   gnc_refresh_main_window ();
+  gnc_resume_gui_refresh ();
 }
 
 static void
@@ -841,7 +822,6 @@ gnc_recn_scrub_cb(GtkWidget *widget, gpointer data)
   xaccAccountTreeScrubOrphans (account);
   xaccAccountTreeScrubImbalance (account);
 
-  gnc_account_ui_refresh (account);
   gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
@@ -1664,10 +1644,7 @@ recn_destroy_cb (GtkWidget *w, gpointer data)
   gnc_unregister_option_change_callback_id (id);
 
   if (recnData->delete_refresh)
-  {
-    gnc_account_ui_refresh (recn_get_account (recnData));
     gnc_resume_gui_refresh ();
-  }
 
   g_free (recnData);
 }

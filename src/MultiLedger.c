@@ -176,6 +176,18 @@ find_by_query (gpointer find_data, gpointer user_data)
   return ld->query == q;
 }
 
+static gboolean
+find_by_reg (gpointer find_data, gpointer user_data)
+{
+  SplitRegister *reg = find_data;
+  xaccLedgerDisplay *ld = user_data;
+
+  if (!reg || !ld)
+    return FALSE;
+
+  return ld->reg == reg;
+}
+
 static SplitRegisterStyle
 gnc_get_default_register_style ()
 {
@@ -423,35 +435,37 @@ xaccGUIDCopy (gpointer _to, gconstpointer _from)
     *to = *from;
 }
 
-#if 0
 static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
   xaccLedgerDisplay *ld = user_data;
   const EventInfo *info;
+  gboolean has_leader;
 
-  if (ld->type > NUM_SINGLE_REGISTER_TYPES)
+  has_leader = (ld->ld_type == LD_SINGLE || ld->ld_type == LD_SUBACCOUNT);
+
+  if (has_leader)
   {
     Account *leader = xaccLedgerDisplayLeader (ld);
-    if (!account)
+    if (!leader)
     {
       gnc_close_gui_component (ld->component_id);
       return;
     }
+  }
 
-  if (changes)
+  if (changes && has_leader)
   {
-    info = gnc_gui_get_entity_events (changes, &recnData->account);
+    info = gnc_gui_get_entity_events (changes, &ld->leader);
     if (info && (info->event_mask & GNC_EVENT_DESTROY))
     {
-      gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
+      gnc_close_gui_component (ld->component_id);
       return;
     }
   }
 
-  recnRefresh (recnData);
+  xaccLedgerDisplayRefresh (ld);
 }
-#endif
 
 static void
 close_handler (gpointer user_data)
@@ -638,8 +652,13 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
   else
     make_ledger_query (ld, show_all, reg_type);
 
-  ld->component_id = gnc_register_gui_component (class, NULL,
+  ld->component_id = gnc_register_gui_component (class,
+                                                 refresh_handler,
                                                  close_handler, ld);
+
+  gnc_gui_component_watch_entity_type (ld->component_id,
+                                       GNC_ID_ACCOUNT,
+                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   /******************************************************************\
    * The main register window itself                                *
@@ -692,7 +711,7 @@ xaccFindGeneralLedgerByQuery (Query *q)
  * refresh only the indicated register window                       *
 \********************************************************************/
 
-void 
+void
 xaccLedgerDisplayRefresh (xaccLedgerDisplay *ld)
 {
   if (!ld)
@@ -708,115 +727,39 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *ld)
                       xaccLedgerDisplayLeader (ld));
 }
 
-/********************************************************************\
- * mark dirty *all* register windows which contain this account      * 
-\********************************************************************/
-
-static void 
-MarkDirtyAllRegsClass (Account *account, const char *component_class)
-{
-  GList *list;
-  GList *node;
-
-  list = gnc_find_gui_components (component_class, find_by_account, account);
-
-  for (node = list; node; node = node->next)
-  {
-  }
-
-  g_list_free (list);
-}
-
-static void
-MarkDirtyAllRegs (Account *account)
-{
-  MarkDirtyAllRegsClass (account, REGISTER_SINGLE_CM_CLASS);
-  MarkDirtyAllRegsClass (account, REGISTER_SUBACCOUNT_CM_CLASS);
-  MarkDirtyAllRegsClass (account, REGISTER_GL_CM_CLASS);
-}
-
-/********************************************************************\
- * refresh *all* register windows which contain this account        * 
-\********************************************************************/
-
-static void 
-RefreshAllRegsClass (Account *account, const char *component_class)
-{
-  GList *list;
-  GList *node;
-
-  list = gnc_find_gui_components (component_class, find_by_account, account);
-
-  for (node = list; node; node = node->next)
-  {
-    xaccLedgerDisplay *ld = node->data;
-
-    xaccLedgerDisplayRefresh (ld);
-  }
-
-  g_list_free (list);
-}
-
-static void 
-RefreshAllRegs (Account *account)
-{
-  RefreshAllRegsClass (account, REGISTER_SINGLE_CM_CLASS);
-  RefreshAllRegsClass (account, REGISTER_SUBACCOUNT_CM_CLASS);
-  RefreshAllRegsClass (account, REGISTER_GL_CM_CLASS);
-}
-
-/********************************************************************\
-\********************************************************************/
-
 void
-xaccAccountDisplayRefresh (Account *account)
+xaccLedgerDisplayRefreshByReg (SplitRegister *reg)
 {
-  if (!account)
+  xaccLedgerDisplay *ld;
+
+  if (!reg)
     return;
 
-  MarkDirtyAllRegs (account);
-  RefreshAllRegs   (account);
-}
+  ld = gnc_find_first_gui_component (REGISTER_SINGLE_CM_CLASS,
+                                     find_by_reg, reg);
 
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccAccGListDisplayRefresh (GList *accounts)
-{
-  GList *node;
-
-  for (node = accounts; node; node = node->next)
-    MarkDirtyAllRegs (node->data);
-
-  for (node = accounts; node; node = node->next)
-    RefreshAllRegs (node->data);
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void 
-xaccTransDisplayRefresh (Transaction *trans)
-{
-  GList *node;
-
-  for (node = xaccTransGetSplitList (trans); node; node = node->next)
+  if (ld)
   {
-    Split *split = node->data;
-    Account *account = xaccSplitGetAccount (split);
-
-    if (account)
-      MarkDirtyAllRegs (account);
+    xaccLedgerDisplayRefresh (ld);
+    return;
   }
 
-  for (node = xaccTransGetSplitList (trans); node; node = node->next)
-  {
-    Split *split = node->data;
-    Account *account = xaccSplitGetAccount (split);
+  ld = gnc_find_first_gui_component (REGISTER_SUBACCOUNT_CM_CLASS,
+                                     find_by_reg, reg);
 
-    if (account)
-      RefreshAllRegs (account);
+  if (ld)
+  {
+    xaccLedgerDisplayRefresh (ld);
+    return;
+  }
+
+  ld = gnc_find_first_gui_component (REGISTER_GL_CM_CLASS,
+                                     find_by_reg, reg);
+
+  if (ld)
+  {
+    xaccLedgerDisplayRefresh (ld);
+    return;
   }
 }
 

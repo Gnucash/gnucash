@@ -94,18 +94,10 @@ Query * xaccLedgerDisplayGetQuery (xaccLedgerDisplay *ld);
  * return NULL */
 xaccLedgerDisplay * xaccFindGeneralLedgerByQuery (Query *q);
 
-/* redisplay/redraw all windows that contain any transactions that are
- * associated with the indicated account. */
-void        xaccAccountDisplayRefresh (Account *account);
-void        xaccAccGListDisplayRefresh (GList *accounts);
-
-/* redisplay/redraw all windows that contain this transaction (or any
- * of its member splits). */
-void        xaccTransDisplayRefresh (Transaction *trans);
-
 /* redisplay/redraw only the indicated window. Both routines do same
  * thing, they differ only by the argument they take. */
 void        xaccLedgerDisplayRefresh (xaccLedgerDisplay * ledger_display);
+void        xaccLedgerDisplayRefreshByReg (SplitRegister *reg);
 
 /* close the window */
 void        xaccLedgerDisplayClose (xaccLedgerDisplay * ledger_display);

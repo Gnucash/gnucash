@@ -34,7 +34,6 @@
 #include "EuroUtils.h"
 #include "MainWindow.h"
 #include "MultiLedger.h"
-#include "Refresh.h"
 #include "RegWindow.h"
 #include "Scrub.h"
 #include "dialog-find-transactions.h"
@@ -1146,11 +1145,10 @@ gnc_register_scrub_cb(GtkWidget *widget, gpointer data)
 
   gnc_suspend_gui_refresh ();
 
-  xaccAccountTreeScrubOrphans(account);
-  xaccAccountTreeScrubImbalance(account);
+  xaccAccountTreeScrubOrphans (account);
+  xaccAccountTreeScrubImbalance (account);
 
-  gnc_account_ui_refresh(account);
-  gnc_refresh_main_window();
+  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 

@@ -30,7 +30,6 @@
 #include "FileDialog.h"
 #include "MainWindow.h"
 #include "MultiLedger.h"
-#include "Refresh.h"
 #include "account-tree.h"
 #include "dialog-account.h"
 #include "dialog-utils.h"
@@ -275,9 +274,6 @@ gnc_finish_ok (AccountWindow *aw,
   /* make the account changes */
   make_account_changes(change_currency, change_security, change_type);
   gnc_ui_to_account (aw);
-
-  /* Refresh all registers so they have this account in their lists */
-  gnc_group_ui_refresh (gncGetCurrentGroup());
 
   /* Refresh the main window. This will also refresh all account lists. */
   gnc_refresh_main_window ();

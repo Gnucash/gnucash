@@ -26,8 +26,8 @@
 
 #include <gnome.h>
 #include <gtkhtml/gtkhtml.h>
-#include <libguppitank/guppi-tank.h>
 #include <guile/gh.h>
+#include <libguppitank/guppi-tank.h>
 #include <popt.h>
 #include <stdlib.h>
 
@@ -37,7 +37,6 @@
 #include "FileDialog.h"
 #include "FileIO.h"
 #include "MainWindow.h"
-#include "Refresh.h"
 #include "SplitLedger.h"
 #include "TransLog.h"
 #include "argv-list-converters.h"
@@ -433,10 +432,10 @@ gnc_register_default_hint_font(void)
  * Returns: Nothing
  */
 static void 
-gnc_configure_date_format_cb(void *data)
+gnc_configure_date_format_cb (gpointer data)
 {
-  gnc_configure_date_format();
-  gnc_group_ui_refresh(gncGetCurrentGroup());
+  gnc_configure_date_format ();
+  gnc_gui_refresh_all ();
 }
 
 
@@ -500,10 +499,10 @@ gnc_configure_date_format (void)
  * Returns: Nothing
  */
 static void 
-gnc_configure_account_separator_cb(void *data)
+gnc_configure_account_separator_cb (gpointer data)
 {
-  gnc_configure_account_separator();
-  gnc_group_ui_refresh(gncGetCurrentGroup());
+  gnc_configure_account_separator ();
+  gnc_gui_refresh_all ();
 }
 
 /* gnc_configure_account_separator
@@ -514,11 +513,11 @@ gnc_configure_account_separator_cb(void *data)
  * Returns: Nothing
  */
 static void
-gnc_configure_account_separator(void)
+gnc_configure_account_separator (void)
 {
-  char separator = gnc_get_account_separator();
+  char separator = gnc_get_account_separator ();
 
-  xaccSRSetAccountSeparator(separator);
+  xaccSRSetAccountSeparator (separator);
 }
 
 /* gnc_configure_register_colors_cb
@@ -529,10 +528,10 @@ gnc_configure_account_separator(void)
  * Returns: Nothing
  */
 static void
-gnc_configure_register_colors_cb(void *data)
+gnc_configure_register_colors_cb (gpointer data)
 {
-  gnc_configure_register_colors();
-  gnc_group_ui_refresh(gncGetCurrentGroup());
+  gnc_configure_register_colors ();
+  gnc_gui_refresh_all ();
 }
 
 /* gnc_configure_register_colors_cb
@@ -542,7 +541,7 @@ gnc_configure_register_colors_cb(void *data)
  * Returns: Nothing
  */
 static void
-gnc_configure_register_colors(void)
+gnc_configure_register_colors (void)
 {
   SplitRegisterColors reg_colors;
 
@@ -586,7 +585,7 @@ gnc_configure_register_colors(void)
                               "Double mode colors alternate with transactions",
                               FALSE);
 
-  xaccSetSplitRegisterColors(reg_colors);
+  xaccSetSplitRegisterColors (reg_colors);
 }
 
 
@@ -598,10 +597,10 @@ gnc_configure_register_colors(void)
  * Returns: Nothing
  */
 static void
-gnc_configure_register_borders_cb(void *data)
+gnc_configure_register_borders_cb (gpointer data)
 {
-  gnc_configure_register_borders();
-  gnc_group_ui_refresh(gncGetCurrentGroup());
+  gnc_configure_register_borders ();
+  gnc_gui_refresh_all ();
 }
 
 /* gnc_configure_register_border
@@ -611,7 +610,7 @@ gnc_configure_register_borders_cb(void *data)
  * Returns: Nothing
  */
 static void
-gnc_configure_register_borders(void)
+gnc_configure_register_borders (void)
 {
   gboolean use_vertical_lines;
   gboolean use_horizontal_lines;
@@ -637,9 +636,9 @@ gnc_configure_register_borders(void)
  * Returns: Nothing
  */
 static void
-gnc_configure_auto_raise_cb(void *data)
+gnc_configure_auto_raise_cb (gpointer data)
 {
-  gnc_configure_auto_raise();
+  gnc_configure_auto_raise ();
 }
 
 /* gnc_configure_auto_raise
@@ -649,7 +648,7 @@ gnc_configure_auto_raise_cb(void *data)
  * Returns: Nothing
  */
 static void
-gnc_configure_auto_raise(void)
+gnc_configure_auto_raise (void)
 {
   gboolean auto_pop;
 
@@ -666,12 +665,12 @@ gnc_configure_auto_raise(void)
  * Returns: Nothing
  */
 static void
-gnc_configure_negative_color_cb(void *data)
+gnc_configure_negative_color_cb (gpointer data)
 {
-  gnc_configure_negative_color();
+  gnc_configure_negative_color ();
 
-  gnc_group_ui_refresh(gncGetCurrentGroup());
-  gnc_refresh_main_window();
+  gnc_gui_refresh_all ();
+  gnc_refresh_main_window ();
 }
 
 /* gnc_configure_negative_color
@@ -700,11 +699,11 @@ gnc_configure_negative_color(void)
  * Returns: Nothing
  */
 static void
-gnc_configure_reverse_balance_cb(void *not_used)
+gnc_configure_reverse_balance_cb (gpointer not_used)
 {
-  gnc_configure_reverse_balance();
-  gnc_group_ui_refresh(gncGetCurrentGroup());
-  gnc_refresh_main_window();
+  gnc_configure_reverse_balance ();
+  gnc_gui_refresh_all ();
+  gnc_refresh_main_window ();
 }
 
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];

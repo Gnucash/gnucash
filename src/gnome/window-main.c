@@ -33,7 +33,6 @@
 #include "EuroUtils.h"
 #include "FileDialog.h"
 #include "MainWindow.h"
-#include "Refresh.h"
 #include "RegWindow.h"
 #include "Scrub.h"
 #include "account-tree.h"
@@ -551,7 +550,6 @@ gnc_ui_delete_account (Account *account)
   xaccFreeAccount (account);
 
   gnc_refresh_main_window ();
-  gnc_group_ui_refresh (gncGetCurrentGroup ());
   gnc_resume_gui_refresh ();
 }
 
@@ -681,11 +679,10 @@ gnc_ui_mainWindow_scrub(GtkWidget *widget, gpointer data)
 
   gnc_suspend_gui_refresh ();
 
-  xaccAccountScrubOrphans(account);
-  xaccAccountScrubImbalance(account);
+  xaccAccountScrubOrphans (account);
+  xaccAccountScrubImbalance (account);
 
-  gnc_account_ui_refresh(account);
-  gnc_refresh_main_window();
+  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 
@@ -703,11 +700,10 @@ gnc_ui_mainWindow_scrub_sub(GtkWidget *widget, gpointer data)
 
   gnc_suspend_gui_refresh ();
 
-  xaccAccountTreeScrubOrphans(account);
-  xaccAccountTreeScrubImbalance(account);
+  xaccAccountTreeScrubOrphans (account);
+  xaccAccountTreeScrubImbalance (account);
 
-  gnc_account_ui_refresh(account);
-  gnc_refresh_main_window();
+  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 
@@ -718,11 +714,10 @@ gnc_ui_mainWindow_scrub_all(GtkWidget *widget, gpointer data)
 
   gnc_suspend_gui_refresh ();
 
-  xaccGroupScrubOrphans(group);
-  xaccGroupScrubImbalance(group);
+  xaccGroupScrubOrphans (group);
+  xaccGroupScrubImbalance (group);
 
-  gnc_group_ui_refresh(group);
-  gnc_refresh_main_window();
+  gnc_refresh_main_window ();
   gnc_resume_gui_refresh ();
 }
 
@@ -990,11 +985,11 @@ gnc_configure_account_tree(void *data)
 }
 
 static void
-gnc_euro_change(void *data)
+gnc_euro_change (gpointer data)
 {
-  gnc_ui_refresh_statusbar();
-  gnc_configure_account_tree(data);
-  gnc_group_ui_refresh(gncGetCurrentGroup());
+  gnc_ui_refresh_statusbar ();
+  gnc_configure_account_tree (data);
+  gnc_gui_refresh_all ();
 }
 
 static void

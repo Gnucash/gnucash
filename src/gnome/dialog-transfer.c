@@ -28,7 +28,6 @@
 
 #include "FileDialog.h"
 #include "MultiLedger.h"
-#include "Refresh.h"
 #include "account-tree.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
@@ -800,9 +799,6 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     xaccTransCommitEdit(trans);
 
     /* Refresh everything */
-    gnc_account_ui_refresh(to);
-    gnc_account_ui_refresh(from);
-    gnc_account_ui_refresh(curr);
     gnc_resume_gui_refresh ();
   }
   else
@@ -853,8 +849,6 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     xaccTransCommitEdit(trans);
 
     /* Refresh everything */
-    gnc_account_ui_refresh(to);
-    gnc_account_ui_refresh(from);
     gnc_resume_gui_refresh ();
   }
 
