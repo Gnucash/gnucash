@@ -11,6 +11,7 @@ exec guile -s "$0"
 (display "  testing report module load ... ")
 (use-modules (ice-9 syncase))
 (use-modules (gnucash gnc-module))
+
 (gnc:module-system-init)
 
 (if (gnc:module-load "gnucash/report/report-system" 0)
