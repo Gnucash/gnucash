@@ -45,6 +45,8 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(limits.h)
 AC_CHECK_FUNCS(stpcpy memcpy timegm)
 
+STRUCT_TM_GMTOFF_CHECK
+
 AM_PATH_GLIB
 
 if test ${no_glib}x = yesx

@@ -277,3 +277,19 @@ AC_DEFUN([LANGINFO_D_FMT_CHECK],
   fi
 ])
 
+AC_DEFUN([STRUCT_TM_GMTOFF_CHECK],
+[
+  AC_CACHE_CHECK([for the tm_gmtoff member of struct tm], am_cv_struct_tm_gmtoff,
+    [AC_TRY_LINK([#include <time.h>
+                  #define _GNU_SOURCE
+                  #define __EXTENSIONS__],
+      [struct tm tm;
+       tm.tm_gmtoff = 0;],
+      am_cv_struct_tm_gmtoff=yes,
+      am_cv_struct_tm_gmtoff=no)
+    ])
+  if test $am_cv_struct_tm_gmtoff = yes; then
+    AC_DEFINE(HAVE_STRUCT_TM_GMTOFF, 1,
+      [Define if you have the tm_gmtoff member of struct tm.])
+  fi
+])
