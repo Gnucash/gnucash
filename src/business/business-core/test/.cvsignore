@@ -1,4 +1,9 @@
+*.la
+*.lo
+.deps
+.libs
 Makefile
+Makefile.in
 test-address
 test-business
 test-customer
