@@ -23,6 +23,11 @@
 #ifndef _NEW_USER_FUNS_H_
 #define _NEW_USER_FUNS_H_
 
+#include <glib.h>
+
+#include "gnc-commodity-edit.h"
+#include "Group.h"
+
 int gnc_ui_show_new_user_window(void);
 int gnc_ui_delete_new_user_window(void);
 
@@ -31,5 +36,10 @@ int gnc_ui_delete_nu_cancel_dialog(void);
 
 int gnc_ui_show_nu_account_list(void);
 int gnc_ui_delete_nu_account_list(void);
+
+GtkCList* gnc_new_user_get_clist(void);
+GtkWidget* gnc_new_user_get_widget(const char *name);
+AccountGroup* gnc_new_user_merge_groups(GSList *dalist);
+GNCCommodityEdit * gnc_get_new_user_commodity_editor(void);
 
 #endif /* NEW_USER_FUNS_H */

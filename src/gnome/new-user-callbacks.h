@@ -80,9 +80,6 @@ on_newAccountTree_select_row           (GtkCList        *clist,
                                         GdkEvent        *event,
                                         gpointer         user_data);
 
-
-#endif /* _NEW_USER_CALLBACKS_H_ */    
-
 void
 on_newAccountSelectAllButton_clicked   (GtkButton       *button,
                                         gpointer         user_data);
@@ -109,13 +106,21 @@ on_newAccountsTypeList_SelectAllButton_clicked
                                         gpointer         user_data);
 
 void
-on_ctree1_select_row                   (GtkCList        *clist,
+on_finalAccountDruidPage_prepare       (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+void
+on_newAccountsTypeList_ClearAllButton_clicked
+                                        (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_finalAccountCTree_select_row        (GtkCList        *clist,
                                         gint             row,
                                         gint             column,
                                         GdkEvent        *event,
                                         gpointer         user_data);
 
-void
-on_finalAccountDruidPage_prepare       (GnomeDruidPage  *gnomedruidpage,
-                                        gpointer         arg1,
-                                        gpointer         user_data);
+#endif /* _NEW_USER_CALLBACKS_H_ */    
+
+

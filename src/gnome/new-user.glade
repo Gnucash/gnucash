@@ -29,7 +29,7 @@
   <height>370</height>
   <title>New User Account setup</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
-  <position>GTK_WIN_POS_NONE</position>
+  <position>GTK_WIN_POS_MOUSE</position>
   <modal>False</modal>
   <default_width>640</default_width>
   <default_height>480</default_height>
@@ -259,8 +259,7 @@
 
 	    <widget>
 	      <class>GtkText</class>
-	      <name>accountTypesDescription</name>
-	      <sensitive>False</sensitive>
+	      <name>newAccountTypesDescription</name>
 	      <editable>False</editable>
 	      <text></text>
 	    </widget>
@@ -287,7 +286,6 @@
 	      <widget>
 		<class>GtkTree</class>
 		<name>newAccountListTree</name>
-		<sensitive>False</sensitive>
 		<selection_mode>GTK_SELECTION_SINGLE</selection_mode>
 		<view_mode>GTK_TREE_VIEW_LINE</view_mode>
 		<view_line>True</view_line>
@@ -329,6 +327,11 @@
 	    <class>GtkButton</class>
 	    <name>newAccountsTypeList_ClearAllButton</name>
 	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>clicked</name>
+	      <handler>on_newAccountsTypeList_ClearAllButton_clicked</handler>
+	      <last_modification_time>Thu, 19 Apr 2001 14:27:32 GMT</last_modification_time>
+	    </signal>
 	    <label>Clear All</label>
 	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
@@ -368,7 +371,7 @@
 
 	<widget>
 	  <class>GtkLabel</class>
-	  <name>label6</name>
+	  <name>finalAccountLabel</name>
 	  <label>If you would like the accounts to have a starting balance click on the account line and enter the starting balance in the text entry box on the right.</label>
 	  <justify>GTK_JUSTIFY_FILL</justify>
 	  <wrap>True</wrap>
@@ -409,12 +412,12 @@
 
 	    <widget>
 	      <class>GtkCTree</class>
-	      <name>ctree1</name>
+	      <name>finalAccountCTree</name>
 	      <can_focus>True</can_focus>
 	      <signal>
 		<name>select_row</name>
-		<handler>on_ctree1_select_row</handler>
-		<last_modification_time>Thu, 12 Apr 2001 22:48:53 GMT</last_modification_time>
+		<handler>on_finalAccountCTree_select_row</handler>
+		<last_modification_time>Thu, 19 Apr 2001 17:26:51 GMT</last_modification_time>
 	      </signal>
 	      <columns>3</columns>
 	      <column_widths>285,118,80</column_widths>
