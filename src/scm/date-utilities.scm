@@ -150,6 +150,9 @@
         ((= (car t1) (car t2)) (<= (cdr t2) (cdr t2)))
         (else #f)))
 
+(define (gnc:timepair-eq t1 t2)
+  (and (= (car t1) (car t2)) (= (cdr t1) (cdr t2))))
+
 ;; Build a list of time intervals 
 (define (dateloop curd endd incr) 
   (cond ((gnc:timepair-later curd endd)
@@ -225,27 +228,12 @@
 ;; converts it to be midday that day.
 
 (define (gnc:timepair-canonical-day-time tp)
-  (let ((bdt (localtime (car tp))))
+  (let ((bdt (localtime (gnc:timepair->secs tp))))
     (set-tm:sec bdt 0)
     (set-tm:min bdt 0)
     (set-tm:hour bdt 12)
     (let ((newtime (car (mktime bdt))))
-      ; alert - blarsen@ada-works.com fixed this.  you may want to
-      ; revert if I'm wrong.
       (cons newtime 0))))
-
-(define (gnc:timepair-earlier-or-eq-date t1 t2)
-  (let ((time1 (car (gnc:timepair-canonical-day-time t1)))
-        (time2 (car (gnc:timepair-canonical-day-time t2))))
-    (<= time1 time2)))
-
-(define (gnc:timepair-later-date t1 t2)
-  (let ((time1 (car (gnc:timepair-canonical-day-time t1))) 
-        (time2 (car (gnc:timepair-canonical-day-time t2))))
-    (< time1 time2)))
-
-(define (gnc:timepair-later-or-eq-date t1 t2)
-  (gnc:timepair-earlier-or-eq-date t2 t1))
 
 (define (gnc:timepair-start-day-time tp)
   (let ((bdt (localtime (gnc:timepair->secs tp))))
