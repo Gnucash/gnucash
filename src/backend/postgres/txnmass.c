@@ -57,7 +57,7 @@ static short module = MOD_TXN;
 static gpointer
 get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GList *node, *xaction_list = (GList *) data;
+   GList *xaction_list = (GList *) data;
    Transaction *trans;
    gnc_commodity *currency = NULL;
    Timespec ts;

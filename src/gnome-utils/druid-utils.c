@@ -29,9 +29,6 @@
 #include "gnc-engine-util.h"
 
 
-/* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_GUI;
-
 void
 gnc_druid_set_watermark_image (GnomeDruid *druid, char *image_path)
 {

@@ -30,7 +30,6 @@ run_test (void)
   AccountGroup *grp;
   AccountList *acclist, *anode;
   Account * acc = NULL;
-  Timespec ts;
   SplitList *splist;
   Split *sfirst, *slast;
   Transaction *tfirst, *tlast;

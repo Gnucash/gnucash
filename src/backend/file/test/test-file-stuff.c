@@ -262,9 +262,6 @@ just_dom_tree_end_handler(gpointer data_for_children,
                           gpointer parent_data, gpointer global_data,
                           gpointer *result, const gchar *tag)
 {
-    Transaction *trn = NULL;
-    gboolean successful = FALSE;
-    xmlNodePtr achild;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     xmlNodePtr *globaldata = (xmlNodePtr*)global_data;
 

@@ -413,7 +413,6 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
 {
   char *desc;
   Account *match_account;  /* the matched text was from this account */
-  Transaction *trans;      /* the transaction to autocomplete from */
   Split *split;            /* the split to autocomplete from */
   Split *other = NULL;     /* the other split of the transaction */
   Account *other_acct = NULL;   /* the Account of the other split */
@@ -519,7 +518,6 @@ gnc_xfer_description_insert_cb(GtkEntry *entry,
                                XferDialog *xferData)
 {
   GdkWChar *change_text_w, *old_text_w, *new_text_w;
-  int old_position;
   int change_text_len, old_text_len, new_text_len, old_pos;
   char *new_text;
   const char *old_text, *match_str = NULL;
@@ -1310,8 +1308,6 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
   /* optional intermediate currency account */
   {
     GtkWidget *frame;
-    GtkWidget *label;
-    GtkWidget *combo;
     GtkWidget *entry;
     GtkWidget *edit;
     GtkWidget *hbox;

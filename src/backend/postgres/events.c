@@ -56,7 +56,6 @@ pgendEventsPending (Backend *bend)
 {
    PGBackend *be = (PGBackend *) bend;
    PGnotify *note;
-   char *p;
    int rc;
 
    if (!be) return FALSE;

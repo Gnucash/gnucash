@@ -341,8 +341,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   GtkWidget *w;
   gchar *name;
   GDate date;
-  int index;
-  FreqSpec *fs, *tmpfs;
+  FreqSpec *fs;
   getEndTuple end_info;
   guint sxftd_errno = 0; /* 0 == OK, > 0 means dialog needs to be run again */
 
@@ -470,8 +469,6 @@ static void
 sxftd_advanced_clicked(GtkWidget *w, gpointer user_data)
 {
    SXFromTransInfo *sxfti = user_data;
-  GNCBook *book;
-  GList *sx_list;
   guint sx_error = sxftd_compute_sx(sxfti);
   SchedXactionDialog *adv_dlg;
   SchedXactionEditorDialog *adv_edit_dlg;

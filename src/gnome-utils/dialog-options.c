@@ -754,7 +754,6 @@ gnc_option_set_selectable_internal (GNCOption *option, gboolean selectable)
 static void
 default_button_cb(GtkButton *button, gpointer data)
 {
-  GtkWidget *pbox;
   GNCOption *option = data;
 
   gnc_option_set_ui_value (option, TRUE);
@@ -1386,7 +1385,6 @@ gnc_option_set_ui_widget(GNCOption *option,
   {
     GtkWidget *frame;
     GtkWidget *scroll;
-    gchar *colon_name;
 
     frame = gtk_frame_new(name);
 

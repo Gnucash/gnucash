@@ -469,7 +469,6 @@ static gpointer
 timespec_handler (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    Timespec ts;
-   GUID guid;
    KVP_HANDLER_SETUP;
    ts = gnc_iso8601_to_timespec_local (DB_GET_VAL ("data", j));
    kv = kvp_value_new_timespec (ts);
@@ -495,21 +494,11 @@ list_handler (PGBackend *be, PGresult *result, int j, gpointer data)
    kf = pgendGetResults (be, TYPE##_handler, kf);	\
 }
 
-static gpointer 
-count_handler (PGBackend *be, PGresult *result, int j, gpointer data)
-{
-   int *cnt = (int *) data;
-   *cnt += atoi (DB_GET_VAL ("count", j));
-   return data;
-}
-
-
 kvp_frame * 
 pgendKVPFetch (PGBackend *be, guint32 iguid, kvp_frame *kf)
 {
    char * p;
    char iguid_str[40];
-   int count = 0;
    if (!be || 0 == iguid) return kf;
 
    ENTER (" ");

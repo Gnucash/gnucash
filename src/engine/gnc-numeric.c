@@ -40,6 +40,7 @@
 
 /* static short module = MOD_ENGINE; */
 
+#if 0
 static const char * _numeric_error_strings[] = 
 {
   "No error",
@@ -48,6 +49,7 @@ static const char * _numeric_error_strings[] =
   "Argument denominators differ in GNC_DENOM_FIXED operation",
   "Remainder part in GNC_RND_NEVER operation"
 };
+#endif
 
 static gint64 gnc_numeric_lcd(gnc_numeric a, gnc_numeric b);
 

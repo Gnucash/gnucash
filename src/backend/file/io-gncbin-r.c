@@ -184,8 +184,6 @@ static GSList     *potential_quotes;
 static void
 mark_potential_quote(Split *s, double price, double quantity)
 {
-  static int count = 0;
-
   if((price != 0) && DEQ(quantity, 0)){
     GNCPotentialQuote *q = g_new0(GNCPotentialQuote, 1);
     q->split = s;

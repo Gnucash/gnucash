@@ -474,8 +474,8 @@ gnc_kvp_path2scm (GSList *path)
   {
     const char *key = node->data;
 
-    if (key)
-      path_scm = gh_cons (gh_str02scm (key), path_scm);
+    if (key) /* FIXME: remove cast */
+      path_scm = gh_cons (gh_str02scm ((char *) key), path_scm);
   }
 
   return gh_reverse (path_scm);
@@ -617,7 +617,8 @@ kvp_frame_slot2scm (const char *key, kvp_value *value, gpointer data)
   SCM key_scm;
   SCM pair;
 
-  key_scm = gh_str02scm (key);
+  /* FIXME: remove cast */
+  key_scm = gh_str02scm ((char *) key);
   value_scm = gnc_kvp_value2scm (value);
   pair = gh_cons (key_scm, value_scm);
 

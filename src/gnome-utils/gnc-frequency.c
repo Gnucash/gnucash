@@ -153,9 +153,8 @@ gnc_frequency_init( GNCFrequency *gf )
 {
   int    i, j;
   GtkVBox  *vb;
-  GtkWidget   *o, *win;
+  GtkWidget   *o;
   GtkAdjustment  *adj;
-  struct tm *tmpTm;
 
   static char *cals[] = {
     "daily_cal",
@@ -277,9 +276,7 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
   GtkWidget *o;
   FreqSpec *subFS;
   GList *list;
-  int tmpInt;
   int i;
-  int idx;
   char *str;
 
   page = 0;
@@ -376,7 +373,6 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
   {
           int weeklyMult = -1;
           int dayOfWeek;
-          int count = 0;
 
           for ( list = xaccFreqSpecCompositeGet( fs );
                 list; list = g_list_next(list) ) {
@@ -481,7 +477,7 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
   break;
   case UIFREQ_QUARTERLY:
   {
-          int monthlyMult, month, dayOfMonth, monthOffset;
+          int monthlyMult, dayOfMonth, monthOffset;
 
           if ( xaccFreqSpecGetMonthly( fs, &monthlyMult,
                                        &dayOfMonth, &monthOffset ) < 0 ) {
@@ -580,7 +576,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
 {
   gint page;
   struct tm *tmpTm;
-  guint day, month, year;
+  guint day;
   GtkWidget *o;
   UIFreqType uift;
   FreqSpec *tmpFS;
@@ -892,9 +888,9 @@ update_appropriate_cal( GNCFrequency *gf )
 static void 
 free_resources( GtkObject *o, gpointer d )
 {
+#if 0
   GNCFrequency *gf = (GNCFrequency*)d;
   // FIXME: destroy an appropriate widget
-#if 0
   gtk_widget_destroy( glade_xml_get_widget( gf->gxml,
                                             "GNCFrequency widget" ) );
 #endif // 0
@@ -906,6 +902,7 @@ spin_changed_helper( GtkAdjustment *adj, gpointer d )
   update_appropriate_cal( (GNCFrequency*)d );
 }
 
+#if 0
 static void
 daily_spin_value_changed( GtkAdjustment *adj, gpointer d )
 {
@@ -915,7 +912,9 @@ daily_spin_value_changed( GtkAdjustment *adj, gpointer d )
                                             "daily_cal" ) );
   update_cal( d, cal );
 }
+#endif
 
+#if 0
 static void
 dailymf_spin_value_changed( GtkAdjustment *adj, gpointer d )
 {
@@ -925,7 +924,9 @@ dailymf_spin_value_changed( GtkAdjustment *adj, gpointer d )
                                             "dailymf_cal" ) );
   update_cal( d, cal );
 }
+#endif
 
+#if 0
 static void
 weekly_spin_value_changed( GtkAdjustment *adj, gpointer d )
 {
@@ -936,6 +937,7 @@ weekly_spin_value_changed( GtkAdjustment *adj, gpointer d )
 
   update_cal( d, cal );
 }
+#endif
 
 static void
 weekly_days_changed( GtkButton *b, gpointer d )
@@ -953,7 +955,6 @@ monthly_sel_changed( GtkButton *b, gpointer d )
 {
   GNCFrequency  *gf;
   GtkWidget  *o;
-  GDate    *gd;
   guint    dayOfMonth;
   struct tm  *tmptm;
   time_t    tmptt;
@@ -978,17 +979,21 @@ monthly_sel_changed( GtkButton *b, gpointer d )
   update_appropriate_cal( (GNCFrequency*)d );
 }
 
+#if 0
 static void
 monthly_spin_value_changed( GtkAdjustment *adj, gpointer d )
 {
   update_appropriate_cal( (GNCFrequency*)d );
 }
+#endif
 
+#if 0
 static void
 semimonthly_spin_value_changed( GtkAdjustment *adj, gpointer d )
 {
   update_appropriate_cal( (GNCFrequency*)d );
 }
+#endif
 
 static void
 semimonthly_sel_changed( GtkButton *b, gpointer d )
@@ -1083,7 +1088,6 @@ yearly_sel_changed( GtkButton *b, gpointer d )
   GtkWidget  *o;
   time_t    tmptt;
   struct tm  *tmptm;
-  gint    tmpint;
 
   gf = (GNCFrequency*)d;
 
@@ -1113,7 +1117,6 @@ yearly_sel_changed( GtkButton *b, gpointer d )
 static void
 freq_option_value_changed( GtkMenuShell *b, gpointer d )
 {
-  GtkObject  *o;
   int    optIdx;
 
   optIdx = gnc_option_menu_get_active( GTK_WIDGET(((GNCFrequency*)d)->freqOpt) );

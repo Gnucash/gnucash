@@ -1215,7 +1215,6 @@ stable_price_traversal(GNCPriceDB *db,
                        gpointer user_data)
 {
   GSList *currency_hashes = NULL;
-  GSList *foo = NULL;
   gboolean ok = TRUE;
   GSList *i = NULL;
   
@@ -1313,7 +1312,6 @@ gnc_pricedb_substitute_commodity(GNCPriceDB *db,
                                  gnc_commodity *old_c,
                                  gnc_commodity *new_c)
 {
-  GHashTable *currency_hash;
   GNCPriceFixupData data;
   GList *prices = NULL;
 
@@ -1379,12 +1377,6 @@ gnc_price_print(GNCPrice *p, FILE *f, int indent)
   fprintf(f, "%s</pdb:price>\n", istr);
 
   g_free(istr);
-}
-
-static void
-gnc_price_print_stdout(GNCPrice *p, int indent)
-{
-  gnc_price_print(p, stdout, indent);
 }
 
 static gboolean

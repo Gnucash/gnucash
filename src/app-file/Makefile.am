@@ -7,6 +7,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/gnome-utils \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \

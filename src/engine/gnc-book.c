@@ -67,8 +67,6 @@ static short module = MOD_IO;
 static void
 gnc_book_init (GNCBook *book)
 {
-  Account *template_acct;
-
   if (!book) return;
 
   book->entity_table = xaccEntityTableNew ();

@@ -278,10 +278,6 @@ static gboolean
 gnc_html_report_url_cb (const char *location, const char *label,
                         gboolean new_window, GNCURLResult *result)
 {
-  gnc_report_window * rwin;
-  GtkHTMLStream * handle;
-  char * url;
-
   g_return_val_if_fail (location != NULL, FALSE);
   g_return_val_if_fail (result != NULL, FALSE);
 

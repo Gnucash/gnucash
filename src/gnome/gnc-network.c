@@ -135,8 +135,6 @@ gnc_network_build_url(const char * action) {
 
 static void 
 get_pp_string_cb(char * string, gpointer data) {
-  int l, i;
-  
   if(!data) return;
   if(!string) {
     *((char **)data) = NULL;
@@ -451,7 +449,6 @@ gnc_network_make_keypair_handler(gnc_html * html, GtkHTMLEmbedded * eb,
 static int
 gnc_network_store_uid_handler(gnc_html * html, GtkHTMLEmbedded * eb, 
                               gpointer data) {
-  int  retval = TRUE;
   char * uid = g_hash_table_lookup(eb->params, "uid");
   gnc_set_option("__gnc_network", "uid", gh_str02scm(uid));
   return TRUE;

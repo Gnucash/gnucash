@@ -305,7 +305,6 @@ gnc_reconcile_list_toggle_children(Account *account, GNCReconcileList *list, Spl
     Account *other_account;
     GNCReconcileList *current_list;
     gint row;
-    GtkCList *split_list;
 
     other_split = node->data;
     other_account = xaccSplitGetAccount(other_split);
@@ -336,7 +335,6 @@ gnc_reconcile_list_toggle (GNCReconcileList *list)
 {
   Split *split, *current;
   gint row;
-  Account * account;
   gboolean include_children;
 
   g_return_if_fail (IS_GNC_RECONCILE_LIST(list));

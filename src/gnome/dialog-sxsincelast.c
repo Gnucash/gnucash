@@ -51,6 +51,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-exp-parser.h"
+#include "gnc-gui-query.h"
 #include "gnc-numeric.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
@@ -189,9 +190,11 @@ static gboolean sxsincelast_populate( sxSinceLastData *sxsld );
 static void sxsincelast_druid_cancelled( GnomeDruid *druid, gpointer ud );
 static void sxsincelast_close_handler( gpointer ud );
 
+#if 0
 static void sxsincelast_ok_clicked( GtkButton *b, gpointer ud );
 
 static void sxsincelast_cancel_clicked( GtkButton *b, gpointer ud );
+#endif
 static void sxsincelast_entry_changed( GtkEditable *e, gpointer ud );
 
 static void sxsincelast_destroy( GtkObject *o, gpointer ud );
@@ -241,26 +244,11 @@ static gboolean inform_or_add( GList *reminders,
                                GList *badList, GList **goodList );
 
 int parse_vars_from_formula( const char *formula, GHashTable *varHash );
-static void sx_obsolete_ok_clicked(GtkButton *button, gpointer user_data);
-
-static void sx_obsolete_cancel_clicked(GtkButton *button, gpointer user_data);
-static void sx_obsolete_row_unsel(GtkCList *clist,
-				  gint row,
-				  gint column,
-				  GdkEventButton *event,
-				  gpointer user_data);
-
-static void sx_obsolete_close_handler(gpointer user_data);
 
 static void sx_obsolete_select_all_clicked(GtkButton *button,
                                            gpointer user_data);
 static void sx_obsolete_unselect_all_clicked(GtkButton *button,
                                              gpointer user_data);
-static void sx_obsolete_row_sel(GtkCList *clist,
-				gint row,
-				gint column,
-				GdkEventButton *event,
-				gpointer user_data);
 
 /**
  * Used to wrap for the book-open hook, where the book filename is given.
@@ -442,6 +430,7 @@ reminders_next( GnomeDruidPage *druid_page,
         return FALSE;
 }
 
+#if 0
 static gboolean 
 reminders_back( GnomeDruidPage *druid_page,
                 gpointer arg1, gpointer ud )
@@ -449,6 +438,7 @@ reminders_back( GnomeDruidPage *druid_page,
         DEBUG( "reminders_back" );
         return FALSE;
 }
+#endif
 
 static void
 reminders_finish( GnomeDruidPage *druid_page,
@@ -680,7 +670,6 @@ static void
 sxsincelast_init( sxSinceLastData *sxsld )
 {
         GtkWidget *w;
-        int i;
         static widgetSignalHandlerTuple widgets[] = {
                 { SINCELAST_DRUID, "cancel",  sxsincelast_druid_cancelled },
 
@@ -817,12 +806,15 @@ generate_instances( SchedXaction *sx,
         seqStateData = NULL;
 }
 
+#if 0
 static void
 free_gdate_list_elts( gpointer data, gpointer user_data )
 {
         g_date_free( (GDate*)data );
 }
+#endif
 
+#if 0
 static void
 _free_reminderTuple_list_elts( gpointer data, gpointer user_data )
 {
@@ -830,6 +822,7 @@ _free_reminderTuple_list_elts( gpointer data, gpointer user_data )
         g_date_free( ((reminderTuple*)data)->occurDate );
         g_free( (reminderTuple*)data );
 }
+#endif
 
 static void
 _free_varBindings_hash_elts( gpointer key, gpointer value, gpointer data )
@@ -861,7 +854,6 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
         GList *thisGUID;
         autoCreateTuple *act;
         gboolean autoCreateState, notifyState;
-        char *rowText[2];
 
         /* get the "automagically created and notification requested"
          * register, and create the entries in it. */
@@ -990,7 +982,6 @@ processRemoveList(GList *removeList, sxSinceLastData *sxsld)
   GString *tmp_str;
   toDeleteTuple *tdt;
   FreqSpec *fs;
-  GDate *gd;
   rowtext[2] = g_new0(gchar, GNC_D_BUF_WIDTH ); 
 
   cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml,
@@ -1081,8 +1072,6 @@ sxsincelast_populate( sxSinceLastData *sxsld )
         GDate *instDate;
         gint daysInAdvance;
         gboolean autocreateState, notifyState;
-        GtkWidget *w;
-        reminderTuple *rt;
         gboolean showIt;
         autoCreateTuple *act;
         toCreateTuple *tct;
@@ -1227,26 +1216,12 @@ sxsincelast_close_handler( gpointer ud )
         clean_sincelast_data( sxsld );
 }
 
-static void
-free_elts( gpointer data, gpointer user_data )
-{
-        g_free( data );
-}
-
+#if 0
 static void
 sxsincelast_ok_clicked( GtkButton *b, gpointer ud )
 {
         sxSinceLastData *sxsld;
-        GtkWidget *dlg;
-        GtkWidget *o;
         GtkCList *cl;
-        time_t gdeDate;
-        GList *sxList;
-        GNCBook *book;
-        SchedXaction *sx;
-        GDate gd, *endDate;
-        gint row;
-        char *rowText[2];
         toCreateTuple *tct;
 
         GList *tcList;
@@ -1303,6 +1278,7 @@ sxsincelast_cancel_clicked( GtkButton *o, gpointer ud )
 {
         sxsincelast_close_handler( ud );
 }
+#endif
 
 static void
 andequal_numerics_set( gpointer key, gpointer value, gpointer data )
@@ -1626,7 +1602,6 @@ create_transactions_on( SchedXaction *sx, GDate *gd,
         AccountGroup *ag;
         Account *acct;
         char *id;
-        char tmpBuf[GNC_D_BUF_WIDTH];
         gboolean createdTCT;
 
 
@@ -1708,7 +1683,7 @@ clear_variable_numerics( gpointer key, gpointer value, gpointer data )
 void
 sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash )
 {
-        GList *splitList, *tmpL;
+        GList *splitList;
         kvp_frame *kvpf;
         kvp_value *kvp_val;
         Split *s;
@@ -2237,7 +2212,6 @@ create_autoCreate_gen_ledger( sxSinceLastData *sxsld )
         GtkWidget *vbox;
         GtkWidget *toolbar;
         GtkWidget *regWidget;
-        GtkWidget *popup;
 
         sxsld->ac_ledger = gnc_ledger_display_gl();
 

@@ -102,7 +102,6 @@ gnc_shutdown (int exit_status)
 static void
 gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app, 
                                gpointer data) {
-  GNCMDIInfo * mainwin = data;
   GtkWidget * summarybar;
   GtkWidget * statusbar;
 
@@ -463,12 +462,6 @@ gnc_main_window_fincalc_cb(GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_ui_mainWindow_scheduled_xaction_cb(GtkWidget *widget, gpointer data)
-{
-  gnc_ui_scheduled_xaction_dialog_create();
-}
-
-static void
 gnc_main_window_gl_cb(GtkWidget *widget, gpointer data)
 {
   GNCLedgerDisplay *ld;
@@ -726,11 +719,6 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
   static GnomeUIInfo gnc_windows_menu_template[] =
   {
     GNOMEUIINFO_END
-  };
-
-  static GnomeUIInfo gnc_developer_menu_template[] =
-  {
-      GNOMEUIINFO_END
   };
 
   static GnomeUIInfo gnc_main_menu_template[] =

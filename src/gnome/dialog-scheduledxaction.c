@@ -138,8 +138,10 @@ static void advance_toggle( GtkButton *b, SchedXactionEditorDialog *sxed );
 static gncUIWidget sxe_ledger_get_parent( GNCLedgerDisplay *ld );
 
 /* ledger callbacks */
+#if 0
 static void sxe_register_record_cb( GnucashRegister *reg, gpointer d );
 static void sxe_register_redraw_all_cb( GnucashRegister *reg, gpointer d );
+#endif
 
 static void sxed_reg_recordCB( GtkWidget *w, gpointer d );
 static void sxed_reg_cancelCB( GtkWidget *w, gpointer d );
@@ -216,11 +218,13 @@ editor_help_button_clicked(GtkButton *b, SchedXactionEditorDialog *sxed)
 	return;
 }
 
+#if 0
 static void
 local_print_helper( gpointer key, gpointer value, gpointer ud )
 {
         printf( "var: \"%s\"\n", (char*)key );
 }
+#endif
 
 static
 void
@@ -230,8 +234,6 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         GtkWidget *w, *optEndDate, *optNoEnd, *optNumOccur;
         GList *sxList;
         FreqSpec *fs;
-        gint row;
-        time_t tmpDate;
         GDate *gdate;
 
         /* FIXME: Do checks on validity and such, interrupting the user if
@@ -459,7 +461,6 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         SchedXactionDialog *sxd = NULL;
         GtkObject *sxdo;
         GtkWidget *button;
-        GtkWidget *clist;
         GList *alreadyExisting = NULL;
 
         alreadyExisting = 
@@ -563,9 +564,6 @@ schedXact_populate( SchedXactionDialog *sxd )
         GNCBook *book;
         GList *sxList;
         GtkCList *sx_clist;
-        FreqSpec *tmpFS;
-        struct tm tmpTm;
-        time_t tmpTime;
         int i;
 
         book = gnc_get_current_book ();
@@ -582,6 +580,7 @@ schedXact_populate( SchedXactionDialog *sxd )
                            GTK_SIGNAL_FUNC(row_select_handler), sxd );
 }
 
+#if 0
 static void
 sxed_check_close( SchedXactionEditorDialog *sxed )
 {
@@ -594,6 +593,7 @@ sxed_check_close( SchedXactionEditorDialog *sxed )
         /* Check the ledger for changes. */
         gnc_sxed_reg_check_close( sxed );
 }
+#endif
 
 static gboolean
 sxed_delete_event( GtkWidget *widget, GdkEvent *evt, gpointer ud )
@@ -1055,10 +1055,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         GtkEntry *nameEntry;
         char *name;
         time_t tmpDate;
-        int numRec, numRecRem;
-        GnomeDateEdit *gde;
         SplitRegister *splitReg;
-        GList *splitList;
         GtkWidget *w;
         GString *tmpgStr;
         struct tm *tmpTm;
@@ -1261,7 +1258,6 @@ delete_button_clicked( GtkButton *b, gpointer d )
         static char *confirmMessage =
                 "Delete the selected scheduled transactions?";
         int confirmSel;
-        GtkVBox *vb;
         GString *realMsg;
         SchedXaction *sx;
 
@@ -1356,11 +1352,8 @@ putSchedXactionInClist( gpointer data, gpointer user_data )
         SchedXactionDialog *sxd;
         GtkCList *clist;
         char *text[3];
-        char *tmpStr;
         GString *freqStr;
-        time_t nextTime;
         GString *nextDate;
-        time_t now;
         gint row;
         int i;
         GDate gd;
@@ -1416,6 +1409,7 @@ sxe_ledger_get_parent( GNCLedgerDisplay *ld )
         return sxed->dialog;
 }
 
+#if 0
 static
 void
 sxe_register_record_cb( GnucashRegister *reg, gpointer d )
@@ -1436,13 +1430,16 @@ sxe_register_record_cb( GnucashRegister *reg, gpointer d )
 
         gnc_split_register_redraw( splitreg );
 }
+#endif
 
+#if 0
 static
 void
 sxe_register_redraw_all_cb( GnucashRegister *reg, gpointer d )
 {
         DEBUG( "FIXME: sxe_register_redraw_all_cb called\n" );
 }
+#endif
 
 static
 void
@@ -1695,7 +1692,6 @@ void
 sxed_reg_expand_trans_checkCB( GtkWidget *w, gpointer d )
 {
           SchedXactionEditorDialog *sxed = d;
-          SplitRegister *reg;
 
           gnc_split_register_expand_current_trans
             (gnc_ledger_display_get_split_register (sxed->ledger),
@@ -1746,7 +1742,6 @@ static
 void
 sxed_reg_xferCB( GtkWidget *w, gpointer d )
 {
-        GnomeDialog *gd;
         /* FIXME: should use a "templatized" xfer dlg. */
 }
 

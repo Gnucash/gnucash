@@ -168,8 +168,6 @@ gnc_account_tree_new_with_root (Account * root)
 static void
 gnc_account_tree_init (GNCAccountTree *tree)
 {
-  gint i;
-
   tree->root_account     = *xaccGUIDNULL ();
   tree->current_accounts = NULL;
   tree->ignore_unselect  = FALSE;

@@ -416,6 +416,7 @@ gnc_counter_sixtp_parser_create(void)
      return sixtp_dom_parser_new(gnc_counter_end_handler, NULL, NULL);
 }
 
+#if 0
 static void
 print_counter_data(load_counter data)
 {
@@ -428,6 +429,7 @@ print_counter_data(load_counter data)
     printf("Scheduled Tansactions: Total: %d, Loaded: %d\n",
            data.schedXactions_total, data.schedXactions_loaded);
 }
+#endif
 
 static const char *ACCOUNT_TAG = "gnc:account";
 static const char *PRICEDB_TAG = "gnc:pricedb";
@@ -748,12 +750,14 @@ write_schedXactions( FILE *out, GNCBook *book )
     } while ( (schedXactions = schedXactions->next) );
 }
 
+#if 0
 static void
 write_namespace_decl (FILE *out, const char *namespace)
 {
   g_return_if_fail (namespace);
   fprintf(out, " xmlns:%s=\"\"", namespace);
 }
+#endif
 
 static void
 write_v2_header (FILE *out)

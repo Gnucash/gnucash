@@ -445,8 +445,6 @@ dom_tree_to_text(xmlNodePtr tree)
      Ignores comment nodes and collapse text nodes into one string.
      Returns NULL if expectations are unsatisfied.
   */
-  gboolean ok = TRUE;
-  xmlNodePtr current;
   gchar *result;
   gchar *temp;
 

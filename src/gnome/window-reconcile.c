@@ -401,10 +401,7 @@ gnc_recn_interest_xfer_no_auto_clicked_cb(GtkButton *button,
 static void
 recnInterestXferWindow( startRecnWindowData *data)
 {
-  GtkWidget *frame;
-  GtkWidget *button;
   gchar *title;
-  gint result;
 
   if( !account_type_has_auto_interest_xfer( data->account_type ) ) return;
 

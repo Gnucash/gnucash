@@ -293,7 +293,6 @@ cleanup_extension_info(gpointer extension_info, gpointer not_used)
 void
 gnc_add_extension(SCM extension)
 {
-  GnomeApp *app;
   ExtensionInfo *ext_info;
   ext_info = gnc_create_extension_info(extension);
   if (ext_info == NULL)

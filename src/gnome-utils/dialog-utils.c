@@ -56,7 +56,6 @@ gnc_ui_source_menu_create(Account *account)
   GtkMenu   *menu;
   GtkWidget *item;
   GtkWidget *omenu;
-  GNCAccountType type;
 
   menu = GTK_MENU(gtk_menu_new());
   gtk_widget_show(GTK_WIDGET(menu));
@@ -119,7 +118,6 @@ gnc_timezone_menu_position_to_string(guint pos)
 GtkWidget *
 gnc_ui_quote_tz_menu_create(Account *account)
 {
-  gint i;
   GtkMenu   *menu;
   GtkWidget *item;
   GtkWidget *omenu;

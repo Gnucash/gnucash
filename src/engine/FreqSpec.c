@@ -144,6 +144,7 @@ get_wday_name(guint day)
   return wday_name;
 }
  
+#if 0
 static const char *
 get_full_month_name(guint month)
 {
@@ -153,6 +154,7 @@ get_full_month_name(guint month)
   strftime(month_name, WDAY_NAME_WIDTH, "%B", &t);
   return month_name;
 }
+#endif
 
 static const char *
 get_abbrev_month_name(guint month)
@@ -282,8 +284,7 @@ xaccFreqSpecGetNextInstance(
         const GDate* in_date,
         GDate* out_date )
 {
-        GList                *list, *blist;
-        int                mon;
+        GList                *list;
 
         g_return_if_fail( fs );
         switch( fs->type ) {

@@ -88,8 +88,6 @@ static void gnc_price_dialog_create (PricesDialog *pdb_dialog);
 static void
 gnc_prices_set_changed (PricesDialog *pdb_dialog, gboolean changed)
 {
-  GtkWidget *button;
-
   pdb_dialog->changed = changed;
 }
 
@@ -335,7 +333,6 @@ gui_to_price (PricesDialog *pdb_dialog)
 {
   gnc_commodity *commodity;
   gnc_commodity *currency;
-  const char *source;
   const char *type;
   gnc_numeric value;
   Timespec date;
@@ -614,7 +611,6 @@ add_clicked (GtkWidget *widget, gpointer data)
 static void
 get_quotes_clicked (GtkWidget *widget, gpointer data)
 {
-  PricesDialog *pdb_dialog = data;
   GNCBook *book = gnc_get_current_book ();
   SCM quotes_func;
   SCM book_scm;
@@ -774,7 +770,6 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
   GladeXML *xml;
   GNCPrintAmountInfo print_info;
   GtkWidget *price_dialog;
-  GtkWidget *button;
   GtkWidget *entry;
   GtkWidget *menu;
   GtkWidget *box;
@@ -895,7 +890,6 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
   /* price tree */
   {
-    GtkWidget *income_radio;
     GtkWidget *list;
 
     list = glade_xml_get_widget (xml, "price_list");

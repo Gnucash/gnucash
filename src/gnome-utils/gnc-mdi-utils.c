@@ -72,7 +72,6 @@ gnc_ui_get_toplevel (void)
 static void
 gnc_mdi_child_set_title (GNCMDIChildInfo *childwin)
 {
-  GNCBook *book;
   const char *filename;
   char *title;
 
@@ -168,7 +167,6 @@ static void
 gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * not_used,
                           gpointer data)
 {
-  GNCMDIInfo      * mainwin = data;
   GNCMDIChildInfo * childwin = NULL;
   GnomeUIInfo      * hintinfo;
   GtkWidget        * oldbar;
@@ -593,9 +591,7 @@ gnc_mdi_restore (GNCMDIInfo * gnc_mdi, const char * filename)
 void
 gnc_mdi_create_child_toolbar (GNCMDIInfo * mi, GNCMDIChildInfo * child)
 {
-  GnomeUIInfo end = GNOMEUIINFO_END;
   GnomeUIInfo * tbinfo;
-  GnomeUIInfo * cur;
   GtkToolbar  * tb;
 
   g_return_if_fail (mi != NULL);

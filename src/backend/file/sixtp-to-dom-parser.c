@@ -82,20 +82,6 @@ dom_fail_handler(gpointer data_for_children,
   if(*result) xmlFreeNode(*result);
 }
 
-
-static gboolean is_whitespace(const char *text, int len)
-{
-    int i;
-    for(i = 0; i < len; i++)
-    {
-        if(!isspace(text[i]))
-        {
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-
 static gboolean dom_chars_handler(
     GSList *sibling_data, gpointer parent_data, gpointer global_data,
     gpointer *result, const char *text, int length)

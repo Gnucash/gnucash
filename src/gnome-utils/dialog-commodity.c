@@ -67,10 +67,6 @@ static SelectCommodityWindow *
 gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
                                gnc_commodity_callback callback,
                                void * callback_data);
-static CommodityWindow *
-gnc_ui_commodity_create(const char * selected_namespace,
-                        gnc_commodity_callback callback, 
-                        void * callback_data);
 
 static void gnc_ui_select_commodity_ok_cb(GtkButton * button,
                                           gpointer user_data);

@@ -159,9 +159,7 @@ gnc_commodities_load_commodities (CommoditiesDialog *cd)
 {
   gnc_commodity_table *ct;
   GList *namespaces;
-  GList *node;
   int new_row;
-  guint size;
 
   ct = gnc_get_current_commodities ();
 

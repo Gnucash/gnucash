@@ -92,8 +92,6 @@ update_display_lists(gnc_column_view_edit * view) {
   SCM   template_menu_name = gh_eval_str("gnc:report-template-menu-name/name");
   SCM   report_menu_name = gh_eval_str("gnc:report-menu-name");
   SCM   find_report = gh_eval_str("gnc:find-report");
-  SCM   get_options = gh_eval_str("gnc:report-options");
-  SCM   report_name = gh_eval_str("gnc:report-name");
   SCM   names = gh_call0(get_names);
   SCM   contents = 
     gnc_option_db_lookup_option(view->odb, "__general", "report-list",
@@ -304,9 +302,7 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
   SCM mark_report = gh_eval_str("gnc:report-set-needs-save?!");
   SCM find_report = gh_eval_str("gnc:find-report");
   SCM template_name;
-  SCM set_value = gh_eval_str("gnc:option-set-value");
   SCM new_report;
-  SCM report_obj;
   SCM newlist = SCM_EOL;
   SCM oldlist = r->contents_list;
   int count;

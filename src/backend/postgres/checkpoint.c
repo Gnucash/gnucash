@@ -77,7 +77,7 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
    PGresult *result;
    Checkpoint *bp;
    char *p;
-   int i, nrows, nsplits;
+   int i;
    int nck;
    Account *acc;
    const char *commodity_name, *guid_string;
@@ -141,7 +141,7 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
       do {
          GET_RESULTS (be->connection, result);
          {
-            int j, jrows;
+            int jrows;
             int ncols = PQnfields (result);
             jrows = PQntuples (result);
             PINFO ("query result %d has %d rows and %d cols",
@@ -277,7 +277,7 @@ pgendAccountRecomputeOneCheckpoint (PGBackend *be, Account *acc, Timespec ts)
 void
 pgendTransactionRecomputeCheckpoints (PGBackend *be, Transaction *trans)
 {
-   char *p, dbuf[80];
+   char *p;
 
    p = be->buff; *p = 0;
    p = stpcpy (p, "BEGIN WORK;\n"

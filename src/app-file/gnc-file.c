@@ -35,6 +35,7 @@
 #include "gnc-file-dialog.h"
 #include "gnc-file-history.h"
 #include "gnc-file-p.h"
+#include "gnc-gui-query.h"
 #include "gnc-session.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"

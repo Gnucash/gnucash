@@ -348,10 +348,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
 {
    char *pbuff;
    Account *acc;
-   PGresult *result;
    int engine_data_is_newer = 0;
-   int i, j, nrows;
-
 
    ENTER ("be=%p", be);
    if (!be || !acct_guid) return 0;

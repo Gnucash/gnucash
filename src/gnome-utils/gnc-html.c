@@ -631,9 +631,7 @@ gnc_html_url_requested_cb(GtkHTML * html, char * url,
 static int
 gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
                              gpointer data) {
-  GtkWidget * widg = NULL;
   gnc_html  * gnchtml = data; 
-  int retval = FALSE;
   GncHTMLObjectCB h;
 
   if(!eb || !(eb->classid) || !gnc_html_object_handlers) return FALSE;
@@ -808,7 +806,6 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
   char     * location = NULL;
   char     * new_loc = NULL;
   char     * label = NULL;
-  char     * submit_encoding = NULL;
   char     ** action_parts;
   GHashTable * form_data = gnc_html_unpack_form_data(encoded_form_data);
   URLType  type;

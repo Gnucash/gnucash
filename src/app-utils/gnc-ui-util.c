@@ -292,7 +292,6 @@ gnc_account_get_balance_in_currency (Account *account,
   GNCPriceDB *pdb;
   GNCPrice *price;
   gnc_numeric balance;
-  GNCAccountType atype;
   gnc_commodity *commodity;
 
   if (!account || !currency)
@@ -355,12 +354,7 @@ static gnc_numeric
 gnc_account_get_reconciled_balance_in_currency (Account *account,
                                                 gnc_commodity *currency)
 {
-  GNCBook *book;
-  GNCPriceDB *pdb;
-  GNCPrice *price;
-  gboolean has_shares;
   gnc_numeric balance;
-  GNCAccountType atype;
   gnc_commodity *balance_currency;
 
   if (!account || !currency)
@@ -903,7 +897,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
 
   parent = xaccGetAccountFromName (group, _("Equity"));
   if (parent && xaccAccountGetType (parent) != EQUITY)
-    parent == NULL;
+    parent = NULL;
 
   account = xaccMallocAccount (book);
 

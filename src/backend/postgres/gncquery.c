@@ -557,7 +557,6 @@ kvp_left_operand (kvp_value *value)
 {
   kvp_value_t value_t;
   const char *kvptable;
-  char *operand;
 
   g_return_val_if_fail (value, NULL);
 
@@ -590,7 +589,6 @@ kvp_right_operand (sqlQuery *sq, kvp_value *value)
 {
   kvp_value_t value_t;
   const char *kvptable;
-  char *operand;
 
   g_return_val_if_fail (value, NULL);
 

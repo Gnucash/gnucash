@@ -243,8 +243,6 @@ gboolean
 gnc_session_begin (GNCSession *session, const char * book_id, 
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
-  int rc;
-
   if (!session) return FALSE;
   ENTER (" ignore_lock=%d, book-id=%s", ignore_lock,
          book_id ? book_id : "(null)");
@@ -350,7 +348,6 @@ gnc_session_begin (GNCSession *session, const char * book_id,
 gboolean
 gnc_session_load (GNCSession *session)
 {
-  GNCBackendError backend_err;
   Backend *be;
 
   if (!session) return FALSE;

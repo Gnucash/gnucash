@@ -232,9 +232,11 @@ static const char *sql_functions_str =
 #include "functions.c"
 ;
 
+#if 0
 static const char *table_drop_str = 
 #include "table-drop.c"
 ;
+#endif
 
 /* ============================================================= */
 /*             QUERY STUFF                                       */
@@ -527,7 +529,6 @@ pgendRunQuery (Backend *bend, Query *q)
    const char * sql_query_string;
    AccountGroup *topgroup;
    sqlQuery *sq;
-   GList *node, *anode, *xaction_list= NULL, *acct_list = NULL;
 
    ENTER ("be=%p, qry=%p", be, q);
    if (!be || !q) return;
@@ -588,10 +589,11 @@ pgendRunQuery (Backend *bend, Query *q)
  *    for a rainy day...
  */
 
+#if 0
 static gpointer
 get_all_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GList *node, *xaction_list = (GList *) data;
+   GList *xaction_list = (GList *) data;
    GUID *trans_guid;
 
    /* find the transaction this goes into */
@@ -628,6 +630,7 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
    pgendEnable(be);
    gnc_engine_resume_events();
 }
+#endif
 
 
 /* ============================================================= */
@@ -1338,7 +1341,6 @@ pgend_session_begin (Backend *backend,
                      gboolean ignore_lock,
                      gboolean create_new_db)
 {
-   int really_do_create = 0;
    int rc;
    PGBackend *be;
    char *url, *start, *end;
@@ -1755,7 +1757,7 @@ pgend_session_begin (Backend *backend,
             gboolean someones_still_on;
             /* The server is older than we are; lets upgrade */
             /* But first, make sure all users are logged off ... */
-            p = "BEGIN;\n";
+            p = "BEGIN;\n"
                 "LOCK TABLE gncSession IN ACCESS EXCLUSIVE MODE;\n"
                 "SELECT time_off FROM gncSession WHERE time_off ='infinity';";
             SEND_QUERY (be,p, );

@@ -462,7 +462,6 @@ summarybar_refresh_handler(GHashTable * changes, gpointer user_data) {
 GtkWidget *
 gnc_main_window_summary_new (void) {
   GNCMainSummary  * retval = g_new0(GNCMainSummary, 1);
-  GtkWidget       * summarybar;
   GNCCurrencyItem * def_item;
   gnc_commodity   * default_currency = gnc_default_currency ();
   

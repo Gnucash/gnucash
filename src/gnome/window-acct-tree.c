@@ -40,6 +40,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
+#include "gnc-gui-query.h"
 #include "gnc-html.h"
 #include "gnc-ui.h"
 #include "gtkselect.h"
@@ -471,8 +472,6 @@ static void
 gnc_acct_tree_window_menu_tax_info_cb (GtkWidget * widget, 
                                        GnomeMDIChild * child) {
   GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
-  Account        * account = gnc_acct_tree_window_get_current_account(win);
   gnc_tax_info_dialog(GTK_WIDGET(mc->app));
 }
 
@@ -556,13 +555,6 @@ gnc_acct_tree_window_menu_open_cb (GtkWidget *widget, GnomeMDIChild * child)
 }
 
 
-static void
-gnc_acct_tree_window_destroy_cb (GtkObject *object, gpointer user_data)
-{
-  GNCAcctTreeWin *win = user_data;
-  gnc_acct_tree_window_destroy(win);
-}
- 
 static void
 gnc_acct_tree_window_activate_cb(GNCMainWinAccountTree *tree,
                                  Account *account,
@@ -1099,7 +1091,6 @@ gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
 void
 gnc_acct_tree_window_toolbar_options_cb(GtkWidget * widget, gpointer data) {
   GNCAcctTreeWin * win = data;
-  struct acct_tree_params_data * prm = NULL;
 
   if(win->editor_dialog) {
     gdk_window_raise(GTK_WIDGET
