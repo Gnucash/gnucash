@@ -1,3 +1,8 @@
+2002-05-27  David Hampton  <hampton@employees.org>
+
+	* src/dialog-account/dialog-account.c: Sort the account type list
+	in the Edit Account dialog.
+
 2002-05-27  Derek Atkins   <derek@ihtfp.com>
 
 	* dialog-options.c: implement a radiobutton option type.
