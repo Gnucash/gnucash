@@ -170,9 +170,6 @@
 /* Define if you have the i library (-li).  */
 #undef HAVE_LIBI
 
-/* Define if you have the xml library (-lxml).  */
-#undef HAVE_LIBXML
-
 /* Name of package */
 #undef PACKAGE
 

@@ -5313,7 +5313,7 @@ if test "${with_imlib+set}" = set; then
 fi
 
 
-# the XmHTML widget needs libz, libjpeg, libpng and libm
+# the XmHTML widget needs libz, libjpeg, and libpng.
 # it also uses #ifdef's not #if's so DONT #def to zero.
 echo $ac_n "checking for deflateEnd in -lz""... $ac_c" 1>&6
 echo "configure:5320: checking for deflateEnd in -lz" >&5
@@ -5353,7 +5353,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   cat >> confdefs.h <<\EOF
 #define HAVE_ZLIB 1
 EOF
- LIBS="-lz $LIBS"
+
 else
   echo "$ac_t""no" 1>&6
 fi
@@ -5396,7 +5396,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   cat >> confdefs.h <<\EOF
 #define HAVE_JPEG 1
 EOF
- LIBS="-ljpeg $LIBS"
+
 else
   echo "$ac_t""no" 1>&6
 fi
@@ -5439,7 +5439,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   cat >> confdefs.h <<\EOF
 #define HAVE_PNG 1
 EOF
- LIBS="-lpng $LIBS"
+
 else
   echo "$ac_t""no" 1>&6
 fi
@@ -5634,14 +5634,7 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-    ac_tr_lib=HAVE_LIB`echo xml | sed -e 's/[^a-zA-Z0-9_]/_/g' \
-    -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
-  cat >> confdefs.h <<EOF
-#define $ac_tr_lib 1
-EOF
-
-  LIBS="-lxml $LIBS"
-
+  NOT_USED=""
 else
   echo "$ac_t""no" 1>&6
 { echo "configure: error: Cannot find libxml." 1>&2; exit 1; }
@@ -5655,7 +5648,7 @@ EXTRALIBS=`$GNOME_CONFIG_BIN --libs print`
 # check for gnome-print and enable it via HAVE_LIBGNOMEPRINT
 # if found
 echo $ac_n "checking for gnome_print_context_new in -lgnomeprint""... $ac_c" 1>&6
-echo "configure:5659: checking for gnome_print_context_new in -lgnomeprint" >&5
+echo "configure:5652: checking for gnome_print_context_new in -lgnomeprint" >&5
 ac_lib_var=`echo gnomeprint'_'gnome_print_context_new | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -5663,7 +5656,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lgnomeprint $EXTRALIBS $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 5667 "configure"
+#line 5660 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -5674,7 +5667,7 @@ int main() {
 gnome_print_context_new()
 ; return 0; }
 EOF
-if { (eval echo configure:5678: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:5671: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -5734,7 +5727,7 @@ G_WRAP_LINK_ARGS=""
 # Extract the first word of "g-wrap-config", so it can be a program name with args.
 set dummy g-wrap-config; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5738: checking for $ac_word" >&5
+echo "configure:5731: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_G_WRAP_CONFIG'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -5778,7 +5771,7 @@ fi
 # Extract the first word of "g-wrap", so it can be a program name with args.
 set dummy g-wrap; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5782: checking for $ac_word" >&5
+echo "configure:5775: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_G_WRAP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -5836,7 +5829,7 @@ GUILE_LINK_ARGS=""
 # Extract the first word of "guile-config", so it can be a program name with args.
 set dummy guile-config; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5840: checking for $ac_word" >&5
+echo "configure:5833: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_GUILE_CONFIG'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -5880,7 +5873,7 @@ fi
 # Extract the first word of "guile", so it can be a program name with args.
 set dummy guile; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5884: checking for $ac_word" >&5
+echo "configure:5877: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_GUILE'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
