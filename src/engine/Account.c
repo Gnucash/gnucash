@@ -222,6 +222,7 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
 {
   int  i,j;
   Split **oldsplits;
+  Account *oldacc;
 
   if (!acc) return;
   if (!split) return;
@@ -254,39 +255,73 @@ disable for now till we figure out what the right thing is.
    * there first.  We don't want to ever leave the system
    * in an inconsistent state.
    */
+  oldacc = split->acc;
   if (split->acc) xaccAccountRemoveSplit (split->acc, split);
   split->acc = acc;
     
-  oldsplits = acc->splits;
-  acc->numSplits ++;
-  acc->splits = (Split **)_malloc(((acc->numSplits) + 1) * sizeof(Split *));
-  
-  /* Find the insertion point */
-  /* to get realy fancy, could use binary search. */
-  for(i = 0; i < (acc->numSplits - 1);) {
-    if(xaccSplitOrder(&(oldsplits[i]), &split) > 0) {
-      break;
-    } else {
-      acc->splits[i] = oldsplits[i];
-    }
-    i++;  /* Don't put this in the loop guard!  It'll go too far. */
+  /* enlarge the size of the split array to accomadate the new split,
+   * and copy all the splits over to the new array. 
+   * If the old and new accounts are the same account, then we
+   * are just shuffling around the split, resumably due to a 
+   * date reordering.  In this case, most of the malloc/copy/free bit
+   * can be avoided.
+   */
+  if (oldacc != acc) {
+     oldsplits = acc->splits;
+     acc->numSplits ++;
+
+     acc->splits = (Split **)_malloc(((acc->numSplits) + 1) * sizeof(Split *));
+     
+     /* Find the insertion point */
+     /* to get realy fancy, could use binary search. */
+     for(i = 0; i < (acc->numSplits - 1);) {
+       if(xaccSplitOrder(&(oldsplits[i]), &split) > 0) {
+         break;
+       } else {
+         acc->splits[i] = oldsplits[i];
+       }
+       i++;  /* Don't put this in the loop guard!  It'll go too far. */
+     }
+     /* Insertion point is now i */
+   
+     //fprintf(stderr, "Insertion position is: %d\n", i);
+   
+     /* Move all the other splits down (this could be done faster with memmove)*/
+     for( j = acc->numSplits; j > i; j--) {
+       acc->splits[j] = oldsplits[j - 1];
+     }
+   
+     /* Now insert the new split */
+     acc->splits[i] = split;
+   
+     /* make sure the array is NULL terminated */
+     acc->splits[acc->numSplits] = NULL;
+   
+     _free(oldsplits);
+  } else {
+     acc->numSplits ++;
+
+     /* Find the insertion point */
+     /* to get realy fancy, could use binary search. */
+     for(i = 0; i < (acc->numSplits - 1);) {
+       if(xaccSplitOrder(&(acc->splits[i]), &split) > 0) {
+         break;
+       }
+       i++;  /* Don't put this in the loop guard!  It'll go too far. */
+     }
+     /* Insertion point is now i */
+   
+     /* Move all the other splits down (this could be done faster with memmove)*/
+     for( j = acc->numSplits; j > i; j--) {
+       acc->splits[j] = acc->splits[j - 1];
+     }
+   
+     /* Now insert the new split */
+     acc->splits[i] = split;
+   
+     /* make sure the array is NULL terminated */
+     acc->splits[acc->numSplits] = NULL;
   }
-  /* Insertion point is now i */
-
-  //fprintf(stderr, "Insertion position is: %d\n", i);
-
-  /* Move all the other splits down (this could be done faster with memmove)*/
-  for( j = acc->numSplits; j > i; j--) {
-    acc->splits[j] = oldsplits[j - 1];
-  }
-
-  /* Now insert the new split */
-  acc->splits[i] = split;
-
-  /* make sure the array is NULL terminated */
-  acc->splits[acc->numSplits] = NULL;
-
-  _free(oldsplits);
 
   xaccAccountRecomputeBalance (acc);
 }
@@ -485,7 +520,6 @@ xaccCheckDateOrder (Account * acc, Split *split )
 
   /* take care of re-ordering, if necessary */
   if( outOfOrder ) {
-    xaccAccountRemoveSplit( acc, split );
     xaccAccountInsertSplit( acc, split );
     return 1;
   }

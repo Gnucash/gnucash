@@ -414,6 +414,11 @@ xaccFreeTransaction( Transaction *trans )
 
   trans->open = 0;
 
+  if (trans->orig) {
+    xaccFreeTransaction (trans->orig);
+    trans->orig = NULL;
+  }
+
   _free(trans);
 }
 
@@ -767,12 +772,6 @@ xaccTransCommitEdit (Transaction *trans)
    if (!trans) return;
    CHECK_OPEN (trans);
 
-   /* get rid of the copy we made. We won't be rolling back, 
-    * so we don't need i any more.
-    */
-   xaccFreeTransaction (trans->orig);
-   trans->orig = NULL;
-
    /* At this point, we check to see if we have a valid transaction.
     * As a result of editing, we could end up with a transaction that
     * has no splits in it, in which case we delete the transaction and
@@ -807,17 +806,26 @@ xaccTransCommitEdit (Transaction *trans)
    trans->open &= ~DEFER_REBALANCE;
    xaccTransRebalance (trans);
 
-   /* um, theoritically, it is impossible for splits
-    * to get inserted out of order. But we'll get paranoid,
-    * and check anyway, at the loss of some performance.
-    */
-   i=0;
-   split = trans->splits[i];
-   while (split) {
-      acc = split ->acc;
-      xaccCheckDateOrder(acc, trans->splits[i]);
-      i++;
+   /* check to see if the date has changed.  We use the date as the sort key. */
+   if ((trans->orig->date_entered.tv_sec != trans->date_entered.tv_sec) ||
+       (trans->orig->date_posted.tv_sec  != trans->date_posted.tv_sec))
+   {
+
+      /* since the date has changed, we need to be careful to 
+       * make sure all associated splits are in proper order
+       * in thier accounts.  The easiest way of ensuring this
+       * is to remove and reinsert every split. The reinsertion
+       * process will place the split in the correct date-sorted
+       * order.
+       */
+      i=0;
       split = trans->splits[i];
+      while (split) {
+         acc = split ->acc;
+         xaccCheckDateOrder(acc, trans->splits[i]);
+         i++;
+         split = trans->splits[i];
+      }
    }
 
    i=0;
@@ -831,6 +839,12 @@ xaccTransCommitEdit (Transaction *trans)
 
    trans->open = 0;
    xaccTransWriteLog (trans, 'C');
+
+   /* get rid of the copy we made. We won't be rolling back, 
+    * so we don't need it any more.  */
+   xaccFreeTransaction (trans->orig);
+   trans->orig = NULL;
+
 }
 
 void
@@ -1203,40 +1217,22 @@ xaccCountTransactions (Transaction **tarray)
 void
 xaccTransSetDateSecs (Transaction *trans, time_t secs)
 {
-   Split *split;
-   Account *acc;
-   int i=0;
-
    if (!trans) return;
    CHECK_OPEN (trans);
 
    /* hack alert -- for right now, keep the posted and the entered
     * dates in sync.  Later, we'll have to split these up. */
 
-
    trans->date_entered.tv_sec = secs;
    trans->date_posted.tv_sec = secs;
 
-   /* since the date has changed, we need to be careful to 
-    * make sure all associated splits are in proper order
-    * in thier accounts.  The easiest way of ensuring this
-    * is to remove and reinsert every split. The reinsertion
-    * process will place the split in the correct date-sorted
-    * order.
+   /* Because the date has changed, we need to make sure that each of the
+    * splits is properly ordered in each of thier accounts.  We could do that
+    * here, simply by reinserting each split into its account.  However, in
+    * some ways this is bad behaviour, and it seems much better/nicer to defer
+    * that until the commit phase, i.e. until the user has called the
+    * xaccTransCommitEdit() routine.  So, for now, we are done.
     */
-
-   assert (trans->splits);
-
-   i=0;
-   split = trans->splits[i];
-   while (split) {
-      acc = split->acc;
-      xaccAccountRemoveSplit (acc, split);
-      xaccAccountInsertSplit (acc, split);
-
-      i++;
-      split = trans->splits[i];
-   }
 }
 
 void
