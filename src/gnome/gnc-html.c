@@ -28,7 +28,9 @@
 #include <unistd.h>
 #include <gtkhtml/gtkhtml.h>
 #include <gtkhtml/gtkhtml-embedded.h>
+#ifdef USE_GUPPI
 #include <libguppitank/guppi-tank.h>
+#endif
 #include <gnome.h>
 #include <regex.h>
 #include <glib.h>
@@ -549,6 +551,7 @@ gnc_html_url_requested_cb(GtkHTML * html, char * url,
 }
 
 
+#ifdef USE_GUPPI
 static void 
 gnc_html_guppi_print_cb(GtkHTMLEmbedded * eb, GnomePrintContext * pc,
                         gpointer data) {
@@ -567,6 +570,7 @@ gnc_html_guppi_redraw_cb(GtkHTMLEmbedded * eb,
                          gpointer data) {
   /* nothing special to do */
 }
+#endif /* USE_GUPPI */
 
 /********************************************************************
  * gnc_html_object_requested_cb - called when an applet needs to be
@@ -580,8 +584,10 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
   int retval = FALSE;
 
   if(!strcmp(eb->classid, "gnc-guppi-pie")) {
+#ifdef USE_GUPPI
     widg = gnc_html_embedded_piechart(eb->width, eb->height, 
                                       eb->params); 
+#endif /* USE_GUPPI */
     if(widg) {
       gtk_widget_show_all(widg);
       gtk_container_add(GTK_CONTAINER(eb), widg);
@@ -590,8 +596,10 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
     retval = TRUE;
   }
   else if(!strcmp(eb->classid, "gnc-guppi-bar")) {
+#ifdef USE_GUPPI
     widg = gnc_html_embedded_barchart(eb->width, eb->height, 
                                       eb->params); 
+#endif /* USE_GUPPI */
     if(widg) {
       gtk_widget_show_all(widg);
       gtk_container_add(GTK_CONTAINER(eb), widg);
@@ -600,8 +608,10 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
     retval = TRUE;
   }
   else if(!strcmp(eb->classid, "gnc-guppi-scatter")) {
+#ifdef USE_GUPPI
     widg = gnc_html_embedded_scatter(eb->width, eb->height, 
                                      eb->params); 
+#endif /* USE_GUPPI */
     if(widg) {
       gtk_widget_show_all(widg);
       gtk_container_add(GTK_CONTAINER(eb), widg);
@@ -620,7 +630,7 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
     retval = TRUE;
   }
 
-#if 0
+#if 0 && defined(USE_GUPPI)
   if(widg) {
     gtk_signal_connect(GTK_OBJECT(eb), "draw_gdk",
                        GTK_SIGNAL_FUNC(gnc_html_guppi_redraw_cb),

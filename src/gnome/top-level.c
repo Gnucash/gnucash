@@ -27,7 +27,9 @@
 #include <gnome.h>
 #include <gtkhtml/gtkhtml.h>
 #include <guile/gh.h>
+#ifdef USE_GUPPI
 #include <libguppitank/guppi-tank.h>
+#endif
 #include <popt.h>
 #include <stdlib.h>
 
@@ -208,8 +210,10 @@ gnucash_ui_init(void)
     gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
     gtk_widget_set_default_visual (gdk_rgb_get_visual ());
     
+#ifdef USE_GUPPI    
     /* initialize guppi */
     guppi_tank_init();
+#endif
 
     app = gnome_app_new("GnuCash", "GnuCash");
 

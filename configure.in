@@ -283,9 +283,13 @@ AC_CHECK_LIB(gtkhtml, gtk_html_new,
 GHTTP_LIBS=`$GNOME_CONFIG --libs ghttp`
 GHTTP_CFLAGS=`$GNOME_CONFIG --cflags ghttp`
 
+# Note: this doesn't croak if GHTTP_LIBS is empty! (e.g. on RH6.2)
 AC_CHECK_LIB(ghttp, ghttp_request_new,
              GNOMEBUILDLIBS="${GNOMEBUILDLIBS} ghttp"
-             AC_DEFINE(HAVE_LIBGHTTP),
+             AC_DEFINE(HAVE_LIBGHTTP)
+	     if test "x$GHTTP_LIBS" = "x" ; then
+		GHTTP_LIBS=-lghttp
+	     fi,
              AC_MSG_ERROR([Cannot find ghttp.  See the README for more info.]),
              $GHTTP_LIBS)
 
@@ -298,6 +302,20 @@ AC_SUBST(GHTTP_CFLAGS)
 
 ### --------------------------------------------------------------------------
 ### guppi
+
+AC_ARG_ENABLE( guppi,
+  [  --disable-guppi               compile without guppi support],
+  if test $enableval = no; then
+    USE_GUPPI=0
+  else
+    USE_GUPPI=1
+  fi,
+  USE_GUPPI=1 )
+
+if test $USE_GUPPI = 0; then
+  AC_MSG_WARN([Compiling without guppi support])
+else
+  AC_DEFINE(USE_GUPPI)
 
 ## Things guppi needs (actually are these guppi dependencies or gtkhtml's?)
 
@@ -329,6 +347,7 @@ LIBGUPPI_CHECK
 AC_SUBST(GUPPI_LIBS)
 AC_SUBST(GUPPI_CFLAGS)
 
+fi
 
 ### --------------------------------------------------------------------------
 ### XIM

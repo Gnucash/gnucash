@@ -24,7 +24,9 @@
 
 #include <gnome.h>
 #include <glib.h>
+#ifdef USE_GUPPI
 #include <libguppitank/guppi-tank.h>
+#endif
 
 #include "gnc-html-embedded.h"
 #include "mainwindow-account-tree.h"
@@ -98,6 +100,7 @@ free_strings(char ** strings, int nstrings) {
 }
 
 
+#ifdef USE_GUPPI
 /********************************************************************
  * gnc_html_embedded_piechart
  * create a Guppi piechart from an HTML <object> block
@@ -392,6 +395,7 @@ gnc_html_embedded_scatter(int w, int h, GHashTable * params) {
   
   return rv;
 }
+#endif /* USE_GUPPI */
 
 /********************************************************************
  * gnc_html_embedded_account_tree
