@@ -54,22 +54,19 @@ gnc_druid_provider_desc_multifile_new_with_data(const gchar* title,
 						const gchar* (*get_filename)(gpointer, gpointer))
 {
   GNCDruidProviderDescMultifile* desc;
-  GNCDruidProviderDesc* gdp_desc;
 
   desc = gnc_druid_provider_desc_multifile_new();
   g_assert(desc);
-  gdp_desc = GNC_DRUID_PROVIDER_DESC(desc);
 
   desc->file_provider = file_prov;
   desc->get_files = get_files;
   desc->get_filename = get_filename;
-
-  gdp_desc->next_cb = next_cb;
+  desc->parent.next_cb = next_cb;
 
   if (text)
     gnc_druid_provider_desc_multifile_set_text(desc, text);
   if (title)
-    gnc_druid_provider_desc_set_title(gdp_desc, title);
+    gnc_druid_provider_desc_set_title(&(desc->parent), title);
 
   return desc;
 }

@@ -1,3 +1,21 @@
+2004-02-08  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc-file.c:
+	* Index: src/app-utils/gnc-druid-provider-desc-multifile.c:
+	  don't need to cast to the superclass -- just use it directly
+	* src/gnome-utils/Makefile.am:
+	  add multifile sources and glade file
+	* src/gnome-utils/gnc-druid-provider-file-gnome.c:
+	  Call the next_cb with the proper argument (no clue why the compiler
+	  didn't catch this before)
+	* src/gnome-utils/gnc-druid-provider-multifile-gnome.[ch]:
+	* src/gnome-utils/druid-provider-multifile.glade:
+	  Added code and glade file to implement the multifile provider
+	* src/gnome-utils/gncmod-gnome-utils.c:
+	  Register the file and multifile providers
+	* src/import-export/qif-import/gnc-druid-test.c:
+	  Add the file and multifile providers to the druid test
+
 2004-02-07  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/gnc-druid-provider-desc-file.[ch]:

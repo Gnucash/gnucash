@@ -56,13 +56,11 @@ gnc_druid_provider_desc_file_new_with_data(const gchar* title,
 					   void (*remove_file)(gpointer, gpointer))
 {
   GNCDruidProviderDescFile* desc;
-  GNCDruidProviderDesc* gdp_desc;
 
   desc = gnc_druid_provider_desc_file_new();
   g_assert(desc);
-  gdp_desc = GNC_DRUID_PROVIDER_DESC(desc);
 
-  gdp_desc->next_cb = next_cb;
+  desc->parent.next_cb = next_cb;
   desc->remove_file = remove_file;
   desc->glob = glob;
 
@@ -71,7 +69,7 @@ gnc_druid_provider_desc_file_new_with_data(const gchar* title,
   if (last_dir)
     gnc_druid_provider_desc_file_set_last_dir(desc, last_dir);
   if (title)
-    gnc_druid_provider_desc_set_title(gdp_desc, title);
+    gnc_druid_provider_desc_set_title(&(desc->parent), title);
 
   return desc;
 }

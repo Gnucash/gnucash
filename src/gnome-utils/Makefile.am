@@ -46,6 +46,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-druid-gnome.c \
   gnc-druid-provider-edge-gnome.c \
   gnc-druid-provider-file-gnome.c \
+  gnc-druid-provider-multifile-gnome.c \
   gnc-frequency.c \
   gnc-general-select.c \
   gnc-gconf-utils.c \
@@ -127,6 +128,7 @@ noinst_HEADERS = \
   gnc-druid-gnome.h \
   gnc-druid-provider-edge-gnome.h \
   gnc-druid-provider-file-gnome.h \
+  gnc-druid-provider-multifile-gnome.h \
   gnc-version.h \
   gw-gnome-utils.h \
   search-param.h
@@ -167,6 +169,7 @@ gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
   commodity.glade \
   dialog-query-list.glade \
+  druid-provider-multifile.glade \
   exchange-dialog.glade \
   gnc-date-format.glade \
   preferences.glade \

@@ -23,6 +23,8 @@
 
 #include "gnc-druid-gnome.h"
 #include "gnc-druid-provider-edge-gnome.h"
+#include "gnc-druid-provider-file-gnome.h"
+#include "gnc-druid-provider-multifile-gnome.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_gnome_utils_LTX_gnc_module_system_interface = 0;
@@ -91,6 +93,8 @@ libgncmod_gnome_utils_LTX_gnc_module_init(int refcount) {
     /* register the druid pieces */
     gnc_druid_gnome_register();
     gnc_druid_provider_edge_gnome_register();
+    gnc_druid_provider_file_gnome_register();
+    gnc_druid_provider_multifile_gnome_register();
   }
 
   gnc_set_warning_message(gnc_warning_dialog_va);

@@ -87,7 +87,7 @@ gnc_dpfg_next_file(GNCDruidProvider *prov, const gchar *filename)
   gboolean res;
 
   prov_f->cb->filename = filename;
-  res = prov->desc->next_cb(prov->druid->be_ctx);
+  res = prov->desc->next_cb(&(prov_f->cb->parent));
 
   if (!res)
     gnc_error_dialog(GTK_WIDGET(prov_f->page),
