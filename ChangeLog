@@ -1,4 +1,16 @@
 2002-11-13  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/Transaction-matcher.c: 
+	-Don't show match with probability less than 1, so we don't
+	end up showing the whole account.
+	-Fix crash when importing a transaction twice
+	-Copy the online id to the reconciled transaction, so the 
+	match will be remembered.
+	-Do not consider transaction with an online_id kvp frame as
+	potential match, as they have previously been downloaded 
+	online.
+	-Steal a better pixmap from gnome drop down menu.
+
+2002-11-13  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	* src/import-export/ofx/gnc-ofx-import.c: MAJOR improvement to 
 	investment support.  All transactions created from an investment

@@ -1,6 +1,6 @@
 /********************************************************************\
- * Transaction-matcher.c --       * 
- * See file generic-import-design.txt for         *
+ * Transaction-matcher.c --                                         *
+ * See file generic-import-design.txt for                           *
  * description                                                      *
  *                        (GnuCash)                                 *
  * Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>        *
@@ -127,7 +127,17 @@ static const int TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD = 6;
 /*Transaction who's best match probability is below or equal to 
   this will be added as new by default */
 static const int TRANSACTION_ADD_PROBABILITY_THRESHOLD = 2;
-static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = TRUE;
+/*Transaction's match probability must be at least this much to be 
+  displayed in the match list.  Dont set this to 0 except for 
+  debugging purposes, otherwise all transactions of every accounts 
+  will be shown in the list */
+static const int TRANSACTION_DISPLAY_PROBABILITY_THRESHOLD = 1;
+/*Transaction's who have an online_id kvp frame have been downloaded 
+  online can probably be skipped in the match list, since it is very 
+  unlikely that they would match a transaction downloaded at a later
+  date and yet not have the same online_id.  This also increases
+  performance of the matcher. */
+static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = FALSE;
 
 static const int ACTION_IGNORE_ENABLED = TRUE;
 static const int ACTION_ADD_ENABLED = TRUE;
@@ -136,35 +146,70 @@ static const int ACTION_REPLACE_ENABLED = TRUE;
 
 /* XPM */
 static char * fleche_xpm[] = {
-  "13 21 7 1",
-  " 	c None",
-  ".	c #000000",
-  "+	c #DEDACD",
-  "@	c #FFFFFF",
-  "#	c #B4BAB4",
-  "$	c #C5C2C5",
-  "%	c #BDBEBD",
-  ".............",
-  ".++++++++++@.",
-  ".+#########@.",
-  ".+####.####@.",
-  ".+###...###@.",
-  ".+###...###@.",
-  ".+###...###@.",
-  ".+###...###@.",
-  ".+###...###@.",
-  ".+###...###@.",
-  ".+###...###@.",
-  ".+###...###@.",
-  ".+###...###@.",
-  ".+#.......#@.",
-  ".+##.....##@.",
-  ".+###...###@.",
-  ".+###$.$###@.",
-  ".+####%####@.",
-  ".@#########@.",
-  ".............",
-  "@@@@@@@@@@@@@"};
+"17 22 41 1",
+" 	c None",
+".	c #FFFFFF",
+"+	c #000000",
+"@	c #FFFAFF",
+"#	c #F6FFF6",
+"$	c #EEEEE6",
+"%	c #B4B29C",
+"&	c #F6F6F6",
+"*	c #F6F2F6",
+"=	c #EFF7EF",
+"-	c #EEF2EE",
+";	c #EEEEEE",
+">	c #F6EEF6",
+",	c #E6EEE6",
+"'	c #EEEAEE",
+")	c #E6EAE6",
+"!	c #EEE6EE",
+"~	c #E6E6E6",
+"{	c #DEE2DE",
+"]	c #E6E2E6",
+"^	c #DEDEDE",
+"/	c #E6DEE6",
+"(	c #DEDADE",
+"_	c #D5DED5",
+":	c #D5DAD5",
+"<	c #DED6DE",
+"[	c #D5D6D5",
+"}	c #D5D2D5",
+"|	c #CDD6CD",
+"1	c #CDD2CD",
+"2	c #CDCECD",
+"3	c #D5CED5",
+"4	c #CDCACD",
+"5	c #C5CAC5",
+"6	c #C5C6C5",
+"7	c #CDC6CD",
+"8	c #BDC6BD",
+"9	c #C5C2C5",
+"0	c #C5BEC5",
+"a	c #BDC2BD",
+"b	c #BDBEBD",
+".+++++++++++++++.",
+"+@.............#+",
+"+.$$$$$$$$$$$$$%+",
+"+.$&&*&&&&&=&&&%+",
+"+.$*--*-**-*-*-%+",
+"+.$;;;;>-;;;;;-%+",
+"+.$,',';;';',';%+",
+"+.$)!)!)!))))')%+",
+"+.$~~~~~~~~~~~~%+",
+"+.${]+++++++]]]%+",
+"+.${^/+++++/{^{%+",
+"+.$(^(_+++((_(^%+",
+"+.$:<:(<+<::<(<%+",
+"+.$[[<[[[[[<[[[%+",
+"+.$}|}}}}|}}}}}%+",
+"+.$111112131131%+",
+"+.$242442422424%+",
+"+.$454545444545%+",
+"+.$676676656767%+",
+"+.$689689696966%+",
+"+0%%%%%%%%%%%%%a+",
+"b+++++++++++++++b"};
 
 static  GdkPixmap* gen_probability_pixmap(gint score, struct _transmatcherdialog * matcher)
 {
@@ -329,7 +374,7 @@ static void downloaded_transaction_refresh_gui( struct _transmatcherdialog * mat
 				   NULL);
  
   gtk_clist_set_row_height        (matcher->downloaded_clist,
-				   0);
+				   23);
 }
 
 
@@ -514,7 +559,9 @@ on_matcher_apply_clicked (GtkButton *button,
 		  xaccSplitSetReconcile(transaction_info->selected_match_info->split,YREC);
 		  /*Set reconcile date to today*/
 		  xaccSplitSetDateReconciledSecs(transaction_info->selected_match_info->split,time(NULL));
-		  PERR("WRITEME:  ADD ONLINE ID HERE");
+		  /* Copy the online id to the reconciled transaction, so the match will be remembered */ 
+		  gnc_import_set_trans_online_id(transaction_info->selected_match_info->trans, gnc_import_get_trans_online_id(transaction_info->trans));
+
 		  xaccTransCommitEdit(transaction_info->selected_match_info->trans);
 		  
 		  /* Erase the downloaded transaction */
@@ -670,7 +717,7 @@ static void split_find_match( gpointer data, gpointer user_data)
   /*Ignore the split if the transaction is open for edit, meaning it was just downloaded
     Ignore the split if the transaction has an online ID, unless overriden in prefs */
   if(xaccTransIsOpen(xaccSplitGetParent(split))==FALSE&&
-     (SHOW_TRANSACTIONS_WITH_UNIQUE_ID==TRUE||gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL))
+     (gnc_import_get_trans_online_id(xaccSplitGetParent(split))==NULL || SHOW_TRANSACTIONS_WITH_UNIQUE_ID==TRUE))
     {
       match_info = g_new0(struct _matchinfo,1);
     
@@ -768,8 +815,15 @@ static void split_find_match( gpointer data, gpointer user_data)
     
       match_info->clist_text[MATCHER_CLIST_MEMO]=xaccSplitGetMemo(split);/*Split memo*/
     
-      transaction_info->match_list = g_list_append(transaction_info->match_list,
+      if(match_info->probability >= TRANSACTION_DISPLAY_PROBABILITY_THRESHOLD)
+	{
+	  transaction_info->match_list = g_list_append(transaction_info->match_list,
 						   match_info);
+	}
+      else
+	{
+	  g_free(match_info);
+	}
     }
 }/* end split_find_match */
 
@@ -815,7 +869,7 @@ void gnc_import_add_trans(Transaction *trans)
   gint i;
   Account * dest_acct;
   gboolean trans_not_found=TRUE;
-  struct _transactioninfo * transaction_info;
+  struct _transactioninfo * transaction_info = NULL;
   gint row_number;
   struct _matchinfo * best_match;
   Split * source_split;
@@ -868,26 +922,23 @@ void gnc_import_add_trans(Transaction *trans)
       /*WRITEME:  sort match list and determine default action*/
       transaction_info->match_list=g_list_sort(transaction_info->match_list,
 					       compare_probability);
-      {
-	/*Transaction who's best match probability is below or equal to 
-	  this will be added as new by default TRANSACTION_ADD_PROBABILITY_THRESHOLD */
-	best_match=g_list_nth_data(transaction_info->match_list,0);
-	if(best_match != NULL && 
-	   best_match->probability >= TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD)
-	  {
-	    transaction_info->action=RECONCILE;
-	    transaction_info->selected_match_info=best_match;
-	  }
-	else if(best_match == NULL ||
-		best_match->probability<=TRANSACTION_ADD_PROBABILITY_THRESHOLD)
-	  {
-	    transaction_info->action=ADD;
-	  }
-	else
-	  {
-	    transaction_info->action=IGNORE;
-	  }
-      }
+      best_match=g_list_nth_data(transaction_info->match_list,0);
+      if(best_match != NULL && 
+	 best_match->probability >= TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD)
+	{
+	  transaction_info->action=RECONCILE;
+	  transaction_info->selected_match_info=best_match;
+	}
+      else if(best_match == NULL ||
+	      best_match->probability<=TRANSACTION_ADD_PROBABILITY_THRESHOLD)
+	{
+	  transaction_info->action=ADD;
+	}
+      else
+	{
+	  transaction_info->action=IGNORE;
+	}
+      
       transaction_info->previous_action=transaction_info->action;
       row_number = gtk_clist_append(matcher->downloaded_clist,
 				    (char **)(transaction_info->clist_text));
@@ -897,7 +948,6 @@ void gnc_import_add_trans(Transaction *trans)
 				  downloaded_trans_row_destroy_cb);
       downloaded_transaction_refresh_gui(matcher,
 					 transaction_info);
-      
     }
   return;
 }/* end gnc_import_add_trans() */
