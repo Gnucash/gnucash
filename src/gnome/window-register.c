@@ -807,7 +807,7 @@ regWindowLedger( GNCLedgerDisplay *ledger )
                                      gnc_glade_autoconnect_full_func,
                                      regData );
 
-  numRows = (guint)gnc_lookup_number_option ( "Register",
+  numRows = (guint)gnc_lookup_number_option ( "_+Advanced",
                                               "Number of Rows", 20.0 );
 
   gsr = gnc_split_reg_new( ledger, GTK_WINDOW(register_window), numRows,
@@ -826,7 +826,7 @@ regWindowLedger( GNCLedgerDisplay *ledger )
 
   gnc_reg_set_window_name( regData );
 
-  show_all = gnc_lookup_boolean_option( "Register",
+  show_all = gnc_lookup_boolean_option( "_+Advanced",
                                         "Show All Transactions",
                                         TRUE );
 

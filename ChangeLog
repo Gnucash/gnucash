@@ -1,3 +1,10 @@
+2002-11-07  David Hampton  <hampton@employees.org>
+
+	* src/engine/iso-4217-currencies.scm: Added a bunch of currencies. #95405
+
+	* various: Update references to preferences to read the new
+	"Advanced" settings. #97614
+
 2002-11-06  Derek Atkins  <derek@ihtfp.com>
 	* gnome/gnc-split-reg: export jump_to_* functions
 	* gnome/window-reconcile.c: re-enable the 'jump to blank'

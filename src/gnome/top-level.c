@@ -348,7 +348,7 @@ gnc_gui_init (SCM command_line)
     gnc_configure_auto_raise();
     auto_raise_callback_id = 
       gnc_register_option_change_callback(gnc_configure_auto_raise_cb,
-                                          NULL, "Register",
+                                          NULL, "_+Advanced",
                                           "Auto-Raise Lists");
 
     gnc_configure_negative_color();
@@ -712,12 +712,12 @@ gnc_configure_register_borders (void)
   gboolean use_vertical_lines;
   gboolean use_horizontal_lines;
 
-  use_vertical_lines = gnc_lookup_boolean_option("Register",
+  use_vertical_lines = gnc_lookup_boolean_option("_+Advanced",
                                                  "Show Vertical Borders",
                                                  FALSE);
 
   
-  use_horizontal_lines = gnc_lookup_boolean_option("Register",
+  use_horizontal_lines = gnc_lookup_boolean_option("_+Advanced",
                                                    "Show Horizontal Borders",
                                                    FALSE);
 
@@ -749,7 +749,7 @@ gnc_configure_auto_raise (void)
 {
   gboolean auto_pop;
 
-  auto_pop = gnc_lookup_boolean_option("Register", "Auto-Raise Lists", TRUE);
+  auto_pop = gnc_lookup_boolean_option("_+Advanced", "Auto-Raise Lists", TRUE);
 
   gnc_combo_cell_set_autopop (auto_pop);
 }

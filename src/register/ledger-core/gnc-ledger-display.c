@@ -748,7 +748,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
   ld->get_parent = NULL;
   ld->user_data = NULL;
 
-  show_all = gnc_lookup_boolean_option ("Register",
+  show_all = gnc_lookup_boolean_option ("_+Advanced",
                                         "Show All Transactions",
                                         TRUE);
 

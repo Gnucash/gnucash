@@ -325,7 +325,7 @@ gnc_get_toolbar_style(void)
 GnomeMDIMode 
 gnc_get_mdi_mode(void) {
   GnomeMDIMode mode = GNOME_MDI_DEFAULT_MODE;
-  char * mode_string = gnc_lookup_multichoice_option("General",
+  char * mode_string = gnc_lookup_multichoice_option("_+Advanced",
                                                      "Application MDI mode",
                                                      "");
   if(!safe_strcmp(mode_string, "mdi-notebook")) {
@@ -418,7 +418,7 @@ gnc_get_window_size(const char *prefix, int *width, int *height)
   int w, h;
   char *name;
 
-  if (gnc_lookup_boolean_option("General", "Save Window Geometry", TRUE))
+  if (gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", TRUE))
   {
     name = g_strconcat(prefix, "_width", NULL);
     w = gnc_lookup_number_option("__gui", name, 0.0);
@@ -458,7 +458,7 @@ gnc_save_window_size(const char *prefix, int width, int height)
   char *name;
   gboolean save;
 
-  save = gnc_lookup_boolean_option("General", "Save Window Geometry", FALSE);
+  save = gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", FALSE);
 
   name = g_strconcat(prefix, "_width", NULL);
   if (save)

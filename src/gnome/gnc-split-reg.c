@@ -335,7 +335,7 @@ gnc_split_reg_init( GNCSplitReg *gsr )
   gsr->width = -1;
   gsr->height = -1;
   gsr->disallowedCaps = 0;
-  gsr->numRows = (guint) gnc_lookup_number_option ( "Register",
+  gsr->numRows = (guint) gnc_lookup_number_option ( "_+Advanced",
                                                     "Number of Rows", 20.0 );
   gsr->read_only = FALSE;
 

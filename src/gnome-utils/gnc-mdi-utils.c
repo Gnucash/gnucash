@@ -915,7 +915,7 @@ gnc_mdi_new (const char *app_name,
   gnc_mdi->mdi_change_callback_id =
     gnc_register_option_change_callback (gnc_mdi_configure_mdi_cb, 
                                          gnc_mdi,
-                                         "General", "Application MDI mode");
+                                         "_+Advanced", "Application MDI mode");
 
   gnome_mdi_set_mode (gnc_mdi->mdi, gnc_get_mdi_mode ());
 
