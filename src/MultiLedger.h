@@ -91,8 +91,11 @@ extern void        xaccTransDisplayRefresh (Transaction *trans);
 
 /* 
  * redisplay/redraw only the indicated window.
+ * both routines do same thing, they differ only by the argument they
+ * take.
  */
 extern void        xaccLedgerDisplayRefresh (xaccLedgerDisplay *);
+extern void        xaccRegisterRefresh (SplitRegister *);
 
 /* 
  * close the window 

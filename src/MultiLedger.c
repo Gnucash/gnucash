@@ -44,7 +44,12 @@ static xaccLedgerDisplay **fullList = NULL;    /* all registers */
 
 /********************************************************************\
  * Ledger utilities                                                 *
- * should replace with glib calls, as per g* style guides.          *
+ * Although these seem like they might be replacable with stock     *
+ * list handling calls, I want to leave them like this for now,     *
+ * since they manipulate global variables.  If this code ever       *
+ * gets multi-threaded, access and edit of these globals will have  *
+ * to be controlled with mutexes, and these utility routines        *
+ * present a rather natural place for the locks to be placed.       *
 \********************************************************************/
 
 int 
@@ -395,6 +400,28 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
      (regData->redraw) (regData);
    }
 
+}
+
+/********************************************************************\
+ * refresh only the indicated register window                       *
+\********************************************************************/
+
+void 
+xaccRegisterRefresh (SplitRegister *splitreg)
+{
+   xaccLedgerDisplay *regData;
+   int n;
+
+   /* find the ledger which contains this register */
+   n = 0; regData = fullList[n];
+   while (regData) {
+      if (splitreg == regData->ledger) {
+        regData->dirty = 1;
+        xaccLedgerDisplayRefresh (regData);
+        return;
+      }
+      n++; regData = fullList[n];
+   }
 }
 
 /********************************************************************\
