@@ -1,3 +1,8 @@
+2003-02-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/window-register.c: fix the query code to use the correct
+	  param list.  Fixes bug #104951
+
 2003-01-31  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-import/qif-file.scm: change the way that

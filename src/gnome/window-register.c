@@ -435,7 +435,7 @@ gnc_register_set_date_range(RegWindow *regData)
 
   toggle = GTK_TOGGLE_BUTTON(regDateData->show_earliest);
 
-  date_param = gncQueryBuildParamList(TRANS_DATE_POSTED, SPLIT_TRANS, NULL);
+  date_param = gncQueryBuildParamList(SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
   gncQueryPurgeTerms (query, date_param);
   g_slist_free(date_param);
 
@@ -935,8 +935,8 @@ regWindowLedger( GNCLedgerDisplay *ledger )
                                         TRUE );
 
   {
-    GSList *date_param = gncQueryBuildParamList(TRANS_DATE_POSTED,
-						SPLIT_TRANS, NULL);
+    GSList *date_param = gncQueryBuildParamList(SPLIT_TRANS, TRANS_DATE_POSTED,
+						NULL);
     Query *q = gnc_ledger_display_get_query (regData->ledger);
     has_date = gncQueryHasTermType (q, date_param);
     g_slist_free(date_param);
