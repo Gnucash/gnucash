@@ -76,6 +76,9 @@ void xaccDestroyBasicCell (BasicCell *cell)
 
    /* help prevent access to freed memory */
    xaccInitBasicCell (cell);
+
+   /* free the object itself */
+   free (cell);
 }
 
 /* ===================================================== */
