@@ -8,6 +8,7 @@ test-xml2-is-file
 test-load-xml2
 test-load-example-account
 test-xml-commodity
+test-xml-pricedb
 test-xml-transaction
 test-save-in-lang
 .deps
