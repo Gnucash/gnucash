@@ -665,7 +665,7 @@ Do you want to continue anyway?\n");
   
   todaysDate( &(trans->date) );
   trans->num         = XtNewString("");
-  trans->description = XtNewString("Opening Balance\0");
+  trans->description = XtNewString("Opening Balance");
   trans->memo        = XtNewString("");
   
   /* add the new transaction to the account */
