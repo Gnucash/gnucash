@@ -6,7 +6,6 @@ src/backend/file/test/test-dom-parser1.c
 src/backend/file/test/test-kvp-frames.c
 src/backend/file/test/test-load-example-account.c
 src/backend/file/test/test-load-xml2.c
-src/backend/file/test/test-save-in-lang.c
 src/backend/file/test/test-string-converters.c
 src/backend/file/test/test-xml-account.c
 src/backend/file/test/test-xml-commodity.c
@@ -15,6 +14,7 @@ src/backend/file/test/test-xml2-is-file.c
 src/backend/file/test/test-file-stuff.c
 src/backend/file/test/test-date-converting.c
 src/backend/file/test/test-xml-pricedb.c
+src/backend/file/test/test-save-in-lang.c
 src/backend/file/gnc-account-xml-v2.c
 src/backend/file/gnc-backend-file.c
 src/backend/file/gnc-commodity-xml-v2.c
@@ -22,7 +22,6 @@ src/backend/file/gnc-freqspec-xml-v2.c
 src/backend/file/gnc-pricedb-xml-v1.c
 src/backend/file/gnc-schedxaction-xml-v2.c
 src/backend/file/gnc-transaction-xml-v2.c
-src/backend/file/gncmod-backend-file.c
 src/backend/file/io-example-account.c
 src/backend/file/io-gncbin-r.c
 src/backend/file/io-gncxml-gen.c
@@ -35,6 +34,7 @@ src/backend/file/sixtp-stack.c
 src/backend/file/sixtp-to-dom-parser.c
 src/backend/file/sixtp-utils.c
 src/backend/file/sixtp.c
+src/backend/file/gncmod-backend-file.c
 src/backend/rpc/RpcBackend.c
 src/backend/rpc/RpcServer.c
 src/backend/rpc/RpcSock.c
@@ -151,6 +151,9 @@ src/engine/test-core/test-engine-stuff.c
 src/engine/test-core/gncmod-test-engine.c
 src/app-file/gnc-file.c
 src/app-file/gncmod-app-file.c
+src/app-file/gnome/gnc-file-history.c
+src/app-file/gnome/gncmod-app-file-gnome.c
+src/app-file/gnome/gnc-file-dialog.c
 src/experimental/cgi-bin/fastcgi-hello.c
 src/experimental/cgi-bin/gnc-server.c
 src/experimental/cgi-bin/hello.c
@@ -191,7 +194,6 @@ src/gnome/dialog-account.c
 src/gnome/dialog-column-view.c
 src/gnome/dialog-commodities.c
 src/gnome/dialog-dup-trans.c
-src/gnome/dialog-filebox.c
 src/gnome/dialog-fincalc.c
 src/gnome/dialog-find-transactions.c
 src/gnome/dialog-new-user.c
@@ -207,20 +209,19 @@ src/gnome/dialog-tax-info.c
 src/gnome/dialog-totd.c
 src/gnome/dialog-transfer.c
 src/gnome/dialog-userpass.c
+src/gnome/reconcile-list.c
+src/gnome/window-main.c
 src/gnome/druid-hierarchy.c
 src/gnome/druid-stock-split.c
-src/gnome/file-history.c
 src/gnome/window-help.c
+src/gnome/top-level.c
 src/gnome/gnc-network.c
 src/gnome/gnc-splash.c
 src/gnome/gnucash.keys.in
 src/gnome/mainwindow-account-tree.c
-src/gnome/reconcile-list.c
-src/gnome/top-level.c
+src/gnome/window-reconcile.c
 src/gnome/window-acct-tree.c
 src/gnome/window-main-summarybar.c
-src/gnome/window-main.c
-src/gnome/window-reconcile.c
 src/gnome/window-register.c
 src/gnome/window-report.c
 src/gnome/gnucash.desktop.in
