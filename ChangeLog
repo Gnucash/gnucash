@@ -1,3 +1,31 @@
+2000-02-29  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/prefs.scm: converted account type and account field
+ 	options to list options.
+
+	* src/register/gnome/combocell-gnome.c (leaveCombo): if a new
+ 	value is returned, also set the same value as the cell value.
+
+	* Makefile.in: added 'unfinished' to qt compile target info.
+
+2000-02-28  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/options.scm: added a list option
+
+	* src/scm/report/hello-world.scm: added a demo list option
+
+	* src/gnome/dialog-options.c: added implementation of list options.
+
+	* src/engine/QIFIO.c (xaccParseQIFDate): fix for 4-digit dates.
+	(xaccParseQIFDate): fix for x/x' 00 dates, which are an old
+	format for 2000 dates.
+
+	* src/scm/report/average-balance.scm: fix report to work when
+ 	there are no accounts.
+
+	* src/scm/report/transaction-report.scm: initialize the inflow and
+ 	outflow variables to zero each time the report is run.
+
 2000-02-27  Heath Martin  <martinh@pegasus.cc.ucf.edu>
 
 	* src/gnome/top-level.c (gnc_configure_register_borders): Add

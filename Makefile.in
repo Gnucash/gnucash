@@ -40,8 +40,8 @@ default:
 	@echo "motif-static    statically linked motif version"
 	@echo "gnome           gnome/gtk version"
 	@echo "gnome-static    gnome/gtk statically linked version"
-	@echo "qt              kde/qt version"
-	@echo "qt-static       kde/qt statically linked version"
+	@echo "qt              kde/qt version (unfinished)"
+	@echo "qt-static       kde/qt statically linked version (unfinished)"
 	@echo " "
 
 # This inclusion must come after the first target, and after the
