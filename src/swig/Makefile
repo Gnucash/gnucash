@@ -21,41 +21,41 @@ all: guile perl5
 
 # This is .PHONY because it has to be re-generated *every* time.  Who
 # knows when headers are added to the engine dir?
-xacc.i:
-	@echo "%module xacc" > xacc.i
-	@echo "%{" >> xacc.i
-	@($(foreach hdr,${SWIG_BASENAMES},echo "#include <${hdr}>"; )) >> xacc.i
-	@echo "%}" >> xacc.i
-	@($(foreach hdr,${SWIG_BASENAMES},echo %include ${hdr}; )) >> xacc.i
-.PHONY: xacc.i
+gnucash.i:
+	@echo "%module gnucash" > gnucash.i
+	@echo "%{" >> gnucash.i
+	@($(foreach hdr,${SWIG_BASENAMES},echo "#include <${hdr}>"; )) >> gnucash.i
+	@echo "%}" >> gnucash.i
+	@($(foreach hdr,${SWIG_BASENAMES},echo %include ${hdr}; )) >> gnucash.i
+.PHONY: gnucash.i
 
-%_wrap.c: xacc.i
+%_wrap.c: gnucash.i
 
 ##### Guile
 
-guile: guile/xacc-guile
+guile: guile/gnucash-guile
 .PHONY: guile
 
 ##### Guile
 
-xacc-guile: xacc-guile.o xacc-guile_wrap.o $(LIBENG) 
+gnucash-guile: gnucash-guile.o gnucash-guile_wrap.o $(LIBENG) 
 
-guile/xacc-guile_wrap.c: xacc.i ${SWIG_HDRS}
+guile/gnucash-guile_wrap.c: gnucash.i ${SWIG_HDRS}
 	swig -I../engine -guile -o $@ $< 
 
-guile/xacc-guile: guile/xacc-guile.o guile/xacc-guile_wrap.o $(LIBENG) 
+guile/gnucash-guile: guile/gnucash-guile.o guile/gnucash-guile_wrap.o $(LIBENG) 
 	${CC} $^  -lguile -lreadline -lm -o $@
-CLEANFILES += guile/xacc-guile
+CLEANFILES += guile/gnucash-guile
 
 ##### Perl5
 
-perl5: perl5/xacc.so
+perl5: perl5/gnucash.so
 
-perl5/xacc.so: perl5/xacc-perl5_wrap.c $(LIBENG) 
+perl5/gnucash.so: perl5/gnucash-perl5_wrap.c $(LIBENG) 
 	${CC} ${CFLAGS} -shared $^ -lm -o $@ -Dbool=char -fpic
-CLEANFILES += perl5/xacc.so
+CLEANFILES += perl5/gnucash.so
 
-perl5/xacc-perl5_wrap.c: xacc.i ${SWIG_HDRS}
+perl5/gnucash-perl5_wrap.c: gnucash.i ${SWIG_HDRS}
 	swig -I../engine -perl5 -o $@ $< 
 
 clean:
