@@ -248,7 +248,7 @@
     pagename name-width
     (string-append sort-tag "a")
     (N_ "Width of plot in pixels.") default-width
-    100 1000 0 1))
+    100 20000 0 5))
 
   (gnc:register-option
    options
@@ -256,7 +256,7 @@
     pagename name-height
     (string-append sort-tag "b")
     (N_ "Height of plot in pixels.") default-height
-    100 1000 0 1)))
+    100 20000 0 5)))
 
 ;; A multicoice option for the marker of a scatter plot.
 (define (gnc:options-add-marker-choice!

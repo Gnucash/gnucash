@@ -1,3 +1,16 @@
+2001-05-24  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/average-balance.scm: made strings more
+	consistent.
+
+	* src/scm/options-utilities.scm: adjusted the upper bound for plot
+	size.
+
+	* src/gnome/dialog-column-view.c: use menu-name in report-list.
+
+	* src/scm/report.scm (gnc:report-menu-name),
+	(gnc:report-template-menu-name/name): added functions.
+
 2001-05-24  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* doc/sgml/C/gnucash.sgml: add references to new files.

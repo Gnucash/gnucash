@@ -76,19 +76,21 @@ gnc_column_view_edit_destroy(gnc_column_view_edit * view) {
 static void
 update_display_lists(gnc_column_view_edit * view) {
   SCM   get_names = gh_eval_str("gnc:all-report-template-names");
+  SCM   template_menu_name = gh_eval_str("gnc:report-template-menu-name/name");
+  SCM   report_menu_name = gh_eval_str("gnc:report-menu-name");
   SCM   find_report = gh_eval_str("gnc:find-report");
   SCM   get_options = gh_eval_str("gnc:report-options");
-  SCM   get_option  = gh_eval_str("gnc:lookup-option");
-  SCM   get_value  = gh_eval_str("gnc:option-value");
+  SCM   report_name = gh_eval_str("gnc:report-name");
   SCM   names = gh_call0(get_names);
   SCM   contents = 
     gnc_option_db_lookup_option(view->odb, "__general", "report-list",
                                 SCM_BOOL_F);
-  SCM   this_report, this_options, this_name;
+  SCM   this_report, this_name;
   SCM   selection;
   char  * name[3];
   int   row, i;
 
+  /* Update the list of available reports (left selection box). */
   row = view->available_selected;
 
   if(gh_list_p(view->available_list) && !gh_null_p (view->available_list)) {
@@ -109,7 +111,8 @@ update_display_lists(gnc_column_view_edit * view) {
     for(i = 0; !gh_null_p(names); names = gh_cdr(names), i++) {
       if (gh_equal_p (gh_car(names), selection))
         row = i;
-      name[0] = gh_scm2newstr(gh_car(names), NULL);      
+      name[0] = gh_scm2newstr(gh_call1(template_menu_name, gh_car(names)),
+			      NULL);
       gtk_clist_append(view->available, name);
       free(name[0]);
     }
@@ -118,6 +121,7 @@ update_display_lists(gnc_column_view_edit * view) {
   gtk_clist_thaw(view->available);
 
 
+  /* Update the list of selected reports (right selection box). */
   row = view->contents_selected;
 
   if(gh_list_p(view->contents_list) && !gh_null_p (view->contents_list)) {
@@ -140,11 +144,8 @@ update_display_lists(gnc_column_view_edit * view) {
         row = i;
 
       this_report = gh_call1(find_report, gh_caar(contents));
-      this_options = gh_call1(get_options, this_report);
-      this_name = gh_call1(get_value, 
-                           gh_call3(get_option, this_options, 
-                                    gh_str02scm("General"), 
-                                    gh_str02scm("Report name")));
+      /* this_name = gh_call1(report_name, this_report); */
+      this_name = gh_call1(report_menu_name, this_report);
       name[0] = gh_scm2newstr(this_name, NULL);
       name[1] = g_strdup_printf("%d", gh_scm2int(gh_cadr(gh_car(contents))));
       name[2] = g_strdup_printf("%d", gh_scm2int(gh_caddr(gh_car(contents))));

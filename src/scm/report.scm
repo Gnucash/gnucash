@@ -213,6 +213,13 @@
         (gnc:report-template-new-options templ)
         #f)))
 
+(define (gnc:report-template-menu-name/name template-name)
+  (let ((templ (hash-ref *gnc:_report-templates_* template-name)))
+    (if templ
+	(or (gnc:report-template-menu-name templ)
+	    (gnc:report-template-name templ))
+        #f)))
+
 (define (gnc:report-template-new-options report-template)
   (let ((generator (gnc:report-template-options-generator report-template))
         (namer 
@@ -371,6 +378,14 @@
                     (gnc:report-type report))))
     (if template
         (gnc:report-template-export-thunk template)
+        #f)))
+
+(define (gnc:report-menu-name report)
+  (let ((template (hash-ref  *gnc:_report-templates_* 
+			     (gnc:report-type report))))
+    (if template
+        (or (gnc:report-template-menu-name template)
+	    (gnc:report-name report))
         #f)))
 
 (define (gnc:report-name report) 

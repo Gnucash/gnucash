@@ -36,7 +36,7 @@
        options gnc:pagename-general optname-from-date optname-to-date "a")
 
       (gnc:options-add-interval-choice! 
-       options gnc:pagename-general optname-stepsize "b" 'TwoWeekDelta)
+       options gnc:pagename-general optname-stepsize "b" 'MonthDelta)
 
       ;; Report currency
       (gnc:options-add-currency! 
@@ -88,12 +88,10 @@
        (gnc:make-list-option
         gnc:pagename-display (N_ "Plot Type")
         "c" (N_ "The type of graph to generate") (list 'AvgBalPlot)
-        (list (list->vector
-               (list 'AvgBalPlot (N_ "Average") (N_ "Average Balance")))
-              (list->vector
-               (list 'GainPlot (N_ "Net Gain") (N_ "Net Gain")))
-              (list->vector
-               (list 'GLPlot (N_ "Gain/Loss") (N_ "Gain And Loss"))))))
+        (list 
+	 (vector 'AvgBalPlot (N_ "Average") (N_ "Average Balance"))
+	 (vector 'GainPlot (N_ "Profit") (N_ "Profit (Gain minus Loss)"))
+	 (vector 'GLPlot (N_ "Gain/Loss") (N_ "Gain And Loss")))))
 
       (gnc:options-add-plot-size! 
        options gnc:pagename-display (N_ "Plot Width") (N_ "Plot Height")
@@ -109,9 +107,11 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (define columns
-    (list (_ "Period start") (_ "Period end") (_ "Avg Bal") 
-          (_ "Max Bal") (_ "Min Bal") (_ "Total In") 
-          (_ "Total Out") (_ "Net Change") ))
+    ;; Watch out -- these names should be consistent with the display
+    ;; option where you choose them, otherwise users are confused.
+    (list (_ "Period start") (_ "Period end") (_ "Average") 
+          (_ "Maximum") (_ "Minimum") (_ "Gain") 
+          (_ "Loss") (_ "Profit") ))
   
   ;; analyze-splits crunches a split list into a set of period
   ;; summaries.  Each summary is a list of (start-date end-date
