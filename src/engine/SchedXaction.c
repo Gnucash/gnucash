@@ -70,7 +70,6 @@ xaccSchedXactionInit( SchedXaction *sx, GNCBook *book)
         sx->advanceRemindDays = 0;
 	sx->dirty = TRUE;
 
-/*        sx->templateSplits = NULL; */
         /* create a new template account for our splits */
         sx->template_acct = xaccMallocAccount();
         name = guid_to_string( &sx->guid );
@@ -223,13 +222,25 @@ xaccSchedXactionSetEndDate( SchedXaction *sx, GDate *newEnd )
 {
   if ( g_date_valid( newEnd ) ) {
     if ( g_date_compare( newEnd, &sx->start_date ) < 0 ) {
-      /* FIXME:error
-	 error( "New end date before start date" ); */
+      /* XXX: I reject the bad data - is this the right 
+       * thing to do <rgmerk>.
+       * This warning is only human readable - the caller
+       * doesn't know the call failed.  This is bad
+       */
+      PWARN( "New end date before start date" ); 
     }
+    else
+    {
+      sx->end_date = *newEnd;
+      sx->dirty = TRUE;
+    }
+   
   }
-  
-  sx->end_date = *newEnd;
-  sx->dirty = TRUE;
+  else
+  {
+    PWARN("New end date invalid");
+  }
+  return;
 }
 
 GDate*
@@ -278,11 +289,15 @@ xaccSchedXactionSetRemOccur( SchedXaction *sx,
 {
   /* FIXME This condition can be tightened up */
   if ( numRemain > sx->num_occurances_total ) {
-    /* FIXME:error
-       error( "more remaining occurances than total" ); */
+    PWARN("The number remaining is greater than the \
+total occurrences");
+    
   }
-  sx->num_occurances_remain = numRemain;
-  sx->dirty = TRUE;
+  else
+  {
+    sx->num_occurances_remain = numRemain;
+    sx->dirty = TRUE;
+  }
   return;
 }
 
@@ -456,23 +471,6 @@ xaccSchedXactionGetSplits( SchedXaction *sx )
   g_return_val_if_fail( sx, NULL );
   return xaccAccountGetSplitList(sx->template_acct);
 }
-
-
-/* 
- * FIXME: This can be removed, I think <rgmerk>
- */ 
-
-#if 0
-void
-xaccSchedXactionSetSplits( SchedXaction *sx, GList *newSplits )
-{
-        g_return_if_fail( sx );
-        sx->templateSplits = newSplits;
-	return;
-}
-
-#endif
-
 
 void
 xaccSchedXactionSetDirtyness( SchedXaction *sx, gboolean dirty_p)

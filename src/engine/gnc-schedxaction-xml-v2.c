@@ -121,6 +121,14 @@ static short module = MOD_SX;
 #define SX_SLOTS                "sx:slots"
 
 
+/*
+ * FIXME: These should be defined in a header somewhere
+ */
+
+#define GNC_ACCOUNT_TAG         "gnc:account"
+#define GNC_TRANSACTION_TAG     "gnc:transaction"
+#define GNC_SCHEDXACTION_TAG    "gnc:schedxaction"
+
 const gchar *schedxaction_version_string = "1.0.0";
 
 xmlNodePtr
@@ -135,7 +143,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     templ_acc_guid = xaccAccountGetGUID(sx->template_acct);
 
     /* FIXME: this should be the same as the def in io-gncxml-v2.c */
-    ret = xmlNewNode( NULL, "gnc:schedxaction" );
+    ret = xmlNewNode( NULL, GNC_SCHEDXACTION_TAG );
 
     xmlSetProp( ret, "version", schedxaction_version_string );
 
@@ -466,7 +474,12 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
             }
             DEBUG( "Got template account with name \"%s\" for SX with GUID \"%s\"",
                    xaccAccountGetName( acct ), id );
-            /* FIXME: free existing template account. */
+            /* FIXME: free existing template account. 
+	     *  HUH????? We only execute this if there isn't
+	     * currently an existing template account, don't we?
+	     * <rgmerk>
+	     */
+
             sx->template_acct = acct;
     }
 
@@ -532,13 +545,10 @@ tt_trn_handler( xmlNodePtr node, gpointer data )
 }
 
 
-/*
- * FIXME: These tags should be #defined elsewhere 
- */
 
 struct dom_tree_handler tt_dom_handlers[] = {
-        { "gnc:account",     tt_act_handler, 0, 0 },
-        { "gnc:transaction", tt_trn_handler, 0, 0 },
+        { GNC_ACCOUNT_TAG,     tt_act_handler, 0, 0 },
+        { GNC_TRANSACTION_TAG, tt_trn_handler, 0, 0 },
 };
 
 static gboolean

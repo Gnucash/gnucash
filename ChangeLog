@@ -1,3 +1,12 @@
+2001-08-02  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/SchedXaction.c (xaccSchedXactionSetEndDate): Reject
+	bad data, log warning. (xaccSchedXactionSetRemOccur): ditto.
+	(xaccSchedXactionSetSplits): remove already-#if'd out function.
+
+	* src/engine/gnc-schedxaction-xml-v2.c: #define more tags.
+	
+
 2001-08-01  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/SchedXaction.{ch}: modified indenting to 2 spaces.
