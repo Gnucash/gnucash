@@ -1,3 +1,8 @@
+2003-03-01  Christian Stimming  <stimming@tuhh.de>
+
+	* po/sk.po: Updated Slovak translation by Zdenko Podobný
+	<zdpo@mailbox.sk>.
+
 2003-02-26  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-backend.c: Pull from HEAD
