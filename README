@@ -11,68 +11,60 @@ The next stable, production version will be gnucash-1.2.x
 
 GnuCash
 -------
-GnuCash is an application to keep track of your finances.  It is similar in
-concept to Quicken(TM).  Although GnuCash still lacks the advanced
-features of Quicken, it does have the basic functionality.  Some
-of the features of GnuCash are:
+GnuCash is a personal finance manager.  A check-book like 
+register GUI allows you to enter and track bank accounts,
+stocks, income and even currency trades.  The interface is 
+designed to be simple and easy to use, but is backed with 
+double-entry accounting principles to ensure balanced books.
 
-  - Multiple Accounts
-  - Each account keeps a running balance and
-    a reconciled balance, so you can keep track
-    of the checks that have clear your account.
-  - A simple interface.  If you can use the
-    register in the back of your checkbook,
-    you can use GnuCash.
-  - QuickFill... if you begin typing a description
-    in the description fields, and it matches an
-    previous transaction, hitting <TAB> will copy
-    the previous transaction.  Handy if you have
-    similar transactions on a regular basis.
-    (such as depositing your paycheck every week :)
-  - Stock/Mutual Fund Portfolios.  Track stocks
+Features include:
+
+  - An easy-to-use interface.  If you can use the
+    register in the back of your checkbook, you 
+    can use GnuCash.  Type directly into the register,
+    tab between fields, and use quickfill to
+    automatically complete the transaction.
+  - Reconcile window  with running reconciled 
+    and cleared balances makes reconciliation easy.
+  - Stock/Mutual Fund Portfolios:  Track stocks
     individually (one per account) or in portfolio
     of accounts (a group of accounts that can be 
     displayed together).  
-  - Multiple Currencies. Multiple currencies are 
-    supported, as well as currency trading accounts.
-    Note this is still broken in many ways...
-  - Quicken File Import. Import Quicken QIF files.
-  - Reports. Display Balance, Profit&Loss reports,
-    or print them in HTML form.
-
-Advanced Features
------------------
-GnuCash offers some features not usually found
-in simpler accounting programs.
-  - Sub-accounts: A master account can have a hierarchy
+  - Multiple Currencies & Currency Trading: Multiple 
+    currencies are supported and can be bought and
+    sold (traded).  Currency movements between accounts
+    are fully balanced when double-entry is enabled.
+    (Some aspects of mutiple currency support are not 
+    fully implemented.)
+  - Quicken File Import: Import Quicken QIF style files.
+    QIF files are automtically merged to eliminate 
+    duplicate transactions.
+  - Reports: Display Balance Sheet, Profit&Loss reports,
+    or print them as HTML.
+  - Chart of Accounts: A master account can have a hierarchy
     of detail accounts underneath it.  This allows similar
     account types (e.g. Cash, Bank, Stock) to be grouped 
     into one master account (e.g. Assets).
-  - Double Entry: 
-    Every transaction can appear in two
-    accounts; one account is debited and the other is 
-    credited with exactly the same amount.  With 
-    double-entry, a transaction edited in one window 
-    will be automatically updated in all other windows 
-    showing that transaction, and in both of the 
-    accounts.
-  - Income/Expense Account Types (Categories).   
-    When used properly 
-    with the double-entry feature, these can be used 
-    to create both Balance Sheet and Profits &amp; Losses
-    reports.  For example, savings account interest,
-    stock dividends, or paychecks can be marked as 
-    both a deposit in a bank account, and as income in 
-    an Income account type, using the double-entry 
-    (transfer) feature.  Similarly, credit card charges
-    can be noted in the credit card account, as well 
-    as in a corresponding expense account.
+  - Split Transactions: A single transaction can be split
+    into several pieces to record taxes, fees, and
+    other compund entries.
+  - Double Entry: When enabled, every transaction must 
+    debit one account and credit another by an equal amount.
+    This ensures that the "books balance": that the 
+    difference between income and outflow exactly equals
+    the sum of all assets, be they bank, cash, stock or other.
+  - Income/Expense Account Types (Categories):  
+    These serve not only to categorize your cash flow, 
+    but when used properly with the double-entry feature,
+    these can provide an accurate Profit&Loss statement.
   - General Ledger: Multiple accounts can be displayed 
     in one register window at the same time.  This can
     ease the trouble of tracking down typing/entry errors.
     It also provides a convenient way of viewing a
     portfolio of many stocks, by showing all transactions
     in that portfolio.
+  - Written in C, with perl, scheme and tcl support for easy
+    configuration and extensibility.
 
 Home Page:
 ----------
