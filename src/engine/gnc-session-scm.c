@@ -59,11 +59,11 @@
 static SCM gnc_session_scm_gui_cb = SCM_BOOL_F;
 
 static void
-gnc_session_scm_gui_cb_helper (const char *message, int percent)
+gnc_session_scm_gui_cb_helper (const char *message, double percent)
 {
   if (gnc_session_scm_gui_cb != SCM_BOOL_F) {
     SCM string = gh_str02scm((char*)message);
-    SCM scm_percent = gh_long2scm(percent);
+    SCM scm_percent = gh_double2scm(percent);
     gh_call2 (gnc_session_scm_gui_cb, string, scm_percent);
   }
 }

@@ -134,7 +134,7 @@ void gnc_file_quit (void);
 typedef gboolean (*GNCCanCancelSaveCB) (void);
 void gnc_file_set_can_cancel_callback (GNCCanCancelSaveCB cb);
 
-typedef void (*GNCFilePercentageFunc) (const char *message, int percent);
+typedef void (*GNCFilePercentageFunc) (const char *message, double percent);
 void gnc_file_set_pct_handler (GNCFilePercentageFunc file_percentage_func);
 
 typedef void (*GNCShutdownCB) (int);

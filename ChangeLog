@@ -1,3 +1,19 @@
+2003-01-13  David Hampton  <hampton@employees.org>
+
+	* src/engine/engine-helpers.c: Make the gnc_scm_to_gint64()
+	function work with either guile 1.4 or guile 1.6.
+
+	* src/app-file/gnc-file.h:
+	* src/engine/Backend.h:
+	* src/engine/gnc-session-scm.c:
+	* src/engine/gnc-session.h:
+	* src/gnome-utils/gnc-mdi-utils.c:
+	* src/gnome-utils/gnc-mdi-utils.h:
+	* src/gnome-utils/gw-gnome-utils-spec.scm:
+	* src/report/report-system/report-utilities.scm: Make the progress
+	bar argument a double instead of an int.  This gets around an
+	issue with guile 1.6.
+
 2003-01-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/option-util.c: gh_str2scm() takes a char*, not a

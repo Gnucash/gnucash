@@ -466,7 +466,7 @@ be left empty")
    '<gw:void>
    "gnc_mdi_show_progress"
    '(((<gw:mchars> caller-owned const) message)
-     (<gw:int> percentage))
+     (<gw:double> percentage))
    "Autosize the columns of a clist including the titles.")
 
   (gw:wrap-function

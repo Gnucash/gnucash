@@ -683,7 +683,7 @@
 			 0))
 
 (define (gnc:report-percent-done percent)
-  (gnc:mdi-show-progress #f (truncate percent)))
+  (gnc:mdi-show-progress #f percent))
 
 (define (gnc:report-finished)
   (gnc:mdi-show-progress #f -1))

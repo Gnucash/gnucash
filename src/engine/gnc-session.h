@@ -150,7 +150,7 @@ void gnc_session_begin (GNCSession *session, const char * book_id,
  *    to make the book actually usable; it would not cause *all* of the
  *    data to be loaded.
  */
-typedef void (*GNCPercentageFunc) (const char *message, int percent);
+typedef void (*GNCPercentageFunc) (const char *message, double percent);
 void gnc_session_load (GNCSession *session,
 		       GNCPercentageFunc percentage_func);
 gboolean gnc_session_export (GNCSession *tmp_session,

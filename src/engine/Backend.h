@@ -95,6 +95,6 @@ typedef enum {
 
 typedef struct backend_s Backend;
 
-typedef void (*GNCBePercentageFunc) (const char *message, int percent);
+typedef void (*GNCBePercentageFunc) (const char *message, double percent);
 
 #endif /* XACC_BACKEND_H */

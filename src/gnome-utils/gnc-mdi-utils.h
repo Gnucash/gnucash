@@ -119,7 +119,7 @@ void gnc_mdi_child_refresh (GNCMDIChildInfo *child);
 GNCMDIInfo * gnc_mdi_get_current (void);
 gboolean gnc_mdi_has_apps (void);
 
-void gnc_mdi_show_progress (const char *message, int percentage);
+void gnc_mdi_show_progress (const char *message, double percentage);
 
 void gnc_app_set_title (GnomeApp *app);
 
