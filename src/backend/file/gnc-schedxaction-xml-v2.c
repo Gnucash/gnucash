@@ -264,7 +264,7 @@ sx_id_handler( xmlNodePtr node, gpointer sx_pdata )
     GUID        *tmp = dom_tree_to_guid( node );
 
     g_return_val_if_fail( tmp, FALSE );
-    xaccSchedXactionSetGUID(sx, *tmp);
+    xaccSchedXactionSetGUID(sx, tmp);
     g_free( tmp );
 
     return TRUE;
@@ -668,15 +668,13 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
                    xaccAccountGetName( acct ), id );
 
             /* FIXME: free existing template account. 
-	     *  HUH????? We only execute this if there isn't
-	     * currently an existing template account, don't we?
-	     * <rgmerk>
-	     */
+             *  HUH????? We only execute this if there isn't
+             * currently an existing template account, don't we?
+             * <rgmerk>
+             */
 
             sx->template_acct = acct;
     }
-
-    xaccSchedXactionSetDirtyness(sx, FALSE);
     xmlFreeNode( tree );
 
     return successful;

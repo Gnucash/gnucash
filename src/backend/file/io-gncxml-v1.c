@@ -2821,8 +2821,7 @@ txn_restore_after_child_handler(gpointer data_for_children,
   if(strcmp(child_result->tag, "slots") == 0) {
     kvp_frame *f = (kvp_frame *) child_result->data;
     g_return_val_if_fail(f, FALSE);
-    if(trans->kvp_data) kvp_frame_delete(trans->kvp_data);
-    trans->kvp_data = f;
+    qof_instance_set_slots(QOF_INSTANCE(trans),f);
     child_result->should_cleanup = FALSE;
   }
   return(TRUE);

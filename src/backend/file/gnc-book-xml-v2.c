@@ -183,7 +183,7 @@ book_id_handler (xmlNodePtr node, gpointer book_pdata)
     GUID *guid;
 
     guid = dom_tree_to_guid(node);
-    qof_book_set_guid(book, *guid);
+    qof_book_set_guid(book, guid);
 
     g_free(guid);
     
