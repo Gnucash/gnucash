@@ -24,7 +24,7 @@
 
 #include <gnome.h>
 
-#include "date.h"
+#include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "QueryCore.h"
 

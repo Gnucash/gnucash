@@ -30,7 +30,7 @@
 #define GNC_DATE_FORMAT_H 
 
 #include <gnome.h>
-#include "date.h"
+#include "gnc-date.h"
 
 #define GNC_DATE_FORMAT(obj)          GTK_CHECK_CAST (obj, gnc_date_format_get_type(), GNCDateFormat)
 #define GNC_DATE_FORMAT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_date_format_get_type(), GNCDateFormatClass)

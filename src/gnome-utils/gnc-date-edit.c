@@ -41,7 +41,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "date.h"
+#include "gnc-date.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
 #include "messages.h"
