@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.3.X\n"
-"POT-Creation-Date: 2000-06-12 15:20-0700\n"
-"PO-Revision-Date: 2000-06-04 23:00+0100\n"
+"Project-Id-Version: gnucash 1.4.X\n"
+"POT-Creation-Date: 2000-06-18 18:39-0700\n"
+"PO-Revision-Date: 2000-07-01 22:00+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -124,6 +124,8 @@ msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
 msgstr ""
+"Voulez-vous réellement marquer cette transaction comme non rapprochée?\n"
+"Faire celà peut rendre un futur rapprochement difficile!"
 
 # messages-i18n.c:25
 #: messages-i18n.c:26
@@ -151,7 +153,7 @@ msgid ""
 "probably shouldn't do this unless you're going to immediately add another "
 "split to bring the transaction back into balance."
 msgstr ""
-"Attention: l'effacement uniquement de toutes les répartitions fera de votre "
+"Attention: l'effacement de toutes les répartitions uniquement fera de votre "
 "compte, un compte non équilibré.Vous ne devez probablement pas faire celà à "
 "moins que vous n'alliez immédiatement ajouter une autre répartition qui "
 "amènera la transaction de retour comme équilibré."
@@ -213,7 +215,7 @@ msgstr ""
 
 # messages-i18n.c:34
 #: messages-i18n.c:35
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error writing the file\n"
 "     %s\n"
@@ -221,11 +223,13 @@ msgid ""
 "%s"
 msgstr ""
 "Il y a une erreur d'écriture du fichier\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 
 # messages-i18n.c:35
 #: messages-i18n.c:36
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error opening the file\n"
 "     %s\n"
@@ -233,11 +237,13 @@ msgid ""
 "%s"
 msgstr ""
 "Il y a une erreur d'ouverture du fichier\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 
 # messages-i18n.c:36
 #: messages-i18n.c:37
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error closing the file\n"
 "     %s\n"
@@ -245,7 +251,9 @@ msgid ""
 "%s"
 msgstr ""
 "Il y a une erreur de fermeture du fichier\n"
-"      %s."
+"      %s\n"
+"\n"
+"%s"
 
 # messages-i18n.c:37
 #: messages-i18n.c:38
@@ -325,35 +333,43 @@ msgstr "Vous avez besoin d'installer la librairie gnome-print."
 
 # messages-i18n.c:44
 #: messages-i18n.c:45
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "QIF file load failed:\n"
 "%s"
-msgstr "Le chargement du fichier QIF a échoué."
+msgstr ""
+"Le chargement du fichier QIF:\n"
+"%s a échoué."
 
 # messages-i18n.c:44
 #: messages-i18n.c:46
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "QIF file load warning:\n"
 "%s"
-msgstr "Le chargement du fichier QIF a échoué."
+msgstr ""
+"Alerte de chargement du fichier QIF:\n"
+"%s"
 
 # messages-i18n.c:44
 #: messages-i18n.c:47
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "QIF file parse failed:\n"
 "%s"
-msgstr "Le chargement du fichier QIF a échoué."
+msgstr ""
+"Le traitement/analyse du fichier QIF:\n"
+"%s a échoué."
 
 # messages-i18n.c:44
 #: messages-i18n.c:48
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "QIF file parse warning:\n"
 "%s"
-msgstr "Le chargement du fichier QIF a échoué."
+msgstr ""
+"Alerte de traitement/analyse du fichier QIF:\n"
+"%s"
 
 # messages-i18n.c:46
 #: messages-i18n.c:49
@@ -448,8 +464,8 @@ msgid ""
 "The values entered for this transaction are inconsistent.\n"
 "Which value would you like to have recalculated?\n"
 msgstr ""
-"Les valeurs entrees pour cette transaction sont incompatibles.\n"
-"Quelle valeur aimeriez-vous etre recalculee?\n"
+"Les valeurs entrées pour cette transaction sont contradictoires.\n"
+"Quelle valeur aimeriez-vous etre recalculée?\n"
 
 # messages-i18n.c:59
 #: messages-i18n.c:62
@@ -459,7 +475,7 @@ msgid ""
 "to %s.\n"
 "Is that what you want to do?"
 msgstr ""
-"Les types de tous les comptes parents et leurs sous-comptes doit être "
+"Les types de tous les comptes parents et leurs sous-comptes doivent être "
 "changés vers %s.\n"
 "Est-ce celà que vous voulez faire?"
 
@@ -470,7 +486,7 @@ msgid ""
 "The types of all the subaccounts must be changed to %s.\n"
 "Is that what you want to do?"
 msgstr ""
-"Les types de tous les sous-comptes doit être changés vers %s.\n"
+"Les types de tous les sous-comptes doivent être changés vers %s.\n"
 "Est-ce celà que vous voulez faire?"
 
 #: messages-i18n.c:64
@@ -502,7 +518,7 @@ msgid ""
 " must be different!"
 msgstr ""
 "Les comptes \"depuis\" et \"vers\" \n"
-" doivent etre differents!"
+" doivent être différents!"
 
 # messages-i18n.c:64
 #: messages-i18n.c:68
@@ -518,7 +534,7 @@ msgid ""
 msgstr ""
 "Vous devez spécifier un compte à transférer depuis, \n"
 "ou vers,ou l'un et l'autre, pour cette transaction; \n"
-"autrement il ne sera pas enregistré."
+"autrement elle ne sera pas enregistrée."
 
 # messages-i18n.c:66
 #: messages-i18n.c:70
@@ -581,7 +597,7 @@ msgstr "Copier la transaction sélectionnée."
 
 #: messages-i18n.c:82
 msgid "Enter a 3-letter ISO currency code such as USD (US Dollars)"
-msgstr ""
+msgstr "Entrer un code de monnaie ISO à 3 lettres tel que USD (US Dollars)"
 
 # messages-i18n.c:80
 #: messages-i18n.c:83
@@ -741,7 +757,7 @@ msgstr "Imprimer un chèque en utilisant un format standard"
 # messages-i18n.c:101
 #: messages-i18n.c:113
 msgid "Reconcile the selected account"
-msgstr "Rapprocher le compte sélectionné."
+msgstr "Rapprocher le compte sélectionné"
 
 # messages-i18n.c:102
 #: messages-i18n.c:114
@@ -783,22 +799,23 @@ msgstr "Sauvegarder le fichier sur le disque."
 # messages-i18n.c:108
 #: messages-i18n.c:121
 msgid "Identify and fix problems in the account"
-msgstr "Identifie et corrige les problèmes dans le compte."
+msgstr "Identifier et corriger les problèmes dans le compte."
 
 # messages-i18n.c:109
 #: messages-i18n.c:122
 msgid "Identify and fix problems in all the accounts"
-msgstr "Identifie et corrige les problèmes dans tous les comptes."
+msgstr "Identifier et corriger les problèmes dans tous les comptes."
 
 # messages-i18n.c:110
 #: messages-i18n.c:123
 msgid "Identify and fix problems in the account and its subaccounts"
-msgstr "Identifie et corrige les problèmes dans le compte et ces sous-comptes."
+msgstr ""
+"Identifier et corriger les problèmes dans le compte et ces sous-comptes."
 
 # messages-i18n.c:111
 #: messages-i18n.c:124
 msgid "Identify and fix problems in the accounts of this register"
-msgstr "Identifie et corrige les problèmes dans les comptes de ce registre."
+msgstr "Identifier et corriger les problèmes dans les comptes de ce registre."
 
 # messages-i18n.c:112
 #: messages-i18n.c:125
@@ -862,7 +879,7 @@ msgstr "Transfert de fonds depuis un compte vers un autre."
 # messages-i18n.c:122
 #: messages-i18n.c:137
 msgid "Enter the type of transaction, or choose one from the list"
-msgstr "Entrez le type de transaction,ou choisissez en une dans la liste"
+msgstr "Entrez le type de transaction, ou choisissez en une dans la liste"
 
 # messages-i18n.c:123
 #: messages-i18n.c:138
@@ -1173,7 +1190,7 @@ msgstr "Tout désélectionner"
 # messages-i18n.c:171
 #: messages-i18n.c:199
 msgid "Close Window"
-msgstr "Fermer la fenetre"
+msgstr "Fermer la fenêtre"
 
 # messages-i18n.c:172
 #: messages-i18n.c:200
@@ -1432,7 +1449,6 @@ msgstr "Montrer Tout"
 
 # messages-i18n.c:216
 #: messages-i18n.c:251
-#, fuzzy
 msgid "Show Income/Expense"
 msgstr "Montrer Revenus/Dépenses"
 
@@ -2182,9 +2198,8 @@ msgstr "Se retirer"
 
 # messages-i18n.c:351
 #: messages-i18n.c:402 po/guile_strings.txt:60
-#, fuzzy
 msgid "Withdrawal"
-msgstr "Se retirer"
+msgstr "Retiré"
 
 # po/guile_strings.txt:182
 #: messages-i18n.c:403
@@ -2297,7 +2312,7 @@ msgstr "Type de rapport de budget"
 # po/guile_strings.txt:24
 #: po/guile_strings.txt:27
 msgid "Balancing"
-msgstr "Equilibrer"
+msgstr "Equilibrage"
 
 #: po/guile_strings.txt:28
 msgid "Date (subtotal monthly)"
@@ -2434,7 +2449,7 @@ msgstr "Par défaut, montre toutes les transactions dans un compte"
 
 #: po/guile_strings.txt:59
 msgid "No amount display"
-msgstr ""
+msgstr "Pas de montant à afficher"
 
 # po/guile_strings.txt:52
 #: po/guile_strings.txt:61
@@ -3219,7 +3234,6 @@ msgid "Income.Salary.Taxable"
 msgstr "Revenus.Salaire.Imposable"
 
 #: po/guile_strings.txt:243
-#, fuzzy
 msgid "Only use 'debit' and 'credit' instead of informal synonyms"
 msgstr ""
 "Utiliser seulement 'débit' et 'crédit' à la place de synonymes informels"
@@ -3332,12 +3346,12 @@ msgstr "Affiche le rapport du budget."
 # messages-i18n.c:96
 #: po/guile_strings.txt:267
 msgid "Display the account?"
-msgstr "Affiche le compte?"
+msgstr "Afficher le compte?"
 
 # po/guile_strings.txt:219
 #: po/guile_strings.txt:268
 msgid "Display the cheque number?"
-msgstr "Affiche le numéro du chèque?"
+msgstr "Afficher le numéro du chèque?"
 
 #: po/guile_strings.txt:269
 msgid "Display N lines"
@@ -3484,8 +3498,8 @@ msgid ""
 "Display the other account?  (if this is a split transaction, this parameter "
 "is guessed)."
 msgstr ""
-"Affiche l'autre compte? (si c'est une transaction répartie, ce paramètre est "
-"deviné."
+"Afficher l'autre compte? (si c'est une transaction répartie, ce paramètre "
+"est deviné)."
 
 # po/guile_strings.txt:247
 #: po/guile_strings.txt:297
@@ -3510,7 +3524,7 @@ msgstr "Le caractère utilisé pour séparer les noms de comptes utilisables"
 # po/guile_strings.txt:251
 #: po/guile_strings.txt:301
 msgid "Report start date"
-msgstr "Date de départ du rapport"
+msgstr "Date de début du rapport"
 
 # po/guile_strings.txt:253
 #: po/guile_strings.txt:303
@@ -3643,7 +3657,7 @@ msgstr "Mauvaise option"
 # po/guile_strings.txt:281
 #: po/guile_strings.txt:333
 msgid "Display the Balance sheet report."
-msgstr "Affiche le rapport de la feuille du solde/bilan"
+msgstr "Affiche le rapport du bilan"
 
 # messages-i18n.c:116
 #: po/guile_strings.txt:334
@@ -3728,7 +3742,7 @@ msgstr ""
 # po/guile_strings.txt:294
 #: po/guile_strings.txt:348
 msgid "This is a multi choice option."
-msgstr "C'est une option à choix multiple"
+msgstr "C'est une option à choix multiples"
 
 # po/guile_strings.txt:295
 #: po/guile_strings.txt:349
@@ -3743,7 +3757,7 @@ msgstr "Bonjour, tout le monde!"
 # po/guile_strings.txt:261
 #: po/guile_strings.txt:351
 msgid "Sort & subtotal by account"
-msgstr "Trie et sous-total par compte"
+msgstr "Tri et sous-total par compte"
 
 # po/guile_strings.txt:297
 #: po/guile_strings.txt:352
@@ -4131,7 +4145,7 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: src/gnome/glade-gnc-dialogs.c:1707
 msgid "Find Transactions"
-msgstr "Transactions trouvés"
+msgstr "Chercher des transactions"
 
 # messages-i18n.c:186
 #: src/gnome/glade-gnc-dialogs.c:1722
@@ -4269,30 +4283,26 @@ msgstr "Trouver les transactions sur lesquels ces Actions se retrouvent:"
 
 # messages-i18n.c:227
 #: src/gnome/glade-gnc-dialogs.c:2405
-#, fuzzy
 msgid "Match Cleared state"
-msgstr "Date trouvé"
+msgstr "Etat de rapprochement trouvé"
 
 #: src/gnome/glade-gnc-dialogs.c:2420
-#, fuzzy
 msgid "Find transactions whose Cleared status is:"
-msgstr "Trouver les transactions qui se trouvent dans ce Numéro:"
+msgstr "Trouver les transactions dont le status de rapprochement est:"
 
 #: src/gnome/glade-gnc-dialogs.c:2428
 msgid "Not cleared (n)"
-msgstr ""
+msgstr "Pas rapproché (n)"
 
 # messages-i18n.c:260
 #: src/gnome/glade-gnc-dialogs.c:2435
-#, fuzzy
 msgid "Cleared (c)"
-msgstr "Pointé"
+msgstr "Pointé (c)"
 
 # messages-i18n.c:322
 #: src/gnome/glade-gnc-dialogs.c:2442
-#, fuzzy
 msgid "Reconciled (y)"
-msgstr "Rapprocher"
+msgstr "Rapprocher (y)"
 
 #: src/gnome/glade-gnc-dialogs.c:2470
 msgid "Type of search"

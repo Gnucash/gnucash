@@ -47,7 +47,6 @@
 #include "query-user.h"
 #include "enriched-messages.h"
 #include "table-gnome.h"
-#include "table-html.h"
 #include "gnucash-sheet.h"
 #include "global-options.h"
 #include "dialog-find-transactions.h"
@@ -1269,6 +1268,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+#if 0
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
@@ -1277,6 +1277,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+#endif
     GNOMEUIINFO_END
   };
 
