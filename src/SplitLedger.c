@@ -288,9 +288,7 @@ xaccSRRedrawRegEntry (SplitRegister *reg)
 {
    Split *split;
    Transaction *trans;
-   Account * acc;
    unsigned int changed;
-   int i;
 
    /* use the changed flag to avoid heavy-weight redraws
     * This will help cut down on uneccessary register redraws.  */
