@@ -1527,18 +1527,18 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      N_("_Scrub All"),
-      N_("Identify and fix problems in the "
-         "transactions displayed in this register"),
+      N_("_Check & Repair All"),
+      N_("Check for and repair unbalanced transactions and orphan splits "
+	 "in all transactions of this account"),
       gnc_register_scrub_all_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("_Scrub Current"),
-      N_("Identify and fix problems in the "
-         "current transaction"),
+      N_("Check & _Repair Current"),
+      N_("Check for and repair unbalanced transactions and orphan splits "
+	 "in this transaction"),
       gnc_register_scrub_current_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL

@@ -1,3 +1,9 @@
+2001-08-15  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/window-acct-tree.c, window-register.c,
+	window-reconcile.c, po/gnc-glossary.txt: Changed the term 'to
+	scrub' to 'to check and repair'.
+
 2001-08-15  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/SchedXaction.c(xaccSchedXactionFree): fix 

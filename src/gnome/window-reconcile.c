@@ -1371,7 +1371,9 @@ gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      N_("_Scrub"), N_("Identify and fix problems in the account"),
+      N_("_Check & Repair"),
+      N_("Check for and repair unbalanced transactions and orphan splits "
+	 "in this account"),
       gnc_recn_scrub_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
