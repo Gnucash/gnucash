@@ -36,7 +36,7 @@
 (define (qif-io:bank-xtn-import qif-xtn qif-file gnc-acct-info commodity)
   (let* ((format-info 
           (qif-io:file-bank-xtn-format qif-file))
-         (gnc-xtn (gnc:transaction-create (gnc:get-current-session)))
+         (gnc-xtn (gnc:transaction-create (gnc:get-current-book)))
          (near-split-amt
           ;; the u-amount has a larger range and is more correct,
           ;; but is optional

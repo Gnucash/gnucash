@@ -23,7 +23,7 @@
 (define-module (gnucash price-quotes))
 
 (export yahoo-get-historical-quotes)
-(export gnc:session-add-quotes)
+(export gnc:book-add-quotes)
 (export gnc:add-quotes-to-book-at-url)
 
 (use-modules (gnucash process))
@@ -302,7 +302,7 @@
         get-quotes
         kill-quoter)))
 
-(define (gnc:session-add-quotes session)
+(define (gnc:book-add-quotes book)
 
   (define (find-quotables group)
     ;; Return a list of accounts for whose commodities we should get
@@ -561,7 +561,7 @@
       (if (not (and commodity currency gnc-time price price-type))
           (string-append
            currency-str ":" (gnc:commodity-get-mnemonic commodity))
-          (let ((gnc-price (gnc:price-create session)))
+          (let ((gnc-price (gnc:price-create book)))
             (if (not gnc-price)
                 (string-append
                  currency-str ":" (gnc:commodity-get-mnemonic commodity))
@@ -585,8 +585,7 @@
   ;; FIXME: uses of gnc:warn in here need to be cleaned up.  Right
   ;; now, they'll result in funny formatting.
 
-  (let* ((book (gnc:session-get-book session))
-         (group (gnc:book-get-group book))
+  (let* ((group (gnc:book-get-group book))
          (quotables (and group (find-quotables group)))
          (fq-call-data (and quotables (accounts->fq-call-data quotables)))
          (fq-calls (and fq-call-data
@@ -704,7 +703,9 @@ Run 'update-finance-quote' as root to install them.") "\n")))
 
 (define (gnc:add-quotes-to-book-at-url url)
   (let* ((session (gnc:url->loaded-session url #f #f))
-         (quote-ok? (and session (gnc:session-add-quotes session))))
+         (quote-ok? (and session
+                         (gnc:book-add-quotes
+                          (gnc:session-get-book session)))))
 
     (if (not quote-ok?) (gnc:msg "book-add-quotes failed"))
     (and session (gnc:session-save session))

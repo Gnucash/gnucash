@@ -596,7 +596,7 @@ add_clicked (GtkWidget *widget, gpointer data)
   if (pdb_dialog->price)
     gnc_price_unref (pdb_dialog->price);
 
-  pdb_dialog->price = gnc_price_create (gnc_get_current_session ());
+  pdb_dialog->price = gnc_price_create (gnc_get_current_book ());
   pdb_dialog->new = TRUE;
   pdb_dialog->changed = TRUE;
 
@@ -615,20 +615,20 @@ static void
 get_quotes_clicked (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
-  GNCSession *session = gnc_get_current_session ();
+  GNCBook *book = gnc_get_current_book ();
   SCM quotes_func;
-  SCM session_scm;
+  SCM book_scm;
 
-  quotes_func = gh_eval_str ("gnc:session-add-quotes");
+  quotes_func = gh_eval_str ("gnc:book-add-quotes");
   if (!gh_procedure_p (quotes_func))
     return;
 
-  session_scm = gnc_session_to_scm (session);
-  if (gh_scm2bool (gh_not (session_scm)))
+  book_scm = gnc_book_to_scm (book);
+  if (gh_scm2bool (gh_not (book_scm)))
     return;
 
   gnc_set_busy_cursor (NULL, TRUE);
-  gh_call1 (quotes_func, session_scm);
+  gh_call1 (quotes_func, book_scm);
   gnc_unset_busy_cursor (NULL);
 
   gnc_gui_refresh_all ();

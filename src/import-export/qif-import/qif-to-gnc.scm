@@ -331,7 +331,7 @@
                  (begin 
                    ;; create and fill in the GNC transaction
                    (let ((gnc-xtn (gnc:transaction-create
-                                   (gnc:get-current-session))))
+                                   (gnc:get-current-book))))
                      (gnc:transaction-begin-edit gnc-xtn)
 
                      ;; FIXME. This is probably wrong
