@@ -6,7 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report report-system))
-
+(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 slib))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))
@@ -16,6 +16,8 @@
 (use-modules (g-wrapped gw-glib))
 
 (require 'hash-table)
+(if (not (defined? 'simple-format))
+    (require 'format))
 
 (gnc:module-load "gnucash/engine" 0)
 (gnc:module-load "gnucash/app-utils" 0)
