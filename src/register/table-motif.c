@@ -1,6 +1,6 @@
 /*
  * FILE:
- * table.c
+ * table-motif.c
  *
  * FUNCTION:
  * Implements the infrastructure for the displayed table.
@@ -33,7 +33,8 @@
 #include <Xbae/Matrix.h>
 
 #include "cellblock.h"
-#include "table.h"
+#include "table-allgui.h"
+#include "table-motif.h"
 
 static void enterCB (Widget mw, XtPointer cd, XtPointer cb);
 static void leaveCB (Widget mw, XtPointer cd, XtPointer cb);
@@ -68,6 +69,8 @@ xaccInitTable (Table * table)
 
    table->num_phys_rows = 0;
    table->num_phys_cols = 0;
+   table->num_virt_rows = 0;
+   table->num_virt_cols = 0;
    table->num_header_rows = 0;
 
    table->current_cursor = NULL;
@@ -89,257 +92,23 @@ xaccInitTable (Table * table)
 
 /* ==================================================== */
 
-static void 
-ResizeStringArr (Table * table, int tile_rows, int tile_cols)
-{
-   int num_header_rows;
-   int num_phys_rows, num_phys_cols;
-   int old_phys_rows, old_phys_cols;
-   int i,j;
-
-   /* save old table size */
-   old_phys_rows = table->num_phys_rows;
-   old_phys_cols = table->num_phys_cols;
-
-   /* compute number of physical rows */
-   num_header_rows = 0;
-   num_phys_rows = 0;
-   num_phys_cols = 0;
-   if (table->header) {
-      num_header_rows = table->header->numRows;
-      num_phys_rows += table->header->numRows;
-   }
-
-   table->tile_height = 0;
-   table->tile_width = 0;
-   if (table->cursor) {
-      table->tile_height = table->cursor->numRows;
-      table->tile_width = table->cursor->numCols;
-      num_phys_rows += tile_rows * table->cursor->numRows;
-      num_phys_cols  = tile_cols * table->cursor->numCols;
-      
-   }
-   table->num_phys_rows = num_phys_rows;
-   table->num_phys_cols = num_phys_cols;
-   table->num_header_rows = num_header_rows;
-
-   /* realloc to get the new table size.  Note that the
-    * new table may be wider or slimmer, taller or shorter. */
-   if (old_phys_rows >= num_phys_rows) {
-      if (old_phys_cols >= num_phys_cols) {
-
-         /* if we are here, new table has fewer cols 
-          * simply truncate columns */
-         for (i=0; i<num_phys_rows; i++) {
-            for (j=num_phys_cols; j<old_phys_cols; j++) {
-               free (table->entries[i][j]);
-               table->entries[i][j] = NULL;
-            }
-         }
-      } else {
-
-         /* if we are here, the new table has more
-          * columns. Realloc the columns.  */
-         for (i=0; i<num_phys_rows; i++) {
-            char **old_row;
-
-            old_row = table->entries[i];
-            table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
-            for (j=0; j<old_phys_cols; j++) {
-               table->entries[i][j] = old_row[j];
-            }
-            for (j=old_phys_cols; j<num_phys_cols; j++) {
-               table->entries[i][j] = strdup ("");
-            }
-            free (old_row);
-         }
-      }
-
-      /* new table has fewer rows.  Simply truncate the rows */
-      for (i=num_phys_rows; i<old_phys_rows; i++) {
-         for (j=0; j<old_phys_cols; j++) {
-            free (table->entries[i][j]);
-         }
-         free (table->entries[i]);
-         table->entries[i] = NULL;
-      }
-
-   } else {
-      char ***old_entries;
-
-      if (old_phys_cols >= num_phys_cols) {
-
-         /* new table has fewer columns. 
-          * Simply truncate the columns */
-         for (i=0; i<old_phys_rows; i++) {
-            for (j=num_phys_cols; j<old_phys_cols; j++) {
-               free (table->entries[i][j]);
-               table->entries[i][j] = NULL;
-            }
-         }
-      } else {
-
-         /* if we are here, the new table has more
-          * columns. Realloc the columns.  */
-         for (i=0; i<old_phys_rows; i++) {
-            char **old_row;
-
-            old_row = table->entries[i];
-            table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
-            for (j=0; j<old_phys_cols; j++) {
-               table->entries[i][j] = old_row[j];
-            }
-            for (j=old_phys_cols; j<num_phys_cols; j++) {
-               table->entries[i][j] = strdup ("");
-            }
-            free (old_row);
-         }
-      }
-
-      /* now, add all new rows */
-      old_entries = table->entries;
-      table->entries = (char ***) malloc (num_phys_rows * sizeof (char **));
-      for (i=0; i<old_phys_rows; i++) {
-         table->entries[i] = old_entries[i];
-      }
-      if (old_entries) free (old_entries);
-
-      for (i=old_phys_rows; i<num_phys_rows; i++) {
-         table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
-         for (j=0; j<num_phys_cols; j++) {
-            table->entries[i][j] = strdup ("");
-         }
-      }
-   }
-}
-
-/* ==================================================== */
-
-static void 
-ResizeUserData (Table * table, int tile_rows, int tile_cols)
-{
-   int old_rows, old_cols;
-   int i,j;
-
-   /* save old table size */
-   old_rows = table->num_rows;
-   old_cols = table->num_cols;
-
-   table->num_rows = tile_rows;
-   table->num_cols = tile_cols;
-
-   /* realloc to get the new table size.  Note that the
-    * new table may be wider or slimmer, taller or shorter. */
-   if (old_rows >= tile_rows) {
-      if (old_cols >= tile_cols) {
-
-         /* if we are here, new table has fewer cols 
-          * simply truncate columns */
-         for (i=0; i<tile_rows; i++) {
-            for (j=tile_cols; j<old_cols; j++) {
-               table->user_data[i][j] = NULL;
-            }
-         }
-      } else {
-
-         /* if we are here, the new table has more
-          * columns. Realloc the columns.  */
-         for (i=0; i<tile_rows; i++) {
-            void **old_row;
-
-            old_row = table->user_data[i];
-            table->user_data[i] = (void **) malloc (tile_cols * sizeof (void *));
-            for (j=0; j<old_cols; j++) {
-               table->user_data[i][j] = old_row[j];
-            }
-            for (j=old_cols; j<tile_cols; j++) {
-               table->user_data[i][j] = NULL;
-            }
-            free (old_row);
-         }
-      }
-
-      /* new table has fewer rows.  Simply truncate the rows */
-      for (i=tile_rows; i<old_rows; i++) {
-         free (table->user_data[i]);
-         table->user_data[i] = NULL;
-      }
-
-   } else {
-      void ***old_user_data;
-
-      if (old_cols >= tile_cols) {
-
-         /* new table has fewer columns. 
-          * Simply truncate the columns */
-         for (i=0; i<old_rows; i++) {
-            for (j=tile_cols; j<old_cols; j++) {
-               table->user_data[i][j] = NULL;
-            }
-         }
-      } else {
-
-         /* if we are here, the new table has more
-          * columns. Realloc the columns.  */
-         for (i=0; i<old_rows; i++) {
-            void **old_row;
-
-            old_row = table->user_data[i];
-            table->user_data[i] = (void **) malloc (tile_cols * sizeof (void *));
-            for (j=0; j<old_cols; j++) {
-               table->user_data[i][j] = old_row[j];
-            }
-            for (j=old_cols; j<tile_cols; j++) {
-               table->user_data[i][j] = NULL;
-            }
-            free (old_row);
-         }
-      }
-
-      /* now, add all new rows */
-      old_user_data = table->user_data;
-      table->user_data = (void ***) malloc (tile_rows * sizeof (void **));
-      for (i=0; i<old_rows; i++) {
-         table->user_data[i] = old_user_data[i];
-      }
-      if (old_user_data) free (old_user_data);
-
-      for (i=old_rows; i<tile_rows; i++) {
-         table->user_data[i] = (void **) malloc (tile_cols * sizeof (void *));
-         for (j=0; j<tile_cols; j++) {
-            table->user_data[i][j] = NULL;
-         }
-      }
-   }
-}
-
-/* ==================================================== */
-
 void 
-xaccSetTableSize (Table * table, int tile_rows, int tile_cols)
+xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
+                                 int virt_rows, int virt_cols)
 {
-   ResizeStringArr (table, tile_rows, tile_cols);
-   ResizeUserData (table, tile_rows, tile_cols);
+   xaccTableResizeStringArr (table, phys_rows, phys_cols);
+   xaccTableResizeUserData (table, virt_rows, virt_cols);
 
    /* invalidate the "previous" traversed cell */
    table->prev_phys_traverse_row = -1;
    table->prev_phys_traverse_col = -1;
 
    /* invalidate the current cursor position, if needed */
-   if ((table->current_cursor_row >= table->num_rows) ||
-       (table->current_cursor_col >= table->num_cols)) {
+   if ((table->current_cursor_row >= table->num_virt_rows) ||
+       (table->current_cursor_col >= table->num_virt_cols)) {
       table->current_cursor_row = -1;
       table->current_cursor_col = -1;
    }
-}
-
-/* ==================================================== */
-
-void
-xaccSetCursor (Table *table, CellBlock *curs)
-{
-   table->cursor = curs;
-   xaccSetTableSize (table, 1, 1);
 }
 
 /* ==================================================== */

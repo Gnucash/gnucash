@@ -1,6 +1,6 @@
 /*
  * FILE:
- * table.h
+ * table-motif.h
  *
  * FUNCTION:
  * The table is the complete, displayed table. 
@@ -12,6 +12,23 @@
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
  */
+
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
+
 
 #ifndef __XACC_TABLE_H__
 #define __XACC_TABLE_H__
@@ -29,9 +46,11 @@ typedef struct _Table {
    * consist of one or more physical rows.
    */
 
-  int num_header_rows;
+  int num_header_rows;  /* hack alert -- remove this */
   int num_phys_rows;
   int num_phys_cols;
+  int num_virt_rows;
+  int num_virt_cols;
 
   CellBlock *header;
   CellBlock **cursors;
@@ -76,7 +95,8 @@ typedef struct _Table {
 Table     * xaccMallocTable (void);
 void        xaccInitTable (Table *);
 
-void        xaccSetTableSize (Table * table, int tile_rows, int tile_cols);
+void        xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
+                                             int virt_rows, int virt_cols);
 
 /* create the widget */
 Widget      xaccCreateTable (Table *, Widget parent, char * name);
@@ -88,7 +108,7 @@ void        xaccDestroyTable (Table *);
 void        xaccRefreshTableGUI (Table *);
 
 /* Make the indicated cell block be the cursor for this table */
-void        xaccSetCursor (Table *, CellBlock *);
+void        xaccAddCursor (Table *, CellBlock *);
 
 /* move the cursor (but not the GUI) to the indicated location. */
 void        xaccMoveCursor (Table *, int virt_row, int virt_col);
