@@ -839,6 +839,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
     case CURSOR_TRANS: {
       Transaction *auto_trans;
       GList *refresh_accounts;
+      Timespec post_date;
       char *desc;
 
       /* we must be on the blank split */
@@ -877,6 +878,11 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
 
       xaccTransBeginEdit(trans, FALSE);
       gnc_copy_trans_onto_trans(auto_trans, trans, FALSE);
+
+      xaccDateCellGetDate (reg->dateCell, &post_date);
+      xaccTransSetDateTS (trans, &post_date);
+
+      xaccTransSetNum (trans, reg->numCell->cell.value);
 
       if (info->default_source_account != NULL)
       {
