@@ -50,8 +50,8 @@
 #include "util.h"
 
 
-#define NUM_COLUMNS           12
-#define NUM_HEADER_ROWS   1
+#define NUM_COLUMNS        12
+#define NUM_HEADER_ROWS    2
 #define NUM_ROWS_PER_TRANS 2
 
 /* enumerate different ledger types */
@@ -94,7 +94,7 @@ typedef struct _RegWindow {
   short          numCols;     /* number of columns in the register       */
   short columnLocation [NUM_COLUMNS];  /* column ordering              */
   short columnWidths   [NUM_COLUMNS];  /* widths (in chars not pixels) */
-  String columnLabels  [3][NUM_COLUMNS]; /* column labels              */
+  String columnLabels  [NUM_HEADER_ROWS+NUM_ROWS_PER_TRANS][NUM_COLUMNS]; /* column labels              */
   unsigned char alignments[NUM_COLUMNS]; /* alignment of display chars */
 
 } RegWindow;
@@ -273,7 +273,6 @@ regRefresh( RegWindow *regData )
     char   buf[BUFSIZE];
     String **data = NULL;
     String **newData;
-    Account *main_acc=NULL, *xfer_acc=NULL;
     double themount;  /* amount */
     
     /* first, build a sorted array of transactions */
@@ -286,7 +285,6 @@ regRefresh( RegWindow *regData )
         * to allow the user to add new transactions */
        new_num_rows = NUM_ROWS_PER_TRANS*(ntrans+1) + NUM_HEADER_ROWS;
 
-       main_acc = regData->blackacc[0];
     } else {
        tarray = accListGetSortedTrans (regData->blackacc);
        ntrans = xaccCountTransactions (tarray);
@@ -295,7 +293,6 @@ regRefresh( RegWindow *regData )
         * new transactions is not allowed. Thus, no blank 
         * rows at the end. */
        new_num_rows = NUM_ROWS_PER_TRANS*ntrans + NUM_HEADER_ROWS;
-       main_acc = NULL;
     }
 
     XtVaGetValues( regData->reg, XmNrows, &old_num_rows, NULL );
@@ -324,9 +321,10 @@ regRefresh( RegWindow *regData )
     
     /* adjust the size of the matrix, only after copying old column headers: */
     if( delta_rows < 0 ) {
-      XbaeMatrixDeleteRows( regData->reg, 1, -delta_rows );
+      XbaeMatrixDeleteRows( regData->reg, NUM_HEADER_ROWS, -delta_rows );
     } else if( delta_rows > 0 ) {
-      XbaeMatrixAddRows( regData->reg, 1, NULL, NULL, NULL, delta_rows );
+      XbaeMatrixAddRows( regData->reg, NUM_HEADER_ROWS, 
+                        NULL, NULL, NULL, delta_rows );
     }
     
     /* and fill in the data for the matrix: */
@@ -346,14 +344,36 @@ regRefresh( RegWindow *regData )
       sprintf( buf, "%s", trans->num );
       newData[row+NUM_CELL_R][NUM_CELL_C]   = XtNewString(buf);
 
-/* hack alert xxxxxxxxxxxxx */
-/* not correct for gen ledger */
-      xfer_acc = xaccGetOtherAccount (main_acc, trans);
-      if (xfer_acc) {
-        sprintf( buf, "%s", xfer_acc->accountName );
-        newData[row+XFRM_CELL_R][XFRM_CELL_C] = XtNewString(buf);
+      /* for a general ledger, we fill out the "from" and "to"
+       * transfer fields */
+      if ( (GEN_LEDGER == regData->type) ||
+           (PORTFOLIO  == regData->type) ) {
+        Account *xfer_acc;
+        xfer_acc = (Account *) trans -> debit;
+        if (xfer_acc) {
+          sprintf( buf, "%s", xfer_acc->accountName );
+          newData[row+XFRM_CELL_R][XFRM_CELL_C] = XtNewString(buf);
+        }
+        xfer_acc = (Account *) trans -> credit;
+        if (xfer_acc) {
+          sprintf( buf, "%s", xfer_acc->accountName );
+          newData[row+XTO_CELL_R][XTO_CELL_C] = XtNewString(buf);
+        }
+
+      } else {
+
+        /* if here, then this is not a general ledger type display.
+         * We are displaying just one account. */
+        Account *main_acc, *xfer_acc;
+
+        main_acc = regData->blackacc[0];
+        xfer_acc = xaccGetOtherAccount (main_acc, trans);
+        if (xfer_acc) {
+          sprintf( buf, "%s", xfer_acc->accountName );
+          newData[row+XFRM_CELL_R][XFRM_CELL_C] = XtNewString(buf);
+        }
       }
-      
+
       sprintf( buf, "%s", trans->description );
       newData[row+DESC_CELL_R][DESC_CELL_C]   = XtNewString(buf);
       sprintf( buf, "%s", trans->memo );
@@ -367,6 +387,10 @@ regRefresh( RegWindow *regData )
 
       /* ----------------------------------- */
       /* display depends on account type */
+  {
+      Account *main_acc;
+      /* hack alert xxxxxxxxxxxxxxx broken for gen ledger */
+      main_acc = regData->blackacc[0];
       switch (regData->type) {
         case BANK:
         case CASH:
@@ -396,6 +420,7 @@ regRefresh( RegWindow *regData )
           fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", 
                   regData->type);
       }
+}
 
       if( 0.0 > themount ) {
         newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
@@ -490,7 +515,7 @@ double
 regRecalculateBalance( RegWindow *regData )
   {
   int  i; 
-  int  position   = 1;
+  int  position   = NUM_HEADER_ROWS;
   double  dbalance    = 0.0;
   double  dclearedBalance = 0.0;
   double share_balance = 0.0;
@@ -1246,7 +1271,7 @@ regWindowLedger( Widget parent, Account **acclist )
     
     /* ----------------------------------- */
     /* Put the appropriate heading names in the column titles */
-    for (i=0; i<3; i++) {
+    for (i=0; i<(NUM_HEADER_ROWS+NUM_ROWS_PER_TRANS); i++) {
        for (j=0; j<NUM_COLUMNS; j++) {
           regData->columnLabels[i][j] = "";
        }
@@ -1254,9 +1279,16 @@ regWindowLedger( Widget parent, Account **acclist )
 
     regData -> columnLabels[0][DATE_CELL_C] = "Date";
     regData -> columnLabels[0][NUM_CELL_C]  = "Num";
-    regData -> columnLabels[0][XFRM_CELL_C] = "Transfer";
+    regData -> columnLabels[0][XFRM_CELL_C] = "Transfer From";
     regData -> columnLabels[0][DESC_CELL_C] = "Description";
     regData -> columnLabels[0][BALN_CELL_C] = "Balance";
+
+    if (1 < NUM_HEADER_ROWS) {
+      regData -> columnLabels[1][ACTN_CELL_C] = "Action";
+      regData -> columnLabels[1][XTO_CELL_C]  = "Transfer To";
+      regData -> columnLabels[1][MEMO_CELL_C] = "Memo";
+    }
+
     switch(regData->type)
       {
       case BANK:
@@ -1316,10 +1348,14 @@ regWindowLedger( Widget parent, Account **acclist )
         break;
       }
     
-    data = (String **)XtMalloc(3*sizeof(String *));
-    data[0] = &(regData -> columnLabels[0][0]);
-    data[1] = &(regData -> columnLabels[1][0]);
-    data[2] = &(regData -> columnLabels[2][0]);
+    data = (String **)XtMalloc(
+                      (NUM_HEADER_ROWS+NUM_ROWS_PER_TRANS) * 
+                      sizeof(String *));
+
+    for (i=0; i<(NUM_HEADER_ROWS+NUM_ROWS_PER_TRANS); i++) {
+      data[i] = &(regData -> columnLabels[i][0]);
+    }
+
     sprintf( buf, "reg" );
     reg = XtVaCreateWidget( strcat(buf,accRes[regData->type]),
                             xbaeMatrixWidgetClass,  frame,
@@ -2085,13 +2121,13 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
   date.year  = 0;
   
   if (do_year) {
-    sscanf( XbaeMatrixGetCell(mw,row,col),
+    sscanf( XbaeMatrixGetCell(mw,row+DATE_CELL_R,col),
             "%d/%d",&(date.month), &(date.day) );
   }else {
     sscanf( mvcbs->prev_text, 
             "%d/%d",&(date.month), &(date.day) );
   }
-  sscanf( XbaeMatrixGetCell(mw,row+1,col),
+  sscanf( XbaeMatrixGetCell(mw,row+YEAR_CELL_R,col),
           "%d", &(date.year) );
   
   /* If there isn't a valid date in this field, use today's date */
@@ -2194,12 +2230,12 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
   if( changed )
     {
     sprintf( buf,"%2d/%2d", date.month, date.day );
-    XbaeMatrixSetCell( mw, row, col, buf );
-    XbaeMatrixRefreshCell( mw, row, col );
+    XbaeMatrixSetCell( mw, row+DATE_CELL_R, col, buf );
+    XbaeMatrixRefreshCell( mw, row+DATE_CELL_R, col );
     
     sprintf( buf,"%4d", date.year );
-    XbaeMatrixSetCell( mw, row+1, col, buf );
-    XbaeMatrixRefreshCell( mw, row+1, col );
+    XbaeMatrixSetCell( mw, row+YEAR_CELL_R, col, buf );
+    XbaeMatrixRefreshCell( mw, row+YEAR_CELL_R, col );
     }
   }
  
