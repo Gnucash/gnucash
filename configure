@@ -1889,7 +1889,7 @@ MOTIF_LIBS="-lXm"
 # Check whether --with-gnome-config or --without-gnome-config was given.
 if test "${with_gnome_config+set}" = set; then
   withval="$with_gnome_config"
-  GNOME_CONFIG_BIN="$with_gnome/bin/"
+  GNOME_CONFIG_BIN="$with_gnome_config"
 fi
 
 
@@ -1907,7 +1907,7 @@ fi
 if test "${with_guile+set}" = set; then
   withval="$with_guile"
   GUILE_INC="-I$with_guile/include"
-	GUILELIBS="-L$with_guile/lib"
+	GUILELIBS="-L$with_guile/lib -lguile"
        	LIBS="${LIBS} $GUILELIBS"
 	 
 fi

@@ -46,7 +46,7 @@ AC_ARG_WITH( imlib,
 AC_ARG_WITH( guile, 
        [  --with-guile=PATH       specify where to look for guile includes and libs],
 	GUILE_INC="-I$with_guile/include"
-	GUILELIBS="-L$with_guile/lib"
+	GUILELIBS="-L$with_guile/lib -lguile"
        	LIBS="${LIBS} $GUILELIBS"
 	 )
 
