@@ -3,6 +3,10 @@
 	* src/register/ledger-core/split-register-model-save.c -- fix a bug
 	  updating two-split multi-currency transactions from the basic ledger.
 
+	* src/register/ledger-core/split-register-model.c:
+	* src/register/ledger-core/split-register-model-save.c:
+	  Fix a few rounding errors when computing conversion rates.
+	
 2002-12-02  Chris Lyttle  <chris@wilddev.net>
 	
 	* src/doc/Makefile.am: fix for failure when building rpm

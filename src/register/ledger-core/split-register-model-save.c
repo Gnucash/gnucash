@@ -405,13 +405,21 @@ gnc_split_register_save_debcred_cell (BasicCell * bcell,
    * 'value' by dividing by the convrate in order to set the value.
    */
 
-  convrate = xaccSplitGetAmount (sd->split);
-  value = xaccSplitGetValue (sd->split);
-  if (! gnc_numeric_zero_p (value))
-    oldconvrate = gnc_numeric_div (convrate, value, GNC_DENOM_LCD, GNC_RND_ROUND);
-  else
-    oldconvrate = gnc_numeric_create (100,100);
+  /* First, compute the "old" conversion rate -- use the RATE_CELL if it
+   * exists -- if not, then compute from the old amount/value
+   */
+  oldconvrate = gnc_split_register_get_rate_cell (reg, RATE_CELL);
+  if (gnc_numeric_zero_p (oldconvrate)) {
+    convrate = xaccSplitGetAmount (sd->split);
+    value = xaccSplitGetValue (sd->split);
 
+    if (! gnc_numeric_zero_p (value))
+      oldconvrate = gnc_numeric_div (convrate, value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+    else
+      oldconvrate = gnc_numeric_create (100,100);
+  }
+
+  /* Now compute/set the split value */
   acc = gnc_split_register_get_default_account (reg);
   if (gnc_split_register_needs_conv_rate (sd->trans, acc)) {
     gnc_commodity *curr;

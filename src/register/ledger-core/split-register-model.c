@@ -916,7 +916,7 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
   if (gnc_numeric_zero_p (value))
     return "";
 
-  convrate = gnc_numeric_div (amount, value, GNC_DENOM_LCD, GNC_RND_ROUND);
+  convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
 
   return xaccPrintAmount (convrate, gnc_split_value_print_info (split, FALSE));
 }
@@ -1328,7 +1328,7 @@ gnc_split_register_get_conv_rate (Transaction *txn, Account *acc)
 
     amount = xaccSplitGetAmount (s);
     value = xaccSplitGetValue (s);
-    convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
     return convrate;
   }
 
