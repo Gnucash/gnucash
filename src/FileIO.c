@@ -28,8 +28,12 @@
  *       position in the file, and so the order which these         *
  *       functions are called in important                          *
  *                                                                  *
+ * Version 1 is the original file format                            *
+ *                                                                  *
  * Version 2 of the file format supports reading and writing of     *
  * double-entry transactions.                                       *
+ *                                                                  *
+ * Version 3 of the file format supports actions (Buy, Sell, etc.)  *
  *                                                                  *
  *                                                                  *
  * the format of the data in the file:                              *
@@ -52,6 +56,7 @@
  *   date        ::== Date                                          * 
  *   description ::== String                                        * 
  *   memo        ::== String                                        * 
+ *   action      ::== String                                        * 
  *   catagory    ::== int                                           * 
  *   reconciled  ::== char                                          * 
  *   amount      ::== double                                        * 
@@ -76,7 +81,7 @@
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
-#define VERSION 2
+#define VERSION 3
 
 /** GLOBALS *********************************************************/
 extern Widget toplevel;
@@ -184,7 +189,7 @@ readData( char *datafile )
   
   /* If this is an old file, ask the user if the file
    * should be updated */
-  if( token < VERSION )
+  if( VERSION > token )
     {
     char msg[BUFSIZE];
     sprintf( (char *)&msg, FILE_TOO_OLD_MSG );
@@ -194,7 +199,7 @@ readData( char *datafile )
   
   /* If this is a newer file than we know how to deal
    * with, warn the user */
-  if( token > VERSION )
+  if( VERSION < token )
     {
     char msg[BUFSIZE];
     sprintf( (char *)&msg, FILE_TOO_NEW_MSG );
@@ -390,13 +395,28 @@ readTransaction( int fd, Account *acc, int token )
     return NULL;
     }
   
+  /* actin first introduced in version 3 of the file format */
+  if (3 <= token) {
+     trans->action = readString( fd, token );
+     if( trans->action == NULL )
+       {
+       DEBUG ("Error: Premature end of Transaction at memo");
+       XtFree(trans->description);
+       XtFree(trans->num);
+       XtFree(trans->memo);
+       _free(trans);
+       return NULL;
+       }
+    }
+  
   err = read( fd, &(trans->catagory), sizeof(int) );
   if( err != sizeof(int) )
     {
-    DEBUG ("Error: Premature end of Transaction at category");
-    XtFree(trans->memo);
+    DEBUG ("Error: Premature end of Transaction at catagory");
     XtFree(trans->description);
     XtFree(trans->num);
+    XtFree(trans->memo);
+    XtFree(trans->action);
     _free(trans);
     return NULL;
     }
@@ -428,10 +448,12 @@ readTransaction( int fd, Account *acc, int token )
   if( (trans->reconciled != YREC) && (trans->reconciled != CREC) )
     trans->reconciled = NREC;
   
+  /* Version 1 files stored the amount as an integer,
+   * with the amount recorded as pennies.
+   * Version 2 and above store the share amounts and 
+   * prices as doubles. */
   if (1 == token) {
     int amount;
-    /* version 1 files stored the amount as an integer,
-     * with the amount recorded as pennies */
     err = read( fd, &amount, sizeof(int) );
     if( err != sizeof(int) )
       {
@@ -477,8 +499,8 @@ readTransaction( int fd, Account *acc, int token )
   }  
   DEBUGCMD(printf ("Info: readTransaction(): amount %f \n", trans->damount));
 
-  /* read the account numbers for double-entry */
-  /* these are first used in version 2 of the file format */
+  /* Read the account numbers for double-entry */
+  /* These are first used in Version 2 of the file format */
   if (1 < token) {
     Account *peer_acc;
     /* first, read the credit account number */
@@ -520,7 +542,7 @@ readTransaction( int fd, Account *acc, int token )
     if (peer_acc) insertTransaction( peer_acc, trans );
   } else {
 
-    /* version 1 files did not do double-entry */
+    /* Version 1 files did not do double-entry */
     insertTransaction( acc, trans );
   }
   
@@ -778,6 +800,10 @@ writeTransaction( int fd, Account * acc, Transaction *trans )
     return err;
   
   err = writeString( fd, trans->memo );
+  if( err == -1 )
+    return err;
+  
+  err = writeString( fd, trans->action );
   if( err == -1 )
     return err;
   

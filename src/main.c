@@ -93,6 +93,8 @@ String fbRes[] = {
   "*recn*cellShadowType:      SHADOW_ETCHED_IN",
   "*recn*cellMarginWidth:     0",
   "*recn*cellMarginHeight:    0",
+  /* combobox -- don't want the cell to be outlined */
+  "*reg*actionbox*shadowThickness:     0",
   NULL,
   };
 

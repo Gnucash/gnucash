@@ -34,6 +34,8 @@
 \********************************************************************/
 
 /********************************************************************\
+ * initTransaction
+ * Initialize a transaction structure
 \********************************************************************/
 
 void
@@ -47,6 +49,7 @@ initTransaction( Transaction * trans )
   trans->num         = NULL;
   trans->description = NULL;
   trans->memo        = NULL;
+  trans->action      = NULL;
   trans->catagory    = 0;
   trans->reconciled  = NREC;
   trans->damount     = 0.0;
