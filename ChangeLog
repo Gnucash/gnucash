@@ -5,6 +5,10 @@
 	* src/business/business-core/gncInvoice.[ch]: add INVOICE_POST_LOT
 	  query parameter methods
 
+	* src/engine/gnc-event*: add an api to force an event even when
+	  events are suspended.  Without such an API, events can be lost
+	  if the event system is suspended when the event comes in.
+	
 2003-05-18  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-lot.[ch]: add LOT_IS_CLOSED and LOT_BALANCE
