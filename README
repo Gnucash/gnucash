@@ -209,15 +209,19 @@ cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot checkout xacc
 
 Main Developers:
 ----------------
-Rob Browning <rlb@cs.utexas.edu> for GTK graphing
+Rob Browning <rlb@cs.utexas.edu> for perl, scheme & GTK graphing
 Robin Clark <rclark@hmc.edu> for original xacc
 Jeremy Collins <linux@cyberramp.net> for GTK port
-Linas Vepstas <linas@lins.org> for extensive enhancements
+Linas Vepstas <linas@linas.org> for extensive enhancements
 
 
 Fixes & Patches:
 ----------------
+Fred Baube <fred@moremagic.com> for Java port
+Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
+Rob Browning <rlb@cs.utexas.edu> for perl, scheme & GTK plotting
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
+Jeremey Collins <linux@cyberramp.net> for GnoMoney & GTK port
 Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
