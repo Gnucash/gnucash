@@ -331,7 +331,8 @@ on_button_clicked (GtkButton *button,
     GNCInteractor_setAborted(data);
   } else if (strcmp (name, "close_button") == 0) {
     if (data->state != RUNNING)
-      GNCInteractor_hide (data);
+      gtk_widget_hide_all (data->dialog); 
+    /*GNCInteractor_hide (data);*/
   } else {
     printf("on_button_clicked: Oops, unknown button: %s\n",
 	   name);
