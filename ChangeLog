@@ -1,5 +1,8 @@
 2003-10-21  Christian Stimming  <stimming@tuhh.de>
 
+	* po/cs.po: Updated Czech translation by Miloslav Trmac
+	<mitr@volny.cz>
+	
 	* src/import-export/hbci/gnc-hbci-utils.c: Refactor some GUI
 	code. Improve user messages.
 

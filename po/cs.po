@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.8.5\n"
-"POT-Creation-Date: 2003-08-19 09:33-0400\n"
-"PO-Revision-Date: 2003-09-01 20:52+0200\n"
+"Project-Id-Version: gnucash 1.8.7\n"
+"POT-Creation-Date: 2003-09-14 18:59-0700\n"
+"PO-Revision-Date: 2003-10-21 13:47+0200\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -404,9 +404,9 @@ msgstr "void:p"
 msgid "Opening Balances"
 msgstr "Počáteční zůstatky"
 
-#: src/app-utils/gnc-ui-util.c:840 intl-scm/guile-strings.c:1265
-#: intl-scm/guile-strings.c:1267 intl-scm/guile-strings.c:1305
-#: intl-scm/guile-strings.c:1307 intl-scm/guile-strings.c:1907
+#: src/app-utils/gnc-ui-util.c:840 intl-scm/guile-strings.c:1269
+#: intl-scm/guile-strings.c:1271 intl-scm/guile-strings.c:1309
+#: intl-scm/guile-strings.c:1311 intl-scm/guile-strings.c:1907
 msgid "Retained Earnings"
 msgstr "Nerozdělený zisk"
 
@@ -424,7 +424,7 @@ msgstr "Počáteční zůstatek"
 
 #: src/app-utils/guile-util.c:1112
 #: src/register/ledger-core/split-register.c:1904
-#: intl-scm/guile-strings.c:2265 intl-scm/guile-strings.c:2467
+#: intl-scm/guile-strings.c:2327 intl-scm/guile-strings.c:2529
 msgid "Debit"
 msgstr "Má dáti"
 
@@ -433,7 +433,7 @@ msgstr "Má dáti"
 #: src/register/ledger-core/split-register.c:2002
 #: src/register/ledger-core/split-register.c:2018
 #: src/register/ledger-core/split-register.c:2036
-#: intl-scm/guile-strings.c:2267 intl-scm/guile-strings.c:2469
+#: intl-scm/guile-strings.c:2329 intl-scm/guile-strings.c:2531
 #: intl-scm/guile-strings.c:3913
 msgid "Credit"
 msgstr "Dal"
@@ -450,20 +450,20 @@ msgstr "Neznámý režim přístupu k databázi '%s'. Používám implicitní re
 #: src/business/business-core/gncInvoice.c:509
 #: src/business/business-gnome/glade/invoice.glade:538
 #: src/register/ledger-core/split-register.c:2033 intl-scm/guile-strings.c:116
-#: intl-scm/guile-strings.c:867 intl-scm/guile-strings.c:959
-#: intl-scm/guile-strings.c:1149 intl-scm/guile-strings.c:2347
+#: intl-scm/guile-strings.c:867 intl-scm/guile-strings.c:1031
+#: intl-scm/guile-strings.c:1123 intl-scm/guile-strings.c:2409
 msgid "Invoice"
 msgstr "Faktura"
 
 #: src/business/business-core/gncInvoice.c:511 intl-scm/guile-strings.c:142
-#: intl-scm/guile-strings.c:869 intl-scm/guile-strings.c:961
-#: intl-scm/guile-strings.c:1151
+#: intl-scm/guile-strings.c:869 intl-scm/guile-strings.c:1033
+#: intl-scm/guile-strings.c:1125
 msgid "Bill"
 msgstr "Účet"
 
 #: src/business/business-core/gncInvoice.c:513 src/engine/Account.c:2487
 #: src/gnome/glade/tax.glade:146 intl-scm/guile-strings.c:112
-#: intl-scm/guile-strings.c:2067 intl-scm/guile-strings.c:3927
+#: intl-scm/guile-strings.c:2129 intl-scm/guile-strings.c:3927
 msgid "Expense"
 msgstr "Výdaje"
 
@@ -536,13 +536,13 @@ msgstr "(vlastník)"
 #: src/import-export/qif-import/qif.glade:1688
 #: src/register/ledger-core/split-register-model.c:116
 #: intl-scm/guile-strings.c:729 intl-scm/guile-strings.c:753
-#: intl-scm/guile-strings.c:895 intl-scm/guile-strings.c:1011
-#: intl-scm/guile-strings.c:1035 intl-scm/guile-strings.c:1703
-#: intl-scm/guile-strings.c:1743 intl-scm/guile-strings.c:2137
-#: intl-scm/guile-strings.c:2247 intl-scm/guile-strings.c:2279
-#: intl-scm/guile-strings.c:2345 intl-scm/guile-strings.c:2381
-#: intl-scm/guile-strings.c:2447 intl-scm/guile-strings.c:2539
-#: intl-scm/guile-strings.c:2627
+#: intl-scm/guile-strings.c:893 intl-scm/guile-strings.c:917
+#: intl-scm/guile-strings.c:1059 intl-scm/guile-strings.c:1703
+#: intl-scm/guile-strings.c:1743 intl-scm/guile-strings.c:2199
+#: intl-scm/guile-strings.c:2309 intl-scm/guile-strings.c:2341
+#: intl-scm/guile-strings.c:2407 intl-scm/guile-strings.c:2443
+#: intl-scm/guile-strings.c:2509 intl-scm/guile-strings.c:2601
+#: intl-scm/guile-strings.c:2689
 msgid "Date"
 msgstr "Datum"
 
@@ -555,10 +555,10 @@ msgstr "Datum"
 #: src/import-export/hbci/glade/hbci.glade:1982
 #: src/import-export/qif-import/qif.glade:1636
 #: src/import-export/qif-import/qif.glade:1714 intl-scm/guile-strings.c:553
-#: intl-scm/guile-strings.c:905 intl-scm/guile-strings.c:1561
-#: intl-scm/guile-strings.c:2313 intl-scm/guile-strings.c:2351
-#: intl-scm/guile-strings.c:2413 intl-scm/guile-strings.c:2465
-#: intl-scm/guile-strings.c:2563 intl-scm/guile-strings.c:2687
+#: intl-scm/guile-strings.c:1069 intl-scm/guile-strings.c:1561
+#: intl-scm/guile-strings.c:2375 intl-scm/guile-strings.c:2413
+#: intl-scm/guile-strings.c:2475 intl-scm/guile-strings.c:2527
+#: intl-scm/guile-strings.c:2625 intl-scm/guile-strings.c:2749
 msgid "Amount"
 msgstr "Částka"
 
@@ -567,9 +567,9 @@ msgstr "Částka"
 #: src/business/business-gnome/dialog-order.c:866
 #: src/gnome/reconcile-list.c:216
 #: src/register/ledger-core/split-register-model.c:137
-#: intl-scm/guile-strings.c:2249 intl-scm/guile-strings.c:2285
-#: intl-scm/guile-strings.c:2389 intl-scm/guile-strings.c:2451
-#: intl-scm/guile-strings.c:2635
+#: intl-scm/guile-strings.c:2311 intl-scm/guile-strings.c:2347
+#: intl-scm/guile-strings.c:2451 intl-scm/guile-strings.c:2513
+#: intl-scm/guile-strings.c:2697
 msgid "Num"
 msgstr "Č."
 
@@ -578,8 +578,8 @@ msgstr "Č."
 #: src/import-export/generic-import.glade:951
 #: src/import-export/generic-import.glade:1081
 #: src/register/ledger-core/split-register-model.c:205
-#: intl-scm/guile-strings.c:2425 intl-scm/guile-strings.c:2455
-#: intl-scm/guile-strings.c:2575 intl-scm/guile-strings.c:2643
+#: intl-scm/guile-strings.c:2487 intl-scm/guile-strings.c:2517
+#: intl-scm/guile-strings.c:2637 intl-scm/guile-strings.c:2705
 msgid "Memo"
 msgstr "Poznámka"
 
@@ -596,7 +596,7 @@ msgstr "Cílový účet"
 #: src/business/business-gnome/glade/billterms.glade:87
 #: src/business/business-gnome/glade/invoice.glade:295
 #: src/business/business-gnome/glade/invoice.glade:1758
-#: intl-scm/guile-strings.c:881 intl-scm/guile-strings.c:1163
+#: intl-scm/guile-strings.c:881 intl-scm/guile-strings.c:1045
 msgid "Terms"
 msgstr "Podmínky"
 
@@ -710,7 +710,7 @@ msgstr "Počet dní ode dneška"
 #: src/business/business-gnome/glade/billterms.glade:873
 #: src/business/business-gnome/dialog-billterms.c:478
 #: src/gnome/glade/sched-xact.glade:1167 src/gnome-utils/gnc-date-delta.c:209
-#: intl-scm/guile-strings.c:2213
+#: intl-scm/guile-strings.c:2275
 msgid "Days"
 msgstr "Dny"
 
@@ -869,7 +869,7 @@ msgstr "Poznámky"
 #: src/business/business-gnome/glade/invoice.glade:420
 #: src/business/business-gnome/search-owner.c:233
 #: src/register/ledger-core/split-register-model.c:149
-#: intl-scm/guile-strings.c:969
+#: intl-scm/guile-strings.c:1133
 msgid "Customer"
 msgstr "Zákazník"
 
@@ -953,11 +953,11 @@ msgstr "splatnost"
 #: src/import-export/qif-import/qif.glade:1701
 #: src/register/ledger-core/split-register-model.c:153
 #: intl-scm/guile-strings.c:731 intl-scm/guile-strings.c:759
-#: intl-scm/guile-strings.c:903 intl-scm/guile-strings.c:1013
-#: intl-scm/guile-strings.c:1041 intl-scm/guile-strings.c:2251
-#: intl-scm/guile-strings.c:2291 intl-scm/guile-strings.c:2393
-#: intl-scm/guile-strings.c:2453 intl-scm/guile-strings.c:2567
-#: intl-scm/guile-strings.c:2639 intl-scm/guile-strings.c:3943
+#: intl-scm/guile-strings.c:895 intl-scm/guile-strings.c:923
+#: intl-scm/guile-strings.c:1067 intl-scm/guile-strings.c:2313
+#: intl-scm/guile-strings.c:2353 intl-scm/guile-strings.c:2455
+#: intl-scm/guile-strings.c:2515 intl-scm/guile-strings.c:2629
+#: intl-scm/guile-strings.c:2701 intl-scm/guile-strings.c:3943
 msgid "Description"
 msgstr "Popis"
 
@@ -1013,7 +1013,8 @@ msgid "Credit Account:"
 msgstr "Účet Dal:"
 
 #: src/business/business-gnome/glade/employee.glade:845
-#: src/business/business-gnome/search-owner.c:236 intl-scm/guile-strings.c:973
+#: src/business/business-gnome/search-owner.c:236
+#: intl-scm/guile-strings.c:1137
 msgid "Employee"
 msgstr "Zaměstnanec"
 
@@ -1071,7 +1072,7 @@ msgstr "Práce"
 #: src/business/business-gnome/dialog-job.c:531
 #: src/business/business-gnome/dialog-job.c:541
 #: src/business/business-gnome/dialog-order.c:857 intl-scm/guile-strings.c:829
-#: intl-scm/guile-strings.c:1111
+#: intl-scm/guile-strings.c:993
 msgid "Billing ID"
 msgstr "Fakturační ID"
 
@@ -1149,7 +1150,7 @@ msgid "_Standard"
 msgstr "_Standardní"
 
 #: src/business/business-gnome/glade/invoice.glade:850
-#: intl-scm/guile-strings.c:2541
+#: intl-scm/guile-strings.c:2603
 msgid "Sort by date"
 msgstr "Třídit podle data"
 
@@ -1185,7 +1186,7 @@ msgid "_Price"
 msgstr "_Cena"
 
 #: src/business/business-gnome/glade/invoice.glade:910
-#: intl-scm/guile-strings.c:2569
+#: intl-scm/guile-strings.c:2631
 msgid "Sort by description"
 msgstr "Třídit podle popisu"
 
@@ -1515,8 +1516,8 @@ msgstr "Datum uzavření"
 #: src/business/business-gnome/glade/order.glade:343
 #: src/business/business-gnome/glade/order.glade:777
 #: src/business/business-gnome/glade/order.glade:1179
-#: intl-scm/guile-strings.c:879 intl-scm/guile-strings.c:899
-#: intl-scm/guile-strings.c:1161
+#: intl-scm/guile-strings.c:879 intl-scm/guile-strings.c:1043
+#: intl-scm/guile-strings.c:1063
 msgid "Reference"
 msgstr "Odkaz"
 
@@ -1554,7 +1555,7 @@ msgstr "ID číslo dodavatele. Pokud je ponecháno prázdné, bude pro vás zvol
 #: src/business/business-gnome/glade/vendor.glade:596
 #: src/business/business-gnome/search-owner.c:235
 #: src/register/ledger-core/split-register-model.c:151
-#: intl-scm/guile-strings.c:971
+#: intl-scm/guile-strings.c:1135
 msgid "Vendor"
 msgstr "Dodavatel"
 
@@ -1677,7 +1678,7 @@ msgstr ""
 #: src/import-export/hbci/hbci-interaction.c:303
 #: src/import-export/hbci/hbci-interaction.c:369
 #: src/import-export/hbci/hbci-interaction.c:491
-#: src/import-export/hbci/hbci-progressmon.c:192 intl-scm/guile-strings.c:917
+#: src/import-export/hbci/hbci-progressmon.c:192 intl-scm/guile-strings.c:1081
 msgid "Unknown"
 msgstr "Neznámý"
 
@@ -1777,7 +1778,7 @@ msgstr "Kontakt"
 #: src/business/business-gnome/dialog-order.c:859
 #: src/business/business-gnome/dialog-vendor.c:678
 #: intl-scm/guile-strings.c:551 intl-scm/guile-strings.c:709
-#: intl-scm/guile-strings.c:893
+#: intl-scm/guile-strings.c:1057
 msgid "Company"
 msgstr "Společnost"
 
@@ -1863,8 +1864,8 @@ msgstr "Opravdu chcete vystavit fakturu?"
 
 #: src/business/business-gnome/dialog-invoice.c:563
 #: src/register/ledger-core/split-register-model.c:123
-#: intl-scm/guile-strings.c:549 intl-scm/guile-strings.c:875
-#: intl-scm/guile-strings.c:897
+#: intl-scm/guile-strings.c:549 intl-scm/guile-strings.c:1039
+#: intl-scm/guile-strings.c:1061
 msgid "Due Date"
 msgstr "Datu splatnosti"
 
@@ -1954,7 +1955,7 @@ msgid "Invoice Owner"
 msgstr "Vlastník faktury"
 
 #: src/business/business-gnome/dialog-invoice.c:2294
-#: intl-scm/guile-strings.c:835 intl-scm/guile-strings.c:1117
+#: intl-scm/guile-strings.c:835 intl-scm/guile-strings.c:999
 msgid "Invoice Notes"
 msgstr "Poznámky o faktuře"
 
@@ -1976,7 +1977,7 @@ msgstr "Jméno společnosti "
 #: src/gnome/dialog-price-edit-db.c:503 src/gnome-utils/gnc-account-tree.c:89
 #: src/import-export/generic-import.glade:174
 #: src/register/ledger-core/split-register-model.c:212
-#: intl-scm/guile-strings.c:901 intl-scm/guile-strings.c:3939
+#: intl-scm/guile-strings.c:1065 intl-scm/guile-strings.c:3939
 msgid "Type"
 msgstr "Typ"
 
@@ -2149,9 +2150,9 @@ msgstr "není"
 
 #: src/business/business-gnome/business-gnome-utils.c:314
 #: src/gnome/glade/sched-xact.glade:864 intl-scm/guile-strings.c:381
-#: intl-scm/guile-strings.c:2501 intl-scm/guile-strings.c:2527
-#: intl-scm/guile-strings.c:2587 intl-scm/guile-strings.c:2589
-#: intl-scm/guile-strings.c:2691 intl-scm/guile-strings.c:2707
+#: intl-scm/guile-strings.c:2563 intl-scm/guile-strings.c:2589
+#: intl-scm/guile-strings.c:2649 intl-scm/guile-strings.c:2651
+#: intl-scm/guile-strings.c:2753 intl-scm/guile-strings.c:2769
 msgid "None"
 msgstr "Žádný"
 
@@ -2310,7 +2311,7 @@ msgstr "Kč"
 
 #: src/business/business-ledger/gncEntryLedgerLoad.c:33
 #: src/gnome/glade/sched-xact.glade:4651 intl-scm/guile-strings.c:747
-#: intl-scm/guile-strings.c:1029
+#: intl-scm/guile-strings.c:911
 msgid "%"
 msgstr "%"
 
@@ -2338,7 +2339,7 @@ msgstr "Hotovost"
 #: src/business/business-ledger/gncEntryLedgerModel.c:499
 #: src/business/business-ledger/gncEntryLedgerModel.c:1025
 #: intl-scm/guile-strings.c:110 intl-scm/guile-strings.c:126
-#: intl-scm/guile-strings.c:2349
+#: intl-scm/guile-strings.c:2411
 msgid "Charge"
 msgstr "Účtovat"
 
@@ -2353,13 +2354,13 @@ msgstr "Výdajový účet"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:50
 #: src/register/ledger-core/split-register-model.c:184
-#: intl-scm/guile-strings.c:765 intl-scm/guile-strings.c:1047
+#: intl-scm/guile-strings.c:765 intl-scm/guile-strings.c:929
 msgid "Action"
 msgstr "Akce"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:65
 #: intl-scm/guile-strings.c:739 intl-scm/guile-strings.c:781
-#: intl-scm/guile-strings.c:1021 intl-scm/guile-strings.c:1063
+#: intl-scm/guile-strings.c:903 intl-scm/guile-strings.c:945
 msgid "Discount"
 msgstr "Sleva"
 
@@ -2372,13 +2373,13 @@ msgid "Discount How"
 msgstr "Sleva jak"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:80
-#: intl-scm/guile-strings.c:737 intl-scm/guile-strings.c:1019
+#: intl-scm/guile-strings.c:737 intl-scm/guile-strings.c:901
 msgid "Unit Price"
 msgstr "Jednotková cena"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:85
 #: intl-scm/guile-strings.c:735 intl-scm/guile-strings.c:771
-#: intl-scm/guile-strings.c:1017 intl-scm/guile-strings.c:1053
+#: intl-scm/guile-strings.c:899 intl-scm/guile-strings.c:935
 msgid "Quantity"
 msgstr "Množství"
 
@@ -2400,12 +2401,12 @@ msgid "Invoiced?"
 msgstr "Vyfakturováno?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:110
-#: intl-scm/guile-strings.c:859 intl-scm/guile-strings.c:1141
+#: intl-scm/guile-strings.c:859 intl-scm/guile-strings.c:1023
 msgid "Subtotal"
 msgstr "Částečný součet"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:115
-#: intl-scm/guile-strings.c:861 intl-scm/guile-strings.c:1143
+#: intl-scm/guile-strings.c:861 intl-scm/guile-strings.c:1025
 msgid "Tax"
 msgstr "Daň"
 
@@ -2633,7 +2634,7 @@ msgstr "Měna"
 
 #: src/engine/Account.c:2486 src/gnome/glade/tax.glade:131
 #: src/register/ledger-core/split-register.c:2070 intl-scm/guile-strings.c:138
-#: intl-scm/guile-strings.c:1581 intl-scm/guile-strings.c:2065
+#: intl-scm/guile-strings.c:1581 intl-scm/guile-strings.c:2127
 #: intl-scm/guile-strings.c:3925
 msgid "Income"
 msgstr "Příjmy"
@@ -2769,14 +2770,14 @@ msgstr ""
 #: src/engine/Transaction.c:2358 src/engine/Transaction.c:2379
 #: src/register/ledger-core/split-register-control.c:977
 #: src/register/ledger-core/split-register.c:2089
-#: intl-scm/guile-strings.c:2263 intl-scm/guile-strings.c:2747
+#: intl-scm/guile-strings.c:2325 intl-scm/guile-strings.c:2809
 msgid "-- Split Transaction --"
 msgstr "-- Rozdělená účetní položka --"
 
 #: src/engine/Transaction.c:2400 src/gnome/glade/register.glade:1608
 #: src/gnome/druid-stock-split.c:410
 #: src/register/ledger-core/split-register.c:2073
-#: intl-scm/guile-strings.c:2373
+#: intl-scm/guile-strings.c:2435
 msgid "Split"
 msgstr "Rozdělení"
 
@@ -3218,7 +3219,7 @@ msgstr "NOTUSED: Definováno v src/gnome/window-register.c"
 #: src/register/ledger-core/split-register-layout.c:564
 #: src/register/ledger-core/split-register-model.c:198
 #: src/register/ledger-core/split-register.c:2004
-#: intl-scm/guile-strings.c:2255
+#: intl-scm/guile-strings.c:2317
 msgid "Transfer"
 msgstr "Převod"
 
@@ -3410,8 +3411,8 @@ msgstr "Detailní popis"
 #: intl-scm/guile-strings.c:1667 intl-scm/guile-strings.c:1715
 #: intl-scm/guile-strings.c:1759 intl-scm/guile-strings.c:1803
 #: intl-scm/guile-strings.c:1851 intl-scm/guile-strings.c:1993
-#: intl-scm/guile-strings.c:2039 intl-scm/guile-strings.c:2143
-#: intl-scm/guile-strings.c:2773 intl-scm/guile-strings.c:3363
+#: intl-scm/guile-strings.c:2047 intl-scm/guile-strings.c:2101
+#: intl-scm/guile-strings.c:2205 intl-scm/guile-strings.c:3363
 #: intl-scm/guile-strings.c:3405 intl-scm/guile-strings.c:3843
 #: intl-scm/guile-strings.c:3897
 msgid "Accounts"
@@ -3432,8 +3433,8 @@ msgstr ""
 "a účtů držících místo mohou mít počáteční zůstatek."
 
 #: src/gnome/glade/account.glade:1343 src/gnome-utils/gnc-account-tree.c:88
-#: intl-scm/guile-strings.c:1383 intl-scm/guile-strings.c:2397
-#: intl-scm/guile-strings.c:2531 intl-scm/guile-strings.c:2647
+#: intl-scm/guile-strings.c:1383 intl-scm/guile-strings.c:2459
+#: intl-scm/guile-strings.c:2593 intl-scm/guile-strings.c:2709
 msgid "Account Name"
 msgstr "Jméno účtu"
 
@@ -3475,11 +3476,11 @@ msgstr "Zvolte nebo přidejte účet GnuCash"
 #: src/import-export/hbci/gnc-hbci-utils.c:525
 #: src/import-export/qif-import/qif.glade:125
 #: src/register/ledger-core/split-register-model.c:191
-#: intl-scm/guile-strings.c:891 intl-scm/guile-strings.c:1765
+#: intl-scm/guile-strings.c:1055 intl-scm/guile-strings.c:1765
 #: intl-scm/guile-strings.c:1873 intl-scm/guile-strings.c:1927
-#: intl-scm/guile-strings.c:2099 intl-scm/guile-strings.c:2149
-#: intl-scm/guile-strings.c:2253 intl-scm/guile-strings.c:2297
-#: intl-scm/guile-strings.c:2457
+#: intl-scm/guile-strings.c:2161 intl-scm/guile-strings.c:2211
+#: intl-scm/guile-strings.c:2315 intl-scm/guile-strings.c:2359
+#: intl-scm/guile-strings.c:2519
 msgid "Account"
 msgstr "Účet"
 
@@ -3507,7 +3508,7 @@ msgstr "Zobrazovat národní měny"
 
 #: src/gnome/glade/commodities.glade:156 src/gnome/glade/stocks.glade:133
 #: src/gnome/dialog-commodities.c:354 intl-scm/guile-strings.c:1767
-#: intl-scm/guile-strings.c:2151
+#: intl-scm/guile-strings.c:2213
 msgid "Symbol"
 msgstr "Symbol"
 
@@ -3706,11 +3707,11 @@ msgstr "Zdroj"
 #: src/register/ledger-core/split-register.c:1713
 #: src/register/ledger-core/split-register.c:1715
 #: src/register/ledger-core/split-register.c:2061 intl-scm/guile-strings.c:777
-#: intl-scm/guile-strings.c:1059 intl-scm/guile-strings.c:1773
-#: intl-scm/guile-strings.c:2157 intl-scm/guile-strings.c:2169
-#: intl-scm/guile-strings.c:2243 intl-scm/guile-strings.c:2259
-#: intl-scm/guile-strings.c:2309 intl-scm/guile-strings.c:2409
-#: intl-scm/guile-strings.c:2463 intl-scm/guile-strings.c:2675
+#: intl-scm/guile-strings.c:941 intl-scm/guile-strings.c:1773
+#: intl-scm/guile-strings.c:2219 intl-scm/guile-strings.c:2231
+#: intl-scm/guile-strings.c:2305 intl-scm/guile-strings.c:2321
+#: intl-scm/guile-strings.c:2371 intl-scm/guile-strings.c:2471
+#: intl-scm/guile-strings.c:2525 intl-scm/guile-strings.c:2737
 msgid "Price"
 msgstr "Cena"
 
@@ -3975,31 +3976,31 @@ msgstr "Denně [Po-Pá]"
 msgid "Every"
 msgstr "Každý"
 
-#: src/gnome/glade/sched-xact.glade:1197 intl-scm/guile-strings.c:2799
+#: src/gnome/glade/sched-xact.glade:1197 intl-scm/guile-strings.c:2073
 msgid "Sunday"
 msgstr "Neděle"
 
-#: src/gnome/glade/sched-xact.glade:1211 intl-scm/guile-strings.c:2801
+#: src/gnome/glade/sched-xact.glade:1211 intl-scm/guile-strings.c:2075
 msgid "Monday"
 msgstr "Pondělí"
 
-#: src/gnome/glade/sched-xact.glade:1225 intl-scm/guile-strings.c:2803
+#: src/gnome/glade/sched-xact.glade:1225 intl-scm/guile-strings.c:2077
 msgid "Tuesday"
 msgstr "Úterý"
 
-#: src/gnome/glade/sched-xact.glade:1251 intl-scm/guile-strings.c:2805
+#: src/gnome/glade/sched-xact.glade:1251 intl-scm/guile-strings.c:2079
 msgid "Wednesday"
 msgstr "Středa"
 
-#: src/gnome/glade/sched-xact.glade:1265 intl-scm/guile-strings.c:2807
+#: src/gnome/glade/sched-xact.glade:1265 intl-scm/guile-strings.c:2081
 msgid "Thursday"
 msgstr "Čtvrtek"
 
-#: src/gnome/glade/sched-xact.glade:1279 intl-scm/guile-strings.c:2809
+#: src/gnome/glade/sched-xact.glade:1279 intl-scm/guile-strings.c:2083
 msgid "Friday"
 msgstr "Pátek"
 
-#: src/gnome/glade/sched-xact.glade:1305 intl-scm/guile-strings.c:2811
+#: src/gnome/glade/sched-xact.glade:1305 intl-scm/guile-strings.c:2085
 msgid "Saturday"
 msgstr "Sobota"
 
@@ -4036,8 +4037,8 @@ msgstr "Dvakrát měsíčně"
 msgid "On the"
 msgstr "Dne"
 
-#: src/gnome/glade/sched-xact.glade:1782 intl-scm/guile-strings.c:2591
-#: intl-scm/guile-strings.c:2593
+#: src/gnome/glade/sched-xact.glade:1782 intl-scm/guile-strings.c:2653
+#: intl-scm/guile-strings.c:2655
 msgid "Monthly"
 msgstr "Měsíčně"
 
@@ -4072,8 +4073,8 @@ msgstr "Měsíc"
 msgid "Day"
 msgstr "Den"
 
-#: src/gnome/glade/sched-xact.glade:2425 intl-scm/guile-strings.c:2595
-#: intl-scm/guile-strings.c:2597
+#: src/gnome/glade/sched-xact.glade:2425 intl-scm/guile-strings.c:2657
+#: intl-scm/guile-strings.c:2659
 msgid "Yearly"
 msgstr "Ročně"
 
@@ -4206,7 +4207,7 @@ msgstr "Proměnné"
 #: src/gnome/glade/sched-xact.glade:3993
 #: src/register/ledger-core/split-register.c:1720
 #: src/register/ledger-core/split-register.c:1722
-#: intl-scm/guile-strings.c:1775 intl-scm/guile-strings.c:2159
+#: intl-scm/guile-strings.c:1775 intl-scm/guile-strings.c:2221
 msgid "Value"
 msgstr "Hodnota"
 
@@ -4381,7 +4382,7 @@ msgstr "Zkontrolovat"
 msgid "Range: "
 msgstr "Rozsah: "
 
-#: src/gnome/glade/sched-xact.glade:5688 intl-scm/guile-strings.c:979
+#: src/gnome/glade/sched-xact.glade:5688 intl-scm/guile-strings.c:1143
 msgid "Date Range"
 msgstr "Rozsah data"
 
@@ -4421,9 +4422,9 @@ msgstr "Zvolte účet, pro který chcete zaznamenat rozdělení nebo sloučení 
 #: src/register/ledger-core/split-register-model.c:254
 #: src/register/ledger-core/split-register.c:1706
 #: src/register/ledger-core/split-register.c:1708
-#: intl-scm/guile-strings.c:1771 intl-scm/guile-strings.c:2257
-#: intl-scm/guile-strings.c:2303 intl-scm/guile-strings.c:2405
-#: intl-scm/guile-strings.c:2461 intl-scm/guile-strings.c:2671
+#: intl-scm/guile-strings.c:1771 intl-scm/guile-strings.c:2319
+#: intl-scm/guile-strings.c:2365 intl-scm/guile-strings.c:2467
+#: intl-scm/guile-strings.c:2523 intl-scm/guile-strings.c:2733
 msgid "Shares"
 msgstr "Podíly"
 
@@ -4625,7 +4626,7 @@ msgstr "Musíte zvolit komoditu."
 msgid "You must select a currency."
 msgstr "Musíte zvolit měnu."
 
-#: src/gnome/dialog-price-editor.c:185 src/gnome-utils/dialog-transfer.c:1375
+#: src/gnome/dialog-price-editor.c:185 src/gnome-utils/dialog-transfer.c:1383
 msgid "You must enter a valid amount."
 msgstr "Musíte zadat platnou částku."
 
@@ -4859,7 +4860,7 @@ msgstr "Hlavní část"
 
 #: src/gnome/druid-loan.c:1748 src/gnome/druid-loan.c:2341
 #: src/register/ledger-core/split-register.c:2035
-#: intl-scm/guile-strings.c:1255 intl-scm/guile-strings.c:1295
+#: intl-scm/guile-strings.c:1259 intl-scm/guile-strings.c:1299
 msgid "Interest"
 msgstr "Úrok"
 
@@ -5530,12 +5531,12 @@ msgstr "Zpráva o výsledcích hledání"
 #: src/gnome/window-register.c:825 intl-scm/guile-strings.c:198
 #: intl-scm/guile-strings.c:216 intl-scm/guile-strings.c:222
 #: intl-scm/guile-strings.c:228 intl-scm/guile-strings.c:234
-#: intl-scm/guile-strings.c:242 intl-scm/guile-strings.c:2353
+#: intl-scm/guile-strings.c:242 intl-scm/guile-strings.c:2415
 #: intl-scm/guile-strings.c:3375 intl-scm/guile-strings.c:3855
 msgid "Register"
 msgstr "Účetní kniha"
 
-#: src/gnome/window-register.c:827 intl-scm/guile-strings.c:2275
+#: src/gnome/window-register.c:827 intl-scm/guile-strings.c:2337
 msgid "Register Report"
 msgstr "Sestava účetní knihy"
 
@@ -6144,8 +6145,8 @@ msgid "(%d) New Accounts"
 msgstr "(%d) nových účtů"
 
 #: src/gnome-utils/gnc-account-tree.c:91 intl-scm/guile-strings.c:1553
-#: intl-scm/guile-strings.c:2429 intl-scm/guile-strings.c:2535
-#: intl-scm/guile-strings.c:2655
+#: intl-scm/guile-strings.c:2491 intl-scm/guile-strings.c:2597
+#: intl-scm/guile-strings.c:2717
 msgid "Account Code"
 msgstr "Kód účtu"
 
@@ -6160,8 +6161,8 @@ msgstr "Současné (Sestava)"
 #: src/gnome-utils/gnc-account-tree.c:95
 #: src/register/ledger-core/split-register-model.c:177
 #: src/register/ledger-core/split-register-model.c:317
-#: intl-scm/guile-strings.c:919 intl-scm/guile-strings.c:1423
-#: intl-scm/guile-strings.c:2261 intl-scm/guile-strings.c:2471
+#: intl-scm/guile-strings.c:1083 intl-scm/guile-strings.c:1423
+#: intl-scm/guile-strings.c:2323 intl-scm/guile-strings.c:2533
 #: intl-scm/guile-strings.c:3949
 msgid "Balance"
 msgstr "Zůstatek"
@@ -6188,10 +6189,10 @@ msgstr "Budoucí minimum (Sestava)"
 
 #: src/gnome-utils/gnc-account-tree.c:103 intl-scm/guile-strings.c:719
 #: intl-scm/guile-strings.c:723 intl-scm/guile-strings.c:745
-#: intl-scm/guile-strings.c:799 intl-scm/guile-strings.c:1027
-#: intl-scm/guile-strings.c:1081 intl-scm/guile-strings.c:1385
+#: intl-scm/guile-strings.c:799 intl-scm/guile-strings.c:909
+#: intl-scm/guile-strings.c:963 intl-scm/guile-strings.c:1385
 #: intl-scm/guile-strings.c:1419 intl-scm/guile-strings.c:1733
-#: intl-scm/guile-strings.c:1785 intl-scm/guile-strings.c:2161
+#: intl-scm/guile-strings.c:1785 intl-scm/guile-strings.c:2223
 #: intl-scm/guile-strings.c:3969
 msgid "Total"
 msgstr "Celkem"
@@ -6204,15 +6205,15 @@ msgstr "Celkem (Sestava)"
 msgid "Tax Info"
 msgstr "Daňové info"
 
-#: src/gnome-utils/gnc-date-delta.c:210 intl-scm/guile-strings.c:2215
+#: src/gnome-utils/gnc-date-delta.c:210 intl-scm/guile-strings.c:2277
 msgid "Weeks"
 msgstr "Týdny"
 
-#: src/gnome-utils/gnc-date-delta.c:211 intl-scm/guile-strings.c:2219
+#: src/gnome-utils/gnc-date-delta.c:211 intl-scm/guile-strings.c:2281
 msgid "Months"
 msgstr "Měsíce"
 
-#: src/gnome-utils/gnc-date-delta.c:212 intl-scm/guile-strings.c:2221
+#: src/gnome-utils/gnc-date-delta.c:212 intl-scm/guile-strings.c:2283
 msgid "Years"
 msgstr "Roky"
 
@@ -6375,7 +6376,7 @@ msgid " "
 msgstr " "
 
 #: src/gnome-utils/transfer.glade:410 src/gnome-utils/transfer.glade:511
-#: intl-scm/guile-strings.c:2041 intl-scm/guile-strings.c:2177
+#: intl-scm/guile-strings.c:2103 intl-scm/guile-strings.c:2239
 msgid "Show Income/Expense"
 msgstr "Zobrazit příjmy/výdaje"
 
@@ -6417,7 +6418,7 @@ msgstr "Informace o kurzu/ceně"
 msgid "Show the income and expense accounts"
 msgstr "Zobrazit příjmové a výdajové účty"
 
-#: src/gnome-utils/dialog-transfer.c:1329
+#: src/gnome-utils/dialog-transfer.c:1337
 msgid ""
 "You must specify an account to transfer from,\n"
 "or to, or both, for this transaction.\n"
@@ -6427,11 +6428,11 @@ msgstr ""
 "ze kterého nebo do kterého převést, nebo oba.\n"
 "Jinak nebude zaznamenána."
 
-#: src/gnome-utils/dialog-transfer.c:1338
+#: src/gnome-utils/dialog-transfer.c:1346
 msgid "You can't transfer from and to the same account!"
 msgstr "Nemůžete převádět z a do toho samého účtu!"
 
-#: src/gnome-utils/dialog-transfer.c:1348
+#: src/gnome-utils/dialog-transfer.c:1356
 #, c-format
 msgid ""
 "The account %s\n"
@@ -6440,19 +6441,19 @@ msgstr ""
 "Účet %s\n"
 "nedovoluje účetní položky.\n"
 
-#: src/gnome-utils/dialog-transfer.c:1365
+#: src/gnome-utils/dialog-transfer.c:1373
 msgid "You can't transfer from a non-currency account.  Try reversing the \"from\" and \"to\" accounts and making the \"amount\" negative."
 msgstr "Nemůžete převádět z neměnového účtu. Zkuste prohodit účty \"od\" a \"do\" a použít zápornou \"částku\"."
 
-#: src/gnome-utils/dialog-transfer.c:1388
+#: src/gnome-utils/dialog-transfer.c:1396
 msgid "You must enter an amount to transfer."
 msgstr "Musíte zadat částku k převodu."
 
-#: src/gnome-utils/dialog-transfer.c:1402
+#: src/gnome-utils/dialog-transfer.c:1410
 msgid "You must enter a valid price."
 msgstr "Musíte zadat platnou cenu."
 
-#: src/gnome-utils/dialog-transfer.c:1413
+#: src/gnome-utils/dialog-transfer.c:1421
 msgid "You must enter a valid `to' amount."
 msgstr "Musíte zadat platnou částku `do'."
 
@@ -7151,8 +7152,8 @@ msgid "HBCI Connection Window"
 msgstr "Okno spojení HBCI"
 
 #: src/import-export/hbci/glade/hbci.glade:2526
-#: src/import-export/hbci/glade/hbci.glade:2599 intl-scm/guile-strings.c:1275
-#: intl-scm/guile-strings.c:1279 intl-scm/guile-strings.c:1289
+#: src/import-export/hbci/glade/hbci.glade:2599 intl-scm/guile-strings.c:1279
+#: intl-scm/guile-strings.c:1283 intl-scm/guile-strings.c:1293
 msgid "Progress"
 msgstr "Postup"
 
@@ -7180,13 +7181,13 @@ msgstr "Získat účetní položky online"
 msgid "Date range of transactions to retrieve:"
 msgstr "Rozsah dat účetních položek, které získat:"
 
-#: src/import-export/hbci/glade/hbci.glade:2838 intl-scm/guile-strings.c:929
-#: intl-scm/guile-strings.c:965 intl-scm/guile-strings.c:1321
+#: src/import-export/hbci/glade/hbci.glade:2838 intl-scm/guile-strings.c:1093
+#: intl-scm/guile-strings.c:1129 intl-scm/guile-strings.c:1321
 #: intl-scm/guile-strings.c:1659 intl-scm/guile-strings.c:1789
 #: intl-scm/guile-strings.c:1865 intl-scm/guile-strings.c:1919
-#: intl-scm/guile-strings.c:1983 intl-scm/guile-strings.c:2029
-#: intl-scm/guile-strings.c:2091 intl-scm/guile-strings.c:2163
-#: intl-scm/guile-strings.c:2473 intl-scm/guile-strings.c:2765
+#: intl-scm/guile-strings.c:1983 intl-scm/guile-strings.c:2039
+#: intl-scm/guile-strings.c:2091 intl-scm/guile-strings.c:2153
+#: intl-scm/guile-strings.c:2225 intl-scm/guile-strings.c:2535
 msgid "From"
 msgstr "Od"
 
@@ -7204,13 +7205,13 @@ msgid "Earliest possible date"
 msgstr "Nejdřívější možné datum"
 
 #: src/import-export/hbci/glade/hbci.glade:2931 intl-scm/guile-strings.c:669
-#: intl-scm/guile-strings.c:721 intl-scm/guile-strings.c:931
-#: intl-scm/guile-strings.c:967 intl-scm/guile-strings.c:1323
+#: intl-scm/guile-strings.c:721 intl-scm/guile-strings.c:1095
+#: intl-scm/guile-strings.c:1131 intl-scm/guile-strings.c:1323
 #: intl-scm/guile-strings.c:1661 intl-scm/guile-strings.c:1791
 #: intl-scm/guile-strings.c:1867 intl-scm/guile-strings.c:1921
-#: intl-scm/guile-strings.c:1985 intl-scm/guile-strings.c:2031
-#: intl-scm/guile-strings.c:2093 intl-scm/guile-strings.c:2165
-#: intl-scm/guile-strings.c:2475 intl-scm/guile-strings.c:2767
+#: intl-scm/guile-strings.c:1985 intl-scm/guile-strings.c:2041
+#: intl-scm/guile-strings.c:2093 intl-scm/guile-strings.c:2155
+#: intl-scm/guile-strings.c:2227 intl-scm/guile-strings.c:2537
 msgid "To"
 msgstr "Do"
 
@@ -7436,8 +7437,8 @@ msgstr ""
 "Vaše bezpečnostní médium není podporováno. Pro dané médium nebyl \n"
 "nalezen žádný odpovídající zásuvný modul. Končím."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:494 intl-scm/guile-strings.c:1273
-#: intl-scm/guile-strings.c:1313
+#: src/import-export/hbci/gnc-hbci-utils.c:494 intl-scm/guile-strings.c:1277
+#: intl-scm/guile-strings.c:1317
 msgid "Unspecified"
 msgstr "Nespecifikováno"
 
@@ -8576,7 +8577,7 @@ msgstr ""
 msgid "(Full account ID: "
 msgstr "(Úplné ID účtu: "
 
-#: src/import-export/import-backend.c:841
+#: src/import-export/import-backend.c:840
 msgid "Auto-Balance split"
 msgstr "Část automatického vyrovnání"
 
@@ -9571,7 +9572,7 @@ msgstr "Při odsouhlasování automaticky odškrtnout vynulované účetní polo
 #: intl-scm/guile-strings.c:403 intl-scm/guile-strings.c:409
 #: intl-scm/guile-strings.c:415 intl-scm/guile-strings.c:421
 #: intl-scm/guile-strings.c:427 intl-scm/guile-strings.c:1613
-#: intl-scm/guile-strings.c:2269 intl-scm/guile-strings.c:2815
+#: intl-scm/guile-strings.c:2331 intl-scm/guile-strings.c:2815
 #: intl-scm/guile-strings.c:2821 intl-scm/guile-strings.c:2827
 #: intl-scm/guile-strings.c:2833 intl-scm/guile-strings.c:2923
 #: intl-scm/guile-strings.c:2927 intl-scm/guile-strings.c:2931
@@ -9688,7 +9689,7 @@ msgstr "Příjmy & výdaje"
 msgid "Reverse Income and Expense Accounts"
 msgstr "Obrátit příjmové a výdajové účty"
 
-#: intl-scm/guile-strings.c:377 intl-scm/guile-strings.c:2715
+#: intl-scm/guile-strings.c:377 intl-scm/guile-strings.c:2777
 msgid "Credit Accounts"
 msgstr "Účty Dal"
 
@@ -9982,7 +9983,7 @@ msgid "View the quick report of bills coming due soon."
 msgstr "Zobrazit rychlou zprávu účtů, které bude brzo třeba zaplatit."
 
 #: intl-scm/guile-strings.c:641 intl-scm/guile-strings.c:823
-#: intl-scm/guile-strings.c:1105
+#: intl-scm/guile-strings.c:987
 msgid "Billing Terms"
 msgstr "Platební podmínky"
 
@@ -10037,9 +10038,9 @@ msgstr "Pořadí třídění"
 #: intl-scm/guile-strings.c:675 intl-scm/guile-strings.c:1663
 #: intl-scm/guile-strings.c:1709 intl-scm/guile-strings.c:1795
 #: intl-scm/guile-strings.c:1879 intl-scm/guile-strings.c:1929
-#: intl-scm/guile-strings.c:1989 intl-scm/guile-strings.c:2035
-#: intl-scm/guile-strings.c:2109 intl-scm/guile-strings.c:2171
-#: intl-scm/guile-strings.c:2769
+#: intl-scm/guile-strings.c:1989 intl-scm/guile-strings.c:2043
+#: intl-scm/guile-strings.c:2097 intl-scm/guile-strings.c:2171
+#: intl-scm/guile-strings.c:2233
 msgid "Report's currency"
 msgstr "Měna sestavy"
 
@@ -10047,9 +10048,9 @@ msgstr "Měna sestavy"
 #: intl-scm/guile-strings.c:1711 intl-scm/guile-strings.c:1737
 #: intl-scm/guile-strings.c:1797 intl-scm/guile-strings.c:1881
 #: intl-scm/guile-strings.c:1931 intl-scm/guile-strings.c:1991
-#: intl-scm/guile-strings.c:2037 intl-scm/guile-strings.c:2111
-#: intl-scm/guile-strings.c:2131 intl-scm/guile-strings.c:2175
-#: intl-scm/guile-strings.c:2771
+#: intl-scm/guile-strings.c:2045 intl-scm/guile-strings.c:2099
+#: intl-scm/guile-strings.c:2173 intl-scm/guile-strings.c:2193
+#: intl-scm/guile-strings.c:2237
 msgid "Price Source"
 msgstr "Zdroj cen"
 
@@ -10110,19 +10111,19 @@ msgstr "999 999,99 Kč -> 0 Kč, Z->A"
 msgid "Show multi-currency totals.  If not selected, convert all totals to report currency"
 msgstr "Zobrazovat součty ve více měnách. Není-li vybráno, konvertovat všechny součty na měnu sestavy."
 
-#: intl-scm/guile-strings.c:711 intl-scm/guile-strings.c:907
+#: intl-scm/guile-strings.c:711 intl-scm/guile-strings.c:1071
 msgid "0-30 days"
 msgstr "0-30 dnů"
 
-#: intl-scm/guile-strings.c:713 intl-scm/guile-strings.c:909
+#: intl-scm/guile-strings.c:713 intl-scm/guile-strings.c:1073
 msgid "31-60 days"
 msgstr "31-60 dnů"
 
-#: intl-scm/guile-strings.c:715 intl-scm/guile-strings.c:911
+#: intl-scm/guile-strings.c:715 intl-scm/guile-strings.c:1075
 msgid "61-90 days"
 msgstr "61-90 dnů"
 
-#: intl-scm/guile-strings.c:717 intl-scm/guile-strings.c:913
+#: intl-scm/guile-strings.c:717 intl-scm/guile-strings.c:1077
 msgid "91+ days"
 msgstr "91+ dnů"
 
@@ -10130,25 +10131,25 @@ msgstr "91+ dnů"
 msgid "Business Reports"
 msgstr "Obchodní sestavy"
 
-#: intl-scm/guile-strings.c:727 intl-scm/guile-strings.c:1009
+#: intl-scm/guile-strings.c:727 intl-scm/guile-strings.c:891
 msgid "Invoice Number"
 msgstr "Číslo faktury"
 
-#: intl-scm/guile-strings.c:733 intl-scm/guile-strings.c:1015
+#: intl-scm/guile-strings.c:733 intl-scm/guile-strings.c:897
 msgid "Charge Type"
 msgstr "Typ srážky"
 
 #: intl-scm/guile-strings.c:741 intl-scm/guile-strings.c:787
-#: intl-scm/guile-strings.c:1023 intl-scm/guile-strings.c:1069
+#: intl-scm/guile-strings.c:905 intl-scm/guile-strings.c:951
 msgid "Taxable"
 msgstr "Zdanitelné"
 
 #: intl-scm/guile-strings.c:743 intl-scm/guile-strings.c:793
-#: intl-scm/guile-strings.c:1025 intl-scm/guile-strings.c:1075
+#: intl-scm/guile-strings.c:907 intl-scm/guile-strings.c:957
 msgid "Tax Amount"
 msgstr "Částka daně"
 
-#: intl-scm/guile-strings.c:749 intl-scm/guile-strings.c:1031
+#: intl-scm/guile-strings.c:749 intl-scm/guile-strings.c:913
 msgid "T"
 msgstr "D"
 
@@ -10156,49 +10157,49 @@ msgstr "D"
 #: intl-scm/guile-strings.c:763 intl-scm/guile-strings.c:769
 #: intl-scm/guile-strings.c:775 intl-scm/guile-strings.c:779
 #: intl-scm/guile-strings.c:785 intl-scm/guile-strings.c:791
-#: intl-scm/guile-strings.c:797 intl-scm/guile-strings.c:933
-#: intl-scm/guile-strings.c:937 intl-scm/guile-strings.c:941
-#: intl-scm/guile-strings.c:945 intl-scm/guile-strings.c:949
-#: intl-scm/guile-strings.c:953 intl-scm/guile-strings.c:1033
-#: intl-scm/guile-strings.c:1039 intl-scm/guile-strings.c:1045
-#: intl-scm/guile-strings.c:1051 intl-scm/guile-strings.c:1057
-#: intl-scm/guile-strings.c:1061 intl-scm/guile-strings.c:1067
-#: intl-scm/guile-strings.c:1073 intl-scm/guile-strings.c:1079
+#: intl-scm/guile-strings.c:797 intl-scm/guile-strings.c:915
+#: intl-scm/guile-strings.c:921 intl-scm/guile-strings.c:927
+#: intl-scm/guile-strings.c:933 intl-scm/guile-strings.c:939
+#: intl-scm/guile-strings.c:943 intl-scm/guile-strings.c:949
+#: intl-scm/guile-strings.c:955 intl-scm/guile-strings.c:961
+#: intl-scm/guile-strings.c:1097 intl-scm/guile-strings.c:1101
+#: intl-scm/guile-strings.c:1105 intl-scm/guile-strings.c:1109
+#: intl-scm/guile-strings.c:1113 intl-scm/guile-strings.c:1117
 msgid "Display Columns"
 msgstr "Zobrazovat sloupce"
 
-#: intl-scm/guile-strings.c:755 intl-scm/guile-strings.c:1037
-#: intl-scm/guile-strings.c:2281 intl-scm/guile-strings.c:2629
+#: intl-scm/guile-strings.c:755 intl-scm/guile-strings.c:919
+#: intl-scm/guile-strings.c:2343 intl-scm/guile-strings.c:2691
 msgid "Display the date?"
 msgstr "Zobrazovat datum?"
 
-#: intl-scm/guile-strings.c:761 intl-scm/guile-strings.c:1043
-#: intl-scm/guile-strings.c:2293 intl-scm/guile-strings.c:2641
+#: intl-scm/guile-strings.c:761 intl-scm/guile-strings.c:925
+#: intl-scm/guile-strings.c:2355 intl-scm/guile-strings.c:2703
 msgid "Display the description?"
 msgstr "Zobrazovat popis?"
 
-#: intl-scm/guile-strings.c:767 intl-scm/guile-strings.c:1049
+#: intl-scm/guile-strings.c:767 intl-scm/guile-strings.c:931
 msgid "Display the action?"
 msgstr "Zobrazovat akci?"
 
-#: intl-scm/guile-strings.c:773 intl-scm/guile-strings.c:1055
+#: intl-scm/guile-strings.c:773 intl-scm/guile-strings.c:937
 msgid "Display the quantity of items?"
 msgstr "Zobrazovat počet položek?"
 
-#: intl-scm/guile-strings.c:783 intl-scm/guile-strings.c:1065
+#: intl-scm/guile-strings.c:783 intl-scm/guile-strings.c:947
 msgid "Display the entry's discount"
 msgstr "Zobrazovat slevu položky?"
 
-#: intl-scm/guile-strings.c:789 intl-scm/guile-strings.c:1071
+#: intl-scm/guile-strings.c:789 intl-scm/guile-strings.c:953
 msgid "Display the entry's taxable status"
 msgstr "Zobrazovat stav zdanitelnosti položky"
 
 # FIXME: total total
-#: intl-scm/guile-strings.c:795 intl-scm/guile-strings.c:1077
+#: intl-scm/guile-strings.c:795 intl-scm/guile-strings.c:959
 msgid "Display each entry's total total tax"
 msgstr "Zobrazovat celou daň každé položky"
 
-#: intl-scm/guile-strings.c:801 intl-scm/guile-strings.c:1083
+#: intl-scm/guile-strings.c:801 intl-scm/guile-strings.c:965
 msgid "Display the entry's value"
 msgstr "Zobrazovat hodnotu položky"
 
@@ -10206,218 +10207,217 @@ msgstr "Zobrazovat hodnotu položky"
 #: intl-scm/guile-strings.c:815 intl-scm/guile-strings.c:821
 #: intl-scm/guile-strings.c:827 intl-scm/guile-strings.c:833
 #: intl-scm/guile-strings.c:839 intl-scm/guile-strings.c:845
-#: intl-scm/guile-strings.c:851 intl-scm/guile-strings.c:1085
-#: intl-scm/guile-strings.c:1091 intl-scm/guile-strings.c:1097
-#: intl-scm/guile-strings.c:1103 intl-scm/guile-strings.c:1109
-#: intl-scm/guile-strings.c:1115 intl-scm/guile-strings.c:1121
-#: intl-scm/guile-strings.c:1127 intl-scm/guile-strings.c:1133
-#: intl-scm/guile-strings.c:1617 intl-scm/guile-strings.c:2277
-#: intl-scm/guile-strings.c:2283 intl-scm/guile-strings.c:2289
-#: intl-scm/guile-strings.c:2295 intl-scm/guile-strings.c:2301
-#: intl-scm/guile-strings.c:2307 intl-scm/guile-strings.c:2311
-#: intl-scm/guile-strings.c:2325 intl-scm/guile-strings.c:2331
-#: intl-scm/guile-strings.c:2379 intl-scm/guile-strings.c:2383
-#: intl-scm/guile-strings.c:2387 intl-scm/guile-strings.c:2391
-#: intl-scm/guile-strings.c:2395 intl-scm/guile-strings.c:2399
-#: intl-scm/guile-strings.c:2403 intl-scm/guile-strings.c:2407
-#: intl-scm/guile-strings.c:2411 intl-scm/guile-strings.c:2415
-#: intl-scm/guile-strings.c:2419 intl-scm/guile-strings.c:2423
-#: intl-scm/guile-strings.c:2427 intl-scm/guile-strings.c:2431
-#: intl-scm/guile-strings.c:2435 intl-scm/guile-strings.c:2741
+#: intl-scm/guile-strings.c:851 intl-scm/guile-strings.c:967
+#: intl-scm/guile-strings.c:973 intl-scm/guile-strings.c:979
+#: intl-scm/guile-strings.c:985 intl-scm/guile-strings.c:991
+#: intl-scm/guile-strings.c:997 intl-scm/guile-strings.c:1003
+#: intl-scm/guile-strings.c:1009 intl-scm/guile-strings.c:1015
+#: intl-scm/guile-strings.c:1617 intl-scm/guile-strings.c:2339
+#: intl-scm/guile-strings.c:2345 intl-scm/guile-strings.c:2351
+#: intl-scm/guile-strings.c:2357 intl-scm/guile-strings.c:2363
+#: intl-scm/guile-strings.c:2369 intl-scm/guile-strings.c:2373
+#: intl-scm/guile-strings.c:2387 intl-scm/guile-strings.c:2393
+#: intl-scm/guile-strings.c:2441 intl-scm/guile-strings.c:2445
+#: intl-scm/guile-strings.c:2449 intl-scm/guile-strings.c:2453
+#: intl-scm/guile-strings.c:2457 intl-scm/guile-strings.c:2461
+#: intl-scm/guile-strings.c:2465 intl-scm/guile-strings.c:2469
+#: intl-scm/guile-strings.c:2473 intl-scm/guile-strings.c:2477
+#: intl-scm/guile-strings.c:2481 intl-scm/guile-strings.c:2485
+#: intl-scm/guile-strings.c:2489 intl-scm/guile-strings.c:2493
+#: intl-scm/guile-strings.c:2497 intl-scm/guile-strings.c:2803
 msgid "Display"
 msgstr "Zobrazení"
 
-#: intl-scm/guile-strings.c:805 intl-scm/guile-strings.c:1087
+#: intl-scm/guile-strings.c:805 intl-scm/guile-strings.c:969
 msgid "Individual Taxes"
 msgstr "Individuální daně"
 
-#: intl-scm/guile-strings.c:807 intl-scm/guile-strings.c:1089
+#: intl-scm/guile-strings.c:807 intl-scm/guile-strings.c:971
 msgid "Display all the individual taxes?"
 msgstr "Zobrazovat všechny individuální daně?"
 
-#: intl-scm/guile-strings.c:811 intl-scm/guile-strings.c:1093
-#: intl-scm/guile-strings.c:2333 intl-scm/guile-strings.c:2683
+#: intl-scm/guile-strings.c:811 intl-scm/guile-strings.c:975
+#: intl-scm/guile-strings.c:2395 intl-scm/guile-strings.c:2745
 msgid "Totals"
 msgstr "Součty"
 
-#: intl-scm/guile-strings.c:813 intl-scm/guile-strings.c:1095
-#: intl-scm/guile-strings.c:2335 intl-scm/guile-strings.c:2685
+#: intl-scm/guile-strings.c:813 intl-scm/guile-strings.c:977
+#: intl-scm/guile-strings.c:2397 intl-scm/guile-strings.c:2747
 msgid "Display the totals?"
 msgstr "Zobrazovat součty?"
 
-#: intl-scm/guile-strings.c:817 intl-scm/guile-strings.c:1099
+#: intl-scm/guile-strings.c:817 intl-scm/guile-strings.c:981
 msgid "References"
 msgstr "Odkazy"
 
-#: intl-scm/guile-strings.c:819 intl-scm/guile-strings.c:1101
+#: intl-scm/guile-strings.c:819 intl-scm/guile-strings.c:983
 msgid "Display the invoice references?"
 msgstr "Zobrazovat odkazy faktury?"
 
-#: intl-scm/guile-strings.c:825 intl-scm/guile-strings.c:1107
+#: intl-scm/guile-strings.c:825 intl-scm/guile-strings.c:989
 msgid "Display the invoice billing terms?"
 msgstr "Zobrazovat platební podmínky faktury?"
 
-#: intl-scm/guile-strings.c:831 intl-scm/guile-strings.c:1113
+#: intl-scm/guile-strings.c:831 intl-scm/guile-strings.c:995
 msgid "Display the billing id?"
 msgstr "Zobrazovat fakturační ID?"
 
-#: intl-scm/guile-strings.c:837 intl-scm/guile-strings.c:1119
+#: intl-scm/guile-strings.c:837 intl-scm/guile-strings.c:1001
 msgid "Display the invoice notes?"
 msgstr "Zobrazovat poznámky o faktuře?"
 
-#: intl-scm/guile-strings.c:841 intl-scm/guile-strings.c:1123
+#: intl-scm/guile-strings.c:841 intl-scm/guile-strings.c:1005
 msgid "Payments"
 msgstr "Platby"
 
-#: intl-scm/guile-strings.c:843 intl-scm/guile-strings.c:1125
+#: intl-scm/guile-strings.c:843 intl-scm/guile-strings.c:1007
 msgid "Display the payments applied to this invoice?"
 msgstr "Zobrazovat platby týkající se této faktury?"
 
-#: intl-scm/guile-strings.c:847 intl-scm/guile-strings.c:1129
+#: intl-scm/guile-strings.c:847 intl-scm/guile-strings.c:1011
 msgid "Extra Notes"
 msgstr "Další poznámky"
 
-#: intl-scm/guile-strings.c:849 intl-scm/guile-strings.c:1131
+#: intl-scm/guile-strings.c:849 intl-scm/guile-strings.c:1013
 msgid "Extra notes to put on the invoice"
 msgstr "Další poznámky, které dát na fakturu"
 
-#: intl-scm/guile-strings.c:853 intl-scm/guile-strings.c:955
-#: intl-scm/guile-strings.c:977 intl-scm/guile-strings.c:1135
+#: intl-scm/guile-strings.c:853 intl-scm/guile-strings.c:1017
+#: intl-scm/guile-strings.c:1119 intl-scm/guile-strings.c:1141
 msgid "Today Date Format"
 msgstr "Formát dnešního data"
 
-#: intl-scm/guile-strings.c:855 intl-scm/guile-strings.c:957
-#: intl-scm/guile-strings.c:1137
+#: intl-scm/guile-strings.c:855 intl-scm/guile-strings.c:1019
+#: intl-scm/guile-strings.c:1121
 msgid "The format for the date->string conversion for today's date."
 msgstr "Formát pro konverzi datum->řetězec pro dnešní datum."
 
-#: intl-scm/guile-strings.c:857 intl-scm/guile-strings.c:915
-#: intl-scm/guile-strings.c:1139
+#: intl-scm/guile-strings.c:857 intl-scm/guile-strings.c:1021
+#: intl-scm/guile-strings.c:1079
 msgid "Payment, thank you"
 msgstr "Platba, děkujeme vám"
 
-#: intl-scm/guile-strings.c:863 intl-scm/guile-strings.c:1145
+#: intl-scm/guile-strings.c:863 intl-scm/guile-strings.c:1027
 msgid "Amount Due"
 msgstr "Částka splatná"
 
-#: intl-scm/guile-strings.c:865 intl-scm/guile-strings.c:1147
+#: intl-scm/guile-strings.c:865 intl-scm/guile-strings.c:1029
 msgid "REF"
 msgstr "REF"
 
-#: intl-scm/guile-strings.c:871 intl-scm/guile-strings.c:1153
+#: intl-scm/guile-strings.c:871 intl-scm/guile-strings.c:1035
 msgid "Expense Voucher"
 msgstr ""
 
 #: intl-scm/guile-strings.c:873
-msgid "Invoice Date"
-msgstr "Datum faktury"
+msgid "Invoice&nbsp;Date"
+msgstr "Datum&nbsp;faktury"
+
+#: intl-scm/guile-strings.c:875
+msgid "Due&nbsp;Date"
+msgstr "Datum&nbsp;splatnosti"
 
 #: intl-scm/guile-strings.c:877
-msgid "Invoice in progress...."
-msgstr "Pracuji na faktuře..."
+msgid "<br>Invoice&nbsp;in&nbsp;progress...."
+msgstr "<br>Pracuji&nbsp;na&nbsp;faktuře..."
 
-#: intl-scm/guile-strings.c:883 intl-scm/guile-strings.c:1165
+#: intl-scm/guile-strings.c:883 intl-scm/guile-strings.c:1047
 msgid "No Valid Invoice Selected"
 msgstr "Nebyla vybrána platná faktura"
 
 #: intl-scm/guile-strings.c:885 intl-scm/guile-strings.c:887
 #: intl-scm/guile-strings.c:889
+msgid "Fancy Invoice"
+msgstr "Efektní faktura"
+
+#: intl-scm/guile-strings.c:1037
+msgid "Invoice Date"
+msgstr "Datum faktury"
+
+#: intl-scm/guile-strings.c:1041
+msgid "Invoice in progress...."
+msgstr "Pracuji na faktuře..."
+
+#: intl-scm/guile-strings.c:1049 intl-scm/guile-strings.c:1051
+#: intl-scm/guile-strings.c:1053
 msgid "Printable Invoice"
 msgstr "Tisknutelná faktura"
 
-#: intl-scm/guile-strings.c:921
+#: intl-scm/guile-strings.c:1085
 msgid "Total Credit"
 msgstr "Celkem kredit"
 
-#: intl-scm/guile-strings.c:923
+#: intl-scm/guile-strings.c:1087
 msgid "Total Due"
 msgstr "Celkem k zaplacení"
 
-#: intl-scm/guile-strings.c:925
+#: intl-scm/guile-strings.c:1089
 msgid "The company for this report"
 msgstr "Spočetnost pro tuto sestavu"
 
-#: intl-scm/guile-strings.c:927
+#: intl-scm/guile-strings.c:1091
 msgid "The account to search for transactions"
 msgstr "Účet, ve kterém hledat účetní položky"
 
-#: intl-scm/guile-strings.c:935 intl-scm/guile-strings.c:939
+#: intl-scm/guile-strings.c:1099 intl-scm/guile-strings.c:1103
 msgid "Display the transaction date?"
 msgstr "Zobrazovat datum účetní položky?"
 
-#: intl-scm/guile-strings.c:943
+#: intl-scm/guile-strings.c:1107
 msgid "Display the transaction reference?"
 msgstr "Zobrazovat odkaz účetní položky?"
 
-#: intl-scm/guile-strings.c:947
+#: intl-scm/guile-strings.c:1111
 msgid "Display the transaction type?"
 msgstr "Zobrazovat typ účetní položky?"
 
-#: intl-scm/guile-strings.c:951
+#: intl-scm/guile-strings.c:1115
 msgid "Display the transaction description?"
 msgstr "Zobrazovat popis účetní položky?"
 
-#: intl-scm/guile-strings.c:963
+#: intl-scm/guile-strings.c:1127
 msgid "Expense Report"
 msgstr "Sestava výdajů"
 
-#: intl-scm/guile-strings.c:975
+#: intl-scm/guile-strings.c:1139
 msgid " Report: "
 msgstr " Sestava: "
 
-#: intl-scm/guile-strings.c:981 intl-scm/guile-strings.c:987
+#: intl-scm/guile-strings.c:1145 intl-scm/guile-strings.c:1151
 msgid "Customer Report"
 msgstr "Sestava zákazníků"
 
-#: intl-scm/guile-strings.c:983 intl-scm/guile-strings.c:989
+#: intl-scm/guile-strings.c:1147 intl-scm/guile-strings.c:1153
 msgid "Vendor Report"
 msgstr "Sestava dodavatelů"
 
-#: intl-scm/guile-strings.c:985 intl-scm/guile-strings.c:991
+#: intl-scm/guile-strings.c:1149 intl-scm/guile-strings.c:1155
 msgid "Employee Report"
 msgstr "Sestava zaměstnanců"
 
-#: intl-scm/guile-strings.c:993
+#: intl-scm/guile-strings.c:1157
 msgid "Payable Account"
 msgstr "Ǔčet k zaplacení"
 
-#: intl-scm/guile-strings.c:995
+#: intl-scm/guile-strings.c:1159
 msgid "The payable account you wish to examine"
 msgstr "Účet k zaplacení, který chcete prozkoumat"
 
-#: intl-scm/guile-strings.c:997 intl-scm/guile-strings.c:999
+#: intl-scm/guile-strings.c:1161 intl-scm/guile-strings.c:1163
 msgid "Payable Aging"
 msgstr ""
 
-#: intl-scm/guile-strings.c:1001
+#: intl-scm/guile-strings.c:1165
 msgid "Receivables Account"
 msgstr "Účet k příjmu"
 
-#: intl-scm/guile-strings.c:1003
+#: intl-scm/guile-strings.c:1167
 msgid "The receivables account you wish to examine"
 msgstr "Účet k příjmu, který chcete prozkoumat"
 
-#: intl-scm/guile-strings.c:1005 intl-scm/guile-strings.c:1007
+#: intl-scm/guile-strings.c:1169 intl-scm/guile-strings.c:1171
 msgid "Receivable Aging"
 msgstr ""
-
-#: intl-scm/guile-strings.c:1155
-msgid "Invoice&nbsp;Date"
-msgstr "Datum&nbsp;faktury"
-
-#: intl-scm/guile-strings.c:1157
-msgid "Due&nbsp;Date"
-msgstr "Datum&nbsp;splatnosti"
-
-#: intl-scm/guile-strings.c:1159
-msgid "<br>Invoice&nbsp;in&nbsp;progress...."
-msgstr "<br>Pracuji&nbsp;na&nbsp;faktuře..."
-
-#: intl-scm/guile-strings.c:1167 intl-scm/guile-strings.c:1169
-#: intl-scm/guile-strings.c:1171
-#, fuzzy
-msgid "Fancy Invoice"
-msgstr "Najít fakturu"
 
 #: intl-scm/guile-strings.c:1175
 msgid "Default number of register rows to display in Invoices."
@@ -10533,74 +10533,74 @@ msgid "Activate verbose debug messages for HBCI Online Banking."
 msgstr "Aktivovat podrobné ladicí zprávy pro HBCI Online Banking."
 
 #: intl-scm/guile-strings.c:1249
+msgid "Replay GnuCash .log file"
+msgstr "Znovu přehrát soubor GnuCash .log"
+
+#: intl-scm/guile-strings.c:1251
+msgid "Replay a gnucash log file after a crash.  This cannot be undone."
+msgstr "Znovu přehrát soubor GnuCash .log po pádu. Toto nelze vrátit zpět."
+
+#: intl-scm/guile-strings.c:1253
 msgid "Import OFX/QFX"
 msgstr "Import OFX/QFX"
 
-#: intl-scm/guile-strings.c:1251
+#: intl-scm/guile-strings.c:1255
 msgid "Process an OFX/QFX response file"
 msgstr "Zpracovat soubor odpovědí OFX/QFX"
 
-#: intl-scm/guile-strings.c:1253 intl-scm/guile-strings.c:1293
+#: intl-scm/guile-strings.c:1257 intl-scm/guile-strings.c:1297
 #: intl-scm/guile-strings.c:3523
 msgid "Dividends"
 msgstr "Dividendy"
 
-#: intl-scm/guile-strings.c:1257 intl-scm/guile-strings.c:1297
+#: intl-scm/guile-strings.c:1261 intl-scm/guile-strings.c:1301
 msgid "Cap Return"
 msgstr ""
 
-#: intl-scm/guile-strings.c:1259 intl-scm/guile-strings.c:1299
+#: intl-scm/guile-strings.c:1263 intl-scm/guile-strings.c:1303
 msgid "Cap. gain (long)"
 msgstr "Kap. zisk (dlouhodobý)"
 
-#: intl-scm/guile-strings.c:1261 intl-scm/guile-strings.c:1301
+#: intl-scm/guile-strings.c:1265 intl-scm/guile-strings.c:1305
 msgid "Cap. gain (mid)"
 msgstr "Kap. zisk (střednědobý)"
 
-#: intl-scm/guile-strings.c:1263 intl-scm/guile-strings.c:1303
+#: intl-scm/guile-strings.c:1267 intl-scm/guile-strings.c:1307
 msgid "Cap. gain (short)"
 msgstr "Kap. zisk (krátkodobý)"
 
-#: intl-scm/guile-strings.c:1269 intl-scm/guile-strings.c:1309
+#: intl-scm/guile-strings.c:1273 intl-scm/guile-strings.c:1313
 msgid "Commissions"
 msgstr ""
 
-#: intl-scm/guile-strings.c:1271 intl-scm/guile-strings.c:1311
+#: intl-scm/guile-strings.c:1275 intl-scm/guile-strings.c:1315
 msgid "Margin Interest"
 msgstr ""
 
-#: intl-scm/guile-strings.c:1277
+#: intl-scm/guile-strings.c:1281
 msgid "Loading QIF file..."
 msgstr "Načítám soubor QIF..."
 
-#: intl-scm/guile-strings.c:1281
+#: intl-scm/guile-strings.c:1285
 msgid "Finding duplicate transactions..."
 msgstr "Hledám duplikované účetní položky..."
 
-#: intl-scm/guile-strings.c:1283
+#: intl-scm/guile-strings.c:1287
 #, c-format
 msgid "The file contains an unknown Action '%s'."
 msgstr "Soubor obsahuje neznámou akci '%s'."
 
-#: intl-scm/guile-strings.c:1285
+#: intl-scm/guile-strings.c:1289
 msgid "Some transactions may be discarded."
 msgstr "Některé účetní položky mohou být zahozeny."
 
-#: intl-scm/guile-strings.c:1287
+#: intl-scm/guile-strings.c:1291
 msgid "QIF import: Name conflict with another account."
 msgstr "Import QIF: Konflikt jména s jiným účtem."
 
-#: intl-scm/guile-strings.c:1291
+#: intl-scm/guile-strings.c:1295
 msgid "Importing transactions..."
 msgstr "Importuji účetní položky"
-
-#: intl-scm/guile-strings.c:1315
-msgid "Replay GnuCash .log file"
-msgstr "Znovu přehrát soubor GnuCash .log"
-
-#: intl-scm/guile-strings.c:1317
-msgid "Replay a gnucash log file after a crash.  This cannot be undone."
-msgstr "Znovu přehrát soubor GnuCash .log po pádu. Toto nelze vrátit zpět."
 
 #: intl-scm/guile-strings.c:1319
 msgid "Tax Report / TXF Export"
@@ -10797,7 +10797,7 @@ msgstr "Nevybrány žádné účty"
 msgid "This report requires accounts to be selected."
 msgstr "Tato sestava vyžaduje vybrání účtů."
 
-#: intl-scm/guile-strings.c:1435 intl-scm/guile-strings.c:2235
+#: intl-scm/guile-strings.c:1435 intl-scm/guile-strings.c:2297
 msgid "No data"
 msgstr "Žádná data"
 
@@ -10894,20 +10894,20 @@ msgid "Select the currency to display the values of this report in."
 msgstr "Zvolte měnu, ve které zobrazovat hodnoty této sestavy."
 
 #: intl-scm/guile-strings.c:1505 intl-scm/guile-strings.c:1729
-#: intl-scm/guile-strings.c:1891 intl-scm/guile-strings.c:2119
+#: intl-scm/guile-strings.c:1891 intl-scm/guile-strings.c:2181
 msgid "Display the account's foreign currency amount?"
 msgstr "Zobrazovat částku účtu v cizí měně?"
 
 #: intl-scm/guile-strings.c:1507 intl-scm/guile-strings.c:1747
-#: intl-scm/guile-strings.c:2195
+#: intl-scm/guile-strings.c:2257
 msgid "The source of price information"
 msgstr "Zdroj informací o ceně"
 
-#: intl-scm/guile-strings.c:1509 intl-scm/guile-strings.c:2197
+#: intl-scm/guile-strings.c:1509 intl-scm/guile-strings.c:2259
 msgid "Weighted Average"
 msgstr "Vážený průměr"
 
-#: intl-scm/guile-strings.c:1511 intl-scm/guile-strings.c:2199
+#: intl-scm/guile-strings.c:1511 intl-scm/guile-strings.c:2261
 msgid "The weighted average of all currency transactions of the past"
 msgstr "Vážený průměr všech účetních položek měny v minulosti"
 
@@ -10993,13 +10993,13 @@ msgstr "Podle částky, od největších k nejmenším"
 
 #: intl-scm/guile-strings.c:1571 intl-scm/guile-strings.c:1655
 #: intl-scm/guile-strings.c:1895 intl-scm/guile-strings.c:1897
-#: intl-scm/guile-strings.c:2069
+#: intl-scm/guile-strings.c:2131
 msgid "Assets"
 msgstr "Aktiva"
 
 #: intl-scm/guile-strings.c:1573 intl-scm/guile-strings.c:1657
 #: intl-scm/guile-strings.c:1899 intl-scm/guile-strings.c:1901
-#: intl-scm/guile-strings.c:2071
+#: intl-scm/guile-strings.c:2133
 msgid "Liabilities"
 msgstr "Pasiva"
 
@@ -11137,49 +11137,49 @@ msgid "Expense Accounts"
 msgstr "Výdajové účty"
 
 #: intl-scm/guile-strings.c:1669 intl-scm/guile-strings.c:1995
-#: intl-scm/guile-strings.c:2775
+#: intl-scm/guile-strings.c:2049
 msgid "Show Accounts until level"
 msgstr "Zobrazovat účty po úroveň"
 
 #: intl-scm/guile-strings.c:1671 intl-scm/guile-strings.c:1997
-#: intl-scm/guile-strings.c:2779
+#: intl-scm/guile-strings.c:2053
 msgid "Show long account names"
 msgstr "Zobrazovat dlouhá jména účtů"
 
-#: intl-scm/guile-strings.c:1673 intl-scm/guile-strings.c:2781
+#: intl-scm/guile-strings.c:1673 intl-scm/guile-strings.c:2055
 msgid "Show Totals"
 msgstr "Zobrazovat součty"
 
-#: intl-scm/guile-strings.c:1675 intl-scm/guile-strings.c:2783
+#: intl-scm/guile-strings.c:1675 intl-scm/guile-strings.c:2057
 msgid "Maximum Slices"
 msgstr "Maximum řezů"
 
 #: intl-scm/guile-strings.c:1677 intl-scm/guile-strings.c:1831
 #: intl-scm/guile-strings.c:1859 intl-scm/guile-strings.c:2003
-#: intl-scm/guile-strings.c:2049 intl-scm/guile-strings.c:2189
-#: intl-scm/guile-strings.c:2785
+#: intl-scm/guile-strings.c:2059 intl-scm/guile-strings.c:2111
+#: intl-scm/guile-strings.c:2251
 msgid "Plot Width"
 msgstr "Šířka grafu"
 
 #: intl-scm/guile-strings.c:1679 intl-scm/guile-strings.c:1833
 #: intl-scm/guile-strings.c:1861 intl-scm/guile-strings.c:2005
-#: intl-scm/guile-strings.c:2051 intl-scm/guile-strings.c:2191
-#: intl-scm/guile-strings.c:2787
+#: intl-scm/guile-strings.c:2061 intl-scm/guile-strings.c:2113
+#: intl-scm/guile-strings.c:2253
 msgid "Plot Height"
 msgstr "Výška grafu"
 
 #: intl-scm/guile-strings.c:1681 intl-scm/guile-strings.c:2007
-#: intl-scm/guile-strings.c:2789
+#: intl-scm/guile-strings.c:2063
 msgid "Sort Method"
 msgstr "Metoda třídění"
 
 #: intl-scm/guile-strings.c:1683 intl-scm/guile-strings.c:2009
-#: intl-scm/guile-strings.c:2053 intl-scm/guile-strings.c:2793
+#: intl-scm/guile-strings.c:2067 intl-scm/guile-strings.c:2115
 msgid "Report on these accounts, if chosen account level allows."
 msgstr "Vytvořit sestavu o těchto účtech, pokud to dovolí zvolená hloubka účtů."
 
 #: intl-scm/guile-strings.c:1685 intl-scm/guile-strings.c:2011
-#: intl-scm/guile-strings.c:2795
+#: intl-scm/guile-strings.c:2069
 msgid "Show accounts to this depth and not further"
 msgstr "Zobrazovat účty po tuto hloubky a ne dál"
 
@@ -11187,7 +11187,7 @@ msgstr "Zobrazovat účty po tuto hloubky a ne dál"
 msgid "Show the full account name in legend?"
 msgstr "Zobrazovat v legendě úplné jméno účtu?"
 
-#: intl-scm/guile-strings.c:1689 intl-scm/guile-strings.c:2797
+#: intl-scm/guile-strings.c:1689 intl-scm/guile-strings.c:2071
 msgid "Show the total balance in legend?"
 msgstr "Zobrazovat v legendě celkový zůstatek?"
 
@@ -11196,8 +11196,8 @@ msgid "Maximum number of slices in pie"
 msgstr "Maximální počet řezů v koláči"
 
 #: intl-scm/guile-strings.c:1695 intl-scm/guile-strings.c:2019
-#: intl-scm/guile-strings.c:2063 intl-scm/guile-strings.c:2211
-#: intl-scm/guile-strings.c:2813
+#: intl-scm/guile-strings.c:2087 intl-scm/guile-strings.c:2125
+#: intl-scm/guile-strings.c:2273
 #, c-format
 msgid "%s to %s"
 msgstr "%s do %s"
@@ -11216,7 +11216,7 @@ msgid "Account Summary"
 msgstr "Shrnutí účtů"
 
 #: intl-scm/guile-strings.c:1705 intl-scm/guile-strings.c:1869
-#: intl-scm/guile-strings.c:1923 intl-scm/guile-strings.c:2095
+#: intl-scm/guile-strings.c:1923 intl-scm/guile-strings.c:2157
 msgid "Account Display Depth"
 msgstr "Hloubka zobrazení účtů"
 
@@ -11225,37 +11225,37 @@ msgid "Show Foreign Currencies/Shares of Stock"
 msgstr "Zobrazovat cizí měny/podíly akcií"
 
 #: intl-scm/guile-strings.c:1713 intl-scm/guile-strings.c:1871
-#: intl-scm/guile-strings.c:1925 intl-scm/guile-strings.c:2097
+#: intl-scm/guile-strings.c:1925 intl-scm/guile-strings.c:2159
 msgid "Always show sub-accounts"
 msgstr "Vždy zobrazovat podúčty"
 
-#: intl-scm/guile-strings.c:1717 intl-scm/guile-strings.c:2101
+#: intl-scm/guile-strings.c:1717 intl-scm/guile-strings.c:2163
 msgid "Group the accounts"
 msgstr "Seskupit účty"
 
 #: intl-scm/guile-strings.c:1719 intl-scm/guile-strings.c:1725
 #: intl-scm/guile-strings.c:1875 intl-scm/guile-strings.c:1887
-#: intl-scm/guile-strings.c:2103 intl-scm/guile-strings.c:2115
+#: intl-scm/guile-strings.c:2165 intl-scm/guile-strings.c:2177
 msgid "Show balances for parent accounts"
 msgstr "Zobrazovat zůstatky rodičovských účtů"
 
 #: intl-scm/guile-strings.c:1721 intl-scm/guile-strings.c:1877
-#: intl-scm/guile-strings.c:2105
+#: intl-scm/guile-strings.c:2167
 msgid "Show subtotals"
 msgstr "Zobrazovat částečné součty"
 
 #: intl-scm/guile-strings.c:1723 intl-scm/guile-strings.c:1885
-#: intl-scm/guile-strings.c:1933 intl-scm/guile-strings.c:2113
+#: intl-scm/guile-strings.c:1933 intl-scm/guile-strings.c:2175
 msgid "Show Exchange Rates"
 msgstr "Zobrazovat kurzy"
 
 #: intl-scm/guile-strings.c:1727 intl-scm/guile-strings.c:1889
-#: intl-scm/guile-strings.c:2117
+#: intl-scm/guile-strings.c:2179
 msgid "Show subtotals for parent accounts"
 msgstr "Zobrazovat částečné součty rodičovských účtů"
 
 #: intl-scm/guile-strings.c:1731 intl-scm/guile-strings.c:1893
-#: intl-scm/guile-strings.c:1937 intl-scm/guile-strings.c:2121
+#: intl-scm/guile-strings.c:1937 intl-scm/guile-strings.c:2183
 msgid "Show the exchange rates used"
 msgstr "Zobrazovat použité kurzy"
 
@@ -11263,31 +11263,31 @@ msgstr "Zobrazovat použité kurzy"
 msgid "Advanced Portfolio"
 msgstr "Pokročilé portfolio"
 
-#: intl-scm/guile-strings.c:1739 intl-scm/guile-strings.c:2133
+#: intl-scm/guile-strings.c:1739 intl-scm/guile-strings.c:2195
 msgid "Share decimal places"
 msgstr "Desetinná místa podílu"
 
-#: intl-scm/guile-strings.c:1741 intl-scm/guile-strings.c:2135
+#: intl-scm/guile-strings.c:1741 intl-scm/guile-strings.c:2197
 msgid "Include accounts with no shares"
 msgstr "Zahrnout účty bez podílů"
 
-#: intl-scm/guile-strings.c:1745 intl-scm/guile-strings.c:2139
+#: intl-scm/guile-strings.c:1745 intl-scm/guile-strings.c:2201
 msgid "Report Currency"
 msgstr "Měna sestavy"
 
-#: intl-scm/guile-strings.c:1757 intl-scm/guile-strings.c:2141
+#: intl-scm/guile-strings.c:1757 intl-scm/guile-strings.c:2203
 msgid "The number of decimal places to use for share numbers"
 msgstr "Počet desetinných míst, které používat pro počty podílů"
 
-#: intl-scm/guile-strings.c:1761 intl-scm/guile-strings.c:2145
+#: intl-scm/guile-strings.c:1761 intl-scm/guile-strings.c:2207
 msgid "Stock Accounts to report on"
 msgstr "Účty akcií, o kterých vytvořit sestavu"
 
-#: intl-scm/guile-strings.c:1763 intl-scm/guile-strings.c:2147
+#: intl-scm/guile-strings.c:1763 intl-scm/guile-strings.c:2209
 msgid "Include accounts that have a zero share balances."
 msgstr "Zahrnout účty, které mají nulový zůstatek podílů."
 
-#: intl-scm/guile-strings.c:1769 intl-scm/guile-strings.c:2153
+#: intl-scm/guile-strings.c:1769 intl-scm/guile-strings.c:2215
 msgid "Listing"
 msgstr "Seznam"
 
@@ -11312,15 +11312,15 @@ msgid "Average Balance"
 msgstr "Průměrný zůstatek"
 
 #: intl-scm/guile-strings.c:1793 intl-scm/guile-strings.c:1987
-#: intl-scm/guile-strings.c:2033 intl-scm/guile-strings.c:2167
+#: intl-scm/guile-strings.c:2095 intl-scm/guile-strings.c:2229
 msgid "Step Size"
 msgstr "Velikost kroku"
 
-#: intl-scm/guile-strings.c:1799 intl-scm/guile-strings.c:2777
+#: intl-scm/guile-strings.c:1799 intl-scm/guile-strings.c:2051
 msgid "Include Sub-Accounts"
 msgstr "Zahrnout podúčty"
 
-#: intl-scm/guile-strings.c:1801 intl-scm/guile-strings.c:2791
+#: intl-scm/guile-strings.c:1801 intl-scm/guile-strings.c:2065
 msgid "Include sub-accounts of all selected accounts"
 msgstr "Zahrnout podúčty všech vybraných účtů"
 
@@ -11357,7 +11357,7 @@ msgid "Average"
 msgstr "Průměr"
 
 #: intl-scm/guile-strings.c:1823 intl-scm/guile-strings.c:1849
-#: intl-scm/guile-strings.c:2125
+#: intl-scm/guile-strings.c:2187
 msgid "Profit"
 msgstr "Zisk"
 
@@ -11397,7 +11397,7 @@ msgstr "Ztráta"
 msgid "Balance Sheet"
 msgstr "Rozvaha"
 
-#: intl-scm/guile-strings.c:1883 intl-scm/guile-strings.c:2107
+#: intl-scm/guile-strings.c:1883 intl-scm/guile-strings.c:2169
 msgid "Show Foreign Currencies"
 msgstr "Zobrazovat cizí měny"
 
@@ -11405,7 +11405,7 @@ msgstr "Zobrazovat cizí měny"
 msgid "Unrealized Gains(Losses)"
 msgstr "Nerealizovaný zisk(ztráta)"
 
-#: intl-scm/guile-strings.c:1909 intl-scm/guile-strings.c:2073
+#: intl-scm/guile-strings.c:1909 intl-scm/guile-strings.c:2135
 msgid "Net Profit"
 msgstr "Čistý zisk"
 
@@ -11525,589 +11525,605 @@ msgstr "Maximální počet sloupců v grafu"
 msgid "Balances %s to %s"
 msgstr "Zůstatky %s do %s"
 
-#: intl-scm/guile-strings.c:2027
+#: intl-scm/guile-strings.c:2027 intl-scm/guile-strings.c:2035
+msgid "Income vs. Day of Week"
+msgstr "Příjem vs. den v týdnu"
+
+#: intl-scm/guile-strings.c:2029 intl-scm/guile-strings.c:2037
+msgid "Expenses vs. Day of Week"
+msgstr "Výdaje vs. den v týdnu"
+
+#: intl-scm/guile-strings.c:2031
+msgid "Shows a piechart with the total income for each day of the week"
+msgstr "Zobrazuje koláčový graf celkových příjmů pro každý den v týdnu"
+
+#: intl-scm/guile-strings.c:2033
+msgid "Shows a piechart with the total expenses for each day of the week"
+msgstr "Zobrazuje koláčový graf celkových výdajů pro každý den v týdnu"
+
+#: intl-scm/guile-strings.c:2089
 msgid "Income/Expense Chart"
 msgstr "Graf příjmů/výdajů"
 
-#: intl-scm/guile-strings.c:2043 intl-scm/guile-strings.c:2179
+#: intl-scm/guile-strings.c:2105 intl-scm/guile-strings.c:2241
 msgid "Show Net Profit"
 msgstr "Zobrazovat čistý zisk"
 
-#: intl-scm/guile-strings.c:2045 intl-scm/guile-strings.c:2181
+#: intl-scm/guile-strings.c:2107 intl-scm/guile-strings.c:2243
 msgid "Show Asset & Liability bars"
 msgstr "Zobrazovat sloupce aktiv & pasiv"
 
-#: intl-scm/guile-strings.c:2047 intl-scm/guile-strings.c:2183
+#: intl-scm/guile-strings.c:2109 intl-scm/guile-strings.c:2245
 msgid "Show Net Worth bars"
 msgstr "Zobrazovat sloupce čisté hodnoty"
 
-#: intl-scm/guile-strings.c:2055
+#: intl-scm/guile-strings.c:2117
 msgid "Show Income and Expenses?"
 msgstr "Zobrazovat příjmy a výdaje?"
 
-#: intl-scm/guile-strings.c:2057
+#: intl-scm/guile-strings.c:2119
 msgid "Show the Asset and the Liability bars?"
 msgstr "Zobrazovat sloupce aktiv a pasiv?"
 
-#: intl-scm/guile-strings.c:2059
+#: intl-scm/guile-strings.c:2121
 msgid "Show the net profit?"
 msgstr "Zobrazovat čistý zisk?"
 
-#: intl-scm/guile-strings.c:2061
+#: intl-scm/guile-strings.c:2123
 msgid "Show a Net Worth bar?"
 msgstr "Zobrazovat sloupec čistá hodnota?"
 
-#: intl-scm/guile-strings.c:2075
+#: intl-scm/guile-strings.c:2137
 msgid "Net Worth"
 msgstr "Čistí hodnota"
 
-#: intl-scm/guile-strings.c:2077
+#: intl-scm/guile-strings.c:2139
 msgid "Income Chart"
 msgstr "Graf příjmů"
 
-#: intl-scm/guile-strings.c:2079
+#: intl-scm/guile-strings.c:2141
 msgid "Asset Chart"
 msgstr "Graf aktiv"
 
-#: intl-scm/guile-strings.c:2081
+#: intl-scm/guile-strings.c:2143
 msgid "Expense Chart"
 msgstr "Graf výdajů"
 
-#: intl-scm/guile-strings.c:2083
+#: intl-scm/guile-strings.c:2145
 msgid "Liability Chart"
 msgstr "Graf pasiv"
 
-#: intl-scm/guile-strings.c:2085
+#: intl-scm/guile-strings.c:2147
 msgid "Net Worth Barchart"
 msgstr "Sloupcový graf čisté hodnoty"
 
-#: intl-scm/guile-strings.c:2087
+#: intl-scm/guile-strings.c:2149
 msgid "Income & Expense Chart"
 msgstr "Graf příjmů & výdajů"
 
-#: intl-scm/guile-strings.c:2089
+#: intl-scm/guile-strings.c:2151
 msgid "Profit And Loss"
 msgstr "Zisk a ztráta"
 
-#: intl-scm/guile-strings.c:2123
+#: intl-scm/guile-strings.c:2185
 #, c-format
 msgid "%s - %s to %s"
 msgstr "%s - %s do %s"
 
-#: intl-scm/guile-strings.c:2127
+#: intl-scm/guile-strings.c:2189
 msgid "Profit & Loss"
 msgstr "Zisk & ztráta"
 
-#: intl-scm/guile-strings.c:2129
+#: intl-scm/guile-strings.c:2191
 msgid "Investment Portfolio"
 msgstr "Investiční portfolio"
 
-#: intl-scm/guile-strings.c:2155
+#: intl-scm/guile-strings.c:2217
 msgid "Units"
 msgstr "Jednotky"
 
-#: intl-scm/guile-strings.c:2173
+#: intl-scm/guile-strings.c:2235
 msgid "Price of Commodity"
 msgstr "Cena komodity"
 
-#: intl-scm/guile-strings.c:2185
+#: intl-scm/guile-strings.c:2247
 msgid "Marker"
 msgstr "Značka"
 
-#: intl-scm/guile-strings.c:2187
+#: intl-scm/guile-strings.c:2249
 msgid "Marker Color"
 msgstr "Barva značky"
 
-#: intl-scm/guile-strings.c:2193
+#: intl-scm/guile-strings.c:2255
 msgid "Calculate the price of this commodity."
 msgstr "Spočítat cenu této komodity."
 
-#: intl-scm/guile-strings.c:2201
+#: intl-scm/guile-strings.c:2263
 msgid "Actual Transactions"
 msgstr "Skutečné převody"
 
-#: intl-scm/guile-strings.c:2203
+#: intl-scm/guile-strings.c:2265
 msgid "The instantaneous price of actual currency transactions in the past"
 msgstr "Okamžitá cena skutečných převodů měny v minulosti"
 
-#: intl-scm/guile-strings.c:2205
+#: intl-scm/guile-strings.c:2267
 msgid "Price Database"
 msgstr "Databáze cen"
 
-#: intl-scm/guile-strings.c:2207
+#: intl-scm/guile-strings.c:2269
 msgid "The recorded prices"
 msgstr "Zaznamenané ceny"
 
-#: intl-scm/guile-strings.c:2209
+#: intl-scm/guile-strings.c:2271
 msgid "Color of the marker"
 msgstr "Barva značky"
 
-#: intl-scm/guile-strings.c:2217
+#: intl-scm/guile-strings.c:2279
 msgid "Double-Weeks"
 msgstr "Dva týdny"
 
-#: intl-scm/guile-strings.c:2223
+#: intl-scm/guile-strings.c:2285
 msgid "All Prices equal"
 msgstr "Všechny ceny stejné"
 
-#: intl-scm/guile-strings.c:2225
+#: intl-scm/guile-strings.c:2287
 msgid "All the prices found are equal. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
 msgstr "Všechny nalezené ceny jsou stejné. To by vytvořilo graf s jednou rovnou čárou. To bohužel kreslící nástroj neumí."
 
-#: intl-scm/guile-strings.c:2227
+#: intl-scm/guile-strings.c:2289
 msgid "All Prices at the same date"
 msgstr "Všechny ceny ze stejného data"
 
-#: intl-scm/guile-strings.c:2229
+#: intl-scm/guile-strings.c:2291
 msgid "All the prices found are from the same date. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
 msgstr "Všechny nalezené ceny jsou ze stejného data. To by vytvořilo graf s jednou rovnou čárou. To bohužel kreslící nástroj neumí."
 
-#: intl-scm/guile-strings.c:2231
+#: intl-scm/guile-strings.c:2293
 msgid "Only one price"
 msgstr "Jen jedna cena"
 
-#: intl-scm/guile-strings.c:2233
+#: intl-scm/guile-strings.c:2295
 msgid "There was only one single price found for the selected commodities in the selected time period. This doesn't give a useful plot."
 msgstr "Ve vybraném časovém období měly vybrané komodity jen jednu cenu. To neumožňuje užitečný graf."
 
-#: intl-scm/guile-strings.c:2237
+#: intl-scm/guile-strings.c:2299
 msgid "There is no price information available for the selected commodities in the selected time period."
 msgstr "Ve vybraném časovém období není k dispozici žádná informace o cenách vybraných komodit."
 
-#: intl-scm/guile-strings.c:2239
+#: intl-scm/guile-strings.c:2301
 msgid "Identical commodities"
 msgstr "Identické komodity"
 
-#: intl-scm/guile-strings.c:2241
+#: intl-scm/guile-strings.c:2303
 msgid "Your selected commodity and the currency of the report are identical. It doesn't make sense to show prices for identical commodities."
 msgstr "Vámi vybraná komodita a měna sestavy jsou identické. Nedává smysl zobrazovat ceny identických komodit."
 
-#: intl-scm/guile-strings.c:2245
+#: intl-scm/guile-strings.c:2307
 msgid "Price Scatterplot"
 msgstr ""
 
-#: intl-scm/guile-strings.c:2271
+#: intl-scm/guile-strings.c:2333
 msgid "Title"
 msgstr "Nadpis"
 
-#: intl-scm/guile-strings.c:2273
+#: intl-scm/guile-strings.c:2335
 msgid "The title of the report"
 msgstr "Nadpis sestavy"
 
-#: intl-scm/guile-strings.c:2287 intl-scm/guile-strings.c:2637
+#: intl-scm/guile-strings.c:2349 intl-scm/guile-strings.c:2699
 msgid "Display the check number?"
 msgstr "Zobrazovat číslo šeku?"
 
-#: intl-scm/guile-strings.c:2299
+#: intl-scm/guile-strings.c:2361
 msgid "Display the account?"
 msgstr "Zobrazovat účet?"
 
-#: intl-scm/guile-strings.c:2305 intl-scm/guile-strings.c:2673
+#: intl-scm/guile-strings.c:2367 intl-scm/guile-strings.c:2735
 msgid "Display the number of shares?"
 msgstr "Zobrazovat počet podílů?"
 
-#: intl-scm/guile-strings.c:2315 intl-scm/guile-strings.c:2689
+#: intl-scm/guile-strings.c:2377 intl-scm/guile-strings.c:2751
 msgid "Display the amount?"
 msgstr "Zobrazovat částku?"
 
-#: intl-scm/guile-strings.c:2317 intl-scm/guile-strings.c:2485
-#: intl-scm/guile-strings.c:2695
+#: intl-scm/guile-strings.c:2379 intl-scm/guile-strings.c:2547
+#: intl-scm/guile-strings.c:2757
 msgid "Single"
 msgstr "Jednoduchý"
 
-#: intl-scm/guile-strings.c:2319 intl-scm/guile-strings.c:2697
+#: intl-scm/guile-strings.c:2381 intl-scm/guile-strings.c:2759
 msgid "Single Column Display"
 msgstr "Zobrazení v jednou sloupci"
 
-#: intl-scm/guile-strings.c:2321 intl-scm/guile-strings.c:2699
+#: intl-scm/guile-strings.c:2383 intl-scm/guile-strings.c:2761
 msgid "Double"
 msgstr "Dvojitý"
 
-#: intl-scm/guile-strings.c:2323 intl-scm/guile-strings.c:2701
+#: intl-scm/guile-strings.c:2385 intl-scm/guile-strings.c:2763
 msgid "Two Column Display"
 msgstr "Zobrazení ve dvou sloupcích"
 
-#: intl-scm/guile-strings.c:2327 intl-scm/guile-strings.c:2417
-#: intl-scm/guile-strings.c:2679
+#: intl-scm/guile-strings.c:2389 intl-scm/guile-strings.c:2479
+#: intl-scm/guile-strings.c:2741
 msgid "Running Balance"
 msgstr "Průběžný zůstatek"
 
-#: intl-scm/guile-strings.c:2329 intl-scm/guile-strings.c:2681
+#: intl-scm/guile-strings.c:2391 intl-scm/guile-strings.c:2743
 msgid "Display a running balance"
 msgstr "Zobrazovat průběžný zůstatek"
 
-#: intl-scm/guile-strings.c:2337
+#: intl-scm/guile-strings.c:2399
 msgid "Total Debits"
 msgstr "Celkem Má dáti"
 
-#: intl-scm/guile-strings.c:2339
+#: intl-scm/guile-strings.c:2401
 msgid "Total Credits"
 msgstr "Celkem Dal"
 
-#: intl-scm/guile-strings.c:2341
+#: intl-scm/guile-strings.c:2403
 msgid "Net Change"
 msgstr "Čistá změna"
 
-#: intl-scm/guile-strings.c:2343
+#: intl-scm/guile-strings.c:2405
 msgid "Client"
 msgstr "Klient"
 
-#: intl-scm/guile-strings.c:2355
+#: intl-scm/guile-strings.c:2417
 msgid "Transaction Report"
 msgstr "Sestava účetních položek"
 
-#: intl-scm/guile-strings.c:2357 intl-scm/guile-strings.c:2439
-#: intl-scm/guile-strings.c:2443
+#: intl-scm/guile-strings.c:2419 intl-scm/guile-strings.c:2501
+#: intl-scm/guile-strings.c:2505
 msgid "Sorting"
 msgstr "Třídění"
 
-#: intl-scm/guile-strings.c:2359
+#: intl-scm/guile-strings.c:2421
 msgid "Primary Key"
 msgstr "Primární klíč"
 
-#: intl-scm/guile-strings.c:2361
+#: intl-scm/guile-strings.c:2423
 msgid "Primary Subtotal"
 msgstr "Primární částečný součet"
 
-#: intl-scm/guile-strings.c:2363
+#: intl-scm/guile-strings.c:2425
 msgid "Primary Subtotal for Date Key"
 msgstr "Primární částečný součet pro klíč Datum"
 
-#: intl-scm/guile-strings.c:2365
+#: intl-scm/guile-strings.c:2427
 msgid "Secondary Key"
 msgstr "Sekundární klíč"
 
-#: intl-scm/guile-strings.c:2367
+#: intl-scm/guile-strings.c:2429
 msgid "Secondary Subtotal"
 msgstr "Sekundární částečný součet"
 
-#: intl-scm/guile-strings.c:2369
+#: intl-scm/guile-strings.c:2431
 msgid "Secondary Subtotal for Date Key"
 msgstr "Sekundární částečný součet pro klíč datum"
 
-#: intl-scm/guile-strings.c:2371
+#: intl-scm/guile-strings.c:2433
 msgid "Void Transactions?"
 msgstr "Neplatné účetní položky?"
 
-#: intl-scm/guile-strings.c:2375
+#: intl-scm/guile-strings.c:2437
 msgid "Total For "
 msgstr "Součet pro "
 
-#: intl-scm/guile-strings.c:2377 intl-scm/guile-strings.c:2731
+#: intl-scm/guile-strings.c:2439 intl-scm/guile-strings.c:2793
 msgid "Grand Total"
 msgstr "Úplný součet"
 
-#: intl-scm/guile-strings.c:2385 intl-scm/guile-strings.c:2449
-#: intl-scm/guile-strings.c:2547 intl-scm/guile-strings.c:2631
+#: intl-scm/guile-strings.c:2447 intl-scm/guile-strings.c:2511
+#: intl-scm/guile-strings.c:2609 intl-scm/guile-strings.c:2693
 msgid "Reconciled Date"
 msgstr "Datum odsouhlasení"
 
-#: intl-scm/guile-strings.c:2401 intl-scm/guile-strings.c:2555
-#: intl-scm/guile-strings.c:2659
+#: intl-scm/guile-strings.c:2463 intl-scm/guile-strings.c:2617
+#: intl-scm/guile-strings.c:2721
 msgid "Other Account Name"
 msgstr "Jméno jiného účtu"
 
-#: intl-scm/guile-strings.c:2421 intl-scm/guile-strings.c:2651
+#: intl-scm/guile-strings.c:2483 intl-scm/guile-strings.c:2713
 msgid "Use Full Account Name?"
 msgstr "Použít úplné jméno účtu?"
 
-#: intl-scm/guile-strings.c:2433 intl-scm/guile-strings.c:2559
-#: intl-scm/guile-strings.c:2667
+#: intl-scm/guile-strings.c:2495 intl-scm/guile-strings.c:2621
+#: intl-scm/guile-strings.c:2729
 msgid "Other Account Code"
 msgstr "Kód druhého účtu"
 
-#: intl-scm/guile-strings.c:2437 intl-scm/guile-strings.c:2663
+#: intl-scm/guile-strings.c:2499 intl-scm/guile-strings.c:2725
 msgid "Use Full Other Account Name?"
 msgstr "Použít jméno druhého účtu?"
 
-#: intl-scm/guile-strings.c:2441 intl-scm/guile-strings.c:2605
+#: intl-scm/guile-strings.c:2503 intl-scm/guile-strings.c:2667
 msgid "Show Account Code?"
 msgstr "Zobrazovat kód účtu?"
 
-#: intl-scm/guile-strings.c:2445 intl-scm/guile-strings.c:2601
+#: intl-scm/guile-strings.c:2507 intl-scm/guile-strings.c:2663
 msgid "Show Full Account Name?"
 msgstr "Zobrazovat úplné jméno účtu?"
 
-#: intl-scm/guile-strings.c:2459
+#: intl-scm/guile-strings.c:2521
 msgid "Transfer from/to"
 msgstr "Převod z/do"
 
-#: intl-scm/guile-strings.c:2477 intl-scm/guile-strings.c:2745
+#: intl-scm/guile-strings.c:2539 intl-scm/guile-strings.c:2807
 msgid "Style"
 msgstr "Styl"
 
-#: intl-scm/guile-strings.c:2479
+#: intl-scm/guile-strings.c:2541
 msgid "Report style"
 msgstr "Styl sestavy"
 
-#: intl-scm/guile-strings.c:2481
+#: intl-scm/guile-strings.c:2543
 msgid "Multi-Line"
 msgstr "Více řádků"
 
-#: intl-scm/guile-strings.c:2483
+#: intl-scm/guile-strings.c:2545
 msgid "Display N lines"
 msgstr "Zobrazit N řádků"
 
-#: intl-scm/guile-strings.c:2487
+#: intl-scm/guile-strings.c:2549
 msgid "Display 1 line"
 msgstr "Zobrazit 1 řádek"
 
-#: intl-scm/guile-strings.c:2489
+#: intl-scm/guile-strings.c:2551
 msgid "Report Accounts"
 msgstr "Účty sestavy"
 
-#: intl-scm/guile-strings.c:2491
+#: intl-scm/guile-strings.c:2553
 msgid "Report on these accounts"
 msgstr "Vytvořit sestavu o těchto účtech"
 
-#: intl-scm/guile-strings.c:2493
+#: intl-scm/guile-strings.c:2555
 msgid "Filter Accounts"
 msgstr "Filtrovat účty"
 
-#: intl-scm/guile-strings.c:2495
+#: intl-scm/guile-strings.c:2557
 msgid "Filter on these accounts"
 msgstr "Filtrovat tyto účty"
 
-#: intl-scm/guile-strings.c:2497
+#: intl-scm/guile-strings.c:2559
 msgid "Filter Type"
 msgstr "Typ filtru"
 
-#: intl-scm/guile-strings.c:2499
+#: intl-scm/guile-strings.c:2561
 msgid "Filter account"
 msgstr "Filtrovat účet"
 
-#: intl-scm/guile-strings.c:2503
+#: intl-scm/guile-strings.c:2565
 msgid "Do not do any filtering"
 msgstr "Nefiltrovat"
 
-#: intl-scm/guile-strings.c:2505
+#: intl-scm/guile-strings.c:2567
 msgid "Include Transactions to/from Filter Accounts"
 msgstr "Zahrnout účetní položky z/do filtrovaných účtů"
 
-#: intl-scm/guile-strings.c:2507
+#: intl-scm/guile-strings.c:2569
 msgid "Include transactions to/from filter accounts only"
 msgstr "Zahrnout jen účetní položky z/do filtrovaných účtů"
 
-#: intl-scm/guile-strings.c:2509
+#: intl-scm/guile-strings.c:2571
 msgid "Exclude Transactions to/from Filter Accounts"
 msgstr "Ignorovat účetní položky z/do filtrovaných účtů"
 
-#: intl-scm/guile-strings.c:2511
+#: intl-scm/guile-strings.c:2573
 msgid "Exclude transactions to/from all filter accounts"
 msgstr "Ignorovat účetní položky z/do všech filtrovaných účtů"
 
-#: intl-scm/guile-strings.c:2513
+#: intl-scm/guile-strings.c:2575
 msgid "How to handle void transactions"
 msgstr "Jak zpracovat neplatné účetní položky"
 
-#: intl-scm/guile-strings.c:2515
+#: intl-scm/guile-strings.c:2577
 msgid "Non-void only"
 msgstr "Jen platné"
 
-#: intl-scm/guile-strings.c:2517
+#: intl-scm/guile-strings.c:2579
 msgid "Show only non-voided transactions"
 msgstr "Zobrazovat jen platné účetní položky"
 
-#: intl-scm/guile-strings.c:2519
+#: intl-scm/guile-strings.c:2581
 msgid "Void only"
 msgstr "Jen neplatné"
 
-#: intl-scm/guile-strings.c:2521
+#: intl-scm/guile-strings.c:2583
 msgid "Show only voided transactions"
 msgstr "Zobrazovat jen neplatné účetní položky"
 
-#: intl-scm/guile-strings.c:2523
+#: intl-scm/guile-strings.c:2585
 msgid "Both"
 msgstr "Obojí"
 
-#: intl-scm/guile-strings.c:2525
+#: intl-scm/guile-strings.c:2587
 msgid "Show both (and include void transactions in totals)"
 msgstr "Zobrazovat obojí (a zahrnout neplatné účetní položky v součtech)"
 
-#: intl-scm/guile-strings.c:2529
+#: intl-scm/guile-strings.c:2591
 msgid "Do not sort"
 msgstr "Netřídit"
 
-#: intl-scm/guile-strings.c:2533
+#: intl-scm/guile-strings.c:2595
 msgid "Sort & subtotal by account name"
 msgstr "Třídit & částečné součty podle jména účtu"
 
-#: intl-scm/guile-strings.c:2537
+#: intl-scm/guile-strings.c:2599
 msgid "Sort & subtotal by account code"
 msgstr "Třídit & částečné součty podle kódu účtu"
 
-#: intl-scm/guile-strings.c:2543
+#: intl-scm/guile-strings.c:2605
 msgid "Exact Time"
 msgstr "Přesný čas"
 
-#: intl-scm/guile-strings.c:2545
+#: intl-scm/guile-strings.c:2607
 msgid "Sort by exact time"
 msgstr "Třídit podle přesného času"
 
-#: intl-scm/guile-strings.c:2549
+#: intl-scm/guile-strings.c:2611
 msgid "Sort by the Reconciled Date"
 msgstr "Třídit podle data odsouhlasení"
 
-#: intl-scm/guile-strings.c:2551
+#: intl-scm/guile-strings.c:2613
 msgid "Register Order"
 msgstr "Pořadí účetní knihy"
 
-#: intl-scm/guile-strings.c:2553
+#: intl-scm/guile-strings.c:2615
 msgid "Sort as with the register"
 msgstr "Třídit jako v účetní knize"
 
-#: intl-scm/guile-strings.c:2557
+#: intl-scm/guile-strings.c:2619
 msgid "Sort by account transferred from/to's name"
 msgstr "Třídit podle jména účtu, z/do kterého převáděno"
 
-#: intl-scm/guile-strings.c:2561
+#: intl-scm/guile-strings.c:2623
 msgid "Sort by account transferred from/to's code"
 msgstr "Třídit podle kódu účtu, z/do kterého převáděno"
 
-#: intl-scm/guile-strings.c:2565
+#: intl-scm/guile-strings.c:2627
 msgid "Sort by amount"
 msgstr "Třídit podle částky"
 
-#: intl-scm/guile-strings.c:2571
+#: intl-scm/guile-strings.c:2633
 msgid "Number"
 msgstr "Číslo"
 
-#: intl-scm/guile-strings.c:2573
+#: intl-scm/guile-strings.c:2635
 msgid "Sort by check/transaction number"
 msgstr "Třídit pole čísla šeku/účetní položky"
 
-#: intl-scm/guile-strings.c:2577
+#: intl-scm/guile-strings.c:2639
 msgid "Sort by memo"
 msgstr "Třídit podle poznámky"
 
-#: intl-scm/guile-strings.c:2579
+#: intl-scm/guile-strings.c:2641
 msgid "Ascending"
 msgstr "Vzestupně"
 
-#: intl-scm/guile-strings.c:2581
+#: intl-scm/guile-strings.c:2643
 msgid "smallest to largest, earliest to latest"
 msgstr "od nejmenšího po největší, od nejdřívějšího po nejpozdější"
 
-#: intl-scm/guile-strings.c:2583
+#: intl-scm/guile-strings.c:2645
 msgid "Descending"
 msgstr "Sestupně"
 
-#: intl-scm/guile-strings.c:2585
+#: intl-scm/guile-strings.c:2647
 msgid "largest to smallest, latest to earliest"
 msgstr "od největšího po nejmenší, od nejpozdějšího po nejdřívější"
 
-#: intl-scm/guile-strings.c:2599
+#: intl-scm/guile-strings.c:2661
 msgid "Sort by this criterion first"
 msgstr "Třídit prvně podle tohoto kritéria"
 
-#: intl-scm/guile-strings.c:2603
+#: intl-scm/guile-strings.c:2665
 msgid "Show the full account name for subtotals and subtitles?"
 msgstr "Zobrazovat úplné jméno účtu v podsoučtech a podnadpisech?"
 
-#: intl-scm/guile-strings.c:2607
+#: intl-scm/guile-strings.c:2669
 msgid "Show the account code for subtotals and subtitles?"
 msgstr "Zobrazovat kód účtu v podsoučtech a podnadpisech?"
 
-#: intl-scm/guile-strings.c:2609
+#: intl-scm/guile-strings.c:2671
 msgid "Subtotal according to the primary key?"
 msgstr "Počítat částečné součty podle primárního klíče?"
 
-#: intl-scm/guile-strings.c:2611 intl-scm/guile-strings.c:2621
+#: intl-scm/guile-strings.c:2673 intl-scm/guile-strings.c:2683
 msgid "Do a date subtotal"
 msgstr "Spočítat částečné součty podle data"
 
-#: intl-scm/guile-strings.c:2613
+#: intl-scm/guile-strings.c:2675
 msgid "Primary Sort Order"
 msgstr "Primární pořadí třídění"
 
-#: intl-scm/guile-strings.c:2615
+#: intl-scm/guile-strings.c:2677
 msgid "Order of primary sorting"
 msgstr "Pořadí primárního třídění"
 
-#: intl-scm/guile-strings.c:2617
+#: intl-scm/guile-strings.c:2679
 msgid "Sort by this criterion second"
 msgstr "Třídit pak podle tohoto kritéria"
 
-#: intl-scm/guile-strings.c:2619
+#: intl-scm/guile-strings.c:2681
 msgid "Subtotal according to the secondary key?"
 msgstr "Spočítat částečné součty podle sekundárního klíče?"
 
-#: intl-scm/guile-strings.c:2623
+#: intl-scm/guile-strings.c:2685
 msgid "Secondary Sort Order"
 msgstr "Sekundární pořadí třídění"
 
-#: intl-scm/guile-strings.c:2625
+#: intl-scm/guile-strings.c:2687
 msgid "Order of Secondary sorting"
 msgstr "Pořadí sekundárního třídění"
 
-#: intl-scm/guile-strings.c:2633
+#: intl-scm/guile-strings.c:2695
 msgid "Display the reconciled date?"
 msgstr "Zobrazovat datum odsouhlasení?"
 
-#: intl-scm/guile-strings.c:2645
+#: intl-scm/guile-strings.c:2707
 msgid "Display the memo?"
 msgstr "Zobrazovat poznámku?"
 
-#: intl-scm/guile-strings.c:2649
+#: intl-scm/guile-strings.c:2711
 msgid "Display the account name?"
 msgstr "Zobrazovat jméno účtu?"
 
-#: intl-scm/guile-strings.c:2653 intl-scm/guile-strings.c:2665
+#: intl-scm/guile-strings.c:2715 intl-scm/guile-strings.c:2727
 msgid "Display the full account name"
 msgstr "Zobrazovat úplné jméno účtu"
 
-#: intl-scm/guile-strings.c:2657
+#: intl-scm/guile-strings.c:2719
 msgid "Display the account code"
 msgstr "Zobrazovat kód účtu?"
 
-#: intl-scm/guile-strings.c:2661
+#: intl-scm/guile-strings.c:2723
 msgid "Display the other account name? (if this is a split transaction, this parameter is guessed)."
 msgstr "Zobrazovat jméno druhého účtu? (je-li to rozdělená účetní položka, je tento parametr hádán)."
 
-#: intl-scm/guile-strings.c:2669
+#: intl-scm/guile-strings.c:2731
 msgid "Display the other account code"
 msgstr "Zobrazovat kód druhého účtu?"
 
-#: intl-scm/guile-strings.c:2677
+#: intl-scm/guile-strings.c:2739
 msgid "Display the shares price?"
 msgstr "Zobrazovat cenu podílů"
 
-#: intl-scm/guile-strings.c:2693
+#: intl-scm/guile-strings.c:2755
 msgid "No amount display"
 msgstr "Nezobrazovat částku"
 
-#: intl-scm/guile-strings.c:2703 intl-scm/guile-strings.c:2743
+#: intl-scm/guile-strings.c:2765 intl-scm/guile-strings.c:2805
 msgid "Sign Reverses?"
 msgstr "Obrátit znaménko?"
 
-#: intl-scm/guile-strings.c:2705
+#: intl-scm/guile-strings.c:2767
 msgid "Reverse amount display for certain account types"
 msgstr "Obrátit zobrazení částky pro jisté typy účtů"
 
-#: intl-scm/guile-strings.c:2709
+#: intl-scm/guile-strings.c:2771
 msgid "Don't change any displayed amounts"
 msgstr "Neměnit zobrazované částky"
 
-#: intl-scm/guile-strings.c:2711
+#: intl-scm/guile-strings.c:2773
 msgid "Income and Expense"
 msgstr "Příjmy a výdaje"
 
-#: intl-scm/guile-strings.c:2713
+#: intl-scm/guile-strings.c:2775
 msgid "Reverse amount display for Income and Expense Accounts"
 msgstr "Obrátit zobrazované částky pro příjmové a výdajové účty"
 
-#: intl-scm/guile-strings.c:2717
+#: intl-scm/guile-strings.c:2779
 msgid "Reverse amount display for Liability, Payable, Equity, Credit Card, and Income accounts"
 msgstr "Obrátit zobrazované částky pro účty Pasiva, K zaplacení, Vlastní jmění, Kreditní karta a Příjmy"
 
-#: intl-scm/guile-strings.c:2719
+#: intl-scm/guile-strings.c:2781
 #, c-format
 msgid "From %s To %s"
 msgstr "Od %s do %s"
 
-#: intl-scm/guile-strings.c:2721 intl-scm/guile-strings.c:2725
-#: intl-scm/guile-strings.c:2729 intl-scm/guile-strings.c:2733
-#: intl-scm/guile-strings.c:2737 intl-scm/guile-strings.c:2857
+#: intl-scm/guile-strings.c:2783 intl-scm/guile-strings.c:2787
+#: intl-scm/guile-strings.c:2791 intl-scm/guile-strings.c:2795
+#: intl-scm/guile-strings.c:2799 intl-scm/guile-strings.c:2857
 #: intl-scm/guile-strings.c:2863 intl-scm/guile-strings.c:2869
 #: intl-scm/guile-strings.c:2875 intl-scm/guile-strings.c:2881
 #: intl-scm/guile-strings.c:2887 intl-scm/guile-strings.c:2893
@@ -12119,45 +12135,29 @@ msgstr "Od %s do %s"
 msgid "Colors"
 msgstr "Barvy"
 
-#: intl-scm/guile-strings.c:2723
+#: intl-scm/guile-strings.c:2785
 msgid "Primary Subtotals/headings"
 msgstr "Primární částečný součet/nadpisy"
 
-#: intl-scm/guile-strings.c:2727
+#: intl-scm/guile-strings.c:2789
 msgid "Secondary Subtotals/headings"
 msgstr "Sekundární částečný součet/nadpisy"
 
-#: intl-scm/guile-strings.c:2735
+#: intl-scm/guile-strings.c:2797
 msgid "Split Odd"
 msgstr ""
 
-#: intl-scm/guile-strings.c:2739
+#: intl-scm/guile-strings.c:2801
 msgid "Split Even"
 msgstr ""
 
-#: intl-scm/guile-strings.c:2749
+#: intl-scm/guile-strings.c:2811
 msgid "No matching transactions found"
 msgstr "Nenalezeny odpovídající účetní položky"
 
-#: intl-scm/guile-strings.c:2751
+#: intl-scm/guile-strings.c:2813
 msgid "No transactions were found that match the given time interval and account selection."
 msgstr "Nebyly nalezeny účetní položky, které odpovídají zadanému časovému intervalu a výběru účtů."
-
-#: intl-scm/guile-strings.c:2753 intl-scm/guile-strings.c:2761
-msgid "Income vs. Day of Week"
-msgstr "Příjem vs. den v týdnu"
-
-#: intl-scm/guile-strings.c:2755 intl-scm/guile-strings.c:2763
-msgid "Expenses vs. Day of Week"
-msgstr "Výdaje vs. den v týdnu"
-
-#: intl-scm/guile-strings.c:2757
-msgid "Shows a piechart with the total income for each day of the week"
-msgstr "Zobrazuje koláčový graf celkových příjmů pro každý den v týdnu"
-
-#: intl-scm/guile-strings.c:2759
-msgid "Shows a piechart with the total expenses for each day of the week"
-msgstr "Zobrazuje koláčový graf celkových výdajů pro každý den v týdnu"
 
 #: intl-scm/guile-strings.c:2817 intl-scm/guile-strings.c:2925
 msgid "Preparer"
@@ -12332,7 +12332,7 @@ msgstr "Připraveno pro: "
 
 #: intl-scm/guile-strings.c:3001
 msgid "Fancy"
-msgstr ""
+msgstr "Efektní"
 
 #: intl-scm/guile-strings.c:3003 intl-scm/guile-strings.c:3873
 msgid "Technicolor"
@@ -13941,9 +13941,6 @@ msgstr ""
 "nevysvětlitelným.\n"
 "Existuje jiná teorie, že se to již stalo.\n"
 "Douglas Adams, \"Restaurace na konci Vesmíru\""
-
-#~ msgid "You must enter a company name."
-#~ msgstr "Musíte zadat jméno společnosti."
 
 #~ msgid "Months:"
 #~ msgstr "Měsíce:"
