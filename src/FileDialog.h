@@ -125,12 +125,12 @@
 #include "gnc-book.h"
 
 void gncFileNew (void);
-void gncFileOpen (void);
+gboolean gncFileOpen (void);
 void gncFileQIFImport (void);
 void gncFileSave (void);
 void gncFileSaveAs (void);
 
-void gncFileOpenFile (const char *);
+gboolean gncFileOpenFile (const char *filename);
 
 gboolean gncFileQuerySave (void);
 

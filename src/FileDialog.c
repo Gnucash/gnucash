@@ -305,7 +305,7 @@ gncFileQuerySave (void)
 /* ======================================================== */
 /* private utilities for file open; done in two stages */
 
-static void
+static gboolean
 gncPostFileOpen (const char * filename)
 {
   GNCBook *new_book;
@@ -314,13 +314,13 @@ gncPostFileOpen (const char * filename)
   char * newfile;
   GNCBackendError io_err = ERR_BACKEND_NO_ERR;
 
-  if (!filename) return;
+  if (!filename) return FALSE;
 
   newfile = xaccResolveURL (filename); 
   if (!newfile)
   {
      show_book_error (ERR_FILEIO_FILE_NOT_FOUND, filename);
-     return;
+     return FALSE;
   }
 
   /* disable events while moving over to the new set of accounts; 
@@ -336,7 +336,7 @@ gncPostFileOpen (const char * filename)
   gh_call2(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*book-closed-hook*"),
            gh_str02scm(gnc_book_get_url(current_book)));           
-  
+
   gnc_book_destroy (current_book);
   current_book = NULL;
 
@@ -419,24 +419,28 @@ gncPostFileOpen (const char * filename)
      * reason, we don't want to leave them high & dry without a
      * topgroup, because if the user continues, then bad things will
      * happen. */
-    gncGetCurrentBook ();
+    current_book = gncGetCurrentBook ();
 
     g_free (newfile);
 
     gnc_engine_resume_events ();
     gnc_gui_refresh_all ();
 
-    return;
+    gh_call2(gh_eval_str("gnc:hook-run-danglers"),
+             gh_eval_str("gnc:*book-opened-hook*"),
+             gh_str02scm(gnc_book_get_url(current_book))); 
+
+    return FALSE;
   }
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
   current_book = new_book;
-  
+
   gh_call2(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*book-opened-hook*"),
            gh_str02scm(gnc_book_get_url(current_book))); 
-  
+
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* clean up old stuff, and then we're outta here. */
@@ -446,37 +450,42 @@ gncPostFileOpen (const char * filename)
 
   gnc_engine_resume_events ();
   gnc_gui_refresh_all ();
+
+  return TRUE;
 }
 
 /* ======================================================== */
 
-void
+gboolean
 gncFileOpen (void)
 {
   const char * newfile;
+  gboolean result;
 
   if (!gncFileQuerySave ())
-    return;
+    return FALSE;
 
   newfile = fileBox(_("Open"), NULL, gnc_history_get_last());
-  gncPostFileOpen (newfile);
+  result = gncPostFileOpen (newfile);
 
   /* This dialogue can show up early in the startup process. If the
    * user fails to pick a file (by e.g. hitting the cancel button), we
    * might be left with a null topgroup, which leads to nastiness when
    * user goes to create their very first account. So create one. */
   gncGetCurrentBook ();
+
+  return result;
 }
 
-void
+gboolean
 gncFileOpenFile (const char * newfile)
 {
-  if (!newfile) return;
+  if (!newfile) return FALSE;
 
   if (!gncFileQuerySave ())
-    return;
+    return FALSE;
 
-  gncPostFileOpen (newfile);
+  return gncPostFileOpen (newfile);
 }
 
 /* ======================================================== */

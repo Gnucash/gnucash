@@ -170,9 +170,8 @@ the account instead of opening a register.") #f))
   (let ((conf-file-name (gnc:html-encode-string book-url))
         (dead-reports '()))
     (if conf-file-name 
-        (begin 
-          (try-load conf-file-name)
-          (gnc:main-window-restore (gnc:get-ui-data) book-url)))))
+        (try-load conf-file-name))
+    (gnc:main-window-restore (gnc:get-ui-data) book-url)))
 
 (gnc:hook-add-dangler gnc:*book-opened-hook* 
                       gnc:main-window-book-open-handler)

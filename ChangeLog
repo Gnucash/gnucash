@@ -1,3 +1,22 @@
+2001-05-10  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/main-window.scm ((gnc:main-window-book-open-handler
+	book-url)): restore the main window even if we can't get a
+	conf-file-name.
+
+	* src/scm/main.scm (gnc:load-account-file): if we have a file to
+	open, only run book-opened-hook if file open returns false.
+
+	* src/FileDialog.c (gncPostFileOpen): once book-closed-hook has
+	been run, run book-opened-hook if opening the file fails for some
+	reason.
+
+	* src/guile/gnc.gwp: update ui-open-file api.
+
+	* src/gnome/top-level.c (gnucash_ui_open_file): return TRUE/FALSE
+	for success/failure. use gboolean instead of int for boolean
+	returns.
+
 2001-05-10  Bill Gribble  <grib@billgribble.com>
 
 	* src/gnome/dialog-column-view.c: change handling of component

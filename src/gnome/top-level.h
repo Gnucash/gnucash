@@ -23,12 +23,14 @@
 #ifndef __TOP_LEVEL_H__
 #define __TOP_LEVEL_H__
 
+#include <glib.h>
+
 #include "window-main.h"
 
-int           gnucash_ui_is_running(void);
-int           gnucash_ui_is_terminating(void);
+gboolean      gnucash_ui_is_running(void);
+gboolean      gnucash_ui_is_terminating(void);
 int           gnucash_ui_init(void);
-int           gnucash_ui_open_file(const char * name);
+gboolean      gnucash_ui_open_file(const char * name);
 int           gnucash_ui_select_file(void);
 
 GNCMainInfo * gnc_ui_get_data(void);

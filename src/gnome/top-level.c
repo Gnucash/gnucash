@@ -123,7 +123,7 @@ static SCM register_hint_font_callback_id = SCM_UNDEFINED;
 
 /* ============================================================== */
 
-int 
+gboolean
 gnucash_ui_is_running(void)
 {
   return gnome_is_running;
@@ -131,7 +131,7 @@ gnucash_ui_is_running(void)
 
 /* ============================================================== */
 
-int 
+gboolean 
 gnucash_ui_is_terminating(void)
 {
   return gnome_is_terminating;
@@ -467,11 +467,10 @@ gnc_ui_main(void)
 
 /* ============================================================== */
 
-int
+gboolean
 gnucash_ui_open_file(const char name[])
 {
-  gncFileOpenFile(name);
-  return 1;
+  return gncFileOpenFile(name);
 }
 
 /* ============================================================== */
