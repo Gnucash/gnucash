@@ -39,6 +39,9 @@
 	* split-register-model.c -- If the TxnType != NONE, set all cells as
 	  READ_ONLY.
 	* fixes bug 96028 by making posted invoices and payments read-only.
+
+	* gnc-ledger-display.c -- fix a memory leak (you need to g_list_free()
+	  the returned list from xaccGroupGetSubAccounts(), according to the docs)
 	
 2002-10-16  Joshua Sled  <jsled@asynchronous.org>
 

@@ -437,6 +437,7 @@ gnc_ledger_display_gl (void)
     tAG = gnc_book_get_template_group( gnc_get_current_book() );
     al = xaccGroupGetSubAccounts( tAG );
     xaccQueryAddAccountMatch( query, al, GUID_MATCH_NONE, QUERY_AND );
+    g_list_free (al);
     al = NULL;
     tAG = NULL;
   }
