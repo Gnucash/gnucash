@@ -36,6 +36,7 @@ typedef enum
   GNC_EVENT_DESTROY = 1 << 2
 } GNCEngineEventType;
 
+
 /* GNCEngineEventCallback
  *   Callback invoked when an engine event occurs.
  *
