@@ -21,6 +21,8 @@
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 
+static short module = MOD_TEST; 
+
 static void
 save_xml_file (GNCSession *session, const char *filename_base)
 {
@@ -1000,6 +1002,42 @@ run_test (void)
     return;
 #endif
 }
+
+#if 0
+static void
+test_performance (const char *db_name, const char *mode)
+{
+  GNCSession *session;
+
+  session = get_random_session ();
+
+  gnc_set_log_level (MOD_TEST, GNC_LOG_WARNING);
+
+  START_CLOCK (0, "Starting to save session");
+  if (!save_db_file (session, db_name, "single-update"))
+    return;
+  REPORT_CLOCK (0, "Finished saving session");
+
+  gnc_session_destroy (session);
+  session = gnc_session_new ();
+
+  if (!load_db_file (session, db_name, mode, FALSE))
+    return;
+
+  gnc_set_log_level (MOD_TEST, GNC_LOG_INFO);
+
+  START_CLOCK (0, "Starting to save transactions");
+  add_random_transactions_to_book (gnc_session_get_book(session), 100);
+  REPORT_CLOCK (0, "Finished saving transactions");
+
+  REPORT_CLOCK_TOTAL (0, "total");
+  REPORT_CLOCK_TOTAL (1, "deleting kvp");
+  REPORT_CLOCK_TOTAL (2, "storing kvp");
+
+  gnc_session_end (session);
+  gnc_session_destroy (session);
+}
+#endif
 
 static void
 guile_main (int argc, char **argv)
