@@ -8,6 +8,13 @@
  * outside of the engine should *never* access any of the structure
  * members directly.
  *
+ * Note that this header file also defines prototypes for various
+ * routines that perform sub-atomic updates of the accounting
+ * structures.  If these routines are not used properly, they
+ * can result in inconsistent, unbalanced accounting structures.
+ * In other words, thier use is dangerous, and thier use outside
+ * of the scope of the engine is forbidden.
+ *
  */
 
 /********************************************************************\
@@ -44,14 +51,17 @@
 
 
 /** STRUCTS *********************************************************/
-/* The debit & credit pointers are used to implement a double-entry 
- * accounting system.  Basically, the idea with double entry is that
- * there is always an account that is debited, and another that is
- * credited.  These two pointers identify the two accounts. 
+/* 
+ * Double-entry is forced by having at least two splits in every
+ * transaction.  By convention, (and only by convention, not by
+ * any inate requirement), the first split is considered to be
+ * the source split or the crediting split, and the others are
+ * the destination, or debiting splits.  The grand total of all
+ * of the splits must always be kept zero.
  */
 
 /* A split transaction is one which shows up as a credit (or debit) in
- * one account, and peices of it show up as debits (or credits) in other
+ * one account, and pieces of it show up as debits (or credits) in other
  * accounts.  Thus, a single credit-card transaction might be split
  * between "dining", "tips" and "taxes" categories.
  */
@@ -85,8 +95,7 @@ struct _transaction
   Date    date;              /* transaction date                          */
   char  * description;        
 
-  Split   source_split;      /* source (creidted) account                 */
-  Split   **dest_splits;     /* list of splits, null terminated           */
+  Split   **splits;          /* list of splits, null terminated           */
 
   char    write_flag;        /* used only during file IO                  */
 
@@ -94,6 +103,43 @@ struct _transaction
    * opened for editing. */
   char open;
 };
+
+
+/* freeTransaction only does so if the transaction is not part of an
+ * account. (i.e. if none of the member splits are in an account). */
+void          xaccFreeTransaction (Transaction *);
+
+void          xaccFreeSplit   (Split *);    /* frees memory */
+
+
+/*
+ * The xaccSplitRebalance() routine is an important routine for
+ * maintaining and ensuring that double-entries balance properly.
+ * This routine forces the sum-total of the values of all the
+ * splits in a transaction to total up to exactly zero.
+ *
+ * It is worthwhile to understand the algorithm that this routine
+ * uses to acheive balance.  It goes like this:
+ * If the indicated split is a destination split (i.e. is not
+ * the first split), then the total value of the destination 
+ * splits is computed, and the value of the source split (ie.
+ * the first split) is adjusted to be minus this amount.
+ * (the share price of the source split is not changed).
+ * If the indicated split is the source split, then the value
+ * of the very first destination split is adjusted so that
+ * the blanace is zero.   If there is not destination split,
+ * one of two outcomes are possible, depending on whether
+ * "forced_double_entry" is enabled or disabled.
+ * (1) if forced-double-entry is disabled, the fact that
+ *     the destination is missing is ignored.
+ * (2) if force-double-entry is enabled, then a destination
+ *     split that exactly mirrors the source split is created,
+ *     and credited to the same account as the source split.
+ *     Hopefully, the user will notice this, and reparent the
+ *     destination split properly.
+ */
+
+void xaccSplitRebalance (Split *);
 
 
 #endif /* __XACC_TRANSACTION_P_H__ */

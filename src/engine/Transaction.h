@@ -64,10 +64,6 @@ typedef struct _transaction   Transaction;
 Transaction * xaccMallocTransaction (void);       /* mallocs and inits */
 void          xaccInitTransaction (Transaction *);/* clears a trans struct */
 
-/* freeTransaction only does so if the transaction is not part of an
- * account. (i.e. if none of the member splits are in an account). */
-void          xaccFreeTransaction (Transaction *);
-
 void          xaccTransBeginEdit (Transaction *);
 void          xaccTransCommitEdit (Transaction *);
 
@@ -81,64 +77,39 @@ void          xaccTransSetNum (Transaction *, const char *);
 void          xaccTransSetDescription (Transaction *, const char *);
 void          xaccTransSetMemo (Transaction *, const char *);
 void          xaccTransSetAction (Transaction *, const char *);
-void          xaccTransSetReconcile (Transaction *, char);
 
 void          xaccTransAppendSplit (Transaction *, Split *);
-void          xaccTransRemoveSplit (Transaction *, Split *);
 
 /* 
- * HACK ALERT *** this algorithm is wrong. Needs fixing.
- * The xaccSplitRebalance() routine is an important routine for 
- * maintaining and ensuring that double-entries balance properly.
- * This routine forces the sum-total of the values of all the 
- * splits in a transaction to total up to exactly zero.  
+ * The xaccSplitDestroy() method will update its parent account and 
+ *    transaction in a consistent maner, resulting in the complete 
+ *    unlinking of the split, and the freeing of it's associated memory.
+ *    The goal of this routine is to perform the removal and destruction
+ *    of the split in an atomic fashion, with no chance of accidentally
+ *    leaving the accounting structure out-of-balance or otherwise
+ *    inconsistent.
  *
- * It is worthwhile to understand the algorithm that this routine
- * uses to acheive balance.  It goes like this:
- * If the indicated split is a destination split, then the
- * total value of the destination splits is computed, and the
- * value of the source split is adjusted to be minus this amount.
- * (the share price of the source split is not changed).
- * If the indicated split is the source split, then the value
- * of the very first destination split is adjusted so that
- * the blanace is zero.   If there is not destination split,
- * one of two outcomes are possible, depending on whether
- * "forced_double_entry" is enabled or disabled.
- * (1) if forced-double-entry is disabled, the fact that
- *     the destination is missing is ignored.
- * (2) if force-double-entry is enabled, then a destination
- *     split that exactly mirrors the ource split is created,
- *     and credited to the same account as the source split.
- *     Hopefully, the user will notice this, and reparent the 
- *     destination split properly.
- *
- * The xaccTransRebalance() routine merely calls xaccSplitRebalance()
- * on the source split.
+ *    If the parent transaction of the split has three or more splits
+ *    in it, then only this one split is unlinked. If the parent
+ *    transaction has only two splits in it (and thus, this is one of
+ *    them), then both splits and the transaction are destroyed.
  */
- 
-void xaccSplitRebalance (Split *);
-void xaccTransRebalance (Transaction *);
+void          xaccSplitDestroy (Split *);
 
 /* ------------- gets --------------- */
-/* return pointer to the source split */
-Split *       xaccTransGetSourceSplit (Transaction *);
-Split *       xaccTransGetDestSplit (Transaction *trans, int i);
+/* return pointer to each of the splits */
+Split *       xaccTransGetSplit (Transaction *trans, int i);
 
 char *        xaccTransGetNum (Transaction *);
-char *        xaccTransGetDescription (Transaction *trans);
+char *        xaccTransGetDescription (Transaction *);
 Date *        xaccTransGetDate (Transaction *);
 char *        xaccTransGetDateStr (Transaction *);
 
-/* return the number of destination splits */
+/* return the number of splits */
 int           xaccTransCountSplits (Transaction *trans);
-
-/* returns non-zero value if split is source split */
-int           xaccTransIsSource (Transaction *, Split *);
-
 
 Split       * xaccMallocSplit (void);
 void          xaccInitSplit   (Split *);    /* clears a split struct */
-void          xaccFreeSplit   (Split *);    /* frees memory */
 int           xaccCountSplits (Split **sarray);
 
 void          xaccSplitSetMemo (Split *, const char *);

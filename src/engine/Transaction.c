@@ -23,6 +23,7 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#include <assert.h>
 #include <string.h>
 
 #include "config.h"
@@ -94,19 +95,7 @@ xaccMallocSplit( void )
 void
 xaccFreeSplit( Split *split )
   {
-  Transaction *trans;
-
   if (!split) return;
-
-  /* free a split only if it is not claimed
-   * by any accounts. */
-  if (split->acc) return;
-
-  /* free the split only if its not a source split */
-  trans = split->parent;
-  if (&(trans->source_split) == split) return;
-
-  xaccTransRemoveSplit (trans, split);
 
   free(split->memo);
   free(split->action);
@@ -132,12 +121,10 @@ xaccFreeSplit( Split *split )
 static void
 MarkChanged (Transaction *trans)
 {
-   MARK_SPLIT (&(trans->source_split));
-
-   if (trans->dest_splits) {
+   if (trans->splits) {
       int i=0;
-      while (trans->dest_splits[i]) {
-         MARK_SPLIT (trans->dest_splits[i]);
+      while (trans->splits[i]) {
+         MARK_SPLIT (trans->splits[i]);
          i++;
       }
    }
@@ -244,11 +231,8 @@ xaccInitTransaction( Transaction * trans )
   trans->num         = strdup("");
   trans->description = strdup("");
 
-  trans->dest_splits    = (Split **) _malloc (sizeof (Split *));
-  trans->dest_splits[0] = NULL;
-
-  xaccInitSplit ( &(trans->source_split));
-  trans->source_split.parent = trans;
+  trans->splits    = (Split **) _malloc (sizeof (Split *));
+  trans->splits[0] = NULL;
 
   /* create at least one destination split */
   dsplit = xaccMallocSplit ();
@@ -284,38 +268,25 @@ xaccFreeTransaction( Transaction *trans )
 
   /* free a transaction only if it is not claimed
    * by any accounts. */
-  if (trans->source_split.acc) return;
 
   i = 0;
-  s = trans->dest_splits[i];
+  s = trans->splits[i];
   while (s) {
     if (s->acc) return;
     i++;
-    s = trans->dest_splits[i];
+    s = trans->splits[i];
   }
 
   /* free up the destination splits */
   i = 0;
-  s = trans->dest_splits[i];
+  s = trans->splits[i];
   while (s) {
     xaccFreeSplit (s);
     i++;
-    s = trans->dest_splits[i];
+    s = trans->splits[i];
   }
 
-  _free (trans->dest_splits);
-
-
-  /* free up the source-split related stuff. */
-  free(trans->source_split.memo);
-  free(trans->source_split.action);
-
-  /* just in case someone looks up freed memory ... */
-  trans->source_split.memo        = 0x0;
-  trans->source_split.reconciled  = NREC;
-  trans->source_split.damount     = 0.0;
-  trans->source_split.share_price = 1.0;
-  trans->source_split.parent      = NULL;
+  _free (trans->splits);
 
   /* free up transaction strings */
   free(trans->num);
@@ -357,7 +328,7 @@ xaccTransCommitEdit (Transaction *trans)
 void
 xaccTransRebalance (Transaction * trans)
 {
-  xaccSplitRebalance (&(trans->source_split));
+  xaccSplitRebalance (trans->splits[0]);
 }
 
 void
@@ -368,31 +339,33 @@ xaccSplitRebalance (Split *split)
   int i = 0;
   double value = 0.0;
 
-
   trans = split->parent;
+  assert (trans);
+  assert (trans->splits);
+  assert (trans->splits[0]);
 
-  if (&(trans->source_split) == split) {
+  if (split == trans->splits[0]) {
     /* The indicated split is the source split.
      * Pick a destination split (by default, 
      * the first destination split), and force 
      * the total on it. 
      */
 
-    s = trans->dest_splits[0];
+    s = trans->splits[1];
     if (s) {
       /* first, add the source split */
       value = split->share_price * split->damount;
 
       /* now add in the sum of the destination splits */
-      i = 0;
+      i = 1;
       while (s) {
         value += s->share_price * s->damount;
         i++;
-        s = trans->dest_splits[i];
+        s = trans->splits[i];
       }
 
       /* subtract the first destination split */
-      s = trans->dest_splits[0];
+      s = trans->splits[1];
       value -= (s->share_price) * (s->damount);
 
       /* the new value of the destination split 
@@ -409,6 +382,8 @@ xaccSplitRebalance (Split *split)
        * to be created.
        */
 
+/* hack alert -- I think this is broken */
+#ifdef HACK_ALERT
        if (force_double_entry) {
           value = split->share_price * split->damount;
 
@@ -426,23 +401,25 @@ xaccSplitRebalance (Split *split)
           xaccAccountInsertSplit (split->acc, s);
           MARK_SPLIT (s);
        }
+#endif
+
     }
   } else {
 
     /* The indicated split is a destination split.
-     * Compute grand total of all distination splits,
+     * Compute grand total of all destination splits,
      * and force the source split to blanace.
      */
-    i = 0;
-    s = trans->dest_splits[i];
+    i = 1;
+    s = trans->splits[i];
     value = 0.0;
     while (s) {
       value += s->share_price * s->damount;
       i++;
-      s = trans->dest_splits[i];
+      s = trans->splits[i];
     }
 
-    s = &(trans->source_split);
+    s = trans->splits[0];
     s -> damount = - (value / (s->share_price));   
     MARK_SPLIT (s);
   }
@@ -470,15 +447,15 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
    
    /* first, insert the split into the array */
    split->parent = trans;
-   num = xaccCountSplits (trans->dest_splits);
+   num = xaccCountSplits (trans->splits);
 
-   oldarray = trans->dest_splits;
-   trans->dest_splits = (Split **) _malloc ((num+2)*sizeof(Split *));
+   oldarray = trans->splits;
+   trans->splits = (Split **) _malloc ((num+2)*sizeof(Split *));
    for (i=0; i<num; i++) {
-      (trans->dest_splits)[i] = oldarray[i];
+      (trans->splits)[i] = oldarray[i];
    }
-   trans->dest_splits[num] = split;
-   trans->dest_splits[num+1] = NULL;
+   trans->splits[num] = split;
+   trans->splits[num+1] = NULL;
 
    if (oldarray) _free (oldarray);
 
@@ -499,15 +476,15 @@ xaccTransRemoveSplit (Transaction *trans, Split *split)
    if (!trans) return;
    split->parent = NULL;
 
-   s = trans->dest_splits[0];
+   s = trans->splits[0];
    while (s) {
-     trans->dest_splits[i] = trans->dest_splits[n];
+     trans->splits[i] = trans->splits[n];
      if (split == s) { i--; }
      i++;
      n++;
-     s = trans->dest_splits[n];
+     s = trans->splits[n];
    }
-   trans->dest_splits[i] = NULL;
+   trans->splits[i] = NULL;
 
    /* force double entry to always be consistent */
    xaccTransRebalance (trans);
@@ -659,6 +636,7 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 {
    Split *split;
    Account *acc;
+   int i=0;
 
    trans->date.year = year;
    trans->date.month = mon;
@@ -672,24 +650,18 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
     * order.
     */
 
-   split = &(trans->source_split);
-   acc = (Account *) split->acc;
-   xaccAccountRemoveSplit (acc, split);
-   xaccAccountInsertSplit (acc, split);
-   xaccRecomputeBalance (acc);
+   assert (trans->splits);
 
-   if (trans->dest_splits) {
-      int i=0;
-      split = trans->dest_splits[i];
-      while (split) {
-         acc = (Account *) split->acc;
-         xaccAccountRemoveSplit (acc, split);
-         xaccAccountInsertSplit (acc, split);
-         xaccRecomputeBalance (acc);
+   i=0;
+   split = trans->splits[i];
+   while (split) {
+      acc = (Account *) split->acc;
+      xaccAccountRemoveSplit (acc, split);
+      xaccAccountInsertSplit (acc, split);
+      xaccRecomputeBalance (acc);
 
-         i++;
-         split = trans->dest_splits[i];
-      }
+      i++;
+      split = trans->splits[i];
    }
 }
 
@@ -733,67 +705,55 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
    MarkChanged (trans);
 }
 
-void
-xaccTransSetMemo (Transaction *trans, const char *memo)
-{
-   char * tmp = strdup (memo);
-   if (trans->source_split.memo) free (trans->source_split.memo);
-   trans->source_split.memo = tmp;
-   MARK_SPLIT (&(trans->source_split));
+#define SET_TRANS_FIELD(trans,field,value)			\
+{								\
+   if (!trans) return;						\
+								\
+   /* the engine *must* always be internally consistent */	\
+   assert (trans->splits);					\
+								\
+   if (force_double_entry) {					\
+     assert (trans->splits[0]);					\
+     assert (trans->splits[1]);					\
+   }								\
+								\
+   if (0x0 != trans->splits[0]) {				\
+      char * tmp = strdup (value);				\
+      free (trans->splits[0]->field);				\
+      trans->splits[0]->field = tmp;				\
+      MARK_SPLIT (trans->splits[0]);				\
+ 								\
+      /* if there are just two splits, then keep them in sync. */\
+      if (0x0 != trans->splits[1]) {				\
+         if (0x0 == trans->splits[2]) {				\
+            free (trans->splits[1]->field);			\
+            trans->splits[1]->field = strdup (tmp);		\
+            MARK_SPLIT (trans->splits[1]);			\
+         }							\
+      }								\
+   }								\
+}
 
-   /* if there is only one split, then keep memos in sync. */
-   if (trans->dest_splits) {
-      if (0x0 != trans->dest_splits[0]) {
-         if (0x0 == trans->dest_splits[1]) {
-            free (trans->dest_splits[0]->memo);
-            trans->dest_splits[0]->memo = strdup (tmp);
-            MARK_SPLIT (trans->dest_splits[0]);
-         }
-      }
-   }
+void
+xaccTransSetMemo (Transaction *trans, const char *mimeo)
+{
+   SET_TRANS_FIELD (trans, memo, mimeo);
 }
 
 void
 xaccTransSetAction (Transaction *trans, const char *actn)
 {
-   char * tmp = strdup (actn);
-
-   if (trans->source_split.action) free (trans->source_split.action);
-   trans->source_split.action = tmp;
-   MARK_SPLIT (&(trans->source_split));
-
-   /* if there is only one split, then keep action in sync. */
-   if (trans->dest_splits) {
-      if (0x0 != trans->dest_splits[0]) {
-         if (0x0 == trans->dest_splits[1]) {
-            free (trans->dest_splits[0]->action);
-            trans->dest_splits[0]->action = strdup (tmp);
-            MARK_SPLIT (trans->dest_splits[0]);
-         }
-      }
-   }
-}
-
-void
-xaccTransSetReconcile (Transaction *trans, char recn)
-{
-   trans->source_split.reconciled = recn;
-   MARK_SPLIT (&(trans->source_split));
+   SET_TRANS_FIELD (trans, action, actn);
 }
 
 /********************************************************************\
 \********************************************************************/
-Split *
-xaccTransGetSourceSplit (Transaction *trans) 
-{
-   return (&(trans->source_split));
-}
 
 Split *
-xaccTransGetDestSplit (Transaction *trans, int i) 
+xaccTransGetSplit (Transaction *trans, int i) 
 {
-   if (trans->dest_splits) {
-      return (trans->dest_splits[i]);
+   if (trans->splits) {
+      return (trans->splits[i]);
    }
    return NULL;
 }
@@ -827,13 +787,7 @@ xaccTransGetDateStr (Transaction *trans)
 int 
 xaccTransCountSplits (Transaction *trans)
 {
-   return (xaccCountSplits (trans->dest_splits));
-}
-
-int
-xaccTransIsSource (Transaction *trans, Split *split)
-{
-   return (split == &(trans->source_split));
+   return (xaccCountSplits (trans->splits));
 }
 
 /********************************************************************\
