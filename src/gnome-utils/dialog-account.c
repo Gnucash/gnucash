@@ -938,7 +938,7 @@ gnc_new_account_ok (AccountWindow *aw)
   char *name;
 
   /* check for valid name */
-  name = gtk_entry_get_text(GTK_ENTRY(aw->name_entry));
+  name = (char *) gtk_entry_get_text(GTK_ENTRY(aw->name_entry));
   if (safe_strcmp(name, "") == 0)
   {
     const char *message = _("The account must be given a name.");
@@ -1634,7 +1634,7 @@ get_ui_fullname (AccountWindow *aw)
   char *fullname;
   char *name;
 
-  name = gtk_entry_get_text (GTK_ENTRY(aw->name_entry));
+  name = (char *) gtk_entry_get_text (GTK_ENTRY(aw->name_entry));
   if (!name || *name == '\0')
     name = _("<No name>");
 

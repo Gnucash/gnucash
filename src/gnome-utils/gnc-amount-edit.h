@@ -34,12 +34,9 @@
 #include "gnc-numeric.h"
 #include "gnc-ui-util.h"
 
-BEGIN_GNOME_DECLS
-
-
-#define GNC_AMOUNT_EDIT(obj)          GTK_CHECK_CAST (obj, gnc_amount_edit_get_type(), GNCAmountEdit)
-#define GNC_AMOUNT_EDIT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_amount_edit_get_type(), GNCAmountEditClass)
-#define GNC_IS_AMOUNT_EDIT(obj)       GTK_CHECK_TYPE (obj, gnc_amount_edit_get_type ())
+#define GNC_AMOUNT_EDIT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_amount_edit_get_type(), GNCAmountEdit)
+#define GNC_AMOUNT_EDIT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_amount_edit_get_type(), GNCAmountEditClass)
+#define GNC_IS_AMOUNT_EDIT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_amount_edit_get_type ())
 
 typedef struct
 {
@@ -88,7 +85,4 @@ void      gnc_amount_edit_set_fraction    (GNCAmountEdit *gae, int fraction);
 
 void      gnc_amount_edit_set_evaluate_on_enter (GNCAmountEdit *gae,
                                                  gboolean evaluate_on_enter);
-
-END_GNOME_DECLS
-
 #endif

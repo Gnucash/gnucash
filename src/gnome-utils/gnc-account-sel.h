@@ -33,11 +33,9 @@
 #include <gnome.h>
 #include "Account.h"
 
-BEGIN_GNOME_DECLS
-
-#define GNC_ACCOUNT_SEL(obj)          GTK_CHECK_CAST (obj, gnc_account_sel_get_type(), GNCAccountSel)
-#define GNC_ACCOUNT_SEL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_account_sel_get_type(), GNCAccountSelClass)
-#define GNC_IS_ACCOUNT_SEL(obj)       GTK_CHECK_TYPE (obj, gnc_account_sel_get_type ())
+#define GNC_ACCOUNT_SEL(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_account_sel_get_type(), GNCAccountSel)
+#define GNC_ACCOUNT_SEL_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_account_sel_get_type(), GNCAccountSelClass)
+#define GNC_IS_ACCOUNT_SEL(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_account_sel_get_type ())
 
 typedef struct
 {
@@ -100,9 +98,5 @@ void gnc_account_sel_set_new_account_ability( GNCAccountSel *gas,
  **/
 void gnc_account_sel_set_new_account_modal( GNCAccountSel *gas,
                                               gboolean state );
-
-
-
-END_GNOME_DECLS
 
 #endif /* !ndef GNC_ACCOUNT_SEL_H */

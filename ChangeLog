@@ -1,4 +1,26 @@
 
+2003-04-01 TomF changes for gnucash-gnome2-dev, 9th batch
+
+	* src/gnome-utils/gnc-html.h 
+	  Replace gtkhtml/gtkhtml.h by libgtkhtml/gtkhtml.h
+	  Delete declare of gnc_html_register_object_handler	(FIXME)
+	  Delete typedef of GncHTMLObjectCB			(FIXME)
+	* src/gnome-utils/dialog-account.c
+	  cast assignment statements to char *
+
+	  In the following, replace glib macro wrappers GTK_CHECK* 
+	  by G_TYPE_CHECK* and remove {BEGIN,END}_GNOME_DECLS
+
+	* src/gnome-utils/gnc-amount-edit.h
+	* src/gnome-utils/gnc-general-select.h
+	* src/gnome-search/gnc-general-search.h
+	* src/gnome-utils/gnc-account-sel.h
+	* src/gnome-utils/gnc-currency-edit.h
+	* src/gnome-utils/gnc-date-delta.h
+	* src/gnome-utils/gnc-date-edit.h
+	* src/gnome-utils/gnc-frequency.h
+
+
 2003-04-01  Derek Atkins  <derek@ihtfp.com>
 
 	* remove TomF's comments from files in batch 7; the
@@ -101,7 +123,7 @@
 	  Changed xml to xml2; changed GNOME-CONFIG to PKG-CONFIG
 	  Moved AS_SCRUB_INCLUDE call from configure.in
 	  This .m4 file was not in the Gnome-2 branch, so it has to be
-	  added in cvs.  It don't know how it got dropped.
+	  added in cvs.  I don't know how it got dropped.
 	* src/engine/gnc-associate-account.c: Fixed gcc warning messages.
 	* Currently, make fails at gnc-gpg.c, and there is an unknown text
 	  file: src/network-utils/gnc-gpg.loT

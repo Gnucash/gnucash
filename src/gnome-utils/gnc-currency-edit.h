@@ -35,12 +35,9 @@
 
 #include "gnc-commodity.h"
 
-BEGIN_GNOME_DECLS
-
-
-#define GNC_CURRENCY_EDIT(obj)          GTK_CHECK_CAST (obj, gnc_currency_edit_get_type(), GNCCurrencyEdit)
-#define GNC_CURRENCY_EDIT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_currency_edit_get_type(), GNCCurrencyEditClass)
-#define GNC_IS_CURRENCY_EDIT(obj)       GTK_CHECK_TYPE (obj, gnc_currency_edit_get_type ())
+#define GNC_CURRENCY_EDIT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_currency_edit_get_type(), GNCCurrencyEdit)
+#define GNC_CURRENCY_EDIT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_currency_edit_get_type(), GNCCurrencyEditClass)
+#define GNC_IS_CURRENCY_EDIT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_currency_edit_get_type ())
 
 typedef struct {
         GtkCombo combo;
@@ -58,8 +55,6 @@ void       gnc_currency_edit_set_currency   (GNCCurrencyEdit *gce,
                                              const gnc_commodity *currency);
 
 gnc_commodity * gnc_currency_edit_get_currency (GNCCurrencyEdit *gce);
-
-END_GNOME_DECLS
 
 #endif
 

@@ -33,9 +33,6 @@
 
 #include <gnome.h>
 
-BEGIN_GNOME_DECLS
-
-
 typedef enum {
   GNC_DATE_DELTA_DAYS,
   GNC_DATE_DELTA_WEEKS,
@@ -50,10 +47,15 @@ typedef enum {
   GNC_DATE_DELTA_NUM_POLARITY
 } GNCDateDeltaPolarity;
 
+#define GNC_AMOUNT_EDIT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_amount_edit_get_type(), GNCAmountEdit)
+#define GNC_AMOUNT_EDIT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_amount_edit_get_type(), GNCAmountEditClass)
+#define GNC_IS_AMOUNT_EDIT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_amount_edit_get_type ())
 
-#define GNC_DATE_DELTA(obj)          GTK_CHECK_CAST (obj, gnc_date_delta_get_type(), GNCDateDelta)
-#define GNC_DATE_DELTA_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_date_delta_get_type(), GNCDateDeltaClass)
-#define GNC_IS_DATE_DELTA(obj)       GTK_CHECK_TYPE (obj, gnc_date_delta_get_type ())
+
+
+#define GNC_DATE_DELTA(obj)           G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_date_delta_get_type(), GNCDateDelta)
+#define GNC_DATE_DELTA_CLASS(klass)   G_TYPE_CHECK_CLASS_CAST (klass, gnc_date_delta_get_type(), GNCDateDeltaClass)
+#define GNC_IS_DATE_DELTA(obj)        G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_date_delta_get_type ())
 
 typedef struct {
   GtkHBox hbox;
@@ -91,7 +93,5 @@ void gnc_date_delta_set_polarity (GNCDateDelta *gdd,
 GNCDateDeltaPolarity gnc_date_delta_get_polarity (GNCDateDelta *gdd);
 
 void gnc_date_delta_show_polarity (GNCDateDelta *gdd, gboolean show_polarity);
-
-END_GNOME_DECLS
 
 #endif

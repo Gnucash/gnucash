@@ -34,9 +34,6 @@
 
 #include <gnome.h>
 
-BEGIN_GNOME_DECLS
-
-
 typedef enum {
 	GNC_DATE_EDIT_SHOW_TIME             = 1 << 0,
 	GNC_DATE_EDIT_24_HR                 = 1 << 1,
@@ -47,10 +44,9 @@ typedef enum {
 #endif
 } GNCDateEditFlags;
 
-
-#define GNC_DATE_EDIT(obj)          GTK_CHECK_CAST (obj, gnc_date_edit_get_type(), GNCDateEdit)
-#define GNC_DATE_EDIT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_date_edit_get_type(), GNCDateEditClass)
-#define GNC_IS_DATE_EDIT(obj)       GTK_CHECK_TYPE (obj, gnc_date_edit_get_type ())
+#define GNC_DATE_EDIT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_date_edit_get_type(), GNCDateEdit)
+#define GNC_DATE_EDIT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_date_edit_get_type(), GNCDateEditClass)
+#define GNC_IS_DATE_EDIT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_date_edit_get_type ())
 
 /**
  *  * 2001.05.13T1647 [PDT], #gnucash:
@@ -112,8 +108,4 @@ int       gnc_date_edit_get_flags       (GNCDateEdit *gde);
 
 void      gnc_date_editable_enters      (GnomeDialog *dialog,
 					 GNCDateEdit *gde);
-
-
-END_GNOME_DECLS
-
 #endif
