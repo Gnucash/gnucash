@@ -61,7 +61,6 @@
 #include "gnucash-color.h"
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
-#include "gnucash.h"
 #include "guile-util.h"
 #include "messages.h"
 #include "recncell.h"
