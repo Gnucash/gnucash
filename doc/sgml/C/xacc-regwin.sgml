@@ -91,7 +91,7 @@
      <screeninfo>The Account Register - Auto-Split Ledger</screeninfo>
       <mediaobject>
 	 <imageobject>
-            <imagedata fileref="image/autosplitledger" srccredit="wilddev">
+            <imagedata fileref="image/autosplitledger.png" srccredit="wilddev">
          </imageobject>
       </mediaobject>
     </screenshot>
@@ -113,7 +113,7 @@
      <screeninfo>The Account Register - Transaction Journal</screeninfo>
       <mediaobject>
         <imageobject>
-         <imagedata fileref="image/transactionjrnl" srccredit="wilddev">
+         <imagedata fileref="image/transactionjrnl.png" srccredit="wilddev">
         </imageobject>
        </mediaobject>
     </screenshot>

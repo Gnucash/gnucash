@@ -1,3 +1,8 @@
+2001-06-08  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* doc/sgml/C/xacc-file-operations.sgml, xacc-quickstart.sgml, 
+	xacc-regwin.sgml: updates and corrections.
+
 2001-06-07  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/price-quotes.scm: same as below
