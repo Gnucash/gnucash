@@ -34,6 +34,8 @@ if test -x "${hbci_config}" ; then
   OPENHBCI_LIBS="`${hbci_config} --libraries`"
   OPENHBCI_CFLAGS="`${hbci_config} --includes`"
   OPENHBCI_CXXFLAGS="`${hbci_config} --includes`"
+  AS_SCRUB_INCLUDE(OPENHBCI_CFLAGS)
+  AS_SCRUB_INCLUDE(OPENHBCI_CXXFLAGS)
 else
   AC_MSG_ERROR([
   Could not find bin/openhbci-config in prefix ${OPENHBCI_PREFIX}.
