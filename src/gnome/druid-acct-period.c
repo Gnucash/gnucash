@@ -32,6 +32,8 @@
 #include "Group.h"
 #include "Period.h"
 #include "Query.h"
+#include "Scrub.h"
+#include "Scrub2.h"
 #include "Transaction.h"
 #include "dialog-utils.h"
 #include "druid-acct-period.h"
