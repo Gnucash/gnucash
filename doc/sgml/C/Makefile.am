@@ -62,8 +62,8 @@ install-data-local: gnucash/index.html gnucash/help-search-index.db
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)/stylesheet-images
 	$(INSTALL_DATA) $(srcdir)/topic.dat \
 			$(DESTDIR)$(gnucash_helpdir)/topic.dat
-	$(INSTALL_DATA) gnucash/help-search-index.db \
-			$(DESTDIR)$(gnucash_helpdir)/help-search-index.db
+	-$(INSTALL_DATA) gnucash/help-search-index.db \
+			 $(DESTDIR)$(gnucash_helpdir)/help-search-index.db
 	-(for file in gnucash/*.html; do \
 	    basefile=`basename $$file` \
 	    $(INSTALL_DATA) $(srcdir)/$$file \
