@@ -13,13 +13,14 @@ set out 'count.png'
 set data style linespoints 
 set xdata time
 set timefmt "%d/%m/%Y"
-set format x "%m/%y"
+# set format x "%m/%y"
+set format x "%Y"
 set xrange ["01/09/1997":"01/12/2003"]
 set title "Number of Lines of code in GnuCash"
 set key right
-set xlabel "Date"
+set xlabel "Year"
 set logscale y
-set ylabel "KLOC"
+set ylabel "KLOC\nLogarithmic Scale"
 plot "count.dat" using 1:2	title "kloc"
 
 # pause 1000
