@@ -128,9 +128,8 @@ static void load_payment_type_cells (GncEntryLedger *ledger)
 /* Return TRUE if we don't want to add this account to the xfer menu */
 
 static gboolean
-skip_acct_cb (Account *account, gpointer user_data)
+skip_expense_acct_cb (Account *account, gpointer user_data)
 {
-  GncEntryLedgerType ledger_type = (GncEntryLedgerType) user_data;
   GNCAccountType type;
 
   /* Don't add A/R, A/P, Bank, Cash, or Equity accounts */
@@ -141,32 +140,34 @@ skip_acct_cb (Account *account, gpointer user_data)
     return TRUE;
   }
 
+  /* If this is an ORDER or INVOICE, then leave out the expenses.  */
+  if (type == EXPENSE) return TRUE;
+
   /* Don't add placeholder accounts */
-  if (xaccAccountGetPlaceholder (account))
+  if (xaccAccountGetPlaceholder (account)) return TRUE;
+
+  return FALSE;
+}
+
+static gboolean
+skip_income_acct_cb (Account *account, gpointer user_data)
+{
+  GNCAccountType type;
+
+  /* Don't add A/R, A/P, Bank, Cash, or Equity accounts */
+  type = xaccAccountGetType (account);
+  if (type == PAYABLE || type == RECEIVABLE ||
+      type == CASH || type == BANK || type == EQUITY)
   {
     return TRUE;
   }
 
-  /* If this is an ORDER or INVOICE, then leave out the expenses.
-   * if it's a BILL, then leave out the incomes
-   */
-  switch (ledger_type) 
-  {
-    case GNCENTRY_ORDER_ENTRY:
-    case GNCENTRY_ORDER_VIEWER:
-    case GNCENTRY_INVOICE_ENTRY:
-    case GNCENTRY_INVOICE_VIEWER:
-      if (type == EXPENSE) return TRUE;
-      return FALSE;
+  /* If this is a BILL, then leave out the incomes */
+  if (type == INCOME) return TRUE;
 
-    case GNCENTRY_BILL_ENTRY:
-    case GNCENTRY_BILL_VIEWER:
-    case GNCENTRY_EXPVOUCHER_ENTRY:
-    case GNCENTRY_EXPVOUCHER_VIEWER:
-    case GNCENTRY_NUM_REGISTER_TYPES:
-      if (type == INCOME) return TRUE;
-      return FALSE;
-  }
+  /* Don't add placeholder accounts */
+  if (xaccAccountGetPlaceholder (account)) return TRUE;
+
   return FALSE;
 }
 
@@ -182,9 +183,41 @@ static gpointer
 load_xfer_cell_cb (Account *account, gpointer data)
 {
   BCE *bce = data;
+  GNCAccountType type;
   char *name;
 
-  if (skip_acct_cb (account, (gpointer) bce->ledger_type)) return NULL;
+  /* Don't add A/R, A/P, Bank, Cash, or Equity accounts */
+  type = xaccAccountGetType (account);
+  if (type == PAYABLE || type == RECEIVABLE ||
+      type == CASH || type == BANK || type == EQUITY)
+  {
+    return NULL;
+  }
+
+  /* If this is an ORDER or INVOICE, then leave out the expenses.
+   * if it's a BILL, then leave out the incomes
+   */
+  switch (bce->ledger_type) 
+  {
+    case GNCENTRY_ORDER_ENTRY:
+    case GNCENTRY_ORDER_VIEWER:
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
+      if (type == EXPENSE) return NULL;
+      break;
+
+    case GNCENTRY_BILL_ENTRY:
+    case GNCENTRY_BILL_VIEWER:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_NUM_REGISTER_TYPES:
+      if (type == INCOME) return NULL;
+      break;
+  }
+
+  /* Don't add placeholder accounts */
+  if (xaccAccountGetPlaceholder (account)) return NULL;
+
 
   name = xaccAccountGetFullName (account, gnc_get_account_separator ());
   if (NULL == name) return NULL;
@@ -194,7 +227,8 @@ load_xfer_cell_cb (Account *account, gpointer data)
   return NULL;
 }
 
-#define BKEY "Business entry quickfill"
+#define EKEY "Expense Business entry quickfill"
+#define IKEY "Income Business entry quickfill"
 
 static void 
 load_xfer_type_cells (GncEntryLedger *ledger)
@@ -202,14 +236,34 @@ load_xfer_type_cells (GncEntryLedger *ledger)
   BCE bce;
   AccountGroup *group;
   ComboCell *cell;
-  QuickFill *qf;
+  QuickFill *qf=NULL;
 
   group = gnc_book_get_group (ledger->book);
   if (group == NULL) return;
 
-  /* Use a common, shared quickfill */
-  qf = gnc_get_shared_account_name_quickfill (group, BKEY, 
-                                skip_acct_cb, (gpointer) ledger->type);
+  /* Use a common, shared quickfill.  For the ORDER or INVOICE, 
+   * ledgers, we don't want expense-type accounts in the menu.
+   * For BILL, etc. then leave out the income types.
+   */
+  switch (ledger->type) 
+  {
+    case GNCENTRY_ORDER_ENTRY:
+    case GNCENTRY_ORDER_VIEWER:
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
+      qf = gnc_get_shared_account_name_quickfill (group, IKEY, 
+                                      skip_expense_acct_cb, NULL);
+      break;
+
+    case GNCENTRY_BILL_ENTRY:
+    case GNCENTRY_BILL_VIEWER:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_NUM_REGISTER_TYPES:
+      qf = gnc_get_shared_account_name_quickfill (group, EKEY, 
+                                      skip_income_acct_cb, NULL);
+      break;
+  }
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_IACCT_CELL);
