@@ -612,10 +612,9 @@ gnc_main_window_add_widget (EggMenuMerge *merge,
 }
 
 static void
-gnc_main_window_switch_page (GtkNotebook *notebook,
-			     GtkNotebookPage *notebook_page,
-			     gint pos,
-			     GncMainWindow *window)
+gnc_main_window_switch_page_internal (GtkNotebook *notebook,
+				      gint pos,
+				      GncMainWindow *window)
 {
 	GtkWidget *child;
 	GncPluginPage *page;
@@ -640,32 +639,20 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 }
 
 static void
+gnc_main_window_switch_page (GtkNotebook *notebook,
+			     GtkNotebookPage *notebook_page,
+			     gint pos,
+			     GncMainWindow *window)
+{
+	gnc_main_window_switch_page_internal (notebook, pos, window);
+}
+
+static void
 gnc_main_window_change_current_page (GtkNotebook *notebook,
 				     gint pos,
 				     GncMainWindow *window)
 {
-	GtkWidget *child;
-	GncPluginPage *page;
-
-	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
-
-	g_print ("change_current_page");
-
-	if (window->priv->current_page != NULL) {
-		gnc_plugin_page_unmerge_actions (window->priv->current_page,
-						 window->ui_merge);
-		gnc_plugin_page_unselected (window->priv->current_page);
-	}
-
-	child = gtk_notebook_get_nth_page (notebook, pos);
-	page = g_object_get_data (G_OBJECT (child), "page-plugin");
-
-	window->priv->current_page = page;
-
-	if (page != NULL) {
-		gnc_plugin_page_merge_actions (page, window->ui_merge);
-		gnc_plugin_page_selected (page);
-	}
+	gnc_main_window_switch_page_internal (notebook, pos, window);
 }
 
 static void
