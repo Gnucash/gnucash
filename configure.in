@@ -112,14 +112,14 @@ then
 fi
 
 AC_ARG_ENABLE( debug,
-       [  --enable-debug          compile with debugging flags set],
+  [  --enable-debug               compile with debugging flags set],
        CFLAGS="${CFLAGS} -g"
        LDFLAGS="${LDFLAGS} -g"
        AC_DEFINE(DEBUG_MEMORY,1),
        AC_DEFINE(DEBUG_MEMORY,0) )
 
 AC_ARG_ENABLE( profile,
-       [  --enable-profile          compile with profiling set],
+  [  --enable-profile             compile with profiling set],
        CFLAGS="${CFLAGS} -pg"
        LDFLAGS="${LDFLAGS} -pg")
 
@@ -137,7 +137,7 @@ AC_SUBST(LOCALE_DIR)
 ### --------------------------------------------------------------------------
 ### help files
 AC_ARG_WITH( help-prefix,
-  [  --with-help-prefix=PATH         specify where to store the help files],
+  [  --with-help-prefix=PATH      specify where to store the help files],
   GNC_HELPDIR="$with_help_prefix/gnome/help/gnucash",
   GNC_HELPDIR="\${datadir}/gnome/help/gnucash")
 
@@ -149,7 +149,7 @@ AC_SUBST(GNC_HELPDIR)
 
 # Check for glade
 AC_ARG_WITH(glade,
-  [  --with-glade=FILE              which glade executable to use ],
+  [  --with-glade=FILE            which glade executable to use ],
   GLADE="${with_glade}")
 
 # If the user didn't specify a glade, then go fetch.
@@ -171,7 +171,7 @@ AC_SUBST(GLADE)
 
 # Check for perl, force version 5
 AC_ARG_WITH(perl,
-  [  --with-perl=FILE              which perl executable to use ],
+  [  --with-perl=FILE             which perl executable to use ],
   PERL="${with_perl}")
 
 # If the user didn't specify a perl, then go fetch.
@@ -201,7 +201,7 @@ AC_SUBST(PERL)
 #
 PERLINCL=`$PERL -MConfig -e 'print $Config{"archlibexp"}'`
 AC_ARG_WITH( perl-includes, 
-       [  --with-perl-includes=DIR    specify where to look for perl includes],
+  [  --with-perl-includes=DIR     specify where to look for perl includes],
        PERLINCL="$with_perl_includes" )
 
 if test ! -d ${PERLINCL}/CORE; then
@@ -217,7 +217,8 @@ LIBS="$LIBS -lm"
 
 ### --------------------------------------------------------------------------
 ### Berkeley db
-AC_ARG_ENABLE(prefer-db1, [  --enable-prefer-db1     Prefer Berkeley DB 1.x],[prefer_db1="$enableval"],[prefer_db1=yes])
+AC_ARG_ENABLE(prefer-db1,
+  [  --enable-prefer-db1          Prefer Berkeley DB 1.x],[prefer_db1="$enableval"],[prefer_db1=yes])
 
 DB_LIBS=
 AC_CHECK_FUNC(dbopen, [],
@@ -293,11 +294,48 @@ AC_SUBST(GHTTP_CFLAGS)
 ### --------------------------------------------------------------------------
 ### guppi
 
+## Things guppi needs (actually are these guppi dependencies or gtkhtml's?)
+
+# LAME: if you ask gnome-config for the zvt libs, it doesn't include
+# imlib, though it needs it so we'll just steal gtkhtml's which does.
+AC_CHECK_LIB(zvt, main, true,
+  [AC_MSG_ERROR([libzvt development files not found.  Guppi requires them.])],
+  `$GNOME_CONFIG --libs zvt gtkhtml`)
+
+AC_CHECK_LIB(bonobo, main, true,
+  [AC_MSG_ERROR([libbonobo development files not found.  Guppi requires them.])
+],
+  `$GNOME_CONFIG --libs bonobo`)
+
+AC_CHECK_LIB(oaf, main, true,
+  [AC_MSG_ERROR([liboaf development files not found.  Guppi requires them.])],
+  `$GNOME_CONFIG --libs oaf`)
+
+AC_CHECK_LIB(glade, main, true,
+  [AC_MSG_ERROR([libglade development files not found.  Guppi requires them.])]
+,
+  `$GNOME_CONFIG --libs libglade`)
+
+## guppi itself.
+
 GUPPI_LIBS=`$GNOME_CONFIG --libs libguppi`
 GUPPI_CFLAGS=`$GNOME_CONFIG --cflags libguppi`
 LIBGUPPI_CHECK
 AC_SUBST(GUPPI_LIBS)
 AC_SUBST(GUPPI_CFLAGS)
+
+
+### --------------------------------------------------------------------------
+### XIM
+AC_ARG_ENABLE(xim,
+  [  --enable-xim                 support XIM [default=yes]],
+  , enable_xim="yes")
+
+if test "x$enable_xim" = "xyes"; then
+  GTK_XIM_FLAGS="-DUSE_XIM"
+fi
+
+AC_SUBST(GTK_XIM_FLAGS)
 
 
 ### --------------------------------------------------------------------------
