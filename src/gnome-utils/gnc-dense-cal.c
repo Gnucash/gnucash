@@ -80,11 +80,6 @@ static const int DENSE_CAL_DEFAULT_HEIGHT = 105;
 static const int MINOR_BORDER_SIZE = 1;
 static const int COL_BORDER_SIZE = 3;
 
-static const gchar* MONTH_NAMES[] = {
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-};
-
 static const gchar* MONTH_THIS_COLOR = "lavender";
 static const gchar* MONTH_THAT_COLOR = "SlateGray1";
 
@@ -161,6 +156,42 @@ static void doc_coords( GncDenseCal *dcal, int dayOfCal,
                         int *x1, int *y1, int *x2, int *y2 );
 
 static GtkWidgetClass *parent_class = NULL;
+
+/*static const gchar* MONTH_NAMES[] = {
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  };*/
+#define MONTH_NAME_BUFSIZE 5
+/* Takes the number of months since January, in the range 0 to
+ * 11. Returns the abbreviated month name according to the current
+ * locale. (i18n'd version of the above static character array.) */
+static const gchar *month_name(int mon) 
+{
+    static char buf[MONTH_NAME_BUFSIZE];
+    struct tm my_tm;
+    int i;
+
+    my_tm.tm_mon = mon;
+    i = strftime (buf, MONTH_NAME_BUFSIZE, "%b", &my_tm);
+    return buf;
+}
+/* FIXME: i18n 
+   static const gchar *dayLabels[7] = {
+   "Su", "M", "Tu", "W", "Th", "F", "Sa"
+   };*/
+/* Takes the number of days since Sunday, in the range 0 to 6. Returns
+ * the abbreviated weekday name according to the current locale. */
+static const gchar *day_label(int wday)
+{
+    static char buf[MONTH_NAME_BUFSIZE];
+    struct tm my_tm;
+    int i;
+    
+    my_tm.tm_wday = wday;
+    i = strftime (buf, MONTH_NAME_BUFSIZE, "%a", &my_tm);
+    return buf;
+}
+
 
 GtkType
 gnc_dense_cal_get_type ()
@@ -288,7 +319,7 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                 maxWidth = maxHeight = maxAscent = maxLBearing = 0;
                 for ( i=0; i<12; i++ ) {
                         gint w, h;
-                        gdk_string_extents( dcal->monthLabelFont, MONTH_NAMES[i],
+                        gdk_string_extents( dcal->monthLabelFont, month_name(i),
                                             &lbearing, &rbearing, &width,
                                             &ascent, &descent );
                         w = rbearing - lbearing + 1;
@@ -743,7 +774,7 @@ gnc_dense_cal_draw_to_buffer( GncDenseCal *dcal )
                         gdk_draw_string( tmpPix, dcal->monthLabelFont, gc,
                                          dcal->label_lbearing,
                                          dcal->label_ascent,
-                                         MONTH_NAMES[i] );
+                                         month_name(i) );
 
                         tmpImg = gdk_image_get( tmpPix, 0, 0,
                                                 dcal->label_height,
@@ -872,21 +903,17 @@ gnc_dense_cal_draw_to_buffer( GncDenseCal *dcal )
                 /* draw the day labels */
                 maxWidth = gdk_string_width( dcal->monthLabelFont, "88" );
                 if ( dcal->x_scale > maxWidth ) {
-                        /* FIXME: i18n */
-                        static const gchar *dayLabels[7] = {
-                                "Su", "M", "Tu", "W", "Th", "F", "Sa"
-                        };
                         for ( j=0; j<7; j++ ) {
                                 gint dx = x
                                         + (j * day_width(dcal))
                                         + (day_width(dcal)/2)
                                         - ( gdk_string_width(dcal->monthLabelFont,
-                                                             dayLabels[j]) / 2 );
+                                                             day_label(j)) / 2 );
                                 gint dy = y - 2;
                                 gdk_draw_string( dcal->drawbuf,
                                                  dcal->monthLabelFont,
                                                  widget->style->fg_gc[widget->state],
-                                                 dx, dy, dayLabels[j] );
+                                                 dx, dy, day_label(j) );
                         }
                 }
         }

@@ -1,3 +1,8 @@
+2002-12-30  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome-utils/gnc-dense-cal.c: i18n'ize the dense calendar
+	widget.
+
 2002-12-29  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/dialog-scheduledxaction.c, dialog-sxsincelast.c: Some
