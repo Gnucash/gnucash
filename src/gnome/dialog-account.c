@@ -62,6 +62,7 @@ struct _AccountWindow
 
   Account *account;
   Account *top_level_account;
+  Account *created_account;
 
   GList *subaccount_names;
 
@@ -289,6 +290,9 @@ gnc_finish_ok (AccountWindow *aw)
 
     return;
   }
+
+  /* save for posterity */
+  aw->created_account = aw->account;
 
   /* so it doesn't get freed on close */
   aw->account = NULL;
@@ -1026,14 +1030,14 @@ gnc_account_window_help_cb(GtkWidget *widget, gpointer data)
 
 
 static int
-gnc_account_window_close_cb (GnomeDialog *dialog, gpointer data)
+gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
 {
   AccountWindow *aw = data;
 
   switch (aw->dialog_type)
   {
     case NEW_ACCOUNT:
-      new_account_windows = g_list_remove (new_account_windows, dialog);
+      new_account_windows = g_list_remove (new_account_windows, object);
 
       if (aw->account != NULL)
       {
@@ -1068,7 +1072,7 @@ gnc_account_window_close_cb (GnomeDialog *dialog, gpointer data)
 
   g_free (aw);
 
-  gdk_window_get_geometry (GTK_WIDGET(dialog)->window, NULL, NULL,
+  gdk_window_get_geometry (GTK_WIDGET(object)->window, NULL, NULL,
                            &last_width, &last_height, NULL);
 
   gnc_save_window_size ("account_win", last_width, last_height);
@@ -1246,15 +1250,17 @@ gnc_account_window_create(AccountWindow *aw)
   GtkObject *awo;
   GtkWidget *box;
 
-  aw->dialog = create_Account_Dialog();
-  awo = GTK_OBJECT(aw->dialog);
-  awd = GNOME_DIALOG(awo);
+  aw->dialog = create_Account_Dialog ();
+  awo = GTK_OBJECT (aw->dialog);
+  awd = GNOME_DIALOG (awo);
+
+  gtk_object_set_data (awo, "dialog_info", aw);
 
   /* default to ok */
   gnome_dialog_set_default(awd, 0);
 
-  gtk_signal_connect(awo, "close",
-                     GTK_SIGNAL_FUNC(gnc_account_window_close_cb), aw);
+  gtk_signal_connect(awo, "destroy",
+                     GTK_SIGNAL_FUNC(gnc_account_window_destroy_cb), aw);
 
   gnome_dialog_button_connect
     (awd, 0, GTK_SIGNAL_FUNC(gnc_account_window_ok_cb), aw);
@@ -1514,18 +1520,37 @@ gnc_split_account_name (const char *in_name, Account **base_account)
 }
 
 
-AccountWindow *
+static int
+from_name_close_cb (GnomeDialog *dialog, gpointer data)
+{
+  AccountWindow *aw;
+  Account **created_account = data;
+
+  aw = gtk_object_get_data (GTK_OBJECT (dialog), "dialog_info");
+
+  *created_account = aw->created_account;
+
+  gtk_main_quit ();
+
+  return FALSE;
+}
+
+Account *
 gnc_ui_new_accounts_from_name_window (const char *name)
 {
   AccountWindow *aw;
   Account *base_account;
+  Account *created_account;
   GList * subaccount_names;
   GList * node;
 
   if (!name || *name == '\0')
-    return gnc_ui_new_account_window (NULL);
-
-  subaccount_names = gnc_split_account_name (name, &base_account);
+  {
+    subaccount_names = NULL;
+    base_account = NULL;
+  }
+  else
+    subaccount_names = gnc_split_account_name (name, &base_account);
 
   aw = gnc_ui_new_account_window_internal (base_account, subaccount_names);
 
@@ -1533,7 +1558,12 @@ gnc_ui_new_accounts_from_name_window (const char *name)
     g_free (node->data);
   g_list_free (subaccount_names);
 
-  return aw;
+  gtk_signal_connect(GTK_OBJECT (aw->dialog), "close",
+                     GTK_SIGNAL_FUNC (from_name_close_cb), &created_account);
+
+  gtk_main ();
+
+  return created_account;
 }
 
 

@@ -1241,9 +1241,14 @@ LedgerTraverse (Table *table,
         break;
     }
 
-    gnc_ui_new_accounts_from_name_window (name);
+    account = gnc_ui_new_accounts_from_name_window (name);
+    if (!account)
+      break;
 
-    return TRUE;
+    name = xaccAccountGetFullName (account, account_separator);
+    xaccSetComboCellValue (cell, name);
+    xaccBasicCellSetChanged (&cell->cell, TRUE);
+    g_free (name);
 
   } while (FALSE);
 

@@ -49,35 +49,39 @@
 #include "gnc-common.h"
 
 
-typedef struct _ComboCell {
-   BasicCell  cell;
+typedef struct _ComboCell
+{
+  BasicCell  cell;
 } ComboCell;
 
 
 ComboCell *  xaccMallocComboCell (void);
-void         xaccInitComboCell (ComboCell *);
-void         xaccDestroyComboCell (ComboCell *);
+void         xaccInitComboCell (ComboCell *cell);
+void         xaccDestroyComboCell (ComboCell *cell);
 
-void         xaccSetComboCellValue (ComboCell *, const char *);
+void         xaccSetComboCellValue (ComboCell *cell, const char *value);
 
-void         xaccClearComboCellMenu (ComboCell *);
-void         xaccAddComboCellMenuItem (ComboCell *, char * menustr);
+void         xaccClearComboCellMenu (ComboCell *cell);
+void         xaccAddComboCellMenuItem (ComboCell *cell, char * menustr);
 
 /* Determines whether the cell will accept strings not in the
  * menu. Defaults to strict, i.e., only menu items are accepted. */
-void         xaccComboCellSetStrict (ComboCell *, gboolean);
+void         xaccComboCellSetStrict (ComboCell *cell, gboolean strict);
 
 /* Sets a character used for special completion processing. */
-void         xaccComboCellSetCompleteChar (ComboCell *, char);
+void         xaccComboCellSetCompleteChar (ComboCell *cell,
+                                           char complete_char);
 
 /* Sets a string which, if the cell has that value, will be returned
  * on an enter, thus preventing the cell from being edited. This is
  * used for transactions with multiple splits. */
-void         xaccComboCellSetIgnoreString (ComboCell *, const char *);
+void         xaccComboCellSetIgnoreString (ComboCell *cell,
+                                           const char *ignore_string);
 
 /* Sets a string which, if the cell has the ignore value, will be
  * returned as the help string. */
-void         xaccComboCellSetIgnoreHelp (ComboCell *, const char *);
+void         xaccComboCellSetIgnoreHelp (ComboCell *cell,
+                                         const char *ignore_help);
 
 /* Determines whether combocells are automatically raised upon typing.
  * Defaults to false. This is a 'class' method. */
