@@ -1,3 +1,8 @@
+2001-06-29  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/gnc-account-xml-v2.c: Alex Zepeda's patch
+	adding a missing include.
+
 2001-06-27  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/QuickFill.c: same as below
