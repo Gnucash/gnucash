@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.4.X\n"
-"POT-Creation-Date: 2000-06-18 18:39-0700\n"
+"POT-Creation-Date: 2000-09-07 15:12-0700\n"
 "PO-Revision-Date: 2000-07-23 20:00+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1804,410 +1804,418 @@ msgstr "Afficher"
 msgid "Equity"
 msgstr "Capitaux propres"
 
-# messages-i18n.c:283
 #: messages-i18n.c:325
+msgid "EUR (total)"
+msgstr ""
+
+# messages-i18n.c:283
+#: messages-i18n.c:326
 msgid "Exit"
 msgstr "Quitter"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
-#: messages-i18n.c:326 po/guile_strings.txt:327
+#: messages-i18n.c:327 po/guile_strings.txt:327
 #: src/gnome/glade-gnc-dialogs.c:588
 msgid "Expense"
 msgstr "Dépenses"
 
 # messages-i18n.c:285
-#: messages-i18n.c:327
+#: messages-i18n.c:328
 msgid "Export"
 msgstr "Exporter"
 
 # messages-i18n.c:286 po/guile_strings.txt:300
-#: messages-i18n.c:328 po/guile_strings.txt:355
+#: messages-i18n.c:329 po/guile_strings.txt:355
 msgid "Extensions"
 msgstr "Extensions"
 
 # messages-i18n.c:287
-#: messages-i18n.c:329
+#: messages-i18n.c:330
 msgid "Fee"
 msgstr "Taxes/Impots"
 
 # messages-i18n.c:288
-#: messages-i18n.c:330
+#: messages-i18n.c:331
 msgid "Field"
 msgstr "Champ"
 
 # messages-i18n.c:288
-#: messages-i18n.c:331
+#: messages-i18n.c:332
 msgid "File"
 msgstr "Fichier"
 
 # messages-i18n.c:182
-#: messages-i18n.c:332 src/gnome/glade-gnc-dialogs.c:2523
+#: messages-i18n.c:333 src/gnome/glade-gnc-dialogs.c:2523
 msgid "Find"
 msgstr "Chercher"
 
 # messages-i18n.c:289
-#: messages-i18n.c:333
+#: messages-i18n.c:334
 msgid "Forward"
 msgstr "Suivant"
 
 # messages-i18n.c:290 po/guile_strings.txt:106
-#: messages-i18n.c:334 po/guile_strings.txt:126
+#: messages-i18n.c:335 po/guile_strings.txt:126
 msgid "From"
 msgstr "Depuis"
 
 # messages-i18n.c:291
-#: messages-i18n.c:335
+#: messages-i18n.c:336
 msgid "GnuCash Preferences"
 msgstr "Préférences de GnuCash"
 
 # messages-i18n.c:292
-#: messages-i18n.c:336
+#: messages-i18n.c:337
 msgid "Help"
 msgstr "Aide"
 
 # messages-i18n.c:249 po/guile_strings.txt:12
-#: messages-i18n.c:337
+#: messages-i18n.c:338
 msgid "Imbalance"
 msgstr "Non soldé"
 
 # messages-i18n.c:293
-#: messages-i18n.c:338
+#: messages-i18n.c:339
 msgid "Import"
 msgstr "Importer"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
-#: messages-i18n.c:339 po/guile_strings.txt:244
+#: messages-i18n.c:340 po/guile_strings.txt:244
 #: src/gnome/glade-gnc-dialogs.c:585
 msgid "Income"
 msgstr "Revenus"
 
 # messages-i18n.c:295
-#: messages-i18n.c:340
+#: messages-i18n.c:341
 msgid "Increase"
 msgstr "Augmenter"
 
 # messages-i18n.c:296
-#: messages-i18n.c:341
+#: messages-i18n.c:342
 msgid "Int"
 msgstr "Int"
 
 # messages-i18n.c:297
-#: messages-i18n.c:342
+#: messages-i18n.c:343
 msgid "Jump"
 msgstr "Sauter"
 
 # messages-i18n.c:298 po/guile_strings.txt:165
 # src/gnome/glade-gnc-dialogs.c:632
-#: messages-i18n.c:343 po/guile_strings.txt:194
+#: messages-i18n.c:344 po/guile_strings.txt:194
 #: src/gnome/glade-gnc-dialogs.c:573
 msgid "Liability"
 msgstr "Passif(Dettes)"
 
 # messages-i18n.c:299
-#: messages-i18n.c:344
+#: messages-i18n.c:345
 msgid "License"
 msgstr "Licence"
 
 # messages-i18n.c:300
-#: messages-i18n.c:345
+#: messages-i18n.c:346
 msgid "Loan"
 msgstr "Emprunt"
 
 # messages-i18n.c:301
-#: messages-i18n.c:346
+#: messages-i18n.c:347
 msgid "LTCG"
 msgstr "PVLT"
 
 # messages-i18n.c:302 po/guile_strings.txt:26
-#: messages-i18n.c:347 po/guile_strings.txt:32
+#: messages-i18n.c:348 po/guile_strings.txt:32
 #: src/gnome/glade-gnc-dialogs.c:2196
 msgid "Memo"
 msgstr "Mémo"
 
 # po/guile_strings.txt:184
-#: messages-i18n.c:348
+#: messages-i18n.c:349
 msgid "Months"
 msgstr "Mois"
 
 # messages-i18n.c:303
-#: messages-i18n.c:349
+#: messages-i18n.c:350
 msgid "New"
 msgstr "Nouveau"
 
 # messages-i18n.c:304
-#: messages-i18n.c:350
+#: messages-i18n.c:351
 msgid "No"
 msgstr "Non"
 
 # messages-i18n.c:305 src/gnome/print-session.c:108
 # src/gnome/print-session.c:197
-#: messages-i18n.c:351 src/gnome/print-session.c:111
+#: messages-i18n.c:352 src/gnome/print-session.c:111
 #: src/gnome/print-session.c:200
 msgid "(none)"
 msgstr "(aucun)"
 
 # messages-i18n.c:306 po/guile_strings.txt:176
-#: messages-i18n.c:352 po/guile_strings.txt:209
+#: messages-i18n.c:353 po/guile_strings.txt:209
 msgid "Notes"
 msgstr "Notes"
 
 # messages-i18n.c:307 po/guile_strings.txt:148
-#: messages-i18n.c:353 po/guile_strings.txt:176
+#: messages-i18n.c:354 po/guile_strings.txt:176
 msgid "Num"
 msgstr "Num"
 
 # messages-i18n.c:308
-#: messages-i18n.c:354
+#: messages-i18n.c:355
 msgid "Ok"
 msgstr "Ok"
 
 # messages-i18n.c:309
-#: messages-i18n.c:355
+#: messages-i18n.c:356
 msgid "Online"
 msgstr "En ligne"
 
 # messages-i18n.c:310
-#: messages-i18n.c:356
+#: messages-i18n.c:357
 msgid "Open"
 msgstr "Ouvrir"
 
 # messages-i18n.c:310
-#: messages-i18n.c:357
+#: messages-i18n.c:358
 msgid "Orphan"
 msgstr "Orphelin"
 
 # messages-i18n.c:311
-#: messages-i18n.c:358
+#: messages-i18n.c:359
 msgid "Parameters"
 msgstr "Paramètres"
 
 # messages-i18n.c:312
-#: messages-i18n.c:359 po/guile_strings.txt:114
+#: messages-i18n.c:360 po/guile_strings.txt:114
 msgid "Payment"
 msgstr "Paiement"
 
 # messages-i18n.c:313
-#: messages-i18n.c:360
+#: messages-i18n.c:361
 msgid "Portfolio"
 msgstr "Portefeuille"
 
 # messages-i18n.c:314
-#: messages-i18n.c:361
+#: messages-i18n.c:362
 msgid "POS"
 msgstr "DAB"
 
 # messages-i18n.c:315
-#: messages-i18n.c:362
+#: messages-i18n.c:363
 msgid "Preferences"
 msgstr "Préferences"
 
 # messages-i18n.c:316
-#: messages-i18n.c:363 src/gnome/glade-gnc-dialogs.c:2340
+#: messages-i18n.c:364 src/gnome/glade-gnc-dialogs.c:2340
 msgid "Price"
 msgstr "Cours"
 
 # messages-i18n.c:317 src/gnome/glade-gnc-dialogs.c:971
-#: messages-i18n.c:364 src/gnome/glade-gnc-dialogs.c:937
+#: messages-i18n.c:365 src/gnome/glade-gnc-dialogs.c:937
 msgid "Print"
 msgstr "Imprimer"
 
 # messages-i18n.c:318
-#: messages-i18n.c:365
+#: messages-i18n.c:366
 msgid "Profits"
 msgstr "Profits"
 
 # messages-i18n.c:319
-#: messages-i18n.c:366
+#: messages-i18n.c:367
 msgid "Quit"
 msgstr "Quitter"
 
 # messages-i18n.c:320
-#: messages-i18n.c:367 po/guile_strings.txt:18
+#: messages-i18n.c:368 po/guile_strings.txt:18
 msgid "Rebate"
 msgstr "Rabais"
 
 # messages-i18n.c:321
-#: messages-i18n.c:368 po/guile_strings.txt:191
+#: messages-i18n.c:369 po/guile_strings.txt:191
 msgid "Receive"
 msgstr "Reçu"
 
 # messages-i18n.c:322
-#: messages-i18n.c:369
+#: messages-i18n.c:370
 msgid "Reconcile"
 msgstr "Rapprocher"
 
 # messages-i18n.c:323
-#: messages-i18n.c:370
+#: messages-i18n.c:371
 msgid "Record"
 msgstr "Enregistrer"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
-#: messages-i18n.c:371 po/guile_strings.txt:215
+#: messages-i18n.c:372 po/guile_strings.txt:215
 msgid "Register"
 msgstr "Registre"
 
 # messages-i18n.c:325 po/guile_strings.txt:175
-#: messages-i18n.c:372 po/guile_strings.txt:208
+#: messages-i18n.c:373 po/guile_strings.txt:208
 msgid "Report"
 msgstr "Rapport"
 
 # messages-i18n.c:326
-#: messages-i18n.c:373
+#: messages-i18n.c:374
 msgid "Reports"
 msgstr "Rapports"
 
 # messages-i18n.c:327
-#: messages-i18n.c:374
+#: messages-i18n.c:375
 msgid "Save"
 msgstr "Sauvegarder"
 
 # messages-i18n.c:328
-#: messages-i18n.c:375
+#: messages-i18n.c:376
 msgid "Savings"
 msgstr "Epargne"
 
 # messages-i18n.c:329
-#: messages-i18n.c:376
+#: messages-i18n.c:377
 msgid "Scrub"
 msgstr "Nettoyer"
 
-#: messages-i18n.c:377
+#: messages-i18n.c:378
 msgid "Search Results"
 msgstr "Résultats de la recherche"
 
 # messages-i18n.c:330 po/guile_strings.txt:161
-#: messages-i18n.c:378 po/guile_strings.txt:189
+#: messages-i18n.c:379 po/guile_strings.txt:189
 msgid "Security"
 msgstr "Valeur"
 
 # messages-i18n.c:331
-#: messages-i18n.c:379
+#: messages-i18n.c:380
 msgid "Sell"
 msgstr "Vendre"
 
 # messages-i18n.c:332
-#: messages-i18n.c:380
+#: messages-i18n.c:381
 msgid "Settings"
 msgstr "Paramètres"
 
 # messages-i18n.c:333
-#: messages-i18n.c:381
+#: messages-i18n.c:382
 msgid "Simple"
 msgstr "Simple"
 
 # messages-i18n.c:334
-#: messages-i18n.c:382 po/guile_strings.txt:313
+#: messages-i18n.c:383 po/guile_strings.txt:313
 msgid "Sold"
 msgstr "Vendu"
 
 # messages-i18n.c:335
-#: messages-i18n.c:383 po/guile_strings.txt:51
+#: messages-i18n.c:384 po/guile_strings.txt:51
 msgid "Spend"
 msgstr "Dépenser"
 
 # messages-i18n.c:336
-#: messages-i18n.c:384
+#: messages-i18n.c:385
 msgid "Split"
 msgstr "Répartition"
 
 # messages-i18n.c:337
-#: messages-i18n.c:385
+#: messages-i18n.c:386
 msgid "STCG"
 msgstr "PVCT"
 
 # messages-i18n.c:338 po/guile_strings.txt:298
 # src/gnome/glade-gnc-dialogs.c:635
-#: messages-i18n.c:386 po/guile_strings.txt:353
+#: messages-i18n.c:387 po/guile_strings.txt:353
 #: src/gnome/glade-gnc-dialogs.c:576
 msgid "Stock"
 msgstr "Actions"
 
 # messages-i18n.c:339
-#: messages-i18n.c:387 po/guile_strings.txt:246
+#: messages-i18n.c:388 po/guile_strings.txt:246
 msgid "Style"
 msgstr "Style"
 
 # messages-i18n.c:340
-#: messages-i18n.c:388
+#: messages-i18n.c:389
 msgid "Surplus"
 msgstr "Excédent"
 
 # messages-i18n.c:341
-#: messages-i18n.c:389
+#: messages-i18n.c:390
 msgid "Teller"
 msgstr "Caissier"
 
 # messages-i18n.c:342 po/guile_strings.txt:252
-#: messages-i18n.c:390 po/guile_strings.txt:302
+#: messages-i18n.c:391 po/guile_strings.txt:302
 msgid "To"
 msgstr "Vers"
 
 # messages-i18n.c:343
-#: messages-i18n.c:391 src/gnome/glade-gnc-dialogs.c:2615
+#: messages-i18n.c:392 src/gnome/glade-gnc-dialogs.c:2615
 msgid "Today"
 msgstr "Aujourd'hui"
 
 # messages-i18n.c:344
-#: messages-i18n.c:392 messages-i18n.c:393 po/guile_strings.txt:207
+#: messages-i18n.c:393 messages-i18n.c:394 po/guile_strings.txt:207
 msgid "Total"
 msgstr "Total"
 
 # messages-i18n.c:345 po/guile_strings.txt:254
 # src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
-#: messages-i18n.c:394 po/guile_strings.txt:304
+#: messages-i18n.c:395 po/guile_strings.txt:304
 #: src/gnome/glade-gnc-dialogs.c:295 src/gnome/glade-gnc-dialogs.c:349
 msgid "Type"
 msgstr "Type"
 
 # messages-i18n.c:346
-#: messages-i18n.c:395
+#: messages-i18n.c:396
 msgid "Transaction"
 msgstr "Transaction"
 
 # messages-i18n.c:347
-#: messages-i18n.c:396
+#: messages-i18n.c:397
 msgid "Transfer"
 msgstr "Transférer"
 
+#: messages-i18n.c:398
+msgid "Untitled"
+msgstr "Sans titre"
+
 # messages-i18n.c:348 po/guile_strings.txt:57
-#: messages-i18n.c:397 po/guile_strings.txt:66
+#: messages-i18n.c:399 po/guile_strings.txt:66
 msgid "Value"
 msgstr "Montant"
 
 # messages-i18n.c:349
-#: messages-i18n.c:398
+#: messages-i18n.c:400
 msgid "WARNING"
 msgstr "ATTENTION"
 
 # po/guile_strings.txt:113
-#: messages-i18n.c:399
+#: messages-i18n.c:401
 msgid "Weeks"
 msgstr "Semaines"
 
 # messages-i18n.c:350
-#: messages-i18n.c:400
+#: messages-i18n.c:402
 msgid "Wire"
 msgstr "Télétransmission"
 
 # messages-i18n.c:351
-#: messages-i18n.c:401
+#: messages-i18n.c:403
 msgid "Withdraw"
 msgstr "Se retirer"
 
 # messages-i18n.c:351
-#: messages-i18n.c:402 po/guile_strings.txt:60
+#: messages-i18n.c:404 po/guile_strings.txt:60
 msgid "Withdrawal"
 msgstr "Retrait"
 
 # po/guile_strings.txt:182
-#: messages-i18n.c:403
+#: messages-i18n.c:405
 msgid "Years"
 msgstr "Années"
 
 # messages-i18n.c:352
-#: messages-i18n.c:404
+#: messages-i18n.c:406
 msgid "Yes"
 msgstr "Oui"
 
