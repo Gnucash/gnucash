@@ -553,6 +553,16 @@ regSaveTransaction( RegWindow *regData, int position )
       }
     }
   
+  if( regData->changed & MOD_ACTN )
+    {
+    String  actn = NULL;
+    DEBUG("MOD_ACTN");
+    /* ... the action ... */
+    XtFree( trans->action );
+    actn = XbaeMatrixGetCell(regData->reg,row+1,ACTN_CELL_C);
+    trans->action = XtNewString( actn );
+    }
+  
   if( regData->changed & MOD_RECN )
     {
     DEBUG("MOD_RECN");
@@ -611,7 +621,6 @@ regSaveTransaction( RegWindow *regData, int position )
 
     DEBUG("MOD_PRIC");
     /* ...the price flag ... */
-    trans->reconciled = (XbaeMatrixGetCell(regData->reg,row,PRIC_CELL_C))[0];
 
     price = XbaeMatrixGetCell(regData->reg,row,PRIC_CELL_C);
     sscanf( price, "%f", &val );
@@ -1595,7 +1604,6 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       if( ((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) ||
           ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) {
         regData->changed |= MOD_ACTN;
-printf ("yooooo action %d %d \n", row, col);
       }
       break;
     case XbaeTraverseCellReason:

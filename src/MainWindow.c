@@ -498,7 +498,9 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       data->new = True;            /* so we have to do a "SaveAs" when
                                     * the file is first saved */
       break;
-    case FMB_OPEN:
+
+    case FMB_OPEN: {
+      char * newfile;
       DEBUG("FMB_OPEN");
       if( (!(data->saved)) && (datafile != NULL) )
         {
@@ -506,32 +508,39 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
         if( verifyBox(toplevel,msg) )
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
         }
-      freeData(data);
-      while( (datafile = fileBox(toplevel,OPEN)) == NULL )
-        printf("Bad File\n");
+      newfile = fileBox(toplevel,OPEN);
+      if (newfile) {
+        datafile = newfile;
+        freeData(data);
       
-      /* load the accounts from the users datafile */
-      data = readData(datafile);
+        /* load the accounts from the users datafile */
+        data = readData(datafile);
       
-      if( data == NULL )
-        {
-        /* the file could not be found */
-        data = mallocData();
+        if( data == NULL ) {
+          /* the file could not be found */
+          data = mallocData();
         }
-      
+      }
       break;
+    }
     case FMB_SAVE:
       DEBUG("FMB_SAVE");
       /* ??? Somehow make sure all in-progress edits get committed! */
       writeData( datafile, data );
       data->saved = True;
       break;
-    case FMB_SAVEAS:
+
+    case FMB_SAVEAS: {
+      char * newfile;
       DEBUG("FMB_SAVEAS");
-      while( (datafile = fileBox(toplevel,OPEN)) == NULL )
-        printf("Bad File\n");
-      fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
+
+      newfile = fileBox(toplevel,OPEN);
+      if ( newfile ) {
+         datafile = newfile;
+         fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
+      }
       break;
+    }
     case FMB_QUIT:
       DEBUG("FMB_QUIT");
       {
