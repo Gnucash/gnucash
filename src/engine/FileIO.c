@@ -659,7 +659,7 @@ readTransaction( int fd, Account *acc, int token )
   
       /* insert the split part of the transaction into 
        * the credited account */
-      if (peer_acc) xaccInsertSplit( peer_acc, &(trans->source_split) );
+      if (peer_acc) xaccAccountInsertSplit( peer_acc, &(trans->source_split) );
   
       /* next read the debit account number */
       err = read( fd, &acc_id, sizeof(int) );
@@ -677,7 +677,7 @@ readTransaction( int fd, Account *acc, int token )
          split = xaccMallocSplit ();
          xaccTransAppendSplit (trans, split);
          split -> acc = (struct _account *) peer_acc;
-         xaccInsertSplit (peer_acc, split);
+         xaccAccountInsertSplit (peer_acc, split);
 
          /* duplicate many of the attributes in the credit split */
          split->damount = -num_shares;
@@ -692,7 +692,7 @@ readTransaction( int fd, Account *acc, int token )
     } else {
 
       /* Version 1 files did not do double-entry */
-      xaccInsertSplit( acc, &(trans->source_split) );
+      xaccAccountInsertSplit( acc, &(trans->source_split) );
     }
   } else { /* else, read version-5 files */
      Split *split;
@@ -708,7 +708,7 @@ readTransaction( int fd, Account *acc, int token )
      trans->source_split.parent = trans;
 
      /* then wire it into place */
-     xaccInsertSplit( ((Account *) (trans->source_split.acc)), &(trans->source_split) );
+     xaccAccountInsertSplit( ((Account *) (trans->source_split.acc)), &(trans->source_split) );
      
      /* free the thing that  the read returned */
      split->acc = NULL;
@@ -729,7 +729,7 @@ readTransaction( int fd, Account *acc, int token )
         split = readSplit (fd, token);
         split->parent = trans;
         xaccTransAppendSplit( trans, split);
-        xaccInsertSplit( ((Account *) (split->acc)), split);
+        xaccAccountInsertSplit( ((Account *) (split->acc)), split);
      }
   }
     

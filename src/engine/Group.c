@@ -539,7 +539,7 @@ xaccMergeAccounts (AccountGroup *grp)
                acc_b->splits[k] = NULL;
                if (acc_b == (Account *) split->acc) 
                    split->acc = (struct _account *) acc_a;
-               xaccInsertSplit (acc_a, split);
+               xaccAccountInsertSplit (acc_a, split);
             }
 
             /* free the account structure itself */

@@ -70,8 +70,8 @@ void         xaccAccountCommitEdit (Account *);
 
 int          xaccGetAccountID (Account *);
 
-void         xaccInsertSplit (Account *, Split *);
-void         xaccRemoveSplit (Account *, Split *);
+void         xaccAccountInsertSplit (Account *, Split *);
+void         xaccAccountRemoveSplit (Account *, Split *);
 
 /* the following recompute the partial balances (stored with the transaction)
  * and the total balance, for this account */

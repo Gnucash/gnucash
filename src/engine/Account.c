@@ -214,7 +214,7 @@ xaccGetAccountID (Account *acc)
 \********************************************************************/
 
 void
-xaccInsertSplit ( Account *acc, Split *split )
+xaccAccountInsertSplit ( Account *acc, Split *split )
   {
   int  i,j;
   int  inserted = FALSE;
@@ -277,7 +277,7 @@ xaccInsertSplit ( Account *acc, Split *split )
 \********************************************************************/
 
 void
-xaccRemoveSplit ( Account *acc, Split *split )
+xaccAccountRemoveSplit ( Account *acc, Split *split )
   {
   int  i,j;
 
@@ -459,8 +459,8 @@ xaccCheckDateOrder (Account * acc, Split *split )
 
   /* take care of re-ordering, if necessary */
   if( outOfOrder ) {
-    xaccRemoveSplit( acc, split );
-    xaccInsertSplit( acc, split );
+    xaccAccountRemoveSplit( acc, split );
+    xaccAccountInsertSplit( acc, split );
     return 1;
   }
   return 0;
@@ -594,8 +594,8 @@ xaccMoveFarEnd (Split *split, Account *new_acc)
       /* remove the partner split from the old account */
       acc = (Account *) (partner_split->acc);
       if (acc != new_acc) {
-         xaccRemoveSplit (acc, partner_split);
-         xaccInsertSplit (new_acc, partner_split);
+         xaccAccountRemoveSplit (acc, partner_split);
+         xaccAccountInsertSplit (new_acc, partner_split);
       }
    }
 }

@@ -503,8 +503,8 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 
    split = &(trans->source_split);
    acc = (Account *) split->acc;
-   xaccRemoveSplit (acc, split);
-   xaccInsertSplit (acc, split);
+   xaccAccountRemoveSplit (acc, split);
+   xaccAccountInsertSplit (acc, split);
    xaccRecomputeBalance (acc);
 
    if (trans->dest_splits) {
@@ -512,8 +512,8 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
       split = trans->dest_splits[i];
       while (split) {
          acc = (Account *) split->acc;
-         xaccRemoveSplit (acc, split);
-         xaccInsertSplit (acc, split);
+         xaccAccountRemoveSplit (acc, split);
+         xaccAccountInsertSplit (acc, split);
          xaccRecomputeBalance (acc);
 
          i++;

@@ -803,10 +803,10 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
           * was specified. */
          if (xfer_acc) {
             split->acc = (struct _account *) xfer_acc;
-            xaccInsertSplit (xfer_acc, split);
+            xaccAccountInsertSplit (xfer_acc, split);
          } else {
             split->acc = (struct _account *) acc;
-            xaccInsertSplit (acc, split);
+            xaccAccountInsertSplit (acc, split);
          }
 
          /* normally, the security account is pointed at by 
@@ -814,7 +814,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
           * But, just in case its missing, avoid a core dump */
          if (sub_acc) {
             trans->source_split.acc = (struct _account *) sub_acc;
-            xaccInsertSplit (sub_acc, split);
+            xaccAccountInsertSplit (sub_acc, split);
          }
       } else {
 
@@ -826,10 +826,10 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
           * main account gets it */
          if (xfer_acc) {
             trans->source_split.acc = (struct _account *) xfer_acc;
-            xaccInsertSplit (xfer_acc, &(trans->source_split));
+            xaccAccountInsertSplit (xfer_acc, &(trans->source_split));
          } else {
             trans->source_split.acc = (struct _account *) acc;
-            xaccInsertSplit (acc, &(trans->source_split));
+            xaccAccountInsertSplit (acc, &(trans->source_split));
          }
       }
 
@@ -842,12 +842,12 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
             xaccTransAppendSplit (trans, split);
          }
          split->acc = (struct _account *) xfer_acc;
-         xaccInsertSplit (xfer_acc, split);
+         xaccAccountInsertSplit (xfer_acc, split);
       }
 
       /* the transaction itself appears as a credit */
       trans->source_split.acc = (struct _account *) acc;
-      xaccInsertSplit (acc, &(trans->source_split));
+      xaccAccountInsertSplit (acc, &(trans->source_split));
    }
 
    return qifline;
