@@ -75,6 +75,11 @@
 	contents in an <iframe>... handly for putting that stock ticker
 	graph from yahoo or wherever in a sidebar of a multicolumn view.
 
+2001-04-17  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/test-load-example-account.c (main): ignore the README
+	file.
+
 2001-04-17  Dave Peticolas  <dave@krondo.com>
 
 	* lots of files: handle NULL pointer printf problems,
