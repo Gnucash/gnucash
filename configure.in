@@ -663,6 +663,8 @@ AC_OUTPUT(
           src/gnome/Makefile
           src/guile/Makefile
           src/optional/Makefile
+          src/optional/swig/Makefile
+          src/optional/swig/examples/Makefile
           src/pixmaps/Makefile
           src/quotes/Makefile
           src/register/Makefile
