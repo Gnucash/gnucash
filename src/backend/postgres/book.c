@@ -36,6 +36,7 @@
 #include "book.h"
 #include "gnc-book-p.h"
 #include "gnc-engine-util.h"
+#include "gnc-pricedb.h"
 #include "guid.h"
 #include "kvp-sql.h"
 #include "PostgresBackend.h"
