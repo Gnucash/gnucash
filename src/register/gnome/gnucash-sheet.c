@@ -843,7 +843,8 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
 
 
 static void
-gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
+gnucash_sheet_insert_cb (GtkWidget *widget,
+                         const gchar *new_text,
                          const gint new_text_length,
                          gint *position,
                          GnucashSheet *sheet)
@@ -858,6 +859,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
         const char *retval;
 
         int start_sel, end_sel;
+        int old_position;
         int old_len;
 
         if (!new_text_length)
@@ -872,6 +874,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
         if (old_text == NULL)
                 old_text = "";
         old_len = strlen(old_text);
+        old_position = *position;
 
         /* we set newval to what the entry contents would be if
            the insert was processed */
@@ -894,7 +897,9 @@ gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
         retval = gnc_table_modify_update (table, virt_loc, change, newval,
                                           position, &start_sel, &end_sel);
 
-        if (retval && (safe_strcmp (retval, newval) != 0)) {
+        if (retval &&
+            ((safe_strcmp (retval, newval) != 0) ||
+             (*position != old_position))) {
                 gtk_signal_handler_block(GTK_OBJECT (sheet->entry),
 					 sheet->insert_signal);
 
