@@ -274,17 +274,22 @@ trans_has_open_lot_tree (Transaction *trans)
 {
    SplitList *split_list, *node;
 
-   if (trans->marker) return FALSE;
+   if (1 == trans->marker) return FALSE;
+   if (2 == trans->marker) return TRUE;
    trans->marker = 1;
 
    split_list = xaccTransGetSplitList (trans);
    for (node = split_list; node; node=node->next)
    {
       Split *s = node->data;
-      GNCLot *lot = xaccSplitGetLot(s);
+      GNCLot *lot = s->lot;
       if (NULL == lot) continue;
-      if (FALSE == gnc_lot_is_closed(lot)) return TRUE;
-      if (lot_has_open_trans_tree (lot)) return TRUE;
+      if ((FALSE == gnc_lot_is_closed(lot)) ||
+          (lot_has_open_trans_tree (lot)))
+      {
+         trans->marker = 2;
+         return TRUE;
+      }
    }
    return FALSE;
 }
@@ -294,17 +299,26 @@ lot_has_open_trans_tree (GNCLot *lot)
 {
    SplitList *split_list, *snode;
 
-   if (lot->marker) return FALSE;
+   if (1 == lot->marker) return FALSE;
+   if (2 == lot->marker) return TRUE;
    lot->marker = 1;
 
-   if (FALSE == gnc_lot_is_closed(lot)) return TRUE;
+   if (FALSE == gnc_lot_is_closed(lot))
+   {
+      lot->marker = 2;
+      return TRUE;
+   }
 
    split_list = gnc_lot_get_split_list (lot);
    for (snode = split_list; snode; snode=snode->next)
    {
       Split *s = snode->data;
       Transaction *trans = s->parent;
-      if (trans_has_open_lot_tree (trans)) return TRUE;
+      if (trans_has_open_lot_tree (trans)) 
+      {
+         lot->marker = 2;
+         return TRUE;
+      }
    }
    return FALSE;
 }
@@ -318,7 +332,7 @@ static LotList *
 lot_list_preen_open_lots (LotList *lot_list)
 {
    LotList *lnode;
-
+   ENTER (" ");
    for (lnode=lot_list; lnode; )
    {
       GNCLot *lot = lnode->data;
@@ -334,6 +348,7 @@ lot_list_preen_open_lots (LotList *lot_list)
       }
       lnode = lnext;
    }
+   LEAVE (" ");
    return lot_list;
 }
 
@@ -342,6 +357,7 @@ trans_list_preen_open_lots (TransList *trans_list)
 {
    TransList *tnode;
 
+   ENTER (" ");
    for (tnode=trans_list; tnode; )
    {
       Transaction *trans = tnode->data;
@@ -357,6 +373,7 @@ trans_list_preen_open_lots (TransList *trans_list)
       }
       tnode = tnext;
    }
+   LEAVE (" ");
    return trans_list;
 }
 
@@ -440,7 +457,6 @@ gnc_book_partition_pricedb (QofBook *dest_book, QofBook *src_book, QofQuery *que
    for (pnode = price_list; pnode; pnode=pnode->next)
    {
       GNCPrice *pr = pnode->data;
-printf ("duude got price =%p\n", pr);
       gnc_price_ref (pr);
       gnc_pricedb_remove_price (src_pdb, pr);
       gnc_pricedb_add_price (dest_pdb, pr);
@@ -525,7 +541,6 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    now = time(0);
    gnc_kvp_gemini (src_book->kvp_data, now, "book_guid", &dest_book->guid, NULL);
    gnc_kvp_gemini (dest_book->kvp_data, now, "book_guid", &src_book->guid, NULL);
-
    LEAVE (" ");
 }
 
