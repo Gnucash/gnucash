@@ -345,6 +345,16 @@ void DxaccQueryAddSharePriceMatch(Query * q, double amount,
                                   amt_match_t how, QueryOp op);
 void DxaccQueryAddSharesMatch(Query * q, double amount, 
                               amt_match_t how, QueryOp op);
+
+/* The DateMatch queries match transactions whose posted date
+ *    is in a date range.  If use_start is TRUE, then a matching
+ *    posted date will be greater than the start date.   If 
+ *    use_end is TRUE, then a match occurs for posted dates earlier 
+ *    than the end date.  If both flags are set, then *both* 
+ *    conditions must hold ('and').  If neither flag is set, then 
+ *    all transactions are matched.
+ */
+
 void xaccQueryAddDateMatch(Query * q, 
                            int use_start, int sday, int smonth, int syear, 
                            int use_end, int eday, int emonth, int eyear,
