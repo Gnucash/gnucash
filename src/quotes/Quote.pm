@@ -27,24 +27,31 @@ require 5.000;
 
 require Exporter;
 use strict;
-use vars qw($VERSION @EXPORT @ISA $QURL);
+use vars qw($VERSION @EXPORT @ISA $YAHOO_URL $FIDELITY_GANDI_URL
+            $FIDELITY_GROWTH_URL);
 
 use LWP::UserAgent;
 use HTTP::Request::Common;
 
 $VERSION = '0.06';
-$QURL = ("http://quote.yahoo.com/d?f=snl1d1t1c1p2va2bapomwerr1dyj1&s=");
 @ISA = qw(Exporter);
+
+$YAHOO_URL = ("http://quote.yahoo.com/d?f=snl1d1t1c1p2va2bapomwerr1dyj1&s=");
+$FIDELITY_GANDI_URL = ("http://personal441.fidelity.com/gen/prices/gandi.csv");
+$FIDELITY_GROWTH_URL = ("http://personal441.fidelity.com/gen/prices/growth.csv");
 
 # Don't export; let user invoke with Quote::getquote syntax.
 # @EXPORT = qw(&quote_yahoo);
 
-sub quote_yahoo {
+# =======================================================================
+# yahoo gets quotes from the Yahoo service
+# which is primarily the new york stock exchange.
+sub yahoo {
     my @symbols = @_;
-    my($x,@q,@qr,@qa,%aa,$ua,$url,$sym);
+    my($x,@q,%aa,$ua,$url,$sym);
     $x = $";
     $" = "+";
-    $url = $QURL."@symbols";
+    $url = $YAHOO_URL."@symbols";
     $" = $x;
     $ua = LWP::UserAgent->new;
     foreach (split('\n',$ua->request(GET $url)->content)) {
@@ -53,8 +60,8 @@ sub quote_yahoo {
         $aa {$sym, "exchange"} = "NYSE";  # new  york stock exchange
         $aa {$sym, "name"} = $q[1];
         $aa {$sym, "last"} = $q[2];
-        $aa {$sym, "lastdate"} = $q[3];
-        $aa {$sym, "lasttime"} = $q[4];
+        $aa {$sym, "date"} = $q[3];
+        $aa {$sym, "time"} = $q[4];
         $aa {$sym, "volume"} = $q[7];
         $aa {$sym, "bid"} = $q[9];
         $aa {$sym, "ask"} = $q[10];
@@ -65,6 +72,105 @@ sub quote_yahoo {
         $aa {$sym, "cap"} = $q[20];
     }
     # return wantarray() ? @qr : \@qr;
+    return %aa;
+}
+
+# =======================================================================
+# the fideility routine gets quotes from fidelity investments
+#
+sub fidelity {
+    my @symbols = @_;
+    my(%aa,$sym);
+
+    # rather iritatingly, fidelity sorts its funds into different groups.
+    my @gandi =  ("FBALX", "FCVSX", "FEQIX", "FEQTX", "FFIDX", "FGRIX",
+                  "FIUIX", "FPURX", "FRESX", );
+    my @growth = ("FBGRX", "FCNTX", "FCONX", "FDCAX", "FDEGX", "FDEQX",
+                  "FDFFX", "FDGFX", "FDGRX", "FDSCX", "FDSSX", "FDVLX",
+                  "FEXPX", "FFTYX", "FLCSX", "FLPSX", "FMAGX", "FMCSX",
+                  "FMILX", "FOCPX", "FSLCX", "FSLSX", "FTQGX", "FTRNX",
+                  "FTXMX", );
+    my (%agandi, %agrowth);
+
+    for (@gandi) { $agandi{$_} ++; }
+    for (@growth) { $agrowth{$_} ++; }
+   
+    # for Fidelity, we get them all. 
+    for (@symbols) {
+print "duuude handling $_\n";
+       if ($agandi {$_} ) {
+          %aa = &fidelity_gandi;
+       }
+       if ($agrowth {$_} ) {
+          %aa = &fidelity_growth;
+       }
+    }
+    return %aa;
+}
+
+# =======================================================================
+
+sub fidelity_gandi {
+    my @symbols = @_;
+    my(@q,%aa,$ua,$url,$sym, $dayte);
+    my %days = ('Monday','Mon','Tuesday','Tue','Wednesday','Wed',
+                'Thursday','Thu','Friday','Fri','Saturday','Sat','Sunday','Sun');
+
+    # for Fidelity, we get them all. 
+    $url = $FIDELITY_GANDI_URL;
+    $ua = LWP::UserAgent->new;
+    foreach (split('\n',$ua->request(GET $url)->content)) {
+	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
+
+        # extract the date which is usually on the second line fo the file.
+        if (! defined ($dayte)) {
+           if ( $days {$q[0]} ) {          
+              $dayte = $q[1];
+           }
+        }
+        $sym = $q[2];
+        if ($sym) {
+            $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
+            $aa {$sym, "name"} = $q[0];
+            $aa {$sym, "nav"} = $q[3];
+            $aa {$sym, "change"} = $q[4];
+            $aa {$sym, "ask"} = $q[7];
+            $aa {$sym, "date"} = $dayte;
+        }
+    }
+    return %aa;
+}
+
+# =======================================================================
+
+sub fidelity_growth {
+    my @symbols = @_;
+    my(@q,%aa,$ua,$url,$sym, $dayte);
+    my %days = ('Monday','Mon','Tuesday','Tue','Wednesday','Wed',
+                'Thursday','Thu','Friday','Fri','Saturday','Sat','Sunday','Sun');
+
+    # for Fidelity, we get them all. 
+    $url = $FIDELITY_GROWTH_URL;
+    $ua = LWP::UserAgent->new;
+    foreach (split('\n',$ua->request(GET $url)->content)) {
+	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
+
+        # extract the date which is usually on the second line fo the file.
+        if (! defined ($dayte)) {
+           if ( $days {$q[0]} ) {          
+              $dayte = $q[1];
+           }
+        }
+        $sym = $q[2];
+        if ($sym) {
+            $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
+            $aa {$sym, "name"} = $q[0];
+            $aa {$sym, "nav"} = $q[3];
+            $aa {$sym, "change"} = $q[4];
+            $aa {$sym, "ask"} = $q[7];
+            $aa {$sym, "date"} = $dayte;
+        }
+    }
     return %aa;
 }
 
