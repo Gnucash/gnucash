@@ -1,5 +1,29 @@
 2001-11-09  Rob Browning  <rlb@defaultvalue.org>
 
+	* src/gnome-utils/test/Makefile.am
+	(INCLUDES): typo - GUILE_INCS not GUILE_CFLAGS.
+
+	* src/tax/us/test/.cvsignore: add .libs.
+
+	* src/report/locale-specific/us/test/.cvsignore: add .libs.
+
+	* src/import-export/qif-import/test/.cvsignore: add .libs.
+
+	* src/backend/file/test/Makefile.am
+	(AM_CFLAGS): add GUILE_INCS.
+
+	* src/guile/tip-of-the-day.h: moved to src/gnome.
+
+	* src/guile/tip-of-the-day.c: moved to src/gnome.
+
+	* src/gnome/tip-of-the-day.h: moved from src/guile.
+
+	* src/gnome/tip-of-the-day.c: moved from src/guile.
+
+	* src/guile/Makefile.am: remove tip-of-the-day.
+
+	* src/gnome/Makefile.am: move tip-of-the-day here.
+
 	* src/guile/Makefile.am: fix for new automake.
 
 	* src/gnome-utils/Makefile.am (BUILT_SOURCES): fix for new automake.
