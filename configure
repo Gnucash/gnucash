@@ -2300,7 +2300,7 @@ fi
 
 
 # We should always see these errors...
-CFLAGS="${CFLAGS} -Wall"
+CFLAGS="${CFLAGS} -Wall -D_GNU_SOURCE"
 
 # This has to come after AC_PROG_CC
 if test ${GCC}x = yesx

@@ -102,6 +102,8 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
+#include "gnc-commodity.h"
+#include "gnc-engine.h"
 #include "GNCIdP.h"
 #include "util.h"
 
@@ -183,6 +185,7 @@ static int writeTSDate( int fd, Timespec *);
 #define FF_CREDITLINE	13
 #define FF_CURRENCY	14
 
+
 /*******************************************************/
 
 int 
@@ -262,6 +265,37 @@ gint64 xaccFlipLongLong (gint64 val)
   #define XACC_FLIP_INT(x) { (x) = xaccFlipInt (x); }
   #define XACC_FLIP_SHORT(x) { (x) = xaccFlipShort (x); }
 #endif /* WORDS_BIGENDIAN */
+
+
+
+/********************************************************************
+ * handle legacy currencies : after we load old files, we MUST run the
+ * gnucash currency conversion functions to get rid of the
+ * GNC_LEGACY_CURRENCIES namespace.
+ ********************************************************************/
+
+static gnc_commodity * 
+gnc_commodity_import_legacy(const char * currency_name) {
+  gnc_commodity * old = NULL;
+
+  if(currency_name && (currency_name[0] != 0) ) {
+    old = gnc_commodity_table_lookup(gnc_engine_commodities(),
+                                     "GNC_LEGACY_CURRENCIES",
+                                     currency_name);
+    
+    if(!old) {
+      old = gnc_commodity_new(currency_name, currency_name, NULL, 
+                              "GNC_LEGACY_CURRENCIES", currency_name,
+                              0, 0, 0);
+      gnc_commodity_table_insert(gnc_engine_commodities(), 
+                                 old);
+    }
+    return old;
+  }
+  else {
+    return NULL;
+  }
+}
 
 
 /********************************************************************\
@@ -453,6 +487,8 @@ readAccount( int fd, AccountGroup *grp, int token )
   int i;
   int numTrans, accID;
   Account *acc;
+  gnc_commodity * currency;
+  gnc_commodity * security;
   char * tmp;
 
   ENTER ("\n");
@@ -527,17 +563,22 @@ readAccount( int fd, AccountGroup *grp, int token )
   if (7 <= token) {
      tmp = readString( fd, token );
      if( NULL == tmp ) return NULL;
-     xaccAccountSetCurrency (acc, tmp);
-     if (0x0 == tmp[0]) xaccAccountSetCurrency (acc, DEFAULT_CURRENCY);
-     free (tmp);
+     
+     currency = gnc_commodity_import_legacy(tmp);
+     xaccAccountSetCurrency (acc, currency);
+     
+     if(tmp) free (tmp);
 
      tmp = readString( fd, token );
-     if( NULL == tmp ) return NULL;
-     xaccAccountSetSecurity (acc, tmp);
-     free (tmp);
-  } else {
-     /* set the default currency when importing old files */
-     xaccAccountSetCurrency (acc, DEFAULT_CURRENCY);
+     security = gnc_commodity_import_legacy(tmp);
+     xaccAccountSetSecurity (acc, security);
+
+     if(tmp) free (tmp);
+  } 
+  else {
+    /* set the default currency when importing old files */
+    currency = gnc_commodity_import_legacy(DEFAULT_CURRENCY);
+    xaccAccountSetCurrency (acc, currency);
   }
 
   /* aux account info first appears in version ten files */
@@ -1529,6 +1570,7 @@ writeAccount( int fd, Account *acc )
   int numUnwrittenTrans, ntrans;
   int acc_id;
   int numChildren = 0;
+  const gnc_commodity * comm; /* hack alert : just for testing! -- bg */
   const char * tmp;
   
   DEBUG ("writing acct %s \n", xaccAccountGetName (acc));
@@ -1591,12 +1633,12 @@ writeAccount( int fd, Account *acc )
   err = writeString( fd, tmp );
   if( -1 == err ) return err;
   
-  tmp = xaccAccountGetCurrency (acc);
-  err = writeString( fd, tmp );
+  comm = xaccAccountGetCurrency (acc);
+  err = writeString( fd, gnc_commodity_get_mnemonic(comm));
   if( -1 == err ) return err;
   
-  tmp = xaccAccountGetSecurity (acc);
-  err = writeString( fd, tmp );
+  comm = xaccAccountGetSecurity (acc);
+  err = writeString( fd, gnc_commodity_get_mnemonic(comm));
   if( -1 == err ) return err;
   
   err = writeAccInfo (fd, xaccAccountGetAccInfo (acc));    
@@ -1876,5 +1918,8 @@ writeTSDate( int fd, Timespec *ts)
   
   return err;
   }
+
+
+
 
 /*********************** END OF FILE *********************************/

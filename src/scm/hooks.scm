@@ -95,6 +95,12 @@
    'main-window-opened-hook
    "Functions to run whenever the main window is opened.  Hook args: (window)"))
 
+(define gnc:*file-opened-hook*
+  (gnc:hook-define 
+   'file-opened-hook
+   "Run on file open.  Hook args: none."))
+
+
 ;;(let ((hook (gnc:hook-lookup 'startup-hook)))
 ;;  (display (gnc:hook-name-get hook))
 ;;  (newline)

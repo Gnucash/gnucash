@@ -36,6 +36,7 @@
 #include <stdlib.h>
 
 #include "gnc-common.h"
+#include "gnc-commodity.h"
 
 #define BUFSIZE   1024
 
@@ -198,9 +199,8 @@ gboolean gnc_strisnum(const char *s);
  */
 struct lconv * gnc_localeconv();
 
-/* Returns the 3 character currency code of the current locale. */
-const char * gnc_locale_default_currency();
-
+/* Returns the default currency of the current locale. */
+gnc_commodity * gnc_locale_default_currency();
 
 /*
  * The xaccPrintAmount() and xaccSPrintAmount() routines provide
@@ -250,7 +250,7 @@ typedef unsigned int GNCPrintAmountFlags;
 const char * xaccPrintAmount (double val, GNCPrintAmountFlags flags,
                               const char *curr_code);
 int xaccSPrintAmount (char *buf, double val, GNCPrintAmountFlags flags,
-                      const char *curr_code);
+                      const char * curr_code);
 int xaccSPrintAmountGeneral (char * bufp, double val,
                              GNCPrintAmountFlags flags,
                              int precision,

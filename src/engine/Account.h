@@ -140,30 +140,30 @@ void xaccAccountSetName (Account *, const char *);
 void xaccAccountSetCode (Account *, const char *);
 void xaccAccountSetDescription (Account *, const char *);
 void xaccAccountSetNotes (Account *, const char *);
-void xaccAccountSetCurrency (Account *, const char *);
-void xaccAccountSetSecurity (Account *, const char *);
+void xaccAccountSetCurrency (Account *, const gnc_commodity *);
+void xaccAccountSetSecurity (Account *, const gnc_commodity *);
 
-GNCAccountType xaccAccountGetType (Account *);
-const char *   xaccAccountGetName (Account *);
-const char *   xaccAccountGetCode (Account *);
-const char *   xaccAccountGetDescription (Account *);
-const char *   xaccAccountGetNotes (Account *);
-const char *   xaccAccountGetCurrency (Account *);
-const char *   xaccAccountGetSecurity (Account *);
-AccountGroup * xaccAccountGetChildren (Account *);
-AccountGroup * xaccAccountGetParent (Account *);
-Account *      xaccAccountGetParentAccount (Account *);
-AccInfo *      xaccAccountGetAccInfo (Account *);
+GNCAccountType  xaccAccountGetType (Account *);
+const char *    xaccAccountGetName (Account *);
+const char *    xaccAccountGetCode (Account *);
+const char *    xaccAccountGetDescription (Account *);
+const char *    xaccAccountGetNotes (Account *);
+const gnc_commodity * xaccAccountGetCurrency (Account *);
+const gnc_commodity * xaccAccountGetSecurity (Account *);
+AccountGroup *  xaccAccountGetChildren (Account *);
+AccountGroup *  xaccAccountGetParent (Account *);
+Account *       xaccAccountGetParentAccount (Account *);
+AccInfo *       xaccAccountGetAccInfo (Account *);
 
-double         xaccAccountGetBalance (Account *);
-double         xaccAccountGetClearedBalance (Account *);
-double         xaccAccountGetReconciledBalance (Account *);
-double         xaccAccountGetShareBalance (Account *);
-double         xaccAccountGetShareClearedBalance (Account *);
-double         xaccAccountGetShareReconciledBalance (Account *);
-Split *        xaccAccountGetSplit (Account *acc, int i);
-Split **       xaccAccountGetSplitList (Account *acc);
-int            xaccAccountGetNumSplits (Account *acc);
+double          xaccAccountGetBalance (Account *);
+double          xaccAccountGetClearedBalance (Account *);
+double          xaccAccountGetReconciledBalance (Account *);
+double          xaccAccountGetShareBalance (Account *);
+double          xaccAccountGetShareClearedBalance (Account *);
+double          xaccAccountGetShareReconciledBalance (Account *);
+Split *         xaccAccountGetSplit (Account *acc, int i);
+Split **        xaccAccountGetSplitList (Account *acc);
+int             xaccAccountGetNumSplits (Account *acc);
 
 /* The xaccAccountGetFullName routine returns the fully qualified name
  * of the account using the given separator char. The name must be freed

@@ -144,9 +144,9 @@ gnc_xfer_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
   GtkEntry *entry = GTK_ENTRY(widget);
   XferDialog *xferData = data;
   Account *account;
-  const char *new_string;
-  const char *currency;
-  const char *string;
+  const char * new_string;
+  const gnc_commodity * currency;
+  const char * string;
   double value;
 
   account = gnc_account_tree_get_current_account(xferData->from);
@@ -162,7 +162,8 @@ gnc_xfer_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 
   currency = xaccAccountGetCurrency(account);
 
-  new_string = xaccPrintAmount(value, PRTSEP, currency);
+  new_string = xaccPrintAmount(value, PRTSEP, 
+                               gnc_commodity_get_mnemonic(currency));
 
   if (safe_strcmp(string, new_string) == 0)
     return FALSE;
@@ -253,8 +254,8 @@ void
 gnc_xfer_dialog_set_amount(XferDialog *xferData, double amount)
 {
   Account *account;
-  const char *currency;
-  const char *string;
+  const gnc_commodity * currency;
+  const char * string;
 
   if (xferData == NULL)
     return;
@@ -265,7 +266,8 @@ gnc_xfer_dialog_set_amount(XferDialog *xferData, double amount)
 
   currency = xaccAccountGetCurrency(account);
 
-  string = xaccPrintAmount(amount, PRTSEP, currency);
+  string = xaccPrintAmount(amount, PRTSEP, 
+                           gnc_commodity_get_mnemonic(currency));
 
   gtk_entry_set_text(GTK_ENTRY(xferData->amount_entry), string);
 }

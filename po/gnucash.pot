@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-08-11 19:49-0700\n"
+"POT-Creation-Date: 2000-08-25 01:06-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -918,7 +918,7 @@ msgstr ""
 msgid "Account Name"
 msgstr ""
 
-#: messages-i18n.c:203 src/gnome/glade-gnc-dialogs.c:4119
+#: messages-i18n.c:203 src/gnome/glade-gnc-dialogs.c:4491
 msgid "Account Type"
 msgstr ""
 
@@ -1034,7 +1034,7 @@ msgstr ""
 msgid "Mutual Fund"
 msgstr ""
 
-#: messages-i18n.c:232 src/gnome/glade-gnc-dialogs.c:3985
+#: messages-i18n.c:232 src/gnome/glade-gnc-dialogs.c:4327
 msgid "New Account"
 msgstr ""
 
@@ -1082,7 +1082,7 @@ msgstr ""
 msgid "Pick One"
 msgstr ""
 
-#: messages-i18n.c:244 src/gnome/glade-gnc-dialogs.c:4152
+#: messages-i18n.c:244 src/gnome/glade-gnc-dialogs.c:4524
 msgid "Parent Account"
 msgstr ""
 
@@ -1094,7 +1094,7 @@ msgstr ""
 msgid "Purch Price"
 msgstr ""
 
-#: messages-i18n.c:247 src/gnome/glade-gnc-dialogs.c:4169
+#: messages-i18n.c:247 src/gnome/glade-gnc-dialogs.c:4541
 msgid "Price Quote Source"
 msgstr ""
 
@@ -1248,7 +1248,7 @@ msgstr ""
 msgid "Accounts"
 msgstr ""
 
-#: messages-i18n.c:290 src/gnome/glade-gnc-dialogs.c:4000
+#: messages-i18n.c:290 src/gnome/glade-gnc-dialogs.c:4342
 msgid "Account Information"
 msgstr ""
 
@@ -1564,7 +1564,7 @@ msgid "(none)"
 msgstr ""
 
 #: messages-i18n.c:366 po/guile_strings.txt:216
-#: src/gnome/glade-gnc-dialogs.c:4194
+#: src/gnome/glade-gnc-dialogs.c:4566
 msgid "Notes"
 msgstr ""
 
@@ -3158,12 +3158,13 @@ msgstr ""
 msgid "Default QIF acct:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:167 src/gnome/glade-gnc-dialogs.c:4041
+#: src/gnome/glade-gnc-dialogs.c:167 src/gnome/glade-gnc-dialogs.c:4383
 msgid "Currency:"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:198 src/gnome/glade-gnc-dialogs.c:1861
-#: src/gnome/glade-gnc-dialogs.c:1913
+#: src/gnome/glade-gnc-dialogs.c:1913 src/gnome/glade-gnc-dialogs.c:4447
+#: src/gnome/glade-gnc-dialogs.c:4469
 msgid "Select ..."
 msgstr ""
 
@@ -3208,7 +3209,7 @@ msgid "Selected account:"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:514 src/gnome/glade-gnc-dialogs.c:2931
-#: src/gnome/glade-gnc-dialogs.c:3018 src/gnome/glade-gnc-dialogs.c:4032
+#: src/gnome/glade-gnc-dialogs.c:3018 src/gnome/glade-gnc-dialogs.c:4374
 msgid "Description:"
 msgstr ""
 
@@ -3614,7 +3615,8 @@ msgstr ""
 msgid "Entry"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2940
+#: src/gnome/glade-gnc-dialogs.c:2940 src/gnome/glade-gnc-dialogs.c:3989
+#: src/gnome/glade-gnc-dialogs.c:4154
 msgid "Type:"
 msgstr ""
 
@@ -3795,24 +3797,96 @@ msgstr ""
 msgid "Initial Payment:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4023
+#: src/gnome/glade-gnc-dialogs.c:3966
+msgid "Select currency/security "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3997
+msgid "Currency/security:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4056
+msgid "New..."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4116
+msgid "New Currency/Security"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4138
+msgid "Full name:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4146
+msgid "Symbol/abbreviation:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4162
+msgid "Numeric identifier:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4170
+msgid "Fraction traded:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4227
+msgid "1 /"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4365
 msgid "Account Name:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4050
+#: src/gnome/glade-gnc-dialogs.c:4392
 msgid "Security:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4059
+#: src/gnome/glade-gnc-dialogs.c:4401
 msgid "Account Code:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4145
+#: src/gnome/glade-gnc-dialogs.c:4517
 msgid "label812"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4185
+#: src/gnome/glade-gnc-dialogs.c:4557
 msgid "The source for price quotes:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4649
+msgid "Import currency and stock information"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4670
+msgid "Import currency and stock information "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4671
+msgid ""
+"The file you are loading is from an older version of Gnucash. \n"
+"Information about currencies, stocks, and mutual funds needs to\n"
+"be updated for the new version. \n"
+"\n"
+"This dialog will prompt you for some additional information about \n"
+"each currency, stock, and mutual fund that appear in your\n"
+"accounts.  After you have entered this information, you can\n"
+"update your accounts for the new version of Gnucash.\n"
+"\n"
+"Hit \"Cancel\" now to stop loading the file. "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4683
+msgid "Update your accounts with the new information"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4684
+msgid ""
+"Click \"Finish\" to update your accounts to use the new \n"
+"information you have entered.\n"
+"\n"
+"Click \"Cancel\" to cancel the file-loading process.  \n"
+"\n"
+"Click \"Back\" to review your currency selections."
 msgstr ""
 
 #: src/gnome/print-session.c:233

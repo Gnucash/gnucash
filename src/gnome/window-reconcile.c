@@ -171,8 +171,8 @@ recnRefresh(Account *account)
 static double
 recnRecalculateBalance(RecnWindow *recnData)
 {
-  const char *amount;
-  const char *currency;
+  char *amount;
+  const gnc_commodity * currency;
   double debit;
   double credit;
   double starting;
@@ -198,7 +198,9 @@ recnRecalculateBalance(RecnWindow *recnData)
     starting = xaccAccountGetReconciledBalance(recnData->account);
   if (reverse_balance)
     starting = -starting;
-  amount = xaccPrintAmount(starting, flags, currency);
+
+  amount = xaccPrintAmount(starting, flags, 
+                           gnc_commodity_get_mnemonic(currency));
   gnc_set_label_color(recnData->starting, starting);
   gtk_label_set_text(GTK_LABEL(recnData->starting), amount);
   if (reverse_balance)
@@ -208,7 +210,8 @@ recnRecalculateBalance(RecnWindow *recnData)
   ending = recnData->new_ending;
   if (reverse_balance)
     ending = -ending;
-  amount = xaccPrintAmount(ending, flags, currency);
+  amount = xaccPrintAmount(ending, flags, 
+                           gnc_commodity_get_mnemonic(currency));
   gnc_set_label_color(recnData->ending, ending);
   gtk_label_set_text(GTK_LABEL(recnData->ending), amount);
   if (reverse_balance)
@@ -221,17 +224,21 @@ recnRecalculateBalance(RecnWindow *recnData)
     (GNC_RECONCILE_LIST(recnData->credit));
 
   /* Update the total debit and credit fields */
-  amount = xaccPrintAmount(DABS(debit), flags, currency);
+  amount = xaccPrintAmount(DABS(debit), flags, 
+                           gnc_commodity_get_mnemonic(currency));
   gtk_label_set_text(GTK_LABEL(recnData->total_debit), amount);
 
-  amount = xaccPrintAmount(credit, flags, currency);
+  amount = xaccPrintAmount(credit, flags, 
+                           gnc_commodity_get_mnemonic(currency));
+
   gtk_label_set_text(GTK_LABEL(recnData->total_credit), amount);
 
   /* update the reconciled balance */
   reconciled = starting + debit - credit;
   if (reverse_balance)
     reconciled = -reconciled;
-  amount = xaccPrintAmount(reconciled, flags, currency);
+  amount = xaccPrintAmount(reconciled, flags, 
+                           gnc_commodity_get_mnemonic(currency));
   gnc_set_label_color(recnData->reconciled, reconciled);
   gtk_label_set_text(GTK_LABEL(recnData->reconciled), amount);
   if (reverse_balance)
@@ -241,7 +248,8 @@ recnRecalculateBalance(RecnWindow *recnData)
   diff = ending - reconciled;
   if (reverse_balance)
     diff = -diff;
-  amount = xaccPrintAmount(diff, flags, currency);
+  amount = xaccPrintAmount(diff, flags, 
+                           gnc_commodity_get_mnemonic(currency));
   gnc_set_label_color(recnData->difference, diff);
   gtk_label_set_text(GTK_LABEL(recnData->difference), amount);
   if (reverse_balance)
@@ -260,9 +268,9 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
   GNCPrintAmountFlags flags;
   Account *account = data;
   int account_type;
-  const char *currency;
-  const char *new_string;
-  const char *string;
+  const gnc_commodity * currency;
+  const char * new_string;
+  const char * string;
   double value;
 
   flags = PRTSYM | PRTSEP;
@@ -278,7 +286,8 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
 
   currency = xaccAccountGetCurrency(account);
 
-  new_string = xaccPrintAmount(value, flags & ~PRTSYM, currency);
+  new_string = xaccPrintAmount(value, flags & ~PRTSYM, 
+                               gnc_commodity_get_mnemonic(currency));
 
   if (safe_strcmp(string, new_string) == 0)
     return FALSE;
@@ -307,9 +316,9 @@ startRecnWindow(GtkWidget *parent, Account *account,
                 double *new_ending, time_t *statement_date)
 {
   GtkWidget *dialog, *end_value, *date_value;
+  const gnc_commodity * currency;
   GNCAccountType account_type;
   GNCPrintAmountFlags flags;
-  const char *currency;
   const char *amount;
   double dendBalance;
   char *title;
@@ -336,7 +345,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
   currency = xaccAccountGetCurrency(account);
 
-  amount = xaccPrintAmount(dendBalance, flags, currency);
+  amount = xaccPrintAmount(dendBalance, flags, 
+                           gnc_commodity_get_mnemonic(currency));
 
   /* Create the dialog box... */
   title = gnc_recn_make_window_name(account);
@@ -366,7 +376,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
     date_value = gnc_date_edit_new(*statement_date, FALSE, FALSE);
     end_value = gtk_entry_new();
 
-    amount = xaccPrintAmount(*new_ending, flags & ~PRTSYM, currency);
+    amount = xaccPrintAmount(*new_ending, flags & ~PRTSYM, 
+                             gnc_commodity_get_mnemonic(currency));
     gtk_entry_set_text(GTK_ENTRY(end_value), amount);
     gtk_editable_select_region(GTK_EDITABLE(end_value), 0, -1);
 

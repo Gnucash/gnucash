@@ -28,7 +28,7 @@
 #include "account-tree.h"
 #include "dialog-utils.h"
 #include "global-options.h"
-#include "gnc-currency-edit.h"
+#include "gnc-commodity.h"
 #include "messages.h"
 #include "EuroUtils.h"
 #include "util.h"
@@ -267,22 +267,24 @@ gnc_ui_get_account_field_value_string(Account *account, int field)
       return xaccAccountGetNotes(account);
       break;
     case ACCOUNT_CURRENCY :
-      return xaccAccountGetCurrency(account);
+      return gnc_commodity_get_printname(xaccAccountGetCurrency(account));
       break;
     case ACCOUNT_SECURITY :
-      return xaccAccountGetSecurity(account);
+      return gnc_commodity_get_printname(xaccAccountGetSecurity(account));
       break;
     case ACCOUNT_BALANCE :
       {
         double balance = gnc_ui_account_get_balance(account, FALSE);
 
 	return xaccPrintAmount(balance, PRTSYM | PRTSEP,
-			       xaccAccountGetCurrency(account));
+			       gnc_commodity_get_mnemonic
+                               (xaccAccountGetCurrency(account)));
       }
       break;
     case ACCOUNT_BALANCE_EURO :
       {
-	const char *account_currency = xaccAccountGetCurrency(account);
+	const gnc_commodity * account_currency = 
+          xaccAccountGetCurrency(account);
         double balance = gnc_ui_account_get_balance(account, FALSE);
 	double euro_balance = gnc_convert_to_euro(account_currency, balance);
 
@@ -294,12 +296,14 @@ gnc_ui_get_account_field_value_string(Account *account, int field)
 	double balance = gnc_ui_account_get_balance(account, TRUE);
 
 	return xaccPrintAmount(balance, PRTSYM | PRTSEP,
-			       xaccAccountGetCurrency(account));
+			       gnc_commodity_get_mnemonic
+                               (xaccAccountGetCurrency(account)));
       }
       break;
     case ACCOUNT_TOTAL_EURO :
       {
-	const char *account_currency = xaccAccountGetCurrency(account);
+	const gnc_commodity * account_currency = 
+          xaccAccountGetCurrency(account);
 	double balance = gnc_ui_account_get_balance(account, TRUE);
 	double euro_balance = gnc_convert_to_euro(account_currency, balance);
 

@@ -199,7 +199,6 @@ the account instead of opening a register." #f))
 
 
 ;; Register options
-
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
   "Register" "Default Register Mode"
@@ -538,6 +537,14 @@ the current value of the path."
 
 ;; Internal options -- Section names that start with "__" are not
 ;; displayed in option dialogs.
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "account_add_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "account_add_win_height" 0))
 
 (gnc:register-configuration-option
  (gnc:make-internal-option

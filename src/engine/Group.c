@@ -601,8 +601,8 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
 {
    int i;
    Account *acc;
-   char * default_currency;
-
+   const gnc_commodity * default_currency;
+   
    if (!grp) return;
    if (!(grp->account)) return;
 
@@ -618,15 +618,15 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
       if (acc->children) {
          xaccRecomputeGroupBalance (acc->children);
 
-         if (!safe_strcmp (default_currency, acc->currency)) {
-            grp->balance += acc->children->balance;
+         if (gnc_commodity_equiv(default_currency, acc->currency)) {
+           grp->balance += acc->children->balance;
          }
       }
-
+      
       /* then add up accounts in this group */
       xaccAccountRecomputeBalance (acc);
-      if (!safe_strcmp (default_currency, acc->currency)) {
-         grp->balance += acc->balance;
+      if (gnc_commodity_equiv(default_currency, acc->currency)) {
+        grp->balance += acc->balance;
       }
    }
 }
@@ -821,8 +821,8 @@ xaccMergeAccounts (AccountGroup *grp)
          if ((0 == safe_strcmp(acc_a->accountName, acc_b->accountName)) &&
              (0 == safe_strcmp(acc_a->accountCode, acc_b->accountCode)) &&
              (0 == safe_strcmp(acc_a->description, acc_b->description)) &&
-             (0 == safe_strcmp(acc_a->currency, acc_b->currency)) &&
-             (0 == safe_strcmp(acc_a->security, acc_b->security)) &&
+             (gnc_commodity_equiv(acc_a->currency, acc_b->currency)) &&
+             (gnc_commodity_equiv(acc_a->security, acc_b->security)) &&
              (0 == safe_strcmp(acc_a->notes, acc_b->notes)) &&
              (acc_a->type == acc_b->type)) {
 

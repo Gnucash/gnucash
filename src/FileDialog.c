@@ -21,6 +21,7 @@
 
 #include <string.h>
 #include <glib.h>
+#include <guile/gh.h>
 
 #include "top-level.h"
 
@@ -35,6 +36,7 @@
 #include "util.h"
 #include "ui-callbacks.h"
 #include "file-history.h"
+
 
 /* This static indicates the debugging module that this .o belongs to.  */
 // static short module = MOD_GUI;
@@ -288,6 +290,19 @@ gncPostFileOpen (const char * filename)
   xaccLogEnable();
 
   free (newfile);
+
+  /* run a file-opened hook.  For now, the main thing it will do 
+   * is notice if legacy currencies are being imported. */
+  {
+    SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
+    SCM hook = gh_eval_str("gnc:*file-opened-hook*");
+    SCM filename;
+    
+    if(newfile) {
+      filename = gh_str02scm(newfile);
+      gh_call2(run_danglers, hook, filename); 
+    }
+  }  
 }
 
 /* ======================================================== */

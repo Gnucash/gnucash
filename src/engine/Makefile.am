@@ -25,7 +25,10 @@ libgncengine_la_SOURCES = \
   GNCId.c \
   guid.c \
   md5.c \
-  kvp_frame.c
+  kvp_frame.c \
+  gnc-commodity.c\
+  gnc-numeric.c \
+  gnc-engine.c
 
 libgncengine_la_LDFLAGS = -version-info 1:1:1
 
@@ -55,11 +58,15 @@ noinst_HEADERS = \
   guid.h \
   md5.h \
   util.h \
-  kvp_frame.h
+  kvp_frame.h \
+  gnc-commodity.h \
+  gnc-numeric.h \
+  gnc-engine.h
 
 EXTRA_DIST = \
   .cvsignore \
   README.query-api \
+  README.gnc-numeric \
   design.txt \
   extensions.txt
 

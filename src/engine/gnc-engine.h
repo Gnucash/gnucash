@@ -1,7 +1,6 @@
-/********************************************************************\
- * gnc-common.h -- define platform independent items                *
- *                                                                  *
- * Copyright (C) 1999, 2000 Rob Browning                            *
+/********************************************************************
+ * gnc-engine.h  -- top-level include file for Gnucash Engine       *
+ * Copyright 2000 Bill Gribble <grib@billgribble.com>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,16 +19,27 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
-\********************************************************************/
+ ********************************************************************/
 
-#ifndef __GNC_COMMON_H__
-#define __GNC_COMMON_H__
+#ifndef __GNC_ENGINE_H__
+#define __GNC_ENGINE_H__
 
-#include "config.h"
-#include <glib.h>
+#include "gnc-commodity.h"
 
-typedef int gncBoolean;
-#define GNC_F 0
-#define GNC_T 1
+typedef void (* gnc_engine_init_hook_t)(int, char **);
+
+/** PROTOTYPES ******************************************************/
+
+/* gnc_engine_init MUST be called before gnc engine functions can 
+ * be used. */
+void gnc_engine_init(int argc, char ** argv);
+
+/* pass a function pointer to gnc_engine_add_init_hook and 
+ * it will be called during the evaluation of gnc_engine_init */
+void gnc_engine_add_init_hook(gnc_engine_init_hook_t hook);
+
+/* this is a global table of known commodity types. */
+gnc_commodity_table * gnc_engine_commodities();
 
 #endif
+

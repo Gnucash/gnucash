@@ -40,7 +40,7 @@
 #include "TransLog.h"
 #include "util.h"
 #include "date.h"
-
+#include "gnc-commodity.h"
 
 /* 
  * The "force_double_entry" flag determines how 
@@ -644,7 +644,8 @@ xaccTransLookup (const GUID *guid)
 }
 
 void
-xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
+xaccSplitSetBaseValue (Split *s, double value, 
+                       const gnc_commodity * base_currency)
 {
    int adjust_price = 0; 
    if (!s) return;
@@ -674,17 +675,17 @@ xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
       }
    }
 
-   if (s->acc &&
-       s->acc->security &&
-       *s->acc->security &&
-       safe_strcmp(s->acc->security, s->acc->currency) &&
-       !DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE))
+   if(s->acc &&
+      s->acc->security &&
+      gnc_commodity_equiv(s->acc->security, s->acc->currency) && 
+      !DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE)) {
      adjust_price = 1;
+   }
 
    /* The value of a split depends on the currency we express the
     * value in.  This may or may not require a divide.
     */
-   if (!safe_strcmp(s->acc->currency, base_currency)) {
+   if (gnc_commodity_equiv(s->acc->currency, base_currency)) {
      if (adjust_price) {
        DEVIDE(s->share_price, value, s->damount);
      }
@@ -692,8 +693,9 @@ xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
        DEVIDE(s->damount, value, s->share_price);
      }
    } 
-   else if (!safe_strcmp(s->acc->security, base_currency)) {
-     s->damount = value;   
+   else if (gnc_commodity_equiv(s->acc->security, base_currency)) {
+     s->damount     = value;   
+     s->share_price = 1.0;
    } 
    else if ((0x0==base_currency) && (0 == force_double_entry)) {
      if (adjust_price) {
@@ -706,14 +708,16 @@ xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
    else {
      PERR ("inappropriate base currency %s "
            "given split currency=%s and security=%s\n",
-           base_currency, s->acc->currency, s->acc->security);
+           gnc_commodity_get_fullname(base_currency), 
+           gnc_commodity_get_fullname(s->acc->currency), 
+           gnc_commodity_get_fullname(s->acc->security));
      return;
    }
 }
 
 
 double
-xaccSplitGetBaseValue (Split *s, const char * base_currency)
+xaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency)
 {
    double value;
    if (!s) return 0.0;
@@ -735,10 +739,10 @@ xaccSplitGetBaseValue (Split *s, const char * base_currency)
    /* be more precise -- the value depends on the currency 
     * we want it expressed in.
     */
-   if (!safe_strcmp(s->acc->currency, base_currency)) {
+   if (gnc_commodity_equiv(s->acc->currency, base_currency)) {
       value = s->damount * s->share_price;   
    } else 
-   if (!safe_strcmp(s->acc->security, base_currency)) {
+   if (gnc_commodity_equiv(s->acc->security, base_currency)) {
       value = s->damount;   
    } else 
    if ((NULL==base_currency) && (0 == force_double_entry)) {
@@ -747,7 +751,9 @@ xaccSplitGetBaseValue (Split *s, const char * base_currency)
    {
       PERR ("inappropriate base currency %s "
             "given split currency=%s and security=%s\n",
-             base_currency, s->acc->currency, s->acc->security);
+            gnc_commodity_get_fullname(base_currency), 
+            gnc_commodity_get_fullname(s->acc->currency), 
+            gnc_commodity_get_fullname(s->acc->security));
       return 0.0;
    }
    return value;
@@ -757,7 +763,8 @@ xaccSplitGetBaseValue (Split *s, const char * base_currency)
 \********************************************************************/
 
 static double
-ComputeValue (Split **sarray, Split * skip_me, const char * base_currency)
+ComputeValue (Split **sarray, Split * skip_me, 
+              const gnc_commodity * base_currency)
 {
    Split *s;
    int i=0;
@@ -786,14 +793,15 @@ ComputeValue (Split **sarray, Split * skip_me, const char * base_currency)
              * lets behave like professionals now, instead of the
              * shenanigans above.
              */
-            if (!safe_strcmp(s->acc->currency, base_currency)) {
-               value += s->share_price * s->damount;
-            } else 
-            if (!safe_strcmp(s->acc->security, base_currency)) {
-               value += s->damount;
-            } else {
-               PERR ("inconsistent currencies\n");
-               assert (0);
+            if (gnc_commodity_equiv(s->acc->currency, base_currency)) {
+              value += s->share_price * s->damount;
+            } 
+            else if (gnc_commodity_equiv(s->acc->security, base_currency)) {
+              value += s->damount;
+            } 
+            else {
+              PERR ("inconsistent currencies\n");
+              assert (0);
             }
          }
       }
@@ -806,58 +814,53 @@ ComputeValue (Split **sarray, Split * skip_me, const char * base_currency)
 double
 xaccTransGetImbalance (Transaction * trans)
 {
-  const char * currency = xaccTransFindCommonCurrency (trans);
+  const gnc_commodity * currency = xaccTransFindCommonCurrency (trans);
   double imbal = ComputeValue (trans->splits, NULL, currency);
   return imbal;
 }
 
 /********************************************************************\
 \********************************************************************/
-gboolean
-xaccIsCommonCurrency(const char *currency_1, const char *security_1,
-                     const char *currency_2, const char *security_2)
+gncBoolean
+xaccIsCommonCurrency(const gnc_commodity * currency_1, 
+                     const gnc_commodity * security_1,
+                     const gnc_commodity * currency_2, 
+                     const gnc_commodity * security_2)
 {
   int c1c2, c1s2, s1c2, s1s2;
 
   if ((currency_1 == NULL) || (currency_2 == NULL))
-    return FALSE;
+    return GNC_F;
 
-  if ((security_1 != NULL) && (security_1[0] == 0x0))
-    security_1 = NULL;
-
-  if ((security_2 != NULL) && (security_2[0] == 0x0))
-    security_2 = NULL;
-
-  c1c2 = safe_strcmp(currency_1, currency_2);
-  c1s2 = safe_strcmp(currency_1, security_2);
+  c1c2 = gnc_commodity_equiv(currency_1, currency_2);
+  c1s2 = gnc_commodity_equiv(currency_1, security_2);
 
   if (security_1 != NULL)
   {
-    s1c2 = safe_strcmp(security_1, currency_2);
-    s1s2 = safe_strcmp(security_1, security_2);
+    s1c2 = gnc_commodity_equiv(security_1, currency_2);
+    s1s2 = gnc_commodity_equiv(security_1, security_2);
   }
   else /* no match */
   {
-    s1c2 = 1;
-    s1s2 = 1;
+    s1c2 = 0;
+    s1s2 = 0;
   }
 
-  return (c1c2 == 0) || (c1s2 == 0) || (s1c2 == 0) || (s1s2 == 0);
+  return (c1c2 == 1) || (c1s2 == 1) || (s1c2 == 1) || (s1s2 == 1);
 }
 
-static const char *
-FindCommonCurrency (Split **slist, const char * ra, const char * rb)
+static const gnc_commodity *
+FindCommonCurrency (Split **slist, const gnc_commodity * ra, 
+                    const gnc_commodity * rb)
 {
   Split *s;
   int i = 0;
 
   if (!slist) return NULL;
 
-  if (rb && ('\0' == rb[0])) rb = NULL;
-
   i=0; s = slist[0];
   while (s) {
-    char *sa, *sb;
+    const gnc_commodity * sa, * sb;
 
     /* Novice/casual users may not want or use the double entry 
      * features of this engine.   Because of this, there
@@ -873,13 +876,12 @@ FindCommonCurrency (Split **slist, const char * ra, const char * rb)
 
     sa = s->acc->currency;
     sb = s->acc->security;
-    if (sb && (0x0==sb[0])) sb = NULL;
 
     if (ra && rb) {
-       int aa = safe_strcmp (ra,sa);
-       int ab = safe_strcmp (ra,sb);
-       int ba = safe_strcmp (rb,sa);
-       int bb = safe_strcmp (rb,sb);
+       int aa = gnc_commodity_equiv(ra,sa);
+       int ab = gnc_commodity_equiv(ra,sb);
+       int ba = gnc_commodity_equiv(rb,sa);
+       int bb = gnc_commodity_equiv(rb,sb);
 
        if ( (!aa) && bb) rb = NULL;
        else
@@ -895,8 +897,8 @@ FindCommonCurrency (Split **slist, const char * ra, const char * rb)
     } 
     else
     if (ra && !rb) {
-       int aa = safe_strcmp (ra,sa);
-       int ab = safe_strcmp (ra,sb);
+       int aa = gnc_commodity_equiv(ra,sa);
+       int ab = gnc_commodity_equiv(ra,sb);
        if ( aa && ab ) ra = NULL;
     }
 
@@ -908,10 +910,10 @@ FindCommonCurrency (Split **slist, const char * ra, const char * rb)
 }
 
 
-const char *
+const gnc_commodity *
 xaccTransFindCommonCurrency (Transaction *trans)
 {
-  char *ra, *rb;
+  const gnc_commodity * ra, * rb;
 
   if (trans->splits == NULL) return NULL;
   if (trans->splits[0] == NULL) return NULL;
@@ -923,8 +925,8 @@ xaccTransFindCommonCurrency (Transaction *trans)
   return FindCommonCurrency (trans->splits, ra, rb);
 }
 
-const char *
-xaccTransIsCommonCurrency (Transaction *trans, const char * ra)
+const gnc_commodity *
+xaccTransIsCommonCurrency (Transaction *trans, const gnc_commodity * ra)
 {
   return FindCommonCurrency (trans->splits, ra, NULL);
 }
@@ -951,7 +953,7 @@ xaccSplitRebalance (Split *split)
   Split *s;
   int i = 0;
   double value = 0.0;
-  const char *base_currency = NULL;
+  const gnc_commodity * base_currency = NULL;
 
   trans = split->parent;
 
@@ -965,7 +967,7 @@ xaccSplitRebalance (Split *split)
   if (DEFER_REBALANCE & (trans->open)) return;
 
   if (split->acc) {
-    char *ra, *rb;
+    const gnc_commodity * ra, * rb;
     if (ACC_DEFER_REBALANCE & (split->acc->open)) return;
     assert (trans->splits);
     assert (trans->splits[0]);
@@ -982,7 +984,9 @@ xaccSplitRebalance (Split *split)
       while (s) {
         if (s->acc) {
           PERR ("\taccount=%s currency=%s security=%s\n",
-                s->acc->accountName, s->acc->currency, s->acc->security);
+                s->acc->accountName, 
+                gnc_commodity_get_fullname(s->acc->currency), 
+                gnc_commodity_get_fullname(s->acc->security));
         } else {
           PERR ("\t*** No parent account *** \n");
         }

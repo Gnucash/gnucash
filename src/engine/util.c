@@ -36,11 +36,10 @@
 
 #include "config.h"
 #include "messages.h"
+#include "gnc-engine.h"
 #include "gnc-common.h"
+#include "gnc-commodity.h"
 #include "util.h"
-
-/* hack alert -- stpcpy prototype is missing, use -DGNU */
-char * stpcpy (char *dest, const char *src);
 
 /** GLOBALS *********************************************************/
 gncLogLevel loglevel[MOD_LAST + 1] =
@@ -426,7 +425,7 @@ gnc_localeconv()
 
   gnc_lconv_set(&lc.decimal_point, ".");
   gnc_lconv_set(&lc.thousands_sep, ",");
-  gnc_lconv_set(&lc.int_curr_symbol, "USD ");
+  gnc_lconv_set(&lc.int_curr_symbol, "USD");
   gnc_lconv_set(&lc.currency_symbol, CURRENCY_SYMBOL);
   gnc_lconv_set(&lc.mon_decimal_point, ".");
   gnc_lconv_set(&lc.mon_thousands_sep, ",");
@@ -446,26 +445,22 @@ gnc_localeconv()
   return &lc;
 }
 
-const char *
+gnc_commodity *
 gnc_locale_default_currency()
 {
-  static char currency[4];
-  gboolean got_it = FALSE;
+  static gnc_commodity * currency;
+  gncBoolean got_it = GNC_F;
   struct lconv *lc;
-  int i;
 
   if (got_it)
     return currency;
 
-  for (i = 0; i < 4; i++)
-    currency[i] = 0;
-
-  lc = gnc_localeconv();
-
-  strncpy(currency, lc->int_curr_symbol, 3);
-
-  got_it = TRUE;
-
+  lc       = gnc_localeconv();
+  currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
+                                        "ISO-4217 Currencies", 
+                                        lc->int_curr_symbol);
+  got_it = GNC_T;
+  
   return currency;
 }
 
@@ -711,7 +706,7 @@ xaccSPrintAmountGeneral (char * bufp, double val,
 
 int
 xaccSPrintAmount (char * bufp, double val, GNCPrintAmountFlags flags,
-                  const char *curr_code) 
+                  const char * curr_code) 
 {
    struct lconv *lc;
    int precision;

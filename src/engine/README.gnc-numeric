@@ -1,0 +1,69 @@
+The gnc_numeric data type represents exact quantities such as monetary
+values and prices.  Its purpose is to provide an arithmetic engine for
+dealing with exact quantities which can be used to handle financial
+computations in gnucash.  
+
+
+REQUIREMENTS [modified from a posting to the list] 
+------------
+
+  1. Maximum magnitude.  We should be able to represent very large
+     monetary sums as exact integer quantities of
+     smallest-currency-units.  A rule of thumb is that we should be
+     able to represent national budgets to the SCU
+     (smallest-currency-unit) with several orders of magnitude to
+     spare, even in very small-valued currencies.
+
+  2. Genericity.  We must be able to handle fixed-point operations
+     including addition, subtraction, multiplication, and division for
+     numbers in different units.  SCU values must be allowed to be
+     non-decimal fractions of the currency (such as share prices in
+     64ths of a dollar, or old-style English pence/shilling/pound 
+     currency units).
+ 
+     We must be flexible enough to allow a fixed-point "number of
+     shares" (perhaps represented as an integer number of
+     thousandths-of-a-share) to be multiplied by a fixed-point "price
+     per share" (perhaps represented as an integer number of
+     64ths-of-a-dollar) to get a fixed-point "total transaction value"
+     (perhaps represented as an integer number of pennies).
+
+  3. Rounding/truncation control.  When performing multiplication and
+     division between fixed-point quantities, rounding/truncation may
+     be performed if the desired denomination of the output differs
+     from the input (as in the price * num = total example above).
+     There must be a mechanism to control when and how
+     rounding/truncation is done, if there are several choices.
+
+  4. Intermediate results.  If an overall computation does not
+     overflow the bounds of the representation, the computation must
+     be performed correctly and without an error flag even if
+     intermediate results might overflow.  Where overflow is possible
+     in intermediate results, an extended-range format must be used
+     temporarily to store intermediate results.
+     
+  5. Input/output conversion.  There must be an interface API which
+     will allow for conversion to and from common C data types
+     with a mechanism for signaling overflow/underflow and 
+     loss-of-information in the conversion.
+    
+  6. Compatibility with existing codebase.  The implementation of 
+     a new numeric format must be compatible with both the C and
+     Scheme portions of gnucash.
+
+  7. Abstraction.  Since we have made at least one fundamental mistake
+     in specifying the original representation of monetary values in
+     gnucash, we have to assume that we may make others.  We are going
+     to have to do significant surgery on gnucash to remove instances
+     of double math using built-in operators; by all means, let's
+     replace *all* such math with a c-function-based API that can have
+     its implementation repaired at a later time, even if some simple
+     operations (such as addition) can be implemented directly as C
+     operations on "long long" (if that happens to end up as the
+     underlying representation).
+
+  8. Fixed storage size.  Considering that the gnucash engine may at
+     some time have a database backend, it's important to have a
+     numeric format that has a fixed storage size and (optimally) can
+     be directly operated on by SQL operators.
+

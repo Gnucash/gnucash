@@ -59,7 +59,8 @@
 #include "Scrub.h"
 #include "util.h"
 #include "gnc.h"
-
+#include "gnc-commodity.h"
+#include "gnc-engine.h"
 #include "gtkselect.h"
 
 
@@ -85,7 +86,7 @@ enum {
  * be better ways to do this, but none occurred...
  */
 struct _GNCCurrencyAcc {
-  const char *currency;
+  const gnc_commodity * currency;
   double assets;
   double profits;
 };
@@ -99,7 +100,7 @@ typedef struct _GNCCurrencyAcc GNCCurrencyAcc;
  * EURO
  */
 struct _GNCCurrencyItem {
-  const char *currency;
+  const gnc_commodity * currency;
   GtkWidget *listitem;
   GtkWidget *assets_label;
   GtkWidget *profits_label;
@@ -115,7 +116,7 @@ typedef struct _GNCCurrencyItem GNCCurrencyItem;
  * only handles a single currency.
  */
 GNCCurrencyItem *
-gnc_ui_build_currency_item(const char *currency)
+gnc_ui_build_currency_item(const gnc_commodity * currency)
 {
   GtkWidget *label;
   GtkWidget *topbox;
@@ -136,7 +137,7 @@ gnc_ui_build_currency_item(const char *currency)
   gtk_widget_show(hbox);
   gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
 
-  label = gtk_label_new(currency);
+  label = gtk_label_new(gnc_commodity_get_mnemonic(currency));
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_widget_show(label);
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -185,14 +186,14 @@ gnc_ui_build_currency_item(const char *currency)
  * the same name... let the buyer beware.
  */
 static GNCCurrencyAcc *
-gnc_ui_get_currency_accumulator(GList **list, const char *currency)
+gnc_ui_get_currency_accumulator(GList **list, const gnc_commodity * currency)
 {
   GList *current;
   GNCCurrencyAcc *found;
 
   for (current = g_list_first(*list); current; current = g_list_next(current)) {
     found = current->data;
-    if (strcmp(found->currency, currency) == 0) {
+    if (gnc_commodity_equiv(currency, found->currency)) {
       return found;
     }
   }
@@ -215,14 +216,14 @@ gnc_ui_get_currency_accumulator(GList **list, const char *currency)
  * item into the list.
  */
 static GNCCurrencyItem *
-gnc_ui_get_currency_item(GList **list, const char *currency, GtkWidget *holder)
+gnc_ui_get_currency_item(GList **list, const gnc_commodity * currency, GtkWidget *holder)
 {
   GList *current;
   GNCCurrencyItem *found;
 
   for (current = g_list_first(*list); current; current = g_list_next(current)) {
     found = current->data;
-    if (strcmp(found->currency, currency) == 0) {
+    if (gnc_commodity_equiv(found->currency, currency)) {
       return found;
     }
   }
@@ -262,9 +263,11 @@ gnc_ui_refresh_statusbar (void)
   char asset_string[256];
   char profit_string[256];
   int num_accounts;
-  int account_type;
-  const char *account_currency;
-  const char *default_currency;
+  int account_type;  
+  const gnc_commodity * account_currency;
+  const gnc_commodity * default_currency;
+  const gnc_commodity * euro_commodity;
+  const char * default_mnemonic;
   GNCCurrencyAcc *currency_accum;
   GNCCurrencyAcc *euro_accum = NULL;
   GNCCurrencyItem *currency_item;
@@ -273,9 +276,13 @@ gnc_ui_refresh_statusbar (void)
   gboolean euro;
   int i;
 
-  default_currency = gnc_lookup_string_option("International",
+  default_mnemonic = gnc_lookup_string_option("International",
 					      "Default Currency",
 					      "USD");
+  default_currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
+                                                "ISO-4217 Currencies",
+                                                default_mnemonic);
+
   euro = gnc_lookup_boolean_option("International",
 				   "Enable EURO support",
 				   FALSE);
@@ -287,10 +294,13 @@ gnc_ui_refresh_statusbar (void)
   currency_list = NULL;
   if (euro)
   {
+    euro_commodity = gnc_commodity_table_lookup(gnc_engine_commodities(),
+                                                "ISO-4217 Currencies",
+                                                "EUR");    
     euro_accum = gnc_ui_get_currency_accumulator(&currency_list,
-						 EURO_TOTAL_STR);
+						 euro_commodity);
   }
-
+  
   group = gncGetCurrentGroup ();
   num_accounts = xaccGroupGetNumAccounts(group);
   for (i = 0; i < num_accounts; i++)
@@ -360,12 +370,14 @@ gnc_ui_refresh_statusbar (void)
     currency_item->touched = 1;
 
     xaccSPrintAmount(asset_string, currency_accum->assets,
-		     PRTSYM | PRTSEP, currency_accum->currency);
+		     PRTSYM | PRTSEP, 
+                     gnc_commodity_get_mnemonic(currency_accum->currency));
     gtk_label_set_text(GTK_LABEL(currency_item->assets_label), asset_string);
     gnc_set_label_color(currency_item->assets_label, currency_accum->assets);
 
     xaccSPrintAmount(profit_string, currency_accum->profits,
-		     PRTSYM | PRTSEP, currency_accum->currency);
+		     PRTSYM | PRTSEP, 
+                     gnc_commodity_get_mnemonic(currency_accum->currency));
     gtk_label_set_text(GTK_LABEL(currency_item->profits_label), profit_string);
     gnc_set_label_color(currency_item->profits_label, currency_accum->profits);
     g_free(currency_accum);
@@ -377,11 +389,11 @@ gnc_ui_refresh_statusbar (void)
   while (current)
   {
     GList *next = current->next;
-
+    
     currency_item = current->data;
     if (currency_item->touched == 0
-        && strcmp(currency_item->currency, default_currency) != 0)
-    {
+        && !gnc_commodity_equiv(currency_item->currency,
+                                default_currency)) {
       currency_list = g_list_append(currency_list, currency_item->listitem);
       main_info->totals_list = g_list_remove_link(main_info->totals_list,
 						  current);
@@ -1349,12 +1361,16 @@ mainWindow()
   /* create the label containing the account balances */
   {
     GtkWidget *combo_box;
-    const char *default_currency;
+    const char *default_currency_mnemonic;
+    const gnc_commodity * default_currency;
     GNCCurrencyItem *def_item;
-
-    default_currency = gnc_lookup_string_option("International",
-						"Default Currency",
-						"USD");
+    
+    default_currency_mnemonic = gnc_lookup_string_option("International",
+                                                         "Default Currency",
+                                                         "USD");
+    default_currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
+                                                  "ISO-4217 Currencies",
+                                                  default_currency_mnemonic);
     combo_box = gtk_select_new();
     main_info->totals_combo = combo_box;
     main_info->totals_list = NULL;
@@ -1375,7 +1391,7 @@ mainWindow()
 
   gtk_container_add(GTK_CONTAINER(scrolled_win),
                     GTK_WIDGET(main_info->account_tree));
-
+  
   {
     SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
     SCM hook = gh_eval_str("gnc:*main-window-opened-hook*");

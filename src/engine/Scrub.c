@@ -184,16 +184,17 @@ static Account *
 GetOrMakeAccount (Account *peer, Transaction *trans, const char *name_root)
 {
    char * accname;
-   const char * currency;
+   const gnc_commodity * currency;
    Account * acc;
    AccountGroup *root;
 
    /* build the account name */
    currency = xaccTransFindCommonCurrency (trans);
-   accname = alloca (strlen (name_root) + strlen (currency) + 2);
+   accname = alloca (strlen (name_root) + 
+                     strlen (gnc_commodity_get_mnemonic(currency)) + 2);
    strcpy (accname, name_root);
    strcat (accname, "-");
-   strcat (accname, currency); 
+   strcat (accname, gnc_commodity_get_mnemonic(currency)); 
 
    /* see if we've got one of these going already ... */
    acc = xaccGetPeerAccountFromName (peer, accname);

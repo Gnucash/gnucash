@@ -1,7 +1,7 @@
-/********************************************************************\
- * gnc-common.h -- define platform independent items                *
- *                                                                  *
- * Copyright (C) 1999, 2000 Rob Browning                            *
+/********************************************************************
+ * druid-commodity.h -- fancy importer for old Gnucash files        *
+ *                       (GnuCash)                                  *
+ * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -19,17 +19,24 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
- *                                                                  *
-\********************************************************************/
+ ********************************************************************/
 
-#ifndef __GNC_COMMON_H__
-#define __GNC_COMMON_H__
+#ifndef __DRUID_COMMODITY_H__
+#define __DRUID_COMMODITY_H__
 
-#include "config.h"
-#include <glib.h>
+#include <gtk/gtk.h>
+#include <gnome.h>
 
-typedef int gncBoolean;
-#define GNC_F 0
-#define GNC_T 1
+#include "glade-gnc-dialogs.h"
+#include "glade-cb-gnc-dialogs.h"
+#include "ui-callbacks.h"
+#include "gnc-commodity.h"
+#include "gnc-engine.h"
+
+typedef struct _commoditydruid CommodityDruid;
+
+CommodityDruid * gnc_ui_commodity_druid_create();
+void           gnc_commodity_druid_destroy(CommodityDruid * druid);
 
 #endif
+

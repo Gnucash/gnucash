@@ -100,6 +100,7 @@
 #include <config.h>
 
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
 #include <glib.h>
 #include <guile/gh.h>
@@ -419,7 +420,7 @@ gnc_find_split_in_trans_by_memo(Transaction *trans, const char *memo,
     if (safe_strcmp(memo, xaccSplitGetMemo(split)) == 0)
     {
       Account *account = xaccSplitGetAccount(split);
-      const char *currency, *security;
+      const gnc_commodity *currency, *security;
 
       if (account == NULL)
         return split;
@@ -2555,8 +2556,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     if ((new_acc != NULL) && (old_acc != new_acc))
     {
-      const char *currency = NULL;
-      const char *security = NULL;
+      const gnc_commodity * currency = NULL;
+      const gnc_commodity * security = NULL;
 
       currency = xaccAccountGetCurrency(new_acc);
       currency = xaccTransIsCommonCurrency(trans, currency);
@@ -2629,8 +2630,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
       if ((new_acc != NULL) && (old_acc != new_acc))
       {
-        const char *currency = NULL;
-        const char *security = NULL;
+        const gnc_commodity * currency = NULL;
+        const gnc_commodity * security = NULL;
 
         currency = xaccAccountGetCurrency(new_acc);
         currency = xaccTransIsCommonCurrency(trans, currency);
@@ -3597,10 +3598,10 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 /* walk account tree recursively, pulling out all the names */
 
 static void 
-LoadXferCell (ComboCell *cell,  
-              AccountGroup *grp,
-              const char *base_currency,
-              const char *base_security)
+LoadXferCell (ComboCell * cell,  
+              AccountGroup * grp,
+              const gnc_commodity * base_currency,
+              const gnc_commodity * base_security)
 {
   gboolean load_everything;
   Account * acc;
@@ -3621,20 +3622,19 @@ LoadXferCell (ComboCell *cell,
   n = 0;
   acc = xaccGroupGetAccount (grp, n);
   while (acc) {
-    const char *curr, *secu;
+    const gnc_commodity * curr, * secu;
 
     curr = xaccAccountGetCurrency (acc);
     secu = xaccAccountGetSecurity (acc);
-    if (secu && (0x0 == secu[0])) secu = NULL;
 
-    DEBUG ("curr=%s secu=%s acct=%s\n", 
+    DEBUG ("curr=%p secu=%p acct=%s\n", 
            curr, secu, xaccAccountGetName (acc));
 
     if ( load_everything || 
-         (!safe_strcmp(curr,base_currency)) ||
-         (!safe_strcmp(curr,base_security)) ||
-         (secu && (!safe_strcmp(secu,base_currency))) ||
-         (secu && (!safe_strcmp(secu,base_security))) )
+         (gnc_commodity_equiv(curr,base_currency)) ||
+         (gnc_commodity_equiv(curr,base_security)) ||
+         (secu && (gnc_commodity_equiv(secu,base_currency))) ||
+         (secu && (gnc_commodity_equiv(secu,base_security))) )
     {
       name = xaccAccountGetFullName (acc, account_separator);
       if (name != NULL)
@@ -3659,13 +3659,10 @@ xaccLoadXferCell (ComboCell *cell,
                   AccountGroup *grp, 
                   Account *base_account)
 {
-  const char *curr, *secu;
+  const gnc_commodity * curr, * secu;
 
   curr = xaccAccountGetCurrency (base_account);
   secu = xaccAccountGetSecurity (base_account);
-
-  if ((secu != NULL) && (secu[0] == 0))
-    secu = NULL;
 
   xaccClearComboCellMenu (cell);
   xaccAddComboCellMenuItem (cell, "");

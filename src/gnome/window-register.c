@@ -1735,13 +1735,12 @@ regRefresh(xaccLedgerDisplay *ledger)
   gboolean euro = gnc_lookup_boolean_option("International",
 					    "Enable EURO support",
 					    FALSE);
-  const char *currency = xaccAccountGetCurrency(ledger->leader);
+  const gnc_commodity * currency = xaccAccountGetCurrency(ledger->leader);
 
   /* no EURO converson, if account is already EURO or no EURO currency */
   if(currency != NULL)
   {
-    euro = (euro && strncasecmp("EUR", currency, 3) &&
-	    gnc_is_euro_currency(currency));
+    euro = (euro && gnc_is_euro_currency(currency));
   }
   else
   {

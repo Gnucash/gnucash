@@ -1,0 +1,73 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;  commodity-table.scm
+;;;  load and save commodity tables 
+;;;
+;;;  Bill Gribble <grib@billgribble.com> 3 Aug 2000 
+;;;  $Id$
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(define gnc:*iso-4217-currency-file*
+  (gnc:make-config-var
+   "Database of ISO-4217 currency definitions"
+   (lambda (var value) (if (string? value) (list value) #f))
+   string=?
+   "iso-4217-currencies.scm"))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  (gnc:setup-default-namespaces)
+;;  make sure there are some reasonable commodity namespaces 
+;;  in the engine
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (gnc:setup-default-namespaces)
+  (let ((table (gnc:engine-commodities)))
+    (gnc:commodity-table-add-namespace table "NASDAQ Securities")
+    (gnc:commodity-table-add-namespace table "NYSE Securities")
+    (gnc:commodity-table-add-namespace table "EUREX Securities")
+    (gnc:commodity-table-add-namespace table "US Mutual Funds")))
+
+    
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  (gnc:load-iso-4217-currencies)
+;;  load the default table of ISO-4217 currency information. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (gnc:load-iso-4217-currencies) 
+  (let ((table (gnc:engine-commodities)))
+    (with-input-from-file 
+        (gnc:find-in-directories 
+         (gnc:config-var-value-get gnc:*iso-4217-currency-file*)
+         gnc:*load-path*)
+      (lambda ()
+        (let loop ((form (read)))
+          (if (not (eof-object? form))
+              (begin 
+                (if (and (list? form)
+                         (eq? 8 (length form)))
+                    (let ((fullname (list-ref form 0))
+                          (unitname (list-ref form 1))
+                          (partname (list-ref form 2))
+                          (namespace (list-ref form 3))
+                          (mnemonic (list-ref form 4))
+                          (exchange-code (list-ref form 5))
+                          (parts-per-unit (list-ref form 6))
+                          (smallest-fraction (list-ref form 7)))
+                      (if (and (string? fullname)
+                               (string? unitname)
+                               (string? partname)
+                               (string? namespace)
+                               (string? mnemonic)
+                               (number? exchange-code)
+                               (number? parts-per-unit)
+                               (number? smallest-fraction))
+                          (let ((comm 
+                                 (gnc:commodity-create 
+                                  fullname unitname partname namespace 
+                                  mnemonic exchange-code parts-per-unit 
+                                  smallest-fraction)))
+;                            (display "inserting commodity ")
+;                            (write form) (newline)
+                            (gnc:commodity-table-insert table comm)))))
+                (loop (read)))))))))diff -u /dev/null '/home/grib/devel/gnucash-1.5/src/scm/engine-init.scm'

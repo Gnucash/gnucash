@@ -146,17 +146,80 @@ gnc_ui_select_date_dialog_cancel_cb    (GtkButton       *button,
                                         gpointer         user_data);
 
 void
-gnc_ui_qif_import_account_line_select_cb
-                                        (GtkCList        *clist,
-                                        gint             row,
-                                        gint             column,
-                                        GdkEvent        *event,
+gnc_ui_select_commodity_ok_cb          (GtkButton       *button,
                                         gpointer         user_data);
 
 void
-gnc_ui_qif_import_category_line_select_cb
-                                        (GtkCList        *clist,
-                                        gint             row,
-                                        gint             column,
-                                        GdkEvent        *event,
+gnc_ui_select_commodity_new_cb         (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_select_commodity_cancel_cb      (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_new_commodity_ok_cb             (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_new_commodity_cancel_cb         (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_new_commodity_help_cb           (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_account_window_select_currency_cb  (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_account_window_select_security_cb  (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_account_window_select_security_cb  (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_select_commodity_namespace_changed_cb
+                                        (GtkEditable     *editable,
+                                        gpointer         user_data);
+
+gboolean
+gnc_ui_commodity_druid_cancel_cb       (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+void
+gnc_ui_commodity_druid_backup_prepare_cb
+                                        (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+gboolean
+gnc_ui_commodity_druid_currency_back_cb
+                                        (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+gboolean
+gnc_ui_commodity_druid_currency_next_cb
+                                        (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+gboolean
+gnc_ui_commodity_druid_finish_back_cb  (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+void
+gnc_ui_commodity_druid_finish_cb       (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+gboolean
+gnc_ui_commodity_druid_backup_check_cb (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
                                         gpointer         user_data);

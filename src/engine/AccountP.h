@@ -43,6 +43,7 @@
 #define __XACC_ACCOUNT_P_H__
 
 #include "config.h"
+#include "gnc-commodity.h"
 #include "kvp_frame.h"
 #include "AccInfo.h"
 #include "GNCId.h"
@@ -104,14 +105,12 @@ struct _account {
   AccInfo *accInfo;
 
   /* The currency field denotes the default currency in which all
-   * splits in this account are denominated.  Its value *MUST*
-   * be a three-letter ISO currency code, or it must be a comma followed
-   * by an arbitrary string (security name).  Currency trading accounts
-   * allow splits between accounts when the currency string matches the
-   * security string.
-   */
-  char    *currency;
-  char    *security;
+   * splits in this account are denominated.  The gnc_commodity type
+   * represents the namespace, full name, and symbol for the currency.
+   * Currency trading accounts allow splits between accounts when the
+   * currency string matches the security string.  */
+  const gnc_commodity * currency;
+  const gnc_commodity * security;
 
   /* The parent and children pointers are used to implement an account
    * hierarchy, of accounts that have sub-accounts ("detail accounts").

@@ -36,6 +36,7 @@
 #include "dialog-utils.h"
 #include "query-user.h"
 #include "gnc-dateedit.h"
+#include "gnc-commodity.h"
 #include "messages.h"
 #include "util.h"
 
@@ -155,11 +156,11 @@ gnc_ui_AdjBWindow_ok_cb(GtkWidget * widget, gpointer data)
 static gboolean
 gnc_adjust_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 {
-  GtkEntry *entry = GTK_ENTRY(widget);
-  Account *account = data;
-  const char *new_string;
-  const char *currency;
-  const char *string;
+  GtkEntry * entry = GTK_ENTRY(widget);
+  Account * account = data;
+  const char * new_string;
+  const gnc_commodity * currency;
+  gchar * string;
   double value;
 
   string = gtk_entry_get_text(entry);
@@ -168,7 +169,8 @@ gnc_adjust_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 
   currency = xaccAccountGetCurrency(account);
 
-  new_string = xaccPrintAmount(value, PRTSEP, currency);
+  new_string = xaccPrintAmount(value, PRTSEP, 
+                               gnc_commodity_get_mnemonic(currency));
 
   if (safe_strcmp(string, new_string) == 0)
     return FALSE;
@@ -251,9 +253,9 @@ adjBWindow(Account *account)
     GtkWidget *hbox, *vbox;
     GtkWidget *amount, *date;
     GtkWidget *label, *entry;
+    const gnc_commodity * currency;
+    const char * string;
     const char *amount_str;
-    const char *currency;
-    char *string;
 
     tooltips = gtk_tooltips_new();
 
@@ -297,8 +299,10 @@ adjBWindow(Account *account)
     gtk_tooltips_set_tip(tooltips, amount, TOOLTIP_ADJUST_AMOUNT, NULL);
 
     currency = xaccAccountGetCurrency(account);
-    amount_str = xaccPrintAmount(0.0, PRTSEP, currency);
+    amount_str = xaccPrintAmount(0.0, PRTSEP, 
+                                 gnc_commodity_get_mnemonic(currency));
     gtk_entry_set_text(GTK_ENTRY(amount), amount_str);
+
     gtk_entry_select_region(GTK_ENTRY(amount), 0, -1);
 
     gtk_signal_connect(GTK_OBJECT(amount), "focus-out-event",

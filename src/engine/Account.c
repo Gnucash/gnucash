@@ -29,6 +29,8 @@
 
 #include "Account.h"
 #include "AccountP.h"
+#include "gnc-commodity.h"
+#include "kvp_frame.h"
 #include "date.h"
 #include "GNCIdP.h"
 #include "Group.h"
@@ -93,8 +95,8 @@ xaccInitAccount (Account * acc)
   acc->accountCode = strdup("");
   acc->description = strdup("");
   acc->notes       = strdup("");
-  acc->currency    = strdup("");
-  acc->security    = strdup("");
+  acc->currency    = NULL;
+  acc->security    = NULL;
 
   acc->numSplits   = 0;
   acc->splits      = (Split **) _malloc (sizeof (Split *));
@@ -169,8 +171,6 @@ xaccFreeAccount( Account *acc )
   if (acc->accountCode) free (acc->accountCode);
   if (acc->description) free (acc->description);
   if (acc->notes) free (acc->notes);
-  if (acc->currency) free (acc->currency);
-  if (acc->security) free (acc->security);
 
   /* zero out values, just in case stray 
    * pointers are pointing here. */
@@ -856,16 +856,6 @@ xaccAccountOrder (Account **aa, Account **ab)
   db = (*ab)->accountName;
   SAFE_STRCMP (da, db);
 
-  /* accountName strings should really, really be unique, and so in theory
-   * we should never ever get here.  But just in case theory is broke ... */
-  da = (*aa)->currency;
-  db = (*ab)->currency;
-  SAFE_STRCMP (da, db);
-
-  da = (*aa)->security;
-  db = (*ab)->security;
-  SAFE_STRCMP (da, db);
-
   return 0;
 }
 
@@ -1070,47 +1060,48 @@ xaccAccountSetNotes (Account *acc, const char *str)
 }
 
 void 
-xaccAccountSetCurrency (Account *acc, const char *str)
+xaccAccountSetCurrency (Account * acc, const gnc_commodity * currency)
 {
-   if ((!acc) || (!str)) return;
+   if ((!acc) || (!currency)) return;
    CHECK (acc);
 
-   if (acc->currency && (0x0 != acc->currency[0])) {
-      if (unsafe_ops) {
-         PWARN ( "it is dangerous to change the currency denomination of an account! \n"
-                "\tAccount=%s old currency=%s new currency=%s \n",
-                acc->accountName, acc->currency, str);
-      } else {
-         PERR ("the currency denomination of an account cannot be changed!\n"
-                "\tAccount=%s \n", acc->accountName);
-         return;
-      }
+   if (acc->currency) {
+     if (unsafe_ops) {
+       PWARN ( "it is dangerous to change the currency denomination of an account! \n"
+               "\tAccount=%s old currency=%s new currency=%s \n",
+               acc->accountName, 
+               gnc_commodity_get_printname(acc->currency), 
+               gnc_commodity_get_printname(currency));
+     } 
+     else {
+       PERR ("the currency denomination of an account cannot be changed!\n"
+             "\tAccount=%s \n", acc->accountName);
+       return;
+     }
    }
-   /* free the zero-length string */
-   if (acc->currency) free (acc->currency);
-   acc->currency = strdup (str);
+   acc->currency = currency;
 }
 
 void 
-xaccAccountSetSecurity (Account *acc, const char *str)
+xaccAccountSetSecurity (Account *acc, const gnc_commodity * security)
 {
-   if ((!acc) || (!str)) return;
+   if ((!acc) || (!security)) return;
    CHECK (acc);
 
-   if (acc->security && (0x0 != acc->security[0])) {
-      if (unsafe_ops) {
-         PWARN ("it is dangerous to change the security denomination of an account! \n"
-                "\tAccount=%s old security=%s new security=%s \n",
-                acc->accountName, acc->security, str);
-      } else {
-         PERR ("the security denomination of an account cannot be changed!\n"
-               "\tAccount=%s \n", acc->accountName);
-         return;
-      }
+   if (acc->security) {
+     if (unsafe_ops) {
+       PWARN ("it is dangerous to change the security denomination of an account! \n"
+              "\tAccount=%s old security=%s new security=%s \n",
+              acc->accountName,
+              gnc_commodity_get_printname(acc->security), 
+              gnc_commodity_get_printname(security));
+     } else {
+       PERR ("the security denomination of an account cannot be changed!\n"
+             "\tAccount=%s \n", acc->accountName);
+       return;
+     }
    }
-   /* free the zero-length string */
-   if (acc->security) free (acc->security);
-   acc->security = strdup (str);
+   acc->security = security;
 }
 
 /********************************************************************\
@@ -1240,14 +1231,14 @@ xaccAccountGetNotes (Account *acc)
    return (acc->notes);
 }
 
-const char * 
+const gnc_commodity * 
 xaccAccountGetCurrency (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->currency);
 }
 
-const char * 
+const gnc_commodity * 
 xaccAccountGetSecurity (Account *acc)
 {
    if (!acc) return NULL;
