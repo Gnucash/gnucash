@@ -52,6 +52,27 @@
    "gnc-report:id="
    (number->string report-id)))
 
+;; Make a new report and return the anchor to it. The new report of
+;; type 'reportname' will have the option values copied from
+;; 'src-options', and additionally this function sets all options
+;; according to 'optionlist'. Each element of optionlist is a list of
+;; section, name, and value of the function.
+(define (gnc:make-report-anchor reportname 
+				src-options optionlist)
+  (let ((options (gnc:make-report-options reportname)))
+    (gnc:options-copy-values src-options options)
+    (for-each
+     (lambda (l)
+       (let ((o (gnc:lookup-option options (car l) (cadr l))))
+	 (if o
+	     (gnc:option-set-value o (caddr l))
+	     (warn "gnc:make-report-anchor:" reportname
+		   " No such option: " (car l) (cadr l)))))
+     optionlist)
+    (gnc:report-anchor-text 
+     (gnc:make-report reportname options))))
+
+
 ;; returns the account name as html-text and anchor to the register.
 (define (gnc:html-account-anchor acct)
   (gnc:make-html-text (gnc:html-markup-anchor

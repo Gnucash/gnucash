@@ -17,6 +17,12 @@
 
 2001-04-11  Christian Stimming  <stimming@tuhh.de>
 
+	* src/scm/report/account-piecharts.scm: Simplified anchors for
+	other reports by using gnc:make-report-anchor.
+
+	* src/scm/html-utilities.scm (gnc:make-report-anchor): New
+	function.
+
 	* src/scm/options.scm (gnc:options-copy-values): New function.
 	
 	* src/scm/report/account-piecharts.scm: Added anchors to yet other

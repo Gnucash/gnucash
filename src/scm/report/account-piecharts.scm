@@ -287,20 +287,14 @@
 			      ;; to another report which is run on the
 			      ;; immediate subaccounts of this account
 			      ;; (and including this account).
-			      (let ((options (gnc:make-report-options 
-					      reportname)))
-				(gnc:options-copy-values 
-				 (gnc:report-options report-obj) options)
-				(gnc:option-set-value
-				 (gnc:lookup-option options pagename-accounts
-						    optname-accounts)
-				 (cons acct subaccts))
-				(gnc:option-set-value
-				 (gnc:lookup-option options pagename-accounts
-						    optname-levels)
-				 (+ 1 tree-depth))
-				(gnc:report-anchor-text
-				 (gnc:make-report reportname options)))))))
+			      (gnc:make-report-anchor
+			       reportname
+			       (gnc:report-options report-obj) 
+			       (list
+				(list pagename-accounts optname-accounts
+				      (cons acct subaccts))
+				(list pagename-accounts optname-levels
+				      (+ 1 tree-depth))))))))
 		combined)))
 	  (gnc:html-piechart-set-button-1-slice-urls! chart urls)
 	  (gnc:html-piechart-set-button-1-legend-urls! chart urls))
