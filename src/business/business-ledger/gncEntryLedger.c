@@ -285,8 +285,8 @@ static void create_invoice_query (GncEntryLedger *ledger)
    * 3.      ( Entry->Invoice == NULL AND
    *           Entry->Order->real-parent == Invoice->parent ) )
    *
-   * Note that term 3 is only for Editable invoices, and only when
-   * we've already got an 'owner'.
+   * Note that term 3 is only for Editable invoices where the 'owner'
+   * is valid.
    */
   
   /* Term 1 */
@@ -301,20 +301,27 @@ static void create_invoice_query (GncEntryLedger *ledger)
 			gncInvoiceGetGUID (ledger->invoice), QUERY_OR);
 
   /* Term 3 */
-  if (ledger->type == GNCENTRY_INVOICE_ENTRY) {
+  if (ledger->type == GNCENTRY_INVOICE_ENTRY &&
+      gncOwnerGetEndGUID (gncInvoiceGetOwner (ledger->invoice)) != NULL) {
     QueryNew *q2 = gncQueryCreate ();
 
-    /* Note that this is a bogus search -- it will find all entries that
-     * exist (including "blank" entries)
-     */
+    /* entry_invoice->invoice_guid == NULL */
     gncQueryAddGUIDMatch (q2,
 			  g_slist_prepend (g_slist_prepend (NULL,
 							    INVOICE_GUID),
 					   ENTRY_INVOICE),
-			  NULL, QUERY_AND);
-    
-    /* XXX Check entry's order's real-parent matches this invoice's parent */
+			  NULL, QUERY_OR);
 
+    /* entry_order->owner->end_guid == invoice->owner->guid */
+    gncQueryAddGUIDMatch (q2,
+			  g_slist_prepend
+			  (g_slist_prepend
+			   (g_slist_prepend (NULL, OWNER_PARENTG),
+			    ORDER_OWNER), ENTRY_ORDER),
+			  gncOwnerGetGUID (gncInvoiceGetOwner
+					   (ledger->invoice)),
+			  QUERY_AND);
+    
     /* Combine terms 2 and 3 */
     q1 = gncQueryMerge (q, q2, QUERY_OR);
     gncQueryDestroy (q);

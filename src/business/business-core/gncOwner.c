@@ -9,7 +9,12 @@
 #include <glib.h>
 #include <string.h>		/* for memcpy() */
 
+#include "QueryObject.h"
+
 #include "gncOwner.h"
+#include "gncOwnerP.h"
+
+#define _GNC_MOD_NAME	GNC_OWNER_MODULE_NAME
 
 void gncOwnerInitUndefined (GncOwner *owner, gpointer obj)
 {
@@ -104,4 +109,63 @@ const char * gncOwnerGetName (GncOwner *owner)
   }
 }
 
+const GUID * gncOwnerGetGUID (GncOwner *owner)
+{
+  if (!owner) return NULL;
 
+  switch (owner->type) {
+  case GNC_OWNER_NONE:
+  case GNC_OWNER_UNDEFINED:
+  default:
+    return NULL;
+  case GNC_OWNER_CUSTOMER:
+    return gncCustomerGetGUID (owner->owner.customer);
+  case GNC_OWNER_JOB:
+    return gncJobGetGUID (owner->owner.job);
+  case GNC_OWNER_VENDOR:
+    return gncVendorGetGUID (owner->owner.vendor);
+  }
+}
+
+GncOwner * gncOwnerGetEndOwner (GncOwner *owner)
+{
+  if (!owner) return NULL;
+  switch (owner->type) {
+  case GNC_OWNER_NONE:
+  case GNC_OWNER_UNDEFINED:
+  default:
+    return NULL;
+  case GNC_OWNER_CUSTOMER:
+  case GNC_OWNER_VENDOR:
+    return owner;
+  case GNC_OWNER_JOB:
+    return gncJobGetOwner (owner->owner.job);
+  }
+}
+
+const GUID * gncOwnerGetEndGUID (GncOwner *owner)
+{
+  if (!owner) return NULL;
+  owner = gncOwnerGetEndOwner (owner);
+  return gncOwnerGetGUID (owner);
+}
+
+gboolean gncOwnerRegister (void)
+{
+  static QueryObjectDef params[] = {
+    { OWNER_TYPE, QUERYCORE_INT64, (QueryAccess)gncOwnerGetType },
+    { OWNER_CUSTOMER, GNC_CUSTOMER_MODULE_NAME,
+      (QueryAccess)gncOwnerGetCustomer },
+    { OWNER_JOB, GNC_JOB_MODULE_NAME, (QueryAccess)gncOwnerGetJob },
+    { OWNER_VENDOR, GNC_VENDOR_MODULE_NAME, (QueryAccess)gncOwnerGetVendor },
+    { OWNER_GUID, QUERYCORE_GUID, (QueryAccess)gncOwnerGetGUID },
+    { OWNER_PARENT, _GNC_MOD_NAME, (QueryAccess)gncOwnerGetEndOwner },
+    { OWNER_PARENTG, QUERYCORE_GUID, (QueryAccess)gncOwnerGetEndGUID },
+    { OWNER_NAME, QUERYCORE_STRING, (QueryAccess)gncOwnerGetName },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncCustomerCompare,params);
+
+  return TRUE;
+}

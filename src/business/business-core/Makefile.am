@@ -40,6 +40,7 @@ noinst_HEADERS = \
   gncOrder.h \
   gncOrderP.h \
   gncOwner.h \
+  gncOwnerP.h \
   gncVendor.h \
   gncVendorP.h
 

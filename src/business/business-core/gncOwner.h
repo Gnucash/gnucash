@@ -9,6 +9,8 @@
 
 typedef struct gnc_owner_s GncOwner;
 
+#define GNC_OWNER_MODULE_NAME	"gncOwner"
+
 #include "gncCustomer.h"
 #include "gncJob.h"
 #include "gncVendor.h"
@@ -46,5 +48,24 @@ void gncOwnerCopy (const GncOwner *src, GncOwner *dest);
 gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b);
 
 const char * gncOwnerGetName (GncOwner *owner);
+
+/* Get the GUID of the immediate owner */
+const GUID * gncOwnerGetGUID (GncOwner *owner);
+
+/*
+ * Get the "parent" Owner or GUID thereof.  The "parent" owner
+ * is the Customer or Vendor, or the Owner of a Job
+ */
+GncOwner * gncOwnerGetEndOwner (GncOwner *owner);
+const GUID * gncOwnerGetEndGUID (GncOwner *owner);
+
+#define OWNER_TYPE	"type"
+#define OWNER_CUSTOMER	"customer"
+#define OWNER_JOB	"job"
+#define OWNER_VENDOR	"vendor"
+#define OWNER_GUID	"guid"
+#define OWNER_PARENT	"parent"
+#define OWNER_PARENTG	"parent-guid"
+#define OWNER_NAME	"name"
 
 #endif /* GNC_OWNER_H_ */

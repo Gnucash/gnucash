@@ -19,6 +19,7 @@
 #include "gncInvoiceP.h"
 #include "gncJobP.h"
 #include "gncOrderP.h"
+#include "gncOwnerP.h"
 #include "gncVendorP.h"
 
 /* version of the gnc module system interface we require */
@@ -58,6 +59,7 @@ gnc_module_init(int refcount)
     gncInvoiceRegister ();
     gncJobRegister ();
     gncOrderRegister ();
+    gncOwnerRegister ();
     gncVendorRegister ();
   }
   

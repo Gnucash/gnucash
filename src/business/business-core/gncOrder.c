@@ -342,6 +342,7 @@ gboolean gncOrderRegister (void)
 {
   static QueryObjectDef params[] = {
     { ORDER_GUID, QUERYCORE_GUID, (QueryAccess)gncOrderGetGUID },
+    { ORDER_OWNER, GNC_OWNER_MODULE_NAME, (QueryAccess)gncOrderGetOwner },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncOrderGetBook },
     { NULL },
   };

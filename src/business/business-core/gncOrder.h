@@ -54,5 +54,6 @@ void gncOrderCommitEdit (GncOrder *order);
 int gncOrderCompare (GncOrder *a, GncOrder *b);
 
 #define ORDER_GUID	"guid"
+#define ORDER_OWNER	"owner"
 
 #endif /* GNC_ORDER_H_ */
