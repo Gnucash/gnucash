@@ -12,78 +12,181 @@
  <chapter id="chapter7">
  <title>Chapter 7 Investments</title>
  <para>
+ This chapter explains how to manage your investments with GnuCash. Most
+ people have a investment plan, whether its just putting money into a CD
+ account, investing through a company sponsored plan at your workplace or
+ buying and selling stocks and bonds through a brokerage. GnuCash gives you
+ tools to help you manage these investments such as the <emphasis>Price Editor</emphasis> which allows you to record changes in the prices of stocks you own.
   </para>
- <sect1 id="settingupacct1">
+ <sect1 id="setupinvest1">
  <title>7.1 Setting Up Accounts (Discussion)</title>
  <para>
-  </para>
+ To setup investment accounts in GnuCash you can either use any of the
+ predefined categories or setup your own. Investment accounts in GnuCash fall
+ into two asset sub-categories, Current Assets and Investments. The Current 
+ Assets category is used for the types of accounts that are like savings 
+ accounts at your bank such as CD's and Money Market accounts. The Investments
+ category is used for the types of accounts where you have a more direct
+ ownership stake in the company you are investing in.
+ </para>
+ <para>
+ We discussed previously how you could use a strategy of just setting up
+ two accounts to track paying a credit card bill, this simple formula applies
+ also here. The minimum you need to do to track investments in GnuCash is to
+ setup an account for your brokerage firm or trading account and to add shares
+ to it with a price per share and the transfer account that is paying for the
+ investment listed in the transfer box. GnuCash will automatically calculate
+ the value of the shares and show at the top of the register both the number
+ of shares you own and their current value.
+ </para>
+ <para>
+ You can also track each different type of investment individually such as
+   <itemizedlist>
+    <listitem>
+     <para>
+ 	Brokerage Accounts
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+	CD's
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+	Treasury Bills
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+	Money Market
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+	Mutual Funds
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+	Stocks
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+	Bonds
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+	Retirements accounts
+    </para>
+    </listitem>
+   </itemizedlist>
+   </para>
  </sect1>
- <sect1 id="entercharge1">
+ <sect1 id="createport1">
  <title>7.2 Creating a Portfolio for Your Current Holdings (How-To)</title>
  <para>
+ If you used the template account setup back in Chapter's 2 &amp; 3, you will
+ see the investment accounts in two places under the Assets category. You can
+ use this as a portfolio for your investments or if you wish, create your own
+ by creating a new sub-account under Assets.
  </para>
+ <orderedlist>
+ <listitem>
+ <para>
+ In order to receive online price quotes for your stocks you will need to
+ setup the Perl module Finance::Quote. This is done by opening a root terminal
+ session and typing in 'update-finance-quote' (without the quote marks). This
+ will launch a Perl CPAN update session which goes out onto the internet in
+ order to install the above module onto your system. If you feel uncomfortable
+ about doing this please either email the gnucash-user mailing list
+ (gnucash-user@gnucash.org) asking for help or come to the gnucash irc channel
+ on irc.gnome.org. You can also leave out this step and manually update your
+ stock prices.
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ You should now have at least one stock account under the Assets category.
+ Select the Assets category:
+ insert investaccts.png
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ Go to the menu and select:
+ <menuchoice>
+ <guimenu>Account</guimenu>
+ <guimenuitem>Open Subaccounts</guimenuitem>
+ </menuchoice>
+ . This will show you the <emphasis role="strong">Portfolio</emphasis> view.
+ </para>
+ </listitem>
+ </orderedlist>
  </sect1>
- <sect1 id="enterpay1">
+ <sect1 id="buyinvest1">
  <title>7.3 Buying New Investments (How-To)</title>
  <para>
  </para>
  </sect1>
- <sect1 id="statement1">
+ <sect1 id="sellinvest1">
  <title>7.4 Selling Investments (How-To)</title>
  <para>
  </para>
  </sect1>
- <sect1 id="adjustbal1">
+ <sect1 id="divint1">
  <title>7.5 Recording Dividends and Interest (How-To)</title>
  <para>
  </para>
  </sect1>
- <sect1 id="creditcard1">
+ <sect1 id="splitmerge1">
  <title>7.6 Recording Stock Splits and Mergers (How-To)</title>
  <para>
  </para>
  </sect1>
- <sect1 id="creditcard1">
+ <sect1 id="employeeplan1">
  <title>7.7 Recording Employee Stock Plans (Discussion)</title>
  <para>
  </para>
-  <sect2 id="purchase2">
+  <sect2 id="purcstock2">
  <title>7.7.1 Stock Purchase Plans (How-To)</title>
  <para>
  </para>
   </sect2>
-  <sect2 id="purchase2">
+  <sect2 id="soptions2">
  <title>7.7.2 Stock Options (How-To)</title>
  <para>
  </para>
   </sect2>
  </sect1>
- <sect1 id="creditcard1">
+ <sect1 id="manageport1">
  <title>7.8 Managing your Portfolio (Discussion)</title>
  <para>
  </para>
-  <sect2 id="purchase2">
+  <sect2 id="portview2">
  <title>7.8.1  Portfolio View</title>
  <para>
  </para>
   </sect2>
-  <sect2 id="purchase2">
+  <sect2 id="updateprices2">
  <title>7.8.2 Updating Prices (How-To)</title>
  <para>
  </para>
   </sect2>
-  <sect2 id="purchase2">
+  <sect2 id="capitalgain2">
  <title>7.8.3 Measuring Capital Gains (Discussion)</title>
  <para>
  </para>
   </sect2>
  </sect1>
- <sect1 id="creditcard1">
+ <sect1 id="reconcilebroker1">
  <title>7.9 Reconciling with the Brokerage Statement (How-To)</title>
  <para>
  </para>
  </sect1>
- <sect1 id="creditcard1">
+ <sect1 id="stockegs1">
  <title>7.10 Putting It All Together (Examples)</title>
  <para>
  </para>

@@ -7,6 +7,14 @@
 <!ENTITY chapter4 SYSTEM "chapter4.xml">
 <!ENTITY chapter5 SYSTEM "chapter5.xml">
 <!ENTITY chapter6 SYSTEM "chapter6.xml">
+<!ENTITY chapter7 SYSTEM "chapter7.xml">
+<!ENTITY chapter8 SYSTEM "chapter8.xml">
+<!ENTITY chapter9 SYSTEM "chapter9.xml">
+<!ENTITY chapter10 SYSTEM "chapter10.xml">
+<!ENTITY chapter11 SYSTEM "chapter11.xml">
+<!ENTITY chapter12 SYSTEM "chapter12.xml">
+<!ENTITY chapter13 SYSTEM "chapter13.xml">
+<!ENTITY appendix SYSTEM "appendix.xml">
 ]>
 <book id="index">
  <bookinfo>
@@ -74,5 +82,6 @@ A copy of this license was provided with this software in the file <filename>COP
 &chapter4;
 &chapter5;
 &chapter6;
+&chapter7;
 
 </book>
