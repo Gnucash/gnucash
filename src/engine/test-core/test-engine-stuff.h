@@ -34,6 +34,8 @@ void random_glist_strings_only (gboolean strings_only);
 void glist_exclude_type (kvp_value_t kvp_type);
 void set_max_kvp_depth (gint max_kvp_depth);
 void set_max_kvp_frame_elements (gint max_kvp_frame_elements);
+void set_max_group_depth (gint max_group_depth);
+void set_max_group_accounts (gint max_group_accounts);
 
 GNCPrice * get_random_price(void);
 void make_random_pricedb (GNCPriceDB *pdb);

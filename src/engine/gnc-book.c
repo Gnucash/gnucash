@@ -739,6 +739,26 @@ gnc_book_destroy (GNCBook *book)
 }
 
 gboolean
+gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
+{
+  if (book_1 == book_2) return TRUE;
+  if (!book_1 || !book_2) return FALSE;
+
+  if (!xaccGroupEqual (gnc_book_get_group (book_1),
+                       gnc_book_get_group (book_2),
+                       TRUE))
+    return FALSE;
+
+  if (!gnc_pricedb_equal (gnc_book_get_pricedb (book_1),
+                          gnc_book_get_pricedb (book_2)))
+    return FALSE;
+
+  /* FIXME: do scheduled transactions and template group */
+
+  return TRUE;
+}
+
+gboolean
 gnc_book_events_pending (GNCBook *book)
 {
   if (!book) return FALSE;

@@ -23,11 +23,25 @@ static GHashTable *exclude_kvp_types = NULL;
 static gint kvp_max_depth = G_MAXINT;
 static gint kvp_frame_max_elements = 10;
 
+static gint max_group_depth = 4;
+static gint max_group_accounts = 10;
 
 static kvp_value* get_random_kvp_value_depth (int type, gint depth);
 
 
 /***********************************************************************/
+
+void
+set_max_group_depth (gint max_group_depth_in)
+{
+  max_group_depth = MAX (max_group_depth_in, 1);
+}
+
+void
+set_max_group_accounts (gint max_group_accounts_in)
+{
+  max_group_accounts = MAX (max_group_accounts_in, 1);
+}
 
 void
 set_max_kvp_depth (gint max_kvp_depth)
@@ -427,7 +441,8 @@ get_random_group_depth(int depth)
 
   group = xaccMallocAccountGroup ();
 
-  num_accounts = get_random_int_in_range (1, 10);
+  num_accounts = get_random_int_in_range (1, max_group_accounts);
+
   while (num_accounts-- > 0)
   {
     Account *account = get_random_account ();
@@ -445,7 +460,7 @@ get_random_group(void)
 {
   int depth;
 
-  depth = get_random_int_in_range (1, 4);
+  depth = get_random_int_in_range (1, max_group_depth);
 
   return get_random_group_depth (depth);
 }

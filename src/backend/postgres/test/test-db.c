@@ -16,32 +16,11 @@ static void
 run_test (void)
 {
   GNCBook *book;
+  GNCBook *book_db;
   GNCBackendError io_err;
-  char cwd[1024];
   char *filename;
 
   book = get_random_book ();
-
-  getcwd (cwd, sizeof (cwd));
-
-  filename = g_strconcat ("file:/", cwd, "/test-file-1", NULL);
-  gnc_book_begin (book, filename, FALSE, TRUE);
-  g_free (filename);
-
-  io_err = gnc_book_get_error (book);
-  if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Beginning test-file-1"))
-    return;
-
-  gnc_book_save (book);
-  if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Saving test-file-1"))
-    return;
-
-  gnc_book_end (book);
-  if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Ending test-file-1"))
-    return;
-
-  if (!do_test (gnc_book_get_url (book) == NULL, "book url not NULL"))
-    return;
 
   filename = g_strdup ("postgres://localhost:7777/gnc_test?mode=single-file");
   gnc_book_begin (book, filename, FALSE, TRUE);
@@ -58,57 +37,47 @@ run_test (void)
   if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Ending gnc_test"))
     return;
 
-  gnc_book_destroy (book);
+  if (!do_test (gnc_book_get_url (book) == NULL, "book url not NULL"))
+    return;
 
-  book = gnc_book_new ();
+  book_db = gnc_book_new ();
 
-  gnc_book_begin (book, filename, FALSE, FALSE);
+  gnc_book_begin (book_db, filename, FALSE, FALSE);
   g_free (filename);
 
-  io_err = gnc_book_get_error (book);
+  io_err = gnc_book_get_error (book_db);
   if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Beginning gnc_test load"))
     return;
 
-  gnc_book_load (book);
+  gnc_book_load (book_db);
   if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Loading gnc_test"))
     return;
 
-  gnc_book_end (book);
+  gnc_book_end (book_db);
   if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Ending gnc_test load"))
     return;
 
-  filename = g_strconcat ("file:/", cwd, "/test-file-2", NULL);
-  gnc_book_begin (book, filename, FALSE, TRUE);
-  g_free (filename);
-
-  io_err = gnc_book_get_error (book);
-  if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Beginning test-file-2"))
-    return;
-
-  gnc_book_save (book);
-  if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Saving test-file-2"))
-    return;
-
-  gnc_book_end (book);
-  if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Ending test-file-2"))
-    return;
+  do_test (gnc_book_equal (book, book_db), "Books not equal");
 }
 
 static void
 guile_main (int argc, char **argv)
 {
-  GNCBook *book;
-
   gnc_module_system_init ();
   gnc_module_load ("gnucash/engine", 0);
 
   glist_exclude_type (KVP_TYPE_BINARY);
   glist_exclude_type (KVP_TYPE_GLIST);
+
   /* The random double generator is making values
    * that postgres doesn't like. */
   glist_exclude_type (KVP_TYPE_DOUBLE);
+
   set_max_kvp_depth (3);
   set_max_kvp_frame_elements (3);
+
+  set_max_group_depth (3);
+  set_max_group_accounts (5);
 
   xaccLogDisable ();
 
@@ -121,7 +90,7 @@ guile_main (int argc, char **argv)
 int
 main (int argc, char ** argv)
 {
-  getchar ();
+  /* getchar (); */
 
   gh_enter (argc, argv, guile_main);
 

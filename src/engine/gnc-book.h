@@ -182,6 +182,10 @@ gboolean gnc_book_save_may_clobber_data (GNCBook *book);
 void     gnc_book_save (GNCBook *book);
 void     gnc_book_end  (GNCBook *book);
 
+/* The gnc_book_equal() method returns TRUE if the engine data
+ * in the two given books is equal. */
+gboolean gnc_book_equal (GNCBook *book_1, GNCBook *book_2);
+
 /* The gnc_book_events_pending() method will return TRUE if the backend
  *    has pending events which must be processed to bring the engine
  *    up to date with the backend.
