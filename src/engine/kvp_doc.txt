@@ -1,0 +1,58 @@
+This file documents the use of keys in the key-value pair system
+used by the Engine. Before assigning keys for use, please read
+the Key-Value Policy in the GnuCash Design Document located
+under src/doc/design.
+
+The format of the data below is:
+
+Name: The name of the key, including key names of parent frames
+      with the parent frames listed first, as in a fully-qualified
+      filename. Use the '/' character to separate keys.
+
+Type: The type of value stored in the key. The types are listed in
+      'kvp_frame.h'.
+
+Entities: Which engine entities (Accounts, Transactions, Splits)
+          can use this key. Use 'All' if every entity could have
+          the key.
+
+Use: The use to which the key will be put. Include any requirements
+     for using the key here. Also include any API calls which use
+     the key. If more than one entity can use the key, 
+
+
+Example:
+
+Name: my-favorite-thing
+Type: string
+Entities: Accounts
+Use:  xaccGetMyFavoriteThing(), xaccSetMyFavoriteThing()
+      This key stores a text description of the user's
+      favorite thing. Do not use this key to store things
+      which the user merely likes!
+
+
+--------------------------------------------------------------------------
+
+Name: user-keys
+Type: frame
+Entities: All
+Use: This frame is used to store keys which are editable directly by
+     the user. The program should not attach any semantics to keys
+     under this frame.
+
+Name: old-price-source
+Type: string
+Entities: Account
+Use: This string holds the old Price Source code used by earlier versions
+     of GnuCash and stored in the obsolete AccInfo structure. The use of
+     this value will be deprecated when the new version of Finance::Quote
+     is fully supported. The new version of Finance::Quote uses a different
+     scheme to identify sources for price quotes.
+
+Name: old-docref
+Type: string
+Entities: Transactions, Splits
+Use: This string holds the old Docref value which was supported in earlier
+     versions of GnuCash but which was never used for any purpose. The
+     value is retained in case any users were making use of it.

@@ -95,7 +95,68 @@ Splits plus the value of all of its sub-Accounts.
 
 @node Globally Unique Identifiers, Key-Value Pair Frames, Engine Introduction, Engine
 @section Globally Unique Identifiers
+@cindex Globally Unique Identifier
 @tindex GUID
+
+It is common for Engine structures to reference other Engine structures.
+For example, an Account must reference its Splits, its parent Account
+Group, and its child Account Group. Furthermore, other GnuCash modules
+may need to reference Engine structures. For example, a GUI
+implementation may wish to save a list of Accounts which the user has
+open when the application exits in order to restore that same state upon
+the next invocation.
+
+One way to uniquely identify an Engine structure, at least while the
+program is running, is using the C pointer which points to the
+structure. C pointers have the advantage of speed, but also have some
+disadvantages:
+
+@itemize
+
+@item
+Pointers cannot be used in data files and are not persistant across
+different program invocations.
+
+@item
+When an entity is destroyed, every other structure which references that
+entity through a direct pointer must be immediately updated to prevent
+illegal accesses.
+
+@end itemize
+
+The @dfn{GUID} (Globally Unique Identifier) provides a way to reference
+Engine structures that is more flexible than C pointers. Each Engine
+structure has an associated GUID which can be used to reference that
+structure. Engine GUIDs have the following features:
+
+@itemize
+
+@item
+The GUID is permanent, i.e., it persists between invocations of GnuCash.
+
+@item
+The GUID is guaranteed to be unique with the set of all Splits,
+Transactions, and Accounts in the hierarchy of which the structure
+is a member.
+
+@item
+With very high probability, the GUID is unique among all GUIDs
+created by any invocation of GnuCash, all over the world.
+
+@item
+GUIDs can be efficiently encoded in a string representation.
+
+@end itemize
+
+
+@menu
+* When to use GUIDs::           
+@end menu
+
+@node When to use GUIDs,  , Globally Unique Identifiers, Globally Unique Identifiers
+@subsection When to use GUIDs
+@cindex When to use GUIDs
+
 
 
 @node Key-Value Pair Frames, Splits, Globally Unique Identifiers, Engine
@@ -120,14 +181,64 @@ between character strings (keys) and @code{kvp_value} structures. A
 @code{kvp_value} object.
 
 @menu
+* Key-Value Policy::            
 * kvp_frame::                   
 * kvp_value::                   
 * kvp_list::                    
-* Key-Value Policy::            
 @end menu
 
 
-@node kvp_frame, kvp_value, Key-Value Pair Frames, Key-Value Pair Frames
+@node Key-Value Policy, kvp_frame, Key-Value Pair Frames, Key-Value Pair Frames
+@subsection Key-Value Policy
+@cindex Key-Value Policy
+
+This section defines the policy that programmers should follow
+when using key-value pairs to store information. Because of the
+large amount of information which can potentially be stored using
+this mechanism, it is important to follow these guidelines so
+that order will be maintained.
+
+The following rules should be followed for using key-value pairs:
+
+@itemize
+
+@item
+The document @file{src/engine/kvp_doc.txt} should be used to document the
+use of keys and values. Please consult this document before planning any
+use of new keys.
+
+@item
+Key strings should be in all lower case with the '-' character
+separating words. If possible, use only alphanumeric characters and
+'-'. Example: @code{bank-info}. Because the '/' character is useful for
+describing keys in sub-frames (@code{bank-info/routing-number}), do not
+use the '/' character in key names.
+
+@item
+Favor longer, descriptive key strings over short ones. Example:
+@code{online-banking-info} is better than @code{onln-bnk}.
+
+@item
+Make use of the fact that frames can be stored in frames. If a group
+of keys are used for a related purpose, consider storing them together
+in a sub-frame.
+
+@item
+Values should generally not be accessed directly through keys, but
+should rather be accessed through specific API calls. The API calls
+do not necessarily need to part a part of the Engine API. For example,
+the GUI would probably define keys that the Engine does not need to
+know about.
+
+@item
+The same key should not be used for different engine structures (Accounts,
+Transactions, Splits), unless the key's value has the same type and the
+same basic purpose.
+
+@end itemize
+
+
+@node kvp_frame, kvp_value, Key-Value Policy, Key-Value Pair Frames
 @subsection kvp_frame
 @tindex kvp_frame
 
@@ -253,7 +364,7 @@ as appropriate.
 @end deftypefun
 
 
-@node kvp_list, Key-Value Policy, kvp_value, Key-Value Pair Frames
+@node kvp_list,  , kvp_value, Key-Value Pair Frames
 @subsection kvp_list
 @tindex kvp_list
 
@@ -294,46 +405,6 @@ by the values of @var{cdr}. This function uses 'hand-over' semantics, i.e.,
 the arguments @var{car} and @var{cdr} are no longer the responsibility of
 the caller and should not be accessed after the function returns.
 @end deftypefun
-
-
-@node Key-Value Policy,  , kvp_list, Key-Value Pair Frames
-@subsection Key-Value Policy
-@cindex Key-Value Policy
-
-This section defines the policy that programmers should follow
-when using key-value pairs to store information. Because of the
-large amount of information which can potentially be stored using
-this mechanism, it is important to follow these guidelines so
-that order will be maintained.
-
-The following rules should be followed for using key-value pairs:
-
-@itemize
-
-@item
-The document @file{src/engine/kvp_doc.txt} should be used to document
-the use of keys and values. Please consult this document before planning
-any use of new keys.
-
-@item
-Key strings should be in all lower case with the '_' character
-separating words. If possible, use only alphanumeric characters
-and '_'. Example: @code{"bank_info"}
-
-@item
-Favor longer, descriptive key strings over short ones. Example:
-@code{"online_banking_info"} is better than @code{"onln_bnk"}.
-
-@item
-Make use of the fact that frames can be stored in frames. If a group
-of keys are used for a related purpose, consider storing them together
-in a sub-frame.
-
-@item
-Values should generally not be accessed directly through keys, but
-should rather be accessed through specific API calls.
-
-@end itemize
 
 
 @node Splits, Transactions, Key-Value Pair Frames, Engine

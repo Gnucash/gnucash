@@ -85,12 +85,16 @@ Engine
 * Account Groups::              
 * Sessions::                    
 
+Globally Unique Identifiers
+
+* When to use GUIDs::           
+
 Key-Value Pair Frames
 
+* Key-Value Policy::            
 * kvp_frame::                   
 * kvp_value::                   
 * kvp_list::                    
-* Key-Value Policy::            
 
 Register
 

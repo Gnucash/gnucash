@@ -32,7 +32,6 @@ noinst_HEADERS = \
 
 EXTRA_DIST = \
   .cvsignore \
-  design.txt \
   table-html.c \
   table-html.h
 

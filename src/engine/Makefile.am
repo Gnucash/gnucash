@@ -59,7 +59,8 @@ EXTRA_DIST = \
   .cvsignore \
   README.query-api \
   design.txt \
-  extensions.txt
+  extensions.txt \
+  kvp_doc.txt
 
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GUILE_COMPILE_ARGS}
 

@@ -123,7 +123,7 @@ libgncregister_a_SOURCES =    QuickFill.c   basiccell.c   cellblock.c   datecell
 noinst_HEADERS =    QuickFill.h   basiccell.h   cellblock.h   combocell.h   datecell.h   numcell.h   pricecell.h   quickfillcell.h   recncell.h   register-common.h   splitreg.h   table-allgui.h   textcell.h
 
 
-EXTRA_DIST =    .cvsignore   design.txt   table-html.c   table-html.h
+EXTRA_DIST =    .cvsignore   table-html.c   table-html.h
 
 
 CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} ${GUILE_COMPILE_ARGS}
