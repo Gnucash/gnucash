@@ -628,7 +628,7 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	  /* Transaction gets imported. */
 
 	  /* Is the transaction not balanced and there is a non-NULL destination account? */
-	  if (gnc_import_TransInfo_is_balanced(trans_info) == TRUE
+	  if (gnc_import_TransInfo_is_balanced(trans_info) == FALSE
 	      && gnc_import_TransInfo_get_destacc(trans_info) != NULL) {
 	    /* Create the 'other' split. */
 	    Split *split = 
@@ -680,8 +680,10 @@ gnc_import_process_trans_clist (GtkCList *clist,
 
 	      /* Copy the online id to the reconciled transaction, so
 		 the match will be remembered */ 
-	      if (gnc_import_get_trans_online_id(trans_info->trans)
-		  != NULL)
+	      if ((gnc_import_get_trans_online_id(trans_info->trans)
+		   != NULL) && 
+		  (strlen (gnc_import_get_trans_online_id(trans_info->trans))
+		   > 0))
 		gnc_import_set_trans_online_id
 		  (trans_info->selected_match_info->trans, 
 		   gnc_import_get_trans_online_id(trans_info->trans));

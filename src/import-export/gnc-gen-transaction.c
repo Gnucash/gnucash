@@ -32,6 +32,7 @@
 #include "global-options.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
+#include "dialog-account-pick.h"
 
 #include "import-match-map.h"
 #include "import-match-picker.h"
