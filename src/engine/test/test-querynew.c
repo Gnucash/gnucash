@@ -7,10 +7,10 @@
 #include "gnc-engine-util.h"
 #include "messages.h"
 
+#include "qofclass-p.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
 #include "qofquerycore-p.h"
-#include "qofqueryobject-p.h"
 
 #include "test-stuff.h"
 

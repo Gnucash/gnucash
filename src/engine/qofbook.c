@@ -46,9 +46,9 @@
 #include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofclass.h"
 #include "qofid-p.h"
 #include "qofobject-p.h"
-#include "qofqueryobject.h"
 
 static short module = MOD_ENGINE;
 

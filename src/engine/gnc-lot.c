@@ -47,11 +47,11 @@
 #include "gnc-trace.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "qofquery.h"
-#include "qofqueryobject.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofclass.h"
 #include "qofid-p.h"
+#include "qofquery.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_LOT;

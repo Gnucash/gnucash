@@ -1,5 +1,5 @@
 /********************************************************************\
- * QueryObject.c -- provide QOF Queriable data objects              *
+ * qofclass.c -- provide QOF paramterized data objects              *
  * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -27,7 +27,8 @@
 
 #include "gnc-engine-util.h"
 #include "gnc-trace.h"
-#include "qofqueryobject-p.h"
+#include "qofclass.h"
+#include "qofclass-p.h"
 #include "qofquery.h"
 
 static short module = MOD_QUERY;

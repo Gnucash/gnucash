@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofqueryobject-p.h -- Private API for registering queriable objects  *
+ * qofclass-p.h -- Private API for registering queriable objects    *
  * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -21,14 +21,14 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef QOF_QUERYOBJECTP_H
-#define QOF_QUERYOBJECTP_H
+#ifndef QOF_CLASSP_H
+#define QOF_CLASSP_H
 
-#include "qofqueryobject.h"
+#include "qofclass.h"
 
 void qof_class_init(void);
 void qof_class_shutdown (void);
 
 QofSortFunc qof_class_get_default_sort (QofIdTypeConst obj_name);
 
-#endif /* QOF_QUERYOBJECTP_H */
+#endif /* QOF_CLASSP_H */

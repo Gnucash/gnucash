@@ -1,5 +1,5 @@
 
-#include "qofqueryobject.h"
+#include "qofclass.h"
 
 		#define query_object_def _QofParam
 		#define QueryObjectDef QofParam

@@ -37,9 +37,9 @@
 #include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofclass.h"
 #include "qofid-p.h"
 #include "qofobject.h"
-#include "qofqueryobject.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_PRICE;

@@ -44,11 +44,11 @@ libgncmod_engine_la_SOURCES = \
   policy.c \
   qofbackend.c \
   qofbook.c \
+  qofclass.c \
   qofid.c \
   qofobject.c \
   qofquery.c \
   qofquerycore.c \
-  qofqueryobject.c \
   qofsession.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
@@ -98,11 +98,11 @@ gncinclude_HEADERS = \
   qof.h \
   qofbackend.h \
   qofbook.h \
+  qofclass.h \
   qofid.h \
   qofobject.h \
   qofquery.h \
   qofquerycore.h \
-  qofqueryobject.h \
   qofsession.h
 
 noinst_HEADERS = \
@@ -126,11 +126,11 @@ noinst_HEADERS = \
   policy-p.h \
   qofbackend-p.h \
   qofbook-p.h \
+  qofclass-p.h \
   qofid-p.h \
   qofobject-p.h \
   qofquery-p.h \
   qofquerycore-p.h \
-  qofqueryobject-p.h \
   qofsession-p.h
 
 noinst_SCRIPTS = iso-currencies-to-c

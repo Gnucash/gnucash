@@ -26,15 +26,15 @@
     @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
 */
 
-#ifndef QOF_TYPE_H
-#define QOF_TYPE_H
+#ifndef QOF_QUERYCORE_H
+#define QOF_QUERYCORE_H
 
 #include <glib.h>
 
 #include "gnc-numeric.h"
 #include "gnc-date.h"
 #include "kvp_frame.h"
-#include "qofqueryobject.h"
+#include "qofclass.h"
 
 typedef struct _QofQueryPredData QofQueryPredData;
 

@@ -35,13 +35,13 @@
 #include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofclass.h"
+#include "qofclass-p.h"
 #include "qofobject.h"
 #include "qofquery.h"
 #include "qofquery-p.h"
 #include "qofquerycore.h"
 #include "qofquerycore-p.h"
-#include "qofqueryobject.h"
-#include "qofqueryobject-p.h"
 
 static short module = MOD_QUERY;
 
