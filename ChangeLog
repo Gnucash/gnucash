@@ -1,3 +1,8 @@
+2003-02-26  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/import-backend.c: 
+	-Disable -3 punishment for transactions which have an online ID.  This punished credit card transfer yet added no tangible benefit.
+
 2003-02-22  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/glade/account.glade: Increase height of

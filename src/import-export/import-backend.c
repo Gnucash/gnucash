@@ -591,7 +591,9 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	{
 	  /* If the pref is to show match even with online ID's,
 	     puninsh the transaction with online id */
-	  prob = prob-3;
+	  
+	  /* DISABLED, it's the wrong solution to the problem. benoitg, 24/2/2003 */
+	  /*prob = prob-3;*/
 	}
       
       /* Is the probability high enough? Otherwise do nothing and return. */
