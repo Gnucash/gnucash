@@ -1,7 +1,7 @@
 /********************************************************************
  * kvp_frame.c -- a key-value frame system for gnucash.             *
  * Copyright (C) 2000 Bill Gribble                                  *
- * Copyright (C) 2001,2003Linas Vepstas <linas@linas.org>           *
+ * Copyright (C) 2001,2003 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -289,7 +289,7 @@ kvp_frame_set_slot_nc(KvpFrame * frame, const char * slot,
 }
 
 KvpValue * 
-kvp_frame_get_slot(KvpFrame * frame, const char * slot) 
+kvp_frame_get_slot(const KvpFrame * frame, const char * slot) 
 {
   if (!frame) return NULL;
   if(!frame->hash) return(NULL);
@@ -587,6 +587,137 @@ kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc)
 	}
 	
 	g_free(buff);
+}
+
+/* ============================================================ */
+
+/* Get pointer to last frame in path, or NULL if the path doesn't
+ * exist. The string stored in keypath will be hopelessly mangled .
+ */
+static inline const KvpFrame *
+kvp_frame_get_frame_or_null_slash_trash (const KvpFrame *frame, char *key_path) 
+{
+  KvpValue *value;
+  char *key, *next;
+  if (!frame || !key_path) return NULL;
+
+  key = key_path;
+  key --;
+
+  while (key) 
+  {
+    key ++;
+    while ('/' == *key) { key++; }
+    if (0x0 == *key) break;    /* trailing slash */
+    next = strchr (key, '/');
+    if (next) *next = 0x0;
+
+    value = kvp_frame_get_slot (frame, key);
+    if (!value) return NULL;
+    frame = kvp_value_get_frame (value);
+    if (!frame) return NULL;
+   
+    key = next;
+  }
+  return frame;
+}
+
+/* return pointer to last frame in path, or NULL if the path
+ * doesn't exist.  Also store the last dangling part of path
+ * in 'end_key'.
+ */
+
+static inline const KvpFrame *
+get_trailer_or_null (const KvpFrame * frame, const char * key_path, char **end_key)
+{
+  char *last_key;
+
+  if (!frame || !key_path || (0 == key_path[0])) return NULL;
+
+  last_key = strrchr (key_path, '/');
+  if (NULL == last_key)
+  {
+    last_key = (char *) key_path;
+  }
+  else if (last_key == key_path)
+  {
+    last_key ++;
+  }
+  else if (0 == last_key[1])
+  {
+    return NULL;
+  }
+  else
+  {
+    char *root, *lkey;
+    root = g_strdup (key_path);
+    lkey = strrchr (root, '/');
+    *lkey = 0;
+    frame = kvp_frame_get_frame_or_null_slash_trash (frame, root);
+    g_free(root);
+
+    last_key ++;
+  }
+
+  *end_key = last_key;
+  return frame;
+}
+
+gint64
+kvp_frame_get_gint64(const KvpFrame *frame, const char *path)
+{
+  char *key = NULL;
+  frame = get_trailer_or_null (frame, path, &key);
+  return kvp_value_get_gint64(kvp_frame_get_slot (frame, key));
+}
+
+double      
+kvp_frame_get_double(const KvpFrame *frame, const char *path)
+{
+  char *key = NULL;
+  frame = get_trailer_or_null (frame, path, &key);
+  return kvp_value_get_double(kvp_frame_get_slot (frame, key));
+}
+
+gnc_numeric 
+kvp_frame_get_numeric(const KvpFrame *frame, const char *path)
+{
+  char *key = NULL;
+  frame = get_trailer_or_null (frame, path, &key);
+  return kvp_value_get_numeric(kvp_frame_get_slot (frame, key));
+}
+
+char * 
+kvp_frame_get_string(const KvpFrame *frame, const char *path)
+{
+  char *key = NULL;
+  frame = get_trailer_or_null (frame, path, &key);
+  return kvp_value_get_string(kvp_frame_get_slot (frame, key));
+}
+
+GUID *
+kvp_frame_get_guid(const KvpFrame *frame, const char *path)
+{
+  char *key = NULL;
+  frame = get_trailer_or_null (frame, path, &key);
+  return kvp_value_get_guid(kvp_frame_get_slot (frame, key));
+}
+
+void * 
+kvp_frame_get_binary(const KvpFrame *frame, const char *path,
+                                   guint64 * size_return)
+{
+  char *key = NULL;
+  frame = get_trailer_or_null (frame, path, &key);
+  return kvp_value_get_binary(kvp_frame_get_slot (frame, key), size_return);
+}
+
+Timespec
+kvp_frame_get_timespec(const KvpFrame *frame, const char *path)
+{
+  char *key = NULL;
+  frame = get_trailer_or_null (frame, path, &key);
+  return kvp_value_get_timespec(kvp_frame_get_slot (frame, key));
 }
 
 /* ============================================================ */
