@@ -1539,7 +1539,7 @@ create_each_transaction_helper( Transaction *t, void *d )
 #endif /* 0 */
                         }
                         
-                        final = gnc_numeric_sub_fixed( credit_num, debit_num );
+                        final = gnc_numeric_sub_fixed( debit_num, credit_num );
                         
                         gncn_error = gnc_numeric_check( final );
                         if ( gncn_error != GNC_ERROR_OK ) {
@@ -1552,7 +1552,6 @@ create_each_transaction_helper( Transaction *t, void *d )
                                gnc_numeric_to_string( final ) );
 #endif /* 0 */
                         xaccSplitSetBaseValue( split, final, commonCommodity );
-                        /* xaccSplitSetValue( split, final ); */
                 }
 #if 0
 /* NOT [YET] USED */
@@ -1629,11 +1628,13 @@ create_transactions_on( SchedXaction *sx, GDate *gd,
         gboolean createdTCT;
 
 
+#if 0
         {
                 g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, gd );
                 DEBUG( "Creating transactions on %s for %s",
                        tmpBuf, xaccSchedXactionGetName( sx ) );
         }
+#endif /* 0 */
 
         if ( tct != NULL
              && g_date_compare( gd, tct->date ) != 0 ) {

@@ -204,16 +204,14 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
     {
             tmpStr = xaccPrintAmount( split_value,
                                       gnc_default_print_info(FALSE) );
-            /*gnc_ttsplitinfo_set_debit_formula( ttsi, tmpStr );*/
-            gnc_ttsplitinfo_set_credit_formula( ttsi, tmpStr );
+            gnc_ttsplitinfo_set_debit_formula( ttsi, tmpStr );
     }
     else
     {
             /* Negate the numeric so it prints w/o the sign at the front. */
             tmpStr = xaccPrintAmount( gnc_numeric_neg( split_value ),
                                       gnc_default_print_info(FALSE) );
-            /*gnc_ttsplitinfo_set_credit_formula( ttsi, tmpStr );*/
-            gnc_ttsplitinfo_set_debit_formula( ttsi, tmpStr );
+            gnc_ttsplitinfo_set_credit_formula( ttsi, tmpStr );
     }
 
     /* Copy over per-split account info */
