@@ -191,6 +191,17 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
        if (acc->expand) {
           xaccMainWindowAddAcct (acctrix, acc->children, depth+1);
        }
+    } else {
+       /* if there are no children, make sure that there is no
+        * arrow too.  This situation can occur if a sub-account
+        * has been deleted. 
+        */
+       if (acc->arrowb) {
+          XbaeMatrixSetCellWidget (acctrix, currow, XACC_MAIN_ACC_ARRW, NULL);
+          XtUnmanageChild (acc->arrowb);
+          XtDestroyWidget (acc->arrowb);
+          acc->arrowb = NULL;
+       }
     }
   }
 }
@@ -722,7 +733,6 @@ xaccMainWindowRedisplayBalance (void)
    XmTextSetString( baln_widget, buf );
 }
 
-/************************** END OF FILE *************************/
 /********************************************************************\
  * listCB -- makes the matrix widget behave like a list widget      * 
  *                                                                  * 
@@ -778,11 +788,10 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
   switch( button )
     {
     case FMB_NEW:
-      DEBUG("FMB_NEW");
-      if( xaccAccountGroupNotSaved (grp) && (NULL != datafile) )
+      DEBUG("FMB_NEW\n");
+      if( xaccAccountGroupNotSaved (grp) )
         {
-        char *msg = SAVE_MSG;
-        if( verifyBox(toplevel,msg) )
+        if( verifyBox (toplevel, FMB_SAVE_MSG) )
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
         }
       datafile = NULL;
@@ -795,9 +804,9 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
 
     case FMB_OPEN: {
       char * newfile;
-      DEBUG("FMB_OPEN");
-      if( xaccAccountGroupNotSaved (grp) && (NULL != datafile) ) {
-        if( verifyBox(toplevel, SAVE_MSG) ) {
+      DEBUG("FMB_OPEN\n");
+      if( xaccAccountGroupNotSaved (grp) ) {
+        if( verifyBox(toplevel, FMB_SAVE_MSG) ) {
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
           }
         }
@@ -818,7 +827,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       break;
     }
     case FMB_SAVE:
-      DEBUG("FMB_SAVE");
+      DEBUG("FMB_SAVE\n");
       /* hack alert -- Somehow make sure all in-progress edits get committed! */
       if (NULL == datafile) {
         fileMenubarCB( mw, (XtPointer)FMB_SAVEAS, cb );
@@ -831,7 +840,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
 
     case FMB_SAVEAS: {
       char * newfile;
-      DEBUG("FMB_SAVEAS");
+      DEBUG("FMB_SAVEAS\n");
 
       newfile = fileBox(toplevel,OPEN);
       if ( newfile ) {
@@ -841,7 +850,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       break;
     }
     case FMB_QUIT:
-      DEBUG("FMB_QUIT");
+      DEBUG("FMB_QUIT\n");
       {
       Account *acc;
       int i=0;
@@ -859,10 +868,9 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
           }
         }
       
-      if( (!(grp->saved)) && (datafile != NULL) )
+      if( !(grp->saved) )
         {
-        char *msg = SAVE_MSG;
-        if( verifyBox(toplevel,msg) )
+        if( verifyBox(toplevel, FMB_SAVE_MSG) )
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
         }
       
@@ -874,7 +882,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       }
       break;
     default:
-      DEBUG("We shouldn't be here!");
+      PERR("fileMenubarCB(): We shouldn't be here!");
     }
   refreshMainWindow();
   }
@@ -910,18 +918,15 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
   switch( button )
     {
     case AMB_NEW:
-      DEBUG("AMB_NEW");
+      DEBUG("AMB_NEW\n");
       accWindow(toplevel);
       break;
     case AMB_OPEN:
-      DEBUG("AMB_OPEN");
+      DEBUG("AMB_OPEN\n");
         {
         Account *acc = selected_acc;
         if( NULL == acc ) {
-          int make_new = verifyBox (toplevel,
-"Do you want to create a new account?\n\
-If not, then please select an account\n\
-to open in the main window.\n");
+          int make_new = verifyBox (toplevel, ACC_NEW_MSG);
           if (make_new) {
             accWindow(toplevel);
           }
@@ -934,26 +939,22 @@ to open in the main window.\n");
       }
       break;
     case AMB_EDIT:
-      DEBUG("AMB_EDIT");
+      DEBUG("AMB_EDIT\n");
       {
         Account *acc = selected_acc;
         if( NULL == acc ) {
-          errorBox (toplevel,
-"To edit an account, you must first \n\
-choose an account to delete.\n");
+          errorBox (toplevel, ACC_EDIT_MSG);
         } else {
           editAccWindow( toplevel, acc );
         }
       }
       break;
     case AMB_DEL:
-      DEBUG("AMB_DEL");
+      DEBUG("AMB_DEL\n");
         {
         Account *acc = selected_acc;
         if( NULL == acc ) {
-          errorBox (toplevel,
-"To delete an account, you must first \n\
-choose an account to delete.\n");
+          errorBox (toplevel, ACC_DEL_MSG);
         } else {
           char msg[1000];
           sprintf (msg, 
@@ -969,18 +970,18 @@ choose an account to delete.\n");
         }
       break;
     case AMB_TRNS:
-      DEBUG("AMB_TRNS");
+      DEBUG("AMB_TRNS\n");
       xferWindow(toplevel);
       break;
     case AMB_RPRT:
-      DEBUG("AMB_RPRT");
+      DEBUG("AMB_RPRT\n");
       simpleReportWindow(toplevel);
       break;
     case AMB_CAT:
-      DEBUG("AMB_CAT");
+      DEBUG("AMB_CAT\n");
       break;
     default:
-      DEBUG("We shouldn't be here!");
+      PERR ("AccountMenuBarCB(): We shouldn't be here!\n");
     }
   }
 

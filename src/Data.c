@@ -67,23 +67,24 @@ mallocAccountGroup( void )
 \********************************************************************/
 void
 freeAccountGroup( AccountGroup *grp )
-  {
-  if( grp != NULL )
-    {
-    int i;
+{
+  int i;
+  if (NULL == grp) return;
 
-    for( i=0; i<grp->numAcc; i++ )
-      freeAccount( grp->account[i] );
-    
-    _free( grp->account );
+  if (grp == topgroup) topgroup = NULL;  /* safety device */
 
-    /* null everything out, just in case somebody 
-     * tries to traverse freed memory */
-    xaccInitializeAccountGroup (grp);
-
-    _free(grp);
-    }
+  for( i=0; i<grp->numAcc; i++ ) {
+    freeAccount( grp->account[i] );
   }
+    
+  _free( grp->account );
+
+  /* null everything out, just in case somebody 
+   * tries to traverse freed memory */
+  xaccInitializeAccountGroup (grp);
+
+  _free(grp);
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -108,6 +109,7 @@ xaccAccountGroupNotSaved (AccountGroup *grp)
    int not_saved;
    int i;
 
+   if (!grp) return;
    if (False == grp->saved) return 1;
 
    for (i=0; i<grp->numAcc; i++) {
@@ -322,6 +324,30 @@ removeAccount( AccountGroup *grp, int num )
 \********************************************************************/
 
 void
+xaccRemoveGroup (AccountGroup *grp)
+{
+   Account *acc;
+
+   if (NULL == grp) return;
+   acc = grp->parent;
+
+   /* if this group has no parent, it must be the topgroup */
+   if (NULL == acc) return;
+
+   acc->children = NULL;
+
+   /* make sure that the parent of the group is marked 
+    * as having been modified. */
+   grp = acc -> parent;
+   if (!grp) return;
+
+   grp->saved = False;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
 xaccRemoveAccount (Account *acc)
 {
    int i,j;
@@ -330,6 +356,7 @@ xaccRemoveAccount (Account *acc)
 
    if (NULL == acc) return;
    grp = acc->parent;
+   acc->parent = NULL;
 
    /* this routine might be called on accounts which 
     * are not yet parented. */
@@ -353,7 +380,14 @@ xaccRemoveAccount (Account *acc)
       }
    } else {
       grp->account = NULL;
-   }
+
+      /* if this was the last account in a group, delete
+       * the group as well (unless its a root group) */
+      if (grp->parent) {
+         xaccRemoveGroup (grp);
+         freeAccountGroup (grp);
+       }
+    }
     
    _free(oldAcc);
 }
@@ -361,19 +395,22 @@ xaccRemoveAccount (Account *acc)
 /********************************************************************\
 \********************************************************************/
 int
-xaccInsertSubAccount( Account *parent, Account *child )
+xaccInsertSubAccount( Account *adult, Account *child )
 {
   int retval;
 
-  if (NULL == parent) return -1;
+  if (NULL == adult) return -1;
   if (NULL == child) return -1;
 
   /* if a container for the children doesn't yet exist, add it */
-  if (NULL == parent->children) {
-    parent->children = mallocAccountGroup();
+  if (NULL == adult->children) {
+    adult->children = mallocAccountGroup();
   }
 
-  retval = insertAccount (parent->children, child);
+  /* set back-pointer to parent */
+  adult->children->parent = adult;
+
+  retval = insertAccount (adult->children, child);
   return retval;
 }
 
@@ -419,6 +456,8 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
    int i;
    Account *acc;
 
+   if (!grp) return;
+
    grp->balance = 0.0;
    for (i=0; i<grp->numAcc; i++) {
       acc = grp->account[i];
@@ -433,6 +472,26 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
       xaccRecomputeBalance (acc);
       grp->balance += acc->balance;
    }
+}
+
+/********************************************************************\
+\********************************************************************/
+AccountGroup * 
+xaccGetRootGroupOfAcct (Account *acc) 
+{
+   AccountGroup *grp;
+
+   if (!acc) return NULL;
+
+   /* recursively walk up the tree of parents */
+   grp = acc->parent;
+   acc = grp->parent;
+   while (acc) {
+     grp = acc->parent;
+     acc = grp->parent;
+   }
+
+   return grp;
 }
 
 /****************** END OF FILE *************************************/

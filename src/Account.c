@@ -179,47 +179,54 @@ getNumOfTransaction( Account *acc, Transaction *trans )
 \********************************************************************/
 Transaction *
 removeTransaction( Account *acc, int num )
-  {
+{
   Transaction *trans = NULL;
+  Transaction **oldTrans;
+  int  i,j;
 
-  if( acc != NULL )
-    {
-    int  i,j;
-    Transaction **oldTrans = acc->transaction;
+  if (NULL == acc) return;
 
-    /* check for valid number */
-    if( (0 > num) || (num >= acc->numTrans) ) return NULL;
+  oldTrans = acc->transaction;
 
-    /* Set this flag, so we know we need to save the data file: */
-    if( NULL != acc->parent ) acc->parent->saved = False;
+  /* check for valid number */
+  if( (0 > num) || (num >= acc->numTrans) ) return NULL;
+
+  /* Set this flag, so we know we need to save the data file: */
+  if( NULL != acc->parent ) acc->parent->saved = False;
     
-    acc->numTrans--;
+  acc->numTrans--;
+
+  if (0 < acc->numTrans) {
     acc->transaction = (Transaction **)_malloc((acc->numTrans)*
                                                sizeof(Transaction *));
     
     trans = oldTrans[acc->numTrans];/* In case we are deleting last in
                                      * old array */
-    for( i=0,j=0; i<acc->numTrans; i++,j++ )
-      {
-      if( j != num )
+    for( i=0,j=0; i<acc->numTrans; i++,j++ ) {
+      if( j != num ) {
         acc->transaction[i] = oldTrans[j];
-      else
-        {
+      } else {
         trans = oldTrans[j];
         i--;
-        }
       }
-      
-    _free (oldTrans);
-
-    /* if this is a double-entry transaction, be sure to
-     * unmark it. */
-    if (((Account *)trans->credit) == acc) trans->credit = NULL;
-    if (((Account *)trans->debit)  == acc) trans->debit  = NULL;
-
     }
+  } else {
+    if (0 != num) {
+       PERR ("removeTransaction(): num should be zero !");
+    }
+    trans = oldTrans[0];
+    acc->transaction = NULL;
+  }    
+
+  _free (oldTrans);
+
+  /* if this is a double-entry transaction, be sure to
+   * unmark it. */
+  if (((Account *)trans->credit) == acc) trans->credit = NULL;
+  if (((Account *)trans->debit)  == acc) trans->debit  = NULL;
+
   return trans;
-  }
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -284,39 +291,44 @@ insertTransaction( Account *acc, Transaction *trans )
   acc->transaction = (Transaction **)_malloc((acc->numTrans)*
                                              sizeof(Transaction *));
   
-  /* dt is the date of the transaction we are inserting, and dj
-   * is the date of the "cursor" transaction... we want to insert
-   * the new transaction before the first transaction of the same
-   * or later date.  The !inserted bit is a bit of a kludge to 
-   * make sure we only insert the new transaction once! */
-  dt = &(trans->date);
-  for( i=0,j=0; i<acc->numTrans; i++,j++ )
-    {
-    /* if we didn't do this, and we needed to insert into the
-     * last spot in the array, we would walk off the end of the
-     * old array, which is no good! */
-    if( j>=(acc->numTrans-1) )
+  if (oldTrans) {
+    /* dt is the date of the transaction we are inserting, and dj
+     * is the date of the "cursor" transaction... we want to insert
+     * the new transaction before the first transaction of the same
+     * or later date.  The !inserted bit is a bit of a kludge to 
+     * make sure we only insert the new transaction once! */
+    dt = &(trans->date);
+    for( i=0,j=0; i<acc->numTrans; i++,j++ )
       {
-      position = i;
-      acc->transaction[i] = trans;
-      break;
-      }
-    else
-      {
-      dj = &(oldTrans[j]->date);
-      if( (datecmp(dj,dt) > 0) & !inserted )
+      /* if we didn't do this, and we needed to insert into the
+       * last spot in the array, we would walk off the end of the
+       * old array, which is no good! */
+      if( j>=(acc->numTrans-1) )
         {
         position = i;
         acc->transaction[i] = trans;
-        j--;
-        inserted = True;
+        break;
         }
       else
-        acc->transaction[i] = oldTrans[j];
+        {
+        dj = &(oldTrans[j]->date);
+        if( (datecmp(dj,dt) > 0) & !inserted )
+          {
+          position = i;
+          acc->transaction[i] = trans;
+          j--;
+          inserted = True;
+          }
+        else
+          acc->transaction[i] = oldTrans[j];
+        }
       }
-    }
-  
-  _free(oldTrans);
+    
+    _free(oldTrans);
+  } else {
+    acc->transaction[0] = trans;
+    position = 0;
+  }
 
   if( position != -1 )
     qfInsertTransaction( acc->qfRoot, trans );

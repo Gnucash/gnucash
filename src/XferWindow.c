@@ -393,7 +393,7 @@ closeXferWindow( Widget mw, XtPointer cd, XtPointer cb )
   
   _free(xferData);
   
-  DEBUG("close XferWindow");
+  DEBUG("close XferWindow\n");
   }
 
 /********************************************************************\

@@ -260,7 +260,7 @@ readData( char *datafile )
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 static AccountGroup *
-readGroup (int fd, Account *parent, int token)
+readGroup (int fd, Account *aparent, int token)
   {
   int  numAcc;
   int  err=0;
@@ -269,7 +269,7 @@ readGroup (int fd, Account *parent, int token)
   
   ENTER ("readGroup");
 
-  if (NULL == parent) {
+  if (NULL == aparent) {
     maingrp = grp;
   }
 
@@ -282,7 +282,7 @@ readGroup (int fd, Account *parent, int token)
     }
   XACC_FLIP_INT (numAcc);
   
-  DEBUGCMD ((printf ("Info: readGroup(): expecting %d accounts \n", numAcc)));
+  INFO_2 ("readGroup(): expecting %d accounts \n", numAcc);
 
   /* read in the accounts */
   for( i=0; i<numAcc; i++ )
@@ -297,8 +297,9 @@ readGroup (int fd, Account *parent, int token)
 
   /* if reading an account subgroup, place the subgroup
    * into the parent account */
-  if (parent) {
-    parent->children = grp;
+  grp->parent = aparent;
+  if (aparent) {
+    aparent->children = grp;
   }
   return grp;
 }
@@ -341,6 +342,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   
   acc->accountName = readString( fd, token );
   if( acc->accountName == NULL ) { return NULL; }
+  INFO_2 ("readAccount(): reading acct %s \n", acc->accountName);
   
   acc->description = readString( fd, token );
   if( acc->description == NULL ) { return NULL; }
@@ -352,7 +354,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   if( err != sizeof(int) ) { return NULL; }
   XACC_FLIP_INT (numTrans);
   
-  DEBUGCMD ((printf ("Info: readAccount(): expecting %d transactions \n", numTrans)));
+  INFO_2 ("Info: readAccount(): expecting %d transactions \n", numTrans);
   /* read the transactions */
   for( i=0; i<numTrans; i++ )
     {
@@ -360,7 +362,7 @@ readAccount( int fd, AccountGroup *grp, int token )
     trans = readTransaction( fd, acc, token );
     if( trans == NULL )
       {
-      printf("Error: readAccount(): Short Transaction Read: \n");
+      PERR ("readAccount(): Short Transaction Read: \n");
       printf (" expected %d got %d transactions \n",numTrans,i);
       break;
       }
@@ -408,7 +410,7 @@ locateAccount (int acc_id)
    if (0 > acc_id) return NULL;   
 
    /* first, see if we've already created the account */
-   acc = xaccGetAccountFromID (topgroup, acc_id);
+   acc = xaccGetAccountFromID (maingrp, acc_id);
    if (acc) return acc;
 
    /* next, see if its an unclaimed account */
@@ -437,7 +439,7 @@ springAccount (int acc_id)
    Account * acc;
    
    /* first, see if we're confused about the account */
-   acc = xaccGetAccountFromID (topgroup, acc_id);
+   acc = xaccGetAccountFromID (maingrp, acc_id);
    if (acc) {
       printf ("Internal Error: springAccount(): \n");
       printf ("account already parented \n");
@@ -465,6 +467,7 @@ springAccount (int acc_id)
  *         token - the datafile version                             * 
  * Return: the transaction structure                                * 
 \********************************************************************/
+
 static Transaction *
 readTransaction( int fd, Account *acc, int token )
   {
@@ -478,7 +481,7 @@ readTransaction( int fd, Account *acc, int token )
   trans->num = readString( fd, token );
   if( trans->num == NULL )
     {
-    DEBUG ("Error: Premature end of Transaction at num");
+    PERR ("Premature end of Transaction at num");
     freeTransaction(trans);
     return NULL;
     }
@@ -486,7 +489,7 @@ readTransaction( int fd, Account *acc, int token )
   date = readDate( fd, token );
   if( date == NULL )
     {
-    DEBUG ("Error: Premature end of Transaction at date");
+    PERR ("Premature end of Transaction at date");
     freeTransaction(trans);
     return NULL;
     }
@@ -496,7 +499,7 @@ readTransaction( int fd, Account *acc, int token )
   trans->description = readString( fd, token );
   if( trans->description == NULL )
     {
-    DEBUG ("Error: Premature end of Transaction at description");
+    PERR ("Premature end of Transaction at description");
     freeTransaction(trans);
     return NULL;
     }
@@ -504,7 +507,7 @@ readTransaction( int fd, Account *acc, int token )
   trans->memo = readString( fd, token );
   if( trans->memo == NULL )
     {
-    DEBUG ("Error: Premature end of Transaction at memo");
+    PERR ("Premature end of Transaction at memo");
     freeTransaction(trans);
     return NULL;
     }
@@ -514,7 +517,7 @@ readTransaction( int fd, Account *acc, int token )
      trans->action = readString( fd, token );
      if( trans->action == NULL )
        {
-       DEBUG ("Error: Premature end of Transaction at memo");
+       PERR ("Premature end of Transaction at memo");
        freeTransaction(trans);
        return NULL;
        }
@@ -523,7 +526,7 @@ readTransaction( int fd, Account *acc, int token )
   err = read( fd, &(trans->catagory), sizeof(int) );
   if( err != sizeof(int) )
     {
-    DEBUG ("Error: Premature end of Transaction at catagory");
+    PERR ("Premature end of Transaction at catagory");
     freeTransaction(trans);
     return NULL;
     }
@@ -532,7 +535,7 @@ readTransaction( int fd, Account *acc, int token )
   err = read( fd, &(trans->reconciled), sizeof(char) );
   if( err != sizeof(char) )
     {
-    DEBUG ("Error: Premature end of Transaction at reconciled");
+    PERR ("Premature end of Transaction at reconciled");
     freeTransaction(trans);
     return NULL;
     }
@@ -561,7 +564,7 @@ readTransaction( int fd, Account *acc, int token )
     err = read( fd, &amount, sizeof(int) );
     if( err != sizeof(int) )
       {
-      DEBUG ("Error: Premature end of Transaction at V1 amount");
+      PERR ("Premature end of Transaction at V1 amount");
       freeTransaction(trans);
       return NULL;
       }
@@ -574,7 +577,7 @@ readTransaction( int fd, Account *acc, int token )
     err = read( fd, &damount, sizeof(double) );
     if( err != sizeof(double) )
       {
-      DEBUG ("Error: Premature end of Transaction at amount");
+      PERR ("Premature end of Transaction at amount");
       freeTransaction(trans);
       return NULL;
       }
@@ -585,14 +588,14 @@ readTransaction( int fd, Account *acc, int token )
     err = read( fd, &damount, sizeof(double) );
     if( err != sizeof(double) )
       {
-      DEBUG ("Error: Premature end of Transaction at share_price");
+      PERR ("Premature end of Transaction at share_price");
       freeTransaction(trans);
       return NULL;
       }
     XACC_FLIP_DOUBLE (damount);
     trans->share_price = damount;
   }  
-  DEBUGCMD(printf ("Info: readTransaction(): amount %f \n", trans->damount));
+  INFO_2 ("readTransaction(): amount %f \n", trans->damount);
 
   /* Read the account numbers for double-entry */
   /* These are first used in Version 2 of the file format */
@@ -602,12 +605,12 @@ readTransaction( int fd, Account *acc, int token )
     err = read( fd, &acc_id, sizeof(int) );
     if( err != sizeof(int) )
       {
-      DEBUG ("Error: Premature end of Transaction at credit");
+      PERR ("Premature end of Transaction at credit");
       freeTransaction(trans);
       return NULL;
       }
     XACC_FLIP_INT (acc_id);
-    DEBUGCMD (printf ("Info: readTransaction(): credit %d\n", acc_id));
+    INFO_2 ("readTransaction(): credit %d\n", acc_id);
     peer_acc = locateAccount (acc_id);
     trans -> credit = (struct _account *) peer_acc;
 
@@ -619,12 +622,12 @@ readTransaction( int fd, Account *acc, int token )
     err = read( fd, &acc_id, sizeof(int) );
     if( err != sizeof(int) )
       {
-      DEBUG ("Error: Premature end of Transaction at debit");
+      PERR ("Premature end of Transaction at debit");
       freeTransaction(trans);
       return NULL;
       }
     XACC_FLIP_INT (acc_id);
-    DEBUGCMD (printf ("Info: readTransaction(): debit %d\n", acc_id));
+    INFO_2 ("readTransaction(): debit %d\n", acc_id);
     peer_acc = locateAccount (acc_id);
     trans -> debit = (struct _account *) peer_acc;
 
@@ -956,7 +959,7 @@ writeTransaction( int fd, Transaction *trans )
     return -1;
   
   damount = trans->damount;
-  DEBUGCMD (printf ("Info: writeTransaction: amount=%f \n", damount));
+  INFO_2 ("writeTransaction: amount=%f \n", damount);
   XACC_FLIP_DOUBLE (damount);
   err = write( fd, &damount, sizeof(double) );
   if( err != sizeof(double) )
@@ -972,7 +975,7 @@ writeTransaction( int fd, Transaction *trans )
   xfer_acc = (Account *) (trans->credit);
   acc_id = -1;
   if (xfer_acc) acc_id = xfer_acc -> id;
-  DEBUGCMD (printf ("Info: writeTransaction: credit %d \n", acc_id));
+  INFO_2 ("writeTransaction: credit %d \n", acc_id);
   XACC_FLIP_INT (acc_id);
   err = write( fd, &acc_id, sizeof(int) );
   if( err != sizeof(int) )
@@ -981,7 +984,7 @@ writeTransaction( int fd, Transaction *trans )
   xfer_acc = (Account *) (trans->debit);
   acc_id = -1;
   if (xfer_acc) acc_id = xfer_acc -> id;
-  DEBUGCMD (printf ("Info: writeTransaction: debit %d \n", acc_id));
+  INFO_2 (" writeTransaction: debit %d \n", acc_id);
   XACC_FLIP_INT (acc_id);
   err = write( fd, &acc_id, sizeof(int) );
   if( err != sizeof(int) )
