@@ -23,8 +23,9 @@
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>
-  <allow_shrink>False</allow_shrink>
-  <allow_grow>False</allow_grow>
+  <default_width>790</default_width>
+  <allow_shrink>True</allow_shrink>
+  <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>
   <auto_close>False</auto_close>
   <hide_on_close>False</hide_on_close>
@@ -37,15 +38,15 @@
     <spacing>8</spacing>
     <child>
       <padding>4</padding>
-      <expand>False</expand>
-      <fill>False</fill>
+      <expand>True</expand>
+      <fill>True</fill>
     </child>
 
     <widget>
       <class>GtkHButtonBox</class>
       <child_name>GnomeDialog:action_area</child_name>
       <name>dialog-action_area1</name>
-      <layout_style>GTK_BUTTONBOX_DEFAULT_STYLE</layout_style>
+      <layout_style>GTK_BUTTONBOX_SPREAD</layout_style>
       <spacing>8</spacing>
       <child_min_width>85</child_min_width>
       <child_min_height>27</child_min_height>
@@ -53,7 +54,7 @@
       <child_ipad_y>0</child_ipad_y>
       <child>
 	<padding>0</padding>
-	<expand>False</expand>
+	<expand>True</expand>
 	<fill>True</fill>
 	<pack>GTK_PACK_END</pack>
       </child>
@@ -105,7 +106,6 @@
       <widget>
 	<class>GtkFrame</class>
 	<name>ledger_frame</name>
-	<border_width>3</border_width>
 	<label>Order Entries</label>
 	<label_xalign>0</label_xalign>
 	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
@@ -118,7 +118,7 @@
 	<widget>
 	  <class>GtkVBox</class>
 	  <name>ledger_vbox</name>
-	  <border_width>3</border_width>
+	  <border_width>2</border_width>
 	  <homogeneous>False</homogeneous>
 	  <spacing>0</spacing>
 

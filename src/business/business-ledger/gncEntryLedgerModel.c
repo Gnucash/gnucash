@@ -66,7 +66,7 @@ static const char * get_distype_label (VirtualLocation virt_loc, gpointer data)
 
 static const char * get_pric_label (VirtualLocation virt_loc, gpointer data)
 {
-  return _("Price");
+  return _("Unit Price");
 }
 
 static const char * get_qty_label (VirtualLocation virt_loc, gpointer data)
