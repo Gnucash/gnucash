@@ -1410,8 +1410,12 @@ gnc_dense_cal_mark( GncDenseCal *dcal,
                 if ( doc < 0 ) {
                         continue;
                 }
-                g_assert( doc < dcal->numMarks );
-                dcal->marks[doc] = g_list_append( dcal->marks[doc], newMark );
+                if ( doc >= dcal->numMarks ) {
+                        /* It's not going to get any better, so just
+                         * stop processing. */
+                        break;
+                }
+
                 newMark->ourMarks = g_list_append( newMark->ourMarks,
                                                    GINT_TO_POINTER(doc) );
         }

@@ -1,3 +1,8 @@
+2002-09-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_mark): Fix
+	assertion failure for ignorant callers, Bug#92779.
+
 2002-09-14  David Hampton  <hampton@employees.org>
 
 	Refactor the startup to display the splash screen faster (bug #92192)
