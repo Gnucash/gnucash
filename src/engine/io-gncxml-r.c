@@ -3,6 +3,8 @@
  *
  * Initial code by Rob l. Browning 4Q 2000
  * Tuneups by James Lewis Moss Dec 2000
+ * Excessive hacking inas Vepstas January 2001
+ *
  */
 
 #ifndef _GNU_SOURCE
@@ -518,7 +520,7 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name) {
 }
 
 static sixtp *
-sixtp_new() {
+sixtp_new(void) {
   sixtp *s = g_new0(sixtp, 1);
 
   if(s) {
@@ -827,6 +829,46 @@ sixtp_parse_file(sixtp *sixtp,
   if(!rc) return(FALSE);
 
   xmlSAXUserParseFile(&sax_handler, &sax_data, filename);
+
+  rc = sixtp_teardown_parser(sixtp,
+                             data_for_top_level,
+                             global_data,
+                             parse_result, 
+                             &sax_data,
+                             top_frame);
+
+  return rc;
+}
+
+/* ========================================================== */
+/* parse the contents of a buffer in memory */
+
+static gboolean
+sixtp_parse_buffer(sixtp *sixtp,
+                   char *bufp,
+                   int bufsz,
+                   gpointer data_for_top_level,
+                   gpointer global_data,
+                   gpointer *parse_result) 
+{
+  xmlSAXHandler sax_handler;
+  sixtp_sax_data sax_data;
+  sixtp_stack_frame *top_frame = NULL;
+  int rc;
+  
+  /* hack alert -- XXX -- where is top_frame released?? */
+  /* looks like a mem leak to me ... */
+  top_frame = g_new0(sixtp_stack_frame, 1);
+  rc = sixtp_setup_parser (sixtp,
+                           data_for_top_level,
+                           global_data,
+                           &sax_handler,
+                           &sax_data,
+                           top_frame);
+
+  if(!rc) return(FALSE);
+
+  xmlSAXUserParseMemory(&sax_handler, &sax_data, bufp, bufsz);
 
   rc = sixtp_teardown_parser(sixtp,
                              data_for_top_level,
@@ -1298,7 +1340,7 @@ simple_kvp_value_parser_new(sixtp_end_handler end_handler)
 
 #define KVP_PARSER_NEW(TYPE)					\
 static sixtp*							\
-TYPE##_kvp_value_parser_new() {					\
+TYPE##_kvp_value_parser_new(void) {				\
   return(simple_kvp_value_parser_new(TYPE##_kvp_value_end_handler)); \
 }
 
@@ -1476,7 +1518,8 @@ END_HANDLER(kvp_frame_binary)
 }
 
 static sixtp*
-binary_kvp_value_parser_new() {
+binary_kvp_value_parser_new(void) 
+{
   sixtp *top_level = sixtp_new();
   sixtp *hex_pr;
   
@@ -1744,7 +1787,8 @@ RESULT_CLEANUP(kvp_frame)
 }
 
 static sixtp*
-kvp_frame_parser_new() {
+kvp_frame_parser_new(void) 
+{
   sixtp *top_level = sixtp_new();
   sixtp *child_pr;
 
@@ -2017,25 +2061,15 @@ generic_timespec_parser_new(sixtp_end_handler end_handler)
    so if you want it, you better set should_cleanup to false
 
    input: NA
-   
    to-children-via-*result: new AccountGroup*
-
    returns: an AccountGroup*
-   
    start: creates the account group and puts it into *result
-
    characters: NA
-
    end: finishes up the account group and leaves it in result.
-
    cleanup-result: deletes the account group (use should_cleanup to avoid).
-
    cleanup-chars: NA
-
    fail: deletes the account group in *result.
-
    result-fail: same as cleanup-result.
-
    chars-fail: NA
 
 */
@@ -2278,7 +2312,7 @@ END_HANDLER(commodity_restore)
 
 
 static sixtp *
-commodity_restore_parser_new() 
+commodity_restore_parser_new(void) 
 {
   sixtp *top_level;
   sixtp *restore_pr;
@@ -2345,27 +2379,16 @@ START_HANDLER(account)
    ledger-data's account group.
  
    input: AccountGroup*
-
    to-children-via-*result: new Account*
-
    returns: NA
-   
    start: create new Account*, and leave in for children.
-
    characters: NA
-
    end: clear *result
-
    cleanup-result: NA
-
    cleanup-chars: NA
-
    fail: delete Account*
-
    result-fail: NA
-
    chars-fail: NA
-
  */
 
 START_HANDLER(account_restore)
@@ -2767,7 +2790,8 @@ END_HANDLER(generic_guid)
 }
 
 static sixtp*
-generic_guid_parser_new() {
+generic_guid_parser_new(void) 
+{
   sixtp *top_level = sixtp_new();
 
   g_return_val_if_fail(top_level, NULL);
@@ -2828,7 +2852,8 @@ END_HANDLER(generic_gnc_numeric)
 }
 
 static sixtp*
-generic_gnc_numeric_parser_new() {
+generic_gnc_numeric_parser_new(void) 
+{
   sixtp *top_level = sixtp_new();
 
   g_return_val_if_fail(top_level, NULL);
@@ -2944,7 +2969,8 @@ END_HANDLER(generic_gnc_commodity_lookup)
 
 
 static sixtp *
-generic_gnc_commodity_lookup_parser_new() {
+generic_gnc_commodity_lookup_parser_new(void) 
+{
   sixtp *top_level = sixtp_new();
   sixtp *namespace_pr;
   sixtp *id_pr;
@@ -3607,43 +3633,44 @@ END_HANDLER(txn_restore_split_account)
 /****************************************************************************/
 
 /* Generic character restorion macro */
-#define RESTORE_CHAR(NAME,TOK,REST)					\
+#define RESTORE_CHAR(REST,NAME,TOK)					\
   {									\
-    sixtp *NAME##_pr = sixtp_new();					\
-    if(!NAME##_pr) {							\
+    sixtp *tmp_pr = sixtp_new();					\
+    if(!tmp_pr) {							\
       sixtp_destroy(top_level);						\
       return(NULL);							\
     }									\
-    sixtp_set_chars(NAME##_pr, generic_accumulate_chars);		\
-    sixtp_set_end(NAME##_pr, REST##_##NAME##_end_handler);		\
-    sixtp_set_cleanup_chars(NAME##_pr, generic_free_result);		\
-    sixtp_set_chars_fail(NAME##_pr, generic_free_result);		\
-    sixtp_add_sub_parser(restore_pr, TOK, NAME##_pr);			\
+    sixtp_set_chars(tmp_pr, generic_accumulate_chars);			\
+    sixtp_set_end(tmp_pr, REST##_##NAME##_end_handler);			\
+    sixtp_set_cleanup_chars(tmp_pr, generic_free_result);		\
+    sixtp_set_chars_fail(tmp_pr, generic_free_result);			\
+    sixtp_add_sub_parser(restore_pr, TOK, tmp_pr);			\
   }
 
 /* Generic date restore macro */
-#define RESTORE_DATE(NAME,TOK,REST)					\
+#define RESTORE_DATE(REST,NAME,TOK)					\
   {									\
-    sixtp *NAME##_pr;							\
-    NAME##_pr = generic_timespec_parser_new(REST##_##NAME##_end_handler);\
-    if(!NAME##_pr) {							\
+    sixtp *tmp_pr;							\
+    tmp_pr = generic_timespec_parser_new(REST##_##NAME##_end_handler);  \
+    if(!tmp_pr) {							\
       sixtp_destroy(top_level);						\
       return(NULL);							\
     }									\
-    sixtp_add_sub_parser(restore_pr, TOK, NAME##_pr);			\
+    sixtp_add_sub_parser(restore_pr, TOK, tmp_pr);			\
   }
 
 /****************************************************************************/
 
 #define TXN_RESTORE_SPLIT_DASH(NAME,TOK)				\
-        RESTORE_CHAR(NAME, TOK, txn_restore_split)
+        RESTORE_CHAR(txn_restore_split, NAME, TOK)
 
 #define TXN_RESTORE_SPLIT(NAME)  					\
-        RESTORE_CHAR(NAME, #NAME, txn_restore_split)
+        RESTORE_CHAR(txn_restore_split, NAME, #NAME)
 
 
 static sixtp *
-gnc_txn_restore_split_parser_new() {
+gnc_txn_restore_split_parser_new(void) 
+{
   sixtp *top_level;
   sixtp *restore_pr;
   sixtp *damount_pr;
@@ -3667,7 +3694,7 @@ gnc_txn_restore_split_parser_new() {
   TXN_RESTORE_SPLIT_DASH (reconcile_state, "reconcile-state");
 
   /* <restore> <reconcile-date> */
-  RESTORE_DATE (reconcile_date, "reconcile-date", txn_restore_split);
+  RESTORE_DATE (txn_restore_split, reconcile_date, "reconcile-date");
   
   /* <restore> <quantity> */
   damount_pr = generic_gnc_numeric_parser_new();
@@ -3698,10 +3725,11 @@ gnc_txn_restore_split_parser_new() {
 
 /***************************************************************************/
 
-#define TXN_RESTORE(NAME)  RESTORE_CHAR(NAME,#NAME, txn_restore)
+#define TXN_RESTORE(NAME)  RESTORE_CHAR(txn_restore, NAME, #NAME)
 
 static sixtp *
-gnc_transaction_parser_new() {
+gnc_transaction_parser_new(void) 
+{
   sixtp *top_level;
   sixtp *restore_pr;
   sixtp *split_pr;
@@ -3722,8 +3750,8 @@ gnc_transaction_parser_new() {
   TXN_RESTORE (description);
 
   /* <restore> (<date-posted> | <date-entered>) */
-  RESTORE_DATE (date_posted, "date-posted", txn_rest);
-  RESTORE_DATE (date_entered, "date-entered", txn_rest);
+  RESTORE_DATE (txn_rest, date_posted, "date-posted");
+  RESTORE_DATE (txn_rest, date_entered, "date-entered");
   
   /* <restore> <slots> */
   tmp_pr = kvp_frame_parser_new();
@@ -3748,11 +3776,11 @@ gnc_transaction_parser_new() {
 
 
 #define ACC_RESTORE_SIMPLE(NAME) 						\
-  RESTORE_CHAR (NAME, #NAME, acc_restore)
+  RESTORE_CHAR (acc_restore, NAME, #NAME)
 
   
 static sixtp*
-ledger_data_parser_new() 
+ledger_data_parser_new(void) 
 {
   sixtp *top_level;
   sixtp *acc_pr;
@@ -3861,9 +3889,11 @@ ledger_data_parser_new()
 
 
 /****************************************************************************/
-/****************************************************************************/
 /* ================================================================= */
-/* <query> (parent <gnc-data>)
+/* ================================================================= */
+/* ================================================================= */
+/* ================================================================= */
+/* <query-server> (parent <gnc-data>)
 
    On failure or on normal cleanup, the query will be killed,
    so if you want it, you better set should_cleanup to false
@@ -3890,8 +3920,9 @@ START_HANDLER(query_server)
 
 END_HANDLER(query_server)
 {
-  // hax0r alert should set result from somewhere ?
-  // *result = q;
+  Query *q = (Query *) data_for_children;
+printf ("server duuuude its %p\n", q);
+  *result = q;
   return(TRUE);
 }
 
@@ -3920,6 +3951,15 @@ START_HANDLER(query)
 {
   return(TRUE);
 }
+
+END_HANDLER(query)
+{
+  Query *q = (Query *) data_for_children;
+printf ("query duuuude its %p\n", q);
+  *result = q;
+  return(TRUE);
+}
+
 
 
 /* ================================================================= */
@@ -3956,6 +3996,7 @@ START_HANDLER(query_restore)
 END_HANDLER(query_restore)
 {
   Query *q = (Query *) result;
+printf ("query restore duuuude its %p\n", q);
   g_return_val_if_fail(q, FALSE);
   *result = q;
   return(TRUE);
@@ -3974,7 +4015,7 @@ RESULT_CLEANUP(query_restore)
 }
 
 
-AFTER_CHILD (query_restore)
+AFTER_CHILD(query_restore)
 {
   g_return_val_if_fail(data_for_children, FALSE);
   if(!child_result) return(TRUE);
@@ -3983,9 +4024,170 @@ AFTER_CHILD (query_restore)
 }
 
 /* ================================================================= */
+/* <datepred> (lineage <restore> <query> <query-server>)
+   Restores a given date predicate.  
+ 
+   from parent: Query*
+   for children: NA
+   result: NA
+   -----------
+   start: ??
+   chars: allow and ignore only whitespace.
+   end: AddDateMatch to Query
+   cleanup-result: NA
+   cleanup-chars: NA
+   fail: ??
+   result-fail: NA
+   chars-fail: NA
+ */
+
+START_HANDLER(qrestore_datepred)
+{
+  // Split *s = xaccMallocSplit();
+  // g_return_val_if_fail(s, FALSE);
+  // *data_for_children = s;
+  return(TRUE);
+}
+
+END_HANDLER(qrestore_datepred)
+{
+  Query *q = (Query *) parent_data;
+
+  g_return_val_if_fail(q, FALSE);
+
+#if 0
+  Split *s = (Split *) data_for_children;
+  g_return_val_if_fail(s, FALSE);
+#endif
+
+  return(TRUE);
+}
+
+AFTER_CHILD(qrestore_datepred)
+{
+#if 0
+  Split *s = (Split *) data_for_children;
+  g_return_val_if_fail(s, FALSE);
+  if(!child_result) return(TRUE);
+  if(child_result->type != SIXTP_CHILD_RESULT_NODE) return(TRUE);
+
+  if(strcmp(child_result->tag, "quantity") == 0) {
+    gnc_numeric *n = (gnc_numeric *) child_result->data;
+    g_return_val_if_fail(n, FALSE);
+    xaccSplitSetShareAmount(s, *n);
+    /* let the normal child_result handler clean up n */
+  }
+  else if(strcmp(child_result->tag, "value") == 0) {
+    gnc_numeric *n = (gnc_numeric *) child_result->data;
+    g_return_val_if_fail(n, FALSE);
+    xaccSplitSetValue(s, *n);
+    /* let the normal child_result handler clean up n */
+  }
+#endif
+
+  return(TRUE);
+}
+
+FAIL_HANDLER(qrestore_datepred)
+{
+}
+
+/* ================================================================= */
+/* <end-date> (lineage <date-pred> <restore> <query>)
+   restores a given query's end-date.
+   Just uses a generic_timespec parser, but with our own end handler.
+   end: set end-date.
+ */
+
+END_HANDLER(datepred_use_start)
+{
+  return(TRUE);
+}
+
+END_HANDLER(datepred_use_end)
+{
+  return(TRUE);
+}
+
+END_HANDLER(datepred_start_date)
+{
+  return(TRUE);
+}
+
+END_HANDLER(datepred_end_date)
+{
+  // Split *s = (Split *) parent_data;
+  TimespecParseInfo *info = (TimespecParseInfo *) data_for_children;
+  
+  g_return_val_if_fail(info, FALSE);
+  if(!timespec_parse_ok(info)) {
+    g_free(info);
+    return(FALSE);
+  }
+
+  // xaccSplitSetDateReconciledTS(s, &(info->ts));
+  g_free(info);
+
+  return(TRUE);
+}
+
+END_HANDLER(generic_pred_sense)
+{
+  return(TRUE);
+}
+
+
+/* --------------------------------------------------- */
+#define PRED_PARSE(PRED,NAME,TOK)			\
+{							\
+  sixtp *tmp_pr = simple_chars_only_parser_new(NULL);	\
+  if(!tmp_pr) {						\
+    sixtp_destroy(top_level);				\
+    return(NULL);					\
+  }							\
+  sixtp_set_end(tmp_pr, PRED##_##NAME##_end_handler);	\
+  sixtp_add_sub_parser(top_level, TOK, tmp_pr);		\
+}
+/* --------------------------------------------------- */
+/* ================================================================= */
 
 static sixtp*
-query_server_parser_new() 
+qrestore_datepred_parser_new(void)
+{
+  sixtp *top_level = sixtp_new();
+  sixtp *restore_pr = top_level;
+  g_return_val_if_fail(top_level, NULL);
+
+  PRED_PARSE(datepred, use_start,  "use-start");
+  PRED_PARSE(datepred, use_end,    "use-end");
+  RESTORE_DATE (datepred, start_date, "start-date");
+  RESTORE_DATE (datepred, end_date,   "end-date");
+  PRED_PARSE(generic_pred, sense,  "sense");
+
+  return(top_level);
+}
+
+/* ================================================================= */
+/* Generic predicate restorion macro */
+#define RESTORE_PRED(NAME,TOK,REST)					\
+  {									\
+    sixtp *tmp_pr = REST##_##NAME##_parser_new();			\
+    if(!tmp_pr) {							\
+      sixtp_destroy(top_level);						\
+      return(NULL);							\
+    }									\
+    sixtp_set_start(tmp_pr, REST##_##NAME##_start_handler);		\
+    sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);	\
+    sixtp_set_end(tmp_pr, REST##_##NAME##_end_handler);			\
+    sixtp_set_after_child(tmp_pr, REST##_##NAME##_after_child_handler);	\
+    sixtp_set_fail(tmp_pr, REST##_##NAME##_fail_handler);		\
+    sixtp_add_sub_parser(restore_pr, TOK, tmp_pr);			\
+  }
+
+/* ================================================================= */
+
+static sixtp*
+query_server_parser_new (void) 
 {
   sixtp *top_level;
   sixtp *query_pr;
@@ -4006,10 +4208,13 @@ query_server_parser_new()
   }
   sixtp_set_start(query_pr, query_start_handler);
   sixtp_set_chars(query_pr, allow_and_ignore_only_whitespace);
-  sixtp_add_sub_parser(top_level, "query-server", query_pr);
+  sixtp_set_end(query_pr, query_end_handler);
+  sixtp_add_sub_parser(top_level, "query", query_pr);
   
   /* <query> <restore> */
   SETUP_RESTORE (query, query_pr);
+
+  RESTORE_PRED(datepred, "date-pred", qrestore);
 
 #ifdef LATER
 
@@ -4028,6 +4233,9 @@ query_server_parser_new()
   return(top_level);
 }
 
+/* ================================================================= */
+/* ================================================================= */
+/* ================================================================= */
 /* ================================================================= */
 /****************************************************************************/
 /* <version> (lineage <gnc>)
@@ -4094,7 +4302,9 @@ END_HANDLER(gnc_version)
   return(TRUE);
 }
 
-static sixtp *gnc_version_parser_new() {
+static sixtp *
+gnc_version_parser_new(void) 
+{
   return(simple_chars_only_parser_new(gnc_version_end_handler));
 }
 
@@ -4175,7 +4385,8 @@ AFTER_CHILD(gnc_parser)
 }
 
 static sixtp*
-gnc_parser_new() {
+gnc_parser_new(void) 
+{
   sixtp *top_level = sixtp_new();
   
   g_return_val_if_fail(top_level, NULL);
@@ -4187,21 +4398,13 @@ gnc_parser_new() {
 
 /* ================================================================== */
 
-gboolean
-gncxml_read(const gchar *filename,
-            AccountGroup **result_group) 
+static sixtp *
+gncxml_setup_for_read (GNCParseStatus *global_parse_status)
 {
-  /* fixme: this should be broken up into sub-functions later. */
 
-  gboolean parse_ok;
-  gpointer parse_result;
   sixtp *top_level_pr;
   sixtp *gnc_pr;
   sixtp *gnc_version_pr;
-  GNCParseStatus global_parse_status;
-
-  g_return_val_if_fail(filename, FALSE);
-  g_return_val_if_fail(result_group, FALSE);
 
   /* top-level: This is just a dummy node.  It doesn't do anything.
      For now, the result is communicated through the global_data
@@ -4214,7 +4417,7 @@ gncxml_read(const gchar *filename,
   gnc_pr = gnc_parser_new();
   if(!gnc_pr) {
     sixtp_destroy(top_level_pr);
-    return(FALSE);
+    return(NULL);
   }
   sixtp_add_sub_parser(top_level_pr, "gnc", gnc_pr);
 
@@ -4222,16 +4425,35 @@ gncxml_read(const gchar *filename,
   gnc_version_pr = gnc_version_parser_new();
   if(!gnc_version_pr) {
     sixtp_destroy(top_level_pr);
-    return(FALSE);
+    return(NULL);
   }
   sixtp_add_sub_parser(gnc_pr, "version", gnc_version_pr);
 
-  global_parse_status.seen_version = FALSE;
-  global_parse_status.gnc_parser = gnc_pr;
-  global_parse_status.account_group = NULL;
-  global_parse_status.query = NULL;
-  global_parse_status.error = GNC_PARSE_ERR_NONE;
-  parse_result = NULL;
+  global_parse_status->seen_version = FALSE;
+  global_parse_status->gnc_parser = gnc_pr;
+  global_parse_status->account_group = NULL;
+  global_parse_status->query = NULL;
+  global_parse_status->error = GNC_PARSE_ERR_NONE;
+
+  return top_level_pr;
+}
+
+/* ================================================================== */
+
+gboolean
+gncxml_read(const gchar *filename,
+            AccountGroup **result_group) 
+{
+  gboolean parse_ok;
+  gpointer parse_result = NULL;
+  sixtp *top_level_pr;
+  GNCParseStatus global_parse_status;
+
+  g_return_val_if_fail(filename, FALSE);
+  g_return_val_if_fail(result_group, FALSE);
+
+  top_level_pr = gncxml_setup_for_read (&global_parse_status);
+  if (!top_level_pr) return (FALSE);
 
   parse_ok = sixtp_parse_file(top_level_pr,
                               filename,
@@ -4249,10 +4471,67 @@ gncxml_read(const gchar *filename,
   }
 }
 
-/****************************************************************************/
+/* ================================================================== */
+
+AccountGroup *
+gncxml_read_from_buf (char * bufp, int bufsz)
+{
+  gboolean parse_ok;
+  gpointer parse_result = NULL;
+  sixtp *top_level_pr;
+  GNCParseStatus global_parse_status;
+
+  g_return_val_if_fail(bufp, NULL);
+
+  top_level_pr = gncxml_setup_for_read (&global_parse_status);
+  if (!top_level_pr) return (NULL);
+
+  parse_ok = sixtp_parse_buffer(top_level_pr,
+                                bufp,
+                                bufsz,
+                                NULL,
+                                &global_parse_status,
+                                &parse_result);
+  
+  sixtp_destroy(top_level_pr);
+  if (parse_ok) return (global_parse_status.account_group);
+
+  return NULL;
+}
+
+/* ================================================================== */
+
+Query *
+gncxml_read_query (char * bufp, int bufsz)
+{
+  gboolean parse_ok;
+  gpointer parse_result = NULL;
+  sixtp *top_level_pr;
+  GNCParseStatus global_parse_status;
+
+  g_return_val_if_fail(bufp, NULL);
+
+  top_level_pr = gncxml_setup_for_read (&global_parse_status);
+  if (!top_level_pr) return (NULL);
+
+  parse_ok = sixtp_parse_buffer(top_level_pr,
+                                bufp,
+                                bufsz,
+                                NULL,
+                                &global_parse_status,
+                                &parse_result);
+  
+  sixtp_destroy(top_level_pr);
+  if (parse_ok) return (global_parse_status.query);
+
+  return NULL;
+}
+
+/* ================================================================== */
 
 gboolean
-is_gncxml_file(const gchar *filename) {
+is_gncxml_file(const gchar *filename) 
+{
   FILE *f = NULL;
   char first_chunk[256];
   const char* cursor = NULL;
@@ -4279,3 +4558,5 @@ is_gncxml_file(const gchar *filename) {
   if(f) fclose(f);
   return(result);
 }
+
+/* ======================= END OF FILE ============================== */

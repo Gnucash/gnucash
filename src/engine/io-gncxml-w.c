@@ -876,7 +876,7 @@ xml_add_qterm_restorer(xmlNodePtr qxml, QueryTerm *qt)
   int rc;
   xmlNodePtr p = NULL;
 
-  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(qxml, FALSE);
   g_return_val_if_fail(qt, FALSE);
 
   switch (qt->data.type) {

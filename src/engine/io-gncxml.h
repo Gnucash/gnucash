@@ -16,7 +16,18 @@
 #include "Query.h"
 
 /* read in an account group from a file */
-gboolean gncxml_read(const gchar *name, AccountGroup **result_group);
+gboolean gncxml_read(const gchar *filename, AccountGroup **result_group);
+
+
+/* read an account group from a buffer in memory 
+ * the pointer bufp must point at the ascii xml, and bufsz
+ * must be the size of the buffer.
+ */
+AccountGroup *
+gncxml_read_from_buf (char *bufp, int bufsz);
+
+Query *
+gncxml_read_query (char *bufp, int bufsz);
 
 /* write all account info to a file */
 gboolean gncxml_write(AccountGroup *group, const gchar *name);
