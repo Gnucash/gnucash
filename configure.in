@@ -78,29 +78,6 @@ AM_PROG_LIBTOOL
 
 AC_SUBST(LIBTOOL_DEPS)
 
-# # checks for the pthreads library
-# have_pthread=no
-# for i in pthreads lthread pthread; do
-#   if test "x$have_pthread" = xno; then
-#     AC_CHECK_LIB($i, pthread_once, [
-#  	PTHREAD_LIBS=-l$i
-# 	have_pthread=yes
-# 	])
-#   fi
-# done
-# 
-# # Hmm, maybe it's just in libc?
-# if test "x$have_pthread" = xno; then
-#     AC_CHECK_FUNC(pthread_once, [ have_pthread=yes ])
-# fi
-# 
-# # Do we HAVE threads?!?
-# if test "x$have_pthread" = xno; then
-#   AC_MSG_ERROR([unable to find pthreads on your system.  Sorry.])
-# fi
-# 
-# AC_SUBST(PTHREAD_LIBS)
-
 AC_ISC_POSIX
 AC_C_BIGENDIAN
 AC_PROG_MAKE_SET
@@ -120,7 +97,8 @@ fi
 AM_PATH_GLIB_2_0(2.0.0,,AC_MSG_ERROR([
 *** GLIB >= 2.0 is required to build Gnucash; please make sure you have the
 *** development headers installed. The latest version of GLIB is
-*** always available at ftp://ftp.gnome.org/pub/gnome/sources/glib/.]))
+*** always available at ftp://ftp.gnome.org/pub/gnome/sources/glib/.]),
+	gthread)
 
 if test ${no_glib}x = yesx
 then

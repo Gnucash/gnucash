@@ -58,13 +58,6 @@ static gboolean guid_initialized = FALSE;
 static struct md5_ctx guid_context;
 static GMemChunk *guid_memchunk = NULL;
 
-#if USING_THREADS
-/* guid_to_string uses a thread local buffer. These are used to set it up */
-#include <pthread.h>
-static pthread_key_t guid_buffer_key;
-static pthread_once_t guid_buffer_key_once = PTHREAD_ONCE_INIT;
-#endif
-
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
 
@@ -543,22 +536,19 @@ badstring:
 }
 
 /* Allocate the key */
-#if USING_THREADS
-static void guid_buffer_key_alloc(void)
-{
-  pthread_key_create(&guid_buffer_key, NULL /* Never freed */);
-  pthread_setspecific(guid_buffer_key, malloc(GUID_ENCODING_LENGTH+1));
-}
-#endif
 
 const char *
 guid_to_string(const GUID * guid)
 {
-#if USING_THREADS
-  char *string;
+#ifdef G_THREADS_ENABLED
+  static GStaticPrivate guid_buffer_key = G_STATIC_PRIVATE_INIT;
+  gchar *string;
 
-  pthread_once(&guid_buffer_key_once, guid_buffer_key_alloc);
-  string = pthread_getspecific(guid_buffer_key);
+  string = g_static_private_get (&guid_buffer_key);
+  if (string == NULL) {
+    string = malloc(GUID_ENCODING_LENGTH+1);
+    g_static_private_set (&guid_buffer_key, string, g_free);
+  }
 #else
   static char string[64];
 #endif
