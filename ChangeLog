@@ -1,3 +1,8 @@
+2002-12-07  Christian Stimming  <stimming@tuhh.de>
+
+	* po/nl.po: Fix use of msgid_plural by adding the appropriate
+	header entry.
+
 2002-13-6  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/ofx/gnc-ofx-import.c:  Do the "right" 
