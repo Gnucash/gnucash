@@ -78,11 +78,15 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
    }
    while (node)
    {
+      gboolean is_match;
       gboolean is_positive;
       split = node->data;
       if (split->lot) goto donext;
 
-		if (common_currency != split->parent->common_currency) goto donext;
+      /* Allow equiv currencies */
+		is_match = gnc_commodity_equiv (common_currency, 
+                                      split->parent->common_currency);
+		if (FALSE == is_match) goto donext;
 
       is_positive = gnc_numeric_positive_p (split->amount);
       if ((want_positive && is_positive) ||
