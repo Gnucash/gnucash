@@ -9,7 +9,6 @@ define(`account', `gncAccount, Account, Account,
        accountName,    , char *, xaccAccountGetName(ptr),
        accountCode,    , char *, xaccAccountGetCode(ptr),
        description,    , char *, xaccAccountGetDescription(ptr),
-       notes,          , char *, xaccAccountGetNotes(ptr),
        type,           , char *, xaccAccountTypeEnumAsString(xaccAccountGetType(ptr)),
        commodity,      , char *, gnc_commodity_get_unique_name(xaccAccountGetCommodity(ptr)),
        version,        , int32,  xaccAccountGetVersion(ptr),
@@ -244,7 +243,7 @@ pgendStoreOne`'func_name($@)`'Only (PGBackend *be,
 define(`compare_one_only', 
 `
 /* ------------------------------------------------------ */
-/* This routine returns a positive int if the indicated transaction
+/* This routine returns a positive int if the indicated object
  * differs from that in the SQL database.  It returns negative
  * number if theres an error.
  * It does not do any traversals, it does not lock.  
@@ -320,7 +319,7 @@ pgendPutOne`'func_name($@)`'Only (PGBackend *be, xacc_type($@) *ptr)
 define(`compare_version', 
 `
 /* ------------------------------------------------------ */
-/* This routine compares the version number of the account in 
+/* This routine compares the version number of the object in 
  * the engine and the sql database. It returns a negative 
  * number if the sql version is older (or the item is not 
  * present in the sql db). It returns a positive number

@@ -28,7 +28,6 @@ CREATE TABLE gncAccountTrail (
 	accountName 	TEXT NOT NULL CHECK (accountName <> ''),
 	accountCode 	TEXT,
 	description 	TEXT,
-	notes	 	TEXT,
 	type		TEXT NOT NULL,
 	commodity	TEXT NOT NULL CHECK (commodity <>''),
 	version		INT4 NOT NULL
