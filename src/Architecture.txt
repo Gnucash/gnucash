@@ -71,10 +71,16 @@ GnuCash
 -------
 "GnuCash" (src/motif, src/gnome, src/qt) is the main GUI application.  It
 consists of a collection of miscellaneous GUI code to glue together all of the
-peices above into a coherent, point-and-click whole.   Currently, the Motif
-interface is the only operational interface.   The gtk code compiles, but most
-of the functions are not wired in.  The Qt code won't copmpile, most-all
-functions are missing.
+pieces above into a coherent, point-and-click whole.   It is meant to be
+easy to use and intuitive to the novice user without sacraficing the power
+and flexibility that a professional might expect.    When people say that
+GnuCash is trying to be a "Quicken/MSMoney look/work/act-alike", this is 
+the piece that they are refering to.  It really is meant to be a personal-finance
+manager with enough power for the power user and the ease of use for the beginer.
+
+Currently, the Motif interface is the only operational interface.   The gtk 
+code compiles, but most of the functions are not wired in.  The Qt code won't 
+copmpile, most-all functions are missing.
 
 
 
