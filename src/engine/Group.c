@@ -515,6 +515,66 @@ xaccGroupGetNextFreeCode (AccountGroup *grp, int digits)
 
 /********************************************************************\
 \********************************************************************/
+/* almost identical code to above, but altered to deal with 
+ * specified account */
+
+char *
+xaccAccountGetNextChildCode (Account *parent_acc, int digits)
+{
+  Account *acc;
+  int i, maxcode = 0;
+  char * retval;
+  AccountGroup *grp;
+
+  if (!parent_acc) return NULL;
+
+  /* count levels to top */
+  acc = parent_acc;
+  while (acc) {
+    digits --;
+    assert (acc->parent);   /* all acounts must be in a group */
+    acc = acc->parent->parent;
+  }
+
+  /* if (0>digits)  we could insert a decimal place, but I am too lazy
+   * to write this code.  It doesn't seem important at the moment ... */
+
+  /* find the largest used code */
+  acc = parent_acc;
+  if (acc) {
+     if (acc->accountCode) {
+        maxcode = strtol (acc->accountCode, NULL, BASE);
+     }
+  }
+  grp = parent_acc->children;
+  if (grp) {
+     for (i=0; i<grp->numAcc; i++) {
+        Account *acnt = grp->account[i];
+        if (acnt->accountCode) {
+           int code = strtol (acnt->accountCode, NULL, BASE);
+           if (code > maxcode) maxcode = code;
+        }
+     }
+  }
+
+  /* right-shift */
+  for (i=1; i<digits; i++) {
+     maxcode /= BASE;
+  }
+  maxcode ++;
+
+  /* left-shift */
+  for (i=1; i<digits; i++) {
+     maxcode *= BASE;
+  }
+
+  /* print */
+  retval = ultostr ((unsigned long) maxcode, BASE);
+  return retval;
+}
+
+/********************************************************************\
+\********************************************************************/
 
 void
 xaccGroupDepthAutoCode (AccountGroup *grp)

@@ -147,8 +147,11 @@ Account * xaccGroupGetAccount (AccountGroup *, int);
 double    xaccGroupGetBalance (AccountGroup *);
 
 /*
- * The xaccGroupNextFreeCode() method will try to guess a reasonable 
+ * The xaccGroupGetNextFreeCode() method will try to guess a reasonable 
  *    candidate for the next unused account code in this group.
+ *
+ * The xaccAccountGetNextChildCode() method does same as above,
+ *    except that it returns a value appropriate for a child account.
  *
  * The xaccGroupAutoCode() method will traverse the group, automatically
  *    inserting account codes into those accounts whose account codes 
@@ -161,6 +164,7 @@ double    xaccGroupGetBalance (AccountGroup *);
  */
 
 char * xaccGroupGetNextFreeCode (AccountGroup *grp, int num_digits);
+char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
 void   xaccGroupAutoCode (AccountGroup *grp, int num_digits);
 void   xaccGroupDepthAutoCode (AccountGroup *grp);
 
