@@ -10,3 +10,4 @@ test-customer
 test-employee
 test-job
 test-vendor
+test-load-module
