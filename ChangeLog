@@ -2357,6 +2357,166 @@
 -=-=-=- cvs HEAD ChangeLog is below this line -=-=-=-
 
 
+2004-01-16  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: fix a typo in the help (was --diable-gui).  Fixes #131414
+
+	* configure.in: add db-4.2 to the list of databases we search.
+	  We probably need a better mechanism to search for a working db
+	  library, like defining our own macro and just supplying a list.
+	  We probably can get rid of the prefer-db1 option as well, maybe?
+	  Fixes #131506
+
+2004-01-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/options.scm: Create two new functions to centralize
+	  date-selection option creation.
+	* src/app-utils/app-utils.scm: export the new scheme functions
+	* src/app-utils/prefs.scm: Modify Herbert's patch to centralize
+	  the date-selection option code.
+	* src/report/report-system/options-utilities.scm: use the new
+	  centralized date-selection option-creation code.
+
+2004-01-13  Herbert Thoma  <herbie@hthoma.de>
+
+	* src/app-utils/global-options.c:
+	* src/app-utils/global-options.h: add gnc_lookup_date_option()
+	  function
+	* src/app-utils/gnc-ui-util.c:
+	* src/app-utils/gnc-ui-util.h: add 
+	  gnc_ui_account_get_balance_in_currency() function
+	* src/app-utils/prefs.scm: add preferences for summarybar
+	* src/engine/Account.c:
+	* src/engine/Account.h: add 
+	  xaccAccountConvertBalanceToCurrencyAsOfDate() function
+	* src/gnome/window-main-summarybar.c: summarybar can now display
+	  a grand total of all commodities, profits of a period of time
+	  and net assets at the end of the period; summarybar can be
+	  configured with some options under edit->preferences
+
+2004-01-13  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c, gnc-hbci-utils.c: Add
+	workaround code for openhbci/chipcard problem.
+
+2004-01-12  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/file-utils.[ch]:  add gnc_getline() function
+	  to read an unlimited line-length from a file (so you're
+	  not limited to a buffer size with fgets() and the like).
+	  It is similar to the getline(3) on Linux except the API
+	  is different and it will always set the return string.
+
+	* src/doc/Makefile.am: add new documentation: generic-druid-framework.txt
+	* src/doc/generic-druid-framework.txt: new documentation
+
+	* src/import-export/csv/gnc-csv2glist.[ch]: add file from Kevin Hammack
+	  to parse CSV files.
+	* src/import-export/csv/test/test.csv:  a test CSV file
+
+2004-01-07  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Transaction.h: fix the xaccTransOrder() documentation
+	  to be more accurate with the actual implementation.
+
+	* src/doc/Makefile.am:
+	* src/doc/qif.txt:
+	  Add new qif importer documentation to the repository/dist
+
+2004-01-06  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofinstance.c: revert fix from 01-01, because it's wrong.
+	  Fix the actual problem, all the ...ReturnGUID() #define's which
+	  don't check that it's passed a NULL value.
+	* src/engine/Transaction.h:
+	* src/engine/Account.h:
+	  Fix ...ReturnGUID() to check whether it was passed a NULL object
+	  and, if so, return the null GUID instead of crashing.
+	* src/business/business-core/gncCustomer.h:
+	* src/business/business-core/gncEmployee.h:
+	* src/business/business-core/gncInvoice.h:
+	* src/business/business-core/gncJob.h:
+	* src/business/business-core/gncTaxTable.h:
+	* src/business/business-core/gncVendor.h:
+	  Fix ...RetGUID() to check whether it was passed a NULL object
+	  and, if so, return the null GUID instead of crashing.
+	
+	* README.cvs: make it even more explicit that you should not run configure
+	* src/engine/Makefile.am: remove the circular dependency I added earlier
+	* src/engine/gw-engine-spec.scm: don't include gnc-engine-util.h (it's
+	  not required and may break things).
+	* src/engine/gnc-trace.[ch]: move gnc_should_log() out of the .h
+	  and into the .c (making it a function instead of an array) due
+	  to symbol problems with libgw-engine.  With it the other way the
+	  test-account-create test was throwing an error about an
+	  undefined symbol (gnc_log_modules).
+	  NOTE: If you don't like this de-optimization then feel free to remove
+	  all the P*() calls from engine-helpers.c and then revert gnc-trace.
+	  Or you can find another way around the undefined symbol problem.
+	* src/doc/Makefile.am: include guid.txt in the dist
+
+2004-01-02  Derek Atkins  <derek@ihtfp.com>
+
+	* README.patches:
+	* make-gnucash-patch.in:
+	  Patch by Geoff Kassel to work on OpenBSD (allow user to set diffcmd)
+	Fixes #122646
+
+	* src/business/business-core/gncInvoice.c: need a non-const string
+	* src/engine/test/Makefile.am: add test-link, make libgw-engine
+	  depend on libgncmod-engine
+	* src/engine/test/test-link.c: add a source-file to test-link
+	
+	* src/engine/test-core/test-engine-stuff.c: don't test double
+	  KVPs, on the theory that they will soon be deprecated.
+	Fixes #127315
+	
+	* src/engine/test-core/test-engine-stuff.c: random queries only
+	  get up to 3 terms, not 4
+	* src/app-utils/test/test-scm-query-string.c: loop the test 1000
+	  times, now that the queries are smaller.
+	Fixes #127492
+
+	* src/business/business-core/gncInvoice.c: set the lot title to
+	  "<Invoice Type> <Invoice ID>" (e.g., "Invoice 000001" or
+	  "Bill I2-34") when posting an invoice.  We already assume
+	  one invoice to a lot.
+
+	* src/business/business-reports/aging.scm:  When computing the aging
+	  report, ignore splits that belong to closed lots.  This way we wont
+	  get the wrong values when the invoice falls outside the 360-day
+	  window but its payment falls inside the window.
+
+2004-01-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofinstance.c: return a "valid" GUID even if passed a NULL
+	  object, because lots of code assumes you can get a guid all the time.
+	  So, just return guid_null() instead of NULL.  Fixes a SEGV.
+
+2003-12-23  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/gnc-trace.c: Patch enabling compilation on Mac OS X
+	by Rich Johnson <rich@dogstar-interactive.com>: Some platforms
+	define timeval data members as "int".  Explicitly casting to "long
+	int" for "%ld" directive avoids type mismatch.
+
+2003-12-22  Christian Stimming  <stimming@tuhh.de>
+
+	* accounts/tr_TR/*.xea: Added Turkish account templates by
+	A. Alper Atici <alper_atici@yahoo.com>
+
+	* accounts/hu_HU/*xea: Hungarian account templates by Sulyok Peter
+	<sp@elte.hu>
+
+	* src/engine/gnc-trace.h: Fix for gcc2.95 for macros with variable
+	arguments by Lionel Elie Mamane <lionel@mamane.lu>.
+
+2003-12-18  Herbert Thoma  <herbie@hthoma.de>
+
+	* src/gnome/dialog-price-editor.c: when the commodity is changed,
+	then set the currency to the currency of the last price entered
+	for this commodity
+
 2003-12-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/reconcile-list.c: make sure to verify that the items
