@@ -558,6 +558,14 @@ value.  It is meant to be a short descriptive phrase.")
 
 (gw:wrap-function
  ws
+ 'gnc:transaction-order
+ '<gw:int>
+ "xaccTransOrder"
+ '((<gnc:Transaction*> ta) (<gnc:Transaction*> tb))
+ "Return an integer for ta,tb ordering.  <0 is ta is before tb, >0 if ta is after tb")
+
+(gw:wrap-function
+ ws
  'gnc:split-void-former-amount
  '<gnc:numeric>
  "xaccSplitVoidFormerAmount"
