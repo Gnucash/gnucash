@@ -297,7 +297,6 @@ src/gnome-search/search-date.c
 src/gnome-search/search-double.c
 src/gnome-search/search-int64.c
 src/gnome-search/search-numeric.c
-src/gnome-search/search-param.c
 src/gnome-search/search-string.c
 src/gnome-search/search.glade
 src/gnome-search/search-reconciled.c
@@ -336,6 +335,7 @@ src/gnome-utils/dialog-account-pick.c
 src/gnome-utils/exchange-dialog.glade
 src/gnome-utils/dialog-transfer.c
 src/gnome-utils/QuickFill.c
+src/gnome-utils/search-param.c
 src/import-export/binary-import/test/test-link-module.c
 src/import-export/binary-import/binary-import.glade
 src/import-export/binary-import/druid-commodity.c
