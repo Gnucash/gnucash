@@ -66,18 +66,19 @@ static void
 gnc_book_clear_error (GNCBook *book)
 {
   book->last_err = ERR_BACKEND_NO_ERR;
-  if(book->error_message)
-  {
-      g_free(book->error_message);
-      book->error_message = NULL;
-  }
+  g_free(book->error_message);
+  book->error_message = NULL;
 }
 
 void
-gnc_book_push_error (GNCBook *book, GNCBackendError err, char *message)
+gnc_book_push_error (GNCBook *book, GNCBackendError err, const char *message)
 {
+  if (!book) return;
+
+  g_free (book->error_message);
+
   book->last_err = err;
-  book->error_message = message;
+  book->error_message = g_strdup (message);
 }
 
 GNCBackendError

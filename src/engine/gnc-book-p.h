@@ -95,7 +95,8 @@ void gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db);
 
 void gnc_book_mark_saved(GNCBook *book);
 
-void gnc_book_push_error (GNCBook *book, GNCBackendError err, char *message);
+void gnc_book_push_error (GNCBook *book, GNCBackendError err,
+                          const char *message);
 
 Backend* gncBackendInit_file(const char *book_id, void *data);
 

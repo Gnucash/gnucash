@@ -62,9 +62,10 @@ static void
 file_book_begin(Backend *be_start, GNCBook *book, const char *book_id, 
                 gboolean ignore_lock, gboolean create_if_nonexistent)
 {
+    FileBackend* be;
     char *dirname;
     char *p;
-    FileBackend* be;
+
     ENTER (" ");
 
     be = (FileBackend*)be_start;
@@ -73,7 +74,7 @@ file_book_begin(Backend *be_start, GNCBook *book, const char *book_id,
     /* Make sure the directory is there */
 
     dirname = g_strdup (book->fullpath);
-    be->fullpath = book->fullpath;
+    be->fullpath = g_strdup (book->fullpath);
     p = strrchr (dirname, '/');
     if (p && p != dirname)
     {
