@@ -1,3 +1,11 @@
+2002-11-14  Christian Stimming  <stimming@tuhh.de>
+
+	* po/*.po: Updated translations (merged from 1.6 branch plus
+	updates from the Translation Project).
+
+	* po/nb.po: New filename for norwegian (bokmal) translation -- it
+	used to be stored under no.po but that is no longer.
+
 2002-11-13  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c: 
 	-Don't show match with probability less than 1, so we don't
