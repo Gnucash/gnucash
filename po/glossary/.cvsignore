@@ -3,4 +3,4 @@
 *.mo
 Makefile
 Makefile.in
-glossary.pot
+*.pot
