@@ -1833,6 +1833,8 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
    trans->date_posted.tv_sec = secs;
    trans->date_posted.tv_nsec = 0;
 
+   MarkChanged (trans);
+
    /* Because the date has changed, we need to make sure that each of the
     * splits is properly ordered in each of their accounts.  We could do that
     * here, simply by reinserting each split into its account.  However, in
@@ -1850,6 +1852,8 @@ xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
 
    trans->date_entered.tv_sec = secs;
    trans->date_entered.tv_nsec = 0;
+
+   MarkChanged (trans);
 }
 
 void
@@ -1865,6 +1869,8 @@ xaccTransSetDateTS (Transaction *trans, const Timespec *ts)
 
    trans->date_posted.tv_sec = ts->tv_sec;
    trans->date_posted.tv_nsec = ts->tv_nsec;
+
+   MarkChanged (trans);
 }
 
 void
@@ -1875,6 +1881,8 @@ xaccTransSetDateEnteredTS (Transaction *trans, const Timespec *ts)
 
    trans->date_entered.tv_sec = ts->tv_sec;
    trans->date_entered.tv_nsec = ts->tv_nsec;
+
+   MarkChanged (trans);
 }
 
 void
@@ -1895,6 +1903,8 @@ xaccTransSetDateToday (Transaction *trans)
    gettimeofday (&tv, NULL);
    trans->date_posted.tv_sec = tv.tv_sec;
    trans->date_posted.tv_nsec = 1000 * tv.tv_usec;
+
+   MarkChanged (trans);
 
    PINFO ("addr=%p set date to %lu %s \n",
           trans, tv.tv_sec, ctime ((time_t *)&tv.tv_sec));
@@ -1945,6 +1955,7 @@ xaccTransSetNotes (Transaction *trans, const char *notes)
   {
     kvp_frame_set_slot (xaccTransGetSlots (trans), "notes", new_value);
     kvp_value_delete (new_value);
+    MarkChanged (trans);
   }
   else
   {
