@@ -554,7 +554,18 @@ gnc_price_list_equal(GList *prices1, GList *prices2)
   GList *n1, *n2;
 
   if (prices1 == prices2) return TRUE;
-  if (g_list_length (prices1) != g_list_length (prices2)) return FALSE;
+
+  if (g_list_length (prices1) < g_list_length (prices2))
+  {
+    PWARN ("prices2 has extra prices");
+    return FALSE;
+  }
+
+  if (g_list_length (prices1) > g_list_length (prices2))
+  {
+    PWARN ("prices1 has extra prices");
+    return FALSE;
+  }
 
   for (n1 = prices1, n2 = prices2; n1 ; n1 = n1->next, n2 = n2->next)
     if (!gnc_price_equal (n1->data, n2->data))
@@ -575,12 +586,33 @@ gnc_price_list_equal(GList *prices1, GList *prices2)
 
  */
 
+static guint
+commodity_hash (gconstpointer key)
+{
+  gnc_commodity * com = (gnc_commodity *) key;
+
+  g_return_val_if_fail (key, 0);
+
+  return g_str_hash (gnc_commodity_get_unique_name (com));
+}
+
+static gint
+commodity_equal (gconstpointer a, gconstpointer b)
+{
+  gnc_commodity * ca = (gnc_commodity *) a;
+  gnc_commodity * cb = (gnc_commodity *) b;
+
+  g_return_val_if_fail (a && b, FALSE);
+
+  return gnc_commodity_equiv (ca, cb);
+}
+
 GNCPriceDB *
 gnc_pricedb_create(void)
 {
   GNCPriceDB * result = g_new0(GNCPriceDB, 1);
   result->backend = NULL;
-  result->commodity_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
+  result->commodity_hash = g_hash_table_new(commodity_hash, commodity_equal);
   g_return_val_if_fail (result->commodity_hash, NULL);
   return result;
 }
@@ -718,7 +750,12 @@ gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2)
   GNCPriceDBEqualData equal_data;
 
   if (db1 == db2) return TRUE;
-  if (!db1 || !db2) return FALSE;
+
+  if (!db1 || !db2)
+  {
+    PWARN ("one is NULL");
+    return FALSE;
+  }
 
   equal_data.equal = TRUE;
   equal_data.db2 = db2;
@@ -762,7 +799,7 @@ add_price(GNCPriceDB *db, GNCPrice *p)
 
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
   if(!currency_hash) {
-    currency_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
+    currency_hash = g_hash_table_new(commodity_hash, commodity_equal);
     g_hash_table_insert(db->commodity_hash, commodity, currency_hash);
   }
 
