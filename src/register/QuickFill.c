@@ -46,6 +46,9 @@ static void quickfill_insert_recursive (QuickFill *qf, const char *text,
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
+/* A cache for quickfill strings */
+GCache * qf_string_cache = NULL;
+
 
 /********************************************************************\
 \********************************************************************/
@@ -70,6 +73,13 @@ QuickFill *
 gnc_quickfill_new (void)
 {
   QuickFill *qf;
+
+  if (qf_string_cache == NULL)
+  {
+    qf_string_cache = g_cache_new((GCacheNewFunc) g_strdup, g_free,
+                                  (GCacheDupFunc) g_strdup, g_free,
+                                  g_str_hash, g_str_hash, g_str_equal);
+  }
 
   qf = g_new (QuickFill, 1);
 
@@ -97,7 +107,8 @@ gnc_quickfill_destroy (QuickFill *qf)
   g_hash_table_destroy (qf->matches);
   qf->matches = NULL;
 
-  g_free(qf->text);
+  if (qf->text)
+    g_cache_remove (qf_string_cache, qf->text);
   qf->text = NULL;
 
   g_free(qf);
@@ -243,7 +254,7 @@ quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
       /* If there's no string there already, just put the new one in. */
       if (old_text == NULL)
       {
-        match_qf->text = g_strdup (text);
+        match_qf->text = g_cache_insert (qf_string_cache, (gpointer) text);
         break;
       }
 
@@ -252,8 +263,8 @@ quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
           (strncmp(text, old_text, strlen(old_text)) == 0))
         break;
 
-      g_free (old_text);
-      match_qf->text = g_strdup (text);
+      g_cache_remove (qf_string_cache, old_text);
+      match_qf->text = g_cache_insert (qf_string_cache, (gpointer) text);
       break;
   }
 
