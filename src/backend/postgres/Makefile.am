@@ -48,8 +48,7 @@ EXTRA_DIST = \
   table-version.sql \
   demo.c 
 
-INCLUDES = -I.. -I../.. -I../../engine -I../../gnc-module
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
+CFLAGS = @CFLAGS@ -I.. -I../.. -I../../engine -I../../gnc-module ${GLIB_CFLAGS}
 
 # Some of the required C files are built with the m4 pre-processor
 # As a result, we need to manually specify dependencies, clean targets.
