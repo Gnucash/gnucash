@@ -33,6 +33,7 @@ EXTRA_DIST = \
   HACKING \
   README.patches \
   gnucash.lsm \
+  gnucash-config.in \
   make-gnucash-patch.in \
   make-gnucash-potfiles.in \
   po/.cvsignore \
@@ -40,6 +41,12 @@ EXTRA_DIST = \
   po/glossary/de.po \
   po/glossary/gnc-glossary.txt \
   po/glossary/txt-to-pot.sh
+
+
+bin_SCRIPTS = gnucash-config
+
+BUILT_SOURCES = gnucash-config
+CLEANFILES += gnucash-config
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
@@ -56,6 +63,14 @@ make-gnucash-potfiles: make-gnucash-potfiles.in
 	rm -f $@.tmp
 	sed < $@.in > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g'
+	chmod +x $@.tmp
+	mv $@.tmp $@
+
+gnucash-config: gnucash-config.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+            -e 's:@-VERSION-@:${VERSION}:g' \
+            -e 's:@-GNC_INCLUDE_DIR-@:${GNC_INCLUDE_DIR}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 

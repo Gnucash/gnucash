@@ -17,6 +17,7 @@ config.h.in
 cscope.out
 cscope.files
 etags.files
+gnucash-config
 install-sh
 intl
 libtool
