@@ -4,36 +4,59 @@ Accounting Engine
 
 Quick Overview
 --------------
-The fundamental accounting unit is a "split". Each split stores
-a (monetary) value, a memo, and a pointer to the "credited" account.
-The term "credited" here is arbitrary, as the value can be 
-positive or negative.
+The fundamental accounting unit is a "journal entry".  Each entry consists
+of a quantity (number of dollar bills, number of shares, etc.), the
+price of that quantity (the price of one dollar is 1.00 dollars, etc.)
+a memo, a pointer to the "credited" account, a reconciled flag and timestamp, 
+an "action" field, and a pointer to any additional generic data.   Because 
+the word "entry" has many other meanings, the remainder of the documentation, 
+and the code, refers to it as a "split".  So when you see "Split", think "Journal
+Entry".
 
 The notion of "double entry" is embodied in the "transaction" structure.
-The transaction consists of a date, a single "source split" and zero
-or more "destination splits".  Again, the notion of "source" and
-"destination" are arbitrary, as the value stored in the split can be 
-positive or negative.
+The transaction consists of a date, a description field, a number, and
+a list of one or more "splits".  When double-entry rules are properly 
+enabled in the engine (they are settable with various flags), the sum-total
+value of all of the splits is forced to be zero.  Note that if there
+is just one split, its value must be zero; this is useful because a 
+zero-valued split can store a price (useful for e.g. tracking stocks).
+If there are two splits, then the value of one must be positive, the
+other negative: this denotes that one account is credited, and another
+is debited by an equal amount.  It is this very forcing of the splits to
+add up to zero that causes a double-entry accounting system to always
+automatically balance.  
 
-If a transaction has one or more "dest_splits", then the sum of 
-the destination-split values *must* equal the value of the source-split.
-This equality is what forces a double-entry accounting system to
-balance.
+Through various flags, double-entry can be disabled; this is often 
+desirable for novice, home-oriented users. As an alternative, it may be
+better to leave double-entry enabled, but credit all dangling splits 
+to some dummy account, and then simply not show that dummy account to 
+the user.
 
-A transaction may have zero "destination-splits".  If the transaction value
-is non-zero, then by definition, the system as a whole cannot balance.
-Many simple, home-oriented non-double-entry systems will allow
-non-balancing transactions, as these are simpler to comprehend for the 
-casual home user.
+Note that the sum of the values of the splits is always computed with respect to 
+a currency; thus splits can be balanced even when they are in different
+currencies, as long as they share a common currency.  The conversion price
+is simply the rpice stored in the split.  This feature allows currency-trading 
+accounts to be established.
 
 Every split must point at its parent transaction, and that transaction
-must in turn point back at the split.   A split can belong to at most
-one transaction.
+must in turn include that split in its list of splits.   A split can 
+belong to at most one transaction.  This relationship is forced by the engine.
+The engine user cannnot accidentally destroy this relationship as long as they
+stick to using the API, and never accessing internal structures directly.
 
 Splits are grouped into "accounts". Each account consists of a list of 
 splits that credit (debit) that account.   To ensure consistency, 
 if a split points at an account, then the account must point at the 
 split, and vice-versa.  A split can belong to at most one account.
+Besides merely containing a list of splits, the account structure
+also gives the account a name, a code number, description and notes fields,
+a place to store general info, a pointer to the currency that is used
+for all splits in this account, and a pointer to the "security" used 
+for all splits in this account.  The "security" can be the name of a stock
+(e.g. "IBM", "McDonald's"), or another currency (e.g. "Yen", "Franc"). 
+The security is used during split balancing to enable trading between 
+accounts denominated in different currencies, or to, for example, move 
+stocks from one account to another.
 
 Accounts can be arranged in a heirarchical tree.  The nodes of the 
 tree are called "Account Groups".  By accounting convention, the 
@@ -67,9 +90,11 @@ Currency accounts should use a share price of 1.0 for all splits.
 To maintain the double-entry consistency, one must have the following
 hold true:
 
-   0.0 == 
-   (source_split->damount) * (source_split->share_price) +
-   sum of all ((dest_split->damount) * (dest_split->share_price))  
+   0.0 == sum of all split values.
+
+If all splits are in the same currency, then this becomes:
+
+   0.0 == sum of all ((split->damount) * (split->share_price))  
 
 Thus, for example, the purchase of shares can be represented as:
 
@@ -79,6 +104,26 @@ Thus, for example, the purchase of shares can be represented as:
    destination:
    credit PQR Stock for $1000 (100 shares at $10 per share)
    credit StockBroker category $45 in fees
+
+If the splits are in mixed currencies and securities, then there must
+be at least one common currency/security between all of them.  Thus, 
+for example:
+
+   source:
+   debit ABC Bank for $1045  (1045 dollars * dollar "price" of 1.00)
+   
+   destination:
+   credit VolkTrader for 2000 DM (1000 dollars at 2.0 mark per dollar)
+   credit Fees category $45 in fees
+
+If the "currency" field is set to "DM" for the VolksTrader account, 
+and the "security" field is set to "USD", while the currency for ABC bank is
+"USD", then the balancing equation becomes: 
+
+0.0 = 1045 * $1.00 - $1000 - 45 * $1.00
+
+Note that we ignored the price when adding the second split.
+
 
 
 Error Reporting
@@ -219,14 +264,14 @@ The very first date that it was recn'ed?
 
 
 
-
-
-
 Remaining Work Items
 --------------------
 The date handling functions need to be replaced with something that
-handles time, down to milliseconds.  I know millisecssounds stupid, but
+handles time, down to milliseconds.  I know millisecs sounds stupid, but
 big banks use this for various consistency reasons.
+
+To find other remaining work items in the code, grep for the string 
+"hack alert".
 
 
 
