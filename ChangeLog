@@ -1,3 +1,8 @@
+2003-11-16  Linas Vepstas <linas@linas.org>
+
+	* src/doc/guid.txt: add document debating issues of guid usage in
+	  the closing of books.
+
 2003-11-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/advanced-portfolio.scm:
