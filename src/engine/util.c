@@ -832,6 +832,20 @@ double xaccParseAmount (const char * instr, gncBoolean monetary)
       isneg = GNC_T;
       str++;
    }
+   /* also accept (num) as negative */
+   else if (*str == '(') {
+     /* go to end of string */
+     for (tok = str; *tok != '\0'; tok++)
+       ;
+     tok--;
+
+     if (*tok != ')')
+       return 0.0;
+
+     isneg = GNC_T;
+     *str++;
+     *tok = '\0';
+   }
 
    if (*str == '\0') return 0.0;
 

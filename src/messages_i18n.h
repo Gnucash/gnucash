@@ -44,6 +44,8 @@
 
 #else                                 /* Not HAVE_GETTEXT */
 
+#undef _
+
 #define _(String)       (String)
 #define gettext(String) (String)
 

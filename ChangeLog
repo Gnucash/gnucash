@@ -1,3 +1,9 @@
+2000-10-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/util.c (xaccParseAmount): interpret (NUM) as -NUM.
+
+	* src/register/pricecell.c: allow '(' and ')' in the price cells.
+
 2000-10-22  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-find-transactions.c: use the standard date
