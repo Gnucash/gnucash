@@ -41,12 +41,13 @@
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
 
+#include "gncEntry.h"
 #include "gncTaxTableP.h"
 #include "gnc-tax-table-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncObject.h"
-#include "gncEntry.h"
+#include "qofobject.h"
+#include "qofinstance.h"
 
 #define _GNC_MOD_NAME	GNC_TAXTABLE_MODULE_NAME
 
@@ -74,7 +75,8 @@ static void
 maybe_add_guid (xmlNodePtr ptr, const char *tag, GncTaxTable *table)
 {
   if (table)
-    xmlAddChild (ptr, guid_to_dom_tree (tag, gncTaxTableGetGUID (table)));
+    xmlAddChild (ptr, guid_to_dom_tree (tag, 
+            qof_instance_get_guid(QOF_INSTANCE(table))));
 }
 
 static xmlNodePtr
@@ -457,7 +459,7 @@ static int
 taxtable_get_count (GNCBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
@@ -477,7 +479,7 @@ xml_add_taxtable (gpointer table_p, gpointer out_p)
 static void
 taxtable_write (FILE *out, GNCBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_taxtable, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_taxtable, (gpointer) out);
 }
 
 
@@ -619,7 +621,7 @@ taxtable_reset_refcount (gpointer key, gpointer value, gpointer notused)
 
   if (count != gncTaxTableGetRefcount(table) && !gncTaxTableGetInvisible(table)) {
     PWARN("Fixing refcount on taxtable %s (%lld -> %d)\n",
-	  guid_to_string(gncTaxTableGetGUID(table)),
+	  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(table))),
 	  gncTaxTableGetRefcount(table), count)
       gncTaxTableSetRefcount(table, count);
   }
@@ -633,17 +635,17 @@ taxtable_scrub (GNCBook *book)
   GncTaxTable *parent, *table;
   GHashTable *ht = g_hash_table_new(g_direct_hash, g_direct_equal);
 
-  gncObjectForeach (GNC_ENTRY_MODULE_NAME, book, taxtable_scrub_entries, ht);
-  gncObjectForeach (GNC_CUSTOMER_MODULE_NAME, book, taxtable_scrub_cust, ht);
-  gncObjectForeach (GNC_VENDOR_MODULE_NAME, book, taxtable_scrub_vendor, ht);
-  gncObjectForeach (_GNC_MOD_NAME, book, taxtable_scrub_cb, &list);
+  qof_object_foreach (GNC_ENTRY_MODULE_NAME, book, taxtable_scrub_entries, ht);
+  qof_object_foreach (GNC_CUSTOMER_MODULE_NAME, book, taxtable_scrub_cust, ht);
+  qof_object_foreach (GNC_VENDOR_MODULE_NAME, book, taxtable_scrub_vendor, ht);
+  qof_object_foreach (_GNC_MOD_NAME, book, taxtable_scrub_cb, &list);
 
   /* destroy the list of "grandchildren" tax tables */
   for (node = list; node; node = node->next) {
     table = node->data;
 
     PINFO ("deleting grandchild taxtable: %s\n",
-	   guid_to_string(gncTaxTableGetGUID(table)));
+	   guid_to_string(qof_instance_get_guid(QOF_INSTANCE(table))));
 
     /* Make sure the parent has no children */
     parent = gncTaxTableGetParent(table);
@@ -674,7 +676,7 @@ gnc_taxtable_xml_initialize (void)
     taxtable_scrub,
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }

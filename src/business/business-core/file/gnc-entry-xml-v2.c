@@ -49,7 +49,8 @@
 #include "gnc-owner-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncObject.h"
+#include "qofinstance.h"
+#include "qofobject.h"
 
 #define _GNC_MOD_NAME	GNC_ENTRY_MODULE_NAME
 
@@ -170,7 +171,7 @@ entry_dom_tree_create (GncEntry *entry)
     taxtable = gncEntryGetInvTaxTable (entry);
     if (taxtable)
       xmlAddChild (ret, guid_to_dom_tree (entry_itaxtable_string,
-					  gncTaxTableGetGUID (taxtable)));
+					  qof_instance_get_guid (QOF_INSTANCE(taxtable))));
 
     /* vendor bills */
 
@@ -203,7 +204,7 @@ entry_dom_tree_create (GncEntry *entry)
     taxtable = gncEntryGetBillTaxTable (entry);
     if (taxtable)
       xmlAddChild (ret, guid_to_dom_tree (entry_btaxtable_string,
-					  gncTaxTableGetGUID (taxtable)));
+					  qof_instance_get_guid (QOF_INSTANCE(taxtable))));
 
     /* Other stuff */
 
@@ -794,7 +795,7 @@ static int
 entry_get_count (GNCBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
@@ -819,7 +820,7 @@ xml_add_entry (gpointer entry_p, gpointer out_p)
 static void
 entry_write (FILE *out, GNCBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_entry, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_entry, (gpointer) out);
 }
 
 void
@@ -835,7 +836,7 @@ gnc_entry_xml_initialize (void)
     NULL,			/* scrub */
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }

@@ -138,7 +138,7 @@ customer_dom_tree_create (GncCustomer *cust)
     taxtable = gncCustomerGetTaxTable (cust);
     if (taxtable)
       xmlAddChild (ret, guid_to_dom_tree (cust_taxtable_string,
-					  gncTaxTableGetGUID (taxtable)));
+					  qof_instance_get_guid(QOF_INSTANCE(taxtable))));
 
     kvpnode = kvp_frame_to_dom_tree (cust_slots_string, 
                  qof_instance_get_slots (QOF_INSTANCE(cust)));

@@ -11,10 +11,12 @@ typedef struct _gncTaxTable GncTaxTable;
 typedef struct _gncTaxTableEntry GncTaxTableEntry;
 typedef struct _gncAccountValue GncAccountValue;
 
-#include "gnc-numeric.h"
-#include "gnc-book.h"
-#include "gnc-date.h"
 #include "Account.h"
+#include "gnc-date.h"
+#include "gnc-numeric.h"
+
+#include "qofbook.h"
+#include "qofinstance.h"
 
 #define GNC_TAXTABLE_MODULE_NAME "gncTaxTable"
 
@@ -67,8 +69,6 @@ GncTaxTable *gncTaxTableLookup (QofBook *book, const GUID *guid);
 GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name);
 GList * gncTaxTableGetTables (QofBook *book);
 
-const GUID *gncTaxTableGetGUID (GncTaxTable *table);
-QofBook *gncTaxTableGetBook (GncTaxTable *table);
 const char *gncTaxTableGetName (GncTaxTable *table);
 GncTaxTable *gncTaxTableGetParent (GncTaxTable *table);
 GncTaxTable *gncTaxTableReturnChild (GncTaxTable *table, gboolean make_new);
@@ -109,5 +109,8 @@ gnc_numeric gncAccountValueTotal (GList *list);
 /* Destroy a list of accountvalues */
 void gncAccountValueDestroy (GList *list);
 
+
+/** deprecated routine */
+#define gncTaxTableGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 
 #endif /* GNC_TAXTABLE_H_ */

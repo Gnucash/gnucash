@@ -153,6 +153,7 @@ void gncCustomerDestroy (GncCustomer *cust)
 {
   if (!cust) return;
   cust->inst.do_free = TRUE;
+  // ??? why not?? gncBusinessSetDirtyFlag (table->book, _GNC_MOD_NAME, TRUE);
   gncCustomerCommitEdit (cust);
 }
 
@@ -168,7 +169,6 @@ static void gncCustomerFree (GncCustomer *cust)
   gncAddressDestroy (cust->addr);
   gncAddressDestroy (cust->shipaddr);
   g_list_free (cust->jobs);
-  qof_instance_release (&cust->inst);
 
   remObj (cust);
 
@@ -177,6 +177,7 @@ static void gncCustomerFree (GncCustomer *cust)
   if (cust->taxtable)
     gncTaxTableDecRef (cust->taxtable);
 
+  qof_instance_release (&cust->inst);
   g_free (cust);
 }
 
