@@ -3,8 +3,8 @@
 <ARTHEADER>
 <TITLE>Depreciation and Capital Gains</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE>Depreciation and Capital Gains</TITLE>
+<!-- <SECT1> -->
+<!-- <TITLE>Depreciation and Capital Gains</TITLE> -->
 <PARA>
 If you hold assets for business purposes, thier decline in value over
 time can be treated as a deduction for tax purposes, called
@@ -67,7 +67,7 @@ case, you must recognize -- for tax purposes -- what are called
 </ITEMIZEDLIST>
 
     </PARA>
-</SECT1>
+<!-- </SECT1> -->
 <SECT1 ID="XACC-CAPITALGAINS">
 <TITLE> Capital Gains - Asset Appreciation</TITLE>
 <PARA>    <ANCHOR ID="APPR"> 
