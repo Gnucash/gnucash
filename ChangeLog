@@ -1,5 +1,7 @@
 2001-06-09  Dave Peticolas  <dave@krondo.com>
 
+	* configure.in: fix bug
+
 	* doc/sgml/C/xacc-about.sgml: update credits
 
 	* src/gnome/window-main.c (gnc_main_window_about_cb): update

@@ -196,15 +196,17 @@ AC_ARG_ENABLE( sql,
             SQL_DIR=sql
           ],
           [
-            AC_MSG_ERROR([Cannot find PosgreSQL libraries; won't build sql backend]) 
+            AC_MSG_ERROR([Cannot find PosgreSQL libraries; will not build sql backend]) 
           ]
         )
+        LIBS="$saved_LIBS"
       fi
     fi
   ]
 )
 
 AC_SUBST(SQL_DIR)
+
 
 ### --------------------------------------------------------------------------
 ### RPC
