@@ -499,25 +499,25 @@ readAccount( int fd, AccountGroup *grp, int token )
   }
   
   tmp = readString( fd, token );
-  if( NULL == tmp)  { free (tmp);  return NULL; }
+  if( NULL == tmp) return NULL;
   DEBUG ("readAccount(): reading acct %s \n", tmp);
   xaccAccountSetName (acc, tmp);
   free (tmp);
   
   if (8 <= token) {
      tmp = readString( fd, token );
-     if( NULL == tmp)  { free (tmp);  return NULL; }
+     if( NULL == tmp) return NULL;
      xaccAccountSetCode (acc, tmp);
      free (tmp);
   }
   
   tmp = readString( fd, token );
-  if( NULL == tmp ) { free (tmp); return NULL; }
+  if( NULL == tmp ) return NULL;
   xaccAccountSetDescription (acc, tmp);
   free (tmp);
   
   tmp = readString( fd, token );
-  if( NULL == tmp ) { free (tmp); return NULL; }
+  if( NULL == tmp ) return NULL;
   xaccAccountSetNotes (acc, tmp);
   free (tmp);
   
@@ -525,13 +525,13 @@ readAccount( int fd, AccountGroup *grp, int token )
    * in version 7 of the file format */
   if (7 <= token) {
      tmp = readString( fd, token );
-     if( NULL == tmp ) { free (tmp); return NULL; }
+     if( NULL == tmp ) return NULL;
      xaccAccountSetCurrency (acc, tmp);
      if (0x0 == tmp[0]) xaccAccountSetCurrency (acc, DEFAULT_CURRENCY);
      free (tmp);
 
      tmp = readString( fd, token );
-     if( NULL == tmp ) { free (tmp); return NULL; }
+     if( NULL == tmp ) return NULL;
      xaccAccountSetSecurity (acc, tmp);
      free (tmp);
   } else {
@@ -686,7 +686,7 @@ readInvAcct( int fd, InvAcct *invacct, int token )
   char * tmp;
 
   tmp = readString( fd, token );
-  if( NULL == tmp ) { free (tmp); return; }
+  if( NULL == tmp ) return;
   xaccInvAcctSetPriceSrc (invacct, tmp);
   free (tmp);
 }
