@@ -3,7 +3,6 @@
 ;;;  handle tables of qif-to-gnucash account mappings 
 ;;;
 ;;;  Copyright (c) 2001 Linux Developers Group, Inc.
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

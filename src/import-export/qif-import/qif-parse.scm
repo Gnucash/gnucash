@@ -3,7 +3,6 @@
 ;;;  routines to parse values and dates in QIF files. 
 ;;;
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define qif-category-compiled-rexp 

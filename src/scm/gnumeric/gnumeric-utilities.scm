@@ -1,4 +1,3 @@
-;;;; $Id$
 ;;;; gnumeric-utilities.scm - Gnumeric spreadsheet generation functions
 
 (use-modules (srfi srfi-19))

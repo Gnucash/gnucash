@@ -3,7 +3,6 @@
 ;;;  print a check from a transaction. 
 ;;;
 ;;;  Copyright 2000 Bill Gribble <grib@billgribble.com>
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash printing number-to-words))
