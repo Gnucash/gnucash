@@ -64,6 +64,13 @@ Home Page:
 ----------
 http://www.cs.hmc.edu/~rclark/xacc
 
+Important Note:
+---------------
+Numerous core dumps have been reported that occur with lestiff
+version 0.82.  These core dumps do not occur with lesstif v 0.81,
+nor with RedHat Motif.  If it's crashing, please try using the
+statically-linked Motif version, as described below.
+
 
 Running:
 --------
