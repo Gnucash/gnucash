@@ -690,6 +690,7 @@ gnc_hbci_trans_dialog_execute(HBCITransDialog *td, AB_BANKING *api,
   /* Watch out! The job *has* to be removed from the queue
      here because otherwise it might be executed again. */
   AB_Banking_DequeueJob(api, job);
+  /* AB_Banking_DequeueJob(api, job); */
   return successful;
 }
 
