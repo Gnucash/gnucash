@@ -180,10 +180,10 @@ gnc_kvp_bag_get_first (KvpFrame *root, const char * path)
   if (KVP_TYPE_GLIST != valtype) return NULL;
 
   node = kvp_value_get_glist(arr);
-  {
-    KvpValue *va = node->data;
-    return kvp_value_get_frame(va);
-  }
+  if (NULL == node) return NULL;
+
+  KvpValue *va = node->data;
+  return kvp_value_get_frame(va);
 }
 
 void
