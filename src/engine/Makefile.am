@@ -71,7 +71,7 @@ noinst_HEADERS = \
 #  NetIO.h 
 
 libgncmod_engine_la_LDFLAGS = -module
-libgncmod_engine_la_LIBADD = ${GUILE_LIBS}
+libgncmod_engine_la_LIBADD = ${GUILE_LIBS} ${GLIB_LIBS}
 
 libgw_glib_la_SOURCES=gw-glib.c glib-helpers.c
 libgw_glib_la_LDFLAGS=-module
