@@ -801,3 +801,43 @@ gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked)
   else
     gtk_clist_set_text (list, row, col, "");
 }
+
+void
+gnc_clist_columns_autosize (GtkCList *list)
+{
+  GtkStyle *style;
+  GdkFont *font;
+  gint i;
+
+  if (!list) return;
+  g_return_if_fail (GTK_IS_CLIST (list));
+
+  style = gtk_widget_get_style (GTK_WIDGET(list));
+  if (!style)
+    return;
+
+  font = style->font;
+  if (!font)
+    return;
+
+  for (i = 0; TRUE; i++)
+  {
+    GtkWidget *widget;
+    char *title;
+    gint width;
+
+    widget = gtk_clist_get_column_widget (list, i);
+    if (!widget)
+      break;
+
+    if (!GTK_IS_LABEL (widget))
+      continue;
+
+    gtk_label_get (GTK_LABEL (widget), &title);
+
+    width = gdk_string_width (font, title);
+    gtk_clist_set_column_min_width (list, i, width + 5);
+  }
+
+  gtk_clist_columns_autosize (list);
+}

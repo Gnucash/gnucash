@@ -7004,7 +7004,7 @@ create_Edit_Column_View_Page (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (scrolledwindow26);
   gtk_box_pack_start (GTK_BOX (view_contents_hbox), scrolledwindow26, TRUE, TRUE, 0);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow26), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow26), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
   available_list = gtk_clist_new (1);
   gtk_widget_ref (available_list);
@@ -7079,7 +7079,7 @@ create_Edit_Column_View_Page (void)
   gtk_widget_show (label847723);
   gtk_box_pack_start (GTK_BOX (vbox109), label847723, FALSE, FALSE, 0);
 
-  button89 = gtk_button_new_with_label (_("Size ..."));
+  button89 = gtk_button_new_with_label (_("Size..."));
   gtk_widget_ref (button89);
   gtk_object_set_data_full (GTK_OBJECT (Edit_Column_View_Page), "button89", button89,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -7099,7 +7099,7 @@ create_Edit_Column_View_Page (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (scrolledwindow27);
   gtk_box_pack_start (GTK_BOX (view_contents_hbox), scrolledwindow27, TRUE, TRUE, 0);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow27), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow27), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
   contents_list = gtk_clist_new (3);
   gtk_widget_ref (contents_list);

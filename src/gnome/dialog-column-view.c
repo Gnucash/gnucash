@@ -28,6 +28,7 @@
 
 #include "dialog-column-view.h"
 #include "dialog-options.h"
+#include "dialog-utils.h"
 #include "glade-cb-gnc-dialogs.h"
 #include "glade-gnc-dialogs.h"
 #include "messages.h"
@@ -71,29 +72,60 @@ update_display_lists(gnc_column_view_edit * view) {
     gnc_option_db_lookup_option(view->odb, "__general", "report-list",
                                 SCM_BOOL_F);
   SCM   this_report, this_options, this_name;
+  SCM   selection;
   char  * name[3];
+  int   row, i;
+
+  row = view->available_selected;
+
+  if(gh_list_p(view->available_list) && !gh_null_p (view->available_list)) {
+    row = MIN (row, gh_length (view->available_list) - 1);
+    selection = gh_list_ref (view->available_list, gh_int2scm (row));
+  }
+  else {
+    selection = SCM_UNDEFINED;
+  }
 
   scm_unprotect_object(view->available_list);
   view->available_list = names;
   scm_protect_object(view->available_list);
 
+  gtk_clist_freeze(view->available);
   gtk_clist_clear(view->available);
   if(gh_list_p(names)) {
-    for(; !gh_null_p(names); names = gh_cdr(names)) {
+    for(i = 0; !gh_null_p(names); names = gh_cdr(names), i++) {
+      if (gh_equal_p (gh_car(names), selection))
+        row = i;
       name[0] = gh_scm2newstr(gh_car(names), NULL);      
       gtk_clist_append(view->available, name);
       free(name[0]);
     }
   }
-  gtk_clist_select_row(view->available, view->available_selected, 0);
-  
+  gtk_clist_select_row(view->available, row, 0);
+  gtk_clist_thaw(view->available);
+
+
+  row = view->contents_selected;
+
+  if(gh_list_p(view->contents_list) && !gh_null_p (view->contents_list)) {
+    row = MIN (row, gh_length (view->contents_list) - 1);
+    selection = gh_list_ref (view->contents_list, gh_int2scm (row));
+  }
+  else {
+    selection = SCM_UNDEFINED;
+  }
+
   scm_unprotect_object(view->contents_list);
   view->contents_list = contents;
   scm_protect_object(view->contents_list);
-  
+
+  gtk_clist_freeze(view->contents);
   gtk_clist_clear(view->contents);
   if(gh_list_p(contents)) {
-    for(; !gh_null_p(contents); contents = gh_cdr(contents)) {
+    for(i = 0; !gh_null_p(contents); contents = gh_cdr(contents), i++) {
+      if (gh_equal_p (gh_car(contents), selection))
+        row = i;
+
       this_report = gh_call1(find_report, gh_caar(contents));
       this_options = gh_call1(get_options, this_report);
       this_name = gh_call1(get_value, 
@@ -109,7 +141,11 @@ update_display_lists(gnc_column_view_edit * view) {
       g_free(name[2]);
     }
   }
-  gtk_clist_select_row(view->contents, view->contents_selected, 0);
+  gtk_clist_select_row(view->contents, row, 0);
+  gtk_clist_thaw(view->contents);
+
+  gnc_clist_columns_autosize (view->available);
+  gnc_clist_columns_autosize (view->contents);
 }
 
 static void
@@ -212,7 +248,10 @@ gnc_column_view_edit_options(SCM options, SCM view) {
                        gnc_column_view_select_contents_cb, (gpointer)r);
     
     update_display_lists(r);
-    
+
+    gtk_clist_column_titles_passive (r->available);
+    gtk_clist_column_titles_passive (r->contents);
+
     gnc_options_dialog_set_apply_cb(r->optwin, 
                                     gnc_column_view_edit_apply_cb, r);
     gnc_options_dialog_set_close_cb(r->optwin, 
@@ -291,8 +330,6 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data) {
   int count;
   int oldlength;
   
-  printf("remove cb\n");
-
   if(gh_list_p(r->contents_list)) {
     oldlength = gh_length(r->contents_list);
     if(oldlength > r->contents_selected) {

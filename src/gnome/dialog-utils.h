@@ -84,4 +84,9 @@ void gnc_window_adjust_for_screen (GtkWindow * window);
  * widgets. */
 void gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked);
 
+/* This function is similar to gtk_clist_columns_autosize, but
+ * also takes into account the column titles. */
+void gnc_clist_columns_autosize (GtkCList *list);
+
+
 #endif

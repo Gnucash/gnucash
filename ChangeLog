@@ -1,3 +1,9 @@
+2001-05-02  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-column-view.c: work on gui
+
+	* src/gnome/dialog-utils.c (gnc_clist_columns_autosize): new func
+
 2001-05-02  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/transaction-report.scm: Fix bug with subheading
