@@ -41,7 +41,7 @@
 
 #include "guid.h"
 #include "md5.h"
-#include "gnc-engine-util.h"
+#include "gnc-trace.h"
 
 # ifndef P_tmpdir
 #  define P_tmpdir "/tmp"
