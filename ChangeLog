@@ -1,3 +1,28 @@
+2001-05-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/FileDialog.c (gncFileSaveAs): don't use a default filename
+
+	* src/scm/report/hello-world.scm: put under utility menu
+
+	* src/scm/report/welcome-to-gnucash.scm: don't show in menu
+
+	* src/scm/report/iframe-url.scm: put under utility menu
+
+	* src/scm/report.scm: add 'utility reports' menu
+
+	* src/gnome/new-user-funs.c: add support for opening balances
+
+	* src/gnome/gnc-amount-edit.c (gnc_amount_edit_evaluate): allow
+	empty string as zero
+
+	* src/gnome/new-user-callbacks.c: add support for opening balances
+
+	* src/gnome/dialog-account.c (gnc_account_list_fill): fix warning
+	(gnc_account_window_destroy_cb): destroy callback has no return
+	(gnc_ui_to_account): reverse opening balance appropriately
+
+	* src/engine/Account.c: change return type to const
+
 2001-05-12  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/pnl.scm, account-piecharts.scm,

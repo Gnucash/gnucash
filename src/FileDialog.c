@@ -551,7 +551,7 @@ gncFileSaveAs (void)
   GNCBackendError io_err = ERR_BACKEND_NO_ERR;
 
   ENTER(" ");
-  filename = fileBox(_("Save"), "*.gnc", gnc_history_get_last());
+  filename = fileBox(_("Save"), "*.gnc", NULL);
   if (!filename) return;
 
   /* Check to see if the user specified the same file as the current

@@ -105,7 +105,7 @@ typedef enum
   CREDITLINE = 14,     /* line of credit */
 } GNCAccountType;
 
-char * xaccAccountGetTypeStr (int type); /* GUI names */
+const char * xaccAccountGetTypeStr (GNCAccountType type); /* GUI names */
 
 /* Conversion routines for the account types to/from strings.
    Critical for the text communication mechanisms. i.e. INCOME ->

@@ -20,17 +20,17 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
+#include "config.h"
 
 #include <gnome.h>
+#include <guile/gh.h>
 #include <stdio.h>
 
 #include "new-user-callbacks.h"
 #include "new-user-interface.h"
 #include "new-user-funs.h"
 #include "glade-support.h"
+#include "gnc-amount-edit.h"
 #include "gnc-currency-edit.h"
 #include "gnc-ui-util.h"
 
@@ -38,7 +38,6 @@
 #include "io-example-account.h"
 #include "Account.h"
 
-#include <guile/gh.h>
 
 static GtkWidget *newUserDialog = NULL;
 static GtkWidget *cancelDialog = NULL;
@@ -70,6 +69,14 @@ gnc_get_new_user_commodity_editor(void)
                                          gnc_locale_default_currency());
     }
     return cur_editor;
+}
+
+GNCAmountEdit *
+gnc_new_user_get_balance_editor(void)
+{
+  if (!newUserDialog) return NULL;
+
+  return gtk_object_get_data (GTK_OBJECT (newUserDialog), "balance_editor");
 }
 
 struct add_group_data_struct
@@ -152,6 +159,90 @@ gnc_new_user_get_clist(void)
     return GTK_CLIST(gnc_new_user_get_widget("newAccountTypesList"));
 }
 
+GtkCTree *
+gnc_new_user_get_final_account_tree (void)
+{
+    return GTK_CTREE(gnc_new_user_get_widget("finalAccountCTree"));
+}
+
+void
+gnc_new_user_set_balance (Account *account, gnc_numeric in_balance)
+{
+  GHashTable *hash;
+  gnc_numeric *balance;
+  char *fullname;
+
+  if (!account || !newUserDialog) return;
+
+  hash = gtk_object_get_data (GTK_OBJECT (newUserDialog), "balance_hash");
+  if (!hash) return;
+
+  fullname = xaccAccountGetFullName (account, ':');
+
+  balance = g_hash_table_lookup (hash, fullname);
+  if (balance)
+  {
+    *balance = in_balance;
+    g_free (fullname);
+  }
+  else
+  {
+    balance = g_new (gnc_numeric, 1);
+    *balance = in_balance;
+
+    g_hash_table_insert (hash, fullname, balance);
+  }
+}
+
+gnc_numeric
+gnc_new_user_get_balance (Account *account)
+{
+  GHashTable *hash;
+  gnc_numeric *balance;
+  char *fullname;
+
+  if (!account || !newUserDialog) return gnc_numeric_zero ();
+
+  hash = gtk_object_get_data (GTK_OBJECT (newUserDialog), "balance_hash");
+  if (!hash) return gnc_numeric_zero ();
+
+  fullname = xaccAccountGetFullName (account, ':');
+
+  balance = g_hash_table_lookup (hash, fullname);
+
+  g_free (fullname);
+
+  if (balance)
+    return *balance;
+
+  return gnc_numeric_zero ();
+}
+
+void
+gnc_new_user_block_amount_changed (void)
+{
+  GNCAmountEdit *balance_edit;
+
+  balance_edit = gnc_new_user_get_balance_editor ();
+  if (!balance_edit) return;
+
+  gtk_signal_handler_block_by_func
+    (GTK_OBJECT (balance_edit),
+     GTK_SIGNAL_FUNC(on_finalAccountBalanceEdit_changed), NULL);
+}
+
+void
+gnc_new_user_unblock_amount_changed (void)
+{
+  GNCAmountEdit *balance_edit;
+
+  balance_edit = gnc_new_user_get_balance_editor ();
+  if (!balance_edit) return;
+
+  gtk_signal_handler_unblock_by_func
+    (GTK_OBJECT (balance_edit),
+     GTK_SIGNAL_FUNC(on_finalAccountBalanceEdit_changed), NULL);
+}
 
 /***********************************************************************/
 static int
@@ -179,10 +270,67 @@ deleteit(GtkWidget** togetridof)
     return 1;
 }
 
+static void
+destroy_hash_helper (gpointer key, gpointer value, gpointer user_data)
+{
+  char *fullname = key;
+  gnc_numeric *balance = value;
+
+  g_free (fullname);
+  g_free (balance);
+}
+
+static void
+gnc_new_user_destroy_cb (GtkObject *obj, gpointer user_data)
+{
+  GHashTable *hash;
+
+  hash = gtk_object_get_data (obj, "balance_hash");
+  if (hash)
+  {
+    g_hash_table_foreach (hash, destroy_hash_helper, NULL);
+    g_hash_table_destroy (hash);
+    gtk_object_set_data (obj, "balance_hash", NULL);
+  }
+}
+
+static GtkWidget *
+gnc_create_newUserDialog (void)
+{
+  GtkWidget *balance_edit;
+  GtkWidget *dialog;
+  GtkWidget *box;
+  GHashTable *hash;
+
+  dialog = create_newUserDialog();
+
+  balance_edit = gnc_amount_edit_new ();
+  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (balance_edit), TRUE);
+  gtk_widget_show (balance_edit);
+
+  gtk_signal_connect (GTK_OBJECT (balance_edit), "amount_changed",
+                      GTK_SIGNAL_FUNC(on_finalAccountBalanceEdit_changed),
+                      NULL);
+
+  box = lookup_widget (dialog, "startBalanceBox");
+  gtk_box_pack_start (GTK_BOX (box), balance_edit, TRUE, TRUE, 0);
+
+  gtk_object_set_data (GTK_OBJECT(dialog), "balance_editor", balance_edit);
+
+  hash = g_hash_table_new (g_str_hash, g_str_equal);
+
+  gtk_object_set_data (GTK_OBJECT(dialog), "balance_hash", hash);
+
+  gtk_signal_connect (GTK_OBJECT(dialog), "destroy",
+                      GTK_SIGNAL_FUNC(gnc_new_user_destroy_cb), NULL);
+
+  return dialog;
+}
+
 int
 gnc_ui_show_new_user_window(void)
 {
-    return createit(create_newUserDialog, &newUserDialog);
+    return createit(gnc_create_newUserDialog, &newUserDialog);
 }
 
 int

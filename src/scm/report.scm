@@ -44,6 +44,7 @@
 (define gnc:menuname-income-expense 
   (N_ "_Income & Expense"))
 (define gnc:menuname-taxes (N_ "_Taxes"))
+(define gnc:menuname-utility (N_ "_Utility"))
 (define gnc:pagename-general (N_ "General"))
 (define gnc:pagename-accounts (N_ "Accounts"))
 (define gnc:pagename-display (N_ "Display"))
@@ -64,6 +65,9 @@
                    (list "_File" "New _Report" "")))
   (define asset-liability-menu
     (gnc:make-menu gnc:menuname-asset-liability
+                   (list "_File" "New _Report" "")))
+  (define utility-menu
+    (gnc:make-menu gnc:menuname-utility
                    (list "_File" "New _Report" "")))
   (define menu-hash (make-hash-table 23))
 
@@ -113,6 +117,7 @@
 ;  (gnc:add-extension tax-menu)
   (gnc:add-extension income-expense-menu)
   (gnc:add-extension asset-liability-menu)
+  (gnc:add-extension utility-menu)
 
   ;; push reports (new items added on top of menu)
   (hash-for-each add-report-menu-item *gnc:_report-templates_*)
@@ -121,8 +126,8 @@
   (gnc:add-extension 
    (gnc:make-menu-item 
     ((menu-namer 'add-name) (_ "Welcome Extravaganza")) 
-    (_ "Welcome-to-gnucash screen")
-    (list "_File" "New _Report" "")
+    (_ "Welcome-to-GnuCash screen")
+    (list "_File" "New _Report" gnc:menuname-utility "")
     (lambda ()
       (gnc:make-welcome-report)))))
 

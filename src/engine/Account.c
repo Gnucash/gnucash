@@ -1871,8 +1871,8 @@ account_type_name[NUM_ACCOUNT_TYPES] = {
   */
 };
 
-char *
-xaccAccountGetTypeStr(int type) {
+const char *
+xaccAccountGetTypeStr(GNCAccountType type) {
   if (0 > type) return "";
   if (NUM_ACCOUNT_TYPES <= type) return "";
   return _(account_type_name [type]);

@@ -257,6 +257,17 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
     return TRUE;
 
   string = gtk_entry_get_text(GTK_ENTRY(gae->amount_entry));
+  if (!string || *string == '\0')
+  {
+    gnc_numeric old_amount = gae->amount;
+
+    gnc_amount_edit_set_amount (gae, gnc_numeric_zero ());
+
+    if (!gnc_numeric_equal (gnc_numeric_zero (), old_amount))
+      gtk_signal_emit (GTK_OBJECT (gae), amount_edit_signals [AMOUNT_CHANGED]);
+
+    return TRUE;
+  }
 
   error_loc = NULL;
 

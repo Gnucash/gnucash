@@ -20,25 +20,25 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
+#include "config.h"
 
 #include <glib.h>
-
 #include <gnome.h>
-
-#include "gnc-book.h"
-#include "new-user-callbacks.h"
-#include "new-user-interface.h"
-#include "gnc-commodity-edit.h"
-#include "glade-support.h"
-#include "new-user-funs.h"
-#include "gnc-ui-util.h"
-#include "gnc-dir.h"
-#include "io-example-account.h"
-#include "FileDialog.h"
 #include <guile/gh.h>
+#include <time.h>
+
+#include "FileDialog.h"
+#include "dialog-utils.h"
+#include "glade-support.h"
+#include "gnc-book.h"
+#include "gnc-commodity-edit.h"
+#include "gnc-dir.h"
+#include "gnc-ui-util.h"
+#include "io-example-account.h"
+#include "new-user-callbacks.h"
+#include "new-user-funs.h"
+#include "new-user-interface.h"
+#include "query-user.h"
 
 static int commodEditAdded = 0;
 
@@ -73,7 +73,6 @@ on_newUserStartPage_next               (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data)
 {
-    
     return FALSE;
 }
 
@@ -88,17 +87,32 @@ on_chooseAccountTypesPage_next         (GnomeDruidPage  *gnomedruidpage,
 }
 
 
+static gpointer
+starting_balance_helper (Account *account, gpointer data)
+{
+  gnc_numeric balance;
+
+  balance = gnc_new_user_get_balance (account);
+  if (!gnc_numeric_zero_p (balance))
+    gnc_account_create_opening_balance (account, balance, time (NULL));
+
+  return NULL;
+}
 
 void
 on_newUserDruidFinishPage_finish       (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data)
 {
+    if (our_final_group)
+        xaccGroupForEachAccount (our_final_group, starting_balance_helper,
+                                 NULL, TRUE);
+
     gnc_ui_delete_new_user_window();
     gnc_ui_delete_nu_account_list();
-    
+
     gh_eval_str("(gnc:default-ui-start)");
-    
+
     /* now we need to load all the accounts into the program */
 
     gh_eval_str("(gnc:show-main-window)");
@@ -108,8 +122,10 @@ on_newUserDruidFinishPage_finish       (GnomeDruidPage  *gnomedruidpage,
 
     if(our_final_group)
     {
-        xaccGroupConcatGroup(gnc_book_get_group(gncGetCurrentBook()),
-                             our_final_group);
+        AccountGroup *group;
+
+        group = gnc_book_get_group(gncGetCurrentBook());
+        xaccGroupConcatGroup(group, our_final_group);
     }
 }
 
@@ -210,6 +226,8 @@ on_chooseAccountTypesPage_prepare      (GnomeDruidPage  *gnomedruidpage,
 
     gtk_clist_sort(clist);
     gtk_clist_thaw(clist);
+
+    g_slist_free (list);
 }
 
 
@@ -277,17 +295,33 @@ on_newAccountTypesList_select_row      (GtkCList        *clist,
     gtk_text_forward_delete(datext, gtk_text_get_length(datext));
     if(gea->long_description != NULL)
     {
-        gtk_text_set_editable(datext, TRUE);
         gtk_text_insert(datext, NULL, NULL, NULL, gea->long_description, -1);
-        gtk_text_set_editable(datext, FALSE);
     }
     gtk_text_thaw(datext);
 
-    gtk_tree_clear_items(datree, 0, 1000);
+    gtk_tree_clear_items(datree, 0, g_list_length (datree->children) - 1);
     add_to_tree(datree, gea->group);
+}
 
-    printf("%s", "");
-    
+
+void
+on_newAccountTypesList_unselect_row    (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data)
+{
+    GtkText *datext =
+    GTK_TEXT(gnc_new_user_get_widget("newAccountTypesDescription"));
+    GtkTree *datree =
+    GTK_TREE(gnc_new_user_get_widget("newAccountListTree"));
+
+    gtk_text_freeze(datext);
+    gtk_text_set_point(datext, 0);
+    gtk_text_forward_delete(datext, gtk_text_get_length(datext));
+    gtk_text_thaw(datext);
+
+    gtk_tree_clear_items(datree, 0, g_list_length (datree->children) - 1);
 }
 
 
@@ -313,7 +347,6 @@ void
 on_newAccountOKButton_clicked          (GtkButton       *button,
                                         gpointer         user_data)
 {
-
 }
 
 
@@ -322,7 +355,6 @@ on_newAccountCurrencyChoosePage_next   (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data)
 {
-
   return FALSE;
 }
 
@@ -359,8 +391,26 @@ generate_account_titles(Account *act)
     ret = g_new(gchar *, 3);
 
     ret[0] = (gchar*)xaccAccountGetName(act);
-    ret[1] = xaccAccountTypeEnumAsString(xaccAccountGetType(act));
-    ret[2] = "";
+    ret[1] = (gchar*)xaccAccountGetTypeStr(xaccAccountGetType(act));
+
+    {
+      gnc_numeric balance;
+      const char *string;
+
+      balance = gnc_new_user_get_balance (act);
+
+      if (gnc_numeric_zero_p (balance))
+        string = "";
+      else
+      {
+        GNCPrintAmountInfo print_info;
+
+        print_info = gnc_account_value_print_info (act, FALSE);
+        string = xaccPrintAmount (balance, print_info);
+      }
+
+      ret[2] = (gchar*)string;
+    }
 
     return ret;
 }
@@ -379,14 +429,16 @@ add_to_ctree_final_account(Account* toadd, gpointer data)
     gchar **titles;
 
     titles = generate_account_titles (toadd);
-    
+
     node = gtk_ctree_insert_node(topdata->tree, topdata->node,
                                  topdata->sibling, 
                                  titles, 0,
                                  NULL, NULL, NULL, NULL,
                                  FALSE, TRUE);
-    /* don't know if this is safe, so commented out at the moment. FIXME! */
-    /* free_account_titles(titles); */
+
+    free_account_titles(titles);
+
+    gtk_ctree_node_set_row_data (topdata->tree, node, toadd);
 
     if(xaccGroupGetNumAccounts(xaccAccountGetChildren(toadd)) > 0)
     {
@@ -423,8 +475,11 @@ on_finalAccountDruidPage_prepare       (GnomeDruidPage  *gnomedruidpage,
     GList *dalist;
     GSList *actlist = NULL;
     GtkCList *clist = gnc_new_user_get_clist();
+    GtkWidget *ctree;
 
-    gtk_clist_clear(GTK_CLIST(gnc_new_user_get_widget("finalAccountCTree")));
+    ctree = gnc_new_user_get_widget("finalAccountCTree");
+
+    gtk_clist_clear(GTK_CLIST(ctree));
     
     for(dalist = clist->selection; dalist; dalist = dalist->next)
     {
@@ -435,20 +490,183 @@ on_finalAccountDruidPage_prepare       (GnomeDruidPage  *gnomedruidpage,
     delete_our_final_group();
     our_final_group = gnc_new_user_merge_groups(actlist);
 
-    gnc_new_user_insert_final_accounts(
-        GTK_CTREE(gnc_new_user_get_widget("finalAccountCTree")),
-        our_final_group);
+    gnc_new_user_insert_final_accounts(GTK_CTREE(ctree), our_final_group);
+
+    gnc_clist_columns_autosize (GTK_CLIST(ctree));
+
+    {
+      GNCAmountEdit *balance_edit;
+      GtkWidget *entry;
+
+      gnc_new_user_block_amount_changed ();
+
+      balance_edit = gnc_new_user_get_balance_editor ();
+      gnc_amount_edit_set_amount (balance_edit, gnc_numeric_zero ());
+
+      entry = gnc_amount_edit_gtk_entry (balance_edit);
+      gtk_entry_set_text (GTK_ENTRY (entry), "");
+
+      gnc_new_user_unblock_amount_changed ();
+
+      gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), FALSE);
+    }
 }
 
 
-
 void
-on_finalAccountCTree_select_row        (GtkCList        *clist,
-                                        gint             row,
+on_finalAccountCTree_tree_select_row   (GtkCTree        *ctree,
+                                        GList           *node,
                                         gint             column,
-                                        GdkEvent        *event,
                                         gpointer         user_data)
 {
+  Account *account;
+  GNCAmountEdit *balance_edit;
+  GNCPrintAmountInfo print_info;
+  gnc_numeric balance;
 
+  balance_edit = gnc_new_user_get_balance_editor ();
+
+  account = gtk_ctree_node_get_row_data (ctree, GTK_CTREE_NODE (node));
+  if (!account || xaccAccountGetType (account) == EQUITY)
+  {
+    GtkWidget *entry;
+
+    entry = gnc_amount_edit_gtk_entry (balance_edit);
+    gtk_entry_set_text (GTK_ENTRY (entry), "");
+
+    gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), FALSE);
+
+    return;
+  }
+
+  gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), TRUE);
+
+  balance = gnc_new_user_get_balance (account);
+
+  if (gnc_reverse_balance (account))
+    balance = gnc_numeric_neg (balance);
+
+  print_info = gnc_account_value_print_info (account, FALSE);
+  gnc_amount_edit_set_print_info (balance_edit, print_info);
+  gnc_amount_edit_set_fraction (balance_edit,
+                                xaccAccountGetCurrencySCU (account));
+
+  gnc_new_user_block_amount_changed ();
+
+  gnc_amount_edit_set_amount (balance_edit, balance);
+  if (gnc_numeric_zero_p (balance))
+  {
+    GtkWidget *entry;
+
+    entry = gnc_amount_edit_gtk_entry (balance_edit);
+    gtk_entry_set_text (GTK_ENTRY (entry), "");
+  }
+
+  gnc_new_user_unblock_amount_changed ();
+}
+
+
+static void
+update_account_balance (GtkCTree *ctree, GtkCTreeNode *node)
+{
+  Account *account;
+  GNCAmountEdit *balance_edit;
+  gboolean result;
+
+  balance_edit = gnc_new_user_get_balance_editor ();
+
+  account = gtk_ctree_node_get_row_data (ctree, node);
+  if (!account)
+    return;
+
+  gnc_new_user_block_amount_changed ();
+  result = gnc_amount_edit_evaluate (balance_edit);
+  gnc_new_user_unblock_amount_changed ();
+
+  if (result)
+  {
+    gnc_numeric balance;
+    GNCPrintAmountInfo print_info;
+    const char *string;
+
+    balance = gnc_amount_edit_get_amount (balance_edit);
+
+    print_info = gnc_account_value_print_info (account, FALSE);
+    string = xaccPrintAmount (balance, print_info);
+
+    if (gnc_numeric_zero_p (balance))
+      string = "";
+
+    gtk_ctree_node_set_text (ctree, GTK_CTREE_NODE (node), 2, string);
+
+    if (gnc_reverse_balance (account))
+      balance = gnc_numeric_neg (balance);
+
+    gnc_new_user_set_balance (account, balance);
+  }
+}
+
+void
+on_finalAccountCTree_tree_unselect_row (GtkCTree        *ctree,
+                                        GList           *node,
+                                        gint             column,
+                                        gpointer         user_data)
+{
+  update_account_balance (ctree, GTK_CTREE_NODE (node));
+
+  {
+    GNCAmountEdit *balance_edit;
+    GtkWidget *entry;
+
+    balance_edit = gnc_new_user_get_balance_editor ();
+
+    entry = gnc_amount_edit_gtk_entry (balance_edit);
+    gtk_entry_set_text (GTK_ENTRY (entry), "");
+
+    gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), FALSE);
+  }
+}
+
+void
+on_finalAccountBalanceEdit_changed (GNCAmountEdit *gae)
+{
+  GtkCTree *ctree;
+  GtkCTreeNode *node;
+
+  if (!GTK_WIDGET_SENSITIVE (GTK_WIDGET (gae)))
+    return;
+
+  ctree = gnc_new_user_get_final_account_tree ();
+  if (!ctree)
+    return;
+
+  node = gtk_ctree_node_nth (ctree, GTK_CLIST(ctree)->focus_row);
+  if (!node)
+    return;
+
+  update_account_balance (ctree, node);
+}
+
+gboolean
+on_finalAccountDruidPage_next          (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data)
+{
+  GNCAmountEdit *balance_edit;
+
+  balance_edit = gnc_new_user_get_balance_editor ();
+
+  if (!gnc_amount_edit_evaluate (balance_edit))
+  {
+    GtkWidget *top;
+    const char *message = _("You must enter a valid balance.");
+
+    top = gtk_widget_get_toplevel (GTK_WIDGET (gnomedruidpage));
+    gnc_error_dialog_parented(GTK_WINDOW(top), message);
+
+    return TRUE;
+  }
+
+  return FALSE;
 }
 

@@ -472,6 +472,10 @@ new, totally cool report, consult the mailing list %s.")
    ;; report to the user.
    'menu-tip (N_ "A sample report with examples.")
 
+   ;; A path describing where to put the report in the menu system.
+   ;; In this case, it's going under the utility menu.
+   'menu-path (list gnc:menuname-utility)
+
    ;; The options generator function defined above.
    'options-generator options-generator
    

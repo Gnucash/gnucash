@@ -124,3 +124,27 @@ on_finalAccountCTree_select_row        (GtkCList        *clist,
 #endif /* _NEW_USER_CALLBACKS_H_ */    
 
 
+
+void
+on_newAccountTypesList_unselect_row    (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
+
+void
+on_finalAccountCTree_tree_select_row   (GtkCTree        *ctree,
+                                        GList           *node,
+                                        gint             column,
+                                        gpointer         user_data);
+
+void
+on_finalAccountCTree_tree_unselect_row (GtkCTree        *ctree,
+                                        GList           *node,
+                                        gint             column,
+                                        gpointer         user_data);
+
+gboolean
+on_finalAccountDruidPage_next          (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);

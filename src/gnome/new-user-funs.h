@@ -25,6 +25,7 @@
 
 #include <glib.h>
 
+#include "gnc-amount-edit.h"
 #include "gnc-commodity-edit.h"
 #include "Group.h"
 
@@ -37,9 +38,20 @@ int gnc_ui_delete_nu_cancel_dialog(void);
 int gnc_ui_show_nu_account_list(void);
 int gnc_ui_delete_nu_account_list(void);
 
+void gnc_new_user_set_balance (Account *account, gnc_numeric balance);
+gnc_numeric gnc_new_user_get_balance (Account *account);
+
 GtkCList* gnc_new_user_get_clist(void);
+GtkCTree * gnc_new_user_get_final_account_tree (void);
 GtkWidget* gnc_new_user_get_widget(const char *name);
 AccountGroup* gnc_new_user_merge_groups(GSList *dalist);
 GNCCommodityEdit * gnc_get_new_user_commodity_editor(void);
+GNCAmountEdit * gnc_new_user_get_balance_editor(void);
+
+void gnc_new_user_block_amount_changed (void);
+void gnc_new_user_unblock_amount_changed (void);
+
+/* private */
+void on_finalAccountBalanceEdit_changed (GNCAmountEdit *gae);
 
 #endif /* NEW_USER_FUNS_H */

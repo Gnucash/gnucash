@@ -85,7 +85,7 @@
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>newAccountCurrencyChooser_vbox2</name>
-	<border_width>5</border_width>
+	<border_width>20</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>5</spacing>
 	<child>
@@ -199,6 +199,11 @@
 	      <handler>on_newAccountTypesList_select_row</handler>
 	      <last_modification_time>Thu, 12 Apr 2001 22:01:16 GMT</last_modification_time>
 	    </signal>
+	    <signal>
+	      <name>unselect_row</name>
+	      <handler>on_newAccountTypesList_unselect_row</handler>
+	      <last_modification_time>Sat, 12 May 2001 09:23:47 GMT</last_modification_time>
+	    </signal>
 	    <columns>2</columns>
 	    <column_widths>144,80</column_widths>
 	    <selection_mode>GTK_SELECTION_MULTIPLE</selection_mode>
@@ -237,7 +242,7 @@
 	  <class>GtkHBox</class>
 	  <name>hbox1</name>
 	  <homogeneous>False</homogeneous>
-	  <spacing>0</spacing>
+	  <spacing>2</spacing>
 	  <child>
 	    <padding>0</padding>
 	    <expand>True</expand>
@@ -245,12 +250,11 @@
 	  </child>
 
 	  <widget>
-	    <class>GtkScrolledWindow</class>
-	    <name>scrolledwindow2</name>
-	    <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-	    <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
-	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	    <class>GtkFrame</class>
+	    <name>frame1</name>
+	    <label>Long Description</label>
+	    <label_xalign>0</label_xalign>
+	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -258,20 +262,28 @@
 	    </child>
 
 	    <widget>
-	      <class>GtkText</class>
-	      <name>newAccountTypesDescription</name>
-	      <editable>False</editable>
-	      <text></text>
+	      <class>GtkScrolledWindow</class>
+	      <name>scrolledwindow2</name>
+	      <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	      <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+
+	      <widget>
+		<class>GtkText</class>
+		<name>newAccountTypesDescription</name>
+		<editable>False</editable>
+		<text></text>
+	      </widget>
 	    </widget>
 	  </widget>
 
 	  <widget>
-	    <class>GtkScrolledWindow</class>
-	    <name>scrolledwindow3</name>
-	    <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-	    <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
-	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	    <class>GtkFrame</class>
+	    <name>frame2</name>
+	    <label>Accounts</label>
+	    <label_xalign>0</label_xalign>
+	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -279,16 +291,25 @@
 	    </child>
 
 	    <widget>
-	      <class>GtkViewport</class>
-	      <name>viewport1</name>
-	      <shadow_type>GTK_SHADOW_IN</shadow_type>
+	      <class>GtkScrolledWindow</class>
+	      <name>scrolledwindow3</name>
+	      <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	      <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
 
 	      <widget>
-		<class>GtkTree</class>
-		<name>newAccountListTree</name>
-		<selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-		<view_mode>GTK_TREE_VIEW_LINE</view_mode>
-		<view_line>True</view_line>
+		<class>GtkViewport</class>
+		<name>viewport1</name>
+		<shadow_type>GTK_SHADOW_IN</shadow_type>
+
+		<widget>
+		  <class>GtkTree</class>
+		  <name>newAccountListTree</name>
+		  <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+		  <view_mode>GTK_TREE_VIEW_LINE</view_mode>
+		  <view_line>True</view_line>
+		</widget>
 	      </widget>
 	    </widget>
 	  </widget>
@@ -352,6 +373,11 @@
 	<handler>on_finalAccountDruidPage_prepare</handler>
 	<last_modification_time>Thu, 12 Apr 2001 22:49:49 GMT</last_modification_time>
       </signal>
+      <signal>
+	<name>next</name>
+	<handler>on_finalAccountDruidPage_next</handler>
+	<last_modification_time>Sat, 12 May 2001 10:43:19 GMT</last_modification_time>
+      </signal>
       <title>Check and Enter Final Account Info</title>
       <title_color>255,255,255</title_color>
       <background_color>25,25,112</background_color>
@@ -361,6 +387,7 @@
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>druid-vbox3</name>
+	<border_width>5</border_width>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
@@ -372,11 +399,11 @@
 	<widget>
 	  <class>GtkLabel</class>
 	  <name>finalAccountLabel</name>
-	  <label>If you would like the accounts to have a starting balance click on the account line and enter the starting balance in the text entry box on the right.</label>
+	  <label>If you would like the accounts to have an opening balance click on the account line and enter the starting balance in the box on the right.</label>
 	  <justify>GTK_JUSTIFY_FILL</justify>
 	  <wrap>True</wrap>
-	  <xalign>0.0800003</xalign>
-	  <yalign>0.08</yalign>
+	  <xalign>0.0200003</xalign>
+	  <yalign>7.45058e-09</yalign>
 	  <xpad>1</xpad>
 	  <ypad>1</ypad>
 	  <child>
@@ -390,7 +417,7 @@
 	  <class>GtkHBox</class>
 	  <name>hbox4</name>
 	  <homogeneous>False</homogeneous>
-	  <spacing>0</spacing>
+	  <spacing>2</spacing>
 	  <child>
 	    <padding>0</padding>
 	    <expand>True</expand>
@@ -400,7 +427,7 @@
 	  <widget>
 	    <class>GtkScrolledWindow</class>
 	    <name>scrolledwindow4</name>
-	    <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
+	    <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
 	    <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
 	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
 	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
@@ -415,9 +442,14 @@
 	      <name>finalAccountCTree</name>
 	      <can_focus>True</can_focus>
 	      <signal>
-		<name>select_row</name>
-		<handler>on_finalAccountCTree_select_row</handler>
-		<last_modification_time>Thu, 19 Apr 2001 17:26:51 GMT</last_modification_time>
+		<name>tree_select_row</name>
+		<handler>on_finalAccountCTree_tree_select_row</handler>
+		<last_modification_time>Sat, 12 May 2001 09:28:43 GMT</last_modification_time>
+	      </signal>
+	      <signal>
+		<name>tree_unselect_row</name>
+		<handler>on_finalAccountCTree_tree_unselect_row</handler>
+		<last_modification_time>Sat, 12 May 2001 09:42:20 GMT</last_modification_time>
 	      </signal>
 	      <columns>3</columns>
 	      <column_widths>285,118,80</column_widths>
@@ -455,7 +487,7 @@
 		<class>GtkLabel</class>
 		<child_name>CTree:title</child_name>
 		<name>checkAccountList_StartBalanceLabel</name>
-		<label>Starting Balance</label>
+		<label>Opening Balance</label>
 		<justify>GTK_JUSTIFY_CENTER</justify>
 		<wrap>False</wrap>
 		<xalign>0.5</xalign>
@@ -478,52 +510,32 @@
 	    </child>
 
 	    <widget>
-	      <class>GtkLabel</class>
-	      <name>checkAccount_AccountLabel</name>
-	      <label>Account:</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
+	      <class>GtkFrame</class>
+	      <name>frame3</name>
+	      <label>Opening Balance</label>
+	      <label_xalign>0</label_xalign>
+	      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>
 		<fill>False</fill>
 	      </child>
+
+	      <widget>
+		<class>GtkVBox</class>
+		<name>startBalanceBox</name>
+		<border_width>3</border_width>
+		<homogeneous>False</homogeneous>
+		<spacing>0</spacing>
+
+		<widget>
+		  <class>Placeholder</class>
+		</widget>
+	      </widget>
 	    </widget>
 
 	    <widget>
-	      <class>GtkLabel</class>
-	      <name>checkAccount_StartBalanceLabel</name>
-	      <label>Enter Starting Balance</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GtkEntry</class>
-	      <name>checkAccount_StartBalanceEntry</name>
-	      <can_focus>True</can_focus>
-	      <editable>True</editable>
-	      <text_visible>True</text_visible>
-	      <text_max_length>20</text_max_length>
-	      <text></text>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
+	      <class>Placeholder</class>
 	    </widget>
 	  </widget>
 	</widget>

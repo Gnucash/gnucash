@@ -217,9 +217,9 @@
   (gnc:define-report 
    'version 1
    'name (N_ "Multicolumn View")
+   'menu-path (list gnc:menuname-utility)
    'renderer render-view
    'options-generator make-options
    'options-editor edit-options
    'options-cleanup-cb cleanup-options 
    'options-changed-cb options-changed-cb))
-

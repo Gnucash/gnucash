@@ -73,10 +73,9 @@
         (gnc:html-markup-p 
          "I know this is ugly.")))
       doc))
-  
+
   (gnc:define-report 
    'name "Welcome to GnuCash 1.6"
+   'in-menu? #f
    'options-generator options
    'renderer renderer))
-
-

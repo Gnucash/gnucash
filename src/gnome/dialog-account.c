@@ -391,6 +391,9 @@ gnc_ui_to_account(AccountWindow *aw)
   if (gnc_numeric_zero_p (balance))
     return;
 
+  if (gnc_reverse_balance (account))
+    balance = gnc_numeric_neg (balance);
+
   date = gnc_date_edit_get_date
     (GNC_DATE_EDIT (aw->opening_balance_date_edit));
 
@@ -1257,7 +1260,7 @@ gnc_account_window_help_cb(GtkWidget *widget, gpointer data)
 }
 
 
-static int
+static void
 gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
 {
   AccountWindow *aw = data;
@@ -1286,7 +1289,7 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
     default:
       PERR ("unexpected dialog type\n");
       gnc_resume_gui_refresh ();
-      return FALSE;
+      return;
   }
 
   gnc_unregister_gui_component (aw->component_id);
@@ -1307,8 +1310,6 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
   }
 
   g_free (aw);
-
-  return FALSE;
 }
 
 
@@ -1389,7 +1390,7 @@ gnc_account_list_fill(GtkCList *type_list)
 
   for (row = 0; row < NUM_ACCOUNT_TYPES; row++) 
   {
-    text[0] = xaccAccountGetTypeStr(row);
+    text[0] = (gchar *) xaccAccountGetTypeStr(row);
     gtk_clist_append(type_list, text);
   }
 }
