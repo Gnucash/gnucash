@@ -59,49 +59,7 @@ typedef enum {
 } GnucashSheetAlignment;
 
 
-typedef struct _CellLayoutInfo CellLayoutInfo;
-
-typedef struct 
-{
-        /* totals, in pixels */
-        gint height;
-        gint width;
-
-        /* per cell parameters */
-        gint **pixel_heights;    /* in pixels, may be zero if
-                                    row/column not displayed */
-        gint **pixel_widths;
-
-        gint **origin_x;   /* the origin of the cell */
-        gint **origin_y;
-
-        gint nrows, ncols;
-        gint refcount;
-} CellDimensions;
-
-typedef struct
-{
-        gint nrows;
-        gint ncols;
-
-        gint reg_type;
-        gint cursor_type;
-
-        CellLayoutInfo *layout_info;
-        CellDimensions *dimensions;
-
-        gchar ***labels;              /* for the header */
-        GdkFont *header_font;          
-
-        GtkJustification **alignments;
-
-        GdkColor ***active_bg_color;
-        GdkColor ***inactive_bg_color;
-        int **borders;
-
-        gint refcount;
-} SheetBlockStyle;
-
+typedef struct _SheetBlockStyle SheetBlockStyle;
 
 typedef struct  
 {
@@ -109,14 +67,14 @@ typedef struct
            is associated to */
         VirtualCellLocation vcell_loc;
 
-        /*  The style for this block, derived from the handlers for
-            the virt row/col */
+        /* The style for this block, derived from the handlers for
+           the virt row/col */
         SheetBlockStyle *style;
 
         GdkColor ***fg_colors;
         GdkColor ***bg_colors;                
 
-        /*  the text of the block;  a num_phys_row by num_phys_cols array */
+        /* the text of the block;  a num_phys_row by num_phys_cols array */
         gchar ***entries;
 } SheetBlock;
 
@@ -193,7 +151,7 @@ typedef struct
 
 
 GtkType    gnucash_sheet_get_type (void);
-GtkWidget *gnucash_sheet_new 	 (Table *table);
+GtkWidget *gnucash_sheet_new (Table *table);
 
 void gnucash_sheet_table_load (GnucashSheet *sheet);
 
@@ -273,7 +231,6 @@ typedef struct {
         GtkTableClass parent_class;
 
         void (*activate_cursor) (GnucashRegister *reg);
-
 } GnucashRegisterClass;
 
 #endif

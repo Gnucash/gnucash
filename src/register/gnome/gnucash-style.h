@@ -26,12 +26,62 @@
 #include "splitreg.h"
 #include "gnucash-sheet.h"
 
-#define STYLE_BORDER_LEFT 1<<0
-#define STYLE_BORDER_RIGHT 1<<1
-#define STYLE_BORDER_TOP 1<<2
-#define STYLE_BORDER_BOTTOM 1<<3
+#define STYLE_BORDER_LEFT   (1 << 0)
+#define STYLE_BORDER_RIGHT  (1 << 1)
+#define STYLE_BORDER_TOP    (1 << 2)
+#define STYLE_BORDER_BOTTOM (1 << 3)
 
 typedef int RegisterBorders;
+
+typedef struct
+{
+        gint pixel_height;
+        gint pixel_width;
+
+        gint origin_x;
+        gint origin_y;
+} CellDimensions;
+
+typedef struct
+{
+        gint nrows;
+        gint ncols;
+
+        /* totals, in pixels */
+        gint height;
+        gint width;
+
+        /* per cell parameters */
+        GTable *cell_dimensions;
+
+        gint refcount;
+} BlockDimensions;
+
+typedef struct _CellLayoutInfo CellLayoutInfo;
+
+struct _SheetBlockStyle
+{
+        gint nrows;
+        gint ncols;
+
+        gint reg_type;
+        gint cursor_type;
+
+        CellLayoutInfo *layout_info;
+        BlockDimensions *dimensions;
+
+        gchar ***labels;              /* for the header */
+        GdkFont *header_font;          
+
+        GtkJustification **alignments;
+
+        GdkColor ***active_bg_color;
+        GdkColor ***inactive_bg_color;
+        int **borders;
+
+        gint refcount;
+};
+
 
 void gnucash_style_init (void);
 
@@ -44,6 +94,9 @@ const char * gnucash_style_get_default_register_font_name(void);
 const char * gnucash_style_get_default_register_hint_font_name(void);
 
 gint gnucash_style_col_is_resizable (SheetBlockStyle *style, int col);
+
+CellDimensions * gnucash_style_get_cell_dimensions (SheetBlockStyle *style,
+                                                    int row, int col);
 
 void gnucash_sheet_style_set_col_width (GnucashSheet *sheet,
                                         SheetBlockStyle *style,
@@ -86,7 +139,6 @@ void gnucash_style_set_cell_borders (SheetBlockStyle *style,
 void gnucash_style_set_register_borders (int reg_borders_new);
 void gnucash_style_set_borders (SheetBlockStyle *style, int border);
 void gnucash_sheet_set_borders (GnucashSheet *sheet, int border);
-
 
 
 extern GdkFont *gnucash_register_font;

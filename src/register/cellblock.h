@@ -87,6 +87,7 @@ typedef struct
 {
   short right_traverse_row;
   short right_traverse_col;
+
   short left_traverse_row;
   short left_traverse_col;
 } CellTraverseInfo;

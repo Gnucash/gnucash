@@ -65,6 +65,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         GnucashHeader *header = GNUCASH_HEADER(item);
         SheetBlockStyle *style = header->style;
         SheetBlockStyle *header_style;
+        CellDimensions *cd;
         int i, j;
         int xpaint, ypaint;
         int w = 0, h = 0;
@@ -103,18 +104,20 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                    That way we'll be sure everything is drawn
                    consistently, and cut down on maintenance issues. */
                 for (j = 0; j < style->ncols; j++) {
+                        cd = gnucash_style_get_cell_dimensions (style, i, j);
+
                         if (header->in_resize && (j == header->resize_col))
                                 w = header->resize_col_width;
                         else
-                                w = style->dimensions->pixel_widths[i][j];
-                        
-                        h = style->dimensions->pixel_heights[i][j];
-                        
+                                w = cd->pixel_width;
+
+                        h = cd->pixel_height;
+
                         gdk_draw_rectangle (drawable, header->gc, FALSE,
                                             xpaint, ypaint, w, h);
-                        
+
                         text = style->labels[i][j];
-                        
+
                         if (text) {
                                 gint x_offset, y_offset;
                                 GdkRectangle rect;
@@ -285,11 +288,13 @@ pointer_on_resize_line (GnucashHeader *header, int x, int y, int *col)
 {
         SheetBlockStyle *style = header->style;
         gboolean on_the_line = FALSE;
-        int pixels = 0; /* = style->dimensions->pixel_widths[header->row][0];*/
+        CellDimensions *cd;
+        int pixels = 0;
         int j;
 
         for (j = 0; j < style->ncols; j++) {
-                pixels += style->dimensions->pixel_widths[header->row][j];
+                cd = gnucash_style_get_cell_dimensions (style, header->row, j);
+                pixels += cd->pixel_width;
                 if (x >= pixels - 1 && x <= pixels + 1)
                         on_the_line = TRUE;
                 if (x <= pixels + 1)
@@ -306,15 +311,17 @@ pointer_on_resize_line (GnucashHeader *header, int x, int y, int *col)
 static int
 find_resize_col (GnucashHeader *header, int col)
 {
-        int start = col;
         SheetBlockStyle *style = header->style;
+        CellDimensions *cd;
+        int start = col;
 
         if (col < 0 || col >= style->ncols)
                 return -1;
 
         /* skip to the right over zero-width columns */
-        while (col+1 < style->ncols &&
-               style->dimensions->pixel_widths[0][col+1] == 0)
+        while ((col+1 < style->ncols) &&
+               (cd = gnucash_style_get_cell_dimensions (style, 0, col + 1)) &&
+               (cd->pixel_width == 0))
                 col++;
 
         /* now go back left till we have a resizable column */
@@ -413,9 +420,15 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
                         col = -1;
 
                 if (col > -1) {
+                        CellDimensions *cd;
+
+                        cd = gnucash_style_get_cell_dimensions (header->style,
+                                                                header->row,
+                                                                col);
+
                         header->in_resize = TRUE;
                         header->resize_col = col;
-                        header->resize_col_width = header->style->dimensions->pixel_widths[header->row][col];
+                        header->resize_col_width = cd->pixel_width;
                         header->resize_x = x;
                 }
 
@@ -433,10 +446,12 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
 
                 if (header->in_resize) {
                         if (header->needs_ungrab) {
-                                gnome_canvas_item_ungrab (item, event->button.time);
+                                gnome_canvas_item_ungrab (item,
+                                                          event->button.time);
                                 header->needs_ungrab = FALSE;
 
-                                gnucash_sheet_style_set_col_width (sheet, header->style,
+                                gnucash_sheet_style_set_col_width (sheet,
+                                                                   header->style,
                                                                    header->resize_col, header->resize_col_width, FALSE);
 
                                 gtk_window_set_default_size(GTK_WINDOW(sheet->window), 0, 0);

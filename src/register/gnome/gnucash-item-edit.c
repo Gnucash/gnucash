@@ -457,6 +457,7 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
         gint pos_x;
         gint o_x, o_y;
         VirtualCellLocation vcell_loc;
+        CellDimensions *cd;
         gint cell_row, cell_col;
         SheetBlockStyle *style;
         PhysicalCell *pcell;
@@ -476,8 +477,10 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
 
         style = gnucash_sheet_get_style (item_edit->sheet, vcell_loc);
 
-        o_x = style->dimensions->origin_x[cell_row][cell_col];
-        o_y = style->dimensions->origin_y[cell_row][cell_col];
+        cd = gnucash_style_get_cell_dimensions (style, cell_row, cell_col);
+
+        o_x = cd->origin_x;
+        o_y = cd->origin_y;
 
         if ( (vcell_loc.virt_row != item_edit->virt_row) ||
              (vcell_loc.virt_col != item_edit->virt_col) ||

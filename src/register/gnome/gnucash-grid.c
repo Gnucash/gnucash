@@ -187,6 +187,7 @@ gnucash_grid_find_cell_by_pixel (GnucashGrid *grid, gint x, gint y,
                                  VirtualLocation *virt_loc)
 {
         SheetBlockStyle *style;
+        CellDimensions *cd;
         int block_x, block_y;
 
         if (virt_loc == NULL)
@@ -210,12 +211,12 @@ gnucash_grid_find_cell_by_pixel (GnucashGrid *grid, gint x, gint y,
                 gint pixel = 0;
 
                 do {
-                        if ( y >= pixel &&
-                             y <  pixel +
-                               style->dimensions->pixel_heights[row][0])
+                        cd = gnucash_style_get_cell_dimensions (style, row, 0);
+
+                        if ( y >= pixel && y < pixel + cd->pixel_height)
                                 break;
 
-                        pixel += style->dimensions->pixel_heights[row][0];
+                        pixel += cd->pixel_height;
                         row++;
                 } while (row < style->nrows);
 
@@ -224,12 +225,13 @@ gnucash_grid_find_cell_by_pixel (GnucashGrid *grid, gint x, gint y,
 
                 pixel = 0;
                 do {
-                        if ( x >= pixel &&
-                             x <  pixel +
-                               style->dimensions->pixel_widths[row][col]) 
+                        cd = gnucash_style_get_cell_dimensions (style,
+                                                                row, col);
+
+                        if ( x >= pixel && x < pixel + cd->pixel_width) 
                                 break;
 
-                        pixel += style->dimensions->pixel_widths[row][col];
+                        pixel += cd->pixel_width;
                         col++;
                 } while (col < style->ncols);
 
@@ -383,6 +385,7 @@ gnucash_grid_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         VirtualLocation virt_loc;
         SheetBlockStyle *style;
         SheetBlock *sheet_block;
+        CellDimensions *cd;
         Table *table;
         gint x_paint, y_paint;
         gint diff_x, diff_y;
@@ -398,7 +401,7 @@ gnucash_grid_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         /* The default background */
         gdk_draw_rectangle (drawable, grid->fill_gc, TRUE,
                             0, 0, width, height);
-        
+
         /* compute our initial values where we start drawing */
         if (!gnucash_grid_find_block_origin_by_pixel (grid, x, y, NULL,
                                                       &ox, &oy))
@@ -422,19 +425,26 @@ gnucash_grid_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                 cellrow = virt_loc.phys_row_offset;
                 cellcol = virt_loc.phys_col_offset;
 
-                ox = style->dimensions->origin_x[cellrow][cellcol];
-                
+                cd = gnucash_style_get_cell_dimensions (style,
+                                                        cellrow, cellcol);
+
+                ox = cd->origin_x;
+
                 diff_x = x - ox;
 
                 for (x_paint = x - diff_x;
                      x_paint <= x + width && cellcol < style->ncols; ) {
+                        cd = gnucash_style_get_cell_dimensions (style,
+                                                                cellrow,
+                                                                cellcol);
 
-                        h = style->dimensions->pixel_heights[cellrow][0];
-                        w = style->dimensions->pixel_widths[cellrow][cellcol];
+                        h = cd->pixel_height;
+                        w = cd->pixel_width;
 
                         draw_cell (grid, virt_loc.vcell_loc.virt_row,
                                    style, cellrow, cellcol, drawable,
                                    x_paint - x, y_paint - y, w, h);
+
                         x_paint += w;
                         cellcol++;
                 }

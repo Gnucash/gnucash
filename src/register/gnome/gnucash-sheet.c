@@ -792,6 +792,7 @@ static gint
 compute_optimal_height (GnucashSheet *sheet)
 {
         SheetBlockStyle *style;
+        CellDimensions *cd;
         gint row_height;
 
         if (sheet->default_height >= 0)
@@ -802,10 +803,11 @@ compute_optimal_height (GnucashSheet *sheet)
 
         style = sheet->cursor_style[GNUCASH_CURSOR_HEADER];
 
-        if ((style == NULL) || (style->dimensions->pixel_heights == NULL))
+        cd = gnucash_style_get_cell_dimensions (style, 0, 0);
+        if (cd == NULL)
                 return DEFAULT_REGISTER_HEIGHT;
 
-        row_height = style->dimensions->pixel_heights[0][0];
+        row_height = cd->pixel_height;
         sheet->default_height = row_height * gnucash_register_initial_rows;
 
         return sheet->default_height;
@@ -816,7 +818,6 @@ static void
 gnucash_sheet_size_request (GtkWidget *widget, GtkRequisition *requisition)
 {
         GnucashSheet *sheet = GNUCASH_SHEET(widget);
-
 
         requisition->width = compute_optimal_width (sheet);
         requisition->height = compute_optimal_height (sheet);

@@ -1,3 +1,11 @@
+2000-09-16  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/table-allgui.c: re-implement using gtables.
+
+	* src/register/cellblock.c: re-implement using gtables.
+
+	* src/register/gtable.c: implentation of a dynamic 2-d array.
+
 2000-09-13  Dave Peticolas  <dave@krondo.com>
 
 	* src/SplitLedger.c (xaccSRSaveChangedCells): don't copy memo

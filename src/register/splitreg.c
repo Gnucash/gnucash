@@ -110,7 +110,7 @@ static SplitRegisterColors reg_colors = {
 #define MXFRM_CELL_ALIGN   CELL_ALIGN_RIGHT
 #define XTO_CELL_ALIGN     CELL_ALIGN_RIGHT
 #define DESC_CELL_ALIGN    CELL_ALIGN_LEFT
-#define MEMO_CELL_ALIGN    CELL_ALIGN_LEFT
+#define MEMO_CELL_ALIGN    CELL_ALIGN_FILL
 #define RECN_CELL_ALIGN    CELL_ALIGN_CENTER
 #define DEBT_CELL_ALIGN    CELL_ALIGN_RIGHT
 #define CRED_CELL_ALIGN    CELL_ALIGN_RIGHT
@@ -294,26 +294,29 @@ configAction (SplitRegister *reg)
 
 /* ============================================== */
 
-#define SET(NAME,col,row,handler)				\
-{								\
-   BasicCell *hcell;						\
-   hcell = reg->header_label_cells[NAME##_CELL];		\
-								\
-   if ((0<=row) && (0<=col)) {					\
-      CellBlockCell *cb_cell;                                   \
-                                                                \
-      cb_cell = gnc_cellblock_get_cell (curs, row, col);        \
-                                                                \
-      cb_cell->cell = (handler);			        \
-      cb_cell->cell_type = NAME##_CELL;                         \
-      cb_cell->alignment = NAME##_CELL_ALIGN;		        \
-                                                                \
-      cb_cell = gnc_cellblock_get_cell (header, row, col);      \
-      if (cb_cell) {                                            \
-        cb_cell->alignment = NAME##_CELL_ALIGN;		        \
-        cb_cell->cell = hcell;			                \
-      }								\
-   }                                                            \
+#define SET(NAME,col,row,handler)			    \
+{							    \
+   BasicCell *hcell;					    \
+   hcell = reg->header_label_cells[NAME##_CELL];	    \
+							    \
+   if ((0<=row) && (0<=col)) {				    \
+      CellBlockCell *cb_cell;                               \
+                                                            \
+      cb_cell = gnc_cellblock_get_cell (curs, row, col);    \
+                                                            \
+      cb_cell->cell = (handler);			    \
+      cb_cell->cell_type = NAME##_CELL;                     \
+      cb_cell->sample_text = g_strdup (NAME##_CELL_SAMPLE); \
+      cb_cell->alignment = NAME##_CELL_ALIGN;		    \
+      cb_cell->resizable = (cb_cell->cell !=                \
+                            (BasicCell *) reg->recnCell);   \
+                                                            \
+      cb_cell = gnc_cellblock_get_cell (header, row, col);  \
+      if (cb_cell) {                                        \
+        cb_cell->alignment = NAME##_CELL_ALIGN;		    \
+        cb_cell->cell = hcell;			            \
+      }							    \
+   }                                                        \
 }
 
 /* SET_CELL macro initializes cells in the register */
