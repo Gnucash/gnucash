@@ -188,31 +188,21 @@ install:
 	$(INSTALL_DATA) data/*.xac ${GNC_SHAREDIR}/data
 
 	@mkdir -p ${GNC_SHAREDIR}/Docs
-	@mkdir -p ${GNC_SHAREDIR}/Docs/En
-	@mkdir -p ${GNC_SHAREDIR}/Docs/Fr
-	$(INSTALL_DATA) Docs/*.html ${GNC_SHAREDIR}/Docs
-	$(INSTALL_DATA) Docs/En/*.html ${GNC_SHAREDIR}/Docs/En
-	$(INSTALL_DATA) Docs/Fr/*.html ${GNC_SHAREDIR}/Docs/Fr
-# XXX hack alert -- should fix scheme paths to find language directories.
-	$(INSTALL_DATA) Docs/En/*.html ${GNC_SHAREDIR}/Docs
-  #	$(INSTALL_DATA) Docs/*.phtml ${GNC_SHAREDIR}/Docs
-	$(INSTALL_DATA) Docs/*.gif ${GNC_SHAREDIR}/Docs
-  #	$(INSTALL_DATA) Docs/*.jpg ${GNC_SHAREDIR}/Docs
-  #	$(INSTALL_DATA) Docs/*.xpm ${GNC_SHAREDIR}/Docs
+	@mkdir -p ${GNC_SHAREDIR}/Docs/C
+	@mkdir -p ${GNC_SHAREDIR}/Docs/C/pix
+	@mkdir -p ${GNC_SHAREDIR}/Docs/fr
+	@mkdir -p ${GNC_SHAREDIR}/Docs/fr/pix
+	$(INSTALL_DATA) Docs/C/*.html ${GNC_SHAREDIR}/Docs/C
+	$(INSTALL_DATA) Docs/fr/*.html ${GNC_SHAREDIR}/Docs/fr
+	$(INSTALL_DATA) Docs/C/pix/*.* ${GNC_SHAREDIR}/Docs/C/pix
+	$(INSTALL_DATA) Docs/fr/pix/*.* ${GNC_SHAREDIR}/Docs/fr/pix
 	$(INSTALL_DATA) Docs/*.css ${GNC_SHAREDIR}/Docs
-	@mkdir -p ${GNC_SHAREDIR}/Docs/images
-  # 	$(INSTALL_DATA) Docs/logos/*.* ${GNC_SHAREDIR}/Docs/images
 	@mkdir -p ${GNC_SHAREDIR}/Docs/logos
 	$(INSTALL_DATA) Docs/logos/*.* ${GNC_SHAREDIR}/Docs/logos
 
 	@mkdir -p ${GNC_SHAREDIR}/Reports
 	$(INSTALL_DATA) Reports/*.html ${GNC_SHAREDIR}/Reports
 	$(INSTALL_DATA) Reports/*.phtml ${GNC_SHAREDIR}/Reports
-  #	$(INSTALL_DATA) Reports/*.gif ${GNC_SHAREDIR}/Reports
-  #	$(INSTALL_DATA) Reports/*.jpg ${GNC_SHAREDIR}/Reports
-  #	$(INSTALL_DATA) Reports/*.xpm ${GNC_SHAREDIR}/Reports
-	@mkdir -p ${GNC_SHAREDIR}/Reports/images
-  # 	$(INSTALL_DATA) Reports/logos/*.* ${GNC_SHAREDIR}/Reports/images
 
   # ------------------------------------------------------------------
   # hack alert -- the config dir stuff is messed up in configure.in as well 

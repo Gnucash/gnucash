@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.06 [fr] (Win98; I) [Netscape]">
+   <TITLE>Stock Ticker</TITLE>
+</HEAD>
+<BODY BGCOLOR="#EEEEEE">
+
+<H1>
+Cours des actions et codes des titres</H1>
+GnuCash actuellement fournit des possibilit&eacute;s de cotation d'actions
+automatis&eacute;. Si un compte est correctement configur&eacute;, et l'ordinateur
+h&ocirc;te est connect&eacute; sur internet, l'ex&eacute;cutable <TT>gnc-prices</TT>
+peut &ecirc;tre utilis&eacute; pour chargerv les cotations des cours d'actions
+ou FCP et SICAV &agrave; partir de divers sites web directement dans GnuCash.
+<P>Pour utiliser cette fonctionnalit&eacute;, ce qui suit doit &ecirc;tre
+fait:
+<UL>
+<LI>
+Cr&eacute;er un compte et marquer le comme &eacute;tant du type "FCP/SICAV"
+ou "Actions".</LI>
+
+<LI>
+Entrer un code de titre valide (ndt : code SICOVAM en france) dans le champ
+marqu&eacute; "Valeur:"</LI>
+
+<LI>
+S&eacute;lectionner une source de cotations depuis le menu d&eacute;roulant.
+Actuellement les sources de cotations support&eacute;s incluent <B>Yahoo</B>,
+<B>Fidelity Investments</B>, <B>T. Rowe Price</B> et le <B>Vanguard Group</B>.
+Noter que Yahoo fournira le cours des cotations pour la plupart des fonds
+communs , incluant Fidelity, T.Rowe Price and Vanguard, et les cours/NAV
+cot&eacute;s&nbsp; devrait &ecirc;tre identique &agrave; ceux sur les sites
+sources.</LI>
+</UL>
+Un exemple d'image est montr&eacute; ci-dessous:
+<P><IMG SRC="ticker-a.gif" HEIGHT=347 WIDTH=405>
+<P>Pour mettre &agrave; jour les cours stock&eacute;s dans un fichier de
+compte de gnucash, lancez en ligne de commande <TT>gnc-price</TT>, en specifiant
+le nom du fichier; par exemple:
+<PRE>&nbsp;&nbsp;&nbsp; gnc-prices myaccts.xac</PRE>
+En lan&ccedil;ant cette commande, elle affichera divers messages de diagnostic
+vers l'&eacute;cran tandis qu'elle chargera les donn&eacute;es. Elle fonctionnera
+seulement quand l'ordinateur h&ocirc;te est connect&eacute; &agrave; internet.
+Elle fonctionnera si l'h&ocirc;te est derri&egrave;re un parefeu/firewall
+de style masqu&eacute;. Elle ne fonctionne pas actuellement depuis derri&egrave;re
+un proxy ou des parefeu de style socks. La commande peut &ecirc;tre lanc&eacute;e
+plusieurs fois dans une journ&eacute;e;&nbsp; pourtant, elle mettra les
+comptes &agrave; jour au maximum une fois avec la plupart des donn&eacute;es
+de cours de la journ&eacute;e &eacute;chang&eacute; derni&egrave;rement.
+Ainsi, si&nbsp; gnc-prices est lanc&eacute; le vendredi, samedi, dimanche
+et&nbsp; lundi, seulement deux chargement de cours seront effectu&eacute;:
+un contenant les donn&eacute;es du vendredi, et un contenant les donn&eacute;es
+du lundi, tandis que celui du samedi et dimanche lanc&eacute; retrouvera
+seulement les cours de cloture du vendredi. Pour emp&ecirc;cher&nbsp; gnc-prices
+de mettre &agrave; jour un compte, tandis que vous lui permettez de mettre
+&agrave; jour un autre compte, simplement marqu&eacute; les donn&eacute;es
+source pour ce compte comme "(aucun)". Vous pouvez le faire depuis la fen&ecirc;tre
+"Afficher un compte".
+<P>Apr&egrave;s avoir lanc&eacute; gnc-prices pendant quelques jours, vos
+comptes commenceront &agrave; ressembler&nbsp; &agrave; ce qui suit:
+<P><IMG SRC="ticker-b.gif" HEIGHT=372 WIDTH=881>
+<HR>
+</BODY>
+</HTML>

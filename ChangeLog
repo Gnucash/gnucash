@@ -1,4 +1,23 @@
+2000-03-04  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/guile/gnucash.c (main): load the locale from the environment
+ 	with setlocale. This is needed so that guile can find the locale.
+
+	* Docs/: reorganized the Docs directory. Then english language
+ 	stuff moved to the "C" directory. The french stuff goes under
+ 	"fr". The "En" and "Fr" directories are gone. The standard for
+ 	country codes uses lower-cases letters, so we should stick to
+ 	that. The graphics files go under "pix" directories under their
+ 	respective language directories.
+
+	* src/scm/path.scm: create documentation search paths based on the
+ 	current locale. The default "C" locale is always searched last.
+
+	* src/reports/File.c (gncFindFile): take out dead code.
+
 2000-03-03  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/pricecell.c (PriceMV): accept thousands separators.
 
 	* src/scm/c-interface.scm: new functionality for registering
  	translatable strings and saving them to a file in a suitable

@@ -903,11 +903,13 @@ htmlReadImageProc (GtkWidget *widget, String file, gpointer data)
 
   /* construct absolute path -- twiddle the relative path we received */  
   filename = gncFindFile(file);
-  
+
   /* use the default proc for the hard work */
   retval = XmHTMLImageDefaultProc(widget, filename, NULL, 0);
 
-  free(filename);
+  if (filename != NULL)
+    free(filename);
+
   return retval;
 }
 

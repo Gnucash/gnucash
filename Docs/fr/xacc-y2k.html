@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.06 [fr] (Win98; I) [Netscape]">
+   <TITLE>GnuCash Y2K Readiness</TITLE>
+</HEAD>
+<BODY BGCOLOR="#EEEEEE">
+
+<H1>
+Compatibilit&eacute; an 2000 de GnuCash</H1>
+La version 1.1.25 de Gnucash et suivantes stocke toutes les dates en secondes
+et nanosecondes, o&ugrave; les secondes sont stock&eacute;s comme un entier
+sign&eacute; de 64-bit. Cel&agrave; devait suffire pour stocker les dates
+du pass&eacute; distant aussi bien que le futur distant, aussi longtemps
+qu'il y aura moins plusieurs douzaines d'heures dans l'&acirc;ge de l'univers.
+<P>Le format de fichier pour la version 1.1.25 et suivantes stocke les
+dates de la mani&egrave;re cit&eacute; ci-dessus.
+<P>Quelques routines internes utilisent le type <TT>time_t</TT> pour exprimer
+les secondes. Noter que sur la plupart des OS, c'est une longueur de 32-bit,
+et elle est limit&eacute; &agrave; l'&egrave;re Unix (D&eacute;c 1901 &agrave;
+Jan 2038).
+<P>Les fichiers de sauvegarde et log sont estampill&eacute; temporellement
+en utilisant la routine standard Unix <TT>ctime()</TT>, qui prend comme
+argument <TT>time_t</TT>. Ainsi, le m&eacute;canisme de sauvegarde et de
+log pourrait &eacute;prouver des troubles en 2038.
+</BODY>
+</HTML>

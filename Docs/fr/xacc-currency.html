@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.06 [fr] (Win98; I) [Netscape]">
+</HEAD>
+<BODY>
+Un syst&egrave;me &agrave; double entr&eacute;e stocke les valeurs ensemble
+<BR>(et effectue le solde/bilan des transactions):
+<P>&eacute;tats de la double entr&eacute;e o&ugrave; value1+value2+value3+
+... = 0
+<BR>et dont chaque valeur est enregistr&eacute;e dans un compte diff&eacute;rent.
+<BR>Une valeur est : valeur=Taux de change*montant (pour les comptes de
+devises/monnaies)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; valeur=cours*nombre
+de parts (pour les actions/FCP et SICAV)
+<P>Ainsi, acheter un gadget au japon et utiliser des dollars pour le payer
+devrait apparaitre
+<BR>commme ceci:
+<P>SpendAcct: (un compte banque/liquidit&eacute;s ordinaire libell&eacute;
+en USD)
+<BR>----------
+<BR>Date&nbsp;&nbsp;&nbsp; transfert depuis&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+m&eacute;mo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+cout
+<BR>1/5/99&nbsp;&nbsp;&nbsp; [YenAcct]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Achat gadget&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $1.00
+<BR>&nbsp;
+<P>YenAcct: (un compte d'achat/vente de devises libell&eacute; en yen)
+<BR>--------
+<BR>Date&nbsp;&nbsp;&nbsp; transfert depuis&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+m&eacute;mo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+achat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; taux
+<BR>1/5/99&nbsp;&nbsp;&nbsp; [SpendAcct]&nbsp;&nbsp;&nbsp;&nbsp; Buy widget&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Y150&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00667
+<BR>&nbsp;
+<P>Le moteur lie ,toutes les trois, ces valeurs ensemble (1.0, 150, 0.00667)
+<BR>en permanence et les rend imposssible &agrave; changer sans en changer
+une autre,
+<BR>ainsi que la grande addition est toujours z&eacute;ro.
+<BR>&nbsp;
+</BODY>
+</HTML>

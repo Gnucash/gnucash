@@ -1,3 +1,26 @@
+(define (gnc:locale-prefixes)
+  (let* ((locale (setlocale LC_MESSAGES))
+         (strings (cond ((not (string? locale)) ())
+                        ((equal? locale "C") ())
+                        ((<= (string-length locale) 2) (list locale))
+                        (else (list (substring locale 0 2) locale)))))
+    (reverse (cons "C" strings))))
+
+(define (gnc:default-doc-dirs)
+  (let ((user-paths (list
+                     (list (getenv "HOME") ".gnucash" "doc")))
+        (locale-paths (map (lambda (prefix)
+                             (list gnc:_share-dir-default_ "Docs" prefix))
+                           (gnc:locale-prefixes)))
+        (pix-paths (map (lambda (prefix)
+                          (list gnc:_share-dir-default_ "Docs" prefix "pix"))
+                        (gnc:locale-prefixes)))
+        (base-paths (list
+                     (list gnc:_share-dir-default_ "Docs")))
+        (report-paths (list
+                       (list gnc:_share-dir-default_ "Reports"))))
+    (map (lambda (paths) (apply build-path paths))
+         (append user-paths locale-paths pix-paths base-paths report-paths))))
 
 (define (gnc:_expand-doc-path_ new-path)
   ;; FIXME: Bad items should probably cause this to abort with #f or
@@ -8,12 +31,7 @@
            (cond ((string? item) (list item))
                  ((symbol? item)
                   (case item
-                    ((default)
-                     (list
-                      (build-path (getenv "HOME") ".gnucash" "doc")    
-                      (build-path gnc:_share-dir-default_ "Docs" "En")
-                      (build-path gnc:_share-dir-default_ "Docs")
-                      (build-path gnc:_share-dir-default_ "Reports")))
+                    ((default) (gnc:default-doc-dirs))
                     ((current)
                      (gnc:config-var-value-get gnc:*doc-path*))
                     (else

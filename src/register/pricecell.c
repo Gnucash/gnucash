@@ -89,28 +89,36 @@ PriceMV (BasicCell *_cell,
    PriceCell *cell = (PriceCell *) _cell;
    struct lconv *lc = gnc_localeconv();
    char decimal_point;
+   char thousands_sep;
 
    if (cell->monetary)
      decimal_point = lc->mon_decimal_point[0];
    else
      decimal_point = lc->decimal_point[0];
 
+   if (cell->monetary)
+     thousands_sep = lc->mon_thousands_sep[0];
+   else
+     thousands_sep = lc->thousands_sep[0];
+
    /* accept the newval string if user action was delete, etc. */
    if (change != NULL)
    {
       int i, count=0;
 
-      for (i=0; 0 != change[i]; i++)
+      for (i = 0; 0 != change[i]; i++)
       {
-        /* accept only numbers or a decimal point */
-        if (!isdigit(change[i]) && (decimal_point != change[i]))
+        /* accept only numbers or a decimal point or a thousands sep */
+        if (!isdigit(change[i]) &&
+            (decimal_point != change[i]) &&
+            (thousands_sep != change[i]))
           return NULL;
 
         if (decimal_point == change[i])
           count++;
       }
 
-      for (i=0; 0 != oldval[i]; i++)
+      for (i = 0; 0 != oldval[i]; i++)
         if (decimal_point == oldval[i])
           count++;
 
