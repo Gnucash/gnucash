@@ -45,6 +45,12 @@ gnc_book_insert_trans (GNCBook *book, Transaction *trans)
    if (trans->book == book) return;
 
    newtrans = xaccDupeTransaction (trans);
+   for (node = newtrans->splits; node; node = node->next)
+   {
+      Split *s = node->data;
+      s->parent = newtrans;
+   }
+
 
    /* Utterly wipe out the transaction from the old book. */
    xaccTransBeginEdit (trans);
