@@ -124,6 +124,7 @@ scanDate(const char *buff, int *day, int *month, int *year)
    time_t secs;
    struct tm *now;
 
+   if (!buff) return;
    dupe = strdup (buff);
    tmp = dupe;
    first_field = 0x0;
@@ -177,9 +178,9 @@ scanDate(const char *buff, int *day, int *month, int *year)
    if(iyear<100)
      iyear += ((int) ((now->tm_year+1900)/100)) * 100;
 
-   *year=iyear;
-   *month=imonth;
-   *day=iday;
+   if (year) *year=iyear;
+   if (month) *month=imonth;
+   if (day) *day=iday;
 }
 
 /**
