@@ -90,7 +90,7 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
     gnc_hbci_api_interactors (api, parent);
 
   return api;
-};
+}
 
 static HBCI_API *gnc_hbci_api = NULL;
 static char *gnc_hbci_configfile = NULL;
@@ -122,7 +122,7 @@ HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent,
     GNCInteractor_reparent (*inter, parent);
     return gnc_hbci_api;
   }
-};
+}
 
 void gnc_hbci_api_delete (HBCI_API *api)
 {
@@ -160,17 +160,17 @@ gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc)
   bankcode = gnc_hbci_get_account_bankcode (gnc_acc);
   countrycode = gnc_hbci_get_account_countrycode (gnc_acc);
   if (bankcode && (strlen(bankcode)>0) && (countrycode > 0)) {
-    //printf("gnc_acc %s has blz %s and ccode %d\n",
-    //   xaccAccountGetName (gnc_acc), bankcode, countrycode);
+    /*printf("gnc_acc %s has blz %s and ccode %d\n",
+      xaccAccountGetName (gnc_acc), bankcode, countrycode);*/
     bank = HBCI_API_findBank (api, countrycode, bankcode);
     if (bank) {
       accountid = gnc_hbci_get_account_accountid (gnc_acc);
       if (accountid && (strlen(accountid)>0)) {
 	hbci_acc = HBCI_Bank_findAccount (bank, accountid);
 	if (hbci_acc) {
-	  //printf("can connect gnc_acc %s to hbci_acc %s\n",
-	  // xaccAccountGetName (gnc_acc), 
-	  // HBCI_Account_accountId (hbci_acc));
+	  /*printf("can connect gnc_acc %s to hbci_acc %s\n",
+	    xaccAccountGetName (gnc_acc), 
+	    HBCI_Account_accountId (hbci_acc));*/
 	  return hbci_acc;
 	} /* hbci_acc */
       } /* accountid */

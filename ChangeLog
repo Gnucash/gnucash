@@ -1,3 +1,11 @@
+2003-07-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-transfer.c,
+	src/import-export/hbci/dialog-hbcitrans.c: Change HBCI online
+	transfer action so that first the gnucash Transaction is created
+	and only after that the HBCI connection is started. Necessary for
+	later implementation of offline queueing and multi-job execution.
+
 2003-07-01  David Hampton  <hampton@employees.org>
 
 	* src/backend/file/gnc-backend-file.c: New data file should have
