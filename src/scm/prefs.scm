@@ -67,105 +67,38 @@
 
 ;;;;;; Create default options and config vars
 
-;; Account Types options
+;; Main Window options
 
 (gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Types" "Show bank accounts"
-  "a" "Show bank accounts in the account tree." #t))
+ (gnc:make-list-option
+  "Main Window" "Account types to display"
+  "a" ""
+  (list 'equity 'expense 'income 'currency 'mutual
+        'stock 'liability 'asset 'credit 'cash 'bank)
+  (list #(bank "Bank" "")
+        #(cash "Cash" "")
+        #(credit "Credit" "")
+        #(asset "Asset" "")
+        #(liability "Liability" "")
+        #(stock "Stock" "")
+        #(mutual "Mutual Fund" "")
+        #(currency "Currency" "")
+        #(income "Income" "")
+        #(expense "Expense" "")
+        #(equity "Equity" ""))))
 
 (gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Types" "Show cash accounts"
-  "b" "Show cash accounts in the account tree." #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Types" "Show credit accounts"
-  "c" "Show credit accounts in the account tree." #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Types" "Show asset accounts"
-  "d" "Show asset accounts in the account tree." #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Types" "Show liability accounts"
-  "e" "Show liability accounts in the account tree." #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Types" "Show stock accounts"
-  "f" "Show stock accounts in the account tree." #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Types" "Show mutual fund accounts"
-  "g" "Show mutual fund accounts in the account tree." #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Types" "Show currency accounts"
-  "h" "Show currency accounts in the account tree." #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Types" "Show income accounts"
-  "i" "Show income accounts in the account tree." #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Types" "Show expense accounts"
-  "j" "Show expense accounts in the account tree." #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Types" "Show equity accounts"
-  "k" "Show equity accounts in the account tree." #t))
-
-
-;; Account Fields options
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Fields" "Show account name"
-  "a" "Show the account name column in the account tree." #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Fields" "Show account type"
-  "b" "Show the account type column in the account tree." #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Fields" "Show account code"
-  "c" "Show the account code column in the account tree." #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Fields" "Show account description"
-  "d" "Show the account description column in the account tree." #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Fields" "Show account notes"
-  "e" "Show the account notes column in the account tree." #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Fields" "Show account currency"
-  "f" "Show the account currency column in the account tree." #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Fields" "Show account security"
-  "g" "Show the account security column in the account tree." #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Account Fields" "Show account balance"
-  "h" "Show the account balance column in the account tree." #t))
+ (gnc:make-list-option
+  "Main Window" "Account fields to display"
+  "b" ""
+  (list 'balance 'description)
+  (list #(type "Type" "")
+        #(code "Code" "")
+        #(description "Description" "")
+        #(notes "Notes" "")
+        #(currency "Currency" "")
+        #(security "Security" "")
+        #(balance "Balance" ""))))
 
 
 ;; International options

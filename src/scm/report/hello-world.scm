@@ -14,12 +14,12 @@
   (define (options-generator)
 
     ;; This will be the new set of options.
-    (define gnc:*dummy-options* (gnc:new-options))
+    (define gnc:*hello-world-options* (gnc:new-options))
 
     ;; This is just a helper function for making options.
     ;; See gnucash/src/scm/options.scm for details.
-    (define (gnc:register-dummy-option new-option)
-      (gnc:register-option gnc:*dummy-options* new-option))
+    (define (gnc:register-hello-world-option new-option)
+      (gnc:register-option gnc:*hello-world-options* new-option))
 
     ;; This is a boolean option. It is in Section 'Hello, World!'
     ;; and is named 'Boolean Option'. Its sorting key is 'a',
@@ -28,7 +28,7 @@
     ;; is #t (true). The phrase 'This is a boolean option'
     ;; will be displayed as help text when the user puts
     ;; the mouse pointer over the option.
-    (gnc:register-dummy-option
+    (gnc:register-hello-world-option
      (gnc:make-simple-boolean-option
       "Hello, World!" "Boolean Option"
       "a" "This is a boolean option." #t))
@@ -38,13 +38,13 @@
     ;; symbols. The value 'first will be displayed as "First Option"
     ;; and have a help string of "Help for first option.". The default
     ;; value is 'third.
-    (gnc:register-dummy-option
+    (gnc:register-hello-world-option
      (gnc:make-multichoice-option
       "Hello, World!" "Multi Choice Option"
       "b" "This is a multi choice option." 'third
-      (list #(first  "First Option"   "Help for first option.")
-            #(second "Second Option"  "Help for second option.")
-            #(third  "Third Option"   "Help for third option.")
+      (list #(first  "First Option"   "Help for first option")
+            #(second "Second Option"  "Help for second option")
+            #(third  "Third Option"   "Help for third option")
             #(fourth "Fourth Options" "The fourth option rules!"))))
 
     ;; This is a string option. Users can type anything they want
@@ -52,7 +52,7 @@
     ;; in the same section as the option above. It will be shown
     ;; after the option above because its key is 'b' while the
     ;; other key is 'a'.
-    (gnc:register-dummy-option
+    (gnc:register-hello-world-option
      (gnc:make-string-option
       "Hello, World!" "String Option"
       "c" "This is a string option" "Hello, World"))
@@ -63,7 +63,7 @@
     ;; Unix time. The last option is false, so the user can only
     ;; select a date, not a time. The default value is the current
     ;; time.
-    (gnc:register-dummy-option
+    (gnc:register-hello-world-option
      (gnc:make-date-option
       "Hello, World!" "Just a Date Option"
       "d" "This is a date option"
@@ -72,7 +72,7 @@
 
     ;; This is another date option, but the user can also select
     ;; the time.
-    (gnc:register-dummy-option
+    (gnc:register-hello-world-option
      (gnc:make-date-option
       "Hello, World!" "Time and Date Option"
       "e" "This is a date option with time"
@@ -86,7 +86,7 @@
     ;; (#f) indicates the alpha value should be ignored. You can get
     ;; a color string from a color option with gnc:color-option->html,
     ;; which will scale the values appropriately according the range.
-    (gnc:register-dummy-option
+    (gnc:register-hello-world-option
      (gnc:make-color-option
       "Hello, World!" "Background Color"
       "f" "This is a color option"
@@ -109,23 +109,36 @@
     ;; the user is allowed to select more than one account.
     ;; The default value for this option is the currently
     ;; selected account in the main window, if any.
-    (gnc:register-dummy-option
+    (gnc:register-hello-world-option
      (gnc:make-account-list-option
-      "Hello, World!" "An account list option"
+      "Hello Again" "An account list option"
       "g" "This is an account list option"
       (lambda () (gnc:get-current-accounts))
       #f #t))
 
+    ;; This is a list option. The user can select one or (possibly)
+    ;; more values from a list. The list of acceptable values is
+    ;; the same format as a multichoice option. The value of the
+    ;; option is a list of symbols.
+    (gnc:register-hello-world-option
+     (gnc:make-list-option
+      "Hello Again" "A list option"
+      "h" "This is a list option"
+      (list 'good)
+      (list #(good  "The Good" "Good option")
+            #(bad   "The Bad"  "Bad option")
+            #(ugly  "The Ugly" "Ugly option"))))
+
     ;; This option is for testing. When true, the report generates
     ;; an exception.
-    (gnc:register-dummy-option
+    (gnc:register-hello-world-option
      (gnc:make-simple-boolean-option
       "Testing" "Crash the report"
       "a" (string-append "This is for testing. "
                          "Your reports probably shouldn't have an "
                          "option like this.") #f))
 
-    gnc:*dummy-options*)
+    gnc:*hello-world-options*)
 
   ;; This is a helper function to generate an html list of account names
   ;; given an account list option.
@@ -136,6 +149,19 @@
           "<p>There are no selected accounts in the account list option.</p>"
           (list "<p>"
                 "The accounts selected in the account list option are:"
+                "</p>"
+                "<ul>"
+                (map (lambda (name) (list "<li>" name "</li>")) names)
+                "</ul>"))))
+
+  ;; This is a helper function to generate an html list for the list option.
+  (define (list-option-list list-op)
+    (let* ((values (gnc:option-value list-op))
+           (names (map symbol->string values)))
+      (if (null? values)
+          "<p>You have selected no values in the list option.</p>"
+          (list "<p>"
+                "The items selected in the list option are:"
                 "</p>"
                 "<ul>"
                 (map (lambda (name) (list "<li>" name "</li>")) names)
@@ -175,8 +201,10 @@
            (colorop (gnc:lookup-option options
                                        "Hello, World!" "Background Color"))
            (account-list-op (gnc:lookup-option options
-                                               "Hello, World!"
+                                               "Hello Again"
                                                "An account list option"))
+           (list-op (gnc:lookup-option options
+                                       "Hello Again" "A list option"))
            (crash-op (gnc:lookup-option options "Testing" "Crash the report")))
 
        (let ((time-string (strftime "%X" (localtime (current-time))))
@@ -244,6 +272,8 @@
           (list "<p>"
                 "The date and time option is " (bold date-string2) "."
                 "</p>")
+
+          (list-option-list list-op)
 
           (account-list account-list-op)
 

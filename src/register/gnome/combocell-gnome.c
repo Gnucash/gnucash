@@ -800,7 +800,10 @@ leaveCombo (BasicCell *bcell, const char *value)
                 if (find == NULL &&
                     ((box->ignore_string == NULL) ||
                     (safe_strcmp(value, box->ignore_string) != 0)))
+                {
+                        xaccSetBasicCellValue(bcell, "");
                         return strdup("");
+                }
         }
 
 	return value;

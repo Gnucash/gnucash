@@ -202,7 +202,7 @@
   (define (multichoice-legal val p-vals)
     (cond ((null? p-vals) #f)
           ((eq? val (vector-ref (car p-vals) 0)) #t)
-          (else multichoice-legal (cdr p-vals))))
+          (else (multichoice-legal val (cdr p-vals)))))
 
   (let* ((value default-value)
          (value->string (lambda ()
@@ -220,6 +220,46 @@
        (if (multichoice-legal x ok-values)
            (list #t x)
            (list #f "multichoice-option: illegal choice")))
+     ok-values)))
+
+;; list options use the option-data in the same way as multichoice
+;; options. List options allow the user to select more than one option.
+(define (gnc:make-list-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-value
+         ok-values)
+
+  (define (legal-value? value legal-values)
+    (cond ((null? legal-values) #f)
+          ((eq? value (vector-ref (car legal-values) 0)) #t)
+          (else (legal-value? value (cdr legal-values)))))
+
+  (define (list-legal values)
+    (cond ((null? values) #t)
+          (else
+           (and
+            (legal-value? (car values) ok-values)
+            (list-legal (cdr values))))))
+
+  (let* ((value default-value)
+         (value->string (lambda ()
+                          (string-append "'" (gnc:value->string value)))))
+    (gnc:make-option
+     section name sort-tag 'list documentation-string
+     (lambda () value)
+     (lambda (x)
+       (if (list-legal x)
+           (set! value x)
+           (gnc:error "Illegal list option set")))
+     (lambda () default-value)
+     (gnc:restore-form-generator value->string)
+     (lambda (x)
+       (if (list-legal x)
+           (list #t x)
+           (list #f "list-option: illegal value")))
      ok-values)))
 
 ;; number range options use the option-data as a list whose

@@ -491,6 +491,8 @@
  trep-options-generator
  ;; renderer
  (lambda (options)
+   (gnc:set-total-inflow! 0)
+   (gnc:set-total-outflow! 0)
    (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
           (enddate (gnc:lookup-option options "Report Options" "To"))
           (tr-report-account-op (gnc:lookup-option options

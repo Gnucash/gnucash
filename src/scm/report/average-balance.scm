@@ -534,7 +534,7 @@
      (gnc:init-query gncq)
 
      (if (null? accounts)
-         (set! report-lines
+         (set! rept-text
                (list "<TR><TD>You have not selected an account.</TD></TR>"))
 	 (begin
 	   ; Grab account names
@@ -557,65 +557,66 @@
 
 	   (map (lambda(acct) (gnc:query-add-account gncq acct)) accounts)
 
-     (set! tempstruct 
-	   (build-mystruct-instance 
-	    (define-mystruct 
-		(gnc:acctnames-from-list accounts))))
+           (set! tempstruct 
+                 (build-mystruct-instance 
+                  (define-mystruct 
+                    (gnc:acctnames-from-list accounts))))
 
-     (set! acctcurrency (gnc:account-get-currency (car accounts)))
+           (set! acctcurrency (gnc:account-get-currency (car accounts)))
 
-     (set! report-lines 
-	   (gnc:convert-split-list (gnc:query-get-splits gncq)))))
+           (set! report-lines 
+                 (gnc:convert-split-list (gnc:query-get-splits gncq)))
 
-     (gnc:free-query gncq)
-	    
-     (display (length report-lines))
-     (display " Splits\n")
+           (gnc:free-query gncq)
 
-     ; Set initial balances to zero
-     (map (lambda(an) (tempstruct 'put an 0)) 
-	  (gnc:acctnames-from-list accounts))
+           (display (length report-lines))
+           (display " Splits\n")
 
-	    (dateloop begindate
-		       enddate
-		       (eval stepsize))
-     (set! rept-data 
-	   (reduce-split-list
-	    (dateloop begindate
-		       enddate
-		       (eval stepsize))
-	    report-lines zdate tempstruct))
+           ; Set initial balances to zero
+           (map (lambda(an) (tempstruct 'put an 0)) 
+                (gnc:acctnames-from-list accounts))
 
-     (set! sum-data (get-averages rept-data))
+           (dateloop begindate
+                     enddate
+                     (eval stepsize))
+           (set! rept-data 
+                 (reduce-split-list
+                  (dateloop begindate
+                            enddate
+                            (eval stepsize))
+                  report-lines zdate tempstruct))
 
+           (set! sum-data (get-averages rept-data))
 
-     ;; Create HTML
-     (set! rept-text 
-	   (html-table 
-	    collist
-	    (append rept-data 
-		    (list "<TR cellspacing=0><TD><TD><TD colspan=3><HR size=2 noshade><TD colspan=3><HR size=2 noshade></TR>" sum-data))))
+           ;; Create HTML
+           (set! rept-text 
+                 (html-table 
+                  collist
+                  (append rept-data 
+                          (list "<TR cellspacing=0><TD><TD><TD colspan=3><HR size=2 noshade><TD colspan=3><HR size=2 noshade></TR>" sum-data))))
 
+           ;; Do a plot
+           (if (not (equal? NoPlot (eval plotstr)))
+               (let* ((fn "/tmp/gncplot.dat")
+                      (preplot (string-append
+                                "set xdata time\n"
+                                "set timefmt '%m/%d/%Y'\n"
+                                "set pointsize 2\n"
+                                "set title '" acctname "'\n"
+                                "set ylabel '" acctcurrency "'\n"
+                                "set xlabel 'Period Ending'\n"
+                                )))
 
-     ;; Do a plot
-     (if (not (equal? NoPlot (eval plotstr)))
-	 (let* ((fn "/tmp/gncplot.dat")
-	   (preplot (string-append
-		     "set xdata time\n"
-		     "set timefmt '%m/%d/%Y'\n"
-		     "set pointsize 2\n"
-		     "set title '" acctname "'\n"
-		     "set ylabel '" acctcurrency "'\n"
-		     "set xlabel 'Period Ending'\n"
-		     )
-		    )
-	   )
+                 (data-to-gpfile collist  rept-data fn (eval plotstr))
+                 (system 
+                  (string-append "echo \"" preplot "plot '"
+                                 fn "'" (eval plotstr) 
+                                 "\"|gnuplot -persist " ))))
+           ))
 
-       (data-to-gpfile collist  rept-data fn (eval plotstr))
-	  (system 
-	   (string-append "echo \"" preplot "plot '"  fn "'" (eval plotstr) 
-			  "\"|gnuplot -persist " )))
-	 )
-     (append prefix (list "Report for " acctname "<p>\n" )
+     (append prefix
+             (if (null? accounts)
+                 ()
+                 (list "Report for " acctname "<p>\n"))
 	     (list rept-text) suffix)))
 )
