@@ -812,7 +812,7 @@ xaccResolveURL (const char * pathfrag)
       !strncmp (pathfrag, "https://", 8)     ||
       !strncmp (pathfrag, "postgres://", 11) ) 
   {
-    return (char *) pathfrag;
+    return g_strdup(pathfrag);
   }
 
   if (!strncmp (pathfrag, "file:", 5)) {
