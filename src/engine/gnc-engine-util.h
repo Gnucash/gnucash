@@ -66,7 +66,8 @@ typedef enum
   GNC_LOG_WARNING = 2,
   GNC_LOG_INFO    = 3,
   GNC_LOG_DEBUG   = 4,
-  GNC_LOG_DETAIL  = 5
+  GNC_LOG_DETAIL  = 5,
+  GNC_LOG_TRACE   = 6,
 } gncLogLevel;
 
 extern gncLogLevel loglevel[MOD_LAST + 1];
@@ -110,6 +111,8 @@ void gnc_log (gncModuleType module, gncLogLevel log_level,
 #define ERROR()     fprintf(stderr,"%s: Line %d, error = %s\n", \
 			    __FILE__, __LINE__, strerror(errno));
 
+#define TRACE(format, args...) \
+  gnc_log(module, GNC_LOG_TRACE, "Trace", __FUNCTION__, format, ## args);
 
 /* Set the logging level of the given module. */
 void gnc_set_log_level(gncModuleType module, gncLogLevel level);

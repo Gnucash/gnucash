@@ -255,28 +255,33 @@ gncPostFileOpen (const char * filename)
   {
      char *buf = g_strdup_printf (file_not_found_msg(), filename);
      gnc_error_dialog (buf);
-     g_free(buf);
+     g_free (buf);
      return;
   }
-
-  /* -------------- BEGIN CORE SESSION CODE ------------- */
-  /* -- this code is almost identical in FileOpen and FileSaveAs -- */
-  old_group = gnc_book_get_group (gncGetCurrentBook ());
-
-  /* load the accounts from the users datafile */
-  /* but first, check to make sure we've got a book going. */
-  new_book = gnc_book_new ();
 
   /* disable logging and events while moving over to the new set of
    * accounts; the mass deletetion of accounts and transactions during
    * switchover is not something we want to keep in a journal. */
   gnc_engine_suspend_events ();
 
+  /* Change the mouse to a busy cursor */
   gnc_set_busy_cursor (NULL);
+
+  /* -------------- BEGIN CORE SESSION CODE ------------- */
+  /* -- this code is almost identical in FileOpen and FileSaveAs -- */
+  old_group = gnc_book_get_group (gncGetCurrentBook ());
+
+  gnc_book_destroy (current_book);
+  current_book = NULL;
+  
+  /* load the accounts from the users datafile */
+  /* but first, check to make sure we've got a book going. */
+  new_book = gnc_book_new ();
+
   new_group = NULL;
 
   /* hack alert -- there has got to be a simpler way of dealing with 
-   * errors than this spaghetti code!  I beleive that this would simplify
+   * errors than this spaghetti code!  I believe that this would simplify
    * a whole lot if all functions returned void, and one *always* used
    * try-throw semantics, instead of this hodge-podge of testing 
    * return values.  -- linas jan 2001
@@ -302,7 +307,7 @@ gncPostFileOpen (const char * filename)
   {
     if (gnc_book_load (new_book)) 
     {
-       new_group = gnc_book_get_group (new_book);
+      new_group = gnc_book_get_group (new_book);
     }
 
     /* for any other error, put up appropriate dialog */
@@ -325,6 +330,7 @@ gncPostFileOpen (const char * filename)
       uh_oh = TRUE;
     }
   }
+
   gnc_unset_busy_cursor (NULL);
 
   /* going down -- abandon ship */
@@ -350,7 +356,6 @@ gncPostFileOpen (const char * filename)
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  gnc_book_destroy (current_book);
   current_book = new_book;
 
   gnc_engine_resume_events ();
@@ -363,17 +368,13 @@ gncPostFileOpen (const char * filename)
 
   /* run a file-opened hook. For now, the main thing it will do 
    * is notice if legacy currencies are being imported. */
+  if (newfile)
   {
-    SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
-    SCM hook = gh_eval_str("gnc:*file-opened-hook*");
-    SCM scm_filename;
+      gh_call2(gh_eval_str("gnc:hook-run-danglers"),
+               gh_eval_str("gnc:*file-opened-hook*"),
+               gh_str02scm(newfile)); 
+  }
 
-    if (newfile)
-    {
-      scm_filename = gh_str02scm(newfile);
-      gh_call2(run_danglers, hook, scm_filename); 
-    }
-  }  
   g_free (newfile);
 }
 
