@@ -376,7 +376,11 @@
 	    a
 	    #f)))
 
-    (filter quotable-account? (gnc:group-get-subaccounts group)))
+    (let ((quotables (filter quotable-account? (gnc:group-get-subaccounts group))))
+      (if (null? quotables)
+	  #f
+	  quotables))
+    )
 
   (define (accounts->fq-call-data account-list)
     ;; Take a list of accounts that should be "quotable" -- i.e. they
@@ -638,6 +642,11 @@
          (keep-going? #t))
 
     (cond
+     ((eq? quotables #f)
+      (set! keep-going? #f)
+      (if (gnc:ui-is-running?)
+          (gnc:error-dialog  (_ "No accounts marked for quote retrieval."))
+	  (gnc:warn (_ "No accounts marked for quote retrieval."))))
      ((eq? fq-results #f)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
