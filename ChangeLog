@@ -3,6 +3,9 @@
 	* apply patch to use Euclid's algo for gnc_numeric_reduce
 	  more fixes for #95474
 
+	* src/business/business-core/gncInvoice.c: actually apply
+	  a payment to the proper transfer account.  Fixes bug #102893
+	
 2003-01-08  Christian Stimming  <stimming@tuhh.de>
 
 	* po/ru.po: Updated very complete (!) Russian translation by

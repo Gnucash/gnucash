@@ -980,9 +980,9 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
   xaccSplitSetMemo (split, memo);
   xaccSplitSetBaseValue (split, reverse ? amount :
 			 gnc_numeric_neg (amount), commodity);
-  xaccAccountBeginEdit (posted_acc);
-  xaccAccountInsertSplit (posted_acc, split);
-  xaccAccountCommitEdit (posted_acc);
+  xaccAccountBeginEdit (xfer_acc);
+  xaccAccountInsertSplit (xfer_acc, split);
+  xaccAccountCommitEdit (xfer_acc);
   xaccTransAppendSplit (txn, split);
 
   /* Now, find all "open" lots in the posting account for this
