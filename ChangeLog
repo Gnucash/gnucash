@@ -1,3 +1,11 @@
+2004-04-18  Christian Stimming  <stimming@tuhh.de>
+
+	* po/cs.po: Update Czech translation by Miloslav Trmac
+	<mitr@volny.cz>
+
+	* po/en_GB.po: Updated British English translation by Nigel Titley
+	<nigel@titley.com>
+
 2004-05-16  Derek Atkins  <derek@ihtfp.com>
 
 	* src/macros/autogen.sh: Add MORE warnings around gettext because
