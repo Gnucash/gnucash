@@ -152,7 +152,7 @@ ultostr (unsigned long val, int base)
  * stpcpy for those platforms that don't have it.
 \********************************************************************/
 
-#ifndef HAVE_STPCPY
+#if !HAVE_STPCPY
 char *
 stpcpy (char *dest, const char *src) 
 {
