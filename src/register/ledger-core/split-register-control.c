@@ -37,7 +37,6 @@
 #include "split-register-control.h"
 #include "split-register-model-save.h"
 #include "split-register-p.h"
-#include "splitreg.h"
 #include "table-allgui.h"
 
 
@@ -205,7 +204,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
   old_split = xaccSRGetCurrentSplit (reg);
   old_trans = xaccSRGetCurrentTrans (reg);
   old_trans_split = xaccSRGetCurrentTransSplit (reg, &old_trans_split_loc);
-  old_class = xaccSplitRegisterGetCurrentCursorClass (reg);
+  old_class = gnc_split_register_get_current_cursor_class (reg);
 
   exact_traversal = info->exact_traversal;
 
@@ -231,7 +230,8 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     /* The split at the transaction line we are moving to */
     new_trans_split = xaccSRGetTransSplit (reg, new_virt_loc.vcell_loc, NULL);
 
-    new_class = xaccSplitRegisterGetCursorClass (reg, new_virt_loc.vcell_loc);
+    new_class = gnc_split_register_get_cursor_class (reg,
+                                                     new_virt_loc.vcell_loc);
   }
   else
   {
@@ -320,7 +320,8 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     new_trans = xaccSRGetTrans (reg, new_virt_loc.vcell_loc);
     new_split = sr_get_split (reg, new_virt_loc.vcell_loc);
     new_trans_split = xaccSRGetTransSplit (reg, new_virt_loc.vcell_loc, NULL);
-    new_class = xaccSplitRegisterGetCursorClass (reg, new_virt_loc.vcell_loc);
+    new_class = gnc_split_register_get_cursor_class (reg,
+                                                     new_virt_loc.vcell_loc);
   }
   else if (info->traverse_to_new)
   {
@@ -557,7 +558,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
   if (trans == NULL)
     return FALSE;
 
-  cursor_class = xaccSplitRegisterGetCurrentCursorClass (reg);
+  cursor_class = gnc_split_register_get_current_cursor_class (reg);
   cell_name = gnc_table_get_current_cell_name (reg->table);
 
   switch (cursor_class)
@@ -1048,7 +1049,8 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
         new_split = sr_get_split (reg, virt_loc.vcell_loc);
         trans_split = xaccSRGetTransSplit (reg, virt_loc.vcell_loc, NULL);
-        new_class = xaccSplitRegisterGetCursorClass (reg, virt_loc.vcell_loc);
+        new_class = gnc_split_register_get_cursor_class (reg,
+                                                         virt_loc.vcell_loc);
 
         xaccSRCancelCursorTransChanges (reg);
 

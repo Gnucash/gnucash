@@ -121,6 +121,7 @@ src/engine/test/test-split-vs-account.c
 src/engine/test/test-freq-spec.c
 src/engine/test/test-scm-query.c
 src/engine/test/test-group-vs-book.c
+src/engine/SX-ttinfo.c
 src/engine/kvp-scm.c
 src/engine/test-core/test-engine-stuff.c
 src/engine/test-core/gncmod-test-engine.c
@@ -218,6 +219,7 @@ src/gnome/window-register.c
 src/gnome/window-report.c
 src/gnome/argv-list-converters.c
 src/gnome/file-utils.c
+src/gnome/dialog-sx-from-trans.c
 src/guile/guile-util.c
 src/guile/tip-of-the-day.c
 src/import-export/qif-import/dialog-account-picker.c
@@ -237,8 +239,8 @@ src/register/ledger-core/gnc-ledger-display.c
 src/register/ledger-core/split-register-model.c
 src/register/ledger-core/split-register-model-save.c
 src/register/ledger-core/split-register-load.c
+src/register/ledger-core/split-register-layout.c
 src/register/register-core/QuickFill.c
-src/register/register-core/basiccell.c
 src/register/register-core/cell-factory.c
 src/register/register-core/cellblock.c
 src/register/register-core/gncmod-register-core.c
@@ -248,12 +250,12 @@ src/register/register-core/pricecell.c
 src/register/register-core/quickfillcell.c
 src/register/register-core/recncell.c
 src/register/register-core/register-common.c
-src/register/register-core/splitreg.c
 src/register/register-core/table-allgui.c
 src/register/register-core/table-control.c
 src/register/register-core/table-html.c
 src/register/register-core/table-layout.c
 src/register/register-core/table-model.c
+src/register/register-core/basiccell.c
 src/register/register-gnome/combocell-gnome.c
 src/register/register-gnome/datecell-gnome.c
 src/register/register-gnome/gncmod-register-gnome.c

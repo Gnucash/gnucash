@@ -710,9 +710,9 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 
         /* configure... */
         /* don't use double-line */
-        xaccConfigSplitRegister(splitreg,
-                                splitreg->type, splitreg->style,
-                                FALSE );
+        gnc_split_register_config(splitreg,
+                                  splitreg->type, splitreg->style,
+                                  FALSE );
         /* don't show present/future divider [by definition, not necessary] */
         xaccSRShowPresentDivider( splitreg, FALSE );
 
@@ -1230,7 +1230,7 @@ sxed_reg_deleteCB( GtkWidget *w, gpointer d )
 
   trans = xaccSplitGetParent(split);
   style = reg->style;
-  cursor_class = xaccSplitRegisterGetCurrentCursorClass(reg);
+  cursor_class = gnc_split_register_get_current_cursor_class(reg);
 
   /* Deleting the blank split just cancels */
   {

@@ -25,7 +25,7 @@
 
 #include "Group.h"
 #include "gnc-ledger-display.h"
-#include "splitreg.h"
+#include "split-register.h"
 
 
 #define SPLIT_TRANS_STR _("-- Split Transaction --")
@@ -143,5 +143,7 @@ Account * gnc_split_register_get_account (SplitRegister *reg,
 gboolean gnc_split_register_recn_cell_confirm (char old_flag, gpointer data);
 
 void LedgerDestroy (SplitRegister *reg);
+
+CursorClass gnc_split_register_cursor_name_to_class (const char *cursor_name);
 
 #endif

@@ -470,7 +470,8 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   info->cursor_hint_trans = xaccSRGetCurrentTrans (reg);
   info->cursor_hint_split = xaccSRGetCurrentSplit (reg);
   info->cursor_hint_trans_split = xaccSRGetCurrentTransSplit (reg, NULL);
-  info->cursor_hint_cursor_class = xaccSplitRegisterGetCurrentCursorClass(reg);
+  info->cursor_hint_cursor_class =
+    gnc_split_register_get_current_cursor_class(reg);
   info->hint_set_by_traverse = FALSE;
   info->traverse_to_new = FALSE;
   info->exact_traversal = FALSE;

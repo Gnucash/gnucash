@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <string.h>
 
 #include "global-options.h"
 #include "gnc-engine-util.h"
@@ -171,7 +172,7 @@ xaccSRGetTransSplit (SplitRegister *reg,
       return NULL;
     }
 
-    cursor_class = xaccSplitRegisterGetCursorClass (reg, vcell_loc);
+    cursor_class = gnc_split_register_get_cursor_class (reg, vcell_loc);
 
     if (cursor_class == CURSOR_CLASS_TRANS)
     {
@@ -222,7 +223,7 @@ xaccSRFindSplit (SplitRegister *reg,
       s = sr_get_split (reg, vc_loc);
       t = xaccSplitGetParent(s);
 
-      cursor_class = xaccSplitRegisterGetCursorClass(reg, vc_loc);
+      cursor_class = gnc_split_register_get_cursor_class (reg, vc_loc);
 
       if (t == trans)
         found_trans = TRUE;
@@ -266,7 +267,7 @@ xaccSRShowTrans (SplitRegister *reg,
     VirtualCellLocation vc_loc = { v_row, 0 };
     CursorClass cursor_class;
 
-    cursor_class = xaccSplitRegisterGetCursorClass (reg, vc_loc);
+    cursor_class = gnc_split_register_get_cursor_class (reg, vc_loc);
     if (cursor_class == CURSOR_CLASS_TRANS)
       break;
 
@@ -294,7 +295,7 @@ xaccSRSetTransVisible (SplitRegister *reg,
   {
     vcell_loc.virt_row++;
 
-    cursor_class = xaccSplitRegisterGetCursorClass (reg, vcell_loc);
+    cursor_class = gnc_split_register_get_cursor_class (reg, vcell_loc);
     if (cursor_class != CURSOR_CLASS_SPLIT)
       return;
 
@@ -414,4 +415,68 @@ sr_set_last_num (SplitRegister *reg, const char *num)
     return;
 
   xaccAccountSetLastNum (account, num);
+}
+
+static CursorClass
+gnc_split_register_cursor_class (SplitRegister *reg,
+                                 CellBlock *cursor)
+{
+  if (cursor == NULL)
+    return CURSOR_CLASS_NONE;
+
+  return gnc_split_register_cursor_name_to_class (cursor->cursor_name);
+}
+
+CursorClass
+gnc_split_register_get_cursor_class (SplitRegister *reg,
+                                     VirtualCellLocation vcell_loc)
+{
+  VirtualCell *vcell;
+  Table *table;
+
+  if (reg == NULL)
+    return CURSOR_CLASS_NONE;
+
+  table = reg->table;
+  if (table == NULL)
+    return CURSOR_CLASS_NONE;
+
+  vcell = gnc_table_get_virtual_cell (table, vcell_loc);
+  if (vcell == NULL)
+    return CURSOR_CLASS_NONE;
+
+  return gnc_split_register_cursor_class (reg, vcell->cellblock);
+}
+
+CursorClass
+gnc_split_register_get_current_cursor_class (SplitRegister *reg)
+{
+  Table *table;
+
+  if (reg == NULL)
+    return CURSOR_CLASS_NONE;
+
+  table = reg->table;
+  if (table == NULL)
+    return CURSOR_CLASS_NONE;
+
+  return gnc_split_register_cursor_class (reg, table->current_cursor);
+}
+
+CursorClass
+gnc_split_register_cursor_name_to_class (const char *cursor_name)
+{
+  if (cursor_name == NULL)
+    return CURSOR_CLASS_NONE;
+
+  if (strcmp (cursor_name, CURSOR_SINGLE_LEDGER) == 0  ||
+      strcmp (cursor_name, CURSOR_DOUBLE_LEDGER) == 0  ||
+      strcmp (cursor_name, CURSOR_SINGLE_JOURNAL) == 0 ||
+      strcmp (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0)
+    return CURSOR_CLASS_TRANS;
+
+  if (strcmp (cursor_name, CURSOR_SPLIT) == 0)
+    return CURSOR_CLASS_SPLIT;
+
+  return CURSOR_CLASS_NONE;
 }

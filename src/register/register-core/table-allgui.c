@@ -63,18 +63,19 @@ static void gnc_table_resize (Table * table, int virt_rows, int virt_cols);
 /** Implementation *****************************************************/
 
 Table * 
-gnc_table_new (TableControl *control, TableModel *model)
+gnc_table_new (TableLayout *layout, TableModel *model, TableControl *control)
 {
   Table *table;
 
-  g_return_val_if_fail (control != NULL, NULL);
+  g_return_val_if_fail (layout != NULL, NULL);
   g_return_val_if_fail (model != NULL, NULL);
+  g_return_val_if_fail (control != NULL, NULL);
 
   table = g_new0 (Table, 1);
 
-  table->control = control;
-  table->layout = gnc_table_layout_new ();
+  table->layout = layout;
   table->model = model;
+  table->control = control;
 
   gnc_table_init (table);
 
@@ -118,6 +119,12 @@ gnc_table_destroy (Table * table)
 
   gnc_table_layout_destroy (table->layout);
   table->layout = NULL;
+
+  gnc_table_control_destroy (table->control);
+  table->control = NULL;
+
+  gnc_table_model_destroy (table->model);
+  table->model = NULL;
 
   /* intialize vars to null value so that any access is voided. */
   gnc_table_init (table);

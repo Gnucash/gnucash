@@ -43,7 +43,6 @@
 #include "gnc-ledger-display.h"
 #include "gnc-ui.h"
 #include "messages.h"
-#include "splitreg.h"
 #include "window-help.h"
 #include "window-register.h"
 

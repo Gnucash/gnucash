@@ -48,7 +48,6 @@
 #include "global-options.h"
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
-#include "splitreg.h"
 #include "table-allgui.h"
 
 
@@ -88,7 +87,7 @@ gnc_table_save_state (Table *table)
                         if (width <= 0)
                                 continue;
 
-                        if (gnc_basic_cell_has_name (cell, DESC_CELL))
+                        if (cell->expandable)
                                 continue;
 
                         assoc = gh_cons (gh_str02scm(cell->cell_name),

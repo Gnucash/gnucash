@@ -63,7 +63,6 @@
 #include "guile-util.h"
 #include "messages.h"
 #include "recncell.h"
-#include "splitreg.h"
 #include "split-register.h"
 #include "top-level.h"
 #include "window-help.h"

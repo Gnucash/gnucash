@@ -293,7 +293,7 @@ gnc_register_change_style (RegWindow *regData, SplitRegisterStyle style)
   if (style == reg->style)
     return;
 
-  xaccConfigSplitRegister (reg, reg->type, style, reg->use_double_line);
+  gnc_split_register_config (reg, reg->type, style, reg->use_double_line);
 
   xaccLedgerDisplayRefresh (regData->ledger);
 }
@@ -343,7 +343,7 @@ gnc_register_double_line_cb (GtkWidget *w, gpointer data)
   if (use_double_line == reg->use_double_line)
     return;
 
-  xaccConfigSplitRegister (reg, reg->type, reg->style, use_double_line);
+  gnc_split_register_config (reg, reg->type, reg->style, use_double_line);
 
   xaccLedgerDisplayRefresh (regData->ledger);
 }
@@ -1781,7 +1781,7 @@ gnc_register_match_trans_row (VirtualLocation virt_loc,
   SplitRegister *sr;
 
   sr = xaccLedgerDisplayGetSR (regData->ledger);
-  cursor_class = xaccSplitRegisterGetCursorClass (sr, virt_loc.vcell_loc);
+  cursor_class = gnc_split_register_get_cursor_class (sr, virt_loc.vcell_loc);
 
   return (cursor_class == CURSOR_CLASS_TRANS);
 }
@@ -2202,7 +2202,7 @@ regWindowLedger (xaccLedgerDisplay *ledger)
                                                  FALSE);
 
     /* be sure to initialize the gui elements associated with the cursor */
-    xaccConfigSplitRegister (reg, reg->type, reg->style, use_double_line);
+    gnc_split_register_config (reg, reg->type, reg->style, use_double_line);
 
     check = GTK_CHECK_MENU_ITEM (regData->double_line_check);
 
@@ -3013,7 +3013,7 @@ deleteCB(GtkWidget *widget, gpointer data)
 
   trans = xaccSplitGetParent(split);
   style = reg->style;
-  cursor_class = xaccSplitRegisterGetCurrentCursorClass(reg);
+  cursor_class = gnc_split_register_get_current_cursor_class (reg);
 
   /* Deleting the blank split just cancels */
   {

@@ -55,9 +55,6 @@ struct _xaccLedgerDisplay
 
   SplitRegister *reg;
 
-  TableControl *control;
-  TableModel *model;
-
   gboolean loading;
 
   LedgerDisplayDestroy destroy;
@@ -561,17 +558,11 @@ close_handler (gpointer user_data)
   if (ld->destroy)
       ld->destroy (ld);
 
-  xaccDestroySplitRegister (ld->reg);
+  gnc_split_register_destroy (ld->reg);
   ld->reg = NULL;
 
   xaccFreeQuery (ld->query);
   ld->query = NULL;
-
-  gnc_table_control_destroy (ld->control);
-  ld->control = NULL;
-
-  gnc_table_model_destroy (ld->model);
-  ld->model = NULL;
 
   g_free (ld);
 }
@@ -757,17 +748,7 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
    * The main register window itself                                *
   \******************************************************************/
 
-  if (templateMode)
-    ld->model = gnc_template_register_model_new ();
-  else
-    ld->model = gnc_split_register_model_new ();
-
-  ld->control = gnc_split_register_control_new ();
-
-  ld->reg = gnc_register_new (reg_type, style, FALSE,
-                              ld->control, ld->model, templateMode);
-
-  ld->control->user_data = ld->reg;
+  ld->reg = gnc_split_register_new (reg_type, style, FALSE, templateMode);
 
   xaccSRSetData (ld->reg, ld, xaccLedgerDisplayParent);
 

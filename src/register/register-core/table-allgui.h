@@ -120,9 +120,9 @@ typedef void (*TableDestroyFunc) (Table *table);
 
 struct table
 {
+  TableLayout  *layout;
+  TableModel   *model;
   TableControl *control;
-  TableLayout *layout;
-  TableModel *model;
 
   int num_virt_rows;
   int num_virt_cols;
@@ -143,7 +143,9 @@ struct table
 
 
 /* Functions to create and destroy Tables.  */
-Table *     gnc_table_new (TableControl *control, TableModel *model);
+Table *     gnc_table_new (TableLayout *layout,
+                           TableModel *model,
+                           TableControl *control);
 
 void        gnc_table_save_state (Table *table);
 void        gnc_table_destroy (Table *table);

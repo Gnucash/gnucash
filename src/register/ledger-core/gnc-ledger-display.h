@@ -31,7 +31,6 @@
 
 #include "Account.h"
 #include "Query.h"
-#include "splitreg.h"
 #include "split-register.h"
 #include "SchedXaction.h"
 #include "Transaction.h"

@@ -122,8 +122,10 @@
 #include "pricecell.h"
 #include "quickfillcell.h"
 #include "recncell.h"
-#include "splitreg.h"
 #include "split-register.h"
+#include "split-register-control.h"
+#include "split-register-layout.h"
+#include "split-register-model.h"
 #include "split-register-model-save.h"
 #include "table-allgui.h"
 
@@ -486,7 +488,7 @@ xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
   if (!xaccSRGetSplitVirtLoc (reg, split, &v_loc.vcell_loc))
     return FALSE;
 
-  cursor_class = xaccSplitRegisterGetCursorClass (reg, v_loc.vcell_loc);
+  cursor_class = gnc_split_register_get_cursor_class (reg, v_loc.vcell_loc);
 
   value = xaccSplitGetValue (split);
 
@@ -532,7 +534,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   if (trans == NULL)
     return NULL;
 
-  cursor_class = xaccSplitRegisterGetCurrentCursorClass (reg);
+  cursor_class = gnc_split_register_get_current_cursor_class (reg);
 
   /* Can't do anything with this. */
   if (cursor_class == CURSOR_CLASS_NONE)
@@ -693,7 +695,7 @@ xaccSRCopyCurrentInternal (SplitRegister *reg, gboolean use_cut_semantics)
   if (trans == NULL)
     return;
 
-  cursor_class = xaccSplitRegisterGetCurrentCursorClass (reg);
+  cursor_class = gnc_split_register_get_current_cursor_class (reg);
 
   /* Can't do anything with this. */
   if (cursor_class == CURSOR_CLASS_NONE)
@@ -786,7 +788,7 @@ xaccSRCutCurrent (SplitRegister *reg)
   if (trans == NULL)
     return;
 
-  cursor_class = xaccSplitRegisterGetCurrentCursorClass (reg);
+  cursor_class = gnc_split_register_get_current_cursor_class (reg);
 
   /* Can't do anything with this. */
   if (cursor_class == CURSOR_CLASS_NONE)
@@ -832,7 +834,7 @@ xaccSRPasteCurrent (SplitRegister *reg)
   if (trans == NULL)
     return;
 
-  cursor_class = xaccSplitRegisterGetCurrentCursorClass (reg);
+  cursor_class = gnc_split_register_get_current_cursor_class (reg);
 
   /* Can't do anything with this. */
   if (cursor_class == CURSOR_CLASS_NONE)
@@ -1927,4 +1929,359 @@ xaccSRFullRefreshOK (SplitRegister *reg)
     return FALSE;
 
   return info->full_refresh;
+}
+
+/* configAction strings into the action cell */
+/* hack alert -- this stuff really, really should be in a config file ... */
+static void
+gnc_split_register_config_action (SplitRegister *reg)
+{
+  ComboCell *cell;
+
+  cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                                  ACTN_CELL);
+
+  /* setup strings in the action pull-down */
+  switch (reg->type)
+  {
+    case BANK_REGISTER:
+      /* broken ! FIXME bg */
+    case SEARCH_LEDGER:  
+      gnc_combo_cell_add_menu_item (cell, _("Deposit"));
+      gnc_combo_cell_add_menu_item (cell, _("Withdraw"));
+      gnc_combo_cell_add_menu_item (cell, _("Check"));
+      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("ATM"));
+      gnc_combo_cell_add_menu_item (cell, _("Teller"));
+      /* Action: Point Of Sale */
+      gnc_combo_cell_add_menu_item (cell, _("POS"));
+      gnc_combo_cell_add_menu_item (cell, _("Phone"));
+      gnc_combo_cell_add_menu_item (cell, _("Online"));
+      /* Action: Automatic Deposit ?!? */
+      gnc_combo_cell_add_menu_item (cell, _("AutoDep"));
+      gnc_combo_cell_add_menu_item (cell, _("Wire"));
+      gnc_combo_cell_add_menu_item (cell, _("Credit"));
+      gnc_combo_cell_add_menu_item (cell, _("Direct Debit"));
+      gnc_combo_cell_add_menu_item (cell, _("Transfer"));
+      break;
+    case CASH_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      break;
+    case ASSET_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("Fee"));
+      break;
+    case CREDIT_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("ATM"));
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Credit"));
+      gnc_combo_cell_add_menu_item (cell, _("Fee"));
+      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("Online"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      break;
+    case LIABILITY_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("Loan"));
+      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("Payment"));
+      break;
+    case INCOME_LEDGER:
+    case INCOME_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("Payment"));
+      gnc_combo_cell_add_menu_item (cell, _("Rebate"));
+      break;
+    case EXPENSE_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      break;
+    case GENERAL_LEDGER:
+    case EQUITY_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("Equity"));
+      break;
+    case STOCK_REGISTER:
+    case PORTFOLIO_LEDGER:
+    case CURRENCY_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("Price"));
+      gnc_combo_cell_add_menu_item (cell, _("Fee"));
+      /* Action: Dividend */
+      gnc_combo_cell_add_menu_item (cell, _("Div")); 
+      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      /* Action: Long Term Capital Gains */
+      gnc_combo_cell_add_menu_item (cell, _("LTCG"));
+      /* Action: Short Term Capital Gains */
+      gnc_combo_cell_add_menu_item (cell, _("STCG"));
+      gnc_combo_cell_add_menu_item (cell, _("Income"));
+      /* Action: Distribution */
+      gnc_combo_cell_add_menu_item (cell, _("Dist")); 
+      gnc_combo_cell_add_menu_item (cell, _("Split"));
+      break;
+
+    default:
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      break;
+  }
+}
+
+static void
+gnc_split_register_config_cells (SplitRegister *reg)
+{
+  /* The num cell is the transaction number */
+  xaccSetBasicCellBlankHelp (gnc_table_layout_get_cell (reg->table->layout,
+                                                        NUM_CELL),
+                             _("Enter the transaction number, such as the "
+                               "check number"));
+
+  /* the xfer cells */
+  {
+    const char *help = _("Enter the account to transfer from, or choose "
+                         "one from the list");
+    xaccSetBasicCellBlankHelp (gnc_table_layout_get_cell (reg->table->layout,
+                                                          MXFRM_CELL), help);
+    xaccSetBasicCellBlankHelp (gnc_table_layout_get_cell (reg->table->layout,
+                                                          XFRM_CELL), help);
+  }
+
+  {
+    const char *help = _("This transaction has multiple splits; "
+                         "press the Split button to see them all");
+
+    gnc_combo_cell_add_ignore_string
+      ((ComboCell *)
+       gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
+       _("-- Split Transaction --"), help);
+  }
+
+  {
+    const char *help = _("This transaction is a stock split; "
+                         "press the Split button to see details");
+
+    gnc_combo_cell_add_ignore_string
+      ((ComboCell *)
+       gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
+       _("-- Stock Split --"), help);
+  }
+
+  /* the action cell */
+  gnc_combo_cell_set_autosize
+    ((ComboCell *)
+     gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), TRUE);
+
+  /* the memo cell */
+  xaccSetBasicCellBlankHelp
+    (gnc_table_layout_get_cell (reg->table->layout, MEMO_CELL),
+     _("Enter a description of the split"));
+
+  /* the desc cell */
+  xaccSetBasicCellBlankHelp
+    (gnc_table_layout_get_cell (reg->table->layout, DESC_CELL),
+     _("Enter a description of the transaction"));
+
+  /* the notes cell */
+  xaccSetBasicCellBlankHelp
+    (gnc_table_layout_get_cell (reg->table->layout, NOTES_CELL),
+     _("Enter notes for the transaction"));
+
+  /* the formula cells */
+  xaccSetBasicCellBlankHelp
+    (gnc_table_layout_get_cell (reg->table->layout, FCRED_CELL),
+     _("Enter credit formula for real transaction"));
+
+  xaccSetBasicCellBlankHelp
+    (gnc_table_layout_get_cell (reg->table->layout, FDEBT_CELL),
+     _("Enter debit formula for real transaction"));
+
+  /* Use 6 decimal places for prices */
+  gnc_price_cell_set_fraction
+    ((PriceCell *)
+     gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL), 1000000);
+
+  /* Initialize shares and share balance cells */
+  gnc_price_cell_set_print_info
+    ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL),
+     gnc_default_share_print_info ());
+
+  gnc_price_cell_set_print_info
+    ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, TSHRS_CELL),
+     gnc_default_share_print_info ());
+
+  /* The action cell should accept strings not in the list */
+  gnc_combo_cell_set_strict
+    ((ComboCell *)
+     gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), FALSE);
+
+  xaccSetBasicCellBlankHelp
+    (gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL),
+     _("Enter the type of transaction, or choose "
+       "one from the list"));
+
+  /* number format for share quantities in stock ledgers */
+  switch (reg->type)
+  {
+    case CURRENCY_REGISTER:
+    case STOCK_REGISTER:
+    case PORTFOLIO_LEDGER:
+      gnc_price_cell_set_print_info
+        ((PriceCell *)
+         gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
+         gnc_default_price_print_info ());
+
+      xaccSetBasicCellBlankHelp
+        (gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
+         _("Enter the share price"));
+
+      xaccSetBasicCellBlankHelp
+        (gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL),
+         _("Enter the number of shares bought or sold"));
+      break;
+
+    default:
+      break;
+  }
+
+  /* add menu items for the action cell */
+  gnc_split_register_config_action (reg);
+}
+
+static void 
+gnc_split_register_init (SplitRegister *reg,
+                         SplitRegisterType type,
+                         SplitRegisterStyle style,
+                         gboolean use_double_line,
+                         gboolean templateMode)
+{
+  TableLayout *layout;
+  TableModel *model;
+  TableControl *control;
+
+  reg->user_data = NULL;
+  reg->destroy = NULL;
+
+  reg->type = type;
+  reg->style = style;
+  reg->use_double_line = use_double_line;
+  reg->template = templateMode;
+
+  layout = gnc_split_register_layout_new (reg);
+
+  model = gnc_split_register_model_new ();
+  model->handler_user_data = reg;
+
+  control = gnc_split_register_control_new ();
+  control->user_data = reg;
+
+  reg->table = gnc_table_new (layout, model, control);
+
+  gnc_split_register_config_cells (reg);
+
+  /* Set up header */
+  {
+    VirtualCellLocation vcell_loc = { 0, 0 };
+    CellBlock *header;
+
+    header = gnc_table_layout_get_cursor (reg->table->layout, CURSOR_HEADER);
+
+    gnc_table_set_vcell (reg->table, header, NULL, TRUE, TRUE, vcell_loc);
+  }
+
+  /* Set up first and only initial row */
+  {
+    VirtualLocation vloc;
+    CellBlock *cursor;
+
+    vloc.vcell_loc.virt_row = 1;
+    vloc.vcell_loc.virt_col = 0;
+    vloc.phys_row_offset = 0;
+    vloc.phys_col_offset = 0;
+
+    cursor = gnc_table_layout_get_cursor (reg->table->layout,
+                                          CURSOR_SINGLE_LEDGER);
+
+    gnc_table_set_vcell (reg->table, cursor, NULL, TRUE, TRUE, vloc.vcell_loc);
+    gnc_table_move_cursor (reg->table, vloc);
+  }
+}
+
+SplitRegister *
+gnc_split_register_new (SplitRegisterType type,
+                        SplitRegisterStyle style,
+                        gboolean use_double_line,
+                        gboolean templateMode)
+{
+  SplitRegister * reg;
+
+  reg = g_new0 (SplitRegister, 1);
+
+  if (type >= NUM_SINGLE_REGISTER_TYPES)
+    style = REG_STYLE_JOURNAL;
+
+  gnc_split_register_init (reg,
+                           type,
+                           style,
+                           use_double_line,
+                           templateMode);
+
+  return reg;
+}
+
+void
+gnc_split_register_config (SplitRegister *reg,
+                           SplitRegisterType newtype,
+                           SplitRegisterStyle newstyle,
+                           gboolean use_double_line)
+{
+  if (!reg) return;
+
+  reg->type = newtype;
+
+  if (reg->type >= NUM_SINGLE_REGISTER_TYPES)
+    newstyle = REG_STYLE_JOURNAL;
+
+  reg->style = newstyle;
+  reg->use_double_line = use_double_line;
+
+  gnc_table_realize_gui (reg->table);
+}
+
+void 
+gnc_split_register_destroy (SplitRegister *reg)
+{
+  GList *node;
+
+  if (!reg)
+    return;
+
+  /* give the user a chance to clean up */
+  if (reg->destroy)
+    (reg->destroy) (reg);
+
+  reg->destroy = NULL;
+  reg->user_data = NULL;
+
+  gnc_table_destroy (reg->table);
+  reg->table = NULL;
+
+  g_free (reg->debit_str);
+  g_free (reg->tdebit_str);
+  g_free (reg->credit_str);
+  g_free (reg->tcredit_str);
+
+  reg->debit_str = NULL;
+  reg->tdebit_str = NULL;
+  reg->credit_str = NULL;
+  reg->tcredit_str = NULL;
+
+  /* free the memory itself */
+  g_free (reg);
 }

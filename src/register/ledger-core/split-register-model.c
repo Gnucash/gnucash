@@ -72,8 +72,8 @@ use_security_cells (SplitRegister *reg, VirtualLocation virt_loc)
   if (!split)
     return TRUE;
 
-  cursor_class = xaccSplitRegisterGetCursorClass (reg,
-                                                  virt_loc.vcell_loc);
+  cursor_class = gnc_split_register_get_cursor_class (reg,
+                                                      virt_loc.vcell_loc);
   if (cursor_class != CURSOR_CLASS_SPLIT)
     return TRUE;
 
@@ -573,7 +573,8 @@ gnc_split_register_get_border (VirtualLocation virt_loc,
     return;
   }
 
-  cursor_class = xaccCursorNameToClass (vcell->cellblock->cursor_name);
+  cursor_class =
+    gnc_split_register_cursor_name_to_class (vcell->cellblock->cursor_name);
 
   if (cursor_class == CURSOR_CLASS_TRANS &&
       virt_loc.phys_col_offset == vcell->cellblock->start_col)

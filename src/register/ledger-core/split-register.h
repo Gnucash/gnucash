@@ -29,13 +29,82 @@
 #include "Group.h"
 #include "Transaction.h"
 #include "gnc-common.h"
-#include "splitreg.h"
+#include "table-allgui.h"
 
 
-/* Datatypes */
-typedef struct _SplitRegisterColors SplitRegisterColors;
+/** Datatypes *******************************************************/
 
-struct _SplitRegisterColors
+/* Register types.
+ * "registers" are single-account display windows.
+ * "ledgers" are multiple-account display windows */
+typedef enum
+{
+  BANK_REGISTER,
+  CASH_REGISTER,
+  ASSET_REGISTER,
+  CREDIT_REGISTER,
+  LIABILITY_REGISTER,
+  INCOME_REGISTER,
+  EXPENSE_REGISTER,
+  EQUITY_REGISTER,
+  STOCK_REGISTER,
+  CURRENCY_REGISTER,
+  NUM_SINGLE_REGISTER_TYPES,
+
+  GENERAL_LEDGER = NUM_SINGLE_REGISTER_TYPES,
+  INCOME_LEDGER,
+  PORTFOLIO_LEDGER,
+  SEARCH_LEDGER,
+
+  NUM_REGISTER_TYPES
+} SplitRegisterType;
+
+typedef enum
+{
+  REG_STYLE_LEDGER,
+  REG_STYLE_AUTO_LEDGER,
+  REG_STYLE_JOURNAL
+} SplitRegisterStyle;
+
+/* Cell Names. T* cells are transaction summary cells */
+#define ACTN_CELL  "action"
+#define BALN_CELL  "balance"
+#define CRED_CELL  "credit"
+#define DATE_CELL  "date"
+#define DEBT_CELL  "debit"
+#define DESC_CELL  "description"
+#define FCRED_CELL "credit-formula"
+#define FDEBT_CELL "debit formula"
+#define MEMO_CELL  "memo"
+#define MXFRM_CELL "transfer"
+#define NOTES_CELL "notes"
+#define NUM_CELL   "num"
+#define PRIC_CELL  "price"
+#define RECN_CELL  "reconcile"
+#define SHRS_CELL  "shares"
+#define TBALN_CELL "trans-balance"
+#define TCRED_CELL "trans-credit"
+#define TDEBT_CELL "trans-debit"
+#define TSHRS_CELL "trans-shares"
+#define XFRM_CELL  "account"
+
+/* Cursor Names */
+#define CURSOR_SINGLE_LEDGER  "cursor-single-ledger"
+#define CURSOR_DOUBLE_LEDGER  "cursor-double-ledger"
+#define CURSOR_SINGLE_JOURNAL "cursor-single-journal"
+#define CURSOR_DOUBLE_JOURNAL "cursor-double-journal"
+#define CURSOR_SPLIT          "cursor-split"
+
+/* Types of cursors */
+typedef enum
+{
+  CURSOR_CLASS_NONE = -1,
+  CURSOR_CLASS_SPLIT,
+  CURSOR_CLASS_TRANS,
+  NUM_CURSOR_CLASSES
+} CursorClass;
+
+typedef struct split_register_colors
 {
   guint32 header_bg_color;
 
@@ -49,13 +118,80 @@ struct _SplitRegisterColors
   guint32 split_active_bg_color;
 
   gboolean double_alternate_virt;
-};
+} SplitRegisterColors;
 
+
+typedef struct split_register SplitRegister;
+
+typedef void (*SplitRegisterDestroyCB) (SplitRegister *reg);
+
+struct split_register
+{
+  /* the table itself that implements the underlying GUI. */
+  Table * table;
+
+  SplitRegisterType type;
+  SplitRegisterStyle style;
+
+  gboolean use_double_line;
+
+  /* some private data; outsiders should not access this */
+
+  /**
+   * A flag indicating a "template" register.
+   **/
+  gboolean	template; /* FIXME: this should not be here! */
+
+  /**
+   * The template account which the transactions in a template
+   * splitregister will belong to.
+   **/
+  Account	*templateAcct; /* FIXME: this should not be here! */
+
+  /* user_data allows users of this object to hang
+   * private data onto it */
+  gpointer user_data;
+
+  /* The destroy callback gives user's a chance 
+   * to free up any associated user_hook data */
+  SplitRegisterDestroyCB destroy;
+
+  /* configured strings for debit/credit headers */
+  char *debit_str;
+  char *credit_str;
+  char *tdebit_str;
+  char *tcredit_str;
+};
 
 /* Callback function type */
 typedef gncUIWidget (*SRGetParentCallback) (gpointer user_data);
 typedef void (*SRSetHelpCallback) (gpointer user_data, const char *help_str);
 
+
+/** Prototypes ******************************************************/
+
+/* Create and return a new split register. */
+SplitRegister * gnc_split_register_new (SplitRegisterType type,
+                                        SplitRegisterStyle style,
+                                        gboolean use_double_line,
+                                        gboolean templateMode);
+
+/* Configure the split register. */
+void gnc_split_register_config (SplitRegister *reg,
+                                SplitRegisterType type,
+                                SplitRegisterStyle style,
+                                gboolean use_double_line);
+
+/* Destroy the split register. */
+void gnc_split_register_destroy (SplitRegister *reg);
+
+/* Returns the class of the current cursor */
+CursorClass gnc_split_register_get_current_cursor_class (SplitRegister *reg);
+
+/* Returns the class of the cursor at the given virtual cell location. */
+CursorClass gnc_split_register_get_cursor_class
+                                              (SplitRegister *reg,
+                                               VirtualCellLocation vcell_loc);
 
 /* The xaccSRSetData() method sets the user data and callback
  *    hooks for the register. */
