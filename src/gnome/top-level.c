@@ -28,7 +28,7 @@
 #include <guile/gh.h>
 #include <popt.h>
 #include <stdlib.h>
-#include <g-wrap-runtime-guile.h>
+#include <g-wrap-wct.h>
 #include <X11/Xlib.h>
 
 #include "AccWindow.h"
