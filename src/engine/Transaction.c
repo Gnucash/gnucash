@@ -157,7 +157,7 @@ xaccSplitDestroy (Split *split)
    s = trans->splits[0];
    while (s) {
 /* xxxxxxx */
-printf ("trans %p, %d %p\n", trans, numsplits, s);
+printf ("SplitDestroy(): trans=%p, %d'th split=%p\n", trans, numsplits, s);
       MARK_SPLIT(s);
       if (s == split) ismember = 1;
       numsplits ++;
