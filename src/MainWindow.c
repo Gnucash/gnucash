@@ -55,7 +55,7 @@ void helpMenubarCB( Widget mw, XtPointer cd, XtPointer cb );
 /** GLOBALS *********************************************************/
 extern char   *datafile;
 extern Widget toplevel;
-int    row;              /* The selected row of accountlist */
+static int    selected_row=-1;              /* The selected row of accountlist */
 Widget accountlist;
 char   *type[] = { "Bank","Cash","Asset","Credit Card",
 		   "Liability","Portfolio","Mutual Fund" };
@@ -452,9 +452,9 @@ listCB( Widget mw, XtPointer cd, XtPointer cb )
   cbs->doit = False;
   cbs->map  = False;
   
-  row = cbs->row;
+  selected_row = cbs->row;
   XbaeMatrixDeselectAll(accountlist);
-  XbaeMatrixSelectRow( accountlist, row );
+  XbaeMatrixSelectRow( accountlist, selected_row );
   }
 
 
@@ -591,9 +591,9 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
  *         cd - const that lets us know which choice was selected   * 
  *         cb -                                                     * 
  * Return: none                                                     * 
- * Global: data        - the data from the datafile                 *
- *         row         - the selected row number                    *
- *         toplevel    - the toplevel widget                        *
+ * Global: data         - the data from the datafile                *
+ *         selected_row - the selected row number                   *
+ *         toplevel     - the toplevel widget                       *
 \********************************************************************/
 void
 accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
@@ -621,12 +621,12 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     case AMB_OPEN:
       DEBUG("AMB_OPEN");
         {
-        Account *acc = getAccount (grp,row);
+        Account *acc = getAccount (grp,selected_row);
         if( NULL == acc ) {
           int make_new = verifyBox (toplevel,
 "Do you want to create a new account?\n\
 If not, then please select an account\n\
-account to open in the main window.\n");
+to open in the main window.\n");
           if (make_new) {
             accWindow(toplevel);
           }
@@ -641,28 +641,31 @@ account to open in the main window.\n");
     case AMB_EDIT:
       DEBUG("AMB_EDIT");
       {
-        Account *acc = getAccount (grp,row);
+        Account *acc = getAccount (grp,selected_row);
         if( NULL == acc ) {
           errorBox (toplevel,
 "To edit an account, you must first \n\
 choose an account to delete.\n");
         } else {
-          editAccWindow( toplevel, getAccount(grp,row) );
+          editAccWindow( toplevel, getAccount(grp,selected_row) );
         }
       }
       break;
     case AMB_DEL:
       DEBUG("AMB_DEL");
         {
-        Account *acc = getAccount (grp,row);
+        Account *acc = getAccount (grp,selected_row);
         if( NULL == acc ) {
           errorBox (toplevel,
 "To delete an account, you must first \n\
 choose an account to delete.\n");
         } else {
-          char *msg = "Are you sure you want to delete this account?";
+          char msg[1000];
+          sprintf (msg, 
+                   "Are you sure you want to delete the %s account?", 
+                   acc->accountName);
           if( verifyBox(toplevel,msg) ) {
-            freeAccount( removeAccount (grp, row) );
+            freeAccount( removeAccount (grp, selected_row) );
             refreshMainWindow();
             }
           }
