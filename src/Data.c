@@ -126,7 +126,7 @@ xaccGetPeerAccountFromName ( Account *acc, char * name )
 
   for (i=0; i<data->numAcc; i++) {
     peer_acc = data->account[i];
-    if (!strcmp(acc->accountName, name)) return peer_acc;
+    if (!strcmp(peer_acc->accountName, name)) return peer_acc;
   }
 
   return NULL;

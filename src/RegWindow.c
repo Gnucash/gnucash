@@ -605,13 +605,15 @@ regSaveTransaction( RegWindow *regData, int position )
       /* recalculate the balance and redisplay the window for the old acct */
       RECALC_BALANCE (xfer_acct);
       REFRESH_REGISTER (xfer_acct);
+      }
        
-      /* get the new account name */
-      name = XbaeMatrixGetCell(regData->reg,row+XFER_CELL_R, XFER_CELL_C);
+    /* get the new account name */
+    name = XbaeMatrixGetCell(regData->reg,row+XFER_CELL_R, XFER_CELL_C);
   
-      /* get the new account from the name */
-      xfer_acct = xaccGetPeerAccountFromName (acc, name);
+    /* get the new account from the name */
+    xfer_acct = xaccGetPeerAccountFromName (acc, name);
   
+    if (xfer_acct) {
       /* insert the transaction into the new account */
       insertTransaction (xfer_acct, trans);
       }
@@ -1449,6 +1451,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       if( !IN_DATE_CELL(row,col) && !IN_NUM_CELL(row,col) &&
           !IN_DESC_CELL(row,col) && !IN_PAY_CELL(row,col) &&
           !IN_RECN_CELL(row,col) && !IN_DEP_CELL(row,col) &&
+          !IN_XFER_CELL(row,col) && 
           !((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) &&
           !((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) &&
           !((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) &&
@@ -1489,8 +1492,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         }
 
       /* otherwise, move the XFER widget */
-      else if( ((PORTFOLIO == acc->type) && IN_XFER_CELL(row,col)) ||
-               ((MUTUAL    == acc->type) && IN_XFER_CELL(row,col)) ) 
+      else if( IN_XFER_CELL(row,col) )
         {
            SetPopBox (regData->xferbox, row, col);
            regData->changed |= MOD_XFER;
@@ -1670,10 +1672,9 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
        * indicate a row,col with a cell widget in it.  
        * Thus, the following if statment will never be true
        */
-      if( ((PORTFOLIO == acc->type) && IN_XFER_CELL(row,col)) ||
-          ((MUTUAL    == acc->type) && IN_XFER_CELL(row,col)) ) {
+      if( IN_XFER_CELL(row,col) ) 
         regData->changed |= MOD_XFER;
-      }
+
       break;
 
     case XbaeTraverseCellReason:

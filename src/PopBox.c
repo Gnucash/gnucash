@@ -69,7 +69,7 @@ popBox (Widget parent)
 
 /* hack alert -- the width of the combobox should be relative to the font, should
    be relative to the size of the cell in which it will fit. */
-                       XmNwidth, 43,
+                       XmNwidth, 53,
                        NULL);
 
    popData -> combobox = combobox;
