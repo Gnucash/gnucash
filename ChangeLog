@@ -1,3 +1,132 @@
+2001-12-04  Rob Browning  <rlb@defaultvalue.org>
+
+	* src/scm/main.scm: merge bootstrap.scm contents here and
+	rearrange code to eliminate most, if not all top-level activities.
+
+	* src/scm/.cvsignore: remove bootstrap.scm and add build-config.scm.
+
+	* src/scm/Makefile.am: remove depend.scm and handle switch from
+	bootstrap.scm to main.scm and build-config.scm.
+
+	* src/scm/build-config.scm.in: new file -- keep all the
+	auto-generated bits (and only those) here.
+
+	* src/scm/doc.scm (gnc:load-help-topics): just use
+	%search-load-path for now, though in the future these files
+	probably ought to be elsewhere.
+
+	* src/scm/path.scm (gnc:default-doc-dirs): match build-config.scm
+	var names for help dir.
+
+	* src/scm/command-line.scm: add other env var lookups as part of
+	startup changes.  Change bootstrap to main.
+	(gnc:*load-path*): eliminate.
+
+	* src/gnc-module/gnc-module.c: remove guile includes.
+
+	* src/gnc-module/Makefile.am (libgncmodule_la_LIBADD): remove
+	guile libs -- not needed any more.
+
+	* src/engine/test/test-period.c: must load the engine
+	before using it, and check to make sure the load works.
+
+	* src/engine/test/test-group-vs-book.c (main_helper): check for
+	failure loading the engine.
+
+	* src/bin/overrides/gnucash-build-env.in: part 1 of startup
+	changes -- use envt vars for more bits: GNC_CONFIG_DIR,
+	GNC_SHARE_DIR, and GNC_DOC_PATH now.
+
+	* src/bin/overrides/gnucash: use main, not bootstrap.
+
+	* src/app-utils/app-utils.scm: accomodate removal of
+	utilities.scm, and use main not bootstrap.
+
+	* src/app-utils/utilities.scm: code moved to main.scm -- needed
+	eariler in boot process.
+
+	* src/app-utils/Makefile.am (gncscm_DATA): remove utilities.scm.
+
+	* Makefile.am (TAGS): modify to fix the problem where you had to
+	run make twice to get it to succeed.
+
+	* Makefile.TAGS: new file.
+
+	* src/scm/depend.scm: deleted.
+
+	* src/report/standard-reports/net-barchart.scm: rename bootstrap to main.
+
+	* src/report/standard-reports/category-barchart.scm: rename
+	bootstrap to main.
+
+	* src/report/standard-reports/balance-sheet.scm: rename bootstrap
+	to main.
+
+	* src/report/standard-reports/receivables.scm: rename bootstrap to main.
+
+	* src/report/standard-reports/payables.scm: rename bootstrap to
+	main.
+
+	* src/report/standard-reports/standard-reports.scm: rename
+	bootstrap to main.
+
+	* src/report/standard-reports/register.scm: rename bootstrap to main.
+
+	* src/report/standard-reports/price-scatter.scm: rename bootstrap
+	to main.
+
+	* src/report/standard-reports/portfolio.scm: rename bootstrap to main.
+
+	* src/report/standard-reports/average-balance.scm: rename
+	bootstrap to main.
+
+	* src/report/utility-reports/welcome-to-gnucash.scm: rename
+	bootstrap to main.
+
+	* src/report/utility-reports/utility-reports.scm: rename bootstrap
+	to main.
+
+	* src/report/standard-reports/transaction.scm: rename bootstrap to main.
+
+	* src/report/standard-reports/aging.scm: rename bootstrap to main.
+
+	* src/report/utility-reports/view-column.scm: rename bootstrap to main.
+
+	* src/report/standard-reports/account-summary.scm: rename
+	bootstrap to main.
+
+	* src/report/standard-reports/account-piecharts.scm: rename
+	bootstrap to main.
+
+	* src/report/utility-reports/iframe-url.scm: rename bootstrap to main.
+
+	* src/report/utility-reports/hello-world.scm: rename bootstrap to main.
+
+	* src/tax/us/us.scm: rename bootstrap to main.
+
+	* src/scm/price-quotes.scm: rename bootstrap to main.
+
+	* src/report/stylesheets/stylesheets.scm: rename bootstrap to main.
+
+	* src/report/stylesheets/stylesheet-plain.scm: rename bootstrap to main.
+
+	* src/report/stylesheets/stylesheet-fancy.scm: rename bootstrap to main.
+
+	* src/report/report-system/report.scm: rename bootstrap to main.
+
+	* src/report/report-system/report-system.scm: rename bootstrap to main.
+
+	* src/report/locale-specific/us/taxtxf.scm: rename bootstrap to main.
+
+	* src/import-export/qif-io-core/qif-io-core.scm: rename bootstrap
+	to main.
+
+	* src/gnome-utils/gnome-utils.scm: rename bootstrap to main.
+
+	* src/import-export/qif-import/qif-import.scm: rename bootstrap to main.
+
+	* src/report/standard-reports/pnl.scm: rename bootstrap to main.
+
 2001-11-28  Rob Browning  <rlb@defaultvalue.org>
 
 	* src/bin/Makefile.am: handle new overrides arrangement.
