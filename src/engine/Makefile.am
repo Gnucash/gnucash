@@ -96,6 +96,7 @@ noinst_HEADERS = \
   TransactionP.h \
   gnc-book-p.h \
   gnc-event-p.h \
+  gnc-lot.h \
   gnc-lot-p.h \
   gnc-pricedb-p.h \
   gnc-session-p.h \

@@ -1,6 +1,7 @@
 2002-10-14  Chris Lyttle  <chris@wilddev.net>
 
 	* src/import-export/Makefile.am: fix make dist breakage
+	* src/engine/Makefile.am: more fixes
 
 2002-10-13  Chris Lyttle  <chris@wilddev.net>
 
