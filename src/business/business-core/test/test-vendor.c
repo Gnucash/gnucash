@@ -36,13 +36,21 @@ test_gint_fcn (QofBook *book, const char *message,
 	       gint (*get) (GncVendor *));
 #endif
 
+extern QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
+
 static void
 test_vendor (void)
 {
+  QofBackend *fbe;
   QofBook *book;
   GncVendor *vendor;
 
   book = qof_book_new ();
+
+  /* The book *must* have a backend to pass the test of the 'dirty' flag */
+  /* See the README file for details */
+  fbe = libgncmod_backend_file_LTX_gnc_backend_new();
+  qof_book_set_backend (book, fbe);
 
   /* Test creation/destruction */
   {
