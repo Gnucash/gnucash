@@ -57,5 +57,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnome-utils \
   ${GLIB_CFLAGS} \
+  ${GLADE_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}

@@ -12,6 +12,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnome \
   ${GUILE_INCS} \
+  ${GLADE_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GLIB_CFLAGS} \
   ${GNOME_INCLUDEDIR}
@@ -38,6 +39,7 @@ libgncmod_binary_import_la_LIBADD = \
   ${top_srcdir}/src/app-file/libgncmod-app-file.la \
   ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${GUILE_LIBS} \
+  ${GLADE_LIBS} \
   ${GNOMEUI_LIBS} \
   ${GNOME_LIBDIR} \
   ${GLIB_LIBS}

@@ -57,6 +57,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/register/register-core \
   ${GUILE_INCS} \
+  ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GTK_XIM_FLAGS} \
   ${GNOME_INCLUDEDIR}

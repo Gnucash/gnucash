@@ -1,3 +1,7 @@
+2001-11-26  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/*/Makefile.am: add ${GLADE_CFLAGS} to AM_CFLAGS.
+
 2001-11-21  Rob Browning  <rlb@defaultvalue.org>
 
 	* README: add a note to the Running section indicating that it's
