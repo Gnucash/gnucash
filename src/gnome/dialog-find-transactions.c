@@ -106,8 +106,6 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
 				       type, SPLIT_RECONCILE, NULL);
     params = gnc_search_param_prepend (params, "Share Price", NULL,
 				       type, SPLIT_SHARE_PRICE, NULL);
-    params = gnc_search_param_prepend (params, "Share Price", NULL,
-				       type, SPLIT_SHARE_PRICE, NULL);
     params = gnc_search_param_prepend (params, "Shares", NULL,
 				       type, SPLIT_AMOUNT, NULL);
     params = gnc_search_param_prepend (params, "Value", NULL,

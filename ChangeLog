@@ -1,3 +1,7 @@
+2002-11-10  Derek Atkins  <derek@ihtfp.com>
+
+	* Fix the Find-Transactions dialog so it only has "Share Price" twice
+
 2002-11-10  David Hampton  <hampton@employees.org>
 
 	* src/scm/price-quotes.scm ((gnc:book-add-quotes book)): Don't get
@@ -22,6 +26,7 @@
 	(gnc_split_reg_jump_to_split_amount): Remove uninitialized
 	variable.
 
+>>>>>>> 1.1128
 2002-11-09  Herbert Thoma  <herbie@hthoma.de>
 
 	* /src/report/standard-reports/cash-flow.scm: bug fix for cash flow
