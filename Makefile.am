@@ -35,8 +35,10 @@ EXTRA_DIST = \
   gnucash.lsm \
   make-gnucash-patch.in \
   po/.cvsignore \
-  po/gnc-glossary.txt \
-  po/README
+  po/README \
+  po/glossary/de.po \
+  po/glossary/gnc-glossary.txt \
+  po/glossary/txt-to-pot.sh
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
