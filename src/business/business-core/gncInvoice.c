@@ -22,19 +22,13 @@
 
 /*
  * Copyright (C) 2001,2002 Derek Atkins
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
 #include "config.h"
 
 #include <glib.h>
-
-#include "Transaction.h"
-#include "Account.h"
-#include "messages.h"
-#include "gnc-numeric.h"
-#include "kvp_frame.h"
-#include "gnc-engine-util.h"
 
 #include "qofbook.h"
 #include "qofclass.h"
@@ -46,16 +40,25 @@
 #include "qofquerycore.h"
 #include "qofquery.h"
 
+#include "Transaction.h"
+#include "Account.h"
+#include "messages.h"
+#include "gnc-numeric.h"
+#include "kvp_frame.h"
+#include "gnc-engine-util.h"
+
 #include "gnc-event-p.h"
 #include "gnc-lot.h"
 #include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
+#include "gncBillTermP.h"
 #include "gncEntry.h"
 #include "gncEntryP.h"
+#include "gncJobP.h"
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
-#include "gncOwner.h"
+#include "gncOwnerP.h"
 
 struct _gncInvoice 
 {
@@ -113,6 +116,7 @@ mark_invoice (GncInvoice *invoice)
   gnc_engine_gen_event (&invoice->inst.entity, GNC_EVENT_MODIFY);
 }
 
+/* ================================================================== */
 /* Create/Destroy Functions */
 
 GncInvoice *gncInvoiceCreate (QofBook *book)
@@ -165,6 +169,74 @@ static void gncInvoiceFree (GncInvoice *invoice)
   g_free (invoice);
 }
 
+GncInvoice *
+gncCloneInvoice (GncInvoice *from, QofBook *book)
+{
+  GList *node;
+  GncInvoice *invoice;
+
+  if (!book) return NULL;
+
+  invoice = g_new0 (GncInvoice, 1);
+  qof_instance_init (&invoice->inst, _GNC_MOD_NAME, book);
+
+  invoice->id = CACHE_INSERT (from->id);
+  invoice->notes = CACHE_INSERT (from->notes);
+  invoice->billing_id = CACHE_INSERT (from->billing_id);
+  invoice->active = from->active;
+
+  invoice->billto = gncCloneOwner (&from->billto, book);
+  invoice->owner = gncCloneOwner (&from->owner, book);
+  invoice->job = gncJobObtainTwin (from->job, book);
+  invoice->terms = gncBillTermObtainTwin (from->terms, book);
+  gncBillTermIncRef (invoice->terms);
+
+
+  invoice->to_charge_amount = from->to_charge_amount;
+  invoice->printname = NULL; /* that's right, NULL. See below. */
+  invoice->date_opened = from->date_opened;
+  invoice->date_posted = from->date_posted;
+
+  invoice->currency = gnc_commodity_obtain_twin (from->currency, book);
+
+  invoice->entries = NULL;
+  for (node = g_list_last(from->entries); node; node=node->next)
+  {
+    GncEntry *entry = node->data;
+    entry = gncEntryObtainTwin (entry, book);
+    invoice->entries = g_list_prepend (invoice->entries, entry);
+  }
+
+  /* XXX should probably be obtain-twin not lookup-twin */
+  invoice->posted_acc = 
+     GNC_ACCOUNT(qof_instance_lookup_twin(QOF_INSTANCE(from->posted_acc), book));
+#if 0
+XXX not done */
+  Transaction * posted_txn;
+  GNCLot *	posted_lot;
+#endif
+
+  gnc_engine_gen_event (&invoice->inst.entity, GNC_EVENT_CREATE);
+
+  return invoice;
+}
+
+GncInvoice *
+gncInvoiceObtainTwin (GncInvoice *from, QofBook *book)
+{
+  GncInvoice *invoice;
+  if (!book) return NULL;
+
+  invoice = (GncInvoice *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!invoice)
+  {
+    invoice = gncCloneInvoice (from, book);
+  }
+
+  return invoice;
+}
+
+/* ================================================================== */
 /* Set Functions */
 
 void gncInvoiceSetID (GncInvoice *invoice, const char *id)
@@ -361,6 +433,7 @@ void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry)
   mark_invoice (bill);
 }
 
+/* ================================================================== */
 /* Get Functions */
 
 const char * gncInvoiceGetID (GncInvoice *invoice)
@@ -1210,6 +1283,8 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice)
   if (!invoice->posted_lot) return FALSE;
   return gnc_lot_is_closed(invoice->posted_lot);
 }
+
+/* ================================================================== */
 
 void gncInvoiceBeginEdit (GncInvoice *invoice)
 {

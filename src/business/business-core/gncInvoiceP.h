@@ -41,5 +41,28 @@ void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn);
 void gncInvoiceSetPostedLot (GncInvoice *invoice, GNCLot *lot);
 void gncInvoiceSetPaidTxn (GncInvoice *invoice, Transaction *txn);
 
+
+/** The gncCloneInvoice() routine makes a copy of the indicated
+ *  invoice, placing it in the indicated book.  It copies
+ *  the name, description, type, due-days, discount, etc. 
+ *  It also copies (as needed) both parents and children, so that
+ *  the parent-child relationship is correctly mirrored in the 
+ *  clone.
+ *  It then adds a pair of 'gemini' kvp pointers so that each copy
+ *  can be found from the other.
+ */
+
+GncInvoice * gncCloneInvoice (GncInvoice *from, QofBook *);
+
+/** The gncInvoiceObtainTwin() will find the 'twin' of the
+ *  indicated invoice in the indicated book.  If the twin doesn't
+ *  yet exist in the book, it will be created (by calling
+ *  gncCloneInvoice()) and placed into the book.
+ *
+ * We called this routine 'Obtain' instead of "Get" to distinguish
+ * it from the other Get routines, which work in fundamentally  
+ * different ways.
+ */
+GncInvoice * gncInvoiceObtainTwin (GncInvoice *from, QofBook *book);
 #define gncInvoiceSetGUID(I,G) qof_entity_set_guid(QOF_ENTITY(I),(G))
 #endif /* GNC_INVOICEP_H_ */
