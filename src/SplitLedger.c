@@ -806,7 +806,6 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
   SRInfo *info = xaccSRGetInfo(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
-  SplitRegisterType reg_type;
   CursorType cursor_type;
   unsigned int changed;
   CellType cell_type;
@@ -825,7 +824,6 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
   if (trans == NULL)
     return;
 
-  reg_type = reg->type;
   cursor_type = xaccSplitRegisterGetCursorType(reg);
   cell_type = xaccSplitRegisterGetCellType(reg);
   changed = xaccSplitRegisterGetChangeFlag(reg);
