@@ -23,7 +23,6 @@ double-entry accounting principles to ensure balanced books.
 
 
 %build
-unset LINGUAS
 ./configure --prefix=/usr --sysconfdir=/etc
 make gnome
 
