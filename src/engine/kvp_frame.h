@@ -203,6 +203,22 @@ void kvp_frame_add_guid(KvpFrame * frame, const char * path, const GUID *guid);
 void kvp_frame_add_frame(KvpFrame *frame, const char *path, KvpFrame *chld);
 void kvp_frame_add_frame_nc(KvpFrame *frame, const char *path, KvpFrame *chld);
 
+/* The kvp_frame_add_value() routine will  add a copy of the value
+ *    to the glist bag at the indicated path. If not all frame components
+ *    of the path exist, they are created.  If there was another
+ *    item previously stored at that path, then the path is converted
+ *    to a bag, and the old value, along with the new value, is added
+ *    to the bag.  This routine returns the pointer to the last frame
+ *    (the actual frame to which the value was added), or NULL if there
+ *    was an error of any sort (typically, a parse error in the path).
+ * 
+ *    The *_nc() routine is analogous, except that it doesn't copy the
+ *    value.
+ */
+KvpFrame * kvp_frame_add_value(KvpFrame * frame, const char * path, KvpValue *value);
+KvpFrame * kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue *value);
+
+
 /*@}*/
 
 /* -------------------------------------------------------- */
@@ -243,6 +259,7 @@ GUID      * kvp_frame_get_guid(const KvpFrame *frame, const char *path);
 void      * kvp_frame_get_binary(const KvpFrame *frame, const char *path,
                                    guint64 * size_return); 
 Timespec    kvp_frame_get_timespec(const KvpFrame *frame, const char *path);
+KvpValue  * kvp_frame_get_value(const KvpFrame *frame, const char *path);
 KvpFrame  * kvp_frame_get_frame(const KvpFrame *frame, const char *path);
 
 /** This routine returns the last frame of the path.

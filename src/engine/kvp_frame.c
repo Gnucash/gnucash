@@ -171,19 +171,20 @@ kvp_frame_copy(const KvpFrame * frame)
   return retval;
 }
 
-/* Passing in a null value into this routine has the effect
- * of deleting the old value stored at this slot.
+/* Replace the old value with the new value.  Return the old value.
+ * Passing in a null value into this routine has the effect of 
+ * removing the key from the KVP tree.
  */
-static void
-kvp_frame_set_slot_destructively(KvpFrame * frame, const char * slot, 
+static KvpValue *
+kvp_frame_replace_slot (KvpFrame * frame, const char * slot, 
                                  KvpValue * new_value) 
 {
   gpointer orig_key;
-  gpointer orig_value;
+  gpointer orig_value = NULL;
   int      key_exists;
 
-  if(!frame->hash) return; /*  Error ...  */
-  if(!init_frame_body_if_needed(frame)) return; /* Error ... */
+  if(!frame->hash) return NULL; /*  Error ...  */
+  if(!init_frame_body_if_needed(frame)) return NULL; /* Error ... */
 
   g_hash_table_freeze(frame->hash);
 
@@ -193,7 +194,10 @@ kvp_frame_set_slot_destructively(KvpFrame * frame, const char * slot,
   {
     g_hash_table_remove(frame->hash, slot);
     g_cache_remove(gnc_engine_get_string_cache(), orig_key);
-    kvp_value_delete(orig_value);
+  }
+  else
+  {
+    orig_value = NULL;
   }
 
   if(new_value) 
@@ -201,10 +205,193 @@ kvp_frame_set_slot_destructively(KvpFrame * frame, const char * slot,
     g_hash_table_insert(frame->hash,
                         g_cache_insert(gnc_engine_get_string_cache(),
                                        (gpointer) slot),
-      new_value);
+                        new_value);
   }
 
   g_hash_table_thaw(frame->hash);
+
+  return (KvpValue *) orig_value;
+}
+
+/* Passing in a null value into this routine has the effect
+ * of deleting the old value stored at this slot.
+ */
+static void
+kvp_frame_set_slot_destructively(KvpFrame * frame, const char * slot, 
+                                 KvpValue * new_value) 
+{
+  KvpValue * old_value;
+  old_value = kvp_frame_replace_slot (frame, slot, new_value);
+  kvp_value_delete (old_value);
+}
+
+/* ============================================================ */
+/* Get the named frame, or create it if it doesn't exist.
+ * gcc -O3 should inline it.  It performs no error checks,
+ * the caller is responsible of passing good keys and frames.
+ */
+static inline KvpFrame *
+get_or_make (KvpFrame *fr, const char * key)
+{
+    KvpFrame *next_frame;
+    KvpValue *value;
+
+    value = kvp_frame_get_slot (fr, key);
+    if (value) 
+    {
+      next_frame = kvp_value_get_frame (value);
+    }
+    else
+    {
+      next_frame = kvp_frame_new ();
+      kvp_frame_set_slot_nc (fr, key, 
+                   kvp_value_new_frame_nc (next_frame));
+    }
+    return next_frame;
+}
+
+/* Get pointer to last frame in path. If teh path doesn't exist,
+ * it is created.  The string stored in keypath will be hopelessly 
+ * mangled .
+ */
+static inline KvpFrame *
+kvp_frame_get_frame_slash_trash (KvpFrame *frame, char *key_path) 
+{
+  char *key, *next;
+  if (!frame || !key_path) return frame;
+
+  key = key_path;
+  key --;
+
+  while (key) 
+  {
+    key ++;
+    while ('/' == *key) { key++; }
+    if (0x0 == *key) break;    /* trailing slash */
+    next = strchr (key, '/');
+    if (next) *next = 0x0;
+
+    frame = get_or_make (frame, key);
+    if (!frame) break;  /* error - should never happen */
+    
+    key = next;
+  }
+  return frame;
+}
+
+/* ============================================================ */
+/* Get pointer to last frame in path, or NULL if the path doesn't
+ * exist. The string stored in keypath will be hopelessly mangled .
+ */
+static inline const KvpFrame *
+kvp_frame_get_frame_or_null_slash_trash (const KvpFrame *frame, char *key_path) 
+{
+  KvpValue *value;
+  char *key, *next;
+  if (!frame || !key_path) return NULL;
+
+  key = key_path;
+  key --;
+
+  while (key) 
+  {
+    key ++;
+    while ('/' == *key) { key++; }
+    if (0x0 == *key) break;    /* trailing slash */
+    next = strchr (key, '/');
+    if (next) *next = 0x0;
+
+    value = kvp_frame_get_slot (frame, key);
+    if (!value) return NULL;
+    frame = kvp_value_get_frame (value);
+    if (!frame) return NULL;
+   
+    key = next;
+  }
+  return frame;
+}
+
+/* Return pointer to last frame in path, and also store the
+ * last dangling part of path in 'end_key'.  If path doesn't 
+ * exist, it is created.
+ */
+
+static inline KvpFrame *
+get_trailer_make (KvpFrame * frame, const char * key_path, char **end_key)
+{
+  char *last_key;
+
+  if (!frame || !key_path || (0 == key_path[0])) return NULL;
+
+  last_key = strrchr (key_path, '/');
+  if (NULL == last_key)
+  {
+    last_key = (char *) key_path;
+  }
+  else if (last_key == key_path)
+  {
+    last_key ++;
+  }
+  else if (0 == last_key[1])
+  {
+    return NULL;
+  }
+  else
+  {
+    char *root, *lkey;
+    root = g_strdup (key_path);
+    lkey = strrchr (root, '/');
+    *lkey = 0;
+    frame = kvp_frame_get_frame_slash_trash (frame, root);
+    g_free(root);
+
+    last_key ++;
+  }
+
+  *end_key = last_key;
+  return frame;
+}
+
+
+/* Return pointer to last frame in path, or NULL if the path
+ * doesn't exist.  Also store the last dangling part of path
+ * in 'end_key'.
+ */
+
+static inline const KvpFrame *
+get_trailer_or_null (const KvpFrame * frame, const char * key_path, char **end_key)
+{
+  char *last_key;
+
+  if (!frame || !key_path || (0 == key_path[0])) return NULL;
+
+  last_key = strrchr (key_path, '/');
+  if (NULL == last_key)
+  {
+    last_key = (char *) key_path;
+  }
+  else if (last_key == key_path)
+  {
+    last_key ++;
+  }
+  else if (0 == last_key[1])
+  {
+    return NULL;
+  }
+  else
+  {
+    char *root, *lkey;
+    root = g_strdup (key_path);
+    lkey = strrchr (root, '/');
+    *lkey = 0;
+    frame = kvp_frame_get_frame_or_null_slash_trash (frame, root);
+    g_free(root);
+
+    last_key ++;
+  }
+
+  *end_key = last_key;
+  return frame;
 }
 
 /* ============================================================ */
@@ -283,41 +470,125 @@ kvp_frame_set_frame_nc(KvpFrame * frame, const char * path, KvpFrame *fr)
 
 /* ============================================================ */
 
-#if UNDER_CONSTRUCTION
-void
-kvp_frame_add_gint64(KvpFrame * frame, const char * path, gint64 ival) 
+KvpFrame *
+kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue *value) 
 {
-  KvpValue *value, *oldvalue;
-  value = kvp_value_new_gint64 (ival);
+  char *key = NULL;
+  KvpValue *oldvalue;
 
-  oldvalue = kvp_frame_get_value (frame, path);
+  frame = (KvpFrame *) get_trailer_or_null (frame, path, &key);
+  oldvalue = kvp_frame_get_slot (frame, key);
+
   if (oldvalue)
   {
+    /* If already a glist here, just append */
     if (KVP_TYPE_GLIST == oldvalue->type)
     {
        GList * vlist = oldvalue->value.list;
        vlist = g_list_append (vlist, value);
        oldvalue->value.list = vlist;
-       return;
     }
     else
+       /* If some other value, convert it to a glist */
     {
+       KvpValue *klist;
        GList *vlist = NULL;
-       /* XXX don't copy oldvalue, dont't set destructo */
-       vlist = g_list_append (vlist, kvp_value_copy(oldvalue));
-       vlist = g_list_append (vlist, value);
-       kvp_value_new_glist_nc (vlist);
-       kvp_frame_set_slot_destructively (frame,xxx,vvv);
-       return;
-    }
-  }
-xxxxxxxxxxx
-  
 
+       vlist = g_list_append (vlist, oldvalue);
+       vlist = g_list_append (vlist, value);
+       klist = kvp_value_new_glist_nc (vlist);
+
+       kvp_frame_replace_slot (frame, key, klist);
+    }
+    return frame;
+  }
+
+  /* Hmm, if we are here, the path doesn't exist. We need to 
+   * create the path, add the value to it. */
   frame = kvp_frame_set_slot_slash_nc (frame, path, value);
+  return frame;
+}
+
+KvpFrame *
+kvp_frame_add_value(KvpFrame * frame, const char * path, KvpValue *value)
+{
+  value = kvp_value_copy (value);
+  frame = kvp_frame_add_value_nc (frame, path, value);
+  if (!frame) kvp_value_delete (value);
+  return frame;
+}
+
+void
+kvp_frame_add_gint64(KvpFrame * frame, const char * path, gint64 ival) 
+{
+  KvpValue *value;
+  value = kvp_value_new_gint64 (ival);
+  frame = kvp_frame_add_value_nc (frame, path, value);
   if (!frame) kvp_value_delete (value);
 }
-#endif
+
+void
+kvp_frame_add_double(KvpFrame * frame, const char * path, double dval) 
+{
+  KvpValue *value;
+  value = kvp_value_new_double (dval);
+  frame = kvp_frame_add_value_nc (frame, path, value);
+  if (!frame) kvp_value_delete (value);
+}
+
+void
+kvp_frame_add_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval) 
+{
+  KvpValue *value;
+  value = kvp_value_new_gnc_numeric (nval);
+  frame = kvp_frame_add_value_nc (frame, path, value);
+  if (!frame) kvp_value_delete (value);
+}
+
+void
+kvp_frame_add_str(KvpFrame * frame, const char * path, const char* str) 
+{
+  KvpValue *value;
+  value = kvp_value_new_string (str);
+  frame = kvp_frame_add_value_nc (frame, path, value);
+  if (!frame) kvp_value_delete (value);
+}
+
+void
+kvp_frame_add_guid(KvpFrame * frame, const char * path, const GUID *guid) 
+{
+  KvpValue *value;
+  value = kvp_value_new_guid (guid);
+  frame = kvp_frame_add_value_nc (frame, path, value);
+  if (!frame) kvp_value_delete (value);
+}
+
+void
+kvp_frame_add_timespec(KvpFrame * frame, const char * path, Timespec ts) 
+{
+  KvpValue *value;
+  value = kvp_value_new_timespec (ts);
+  frame = kvp_frame_add_value_nc (frame, path, value);
+  if (!frame) kvp_value_delete (value);
+}
+
+void
+kvp_frame_add_frame(KvpFrame * frame, const char * path, KvpFrame *fr) 
+{
+  KvpValue *value;
+  value = kvp_value_new_frame (fr);
+  frame = kvp_frame_add_value_nc (frame, path, value);
+  if (!frame) kvp_value_delete (value);
+}
+
+void
+kvp_frame_add_frame_nc(KvpFrame * frame, const char * path, KvpFrame *fr) 
+{
+  KvpValue *value;
+  value = kvp_value_new_frame_nc (fr);
+  frame = kvp_frame_add_value_nc (frame, path, value);
+  if (!frame) kvp_value_delete (value);
+}
 
 /* ============================================================ */
 
@@ -450,97 +721,6 @@ kvp_frame_set_slot_path_gslist (KvpFrame *frame,
 }
 
 /* ============================================================ */
-/* Get the named frame, or create it if it doesn't exist.
- * gcc -O3 should inline it.  It performs no error checks,
- * the caller is responsible of passing good keys and frames.
- */
-static inline KvpFrame *
-get_or_make (KvpFrame *fr, const char * key)
-{
-    KvpFrame *next_frame;
-    KvpValue *value;
-
-    value = kvp_frame_get_slot (fr, key);
-    if (value) 
-    {
-      next_frame = kvp_value_get_frame (value);
-    }
-    else
-    {
-      next_frame = kvp_frame_new ();
-      kvp_frame_set_slot_nc (fr, key, 
-                   kvp_value_new_frame_nc (next_frame));
-    }
-    return next_frame;
-}
-
-/* Get pointer to last frame in path. The string stored in
- * keypath will be hopelessly mangled .
- */
-static inline KvpFrame *
-kvp_frame_get_frame_slash_trash (KvpFrame *frame, char *key_path) 
-{
-  char *key, *next;
-  if (!frame || !key_path) return frame;
-
-  key = key_path;
-  key --;
-
-  while (key) 
-  {
-    key ++;
-    while ('/' == *key) { key++; }
-    if (0x0 == *key) break;    /* trailing slash */
-    next = strchr (key, '/');
-    if (next) *next = 0x0;
-
-    frame = get_or_make (frame, key);
-    if (!frame) break;  /* error - should never happen */
-    
-    key = next;
-  }
-  return frame;
-}
-
-/* Return pointer to last frame in path, and also store the
- * last dangling part of path in 'end_key'.
- */
-
-static inline KvpFrame *
-get_trailer (KvpFrame * frame, const char * key_path, char **end_key)
-{
-  char *last_key;
-
-  if (!frame || !key_path || (0 == key_path[0])) return NULL;
-
-  last_key = strrchr (key_path, '/');
-  if (NULL == last_key)
-  {
-    last_key = (char *) key_path;
-  }
-  else if (last_key == key_path)
-  {
-    last_key ++;
-  }
-  else if (0 == last_key[1])
-  {
-    return NULL;
-  }
-  else
-  {
-    char *root, *lkey;
-    root = g_strdup (key_path);
-    lkey = strrchr (root, '/');
-    *lkey = 0;
-    frame = kvp_frame_get_frame_slash_trash (frame, root);
-    g_free(root);
-
-    last_key ++;
-  }
-
-  *end_key = last_key;
-  return frame;
-}
 
 KvpFrame *
 kvp_frame_set_slot_slash_nc (KvpFrame * frame, const char * key_path, 
@@ -548,7 +728,7 @@ kvp_frame_set_slot_slash_nc (KvpFrame * frame, const char * key_path,
 {
   char *last_key;
 
-  frame = get_trailer (frame, key_path, &last_key);
+  frame = get_trailer_make (frame, key_path, &last_key);
   if (!frame) return NULL;
   kvp_frame_set_slot_destructively(frame, last_key, value);
   return frame;
@@ -561,7 +741,7 @@ kvp_frame_set_slot_slash (KvpFrame * frame, const char * key_path,
   KvpValue *new_value = NULL;
   char *last_key;
 
-  frame = get_trailer (frame, key_path, &last_key);
+  frame = get_trailer_make (frame, key_path, &last_key);
   if (!frame) return NULL;
 
   if (value) new_value = kvp_value_copy(value);
@@ -649,77 +829,6 @@ kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc)
 
 /* ============================================================ */
 
-/* Get pointer to last frame in path, or NULL if the path doesn't
- * exist. The string stored in keypath will be hopelessly mangled .
- */
-static inline const KvpFrame *
-kvp_frame_get_frame_or_null_slash_trash (const KvpFrame *frame, char *key_path) 
-{
-  KvpValue *value;
-  char *key, *next;
-  if (!frame || !key_path) return NULL;
-
-  key = key_path;
-  key --;
-
-  while (key) 
-  {
-    key ++;
-    while ('/' == *key) { key++; }
-    if (0x0 == *key) break;    /* trailing slash */
-    next = strchr (key, '/');
-    if (next) *next = 0x0;
-
-    value = kvp_frame_get_slot (frame, key);
-    if (!value) return NULL;
-    frame = kvp_value_get_frame (value);
-    if (!frame) return NULL;
-   
-    key = next;
-  }
-  return frame;
-}
-
-/* Return pointer to last frame in path, or NULL if the path
- * doesn't exist.  Also store the last dangling part of path
- * in 'end_key'.
- */
-
-static inline const KvpFrame *
-get_trailer_or_null (const KvpFrame * frame, const char * key_path, char **end_key)
-{
-  char *last_key;
-
-  if (!frame || !key_path || (0 == key_path[0])) return NULL;
-
-  last_key = strrchr (key_path, '/');
-  if (NULL == last_key)
-  {
-    last_key = (char *) key_path;
-  }
-  else if (last_key == key_path)
-  {
-    last_key ++;
-  }
-  else if (0 == last_key[1])
-  {
-    return NULL;
-  }
-  else
-  {
-    char *root, *lkey;
-    root = g_strdup (key_path);
-    lkey = strrchr (root, '/');
-    *lkey = 0;
-    frame = kvp_frame_get_frame_or_null_slash_trash (frame, root);
-    g_free(root);
-
-    last_key ++;
-  }
-
-  *end_key = last_key;
-  return frame;
-}
 
 gint64
 kvp_frame_get_gint64(const KvpFrame *frame, const char *path)
@@ -814,7 +923,6 @@ kvp_frame_get_frame_gslist (KvpFrame *frame, GSList *key_path)
   }
   return frame;  /* this is the normal exit for this func */
 }
-
 
 KvpFrame *
 kvp_frame_get_frame_path (KvpFrame *frame, const char *key,  ...) 
