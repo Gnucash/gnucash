@@ -186,7 +186,8 @@
         (list->vector
          (list 'auto_ledger
                (N_ "Auto Ledger")
-               (N_ "Show transactions on one or two lines and expand the current transaction")))
+               (N_ "Show transactions on one or two lines \
+and expand the current transaction")))
         (list->vector
          (list 'journal
                (N_ "Journal")
@@ -314,7 +315,8 @@ transaction.") #t))
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   (N_ "Register Colors") (N_ "Double mode colors alternate with transactions")
-  "h" (N_ "Alternate the primary and secondary colors with each transaction, not each row")
+  "h" (N_ "Alternate the primary and secondary colors with each transaction, \
+not each row")
   #f))
 
 
@@ -323,7 +325,8 @@ transaction.") #t))
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   (N_ "Reconcile") (N_ "Automatic credit card payments")
-  "a" (N_ "After reconciling a credit card statement, prompt the user to enter a credit card payment")
+  "a" (N_ "After reconciling a credit card statement, prompt the user \
+to enter a credit card payment")
   #t))
 
 ;;; User Info Options
@@ -372,19 +375,23 @@ transaction.") #t))
   (list (list->vector
          (list 'mdi-notebook
                (N_ "Notebook")
-               (N_ "New windows are created as notebook tabs in the current top-level window")))
+               (N_ "New windows are created as notebook tabs in the \
+current top-level window")))
         (list->vector
          (list 'mdi-toplevel
                (N_ "Top-level")
-               (N_ "Create a new top-level window for each report or account tree")))
+               (N_ "Create a new top-level window for each report \
+or account tree")))
         (list->vector
          (list 'mdi-modal
                (N_ "Single window")
-               (N_ "One window is used for all displays (select contents through Window menu)")))
+               (N_ "One window is used for all displays (select contents \
+through Window menu)")))
         (list->vector
          (list 'mdi-default
                (N_ "Use GNOME default")
-               (N_ "Default MDI mode can be set in the GNOME Control Center"))))))
+               (N_ "Default MDI mode can be set in the GNOME \
+Control Center"))))))
 
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
@@ -424,7 +431,8 @@ transaction.") #t))
         (list->vector
          (list 'credit
                (N_ "Credit Accounts")
-               (N_ "Reverse Credit Card, Liability, Equity, and Income Accounts")))
+               (N_ "Reverse Credit Card, Liability, Equity, and Income \
+Accounts")))
         (list->vector
          (list 'none
                (N_ "None")
@@ -451,7 +459,8 @@ transaction.") #t))
  (gnc:make-complex-boolean-option
   (N_ "General") (N_ "Automatic Decimal Point")
   "h" 
-  (N_ "Automatically insert a decimal point into values that are entered without one.") 
+  (N_ "Automatically insert a decimal point into values that are entered \
+without one.") 
   #f #f
   (lambda (x) (gnc:set-option-selectable-by-name "General"
                                                  "Auto Decimal Places"
@@ -587,9 +596,9 @@ the current value of the path.")
 (define gnc:*doc-path*
 
   (gnc:make-config-var
-   (N_ "A list of strings indicating where to look for html and parsed-html files
-Each element must be a string representing a directory or a symbol
-where 'default expands to the default path, and 'current expands to
+   (N_ "A list of strings indicating where to look for html and parsed-html files\
+Each element must be a string representing a directory or a symbol\
+where 'default expands to the default path, and 'current expands to\
 the current value of the path.")
    (lambda (var value)
      (let ((result (gnc:_expand-doc-path_ value)))
