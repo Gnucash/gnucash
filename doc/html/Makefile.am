@@ -1,7 +1,7 @@
 
 docdir = ${GNC_SHAREDIR}/html
 
-SUBDIRS = C fr
+SUBDIRS = fr
 
 doc_DATA = \
   gnucash.css \
