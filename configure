@@ -5757,6 +5757,7 @@ trap 'rm -fr `echo "          Makefile
           intl/Makefile
           lib/Makefile
 	  po/Makefile.in
+          po/Makefile
           rpm/Makefile
           src/Makefile
           src/doc/Makefile
@@ -5944,6 +5945,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
           intl/Makefile
           lib/Makefile
 	  po/Makefile.in
+          po/Makefile
           rpm/Makefile
           src/Makefile
           src/doc/Makefile
