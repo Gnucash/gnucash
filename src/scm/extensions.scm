@@ -59,63 +59,13 @@
 
 (define (gnc:extensions-menu-setup)
   (define menu (gnc:make-menu "Extensions" (list "_Settings")))
-  
-  (define schedxact-editor-item
-    (gnc:make-menu-item (N_ "SchedXact: Editor")
-			(N_ "Editor of Scheduled Transactions")
-			(list "Extensions" "")
-			(lambda () (gnc:sx-editor)))
-    )
-  (define schedxact-old-slr-item
-    (gnc:make-menu-item (N_ "SchedXact: [Old] Since Last Run")
-			(N_ "since last run dialog")
-			(list "Extensions" "")
-			(lambda () (gnc:sx-since-last-run)))
-    )
-  (define schedxact-slr-item
-    (gnc:make-menu-item (N_ "SchedXact: [New] Since Last Run")
-                        (N_ "since last run dialog")
-                        (list "Extensions" "" )
-                        (lambda () (gnc:sx-sincelast-create ))))
-  (define progress-item
-    (gnc:make-menu-item (N_ "Test progress dialog")
-                        (N_ "Test progress dialog")
-                        (list "Extensions" "")
-                        (lambda ()
-                          (let ((dialog (gnc:progress-dialog-new #f #f))
-                                (canceled #f))
-                            (gnc:progress-dialog-set-activity-mode dialog #t)
-                            (gnc:progress-dialog-set-heading dialog #f)
-                            (gnc:progress-dialog-set-cancel-scm-func
-                             dialog
-                             (lambda ()
-                               (display "User canceled.") (newline)
-                               (set! canceled #t)
-                               #t))
-                            (let loop ((value 0.0))
-                              (gnc:progress-dialog-set-value dialog value)
-                              (sleep 1)
-                              (if (and (not canceled) (< value 90.0))
-                                  (loop (+ value 5.0))))
-                            (gnc:progress-dialog-finish dialog)
-                            (gnc:progress-dialog-destroy dialog)))))
 
   (gnc:add-extension menu)
-;  (gnc:add-extension export-item)
-
-;; NOTE: this is the inverse order from how you may want them to
-;; appear in the menu [prepending to some list]...
-
-  (gnc:add-extension progress-item)
-  (gnc:add-extension schedxact-old-slr-item)
-  (gnc:add-extension schedxact-slr-item)
-  (gnc:add-extension schedxact-editor-item)
 )
 
 (if (gnc:debugging?)
     (gnc:hook-add-dangler gnc:*ui-startup-hook*
                           gnc:extensions-menu-setup))
-
 
 ;; Automatically pick accelerators for menu names
 (define (gnc:new-menu-namer)

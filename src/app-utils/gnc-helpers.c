@@ -106,3 +106,14 @@ gnc_printinfo_p(SCM info_scm)
   return retval;
 }
 
+const char *
+gnc_get_account_separator_string (void)
+{
+  static char sep[2];
+
+  sep[0] = gnc_get_account_separator ();
+  sep[1] = '\0';
+
+  return sep;
+}
+

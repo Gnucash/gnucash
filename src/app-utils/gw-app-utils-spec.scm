@@ -305,4 +305,13 @@ determines formatting details.")
    '<gnc:commodity*>
    "gnc_get_euro"
    '()
-   "Returns the commodity EURO"))
+   "Returns the commodity EURO")
+
+  (gw:wrap-function
+   mod
+   'gnc:account-separator-char
+   '(<gw:m-chars-callee-owned> gw:const)
+   "gnc_get_account_separator_string"
+   '()
+   "Returns a string with the user-selected account separator")
+)

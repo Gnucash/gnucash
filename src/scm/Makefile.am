@@ -11,7 +11,6 @@ gnc_autogen_scm_files = \
 
 gnc_regular_scm_files = \
   command-line.scm \
-  commodity-import.scm \
   config-var.scm \
   depend.scm \
   doc.scm \
@@ -24,12 +23,9 @@ gnc_regular_scm_files = \
   price-quotes.scm \
   slib-backup.scm \
   startup.scm \
-  structure.scm \
   substring-search.scm \
-  testbed.scm \
   tip-list.scm \
   tip-of-the-day.scm \
-  utilities.scm \
   xgettext.scm \
   xml-generator.scm
 
@@ -49,7 +45,6 @@ SCM_FILES = ${gncscm_DATA} ${gncscmmod_DATA}
 EXTRA_DIST = \
   .cvsignore \
   bootstrap.scm.in \
-  design.txt \
   startup-design.txt \
   ${SCM_FILES}
 

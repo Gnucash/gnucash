@@ -82,3 +82,19 @@
             (loop first-char))
           (set! parts (cons (substring str 0 last-char) parts))))    
     parts))
+
+(define (gnc:backtrace-if-exception proc . args)
+  (define (dumper key . args)
+    (let ((stack (make-stack #t dumper)))
+      (display-backtrace stack (current-error-port))
+      (apply display-error stack (current-error-port) args)
+      (throw 'ignore)))
+  
+  (catch 
+   'ignore
+   (lambda () 
+     (lazy-catch #t 
+                 (lambda () (apply proc args))
+                 dumper))
+   (lambda (key . args)
+     #f)))

@@ -202,7 +202,15 @@
 (export gnc:*book-opened-hook*)
 (export gnc:*book-closed-hook*)
 
+;; utilities
+(export hash-fold)
+(export item-list->hash!)
+(export string-split)
+(export string-join)
+(export gnc:backtrace-if-exception)
+
 (load-from-path "c-interface.scm")
 (load-from-path "options.scm")
 (load-from-path "hooks.scm")
 (load-from-path "date-utilities.scm")
+(load-from-path "utilities.scm")

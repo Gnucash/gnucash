@@ -154,20 +154,6 @@
   (accounts-get-children-depth 
    (gnc:group-get-account-list (gnc:get-current-group))))
 
-;;
-(define (gnc:account-separator-char)
-  (let ((option (gnc:lookup-option gnc:*options-entries*
-                                   "General" "Account Separator")))
-    (if option
-        (case (gnc:option-value option)
-          ((colon) ":")
-          ((slash) "/")
-          ((backslash) "\\")
-          ((dash) "-")
-          ((period) ".")
-          (else ":"))
-        ":")))
-
 ;; get a full account name
 (define (gnc:account-get-full-name account)
   (let ((separator (gnc:account-separator-char)))

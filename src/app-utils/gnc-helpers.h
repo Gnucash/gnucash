@@ -21,14 +21,17 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __GNC_HELPERS__
-#define __GNC_HELPERS__
+#ifndef GNC_HELPERS
+#define GNC_HELPERS
+
+#include <guile/gh.h>
 
 #include "gnc-ui-util.h"
-#include <guile/gh.h>
 
 SCM  gnc_printinfo2scm(GNCPrintAmountInfo info);
 GNCPrintAmountInfo gnc_scm2printinfo(SCM info_scm);
 int  gnc_printinfo_p(SCM info_scm);
+
+const char * gnc_get_account_separator_string (void);
 
 #endif

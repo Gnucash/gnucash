@@ -71,10 +71,11 @@
   (gnc:depend "doc.scm")
   (gnc:depend "extensions.scm")
   (gnc:depend "main-window.scm")
-  (gnc:depend "commodity-import.scm")
   (gnc:depend "printing/print-check.scm")
   (gnc:depend "price-quotes.scm")
   (gnc:depend "tip-of-the-day.scm")
+
+  (gnc:hook-add-dangler gnc:*book-opened-hook* gnc:import-legacy-commodities)
 
   (if (not (gnc:handle-command-line-args))
       (gnc:shutdown 1))

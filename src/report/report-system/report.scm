@@ -406,7 +406,7 @@
     (N_ "Stylesheet"))
    (string->symbol 
     (gnc:html-style-sheet-name stylesheet))))
-  
+
 (define (gnc:all-report-template-names)
   (sort 
    (hash-fold 
@@ -447,23 +447,6 @@
    (simple-format 
     #f "  (gnc:restore-report ~S ~S options))\n"
     (gnc:report-id report) (gnc:report-type report))))
-
-(define (gnc:backtrace-if-exception proc . args)
-  (define (dumper key . args)
-    (let ((stack (make-stack #t dumper)))
-      (display-backtrace stack (current-error-port))
-      (apply display-error stack (current-error-port) args)
-      (throw 'ignore)))
-  
-  (catch 
-   'ignore
-   (lambda () 
-     (lazy-catch #t 
-                 (lambda () (apply proc args))
-                 dumper))
-   (lambda (key . args)
-     #f)))
-
 
 (define (gnc:report-render-html report headers?)
   (if (and (not (gnc:report-dirty? report))

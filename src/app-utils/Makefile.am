@@ -50,8 +50,13 @@ libgw_app_utils_la_LDFLAGS=-module
 gncmoddir=${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA=app-utils.scm 
 
-gncscmdir=${GNC_SHAREDIR}/scm
-gncscm_DATA=c-interface.scm options.scm hooks.scm date-utilities.scm
+gncscmdir = ${GNC_SHAREDIR}/scm
+gncscm_DATA = \
+  c-interface.scm \
+  date-utilities.scm \
+  hooks.scm \
+  options.scm \
+  utilities.scm
 
 gwmoddir=${GNC_SHAREDIR}/guile-modules/g-wrapped
 gwmod_LTLIBRARIES=libgw-app-utils.la
