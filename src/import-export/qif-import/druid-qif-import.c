@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <libgnomeui/gnome-window-icon.h>
 
 #include "Account.h"
 #include "Transaction.h"
@@ -2023,7 +2024,7 @@ gnc_ui_qif_import_druid_make(void)  {
 
   gnc_register_gui_component(DRUID_QIF_IMPORT_CM_CLASS, NULL, NULL, retval);
 
-  gnome_window_icon_set_from_default(retval->window);
+  gnome_window_icon_set_from_default(GTK_WINDOW(retval->window));
   gtk_widget_show_all(retval->window);
   gtk_window_present (GTK_WINDOW(retval->window));
 

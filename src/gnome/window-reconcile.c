@@ -34,6 +34,7 @@
 #include <gnome.h>
 #include <stdio.h>
 #include <time.h>
+#include <libgnomeui/gnome-window-icon.h>
 
 #include "AccWindow.h"
 #include "Scrub.h"
@@ -1714,6 +1715,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
   recnData->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   recnData->delete_refresh = FALSE;
 
+  gnome_window_icon_set_from_default (GTK_WINDOW (recnData->window));
   gnc_recn_set_window_name(recnData);
 
   vbox = gtk_vbox_new(FALSE, 0);

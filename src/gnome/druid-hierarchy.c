@@ -26,6 +26,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <libgnomeui/gnome-window-icon.h>
 
 #include "Group.h"
 #include "dialog-new-user.h"
@@ -951,6 +952,7 @@ gnc_create_hierarchy_druid (void)
   glade_xml_signal_connect (xml, "on_cancel", GTK_SIGNAL_FUNC (on_cancel));
 
   dialog = glade_xml_get_widget (xml, "Hierarchy Druid");
+  gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
 
   druid = glade_xml_get_widget (xml, "hierarchy_druid");
   gnc_druid_set_colors (GNOME_DRUID (druid));
