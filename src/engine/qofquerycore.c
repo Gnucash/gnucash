@@ -495,7 +495,7 @@ numeric_to_string (gpointer object, QofParam *getter)
   gnc_numeric num;
   num = ((query_numeric_getter)getter->param_getfcn)(object, getter);
 
-  return g_strdup (gnc_numeric_to_string (num));
+  return gnc_numeric_to_string (num);
 }
 
 static char * 
@@ -504,7 +504,7 @@ debcred_to_string (gpointer object, QofParam *getter)
   gnc_numeric num;
   num = ((query_numeric_getter)getter->param_getfcn)(object, getter);
 
-  return g_strdup (gnc_numeric_to_string (num));
+  return gnc_numeric_to_string (num);
 }
 
 /* QOF_TYPE_GUID =================================================== */
