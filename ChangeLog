@@ -6,7 +6,7 @@
 2003-06-23  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-account.c: Limit the commodity choices
-	based upon the current account type.
+	based upon the current account type. #102023, #115461
 
 	* src/gnome-utils/dialog-commodity.c: Add a new argument to the
 	dialog creation functions to specify what types of commodities
@@ -19,6 +19,9 @@
 	* src/import-export/import-commodity-matcher.c: 
 	* src/import-export/qif-import/druid-qif-import.c: Updated for new
 	commodity dialog argument.
+
+	* src/report/standard-reports/register.scm: Show the running
+	balance column by default. #92052.
 
 2003-06-22  David Hampton  <hampton@employees.org>
 
