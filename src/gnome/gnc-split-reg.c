@@ -1053,9 +1053,17 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     const char *recn_warn = _("You would be deleting a reconciled split!\n"
 			      "This is not a good idea as it will cause your "
 			      "reconciled balance to be off.");
+    const char *anchor_split = _("This is the split anchoring this transaction "
+				 "to the register. You may not delete it from "
+				 "this register window.");
     const char *memo;
     const char *desc;
     char recn;
+
+    if (split == gnc_split_register_get_current_trans_split (reg, NULL)) {
+      gnc_error_dialog(anchor_split);
+      return;
+    }
 
     memo = xaccSplitGetMemo (split);
     memo = (memo && *memo) ? memo : _("(no memo)");
