@@ -153,7 +153,7 @@
      (gnc:make-account-list-option
       tab-title (N_ "Select Accounts (none = all)")
       "d" (N_ "Select accounts")
-      (lambda () (gnc:get-current-accounts))
+      (lambda () '())
       #f #t))
 
     (gnc:register-tax-option
@@ -399,12 +399,12 @@
 	   (tax-mode tax-mode-in)	; these need to different later
 	   (user-sel-accnts (get-option tab-title
                                         "Select Accounts (none = all)"))
-	   (valid-user-sel-accnts (validate user-sel-accnts))
-	   ;; If no selected accounts, check all.
+           (valid-user-sel-accnts (validate user-sel-accnts))
+           ;; If no selected accounts, check all.
 	   (selected-accounts (if (not (null? user-sel-accnts))
-				  valid-user-sel-accnts
-				  (validate (gnc:group-get-subaccounts
-					     (gnc:get-current-group)))))
+                                  valid-user-sel-accnts
+                                  (validate (gnc:group-get-account-list
+                                             (gnc:get-current-group)))))
 	   (generations (if (pair? selected-accounts)
 			    (apply max (map (lambda (x) (num-generations x 1))
 					    selected-accounts))

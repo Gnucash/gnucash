@@ -87,12 +87,12 @@
             (id (gnc:account-get-id account)))
         
         (list id name
-              (gnc:group-map-accounts
+              (gnc:group-map-all-accounts
                handle-account
                (gnc:account-get-children account)))))
     
     (cons 'chart-of-accounts
-          (gnc:group-map-accounts handle-account group)))
+          (gnc:group-map-all-accounts handle-account group)))
 
 
   (define (split->output-form split)
@@ -215,19 +215,19 @@
      (lambda (account)
        (newline port)
        (write-data account port))
-     (gnc:group-map-accounts account->output-form account-group))
+     (gnc:group-map-all-accounts account->output-form account-group))
     
     (display "\n\n;;; Transactions\n\n" port)
     ;; Now print all the transactions
     (gnc:group-begin-staged-transaction-traversals account-group)
 
-    ;;(gnc:group-map-accounts
+    ;;(gnc:group-map-all-accounts
     ;; (lambda (account)
     ;;   (newline port)
     ;;   (account-txns-write account port))
     ;; account-group)
     
-    (gnc:group-map-accounts
+    (gnc:group-map-all-accounts
      (lambda (account)
        (newline port)
        (account-txns-write account port))

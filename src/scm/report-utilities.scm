@@ -450,13 +450,11 @@
 			   (gnc:split-get-share-balance (car splits))))
     balance-collector))
 
-;; get the balance of a group of accounts at the specified date.
-;; The childrens are NOT included in the calculation since
-;; account-get-children already returned ALL children, whether
-;; they are immediate children or not.
+;; get the balance of a group of accounts at the specified date
+;; inlcuding child accounts.
 (define (gnc:group-get-balance-at-date group date)
   (apply +
-         (gnc:group-map-accounts
+         (gnc:group-map-all-accounts
           (lambda (account)
             (gnc:account-get-balance-at-date account date #f)) 
           group)))
@@ -526,7 +524,7 @@
   (let ((this-collector (gnc:make-commodity-collector)))
     (for-each 
      (lambda (x) (this-collector 'merge x #f))
-     (gnc:group-map-accounts
+     (gnc:group-map-all-accounts
       (lambda (account)
 	(gnc:account-get-comm-balance-at-date 
 	 account date #f)) 
@@ -560,7 +558,7 @@
 
 (define (gnc:group-get-balance-interval group from to)
   (apply +
-         (gnc:group-map-accounts
+         (gnc:group-map-all-accounts
           (lambda (account)
             (gnc:account-get-balance-interval account from to #t)) group)))
 
@@ -568,7 +566,7 @@
 (define (gnc:group-get-comm-balance-interval group from to)
   (let ((this-collector (gnc:make-commodity-collector)))
     (for-each (lambda (x) (this-collector 'merge x #f))
-	      (gnc:group-map-accounts
+	      (gnc:group-map-all-accounts
 	       (lambda (account)
 		 (gnc:account-get-comm-balance-interval 
 		  account from to #t)) group))

@@ -63,6 +63,10 @@
             (loop (cdr splits)))))
     (reverse retval)))
 
-(define (gnc:group-map-accounts thunk group)
+(define (gnc:group-map-all-accounts thunk group)
   (let ((accounts (or (gnc:group-get-subaccounts group) '())))
+    (map thunk accounts)))
+
+(define (gnc:group-map-accounts thunk group)
+  (let ((accounts (or (gnc:group-get-account-list group) '())))
     (map thunk accounts)))

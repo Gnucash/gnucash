@@ -1,5 +1,15 @@
 2001-04-07  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/report/taxtxf.scm: fix bug
+
+	* src/scm/text-export.scm: fix for api change
+
+	* src/scm/report-utilities.scm: fix for api change
+
+	* src/scm/engine-utilities.scm: change gnc:group-map-accounts
+	to gnc:group-map-all-accounts. make gnc:group-map-accounts do
+	only the immediate children.
+
 	* src/gnome/dialog-price-editor.c: more work
 
 	* src/engine/gnc-pricedb.c: add an error check
