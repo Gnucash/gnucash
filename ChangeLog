@@ -1,3 +1,7 @@
+2001-10-09  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/Transaction.{ch} (xaccTransGetVoidTime): new function.
+
 2001-10-08  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/test/test-transaction-voiding.c (run_test): remove 

@@ -498,4 +498,5 @@ char *xaccTransGetVoidReason(Transaction *transaction);
 gnc_numeric xaccSplitVoidFormerAmount(Split *split);
 gnc_numeric xaccSplitVoidFormerValue(Split *split);
 
+Timespec xaccTransGetVoidTime(Transaction *tr);
 #endif /* XACC_TRANSACTION_H */

@@ -65,10 +65,14 @@
 int force_double_entry = 0;
 
 const char *void_reason_str = "void-reason";
+const char *void_time_str = "void-time";
 const char *void_former_amt_str = "void-former-amount";
 const char *void_former_val_str = "void-former-value";
 
 #define PRICE_SIGFIGS 6
+
+#define ISO_DATELENGTH 30 /* length of an iso 8601 date string.
+			   * not sure, can't be bothered counting :) */
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
@@ -2612,6 +2616,9 @@ xaccTransVoid(Transaction *transaction,
   gnc_numeric amt, zero;
   GList *split_list;
   Split *split;
+  Timespec now;
+  char iso8601_str[ISO_DATELENGTH+1] = "";
+
   g_return_if_fail(transaction && reason);
 
   xaccTransBeginEdit(transaction);
@@ -2624,7 +2631,19 @@ xaccTransVoid(Transaction *transaction,
 			void_reason_str,
 			val);
 
+
+  now.tv_sec = time(NULL);
+  now.tv_nsec = 0;
+
+  gnc_timespec_to_iso8601_buff(now, iso8601_str);
+
   
+  val = kvp_value_new_string (iso8601_str);
+
+  kvp_frame_set_slot_nc(frame, 
+			void_time_str,
+			val);
+
   for(  split_list = xaccTransGetSplitList(transaction); 
 	split_list; 
 	split_list = g_list_next(split_list))
@@ -2642,7 +2661,6 @@ xaccTransVoid(Transaction *transaction,
     amt = xaccSplitGetValue(split);
     val = kvp_value_new_gnc_numeric(amt);
     kvp_frame_set_slot_nc(frame, void_former_val_str, val);
-
     
     
     xaccSplitSetAmount(split, zero);
@@ -2714,7 +2732,7 @@ gnc_numeric xaccSplitVoidFormerAmount(Split *split)
 
 gnc_numeric xaccSplitVoidFormerValue(Split *split)
 {
-   kvp_frame *frame;
+  kvp_frame *frame;
   kvp_value *val;
   gnc_numeric amt = gnc_numeric_zero();
   g_return_val_if_fail(split, amt);
@@ -2729,6 +2747,26 @@ gnc_numeric xaccSplitVoidFormerValue(Split *split)
   }
 
   return amt;
+}
+
+Timespec xaccTransGetVoidTime(Transaction *tr)
+{
+  kvp_frame *frame;
+  kvp_value *val;
+  char *iso8601_str;
+  Timespec void_time= {0,0};
+  g_return_val_if_fail(tr, void_time);
+
+  frame = xaccSplitGetSlots(tr);
+
+  val = kvp_frame_get_slot(frame, void_time_str);
+  
+  if(val)
+  {
+    void_time = gnc_iso8601_to_timespec_local(kvp_value_get_string(val));
+  }
+
+  return void_time;
 }
 /************************ END OF ************************************\
 \************************* FILE *************************************/
