@@ -1,5 +1,8 @@
 2001-04-15  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/top-level.c: check for no children when creating default
+	window
+
 	* src/gnome/window-main.c: Kevin Finn's patch to shutdown gnucash
 	when the main window is deleted. Handle remove_child events to
 	prevent accessing deleted windows.

@@ -337,7 +337,8 @@ void
 gnc_default_ui_start(void) {
   if(!hasstarted) {
     if(!gnome_mdi_restore_state(app->mdi, "/GnuCash/MDI Session",
-                                gnc_main_window_create_child)) {
+                                gnc_main_window_create_child) ||
+       app->children == NULL) {
       gnc_main_window_open_accounts(FALSE);
     }
     hasstarted = TRUE;
