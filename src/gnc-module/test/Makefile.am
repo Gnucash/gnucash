@@ -16,7 +16,7 @@ TESTS = \
   test-agedver \
   test-dynload \
   test-scm-dynload \
-  test-scm-init 
+  test-scm-init
 
 TESTS_ENVIRONMENT = \
   GNC_MODULE_PATH=mod-foo:mod-bar:mod-baz:misc-mods \
@@ -35,7 +35,6 @@ test_dynload_LDFLAGS = -lltdl ${GUILE_LIBS}
 EXTRA_DIST = \
   test-gwrapped-c \
   test-load-deps \
-  test-load-deps.scm \
   test-load-scm \
   test-scm-dynload \
   test-scm-init \
