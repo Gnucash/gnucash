@@ -58,7 +58,7 @@ void qof_instance_release (QofInstance *inst);
 /** Return the book pointer */
 QofBook * qof_instance_get_book (QofInstance *);
 
-/* Return the GUID of this instance */
+/** Return the GUID of this instance */
 const GUID * qof_instance_get_guid (QofInstance *);
 
 /** return the pointer to the kvp_data */
