@@ -13,6 +13,7 @@
 
 #include "gnc-engine-util.h"
 #include "GNCId.h"
+#include "QueryCore.h"
 #include "QueryObject.h"
 
 #include "search-param.h"
