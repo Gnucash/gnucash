@@ -1,3 +1,8 @@
+2000-05-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c (deleteCB): use g_strdup_printf
+	instead of asprintf.
+
 2000-05-06  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/engine/Query.c: g_list_sort *returns* the new first node.

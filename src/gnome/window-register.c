@@ -2197,15 +2197,13 @@ deleteCB(GtkWidget *widget, gpointer data)
   if (cursor_type == CURSOR_SPLIT)
   {
     /* ask for user confirmation before performing permanent damage */
-    asprintf(&buf, TRANS_DEL_MSG, xaccSplitGetMemo(split),
-             xaccTransGetDescription(trans));
-
-    assert(buf != NULL);
+    buf = g_strdup_printf(TRANS_DEL_MSG, xaccSplitGetMemo(split),
+                          xaccTransGetDescription(trans));
 
     result = gnc_verify_dialog_parented(GTK_WINDOW(regData->window),
                                         buf, GNC_F);
 
-    free(buf);
+    g_free(buf);
 
     if (!result)
       return;
