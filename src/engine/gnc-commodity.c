@@ -1154,6 +1154,7 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
   if (!nsp) return;
 
   g_hash_table_remove (nsp->table, comm->mnemonic);
+  /* XXX minor mem leak, should remove the key as well */
 }
 
 /********************************************************************
@@ -1363,8 +1364,10 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
 static int
 ns_helper(gpointer key, gpointer value, gpointer user_data) 
 {
+  GCache *str_cache = user_data;
   gnc_commodity * c = value;
   gnc_commodity_destroy(c);
+  g_cache_remove (str_cache, key);  /* key is commodity mnemonic */
   return TRUE;
 }
 
@@ -1381,7 +1384,7 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
     GCache *str_cache = gnc_engine_get_string_cache ();
     g_hash_table_remove(table->table, namespace);
 
-    g_hash_table_foreach_remove(ns->table, ns_helper, NULL);
+    g_hash_table_foreach_remove(ns->table, ns_helper, str_cache);
     g_hash_table_destroy(ns->table);
     g_cache_remove (str_cache, ns->namespace);
     g_free(ns);
@@ -1452,7 +1455,6 @@ ct_helper(gpointer key, gpointer value, gpointer data)
   g_hash_table_destroy(ns->table);
   ns->table = NULL;
   g_cache_remove (str_cache, ns->namespace);
-  g_cache_remove (str_cache, key);
   g_free(ns);
   return TRUE;
 }
