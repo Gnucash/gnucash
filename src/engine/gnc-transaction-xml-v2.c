@@ -72,13 +72,22 @@ split_to_dom_tree(const gchar *tag, Split *spl)
     
     {
         const char *memo = xaccSplitGetMemo(spl);
-        
+
         if(memo && safe_strcmp(memo, "") != 0)
         {
             xmlNewTextChild(ret, NULL, "split:memo", memo);
         }
     }
-    
+
+    {
+        const char *action = xaccSplitGetAction(spl);
+
+        if(action && safe_strcmp(action, "") != 0)
+        {
+            xmlNewTextChild(ret, NULL, "split:action", action);
+        }
+    }
+
     {
         char tmp[2];
 
@@ -217,6 +226,12 @@ spl_memo_handler(xmlNodePtr node, gpointer spl)
 }
 
 static gboolean
+spl_action_handler(xmlNodePtr node, gpointer spl)
+{
+    return set_spl_string(node, (Split*)spl, xaccSplitSetAction);
+}
+
+static gboolean
 spl_reconciled_state_handler(xmlNodePtr node, gpointer spl)
 {
     gchar *tmp = dom_tree_to_text(node);
@@ -283,6 +298,7 @@ struct dom_tree_handler spl_dom_handlers[] =
 {
     { "split:id", spl_id_handler, 1, 0 },
     { "split:memo", spl_memo_handler, 0, 0 },
+    { "split:action", spl_action_handler, 0, 0 },
     { "split:reconciled-state", spl_reconciled_state_handler, 1, 0 },
     { "split:reconcile-date", spl_reconcile_date_handler, 0, 0 },
     { "split:value", spl_value_handler, 1, 0 },
