@@ -1267,14 +1267,14 @@ static gnc_numeric
 gnc_split_register_convert_amount (Split *split, Account * account,
 				   gnc_commodity * to_commodity)
 {
-  GNCPriceDB *pricedb;
   gnc_commodity *currency, *acc_com;
   Transaction *txn;
   Timespec date;
-  gnc_numeric amount, convrate;
-  GList * price_list;
+  gnc_numeric amount, value, convrate;
+  GList * price_list, *splits;
   Account * split_acc;
   gboolean div = FALSE;
+  Split *s;
 
   amount = xaccSplitGetAmount (split);
 
@@ -1304,30 +1304,29 @@ gnc_split_register_convert_amount (Split *split, Account * account,
   }
 
   /* ... otherwise, we need to compute the amount from the conversion
-   * rate from the pricedb
+   * rate into _this account_.  So, find the split into this account,
+   * compute the conversion rate (based on amount/value), and then multiply
+   * this times the split value.
    */
-  pricedb = gnc_book_get_pricedb (xaccSplitGetBook (split));
-  currency = xaccTransGetCurrency (txn);
-  xaccTransGetDatePostedTS (txn, &date);
+  splits = xaccTransGetSplitList(txn);
+  for (; splits; splits = splits->next) {
+    s = splits->data;
+    
+    if (xaccSplitGetAccount (s) != account)
+      continue;
 
-  price_list = gnc_pricedb_lookup_at_time (pricedb, to_commodity, currency, date);
-  if (price_list)
-    div = TRUE;
-  else
-    price_list = gnc_pricedb_lookup_at_time (pricedb, currency, to_commodity, date);
-  if (!price_list)
-    return amount;
+    amount = xaccSplitGetAmount (s);
+    value = xaccSplitGetValue (s);
+    convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
 
-  convrate = gnc_price_get_value (price_list->data);
-
-  if (div)
-    return gnc_numeric_div (amount, convrate,
+    value = xaccSplitGetValue (split);
+    return gnc_numeric_mul (value, convrate,
 			    gnc_commodity_get_fraction (to_commodity),
 			    GNC_RND_ROUND);    
-  else
-    return gnc_numeric_mul (amount, convrate,
-			    gnc_commodity_get_fraction (to_commodity),
-			    GNC_RND_ROUND);
+  }
+
+  /* If we reach here, do what we USED to do */
+  return xaccSplitGetValue (split);
 }
 
 static const char *

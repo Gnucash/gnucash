@@ -3,6 +3,12 @@
 	  implicit exchange rates for balanced, two-split transactions.
 	  Fixes bug #99083 (for real)
 
+	* src/register/ledger-core/split-register-model.c -- compute the
+	  implicit exchange rates for ALL transactions when necessary.  No
+	  longer requires the pricedb for printing split values.  This will
+	  display all transactions in the currency of the current account,
+	  regardless of the number of splits in the transaction.
+	  
 2002-11-30  Herbert Thoma  <herbie@hthoma.de>
 
 	* src/report/standard-reports/cash-flow.scm: Added new option
