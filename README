@@ -25,10 +25,10 @@ Features include:
     currencies are supported and can be bought and
     sold (traded).  Currency movements between accounts
     are fully balanced when double-entry is enabled.
-    (Some aspects of mutiple currency support are not 
+    (Some aspects of multiple currency support are not 
     fully implemented.)
   - Quicken File Import: Import Quicken QIF style files.
-    QIF files are automtically merged to eliminate 
+    QIF files are automatically merged to eliminate 
     duplicate transactions.
   - Reports: Display Balance Sheet, Profit&Loss, Portfolio 
     Valuation, or print them as HTML.
@@ -38,7 +38,7 @@ Features include:
     into one master account (e.g. Assets).
   - Split Transactions: A single transaction can be split
     into several pieces to record taxes, fees, and
-    other compund entries.
+    other compound entries.
   - Double Entry: When enabled, every transaction must 
     debit one account and credit another by an equal amount.
     This ensures that the "books balance": that the 
@@ -55,7 +55,7 @@ Features include:
     portfolio of many stocks, by showing all transactions
     in that portfolio.
   - Written in C with embedded scheme support via Guile.
-  - Perl support is optionally available for standalone scripting via SWIG.
+  - Perl support is optionally available for stand-alone scripting via SWIG.
   - File access is locked in a network-safe fashion, preventing
     accidental damage if several users attempt to access the 
     same file, even if the file is NFS-mounted.
@@ -71,7 +71,7 @@ Home Page:
 ----------
 http://gnucash.org/
 
-Origianl X-Accountant home page:
+Original X-Accountant home page:
 http://www.cs.hmc.edu/~rclark/xacc
 
 Precompiled binaries:
@@ -210,7 +210,7 @@ packages:
 
 libtool -- Used to build our internal version of g-wrap which handles
            our guile C wrappers.  Available at ftp://ftp.gnu.org/gnu.
-           RPM's and debs are widely available with most disributions.
+           RPM's and debs are widely available with most distributions.
 nana    -- Used to provide a debugging infrastructure.
            Any version should work.
            http://www.fsf.org/software/nana/nana.html
@@ -267,7 +267,7 @@ to that location.  This feature is mostly useful for package
 builders, but it shouldn't hurt anyone else.
 
 Only the location of startup.scm is hardcoded into the
-binary, and even that can be overriden with --startup-file on the
+binary, and even that can be overridden with --startup-file on the
 command line.  The other defaults are now in startup.scm.
 path-defaults.h is now gone.  The startup file setting is in
 gnucash.h, generated from gnucash.h.in.
@@ -291,7 +291,7 @@ Unixware 7            -- Intel
 SCO OpenServer 5.0.4  -- Intel
 Solaris               -- Sparc
 
-See ftp://ftp.gnucash.org/pub/xacc (high-bandwdith)
+See ftp://ftp.gnucash.org/pub/xacc (high-bandwidth)
 or  http://linas.org/linux/xacc (slow-www ) 
 for precompiled binaries for these platforms
 
@@ -345,7 +345,7 @@ Linas Vepstas <linas@linas.org> liked what he saw: the GUI was slick,
    the code was documented and well structured, and it was all GPL'ed.  
    And so he re-wrote it: adding cell-widgets to XbaeMatrix, so that 
    the combobox and arrows would make an even slicker GUI, rewrote the 
-   X-Accountant internals to add double-entry, an account heirarchy,
+   X-Accountant internals to add double-entry, an account hierarchy,
    split out a transaction mini-engine, add support for stocks, and spiff
    up the help menus.  This was version 1.0 as of January 1998.  Since
    then, for version 1.1, the engine was expanded & refined, and the 
