@@ -33,7 +33,11 @@ int libgncmod_tax_us_LTX_gnc_module_end(int refcount);
 
 char *
 libgncmod_tax_us_LTX_gnc_module_path(void) {
-  return g_strdup("gnucash/tax/us");
+  const char *thislocale = setlocale(LC_ALL, NULL);
+  if (strncmp(thislocale, "de_DE", 5) == 0)
+    return g_strdup("gnucash/tax/de_DE");
+  else
+    return g_strdup("gnucash/tax/us");
 }
 
 char * 

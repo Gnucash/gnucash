@@ -1,3 +1,10 @@
+2005-01-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/locale-specific/us/gncmod-locale-reports-us.c,
+	src/tax/us/gncmod-tax-us.c: For German tax categories, make sure
+	the module name will match the de_DE locale or will fall back to
+	us module name all the time.
+
 2004-12-31  Derek Atkins  <derek@ihtfp.com>
 
 	John Ellson's patch to fix some gcc4 warnings (bug #162582).
