@@ -1,5 +1,5 @@
 ############################################################
-          GnuCash 1.7.x README file.
+          GnuCash 1.9.x README file.
 
 NOTE: THIS IS A DEVELOPMENT RELEASE!!! THIS VERSION HAS NOT
 BEEN TESTED PROPERLY AND MAY DO ABSOLUTELY ANYTHING!  
@@ -7,7 +7,7 @@ BEEN TESTED PROPERLY AND MAY DO ABSOLUTELY ANYTHING!
 USE AT YOUR OWN RISK (AND KEEP *LOTS* OF BACKUPS)
 
 If you want something a bit more tested, please use the
-1.6 stable series.
+1.8 stable series.
 ------------------------------------------------------------
 
 ##################
@@ -15,7 +15,7 @@ Table of Contents:
 ------------------
 
   - Overview
-  - Upgrading from 1.4.x
+  - Upgrading from 1.8.x
   - Dependencies
   - Invocation/running
   - Internationalization
@@ -110,10 +110,10 @@ Development versions:
 http://www.gnucash.org/source_code.php3
 
 ####################
-Upgrading from 1.4.x
+Upgrading from 1.8.x
 --------------------
 
-There are many, many changes from the 1.4 series - have a look at the
+There are many, many changes from the 1.8 series - have a look at the
 NEWS file if you want more details. In particular, GnuCash now
 requires the gtkhtml and guppi libraries. See the "dependencies"
 section of this file for more detail. The file format has changed
