@@ -204,6 +204,28 @@ Flag --with-gtk-config.  The way gtk phiolosphy goes,
 you should *only* specify the config program location and
 rely on it to tell you the right CFLAGS and XLIBS values.
 
+The new --shell option should work properly now too.  There is no
+gnucash-shell anymore.  There's just one binary.  You can invoke
+gnucash with the --shell option now to get a guile shell with all the
+gnucash functions loaded.  You can also get the normal startup
+behavior from that shell like this:
+
+  ./gnucash --shell
+  guile> (load (string-append gnc:_startup-dir-default_ "/init.scm"))
+  guile> (gnc:main)
+
+which is the same thing that happens if you don't use the --shell
+option.
+
+The --shell option can be helpful when trying to write and test new
+.scm files.  I set it up so that I (or someone else) could
+(eventually) work on the graphing stuff...
+
+Anyone who's having the same problem with the added termcap libs that
+I am can look in configure.in and comment out the TERMCAP_TMP line and
+re-run autoconf and configure.  We'll have a better fix later.
+
+
 Runtime and install destinations are separate.  The --prefix
 you specify to configure determines where the resulting binary
 will look for things at runtime.  The prefix you give to make
