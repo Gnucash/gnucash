@@ -7,7 +7,7 @@
 
 
 'Lots' capture a fundamental accounting idea behind AR/AP, billing,
-inventory, captial gains, depreciation and the like.  The basic idea
+inventory, capital gains, depreciation and the like.  The basic idea
 is that a set of items is tracked together as a 'lot'; the date of 
 creation of the lot helps determine when a bill is due, when depreciation
 starts, or the tax rate for capital gains on a stock market investment.
@@ -85,7 +85,7 @@ transactions:
 
 However, the two buy transactions create different lots (because
 you can't add to a stock-investment lot after its been created, because
-the purchases occured on different dates).  Thus, when the shares are 
+the purchases occurred on different dates).  Thus, when the shares are 
 sold, the sale is split across two lots:
 
 >        Date     Desc    Lot     Buy     Sell    Price    Value
@@ -113,7 +113,7 @@ know of any simple way of dealing with this. In order to have lots
 work (thereby allowing cap gains reports to work correctly), the GnuCash
 engine *must* use the 'with-lots' representation of the data.  If the
 GUI wants to hide the fact that there are lots under the covers, it
-muc\st figure out a way of doing this (i.e. re-combining splits) on
+must figure out a way of doing this (i.e. re-combining splits) on
 its own.
 
 
@@ -132,7 +132,7 @@ and transactions are 'atomic', this means that the associated
 transactions must be moved into the open book as well.  A lot
 is considered closed when its balance is zero; when a book is closed,
 all of the lots that were closed stay with that book.  That is,
-closed lots are not propageted forward into the currently open book.
+closed lots are not propagated forward into the currently open book.
 
 
 Implementation 
