@@ -27,6 +27,7 @@ dnl Process this file with autoconf to produce a configure script.
 ### commands depend on them):
 
 AC_INIT(src/engine/Transaction.h)
+AC_PREREQ(2.53)
 
 AC_PROG_CC
 

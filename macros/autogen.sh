@@ -21,7 +21,7 @@ test_version()
     this_prog="$1"
     want_vers="$2"
 
-    testv=`"$this_prog" --version | head -1 | awk '{print $NF}'`
+    testv=`"$this_prog" --version 2>/dev/null | head -1 | awk '{print $NF}'`
     if test -z "$testv" ; then return 1 ; fi
 
     testv_major=`echo "$testv" | sed 's/\([0-9]*\).\([0-9]*\).*$/\1/'`
@@ -47,7 +47,7 @@ test_version()
     fi
 }
 
-# usage: find_program preset program version
+# usage: find_program preset program version "<other versions>"
 # sets "program" to the name of the program to use.
 # if preset is set, then use that regardless,
 #  otherwise check if "program" is of a good enough version and use that,
@@ -58,6 +58,7 @@ find_program()
     find="$1"
     prog="$2"
     vers="$3"
+    extravers="$4"
 
     if test -n "$find" ; then
 	test_version "$find" "$vers"
@@ -76,12 +77,14 @@ find_program()
 	    return 0
 	fi
 
-	test_version "$prog-$vers" "$vers"
-	status=$?
-	if test "$status" = 0 ; then
-	    program="$prog-$vers"
-	    return 0
-	fi
+	for test_vers in $vers $extravers ; do
+	    test_version "$prog-$test_vers" "$vers"
+	    status=$?
+	    if test "$status" = 0 ; then
+		program="$prog-$test_vers"
+		return 0
+	    fi
+	done
     fi
 
     echo
@@ -92,13 +95,13 @@ find_program()
     return 1
 }
 
-find_program "$AUTOCONF" autoconf 2.53
+find_program "$AUTOCONF" autoconf 2.53 "2.5 2.5x"
 [ "$?" = 0 ] && AUTOCONF="$program"
-find_program "$AUTOHEADER" autoheader 2.53
+find_program "$AUTOHEADER" autoheader 2.53 "2.5 2.5x"
 [ "$?" = 0 ] && AUTOHEADER="$program"
-find_program "$AUTOMAKE" automake 1.5
+find_program "$AUTOMAKE" automake 1.5 "1.6 1.7"
 [ "$?" = 0 ] && AUTOMAKE="$program"
-find_program "$ACLOCAL" aclocal 1.5
+find_program "$ACLOCAL" aclocal 1.5 "1.6 1.7"
 [ "$?" = 0 ] && ACLOCAL="$program"
 
 

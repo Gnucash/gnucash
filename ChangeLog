@@ -1,3 +1,9 @@
+2003-05-08  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: add AC_PREREQ(2.53) to require 2.53 :)
+	* macros/autogen.sh: add more searches for a good version of
+	  the autotools.
+
 2003-05-07  Derek Atkins  <derek@ihtfp.com>
 
 	* macros/autogen.sh: require autoconf >= 2.53 and automake >= 1.5
