@@ -177,7 +177,6 @@ static void gncBillTermFree (GncBillTerm *term)
   gnc_engine_generate_event (&term->inst.guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
   CACHE_REMOVE (term->name);
   CACHE_REMOVE (term->desc);
-  qof_instance_release(&term->inst);
   remObj (term);
 
   if (!term->inst.do_free)
@@ -194,6 +193,7 @@ static void gncBillTermFree (GncBillTerm *term)
   }
   g_list_free(term->children);
 
+  qof_instance_release(&term->inst);
   g_free (term);
 }
 

@@ -1,7 +1,16 @@
 
+XXX TODO:
+-- billterms is incompletely cloned, not sure what to do 
+   with certain fields, ask warlord
 
-XXX how to deal with customer tax table, 
-also jobs
+-- taxtable is incompletely cloned, not sure what to do 
+   with certain fields, ask warlord
+
+-- customer incomplete cloned, neeed to handle jobs
+
+-- Ask warlord is *all bill terms should eb copied, or just
+   thiose on customers ... 
+
 
 #include "gncBusiness.h"
 
@@ -37,6 +46,7 @@ partition (QofBook *dest_book, QofBook *src_book)
 
   /* Copy all bill terms first, since the CustomerCopy expects
    * these to be in place already. */
+/* XXX not strictly needed, the customer can pull thier own .. ? */
   gncBillTermCopyAll (dest_book, src_book);
 }
 

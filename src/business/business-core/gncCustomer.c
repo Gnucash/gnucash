@@ -52,6 +52,7 @@
 #include "gncBusiness.h"
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
+#include "gncTaxTableP.h"
 
 struct _gncCustomer 
 {
@@ -150,14 +151,26 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
   cust->credit = from->credit;
   cust->taxincluded = from->taxincluded;
   cust->active = from->active;
+  cust->taxtable_override = from->taxtable_override;
 
-  /* cust->jobs = ??? XXX fixme not sure what to do here */
-  /* cust->taxtable = ??? XXX fixme not sure what to do here */
+  /* cust->jobs = ??? XXXXXXXXXXXXXXXXXXXXXXX fixme not sure what to do here */
+
   cust->addr = gncCloneAddress (from->addr, book);
   cust->shipaddr = gncCloneAddress (from->shipaddr, book);
 
-  /* Assume that bill terms have been previously inserted 
-   * into the new book. Just find the matching bill term. */
+  /* Find the matching currency in the new book, assumes
+   * currency has already been copied into new book. */
+  if (from->currency)
+  {
+    const char * ucom;
+    const gnc_commodity_table * comtbl;
+    ucom = gnc_commodity_get_unique_name (from->currency);
+    comtbl = gnc_commodity_table_get_table (book);
+    cust->currency = gnc_commodity_table_lookup_unique (comtbl, ucom);
+  }
+
+  /* Find the matching bill term in the new book, 
+   * else clone that too. */
   if (from->terms)
   {
     GncBillTerm *bitty;
@@ -167,6 +180,19 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
       bitty = gncCloneBillTerm (from->terms, book);
     }
     cust->terms = bitty;
+  }
+
+  /* Find the matching taxtable in the new book, 
+   * else clone that too. */
+  if (from->taxtable)
+  {
+    GncTaxTable *txtab;
+    txtab = (GncTaxTable *) qof_instance_lookup_twin (QOF_INSTANCE(from->taxtable), book);
+    if (!txtab)
+    {
+      txtab = gncCloneTaxTable (from->taxtable, book);
+    }
+    cust->taxtable = txtab;
   }
 
   addObj (cust);
