@@ -26,9 +26,9 @@
 #include <string.h>
 #include <glib.h>
 
+#include "GNCId.h"
 #include "GNCIdP.h"
 #include "gnc-engine-util.h"
-#include "gnc-book-p.h"
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (gpointer)(str));
@@ -204,13 +204,6 @@ xaccGUIDTypeEntityTable (const GUID * guid, GNCEntityTable *entity_table)
   return e_node->entity_type;
 }
 
-GNCIdType
-xaccGUIDType (const GUID * guid, GNCBook *book)
-{
-  return xaccGUIDTypeEntityTable (guid,
-                                  gnc_book_get_entity_table (book));
-}
-
 void
 xaccGUIDNewEntityTable (GUID *guid, GNCEntityTable *entity_table)
 {
@@ -228,12 +221,6 @@ xaccGUIDNewEntityTable (GUID *guid, GNCEntityTable *entity_table)
 
     PWARN("duplicate id created, trying again");
   } while(1);
-}
-
-void
-xaccGUIDNew (GUID *guid, GNCBook *book)
-{
-  xaccGUIDNewEntityTable (guid, gnc_book_get_entity_table (book));
 }
 
 const GUID *

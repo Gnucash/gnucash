@@ -27,12 +27,9 @@
 #include <glib.h>
 
 #include "GNCId.h"
-#include "gnc-engine.h"
 
 /* This file defines an engine-only API for using gnucash entity
  * identifiers. */
-
-typedef struct gnc_entity_table GNCEntityTable;
 
 /* Create and destroy entity tables */
 GNCEntityTable * xaccEntityTableNew (void);
@@ -49,8 +46,14 @@ void xaccEntityTableDestroy (GNCEntityTable *table);
  * age of teh universe, you'd still have a one-in-a-million chance of
  * coming up with a duplicate.  2^128 is a really really big number.
  */
-void xaccGUIDNew (GUID *guid, GNCBook *book);
 void xaccGUIDNewEntityTable (GUID *guid, GNCEntityTable *entity_table);
+
+/* Equivalent function prototype:
+ * void xaccGUIDNew (GUID *guid, GNCBook *book) 
+ */
+#define xaccGUIDNew(guid,book)     \
+      xaccGUIDNewEntityTable ((guid), gnc_book_get_entity_table (book))
+
 
 /* Lookup an entity given an id and a type. If there is no entity
  * associated with the id, or if it has a different type, NULL
@@ -66,9 +69,6 @@ void xaccStoreEntity (GNCEntityTable *entity_table,
 /* Remove any existing association between an entity and the given
  * id. The entity is not changed in any way. */
 void xaccRemoveEntity (GNCEntityTable *entity_table, const GUID * guid);
-
-GNCIdType xaccGUIDTypeEntityTable (const GUID * guid,
-                                   GNCEntityTable *entity_table);
 
 /* Call a function for each object of type 'type' in the entity table */
 void xaccForeachEntity (GNCEntityTable *entity_table, GNCIdType type,
