@@ -83,7 +83,7 @@ fileBox(const char * title, const char * filter)
   fb_info.file_name = NULL;
 
   last_file = gnc_history_get_last();
-  if (last_file != NULL)
+  if (last_file && !filter)
     gtk_file_selection_set_filename(fb_info.file_box, last_file);
 
   /* hack alert - this was filtering directory names as well as file 

@@ -99,7 +99,7 @@
      (list "Extensions" "")
      (lambda ()
        (let ((file-name (gnc:file-selection-dialog
-                         "Select file to save strings in" "")))
+                         "Select file to save strings in" ".txt")))
          (if file-name (gnc:save-translatable-strings file-name))))))
 
   (gnc:add-extension menu)
