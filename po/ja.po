@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-06-04 17:16-0700\n"
+"POT-Creation-Date: 2000-06-08 12:48-0700\n"
 "PO-Revision-Date: 2000-04-25 00:00+0900\n"
 "Last-Translator: Shimpei Yamashita <shimpei@gol.com>\n"
 "Language-Team: \n"
@@ -3074,8 +3074,8 @@ msgstr "読み込むファイルを指定して下さい。"
 msgid "You must specify a currency."
 msgstr "通貨を指定して下さい。"
 
-#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:619
-#: src/gnome/dialog-qif-import.c:676 src/gnome/dialog-qif-import.c:774
+#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
+#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
 msgid "QIF File scheme code not loaded properly."
 msgstr "QIFファイル処理用の scheme コードが正常にロードされていません。"
 
@@ -3083,7 +3083,7 @@ msgstr "QIFファイル処理用の scheme コードが正常にロードされていません。"
 msgid "QIF File already loaded. Reload with current settings?"
 msgstr "QIFファイルは読み込み済みです。今の設定を使ってもう一度読み込みますか?"
 
-#: src/gnome/dialog-qif-import.c:704 src/gnome/dialog-qif-import.c:802
+#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
 msgid "Something is very wrong with QIF Importing."
 msgstr "QIF読み込みが本格的におかしいようです。"
 
