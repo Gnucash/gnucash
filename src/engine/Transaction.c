@@ -28,6 +28,7 @@
 #include "config.h"
 
 #include "Account.h"
+#include "AccountP.h"
 #include "date.h"
 #include "Transaction.h"
 #include "TransactionP.h"

@@ -57,8 +57,8 @@
  */
 
 struct _split {
-  struct _account *acc;     /* back-pointer to debited/credited account   */
-  struct _transaction *parent; /* parent of split                         */
+  Account *acc;     /* back-pointer to debited/credited account   */
+  Transaction *parent; /* parent of split                         */
   char  * memo;
   char  * action;            /* Buy, Sell, Div, etc.                      */
   char    reconciled;

@@ -48,6 +48,7 @@
  * between "dining", "tips" and "taxes" categories.
  */
 
+typedef struct _account      Account;
 typedef struct _split        Split;
 typedef struct _transaction  Transaction;
 
@@ -147,6 +148,8 @@ char          xaccSplitGetReconcile (Split *split);
 double        xaccSplitGetAmount (Split * split);
 double        xaccSplitGetValue (Split * split);
 double        xaccSplitGetSharePrice (Split * split);
+
+Account *     xaccSplitGetAccount (Split *);
 
 /********************************************************************\
  * sorting comparison function

@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include "Account.h"
+#include "AccountP.h"
 #include "Group.h"
 #include "TransactionP.h"
 #include "util.h"

@@ -84,6 +84,7 @@
 #include "config.h"
 
 #include "Account.h"
+#include "AccountP.h"
 #include "FileIO.h"
 #include "Group.h"
 #include "messages.h"

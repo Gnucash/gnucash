@@ -34,6 +34,7 @@
 #include "config.h"
 
 #include "Account.h"
+#include "AccountP.h"
 #include "Group.h"
 #include "FileIO.h"
 #include "TransactionP.h"

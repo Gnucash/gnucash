@@ -51,36 +51,6 @@ enum {
  * the enumerated types above */
 extern char *account_type_name[];
 
-/** STRUCTS *********************************************************/
-typedef struct _Account {
-  /* public data, describes account */
-
-  struct _account_group *parent;    /* back-pointer to parent */
-  struct _account_group *children;  /* pointer to sub-accounts */
-  int       id;                     /* unique account id, internally assigned */
-  char      flags;
-  short     type;
-  char     *accountName;
-  char     *description;
-  char     *notes;
-
-  /* protected data, cached parameters */
-  double balance;
-  double cleared_balance;
-  double reconciled_balance;
-
-  double running_balance;
-  double running_cleared_balance;
-  double running_reconciled_balance;
-
-  int numSplits;                /* length of splits array below   */
-  Split **splits;               /* ptr to array of ptrs to splits */
-
-  /* the modified flag helps the gui keep track of 
-   * changes to this account */
-  short changed;
-} Account;
-
 /** PROTOTYPES ******************************************************/
 
 Account     *xaccMallocAccount( void );
@@ -136,8 +106,6 @@ void        xaccConsolidateTransactions (Account *);
 
 void xaccMoveFarEnd (Split *, Account *);
 void xaccMoveFarEndByName (Split *, const char *);
-
-Account *     xaccSplitGetAccount (Split *);
 
 /** GLOBALS *********************************************************/
 
