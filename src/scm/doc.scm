@@ -19,3 +19,9 @@
 
 (define (gnc:find-doc-file file)
   (gnc:find-in-directories file (gnc:config-var-value-get gnc:*doc-path*)))
+
+(define (gnc:load-help-topics fname) 
+  (with-input-from-file
+      (gnc:find-in-directories fname
+                               (gnc:config-var-value-get gnc:*load-path*))
+    (lambda () (read))))
