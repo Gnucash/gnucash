@@ -40,7 +40,7 @@ CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
 LDFLAGS  = @LDFLAGS@
 LIBS     = -L$(prefix)/lib @LIBS@ @X_PRE_LIBS@ @X_LIBS@ \
            $(shell gtk-config --libs) @X_EXTRA_LIBS@ -lgnomeui -lgnome \
-           -lgnomesupport -lgdk_imlib -ltiff \
+           -lgnomesupport -lgdk_imlib -ltiff -lgif \
            -lguile -lreadline -lintl
 
 
