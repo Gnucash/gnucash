@@ -136,6 +136,6 @@ dist-hook:
 	mkdir $(distdir)/gnucash/image
 	mkdir $(distdir)/gnucash/stylesheet-images
 	cp gnucash/*.html $(distdir)/gnucash
-	cp gnucash/*.css $(distdir)/gnucash
 	cp gnucash/image/*.png $(distdir)/gnucash/image
-	cp gnucash/stylesheet-images/*.gif $(distdir)/gnucash/stylesheet-images
+	-cp gnucash/*.css $(distdir)/gnucash
+	-cp gnucash/stylesheet-images/*.gif $(distdir)/gnucash/stylesheet-images
