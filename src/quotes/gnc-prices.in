@@ -140,6 +140,11 @@ foreach $acct (@acctlist)
     $accinfo = gnucash::xaccAccountGetAccInfo ($acct);
     $invacct = gnucash::xaccCastToInvAcct ($accinfo);
 
+    if ($security eq "") 
+    {
+       print "unknown. skipping...\n";
+       next;
+    }
     if ($invacct)
     {
       $quotesrc = gnucash::xaccInvAcctGetPriceSrc ($invacct);

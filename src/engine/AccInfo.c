@@ -213,9 +213,12 @@ xaccFreeInvAcct (InvAcct *iacc)
 void 
 xaccInvAcctSetPriceSrc (InvAcct *iacc, const char *src)
 {
-   if (!iacc || !src) return;
+   if (!iacc) return;
    if (iacc->pricesrc) { free(iacc->pricesrc); }
-   iacc->pricesrc = strdup (src);
+   if (src)
+     iacc->pricesrc = strdup (src);
+   else
+     iacc->pricesrc = NULL;
 }
 
 char * 

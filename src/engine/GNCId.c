@@ -113,7 +113,7 @@ entity_table_init()
 
   entity_table = g_hash_table_new(id_hash, id_compare);
 
-  atexit(summarize_table);
+  /* atexit(summarize_table); */
 }
 
 GNCIdType

@@ -55,7 +55,7 @@ include @top_srcdir@/Makefile.common
 default: gnucash.so 
 
 gnucash.so: ${OBJS} ../../engine/libengine.a
-	gcc -shared ${OBJS} ../../engine/libengine.a -L@libdir@ ${LIBNANA} -o gnucash.so
+	gcc -shared ${GLIB_LIBS} ${OBJS} ../../engine/libengine.a -L@libdir@ ${LIBNANA} -o gnucash.so
 
 SWIG_FILTER    := %P.h %/util.h
 SWIG_ENGINE_HDRS := \
