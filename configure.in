@@ -771,7 +771,7 @@ AM_CONDITIONAL(GNUCASH_ENABLE_GUI, test x${gnc_build_gui} = xtrue)
 
 if test x${gnc_build_gui} = xtrue ;
 then
-#    GNOME_INIT			2/18/03 remove
+    GNOME_INIT
     GNOME_COMPILE_WARNINGS
 #    GNOME_CHECK_GDK_PIXBUF
 #    GNOME_PRINT_CHECK

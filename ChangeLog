@@ -1,3 +1,8 @@
+2003-02-27   Derek Atkins  <derek@ihtfp.com>
+
+	* re-add macros/gnome.m4 for GNOME_INIT
+	* configure.in: re-add call to GNOME_INIT
+
 2003-02-18 TomF changes for Gnome-2 branch
 
 	* autogen.sh: Use Gnome2 libraries
