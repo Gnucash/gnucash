@@ -1,3 +1,13 @@
+2001-04-27  Dave Peticolas  <dave@krondo.com>
+
+	* src/SplitLedger.c (xaccSRExpandCurrentTrans): if expanding
+	a transaction, try to show all of it
+
+	* src/register/table-gnome.c (gnc_table_show_range): new func
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_show_range):
+	new func
+
 2001-04-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/balance-sheet.scm: Added option to choose the

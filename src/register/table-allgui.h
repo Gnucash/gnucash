@@ -389,6 +389,10 @@ void        gnc_table_refresh_current_cursor_gui (Table * table,
 /* Refresh the whole GUI from the table. */
 void        gnc_table_refresh_gui (Table *table, gboolean do_scroll);
 
+/* Try to show the whole range in the register. */
+void        gnc_table_show_range (Table *table,
+                                  VirtualCellLocation start_loc,
+                                  VirtualCellLocation end_loc);
 
 /* ==================================================== */
 

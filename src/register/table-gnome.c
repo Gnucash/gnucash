@@ -220,7 +220,6 @@ gnc_table_refresh_cursor_gui (Table * table,
 
         g_return_if_fail (GNUCASH_IS_SHEET (table->ui_data));
 
-        /* if the current cursor is undefined, there is nothing to do. */
         if (gnc_table_virtual_cell_out_of_bounds (table, vcell_loc))
                 return;
 
@@ -237,6 +236,29 @@ gnc_table_refresh_cursor_gui (Table * table,
         }
         else
                 gnucash_sheet_redraw_block (sheet, vcell_loc);
+}
+
+void
+gnc_table_show_range (Table *table,
+                      VirtualCellLocation start_loc,
+                      VirtualCellLocation end_loc)
+{
+        GnucashSheet *sheet;
+
+        if (!table)
+                return;
+
+        g_return_if_fail (GNUCASH_IS_SHEET (table->ui_data));
+
+        if (gnc_table_virtual_cell_out_of_bounds (table, start_loc))
+                return;
+
+        if (gnc_table_virtual_cell_out_of_bounds (table, end_loc))
+                return;
+
+        sheet = GNUCASH_SHEET (table->ui_data);
+
+        gnucash_sheet_show_range (sheet, start_loc, end_loc);
 }
 
 /* ================== end of file ======================= */

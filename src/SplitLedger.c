@@ -780,6 +780,37 @@ xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand)
   }
 
   gnc_table_refresh_gui (reg->table, TRUE);
+
+  if (expand)
+  {
+    VirtualCellLocation start_loc;
+    VirtualCellLocation end_loc;
+    int v_row;
+
+    start_loc = reg->table->current_cursor_loc.vcell_loc;
+    end_loc = reg->table->current_cursor_loc.vcell_loc;
+
+    for (v_row = end_loc.virt_row + 1;
+         v_row < reg->table->num_virt_rows; v_row++)
+    {
+      VirtualCellLocation vc_loc = { v_row, 0 };
+      CursorClass cursor_class;
+
+      cursor_class = xaccSplitRegisterGetCursorClass (reg, vc_loc);
+      if (cursor_class == CURSOR_CLASS_TRANS)
+        break;
+
+      if (cursor_class != CURSOR_CLASS_SPLIT)
+      {
+        v_row--;
+        break;
+      }
+    }
+
+    end_loc.virt_row = MIN (v_row, reg->table->num_virt_rows - 1);
+
+    gnc_table_show_range (reg->table, start_loc, end_loc);
+  }
 }
 
 gboolean

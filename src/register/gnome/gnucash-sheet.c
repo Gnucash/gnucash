@@ -414,7 +414,7 @@ gnucash_sheet_show_row (GnucashSheet *sheet, gint virt_row)
                 return;
 
         if (y > cy)
-                y -= height - block_height;
+                y -= height - MIN (block_height, height);
 
         if ((sheet->height - y) < height)
                 y = sheet->height - height;
@@ -443,6 +443,63 @@ gnucash_sheet_make_cell_visible (GnucashSheet *sheet, VirtualLocation virt_loc)
 
         gnucash_sheet_show_row (sheet, virt_loc.vcell_loc.virt_row);
 
+        gnucash_sheet_update_adjustments (sheet);
+}
+
+
+void
+gnucash_sheet_show_range (GnucashSheet *sheet,
+                          VirtualCellLocation start_loc,
+                          VirtualCellLocation end_loc)
+{
+        SheetBlock *start_block;
+        SheetBlock *end_block;
+        gint block_height;
+        gint height;
+        gint cx, cy;
+        gint x, y;
+
+        g_return_if_fail (sheet != NULL);
+        g_return_if_fail (GNUCASH_IS_SHEET(sheet));
+
+        start_loc.virt_row = MAX (start_loc.virt_row, 1);
+        start_loc.virt_row = MIN (start_loc.virt_row,
+                                  sheet->num_virt_rows - 1);
+
+        end_loc.virt_row = MAX (end_loc.virt_row, 1);
+        end_loc.virt_row = MIN (end_loc.virt_row,
+                                sheet->num_virt_rows - 1);
+
+        gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), &cx, &cy);
+        x = cx;
+
+        height = GTK_WIDGET(sheet)->allocation.height;
+
+        start_block = gnucash_sheet_get_block (sheet, start_loc);
+        end_block = gnucash_sheet_get_block (sheet, end_loc);
+
+        y = start_block->origin_y;
+        block_height = (end_block->origin_y +
+                        end_block->style->dimensions->height) - y;
+
+        if ((cy <= y) && (cy + height >= y + block_height))
+                return;
+
+        if (y > cy)
+                y -= height - MIN (block_height, height);
+
+        if ((sheet->height - y) < height)
+                y = sheet->height - height;
+
+        if (y < 0)
+                y = 0;
+
+        if (y != cy)
+                gtk_adjustment_set_value (sheet->vadj, y);
+        if (x != cx)
+                gtk_adjustment_set_value (sheet->hadj, x);
+
+        gnucash_sheet_compute_visible_range (sheet);
         gnucash_sheet_update_adjustments (sheet);
 }
 
