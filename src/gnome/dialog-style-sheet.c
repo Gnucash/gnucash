@@ -21,11 +21,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
+#include "config.h"
+
 #include <gnome.h>
 
 #include "dialog-style-sheet.h"
 #include "dialog-options.h"
 #include "glade-gnc-dialogs.h"
+#include "messages.h"
 
 StyleSheetDialog * gnc_style_sheet_dialog = NULL;
 
@@ -102,8 +105,8 @@ gnc_style_sheet_dialog_fill(StyleSheetDialog * ss, SCM selected) {
     SCM            scm_options = gh_call1(get_options, gh_car(stylesheets));
     struct ss_info * ssinfo = g_new0(struct ss_info, 1);
     int            this_row;
-    char           * c_names[1]; 
-
+    char           * c_names[1];
+    char           * c_name;
 
     /* make the options DB and dialog, but don't parent it yet */ 
     ssinfo->odialog = gnc_options_dialog_new(FALSE);
@@ -121,10 +124,16 @@ gnc_style_sheet_dialog_fill(StyleSheetDialog * ss, SCM selected) {
     gnc_options_dialog_set_close_cb(ssinfo->odialog, 
                                     gnc_style_sheet_options_close_cb,
                                     ss);
-    
+
     /* add the column name */
-    c_names[0] = gh_scm2newstr(scm_name, NULL);
+    c_name = gh_scm2newstr(scm_name, NULL);
+    if (!c_name)
+      continue;
+
+    c_names[0] = _(c_name);
     this_row   = gtk_clist_append(GTK_CLIST(ss->list), c_names);
+    free (c_name);
+
     gtk_clist_set_row_data_full(GTK_CLIST(ss->list), this_row, 
                                 (gpointer)ssinfo, 
                                 row_data_destroy_cb);
@@ -132,7 +141,7 @@ gnc_style_sheet_dialog_fill(StyleSheetDialog * ss, SCM selected) {
       sel_row = this_row;
     }
   }
-  
+
   gtk_clist_select_row(GTK_CLIST(ss->list), sel_row, 0);
 }
 

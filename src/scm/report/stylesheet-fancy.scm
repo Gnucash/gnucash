@@ -79,7 +79,7 @@
        (gnc:make-color-option
         (N_ "Colors")
         (N_ "Background Color") "a" (N_ "General background color for report.")
-        (list #xff #x88 #xff 0)
+        (list #xff #xff #xff 0)
         255 #f))      
 
       (opt-register
@@ -93,14 +93,14 @@
        (gnc:make-color-option
         (N_ "Colors")
         (N_ "Link Color") "c" (N_ "Link text color.")
-        (list #x00 #xff #xff 0)
+        (list #xb2 #x22 #x22 0)
         255 #f))
-      
+
       (opt-register
        (gnc:make-color-option
         (N_ "Colors")
         (N_ "Table Cell Color") "c" (N_ "Default background for table cells.")
-        (list #xff #x00 #xff 0)
+        (list #xff #xff #xff 0)
         255 #f))      
 
       (opt-register
@@ -108,7 +108,7 @@
 	(N_ "Colors")
 	(N_ "Alternate Table Cell Color") "d"
 	(N_ "Default alternate background for table cells.")
-	(list #x00 #x00 #x00 0)
+	(list #xff #xff #xff 0)
 	255 #f))
 
       (opt-register
@@ -116,7 +116,7 @@
 	(N_ "Colors")
 	(N_ "Subheading/Subtotal Cell Color") "e"
 	(N_ "Default color for subtotal rows.")
-	(list #x00 #x00 #x00 0)
+	(list #xee #xe8 #xaa 0)
 	255 #f))
 
       (opt-register
@@ -124,7 +124,7 @@
 	(N_ "Colors")
 	(N_ "Sub-subheading/total Cell Color") "f"
 	(N_ "Color for subsubtotals")
-	(list #x00 #x00 #x00 0)
+	(list #xfa #xfa #xd2 0)
 	255 #f))
 
       (opt-register
@@ -132,20 +132,21 @@
 	(N_ "Colors")
 	(N_ "Grand Total Cell Color") "g"
 	(N_ "Color for grand totals")
-	(list #x00 #x00 #x00 0)
+	(list #xff #xff #x00 0)
 	255 #f))
-          
-	    
+
       (opt-register 
        (gnc:make-number-range-option 
         (N_ "Tables")
         (N_ "Table cell spacing") "a" (N_ "Space between table cells")
         1 0 20 0 1))
+
       (opt-register 
        (gnc:make-number-range-option 
         (N_ "Tables")
         (N_ "Table cell padding") "b" (N_ "Space between table cells")
         1 0 20 0 1))
+
       (opt-register 
        (gnc:make-number-range-option 
         (N_ "Tables")
@@ -171,10 +172,14 @@
            (textcolor (color-val (N_ "Colors") (N_ "Text Color")))
            (linkcolor (color-val (N_ "Colors") (N_ "Link Color")))
            (normal-row-color (color-val (N_ "Colors") (N_ "Table Cell Color")))
-	   (alternate-row-color (color-val (N_ "Colors") (N_ "Alternate Table Cell Color")))
-	   (primary-subheading-color (color-val (N_ "Colors") (N_ "Subheading/Subtotal Cell Color")))
-	   (secondary-subheading-color (color-val (N_ "Colors") 
-						(N_ "Sub-subheading/total Cell Color")))
+	   (alternate-row-color (color-val (N_ "Colors")
+                                           (N_ "Alternate Table Cell Color")))
+	   (primary-subheading-color
+            (color-val (N_ "Colors")
+                       (N_ "Subheading/Subtotal Cell Color")))
+	   (secondary-subheading-color
+            (color-val (N_ "Colors") 
+                       (N_ "Sub-subheading/total Cell Color")))
 	   (grand-total-color (color-val (N_ "Colors")
 					 (N_ "Grand Total Cell Color")))
            (bgpixmap (opt-val (N_ "Images") (N_ "Background Tile")))
@@ -183,13 +188,13 @@
            (spacing (opt-val (N_ "Tables") (N_ "Table cell spacing")))
            (padding (opt-val (N_ "Tables") (N_ "Table cell padding")))
            (border (opt-val (N_ "Tables") (N_ "Table border width"))))
-            
+
       (gnc:html-document-set-style! 
        ssdoc "body" 
        'attribute (list "bgcolor" bgcolor)
        'attribute (list "text" textcolor)
        'attribute (list "link" linkcolor))
-   
+
       (gnc:html-document-set-style!
        ssdoc "number-cell"
        'tag "td"
@@ -227,13 +232,11 @@
        ssdoc "grand-total"
        'attribute (list "bgcolor" grand-total-color)
        'tag "tr")   
-      
+
       (gnc:html-document-set-style!
        ssdoc "text-cell"
        'tag "td"
        'attribute (list "align" "left"))
-
-
 
       (gnc:html-document-set-style!
        ssdoc "total-number-cell"
@@ -244,7 +247,6 @@
        ssdoc "total-label-cell"
        'tag '("td" "b")
        'attribute (list "align" "left"))
-
 
       ;; don't surround marked-up links with <a> </a>
       (if (not links?)
@@ -258,7 +260,7 @@
          t "table" 
          'attribute (list "border" 0)
          'inheritable? #f)
-        
+
         (gnc:html-table-set-cell! 
          t 1 1
          (if show-preparer? 
@@ -267,13 +269,13 @@
               (gnc:html-markup-b 
                (gnc:html-document-title doc))  
               (gnc:html-markup-br)
-              "Prepared by: "
+              (_ "Prepared by: ")
               (gnc:html-markup-b preparer)
               (gnc:html-markup-br)
-              "Prepared for: "
+              (_ "Prepared for: ")
               (gnc:html-markup-b prepared-for)
               (gnc:html-markup-br)
-              "Date: " 
+              (_ "Date: ")
               (gnc:timepair-to-datestring 
                (cons (current-time) 0)))
 
@@ -294,17 +296,18 @@
         
         (apply 
          gnc:html-table-set-cell! 
-         t 2 1 
+         t 2 1
          (gnc:html-document-objects doc))
         
         (gnc:html-document-add-object! ssdoc t))
       ssdoc))
-  
+
   (gnc:define-html-style-sheet 
    'version 1
-   'name "Fancy"
+   'name (N_ "Fancy")
    'renderer fancy-renderer
    'options-generator fancy-options)
-  
+
   #t)
-(gnc:make-html-style-sheet "Fancy" "Technicolor")
+
+(gnc:make-html-style-sheet "Fancy" (N_ "Technicolor"))

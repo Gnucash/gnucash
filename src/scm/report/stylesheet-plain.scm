@@ -166,9 +166,9 @@
 
   (gnc:define-html-style-sheet 
    'version 1
-   'name "Plain"
+   'name (N_ "Plain")
    'renderer plain-renderer
    'options-generator plain-options))
 
 ;; instantiate a default style sheet 
-(gnc:make-html-style-sheet "Plain" "Default")
+(gnc:make-html-style-sheet "Plain" (N_ "Default"))

@@ -1,5 +1,12 @@
 2001-05-01  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/report/stylesheet-plain.scm: fix i18n bugs
+
+	* src/scm/report/stylesheet-fancy.scm: work on colors,
+	fix i18n bugs
+
+	* src/gnome/dialog-style-sheet.c: fix i18n bugs
+
 	* src/gnome/window-acct-tree.c: add popup menu to account tree
 
 	* src/gnome/mainwindow-account-tree.c
