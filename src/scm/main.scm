@@ -572,7 +572,9 @@ string and 'directories' must be a list of strings."
              (not (string? (gnc:history-get-last)))
              (gnc:option-value
               (gnc:lookup-global-option "__new_user" "first_startup")))
-            (gnc:new-user-dialog)
+            (begin
+	      (gnc:destroy-splash-screen)
+	      (gnc:new-user-dialog))
             (begin
 	      (gnc:load-account-file)
 	      (gnc:destroy-splash-screen)))
