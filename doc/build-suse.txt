@@ -1,7 +1,7 @@
 How to install gnucash on SuSE
 ==============================
 (written 2000-01-07 by Peter Pointner <peter@wuzel.m.isar.de>)
-(last changed 2000-07-12 by Herbert Thoma (tma@iis.fhg.de))
+(last changed 2000-09-04 by Herbert Thoma (tma@iis.fhg.de))
 
 Notes:
 
@@ -77,9 +77,8 @@ Let's go:
     cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout gnucash
     (this will get you the latest development version)
 
-* If you want to build the development version, first build gtkhtml
-  as described in lib/README. This step will no longer be required
-  when gtkhtml makes it into the official GNOME distribution.
+* The lib directory contains packages that are needed to build GnuCash
+  but are not widely available yet. Read the file lib/README for details.
 
 * Configure, build and install gnucash. Installation must probably be
   done as root, the files go to various places in /usr/local.

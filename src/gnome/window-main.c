@@ -257,26 +257,84 @@ gnc_ui_get_currency_item(GList **list, const char *currency, GtkWidget *holder)
  */
 
 static void
-gnc_ui_refresh_statusbar (void)
+gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
+                         gboolean euro)
 {
-  GNCMainInfo *main_info;
   double amount;
-  AccountGroup *group;
   AccountGroup *children;
   Account *account;
-  char asset_string[256];
-  char profit_string[256];
   int num_accounts;
   int account_type;
   const char *account_currency;
-  const char *default_currency;
   GNCCurrencyAcc *currency_accum;
   GNCCurrencyAcc *euro_accum = NULL;
+  int i;
+
+  if (euro)
+    euro_accum = gnc_ui_get_currency_accumulator(currency_list,
+						 EURO_TOTAL_STR);
+
+  num_accounts = xaccGroupGetNumAccounts(group);
+  for (i = 0; i < num_accounts; i++)
+  {
+    account = xaccGroupGetAccount(group, i);
+
+    account_type = xaccAccountGetType(account);
+    account_currency = xaccAccountGetCurrency(account);
+    children = xaccAccountGetChildren(account);
+    currency_accum = gnc_ui_get_currency_accumulator(currency_list,
+						     account_currency);
+
+    switch (account_type)
+    {
+      case BANK:
+      case CASH:
+      case ASSET:
+      case STOCK:
+      case MUTUAL:
+      case CREDIT:
+      case LIABILITY:
+	amount = xaccAccountGetBalance(account);
+        currency_accum->assets += amount;
+	if(euro)
+	  euro_accum->assets += gnc_convert_to_euro(account_currency, amount);
+
+	if (children != NULL)
+	  gnc_ui_accounts_recurse(children, currency_list, euro);
+	break;
+      case INCOME:
+      case EXPENSE:
+	amount = xaccAccountGetBalance(account);
+        currency_accum->profits -= amount;
+	if(euro)
+	  euro_accum->profits -= gnc_convert_to_euro(account_currency, amount);
+
+	if (children != NULL)
+	  gnc_ui_accounts_recurse(children, currency_list, euro);
+	break;
+      case EQUITY:
+        /* no-op, see comments at top about summing assets */
+	break;
+      case CURRENCY:
+      default:
+	break;
+    }
+  }
+}
+
+static void
+gnc_ui_refresh_statusbar (void)
+{
+  GNCMainInfo *main_info;
+  AccountGroup *group;
+  char asset_string[256];
+  char profit_string[256];
+  const char *default_currency;
+  GNCCurrencyAcc *currency_accum;
   GNCCurrencyItem *currency_item;
   GList *currency_list;
   GList *current;
   gboolean euro;
-  int i;
 
   default_currency = gnc_lookup_string_option("International",
 					      "Default Currency",
@@ -291,57 +349,9 @@ gnc_ui_refresh_statusbar (void)
     return;
 
   currency_list = NULL;
-  if (euro)
-    euro_accum = gnc_ui_get_currency_accumulator(&currency_list,
-						 EURO_TOTAL_STR);
 
   group = gncGetCurrentGroup ();
-  num_accounts = xaccGroupGetNumAccounts(group);
-  for (i = 0; i < num_accounts; i++)
-  {
-    account = xaccGroupGetAccount(group, i);
-
-    account_type = xaccAccountGetType(account);
-    account_currency = xaccAccountGetCurrency(account);
-    children = xaccAccountGetChildren(account);
-    currency_accum = gnc_ui_get_currency_accumulator(&currency_list,
-						     account_currency);
-
-    switch (account_type)
-    {
-      case BANK:
-      case CASH:
-      case ASSET:
-      case STOCK:
-      case MUTUAL:
-      case CREDIT:
-      case LIABILITY:
-	amount = xaccAccountGetBalance(account);
-	if (children != NULL)
-	  amount += xaccGroupGetBalance(children);
-
-        currency_accum->assets += amount;
-	if(euro)
-	  euro_accum->assets += gnc_convert_to_euro(account_currency, amount);
-	break;
-      case INCOME:
-      case EXPENSE:
-	amount = xaccAccountGetBalance(account);
-	if (children != NULL)
-	  amount += xaccGroupGetBalance(children);
-
-        currency_accum->profits -= amount;
-	if(euro)
-	  euro_accum->profits -= gnc_convert_to_euro(account_currency, amount);
-	break;
-      case EQUITY:
-        /* no-op, see comments at top about summing assets */
-	break;
-      case CURRENCY:
-      default:
-	break;
-    }
-  }
+  gnc_ui_accounts_recurse(group, &currency_list, euro);
 
   for (current = g_list_first(main_info->totals_list); current;
        current = g_list_next(current))

@@ -149,8 +149,8 @@
 #define REG_CURR_MSG      _("You cannot transfer funds from the %s " \
                             "account.\nIt does not have a matching " \
                             "currency.\nTo transfer funds between " \
-                            "accounts with different currencies\n you" \
-                            "need an intermediate currency account.\n" \
+                            "accounts with different currencies\n" \
+                            "you need an intermediate currency account.\n" \
                             "Please see the GnuCash online manual")
 #define REPORT_ERR_MSG    _("Error executing scheme report.")
 #define REPORT_NOPARM_MSG _("This report has no parameters.")
