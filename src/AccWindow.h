@@ -49,5 +49,8 @@ EditNotesWindow * editNotesWindow (Account *acc);
 void xaccDestroyEditAccWindow (Account *);
 void xaccDestroyEditNotesWindow (Account *);
 
+void editAccountRefresh(Account *);
+
 void xaccSetDefaultNewaccountCurrency(char *new_default_currency);
+
 #endif /* __XACC_NEWACCWINDOW_H__ */

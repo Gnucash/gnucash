@@ -1,15 +1,3 @@
-/*
- * FILE:
- * Query.h
- *
- * DESCRIPTION:
- * Provide a simple query engine interface.
- *
- * HISTORY:
- * created by Linas Vepstas Sept 1998
- * Copyright (c) 1998 Linas Vepstas
- */
-
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -25,6 +13,18 @@
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
+
+/*
+ * FILE:
+ * Query.h
+ *
+ * DESCRIPTION:
+ * Provide a simple query engine interface.
+ *
+ * HISTORY:
+ * created by Linas Vepstas Sept 1998
+ * Copyright (c) 1998-2000 Linas Vepstas
+ */
 
 #ifndef __GNUCASH_QUERY_H__
 #define __GNUCASH_QUERY_H__
@@ -75,6 +75,9 @@ void xaccQuerySetDateRangeL (Query *, long long earliest, long long latest);
 
 void xaccQuerySetEarliest (Query *, time_t earliest);
 void xaccQuerySetLatest   (Query *, time_t latest);
+
+void xaccQuerySetEarliestTS (Query *, Timespec earliest);
+void xaccQuerySetLatestTS   (Query *, Timespec latest);
 
 time_t xaccQueryGetEarliest (Query *);
 time_t xaccQueryGetLatest   (Query *);

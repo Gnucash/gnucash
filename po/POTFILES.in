@@ -1,5 +1,9 @@
 # List of files which containing translatable strings.
 # Copyright (C) 1995, 1998 Free Software Foundation, Inc.
 
-include/messages_i18n.h
+po/pseudo-source.c
 po/guile_strings.txt
+src/gnome/dialog-account-picker.c
+src/gnome/dialog-qif-import.c
+src/gnome/glade-account-picker.c
+src/gnome/glade-qif-import.c

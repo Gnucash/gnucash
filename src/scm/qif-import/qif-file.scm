@@ -6,12 +6,10 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(gnc:support "qif-file.scm")
 (gnc:depend "qif-objects.scm")
 (gnc:depend "qif-parse.scm")
 (gnc:depend "qif-utils.scm")
-
-(gnc:support "qif-file.scm")
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file:read-file self path  
@@ -29,7 +27,10 @@
         (line #f)
         (tag #f)
         (value #f)
-        (heinous-error #f))
+        (heinous-error #f)
+	(valid-acct-types '(type:bank type:cash
+		            type:ccard type:invst
+			    #{type:oth\ a}#  #{type:oth\ l}#)))
     (with-input-from-file path
       (lambda ()        
         ;; loop over lines
@@ -48,15 +49,9 @@
                  ;; the type switcher. 
                  ((eq? tag #\!)
                   (set! qstate-type (qif-file:parse-bang-field self value))
-                  (cond ((or (eq? qstate-type 'type:bank)
-                             (eq? qstate-type 'type:cash)
-                             (eq? qstate-type 'type:ccard)
-                             (eq? qstate-type 'type:invst)
-                             (eq? qstate-type '#{type:oth\ a}#)
-                             (eq? qstate-type '#{type:oth\ l}#))
-
-                         (set! current-xtn (make-qif-xtn))
-                         (set! default-split (make-qif-split))
+                  (cond ((member qstate-type valid-acct-types)
+			 (set! current-xtn (make-qif-xtn))
+			 (set! default-split (make-qif-split))
                          (qif-split:set-category! default-split "")
                          (qif-file:set-account-type! 
                           self (qif-file:state-to-account-type 
@@ -78,25 +73,20 @@
                  ;; account transactions 
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-                 ((or (eq? qstate-type 'type:bank)
-                      (eq? qstate-type 'type:cash)
-                      (eq? qstate-type 'type:ccard)
-                      (eq? qstate-type 'type:invst)
-                      (eq? qstate-type '#{type:oth\ a}#)
-                      (eq? qstate-type '#{type:oth\ l}#))
-                  (cond                                       
+                 ((member qstate-type valid-acct-types)
+                  (case tag
                    ;; D : transaction date 
-                   ((eq? tag #\D)
+                   ((#\D)
                     (qif-xtn:set-date! current-xtn 
                                        (qif-file:parse-date self value)))
                    
                    ;; T : total amount 
-                   ((eq? tag #\T)
+                   ((#\T)
                     (qif-split:set-amount! default-split
                                            (qif-file:parse-value self value)))
                    
                    ;; P : payee
-                   ((eq? tag #\P)
+                   ((#\P)
                     (qif-xtn:set-payee! current-xtn 
                                         (qif-file:parse-string self value)))
 
@@ -104,7 +94,7 @@
                    ;; multiple "A" lines are appended together with 
                    ;; newlines; some Quicken files have a lot of 
                    ;; A lines. 
-                   ((eq? tag #\A)
+                   ((#\A)
                     (qif-xtn:set-address! 
                      current-xtn
                      (let ((current (qif-xtn:address current-xtn)))
@@ -117,48 +107,48 @@
                    ;; N : check number / transaction number /xtn direction
                    ;; this could be a number or a string; no point in
                    ;; keeping it numeric just yet. 
-                   ((eq? tag #\N)
+                   ((#\N)
                     (qif-xtn:set-number! 
                      current-xtn (qif-file:parse-string self value)))
                    
                    ;; C : cleared flag 
-                   ((eq? tag #\C)
+                   ((#\C)
                     (qif-xtn:set-cleared! 
                      current-xtn (qif-file:parse-cleared-field self value)))
                    
                    ;; M : memo 
-                   ((eq? tag #\M)
+                   ((#\M)
                     (qif-split:set-memo! default-split
                                          (qif-file:parse-string self value)))
                    
                    ;; I : share price (stock transactions)
-                   ((eq? tag #\I)
+                   ((#\I)
                     (qif-xtn:set-share-price! 
                      current-xtn (qif-file:parse-value self value)))
                    
                    ;; Q : share price (stock transactions)
-                   ((eq? tag #\Q)
+                   ((#\Q)
                     (qif-xtn:set-num-shares! 
                      current-xtn (qif-file:parse-value self value))
                     (qif-xtn:set-bank-xtn?! current-xtn #f))
                    
                    ;; Y : name of security (stock transactions)
-                   ((eq? tag #\Y)
+                   ((#\Y)
                     (qif-xtn:set-security-name! 
                      current-xtn (qif-file:parse-string self value)))
                    
                    ;; O : adjustment (stock transactions)
-                   ((eq? tag #\O)
+                   ((#\O)
                     (qif-xtn:set-adjustment! 
                      current-xtn (qif-file:parse-value self value)))
                    
                    ;; L : category 
-                   ((eq? tag #\L)
+                   ((#\L)
                     (qif-split:set-category! 
                      default-split (qif-file:parse-string self value)))
 
                    ;; S : split category 
-                   ((eq? tag #\S)
+                   ((#\S)
                     (set! current-split  (make-qif-split))
                     (qif-split:set-category! 
                      current-split (qif-file:parse-string self value))
@@ -167,20 +157,19 @@
                      (cons current-split (qif-xtn:splits current-xtn))))
                    
                    ;; E : split memo (?)
-                   ((eq? tag #\E)
+                   ((#\E)
                     (qif-split:set-memo! 
                      current-split (qif-file:parse-string self value)))
                    
                    ;; $ : split amount (if there are splits)
-                   ((eq? tag #\$)
+                   ((#\$)
                     ;; if this is 'Type:Invst, I can't figure out 
                     ;; what the $ signifies.  I'll do it later. 
-                    (if (eq? qstate-type 'type:bank)
+                    (if (not (eq? qstate-type 'type:invst))
                         (qif-split:set-amount! 
                          current-split (qif-file:parse-value self value))))
-                   
                    ;; ^ : end-of-record 
-                   ((eq? tag #\^)
+                   ((#\^)
                     (if (and (qif-xtn:date current-xtn)
                              (qif-split:amount default-split))
                         (begin 
@@ -253,32 +242,33 @@
                     (set! current-xtn (make-qif-xtn))
                     (set! default-split (make-qif-split)))
                    
-                   (#t
+                   (else
                     (display "qif-file:read-file : unknown Bank slot ")
-                    (display tag) (newline))))
+                    (display tag) 
+		    (newline))))
                  
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                  ;; Class transactions 
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                  ((eq? qstate-type 'type:class)
-                  (cond 
+                  (case tag
                    ;; N : name 
-                   ((eq? tag #\N)
+                   ((#\N)
                     (qif-class:set-name! current-xtn 
                                          (qif-file:parse-string self value)))
                    
                    ;; D : description 
-                   ((eq? tag #\D)
+                   ((#\D)
                     (qif-class:set-description! 
                      current-xtn (qif-file:parse-string self value)))
                    
                    ;; end-of-record
-                   ((eq? tag #\^)
+                   ((#\^)
                     (qif-file:add-class! self current-xtn)
 ;                    (qif-class:print current-xtn)
                     (set! current-xtn (make-qif-class)))
 
-                   (#t
+                   (else
                     (display "qif-file:read-file : unknown Class slot ")
                     (display tag) (newline))))
                  
@@ -286,78 +276,77 @@
                  ;; Account definitions
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                  ((eq? qstate-type 'account)
-                  (cond
-                   ((eq? tag #\N)
+                  (case tag
+                   ((#\N)
                     (qif-acct:set-name! current-xtn 
                                         (qif-file:parse-string self value)))
-                   ((eq? tag #\D)
+                   ((#\D)
                     (qif-acct:set-description! 
                      current-xtn (qif-file:parse-string self value)))
 
-                   ((eq? tag #\T)
+                   ((#\T)
                     (qif-acct:set-type! 
                      current-xtn (qif-file:parse-acct-type self value)))
                    
-                   ((eq? tag #\L)
+                   ((#\L)
                     (qif-acct:set-limit! 
                      current-xtn (qif-file:parse-value self value)))
 
-                   ((eq? tag #\^)
+                   ((#\^)
                     (qif-file:add-account! self current-xtn)
 ;                    (qif-acct:print current-xtn)
                     (set! current-xtn (make-qif-acct)))
                                                
-                   (#t
+                   (else
                     (display "qif-file:read-file : unknown Account slot ")
                     (display tag) (newline))))
 
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                  ;; Category (Cat) transactions 
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
                  ((eq? qstate-type 'type:cat)
-                  (cond 
+                  (case tag
                    ;; N : category name 
-                   ((eq? tag #\N)
+                   ((#\N)
                     (qif-cat:set-name! current-xtn 
                                        (qif-file:parse-string self value)))
 
                    ;; D : category description 
-                   ((eq? tag #\D)
+                   ((#\D)
                     (qif-cat:set-description! current-xtn 
-                                              (qif-file:parse-string 
+					      (qif-file:parse-string 
                                                self value)))
 
                    ;; E : is this a taxable category?
-                   ((eq? tag #\T)
+                   ((#\T)
                     (qif-cat:set-taxable! current-xtn #t))
 
                    ;; E : is this an expense category?
-                   ((eq? tag #\E)
+                   ((#\E)
                     (qif-cat:set-expense-cat! current-xtn #t))
 
                    ;; I : is this an income category? 
-                   ((eq? tag #\I)
+                   ((#\I)
                     (qif-cat:set-income-cat! current-xtn #t))
 
                    ;; R : what is the tax rate (from some table?
                    ;; seems to be an integer)
-                   ((eq? tag #\R)
+                   ((#\R)
                     (qif-cat:set-tax-rate! 
                      current-xtn (qif-file:parse-value self value)))
                    
                    ;; B : budget amount.  not really supported. 
-                   ((eq? tag #\B)
+                   ((#\B)
                     (qif-cat:set-budget-amt! 
                      current-xtn (qif-file:parse-value self value)))
 
                    ;; end-of-record
-                   ((eq? tag #\^)
+                   ((#\^)
                     (qif-file:add-cat! self current-xtn)
 ;                    (qif-cat:print current-xtn)
                     (set! current-xtn (make-qif-cat)))
 
-                   (#t 
+                   (else
                     (display "qif-file:read-file : unknown Cat slot ")
                     (display tag) (newline))))
                  
@@ -426,9 +415,3 @@
           (display "There was a heinous error.  Failed to read file.")
           (newline)
           #f))))
-
-      
-        
-
-  
-  

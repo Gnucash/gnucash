@@ -36,10 +36,10 @@ include @top_srcdir@/Makefile.init
 default:
 	@echo " "
 	@echo "Please choose one of the following targets:"
-	@echo "motif           dynamically linked motif version"
-	@echo "motif-static    statically linked motif version"
 	@echo "gnome           gnome/gtk version"
 	@echo "gnome-static    gnome/gtk statically linked version"
+	@echo "motif           motif version (unfinished)"
+	@echo "motif-static    motif statically linked version (unfinished)"
 	@echo "qt              kde/qt version (unfinished)"
 	@echo "qt-static       kde/qt statically linked version (unfinished)"
 	@echo " "

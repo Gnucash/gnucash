@@ -88,11 +88,7 @@
 
   ;; add a hook to save the user configs on shutdown
   (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:save-global-options)
-
   (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:ui-finish)
-
   (gnc:ui-main)
-
   (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:ui-finish)
-
   (gnc:shutdown 0))

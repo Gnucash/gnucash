@@ -92,7 +92,7 @@ accountPickerBox(char * initial_selection, int initial_type) {
   AccountGroup * topgroup; 
   Account      * selected;
   int          i;
-  GtkWidget    * treeitem  = gtk_tree_item_new_with_label("All Accounts");
+  GtkWidget    * treeitem  = gtk_tree_item_new_with_label(_("All Accounts"));
   GtkWidget    * subtree   = gtk_tree_new();
   SCM          infolist;
   GtkWidget    * active, * menu;

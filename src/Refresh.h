@@ -1,6 +1,6 @@
 /*******************************************************************\
  * Refresh.h -- utilities for window refresh for GnuCash            *
- * Copyright (C) 1999 Linas Vepstas                                 *
+ * Copyright (C) 1999,2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

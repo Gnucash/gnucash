@@ -477,7 +477,7 @@ GtkWidget *
 gnc_ui_account_field_box_create_from_account(Account * account,
 					     AccountEditInfo * info)
 {
-  GtkWidget * box = gnc_ui_account_field_box_create(info, TRUE);
+  GtkWidget * box = gnc_ui_account_field_box_create(info, FALSE);
   gboolean sensitive;
   int accType;
 
@@ -485,8 +485,6 @@ gnc_ui_account_field_box_create_from_account(Account * account,
 		     xaccAccountGetName(account));
   gtk_entry_set_text(GTK_ENTRY(info->description_entry),
 		     xaccAccountGetDescription(account));
-  gtk_entry_set_text(GTK_ENTRY(info->type_entry),
-		     xaccAccountGetTypeStr(xaccAccountGetType(account)));
   gtk_entry_set_text(GTK_ENTRY(info->currency_entry),
 		     xaccAccountGetCurrency(account));
   gtk_entry_set_text(GTK_ENTRY(info->security_entry),

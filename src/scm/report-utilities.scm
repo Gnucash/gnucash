@@ -2,8 +2,19 @@
 ;;; Reporting utilities
 (gnc:support "report-utilities.scm")
 
+(define (gnc:amount->string amount print_currency_symbol?
+                            print_separators? shares_value?)
+  (gnc:amount->string-helper (exact->inexact amount)
+                             print_currency_symbol?
+                             print_separators?
+                             shares_value?))
+
 (define (gnc:amount->formatted-string amount shares_value?)
   (gnc:amount->string amount #t #t shares_value?))
+
+(define (gnc:account-has-shares? account)
+  (let ((type (gnc:account-type->symbol (gnc:account-get-type account))))
+    (member type '(STOCK MUTUAL CURRENCY))))
 
 (define (gnc:account-separator-char)
   (let ((option (gnc:lookup-option gnc:*options-entries*
@@ -142,7 +153,8 @@
 	  ('average (getaverage))
 	  ('getmax (getmax))
 	  ('getmin (getmin))
-	  ('reset (reset-all)))))))
+	  ('reset (reset-all))
+          (else (gnc:warn "bad stats-collector action: " action)))))))
 
 (define (makedrcr-collector)
   (let ;;; values
@@ -170,7 +182,8 @@
 	  ('debits (getdebits))
 	  ('credits (getcredits))
 	  ('items (getitems))
-	  ('reset (reset-all)))))))
+	  ('reset (reset-all))
+          (else (gnc:warn "bad dr-cr-collector action: " action)))))))
 
 ;; Add x to list lst if it is not already in there
 (define (addunique lst x)
@@ -186,119 +199,15 @@
 		  (thunk (gnc:account-get-split account x)))
 		0 (gnc:account-get-split-count account) 1))
 
-;; register a configuration option for the transaction report
-(define (trep-options-generator)
-  (define gnc:*transaction-report-options* (gnc:new-options))
-  (define (gnc:register-trep-option new-option)
-    (gnc:register-option gnc:*transaction-report-options* new-option))
-  ;; from date
-  ;; hack alert - could somebody set this to an appropriate date?
-  (gnc:register-trep-option
-   (gnc:make-date-option
-    "Report Options" "From"
-    "a" "Report Items from this date" 
-    (lambda ()
-      (let ((bdtime (localtime (current-time))))
-        (set-tm:sec bdtime 0)
-        (set-tm:min bdtime 0)
-        (set-tm:hour bdtime 0)
-        (set-tm:mday bdtime 1)
-        (set-tm:mon bdtime 0)
-        (let ((time (car (mktime bdtime))))
-          (cons time 0))))
-    #f))
-  ;; to-date
-  (gnc:register-trep-option
-   (gnc:make-date-option
-    "Report Options" "To"
-    "b" "Report items up to and including this date"
-    (lambda () (cons (current-time) 0))
-    #f))
-
-  ;; account to do report on
-  (gnc:register-trep-option
-   (gnc:make-account-list-option
-    "Report Options" "Account"
-    "c" "Do transaction report on this account"
-    (lambda ()
-      (let ((current-accounts (gnc:get-current-accounts))
-            (num-accounts (gnc:group-get-num-accounts (gnc:get-current-group)))
-            (first-account (gnc:group-get-account (gnc:get-current-group) 0)))
-        (cond ((not (null? current-accounts)) (list (car current-accounts)))
-              ((> num-accounts 0) (list first-account))
-              (else ()))))
-    #f #f))
-
-  ;; primary sorting criterion
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
-    "Sorting" "Primary Key"
-     "a" "Sort by this criterion first"
-     'date
-     (list #(date
-	     "Date"
-	     "Sort by date")
-	   #(time
-	     "Time"
-	     "Sort by EXACT entry time")
-	   #(corresponding-acc
-	     "Transfer from/to"
-	     "Sort by account transferred from/to's name")
-	   #(amount
-	     "Amount"
-	     "Sort by amount")
-	   #(description
-	     "Description"
-	     "Sort by description")
-	   #(number
-	     "Number"
-	     "Sort by check/transaction number")
-	   #(memo
-	     "Memo"
-	     "Sort by memo"))))
-
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
-    "Sorting" "Primary Sort Order"
-    "b" "Order of primary sorting"
-    'ascend
-    (list #(ascend "Ascending" "smallest to largest, earliest to latest")
-	  #(descend "Descending" "largest to smallest, latest to earliest"))))
-
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
-    "Sorting" "Secondary Key"
-     "c"
-     "Sort by this criterion second"
-     'corresponding-acc
-     (list #(date
-	     "Date"
-	     "Sort by date")
-	   #(time
-	     "Time"
-	     "Sort by EXACT entry time")
-	   #(corresponding-acc
-	     "Transfer from/to"
-	     "Sort by account transferred from/to's name")
-	   #(amount
-	     "Amount"
-	     "Sort by amount")
-	   #(description
-	     "Description"
-	     "Sort by description")
-	   #(number
-	     "Number"
-	     "Sort by check/transaction number")
-	   #(memo
-	     "Memo"
-	     "Sort by memo"))))
-
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
-    "Sorting" "Secondary Sort Order"
-    "d" "Order of Secondary sorting"
-    'ascend
-    (list #(ascend "Ascending" "smallest to largest, earliest to latest")
-	  #(descend "Descending" "largest to smallest, latest to earliest"))))
-  gnc:*transaction-report-options*)
-
+(define (gnc:split-list-balance splits)
+  (let ((num-splits (gnc:count-splits splits)))
+    (if (eq? num-splits 0)
+        0
+        (let loop
+            ((balance (gnc:split-get-balance (gnc:ith-split splits 0)))
+             (index 1))
+          (if (>= index num-splits)
+              balance
+              (loop (+ (gnc:split-get-value (gnc:ith-split splits index))
+                       balance)
+                    (+ index 1)))))))

@@ -208,7 +208,7 @@
     (set! numeric-date-parts
           (map (lambda (elt)
                  (with-input-from-string elt
-                   (lambda () (read))))
+					 (lambda () (read))))
                date-parts))
     
     (cond 
@@ -472,4 +472,3 @@
      ;; later. 
      (#t         
       value-string))))
-

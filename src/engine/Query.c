@@ -1,16 +1,3 @@
-/*
- * FILE:
- * Query.c
- *
- * DESCRIPTION:
- * Provide a simple query engine interface.
- * Note that the query engine is officially a part of the transaction engine, 
- * and thus has direct access to internal structures.
- *
- * HISTORY:
- * created by Linas Vepstas Sept 1998
- * Copyright (c) 1998 Linas Vepstas
- */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -26,6 +13,20 @@
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
+
+/*
+ * FILE:
+ * Query.c
+ *
+ * DESCRIPTION:
+ * Provide a simple query engine interface.
+ * Note that the query engine is officially a part of the transaction engine, 
+ * and thus has direct access to internal structures.
+ *
+ * HISTORY:
+ * created by Linas Vepstas Sept 1998
+ * Copyright (c) 1998-2000 Linas Vepstas
+ */
 
 #include <limits.h>
 #include <stdlib.h>
@@ -79,7 +80,7 @@ xaccMallocQuery (void)
 
 /* ================================================== */
 
-static int Sort_DATE_NUM_AMOUNT (Split **, Split **);
+static int Sort_STANDARD_NONE_NONE (Split **, Split **);
 
 #ifndef LONG_LONG_MAX
 #define LONG_LONG_MAX 0x7fffffffffffffffLL
@@ -111,7 +112,7 @@ xaccInitQuery (Query *q)
    q->latest_found.tv_sec = LONG_LONG_MIN;
    q->latest_found.tv_nsec = 0; 
 
-   q->sort_func = (int (*)(const void*, const void *)) Sort_DATE_NUM_AMOUNT;
+   q->sort_func = (int (*)(const void*, const void *)) Sort_STANDARD_NONE_NONE;
 }
 
 /* ================================================== */
@@ -241,6 +242,22 @@ xaccQuerySetLatest (Query *q, time_t latest)
    if (!q) return;
    q->changed = 1; 
    q->latest.tv_sec = latest;
+}
+
+void
+xaccQuerySetEarliestTS (Query *q, Timespec earliest)
+{
+  if (!q) return;
+  q->changed = 1;
+  q->earliest = earliest;
+}
+
+void
+xaccQuerySetLatestTS (Query *q, Timespec latest)
+{
+  if (!q) return;
+  q->changed = 1;
+  q->latest = latest;
 }
 
 time_t

@@ -55,6 +55,29 @@ static AdjBWindow **adjBList = NULL;
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
+/** Prototypes ******************************************************/
+static void gnc_adjb_set_window_name(AdjBWindow *adjBData);
+
+
+/********************************************************************\
+ * adjBRefresh                                                      *
+ *   refreshes the adjust balance window                            *
+ *                                                                  *
+ * Args:   account - the account of the window to refresh           *
+ * Return: none                                                     *
+\********************************************************************/
+void
+adjBRefresh(Account *account)
+{
+  AdjBWindow *adjBData; 
+
+  FIND_IN_LIST (AdjBWindow, adjBList, account, account, adjBData);
+  if (adjBData == NULL)
+    return;
+
+  gnc_adjb_set_window_name(adjBData);
+}
+
 
 static int
 gnc_ui_adjBWindow_close_cb(GnomeDialog *dialog, gpointer user_data)
@@ -150,6 +173,33 @@ gnc_adjust_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 }
 
 
+static char *
+gnc_adjb_make_window_name(Account *account)
+{
+  char *fullname;
+  char *title;
+
+  fullname = xaccAccountGetFullName(account, gnc_get_account_separator());
+  title = g_strconcat(fullname, " - ", ADJ_BALN_STR, NULL);
+
+  free(fullname);
+
+  return title;
+}
+
+static void
+gnc_adjb_set_window_name(AdjBWindow *adjBData)
+{
+  char *title;
+
+  title = gnc_adjb_make_window_name(adjBData->account);
+
+  gtk_window_set_title(GTK_WINDOW(adjBData->dialog), title);
+
+  g_free(title);
+}
+
+
 /********************************************************************\
  * adjBWindow                                                       *
  *   opens up the window to adjust the balance                      *
@@ -162,19 +212,17 @@ adjBWindow(Account *account)
 {
   GtkWidget *dialog, *frame, *vbox;
   AdjBWindow *adjBData;
-  gchar *title, *name;
+  gchar *title;
    
   FETCH_FROM_LIST(AdjBWindow, adjBList, account, account, adjBData);
 
-  name = xaccAccountGetFullName(account, gnc_get_account_separator());
-  title = g_strconcat(name, " - ", ADJ_BALN_STR, NULL);
+  title = gnc_adjb_make_window_name(account);
 
   dialog = gnome_dialog_new(title,
 			    GNOME_STOCK_BUTTON_OK,
 			    GNOME_STOCK_BUTTON_CANCEL,
 			    NULL);
 
-  free(name);
   g_free(title);
 
   adjBData->account = account;

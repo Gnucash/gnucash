@@ -82,6 +82,12 @@
 (define (html-cell-header-right item)
   (html-generic-cell #t #t #f item))
 
+(define (html-para text)
+  (string-append "<P>" text "</P>\n"))
+
+(define (html-cell-attributes value attributes)
+  (string-append "<TD " attributes ">" value "</TD>"))
+
 (define (html-start-document)
   (list 
    "<HTML>"

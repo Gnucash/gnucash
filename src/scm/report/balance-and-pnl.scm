@@ -5,12 +5,97 @@
 (gnc:support "report/balance-and-pnl.scm")
 (gnc:depend "text-export.scm")
 (gnc:depend "report-utilities.scm")
+(gnc:depend "options.scm")
 
+(define (gnc:account-get-balance-until account to-tp)
+  (let ((query (gnc:malloc-query))
+	(balance-temp 0))
+    (gnc:query-add-account query account)
+    (gnc:query-show-earliest query)
+    (gnc:query-set-latest query to-tp)
+    (set! balance-temp
+          (gnc:split-list-balance (gnc:query-get-splits query)))
+    (gnc:free-query query)
+    balance-temp))
+
+(define (gnc:account-get-balance-interval account from-tp to-tp)
+  (let ((query (gnc:malloc-query))
+	(balance-temp 0))
+    (gnc:query-add-account query account)
+    (gnc:query-set-earliest query from-tp)
+    (gnc:query-set-latest query to-tp)
+    (set! balance-temp 
+          (gnc:split-list-balance (gnc:query-get-splits query)))
+    (gnc:free-query query)
+    balance-temp))
+
+(define (gnc:group-get-balance-until group to-tp)
+  (sum (map (lambda (x) (gnc:account-get-balance-until x to-tp)) group)))
+
+(define (gnc:group-get-balance-interval group from-tp to-tp)
+  (sum (map (lambda (x)
+              (gnc:account-get-balance-until x from-tp to-tp)) group)))
+
+;; Just a private scope.
 (let 
     ((l0-collector (make-stats-collector))
      (l1-collector (make-stats-collector))
      (l2-collector (make-stats-collector)))
-  ;; Just a private scope.
+  
+  (define string-db (gnc:make-string-database))
+
+  (define (balsht-options-generator)
+    (define gnc:*balsht-report-options* (gnc:new-options))
+    (define (gnc:register-balsht-option new-option)
+      (gnc:register-option gnc:*balsht-report-options* new-option)) 
+
+    (gnc:register-balsht-option
+     (gnc:make-date-option
+      "Report Options" "To"
+      "a" "Calculate balance sheet up to this date"
+      (lambda ()
+        (let ((bdtime (localtime (current-time))))
+          (set-tm:sec bdtime 59)
+          (set-tm:min bdtime 59)
+          (set-tm:hour bdtime 23)
+          (let ((time (car (mktime bdtime))))
+            (cons time 0))))
+      #f))
+    gnc:*balsht-report-options*)
+
+  (define  (pnl-options-generator)
+    (define gnc:*pnl-report-options* (gnc:new-options))
+    (define (gnc:register-pnl-option new-option)
+      (gnc:register-option gnc:*pnl-report-options* new-option))
+
+    (gnc:register-pnl-option
+     (gnc:make-date-option
+      "Report Options" "From"
+      "a" "Start of reporting period"
+      (lambda ()
+        (let ((bdtime (localtime (current-time))))
+          (set-tm:sec bdtime 0)
+          (set-tm:min bdtime 0)
+          (set-tm:hour bdtime 0)
+          (set-tm:mday bdtime 1)
+          (set-tm:mon bdtime 0)
+          (let ((time (car (mktime bdtime))))
+            (cons time 0))))
+      #f)) 
+
+    (gnc:register-pnl-option
+     (gnc:make-date-option
+      "Report Options" "To"
+      "b" "End of reporting period"
+      (lambda ()
+        (let ((bdtime (localtime (current-time))))
+          (set-tm:sec bdtime 59)
+          (set-tm:min bdtime 59)
+          (set-tm:hour bdtime 23)
+          (let ((time (car (mktime bdtime))))
+            (cons time 0))))
+      #f))
+    gnc:*pnl-report-options*)
 
   (define (render-level-2-account level-2-account l2-value)
     (let ((account-name (gnc:account-get-name level-2-account))
@@ -18,18 +103,22 @@
                       (gnc:account-get-type level-2-account))))
       (html-table-row
        (list
-	account-name type-name l2-value))))
+	account-name type-name (gnc:amount->formatted-string l2-value #f)))))
 
   (define (render-level-1-account account l1-value l2-value)
     (let ((name (gnc:account-get-name account))
           (type (gnc:account-get-type-string (gnc:account-get-type account))))
       (html-table-row 
-       (list name type l2-value l1-value
+       (list name type
+             (gnc:amount->formatted-string l2-value #f)
+             (gnc:amount->formatted-string l1-value #f)
 	     "&nbsp;" "&nbsp;"))))
 
   (define (render-total l0-value)
-    (html-table-row (list "&nbsp;" "&nbsp;" "&nbsp;" (html-strong "Net")
-			  "&nbsp;" l0-value)))
+    (html-table-row (list "&nbsp;" "&nbsp;" "&nbsp;"
+                          (html-strong (string-db 'lookup 'net))
+                          "&nbsp;"
+                          (gnc:amount->formatted-string l0-value #f))))
 
   (define (is-it-on-balance-sheet? type balance?)
     (eq? 
@@ -38,6 +127,7 @@
 
   (define (generate-balance-sheet-or-pnl report-name
 					 report-description
+					 options
 					 balance-sheet?)
     ;; currency symbol that is printed is a dollar sign, for now
     ;; currency amounts get printed with two decimal places
@@ -48,36 +138,55 @@
     ;; just translated it directly from the old ePerl with a few
     ;; schemifications.
 
-  (define (handle-level-1-account account)
-    (let ((type (gnc:account-type->symbol (gnc:account-get-type account))))
-      (if (is-it-on-balance-sheet? type balance-sheet?)
-	  ;; Ignore
-	  '()
-	  (let 
-	      ((childrens-output (gnc:group-map-accounts
-				  handle-level-2-account
-				  (gnc:account-get-children account)))
+    (let* ((from-option (gnc:lookup-option options "Report Options" "From"))
+           (from-value (if from-option (gnc:option-value from-option) #f))
+           (to-value (gnc:option-value
+                      (gnc:lookup-option options "Report Options" "To"))))
 
-	       (account-balance (gnc:account-get-balance account)))
-	    
-	    (if (not balance-sheet?)
-		(set! account-balance (- account-balance)))
-	    (l2-collector 'add account-balance)
-	    (l1-collector 'add account-balance)
-	    (l0-collector 'add (l1-collector 'total #f))
-	    (let ((level-1-output 
-		   (render-level-1-account account
-					   (l1-collector 'total #f)
-					   (l2-collector 'total #f))))
-	      (l1-collector 'reset #f)
-	      (l2-collector 'reset #f)
-	      (list childrens-output level-1-output))))))
+      (define (handle-level-1-account account options)
+        (let ((type (gnc:account-type->symbol (gnc:account-get-type account))))
+          (if (is-it-on-balance-sheet? type balance-sheet?)
+              ;; Ignore
+              '()
+              (let
+                  ((childrens-output (gnc:group-map-accounts
+                                      (lambda (x)
+                                        (handle-level-2-account x options))
+                                      (gnc:account-get-children account)))
 
-    (define (handle-level-2-account account)
-      (let 
+                   (account-balance (if balance-sheet?
+                                        (gnc:account-get-balance-until
+                                         account
+                                         to-value)
+                                        (gnc:account-get-balance-interval
+                                         account
+                                         from-value
+                                         to-value))))
+
+                (if (not balance-sheet?)
+                    (set! account-balance (- account-balance)))
+                (l2-collector 'add account-balance)
+                (l1-collector 'add account-balance)
+                (l0-collector 'add (l1-collector 'total #f))
+                (let ((level-1-output
+                       (render-level-1-account account
+                                               (l1-collector 'total #f)
+                                               (l2-collector 'total #f))))
+                  (l1-collector 'reset #f)
+                  (l2-collector 'reset #f)
+                  (list childrens-output level-1-output))))))
+
+    (define (handle-level-2-account account options)
+      (let
 	  ((type (gnc:account-type->symbol (gnc:account-get-type account)))
 	   (balance (make-stats-collector))
-	   (rawbal (gnc:account-get-balance account)))
+	   (rawbal
+	    (if balance-sheet?
+		(gnc:account-get-balance-until account to-value)
+		(gnc:account-get-balance-interval 
+		 account 
+		 from-value
+		 to-value))))
 	(balance 'add 
 		 (if balance-sheet? 
 		     rawbal
@@ -91,20 +200,26 @@
 		  (balance 'add 
 			   ((if balance-sheet? + -) 
 			    0
-			    (gnc:group-get-balance grandchildren))))
-	      (l2-collector 'add (balance 'get #f))
-	      (l1-collector 'add (l2-collector 'get #f))
-	      (let 
-		  ((result (render-level-2-account 
-			    account (l2-collector 'get #f))))
+			    (if balance-sheet? 
+				(gnc:group-get-balance-until grandchildren 
+							     to-value)
+				(gnc:group-get-balance-interval grandchildren
+								from-value
+								to-value)))))
+	      (l2-collector 'add (balance 'total #f))
+	      (l1-collector 'add (l2-collector 'total #f))
+	      (let
+		  ((result (render-level-2-account
+			    account (l2-collector 'total #f))))
 		(l2-collector 'reset #f)
 		result)))))
+
     (let
 	((current-group (gnc:get-current-group))
 	 (output '()))
 
-	;;; Now, the main body
-	;;; Reset all the balance collectors
+      ;; Now, the main body
+      ;; Reset all the balance collectors
       (l0-collector 'reset #f)
       (l1-collector 'reset #f)
       (l2-collector 'reset #f)
@@ -112,55 +227,66 @@
 	  (set! output
 		(list
 		 (gnc:group-map-accounts
-		  handle-level-1-account 
+		  (lambda (x) (handle-level-1-account x options))
 		  current-group)
 		 (render-total  (l0-collector 'total #f)))))
 
       (list
        "<html>"
        "<head>"
-       "<title>" (gnc:_ report-name) "</title>"
+       "<title>" report-name "</title>"
        "</head>"
 
        "<body bgcolor=#ccccff>"
-       (gnc:_ report-description)
+       report-description
        "<p>"
 
        "<table cellpadding=1>"
-       "<caption><b>" (gnc:_ report-name) "</b></caption>"
-       "<tr><th>"(gnc:_ "Account Name")"<th align=center>" (gnc:_ "Type")
-       "<th> <th align=center>"(gnc:_ "Balance")
+       "<caption><b>" report-name "</b></caption>"
+       "<tr><th>" (string-db 'lookup 'account-name)
+       "<th align=center>" (string-db 'lookup 'type)
+       "<th> <th align=center>" (string-db 'lookup 'balance)
 
        output
 
        "</table>"
        "</body>"
-       "</html>")))
+       "</html>"))))
 
+  (string-db 'store 'net "Net")
+  (string-db 'store 'type "Type")
+  (string-db 'store 'account-name "Account Name")
+  (string-db 'store 'balance "Balance")
+  (string-db 'store 'bal-title "Balance Sheet")
+  (string-db 'store 'bal-desc "This page shows your net worth.")
+  (string-db 'store 'pnl-title "Profit and Loss")
+  (string-db 'store 'pnl-desc "This page shows your profits and losses.")
 
   (gnc:define-report
-     ;; version
-     1
-     ;; Menu name
-     "Balance sheet"
-     ;; Options Generator (none currently)
-     #f
-     ;; Code to generate the report   
-     (lambda (options)
-       (generate-balance-sheet-or-pnl "Balance Sheet"
-				      "This page shows your net worth."
-				      #t)))
+   ;; version
+   1
+   ;; Menu name
+   "Balance sheet"
+   ;; Options Generator 
+   balsht-options-generator
+   ;; Code to generate the report
+   (lambda (options)
+     (generate-balance-sheet-or-pnl (string-db 'lookup 'bal-title)
+                                    (string-db 'lookup 'bal-desc)
+                                    options
+                                    #t)))
 
-    (gnc:define-report
-     ;; version
-     1
-     ;; Menu name
-     "Profit and Loss"
-     ;; Options (none currently)
-     #f
-     ;; Code to generate the report   
-     (lambda (options)
-       (generate-balance-sheet-or-pnl 
-	"Profit and Loss"
-	"This page shows your profits and losses."
-	#f))))
+  (gnc:define-report
+   ;; version
+   1
+   ;; Menu name
+   "Profit and Loss"
+   ;; Options
+   pnl-options-generator
+   ;; Code to generate the report
+   (lambda (options)
+     (generate-balance-sheet-or-pnl 
+      (string-db 'lookup 'pnl-title)
+      (string-db 'lookup 'pnl-desc)
+      options
+      #f))))

@@ -196,9 +196,9 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   QIFImportWindow * wind = 
     gtk_object_get_data(GTK_OBJECT(dialog), "qif_window_struct");
   
-  char       * new_file_name;
+  char * new_file_name;
 
-  new_file_name = (char *)fileBox("Select QIF File", "*.qif");
+  new_file_name = fileBox(_("Select QIF File"), "*.qif");
 
   if(new_file_name) {
 
@@ -207,7 +207,7 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
       gtk_entry_set_text(GTK_ENTRY(wind->filename_entry),
                          new_file_name);
     }
-    
+
     /* the account should be auto-determined by default 
      * if the "opening balance" trick doesn't work "auto" will
      * use the file name as a guess */
@@ -309,7 +309,7 @@ gnc_ui_qif_import_load_file_cb         (GtkButton       *button,
       scm_currency = gh_str02scm(currency);
       scm_radix = gh_symbol2scm(radix_symbols[radix_format]);
       scm_date = gh_symbol2scm(date_symbols[date_format]);
-      
+
       if(gtk_toggle_button_get_active
          (GTK_TOGGLE_BUTTON(wind->acct_auto_button))) {
         scm_qif_account = gh_symbol2scm("unknown");
@@ -317,14 +317,14 @@ gnc_ui_qif_import_load_file_cb         (GtkButton       *button,
       else {
         scm_qif_account = gh_str02scm(qif_account);
       }
-      
+
       imported_files = wind->imported_files;
 
       if(gh_call2(qif_file_loaded, scm_filename, wind->imported_files)
          == SCM_BOOL_T) {
         if(gnc_verify_dialog_parented
            (GTK_WINDOW(wind->dialog),
-            _("QIF File already loaded.  Reload with current settings?"), 
+            _("QIF File already loaded. Reload with current settings?"), 
             TRUE)) {
           imported_files = 
             gh_call2(unload_qif_file, scm_filename, wind->imported_files);
@@ -333,7 +333,7 @@ gnc_ui_qif_import_load_file_cb         (GtkButton       *button,
           return;
         }
       }
-      
+
       /* turn on the busy cursor */
       gnc_set_busy_cursor(NULL);
 
@@ -892,5 +892,3 @@ update_categories_page(QIFImportWindow * wind) {
   
   gtk_clist_thaw(GTK_CLIST(wind->cat_list));
 }
-
-

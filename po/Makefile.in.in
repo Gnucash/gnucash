@@ -83,18 +83,16 @@ INSTOBJEXT = @INSTOBJEXT@
 
 all: $(CATALOGS)
 
-$(PACKAGE).pot: pseudo-source.c
-	$(XGETTEXT) --default-domain=$(PACKAGE) \
-	  --add-comments --keyword=_ --keyword=N_ $<
-	if cmp -s $(PACKAGE).po $(srcdir)/$(PACKAGE).pot; then \
-	  rm -f $(PACKAGE).po; \
-	else \
-	  rm -f $(srcdir)/$(PACKAGE).pot \
-	    && mv $(PACKAGE).po $(srcdir)/$(PACKAGE).pot; \
-	fi
+$(PACKAGE).pot: pseudo-source.c $(POTFILES)
+	$(XGETTEXT) --default-domain=$(PACKAGE) --directory=$(top_srcdir) \
+	  --add-comments --keyword=_ --keyword=N_ \
+	  --files-from=$(srcdir)/POTFILES.in \
+	&& test ! -f $(PACKAGE).po \
+	   || ( rm -f $(srcdir)/$(PACKAGE).pot \
+	        && mv $(PACKAGE).po $(srcdir)/$(PACKAGE).pot )
 
-pseudo-source.c: $(POTFILES)
-	perl -s extract-macros.perl $(POTFILES) > $@
+pseudo-source.c: $(top_srcdir)/include/messages_i18n.h
+	perl -s extract-macros.perl $< > $@
 
 install: install-exec install-data
 install-exec:

@@ -26,23 +26,8 @@
 #ifndef __WINDOW_RECONCILE_H__
 #define __WINDOW_RECONCILE_H__
 
-
-/** GLOBALS *********************************************************/
-
-/** STRUCTS *********************************************************/
-typedef struct _RecnWindow RecnWindow;
-
-/** PROTOTYPES ******************************************************/
-void        recnRefresh(Account *account);
-RecnWindow *recnWindow(GtkWidget *parent, Account *account);
+#include "RecnWindow.h"
 
 void gnc_ui_reconcile_window_raise(RecnWindow * recnData);
-
-/*
- * The xaccDestroyRecnWindow() subroutine can be called from 
- * anywhere to shut down the Register window.  Used primarily when
- * destroying the underlying account.
- */
-void       xaccDestroyRecnWindow(Account *);
 
 #endif

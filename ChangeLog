@@ -1,3 +1,18 @@
+2000-03-18  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/Query.c (xaccInitQuery): make the standard engine
+ 	order the default sort order.
+
+	* src/gnome/window-adjust.c (adjBRefresh): update the title
+
+	* src/Refresh.c (gnc_account_ui_refresh): refresh the edit account
+	and adjust balance windows too.
+
+	* src/gnome/dialog-edit.c: add gui for changed the account type.
+
+	* src/engine/Account.c (xaccAccountSetType): allow account types
+ 	to be changed.
+
 2000-03-15  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/scm/extensions.scm (gnc:new-menu-namer): register and

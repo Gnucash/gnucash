@@ -1,5 +1,5 @@
 /********************************************************************\
- * AdjBWindow.h -- the adjust balance window                        *
+ * RecnWindow.h -- the reconcile window                             *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998-2000 Linas Vepstas                            *
  *                                                                  *
@@ -23,29 +23,25 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __XACC_ADJBWINDOW_H__
-#define __XACC_ADJBWINDOW_H__
+#ifndef __RECONCILE_H__
+#define __RECONCILE_H__
 
-#include "config.h"
-
+#include "top-level.h"
 #include "Account.h"
 
+
+/** STRUCTS *********************************************************/
+typedef struct _RecnWindow RecnWindow;
+
+/** PROTOTYPES ******************************************************/
+void        recnRefresh( Account * );
+RecnWindow *recnWindow( gncUIWidget parent, Account *account );
+
 /*
- * The adjBWindow() subroutine creates the "adjust-balance" dialog
- * for the indicated account, if that dialog is not already mapped.
- * If the dialog already esits, it returns with a no-op.
- *
- * The adjBRefresh() subroutine refreshes the associated window.
- *
- * The xaccDestroyAdjBWindow() subroutine can be called from 
+ * The xaccDestroyRecnWindow() subroutine can be called from 
  * anywhere to shut down the Register window.  Used primarily when
  * destroying the underlying account.
  */
+void       xaccDestroyRecnWindow (Account *);
 
-typedef struct _AdjBWindow AdjBWindow;
-
-AdjBWindow *adjBWindow(Account *account);
-void       adjBRefresh(Account *account);
-void       xaccDestroyAdjBWindow (Account *);
-
-#endif /* __XACC_ADJBWINDOW_H__ */
+#endif

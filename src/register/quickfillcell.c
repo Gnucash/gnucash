@@ -1,14 +1,3 @@
-/*
- * FILE:
- * quickfillcell.c
- *
- * FUNCTION:
- * Implements a text cell with automatic typed-phrase
- * completion.
- *
- * HISTORY:
- * Copyright (c) 1998  Linas Vepstas
- */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,6 +13,18 @@
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
+
+/*
+ * FILE:
+ * quickfillcell.c
+ *
+ * FUNCTION:
+ * Implements a text cell with automatic typed-phrase
+ * completion.
+ *
+ * HISTORY:
+ * Copyright (c) 1998-2000 Linas Vepstas
+ */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -80,7 +81,6 @@ quick_modify (BasicCell *_cell,
               int *start_selection,
               int *end_selection)
 {
-#ifndef MOTIF
    QuickFillCell *cell = (QuickFillCell *) _cell;
    const char *retval;
    QuickFill *match;
@@ -115,106 +115,6 @@ quick_modify (BasicCell *_cell,
 
    SET (&(cell->cell), retval);
    return retval;
-#endif
-
-#ifdef MOTIF
-   /* The modifications to fix up completion cursor positioning and
-    *  stale match handling below are somewhat tortured.  I suspect we
-    *  can do better, but this works for now... */
-
-   QuickFillCell *cell = (QuickFillCell *) _cell;
-   QuickFill *initial_match_point = cell->qf;
-   const char * retval = newval;
-
-   /* if user typed the very first letter into this
-    * cell, then make sure that the quick-fill is set to 
-    * the root.  Alternately, if user erased all of the 
-    * text in the cell, and has just started typing,
-    * then make sure that the quick-fill root is also reset */
-   if (newval) {
-      if (change && (0x0 != newval[0]) && (0x0 == newval[1])) {
-         /* the first char is being inserted */
-         cell->qf = cell->qfRoot;
-      } else if('\0' == newval[0]) {
-         /* the last char is being deleted */
-         cell->qf = cell->qfRoot;
-      }
-   }
-
-   /* if change is null, then user is deleting text;
-    * otherwise, they are inserting text. */
-   if (change) {
-      int i;
-      char c;
-      int previous_match_len = 0;
-      
-      /* search for best-matching quick-fill string */
-      i=0;
-      c = change[i];
-      while (c && cell->qf) {
-         cell->qf = xaccGetQuickFill (cell->qf, c);
-         i++;
-         c = change[i];
-      }
-
-      /* Figure out how long the previous match was.  This allows us
-       * to position the cursor incrementally, or DTRT when the user
-       * diverges from a quickfill match. */
-      {
-        QuickFill *qcursor = cell->qfRoot;
-        while(qcursor && (qcursor != initial_match_point)) {
-          qcursor = xaccGetQuickFill (qcursor, oldval[previous_match_len++]);
-        }
-      }
-
-      if (cell->qf) {
-        /* we have a match, return it and reposition the cursor */
-        *cursor_position = previous_match_len + strlen(change);
-        retval = strdup (cell->qf->text);
-      } else {
-        /* do some research to figure out if the failure is because
-         * the current change just diverged from a match, in which
-         * case we should return everything that matched before this
-         * insertion plus the new change, or because the oldval hasn't
-         * matched for a while (i.e. we're no longer quickfilling), in
-         * which case we should just return the suggested newval. */
-
-        int oldval_match_len = 0;
-
-        /* find out how much of oldval is a quickfill entry. */
-        {
-          QuickFill *qcursor = cell->qfRoot;
-          while(qcursor) {
-            qcursor = xaccGetQuickFill (qcursor, oldval[oldval_match_len]);
-            oldval_match_len++;
-          }
-          oldval_match_len--;
-        }
-
-        if(oldval_match_len == strlen(oldval)) {
-          /* If oldval was quick-fill match in its entirety, then the
-           * current "change" is the first divergence.  Accordingly,
-           * we need to remove any "post-divergence", stale quickfill
-           * bits that reside after the cursor and then append the new
-           * change text. */
-
-          char *unmatched =
-            (char *) malloc(previous_match_len + strlen(change) + 1);
-          
-          strncpy(unmatched, oldval, previous_match_len);
-          unmatched[previous_match_len] = '\0';
-          strcat(unmatched, change);          
-          *cursor_position = strlen(unmatched);
-
-          retval = unmatched;
-
-        }
-      }
-   }
-   
-   SET (&(cell->cell), retval);
-   return retval;
-#endif
 }
 
 /* ================================================ */

@@ -9,7 +9,6 @@
 
 (gnc:support "qif-to-gnc.scm")
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  find-or-make-acct:
 ;;  given a colon-separated account path, return an Account* to
@@ -231,9 +230,7 @@
     ;; now take the new account tree and merge it in with the 
     ;; existing gnucash account tree. 
     (gnc:merge-accounts account-group)
-    (gnc:refresh-main-window)
-    ))
-
+    (gnc:refresh-main-window)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; qif-import:qif-xtn-to-gnc-xtn
@@ -260,21 +257,13 @@
 
     ;; find the GNC account for the near end of the transaction 
     ;; (all splits have the same near end)
-    (if (qif-xtn:bank-xtn? qif-xtn)
-        (begin 
-          (set! near-acct-info
-                (hash-ref qif-acct-map 
-                          (qif-file:account qif-file)))
-          (set! near-acct-name 
-                (list-ref near-acct-info 1))
-          (set! near-acct (hash-ref gnc-acct-hash near-acct-name)))
-        (begin 
-          (set! near-acct-info 
-                (hash-ref qif-acct-map 
-                          (qif-xtn:security-name qif-xtn)))
-          (set! near-acct-name 
-                (list-ref near-acct-info 1))
-          (set! near-acct (hash-ref gnc-acct-hash near-acct-name))))
+    (set! near-acct-info
+	  (hash-ref qif-acct-map 
+		    (if (qif-xtn:bank-xtn? qif-xtn)
+			(qif-file:account qif-file)
+			(qif-xtn:security-name qif-xtn))))
+    (set! near-acct-name (list-ref near-acct-info 1))
+    (set! near-acct (hash-ref gnc-acct-hash near-acct-name))
     
     ;; iterate over QIF splits 
     (for-each 
@@ -284,22 +273,28 @@
              (far-acct-info #f)
              (far-acct-name #f)
              (far-acct-type #f)
-             (far-acct #f))
+             (far-acct #f)
+	     (split-amt (qif-split:amount qif-split))
+	     (currency (qif-file:currency qif-file))
+	     (memo (qif-split:memo qif-split)))
          
          ;; fill the splits in (near first).  This handles files in
          ;; multiple currencies by pulling the currency value from the
          ;; file import.
-         (gnc:split-set-base-value gnc-near-split 
-                                   (qif-split:amount qif-split)
-                                   (qif-file:currency qif-file))
-         (gnc:split-set-base-value gnc-far-split 
-                                   (- (qif-split:amount qif-split))
-                                   (qif-file:currency qif-file))
+	 (if split-amt
+	     (begin
+	       (gnc:split-set-base-value gnc-near-split
+					 split-amt
+					 currency)
+	       (gnc:split-set-base-value gnc-far-split 
+					 (- split-amt)
+					 currency))
+	     (error "No amount in split!" qif-split "txn:" qif-xtn))
 
-         (if (qif-split:memo qif-split)
+         (if memo
              (begin 
-               (gnc:split-set-memo gnc-near-split (qif-split:memo qif-split))
-               (gnc:split-set-memo gnc-far-split (qif-split:memo qif-split))))
+               (gnc:split-set-memo gnc-near-split memo)
+               (gnc:split-set-memo gnc-far-split memo)))
          
          ;; my guess is that you can't have Quicken splits 
          ;; on stock transactions.  This will break if you can. 
@@ -309,25 +304,22 @@
                    (begin 
                      (display "qif-import:qif-xtn-to-gnc-xtn : ")
                      (display "splits in stock transaction!") (newline)))
-               (gnc:split-set-share-price gnc-near-split 
-                                          (qif-xtn:share-price qif-xtn))
-               (gnc:split-set-share-price gnc-far-split 
-                                          (qif-xtn:share-price qif-xtn)))
-             (begin 
+	       (let ((price          (qif-xtn:share-price qif-xtn)))
+               (gnc:split-set-share-price gnc-near-split price)
+               (gnc:split-set-share-price gnc-far-split price)))
+	     (begin 
                (gnc:split-set-share-price gnc-near-split 1.0)
                (gnc:split-set-share-price gnc-far-split 1.0)))
          
          (if (qif-xtn:num-shares qif-xtn)
-             (begin 
+             (let ((numshares              (qif-xtn:num-shares qif-xtn)))
                (if (> (length splits) 1) 
                    (begin 
                      (display "qif-import:qif-xtn-to-gnc-xtn : ")
                      (display "splits in stock transaction!") (newline)))
                                  
-               (gnc:split-set-share-amount gnc-near-split 
-                                           (qif-xtn:num-shares qif-xtn))
-               (gnc:split-set-share-amount gnc-far-split 
-                                           (- (qif-xtn:num-shares qif-xtn)))))
+               (gnc:split-set-share-amount gnc-near-split numshares)
+	       (gnc:split-set-share-amount gnc-far-split (- numshares))))
          
          ;; find the GNC account on the far end of the split 
          (cond 
@@ -426,7 +418,7 @@
                        (car splits) (car xtns) 
                        near-acct-name date amount memo)
                       (begin
-;;                        (display "found ")(write (car splits))(newline)
+			;;; (display "found ")(write (car splits))(newline)
                         (qif-split:set-mark! (car splits) #t)
                         (set! done #t)
                         (let ((all-marked #t))
@@ -474,6 +466,3 @@
    ;; is the memo the same? (is this true?)
    ;; ignore it for now
    ))
-
-
-

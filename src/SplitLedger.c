@@ -410,7 +410,6 @@ LedgerTraverse  (Table *table,
                  int *p_new_phys_col, 
                  void * client_data)
 {
-#ifdef GNOME
   SplitRegister *reg = client_data;
   SRInfo *info = xaccSRGetInfo(reg);
   Transaction *trans, *new_trans;
@@ -465,7 +464,6 @@ LedgerTraverse  (Table *table,
     default:
       break;
   }
-#endif
 }
 
 /* ======================================================== */
@@ -647,7 +645,6 @@ xaccSRGetSplitRowCol (SplitRegister *reg, Split *split,
 Split *
 xaccSRDuplicateCurrent (SplitRegister *reg)
 {
-#ifdef GNOME
   SRInfo *info = xaccSRGetInfo(reg);
   CursorType cursor_type;
   unsigned int changed;
@@ -779,7 +776,6 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   gnc_refresh_main_window();
 
   return return_split;
-#endif
 }
 
 /* ======================================================== */
@@ -1238,7 +1234,6 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
         if ((currency != NULL) || (security != NULL))
           xaccAccountInsertSplit (new_acc, split);
         else {
-#ifdef GNOME
           char *message = NULL;
 
           asprintf(&message, REG_CURR_MSG, xaccAccountGetName(new_acc));
@@ -1246,7 +1241,6 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
 
           gnc_warning_dialog_parented(xaccSRGetParent(reg), message);
           free(message);
-#endif
         }
 
         /* make sure any open windows of the old account get redrawn */
@@ -1314,7 +1308,6 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
            if ((currency != NULL) || (security != NULL))
              xaccAccountInsertSplit (new_acc, other_split);
            else {
-#ifdef GNOME
              char *message = NULL;
 
              asprintf(&message, REG_CURR_MSG, xaccAccountGetName(new_acc));
@@ -1322,7 +1315,6 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
 
              gnc_warning_dialog_parented(xaccSRGetParent(reg), message);
              free(message);
-#endif
            }
 
            /* make sure any open windows of the old account get redrawn */

@@ -62,4 +62,3 @@
             (loop first-char))
           (set! parts (cons (substring str 0 last-char) parts))))    
     parts))
-

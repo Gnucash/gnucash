@@ -226,7 +226,7 @@
    ((char=? ch #\7) 7)
    ((char=? ch #\8) 8)
    ((char=? ch #\9) 9)
-   (else (error "Non-integer character" ch i))))
+   (else (error "Non-integer character" ch i))))	     
 
 ;; non-public procedure
 (define (normalize-year year nowyear)
@@ -474,3 +474,4 @@
 				(erriso "day" index string)
 				(encode-julian-day-number 
 				 day month year))))))))))))))))
+

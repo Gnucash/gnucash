@@ -3,6 +3,7 @@
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998, 1999 Linas Vepstas                     *
  * Copyright (C) 1999 Jeremy Collins                                *
+ * Copyright (C) 2000 Dave Peticolas <petcola@cs.ucdavis.edu>       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,10 +24,6 @@
  *  Address: 609 8th Street                                         *
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
-
-/* TODO:
- * -- tooltips for the widgets in the window
- */
 
 #include "top-level.h"
 
@@ -64,6 +61,7 @@ struct _accwindow
 
   Account *parentAccount;
   Account *newAccount;
+
   gint	  type;
 };
 
@@ -522,8 +520,6 @@ accWindow (AccountGroup *this_is_not_used)
       gnc_ui_free_field_strings(&strings);
       continue;
     }
-
-    /* fixme check for unique code, if entered */
 
     gnc_ui_accWindow_create_account(accData->newAccount,
 				    accData->parentAccount,

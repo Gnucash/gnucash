@@ -1,6 +1,7 @@
 /********************************************************************\
  * RegWindow.h -- the register window for xacc (X-Accountant)       *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1998-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -35,7 +36,6 @@
 typedef struct _RegWindow RegWindow;
 
 /** PROTOTYPES ******************************************************/
-void       accRefresh (Account *);
 RegWindow *regWindowSimple(Account *account);
 RegWindow *regWindowAccGroup(Account *account_group);
 

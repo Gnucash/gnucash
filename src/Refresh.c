@@ -1,6 +1,6 @@
 /*******************************************************************\
  * Refresh.c -- utilities for window refresh (GnuCash)              *
- * Copyright (C) 1999 Linas Vepstas                                 *
+ * Copyright (C) 1999,2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -25,24 +25,13 @@
 #include "Refresh.h"
 #include "LedgerUtils.h"
 #include "MultiLedger.h"
-
-#ifdef KDE
-#if 0
-#include "qt/reconciledlg.h"
-#endif
-#endif
-
-#ifdef GNOME
-#include "window-reconcile.h"
-#endif
-
-#ifdef MOTIF
 #include "RecnWindow.h"
-#endif
+#include "AdjBWindow.h"
+#include "AccWindow.h"
 
 #include "util.h"
 
-   
+
 /* ------------------------------------------------------ */
 void
 gnc_account_ui_refresh(Account *account)
@@ -71,6 +60,8 @@ gnc_account_ui_refresh(Account *account)
 
    xaccAccountDisplayRefresh(account);
    recnRefresh(account);
+   adjBRefresh(account);
+   editAccountRefresh(account);
 }
 
 

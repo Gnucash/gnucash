@@ -931,22 +931,20 @@ xaccAccountSetType (Account *acc, int tip)
    if (!acc) return;
    CHECK (acc);
 
-   /* After an account type has been set, it cannot be changed */
-   if (-1 < acc->type) {
-      PERR ("xaccAccountSetType(): "
-            "the type of the account cannot be changed "
-            "after its been set! \n"
-           );
-      return;
-   }
-
    /* refuse invalid account types */
    if (NUM_ACCOUNT_TYPES <= tip) return;
+
+   /* Don't bother if it already is. */
+   if (acc->type == tip) return;
+
    acc->type = tip;
 
    /* initialize the auxilliary account info as well */
    if (acc->accInfo) xaccFreeAccInfo (acc->accInfo); 
    acc->accInfo = xaccMallocAccInfo (tip);
+
+   /* Changing the type can change the way the balances are computed. */
+   xaccAccountRecomputeBalance(acc);
 }
 
 void 
