@@ -440,7 +440,7 @@ string and 'directories' must be a list of strings."
    (gnc:make-menu-item 
     (_ "_Style Sheets...")
     (_ "Edit report style sheets.")
-    (list "_Edit" "_Preferences...")
+    (list gnc:window-name-main "Edit" "Preferences...")
     (lambda ()
       (gnc:style-sheet-dialog-open))))
 
@@ -449,7 +449,7 @@ string and 'directories' must be a list of strings."
    (gnc:make-menu-item 
     (_ "Welcome Extravaganza")
     (_ "Welcome-to-GnuCash screen")
-    (list gnc:menuname-reports gnc:menuname-utility "")
+    (list gnc:window-name-main gnc:menuname-reports gnc:menuname-utility "")
     (lambda ()
       (gnc:main-window-open-report (gnc:make-welcome-report) #f))))
 

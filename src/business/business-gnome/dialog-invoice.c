@@ -18,6 +18,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
 #include "gnc-date-edit.h"
+#include "gnc-menu-extensions.h"
 #include "gnucash-sheet.h"
 #include "window-help.h"
 #include "window-report.h"
@@ -1529,6 +1530,11 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
 
   /* Autoconnect all the signals */
   glade_xml_signal_autoconnect_full (xml, gnc_glade_autoconnect_full_func, iw);
+
+  /* libglade should do this next line */
+  GNOME_APP(iw->dialog)->menubar = glade_xml_get_widget (xml, "menubar1");
+  gnc_extensions_menu_setup(GNOME_APP(iw->dialog), WINDOW_NAME_INVOICE);
+
 
   /* Grab the widgets */
   iw->id_entry = glade_xml_get_widget (xml, "id_entry");

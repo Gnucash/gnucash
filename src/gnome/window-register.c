@@ -47,6 +47,7 @@
 #include "gnc-euro.h"
 #include "gnc-gui-query.h"
 #include "gnc-ledger-display.h"
+#include "gnc-menu-extensions.h"
 #include "gnc-pricedb.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
@@ -1460,6 +1461,7 @@ regWindowLedger (GNCLedgerDisplay *ledger)
   RegWindow *regData;
   GtkWidget *register_window;
   GtkWidget *table_frame;
+  GtkWidget *menubar;
   gboolean show_all;
   gboolean has_date;
   GladeXML *xml;
@@ -1480,9 +1482,12 @@ regWindowLedger (GNCLedgerDisplay *ledger)
 
   xml = gnc_glade_xml_new ("register.glade", "Check Register");
   register_window = glade_xml_get_widget (xml, "Check Register");
-
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
 				    regData);
+  /* libglade should do this next line */
+  GNOME_APP(register_window)->menubar = glade_xml_get_widget (xml, "menubar1");
+  gnc_extensions_menu_setup(GNOME_APP(register_window), WINDOW_NAME_REGISTER);
+
 
   regData->ledger = ledger;
   regData->window = register_window;

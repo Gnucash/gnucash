@@ -177,7 +177,7 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
   gnome_app_set_statusbar(app, statusbar);
 
   /* set up extensions menu and hints */
-  gnc_extensions_menu_setup (app);
+  gnc_extensions_menu_setup (app, WINDOW_NAME_MAIN);
 
   /* make sure the file history is shown */ 
   gnc_history_update_menu (GTK_WIDGET (app));

@@ -26,9 +26,14 @@
 #include <guile/gh.h>
 #include <gnome.h>
 
+#define WINDOW_NAME_MAIN     "Main"
+#define WINDOW_NAME_REGISTER "Register"
+#define WINDOW_NAME_INVOICE  "Invoice"
+#define WINDOW_NAME_ALL      "All"
+
 void gnc_add_c_extension(GnomeUIInfo *info, gchar *path);
 void gnc_add_scm_extension(SCM extension);
-void gnc_extensions_menu_setup(GnomeApp * app);
+void gnc_extensions_menu_setup(GnomeApp * app, gchar *prefix);
 void gnc_extensions_shutdown(void);
 
 #endif

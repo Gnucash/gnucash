@@ -56,7 +56,7 @@
               (set! menu-path
                     (append menu-path '(""))))
 
-          (set! menu-path (append (list gnc:menuname-reports) menu-path))
+          (set! menu-path (append (list gnc:window-name-main gnc:menuname-reports) menu-path))
 
           (if menu-name (set! name menu-name))
 
@@ -80,19 +80,21 @@
 (define (gnc:report-menu-setup)
   ;; since this menu gets added to every child window, we say it 
   ;; comes after the "_Actions" menu. 
-  (define menu (gnc:make-menu gnc:menuname-reports (list "_Actions")))
+  (define menu (gnc:make-menu gnc:menuname-reports
+			      (list gnc:window-name-main "Actions")))
   (define menu-namer (gnc:new-menu-namer))
   (define tax-menu (gnc:make-menu gnc:menuname-taxes
-                                  (list gnc:menuname-reports "")))
+                                  (list gnc:window-name-main
+					gnc:menuname-reports "")))
   (define income-expense-menu
     (gnc:make-menu gnc:menuname-income-expense
-                   (list gnc:menuname-reports "")))
+                   (list gnc:window-name-main gnc:menuname-reports "")))
   (define asset-liability-menu
     (gnc:make-menu gnc:menuname-asset-liability
-                   (list gnc:menuname-reports "")))
+                   (list gnc:window-name-main gnc:menuname-reports "")))
   (define utility-menu
     (gnc:make-menu gnc:menuname-utility
-                   (list gnc:menuname-reports "")))
+                   (list gnc:window-name-main gnc:menuname-reports "")))
 
   (gnc:add-extension menu)
 

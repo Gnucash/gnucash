@@ -33,6 +33,7 @@ typedef struct _ExtensionInfo ExtensionInfo;
 struct _ExtensionInfo
 {
   SCM extension;
+  gchar *window;
   gchar *path;
 
   GnomeUIInfo info[2];
@@ -128,22 +129,27 @@ gnc_extension_documentation(ExtensionInfo *ext_info)
 
 
 /* returns g_malloc'd path */
-static char *
-gnc_extension_path(SCM extension)
+static void
+gnc_extension_path(SCM extension, char **window, char **fullpath)
 {
   SCM path;
   gchar **strings;
-  gchar *fullpath;
   gint i;
 
   initialize_getters();
 
   path = gnc_guile_call1_to_list(getters.path, extension);
-  if (path == SCM_UNDEFINED)
-    return g_strdup("");
+  if (path == SCM_UNDEFINED) {
+    *window = g_strdup("");
+    *fullpath = g_strdup("");
+    return;
+  }
 
-  if (gh_null_p(path))
-    return g_strdup("");
+  if (gh_null_p(path)) {
+    *window = g_strdup("");
+    *fullpath = g_strdup("");
+    return;
+  }
 
   strings = g_new0(gchar *, gh_length(path) + 1);
 
@@ -165,20 +171,26 @@ gnc_extension_path(SCM extension)
 
       PERR("not a string");
 
-      return NULL;
+      *window = g_strdup("");
+      *fullpath = g_strdup("");
+      return;
     }
 
     i++;
   }
 
-  fullpath = g_strjoinv("/", strings);
+  if (i > 0) {
+    *window = g_strdup(strings[0]);
+    *fullpath = g_strjoinv("/", strings+1);
+  } else {
+    *window = g_strdup(WINDOW_NAME_MAIN);
+    *fullpath = g_strjoinv("/", strings);
+  }
 
   i = 0;
   while (strings[i] != NULL)
     free(strings[i++]);
   g_free(strings);
-
-  return fullpath;
 }
 
 
@@ -221,7 +233,7 @@ gnc_create_extension_info(SCM extension)
 
   ext_info = g_new0(ExtensionInfo, 1);
   ext_info->extension = extension;
-  ext_info->path = gnc_extension_path(extension);
+  gnc_extension_path(extension, &ext_info->window, &ext_info->path);
 
   ext_info->info[0].type = gnc_extension_type(ext_info);
 
@@ -310,9 +322,17 @@ void
 gnc_add_c_extension(GnomeUIInfo *info, gchar *path)
 {
   ExtensionInfo *ext_info;
+  char *separator;
 
   ext_info = g_new0(ExtensionInfo, 1);
-  ext_info->path = g_strdup(path);
+  separator = index(path, '/');
+  if (separator) {
+    ext_info->window = g_strndup(path, separator-path);
+    ext_info->path = g_strdup(separator+1);
+  } else {
+    ext_info->window = g_strdup(WINDOW_NAME_MAIN);
+    ext_info->path = g_strdup(path);
+  }
 
   ext_info->info[0] = *info;
   ext_info->info[0].label = g_strdup(info->label);
@@ -324,13 +344,16 @@ gnc_add_c_extension(GnomeUIInfo *info, gchar *path)
 }
 
 void
-gnc_extensions_menu_setup(GnomeApp * app)
+gnc_extensions_menu_setup(GnomeApp * app, gchar *window)
 {
   GSList        * l = NULL;
   ExtensionInfo * info;
-  
+
   for(l=extension_list; l; l=l->next) {
     info = l->data;
+    if ((strcmp(info->window, window) != 0) &&
+	(strcmp(info->window, WINDOW_NAME_ALL) != 0))
+      continue;
     gnome_app_insert_menus(app, info->path, info->info);
     gnome_app_install_menu_hints(app, info->info); 
   }

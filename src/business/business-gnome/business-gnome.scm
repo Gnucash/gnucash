@@ -12,6 +12,7 @@
 (use-modules (gnucash report business-reports))
 (use-modules (gnucash main))		;for gnc:debug
 
+(define main-window gnc:window-name-main)
 (define top-level "_Business")
 (define new-label "New")
 (define find-label "Find")
@@ -28,19 +29,19 @@
 
     (define customer-menu
       (gnc:make-menu (N_ cust)
-		     (list top-level "")))
+		     (list main-window top-level "")))
 
     (define new-customer-item
       (gnc:make-menu-item (N_ "New Customer")
 			  (N_ "New Customer")
-			  (list top-level cust "")
+			  (list main-window top-level cust "")
 			  (lambda ()
 			    (gnc:customer-new (gnc:get-current-book)))))
 
     (define find-customer-item
       (gnc:make-menu-item (N_ "Find Customer")
 			  (N_ "Find Customer")
-			  (list top-level cust "")
+			  (list main-window top-level cust "")
 			  (lambda ()
 			    (gnc:customer-search (gnc:owner-get-customer
 						last-cust)
@@ -49,7 +50,7 @@
     (define new-invoice-item
       (gnc:make-menu-item (N_ "New Invoice")
 			  (N_ "New Invoice")
-			  (list top-level cust "")
+			  (list main-window top-level cust "")
 			  (lambda ()
 			    (gnc:invoice-new last-cust
 					     (gnc:get-current-book)))))
@@ -57,7 +58,7 @@
     (define find-invoice-item
       (gnc:make-menu-item (N_ "Find Invoice")
 			  (N_ "Find Invoice")
-			  (list top-level cust "")
+			  (list main-window top-level cust "")
 			  (lambda ()
 			    (gnc:invoice-search #f last-cust
 					      (gnc:get-current-book)))))
@@ -65,7 +66,7 @@
     (define new-job-item
       (gnc:make-menu-item (N_ "New Job")
 			  (N_ "New Job")
-			  (list top-level cust "")
+			  (list main-window top-level cust "")
 			  (lambda ()
 			    (gnc:job-new last-cust
 					 (gnc:get-current-book)))))
@@ -73,7 +74,7 @@
     (define find-job-item
       (gnc:make-menu-item (N_ "Find Job")
 			  (N_ "Find Job")
-			  (list top-level cust "")
+			  (list main-window top-level cust "")
 			  (lambda ()
 			    (gnc:job-search #f last-cust
 					  (gnc:get-current-book)))))
@@ -81,7 +82,7 @@
     (define payment-item
       (gnc:make-menu-item (N_ "Process Payment")
 			  (N_ "Process Payment")
-			  (list top-level cust "")
+			  (list main-window top-level cust "")
 			  (lambda ()
 			    (gnc:payment-new last-cust
 					     (gnc:get-current-book)))))
@@ -105,12 +106,12 @@
 
     (define vendor-menu
       (gnc:make-menu (N_ vendor)
-		     (list top-level "")))
+		     (list main-window top-level "")))
 
     (define new-vendor-item
       (gnc:make-menu-item (N_ "New Vendor")
 			  (N_ "New Vendor")
-			  (list top-level vendor "")
+			  (list main-window top-level vendor "")
 			  (lambda ()
 			    (gnc:vendor-new (gnc:get-current-book)))))
   
@@ -118,7 +119,7 @@
     (define find-vendor-item
       (gnc:make-menu-item (N_ "Find Vendor")
 			  (N_ "Find Vendor")
-			  (list top-level vendor "")
+			  (list main-window top-level vendor "")
 			  (lambda ()
 			    (gnc:vendor-search (gnc:owner-get-vendor
 					      last-vendor)
@@ -127,7 +128,7 @@
     (define new-invoice-item
       (gnc:make-menu-item (N_ "New Bill")
 			  (N_ "New Bill")
-			  (list top-level vendor "")
+			  (list main-window top-level vendor "")
 			  (lambda ()
 			    (gnc:invoice-new last-vendor
 					     (gnc:get-current-book)))))
@@ -135,7 +136,7 @@
     (define find-invoice-item
       (gnc:make-menu-item (N_ "Find Bill")
 			  (N_ "Find Bill")
-			  (list top-level vendor "")
+			  (list main-window top-level vendor "")
 			  (lambda ()
 			    (gnc:invoice-search #f last-vendor
 					      (gnc:get-current-book)))))
@@ -143,7 +144,7 @@
     (define new-job-item
       (gnc:make-menu-item (N_ "New Job")
 			  (N_ "New Job")
-			  (list top-level vendor "")
+			  (list main-window top-level vendor "")
 			  (lambda ()
 			    (gnc:job-new last-vendor
 					 (gnc:get-current-book)))))
@@ -151,7 +152,7 @@
     (define find-job-item
       (gnc:make-menu-item (N_ "Find Job")
 			  (N_ "Find Job")
-			  (list top-level vendor "")
+			  (list main-window top-level vendor "")
 			  (lambda ()
 			    (gnc:job-search #f last-vendor
 					  (gnc:get-current-book)))))
@@ -160,7 +161,7 @@
     (define payment-item
       (gnc:make-menu-item (N_ "Process Payment")
 			  (N_ "Process Payment")
-			  (list top-level vendor "")
+			  (list main-window top-level vendor "")
 			  (lambda ()
 			    (gnc:payment-new last-vendor
 					     (gnc:get-current-book)))))
@@ -178,9 +179,9 @@
     ))
 
 (define (add-business-items)
-  (define menu (gnc:make-menu top-level (list "_Actions")))
-  ;;(define new (gnc:make-menu (N_ new-label) (list top-level "")))
-  ;;(define find (gnc:make-menu (N_ find-label) (list top-level "")))
+  (define menu (gnc:make-menu top-level (list "Main" "_Actions")))
+  ;;(define new (gnc:make-menu (N_ new-label) (list main-window top-level "")))
+  ;;(define find (gnc:make-menu (N_ find-label) (list main-window top-level "")))
 
   (gnc:add-extension menu)
 
@@ -190,14 +191,14 @@
   (gnc:add-extension
    (gnc:make-menu-item (N_ "Billing Terms")
 		       (N_ "View and Edit the available Billing Terms")
-		       (list top-level "")
+		       (list main-window top-level "")
 		       (lambda ()
 			 (gnc:billterms-new (gnc:get-current-book)))))
 
   (gnc:add-extension
    (gnc:make-menu-item (N_ "Tax Tables")
 		       (N_ "View and Edit the available Tax Tables")
-		       (list top-level "")
+		       (list main-window top-level "")
 		       (lambda ()
 			 (gnc:tax-table-new (gnc:get-current-book)))))
   (add-vendor-items)
@@ -206,7 +207,7 @@
   (gnc:add-extension
     (gnc:make-menu-item (N_ "Properties")
 			(N_ "View and edit the properties of this file.")
-			(list "File" "Print")
+			(list "Main" "File" "Print")
 			(lambda ()
 			  (let* ((book (gnc:get-current-book))
 				 (slots (gnc:book-get-slots book)))
@@ -217,7 +218,7 @@
 			    (gnc:kvp-option-dialog gnc:id-book
 						   slots "Book Options"
 						   changed_cb)))))
-  (gnc:add-extension (gnc:make-separator (list "File" "Print")))
+  (gnc:add-extension (gnc:make-separator (list "Main" "File" "Print")))
 
   )
 
@@ -225,7 +226,7 @@
 (define (business-report-function)
   (gnc:add-extension
    (gnc:make-menu gnc:menuname-business-reports
-		  (list gnc:menuname-reports gnc:menuname-income-expense))))
+		  (list "Main" gnc:menuname-reports gnc:menuname-income-expense))))
 
 
 

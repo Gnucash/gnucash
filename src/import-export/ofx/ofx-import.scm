@@ -2,7 +2,7 @@
   (gnc:add-extension
    (gnc:make-menu-item(N_ "Import OFX/QFX")
 		      (N_ "Process an OFX/QFX response file")
-		      (list "File" "Import" "")
+		      (list gnc:window-name-main "File" "Import" "")
 		      (lambda ()
 			(gnc:ofx-import)))))
 

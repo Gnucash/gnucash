@@ -1,3 +1,25 @@
+2002-09-01  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-menu-extensions.[ch]:
+	* src/gnome-utils/gw-gnome-utils-spec.scm: Add support for a
+	window name "prefix" to the menu extensions code.  All menu
+	extensions must now indocate to which window they apply.
+
+	* src/gnome/window-main.c: Added a prefix to the call that
+	installs menu extensions.
+	
+	* src/business/business-gnome/dialog-invoice.c:
+	* src/gnome/window-register.c: Now installs any menu extensions
+	available for the window.
+
+	* src/business/business-gnome/business-gnome.scm:
+	* src/gnome-utils/gnc-menu-extensions.scm:
+	* src/import-export/hbci/hbci.scm:
+	* src/import-export/ofx/ofx-import.scm:
+	* src/import-export/qif-import/druid-qif-import.c:
+	* src/report/report-gnome/report-gnome.scm:
+	* src/scm/main.scm: Add prefixes to the menu extensions.
+
 2002-09-01  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Adapt to latest
