@@ -5,6 +5,7 @@
 #include "sixtp.h"
 #include "sixtp-utils.h"
 #include "sixtp-parsers.h"
+#include "sixtp-xml-write-utils.h"
 
 #include "Transaction.h"
 #include "TransactionP.h"
@@ -833,4 +834,137 @@ gnc_transaction_parser_new(void)
   }
 
   return(top_level);
+}
+
+/***********************************************************************/
+/***********************************************************************/
+/* WRITING */
+
+static gboolean
+xml_add_transaction_split(xmlNodePtr p, Split* s) {
+  xmlNodePtr split_xml;
+
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(s, FALSE);
+
+  split_xml = xmlNewTextChild(p, NULL, "split", NULL);  
+  g_return_val_if_fail(split_xml, FALSE);
+
+  if(!xml_add_guid(split_xml, "guid", xaccSplitGetGUID(s)))
+    return(FALSE);
+
+  if(!xml_add_str(split_xml, "memo", xaccSplitGetMemo(s), FALSE))
+    return(FALSE);
+
+  if(!xml_add_str(split_xml, "action", xaccSplitGetAction(s), FALSE))
+    return(FALSE);
+
+  /* reconcile-state */
+  { 
+    char state = xaccSplitGetReconcile(s);
+    if(!xml_add_character(split_xml, "reconcile-state", state))
+      return(FALSE);
+  }
+  
+  {
+    /* reconcile-date */
+    Timespec ts;
+    xaccSplitGetDateReconciledTS(s, &ts);
+    if(!xml_add_editable_timespec(split_xml, "reconcile-date", &ts, FALSE))
+      return(FALSE);
+  }
+
+  /* share-amount */
+  if(!xml_add_gnc_numeric(split_xml, "value", xaccSplitGetValue(s)))
+    return(FALSE);
+
+  /* share-price */
+  if(!xml_add_gnc_numeric(split_xml, "quantity", xaccSplitGetShareAmount(s)))
+    return(FALSE);
+
+  /* account */
+  { 
+    Account *acct = xaccSplitGetAccount(s);
+    if(acct) {
+      if(!xml_add_guid(split_xml, "account", xaccAccountGetGUID(acct)))
+        return(FALSE);
+    }
+  }
+
+  if(s->kvp_data) {
+    if(!xml_add_kvp_frame(split_xml, "slots", s->kvp_data, FALSE))
+      return(FALSE);
+  }
+
+  return(TRUE);
+}
+
+/* ============================================================== */
+
+static gboolean
+xml_add_txn_restore(xmlNodePtr p, Transaction* t) {
+
+  xmlNodePtr txn_xml;
+  xmlNodePtr restore_xml;
+
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(t, FALSE);
+
+  txn_xml = xmlNewTextChild(p, NULL, "transaction", NULL);  
+  g_return_val_if_fail(txn_xml, FALSE);
+
+  restore_xml = xmlNewTextChild(txn_xml, NULL, "restore", NULL);  
+  g_return_val_if_fail(restore_xml, FALSE);
+
+  if(!xml_add_guid(restore_xml, "guid", xaccTransGetGUID(t)))
+    return(FALSE);
+  if(!xml_add_str(restore_xml, "num", xaccTransGetNum(t), FALSE))
+    return(FALSE);
+  {
+    Timespec ts;
+    xaccTransGetDatePostedTS(t, &ts);
+    if(!xml_add_editable_timespec(restore_xml, "date-posted", &ts, FALSE))
+      return(FALSE);
+  }
+  {
+    Timespec ts;
+    xaccTransGetDateEnteredTS(t, &ts);
+    if(!xml_add_editable_timespec(restore_xml, "date-entered", &ts, FALSE))
+      return(FALSE);
+  }
+  if(!xml_add_str(restore_xml, "description", xaccTransGetDescription(t), FALSE))
+    return(FALSE);
+
+  if(t->kvp_data) {
+    if(!xml_add_kvp_frame(restore_xml, "slots", t->kvp_data, FALSE))
+      return(FALSE);
+  }
+
+  {
+    guint32 n = 0;
+    Split *s = xaccTransGetSplit(t, n);
+
+    while(s) {
+      if(!xml_add_transaction_split(restore_xml, s)) return(FALSE); 
+      n++;
+      s = xaccTransGetSplit(t, n);
+    }
+  }
+
+  return(TRUE);
+}
+
+/* ============================================================== */
+
+static gboolean
+xml_add_txn_restore_adapter(Transaction *t, gpointer data) {
+  xmlNodePtr xml_node = (xmlNodePtr) data;
+  return(xml_add_txn_restore(xml_node, t));
+}
+
+gboolean
+xml_add_txn_and_split_restorers(xmlNodePtr p, AccountGroup *g) {
+  return(xaccGroupForEachTransaction(g,
+                                     xml_add_txn_restore_adapter,
+                                     (gpointer) p));
 }

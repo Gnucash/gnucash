@@ -77,7 +77,6 @@ binary-arch: build install
 #	cp src/.libs/gnucash $(id)/usr/bin/gnucash.debug
 	dh_compress
 	dh_fixperms
-	dh_suidregister
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol

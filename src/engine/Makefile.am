@@ -36,6 +36,7 @@ libgncengine_la_SOURCES = \
   sixtp-kvp-parser.c \
   sixtp-stack.c \
   sixtp-utils.c \
+  sixtp-xml-write-utils.c \
   sixtp.c \
   Account-xml-parser-v1.c \
   Commodity-xml-parser-v1.c \
@@ -78,7 +79,9 @@ noinst_HEADERS = \
   gnc-event-p.h \
   gnc-numeric.h \
   sixtp-parsers.h \
+  sixtp-writers.h \
   sixtp-stack.h \
+  sixtp-xml-write-utils.h \
   sixtp.h
 
 EXTRA_DIST = \

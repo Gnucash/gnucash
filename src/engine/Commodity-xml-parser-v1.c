@@ -6,9 +6,12 @@
 #include "sixtp.h"
 #include "sixtp-utils.h"
 #include "sixtp-parsers.h"
+#include "sixtp-writers.h"
+#include "sixtp-xml-write-utils.h"
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+#include "gnc-engine-util.h"
 
 /****************************************************************************/
 /* Commodity restorer.
@@ -357,4 +360,144 @@ generic_gnc_commodity_lookup_parser_new(void)
   }
 
   return(top_level);
+}
+
+/***********************************************************************/
+/***********************************************************************/
+/* WRITING */
+
+gboolean
+xml_add_commodity_ref(xmlNodePtr p, const char *tag, const gnc_commodity *c) {
+  xmlNodePtr c_xml = NULL;
+  gboolean ok = FALSE;
+
+  if(p && tag) {
+    if(!c) {
+      ok = TRUE;
+    } else {
+      c_xml= xmlNewTextChild(p, NULL, tag, NULL);
+      if(c_xml) {
+        const gchar *namestr = gnc_commodity_get_namespace(c);
+        if(namestr) {
+          xmlNodePtr namespace_xml = xmlNewTextChild(c_xml, NULL, "space", namestr);
+          if(namespace_xml) {
+            const gchar *idstr = gnc_commodity_get_mnemonic(c);
+            xmlNodePtr id_xml = xmlNewTextChild(c_xml, NULL, "id", idstr);
+            if(id_xml) ok = TRUE;
+          }
+        }
+      }
+    }
+  }
+  
+  if(!ok && c_xml) xmlFreeNode(c_xml);
+  return(TRUE);
+}
+
+/* ============================================================== */
+
+static gboolean
+xml_add_commodity_restorer(xmlNodePtr p, gnc_commodity *c) {
+  xmlNodePtr comm_xml;
+  xmlNodePtr rst_xml;
+
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(c, FALSE);
+
+  comm_xml = xmlNewTextChild(p, NULL, "commodity", NULL);  
+  g_return_val_if_fail(comm_xml, FALSE);
+
+  rst_xml = xmlNewTextChild(comm_xml, NULL, "restore", NULL);  
+  if(!rst_xml) {
+    xmlFreeNode(comm_xml);
+    return(FALSE);
+  }
+
+  if(!xml_add_str(rst_xml, "space", gnc_commodity_get_namespace(c), FALSE)) {
+    xmlFreeNode(comm_xml);
+    return(FALSE);
+  }
+  if(!xml_add_str(rst_xml, "id", gnc_commodity_get_mnemonic(c), FALSE)) {
+    xmlFreeNode(comm_xml);
+    return(FALSE);
+  }
+  if(!xml_add_str(rst_xml, "name", gnc_commodity_get_fullname(c), FALSE)) {
+    xmlFreeNode(comm_xml);
+    return(FALSE);
+  }
+  if(!xml_add_str(rst_xml, "xcode", gnc_commodity_get_exchange_code(c), FALSE)) {
+    xmlFreeNode(comm_xml);
+    return(FALSE);
+  }
+  if(!xml_add_gint64(rst_xml, "fraction", gnc_commodity_get_fraction(c))) {
+    xmlFreeNode(comm_xml);
+    return(FALSE);
+  }
+
+  return(TRUE);
+}
+
+
+static gint
+compare_namespaces(gconstpointer a, gconstpointer b) {
+  const gchar *sa = (const gchar *) a;
+  const gchar *sb = (const gchar *) b;
+  return(safe_strcmp(sa, sb));
+}
+
+static gint
+compare_commodity_ids(gconstpointer a, gconstpointer b) {
+  const gnc_commodity *ca = (const gnc_commodity *) a;
+  const gnc_commodity *cb = (const gnc_commodity *) b;
+  return(safe_strcmp(gnc_commodity_get_mnemonic(ca),
+                     gnc_commodity_get_mnemonic(cb)));
+}
+
+gboolean
+xml_add_commodity_restorers(xmlNodePtr p) {
+  gnc_commodity_table *commodities;
+  GList *namespaces;
+  GList *lp;
+
+  g_return_val_if_fail(p, FALSE);
+
+  commodities = gnc_engine_commodities();
+  g_return_val_if_fail(commodities, FALSE);
+
+  namespaces = g_list_sort(gnc_commodity_table_get_namespaces(commodities),
+                           compare_namespaces);
+  
+
+  for(lp = namespaces; lp; lp = lp->next) {
+    gchar *space;
+
+    if(!lp->data) {
+      g_list_free (namespaces);
+      return(FALSE);
+    }
+
+    space = (gchar *) lp->data;
+    if(strcmp(GNC_COMMODITY_NS_ISO, space) != 0) {
+      GList *comms = gnc_commodity_table_get_commodities(commodities, space);
+      GList *lp2;
+
+      comms = g_list_sort(comms, compare_commodity_ids);
+
+      for(lp2 = comms; lp2; lp2 = lp2->next) {
+        gnc_commodity *com = (gnc_commodity *) lp2->data;
+
+        if(!xml_add_commodity_restorer(p, com)) {
+          g_list_free (comms);
+          g_list_free (namespaces);
+          return(FALSE);
+        }
+      }
+
+      g_list_free (comms);
+    }
+  }
+
+  g_list_free (namespaces);
+
+  return(TRUE);
 }

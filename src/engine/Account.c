@@ -220,11 +220,7 @@ xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids) {
   if(!aa) return FALSE;
   if(!ab) return FALSE;
 
-  if(aa->type != ab->type) {
-    PERR ("Account types don't match (%d != %d)\n",
-          aa->type, ab->type);
-    return FALSE;
-  }
+  if(aa->type != ab->type) return FALSE;
 
   if(safe_strcmp(aa->accountName, ab->accountName) != 0) return FALSE;
   if(safe_strcmp(aa->accountCode, ab->accountCode) != 0) return FALSE;
@@ -233,11 +229,7 @@ xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids) {
   if(!gnc_commodity_equiv(aa->security, ab->security)) return FALSE;
 
   if(check_guids) {
-    if(!guid_equal(&aa->guid, &ab->guid)) {
-      PERR ("Account guids don't match for %s ?= %s\n",
-            aa->accountName, ab->accountName);
-      return FALSE;
-    }
+    if(!guid_equal(&aa->guid, &ab->guid)) return FALSE;
   }
 
   if(kvp_frame_compare(aa->kvp_data, ab->kvp_data) != 0) return FALSE;
