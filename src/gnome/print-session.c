@@ -136,8 +136,8 @@ gnc_ui_paper_dialog_new_modal() {
   gtk_main();
 
   if(GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(dialog), "quit-cause"))) {
-    newpaper = strdup(gnome_paper_selector_get_name
-                      (GNOME_PAPER_SELECTOR(papersel)));
+    newpaper = g_strdup(gnome_paper_selector_get_name
+                        (GNOME_PAPER_SELECTOR(papersel)));
   }
   gtk_widget_destroy(dialog);
 
@@ -257,8 +257,8 @@ void
 gnc_print_session_destroy(PrintSession * ps) {
   gtk_object_unref(GTK_OBJECT(ps->meta));
   gtk_object_unref(GTK_OBJECT(ps->default_font));
-  g_free(ps->paper);
 
+  g_free(ps->paper);
   g_free(ps);
 }
 
@@ -317,7 +317,8 @@ void gnc_ui_print_dialog_select_printer_cb(GtkWidget * widget,
 void gnc_ui_print_dialog_preview_cb(GtkWidget * widget, gpointer user_data) {}
 void gnc_ui_print_dialog_ok_cb(GtkWidget * widget, gpointer user_data) {}
 void gnc_ui_print_dialog_cancel_cb(GtkWidget * widget, gpointer user_data) {}
-
+void gnc_ui_paper_dialog_cancel_cb(GtkWidget * widg, gpointer user_data) { }
+void gnc_ui_paper_dialog_ok_cb(GtkWidget * widg, gpointer user_data) {}
 
 /* printsession stuff */
 PrintSession * gnc_print_session_create() { return NULL; }
