@@ -543,6 +543,15 @@ check_mult_div (void)
 		}
 
 	}
+
+	a = gnc_numeric_create(782592055622866ULL,89025);
+	b = gnc_numeric_create(2222554708930978ULL,85568);
+	/* XXX: I'm not 100% sure that this is the value we should get, but
+	 * we probably should NOT get ERROR -2 / 0 */
+	check_binary_op (gnc_numeric_create(2578135489ULL, 7617691200ULL),
+			 gnc_numeric_div(a, b, GNC_DENOM_AUTO,
+					 GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND),
+			 a, b, "expected %s got %s = %s / %s for div round");
 }
   
 /* ======================================================= */
