@@ -30,6 +30,7 @@
 #include "config.h"
 
 #include "Account.h"
+#include "MultiLedger.h"
 
 /** GLOBALS *********************************************************/
 
@@ -40,7 +41,7 @@ typedef struct _RegWindow RegWindow;
 void       accRefresh (Account *);
 RegWindow *regWindowSimple( Account *account );
 RegWindow *regWindowAccGroup( Account *account_group );
-RegWindow *regWindowLedger( Account *lead, Account **account, int type);
+RegWindow *regWindowLedger( xaccLedgerDisplay *ledger);
 
 /*
  * The xaccDestroyRegWindow() subroutine can be called from 

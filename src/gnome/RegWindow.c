@@ -1,4 +1,4 @@
-/*******************************************************************\
+/*-*-gnucash-c-*-****************************************************\
  * RegWindow.c -- the register window for xacc (X-Accountant)       *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998 Linas Vepstas                           *
@@ -39,19 +39,18 @@
 
 #include "Account.h"
 #include "AccountP.h"  /* hack alert -- do not include P.h files !! */
-//#include "AdjBWindow.h"
-//#include "BuildMenu.h"
 #include "Group.h"
 #include "Ledger.h"
 #include "LedgerUtils.h"
 #include "MainWindow.h"
 #include "main.h"
 #include "messages.h"
-#include "MultiLedger.h"
 #include "RecnWindow.h"
 #include "RegWindow.h"
 #include "Transaction.h"
 #include "util.h"
+#include "xtutil.h"
+#include "table-html.h"
 
 /** STRUCTS *********************************************************/
 /* The RegWindow struct contains info needed by an instance of an open 
@@ -72,7 +71,7 @@ struct _RegWindow {
 extern GtkWidget *  toplevel;
 
 /** PROTOTYPES ******************************************************/
-RegWindow * regWindowLedger(Account *lead, Account **acclist, int type);
+RegWindow *regWindowLedger( xaccLedgerDisplay *ledger);
 static void regRefresh (xaccLedgerDisplay *ledger);
 static void regDestroy (xaccLedgerDisplay *ledger);
 
@@ -710,7 +709,7 @@ recordCB( GtkWidget *w, gpointer data)
 {
   RegWindow *regData = (RegWindow *) data;
   
-  xaccSRSaveRegEntry (regData->ledger);
+  xaccSRSaveRegEntry (regData->ledger->ledger);
 }
 
 /********************************************************************\
@@ -733,7 +732,7 @@ deleteCB(GtkWidget *widget, gpointer data)
   Account **affected_accounts;
   
   /* get the current split based on cursor position */
-  split = xaccSRGetCurrentSplit (regData->ledger);
+  split = xaccSRGetCurrentSplit (regData->ledger->ledger);
   if (NULL == split ) return;
 
   /* ask for user confirmation before performing 
@@ -776,13 +775,16 @@ cancelCB( GtkWidget *w, gpointer data)
   Split * split;
   
   /* when cancelling edits, reload the cursor from the transaction */
-  split = xaccSRGetCurrentSplit (regData->ledger);
-  xaccSRLoadRegEntry (regData->ledger, split);
-  xaccRefreshTableGUI (regData->ledger->table);
+  split = xaccSRGetCurrentSplit (regData->ledger->ledger);
+  xaccSRLoadRegEntry (regData->ledger->ledger, split);
+  xaccRefreshTableGUI (regData->ledger->ledger->table);
 }
 
 /********************************************************************\
 \********************************************************************/
+
+#ifdef 0
+/* fileBox not implemented in GNOME version yet */
 
 static void
 reportCB( GtkWidget *w, gpointer data)
@@ -802,13 +804,7 @@ webCB( GtkWidget *w, gpointer data)
   xaccTableWebServeHTML (regData->ledger->ledger->table, 1080);
 }
 
+#endif
 
-/************************** END OF FILE *************************/
 
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  eval: (c-set-style "gnu")
-  End:
-*/
+/************************** END OF FILE **************************/
