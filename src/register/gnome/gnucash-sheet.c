@@ -2015,41 +2015,42 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet, gint virt_row,
                 if (block->style  && block->style != style) {
 
                         gnucash_sheet_block_clear_entries (block);
-                        
+
                         /* the zero'th virtual row isn't drawn */
                         if (virt_row > 0)
                                 sheet->height -= block->style->dimensions->height;
                         gnucash_style_unref (block->style);
                         block->style = NULL;
                 }
-                
 
                 if (block->style == NULL) {
                         block->style = style;
-                        
+
                         /* the zero'th virtual row isn't drawn */
                         if (virt_row > 0)
                                 sheet->height += block->style->dimensions->height;
 
                         gnucash_style_ref(block->style);
 
-
-                        block->entries = g_new0( gchar **, block->style->nrows);
+                        block->entries = g_new0( gchar **,
+                                                 block->style->nrows);
                         for (i = 0; i < block->style->nrows; i++)
                                 block->entries[i] = g_new0(gchar *,
                                                            block->style->ncols);
-                        
-                        block->fg_colors = g_new0( GdkColor **, block->style->nrows);
+
+                        block->fg_colors = g_new0( GdkColor **,
+                                                   block->style->nrows);
                         for (i = 0; i < block->style->nrows; i++)
                                 block->fg_colors[i] = g_new0(GdkColor *,
                                                              block->style->ncols);
-                        
-                        block->bg_colors = g_new0( GdkColor **, block->style->nrows);
+
+                        block->bg_colors = g_new0( GdkColor **,
+                                                   block->style->nrows);
                         for (i = 0; i < block->style->nrows; i++)
                                 block->bg_colors[i] = g_new0(GdkColor *,
                                                              block->style->ncols);
                 }
-                
+
                 gnucash_sheet_block_set_entries (sheet, virt_row, virt_col);
         }
 }
@@ -2075,7 +2076,7 @@ gnucash_sheet_cell_set_from_table (GnucashSheet *sheet, gint virt_row,
         style = block->style;
         if (!style)
                 return;
-        
+
         if (cell_row >= 0 && cell_row <= style->nrows &&
             cell_col >= 0 && cell_col <= style->ncols) {
                 VirtualCell *vcell;
@@ -2238,7 +2239,7 @@ gnucash_sheet_resize (GnucashSheet *sheet)
         else if (diff_rows > 0) {
                 /* we need some more rows */
                 for (i = 0; i < diff_rows; i++)
-                                gnucash_sheet_block_new(sheet, num_virt_rows + i, 0);
+                        gnucash_sheet_block_new(sheet, num_virt_rows + i, 0);
         }
 
         sheet->num_virt_rows = sheet->table->num_virt_rows;
