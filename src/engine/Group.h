@@ -37,6 +37,7 @@
 /** PROTOTYPES ******************************************************/
 AccountGroup *xaccMallocAccountGroup( void );
 void          xaccFreeAccountGroup( AccountGroup *account_group );
+void 	      xaccAccountGroupCommitEdit( AccountGroup *grp );
 
 /*
  * The xaccConcatGroups() subroutine will move all accounts

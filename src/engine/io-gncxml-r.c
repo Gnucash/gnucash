@@ -2215,6 +2215,11 @@ ledger_data_end_handler(gpointer data_for_children,
   /* auto-number the accounts, if they are not already numbered */
   xaccGroupDepthAutoCode (ag);
 
+  /* commit all groups, this completes the BeginEdit started when the
+   * account_end_handler finished reading the account.
+   */
+  xaccAccountGroupCommitEdit (ag);
+
   /* set up various state that is not normally stored in the byte stream */
   xaccRecomputeGroupBalance (ag);
 
@@ -2597,6 +2602,11 @@ GSList* data_from_children,
 
   *result = NULL;
 
+  /* Now return the account to the "edit" state.  At the end of reading
+   * all the transactions, we will Commit.  This replaces #splits
+   *  rebalances with #accounts rebalances at the end.  A BIG win!
+   */
+  xaccAccountBeginEdit(acc);
   return(TRUE);
 }
 

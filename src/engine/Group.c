@@ -136,6 +136,23 @@ xaccAccountGroupBeginEdit( AccountGroup *grp, int defer )
 \********************************************************************/
 
 void
+xaccAccountGroupCommitEdit( AccountGroup *grp )
+{
+  int i;
+
+  if (NULL == grp) return;
+
+  for(i = 0; i < grp->numAcc; i++ )
+  {
+    xaccAccountCommitEdit(grp->account[i]);
+    xaccAccountGroupCommitEdit (grp->account[i]->children);
+  }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
 xaccFreeAccountGroup( AccountGroup *grp )
 {
   int i;
