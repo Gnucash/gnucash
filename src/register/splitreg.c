@@ -200,17 +200,18 @@ configLayout (SplitRegister *reg)
    // int style = (reg->type) & REG_STYLE_MASK;
    int i;
 
+   /* define header for macros */
+   header = reg->header;
+
    /* fill things up with null cells */
    for (i=0; i<reg->num_cols; i++) {
+      header->cells[0][i] = reg->nullCell;
       reg->split_cursor->cells[0][i] = reg->nullCell;
       reg->trans_cursor->cells[0][i] = reg->nullCell;
       reg->single_cursor->cells[0][i] = reg->nullCell;
       reg->double_cursor->cells[0][i] = reg->nullCell;
       reg->double_cursor->cells[1][i] = reg->nullCell;
    }
-
-   /* define header for macros */
-   header = reg->header;
 
    switch (type) {
       case BANK_REGISTER:
@@ -566,7 +567,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
 
    /* --------------------------- */
    /* configLabels merely puts strings into the label cells 
-    * it does *not* cop[y them to the header cursor */
+    * it does *not* copy them to the header cursor */
    configLabels (reg);
 
    /* config the layout of the cells in the cursors */
