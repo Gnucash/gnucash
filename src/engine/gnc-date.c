@@ -412,7 +412,7 @@ const gchar *qof_date_format_get_format(QofDateFormat df)
 }
 
 /**
- * qof_print_date_buff
+ * qof_print_date_dmy_buff
  *    Convert a date as day / month / year integers into a localized string
  *    representation
  *
@@ -427,7 +427,7 @@ const gchar *qof_date_format_get_format(QofDateFormat df)
  * Globals: global dateFormat value
  */
 size_t
-qof_print_date_buff (char * buff, size_t len, int day, int month, int year)
+qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
 {
   int flen;
   if (!buff) return 0;
@@ -474,35 +474,35 @@ qof_print_date_buff (char * buff, size_t len, int day, int month, int year)
   return flen;
 }
 
-void 
-qof_print_date_secs_buff (char * buff, time_t t)
+size_t
+qof_print_date_buff (char * buff, size_t len, time_t t)
 {
   struct tm *theTime;
 
-  if (!buff) return;
+  if (!buff) return 0 ;
 
   theTime = localtime (&t);
 
-  qof_print_date_buff (buff, MAX_DATE_LENGTH,
+  return qof_print_date_dmy_buff (buff, len,
                    theTime->tm_mday, 
                    theTime->tm_mon + 1,
                    theTime->tm_year + 1900);
 }
 
-void
-qof_print_gdate( char *buf, GDate *gd )
+size_t
+qof_print_gdate( char *buf, size_t len, GDate *gd )
 {
-  qof_print_date_buff( buf, MAX_DATE_LENGTH,
+  return qof_print_date_dmy_buff( buf, len,
              g_date_day(gd),
              g_date_month(gd),
              g_date_year(gd) );
 }
 
 char * 
-qof_print_date_secs (time_t t)
+qof_print_date (time_t t)
 {
    char buff[MAX_DATE_LENGTH];
-   qof_print_date_secs_buff (buff, t);
+   qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
    return g_strdup (buff);
 }
 
@@ -514,7 +514,7 @@ gnc_print_date (Timespec ts)
 
   t = ts.tv_sec + (ts.tv_nsec / 1000000000.0);
 
-  qof_print_date_secs_buff (buff, t);
+  qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
 
   return buff;
 }

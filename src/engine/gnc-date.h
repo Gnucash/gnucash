@@ -54,10 +54,10 @@
 		#define getDateFormat qof_date_format_get
 		#define setDateFormat qof_date_format_set
 		#define DateFormat QofDateFormat
-		#define printDateSecs qof_print_date_secs_buff
-		#define printDate(S,D,M,Y) qof_print_date_buff(S,MAX_DATE_LENGTH,D,M,Y)
-		#define printGDate qof_print_gdate
-		#define xaccPrintDateSecs qof_print_date_secs
+		#define printDateSecs(B,S) qof_print_date_buff(B,MAX_DATE_LENGTH,S)
+		#define printDate(B,D,M,Y) qof_print_date_dmy_buff(B,MAX_DATE_LENGTH,D,M,Y)
+		#define printGDate(B,D) qof_print_gdate(B,MAX_DATE_LENGTH,D)
+		#define xaccPrintDateSecs qof_print_date
 		#define scanDate qof_scan_date
 
 		#define DATE_FORMAT_US QOF_DATE_FORMAT_US
@@ -267,7 +267,7 @@ char dateSeparator(void);
  * itself, instead of depending on the routines here.
  */
 /*@{*/
-/** qof_print_date_buff
+/** qof_print_date_dmy_buff
  *    Convert a date as day / month / year integers into a localized string
  *    representation
  *
@@ -282,24 +282,24 @@ char dateSeparator(void);
  *
  * Globals: global dateFormat value
  **/
-size_t qof_print_date_buff (char * buff, size_t buflen, int day, int month, int year);
+size_t qof_print_date_dmy_buff (char * buff, size_t buflen, int day, int month, int year);
 
-/** Convenience: calls through to qof_print_date_buff(). **/
-void qof_print_date_secs_buff (char * buff, time_t secs);
+/** Convenience: calls through to qof_print_date_dmy_buff(). **/
+size_t qof_print_date_buff (char * buff, size_t buflen, time_t secs);
 
-/** Convenience; calls through to qof_print_date_buff(). **/
-void qof_print_gdate( char *buf, GDate *gd );
+/** Convenience; calls through to qof_print_date_dmy_buff(). **/
+size_t qof_print_gdate( char *buf, size_t bufflen, GDate *gd );
 
-/** Convenience; calls through to qof_print_date_buff(). 
+/** Convenience; calls through to qof_print_date_dmy_buff(). 
  *  Return: string, which should be freed when no longer needed.
  * **/
-char * qof_print_date_secs (time_t secs);
+char * qof_print_date (time_t secs);
 
-/** Convenience; calls through to qof_print_date_buff(). 
+/** Convenience; calls through to qof_print_date_dmy_buff(). 
  *  Return: static global string.
  *  \warning This routine is not thread-safe, because it uses a single
- *      global buffer to store the return value.  Use qof_print_date_secs_buff()
- *      or qof_print_date_secs instead.
+ *      global buffer to store the return value.  Use qof_print_date_buff()
+ *      or qof_print_date() instead.
  * **/
 const char * gnc_print_date(Timespec ts);
 
