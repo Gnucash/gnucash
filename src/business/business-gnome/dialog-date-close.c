@@ -101,11 +101,15 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
     ddc->acct = acc;
   }
 
-  if (ddc->date)
-    *(ddc->ts) = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (ddc->date));
-
   if (ddc->post_date)
     *(ddc->ts2) = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (ddc->post_date));
+
+  if (ddc->date) {
+    if (ddc->terms)
+      *(ddc->ts) = gncBillTermComputeDueDate (ddc->terms, *(ddc->ts2));
+    else
+      *(ddc->ts) = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (ddc->date));
+  }
 
   if (ddc->memo_entry && ddc->memo)
     *(ddc->memo) = gtk_editable_get_chars (GTK_EDITABLE (ddc->memo_entry),
