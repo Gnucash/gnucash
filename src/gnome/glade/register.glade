@@ -1089,7 +1089,7 @@
 	  <class>GtkButton</class>
 	  <child_name>Toolbar:button</child_name>
 	  <name>toolbar_schedule</name>
-	  <tooltip>Create a scheduled transaction using the current one as a template</tooltip>
+	  <tooltip>Create a scheduled transaction with the current transaction as a template</tooltip>
 	  <signal>
 	    <name>clicked</name>
 	    <handler>gnc_register_recur_cb</handler>
