@@ -64,6 +64,7 @@ static void
 LedgerMoveCursor  (Table *table, int new_phys_row, int new_phys_col, void * client_data)
 {
    SplitRegister *reg = (SplitRegister *) client_data;
+   int style;
 
    /* commit the contents of the cursor into the database */
    xaccSRSaveRegEntry (reg);
@@ -75,7 +76,10 @@ LedgerMoveCursor  (Table *table, int new_phys_row, int new_phys_col, void * clie
     * LoadRegister code into expanding the appropriate split.
     * 
     */   
-   if ((reg->type) & (REG_SINGLE_DYNAMIC|REG_DOUBLE_DYNAMIC)) {
+   style = ((reg->type) & REG_STYLE_MASK);
+   if ((REG_SINGLE_DYNAMIC == style) ||
+       (REG_DOUBLE_DYNAMIC == style)) 
+   {
       Split * split;
       split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
       reg->table->current_cursor->user_data = (void *) split;
@@ -127,6 +131,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    Transaction *trans;
    Account * acc;
    unsigned int changed;
+   int style;
    int i;
 
    /* use the changed flag to avoid heavy-weight updates
@@ -134,7 +139,9 @@ xaccSRSaveRegEntry (SplitRegister *reg)
     * cut down on uneccessary register redraws.  */
    changed = xaccSplitRegisterGetChangeFlag (reg);
    if (!changed) return;
-   
+
+   style = (reg->type) & REG_STYLE_MASK;   
+
    /* get the handle to the current split and transaction */
    split = xaccSRGetCurrentSplit (reg);
 printf ("save split is %p \n", split);
@@ -205,7 +212,7 @@ printf ("save split is %p \n", split);
       Account *old_acc=NULL, *new_acc=NULL;
       Split *split_to_modify = NULL;
 
-      if (reg->type & REG_MULTI_LINE) {
+      if (REG_MULTI_LINE == style) {
          split_to_modify = split;
       } else {
          split_to_modify = xaccGetOtherSplit(split);
@@ -308,7 +315,17 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       xaccSetPriceCellValue  (reg->shrsCell,  0.0);
       xaccSetPriceCellValue (reg->balanceCell, 0.0);
 
+      xaccSetComboCellValue (reg->actionCell, "");
+      xaccSetBasicCellValue (reg->memoCell, "");
+      xaccSetComboCellValue (reg->xfrmCell, "");
+      xaccSetDebCredCellValue (reg->debitCell, 
+                               reg->creditCell, 0.0);
+      xaccSetPriceCellValue (reg->priceCell, 0.0);
+      xaccSetPriceCellValue (reg->valueCell, 0.0);
+
    } else {
+      double amt;
+      char * accname=NULL;
       Transaction *trans = xaccSplitGetParent (split);
    
       secs = xaccTransGetDate (trans);
@@ -334,40 +351,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       xaccSetPriceCellValue (reg->balanceCell, baln);
    
       xaccSetPriceCellValue (reg->shrsCell,  xaccSplitGetShareBalance (split));
-   }
 
-   reg->table->current_cursor->user_data = (void *) split;
-
-   /* copy cursor contents into the table */
-   if (do_commit) {
-      xaccCommitCursor (reg->table);
-   }
-}
-
-/* ======================================================== */
-
-static void
-xaccSRLoadSplitEntry (SplitRegister *reg, Split *split, int do_commit)
-{
-   char buff[2];
-
-   /* don't even bother doing a load if there is no current cursor */
-   if (!(reg->table->current_cursor)) return;
-
-   if (!split) {
-      /* we interpret a NULL split as a blank split */
-      xaccSetComboCellValue (reg->actionCell, "");
-      xaccSetBasicCellValue (reg->memoCell, "");
-      xaccSetComboCellValue (reg->xfrmCell, "");
-      xaccSetDebCredCellValue (reg->debitCell, 
-                               reg->creditCell, 0.0);
-      xaccSetPriceCellValue (reg->priceCell, 0.0);
-      xaccSetPriceCellValue (reg->valueCell, 0.0);
-
-   } else {
-      double amt;
-      char * accname=NULL;
-   
       xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
 
       /* Show the transfer-from account name.                            
@@ -418,6 +402,29 @@ xaccSRLoadSplitEntry (SplitRegister *reg, Split *split, int do_commit)
 
 /* ======================================================== */
 
+#define xaccSRLoadSplitEntry  xaccSRLoadTransEntry
+
+#ifdef LATER
+static void
+xaccSRLoadSplitEntry (SplitRegister *reg, Split *split, int do_commit)
+{
+   char buff[2];
+
+   if (!split) {
+   } else {
+   }
+
+   reg->table->current_cursor->user_data = (void *) split;
+
+   /* copy cursor contents into the table */
+   if (do_commit) {
+      xaccCommitCursor (reg->table);
+   }
+}
+#endif 
+
+/* ======================================================== */
+
 void
 xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
 {
@@ -444,12 +451,13 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    int num_virt_rows;
    int phys_row;
    int vrow;
-   int double_line, multi_line, dynamic;
+   int style;
+   int multi_line, dynamic;
 
    table = reg->table;
-   double_line = (reg->type) & REG_DOUBLE_LINE;
-   multi_line  = (reg->type) & REG_MULTI_LINE;
-   dynamic = (reg->type) & (REG_SINGLE_DYNAMIC|REG_DOUBLE_DYNAMIC);
+   style = (reg->type) & REG_STYLE_MASK;
+   multi_line  = (REG_MULTI_LINE == style);
+   dynamic = ((REG_SINGLE_DYNAMIC == style) || (REG_DOUBLE_DYNAMIC == style));
 
    /* save the current cursor location; we do this by saving
     * a pointer to the currently edited split; we restore the 
@@ -496,30 +504,22 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
          break;
       } 
 
-      /* add one row for a transaction */
-      num_virt_rows ++;
-      num_phys_rows += reg->trans_cursor->numRows; 
-      
-      if (double_line) {
-         /* add one split row for each transaction */
-         num_virt_rows ++;
-         num_phys_rows += reg->split_cursor->numRows; 
-      }
-
       /* if multi-line, then show all splits.  If dynamic then
        * show all splits only if this is the hot split. 
        */
       if (multi_line || (dynamic && (split == save_current_split))) {
+         /* add one row for a transaction */
+         num_virt_rows ++;
+         num_phys_rows += reg->trans_cursor->numRows; 
          /* add a row for each split, minus one, plus one */
          j = xaccTransCountSplits (trans);
          num_virt_rows += j;
          num_phys_rows += j * reg->split_cursor->numRows; 
-         if (double_line) {
-            /* fix prior double-counting */
-            num_virt_rows --;
-            num_phys_rows -= reg->split_cursor->numRows; 
-         }
-      } 
+      } else {
+         /* add one row for a transaction */
+         num_virt_rows ++;
+         num_phys_rows += reg->lead_cursor->numRows; 
+      }
       
       i++;
       split = slist[i];
@@ -540,24 +540,11 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
          num_virt_rows -= 1; 
          num_phys_rows -= reg->split_cursor->numRows;
       }
-   }
-
-   if (double_line) {
-      /* add two rows */
-      if (!(reg->user_hook)) {
-         i++;
-         num_virt_rows ++;
-         num_phys_rows += reg->trans_cursor->numRows; 
-         num_virt_rows ++;
-         num_phys_rows += reg->split_cursor->numRows; 
-      }
-   }
-
-   if (!multi_line && !double_line) {
+   } else {
       if (!(reg->user_hook)) {
          i++;
          num_virt_rows += 1; 
-         num_phys_rows += reg->trans_cursor->numRows;
+         num_phys_rows += reg->lead_cursor->numRows;
       }
    }
 
@@ -587,21 +574,15 @@ printf ("load register of %d virtual entries %d phys rows ----------- \n", i, nu
          int j = 0;
 
 printf ("load trans %d at phys row %d \n", i, phys_row);
-         xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
-         xaccMoveCursor (table, phys_row, 0);
-         xaccSRLoadTransEntry (reg, split, 1);
-         vrow ++;
-         phys_row += reg->trans_cursor->numRows; 
    
-         if (double_line) {
-            xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
+         if (multi_line || (dynamic && (split == save_current_split))) 
+         {
+            xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
             xaccMoveCursor (table, phys_row, 0);
-            xaccSRLoadSplitEntry (reg, split, 1);
+            xaccSRLoadTransEntry (reg, split, 1);
             vrow ++;
-            phys_row += reg->split_cursor->numRows; 
-         }
+            phys_row += reg->trans_cursor->numRows; 
 
-         if (multi_line || (dynamic && (split == save_current_split))) {
             /* loop over all of the splits in the transaction */
             /* the do..while will automaticaly put a blank (null) split at the end */
             trans = xaccSplitGetParent (split);
@@ -625,7 +606,15 @@ printf ("load split %d at phys row %d \n", j, phys_row);
 
                j++;
             } while (secondary);
-         } 
+
+         } else {
+            /* the simple case ... */
+            xaccSetCursor (table, reg->lead_cursor, phys_row, 0, vrow, 0);
+            xaccMoveCursor (table, phys_row, 0);
+            xaccSRLoadTransEntry (reg, split, 1);
+            vrow ++;
+            phys_row += reg->lead_cursor->numRows; 
+         }
       }
 
       last_split = split;
@@ -664,16 +653,17 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       save_cursor_phys_row = phys_row;
    }
 
-   /* do the transaction row of the blank split */
-   xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
-   xaccMoveCursor (table, phys_row, 0);
-   xaccSRLoadTransEntry (reg, split, 1);
-   vrow ++;
-   phys_row += reg->trans_cursor->numRows; 
-   
    /* do the split row of the blank split */
-   if (double_line || multi_line) {
+   if (multi_line) {
       Transaction *trans;
+
+      /* do the transaction row of the blank split */
+      xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
+      xaccMoveCursor (table, phys_row, 0);
+      xaccSRLoadTransEntry (reg, split, 1);
+      vrow ++;
+      phys_row += reg->trans_cursor->numRows; 
+   
       trans = xaccSplitGetParent (split);
       split = xaccTransGetSplit (trans, 1);
       xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
@@ -681,7 +671,14 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       xaccSRLoadSplitEntry (reg, split, 1);
       vrow ++;
       phys_row += reg->split_cursor->numRows; 
+   } else {
+      xaccSetCursor (table, reg->lead_cursor, phys_row, 0, vrow, 0);
+      xaccMoveCursor (table, phys_row, 0);
+      xaccSRLoadTransEntry (reg, split, 1);
+      vrow ++;
+      phys_row += reg->lead_cursor->numRows; 
    }
+   
 
    /* restore the cursor to its original location */
    if (!save_current_split || (phys_row <= save_cursor_phys_row)) {
