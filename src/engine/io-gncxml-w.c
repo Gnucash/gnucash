@@ -718,32 +718,33 @@ xml_add_account_restorer(xmlNodePtr p, Account* a) {
   {
     AccountGroup *g = xaccAccountGetChildren(a);
     if(g) {
-      guint32 num_accounts = xaccGroupGetNumAccounts(g);  
-      guint32 i = 0;
-      while(i < num_accounts) {
-        Account *current_acc = xaccGroupGetAccount(g, i);
+      GList *list = xaccGroupGetAccountList (g);
+      GList *node;
 
-        if(!xml_add_account_restorer(p, current_acc)) return(FALSE);
-        i++;
+      for (node = list; node; node = node->next) {
+        Account *current_acc = node->data;
+
+        if(!xml_add_account_restorer(p, current_acc))
+          return(FALSE);
       }
     }
   }
   return(TRUE);
 }
-  
+
 static gboolean
 xml_add_account_restorers(xmlNodePtr p, AccountGroup *g) {
-  guint32 i = 0;
-  guint32 num_accounts;
+  GList *list;
+  GList *node;
   
   if(!p) return(FALSE);
   if(!g) return(FALSE);
 
-  num_accounts = xaccGroupGetNumAccounts(g); 
-  while(i < num_accounts) {
-    Account *current_acc = xaccGroupGetAccount(g, i);
+  list = xaccGroupGetAccountList (g);
+
+  for (node = list; node; node = node->next) {
+    Account *current_acc = node->data;
     xml_add_account_restorer(p, current_acc);
-    i++;
   }
   return(TRUE);
 }
