@@ -146,7 +146,7 @@ show_session_error (QofBackendError io_error, const char *newfile)
       fmt = _("GnuCash could not write to\n"
               "   %s.\n"
               "That database may be on a read-only file system,\n"
-	      "or you may not have write permission for the directory.\n");
+              "or you may not have write permission for the directory.\n");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
@@ -258,10 +258,10 @@ gnc_book_opened (void)
 {
   QofSession *session = qof_session_get_current_session();
   scm_call_2 (scm_c_eval_string("gnc:hook-run-danglers"),
-	      scm_c_eval_string("gnc:*book-opened-hook*"),
-	      (session ? 
-	       gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
-	       SCM_BOOL_F));
+              scm_c_eval_string("gnc:*book-opened-hook*"),
+              (session ? 
+               gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
+               SCM_BOOL_F));
 }
 
 void
@@ -281,10 +281,10 @@ gnc_file_new (void)
   gnc_engine_suspend_events ();
   
   scm_call_2(scm_c_eval_string("gnc:hook-run-danglers"),
-	     scm_c_eval_string("gnc:*book-closed-hook*"),
-	     (session ?
-	      gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
-	      SCM_BOOL_F));
+             scm_c_eval_string("gnc:*book-closed-hook*"),
+             (session ?
+              gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
+              SCM_BOOL_F));
 
   gnc_close_gui_component_by_session (session);
   qof_session_destroy (session);
@@ -293,7 +293,7 @@ gnc_file_new (void)
   qof_session_get_current_session ();
 
   scm_call_1(scm_c_eval_string("gnc:hook-run-danglers"),
-	     scm_c_eval_string("gnc:*new-book-hook*"));
+             scm_c_eval_string("gnc:*new-book-hook*"));
 
   gnc_book_opened ();
 
@@ -370,11 +370,11 @@ gnc_post_file_open (const char * filename)
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
   current_session  = qof_session_get_current_session();
   scm_call_2(scm_c_eval_string("gnc:hook-run-danglers"),
-	     scm_c_eval_string("gnc:*book-closed-hook*"),
-	     (current_session ?
-	      gw_wcp_assimilate_ptr (current_session,
-				     scm_c_eval_string("<gnc:Session*>")) :
-	      SCM_BOOL_F));
+             scm_c_eval_string("gnc:*book-closed-hook*"),
+             (current_session ?
+              gw_wcp_assimilate_ptr (current_session,
+                                     scm_c_eval_string("<gnc:Session*>")) :
+              SCM_BOOL_F));
   qof_session_destroy (current_session);
 
   /* load the accounts from the users datafile */
@@ -388,20 +388,20 @@ gnc_post_file_open (const char * filename)
   if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
   {
     const char *buttons[] = { N_("Quit"), N_("Open Anyway"),
-			      N_("Create New File"), NULL };
+                              N_("Create New File"), NULL };
     char *fmt = ((ERR_BACKEND_LOCKED == io_err) ?
-		 _("GnuCash could not obtain the lock for\n"
-		   "   %s.\n"
-		   "That database may be in use by another user,\n"
-		   "in which case you should not open the database.\n"
-		   "\nWhat would you like to do?") :
-		 _("WARNING!!!  GnuCash could not obtain the lock for\n"
-		   "   %s.\n"
-		   "That database may be on a read-only file system,\n"
-		   "or you may not have write permission for the directory.\n"
-		   "If you proceed you may not be able to save any changes.\n"
-		   "\nWhat would you like to do?")
-		 );
+                 _("GnuCash could not obtain the lock for\n"
+                   "   %s.\n"
+                   "That database may be in use by another user,\n"
+                   "in which case you should not open the database.\n"
+                   "\nWhat would you like to do?") :
+                 _("WARNING!!!  GnuCash could not obtain the lock for\n"
+                   "   %s.\n"
+                   "That database may be on a read-only file system,\n"
+                   "or you may not have write permission for the directory.\n"
+                   "If you proceed you may not be able to save any changes.\n"
+                   "\nWhat would you like to do?")
+                 );
     int rc;
 
     if (shutdown_cb) {
@@ -413,7 +413,7 @@ gnc_post_file_open (const char * filename)
     if (rc == 0)
     {
       if (shutdown_cb)
-	shutdown_cb(0);
+        shutdown_cb(0);
       g_assert(1);
     }
     else if (rc == 1)
@@ -639,7 +639,7 @@ gnc_file_export_file(const char * newfile)
   if (file_percentage_func) {
     file_percentage_func(_("Exporting file..."), 0.0);
     ok = qof_session_export (new_session, current_session,
-			     file_percentage_func);
+                             file_percentage_func);
     file_percentage_func(NULL, -1.0);
   } else {
     ok = qof_session_export (new_session, current_session, NULL);
@@ -709,9 +709,9 @@ gnc_file_save (void)
 
   /* save the main window state */
   scm_call_1 (scm_c_eval_string("gnc:main-window-save-state"),
-	      (session ?
-	       gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
-	       SCM_BOOL_F));
+              (session ?
+               gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
+               SCM_BOOL_F));
 
   LEAVE (" ");
 }
@@ -722,7 +722,7 @@ gnc_file_save_as (void)
   QofSession *new_session;
   QofSession *session;
   const char *filename;
-  char *default_dir = NULL;	/* Default to last open */
+  char *default_dir = NULL;        /* Default to last open */
   const char *last;
   char *newfile;
   const char *oldfile;
@@ -850,10 +850,10 @@ gnc_file_quit (void)
   gnc_engine_suspend_events ();
 
   scm_call_2(scm_c_eval_string("gnc:hook-run-danglers"),
-	     scm_c_eval_string("gnc:*book-closed-hook*"),
-	     (session ?
-	      gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
-	      SCM_BOOL_F));
+             scm_c_eval_string("gnc:*book-closed-hook*"),
+             (session ?
+              gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
+              SCM_BOOL_F));
   
   qof_session_destroy (session);
 
