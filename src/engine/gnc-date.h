@@ -55,7 +55,7 @@
 		#define setDateFormat qof_date_format_set
 		#define DateFormat QofDateFormat
 		#define printDateSecs qof_print_date_secs_buff
-		#define printDate(S,D,M,Y) qof_print_date_buff(S,MAX_DATE_LENTH,D,M,Y)
+		#define printDate(S,D,M,Y) qof_print_date_buff(S,MAX_DATE_LENGTH,D,M,Y)
 		#define printGDate qof_print_gdate
 		#define xaccPrintDateSecs qof_print_date_secs
 		#define scanDate qof_scan_date
