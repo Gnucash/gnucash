@@ -1,5 +1,7 @@
 2001-06-01  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnc-ui-util.c: use new scanf macro below
+
 	* src/engine/sixtp-dom-parsers.c (string_to_integer): use new
 	scanf macro below
 
