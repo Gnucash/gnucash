@@ -2011,6 +2011,8 @@ gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
         table = sheet->table;
         num_virt_rows = table->num_virt_rows;
 
+        gnucash_header_reconfigure (GNUCASH_HEADER(sheet->header_item));
+
         gtk_layout_freeze (GTK_LAYOUT(sheet));
 
         gnucash_sheet_stop_editing (sheet);

@@ -193,6 +193,8 @@ struct _Table
   short num_virt_rows;
   short num_virt_cols;
 
+  short num_header_phys_rows;
+
   CellBlock *current_cursor;
 
   VirtualLocation current_cursor_loc;

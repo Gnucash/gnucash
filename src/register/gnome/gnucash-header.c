@@ -65,19 +65,16 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 {
         GnucashHeader *header = GNUCASH_HEADER(item);
         SheetBlockStyle *style = header->style;
-        SheetBlockStyle *header_style;
-        CellDimensions *cd;
-        VirtualLocation virt_loc;
         Table *table = header->sheet->table;
-        int i, j;
+        VirtualLocation virt_loc;
+        CellDimensions *cd;
+        GdkColor *bg_color;
         int xpaint, ypaint;
-        int w = 0, h = 0;
         const char *text;
         GdkFont *font;
-        GdkColor *bg_color;
         guint32 argb;
-
-        header_style = header->sheet->cursor_styles[CURSOR_TYPE_HEADER];
+        int i, j;
+        int w, h;
 
         virt_loc.vcell_loc.virt_row = 0;
         virt_loc.vcell_loc.virt_col = 0;
@@ -88,19 +85,24 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         bg_color = gnucash_color_argb_to_gdk (argb);
 
-        /* Assume all cells have the same color */
+        h = style->dimensions->height;
+        if (header->style->nrows == 1 &&
+            header->sheet->table->num_header_phys_rows == 2)
+                h *= 2;
+
         gdk_gc_set_foreground (header->gc, bg_color);
-        gdk_draw_rectangle (drawable, header->gc, TRUE, 0, 0, width, height);
+
+        gdk_draw_rectangle (drawable, header->gc, TRUE, 0, 0,
+                            style->dimensions->width, h);
 
         gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, -1, -1);
         gdk_gc_set_foreground (header->gc, &gn_black);
+
         gdk_draw_rectangle (drawable, header->gc, FALSE, -x, -y,
-                            style->dimensions->width,
-                            style->dimensions->height);
-        gdk_draw_line (drawable, header->gc, -x,
-                       style->dimensions->height + 1,
-                       style->dimensions->width - 1,
-                       style->dimensions->height + 1);
+                            style->dimensions->width, h);
+
+        gdk_draw_line (drawable, header->gc, 0, h + 1,
+                       style->dimensions->width, h + 1);
 
         gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, -1, -1);
         gdk_gc_set_background (header->gc, &gn_white);
@@ -108,6 +110,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         font = gnucash_register_font;
 
         ypaint = -y;
+        h = 0;
 
         for (i = 0; i < style->nrows; i++) {
                 xpaint = -x;
@@ -180,6 +183,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
                         xpaint += w;
                 }
+
                 ypaint += h;
         }
 }
@@ -279,15 +283,21 @@ gnucash_header_reconfigure (GnucashHeader *header)
         sheet->width = header->style->dimensions->width;
 
         w = header->style->dimensions->width;
-        h = header->style->dimensions->height + 2;
+        h = header->style->dimensions->height;
+        if (header->style->nrows == 1 &&
+            header->sheet->table->num_header_phys_rows == 2)
+                h *= 2;
+        h += 2;
 
-        if (header->height != h || header->width != w ||
-            header->style != old_style) {
+        if (header->height != h ||
+            header->width != w  ||
+            header->style != old_style)
+        {
                 header->height = h;
                 header->width = w;
 
-                gnome_canvas_set_scroll_region(GNOME_CANVAS(canvas),
-					       0, 0, w, h);
+                gnome_canvas_set_scroll_region (GNOME_CANVAS(canvas),
+                                                0, 0, w, h);
 
                 gtk_widget_set_usize (GTK_WIDGET(canvas), -1, h);
 

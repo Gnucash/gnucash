@@ -76,7 +76,7 @@ gnc_table_new (TableGetEntryHandler entry_handler,
 
    g_assert (entry_handler != NULL);
 
-   table = g_new0(Table, 1);
+   table = g_new0 (Table, 1);
 
    table->entry_handler = entry_handler;
    table->label_handler = label_handler;
@@ -91,9 +91,9 @@ gnc_table_new (TableGetEntryHandler entry_handler,
 
    gnc_table_init (table);
 
-   table->virt_cells = g_table_new(sizeof (VirtualCell),
-                                   gnc_virtual_cell_construct,
-                                   gnc_virtual_cell_destroy, table);
+   table->virt_cells = g_table_new (sizeof (VirtualCell),
+                                    gnc_virtual_cell_construct,
+                                    gnc_virtual_cell_destroy, table);
 
    return table;
 }
@@ -105,6 +105,8 @@ gnc_table_init (Table * table)
 {
    table->num_virt_rows = -1;
    table->num_virt_cols = -1;
+
+   table->num_header_phys_rows = -1;
 
    table->current_cursor = NULL;
 
