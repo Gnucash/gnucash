@@ -247,7 +247,10 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
    Account * acc;
    if (!lot || !split) return;
 
-   ENTER ("(lot=%p, split=%p)", lot, split);
+   ENTER ("(lot=%p, split=%p) %s amt=%s val=%s", lot, split,
+        gnc_lot_get_title (lot), 
+        gnc_num_dbg_to_string (split->amount),
+        gnc_num_dbg_to_string (split->value));
    acc = xaccSplitGetAccount (split);
    if (NULL == lot->account)
    {
