@@ -29,7 +29,6 @@
 #include <guile/gh.h>
 
 #include "print-session.h"
-#include "glade-gnc-dialogs.h"
 
 typedef struct {
   GtkWidget * dialog;

@@ -27,8 +27,6 @@
 
 #include <gnome.h>
 
-#include "glade-gnc-dialogs.h"
-
 typedef struct _FinCalcDialog FinCalcDialog;
 
 FinCalcDialog * gnc_ui_fincalc_dialog_create(void);

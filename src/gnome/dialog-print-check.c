@@ -29,6 +29,7 @@
 #include <guile/gh.h>
 
 #include "messages.h"
+#include "glade-gnc-dialogs.h"
 #include "dialog-print-check.h"
 #include "dialog-utils.h"
 #include "window-help.h"

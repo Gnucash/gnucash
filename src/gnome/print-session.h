@@ -38,8 +38,6 @@
 /* #include <libgnomeprint/gnome-printer-profile.h> */
 #include <libgnomeprint/gnome-font.h>
 
-#include "glade-gnc-dialogs.h"
-
 typedef struct {
   GnomePrintMaster   * master;
   GnomePrintMeta     * meta;

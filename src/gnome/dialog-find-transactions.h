@@ -37,16 +37,5 @@ FindTransactionsDialog *
 gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * ledger);
 
 void gnc_ui_find_transactions_dialog_destroy(FindTransactionsDialog * pcd);
-void gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
-                                           gpointer  user_data);
-void gnc_ui_find_transactions_dialog_cancel_cb(GtkButton * button,
-                                               gpointer user_data);
-
-SelectDateDialog *
-gnc_ui_select_date_dialog_create(GtkWidget * w1, GtkWidget * w2, 
-                                 GtkWidget * w3, char * ymd_format);
-void gnc_ui_select_date_dialog_destroy(SelectDateDialog * sdd);
-void gnc_ui_select_date_cancel_cb(GtkWidget * w, gpointer user_data);
-void gnc_ui_select_date_ok_cb(GtkWidget * w, gpointer user_data);
 
 #endif

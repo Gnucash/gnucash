@@ -31,6 +31,7 @@ src/gnome/glade-support.c
 src/gnome/glade/account_strings.c
 src/gnome/glade/commodity_strings.c
 src/gnome/glade/fincalc_strings.c
+src/gnome/glade/find_strings.c
 src/gnome/glade/help_strings.c
 src/gnome/glade/price_strings.c
 src/gnome/glade/progress_strings.c
