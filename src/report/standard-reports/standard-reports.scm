@@ -80,6 +80,7 @@
 (use-modules (gnucash report portfolio))
 (use-modules (gnucash report price-scatter))
 (use-modules (gnucash report register))
+(use-modules (gnucash report trial-balance))
 (use-modules (gnucash report transaction))
 
 (use-modules (gnucash gnc-module))

@@ -68,6 +68,7 @@
 
 ;; html-utilities.scm 
 
+(export gnc:html-make-empty-cell)
 (export gnc:html-make-empty-cells)
 (export gnc:account-anchor-text)
 (export gnc:split-anchor-text)
@@ -593,6 +594,9 @@
 (export gnc:report-finished)
 (export gnc:accounts-count-splits)
 (export gnc:commodity-collector-allzero?)
+(export gnc:account-get-trans-type-balance-interval)
+(export gnc:account-get-pos-trans-total-interval)
+(export gnc:double-col)
 
 (load-from-path "commodity-utilities.scm")
 (load-from-path "html-barchart.scm")

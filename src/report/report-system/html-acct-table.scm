@@ -62,7 +62,7 @@
 ;; 
 ;; The list of accounts which are to be placed in the
 ;; gnc:html-acct-table object can be controled with the
-;; gnc:make-html-acct-table/accts, gnc:make-html-acct-table/accts/env,
+;; gnc:make-html-acct-table/accts, gnc:make-html-acct-table/env/accts,
 ;; and gnc:html-table-add-accts!  functions.  
 ;; 
 ;; The gnc:html-acct-table parameters, set with
@@ -741,10 +741,12 @@
 (define (gnc:html-acct-table-get-cell acct-table row col)
   ;; we'll only ever store one object in an html-table-cell
   ;; returns the first object stored in that cell
-  (car (gnc:html-table-cell-data
-	(gnc:html-table-get-cell
-	 (gnc:_html-acct-table-matrix_ acct-table)
-	 row (+ col 1)))))
+  (let* ((cell (gnc:html-table-get-cell
+		(gnc:_html-acct-table-matrix_ acct-table)
+		row (+ col 1))))
+    (and cell (car (gnc:html-table-cell-data cell)))
+    )
+  )
 
 (define (gnc:html-acct-table-set-cell! acct-table row col obj)
   (gnc:html-table-set-cell!
@@ -753,7 +755,8 @@
    obj))
 
 (define (gnc:html-acct-table-get-row-env acct-table row)
-  (gnc:html-acct-table-get-cell acct-table row -1))
+  (gnc:html-acct-table-get-cell acct-table row -1)
+  )
 
 (define (gnc:html-acct-table-set-row-env! acct-table row env)
   (gnc:html-acct-table-set-cell! acct-table row -1 env))
@@ -887,21 +890,6 @@
 	 )))
     table)
   )
-
-(define (gnc:uniform-commodity? amt report-commodity)
-  ;; function to see if the commodity-collector amt
-  ;; contains any foreign commodities
-  (lambda (amt)
-    (let ((elts (gnc:commodity-collector-commodity-count amt))
-	  )
-      (or (equal? elts 0)
-	  (and (equal? elts 1)
-	       (gnc:commodity-collector-contains-commodity?
-		amt report-commodity)
-	       )
-	  )
-      )
-    ))
 
 ;; 
 ;; This function adds all the lines from a gnc:html-acct-table to a

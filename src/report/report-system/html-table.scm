@@ -405,19 +405,25 @@
 ;;   (let ((a '(0 1 2))) (list-set! a 1 "x") a)
 ;;    => (0 "x" 2)
 (define (gnc:html-table-get-cell table row col)
-  (list-ref-safe (gnc:html-table-get-row table row) col))
+  (let* ((row (gnc:html-table-get-row table row)))
+    (and row (list-ref-safe row col)))
+  )
 
 (define (gnc:html-table-get-row table row)
   (let* ((dd (gnc:html-table-data table))
-	 (len (length dd))
+	 (len (and dd (length dd)))
 	 )
-    (list-ref-safe dd (- (- len 1) row))
+    (and len
+	 (list-ref-safe dd (- (- len 1) row))
+	 )
     ))
 
 (define (gnc:html-table-set-cell! table row col . objects)
   (let ((rowdata #f)
 	(row-loc #f)
-        (l (length (gnc:html-table-data table))))
+        (l (length (gnc:html-table-data table)))
+	(objs (length objects))
+	)
     ;; ensure the row-data is there 
     (if (>= row l)
 	(begin
@@ -433,8 +439,12 @@
 	  (set! rowdata (list-ref (gnc:html-table-data table) row-loc))))
     
     ;; make a table-cell and set the data 
-    (let ((tc (gnc:make-html-table-cell)))
-      (apply gnc:html-table-cell-append-objects! tc objects)
+    (let* ((tc (gnc:make-html-table-cell))
+	   (first (car objects)))
+      (if (and (equal? objs 1) (gnc:html-table-cell? first))
+	  (set! tc first)
+	  (apply gnc:html-table-cell-append-objects! tc objects)
+	  )
       (set! rowdata (list-set-safe! rowdata col tc))
       
       ;; add the row-data back to the table 

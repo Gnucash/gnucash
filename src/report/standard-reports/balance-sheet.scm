@@ -30,6 +30,7 @@
 ;;    
 ;;    Line & column alignments still do not conform with
 ;;    textbook accounting practice (they're close though!).
+;;    The 'canonically-tabbed option is currently broken.
 ;;    
 ;;    Progress bar functionality is currently mostly broken.
 ;;    
@@ -101,13 +102,12 @@
 (define opthelp-bottom-behavior
   (N_ "Displays accounts which exceed the depth limit at the depth limit"))
 
-(define optname-show-parent-balance (N_ "Show any balance in parent accounts"))
-(define opthelp-show-parent-balance (N_ "Show any balance in parent accounts"))
-;; FIXME optname-show-parent-balance needs immediate/recursive/omit choices
-(define optname-show-parent-total (N_ "Show parent account subtotals"))
-(define opthelp-show-parent-total
-  (N_ "Show account subtotals for all selected accounts having children"))
-;; FIXME optname-show-parent-total needs a 'canonically-tabbed choice
+(define optname-parent-balance-mode (N_ "Parent account balances"))
+(define opthelp-parent-balance-mode
+  (N_ "How to show any balance in parent accounts"))
+(define optname-parent-total-mode (N_ "Parent account subtotals"))
+(define opthelp-parent-total-mode
+  (N_ "How to show account subtotals for selected accounts having children"))
 
 (define optname-show-zb-accts (N_ "Include accounts with zero total balances"))
 (define opthelp-show-zb-accts
@@ -272,14 +272,36 @@
       gnc:pagename-display optname-omit-zb-bals
       "b" opthelp-omit-zb-bals #f))
     ;; what to show for non-leaf accounts
-    (add-option 
-     (gnc:make-simple-boolean-option
-      gnc:pagename-display optname-show-parent-balance 
-      "c" opthelp-show-parent-balance #t))
-    (add-option 
-     (gnc:make-simple-boolean-option
-      gnc:pagename-display optname-show-parent-total
-      "d" opthelp-show-parent-total #f))
+    (add-option
+     (gnc:make-multichoice-option
+      gnc:pagename-display optname-parent-balance-mode
+      "c" opthelp-parent-balance-mode
+      'immediate-bal
+      (list (vector 'immediate-bal
+		    (N_ "Show Immediate Balance")
+		    (N_ "Show only the balance in the parent account, excluding any subaccounts"))
+	    (vector 'recursive-bal
+		    (N_ "Recursive Balance")
+		    (N_ "Include subaccounts in balance"))
+	    (vector 'omit-bal
+		    (N_ "Omit Balance")
+		    (N_ "Do not show parent account balances")))))
+    (add-option
+     (gnc:make-multichoice-option
+      gnc:pagename-display optname-parent-total-mode
+      "d" opthelp-parent-total-mode
+      'f
+      (list (vector 't
+		    (N_ "Show subtotals")
+		    (N_ "Show subtotals for selected accounts which have subaccounts"))
+	    (vector 'f
+		    (N_ "Do not show subtotals")
+		    (N_ "Do not subtotal selected parent accounts"))
+	    (vector 'canonically-tabbed
+		    ;;(N_ "Subtotals indented text book style")
+		    (N_ "Text book style (experimental)")
+		    (N_ "Show parent account subtotals, indented per text book practice (experimental)")))))
+    
     ;; some detailed formatting options
     (add-option 
      (gnc:make-simple-boolean-option
@@ -362,10 +384,13 @@
                                  optname-show-foreign))
          (show-rates? (get-option pagename-commodities
                                   optname-show-rates))
-         (show-parent-balance? (get-option gnc:pagename-display
-                                           optname-show-parent-balance))
-         (show-parent-total? (get-option gnc:pagename-display
-                                         optname-show-parent-total))
+         (parent-balance-mode (get-option gnc:pagename-display
+                                           optname-parent-balance-mode))
+         (parent-total-mode
+	  (car
+	   (assoc-ref '((t #t) (f #f) (canonically-tabbed canonically-tabbed))
+		      (get-option gnc:pagename-display
+				  optname-parent-total-mode))))
          (show-zb-accts? (get-option gnc:pagename-display
 				     optname-show-zb-accts))
          (omit-zb-bals? (get-option gnc:pagename-display
@@ -409,7 +434,7 @@
 	 ;; (asset, liability, equity) have the same width.
          (tree-depth (if (equal? depth-limit 'all)
                          (gnc:get-current-group-depth) 
-                         depth-limit))
+			 depth-limit))
          ;; exchange rates calculation parameters
 	 (exchange-fn
 	  (gnc:case-exchange-fn price-source report-commodity date-tp))
@@ -420,6 +445,7 @@
     (define (add-subtotal-line table pos-label neg-label signed-balance)
       (define allow-same-column-totals #t)
       (let* ((neg? (and signed-balance
+			neg-label
 			(gnc:numeric-negative-p
 			 (gnc:gnc-monetary-amount
 			  (gnc:sum-collector-commodity
@@ -459,7 +485,7 @@
     
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
-     doc (string-append report-title " " company-name " "
+     doc (string-append company-name " " report-title " "
 			(gnc:print-date date-tp))
      )
     
@@ -616,7 +642,7 @@
 						 'summarize))
 		 (list 'report-commodity report-commodity)
 		 (list 'exchange-fn exchange-fn)
-		 (list 'parent-account-subtotal-mode show-parent-total?)
+		 (list 'parent-account-subtotal-mode parent-total-mode)
 		 (list 'zero-balance-mode (if show-zb-accts?
 					      'show-leaf-acct
 					      'omit-leaf-acct))
@@ -627,11 +653,7 @@
 		)
 	  (set! params
 		(list
-		 (list 'parent-account-balance-mode
-		       (if show-parent-balance?
-			   'immediate-bal
-			   'omit-bal
-			   ))
+		 (list 'parent-account-balance-mode parent-balance-mode)
 		 (list 'zero-balance-display-mode (if omit-zb-bals?
 						      'omit-balance
 						      'show-balance))

@@ -37,6 +37,7 @@ gncscmmod_DATA = \
    price-scatter.scm \
    register.scm \
    standard-reports.scm \
+   trial-balance.scm \
    transaction.scm 
 
 EXTRA_DIST = ${gncscmmod_DATA}

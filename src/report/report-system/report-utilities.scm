@@ -474,17 +474,6 @@
 (define (gnc:commodity-collector-list collector)
   (collector 'list #f #f))
 
-;; Returns the number of commodities in a commodity-collector.
-;; (If this were implemented as a record, I would be able to
-;; just (length ...) the alist, but....)
-(define (gnc:commodity-collector-commodity-count collector)
-    (let ((commodities 0))
-	(gnc:commodity-collector-map
-	    collector
-		(lambda (comm amt) (set! commodities (+ commodities 1))))
-	commodities
-    ))
-
 ;; Returns zero if all entries in this collector are zero.
 (define (gnc:commodity-collector-allzero? collector)
   (let ((result #t))
@@ -705,4 +694,143 @@
       (+ (length (gnc:account-get-split-list (car accounts)))
 	 (gnc:accounts-count-splits (cdr accounts)))
       0))
+
+;; Sums up any splits of a certain type affecting a group of accounts.
+;; the type is an alist '((str "match me") (cased #f) (regexp #f))
+(define (gnc:account-get-trans-type-balance-interval
+	 group type start-date-tp end-date-tp)
+  (let* ((query (gnc:malloc-query))
+	 (splits #f)
+	 (get-val (lambda (alist key)
+		    (let ((lst (assoc-ref alist key)))
+		      (if lst (car lst) lst))))
+	 (matchstr (get-val type 'str))
+	 (case-sens (if (get-val type 'cased) 1 0))
+	 (regexp (if (get-val type 'regexp) 1 0))
+	 (total (gnc:make-commodity-collector))
+	 )
+    (gnc:query-set-book query (gnc:get-current-book))
+    (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
+    (gnc:query-add-account-match query group 'guid-match-any 'query-and)
+    (gnc:query-add-date-match-timepair
+     query
+     (and start-date-tp #t) start-date-tp
+     (and end-date-tp #t) end-date-tp 'query-and)
+    (gnc:query-add-description-match
+     query matchstr case-sens regexp 'query-and)
+    
+    (set! splits (gnc:query-get-splits query))
+    (map (lambda (split)
+		(let* ((shares (gnc:split-get-amount split))
+		       (acct-comm (gnc:account-get-commodity
+				   (gnc:split-get-account split)))
+		       )
+		  (gnc:commodity-collector-add total acct-comm shares)
+		  )
+		)
+	 splits
+	 )
+    (gnc:free-query query)
+    total
+    )
+  )
+
+;; similar, but only counts transactions with non-negative shares and
+;; *ignores* any closing entries
+(define (gnc:account-get-pos-trans-total-interval
+	 group type start-date-tp end-date-tp)
+  (let* ((str-query (gnc:malloc-query))
+	 (sign-query (gnc:malloc-query))
+	 (total-query #f)
+         (splits #f)
+	 (get-val (lambda (alist key)
+		    (let ((lst (assoc-ref alist key)))
+		      (if lst (car lst) lst))))
+	 (matchstr (get-val type 'str))
+	 (case-sens (if (get-val type 'cased) 1 0))
+	 (regexp (if (get-val type 'regexp) 1 0))
+         (total (gnc:make-commodity-collector))
+         )
+    (gnc:query-set-book str-query (gnc:get-current-book))
+    (gnc:query-set-book sign-query (gnc:get-current-book))
+    (gnc:query-set-match-non-voids-only! str-query (gnc:get-current-book))
+    (gnc:query-set-match-non-voids-only! sign-query (gnc:get-current-book))
+    (gnc:query-add-account-match str-query group 'guid-match-any 'query-and)
+    (gnc:query-add-account-match sign-query group 'guid-match-any 'query-and)
+    (gnc:query-add-date-match-timepair
+     str-query
+     (and start-date-tp #t) start-date-tp
+     (and end-date-tp #t) end-date-tp 'query-and)
+    (gnc:query-add-date-match-timepair
+     sign-query
+     (and start-date-tp #t) start-date-tp
+     (and end-date-tp #t) end-date-tp 'query-and)
+    (gnc:query-add-description-match
+     str-query matchstr case-sens regexp 'query-and)
+    (set! total-query
+	  (gnc:query-merge sign-query (gnc:query-invert str-query) 'query-and))
+    
+    (set! splits (gnc:query-get-splits total-query))
+    (map (lambda (split)
+	   (let* ((shares (gnc:split-get-amount split))
+		  (acct-comm (gnc:account-get-commodity
+			      (gnc:split-get-account split)))
+		  )
+	     (or (gnc:numeric-negative-p shares)
+		 (gnc:commodity-collector-add total acct-comm shares)
+		 )
+	     )
+	   )
+         splits
+         )
+    (gnc:free-query total-query)
+    total
+    )
+  )
+
+;; utility to assist with double-column balance tables
+;; a request is made with the <req> argument
+;; <req> may currently be 'entry|'debit-q|'credit-q|'zero-q|'debit|'credit
+;; 'debit-q|'credit-q|'zero-q tests the sign of the balance
+;; 'side returns 'debit or 'credit, the column in which to display
+;; 'debt|'credit return the entry, if appropriate, or #f
+(define (gnc:double-col
+	 req signed-balance report-commodity exchange-fn show-comm?)
+  (let* ((sum (and signed-balance
+		   (gnc:sum-collector-commodity
+		    signed-balance
+		    report-commodity
+		    exchange-fn)))
+	 (amt (and sum (gnc:gnc-monetary-amount sum)))
+	 (neg? (and amt (gnc:numeric-negative-p amt)))
+	 (bal (if neg?
+		  (let ((bal (gnc:make-commodity-collector)))
+		    (bal 'minusmerge signed-balance #f)
+		    bal)
+		  signed-balance))
+	 (bal-sum (gnc:sum-collector-commodity
+		   bal
+		   report-commodity
+		   exchange-fn))
+	 (balance
+	  (if (gnc:uniform-commodity? bal report-commodity)
+	      (if (gnc:numeric-zero-p amt) #f bal-sum)
+	      (if show-comm?
+		  (gnc:commodity-table bal report-commodity exchange-fn)
+		  bal-sum)
+	      ))
+	 )
+    (car (assoc-ref
+	  (list
+	   (list 'entry balance)
+	   (list 'debit (if neg? #f balance))
+	   (list 'credit (if neg? balance #f))
+	   (list 'zero-q (if neg? #f (if balance #f #t)))
+	   (list 'debit-q (if neg? #f (if balance #t #f)))
+	   (list 'credit-q (if neg? #t #f))
+	   )
+	  req
+	  ))
+    )
+  )
 

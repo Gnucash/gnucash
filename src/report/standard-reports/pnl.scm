@@ -22,6 +22,22 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 
+;; FIXME
+;; 
+;; Note: the current P&L report must be done before closing, when
+;; there are still balances in your income/expense accounts. if run
+;; post-closing, this implementation will report zero profit.  in
+;; other words, users will generally want to run this report after
+;; adjustments but before closing. this code really should filter-out
+;; closing (but not adjusting) entries and report on what is left....
+;; 
+;;  (see equity-statement.scm for an example of how to do this)
+;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 (define-module (gnucash report pnl))
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
@@ -35,7 +51,7 @@
 
 ;; Profit and loss report. Actually, people in finances might want
 ;; something different under this name, but they are welcomed to
-;; contribute their changes :-)
+;; contribute their changes :-)  (perhaps income statement)
 
 (define reportname (N_ "Profit And Loss"))
 

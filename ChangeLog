@@ -1,3 +1,43 @@
+2004-07-13  David Montenegro  <sunrise2000@comcast.net>
+
+        * src/report/standard-reports/trial-balance.scm:
+        * src/report/standard-reports/standard-reports.scm:
+        * src/report/standard-reports/Makefile.am
+          added Trial Balance/Work Sheet report
+
+        * src/report/standard-reports/balance-sheet.scm:
+          added drop-down choices missing in previous version
+          added support for adjusting/closing entries
+
+        * src/report/standard-reports/equity-statement.scm:
+          added support for adjusting/closing entries
+          fixed "For Period Covering" label
+          fixed handling of unrealized gains
+          investment/draw discrimination based on shares sign
+          omit unrealized gains when zero
+
+        * src/report/report-system/html-acct-table.scm:
+        * src/report/report-system/html-table.scm:
+          null reference bug fixes
+
+        * src/report/report-system/report-utilities.scm:
+          added utility functions for accessing splits
+          and creating double-column balance HTML
+          gnc:double-col,
+          gnc:account-get-trans-type-balance-interval,
+          gnc:account-get-pos-trans-total-interval
+
+        * src/report/report-system/commodity-utilities.scm:
+        * src/report/report-system/html-acct-table.scm:
+        * src/report/report-system/report-utilities.scm:
+          moved gnc:commodity-collector-commodity-count and
+          gnc:uniform-commodity? into commodity-utilities.scm
+
+        * src/report/report-system/report-system.scm:
+          added some additional exports
+
+	Bug #144265
+
 2004-07-04  Derek Atkins  <derek@ihtfp.com>
 
 	* acinclude.m4: create a SCANF_QD_CHECK and make sure both

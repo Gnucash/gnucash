@@ -19,7 +19,8 @@
 ;;    statement to no more than daily resolution.
 ;;    
 ;;    The Accounts option panel needs a way to select (and select by
-;;    default) capital and draw accounts.
+;;    default) capital and draw accounts. There really should be a
+;;    contra account type or attribute....
 ;;    
 ;;    The variables in this code could use more consistent naming.
 ;;    
@@ -86,6 +87,19 @@
   (N_ "Display any foreign currency amount in an account"))
 (define optname-show-rates (N_ "Show Exchange Rates"))
 (define opthelp-show-rates (N_ "Show the exchange rates used"))
+
+(define pagename-entries (N_ "Entries"))
+(define optname-closing-pattern (N_ "Closing Entries pattern"))
+(define opthelp-closing-pattern
+  (N_ "Any text in the Description column which identifies closing entries"))
+(define optname-closing-casing
+  (N_ "Closing Entries pattern is case-sensitive"))
+(define opthelp-closing-casing
+  (N_ "Causes the Closing Entries Pattern match to be case-sensitive"))
+(define optname-closing-regexp
+  (N_ "Closing Entries Pattern is regular expression"))
+(define opthelp-closing-regexp
+  (N_ "Causes the Closing Entries Pattern to be treated as a regular expression"))
 
 ;; This calculates the increase in the balance(s) of all accounts in
 ;; <accountlist> over the period from <start-date> to <end-date>.
@@ -189,6 +203,23 @@
       gnc:pagename-display optname-use-rules
       "f" opthelp-use-rules #f))
     
+    ;; adjusting/closing entry match criteria
+    ;; 
+    ;; N.B.: transactions really should have a field where we can put
+    ;; transaction types like "Adjusting/Closing/Correcting Entries"
+    (add-option
+      (gnc:make-string-option
+      pagename-entries optname-closing-pattern
+      "a" opthelp-closing-pattern (N_ "Closing Entries")))
+    (add-option
+     (gnc:make-simple-boolean-option
+      pagename-entries optname-closing-casing
+      "b" opthelp-closing-casing #f))
+    (add-option
+     (gnc:make-simple-boolean-option
+      pagename-entries optname-closing-regexp
+      "c" opthelp-closing-regexp #f))
+    
     ;; Set the accounts page as default option tab
     (gnc:options-set-default-section options gnc:pagename-accounts)
     
@@ -241,6 +272,12 @@
                                   optname-show-rates))
          (use-rules? (get-option gnc:pagename-display
 				    optname-use-rules))
+	 (closing-str (get-option pagename-entries
+				  optname-closing-pattern))
+	 (closing-cased (get-option pagename-entries
+				    optname-closing-casing))
+	 (closing-regexp (get-option pagename-entries
+				     optname-closing-regexp))
 	 
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
@@ -257,6 +294,16 @@
 	 ;; these must still be split-out and itemized separately
 	 (capital-accounts #f)
 	 (drawing-accounts #f)
+	 (investments #f)
+	 (withdrawals #f)
+	 (net-investment #f)
+	 (income-expense-closing #f)
+	 (closing-pattern
+	  (list (list 'str closing-str)
+		(list 'cased closing-cased)
+		(list 'regexp closing-regexp)
+		)
+	  )
 	 
          (doc (gnc:make-html-document))
          ;; exchange rates calculation parameters
@@ -271,11 +318,11 @@
     (gnc:html-document-set-title! 
      doc (sprintf #f
 		  (string-append "%s %s "
-				 (N_ "For Period")
+				 (N_ "For Period Covering")
 				 " %s "
 				 (N_ "to")
 				 " %s")
-		  report-title company-name
+		  company-name report-title
                   (gnc:print-date start-date-printable)
                   (gnc:print-date end-date-tp)))
     
@@ -303,6 +350,8 @@
                (neg-start-equity-balance #f)
                (neg-end-equity-balance #f)
 	       
+	       ;; these variables wont be used until gnucash gets
+	       ;; conta account types
                (start-capital-balance #f)
                (end-capital-balance #f)
                (start-drawing-balance #f)
@@ -315,13 +364,13 @@
 	       (end-unrealized-gains #f)
 	       (net-unrealized-gains #f)
 	       
-	       (start-total-equity #f)
-	       (end-total-equity #f)
-	       
-	       (investments #f)
-	       (draws #f)
+	       (equity-closing #f)
+	       (neg-pre-closing-equity #f)
 	       
 	       (capital-increase #f)
+	       
+	       (start-total-equity #f)
+	       (end-total-equity #f)
 	       
 	       ;; Create the account table below where its
 	       ;; percentage time can be tracked.
@@ -350,6 +399,7 @@
 		   table pos-label neg-label amount col
 		   exchange-fn rule? row-style)
 	    (let* ((neg? (and amount
+			      neg-label
 			      (gnc:numeric-negative-p
 			       (gnc:gnc-monetary-amount
 				(gnc:sum-collector-commodity
@@ -363,10 +413,11 @@
 		   (bal (gnc:sum-collector-commodity
 			 pos-bal report-commodity exchange-fn))
 		   (balance
-		    (or (and (gnc:uniform-commodity? bal report-commodity) bal)
+		    (or (and (gnc:uniform-commodity? pos-bal report-commodity)
+			     bal)
 			(and show-fucr?
 			     (gnc:commodity-table
-			      bal report-commodity exchange-fn))
+			      pos-bal report-commodity exchange-fn))
 			bal
 			))
 		   (column (or col 0))
@@ -444,12 +495,26 @@
 		(accountlist-get-comm-balance-at-date
 		 income-expense-accounts
 		 forever-ago end-date-tp)) ; OK
+	  ;; neg-pre-end-retained-earnings is not used to calculate
+	  ;; profit but is used to calculate unrealized gains
+	  
+	  ;; calculate net income
+	  ;; first, ask out how much profit/loss was closed
+	  (set! income-expense-closing
+		(gnc:account-get-trans-type-balance-interval
+		 income-expense-accounts closing-pattern
+		 start-date-tp end-date-tp)
+		)
+	  ;; find retained earnings for the period
 	  (set! neg-net-income
 		(accountlist-get-comm-balance-at-date
 		 income-expense-accounts
 		 start-date-tp end-date-tp)) ; OK
+	  ;; revert the income/expense to its pre-closing balance
+	  (neg-net-income 'minusmerge income-expense-closing #f)
 	  (set! net-income (gnc:make-commodity-collector))
 	  (net-income 'minusmerge neg-net-income #f)
+	  ;; now we know the net income for the period
 	  
 	  ;; start and end (unadjusted) equity balances
 	  (set! neg-start-equity-balance
@@ -458,6 +523,8 @@
 	  (set! neg-end-equity-balance
                 (gnc:accounts-get-comm-total-assets 
                  equity-accounts get-end-balance-fn)) ; OK
+	  ;; neg-end-equity-balance is used to calculate unrealized
+	  ;; gains and investments/withdrawals
 	  
 	  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	  ;; 
@@ -482,6 +549,10 @@
 		(unrealized-gains-at-date start-book-balance
 					  start-exchange-fn
 					  start-date-tp)) ; OK
+	  ;; I suspect that unrealized gains (since never realized)
+	  ;; must be counted from forever-ago....
+	  ;; ...yep, this appears to be correct.
+	  (set! start-unrealized-gains (gnc:make-commodity-collector))
 	  (set! end-unrealized-gains
 		(unrealized-gains-at-date end-book-balance
 					  end-exchange-fn
@@ -492,17 +563,6 @@
 	  (net-unrealized-gains 'merge end-unrealized-gains #f)
 	  (net-unrealized-gains 'minusmerge start-unrealized-gains #f) ; OK
 	  
-	  ;; starting and ending total equity...
-	  (set! start-total-equity (gnc:make-commodity-collector))
-	  (start-total-equity 'minusmerge neg-start-equity-balance #f)
-	  (start-total-equity 'minusmerge neg-pre-start-retained-earnings #f)
-	  (start-total-equity 'merge start-unrealized-gains #f) ; OK
-	  
-	  (set! end-total-equity (gnc:make-commodity-collector))
-	  (end-total-equity 'minusmerge neg-end-equity-balance #f)
-	  (end-total-equity 'minusmerge neg-pre-end-retained-earnings #f)
-	  (end-total-equity 'merge end-unrealized-gains #f) ; OK
-	  
 	  ;; 
 	  ;; calculate investments & draws...
 	  ;; 
@@ -511,20 +571,51 @@
 	  ;; bit...  i'll do a transaction query and classify the
 	  ;; splits by debit/credit.
 	  ;; 
+	  ;;   withdrawals = investments - (investments - withdrawals)
+	  ;;   investments = withdrawals + (investments - withdrawals)
+	  ;; 
+	  ;; assume that positive shares on an equity account are debits...
+	  ;; 
 	  
-	  ;; FIXME: um... no.  that sounds like too much work.
-	  ;; ok, for now, just assume draws are zero and investments signed
-	  (set! draws (gnc:make-commodity-collector))           ;; 0
-	  (set! investments (gnc:make-commodity-collector))     ;; 0
-	  (investments 'minusmerge neg-end-equity-balance #f)   ;; > 0
-	  (investments 'merge neg-start-equity-balance #f)      ;; net increase
+	  (set! equity-closing 
+		(gnc:account-get-trans-type-balance-interval
+		 equity-accounts closing-pattern
+		 start-date-tp end-date-tp)
+		)
+	  (set! neg-pre-closing-equity (gnc:make-commodity-collector))
+	  (neg-pre-closing-equity 'merge neg-end-equity-balance #f)
+	  (neg-pre-closing-equity 'minusmerge equity-closing #f)
+	  
+	  (set! net-investment (gnc:make-commodity-collector))  ;; 0
+	  (net-investment 'minusmerge neg-pre-closing-equity #f);; > 0
+	  (net-investment 'merge neg-start-equity-balance #f)   ;; net increase
+	  
+	  (set! withdrawals (gnc:make-commodity-collector))
+	  (withdrawals 'merge (gnc:account-get-pos-trans-total-interval
+				    equity-accounts closing-pattern
+				    start-date-tp end-date-tp)
+		       #f)
+	  (set! investments (gnc:make-commodity-collector))
+	  (investments 'merge net-investment #f)
+	  (investments 'merge withdrawals #f)
 	  
 	  ;; increase in equity
 	  (set! capital-increase (gnc:make-commodity-collector))
 	  (capital-increase 'merge net-income #f)
 	  (capital-increase 'merge investments #f)
-	  (capital-increase 'minusmerge draws #f)
+	  (capital-increase 'minusmerge withdrawals #f)
 	  (capital-increase 'merge net-unrealized-gains #f)
+	  
+	  ;; starting total equity
+	  (set! start-total-equity (gnc:make-commodity-collector))
+	  (start-total-equity 'minusmerge neg-start-equity-balance #f)
+	  (start-total-equity 'minusmerge neg-pre-start-retained-earnings #f)
+	  (start-total-equity 'merge start-unrealized-gains #f) ; OK
+	  
+	  ;; ending total equity
+	  (set! end-total-equity (gnc:make-commodity-collector))
+	  (end-total-equity 'merge start-total-equity #f)
+	  (end-total-equity 'merge capital-increase #f) ; OK
 	  
 	  (gnc:report-percent-done 30)
 	  
@@ -555,17 +646,26 @@
 	   )
 	  (report-line
 	   build-table 
-	   (string-append (N_ "Investments less withdrawals") period-for)
+	   (string-append (N_ "Investments") period-for)
 	   #f
 	   investments
 	   0 end-exchange-fn #f #f
 	   )
 	  (report-line
 	   build-table 
-	   (string-append (N_ "Unrealized gains") period-for)
-	   (string-append (N_ "Unrealized losses") period-for)
-	   net-unrealized-gains
+	   (string-append (N_ "Withdrawals") period-for)
+	   #f
+	   withdrawals
 	   0 end-exchange-fn #f #f
+	   )
+	  (or (gnc:commodity-collector-allzero? net-unrealized-gains)
+	      (report-line
+	       build-table 
+	       (N_ "Unrealized gains")
+	       (N_ "Unrealized losses")
+	       net-unrealized-gains
+	       0 end-exchange-fn #f #f
+	       )
 	   )
 	  (report-line
 	   build-table 
