@@ -1,0 +1,81 @@
+#!/bin/sh
+exec guile -s $0 "$@"
+!#
+
+(use-modules (srfi srfi-2))
+(use-modules (ice-9 slib))
+(require 'format)
+
+(define *currency-file* "iso-4217-currencies.scm")
+(define *c-file-name* "iso-4217-currencies.c")
+
+(define (generate-currency-c-code form output-port)
+  (or (and-let* (((list? form))
+                 ((eq? 8 (length form)))
+                 (fullname (list-ref form 0))
+                 (unitname (list-ref form 1))
+                 (partname (list-ref form 2))
+                 (namespace (list-ref form 3))
+                 (mnemonic (list-ref form 4))
+                 (exchange-code (list-ref form 5))
+                 (parts-per-unit (list-ref form 6))
+                 (smallest-fraction (list-ref form 7))
+                 ((string? fullname))
+                 ((string? unitname))
+                 ((string? partname))
+                 ((string? namespace))
+                 ((string? mnemonic))
+                 ((string? exchange-code))
+                 ((number? parts-per-unit))
+                 ((number? smallest-fraction)))
+        
+        (format
+         output-port "
+  {
+    const char *fullname = ~S;
+    gnc_commodity *c = gnc_commodity_new(fullname,
+                                         ~S,
+                                         ~S,
+                                         ~S,
+                                         ~S);\n
+    if(!c)
+      g_warning(\"failed to create commodity for currency %s\", fullname);
+    else
+      if(!gnc_commodity_table_insert(table, c))
+        g_warning(\"failed to insert %s into commodity table\", fullname);
+  }\n"
+         fullname
+         namespace
+         mnemonic 
+         exchange-code
+         smallest-fraction
+         fullname
+         fullname))
+
+      (begin
+        (display "Bad currency data at form: ")
+        (display form)
+        (newline)
+        #f)))
+
+(define (generate-currencies-c-code)
+  (call-with-input-file *currency-file*
+    (lambda (input-port)
+      (call-with-output-file *c-file-name*
+        (lambda (output-port)
+          (let loop ((form (read input-port)))
+            (if (eof-object? form)
+                #t
+                (if (generate-currency-c-code form output-port)
+                    (loop (read input-port))
+                    #f))))))))
+
+(if (not (generate-currencies-c-code))
+    (begin
+      (display "Unable to generate iso-4217 currency C code.\n")
+      (exit 1))
+    (exit 0))
+
+;; Local Variables:
+;; mode: scheme
+;; End:
