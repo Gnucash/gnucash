@@ -82,6 +82,7 @@ gnc_book_init (GNCBook *book)
   book->topgroup = xaccMallocAccountGroup(book);
   book->pricedb = gnc_pricedb_create(book);
   book->shared_quickfill = NULL;
+  book->shared_quickfill_destroy = NULL;
 
   book->sched_xactions = NULL;
   book->sx_notsaved = FALSE;
@@ -125,6 +126,12 @@ gnc_book_destroy (GNCBook *book)
 
   ENTER ("book=%p", book);
   gnc_engine_generate_event (&book->guid, GNC_EVENT_DESTROY);
+
+  if (book->shared_quickfill_destroy)
+  {
+    (book->shared_quickfill_destroy) (book,
+                        book->shared_quickfill);
+  }
 
   gncObjectBookEnd (book);
 
@@ -229,10 +236,12 @@ gnc_book_get_shared_quickfill_hack (GNCBook *book)
 }
 
 void
-gnc_book_set_shared_quickfill_hack (GNCBook *book, gpointer qf)
+gnc_book_set_shared_quickfill_hack (GNCBook *book, gpointer qf,
+                                void (*fn) (GNCBook *, gpointer))
 {
   if (!book) return;
   book->shared_quickfill = qf;
+  book->shared_quickfill_destroy = fn;
 }
 
 /* ====================================================================== */

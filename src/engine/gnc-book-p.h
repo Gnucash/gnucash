@@ -56,6 +56,7 @@ struct gnc_book_struct
   AccountGroup *topgroup;
   GNCPriceDB *pricedb;
   gpointer shared_quickfill;
+  void (*shared_quickfill_destroy) (GNCBook *, gpointer);
 
   GList *sched_xactions;
   AccountGroup *template_group;
