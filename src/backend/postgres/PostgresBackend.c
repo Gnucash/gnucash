@@ -197,23 +197,6 @@ pgendSplitLookup (PGBackend *be, const GUID *split_guid)
    return NULL;
 }
 
-GNCPrice *
-pgendPriceLookup (PGBackend *be, const GUID *price_guid)
-{
-   GList *node;
-   GNCPrice * price = NULL;
-
-   ENTER("guid = %s", guid_to_string(price_guid));
-   for (node=be->blist; node; node=node->next)
-   {
-      GNCBook *book = node->data;
-      price = gnc_price_lookup (price_guid, book);
-      if (price) { LEAVE("price = %p", price); return price; }
-   }
-
-   return NULL;
-}
-
 GNCIdType
 pgendGUIDType (PGBackend *be, const GUID *guid)
 {
