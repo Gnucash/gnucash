@@ -27,110 +27,98 @@
 ;; functions that do more work in a "chunk".
 
 (define-module (srfi srfi-19)
-  :use-module (ice-9 syncase)
+  :use-module (srfi srfi-6)
   :use-module (srfi srfi-8)
-  :use-module (srfi srfi-9))
+  :use-module (srfi srfi-9)
+  :export (;; Constants
+           time-duration
+           time-monotonic
+           time-process
+           time-tai
+           time-thread
+           time-utc
+           ;; Current time and clock resolution
+           current-date
+           current-julian-day
+           current-modified-julian-day
+           current-time
+           time-resolution
+           ;; Time object and accessors
+           make-time
+           time?
+           time-type
+           time-nanosecond
+           time-second
+           set-time-type!
+           set-time-nanosecond!
+           set-time-second!
+           copy-time
+           ;; Time comparison procedures
+           time<=?
+           time<?
+           time=?
+           time>=?
+           time>?
+           ;; Time arithmetic procedures
+           time-difference
+           time-difference!
+           add-duration
+           add-duration!
+           subtract-duration
+           subtract-duration!
+           ;; Date object and accessors
+           make-date
+           date?
+           date-nanosecond
+           date-second
+           date-minute
+           date-hour
+           date-day
+           date-month
+           date-year
+           date-zone-offset?
+           date-year-day
+           date-week-day
+           date-week-number
+           ;; Time/Date/Julian Day/Modified Julian Day converters
+           date->julian-day
+           date->modified-julian-day
+           date->time-monotonic
+           date->time-tai
+           date->time-utc
+           julian-day->date
+           julian-day->time-monotonic
+           julian-day->time-tai
+           julian-day->time-utc
+           modified-julian-day->date
+           modified-julian-day->time-monotonic
+           modified-julian-day->time-tai
+           modified-julian-day->time-utc
+           time-monotonic->date
+           time-monotonic->time-monotonic
+           time-monotonic->time-tai
+           time-monotonic->time-tai!
+           time-monotonic->time-utc
+           time-monotonic->time-utc!
+           time-tai->date
+           time-tai->julian-day
+           time-tai->modified-julian-day
+           time-tai->time-monotonic
+           time-tai->time-monotonic!
+           time-tai->time-utc
+           time-tai->time-utc!
+           time-utc->date
+           time-utc->julian-day
+           time-utc->modified-julian-day
+           time-utc->time-monotonic
+           time-utc->time-monotonic!
+           time-utc->time-tai
+           time-utc->time-tai!
+           ;; Date to string/string to date converters.
+           date->string
+           string->date))
 
-(export
- ;; Constants
- time-duration
- time-monotonic
- time-process
- time-tai
- time-thread
- time-utc
- ;; Current time and clock resolution
- current-date
- current-julian-day
- current-modified-julian-day
- current-time
- time-resolution
- ;; Time object and accessors
- make-time
- time?
- time-type
- time-nanosecond
- time-second
- set-time-type!
- set-time-nanosecond!
- set-time-second!
- copy-time
- ;; Time comparison procedures
- time<=?
- time<?
- time=?
- time>=?
- time>?
- ;; Time arithmetic procedures
- time-difference
- time-difference!
- add-duration
- add-duration!
- subtract-duration
- subtract-duration!
- ;; Date object and accessors
- make-date
- date?
- date-nanosecond
- date-second
- date-minute
- date-hour
- date-day
- date-month
- date-year
- date-zone-offset?
- date-year-day
- date-week-day
- date-week-number
- ;; Time/Date/Julian Day/Modified Julian Day converters
- date->julian-day
- date->modified-julian-day
- date->time-monotonic
- date->time-tai
- date->time-utc
- julian-day->date
- julian-day->time-monotonic
- julian-day->time-tai
- julian-day->time-utc
- modified-julian-day->date
- modified-julian-day->time-monotonic
- modified-julian-day->time-tai
- modified-julian-day->time-utc
- time-monotonic->date
- time-monotonic->time-monotonic
- time-monotonic->time-tai
- time-monotonic->time-tai!
- time-monotonic->time-utc
- time-monotonic->time-utc!
- time-tai->date
- time-tai->julian-day
- time-tai->modified-julian-day
- time-tai->time-monotonic
- time-tai->time-monotonic!
- time-tai->time-utc
- time-tai->time-utc!
- time-utc->date
- time-utc->julian-day
- time-utc->modified-julian-day
- time-utc->time-monotonic
- time-utc->time-monotonic!
- time-utc->time-tai
- time-utc->time-tai!
- ;; Date to string/string to date converters.
- date->string
- string->date)
-
-;; Guile's prior to 1.5.X didn't have this.
-(define (priv:open-input-string str)
-  (call-with-input-string str (lambda (port)
-                                port)))
-
-;; :OPTIONAL is nice
-
-(define-syntax :optional
-  (syntax-rules ()
-    ((_ val default-value)
-     (if (null? val) default-value (car val)))))
+(cond-expand-provide (current-module) '(srfi-19))
 
 (define time-tai 'time-tai)
 (define time-utc 'time-utc)
@@ -227,7 +215,7 @@
     (let loop ((line (read-line port)))
       (if (not (eq? line eof))
           (begin
-            (let* ((data (read (priv:open-input-string
+            (let* ((data (read (open-input-string
                                 (string-append "(" line ")")))) 
                    (year (car data))
                    (jd   (cadddr (cdr data)))
@@ -390,7 +378,7 @@
 ;;  (priv:current-time-ms-time time-gc current-gc-milliseconds))
 
 (define (current-time . clock-type)
-  (let ((clock-type (:optional clock-type time-utc)))
+  (let ((clock-type (if (null? clock-type) time-utc (car clock-type))))
     (cond
      ((eq? clock-type time-tai) (priv:current-time-tai))
      ((eq? clock-type time-utc) (priv:current-time-utc))
@@ -405,7 +393,7 @@
 ;; This will be implementation specific.
 
 (define (time-resolution . clock-type)
-  (let ((clock-type (:optional clock-type time-utc)))
+  (let ((clock-type (if (null? clock-type) time-utc (car clock-type))))
     (case clock-type
       ((time-tai) 1000)
       ((time-utc) 1000)
@@ -577,11 +565,14 @@
 
 ;; -- Date Structures
 
+;; FIXME: to be really safe, perhaps we should normalize the
+;; seconds/nanoseconds/minutes coming in to make-date...
+
 (define-record-type date
-  (make-date-unnormalized nanosecond second minute
-                          hour day month
-                          year
-                          zone-offset)
+  (make-date nanosecond second minute
+             hour day month
+             year
+             zone-offset)
   date?
   (nanosecond date-nanosecond)
   (second date-second)
@@ -591,6 +582,28 @@
   (month date-month)
   (year date-year)
   (zone-offset date-zone-offset))
+
+(define (priv:time-normalize! t)
+  (if (>= (abs (time-nanosecond t)) 1000000000)
+      (begin
+        (set-time-second! t (+ (time-second t)
+                               (quotient (time-nanosecond t) 1000000000)))
+        (set-time-nanosecond! t (remainder (time-nanosecond t)
+                                           1000000000))))
+  (if (and (positive? (time-second t))
+           (negative? (time-nanosecond t)))
+      (begin
+        (set-time-second! t (- (time-second t) 1))
+        (set-time-nanosecond! t (+ 1000000000 (time-nanosecond t))))
+      (if (and (negative? (time-second t))
+               (positive? (time-nanosecond t)))
+          (begin
+            (set-time-second! t (+ (time-second t) 1))
+            (set-time-nanosecond! t (+ 1000000000 (time-nanosecond t))))))
+  t)
+
+
+  (
 
 ;; gives the julian day which starts at noon.
 (define (priv:encode-julian-day-number day month year)
@@ -612,7 +625,7 @@
 
 ;; gives the seconds/date/month/year 
 (define (priv:decode-julian-day-number jdn)
-  (let* ((days (truncate jdn))
+  (let* ((days (inexact->exact (truncate jdn)))
          (a (+ days 32044))
          (b (quotient (+ (* 4 a) 3) 146097))
          (c (- a (quotient (* 146097 b) 4)))
@@ -646,7 +659,7 @@
 (define (time-utc->date time . tz-offset)
   (if (not (eq? (time-type time) time-utc))
       (priv:time-error 'time->date 'incompatible-time-types  time))
-  (let* ((offset (:optional tz-offset (priv:local-tz-offset)))
+  (let* ((offset (if (null? tz-offset) (priv:local-tz-offset) (car tz-offset)))
          (leap-second? (priv:leap-second? (+ offset (time-second time))))
          (jdn (priv:time->julian-day-number (if leap-second?
                                                 (- (time-second time) 1)
@@ -655,8 +668,9 @@
 
     (call-with-values (lambda () (priv:decode-julian-day-number jdn))
       (lambda (secs date month year)
-        (let* ((hours    (quotient secs (* 60 60)))
-               (rem      (remainder secs (* 60 60)))
+        (let* ((int-secs (inexact->exact (floor secs)))
+               (hours    (quotient int-secs (* 60 60)))
+               (rem      (remainder int-secs (* 60 60)))
                (minutes  (quotient rem 60))
                (seconds  (remainder rem 60)))
           (make-date (time-nanosecond time)
@@ -671,7 +685,7 @@
 (define (time-tai->date time  . tz-offset)
   (if (not (eq? (time-type time) time-tai))
       (priv:time-error 'time->date 'incompatible-time-types  time))
-  (let* ((offset (:optional tz-offset (priv:local-tz-offset)))
+  (let* ((offset (if (null? tz-offset) (priv:local-tz-offset) (car tz-offset)))
          (seconds (- (time-second time)
                      (priv:leap-second-delta (time-second time))))
          (leap-second? (priv:leap-second? (+ offset seconds)))
@@ -699,7 +713,7 @@
 (define (time-monotonic->date time . tz-offset)
   (if (not (eq? (time-type time) time-monotonic))
       (priv:time-error 'time->date 'incompatible-time-types  time))
-  (let* ((offset (:optional tz-offset (priv:local-tz-offset)))
+  (let* ((offset (if (null? tz-offset) (priv:local-tz-offset) (car tz-offset)))
          (seconds (- (time-second time)
                      (priv:leap-second-delta (time-second time))))
          (leap-second? (priv:leap-second? (+ offset seconds)))
@@ -796,8 +810,9 @@
             7))
 
 (define (current-date . tz-offset) 
-  (time-utc->date (current-time time-utc)
-                  (:optional tz-offset (priv:local-tz-offset))))
+  (time-utc->date
+   (current-time time-utc)
+   (if (null? tz-offset) (priv:local-tz-offset) (car tz-offset))))
 
 ;; given a 'two digit' number, find the year within 50 years +/-
 (define (priv:natural-year n)
@@ -882,11 +897,11 @@
   (time-utc->time-monotonic! (julian-day->time-utc jdn)))
 
 (define (julian-day->date jdn . tz-offset)
-  (let ((offset (:optional tz-offset (priv:local-tz-offset))))
+  (let ((offset (if (null? tz-offset) (priv:local-tz-offset) (car tz-offset))))
     (time-utc->date (julian-day->time-utc jdn) offset)))
 
 (define (modified-julian-day->date jdn . tz-offset)
-  (let ((offset (:optional tz-offset (priv:local-tz-offset))))
+  (let ((offset (if (null? tz-offset) (priv:local-tz-offset) (car tz-offset))))
     (julian-day->date (+ jdn 4800001/2) offset)))
 
 (define (modified-julian-day->time-utc jdn)
@@ -1212,11 +1227,10 @@
 
 
 (define (date->string date .  format-string)
-  (call-with-output-string
-   (lambda (str-port)
-     (let ((fmt-str (:optional format-string "~c")))
-       (priv:date-printer date 0 fmt-str (string-length fmt-str) str-port)
-       (get-output-string str-port)))))
+  (let ((str-port (open-output-string))
+        (fmt-str (if (null? format-string) "~c" (car format-string))))
+    (priv:date-printer date 0 fmt-str (string-length fmt-str) str-port)
+    (get-output-string str-port)))
 
 (define (priv:char->int ch)
   (case ch
@@ -1321,18 +1335,18 @@
 
 ;; looking at a char, read the char string, run thru indexer, return index
 (define (priv:locale-reader port indexer)
-
-  (define (read-char-string result)
-    (let ((ch (peek-char port)))
-      (if (char-alphabetic? ch)
-          (read-char-string (cons (read-char port) result))
-          (list->string (reverse result)))))
-  
-  (let* ((str (read-char-string '())) 
-         (index (indexer str)))
-    (if index index (priv:time-error 'string->date
-                                     'bad-date-template-string
-                                     (list "Invalid string for " indexer)))))
+  (let ((string-port (open-output-string)))
+    (define (read-char-string)
+      (let ((ch (peek-char port)))
+        (if (char-alphabetic? ch)
+            (begin (write-char (read-char port) string-port) 
+                   (read-char-string))
+            (get-output-string string-port))))
+    (let* ((str (read-char-string)) 
+           (index (indexer str)))
+      (if index index (priv:time-error 'string->date
+                                       'bad-date-template-string
+                                       (list "Invalid string for " indexer))))))
 
 (define (priv:make-locale-reader indexer)
   (lambda (port)
@@ -1482,7 +1496,7 @@
                        0
                        template-string
                        (string-length template-string)
-                       (priv:open-input-string input-string)
+                       (open-input-string input-string)
                        template-string)
     (if (priv:date-ok? newdate)
         newdate
