@@ -62,7 +62,7 @@
       (gnc:options-add-account-selection! 
        options pagename-general 
        optname-display-depth optname-show-subaccounts
-       optname-accounts "b" 1         
+       optname-accounts "b" 2
        (lambda ()
 	 (let ((current-accounts (gnc:get-current-accounts)))
 	   (cond ((not (null? current-accounts)) current-accounts)
@@ -122,7 +122,7 @@
 			 #f date-tp 
 			 tree-depth show-subaccts? accounts 
 			 #t gnc:accounts-get-comm-total-assets 
-			 (_ "Net Assets") do-subtotals?
+			 (_ "Net Assets") #t do-subtotals?
 			 show-fcur? report-currency exchange-fn)))
 
 	    ;; set some column headers 

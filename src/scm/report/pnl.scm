@@ -134,7 +134,7 @@
 			 from-date-tp to-date-tp 
 			 tree-depth show-subaccts? accounts 
 			 #t gnc:accounts-get-comm-total-profit 
-			 (_ "Profit") do-subtotals?
+			 (_ "Profit") #t do-subtotals?
 			 show-fcur? report-currency exchange-fn)))
 
 	    ;; set some column headers 
