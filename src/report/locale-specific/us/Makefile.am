@@ -29,4 +29,4 @@ EXTRA_DIST = \
   ${gncscmmod_DATA} \
   ${gncscmothermod_DATA}
 
-CLEANFILES += gnucash report locale-specific us
+CLEANFILES += gnucash report locale-specific us .scm-links
