@@ -84,7 +84,7 @@ maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
 static xmlNodePtr
 customer_dom_tree_create (GncCustomer *cust)
 {
-    xmlNodePtr ret;
+    xmlNodePtr ret, kvpnode;
     gnc_numeric num;
     GncBillTerm *term;
     GncTaxTable *taxtable;
@@ -138,6 +138,10 @@ customer_dom_tree_create (GncCustomer *cust)
     if (taxtable)
       xmlAddChild (ret, guid_to_dom_tree (cust_taxtable_string,
 					  gncTaxTableGetGUID (taxtable)));
+
+    kvpnode = kvp_frame_to_dom_tree (cust_slots_string, 
+                 gncCustomerGetSlots (cust));
+    if (kvpnode) xmlAddChild (ret, kvpnode);
 
     return ret;
 }
@@ -371,7 +375,8 @@ customer_taxtableoverride_handler (xmlNodePtr node, gpointer cust_pdata)
 static gboolean
 customer_slots_handler (xmlNodePtr node, gpointer cust_pdata)
 {
-  return TRUE;
+  struct customer_pdata *pdata = cust_pdata;
+  return dom_tree_to_kvp_frame_given (node, gncCustomerGetSlots (pdata->customer));
 }
 
 static struct dom_tree_handler customer_handlers_v2[] = {
