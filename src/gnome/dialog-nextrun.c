@@ -212,25 +212,28 @@ nr_next_clicked( GtkButton *b, gpointer ud )
         do {
                 sx = (SchedXaction*)sxList->data;
                 g_date_set_time( &gd, time(NULL) );
-                while ( g_date_compare( &gd, endDate ) <= 0 ) {
-                        g_date_strftime( buf, 1023, "%c", &gd );
-                        /* add to clist [ahem... register... ahem] */
-                        rowText[0] = xaccSchedXactionGetName( sx );
-                        rowText[1] = malloc( sizeof(char) * 256 ); /* FIXME */
-                        g_date_strftime( rowText[1], 255, "%c", &gd );
-
-                        tct = g_new0( toCreateTransaction, 1 );
-                        tct->sx = sx;
-                        tct->date = g_date_new();
-                        *tct->date = gd;
-                        tct->clistRow = row;
-                        sxsld->transList = g_list_append( sxsld->transList, tct );
-
-                        gtk_clist_insert( cl, row, rowText );
-                        row += 1;
-
+                do {
                         gd = xaccSchedXactionGetInstanceAfter( sx, &gd );
-                }
+                        if ( g_date_valid( &gd ) ) {
+
+                                g_date_strftime( buf, 1023, "%c", &gd );
+                                /* add to clist [ahem... register... ahem] */
+                                rowText[0] = xaccSchedXactionGetName( sx );
+                                rowText[1] = malloc( sizeof(char) * 256 ); /* FIXME */
+                                g_date_strftime( rowText[1], 255, "%c", &gd );
+
+                                tct = g_new0( toCreateTransaction, 1 );
+                                tct->sx = sx;
+                                tct->date = g_date_new();
+                                *tct->date = gd;
+                                tct->clistRow = row;
+                                sxsld->transList = g_list_append( sxsld->transList, tct );
+
+                                gtk_clist_insert( cl, row, rowText );
+                                row += 1;
+                        }
+                } while ( g_date_compare( &gd, endDate ) <= 0
+                          && g_date_valid( &gd ) );
         } while ( (sxList = sxList->next) );
 
 #if 0

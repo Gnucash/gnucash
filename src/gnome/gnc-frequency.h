@@ -41,13 +41,13 @@ BEGIN_GNOME_DECLS
  * FreqSpec object in the process.
  **/
 typedef struct _GNCFrequency {
-	GtkVBox		widget;
+	GtkVBox	        widget;
 
-    	GtkVBox		*vb;
-	GtkNotebook	*nb;
-	GtkOptionMenu	*freqOpt;
-	GnomeDateEdit	*startDate;
-	GladeXML	*gxml;
+    	GtkVBox         *vb;
+	GtkNotebook     *nb;
+	GtkOptionMenu   *freqOpt;
+	GnomeDateEdit   *startDate;
+	GladeXML        *gxml;
 } GNCFrequency;
 
 typedef struct _GNCFrequencyClass {
@@ -66,7 +66,7 @@ guint gnc_frequency_get_type( void );
 /**
  * For the default freq spec widget, use 'NULL'.
  **/
-GtkWidget * gnc_frequency_new( FreqSpec *fs );
+GtkWidget * gnc_frequency_new( FreqSpec *fs, GDate *startDate );
 void gnc_frequency_init( GNCFrequency *gf );
 /**
  * Sets up the given GNCFrequency with the given FreqSpec and
@@ -75,7 +75,7 @@ void gnc_frequency_init( GNCFrequency *gf );
  * default.  If the FreqSpec is non-NULL, then it really should agree
  * with the UIFreqSpec; this is considered a 'critical' error.
  **/
-void gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs );
+void gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate );
 
 /**
  * Saves the state of the GNCFrequenecy widget into the given FreqSpec

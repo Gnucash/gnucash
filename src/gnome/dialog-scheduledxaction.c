@@ -138,7 +138,7 @@ void
 sxd_close_handler ( gpointer user_data )
 {
         SchedXactionDialog        *sxd = user_data;
-        DEBUG( "In sxd_close_handler\n" );
+        /* FIXME: is this all we have to do? */
         gnome_dialog_close( GNOME_DIALOG( sxd->dialog ) );
 }
 
@@ -148,7 +148,6 @@ sxed_close_handler ( gpointer user_data )
 {
         SchedXactionEditorDialog        *sxed = user_data;
 
-        DEBUG( "In sxed_close_handler\n" );
         /* FIXME: destroy, too... the ledger, especially. */
         xaccLedgerDisplayClose( sxed->ledger );
         free(sxed->sxGUIDstr);
@@ -212,7 +211,6 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                 o = glade_xml_get_widget( sxed->gxml, "end_nentry" );
                 xaccSchedXactionSetNumOccur( sxed->sx,
                                              (gint)gnome_number_entry_get_number( GNOME_NUMBER_ENTRY(o) ) );
-                /* set the end date data */
                 g_date_clear( gdate, 1 );
                 xaccSchedXactionSetEndDate( sxed->sx, gdate );
         } else if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o2) ) ) {
@@ -277,7 +275,7 @@ static void
 scheduledxaction_dialog_destroy(GtkObject *object, gpointer data)
 {
         SchedXactionDialog *sxd = data;
-        DEBUG( "In scheduledxaction_dialog_destroy\n" );
+        // FIXME: apporpriate destruction, here?
         if (sxd == NULL) {
                 return;
         }
@@ -294,7 +292,6 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
 {
         SchedXactionEditorDialog *sxed = data;
 
-        DEBUG( "In scheduledxaction_editor_dialog_destroy\n" );
         if (sxed == NULL)
                 return;
 
@@ -319,9 +316,10 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
 SchedXactionDialog*
 gnc_ui_scheduled_xaction_dialog_create(void)
 {
-        SchedXactionDialog        *sxd;
-        GtkObject                *sxdo;
-        GtkWidget                *button;
+        SchedXactionDialog *sxd;
+        GtkObject *sxdo;
+        GtkWidget *button;
+        GtkWidget *clist;
 
         sxd = g_new0( SchedXactionDialog, 1 );
 
@@ -358,6 +356,8 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         /* turn off the cancel button, for now, as we have no way to cancel. */
         gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE );
 
+        /* Set the clist columns to auto-resize. */
+        
         schedXact_populate( sxd );
 
         gtk_widget_show(sxd->dialog);
@@ -368,7 +368,7 @@ gnc_ui_scheduled_xaction_dialog_create(void)
 void
 gnc_ui_scheduled_xaction_dialog_destroy(SchedXactionDialog *sxd)
 {
-        DEBUG( "In gnc_ui_scheduled_xaction_dialog_destroy\n" );
+        // FIXME: appropriate destruction?
         if (sxd == NULL)
                 return;
         gnc_close_gui_component_by_data (DIALOG_SCHEDXACTION_CM_CLASS, sxd);
@@ -377,7 +377,7 @@ gnc_ui_scheduled_xaction_dialog_destroy(SchedXactionDialog *sxd)
 void
 gnc_ui_scheduled_xaction_editor_dialog_destroy(SchedXactionEditorDialog *sxed)
 {
-        DEBUG( "In gnc_ui_scheduled_xaction_editor_dialog_destroy\n" );
+        // FIXME: appropriate destruction?
         if (sxed == NULL)
                 return;
         gnc_close_gui_component_by_data (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
@@ -412,12 +412,13 @@ static
 void
 schedXact_populate( SchedXactionDialog *sxd )
 {
-        GNCBook                *book;
-        GList                *sxList;
-        GtkCList        *sx_clist;
-        FreqSpec        *tmpFS;
-        struct tm        tmpTm;
-        time_t                tmpTime;
+        GNCBook *book;
+        GList *sxList;
+        GtkCList *sx_clist;
+        FreqSpec *tmpFS;
+        struct tm tmpTm;
+        time_t tmpTime;
+        int i;
 
         book = gncGetCurrentBook();
         sxList = gnc_book_get_schedxactions( book );
@@ -425,9 +426,11 @@ schedXact_populate( SchedXactionDialog *sxd )
         g_list_foreach( sxList, putSchedXactionInClist, sxd );
 
         sx_clist = GTK_CLIST( glade_xml_get_widget( sxd->gxml,  "sched_xact_list" ) );
+        for ( i=0; i<3; i++ ) {
+                gtk_clist_set_column_auto_resize( sx_clist, i, TRUE );
+        }
         gtk_signal_connect(GTK_OBJECT(sx_clist), "select-row",
                            GTK_SIGNAL_FUNC(row_select_handler), sxd );
-  
 }
 
 SchedXactionEditorDialog *
@@ -597,8 +600,10 @@ schedXact_editor_create_freq_sel( SchedXactionEditorDialog *sxed )
 
         f = GTK_FRAME( glade_xml_get_widget( sxed->gxml,
                                              "recur_frame" ) );
+        
         sxed->gncfreq =
-                GNC_FREQUENCY( gnc_frequency_new( xaccSchedXactionGetFreqSpec(sxed->sx) ) );
+                GNC_FREQUENCY( gnc_frequency_new( xaccSchedXactionGetFreqSpec(sxed->sx),
+                                                  xaccSchedXactionGetStartDate(sxed->sx) ) );
         if ( sxed->gncfreq == NULL ) {
                 PERR( "gnc_frequency_new returned 0\n" );
                 return;
@@ -618,9 +623,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         tempxaction_frame =
                 GTK_FRAME( glade_xml_get_widget( sxed->gxml,
                                                  "tempxaction_frame" ) );
-        /* FIXME: load the sxed->sx's TSplits */
         sxed->sxGUIDstr = guid_to_string( xaccSchedXactionGetGUID(sxed->sx) );
-        DEBUG( "setting template gl with tag \"%s\"\n", sxed->sxGUIDstr );
         sxed->ledger = xaccLedgerDisplayTemplateGL( sxed->sxGUIDstr );
 
         xaccLedgerDisplaySetHandlers( sxed->ledger,
@@ -895,19 +898,19 @@ static
 void
 putSchedXactionInClist( gpointer data, gpointer user_data )
 {
-        SchedXaction         *sx;
+        SchedXaction *sx;
         SchedXactionDialog *sxd;
-        GtkCList         *clist;
-        char                 *text[3];
-        char                *tmpStr;
-        GString         *freqStr;
-        time_t                 nextTime;
-        GString         *nextDate;
-        time_t                 now;
-        struct tm        *nowTm;
-        gint                 row;
-        int                i;
-        GDate                gd;
+        GtkCList *clist;
+        char *text[3];
+        char *tmpStr;
+        GString *freqStr;
+        time_t nextTime;
+        GString *nextDate;
+        time_t now;
+        struct tm *nowTm;
+        gint row;
+        int i;
+        GDate gd;
 
         sx = (SchedXaction*)data;
         sxd = (SchedXactionDialog*)user_data;
@@ -915,21 +918,24 @@ putSchedXactionInClist( gpointer data, gpointer user_data )
         freqStr = g_string_new( "" );
         nextDate = g_string_new( "" );
 
-        xaccFreqSpecGetFreqStr( xaccSchedXactionGetFreqSpec(sx),
-                                freqStr );
+        xaccFreqSpecGetFreqStr( xaccSchedXactionGetFreqSpec(sx), freqStr );
 
         gd = xaccSchedXactionGetNextInstance( sx );
         nowTm = g_new0( struct tm, 1 );
-        g_date_to_struct_tm( &gd, nowTm );
-        nextTime = mktime( nowTm );
-        g_free( nowTm );
-        if ( nextTime == 0 ) {
+        if ( ! g_date_valid( &gd ) ) {
                 g_string_sprintf( nextDate, "not scheduled" );
         } else {
-                tmpStr = g_new0( char, 25 );
-                strftime( tmpStr, 25, "%a, %b %e, %Y", localtime(&nextTime) );
-                g_string_sprintf( nextDate, "%s", tmpStr );
-                g_free( tmpStr );
+                g_date_to_struct_tm( &gd, nowTm );
+                nextTime = mktime( nowTm );
+                g_free( nowTm );
+                if ( nextTime == 0 ) {
+                        g_string_sprintf( nextDate, "not scheduled" );
+                } else {
+                        tmpStr = g_new0( char, 25 );
+                        strftime( tmpStr, 25, "%a, %b %e, %Y", localtime(&nextTime) );
+                        g_string_sprintf( nextDate, "%s", tmpStr );
+                        g_free( tmpStr );
+                }
         }
 
         text[0] = xaccSchedXactionGetName( sx );
