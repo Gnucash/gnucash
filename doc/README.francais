@@ -1,12 +1,10 @@
--*-text-*-
-
 ************ VERSION DE DEVELOPPEMENT ******************
 Les séries de version 1.3.x de GnuCash sont des versions expérimentales de
 développement.  Elles peuvent ou non fonctionner. Utilisez les à votre propre
 risque.
 
-La dernière stable, version de production était gnucash-1.2.5
-La dernière stable, version de production sera gnucash-1.4.x 
+La dernière version stable de production était gnucash-1.2.5
+La prochaine version stable de production sera gnucash-1.4.x 
 
 ##############################################
 
@@ -17,21 +15,21 @@ graphique d'enregistrement ressemblant au talon de votre chéquier
 vous permet d'entrer et suivre vos comptes bancaires,actions,
 revenus et même les marchés des changes.  L'interface est conçu pour
 être simple et facile à utiliser, mais elle est adossée/renforcée à
-des pricipes de comptabilité de double entrée/double livret pour
-s'assurer que les livres dont équilibrés.
+des pricipes de comptabilité en partie double pour
+s'assurer que les livres sont équilibrés.
 
 Quelques une de ces caractéristiques sont:
 
-  - Une interface facile à utiliser.  Si vous savez utilisez
+  - Une interface facile à utiliser.  Si vous savez utiliser
     le talon de votre chéquier, vous savez utiliser GnuCash.
     Tapez directement dans le registre,
     déplacer vous entre les champs, et utilisez quick-fill
     (saisie rapide) pour compléter automatiquement la transaction.
   - La fenêtre de rapprochement avec soldes actuels rapprochés et
     pointés rend le rapprochement facile.
-  - Potefeuille d'actions/fonds communs (SICAV et FCP en france):
+  - Potefeuille d'actions/fonds communs (SICAV et FCP en France):
     Suivi d'actions individuellement (une par compte) ou dans un
-    portefeuille de colmptes (un groupe de comptes qui peuvent
+    portefeuille de comptes (un groupe de comptes qui peuvent
     être affiché ensemble).  
   - Monnaies/devises multiples et Marché des changes:
     De multiple monnaies sont supportées et peuvent être achetées
@@ -44,28 +42,28 @@ Quelques une de ces caractéristiques sont:
     QIF de Quicken.
     Les fichiers QIF sont automatiquement fusionnés pour éliminer
     les transactions dupliquées.
-  - Rapports: Affiche la feuille du solde/bilan, pertes et profits,
-    évaluation du portefeuille, ou les imprimer en HTML.
+  - Rapports: Affiche la feuille bilan (actifs et passifs), résultat avec
+    charges et produits, évaluation du portefeuille, ou les imprime en HTML.
   - Tableau de comptes: Un compte maitre/principal peut avoir une arborescence
-    de comptes détaillés en desssous de lui. Celà permet des
-    types de comptes similaires (par exemple Liquidités, Banque, Actions)
+    de comptes détaillés en desssous de lui. Celà permet des types de
+    comptes similaires (par exemple Liquidités, Banque, Actions)
     d'être groupés dans compte maitre (par exemple Avoirs).
   - Transactions réparties: Une simple transaction peut être répartie
     en plusieurs morceaux pour enregistrer les impôts, paiements, et
     autres entrées composées.
-  - Double Entrée/Double livret: Quand elle est active, chaque transaction
+  - Partie double: Quand elle est active, chaque transaction
     doit débiter un compte et créditer un autre d'un montant équivalent.
-    Celà permet de s'assurer que les "livres sont équilibrés": c'est la 
-    différence entre les revenus et les sorties qui est exactement égale
-    à la somme de tous les avoirs, qu'ils soit bancaire, liquidités, actions
-    ou autre.
+    Celà permet de s'assurer que les "livres sont équilibrés":
+    c'est la différence entre les revenus et les sorties qui est exactement
+    égale à la somme de tous les avoirs, qu'ils soit bancaire, liquidités,
+    actions ou autre.
   - Types de comptes Revenus/Dépenses (Catégories):  
     Ils ne servent pas uniquement à catégoriser votre flux
     de liquidités/argent, mais quand ils sont utilisés avec la fonction de
-    la double-entrée, ceux-ci peuvent fournir un état exact des pertes et
-    profits.
-  - Registre général/grand livre: De multiples comptes peuvent être affichés 
-    dans une fenêtre registre/d'enregistrement au même moment. Celà peut
+    la partie double, ceux-ci peuvent fournir un état exact des pertes et
+    profits et donc du résultat de la période.
+  - Extrait de compte/grand livre: De multiples comptes peuvent être affichés
+     dans une fenêtre registre/d'enregistrement au même moment. Celà peut
     faciliter l'ennui de la recherche/vérification des erreurs de
     frappe/d'entrée.
     Il fournit aussi une manière agréable de visualiser un porte-feuille de
@@ -83,8 +81,8 @@ Quelques une de ces caractéristiques sont:
   - Récupère les cours des actions et fonds communs (FCP et SICAV) depuis
     différents sites web, met à jour automatiquement le porte-feuille
     (plus de fonds doivent être ajouter réegulièrement).
-  - Chargement de la date au format européen, traductions française et
-    allemande.
+  - Chargement de la date au format européen, traductions française,
+    anglaise, allemande et suédoise.
 
 
 Home Page:
@@ -93,7 +91,7 @@ http://gnucash.org/ (version anglaise)
 http://www.multimania.com/yleny/gnucash (version française)
 
 Home page initiale de X-Accountant:
-http://www.cs.hmc.edu/~rclark/xacc
+http://www.cs.hmc.edu/~rclark/xacc     
 
 Binaires précompilés / exécutables:
 http://www.gnucash.org/pub/gnucash/redhat-6.x/
@@ -105,10 +103,10 @@ http://www.gnucash.org/source_code.php3
 Mise en route:
 --------------
 
-Seulement la version Motif de GnuCash est actuellement stable.
-La version Gnome est une version de développement, mais elle sera bientot
-assez stable pour une utilisation régulière.
-Le développement de la version Motif a cessé.
+Seulement la version Motif de GnuCash est actuellement fonctionnelle/utilisable.
+La version Gnome vous donnera le goût de Gnome, et elle arivera à point,
+mais elle est probablement pas assez stable pour une utilisation régulière.
+(ndt:pour moi,elle l'est) 
 La version qt/kde ne se compile pas, la plupart des fonctions sont manquantes.
 Voyez ci-dessous pour les OS autres que le support de GNU/Linux/*BSD.
 
@@ -120,16 +118,16 @@ Pour les binaires/exécutables Motif:
 guile   -- Fournit l'infrastructure du langage d'extension principal.
            Il est utilisé intensivement par gnucash pur l'initialisation et
 	   le démarrage.
-           Requiert la version 1.3 ou ultérieure/plus récente.
-           Le rpm guile-1.3-7 fonctionne.
+           Requiert la version 1.3.4 ou ultérieure/plus récente.
+           Le rpm guile-1.3.4-1 fonctionne.
 
 Motif ou Lesstif  --
-           Soit l'un ou l'autre du Motif commercial, ou le clone en logiciel
+           Soit l'un ou l'autre du Motif commercial, ou du clone en logiciel
            libre Lesstif est demandé. Si vous utilisez une version commerciale
-	   de Motif (largement disponible pour au moins 50 USD), soyez sûr de
-	   récupérer une version compatible avec votre version de glibc et
-	   libXt.
-           Lesstif pour la plupart fontionne, mais il y a eu des problèmes.
+	     de Motif (largement disponible pour au moins 50 USD), soyez sûr de
+	     récupérer une version compatible avec votre version de glibc et
+	     libXt.
+           Lesstif pou la plupart fontionne, mais il y a eu des problèmes.
            Voici notre expérience:
 
            Lesstif 0.81    fonctionne   
@@ -140,7 +138,7 @@ Motif ou Lesstif  --
            Lesstif 0.86.9  fonctionne ... mais quelques menus viennent avec
            2 pixels trop haut.(?)
            Lesstif 0.87.0: cassé (broken) (manque les symboles pour
-	   XmeDrawShadows, etc.)
+	     XmeDrawShadows, etc.)
            Lesstif 0.88.1  fonctionne
            Lesstif 0.89.0  fonctionne
 
@@ -153,12 +151,12 @@ XmHTML  -- Fournit les possibilités d'affichage en HTML. Utilisé pour les
            ftp://ftp.ultra.net/pub/eugene/SRPMS/XmHTML-1.1.5-1.src.rpm
 
            Note: quelques versions précompilées de XmHTML ont été compilées
-	   avec Motif.  Quand elles sont utilisées avec la plupart des versions
-	   précompilées de Lesstif, vous aurez une erreur "undefined symbol
-	   XmeDrawShadows".
+	     avec Motif.  Quand elles sont utilisées avec la plupart des versions
+	     précompilées de Lesstif, vous aurez une erreur "undefined symbol
+	     XmeDrawShadows".
            Il y a plusieurs solutions; la plus simple est probablement de
-	   télécharger le package des sources de XmHTML et de le compiler
-	   vous-même.
+	     télécharger le package des sources de XmHTML et de le compiler
+	     vous-même.
 
 slib    -- librairies scheme pour guile. A besoin de slib2c4 ou ultérieure.
 
@@ -189,30 +187,12 @@ perl-HTML/HTML-0.6
 perl-HTML/HTML-Parser-2.20
         -- ces modules perl sont utilisés pour récupérer les cours des
            actions et fonds communs à partir d'internet. Vous pouvez récupérer
-	   ces RPMS à
+	     ces RPMS à
            ftp://ftp.gnucash.org/pub/gnucash/binaries/RPMS
            http://rufus.w3.org/linux/RPM/PByName.html
            http://linas.org/linux/gnucash (en dernier ressort)
            ou les sources à
            http://www.cpan.org/CPAN.html
-
-Les packages suivant sont requis d'être installés pour faire
-fonctionnerto le binaire Gnome de GnuCash:
-
-gnome-libs -- la version 1.0.40 ou ultérieure devrait fonctionner.
-              Ces librairies requièrent le support de nombreuses
-              librairies, tel que gtk and glib.
-
-guile  -- même chose que Motif
-slib   -- The following packages are required to be installed to run the GnuCash
-Gnome binary:
-
-gnome-libs -- version 1.0.40 or higher should work. These libraries
-              require numerous other supporting libraries, such as
-              gtk and glib.
-
-guile  -- same as Motif
-slib   -- same as Motif
 
 
 Invocation:
@@ -566,7 +546,7 @@ Linas Vepstas <linas@linas.org> ce qu'il vu: l'interface graphique était
    sous GPL.Et ainsi il le ré-écrit: ajoutant les widgets de cellules avec
    XbaeMatrix, ainsi que les boites de dialogues et flèches devraient faire
    un même astucieux GUI, ré-écrit le code interne de X-Accountant pour
-   ajouter la double-entrée, une arborescence de compte, réparti un 
+   ajouter la double-entrée, une arborescence de compte, a réparti un 
    mini-moteur de transactions, ajouta le support pour les actions, et
    améliora les menus d'aide.C'était la version 1.0 de Janvier 1998.
    Depuis lors, pour la version 1.1, le moteur fût étendu et redéfini,
