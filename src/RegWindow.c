@@ -491,68 +491,40 @@ regRefresh( RegWindow *regData )
            Account * acc;
            int show;
 
-           /* Show the debit amount, if the debit account 
-            * is in this ledger */
+           /* Show the share debit amount, if the debit account 
+            * is in this ledger. But don't show share amount unless
+            * the account type is stock or mutual, since other types
+            * do not have shares. */
+           show = 0;
            acc = (Account *) (trans->debit);
            if (acc) {
-             show = xaccIsAccountInList (acc, regData->blackacc);
              if ((MUTUAL == acc->type) || (STOCK == acc->type) ) {
-                themount = trans->damount;
-                sprintf( buf, "%.3f ", themount );
-  
-                /* if the amount is zero, then leave the cell blank */
-                if (show && !(DEQ(0.0, themount)) ) {
-                   newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
-                } else {
-                   newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
-                }
-             } else {
-                themount = trans->damount * trans->share_price;
-                sprintf( buf, "%.2f ", themount );
-  
-                /* if the amount is zero, then leave the cell blank */
-                if (show && !(DEQ(0.0, themount)) ) {
-                   newData[row+VDEB_CELL_R][VDEB_CELL_C] = XtNewString(buf);
-                } else {
-                   newData[row+VDEB_CELL_R][VDEB_CELL_C] = XtNewString("");
-                }
+               show += xaccIsAccountInList (acc, regData->blackacc);
              }
-           } else {
-             newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
-             newData[row+VDEB_CELL_R][VDEB_CELL_C] = XtNewString("");
            }
-
-           /* Show the credit amount, if the credit account 
-            * is in this ledger */
            acc = (Account *) (trans->credit);
            if (acc) {
-             show = xaccIsAccountInList (acc, regData->blackacc);
              if ((MUTUAL == acc->type) || (STOCK == acc->type) ) {
-                themount = trans->damount;
-                sprintf( buf, "%.3f ", themount );
-  
-                /* if the amount is zero, then leave the cell blank */
-                if (show && !(DEQ(0.0, themount)) ) {
-                   newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
-                } else {
-                   newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
-                }
-             } else {
-                themount = trans->damount * trans->share_price;
-                sprintf( buf, "%.2f ", themount );
-  
-                /* if the amount is zero, then leave the cell blank */
-                if (show && !(DEQ(0.0, themount)) ) {
-                   newData[row+VCRD_CELL_R][VCRD_CELL_C] = XtNewString(buf);
-                } else {
-                   newData[row+VCRD_CELL_R][VCRD_CELL_C] = XtNewString("");
-                }
+               show += xaccIsAccountInList (acc, regData->blackacc);
              }
-           } else {
-             newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
-             newData[row+VCRD_CELL_R][VCRD_CELL_C] = XtNewString("");
            }
 
+           /* if the amount is zero, then leave the cell blank */
+           themount = trans->damount;
+           if (show && !(DEQ(0.0, themount)) ) {
+              sprintf( buf, "%.3f ", DABS(themount) );
+  
+              if (0.0 > themount ) {
+                 newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
+                 newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
+              } else {
+                 newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
+                 newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
+              }
+           } else {
+             newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
+             newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
+           }
         }  
           break;
 
@@ -579,22 +551,35 @@ regRefresh( RegWindow *regData )
         case MUTUAL:
           sprintf( buf, "%.2f ", trans->share_price );
           newData[row+PRIC_CELL_R][PRIC_CELL_C] = XtNewString(buf);
-
-          /* don't set number of shares here -- this is computed later,
-           * in recomputeBalance. */
-          newData[row+SHRS_CELL_R][SHRS_CELL_C]   = XtNewString("");
-          newData[row+VCRD_CELL_R][VCRD_CELL_C]   = XtNewString("");
           break;
 
-        case PORTFOLIO:
-          sprintf( buf, "%.2f ", trans->share_price );
-          newData[row+PRIC_CELL_R][PRIC_CELL_C] = XtNewString(buf);
+        case PORTFOLIO: {
+           Account * acc;
+           int show;
 
-          /* don't set number of shares here -- this is computed later,
-           * in recomputeBalance. */
-          newData[row+SHRS_CELL_R][SHRS_CELL_C]   = XtNewString("");
-          newData[row+VCRD_CELL_R][VCRD_CELL_C]   = XtNewString("");
-          newData[row+VDEB_CELL_R][VDEB_CELL_C]   = XtNewString("");
+          /* show the price, only if the transaction records a 
+           * share purchase/sale.  Otherwise, its a plain dollar
+           * amount, and the price should not be shown. */
+          show = 0;
+          acc = (Account *) (trans->debit);
+          if (acc) {
+             if ( (MUTUAL == acc->type) || (STOCK == acc->type) ) {
+               show += xaccIsAccountInList (acc, regData->blackacc);
+             }
+          }
+          acc = (Account *) (trans->credit);
+          if (acc) {
+             if ( (MUTUAL == acc->type) || (STOCK == acc->type) ) {
+               show += xaccIsAccountInList (acc, regData->blackacc);
+             }
+          }
+          if (show) {
+            sprintf( buf, "%.3f ", trans->share_price );
+            newData[row+PRIC_CELL_R][PRIC_CELL_C] = XtNewString(buf);
+          } else {
+            newData[row+PRIC_CELL_R][PRIC_CELL_C] = XtNewString("");
+          }
+        }
           break;
         default:
           break;
@@ -673,13 +658,11 @@ regRecalculateBalance( RegWindow *regData )
   int  position   = NUM_HEADER_ROWS;
   double  dbalance    = 0.0;
   double  dclearedBalance = 0.0;
-  double share_balance = 0.0;
   double prt_balance = 0.0;
   double prt_clearedBalance = 0.0;
   double tmp;
   char buf[BUFSIZE];
   Transaction *trans;
-  Account *acc;
   Widget reg;
   
   if( NULL == regData ) return 0.0;
@@ -697,7 +680,6 @@ regRecalculateBalance( RegWindow *regData )
   /* zero everything out */
   dbalance = 0.0;
   dclearedBalance = 0.0;
-  share_balance = 0.0;
   xaccZeroRunningBalances (regData->blackacc);
     
   /* loop over all of the rows */
@@ -721,8 +703,6 @@ regRecalculateBalance( RegWindow *regData )
 
     /* increment and/or decrement the running balance as appropriate */
     if (is_credit) {
-      share_balance = xaccGetShareBalance (credit_acc, trans);
-
       tmp = xaccGetBalance (credit_acc, trans);
       dbalance -= credit_acc -> running_balance;
       dbalance += tmp;
@@ -737,8 +717,6 @@ regRecalculateBalance( RegWindow *regData )
     }
 
     if (is_debit) {
-      share_balance = xaccGetShareBalance (debit_acc, trans);
-
       tmp = xaccGetBalance (debit_acc, trans);
       dbalance -= debit_acc -> running_balance;
       dbalance += tmp;
@@ -765,8 +743,7 @@ regRecalculateBalance( RegWindow *regData )
       prt_clearedBalance = - dclearedBalance;
     }
 
-    if( reg != NULL )
-      {
+    if( reg != NULL ) {
 #ifdef USE_NO_COLOR
       sprintf( buf, "%.2f ", prt_balance );
 #else
@@ -787,67 +764,140 @@ regRecalculateBalance( RegWindow *regData )
       XbaeMatrixSetCell( reg, position+BALN_CELL_R, BALN_CELL_C, buf );
 
       /* update share balances too ... */
-      if( (MUTUAL    == regData->type) ||
-          (STOCK     == regData->type) || 
-          (PORTFOLIO == regData->type) ) 
-        {
-        double value = 0.0;
-#ifdef USE_NO_COLOR
-        sprintf( buf, "%.3f ", share_balance );
-#else
-        sprintf( buf, "%.3f ", DABS(share_balance) );
-        
-        /* Set the color of the text, depending on whether the
-         * balance is negative or positive */
-        if( 0.0 > share_balance ) {
-          XbaeMatrixSetCellColor( reg, position+SHRS_CELL_R, 
-                                       SHRS_CELL_C, negPixel );
-        } else {
-          XbaeMatrixSetCellColor( reg, position+SHRS_CELL_R, 
-                                       SHRS_CELL_C, posPixel );
-        }
-#endif
+      switch (regData->type) {
+        case MUTUAL:
+        case STOCK: {
+          double value = 0.0;
+          double share_balance = 0.0;
+          Account *acc;
 
-/* xxxxxxxxxxxxxx incorrect */
-      
-        /* Put the share balance in the cell */
-        XbaeMatrixSetCell( reg, position+SHRS_CELL_R, SHRS_CELL_C, buf );
-
-        if( (MUTUAL    == regData->type) ||
-            (STOCK     == regData->type) ) {
-          value = xaccGetAmount (regData->blackacc[0], trans);
-        }
+          /* mutual and stock types have just one account */
+          acc = regData->blackacc[0];
+          /* ------------------------------------ */
+          /* do the value of the transaction */
+          value = xaccGetAmount (acc, trans);
         
-        /* if the value is zero, just leave the cell blank */
-        if (DEQ (0.0, value)) {
-          buf[0] = 0x0;
-        } else {
+          /* if the value is zero, just leave the cell blank */
+          if (DEQ (0.0, value)) {
+            buf[0] = 0x0;
+          } else {
 #ifdef USE_NO_COLOR
-          sprintf( buf, "%.2f ", value );
+            sprintf( buf, "%.2f ", value );
 #else
-          sprintf( buf, "%.2f ", DABS(value) );
+            sprintf( buf, "%.2f ", DABS(value) );
 #endif
-        }
+          }
         
 #ifndef USE_NO_COLOR
-        /* Set the color of the text, depending on whether the
-         * balance is negative or positive */
-        if( 0.0 > value ) {
-          XbaeMatrixSetCellColor( reg, position+VCRD_CELL_R, 
-                                       VCRD_CELL_C, negPixel );
-        } else {
-          XbaeMatrixSetCellColor( reg, position+VCRD_CELL_R, 
-                                       VCRD_CELL_C, posPixel );
-        }
+          /* Set the color of the text, depending on whether the
+           * balance is negative or positive */
+          if( 0.0 > value ) {
+            XbaeMatrixSetCellColor( reg, position+VCRD_CELL_R, 
+                                         VCRD_CELL_C, negPixel );
+          } else {
+            XbaeMatrixSetCellColor( reg, position+VCRD_CELL_R, 
+                                         VCRD_CELL_C, posPixel );
+          }
 #endif
-      
-        /* Put the value in the cell */
-        XbaeMatrixSetCell( reg, position+VCRD_CELL_R, VCRD_CELL_C, buf );
-        }
+          /* Put the value in the cell */
+          XbaeMatrixSetCell( reg, position+VCRD_CELL_R, VCRD_CELL_C, buf );
 
+          /* ------------------------------------ */
+          /* now show the share balance */
+          share_balance = xaccGetShareBalance (acc, trans);
+#ifdef USE_NO_COLOR
+          sprintf( buf, "%.3f ", share_balance );
+#else
+          sprintf( buf, "%.3f ", DABS(share_balance) );
+          
+          /* Set the color of the text, depending on whether the
+           * balance is negative or positive */
+          if( 0.0 > share_balance ) {
+            XbaeMatrixSetCellColor( reg, position+SHRS_CELL_R, 
+                                         SHRS_CELL_C, negPixel );
+          } else {
+            XbaeMatrixSetCellColor( reg, position+SHRS_CELL_R, 
+                                         SHRS_CELL_C, posPixel );
+          }
+#endif
+
+          /* Put the share balance in the cell */
+          XbaeMatrixSetCell( reg, position+SHRS_CELL_R, SHRS_CELL_C, buf );
+
+        }
+          break;
+
+        case PORTFOLIO: {
+          double value = 0.0;
+          int show = 0;
+          Account *acc;
+
+          /* ------------------------------------ */
+          /* show the value of the transaction, but only if the
+           * account belongs on this ledger */
+          value = trans->damount * trans->share_price;
+
+#ifndef USE_NO_COLOR
+          /* Set the color of the text, depending on whether the
+           * value is negative or positive. Remebr that we flip 
+           * the color value for debit cells */
+          if( 0.0 > value ) {
+            XbaeMatrixSetCellColor( reg, position+VDEB_CELL_R, 
+                                         VDEB_CELL_C, posPixel );
+            XbaeMatrixSetCellColor( reg, position+VCRD_CELL_R, 
+                                         VCRD_CELL_C, negPixel );
+          } else {
+            XbaeMatrixSetCellColor( reg, position+VDEB_CELL_R, 
+                                         VDEB_CELL_C, negPixel );
+            XbaeMatrixSetCellColor( reg, position+VCRD_CELL_R, 
+                                         VCRD_CELL_C, posPixel );
+          }
+#endif
+          value = trans->damount * trans->share_price;
+#ifdef USE_NO_COLOR
+          value = -value;  /* flip sign for debit accounts */
+#else 
+          value = DABS(value);
+#endif
+          acc = (Account *) (trans->debit);
+          show = xaccIsAccountInList (acc, regData->blackacc);
+          /* show only if value is non-zero (it may be zero if a price
+           * is recorded) */
+          if (show && !(DEQ(0.0, value))) {
+            sprintf( buf, "%.2f ", value );  
+          } else {
+            buf[0] = 0x0;
+          }
+          XbaeMatrixSetCell( reg, position+VDEB_CELL_R, VDEB_CELL_C, buf );
+
+          value = trans->damount * trans->share_price;
+#ifdef USE_NO_COLOR
+          value = +value;  /* DO NOT flip sign for credit accounts */
+#else 
+          value = DABS(value);
+#endif
+          acc = (Account *) (trans->credit);
+          show = xaccIsAccountInList (acc, regData->blackacc);
+          /* show only if value is non-zero (it may be zero if a price
+           * is recorded) */
+          if (show && !(DEQ(0.0, value))) {
+            sprintf( buf, "%.2f ", value );
+          } else {
+            buf[0] = 0x0;
+          }
+          XbaeMatrixSetCell( reg, position+VCRD_CELL_R, VCRD_CELL_C, buf );
+
+/*
+xxxxxxxxxxxx
+*/
+        }
+          break;
+
+        default:
+          break;
       }
     }
-  
+  }
   if( NULL != regData->balance ) {
     sprintf( buf, "$ %.2f\n$ %.2f", 
              prt_balance, prt_clearedBalance );
