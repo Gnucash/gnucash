@@ -1,6 +1,21 @@
 Version history:
 ------- -------
 
+ 1.8.6  - 11 Sept 2003
+ 	 o Updated Spanish, Greek, French, Czech, Slovak, 
+	 o Fixed extremely stupid bug in the import value setting workaround.
+	 o Fixed problem with SX formula_cell calls
+	 o Merge missing part of 2003-05-28 commit.  The log format changes
+	   didn't get commited for some reason, making the log replayer 
+	   completely unusable.
+	 o Fixed crash during dialog startup on Solaris.
+	 o Turn off scheme garbage collection during query->scm and scm->query
+	   conversion.  It shaves about 50% off the test-scm-query-string tests.
+	 o Make test-scm-query-string test deterministic by seeding the RNG
+	   with a known value.
+	 o Add a "slots" parameter to allow for future expansion.  Right now
+	   this is completely ignored.
+
  1.8.5  - 17 Aug 2003
  	 o Add IS_PAID column and the ability to search for paid/not-paid
 	   invoices.
