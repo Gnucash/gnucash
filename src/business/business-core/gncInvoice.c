@@ -756,8 +756,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   xaccTransSetCurrency (txn, invoice->currency);
 
   /* Entered and Posted at date */
+  xaccTransSetDateEnteredSecs (txn, time(NULL));
   if (post_date) {
-    xaccTransSetDateEnteredTS (txn, post_date);
     xaccTransSetDatePostedTS (txn, post_date);
     gncInvoiceSetDatePosted (invoice, *post_date);
   }
@@ -941,10 +941,9 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccTransSetCurrency (t2, invoice->currency);
 
     /* Entered and Posted at date */
-    if (post_date) {
-      xaccTransSetDateEnteredTS (t2, post_date);
+    xaccTransSetDateEnteredSecs (t2, time(NULL));
+    if (post_date)
       xaccTransSetDatePostedTS (t2, post_date);
-    }
 
     /* Balance out this lot */
     split = xaccMallocSplit (invoice->book);
@@ -1110,7 +1109,7 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
   xaccTransSetDescription (txn, name ? name : "");
   xaccTransSetNum (txn, num);
   xaccTransSetCurrency (txn, commodity);
-  xaccTransSetDateEnteredTS (txn, &date);
+  xaccTransSetDateEnteredSecs (txn, time(NULL));
   xaccTransSetDatePostedTS (txn, &date);
   xaccTransSetTxnType (txn, TXN_TYPE_PAYMENT);
 

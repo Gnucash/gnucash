@@ -4,6 +4,11 @@
 	  to the various columns displayed in the report currency.
 	  Partial fix for #118695.
 
+	* src/business/business-core/gncInvoice.c: set the date-entered on
+	  invoice transactions to "now" instead of the post date.  This
+	  lets us know when an invoice was actually posted, or a payment
+	  was actually made.
+
 	Support "gain/loss" balancing splits on stocks:
 	* src/engine/Transaction.c: fix xaccSplitGetPrice() to return '0'
 	  if 'amount' is zero but 'value' is non-zero
