@@ -587,7 +587,7 @@ Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work.
-Jon K}re Hellan <jk@isdn-a33.itea.ntnu.no> misc core dump fixes
+Jon Kåre Hellan <hellan@acm.org> misc core dump fixes
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Ben Kelly <ben.kelly@ieee.org> for motif menu bug fix, core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
