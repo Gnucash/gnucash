@@ -1016,7 +1016,8 @@ QofQuery * qof_query_invert (QofQuery *q)
  * combine 2 Query objects by the logical operation in "op".
  ********************************************************************/
 
-QofQuery * qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
+QofQuery * 
+qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
 {
   
   QofQuery * retval = NULL;
@@ -1025,7 +1026,9 @@ QofQuery * qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
   GList * i, * j;
   QofIdType search_for;
 
-  if(!q1 || !q2 ) return NULL;
+  if(!q1) return q2;
+  if(!q2) return q1;
+
   if (q1->search_for && q2->search_for)
     g_return_val_if_fail (safe_strcmp (q1->search_for, q2->search_for) == 0,
                           NULL);

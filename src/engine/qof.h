@@ -37,5 +37,6 @@
 #include "qof/qofquery.h"
 #include "qof/qofquerycore.h"
 #include "qof/qofsession.h"
+#include "qof/qofsql.h"
 
 #endif /* QOF_H_ */

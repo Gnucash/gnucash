@@ -59,10 +59,18 @@ typedef enum {
   QOF_STRING_MATCH_CASEINSENSITIVE
 } QofStringMatch;
 
-/* Comparisons for QOF_TYPE_DATE	*/
+/** Comparisons for QOF_TYPE_DATE	
+ * The QOF_DATE_MATCH_DAY comparison rounds the two time
+ *     values to mid-day and then compares these rounded values.
+ * The QOF_DATE_MATCH_TIME comparison matches teh time values,
+ *     down to the second.
+ */
+/* XXX remove these deprecated old names .. */
+#define QOF_DATE_MATCH_ROUNDED QOF_DATE_MATCH_DAY
+#define QOF_DATE_MATCH_NORMAL  QOF_DATE_MATCH_TIME
 typedef enum {
   QOF_DATE_MATCH_NORMAL = 1,
-  QOF_DATE_MATCH_ROUNDED
+  QOF_DATE_MATCH_DAY
 } QofDateMatch;
 
 /* Comparisons for QOF_TYPE_NUMERIC, QOF_TYPE_DEBCRED	*/
