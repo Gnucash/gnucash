@@ -1,5 +1,10 @@
 2004-03-14  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/druid-loan.c (ld_get_loan_range): Fix precedence bug
+	screwing up loan review page.
+
+2004-03-14  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/register/register-core/formulacell.c
 	(gnc_formula_cell_modify_verify): Add ':' to the token list of
 	allowable characters in the formula cell. Fixes Bug#106260.

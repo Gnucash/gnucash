@@ -2522,11 +2522,18 @@ static
 void
 ld_get_loan_range( LoanDruidData *ldd, GDate *start, GDate *end )
 {
+        int monthsTotal;
+        struct tm *endDateMath;
+
         *start = *ldd->ld.startDate;
-        *end = *start;
-        g_date_add_months( end,
-                           ldd->ld.numPer - 1
-                           * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) );
+
+        endDateMath = g_new0( struct tm, 1 );
+        g_date_to_struct_tm( ldd->ld.startDate, endDateMath );
+        monthsTotal = ( (ldd->ld.numPer - 1)
+                        * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) );
+        endDateMath->tm_mon += monthsTotal;
+        g_date_set_time( end, mktime( endDateMath ) );
+        g_free( endDateMath );
 }
 
 static
@@ -2558,6 +2565,7 @@ ld_rev_get_dates( LoanDruidData *ldd, GDate *start, GDate *end )
                 PERR( "Unknown review date range option %d", range );
                 break;
         }
+       
 }
 
 static
