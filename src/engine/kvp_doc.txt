@@ -1,3 +1,7 @@
+
+                    kvp_doc.txt
+                    -----------
+
 This file documents the use of keys in the key-value pair system
 used by the Engine. Before assigning keys for use, please read
 the Key-Value Policy in the GnuCash Design Document located
@@ -227,3 +231,5 @@ Use: To store the amount of the this split before it was voided.  Note
 that it should only exist if the parent transaction has been voided (but
 checking the reconcile status of the split is a more direct way of finding
 out a split has been voided).
+
+--------------------------- end of document ------------------------
