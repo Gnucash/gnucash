@@ -1,1 +1,1 @@
-EXTRA_DIST = 
+EXTRA_DIST = gettext.m4  
