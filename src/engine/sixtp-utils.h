@@ -100,12 +100,6 @@ gboolean generic_gnc_numeric_end_handler(
 
 sixtp* generic_gnc_numeric_parser_new(void);
 
-sixtp* setup_restorer(sixtp *parent,
-                      sixtp_start_handler starter,
-                      sixtp_end_handler ender,
-                      sixtp_fail_handler failer,
-                      sixtp_after_child_handler afchilder);
-
 sixtp* restore_char_generator(sixtp_end_handler ender);
 
 

@@ -508,13 +508,12 @@ gnc_parser_after_child_handler(gpointer data_for_children,
 static sixtp*
 gnc_parser_new(void) 
 {
-  sixtp *top_level = sixtp_new();
-  
-  g_return_val_if_fail(top_level, NULL);
-  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
-  sixtp_set_before_child(top_level, gnc_parser_before_child_handler);
-  sixtp_set_after_child(top_level, gnc_parser_after_child_handler);
-  return(top_level);
+    return sixtp_set_any(
+        sixtp_new(), FALSE,
+        SIXTP_CHARACTERS_HANDLER_ID, allow_and_ignore_only_whitespace,
+        SIXTP_BEFORE_CHILD_HANDLER_ID, gnc_parser_before_child_handler,
+        SIXTP_AFTER_CHILD_HANDLER_ID, gnc_parser_after_child_handler,
+        SIXTP_NO_MORE_HANDLERS);
 }
 
 /* ================================================================== */

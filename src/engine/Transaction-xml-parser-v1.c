@@ -740,65 +740,41 @@ static sixtp *
 gnc_txn_restore_split_parser_new(void) 
 {
   sixtp *top_level;
-  sixtp *restore_pr;
-  sixtp *damount_pr;
-  sixtp *value_pr;
-  sixtp *tmp_pr;
   
-  top_level = sixtp_new();
-  g_return_val_if_fail(top_level, NULL);
-  sixtp_set_start(top_level, txn_restore_split_start_handler);
-  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
-  sixtp_set_end(top_level, txn_restore_split_end_handler);
-  sixtp_set_fail(top_level, txn_restore_split_fail_handler);
-  sixtp_set_after_child(top_level, txn_restore_split_after_child_handler);
-
-  /* <restore> (<guid> | <memo> | <action> | <account> | <reconcile-state>)  */
-  restore_pr = top_level;
-  sixtp_add_sub_parser(
-      restore_pr, "guid",
-      restore_char_generator(txn_restore_split_guid_end_handler));
-  sixtp_add_sub_parser(
-      restore_pr, "memo",
-      restore_char_generator(txn_restore_split_memo_end_handler));
-  sixtp_add_sub_parser(
-      restore_pr, "action",
-      restore_char_generator(txn_restore_split_action_end_handler));
-  sixtp_add_sub_parser(
-      restore_pr, "account",
-      restore_char_generator(txn_restore_split_account_end_handler));
-  sixtp_add_sub_parser(
-      restore_pr, "reconcile-state",
-      restore_char_generator(txn_restore_split_reconcile_state_end_handler));
-
-  /* <restore> <reconcile-date> */
-  sixtp_add_sub_parser(
-      restore_pr, "reconcile-date", 
-      generic_timespec_parser_new(txn_restore_split_reconcile_date_end_handler));
-  
-  /* <restore> <quantity> */
-  damount_pr = generic_gnc_numeric_parser_new();
-  if(!damount_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
+  if(!(top_level =
+       sixtp_set_any(sixtp_new(), FALSE,
+                     SIXTP_START_HANDLER_ID, txn_restore_split_start_handler,
+                     SIXTP_CHARACTERS_HANDLER_ID,
+                     allow_and_ignore_only_whitespace,
+                     SIXTP_END_HANDLER_ID, txn_restore_split_end_handler,
+                     SIXTP_FAIL_HANDLER_ID, txn_restore_split_fail_handler,
+                     SIXTP_AFTER_CHILD_HANDLER_ID,
+                     txn_restore_split_after_child_handler,
+                     SIXTP_NO_MORE_HANDLERS)))
+  {
+      return NULL;
   }
-  sixtp_add_sub_parser(top_level, "quantity", damount_pr);
 
-  /* <restore> <value> */
-  value_pr = generic_gnc_numeric_parser_new();
-  if(!value_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
+  if(!sixtp_add_some_sub_parsers(
+         top_level, TRUE,
+         "guid", restore_char_generator(txn_restore_split_guid_end_handler),
+         "memo", restore_char_generator(txn_restore_split_memo_end_handler),
+         "action",
+         restore_char_generator(txn_restore_split_action_end_handler),
+         "account",
+         restore_char_generator(txn_restore_split_account_end_handler),
+         "reconcile-state",
+         restore_char_generator(txn_restore_split_reconcile_state_end_handler),
+         "reconcile-date", 
+         generic_timespec_parser_new(
+             txn_restore_split_reconcile_date_end_handler),
+         "quantity", generic_gnc_numeric_parser_new(),
+         "value", generic_gnc_numeric_parser_new(),
+         "slots", kvp_frame_parser_new(),
+         0))
+  {
+      return NULL;
   }
-  sixtp_add_sub_parser(top_level, "value", value_pr);
-
-  /* <restore> <slots> */
-  tmp_pr = kvp_frame_parser_new();
-  if(!tmp_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_add_sub_parser(top_level, "slots", tmp_pr);
 
   return(top_level);
 }
@@ -810,61 +786,51 @@ gnc_transaction_parser_new(void)
 {
   sixtp *top_level;
   sixtp *restore_pr;
-  sixtp *split_pr;
-  sixtp *tmp_pr;
 
-  top_level = sixtp_new();
-  g_return_val_if_fail(top_level, NULL);
-  sixtp_set_start(top_level, transaction_start_handler);
-  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
-  sixtp_set_after_child(top_level, txn_restore_after_child_handler);
+  if(!(top_level =
+       sixtp_set_any(sixtp_new(), FALSE,
+                     SIXTP_START_HANDLER_ID, transaction_start_handler,
+                     SIXTP_CHARACTERS_HANDLER_ID,
+                     allow_and_ignore_only_whitespace,
+                     SIXTP_AFTER_CHILD_HANDLER_ID,
+                     txn_restore_after_child_handler,
+                     SIXTP_NO_MORE_HANDLERS)))
+  {
+      return NULL;
+  }
 
   /* <restore> */
-  restore_pr = setup_restorer(top_level,
-                              txn_restore_start_handler,
-                              txn_restore_end_handler,
-                              txn_restore_fail_handler,
-                              txn_restore_after_child_handler);
-  if(!restore_pr)
+  if(!(restore_pr =
+       sixtp_set_any(sixtp_new(), FALSE,
+                     SIXTP_START_HANDLER_ID, txn_restore_start_handler,
+                     SIXTP_END_HANDLER_ID, txn_restore_end_handler,
+                     SIXTP_FAIL_HANDLER_ID, txn_restore_fail_handler,
+                     SIXTP_AFTER_CHILD_HANDLER_ID,
+                     txn_restore_after_child_handler,
+                     SIXTP_NO_MORE_HANDLERS)))
   {
       sixtp_destroy(top_level);
       return(NULL);
   }
+  sixtp_add_sub_parser(top_level, "restore", restore_pr);
 
-  /* <restore> (<guid> | <num> | <description> ) */
-  sixtp_add_sub_parser(
-      restore_pr, "guid",
-      restore_char_generator(txn_restore_guid_end_handler));
-  sixtp_add_sub_parser(
-      restore_pr, "num",
-      restore_char_generator(txn_restore_num_end_handler));
-  sixtp_add_sub_parser(
-      restore_pr, "description",
-      restore_char_generator(txn_restore_description_end_handler));
-
-  /* <restore> (<date-posted> | <date-entered>) */
-  sixtp_add_sub_parser(
-      restore_pr, "date-posted", 
-      generic_timespec_parser_new(txn_rest_date_posted_end_handler));
-  sixtp_add_sub_parser(
-      restore_pr, "date-entered", 
-      generic_timespec_parser_new(txn_rest_date_entered_end_handler));
-  
-  /* <restore> <slots> */
-  tmp_pr = kvp_frame_parser_new();
-  if(!tmp_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
+  if(!(sixtp_add_some_sub_parsers(
+           restore_pr, TRUE,
+           "guid", restore_char_generator(txn_restore_guid_end_handler),
+           "num", restore_char_generator(txn_restore_num_end_handler),
+           "description",
+           restore_char_generator(txn_restore_description_end_handler),
+           "date-posted",
+           generic_timespec_parser_new(txn_rest_date_posted_end_handler),
+           "date-entered",
+           generic_timespec_parser_new(txn_rest_date_entered_end_handler),
+           "slots", kvp_frame_parser_new(),
+           "split", gnc_txn_restore_split_parser_new(),
+           0)))
+  {
+      sixtp_destroy(top_level);
+      return NULL;
   }
-  sixtp_add_sub_parser(restore_pr, "slots", tmp_pr);
-
-  /* <restore> <split> */
-  split_pr = gnc_txn_restore_split_parser_new();
-  if(!split_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_add_sub_parser(restore_pr, "split", split_pr);
 
   return(top_level);
 }

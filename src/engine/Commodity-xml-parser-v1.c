@@ -172,18 +172,6 @@ commodity_restore_end_handler(gpointer data_for_children,
   return(ok);
 }
 
-/* --------------------------------------------------- */
-#define COM_PARSE(NAME)					\
-{							\
-  sixtp *tmp_pr = simple_chars_only_parser_new(NULL);	\
-  if(!tmp_pr) {						\
-    sixtp_destroy(top_level);				\
-    return(NULL);					\
-  }							\
-  sixtp_add_sub_parser(restore_pr, #NAME, tmp_pr);	\
-}
-/* --------------------------------------------------- */
-
 
 sixtp *
 commodity_restore_parser_new(void) 
@@ -194,23 +182,30 @@ commodity_restore_parser_new(void)
   top_level = sixtp_new();
   g_return_val_if_fail(top_level, NULL);
 
-  restore_pr = setup_restorer(top_level,
-                              commodity_restore_start_handler,
-                              commodity_restore_end_handler,
-                              generic_free_data_for_children,
-                              commodity_restore_after_child_handler);
-  
-  if(!restore_pr)
+  if(!(restore_pr = sixtp_set_any(
+           sixtp_new(), FALSE,
+           SIXTP_START_HANDLER_ID, commodity_restore_start_handler,
+           SIXTP_END_HANDLER_ID, commodity_restore_end_handler,
+           SIXTP_FAIL_HANDLER_ID, generic_free_data_for_children,
+           SIXTP_AFTER_CHILD_HANDLER_ID, commodity_restore_after_child_handler,
+           SIXTP_NO_MORE_HANDLERS)))
   {
       sixtp_destroy(top_level);
       return(NULL);
   }
-
-  COM_PARSE(space);
-  COM_PARSE(id);
-  COM_PARSE(name);
-  COM_PARSE(xcode);
-  COM_PARSE(fraction);
+  sixtp_add_sub_parser(top_level, "restore", restore_pr);
+  
+  if(!sixtp_add_some_sub_parsers(
+         restore_pr, TRUE,
+         "space", simple_chars_only_parser_new(NULL),
+         "id", simple_chars_only_parser_new(NULL),
+         "name", simple_chars_only_parser_new(NULL),
+         "xcode", simple_chars_only_parser_new(NULL),
+         "fraction", simple_chars_only_parser_new(NULL),
+         0))
+  {
+      return NULL;
+  }
 
   return(top_level);
 }
@@ -337,33 +332,29 @@ generic_gnc_commodity_lookup_end_handler(gpointer data_for_children,
 sixtp *
 generic_gnc_commodity_lookup_parser_new(void) 
 {
-  sixtp *top_level = sixtp_new();
-  sixtp *namespace_pr;
-  sixtp *id_pr;
+  sixtp *top_level;
 
-  g_return_val_if_fail(top_level, NULL);
-  sixtp_set_start(top_level, generic_gnc_commodity_lookup_start_handler);
-  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
-  sixtp_set_end(top_level, generic_gnc_commodity_lookup_end_handler);
-
-  sixtp_set_fail(top_level, generic_free_data_for_children);
-
-  sixtp_set_after_child(top_level,
-                        generic_gnc_commodity_lookup_after_child_handler);
-
-  namespace_pr = simple_chars_only_parser_new(NULL);
-  if(!namespace_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
+  if(!(top_level = sixtp_set_any(
+           sixtp_new(), FALSE,
+           SIXTP_START_HANDLER_ID, generic_gnc_commodity_lookup_start_handler,
+           SIXTP_CHARACTERS_HANDLER_ID, allow_and_ignore_only_whitespace,
+           SIXTP_END_HANDLER_ID, generic_gnc_commodity_lookup_end_handler,
+           SIXTP_FAIL_HANDLER_ID, generic_free_data_for_children,
+           SIXTP_AFTER_CHILD_HANDLER_ID,
+           generic_gnc_commodity_lookup_after_child_handler,
+           SIXTP_NO_MORE_HANDLERS)))
+  {
+      return NULL;
   }
-  sixtp_add_sub_parser(top_level, "space", namespace_pr);
 
-  id_pr = simple_chars_only_parser_new(NULL);
-  if(!id_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
+  if(!sixtp_add_some_sub_parsers(
+         top_level, TRUE,
+         "space", simple_chars_only_parser_new(NULL),
+         "id", simple_chars_only_parser_new(NULL),
+         0))
+  {
+      return NULL;
   }
-  sixtp_add_sub_parser(top_level, "id", id_pr);
 
   return(top_level);
 }

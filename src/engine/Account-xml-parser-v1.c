@@ -481,78 +481,74 @@ acc_restore_parent_end_handler(gpointer data_for_children,
   return(TRUE);
 }
 
+sixtp*
+parent_lookup_parser_new()
+{
+    return sixtp_set_any(sixtp_new(), TRUE,
+                         SIXTP_CHARACTERS_HANDLER_ID,
+                         allow_and_ignore_only_whitespace,
+                         SIXTP_END_HANDLER_ID,
+                         acc_restore_parent_end_handler,
+                         SIXTP_NO_MORE_HANDLERS);
+}
+
 sixtp *
 gnc_account_parser_new(void)
 {
   sixtp *restore_pr;
-  sixtp *acc_restore_currency_pr;
-  sixtp *acc_restore_security_pr;
-  sixtp *acc_restore_parent_pr;
-  sixtp *acc_restore_parent_guid_pr;
-  sixtp *acc_restore_slots_pr;
   sixtp *ret;
     
   /* <account> */
-  ret = sixtp_new();
-  g_return_val_if_fail(ret, NULL);
-
-  sixtp_set_start(ret, account_start_handler);
-  sixtp_set_chars(ret, allow_and_ignore_only_whitespace);
+  if(!(ret = sixtp_set_any(
+           sixtp_new(), FALSE,
+           SIXTP_START_HANDLER_ID, account_start_handler,
+           SIXTP_CHARACTERS_HANDLER_ID, allow_and_ignore_only_whitespace,
+           SIXTP_NO_MORE_HANDLERS)))
+  {
+      return NULL;
+  }
   
   /* <account> <restore> */
-  restore_pr = setup_restorer(ret, account_restore_start_handler,
-                              account_restore_end_handler,
-                              account_restore_fail_handler,
-                              account_restore_after_child_handler);
-  g_return_val_if_fail(restore_pr, NULL);
+  if(!(restore_pr =
+       sixtp_set_any(sixtp_new(), FALSE,
+                     SIXTP_START_HANDLER_ID, account_restore_start_handler,
+                     SIXTP_END_HANDLER_ID, account_restore_end_handler,
+                     SIXTP_FAIL_HANDLER_ID, account_restore_fail_handler,
+                     SIXTP_AFTER_CHILD_HANDLER_ID,
+                     account_restore_after_child_handler,
+                     SIXTP_NO_MORE_HANDLERS)))
+  {
+      sixtp_destroy(ret);
+      return NULL;
+  }
   
   /* <restore> (<name> | <guid> | <type> | <code> | <description> | <notes>)*/
-  sixtp_add_sub_parser(
-      restore_pr, "name",
-      restore_char_generator(acc_restore_name_end_handler));
-  sixtp_add_sub_parser(
-      restore_pr, "guid",
-      restore_char_generator(acc_restore_guid_end_handler));
-  sixtp_add_sub_parser(
-      restore_pr, "type",
-      restore_char_generator(acc_restore_type_end_handler));
-  sixtp_add_sub_parser(
-      restore_pr, "code",
-      restore_char_generator(acc_restore_code_end_handler));
-  sixtp_add_sub_parser(
-      restore_pr, "description",
-      restore_char_generator(acc_restore_description_end_handler));
-  sixtp_add_sub_parser(
-      restore_pr, "notes",
-      restore_char_generator(acc_restore_notes_end_handler));
+  if(!sixtp_add_some_sub_parsers(
+         restore_pr, TRUE,
+         "name", restore_char_generator(acc_restore_name_end_handler),
+         "guid", restore_char_generator(acc_restore_guid_end_handler),
+         "type", restore_char_generator(acc_restore_type_end_handler),
+         "code", restore_char_generator(acc_restore_code_end_handler),
+         "description",
+         restore_char_generator(acc_restore_description_end_handler),
+         "notes", restore_char_generator(acc_restore_notes_end_handler),
+         /* <account> <restore> <currency> */
+         "currency", generic_gnc_commodity_lookup_parser_new(),
+         /* <account> <restore> <security> */
+         "security", generic_gnc_commodity_lookup_parser_new(),
+         /* <account> <restore> <parent> */
+         "parent", sixtp_add_some_sub_parsers(
+             parent_lookup_parser_new(), TRUE,
+             "guid", generic_guid_parser_new(),
+             0),
+         "slots", kvp_frame_parser_new(),
+         0))
+  {
+      sixtp_destroy(ret);
+      return NULL;
+  }
   
-  /* <account> <restore> <currency> */
-  acc_restore_currency_pr = generic_gnc_commodity_lookup_parser_new();
-  g_return_val_if_fail(acc_restore_currency_pr, NULL);
-  sixtp_add_sub_parser(restore_pr, "currency", acc_restore_currency_pr);
-  
-  /* <account> <restore> <security> */
-  acc_restore_security_pr = generic_gnc_commodity_lookup_parser_new();
-  g_return_val_if_fail(acc_restore_security_pr, NULL);
-  sixtp_add_sub_parser(restore_pr, "security", acc_restore_security_pr);
-
-  /* <account> <restore> <parent> */
-  acc_restore_parent_pr = sixtp_new();
-  g_return_val_if_fail(acc_restore_parent_pr, NULL);
-  sixtp_set_chars(acc_restore_parent_pr, allow_and_ignore_only_whitespace);
-  sixtp_set_end(acc_restore_parent_pr, acc_restore_parent_end_handler);
-  sixtp_add_sub_parser(restore_pr, "parent", acc_restore_parent_pr);
-  
-  /* <account> <restore> <parent> <guid> */
-  acc_restore_parent_guid_pr = generic_guid_parser_new();
-  g_return_val_if_fail(acc_restore_parent_guid_pr, NULL);
-  sixtp_add_sub_parser(acc_restore_parent_pr, "guid",
-                       acc_restore_parent_guid_pr);
-  
-  /* <account> <restore> <slots> */
-  acc_restore_slots_pr = kvp_frame_parser_new();
-  g_return_val_if_fail(acc_restore_slots_pr, NULL);
-  sixtp_add_sub_parser(restore_pr, "slots", acc_restore_slots_pr);
+  sixtp_add_sub_parser(ret, "restore", restore_pr);
 
   return ret;
 }

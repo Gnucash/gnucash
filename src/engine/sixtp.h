@@ -6,6 +6,8 @@
 #include <glib.h>
 #include <stdio.h>
 
+#include <stdarg.h>
+
 #ifdef HAVE_XML_VERSION_HEADER
 #include <libxml/xmlversion.h>
 #endif
@@ -113,6 +115,25 @@ typedef struct sixtp {
 } sixtp;
 
 typedef enum {
+    SIXTP_NO_MORE_HANDLERS,
+
+    SIXTP_START_HANDLER_ID,
+    SIXTP_BEFORE_CHILD_HANDLER_ID,
+    SIXTP_AFTER_CHILD_HANDLER_ID,
+    SIXTP_END_HANDLER_ID,
+    SIXTP_CHARACTERS_HANDLER_ID,
+
+    SIXTP_FAIL_HANDLER_ID,
+
+    SIXTP_CLEANUP_RESULT_ID,
+    SIXTP_CLEANUP_CHARS_ID,
+
+    SIXTP_RESULT_FAIL_ID,
+
+    SIXTP_CHARS_FAIL_ID,
+} sixtp_handler_type;
+    
+typedef enum {
   SIXTP_CHILD_RESULT_CHARS,
   SIXTP_CHILD_RESULT_NODE
 } sixtp_child_result_type;
@@ -159,6 +180,9 @@ void sixtp_set_cleanup_chars(sixtp *parser, sixtp_result_handler handler);
 void sixtp_set_fail(sixtp *parser, sixtp_fail_handler handler);
 void sixtp_set_result_fail(sixtp *parser, sixtp_result_handler handler);
 void sixtp_set_chars_fail(sixtp *parser, sixtp_result_handler handler);
+
+sixtp* sixtp_set_any(sixtp *tochange, gboolean cleanup, ...);
+sixtp* sixtp_add_some_sub_parsers(sixtp *tochange, gboolean cleanup, ...);
 
 gboolean sixtp_add_sub_parser(sixtp *parser, const gchar* tag,
                               sixtp *sub_parser);

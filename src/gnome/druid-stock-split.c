@@ -59,6 +59,8 @@ window_destroy_cb (GtkObject *object, gpointer data)
   gnc_unregister_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
 
   g_free (info);
+
+  return 1;
 }
 
 static int

@@ -298,17 +298,17 @@ generic_return_chars_end_handler(gpointer data_for_children,
 sixtp*
 simple_chars_only_parser_new(sixtp_end_handler end_handler) 
 {
-  sixtp *top_level = sixtp_new();
-  
-  g_return_val_if_fail(top_level, NULL);
-  if(!end_handler) end_handler = generic_return_chars_end_handler;
-  sixtp_set_chars(top_level, generic_accumulate_chars);
-  sixtp_set_end(top_level, end_handler);
-  sixtp_set_cleanup_result(top_level, sixtp_child_free_data);
-  sixtp_set_cleanup_chars(top_level, sixtp_child_free_data);
-  sixtp_set_result_fail(top_level, sixtp_child_free_data);
-  sixtp_set_chars_fail(top_level, sixtp_child_free_data);
-  return(top_level);
+    return sixtp_set_any(
+        sixtp_new(), FALSE,
+        SIXTP_END_HANDLER_ID, (end_handler
+                               ? end_handler
+                               : generic_return_chars_end_handler),
+        SIXTP_CHARACTERS_HANDLER_ID, generic_accumulate_chars,
+        SIXTP_CLEANUP_RESULT_ID, sixtp_child_free_data,
+        SIXTP_CLEANUP_CHARS_ID, sixtp_child_free_data,
+        SIXTP_RESULT_FAIL_ID, sixtp_child_free_data,
+        SIXTP_CHARS_FAIL_ID, sixtp_child_free_data,
+        SIXTP_NO_MORE_HANDLERS);
 }
 
 
@@ -528,37 +528,41 @@ generic_timespec_nsecs_end_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-#define TIMESPEC_TOK(NAME,TOK)					\
-{								\
-  sixtp *tmp_pr = sixtp_new();					\
-  if(!tmp_pr) {							\
-    sixtp_destroy(top_level);					\
-    return(NULL);						\
-  }								\
-  sixtp_set_chars(tmp_pr, generic_accumulate_chars);		\
-  sixtp_set_end(tmp_pr, generic_timespec_##NAME##_end_handler);	\
-  sixtp_set_cleanup_chars(tmp_pr, sixtp_child_free_data);		\
-  sixtp_set_chars_fail(tmp_pr, sixtp_child_free_data);		\
-  sixtp_add_sub_parser(top_level, TOK, tmp_pr);			\
+static sixtp*
+timespec_sixtp_new(sixtp_end_handler ender)
+{
+    return sixtp_set_any(
+        sixtp_new(), FALSE,
+        SIXTP_CHARACTERS_HANDLER_ID, generic_accumulate_chars,
+        SIXTP_END_HANDLER_ID, ender,
+        SIXTP_CLEANUP_CHARS_ID, sixtp_child_free_data,
+        SIXTP_CHARS_FAIL_ID, sixtp_child_free_data,
+        SIXTP_NO_MORE_HANDLERS);
 }
-
 
 sixtp *
 generic_timespec_parser_new(sixtp_end_handler end_handler) 
 {
-  sixtp *top_level = sixtp_new();
+  sixtp *top_level =
+  sixtp_set_any(sixtp_new(), FALSE,
+                SIXTP_START_HANDLER_ID, generic_timespec_start_handler,
+                SIXTP_CHARACTERS_HANDLER_ID, allow_and_ignore_only_whitespace,
+                SIXTP_END_HANDLER_ID, end_handler,
+                SIXTP_CLEANUP_RESULT_ID, sixtp_child_free_data,
+                SIXTP_FAIL_HANDLER_ID, generic_free_data_for_children,
+                SIXTP_RESULT_FAIL_ID, sixtp_child_free_data,
+                SIXTP_NO_MORE_HANDLERS);
   g_return_val_if_fail(top_level, NULL);
 
-  sixtp_set_start(top_level, generic_timespec_start_handler);
-  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
-  sixtp_set_end(top_level, end_handler);
-  sixtp_set_cleanup_result(top_level, sixtp_child_free_data);
-  sixtp_set_fail(top_level, generic_free_data_for_children);
-  sixtp_set_result_fail(top_level, sixtp_child_free_data);
-
-  TIMESPEC_TOK(secs, "s");
-  TIMESPEC_TOK(nsecs, "ns");
-
+  if(!sixtp_add_some_sub_parsers(
+         top_level, TRUE,
+         "s", timespec_sixtp_new(generic_timespec_secs_end_handler),
+         "ns", timespec_sixtp_new(generic_timespec_nsecs_end_handler),
+         0))
+  {
+      return NULL;
+  }
+  
   return(top_level);
 }
 
@@ -617,18 +621,15 @@ generic_guid_end_handler(gpointer data_for_children,
 sixtp*
 generic_guid_parser_new(void) 
 {
-  sixtp *top_level = sixtp_new();
-
-  g_return_val_if_fail(top_level, NULL);
-
-  sixtp_set_chars(top_level, generic_accumulate_chars);  
-  sixtp_set_cleanup_chars(top_level, sixtp_child_free_data);
-  sixtp_set_chars_fail(top_level, sixtp_child_free_data);
-  sixtp_set_end(top_level, generic_guid_end_handler);
-  sixtp_set_result_fail(top_level, sixtp_child_free_data);
-  sixtp_set_cleanup_result(top_level, sixtp_child_free_data);
-
-  return(top_level);
+    return sixtp_set_any(
+        sixtp_new(), FALSE,
+        SIXTP_CHARACTERS_HANDLER_ID, generic_accumulate_chars,
+        SIXTP_CLEANUP_CHARS_ID, sixtp_child_free_data,
+        SIXTP_CHARS_FAIL_ID, sixtp_child_free_data,
+        SIXTP_END_HANDLER_ID, generic_guid_end_handler,
+        SIXTP_RESULT_FAIL_ID, sixtp_child_free_data,
+        SIXTP_CLEANUP_RESULT_ID, sixtp_child_free_data,
+        SIXTP_NO_MORE_HANDLERS);
 }
 
 /****************************************************************************/
@@ -683,54 +684,27 @@ generic_gnc_numeric_end_handler(gpointer data_for_children,
 sixtp*
 generic_gnc_numeric_parser_new(void) 
 {
-  sixtp *top_level = sixtp_new();
-
-  g_return_val_if_fail(top_level, NULL);
-
-  sixtp_set_chars(top_level, generic_accumulate_chars);  
-  sixtp_set_cleanup_chars(top_level, sixtp_child_free_data);
-  sixtp_set_chars_fail(top_level, sixtp_child_free_data);
-  sixtp_set_end(top_level, generic_gnc_numeric_end_handler);
-  sixtp_set_result_fail(top_level, sixtp_child_free_data);
-  sixtp_set_cleanup_result(top_level, sixtp_child_free_data);
-
-  return(top_level);
+    return sixtp_set_any(
+        sixtp_new(), FALSE,
+        SIXTP_CHARACTERS_HANDLER_ID, generic_accumulate_chars,
+        SIXTP_CLEANUP_CHARS_ID, sixtp_child_free_data,
+        SIXTP_CHARS_FAIL_ID, sixtp_child_free_data,
+        SIXTP_END_HANDLER_ID, generic_gnc_numeric_end_handler,
+        SIXTP_RESULT_FAIL_ID, sixtp_child_free_data,
+        SIXTP_CLEANUP_RESULT_ID, sixtp_child_free_data,
+        SIXTP_NO_MORE_HANDLERS);
 }
 
 /***************************************************************************/
 
 sixtp*
-setup_restorer(sixtp *parent,
-               sixtp_start_handler starter,
-               sixtp_end_handler ender,
-               sixtp_fail_handler failer,
-               sixtp_after_child_handler afchilder)
-{
-  sixtp *ret;
-
-  ret = sixtp_new();
-  g_return_val_if_fail(ret, NULL);
-
-  sixtp_set_start(ret, starter);
-  sixtp_set_chars(ret, allow_and_ignore_only_whitespace);
-  sixtp_set_end(ret, ender);
-  sixtp_set_fail(ret, failer);
-  sixtp_set_after_child(ret, afchilder);
-  sixtp_add_sub_parser(parent, "restore", ret);
-
-  return ret;
-}
-
-sixtp*
 restore_char_generator(sixtp_end_handler ender)
 {
-    sixtp *ret = sixtp_new();
-    g_return_val_if_fail(ret, NULL);
-    
-    sixtp_set_chars(ret, generic_accumulate_chars);
-    sixtp_set_end(ret, ender);
-    sixtp_set_cleanup_chars(ret, sixtp_child_free_data);
-    sixtp_set_chars_fail(ret, sixtp_child_free_data);
-
-    return ret;
+    return sixtp_set_any(
+        sixtp_new(), FALSE,
+        SIXTP_CHARACTERS_HANDLER_ID, generic_accumulate_chars,
+        SIXTP_END_HANDLER_ID, ender,
+        SIXTP_CLEANUP_CHARS_ID, sixtp_child_free_data,
+        SIXTP_CHARS_FAIL_ID, sixtp_child_free_data,
+        SIXTP_NO_MORE_HANDLERS);
 }

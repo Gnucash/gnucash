@@ -105,43 +105,30 @@ sixtp*
 ledger_data_parser_new(void) 
 {
   sixtp *top_level;
-  sixtp *acc_pr;
-  sixtp *com_pr;
-  sixtp *tran_pr;
   
   /* <ledger-data> */
-  top_level = sixtp_new();
-  g_return_val_if_fail(top_level, NULL);
-
-  sixtp_set_start(top_level, ledger_data_start_handler);
-  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
-  sixtp_set_end(top_level, ledger_data_end_handler);
-  sixtp_set_cleanup_result(top_level, ledger_data_result_cleanup);
-  sixtp_set_fail(top_level, ledger_data_fail_handler);
-  sixtp_set_result_fail(top_level, ledger_data_result_cleanup);
-
-  /* <commodity> */
-  com_pr = commodity_restore_parser_new();
-  if(!com_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
+  if(!(top_level = sixtp_set_any(
+           sixtp_new(), FALSE,
+           SIXTP_START_HANDLER_ID, ledger_data_start_handler,
+           SIXTP_CHARACTERS_HANDLER_ID, allow_and_ignore_only_whitespace,
+           SIXTP_END_HANDLER_ID, ledger_data_end_handler,
+           SIXTP_CLEANUP_RESULT_ID, ledger_data_result_cleanup,
+           SIXTP_FAIL_HANDLER_ID, ledger_data_fail_handler,
+           SIXTP_RESULT_FAIL_ID, ledger_data_result_cleanup,
+           SIXTP_NO_MORE_HANDLERS)))
+  {
+      return NULL;
   }
-  sixtp_add_sub_parser(top_level, "commodity", com_pr);  
 
-  acc_pr = gnc_account_parser_new();
-  if(!acc_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
+  if(!sixtp_add_some_sub_parsers(
+         top_level, TRUE,
+         "commodity", commodity_restore_parser_new(),
+         "account", gnc_account_parser_new(),
+         "transaction", gnc_transaction_parser_new(),
+         0))
+  {
+      return NULL;
   }
-  sixtp_add_sub_parser(top_level, "account", acc_pr);
-  
-  /* <transaction> */
-  tran_pr = gnc_transaction_parser_new();
-  if(!tran_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_add_sub_parser(top_level, "transaction", tran_pr);
 
   return(top_level);
 }

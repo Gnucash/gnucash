@@ -54,16 +54,15 @@ kvp_value_result_cleanup(sixtp_child_result *cr)
 static sixtp*
 simple_kvp_value_parser_new(sixtp_end_handler end_handler) 
 {
-  sixtp *top_level = sixtp_new();
-
-  g_return_val_if_fail(top_level, NULL);
-  sixtp_set_chars(top_level, generic_accumulate_chars);
-  sixtp_set_end(top_level, end_handler);
-  sixtp_set_cleanup_result(top_level, kvp_value_result_cleanup);
-  sixtp_set_cleanup_chars(top_level, sixtp_child_free_data);
-  sixtp_set_result_fail(top_level, kvp_value_result_cleanup);
-  sixtp_set_chars_fail(top_level, sixtp_child_free_data);
-  return(top_level);
+    return sixtp_set_any(sixtp_new(), FALSE,
+                         SIXTP_CHARACTERS_HANDLER_ID,
+                         generic_accumulate_chars,
+                         SIXTP_END_HANDLER_ID, end_handler,
+                         SIXTP_CLEANUP_RESULT_ID, kvp_value_result_cleanup,
+                         SIXTP_CLEANUP_CHARS_ID, sixtp_child_free_data,
+                         SIXTP_RESULT_FAIL_ID, kvp_value_result_cleanup,
+                         SIXTP_CHARS_FAIL_ID, sixtp_child_free_data,
+                         SIXTP_NO_MORE_HANDLERS);
 }
 
 /* <gint64> - gint64 kvp_value parser.
@@ -353,23 +352,17 @@ kvp_frame_binary_end_handler(gpointer data_for_children,
 static sixtp*
 binary_kvp_value_parser_new(void) 
 {
-  sixtp *top_level = sixtp_new();
-  sixtp *hex_pr;
-  
-  g_return_val_if_fail(top_level, NULL);
-  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
-  sixtp_set_end(top_level, kvp_frame_binary_end_handler);
-  sixtp_set_cleanup_result(top_level, kvp_value_result_cleanup);
-  sixtp_set_result_fail(top_level, kvp_value_result_cleanup);
-  
-  hex_pr = hex_binary_kvp_value_parser_new();
-  if(!hex_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_add_sub_parser(top_level, "hex", hex_pr);
-
-  return(top_level);
+    return sixtp_add_some_sub_parsers(
+        sixtp_set_any(sixtp_new(), FALSE,
+                      SIXTP_CHARACTERS_HANDLER_ID,
+                      allow_and_ignore_only_whitespace,
+                      SIXTP_END_HANDLER_ID, kvp_frame_binary_end_handler,
+                      SIXTP_CLEANUP_RESULT_ID, kvp_value_result_cleanup,
+                      SIXTP_RESULT_FAIL_ID, kvp_value_result_cleanup,
+                      SIXTP_NO_MORE_HANDLERS),
+        TRUE,
+        "hex", hex_binary_kvp_value_parser_new(),
+        0);
 }
 
 /*********************************/
@@ -453,22 +446,26 @@ add_all_kvp_value_parsers_as_sub_nodes(sixtp *p,
 
 static sixtp*
 glist_kvp_value_parser_new(sixtp *kvp_frame_parser) {
-  sixtp *top_level = sixtp_new();
+    sixtp *top_level = sixtp_set_any(
+        sixtp_new(), FALSE,
+        SIXTP_CHARACTERS_HANDLER_ID, allow_and_ignore_only_whitespace,
+        SIXTP_END_HANDLER_ID, glist_kvp_value_end_handler,
+        SIXTP_CLEANUP_RESULT_ID, kvp_value_result_cleanup,
+        SIXTP_RESULT_FAIL_ID, kvp_value_result_cleanup,
+        SIXTP_NO_MORE_HANDLERS);
+    if(!top_level)
+    {
+        return NULL;
+    }
   
-  g_return_val_if_fail(top_level, NULL);
-  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
-  sixtp_set_end(top_level, glist_kvp_value_end_handler);
-  sixtp_set_cleanup_result(top_level, kvp_value_result_cleanup);
-  sixtp_set_result_fail(top_level, kvp_value_result_cleanup);
-  
-  if(!add_all_kvp_value_parsers_as_sub_nodes(top_level,
-                                             kvp_frame_parser,
-                                             top_level)) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
+    if(!add_all_kvp_value_parsers_as_sub_nodes(top_level,
+                                               kvp_frame_parser,
+                                               top_level)) {
+        sixtp_destroy(top_level);
+        return(NULL);
+    }
 
-  return(top_level);
+    return(top_level);
 }
 
 /*********************************/
@@ -554,15 +551,20 @@ kvp_frame_slot_end_handler(gpointer data_for_children,
 
 static sixtp*
 kvp_frame_slot_parser_new(sixtp *kvp_frame_parser) {
-  sixtp *top_level = sixtp_new();
+  sixtp *top_level;
   sixtp *child_pr;
   sixtp *glist_pr;
 
   g_return_val_if_fail(kvp_frame_parser, NULL);
-  
-  g_return_val_if_fail(top_level, NULL);
-  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
-  sixtp_set_end(top_level, kvp_frame_slot_end_handler);
+
+  if(!(top_level = sixtp_set_any(
+           sixtp_new(), FALSE,
+           SIXTP_CHARACTERS_HANDLER_ID, allow_and_ignore_only_whitespace,
+           SIXTP_END_HANDLER_ID, kvp_frame_slot_end_handler,
+           SIXTP_NO_MORE_HANDLERS)))
+  {
+      return NULL;
+  }
 
   child_pr = simple_chars_only_parser_new(NULL);
   if(!child_pr) { sixtp_destroy(top_level); return(NULL); }
@@ -645,21 +647,28 @@ kvp_frame_result_cleanup(sixtp_child_result *cr)
 sixtp*
 kvp_frame_parser_new(void) 
 {
-  sixtp *top_level = sixtp_new();
-  sixtp *child_pr;
+  sixtp *top_level;
 
-  g_return_val_if_fail(top_level, NULL);
+  if(!(top_level = sixtp_set_any(
+           sixtp_new(), FALSE,
+           SIXTP_START_HANDLER_ID, kvp_frame_start_handler,
+           SIXTP_CHARACTERS_HANDLER_ID, allow_and_ignore_only_whitespace,
+           SIXTP_END_HANDLER_ID, kvp_frame_end_handler,
+           SIXTP_CLEANUP_RESULT_ID, kvp_frame_result_cleanup,
+           SIXTP_RESULT_FAIL_ID, kvp_frame_result_cleanup,
+           SIXTP_FAIL_HANDLER_ID, kvp_frame_fail_handler,
+           SIXTP_NO_MORE_HANDLERS)))
+  {
+      return NULL;
+  }
 
-  sixtp_set_start(top_level, kvp_frame_start_handler);
-  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
-  sixtp_set_end(top_level, kvp_frame_end_handler);
-  sixtp_set_cleanup_result(top_level, kvp_frame_result_cleanup);
-  sixtp_set_result_fail(top_level, kvp_frame_result_cleanup);
-  sixtp_set_fail(top_level, kvp_frame_fail_handler);
-
-  child_pr = kvp_frame_slot_parser_new(top_level);
-  if(!child_pr) { sixtp_destroy(top_level); return(NULL); }
-  sixtp_add_sub_parser(top_level, "s", child_pr);
+  if(!(sixtp_add_some_sub_parsers(
+           top_level, TRUE,
+           "s", kvp_frame_slot_parser_new(top_level),
+           0)))
+  {
+      return NULL;
+  }
 
   return(top_level);
 }

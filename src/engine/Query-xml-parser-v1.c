@@ -427,59 +427,30 @@ generic_pred_sense_end_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-
-/* --------------------------------------------------- */
-#define PRED_PARSE(PRED,NAME,TOK)			\
-{							\
-  sixtp *tmp_pr = simple_chars_only_parser_new(NULL);	\
-  if(!tmp_pr) {						\
-    sixtp_destroy(top_level);				\
-    return(NULL);					\
-  }							\
-  sixtp_set_end(tmp_pr, PRED##_##NAME##_end_handler);	\
-  sixtp_add_sub_parser(top_level, TOK, tmp_pr);		\
+static sixtp*
+pred_parser_new(sixtp_end_handler ender)
+{
+    return sixtp_set_any(simple_chars_only_parser_new(NULL), FALSE,
+                         SIXTP_END_HANDLER_ID, ender,
+                         SIXTP_NO_MORE_HANDLERS);
 }
-/* --------------------------------------------------- */
+
 /* ================================================================= */
 
 static sixtp*
 qrestore_datepred_parser_new(void)
 {
-  sixtp *top_level = sixtp_new();
-  sixtp *restore_pr = top_level;
-  g_return_val_if_fail(top_level, NULL);
-
-  PRED_PARSE(generic_pred, sense,  "sense");
-  PRED_PARSE(datepred, use_start,  "use-start");
-  PRED_PARSE(datepred, use_end,    "use-end");
-  sixtp_add_sub_parser(
-      restore_pr, "start-date", 
-      generic_timespec_parser_new(datepred_start_date_end_handler));
-  sixtp_add_sub_parser(
-      restore_pr, "end-date", 
-      generic_timespec_parser_new(datepred_end_date_end_handler));
-
-  return(top_level);
+    return sixtp_add_some_sub_parsers(
+        sixtp_new(), TRUE,
+        "sense", pred_parser_new(generic_pred_sense_end_handler),
+        "use-start", pred_parser_new(datepred_use_start_end_handler),
+        "use-end", pred_parser_new(datepred_use_end_end_handler),
+        "start-date",
+        generic_timespec_parser_new(datepred_start_date_end_handler),
+        "end-date", 
+        generic_timespec_parser_new(datepred_end_date_end_handler),
+        0);
 }
-
-/* ================================================================= */
-/* Generic predicate restorion macro */
-#define RESTORE_PRED(NAME,TOK,REST)					\
-  {									\
-    sixtp *tmp_pr = REST##_##NAME##_parser_new();			\
-    if(!tmp_pr) {							\
-      sixtp_destroy(top_level);						\
-      return(NULL);							\
-    }									\
-    sixtp_set_start(tmp_pr, REST##_##NAME##_start_handler);		\
-    sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);	\
-    sixtp_set_end(tmp_pr, qrestore_genericpred_end_handler);		\
-    /* sixtp_set_after_child(tmp_pr, REST##_##NAME##_after_child_handler); */	\
-    sixtp_set_fail(tmp_pr, REST##_##NAME##_fail_handler);		\
-    sixtp_add_sub_parser(and_pr, TOK, tmp_pr);				\
-  }
-
-/* ================================================================= */
 
 sixtp*
 query_server_parser_new (void) 
@@ -488,50 +459,76 @@ query_server_parser_new (void)
   sixtp *query_pr;
   sixtp *restore_pr;
   sixtp *and_pr;
+  sixtp *date_pred_pr;
   
   /* <query_server> */
-  top_level = sixtp_new();
-  g_return_val_if_fail(top_level, NULL);
-  sixtp_set_start(top_level, query_server_start_handler);
-  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
-  sixtp_set_end(top_level, query_server_end_handler);
+  if(!(top_level =
+       sixtp_set_any(sixtp_new(), FALSE,
+                     SIXTP_START_HANDLER_ID, query_server_start_handler,
+                     SIXTP_CHARACTERS_HANDLER_ID,
+                     allow_and_ignore_only_whitespace,
+                     SIXTP_END_HANDLER_ID, query_server_end_handler,
+                     SIXTP_NO_MORE_HANDLERS)))
+  {
+      return NULL;
+  }
 
   /* <query_server> <query> */
-  query_pr = sixtp_new();
-  if (!query_pr) {
+  if(!(query_pr =
+       sixtp_set_any(sixtp_new(), FALSE,
+                     SIXTP_START_HANDLER_ID, query_start_handler,
+                     SIXTP_CHARACTERS_HANDLER_ID,
+                     allow_and_ignore_only_whitespace,
+                     SIXTP_END_HANDLER_ID, query_end_handler,
+                     SIXTP_NO_MORE_HANDLERS)))
+  {
     sixtp_destroy(top_level);
     return (NULL);
   }
-  sixtp_set_start(query_pr, query_start_handler);
-  sixtp_set_chars(query_pr, allow_and_ignore_only_whitespace);
-  sixtp_set_end(query_pr, query_end_handler);
   sixtp_add_sub_parser(top_level, "query", query_pr);
   
   /* <query> <restore> */
-  restore_pr = setup_restorer(query_pr,
-                              query_restore_start_handler,
-                              query_restore_end_handler,
-                              query_restore_fail_handler,
-                              query_restore_after_child_handler);
-  if(!restore_pr)
+  if(!(restore_pr = sixtp_set_any(
+           sixtp_new(), FALSE,
+           SIXTP_START_HANDLER_ID, query_restore_start_handler,
+           SIXTP_END_HANDLER_ID, query_restore_end_handler,
+           SIXTP_FAIL_HANDLER_ID, query_restore_fail_handler,
+           SIXTP_AFTER_CHILD_HANDLER_ID, query_restore_after_child_handler,
+           SIXTP_NO_MORE_HANDLERS)))
   {
       sixtp_destroy(top_level);
       return(NULL);
   }
-
+  sixtp_add_sub_parser(query_pr, "restore", restore_pr);
+  
   /* <query> <restore> <and-terms> */
-  and_pr = sixtp_new();
-  if (!and_pr) {
+  if(!(and_pr =
+       sixtp_set_any(sixtp_new(), FALSE,
+                     SIXTP_START_HANDLER_ID, query_and_start_handler,
+                     SIXTP_CHARACTERS_HANDLER_ID,
+                     allow_and_ignore_only_whitespace,
+                     SIXTP_END_HANDLER_ID, query_and_end_handler,
+                     SIXTP_FAIL_HANDLER_ID, query_and_fail_handler,
+                     SIXTP_NO_MORE_HANDLERS)))
+  {
     sixtp_destroy(top_level);
     return (NULL);
   }
-  sixtp_set_start(and_pr, query_and_start_handler);
-  sixtp_set_chars(and_pr, allow_and_ignore_only_whitespace);
-  sixtp_set_end(and_pr, query_and_end_handler);
-  sixtp_set_fail(and_pr, query_and_fail_handler);
   sixtp_add_sub_parser(restore_pr, "and-terms", and_pr);
-  
-  RESTORE_PRED(datepred, "date-pred", qrestore);
+
+  if(!(date_pred_pr =
+       sixtp_set_any(qrestore_datepred_parser_new(), FALSE,
+                     SIXTP_START_HANDLER_ID, qrestore_datepred_start_handler,
+                     SIXTP_CHARACTERS_HANDLER_ID,
+                     allow_and_ignore_only_whitespace,
+                     SIXTP_END_HANDLER_ID, qrestore_genericpred_end_handler,
+                     SIXTP_FAIL_HANDLER_ID, qrestore_datepred_fail_handler,
+                     SIXTP_NO_MORE_HANDLERS)))
+  {
+      sixtp_destroy(top_level);
+      return NULL;
+  }
+  sixtp_add_sub_parser(and_pr, "date-pred", date_pred_pr);
 
   return(top_level);
 }

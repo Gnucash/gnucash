@@ -1,3 +1,7 @@
+#include <glib.h>
+
+#include <stdarg.h>
+
 #include "sixtp.h"
 #include "sixtp-stack.h"
 
@@ -107,6 +111,89 @@ sixtp_new(void) {
 }
 
 sixtp*
+sixtp_set_any(sixtp *tochange, int cleanup, ...)
+{
+    va_list ap;
+    sixtp_handler_type type;
+    
+    va_start(ap, cleanup);
+    
+    if(!tochange)
+    {
+        g_warning("Null tochange passed\n");
+        return NULL;
+    }
+
+    do 
+    {
+        type = va_arg(ap, sixtp_handler_type);
+
+        switch(type)
+        {
+        case SIXTP_NO_MORE_HANDLERS:
+            va_end(ap);
+            return tochange;
+
+        case SIXTP_START_HANDLER_ID:
+            sixtp_set_start(tochange, va_arg(ap, sixtp_start_handler));
+            break;
+            
+        case SIXTP_BEFORE_CHILD_HANDLER_ID:
+            sixtp_set_before_child(tochange,
+                                   va_arg(ap, sixtp_before_child_handler));
+            break;
+            
+        case SIXTP_AFTER_CHILD_HANDLER_ID:
+            sixtp_set_after_child(tochange,
+                                  va_arg(ap, sixtp_after_child_handler));
+            break;
+            
+        case SIXTP_END_HANDLER_ID:
+            sixtp_set_end(tochange, va_arg(ap, sixtp_end_handler));
+            break;
+            
+        case SIXTP_CHARACTERS_HANDLER_ID:
+            sixtp_set_chars(tochange, va_arg(ap, sixtp_characters_handler));
+            break;
+            
+        case SIXTP_FAIL_HANDLER_ID:
+            sixtp_set_fail(tochange, va_arg(ap, sixtp_fail_handler));
+            break;
+            
+        case SIXTP_CLEANUP_RESULT_ID:
+            sixtp_set_cleanup_result(tochange,
+                                     va_arg(ap, sixtp_result_handler));
+            break;
+            
+        case SIXTP_CLEANUP_CHARS_ID:
+            sixtp_set_cleanup_chars(tochange,
+                                    va_arg(ap, sixtp_result_handler));
+            break;
+            
+        case SIXTP_RESULT_FAIL_ID:
+            sixtp_set_result_fail(tochange, va_arg(ap, sixtp_result_handler));
+            break;
+            
+        case SIXTP_CHARS_FAIL_ID:
+            sixtp_set_chars_fail(tochange, va_arg(ap, sixtp_result_handler));
+            break;
+
+        default:
+            va_end(ap);
+            g_warning("Bogus sixtp type %d\n", type);
+            if(cleanup)
+            {
+                sixtp_destroy(tochange);
+            }
+            return NULL;
+        }
+    } while(1);
+
+    va_end(ap);
+    return tochange;
+}
+
+sixtp*
 sixtp_new_full(sixtp_start_handler starter,
                sixtp_before_child_handler cdbeforer,
                sixtp_after_child_handler chafterer,
@@ -194,6 +281,67 @@ sixtp_add_sub_parser(sixtp *parser, const gchar* tag, sixtp *sub_parser) {
 
   g_hash_table_insert(parser->children, g_strdup(tag), (gpointer) sub_parser);
   return(TRUE);
+}
+
+/*
+ * This is a bit complex because of having to make sure to
+ * cleanup things we haven't looked at on an error condition
+ */
+sixtp*
+sixtp_add_some_sub_parsers(sixtp *tochange, int cleanup, ...)
+{
+    int have_error;
+    va_list ap;
+    char *tag;
+    sixtp *handler;
+
+    va_start(ap, cleanup);
+
+    have_error = 0;
+    
+    if(!tochange)
+    {
+        have_error = 1;
+    }
+
+    do
+    {
+        tag = va_arg(ap, char*);
+        if(!tag)
+        {
+            break;
+        }
+
+        handler = va_arg(ap, sixtp*);
+        if(!handler)
+        {
+            g_warning("Handler for tag %s is null\n", tag);
+            
+            if(cleanup)
+            {
+                sixtp_destroy(tochange);
+                tochange = NULL;
+                have_error = 1;
+            }
+            else
+            {
+                va_end(ap);
+                return NULL;
+            }
+        }
+
+        if (have_error)
+        {
+            sixtp_destroy(handler);
+        }
+        else
+        {
+            sixtp_add_sub_parser(tochange, tag, handler);
+        }
+    } while (1);
+
+    va_end(ap);
+    return tochange;
 }
 
 /************************************************************************/
