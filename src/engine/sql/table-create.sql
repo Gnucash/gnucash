@@ -58,7 +58,8 @@ CREATE TABLE gncAccount (
 
 CREATE TABLE gncTransaction (
 	transGuid	CHAR(32) PRIMARY KEY,
-	date_entered 	DATETIME DEFAULT 'NOW',
+	last_modified 	DATETIME DEFAULT 'NOW',
+	date_entered 	DATETIME,
 	date_posted 	DATETIME,
 	num		TEXT,
 	description	TEXT,
