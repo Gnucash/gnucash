@@ -531,10 +531,23 @@ assert (0);
    } 
 
    /* 
-xxxxxxxxxxx 
-hack alert -- 
-this may work,. but document it ...
-*/
+    * OK, now we do a fancy trick to get the auto-expanding registers to 
+    * work right.  The trick is that as one transaction is expanded or
+    * collapsed, the rows all get renumbered.  Now, we can't tell the 
+    * code to directly hope to the new renumbered position, because
+    * we haven't completed all of our work yet.  In particular, we
+    * haven't left the current cell, and this means we haven't yet saved 
+    * those cell contents.  Only after saving, can we reconfigure the
+    * table.  And only after we reconfigure the table can we move the 
+    * since only then will we know where & how to move it to.  Sooo ...
+    * here's what we do. We compute where we should have hopped to
+    * in the reconfigured table, and save that off in the "reverify"
+    * fields.  Then we hop to the boring old place we would have hopped 
+    * to if there had been no reconfiguring going on.  Later on, after
+    * we've reconfigured, we will move the cursor to the "reverify"
+    * position, and viola, we'll be in the right place.
+    */
+
    if (table->traverse) {
       int nr = cbs->next_row;
       int nc = cbs->next_column;
