@@ -55,6 +55,7 @@
 #include "gnc-menu-extensions.h"
 #include "gnc-split-reg.h"
 #include "gnc-ui.h"
+#include "gnc-version.h"
 #include "guile-util.h"
 #include "mainwindow-account-tree.h"
 #include "option-util.h"
@@ -711,9 +712,17 @@ gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
     "Linas Vepstas <linas@linas.org>",
     NULL
   };
+  gchar *ver_string;
 
-  about = gnome_about_new ("GnuCash", VERSION, copyright,
+  if (GNUCASH_MINOR_VERSION % 2) {
+    ver_string = g_strdup_printf("%s (built %s)", VERSION, GNUCASH_BUILD_DATE);
+  } else {
+    ver_string = strdup(VERSION);
+  }
+  about = gnome_about_new ("GnuCash", ver_string, copyright,
                            authors, message, NULL);
+  g_free(ver_string);
+
   gnome_dialog_set_parent (GNOME_DIALOG(about),
                            GTK_WINDOW(gnc_ui_get_toplevel()));
 
