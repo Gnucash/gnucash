@@ -166,7 +166,7 @@ typedef struct _GNCPrintAmountInfo
 
 GNCPrintAmountInfo gnc_default_print_info (gboolean use_symbol);
 
-GNCPrintAmountInfo gnc_commodity_print_info (gnc_commodity *commodity,
+GNCPrintAmountInfo gnc_commodity_print_info (const gnc_commodity *commodity,
                                              gboolean use_symbol);
 
 GNCPrintAmountInfo gnc_account_quantity_print_info (Account *account,

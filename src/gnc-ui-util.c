@@ -686,6 +686,11 @@ gnc_locale_default_currency (void)
                                            GNC_COMMODITY_NS_ISO,
                                            symbol);
 
+    if (!currency)
+      currency = gnc_commodity_table_lookup (gnc_engine_commodities(),
+                                             GNC_COMMODITY_NS_ISO,
+                                             "USD");
+
     g_free (symbol);
     got_it = TRUE;
   }
@@ -809,7 +814,7 @@ is_decimal_fraction (int fraction, guint8 *max_decimal_places_p)
 }
 
 GNCPrintAmountInfo
-gnc_commodity_print_info (gnc_commodity *commodity,
+gnc_commodity_print_info (const gnc_commodity *commodity,
                           gboolean use_symbol)
 {
   GNCPrintAmountInfo info;

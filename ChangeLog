@@ -1,3 +1,10 @@
+2001-04-29  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnc-ui-util.c (gnc_locale_default_currency): handle no
+	default currency
+
+	* src/gnome/dialog-transfer.c: fix bugs
+
 2001-04-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/date-utilities.scm: Fixed a whole lot of bugs in the

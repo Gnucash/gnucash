@@ -338,6 +338,7 @@ gnc_xfer_dialog_from_tree_select_cb(GNCAccountTree *tree,
 				    Account *account, gpointer data)
 {
   XferDialog *xferData = data;
+  GNCPrintAmountInfo print_info;
   const gnc_commodity *currency;
 
   account = gnc_account_tree_get_current_account(tree);
@@ -346,6 +347,13 @@ gnc_xfer_dialog_from_tree_select_cb(GNCAccountTree *tree,
 		     gnc_commodity_get_printname(currency));
 
   gnc_xfer_dialog_curr_acct_activate(xferData);
+
+  print_info = gnc_account_value_print_info (account, FALSE);
+
+  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (xferData->amount_edit),
+                                  print_info);
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (xferData->amount_edit),
+                                xaccAccountGetCurrencySCU (account));
 }
 
 
@@ -354,6 +362,7 @@ gnc_xfer_dialog_to_tree_select_cb(GNCAccountTree *tree,
 				  Account *account, gpointer data)
 {
   XferDialog *xferData = data;
+  GNCPrintAmountInfo print_info;
   const gnc_commodity *currency;
 
   account = gnc_account_tree_get_current_account(tree);
@@ -362,6 +371,13 @@ gnc_xfer_dialog_to_tree_select_cb(GNCAccountTree *tree,
 		     gnc_commodity_get_printname(currency));
 
   gnc_xfer_dialog_curr_acct_activate(xferData);
+
+  print_info = gnc_account_value_print_info (account, FALSE);
+
+  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (xferData->to_amount_edit),
+                                  print_info);
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (xferData->to_amount_edit),
+                                xaccAccountGetCurrencySCU (account));
 }
 
 
@@ -521,7 +537,7 @@ gnc_xfer_price_update_cb(GtkWidget *widget, GdkEventFocus *event,
 
 static gboolean
 gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
-                            gpointer data)
+                             gpointer data)
 {
   XferDialog *xferData = data;
   const gnc_commodity *currency;
