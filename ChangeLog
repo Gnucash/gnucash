@@ -27,6 +27,15 @@
 
 	* src/gnome/gnc-splash.c: make splash a regular window
 
+2001-03-30  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/gnc-test-stuff.c (test_files_in_dir): use file list
+	rather than dir so we can control the order of files tested (to
+	allow parent accounts to be parsed first)
+
+	* src/test/test-real-data.sh (EXIT_VALUE): make sure test fails if
+	at least one of the tests fail.
+
 2001-03-29  Dave Peticolas  <dave@krondo.com>
 
 	* doc/sgml/C/xacc-incomeexpense.sgml: fix debit/credit distinction
@@ -62,9 +71,10 @@
 	GNC_COMMODITY_NS_ISO instead of the string const. Fix compiler
 	warning.
 
-2001-03-28  Dave Peticolas  <dave@krondo.com>
+2001-03-29  James LewisMoss  <jimdres@mindspring.com>
 
-	* src/SplitLedger.c: fix bug
+	* src/engine/io-gncxml-v2.c (write_counts): don't add an amount if
+	it's == 0.
 
 2001-03-29  Christian Stimming  <stimming@tuhh.de>
 
@@ -99,6 +109,10 @@
 
 	* src/engine/gnc-pricedb.[ch]: added
 	gnc_pricedb_lookup_nearest_in_time, courtesy Rob B.
+
+2001-03-28  Dave Peticolas  <dave@krondo.com>
+
+	* src/SplitLedger.c: fix bug
 
 2001-03-28  James LewisMoss  <jimdres@mindspring.com>
 
