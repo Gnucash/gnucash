@@ -1895,7 +1895,7 @@ gnucash_sheet_set_scroll_region (GnucashSheet *sheet)
 }
 
 static void
-gnucash_sheet_block_free (gpointer _block, gpointer user_data)
+gnucash_sheet_block_destroy (gpointer _block, gpointer user_data)
 {
         SheetBlock *block = _block;
 
@@ -1906,18 +1906,14 @@ gnucash_sheet_block_free (gpointer _block, gpointer user_data)
                 gnucash_style_unref (block->style);
                 block->style = NULL;
         }
-
-        g_free (block);
 }
 
-static gpointer
-gnucash_sheet_block_new (gpointer user_data)
+static void
+gnucash_sheet_block_construct (gpointer _block, gpointer user_data)
 {
-        SheetBlock *block;
+        SheetBlock *block = _block;
 
-        block = g_new0 (SheetBlock, 1);
-
-        return block;
+        block->style = NULL;
 }
 
 static void
@@ -2122,8 +2118,9 @@ gnucash_sheet_init (GnucashSheet *sheet)
         sheet->height = 0;
         sheet->smooth_scroll = TRUE;
 
-        sheet->blocks = g_table_new(gnucash_sheet_block_new,
-                                    gnucash_sheet_block_free, NULL);
+        sheet->blocks = g_table_new(sizeof (SheetBlock),
+                                    gnucash_sheet_block_construct,
+                                    gnucash_sheet_block_destroy, NULL);
 }
 
 

@@ -66,24 +66,15 @@ style_get_key (SheetBlockStyle *style)
 }
 
 
-static gpointer
-cell_dimensions_new (gpointer user_data)
+static void
+cell_dimensions_construct (gpointer _cd, gpointer user_data)
 {
-        CellDimensions *cd;
-
-        cd = g_new0 (CellDimensions, 1);
+        CellDimensions *cd = _cd;
 
         cd->pixel_width = -1;
         cd->can_span_over = TRUE;
-
-        return cd;
 }
 
-static void
-cell_dimensions_free (gpointer cd, gpointer user_data)
-{
-        g_free(cd);
-}
 
 static BlockDimensions *
 style_dimensions_new (SheetBlockStyle *style)
@@ -95,8 +86,9 @@ style_dimensions_new (SheetBlockStyle *style)
         dimensions->nrows = style->nrows;
         dimensions->ncols = style->ncols;
 
-        dimensions->cell_dimensions = g_table_new (cell_dimensions_new,
-                                                   cell_dimensions_free, NULL);
+        dimensions->cell_dimensions = g_table_new (sizeof (CellDimensions),
+                                                   cell_dimensions_construct,
+                                                   NULL, NULL);
 
         g_table_resize (dimensions->cell_dimensions,
                         style->nrows, style->ncols);
@@ -627,25 +619,23 @@ gnucash_style_get_cell_style (SheetBlockStyle *style, int row, int col)
         return g_table_index (style->cell_styles, row, col);
 }
 
-static gpointer
-cell_style_new (gpointer user_data)
+static void
+cell_style_construct (gpointer _cs, gpointer user_data)
 {
-        CellStyle *cs;
+        CellStyle *cs = _cs;
 
-        cs = g_new0 (CellStyle, 1);
-
-        return cs;
+        cs->label = NULL;
+        cs->active_bg_color = NULL;
+        cs->inactive_bg_color = NULL;
 }
 
 static void
-cell_style_free (gpointer _cs, gpointer user_data)
+cell_style_destroy (gpointer _cs, gpointer user_data)
 {
         CellStyle *cs = _cs;
 
         g_free(cs->label);
         cs->label = NULL;
-
-        g_free(cs);
 }
 
 static SheetBlockStyle *
@@ -669,8 +659,9 @@ gnucash_sheet_style_new (GnucashSheet *sheet, CellBlock *cursor,
         style->nrows = cursor->num_rows;
         style->ncols = cursor->num_cols;
 
-        style->cell_styles = g_table_new (cell_style_new,
-                                          cell_style_free, NULL);
+        style->cell_styles = g_table_new (sizeof (CellStyle),
+                                          cell_style_construct,
+                                          cell_style_destroy, NULL);
         g_table_resize (style->cell_styles, style->nrows, style->ncols);
 
         gnucash_sheet_style_recompile(style, sr, cursor_type);

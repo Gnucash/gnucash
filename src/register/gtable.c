@@ -25,36 +25,38 @@
 
 struct GTable
 {
-  GPtrArray *array;
+  GArray *array;
+
+  guint entry_size;
 
   int rows;
   int cols;
 
-  g_table_allocator allocator;
-  g_table_deallocator deallocator;
+  g_table_entry_constructor constructor;
+  g_table_entry_destroyer destroyer;
 
   gpointer user_data;
 };
 
 GTable *
-g_table_new (g_table_allocator allocator,
-             g_table_deallocator deallocator,
+g_table_new (guint entry_size,
+             g_table_entry_constructor constructor,
+             g_table_entry_destroyer destroyer,
              gpointer user_data)
 {
   GTable *gtable;
 
-  g_assert (allocator);
-  g_assert (deallocator);
-
   gtable = g_new(GTable, 1);
 
-  gtable->array = g_ptr_array_new();
+  gtable->array = g_array_new(FALSE, FALSE, entry_size);
+
+  gtable->entry_size = entry_size;
 
   gtable->rows = 0;
   gtable->cols = 0;
 
-  gtable->allocator = allocator;
-  gtable->deallocator = deallocator;
+  gtable->constructor = constructor;
+  gtable->destroyer = destroyer;
 
   gtable->user_data = user_data;
 
@@ -69,7 +71,7 @@ g_table_destroy (GTable *gtable)
 
   g_table_resize (gtable, 0, 0);
 
-  g_ptr_array_free (gtable->array, FALSE);
+  g_array_free (gtable->array, TRUE);
 
   gtable->array = NULL;
 
@@ -90,9 +92,9 @@ g_table_index (GTable *gtable, int row, int col)
   if (col >= gtable->cols)
     return NULL;
 
-  index = (row * gtable->cols) + col;
+  index = ((row * gtable->cols) + col) * gtable->entry_size;
 
-  return gtable->array->pdata[index];
+  return &gtable->array->data[index];
 }
 
 void
@@ -112,29 +114,35 @@ g_table_resize (GTable *gtable, int rows, int cols)
   if (new_len == old_len)
     return;
 
-  /* If shrinking, free extra cells */
-  if (new_len < old_len)
+  /* If shrinking, destroy extra cells */
+  if ((new_len < old_len) && gtable->destroyer)
   {
-    gpointer *tcp;
+    gchar *entry;
     guint i;
 
-    tcp = &gtable->array->pdata[new_len];
-    for (i = new_len; i < old_len; i++, tcp++)
-      gtable->deallocator(*tcp, gtable->user_data);
+    entry = &gtable->array->data[new_len * gtable->entry_size];
+    for (i = new_len; i < old_len; i++)
+    {
+      gtable->destroyer(entry, gtable->user_data);
+      entry += gtable->entry_size;
+    }
   }
 
   /* Change the size */
-  g_ptr_array_set_size(gtable->array, new_len);
+  g_array_set_size(gtable->array, new_len);
 
-  /* If expanding, create the new cells */
-  if (new_len > old_len)
+  /* If expanding, construct the new cells */
+  if ((new_len > old_len) && gtable->constructor)
   {
-    gpointer *tcp;
+    gchar *entry;
     guint i;
 
-    tcp = &gtable->array->pdata[old_len];
-    for (i = old_len; i < new_len; i++, tcp++)
-      *tcp = gtable->allocator(gtable->user_data);
+    entry = &gtable->array->data[old_len * gtable->entry_size];
+    for (i = old_len; i < new_len; i++)
+    {
+      gtable->constructor(entry, gtable->user_data);
+      entry += gtable->entry_size;
+    }
   }
 
   gtable->rows = rows;

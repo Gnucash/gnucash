@@ -52,25 +52,24 @@ gnc_cellblock_new (int rows, int cols)
 
 /* =================================================== */
 
-static gpointer
-gnc_cellblock_cell_new (gpointer user_data)
+static void
+gnc_cellblock_cell_construct (gpointer _cb_cell, gpointer user_data)
 {
-  CellBlockCell *cb_cell;
+  CellBlockCell *cb_cell = _cb_cell;
 
-  cb_cell = g_new0(CellBlockCell, 1);
-
+  cb_cell->cell = NULL;
   cb_cell->cell_type = -1;
+
+  cb_cell->sample_text = NULL;
   cb_cell->alignment = CELL_ALIGN_LEFT;
   cb_cell->expandable = FALSE;
   cb_cell->span = FALSE;
-
-  return cb_cell;
 }
 
 /* =================================================== */
 
 static void
-gnc_cellblock_cell_free (gpointer _cb_cell, gpointer user_data)
+gnc_cellblock_cell_destroy (gpointer _cb_cell, gpointer user_data)
 {
   CellBlockCell *cb_cell = _cb_cell;
 
@@ -79,10 +78,6 @@ gnc_cellblock_cell_free (gpointer _cb_cell, gpointer user_data)
 
   g_free(cb_cell->sample_text);
   cb_cell->sample_text = NULL;
-
-  g_free(cb_cell);
-
-  return;
 }
 
 /* =================================================== */
@@ -100,8 +95,9 @@ gnc_cellblock_init (CellBlock *cellblock, int rows, int cols)
   cellblock->num_cols = cols;
 
   /* malloc new cell table */
-  cellblock->cb_cells = g_table_new (gnc_cellblock_cell_new,
-                                     gnc_cellblock_cell_free, NULL);
+  cellblock->cb_cells = g_table_new (sizeof (CellBlockCell),
+                                     gnc_cellblock_cell_construct,
+                                     gnc_cellblock_cell_destroy, NULL);
   g_table_resize (cellblock->cb_cells, rows, cols);
 }
 

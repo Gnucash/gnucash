@@ -41,30 +41,18 @@
 #include "util.h"
 
 
-/** Datatypes **********************************************************/
-
-/* The generic TableCell is used for memory allocation purposes. */
-typedef union _TableCell TableCell;
-union _TableCell
-{
-  VirtualCell virt_cell;
-};
-
-
 /** Static Globals *****************************************************/
 
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_REGISTER;
 
-static GMemChunk *cell_mem_chunk = NULL;
-
 
 /** Prototypes *********************************************************/
 static void gnc_table_init (Table * table);
 static void gnc_table_free_data (Table * table);
-static gpointer gnc_virtual_cell_new (gpointer user_data);
+static void gnc_virtual_cell_construct (gpointer vcell, gpointer user_data);
 static void gnc_virtual_location_init (VirtualLocation *vloc);
-static void gnc_virtual_cell_free (gpointer tcell, gpointer user_data);
+static void gnc_virtual_cell_destroy (gpointer vcell, gpointer user_data);
 static void gnc_table_resize (Table * table, int virt_rows, int virt_cols);
 
 
@@ -82,10 +70,6 @@ gnc_table_new (TableGetEntryHandler entry_handler,
 
    g_assert (entry_handler != NULL);
 
-   /* Do this here for lower overhead. */
-   if (cell_mem_chunk == NULL)
-     cell_mem_chunk = g_mem_chunk_create(TableCell, 2048, G_ALLOC_AND_FREE);
-
    table = g_new0(Table, 1);
 
    table->entry_handler = entry_handler;
@@ -97,8 +81,9 @@ gnc_table_new (TableGetEntryHandler entry_handler,
 
    gnc_table_init (table);
 
-   table->virt_cells = g_table_new(gnc_virtual_cell_new,
-                                   gnc_virtual_cell_free, table);
+   table->virt_cells = g_table_new(sizeof (VirtualCell),
+                                   gnc_virtual_cell_construct,
+                                   gnc_virtual_cell_destroy, table);
 
    return table;
 }
@@ -158,18 +143,11 @@ gnc_table_destroy (Table * table)
 VirtualCell *
 gnc_table_get_virtual_cell (Table *table, VirtualCellLocation vcell_loc)
 {
-  TableCell *tcell;
-
   if (table == NULL)
     return NULL;
 
-  tcell = g_table_index (table->virt_cells,
-                         vcell_loc.virt_row, vcell_loc.virt_col);
-
-  if (tcell == NULL)
-    return NULL;
-
-  return &tcell->virt_cell;
+  return g_table_index (table->virt_cells,
+                        vcell_loc.virt_row, vcell_loc.virt_col);
 }
 
 /* ==================================================== */
@@ -371,16 +349,11 @@ gnc_virtual_location_init (VirtualLocation *vloc)
 
 /* ==================================================== */
 
-static gpointer
-gnc_virtual_cell_new (gpointer user_data)
+static void
+gnc_virtual_cell_construct (gpointer _vcell, gpointer user_data)
 {
+  VirtualCell *vcell = _vcell;
   Table *table = user_data;
-  TableCell *tcell;
-  VirtualCell *vcell;
-
-  tcell = g_chunk_new(TableCell, cell_mem_chunk);
-
-  vcell = &tcell->virt_cell;
 
   vcell->cellblock = NULL;
 
@@ -388,30 +361,20 @@ gnc_virtual_cell_new (gpointer user_data)
     vcell->vcell_data = table->vcell_data_allocator();
   else
     vcell->vcell_data = NULL;
-
-  return tcell;
 }
 
 /* ==================================================== */
 
 static void
-gnc_virtual_cell_free (gpointer _tcell, gpointer user_data)
+gnc_virtual_cell_destroy (gpointer _vcell, gpointer user_data)
 {
+  VirtualCell *vcell = _vcell;
   Table *table = user_data;
-  TableCell *tcell = _tcell;
-  VirtualCell *vcell;
-
-  if (tcell == NULL)
-    return;
-
-  vcell = &tcell->virt_cell;
 
   if (vcell->vcell_data && table && table->vcell_data_deallocator)
     table->vcell_data_deallocator (vcell->vcell_data);
 
   vcell->vcell_data = NULL;
-
-  g_mem_chunk_free(cell_mem_chunk, tcell);
 }
 
 /* ==================================================== */
