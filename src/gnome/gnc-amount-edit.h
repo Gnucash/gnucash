@@ -29,6 +29,7 @@
 
 #include <gnome.h>
 
+#include "gnc-numeric.h"
 #include "gnc-ui-util.h"
 
 BEGIN_GNOME_DECLS
@@ -47,9 +48,10 @@ typedef struct
   gboolean need_to_parse;
 
   GNCPrintAmountInfo print_info;
-  char *currency;
 
-  double amount;
+  gnc_numeric amount;
+
+  int fraction;
 
   gboolean evaluate_on_enter;
 
@@ -67,17 +69,20 @@ GtkWidget *gnc_amount_edit_new            (void);
 
 GtkWidget *gnc_amount_edit_gtk_entry      (GNCAmountEdit *gae);
 
-void      gnc_amount_edit_set_amount      (GNCAmountEdit *gae, double amount);
+void      gnc_amount_edit_set_amount      (GNCAmountEdit *gae,
+                                           gnc_numeric amount);
+void      gnc_amount_edit_set_damount     (GNCAmountEdit *gae,
+                                           double amount);
 
-double    gnc_amount_edit_get_amount      (GNCAmountEdit *gae);
+gnc_numeric gnc_amount_edit_get_amount    (GNCAmountEdit *gae);
+double      gnc_amount_edit_get_damount   (GNCAmountEdit *gae);
 
 gboolean  gnc_amount_edit_evaluate        (GNCAmountEdit *gae);
 
-void      gnc_amount_edit_set_print_info (GNCAmountEdit *gae,
-                                          GNCPrintAmountInfo print_info);
+void      gnc_amount_edit_set_print_info  (GNCAmountEdit *gae,
+                                           GNCPrintAmountInfo print_info);
 
-void      gnc_amount_edit_set_currency    (GNCAmountEdit *gae,
-                                           const char * currency);
+void      gnc_amount_edit_set_fraction    (GNCAmountEdit *gae, int fraction);
 
 void      gnc_amount_edit_set_evaluate_on_enter (GNCAmountEdit *gae,
                                                  gboolean evaluate_on_enter);

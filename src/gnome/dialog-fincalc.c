@@ -130,15 +130,15 @@ fi_to_gui(FinCalcDialog *fcd)
   snprintf(string, sizeof(string), "%u", fcd->financial_info.npp);
   gtk_entry_set_text(GTK_ENTRY(fcd->amounts[PAYMENT_PERIODS]), string);
 
-  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[INTEREST_RATE]),
-                              fcd->financial_info.ir);
+  gnc_amount_edit_set_damount (GNC_AMOUNT_EDIT(fcd->amounts[INTEREST_RATE]),
+                               fcd->financial_info.ir);
 
-  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[PRESENT_VALUE]),
-                              fcd->financial_info.pv);
-  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[PERIODIC_PAYMENT]),
-                              fcd->financial_info.pmt);
-  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]),
-                              -fcd->financial_info.fv);
+  gnc_amount_edit_set_damount (GNC_AMOUNT_EDIT(fcd->amounts[PRESENT_VALUE]),
+                               fcd->financial_info.pv);
+  gnc_amount_edit_set_damount (GNC_AMOUNT_EDIT(fcd->amounts[PERIODIC_PAYMENT]),
+                               fcd->financial_info.pmt);
+  gnc_amount_edit_set_damount (GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]),
+                               -fcd->financial_info.fv);
   total = fcd->financial_info.npp * fcd->financial_info.pmt;
 
   DxaccSPrintAmount (string, total, gnc_default_print_info (FALSE));
@@ -175,14 +175,14 @@ gui_to_fi(FinCalcDialog *fcd)
   string = gtk_entry_get_text(GTK_ENTRY(fcd->amounts[PAYMENT_PERIODS]));
   fcd->financial_info.npp = strtol(string, NULL, 10);
   fcd->financial_info.ir =
-    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[INTEREST_RATE]));
+    gnc_amount_edit_get_damount(GNC_AMOUNT_EDIT(fcd->amounts[INTEREST_RATE]));
 
   fcd->financial_info.pv =
-    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[PRESENT_VALUE]));
+    gnc_amount_edit_get_damount(GNC_AMOUNT_EDIT(fcd->amounts[PRESENT_VALUE]));
   fcd->financial_info.pmt =
-    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[PERIODIC_PAYMENT]));
+    gnc_amount_edit_get_damount(GNC_AMOUNT_EDIT(fcd->amounts[PERIODIC_PAYMENT]));
   fcd->financial_info.fv =
-    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]));
+    gnc_amount_edit_get_damount(GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]));
   fcd->financial_info.fv = -fcd->financial_info.fv;
 
   i = gnc_option_menu_get_active(fcd->compounding_menu);
@@ -358,7 +358,7 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value, int *error_item)
     case PRESENT_VALUE:
     case PERIODIC_PAYMENT:
     case FUTURE_VALUE:
-      dvalue = gnc_amount_edit_get_amount
+      dvalue = gnc_amount_edit_get_damount
         (GNC_AMOUNT_EDIT (fcd->amounts[INTEREST_RATE]));
       if (DEQ(dvalue, 0.0))
       {

@@ -415,78 +415,42 @@ gnc_default_price_print_info (void)
 
 /* Utility function for printing non-negative amounts */
 static int
-PrintAmountInternal(char *buf, double val, const GNCPrintAmountInfo *info)
+PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 {
-  int i, string_length, num_whole_digits;
+  int num_whole_digits;
   struct lconv *lc = gnc_localeconv();
-  char decimal_point;
-  char temp_buf[50];
+  char temp_buf[64];
+  gnc_numeric whole;
 
   g_assert (info != NULL);
 
-  /* check if we're printing infinity */
-  if (!finite(val)) {
-    strcpy (buf, "inf");
-    return 3;
+  if (gnc_numeric_check (val))
+  {
+    PWARN ("Bad numeric.");
+    *buf = '\0';
+    return 0;
   }
 
   /* print the absolute value */
-  if (val < 0.0)
-    val = ABS(val);
+  if (gnc_numeric_negative_p (val))
+    val = gnc_numeric_neg (val);
 
-  /* print the value without separators */
-  util_fptostr(temp_buf, val, info->max_decimal_places);
-
-  if (info->monetary)
-    decimal_point = lc->mon_decimal_point[0];
-  else
-    decimal_point = lc->decimal_point[0];
-
-  /* fix up the decimal place, if there is one */
-  string_length = strlen(temp_buf);
-  num_whole_digits = -1;
-
-  for (i = string_length - 1; i >= 0; i--)
-    if ((temp_buf[i] == '.') ||
-        (temp_buf[i] == lc->mon_decimal_point[0]) ||
-        (temp_buf[i] == lc->decimal_point[0]))
-    {
-      temp_buf[i] = decimal_point;
-      num_whole_digits = i;
-      break;
-    }
-
-  if (num_whole_digits < 0)
-    num_whole_digits = string_length;  /* Can't find decimal place, it's
-                                        * a whole number */
-
-  /* just a quick check */
-  g_assert (num_whole_digits > 0);
-
-  /* Here we strip off trailing decimal zeros per the argument. */
-  if (info->max_decimal_places > 0)
+  /* calculate the integer part and the remainder */
+  whole = gnc_numeric_create (val.num / val.denom, 1);
+  val = gnc_numeric_sub (val, whole, val.denom, GNC_RND_NEVER);
+  if (gnc_numeric_check (val))
   {
-    int max_delete;
-    char *p;
-
-    max_delete = info->max_decimal_places - info->min_decimal_places;
-
-    p = temp_buf + strlen(temp_buf) - 1;
-
-    while ((*p == '0') && (max_delete > 0))
-    {
-      *p-- = '\0';
-      max_delete--;
-    }
-
-    if (*p == decimal_point)
-      *p = '\0';
+    PWARN ("Problem with remainder.");
+    *buf = '\0';
+    return 0;
   }
+
+  /* print the integer part without separators */
+  sprintf(temp_buf, "%lld", (long long) whole.num);
+  num_whole_digits = strlen (temp_buf);
 
   if (!info->use_separators)
-  {
-    strcpy(buf, temp_buf);
-  }
+    strcpy (buf, temp_buf);
   else
   {
     int group_count;
@@ -545,9 +509,71 @@ PrintAmountInternal(char *buf, double val, const GNCPrintAmountInfo *info)
     *buf_ptr++ = *temp_ptr;
     *buf_ptr = '\0';
     g_strreverse(buf);
-
-    strcpy(buf_ptr, &temp_buf[num_whole_digits]);
   } /* endif */
+
+  /* at this point, buf contains the whole part of the number */
+
+  /* If it's not decimal, print the fraction as an expression */
+  if (!is_decimal_fraction (val.denom, NULL))
+  {
+    if (!gnc_numeric_zero_p (val))
+    {
+      val = gnc_numeric_reduce (val);
+
+      printf (temp_buf, " + %lld / %lld",
+              (long long) val.num,
+              (long long) val.denom);
+
+      strcat (buf, temp_buf);
+    }
+  }
+  else
+  {
+    guint8 num_decimal_places = 0;
+    char *temp_ptr = temp_buf;
+
+    *temp_ptr++ = info->monetary ?
+      lc->mon_decimal_point[0] : lc->decimal_point[0];
+
+    while (!gnc_numeric_zero_p (val) && val.denom != 1)
+    {
+      gint64 digit;
+
+      val.denom = val.denom / 10;
+
+      digit = val.num / val.denom;
+
+      *temp_ptr++ = digit + '0';
+      num_decimal_places++;
+
+      val.num = val.num - (digit * val.denom);
+    }
+
+    /* add in needed zeros */
+    while (num_decimal_places < info->min_decimal_places)
+    {
+      *temp_ptr++ = '0';
+      num_decimal_places++;
+    }
+
+    /* cap the end and move to the last character */
+    *temp_ptr-- = '\0';
+
+    /* Here we strip off trailing decimal zeros per the argument. */
+    while (*temp_ptr == '0' && num_decimal_places > info->min_decimal_places)
+    {
+      *temp_ptr-- = '\0';
+      num_decimal_places--;
+    }
+
+    if (num_decimal_places > info->max_decimal_places)
+    {
+      PWARN ("max_decimal_places too small");
+    }
+
+    if (num_decimal_places > 0)
+      strcat (buf, temp_buf);
+  }
 
   return strlen(buf);
 }
@@ -651,7 +677,10 @@ DxaccSPrintAmount (char * bufp, double val, GNCPrintAmountInfo info)
      bufp = gnc_stpcpy(bufp, "(");
 
    /* Now print the value */
-   bufp += PrintAmountInternal(bufp, ABS(val), &info);
+   {
+     gnc_numeric n = double_to_gnc_numeric (ABS (val), 10000, GNC_RND_ROUND);
+     bufp += PrintAmountInternal(bufp, n, &info);
+   }
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))

@@ -122,9 +122,9 @@ static void
 gnc_amount_edit_init (GNCAmountEdit *gae)
 {
   gae->need_to_parse = FALSE;
-  gae->amount = 0.0;
+  gae->amount = gnc_numeric_zero ();
   gae->print_info = gnc_default_print_info (FALSE);
-  gae->currency = NULL;
+  gae->fraction = 0;
   gae->evaluate_on_enter = FALSE;
 }
 
@@ -137,9 +137,6 @@ gnc_amount_edit_destroy (GtkObject *object)
   g_return_if_fail (GNC_IS_AMOUNT_EDIT (object));
 
   gae = GNC_AMOUNT_EDIT (object);
-
-  g_free(gae->currency);
-  gae->currency = NULL;
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -249,7 +246,6 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
   const char *string;
   char *error_loc;
   gnc_numeric amount;
-  double damount;
   gboolean ok;
 
   g_return_val_if_fail(gae != NULL, FALSE);
@@ -266,12 +262,15 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
 
   if (ok)
   {
-    damount = gnc_numeric_to_double (amount);
+    gnc_numeric old_amount = gae->amount;
 
-    if (!DEQ(damount, gae->amount))
+    if (gae->fraction > 0)
+      amount = gnc_numeric_convert (amount, gae->fraction, GNC_RND_ROUND);
+
+    gnc_amount_edit_set_amount (gae, amount);
+
+    if (!gnc_numeric_equal (amount, old_amount))
       gtk_signal_emit (GTK_OBJECT (gae), amount_edit_signals [AMOUNT_CHANGED]);
-
-    gnc_amount_edit_set_amount (gae, damount);
 
     return TRUE;
   }
@@ -293,15 +292,35 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
  * parsing the epxression if necessary. The result of parsing
  * replaces the expression.
  */
-double
+gnc_numeric
 gnc_amount_edit_get_amount (GNCAmountEdit *gae)
+{
+  g_return_val_if_fail(gae != NULL, gnc_numeric_zero ());
+  g_return_val_if_fail(GNC_IS_AMOUNT_EDIT(gae), gnc_numeric_zero ());
+
+  gnc_amount_edit_evaluate (gae);
+
+  return gae->amount;
+}
+
+
+/**
+ * gnc_amount_edit_get_amount:
+ * @gae: The GNCAmountEdit widget
+ *
+ * Returns the amount entered in the GNCAmountEdit widget,
+ * parsing the epxression if necessary. The result of parsing
+ * replaces the expression.
+ */
+double
+gnc_amount_edit_get_damount (GNCAmountEdit *gae)
 {
   g_return_val_if_fail(gae != NULL, 0.0);
   g_return_val_if_fail(GNC_IS_AMOUNT_EDIT(gae), 0.0);
 
   gnc_amount_edit_evaluate (gae);
 
-  return gae->amount;
+  return gnc_numeric_to_double (gae->amount);
 }
 
 
@@ -313,21 +332,48 @@ gnc_amount_edit_get_amount (GNCAmountEdit *gae)
  * Returns nothing.
  */
 void
-gnc_amount_edit_set_amount (GNCAmountEdit *gae, double amount)
+gnc_amount_edit_set_amount (GNCAmountEdit *gae, gnc_numeric amount)
 {
   const char * amount_string;
 
   g_return_if_fail(gae != NULL);
   g_return_if_fail(GNC_IS_AMOUNT_EDIT(gae));
+  g_return_if_fail(!gnc_numeric_check (amount));
 
   gae->amount = amount;
   gae->need_to_parse = FALSE;
 
-  amount_string = DxaccPrintAmount (amount, gae->print_info);
+  amount_string = DxaccPrintAmount (gnc_numeric_to_double(amount),
+                                    gae->print_info);
 
   gtk_entry_set_text (GTK_ENTRY (gae->amount_entry), amount_string);
 }
 
+/**
+ * gnc_amount_edit_set_amount:
+ * @gae: The GNCAmountEdit widget
+ * @amount: The amount to set
+ *
+ * Returns nothing.
+ */
+void
+gnc_amount_edit_set_damount (GNCAmountEdit *gae, double damount)
+{
+  gnc_numeric amount;
+  int fraction;
+
+  g_return_if_fail(gae != NULL);
+  g_return_if_fail(GNC_IS_AMOUNT_EDIT(gae));
+
+  if (gae->fraction > 0)
+    fraction = gae->fraction;
+  else
+    fraction = 100000;
+
+  amount = double_to_gnc_numeric (damount, fraction, GNC_RND_ROUND);
+
+  gnc_amount_edit_set_amount (gae, amount);
+}
 
 /**
  * gnc_amount_edit_set_print_flags:
@@ -349,20 +395,21 @@ gnc_amount_edit_set_print_info (GNCAmountEdit *gae,
 
 
 /**
- * gnc_amount_edit_set_currency:
+ * gnc_amount_edit_set_fraction:
  * @gae: The GNCAmountEdit widget
- * @currency: The currency to set
+ * @fraction: The fraction to set
  *
  * Returns nothing.
  */
 void
-gnc_amount_edit_set_currency (GNCAmountEdit *gae, const char * currency)
+gnc_amount_edit_set_fraction (GNCAmountEdit *gae, int fraction)
 {
   g_return_if_fail(gae != NULL);
   g_return_if_fail(GNC_IS_AMOUNT_EDIT(gae));
 
-  g_free (gae->currency);
-  currency = g_strdup (currency);
+  fraction = MAX (0, fraction);
+
+  gae->fraction = fraction;
 }
 
 
