@@ -28,6 +28,7 @@ doc_DATA = \
 
 EXTRA_DIST = \
   .cvsignore \
+  ChangeLog.1 \
   HACKING \
   gnucash.lsm \
   make-gnucash-patch.in \
