@@ -138,9 +138,8 @@ extern Pixel negPixel;
 #define SHRS_CELL_C   (acc->columnLocation[SHRS_COL_ID])
 #define ACTN_CELL_C   (acc->columnLocation[ACTN_COL_ID])
 
-/* these columns/rows are still hard coded ... should be switched over, I guess */
 #define MEMO_CELL_R  1
-#define MEMO_CELL_C  2
+#define MEMO_CELL_C  DESC_CELL_C  /* same cilumn as the description */
 
 /** COOL MACROS *****************************************************/
 #define IN_DATE_CELL(R,C) (((R-1)%2==0) && (C==DATE_CELL_C))  /* Date cell        */
@@ -151,9 +150,11 @@ extern Pixel negPixel;
 #define IN_DEP_CELL(R,C)  (((R-1)%2==0) && (C==DEP_CELL_C))   /* Deposit cell     */
 #define IN_BALN_CELL(R,C) (((R-1)%2==0) && (C==BALN_CELL_C))  /* Balance cell     */
 #define IN_PRIC_CELL(R,C) (((R-1)%2==0) && (C==PRIC_CELL_C))  /* Price cell       */
+#define IN_ACTN_CELL(R,C) (((R-1)%2==0) && (C==ACTN_CELL_C))  /* Action cell      */
+
 #define IN_YEAR_CELL(R,C) (((R-1)%2==1) && (C==DATE_CELL_C))  /* Year cell        */
-#define IN_MEMO_CELL(R,C) (((R-1)%2==1) && (C==2))  /* Memo cell        */
-#define IN_BAD_CELL(R,C)  (((R-1)%2==1) && (C==3))  /* cell after memo  */
+#define IN_MEMO_CELL(R,C) (((R-1)%2==1) && (C==MEMO_CELL_C))  /* Memo cell        */
+#define IN_BAD_CELL(R,C)  (((R-1)%2==1) && (C!=MEMO_CELL_C))  /* Not the memo cell*/
 
 
 /********************************************************************/
@@ -304,8 +305,8 @@ regRefresh( RegWindow *regData )
           newData[row+1][PRIC_CELL_C] = XtNewString("");
           newData[row][SHRS_CELL_C]   = XtNewString("");
           newData[row+1][SHRS_CELL_C] = XtNewString("");
-          /* newData[row][ACTN_CELL_C]   = XtNewString(""); */
-          /* newData[row+1][ACTN_CELL_C] = XtNewString(""); */
+          newData[row][ACTN_CELL_C]   = XtNewString(""); 
+          newData[row+1][ACTN_CELL_C] = XtNewString(""); 
           break;
         default:
           fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
@@ -894,15 +895,15 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc->columnLocation [DATE_COL_ID] = 0;
         acc->columnLocation [NUM_COL_ID]  = 1;
-        /* acc->columnLocation [ACTN_COL_ID] = 2; */
-        acc->columnLocation [DESC_COL_ID] = 2;
-        acc->columnLocation [RECN_COL_ID] = 3;
-        acc->columnLocation [PAY_COL_ID]  = 4;
-        acc->columnLocation [DEP_COL_ID]  = 5;
-        acc->columnLocation [PRIC_COL_ID] = 6;
-        acc->columnLocation [SHRS_COL_ID] = 7;
-        acc->columnLocation [BALN_COL_ID] = 8;
-        acc -> numCols = 9;
+        acc->columnLocation [ACTN_COL_ID] = 2;
+        acc->columnLocation [DESC_COL_ID] = 3;
+        acc->columnLocation [RECN_COL_ID] = 4;
+        acc->columnLocation [PAY_COL_ID]  = 5;
+        acc->columnLocation [DEP_COL_ID]  = 6;
+        acc->columnLocation [PRIC_COL_ID] = 7;
+        acc->columnLocation [SHRS_COL_ID] = 8;
+        acc->columnLocation [BALN_COL_ID] = 9;
+        acc -> numCols = 10;
         break;
       default:
         fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
@@ -931,7 +932,7 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc -> colWidths[PRIC_CELL_C] = 8;   /* price */
         acc -> colWidths[SHRS_CELL_C] = 8;   /* share balance */
-        /* acc -> colWidths[ACTN_CELL_C] = 6;   /* action (Buy/Sell)*/
+        acc -> colWidths[ACTN_CELL_C] = 6;   /* action (Buy/Sell)*/
         break;
       }
     
@@ -959,7 +960,7 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc -> alignments[PRIC_CELL_C] = XmALIGNMENT_END;  /* price */
         acc -> alignments[SHRS_CELL_C] = XmALIGNMENT_END;  /* share balance */
-        /* acc -> alignments[ACTN_CELL_C] = XmALIGNMENT_BEGINNING;  /* action */
+        acc -> alignments[ACTN_CELL_C] = XmALIGNMENT_BEGINNING;  /* action */
         break;
       }
     
@@ -987,7 +988,7 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc -> rows[0][PRIC_CELL_C] = "Price";
         acc -> rows[0][SHRS_CELL_C] = "Tot Shrs";
-        /* acc -> rows[0][ACTN_CELL_C] = "Action";   /* action */
+        acc -> rows[0][ACTN_CELL_C] = "Action";   /* action */
         break;
       }
     
@@ -1382,6 +1383,8 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           !IN_RECN_CELL(row,col) && !IN_DEP_CELL(row,col) &&
           !((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) &&
           !((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) &&
+          !((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) &&
+          !((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) &&
           !IN_MEMO_CELL(row,col) && !IN_YEAR_CELL(row,col))
         {
         ((XbaeMatrixEnterCellCallbackStruct *)cbs)->doit = FALSE;
@@ -1562,13 +1565,17 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       if( IN_PAY_CELL(row,col) || IN_DEP_CELL(row,col) )
         regData->changed |= MOD_AMNT;
       
-      if( ((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) ||
-          ((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) )
-        regData->changed |= MOD_PRIC;
-      
       if( IN_MEMO_CELL(row,col) )
         regData->changed |= MOD_MEMO;
       
+      if( ((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) ||
+          ((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) )
+        regData->changed |= MOD_PRIC;
+
+      if( ((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) ||
+          ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) )
+        regData->changed |= MOD_ACTN;
+
       break;
     case XbaeTraverseCellReason:
       DEBUG("XbaeTraverseCellReason");
