@@ -1,3 +1,8 @@
+2001-08-10  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/register-core/cell-factory.c
+	(gnc_cell_factory_add_cell_type): fix bug
+
 2001-08-09  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/register-gnome/table-gnome.c

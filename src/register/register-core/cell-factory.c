@@ -86,7 +86,10 @@ gnc_cell_factory_add_cell_type (CellFactory *cf,
   cr = g_hash_table_lookup (cf->cell_table, cell_type_name);
 
   if (cr)
+  {
+    g_hash_table_remove (cf->cell_table, cell_type_name);
     g_free (cr->cell_type_name);
+  }
   else
     cr = g_new0 (CellRecord, 1);
 
