@@ -130,11 +130,13 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
   char dest_string[255];
   time_t current_time; 
   Account *account;
+  Account *investment_account;
+  gnc_commodity *investment_commodity;
   GNCBook *book;
   Transaction *transaction;
   Split *split;
   gchar *notes, *tmp;
-  gnc_numeric gnc_amount;
+/*  gnc_numeric gnc_amount;*/
   
   if(data.account_id_valid==true){
     account = gnc_import_select_account(data.account_id, 0, NULL, NULL, NO_TYPE);
@@ -250,11 +252,11 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 	  g_free(tmp);
 	}
 
-	printf("WRITEME: Gnucash ofx_proc_transaction():Add PAYEE and ADRESS here once supported by libofx!\n");
+	PERR("WRITEME: Gnucash ofx_proc_transaction():Add PAYEE and ADRESS here once supported by libofx!\n");
 
 	/* Ideally, gnucash should process the corrected transactions */
 	if(data.fi_id_corrected_valid==true){
-	  printf("WRITEME: Gnucash ofx_proc_transaction(): WARNING: This transaction corrected a previous transaction, but we created a new one instead!\n");
+	  PERR("WRITEME: Gnucash ofx_proc_transaction(): WARNING: This transaction corrected a previous transaction, but we created a new one instead!\n");
 	  tmp=notes;
 	  notes=g_strdup_printf("%s%s%s%s",tmp,"|This corrects transaction #",data.fi_id_corrected,"but Gnucash didn't process the correction!");
 	  g_free(tmp);
@@ -266,8 +268,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 	  split=xaccMallocSplit(book);
 	  xaccTransAppendSplit(transaction,split);
 	  xaccAccountInsertSplit(account,split);
-	  gnc_amount = double_to_gnc_numeric(data.amount,xaccAccountGetCommoditySCU(account),GNC_RND_ROUND);
-	  xaccSplitSetBaseValue(split, gnc_amount,xaccAccountGetCommodity(account));
+	  /*gnc_amount = double_to_gnc_numeric(data.amount,xaccAccountGetCommoditySCU(account),GNC_RND_ROUND);*/
+	  DxaccSplitSetBaseValue(split, data.amount,xaccAccountGetCommodity(account));
 	  
 	  /* Also put the ofx transaction name in the splits memo field, or ofx memo if name is unavailable */ 
 	  if(data.name_valid==true){
@@ -276,13 +278,49 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 	  else if(data.memo_valid==true){
 	    xaccSplitSetMemo(split, data.memo);
 	  }
-	 /* xaccTransCommitEdit(transaction); */
+	  
+	  if(data.unique_id_valid==true&&data.security_data_ptr->secname_valid==true)
+	    {
+	      /* The transaction is an investment transaction -----------------------------------------------*/
+	      /* Note that the STOCK account type should be replaced with something derived from data.invtranstype*/
+	      investment_commodity = gnc_import_select_commodity(data.unique_id,
+								 0,
+								 NULL,
+								 NULL);
+	      if(investment_commodity!=NULL)
+		{
+		  investment_account = gnc_import_select_account(data.unique_id, 1, data.security_data_ptr->secname, investment_commodity, STOCK);
+		  
+		  if(investment_account!=NULL&&data.unitprice_valid==true&&data.units_valid==true)
+		    {
+		      split=xaccMallocSplit(book);
+		      xaccTransAppendSplit(transaction,split);
+		      xaccAccountInsertSplit(investment_account,split);
+		      DxaccSplitSetSharePriceAndAmount(split, data.unitprice,data.units);
+		      
+		      if(data.security_data_ptr->memo_valid==true){
+			xaccSplitSetMemo(split, data.security_data_ptr->memo);
+		      }
+		      
+		    }
+		  else
+		    {
+		      PERR("The investment account, unist or unitprice  was not found for the insestment transaction");
+		    }
+		}
+	      else
+		{
+		  PERR("Commodity not found for the insestment transaction");
+		}
+	    }
 	  
 	  gnc_import_add_trans(transaction);
 	}
 	else
 	  {
 	    PERR("The transaction doesn't have a valid amount");
+	    xaccTransRollbackEdit(transaction);
+	    xaccTransCommitEdit(transaction);
 	  }
 	
       }
