@@ -369,7 +369,9 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
   else
     active = "";
 
-  if (safe_strcmp (active, GNC_COMMODITY_NS_ISO) == 0)
+  if (safe_strcmp (active, GNC_COMMODITY_NS_ISO) == 0 ||
+      safe_strcmp (active, "CURRENCY") == 0 ||
+      safe_strcmp (init_string, "CURRENCY") == 0)
   {
     active = "CURRENCY";
     init_string = GNC_COMMODITY_NS_ISO;
