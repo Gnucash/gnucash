@@ -269,6 +269,7 @@
 (gw:wrap-value ws 'gnc:split-account '<gnc:id-type> "SPLIT_ACCOUNT")
 (gw:wrap-value ws 'gnc:split-value '<gnc:id-type> "SPLIT_VALUE")
 (gw:wrap-value ws 'gnc:split-memo '<gnc:id-type> "SPLIT_MEMO")
+(gw:wrap-value ws 'gnc:split-date-reconciled '<gnc:id-type> "SPLIT_DATE_RECONCILED")
 
 (gw:wrap-value ws 'gnc:trans-date-posted '<gnc:id-type> "TRANS_DATE_POSTED")
 (gw:wrap-value ws 'gnc:trans-desc '<gnc:id-type> "TRANS_DESCRIPTION")
