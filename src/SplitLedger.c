@@ -76,6 +76,7 @@
 #include "splitreg.h"
 #include "table-allgui.h"
 #include "Transaction.h"
+#include "util.h"
 
 #define BUFSIZE 1024
 
@@ -102,6 +103,9 @@
  */
 
 static int force_double_entry_awareness = 0;
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_LEDGER;
 
 /* ======================================================== */
 /* this callback gets called when the user clicks on the gui
@@ -136,13 +140,13 @@ LedgerMoveCursor  (Table *table,
    SplitRegister *reg = (SplitRegister *) client_data;
    int style;
 
-printf ("LedgerMoveCursor start calback %d %d \n",
-new_phys_row, new_phys_col);
+   PINFO ("LedgerMoveCursor(): start calback %d %d \n",
+       new_phys_row, new_phys_col);
    /* commit the contents of the cursor into the database */
    xaccSRSaveRegEntry (reg);
    xaccSRRedrawRegEntry (reg); 
-printf ("LedgerMoveCursor after redraw %d %d \n",
-new_phys_row, new_phys_col);
+   PINFO ("LedgerMoveCursor(): after redraw %d %d \n",
+      new_phys_row, new_phys_col);
 
    /* if auto-expansion is enabled, we need to redraw the register
     * to expand out the splits at the new location.  We do some
@@ -171,10 +175,8 @@ new_phys_row, new_phys_col);
 
       /* indicate what row we *should* have gone to */
       *p_new_phys_row = table->current_cursor_phys_row;
-printf ("LedgerMoveCursor after dynamic %d %d stored val %d\n",
-*p_new_phys_row, new_phys_col,
-reg->cursor_phys_row
-);
+      PINFO ("LedgerMoveCursor(): after dynamic %d %d stored val %d\n",
+           *p_new_phys_row, new_phys_col, reg->cursor_phys_row);
    }
 }
 
@@ -208,7 +210,7 @@ LedgerTraverse  (Table *table,
        (REG_DOUBLE_DYNAMIC == style)) 
    {
       Split *split, *oldsplit;
-printf ("enter LedgerTraverse with %d %d \n", new_phys_row , new_phys_col);
+      ENTER ("LedgerTraverse with %d %d \n", new_phys_row , new_phys_col);
       oldsplit = xaccSRGetCurrentSplit (reg);
       split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
       reg->table->current_cursor->user_data = (void *) split;
@@ -223,7 +225,7 @@ printf ("enter LedgerTraverse with %d %d \n", new_phys_row , new_phys_col);
       xaccRegisterCountHack (reg);
       reg->table->current_cursor->user_data = (void *) oldsplit;
 
-printf ("leave LedgerTraverse with %d \n", reg->cursor_phys_row);
+      LEAVE ("LedgerTraverse with %d \n", reg->cursor_phys_row);
       /* indicate what row we *should* go to */
       *p_new_phys_row = reg->cursor_phys_row;
    }
@@ -331,7 +333,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
 
    /* get the handle to the current split and transaction */
    split = xaccSRGetCurrentSplit (reg);
-printf ("save split is %p \n", split);
+   PINFO ("xaccSRSaveRegEntry(): save split is %p \n", split);
    if (!split) {
       int vr, vc;
       Split *s;
@@ -349,12 +351,12 @@ printf ("save split is %p \n", split);
       vc = reg->table->current_cursor_virt_col;
       vr --;
       if ((0 > vr) || (0 > vc)) {
-         printf ("Internal Error: SaveRegEntry(): bad row \n");
+         PERR ("Internal Error: SaveRegEntry(): bad row \n");
          return;
       }
       s = (Split *) reg->table->user_data[vr][vc];
       if (!s) {
-         printf ("Internal Error: SaveRegEntry(): no parent \n");
+         PERR ("Internal Error: SaveRegEntry(): no parent \n");
          return;
       }
       trans = xaccSplitGetParent (s);
@@ -509,9 +511,8 @@ printf ("save split is %p \n", split);
       xaccSplitSetValue (split, (reg->valueCell->amount));
    }
 
-printf ("finished saving split %s of trans %s \n", 
-xaccSplitGetMemo(split),
-xaccTransGetDescription(trans));
+   PINFO ("xaccSRSaveRegEntry(): finished saving split %s of trans %s \n", 
+      xaccSplitGetMemo(split), xaccTransGetDescription(trans));
 
    /* if the modified split is the "blank split", 
     * then it is now an official part of the account.
@@ -896,7 +897,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* make sure that the header is loaded */
    xaccSetCursor (table, reg->header, 0, 0, 0, 0);
 
-printf ("load register of %d phys rows ----------- \n", reg->num_phys_rows);
+   PINFO ("xaccSRLoadRegister(): "
+          "load register of %d phys rows ----------- \n", reg->num_phys_rows);
 
    /* populate the table */
    i=0;
@@ -914,7 +916,8 @@ printf ("load register of %d phys rows ----------- \n", reg->num_phys_rows);
          Transaction *trans;
          int do_expand;
 
-printf ("load trans %d at phys row %d \n", i, phys_row);
+         PINFO ("xaccSRLoadRegister(): "
+                "load trans %d at phys row %d \n", i, phys_row);
    
          /* if multi-line, then show all splits.  If dynamic then
           * show all splits only if this is the hot split. 
@@ -949,7 +952,9 @@ printf ("load trans %d at phys row %d \n", i, phys_row);
                   xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
                   xaccMoveCursor (table, phys_row, 0);
                   xaccSRLoadSplitEntry (reg, secondary, 1);
-printf ("load split %d at phys row %d addr=%p \n", j, phys_row, secondary);
+                  PINFO ("xaccSRLoadRegister(): "
+                         "load split %d at phys row %d addr=%p \n", 
+                          j, phys_row, secondary);
                   vrow ++;
                   phys_row += reg->split_cursor->numRows; 
                }
@@ -965,7 +970,11 @@ printf ("load split %d at phys row %d addr=%p \n", j, phys_row, secondary);
             vrow ++;
             phys_row += lead_cursor->numRows; 
          }
+      } else {
+         PINFO ("xaccSRLoadRegister(): "
+                "skip trans %d (user hook) \n", i);
       }
+   
 
       last_split = split;
       i++; 
