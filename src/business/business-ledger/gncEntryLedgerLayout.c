@@ -77,7 +77,9 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
     { ENTRY_INV_CELL, RECN_CELL_TYPE_NAME, N_("sample:X")+7,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_VALUE_CELL, PRICE_CELL_TYPE_NAME, N_("sample:999,999.00")+7,
-      CELL_ALIGN_RIGHT, FALSE, FALSE }
+      CELL_ALIGN_RIGHT, FALSE, FALSE },
+    { ENTRY_TAXVAL_CELL, PRICE_CELL_TYPE_NAME, N_("sample:999.00")+7,
+      CELL_ALIGN_RIGHT, FALSE, FALSE },
   };
   int i;
 
@@ -98,7 +100,7 @@ static void gnc_entry_ledger_layout_add_cursors (GncEntryLedger *ledger,
   case GNCENTRY_ORDER_VIEWER:
   case GNCENTRY_INVOICE_ENTRY:
   case GNCENTRY_INVOICE_VIEWER:
-    num_cols = 13;
+    num_cols = 14;
     break;
   default:
     g_assert (FALSE);
@@ -139,6 +141,7 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
     gnc_table_layout_set_cell (layout, curs, ENTRY_TAX_CELL, 0, x++);
     gnc_table_layout_set_cell (layout, curs, ENTRY_TAXACC_CELL, 0, x++);
     gnc_table_layout_set_cell (layout, curs, ENTRY_VALUE_CELL, 0, x++);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_TAXVAL_CELL, 0, x++);
 
     break;
 

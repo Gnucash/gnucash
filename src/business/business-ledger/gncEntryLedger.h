@@ -45,6 +45,7 @@ typedef struct entry_ledger_colors
 
 #define ENTRY_INV_CELL		"invoiced-p"
 #define ENTRY_VALUE_CELL	"line-value"
+#define ENTRY_TAXVAL_CELL	"line-tax-val"
 
 typedef struct GncEntryLedger_s GncEntryLedger;
 

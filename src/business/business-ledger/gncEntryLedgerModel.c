@@ -95,7 +95,12 @@ static const char * get_inv_label (VirtualLocation virt_loc, gpointer data)
 
 static const char * get_value_label (VirtualLocation virt_loc, gpointer data)
 {
-  return _("Value");
+  return _("Subtotal");
+}
+
+static const char * get_taxval_label (VirtualLocation virt_loc, gpointer data)
+{
+  return _("Tax");
 }
 
 /* GET_ENTRY */
@@ -350,6 +355,44 @@ static const char * get_value_entry (VirtualLocation virt_loc,
   return xaccPrintAmount (value, gnc_default_print_info (TRUE));
 }
 
+static const char * get_taxval_entry (VirtualLocation virt_loc,
+                                      gboolean translate,
+                                      gboolean *conditionally_changed,
+                                      gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+  gnc_numeric value;
+
+  /* Check if this is the current cursor */
+  if (virt_cell_loc_equal (ledger->table->current_cursor_loc.vcell_loc,
+			   virt_loc.vcell_loc)) {
+    gnc_numeric qty, price, discount, tax;
+    gint disc_type, tax_type;
+
+    gnc_entry_ledger_get_numeric (ledger, ENTRY_QTY_CELL, &qty);
+    gnc_entry_ledger_get_numeric (ledger, ENTRY_PRIC_CELL, &price);
+    gnc_entry_ledger_get_numeric (ledger, ENTRY_DISC_CELL, &discount);
+    gnc_entry_ledger_get_numeric (ledger, ENTRY_TAX_CELL, &tax);
+
+    disc_type = gnc_entry_ledger_get_type (ledger, ENTRY_DISTYPE_CELL);
+    tax_type = gnc_entry_ledger_get_type (ledger, ENTRY_TAXTYPE_CELL);
+
+    gncEntryComputeValue (qty, price, tax, tax_type, discount, disc_type,
+			  NULL, &value);
+  } else {
+    GncEntry *entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+
+    if (entry == gncEntryLookup (ledger->book, &(ledger->blank_entry_guid)))
+      return NULL;
+
+    gncEntryGetValue (entry, NULL, &value);
+  }
+  if (gnc_numeric_zero_p (value))
+    return NULL;
+
+  return xaccPrintAmount (value, gnc_default_print_info (TRUE));
+}
+
 /* GET_HELP */
 
 static char * get_acct_help (VirtualLocation virt_loc, gpointer user_data)
@@ -535,7 +578,19 @@ static char * get_value_help (VirtualLocation virt_loc, gpointer user_data)
 
   help = gnc_table_get_entry (ledger->table, virt_loc);
   if (!help || *help == '\0')
-    help = _("The value of this entry ");
+    help = _("The subtotal value of this entry ");
+
+  return g_strdup (help);
+}
+
+static char * get_taxval_help (VirtualLocation virt_loc, gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+  const char *help;
+
+  help = gnc_table_get_entry (ledger->table, virt_loc);
+  if (!help || *help == '\0')
+    help = _("The total tax of this entry ");
 
   return g_strdup (help);
 }
@@ -799,6 +854,7 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model,
     { ENTRY_TAX_CELL, get_tax_entry, get_tax_label, get_tax_help,  get_standard_io_flags },
     { ENTRY_INV_CELL, get_inv_entry, get_inv_label, get_inv_help, get_inv_io_flags },
     { ENTRY_VALUE_CELL, get_value_entry, get_value_label, get_value_help, get_value_io_flags },
+    { ENTRY_TAXVAL_CELL, get_taxval_entry, get_taxval_label, get_taxval_help, get_value_io_flags },
   };
   int i;
 
