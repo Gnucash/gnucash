@@ -117,13 +117,13 @@ l = @l@
 
 noinst_LIBRARIES = libgnccalc.a
 
-libgnccalc_a_SOURCES =    expression_parser.c   fin.c   numeric_ops.c
+libgnccalc_a_SOURCES =    expression_parser.c   fin.c
 
 
 noinst_HEADERS =    finvar.h   finproto.h   fin_spl_protos.h   fin_static_proto.h
 
 
-EXTRA_DIST =    .cvsignore   README   amort_opt.c   amort_prt.c   fin-interactive.c   fin-main.c
+EXTRA_DIST =    .cvsignore   README   amort_opt.c   amort_prt.c   fin-interactive.c   fin-main.c   numeric-ops.c
 
 
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
@@ -142,7 +142,7 @@ X_LIBS = @X_LIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 libgnccalc_a_LIBADD = 
-libgnccalc_a_OBJECTS =  expression_parser.o fin.o numeric_ops.o
+libgnccalc_a_OBJECTS =  expression_parser.o fin.o
 AR = ar
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -157,7 +157,7 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = gtar
 GZIP_ENV = --best
-DEP_FILES =  .deps/expression_parser.P .deps/fin.P .deps/numeric_ops.P
+DEP_FILES =  .deps/expression_parser.P .deps/fin.P
 SOURCES = $(libgnccalc_a_SOURCES)
 OBJECTS = $(libgnccalc_a_OBJECTS)
 
