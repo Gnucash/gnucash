@@ -138,6 +138,9 @@ static void
 gnc_search_dialog_display_results (GNCSearchWindow *sw)
 {
   GList *list;
+  GtkAdjustment *vadjustment;
+  gfloat save_value = 0.0;
+  gboolean have_list = TRUE;
 
   /* Check if this is the first time this is called for this window.
    * If so, then build the results sub-window, the scrolled listbox,
@@ -146,6 +149,8 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
   if (sw->result_list == NULL) {
     GtkWidget *scroller, *button_box, *button;
     char * titles [] = { "Result" }; /* XXX */
+
+    have_list = FALSE;
 
     /* Create the list : XXX : move to function, provide multiple columns */
     sw->result_list = gtk_clist_new_with_titles (1, titles);
@@ -204,6 +209,11 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
       gtk_widget_hide_all (sw->select_button);
   }
 
+  /* Figure out were we were */
+  vadjustment = gtk_clist_get_vadjustment (GTK_CLIST (sw->result_list));
+  if (vadjustment)
+    save_value = vadjustment->value;
+
   /* Clear out all the items, to insert in a moment */
   gtk_clist_freeze (GTK_CLIST (sw->result_list));
   gtk_clist_clear (GTK_CLIST (sw->result_list));
@@ -233,17 +243,29 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
   /* Need to reverse again for internal consistency */
   g_list_reverse (list);
 
+  /* Return to our saved vadjustment */
+  if (vadjustment) {
+    save_value = CLAMP (save_value, vadjustment->lower,
+			vadjustment->upper - vadjustment->page_size);
+    gtk_adjustment_set_value (vadjustment, save_value);
+  }
+
   gtk_clist_thaw (GTK_CLIST (sw->result_list));
 
   /* Figure out what to select */
   {
     gint row = gtk_clist_find_row_from_data (GTK_CLIST (sw->result_list),
 					     sw->selected_item);
+
     if (row < 0)
       row = 0;
 
     gtk_clist_select_row (GTK_CLIST (sw->result_list), row, 0);
-    gtk_clist_moveto (GTK_CLIST (sw->result_list), row, 0, 0.5, 0);
+
+    /* If this row isn't visible, move it to the center */
+    if (gtk_clist_row_is_visible (GTK_CLIST (sw->result_list), row) !=
+	GTK_VISIBILITY_FULL && have_list)
+      gtk_clist_moveto (GTK_CLIST (sw->result_list), row, 0, 0.5, 0);
   }
 }
 
