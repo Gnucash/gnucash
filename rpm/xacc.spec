@@ -69,7 +69,7 @@ install -d /etc/X11/wmconfig
 install -m 644 -o root -g root $RPM_SOURCE_DIR/xacc.wmconfig /etc/X11/wmconfig/xacc
 
 %files
-%doc README TODO
+%doc README README.german TODO
 /usr/bin/xacc
 /usr/bin/xacc.bin
 /usr/bin/xacc-static.bin
