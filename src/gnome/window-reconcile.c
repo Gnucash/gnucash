@@ -135,10 +135,10 @@ recnRefresh(Account *acc)
 
         if(themount < 0)
         {
-          fprintf(stderr, "Adding debit: %s\n", item_str);
+          PINFO ("Adding debit: %s\n", item_str);
           debit_items = g_list_append(debit_items, (gpointer) list_item);
         } else {
-          fprintf(stderr, "Adding credit: %s\n", item_str);
+          PINFO("Adding credit: %s\n", item_str);
           credit_items = g_list_append(credit_items, (gpointer) list_item);
         }
 
@@ -210,7 +210,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   int acc_type;
   
   acc_type = xaccAccountGetType (acc);
-  if ((STOCK == acc_type) || (MUTUAL == acc_type)) shrs = 1;
+  if ((STOCK == acc_type) || (MUTUAL == acc_type)) shrs = PRTSHR;
   
   /* Calculate the total debit: */
   ddebit = 0.0;
@@ -225,9 +225,8 @@ recnRecalculateBalance(RecnWindow *recnData)
     g_list_foreach(GTK_LIST(recnData->credit)->children, func, &dcredit);
   }
   
-  shrs *= PRTSHR;
   shrs |= PRTSYM;
-  
+
   /* Update the difference field, and the total fields */
   amt = xaccPrintAmount(DABS(ddebit), shrs);
   {
@@ -327,7 +326,7 @@ startRecnWindow(GtkWidget *parent, Account *acc, double *diff)
                               GTK_SIGNAL_FUNC(startRecnCancelCB),
                               (gpointer) &result);
   
-  fprintf(stderr, "Not implemented: helpMenubarCB\n");
+  PERR (" startRecnWindow(): Not implemented: helpMenubarCB\n");
   /*
     gnome_dialog_button_connect(GNOME_DIALOG(dialog), 2,
     GTK_SIGNAL_FUNC(helpMenubarCB),
@@ -380,7 +379,7 @@ startRecnWindow(GtkWidget *parent, Account *acc, double *diff)
           if(sscanf(str, "%lf", &val ) == 1) {
             *diff = dendBalance - val;
           } else {
-            errorBox("Ending balance must be a number.");
+            errorBox(N_("Ending balance must be a number."));
             result = -1;
           }
         }
@@ -388,7 +387,7 @@ startRecnWindow(GtkWidget *parent, Account *acc, double *diff)
     }
     gnome_dialog_close(GNOME_DIALOG(dialog));
   }
-  fprintf(stderr, "Returning result: %d\n", result);
+  PINFO ("Returning result: %d\n", result);
   return result;
 }
 
@@ -447,7 +446,7 @@ recnWindow(GtkWidget *parent, Account *acc)
                               GTK_SIGNAL_FUNC(recnCancelCB),
                               (gpointer) recnData);
 
-  fprintf(stderr, "Not implemented: helpMenubarCB\n");
+  PERR ("recnWindow(): Not implemented: helpMenubarCB\n");
   /*
   XtAddCallback( widget, XmNactivateCallback,
                  helpMenubarCB, (XtPointer)HMB_RECNWIN );
@@ -602,9 +601,9 @@ static void
 recnCancelCB(GtkWidget *w, gpointer data)
 {
   RecnWindow  *recnData = (RecnWindow *) data;
-  fprintf(stderr, "X\n");
+  PINFO ("X\n");
   gnome_dialog_close(GNOME_DIALOG(recnData->dialog));
-  fprintf(stderr, "Y\n");
+  PINFO ("Y\n");
 }
 
 /********************************************************************\

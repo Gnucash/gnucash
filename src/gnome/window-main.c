@@ -2,7 +2,7 @@
  * MainWindow.c -- the main window, and associated helper functions * 
  *                 and callback functions for xacc (X-Accountant)   *
  * Copyright (C) 1998,1999 Jeremy Collins	                    *
- * Copyright (C) 1998      Linas Vepstas                            *
+ * Copyright (C) 1998,1999 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -406,12 +406,30 @@ gnc_ui_acct_ctree_fill(GtkCTree *ctree, GtkCTreeNode *parent, AccountGroup *acct
         currentAccount++ )
   {
     Account      *acc = xaccGroupGetAccount(accts, currentAccount);
-    AccountGroup *hasChildren;
+    int           acc_type = xaccAccountGetType (acc); 
+    AccountGroup *acc_children = xaccAccountGetChildren (acc);
     gchar         buf[BUFSIZE];
     GtkWidget    *popup;
+    double        dbalance = 0.0;
         
-    sprintf(buf, "%s%.2f", CURRENCY_SYMBOL, xaccAccountGetBalance(acc));
-    
+
+    /* fill in the balance column */
+    dbalance = xaccAccountGetBalance (acc);
+    /* if the account has children, add in thier balance */
+    if (acc_children) {
+       dbalance += xaccGroupGetBalance (acc_children);
+    }
+
+    /* the meaning of "balance" for income and expense
+     * accounts is reversed, since a deposit of a paycheck in a
+     * bank account will appear as a debit of the corresponding
+     * amount in the income account */
+    if ((EXPENSE == acc_type) ||
+        (INCOME  == acc_type) ) {
+      dbalance = -dbalance;
+    }
+    xaccSPrintAmount (buf, dbalance, PRTSYM | PRTSEP);
+
     text[0] = xaccAccountGetName(acc);
     text[1] = xaccAccountGetDescription(acc);
     text[2] = buf;
@@ -440,15 +458,13 @@ gnc_ui_acct_ctree_fill(GtkCTree *ctree, GtkCTreeNode *parent, AccountGroup *acct
                         GTK_SIGNAL_FUNC(acct_ctree_unselect), 
                         NULL);                        
     
-    /* Check to see if this account has any children. If it
-     * does then we need to build a subtree and fill it 
+    /* If this account has children,
+     * then we need to build a subtree and fill it 
      */
-    hasChildren = xaccAccountGetChildren(acc); 
-     
-    if(hasChildren)
+    if(acc_children)
     {
       /* Call gnc_ui_accWindow_tree_fill to fill this new subtree */
-      gnc_ui_acct_ctree_fill(ctree, sibling, hasChildren );  
+      gnc_ui_acct_ctree_fill(ctree, sibling, acc_children );  
     }
   }
   				       
@@ -585,7 +601,7 @@ gnc_ui_mainWindow_toolbar_open ( GtkWidget *widget, gpointer data )
   
   if(account)
   {
-   fprintf(stderr, "calling regWindowSimple(%p)\n", account);
+   PINFO ("calling regWindowSimple(%p)\n", account);
    regWindowSimple ( account );
   }
   else

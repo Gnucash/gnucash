@@ -28,12 +28,14 @@
 #include "config.h"
 
 #include "messages.h"
-#include "util.h"
-#include "ui-callbacks.h"
 #include "top-level.h"
+#include "ui-callbacks.h"
+#include "util.h"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
 
 #if 0
-
 
 /** GLOBALS *********************************************************/
 
@@ -180,7 +182,7 @@ destroyShellCB( Widget w, XtPointer cd, XtPointer cb )
 void 
 setBusyCursor(GtkWidget *w)
 {
-  fprintf(stderr, "Unimplemented: setBusyCursor\n");
+  PERR("Unimplemented: setBusyCursor\n");
 
 #if 0
   if( realized )
@@ -206,7 +208,7 @@ setBusyCursor(GtkWidget *w)
 void 
 unsetBusyCursor(GtkWidget *w)
 {
-  fprintf(stderr, "Unimplemented: unsetBusyCursor\n");
+  PERR("Unimplemented: unsetBusyCursor\n");
   
 # if 0
   if( realized )

@@ -1,7 +1,12 @@
+
 #include <guile/gh.h>
 #include <gnome.h>
 
 #include "dialog-options.h"
+#include "util.h"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
 
 /* Note that in general, passing SCM values to the GTK/GNOME callbacks
    as the "data" value requires you to make sure that that pointer is
@@ -165,7 +170,8 @@ _gnc_options_dialog_item_refresh_ui_(SCM item) {
       gboolean current_state = gh_scm2bool(gh_call0(value_getter));
       gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(w), current_state);    
     } else {
-      fprintf(stderr, "Unknown type for refresh.  Ignoring.\n");
+      PERR ("_gnc_options_dialog_item_refresh_ui_(): "
+            "Unknown type for refresh.  Ignoring.\n");
     }
     free(item_type);
   }
@@ -191,7 +197,8 @@ _gnc_options_dialog_item_get_ui_value_(SCM item) {
     if(strcmp(item_type, "boolean")) {
       result = gh_bool2scm(GTK_TOGGLE_BUTTON(w)->active);
     } else {
-      fprintf(stderr, "Unknown type for refresh.  Ignoring.\n");
+      PERR ("_gnc_options_dialog_item_get_ui_value_(): "
+            "Unknown type for refresh.  Ignoring.\n");
       result = SCM_UNDEFINED;
     }
     free(item_type);

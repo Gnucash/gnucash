@@ -67,12 +67,12 @@ gnucash_lowlev_app_init()
 #endif
   ENTER ("gnucash_lowlev_app_init");
   
-  printf ("\n\n");
-  printf ("This is a development version.  It may or may not work \n");
-  printf ("Report bugs and other problems to http://www.gnucash.org/ \n");
-  printf ("The last stable version was xacc-1.2.0 \n");
-  printf ("The next stable version will be gnucash-1.4.x \n");
-  printf ("\n\n");
+  printf ("\n\n"
+          "This is a development version.  It may or may not work. \n"
+          "Report bugs and other problems to http://www.gnucash.org/ \n"
+          "The last stable version was gnucash-1.2.0 \n"
+          "The next stable version will be gnucash-1.4.x \n"
+          "\n\n");
   
   {
     int fake_argc = 1;

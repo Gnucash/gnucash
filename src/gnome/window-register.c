@@ -514,7 +514,7 @@ static void
 closeRegWindow( GtkWidget * mw, gpointer data)
 {
   RegWindow *regData = (RegWindow *)data;
-  fprintf(stderr, "Closing register safely\n");
+  PINFO("closeRegWindow(): Closing register safely\n");
   xaccLedgerDisplayClose (regData->ledger);
   free(regData);
   DEBUG("closed RegWindow\n");

@@ -454,7 +454,7 @@ formCB( GtkWidget *widget, gpointer data )
    DEBUGCMD ({
       n = fcs->ncomponents;
       for (i=0; i<n; i++) {
-         printf ("Debug: formCB(): %s=%s\n", 
+         DEBUG ("formCB(): %s=%s\n", 
              fcs->components[i].name, fcs->components[i].value);
       }
    });
@@ -547,7 +547,7 @@ htmlAnchorCB( GtkWidget *widget, XmHTMLAnchorCallbackStruct *acbs, gpointer data
 
       /* a named anchor on a page that is already displayed */
       case ANCHOR_JUMP: {
-//         XmHTMLAnchorScrollToName(mw, acbs->href);
+//          XmHTMLAnchorScrollToName(widget, acbs->href);
       }
       break;
 
@@ -561,17 +561,17 @@ htmlAnchorCB( GtkWidget *widget, XmHTMLAnchorCallbackStruct *acbs, gpointer data
 
       /*  other types are unsupported, but it would be fun if they were ... */
       case ANCHOR_FTP:
-         fprintf(stderr, "Error: this help window doesn't support ftp: %s\n", acbs->href);
+         PERR(" this help window doesn't support ftp: %s\n", acbs->href);
          break;
       case ANCHOR_HTTP:
-         fprintf(stderr, "Error: this help window doesn't support http: %s\n", acbs->href);
+         PERR (" this help window doesn't support http: %s\n", acbs->href);
          break;
       case ANCHOR_MAILTO:
-         fprintf(stderr, "Error: this help window doesn't support email: %s\n", acbs->href);
+         PERR(" this help window doesn't support email: %s\n", acbs->href);
          break;
       case ANCHOR_UNKNOWN:
       default:
-         fprintf(stderr, "Error: don't know this type of url: %s\n", acbs->href);
+         PERR(" don't know this type of url: %s\n", acbs->href);
          break;
    }
 
@@ -646,63 +646,6 @@ htmlReadImageProc (GtkWidget *widget, String file)
   free(filename);
   return retval;
 }
-#endif /* WANT_XMHTML */
+#endif /* HAVE_XMHTML */
 
-#if USE_HTMLW
-#if HAVE_XPM
-/********************************************************************\
- * htmlResolveImage                                                 * 
- *                                                                  * 
- * Args:   mw   - the html widge                                    *
- *         file - the name of the html file to read                 * 
- *         nl   - ???                                               * 
- * Return: none                                                     * 
- * Global: helpPath - the path to the help files                    * 
-\********************************************************************/
-
-struct _image_info {
-  int width;
-  int height;
-  int num_colors;
-  Pixmap pixmap;
-};
-
-typedef struct _image_info ImageInfo;
-
-static ImageInfo *
-htmlResolveImage( GtkWidget *widget, char *file, int nl )
-  {
-  ImageInfo *img = (ImageInfo *)malloc(sizeof(ImageInfo));
-  XpmImage  xpm;
-  XpmAttributes attr;
-  int err;
-  char *filename;
-  
-  /* construct absolute path -- twiddle the relative path we recieved */
-  filename = gncFindFile (file);
-  
-  /* initialize stuff: */
-  memset( img, 0, sizeof(ImageInfo) );
-  memset( &attr, 0, sizeof(XpmAttributes) );
-  memset( &xpm, 0, sizeof(XpmImage) );
-  
-  err = XpmReadFileToXpmImage( filename, &xpm, NULL );
-
-  free(filename); filename = NULL;
-
-  img->width  = xpm.width;
-  img->height = xpm.height;
-  img->num_colors = xpm.ncolors;
-  img->pixmap = None;
-  
-  err = XpmCreatePixmapFromXpmImage( XtDisplay(mw), XtWindow(mw), &xpm,
-				     &(img->pixmap), NULL, NULL );
-  if( err != 0 )
-    ERROR();
-  
-  return img;
-  }
-
-#endif /* HAVE_XPM */
-#endif /* USE_HTMLW */
 /* ----------------------- END OF FILE ---------------------  */

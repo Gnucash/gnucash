@@ -23,6 +23,10 @@
 #include <guile/gh.h>
 
 #include "top-level.h"
+#include "util.h"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
 
 /* FIXME: is this always kosher?  Will SCM's always fit in a gpointer? */
 
@@ -61,7 +65,7 @@ gnc_extensions_menu_add_item(char name[],
   
   /* GtkWidget *w = gnome_app_find_menu_pos(www, "Extensions/", &pos); */
 
-  printf("%s %s %p\n", name, hint, data);
+  PINFO ("gnc_extensions_menu_add_item(): %s %s %p\n", name, hint, data);
   gnome_app_insert_menus(GNOME_APP(gnc_get_ui_data()), "Extensions/", item_info);
 }
 

@@ -40,6 +40,9 @@
 #include "util.h"
 #include "FileDialog.h" /* for gncGetCurrentGroup, does this belong there?*/
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
+
 /* Please look at ../motif/AccWindow.c for info on what should be
    going on in these functions */
 
@@ -126,18 +129,17 @@ gnc_ui_accWindow_list_cb (GtkWidget* list, GtkWidget *child, gpointer data)
 static void
 gnc_ui_accWindow_list_fill ( GtkWidget *listOfTypes )
 {
-  gchar      buffer[255];
   gint       i;
   GtkWidget *list_item;  
   
   for (i=0; i<NUM_ACCOUNT_TYPES; i++) 
   {
     GtkWidget       *label;
-    gchar           *string;
+    gchar           *acctype;
     
-    sprintf(buffer, "%s", xaccAccountGetTypeStr (i));
+    acctype = xaccAccountGetTypeStr (i);
     
-    list_item=gtk_list_item_new_with_label(buffer);
+    list_item=gtk_list_item_new_with_label (acctype);
     gtk_container_add(GTK_CONTAINER(listOfTypes), list_item);
     gtk_object_set_data(GTK_OBJECT(list_item), "accType", (gpointer)i);
     gtk_widget_show(list_item);
@@ -280,7 +282,8 @@ gnc_ui_accWindow_tree_select ( GtkWidget *widget, GtkWidget *child,
         }
         break;
       default:
-        printf("don't know how to handle %d account type!\n", parentAccType);
+        PERR("gnc_ui_accWindow_tree_select(): "
+              "don't know how to handle %d account type!\n", parentAccType);
       }
       children = children->next;
     }
@@ -330,7 +333,8 @@ gnc_ui_accWindow_tree_select ( GtkWidget *widget, GtkWidget *child,
       }
       break;
     default:
-      printf("don't what to select for %d account type!\n", parentAccType);
+      PERR("gnc_ui_accWindow_tree_select(): "
+           "don't what to select for %d account type!\n", parentAccType);
     }
   }
 }
@@ -449,12 +453,13 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
   GtkWidget    *entrySecurity;
   GtkWidget    *notesWidget;
   gchar        *text[3];
-  gchar        buf[BUFSIZE];
+  gchar         buf[BUFSIZE];
   GtkCTreeNode *newRow = NULL;
   GtkCTreeNode *parentRow;
   GtkCTreeNode *ctreeParent;
   GtkCTree     *ctree;
   GtkWidget    *app;
+  double        dbalance;
   
   entryAccountName = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryAccountName");
   entryDescription = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryDescription");
@@ -524,7 +529,8 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
   }
   xaccAccountCommitEdit (account);
 
-  sprintf(buf, "%s%.2f", CURRENCY_SYMBOL, xaccAccountGetBalance(account));
+  dbalance = xaccAccountGetBalance(account);
+  xaccSPrintAmount (buf, dbalance, PRTSYM | PRTSEP);
     
   text[0] = xaccAccountGetName(account);
   text[1] = xaccAccountGetDescription(account);
