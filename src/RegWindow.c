@@ -2951,7 +2951,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           
           if( IN_XFRM_CELL(row,col) ) {
             tcbs->next_column = DESC_CELL_C;
-            tcbs->next_row = row;
+            tcbs->next_row = row - XFRM_CELL_R + DESC_CELL_R;
           }
 
           if ((GEN_LEDGER == regData->type) ||
@@ -2959,7 +2959,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
               (PORTFOLIO  == regData->type)) {
             if( IN_XTO_CELL(row,col) ) {
               tcbs->next_column = MEMO_CELL_C;
-              tcbs->next_row = row;
+              tcbs->next_row = row - XTO_CELL_R + MEMO_CELL_R;
             }
           } 
 
@@ -2970,10 +2970,10 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
                 (INC_LEDGER == regData->type) ||
                 (PORTFOLIO  == regData->type)) {
               tcbs->next_column = XTO_CELL_C;
-              tcbs->next_row = row;
+              tcbs->next_row = row - ACTN_CELL_R + XTO_CELL_R;
             } else {
               tcbs->next_column = MEMO_CELL_C;
-              tcbs->next_row = row;
+              tcbs->next_row = row - ACTN_CELL_R + MEMO_CELL_R;
               if( regData->qf != NULL ) {
                 if( regData->qf->trans != NULL ) {
                   XbaeMatrixSetCell( reg, tcbs->next_row, tcbs->next_column,
@@ -2986,6 +2986,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           if( IN_DESC_CELL(row,col) )
             {
             tcbs->next_column = PAY_CELL_C;
+            tcbs->next_row = row - DESC_CELL_R + PAY_CELL_R;
             if( regData->qf != NULL )
               if( regData->qf->trans != NULL ) {
                 /* hack alert -- this is guarenteed to break for ledgers */
@@ -3009,12 +3010,13 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
             XbaeMatrixCommitEdit(reg,True);
             if( strcmp(XbaeMatrixGetCell(reg,tcbs->row,tcbs->column),"") != 0 )
               {
-              tcbs->next_row    = row+ACTN_CELL_R;
               tcbs->next_column = ACTN_CELL_C;
+              tcbs->next_row    = row - PAY_CELL_R + ACTN_CELL_R;
               }
             else
               {
               tcbs->next_column = DEP_CELL_C;
+              tcbs->next_row    = row - PAY_CELL_R + DEP_CELL_R;
               if( regData->qf != NULL )
                 if( regData->qf->trans != NULL ) {
                   /* hack alert -- this is guarenteed to break for ledgers */
@@ -3033,8 +3035,8 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           
           if( IN_DEP_CELL(row,col) )
             {
-            tcbs->next_row    = row+ACTN_CELL_R;
             tcbs->next_column = ACTN_CELL_C;
+            tcbs->next_row    = row - DEP_CELL_R + ACTN_CELL_R;
             }
           
           /* If we are in the memo cell, stay there! */
