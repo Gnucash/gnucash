@@ -27,8 +27,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include "Account.h"
 #include "AccountP.h"
 #include "Group.h"
+#include "GroupP.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
@@ -178,7 +180,7 @@ get_random_glist_depth (gint depth)
     for (i = 0; i < count; i++)
     {
         KvpValueType kvpt;
-        kvp_value *value;
+        KvpValue *value;
 
         kvpt = glist_strings_only ? KVP_TYPE_STRING : -2;
 
@@ -263,9 +265,9 @@ get_random_binary_data(void)
 /* ========================================================== */
 /* KVP stuff */
 
-static kvp_frame* get_random_kvp_frame_depth (gint depth);
+static KvpFrame* get_random_kvp_frame_depth (gint depth);
 
-static kvp_value*
+static KvpValue*
 get_random_kvp_value_depth (int type, gint depth)
 {
     int datype = type;
@@ -296,7 +298,7 @@ get_random_kvp_value_depth (int type, gint depth)
         break;
 
     case KVP_TYPE_DOUBLE:
-	return NULL;
+        return NULL;
         break;
 
     case KVP_TYPE_NUMERIC:
@@ -306,7 +308,7 @@ get_random_kvp_value_depth (int type, gint depth)
     case KVP_TYPE_STRING:
     {
         gchar *tmp_str;
-        kvp_value *ret;
+        KvpValue *ret;
         tmp_str = get_random_string();
         if(!tmp_str)
         {
@@ -322,7 +324,7 @@ get_random_kvp_value_depth (int type, gint depth)
     case KVP_TYPE_GUID:
     {
         GUID *tmp_guid;
-        kvp_value *ret;
+        KvpValue *ret;
         tmp_guid = get_random_guid();
         ret = kvp_value_new_guid(tmp_guid);
         g_free(tmp_guid);
@@ -340,7 +342,7 @@ get_random_kvp_value_depth (int type, gint depth)
     case KVP_TYPE_BINARY:
     {
         bin_data *tmp_data;
-        kvp_value *ret;
+        KvpValue *ret;
         tmp_data = get_random_binary_data();
         ret = kvp_value_new_binary(tmp_data->data, tmp_data->len);
         g_free(tmp_data->data);
@@ -355,8 +357,8 @@ get_random_kvp_value_depth (int type, gint depth)
 
     case KVP_TYPE_FRAME:
     {
-        kvp_frame *tmp_frame;
-        kvp_value *ret;
+        KvpFrame *tmp_frame;
+        KvpValue *ret;
         tmp_frame = get_random_kvp_frame_depth(depth + 1);
         ret = kvp_value_new_frame(tmp_frame);
         kvp_frame_delete(tmp_frame);
@@ -370,10 +372,10 @@ get_random_kvp_value_depth (int type, gint depth)
     }
 }
 
-static kvp_frame*
+static KvpFrame*
 get_random_kvp_frame_depth (gint depth)
 {
-    kvp_frame *ret;
+    KvpFrame *ret;
     int vals_to_add;
     gboolean val_added;
 
@@ -388,7 +390,7 @@ get_random_kvp_frame_depth (gint depth)
     for (;vals_to_add > 0; vals_to_add--)
     {
         gchar *key;
-        kvp_value *val;
+        KvpValue *val;
 
         do
         {
@@ -413,13 +415,13 @@ get_random_kvp_frame_depth (gint depth)
     return ret;
 }
 
-kvp_frame*
+KvpFrame *
 get_random_kvp_frame (void)
 {
   return get_random_kvp_frame_depth (0);
 }
 
-kvp_value *
+KvpValue *
 get_random_kvp_value(int type)
 {
   return get_random_kvp_value_depth (type, 0);
@@ -525,7 +527,7 @@ get_random_commodity (QofBook *book)
     int ran_int;
     gnc_commodity_table *table;
 
-    table = gnc_book_get_commodity_table (book);
+    table = gnc_commodity_table_get_table (book);
 
 #if 0
     if (table &&
@@ -825,7 +827,7 @@ make_random_group_depth (QofBook *book, AccountGroup *group, int depth)
 }
 
 static void
-make_random_group (QofBook *book, AccountGroup * group)
+make_random_group (QofBook *book, AccountGroup *group)
 {
   int depth;
 
@@ -845,7 +847,12 @@ get_random_group (QofBook *book)
 
   g_return_val_if_fail (book, NULL);
 
-  group = xaccMallocAccountGroup (book);
+  group = xaccGetAccountGroup (book);
+  if (!group)
+  {
+    group = xaccMallocAccountGroup (book);
+    xaccSetAccountGroup (book, group);
+  }
 
   make_random_group (book, group);
 
@@ -1156,6 +1163,7 @@ make_random_changes_to_group (QofBook *book, AccountGroup *group)
 Account*
 get_random_account(QofBook *book)
 {
+    AccountGroup *grp;
     Account *ret;
     int tmp_int;
 
@@ -1175,6 +1183,13 @@ get_random_account(QofBook *book)
 
     xaccAccountSetSlots_nc(ret, get_random_kvp_frame());
 
+    grp = xaccGetAccountGroup (book);
+    if (!grp) 
+    {
+        grp = xaccMallocAccountGroup (book);
+        xaccSetAccountGroup (book, grp);
+    }
+    xaccGroupInsertAccount (grp, ret);
     xaccAccountCommitEdit(ret);
 
     return ret;
@@ -1304,8 +1319,11 @@ get_random_transaction_with_currency(QofBook *book,
 
     if (!account_list) 
     {
-      account_list = xaccGroupGetSubAccounts (gnc_book_get_group (book));
+      account_list = xaccGroupGetSubAccounts (xaccGetAccountGroup (book));
     }
+
+    /* Gotta have at least two different accounts */
+    if (1 >= g_list_length (account_list)) return NULL;
 
     ret = xaccMallocTransaction(book);
 
@@ -1319,7 +1337,8 @@ get_random_transaction_with_currency(QofBook *book,
     trn_add_ran_timespec(ret, xaccTransSetDatePostedTS);
     trn_add_ran_timespec(ret, xaccTransSetDateEnteredTS);
 
-    xaccTransSetSlots_nc(ret, get_random_kvp_frame());
+    KvpFrame *f = get_random_kvp_frame();
+    xaccTransSetSlots_nc(ret, f);
 
     add_random_splits(book, ret, account_list);
 
@@ -1528,7 +1547,7 @@ get_random_query(void)
   while (num_terms-- > 0)
   {
     gint pr_type;
-    kvp_value *value;
+    KvpValue *value;
     Timespec *start;
     Timespec *end;
     GList *guids;
@@ -1700,8 +1719,8 @@ get_random_book (void)
 
   book = qof_book_new ();
 
-  make_random_group (book, gnc_book_get_group (book));
-  make_random_pricedb (book, gnc_book_get_pricedb (book));
+  get_random_group (book);
+  get_random_pricedb (book);
 
   return book;
 }
@@ -1716,8 +1735,8 @@ get_random_session (void)
 
   book = qof_session_get_book (session);
 
-  make_random_group (book, gnc_book_get_group (book));
-  make_random_pricedb (book, gnc_book_get_pricedb (book));
+  get_random_group (book);
+  get_random_pricedb (book);
 
   return session;
 }
@@ -1733,13 +1752,13 @@ add_random_transactions_to_book (QofBook *book, gint num_transactions)
 
   g_return_if_fail (book);
 
-  accounts = xaccGroupGetSubAccounts (gnc_book_get_group (book));
+  accounts = xaccGroupGetSubAccounts (xaccGetAccountGroup (book));
 
   g_return_if_fail (accounts);
 
   num_accounts = g_list_length (accounts);
 
-  table = gnc_book_get_commodity_table (book);
+  table = gnc_commodity_table_get_table (book);
 
   while (num_transactions--)
   {
@@ -1757,11 +1776,11 @@ make_random_changes_to_book (QofBook *book)
 {
   g_return_if_fail (book);
 
-  make_random_changes_to_group (book, gnc_book_get_group (book));
-  make_random_changes_to_pricedb (book, gnc_book_get_pricedb (book));
+  make_random_changes_to_group (book, xaccGetAccountGroup (book));
+  make_random_changes_to_pricedb (book, gnc_pricedb_get_db (book));
 
 #if 0
-  make_random_changes_to_commodity_table (gnc_book_get_commodity_table (book));
+  make_random_changes_to_commodity_table (gnc_commodity_table_get_table (book));
 #endif
 }
 
@@ -1781,7 +1800,7 @@ typedef struct
 } KVPQueryData;
 
 static void
-add_kvp_value_query (const char *key, kvp_value *value, gpointer data)
+add_kvp_value_query (const char *key, KvpValue *value, gpointer data)
 {
   KVPQueryData *kqd = data;
   GSList *node;
@@ -1802,7 +1821,7 @@ add_kvp_value_query (const char *key, kvp_value *value, gpointer data)
 }
 
 static void
-add_kvp_query (Query *q, kvp_frame *frame, QofIdType where)
+add_kvp_query (Query *q, KvpFrame *frame, QofIdType where)
 {
   KVPQueryData kqd;
 
