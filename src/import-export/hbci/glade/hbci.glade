@@ -1064,6 +1064,20 @@ User</label>
 
 	    <widget>
 	      <class>GtkButton</class>
+	      <name>hbciversion_button</name>
+	      <can_focus>True</can_focus>
+	      <label>HBCI
+Version</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkButton</class>
 	      <name>updatelist_button</name>
 	      <can_focus>True</can_focus>
 	      <label>Update 
@@ -2216,7 +2230,7 @@ Press 'Finish' now.</text>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>
   <default_width>350</default_width>
-  <default_height>400</default_height>
+  <default_height>420</default_height>
   <allow_shrink>True</allow_shrink>
   <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>
@@ -2228,7 +2242,7 @@ Press 'Finish' now.</text>
     <child_name>GnomeDialog:vbox</child_name>
     <name>dialog-vbox3</name>
     <homogeneous>False</homogeneous>
-    <spacing>8</spacing>
+    <spacing>0</spacing>
     <child>
       <padding>4</padding>
       <expand>True</expand>
@@ -2272,8 +2286,9 @@ Press 'Finish' now.</text>
     <widget>
       <class>GtkVBox</class>
       <name>vbox149</name>
+      <border_width>8</border_width>
       <homogeneous>False</homogeneous>
-      <spacing>0</spacing>
+      <spacing>8</spacing>
       <child>
 	<padding>0</padding>
 	<expand>True</expand>
@@ -2283,7 +2298,6 @@ Press 'Finish' now.</text>
       <widget>
 	<class>GtkFrame</class>
 	<name>frame68</name>
-	<border_width>10</border_width>
 	<label>Progress</label>
 	<label_xalign>0</label_xalign>
 	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
@@ -2462,7 +2476,6 @@ Press 'Finish' now.</text>
       <widget>
 	<class>GtkFrame</class>
 	<name>frame69</name>
-	<border_width>10</border_width>
 	<label>Log Messages</label>
 	<label_xalign>0</label_xalign>
 	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
@@ -2488,6 +2501,20 @@ Press 'Finish' now.</text>
 	    <text></text>
 	  </widget>
 	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkCheckButton</class>
+	<name>close_checkbutton</name>
+	<can_focus>True</can_focus>
+	<label>Close when finished</label>
+	<active>True</active>
+	<draw_indicator>True</draw_indicator>
+	<child>
+	  <padding>0</padding>
+	  <expand>False</expand>
+	  <fill>False</fill>
+	</child>
       </widget>
     </widget>
   </widget>
@@ -2747,6 +2774,134 @@ Press 'Finish' now.</text>
 		<class>Placeholder</class>
 	      </widget>
 	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+  </widget>
+</widget>
+
+<widget>
+  <class>GnomeDialog</class>
+  <name>HBCI_version_dialog</name>
+  <title>HBCI Version</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <allow_shrink>True</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>False</auto_shrink>
+  <auto_close>True</auto_close>
+  <hide_on_close>True</hide_on_close>
+
+  <widget>
+    <class>GtkVBox</class>
+    <child_name>GnomeDialog:vbox</child_name>
+    <name>dialog-vbox5</name>
+    <homogeneous>False</homogeneous>
+    <spacing>8</spacing>
+    <child>
+      <padding>4</padding>
+      <expand>True</expand>
+      <fill>True</fill>
+    </child>
+
+    <widget>
+      <class>GtkHButtonBox</class>
+      <child_name>GnomeDialog:action_area</child_name>
+      <name>dialog-action_area5</name>
+      <layout_style>GTK_BUTTONBOX_END</layout_style>
+      <spacing>8</spacing>
+      <child_min_width>85</child_min_width>
+      <child_min_height>27</child_min_height>
+      <child_ipad_x>7</child_ipad_x>
+      <child_ipad_y>0</child_ipad_y>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>True</fill>
+	<pack>GTK_PACK_END</pack>
+      </child>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button2</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button4</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkVBox</class>
+      <name>vbox155</name>
+      <homogeneous>False</homogeneous>
+      <spacing>0</spacing>
+      <child>
+	<padding>0</padding>
+	<expand>True</expand>
+	<fill>True</fill>
+      </child>
+
+      <widget>
+	<class>GtkLabel</class>
+	<name>label8877436</name>
+	<label>Choose a HBCI Version to use with the selected bank:</label>
+	<justify>GTK_JUSTIFY_CENTER</justify>
+	<wrap>False</wrap>
+	<xalign>0.5</xalign>
+	<yalign>0.5</yalign>
+	<xpad>0</xpad>
+	<ypad>0</ypad>
+	<child>
+	  <padding>0</padding>
+	  <expand>False</expand>
+	  <fill>False</fill>
+	</child>
+      </widget>
+
+      <widget>
+	<class>GtkScrolledWindow</class>
+	<name>scrolledwindow31</name>
+	<hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
+	<vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
+	<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	<vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkCList</class>
+	  <name>version_clist</name>
+	  <can_focus>True</can_focus>
+	  <columns>1</columns>
+	  <column_widths>80</column_widths>
+	  <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	  <show_titles>False</show_titles>
+	  <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CList:title</child_name>
+	    <name>label8877437</name>
+	    <label>Version</label>
+	    <justify>GTK_JUSTIFY_LEFT</justify>
+	    <wrap>False</wrap>
+	    <xalign>0</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
 	  </widget>
 	</widget>
       </widget>

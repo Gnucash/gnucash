@@ -53,6 +53,7 @@ struct _inter_data
   /* Buttons */
   GtkWidget *abort_button;
   GtkWidget *close_button;
+  GtkWidget *close_checkbutton;
 
   const char *format_pin_user_bank;
   const char *format_pin_min_char;

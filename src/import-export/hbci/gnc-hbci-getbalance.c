@@ -147,10 +147,11 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 	  (HBCI_Value_getValue (HBCI_Balance_value (bal2)) == 0))
 	{
 	  gnome_ok_dialog_parented 
-	    (_("The HBCI Balance download returned zero balance.\n"
-	       "It seems as if your bank does not support Balance download.\n"
-	       "If you know that your bank does support Balance download, please\n"
-	       "send a detailed bug report to the OpenHBCI developers at openhbci-general@lists.sf.net."),
+	    (_("The downloaded HBCI Balance was zero.\n"
+	       "It seems as if your bank does not support Balance download \n"
+	       "in this HBCI version. You should choose a higher HBCI version \n"
+	       "number in the HBCI Setup. After that, try again to download \n"
+	       "the HBCI Balance.\n"),
 	     GTK_WINDOW (parent));
 	  dialogres = FALSE;
 	}

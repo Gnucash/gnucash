@@ -94,8 +94,14 @@ void GNCInteractor_delete(GNCInteractor *data)
 {
   if (data == NULL)
     return;
-  if (data->dialog != NULL) 
+  if (data->dialog != NULL) {
+    gnc_set_boolean_option ("__gui", "hbci_close_on_finish",
+			    gtk_toggle_button_get_active 
+			    (GTK_TOGGLE_BUTTON (data->close_checkbutton)));
+    gtk_object_unref (GTK_OBJECT (data->dialog));
     gtk_widget_destroy (data->dialog);
+  }
+  
   data->dialog = NULL;
 }
 
@@ -107,6 +113,16 @@ void GNCInteractor_erasePIN(GNCInteractor *i)
   i->pw = NULL;
   i->user = NULL;
 }
+void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
+{
+  g_assert (i);
+  i->parent = new_parent;
+  if (GTK_WIDGET (i->dialog) -> parent != NULL)
+    gtk_widget_reparent (GTK_WIDGET (i->dialog), new_parent);
+  else
+    gtk_widget_set_parent (GTK_WIDGET (i->dialog), new_parent);
+}
+
 
 
 /********************************************************

@@ -36,6 +36,7 @@ void GNCInteractor_show(GNCInteractor *i);
 void GNCInteractor_hide(GNCInteractor *i);
 void GNCInteractor_delete(GNCInteractor *i);
 void GNCInteractor_erasePIN(GNCInteractor *i);
+void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent);
 
 
 #endif

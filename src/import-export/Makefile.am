@@ -20,13 +20,14 @@ gncinclude_HEADERS = \
 
 noinst_HEADERS = \
   gnc-gen-transaction.h \
-  import-main-matcher.h \
-  import-backend.h \
-  import-match-picker.h \
   import-account-matcher.h \
+  import-backend.h \
   import-commodity-matcher.h \
-  import-utilities.h \
-  import-settings.h
+  import-main-matcher.h \
+  import-match-map.h \
+  import-match-picker.h \
+  import-settings.h \
+  import-utilities.h 
 
 libgncmod_generic_import_la_LDFLAGS = -module
 

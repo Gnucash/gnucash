@@ -1,5 +1,15 @@
 2002-12-07  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/hbci/gnc-hbci-utils.c: Correctly reparent the
+	HBCI widgets when the parent window changes.
+
+	* src/import-export/hbci/hbci-interaction[P].[hc],
+	hbci-progressmon.c, hbci.scm: Add option for "close on finish" of
+	the HBCI log window.
+
+	* src/import-export/hbci/druid-hbci-initial.c, glade/hbci.glade:
+	Add dialog for choosing HBCI version.
+
 	* po/el.po: Updated translation by Nikos Charonitakis
 	<charosn@her.forthnet.gr>
 

@@ -32,6 +32,7 @@
 #include "druid-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
+#include "global-options.h"
 
 int debug_pmonitor = FALSE;
 
@@ -49,6 +50,9 @@ static void GNCInteractor_setFinished (GNCInteractor *data)
   data->state = FINISHED;
   gtk_widget_set_sensitive (GTK_WIDGET (data->abort_button), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (data->close_button), TRUE);
+  if (gtk_toggle_button_get_active
+      (GTK_TOGGLE_BUTTON (data->close_checkbutton)))
+    GNCInteractor_hide (data);
 }
 static void GNCInteractor_setAborted (GNCInteractor *data)
 {
@@ -341,6 +345,12 @@ gnc_hbci_new_pmonitor(GNCInteractor *data)
   g_assert (data->abort_button = glade_xml_get_widget (xml, "abort_button"));
   gtk_widget_set_sensitive (GTK_WIDGET (data->abort_button), FALSE);
   g_assert (data->close_button = glade_xml_get_widget (xml, "close_button"));
+  g_assert (data->close_checkbutton = 
+	    glade_xml_get_widget (xml, "close_checkbutton"));
+
+  gtk_toggle_button_set_active 
+    (GTK_TOGGLE_BUTTON (data->close_checkbutton), 
+     gnc_lookup_boolean_option("__gui", "hbci_close_on_finish", TRUE));
 
   gtk_signal_connect (GTK_OBJECT (data->abort_button), "clicked", 
 		      GTK_SIGNAL_FUNC (on_button_clicked), data);
@@ -351,6 +361,7 @@ gnc_hbci_new_pmonitor(GNCInteractor *data)
     gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (data->parent));
   //gtk_widget_set_parent (GTK_WIDGET (dialog), data->parent);
 
+  gtk_object_ref (GTK_OBJECT (dialog));
   gtk_widget_hide_all (dialog);
 
   pmon = HBCI_ProgressMonitorCB_new(&destr,

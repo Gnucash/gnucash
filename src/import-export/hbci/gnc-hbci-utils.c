@@ -104,18 +104,22 @@ HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent,
     gnc_hbci_api = gnc_hbci_api_new (gnc_hbci_configfile, 
 				     FALSE, parent, inter);
     gnc_hbci_inter = *inter;
+    return gnc_hbci_api;
   } else if ((gnc_hbci_configfile != NULL) && 
 	     (strcmp(gnc_hbci_configfile, 
 		     gnc_hbci_get_book_configfile (gnc_get_current_book ()))
 	     != 0)) {
     /* Wrong API cached -- delete old and create new. */
     gnc_hbci_api_delete (gnc_hbci_api);
-    printf("gnc_hbci_api_new_currentbook: Wrong HBCI_API cached; creating new one.\n");
+    fprintf(stderr,
+	    "gnc_hbci_api_new_currentbook: Wrong HBCI_API cached; creating new one.\n");
     return gnc_hbci_api_new_currentbook (parent, inter);
+  } else {
+    /* Correct API cached. */
+    *inter = gnc_hbci_inter;
+    GNCInteractor_reparent (*inter, parent);
+    return gnc_hbci_api;
   }
-  /* Correct API cached. */
-  *inter = gnc_hbci_inter;
-  return gnc_hbci_api;
 };
 
 void gnc_hbci_api_delete (HBCI_API *api)

@@ -443,11 +443,135 @@ choose_customer (HBCIInitialInfo *info)
   }
 }
 
+/*********************************************************************
+ * HBCI Version Picking dialog
+ */
+static void *hbciversion_cb (int value, void *user_data) 
+{
+  GtkWidget *clist = user_data;
+  gchar *text;
+  int row;
+  g_assert (clist);
+
+  switch (value) 
+    {
+    case 2:
+      text = g_strdup ("HBCI 2.0");
+      break;
+    case 201:
+      text = g_strdup ("HBCI 2.0.1");
+      break;
+    case 210:
+      text = g_strdup ("HBCI 2.1");
+      break;
+    case 220:
+      text = g_strdup ("HBCI 2.2");
+      break;
+    case 300:
+      text = g_strdup ("FinTS (HBCI 3.0)");
+      break;
+    default:
+      text = g_strdup_printf ("HBCI %d", value);
+    }
+  
+  row = gtk_clist_append (GTK_CLIST (clist), &text);
+  gtk_clist_set_row_data (GTK_CLIST (clist), row, GINT_TO_POINTER (value));
+  
+  return NULL;
+}
+static void hbciversion_select_row (GtkCList *clist,
+				    gint row, gint column,
+				    GdkEventButton *event, gpointer user_data)
+{
+  int *pointer = user_data;
+  *pointer = row;
+}
+static void hbciversion_unselect_row (GtkCList *clist,
+				      gint row, gint column,
+				      GdkEventButton *event, 
+				      gpointer user_data)
+{
+  int *pointer = user_data;
+  *pointer = 0;
+}
+
+static gboolean 
+choose_hbciversion_dialog (GtkWindow *parent, HBCI_Bank *bank)
+{
+  int retval = -1;
+  int selected_row = 0;
+  int initial_selection;
+  GladeXML *xml;
+  GtkWidget *version_clist;
+  GtkWidget *dialog;
+  g_assert (bank);
+  
+  xml = gnc_glade_xml_new ("hbci.glade", "HBCI_version_dialog");
+
+  g_assert
+    (dialog = glade_xml_get_widget (xml, "HBCI_version_dialog"));
+  g_assert
+    (version_clist = glade_xml_get_widget (xml, "version_clist"));
+  gtk_signal_connect (GTK_OBJECT (version_clist), "select_row",
+		      GTK_SIGNAL_FUNC (hbciversion_select_row), &selected_row);
+  gtk_signal_connect (GTK_OBJECT (version_clist), "unselect_row",
+		      GTK_SIGNAL_FUNC (hbciversion_unselect_row),
+		      &selected_row);
+
+  gnome_dialog_set_parent (GNOME_DIALOG (dialog), parent);
+  gtk_clist_freeze (GTK_CLIST (version_clist));
+  {
+    list_int *supported_v = HBCI_Bank_supportedVersions (bank);
+    g_assert (supported_v);
+    if (list_int_size (supported_v) == 0) {
+      list_int_delete (supported_v);
+      return FALSE;
+    }
+    list_int_foreach (supported_v, hbciversion_cb, version_clist);
+    list_int_delete (supported_v);
+  }
+
+  /* Initial selection */
+  initial_selection = HBCI_Bank_hbciVersion (bank);
+  gtk_clist_select_row 
+    (GTK_CLIST (version_clist), 
+     gtk_clist_find_row_from_data
+     (GTK_CLIST (version_clist), GINT_TO_POINTER (initial_selection)), 
+     0);
+
+  gtk_clist_thaw (GTK_CLIST (version_clist));
+  gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
+
+  retval = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));  
+
+  /*fprintf (stderr, "retval = %d, selected_row = %d\n", retval, selected_row);*/
+  if ((retval == 0) && (selected_row > 0))
+    {
+      int newversion = 
+	GPOINTER_TO_INT (gtk_clist_get_row_data
+			 (GTK_CLIST (version_clist), selected_row));
+      if (newversion != initial_selection) 
+	{
+	  /*fprintf (stderr, "Setting new HBCI version %d\n", newversion); */
+	  HBCI_Bank_setHbciVersion (bank, newversion);
+	  HBCI_Bank_setBPDVersion (bank, 0);
+	  gtk_widget_destroy (dialog);
+	  gnome_ok_dialog_parented 
+	    (_("You have changed the HBCI version. GnuCash will now need to \n"
+	       "update various system parameters, including the account list.\n"
+	       "Press 'Ok' now to proceed to updating the system and the account list."), parent);
+	  return TRUE;
+	}
+    }
+  
+  gtk_widget_destroy (dialog);
+  return FALSE;
+}
 
 
-
-
-
+/*************************************************************
+ * GUI callbacks
+ */
 
 
 static void
@@ -1303,10 +1427,22 @@ on_button_clicked (GtkButton *button,
     info->newbank = choose_one_bank (info, &dummy);
     gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			  GNOME_DRUID_PAGE (info->userpage));
+  } else if (strcmp (name, "hbciversion_button") == 0) {
+    /* Choose hbci version */
+    info->state = UPDATE_ACCOUNTS;
+    info->newcustomer = choose_customer (info);
+    if (info->newcustomer == NULL)
+      return;
+    if (choose_hbciversion_dialog 
+	(GTK_WINDOW (info->window),
+	 (HBCI_Bank *) 
+	 HBCI_User_bank (HBCI_Customer_user (info->newcustomer))))
+      gnome_druid_set_page (GNOME_DRUID (info->druid), 
+			    GNOME_DRUID_PAGE (info->accountinfopage));
   } else if (strcmp (name, "updatelist_button") == 0) {
     info->state = UPDATE_ACCOUNTS;
     info->newcustomer = choose_customer (info);
-    // Nothing else to do.
+    /* Nothing else to do. */
     gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			  GNOME_DRUID_PAGE (info->accountinfopage));
   } else if (strcmp (name, "serveryes_button") == 0) {
@@ -1457,6 +1593,10 @@ void gnc_hbci_initial_druid (void)
 			GTK_SIGNAL_FUNC (on_button_clicked), info);
     gtk_signal_connect (GTK_OBJECT 
 			(glade_xml_get_widget (xml, "adduser_button")), 
+			"clicked",
+			GTK_SIGNAL_FUNC (on_button_clicked), info);
+    gtk_signal_connect (GTK_OBJECT 
+			(glade_xml_get_widget (xml, "hbciversion_button")), 
 			"clicked",
 			GTK_SIGNAL_FUNC (on_button_clicked), info);
     gtk_signal_connect (GTK_OBJECT 

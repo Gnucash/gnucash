@@ -45,8 +45,8 @@ typedef enum _action {
 } GNCImportAction;
 
 /************************************************************************
- * @name Non-GUI Functions 
  ************************************************************************/
+/** @name Non-GUI Functions */
 /*@{*/
 
 /** Checks whether the given transaction's online_id already exists in
