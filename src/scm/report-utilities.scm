@@ -212,5 +212,7 @@
 (define (gnc:split-list-balance splits)
   (if (= (gnc:count-splits splits) 0)
       0
-      (+ (gnc:split-list-total splits)
-         (gnc:split-get-balance (gnc:ith-split splits 0)))))
+      (let ((first-split (gnc:ith-split splits 0)))
+        (+ (gnc:split-list-total splits)
+           (gnc:split-get-balance first-split)
+           (- (gnc:split-get-value first-split))))))
