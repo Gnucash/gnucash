@@ -103,7 +103,7 @@ use FileHandle;
 # signature so this works OK.
 
 sub check_modules {
-  my @modules = qw(Date::Manip Finance::Quote);
+  my @modules = qw(Date::Manip Finance::Quote LWP);
   my @missing;
 
   foreach my $mod (@modules) {
@@ -227,7 +227,12 @@ sub schemify_quote {
   }
 
   $field = 'symbol';
-  $data = schemify_string($$quotehash{$itemname, $field});
+  if (($$quotehash{$itemname, $field})) {
+    $data = schemify_string($$quotehash{$itemname, $field});
+  } else {
+    # VWD quotes don't set the symbol
+    $data = $itemname;
+  }
   $quotedata .= "($field . $data)";
 
   $field = 'gnc:time-no-zone';
