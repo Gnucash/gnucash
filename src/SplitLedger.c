@@ -1338,10 +1338,117 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
       /* hack alert -- implement this */
    }
 
-   /* The AMNT and NAMNT updates only differ by sign.  Basically, 
-    * the split and transaction cursors show minus the quants that
-    * the single and double cursors show, and so when updates happen,
-    * the extra minus sign must also be handled. */
+   if (((MOD_AMNT | MOD_PRIC | MOD_VALU) & changed) &&
+       ((STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
+	(CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
+	(PORTFOLIO         == (reg->type & REG_TYPE_MASK)))) {
+
+     double value;
+     double price;
+     double new_amount;
+
+     if (MOD_VALU & changed)
+       value = xaccGetPriceCellValue(reg->valueCell);
+     else
+       value = xaccSplitGetValue(split);
+
+     if (MOD_PRIC & changed)
+       price = xaccGetPriceCellValue(reg->priceCell);
+     else
+       price = xaccSplitGetSharePrice(split);
+
+      if (MOD_AMNT & changed) {
+        double credit = xaccGetPriceCellValue(reg->creditCell);
+        double debit  = xaccGetPriceCellValue(reg->debitCell);
+        new_amount = credit - debit;
+      }
+      else
+        new_amount = xaccSplitGetShareAmount(split);
+
+     if (value != price*new_amount) {
+       int i;
+       int choice;
+       int default_value;
+       char *radio_list[4] = { NULL, NULL, NULL, NULL };
+
+       if (MOD_AMNT & changed)
+         asprintf(&radio_list[0], "%s (%s)", AMT_STR, CHANGED_STR);
+       else
+         radio_list[0] = strdup(AMT_STR);
+
+       if (MOD_PRIC & changed)
+         asprintf(&radio_list[1], "%s (%s)", PRICE_STR, CHANGED_STR);
+       else
+         radio_list[1] = strdup(PRICE_STR);
+
+       if (MOD_VALU & changed)
+         asprintf(&radio_list[2], "%s (%s)", VALUE_STR, CHANGED_STR);
+       else
+         radio_list[2] = strdup(VALUE_STR);
+
+       for (i = 0; i < 3; i++)
+         assert(radio_list[i] != NULL);
+
+       if (!(MOD_AMNT & changed))
+         default_value = 0;
+       else if (!(MOD_PRIC & changed))
+         default_value = 1;
+       else if (!(MOD_VALU & changed))
+         default_value = 2;
+       else
+         default_value = 0;
+
+       choice = gnc_choose_radio_option_dialog_parented(xaccSRGetParent(reg),
+                                                        TRANS_RECALC_TITLE,
+                                                        TRANS_RECALC_MSG,
+                                                        default_value,
+                                                        radio_list);
+
+       for (i = 0; i < 3; i++)
+         free(radio_list[i]);
+
+       switch(choice)
+       {
+         case 0: /* Modify number of shares */
+           if (price == 0)
+             break;
+
+	   new_amount = value/price;
+
+           xaccSetDebCredCellValue (reg->debitCell,
+                                    reg->creditCell, new_amount);
+	   changed |= MOD_AMNT;
+	   break;
+         case 1: /* Modify the share price */
+           if (new_amount == 0)
+             break;
+
+	   price = value/new_amount;
+
+	   if (price < 0) {
+	     price = -price;
+	     xaccSetPriceCellValue(reg->valueCell, -value);  
+	     changed |= MOD_VALU;
+	   }
+	   xaccSetPriceCellValue(reg->priceCell, price);
+	   changed |= MOD_PRIC;
+	   break;
+         case 2: /* Modify total value */
+	   value = price*new_amount;
+
+	   xaccSetPriceCellValue(reg->valueCell, value);
+	   changed |= MOD_VALU;
+	   break;
+         default:
+	   break;
+       }
+     }
+   }
+
+   /* The AMNT and NAMNT updates only differ by sign. Basically, 
+    * the split cursors show minus the quants that the single,
+    * double and transaction cursors show, and so when updates
+    * happen, the extra minus sign must also be handled. */
    if ((MOD_AMNT | MOD_NAMNT) & changed) {
       double new_amount;
       double credit;
@@ -1356,16 +1463,16 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
          debit  = xaccGetPriceCellValue(reg->ndebitCell);
          new_amount = debit - credit;
       }
+
       DEBUG ("xaccSRSaveRegEntry(): MOD_AMNT: %f\n", new_amount);
+
       if ((EQUITY_REGISTER   == (reg->type & REG_TYPE_MASK)) ||
           (STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
           (CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-          (PORTFOLIO         == (reg->type & REG_TYPE_MASK))) 
-      { 
-         xaccSplitSetShareAmount (split, new_amount);
-      } else {
-         xaccSplitSetValue (split, new_amount);
-      }
+          (PORTFOLIO         == (reg->type & REG_TYPE_MASK)))
+        xaccSplitSetShareAmount (split, new_amount);
+      else
+        xaccSplitSetValue (split, new_amount);
    }
 
    if (MOD_PRIC & changed) {
@@ -1376,6 +1483,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
       price = xaccGetPriceCellValue(reg->priceCell);
 
       DEBUG ("xaccSRSaveRegEntry(): MOD_PRIC: %f\n", price);
+
       xaccSplitSetSharePrice (split, price);
 
       /* Here we handle a very special case: the user just created 

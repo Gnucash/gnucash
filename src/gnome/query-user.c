@@ -1,6 +1,6 @@
 /********************************************************************\
  * query-user.c -- functions for creating dialogs for GnuCash       * 
- * Copyright (C) 1998,1999 Linas Vepstas                            *
+ * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -93,7 +93,8 @@ foundation_query_close_cb(GtkWidget *w, gpointer data) {
 }
 
 GtkWidget *
-gnc_foundation_query_dialog(const gchar *title,
+gnc_foundation_query_dialog(gncUIWidget parent,
+                            const gchar *title,
                             GtkWidget *contents,
                             int default_answer,
                             gncBoolean yes_allowed,
@@ -111,7 +112,6 @@ gnc_foundation_query_dialog(const gchar *title,
   int button_count = 0;
   int default_button = 0;
   int delete_result = 0;
-
 
   /* Validate our arguments */
   assert(yes_allowed || ok_allowed || no_allowed || cancel_allowed);
@@ -193,8 +193,11 @@ gnc_foundation_query_dialog(const gchar *title,
   gtk_window_set_modal(GTK_WINDOW(query_dialog), GNC_T);
   gnome_dialog_set_default(GNOME_DIALOG(query_dialog), default_button);
   gnome_dialog_set_close(GNOME_DIALOG(query_dialog), TRUE);
-  gnome_dialog_set_parent(GNOME_DIALOG(query_dialog),
-			  GTK_WINDOW(gnc_get_ui_data()));
+  if (parent != NULL)
+    gnome_dialog_set_parent(GNOME_DIALOG(query_dialog), GTK_WINDOW(parent));
+  else
+    gnome_dialog_set_parent(GNOME_DIALOG(query_dialog),
+                            GTK_WINDOW(gnc_get_ui_data()));
 
   /* Add in the user-supplied widget */
   if(contents)
@@ -222,7 +225,7 @@ gnc_ok_cancel_dialog_parented(gncUIWidget parent, const char *message,
   GtkWidget *dialog = NULL;
   gint default_button;
   gint result;
-  
+
   dialog = gnome_message_box_new(message,
                                  GNOME_MESSAGE_BOX_QUESTION,
                                  GNOME_STOCK_BUTTON_OK,
@@ -491,7 +494,7 @@ typedef struct {
 static void
 gnc_choose_item_cb(GtkWidget *w, gpointer p)
 {
-  if(p == NULL)
+  if (p == NULL)
     return;
 
  {
@@ -597,7 +600,8 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items)
 
   gtk_widget_show(vbox);
 
-  query_box = gnc_foundation_query_dialog(title,
+  query_box = gnc_foundation_query_dialog(NULL,
+                                          title,
 					  vbox,
 					  GNC_QUERY_CANCEL, /* cancel */
 					  GNC_F, /* yes_allowed */
@@ -635,4 +639,94 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items)
   free(cb_data);
 
   return(result);
+}
+
+
+static void
+gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)
+{
+  int *result = (int *) data;
+
+  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w)))
+    *result = GPOINTER_TO_INT(gtk_object_get_user_data(GTK_OBJECT(w)));
+}
+
+/********************************************************************
+ gnc_choose_radio_option_dialog_parented
+
+ display a group of radio_buttons and return the index of
+ the selected one
+
+ radio_list should be a NULL terminated array
+
+*/
+int
+gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
+                                        const char *title, 
+                                        const char *msg,
+                                        int default_value,
+                                        char **radio_list)
+{
+  int dialog_result;
+  int radio_result = 0; /* initial selected value is first one */
+  GtkWidget *vbox;
+  GtkWidget *main_vbox;
+  GtkWidget *query_box;
+  GtkWidget *label;
+  GtkWidget *frame;
+  GtkWidget *radio_button;
+  GSList *group = NULL;
+  int i;
+
+  main_vbox = gtk_vbox_new(FALSE, 3);
+  gtk_container_border_width(GTK_CONTAINER(main_vbox), 5);
+  gtk_widget_show(main_vbox);
+
+  label = gtk_label_new(msg);
+  gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
+  gtk_box_pack_start(GTK_BOX(main_vbox), label, FALSE, FALSE, 0);
+  gtk_widget_show(label);
+
+  frame = gtk_frame_new(NULL);
+  gtk_container_border_width(GTK_CONTAINER(frame), 5);
+  gtk_box_pack_start(GTK_BOX(main_vbox), frame, FALSE, FALSE, 0);
+  gtk_widget_show(frame);
+
+  vbox = gtk_vbox_new(TRUE, 3);
+  gtk_container_border_width(GTK_CONTAINER(vbox), 5);
+  gtk_container_add(GTK_CONTAINER(frame), vbox);
+  gtk_widget_show(vbox);
+
+  for(i = 0; radio_list[i] != NULL; i++)
+  {
+    radio_button = gtk_radio_button_new_with_label(group, radio_list[i]);
+    group = gtk_radio_button_group(GTK_RADIO_BUTTON(radio_button));
+
+    if (i == default_value) /* default is first radio button */
+    {
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button), TRUE);
+      radio_result = default_value;
+    }
+
+    gtk_widget_show(radio_button);
+    gtk_box_pack_start(GTK_BOX(vbox), radio_button, FALSE, FALSE, 0);
+    gtk_object_set_user_data(GTK_OBJECT(radio_button), GINT_TO_POINTER(i));
+    gtk_signal_connect(GTK_OBJECT(radio_button), "clicked",
+		       GTK_SIGNAL_FUNC(gnc_choose_radio_button_cb),
+		       &radio_result);
+  }
+
+  query_box = gnc_foundation_query_dialog(parent,
+                                          title,
+					  main_vbox,
+					  GNC_QUERY_YES, /* ok */
+					  GNC_F, /* yes_allowed */
+					  GNC_T, /* ok_allowed */
+					  GNC_F, /* no_allowed */
+					  GNC_F, /* cancel_allowed */
+					  &dialog_result);
+
+  gnome_dialog_run_and_close(GNOME_DIALOG(query_box));
+
+  return radio_result;
 }

@@ -2005,7 +2005,7 @@ gnc_transaction_delete_query(GtkWindow *parent)
                             NULL);
 
   gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
-  gnome_dialog_close_hides(GNOME_DIALOG(dialog), TRUE);
+  gnome_dialog_close_hides(GNOME_DIALOG(dialog), FALSE);
   gnome_dialog_set_parent(GNOME_DIALOG(dialog), parent);
 
   dvbox = GNOME_DIALOG(dialog)->vbox;

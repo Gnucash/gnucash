@@ -53,6 +53,12 @@ gncBoolean gnc_verify_dialog( const char *message,
 			      gncBoolean yes_is_default );
 void       gnc_error_dialog( const char *message );
 
+int gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
+                                            const char *title,
+                                            const char *msg,
+                                            int default_value,
+                                            char **radio_list);
+
 
 /* Managing the GUI Windows *****************************************/
 void gnc_refresh_main_window( void );
