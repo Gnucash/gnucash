@@ -820,18 +820,18 @@ gnc_reconcile_window_double_click_cb(GNCReconcileList *list, Split *split,
                                      gpointer data)
 {
   RecnWindow *recnData = data;
-  RegWindow *regData;
+  GNCSplitReg *gsr;
 
   /* This should never be true, but be paranoid */
   if (split == NULL)
     return;
 
-  regData = regWindowSimple (recn_get_account (recnData));
-  if (regData == NULL)
+  gsr = regWindowSimple (recn_get_account (recnData));
+  if (gsr == NULL)
     return;
 
-  gnc_register_raise (regData);
-  gnc_register_jump_to_split_amount (regData, split);
+  gnc_split_reg_raise( gsr );
+  gnc_split_reg_jump_to_split( gsr, split );
 }
 
 static void
@@ -1036,14 +1036,14 @@ static void
 gnc_ui_reconcile_window_new_cb(GtkButton *button, gpointer data)
 {
   RecnWindow *recnData = data;
-  RegWindow *regData;
+  GNCSplitReg *gsr;
 
-  regData = regWindowSimple (recn_get_account (recnData));
-  if (regData == NULL)
+  gsr = regWindowSimple (recn_get_account (recnData));
+  if (gsr == NULL)
     return;
 
-  gnc_register_raise (regData);
-  gnc_register_jump_to_blank (regData);
+  gnc_split_reg_raise( gsr );
+  gnc_split_reg_jump_to_blank( gsr );
 }
 
 static void
@@ -1084,7 +1084,7 @@ static void
 gnc_ui_reconcile_window_edit_cb(GtkButton *button, gpointer data)
 {
   RecnWindow *recnData = data;
-  RegWindow *regData;
+  GNCSplitReg *gsr;
   Split *split;
 
   split = gnc_reconcile_window_get_current_split (recnData);
@@ -1092,12 +1092,12 @@ gnc_ui_reconcile_window_edit_cb(GtkButton *button, gpointer data)
   if (split == NULL)
     return;
 
-  regData = regWindowSimple (recn_get_account (recnData));
-  if (regData == NULL)
+  gsr = regWindowSimple (recn_get_account (recnData));
+  if (gsr == NULL)
     return;
 
-  gnc_register_raise (regData);
-  gnc_register_jump_to_split_amount (regData, split);
+  gnc_split_reg_raise( gsr );
+  gnc_split_reg_jump_to_split_amount( gsr, split );
 }
 
 
@@ -1173,13 +1173,13 @@ gnc_recn_open_cb(GtkWidget *widget, gpointer data)
 {
   RecnWindow *recnData = data;
   Account *account = recn_get_account (recnData);
-  RegWindow *regData;
+  GNCSplitReg *gsr;
 
   if (!account)
     return;
 
-  regData = regWindowSimple (account);
-  gnc_register_raise (regData);
+  gsr = regWindowSimple (account);
+  gnc_split_reg_raise( gsr );
 }
 
 static GtkWidget *

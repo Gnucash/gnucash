@@ -1,5 +1,13 @@
 2002-11-17  David Hampton  <hampton@employees.org>
 
+	* src/gnome/window-reconcile.c: Fix a couple of functions that
+	were illegally casting pointers to the wrong type.  Use the new
+	gnc_split_reg_xxx functions instead of the old gnc_register_xxx
+	functions.
+
+	* src/gnome/window-register.c: Remove some functions that are no
+	longer called.
+
 	* macros/as-scrub-include.m4: New macro.
 
 	* configure.in: Use the new AS_SCRUB_INCLUDE macro to remove
