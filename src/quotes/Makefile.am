@@ -1,6 +1,7 @@
 
 gncsharedir = ${GNC_SHAREDIR}
 
+bin_SCRIPTS = gnc-prices
 gncshare_SCRIPTS=finance-quote-helper
 
 EXTRA_DIST = \

@@ -278,45 +278,46 @@ while(<>) {
   }
 
   my($quote_method_name, $symbols) = @$result;
-  my $quote_data = undef;
-  
+  my %quote_data;
+
  SWITCH:
   {
     if($quote_method_name =~ m/^yahoo$/) {
-      $quote_data = $quoter->yahoo(@$symbols);
+      %quote_data = $quoter->yahoo(@$symbols);
       last SWITCH;
     }
     if($quote_method_name =~ m/^yahoo_europe$/) {
-      $quote_data = $quoter->yahoo_europe(@$symbols);
+      %quote_data = $quoter->yahoo_europe(@$symbols);
       last SWITCH;
     }
     if($quote_method_name =~ m/^fidelity_direct$/) {
-      $quote_data = $quoter->fidelity_direct(@$symbols);
+      %quote_data = $quoter->fidelity_direct(@$symbols);
       last SWITCH;
     }
     if($quote_method_name =~ m/^troweprice_direct$/) {
-      $quote_data = $quoter->troweprice_direct(@$symbols);
+      %quote_data = $quoter->troweprice_direct(@$symbols);
       last SWITCH;
-    }    
+    }
     if($quote_method_name =~ m/^vanguard$/) {
-      $quote_data = $quoter->vanguard(@$symbols);
+      %quote_data = $quoter->vanguard(@$symbols);
       last SWITCH;
-    }    
+    }
     if($quote_method_name =~ m/^asx$/) {
-      $quote_data = $quoter->asx(@$symbols);
+      %quote_data = $quoter->asx(@$symbols);
       last SWITCH;
-    }    
+    }
     if($quote_method_name =~ m/^tiaacref$/) {
-      $quote_data = $quoter->tiaacref(@$symbols);
+      %quote_data = $quoter->tiaacref(@$symbols);
       last SWITCH;
-    }    
+    }
   }
 
-  if(!$quote_data) {
+  if(!%quote_data) {
     print "#f\n";
     exit 1;
   }
-  print schemify_quotes($symbols, $quote_data);
+
+  print schemify_quotes($symbols, \%quote_data);
   STDOUT->flush();
 }
 
