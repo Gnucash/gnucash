@@ -27,7 +27,7 @@
   <name>newUserDialog</name>
   <width>540</width>
   <height>370</height>
-  <title>New User Account setup</title>
+  <title>New Account Hierarchy Setup</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_MOUSE</position>
   <modal>False</modal>
@@ -54,10 +54,8 @@
 	<handler>on_newUserStartPage_next</handler>
 	<last_modification_time>Tue, 09 Jan 2001 18:04:50 GMT</last_modification_time>
       </signal>
-      <title>New Account List Setup</title>
-      <text>This wizard will help you to set up a default set of accounts to use. This wizard
-will appear If you choose New File in the File menu unless you have set the
-&quot;No account list setup on new file&quot; option in the Preferences window.</text>
+      <title>New Account Hierarchy Setup</title>
+      <text>This wizard will help you set up a new account hierarchy.</text>
       <title_color>255,255,255</title_color>
       <text_color>0,0,0</text_color>
       <background_color>25,25,112</background_color>
@@ -180,12 +178,10 @@ will appear If you choose New File in the File menu unless you have set the
 	</widget>
 
 	<widget>
-	  <class>GtkScrolledWindow</class>
-	  <name>scrolledwindow1</name>
-	  <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
-	  <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
-	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	  <class>GtkFrame</class>
+	  <name>frame5</name>
+	  <label_xalign>0</label_xalign>
+	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	  <child>
 	    <padding>0</padding>
 	    <expand>True</expand>
@@ -193,49 +189,117 @@ will appear If you choose New File in the File menu unless you have set the
 	  </child>
 
 	  <widget>
-	    <class>GtkCList</class>
-	    <name>newAccountTypesList</name>
-	    <can_focus>True</can_focus>
-	    <signal>
-	      <name>select_row</name>
-	      <handler>on_newAccountTypesList_select_row</handler>
-	      <last_modification_time>Thu, 12 Apr 2001 22:01:16 GMT</last_modification_time>
-	    </signal>
-	    <signal>
-	      <name>unselect_row</name>
-	      <handler>on_newAccountTypesList_unselect_row</handler>
-	      <last_modification_time>Sat, 12 May 2001 09:23:47 GMT</last_modification_time>
-	    </signal>
-	    <columns>2</columns>
-	    <column_widths>144,80</column_widths>
-	    <selection_mode>GTK_SELECTION_MULTIPLE</selection_mode>
-	    <show_titles>True</show_titles>
-	    <shadow_type>GTK_SHADOW_IN</shadow_type>
+	    <class>GtkVBox</class>
+	    <name>vbox7</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
 
 	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>newAccountTypesList_TypeLabel</name>
-	      <label>Account List Type</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
+	      <class>GtkScrolledWindow</class>
+	      <name>scrolledwindow1</name>
+	      <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
+	      <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+
+	      <widget>
+		<class>GtkCList</class>
+		<name>newAccountTypesList</name>
+		<can_focus>True</can_focus>
+		<signal>
+		  <name>select_row</name>
+		  <handler>on_newAccountTypesList_select_row</handler>
+		  <last_modification_time>Thu, 12 Apr 2001 22:01:16 GMT</last_modification_time>
+		</signal>
+		<signal>
+		  <name>unselect_row</name>
+		  <handler>on_newAccountTypesList_unselect_row</handler>
+		  <last_modification_time>Sat, 12 May 2001 09:23:47 GMT</last_modification_time>
+		</signal>
+		<columns>2</columns>
+		<column_widths>144,80</column_widths>
+		<selection_mode>GTK_SELECTION_MULTIPLE</selection_mode>
+		<show_titles>True</show_titles>
+		<shadow_type>GTK_SHADOW_IN</shadow_type>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <child_name>CList:title</child_name>
+		  <name>newAccountTypesList_TypeLabel</name>
+		  <label>Account Types</label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <child_name>CList:title</child_name>
+		  <name>newAccountTypesList_DescriptionLabel</name>
+		  <label>Description</label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+	      </widget>
 	    </widget>
 
 	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>newAccountTypesList_DescriptionLabel</name>
-	      <label>Description</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
+	      <class>GtkHBox</class>
+	      <name>hbox3</name>
+	      <border_width>5</border_width>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+
+	      <widget>
+		<class>GtkButton</class>
+		<name>newAccountsTypeList_SelectAllButton</name>
+		<can_focus>True</can_focus>
+		<signal>
+		  <name>clicked</name>
+		  <handler>on_newAccountsTypeList_SelectAllButton_clicked</handler>
+		  <last_modification_time>Thu, 12 Apr 2001 22:03:24 GMT</last_modification_time>
+		</signal>
+		<label>Select All</label>
+		<child>
+		  <padding>0</padding>
+		  <expand>True</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkButton</class>
+		<name>newAccountsTypeList_ClearAllButton</name>
+		<can_focus>True</can_focus>
+		<signal>
+		  <name>clicked</name>
+		  <handler>on_newAccountsTypeList_ClearAllButton_clicked</handler>
+		  <last_modification_time>Thu, 19 Apr 2001 14:27:32 GMT</last_modification_time>
+		</signal>
+		<label>Clear All</label>
+		<child>
+		  <padding>0</padding>
+		  <expand>True</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
 	    </widget>
 	  </widget>
 	</widget>
@@ -327,54 +391,6 @@ will appear If you choose New File in the File menu unless you have set the
 	    </widget>
 	  </widget>
 	</widget>
-
-	<widget>
-	  <class>GtkHBox</class>
-	  <name>hbox3</name>
-	  <homogeneous>False</homogeneous>
-	  <spacing>0</spacing>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>True</fill>
-	  </child>
-
-	  <widget>
-	    <class>GtkButton</class>
-	    <name>newAccountsTypeList_SelectAllButton</name>
-	    <can_focus>True</can_focus>
-	    <signal>
-	      <name>clicked</name>
-	      <handler>on_newAccountsTypeList_SelectAllButton_clicked</handler>
-	      <last_modification_time>Thu, 12 Apr 2001 22:03:24 GMT</last_modification_time>
-	    </signal>
-	    <label>Select All</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
-
-	  <widget>
-	    <class>GtkButton</class>
-	    <name>newAccountsTypeList_ClearAllButton</name>
-	    <can_focus>True</can_focus>
-	    <signal>
-	      <name>clicked</name>
-	      <handler>on_newAccountsTypeList_ClearAllButton_clicked</handler>
-	      <last_modification_time>Thu, 19 Apr 2001 14:27:32 GMT</last_modification_time>
-	    </signal>
-	    <label>Clear All</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
-	</widget>
       </widget>
     </widget>
 
@@ -402,7 +418,7 @@ will appear If you choose New File in the File menu unless you have set the
 	<name>druid-vbox3</name>
 	<border_width>5</border_width>
 	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
+	<spacing>10</spacing>
 	<child>
 	  <padding>0</padding>
 	  <expand>True</expand>
@@ -412,15 +428,17 @@ will appear If you choose New File in the File menu unless you have set the
 	<widget>
 	  <class>GtkLabel</class>
 	  <name>finalAccountLabel</name>
-	  <label>If you would like the accounts to have an opening balance click on the account line and enter the starting balance in the box on the right.  All accounts but Equity may have a value set.</label>
-	  <justify>GTK_JUSTIFY_FILL</justify>
-	  <wrap>True</wrap>
-	  <xalign>0.0200003</xalign>
-	  <yalign>7.45058e-09</yalign>
+	  <label>If you would like an account to have an opening balance, click on the account
+and enter the starting balance in the box on the right. All accounts except Equity
+accounts may have an opening balance.</label>
+	  <justify>GTK_JUSTIFY_LEFT</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
 	  <xpad>1</xpad>
 	  <ypad>1</ypad>
 	  <child>
-	    <padding>0</padding>
+	    <padding>5</padding>
 	    <expand>False</expand>
 	    <fill>False</fill>
 	  </child>
@@ -564,7 +582,9 @@ will appear If you choose New File in the File menu unless you have set the
 	<last_modification_time>Tue, 09 Jan 2001 18:08:04 GMT</last_modification_time>
       </signal>
       <title>Finish Account Setup</title>
-      <text>Press `Finish' if everything is OK.</text>
+      <text>If everything is OK, press `Finish' and GnuCash will create
+your new account hierarchy. Press `Back' to review your selections.
+Press `Cancel' to close this dialog without creating any new accounts.</text>
       <background_color>25,25,112</background_color>
       <logo_background_color>255,255,255</logo_background_color>
       <textbox_color>255,255,255</textbox_color>
