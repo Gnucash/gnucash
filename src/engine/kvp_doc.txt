@@ -47,7 +47,7 @@ Use:  kvp subdirectory holding info relating to accounting periods, including
       transactions, the closing dates, etc.
 
 Name: /book/accounting-period
-Type: string, enum {none, week, month, quarter, trimester, year}
+Type: string, enum {none, week, month, quarter, trimester, year} XXX not used, should be UIFreqSpec stuff ..
 Entities: Book
 Use:  An enumerated identifier indicating how often books are supposed
       to be closed.  This key will typically be present only in an
@@ -92,6 +92,12 @@ Use:  The GUID of the book that follows this one, chronologically.
       Note that the open-date of the next book should equal the close-date
       of this book.
 
+Name: /book/notes
+Type: string
+Entities: Book
+Use:  User-suplied notes for the book.  The user can set this to any value
+      and change it at any time for any reason.
+
 Name: /book/open-date
 Type: Timespec
 Entities: Book
@@ -111,6 +117,12 @@ Entities: Account, Book
 Use:  The GUID of the book that preceeds this one, chronologically.
       Note that the close-date of the previous book should equal the open-date
       of this book.
+
+Name: /book/title
+Type: string
+Entities: Book
+Use:  A user-suplied title for the book.  The user can set this to any value
+      and change it at any time for any reason.
 
 -----------------------
 
