@@ -643,6 +643,25 @@ CFLAGS="$GNC_OLDCFLAGS"
 
 
 ### --------------------------------------------------------------------------
+### Check which SRFIs we need.
+
+GNC_ADD_ON_SRFIS=""
+
+for srfi in `ls lib/srfi/srfi-*.scm | sed -e 's|lib/srfi/||; s/\.scm//'`
+do
+  AC_MSG_CHECKING(if guile needs our copy of ${srfi})
+  if ! ${GUILE} -c "(use-modules (srfi ${srfi}))" > /dev/null 2>&1
+  then
+    GNC_ADD_ON_SRFIS="${GNC_ADD_ON_SRFIS} ${srfi}.scm"
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+  fi
+done
+
+AC_SUBST(GNC_ADD_ON_SRFIS)
+
+### --------------------------------------------------------------------------
 ### GnuCash flags and libs configuration
 
 GNUCASH_ENGINE_BASE_LIBS="${GUILE_LIBS} ${GLIB_LIBS}"
