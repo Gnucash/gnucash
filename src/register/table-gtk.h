@@ -95,7 +95,7 @@
    g_free(table->prev_entry_text); table->prev_entry_text = NULL;	\
 }
 
-typdef struct _Table Table;
+typedef struct _Table Table;
 
 /* create the GtkWidget */
 GtkWidget      *xaccCreateTable (Table *, GtkWidget *parent);
