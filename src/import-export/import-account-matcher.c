@@ -39,6 +39,7 @@
 #include "dialog-utils.h"
 #include "AccWindow.h"
 
+#include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 
 #include "gnc-ui-util.h"
