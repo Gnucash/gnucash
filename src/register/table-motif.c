@@ -27,6 +27,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include <Xm/Xm.h>
@@ -117,6 +118,7 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
 
 /* ==================================================== */
 /* hack alert -- will core dump if numrows has changed, etc. */
+/* hack alert -- assumes that first block is header. */
 
 static
 void
@@ -128,7 +130,7 @@ xaccRefreshHeader (Table *table)
    if (!(table->entries)) return;
 
    /* copy header data into entries cache */
-   arr = table->header;
+   arr = table->handlers[0][0];
    if (arr) {
       for (i=0; i<arr->numRows; i++) {
          for (j=0; j<arr->numCols; j++) {
@@ -157,6 +159,7 @@ xaccNextTabGroup (Table *table, Widget w)
 
 /* ==================================================== */
 /* this routine calls the individual cell callbacks */
+/* hack alert -- assumes that header is first cell */
 
 static void
 cellCB (Widget mw, XtPointer cd, XtPointer cb)
@@ -165,11 +168,11 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
    XbaeMatrixDefaultActionCallbackStruct *cbs;
    int row, col;
    int rel_row, rel_col;
-   CellBlock *arr;
+   CellBlock *arr, *header;
    int invalid = 0;
 
    table = (Table *) cd;
-   arr = table->cursor;
+   arr = table->current_cursor;
    cbs = (XbaeMatrixDefaultActionCallbackStruct *) cb;
 
    row = cbs->row;
@@ -181,19 +184,15 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
    invalid = invalid || (col >= table->num_phys_cols);
 
    /* header rows cannot be modified */
-   invalid = invalid || (row < table->num_header_rows);
+   header = table->handlers[0][0];
+   invalid = invalid || (row < header->numRows);
 
    /* compute the cell location */
-   rel_row = row;
-   rel_col = col;
-
-   /* remove offset for the header rows */
-   rel_row -= table->num_header_rows;
+   rel_row = table->locators[row][col]->phys_row_offset;
+   rel_col = table->locators[row][col]->phys_col_offset;
 
    /* check for a cell handler, but only if cell adress is valid */
    if (arr && !invalid) {
-      rel_row %= (arr->numRows);
-      rel_col %= (arr->numCols);
       if (! (arr->cells[rel_row][rel_col])) {
          invalid = TRUE;
       } else {
@@ -232,6 +231,8 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
             lcbs->doit = True;
             break;
          }
+         default:
+            break;
       }
       return;
    }
@@ -252,6 +253,8 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
          leaveCB (mw, cd, cb);
          break;
       }
+      default:
+         break;
    }
 }
 
@@ -270,16 +273,14 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
    const char * (*enter) (struct _BasicCell *, const char *);
 
    table = (Table *) cd;
-   arr = table->cursor;
+   arr = table->current_cursor;
    cbs = (XbaeMatrixEnterCellCallbackStruct *) cb;
 
    /* compute the cell location */
    row = cbs->row;
    col = cbs->column;
-   rel_row = row - table->num_header_rows;
-   rel_col = col;
-   rel_row %= (arr->numRows);
-   rel_col %= (arr->numCols);
+   rel_row = table->locators[row][col]->phys_row_offset;
+   rel_col = table->locators[row][col]->phys_col_offset;
 
 printf ("enter %d %d \n", row, col);
 
@@ -338,17 +339,14 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    int len;
 
    table = (Table *) cd;
-   arr = table->cursor;
+   arr = table->current_cursor;
    cbs = (XbaeMatrixModifyVerifyCallbackStruct *) cb;
 
    /* compute the cell location */
    row = cbs->row;
    col = cbs->column;
-   rel_row = row;
-   rel_col = col;
-   rel_row -= table->num_header_rows;
-   rel_row %= (arr->numRows);
-   rel_col %= (arr->numCols);
+   rel_row = table->locators[row][col]->phys_row_offset;
+   rel_col = table->locators[row][col]->phys_col_offset;
 
    /* accept edits by default, unless the cell handler rejects them */
    cbs->verify->doit = True;
@@ -423,16 +421,14 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
    char * newval;
 
    table = (Table *) cd;
-   arr = table->cursor;
+   arr = table->current_cursor;
    cbs = (XbaeMatrixLeaveCellCallbackStruct *) cb;
 
    /* compute the cell location */
    row = cbs->row;
    col = cbs->column;
-   rel_row = row - table->num_header_rows;
-   rel_col = col;
-   rel_row %= (arr->numRows);
-   rel_col %= (arr->numCols);
+   rel_row = table->locators[row][col]->phys_row_offset;
+   rel_col = table->locators[row][col]->phys_col_offset;
 
 printf ("leave %d %d \n", row, col);
 
@@ -490,7 +486,7 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
    int rel_row, rel_col;
 
    table = (Table *) cd;
-   arr = table->cursor;
+   arr = table->current_cursor;
    cbs = (XbaeMatrixTraverseCellCallbackStruct *) cb;
 
    row = cbs->row;
@@ -524,10 +520,8 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
    xaccVerifyCursorPosition (table, row, col);
 
    /* compute the cell location */
-   rel_row = row - table->num_header_rows;
-   rel_col = col;
-   rel_row %= (arr->numRows);
-   rel_col %= (arr->numCols);
+   rel_row = table->locators[row][col]->phys_row_offset;
+   rel_col = table->locators[row][col]->phys_col_offset;
 
    /* process right-moving traversals */
    if (QRight == cbs->qparam) {
@@ -565,6 +559,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    unsigned char * alignments;
    short * widths;
    Widget reg;
+   int num_header_rows = 0;
 
    if (!table) return 0;
 
@@ -582,14 +577,13 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    /* if a header exists, get alignments, widths from there */
    alignments = NULL;
    widths = NULL;
-   if (table->cursor) {
-      alignments = table->cursor->alignments;
-      widths = table->cursor->widths;
+   curs = table->current_cursor;
+   if (!curs) {
+      curs = table->handlers[0][0];
    }
-   if (table->header) {
-      alignments = table->header->alignments;
-      widths = table->header->widths;
-   }
+   alignments = curs->alignments;
+   widths = curs->widths;
+   num_header_rows = curs->numRows;
 
    /* copy header data into entries cache */
    xaccRefreshHeader (table);
@@ -598,7 +592,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    reg = XtVaCreateWidget( name,
                   xbaeMatrixWidgetClass,  parent,
                   XmNcells,               table->entries,
-                  XmNfixedRows,           table->num_header_rows,
+                  XmNfixedRows,           num_header_rows,
                   XmNfixedColumns,        0,
                   XmNrows,                table->num_phys_rows,
                   XmNvisibleRows,         15,
@@ -628,7 +622,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    /* if any of the cells have GUI specific components that need 
     * initialization, initialize them now. */
 
-   curs = table->cursor;
+   curs = table->current_cursor;
    if (curs) {
       int i,j;
 
@@ -660,7 +654,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
 void        
 xaccRefreshTableGUI (Table * table)
 {
-{int i,j;
+{int i;
 printf (" refresh %d %d \n",  table->num_phys_rows,table->num_phys_cols);
 for (i=0; i<table->num_phys_rows; i++) {
 printf ("cell %d %s \n", i, table->entries[i][3]);
