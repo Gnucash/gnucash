@@ -735,6 +735,8 @@ gnucash_sheet_destroy (GtkObject *object)
                 for (j = 0; j < sheet->num_virt_cols; j++)
                         gnucash_sheet_block_destroy(sheet, i, j);
 
+        g_hash_table_destroy (sheet->blocks);
+
         for (i = GNUCASH_CURSOR_HEADER; i < GNUCASH_CURSOR_LAST; i++)
                 gnucash_sheet_style_destroy(sheet, sheet->cursor_style[i]);
 
