@@ -2,4 +2,4 @@
 
 #include <glib.h>
 
-gchar *VERSION = "1.1.10";
+gchar *VERSION = "1.1.25";
