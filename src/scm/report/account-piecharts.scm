@@ -372,23 +372,7 @@ balance at a given time"))
 		      combined)))
 		(gnc:html-piechart-set-labels! chart legend-labels))
 	      
-	      (gnc:html-document-add-object! document chart) 
-	      
-	      (if (gnc:option-value 
-		   (gnc:lookup-global-option "General" 
-					     "Display \"Tip of the Day\""))
-		  (gnc:html-document-add-object! 
-		   document 
-		   (gnc:make-html-text 
-		    (gnc:html-markup-p 
-		     "Double-click on any legend box or pie slice opens either the \
-register or, if the account has subaccounts, opens \
-another piechart report with precisely those subaccounts.")
-		    (gnc:html-markup-p "Dragging with left button \
-lets you drag single slices out of the pie. \
-Dragging with right button lets you rotate the pie. ")
-		    (gnc:html-markup-p "Remove this text by disabling \
-the global Preference \"Display Tip of the Day\".")))))
+	      (gnc:html-document-add-object! document chart))
 	
 	       (gnc:html-document-add-object!
 		document

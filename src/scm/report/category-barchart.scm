@@ -446,24 +446,7 @@ developing over time"))
 		 (gnc:html-barchart-set-button-1-legend-urls! 
 		  chart (append urls urls)))
 	       
-	       (gnc:html-document-add-object! document chart) 
-	       
-	       (if (gnc:option-value 
-		    (gnc:lookup-global-option "General" 
-					      "Display \"Tip of the Day\""))
-		   (gnc:html-document-add-object! 
-		    document 
-		    (gnc:make-html-text 
-		     (gnc:html-markup-p 
-		      "If you don't see a stacked barchart i.e. you only see \
-lots of thin bars next to each other for each date, then you \
-should upgrade Guppi to version 0.35.5.")
-		     (gnc:html-markup-p
-		      "Double-click on any legend box or any bar opens \
-another barchart report with the subaccounts of that account or, \
-if that account doesn't have subaccounts, the register for the account.")
-		     (gnc:html-markup-p "Remove this text by disabling \
-the global Preference \"Display Tip of the Day\".")))))
+	       (gnc:html-document-add-object! document chart))
 
 	     ;; else if empty data
 	     (gnc:html-document-add-object!

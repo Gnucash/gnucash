@@ -1,5 +1,9 @@
 2001-06-12  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/report/account-piecharts.scm: same as below
+
+	* src/scm/report/category-barchart.scm: remove hint text
+
 	* src/engine/gnc-book.c (gnc_book_get_file_lock): some filesystems
 	don't support hard links. If the error code indicates this, go
 	ahead and grant the lock. Is there a better way?
