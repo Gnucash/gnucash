@@ -92,7 +92,7 @@ typedef const char * QofIdTypeConst;
   (c_type *) (obj) :                                          \
   (c_type *) ({                                               \
      g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,               \
-       "Error: Bad QofEntity at %s:%s", __FILE__, __LINE__);  \
+       "Error: Bad QofEntity at %s:%d", __FILE__, __LINE__);  \
      (obj);                                                   \
   }))
 
