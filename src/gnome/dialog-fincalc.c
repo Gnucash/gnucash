@@ -135,7 +135,7 @@ fi_to_gui(FinCalcDialog *fcd)
   xaccSPrintAmount(string, fcd->financial_info.pmt, 0, NULL);
   gtk_entry_set_text(GTK_ENTRY(fcd->entries[PERIODIC_PAYMENT]), string);
 
-  xaccSPrintAmount(string, fcd->financial_info.fv, 0, NULL);
+  xaccSPrintAmount(string, -fcd->financial_info.fv, 0, NULL);
   gtk_entry_set_text(GTK_ENTRY(fcd->entries[FUTURE_VALUE]), string);
 
   i = normalize_period(&fcd->financial_info.CF);
@@ -179,7 +179,7 @@ gui_to_fi(FinCalcDialog *fcd)
   fcd->financial_info.pmt = xaccParseAmount(string, TRUE);
 
   string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[FUTURE_VALUE]));
-  fcd->financial_info.fv = xaccParseAmount(string, TRUE);
+  fcd->financial_info.fv = -xaccParseAmount(string, TRUE);
 
   i = gnc_option_menu_get_active(fcd->compounding_menu);
   fcd->financial_info.CF = periods[i];
