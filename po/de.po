@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2002-12-01 00:35+0100\n"
-"PO-Revision-Date: 2002-12-01 00:44+0100\n"
+"POT-Creation-Date: 2002-12-02 20:46+0100\n"
+"PO-Revision-Date: 2002-12-02 20:48+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: src/app-file/gnc-file.c:526 src/app-file/gnome/gnc-file-dialog.c:77
-#: src/gnome-utils/window-help.c:622 src/gnome/window-acct-tree.c:833
+#: src/gnome-utils/window-help.c:622 src/gnome/window-acct-tree.c:834
 #: src/gnome/window-reconcile.c:1425
 msgid "Open"
 msgstr "Öffnen"
@@ -462,7 +462,7 @@ msgstr "Gewinnrücklagen"
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:128 intl-scm/guile-strings.c:1737
 #: src/app-utils/gnc-ui-util.c:892 src/engine/Account.c:2193
-#: src/register/ledger-core/split-register.c:2037
+#: src/register/ledger-core/split-register.c:2039
 msgid "Equity"
 msgstr "Eigenkapital"
 
@@ -474,17 +474,17 @@ msgstr "Anfangsbestand:"
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:1909 intl-scm/guile-strings.c:2191
 #: src/app-utils/guile-util.c:1112
-#: src/register/ledger-core/split-register.c:1887
+#: src/register/ledger-core/split-register.c:1889
 msgid "Debit"
 msgstr "Belastung"
 
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:112 intl-scm/guile-strings.c:1911
 #: intl-scm/guile-strings.c:2193 src/app-utils/guile-util.c:1158
-#: src/register/ledger-core/split-register.c:1910
-#: src/register/ledger-core/split-register.c:1985
-#: src/register/ledger-core/split-register.c:2001
-#: src/register/ledger-core/split-register.c:2019
+#: src/register/ledger-core/split-register.c:1912
+#: src/register/ledger-core/split-register.c:1987
+#: src/register/ledger-core/split-register.c:2003
+#: src/register/ledger-core/split-register.c:2021
 msgid "Credit"
 msgstr "Gutschrift"
 
@@ -505,7 +505,7 @@ msgstr ""
 #: src/business/business-core/gncInvoice.c:460
 #: src/business/business-gnome/dialog-invoice.c:1570
 #: src/business/business-gnome/glade/invoice.glade.h:30
-#: src/register/ledger-core/split-register.c:2016
+#: src/register/ledger-core/split-register.c:2018
 msgid "Invoice"
 msgstr "Rechnung"
 
@@ -579,7 +579,7 @@ msgstr "Tage"
 #: src/business/business-gnome/glade/invoice.glade.h:19
 #: src/business/dialog-tax-table/tax-tables.glade.h:1
 #: src/gnome/glade/register.glade.h:16 src/gnome/glade/sched-xact.glade.h:62
-#: src/gnome/window-acct-tree.c:875 src/gnome/window-reconcile.c:1417
+#: src/gnome/window-acct-tree.c:876 src/gnome/window-reconcile.c:1417
 #: src/report/report-gnome/report.glade.h:7
 msgid "Delete"
 msgstr "Löschen"
@@ -639,7 +639,7 @@ msgstr "Neue Zahlungsbedingungen"
 #. create the button.
 #: src/business/business-gnome/glade/billterms.glade.h:23
 #: src/business/dialog-tax-table/tax-tables.glade.h:4
-#: src/gnome-utils/commodity.glade.h:12 src/gnome-utils/gnc-account-sel.c:462
+#: src/gnome-utils/commodity.glade.h:12 src/gnome-utils/gnc-account-sel.c:460
 #: src/report/report-gnome/report.glade.h:15
 msgid "New..."
 msgstr "Neu..."
@@ -1028,7 +1028,7 @@ msgstr "Duplizieren"
 #: src/business/business-gnome/glade/invoice.glade.h:26
 #: src/gnome/glade/commodities.glade.h:5 src/gnome/glade/price.glade.h:11
 #: src/gnome/glade/sched-xact.glade.h:65 src/gnome/gnc-split-reg.c:2214
-#: src/gnome/window-acct-tree.c:843 src/gnome/window-reconcile.c:1410
+#: src/gnome/window-acct-tree.c:844 src/gnome/window-reconcile.c:1410
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -1411,7 +1411,7 @@ msgstr "Betrag"
 #: intl-scm/guile-strings.c:2945 intl-scm/guile-strings.c:2967
 #: src/business/business-gnome/glade/payment.glade.h:3
 #: src/business/business-ledger/gncEntryLedgerModel.c:49
-#: src/gnome/dialog-price-edit-db.c:491 src/gnome/druid-loan.c:1470
+#: src/gnome/dialog-price-edit-db.c:491 src/gnome/druid-loan.c:1730
 #: src/gnome/glade/price.glade.h:9 src/gnome/reconcile-list.c:199
 #: src/import-export/generic-import.glade.h:6
 #: src/import-export/qif-import/qif.glade.h:25
@@ -1571,7 +1571,7 @@ msgstr "Entity ist kein Konto: %s"
 #: intl-scm/guile-strings.c:2031 intl-scm/guile-strings.c:2113
 #: intl-scm/guile-strings.c:2129
 #: src/business/business-gnome/business-utils.c:281
-#: src/gnome/glade/sched-xact.glade.h:120
+#: src/gnome/glade/sched-xact.glade.h:119
 msgid "None"
 msgstr "Keine"
 
@@ -1774,7 +1774,7 @@ msgstr "Mitarbeiter Benutzername"
 #: intl-scm/guile-strings.c:2903
 #: src/business/business-gnome/dialog-employee.c:600
 #: src/gnome/dialog-commodities.c:333 src/gnome/glade/commodities.glade.h:7
-#: src/gnome/glade/sched-xact.glade.h:114
+#: src/gnome/glade/sched-xact.glade.h:113
 msgid "Name"
 msgstr "Name"
 
@@ -1845,7 +1845,7 @@ msgstr "Betrag:"
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2667
 #: src/business/business-gnome/dialog-invoice.c:1557
-#: src/gnome/glade/sched-xact.glade.h:117 src/gnome/window-acct-tree.c:865
+#: src/gnome/glade/sched-xact.glade.h:116 src/gnome/window-acct-tree.c:866
 #: src/gnome/window-reconcile.c:1403
 msgid "New"
 msgstr "Neu"
@@ -2000,9 +2000,9 @@ msgstr "Das gewählte Buchungskonto %s existiert nicht"
 #: intl-scm/guile-strings.c:320
 #: src/business/business-gnome/dialog-payment.c:263
 #: src/business/business-gnome/dialog-payment.c:285
-#: src/register/ledger-core/split-register.c:2012
-#: src/register/ledger-core/split-register.c:2017
-#: src/register/ledger-core/split-register.c:2026
+#: src/gnome/druid-loan.c:1731 src/register/ledger-core/split-register.c:2014
+#: src/register/ledger-core/split-register.c:2019
+#: src/register/ledger-core/split-register.c:2028
 msgid "Payment"
 msgstr "Zahlung"
 
@@ -2053,13 +2053,13 @@ msgid "is not"
 msgstr "ist nicht"
 
 #: src/business/business-ledger/gncEntryLedger.c:65
-#: src/register/ledger-core/split-register.c:1482
+#: src/register/ledger-core/split-register.c:1484
 #, c-format
 msgid "The account %s does not allow transactions.\n"
 msgstr "Das Konto %s kann keine Buchungen enthalten.\n"
 
 #: src/business/business-ledger/gncEntryLedger.c:66
-#: src/register/ledger-core/split-register.c:1483
+#: src/register/ledger-core/split-register.c:1485
 #, c-format
 msgid ""
 "The account %s does not exist.\n"
@@ -2138,8 +2138,8 @@ msgid "sample:X"
 msgstr "sample:X"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:60
-#: src/register/ledger-core/split-register-layout.c:497
-#: src/register/ledger-core/split-register-layout.c:505
+#: src/register/ledger-core/split-register-layout.c:503
+#: src/register/ledger-core/split-register-layout.c:511
 msgid "sample:12/12/2000"
 msgstr "sample:12.12.2000"
 
@@ -2230,10 +2230,8 @@ msgstr ">"
 #: src/business/business-ledger/gncEntryLedgerModel.c:39
 #: src/gnome-utils/dialog-account.c:681 src/gnome/glade/account.glade.h:1
 #: src/gnome/glade/stocks.glade.h:1 src/import-export/generic-import.glade.h:1
-#: src/import-export/hbci/gnc-hbci-gettrans.c:362
-#: src/import-export/hbci/gnc-hbci-gettrans.c:365
-#: src/import-export/hbci/gnc-hbci-transfer.c:174
-#: src/import-export/hbci/gnc-hbci-transfer.c:177
+#: src/import-export/hbci/gnc-hbci-utils.c:399
+#: src/import-export/hbci/gnc-hbci-utils.c:403
 #: src/import-export/qif-import/qif.glade.h:1
 #: src/register/ledger-core/split-register-model.c:191
 msgid "Account"
@@ -2501,10 +2499,8 @@ msgstr ""
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:108 intl-scm/guile-strings.c:1145
 #: src/engine/Account.c:2183 src/import-export/hbci/glade/hbci.glade.h:12
-#: src/import-export/hbci/gnc-hbci-gettrans.c:363
-#: src/import-export/hbci/gnc-hbci-gettrans.c:366
-#: src/import-export/hbci/gnc-hbci-transfer.c:175
-#: src/import-export/hbci/gnc-hbci-transfer.c:178
+#: src/import-export/hbci/gnc-hbci-utils.c:400
+#: src/import-export/hbci/gnc-hbci-utils.c:404
 msgid "Bank"
 msgstr "Bank"
 
@@ -2548,7 +2544,7 @@ msgstr "Währung"
 #: intl-scm/guile-strings.c:124 intl-scm/guile-strings.c:314
 #: intl-scm/guile-strings.c:1161 intl-scm/guile-strings.c:1539
 #: src/engine/Account.c:2191 src/gnome/glade/tax.glade.h:8
-#: src/register/ledger-core/split-register.c:2053
+#: src/register/ledger-core/split-register.c:2055
 msgid "Income"
 msgstr "Erträge"
 
@@ -2724,15 +2720,15 @@ msgstr ""
 "ggf. nochmal.\n"
 
 #. src/report/standard-reports/register.scm
-#: intl-scm/guile-strings.c:2189 src/engine/Transaction.c:2336
-#: src/engine/Transaction.c:2357
-#: src/register/ledger-core/split-register.c:2072
+#: intl-scm/guile-strings.c:2189 src/engine/Transaction.c:2337
+#: src/engine/Transaction.c:2358
+#: src/register/ledger-core/split-register.c:2074
 msgid "-- Split Transaction --"
 msgstr "-- Mehrteiliger Vorgang --"
 
-#: src/engine/Transaction.c:2378 src/gnome/druid-stock-split.c:409
+#: src/engine/Transaction.c:2379 src/gnome/druid-stock-split.c:409
 #: src/gnome/glade/register.glade.h:74
-#: src/register/ledger-core/split-register.c:2056
+#: src/register/ledger-core/split-register.c:2058
 msgid "Split"
 msgstr "Mehrteilig"
 
@@ -2764,8 +2760,8 @@ msgstr "Kontoarten"
 #: intl-scm/guile-strings.c:1761 intl-scm/guile-strings.c:1791
 #: intl-scm/guile-strings.c:2293 intl-scm/guile-strings.c:2341
 #: intl-scm/guile-strings.c:2425 src/gnome/glade/account.glade.h:8
-#: src/gnome/glade/tax.glade.h:2 src/gnome/window-acct-tree.c:174
-#: src/gnome/window-acct-tree.c:180 src/gnome/window-acct-tree.c:242
+#: src/gnome/glade/tax.glade.h:2 src/gnome/window-acct-tree.c:175
+#: src/gnome/window-acct-tree.c:181 src/gnome/window-acct-tree.c:243
 #: src/gnome/window-main.c:485
 msgid "Accounts"
 msgstr "Konten"
@@ -2796,14 +2792,14 @@ msgid "Commodity:"
 msgstr "Währung/Aktie:"
 
 #: src/gnome-utils/exchange-dialog.glade.h:2
-#: src/gnome/glade/account.glade.h:15 src/gnome/glade/price.glade.h:10
-#: src/gnome/glade/print.glade.h:15 src/gnome/glade/register.glade.h:15
-#: src/gnome/glade/stocks.glade.h:6 src/gnome/glade/transfer.glade.h:5
+#: src/gnome-utils/transfer.glade.h:5 src/gnome/glade/account.glade.h:15
+#: src/gnome/glade/price.glade.h:10 src/gnome/glade/print.glade.h:15
+#: src/gnome/glade/register.glade.h:15 src/gnome/glade/stocks.glade.h:6
 msgid "Date:"
 msgstr "Datum:"
 
-#: src/gnome/glade/account.glade.h:17 src/gnome/glade/stocks.glade.h:7
-#: src/gnome/glade/transfer.glade.h:6
+#: src/gnome-utils/transfer.glade.h:6 src/gnome/glade/account.glade.h:17
+#: src/gnome/glade/stocks.glade.h:7
 msgid "Description:"
 msgstr "Beschreibung:"
 
@@ -2893,7 +2889,7 @@ msgid "Select Account"
 msgstr "Konto auswählen"
 
 #: src/gnome-utils/dialog-options.c:791 src/gnome-utils/dialog-options.c:937
-#: src/gnome/glade/account.glade.h:42 src/gnome/glade/sched-xact.glade.h:158
+#: src/gnome/glade/account.glade.h:42 src/gnome/glade/sched-xact.glade.h:159
 msgid "Select All"
 msgstr "Alle auswählen"
 
@@ -3081,7 +3077,7 @@ msgstr "Zinssatz"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2033 intl-scm/guile-strings.c:2035
-#: src/gnome/glade/fincalc.glade.h:20 src/gnome/glade/sched-xact.glade.h:110
+#: src/gnome/glade/fincalc.glade.h:20 src/gnome/glade/sched-xact.glade.h:109
 msgid "Monthly"
 msgstr "monatlich"
 
@@ -3105,7 +3101,7 @@ msgstr "Periodische Zahlung"
 msgid "Present Value"
 msgstr "Aktueller Wert"
 
-#: src/gnome/glade/fincalc.glade.h:26 src/gnome/glade/sched-xact.glade.h:143
+#: src/gnome/glade/fincalc.glade.h:26 src/gnome/glade/sched-xact.glade.h:144
 msgid "Quarterly"
 msgstr "Vierteljährlich"
 
@@ -3125,7 +3121,7 @@ msgstr "Halbmonatlich"
 msgid "Tri-annual"
 msgstr "Alle 4 Monate"
 
-#: src/gnome/glade/fincalc.glade.h:31 src/gnome/glade/sched-xact.glade.h:200
+#: src/gnome/glade/fincalc.glade.h:31 src/gnome/glade/sched-xact.glade.h:203
 msgid "Weekly"
 msgstr "Wöchentlich"
 
@@ -3216,8 +3212,8 @@ msgstr "Briefkurs"
 msgid "Bid"
 msgstr "Geldkurs"
 
-#: src/gnome/glade/price.glade.h:8 src/gnome/glade/stocks.glade.h:5
-#: src/gnome/glade/transfer.glade.h:4
+#: src/gnome-utils/transfer.glade.h:4 src/gnome/glade/price.glade.h:8
+#: src/gnome/glade/stocks.glade.h:5
 msgid "Currency:"
 msgstr "Währung:"
 
@@ -3249,9 +3245,9 @@ msgstr "Vermögenswert"
 #: intl-scm/guile-strings.c:2235 intl-scm/guile-strings.c:2991
 #: src/gnome/dialog-price-edit-db.c:494 src/gnome/glade/price.glade.h:17
 #: src/register/ledger-core/split-register-model.c:242
-#: src/register/ledger-core/split-register.c:1696
 #: src/register/ledger-core/split-register.c:1698
-#: src/register/ledger-core/split-register.c:2044
+#: src/register/ledger-core/split-register.c:1700
+#: src/register/ledger-core/split-register.c:2046
 msgid "Price"
 msgstr "Preis"
 
@@ -3292,7 +3288,7 @@ msgid "Source:"
 msgstr "Quelle:"
 
 #: src/gnome-utils/commodity.glade.h:16 src/gnome/glade/price.glade.h:29
-#: src/gnome/glade/sched-xact.glade.h:192
+#: src/gnome/glade/sched-xact.glade.h:194
 msgid "Type:"
 msgstr "Typ:"
 
@@ -3380,8 +3376,8 @@ msgstr "Beim Drucken das Jahrhundert mit hinzufügen (z.B. 2001 anstelle 01)."
 msgid "Locale"
 msgstr "Systemeinstellung"
 
-#: src/gnome/glade/print.glade.h:23 src/gnome/glade/stocks.glade.h:19
-#: src/gnome/glade/transfer.glade.h:8
+#: src/gnome-utils/transfer.glade.h:8 src/gnome/glade/print.glade.h:23
+#: src/gnome/glade/stocks.glade.h:19
 msgid "Memo:"
 msgstr "Buchungstext:"
 
@@ -3397,8 +3393,8 @@ msgstr "Millimeter"
 msgid "Months:"
 msgstr "Monate:"
 
-#: src/gnome/glade/print.glade.h:27 src/gnome/glade/sched-xact.glade.h:133
-#: src/gnome/window-acct-tree.c:854
+#: src/gnome/glade/print.glade.h:27 src/gnome/glade/sched-xact.glade.h:132
+#: src/gnome/window-acct-tree.c:855
 #: src/report/report-gnome/window-report.c:842
 msgid "Options"
 msgstr "Optionen"
@@ -3525,8 +3521,8 @@ msgid ""
 msgstr ""
 "Terminierte Buchung erstellen mit aktuellem Geschäftsvorgang als Vorlage"
 
-#: src/gnome/glade/register.glade.h:10 src/gnome/window-acct-tree.c:866
-#: src/gnome/window-acct-tree.c:1002 src/gnome/window-acct-tree.c:1263
+#: src/gnome/glade/register.glade.h:10 src/gnome/window-acct-tree.c:867
+#: src/gnome/window-acct-tree.c:1003 src/gnome/window-acct-tree.c:1264
 msgid "Create a new account"
 msgstr "Ein neues Konto eröffnen"
 
@@ -3609,7 +3605,7 @@ msgstr "Zur freien Zeile am Ende dieses Kassenberichts gehen"
 msgid "NOTUSED: Defined in src/gnome/window-register.c"
 msgstr "NOTUSED: Defined in src/gnome/window-register.c"
 
-#: src/gnome/glade/register.glade.h:36 src/gnome/glade/transfer.glade.h:9
+#: src/gnome-utils/transfer.glade.h:9 src/gnome/glade/register.glade.h:36
 msgid "Num:"
 msgstr "Nummer:"
 
@@ -3645,8 +3641,8 @@ msgstr "Einen Scheck mit Standard-Format drucken"
 msgid "Reconcile the main account for this register"
 msgstr "Abgleichen des Hauptkontos für diesen Kassenbericht"
 
-#: src/gnome/glade/register.glade.h:47 src/gnome/window-acct-tree.c:993
-#: src/gnome/window-acct-tree.c:1338
+#: src/gnome/glade/register.glade.h:47 src/gnome/window-acct-tree.c:994
+#: src/gnome/window-acct-tree.c:1339
 msgid "Record a stock split or a stock merger"
 msgstr "Buchen einer Aktienteilung oder eines Aktienzusammenschlusses"
 
@@ -3766,14 +3762,14 @@ msgstr "Geschäftsvorgangsinformation"
 
 #. src/report/standard-reports/register.scm
 #: intl-scm/guile-strings.c:2181 src/gnome/glade/register.glade.h:79
-#: src/register/ledger-core/split-register-layout.c:550
+#: src/register/ledger-core/split-register-layout.c:564
 #: src/register/ledger-core/split-register-model.c:198
-#: src/register/ledger-core/split-register.c:1987
+#: src/register/ledger-core/split-register.c:1989
 msgid "Transfer"
 msgstr "Buchen"
 
-#: src/gnome/glade/register.glade.h:80 src/gnome/window-acct-tree.c:985
-#: src/gnome/window-acct-tree.c:1322 src/gnome/window-reconcile.c:1249
+#: src/gnome/glade/register.glade.h:80 src/gnome/window-acct-tree.c:986
+#: src/gnome/window-acct-tree.c:1323 src/gnome/window-reconcile.c:1249
 msgid "Transfer funds from one account to another"
 msgstr "Beträge von einem Konto zu einem anderen umbuchen"
 
@@ -3826,8 +3822,8 @@ msgstr "_Zwei Zeilen"
 msgid "_Edit"
 msgstr "_Bearbeiten"
 
-#: src/gnome/glade/register.glade.h:102 src/gnome/window-acct-tree.c:967
-#: src/gnome/window-acct-tree.c:1296 src/gnome/window-reconcile.c:1241
+#: src/gnome/glade/register.glade.h:102 src/gnome/window-acct-tree.c:968
+#: src/gnome/window-acct-tree.c:1297 src/gnome/window-reconcile.c:1241
 msgid "_Edit Account"
 msgstr "Konto _bearbeiten"
 
@@ -3852,8 +3848,8 @@ msgstr "Buchungstext"
 msgid "_Number"
 msgstr "Nummer"
 
-#: src/gnome/glade/register.glade.h:112 src/gnome/window-acct-tree.c:976
-#: src/gnome/window-acct-tree.c:1329
+#: src/gnome/glade/register.glade.h:112 src/gnome/window-acct-tree.c:977
+#: src/gnome/window-acct-tree.c:1330
 msgid "_Reconcile..."
 msgstr "_Abgleichen..."
 
@@ -3877,8 +3873,8 @@ msgstr "Amerikanisches Journal"
 msgid "_Transaction Report"
 msgstr "Buchungsbericht"
 
-#: src/gnome/glade/register.glade.h:124 src/gnome/window-acct-tree.c:984
-#: src/gnome/window-acct-tree.c:1321 src/gnome/window-reconcile.c:1249
+#: src/gnome/glade/register.glade.h:124 src/gnome/window-acct-tree.c:985
+#: src/gnome/window-acct-tree.c:1322 src/gnome/window-reconcile.c:1249
 msgid "_Transfer..."
 msgstr "_Buchen..."
 
@@ -4020,7 +4016,7 @@ msgid "Advanced..."
 msgstr "Erweitert..."
 
 #: src/gnome-utils/exchange-dialog.glade.h:1
-#: src/gnome/glade/sched-xact.glade.h:37 src/gnome/glade/transfer.glade.h:2
+#: src/gnome-utils/transfer.glade.h:2 src/gnome/glade/sched-xact.glade.h:37
 msgid "Amount:"
 msgstr "Betrag:"
 
@@ -4196,8 +4192,8 @@ msgstr "Ignorieren"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #: intl-scm/guile-strings.c:2561 intl-scm/guile-strings.c:2583
-#: src/gnome/druid-loan.c:1472 src/gnome/glade/sched-xact.glade.h:85
-#: src/register/ledger-core/split-register.c:2018
+#: src/gnome/druid-loan.c:1733 src/gnome/glade/sched-xact.glade.h:85
+#: src/register/ledger-core/split-register.c:2020
 msgid "Interest"
 msgstr "Zinsen"
 
@@ -4254,216 +4250,220 @@ msgid "Loan Account:"
 msgstr "Darlehenskonto:"
 
 #: src/gnome/glade/sched-xact.glade.h:99
-msgid "Loan Amount:"
-msgstr "Darlehensbetrag:"
-
-#: src/gnome/glade/sched-xact.glade.h:100
 msgid "Loan Information"
 msgstr "Darlehen Informationen"
 
-#: src/gnome/glade/sched-xact.glade.h:101
+#: src/gnome/glade/sched-xact.glade.h:100
 msgid "Make Scheduled transaction"
 msgstr "Terminierte Buchung erstellen"
 
-#: src/gnome/glade/sched-xact.glade.h:102
+#: src/gnome/glade/sched-xact.glade.h:101
 msgid "Mar, Jun, Nov"
 msgstr "Mär, Jun, Nov"
 
-#: src/gnome/glade/sched-xact.glade.h:103
+#: src/gnome/glade/sched-xact.glade.h:102
 msgid "Mar, Jun, Sep, Dec"
 msgstr "Mär, Jun, Sep, Dez"
 
-#: src/gnome/glade/sched-xact.glade.h:104
+#: src/gnome/glade/sched-xact.glade.h:103
 msgid "Mar, Sep"
 msgstr "Mär, Sep"
 
-#: src/gnome/glade/sched-xact.glade.h:105
+#: src/gnome/glade/sched-xact.glade.h:104
 msgid "March"
 msgstr "März"
 
-#: src/gnome/glade/sched-xact.glade.h:106
+#: src/gnome/glade/sched-xact.glade.h:105
 msgid "May"
 msgstr "Mai"
 
-#: src/gnome/glade/sched-xact.glade.h:107
+#: src/gnome/glade/sched-xact.glade.h:106
 msgid "May, Nov"
 msgstr "Mai, Nov"
 
-#: src/gnome/glade/sched-xact.glade.h:108
+#: src/gnome/glade/sched-xact.glade.h:107
 msgid "Monday"
 msgstr "Montag"
 
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1047 intl-scm/guile-strings.c:1049
-#: src/gnome/glade/sched-xact.glade.h:109
+#: src/gnome/glade/sched-xact.glade.h:108
 msgid "Month"
 msgstr "Monat"
 
-#: src/gnome/glade/sched-xact.glade.h:111
+#: src/gnome/glade/sched-xact.glade.h:110
 msgid "Months Remaining:"
 msgstr "Restliche Monate:"
 
-#: src/gnome/glade/sched-xact.glade.h:112
+#: src/gnome/glade/sched-xact.glade.h:111
 msgid "Mortgage/Loan Druid"
 msgstr "Hypothek/Darlehen Assistent"
 
-#: src/gnome/glade/sched-xact.glade.h:113
+#: src/gnome/glade/sched-xact.glade.h:112
 msgid "Mortgage/Loan Repayment Setup"
 msgstr "Einrichtung Hypothek/Darlehen-Tilgung"
 
-#: src/gnome/glade/sched-xact.glade.h:115
+#: src/gnome/glade/sched-xact.glade.h:114
 #: src/import-export/hbci/glade/hbci.glade.h:70
 #: src/report/report-gnome/report.glade.h:12
 msgid "Name:"
 msgstr "Name:"
 
-#: src/gnome/glade/sched-xact.glade.h:116
+#: src/gnome/glade/sched-xact.glade.h:115
 msgid "Never End"
 msgstr "Endet nie"
 
-#: src/gnome/glade/sched-xact.glade.h:118
+#: src/gnome/glade/sched-xact.glade.h:117
 msgid "Next Occurence"
 msgstr "Nächstes Auftreten"
 
-#: src/gnome/glade/sched-xact.glade.h:119
+#: src/gnome/glade/sched-xact.glade.h:118
 msgid "No End"
 msgstr "Endlos"
 
-#: src/gnome/glade/sched-xact.glade.h:121
+#: src/gnome/glade/sched-xact.glade.h:120
 msgid "Not scheduled"
 msgstr "Nicht vorgemerkt"
 
-#: src/gnome/glade/sched-xact.glade.h:122
+#: src/gnome/glade/sched-xact.glade.h:121
 msgid "Notify me when created"
 msgstr "Bei Erstellung benachrichtigen"
 
-#: src/gnome/glade/sched-xact.glade.h:123
+#: src/gnome/glade/sched-xact.glade.h:122
 msgid "November"
 msgstr "November"
 
-#: src/gnome/glade/sched-xact.glade.h:124
+#: src/gnome/glade/sched-xact.glade.h:123
 msgid "Now + 1 Year"
 msgstr "Ein Jahr später"
 
-#: src/gnome/glade/sched-xact.glade.h:125
+#: src/gnome/glade/sched-xact.glade.h:124
 msgid "Number of Occurences:"
 msgstr "Anzahl des Auftretens:"
 
-#: src/gnome/glade/sched-xact.glade.h:126
+#: src/gnome/glade/sched-xact.glade.h:125
 msgid "Number of Occurrences"
 msgstr "Anzahl des Auftretens"
 
-#: src/gnome/glade/sched-xact.glade.h:127
+#: src/gnome/glade/sched-xact.glade.h:126
 msgid "Number of Occurrences:"
 msgstr "Anzahl des Auftretens:"
 
-#: src/gnome/glade/sched-xact.glade.h:128
+#: src/gnome/glade/sched-xact.glade.h:127
 msgid "Obsolete Scheduled Transactions"
 msgstr "Terminierte Buchung löschen"
 
-#: src/gnome/glade/sched-xact.glade.h:129
+#: src/gnome/glade/sched-xact.glade.h:128
 msgid "Occuring in"
 msgstr "Tritt auf im"
 
-#: src/gnome/glade/sched-xact.glade.h:130
+#: src/gnome/glade/sched-xact.glade.h:129
 msgid "October"
 msgstr "Oktober"
 
-#: src/gnome/glade/sched-xact.glade.h:131
+#: src/gnome/glade/sched-xact.glade.h:130
 msgid "On the"
 msgstr "Am"
 
-#: src/gnome/glade/sched-xact.glade.h:132
+#: src/gnome/glade/sched-xact.glade.h:131
 msgid "Once"
 msgstr "Einmal"
 
 #. src/report/standard-reports/category-barchart.scm
 #: intl-scm/guile-strings.c:1665 intl-scm/guile-strings.c:2449
-#: src/gnome/glade/sched-xact.glade.h:134
+#: src/gnome/glade/sched-xact.glade.h:133
 msgid "Other"
 msgstr "Weitere"
 
-#: src/gnome/glade/sched-xact.glade.h:135
+#: src/gnome/glade/sched-xact.glade.h:134
 msgid "Part of Payment Transaction"
 msgstr "Teil einer Zahlung"
 
-#: src/gnome/glade/sched-xact.glade.h:136
+#: src/gnome/glade/sched-xact.glade.h:135
 msgid "Payment Amount:"
 msgstr "Zahlungsbetrag:"
 
-#: src/gnome/glade/sched-xact.glade.h:137
+#: src/gnome/glade/sched-xact.glade.h:136
 msgid "Payment Frequency"
 msgstr "Zahlungshäufigkeit"
+
+#: src/gnome/glade/sched-xact.glade.h:137
+msgid "Payment From (Escrow):"
+msgstr "Zahlung von (Treuhandkonto):"
 
 #: src/gnome/glade/sched-xact.glade.h:138
 msgid "Payment From:"
 msgstr "Zahlung von:"
 
 #: src/gnome/glade/sched-xact.glade.h:139
+msgid "Payment To (Escrow):"
+msgstr "Zahlung bis (Treuhandkonto):"
+
+#: src/gnome/glade/sched-xact.glade.h:140
 msgid "Payment To:"
 msgstr "Zahlung bis:"
 
-#: src/gnome/glade/sched-xact.glade.h:140
+#: src/gnome/glade/sched-xact.glade.h:141
 msgid "Postpone"
 msgstr "Verschieben"
 
-#: src/gnome/druid-loan.c:1471 src/gnome/glade/sched-xact.glade.h:141
+#: src/gnome/druid-loan.c:1732 src/gnome/glade/sched-xact.glade.h:142
 msgid "Principal"
 msgstr "Endbetrag Kapital"
 
-#: src/gnome/glade/sched-xact.glade.h:142
+#: src/gnome/glade/sched-xact.glade.h:143
 msgid "Principal To:"
 msgstr "Endbetrag Kapital bis:"
 
-#: src/gnome/glade/sched-xact.glade.h:144
+#: src/gnome/glade/sched-xact.glade.h:145
 msgid "REPLACEME with the Register control box"
 msgstr "REPLACEME with the Register control box"
 
-#: src/gnome/glade/sched-xact.glade.h:145
+#: src/gnome/glade/sched-xact.glade.h:146
 msgid "Range: "
 msgstr "Bereich: "
 
-#: src/gnome/glade/sched-xact.glade.h:146
+#: src/gnome/glade/sched-xact.glade.h:147
 msgid "Record"
 msgstr "Speichern"
 
-#: src/gnome/glade/sched-xact.glade.h:147
+#: src/gnome/glade/sched-xact.glade.h:148
 msgid "Recurrence Frequency"
 msgstr "Häufigkeit des Wiederauftretens"
 
-#: src/gnome/glade/sched-xact.glade.h:148
+#: src/gnome/glade/sched-xact.glade.h:149
 msgid "Remainder to:"
 msgstr "Rest an:"
 
-#: src/gnome/glade/sched-xact.glade.h:149
+#: src/gnome/glade/sched-xact.glade.h:150
 msgid "Remaining Number of Occurrences"
 msgstr "Verbleibende Anzahl des Auftretens"
 
-#: src/gnome/glade/sched-xact.glade.h:150
+#: src/gnome/glade/sched-xact.glade.h:151
 msgid "Remaining Occurrences:"
 msgstr "Verbleibendes Auftreten:"
 
-#: src/gnome/glade/sched-xact.glade.h:151
+#: src/gnome/glade/sched-xact.glade.h:152
 msgid "Remind me "
 msgstr "Erinnern "
 
-#: src/gnome/glade/sched-xact.glade.h:152
+#: src/gnome/glade/sched-xact.glade.h:153
 msgid "Repayment"
 msgstr "Tilgung"
 
-#: src/gnome/glade/sched-xact.glade.h:153
+#: src/gnome/glade/sched-xact.glade.h:154
 msgid "Repayment Frequency"
 msgstr "Tilgungshäufigkeit"
 
-#: src/gnome/glade/sched-xact.glade.h:154
+#: src/gnome/glade/sched-xact.glade.h:155
 msgid "Review"
 msgstr "Kontrolle"
 
-#: src/gnome/glade/sched-xact.glade.h:155
+#: src/gnome/glade/sched-xact.glade.h:156
 msgid "Saturday"
 msgstr "Samstag"
 
-#: src/gnome/glade/sched-xact.glade.h:156
+#: src/gnome/glade/sched-xact.glade.h:157
 msgid "Scheduled Transaction"
 msgstr "Terminierte Buchung"
 
@@ -4471,63 +4471,67 @@ msgstr "Terminierte Buchung"
 #: intl-scm/guile-strings.c:673 intl-scm/guile-strings.c:679
 #: intl-scm/guile-strings.c:685 intl-scm/guile-strings.c:691
 #: intl-scm/guile-strings.c:697 intl-scm/guile-strings.c:703
-#: src/gnome/glade/sched-xact.glade.h:157
+#: src/gnome/glade/sched-xact.glade.h:158
 msgid "Scheduled Transactions"
 msgstr "Terminierte Buchungen"
 
-#: src/gnome/glade/sched-xact.glade.h:159
+#: src/gnome/glade/sched-xact.glade.h:160
 msgid "Select initial date, above."
 msgstr "Wählen Sie oben ein Anfangsdatum."
 
-#: src/gnome/glade/sched-xact.glade.h:160
+#: src/gnome/glade/sched-xact.glade.h:161
 msgid "Select occurrence date above."
 msgstr "Wählen Sie oben ein Datum des Auftretens."
 
-#: src/gnome/glade/sched-xact.glade.h:161
+#: src/gnome/glade/sched-xact.glade.h:162
 msgid "Semi-Monthly"
 msgstr "Halbmonatlich"
 
-#: src/gnome/glade/sched-xact.glade.h:162
+#: src/gnome/glade/sched-xact.glade.h:163
 msgid "Semi-Yearly"
 msgstr "Halbjährlich"
 
-#: src/gnome/glade/sched-xact.glade.h:163
+#: src/gnome/glade/sched-xact.glade.h:164
 msgid "September"
 msgstr "September"
 
-#: src/gnome/glade/sched-xact.glade.h:164
+#: src/gnome/glade/sched-xact.glade.h:165
 msgid "Since Last Run"
 msgstr "Seit letztem Aufruf"
 
-#: src/gnome/glade/sched-xact.glade.h:165
+#: src/gnome/glade/sched-xact.glade.h:166
+msgid "Specify Source Account"
+msgstr "Herkunftskonto auswählen"
+
+#: src/gnome/glade/sched-xact.glade.h:167
 msgid "Start Date:"
 msgstr "Anfangsdatum:"
 
-#: src/gnome/glade/sched-xact.glade.h:166
+#: src/gnome/glade/sched-xact.glade.h:168
 msgid "Start Date: "
 msgstr "Anfangsdatum: "
 
-#: src/gnome/glade/sched-xact.glade.h:167
+#: src/gnome/glade/sched-xact.glade.h:169
 msgid "State"
 msgstr "Status"
 
-#: src/gnome/glade/sched-xact.glade.h:168
+#: src/gnome/glade/sched-xact.glade.h:170
 msgid "Sunday"
 msgstr "Sonntag"
 
-#: src/gnome/glade/sched-xact.glade.h:169
+#: src/gnome/glade/sched-xact.glade.h:171
 msgid "Template Transaction"
 msgstr "Buchungsvorlage"
 
-#: src/gnome/glade/sched-xact.glade.h:170
+#: src/gnome/glade/sched-xact.glade.h:172
 msgid "Template Transaction (Read-Only)"
 msgstr "Buchungsvorlage (schreibgeschützt)"
 
-#: src/gnome/glade/sched-xact.glade.h:171
+#: src/gnome/glade/sched-xact.glade.h:173
 msgid "Template Transactions"
 msgstr "Buchungsvorlagen"
 
-#: src/gnome/glade/sched-xact.glade.h:172
+#: src/gnome/glade/sched-xact.glade.h:174
 msgid ""
 "The following scheduled transactions have expired.\n"
 "Select those you wish to delete."
@@ -4535,7 +4539,7 @@ msgstr ""
 "Die folgenden terminierten Buchungen sind abgelaufen.\n"
 "Bitte wählen Sie jene, die Sie löschen möchten."
 
-#: src/gnome/glade/sched-xact.glade.h:174
+#: src/gnome/glade/sched-xact.glade.h:176
 msgid ""
 "The listed Scheduled Transactions are to-be created soon. \n"
 "Select any which you would like to create now, and click\n"
@@ -4545,7 +4549,7 @@ msgstr ""
 "werden. Wählen Sie jene, die jetzt erstellt werden sollen, und klicken\n"
 "Sie \"Weiter\", um Sie jetzt erstellen zu lassen."
 
-#: src/gnome/glade/sched-xact.glade.h:177
+#: src/gnome/glade/sched-xact.glade.h:179
 msgid ""
 "This is a step-by-step method of creating a loan repayment setup\n"
 "within GnuCash.  In this Druid, you can input the parameters of\n"
@@ -4565,125 +4569,129 @@ msgstr ""
 "Wenn Sie einen Irrtum machen oder später Änderungen machen möchten,\n"
 "können Sie die erstellte Terminierte Buchung direkt ändern."
 
-#: src/gnome/glade/sched-xact.glade.h:185
+#: src/gnome/glade/sched-xact.glade.h:187
 msgid "This window should never be realized."
 msgstr "Dieses Fenster sollte nie erscheinen."
 
-#: src/gnome/glade/sched-xact.glade.h:186
+#: src/gnome/glade/sched-xact.glade.h:188
 msgid "Thursday"
 msgstr "Donnerstag"
 
-#: src/gnome/glade/sched-xact.glade.h:187
+#: src/gnome/glade/sched-xact.glade.h:189
 msgid "To-Create Transaction Preparation"
 msgstr "Vorbereitung der zu erstellenden Buchungen"
 
-#: src/gnome/glade/sched-xact.glade.h:188
+#: src/gnome/glade/sched-xact.glade.h:190
 msgid "Transaction Memo:"
 msgstr "Buchungstext:"
 
-#: src/gnome/glade/sched-xact.glade.h:189
+#: src/gnome/glade/sched-xact.glade.h:191
 msgid "Transaction Reminders"
 msgstr "Buchungserinnerungen"
 
-#: src/gnome/glade/sched-xact.glade.h:190
+#: src/gnome/glade/sched-xact.glade.h:192
 msgid "Tri-Yearly"
 msgstr "Dreimal pro Jahr"
 
-#: src/gnome/glade/sched-xact.glade.h:191
+#: src/gnome/glade/sched-xact.glade.h:193
 msgid "Tuesday"
 msgstr "Dienstag"
 
-#: src/gnome/glade/sched-xact.glade.h:193
+#: src/gnome/glade/sched-xact.glade.h:195
 msgid "Unselect All"
 msgstr "Keine auswählen"
 
-#: src/gnome/glade/sched-xact.glade.h:194
+#: src/gnome/glade/sched-xact.glade.h:196
 msgid "Upcoming"
 msgstr "Bevorstehende"
 
+#: src/gnome/glade/sched-xact.glade.h:197
+msgid "Use Escrow Account"
+msgstr "Treuhandkonto benutzen"
+
 #. src/report/standard-reports/portfolio.scm
 #: intl-scm/guile-strings.c:1693 intl-scm/guile-strings.c:1807
-#: intl-scm/guile-strings.c:2859 src/gnome/glade/sched-xact.glade.h:195
-#: src/register/ledger-core/split-register.c:1703
+#: intl-scm/guile-strings.c:2859 src/gnome/glade/sched-xact.glade.h:198
 #: src/register/ledger-core/split-register.c:1705
+#: src/register/ledger-core/split-register.c:1707
 msgid "Value"
 msgstr "Wert"
 
-#: src/gnome/glade/sched-xact.glade.h:196
+#: src/gnome/glade/sched-xact.glade.h:199
 msgid "Value:"
 msgstr "Wert:"
 
-#: src/gnome/glade/sched-xact.glade.h:197
+#: src/gnome/glade/sched-xact.glade.h:200
 msgid "Variable"
 msgstr "Variable"
 
-#: src/gnome/glade/sched-xact.glade.h:198
+#: src/gnome/glade/sched-xact.glade.h:201
 msgid "Variables"
 msgstr "Variablen"
 
-#: src/gnome/glade/sched-xact.glade.h:199
+#: src/gnome/glade/sched-xact.glade.h:202
 msgid "Wednesday"
 msgstr "Mittwoch"
 
-#: src/gnome/glade/sched-xact.glade.h:201
+#: src/gnome/glade/sched-xact.glade.h:204
 msgid "What to do, what to do?"
 msgstr "Was ist zu tun?"
 
-#: src/gnome/glade/sched-xact.glade.h:202
+#: src/gnome/glade/sched-xact.glade.h:205
 msgid "Whole Loan"
 msgstr "Ganzes Darlehen"
 
-#: src/gnome/glade/sched-xact.glade.h:203
+#: src/gnome/glade/sched-xact.glade.h:206
 msgid "YYYY-MM-DD"
 msgstr "JJJJ-MM-TT"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2037 intl-scm/guile-strings.c:2039
-#: src/gnome/glade/sched-xact.glade.h:204
+#: src/gnome/glade/sched-xact.glade.h:207
 msgid "Yearly"
 msgstr "Jährlich"
 
-#: src/gnome/glade/sched-xact.glade.h:205
+#: src/gnome/glade/sched-xact.glade.h:208
 msgid "[29th]"
 msgstr "[29.]"
 
-#: src/gnome/glade/sched-xact.glade.h:206
+#: src/gnome/glade/sched-xact.glade.h:209
 msgid "[30th]"
 msgstr "[30.]"
 
-#: src/gnome/glade/sched-xact.glade.h:207
+#: src/gnome/glade/sched-xact.glade.h:210
 msgid "[31st]"
 msgstr "[31.]"
 
-#: src/gnome/glade/sched-xact.glade.h:208
+#: src/gnome/glade/sched-xact.glade.h:211
 msgid "[last day]"
 msgstr "[letzter Tag]"
 
-#: src/gnome/glade/sched-xact.glade.h:209
+#: src/gnome/glade/sched-xact.glade.h:212
 msgid "days."
 msgstr "Tage."
 
-#: src/gnome/glade/sched-xact.glade.h:210
+#: src/gnome/glade/sched-xact.glade.h:213
 msgid "months"
 msgstr "Monate"
 
-#: src/gnome/glade/sched-xact.glade.h:211
+#: src/gnome/glade/sched-xact.glade.h:214
 msgid "months."
 msgstr "Monate."
 
-#: src/gnome/glade/sched-xact.glade.h:212
+#: src/gnome/glade/sched-xact.glade.h:215
 msgid "then on the:"
 msgstr "dann am:"
 
-#: src/gnome/glade/sched-xact.glade.h:213
+#: src/gnome/glade/sched-xact.glade.h:216
 msgid "weeks."
 msgstr "Wochen."
 
-#: src/gnome/glade/sched-xact.glade.h:214
+#: src/gnome/glade/sched-xact.glade.h:217
 msgid "year(s)."
 msgstr "Jahre."
 
-#: src/gnome/glade/sched-xact.glade.h:215
+#: src/gnome/glade/sched-xact.glade.h:218
 msgid "years"
 msgstr "Jahre"
 
@@ -4764,8 +4772,8 @@ msgstr "Aktien Verteilung:"
 #: intl-scm/guile-strings.c:2183 intl-scm/guile-strings.c:2229
 #: src/gnome/glade/stocks.glade.h:23
 #: src/register/ledger-core/split-register-model.c:254
-#: src/register/ledger-core/split-register.c:1689
 #: src/register/ledger-core/split-register.c:1691
+#: src/register/ledger-core/split-register.c:1693
 msgid "Shares"
 msgstr "Anteile"
 
@@ -4818,46 +4826,6 @@ msgstr "TXF Kategorien"
 #: src/gnome/glade/tax.glade.h:13
 msgid "Tax Information"
 msgstr "Steuerrelevante Information"
-
-#: src/gnome/glade/transfer.glade.h:1
-msgid " "
-msgstr " "
-
-#: src/gnome/glade/transfer.glade.h:3
-msgid "Currency Transfer"
-msgstr "Währungs-Buchung"
-
-#: src/gnome-utils/exchange-dialog.glade.h:3
-#: src/gnome/glade/transfer.glade.h:7
-msgid "Exchange Rate:"
-msgstr "Wechselkurs:"
-
-#. src/report/standard-reports/price-scatter.scm
-#: intl-scm/guile-strings.c:1427 intl-scm/guile-strings.c:1511
-#: src/gnome/glade/transfer.glade.h:10
-msgid "Show Income/Expense"
-msgstr "Erträge/Aufwendungen anzeigen"
-
-#: src/gnome-utils/exchange-dialog.glade.h:7
-#: src/gnome/glade/transfer.glade.h:11
-msgid "To Amount:"
-msgstr "zum Betrag:"
-
-#: src/gnome/glade/transfer.glade.h:12
-msgid "Transfer From"
-msgstr "Herkunftskonto"
-
-#: src/gnome/glade/transfer.glade.h:13
-msgid "Transfer Funds"
-msgstr "Beträge umbuchen"
-
-#: src/gnome/glade/transfer.glade.h:14
-msgid "Transfer Information"
-msgstr "Buchungsinformation"
-
-#: src/gnome/glade/transfer.glade.h:15
-msgid "Transfer To"
-msgstr "Buchen nach"
 
 #: src/gnome/glade/userpass.glade.h:1
 msgid "Enter your username and password"
@@ -4936,7 +4904,7 @@ msgstr "Sie müssen eine Währung/Aktie auswählen."
 msgid "You must select a currency."
 msgstr "Sie müssen eine Währung auswählen."
 
-#: src/gnome/dialog-price-editor.c:185 src/gnome/dialog-transfer.c:1093
+#: src/gnome-utils/dialog-transfer.c:1220 src/gnome/dialog-price-editor.c:185
 msgid "You must enter a valid amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
@@ -5070,147 +5038,109 @@ msgstr "-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
 msgid "Tip of the Day:"
 msgstr "Tipp des Tages:"
 
-#: src/gnome/dialog-transfer.c:325
-msgid "Show the income and expense accounts"
-msgstr "Anzeige der Ertrags- und Aufwand-Konten"
-
-#: src/gnome-utils/gnc-html.c:115 src/gnome/dialog-transfer.c:395
-#: src/gnome/druid-stock-split.c:228
-msgid "Error"
-msgstr "Fehler"
-
-#: src/gnome/dialog-transfer.c:1058
-msgid ""
-"You must specify an account to transfer from,\n"
-"or to, or both, for this transaction.\n"
-"Otherwise, it will not be recorded."
-msgstr ""
-"Sie müssen ein Konto angeben, zu dem oder von dem umgebucht werden\n"
-"soll. Andernfalls wird kein Geschäftsvorgang aufgezeichnet."
-
-#: src/gnome/dialog-transfer.c:1067
-msgid "You can't transfer from and to the same account!"
-msgstr "Herkunfts- und Zielkonto können nicht identisch sein."
-
-#: src/gnome/dialog-transfer.c:1077
-#, c-format
-msgid ""
-"The account %s\n"
-"does not allow transactions.\n"
-msgstr ""
-"Das Konto %s\n"
-"kann keine Buchungen enthalten.\n"
-
-#: src/gnome/dialog-transfer.c:1106
-msgid "You must enter an amount to transfer."
-msgstr "Sie müssen einen Betrag angeben."
-
-#: src/gnome/dialog-transfer.c:1120
-msgid "You must enter a valid price."
-msgstr "Sie müssen einen gültigen Preis angeben."
-
-#: src/gnome/dialog-transfer.c:1131
-msgid "You must enter a valid `to' amount."
-msgstr "Sie müssen einen gültigen Betrag eingeben."
-
 #: src/gnome/druid-hierarchy.c:832
 msgid "You must enter a valid balance."
 msgstr "Sie müssen einen gültigen Wert angeben."
 
-#: src/gnome/druid-loan.c:408
+#: src/gnome/druid-loan.c:490
 msgid "Fixed"
 msgstr "Festverzinslich"
 
-#: src/gnome/druid-loan.c:408
+#: src/gnome/druid-loan.c:490
 msgid "A Fixed-Rate loan"
 msgstr "Ein festverzinsliches Darlehen"
 
 #. Translators: ARM = Adjustable Rate Mortgage
-#: src/gnome/druid-loan.c:410
+#: src/gnome/druid-loan.c:492
 msgid "3/1 Year"
 msgstr "3/1 ARM"
 
-#: src/gnome/druid-loan.c:410
+#: src/gnome/druid-loan.c:492
 msgid "A 3/1 Year ARM"
 msgstr "3/1 jährige Adjustable Rate Mortgage (zinsvariable Hypothek)"
 
-#: src/gnome/druid-loan.c:411
+#: src/gnome/druid-loan.c:493
 msgid "5/1 Year"
 msgstr "5/1 ARM"
 
-#: src/gnome/druid-loan.c:411
+#: src/gnome/druid-loan.c:493
 msgid "A 5/1 Year ARM"
 msgstr "5/1 jährige Adjustable Rate Mortgage (zinsvariable Hypothek)"
 
-#: src/gnome/druid-loan.c:412
+#: src/gnome/druid-loan.c:494
 msgid "7/1 Year"
 msgstr "7/1 ARM"
 
-#: src/gnome/druid-loan.c:412
+#: src/gnome/druid-loan.c:494
 msgid "A 7/1 Year ARM"
 msgstr "7/1 jährige Adjustable Rate Mortgage (zinsvariable Hypothek)"
 
-#: src/gnome/druid-loan.c:413
+#: src/gnome/druid-loan.c:495
 msgid "10/1 Year"
 msgstr "10/1 ARM"
 
-#: src/gnome/druid-loan.c:413
+#: src/gnome/druid-loan.c:495
 msgid "A 10/1 Year ARM"
 msgstr "10/1 jährige Adjustable Rate Mortgage (zinsvariable Hypothek)"
 
 #. Add payment checkbox.
 #. Translators: %s is "Taxes",
 #. * "Insurance", or similar.
-#: src/gnome/druid-loan.c:491
+#: src/gnome/druid-loan.c:581
 #, c-format
 msgid "... pay \"%s\"?"
 msgstr "... \"%s\" zahlen?"
 
-#: src/gnome/druid-loan.c:503
+#: src/gnome/druid-loan.c:593
 msgid "via Escrow account?"
 msgstr "über Treuhandkonto?"
 
-#: src/gnome/druid-loan.c:667 src/register/ledger-core/split-register.c:2010
+#: src/gnome/druid-loan.c:763 src/register/ledger-core/split-register.c:2012
 msgid "Loan"
 msgstr "Darlehen"
 
-#: src/gnome/druid-loan.c:800
+#: src/gnome/druid-loan.c:995
 msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
 msgstr "Wollen Sie den Darlehen-Assistent wirklich abbrechen?"
 
-#: src/gnome/druid-loan.c:917
+#: src/gnome/druid-loan.c:1112
 msgid "Please select a valid loan account."
 msgstr "Sie müssen ein gültiges Darlehen-Konto auswählen."
 
-#: src/gnome/druid-loan.c:1005
+#: src/gnome/druid-loan.c:1200
 msgid "Please select a valid Escrow Account."
 msgstr "Sie müssen ein gültiges Treuhand-Konto auswählen."
 
-#: src/gnome/druid-loan.c:1071 src/gnome/druid-loan.c:1288
+#: src/gnome/druid-loan.c:1266 src/gnome/druid-loan.c:1491
 msgid "Please select a valid \"from\" account."
 msgstr "Sie müssen ein gültiges Herkunftskonto angeben."
 
-#: src/gnome/druid-loan.c:1079 src/gnome/druid-loan.c:1295
+#: src/gnome/druid-loan.c:1274 src/gnome/druid-loan.c:1500
 msgid "Please select a valid \"to\" account."
 msgstr "Sie müssen ein gültiges Zielkonto angeben."
 
-#: src/gnome/druid-loan.c:1087
+#: src/gnome/druid-loan.c:1282
 msgid "Please select a valid \"interest\" account."
 msgstr "Sie müssen ein gültiges Zinskonto angeben."
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
-#: src/gnome/druid-loan.c:1219
+#: src/gnome/druid-loan.c:1398
 #, c-format
 msgid "Payment: \"%s\""
 msgstr "Zahlung: \"%s\""
 
-#: src/gnome/druid-loan.c:1627
+#: src/gnome/druid-loan.c:1906
 msgid "Repayment - Principal Portion"
 msgstr "Tilgung - Kapitalanteil"
 
-#: src/gnome/druid-loan.c:1643
+#: src/gnome/druid-loan.c:1919
 msgid "Repayment - Interest Portion"
 msgstr "Tilgung - Zinsanteil"
+
+#: src/gnome-utils/dialog-transfer.c:414 src/gnome-utils/gnc-html.c:115
+#: src/gnome/druid-stock-split.c:228
+msgid "Error"
+msgstr "Fehler"
 
 #: src/gnome/druid-stock-split.c:253
 msgid "You must enter a valid distribution amount."
@@ -5313,7 +5243,7 @@ msgid "GnuCash Personal Finance"
 msgstr "GnuCash Persönlicher Finanzmanager"
 
 #: src/gnome/reconcile-list.c:203
-#: src/register/ledger-core/split-register-layout.c:534
+#: src/register/ledger-core/split-register-layout.c:548
 #: src/register/ledger-core/split-register-model.c:169
 msgid "Reconciled:R"
 msgstr "Reconciled:J"
@@ -5336,17 +5266,17 @@ msgstr "Unbekannter Entity Typ: %s"
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:90 intl-scm/guile-strings.c:98
 #: intl-scm/guile-strings.c:104 intl-scm/guile-strings.c:134
-#: src/gnome/window-acct-tree.c:264
+#: src/gnome/window-acct-tree.c:265
 msgid "Account Tree"
 msgstr "Konto-Hierarchie"
 
 #. src/scm/main-window.scm
-#: intl-scm/guile-strings.c:92 src/gnome/window-acct-tree.c:265
+#: intl-scm/guile-strings.c:92 src/gnome/window-acct-tree.c:266
 msgid "Name of account view"
 msgstr "Name der Konto-Ansicht"
 
-#: src/gnome/window-acct-tree.c:350 src/gnome/window-acct-tree.c:499
-#: src/gnome/window-acct-tree.c:663
+#: src/gnome/window-acct-tree.c:351 src/gnome/window-acct-tree.c:500
+#: src/gnome/window-acct-tree.c:664
 msgid ""
 "To open an account, you must first\n"
 "choose an account to open."
@@ -5354,7 +5284,7 @@ msgstr ""
 "Um ein Konto zu öffnen, müssen Sie zuerst \n"
 "eines auswählen."
 
-#: src/gnome/window-acct-tree.c:377 src/gnome/window-acct-tree.c:528
+#: src/gnome/window-acct-tree.c:378 src/gnome/window-acct-tree.c:529
 msgid ""
 "To edit an account, you must first\n"
 "choose an account to edit.\n"
@@ -5362,12 +5292,12 @@ msgstr ""
 "Um ein Konto zu bearbeiten, müssen Sie zuerst \n"
 "eines auswählen.\n"
 
-#: src/gnome/window-acct-tree.c:413
+#: src/gnome/window-acct-tree.c:414
 #, c-format
 msgid "Are you sure you want to delete the %s account?"
 msgstr "Sind Sie sicher, dass Sie das Konto %s löschen möchten?"
 
-#: src/gnome/window-acct-tree.c:414
+#: src/gnome/window-acct-tree.c:415
 #, c-format
 msgid ""
 "Are you sure you want to delete the %s\n"
@@ -5376,7 +5306,7 @@ msgstr ""
 "Sind Sie sicher, dass Sie das Konto %s und alle Unterkonten löschen\n"
 "möchten?"
 
-#: src/gnome/window-acct-tree.c:417
+#: src/gnome/window-acct-tree.c:418
 #, c-format
 msgid ""
 "This account contains transactions.  Are you sure you\n"
@@ -5385,7 +5315,7 @@ msgstr ""
 "Dieses Konto enthält Buchungen. Sind Sie sicher, dass Sie das Konto \n"
 "%s löschen möchten?"
 
-#: src/gnome/window-acct-tree.c:420
+#: src/gnome/window-acct-tree.c:421
 #, c-format
 msgid ""
 "One (or more) children of this account contain\n"
@@ -5396,7 +5326,7 @@ msgstr ""
 "Buchungen. Wollen Sie wirklich dieses Konto %s und alle seine\n"
 "Unterkonten zu löschen?"
 
-#: src/gnome/window-acct-tree.c:456
+#: src/gnome/window-acct-tree.c:457
 msgid ""
 "To delete an account, you must first\n"
 "choose an account to delete.\n"
@@ -5404,7 +5334,7 @@ msgstr ""
 "Um ein Konto zu löschen, müssen Sie zuerst \n"
 "eines auswählen.\n"
 
-#: src/gnome/window-acct-tree.c:550
+#: src/gnome/window-acct-tree.c:551
 msgid ""
 "To reconcile an account, you must first\n"
 "choose an account to reconcile."
@@ -5412,34 +5342,34 @@ msgstr ""
 "Um ein Konto abzugleichen, müssen Sie zuerst \n"
 "eines auswählen."
 
-#: src/gnome/window-acct-tree.c:606 src/gnome/window-acct-tree.c:628
+#: src/gnome/window-acct-tree.c:607 src/gnome/window-acct-tree.c:629
 msgid "You must select an account to check and repair."
 msgstr "Sie müssen ein Konto wählen, daß überprüft und repariert werden soll."
 
-#: src/gnome/window-acct-tree.c:834 src/gnome/window-acct-tree.c:952
-#: src/gnome/window-acct-tree.c:1275
+#: src/gnome/window-acct-tree.c:835 src/gnome/window-acct-tree.c:953
+#: src/gnome/window-acct-tree.c:1276
 msgid "Open the selected account"
 msgstr "Gewähltes Konto öffnen"
 
-#: src/gnome/window-acct-tree.c:844 src/gnome/window-acct-tree.c:968
-#: src/gnome/window-acct-tree.c:1297
+#: src/gnome/window-acct-tree.c:845 src/gnome/window-acct-tree.c:969
+#: src/gnome/window-acct-tree.c:1298
 msgid "Edit the selected account"
 msgstr "Ausgewähltes Konto bearbeiten"
 
-#: src/gnome/window-acct-tree.c:855
+#: src/gnome/window-acct-tree.c:856
 msgid "Edit the account view options"
 msgstr "Ansichts-Optionen ändern"
 
-#: src/gnome/window-acct-tree.c:876 src/gnome/window-acct-tree.c:1010
-#: src/gnome/window-acct-tree.c:1304
+#: src/gnome/window-acct-tree.c:877 src/gnome/window-acct-tree.c:1011
+#: src/gnome/window-acct-tree.c:1305
 msgid "Delete selected account"
 msgstr "Ausgewähltes Konto löschen"
 
-#: src/gnome/window-acct-tree.c:898
+#: src/gnome/window-acct-tree.c:899
 msgid "Check & Repair A_ccount"
 msgstr "Konto überprüfen"
 
-#: src/gnome/window-acct-tree.c:899 src/gnome/window-reconcile.c:1258
+#: src/gnome/window-acct-tree.c:900 src/gnome/window-reconcile.c:1258
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
@@ -5447,11 +5377,11 @@ msgstr ""
 "Überprüfen und Reparieren von unvollständigen Geschäftsvorfällen in diesem "
 "Konto"
 
-#: src/gnome/window-acct-tree.c:907
+#: src/gnome/window-acct-tree.c:908
 msgid "Check & Repair Su_baccounts"
 msgstr "_Unterkonten überprüfen"
 
-#: src/gnome/window-acct-tree.c:908
+#: src/gnome/window-acct-tree.c:909
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
@@ -5459,11 +5389,11 @@ msgstr ""
 "Überprüfen und Reparieren von unvollständigen Geschäftsvorfällen in diesem "
 "Konto und seinen Unterkonten"
 
-#: src/gnome/window-acct-tree.c:916
+#: src/gnome/window-acct-tree.c:917
 msgid "Check & Repair A_ll"
 msgstr "Alle überprüfen"
 
-#: src/gnome/window-acct-tree.c:917
+#: src/gnome/window-acct-tree.c:918
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
@@ -5471,48 +5401,48 @@ msgstr ""
 "Überprüfen und Reparieren von unvollständigen Geschäftsvorfällen in allen "
 "Konten"
 
-#: src/gnome/window-acct-tree.c:951
+#: src/gnome/window-acct-tree.c:952
 msgid "Open Account"
 msgstr "Konto öffnen"
 
-#: src/gnome/window-acct-tree.c:959
+#: src/gnome/window-acct-tree.c:960
 msgid "Open _Subaccounts"
 msgstr "_Unterkonten öffnen"
 
-#: src/gnome/window-acct-tree.c:960 src/gnome/window-acct-tree.c:1283
+#: src/gnome/window-acct-tree.c:961 src/gnome/window-acct-tree.c:1284
 msgid "Open the selected account and all its subaccounts"
 msgstr "Öffne das gewählte Konto und alle Unterkonten"
 
-#: src/gnome/window-acct-tree.c:977 src/gnome/window-acct-tree.c:1330
+#: src/gnome/window-acct-tree.c:978 src/gnome/window-acct-tree.c:1331
 msgid "Reconcile the selected account"
 msgstr "Gewähltes Konto abgleichen"
 
-#: src/gnome/window-acct-tree.c:992 src/gnome/window-acct-tree.c:1337
+#: src/gnome/window-acct-tree.c:993 src/gnome/window-acct-tree.c:1338
 msgid "Stock S_plit..."
 msgstr "Aktienteilung..."
 
-#: src/gnome/window-acct-tree.c:1001 src/gnome/window-acct-tree.c:1262
+#: src/gnome/window-acct-tree.c:1002 src/gnome/window-acct-tree.c:1263
 msgid "_New Account..."
 msgstr "_Neues Konto"
 
-#: src/gnome/window-acct-tree.c:1009 src/gnome/window-acct-tree.c:1303
+#: src/gnome/window-acct-tree.c:1010 src/gnome/window-acct-tree.c:1304
 msgid "_Delete Account"
 msgstr "_Konto löschen"
 
-#: src/gnome/window-acct-tree.c:1016 src/gnome/window-acct-tree.c:1344
+#: src/gnome/window-acct-tree.c:1017 src/gnome/window-acct-tree.c:1345
 #: src/gnome/window-reconcile.c:1257
 msgid "_Check & Repair"
 msgstr "Überprüfen"
 
-#: src/gnome/window-acct-tree.c:1023 src/gnome/window-reconcile.c:1308
+#: src/gnome/window-acct-tree.c:1024 src/gnome/window-reconcile.c:1308
 msgid "_Account"
 msgstr "_Konto"
 
-#: src/gnome/window-acct-tree.c:1274 src/gnome/window-reconcile.c:1234
+#: src/gnome/window-acct-tree.c:1275 src/gnome/window-reconcile.c:1234
 msgid "_Open Account"
 msgstr "_Konto öffnen"
 
-#: src/gnome/window-acct-tree.c:1282
+#: src/gnome/window-acct-tree.c:1283
 msgid "Open S_ubaccounts"
 msgstr "_Unterkonten öffnen"
 
@@ -5914,7 +5844,7 @@ msgid "<No information>"
 msgstr "<keine Informationen>"
 
 #: src/gnome/gnc-split-reg.c:825
-#: src/register/ledger-core/split-register-control.c:1153
+#: src/register/ledger-core/split-register-control.c:1258
 #: src/register/ledger-core/split-register.c:496
 msgid ""
 "The current transaction has been changed.\n"
@@ -6672,6 +6602,11 @@ msgstr "Hilfefenster ausdrucken"
 msgid "Close this Help window"
 msgstr "Hilfefenster schließen"
 
+#: src/gnome-utils/exchange-dialog.glade.h:3
+#: src/gnome-utils/transfer.glade.h:7
+msgid "Exchange Rate:"
+msgstr "Wechselkurs:"
+
 #: src/gnome-utils/exchange-dialog.glade.h:4
 msgid "Exchange/Price Information"
 msgstr "Wechselkurs/Preis-Informationen"
@@ -6684,9 +6619,82 @@ msgstr "Von:"
 msgid "Split Information"
 msgstr "Buchungsinformationen"
 
+#: src/gnome-utils/exchange-dialog.glade.h:7
+#: src/gnome-utils/transfer.glade.h:11
+msgid "To Amount:"
+msgstr "zum Betrag:"
+
 #: src/gnome-utils/exchange-dialog.glade.h:8
 msgid "To:"
 msgstr "Bis:"
+
+#: src/gnome-utils/dialog-transfer.c:339
+msgid "Show the income and expense accounts"
+msgstr "Anzeige der Ertrags- und Aufwand-Konten"
+
+#: src/gnome-utils/dialog-transfer.c:1185
+msgid ""
+"You must specify an account to transfer from,\n"
+"or to, or both, for this transaction.\n"
+"Otherwise, it will not be recorded."
+msgstr ""
+"Sie müssen ein Konto angeben, zu dem oder von dem umgebucht werden\n"
+"soll. Andernfalls wird kein Geschäftsvorgang aufgezeichnet."
+
+#: src/gnome-utils/dialog-transfer.c:1194
+msgid "You can't transfer from and to the same account!"
+msgstr "Herkunfts- und Zielkonto können nicht identisch sein."
+
+#: src/gnome-utils/dialog-transfer.c:1204
+#, c-format
+msgid ""
+"The account %s\n"
+"does not allow transactions.\n"
+msgstr ""
+"Das Konto %s\n"
+"kann keine Buchungen enthalten.\n"
+
+#: src/gnome-utils/dialog-transfer.c:1233
+msgid "You must enter an amount to transfer."
+msgstr "Sie müssen einen Betrag angeben."
+
+#: src/gnome-utils/dialog-transfer.c:1247
+msgid "You must enter a valid price."
+msgstr "Sie müssen einen gültigen Preis angeben."
+
+#: src/gnome-utils/dialog-transfer.c:1258
+msgid "You must enter a valid `to' amount."
+msgstr "Sie müssen einen gültigen Betrag eingeben."
+
+#: src/gnome-utils/transfer.glade.h:1
+msgid " "
+msgstr " "
+
+#: src/gnome-utils/transfer.glade.h:3
+msgid "Currency Transfer"
+msgstr "Währungs-Buchung"
+
+#. src/report/standard-reports/price-scatter.scm
+#: intl-scm/guile-strings.c:1427 intl-scm/guile-strings.c:1511
+#: src/gnome-utils/transfer.glade.h:10
+msgid "Show Income/Expense"
+msgstr "Erträge/Aufwendungen anzeigen"
+
+#: src/gnome-utils/transfer.glade.h:12
+msgid "Transfer From"
+msgstr "Herkunftskonto"
+
+#: src/gnome-utils/transfer.glade.h:13
+msgid "Transfer Funds"
+msgstr "Beträge umbuchen"
+
+#: src/gnome-utils/transfer.glade.h:14
+msgid "Transfer Information"
+msgstr "Buchungsinformation"
+
+#: src/gnome-utils/transfer.glade.h:15
+msgid "Transfer To"
+msgstr "Buchen nach"
 
 #: src/import-export/binary-import/binary-import.glade.h:1
 msgid ""
@@ -7561,8 +7569,8 @@ msgstr "Online-Auftrag Einzelüberweisung"
 #. * inside Germany (HBCI is not supported anywhere else). You
 #. * may safely ignore strings from the import-export/hbci
 #. * subdirectory in other countries.
-#: src/import-export/hbci/gnc-hbci-utils.c:57
-#: src/import-export/hbci/gnc-hbci-utils.c:75
+#: src/import-export/hbci/gnc-hbci-utils.c:60
+#: src/import-export/hbci/gnc-hbci-utils.c:78
 #, c-format
 msgid ""
 "Error while loading OpenHBCI config file:\n"
@@ -7571,7 +7579,7 @@ msgstr ""
 "Fehler beim Laden der OpenHBCI Konfigurations-Datei:\n"
 "  %s\n"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:252
+#: src/import-export/hbci/gnc-hbci-utils.c:255
 msgid ""
 "The PIN you entered was wrong.\n"
 "Do you want to try again?"
@@ -7579,7 +7587,7 @@ msgstr ""
 "Die eingegebene PIN war falsch.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:261
+#: src/import-export/hbci/gnc-hbci-utils.c:264
 msgid ""
 "The PIN you entered was too short.\n"
 "Do you want to try again?"
@@ -7587,13 +7595,21 @@ msgstr ""
 "Die eingegebene PIN war zu kurz.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:270
+#: src/import-export/hbci/gnc-hbci-utils.c:273
 msgid ""
 "Unfortunately this HBCI job is not supported \n"
 "by your bank or for your account. Aborting."
 msgstr ""
 "Dieser HBCI Geschäftsvorfall wird von Ihrer Bank leider nicht\n"
 "unterstützt oder ist Ihnen nicht gestattet. Aktion wird abgebrochen."
+
+#. src/import-export/qif-io-core/qif-invst-xtn-import.scm
+#: intl-scm/guile-strings.c:2579 intl-scm/guile-strings.c:2601
+#: src/import-export/gnc-gen-transaction.c:351
+#: src/import-export/gnc-gen-transaction.c:376
+#: src/import-export/hbci/gnc-hbci-utils.c:372
+msgid "Unspecified"
+msgstr "Nicht spezifiziert"
 
 #: src/import-export/hbci/gncmod-hbci.c:93
 msgid "HBCI Get Balance"
@@ -8548,38 +8564,31 @@ msgstr "Aktualisieren Ihrer Gnucash Konten"
 msgid "A destination split for the transaction you selected."
 msgstr "Gegenbuchung für den aktuellen Geschäftsvorgang."
 
-#. src/import-export/qif-io-core/qif-invst-xtn-import.scm
-#: intl-scm/guile-strings.c:2579 intl-scm/guile-strings.c:2601
-#: src/import-export/gnc-gen-transaction.c:351
-#: src/import-export/gnc-gen-transaction.c:376
-msgid "Unspecified"
-msgstr "Nicht spezifiziert"
-
-#: src/register/ledger-core/split-register-control.c:59
+#: src/register/ledger-core/split-register-control.c:60
 msgid "Rebalance Transaction"
 msgstr "Geschäftsvorgang neu kalkulieren"
 
-#: src/register/ledger-core/split-register-control.c:60
+#: src/register/ledger-core/split-register-control.c:61
 msgid "The current transaction is not balanced."
 msgstr "Der aktuelle Geschäftsvorgang ist nicht ausgeglichen."
 
-#: src/register/ledger-core/split-register-control.c:96
+#: src/register/ledger-core/split-register-control.c:97
 msgid "Balance it manually"
 msgstr "Per Hand ausgleichen"
 
-#: src/register/ledger-core/split-register-control.c:98
+#: src/register/ledger-core/split-register-control.c:99
 msgid "Let GnuCash add an adjusting split"
 msgstr "Automatisch eine ausgleichende Buchung einfügen"
 
-#: src/register/ledger-core/split-register-control.c:103
+#: src/register/ledger-core/split-register-control.c:104
 msgid "Adjust current account split total"
 msgstr "Buchungsbetrag in diesem Konto anpassen"
 
-#: src/register/ledger-core/split-register-control.c:107
+#: src/register/ledger-core/split-register-control.c:108
 msgid "Adjust other account split total"
 msgstr "Buchungsbetrag im anderen Konto anpassen"
 
-#: src/register/ledger-core/split-register-control.c:1224
+#: src/register/ledger-core/split-register-control.c:1329
 msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
@@ -8593,45 +8602,45 @@ msgstr ""
 #. used to estimate widths. Please only
 #. translate the portion after the ':' and
 #. leave the rest ("sample:") as is.
-#: src/register/ledger-core/split-register-layout.c:518
+#: src/register/ledger-core/split-register-layout.c:524
 msgid "sample:99999"
 msgstr "sample:99999"
 
-#: src/register/ledger-core/split-register-layout.c:526
+#: src/register/ledger-core/split-register-layout.c:532
 msgid "sample:Description of a transaction"
 msgstr "sample:Beschreibungsbeispiel einer Buchung"
 
-#: src/register/ledger-core/split-register-layout.c:542
-#: src/register/ledger-core/split-register-layout.c:582
-#: src/register/ledger-core/split-register-layout.c:590
-#: src/register/ledger-core/split-register-layout.c:598
-#: src/register/ledger-core/split-register-layout.c:608
-#: src/register/ledger-core/split-register-layout.c:616
-#: src/register/ledger-core/split-register-layout.c:624
-#: src/register/ledger-core/split-register-layout.c:632
-#: src/register/ledger-core/split-register-layout.c:640
+#: src/register/ledger-core/split-register-layout.c:556
+#: src/register/ledger-core/split-register-layout.c:596
+#: src/register/ledger-core/split-register-layout.c:604
+#: src/register/ledger-core/split-register-layout.c:612
+#: src/register/ledger-core/split-register-layout.c:622
+#: src/register/ledger-core/split-register-layout.c:630
+#: src/register/ledger-core/split-register-layout.c:638
+#: src/register/ledger-core/split-register-layout.c:646
+#: src/register/ledger-core/split-register-layout.c:654
 msgid "sample:999,999.000"
 msgstr "sample:999.999,000"
 
-#: src/register/ledger-core/split-register-layout.c:558
-#: src/register/ledger-core/split-register-layout.c:566
+#: src/register/ledger-core/split-register-layout.c:572
+#: src/register/ledger-core/split-register-layout.c:580
 msgid "sample:Expenses:Automobile:Gasoline"
 msgstr "sample:Ausgaben:Automobil:Treibstoff"
 
-#: src/register/ledger-core/split-register-layout.c:574
+#: src/register/ledger-core/split-register-layout.c:588
 msgid "sample:Memo field sample text string"
 msgstr "sample:Buchungstext-Feld irgendein Beispieltext"
 
-#: src/register/ledger-core/split-register-layout.c:648
+#: src/register/ledger-core/split-register-layout.c:662
 msgid "Type:T"
 msgstr "Typ:T"
 
-#: src/register/ledger-core/split-register-layout.c:656
+#: src/register/ledger-core/split-register-layout.c:670
 msgid "sample:Notes field sample text string"
 msgstr "sample:Bemerkungsfeld irgendein Beispieltext"
 
-#: src/register/ledger-core/split-register-layout.c:664
-#: src/register/ledger-core/split-register-layout.c:672
+#: src/register/ledger-core/split-register-layout.c:678
+#: src/register/ledger-core/split-register-layout.c:686
 msgid "sample:(x + 0.33 * y + (x+y) )"
 msgstr "Beispiel: (x + 0,33 * y + (x+y) )"
 
@@ -8701,44 +8710,44 @@ msgstr "Geben Sie eine Beschreibung des Geschäftsvorgangs ein"
 msgid "Enter notes for the transaction"
 msgstr "Geben Sie Bemerkungen zum Geschäftsvorgang ein"
 
-#: src/register/ledger-core/split-register-model.c:948
+#: src/register/ledger-core/split-register-model.c:973
 msgid "Enter the type of transaction, or choose one from the list"
 msgstr ""
 "Geben Sie den Geschäftsvorgangstyp ein, oder wählen Sie einen aus der Liste"
 
 # FIXME: DON'T use the noun 'description' here.
-#: src/register/ledger-core/split-register-model.c:976
+#: src/register/ledger-core/split-register-model.c:1001
 msgid "Enter a description of the split"
 msgstr "Geben Sie einen Buchungstext der Buchung ein"
 
-#: src/register/ledger-core/split-register-model.c:1051
+#: src/register/ledger-core/split-register-model.c:1076
 msgid "Enter the effective share price"
 msgstr "Geben Sie den effektiven Aktienpreis ein"
 
-#: src/register/ledger-core/split-register-model.c:1087
+#: src/register/ledger-core/split-register-model.c:1112
 msgid "Enter the number of shares bought or sold"
 msgstr "Geben Sie die verkaufte Anzahl von Aktien ein"
 
-#: src/register/ledger-core/split-register-model.c:1139
-#: src/register/ledger-core/split-register-model.c:1206
+#: src/register/ledger-core/split-register-model.c:1164
+#: src/register/ledger-core/split-register-model.c:1231
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "Wählen Sie das Konto aus, von dem Sie buchen wollen"
 
-#: src/register/ledger-core/split-register-model.c:1216
+#: src/register/ledger-core/split-register-model.c:1241
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
 "Dieser Geschäftsvorgang hat mehrere Buchungen. Klicken Sie \"Mehrteilig\", "
 "um alle sehen zu können."
 
-#: src/register/ledger-core/split-register-model.c:1219
+#: src/register/ledger-core/split-register-model.c:1244
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
 "Dieser Geschäftsvorgang ist eine Aktienteilung; klicken Sie 'Mehrteilig', um "
 "Einzelheiten sehen zu können"
 
-#: src/register/ledger-core/split-register-model.c:1556
+#: src/register/ledger-core/split-register-model.c:1631
 msgid ""
 "You are about to change a reconciled split.\n"
 "Are you sure you want to do that?"
@@ -8746,12 +8755,12 @@ msgstr ""
 "Sie verändern eine abgeglichene Buchung. \n"
 "Sind Sie sicher, daß Sie das möchten?"
 
-#: src/register/ledger-core/split-register-model.c:1658
+#: src/register/ledger-core/split-register-model.c:1733
 msgid "Enter debit formula for real transaction"
 msgstr ""
 "Geben Sie die Formel zur Haben-Berechnung der tatsächlichen Buchung ein"
 
-#: src/register/ledger-core/split-register-model.c:1692
+#: src/register/ledger-core/split-register-model.c:1767
 msgid "Enter credit formula for real transaction"
 msgstr "Geben Sie die Formel zur Soll-Berechnung der tatsächlichen Buchung ein"
 
@@ -8771,11 +8780,11 @@ msgstr ""
 "Sie sind dabei, eine bestehende Buchung zu überschreiben. \n"
 "Sind Sie sicher, daß Sie das möchten?"
 
-#: src/register/ledger-core/split-register.c:1681
+#: src/register/ledger-core/split-register.c:1683
 msgid "Recalculate Transaction"
 msgstr "Buchung neu kalkulieren"
 
-#: src/register/ledger-core/split-register.c:1682
+#: src/register/ledger-core/split-register.c:1684
 msgid ""
 "The values entered for this transaction are inconsistent.\n"
 "Which value would you like to have recalculated?"
@@ -8783,127 +8792,127 @@ msgstr ""
 "Die eingegebenen Werte für diese Buchung sind inkonsistent.\n"
 "Welchen Wert möchten Sie neu kalkuliert haben?"
 
-#: src/register/ledger-core/split-register.c:1689
-#: src/register/ledger-core/split-register.c:1696
-#: src/register/ledger-core/split-register.c:1703
+#: src/register/ledger-core/split-register.c:1691
+#: src/register/ledger-core/split-register.c:1698
+#: src/register/ledger-core/split-register.c:1705
 msgid "Changed"
 msgstr "Geändert"
 
 #. src/app-utils/prefs.scm
-#: intl-scm/guile-strings.c:270 src/register/ledger-core/split-register.c:1972
+#: intl-scm/guile-strings.c:270 src/register/ledger-core/split-register.c:1974
 msgid "Deposit"
 msgstr "Einzahlung"
 
-#: src/register/ledger-core/split-register.c:1973
+#: src/register/ledger-core/split-register.c:1975
 msgid "Withdraw"
 msgstr "Belastung"
 
-#: src/register/ledger-core/split-register.c:1974
+#: src/register/ledger-core/split-register.c:1976
 msgid "Check"
 msgstr "Scheck"
 
-#: src/register/ledger-core/split-register.c:1975
-#: src/register/ledger-core/split-register.c:2003
-#: src/register/ledger-core/split-register.c:2011
-#: src/register/ledger-core/split-register.c:2025
-#: src/register/ledger-core/split-register.c:2048
+#: src/register/ledger-core/split-register.c:1977
+#: src/register/ledger-core/split-register.c:2005
+#: src/register/ledger-core/split-register.c:2013
+#: src/register/ledger-core/split-register.c:2027
+#: src/register/ledger-core/split-register.c:2050
 msgid "Int"
 msgstr "Zins"
 
-#: src/register/ledger-core/split-register.c:1976
-#: src/register/ledger-core/split-register.c:1999
+#: src/register/ledger-core/split-register.c:1978
+#: src/register/ledger-core/split-register.c:2001
 msgid "ATM"
 msgstr "Geldautomat"
 
-#: src/register/ledger-core/split-register.c:1977
+#: src/register/ledger-core/split-register.c:1979
 msgid "Teller"
 msgstr "Bankschalter"
 
 #. Action: Point Of Sale
-#: src/register/ledger-core/split-register.c:1979
+#: src/register/ledger-core/split-register.c:1981
 msgid "POS"
 msgstr "Karten-Terminal"
 
-#: src/register/ledger-core/split-register.c:1980
+#: src/register/ledger-core/split-register.c:1982
 msgid "Phone"
 msgstr "Telefon"
 
-#: src/register/ledger-core/split-register.c:1981
-#: src/register/ledger-core/split-register.c:2004
+#: src/register/ledger-core/split-register.c:1983
+#: src/register/ledger-core/split-register.c:2006
 msgid "Online"
 msgstr "Online"
 
 #. Action: Automatic Deposit ?!?
-#: src/register/ledger-core/split-register.c:1983
+#: src/register/ledger-core/split-register.c:1985
 msgid "AutoDep"
 msgstr "Gutschrift"
 
-#: src/register/ledger-core/split-register.c:1984
+#: src/register/ledger-core/split-register.c:1986
 msgid "Wire"
 msgstr "Überweisung"
 
-#: src/register/ledger-core/split-register.c:1986
+#: src/register/ledger-core/split-register.c:1988
 msgid "Direct Debit"
 msgstr "Lastschrift"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:280 intl-scm/guile-strings.c:282
-#: intl-scm/guile-strings.c:284 src/register/ledger-core/split-register.c:1990
-#: src/register/ledger-core/split-register.c:1994
-#: src/register/ledger-core/split-register.c:2000
-#: src/register/ledger-core/split-register.c:2008
-#: src/register/ledger-core/split-register.c:2023
-#: src/register/ledger-core/split-register.c:2030
-#: src/register/ledger-core/split-register.c:2035
-#: src/register/ledger-core/split-register.c:2060
+#: intl-scm/guile-strings.c:284 src/register/ledger-core/split-register.c:1992
+#: src/register/ledger-core/split-register.c:1996
+#: src/register/ledger-core/split-register.c:2002
+#: src/register/ledger-core/split-register.c:2010
+#: src/register/ledger-core/split-register.c:2025
+#: src/register/ledger-core/split-register.c:2032
+#: src/register/ledger-core/split-register.c:2037
+#: src/register/ledger-core/split-register.c:2062
 msgid "Buy"
 msgstr "Kauf"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:308 intl-scm/guile-strings.c:310
-#: intl-scm/guile-strings.c:312 src/register/ledger-core/split-register.c:1991
-#: src/register/ledger-core/split-register.c:1995
-#: src/register/ledger-core/split-register.c:2005
-#: src/register/ledger-core/split-register.c:2009
-#: src/register/ledger-core/split-register.c:2024
-#: src/register/ledger-core/split-register.c:2031
-#: src/register/ledger-core/split-register.c:2036
-#: src/register/ledger-core/split-register.c:2061
+#: intl-scm/guile-strings.c:312 src/register/ledger-core/split-register.c:1993
+#: src/register/ledger-core/split-register.c:1997
+#: src/register/ledger-core/split-register.c:2007
+#: src/register/ledger-core/split-register.c:2011
+#: src/register/ledger-core/split-register.c:2026
+#: src/register/ledger-core/split-register.c:2033
+#: src/register/ledger-core/split-register.c:2038
+#: src/register/ledger-core/split-register.c:2063
 msgid "Sell"
 msgstr "Verkauf"
 
-#: src/register/ledger-core/split-register.c:1996
-#: src/register/ledger-core/split-register.c:2002
-#: src/register/ledger-core/split-register.c:2045
+#: src/register/ledger-core/split-register.c:1998
+#: src/register/ledger-core/split-register.c:2004
+#: src/register/ledger-core/split-register.c:2047
 msgid "Fee"
 msgstr "Gebühr"
 
 #. src/app-utils/prefs.scm
-#: intl-scm/guile-strings.c:316 src/register/ledger-core/split-register.c:2027
+#: intl-scm/guile-strings.c:316 src/register/ledger-core/split-register.c:2029
 msgid "Rebate"
 msgstr "Rabatt"
 
 #. Action: Dividend
-#: src/register/ledger-core/split-register.c:2047
+#: src/register/ledger-core/split-register.c:2049
 msgid "Div"
 msgstr "Dividende"
 
 #. Action: Long Term Capital Gains
-#: src/register/ledger-core/split-register.c:2050
+#: src/register/ledger-core/split-register.c:2052
 msgid "LTCG"
 msgstr "Zinsen aus langfristigen Kapitalanlagen"
 
 #. Action: Short Term Capital Gains
-#: src/register/ledger-core/split-register.c:2052
+#: src/register/ledger-core/split-register.c:2054
 msgid "STCG"
 msgstr "Zinsen aus kurzfristigen Anlagen"
 
 #. Action: Distribution
-#: src/register/ledger-core/split-register.c:2055
+#: src/register/ledger-core/split-register.c:2057
 msgid "Dist"
 msgstr "Ausschüttung"
 
-#: src/register/ledger-core/split-register.c:2077
+#: src/register/ledger-core/split-register.c:2079
 msgid "-- Stock Split --"
 msgstr "-- Aktienteilung --"
 
@@ -10450,7 +10459,8 @@ msgstr "Voreinstellung Tage für Erinnerung"
 #: intl-scm/guile-strings.c:701
 msgid ""
 "Default number of days in advance to remind on new Scheduled Transactions."
-msgstr "So viele Tage im voraus an bevorstehende terminierte Buchungen erinnern"
+msgstr ""
+"So viele Tage im voraus an bevorstehende terminierte Buchungen erinnern"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:705
@@ -13873,6 +13883,9 @@ msgstr "Folgendes Forderungen-Konto wollen Sie untersuchen"
 #: intl-scm/guile-strings.c:3105 intl-scm/guile-strings.c:3107
 msgid "Receivable Aging"
 msgstr "Entwicklung Forderungen"
+
+#~ msgid "Loan Amount:"
+#~ msgstr "Darlehensbetrag:"
 
 #~ msgid ""
 #~ "Want to see all your subaccount transactions in one register?\n"
