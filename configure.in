@@ -568,6 +568,7 @@ AC_ARG_ENABLE( mt940,
   fi)
 if test x${MT940_DIR} = xmt940 ;
 then
+    AC_MSG_ERROR([Sorry, MT940 support is currently broken since it depends on the hbci module with the old openhbci 0.9.x library. But the hbci module now has been ported to the new openhbci2 library. The MT940 importer needs to be ported to openhbci2 as well before this can be enabled again.])
     AM_PATH_OPENHBCI(0.9.13.2)
     # Note: HBCI_LIBS is changed again below in the --enable-hbci
     # section. So check for mt940 first and *not* the other way round!
@@ -589,7 +590,7 @@ AC_ARG_ENABLE( hbci,
   fi)
 if test x${HBCI_DIR} = xhbci ;
 then
-    AM_PATH_OPENHBCI2(1.9.0.1)
+    AM_PATH_OPENHBCI2(1.9.0.8)
     #all_libraries="$all_libraries $OPENHBCI_LIBS"
     #all_includes="$all_includes $OPENHBCI_CXXFLAGS"
     #AM_PATH_OPENHBCI(0.9.13)

@@ -455,6 +455,57 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
   
 }
 
+/* Prints all results that can be found in the outbox into the interactor */
+static void gnc_hbci_printresult(HBCI_Outbox *outbox, GNCInteractor *inter)
+{
+  /* Got no sysid. */
+  GWEN_DB_NODE *rsp, *n;
+  g_assert(outbox);
+  if (!inter) 
+    return;
+  
+  rsp = HBCI_Outbox_response(outbox);
+  n = GWEN_DB_GetFirstGroup(rsp);
+  while(n) {
+    if (strcasecmp(GWEN_DB_GroupName(n), "msgresult")==0) {
+      GWEN_DB_NODE *r = GWEN_DB_GetFirstGroup(n);
+      while (r) {
+	if (strcasecmp(GWEN_DB_GroupName(r), "result") == 0) {
+	  gchar *logtext;
+	  int resultcode;
+	  const char *text, *elementref, *param;
+	  
+	  resultcode = GWEN_DB_GetIntValue(r, "resultcode", 0, 0);
+	  text = GWEN_DB_GetCharValue(r, "text", 0, "Response without text");
+	  elementref = GWEN_DB_GetCharValue(r, "elementref", 0, "");
+	  param = GWEN_DB_GetCharValue(r, "param", 0, "");
+
+	  if (strlen(elementref)>0 || strlen(param) > 0)
+	    logtext = g_strdup_printf("%s (%d; Elementref %s; Param %s)", text, 
+				      resultcode, elementref, param);
+	  else
+	    logtext = g_strdup_printf("%s (%d)", text, resultcode);
+	  GNCInteractor_add_log_text(inter, logtext);
+	  g_free(logtext);
+	}
+	r = GWEN_DB_GetNextGroup(r);
+      }
+    } 
+    else if (strcasecmp(GWEN_DB_GroupName(n), "segresult")==0) {
+      GWEN_DB_NODE *r = GWEN_DB_GetFirstGroup(n);
+      while (r) {
+	if (strcasecmp(GWEN_DB_GroupName(r), "result") == 0) {
+	}
+	r = GWEN_DB_GetNextGroup(r);
+      }
+    } 
+    n=GWEN_DB_GetNextGroup(n);
+  } // while
+
+  GWEN_DB_Group_free(rsp);
+}
+
+
 gboolean
 gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
 		      HBCI_Outbox *queue,
@@ -479,6 +530,10 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
       GNCInteractor_show_nodelete (inter);
     err = HBCI_API_executeQueue (api, queue);
     g_assert (err);
+
+    /* Print result codes to interactor */
+    gnc_hbci_printresult(queue, inter);
+    
   } while (gnc_hbci_error_retry (parent, err, inter));
   
   resultcode = gnc_hbci_debug_outboxjob (job, FALSE);

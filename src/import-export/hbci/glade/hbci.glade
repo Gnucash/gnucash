@@ -1404,7 +1404,8 @@ before this whole druid has finished.</label>
 	    <widget>
 	      <class>GtkLabel</class>
 	      <name>label8477411</name>
-	      <label>Do these values match the values on your paper Ini-Letter?</label>
+	      <label>Do these values match the values on your paper Ini-Letter? 
+(If you cannot see anything, press the 'Print' button.)</label>
 	      <justify>GTK_JUSTIFY_CENTER</justify>
 	      <wrap>False</wrap>
 	      <xalign>0.5</xalign>
@@ -1576,7 +1577,8 @@ connection in the HBCI connection window.</label>
 	  <widget>
 	    <class>GtkLabel</class>
 	    <name>label8477345</name>
-	    <label>This is the Ini-Letter of you, the user. Please print out a paper copy 
+	    <label>This is the Ini-Letter of you, the user. (If you cannot see anything, please 
+press the 'Print' button.) Please print out a paper copy 
 by pressing 'Print'. Then press 'Next'.</label>
 	    <justify>GTK_JUSTIFY_LEFT</justify>
 	    <wrap>False</wrap>

@@ -470,7 +470,7 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
   GNCInteractor *data = user_data;
   g_assert(data);
 
-  add_log_text (data, msg);
+  GNCInteractor_add_log_text (data, msg);
   while (g_main_iteration (FALSE));
   }*/
 
@@ -689,13 +689,13 @@ static void logMsg (const char *msg, void *user_data)
   g_assert(data);
   
   printf("logMsg: Logging msg: %s\n", msg);
-  add_log_text (data, msg);
+  GNCInteractor_add_log_text (data, msg);
 			    
   /* Let the widgets be redrawn */
   while (g_main_iteration (FALSE));
 }
 
-void add_log_text (GNCInteractor *data, const char *msg)
+void GNCInteractor_add_log_text (GNCInteractor *data, const char *msg)
 {
   int pos;
   g_assert(data);

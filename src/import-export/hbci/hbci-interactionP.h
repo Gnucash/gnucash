@@ -85,8 +85,4 @@ void delete_GNCInteractor (GNCInteractor *data);
 HBCI_Interactor *
 gnc_hbci_new_interactor(GNCInteractor *data);
 
-void add_log_text (GNCInteractor *data, const char *msg);
-
-
-
 #endif

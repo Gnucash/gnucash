@@ -1,3 +1,12 @@
+2004-02-14  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in: Require the correct openhbci2 version. Add verbose
+	error message for the currently unavailable mt940 support.
+
+	* src/import-export/hbci/hbci-druid-initial.c, gnc-hbci-utils.c:
+	Finally finish openhbci2 support, phew. Requires
+	openhbci2-1.9beta7 from http://sourceforge.net/projects/openhbci
+
 2004-02-04  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncJob.c: Linas checked the wrong

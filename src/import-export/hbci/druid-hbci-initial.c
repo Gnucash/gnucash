@@ -1102,21 +1102,9 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
   {
     HBCI_OutboxJob *job;
       
+    /* FIXME: Only do this sync job if this is a rdh medium. */
     /* Execute a Synchronize job, then a GetAccounts job. */
-    /*job = HBCI_OutboxJob_new("JobSync", 
-    (HBCI_Customer *)info->newcustomer, "");
-    HBCI_Outbox_addJob (info->outbox, job);*/
-    
-    /* Execute Outbox. */
-    /*if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
-      job, info->interactor)) {*/
-    /* HBCI_API_executeOutbox failed. */
-    /*return FALSE;*/
-    /* -- it seems to be no problem if this fails ?! */
-    /*}*/
-  
-    /* Now the GetAccounts job. */
-    job = HBCI_OutboxJob_new("JobGetAccounts", 
+    job = HBCI_OutboxJob_new("JobSync", 
 			     (HBCI_Customer *)info->newcustomer, "");
     HBCI_Outbox_addJob (info->outbox, job);
     
@@ -1132,7 +1120,89 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
 			    (HBCI_Customer_user(info->newcustomer))));
       HBCI_Job_setProperty
 	(jjob, "open/ident/customerid", HBCI_Customer_custId(info->newcustomer));
+
+      /* for getting a system id */
+      HBCI_Job_setIntProperty(jjob, "open/sync/mode",0);
+      HBCI_Job_setProperty(jjob, "open/ident/systemid", "0");
+    }
+
+    /* Execute Outbox. */
+    if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
+			       job, info->interactor)) {
+      /* HBCI_API_executeOutbox failed. */
+      GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+      printf("on_accountinfo_next: oops, executeOutbox of JobSync failed.\n");
+
+      printf("on_accountinfo_next: Complete HBCI_Outbox response:\n");
+      GWEN_DB_Dump(rsp, stdout, 1);
+      GWEN_DB_Group_free(rsp);
+
+      rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+      printf("on_accountinfo_next: Complete HBCI_Job response:\n");
+      if (rsp) 
+	GWEN_DB_Dump(rsp, stderr, 1);
+      /*return FALSE;*/
+      /* -- it seems to be no problem if this fails ?! */
+    }
+
+    /* Now process the response of the JobSync */
+    {
+      const char *sysid = 
+	HBCI_Job_getProperty(HBCI_OutboxJob_Job(job), 
+			     "response/syncresponse/systemid", "");
+      g_assert(sysid);
+
+      if (strlen(sysid) > 0) {
+	HBCI_User_setSystemId((HBCI_User*) HBCI_Customer_user(info->newcustomer), sysid);
+	printf("on_accountinfo_next: Ok. Got sysid '%s'.\n", sysid);
+      }
+      else {
+	/* Got no sysid. */
+	GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+	printf("on_accountinfo_next: oops, got no sysid.\n");
+	
+	printf("on_accountinfo_next: Complete HBCI_Outbox response:\n");
+	GWEN_DB_Dump(rsp, stdout, 1);
+	GWEN_DB_Group_free(rsp);
+
+	rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+	printf("on_accountinfo_next: Complete HBCI_Job response:\n");
+	if (rsp) 
+	  GWEN_DB_Dump(rsp, stderr, 1);
+	return FALSE;
+      }
+    }
+    
+
+  
+    /* Now the GetAccounts job. */
+    job = HBCI_OutboxJob_new("JobGetAccounts", 
+			     (HBCI_Customer *)info->newcustomer, "");
+    HBCI_Outbox_addJob (info->outbox, job);
+    
+    {
+      char *mediumid;
+      HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
+      HBCI_Job_setIntProperty
+	(jjob, "open/ident/country", 
+	 HBCI_Bank_country(HBCI_User_bank
+			   (HBCI_Customer_user(info->newcustomer))));
+      HBCI_Job_setProperty
+	(jjob, "open/ident/bankcode", 
+	 HBCI_Bank_bankCode(HBCI_User_bank
+			    (HBCI_Customer_user(info->newcustomer))));
+      HBCI_Job_setProperty
+	(jjob, "open/ident/customerid", HBCI_Customer_custId(info->newcustomer));
       HBCI_Job_setIntProperty(jjob, "open/prepare/updversion",0);
+
+      /* FIXME: Only set this for RDH medium */
+      mediumid = HBCI_Medium_mediumId((HBCI_Medium *)HBCI_User_medium(HBCI_Customer_user(info->newcustomer)));
+      g_assert(mediumid);
+      if (strlen(mediumid)==0)
+	HBCI_Job_setProperty(jjob, "open/ident/systemId", "0");
+      else
+	HBCI_Job_setProperty(jjob, "open/ident/systemId", mediumid);
+      free(mediumid);
     }
     
 
@@ -1140,7 +1210,20 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
     if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
 			       job, info->interactor)) {
       /* HBCI_API_executeOutbox failed. */
-      printf("on_accountinfo_next: oops, executeOutbox failed.\n");
+      GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+      printf("on_accountinfo_next: oops, executeOutbox of JobGetAccounts failed.\n");
+
+      printf("on_accountinfo_next: Complete HBCI_Outbox response:\n");
+      GWEN_DB_Dump(rsp, stdout, 1);
+      GWEN_DB_Group_free(rsp);
+
+      rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+      printf("on_accountinfo_next: Complete HBCI_Job response:\n");
+      if (rsp) 
+	GWEN_DB_Dump(rsp, stderr, 1);
+
+      /* And clean everything up */
+      HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
       return FALSE;
     }
 
@@ -1299,6 +1382,20 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
     if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
 			       job, info->interactor)) {
       /* HBCI_API_executeOutbox failed. */
+      GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+      printf("on_iniletter_info_next: oops, executeOutbox failed.\n");
+
+      printf("Complete HBCI_Outbox response:\n");
+      GWEN_DB_Dump(rsp, stdout, 1);
+      GWEN_DB_Group_free(rsp);
+
+      rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+      printf("Complete HBCI_Job response:\n");
+      if (rsp) 
+	GWEN_DB_Dump(rsp, stderr, 1);
+
+      /* And clean everything up */
+      HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
       return FALSE;
     }
 
@@ -1314,6 +1411,9 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
   }
   else if (info->gotkeysforCustomer != info->newcustomer) {
     printf("on_iniletter_info_next: Oops, already got keys for another customer. Not yet implemented.\n");
+
+    /* And clean everything up */
+    HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
     return TRUE;
   }
 
@@ -1482,8 +1582,34 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
     if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
 			       job, info->interactor)) {
       /* HBCI_API_executeOutbox failed. */
+      GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+      printf("on_iniletter_userinfo_next: Oops, api_execute failed.\n");
+      printf("on_iniletter_userinfo_next: Complete HBCI_Outbox response:\n");
+      GWEN_DB_Dump(rsp, stdout, 1);
+      GWEN_DB_Group_free(rsp);
+
+      rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+      printf("on_iniletter_userinfo_next: Complete HBCI_Job response:\n");
+      if (rsp) 
+	GWEN_DB_Dump(rsp, stderr, 1);
+
+      /* And clean everything up */
+      HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
       return FALSE;
     }
+    
+    {
+      GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+      printf("on_iniletter_userinfo_next: Complete HBCI_Outbox response:\n");
+      GWEN_DB_Dump(rsp, stdout, 1);
+      GWEN_DB_Group_free(rsp);
+
+      rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+      printf("on_iniletter_userinfo_next: Complete HBCI_Job response:\n");
+      if (rsp) 
+	GWEN_DB_Dump(rsp, stderr, 1);
+    }
+    
 
     HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
   }
