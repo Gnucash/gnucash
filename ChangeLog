@@ -1,3 +1,8 @@
+2003-03-03  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/business-core.scm: don't export
+	  gnc:owner-get-name -- it overrides the g-wrap'ed version
+
 2003-03-02  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncEntry.[ch]: add interfaces
