@@ -84,6 +84,31 @@ xaccAccountTreeScrubOrphans (Account *acc)
   xaccAccountScrubOrphans (acc);
 }
 
+static void
+TransScrubOrphansFast (Transaction *trans, AccountGroup *root)
+{
+  GList *node;
+
+  if (!trans) return;
+
+  for (node = trans->splits; node; node = node->next)
+  {
+    Split *split = node->data;
+    Account *orph;
+
+    if (split->acc) continue;
+
+    DEBUG ("Found an orphan \n");
+
+    orph = xaccScrubUtilityGetOrMakeAccount (root, trans->common_currency, _("Orphan"));
+    if (!orph) continue;
+
+    xaccAccountBeginEdit (orph);
+    xaccAccountInsertSplit (orph, split);
+    xaccAccountCommitEdit (orph);
+  }
+}
+
 void
 xaccAccountScrubOrphans (Account *acc)
 {
@@ -100,37 +125,25 @@ xaccAccountScrubOrphans (Account *acc)
   {
     Split *split = node->data;
 
-    xaccTransScrubOrphans (xaccSplitGetParent (split),
+    TransScrubOrphansFast (xaccSplitGetParent (split),
                            xaccAccountGetRoot (acc));
   }
 }
 
+
 void
-xaccTransScrubOrphans (Transaction *trans, AccountGroup *root)
+xaccTransScrubOrphans (Transaction *trans)
 {
-  GList *node;
-
-  if (!trans) return;
-
-  for (node = xaccTransGetSplitList (trans); node; node = node->next)
+  SplitList *node;
+  for (node = trans->splits; node; node = node->next)
   {
     Split *split = node->data;
-    Account *account;
-    Account *orph;
 
-    account = xaccSplitGetAccount (split);
-    if (account)
-      continue;
-
-    DEBUG ("Found an orphan \n");
-
-    orph = xaccScrubUtilityGetOrMakeAccount (root, trans->common_currency, _("Orphan"));
-    if (!orph)
-      continue;
-
-    xaccAccountBeginEdit (orph);
-    xaccAccountInsertSplit (orph, split);
-    xaccAccountCommitEdit (orph);
+    if (split->acc)
+    {
+      TransScrubOrphansFast (trans, xaccAccountGetRoot(split->acc));
+      break;
+    }
   }
 }
 
@@ -188,43 +201,35 @@ xaccSplitScrub (Split *split)
   Account *account;
   Transaction *trans;
   gnc_numeric value;
-  gboolean trans_was_open;
-  gnc_commodity *commodity;
   gnc_commodity *currency;
   int scu;
 
-  if (!split)
-    return;
+  if (!split) return;
 
   trans = xaccSplitGetParent (split);
-  if (!trans)
-    return;
+  if (!trans) return;
 
   account = xaccSplitGetAccount (split);
+
+  /* If theres no account, this split is an orphan.
+   * We need to fix that first, before proceeding.
+   */
   if (!account)
   {
-/* xxxxxxxxxx FIXME:  if theres no account, we should
-scrub for orphans, and fix that  !!
-only then should we proceed!
-    xaccTransScrubOrphans (trans, 
---linas march 2003
-*/
-    value = xaccSplitGetValue (split);
-
-    if (gnc_numeric_same (xaccSplitGetAmount (split),
-                          xaccSplitGetValue (split),
-                          value.denom, GNC_RND_ROUND))
-      return;
-
-    xaccSplitSetAmount (split, value);
-
-    return;
+    xaccTransScrubOrphans (trans);
+    account = xaccSplitGetAccount (split);
   }
 
-  commodity = xaccAccountGetCommodity (account);
   currency = xaccTransGetCurrency (trans);
 
-  if (!commodity || !gnc_commodity_equiv (commodity, currency))
+  /* If the account doesn't have a commodity, 
+   * we should attempt to fix that first. 
+  */
+  if (!account->commodity)
+  {
+    xaccAccountScrubCommodity (account);
+  }
+  if (!account->commodity || !gnc_commodity_equiv (account->commodity, currency))
     return;
 
   scu = MIN (xaccAccountGetCommoditySCU (account),
@@ -234,19 +239,20 @@ only then should we proceed!
 
   if (gnc_numeric_same (xaccSplitGetAmount (split),
                         value, scu, GNC_RND_ROUND))
+  {
     return;
+  }
 
-  PINFO ("split with mismatched values");
+  PWARN ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
+         " old amount %s %s, new amount %s",
+            trans->description, split->memo,
+            gnc_numeric_to_string (split->amount),
+            gnc_commodity_get_mnemonic (currency),
+            gnc_numeric_to_string (split->value));
 
-  trans_was_open = xaccTransIsOpen (trans);
-
-  if (!trans_was_open)
-    xaccTransBeginEdit (trans);
-
+  xaccTransBeginEdit (trans);
   xaccSplitSetAmount (split, value);
-
-  if (!trans_was_open)
-    xaccTransCommitEdit (trans);
+  xaccTransCommitEdit (trans);
 }
 
 /* ================================================================ */
@@ -374,8 +380,8 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
      * already existing denominator (bug #104343), because either one
      * of the denominators might already be reduced.  */
     new_value = gnc_numeric_sub (new_value, imbalance,
-				 gnc_commodity_get_fraction(currency), 
-				 GNC_RND_ROUND);
+             gnc_commodity_get_fraction(currency), 
+             GNC_RND_ROUND);
 
     xaccSplitSetValue (balance_split, new_value);
 
@@ -404,17 +410,16 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 void
 xaccTransScrubCurrency (Transaction *trans)
 {
+  SplitList *node;
   gnc_commodity *currency;
 
   if (!trans) return;
 
-/* If there are any orphaned splits in a transaction, then the 
- * TransScrubCurrency will fail for that transaction. 
-xxxxxxxxxxxxxxxxa FIXME: finish fixing me!!
---linas march 2003
-    xaccTransScrubOrphans (xaccSplitGetParent (split),
-                           xaccAccountGetRoot (acc));
-*/
+  /* If there are any orphaned splits in a transaction, then the 
+   * this routine will fail.  Therefore, we want to make sure that
+   * tehre are no orphans (splits without parent account).
+   */
+  xaccTransScrubOrphans (trans);
 
   currency = xaccTransGetCurrency (trans);
   if (currency) return;
@@ -451,59 +456,52 @@ xxxxxxxxxxxxxxxxa FIXME: finish fixing me!!
       }
     }
   }
+
+  for (node=trans->splits; node; node=node->next)
   {
-    SplitList *node;
-    for (node=trans->splits; node; node=node->next)
+    Split *sp = node->data;
+
+    if (!gnc_numeric_equal(xaccSplitGetAmount (sp), 
+        xaccSplitGetValue (sp))) 
     {
-      Split *sp = node->data;
-/*
-xxxxxxxxxxxxxxx  FIXME: this loop should perform the more
-through SplitScrub at this point, although the actual flow 
-of logic for fixing things needs to be tweaked, because 
-some of the fixes are being done in the wrong order.
---linas march 2003
-*/
-      if (!gnc_numeric_equal(xaccSplitGetAmount (sp), 
-			     xaccSplitGetValue (sp))) 
+      gnc_commodity *acc_currency = xaccAccountGetCommodity (sp->acc);
+      if (acc_currency == currency) 
       {
-        Account *acc = xaccSplitGetAccount (sp);
-        gnc_commodity *acc_currency = xaccAccountGetCommodity (acc);
-        if (acc_currency == currency) {
-          /* This Split needs fixing: The transaction-currency equals
-           * the account-currency/commodity, but the amount/values are
-           * inequal i.e. they still correspond to the security
-           * (amount) and the currency (value). In the new model, the
-           * value is the amount in the account-commodity -- so it
-           * needs to be set to equal the amount (since the
-           * account-currency doesn't exist anymore). 
-           *
-           * Note: Nevertheless we lose some information here. Namely,
-           * the information that the 'amount' in 'account-old-security'
-           * was worth 'value' in 'account-old-currency'. Maybe it would
-           * be better to store that information in the price database? 
-           * But then, for old currency transactions there is still the
-           * 'other' transaction, which is going to keep that
-           * information. So I don't bother with that here. -- cstim,
-           * 2002/11/20. */
+        /* This Split needs fixing: The transaction-currency equals
+         * the account-currency/commodity, but the amount/values are
+         * inequal i.e. they still correspond to the security
+         * (amount) and the currency (value). In the new model, the
+         * value is the amount in the account-commodity -- so it
+         * needs to be set to equal the amount (since the
+         * account-currency doesn't exist anymore). 
+         *
+         * Note: Nevertheless we lose some information here. Namely,
+         * the information that the 'amount' in 'account-old-security'
+         * was worth 'value' in 'account-old-currency'. Maybe it would
+         * be better to store that information in the price database? 
+         * But then, for old currency transactions there is still the
+         * 'other' transaction, which is going to keep that
+         * information. So I don't bother with that here. -- cstim,
+         * 2002/11/20. */
           
-          /*PWARN ("## Error likely: Split '%s' Amount %s %s, value %s",
-            xaccSplitGetMemo (sp),
-            gnc_numeric_to_string (amount),
-            gnc_commodity_get_mnemonic (currency),
-            gnc_numeric_to_string (value));*/
-          xaccTransBeginEdit (trans);
-          xaccSplitSetValue (sp, xaccSplitGetAmount (sp));
-          xaccTransCommitEdit (trans);
-        }
-        /*else {
-          PWARN ("Ok: Split '%s' Amount %s %s, value %s %s",
-          xaccSplitGetMemo (sp),
-          gnc_numeric_to_string (amount),
-          gnc_commodity_get_mnemonic (currency),
-          gnc_numeric_to_string (value),
-          gnc_commodity_get_mnemonic (acc_currency));
-          }*/
+        PWARN ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
+               " old amount %s %s, new amount %s",
+               trans->description, sp->memo,
+               gnc_numeric_to_string (sp->amount),
+               gnc_commodity_get_mnemonic (currency),
+               gnc_numeric_to_string (sp->value));
+        xaccTransBeginEdit (trans);
+        xaccSplitSetAmount (sp, sp->value);
+        xaccTransCommitEdit (trans);
       }
+      /*else {
+        PINFO ("Ok: Split '%s' Amount %s %s, value %s %s",
+        xaccSplitGetMemo (sp),
+        gnc_numeric_to_string (amount),
+        gnc_commodity_get_mnemonic (currency),
+        gnc_numeric_to_string (value),
+        gnc_commodity_get_mnemonic (acc_currency));
+      }*/
     }
   }
 }
@@ -536,7 +534,7 @@ xaccAccountScrubCommodity (Account *account)
     return;
   }
 
-  PERR ("account with no commodity");
+  PERR ("Account \"%s\" does not have a commodity!", account->accountName);
 }
 
 /* ================================================================ */

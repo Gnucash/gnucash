@@ -31,7 +31,7 @@
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998, 1999, 2000 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 1998-2000, 2003 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef XACC_SCRUB_H
@@ -47,7 +47,7 @@
  *    for orphaned inodes.
  *
  * The xaccTransScrubOrphans() method scrubs only the splits in the
- *    given transaction. A root account group must be provided.
+ *    given transaction. 
  *
  * The xaccAccountScrubOrphans() method performs this scrub only for the 
  *    indicated account, and not for any of its children.
@@ -58,15 +58,24 @@
  * The xaccGroupScrubOrphans() method performs this scrub for the 
  *    child accounts of this group.
  */
-void xaccTransScrubOrphans (Transaction *trans, AccountGroup *root);
+void xaccTransScrubOrphans (Transaction *trans);
 void xaccAccountScrubOrphans (Account *acc);
 void xaccAccountTreeScrubOrphans (Account *acc);
 void xaccGroupScrubOrphans (AccountGroup *grp);
 
-/** The ScrubSplit methods ensure that splits with the same commodity
- *   and currency have the same amount and value.
+/** The xaccSplitScrub method ensures that if this split has the same
+ *   commodity and currency, then it will have the same amount and value.  
+ *   If the commoidty is the currency, the split->amount is set to the 
+ *   split value.  In addition, if this split is an orphan, that is
+ *   fixed first.  If the split account doesn't have a commodity declared,
+ *   an attempt is made to fix that first.
  */
 void xaccSplitScrub (Split *split);
+
+/** The xacc*ScrubSplits() calls xaccSplitScrub() on each split
+ *    in the respective structure: transaction, account, 
+ *    account & it's children, account-group.
+ */
 void xaccTransScrubSplits (Transaction *trans);
 void xaccAccountScrubSplits (Account *account);
 void xaccAccountTreeScrubSplits (Account *account);
