@@ -21,6 +21,9 @@
 #include "gnc-err-popup.h"
 #include "gnc-gui-query.h"
 
+#include "gnc-druid-gnome.h"
+#include "gnc-druid-provider-edge-gnome.h"
+
 /* version of the gnc module system interface we require */
 int libgncmod_gnome_utils_LTX_gnc_module_system_interface = 0;
 
@@ -84,6 +87,10 @@ libgncmod_gnome_utils_LTX_gnc_module_init(int refcount) {
   if (refcount == 0) {
     gnc_options_ui_initialize ();
     gnc_html_initialize ();
+
+    /* register the druid pieces */
+    gnc_druid_gnome_register();
+    gnc_druid_provider_edge_gnome_register();
   }
 
   gnc_set_warning_message(gnc_warning_dialog_va);

@@ -48,6 +48,9 @@
 	* src/gnome-utils/gnc-druid-gnome.c: use the get_pages() method
 	  to actually build the druid.
 
+	* src/gnome-utils/gncmod-gnome-utils.c: register the gnome-druid and
+	  edge provider.
+
 2004-01-06  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/qofinstance.c: revert fix from 01-01, because it's wrong.
