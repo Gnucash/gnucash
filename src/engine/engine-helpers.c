@@ -866,7 +866,7 @@ static SCM
 gnc_queryterm2scm (QueryNewTerm_t qt)
 {
   SCM qt_scm = SCM_EOL;
-  QofQueryPredData pd = NULL;
+  QofQueryPredData *pd = NULL;
 
   qt_scm = scm_cons (gnc_query_path2scm (gncQueryTermGetParamPath (qt)),
 		    qt_scm);
@@ -940,7 +940,7 @@ static Query *
 gnc_scm2query_term_query_v2 (SCM qt_scm)
 {
   Query *q = NULL;
-  QofQueryPredData pd = NULL;
+  QofQueryPredData *pd = NULL;
   SCM scm;
   char *type = NULL;
   GSList *path = NULL;

@@ -35,10 +35,10 @@
 #include "gnc-date.h"
 #include "kvp_frame.h"
 
-typedef struct _QofQueryPredData *QofQueryPredData;
-
 /** Type of Query Core Objects (String, Date, Numeric, GUID, etc. */
 typedef const char * QofQueryCoreType;
+
+typedef struct _QofQueryPredData QofQueryPredData;
 
 /** The QofQueryAccess type defines an arbitrary function pointer
  *  for access functions.  This is needed because C doesn't have
@@ -112,37 +112,36 @@ typedef enum {
 } QofCharMatch;
 
 /** Head of Predicate Data structures.  All PData must start like this. */
-#if 0
-typedef struct query_pred_data {
-  QofQueryCoreType		type_name;	/* QUERYCORE_* */
-  QofQueryCompare	how;
-} QueryPredDataDef;
-#endif
+struct _QofQueryPredData {
+  QofQueryCoreType      type_name;  /* QUERYCORE_* */
+  QofQueryCompare how;
+};
+
 
 /** Core Data Type Predicates */
-QofQueryPredData qof_query_string_predicate (QofQueryCompare how, char *str,
+QofQueryPredData *qof_query_string_predicate (QofQueryCompare how, char *str,
 					 QofStringMatch options,
 					 gboolean is_regex);
-QofQueryPredData qof_query_date_predicate (QofQueryCompare how,
+QofQueryPredData *qof_query_date_predicate (QofQueryCompare how,
 				       QofDateMatch options, Timespec date);
-QofQueryPredData qof_query_numeric_predicate (QofQueryCompare how,
+QofQueryPredData *qof_query_numeric_predicate (QofQueryCompare how,
 					  QofNumericMatch options,
 					  gnc_numeric value);
-QofQueryPredData qof_query_guid_predicate (QofGuidMatch options, GList *guids);
-QofQueryPredData qof_query_int32_predicate (QofQueryCompare how, gint32 val);
-QofQueryPredData qof_query_int64_predicate (QofQueryCompare how, gint64 val);
-QofQueryPredData qof_query_double_predicate (QofQueryCompare how, double val);
-QofQueryPredData qof_query_boolean_predicate (QofQueryCompare how, gboolean val);
-QofQueryPredData qof_query_char_predicate (QofCharMatch options,
+QofQueryPredData *qof_query_guid_predicate (QofGuidMatch options, GList *guids);
+QofQueryPredData *qof_query_int32_predicate (QofQueryCompare how, gint32 val);
+QofQueryPredData *qof_query_int64_predicate (QofQueryCompare how, gint64 val);
+QofQueryPredData *qof_query_double_predicate (QofQueryCompare how, double val);
+QofQueryPredData *qof_query_boolean_predicate (QofQueryCompare how, gboolean val);
+QofQueryPredData *qof_query_char_predicate (QofCharMatch options,
 				       const char *chars);
-QofQueryPredData qof_query_kvp_predicate (QofQueryCompare how,
+QofQueryPredData *qof_query_kvp_predicate (QofQueryCompare how,
 				      GSList *path, const kvp_value *value);
 
 /** Copy a predicate. */
-QofQueryPredData qof_query_core_predicate_copy (QofQueryPredData pdata);
+QofQueryPredData *qof_query_core_predicate_copy (QofQueryPredData *pdata);
 
 /** Destroy a predicate. */
-void qof_query_core_predicate_free (QofQueryPredData pdata);
+void qof_query_core_predicate_free (QofQueryPredData *pdata);
 
 /** Return a printable string for a core data object.  Caller needs
  *  to g_free() the returned string.

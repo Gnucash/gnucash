@@ -254,7 +254,7 @@ void
 xaccQueryAddAccountGUIDMatch(Query *q, AccountGUIDList *guid_list,
 			     QofGuidMatch how, QueryOp op)
 {
-  QofQueryPredData pred_data;
+  QofQueryPredData *pred_data;
   GSList *param_list = NULL;
 
   if (!q) return;
@@ -301,7 +301,7 @@ xaccQueryAddStringMatch (Query* q, const char *matchstring,
 			 int case_sens, int use_regexp, QueryOp op,
 			 const char * path, ...)
 {
-  QofQueryPredData pred_data;
+  QofQueryPredData *pred_data;
   GSList *param_list;
   va_list ap;
 
@@ -327,7 +327,7 @@ xaccQueryAddNumericMatch (Query *q, gnc_numeric amount, QofNumericMatch sign,
 			  QofQueryCompare how, QueryOp op,
 			  const char * path, ...)
 {
-  QofQueryPredData pred_data;
+  QofQueryPredData *pred_data;
   GSList *param_list;
   va_list ap;
 
@@ -361,7 +361,7 @@ xaccQueryAddDateMatchTS (Query * q,
 			 QueryOp op)
 {
   Query *tmp_q = NULL;
-  QofQueryPredData pred_data;
+  QofQueryPredData *pred_data;
   GSList *param_list;
 
   if (!q || (!use_start && !use_end))
@@ -445,7 +445,7 @@ xaccQueryAddDateMatchTT(Query * q,
 void
 xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op)
 {
-  QofQueryPredData pred_data;
+  QofQueryPredData *pred_data;
   GSList *param_list;
   char chars[6];
   int i = 0;
@@ -517,7 +517,7 @@ xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
 		     QueryOp op)
 {
   GSList *param_list = NULL;
-  QofQueryPredData pred_data;
+  QofQueryPredData *pred_data;
 
   if (!q || !path || !value || !id_type)
     return;

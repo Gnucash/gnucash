@@ -33,17 +33,18 @@
 #include "BackendP.h"
 
 #include "QueryObjectP.h"
-#include "QueryCoreP.h"
 #include "QueryNewP.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofobject.h"
+#include "qofquerycore.h"
+#include "qofquerycore-p.h"
 
 static short module = MOD_QUERY;
 
 typedef struct query_new_term {
   GSList *                param_list;
-  QofQueryPredData         pdata;
+  QofQueryPredData        *pdata;
   gboolean                invert;
 
   /* These values are filled in during "compilation" of the query
@@ -448,7 +449,7 @@ static void compile_sort (QueryNewSort_t sort, GNCIdType obj)
    * If not, check if this is the default sort.
    */
   if (sort->param_fcns) {
-    sort->comp_fcn = g;ncQueryCoreGetCompare (resObj->param_type);
+    sort->comp_fcn = gnc_query_core_get_compare (resObj->param_type);
 
     /* Hrm, perhaps this is an object compare, not a core compare? */
     if (sort->comp_fcn == NULL)
@@ -482,7 +483,7 @@ static void compile_terms (QueryNew *q)
        */
 
       if (qt->param_fcns)
-        qt->pred_fcn = g;ncQueryCoreGetPredicate (resObj->param_type);
+        qt->pred_fcn = gnc_query_core_get_predicate (resObj->param_type);
       else
         qt->pred_fcn = NULL;
     }
@@ -598,7 +599,7 @@ gncQueryBuildParamList (char const *param, ...)
 }
 
 void gncQueryAddTerm (QueryNew *q, GSList *param_list,                      
-                      QofQueryPredData pred_data, QueryOp op)
+                      QofQueryPredData *pred_data, QueryOp op)
 {
   QueryNewTerm *qt;
   QueryNew *qr, *qs;
@@ -1112,7 +1113,7 @@ void gncQueryAddGUIDListMatch (QueryNew *q, GSList *param_list,
                                GList *guid_list, QofGuidMatch options,
                                QueryOp op)
 {
-  QofQueryPredData pdata;
+  QofQueryPredData *pdata;
 
   if (!q || !param_list) return;
 
@@ -1156,7 +1157,7 @@ void gncQuerySetBook (QueryNew *q, QofBook *book)
 void gncQueryAddBooleanMatch (QueryNew *q, GSList *param_list, gboolean value,
                               QueryOp op)
 {
-  QofQueryPredData pdata;
+  QofQueryPredData *pdata;
   if (!q || !param_list) return;
 
   pdata = qof_query_boolean_predicate (QOF_COMPARE_EQUAL, value);
@@ -1169,7 +1170,7 @@ void gncQueryAddBooleanMatch (QueryNew *q, GSList *param_list, gboolean value,
 void gncQueryNewInit (void)
 {
   PINFO("New Query Module Initialization");
-  g;ncQueryCoreInit ();
+  gnc_query_core_init ();
   gncQueryObjectInit ();
 }
 
@@ -1204,7 +1205,7 @@ GSList * gncQueryTermGetParamPath (QueryNewTerm_t qt)
   return qt->param_list;
 }
 
-QofQueryPredData gncQueryTermGetPredData (QueryNewTerm_t qt)
+QofQueryPredData *gncQueryTermGetPredData (QueryNewTerm_t qt)
 {
   if (!qt)
     return NULL;
@@ -1259,7 +1260,7 @@ static gboolean gncQueryTermEqual (QueryNewTerm_t qt1, QueryNewTerm_t qt2)
 
   if (qt1->invert != qt2->invert) return FALSE;
   if (param_list_cmp (qt1->param_list, qt2->param_list)) return FALSE;
-  return g;ncQueryCorePredicateEqual (qt1->pdata, qt2->pdata);
+  return qof_query_core_predicate_equal (qt1->pdata, qt2->pdata);
 }
 
 static gboolean gncQuerySortEqual (QueryNewSort_t qs1, QueryNewSort_t qs2)
@@ -1329,9 +1330,9 @@ static gchar *gncQueryPrintDateMatch (QofDateMatch d);
 static gchar *gncQueryPrintNumericMatch (QofNumericMatch n);
 static gchar *gncQueryPrintGuidMatch (QofGuidMatch g);
 static gchar *gncQueryPrintCharMatch (QofCharMatch c);
-static GString *gncQueryPrintPredData (QofQueryPredData pd);
+static GString *gncQueryPrintPredData (QofQueryPredData *pd);
 static GString *gncQueryPrintParamPath (GSList * parmList);
-static void gncQueryPrintValueForParam (QofQueryPredData pd, GString * gs);
+static void gncQueryPrintValueForParam (QofQueryPredData *pd, GString * gs);
 static void gncQueryPrintOutput (GList * output);
 
 /*
@@ -1484,7 +1485,7 @@ gncQueryPrintAndTerms (GList * terms, GList * output)
 {
   const char *prefix = "  AND Terms:";
   QueryNewTerm_t qt;
-  QofQueryPredData pd;
+  QofQueryPredData *pd;
   GSList *path;
   GList *lst;
   gboolean invert;
@@ -1528,7 +1529,7 @@ gncQueryPrintParamPath (GSList * parmList)
         Process the PredData of the AND terms
 */
 static GString *
-gncQueryPrintPredData (QofQueryPredData pd)
+gncQueryPrintPredData (QofQueryPredData *pd)
 {
   GString *gs;
 
@@ -1571,7 +1572,7 @@ gncQueryPrintStringForHow (QofQueryCompare how)
 
 
 static void
-gncQueryPrintValueForParam (QofQueryPredData pd, GString * gs)
+gncQueryPrintValueForParam (QofQueryPredData *pd, GString * gs)
 {
 
   if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_GUID))

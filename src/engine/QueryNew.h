@@ -94,7 +94,7 @@ void gncQuerySetBook (QueryNew *q, QofBook *book);
  */
 
 void gncQueryAddTerm (QueryNew *query, GSList *param_list,
-		      QofQueryPredData pred_data, QueryOp op);
+		      QofQueryPredData *pred_data, QueryOp op);
 
 void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,
 			   const GUID *guid, QueryOp op);

@@ -32,10 +32,10 @@
 static short module = MOD_QUERY;
 
 /* A function to destroy a query predicate's pdata */
-typedef void (*QueryPredDataFree) (QofQueryPredData pdata);
+typedef void (*QueryPredDataFree) (QofQueryPredData *pdata);
 
 /* A function to copy a query's predicate data */
-typedef QofQueryPredData (*QueryPredicateCopy) (QofQueryPredData pdata);
+typedef QofQueryPredData (*QueryPredicateCopy) (QofQueryPredData *pdata);
 
 /* A function to take the object, apply the get_fcn, and return
  * a printable string.  Note that this QofQueryAccess function should
@@ -138,7 +138,7 @@ static GHashTable *predEqualTable = NULL;
 /* QOF_QUERYCORE_STRING */
 
 static int string_match_predicate (gpointer object, QofQueryAccess get_fcn,
-				   QofQueryPredData pd)
+				   QofQueryPredData *pd)
 {
   query_string_t pdata = (query_string_t) pd;
   const char *s;
@@ -190,7 +190,7 @@ static int string_compare_func (gpointer a, gpointer b, gint options,
   return safe_strcmp (s1, s2);
 }
 
-static void string_free_pdata (QofQueryPredData pd)
+static void string_free_pdata (QofQueryPredData *pd)
 {
   query_string_t pdata = (query_string_t) pd;
 
@@ -204,7 +204,7 @@ static void string_free_pdata (QofQueryPredData pd)
   g_free (pdata);
 }
 
-static QofQueryPredData string_copy_predicate (QofQueryPredData pd)
+static QofQueryPredData string_copy_predicate (QofQueryPredData *pd)
 {
   query_string_t pdata = (query_string_t) pd;
 
@@ -214,7 +214,8 @@ static QofQueryPredData string_copy_predicate (QofQueryPredData pd)
 				  pdata->is_regex);
 }
 
-static gboolean string_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
+static gboolean string_predicate_equal (QofQueryPredData *p1,
+QofQueryPredData *p2)
 {
   query_string_t pd1 = (query_string_t) p1;
   query_string_t pd2 = (query_string_t) p2;
@@ -1267,7 +1268,7 @@ static void gncQueryRegisterCoreObject (char const *core_name,
 /********************************************************************/
 /* PUBLISHED API FUNCTIONS */
 
-void g;ncQueryCoreInit (void)
+void gnc_query_core_init (void)
 {
   /* Only let us initialize once */
   if (initialized) return;
@@ -1297,13 +1298,13 @@ void gncqofquerycore.hutdown (void)
   g_hash_table_destroy (predEqualTable);
 }
 
-QueryPredicate g;ncQueryCoreGetPredicate (char const *type)
+QueryPredicate gnc_query_core_get_predicate (char const *type)
 {
   g_return_val_if_fail (type, NULL);
   return g_hash_table_lookup (predTable, type);
 }
 
-QueryCompare g;ncQueryCoreGetCompare (char const *type)
+QueryCompare gnc_query_core_get_compare (char const *type)
 {
   g_return_val_if_fail (type, NULL);
   return g_hash_table_lookup (cmpTable, type);
@@ -1346,7 +1347,7 @@ char * qof_query_core_to_string (char const *type, gpointer object,
   return toString (object, get);
 }
 
-gboolean g;ncQueryCorePredicateEqual (QofQueryPredData p1, QofQueryPredData p2)
+gboolean qof_query_core_predicate_equal (QofQueryPredData p1, QofQueryPredData p2)
 {
   QueryPredicateEqual pred_equal;
 

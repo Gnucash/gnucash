@@ -83,6 +83,13 @@ foreach (@files)
 		s/string_match_t/QofStringMatch/g;
 		s/query_compare_t/QofQueryCompare/g;
 
+		s/gncQueryCoreInit/gnc_query_core_init/g;
+		s/gncQueryCoreShutdown/gnc_query_core_shutdown/g;
+		s/gncQueryCoreGetPredicate/gnc_query_core_get_predicate/g;
+		s/gncQueryCoreGetCompare/gnc_query_core_get_compare/g;
+		
+		s/gncQueryCorePredicateEqual/qof_query_core_predicate_equal/g;
+		
 		print OF $_;
 	}
    close OF;
