@@ -43,7 +43,7 @@
  * as it can lead to scrambled data.
  * hack alert -- this should be a configurable parameter.
  */
-int unsafe_ops = 0;
+int unsafe_ops = 1;
 
 int next_free_unique_account_id = 0;
 

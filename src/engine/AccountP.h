@@ -44,6 +44,7 @@
 #define __XACC_ACCOUNT_P_H__
 
 #include "config.h"
+#include "AccInfo.h"
 #include "Transaction.h"
 
 /** STRUCTS *********************************************************/
@@ -86,6 +87,13 @@ struct _account {
    * and format the transaction data.
    */
   short     type;
+
+  /* The accInfo field provides a hook for storing additional 
+   * account-type specific data.  Thus, it will contain different
+   * structures depending on whether the account is a bank, investment
+   * or other type of account.  Implemented as a union.
+   */
+  AccInfo *accInfo;
 
   /* The currency field denotes the default currency in which all
    * splits in this account are denominated.  It's value *MUST*

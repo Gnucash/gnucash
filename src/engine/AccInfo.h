@@ -1,6 +1,6 @@
 /********************************************************************\
  * AccInfo.h -- the Account Info data structures                    *
- * Copyright (C) 1998 Linas Vepstas                                 *
+ * Copyright (C) 1998, 1999 Linas Vepstas                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -15,11 +15,6 @@
  * You should have received a copy of the GNU General Public License*
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
- *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
 /*
@@ -99,21 +94,21 @@ enum
 
 char * xaccAccountGetTypeStr (int type);
 
-struct _BankAcct 
-{
-  char * bankid;       /* routing and transit number */
-  char * branchid;     /* branch office bank identifier */  
-  char * acctid;       /* account number */
-  char * accttype;     /* account type */
-  char * acctkey;      /* checksum key */
-  int acctype;         /* account type.  Must be one of 
-                        * CHECKING = 10;
-                        * SAVINGS = 11;
-                        * MONEYMRKT = 12;
-                        * CREDITLINE = 13;
-                        */
+typedef struct _BankAcct BankAcct;
+typedef struct _InvAcct  InvAcct;
+typedef union _AccInfo AccInfo;
 
-};
+InvAcct * xaccMallocInvAcct (void);
+void      xaccInitInvAcct (InvAcct *iacc);
+void      xaccFreeInvAcct (InvAcct *iacc);
 
+/*
+ * The xaccInvAcctSetPriceSrc() and xaccInvAcctGetPriceSrc()
+ *   routines are used to get and set a string that identifies the current
+ *   source for investment pricing info.
+ *   Currently supported values include "yahoo", "fidelity", "troweprice", etc.
+ */
+void      xaccInvAcctSetPriceSrc (InvAcct *iacc, const char *src);
+char    * xaccInvAcctGetPriceSrc (InvAcct *iacc);
 
 #endif /* __ACCINFO_H__ */
