@@ -81,11 +81,11 @@ char * guid_to_string(const GUID * guid);
 
 
 /* Given a string, decode the id into the guid if guid is non-NULL.
- * The function returns true if the string was a valid 32 character
+ * The function returns TRUE if the string was a valid 32 character
  * hexadecimal number. This function accepts both upper and lower case
- * hex digits. If the return value if false, the effect on guid is
+ * hex digits. If the return value is FALSE, the effect on guid is
  * undefined. */
-int string_to_guid(const char * string, GUID * guid);
+gboolean string_to_guid(const char * string, GUID * guid);
 
 
 /* Given two GUIDs, return TRUE if they are non-NULL and equal.
