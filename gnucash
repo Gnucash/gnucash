@@ -2,7 +2,7 @@
 
 export GNC_BOOTSTRAP_SCM=./share/scm/bootstrap.scm
 export GNC_SCM_LOAD_PATH='("./share/scm")'
-export GNC_DEBUG=f
+# export GNC_DEBUG=t
 
 # Run whichever one was built last.
 exec ./gnucash.bin \
