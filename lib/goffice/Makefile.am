@@ -4,6 +4,9 @@ AM_CFLAGS = $(GLIB_CFLAGS) $(ART_CFLAGS) $(GNOME_CFLAGS) $(GSF_CFLAGS)
 
 noinst_LTLIBRARIES = libgoffice.la
 
+BUILT_SOURCES = \
+	paths.h
+
 libgoffice_la_LIBADD = 				\
 	utils/libgoffice-utils.la		\
 	app/libgoffice-app.la			\
@@ -16,6 +19,7 @@ libgoffice_la_LIBADD = 				\
 	${GLIB_LIBS}
 
 libgoffice_la_SOURCES = 	\
+	$(BUILT_SOURCES)        \
 	goffice.c		\
 	goffice.h		\
 	goffice-config.h	\
