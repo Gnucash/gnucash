@@ -1,3 +1,7 @@
+2003-01-30  Derek Atkins  <derek@ihtfp.com>
+
+	* po/np.po -- add the proper "Plural" header so it builds again.
+
 2003-01-29  Matthew Vanecek <mevanecek@yahoo.com>
 	
 	* src/backend/postgres/Makefile.am: Changed the .sql.c target to

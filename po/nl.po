@@ -13,6 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: src/app-file/gnome/gnc-file-dialog.c:77 src/app-file/gnc-file.c:530
 #: src/gnome/window-acct-tree.c:875 src/gnome/window-reconcile.c:1451
