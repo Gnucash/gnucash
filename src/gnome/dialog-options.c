@@ -1909,6 +1909,12 @@ gnc_options_dialog_help_stub_cb(GtkWidget * w, gpointer data) {
 static int
 gnc_options_dialog_close_stub_cb(GtkWidget * w, gpointer data) {
   GNCOptionWin * window = data;
+
+  gtk_signal_disconnect_by_func(GTK_OBJECT(window->container),
+                                GTK_SIGNAL_FUNC
+                                (gnc_options_dialog_close_stub_cb), 
+                                data);
+
   if(window->close_cb) {
     (window->close_cb)(window, window->close_cb_data);
     return TRUE;
@@ -1982,6 +1988,10 @@ gnc_options_dialog_new(gboolean make_toplevel) {
                      retval);
     
   gtk_signal_connect(GTK_OBJECT(close_button), "clicked",
+                     GTK_SIGNAL_FUNC(gnc_options_dialog_close_stub_cb),
+                     retval);
+  
+  gtk_signal_connect(GTK_OBJECT(retval->container), "destroy",
                      GTK_SIGNAL_FUNC(gnc_options_dialog_close_stub_cb),
                      retval);
   

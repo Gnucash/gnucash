@@ -1,3 +1,10 @@
+2001-04-18  Bill Gribble  <grib@billgribble.com>
+
+	* src/gnome/dialog-options.c: don't destroy options dialog twice.
+
+	* src/gnome/window-main.c: hopefully last MDI fixes; rearrange 
+	menu and replace "New Window" with "Move to New Window."
+
 2001-04-18  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnc-ui-util.c (gnc_ui_account_get_balance): use current

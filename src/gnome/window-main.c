@@ -75,19 +75,6 @@ gnc_main_window_destroy_cb(GtkObject * w) {
 
 
 /********************************************************************
- * gnc_main_window_remove_view_cb()
- * we only have one view per child, so destroy the child
- ********************************************************************/
-
-static gint
-gnc_main_window_remove_view_cb(GnomeMDI * mdi, GnomeMDIChild * child, 
-                               gpointer data) {
-  GNCMainInfo * mainwin = data;
-  gtk_object_destroy(GTK_OBJECT(child));
-  return TRUE;
-}
-
-/********************************************************************
  * gnc_main_window_app_destroyed_cb()
  * called when a top-level GnomeApp is destroyed.
  ********************************************************************/
@@ -96,6 +83,7 @@ static void
 gnc_main_window_app_destroyed_cb(GnomeApp * app, gpointer user_data) {
   GNCMainInfo * mainwin = user_data;
   GNCMainChildInfo * mc = NULL;
+  GnomeMDI * mdi = mainwin->mdi;
   GtkWidget *toolbar;
   GList * child; 
 
@@ -243,11 +231,15 @@ static void
 gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used, 
                                  gpointer data) {
   GNCMainInfo      * mainwin = data;
-  GNCMainChildInfo * childwin = 
-    gtk_object_get_user_data(GTK_OBJECT(mdi->active_child));
+  GNCMainChildInfo * childwin = NULL;
   GnomeUIInfo      * hintinfo;
   GtkWidget        * oldbar;
-  GnomeApp         * new_app = gnome_mdi_get_app_from_view(childwin->contents);
+  GnomeApp         * new_app = NULL; 
+
+  if(mdi && mdi->active_child) {
+    childwin = gtk_object_get_user_data(GTK_OBJECT(mdi->active_child));
+    new_app = gnome_mdi_get_app_from_view(childwin->contents);
+  }
 
   if(childwin && childwin->toolbar) {
     if(childwin->app && (childwin->app == new_app)) {
@@ -322,19 +314,6 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
       gnome_app_install_menu_hints(new_app, hintinfo);
     }
   }
-}
-
-
-/********************************************************************
- * gnc_main_window_view_changed_cb()
- * called when the view changes. 
- ********************************************************************/
-
-static void
-gnc_main_window_view_changed_cb(GnomeMDI * mdi, GnomeApp * app, 
-                                gpointer data) {
-  GNCMainInfo * mainwin = data;
-  /* don't do anything ATM */
 }
 
 
@@ -443,9 +422,6 @@ gnc_main_window_new(void) {
   gtk_signal_connect(GTK_OBJECT(retval->mdi), "destroy",
                      GTK_SIGNAL_FUNC(gnc_main_window_destroy_cb),
                      retval);
-  gtk_signal_connect(GTK_OBJECT(retval->mdi), "remove_view",
-                     GTK_SIGNAL_FUNC(gnc_main_window_remove_view_cb),
-                     retval);
   gtk_signal_connect(GTK_OBJECT(retval->mdi), "app_created",
                      GTK_SIGNAL_FUNC(gnc_main_window_app_created_cb),
                      retval);
@@ -455,10 +431,6 @@ gnc_main_window_new(void) {
   gtk_signal_connect(GTK_OBJECT(retval->mdi), "child_changed",
                      GTK_SIGNAL_FUNC(gnc_main_window_child_changed_cb),
                      retval);
-  gtk_signal_connect(GTK_OBJECT(retval->mdi), "view_changed",
-                     GTK_SIGNAL_FUNC(gnc_main_window_view_changed_cb),
-                     retval);
-  
   return retval;
 }
 
@@ -574,13 +546,13 @@ gnc_main_window_file_new_window_cb(GtkWidget * widget, GnomeMDI * mdi) {
   char * location;
   char * label;
   
-  if(mdi->active_child) {
+  if(mdi->active_child && mdi->active_view) {
     if(!strcmp(mdi->active_child->name, _("Accounts"))) {
       gnc_main_window_open_accounts(TRUE);
     }
     else {
-      GnomeMDIChild * child = 
-        gnc_main_window_create_child(mdi->active_child->name);
+      GnomeMDIChild * child = mdi->active_child;
+      gnome_mdi_remove_view(mdi, mdi->active_view, FALSE);
       gnome_mdi_add_toplevel_view(mdi, child);
     }
   }
@@ -737,19 +709,19 @@ gnc_main_window_create_menus(GNCMainInfo * maininfo) {
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      N_("New _Window"),
-      N_("Open a new top-level GnuCash window"),
-      gnc_main_window_file_new_window_cb, NULL, NULL, 
-      GNOME_APP_PIXMAP_NONE, NULL, 0, 0, NULL
-    },    
-    {
-      GNOME_APP_UI_ITEM,
       N_("New _Account Tree"),
       N_("Open a new account tree view"),
       gnc_main_window_file_new_account_tree_cb, NULL, NULL, 
       GNOME_APP_PIXMAP_NONE, NULL, 0, 0, NULL
     },    
     GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Move to New Window"),
+      N_("Open a new top-level GnuCash window for the current view"),
+      gnc_main_window_file_new_window_cb, NULL, NULL, 
+      GNOME_APP_PIXMAP_NONE, NULL, 0, 0, NULL
+    },    
     {
       GNOME_APP_UI_ITEM,
       N_("Close _Window"),
