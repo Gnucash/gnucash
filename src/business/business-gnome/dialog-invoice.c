@@ -2398,7 +2398,7 @@ gnc_invoice_search_edit (gpointer start, gpointer book)
 }
 
 DialogQueryList *
-gnc_invoice_show_bills_due (GNCBook *book, int days_in_advance)
+gnc_invoice_show_bills_due (GNCBook *book, double days_in_advance)
 {
   GNCIdType type = GNC_INVOICE_MODULE_NAME;
   Query *q;
@@ -2406,6 +2406,7 @@ gnc_invoice_show_bills_due (GNCBook *book, int days_in_advance)
   time_t end_date;
   GList *res;
   gint len;
+  Timespec ts;
   static GList *param_list = NULL;
   static GNCDisplayListButton buttons[] = {
     { N_("View/Edit Bill"), edit_invoice_direct },
@@ -2449,7 +2450,11 @@ gnc_invoice_show_bills_due (GNCBook *book, int days_in_advance)
   if (days_in_advance < 0)
     days_in_advance = 0;
   end_date += days_in_advance*60*60*24;
-  xaccQueryAddDateMatchTT(q, FALSE, 0, TRUE, end_date, QUERY_AND);
+
+  ts.tv_sec = (gint64) end_date;
+  ts.tv_nsec = 0;
+  pred_data = gncQueryDatePredicate (COMPARE_LTE, DATE_MATCH_NORMAL, ts);
+  gncQueryAddTerm (q, g_slist_prepend(NULL, INVOICE_DUE), pred_data, QUERY_AND);
 
   res = gncQueryRun(q);
   len = g_list_length (res);

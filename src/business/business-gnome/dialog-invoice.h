@@ -33,6 +33,6 @@ GNCSearchWindow * gnc_invoice_search_edit (gpointer start, gpointer book);
 
 void gnc_business_call_owner_report (GncOwner *owner, Account *acc);
 
-DialogQueryList *gnc_invoice_show_bills_due (GNCBook *book, int days_in_advance);
+DialogQueryList *gnc_invoice_show_bills_due (GNCBook *book, double days_in_advance);
 
 #endif /* GNC_DIALOG_INVOICE_H_ */

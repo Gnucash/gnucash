@@ -19,6 +19,12 @@
 	* src/business/businss-gnome/gw-business-gnome-spec.scm: wrap the
 	  new due-bills api
 	* src/engine/gnc-book.c: forcibly signal a book destroy event
+
+	* src/business/business-gnome/dialog-invoice.[ch]: pass a double
+	  instead of an int, because guile-1.6 sucks.  Also fix the Query
+	  to actually include the Due Date of the invoice.
+	* src/business/business-gnome/gw-business-gnome-spec.scm:
+	  change the int to a double on the bills-due api
 	
 2003-05-18  Derek Atkins  <derek@ihtfp.com>
 
