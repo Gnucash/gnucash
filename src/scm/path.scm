@@ -17,8 +17,8 @@
 
 (define (gnc:locale-prefixes)
   (let* ((locale (setlocale LC_MESSAGES))
-         (strings (cond ((not (string? locale)) ())
-                        ((equal? locale "C") ())
+         (strings (cond ((not (string? locale)) '())
+                        ((equal? locale "C") '())
                         ((<= (string-length locale) 2) (list locale))
                         (else (list (substring locale 0 2) locale)))))
     (reverse (cons "C" strings))))
