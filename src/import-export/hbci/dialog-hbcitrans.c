@@ -166,7 +166,13 @@ gnc_hbci_trans (GtkWidget *parent,
     /* FIXME: Replace "EUR" by account-dependent string here. */
     printf("Got value as %s .\n", 
 	   HBCI_Value_toReadableString (HBCI_Transaction_value (trans)));
-    
+    if (HBCI_Value_getValue (HBCI_Transaction_value (trans)) == 0.0) {
+      printf("Oops, value is zero. Cancelling HBCI job.\n");
+      gtk_widget_destroy (GTK_WIDGET (dialog));
+      HBCI_Transaction_delete (trans);
+      return NULL;
+    }
+
     {
       /* Create a Do-Transaction (Transfer) job. */
       HBCI_OutboxJobTransfer *transfer_job;
@@ -185,7 +191,7 @@ gnc_hbci_trans (GtkWidget *parent,
 	if (interactor)
 	  GNCInteractor_show (interactor);
 
-	/*HBCI_Hbci_setDebugLevel(1);*/
+	HBCI_Hbci_setDebugLevel(1);
 	err = HBCI_API_executeQueue (api, TRUE);
 	g_assert (err);
 	if (!HBCI_Error_isOk(err)) {
@@ -199,7 +205,8 @@ gnc_hbci_trans (GtkWidget *parent,
 	  HBCI_Error_delete (err);
 	  gnc_hbci_debug_outboxjob (job);
 	  gtk_widget_destroy (GTK_WIDGET (dialog));
-	  return trans;
+	  HBCI_Transaction_delete (trans);
+	  return NULL;
 	}
 	/*HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);*/
 	HBCI_Error_delete (err);

@@ -470,8 +470,8 @@ string and 'directories' must be a list of strings."
   ;; add the menu option to edit style sheets 
   (gnc:add-extension
    (gnc:make-menu-item 
-    (_ "_Style Sheets...")
-    (_ "Edit report style sheets.")
+    (N_ "_Style Sheets...")
+    (N_ "Edit report style sheets.")
     (list gnc:window-name-main "Edit" "_Preferences...")
     (lambda ()
       (gnc:style-sheet-dialog-open))))
@@ -479,8 +479,8 @@ string and 'directories' must be a list of strings."
   ;; the Welcome to GnuCash-1.6 extravaganza 
   (gnc:add-extension 
    (gnc:make-menu-item 
-    (_ "Welcome Extravaganza")
-    (_ "Welcome-to-GnuCash screen")
+    (N_ "Welcome Extravaganza")
+    (N_ "Welcome-to-GnuCash screen")
     (list gnc:window-name-main gnc:menuname-reports gnc:menuname-utility "")
     (lambda ()
       (gnc:main-window-open-report (gnc:make-welcome-report) #f))))

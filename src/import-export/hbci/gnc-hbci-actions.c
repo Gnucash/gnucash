@@ -103,7 +103,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
     if (interactor)
       GNCInteractor_show (interactor);
 
-    HBCI_Hbci_setDebugLevel(0);
+    HBCI_Hbci_setDebugLevel(1);
     err = HBCI_API_executeQueue (api, TRUE);
     g_assert (err);
     if (!HBCI_Error_isOk(err)) {
@@ -130,6 +130,23 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
       int choose1;
       Timespec ts1, ts2;
 	    
+      /*const HBCI_AccountBalance *accBal = 
+	HBCI_OutboxJobGetBalance_getBalance(balance_job);
+      const HBCI_Balance *notedBal = 
+	HBCI_AccountBalance_notedBalance(accBal);
+      const HBCI_Balance *bookedBal = 
+	HBCI_AccountBalance_bookedBalance(accBal);
+      const HBCI_Value *resultvalue = 
+	HBCI_Balance_value(notedBal);
+      printf("Noted balance: %s for account no. %s.\n",
+	     HBCI_Value_toReadableString(resultvalue), // this ought to be free'd
+	     HBCI_Account_accountId (h_acc));
+      resultvalue = HBCI_Balance_value(bookedBal);
+      printf("Booked balance: %s for account no. %s \n",
+	     HBCI_Value_toReadableString(resultvalue),
+	     HBCI_Account_accountId (h_acc));*/
+
+
       acc_bal = HBCI_OutboxJobGetBalance_getBalance (balance_job);
       bal1 = HBCI_AccountBalance_notedBalance (acc_bal);
       bal2 = HBCI_AccountBalance_bookedBalance (acc_bal);
@@ -146,7 +163,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
       val = HBCI_Balance_value (choose1 ? bal1 : bal2);
 		  
       gnc_verify_dialog(TRUE,
-			"Result of HBCI job: \nAccount %s balance is %f.",
+			"Result of HBCI job: \nAccount %s balance is %f\n.",
 			(choose1 ? "noted" : "booked"),
 			HBCI_Value_getValue (val));
     }
@@ -230,7 +247,7 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     if (interactor)
       GNCInteractor_show (interactor);
 
-    HBCI_Hbci_setDebugLevel(0);
+    HBCI_Hbci_setDebugLevel(1);
     err = HBCI_API_executeQueue (api, TRUE);
     g_assert (err);
     if (!HBCI_Error_isOk(err)) {
@@ -262,7 +279,7 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
 }
 
 
-
+/* list_HBCI_Transaction_foreach callback */
 static void *trans_list_cb (const HBCI_Transaction *trans, void *user_data)
 {
   time_t current_time; 
@@ -288,9 +305,9 @@ static void *trans_list_cb (const HBCI_Transaction *trans, void *user_data)
   /* Date / Time */
   xaccTransSetDateSecs(transaction, 
 		       HBCI_Date_to_time_t (HBCI_Transaction_date (trans)));
-  xaccTransSetDatePostedSecs(transaction, 
+  /*xaccTransSetDatePostedSecs(transaction, 
 			     HBCI_Date_to_time_t 
-			     (HBCI_Transaction_valutaDate (trans)));
+			     (HBCI_Transaction_valutaDate (trans)));*/
   current_time = time(NULL);
   xaccTransSetDateEnteredSecs(transaction, mktime(localtime(&current_time)));
 
@@ -306,10 +323,10 @@ static void *trans_list_cb (const HBCI_Transaction *trans, void *user_data)
   xaccTransAppendSplit(transaction, split);
   xaccAccountInsertSplit(gnc_acc, split);
 
-  gnc_amount = double_to_gnc_numeric(HBCI_Value_getValue 
-				     (HBCI_Transaction_value (trans)),
-				     xaccAccountGetCommoditySCU(gnc_acc),
-				     GNC_RND_ROUND);
+  gnc_amount = double_to_gnc_numeric
+    (HBCI_Value_getValue (HBCI_Transaction_value (trans)),
+     xaccAccountGetCommoditySCU(gnc_acc),
+     GNC_RND_ROUND);
   xaccSplitSetBaseValue(split, gnc_amount, xaccAccountGetCommodity(gnc_acc));
     
   /* Also put the ofx transaction name in the splits memo field, or
@@ -391,9 +408,8 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc)
       
       amount = double_to_gnc_numeric 
 	(HBCI_Value_getValue (HBCI_Transaction_value (trans)),
-	 100, GNC_RND_ROUND); 
-      /* FIXME: This '100' must go away and instead some function of
-       * the account's currency has to be used here. */
+	 xaccAccountGetCommoditySCU(gnc_acc),
+	 GNC_RND_ROUND); 
       description = g_strdup_printf("HBCI to %s", 
 				    HBCI_Transaction_otherAccountId (trans));
       

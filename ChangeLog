@@ -1,3 +1,8 @@
+2002-10-01  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-actions.c: More work and fixes
+	for balance/transaction retrieval.
+
 2002-09-30  Derek Atkins <derek@ihtfp.com>
 	* get (alpha) qif-io-core to load again and "make check" to
 	  start working (sort-of).  Still needs more work.
