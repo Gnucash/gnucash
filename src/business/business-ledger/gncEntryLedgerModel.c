@@ -85,17 +85,17 @@ static const char * get_taxtable_label (VirtualLocation virt_loc, gpointer data)
 
 static const char * get_taxable_label (VirtualLocation virt_loc, gpointer data)
 {
-  return _("T?");
+  return _("Taxable?");
 }
 
 static const char * get_taxincluded_label (VirtualLocation virt_loc, gpointer data)
 {
-  return _("TI");
+  return _("Tax Included?");
 }
 
 static const char * get_inv_label (VirtualLocation virt_loc, gpointer data)
 {
-  return _("I?");
+  return _("Invoiced?");
 }
 
 static const char * get_value_label (VirtualLocation virt_loc, gpointer data)
