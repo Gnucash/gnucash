@@ -276,6 +276,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
   /* get the current time and reset the dividing row */
   present = gnc_timet_get_today_end ();
+
   if (info->first_pass)
   {
     if (default_account)
@@ -292,6 +293,28 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         has_last_num = TRUE;
       }
     }
+
+    /* set the completion character for the xfer cells */
+    gnc_combo_cell_set_complete_char
+      ((ComboCell *)
+       gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
+       gnc_get_account_separator ());
+  
+    gnc_combo_cell_set_complete_char
+      ((ComboCell *)
+       gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL),
+       gnc_get_account_separator ());
+  
+    /* set the confirmation callback for the reconcile cell */
+    gnc_recn_cell_set_confirm_cb
+      ((RecnCell *)
+       gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
+       gnc_split_register_recn_cell_confirm, reg);
+  
+    /* load up account names into the transfer combobox menus */
+    gnc_split_register_load_xfer_cells (reg, default_account);
+    gnc_split_register_load_recn_cells (reg);
+    gnc_split_register_load_type_cells (reg);
   }
 
   table->model->dividing_row = -1;
@@ -512,29 +535,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
   gnc_split_register_show_trans (reg, table->current_cursor_loc.vcell_loc);
 
-  /* set the completion character for the xfer cells */
-  gnc_combo_cell_set_complete_char
-    ((ComboCell *)
-     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
-     gnc_get_account_separator ());
-
-  gnc_combo_cell_set_complete_char
-    ((ComboCell *)
-     gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL),
-     gnc_get_account_separator ());
-
-  /* set the confirmation callback for the reconcile cell */
-  gnc_recn_cell_set_confirm_cb
-    ((RecnCell *)
-     gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
-     gnc_split_register_recn_cell_confirm, reg);
-
   /* enable callback for cursor user-driven moves */
   gnc_table_control_allow_move (table->control, TRUE);
-
-  gnc_split_register_load_xfer_cells (reg, default_account);
-  gnc_split_register_load_recn_cells (reg);
-  gnc_split_register_load_type_cells (reg);
 }
 
 static void
