@@ -223,6 +223,7 @@ Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
 Rob Browning <rlb@cs.utexas.edu> for perl, scheme & GTK plotting
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
 Jeremey Collins <linux@cyberramp.net> for GnoMoney & GTK port
+Bob Drzyzgula <bob@mostly.com> for budgeting design notes
 Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
@@ -232,6 +233,6 @@ Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
-Henning Spruth <spruth@bigfoot.com> for German translations
+Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
 ... and I am sure that I have missed many others ...
 
