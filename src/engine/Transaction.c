@@ -498,7 +498,10 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 
    /* since the date has changed, we need to be careful to 
     * make sure all associated splits are in proper order
-    * in thier accounts
+    * in thier accounts.  The easiest way of ensuring this
+    * is to remove and reinsert every split. The reinsertion
+    * process will place the split in the correct date-sorted
+    * order.
     */
 
    split = &(trans->source_split);
