@@ -3,8 +3,9 @@
 ********** ALPHA DEVELOPMENT RELEASE ********
 
 THIS IS VERSION 1.1, WHICH IS AN ALPHA RELEASE,
-AND VERY, VERY BROKEN.  IT IS FOR DEVELOPERS ONLY!!
-IT IS GAURENTEED TO CORRUPT DATA!!
+AND IS OFTEN BROKEN.  IT IS FOR DEVELOPERS AND
+A FEW BRAVE, SMART USERS!!
+IT MIGHT CORRUPT DATA!!
 
 IF YOU WANT TO USE XACC, USE VERSION 1.0.17 INSTEAD!!
 ##############################################
@@ -35,6 +36,9 @@ of the features of GnuCash are:
     individually (one per account) or in portfolio
     of accounts (a group of accounts that can be 
     displayed together).  
+  - Multiple Currencies. Multiple currencies are 
+    supported, as well as currency trading accounts.
+    Note this is still broken in many ways...
   - Quicken File Import. Import Quicken QIF files.
 
 Advanced Features
