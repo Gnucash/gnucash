@@ -428,16 +428,21 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b)
  *  gnc_numeric_zero_p
  ********************************************************************/
 
-int
-gnc_numeric_zero_p(gnc_numeric a) {
-  if(gnc_numeric_check(a)) {
+gboolean
+gnc_numeric_zero_p(gnc_numeric a) 
+{
+  if(gnc_numeric_check(a)) 
+  {
     return 0;
   }
-  else {
-    if((a.num == 0) && (a.denom != 0)) {
+  else 
+  {
+    if((a.num == 0) && (a.denom != 0)) 
+    {
       return 1;
     }
-    else {
+    else 
+    {
       return 0;
     }
   }
@@ -447,16 +452,21 @@ gnc_numeric_zero_p(gnc_numeric a) {
  *  gnc_numeric_negative_p
  ********************************************************************/
 
-int
-gnc_numeric_negative_p(gnc_numeric a) {
-  if(gnc_numeric_check(a)) {
+gboolean
+gnc_numeric_negative_p(gnc_numeric a) 
+{
+  if(gnc_numeric_check(a)) 
+  {
     return 0;
   }
-  else {
-    if((a.num < 0) && (a.denom != 0)) {
+  else 
+  {
+    if((a.num < 0) && (a.denom != 0)) 
+    {
       return 1;
     }
-    else {
+    else 
+    {
       return 0;
     }
   }
@@ -466,21 +476,25 @@ gnc_numeric_negative_p(gnc_numeric a) {
  *  gnc_numeric_positive_p
  ********************************************************************/
 
-int
-gnc_numeric_positive_p(gnc_numeric a) {
-  if(gnc_numeric_check(a)) {
+gboolean
+gnc_numeric_positive_p(gnc_numeric a) 
+{
+  if(gnc_numeric_check(a)) 
+  {
     return 0;
   }
-  else {
-    if((a.num > 0) && (a.denom != 0)) {
+  else 
+  {
+    if((a.num > 0) && (a.denom != 0)) 
+    {
       return 1;
     }
-    else {
+    else 
+    {
       return 0;
     }
   }
 }
-
 
 /********************************************************************
  *  gnc_numeric_compare
@@ -663,19 +677,6 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
   return gnc_numeric_convert(sum, denom, how);                             
 }
 
-
-/********************************************************************
- *  gnc_numeric_add_fixed
- ********************************************************************/
-
-gnc_numeric
-gnc_numeric_add_fixed(gnc_numeric a, gnc_numeric b) 
-{
-  return gnc_numeric_add(a, b, GNC_DENOM_AUTO, 
-                         GNC_DENOM_FIXED | GNC_RND_NEVER);
-}
-
-
 /********************************************************************
  *  gnc_numeric_sub
  ********************************************************************/
@@ -693,19 +694,6 @@ gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
   nb.num = -nb.num;
   return gnc_numeric_add (a, nb, denom, how);
 }
-
-
-/********************************************************************
- *  gnc_numeric_sub_fixed
- ********************************************************************/
-
-gnc_numeric
-gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b) 
-{
-  return gnc_numeric_sub(a, b, GNC_DENOM_AUTO, 
-                         GNC_DENOM_FIXED | GNC_RND_NEVER);
-}
-
 
 /********************************************************************
  *  gnc_numeric_mul
