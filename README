@@ -353,7 +353,7 @@ Linas Vepstas <linas@linas.org> liked what he saw: the GUI was slick,
    register window code completely redesigned and made mostly 
    Motif-(and GUI-)independent.  Did some prototype OFX work.
 
-Jeremy Collins <linux@cyberramp.net> publicized the GnoMoney project 
+Jeremy Collins <jcollins@gnucash.org> publicized the GnoMoney project 
    widely and broadly, and then changed its name to GnuCash.  Jeremy
    created the gnucash.org web site, registered the domain, got the 
    initial GTK/gnome code working.
@@ -368,7 +368,7 @@ Fixes & Patches:
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
-Jeremey Collins <linux@cyberramp.net> for GnoMoney & GTK port
+Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
 Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
 Tyson Dowd   <tyson@tyse.net> for config/make patches & debian maint.
