@@ -1,5 +1,7 @@
 2001-08-08  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/ledger-core/SplitLedger.c: fix bugs
+
 	* src/register/register-gnome/pricecell-gnome.c: better 'return'
 	handling.
 
