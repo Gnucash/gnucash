@@ -81,7 +81,14 @@ QofBook * qof_book_new (void);
     associated with it. */
 void      qof_book_destroy (QofBook *book);
 
-/** \return The table of entities of the given type. 
+/** \return The table of entities of the given type.  
+ *
+ *  When an object's constructor calls qof_instance_init(), a
+ *  reference to the object is stored in the book.  The book stores
+ *  all the references to initialized instances, sorted by type.  This
+ *  function returns a collection of the references for the specified
+ *  type.
+ * 
  *  If the collection doesn't yet exist for the indicated type,
  *  it is created.  Thus, this routine is gaurenteed to return
  *  a non-NULL value.  (Unless the system malloc failed (out of 
@@ -94,11 +101,11 @@ typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);
 void qof_book_foreach_collection (QofBook *, QofCollectionForeachCB, gpointer);
 
 /** \return The kvp data for the book.
- *  Note that the boom KVP data is persistant, and is stored/retrevied
+ *  Note that the book KVP data is persistant, and is stored/retrieved
  *  from the file/database.  Thus, the book KVP is the correct place to
  *  store data that needs to be persistant accross sessions (or shared
  *  between multiple users).  To store application runtime data, use
- *  qof_book_set_data() isntead.
+ *  qof_book_set_data() instead.
  */
 #define qof_book_get_slots(book) qof_instance_get_slots(QOF_INSTANCE(book))
 
@@ -120,7 +127,7 @@ void qof_book_set_data (QofBook *book, const char *key, gpointer data);
  */
 void qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFinalCB);
 
-/** Retreives arbitrary pointers to structs stored by qof_book_set_data. */
+/** Retrieves arbitrary pointers to structs stored by qof_book_set_data. */
 gpointer qof_book_get_data (QofBook *book, const char *key);
 
 /** DOCUMENT ME! */
@@ -137,7 +144,7 @@ gboolean qof_book_shutting_down (QofBook *book);
  *    anything about saving.  Its just that whenever data is modified,
  *    the 'dirty' flag is set.  This routine returns the value of the 
  *    'dirty' flag.  Its up to the backend to periodically reset this 
- *    flag, when it acutally does save the data.)
+ *    flag, when it actually does save the data.)
  */
 gboolean qof_book_not_saved (QofBook *book);
 

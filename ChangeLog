@@ -9,6 +9,11 @@
 	  - add indenting of trace file according to ENTER/LEAVE stack depth
 	  - have ENTER report file name of function along with function name
 
+	Chris Shoemaker's typo-fix patch.
+	* src/engine/qofbook.h:
+	* src/engine/qofid.h:
+	  general fixed typos and comments
+
 2004-12-29  Christian Stimming  <stimming@tuhh.de>
 
 	* src/tax/us/txf-de_DE.scm: Add Tax TXF categories for the de_DE
