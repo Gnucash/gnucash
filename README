@@ -426,7 +426,7 @@ Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work.
 Jon K}re Hellan <jk@isdn-a33.itea.ntnu.no> misc core dump fixes
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
-Ben Kelly <ben.kelly@ieee.org> for motif menu bug fix & core dump fix
+Ben Kelly <ben.kelly@ieee.org> for motif menu bug fix, core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
 Sven Kuenzler <sk@xgm.de> for SuSE README file
 Graham Leggett <minfrin@sharp.fm> for fixing a hang
