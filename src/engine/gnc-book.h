@@ -112,7 +112,7 @@ gboolean gnc_book_load (GNCBook *book);
  *       ETXTBSY -- book id is in use; it's locked by someone else.
  *       ENOSYS  -- unsupported URI type.
  *       ERANGE  -- file path too long
- *       ENOLCK  -- book not open when SessionSave() was called.
+ *       ENOLCK  -- book not open when gnc_book_save() was called.
  */
 int gnc_book_get_error (GNCBook *book);
 
@@ -165,4 +165,4 @@ void     gnc_book_end  (GNCBook *book);
  */
 char * xaccResolveFilePath (const char * filefrag);
 
-#endif /* __XACC_SESSION_H__ */
+#endif /* __GNC_BOOK_H__ */
