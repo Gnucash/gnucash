@@ -98,15 +98,14 @@ item_edit_get_pixel_coords (ItemEdit *item_edit, int *x, int *y,
 			    int *w, int *h)
 {
         GnucashSheet *sheet = item_edit->sheet;
+        VirtualCellLocation vcell_loc = { item_edit->virt_row,
+                                          item_edit->virt_col };
         int xd, yd, save;
 
         gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), NULL, &yd);
         save = yd;
 
-        gnucash_sheet_block_pixel_origin (sheet,
-                                          item_edit->virt_row,
-                                          item_edit->virt_col,
-                                          &xd, &yd);
+        gnucash_sheet_block_pixel_origin (sheet, vcell_loc, &xd, &yd);
 
         gnucash_sheet_style_get_cell_pixel_rel_coords (item_edit->style,
 						       item_edit->cell_row,
@@ -450,7 +449,8 @@ item_edit_destroy (GtkObject *object)
 
 
 gboolean
-item_edit_set_cursor_pos (ItemEdit *item_edit, int p_row, int p_col, int x,
+item_edit_set_cursor_pos (ItemEdit *item_edit,
+                          PhysicalLocation phys_loc, int x,
                           gboolean changed_cells, gboolean extend_selection)
 {
         GtkEditable *editable;
@@ -459,7 +459,8 @@ item_edit_set_cursor_pos (ItemEdit *item_edit, int p_row, int p_col, int x,
         gint pos;
         gint pos_x;
         gint o_x, o_y;
-        gint virt_row, virt_col, cell_row, cell_col;
+        VirtualCellLocation vcell_loc;
+        gint cell_row, cell_col;
         SheetBlockStyle *style;
         PhysicalCell *pcell;
         char *text;
@@ -468,22 +469,21 @@ item_edit_set_cursor_pos (ItemEdit *item_edit, int p_row, int p_col, int x,
 
         table = item_edit->sheet->table;
 
-        pcell = gnc_table_get_physical_cell (table, p_row, p_col);
+        pcell = gnc_table_get_physical_cell (table, phys_loc);
         if (pcell == NULL)
                 return FALSE;
 
-	virt_row = pcell->virt_loc.virt_row;
-	virt_col = pcell->virt_loc.virt_col;
+	vcell_loc = pcell->virt_loc.vcell_loc;
 	cell_row = pcell->virt_loc.phys_row_offset;
 	cell_col = pcell->virt_loc.phys_col_offset;
 
-        style = gnucash_sheet_get_style (item_edit->sheet, virt_row, 0);
+        style = gnucash_sheet_get_style (item_edit->sheet, vcell_loc);
 
         o_x = style->dimensions->origin_x[cell_row][cell_col];
         o_y = style->dimensions->origin_y[cell_row][cell_col];
 
-        if ( (virt_row != item_edit->virt_row) ||
-             (virt_col != item_edit->virt_col) ||
+        if ( (vcell_loc.virt_row != item_edit->virt_row) ||
+             (vcell_loc.virt_col != item_edit->virt_col) ||
              (cell_row != item_edit->cell_row) ||
              (cell_col != item_edit->cell_col) )
                 return FALSE;
@@ -593,6 +593,7 @@ item_edit_configure (ItemEdit *item_edit)
 {
         GnucashSheet *sheet = item_edit->sheet;
         GnucashItemCursor *cursor;
+        VirtualCellLocation vcell_loc;
 
         cursor = GNUCASH_ITEM_CURSOR
 		(GNUCASH_CURSOR(sheet->cursor)->cursor[GNUCASH_CURSOR_BLOCK]);
@@ -600,9 +601,11 @@ item_edit_configure (ItemEdit *item_edit)
         item_edit->virt_row = cursor->row;
         item_edit->virt_col = cursor->col;
 
+        vcell_loc.virt_row = cursor->row;
+        vcell_loc.virt_col = cursor->col;
+
         item_edit->style = gnucash_sheet_get_style (item_edit->sheet,
-                                                    item_edit->virt_row,
-                                                    item_edit->virt_col);
+                                                    vcell_loc);
 
         cursor = GNUCASH_ITEM_CURSOR
 		(GNUCASH_CURSOR(sheet->cursor)->cursor[GNUCASH_CURSOR_CELL]);
@@ -642,7 +645,8 @@ item_edit_claim_selection (ItemEdit *item_edit, guint32 time)
 
                 owner = gdk_selection_owner_get (GDK_SELECTION_PRIMARY);
                 if (owner == GTK_WIDGET(item_edit->sheet)->window)
-                        gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, time);
+                        gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY,
+                                                 time);
                 item_edit->has_selection = FALSE;
         }
 }

@@ -218,7 +218,7 @@ void
 gnc_register_jump_to_split(RegWindow *regData, Split *split)
 {
   Transaction *trans;
-  int vrow, vcol;
+  VirtualCellLocation vcell_loc;
 
   trans = xaccSplitGetParent(split);
   if (trans != NULL)
@@ -228,8 +228,8 @@ gnc_register_jump_to_split(RegWindow *regData, Split *split)
       xaccLedgerDisplayRefresh(regData->ledger);
     }
 
-  if (xaccSRGetSplitRowCol(regData->ledger->ledger, split, &vrow, &vcol))
-    gnucash_register_goto_virt_row_col(regData->reg, vrow, vcol);
+  if (xaccSRGetSplitVirtLoc(regData->ledger->ledger, split, &vcell_loc))
+    gnucash_register_goto_virt_cell(regData->reg, vcell_loc);
 }
 
 
@@ -939,14 +939,14 @@ gnc_register_jump_to_blank(RegWindow *regData)
 {
   SplitRegister *sr = regData->ledger->ledger;
   Split *blank;
-  int vrow, vcol;
+  VirtualCellLocation vcell_loc;
 
   blank = xaccSRGetBlankSplit(sr);
   if (blank == NULL)
     return;
 
-  if (xaccSRGetSplitRowCol(sr, blank, &vrow, &vcol))
-    gnucash_register_goto_virt_row_col(regData->reg, vrow, vcol);
+  if (xaccSRGetSplitVirtLoc(sr, blank, &vcell_loc))
+    gnucash_register_goto_virt_cell(regData->reg, vcell_loc);
 }
 
 
@@ -2287,7 +2287,7 @@ deleteCB(GtkWidget *widget, gpointer data)
 
   trans = xaccSplitGetParent(split);
   style = regData->ledger->ledger->style;
-  cursor_type = xaccSplitRegisterGetCursorType(regData->ledger->ledger);
+  cursor_type = xaccSplitRegisterGetCurrentCursorType(regData->ledger->ledger);
 
   /* Deleting the blank split just cancels */
   {

@@ -270,27 +270,25 @@ guint32         xaccSplitRegisterGetChangeFlag (SplitRegister *reg);
 void            xaccSplitRegisterClearChangeFlag (SplitRegister *reg);
 
 /* Returns the type of the current cursor */
-CursorType      xaccSplitRegisterGetCursorType (SplitRegister *reg);
+CursorType      xaccSplitRegisterGetCurrentCursorType (SplitRegister *reg);
 
 /* Returns the type of the cursor at the given virtual row and column. */
-CursorType      xaccSplitRegisterGetCursorTypeRowCol (SplitRegister *reg,
-                                                      int virt_row,
-                                                      int virt_col);
+CursorType      xaccSplitRegisterGetCursorType (SplitRegister *reg,
+                                                VirtualCellLocation vcell_loc);
+
 /* Returns the type of the current cell */
-CellType        xaccSplitRegisterGetCellType (SplitRegister *reg);
+CellType        xaccSplitRegisterGetCurrentCellType (SplitRegister *reg);
 
 /* Returns the type of the cell at the given physical row and column. */
-CellType        xaccSplitRegisterGetCellTypeRowCol (SplitRegister *reg,
-                                                    int phys_row,
-                                                    int phys_col);
+CellType        xaccSplitRegisterGetCellType (SplitRegister *reg,
+                                              PhysicalLocation phys_loc);
 
 /* Returns the physical row and column in the current cursor of the
  * given cell using the pointer values. The function returns true if
  * the given cell type is in the current cursor, false otherwise. */
-gboolean        xaccSplitRegisterGetCellRowCol (SplitRegister *reg,
-                                                CellType cell_type,
-                                                int *p_phys_row,
-                                                int *p_phys_col);
+gboolean        xaccSplitRegisterGetCellPhysLoc (SplitRegister *reg,
+                                                 CellType cell_type,
+                                                 PhysicalLocation *phys_loc);
 
 /* Functions for working with split register buffers */
 SplitRegisterBuffer * xaccMallocSplitRegisterBuffer ();

@@ -1150,7 +1150,12 @@ xaccInitSplitRegister (SplitRegister *reg,
 
    table = gnc_table_new ();
    gnc_table_set_size (table, phys_r, phys_c, reg->num_virt_rows, 1);
-   gnc_table_set_cursor (table, header, 0, 0, 0, 0);
+   {
+     PhysicalLocation ploc = { 0, 0 };
+     VirtualCellLocation vcell_loc = { 0, 0 };
+
+     gnc_table_set_cursor (table, header, ploc, vcell_loc);
+   }
 
    /* The call below is for most practical purposes useless.
     * It simply installs a cursor (the single-line cursor, but it
@@ -1159,11 +1164,18 @@ xaccInitSplitRegister (SplitRegister *reg,
     * data gets loaded. Its just sort of here as a fail-safe fallback,
     * in case someone just creates a register but doesn't do anything
     * with it. Don't want to freak out any programmers. */
-   gnc_table_set_cursor (table, reg->single_cursor, 
-                         reg->cursor_phys_row, 0, 
-                         reg->cursor_virt_row, 0);
+   {
+     PhysicalLocation ploc = { reg->cursor_phys_row, 0 };
+     VirtualCellLocation vcell_loc = { reg->cursor_virt_row, 0 };
 
-   gnc_table_move_cursor (table, header->numRows, 0);
+     gnc_table_set_cursor (table, reg->single_cursor, ploc, vcell_loc);
+   }
+
+   {
+     PhysicalLocation ploc = { header->numRows, 0 };
+
+     gnc_table_move_cursor (table, ploc);
+   }
 
    reg->table = table;
 
@@ -1337,7 +1349,7 @@ sr_cellblock_cursor_type(SplitRegister *reg, CellBlock *cursor)
 /* ============================================== */
 
 CursorType
-xaccSplitRegisterGetCursorType (SplitRegister *reg)
+xaccSplitRegisterGetCurrentCursorType (SplitRegister *reg)
 {
   Table *table;
 
@@ -1354,8 +1366,8 @@ xaccSplitRegisterGetCursorType (SplitRegister *reg)
 /* ============================================== */
 
 CursorType
-xaccSplitRegisterGetCursorTypeRowCol (SplitRegister *reg,
-                                      int virt_row, int virt_col)
+xaccSplitRegisterGetCursorType (SplitRegister *reg,
+                                VirtualCellLocation vcell_loc)
 {
   VirtualCell *vcell;
   Table *table;
@@ -1367,7 +1379,7 @@ xaccSplitRegisterGetCursorTypeRowCol (SplitRegister *reg,
   if (table == NULL)
     return CURSOR_NONE;
 
-  vcell = gnc_table_get_virtual_cell (table, virt_row, virt_col);
+  vcell = gnc_table_get_virtual_cell (table, vcell_loc);
   if (vcell == NULL)
     return CURSOR_NONE;
 
@@ -1436,7 +1448,7 @@ sr_cell_type (SplitRegister *reg, void * cell)
 /* ============================================== */
 
 CellType
-xaccSplitRegisterGetCellType (SplitRegister *reg)
+xaccSplitRegisterGetCurrentCellType (SplitRegister *reg)
 {
   Table *table;
 
@@ -1447,23 +1459,20 @@ xaccSplitRegisterGetCellType (SplitRegister *reg)
   if (table == NULL)
     return NO_CELL;
 
-  return xaccSplitRegisterGetCellTypeRowCol(reg,
-                                            table->current_cursor_phys_row,
-                                            table->current_cursor_phys_col);
+  return
+    xaccSplitRegisterGetCellType(reg, table->current_cursor_phys_loc);
 }
 
 /* ============================================== */
 
 static BasicCell *
-sr_current_cell (SplitRegister *reg)
+sr_get_cell (SplitRegister *reg, PhysicalLocation phys_loc)
 {
   Table *table;
   VirtualCell *vcell;
   PhysicalCell *pcell;
   CellBlock *cellblock;
-  int phys_row, phys_col;
-  int virt_row, virt_col;
-  int cell_row, cell_col;
+  VirtualLocation virt_loc;
 
   if (reg == NULL)
     return NULL;
@@ -1472,36 +1481,29 @@ sr_current_cell (SplitRegister *reg)
   if (table == NULL)
     return NULL;
 
-  phys_row = table->current_cursor_phys_row;
-  phys_col = table->current_cursor_phys_col;
-
-  pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+  pcell = gnc_table_get_physical_cell (table, phys_loc);
   if (pcell == NULL)
     return NULL;
 
-  virt_row = pcell->virt_loc.virt_row;
-  virt_col = pcell->virt_loc.virt_col;
-  cell_row = pcell->virt_loc.phys_row_offset;
-  cell_col = pcell->virt_loc.phys_col_offset;
+  virt_loc = pcell->virt_loc;
 
-  vcell = gnc_table_get_virtual_cell (table, virt_row, virt_col);
+  vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
   if (vcell == NULL)
     return NULL;
 
   cellblock = vcell->cellblock;
 
-  return cellblock->cells[cell_row][cell_col];
+  return cellblock->cells[virt_loc.phys_row_offset][virt_loc.phys_col_offset];
 }
 
 /* ============================================== */
 
 CellType
-xaccSplitRegisterGetCellTypeRowCol (SplitRegister *reg,
-                                    int phys_row, int phys_col)
+xaccSplitRegisterGetCellType (SplitRegister *reg, PhysicalLocation phys_loc)
 {
   BasicCell *cell;
 
-  cell = sr_current_cell (reg);
+  cell = sr_get_cell (reg, phys_loc);
   if (cell == NULL)
     return NO_CELL;
 
@@ -1511,15 +1513,14 @@ xaccSplitRegisterGetCellTypeRowCol (SplitRegister *reg,
 /* ============================================== */
 
 gboolean
-xaccSplitRegisterGetCellRowCol (SplitRegister *reg, CellType cell_type,
-                                int *p_phys_row, int *p_phys_col)
+xaccSplitRegisterGetCellPhysLoc (SplitRegister *reg, CellType cell_type,
+                                 PhysicalLocation *phys_loc)
 {
   Table *table;
   VirtualCell *vcell;
   PhysicalCell *pcell;
   CellBlock *cellblock;
-  int phys_row, phys_col;
-  int virt_row, virt_col;
+  VirtualCellLocation vcell_loc;
   int cell_row, cell_col;
 
   if (reg == NULL)
@@ -1529,17 +1530,13 @@ xaccSplitRegisterGetCellRowCol (SplitRegister *reg, CellType cell_type,
   if (table == NULL)
     return FALSE;
 
-  phys_row = table->current_cursor_phys_row;
-  phys_col = table->current_cursor_phys_col;
-
-  pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+  pcell = gnc_table_get_physical_cell (table, table->current_cursor_phys_loc);
   if (pcell == NULL)
     return FALSE;
 
-  virt_row = pcell->virt_loc.virt_row;
-  virt_col = pcell->virt_loc.virt_col;
+  vcell_loc = pcell->virt_loc.vcell_loc;
 
-  vcell = gnc_table_get_virtual_cell (table, virt_row, virt_col);
+  vcell = gnc_table_get_virtual_cell (table, vcell_loc);
   if (vcell == NULL)
     return FALSE;
 
@@ -1552,16 +1549,11 @@ xaccSplitRegisterGetCellRowCol (SplitRegister *reg, CellType cell_type,
 
       if (sr_cell_type (reg, cell) == cell_type)
       {
-        vcell = gnc_table_get_virtual_cell (table, virt_row, virt_col);
-
-        phys_row = vcell->phys_loc.phys_row + cell_row;
-        phys_col = vcell->phys_loc.phys_col + cell_col;
-
-        if (p_phys_row != NULL)
-          *p_phys_row = phys_row;
-
-        if (p_phys_col != NULL)
-          *p_phys_col = phys_col;
+        if (phys_loc != NULL)
+        {
+          phys_loc->phys_row = vcell->phys_loc.phys_row + cell_row;
+          phys_loc->phys_col = vcell->phys_loc.phys_col + cell_col;
+        }
 
         return TRUE;
       }

@@ -117,38 +117,6 @@ typedef enum {
 } gncTableTraversalDir;
 
 
-/* The VirtualLocation structure contains the virtual
- * location of a physical cell.
- *
- * There is one instance of Locator for each physical cell.
- * The virt_row and virt_col members identify the corresponding
- * cellblock/virtual cell that this physical cell is a member of.
- * The two phys_offsets provide the location of the physical cell
- * as an offset from the cell block origin.  That is, the offsets
- * should never be less than zero, or greater than the size of
- * the cell block.
- */
-typedef struct _VirtualLocation VirtualLocation;
-struct _VirtualLocation {
-  short phys_row_offset;
-  short phys_col_offset;
-  short virt_row;
-  short virt_col;
-};
-
-
-/*  The PhysicalLocation gives a reverse mapping from a virtual
- *  cell block to the origin of the block in physical coordinates.
- *
- *  There is one instance of a PhysicalLocation for each virtual cell.
- */
-typedef struct _PhysicalLocation PhysicalLocation;
-struct _PhysicalLocation {
-  short phys_row;
-  short phys_col;
-};
-
-
 /* The VirtualCell structure holds information about each virtual cell. */
 typedef struct _VirtualCell VirtualCell;
 struct _VirtualCell
@@ -177,12 +145,10 @@ struct _PhysicalCell
 typedef struct _Table Table;
 
 typedef void (*TableMoveFunc) (Table *table,
-                               int *p_new_phys_row,
-                               int *p_new_phys_col);
+                               PhysicalLocation *new_phys_loc);
 
-typedef void (*TableTraverseFunc) (Table *table, 
-                                   int *p_new_phys_row,
-                                   int *p_new_phys_col,
+typedef void (*TableTraverseFunc) (Table *table,
+                                   PhysicalLocation *new_phys_loc,
                                    gncTableTraversalDir dir);
 
 typedef void (*TableSetHelpFunc) (Table *table,
@@ -208,10 +174,10 @@ typedef void (*TableDestroyFunc) (Table *table);
  */
 struct _Table
 {
-  int num_phys_rows;
-  int num_phys_cols;
-  int num_virt_rows;
-  int num_virt_cols;
+  short num_phys_rows;
+  short num_phys_cols;
+  short num_virt_rows;
+  short num_virt_cols;
 
   /* The position of the current cursor in "virtual" space
    * is given by the virt_row and virt_col fields below.
@@ -221,10 +187,8 @@ struct _Table
    * given by the physical values. */
   CellBlock *current_cursor;
 
-  int current_cursor_phys_row;
-  int current_cursor_phys_col;
-  int current_cursor_virt_row;
-  int current_cursor_virt_col;
+  PhysicalLocation    current_cursor_phys_loc;
+  VirtualCellLocation current_cursor_virt_loc;
 
   /* callback that is called when the cursor is moved */
   TableMoveFunc move_cursor;
@@ -257,8 +221,7 @@ struct _Table
   /* This class implements tab-key and arrow key traversal through the
    * cells of the table. To perform this traversal, the location of
    * the "previous" cell having input focus is required. */
-  int prev_phys_traverse_row;
-  int prev_phys_traverse_col;
+  PhysicalLocation prev_phys_traverse_loc;
 
   void * ui_data;
 
@@ -270,14 +233,43 @@ struct _Table
 Table     * gnc_table_new (void);
 void        gnc_table_destroy (Table *);
 
+/* These functions check the bounds of virtal and physical locations
+ * in the table and return TRUE if they are out of bounds. If possible,
+ * they are compiled inline. */
+G_INLINE_FUNC gboolean
+gnc_table_virtual_cell_out_of_bounds (Table *table,
+                                      VirtualCellLocation vcell_loc)
+{
+  if (!table)
+    return TRUE;
+
+  return ((vcell_loc.virt_row < 0) ||
+          (vcell_loc.virt_row >= table->num_virt_rows) ||
+          (vcell_loc.virt_col < 0) ||
+          (vcell_loc.virt_col >= table->num_virt_cols));
+}
+
+G_INLINE_FUNC gboolean
+gnc_table_physical_cell_out_of_bounds (Table *table,
+                                       PhysicalLocation phys_loc)
+{
+  if (!table)
+    return TRUE;
+
+  return ((phys_loc.phys_row < 0) ||
+          (phys_loc.phys_row >= table->num_phys_rows) ||
+          (phys_loc.phys_col < 0) ||
+          (phys_loc.phys_col >= table->num_phys_cols));
+}
+
 /* These functions return the virtual/physical cell associated with a
  *   particular virtual/physical row & column pair. If the pair is out
  *   of bounds, NULL is returned. */
 VirtualCell *  gnc_table_get_virtual_cell (Table *table,
-                                           int virt_row, int virt_col);
+                                           VirtualCellLocation vcell_loc);
 
 PhysicalCell * gnc_table_get_physical_cell (Table *table,
-                                            int phys_row, int phys_col);
+                                            PhysicalLocation phys_loc);
 
 /* Return the virtual cell of the header */
 VirtualCell *  gnc_table_get_header_cell (Table *table);
@@ -295,21 +287,21 @@ void        gnc_table_create_cursor (Table *, CellBlock *);
 
 /* indicate what handler should be used for a given virtual block */
 void        gnc_table_set_cursor (Table *table, CellBlock *curs,
-                                  int phys_row_origin, int phys_col_origin,
-                                  int virt_row, int virt_col);
+                                  PhysicalLocation phys_origin,
+                                  VirtualCellLocation vcell_loc);
 
 /* The gnc_table_move_cursor() method will move the cursor (but not
  *   the cursor GUI) to the indicated location. This function is
  *   useful when loading the table from the cursor: data can be loaded
  *   into the cursor, then committed to the table, all without the
  *   annoying screen flashing associated with GUI redraw. */
-void        gnc_table_move_cursor (Table *table, int phys_row, int phys_col);
+void        gnc_table_move_cursor (Table *table, PhysicalLocation phys_loc);
 
 /* The gnc_table_move_cursor_gui() method will move the cursor and its
  *   GUI to the indicated location. Through a series of callbacks, all
  *   GUI elements get repositioned. */
 void        gnc_table_move_cursor_gui (Table *table,
-                                       int phys_row, int phys_col);
+                                       PhysicalLocation phys_loc);
 
 /* The gnc_table_commit_cursor() method will copy text in the cursor
  *   cells into the table.  This function is useful during the initial
@@ -329,25 +321,25 @@ void        gnc_table_refresh_header (Table *table);
  *   and gui to the new position. Returns true if the cursor was
  *   repositioned. */
 gboolean    gnc_table_verify_cursor_position (Table *table,
-                                              int phys_row, int phys_col);
+                                              PhysicalLocation phys_loc);
 
 /* The gnc_table_get_user_data_physical() method returns the user data
  *   associated with a cursor located at the given physical coords, or
  *   NULL if the coords are out of bounds. */
 void *      gnc_table_get_user_data_physical (Table *table,
-                                              int phys_row, int phys_col);
+                                              PhysicalLocation phys_loc);
 
 /* The gnc_table_get_user_data_virtual() method returns the user data
  *   associated with a cursor located at the given virtual coords, or
  *   NULL if the coords are out of bounds. */
 void *      gnc_table_get_user_data_virtual (Table *table,
-                                             int virt_row, int virt_col);
+                                             VirtualCellLocation vcell_loc);
 
 /* Find the closest valid horizontal cell. If exact_cell is true,
  *   cells that must be explicitly selected by the user (as opposed
  *   to just tabbing into), are considered valid cells. */
 gboolean    gnc_table_find_valid_cell_horiz(Table *table,
-                                            int *phys_row, int *phys_col,
+                                            PhysicalLocation *phys_loc,
                                             gboolean exact_cell);
 
 
@@ -370,14 +362,14 @@ void        gnc_table_refresh_gui (Table *table);
  * perhaps these should go in a table-allguiP.h */
 
 void       gnc_table_wrap_verify_cursor_position (Table *table,
-                                                  int phys_row, int phys_col);
+                                                  PhysicalLocation phys_loc);
 
 gboolean   gnc_table_physical_cell_valid(Table *table,
-                                         int phys_row, int phys_col,
+                                         PhysicalLocation phys_loc,
                                          gboolean exact_pointer);
 
 void       gnc_table_refresh_cursor_gui (Table * table, CellBlock *curs,
-                                         int phys_row, int phys_col,
+                                         PhysicalLocation phys_loc,
                                          gboolean do_scroll);
 
 
@@ -396,17 +388,17 @@ void       gnc_table_refresh_cursor_gui (Table * table, CellBlock *curs,
  * like this semantic, cut&paste this code and change it to suit you. 
  * However, don't just change it, because it will break functional code. */
 const char * gnc_table_enter_update(Table *table,
-                                    int phys_row, int phys_col,
+                                    PhysicalLocation phys_loc,
                                     int *cursor_position,
                                     int *start_selection,
                                     int *end_selection);
 
 const char * gnc_table_leave_update(Table *table,
-                                    int phys_row, int phys_col,
+                                    PhysicalLocation phys_loc,
                                     const char *old_text);
 
 const char * gnc_table_modify_update(Table *table,
-                                     int phys_row, int phys_col,
+                                     PhysicalLocation phys_loc,
                                      const char *oldval,
                                      const char *change,
                                      char *newval,
@@ -415,7 +407,7 @@ const char * gnc_table_modify_update(Table *table,
                                      int *end_selection);
 
 gboolean     gnc_table_direct_update(Table *table,
-                                     int phys_row, int phys_col,
+                                     PhysicalLocation phys_loc,
                                      const char *oldval,
                                      char **newval_ptr,
                                      int *cursor_position,
@@ -424,10 +416,9 @@ gboolean     gnc_table_direct_update(Table *table,
                                      void *gui_data);
 
 gboolean     gnc_table_traverse_update(Table *table,
-                                       int phys_row, int phys_col,
+                                       PhysicalLocation phys_loc,
                                        gncTableTraversalDir dir,
-                                       int *dest_row,
-                                       int *dest_col);
+                                       PhysicalLocation *dest_loc);
 
 #endif /* __TABLE_ALLGUI_H__ */
 

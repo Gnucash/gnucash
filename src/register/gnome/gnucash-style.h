@@ -65,11 +65,12 @@ void gnucash_sheet_style_recompile (SheetBlockStyle *style,
                                     SplitRegister *sr,
                                     gint cursor_type);
 
-SheetBlockStyle *gnucash_sheet_get_style (GnucashSheet *sheet, gint vrow,
-					  gint vcol);
+SheetBlockStyle *gnucash_sheet_get_style (GnucashSheet *sheet,
+                                          VirtualCellLocation vcell_loc);
 
-SheetBlockStyle *gnucash_sheet_get_style_from_table (GnucashSheet *sheet,
-						     gint vrow, gint vcol);
+SheetBlockStyle *
+gnucash_sheet_get_style_from_table (GnucashSheet *sheet,
+                                    VirtualCellLocation vcell_loc);
 
 void gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
                                                     gint cell_row,

@@ -40,7 +40,7 @@ typedef struct {
         /* The first and last displayed block */
         int        top_block;
         int        bottom_block;
-	
+
         /* Offset from spreadsheet origin in units */
         long       top_offset;
         long       left_offset;
@@ -66,15 +66,15 @@ typedef struct {
 GtkType    gnucash_grid_get_type (void);
 GtkWidget *gnucash_grid_new 	 (GnucashSheet *sheet);
 
-gint gnucash_grid_find_block_origin_by_pixel (GnucashGrid *grid,
-                                              gint x, gint y,
-                                              gint *virt_row, gint *virt_col,
-                                              gint *o_x, gint *o_y);
+gboolean
+gnucash_grid_find_block_origin_by_pixel (GnucashGrid *grid,
+                                         gint x, gint y,
+                                         VirtualCellLocation *vcell_loc,
+                                         gint *o_x, gint *o_y);
 
-gint gnucash_grid_find_cell_by_pixel (GnucashGrid *grid,
-                                      gint x, gint y,
-                                      int *virt_row, int *virt_col,
-                                      int *cell_row, int *cell_col);
+gboolean
+gnucash_grid_find_cell_by_pixel (GnucashGrid *grid, gint x, gint y,
+                                 VirtualLocation *vcell_loc);
 
 
 #endif /* GNUCASH_GRID_H */

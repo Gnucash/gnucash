@@ -190,6 +190,7 @@
 
 #include "gnc-common.h"
 #include "gnc-ui-common.h"
+#include "register-common.h"
 
 
 /* define a bitmask */
@@ -234,8 +235,7 @@ typedef const char * (*CellLeaveFunc) (BasicCell *,
 typedef void (*CellRealizeFunc) (BasicCell *, 
                                  void *gui_handle);
 
-typedef void (*CellMoveFunc) (BasicCell *,
-                              int phys_row, int phys_col);
+typedef void (*CellMoveFunc) (BasicCell *, PhysicalLocation phys_loc);
 
 typedef void (*CellDestroyFunc) (BasicCell *);
 

@@ -1449,14 +1449,14 @@ gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
 
 
 SheetBlockStyle *
-gnucash_sheet_get_style (GnucashSheet *sheet, gint vrow, gint vcol)
+gnucash_sheet_get_style (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
 {
         SheetBlock *block;
         
         g_return_val_if_fail (sheet != NULL, NULL);
         g_return_val_if_fail (GNUCASH_IS_SHEET(sheet), NULL);
 
-        block = gnucash_sheet_get_block (sheet, vrow, vcol);
+        block = gnucash_sheet_get_block (sheet, vcell_loc);
 
         if (block)
                 return block->style;
@@ -1466,7 +1466,8 @@ gnucash_sheet_get_style (GnucashSheet *sheet, gint vrow, gint vcol)
 
 
 SheetBlockStyle *
-gnucash_sheet_get_style_from_table (GnucashSheet *sheet, gint vrow, gint vcol)
+gnucash_sheet_get_style_from_table (GnucashSheet *sheet,
+                                    VirtualCellLocation vcell_loc)
 {
         Table *table;
         SplitRegister *sr;
@@ -1479,7 +1480,7 @@ gnucash_sheet_get_style_from_table (GnucashSheet *sheet, gint vrow, gint vcol)
         table = sheet->table;
         sr = sheet->split_register;
 
-        vcell = gnc_table_get_virtual_cell (table, vrow, vcol);
+        vcell = gnc_table_get_virtual_cell (table, vcell_loc);
 
         cursor = vcell->cellblock;
 

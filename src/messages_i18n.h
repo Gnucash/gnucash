@@ -436,6 +436,14 @@
 #define TRANSFER_MENU_E_STR_N    N_("_Transfer...")
 
 
+/* Error messages */
+#define PARSER_UNBALANCED_PARENS   _("Unbalanced parenthesis")
+#define PARSER_STACK_OVERFLOW      _("Stack overflow")
+#define PARSER_STACK_UNDERFLOW     _("Stack underflow")
+#define PARSER_UNDEFINED_CHARACTER _("Undefined character")
+#define PARSER_NOT_A_VARIABLE      _("Not a variable")
+
+
 /** MISC INTERNATIONALIZATION STRINGS: ******************************/
 
 /* phrases */

@@ -171,38 +171,32 @@ gnc_table_refresh_gui (Table * table)
 void        
 gnc_table_refresh_cursor_gui (Table * table,
                               CellBlock *curs,
-                              int phys_row, int phys_col,
+                              PhysicalLocation phys_loc,
                               gboolean do_scroll)
 {
         GnucashSheet *sheet;
         PhysicalCell *pcell;
-        gint virt_row, virt_col;
+        VirtualCellLocation vcell_loc;
 
-        if (!table)
-                return;
-        if (!table->ui_data)
+        if (!table || !table->ui_data || !curs)
                 return;
 
         g_return_if_fail (GNUCASH_IS_SHEET (table->ui_data));
 
         /* if the current cursor is undefined, there is nothing to do. */
-        if (!curs) return;
-        if ((0 > phys_row) || (0 > phys_col)) return;
-        if ((phys_row >= table->num_phys_rows) ||
-            (phys_col >= table->num_phys_cols))
+        if (gnc_table_physical_cell_out_of_bounds (table, phys_loc))
                 return;
 
         sheet = GNUCASH_SHEET(table->ui_data);
 
         /* compute the physical bounds of the current cursor */
-        pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+        pcell = gnc_table_get_physical_cell (table, phys_loc);
 
-        virt_row = pcell->virt_loc.virt_row;
-        virt_col = pcell->virt_loc.virt_col;
+        vcell_loc = pcell->virt_loc.vcell_loc;
 
         gnucash_sheet_cursor_set_from_table (sheet, do_scroll);
-        gnucash_sheet_block_set_from_table (sheet, virt_row, virt_col);
-        gnucash_sheet_redraw_block (sheet, virt_row, virt_col);
+        gnucash_sheet_block_set_from_table (sheet, vcell_loc);
+        gnucash_sheet_redraw_block (sheet, vcell_loc);
 }
 
 /* ================== end of file ======================= */

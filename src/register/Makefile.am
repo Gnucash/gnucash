@@ -25,6 +25,7 @@ noinst_HEADERS = \
   pricecell.h \
   quickfillcell.h \
   recncell.h \
+  register-common.h \
   splitreg.h \
   table-allgui.h \
   textcell.h

@@ -120,7 +120,7 @@ void                     exit_parser(parser_env_ptr pe);
 /* Line Number: 400 */
 ParseError               get_parse_error(parser_env_ptr pe);
 /* Line Number: 408 */
-var_store_ptr            get_vars(parser_env_ptr pe);
+var_store_ptr            parser_get_vars(parser_env_ptr pe);
 /* Line Number: 417 */
 unsigned                 delete_var(char *var_name,
                                     parser_env_ptr pe);

@@ -115,8 +115,7 @@ typedef struct
 {
         /* the virtual row/column in the table this block
            is associated to */
-        gint virt_row; 
-        gint virt_col;
+        VirtualCellLocation vcell_loc;
 
         /*  The style for this block, derived from the handlers for
             the virt row/col */
@@ -206,7 +205,7 @@ GtkWidget *gnucash_sheet_new 	 (Table *table);
 
 void gnucash_sheet_table_load (GnucashSheet *sheet);
 
-GtkType    gnucash_register_get_type (void);
+GtkType gnucash_register_get_type (void);
 
 /* this already has scrollbars attached */
 GtkWidget *gnucash_register_new (Table *table);
@@ -215,52 +214,48 @@ void gnucash_sheet_set_top_block (GnucashSheet *sheet, int new_top_block,
                                   gint align);
 
 
-SheetBlock *gnucash_sheet_get_block (GnucashSheet *sheet, gint vrow,
-				     gint vcol);
-gint
-gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col);
+SheetBlock *gnucash_sheet_get_block (GnucashSheet *sheet,
+                                     VirtualCellLocation vcell_loc);
 
-gint gnucash_sheet_col_get_distance(GnucashSheet *sheet, int v_row, int col_a, int col_b);
+gint gnucash_sheet_col_max_width (GnucashSheet *sheet,
+                                  gint virt_col, gint cell_col);
 
-gint gnucash_sheet_row_get_distance (GnucashSheet *sheet, int row_a,
-				     int row_b);
+gint gnucash_sheet_col_get_distance(GnucashSheet *sheet,
+                                    int v_row, int v_col_a, int v_col_b);
+
+gint gnucash_sheet_row_get_distance (GnucashSheet *sheet,
+                                     int v_row_a, int v_row_b);
 
 void gnucash_sheet_redraw_all (GnucashSheet *sheet);
-void gnucash_sheet_redraw_block (GnucashSheet *sheet, gint row, gint col);
 
-void gnucash_sheet_cursor_set (GnucashSheet *gsheet,
-                               int virt_row, int virt_col,
-			       int cell_row, int cell_col);
+void gnucash_sheet_redraw_block (GnucashSheet *sheet,
+                                 VirtualCellLocation vcell_loc);
+
+void gnucash_sheet_cursor_set (GnucashSheet *gsheet, VirtualLocation virt_loc);
 
 const char * gnucash_sheet_modify_current_cell(GnucashSheet *sheet,
 					       const gchar *new_text);
 
-void gnucash_sheet_block_set_from_table (GnucashSheet *sheet, gint virt_row,
-                                         gint virt_col);
+void gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
+                                         VirtualCellLocation vcell_loc);
 void gnucash_sheet_set_scroll_region (GnucashSheet *sheet);
 
 void gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet,
                                           gboolean do_scroll);
 
-void gnucash_sheet_move_cursor (GnucashSheet *sheet, int col, int row);
-
-void gnucash_sheet_set_cursor_bounds (GnucashSheet *sheet,
-				      int start_col, int start_row,
-				      int end_col,   int end_row);
-
 void gnucash_sheet_compute_visible_range (GnucashSheet *sheet);
 
 void gnucash_sheet_block_pixel_origin (GnucashSheet *sheet,
-                                       gint vrow, gint vcol,
+                                       VirtualCellLocation vcell_loc,
                                        gint *x, gint *y);
 
 void gnucash_sheet_make_cell_visible (GnucashSheet *sheet,
-				      gint virt_row, gint virt_col,
-				      gint cell_row, gint cell_col);
+                                      VirtualLocation virt_loc);
+
 void gnucash_sheet_update_adjustments (GnucashSheet *sheet);
 
-void gnucash_register_goto_virt_row_col (GnucashRegister *reg,
-                                         int v_row, int v_col);
+void gnucash_register_goto_virt_cell (GnucashRegister *reg,
+                                      VirtualCellLocation vcell_loc);
 
 void gnucash_register_goto_next_virt_row (GnucashRegister *reg);
 
@@ -274,20 +269,8 @@ void gnucash_register_copy_clipboard (GnucashRegister *reg);
 void gnucash_register_paste_clipboard (GnucashRegister *reg);
 
 
-
 typedef struct {
         GnomeCanvasClass parent_class;
-
-        gint (*traverse)       	(GnucashSheet *sheet,
-                                 gint row, gint column,
-                                 gint *new_row, gint *new_column);
-        
-        gint (*deactivate)	(GnucashSheet *sheet,
-				 gint row, gint column);
-        
-        gint (*activate) 	(GnucashSheet *sheet,
-				 gint row, gint column);
-        
 } GnucashSheetClass;
 
 

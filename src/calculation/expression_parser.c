@@ -306,8 +306,8 @@
  *         integer designating the error encountered. The possible
  *         values are defined in the "finvar.h" file.
  *
- * var_store_ptr            get_vars(
- *                                   void *vp)
+ * var_store_ptr            parser_get_vars(
+ *                                          void *vp)
  *
  *         This function returns a pointer to the first element of a
  *         linked list of variable storage structures containing the
@@ -487,7 +487,7 @@ ParseError get_parse_error(parser_env_ptr pe)
 } /* get_parse_error */
 
 /* return linked list of named variables which have been defined */
-var_store_ptr get_vars(parser_env_ptr pe)
+var_store_ptr parser_get_vars(parser_env_ptr pe)
 {
   if (pe == NULL)
     return NULL;

@@ -203,6 +203,35 @@ make_predefined_variables (void)
   return vars;
 }
 
+static void
+free_predefined_variables (var_store_ptr vars)
+{
+  var_store_ptr next;
+
+  while (vars != NULL)
+  {
+    next = vars->next_var;
+
+    g_free(vars->value);
+    vars->value = NULL;
+
+    g_free(vars);
+
+    vars = next;
+  }
+}
+
+static void
+update_variables (var_store_ptr vars)
+{
+  for ( ; vars ; vars = vars->next_var )
+  {
+    ParserNum *pnum = vars->value;
+    if (pnum != NULL)
+      gnc_exp_parser_set_value (vars->variable_name, pnum->value);
+  }
+}
+
 static void *
 trans_numeric(const char *digit_str,
               char        radix_point,
@@ -322,7 +351,10 @@ gnc_exp_parser_parse (const char * expression, double *value_p,
     last_error = get_parse_error (pe);
   }
 
-  /* fixme: update variables and free predefined variables */
+  update_variables (vars);
+  update_variables (parser_get_vars (pe));
+
+  free_predefined_variables (vars);
 
   exit_parser (pe);
 
@@ -332,5 +364,20 @@ gnc_exp_parser_parse (const char * expression, double *value_p,
 const char *
 gnc_exp_parser_error_string (void)
 {
-  return NULL;
+  switch (last_error)
+  {
+    default:
+    case PARSER_NO_ERROR:
+      return NULL;
+    case UNBALANCED_PARENS:
+      return PARSER_UNBALANCED_PARENS;
+    case STACK_OVERFLOW:
+      return PARSER_STACK_OVERFLOW;
+    case STACK_UNDERFLOW:
+      return PARSER_STACK_OVERFLOW;
+    case UNDEFINED_CHARACTER:
+      return PARSER_UNDEFINED_CHARACTER;
+    case NOT_A_VARIABLE:
+      return PARSER_NOT_A_VARIABLE;
+  }
 }
