@@ -331,6 +331,9 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
    time_t secs;
    double baln;
 
+   /* don't even bother doing a load if there is no current cursor */
+   if (!(reg->table->current_cursor)) return;
+
    if (!split) {
       /* we interpret a NULL split as a blank split */
       xaccSetDateCellValueSecs (reg->dateCell, 0);
@@ -401,6 +404,9 @@ static void
 xaccSRLoadSplitEntry (SplitRegister *reg, Split *split, int do_commit)
 {
    char buff[2];
+
+   /* don't even bother doing a load if there is no current cursor */
+   if (!(reg->table->current_cursor)) return;
 
    if (!split) {
       /* we interpret a NULL split as a blank split */
@@ -664,7 +670,7 @@ printf ("load split %d at phys row %d \n", j, phys_row);
    /* do the transaction row of the blank split */
    xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
    xaccMoveCursor (table, phys_row, 0);
-   xaccSRLoadRegEntry (reg, split);
+   xaccSRLoadTransEntry (reg, split, 1);
    vrow ++;
    phys_row += reg->trans_cursor->numRows; 
    
@@ -675,7 +681,7 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       split = xaccTransGetSplit (trans, 1);
       xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
       xaccMoveCursor (table, phys_row, 0);
-      xaccSRLoadRegEntry (reg, split);
+      xaccSRLoadSplitEntry (reg, split, 1);
       vrow ++;
       phys_row += reg->split_cursor->numRows; 
    }
