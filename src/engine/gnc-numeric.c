@@ -49,6 +49,7 @@ typedef struct {
   guint64 hi;
   guint64 lo;
   short isneg;
+  short carry;
 } gncint128;
 
 /** Multiply a pair of signed 64-bit numbers, 
@@ -109,6 +110,7 @@ mult128 (gint64 a, gint64 b)
 
   prod.lo = d0 + (sum<<32);
   prod.hi = carry + e1 + f1 + g0 + (g1<<32);
+  prod.carry = (prod.hi || (sum >> 31));
 
   return prod;
 }
@@ -162,6 +164,9 @@ div128 (gncint128 n, gint64 d)
     quotient.hi += 1;
   }
 
+  /* compute the carry situation */
+  quotient.carry = (quotient.hi || (quotient.lo >> 63));
+
   return quotient;
 }
 
@@ -205,7 +210,7 @@ reduce128(gncint128 n, gint64 d)
   /* num now holds the GCD (Greatest Common Divisor) */
 
   gncint128 red = div128 (n, num);
-  if (red.hi)
+  if (red.carry)
   {
     return gnc_numeric_error (GNC_ERROR_OVERFLOW);
   }
@@ -216,22 +221,23 @@ reduce128(gncint128 n, gint64 d)
 }
 
 #ifdef TEST_128_BIT_MULT
-void pr (gint64 a, gint64 b)
+static void pr (gint64 a, gint64 b)
 {
    gncint128 prod = mult128 (a,b);
-   printf ("%lld * %lld = %lld %llu (0x%llx %llx)\n", a,b, prod.hi, prod.lo, prod.hi, prod.lo);
+   printf ("%lld * %lld = %lld %llu (0x%llx %llx) %hd\n",
+	   a, b, prod.hi, prod.lo, prod.hi, prod.lo, prod.carry);
 }
 
-void prd (gint64 a, gint64 b, gint64 c)
+static void prd (gint64 a, gint64 b, gint64 c)
 {
    gncint128 prod = mult128 (a,b);
    gncint128 quot = div128 (prod, c);
    gint64 rem = rem128 (prod, c);
-   printf ("%lld * %lld / %lld = %lld %llu + %lld (0x%llx %llx)\n", a,b, c, quot.hi,
-quot.lo, rem, quot.hi, quot.lo);
+   printf ("%lld * %lld / %lld = %lld %llu + %lld (0x%llx %llx) %hd\n",
+	   a, b, c, quot.hi, quot.lo, rem, quot.hi, quot.lo, quot.carry);
 }
 
-main ()
+int main ()
 {
   pr (2,2);
 
@@ -252,6 +258,8 @@ main ()
   pr (x,x);
   pr (x,-x);
 
+  pr (1000000, 10000000000000);
+
   prd (x,x,2);
   prd (x,x,3);
   prd (x,x,4);
@@ -266,6 +274,8 @@ main ()
   prd (540,x,5);
   prd (777,x,7);
   prd (1111,x,11);
+
+  return 0;
 }
 
 #endif /* TEST_128_BIT_MULT */
@@ -635,7 +645,7 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
   product.denom = a.denom*b.denom;
 
   /* If it looks to be overflowing, try to reduce the fraction ... */
-  if (0 != bigprod.hi)
+  if (bigprod.carry)
   {
     product = reduce128 (bigprod, product.denom);
     if (gnc_numeric_check (product))

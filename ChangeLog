@@ -1,3 +1,9 @@
+2004-06-25  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-numeric.c: small change to the 128-bit math
+	  routines to actually mark a 'carry bit' to denote numbers
+	  >= 2^63 to fix bug #144980.
+
 2004-06-24  Derek Atkins  <derek@ihtfp.com>
 
 	* Makefile.am: be sure to rebuild make-gnucash-patch and
