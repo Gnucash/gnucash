@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5\n"
-"POT-Creation-Date: 2001-06-05 20:08+0200\n"
+"POT-Creation-Date: 2001-06-06 16:53-0700\n"
 "PO-Revision-Date: 2001-06-06 17:06+02:00\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
@@ -217,6 +217,16 @@ msgstr ""
 " existiert bereits.\n"
 "Sind Sie sicher, daß sie überschrieben werden soll?"
 
+#: src/SplitLedger.c:125 src/engine/Transaction.c:2001
+#: src/engine/Transaction.c:2022 src/register/splitreg.c:739
+#: src/scm/report/guile-strings.c:344
+msgid "-- Split Transaction --"
+msgstr "-- Mehrteilige Buchung --"
+
+#: src/SplitLedger.c:126 src/register/splitreg.c:747
+msgid "-- Stock Split --"
+msgstr "-- Aktienteilung --"
+
 #: src/SplitLedger.c:822
 msgid "Rebalance Transaction"
 msgstr "Buchung neu kalkulieren"
@@ -366,7 +376,7 @@ msgstr "Nr"
 #: src/SplitLedger.c:4024 src/gnc-ui-util.c:124
 #: src/gnome/glade-gnc-dialogs.c:1018 src/gnome/glade-gnc-dialogs.c:4801
 #: src/gnome/glade-gnc-dialogs.c:4849 src/gnome/glade-gnc-dialogs.c:6106
-#: src/gnome/new-user-interface.c:221 src/gnome/reconcile-list.c:149
+#: src/gnome/new-user-interface.c:222 src/gnome/reconcile-list.c:149
 #: src/scm/guile-strings.c:157 src/scm/report/guile-strings.c:338
 #: src/scm/report/guile-strings.c:367 src/scm/report/guile-strings.c:579
 #: src/scm/report/guile-strings.c:598 src/scm/report/guile-strings.c:634
@@ -519,11 +529,6 @@ msgstr "Ausbuchungskonto"
 msgid "Imbalance"
 msgstr "Ausgleichskonto"
 
-#: src/engine/Transaction.c:2001 src/engine/Transaction.c:2022
-#: src/register/splitreg.c:739 src/scm/report/guile-strings.c:344
-msgid "-- Split Transaction --"
-msgstr "-- Mehrteilige Buchung --"
-
 #: src/engine/Transaction.c:2043 src/gnome/druid-stock-split.c:395
 #: src/gnome/window-register.c:869 src/register/splitreg.c:241
 msgid "Split"
@@ -563,12 +568,12 @@ msgstr "Numerischer Fehler"
 
 #: src/gnc-ui-util.c:115 src/gnome/dialog-commodities.c:339
 #: src/gnome/dialog-price-editor.c:734 src/gnome/glade-gnc-dialogs.c:7414
-#: src/gnome/glade-gnc-dialogs.c:7816 src/gnome/new-user-interface.c:397
+#: src/gnome/glade-gnc-dialogs.c:7816 src/gnome/new-user-interface.c:398
 #: src/scm/guile-strings.c:155
 msgid "Type"
 msgstr "Art"
 
-#: src/gnc-ui-util.c:118 src/gnome/new-user-interface.c:389
+#: src/gnc-ui-util.c:118 src/gnome/new-user-interface.c:390
 #: src/scm/report/guile-strings.c:545 src/scm/report/guile-strings.c:620
 msgid "Account Name"
 msgstr "Kontobezeichnung"
@@ -622,8 +627,8 @@ msgid "Retained Earnings"
 msgstr "Gewinnrücklagen"
 
 #: src/gnc-ui-util.c:585 src/gnome/dialog-account.c:241
-#: src/gnome/glade-gnc-dialogs.c:3872 src/gnome/new-user-interface.c:405
-#: src/gnome/new-user-interface.c:421
+#: src/gnome/glade-gnc-dialogs.c:3872 src/gnome/new-user-interface.c:406
+#: src/gnome/new-user-interface.c:422
 msgid "Opening Balance"
 msgstr "Eröffnungssaldo:"
 
@@ -788,23 +793,23 @@ msgstr ""
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/gnome/dialog-fincalc.c:326
+#: src/gnome/dialog-fincalc.c:342
 msgid "You must enter values for the other quantities."
 msgstr "Sie müssen auch die anderen Werte angeben."
 
-#: src/gnome/dialog-fincalc.c:327
+#: src/gnome/dialog-fincalc.c:343
 msgid "You must enter a valid expression."
 msgstr "Sie müssen einen gültigen Ausdruck eingeben."
 
-#: src/gnome/dialog-fincalc.c:368
+#: src/gnome/dialog-fincalc.c:384
 msgid "The interest rate cannot be zero."
 msgstr "Der Zinssatz kann nicht Null sein."
 
-#: src/gnome/dialog-fincalc.c:387
+#: src/gnome/dialog-fincalc.c:403
 msgid "The number of payments cannot be zero."
 msgstr "Die Anzahl der Zahlungen kann nicht Null sein"
 
-#: src/gnome/dialog-fincalc.c:392
+#: src/gnome/dialog-fincalc.c:408
 msgid "The number of payments cannot be negative."
 msgstr "Die Anzahl der Zahlungen kann nicht negativ sein"
 
@@ -817,12 +822,12 @@ msgid "Set the option to its default value"
 msgstr "Voreinstellung wiederherstellen"
 
 #: src/gnome/dialog-options.c:1095 src/gnome/dialog-options.c:1241
-#: src/gnome/new-user-interface.c:238
+#: src/gnome/new-user-interface.c:239
 msgid "Select All"
 msgstr "Alle auswählen"
 
 #: src/gnome/dialog-options.c:1102 src/gnome/dialog-options.c:1248
-#: src/gnome/new-user-interface.c:246
+#: src/gnome/new-user-interface.c:247
 msgid "Clear All"
 msgstr "Keine auswählen"
 
@@ -2200,12 +2205,12 @@ msgid ""
 "\n"
 "Note that GnuCash will be creating many accounts that did not exist on your\n"
 "other personal finance program, including a separate account for each stock\n"
-"you own, separate accounts for the brokerage commissions, special "
-"\"Equity\"\n"
+"you own, separate accounts for the brokerage commissions, special \"Equity"
+"\"\n"
 "accounts (subaccounts of Retained Earnings, by default) which are the "
 "source\n"
-"of your opening balances, etc. All of these accounts will appear on the next "
-"\n"
+"of your opening balances, etc. All of these accounts will appear on the "
+"next \n"
 "page so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
@@ -2406,8 +2411,8 @@ msgid ""
 "On the next page, you will be asked to confirm that an existing transaction\n"
 "matches an imported transaction.  Imported transactions are shown on the\n"
 "left side of the page, and possible  matches for the selected left-hand\n"
-"transaction are shown  to the right.  There may be several old transactions "
-"\n"
+"transaction are shown  to the right.  There may be several old "
+"transactions \n"
 "that could match an imported transaction; you will be able to select the \n"
 "correct one by clicking in the \"Dup?\" column of the correct transaction.\n"
 "\n"
@@ -2586,7 +2591,7 @@ msgstr "Vorlage für Stilvorlage:"
 msgid "Tax Information"
 msgstr "Steuerrelevante Information"
 
-#: src/gnome/glade-gnc-dialogs.c:5955 src/gnome/new-user-interface.c:297
+#: src/gnome/glade-gnc-dialogs.c:5955 src/gnome/new-user-interface.c:298
 #: src/gnome/window-acct-tree.c:113 src/gnome/window-acct-tree.c:119
 #: src/gnome/window-acct-tree.c:170 src/gnome/window-main.c:665
 #: src/scm/guile-strings.c:74 src/scm/guile-strings.c:136
@@ -2654,7 +2659,8 @@ msgid "Stock Split"
 msgstr "Aktienteilung"
 
 #: src/gnome/glade-gnc-dialogs.c:6494
-msgid "This wizard will help you record a stock split or stock merger."
+#, fuzzy
+msgid "This druid will help you record a stock split or stock merger."
 msgstr "Dieser Assistent hilft Ihnen, eine Aktienteilung einzugeben."
 
 #: src/gnome/glade-gnc-dialogs.c:6505
@@ -3034,8 +3040,16 @@ msgid "New Account Hierarchy Setup"
 msgstr "Neue Kontenhierarchie erstellen"
 
 #: src/gnome/new-user-interface.c:111
-msgid "This wizard will help you set up a new account hierarchy."
-msgstr "Dieser Assistent hilft Ihnen, eine neue Kontenhierarchie zu erstellen."
+msgid ""
+"This druid will help you create a set of GnuCash \n"
+"accounts for your assets (such as investments, \n"
+"checking or savings accounts), liabilities (such \n"
+"as loans) and different kinds of income and \n"
+"expenses you might have. \n"
+"\n"
+"Click 'Cancel'  if you do not wish to create any \n"
+"new accounts now."
+msgstr ""
 
 #: src/gnome/new-user-interface.c:123
 msgid "Choose Currency"
@@ -3046,28 +3060,32 @@ msgid "Please choose the currency to use for new accounts."
 msgstr "Wählen Sie eine Währung für neue Konten."
 
 #: src/gnome/new-user-interface.c:159
-msgid "Choose Account Types"
+#, fuzzy
+msgid "Choose accounts to create"
 msgstr "Kontoart wählen"
 
 #: src/gnome/new-user-interface.c:169
 msgid ""
-"Please choose the account types you would like to have automatically setup "
-"in GnuCash."
-msgstr "Wählen Sie die Kontoarten, die Sie automatisch erstellt haben möchten."
+"Select categories that correspond to the ways that you will use GnuCash.  \n"
+"Each category you select will cause several accounts to be created.  \n"
+"Select the categories that are relevant to you.  You can always create \n"
+"additional accounts by hand later."
+msgstr ""
 
-#: src/gnome/new-user-interface.c:213
+#: src/gnome/new-user-interface.c:214
 msgid "Account Types"
 msgstr "Kontoarten"
 
-#: src/gnome/new-user-interface.c:262
+#: src/gnome/new-user-interface.c:263
 msgid "Detailed Description"
 msgstr "Ausführliche Beschreibung"
 
-#: src/gnome/new-user-interface.c:340
-msgid "Check and Enter Final Account Info"
-msgstr "Konteninformationen überprüfen und bestätigen"
+#: src/gnome/new-user-interface.c:341
+#, fuzzy
+msgid "Enter opening balances"
+msgstr "Eröffnungssalden"
 
-#: src/gnome/new-user-interface.c:350
+#: src/gnome/new-user-interface.c:351
 msgid ""
 "If you would like an account to have an opening balance, click on the "
 "account\n"
@@ -3080,13 +3098,14 @@ msgstr ""
 "Betrag in den rechten Kasten ein. Jede Kontoart außer Eigenkapital\n"
 "kann einen Eröffnungssaldo haben."
 
-#: src/gnome/new-user-interface.c:449
+#: src/gnome/new-user-interface.c:450
 msgid "Finish Account Setup"
 msgstr "Konteneinrichten fertigstellen"
 
-#: src/gnome/new-user-interface.c:450
+#: src/gnome/new-user-interface.c:451
+#, fuzzy
 msgid ""
-"Press `Finish' to create your new account hierarchy.\n"
+"Press `Finish' to create your new accounts.\n"
 "\n"
 "Press `Back' to review your selections.\n"
 "\n"
@@ -3096,36 +3115,37 @@ msgstr ""
 "\n"
 "Drücken Sie 'Zurück', um Ihre Auswahl zu überprüfen.\n"
 "\n"
-"Drücken Sie 'Abbrechen', um den Assistenten zu schließen, ohne neue Konten zu erstellen."
+"Drücken Sie 'Abbrechen', um den Assistenten zu schließen, ohne neue Konten "
+"zu erstellen."
 
-#: src/gnome/new-user-interface.c:512
+#: src/gnome/new-user-interface.c:513
 msgid "Canceling"
 msgstr "Abbrechen"
 
-#: src/gnome/new-user-interface.c:533
+#: src/gnome/new-user-interface.c:534
 msgid ""
 "Uncheck if you do not want this dialog to run if you start GnuCash up again. "
 msgstr ""
 "Deaktivieren Sie dies, um den Assistenten beim nächsten Start nicht wieder "
 "anzuzeigen."
 
-#: src/gnome/new-user-interface.c:542
+#: src/gnome/new-user-interface.c:543
 msgid "Run dialog for new user again?"
 msgstr "Beim nächsten Start Assistenten wieder anzeigen?"
 
-#: src/gnome/new-user-interface.c:588 src/scm/report/guile-strings.c:719
+#: src/gnome/new-user-interface.c:589 src/scm/report/guile-strings.c:719
 msgid "Welcome to GnuCash 1.6!"
 msgstr "Willkommen zu GnuCash 1.6"
 
-#: src/gnome/new-user-interface.c:615
+#: src/gnome/new-user-interface.c:616
 msgid "Create a new set of accounts"
 msgstr "Neue Konten eröffnen"
 
-#: src/gnome/new-user-interface.c:624
+#: src/gnome/new-user-interface.c:625
 msgid "Import my QIF files"
 msgstr "QIF-Dateien importieren"
 
-#: src/gnome/new-user-interface.c:633
+#: src/gnome/new-user-interface.c:634
 msgid "Open the new user tutorial"
 msgstr "Die Einführung für neue Benutzer öffnen"
 
@@ -4351,10 +4371,6 @@ msgid ""
 msgstr ""
 "Diese Buchung ist eine Aktienteilung; klicken Sie 'Teilbuchung', um "
 "Einzelheiten sehen zu können"
-
-#: src/register/splitreg.c:747
-msgid "-- Stock Split --"
-msgstr "-- Aktienteilung --"
 
 # FIXME: DON'T use the noun 'description' here.
 #: src/register/splitreg.c:755
@@ -7759,3 +7775,16 @@ msgstr ""
 #: src/scm/report/guile-strings.c:721
 msgid "Welcome to GnuCash 1.6"
 msgstr "Willkommen zu GnuCash 1.6"
+
+#~ msgid "This wizard will help you set up a new account hierarchy."
+#~ msgstr ""
+#~ "Dieser Assistent hilft Ihnen, eine neue Kontenhierarchie zu erstellen."
+
+#~ msgid ""
+#~ "Please choose the account types you would like to have automatically "
+#~ "setup in GnuCash."
+#~ msgstr ""
+#~ "Wählen Sie die Kontoarten, die Sie automatisch erstellt haben möchten."
+
+#~ msgid "Check and Enter Final Account Info"
+#~ msgstr "Konteninformationen überprüfen und bestätigen"
