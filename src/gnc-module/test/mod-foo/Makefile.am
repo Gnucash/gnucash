@@ -1,6 +1,9 @@
-CFLAGS=@CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}
-
-INCLUDES=-I${top_srcdir}/src/gnc-module
+CFLAGS=\
+  @CFLAGS@ \
+  -I${top_srcdir}/src/gnc-module \
+  ${GUILE_INCS} \
+  ${G_WRAP_COMPILE_ARGS} \
+  ${GLIB_CFLAGS}
 
 checklibdir=${PWD}
 checklib_LTLIBRARIES=libfoo.la libgncmodfoo.la
