@@ -81,21 +81,6 @@ extern gncLogLevel gnc_log_modules[MOD_LAST + 1];
 /** Initialize the error logging subsystem */
 void gnc_log_init (void);
 
-/** Log error/waring/info messages to stderr or to other pipe. 
- *  This logging infrastructure is meant for validating the 
- *  correctness of the execution of the code.  'Info' level 
- *  messages help trace program flow. 'Error' messages are 
- *  meant to indicate internal data inconsistencies.
- * 
- * FIXME: these logging functions should proably get replaced by
- * the glib.h g_log(), etc functions. That way, we would have
- * unified logging mechanism, instead of having some messages
- * work one way, and others a different way ... We are waiting
- * for g_log to mature a bit first, though.
- */
-void gnc_log (gncModuleType module, gncLogLevel log_level,
-              const char *format, ...) G_GNUC_PRINTF(3,4);
-
 /** Set the logging level of the given module. */
 void gnc_set_log_level(gncModuleType module, gncLogLevel level);
 
@@ -114,11 +99,27 @@ void gnc_set_logfile (FILE *outfile);
  * reasonable. Hope thread safety doesn't poke us in eye. */
 const char * gnc_log_prettify (const char *name);
 
-/* gboolean gnc_should_log (gncModuleType module, gncLogLevel log_level); */
+/* We want logging decisions to be made inline, rather than through
+ * a CPU-cucking subroutine call. Thus, this is a #define, not a
+ * subroutine call.  The prototype would have been:
+ * gboolean gnc_should_log (gncModuleType module, gncLogLevel log_level); 
+ */
 #define gnc_should_log(module,log_level)   \
               (log_level <= gnc_log_modules[module]) 
 
 #define FUNK gnc_log_prettify(__FUNCTION__)
+
+/** Log error/waring/info messages to stderr or to other pipe. 
+ *  This logging infrastructure is meant for validating the 
+ *  correctness of the execution of the code.  'Info' level 
+ *  messages help trace program flow. 'Error' messages are 
+ *  meant to indicate internal data inconsistencies.
+ * 
+ * Messages can be logged to stdout, stderr, or to any desired
+ * FILE * file handle. Use fdopen() to get a file handle from a 
+ * file descriptor. Use gnc_set_logfile to set the logging file 
+ * handle.
+ */
 
 #define FATAL(format, args...) {                     \
   if (gnc_should_log (module, GNC_LOG_FATAL)) {      \
@@ -190,8 +191,8 @@ typedef void (*GNCGuiMessage) (const char *format, va_list args);
 void gnc_set_warning_message (GNCGuiMessage func);
 void gnc_set_error_message (GNCGuiMessage func);
 
-gboolean gnc_send_gui_warning (const char *format, ...);
-gboolean gnc_send_gui_error (const char *format, ...);
+gboolean gnc_send_gui_warning (const char *format, ...) G_GNUC_PRINTF(1,2);
+gboolean gnc_send_gui_error (const char *format, ...) G_GNUC_PRINTF(1,2);
 
 /* -------------------------------------------------------- */
 /* Infrastructure to make timing measurements for critical peices 

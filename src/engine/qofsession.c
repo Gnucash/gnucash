@@ -272,12 +272,7 @@ static void
 qof_session_int_backend_load_error(QofSession *session,
                                    char *message, char *dll_err)
 {
-    if (gnc_should_log (module, GNC_LOG_WARNING)) { 
-      gnc_log (module, GNC_LOG_WARNING,            
-         "Warning: %s: ", FUNK);
-      gnc_log (module, GNC_LOG_WARNING,            
-         message, dll_err ? dll_err : "");
-    }                                            
+    PWARN ("%s %s", message, dll_err ? dll_err : "");
 
     g_free(session->fullpath);
     session->fullpath = NULL;

@@ -138,23 +138,6 @@ gnc_log_prettify (const char *name)
   return bf;
 }
 
-void
-gnc_log (gncModuleType module, gncLogLevel log_level, 
-         const char *format, ...)
-{
-  va_list ap;
-
-  if (!gnc_should_log (module, log_level)) return;
-  if (!fout) gnc_log_init();
-
-  va_start (ap, format);
-  vfprintf (fout, format, ap);
-  va_end (ap);
-  fprintf (fout, "\n");
-  fflush (fout);
-}
-
-
 /********************************************************************\
 \********************************************************************/
 
@@ -273,12 +256,14 @@ gnc_report_clock_total (int clockno,
 static GNCGuiMessage gnc_gui_warning_func = NULL;
 static GNCGuiMessage gnc_gui_error_func = NULL;
 
-void gnc_set_warning_message (GNCGuiMessage func)
+void 
+gnc_set_warning_message (GNCGuiMessage func)
 {
   gnc_gui_warning_func = func;
 }
 
-void gnc_set_error_message (GNCGuiMessage func)
+void 
+gnc_set_error_message (GNCGuiMessage func)
 {
   gnc_gui_error_func = func;
 }
@@ -288,19 +273,17 @@ gnc_send_gui_warning(const gchar *format, ...)
 {
   va_list args;
 
+  va_start (args, format);
   if (!gnc_gui_warning_func)
   {
     if (!fout) gnc_log_init();
 
-    va_start (args, format);
-    vfprintf (fout, format, args);
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING, 
+      format, args);
     va_end (args);
-    fprintf (fout, "\n");
-    fflush (fout);
     return(FALSE);
   }
 
-  va_start(args, format);
   gnc_gui_warning_func(format, args);
   va_end(args);
   return(TRUE);
@@ -311,19 +294,17 @@ gnc_send_gui_error(const gchar *format, ...)
 {
   va_list args;
 
+  va_start (args, format);
   if (!gnc_gui_error_func)
   {
     if (!fout) gnc_log_init();
 
-    va_start (args, format);
-    vfprintf (fout, format, args);
+    g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,
+      format, args);
     va_end (args);
-    fprintf (fout, "\n");
-    fflush (fout);
     return(FALSE);
   }
 
-  va_start(args, format);
   gnc_gui_error_func(format, args);
   va_end(args);
   return(TRUE);
