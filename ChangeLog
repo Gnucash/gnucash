@@ -1,3 +1,7 @@
+2003-09-27  Derek Atkins <derek@ihtfp.com>
+
+	* Remove debian scripts (fix #123046)
+
 2003-09-23  Christian Stimming  <stimming@tuhh.de>
 
 	* po/ca.po: Add Catalan translation by Orestes Mas

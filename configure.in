@@ -1103,7 +1103,6 @@ AC_OUTPUT( m4/Makefile  intl/Makefile po/Makefile.in
           accounts/pt_BR/Makefile
           accounts/pt_PT/Makefile
           accounts/sk/Makefile
-          debian/Makefile
           doc/Makefile
           doc/examples/Makefile
           intl-scm/Makefile
