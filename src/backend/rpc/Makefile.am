@@ -42,10 +42,10 @@ EXTRA_DIST = \
   README \
   $(RPCGEN_SRCS)
 
-INCLUDES = -I.. -I../../engine -I../../gnc-module
-
 LDADD = -lpthread
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} -DGNCACCT_COMMODITY
+CFLAGS = \
+  @CFLAGS@ \
+  -I.. -I../../engine -I../../gnc-module ${GLIB_CFLAGS} -DGNCACCT_COMMODITY
 
 #RPCGEN=rpcgen -M
 RPCGEN=rpcgen -DGNCACCT_COMMODITY
