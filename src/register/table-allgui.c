@@ -439,13 +439,18 @@ void xaccMoveCursorGUI (Table *table, int new_phys_row, int new_phys_col)
          cell = curs->cells[i][j];
          if (cell) {
             char * cell_val = table->entries[i+phys_row_origin][j+phys_col_origin];
-            xaccSetBasicCellValue (cell, cell_val);
-            cell->changed = 0;
-
-            /* if a cell has a GUI, move that too */
+            /* if a cell has a GUI, move that first, before setting
+             * the cell value.  Otherwise, we'll end up putting the 
+             * new values in the old cell locations, and that would 
+             * lead to confusion of all sorts. */
             if (cell->move) {
                (cell->move) (cell, i+phys_row_origin, j+phys_col_origin);
             }
+
+            /* OK, now set the cell value, after the move */
+            xaccSetBasicCellValue (cell, cell_val);
+            cell->changed = 0;
+
          }
       }
    }
@@ -546,7 +551,7 @@ xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col)
    if ((virt_row != table->current_cursor_virt_row) ||
        (virt_col != table->current_cursor_virt_col)) {
 
-      /* before leaving, the current virtual position,
+      /* before leaving the current virtual position,
        * commit any edits that have been accumulated 
        * in the cursor */
       xaccCommitCursor (table);

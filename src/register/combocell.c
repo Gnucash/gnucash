@@ -211,9 +211,20 @@ xaccSetComboCellValue (ComboCell *cell, const char * str)
       } else {
          XmComboBoxClearItemSelection (box->combobox);
       } 
+
+      if ((0 < box->currow) && (0 < box->curcol)) {
+         /* be sure to set the string into the matrix widget as well,
+          * so that we don't end up blanking out the cell when we 
+          * unmap the combobox widget */
+         XbaeMatrixSetCell (box->parent, box->currow, box->curcol, (char *) str); 
+      }
    } else {
       XmComboBoxClearItemSelection (box->combobox);
+      if ((0 < box->currow) && (0 < box->curcol)) {
+         XbaeMatrixSetCell (box->parent, box->currow, box->curcol, "");
+      }
    }
+
 }
 
 /* =============================================== */
@@ -313,7 +324,6 @@ void moveCombo (BasicCell *bcell, int phys_row, int phys_col)
 {
    ComboCell *cell;
    PopBox *box;
-
    cell = (ComboCell *) bcell;
    box = (PopBox *) (cell->cell.gui_private);
 
@@ -448,6 +458,9 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb )
       return;
    }
 
+   /* be sure to set the string into the matrix widget as well,
+    * so that we don't end up blanking out the cell when we 
+    * unmap the combobox widget */
    XbaeMatrixSetCell (box->parent, box->currow, box->curcol, choice); 
    SET (&(cell->cell), choice);
    XtFree (choice);
