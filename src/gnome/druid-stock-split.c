@@ -30,8 +30,6 @@
 #include "account-tree.h"
 #include "dialog-utils.h"
 #include "druid-utils.h"
-#include "glade-gnc-dialogs.h"
-#include "glade-support.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-currency-edit.h"
@@ -510,10 +508,13 @@ static void
 gnc_stock_split_druid_create (StockSplitInfo *info)
 {
   GtkWidget *page;
+  GladeXML *xml;
 
-  info->window = create_Stock_Split_Druid ();
+  xml = gnc_glade_xml_new ("stocks.glade", "Stock Split Druid");
 
-  info->druid = lookup_widget (info->window, "stock_split_druid");
+  info->window = glade_xml_get_widget (xml, "Stock Split Druid");
+
+  info->druid = glade_xml_get_widget (xml, "stock_split_druid");
 
   gtk_signal_connect (GTK_OBJECT (info->window), "destroy",
                       GTK_SIGNAL_FUNC (window_destroy_cb), info);
@@ -521,14 +522,16 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
   gtk_signal_connect (GTK_OBJECT (info->druid), "cancel",
                       GTK_SIGNAL_FUNC (druid_cancel), info);
 
-	gnc_druid_set_title_image (GNOME_DRUID(info->druid), "stock_split_title.png");
-	gnc_druid_set_watermark_image (GNOME_DRUID(info->druid), "stock_split_watermark.png");
+  gnc_druid_set_title_image (GNOME_DRUID(info->druid),
+                             "stock_split_title.png");
+  gnc_druid_set_watermark_image (GNOME_DRUID(info->druid),
+                                 "stock_split_watermark.png");
 
   /* account list */
   {
     GtkCList *clist;
 
-    info->account_list = lookup_widget (info->window, "account_clist");
+    info->account_list = glade_xml_get_widget (xml, "account_clist");
 
     clist = GTK_CLIST (info->account_list);
 
@@ -537,7 +540,7 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     gtk_signal_connect (GTK_OBJECT (clist), "select_row",
                         GTK_SIGNAL_FUNC (clist_select_row), info);
 
-    page = lookup_widget (info->window, "account_page");
+    page = glade_xml_get_widget (xml, "account_page");
 
     gtk_signal_connect (GTK_OBJECT (page), "next",
                         GTK_SIGNAL_FUNC (account_next), info);
@@ -550,20 +553,19 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     GtkWidget *date;
     GtkWidget *ce;
 
-    info->description_entry =
-      lookup_widget (info->window, "description_entry");
+    info->description_entry = glade_xml_get_widget (xml, "description_entry");
 
-    box = lookup_widget (info->window, "date_box");
+    box = glade_xml_get_widget (xml, "date_box");
     date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
     gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
     info->date_edit = date;
 
-    box = lookup_widget (info->window, "distribution_box");
+    box = glade_xml_get_widget (xml, "distribution_box");
     amount = gnc_amount_edit_new ();
     gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
     info->distribution_edit = amount;
 
-    box = lookup_widget (info->window, "price_box");
+    box = glade_xml_get_widget (xml, "price_box");
     amount = gnc_amount_edit_new ();
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (amount),
                                     gnc_default_price_print_info ());
@@ -571,12 +573,12 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
     info->price_edit = amount;
 
-    box = lookup_widget (info->window, "price_currency_box");
+    box = glade_xml_get_widget (xml, "price_currency_box");
     ce = gnc_currency_edit_new ();
     gtk_box_pack_start (GTK_BOX (box), ce, TRUE, TRUE, 0);
     info->price_currency_edit = ce;
 
-    page = lookup_widget (info->window, "details_page");
+    page = glade_xml_get_widget (xml, "details_page");
 
     gtk_signal_connect (GTK_OBJECT (page), "next",
                         GTK_SIGNAL_FUNC (details_next), info);
@@ -591,12 +593,12 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     GtkWidget *amount;
     GtkWidget *scroll;
 
-    box = lookup_widget (info->window, "cash_box");
+    box = glade_xml_get_widget (xml, "cash_box");
     amount = gnc_amount_edit_new ();
     gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
     info->cash_edit = amount;
 
-    info->memo_entry = lookup_widget (info->window, "memo_entry");
+    info->memo_entry = glade_xml_get_widget (xml, "memo_entry");
 
     /* income tree */
     tree = gnc_account_tree_new ();
@@ -618,7 +620,7 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     gtk_widget_show (tree);
 
-    scroll = lookup_widget (info->window, "income_scroll");
+    scroll = glade_xml_get_widget (xml, "income_scroll");
     gtk_container_add (GTK_CONTAINER (scroll), tree);
 
 
@@ -643,10 +645,10 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     gtk_widget_show (tree);
 
-    scroll = lookup_widget (info->window, "asset_scroll");
+    scroll = glade_xml_get_widget (xml, "asset_scroll");
     gtk_container_add (GTK_CONTAINER (scroll), tree);
 
-    page = lookup_widget (info->window, "cash_page");
+    page = glade_xml_get_widget (xml, "cash_page");
 
     gtk_signal_connect (GTK_OBJECT (page), "prepare",
                         GTK_SIGNAL_FUNC (cash_prepare), info);
@@ -655,7 +657,7 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
                         GTK_SIGNAL_FUNC (cash_next), info);
   }
 
-  page = lookup_widget (info->window, "finish_page");
+  page = glade_xml_get_widget (xml, "finish_page");
 
   gtk_signal_connect (GTK_OBJECT (page), "finish",
                       GTK_SIGNAL_FUNC (stock_split_finish), info);
@@ -669,6 +671,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   Account *new_account;
   GNCIdType id_type;
   GtkWidget *page;
+  GladeXML *xml;
 
   id_type = xaccGUIDType (&info->account);
   old_account = xaccAccountLookup (&info->account);
@@ -684,7 +687,8 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   if (id_type == GNC_ID_NULL || old_account == new_account)
     return;
 
-  page = lookup_widget (info->window, "account_page");
+  xml = glade_get_widget_tree (info->window);
+  page = glade_xml_get_widget (xml, "account_page");
 
   gnome_druid_set_page (GNOME_DRUID (info->druid), GNOME_DRUID_PAGE (page));
 }

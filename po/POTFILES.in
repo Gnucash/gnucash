@@ -31,6 +31,7 @@ src/gnome/glade-support.c
 src/gnome/glade/commodity_strings.c
 src/gnome/glade/price_strings.c
 src/gnome/glade/report_strings.c
+src/gnome/glade/stocks_strings.c
 src/gnome/glade/userpass_strings.c
 src/gnome/gnc-commodity-edit.c
 src/gnome/gnc-datedelta.c

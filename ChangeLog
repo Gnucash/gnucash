@@ -1,5 +1,9 @@
 2001-06-13  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/glade/stocks.glade: new file for old stock split druid
+
+	* src/gnome/druid-stock-split.c: use libglade
+
 	* src/gnome/glade/userpass.glade: new file for old
 	username/password dialog
 
