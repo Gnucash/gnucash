@@ -1,3 +1,8 @@
+2003-02-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/import-backend.c: fix a bug keeping the code
+	  from compiling.
+
 2003-02-16  Herbert Thoma  <herbie@hthoma.de>
 
 	* src/gnome/gnc-split-reg.c:

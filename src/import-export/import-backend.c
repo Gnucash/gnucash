@@ -924,10 +924,11 @@ gboolean
 gnc_import_TransInfo_refresh_destacc (GNCImportTransInfo *transaction_info,
 				      GncImportMatchMap *matchmap)
 {
+  Account *orig_destacc;
+  Account *new_destacc = NULL;
   g_assert(transaction_info);
 
-  Account *orig_destacc = gnc_import_TransInfo_get_destacc(transaction_info);
-  Account *new_destacc = NULL;
+  orig_destacc = gnc_import_TransInfo_get_destacc(transaction_info);
 
   /* if we haven't manually selected a destination account for this transaction */
   if(gnc_import_TransInfo_get_destacc_selected_manually(transaction_info) == FALSE)
