@@ -555,13 +555,10 @@ xaccCreateTable (Table *table, Widget parent, char * name)
       haveQuarks = True;
    }
 
-   /* if a header exists, get alignments, widths from there */
+   /* The 0'th row of the handlers is defeined as the header */
    alignments = NULL;
    widths = NULL;
-   curs = table->current_cursor;
-   if (!curs) {
-      curs = table->handlers[0][0];
-   }
+   curs = table->handlers[0][0];
    alignments = curs->alignments;
    widths = curs->widths;
    num_header_rows = curs->numRows;

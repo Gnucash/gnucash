@@ -307,6 +307,7 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
 {
    Table * table;
    CellBlock *curs, *header;
+   int phys_r, phys_c;
 
    reg->user_hook = NULL;
    reg->destroy = NULL;
@@ -374,8 +375,13 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
 
    /* -------------------------------- */   
    table = xaccMallocTable ();
-   xaccSetTableSize (table, header->numRows, header->numCols, 1, 1);
+   phys_r = header->numRows + curs->numRows;
+   phys_c = header->numCols;
+   xaccSetTableSize (table, phys_r, phys_c, 2, 1);
    xaccSetCursor (table, header, 0, 0, 0, 0);
+   xaccSetCursor (table, curs, header->numRows, 0, 1, 0);
+   xaccMoveCursor (table, header->numRows, 0);
+
    reg->table = table;
 }
 

@@ -99,10 +99,13 @@ void destroyCombo (BasicCell *bcell)
 
       box = (PopBox *) (cell->cell.gui_private);
    
-      moveCombo (bcell, -1, -1);
-   
-      XtDestroyWidget (box->combobox);
-      free (box);
+      if (box) { 
+         if (XtIsRealized(box->combobox)) {
+            moveCombo (bcell, -1, -1);
+            XtDestroyWidget (box->combobox);
+         }
+         free (box);
+      }
    
       /* allow the widget to be created again */
       cell->cell.gui_private = NULL;
