@@ -47,7 +47,7 @@ libgncmod_business_core_la_LIBADD = \
   ${GLIB_LIBS} \
   ${EFENCE_LIBS}
 
-						# business-core-helpers.c
+# business-core-helpers.c
 libgw_business_core_la_SOURCES = gw-business-core.c 
 libgw_business_core_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
 

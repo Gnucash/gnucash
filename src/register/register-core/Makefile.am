@@ -76,7 +76,7 @@ gw-register-core.scm gw-register-core.c gw-register-core.h: .scm-links gw-regist
 	  (primitive-load \"./gw-register-core-spec.scm\") \
 	  (gw:generate-module \"gw-register-core\")"
 
-BUILT_SOURCES += gw-register-core.scm gw-register-core.c gw-register-core.h
+BUILT_SOURCES = gw-register-core.scm gw-register-core.c gw-register-core.h
 CLEANFILES = gw-register-core.scm gw-register-core.c gw-register-core.h \
              gw-register-core.html gnucash g-wrapped register .scm-links
 
