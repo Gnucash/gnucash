@@ -419,12 +419,13 @@ topics_add_children(SCM topics, GtkCTree * tree, GtkCTreeNode * parent,
 }
 
 static void
-gnc_help_window_load_topics(gnc_help_window * help, const gchar * file) {
-  
+gnc_help_window_load_topics(gnc_help_window * help, const gchar * file)
+{  
   SCM topics;
   SCM load_topics =  gh_eval_str("gnc:load-help-topics");
 
-  topics = gh_call1(load_topics, gh_str02scm(file));
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
+  topics = gh_call1(load_topics, gh_str02scm((char *) file));
   topics_add_children(topics, GTK_CTREE(help->topics_tree), NULL, help);
   gtk_ctree_expand_to_depth (GTK_CTREE(help->topics_tree), NULL, 1);
   gtk_widget_show_all(help->topics_tree);
