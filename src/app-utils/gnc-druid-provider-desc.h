@@ -22,6 +22,7 @@ typedef struct _GNCDruidProviderDescClass GNCDruidProviderDescClass;
 #include "gnc-druid.h"
 #include "gnc-druid-provider.h"
 
+/* return TRUE if the page should be changed, FALSE if it should not */
 typedef gboolean (*GNCDruidProviderCB)(GNCDruidCB*);
 
 struct _GNCDruidProviderDesc

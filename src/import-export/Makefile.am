@@ -10,14 +10,13 @@ libgncmod_generic_import_la_SOURCES = \
 	import-format-dialog.c \
 	import-match-picker.c \
 	import-parse.c \
-	import-prov-format-cb.c \
-	import-prov-desc-format.c \
 	import-utilities.c \
 	import-settings.c \
 	import-match-map.c \
 	import-main-matcher.c \
 	gnc-import-desc-format.c \
 	gnc-import-format-cb.c \
+	gnc-import-format-gnome.c \
 	gncmod-generic-import.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
@@ -34,8 +33,6 @@ noinst_HEADERS = \
   import-main-matcher.h \
   import-match-map.h \
   import-match-picker.h \
-  import-prov-format-cb.h \
-  import-prov-desc-format.h \
   import-settings.h \
   import-utilities.h 
 
@@ -57,7 +54,9 @@ gncscm_DATA = \
 	generic-import.scm
 
 gladedir = ${GNC_GLADE_DIR}
-glade_DATA = generic-import.glade
+glade_DATA = \
+  generic-import.glade \
+  import-provider-format.glade
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \

@@ -1,3 +1,14 @@
+2004-04-10  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc.h: add a comment about
+	  the callback functions.
+	* src/import-export/Makefile.am: remove duplicate files, add
+	  import format gnome provider.
+	* src/import-export/gnc-import-format-gnome.c: add a new format
+	  provider to let the user choose a date or numeric format.
+	* src/import-export/import-provider-format.glade:  glade file
+	  for the format provider
+
 2004-03-05  Tomas Cernaj  <tcernaj@gmx.de>
 
 	* src/register/register-gnome/gnucash-grid.c:
