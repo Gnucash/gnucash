@@ -324,7 +324,7 @@ more than one currency.  This report is not designed to cope with this possibili
       "h"
       (N_ "Use the description to identify individual companies.\
   If false, use split memo")
-      #f))
+      #t))
 
      
        (add-option

@@ -390,7 +390,7 @@ gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn)
 
 Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 				       Timespec *post_date, Timespec *due_date,
-				       const char * desc, gboolean reverse)
+				       const char * memo, gboolean reverse)
 {
   Transaction *txn;
   GList *iter;
@@ -409,8 +409,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   name = gncOwnerGetName (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)));
 
-  /* Set Transaction Description, Num (invoice ID), Currency */
-  xaccTransSetDescription (txn, desc);
+  /* Set Transaction Description (Owner Name) , Num (invoice ID), Currency */
+  xaccTransSetDescription (txn, name);
   xaccTransSetNum (txn, gncInvoiceGetID (invoice));
   xaccTransSetCurrency (txn, invoice->common_commodity);
 
@@ -472,8 +472,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     split = xaccMallocSplit (invoice->book);
     /* set action and memo? */
 
-    /* The memo is the customer name */
-    xaccSplitSetMemo (split, name);
+    xaccSplitSetMemo (split, memo);
 
     xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (acc_val->val)
 				   : acc_val->val),
@@ -489,8 +488,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     Split *split = xaccMallocSplit (invoice->book);
     /* Set action/memo */
 
-    /* The memo is the customer name */
-    xaccSplitSetMemo (split, name);
+    xaccSplitSetMemo (split, memo);
+    xaccSplitSetAction (split, reverse ? _("Invoice") : _("Bill"));
 			   
     xaccSplitSetBaseValue (split, (reverse ? total : gnc_numeric_neg (total)),
 			   invoice->common_commodity);

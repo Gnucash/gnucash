@@ -1184,17 +1184,8 @@ print_check_cb(GtkWidget * widget, gpointer data)
   if(split && trans &&
      gh_procedure_p(print_check))
   {
-    if (xaccTransGetTxnType (trans) != TXN_TYPE_NONE) {
-      /* If this is an Invoice or Payment, reverse the meanings of
-       * these fields */
-      memo   = xaccTransGetDescription(trans);
-      payee  = xaccSplitGetMemo(split);
-
-    } else {
-      payee  = xaccTransGetDescription(trans);
-      memo   = xaccSplitGetMemo(split);
-    }
-
+    payee  = xaccTransGetDescription(trans);
+    memo   = xaccSplitGetMemo(split);
     amount = xaccSplitGetAmount(split);
     amount = gnc_numeric_abs (amount);
     date   = xaccTransGetDate(trans);

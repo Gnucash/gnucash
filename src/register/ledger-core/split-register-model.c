@@ -142,7 +142,16 @@ static const char *
 gnc_split_register_get_desc_label (VirtualLocation virt_loc,
                                    gpointer user_data)
 {
-  return _("Description");
+  SplitRegister *reg = user_data;
+
+  switch (reg->type) {
+  case RECEIVABLE_REGISTER:
+    return _("Customer");
+  case PAYABLE_REGISTER:
+    return _("Vendor");
+  default:
+    return _("Description");
+  }
 }
 
 static const char *
@@ -193,16 +202,7 @@ static const char *
 gnc_split_register_get_memo_label (VirtualLocation virt_loc,
                                    gpointer user_data)
 {
-  SplitRegister *reg = user_data;
-
-  switch (reg->type) {
-  case RECEIVABLE_REGISTER:
-    return _("Customer");
-  case PAYABLE_REGISTER:
-    return _("Vendor");
-  default:
     return _("Memo");
-  }
 }
 
 static const char *
@@ -853,8 +853,16 @@ gnc_split_register_get_desc_help (VirtualLocation virt_loc,
 
   help = gnc_table_get_entry (reg->table, virt_loc);
   if (!help || *help == '\0')
-    help = _("Enter a description of the transaction");
-
+    switch (reg->type) {
+    case RECEIVABLE_REGISTER:
+      help = _("Enter the name of the Customer");
+      break;
+    case PAYABLE_REGISTER:
+      help = _("Enter the name of the Vendor");
+      break;
+    default:
+      help = _("Enter a description of the transaction");
+    }
   return g_strdup (help);
 }
 
@@ -965,16 +973,7 @@ gnc_split_register_get_memo_help (VirtualLocation virt_loc,
 
   help = gnc_table_get_entry (reg->table, virt_loc);
   if (!help || *help == '\0')
-    switch (reg->type) {
-    case RECEIVABLE_REGISTER:
-      help = _("Enter the name of the Customer");
-      break;
-    case PAYABLE_REGISTER:
-      help = _("Enter the name of the Vendor");
-      break;
-    default:
       help = _("Enter a description of the split");
-    }
   return g_strdup (help);
 }
 
