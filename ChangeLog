@@ -14,6 +14,8 @@
 	  with all the different corner cases.  Someone should re-write
 	  this all.
 
+	  Closed bug # 97690
+	
 2002-12-03  David Hampton  <hampton@employees.org>
 
 	* src/register/ledger-core/split-register-control.c
