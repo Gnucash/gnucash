@@ -1104,6 +1104,8 @@ regSaveTransaction( RegWindow *regData, int position )
   int  row = position * NUM_ROWS_PER_TRANS + NUM_HEADER_ROWS;
   Transaction *trans;
   Boolean dateOutOfOrder = False;
+  Account *old_xfrm_acct = NULL;
+  Account *old_xto_acct = NULL;
 
   /* If nothing has changed, we have nothing to do */
   if (MOD_NONE == regData->changed) return;
@@ -1135,6 +1137,37 @@ regSaveTransaction( RegWindow *regData, int position )
     if (acc) acc->parent->saved = False;
   }
 
+  /* if not a ledger, then we shouldn't get here ... */
+  if( (regData->changed & MOD_XTO ) &&
+     ((GEN_LEDGER == regData->type) ||
+      (INC_LEDGER == regData->type) ||
+      (PORTFOLIO  == regData->type)) )
+    {
+    Account *xfer_acct;
+
+    /* we do the "to" transfers in three steps: first, we
+     * remove the transaction from the "to" account, then
+     * we handle the "from" transfer, and finally, we add
+     * the transaction to the "to" account.  It is split 
+     * up this way to avoid conflicts if the user is attempting
+     * to reverse "from" and "to" in a general ledger window.
+     * If we didn't split it up this way, there would be a moment
+     * when "from" and "to" were identical, which is an error
+     * condition that is trapped.  We avoid this by making "to"
+     * be null for a while, until the "from" work is completed.
+     */
+    DEBUG("MOD_XTO_PHASE_ONE\n");
+
+    /* for a general ledger, from and to are easy to determine */
+    xfer_acct = (Account *) trans->credit;
+
+    if (xfer_acct) {
+      /* remove the transaction from wherever it used to be */
+      REMOVE_TRANS (xfer_acct, trans);
+      old_xto_acct = xfer_acct;
+      }
+    }
+   
   if( regData->changed & MOD_XFRM ) 
     {
     /* ... the transfer ... */
@@ -1166,10 +1199,7 @@ regSaveTransaction( RegWindow *regData, int position )
     if (xfer_acct) {
       /* remove the transaction from wherever it used to be */
       REMOVE_TRANS (xfer_acct, trans);
-  
-      /* recalculate the balance and redisplay the window for the old acct */
-      RECALC_BALANCE (xfer_acct);
-      REFRESH_REGISTER (xfer_acct);
+      old_xfrm_acct = xfer_acct;
       }
      
     /* get the new account name */
@@ -1218,24 +1248,12 @@ regSaveTransaction( RegWindow *regData, int position )
       (INC_LEDGER == regData->type) ||
       (PORTFOLIO  == regData->type)) )
     {
-    /* ... the transfer ... */
+    /* ... complete doing the XTO transfer ... */
+    /* see notes above for details */
     char * name;
     Account *xfer_acct;
 
-    DEBUG("MOD_XTO\n");
-
-    /* for a general ledger, from and to are easy to determine */
-    xfer_acct = (Account *) trans->credit;
-
-    if (xfer_acct) {
-      /* remove the transaction from wherever it used to be */
-      REMOVE_TRANS (xfer_acct, trans);
- 
-      /* recalculate the balance and redisplay the window for the old acct */
-      RECALC_BALANCE (xfer_acct);
-      REFRESH_REGISTER (xfer_acct);
-      }
-   
+    DEBUG("MOD_XTO_PHASE_TWO\n");
     /* get the new account name */
     name = XbaeMatrixGetCell(regData->reg,row+XTO_CELL_R, XTO_CELL_C);
 
@@ -1547,6 +1565,18 @@ regSaveTransaction( RegWindow *regData, int position )
     if (1 < regData->numAcc) {
       regRecalculateBalance (regData);
     }
+  }
+
+  if (old_xfrm_acct) {
+    /* recalculate the balance and redisplay the window for the old acct */
+    RECALC_BALANCE (old_xfrm_acct);
+    REFRESH_REGISTER (old_xfrm_acct);
+  }
+
+  if (old_xto_acct) {
+    /* recalculate the balance and redisplay the window for the old acct */
+    RECALC_BALANCE (old_xto_acct);
+    REFRESH_REGISTER (old_xto_acct);
   }
 
   REFRESH_REGISTER ((trans->credit));
