@@ -134,26 +134,19 @@ static int string_match_predicate (gpointer object, QueryAccess get_fcn,
 
   s = ((query_string_getter)get_fcn) (object);
 
-  do {
-    if (pdata->is_regex) {
-      regmatch_t match;
-      if (!regexec (&pdata->compiled, s, 1, &match, 0))
-	ret = 1;
-
-      break;
-    }
-
-    if (pdata->options == STRING_MATCH_CASEINSENSITIVE) {
-      if (strcasestr (s, pdata->matchstring))
-	ret = 1;
-
-      break;
-    }
-
-    if (strstr (s, pdata->matchstring))
+  if (pdata->is_regex) {
+    regmatch_t match;
+    if (!regexec (&pdata->compiled, s, 1, &match, 0))
       ret = 1;
 
-  } while (FALSE);
+  } else if (pdata->options == STRING_MATCH_CASEINSENSITIVE) {
+    if (strcasestr (s, pdata->matchstring))
+      ret = 1;
+
+  } else {
+    if (strstr (s, pdata->matchstring))
+      ret = 1;
+  }
 
   switch (pd->how) {
   case COMPARE_EQUAL:
@@ -527,7 +520,10 @@ static int guid_match_predicate (gpointer object, QueryAccess get_fcn,
 static void guid_free_pdata (QueryPredData_t pd)
 {
   query_guid_t pdata = (query_guid_t)pd;
+  GList *node;
   VERIFY_PDATA (query_guid_type);
+  for (node = pdata->guids; node; node = node->next)
+    xaccGUIDFree (node->data);
   g_list_free (pdata->guids);
   g_free (pdata);
 }
@@ -542,11 +538,17 @@ static QueryPredData_t guid_copy_predicate (QueryPredData_t pd)
 QueryPredData_t gncQueryGUIDPredicate (guid_match_t options, GList *guids)
 {
   query_guid_t pdata;
+  GList *node;
 
   pdata = g_new0 (query_guid_def, 1);
   pdata->pd.type_name = query_guid_type;
   pdata->options = options;
   pdata->guids = g_list_copy (guids);
+  for (node = pdata->guids; node; node = node->next) {
+    GUID *guid = xaccGUIDMalloc ();
+    *guid = *((GUID *)node->data);
+    node->data = guid;
+  }
   return ((QueryPredData_t)pdata);
 }
 
