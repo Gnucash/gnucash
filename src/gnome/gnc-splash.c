@@ -54,6 +54,9 @@ gnc_show_splash_screen (void)
 {
   GtkWidget *pixmap;
   GtkWidget *frame;
+  GtkWidget *vbox;
+  GtkWidget *hbox;
+  GtkWidget *version;
 
   if (splash) return;
 
@@ -75,9 +78,15 @@ gnc_show_splash_screen (void)
   }
 
   frame = gtk_frame_new (NULL);
+  vbox = gtk_vbox_new (FALSE, 3);
+  hbox = gtk_hbox_new (FALSE, 0);
+  version = gtk_label_new ("Version: Gnucash-CVS");
 
   gtk_container_add (GTK_CONTAINER (frame), pixmap);
-  gtk_container_add (GTK_CONTAINER (splash), frame);
+  gtk_box_pack_end (GTK_BOX (hbox), version, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (splash), vbox);
 
   gtk_widget_show_all (splash);
 
