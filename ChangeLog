@@ -1,3 +1,9 @@
+2005-01-12  Christian Stimming  <stimming@tuhh.de>
+
+	* rpm/gnucash.spec.in, rpm/README: Remove obsolete package
+	requirements from rpm spec file. Add warnings about using these
+	spec files with caution.
+
 2005-01-10  Christian Stimming  <stimming@tuhh.de>
 
 	* src/engine/guid.h: Fix gcc4 warnings as pointed out by bug
