@@ -408,6 +408,7 @@ LANGINFO_D_FMT_CHECK
 ### --------------------------------------------------------------------------
 ### help files
 
+# Used to initialize doc-path.
 AC_ARG_WITH( help-prefix,
   [  --with-help-prefix=PATH      specify where to store the help files],
   GNC_HELPDIR="$with_help_prefix/gnome/help/gnucash",
@@ -693,11 +694,11 @@ fi
 ### --------------------------------------------------------------------------
 ### GnuCash flags and libs configuration
 
-GNUCASH_ENGINE_BASE_LIBS="${GUILE_LIBS} ${GLIB_LIBS}"
-GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} -L${GNC_GWRAP_LIBDIR} ${GNUCASH_ENGINE_BASE_LIBS} -lgncmod-engine -lgw-engine -lgw-kvp -lgw-glib -lgncmodule"
+GNUCASH_ENGINE_BASE_LIBS="${GLIB_LIBS}"
+GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} -L${GNC_GWRAP_LIBDIR} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgw-engine -lgw-kvp -lgw-glib -lgncmodule"
 
-GNUCASH_ENGINE_BASE_CFLAGS="${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_INCS}"
-GNUCASH_ENGINE_CFLAGS="-I${GNC_INCLUDE_DIR} ${GNUCASH_ENGINE_BASE_CFLAGS}"
+GNUCASH_ENGINE_BASE_CFLAGS="${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}"
+GNUCASH_ENGINE_CFLAGS="-I${GNC_INCLUDE_DIR} ${GNUCASH_ENGINE_BASE_CFLAGS} ${GUILE_INCS}"
 
 AC_SUBST(GNUCASH_ENGINE_BASE_LIBS)
 AC_SUBST(GNUCASH_ENGINE_LIBS)
