@@ -51,8 +51,8 @@ dom_tree_to_guid(xmlNodePtr node)
     }
 }
 
-gboolean
-dom_tree_handle_kvp(kvp_frame* frame, xmlNodePtr node)
+kvp_frame*
+dom_tree_handle_kvp(xmlNodePtr node)
 {
 
     return FALSE;
@@ -112,6 +112,7 @@ dom_tree_to_gnc_numeric(xmlNodePtr node)
 
     if(string_to_gnc_numeric(content, ret) != NULL)
     {
+        free(content);
         return ret;
     }
     else
@@ -177,6 +178,7 @@ dom_tree_to_timespec(xmlNodePtr node)
             free(content);
             return timespec_failure(ret);
           }
+          free(content);
           seen_s = TRUE;
         }
       }
@@ -197,6 +199,7 @@ dom_tree_to_timespec(xmlNodePtr node)
             free(content);
             return timespec_failure(ret);
           }
+          free(content);
           seen_ns = TRUE;
         }
       }

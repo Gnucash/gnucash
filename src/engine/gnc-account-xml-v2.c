@@ -79,7 +79,7 @@ account_security_handler (xmlNodePtr node, Account* act)
 static gboolean
 account_slots_handler (xmlNodePtr node, Account* act)
 {
-    return dom_tree_handle_kvp(act->kvp_data, node);
+    /* return dom_tree_handle_kvp(act->kvp_data, node); */
 }
 
 static gboolean

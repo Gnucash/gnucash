@@ -8,7 +8,7 @@
 #include "sixtp-utils.h"
 
 #include "GNCId.h"
-
+#include "kvp_frame.h"
 
 xmlNodePtr
 guid_to_dom_tree(const char *tag, GUID* gid)
@@ -29,6 +29,8 @@ guid_to_dom_tree(const char *tag, GUID* gid)
         
     xmlNodeAddContent(ret, guid_str);
 
+    g_free(guid_str);
+    
     return ret;
 }
 
@@ -140,4 +142,9 @@ gnc_numeric_to_dom_tree(const char *tag, const gnc_numeric *num)
     g_free(numstr);
 
     return ret;
+}
+
+xmlNodePtr
+kvp_frame_to_dom_tree(const char *tag, const kvp_frame *frame)
+{
 }

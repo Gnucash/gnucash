@@ -24,6 +24,6 @@ Timespec* dom_tree_to_timespec(xmlNodePtr node);
 gnc_numeric* dom_tree_to_gnc_numeric(xmlNodePtr node);
 gchar * dom_tree_to_text(xmlNodePtr tree);
 
-gboolean dom_tree_handle_kvp(kvp_frame* frame, xmlNodePtr node);
+kvp_frame* dom_tree_handle_kvp(xmlNodePtr node);
 
 #endif /* _SIXTP_DOM_PARSERS_H_ */

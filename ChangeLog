@@ -1,5 +1,15 @@
 2001-02-14  James LewisMoss  <jimdres@mindspring.com>
 
+	* src/test/test-dom-converters1.c (Repository): fix mem leak.
+
+	* src/engine/sixtp-dom-parsers.h (Repository): start of kvp code.
+
+	* src/engine/sixtp-dom-parsers.c (Repository): fix mem leak.
+	Start of kvp code.
+
+	* src/engine/sixtp-dom-generators.c (Repository): fix mem leak.
+	(Repository): Start of kvp code.
+
 	* src/test/test-date-converting.c (Repository): Tests to make sure
 	date <-> string converting strings work.
 
