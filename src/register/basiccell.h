@@ -151,8 +151,8 @@
  *
  * The move() callback will be called when the GUI element needs
  *    to be positioned to a new location within the table grid.
- *    The second and third arguments are the physical (not virtual)
- *    row and column that the GUI element should be moved to.
+ *    The second argument is the virtual location the GUI
+ *    element should be moved to.
  *
  * The gui_private member may be used by the derived class to 
  *    store any additional GUI-specific data.
@@ -209,7 +209,7 @@ typedef void (*CellLeaveFunc) (BasicCell *cell);
 typedef void (*CellRealizeFunc) (BasicCell *cell,
                                  void *gui_handle);
 
-typedef void (*CellMoveFunc) (BasicCell *cell, PhysicalLocation phys_loc);
+typedef void (*CellMoveFunc) (BasicCell *cell, VirtualLocation virt_loc);
 
 typedef void (*CellDestroyFunc) (BasicCell *cell);
 

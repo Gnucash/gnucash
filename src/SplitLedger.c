@@ -2944,7 +2944,12 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
 
     case SHRBALN_CELL:
       {
+        SRInfo *info = xaccSRGetInfo(reg);
+        Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
         double balance;
+
+        if (split == blank_split)
+          return "";
 
         balance = xaccSplitGetShareBalance (split);
 
@@ -3612,7 +3617,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
             gnc_table_set_cursor (table, reg->trans_cursor,
                                   phys_loc, vcell_loc);
             gnc_table_set_virt_cell_data (table, vcell_loc,
-                                          (gpointer) xaccSplitGetGUID (split));
+                                          xaccSplitGetGUID (split));
             vcell_loc.virt_row ++;
             phys_loc.phys_row += reg->trans_cursor->num_rows; 
 
@@ -3627,7 +3632,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                   gnc_table_set_cursor (table, reg->split_cursor,
                                         phys_loc, vcell_loc);
                   gnc_table_set_virt_cell_data (table, vcell_loc,
-                                                (gpointer)
                                                 xaccSplitGetGUID (secondary));
                   PINFO ("load split %d at phys row %d addr=%p \n", 
                           j, phys_loc.phys_row, secondary);
@@ -3642,7 +3646,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
             /* the simple case ... */
             gnc_table_set_cursor (table, lead_cursor, phys_loc, vcell_loc);
             gnc_table_set_virt_cell_data (table, vcell_loc,
-                                          (gpointer) xaccSplitGetGUID (split));
+                                          xaccSplitGetGUID (split));
             vcell_loc.virt_row ++;
             phys_loc.phys_row += lead_cursor->num_rows; 
          }
@@ -3665,7 +3669,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       /* do the transaction row of the blank split */
       gnc_table_set_cursor (table, reg->trans_cursor, phys_loc, vcell_loc);
       gnc_table_set_virt_cell_data (table, vcell_loc,
-                                    (gpointer) xaccSplitGetGUID (split));
+                                    xaccSplitGetGUID (split));
       vcell_loc.virt_row ++;
       phys_loc.phys_row += reg->trans_cursor->num_rows; 
 
@@ -3683,7 +3687,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
             gnc_table_set_cursor (table, reg->split_cursor,
                                   phys_loc, vcell_loc);
             gnc_table_set_virt_cell_data (table, vcell_loc,
-                                          (gpointer)
                                           xaccSplitGetGUID (secondary));
             PINFO ("load split %d at phys row %d addr=%p \n", 
                    j, phys_loc.phys_row, secondary);
@@ -3697,7 +3700,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    } else {
       gnc_table_set_cursor (table, lead_cursor, phys_loc, vcell_loc);
       gnc_table_set_virt_cell_data (table, vcell_loc,
-                                    (gpointer) xaccSplitGetGUID (split));
+                                    xaccSplitGetGUID (split));
       vcell_loc.virt_row ++;
       phys_loc.phys_row += lead_cursor->num_rows; 
    }

@@ -77,7 +77,7 @@ typedef struct _PopBox
 static void block_list_signals (ComboCell *cell);
 static void unblock_list_signals (ComboCell *cell);
 static void realizeCombo (BasicCell *bcell, void *w);
-static void moveCombo (BasicCell *bcell, PhysicalLocation phys_loc);
+static void moveCombo (BasicCell *bcell, VirtualLocation virt_loc);
 static void destroyCombo (BasicCell *bcell);
 static gboolean enterCombo (BasicCell *bcell,
                             int *cursor_position,
@@ -720,7 +720,7 @@ realizeCombo (BasicCell *bcell, void *data)
 /* =============================================== */
 
 static void
-moveCombo (BasicCell *bcell, PhysicalLocation phys_loc)
+moveCombo (BasicCell *bcell, VirtualLocation virt_loc)
 {
 	PopBox *box = bcell->gui_private;
 

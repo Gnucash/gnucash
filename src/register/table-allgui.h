@@ -148,7 +148,7 @@ typedef const char * (*TableGetEntryHandler) (gpointer vcell_data,
 
 typedef gpointer (*VirtCellDataAllocator)   (void);
 typedef void     (*VirtCellDataDeallocator) (gpointer user_data);
-typedef void     (*VirtCellDataCopy)        (gpointer to, gpointer from);
+typedef void     (*VirtCellDataCopy)        (gpointer to, gconstpointer from);
 
 /* The number of "physical" rows/cols is the number
  * of displayed one-line gui rows/cols in the table.
@@ -311,7 +311,7 @@ void        gnc_table_set_cursor (Table *table, CellBlock *curs,
 /* Set the virtual cell data for a particular location. */
 void        gnc_table_set_virt_cell_data (Table *table,
                                           VirtualCellLocation vcell_loc,
-                                          gpointer vcell_data);
+                                          gconstpointer vcell_data);
 
 /* The gnc_table_move_cursor() method will move the cursor (but not
  *   the cursor GUI) to the indicated location. This function is
@@ -405,10 +405,10 @@ gboolean gnc_table_enter_update(Table *table,
                                 int *end_selection);
 
 const char * gnc_table_leave_update(Table *table,
-                                    PhysicalLocation phys_loc);
+                                    VirtualLocation virt_loc);
 
 const char * gnc_table_modify_update(Table *table,
-                                     PhysicalLocation phys_loc,
+                                     VirtualLocation virt_loc,
                                      const char *change,
                                      const char *newval,
                                      int *cursor_position,
@@ -416,7 +416,7 @@ const char * gnc_table_modify_update(Table *table,
                                      int *end_selection);
 
 gboolean     gnc_table_direct_update(Table *table,
-                                     PhysicalLocation phys_loc,
+                                     VirtualLocation virt_loc,
                                      char **newval_ptr,
                                      int *cursor_position,
                                      int *start_selection,

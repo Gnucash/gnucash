@@ -190,16 +190,13 @@ gnucash_sheet_stop_editing (GnucashSheet *sheet)
 static void
 gnucash_sheet_deactivate_cursor_cell (GnucashSheet *sheet)
 {
-        PhysicalLocation phys_loc;
-        Table *table = sheet->table;
         VirtualLocation virt_loc;
 
-        gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor), &phys_loc);
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
         gnucash_sheet_stop_editing (sheet);
 
-        gnc_table_leave_update(table, phys_loc);
+        gnc_table_leave_update(sheet->table, virt_loc);
 
         gnucash_sheet_redraw_block (sheet, virt_loc.vcell_loc);
 }
@@ -813,16 +810,14 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
         GtkEditable *editable;
         Table *table = sheet->table;
         VirtualLocation virt_loc;
-        PhysicalLocation phys_loc;
 
         const char *retval;
 
         int cursor_position, start_sel, end_sel;
 
-        gnucash_cursor_get_phys(GNUCASH_CURSOR(sheet->cursor), &phys_loc);
         gnucash_cursor_get_virt(GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
-        if (!gnc_table_physical_cell_valid (table, phys_loc, TRUE))
+        if (!gnc_table_virtual_cell_valid (table, virt_loc, TRUE))
                 return NULL;
 
         editable = GTK_EDITABLE(sheet->entry);
@@ -833,7 +828,7 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
         end_sel = MAX(editable->selection_start_pos,
                       editable->selection_end_pos);
 
-        retval = gnc_table_modify_update (table, phys_loc,
+        retval = gnc_table_modify_update (table, virt_loc,
 					  new_text, new_text,
                                           &cursor_position,
                                           &start_sel, &end_sel);
@@ -869,7 +864,6 @@ gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
 {
         GtkEditable *editable;
         Table *table = sheet->table;
-        PhysicalLocation phys_loc;
         VirtualLocation virt_loc;
 
         const char *old_text;
@@ -883,10 +877,9 @@ gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
         if (!new_text_length)
                 return;
 
-        gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor), &phys_loc);
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
-        if (!gnc_table_physical_cell_valid (table, phys_loc, FALSE))
+        if (!gnc_table_virtual_cell_valid (table, virt_loc, FALSE))
                 return;
 
         old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
@@ -912,7 +905,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
         end_sel = MAX(editable->selection_start_pos,
                       editable->selection_end_pos);
 
-        retval = gnc_table_modify_update (table, phys_loc, change, newval,
+        retval = gnc_table_modify_update (table, virt_loc, change, newval,
                                           position, &start_sel, &end_sel);
 
         if (retval && (safe_strcmp (retval, newval) != 0)) {
@@ -959,8 +952,6 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
 {
         GtkEditable *editable;
         Table *table = sheet->table;
-
-        PhysicalLocation phys_loc;
         VirtualLocation virt_loc;
 
         const char *old_text;
@@ -973,10 +964,9 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
         if (end_pos <= start_pos)
                 return;
 
-        gnucash_cursor_get_phys (GNUCASH_CURSOR(sheet->cursor), &phys_loc);
         gnucash_cursor_get_virt (GNUCASH_CURSOR (sheet->cursor), &virt_loc);
 
-        if (!gnc_table_physical_cell_valid (table, phys_loc, FALSE))
+        if (!gnc_table_virtual_cell_valid (table, virt_loc, FALSE))
                 return;
 
         old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
@@ -996,7 +986,7 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
         end_sel = MAX(editable->selection_start_pos,
                       editable->selection_end_pos);
 
-        retval = gnc_table_modify_update (table, phys_loc,
+        retval = gnc_table_modify_update (table, virt_loc,
                                           NULL, newval,
                                           &cursor_position,
                                           &start_sel, &end_sel);
@@ -1449,7 +1439,6 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
         GtkEditable *editable;
         Table *table = sheet->table;
         VirtualLocation virt_loc;
-        PhysicalLocation phys_loc;
         gboolean changed;
         gboolean result;
 
@@ -1458,10 +1447,9 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
         int cursor_position, start_sel, end_sel;
         int new_position, new_start, new_end;
 
-        gnucash_cursor_get_phys(GNUCASH_CURSOR(sheet->cursor), &phys_loc);
         gnucash_cursor_get_virt(GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
-        if (!gnc_table_physical_cell_valid (table, phys_loc, TRUE))
+        if (!gnc_table_virtual_cell_valid (table, virt_loc, TRUE))
                 return FALSE;
 
         editable = GTK_EDITABLE(sheet->entry);
@@ -1476,7 +1464,7 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
         new_start = start_sel;
         new_end = end_sel;
 
-        result = gnc_table_direct_update(table, phys_loc,
+        result = gnc_table_direct_update(table, virt_loc,
                                          &new_text,
                                          &new_position,
                                          &new_start, &new_end,
