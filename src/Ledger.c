@@ -313,12 +313,12 @@ LoadXferCell (ComboCell *cell,  AccountGroup *grp)
    /* build the xfer menu out of account names */
    /* traverse sub-accounts recursively */
    n = 0;
-   acc = getAccount (grp, n);
+   acc = xaccGroupGetAccount (grp, n);
    while (acc) {
       xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
       LoadXferCell (cell, xaccAccountGetChildren (acc));
       n++;
-      acc = getAccount (grp, n);
+      acc = xaccGroupGetAccount (grp, n);
    }
 }
 
