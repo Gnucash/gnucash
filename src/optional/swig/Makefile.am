@@ -68,11 +68,12 @@ SWIG_INPUT_HDRS := \
 ## same as the .pm file, and automake won't tolerate libraries that
 ## aren't named lib*.so...
 install-data-local: libgncswig.la
-	cd ${perllibdir} && rm -f gnucash.so
-	if [ -f ${perllibdir}/libgncswig.so ]; then \
-		cd ${perllibdir} && ln -s libgncswig.so gnucash.so; \
-	elif [ -f ${perllibdir}/libgncswig.so.1.1 ]; then \
-		cd ${perllibdir} && ln -s libgncswig.so.1.1 gnucash.so; \
+	cd ${DESTDIR}${perllibdir} && rm -f gnucash.so
+	if [ -f ${DESTDIR}${perllibdir}/libgncswig.so ]; then \
+		cd ${DESTDIR}${perllibdir} && ln -s libgncswig.so gnucash.so; \
+	elif [ -f ${DESTDIR}${perllibdir}/libgncswig.so.1.1 ]; then \
+		cd ${DESTDIR}${perllibdir} && \
+                ln -s libgncswig.so.1.1 gnucash.so; \
 	else \
 		echo "Can't find libgncswig shared library!" \
 		exit 1; \
