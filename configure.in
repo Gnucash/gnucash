@@ -73,17 +73,28 @@ AM_PROG_LIBTOOL
 
 AC_SUBST(LIBTOOL_DEPS)
 
-# checks for pthreads
-ACX_PTHREAD([enable_threads="pthread"],[enable_threads="no"])
-if test $enable_threads != "pthread"; then
-    AC_MSG_ERROR([unable to find pthreads, currently this is required])
-else
-    AC_DEFINE(HAVE_PTHREAD,1,
-	[Define if you have POSIX threads libraries and header files.])
-    LIBS="$PTHREAD_LIBS $LIBS"
-    CFLAGS="$PTHREAD_CFLAGS $CFLAGS"
-    CXXFLAGS="$PTHREAD_CFLAGS $CXXFLAGS"
-fi
+# # checks for the pthreads library
+# have_pthread=no
+# for i in pthreads lthread pthread; do
+#   if test "x$have_pthread" = xno; then
+#     AC_CHECK_LIB($i, pthread_once, [
+#  	PTHREAD_LIBS=-l$i
+# 	have_pthread=yes
+# 	])
+#   fi
+# done
+# 
+# # Hmm, maybe it's just in libc?
+# if test "x$have_pthread" = xno; then
+#     AC_CHECK_FUNC(pthread_once, [ have_pthread=yes ])
+# fi
+# 
+# # Do we HAVE threads?!?
+# if test "x$have_pthread" = xno; then
+#   AC_MSG_ERROR([unable to find pthreads on your system.  Sorry.])
+# fi
+# 
+# AC_SUBST(PTHREAD_LIBS)
 
 AC_ISC_POSIX
 AC_C_BIGENDIAN

@@ -1,3 +1,11 @@
+2003-07-09  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: change (and comment out) checks for pthreads
+	* macros/acx_pthread.m4: change pthread search (should be removed)
+	* src/engine/guid.c: remove pthread code and just use a static buffer.
+	  (pthread code is kept within some #ifdef's, just in case we decide to
+	   put it back in later).
+
 2003-07-09  Christian Stimming  <stimming@tuhh.de>
 
 	* README: Added remark about gnucash-docs.
