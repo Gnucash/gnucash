@@ -104,7 +104,7 @@ xaccInitAccount (Account * acc)
 
   xaccGUIDNew(&acc->guid);
   xaccStoreEntity(acc, &acc->guid, GNC_ID_ACCOUNT);
-  LEAVE ("guid=%s\n", guid_to_string(&acc->guid));
+  LEAVE ("account=%p\n", acc);
 }
 
 /********************************************************************\
@@ -375,7 +375,7 @@ xaccAccountSetGUID (Account *account, GUID *guid)
 {
   if (!account || !guid) return;
 
-  PINFO("acct=%p guid=%s", account, guid_to_string(guid));
+  PINFO("acct=%p", account);
   xaccRemoveEntity(&account->guid);
 
   account->guid = *guid;

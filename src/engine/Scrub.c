@@ -208,8 +208,7 @@ xaccSplitScrub (Split *split)
                         scu, GNC_RND_ROUND))
     return;
 
-  PINFO ("split with mismatched values: %s",
-         guid_to_string (xaccSplitGetGUID (split)));
+  PINFO ("split with mismatched values");
 
   trans_was_open = xaccTransIsOpen (trans);
 
@@ -304,7 +303,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     /* put split into account before setting split value */
     if (!balance_split)
     {
-      balance_split = xaccMallocSplit();
+      balance_split = xaccMallocSplit ();
 
       xaccAccountBeginEdit (account);
       xaccAccountInsertSplit (account, balance_split);
@@ -312,8 +311,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     }
   }
 
-  PINFO ("unbalanced transaction: %s",
-         guid_to_string (xaccTransGetGUID (trans)));
+  PINFO ("unbalanced transaction");
 
   {
     const gnc_commodity *common_currency;
@@ -363,6 +361,8 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 
     if (balance_split)
       xaccTransAppendSplit (trans, balance_split);
+
+    xaccSplitScrub (balance_split);
 
     if (!trans_was_open)
       xaccTransCommitEdit (trans);
