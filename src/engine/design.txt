@@ -35,7 +35,7 @@ the user.
 Note that the sum of the values of the splits is always computed with respect to 
 a currency; thus splits can be balanced even when they are in different
 currencies, as long as they share a common currency.  The conversion price
-is simply the rpice stored in the split.  This feature allows currency-trading 
+is simply the price stored in the split.  This feature allows currency-trading 
 accounts to be established.
 
 Every split must point at its parent transaction, and that transaction
@@ -157,7 +157,7 @@ many ways can be better to the later design.
      errors.  For example, it can be used to implement a trace mechanism.
  (3) (with the right implementation) Can be thread safe.
  (4) Allows errors that occurred deep in the implementation to be reported
-     up to much higher levels without requireing bagagge inthe middle.
+     up to much higher levels without requiring baggage in the middle.
 
 The right implementation for (2) is to implement not a single variable, but a stack
 or a ring (circular queue) on which error codes are placed, and from which error
@@ -168,9 +168,9 @@ pthread_getspecific() to define a per-thread global and/or ring/queue.
 Engine Isolation
 ----------------
 Goals of engine isolation:
-  o Hide the engine behind and API so that multiple, plaggable engines
+  o Hide the engine behind an API so that multiple, pluggable engines
     could be created, e.g. SQL or CORBA.
-  o Engine users are blocked from being able to put engine ineternal
+  o Engine users are blocked from being able to put engine internal
     structures in an inconsistent state.  Updates are "atomic".
 
 Some half-finished thoughts about the engine API:
@@ -193,7 +193,7 @@ Some half-finished thoughts about the engine API:
    and "end-edit" calls.
 
 -- begin/end braces could potentially be useful for two-phase commit schemes.
-   where "end-edit" is replaced by "commeit-edit" or "reject-edit".
+   where "end-edit" is replaced by "commit-edit" or "reject-edit".
 
 
 Reconciliation
@@ -224,14 +224,14 @@ How about the following proposal:
 -- transactions marked 'y' (reconciled) in gui cannot be edited.
 -- gui will allow 'y' to be changed back to 'n' or 'c'
    (thus allowing editing).
--- engine will also enforce above restricitions
+-- engine will also enforce above restrictions
 -- transactions marked 'f' cannot be changed, period, either
    in the gui or the engine.
 
 Let me know if this is a bad idea, otherwise I'll implement it.
 
 Should I change the font or color or something for reconciled
-transctions, to provide some (strronger) visual cue?  If so, what
+transactions, to provide some (stronger) visual cue?  If so, what
 color/font/whatever?
 
 
@@ -317,16 +317,16 @@ horrible things happen to the "master" database file.
 
 Session Mgmt
 ------------
-To allow the user of the engine some guarentee of atomic updates, 
+To allow the user of the engine some guarantee of atomic updates, 
 serialized file I/O, related miscellany, the concept of a session
 is supported.  No file IO can be performed until a session has 
-been created, and file updates are not guarenteed atomic unless
+been created, and file updates are not guaranteed atomic unless
 performed within a SessionBegin/SessionEnd pair.
 
 Note that (in the current implementation) data can be manipulated 
 outside of the session; its just that it cannot be saved/made persistent.
 
-The goal of sessin management is to ensure that e.g. two users don't end 
+The goal of session management is to ensure that e.g. two users don't end 
 up editing the same file at the same time, or, e.g. that an automatic
 stock-quote update daemon running under a different pid doesn't trash 
 data being currently edited by the user.
@@ -344,7 +344,7 @@ Ideas for engine enhancements:
      write, and compare the two resulting AccountGroups for equality.
 
      During development, this is a good idea, as it will help uncover
-     thinko's more quickly, instead of letting them hid for weeks or months
+     thinko's more quickly, instead of letting them hide for weeks or months
      (as the last one did).  Its not a bad self-consistency check when
      monkeying with the internals, damn the performance.
      
@@ -352,3 +352,4 @@ Ideas for engine enhancements:
 
 
 September 1998
+
