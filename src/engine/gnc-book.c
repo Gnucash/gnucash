@@ -33,6 +33,8 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
+#include "config.h"
+
 #include <dlfcn.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -548,7 +550,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
     }
 
     /* if there's a begin method, call that. */
-    if (book->backend->book_begin)
+    if (book->backend && book->backend->book_begin)
     {
       GNCBackendError err;
 
