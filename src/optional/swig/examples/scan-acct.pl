@@ -4,8 +4,10 @@
 #
 # This file demonstrates how to open an acount file and print 
 # the names and balances of the top-level accounts in the file.
+# Its a pretty basic demo.
+# it also prints timing info, handing for performance measurement.
 #
-# use lib '../swig/perl5/';
+# use lib '/usr/lib/gnucash/';
 use lib '..';
 use gnucash;                                           
 package gnucash;
