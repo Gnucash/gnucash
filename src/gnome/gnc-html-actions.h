@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-html-embedded.h -- embed objects in the html stream          *
+ * gnc-html-actions.h -- basic form submission actions              * 
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,19 +20,11 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __GNC_HTML_EMBEDDED_H__
-#define __GNC_HTML_EMBEDDED_H__
+#ifndef __GNC_HTML_ACTIONS_H__
+#define __GNC_HTML_ACTIONS_H__
 
-#include <gnome.h>
 #include "gnc-html.h"
 
-GtkWidget * gnc_html_embedded_piechart(gnc_html * parent, 
-                                       gint w, gint h, GHashTable * params);
-GtkWidget * gnc_html_embedded_barchart(gnc_html * parent,
-                                       gint w, gint h, GHashTable * params);
-GtkWidget * gnc_html_embedded_scatter(gnc_html * parent,
-                                      gint w, gint h, GHashTable * params);
-GtkWidget * gnc_html_embedded_account_tree(gnc_html * parent,
-                                           gint w, gint h, GHashTable * prms);
+void gnc_html_actions_init(void);
 
 #endif

@@ -1,3 +1,40 @@
+2001-03-07  Bill Gribble  <grib@billgribble.com>
+
+	* summary: separate the HTML and HTTP processing functions into
+	different files to facilitate reuse.  Modularize much of the
+	gnucash-specific behavior of the HTML code (<object> and form
+	submission) to use run-time-expandable bahavior tables.  Add the
+	gnc-action: mechanism for installing form submission handlers.
+
+	* src/gnome/gng-gpg.c: initialize gnc-html handler for crypted
+	HTML objects.  Remove all mention of GPG from gnc-html.c
+
+	* src/gnome/gnc-html-actions.c: new file.  Add a simple form
+	submission action (action=gnc-action:gnc-info/form?CGI_URL) to
+	test submit and action processing.  This is useless ATM.  Some of
+	the stuff in the privacy comments is unimplemented yet.
+
+	* src/gnome/gnc-html-guppi.c: move all Guppi references from
+	gnc-html.c into a separate file, with an initializer for 
+	the Guppi <object> tags. 
+
+	* src/gnome/gnc-html.c: get rid of SSL references; all that stuff
+	is now in gnc-http.c.  Restructure to use gnc-http instead of
+	ghttp directly.  Finish GET and POST default handlers, and add
+	handler lookup/install mechanism for gnc-action: actions.  crib
+	urlencoding function from gtkhtml guts.
+
+	* src/gnome/gnc-http.c: new file.  Move HTTP stuff here. Finish
+	POST handling.
+
+	* src/gnome/top-level.c: add calls to Guppi, GPG, and gnc-html
+	init functions.  These calls will eventually go into loadable
+	module startup functions, when we get loadable modules.
+
+	* src/scm/html-text.scm: Add html-markup/format.
+	(html-markup/format "%a %a %a %a" 1 2 3 4) does what you'd expect,
+	even if the non-format args are html-markup objects.
+	
 2001-03-07  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/top-level.c (gnc_ui_check_events): add timeout

@@ -23,12 +23,73 @@
 
 #include "config.h"
 
+#if USE_GPG
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <gnome.h>
 #include <unistd.h>
 
+#include "gnc-html.h"
 #include "gnc-gpg.h"
+
+static int handle_gpg_html(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
+
+/********************************************************************
+ * gnc_gpg_init : called at startup time.  adds a handler for crypted
+ * HTML to gnc-html.
+ ********************************************************************/
+
+void
+gnc_gpg_init(void) {
+  gnc_html_register_object_handler("gnc-crypted-html", handle_gpg_html);
+}
+
+static char * 
+unescape_newlines(const gchar * in) {
+  const char * ip = in;
+  char * retval = g_strdup(in);
+  char * op = retval;
+
+  for(ip=in; *ip; ip++) {
+    if((*ip == '\\') && (*(ip+1)=='n')) {
+      *op = '\012';
+      op++;
+      ip++;
+    }
+    else {
+      *op = *ip;
+      op++;
+    }
+  }
+  *op = 0;
+  return retval;
+}
+
+/* we just want to take the data and stuff it into the gnc-html
+ * widget, blowing away the active streams.  crypted-html contains a
+ * complete HTML page. */
+static int
+handle_gpg_html(gnc_html * html, GtkHTMLEmbedded * eb, gpointer data) {
+  int  retval;
+  char * cryptext  = unescape_newlines(eb->data);
+  char * cleartext = gnc_gpg_decrypt(cryptext, strlen(cryptext));
+  GtkHTMLStream * handle;
+  if(cleartext && cleartext[0]) {
+    handle = gtk_html_begin(html);
+    gtk_html_write(html, handle, cleartext, strlen(cleartext));
+    gtk_html_end(html, handle, GTK_HTML_STREAM_OK);
+    retval = TRUE;
+  }
+  else {
+    retval = FALSE;
+  }
+  g_free(cleartext);
+  g_free(cryptext);
+
+  return retval;
+}
+
 
 static char *
 gnc_gpg_transform(const gchar * input, gint input_size, 
@@ -206,3 +267,5 @@ gnc_gpg_make_keypair(const gchar * username,
   gnc_gpg_transform(stdin, strlen(stdin), argv);
   g_free(stdin);
 }
+
+#endif

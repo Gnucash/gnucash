@@ -34,9 +34,11 @@ libgncgnome_a_SOURCES = \
   gnc-datedelta.c \
   gnc-dateedit.c \
   gnc-gpg.c \
-  gnc-html-embedded.c \
+  gnc-html-actions.c \
   gnc-html-history.c \
+  gnc-html-guppi.c \
   gnc-html.c \
+  gnc-http.c \
   gnc-splash.c \
   gtkselect.c \
   mainwindow-account-tree.c \
@@ -89,9 +91,11 @@ noinst_HEADERS = \
   gnc-datedelta.h \
   gnc-dateedit.h \
   gnc-gpg.h \
-  gnc-html-embedded.h \
+  gnc-html-actions.h \
   gnc-html-history.h \
+  gnc-html-guppi.h \
   gnc-html.h \
+  gnc-http.h \
   gnc-splash.h \
   gtkselect.h \
   mainwindow-account-tree.h \

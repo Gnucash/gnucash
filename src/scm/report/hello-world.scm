@@ -357,16 +357,19 @@ new, totally cool report, consult the mailing list ")
            (gnc:html-markup-b date-string2) ".")
           
           (gnc:html-markup-p 
-           (_ "The relative date option is ")
-           (gnc:html-markup-b rel-date-string) ".")
+           (gnc:html-markup/format 
+            (_ "The relative date option is %a.")
+            (gnc:html-markup-b rel-date-string)))
           
           (gnc:html-markup-p 
-           (_ "The combination date option is ")
-           (gnc:html-markup-b combo-date-string) ".")
+           (gnc:html-markup/format 
+            (_ "The combination date option is %a.")
+            (gnc:html-markup-b combo-date-string)))
           
           (gnc:html-markup-p 
-           (_ "The number option is ")
-           (gnc:html-markup-b (number->string num-val))  ".")
+           (gnc:html-markup/format 
+            (_ "The number option is %a.")
+            (gnc:html-markup-b (number->string num-val))))
 
           ;; Here we print the value of the number option formatted as
           ;; currency. When printing currency values, you should use
@@ -375,10 +378,11 @@ new, totally cool report, consult the mailing list ")
           ;; appropriately in the current locale. Don't try to format
           ;; it yourself -- it will be wrong in other locales.
           (gnc:html-markup-p 
-           (_ "The number option formatted as currency is ")
-           (gnc:html-markup-b
-            (gnc:amount->string num-val (gnc:default-print-info #f))))))
-
+           (gnc:html-markup/format
+            (_ "The number option formatted as currency is %a.")
+            (gnc:html-markup-b
+             (gnc:amount->string num-val (gnc:default-print-info #f)))))))
+        
         ;; you can add as many objects as you want.  Here's another 
         ;; one.  We'll make a single-column table of the selected list 
         ;; options just for grins. 

@@ -1,7 +1,6 @@
 /********************************************************************
- * gnc-gpg.h -- encrypt/decrypt data using GPG and the gnucash      *
- * keyrings                                                         *
- * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * gnc-http.h -- handle HTTP requests.  thin wrapper on gnome-http. * 
+ * Copyright (C) 2001 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,16 +20,24 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef __GNC_GPG_H__
-#define __GNC_GPG_H__
+#ifndef __GNC_HTTP_H__
+#define __GNC_HTTP_H__
 
-#include "config.h"
+#include <glib.h>
 
-void  gnc_gpg_init(void);
-char  * gnc_gpg_encrypt(const gchar * cleartext, int cleartext_size, 
-                        const gchar * recipient);
-char  * gnc_gpg_decrypt(const gchar * cleartext, int cleartext_size);
-void  gnc_gpg_make_keypair(const gchar * name, const gchar * id,
-                           const gchar * email);
+typedef struct _gnc_http gnc_http;
+
+typedef void (* GncHTTPRequestCB)(const char * uri, int completed_ok,
+                                  const char * body, int body_len,
+                                  gpointer user_data);
+gnc_http    * gnc_http_new(void);
+void          gnc_http_destroy(gnc_http * html);
+void          gnc_http_start_request(gnc_http * http, const char * uri,
+                                     GncHTTPRequestCB cb, gpointer user_data);
+void          gnc_http_start_post(gnc_http * http, const char * uri,
+                                  const char * content_type,
+                                  const char * body, int body_len, 
+                                  GncHTTPRequestCB cb, gpointer user_data);
+void          gnc_http_cancel_requests(gnc_http * http);
 
 #endif

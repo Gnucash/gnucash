@@ -25,11 +25,7 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <gtkhtml/gtkhtml.h>
 #include <guile/gh.h>
-#ifdef USE_GUPPI
-#include <libguppitank/guppi-tank.h>
-#endif
 #include <popt.h>
 #include <stdlib.h>
 
@@ -50,6 +46,13 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-splash.h"
+#include "gnc-html-actions.h"
+#ifdef USE_GUPPI
+#include "gnc-html-guppi.h"
+#endif
+#ifdef USE_GPG
+#include "gnc-gpg.h"
+#endif
 #include "gnc-ui.h"
 #include "gnc.h"
 #include "gnucash-color.h"
@@ -212,9 +215,15 @@ gnucash_ui_init(void)
     gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
     gtk_widget_set_default_visual (gdk_rgb_get_visual ());
     
+    /* load default HTML action handlers */ 
+    gnc_html_actions_init();
 #ifdef USE_GUPPI    
-    /* initialize guppi */
-    guppi_tank_init();
+    /* initialize guppi handling in gnc-html */
+    gnc_html_guppi_init();
+#endif
+#ifdef USE_GPG
+    /* initialize gpg handling in gnc-html */
+    gnc_gpg_init();
 #endif
 
     /* put up splash screen */

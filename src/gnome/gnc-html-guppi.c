@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-html-embedded.c -- embed objects in the html stream.         *
+ * gnc-html-guppi.c -- embed guppi objects in the html stream.      *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -22,16 +22,96 @@
 
 #include "config.h"
 
+#ifdef USE_GUPPI
+
 #include <gnome.h>
 #include <glib.h>
 #include <guile/gh.h>
+#include <gtkhtml/gtkhtml.h>
+#include <gtkhtml/gtkhtml-embedded.h>
 
-#ifdef USE_GUPPI
 #include <libguppitank/guppi-tank.h>
-#endif
+#include "gnc-html.h"
+#include "gnc-html-guppi.h"
 
-#include "gnc-html-embedded.h"
-#include "mainwindow-account-tree.h"
+static int handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
+static int handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
+static int handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
+
+
+/********************************************************************
+ * gnc_html_guppi_init
+ * add object handlers for guppi objects 
+ ********************************************************************/
+
+void
+gnc_html_guppi_init(void) {
+  guppi_tank_init();
+  gnc_html_register_object_handler("gnc-guppi-pie", handle_piechart);
+  gnc_html_register_object_handler("gnc-guppi-bar", handle_barchart);
+  gnc_html_register_object_handler("gnc-guppi-scatter", handle_scatter);
+}
+
+/* the handlers for pie. bar, and scatter charts */ 
+static int
+handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer data) {
+  GtkWidget * widg = NULL;
+  int       retval;
+  widg = gnc_html_embedded_piechart(html, eb->width, eb->height, 
+                                    eb->params); 
+  if(widg) {
+    gtk_widget_show_all(widg);
+    gtk_container_add(GTK_CONTAINER(eb), widg);
+    gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
+    retval = TRUE;
+  }
+  else {
+    retval = FALSE;
+  }
+  return retval;
+}
+
+static int 
+handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer data) {
+  GtkWidget * widg = NULL;
+  int       retval;
+  widg = gnc_html_embedded_barchart(html, eb->width, eb->height, 
+                                    eb->params); 
+  if(widg) {
+    gtk_widget_show_all(widg);
+    gtk_container_add(GTK_CONTAINER(eb), widg);
+    gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
+    retval = TRUE;
+  }
+  else {
+    retval = FALSE;
+  }
+  return retval;
+}  
+
+static int 
+handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer data) {
+  GtkWidget * widg = NULL;
+  int       retval;
+  widg = gnc_html_embedded_scatter(html, eb->width, eb->height, 
+                                   eb->params); 
+  if(widg) {
+    gtk_widget_show_all(widg);
+    gtk_container_add(GTK_CONTAINER(eb), widg);
+    gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
+    retval = TRUE;
+  }
+  else {
+    retval = FALSE;
+  }
+  return retval;
+}
+  
+
+/********************************************************************
+ * now we start the actual embedded object creation routines.  well,
+ * after some utilities.
+ ********************************************************************/
 
 static double * 
 read_doubles(const char * string, int nvalues) {
@@ -101,8 +181,6 @@ free_strings(char ** strings, int nstrings) {
   g_free(strings);
 }
 
-
-#ifdef USE_GUPPI
 
 struct guppi_chart_data {
   GtkWidget    * widget;
@@ -725,7 +803,6 @@ gnc_html_embedded_scatter(gnc_html * parent,
     return NULL;
 }
 
-#endif /* USE_GUPPI */
 
 /********************************************************************
  * gnc_html_embedded_account_tree
@@ -751,26 +828,4 @@ set_bools(char * indices, gboolean * array, int num) {
 }
 
 
-GtkWidget * 
-gnc_html_embedded_account_tree(gnc_html * parent, 
-                               int w, int h, GHashTable * params) {
-  AccountViewInfo info;
-  GtkWidget       * tree = gnc_mainwin_account_tree_new();
-  char            * param;
-  int             * fields;
-
-  memset(&info, 0, sizeof(AccountViewInfo));
-
-  if((param = g_hash_table_lookup(params, "fields"))) {
-    set_bools(param, &(info.show_field[0]), NUM_ACCOUNT_FIELDS);
-  }
-  if((param = g_hash_table_lookup(params, "types"))) {
-    set_bools(param, &(info.include_type[0]), NUM_ACCOUNT_TYPES);
-  }
-  gnc_mainwin_account_tree_set_view_info(GNC_MAINWIN_ACCOUNT_TREE(tree),
-                                         info);
-  
-  gnc_account_tree_refresh(GNC_ACCOUNT_TREE
-                           (GNC_MAINWIN_ACCOUNT_TREE(tree)->acc_tree));
-  return tree;
-}
+#endif

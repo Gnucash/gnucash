@@ -118,6 +118,34 @@
            #f
            entities)))
 
+;; I'm not entirely pleased about the way this works, but I can't
+;; really see a way around it.  It still works within the style
+;; system, but it flattens out its children's lists prematurely.  Has
+;; to, to pass them as args to sprintf.
+
+(define (gnc:html-markup/format format . entities)
+  (lambda (doc)
+    (apply 
+     sprintf #f format 
+     (map 
+      (lambda (elt)
+        (let ((rendered-elt 
+               (cond ((procedure? elt)
+                      (elt doc))
+                     ((gnc:html-object? elt)
+                      (gnc:html-object-render elt doc))
+                     (#t 
+                      (gnc:html-document-render-data doc elt)))))
+          (cond 
+           ((string? rendered-elt)
+            rendered-elt)
+           ((list? rendered-elt)
+            (apply string-append (gnc:report-tree-collapse rendered-elt)))
+           (#t 
+            (simple-format "hold on there podner. form='~s'\n" rendered-elt)
+            ""))))
+      entities))))
+
 (define (gnc:html-markup-p . rest)
   (apply gnc:html-markup "p" rest))
 
@@ -182,9 +210,10 @@
     (gnc:html-document-push-style doc (gnc:html-text-style p))
     (for-each-in-order 
      (lambda (elt)
-       (if (procedure? elt)
-           (push (elt doc))
-           (push (gnc:html-document-render-data doc elt))))
+       (cond ((procedure? elt)
+              (push (elt doc)))
+             (#t 
+              (push (gnc:html-document-render-data doc elt)))))
      (gnc:html-text-body p))
     (gnc:html-document-pop-style doc)
     (gnc:html-style-table-uncompile (gnc:html-text-style p))
@@ -195,10 +224,11 @@
          (push (lambda (l) (set! retval (cons l retval)))))
     (push (gnc:html-document-markup-start doc markup attrib))
     (for-each-in-order 
-     (lambda (elt) 
-       (if (procedure? elt)
-           (push (elt doc))
-           (push (gnc:html-document-render-data doc elt))))
+     (lambda (elt)
+       (cond ((procedure? elt)
+              (push (elt doc)))
+             (#t 
+              (push (gnc:html-document-render-data doc elt)))))
      entities)
     (if end-tag? 
         (push (gnc:html-document-markup-end doc markup)))

@@ -1,6 +1,5 @@
 /********************************************************************
- * gnc-gpg.h -- encrypt/decrypt data using GPG and the gnucash      *
- * keyrings                                                         *
+ * gnc-html-guppi.h -- embed objects in the html stream          *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -19,18 +18,22 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
- ********************************************************************/
+\********************************************************************/
 
-#ifndef __GNC_GPG_H__
-#define __GNC_GPG_H__
+#ifndef __GNC_HTML_GUPPI_H__
+#define __GNC_HTML_GUPPI_H__
 
-#include "config.h"
+#include <gnome.h>
+#include "gnc-html.h"
 
-void  gnc_gpg_init(void);
-char  * gnc_gpg_encrypt(const gchar * cleartext, int cleartext_size, 
-                        const gchar * recipient);
-char  * gnc_gpg_decrypt(const gchar * cleartext, int cleartext_size);
-void  gnc_gpg_make_keypair(const gchar * name, const gchar * id,
-                           const gchar * email);
+void        gnc_html_guppi_init(void);
+GtkWidget * gnc_html_embedded_piechart(gnc_html * parent, 
+                                       gint w, gint h, GHashTable * params);
+GtkWidget * gnc_html_embedded_barchart(gnc_html * parent,
+                                       gint w, gint h, GHashTable * params);
+GtkWidget * gnc_html_embedded_scatter(gnc_html * parent,
+                                      gint w, gint h, GHashTable * params);
+GtkWidget * gnc_html_embedded_account_tree(gnc_html * parent,
+                                           gint w, gint h, GHashTable * prms);
 
 #endif

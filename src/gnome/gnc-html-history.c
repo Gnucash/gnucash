@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <string.h>
 
 #include "gnc-html-history.h"
 
@@ -41,7 +42,7 @@ struct _gnc_html_history {
  ********************************************************************/
 
 gnc_html_history * 
-gnc_html_history_new() {
+gnc_html_history_new(void) {
   gnc_html_history * hist = g_new0(gnc_html_history, 1);
   hist->nodes         = NULL;
   hist->current_node  = NULL;

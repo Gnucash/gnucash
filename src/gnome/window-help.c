@@ -655,8 +655,21 @@ gnc_help_window_new (void) {
 
 void
 gnc_help_window_destroy(gnc_help_window * help) {
-
   if (!help) return;
+
+  gnc_unregister_gui_component_by_data (WINDOW_HELP_CM_CLASS, help);
+
+  gtk_signal_disconnect_by_func(GTK_OBJECT(help->toplevel), 
+                                GTK_SIGNAL_FUNC(gnc_help_window_destroy_cb), 
+                                (gpointer)help);
+  /* close the help index db */
+  if(help->index_db) {
+    help->index_db->close(help->index_db);
+  }
+
+  /* take care of the gnc-html object specially */
+  gtk_widget_ref(gnc_html_get_widget(help->html));
+  gnc_html_destroy(help->html);
 
   gtk_widget_destroy(GTK_WIDGET(help->toplevel)); 
 }
