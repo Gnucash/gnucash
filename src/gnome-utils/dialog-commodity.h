@@ -207,10 +207,10 @@ gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
  *
  *  @note The returned string must be freed by the caller.
  */
-char * gnc_ui_update_namespace_picker(GtkWidget * combobox,
-                                      const char * sel,
-                                      gboolean include_iso,
-                                      gboolean include_all);
+void gnc_ui_update_namespace_picker(GtkWidget * combobox,
+				    const char * sel,
+				    gboolean include_iso,
+				    gboolean include_all);
 
 /** Given a combo box, return the currently selected namespaces.
  *

@@ -1,3 +1,8 @@
+2003-06-22  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-commodity.[ch]: Clean up usage of the
+	gnc_ui_update_namespace_picker function.
+
 2003-06-22  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/category-barchart.scm: Properly
