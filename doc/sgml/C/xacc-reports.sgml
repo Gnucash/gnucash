@@ -11,10 +11,18 @@ menu:
 <itemizedlist>
 
 <listitem><para><link linkend="xacc-balancesheet"> Balance Sheet:
-</link> shows Assets, Liabilities and Equity.  </para> </listitem>
+</link> shows Assets, Liabilities and Equity.  </para>
+<para><link linkend="xacc-net-worth-barchart">Net Worth 
+Barchart</link>shows your net worth in a graphical environment. 
+If you examine just assets or liabilities, <link linkend="xacc-asset-liability-barcharts">
+barcharts</link> showing data over time are available, as are
+<link linkend="xacc-asset-liability-piecharts">piecharts</link>.
 
 <listitem><para><link linkend="xacc-pnl"> Profit And Loss State:
-</link> shows Income and expenses over a selectable period.  </para>
+</link> shows Income and/or Expenses over a selectable period.  </para>
+<para>
+There are also <link linkend="xacc-income-expense-barcharts">bar</link>
+and <link linkend="xacc-income-expense-piecharts">pie</link> charts.</para>
 </listitem>
 
 <listitem> <para><link linkend="xacc-trans-report"> Transaction Report
@@ -31,11 +39,9 @@ linkend="xacc-txf-export">export a .TXF file</link> that can be imported
 to TaxCut or TurboTax.  </para>
 </listitem>
 
-<listitem> <para><application>Balance Tracker</application> tracks the
-balance of one or more accounts over time, and supports graphical
-output (if you have <application>gnuplot</application> installed).
-</para> </listitem>
-
+<listitem> <para><link linkend="xacc-balancereport">Balance
+Tracker</link> tracks the balance of one or more accounts over time,
+with the option of displaying both tables and a bar chart.</para>
 </itemizedlist>
 
 </para>
@@ -43,7 +49,11 @@ output (if you have <application>gnuplot</application> installed).
 <sect1 id="xacc-reportwindow">
 <title> The Report Window</title>
 
-<para> Once you select a report, a report window will appear: </para>
+<para> Once you select a report, a report will appear.  This
+may appear as a seperate top-level window, as a notebook tab, 
+or in the main window, selectable for viewing through the "Window"
+menu.  This is controllable <link linkend="xacc-gnome-mdi">using
+the MDI interface.</link></para>
 
 <para><inlinemediaobject>
 <imageobject>
@@ -62,7 +72,7 @@ window:
 </emphasis> allow you to view the previous contents of the window,
 just like a web browser </para> </listitem>
 
-<listitem> <para> <emphasis>Parameters</emphasis> pops up a dialog box
+<listitem> <para> <emphasis>Options</emphasis> pops up a dialog box
 allowing you to change the information presented in the report:
 </para>
 
@@ -85,8 +95,14 @@ later viewing or printing.  </para> </listitem>
 
 </itemizedlist>
 
-</para>
 </sect1>
+
+<sect1 id="xacc-multiple-reports">
+<title> Multiple Reports In A Window</title> <para>GnuCash allows you
+to place multiple reports into a single report window, allowing you to
+examine a set of financial information at a glance. This functionality
+is provided with the <link linkend="xacc-multicolumn-view-report">
+Multicolumn View</link> special report.</para></sect1>
 
 <sect1 id="xacc-customreports">
 <title> Constructing custom reports</title>
@@ -111,11 +127,13 @@ examine some of the other reports in <filename> src/scm/report
 </filename> for an indication of how they are used.
 </para>
 
-<para>At present, reports are produced by internally creating HTML and
-rendering this with a HTML widget. (Future versions of GnuCash will
-hopefully support a more flexible system).  </para>
+<para>At present, reports are produced by calling a HTML-generation API,
+which outputs a dialect of HTML and rendering this with a HTML widget.  This
+has limitations (particularly when trying to align objects precisely, 
+as might be necessary for printing onto pre-printed invoices for example),
+so in the future an additional report generation interface may be needed.</para>
 
-</sect1>
+</sect1> 
 </article>
 <!-- Local variables: -->
 <!-- sgml-parent-document: "gnucash.sgml" -->

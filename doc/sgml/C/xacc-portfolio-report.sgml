@@ -1,26 +1,37 @@
-
-<ARTICLE ID="XACC-PORTFOLIO-REPORT">
-<ARTHEADER>
-<TITLE>Stock Portfolio Report</TITLE>
-</ARTHEADER>
-<SECT1>
-<TITLE> Stock Portfolio Report</TITLE>
-<PARA>    <INLINEMEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/report-folio.png">
-</IMAGEOBJECT>
-</INLINEMEDIAOBJECT> 
-
-    </PARA>
-<PARA>This report summarizes the value of the stocks in your
+<article id="XACC-PORTFOLIO-REPORT">
+<artheader>
+<title>Stock Portfolio Report</title>
+</artheader>
+<sect1>
+<title> Stock Portfolio Report</title>
+<para>    <inlinemediaobject>
+<imageobject>
+<imagedata fileref="image/report-folio.png">
+</imageobject>
+</inlinemediaobject> 
+</para>
+<para>This report summarizes the value of the stocks in your
     current portfolio.
 
-    </PARA>
-<PARA>There are currently no options for this report.
-
-</PARA>
-</SECT1>
-</ARTICLE>
+    </para>
+<para>Options supported by this report include the following:
+<itemizedlist>
+<listitem><para><emphasis><link linkend="xacc-options-accounts">
+		  Accounts</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-report-title">
+		  Report Title</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-style-sheet">
+		  Stylesheet</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-date">
+		  Date</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-report-currency">
+		  Report Currency</link></emphasis></para></listitem>
+<listitem><para><emphasis<link linkend="xacc-options-price-source">
+		  Price Source</link></emphasis></para></listitem>
+</itemizedlist>
+</para>
+</sect1>
+</article>
 
 <!-- Local variables: -->
 <!-- sgml-parent-document: "gnucash.sgml" -->

@@ -1,14 +1,14 @@
 <ARTICLE ID="XACC-MAINWIN">
 
 <ARTHEADER>
-<TITLE>Main Window</TITLE>
+<TITLE>Account Window</TITLE>
 </ARTHEADER>
 
-<PARA>This is the main account window. You control your set of
+<PARA>This is an account window. You control your set of
     accounts from here.
 
     </PARA>
-<PARA>Below is a picture of the main window, with only the main
+<PARA>Below is a picture of an account window, with only the main
     accounts shown. Note how <EMPHASIS>Business Expenses</EMPHASIS> has been
     selected by highlighting. The box with a cross in it,
     immediately to its left, shows that it has one or more detail

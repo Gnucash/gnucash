@@ -79,10 +79,27 @@ merges duplicate transactions.
 </listitem>
 
 <listitem>
-<para><emphasis><link linkend="xacc-reports">Reports</link>.</emphasis> Display
-      or output as HTML Balance, Transaction, and Profit/Loss
-      reports, as well as graphical account balance tracking.
+<para><emphasis>Gnome MDI Interface</emphasis></para>
+<para>Have multiple views of your financial data, arranged how you want
+them, in one or more windows that stay around through GnuCash sessions.
+</para>
+</listitem>
+
+<listitem>
+<para><emphasis><link linkend="xacc-reports">Reports</link>.</emphasis> Display,
+export as HTML, or print a variety of reports, including Balance Sheet, Account
+Summary, Profit and Loss, Stock Portfolios, and Transaction Reports.  Reports
+are saved from session to session, and rolling reports are possible with 
+relative dates.  GnuCash also supports a variety of customizable, printable,
+bar and pie charts.
  </para>
+</listitem>
+
+<listitem>
+<para><emphasis>Gnome MDI Interface</emphasis></para>
+<para>Have multiple views of your financial data, arranged how you want
+them, in one or more windows that stay around through GnuCash sessions.
+</para>
 </listitem>
 </itemizedlist>
 

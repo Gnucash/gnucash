@@ -13,13 +13,21 @@
 
     </PARA>
 <PARA>This report summarizes your assets, liabilities, and
-    equity.
+    equity.  According to the accounting equation, your assets
+should equal the sum of your liabilities and equity.  If that 
+is not the case, there is some kind of internal imbalance in 
+your accounts.
 
     </PARA>
 <PARA>You can select the date for which the balance sheet is to be
     calculated up to using the "preferences" toolbar button. The
     default is today.
 
+</PARA>
+<PARA>Note that while you <EMPHASIS>can</EMPHASIS> select specific
+accounts for this report, unless you know exactly what you are 
+doing it is unwise and highly likely to give you misleading and
+incorrect figures.
 </PARA>
 </SECT1>
 </ARTICLE>

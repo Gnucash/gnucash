@@ -10,20 +10,28 @@ GNUCASH_SGML_FILES = \
 	xacc-acctypes.sgml \
 	xacc-adjbalwin.sgml \
 	xacc-apar.sgml \
+	xacc-asset-liability-barcharts.sgml \
+	xacc-asset-liability-piecharts.sgml \
 	xacc-balancereport.sgml \
 	xacc-balancesheet.sgml \
 	xacc-chartofaccts.sgml \
 	xacc-commodity.sgml \
+	xacc-common-report-options.sgml \
 	xacc-currencyhandling.sgml \
 	xacc-dateinput.sgml \
 	xacc-depreciation.sgml \
         xacc-dochack.sgml \
 	xacc-doubleentry.sgml \
 	xacc-euro.sgml \
+	xacc-gnome-mdi.sgml \
 	xacc-gpl.sgml \
 	xacc-incomeexpense.sgml \
+	xacc-income-expense-barcharts.sgml \
+	xacc-income-expense-piecharts.sgml \
 	xacc-locatingtxns.sgml \
 	xacc-mainwin.sgml \
+	xacc-multicolumn-view-reports.sgml \
+	xacc-net-worth-barchart.sgml \
 	xacc-newacctwin.sgml \
 	xacc-pnl.sgml \
 	xacc-portfolio-report.sgml \
