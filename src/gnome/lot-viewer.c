@@ -30,12 +30,14 @@
  *
  * XXX need to save title, notes on window close
  * XXX need to delete data structs on window close.
+ * XXX need to listen to 'changed' events and redraw as needed.
+ * XXX Show account name somewhere ... in the lot frame ?
+ * XXX need to finish lot splits viewer
  */
 
 #define _GNU_SOURCE
 
 #include "config.h"
-
 
 #include <glib.h>
 #include <gnome.h>
@@ -66,12 +68,14 @@ struct _GNCLotViewer
    GtkWidget     * window;
    GtkButton     * regview_button;
    GtkButton     * delete_button;
-   GtkButton     * scrub_button;
+   GtkButton     * scrub_lot_button;
+   GtkButton     * scrub_acc_button;
    GtkCList      * lot_clist;
    GtkText       * lot_notes;
    GtkEntry      * title_entry;
    GtkPaned      * lot_hpaned;
    GtkCList      * mini_clist;
+   GtkStatusbar  * status_bar;
 
    Account       * account;
    GNCLot        * selected_lot;
@@ -81,6 +85,77 @@ struct _GNCLotViewer
 static void gnc_lot_viewer_fill (GNCLotViewer *lv);
 
 /* ======================================================================== */
+/* Put the splits into the split clist */
+
+#define MINI_DATE_COL 0 
+#define MINI_NUM_COL  1
+#define MINI_DESC_COL 2 
+#define MINI_AMNT_COL 3 
+#define MINI_VALU_COL 4 
+#define MINI_GAIN_COL 5
+#define MINI_BALN_COL 6 
+#define MINI_NUM_COLS 7
+
+static void
+lv_show_splits (GNCLotViewer *lv)
+{
+   GNCLot *lot = lv->selected_lot;
+   SplitList *split_list, *node;
+
+   if (NULL == lot) return;
+
+   gtk_clist_freeze (lv->mini_clist);
+   gtk_clist_clear (lv->mini_clist);
+   split_list = gnc_lot_get_split_list (lot);
+   for (node = split_list; node; node=node->next)
+   {
+      Split *split = node->data;
+      char dbuff[MAX_DATE_LENGTH];
+      char amtbuff[200];
+      char valbuff[200];
+      gnc_commodity *currency;
+      Transaction *trans = xaccSplitGetParent (split);
+      time_t date = xaccTransGetDate (trans);
+      const char *row_vals[MINI_NUM_COLS];
+      int row;
+
+      /* Opening date */
+      qof_print_date_buff (dbuff, MAX_DATE_LENGTH, date);
+      row_vals[MINI_DATE_COL] = dbuff;
+
+      row_vals[MINI_NUM_COL]  = xaccTransGetNum (trans);
+      row_vals[MINI_DESC_COL] = xaccTransGetDescription (trans);
+
+      /* Amount */
+      xaccSPrintAmount (amtbuff, xaccSplitGetAmount (split),
+                 gnc_account_print_info (lv->account, TRUE));
+      row_vals[MINI_AMNT_COL] = amtbuff;
+
+      currency = xaccTransGetCurrency (trans);
+      xaccSPrintAmount (valbuff, xaccSplitGetValue (split),
+                 gnc_commodity_print_info (currency, TRUE));
+      row_vals[MINI_VALU_COL] = valbuff;
+
+      row_vals[MINI_GAIN_COL] = "-";
+      row_vals[MINI_BALN_COL] = "-";
+
+      /* Self-reference */
+      row = gtk_clist_append (lv->mini_clist, (char **)row_vals);
+      gtk_clist_set_selectable (lv->mini_clist, row, FALSE);
+   }
+   gtk_clist_thaw (lv->mini_clist);
+}
+
+/* ======================================================================== */
+
+static void
+lv_clear_splits (GNCLotViewer *lv)
+{
+   gtk_clist_clear (lv->mini_clist);
+}
+
+/* ======================================================================== */
+/* Callback for selecting a row the the list-of-list clist */
 
 static void 
 lv_select_row_cb (GtkCList       *clist,
@@ -110,6 +185,8 @@ printf ("duuude row elect =%d %p the title=%s\n",row, lot, str);
    /* Don't set until end, to avoid recursion in gtkentry "changed" cb. */
    lv->selected_lot = lot;
    lv->selected_row = row;
+
+   lv_show_splits (lv);
 }
 
 /* ======================================================================== */
@@ -128,9 +205,13 @@ lv_unset_lot (GNCLotViewer *lv)
    /* Blank the notes area */
    xxxgtk_text_set_text (lv->lot_notes, "");
    gtk_text_set_editable (lv->lot_notes, FALSE);
+
+   /* Erase the mini-view area */
+   lv_clear_splits (lv);
 }
 
 /* ======================================================================== */
+/* Callback for un-selecting a row the the list-of-list clist */
 
 static void 
 lv_unselect_row_cb (GtkCList       *clist,
@@ -146,7 +227,7 @@ lv_unselect_row_cb (GtkCList       *clist,
    /* Get the title, blank the title widget */
    str = gtk_entry_get_text (lv->title_entry);
 printf ("duuude row unselect =%d %p new tite=%s\n",row, lot, str);
-   gtk_clist_set_text (lv->lot_clist, row, column, str);
+   gtk_clist_set_text (lv->lot_clist, row, TITLE_COL, str);
    kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", str);
 
    /* Get the notes, blank the notes area */
@@ -157,6 +238,7 @@ printf ("duuude row unselect =%d %p new tite=%s\n",row, lot, str);
 }
 
 /* ======================================================================== */
+/* Callback when user types a new lot title into the entry widget */
 
 static void
 lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data)
@@ -169,6 +251,7 @@ lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data)
 }
 
 /* ======================================================================== */
+/* Delete button was pressed */
 
 static void
 lv_delete_cb (GtkButton *but, gpointer user_data)
@@ -185,15 +268,30 @@ printf ("duude deleted the lot\n");
 }
 
 /* ======================================================================== */
+/* Scrub-lot button was pressed */
 
 static void
-lv_scrub_cb (GtkButton *but, gpointer user_data)
+lv_scrub_lot_cb (GtkButton *but, gpointer user_data)
 {
    GNCLotViewer *lv = user_data;
    if (NULL == lv->selected_lot) return; 
    xaccLotScrubDoubleBalance (lv->selected_lot);
    gnc_lot_viewer_fill (lv);
-printf ("duude done scrubbin lot\n");
+printf ("duude done lot scrubbin lot\n");
+}
+
+/* ======================================================================== */
+/* Scrub-acc button was pressed */
+
+static void
+lv_scrub_acc_cb (GtkButton *but, gpointer user_data)
+{
+   GNCLotViewer *lv = user_data;
+   if (NULL == lv->selected_lot) return; 
+   xaccAccountScrubDoubleBalance (gnc_lot_get_account(lv->selected_lot));
+   lv_unset_lot (lv);
+   gnc_lot_viewer_fill (lv);
+printf ("duude done acc scrubbin lot\n");
 }
 
 /* ======================================================================== */
@@ -250,7 +348,6 @@ get_realized_gains (GNCLot *lot, gnc_commodity *currency)
       if (FALSE == gnc_commodity_equal (xaccTransGetCurrency(trans), currency)) continue;
 
       gains = gnc_numeric_add (gains, xaccSplitGetValue (s), GNC_DENOM_AUTO, GNC_DENOM_FIXED);
-printf ("duude gains = %lld/%lld\n", gains.num, gains.denom);
    }
    return gains;
 }
@@ -266,7 +363,6 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
    lot_list = xaccAccountGetLotList (lv->account);
    nlots = g_list_length (lot_list);
 
-printf ("duude got %d lots\n", nlots);
    gtk_clist_freeze (lv->lot_clist);
    gtk_clist_clear (lv->lot_clist);
    for (node = lot_list; node; node=node->next)
@@ -320,8 +416,6 @@ printf ("duude got %d lots\n", nlots);
       /* Self-reference */
       row = gtk_clist_append (lv->lot_clist, row_vals);
       gtk_clist_set_row_data (lv->lot_clist, row, lot);
-printf ("duude amt %s baln %s row %d\n", row_vals[BALN_COL], row_vals[GAINS_COL], row);
-
    }
    gtk_clist_thaw (lv->lot_clist);
 
@@ -344,7 +438,8 @@ gnc_lot_viewer_dialog (Account *account)
 
    lv->regview_button = GTK_BUTTON(glade_xml_get_widget (xml, "regview button"));
    lv->delete_button = GTK_BUTTON(glade_xml_get_widget (xml, "delete button"));
-   lv->scrub_button = GTK_BUTTON(glade_xml_get_widget (xml, "scrub button"));
+   lv->scrub_lot_button = GTK_BUTTON(glade_xml_get_widget (xml, "scrub lot button"));
+   lv->scrub_acc_button = GTK_BUTTON(glade_xml_get_widget (xml, "scrub account button"));
 
    lv->lot_clist = GTK_CLIST(glade_xml_get_widget (xml, "lot clist"));
    lv->lot_notes = GTK_TEXT(glade_xml_get_widget (xml, "lot notes text"));
@@ -353,6 +448,7 @@ gnc_lot_viewer_dialog (Account *account)
    gtk_paned_set_position (lv->lot_hpaned, 100);   /* XXX hack to make visible */
 
    lv->mini_clist = GTK_CLIST(glade_xml_get_widget (xml, "mini clist"));
+   lv->status_bar = GTK_STATUSBAR(glade_xml_get_widget (xml, "lot statusbar"));
 
    lv->account = account;
    lv->selected_lot = NULL;
@@ -373,8 +469,11 @@ gnc_lot_viewer_dialog (Account *account)
    gtk_signal_connect (GTK_OBJECT (lv->delete_button), "clicked",
                       GTK_SIGNAL_FUNC (lv_delete_cb), lv);
 
-   gtk_signal_connect (GTK_OBJECT (lv->scrub_button), "clicked",
-                      GTK_SIGNAL_FUNC (lv_scrub_cb), lv);
+   gtk_signal_connect (GTK_OBJECT (lv->scrub_acc_button), "clicked",
+                      GTK_SIGNAL_FUNC (lv_scrub_acc_cb), lv);
+
+   gtk_signal_connect (GTK_OBJECT (lv->scrub_lot_button), "clicked",
+                      GTK_SIGNAL_FUNC (lv_scrub_lot_cb), lv);
 
    gnc_lot_viewer_fill (lv);
    return lv;
