@@ -10,11 +10,11 @@ libgncmod_hbci_la_SOURCES = \
   dialog-daterange.c \
   gnc-hbci-kvp.c \
   gnc-hbci-utils.c \
-  gnc-hbci-cb.c \
   gnc-hbci-transfer.c \
   gnc-hbci-trans-templ.c \
   gnc-hbci-getbalance.c \
   gnc-hbci-gettrans.c \
+  gnc-plugin-hbci.c \
   hbci-interaction.c \
   hbci-progressmon.c \
   druid-hbci-initial.c 
@@ -30,13 +30,13 @@ noinst_HEADERS = \
   druid-hbci-initial.h \
   druid-hbci-utils.h \
   gnc-hbci-actions.h \
-  gnc-hbci-cb.h \
   gnc-hbci-getbalance.h \
   gnc-hbci-gettrans.h \
   gnc-hbci-kvp.h \
   gnc-hbci-transfer.h \
   gnc-hbci-trans-templ.h \
   gnc-hbci-utils.h \
+  gnc-plugin-hbci.h \
   hbci-interaction.h \
   hbci-interactionP.h
 
@@ -48,6 +48,7 @@ libgncmod_hbci_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/gnome/libgncgnome.la \
+  ${top_builddir}/lib/egg/libegg.la \
   ${GLADE_LIBS} \
   ${GLIB_LIBS} \
   ${GNOME_LIBS} \
@@ -62,6 +63,7 @@ gncscm_DATA = \
 #glade_DATA = 
 
 AM_CFLAGS = \
+  -I${top_srcdir}/lib/egg \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
@@ -84,6 +86,10 @@ AM_CFLAGS = \
 
 #gladedir = $(GNC_GLADE_DIR)
 #glade_DATA = 
+
+uidir = $(GNC_UI_DIR)
+ui_DATA = \
+	gnc-plugin-hbci-ui.xml
 
 EXTRA_DIST = ${gncscm_DATA} ${libgncmod_hbci_la_empty}
 

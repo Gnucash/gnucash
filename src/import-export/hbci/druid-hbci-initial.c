@@ -1771,11 +1771,4 @@ void gnc_hbci_initial_druid (void)
   /*                   GTK_SIGNAL_FUNC(gnc_hierarchy_destroy_cb), NULL);*/
 
   gtk_widget_show_all (info->window);
-  
-}
-
-SCM  scm_hbci_initial_druid (void)
-{
-  gnc_hbci_initial_druid();
-  return SCM_EOL;
 }

@@ -19,7 +19,6 @@ names of active developers, that'd be great.
 
 Main Window
 
-	- hbci functions missing from menus
 	- report functions missing from menus
 	
 Account Tree: - FUNCTIONAL
@@ -83,6 +82,7 @@ Business functions - Somewhat Functional
 	seems to function properly but then gnucash crashes when the
 	dialog is closed.
 
+HBCI - Needs new http support.
 
 
 

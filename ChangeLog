@@ -1,3 +1,22 @@
+2003-10-19  David Hampton  <hampton@employees.org>
+
+	* src/engine/gnc-trace.[ch]: Add a new module for HBCI.
+
+	* src/gnome/gnc-main-window.[ch]:
+	* src/gnome/gnc-plugin-page-register.[ch]:
+	* src/gnome/gnc-plugin-page-account-tree.[ch]:
+	* src/gnome-utils/gnc-gnome-utils.[ch]: Add signals for a new page
+	being added to a window, and for a change of the current page.
+	Add a signal when an account is selected.  Extract common
+	functions.  Expose a function.
+
+	* src/gnome/gnc-plugin-page.[ch]: Add a new function for accessing
+	the name of a plugin page.
+
+	* src/import-export/hbci: Install menus using the new plugin
+	system.  Cleanup some gnome2 errors.
+
+
 2003-10-18  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/gnc-ui-util.h:
