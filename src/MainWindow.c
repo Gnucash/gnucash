@@ -360,7 +360,7 @@ mainWindow( Widget parent )
       fileMenubarCB, (XtPointer)FMB_NEW,   (MenuItem *)NULL },
     { "Open File...  ",&xmPushButtonWidgetClass, 'O', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_OPEN,  (MenuItem *)NULL },
-    { "Import File...  ",&xmPushButtonWidgetClass, 'O', NULL, NULL, True,
+    { "Import QIF...  ",&xmPushButtonWidgetClass, 'O', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_IMPORT,  (MenuItem *)NULL },
     { "",              &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                  (MenuItem *)NULL },

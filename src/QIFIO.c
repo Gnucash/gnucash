@@ -371,9 +371,11 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    Transaction *trans;
    char * qifline;
    int isneg = 0;
-   int got_quantity = 0;
-   int do_security = 0;
+   int got_share_quantity = 0;
+   int share_xfer = 0;
+   int is_security = 0;
    Account *sub_acc = 0x0;
+   Account *xfer_acc = 0x0;
 
    if (!acc) return NULL;
    trans = (Transaction *)_malloc(sizeof(Transaction));
@@ -389,7 +391,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    /* other possible values ... */
    /* trans->reconciled = YREC;  trans->reconciled = CREC; */
 
-   trans -> date.year = 1970;      /* int */
+   trans -> date.year = 1970;   /* int */
    trans -> date.month = 1;     /* int */
    trans -> date.day = 1;       /* int */
 
@@ -422,16 +424,10 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('Y' == qifline [0]) {   
         XACC_PREP_STRING (trans->description);
 
-        if (do_security) {
+        is_security = 1;
+        if (share_xfer) {
            /* locate or create the sub-account account */
            sub_acc = xaccGetSecurityQIFAccount (acc, qifline);
-   
-           /* now, insert the transaction into the 
-            * main (not sub) account as a debit. The
-            * main account will be debited, the 
-            * subaccount credited */
-           trans->debit = (struct _account *) acc;
-           insertTransaction (acc, trans);
         }
 
      } else
@@ -440,8 +436,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('N' == qifline [0]) {   
 
         if (!strncmp (qifline, "NSell", 5)) isneg = 1;
-        if (!strncmp (qifline, "NSell", 5)) do_security = 1;
-        if (!strncmp (qifline, "NBuy", 4)) do_security = 1;
+        if (!strncmp (qifline, "NSell", 5)) share_xfer = 1;
+        if (!strncmp (qifline, "NBuy", 4)) share_xfer = 1;
 
         /* if a recognized action, convert to our cannonical names */
         XACC_ACTION ("Buy", "Buy")
@@ -461,32 +457,30 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('D' == qifline [0]) {   /* D == date */
          xaccParseQIFDate (&(trans->date), &qifline[1]);
      } else 
+
      if ('T' == qifline [0]) {   /* T == total */
 
          /* ignore T for stock transactions, since T is a dollar amount */
-         if (0 == got_quantity) {
+         if (0 == got_share_quantity) {
             trans -> damount = xaccParseQIFAmount (&qifline[1]);  
             if (isneg) trans -> damount = - (trans->damount);
          }
      } else 
+
      if ('I' == qifline [0]) {   /* I == share price */
          trans -> share_price = xaccParseQIFAmount (&qifline[1]); 
      } else 
+
      if ('Q' == qifline [0]) {   /* Q == number of shares */
          trans -> damount = xaccParseQIFAmount (&qifline[1]);  
          if (isneg) trans -> damount = - (trans->damount);
-         got_quantity = 1;
+         got_share_quantity = 1;
      } else 
-     if ('L' == qifline [0]) {   /* L == name of acount from which transfer occured */
-         Account *xfer_acc;
 
+     /* L == name of acount from which transfer occured */
+     if ('L' == qifline [0]) {   
          /* locate the transfer account */
          xfer_acc = xaccGetXferQIFAccount (acc, qifline);
-
-         /* now, insert the transaction into the transfer account */
-         trans->debit = (struct _account *) xfer_acc;
-         insertTransaction (xfer_acc, trans);
-
      } else 
 
      /* $ == dollar amount -- always preceeded by 'L' */
@@ -529,12 +523,61 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    XACC_PREP_NULL_STRING (trans->description);
    XACC_PREP_NULL_STRING (trans->action);
 
-   /* if a transaction (e.g. security) belongs 
-    * in a subaccount, hnalde it now */
-   if (sub_acc) acc = sub_acc;
 
-   trans->credit = (struct _account *) acc;
-   insertTransaction( acc, trans );
+   /* fundamentally differnt handling for securities and non-securities */
+   if (is_security) {
+
+      /* if the transaction  is a sale/purchase of a security, 
+       * then it is a defacto transfer between the brokerage account 
+       * and the stock account.  */
+      if (share_xfer) {
+         /* Insert the transaction into the main brokerage 
+          * account as a debit, unless an alternate account
+          * was specified. */
+         if (xfer_acc) {
+            trans->debit = (struct _account *) xfer_acc;
+            insertTransaction (xfer_acc, trans);
+         } else {
+            trans->debit = (struct _account *) acc;
+            insertTransaction (acc, trans);
+         }
+
+         /* normally, the security account is pointed at by 
+          * sub_acc; the security account is credited.
+          * But, just in case its missing, avoid a core dump */
+         if (sub_acc) {
+            trans->credit = (struct _account *) sub_acc;
+            insertTransaction (sub_acc, trans);
+         }
+      } else {
+
+         /* else, we are here if its not a share transfer. 
+          * It is probably dividend or other income */
+
+         /* if a transfer account is specified, the transfer 
+          * account gets the dividend credit; otherwise, the 
+          * main account gets it */
+         if (xfer_acc) {
+            trans->credit = (struct _account *) xfer_acc;
+            insertTransaction (xfer_acc, trans);
+         } else {
+            trans->credit = (struct _account *) acc;
+            insertTransaction( acc, trans );
+         }
+      }
+
+   } else {
+      /* if we are here, its not a security, but an ordinary account */
+      /* if a transfer account was specified,  it is the debited account */
+      if (xfer_acc) {
+         trans->debit = (struct _account *) xfer_acc;
+         insertTransaction (xfer_acc, trans);
+      }
+
+      /* the transaction itself appears as a credit */
+      trans->credit = (struct _account *) acc;
+      insertTransaction( acc, trans );
+   }
 
    return qifline;
 }

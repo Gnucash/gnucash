@@ -400,6 +400,7 @@ double xaccGetShareAmount (Account *acc, Transaction *trans)
    } else {
       printf ("Internal Error: xaccGetShareAmount: missing double entry \n");
       printf ("this error should not occur. Please report the problem. \n");
+      printf ("acc=0x%x deb=0x%x cred=0x%x\n", acc, trans->debit, trans->credit);
       themount = 0.0;  /* punt */
    }
    return themount;
