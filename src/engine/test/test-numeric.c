@@ -15,7 +15,7 @@
 #include "test-engine-stuff.h"
 #include "gnc-numeric.h"
 
-#define NREPS 1000
+#define NREPS 2000
 
 static char *
 gnc_numeric_print(gnc_numeric in) 
@@ -489,8 +489,8 @@ check_mult_div (void)
 						 a, b, "expected %s got %s = %s * %s for multiply");
 
 	/* Multiply some random numbers.  This test presumes that
-	 * RAND_MAX is less than 2^32 
-    */
+	 * RAND_MAX is approx 2^32 
+	 */
 	int i;
 	for (i=0; i<NREPS; i++)
 	{
@@ -508,19 +508,41 @@ check_mult_div (void)
 		b = gnc_numeric_create(nb, deno);
 
 		check_binary_op (gnc_numeric_create(ne,1), 
-                   gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+			          gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s * %s for mult exact");
+
+		/* Force 128-bit math to come into play */
 		int j;
 		for (j=1; j<31; j++)
 		{
 			a = gnc_numeric_create(na << j, 1<<j);
 			b = gnc_numeric_create(nb << j, 1<<j);
 			check_binary_op (gnc_numeric_create(ne, 1), 
-                   gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
-						 a, b, "expected %s got %s = %s * %s for mult exact");
+			          gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
+						 a, b, "expected %s got %s = %s * %s for mult reduce");
 		}
-	}
 
+		/* Do some hokey random 128-bit division too */
+		b = gnc_numeric_create(deno, nb);
+
+		check_binary_op (gnc_numeric_create(ne,1), 
+			          gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+						 a, b, "expected %s got %s = %s / %s for div exact");
+
+		/* avoid overflow; */
+		na /= 2;
+		nb /= 2;
+		ne = na*nb;
+		for (j=1; j<16; j++)
+		{
+			a = gnc_numeric_create(na << j, 1<<j);
+			b = gnc_numeric_create(1<<j, nb << j);
+			check_binary_op (gnc_numeric_create(ne, 1), 
+			          gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
+						 a, b, "expected %s got %s = %s / %s for div reduce");
+		}
+
+	}
 }
   
 /* ======================================================= */
