@@ -557,6 +557,18 @@ regRefresh( RegWindow *regData )
                         NULL, NULL, NULL, delta_rows );
     }
     
+    /* try to keep all amounts positive */
+    for (i=0; i<ntrans; i++) {
+      trans = tarray[i];
+      if (0.0 > trans->damount) {
+        struct _account *tmp;
+        tmp = trans->credit;
+        trans->credit = trans->debit;
+        trans->debit = tmp;
+        trans->damount = - (trans->damount);
+      }
+    }
+
     /* and fill in the data for the matrix: */
     for (i=0; i<ntrans; i++) {
       int  row; 
