@@ -78,7 +78,7 @@
     ;; acct)
     (if (and existing-account (compatible? existing-account))
         existing-account 
-        (let ((new-acct (gnc:malloc-account (gnc:get-current-session)))
+        (let ((new-acct (gnc:malloc-account (gnc:get-current-book)))
               (parent-acct #f)
               (parent-name #f)
               (acct-name #f)
@@ -177,7 +177,7 @@
   (gnc:backtrace-if-exception 
    (lambda ()
      (let* ((old-group (gnc:get-current-group))
-            (new-group (gnc:malloc-account-group (gnc:get-current-session)))
+            (new-group (gnc:malloc-account-group (gnc:get-current-book)))
             (gnc-acct-hash (make-hash-table 20))
             (separator (string-ref (gnc:account-separator-char) 0))
             (default-currency 

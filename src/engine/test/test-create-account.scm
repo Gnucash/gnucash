@@ -8,8 +8,9 @@
   (gnc:module-load "gnucash/engine" 0)
 
   (let* ((session (gnc:session-new))
-         (group (gnc:malloc-account-group session))
-         (acct (gnc:malloc-account session)))
+         (book (gnc:session-get-book session))
+         (group (gnc:malloc-account-group book))
+         (acct (gnc:malloc-account book)))
     (gnc:account-begin-edit acct)
     (gnc:account-set-name acct "foo")
     (gnc:account-commit-edit acct)

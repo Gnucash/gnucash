@@ -14,13 +14,11 @@
 static gboolean
 test_trans_query (Transaction *trans, gpointer data)
 {
-  GNCSession *session = data;
   AccountGroup *group;
-  GNCBook *book;
+  GNCBook *book = data;
   GList *list;
   Query *q;
 
-  book = gnc_session_get_book (session);
   group = gnc_book_get_group (book);
 
   q = make_trans_query (trans, ALL_QT);
@@ -29,7 +27,9 @@ test_trans_query (Transaction *trans, gpointer data)
   list = xaccQueryGetTransactions (q, QUERY_MATCH_ANY);
   if (g_list_length (list) != 1)
   {
-    failure ("number of matching transactions not 1");
+    failure_args ("test number returned", __FILE__, __LINE__,
+                  "number of matching transactions %d not 1",
+                  g_list_length (list));
     return FALSE;
   }
 
