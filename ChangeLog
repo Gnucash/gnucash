@@ -10,6 +10,11 @@
 	  During compiling CVS version of gnucash (tag gnucash-gnome2-dev)
 	  I have found some mistakes makes error with GCC compiler.
 
+	* lib/egg/Makefile.am: don't define *_DISABLE_DEPRECATED when
+	  building libegg.  It causes a build failure on FC2 with
+	  Gnome-2.6/Gtk-2.4 because some Gtk-2.2 functions have been
+	  deprecated.  Oops!
+
 2004-05-15  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c
