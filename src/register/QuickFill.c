@@ -48,7 +48,7 @@ static int
 CHAR_TO_INDEX( char c )
   {
   c = toupper(c)-0x40;
-  if( (c < 0) || (c >= QFNUM) )
+  if( (c & 0x80) || (c >= QFNUM) )
     return 0;
   else
     return c;
