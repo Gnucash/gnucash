@@ -262,13 +262,16 @@ draw_cell (GnucashGrid *grid, int block,
         GdkFont *font;
         CellStyle *cs;
         SheetBlock *sheet_block;
+        SheetBlockCell *sb_cell;
         VirtualCellLocation vcell_loc = { block, 0 };
 
         gdk_gc_set_background (grid->gc, &gn_white);
 
         sheet_block = gnucash_sheet_get_block (grid->sheet, vcell_loc);
 
-        gdk_gc_set_foreground (grid->gc, sheet_block->bg_colors[i][j]);        
+        sb_cell = gnucash_sheet_block_get_cell (sheet_block, i, j);
+
+        gdk_gc_set_foreground (grid->gc, sb_cell->bg_color);
         gdk_draw_rectangle (drawable, grid->gc, TRUE, x,  y, width, height);
 
         gdk_gc_set_foreground (grid->gc, &gn_black);
@@ -327,11 +330,11 @@ draw_cell (GnucashGrid *grid, int block,
                       180*64, 90*64);
 #endif /* ROUNDED_CORNERS */
 
-        text = sheet_block->entries[i][j];
+        text = sb_cell->entry;
 
         font = grid->normal_font;
 
-        gdk_gc_set_foreground (grid->gc, sheet_block->fg_colors[i][j]);
+        gdk_gc_set_foreground (grid->gc, sb_cell->fg_color);
 
         if (table->current_cursor_virt_loc.virt_row == block &&
 	    (!text || strlen(text) == 0)) {

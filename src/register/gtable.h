@@ -50,7 +50,10 @@ gpointer g_table_index (GTable *gtable, int row, int col);
 
 /* Resize the table, allocating and deallocating extra table
  * members if needed. The relationship between table members
- * before and after resizing is undefined. */
+ * before and after resizing is undefined, except in the case
+ * where the number of rows changes, but not the number of
+ * columns. In that case, higher-numbered rows are discarded
+ * first. */
 void     g_table_resize (GTable *gtable, int rows, int cols);
 
 #endif

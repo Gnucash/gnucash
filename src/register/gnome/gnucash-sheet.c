@@ -59,8 +59,6 @@ static void gnucash_sheet_deactivate_cursor_cell (GnucashSheet *sheet);
 static void gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
                                                 gboolean changed_cells);
 static void gnucash_sheet_stop_editing (GnucashSheet *sheet);
-static void gnucash_sheet_block_destroy (GnucashSheet *sheet,
-                                         VirtualCellLocation vcell_loc);
 
 
 /* Register signals */
@@ -699,15 +697,12 @@ static void
 gnucash_sheet_destroy (GtkObject *object)
 {
         GnucashSheet *sheet;
-        gint i, j;
+        gint i;
 
         sheet = GNUCASH_SHEET (object);
 
-        for (i = 0; i < sheet->num_virt_rows; i++)
-                for (j = 0; j < sheet->num_virt_cols; j++) {
-                        VirtualCellLocation vcell = { i, j };
-                        gnucash_sheet_block_destroy(sheet, vcell);
-                }
+        g_table_destroy (sheet->blocks);
+        sheet->blocks = NULL;
 
         for (i = GNUCASH_CURSOR_HEADER; i < GNUCASH_CURSOR_LAST; i++)
                 gnucash_sheet_style_destroy(sheet, sheet->cursor_style[i]);
@@ -1833,8 +1828,9 @@ gnucash_register_goto_virt_cell (GnucashRegister *reg,
         gnucash_sheet_goto_virt_loc(sheet, virt_loc);
 }
 
-void gnucash_register_goto_virt_loc (GnucashRegister *reg,
-                                     VirtualLocation virt_loc)
+void
+gnucash_register_goto_virt_loc (GnucashRegister *reg,
+                                VirtualLocation virt_loc)
 {
         GnucashSheet *sheet;
 
@@ -1872,61 +1868,43 @@ gnucash_register_goto_next_virt_row (GnucashRegister *reg)
 SheetBlock *
 gnucash_sheet_get_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
 {
-        SheetBlock block;
-        
         g_return_val_if_fail (sheet != NULL, NULL);
         g_return_val_if_fail (GNUCASH_IS_SHEET(sheet), NULL);
 
-        block.vcell_loc = vcell_loc;
-
-        return g_hash_table_lookup (sheet->blocks, &block);
+        return g_table_index (sheet->blocks,
+                              vcell_loc.virt_row,
+                              vcell_loc.virt_col);
 }
 
+SheetBlockCell *
+gnucash_sheet_block_get_cell (SheetBlock *block, int cell_row, int cell_col)
+{
+        if (block == NULL)
+                return NULL;
+
+        return g_table_index (block->block_cells, cell_row, cell_col);
+}
 
 static const char *
 gnucash_sheet_block_get_text (GnucashSheet *sheet, VirtualLocation virt_loc)
 {
         SheetBlock *block;
+        SheetBlockCell *sb_cell;
 
         g_return_val_if_fail (sheet != NULL, NULL);
         g_return_val_if_fail (GNUCASH_IS_SHEET (sheet), NULL);
 
         block = gnucash_sheet_get_block (sheet, virt_loc.vcell_loc);
+        if (block == NULL)
+                return NULL;
 
-        if (virt_loc.phys_row_offset >= 0 &&
-            virt_loc.phys_row_offset <= block->style->nrows &&
-            virt_loc.phys_col_offset >= 0 &&
-            virt_loc.phys_col_offset <= block->style->ncols)
-                return block->entries [virt_loc.phys_row_offset]
-                                      [virt_loc.phys_col_offset];
+        sb_cell = gnucash_sheet_block_get_cell (block,
+                                                virt_loc.phys_row_offset,
+                                                virt_loc.phys_col_offset);
+        if (sb_cell == NULL)
+                return NULL;
 
-        return NULL;
-}
-
-
-static void
-gnucash_sheet_block_clear_entries (SheetBlock *block)
-{
-        gint i;
-        gint num_rows, num_cols;
-
-        if (block && block->style) {
-                num_rows = block->style->nrows;
-                num_cols = block->style->ncols;
-
-                for (i = 0; i < num_rows; i++ ) {
-                        g_free (block->entries[i]);
-                        g_free (block->fg_colors[i]);
-                        g_free (block->bg_colors[i]);
-                }
-                g_free (block->entries);
-                g_free (block->fg_colors);
-                g_free (block->bg_colors);
-
-                block->entries = NULL;
-                block->fg_colors = NULL;
-                block->bg_colors = NULL;
-        }
+        return sb_cell->entry;
 }
 
 
@@ -1955,17 +1933,19 @@ gnucash_sheet_block_set_entries (GnucashSheet *sheet,
         for (i = 0; i < block->style->nrows; i++)
                 for (j = 0; j < block->style->ncols; j++) {
                         PhysicalCell *pcell;
+                        SheetBlockCell *sb_cell;
                         PhysicalLocation p_loc = phys_origin;
 
                         p_loc.phys_row += i;
                         p_loc.phys_col += j;
 
                         pcell = gnc_table_get_physical_cell (table, p_loc);
+                        sb_cell = gnucash_sheet_block_get_cell (block, i, j);
 
-                        block->entries[i][j] = pcell->entry;
-                        block->fg_colors[i][j] =
+                        sb_cell->entry = pcell->entry;
+                        sb_cell->fg_color =
                                 gnucash_color_argb_to_gdk (pcell->fg_color);
-                        block->bg_colors[i][j] =
+                        sb_cell->bg_color =
                                 gnucash_color_argb_to_gdk (pcell->bg_color);
                 }
 }
@@ -1980,18 +1960,14 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
         Table *table;
         SheetBlock *block;
         SheetBlockStyle *style;
-        gint i;
 
         block = gnucash_sheet_get_block (sheet, vcell_loc);
         style = gnucash_sheet_get_style_from_table (sheet, vcell_loc);
 
         if (block) {
-
                 table = sheet->table;
 
                 if (block->style  && block->style != style) {
-
-                        gnucash_sheet_block_clear_entries (block);
 
                         /* the zero'th virtual row isn't drawn */
                         if (vcell_loc.virt_row > 0)
@@ -2009,23 +1985,9 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
 
                         gnucash_style_ref(block->style);
 
-                        block->entries = g_new0( gchar **,
-                                                 block->style->nrows);
-                        for (i = 0; i < block->style->nrows; i++)
-                                block->entries[i] = g_new0(gchar *,
-                                                           block->style->ncols);
-
-                        block->fg_colors = g_new0( GdkColor **,
-                                                   block->style->nrows);
-                        for (i = 0; i < block->style->nrows; i++)
-                                block->fg_colors[i] = g_new0(GdkColor *,
-                                                             block->style->ncols);
-
-                        block->bg_colors = g_new0( GdkColor **,
-                                                   block->style->nrows);
-                        for (i = 0; i < block->style->nrows; i++)
-                                block->bg_colors[i] = g_new0(GdkColor *,
-                                                             block->style->ncols);
+                        g_table_resize (block->block_cells,
+                                        block->style->nrows,
+                                        block->style->ncols);
                 }
 
                 gnucash_sheet_block_set_entries (sheet, vcell_loc);
@@ -2039,10 +2001,13 @@ gnucash_sheet_cell_set_from_table (GnucashSheet *sheet,
 {
         SheetBlock *block;
         SheetBlockStyle *style;
-        
+        SheetBlockCell *sb_cell;
+        VirtualCell *vcell;
+        PhysicalCell *pcell;
+
         Table *table;
         PhysicalLocation p_loc;
-        
+
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET(sheet));
 
@@ -2056,31 +2021,27 @@ gnucash_sheet_cell_set_from_table (GnucashSheet *sheet,
         if (!style)
                 return;
 
-        if (virt_loc.phys_row_offset >= 0 &&
-            virt_loc.phys_row_offset <= style->nrows &&
-            virt_loc.phys_col_offset >= 0 &&
-            virt_loc.phys_col_offset <= style->ncols) {
-                VirtualCell *vcell;
-                PhysicalCell *pcell;
+        sb_cell = gnucash_sheet_block_get_cell (block,
+                                                virt_loc.phys_row_offset,
+                                                virt_loc.phys_col_offset);
+        if (sb_cell == NULL)
+                return;
 
-                block->entries[virt_loc.phys_row_offset]
-                              [virt_loc.phys_col_offset] = NULL;
+        sb_cell->entry = NULL;
 
-                vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
-                if (vcell == NULL)
-                        return;
+        vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
+        if (vcell == NULL)
+                return;
 
-                p_loc = vcell->phys_loc;
-                p_loc.phys_row += virt_loc.phys_row_offset;
-                p_loc.phys_col += virt_loc.phys_col_offset;
+        p_loc = vcell->phys_loc;
+        p_loc.phys_row += virt_loc.phys_row_offset;
+        p_loc.phys_col += virt_loc.phys_col_offset;
 
-                pcell = gnc_table_get_physical_cell (table, p_loc);
-                if (pcell == NULL)
-                        return;
+        pcell = gnc_table_get_physical_cell (table, p_loc);
+        if (pcell == NULL)
+                return;
 
-                block->entries[virt_loc.phys_row_offset]
-                              [virt_loc.phys_col_offset] = pcell->entry;
-        }
+        sb_cell->entry = pcell->entry;
 }
 
 
@@ -2165,46 +2126,52 @@ gnucash_sheet_set_scroll_region (GnucashSheet *sheet)
                                                 0, 0, width, height);
 }
 
+static gpointer
+sheet_block_cell_new (void)
+{
+        SheetBlockCell *sb_cell;
+
+        sb_cell = g_new0 (SheetBlockCell, 1);
+
+        return sb_cell;
+}
 
 static void
-gnucash_sheet_block_destroy (GnucashSheet *sheet,
-                             VirtualCellLocation vcell_loc)
+sheet_block_cell_free (gpointer block)
+{
+        g_free(block);
+}
+
+static void
+gnucash_sheet_block_free (gpointer _block)
+{
+        SheetBlock *block = _block;
+
+        if (block == NULL)
+                return;
+
+        if (block->style) {
+                gnucash_style_unref (block->style);
+                block->style = NULL;
+        }
+
+        g_table_destroy (block->block_cells);
+
+        g_free (block);
+}
+
+static gpointer
+gnucash_sheet_block_new (void)
 {
         SheetBlock *block;
 
-        block = gnucash_sheet_get_block (sheet, vcell_loc);
+        block = g_new0 (SheetBlock, 1);
 
-        if (block) {
+        block->block_cells = g_table_new (sheet_block_cell_new,
+                                          sheet_block_cell_free);
 
-                if (block->style) {
-                        sheet->height -= block->style->dimensions->height;
-                        gnucash_style_unref (block->style);
-                }
-
-                gnucash_sheet_block_clear_entries (block);
-                g_hash_table_remove (sheet->blocks, block);
-                g_free (block);
-        }
+        return block;
 }
-
-
-static void
-gnucash_sheet_block_new (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
-{
-        SheetBlock *block;
-
-        block = gnucash_sheet_get_block (sheet, vcell_loc);
-
-        if (!block) {
-
-                block = g_new0 (SheetBlock, 1);
-
-                block->vcell_loc = vcell_loc;
-
-                g_hash_table_insert (sheet->blocks, block, block);
-        }
-}
-
 
 static void
 gnucash_sheet_resize (GnucashSheet *sheet)
@@ -2226,24 +2193,35 @@ gnucash_sheet_resize (GnucashSheet *sheet)
         sheet->num_virt_cols = 1;
 
         if (diff_rows < 0) {
-                /* we need to shrink the number of rows */
                 for (i = 0; i < -diff_rows; i++) {
-                        vcell_loc.virt_row = num_virt_rows - i - 1;
-                        gnucash_sheet_block_destroy(sheet, vcell_loc);
+                        SheetBlock *block;
+
+                        vcell_loc.virt_row = (num_virt_rows - i) - 1;
+
+                        block = gnucash_sheet_get_block (sheet, vcell_loc);
+
+                        sheet->height -= block->style->dimensions->height;
                 }
         }
-        else if (diff_rows > 0) {
-                /* we need some more rows */
+
+        g_table_resize (sheet->blocks, sheet->table->num_virt_rows, 1);
+
+        /* This assumes that earlier blocks are unchanged. */
+        if (diff_rows > 0) {
                 for (i = 0; i < diff_rows; i++) {
+                        SheetBlock *block;
+
                         vcell_loc.virt_row = num_virt_rows + i;
-                        gnucash_sheet_block_new(sheet, vcell_loc);
+
+                        block = gnucash_sheet_get_block (sheet, vcell_loc);
+
+                        block->vcell_loc = vcell_loc;
                 }
         }
 
         sheet->num_virt_rows = sheet->table->num_virt_rows;
         gnucash_sheet_set_scroll_region (sheet);
 }
-
 
 void
 gnucash_sheet_table_load (GnucashSheet *sheet)
@@ -2284,7 +2262,6 @@ gnucash_sheet_table_load (GnucashSheet *sheet)
         gnucash_sheet_activate_cursor_cell (sheet, TRUE);
         gtk_layout_thaw (GTK_LAYOUT(sheet));        
 }
-
 
 static gboolean
 gnucash_sheet_selection_clear (GtkWidget          *widget,
@@ -2365,32 +2342,6 @@ gnucash_sheet_class_init (GnucashSheetClass *class)
 }
 
 
-static guint
-block_hash (gconstpointer key)
-{
-        const SheetBlock *block = key;
-
-        return (block->vcell_loc.virt_row << 8) | block->vcell_loc.virt_col;
-}
-
-
-static gint
-block_compare (gconstpointer a, gconstpointer b)
-{
-        const SheetBlock *block_a, *block_b;
-
-        block_a = a;
-        block_b = b;
-
-        if (block_a->vcell_loc.virt_row != block_b->vcell_loc.virt_row)
-                return 0;
-        if (block_a->vcell_loc.virt_col != block_b->vcell_loc.virt_col)
-                return 0;
-
-        return 1;
-}
-
-
 static void
 gnucash_sheet_init (GnucashSheet *sheet)
 {
@@ -2418,7 +2369,8 @@ gnucash_sheet_init (GnucashSheet *sheet)
         sheet->height = 0;
         sheet->smooth_scroll = TRUE;
 
-        sheet->blocks = g_hash_table_new(block_hash, block_compare);
+        sheet->blocks = g_table_new(gnucash_sheet_block_new,
+                                    gnucash_sheet_block_free);
 }
 
 

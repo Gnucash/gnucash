@@ -61,6 +61,14 @@ typedef enum {
 
 typedef struct _SheetBlockStyle SheetBlockStyle;
 
+typedef struct
+{
+        gchar *entry;
+
+        GdkColor *fg_color;
+        GdkColor *bg_color;
+} SheetBlockCell;
+
 typedef struct  
 {
         /* The virtual location in the table of this block */
@@ -69,11 +77,7 @@ typedef struct
         /* The style for this block */
         SheetBlockStyle *style;
 
-        GdkColor ***fg_colors;
-        GdkColor ***bg_colors;                
-
-        /* the text of the block;  a num_phys_row by num_phys_cols array */
-        gchar ***entries;
+        GTable *block_cells;
 } SheetBlock;
 
 
@@ -100,7 +104,7 @@ typedef struct {
         GHashTable *layout_info_hash_table;
         GHashTable *dimensions_hash_table;
 
-        GHashTable *blocks;
+        GTable *blocks;
 
         GnomeCanvasItem *item_editor;
         GtkWidget *entry;   
@@ -164,6 +168,9 @@ void gnucash_sheet_set_top_block (GnucashSheet *sheet, int new_top_block,
 
 SheetBlock *gnucash_sheet_get_block (GnucashSheet *sheet,
                                      VirtualCellLocation vcell_loc);
+
+SheetBlockCell *gnucash_sheet_block_get_cell (SheetBlock *block,
+                                              int cell_row, int cell_col);
 
 gint gnucash_sheet_col_max_width (GnucashSheet *sheet,
                                   gint virt_col, gint cell_col);
