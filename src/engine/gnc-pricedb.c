@@ -75,8 +75,11 @@ gnc_price_unref(GNCPrice *p)
 {
   if(!p) return;
   if(p->refcount == 0) {
-    PERR("gnc_price_unref: refcount == 0!");
+    PERR("refcount == 0!");
     assert(p->refcount != 0);
+  }
+  if(p->db != NULL && p->refcount == 1) {
+    PERR("last unref while price in database");
   }
   p->refcount--;
   if(p->refcount == 0) {
@@ -212,7 +215,7 @@ gnc_numeric
 gnc_price_get_value(GNCPrice *p)
 {
   if(!p) {
-    PERR("gnc_price_get_value: price NULL.\n");
+    PERR("price NULL.\n");
     return gnc_numeric_zero();
   }
   return p->value;
@@ -317,6 +320,15 @@ destroy_pricedb_currency_hash_data(gpointer key,
                                    gpointer user_data)
 {
   GList *price_list = (GList *) data;
+  GList *node;
+
+  for (node = price_list; node; node = node->next)
+  {
+    GNCPrice *p = node->data;
+
+    p->db = NULL;
+  }
+
   gnc_price_list_destroy(price_list);
 }
 

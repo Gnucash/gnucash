@@ -9,6 +9,7 @@ doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  ChangeLog.1 \
   HACKING \
   INSTALL \
   NEWS \

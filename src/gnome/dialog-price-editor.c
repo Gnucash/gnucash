@@ -145,12 +145,16 @@ gnc_prices_load_prices (PricesDialog *pdb_dialog)
 {
   gnc_commodity *current_commodity;
   GNCPrintAmountInfo print_info;
+  GNCPrice *old_price;
   GNCBook *book;
   GList *prices;
   GList *node;
+  int new_row;
 
   book = gncGetCurrentBook ();
+  old_price = pdb_dialog->price;
   prices = NULL;
+  new_row = 0;
 
   gnc_pricedb_foreach_price (gnc_book_get_pricedb (book),
                              load_price_helper, &prices, FALSE);
@@ -180,6 +184,9 @@ gnc_prices_load_prices (PricesDialog *pdb_dialog)
     row = gtk_clist_append (GTK_CLIST (pdb_dialog->price_list), (char **)text);
 
     gtk_clist_set_row_data (GTK_CLIST (pdb_dialog->price_list), row, price);
+
+    if (price == old_price)
+      new_row = row;
   }
 
   gtk_clist_thaw (GTK_CLIST (pdb_dialog->price_list));
@@ -196,7 +203,7 @@ gnc_prices_load_prices (PricesDialog *pdb_dialog)
   g_list_free (pdb_dialog->prices);
   pdb_dialog->prices = prices;
 
-  gtk_clist_select_row (GTK_CLIST (pdb_dialog->price_list), 0, 0);
+  gtk_clist_select_row (GTK_CLIST (pdb_dialog->price_list), new_row, 0);
 
   gtk_widget_set_sensitive (pdb_dialog->edit_button, prices != NULL);
   gtk_widget_set_sensitive (pdb_dialog->remove_button, prices != NULL);
@@ -331,6 +338,12 @@ window_destroy_cb (GtkObject *object, gpointer data)
 
   gnc_unregister_gui_component_by_data (DIALOG_PRICES_CM_CLASS, pdb_dialog);
 
+  if (pdb_dialog->price)
+  {
+    gnc_price_unref (pdb_dialog->price);
+    pdb_dialog->price = NULL;
+  }
+
   gtk_widget_destroy (pdb_dialog->price_dialog);
   pdb_dialog->price_dialog = NULL;
 
@@ -354,26 +367,56 @@ price_window_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer data)
 
   gtk_widget_hide (pdb_dialog->price_dialog);
 
-  /* Don't delete the window, we'll handle things ourselves. */
-  return TRUE;
+  if (pdb_dialog->price && pdb_dialog->new)
+  {
+    gnc_price_unref (pdb_dialog->price);
+    pdb_dialog->price = NULL;
+    pdb_dialog->new = FALSE;
+  }
+
+  gnc_prices_load_prices (pdb_dialog);
+
+  /* delete the window */
+  return FALSE;
 }
 
 static void
 price_ok_clicked (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
+  const char *error_str;
+
+  if (!pdb_dialog->changed)
+  {
+    gtk_widget_hide (pdb_dialog->price_dialog);
+    return;
+  }
+
+  error_str = gui_to_price (pdb_dialog);
+
+  if (error_str)
+  {
+    gnc_warning_dialog_parented (pdb_dialog->price_dialog, error_str);
+    return;
+  }
 
   gtk_widget_hide (pdb_dialog->price_dialog);
 
-  if (pdb_dialog->changed)
+  if (pdb_dialog->new)
   {
     GNCBook *book = gncGetCurrentBook ();
     GNCPriceDB *pdb = gnc_book_get_pricedb (book);
 
-    gui_to_price (pdb_dialog);
+    if (!gnc_pricedb_add_price (pdb, pdb_dialog->price))
+    {
+      gnc_price_unref (pdb_dialog->price);
+      pdb_dialog->price = NULL;
+    }
 
-    gnc_gui_refresh_all ();
+    pdb_dialog->new = FALSE;
   }
+
+  gnc_gui_refresh_all ();
 
   pdb_dialog->changed = FALSE;
 }
@@ -383,8 +426,14 @@ price_cancel_clicked (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
 
-  price_to_gui (pdb_dialog);
-  pdb_dialog->changed = FALSE;
+  if (pdb_dialog->price && pdb_dialog->new)
+  {
+    gnc_price_unref (pdb_dialog->price);
+    pdb_dialog->price = NULL;
+    pdb_dialog->new = FALSE;
+  }
+
+  gnc_prices_load_prices (pdb_dialog);
 
   gtk_widget_hide (pdb_dialog->price_dialog);
 }
@@ -430,12 +479,41 @@ remove_clicked (GtkWidget *widget, gpointer data)
 }
 
 static void
+add_clicked (GtkWidget *widget, gpointer data)
+{
+  PricesDialog *pdb_dialog = data;
+  Timespec date;
+
+  if (pdb_dialog->price)
+    gnc_price_unref (pdb_dialog->price);
+
+  pdb_dialog->price = gnc_price_create ();
+  pdb_dialog->new = TRUE;
+  pdb_dialog->changed = TRUE;
+
+  gnc_price_set_source (pdb_dialog->price, "user:price-editor");
+
+  date.tv_sec = time (NULL);
+  date.tv_nsec = 0;
+  gnc_price_set_time (pdb_dialog->price, date);
+
+  gtk_widget_show (pdb_dialog->price_dialog);
+}
+
+static void
 gnc_prices_select_price_cb (GtkCList *clist, gint row, gint col,
                             GdkEventButton *event, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
 
+  if (pdb_dialog->price)
+    gnc_price_unref (pdb_dialog->price);
+
   pdb_dialog->price = gtk_clist_get_row_data (clist, row);
+  pdb_dialog->new = FALSE;
+
+  if (pdb_dialog->price)
+    gnc_price_ref (pdb_dialog->price);
 
   price_to_gui (pdb_dialog);
   gtk_widget_set_sensitive (pdb_dialog->edit_button,
@@ -451,7 +529,11 @@ gnc_prices_unselect_price_cb (GtkCTree *ctre, gint row, gint col,
 {
   PricesDialog *pdb_dialog = data;
 
+  if (pdb_dialog->price)
+    gnc_price_unref (pdb_dialog->price);
+
   pdb_dialog->price = NULL;
+  pdb_dialog->new = FALSE;
 
   gtk_widget_set_sensitive (pdb_dialog->edit_button, FALSE);
   gtk_widget_set_sensitive (pdb_dialog->remove_button, FALSE);
@@ -671,6 +753,11 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (remove_clicked), pdb_dialog);
+
+    button = lookup_widget (dialog, "add_button");
+
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                        GTK_SIGNAL_FUNC (add_clicked), pdb_dialog);
   }
 
   gnc_prices_load_prices (pdb_dialog);

@@ -669,6 +669,18 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     gtk_text_set_word_wrap (GTK_TEXT (text), TRUE);
     ti_dialog->txf_help_text = text;
 
+    /* set text height */
+    {
+      GtkStyle *style = gtk_widget_get_style (text);
+      GdkFont *font = NULL;
+
+      if (style != NULL)
+        font = style->font;
+
+      if (font)
+        gtk_widget_set_usize (text, 0, (font->ascent + font->descent) * 5 + 6);
+    }
+
     clist = lookup_widget (dialog, "txf_category_clist");
     gtk_clist_column_titles_passive (GTK_CLIST (clist));
     ti_dialog->txf_category_clist = clist;
