@@ -25,11 +25,8 @@ decide.
 <GLOSSDEF>
 <PARA>The <EMPHASIS>Bank</EMPHASIS> account type denotes a savings or
       checking account held at a bank or other financial
-      institution.</PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA>      Such accounts sometimes bear interest.
-
+      institution.
+      Such accounts sometimes bear interest.
       </PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
@@ -41,19 +38,14 @@ decide.
       with VISA, MasterCard, or Discover, as well as others like
       American Express that do <EMPHASIS> not</EMPHASIS> permit you to maintain
       continuing balances.</PARA>
-</GLOSSDEF>
-<GLOSSDEF>
 <PARA>The introduction of <ULINK URL="http://www.visa.com/pd/debit/checkcard.html"> Check
       Cards</ULINK> where payments are withdrawn directly from a
       checking account makes the selection less clear; it is
       probably more appropriate to treat a "Check Card" as a <EMPHASIS>      Bank</EMPHASIS> account, as it does withdraw amounts directly from
       such an account, not really involving any granting of
-      credit.</PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA> Note the ambiguity of AMEX and Check Cards.  This shows that
-deciding where to put accounts is not an exact science.
-
+      credit.
+      Note the ambiguity of AMEX and Check Cards.  This shows that
+      deciding where to put accounts is not an exact science.
       </PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
@@ -62,27 +54,24 @@ deciding where to put accounts is not an exact science.
 <GLOSSDEF>
 <PARA><EMPHASIS>Asset</EMPHASIS> and <EMPHASIS>Liability</EMPHASIS> accounts are used for
       tracking things that are of value, but that are not so
-      directly translated into <EMPHASIS> cash</EMPHASIS> .</PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA>For instance, you might collect the costs of purchasing a
-      house into an asset account entitled <EMPHASIS> My House,</EMPHASIS> or the
+      directly translated into <EMPHASIS>cash</EMPHASIS>.
+      For instance, you might collect the costs of purchasing a
+      house into an asset account entitled <EMPHASIS>My
+      House</EMPHASIS>, or the
       cost of a car into <EMPHASIS> My Car,</EMPHASIS> or collect together the
-      value of your <EMPHASIS> Computer Equipment.</EMPHASIS></PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA>And the home mortgage or car loan would be represented by
+      value of your <EMPHASIS> Computer Equipment.</EMPHASIS>
+      The home mortgage or car loan would be represented by
       liability accounts, <EMPHASIS> Home Mortgage</EMPHASIS> and <EMPHASIS> Car
       Loan</EMPHASIS>, to be drawn down as payments are made on these
-      loans.</PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA>If you hold assets for business purposes, their decline
+      loans.
+</PARA>
+<PARA>
+      If you hold assets for business purposes, their decline
       in value over time might be treated as a deduction for tax
-      purposes, that deduction being called <LINK LINKEND="XACC-DEPRECIATION">Depreciation.</LINK></PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA>On the other hand, if you own assets that <EMPHASIS>      appreciate</EMPHASIS> in value over time, such as real estate,
+      purposes, that deduction being called 
+      <LINK LINKEND="XACC-DEPRECIATION">Depreciation.</LINK>
+      On the other hand, if you own assets that 
+      <EMPHASIS>appreciate</EMPHASIS> in value over time, such as real estate,
       collectibles like paintings, and investments like shares in
       companies, you may see them appreciate in value, and have to
       recognize, for tax purposes, what are called <LINK LINKEND="APPR"> Capital Gains.</LINK></PARA>
@@ -98,53 +87,38 @@ deciding where to put accounts is not an exact science.
       securities that are widely enough traded can have pretty
       concrete values that may be analyzed on a day-to-day
       basis.</PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA>        Stock and Mutual Fund accounts are typically tracked in
+<PARA>
+        Stock and Mutual Fund accounts are typically tracked in
         registers having three main columns: 
 
         <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>Price
-
-          </PARA>
+<PARA>Price </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>Number of shares
-
-          </PARA>
+<PARA>Number of shares </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>Cost
-        </PARA>
+<PARA>Cost </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
       </PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA>        In order to get <EMPHASIS> useful</EMPHASIS> information out of the
+<PARA>  In order to get <EMPHASIS> useful</EMPHASIS> information out of the
         register, it is necessary to have multiple "views" on the
         data so that you may assess such things as: 
 
         <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>Total Values by security
-
-          </PARA>
+<PARA>Total Values by security </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>Gains/Losses by security
-
-          </PARA>
+<PARA>Gains/Losses by security </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>Return On Investment rates by security
-        </PARA>
+<PARA>Return On Investment rates by security </PARA> 
 </LISTITEM>
 </ITEMIZEDLIST>
       </PARA>
-</GLOSSDEF>
-<GLOSSDEF>
 <PARA>More details may be found in the <LINK LINKEND="XACC-TICKER">Stock Ticker</LINK> section.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
@@ -153,19 +127,13 @@ deciding where to put accounts is not an exact science.
       Expense</LINK></EMPHASIS></GLOSSTERM>
 <GLOSSDEF>
 <PARA><EMPHASIS> Income</EMPHASIS> and <EMPHASIS>Expense</EMPHASIS> account types are used to
-      record income and expenses.</PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA>      For example, if you deposit a paycheck in your bank account, you
-should mark it as a transfer from an 'income' account type.  </PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA> Marking income in this way helps balance the books: the change in your
+      record income and expenses.
+     For example, if you deposit a paycheck in your bank account, you
+should mark it as a transfer from an 'income' account type.  
+Marking income in this way helps balance the books: the change in your
 net worth in the course of a few ekks, a few months, or a year, should
 exactly equal your income (minus expenses) for the same period.  </PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA> The value stored in the bank account contributes to your 'net worth';
+The value stored in the bank account contributes to your 'net worth';
 whereas the income contributes to your 'profits'.
 
 </PARA>
@@ -177,38 +145,19 @@ whereas the income contributes to your 'profits'.
 <PARA><EMPHASIS>Equity</EMPHASIS> accounts are used to 
 store the opening balances when you first start using GnuCash 
 (or start a new accounting period).   
-
-
-</PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA>Assuming that you've had a bank
+Assuming that you've had a bank
 account far longer than you've been using GnuCash, and assuming you
 don't want to type in old transactions, you will want to type in a
 non-zero <EMPHASIS> opening balance </EMPHASIS>  into your bank account.  This opening balance
 should be marked as a transfer from an account of type 'equity'.  
-
-</PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA> Alternately, if you close and reopen all your books at the end of every
+Alternately, if you close and reopen all your books at the end of every
 quarter/year, the 'equity' will be your net-worth at the begining of the 
 period: it equal all assets minus all liabilities.  
-
-</PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA> As time goes  by,
-you will have both income and expenses. 
-
-</PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA> At the end of the year, your net
+As time goes  by, you will have both income and expenses. 
+At the end of the year, your net
 worth will be the equity at the begining of the year, plus all income
 minus all expense.  This value will become, of course, the equity for
 the next accounting period.
-
       </PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
@@ -217,10 +166,8 @@ the next accounting period.
       <EMPHASIS>Currency</EMPHASIS></LINK></GLOSSTERM>
 <GLOSSDEF>
 <PARA><EMPHASIS> Currency Accounts</EMPHASIS> are used for trading
-      currencies.</PARA>
-</GLOSSDEF>
-<GLOSSDEF>
-<PARA>In most ways, they behave like stocks, except that the
+      currencies.
+      In most ways, they behave like stocks, except that the
       only way that "income" may be gotten from them is from
       fluctuations in the relative values of currencies. Note that
       transfers cannot be made directly between two accounts
