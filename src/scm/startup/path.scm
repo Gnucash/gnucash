@@ -106,6 +106,10 @@ file in all of the directories specified by gnc:*load-path*."
                             (gnc:warn "failure loading " auto-file)
                             #f))))))))))
 
+;; the system config should probably be loaded from some directory
+;; that wouldn't be a site wide mounted directory, like /usr/share
+;; However, the code below seems to zero in on /usr/share/gnucash/config
+;; ... ahh but that's OK, right ??
 (define gnc:load-system-config-if-needed
   (let ((system-config-loaded? #f))
     (lambda ()
