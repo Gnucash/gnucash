@@ -1,0 +1,41 @@
+Finance::Quote 
+==============
+
+IMPORTANT
+=========
+
+Read Documentation/License for the license (GPL) covering this code.
+
+Install instructions
+--------------------
+
+% perl Makefile.PL
+% make
+% make test		(optional)
+# make install		(as root)
+
+Couldn't be easier, could it?
+
+The tests do take some time to run (especially the currency test), so
+please be patient.
+
+What if my tests fail?
+----------------------
+Your tests could fail if your machine does not have a connection to the
+Internet, if your machine must use an HTTP proxy and you do not have
+your http_proxy environment variable set, or if one or more of the
+servers that Finance::Quote uses is down or unhappy.
+
+The tests can also fail if you do not have LWP installed, which
+Finance::Quote depends.
+
+If you believe you've found a bug, please contact Paul Fenwick
+<pjf@cpan.org>.
+
+More information?
+-----------------
+Try visiting http://finance-quote.sourceforge.net/
+
+Maintainer
+----------
+Paul Fenwick <pjf@cpan.org>
