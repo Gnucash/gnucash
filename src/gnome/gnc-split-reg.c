@@ -53,7 +53,6 @@
 #include "table-allgui.h"
 
 #include <libguile.h>
-#include "gnc-regwidget.h"
 #include "gnc-engine-util.h"
 #include "dialog-utils.h"
 
