@@ -1,5 +1,9 @@
 2000-05-20  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/gnome/dialog-add.c (accWindow): if the window is closed as
+	a result of a window destroy, don't save the size or destroy the
+	window, it's already gone.
+
 	* configure.in: remove check for readline. guile-config should
 	return the right values. Also, change LOCALE_DIR definition to
 	$datadir/locale. This seems to be more correct.
