@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "core-utils.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gw-gnc.h"
@@ -75,17 +76,11 @@ gnucash_main_helper (int argc, char *argv[])
 
   gnc_gw_init ();
 
-  if(!bootstrap_scm) {
-    char *string;
-
-    string = g_strdup_printf("%s=%s", "GNC_BOOTSTRAP_SCM", GNC_BOOTSTRAP_SCM);
-    if (string == NULL) {
-      FATAL("out of memory");
-      exit(1);
-    }
-
-    if (putenv(string) != 0) {
-      FATAL("putenv(%s) failed. Aborting.\n", string);
+  if(!bootstrap_scm)
+  {
+    if(gnc_setenv("GNC_BOOTSTRAP_SCM", GNC_BOOTSTRAP_SCM, 1) != 0)
+    {
+      FATAL("gnc_setenv GNC_BOOTSTRAP_SCM failed. Aborting.\n");
       exit(1);
     }
 
