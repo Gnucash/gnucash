@@ -7,37 +7,25 @@
 <TITLE> What are Incomes and Expenses?</TITLE>
 <PARA>    </PARA>
 <PARA>The words "Income" and "Expense" are beguilingly simple;
-    everyone <EMPHASIS>thinks</EMPHASIS> they know what they mean; this <EMPHASIS>    usually</EMPHASIS> is that <EMPHASIS>When I spend something, this is an
-    expense, and when I get money, this is an income.</EMPHASIS>
+    everyone <EMPHASIS>thinks</EMPHASIS> they know what they mean.
+    <EMPHASIS>The money I get is income, the money I spend is 
+    expense</EMPHASIS>, right?  Right!  However, there are subtlties.
+    The time that you make your income is ofen different than
+    when you actually get the money: to ease the recording of these
+types of transactions, the concept of 'accounts payable' and 'accounts
+receivable' has been invented.   Click on that link to go there.
+This ection deals with the more basic recording of incomes and expenses.
+</SECT1>
 
-    </PARA>
-<PARA>This oversimplifies things somewhat; it is often a <EMPHASIS>    good-enough</EMPHASIS> approximation when doing personal accounting,
-    but when running a business, incomes and expenses often have be
-    recognized as having occurred when some "critical event" takes
-    place that may not perfectly correspond to "when cash comes in
-    or goes out."
+<SECT1>
+<TITLE> Recording Income and Expenses</TITLE>
+<PARA>    </PARA>
 
-    </PARA>
-<PARA>For instance, companies usually have to recognize income
-    <EMPHASIS>when the sale occurs.</EMPHASIS> That may mean that I have to
-    recognize a $100,000 sale <EMPHASIS>at the moment I and the customer
-    shake hands on the deal.</EMPHASIS>
-
-    </PARA>
-<PARA>Since the money hasn't come in, the sale has to be estimated
-    in other way; the way this is done is to <EMPHASIS>accrue</EMPHASIS> a sale
-    at that time, and in making the transaction balance, rather
-    than adding something in to cash, I'd add the $100,000 sale to
-    <EMPHASIS>Accounts Receivable.</EMPHASIS>
-
-    </PARA>
 <PARA>In a double entry system, two kinds of accounts must be
     created: some of type "Income" and others of type "Expense."
     (There tend to be a lot more different kinds of expenses than
     there are of incomes.)
-
-    </PARA>
-<PARA>Income such as salary, wages, bank interest and stock
+    Income such as salary, wages, bank interest and stock
     dividends are then recorded as transfers from an income account
     to a bank (or, in general, some asset) account. Similarly,
     expenses are recorded as transfers from a credit card account
@@ -178,6 +166,41 @@
     this to be a pretty odd situation.)
 
     </PARA>
+<PARA>The words "Income" and "Expense" are beguilingly simple;
+    everyone <EMPHASIS>thinks</EMPHASIS> they know what they mean.
+    <EMPHASIS>The money I get is income, the money I spend is 
+    expense</EMPHASIS>, right?  Yes, but only in a very basic 
+    sense. This may be enough when doing personal accounting, but 
+    for a business, things get more complicated.
+    Income and expenses may be recognized as having occurred at a
+    moment that is different from the moment when cash actually moved 
+    into or out of the business's bank accounts.
+
+    </PARA>
+<PARA>For instance, companies usually recognize income
+    <EMPHASIS>when the sale occurs.</EMPHASIS> For example, 
+    that might mean that you recognize a $10,000 sale 
+    <EMPHASIS>at the moment you and the customer
+    shake hands on the deal.</EMPHASIS>
+    Since the money hasn't actually come in, the sale has to be posted
+    in another way.  You must <EMPHASIS>accrue</EMPHASIS> a sale
+    at the time of the handshake.  To make the transaction balance, 
+    you add the $10,000 sale to <EMPHASIS>Accounts
+    Receivable</EMPHASIS>,
+    rather than adding something in to cash.
+    </PARA>
+<PARA>
+    <EMPHASIS>Insider Knowledge:</EMPHASIS> When a sale is recognized
+    and how its recorded is governed not only by accepted accounting
+    principles, but also by local and national laws.  In the United
+    States, accepted accounting practices are determined by FASB,
+    the Federal Accounting Standards Board.
+</PARA>
+<PARA>
+(The documentiation should state  that 
+for more info, click to the a/r/ and a/p page).
+</PARA>
+
 </SECT1>
 <SECT1 ID="XACC-INCEXPUSE">
 <TITLE> Using Income/Expense Accounts</TITLE>
