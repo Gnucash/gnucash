@@ -113,8 +113,10 @@ gnucash/index.html: $(GNUCASH_SGML_FILES) $(GNUCASH_HTML_FILES)
 	  && cp $(srcdir)/image/*.png gnucash/image || exit 1) 
 
 gnucash/help-search-index.db: $(GNUCASH_SGML_FILES) $(GNUCASH_HTML_FILES)
-	-(chmod a+x $(top_srcdir)/build-help-index.pl && cd gnucash \
-	  && ../$(top_srcdir)/build-help-index.pl help-search-index.db *.html)
+	-(cd gnucash && \
+	  rm -f help-search-index.db && \
+	  ../$(top_srcdir)/doc-tools/build-help-index \
+            ../$(top_srcdir)/doc-tools/dbadd help-search-index.db *.html)
 
 dist-hook:
 	mkdir $(distdir)/gnucash

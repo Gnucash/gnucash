@@ -1,0 +1,62 @@
+#!@-PERL-@ -w
+# -*- perl -*-
+
+use strict;
+
+my %contents;
+
+my $dbadd = $ARGV[0];
+shift @ARGV;
+
+my $db_file = $ARGV[0];
+shift @ARGV;
+
+foreach my $file (@ARGV) {
+    my %filewords;
+
+    open (HELPFILE, $file) or die "Bad help file $file specified.\n";
+
+    my $size = (stat($file))[7];
+    my $data;
+
+    read HELPFILE, $data, $size;
+
+    $data =~ s/<[^>]*>/ /gs;            # get rid of HTML tags 
+    $data =~ tr/\",();&<>!$*/ /;        # get rid of extra punct
+    $data =~ tr/[A-Z]/[a-z]/;           # lowercase everything
+    $data =~ tr/ \012\011/ /s;          # crunch whitespace 
+    $data =~ s/[\.,\'\":\;\+|-]+ / /gs; # get rid of terminal punct 
+    $data =~ s/ [.,\'\":;+|-]+/ /gs;    # get rid of initial punct 
+    $data =~ s/ [^ ] / /gs;             # remove 1-letter words 
+    $data =~ s/ [^ ][^ ] / /gs;         # remove 2-letter words 
+    $data =~ tr/ \012\011/ /s;          # crunch whitespace again
+
+    my @words = split (' ', $data);
+    @words = sort (@words);
+
+    foreach my $w (@words) {
+	$filewords{$w} = ' ';
+    }
+
+    foreach my $w (keys(%filewords)) {
+	my $flist = $contents{$w};
+        $flist = "" unless $flist;
+	$contents{$w} = "$flist$file\012";
+    }
+}
+
+my @keys = keys (%contents);
+my @prefix;
+
+# we don't store all the keys at once in case there
+# are limits on the size of argv. But do more than
+# one at a time for efficiency.
+while (@prefix = splice (@keys, 0, 32)) {
+  my @args = ();
+
+  foreach my $w (@prefix) {
+    unshift (@args, $w, $contents{$w});
+  }
+
+  system ($dbadd, $db_file, @args);
+}
