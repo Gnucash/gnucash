@@ -99,6 +99,7 @@ To be able to use certain features of GnuCash, such as reports and network stock
 price downloads, you must have the following packages below installed.
 RPM's for most of these can be found at http://rufus.w3.org/linux/  
 
+slib    -- scheme libraries for guile.  Need version slib2c0 or later.
 perl    -- Almost any version of perl5 should work.  I run perl-5.004 
 eperl   -- Almost any version of eperl should work.  I run eperl-2.2.14
 
@@ -170,7 +171,6 @@ guile   -- Provides main extension language infrastructure.
            ftp://ftp.gnucash.org/pub/gnucash/extra_libs/TAR/guile-core-19980818.tar.gz 
            guile-core-19980818-1.i386.rpm works
            guile-1.3.1-1 from redhat.com/pub/rawhide works ...
-slib    -- scheme libraries for guile.  Need version slib2c0 or later.
 eperl   -- embeddedPerl needed for Reports.  The menu item "Reports" will not
            work witout this.
            version eperl-2.2.14 works well with perl 5.00404
