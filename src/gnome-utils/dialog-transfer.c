@@ -99,6 +99,9 @@ struct _xferDialog
 
   GtkTooltips *tips;
 
+  /* Are the currencies swapped (in terms of looking up entries in pricedb?) */
+  gboolean	swap_currencies;
+
   /* Where to store the "exchange_rate" at exit (in lieu of
    * creating a transaction)
    */
@@ -929,11 +932,6 @@ gnc_xfer_dialog_select_from_currency(XferDialog *xferData, gnc_commodity *cur)
                                 gnc_commodity_get_fraction (cur));
 
   xferData->from_commodity = cur;
-
-  if (xferData->exch_rate)
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->price_edit),
-				*(xferData->exch_rate));
-
   gnc_xfer_dialog_curr_acct_activate(xferData);
 }
 
@@ -947,11 +945,6 @@ gnc_xfer_dialog_select_to_currency(XferDialog *xferData, gnc_commodity *cur)
 				gnc_commodity_get_fraction (cur));
 
   xferData->to_commodity = cur;
-
-  if (xferData->exch_rate)
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->price_edit),
-				*(xferData->exch_rate));
-
   gnc_xfer_dialog_curr_acct_activate(xferData);
 }
 
@@ -1172,6 +1165,30 @@ gnc_xfer_dialog_set_date(XferDialog *xferData, time_t set_date)
       return;
 
    gnc_date_edit_set_time( GNC_DATE_EDIT(xferData->date_entry), set_date );
+}
+
+void
+gnc_xfer_dialog_set_exchange_rate(XferDialog *xferData, gnc_numeric exchange_rate)
+{
+  if (xferData == NULL)
+    return;
+
+  if (gnc_numeric_zero_p (exchange_rate))
+    return;
+
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->price_edit),
+			      exchange_rate);
+  
+  gnc_xfer_update_to_amount (xferData);
+}
+
+void
+gnc_xfer_dialog_set_swapped_currencies (XferDialog *xferData, gboolean swap)
+{
+  if (xferData == NULL)
+    return;
+
+  xferData->swap_currencies = swap;
 }
 
 static void

@@ -1057,35 +1057,54 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   xfer_com = xaccAccountGetCommodity (xfer_acc);
 
   if (gnc_commodity_equal (txn_cur, xfer_com)) {
+    Split *split;
+
     /* If we're not forcing the dialog, then there is no reason to
      * go on.  We're using the correct accounts.
      */
     if (!force_dialog)
       return FALSE;
 
+    /* Only proceed with two-split, basic, non-expanded registers */
+    split = gnc_split_register_get_current_split (reg);
+    if (gnc_split_register_current_trans_expanded (reg) ||
+	xaccSplitGetOtherSplit (split) == NULL)
+      return FALSE;
+
     /* If we're forcing, then compare the current account
      * commodity to the transaction commodity.
-     * XXX: we only need to do this for two-split, basic, non-expanded registers
      */
-
     xfer_acc = gnc_split_register_get_default_account (reg);
     xfer_com = xaccAccountGetCommodity (xfer_acc);
     if (gnc_commodity_equal (txn_cur, xfer_com))
       return FALSE;
-
-    swap_amounts = TRUE;
   }
 
   /* Ok, we need to grab the exchange rate */
   amount = gnc_split_register_debcred_cell_value (reg);
+
+  /* We know that "amount" is in the currency of the local account.
+   * Unfortunately it is possible that neither xfer_com or txn_cur are
+   * in the "local" currency, in which case we need to convert to the
+   * txn currency...  Or, if the local currency is the xfer_com, then
+   * we need to flip-flop the commodities and the exchange rates.
+   */
 
   /* create the exchange-rate dialog */
   xfer = gnc_xfer_dialog (NULL, NULL); /* XXX */
   gnc_xfer_dialog_is_exchange_dialog (xfer, &exch_rate);
 
   /* enter the accounts */
-  gnc_xfer_dialog_select_to_account (xfer, xfer_acc);
-  gnc_xfer_dialog_select_from_currency (xfer, txn_cur);
+  if (swap_amounts) {
+    gnc_xfer_dialog_select_to_currency (xfer, txn_cur);
+    gnc_xfer_dialog_select_from_currency (xfer, xfer_com);
+    gnc_xfer_dialog_set_swapped_currencies (xfer, TRUE);
+    exch_rate = gnc_numeric_div (gnc_numeric_create (1, 1), exch_rate,
+				 GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+  } else {
+    gnc_xfer_dialog_select_to_currency (xfer, xfer_com);
+    gnc_xfer_dialog_select_from_currency (xfer, txn_cur);
+  }
   gnc_xfer_dialog_hide_to_account_tree (xfer);
   gnc_xfer_dialog_hide_from_account_tree (xfer);
 
@@ -1101,9 +1120,24 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 			    timespecToTime_t (
 			    gnc_split_register_get_cell_date (reg, DATE_CELL)));
 
+  /*
+   * When we flip, we should tell the dialog so it can deal with the
+   * pricedb properly.
+   */
+
+  /* Set the exchange rate */
+  gnc_xfer_dialog_set_exchange_rate (xfer, exch_rate);
+
   /* and run it... */
   if (gnc_xfer_dialog_run_until_done (xfer) == FALSE)
     return TRUE;
+
+  /* If we swapped the amounts for the dialog, then make sure we swap
+   * it back now...
+   */
+  if (swap_amounts)
+    exch_rate = gnc_numeric_div (gnc_numeric_create (1, 1), exch_rate,
+				 GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
 
   /* Set the RATE_CELL on this cursor and mark it changed */
   gnc_price_cell_set_value (rate_cell, exch_rate);

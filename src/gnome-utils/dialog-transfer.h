@@ -82,6 +82,16 @@ void gnc_xfer_dialog_set_memo(XferDialog *xferData, const char *memo);
 void gnc_xfer_dialog_set_num(XferDialog *xferData, const char *num);
 void gnc_xfer_dialog_set_date(XferDialog *xferData, time_t set_time);
 
+/* Set the exchange rate.  If exchange-rate is 0, then do nothing */
+void gnc_xfer_dialog_set_exchange_rate(XferDialog *xferData,
+				       gnc_numeric exchange_rate);
+
+/* Set's a flag that says that the currencies are "swapped", and that
+ * lookups on the pricedb should be done "backwards" using the
+ * currencies inside.
+ */
+void gnc_xfer_dialog_set_swapped_currencies (XferDialog *xferData, gboolean swap);
+
 /* Indicate whether the dialog should quickfill based on the "To" account,
  * rather than the default which is the "From" account.
  */

@@ -12,6 +12,12 @@
 	* src/register/ledger-core/split-register-control.c -- fix the logic
 	  for when we pop-up the exchange-rate dialog, in particular when the
 	  user requests it.   Fixes #100285
+
+	* src/gnome-utils/dialog-transfer.[ch]: add two APIs to set the
+	  exchange rate and to set "swapped currencies".  The former will
+	  set the "price" and the latter will set a (as of yet unused) flag.
+	* src/register/ledger-core/split-register-control.c: Don't pop up
+	  the exchange dialog when it is not needed, even when reqested.
 	
 2002-12-04  David Hampton  <hampton@employees.org>
 
