@@ -1,3 +1,8 @@
+2005-02-06  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-gettrans.c: Fix HBCI date range
+	for statement download.
+
 2005-02-05  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/locale-specific/us/Makefile.am: make sure the
