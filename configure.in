@@ -31,6 +31,27 @@ AC_PATH_XTRA
 X_LIBS="$X_LIBS -lXext -lXmu -lXt -lX11"
 MOTIF_LIBS="-lXm"
 
+# Let the user specify gtk paths:
+AC_ARG_WITH( gtk, 
+       [  --with-gtk=PATH       specify where to look for gtk includes and libs],
+	GTK_BIN="$with_gtk/bin/"
+       	X_LIBS="${X_LIBS} -L$with_gtk/lib"
+	X_CFLAGS="$X_CFLAGS -I$with_gtk/include" )
+AC_SUBST(GTK_BIN)
+
+# Let the user specify imlib paths:
+AC_ARG_WITH( imlib, 
+       [  --with-imlib=PATH       specify where to look for imlib includes and libs],
+       X_LIBS="${X_LIBS} -L$with_imlib/lib" X_CFLAGS="$X_CFLAGS -I$with_imlib/include" )
+
+# Let the user specify guile paths:
+AC_ARG_WITH( guile, 
+       [  --with-guile=PATH       specify where to look for guile includes and libs],
+	GUILE_INC="-I$with_guile/include"
+	GUILELIBS="-L$with_guile/lib"
+       	LIBS="${LIBS} $GUILELIBS"
+	 )
+
 # *******************************************
 # * figure out the configure options:
 
@@ -136,15 +157,16 @@ AC_SUBST(XMHTML_INC)
 # Set GUILELIBS according to the set of libraries needed to link
 # with guile.
 AC_CHECK_LIB(guile, gh_enter,
-	GUILELIBS="-lguile",
+	GUILELIBS="$GUILELIBS -lguile",
 	AC_CHECK_LIB(guile, gh_define,
-		GUILELIBS="-lguile -ldl -lreadline",
+		GUILELIBS="$GUILELIBS -lguile -ldl -lreadline",
 		AC_CHECK_LIB(guile, gh_eval_file,
-			GUILELIBS="-lguile -ldl -lreadline -lqthreads",
+			GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -lqthreads",
 			AC_MSG_ERROR(cannot link with guile),
 			-ldl -lreadline -lqthreads),
 		-ldl -lreadline)
 	)
+AC_SUBST(GUILE_INC)
 AC_SUBST(GUILELIBS)
 
 ### Plotutils
@@ -165,6 +187,6 @@ AC_SUBST(MOTIF_LIBS)
 # *******************************************
 AC_CONFIG_HEADER(config.h)
 
-AC_OUTPUT(Makefile src/Makefile src/engine/Makefile src/guile/Makefile src/gnome/Makefile src/motif/Makefile src/qt/Makefile src/register/Makefile src/reports/Makefile src/swig/Makefile src/swig/guile/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
+AC_OUTPUT(Makefile src/Makefile src/engine/Makefile src/guile/Makefile src/gnome/Makefile src/motif/Makefile src/qt/Makefile src/register/Makefile src/reports/Makefile src/swig/Makefile src/swig/guile/Makefile lib/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
 
 chmod +x gnucash

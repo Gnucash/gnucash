@@ -313,6 +313,7 @@ Ted Lemon <mellon@andare.fugue.com> for NetBSD port
 G. Allen Morris III  <gam3@ann.softgams.com> for QIF core dump 
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
+Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
 Dirk Schoenberger <schoenberger@signsoft.com> for Qt/KDE port
