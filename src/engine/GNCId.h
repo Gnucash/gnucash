@@ -6,7 +6,7 @@
  * QofIdType xaccGUIDType (const GUID * guid, QofBook *book); 
  */
 
-#define xaccGUIDType(obj)  (QOF_INSTANCE(obj)->e_type)
+#define xaccGUIDType(obj,book)  (QOF_INSTANCE(obj)->e_type)
 
 /* Equivalent function prototype:
  * void xaccGUIDNew (GUID *guid, QofBook *book)
