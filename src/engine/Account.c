@@ -215,9 +215,13 @@ xaccCloneAccount (const Account *from, QofBook *book)
     ret->non_standard_scu = from->non_standard_scu;
     ret->core_dirty   = TRUE;
 
-    /* make a note of where the copy came from */
-    gnc_kvp_gemini (ret->kvp_data, &from->guid, &from->book->guid, now);
-    gnc_kvp_gemini (from->kvp_data, &ret->guid, &book->guid, now);
+    /* Make a note of where the copy came from */
+    gnc_kvp_gemini (ret->kvp_data, now, "acct_guid", &from->guid, 
+                                        "book_guid", &from->book->guid,
+                                        NULL);
+    gnc_kvp_gemini (from->kvp_data, now, "acct_guid", &ret->guid, 
+                                         "book_guid", &book->guid, 
+                                         NULL);
 
     LEAVE (" ");
     return ret;

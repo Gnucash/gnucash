@@ -44,6 +44,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
+#include "kvp-util-p.h"
 #include "messages.h"
 
 static short module = MOD_LOT;
@@ -127,6 +128,7 @@ void
 xaccAccountScrubLots (Account *acc)
 {
    SplitList *node;
+   time_t now = time(0);
 
    if (!acc) return;
 
@@ -210,13 +212,11 @@ restart_loop:
                * because the new balance should be precisely zero. */
               gnc_lot_add_split (lot, split);
 
-              /* put the remainder of the balance into a new split, which is
-               * in other respects just a clone of this one */
-              /* XXX FIXME: we should add some kvp markup to indicate that these
-               * two splits used to be one before being 'split' */
+              /* Put the remainder of the balance into a new split,
+               * which is in other respects just a clone of this one */
               new_split = xaccMallocSplit (acc->book);
 
-              /* Copy most of teh split attributes */
+              /* Copy most of the split attributes */
               xaccSplitSetMemo (new_split, xaccSplitGetMemo (split));
               xaccSplitSetAction (new_split, xaccSplitGetAction (split));
               xaccSplitSetReconcile (new_split, xaccSplitGetReconcile (split));
@@ -224,9 +224,16 @@ restart_loop:
               xaccSplitSetDateReconciledTS (new_split, &ts);
 
               /* Copying the KVP tree seems like the right thing to do, 
-               * this is potentially dangerous, depending on how other 
-               * users use it.*/
+               * but this is potentially dangerous, depending on how other 
+               * users use it. XXX this needs some thinking ... */
               xaccSplitSetSlots_nc (new_split, kvp_frame_copy(xaccSplitGetSlots (split)));  
+
+              /* Make a pair of pointers, to show that these two splits
+               * used to be one ... */
+              gnc_kvp_gemini (xaccSplitGetSlots (split), now,
+                          "split_guid", xaccSplitGetGUID (new_split), NULL);
+              gnc_kvp_gemini (xaccSplitGetSlots (new_split), now,
+                          "split_guid", xaccSplitGetGUID (split), NULL);
 
               xaccSplitSetAmount (new_split, amt_b);
               xaccSplitSetValue (new_split, val_b);

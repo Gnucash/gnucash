@@ -363,8 +363,8 @@ gnc_book_partition (QofBook *dest_book, QofBook *src_book, QofQuery *query)
 
    /* Make note of the sibling books */
    now = time(0);
-   gnc_kvp_gemini (src_book->kvp_data, NULL, &dest_book->guid, now);
-   gnc_kvp_gemini (dest_book->kvp_data, NULL, &src_book->guid, now);
+   gnc_kvp_gemini (src_book->kvp_data, now, "book_guid", &dest_book->guid, NULL);
+   gnc_kvp_gemini (dest_book->kvp_data, now, "book_guid", &src_book->guid, NULL);
 
    if (be && be->commit)
    {

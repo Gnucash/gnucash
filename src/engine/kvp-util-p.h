@@ -1,6 +1,5 @@
 /********************************************************************\
  * kvp_util.h -- misc odd-job kvp utils                             *
- * Copyright (C) 2001 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,18 +28,36 @@
 #include "guid.h"
 #include "kvp_frame.h"
 
-/* PRIVATE FILE 
+/* @file kvp_util.h
+ * @breif misc odd-job kvp utils engine-private routines
+ * @author Copyright (C) 2001, 2003 Linas Vepstas <linas@linas.org>               *
+ * @note PRIVATE FILE 
  * -- these routines are private to the engine. The should not be used 
  *    outside of the engine.
  */
 
-/* 
- * The gnc_kvp_gemini() routine:
- * mark the guid and date of the copy, using kvp.  The info will be
- * placed in /gemini/ncopies, /gemini/<n>/acct_guid, /gemini/<n>/book_guid,
- * /gemini/<n>/date, where <n> = ncopies-1.
+/** This routine is used to create a 'pointer' to an object in a kvp tree.
+ *  The thing being pointed at is uniquely identified by its GUID. 
+ *  This routine is typically used to create a linked list, and/or
+ *  a collection of pointers to objects that are 'related' to each 
+ *  other in some way.
+ *
+ *  The var-args should be pairs of strings (const char *) followed by
+ *  the corresponding GUID pointer (const GUID *).  Terminate the varargs
+ *  with a NULL as the last string argument.
+ *
+ *  The actual 'pointer' is stored in an array in the subdirectory
+ *  '/gemini'.  The size of the array is in /gemini/ncopies.  The
+ *  pointer is stored in /gemini/<n>/<name> where <n> = ncopies -1, 
+ *  <name> was passed as an argument.  In addition, the date is 
+ *  logged.  Thus, for example:
+ *  gnc_kvp_gemini (kvp, secs, "acct_guid", aguid, "book_guid", bguid, NULL);
+ *  will increment /gemini/ncopies, and will store aguid in 
+ *  /gemini/<n>/acct_guid and bguid in /gemini/<n>/book_guid, where
+ *  <n> = ncopies-1
  */
 
-void gnc_kvp_gemini (KvpFrame *, const GUID *, const GUID *, time_t);
+void gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs, 
+                     const char *first_name, ...);
 
 #endif /* XACC_KVP_UTIL_P_H */
