@@ -4209,7 +4209,7 @@ msgstr ""
 #: src/register/splitreg.c:93
 #, fuzzy
 msgid "sample: 12/12/2000"
-msgstr "12/31/2000"
+msgstr ""
 
 #. date cell
 #: src/register/splitreg.c:94
@@ -4220,7 +4220,7 @@ msgstr ""
 #: src/register/splitreg.c:95
 #, fuzzy
 msgid "sample:Description of a transaction"
-msgstr "Introducir una descripción de la transacción"
+msgstr "sample:Introducir una descripción de la transacción"
 
 #. recn cell
 #: src/register/splitreg.c:97 src/register/splitreg.c:98
