@@ -1,3 +1,10 @@
+2000-07-13  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm: Added checks
+	to reverse balances if global option set.
+
+	* src/guile/gnc.gwp: Added wrapping for gnc_reverse_balance
+
 2000-06-25  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/date-utilities.scm: cleanup.
