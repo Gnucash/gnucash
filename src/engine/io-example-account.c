@@ -320,6 +320,8 @@ gnc_write_example_account(GncExampleAccount *gea, const gchar *filename)
     fprintf(out, "<?xml version=\"1.0\"?>\n");
     fprintf(out, "<" GNC_ACCOUNT_STRING ">\n");
 
+    write_string_part(out, GNC_ACCOUNT_TITLE, gea->title);
+    
     write_string_part(out, GNC_ACCOUNT_SHORT, gea->short_description);
 
     write_string_part(out, GNC_ACCOUNT_LONG, gea->long_description);
