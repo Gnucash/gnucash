@@ -1,6 +1,6 @@
-/**-*- c -*-*********************************************************\
- * gnc-dir.h -- directories for GnuCash                             *
- * Copyright (C) 2001 Gnumatic, Inc.                                *
+/********************************************************************\
+ * gnc-gui-query.h -- functions for creating dialogs for GnuCash    * 
+ * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,11 +20,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __GNC_DIR_H__
-#define __GNC_DIR_H__
+#ifndef QUERY_USER_H
+#define QUERY_USER_H
 
-#define GNC_ACCOUNTS_DIR "@-GNC_ACCOUNTS_DIR-@"
-#define GNC_GLADE_DIR "@-GNC_GLADE_DIR-@"
-#define GNC_PIXMAP_DIR "@-GNC_PIXMAP_DIR-@"
+void gnc_info_dialog(const char *message);
+void gnc_info_dialog_parented(GtkWindow *parent, const char *message);
+
+void gnc_warning_dialog(const char *message);
+
+void gnc_error_dialog_parented(GtkWindow *parent, const char *message);
 
 #endif

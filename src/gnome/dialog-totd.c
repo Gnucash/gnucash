@@ -28,9 +28,9 @@
 
 #include "dialog-totd.h"
 #include "global-options.h"
+#include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "messages.h"
-#include "query-user.h"
 #include "tip-of-the-day.h"
 
 

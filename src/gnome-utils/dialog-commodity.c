@@ -26,13 +26,12 @@
 #include <gnome.h>
 #include <stdio.h>
 
-#include "FileDialog.h"
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
 #include "gnc-engine-util.h"
+#include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "messages.h"
-#include "query-user.h"
 #include "window-help.h"
 
 

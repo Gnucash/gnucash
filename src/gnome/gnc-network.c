@@ -22,6 +22,7 @@
  ********************************************************************/
 
 #include "config.h"
+
 #include <gnome.h>
 #include <gtkhtml/gtkhtml.h>
 #include <gtkhtml/gtkhtml-embedded.h>
@@ -29,9 +30,9 @@
 #include "global-options.h"
 #include "gnc-ui.h"
 #include "gnc-gpg.h"
+#include "gnc-gui-query.h"
 #include "gnc-html.h"
 #include "gnc-network.h"
-#include "query-user.h"
 #include "messages.h"
 
 /********************************************************************

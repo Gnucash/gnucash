@@ -13,7 +13,6 @@ libgncmod_ledger_core_la_SOURCES = \
 
 noinst_HEADERS = \
   gnc-ledger-display.h \
-  RegWindow.h \
   split-register.h \
   split-register-control.h \
   split-register-layout.h \

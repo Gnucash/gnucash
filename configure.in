@@ -714,6 +714,7 @@ AC_OUTPUT(
           src/gnc-module/test/misc-mods/Makefile
           src/gnome/Makefile
           src/gnome/glade/Makefile
+          src/gnome-utils/Makefile
           src/guile/Makefile
           src/import-export/Makefile
           src/import-export/qif-import/Makefile

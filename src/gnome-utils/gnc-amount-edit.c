@@ -37,7 +37,6 @@
 #include "gnc-amount-edit.h"
 #include "gnc-exp-parser.h"
 #include "messages.h"
-#include "query-user.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
 

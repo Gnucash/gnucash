@@ -37,8 +37,8 @@
 #include "gnc-commodity-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-dir.h"
+#include "gnc-gui-query.h"
 #include "io-example-account.h"
-#include "query-user.h"
 #include "top-level.h"
 
 static GtkWidget *hierarchy_window = NULL;

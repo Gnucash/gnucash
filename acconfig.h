@@ -22,8 +22,8 @@
 \********************************************************************/
 
 
-#ifndef __XACC_CONFIG_H__
-#define __XACC_CONFIG_H__
+#ifndef GNC_CONFIG_H
+#define GNC_CONFIG_H
 
 /* Package name and version number */
 #undef PACKAGE
@@ -84,6 +84,7 @@
 
 /* Configure found the function malloc_usable_size */
 #undef HAVE_MALLOC_USABLE_SIZE  
+
 
 /*** Begin i18n ***/
 

@@ -27,7 +27,7 @@
 #include <time.h>
 
 #include "dialog-utils.h"
-#include "gnc-dateedit.h"
+#include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"
 #include "messages.h"

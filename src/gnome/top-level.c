@@ -44,12 +44,12 @@
 #include "dialog-account.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "extensions.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
-#include "gnc-splash.h"
+#include "gnc-menu-extensions.h"
 #include "gnc-network.h"
+#include "gnc-splash.h"
 #ifdef USE_GUPPI
 #include "gnc-html-guppi.h"
 #endif

@@ -1,7 +1,6 @@
 /********************************************************************\
- * RegWindow.h -- the register window for xacc (X-Accountant)       *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998-2000 Linas Vepstas                            *
+ * druid-utils.h -- utility functions for creating druids           *
+ * Copyright (C) 2001 Jeremy Collins                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -14,29 +13,22 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
-#ifndef REGWINDOW_H
-#define REGWINDOW_H
+#ifndef DRUID_UTILS_H
+#define DRUID_UTILS_H
 
-#include "config.h"
+#include <gnome.h>
 
-#include "Account.h"
+void gnc_druid_set_title_image (GnomeDruid *druid, char *image_path);
+void gnc_druid_set_watermark_image (GnomeDruid *druid, char *image_path);
 
-/** GLOBALS *********************************************************/
-
-/** STRUCTS *********************************************************/
-typedef struct _RegWindow RegWindow;
-
-/** PROTOTYPES ******************************************************/
-RegWindow *regWindowSimple(Account *account);
-RegWindow *regWindowAccGroup(Account *account_group);
+void gnc_druid_set_colors (GnomeDruid *druid);
 
 #endif

@@ -1,5 +1,5 @@
 /********************************************************************\
- * query-user.c -- functions for creating dialogs for GnuCash       * 
+ * gnc-gui-query.c -- functions for creating dialogs for GnuCash    * 
  * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -24,10 +24,10 @@
 
 #include <gnome.h>
  
+#include "gnc-engine-util.h"
+#include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "messages.h"
-#include "query-user.h"
-#include "gnc-engine-util.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */

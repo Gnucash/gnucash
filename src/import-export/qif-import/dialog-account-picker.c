@@ -30,8 +30,8 @@
 #include "dialog-account-picker.h"
 #include "dialog-utils.h"
 #include "druid-qif-import.h"
+#include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
-#include "query-user.h"
 
 struct _accountpickerdialog {
   GtkWidget       * dialog;

@@ -28,16 +28,14 @@
 
 #include <gnome.h>
 
-#include "AccWindow.h"
 #include "FileDialog.h"
-#include "account-tree.h"
+#include "Group.h"
 #include "dialog-utils.h"
+#include "gnc-account-tree.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
-#include "gnucash.h"
 #include "messages.h"
-#include "window-main.h"
 
 #define ACCOUNT_TREE_CM_CLASS "account-tree"
 

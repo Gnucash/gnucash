@@ -8,6 +8,7 @@ SUBDIRS = \
   calculation \
   tax \
   app-utils \
+  gnome-utils \
   register \
   import-export \
   report \
@@ -32,6 +33,7 @@ gnucash_LDADD = \
   -Lgnc-module -Lgnc-module/.libs \
   -Lcalculation -Lcalculation/.libs \
   gnc-module/libgncmodule.la \
+  gnome-utils/libgncmod-gnome-utils.la \
   app-utils/libgncmod-app-utils.la \
   engine/libgncmod-engine.la \
   engine/libgw-engine.la \

@@ -1,6 +1,6 @@
-/********************************************************************\
- * extensions.h -- functions to build the dynamic extensions        *
- * Copyright (C) 1999 Rob Browning         	                    *
+/**-*- c -*-*********************************************************\
+ * gnc-dir.h -- directories for GnuCash                             *
+ * Copyright (C) 2001 Gnumatic, Inc.                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,14 +20,11 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef EXTENSIONS_H
-#define EXTENSIONS_H
+#ifndef GNC_DIR_H
+#define GNC_DIR_H
 
-#include <guile/gh.h>
-#include <gnome.h>
-
-void gnc_add_extension(SCM extension);
-void gnc_extensions_menu_setup(GnomeApp * app);
-void gnc_extensions_shutdown(void);
+#define GNC_ACCOUNTS_DIR "@-GNC_ACCOUNTS_DIR-@"
+#define GNC_GLADE_DIR "@-GNC_GLADE_DIR-@"
+#define GNC_PIXMAP_DIR "@-GNC_PIXMAP_DIR-@"
 
 #endif

@@ -42,10 +42,10 @@
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "messages.h"
-#include "query-user.h"
 #include "window-help.h"
 
 #include <g-wrap-runtime-guile.h>

@@ -39,4 +39,7 @@ report/stylesheets          predefined style sheet templates
 app-utils                   utils for the gnucash app framework (component 
                             mgr, cmd line processing, gettext stuff, etc)
 
+gnome-utils                 Extensions and utilities for using Gnome/Gtk
+                            with GnuCash, including new widgets.
+
 tax/us                      US tax information

@@ -1,5 +1,5 @@
 /********************************************************************\
- * extensions.c -- functions to build dynamic extensions            *
+ * gnc-menu-extensions.c -- functions to build dynamic menus        *
  * Copyright (C) 1999 Rob Browning         	                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -24,9 +24,9 @@
 
 #include <gnome.h>
 
-#include "extensions.h"
 #include "guile-util.h"
 #include "gnc-engine-util.h"
+#include "gnc-menu-extensions.h"
 #include "gnc-ui.h"
 
 typedef struct _ExtensionInfo ExtensionInfo;

@@ -37,9 +37,9 @@
 #include "druid-commodity.h"
 #include "druid-utils.h"
 #include "dialog-commodity.h"
-#include "query-user.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+#include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "gnc-pricedb-p.h"
 

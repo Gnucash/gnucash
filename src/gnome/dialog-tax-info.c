@@ -26,8 +26,8 @@
 #include <gnome.h>
 #include <guile/gh.h>
 
-#include "account-tree.h"
 #include "dialog-utils.h"
+#include "gnc-account-tree.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"

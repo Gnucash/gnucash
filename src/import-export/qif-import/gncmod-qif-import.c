@@ -38,7 +38,14 @@ gnc_module_init(int refcount)
   {
     return FALSE;
   }
+
+  if(!gnc_module_load("gnucash/gnome-utils", 0)) 
+  {
+    return FALSE;
+  }
+
   gh_eval_str("(use-modules (gnucash import-export qif-import))");
+
   return TRUE;
 }
 
@@ -47,4 +54,3 @@ gnc_module_end(int refcount)
 {
   return TRUE;
 }
-

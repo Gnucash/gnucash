@@ -48,6 +48,7 @@ INCLUDES = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/guile \
   -I${top_srcdir}/src/gnome \
+  -I${top_srcdir}/src/gnome-utils \
   ${GLIB_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}

@@ -1,5 +1,5 @@
 /********************************************************************
- * window-main.c -- the main window, and associated helpers         * 
+ * window-acct-tree.c -- the main window account tree               * 
  * Copyright (C) 1998,1999 Jeremy Collins	                    *
  * Copyright (C) 1998,1999,2000 Linas Vepstas                       *
  * Copyright (C) 2001 Bill Gribble                                  *
@@ -29,17 +29,16 @@
 #include <string.h>
 
 #include "AccWindow.h"
-#include "RegWindow.h"
 #include "FileBox.h"
 #include "FileDialog.h"
 #include "Scrub.h"
 
-#include "account-tree.h"
 #include "dialog-account.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "file-history.h"
 #include "global-options.h"
+#include "gnc-account-tree.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"

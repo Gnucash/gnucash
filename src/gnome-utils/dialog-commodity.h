@@ -21,8 +21,10 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef GNC_DIALOG_COMMODITY_H_
-#define GNC_DIALOG_COMMODITY_H_
+#ifndef GNC_DIALOG_COMMODITY_H
+#define GNC_DIALOG_COMMODITY_H
+
+#include <gnome.h>
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"

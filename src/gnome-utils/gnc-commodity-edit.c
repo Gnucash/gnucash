@@ -37,8 +37,8 @@
 #include <ctype.h>
 #include <stdio.h>
 
-#include "gnc-commodity-edit.h"
 #include "dialog-commodity.h"
+#include "gnc-commodity-edit.h"
 #include "guile-util.h"
 #include "messages.h"
 

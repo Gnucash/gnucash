@@ -24,9 +24,14 @@
 #ifndef WINDOW_REGISTER_H
 #define WINDOW_REGISTER_H
 
-#include "RegWindow.h"
 #include "gnc-ledger-display.h"
 
+/** STRUCTS *********************************************************/
+typedef struct _RegWindow RegWindow;
+
+/** PROTOTYPES ******************************************************/
+RegWindow * regWindowSimple(Account *account);
+RegWindow * regWindowAccGroup(Account *account_group);
 RegWindow * regWindowLedger(GNCLedgerDisplay *ledger);
 
 void gnc_register_raise(RegWindow *regData);

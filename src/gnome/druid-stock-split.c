@@ -27,18 +27,18 @@
 
 #include "FileDialog.h"
 #include "Group.h"
-#include "account-tree.h"
 #include "dialog-utils.h"
 #include "druid-utils.h"
 #include "global-options.h"
+#include "gnc-account-tree.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-currency-edit.h"
-#include "gnc-dateedit.h"
+#include "gnc-date-edit.h"
 #include "gnc-exp-parser.h"
+#include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "messages.h"
-#include "query-user.h"
 
 
 #define DRUID_STOCK_SPLIT_CM_CLASS "druid-stock-split"

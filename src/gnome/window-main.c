@@ -35,11 +35,11 @@
 
 #include "gfec.h"
 #include "gnc-engine.h"
+#include "gnc-menu-extensions.h"
 #include "gnc-ui.h"
 #include "gnucash.h"
 #include "io-utils.h"
 #include "top-level.h"
-#include "extensions.h"
 
 #include "FileBox.h"
 #include "FileDialog.h"
@@ -66,9 +66,9 @@
 #include "file-history.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
+#include "gnc-gui-query.h"
 #include "mainwindow-account-tree.h"
 #include "option-util.h"
-#include "query-user.h"
 
 #define WINDOW_MAIN_CM_CLASS "window-main"
 

@@ -1,6 +1,6 @@
 /********************************************************************\
- * query-user.h -- functions for creating dialogs for GnuCash       * 
- * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
+ * gnc-menu-extensions.h -- functions to build dynamic menus        *
+ * Copyright (C) 1999 Rob Browning         	                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,14 +20,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef QUERY_USER_H
-#define QUERY_USER_H
+#ifndef GNC_MENU_EXTENSIONS_H
+#define GNC_MENU_EXTENSIONS_H
 
-void gnc_info_dialog(const char *message);
-void gnc_info_dialog_parented(GtkWindow *parent, const char *message);
+#include <guile/gh.h>
+#include <gnome.h>
 
-void gnc_warning_dialog(const char *message);
-
-void gnc_error_dialog_parented(GtkWindow *parent, const char *message);
+void gnc_add_extension(SCM extension);
+void gnc_extensions_menu_setup(GnomeApp * app);
+void gnc_extensions_shutdown(void);
 
 #endif

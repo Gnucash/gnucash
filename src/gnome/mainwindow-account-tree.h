@@ -23,11 +23,12 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __GNC_MAINWIN_ACCOUNT_TREE_H
-#define __GNC_MAINWIN_ACCOUNT_TREE_H
+#ifndef GNC_MAINWIN_ACCOUNT_TREE_H
+#define GNC_MAINWIN_ACCOUNT_TREE_H
 
 #include <gnome.h>
-#include "account-tree.h"
+
+#include "gnc-account-tree.h"
 #include "Account.h"
 
 #define GNC_MAINWIN_ACCOUNT_TREE(obj)          GTK_CHECK_CAST (obj, gnc_mainwin_account_tree_get_type (), GNCMainWinAccountTree)
