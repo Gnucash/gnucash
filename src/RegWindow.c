@@ -154,15 +154,29 @@ extern Pixel negPixel;
 #define PRIC_COL_ID  6
 #define SHRS_COL_ID  7
 #define BALN_COL_ID  8 
-#define ACTN_COL_ID  9 
+#define XFER_COL_ID  9 
 
 /* the actual column location is pulled out of the column location array */
 #define DATE_CELL_R  0
 #define DATE_CELL_C  (regData->columnLocation[DATE_COL_ID])
+#define YEAR_CELL_R  1
+#define YEAR_CELL_C  DATE_CELL_C  /* same column as the date */
+
 #define NUM_CELL_R   0
 #define NUM_CELL_C   (regData->columnLocation[NUM_COL_ID])
+#define ACTN_CELL_R  1
+#define ACTN_CELL_C  NUM_CELL_C   /* same column as the transaction number */
+
 #define DESC_CELL_R  0
 #define DESC_CELL_C  (regData->columnLocation[DESC_COL_ID])
+#define MEMO_CELL_R  1
+#define MEMO_CELL_C  DESC_CELL_C  /* same column as the description */
+
+#define XFRM_CELL_R  0
+#define XFRM_CELL_C  (regData->columnLocation[XFER_COL_ID])
+#define XTO_CELL_R   1
+#define XTO_CELL_C   XFRM_CELL_C
+
 #define RECN_CELL_R  0
 #define RECN_CELL_C  (regData->columnLocation[RECN_COL_ID])
 #define PAY_CELL_R   0
@@ -172,32 +186,54 @@ extern Pixel negPixel;
 #define BALN_CELL_R  0
 #define BALN_CELL_C  (regData->columnLocation[BALN_COL_ID]) 
 
-#define PRIC_CELL_C   (regData->columnLocation[PRIC_COL_ID])
-#define SHRS_CELL_C   (regData->columnLocation[SHRS_COL_ID])
-#define ACTN_CELL_C   (regData->columnLocation[ACTN_COL_ID])
+#define PRIC_CELL_R  0
+#define PRIC_CELL_C  (regData->columnLocation[PRIC_COL_ID])
+#define SHRS_CELL_R  0
+#define SHRS_CELL_C  (regData->columnLocation[SHRS_COL_ID])
 
-#define YEAR_CELL_R  1
-#define YEAR_CELL_C  DATE_CELL_C  /* same column as the date */
-#define XFER_CELL_R  1
-#define XFER_CELL_C  NUM_CELL_C   /* same column as the transaction number */
-#define MEMO_CELL_R  1
-#define MEMO_CELL_C  DESC_CELL_C  /* same column as the description */
 
 /** CELL MACROS *****************************************************/
-#define IN_DATE_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==DATE_CELL_C))  /* Date cell        */
-#define IN_NUM_CELL(R,C)  (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==NUM_CELL_C))   /* Number cell      */
-#define IN_DESC_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==DESC_CELL_C))  /* Description cell */
-#define IN_RECN_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==RECN_CELL_C))  /* Reconciled cell  */
-#define IN_PAY_CELL(R,C)  (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==PAY_CELL_C))   /* Payment cell     */
-#define IN_DEP_CELL(R,C)  (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==DEP_CELL_C))   /* Deposit cell     */
-#define IN_BALN_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==BALN_CELL_C))  /* Balance cell     */
-#define IN_PRIC_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==PRIC_CELL_C))  /* Price cell       */
-#define IN_ACTN_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==ACTN_CELL_C))  /* Action cell      */
+#define RMOD(R,RM)   ((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==RM) 
 
-#define IN_YEAR_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==1) && (C==DATE_CELL_C))  /* Year cell        */
-#define IN_XFER_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==1) && (C==XFER_CELL_C))  /* Transfer cell    */
-#define IN_MEMO_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==1) && (C==MEMO_CELL_C))  /* Memo cell        */
-#define IN_BAD_CELL(R,C)  (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==1) && (C!=MEMO_CELL_C))  /* Not the memo cell*/
+        /* Date cell        */
+#define IN_DATE_CELL(R,C) (RMOD(R,DATE_CELL_R) && (C==DATE_CELL_C))  
+
+        /* Number cell      */
+#define IN_NUM_CELL(R,C) (RMOD(R,NUM_CELL_R) && (C==NUM_CELL_C))  
+
+        /* Description cell */
+#define IN_DESC_CELL(R,C) (RMOD(R,DESC_CELL_R) && (C==DESC_CELL_C))  
+
+        /* Reconciled cell  */
+#define IN_RECN_CELL(R,C) (RMOD(R,RECN_CELL_R) && (C==RECN_CELL_C))  
+
+        /* Payment cell     */
+#define IN_PAY_CELL(R,C) (RMOD(R,PAY_CELL_R) && (C==PAY_CELL_C))  
+
+        /* Deposit cell     */
+#define IN_DEP_CELL(R,C) (RMOD(R,DEP_CELL_R) && (C==DEP_CELL_C))  
+
+        /* Balance cell     */
+#define IN_BALN_CELL(R,C) (RMOD(R,BALN_CELL_R) && (C==BALN_CELL_C))  
+
+        /* Price cell       */
+#define IN_PRIC_CELL(R,C) (RMOD(R,PRIC_CELL_R) && (C==PRIC_CELL_C))  
+
+        /* Action cell      */
+#define IN_ACTN_CELL(R,C) (RMOD(R,ACTN_CELL_R) && (C==ACTN_CELL_C))  
+
+        /* Year cell        */
+#define IN_YEAR_CELL(R,C) (RMOD(R,YEAR_CELL_R) && (C==YEAR_CELL_C))  
+
+        /* Transfer cell    */
+#define IN_XFRM_CELL(R,C) (RMOD(R,XFRM_CELL_R) && (C==XFRM_CELL_C))  
+#define IN_XTO_CELL(R,C) (RMOD(R,XTO_CELL_R) && (C==XTO_CELL_C))  
+
+        /* Memo cell        */
+#define IN_MEMO_CELL(R,C) (RMOD(R,MEMO_CELL_R) && (C==MEMO_CELL_C))  
+
+        /* Not the memo cell*/
+#define IN_BAD_CELL(R,C) (RMOD(R,1) && (C!=MEMO_CELL_C))  
 
 
 /********************************************************************/
@@ -300,39 +336,36 @@ regRefresh( RegWindow *regData )
 
       XbaeMatrixSetRowUserData  ( regData->reg, row, (XPointer) trans);   
 
-      sprintf( buf, "%2d/%2d\0", 
-               trans->date.month,
-               trans->date.day );
-      newData[row][DATE_CELL_C]   = XtNewString(buf);
+      sprintf( buf, "%2d/%2d", trans->date.month, trans->date.day );
+      newData[row+DATE_CELL_R][DATE_CELL_C]   = XtNewString(buf);
       sprintf( buf, "%4d", trans->date.year );
-      newData[row+1][DATE_CELL_C] = XtNewString(buf);  /* YEAR_CELL_C */
+      newData[row+YEAR_CELL_R][YEAR_CELL_C] = XtNewString(buf);  
       
       sprintf( buf, "%s", trans->num );
-      newData[row][NUM_CELL_C]   = XtNewString(buf);
+      newData[row+NUM_CELL_R][NUM_CELL_C]   = XtNewString(buf);
 
-      /* XFER_CELL_C is same as NUM_CELL_C */
+/* hack alert xxxxxxxxxxxxx */
+/* not correct for gen ledger */
       xfer_acc = xaccGetOtherAccount (main_acc, trans);
       if (xfer_acc) {
         sprintf( buf, "%s", xfer_acc->accountName );
-        newData[row+1][NUM_CELL_C] = XtNewString(buf);
-      } else {
-        newData[row+1][NUM_CELL_C] = XtNewString("");
+        newData[row+XFRM_CELL_R][XFRM_CELL_C] = XtNewString(buf);
       }
       
-      
       sprintf( buf, "%s", trans->description );
-      newData[row][DESC_CELL_C]   = XtNewString(buf);
+      newData[row+DESC_CELL_R][DESC_CELL_C]   = XtNewString(buf);
       sprintf( buf, "%s", trans->memo );
-      newData[row+1][DESC_CELL_C] = XtNewString(buf);
+      newData[row+MEMO_CELL_R][MEMO_CELL_C] = XtNewString(buf);
       
       sprintf( buf, "%c", trans->reconciled );
-      newData[row][RECN_CELL_C]   = XtNewString(buf);
-      newData[row+1][RECN_CELL_C] = XtNewString("");
-      
+      newData[row+RECN_CELL_R][RECN_CELL_C]   = XtNewString(buf);
+
+      sprintf( buf, "%s", trans->action );
+      newData[row+ACTN_CELL_R][ACTN_CELL_C]   = XtNewString(buf);
+
       /* ----------------------------------- */
       /* display depends on account type */
-      switch(regData->type)
-        {
+      switch (regData->type) {
         case BANK:
         case CASH:
         case ASSET:
@@ -342,49 +375,37 @@ regRefresh( RegWindow *regData )
         case EXPENSE:
         case EQUITY:
           themount = xaccGetAmount (main_acc, trans);
-          if( 0.0 > themount )
-            {
+          if( 0.0 > themount ) {
             sprintf( buf, "%.2f ", -themount );
-            newData[row][PAY_CELL_C] = XtNewString(buf);
-            newData[row][DEP_CELL_C] = XtNewString("");
-            }
-          else
-            {
+          } else {
             sprintf( buf, "%.2f ", themount );
-            newData[row][PAY_CELL_C] = XtNewString("");
-            newData[row][DEP_CELL_C] = XtNewString(buf);
-            }
+          }
           break;
         case STOCK:
         case MUTUAL:
           themount = xaccGetShareAmount (main_acc, trans);
-          if( 0.0 > themount )
-            {
+          if( 0.0 > themount ) {
             sprintf( buf, "%.3f ", -themount );
-            newData[row][PAY_CELL_C] = XtNewString(buf);
-            newData[row][DEP_CELL_C] = XtNewString("");
-            }
-          else
-            {
+          } else {
             sprintf( buf, "%.3f ", themount );
-            newData[row][PAY_CELL_C] = XtNewString("");
-            newData[row][DEP_CELL_C] = XtNewString(buf);
-            }
+          }
           break;
         default:
-          fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", regData->type);
-        }
-      
-      newData[row+1][PAY_CELL_C] = XtNewString("");
-      newData[row+1][DEP_CELL_C] = XtNewString("");
-      
-      newData[row][BALN_CELL_C]   = XtNewString("");
-      newData[row+1][BALN_CELL_C] = XtNewString("");
+          fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", 
+                  regData->type);
+      }
 
+      if( 0.0 > themount ) {
+        newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
+        newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
+      } else {
+        newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
+        newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
+      }
+      
       /* ----------------------------------- */
       /* extra columns for mutual funds, etc. */
-      switch(regData->type)
-        {
+      switch(regData->type) {
         case BANK:
         case CASH:
         case ASSET:
@@ -397,23 +418,16 @@ regRefresh( RegWindow *regData )
         case STOCK:
         case MUTUAL:
           sprintf( buf, "%.2f ", trans->share_price );
-          newData[row][PRIC_CELL_C] = XtNewString(buf);
-          newData[row+1][PRIC_CELL_C] = XtNewString("");
+          newData[row+PRIC_CELL_R][PRIC_CELL_C] = XtNewString(buf);
 
           /* don't set number of shares here -- this is computed later,
            * in recomputeBalance. */
-          newData[row][SHRS_CELL_C]   = XtNewString("");
-          newData[row+1][SHRS_CELL_C] = XtNewString("");
-
-          sprintf( buf, "%s", trans->action );
-          newData[row][ACTN_CELL_C]   = XtNewString(buf);
-          newData[row+1][ACTN_CELL_C] = XtNewString("");
-      
+          newData[row+SHRS_CELL_C][SHRS_CELL_C]   = XtNewString("");
           break;
         default:
-          fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", regData->type);
-        }
+          break;
       }
+    }
 
     if (1 == regData->numAcc) {
       int row;
@@ -427,25 +441,14 @@ regRefresh( RegWindow *regData )
       row = NUM_ROWS_PER_TRANS*ntrans + NUM_HEADER_ROWS;
       XbaeMatrixSetRowUserData  ( regData->reg, row, NULL);
 
-      for( i=row; i<new_num_rows; i++ ) {
-        for( j=0; j<ncols; j++ ) {
-          if( IN_DATE_CELL(i,j) ) {
-            sprintf( buf, "%2d/%2d\0", date.month, date.day );
-            newData[i][j] = XtNewString(buf);
-          } 
-          else if( IN_YEAR_CELL(i,j) ) {
-            sprintf( buf, "%4d", date.year );
-            newData[i][j] = XtNewString(buf);
-          }
-          else if( IN_RECN_CELL(i,j) ) {
-            sprintf( buf, "%c", NREC );
-            newData[i][j] = XtNewString(buf);
-          }
-          else {
-            newData[i][j] = XtNewString("");
-          }
-        }
-      }
+      sprintf( buf, "%2d/%2d", date.month, date.day );
+      newData[row+DATE_CELL_R][DATE_CELL_C]   = XtNewString(buf);
+      sprintf( buf, "%4d", date.year );
+      newData[row+YEAR_CELL_R][YEAR_CELL_C] = XtNewString(buf);  
+
+      sprintf( buf, "%c", NREC);
+      newData[row+RECN_CELL_R][RECN_CELL_C]   = XtNewString(buf);
+
     } else {
 
       /* If the number of accounts is greater than one, 
@@ -454,6 +457,14 @@ regRefresh( RegWindow *regData )
       _free (tarray);
     }
    
+    /* put null-terminated strings into cells that 
+     * have been otherwise left blank */
+    for( i=0; i<new_num_rows; i++ ) {
+      for( j=0; j<ncols; j++ ) {
+        if (NULL == newData[i][j]) newData[i][j] = XtNewString("");
+      }
+    }
+
     /* set the cell data: */
     XtVaSetValues( regData->reg, XmNcells, newData, NULL );
     regRecalculateBalance (regData);
@@ -705,7 +716,8 @@ regSaveTransaction( RegWindow *regData, int position )
     DEBUG("MOD_NUM\n");	  
     /* ...the transaction number (String)... */
     XtFree( trans->num );
-    trans->num = XtNewString( XbaeMatrixGetCell(regData->reg,row,NUM_CELL_C) );    
+    trans->num = XtNewString( 
+                 XbaeMatrixGetCell(regData->reg,row+NUM_CELL_R,NUM_CELL_C)); 
     }
   
   if( regData->changed & MOD_XFER )
@@ -728,7 +740,7 @@ regSaveTransaction( RegWindow *regData, int position )
       }
        
     /* get the new account name */
-    name = XbaeMatrixGetCell(regData->reg,row+XFER_CELL_R, XFER_CELL_C);
+    name = XbaeMatrixGetCell(regData->reg,row+XFRM_CELL_R, XFRM_CELL_C);
   
     /* get the new account from the name */
     xfer_acct = xaccGetPeerAccountFromName (main_acc, name);
@@ -745,7 +757,8 @@ regSaveTransaction( RegWindow *regData, int position )
     /* ... the description... */
     XtFree( trans->description );
     trans->description = 
-      XtNewString( XbaeMatrixGetCell(regData->reg,row,DESC_CELL_C) );
+      XtNewString( 
+      XbaeMatrixGetCell(regData->reg,row+DESC_CELL_R,DESC_CELL_C) );
     }
   
   if( regData->changed & MOD_MEMO )
@@ -759,15 +772,13 @@ regSaveTransaction( RegWindow *regData, int position )
     trans->memo = XtNewString( tmp );
     }
   
-  /* ignore MOD_ACTN for non-stock accounts */
-  if( (regData->changed & MOD_ACTN) &&
-      ((MUTUAL == regData->type) || (STOCK==regData->type)) )
+  if( regData->changed & MOD_ACTN )
     {
     String  actn = NULL;
     DEBUG("MOD_ACTN\n");
     /* ... the action ... */
     XtFree( trans->action );
-    actn = XbaeMatrixGetCell(regData->reg,row,ACTN_CELL_C);
+    actn = XbaeMatrixGetCell(regData->reg,row+ACTN_CELL_R,ACTN_CELL_C);
     trans->action = XtNewString( actn );
     }
   
@@ -775,7 +786,8 @@ regSaveTransaction( RegWindow *regData, int position )
     {
     DEBUG("MOD_RECN\n");
     /* ...the reconciled flag (char)... */
-    trans->reconciled = (XbaeMatrixGetCell(regData->reg,row,RECN_CELL_C))[0];
+    trans->reconciled = 
+       (XbaeMatrixGetCell(regData->reg,row+RECN_CELL_R,RECN_CELL_C))[0];
     }
   
   if( regData->changed & MOD_AMNT )
@@ -788,12 +800,12 @@ regSaveTransaction( RegWindow *regData, int position )
 
     DEBUG("MOD_AMNT\n");
     /* ...and the amounts */
-    amount = XbaeMatrixGetCell(regData->reg,row,DEP_CELL_C);
+    amount = XbaeMatrixGetCell(regData->reg,row+DEP_CELL_R,DEP_CELL_C);
     sscanf( amount, "%f", &val );
     themount = val;
     
     val = 0.0;
-    amount = XbaeMatrixGetCell(regData->reg,row,PAY_CELL_C); 
+    amount = XbaeMatrixGetCell(regData->reg,row+PAY_CELL_R,PAY_CELL_C); 
     sscanf( amount, "%f", &val );
     themount -= val;
     
@@ -804,14 +816,14 @@ regSaveTransaction( RegWindow *regData, int position )
       {
       /* hack alert -- should keep 3 digits for share amounts */
       sprintf( buf, "%.2f ", -themount );
-      XbaeMatrixSetCell( regData->reg, row, PAY_CELL_C, buf );
-      XbaeMatrixSetCell( regData->reg, row, DEP_CELL_C, "" );
+      XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, buf );
+      XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
       }
     else
       {
       sprintf( buf, "%.2f ", themount );
-      XbaeMatrixSetCell( regData->reg, row, PAY_CELL_C, "" );
-      XbaeMatrixSetCell( regData->reg, row, DEP_CELL_C, buf );
+      XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
+      XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, buf );
       }
     }
 
@@ -825,12 +837,12 @@ regSaveTransaction( RegWindow *regData, int position )
     DEBUG("MOD_PRIC\n");
     /* ...the price flag ... */
 
-    price = XbaeMatrixGetCell(regData->reg,row,PRIC_CELL_C);
+    price = XbaeMatrixGetCell(regData->reg,row+PRIC_CELL_R,PRIC_CELL_C);
     sscanf( price, "%f", &val );
     trans->share_price = val;
     
     sprintf( buf, "%.2f ", trans->share_price );
-    XbaeMatrixSetCell( regData->reg, row, PRIC_CELL_C, buf );
+    XbaeMatrixSetCell( regData->reg, row+PRIC_CELL_R, PRIC_CELL_C, buf );
     }
   
   if( regData->changed & MOD_DATE )
@@ -862,7 +874,8 @@ regSaveTransaction( RegWindow *regData, int position )
        * but do this only for this register, not any other register 
        * windows. */  
       pos = getNumOfTransaction (main_acc, trans);
-      XbaeMatrixMakeCellVisible( regData->reg, 2*pos+1, DESC_CELL_C );
+      XbaeMatrixMakeCellVisible( regData->reg, 
+         pos*NUM_ROWS_PER_TRANS+NUM_HEADER_ROWS, DESC_CELL_C );
       }
     }
     
@@ -1123,8 +1136,9 @@ regWindowLedger( Widget parent, Account **acclist )
     String **data;
     int i,j;
     /* ----------------------------------- */
-    /* define where each column shows up, and total number of columns. */
-    /* the number on the right hand side is the physical location of the column */
+    /* define where each column shows up, and total number 
+     * of columns for this register type.  The number on the 
+     * right hand side is the physical location of the column */
     switch(regData->type)
       {
       case BANK:
@@ -1137,19 +1151,20 @@ regWindowLedger( Widget parent, Account **acclist )
       case EQUITY:
         regData->columnLocation [DATE_COL_ID] = 0;
         regData->columnLocation [NUM_COL_ID]  = 1;
-        regData->columnLocation [DESC_COL_ID] = 2;
-        regData->columnLocation [RECN_COL_ID] = 3;
-        regData->columnLocation [PAY_COL_ID]  = 4;
-        regData->columnLocation [DEP_COL_ID]  = 5;
-        regData->columnLocation [BALN_COL_ID] = 6;
-        regData -> numCols = 7;
+        regData->columnLocation [XFER_COL_ID] = 2;
+        regData->columnLocation [DESC_COL_ID] = 3;
+        regData->columnLocation [RECN_COL_ID] = 4;
+        regData->columnLocation [PAY_COL_ID]  = 5;
+        regData->columnLocation [DEP_COL_ID]  = 6;
+        regData->columnLocation [BALN_COL_ID] = 7;
+        regData -> numCols = 8;
 
         break;
       case STOCK:
       case MUTUAL:
         regData->columnLocation [DATE_COL_ID] = 0;
         regData->columnLocation [NUM_COL_ID]  = 1;
-        regData->columnLocation [ACTN_COL_ID] = 2;
+        regData->columnLocation [XFER_COL_ID] = 2;
         regData->columnLocation [DESC_COL_ID] = 3;
         regData->columnLocation [RECN_COL_ID] = 4;
         regData->columnLocation [PAY_COL_ID]  = 5;
@@ -1160,15 +1175,17 @@ regWindowLedger( Widget parent, Account **acclist )
         regData -> numCols = 10;
         break;
       default:
-        fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", regData->type);
+        fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", 
+               regData->type);
       }
 
     /* ----------------------------------- */
     /* set up column widths */
 
     regData -> columnWidths[DATE_CELL_C] = 5;   /* also YEAR_CELL_C */
-    regData -> columnWidths[NUM_CELL_C]  = 8;   /* also XFER_CELL_C */
-    regData -> columnWidths[DESC_CELL_C] = 35;  /* also MEMO_CELL_C */
+    regData -> columnWidths[NUM_CELL_C]  = 8;   /* also ACTN_CELL_C */
+    regData -> columnWidths[XFRM_CELL_C] = 14;  /* also XTO_CELL_C */
+    regData -> columnWidths[DESC_CELL_C] = 30;  /* also MEMO_CELL_C */
     regData -> columnWidths[RECN_CELL_C] = 1;   /* the widths of columns */
     regData -> columnWidths[PAY_CELL_C]  = 12;  /* the widths of columns */
     regData -> columnWidths[DEP_CELL_C]  = 12;  /* the widths of columns */
@@ -1189,7 +1206,6 @@ regWindowLedger( Widget parent, Account **acclist )
       case MUTUAL:
         regData -> columnWidths[PRIC_CELL_C] = 8;   /* price */
         regData -> columnWidths[SHRS_CELL_C] = 8;   /* share balance */
-        regData -> columnWidths[ACTN_CELL_C] = 6;   /* action (Buy/Sell)*/
         break;
       }
     
@@ -1197,7 +1213,9 @@ regWindowLedger( Widget parent, Account **acclist )
     /* set up column alignments */
 
     regData -> alignments[DATE_CELL_C] = XmALIGNMENT_END;
-    regData -> alignments[NUM_CELL_C]  = XmALIGNMENT_BEGINNING;  /* need XFER to be visible */
+    /* ACTN is in NUM_CELL, and needs to be visible */
+    regData -> alignments[NUM_CELL_C]  = XmALIGNMENT_BEGINNING;  
+    regData -> alignments[XFRM_CELL_C] = XmALIGNMENT_BEGINNING;  
     regData -> alignments[DESC_CELL_C] = XmALIGNMENT_BEGINNING;
     regData -> alignments[RECN_CELL_C] = XmALIGNMENT_CENTER;
     regData -> alignments[PAY_CELL_C]  = XmALIGNMENT_END;
@@ -1220,7 +1238,6 @@ regWindowLedger( Widget parent, Account **acclist )
       case MUTUAL:
         regData -> alignments[PRIC_CELL_C] = XmALIGNMENT_END;  /* price */
         regData -> alignments[SHRS_CELL_C] = XmALIGNMENT_END;  /* share balance */
-        regData -> alignments[ACTN_CELL_C] = XmALIGNMENT_BEGINNING;  /* action */
         break;
       }
     
@@ -1234,6 +1251,7 @@ regWindowLedger( Widget parent, Account **acclist )
 
     regData -> columnLabels[0][DATE_CELL_C] = "Date";
     regData -> columnLabels[0][NUM_CELL_C]  = "Num";
+    regData -> columnLabels[0][XFRM_CELL_C] = "Transfer";
     regData -> columnLabels[0][DESC_CELL_C] = "Description";
     regData -> columnLabels[0][BALN_CELL_C] = "Balance";
     switch(regData->type)
@@ -1251,7 +1269,6 @@ regWindowLedger( Widget parent, Account **acclist )
       case MUTUAL:
         regData -> columnLabels[0][PRIC_CELL_C] = "Price";
         regData -> columnLabels[0][SHRS_CELL_C] = "Tot Shrs";
-        regData -> columnLabels[0][ACTN_CELL_C] = "Action";   /* action */
         break;
       }
     
@@ -1683,11 +1700,9 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       if( !IN_DATE_CELL(row,col) && !IN_NUM_CELL(row,col) &&
           !IN_DESC_CELL(row,col) && !IN_PAY_CELL(row,col) &&
           !IN_RECN_CELL(row,col) && !IN_DEP_CELL(row,col) &&
-          !IN_XFER_CELL(row,col) && 
+          !IN_XFRM_CELL(row,col) && !IN_ACTN_CELL(row,col) &&
           !((STOCK  == regData->type) && IN_PRIC_CELL(row,col)) &&
           !((MUTUAL == regData->type) && IN_PRIC_CELL(row,col)) &&
-          !((STOCK  == regData->type) && IN_ACTN_CELL(row,col)) &&
-          !((MUTUAL == regData->type) && IN_ACTN_CELL(row,col)) &&
           !IN_MEMO_CELL(row,col) && !IN_YEAR_CELL(row,col))
         {
         ((XbaeMatrixEnterCellCallbackStruct *)cbs)->doit = FALSE;
@@ -1717,15 +1732,14 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         }
 
       /* otherwise, move the ACTN widget */
-      else if( ((STOCK  == regData->type) && IN_ACTN_CELL(row,col)) ||
-               ((MUTUAL == regData->type) && IN_ACTN_CELL(row,col)) ) 
+      else if( IN_ACTN_CELL(row,col)) 
         {
            SetPopBox (regData->actbox, row, col);
            regData->changed |= MOD_ACTN;
         }
 
       /* otherwise, move the XFER widget */
-      else if( IN_XFER_CELL(row,col) )
+      else if( IN_XFRM_CELL(row,col) )
         {
            SetPopBox (regData->xferbox, row, col);
            regData->changed |= MOD_XFER;
@@ -1902,16 +1916,16 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
        * indicate a row,col with a cell widget in it.  
        * Thus, the following if statment will never be true
        */
-      if( ((STOCK  == regData->type) && IN_ACTN_CELL(row,col)) ||
-          ((MUTUAL == regData->type) && IN_ACTN_CELL(row,col)) ) {
+      if( IN_ACTN_CELL(row,col))  {
         regData->changed |= MOD_ACTN;
       }
       /* Note: for cell widgets, this callback will never
        * indicate a row,col with a cell widget in it.  
        * Thus, the following if statment will never be true
        */
-      if( IN_XFER_CELL(row,col) ) 
+      if( IN_XFRM_CELL(row,col) ) {
         regData->changed |= MOD_XFER;
+      }
 
       break;
 
