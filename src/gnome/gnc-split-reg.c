@@ -67,7 +67,7 @@ static short module = MOD_SX;
  *   X fill out gnc-split-reg.h interface
  *   X calendar/date-picker
  * . beta-necessary
- *   . date-inclusion on jumping
+ *   X date-inclusion on jumping
  *   . pass in, use number-of-lines
  *   . title-renaming in read-only case.
  *   X size-allocation
@@ -143,9 +143,9 @@ void gsr_default_copy_txn_handler ( GNCSplitReg *w, gpointer ud );
 void gsr_default_paste_handler    ( GNCSplitReg *w, gpointer ud );
 void gsr_default_paste_txn_handler( GNCSplitReg *w, gpointer ud );
 
-static void gsr_emit_signal( GNCSplitReg *gsr, const char *sigName );
+static void gsr_emit_simple_signal( GNCSplitReg *gsr, const char *sigName );
 static void gsr_emit_help_changed( GnucashRegister *reg, gpointer user_data );
-
+static void gsr_emit_include_date_signal( GNCSplitReg *gsr, time_t date );
 
 void gnc_split_reg_cut_cb(GtkWidget *w, gpointer data);
 void gnc_split_reg_copy_cb(GtkWidget *w, gpointer data);
@@ -239,6 +239,7 @@ enum gnc_split_reg_signal_enum {
   PASTE_SIGNAL,
   PASTE_TXN_SIGNAL,
   HELP_CHANGED_SIGNAL,
+  INCLUDE_DATE_SIGNAL,
   LAST_SIGNAL
 };
 
@@ -270,18 +271,30 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
     { PASTE_SIGNAL,        "paste",        GTK_SIGNAL_OFFSET( GNCSplitRegClass, paste_cb ) },
     { PASTE_TXN_SIGNAL,    "paste_txn",    GTK_SIGNAL_OFFSET( GNCSplitRegClass, paste_txn_cb ) },
     { HELP_CHANGED_SIGNAL, "help-changed", GTK_SIGNAL_OFFSET( GNCSplitRegClass, help_changed_cb ) },
+    { INCLUDE_DATE_SIGNAL, "include-date", GTK_SIGNAL_OFFSET( GNCSplitRegClass, include_date_cb ) },
     { LAST_SIGNAL, NULL, 0 }
   };
 
   object_class = (GtkObjectClass*) class;
 
-  for ( i=0; signals[i].signal_name != NULL; i++ ) {
+  for ( i=0; signals[i].s != INCLUDE_DATE_SIGNAL; i++ ) {
     gnc_split_reg_signals[ signals[i].s ] =
       gtk_signal_new( signals[i].signal_name,
                       GTK_RUN_LAST,
                       object_class->type, signals[i].defaultOffset,
                       gtk_signal_default_marshaller, GTK_TYPE_NONE, 0 );
   }
+  /* Setup the non-default-marshalled signals; 'i' is still valid, here. */
+  /* "include-date" */
+  gnc_split_reg_signals[ INCLUDE_DATE_SIGNAL ] =
+    gtk_signal_new( "include-date",
+                    GTK_RUN_LAST,
+                    object_class->type,
+                    signals[i++].defaultOffset,
+                    gtk_marshal_NONE__INT, /* time_t == int */
+                    GTK_TYPE_NONE, 1, GTK_TYPE_INT );
+
+  g_assert( i == LAST_SIGNAL );
 
   gtk_object_class_add_signals (object_class, gnc_split_reg_signals, LAST_SIGNAL);
 
@@ -303,6 +316,7 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
   class->paste_txn_cb    = gsr_default_paste_txn_handler;
 
   class->help_changed_cb = NULL;
+  class->include_date_cb = NULL;
 }
 
 GtkWidget*
@@ -723,11 +737,6 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
       }
   }
 
-  /* FIXME */
-#if 0 /* FIXME */
-  gnc_reg_set_window_name( gsr );
-#endif /* 0 -- FIXME */
-
   {
     gboolean expand;
     gboolean sensitive;
@@ -838,7 +847,7 @@ void
 gnc_split_reg_cut_cb (GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "cut" );
+  gsr_emit_simple_signal( gsr, "cut" );
 }
 
 void
@@ -854,7 +863,7 @@ void
 gnc_split_reg_copy_cb (GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "copy" );
+  gsr_emit_simple_signal( gsr, "copy" );
 }
 
 void
@@ -870,7 +879,7 @@ void
 gnc_split_reg_paste_cb (GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "paste" );
+  gsr_emit_simple_signal( gsr, "paste" );
 }
 
 void
@@ -887,7 +896,7 @@ void
 gnc_split_reg_cut_trans_cb (GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "cut_txn" );
+  gsr_emit_simple_signal( gsr, "cut_txn" );
 }
 
 void
@@ -904,7 +913,7 @@ void
 gnc_split_reg_copy_trans_cb(GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "copy_txn" );
+  gsr_emit_simple_signal( gsr, "copy_txn" );
 }
 
 void
@@ -921,7 +930,7 @@ void
 gnc_split_reg_paste_trans_cb (GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "paste_txn" );
+  gsr_emit_simple_signal( gsr, "paste_txn" );
 }
 
 /* Remove when porting to gtk2.0 */
@@ -985,7 +994,7 @@ void
 gnc_split_reg_reinitialize_trans_cb(GtkWidget *widget, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "reinit_ent" );
+  gsr_emit_simple_signal( gsr, "reinit_ent" );
 }
 
 void
@@ -1117,7 +1126,7 @@ void
 gnc_split_reg_delete_trans_cb(GtkWidget *widget, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "delete_ent" );
+  gsr_emit_simple_signal( gsr, "delete_ent" );
 }
 
 void
@@ -1134,7 +1143,7 @@ void
 gnc_split_reg_duplicate_trans_cb(GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "dup_ent" );
+  gsr_emit_simple_signal( gsr, "dup_ent" );
 }
 
 /**
@@ -1189,7 +1198,7 @@ void
 gnc_split_reg_recur_cb(GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "schedule_ent" );
+  gsr_emit_simple_signal( gsr, "schedule_ent" );
 }
 
 /**
@@ -1199,7 +1208,7 @@ void
 gnc_split_reg_record_trans_cb (GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "enter_ent" );
+  gsr_emit_simple_signal( gsr, "enter_ent" );
 }
 
 void
@@ -1216,7 +1225,7 @@ void
 gnc_split_reg_cancel_trans_cb(GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "cancel_ent" );
+  gsr_emit_simple_signal( gsr, "cancel_ent" );
 }
 
 void
@@ -1252,14 +1261,14 @@ void
 gnc_split_reg_expand_trans_menu_cb (GtkWidget *widget, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "expand_ent" );
+  gsr_emit_simple_signal( gsr, "expand_ent" );
 }
 
 void
 gnc_split_reg_expand_trans_toolbar_cb (GtkWidget *widget, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "expand_ent" );
+  gsr_emit_simple_signal( gsr, "expand_ent" );
 }
 
 /**
@@ -1275,13 +1284,8 @@ gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split)
   if (!gsr) return;
 
   trans = xaccSplitGetParent(split);
-#if 0 /* FIXME */
-  if (trans != NULL)
-    if (gnc_register_include_date(gsr, xaccTransGetDate(trans)))
-    {
-      gnc_ledger_display_refresh( gsr->ledger );
-    }
-#endif /* 0 -- FIXME */
+
+  gsr_emit_include_date_signal( gsr, xaccTransGetDate(trans) );
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
 
@@ -1300,18 +1304,12 @@ gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split)
 {
   VirtualLocation virt_loc;
   SplitRegister *reg;
+  Transaction *trans;
 
   if (!gsr) return;
 
-#if 0 /* FIXME */
   trans = xaccSplitGetParent(split);
-  if (trans != NULL) {
-    if (gnc_register_include_date(gsr, xaccTransGetDate(trans)))
-    {
-      gnc_ledger_display_refresh (gsr->ledger);
-    }
-  }
-#endif /* 0 -- FIXME */
+  gsr_emit_include_date_signal( gsr, xaccTransGetDate(trans) );
 
   reg = gnc_ledger_display_get_split_register (gsr->ledger);
 
@@ -1355,7 +1353,7 @@ void
 gnc_split_reg_new_trans_cb (GtkWidget *widget, gpointer data)
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "blank" );
+  gsr_emit_simple_signal( gsr, "blank" );
 }
 
 void
@@ -1410,7 +1408,7 @@ void
 gnc_split_reg_jump_cb( GtkWidget *widget, gpointer data )
 {
   GNCSplitReg *gsr = data;
-  gsr_emit_signal( gsr, "jump" );
+  gsr_emit_simple_signal( gsr, "jump" );
 }
 
 static
@@ -1607,12 +1605,7 @@ gnc_split_reg_record (GNCSplitReg *gsr)
   if (!gnc_split_register_save (reg, TRUE))
     return;
 
-  /* FIXME */
-#if 0 /* FIXME */
-  if (trans != NULL)
-    gnc_split_reg_include_date( gsr, xaccTransGetDate(trans) );
-#endif /* 0 - FIXME */
-
+  gsr_emit_include_date_signal( gsr, xaccTransGetDate(trans) );
   gnc_split_register_redraw (reg);
 }
 
@@ -1697,7 +1690,7 @@ gsr_default_enter_handler( GNCSplitReg *gsr, gpointer data )
 void
 gnc_split_reg_record_cb (GnucashRegister *reg, gpointer data)
 {
-  gsr_emit_signal( (GNCSplitReg*)data, "enter_ent" );
+  gsr_emit_simple_signal( (GNCSplitReg*)data, "enter_ent" );
 }
 
 void
@@ -1988,9 +1981,7 @@ void
 gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
 {
   dialog_args *args = g_malloc(sizeof(dialog_args));
-  gchar *old_title, *new_title;
   SplitRegister *reg;
-  GtkArg objarg;
 
   gsr->read_only = FALSE;
 
@@ -1998,7 +1989,6 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
 
     /* FIXME: this is not ideal, as whatever window-title solution we come up
      * with should be used in this case as well. */
-
     gsr->read_only = TRUE;
 
   } else {
@@ -2034,18 +2024,6 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
   gnc_split_register_set_read_only( reg, TRUE );
 
-  /* Rename the window title */
-  /* FIXME: This isn't so good ... this thing shouldn't be directing
-   * window-title changes ... especially for the SX-related stuff. */
-  objarg.name = "GtkWindow::title";
-  gtk_object_arg_get(GTK_OBJECT(gsr->window), &objarg, NULL);
-  old_title = GTK_VALUE_STRING(objarg);
-  new_title = g_strdup_printf(_("%s [Read-Only]"), old_title);
-  /*gtk_object_set(GTK_OBJECT(gsr->window),
-   *               "GtkWindow::title", new_title, NULL); */
-  gtk_window_set_title( GTK_WINDOW(gsr->window), new_title );
-  g_free(old_title);
-  g_free(new_title);
 }
 
 static
@@ -2109,12 +2087,19 @@ static
 void
 gsr_emit_help_changed( GnucashRegister *reg, gpointer user_data )
 {
-  gsr_emit_signal( (GNCSplitReg*)user_data, "help-changed" );
+  gsr_emit_simple_signal( (GNCSplitReg*)user_data, "help-changed" );
 }
 
 static
 void
-gsr_emit_signal( GNCSplitReg *gsr, const char *sigName )
+gsr_emit_include_date_signal( GNCSplitReg *gsr, time_t date )
+{
+  gtk_signal_emit_by_name( GTK_OBJECT(gsr), "include-date", date, NULL );
+}
+
+static
+void
+gsr_emit_simple_signal( GNCSplitReg *gsr, const char *sigName )
 {
   gtk_signal_emit_by_name( GTK_OBJECT(gsr), sigName, NULL );
 }
@@ -2138,6 +2123,7 @@ gnc_split_reg_get_sort_type( GNCSplitReg *gsr )
 void
 gnc_split_reg_set_sort_type( GNCSplitReg *gsr, SortType t )
 {
+  /* FIXME */
   PERR( "unimplemented" );
 }
 
@@ -2201,6 +2187,7 @@ void
 gnc_split_reg_set_split_state( GNCSplitReg *gsr, gboolean split )
 {
   g_assert( gsr );
+  /* FIXME */
   PERR( "Unimplemented" );
 }
 
@@ -2208,6 +2195,7 @@ void
 gnc_split_reg_set_double_line( GNCSplitReg *gsr, gboolean doubleLine )
 {
   g_assert( gsr );
+  /* FIXME */
   PERR( "unimplemented" );
 }
 
@@ -2233,4 +2221,11 @@ gnc_split_reg_use_extended_popup( GNCSplitReg *gsr )
   gtk_menu_append( GTK_MENU(popup), tmpMI );
 
   gtk_widget_show_all( popup );
+}
+
+gboolean
+gnc_split_reg_get_read_only( GNCSplitReg *gsr )
+{
+  g_assert( gsr );
+  return gsr->read_only;
 }

@@ -83,7 +83,10 @@
 #  define PAY_TXN_PART_RB    "pay_txn_part_rb"
 #  define PAY_UNIQ_FREQ_RB   "pay_uniq_freq_rb"
 #  define PAY_FREQ_CONTAINER "pay_freq_align"
-
+#define PG_REVIEW "review_pg"
+#  define REV_SCROLLWIN      "rev_scrollwin"
+#  define REV_RANGE_OPT      "rev_range_opt"
+#  define REV_RANGE_TABLE    "rev_date_range_table"
 #define OPT_VBOX_SPACING 2
 
 static short module = MOD_SX;
@@ -209,46 +212,54 @@ typedef struct LoanDruidData_ {
         
         /* widgets */
         /* prm = params */
-        GtkTable *prmTable;
+        GtkTable      *prmTable;
         GNCAccountSel *prmAccountGAS;
         GNCAmountEdit *prmOrigPrincGAE;
         GtkSpinButton *prmIrateSpin;
         GtkOptionMenu *prmType;
-        GtkFrame *prmVarFrame;
-        GNCFrequency *prmVarGncFreq;
-        GNCDateEdit *prmStartDateGDE;
+        GtkFrame      *prmVarFrame;
+        GNCFrequency  *prmVarGncFreq;
+        GNCDateEdit   *prmStartDateGDE;
         GtkSpinButton *prmLengthSpin;
         GtkOptionMenu *prmLengthType;
         GtkSpinButton *prmRemainSpin;
 
         /* opt = options */
-        GtkVBox *optVBox;
+        GtkVBox        *optVBox;
         GtkCheckButton *optEscrowCb;
-        GtkHBox *optEscrowHBox;
-        GNCAccountSel *optEscrowGAS;
+        GtkHBox        *optEscrowHBox;
+        GNCAccountSel  *optEscrowGAS;
 
         /* rep = repayment */
-        GtkEntry *repTxnName;
-        GtkTable *repTable;
-        GtkEntry *repAmtEntry;
+        GtkEntry      *repTxnName;
+        GtkTable      *repTable;
+        GtkEntry      *repAmtEntry;
         GNCAccountSel *repAssetsFromGAS;
         GNCAccountSel *repPrincToGAS;
         GNCAccountSel *repIntToGAS;
         GtkOptionMenu *repRemainderOpt;
-        GtkFrame *repFreqFrame;
-        GNCFrequency *repGncFreq;
+        GtkFrame      *repFreqFrame;
+        GNCFrequency  *repGncFreq;
 
         /* pay = payment[s] */
-        GtkEntry *payTxnName;
+        GtkEntry         *payTxnName;
         GnomeNumberEntry *payAmtGNE;
-        GtkEntry *payAmtEntry;
-        GNCAccountSel *payAcctFromGAS;
-        GNCAccountSel *payAcctToGAS;
-        GtkTable *payTable;
-        GtkRadioButton *payTxnFreqPartRb;
-        GtkRadioButton *payTxnFreqUniqRb;
-        GtkAlignment *payFreqAlign;
-        GNCFrequency *payGncFreq;
+        GtkEntry         *payAmtEntry;
+        GNCAccountSel    *payAcctFromGAS;
+        GNCAccountSel    *payAcctToGAS;
+        GtkTable         *payTable;
+        GtkRadioButton   *payTxnFreqPartRb;
+        GtkRadioButton   *payTxnFreqUniqRb;
+        GtkAlignment     *payFreqAlign;
+        GNCFrequency     *payGncFreq;
+
+        /* rev = review */
+        GtkOptionMenu     *revRangeOpt;
+        GtkTable          *revTable;
+        GNCDateEdit       *revStartDate;
+        GNCDateEdit       *revEndDate;
+        GtkScrolledWindow *revScrollWin;
+        GtkCList          *revCL;
 } LoanDruidData;
 
 static void gnc_loan_druid_data_init( LoanDruidData *ldd );
@@ -268,6 +279,9 @@ static void ld_escrow_toggled( GtkToggleButton *tb, gpointer ud );
 
 static void ld_pay_freq_toggle( GtkToggleButton *tb, gpointer ud );
 
+static void ldd_rev_range_opt_changed( GtkButton *b, gpointer ud );
+static void ldd_rev_range_changed( GNCDateEdit *gde, gpointer ud );
+
 static gboolean ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static void     ld_info_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_opts_tran( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
@@ -275,11 +289,13 @@ static void     ld_opts_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_rep_next ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static void     ld_rep_prep ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_rep_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
-static void     ld_rep_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_pay_next ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static void     ld_pay_prep ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_pay_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
-static void     ld_pay_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static gboolean ld_rev_next ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static void     ld_rev_prep ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static gboolean ld_rev_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static void     ld_rev_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 
 static void ld_create_sxes( LoanDruidData *ldd );
 
@@ -353,21 +369,39 @@ gnc_ui_sx_loan_druid_create(void)
                         }
                 }
 
-                /* The GNCDateEdit */
+                /* The GNCDateEdit[s] */
                 {
-                        ldd->prmStartDateGDE =
-                                GNC_DATE_EDIT(
-                                        gnc_date_edit_new( time(NULL),
-                                                           FALSE, FALSE ) );
-                        gtk_table_attach( ldd->prmTable,
-                                          GTK_WIDGET( ldd->prmStartDateGDE ),
-                                          1, 2, 4, 5,
-                                          (GTK_EXPAND | GTK_FILL),
-                                          GTK_FILL, 0, 0 );
+                        /* "gde" == GNCDateEdit */
+                        struct gde_in_tables_data {
+                                GNCDateEdit **loc;
+                                GtkTable *table;
+                                int left, right, top, bottom;
+                        } gde_data[] = {
+                                /* These ints are the GtkTable boundries */
+                                { &ldd->prmStartDateGDE, ldd->prmTable, 1, 2, 4, 5 },
+                                { &ldd->revStartDate,    ldd->revTable, 1, 2, 0, 1 },
+                                { &ldd->revEndDate,      ldd->revTable, 1, 2, 1, 2 },
+                                { NULL }
+                        };
+
+                        for ( i=0; gde_data[i].loc != NULL; i++ ) {
+                                *gde_data[i].loc =
+                                        GNC_DATE_EDIT(
+                                                gnc_date_edit_new( time(NULL),
+                                                                   FALSE, FALSE ) );
+                                gtk_table_attach( gde_data[i].table,
+                                                  GTK_WIDGET( *gde_data[i].loc ),
+                                                  gde_data[i].left,
+                                                  gde_data[i].right,
+                                                  gde_data[i].top,
+                                                  gde_data[i].bottom,
+                                                  (GTK_EXPAND | GTK_FILL),
+                                                  GTK_FILL, 0, 0 );
+                        }
+
                 }
 
                 gtk_widget_set_sensitive( GTK_WIDGET(ldd->prmVarFrame), FALSE );
-
                 {
                         GtkAlignment *a;
                         GNCOptionInfo typeOptInfo[] = {
@@ -420,6 +454,7 @@ gnc_ui_sx_loan_druid_create(void)
                 gnc_option_menu_init( GTK_WIDGET(ldd->prmType) );
                 gnc_option_menu_init( GTK_WIDGET(ldd->prmLengthType) );
                 gnc_option_menu_init( GTK_WIDGET(ldd->repRemainderOpt) );
+                gnc_option_menu_init( GTK_WIDGET(ldd->revRangeOpt) );
 
                 gtk_signal_connect( GTK_OBJECT(ldd->optEscrowCb), "toggled",
                                     GTK_SIGNAL_FUNC(ld_escrow_toggle), ldd );
@@ -519,6 +554,24 @@ gnc_ui_sx_loan_druid_create(void)
                                    GTK_WIDGET(ldd->payGncFreq) );
         }
 
+        /* Review page widget setup. */
+        {
+                gtk_signal_connect( GTK_OBJECT( gtk_option_menu_get_menu(
+                                                        ldd->revRangeOpt)),
+                                    "selection-done",
+                                    GTK_SIGNAL_FUNC( ldd_rev_range_opt_changed ),
+                                    ldd );
+                gtk_signal_connect( GTK_OBJECT(ldd->revStartDate),
+                                    "date-changed",
+                                    GTK_SIGNAL_FUNC( ldd_rev_range_changed ),
+                                    ldd );
+                gtk_signal_connect( GTK_OBJECT(ldd->revEndDate),
+                                    "date-changed",
+                                    GTK_SIGNAL_FUNC( ldd_rev_range_changed ),
+                                    ldd );
+                
+        }
+
         {
                 static struct {
                         char *pageName;
@@ -530,8 +583,9 @@ gnc_ui_sx_loan_druid_create(void)
                 } DRUID_HANDLERS[] = {
                         { PG_INFO,      ld_info_save, ld_info_prep, ld_info_save, NULL },
                         { PG_OPTS,      ld_opts_tran, ld_opts_prep, ld_opts_tran, NULL },
-                        { PG_REPAYMENT, ld_rep_next,  ld_rep_prep,  ld_rep_back,  ld_rep_fin },
-                        { PG_PAYMENT,   ld_pay_next,  ld_pay_prep,  ld_pay_back,  ld_pay_fin },
+                        { PG_REPAYMENT, ld_rep_next,  ld_rep_prep,  ld_rep_back,  NULL },
+                        { PG_PAYMENT,   ld_pay_next,  ld_pay_prep,  ld_pay_back,  NULL },
+                        { PG_REVIEW,    ld_rev_next,  ld_rev_prep,  ld_rev_back,  ld_rev_fin },
                         { NULL }
                 };
 
@@ -646,7 +700,6 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
         g_assert( ldd->gxml != NULL );
 
         /* Get all widgets */
-
 #define GET_CASTED_WIDGET( cast, name ) \
 	(cast( glade_xml_get_widget( ldd->gxml, name ) ))
 
@@ -657,8 +710,7 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
                 GET_CASTED_WIDGET( GTK_SPIN_BUTTON,    IRATE_SPIN );
         ldd->prmVarFrame =
                 GET_CASTED_WIDGET( GTK_FRAME,          VAR_CONTAINER );
-        /*ldd->prmStartDateGDE =
-          GET_CASTED_WIDGET( GNOME_DATE_EDIT,    START_DATE );*/
+        /* ldd->prmStartDateGDE */
         ldd->prmLengthSpin =
                 GET_CASTED_WIDGET( GTK_SPIN_BUTTON,    LENGTH_SPIN );
         ldd->prmLengthType =
@@ -701,6 +753,17 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
                 GET_CASTED_WIDGET( GTK_RADIO_BUTTON,   PAY_UNIQ_FREQ_RB );
         ldd->payFreqAlign =
                 GET_CASTED_WIDGET( GTK_ALIGNMENT,      PAY_FREQ_CONTAINER );
+
+        /* rev = review */
+        ldd->revRangeOpt =
+                GET_CASTED_WIDGET( GTK_OPTION_MENU,    REV_RANGE_OPT );
+        ldd->revTable =
+                GET_CASTED_WIDGET( GTK_TABLE,          REV_RANGE_TABLE );
+        /* GNCDateEdit       *revStartDate */
+        /* GNCDateEdit       *revEndDate   */
+        ldd->revScrollWin =
+                GET_CASTED_WIDGET( GTK_SCROLLED_WINDOW, REV_SCROLLWIN );
+
 }
 
 static
@@ -1051,11 +1114,28 @@ ld_rep_next( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         ldd = (LoanDruidData*)ud;
 
         if ( ld_rep_save( ldd ) != FALSE ) {
+                DEBUG( "Couldn't save, stopping here." );
                 return TRUE;
         }
 
-        ldd->currentIdx++;
-        return FALSE;
+        {
+                int i;
+                gboolean haveMoreRepayOpts = FALSE;
+                for ( i = ldd->currentIdx + 1;
+                      (i < ldd->ld.repayOptCount) && !haveMoreRepayOpts;
+                      i++ ) {
+                        haveMoreRepayOpts |= ldd->ld.repayOpts[i]->enabled;
+                }
+                if ( haveMoreRepayOpts ) {
+                        ldd->currentIdx++;
+                        return FALSE;
+                }
+        }
+        gnome_druid_set_page( ldd->druid,
+                              GNOME_DRUID_PAGE(
+                                      glade_xml_get_widget( ldd->gxml,
+                                                            PG_REVIEW ) ) );
+        return TRUE;
 }
 
 static
@@ -1073,21 +1153,21 @@ void
 ld_rep_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 {
         LoanDruidData *ldd;
+        GString *str;
 
         ldd = (LoanDruidData*)ud;
 
-        if ( !ldd->ld.repAmount ) {
-                GString *str;
-                str = g_string_sized_new( 64 );
-
-                g_string_sprintfa( str, "pmt( %.5f / 12 : %d : %0.2f : 0 : 0 )",
-                                   (ldd->ld.interestRate / 100),
-                                   ldd->ld.numPer,
-                                   gnc_numeric_to_double(ldd->ld.principal) );
-
-                ldd->ld.repAmount = str->str;
-                g_string_free( str, FALSE );
+        if ( ldd->ld.repAmount ) {
+                g_free( ldd->ld.repAmount );
         }
+
+        str = g_string_sized_new( 64 );
+        g_string_sprintfa( str, "pmt( %.5f / 12 : %d : %0.2f : 0 : 0 )",
+                           (ldd->ld.interestRate / 100),
+                           ldd->ld.numPer,
+                           gnc_numeric_to_double(ldd->ld.principal) );
+        ldd->ld.repAmount = str->str;
+        g_string_free( str, FALSE );
 
         if ( ldd->ld.repMemo )
                 gtk_entry_set_text( ldd->repTxnName, ldd->ld.repMemo );
@@ -1107,6 +1187,7 @@ ld_rep_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                              ldd->ld.repFreq,
                              ldd->ld.repStartDate );
 
+#if 0 /* no longer needed */
         {
                 int i;
                 gboolean haveRepayOpts = FALSE;
@@ -1116,15 +1197,7 @@ ld_rep_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 }
                 gnome_druid_set_show_finish( ldd->druid, !haveRepayOpts );
         }
-}
-
-static
-void
-ld_rep_fin( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
-{
-        LoanDruidData *ldd = (LoanDruidData*)ud;
-        ld_rep_save( ldd );
-        ld_create_sxes( ldd );
+#endif /* 0 -- no longer needed */
 }
 
 static
@@ -1167,6 +1240,8 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                                      rod->fs, rod->startDate );
         }
 
+#if 0 /* no longer needed to set this up; all transitions are to the review
+       * page. */
         {
                 gboolean haveMoreRepayOpts = FALSE;
                 int i = 0;
@@ -1177,6 +1252,8 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 }
                 gnome_druid_set_show_finish( ldd->druid, !haveMoreRepayOpts );
         }
+#endif /* 0 -- no longer needed to set this up; all transitions are to the
+        * review page. */
 
         g_string_free( str, TRUE );
 }
@@ -1268,16 +1345,24 @@ ld_pay_next( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         }
 
         /* Go through opts list and select next enabled option. */
-        for ( i=(++ldd->currentIdx);
+        for ( i = ldd->currentIdx + 1;
               (i < ldd->ld.repayOptCount)
               && !ldd->ld.repayOpts[i]->enabled; i++ )
                 ;
-        if ( i != ldd->ld.repayOptCount ) {
+
+        if ( i < ldd->ld.repayOptCount ) {
                 ldd->currentIdx = i;
                 ld_pay_prep( gdp, arg1, ud );
                 return TRUE;
         }
-        return FALSE;
+
+        /* If there's no repayment options enabled, then go immediately to
+         * the review page. */
+        gnome_druid_set_page( ldd->druid,
+                              GNOME_DRUID_PAGE(
+                                      glade_xml_get_widget( ldd->gxml,
+                                                            PG_REVIEW ) ) );
+        return TRUE;
 }
 
 static
@@ -1294,28 +1379,18 @@ ld_pay_back( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 return TRUE;
         }
 
+        /* go back through opts list and select next enabled options. */
         for ( i=(--ldd->currentIdx);
               (i > -1) && !ldd->ld.repayOpts[i]->enabled;
-              i-- ) {
-        }
-        if ( i != -1 ) {
+              i-- )
+                ;
+
+        if ( i >= 0 ) {
                 ldd->currentIdx = i;
                 ld_pay_prep( gdp, arg1, ud );
                 return TRUE;
         }
         return FALSE;
-}
-
-static
-void
-ld_pay_fin( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
-{
-        LoanDruidData *ldd = (LoanDruidData*)ud;
-        if ( ld_pay_save_current( ldd ) ) {
-                /* FIXME?: Error? */
-                return;
-        }
-        ld_create_sxes( ldd );
 }
 
 static
@@ -1350,6 +1425,110 @@ ld_pay_freq_toggle( GtkToggleButton *tb, gpointer ud )
                 gnc_frequency_setup( ldd->payGncFreq,
                                      rod->fs, rod->startDate );
         }
+}
+
+static
+gboolean
+ld_rev_next( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+{
+        g_assert( FALSE );
+        return TRUE;
+}
+
+static
+void
+ld_rev_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+{
+        LoanDruidData *ldd = (LoanDruidData*)ud;
+        int i;
+        const static int BASE_COLS = 3;
+        int numCols = BASE_COLS;
+        gchar **titles;
+        int repayOptToColMap[ ( sizeof( REPAY_DEFAULTS )
+                                / sizeof( RepayOptDataDefault ) )
+                              - 1 ];
+
+        gnome_druid_set_show_finish( ldd->druid, TRUE );
+
+        /* Cleanup old clist */
+        if ( ldd->revCL != NULL ) {
+                gtk_container_remove( GTK_CONTAINER(ldd->revScrollWin),
+                                      GTK_WIDGET(ldd->revCL) );
+                ldd->revCL = NULL;
+        }
+
+        /* Get the correct number of columns. */
+        for ( i=0; i < ldd->ld.repayOptCount; i++ ) {
+                repayOptToColMap[i] = -1;
+                if ( !ldd->ld.repayOpts[i]->enabled ) {
+                        continue;
+                }
+                numCols += 1;
+                repayOptToColMap[i] = numCols - 1;
+        }
+        titles = g_new0( gchar*, numCols );
+        titles[0] = _( "Date" );
+        titles[1] = _( "Principal" );
+        titles[2] = _( "Interest" );
+        /* move the appropriate names over into the title array */
+        {
+                for ( i=0; i < ldd->ld.repayOptCount; i++ ) {
+                        if ( repayOptToColMap[i] == -1 ) {
+                                continue;
+                        }
+                        titles[ repayOptToColMap[i] ] =
+                                ldd->ld.repayOpts[i]->name;
+                }
+        }
+
+        ldd->revCL = GTK_CLIST(
+                gtk_clist_new_with_titles( numCols,
+                                           titles ) );
+
+        for( i=0; i < numCols; i++ ) {
+                gtk_clist_set_column_auto_resize( ldd->revCL, i, TRUE );
+        }
+        gtk_container_add( GTK_CONTAINER(ldd->revScrollWin),
+                           GTK_WIDGET(ldd->revCL) );
+        gtk_widget_show_all( GTK_WIDGET(ldd->revCL) );
+}
+
+static
+gboolean
+ld_rev_back( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+{
+        LoanDruidData *ldd = (LoanDruidData*)ud;
+        int i;
+
+        gnome_druid_set_show_finish( ldd->druid, FALSE );
+
+        /* Get the correct page based on the repayment state. */
+        /* go back through opts list and select next enabled options. */
+        for ( i = ldd->currentIdx;
+              (i > -1) && !ldd->ld.repayOpts[i]->enabled;
+              i-- ) {
+        }
+        if ( i >= 0 ) {
+                ldd->currentIdx = i;
+                /* natural transition to the payments page */
+                return FALSE;
+        }
+
+        /* If there are no payment options, then go directly to the main
+         * repayment page. */
+        gnome_druid_set_page( ldd->druid,
+                              GNOME_DRUID_PAGE(
+                                      glade_xml_get_widget( ldd->gxml,
+                                                            PG_REPAYMENT ) ) );
+        return TRUE;
+}
+
+static
+void
+ld_rev_fin( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+{
+        LoanDruidData *ldd = (LoanDruidData*)ud;
+        ld_create_sxes( ldd );
 }
 
 static
@@ -1648,4 +1827,18 @@ ld_calc_upd_rem_payments( GtkWidget *w, gpointer ud )
                     == 1 ? 12 : 1 );
         remain = total - i;
         gtk_spin_button_set_value( ldd->prmRemainSpin, remain );
+}
+
+static
+void
+ldd_rev_range_opt_changed( GtkButton *b, gpointer ud )
+{
+        DEBUG( "FIXME" );
+}
+
+static
+void
+ldd_rev_range_changed( GNCDateEdit *gde, gpointer ud )
+{
+        DEBUG( "FIXME" );
 }

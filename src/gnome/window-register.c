@@ -183,6 +183,12 @@ static void gnc_register_insert_cloned_toolbar_elt( GtkToolbar *dstToolbar,
                                                     gint idx );
 
 static gboolean gnc_register_include_date(RegWindow *regData, time_t date);
+static void gnc_register_include_date_adapter( GNCSplitReg *gsr,
+                                               time_t date,
+                                               gpointer user_data );
+
+static void gnc_register_set_read_only( RegWindow *regData );
+
 static void gnc_reg_save_size (RegWindow *regData);
 
 
@@ -830,7 +836,9 @@ regWindowLedger( GNCLedgerDisplay *ledger )
   numRows = (guint)gnc_lookup_number_option ( "_+Advanced",
                                               "Number of Rows", 20.0 );
 
-  gsr = gnc_split_reg_new( ledger, GTK_WINDOW(register_window), numRows,
+  gsr = gnc_split_reg_new( ledger,
+                           GTK_WINDOW(register_window),
+                           numRows,
                            ( CREATE_TOOLBAR
                              | CREATE_MENUS
                              | CREATE_POPUP
@@ -842,6 +850,9 @@ regWindowLedger( GNCLedgerDisplay *ledger )
   GNOME_APP(register_window)->menubar = glade_xml_get_widget( xml, "gnc_register_menubar" );
 
   gnc_reg_set_window_name( regData );
+  if ( gnc_split_reg_get_read_only( regData->gsr ) ) {
+    gnc_register_set_read_only( regData );
+  }
 
   show_all = gnc_lookup_boolean_option( "_+Advanced",
                                         "Show All Transactions",
@@ -874,6 +885,11 @@ regWindowLedger( GNCLedgerDisplay *ledger )
   regData->statusbar = glade_xml_get_widget( xml, "appbar" );
   gtk_signal_connect( GTK_OBJECT(regData->gsr), "help-changed",
                       GTK_SIGNAL_FUNC( gnc_register_help_changed_cb ),
+                      regData );
+
+  /* The "include-date" and "read-only" signals. */
+  gtk_signal_connect( GTK_OBJECT(regData->gsr), "include-date",
+                      GTK_SIGNAL_FUNC( gnc_register_include_date_adapter ),
                       regData );
 
   /* The menu bar. Menu extension setup needs to come *after* that. */
@@ -1287,6 +1303,16 @@ gnc_register_start_recn_cb(GtkWidget * w, gpointer data)
   recnWindow(regData->window, account);
 }
 
+static
+void
+gnc_register_include_date_adapter( GNCSplitReg *gsr, time_t date, gpointer user_data )
+{
+  RegWindow *regData;
+  regData = (RegWindow*) user_data;
+  if ( gnc_register_include_date( regData, date ) ) {
+    gnc_ledger_display_refresh( gsr->ledger );
+  }
+}
 
 static gboolean
 gnc_register_include_date(RegWindow *regData, time_t date)
@@ -1318,6 +1344,23 @@ gnc_register_include_date(RegWindow *regData, time_t date)
   return changed;
 }
 
+static
+void
+gnc_register_set_read_only( RegWindow *regData )
+{
+  gchar *old_title, *new_title;
+  GtkArg objarg;
+
+  objarg.name = "GtkWindow::title";
+  gtk_object_arg_get(GTK_OBJECT(regData->window), &objarg, NULL);
+  old_title = GTK_VALUE_STRING(objarg);
+  new_title = g_strdup_printf(_("%s [Read-Only]"), old_title);
+  gtk_window_set_title( GTK_WINDOW(regData->window), new_title );
+  g_free(old_title);
+  g_free(new_title);
+
+  regData->read_only = TRUE;
+}
 
 /********************************************************************\
  * gnc_register_close_cb                                            *

@@ -707,7 +707,6 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
         char *tmpStr;
         int i;
 
-        /* FIXME: fill in. */
         switch( xaccFreqSpecGetUIType( fs ) ) {
         case UIFREQ_ONCE:
                 tmpStr = g_new0( char, GDATE_STRING_BUF_SIZE );

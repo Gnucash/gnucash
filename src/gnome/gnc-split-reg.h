@@ -149,6 +149,7 @@ struct _GNCSplitRegClass {
   void (*paste_cb)        ( GNCSplitReg *w, gpointer user_data );
   void (*paste_txn_cb)    ( GNCSplitReg *w, gpointer user_data );
   void (*help_changed_cb) ( GNCSplitReg *w, gpointer user_data );
+  void (*include_date_cb) ( GNCSplitReg *w, time_t date, gpointer user_data );
 };
 
 typedef enum {
@@ -270,6 +271,13 @@ void gnc_split_reg_use_extended_popup( GNCSplitReg *gsr );
 gboolean gnc_split_reg_check_close( GNCSplitReg *gsr );
 
 void gnc_split_reg_raise( GNCSplitReg *gsr );
+
+/**
+ * Callers can use this to determine if they need to reflect some "read-only"
+ * status in the window which contains the GNCSplitReg.
+ * @return TRUE if the register is read-only, FALSE if not.
+ **/
+gboolean gnc_split_reg_get_read_only( GNCSplitReg *gsr );
 
 /*
  * Function to jump to various places in the register

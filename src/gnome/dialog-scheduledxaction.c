@@ -1816,7 +1816,6 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
         GDate **instArray;
         GList *instList;
         guint gdcMarkTag, oldMarkTag;
-        gboolean createdNextInstDate = FALSE;
 
         sx = (SchedXaction*)data;
         sxd = (SchedXactionDialog*)user_data;
@@ -1836,7 +1835,6 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
         generate_instances( sx, calEndDate, &instList );
         g_date_free( calEndDate );
 
-        /* cleanup the date memory, here... */
         if ( instList == NULL ) {
                 /* This was a bug [#90326]; while we do want to generate
                  * instances within the visible calendar range, we also want
@@ -1844,7 +1842,6 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
                  * calendar range.  Thus, if the generate_instances above
                  * returns nothing, double-check with the SX. */
                 nextInstDate = g_date_new();
-                createdNextInstDate = TRUE;
                 *nextInstDate = xaccSchedXactionGetNextInstance( sx, NULL );
                 if ( g_date_valid( nextInstDate ) ) {
                         instList = g_list_append( instList,
@@ -1856,7 +1853,7 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
                 g_string_sprintf( nextDate, "not scheduled" );
         } else {
                 char tmpBuf[ MAX_DATE_LENGTH+1 ];
-                char dowBuf[ 25 ]; /* <- fixme: appropriate length? */
+                char dowBuf[ 25 ]; /* <- FIXME: appropriate length? */
                 nextInstDate = (GDate*)instList->data;
                 printGDate( tmpBuf, nextInstDate );
                 g_date_strftime( dowBuf, 25, "%A", nextInstDate );
@@ -1886,9 +1883,7 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
                 g_free( instArray );
                 g_list_foreach( instList, _gnc_sxd_free_dates, NULL );
                 g_list_free( instList );
-                if ( createdNextInstDate ) {
-                        g_free( nextInstDate );
-                }
+                nextInstDate = NULL;
         }
 
         text[0] = xaccSchedXactionGetName( sx );
