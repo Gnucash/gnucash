@@ -1,3 +1,12 @@
+2003-02-04  Derek Atkins  <derek@ihtfp.com>
+
+	Pull up from HEAD:
+	* src/import-export/qif-import/qif-file.scm: mark "splits" as negative
+	  to make sure the numbers are reflected appropriately.
+	* src/import-export/qif-import/qif-objects.scm: add a neg? value to
+	  a qif-split; use this when converting the split-amount.
+	Fixes bug #105179	
+
 2003-02-03  Derek Atkins  <derek@ihtfp.com>
 
 	Pull up from HEAD:
