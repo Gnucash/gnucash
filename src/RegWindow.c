@@ -842,6 +842,7 @@ regRecalculateBalance( RegWindow *regData )
 
         case PORTFOLIO: {
           double value = 0.0;
+          double share_balance = 0.0;
           int show = 0;
           Account *acc;
 
@@ -900,9 +901,53 @@ regRecalculateBalance( RegWindow *regData )
           }
           XbaeMatrixSetCell( reg, position+VCRD_CELL_R, VCRD_CELL_C, buf );
 
-/*
-xxxxxxxxxxxx
-*/
+          /* ------------------------------------ */
+          /* show the share balance */
+          /* show the share balance *only* either the debit or credit
+           * account belongs in this ledger, *and* if the transaction
+           * type is mutual or stock. */
+          show = 0;
+          share_balance = 0.0;
+
+          acc = (Account *) (trans->debit);
+          if (acc) {
+             if ((MUTUAL == acc->type) || (STOCK == acc->type)) {
+                show += xaccIsAccountInList (acc, regData->blackacc);
+                share_balance = xaccGetShareBalance (debit_acc, trans);
+             }
+          }
+
+          acc = (Account *) (trans->credit);
+          if (acc) {
+             if ((MUTUAL == acc->type) || (STOCK == acc->type)) {
+                show += xaccIsAccountInList (acc, regData->blackacc);
+                share_balance = xaccGetShareBalance (credit_acc, trans);
+             }
+          }
+
+          if (show) {
+#ifdef USE_NO_COLOR
+            sprintf( buf, "%.3f ", share_balance );
+#else
+            sprintf( buf, "%.3f ", DABS(share_balance) );
+            
+            /* Set the color of the text, depending on whether the
+             * share balance is negative or positive */
+            if( 0.0 > share_balance ) {
+              XbaeMatrixSetCellColor( reg, position+SHRS_CELL_R, 
+                                           SHRS_CELL_C, negPixel );
+            } else {
+              XbaeMatrixSetCellColor( reg, position+SHRS_CELL_R, 
+                                           SHRS_CELL_C, posPixel );
+            }
+#endif
+  
+            /* Put the share balance in the cell */
+            XbaeMatrixSetCell( reg, position+SHRS_CELL_R, SHRS_CELL_C, buf );
+          } else {
+            XbaeMatrixSetCell( reg, position+SHRS_CELL_R, SHRS_CELL_C, "" );
+          }
+
         }
           break;
 
