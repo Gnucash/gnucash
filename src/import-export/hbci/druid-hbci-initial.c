@@ -494,6 +494,18 @@ choose_hbciversion_dialog (GtkWindow *parent, HBCI_Bank *bank,
 				   (HBCI_Customer*)info->newcustomer, "");
 	  HBCI_Outbox_addJob(info->outbox, job);
 	  
+	  {
+	    HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
+	    /* copied from aqmoney-tng/src/libaqmoney/adminjobs.cpp
+	       JobUpdateBankInfo */
+	    HBCI_Job_setIntProperty(jjob, "open/ident/country", 
+				    HBCI_Bank_country(bank));
+	    HBCI_Job_setProperty(jjob, "open/ident/bankcode", 
+				 HBCI_Bank_bankCode(bank));
+	    HBCI_Job_setIntProperty(jjob, "open/prepare/bpdversion",0);
+	    HBCI_Job_setIntProperty(jjob, "open/prepare/updversion",0);
+	  }
+	  
 	  gnome_ok_dialog_parented 
 	    /* Translators: Strings from this file are really only
 	     * needed inside Germany (HBCI is not supported anywhere
