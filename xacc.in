@@ -3,4 +3,12 @@
 
 XACC_HELP=${XACC_HELP}:./Docs:@prefix@/share/xacc/Docs
 export XACC_HELP
-exec xacc.bin $@
+
+# hack alert -- we should really be using ldconfig to look for
+# the motif library.  We should also do something to auto-detect
+# and load the gtk version.
+if [ -f /usr/X11R6/lib/libXm.so -o -L /usr/X11R6/lib/libXm.so ]; then
+  exec xacc.bin $@
+else
+  exec xacc-static.bin $@
+fi
