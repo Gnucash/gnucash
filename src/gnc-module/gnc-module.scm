@@ -9,7 +9,6 @@
 
 (define-module (gnucash gnc-module))
 (use-modules (g-wrapped gw-gnc-module))
-(use-modules (g-wrapped gw-runtime))
 
 (export gnc:module-system-init)
 
