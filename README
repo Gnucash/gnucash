@@ -147,11 +147,13 @@ single copy of the source tree:
 
 sorry, no "make install" yet.
 
-
+The current version requires glibc2.0 (libc.so.6) to link.  
+It uses the open_memstream() call, which first shows up 
+in glibc-6.0. 
 
 Status:
 -------
-As of version 1.0.16:
+As of version 1.0.18:
 
 GnuCash is known to work in the following configs:
 Linux 2.x.x           -- Intel  w/ RedHat Motif
