@@ -52,6 +52,8 @@
     (if (gnc:report-in-menu? report)
         (let ((title (string-append (_ "Report") ": " (_ name)))
               (menu-path (gnc:report-menu-path report))
+              (menu-name (gnc:report-menu-name report))
+              (menu-tip (gnc:report-menu-tip report))
               (item #f))
 
           (if (not menu-path)
@@ -61,10 +63,16 @@
 
           (set! menu-path (cons "_Reports" menu-path))
 
+          (if menu-name (set! name menu-name))
+
+          (if (not menu-tip)
+              (set! menu-tip
+                    (sprintf #f (_ "Display the %s report") name)))
+
           (set! item
                 (gnc:make-menu-item
                  ((menu-namer 'add-name) name)
-                 (sprintf #f (_ "Display the %s report") name)
+                 menu-tip
                  menu-path
                  (lambda ()
                    (gnc:backtrace-if-exception 
@@ -102,7 +110,8 @@
   (make-record-type "<report-template>"
                     ;; The data items in a report record
                     '(version name options-generator options-editor
-                              renderer in-menu? menu-path)))
+                              renderer in-menu? menu-path menu-name
+                              menu-tip)))
 
 (define (gnc:define-report . args) 
   ;; For now the version is ignored, but in the future it'll let us
@@ -115,7 +124,7 @@
   (define (blank-report)
     ;; Number of #f's == Number of data members
     ((record-constructor <report-template>)
-     #f #f #f gnc:default-options-editor #f #t #f))
+     #f #f #f gnc:default-options-editor #f #t #f #f #f))
 
   (define (args-to-defn in-report-rec args)
     (let ((report-rec (if in-report-rec
@@ -150,6 +159,10 @@
   (record-accessor <report-template> 'in-menu?))
 (define gnc:report-menu-path
   (record-accessor <report-template> 'menu-path))
+(define gnc:report-menu-name
+  (record-accessor <report-template> 'menu-name))
+(define gnc:report-menu-tip
+  (record-accessor <report-template> 'menu-tip))
 
 (define (gnc:report-template-new-options report-template)
   (let ((generator (gnc:report-template-options-generator report-template))
@@ -457,5 +470,3 @@
            #f)))))
               
 (gnc:hook-add-dangler gnc:*main-window-opened-hook* gnc:report-menu-setup)
-
-

@@ -465,10 +465,13 @@ new, totally cool report, consult the mailing list %s.")
    ;; for making its menu item in the main menu. You need to use the
    ;; untranslated value here!
    'name (N_ "Hello, World")
-   
+
+   ;; A tip that is used to provide additional information about the
+   ;; report to the user.
+   'menu-tip (N_ "A sample report with examples.")
+
    ;; The options generator function defined above.
    'options-generator options-generator
    
    ;; The rendering function defined above.
    'renderer hello-world-renderer))
-

@@ -1,3 +1,9 @@
+2001-04-11  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/hello-world.scm: add a menu tip as an example
+
+	* src/scm/report.scm: add menu names and menu tips to reports
+
 2001-04-11  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/average-balance.scm, category-barchart.scm,
