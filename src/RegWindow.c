@@ -2767,38 +2767,39 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
             regData->qf = getQuickFill( regData->qf, mvcbs->prev_text[i] );
           }
         
-        /* hack alert -- text pointer not valid if non-alpha key hit */
-        /* this will core dump, since ptr is NULL */
-        /* this is not fixed, since the fix is not obvious to me ... */
-        input = (mvcbs->verify->text->ptr)[0];
+        /* ptr will be NULL if the delete key or other 
+         * non-alphanumeric key hit */
+        if (mvcbs->verify->text->ptr) {
+          input = (mvcbs->verify->text->ptr)[0];
 	
-        /* go to qf's child node that corresponds to the
-         * last character inputed by the user */
-        regData->qf = getQuickFill( regData->qf, input );
-        
-        if( (regData->qf != NULL) && (regData->qf->trans != NULL) )
-          {
-          /* char *str = regData->qf->trans->description; */
-          char str[BUFSIZE];
-          strcpy( str, regData->qf->trans->description );
-          DEBUG(str);
+          /* go to qf's child node that corresponds to the
+           * last character inputed by the user */
+          regData->qf = getQuickFill( regData->qf, input );
           
-          mvcbs->verify->doit = False;
+          if( (regData->qf != NULL) && (regData->qf->trans != NULL) )
+            {
+            /* char *str = regData->qf->trans->description; */
+            char str[BUFSIZE];
+            strcpy( str, regData->qf->trans->description );
+            DEBUG(str);
+            
+            mvcbs->verify->doit = False;
+            
+            XbaeMatrixSetCell( mw, row, col, str );
+            XbaeMatrixRefreshCell( mw, row, col );
+            XbaeMatrixSetCursorPosition( mw, regData->insert+1 );
+            }
+          else
+            {
+            char str[BUFSIZE];
+            strncpy( str, mvcbs->prev_text, regData->insert );
+            /* Need to make sure the string is terminated: */
+            str[regData->insert] = '\0';
           
-          XbaeMatrixSetCell( mw, row, col, str );
-          XbaeMatrixRefreshCell( mw, row, col );
-          XbaeMatrixSetCursorPosition( mw, regData->insert+1 );
-          }
-        else
-          {
-          char str[BUFSIZE];
-          strncpy( str, mvcbs->prev_text, regData->insert );
-          /* Need to make sure the string is terminated: */
-          str[regData->insert] = '\0';
-          
-          XbaeMatrixSetCell( mw, row, col, str );
-          XbaeMatrixRefreshCell( mw, row, col );
-          XbaeMatrixSetCursorPosition( mw, regData->insert );
+            XbaeMatrixSetCell( mw, row, col, str );
+            XbaeMatrixRefreshCell( mw, row, col );
+            XbaeMatrixSetCursorPosition( mw, regData->insert );
+            }
           }
         }
 #endif	
