@@ -1,3 +1,54 @@
+2001-08-08  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/engine-helpers.[ch]: remove cruft
+
+	* src/guile/gnc-helpers.c: fix warnings
+
+	* src/import-export/qif-import/gncmod-qif-import.c: include api
+	header
+
+	* src/register/register-gnome/gncmod-register-gnome.c: include api
+	header
+
+	* src/register/register-core/gncmod-register-core.c: include api
+	header
+
+	* src/register/ledger-core/gncmod-ledger-core.c: include api header
+
+	* src/backend/postgres/gncmod-backend-postgres.c: include api header
+
+	* src/backend/rpc/gncmod-backend-rpc.c: include api header
+
+	* src/backend/file/gnc-pricedb-xml-v1.c: fix warning
+
+	* src/backend/file/Makefile.am (SUBDIRS): fix includes
+
+	* src/backend/file/gncmod-backend-file.c: include api header
+
+	* src/engine/gncmod-engine.c: include api header
+
+	* src/gnc-module/test/test-dynload.c: fix warning
+
+	* src/gnc-module/test/misc-mods/agedver.c: include api header
+
+	* src/gnc-module/test/misc-mods/incompatdep.c: include api header
+
+	* src/gnc-module/test/misc-mods/futuremodsys.c: include api header
+
+	* src/gnc-module/test/mod-baz/gnc-mod-baz.c: include api header
+
+	* src/gnc-module/test/mod-bar/gnc-mod-bar.c: include api header
+
+	* src/gnc-module/test/mod-bar/Makefile.am: fix includes
+
+	* src/gnc-module/test/mod-foo/gnc-mod-foo.c: include api header
+
+	* src/gnc-module/test/mod-foo/Makefile.am: fix includes
+
+	* src/gnc-module/gnc-module-api.h: new file. public module api
+
+	* src/gnc-module/Makefile.am: add headers
+
 2001-08-06  Bill Gribble  <grib@billgribble.com>
 
 	* Added module/plugin system (src/gnc-module/*)

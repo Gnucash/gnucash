@@ -4,7 +4,9 @@
 #include <stdio.h>
 #include <guile/gh.h>
 #include <glib.h>
+
 #include "bar-gwrap.h"
+#include "gnc-module-api.h"
 
 int gnc_module_system_interface = 0;
 

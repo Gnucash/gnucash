@@ -3,7 +3,9 @@
 
 #include <stdio.h>
 #include <guile/gh.h>
+
 #include "gnc-module.h"
+#include "gnc-module-api.h"
 #include "baz-gwrap.h"
 
 int gnc_module_system_interface = 0;

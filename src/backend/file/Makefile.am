@@ -2,7 +2,7 @@ SUBDIRS=. test
 
 lib_LTLIBRARIES=libgncmod-backend-file.la
 
-INCLUDES= -I../../engine -I../../gnc-module ${GLIB_CFLAGS} -I../..
+INCLUDES= -I.. -I../../engine -I../../gnc-module ${GLIB_CFLAGS} -I../..
 
 libgncmod_backend_file_la_SOURCES= gncmod-backend-file.c		\
 gnc-account-xml-v2.c gnc-backend-file.c gnc-commodity-xml-v2.c		\

@@ -1,10 +1,12 @@
 /* futuremodsys.c : a gnucash module compiled with a future version of
  * the module system.  gnucash should not be able to load it.  but if
- * it doesn't motice that, the actual interface is compatible with
+ * it doesn't notice that, the actual interface is compatible with
  * version 0 so it will load all the way before failing. */
 
 #include <stdio.h>
 #include <glib.h>
+
+#include "gnc-module-api.h"
 
 int gnc_module_system_interface = 123456;
 

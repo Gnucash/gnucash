@@ -7,7 +7,9 @@
 
 #include <glib.h>
 #include <guile/gh.h>
+
 #include "gnc-module.h"
+#include "gnc-module-api.h"
 
 /* version of the gnc module system interface we require */
 int gnc_module_system_interface = 0;

@@ -8,8 +8,9 @@
 #include <stdio.h>
 #include <guile/gh.h>
 #include <glib.h>
-#include "gnc-engine.h"
 
+#include "gnc-engine.h"
+#include "gnc-module-api.h"
 #include "gw-engine.h"
 
 /* version of the gnc module system interface we require */

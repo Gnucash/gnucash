@@ -302,6 +302,8 @@ pricedb_v2_end_handler(
     return TRUE;
 }
 
+sixtp* gnc_pricedb_parser_new(void);
+
 sixtp*
 gnc_pricedb_parser_new(void) 
 {

@@ -3,6 +3,9 @@
  * Copyright 2001 Linux Developers Group, Inc.
  *************************************************************/
 
+#ifndef GNC_MODULE_H
+#define GNC_MODULE_H
+
 #include <glib.h>
 #include <ltdl.h>
 
@@ -40,3 +43,4 @@ int             gnc_module_use_scm_module(gchar * module_path);
  * 'mod'.  'mod' must be previously loaded. */
 void          * gnc_module_lookup(GNCModule mod, gchar * symbol);
 
+#endif

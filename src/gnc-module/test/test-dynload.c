@@ -10,7 +10,7 @@
 
 #include "gnc-module.h"
 
-void
+static void
 guile_main(int argc, char ** argv) {
   lt_dlhandle handle;
 

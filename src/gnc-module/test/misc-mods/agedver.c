@@ -1,9 +1,10 @@
-/* incompatdep.c : a gnucash module that depends on an incompatible
- * version of another module. the initialization should fail. */
+/* agedver.c : testing module age? */
 
 #include <stdio.h>
 #include <glib.h>
+
 #include "gnc-module.h"
+#include "gnc-module-api.h"
 
 int gnc_module_system_interface = 0;
 
@@ -22,7 +23,7 @@ gnc_module_description(void) {
 }
 
 int 
-gnc_module_init(void) {
+gnc_module_init(int refcount) {
   return TRUE;
 }
 

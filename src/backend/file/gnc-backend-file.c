@@ -23,6 +23,7 @@
 #include "io-gncbin.h"
 #include "io-gncxml-v2.h"
 
+#include "gnc-backend-api.h"
 #include "gnc-book.h"
 #include "gnc-book-p.h"
 #include "gnc-engine.h"
@@ -39,8 +40,6 @@ struct FileBackend_struct
     char *linkfile;
     int lockfd;
 
-    const char *id;
-    
     GNCBook *book;
 };
 
@@ -171,9 +170,6 @@ file_book_end(Backend *be_start)
     if (be->lockfile)
         unlink (be->lockfile);
 
-/*     g_free (be->id); */
-/*     be->id = NULL; */
-
     g_free (be->fullpath);
     be->fullpath = NULL;
 
@@ -197,7 +193,7 @@ file_all_sync(Backend* be, AccountGroup *ag, GNCPriceDB *pricedb)
 }
 
 Backend *
-gnc_backend_new(const char *book_id, void *data)
+gnc_backend_new(void)
 {
     FileBackend *fbe;
     Backend *be;
@@ -232,8 +228,6 @@ gnc_backend_new(const char *book_id, void *data)
     fbe->linkfile = NULL;
     fbe->lockfd = -1;
 
-    fbe->id = book_id;
-    
     fbe->book = NULL;
     
     return be;
@@ -353,7 +347,7 @@ is_gzipped_file(const gchar *name)
     return FALSE;
 }
     
-GNCBookFileType
+static GNCBookFileType
 gnc_file_be_determine_file_type(const char *path)
 {
     if(gnc_is_xml_data_file_v2(path)) {

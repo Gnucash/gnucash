@@ -47,7 +47,7 @@ EXTRA_DIST = \
   table-drop.sql \
   demo.c 
 
-INCLUDES = -I../.. -I../../engine -I../../gnc-module
+INCLUDES = -I.. -I../.. -I../../engine -I../../gnc-module
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
 
 # Some of the required C files are built with the m4 pre-processor

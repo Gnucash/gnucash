@@ -19,6 +19,10 @@ gwmoddir=${GNC_SHAREDIR}/guile-modules/g-wrapped
 gwmod_LTLIBRARIES=libgw-gnc-module.la
 gwmod_DATA=gw-gnc-module-spec.scm 
 
+noinst_HEADERS = \
+  gnc-module-api.h \
+  gnc-module.h
+
 noinst_DATA=.scm-links
 
 .scm-links: 

@@ -34,16 +34,6 @@
 #include <guile/gh.h>
 #include <glib.h>
 
-int           gnc_guid_type(GUID guid);
-GUID          gnc_account_get_guid(Account *account);
-Account     * gnc_account_lookup(GUID guid);
-
-GUID          gnc_trans_get_guid(Transaction *trans);
-Transaction * gnc_trans_lookup(GUID guid);
-
-GUID    gnc_split_get_guid(Split *split);
-Split * gnc_split_lookup(GUID guid);
-
 Timespec gnc_transaction_get_date_posted(Transaction *t);
 Timespec gnc_transaction_get_date_entered(Transaction *t);
 

@@ -39,42 +39,6 @@
 
 #include <g-wrap-runtime-guile.h>
 
-int
-gnc_guid_type(GUID guid)
-{
-  return xaccGUIDType(&guid);
-}
-
-GUID
-gnc_account_get_guid(Account *account) {
-  return *xaccAccountGetGUID(account);
-}
-
-Account *
-gnc_account_lookup(GUID guid) {
-  return xaccAccountLookup(&guid);
-}
-
-GUID
-gnc_trans_get_guid(Transaction *trans) {
-  return *xaccTransGetGUID(trans);
-}
-
-Transaction *
-gnc_trans_lookup(GUID guid) {
-  return xaccTransLookup(&guid);
-}
-
-GUID
-gnc_split_get_guid(Split *split) {
-  return *xaccSplitGetGUID(split);
-}
-
-Split *
-gnc_split_lookup(GUID guid) {
-  return xaccSplitLookup(&guid);
-}
-
 Timespec
 gnc_transaction_get_date_posted(Transaction *t) {
   Timespec result;

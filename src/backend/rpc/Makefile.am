@@ -42,7 +42,7 @@ EXTRA_DIST = \
   README \
   $(RPCGEN_SRCS)
 
-INCLUDES = -I../../engine -I../../gnc-module
+INCLUDES = -I.. -I../../engine -I../../gnc-module
 
 LDADD = -lpthread
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} -DGNCACCT_COMMODITY
