@@ -66,7 +66,7 @@ gpointer pgendGetResults (PGBackend *be,
 /* The gnc_string_to_commodity() routine finds the commodity by
  *     parsing a string of the form NAMESPACE::MNEMONIC
  */
-gnc_commodity * gnc_string_to_commodity (const char *str, GNCSession *session);
+gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
 
 /* hack alert -- calling PQFinish() is quite harsh, since all 
  * subsequent sql queries will fail. On the other hand, killing

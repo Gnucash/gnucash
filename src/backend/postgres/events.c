@@ -265,7 +265,7 @@ pgendProcessEvents (Backend *bend)
       GNCIdType local_obj_type;
 
       /* lets see if the local cache has this item in it */
-      local_obj_type = xaccGUIDType (&(ev->guid), be->session);
+      local_obj_type = xaccGUIDType (&(ev->guid), be->book);
       if ((local_obj_type != GNC_ID_NONE) && (local_obj_type != ev->obj_type))
       {
          PERR ("ouch! object type mismatch, local=%d, event=%d",
@@ -297,7 +297,7 @@ pgendProcessEvents (Backend *bend)
                   xaccGroupMarkSaved (pgendGetTopGroup (be));
                   break;
                case GNC_EVENT_DESTROY: {
-                  Account * acc = xaccAccountLookup (&(ev->guid), be->session);
+                  Account * acc = xaccAccountLookup (&(ev->guid), be->book);
                   xaccAccountBeginEdit (acc);
                   xaccAccountDestroy (acc);
                   xaccGroupMarkSaved (pgendGetTopGroup (be));
@@ -327,7 +327,7 @@ pgendProcessEvents (Backend *bend)
                   break;
                case GNC_EVENT_DESTROY: {
                   Transaction *trans = xaccTransLookup (&(ev->guid),
-                                                        be->session);
+                                                        be->book);
                   xaccTransBeginEdit (trans);
                   xaccTransDestroy (trans);
                   xaccTransCommitEdit (trans);
@@ -352,7 +352,7 @@ pgendProcessEvents (Backend *bend)
       }
    
       /* get the local type again, since we created guid above */
-      local_obj_type = xaccGUIDType (&(ev->guid), be->session);
+      local_obj_type = xaccGUIDType (&(ev->guid), be->book);
       if (GNC_ID_NONE != local_obj_type)
       {
          gnc_engine_generate_event (&(ev->guid), local_obj_type);

@@ -759,7 +759,7 @@ sqlQuery_kvp_build (sqlQuery *sq, KVPPredicateData *kpd)
  */
 
 const char *
-sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
+sqlQuery_build (sqlQuery *sq, Query *q, GNCBook *book)
 {
    GList *il, *jl, *qterms, *andterms;
    QueryTerm *qt;
@@ -774,7 +774,7 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
    gboolean need_entry = FALSE;
    sort_type_t sorter;
 
-   if (!sq || !q || !session) return NULL;
+   if (!sq || !q || !book) return NULL;
 
    /* Determine whether the query will need to reference certain
     * tables. See note above for details. */

@@ -87,7 +87,7 @@ pgendGetAllCommodities (PGBackend *be)
 
    ENTER ("be=%p, conn=%p", be, be->connection);
 
-   comtab = gnc_book_get_commodity_table (gnc_session_get_book (be->session));
+   comtab = gnc_book_get_commodity_table (be->book);
    if (!comtab) {
       PERR ("can't get commodity table");
       return;
@@ -181,7 +181,7 @@ pgendStorePriceDBNoLock (PGBackend *be, GNCPriceDB *prdb)
 {
    gnc_commodity_table *comtab;
 
-   comtab = gnc_book_get_commodity_table (gnc_session_get_book (be->session));
+   comtab = gnc_book_get_commodity_table (be->book);
 
    /* clear the marks on commodities -- we use this to mark 
     * the thing as 'already stored', avoiding redundant stores */
@@ -238,11 +238,11 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* first, lets see if we've already got this one */
    string_to_guid (DB_GET_VAL ("priceGuid", j), &guid);
-   pr = gnc_price_lookup (&guid, be->session);
+   pr = gnc_price_lookup (&guid, be->book);
 
    if (!pr) 
    { 
-      pr = gnc_price_create(be->session);
+      pr = gnc_price_create(be->book);
       gnc_price_begin_edit (pr);
       gnc_price_set_guid (pr, &guid);
       not_found = 1;
@@ -266,10 +266,10 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    }
    gnc_price_set_version (pr, sql_vers);
 
-   modity = gnc_string_to_commodity (DB_GET_VAL("commodity",j), be->session);
+   modity = gnc_string_to_commodity (DB_GET_VAL("commodity",j), be->book);
    gnc_price_set_commodity (pr, modity);
 
-   modity = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->session);
+   modity = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->book);
    gnc_price_set_currency (pr, modity);
 
    ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("time",j));
