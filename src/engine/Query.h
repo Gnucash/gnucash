@@ -38,7 +38,9 @@ typedef struct _Query Query;
 enum {
   BY_DATE,
   BY_NUM,
-  BY_AMOUNT
+  BY_AMOUNT,
+  BY_MEMO,
+  BY_DESC
 };
 
 Query * xaccMallocQuery (void);
@@ -55,6 +57,11 @@ void xaccQueryAddAccount (Query *, Account *acc);
  *    of splits to return as a result of a query.
  */
 void  xaccQuerySetMaxSplits (Query *, int);
+
+/* The xaccQuerySetSortOrder() method sets the sort order that
+ * should be used on the splits 
+ */
+void xaccQuerySetSortOrder (Query *, int, ...); 
 
 /* The xaccQueryGetSplits() method returns a list of splits
  * matching the query and sorting criteria previously set up.

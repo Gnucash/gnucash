@@ -49,6 +49,8 @@ struct _Query {
    Timespec earliest;
    Timespec latest;
 
+   int (*sort_func)(const void*, const void *);
+
    char changed;     /* flag, has the query changed? */
    Split **split_list;
 };
@@ -66,6 +68,8 @@ xaccMallocQuery (void)
 
 /* ================================================== */
 
+static int Sort_DATE_NUM_AMT_MEMO_DESC (Split **, Split **);
+
 void 
 xaccInitQuery (Query *q)
 {
@@ -82,6 +86,8 @@ xaccInitQuery (Query *q)
    /* q->latest.tv_sec = ULONG_MAX; */
    q->latest.tv_sec = LONG_MAX;
    q->latest.tv_nsec = 0; 
+
+   q->sort_func = (int (*)(const void*, const void *)) Sort_DATE_NUM_AMT_MEMO_DESC;
 }
 
 /* ================================================== */
@@ -455,6 +461,14 @@ DECLARE (DESC, MEMO, AMT, NUM,DATE)
 
 /* ================================================== */
 
+void 
+xaccQuerySetSortOrder (Query *q, int a, ...)
+{
+
+}
+
+/* ================================================== */
+
 static void
 SortSplits (Query *q, Split **slist)
 {
@@ -464,9 +478,7 @@ SortSplits (Query *q, Split **slist)
   while (slist[nsplits]) nsplits ++;
 
   /* run the sort routine on the array */
-  qsort (slist, nsplits, sizeof (Split *),
-            (int(*)(const void*, const void *)) xaccSplitOrder);
-  
+  qsort (slist, nsplits, sizeof (Split *), q->sort_func);
 
 }
 
