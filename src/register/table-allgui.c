@@ -235,4 +235,43 @@ xaccTableResizeUserData (Table * table, int new_virt_rows, int new_virt_cols)
    }
 }
 
+/* ==================================================== */
+
+void
+xaccAddCursor (Table *table, CellBlock *curs)
+{
+   CellBlock **old_arr;
+   size_t ncurs = 0;
+
+   /* count the old number of entries */
+   if (table->cursors) {
+      CellBlock *tmp = table->cursors[0];
+      while (tmp) {
+         ncurs ++;
+         tmp = table->cursors[ncurs];
+      }
+   }
+   old_arr = table->cursors;
+
+   /* malloc the list of new handlers */
+   table->cursors = (CellBlock **) malloc ((ncurs+2) * sizeof (CellBlock *));
+
+   /* copy the old array to the new array */
+   ncurs = 0;
+   if (old_arr) {
+      CellBlock *tmp = old_arr[0];
+      while (tmp) {
+         table->cursors[ncurs] = tmp;
+         ncurs ++;
+         tmp = old_arr[ncurs];
+      }
+   }
+
+   /* append the new cursor to the list */
+   table->cursors[ncurs] = curs;
+   table->cursors[ncurs+1] = NULL;
+
+   free (old_arr);
+}
+
 /* ================== end of file ======================= */

@@ -47,6 +47,9 @@ xaccTableResizeStringArr (Table * table, int num_phys_rows, int num_phys_cols);
 extern void 
 xaccTableResizeUserData (Table * table, int new_virt_rows, int new_virt_cols);
 
+extern void 
+xaccAddCursor (Table *table, CellBlock *curs);
+
 #endif /* __XACC_TABLE_ALLGUI_H__ */
 
 /* ================== end of file ======================= */
