@@ -666,6 +666,7 @@ xaccInitTransaction (Transaction * trans)
   trans->date_posted.tv_nsec = 0;
 
   trans->version = 0;
+  trans->version_check = 0;
   trans->marker = 0;
   trans->editlevel = 0;
   trans->do_free = FALSE;

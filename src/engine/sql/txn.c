@@ -129,6 +129,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       if (0 < pgendTransactionCompareVersion (be, trans)) return;
    }
    trans->version ++;  /* be sure to update the version !! */
+   trans->version_check = be->version_check;
 
    /* first, we need to see which splits are in the database
     * since what is there may not match what we have cached in 
@@ -368,6 +369,17 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
       do_set_guid=TRUE;
       engine_data_is_newer = -1;
    }
+   else 
+   {
+      /* save some performance, don't go to the backend if the data is recent. */
+      if (MAX_VERSION_AGE >= be->version_check - trans->version_check) 
+      {
+         PINFO ("fresh data, skip check");
+         pgendEnable(be);
+         gnc_engine_resume_events();
+         return 0;
+      }
+   }
 
    /* build the sql query to get the transaction */
    pbuff = be->buff;
@@ -469,6 +481,9 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
       PQclear (result);
       i++;
    } while (result);
+
+   /* set timestamp as 'recent' for this data */
+   trans->version_check = be->version_check;
 
    /* if engine data was newer, we are done */
    if (0 <= engine_data_is_newer) 

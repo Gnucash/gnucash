@@ -107,6 +107,7 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
      if (0 < pgendAccountCompareVersion (be, acct)) return;
    }
    acct->version ++;  /* be sure to update the version !! */
+   acct->version_check = be->version_check;
 
    pgendPutOneAccountOnly (be, acct);
 
@@ -395,7 +396,16 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
    } 
    else
    {
-      engine_data_is_newer = - pgendAccountCompareVersion (be, acc);
+      /* save some performance, don't go to the backend if the data is recent. */
+      if (MAX_VERSION_AGE >= be->version_check - acc->version_check) 
+      {
+         PINFO ("fresh data, skip check");
+         engine_data_is_newer = 0;
+      }
+      else 
+      {
+         engine_data_is_newer = - pgendAccountCompareVersion (be, acc);
+      }
    }
 
    if (0 > engine_data_is_newer)
@@ -416,6 +426,8 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
       acc->kvp_data = pgendKVPFetch (be, &(acc->guid), acc->kvp_data);
 
       pgendGetAccountCurrencyHack (be, acc);
+
+      acc->version_check = be->version_check;
    }
 
    /* re-enable events to the backend and GUI */
@@ -478,6 +490,7 @@ pgend_account_commit_edit (Backend * bend,
       return 445;
    }
    acct->version ++;   /* be sure to update the version !! */
+   acct->version_check = be->version_check;
 
    if (acct->do_free)
    {
