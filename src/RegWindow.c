@@ -50,7 +50,7 @@
 #include "util.h"
 
 
-#define NUM_COLUMNS        12
+#define NUM_COLUMNS        20
 #define NUM_HEADER_ROWS    2
 #define NUM_ROWS_PER_TRANS 2
 
@@ -92,10 +92,14 @@ typedef struct _RegWindow {
 
   /* structures for controlling the column layout */
   short          numCols;     /* number of columns in the register       */
-  short columnLocation [NUM_COLUMNS];  /* column ordering              */
-  short columnWidths   [NUM_COLUMNS];  /* widths (in chars not pixels) */
-  String columnLabels  [NUM_HEADER_ROWS+NUM_ROWS_PER_TRANS][NUM_COLUMNS]; /* column labels              */
-  unsigned char alignments[NUM_COLUMNS]; /* alignment of display chars */
+
+  short  cellColLocation [NUM_COLUMNS]; /* cell location, column         */
+  short  cellRowLocation [NUM_COLUMNS]; /* cell location, row            */
+  short  columnWidths    [NUM_COLUMNS]; /* widths (in chars not pixels)  */
+
+  String columnLabels  [NUM_HEADER_ROWS + NUM_ROWS_PER_TRANS]
+                       [NUM_COLUMNS];    /* column labels                 */
+  unsigned char alignments[NUM_COLUMNS]; /* alignment of display chars    */
 
 } RegWindow;
 
@@ -147,51 +151,51 @@ extern Pixel negPixel;
 #define MOD_ALL   0xfff
 
 /* These defines are indexes into the column location array */
-#define DATE_COL_ID  0
-#define NUM_COL_ID   1
-#define DESC_COL_ID  2
-#define RECN_COL_ID  3
-#define PAY_COL_ID   4
-#define DEP_COL_ID   5
-#define PRIC_COL_ID  6
-#define SHRS_COL_ID  7
-#define BALN_COL_ID  8 
-#define XFER_COL_ID  9 
+#define DATE_CELL_ID  0
+#define YEAR_CELL_ID  1
+#define NUM_CELL_ID   2
+#define ACTN_CELL_ID  3
+#define XFRM_CELL_ID  4 
+#define XTO_CELL_ID   5 
+#define DESC_CELL_ID  6
+#define MEMO_CELL_ID  7
+#define RECN_CELL_ID  8
+#define PAY_CELL_ID   9
+#define DEP_CELL_ID   10
+#define PRIC_CELL_ID  11
+#define SHRS_CELL_ID  12
+#define BALN_CELL_ID  13
 
-/* the actual column location is pulled out of the column location array */
-#define DATE_CELL_R  0
-#define DATE_CELL_C  (regData->columnLocation[DATE_COL_ID])
-#define YEAR_CELL_R  1
-#define YEAR_CELL_C  DATE_CELL_C  /* same column as the date */
+/* the actual cell location is pulled out of the location array */
+#define DATE_CELL_C  (regData->cellColLocation[DATE_CELL_ID])
+#define YEAR_CELL_C  (regData->cellColLocation[YEAR_CELL_ID])
+#define NUM_CELL_C   (regData->cellColLocation[NUM_CELL_ID])
+#define ACTN_CELL_C  (regData->cellColLocation[ACTN_CELL_ID])
+#define DESC_CELL_C  (regData->cellColLocation[DESC_CELL_ID])
+#define MEMO_CELL_C  (regData->cellColLocation[MEMO_CELL_ID]) 
+#define XFRM_CELL_C  (regData->cellColLocation[XFRM_CELL_ID])
+#define XTO_CELL_C   (regData->cellColLocation[XTO_CELL_ID])
+#define RECN_CELL_C  (regData->cellColLocation[RECN_CELL_ID])
+#define PAY_CELL_C   (regData->cellColLocation[PAY_CELL_ID])
+#define DEP_CELL_C   (regData->cellColLocation[DEP_CELL_ID])
+#define PRIC_CELL_C  (regData->cellColLocation[PRIC_CELL_ID])
+#define SHRS_CELL_C  (regData->cellColLocation[SHRS_CELL_ID])
+#define BALN_CELL_C  (regData->cellColLocation[BALN_CELL_ID]) 
 
-#define NUM_CELL_R   0
-#define NUM_CELL_C   (regData->columnLocation[NUM_COL_ID])
-#define ACTN_CELL_R  1
-#define ACTN_CELL_C  NUM_CELL_C   /* same column as the transaction number */
-
-#define DESC_CELL_R  0
-#define DESC_CELL_C  (regData->columnLocation[DESC_COL_ID])
-#define MEMO_CELL_R  1
-#define MEMO_CELL_C  DESC_CELL_C  /* same column as the description */
-
-#define XFRM_CELL_R  0
-#define XFRM_CELL_C  (regData->columnLocation[XFER_COL_ID])
-#define XTO_CELL_R   1
-#define XTO_CELL_C   XFRM_CELL_C
-
-#define RECN_CELL_R  0
-#define RECN_CELL_C  (regData->columnLocation[RECN_COL_ID])
-#define PAY_CELL_R   0
-#define PAY_CELL_C   (regData->columnLocation[PAY_COL_ID])
-#define DEP_CELL_R   0
-#define DEP_CELL_C   (regData->columnLocation[DEP_COL_ID])
-#define BALN_CELL_R  0
-#define BALN_CELL_C  (regData->columnLocation[BALN_COL_ID]) 
-
-#define PRIC_CELL_R  0
-#define PRIC_CELL_C  (regData->columnLocation[PRIC_COL_ID])
-#define SHRS_CELL_R  0
-#define SHRS_CELL_C  (regData->columnLocation[SHRS_COL_ID])
+#define DATE_CELL_R  (regData->cellRowLocation[DATE_CELL_ID])
+#define YEAR_CELL_R  (regData->cellRowLocation[YEAR_CELL_ID])
+#define NUM_CELL_R   (regData->cellRowLocation[NUM_CELL_ID])
+#define ACTN_CELL_R  (regData->cellRowLocation[ACTN_CELL_ID])
+#define DESC_CELL_R  (regData->cellRowLocation[DESC_CELL_ID])
+#define MEMO_CELL_R  (regData->cellRowLocation[MEMO_CELL_ID]) 
+#define XFRM_CELL_R  (regData->cellRowLocation[XFRM_CELL_ID])
+#define XTO_CELL_R   (regData->cellRowLocation[XTO_CELL_ID])
+#define RECN_CELL_R  (regData->cellRowLocation[RECN_CELL_ID])
+#define PAY_CELL_R   (regData->cellRowLocation[PAY_CELL_ID])
+#define DEP_CELL_R   (regData->cellRowLocation[DEP_CELL_ID])
+#define PRIC_CELL_R  (regData->cellRowLocation[PRIC_CELL_ID])
+#define SHRS_CELL_R  (regData->cellRowLocation[SHRS_CELL_ID])
+#define BALN_CELL_R  (regData->cellRowLocation[BALN_CELL_ID]) 
 
 
 /** CELL MACROS *****************************************************/
@@ -748,15 +752,36 @@ regSaveTransaction( RegWindow *regData, int position )
                  XbaeMatrixGetCell(regData->reg,row+NUM_CELL_R,NUM_CELL_C)); 
     }
   
-  if( regData->changed & MOD_XFRM )
+  if( regData->changed & ( MOD_XFRM | MOD_XTO ) ) 
     {
     /* ... the transfer ... */
     char * name;
-    /* hack alert xxxxxxxxxxxxx this is incorrect for ledger */
-    Account *main_acc = regData->blackacc[0];
-   
-    Account *xfer_acct = xaccGetOtherAccount (main_acc, trans);
-    DEBUG("MOD_XFRM\n");
+    Account *xfer_acct = NULL;
+
+    DEBUG("MOD_XFER\n");
+
+    /* the way that transfers are handled depends on whether this
+     * is a ledger account, or a single-account register */
+    if ( (GEN_LEDGER == regData->type) ||
+         (PORTFOLIO  == regData->type) ) {
+
+      /* for a general ledger, from and to are easy to determine */
+      if (regData->changed & MOD_XFRM) { 
+         xfer_acct = (Account *) trans->debit;
+      } else {
+         xfer_acct = (Account *) trans->credit;
+      }
+    } else {
+
+      /* if not a ledger, then there is only one account,
+       * and the transfer account is the other half of the 
+       * pairing */
+      if (regData->changed & MOD_XFRM) { 
+        xfer_acct = xaccGetOtherAccount (regData->blackacc[0], trans);
+      } else {
+         xfer_acct = NULL;
+      }
+    }
 
     if (xfer_acct) {
       /* remove the transaction from wherever it used to be */
@@ -766,12 +791,12 @@ regSaveTransaction( RegWindow *regData, int position )
       RECALC_BALANCE (xfer_acct);
       REFRESH_REGISTER (xfer_acct);
       }
-       
+     
     /* get the new account name */
     name = XbaeMatrixGetCell(regData->reg,row+XFRM_CELL_R, XFRM_CELL_C);
   
     /* get the new account from the name */
-    xfer_acct = xaccGetPeerAccountFromName (main_acc, name);
+    xfer_acct = xaccGetAccountFromName (topgroup, name);
   
     if (xfer_acct) {
       /* insert the transaction into the new account */
@@ -1167,6 +1192,19 @@ regWindowLedger( Widget parent, Account **acclist )
     /* define where each column shows up, and total number 
      * of columns for this register type.  The number on the 
      * right hand side is the physical location of the column */
+
+    regData->cellColLocation [DATE_CELL_ID] = 0;
+    regData->cellColLocation [YEAR_CELL_ID] = 0;
+    regData->cellColLocation [NUM_CELL_ID]  = 1;
+    regData->cellColLocation [ACTN_CELL_ID] = 1;
+    regData->cellColLocation [XFRM_CELL_ID] = 2;
+    regData->cellColLocation [XTO_CELL_ID]  = 2;
+    regData->cellColLocation [DESC_CELL_ID] = 3;
+    regData->cellColLocation [MEMO_CELL_ID] = 3;
+    regData->cellColLocation [RECN_CELL_ID] = 4;
+    regData->cellColLocation [PAY_CELL_ID]  = 5;
+    regData->cellColLocation [DEP_CELL_ID]  = 6;
+
     switch(regData->type)
       {
       case BANK:
@@ -1177,41 +1215,81 @@ regWindowLedger( Widget parent, Account **acclist )
       case INCOME:
       case EXPENSE:
       case EQUITY:
-        regData->columnLocation [DATE_COL_ID] = 0;
-        regData->columnLocation [NUM_COL_ID]  = 1;
-        regData->columnLocation [XFER_COL_ID] = 2;
-        regData->columnLocation [DESC_COL_ID] = 3;
-        regData->columnLocation [RECN_COL_ID] = 4;
-        regData->columnLocation [PAY_COL_ID]  = 5;
-        regData->columnLocation [DEP_COL_ID]  = 6;
-        regData->columnLocation [BALN_COL_ID] = 7;
+        regData->cellColLocation [XTO_CELL_ID]  = -1;
+        regData->cellColLocation [PRIC_CELL_ID] = -1;
+        regData->cellColLocation [SHRS_CELL_ID] = -1;
+        regData->cellColLocation [BALN_CELL_ID] = 7;
         regData -> numCols = 8;
-
         break;
+
       case STOCK:
       case MUTUAL:
-        regData->columnLocation [DATE_COL_ID] = 0;
-        regData->columnLocation [NUM_COL_ID]  = 1;
-        regData->columnLocation [XFER_COL_ID] = 2;
-        regData->columnLocation [DESC_COL_ID] = 3;
-        regData->columnLocation [RECN_COL_ID] = 4;
-        regData->columnLocation [PAY_COL_ID]  = 5;
-        regData->columnLocation [DEP_COL_ID]  = 6;
-        regData->columnLocation [PRIC_COL_ID] = 7;
-        regData->columnLocation [SHRS_COL_ID] = 8;
-        regData->columnLocation [BALN_COL_ID] = 9;
+        regData->cellColLocation [XTO_CELL_ID]  = -1;
+        regData->cellColLocation [PRIC_CELL_ID] = 7;
+        regData->cellColLocation [SHRS_CELL_ID] = 8;
+        regData->cellColLocation [BALN_CELL_ID] = 9;
         regData -> numCols = 10;
         break;
+
+      case GEN_LEDGER:
+        regData->cellColLocation [XTO_CELL_ID]  = 2;
+        break;
+
       default:
         fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", 
                regData->type);
+      }
+    /* ----------------------------------- */
+    /* define where each row shows up,  The number on the 
+     * right hand side is the physical location of the cell */
+
+    regData->cellRowLocation [DATE_CELL_ID] = 0;
+    regData->cellRowLocation [YEAR_CELL_ID] = 1;
+    regData->cellRowLocation [NUM_CELL_ID]  = 0;
+    regData->cellRowLocation [ACTN_CELL_ID] = 1;
+    regData->cellRowLocation [XFRM_CELL_ID] = 0;
+    regData->cellRowLocation [XTO_CELL_ID]  = 1;
+    regData->cellRowLocation [DESC_CELL_ID] = 0;
+    regData->cellRowLocation [MEMO_CELL_ID] = 1;
+    regData->cellRowLocation [RECN_CELL_ID] = 0;
+    regData->cellRowLocation [PAY_CELL_ID]  = 0;
+    regData->cellRowLocation [DEP_CELL_ID]  = 0;
+    regData->cellRowLocation [BALN_CELL_ID] = 0;
+
+    switch(regData->type)
+      {
+      case BANK:
+      case CASH:
+      case ASSET:
+      case CREDIT:
+      case LIABILITY:
+      case INCOME:
+      case EXPENSE:
+      case EQUITY:
+        regData->cellRowLocation [PRIC_CELL_ID] = -1;
+        regData->cellRowLocation [SHRS_CELL_ID] = -1;
+        regData->cellRowLocation [XTO_CELL_ID]  = -1;
+        break;
+
+      case STOCK:
+      case MUTUAL:
+        regData->cellRowLocation [PRIC_CELL_ID] = 0;
+        regData->cellRowLocation [SHRS_CELL_ID] = 0;
+        regData->cellRowLocation [XTO_CELL_ID]  = -1;
+        break;
+
+      case GEN_LEDGER:
+        regData->cellRowLocation [XTO_CELL_ID]  = 2;
+        break;
+
+      default:
       }
 
     /* ----------------------------------- */
     /* set up column widths */
 
     regData -> columnWidths[DATE_CELL_C] = 5;   /* also YEAR_CELL_C */
-    regData -> columnWidths[NUM_CELL_C]  = 8;   /* also ACTN_CELL_C */
+    regData -> columnWidths[NUM_CELL_C]  = 6;   /* also ACTN_CELL_C */
     regData -> columnWidths[XFRM_CELL_C] = 14;  /* also XTO_CELL_C */
     regData -> columnWidths[DESC_CELL_C] = 30;  /* also MEMO_CELL_C */
     regData -> columnWidths[RECN_CELL_C] = 1;   /* the widths of columns */
@@ -1362,7 +1440,7 @@ regWindowLedger( Widget parent, Account **acclist )
                             XmNcells,               data,
                             XmNfixedRows,           NUM_HEADER_ROWS,
                             XmNfixedColumns,        0,
-                            XmNrows,                NUM_ROWS_PER_TRANS,
+                            XmNrows,                NUM_HEADER_ROWS+NUM_ROWS_PER_TRANS,
                             XmNvisibleRows,         15,
                             XmNfill,                True,
                             XmNcolumns,             regData -> numCols,
@@ -1788,9 +1866,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         }
 
       /* otherwise, move the XTO widget */
-      else if(IN_XTO_CELL(row,col)  &&
-             ((GEN_LEDGER == regData->type) ||
-              (PORTFOLIO  == regData->type)) ) 
+      else if( IN_XTO_CELL(row,col) )
         {
            SetPopBox (regData->xtobox, row, col);
            regData->changed |= MOD_XTO;
@@ -1908,9 +1984,8 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
 
       /* look to see if numeric format is OK.  Note that
        * the share price cell exists only for certain account types */
-      if( IN_PAY_CELL(row,col) || IN_DEP_CELL(row,col) ||
-          ((STOCK  == regData->type) && IN_PRIC_CELL(row,col)) ||
-          ((MUTUAL == regData->type) && IN_PRIC_CELL(row,col)) )
+      if( IN_PAY_CELL (row,col) || IN_DEP_CELL(row,col) ||
+          IN_PRIC_CELL(row,col) )
         {
         /* text pointer is NULL if non-alpha key hit */
         /* for example, the delete key */
@@ -1959,8 +2034,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       if( IN_MEMO_CELL(row,col) )
         regData->changed |= MOD_MEMO;
       
-      if( ((STOCK  == regData->type) && IN_PRIC_CELL(row,col)) ||
-          ((MUTUAL == regData->type) && IN_PRIC_CELL(row,col)) )
+      if( IN_PRIC_CELL(row,col)) 
         regData->changed |= MOD_PRIC;
 
       /* Note: for cell widgets, this callback will never
@@ -1977,9 +2051,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       if( IN_XFRM_CELL(row,col) ) {
         regData->changed |= MOD_XFRM;
       }
-      if(IN_XTO_CELL(row,col)  &&
-        ((GEN_LEDGER == regData->type) || 
-         (PORTFOLIO  == regData->type)) ) {
+      if( IN_XTO_CELL(row,col) ) {
         regData->changed |= MOD_XTO;
       }
 
@@ -2121,13 +2193,13 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
   date.year  = 0;
   
   if (do_year) {
-    sscanf( XbaeMatrixGetCell(mw,row+DATE_CELL_R,col),
+    sscanf( XbaeMatrixGetCell(mw,row,col),
             "%d/%d",&(date.month), &(date.day) );
   }else {
     sscanf( mvcbs->prev_text, 
             "%d/%d",&(date.month), &(date.day) );
   }
-  sscanf( XbaeMatrixGetCell(mw,row+YEAR_CELL_R,col),
+  sscanf( XbaeMatrixGetCell(mw,row+1,col),
           "%d", &(date.year) );
   
   /* If there isn't a valid date in this field, use today's date */
@@ -2230,12 +2302,12 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
   if( changed )
     {
     sprintf( buf,"%2d/%2d", date.month, date.day );
-    XbaeMatrixSetCell( mw, row+DATE_CELL_R, col, buf );
-    XbaeMatrixRefreshCell( mw, row+DATE_CELL_R, col );
+    XbaeMatrixSetCell( mw, row, col, buf );
+    XbaeMatrixRefreshCell( mw, row, col );
     
     sprintf( buf,"%4d", date.year );
-    XbaeMatrixSetCell( mw, row+YEAR_CELL_R, col, buf );
-    XbaeMatrixRefreshCell( mw, row+YEAR_CELL_R, col );
+    XbaeMatrixSetCell( mw, row+1, col, buf );
+    XbaeMatrixRefreshCell( mw, row+1, col );
     }
   }
  
