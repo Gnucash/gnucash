@@ -28,6 +28,7 @@ libgncmod_engine_la_SOURCES = \
   gnc-engine-util.c \
   gnc-engine.c \
   gnc-event.c \
+  gnc-lot.c \
   gnc-numeric.c \
   gnc-pricedb.c \
   gnc-session.c \
@@ -90,6 +91,7 @@ noinst_HEADERS = \
   TransactionP.h \
   gnc-book-p.h \
   gnc-event-p.h \
+  gnc-lot-p.h \
   gnc-pricedb-p.h \
   gnc-session-p.h \
   gncObjectP.h \

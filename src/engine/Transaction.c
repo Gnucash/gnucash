@@ -103,6 +103,7 @@ xaccInitSplit(Split * split, GNCBook *book)
   /* fill in some sane defaults */
   xaccSplitSetAccount(split, NULL);
   split->parent      = NULL;
+  split->lot         = NULL;
 
   split->action      = g_cache_insert(gnc_engine_get_string_cache(), "");
   split->memo        = g_cache_insert(gnc_engine_get_string_cache(), "");

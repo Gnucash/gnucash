@@ -34,9 +34,10 @@ typedef struct account_group_s       AccountGroup;
 typedef struct split_s               Split;
 typedef struct transaction_s         Transaction;
 typedef struct gnc_book_struct       GNCBook;
-typedef struct gnc_session_struct    GNCSession;
 typedef struct gnc_commodity_s       gnc_commodity;
 typedef struct gnc_commodity_table_s gnc_commodity_table;
+typedef struct gnc_lot_struct        GNCLot;
+typedef struct gnc_session_struct    GNCSession;
 
 typedef GList                  AccountList;
 typedef GList                  BookList;

@@ -82,6 +82,8 @@ struct split_s
 
   Account *acc;              /* back-pointer to debited/credited account  */
 
+  GNCLot *lot;               /* back-pointer to debited/credited lot */
+
   Transaction *parent;       /* parent of split                           */
 
   /* The memo field is an arbitrary user-assiged value. 
