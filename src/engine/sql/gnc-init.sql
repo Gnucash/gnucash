@@ -1,39 +1,34 @@
 
 -- these tables roughly mirror the c structs in 
--- TransactionP.h,  AccountP.h and GroupP.h
+-- TransactionP.h,  AccountP.h
 -- these tables are hand-built, but maybe they should be 
 -- autobuilt with the m4 macros ...
 
 
--- each child of a group will have its own record.
-DROP TABLE gncGroup;
-CREATE TABLE gncGroup (
-	groupGuid	CHAR(32) PRIMARY KEY, 
-	parentGuid	CHAR(32)
-);
-
-CREATE INDEX gncGroup_pg_idx ON gncGroup (parentGuid);
-
+-- Account structure -- parentGUID points to parent account
+-- guid. There is no supports for Groups in this schema.
+-- (there seems to be no strong need to have groups in the DB.)
+--
 -- hack alert -- add the kvp frames, the currency tables,
               -- the current balances, etc
 
 DROP TABLE gncAccount;
 CREATE TABLE gncAccount (
 	accountGuid	CHAR(32) PRIMARY KEY,
---	parentGuid	CHAR(32),
+	parentGuid	CHAR(32),
 --	childrenGuid	CHAR(32),
 	accountName 	TEXT DEFAULT 'xoxo',
 	accountCode 	TEXT,
 	description 	TEXT,
 	notes	 	TEXT,
-	type		INT2,
+	type		TEXT,
 	currency	TEXT
 );
 
 -- CREATE INDEX gncAccount_pg_idx ON gncAccount (parentGuid);
 -- CREATE INDEX gncAccount_ch_idx ON gncAccount (childrenGuid);
 
--- hack alert -- docref ??
+-- hack alert -- add kvp frames ??
 
 DROP TABLE gncTransaction;
 CREATE TABLE gncTransaction (
@@ -55,21 +50,25 @@ CREATE TABLE gncEntry (
 	action			TEXT,
 	reconciled		CHAR,
 	date_reconciled 	DATETIME,
-	amount			FLOAT8 DEFAULT '0.0',
-	share_price		FLOAT8 DEFAULT '0.0'
+	amountNum		INT8 DEFAULT '0',
+	amountDenom		INT8 DEFAULT '100',
+	valueNum		INT8 DEFAULT '0',
+	valueDenom		INT8 DEFAULT '100'
 );
 
 CREATE INDEX gncEntry_acc_idx ON gncEntry (accountGuid);
 CREATE INDEX gncEntry_trn_idx ON gncEntry (transGuid);
 
 -- populate with some bogus data
-INSERT INTO gncAccount (accountGuid, accountName, description) VALUES
+INSERT INTO gncAccount (accountGuid, accountName, type, description) VALUES
     ('9101752f77d6615dcdc0fffe24f0de2',
      'Swipe Trading Account', 
+     'STOCK',
      'Swipe Brokers Margin Account');
-INSERT INTO gncAccount (accountGuid, accountName, description) VALUES
+INSERT INTO gncAccount (accountGuid, accountName, type, description) VALUES
     ('0d7c1819693c85c16d5556b37f6caf9d',
      'Stock Dividends &amp; Distributions',
+     'BANK',
      'Stock Dividends &amp; Distributions');
 
 INSERT INTO gncTransaction (transGuid, date_entered, 
@@ -80,3 +79,9 @@ INSERT INTO gncTransaction (transGuid, date_entered,
      '101aaa',
      'Interest at 3.5%');
 
+INSERT INTO gncEntry (entryGuid, memo, reconciled, amountNum,valueNum) VALUES
+    ('d56a1146e414a30d6f2e251af2075f71',
+     'this is a split memo',
+     'Y',
+     700000,
+     700000);

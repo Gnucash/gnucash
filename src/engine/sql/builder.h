@@ -55,6 +55,10 @@ extern void sqlBuild_Set_Date (sqlBuilder *b,
                                const char *tag,
                                Timespec val);
 
+extern void sqlBuild_Set_Int64 (sqlBuilder *b,
+                               const char *tag,
+                               gint64 val);
+
 
 /* build the update 'where' clause */
 /* typically, the primary tag is used in the where clauses */

@@ -24,8 +24,10 @@
 #include "builder.h"
 #include "Group.h"
 #include "gnc-book.h"
-#include "guid.h"
 #include "gnc-engine-util.h"
+#include "guid.h"
+#include "GNCId.h"
+#include "GNCIdP.h"
 #include "TransactionP.h"
 
 #include "PostgresBackend.h"
@@ -142,8 +144,13 @@ static short module = MOD_BACKEND;
    free ((char *) tmp); 					\
 } 
 
-/* hack alert -- not-implemented comapre one char only */
+/* comapre one char only */
 #define COMP_CHAR(sqlname,fun, ndiffs) { 			\
+    if (tolower((GET_DB_VAL(sqlname,0))[0]) != tolower(fun)) {	\
+       PINFO("%s sql=%c eng=%c", sqlname, 			\
+         tolower((GET_DB_VAL(sqlname,0))[0]), tolower(fun)); 	\
+      ndiffs++; 						\
+   }								\
 }
 
 /* assumes the datestring is in ISO-8601 format 
@@ -163,41 +170,16 @@ static short module = MOD_BACKEND;
    }								\
 }
 
+#define COMP_INT64(sqlname,fun,ndiffs) { 			\
+   if (atoll (GET_DB_VAL(sqlname,0)) != fun) {			\
+      PINFO("%s sql='%s', eng='%lld'", sqlname, 		\
+         GET_DB_VAL (sqlname,0), fun); 				\
+      ndiffs++; 						\
+   }								\
+}
 /* ============================================================= */
 
 #include "tmp.c"
-
-/* ============================================================= */
-/* This routine stores the indicated group structure into the database.
- * It does *not* chase pointers, traverse the tree, etc. 
- * It performs no locking.
- */
-
-static void
-pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp, int update)
-{
-   ENTER ("be=%p, grp=%p", be, grp);
-   if (!be || !grp) return;
-   LEAVE (" ");
-}
-
-/* ============================================================= */
-/* this routine routine returns non-zero if the indicated group 
- * differs from that in the SQL database.
- * this routine grabs no locks.
- */
-
-static int 
-pgendCompareOneGroupOnly (PGBackend *be, AccountGroup *grp)
-{
-   int ndiffs=-1;
-
-   ENTER ("be=%p, grp=%p", be, grp);
-   if (!be || !grp) return -1;
-
-   LEAVE (" ");
-   return ndiffs;
-}
 
 /* ============================================================= */
 /* This routine updates the account structure if needed, and/or
@@ -205,7 +187,6 @@ pgendCompareOneGroupOnly (PGBackend *be, AccountGroup *grp)
  * Note that it sets a mark to avoid excessive recursion:
  * This routine shouldn't be used outside of locks,
 where the recursion prevention clears the marks ...
-ah hell. this is a bad idea maybe ....
  */
 
 static void
@@ -287,18 +268,11 @@ traverse_cb (Transaction *trans, void *cb_data)
 static void
 pgendStoreGroupMarkNoLock (PGBackend *be, AccountGroup *grp)
 {
-   int i, nacc, ndiffs;
+   int i, nacc;
 
    if (!be || !grp) return;
 
-   /* first, store the top-group */
-   ndiffs = pgendCompareOneGroupOnly (be, grp);
-   /* update group if there are differences ... */
-   if (0<ndiffs) pgendStoreOneGroupOnly (be, grp, 1);
-   /* insert group if it doesn't exist */
-   if (0>ndiffs) pgendStoreOneGroupOnly (be, grp, 0);
-
-   /* next, walk the account tree, and store subaccounts */
+   /* walk the account tree, and store subaccounts */
    nacc = xaccGroupGetNumAccounts(grp);
 
    for (i=0; i<nacc; i++) {
@@ -375,25 +349,32 @@ pgendGetOneSplitOnly (PGBackend *be, Split *split, GUID *guid)
 }
 
 /* ============================================================= */
-/* this routine returns a list of accounts
- * hack alert unfinished, incomplete 
+/* This routine restores the account heirarchy of *all* accounts in the DB.
+ * It implicitly assumes that the database has only one account
+ * heirarchy in it, i.e. anny accounts without a parent will be stuffed
+ * into the same top group.
+ *
+ * hack alert -- not all account fields being restored.
+ * sepcifically, need to handle currency
  */
 
-static GList *
-pgendGetAccounts (PGBackend *be)
+static AccountGroup *
+pgendGetAllAccounts (PGBackend *be)
 {
    PGresult *result;
-   GList *list=NULL;
+   AccountGroup *topgrp;
    char * buff;
-   int i, nrows;
+   int i, nrows, iacc;
 
    ENTER ("be=%p", be);
    if (!be) return NULL;
 
+   /* Get them ALL */
    buff = "SELECT * FROM gncAccount;";
    SEND_QUERY (be, buff, NULL);
 
-   i=0; nrows=0;
+   i=0; nrows=0; iacc=0;
+   topgrp = xaccMallocAccountGroup();
    do {
       GET_RESULTS (be->connection, result);
       {
@@ -406,13 +387,43 @@ pgendGetAccounts (PGBackend *be)
 
          for (j=0; j<jrows; j++)
          {
-            Account *acc = xaccMallocAccount();
+            Account *parent;
+            Account *acc;
             GUID guid;
+
+            /* first, lets see if we've already got this one */
             string_to_guid (GET_DB_VAL("accountGUID",j), &guid);
-            xaccAccountSetGUID(acc, &guid);
+            acc = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
+            if (!acc) 
+            {
+               acc = xaccMallocAccount();
+               xaccAccountSetGUID(acc, &guid);
+            }
+
             xaccAccountSetName(acc, GET_DB_VAL("accountName",j));
             xaccAccountSetDescription(acc, GET_DB_VAL("description",j));
-            list = g_list_append (list, acc);
+            xaccAccountSetCode(acc, GET_DB_VAL("accountCode",j));
+            xaccAccountSetType(acc, xaccAccountStringToEnum(GET_DB_VAL("type",j)));
+            /* try to find the parent account */
+            string_to_guid (GET_DB_VAL("parentGUID",j), &guid);
+            if (guid_equal(xaccGUIDNULL(), &guid)) 
+            {
+               /* if the parent guid is null, then this
+                * account belongs in the top group */
+               xaccGroupInsertAccount (topgrp, acc);
+            }
+            else
+            {
+               /* if we haven't restored the parent account, create
+                * an empty holder for it */
+               parent = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
+               if (!parent)
+               {
+                  parent = xaccMallocAccount();
+                  xaccAccountSetGUID(parent, &guid);
+               }
+               xaccAccountInsertSubAccount(parent, acc);
+            }
          }
       }
 
@@ -421,12 +432,12 @@ pgendGetAccounts (PGBackend *be)
    } while (result);
 
    LEAVE (" ");
-   return list;
+   return topgrp;
 }
 
 /* ============================================================= */
 
-int
+static int
 pgend_trans_commit_edit (Backend * bend, 
                          Transaction * trans,
                          Transaction * oldtrans)
@@ -488,11 +499,10 @@ pgend_trans_commit_edit (Backend * bend,
 
 /* ============================================================= */
 
-AccountGroup *
+static AccountGroup *
 pgend_session_begin (GNCBook *sess, const char * sessionid)
 {
    AccountGroup *grp;
-   GList *accts;
    PGBackend *be;
 
    if (!sess) return NULL;
@@ -525,24 +535,20 @@ pgend_session_begin (GNCBook *sess, const char * sessionid)
    SEND_QUERY (be,be->buff,NULL);
    FINISH_QUERY(be->connection);
 
-   grp = xaccMallocAccountGroup();
-   accts = pgendGetAccounts (be);
-   while (accts) 
-   {
-      xaccGroupInsertAccount(grp,(Account *) accts->data);
-      accts = accts->next;
-   }
+   grp = pgendGetAllAccounts (be);
 
-#if 0
 {
 /* stupid test */
 GUID guid;
 Transaction *trans=xaccMallocTransaction();
+Split *s=xaccMallocSplit();
 string_to_guid ("2ebc806e72c17bdc3c2c4e964b82eff8", &guid);
 xaccTransSetGUID(trans,&guid);
 pgendCompareOneTransactionOnly (be,trans);
+string_to_guid ("d56a1146e414a30d6f2e251af2075f71", &guid);
+xaccSplitSetGUID(s,&guid);
+pgendCompareOneSplitOnly (be,s);
 }
-#endif
 
    LEAVE(" ");
    return grp;

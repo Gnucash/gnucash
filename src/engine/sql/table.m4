@@ -9,6 +9,8 @@ define(`account', `gncAccount, Account,
        accountCode,    , char *, xaccAccountGetCode(ptr),
        description,    , char *, xaccAccountGetDescription(ptr),
        notes,          , char *, xaccAccountGetNotes(ptr),
+       type,           , char *, xaccAccountTypeEnumAsString(xaccAccountGetType(ptr)),
+       parentGUID,     , GUID *, xaccAccountGetGUID(xaccAccountGetParentAccount(ptr)),
        accountGUID, KEY, GUID *, xaccAccountGetGUID(ptr),
        ')
 
@@ -18,8 +20,12 @@ define(`split', `gncEntry, Split,
        transGUID,       , GUID *,   xaccTransGetGUID(xaccSplitGetParent(ptr)),
        memo,            , char *,   xaccSplitGetMemo(ptr),
        action,          , char *,   xaccSplitGetAction(ptr),
-       reconciled,      , char  ,   xaccSplitGetReconcile(ptr),
+       reconciled,      , char,     xaccSplitGetReconcile(ptr),
        date_reconciled, , Timespec, xaccSplitRetDateReconciledTS(ptr),
+       amountNum,       , int64,    gnc_numeric_num(xaccSplitGetShareAmount(ptr)),
+       amountDenom,     , int64,    gnc_numeric_denom(xaccSplitGetShareAmount(ptr)),
+       valueNum,        , int64,    gnc_numeric_num(xaccSplitGetValue(ptr)),
+       valueDenom,      , int64,    gnc_numeric_denom(xaccSplitGetValue(ptr)),
        entryGUID,    KEY, GUID *,   xaccSplitGetGUID(ptr),
        ')
 
@@ -48,9 +54,10 @@ define(`sql_setter', `ifelse($2, `KEY',
 
                              $2,     ,
                      `ifelse($1, `char *',   sqlBuild_Set_Str,
+                             $1, `int64',    sqlBuild_Set_Int64,
                              $1, `GUID *',   sqlBuild_Set_GUID,
                              $1, `Timespec', sqlBuild_Set_Date,
-                             $1, `char  ',   sqlBuild_Set_Char)')')
+                             $1, `char',     sqlBuild_Set_Char)')')
 
 
 /* recursively walk the table, build the builders */
@@ -65,9 +72,10 @@ define(`set_fields', `set_fields_r(firstrec($@))')
 /* macros to compare a query result */
 
 define(`cmp_value', `ifelse($1, `char *',   COMP_STR,
+                            $1, `int64',    COMP_INT64,
                             $1, `GUID *',   COMP_GUID,
                             $1, `Timespec', COMP_DATE,
-                            $1, `char  ',   COMP_CHAR)')
+                            $1, `char',     COMP_CHAR)')
 
 /* recursively walk the table, build compare functions,
  * but only for non-primary-keys */

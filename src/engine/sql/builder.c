@@ -207,6 +207,43 @@ sqlBuild_Set_Date (sqlBuilder *b, const char *tag, Timespec ts)
 /* ================================================ */
 
 void
+sqlBuild_Set_Int64 (sqlBuilder *b, const char *tag, gint64 nval)
+{
+   char val[100];
+   if (!b || !tag) return;
+
+   snprintf (val, 100, "%lld", nval);
+   if (b->tag_need_comma) b->ptag = stpcpy(b->ptag, ", ");
+   b->tag_need_comma = 1;
+
+   switch (b->qtype) 
+   {
+      case SQL_INSERT:
+         b->ptag = stpcpy(b->ptag, tag);
+
+         if (b->val_need_comma) b->pval = stpcpy(b->pval, ", ");
+         b->val_need_comma = 1;
+         b->pval = stpcpy(b->pval, val);
+         break;
+
+      case SQL_UPDATE:
+         b->ptag = stpcpy(b->ptag, tag);
+         b->ptag = stpcpy(b->ptag, "=");
+         b->ptag = stpcpy(b->ptag, val);
+         break;
+
+      case SQL_SELECT:
+         b->ptag = stpcpy(b->ptag, tag);
+         break;
+
+      default:
+         PERR ("mustn't happen");
+   };
+}
+
+/* ================================================ */
+
+void
 sqlBuild_Where_Str (sqlBuilder *b, const char *tag, const char *val)
 {
    if (!b || !tag || !val) return;
