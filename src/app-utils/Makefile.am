@@ -88,6 +88,6 @@ gw-app-utils.c gw-app-utils.h: .scm-links gw-app-utils-spec.scm
 	  (primitive-load \"./gw-app-utils-spec.scm\") \
 	  (gw:generate-module \"gw-app-utils\")"
 
-BUILT_SOURCES += gw-app-utils.c gw-app-utils.h
-CLEANFILES += gw-app-utils.c gw-app-utils.h gw-app-utils.html \
+BUILT_SOURCES = gw-app-utils.c gw-app-utils.h
+CLEANFILES = gw-app-utils.c gw-app-utils.h gw-app-utils.html \
               gnucash g-wrapped .scm-links

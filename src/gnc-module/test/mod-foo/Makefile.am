@@ -24,5 +24,5 @@ foo-gwrap.c foo-gwrap.h: foo-gwrap.scm
 	  (primitive-load \"./foo-gwrap.scm\") \
 	  (gw:generate-module \"foo-gwrap\")"
 
-BUILT_SOURCES += foo-gwrap.c foo-gwrap.h
-CLEANFILES += *.so* *.a foo-gwrap.c foo-gwrap.h foo-gwrap.html
+BUILT_SOURCES = foo-gwrap.c foo-gwrap.h
+CLEANFILES = *.so* *.a foo-gwrap.c foo-gwrap.h foo-gwrap.html

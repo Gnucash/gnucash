@@ -108,7 +108,7 @@ gnucash-run-script: gnucash-run-script.in
 	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:'
 	mv $@.tmp $@
 BUILT_SOURCES = gnucash-run-script
-CLEANFILES += gnucash-run-script
+CLEANFILES = gnucash-run-script
 
 gnucash-make-guids: gnucash-make-guids.in
 	rm -f $@.tmp

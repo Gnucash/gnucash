@@ -579,3 +579,34 @@
 		 (gnc:account-get-comm-balance-interval 
 		  account from to #t)) group))
     this-collector))
+
+;; utility function - ensure that a query matches only non-voids.  Destructive.
+(define (gnc:query-set-match-non-voids-only! query group)
+  (let ((temp-query (gnc:malloc-query)))
+     (gnc:query-set-group temp-query group)
+     
+     (gnc:query-add-cleared-match
+	     temp-query
+	     'cleared-match-voided
+	     'query-and)
+
+     (set! temp-query (gnc:query-invert temp-query))
+
+     (set! query (gnc:query-merge query temp-query 'query-and))))
+
+;; utility function - ensure that a query matches only voids.  Destructive
+
+(define (gnc:query-set-match-voids-only! query group)
+  (let ((temp-query (gnc:malloc-query)))
+     (gnc:query-set-group temp-query group)
+     
+     (gnc:query-add-cleared-match
+	     temp-query
+	     'cleared-match-voided
+	     'query-and)
+
+     (set! query (gnc:query-merge query temp-query 'query-and))))
+
+(define (gnc:split-voided? split)
+  (let ((trans (gnc:split-get-parent split)))
+    (gnc:transaction-get-void-status trans)))

@@ -5,13 +5,13 @@ bin_PROGRAMS = hello hello2 fastcgi-hello hello3 gnc-server
 
 EXTRA_DIST = .cvsignore
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} 
+CFLAGS = ${GLIB_CFLAGS} 
 
 LDADD = 			\
   ../../engine/libgncengine.la 	\
   -lxml -lghttp -lglib -lfcgi -ldl
 
-INCLUDES =
+#INCLUDES =
 
 hello_SOURCES = \
   hello.c
@@ -31,11 +31,11 @@ gnc_server_SOURCES = \
 noinst_HEADERS = 
 
 
-EXTRA_DIST = \
+EXTRA_DIST += \
   .cvsignore \
   README 
 
-CFLAGS = @CFLAGS@ 
+#CFLAGS = @CFLAGS@ 
 
 #  glib puts its header files in a bizarre place ...
 INCLUDES = 			\

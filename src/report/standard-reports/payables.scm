@@ -262,6 +262,7 @@ more than one currency.  This report is not designed to cope with this possibili
     (gnc:debug "begindate" begindate)
     (gnc:debug "date" date)
     (gnc:query-set-group query (gnc:get-current-group))
+    (gnc:query-set-match-non-voids-only! query (gnc:get-current-group))
     (gnc:query-add-single-account-match query account 'query-and)
     (gnc:query-add-date-match-timepair query #t begindate #t date 'query-and)
     (gnc:query-set-sort-order query 'by-date 'by-none 'by-none)

@@ -49,6 +49,7 @@
 (define optname-sec-sortkey (N_ "Secondary Key"))
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
 (define optname-sec-date-subtotal (N_ "Secondary Subtotal for Date Key"))
+(define optname-void-transactions (N_ "Void Transactions?"))
 (define def:grand-total-style "grand-total")
 (define def:normal-row-style "normal-row")
 (define def:alternate-row-style "alternate-row")
@@ -336,7 +337,9 @@
          (currency (if account
                        (gnc:account-get-commodity account)
                        (gnc:default-currency)))
-         (damount (gnc:split-get-amount split))
+         (damount (if (gnc:split-voided? split)
+					 (gnc:split-void-former-amount split)
+					 (gnc:split-get-amount split)))
          (split-value (gnc:make-gnc-monetary 
                        currency 
                        (if (member account-type account-types-to-reverse) 
@@ -490,7 +493,31 @@
                       (N_ "Exclude Transactions to/from Filter Accounts")
                       (N_ "Exclude transactions to/from all filter accounts"))
 	      )))
-      
+
+
+      ;;
+
+      (gnc:register-trep-option
+       (gnc:make-multichoice-option
+	gnc:pagename-accounts optname-void-transactions
+	"d" (N_ "how to handle void transactions")
+	'non-void-only
+	(list (vector
+	       'non-void-only
+	       (N_ "Non-void only")
+	       (N_ "Show only non-voided transactions"))
+	      (vector
+	       'void-only
+	       (N_ "Void only")
+	       (N_ "Show only voided transactions"))
+	      (vector 
+	       'both
+	       (N_ "Both")
+		(N_ "Show both (and include void transactions in totals)")))))
+	     
+	
+	'void-only
+	'all
   ;; Sorting options
   
 
@@ -1045,6 +1072,7 @@ and Income accounts")))))
         (primary-order (opt-val pagename-sorting "Primary Sort Order"))
         (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
         (secondary-order (opt-val pagename-sorting "Secondary Sort Order"))
+	(void-status (opt-val gnc:pagename-accounts optname-void-transactions))
         (splits '())
         (query (gnc:malloc-query)))
 
@@ -1068,6 +1096,13 @@ and Income accounts")))))
                                          (eq? primary-order 'ascend)
                                          (eq? secondary-order 'ascend)
                                          #t)
+
+	  (case void-status
+	   (('non-void-only) 
+	    (gnc:query-set-match-non-voids-only! query (gnc:get-current-group)))
+	   (('void-only)
+	    (gnc:query-set-match-voids-only! query (gnc:get-current-group)))
+	   (else #f))
 
           (set! splits (gnc:glist->list (gnc:query-get-splits query)
                                         <gnc:Split*>))

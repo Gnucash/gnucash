@@ -24,5 +24,5 @@ bar-gwrap.c bar-gwrap.h: bar-gwrap.scm
 	  (primitive-load \"./bar-gwrap.scm\") \
 	  (gw:generate-module \"bar-gwrap\")"
 
-BUILT_SOURCES += bar-gwrap.c bar-gwrap.h
-CLEANFILES += *.so* *.a bar-gwrap.c bar-gwrap.h bar-gwrap.html
+BUILT_SOURCES = bar-gwrap.c bar-gwrap.h
+CLEANFILES = *.so* *.a bar-gwrap.c bar-gwrap.h bar-gwrap.html

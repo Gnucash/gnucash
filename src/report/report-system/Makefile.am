@@ -50,4 +50,4 @@ gncscm_DATA = \
 
 EXTRA_DIST = ${gncscmmod_DATA} ${gncscm_DATA}
 
-CLEANFILES += gnucash report .scm-links
+CLEANFILES = gnucash report .scm-links

@@ -535,6 +535,9 @@
 (export gnc:account-get-balance-interval)
 (export gnc:account-get-comm-balance-interval)
 (export gnc:group-get-comm-balance-interval)
+(export gnc:query-set-match-non-voids-only!)
+(export gnc:query-set-match-voids-only!)
+(export gnc:split-voided?)
 
 (load-from-path "commodity-utilities.scm")
 (load-from-path "html-barchart.scm")

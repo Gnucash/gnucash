@@ -52,7 +52,7 @@ EXTRA_DIST = \
 bin_SCRIPTS = gnucash-config
 
 BUILT_SOURCES = gnucash-config
-CLEANFILES += gnucash-config
+CLEANFILES = gnucash-config
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
@@ -90,7 +90,7 @@ gnucash-config: gnucash-config.in
 	mv $@.tmp $@
 
 
-DISTCLEANFILES += \
+DISTCLEANFILES = \
   cscope.files cscope.out etags.files make-gnucash-patch
 
 cscope.files:

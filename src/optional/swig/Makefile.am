@@ -90,7 +90,7 @@ gnucash.engine.i: ${SWIG_INPUT_HDRS} perl5_typemaps.i
           echo "%include \"`basename $$file`\"" >> $@; \
 	done
 
-CLEANFILES += gnucash.engine.i
+CLEANFILES = gnucash.engine.i
 
 gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c: gnucash.engine.i
 	${SWIG} -perl5 -I.. -I${top_srcdir}/src/engine -o $@ gnucash.engine.i

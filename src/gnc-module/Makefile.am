@@ -42,6 +42,6 @@ gw-gnc-module.c gw-gnc-module.h: gw-gnc-module-spec.scm
 	  (primitive-load \"./gw-gnc-module-spec.scm\") \
 	  (gw:generate-module \"gw-gnc-module\")"
 
-BUILT_SOURCES += gw-gnc-module.h gw-gnc-module.c
-CLEANFILES += gw-gnc-module.h gw-gnc-module.c gw-gnc-module.html g-wrapped \
+BUILT_SOURCES = gw-gnc-module.h gw-gnc-module.c
+CLEANFILES = gw-gnc-module.h gw-gnc-module.c gw-gnc-module.html g-wrapped \
 gnucash .scm-links

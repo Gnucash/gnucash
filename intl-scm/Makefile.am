@@ -6,6 +6,6 @@ EXTRA_DIST = \
 guile-strings.c:
 	rm -f guile-strings.c
 	guile -s ./xgettext.scm `find ../src -name '*.scm'`
-CLEANFILES += guile-strings.c
+CLEANFILES = guile-strings.c
 
 all-local: guile-strings.c

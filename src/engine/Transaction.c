@@ -67,6 +67,7 @@ int force_double_entry = 0;
 
 const char *void_reason_str = "void-reason";
 const char *void_former_amt_str = "void-former-amount";
+const char *void_former_val_str = "void-former-value";
 
 #define PRICE_SIGFIGS 6
 
@@ -2590,6 +2591,10 @@ xaccTransVoid(Transaction *transaction,
     
     kvp_frame_set_slot_nc(frame, void_former_amt_str, val);
     
+    amt = xaccSplitGetValue(split);
+    val = kvp_value_new_gnc_numeric(amt);
+    kvp_frame_set_slot_nc(frame, void_former_val_str, val);
+
     xaccSplitSetAmount(split, zero);
     xaccSplitSetReconcile(split, VREC);
   }
@@ -2650,6 +2655,25 @@ gnc_numeric xaccSplitVoidFormerAmount(Split *split)
 
   return amt;
   
+}
+
+gnc_numeric xaccSplitVoidFormerValue(Split *split)
+{
+   kvp_frame *frame;
+  kvp_value *val;
+  gnc_numeric amt = gnc_numeric_zero();
+  g_return_val_if_fail(split, amt);
+
+  frame = xaccSplitGetSlots(split);
+
+  val = kvp_frame_get_slot(frame, void_former_val_str);
+  
+  if(val)
+  {
+    amt = kvp_value_get_numeric(val);
+  }
+
+  return amt;
 }
 /************************ END OF ************************************\
 \************************* FILE *************************************/

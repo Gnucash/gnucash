@@ -356,7 +356,7 @@
 				 "QueryOp" "const QueryOp")))
     (gw:enum-add-value! wt "QUERY_AND" 'query-and)
     (gw:enum-add-value! wt "QUERY_OR" 'query-or)
-    (gw:enum-add-value! wt "QUERY_NAND" 'query-nadd)
+    (gw:enum-add-value! wt "QUERY_NAND" 'query-nand)
     (gw:enum-add-value! wt "QUERY_NOR" 'query-nor)
     (gw:enum-add-value! wt "QUERY_XOR" 'query-xor))
 
@@ -732,6 +732,47 @@ value.  It is meant to be a short descriptive phrase.")
    "xaccTransGetNotes"
    '((<gnc:Transaction*> t))
    "Return the transaction notes field.")
+
+  (gw:wrap-function
+   mod
+   'gnc:transaction-void
+   '(<gw:void>)
+   "xaccTransVoid"
+   '((<gnc:Transaction*> transaction)
+     ((<gw:m-chars-caller-owned> gw:const) reason))
+   "Void a transaction")
+
+  (gw:wrap-function
+   mod
+   'gnc:transaction-get-void-status
+   '<gw:bool>
+   "xaccTransGetVoidStatus"
+   '((<gnc:Transaction*> transaction))
+   "Return true if a transaction has been voided")
+
+  (gw:wrap-function
+   mod
+   'gnc:transaction-get-void-reason
+   '<gw:m-chars-callee-owned>
+   "xaccTransGetVoidReason"
+   '((<gnc:Transaction*> transaction))
+   "return a string indicating reason for voiding")
+   
+  (gw:wrap-function
+   mod
+   'gnc:split-void-former-amount
+   '<gnc:numeric>
+   "xaccSplitVoidFormerAmount"
+   '((<gnc:Split*> split))
+   "get what the split's amount before voiding")
+
+  (gw:wrap-function
+   mod
+   'gnc:split-void-former-value
+   '<gnc:numeric>
+   "xaccSplitVoidFormerValue"
+   '((<gnc:Split*> split))
+   "get what the split's value was before voiding")
 
   (gw:wrap-function
    mod
@@ -1944,7 +1985,7 @@ of having a parent transaction with which one is working...")
    'gnc:query-add-cleared-match
    '<gw:void>
    "xaccQueryAddClearedMatch"
-   '((<gnc:Query*> q) (<gw:int> cleared-how) (<gnc:query-op> how))
+   '((<gnc:Query*> q) (<gnc:cleared-match-how> cleared-how) (<gnc:query-op> how))
    "match the cleared state.")
 
   (gw:wrap-function

@@ -1,3 +1,20 @@
+2001-10-03  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* */Makefile.am: changes for automake 1.5 compatibility (still not 
+	perfect).
+
+	* configure.in: changes for automake 1.5 compatibility
+
+	* src/engine/transaction.c: store values as well as amounts in voided splits'
+	kvp frames
+
+	* src/engine/gw-engine-spec.scm: wrap voiding functions
+
+	* src/report/report-system/report-utilities.scm: added some convenience functions
+	for adding voiding checks to queries and checking the voiding status of splits.
+
+	* src/report/standard-reports/*: fixed up queries to exclude voids as appropriate.
+
 2001-10-01  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/Transaction.{ch} (xaccTransVoid), (xaccTransGetVoidStatus),

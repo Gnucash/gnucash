@@ -167,7 +167,7 @@ do
       automake --add-missing --gnu $am_opt ||
 	{ echo "**Error**: automake failed."; exit 1; }
       echo "Running autoconf ..."
-      autoconf || { echo "**Error**: autoconf failed."; exit 1; }
+      autoconf2.50 || { echo "**Error**: autoconf failed."; exit 1; }
     ) || exit 1
   fi
 done

@@ -26,5 +26,5 @@ baz-gwrap.c baz-gwrap.h: baz-gwrap.scm
 	  (primitive-load \"./baz-gwrap.scm\") \
 	  (gw:generate-module \"baz-gwrap\")"
 
-BUILT_SOURCES += baz-gwrap.c baz-gwrap.h
-CLEANFILES += *.so* *.a baz-gwrap.c baz-gwrap.h baz-gwrap.html
+BUILT_SOURCES = baz-gwrap.c baz-gwrap.h
+CLEANFILES = *.so* *.a baz-gwrap.c baz-gwrap.h baz-gwrap.html

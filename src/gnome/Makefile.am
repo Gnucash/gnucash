@@ -118,7 +118,9 @@ INCLUDES = \
 
 
 # We build this in an earlier directory.
-OMIT_DEPENDENCIES = gnc-dir.h
+
+# The line below breaks automake 1.5.  
+##OMIT_DEPENDENCIES = gnc-dir.h
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

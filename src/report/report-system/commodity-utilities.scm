@@ -42,6 +42,7 @@
 	(splits #f))
     
     (gnc:query-set-group query (gnc:get-current-group))
+    (gnc:query-set-match-non-voids-only! query (gnc:get-current-group))
     (gnc:query-add-account-match 
      query (gnc:list->glist currency-accounts)
      'acct-match-any 'query-and)

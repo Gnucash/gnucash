@@ -25,4 +25,4 @@ build-help-index: build-help-index.in
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-CLEANFILES += build-help-index
+CLEANFILES = build-help-index

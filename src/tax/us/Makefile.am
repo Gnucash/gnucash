@@ -27,4 +27,4 @@ EXTRA_DIST = \
   ${gncscmmod_DATA} \
   ${gncscm_DATA}
 
-CLEANFILES += gnucash tax .scm-links
+CLEANFILES = gnucash tax .scm-links

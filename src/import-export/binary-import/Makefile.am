@@ -88,6 +88,6 @@ gw-binary-import.c gw-binary-import.h: .scm-links gw-binary-import-spec.scm
 	  (primitive-load \"./gw-binary-import-spec.scm\") \
 	  (gw:generate-module \"gw-binary-import\")"
 
-BUILT_SOURCES += gw-binary-import.c gw-binary-import.h
-CLEANFILES += gw-binary-import.c gw-binary-import.h gw-binary-import.html \
+BUILT_SOURCES = gw-binary-import.c gw-binary-import.h
+CLEANFILES = gw-binary-import.c gw-binary-import.h gw-binary-import.html \
               gnucash g-wrapped .scm-links

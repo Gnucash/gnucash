@@ -495,5 +495,6 @@ gboolean xaccTransGetVoidStatus(Transaction *transaction);
 char *xaccTransGetVoidReason(Transaction *transaction);
 
 gnc_numeric xaccSplitVoidFormerAmount(Split *split);
+gnc_numeric xaccSplitVoidFormerValue(Split *split);
 
 #endif /* XACC_TRANSACTION_H */

@@ -35,7 +35,7 @@ noinst_DATA = .scm-links
 	ln -sf . gnucash
 	touch .scm-links
 
-CLEANFILES += .scm-links gnucash 
+CLEANFILES = .scm-links gnucash 
 
 SCM_FILES = ${gncscm_DATA} ${gncscmmod_DATA}
 

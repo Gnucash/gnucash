@@ -139,5 +139,5 @@ gw-kvp.c gw-kvp.h: .scm-links gw-kvp-spec.scm
 	 (primitive-load \"./gw-kvp-spec.scm\") \
 	 (gw:generate-module \"gw-kvp\")"
 
-BUILT_SOURCES += gw-engine.c gw-engine.h gw-glib.c gw-glib.h gw-kvp.c gw-kvp.h
-CLEANFILES += gw-engine.c gw-engine.h gw-engine.html gw-glib.c gw-glib.h gw-glib.html gnucash g-wrapped .scm-links gw-kvp.c gw-kvp.h
+BUILT_SOURCES = gw-engine.c gw-engine.h gw-glib.c gw-glib.h gw-kvp.c gw-kvp.h
+CLEANFILES = gw-engine.c gw-engine.h gw-engine.html gw-glib.c gw-glib.h gw-glib.html gnucash g-wrapped .scm-links gw-kvp.c gw-kvp.h

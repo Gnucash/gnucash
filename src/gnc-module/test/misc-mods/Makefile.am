@@ -13,4 +13,4 @@ libincompatdep_la_LDFLAGS=-module
 libagedver_la_SOURCES=agedver.c
 libagedver_la_LDFLAGS=-module
 
-CLEANFILES += *.so* *.a
+CLEANFILES = *.so* *.a
