@@ -142,6 +142,70 @@ gnc_tax_info_set_changed (TaxInfoDialog *ti_dialog, gboolean changed)
   ti_dialog->changed = changed;
 }
 
+char *
+gnc_ui_account_get_tax_info_string (Account *account)
+{
+  GNCAccountType atype;
+  const char *code;
+  SCM category;
+  SCM code_scm;
+  char *result;
+  char *form;
+  char *desc;
+  SCM scm;
+
+  if (!account)
+    return NULL;
+
+  if (!xaccAccountGetTaxRelated (account))
+    return NULL;
+
+  atype = xaccAccountGetType (account);
+  if (atype != INCOME && atype != EXPENSE)
+    return NULL;
+
+  code = xaccAccountGetTaxUSCode (account);
+  if (!code)
+    return NULL;
+
+  initialize_getters ();
+
+  category = gh_eval_str (atype == INCOME ?
+                          "txf-income-categories" :
+                          "txf-expense-categories");
+
+  code_scm = gh_symbol2scm (code);
+
+  scm = gh_call2 (getters.form, category, code_scm);
+  if (!gh_string_p (scm))
+    return NULL;
+
+  form = gh_scm2newstr (scm, NULL);
+  if (!form)
+    return NULL;
+
+  scm = gh_call2 (getters.description, category, code_scm);
+  if (!gh_string_p (scm))
+  {
+    free (form);
+    return NULL;
+  }
+
+  desc = gh_scm2newstr (scm, NULL);
+  if (!desc)
+  {
+    free (form);
+    return NULL;
+  }
+
+  result = g_strdup_printf ("%s %s", form, desc);
+
+  free (form);
+  free (desc);
+
+  return result;
+}
+
 static GList *
 load_txf_info (gboolean income)
 {

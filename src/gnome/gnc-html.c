@@ -1452,7 +1452,7 @@ void
 gnc_html_export(gnc_html * html) {
   const char *filepath;
   FILE *fh;
-  
+
   filepath = fileBox (_("Save HTML To File"), NULL, NULL);
   if (!filepath)
     return;
@@ -1469,7 +1469,7 @@ gnc_html_export(gnc_html * html) {
     if (buf) g_free (buf);
     return;
   }
-  
+
   gtk_html_save (GTK_HTML(html->html), raw_html_receiver, fh);
   fclose (fh);
 }

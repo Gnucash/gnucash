@@ -303,9 +303,18 @@ void xaccQueryAddPredicate (Query * q, PredicateData *pred, QueryOp op);
 
 void xaccQuerySetSortOrder(Query * q, sort_type_t primary, 
                            sort_type_t secondary, sort_type_t tertiary);
-void xaccQuerySetSortIncreasing(Query * q, gboolean prim_increasing,
-			   gboolean sec_increasing, 
+sort_type_t xaccQueryGetPrimarySortOrder(Query * q);
+sort_type_t xaccQueryGetSecondarySortOrder(Query * q);
+sort_type_t xaccQueryGetTertiarySortOrder(Query * q);
+
+void xaccQuerySetSortIncreasing(Query * q,
+                                gboolean prim_increasing,
+                                gboolean sec_increasing, 
 				gboolean tert_increasing);
+gboolean xaccQueryGetSortPrimaryIncreasing (Query *q);
+gboolean xaccQueryGetSortSecondaryIncreasing (Query *q);
+gboolean xaccQueryGetSortTertiaryIncreasing (Query *q);
+
 void xaccQuerySetMaxSplits(Query * q, int n);
 int  xaccQueryGetMaxSplits(Query * q);
 

@@ -356,10 +356,24 @@
                                  (list a))))
                        accounts)))
 
+  ;; returns 'html if html is chosen, 'txf if txf is chosen,
+  ;; and #f otherwise
+  (define (choose-export-format)
+    (let ((choice (gnc:choose_radio_option_dialog_parented
+                   #f
+                   (_ "Choose export format")
+                   (_ "Choose the export format for this report:")
+                   0
+                   (list (_ "HTML") (_ "TXF")))))
+      (case choice
+        ((0) 'html)
+        ((1) 'txf)
+        (else #f))))
+
   (define (generate-tax-or-txf report-name
 			       report-description
 			       report-obj
-			       tax-mode-in)
+			       tax-mode?)
 
     (define (get-option pagename optname)
       (gnc:option-value
@@ -388,7 +402,6 @@
 	   (suppress-0 (get-option tab-title "Suppress $0.00 values"))
 	   (full-names (get-option tab-title
                                    "Print Full account names"))
-	   (tax-mode tax-mode-in)	; these need to different later
 	   (user-sel-accnts (get-option tab-title
                                         "Select Accounts (none = all)"))
            (valid-user-sel-accnts (validate user-sel-accnts))
@@ -532,7 +545,7 @@
                                            (gnc:timepair-lt to-value tmp-date))
                                       to-value
                                       tmp-date)))
-		       (if tax-mode
+		       (if tax-mode?
 			   (render-level-x-account table lev max-level account
 						   value suppress-0 #f date #f)
 			   (render-txf-account account value date))))
@@ -564,9 +577,9 @@
 					     (- account-balance)
 					     account-balance)))
 		(lx-collector level 'add account-balance)
-		
+
 		(let ((level-x-output
-		       (if tax-mode
+		       (if tax-mode?
 			   (render-level-x-account table level
                                                    max-level account
 						   account-balance
@@ -584,11 +597,11 @@
                              (handle-level-x-account (+ 1 level) x)))
                        children))
                   level-x-output)))))
-      
+
       (let ((from-date  (strftime "%Y-%b-%d" (localtime (car from-value))))
 	    (to-date    (strftime "%Y-%b-%d" (localtime (car to-value))))
 	    (today-date (strftime "D%m/%d/%Y" 
-				  (localtime 
+				  (localtime
 				   (car (gnc:timepair-canonical-day-time
 					 (cons (current-time) 0))))))
 	    (txf-last-payer "")
@@ -611,28 +624,29 @@
 	  (lx-collector i 'reset #f))
 	(set! txf-dups-alist '())
 
-	(if (not tax-mode-in)		; First do Txf mode, if set
+	(if (not tax-mode?)		; First do Txf mode, if set
 	    (begin
-	      (set! file-name		; get file name from user
-		    (do ((fname (gnc:file-selection-dialog
-				 "Select file for .TXF export" ""
-				 "~/export.txf")
-				(gnc:file-selection-dialog
-				 "Select file for .TXF export" ""
-				 "~/export.txf")))  
-			((if (not fname)
-			     #t		; no "Cancel" button, exit
-			     (if (access? fname F_OK)
-				 (if (gnc:verify-dialog
-				      (string-append 
-				       "File: \"" fname
-				       "\" exists, Overwrite?")
-				      #f)
-				     (begin (delete-file fname)
-					    #t)
-				     #f)
-				 #t))
-			 fname)))
+	      (set!
+               file-name		; get file name from user
+               (do ((fname (gnc:file-selection-dialog
+                            (_ "Select file for .TXF export") ""
+                            "~/export.txf")
+                           (gnc:file-selection-dialog
+                            (_"Select file for .TXF export") ""
+                            "~/export.txf")))  
+                   ((if (not fname)
+                        #t		; no "Cancel" button, exit
+                        (if (access? fname F_OK)
+                            (if (gnc:verify-dialog
+                                 (sprintf
+                                  #f (_ "File: \"%s\" exists.\nOverwrite?")
+                                  fname)
+                                 #f)
+                                (begin (delete-file fname)
+                                       #t)
+                                #f)
+                            #t))
+                    fname)))
 
 	      (if file-name		; cancel TXF if no file selected
 		  (let* ((port (open-output-file file-name))    
@@ -647,82 +661,73 @@
 				      "\n^"
 				      output)))
 
-                    (display file-name) (newline)
-                    (display output-txf) (newline)
 		    (gnc:display-report-list-item output-txf port
 						  "taxtxf.scm - ")
 		    (newline port)
-		    (close-output-port port)))))
+		    (close-output-port port)
+                    #f)
+                  #t))
 
-	(set! tax-mode #t)		; now do tax mode to display report
+            (begin
+              (gnc:html-document-set-style!
+               doc "blue"
+               'tag "font"
+               'attribute (list "color" "#0000ff"))
 
-        (gnc:html-document-set-style! 
-         doc "blue"
-         'tag "font"
-         'attribute (list "color" "#0000ff"))
+              (gnc:html-document-set-style!
+               doc "income"
+               'tag "font"
+               'attribute (list "color" "#0000ff"))
 
-        (gnc:html-document-set-style! 
-         doc "income"
-         'tag "font"
-         'attribute (list "color" "#0000ff"))
+              (gnc:html-document-set-style!
+               doc "expense"
+               'tag "font"
+               'attribute (list "color" "#ff0000"))
 
-        (gnc:html-document-set-style! 
-         doc "expense"
-         'tag "font"
-         'attribute (list "color" "#ff0000"))
+              (gnc:html-document-set-title! doc report-name)
 
-        (gnc:html-document-set-title! doc report-name)
+              (gnc:html-document-add-object!
+               doc
+               (gnc:make-html-text         
+                (gnc:html-markup-p
+                 (gnc:html-markup/format
+                  (_ "Period from %s to %s") from-date to-date))))
 
-        (gnc:html-document-add-object! 
-         doc
-         (gnc:make-html-text         
-          (gnc:html-markup-p
-           (gnc:html-markup/format
-            (_ "Period from %s to %s") from-date to-date))))
+              (gnc:html-document-add-object!
+               doc
+               (gnc:make-html-text
+                (gnc:html-markup
+                 "blue"
+                 (gnc:html-markup-p
+                  (_ "Blue items are exportable to a TXF file.")))))
 
-        (gnc:html-document-add-object!
-         doc
-         (gnc:make-html-text
-          (gnc:html-markup
-           "blue"
-           (if tax-mode-in
-               (gnc:html-markup-p
-                (_ "Blue items are exportable to a TXF file."))
-               (gnc:html-markup-p
-                (if file-name
-                    (gnc:html-markup/format
-                     (_ "Blue items were exported to file %s.")
-                     (gnc:html-markup-tt file-name))
-                    (_ "Blue items were <em>not</em> exported to \
-txf file!")))))))
+              (txf-print-dups doc)
 
-        (txf-print-dups doc)
+              (gnc:html-document-add-object! doc table)
 
-        (gnc:html-document-add-object! doc table)
+              (gnc:html-table-append-row!
+               table
+               (append
+                (list
+                 (gnc:make-html-table-header-cell
+                  (_ "Account Name")))
+                (make-sub-headers max-level)
+                (list
+                 (gnc:make-html-table-header-cell/markup
+                  "number-header" (_ "Total")))))
 
-        (gnc:html-table-append-row!
-         table
-         (append
-          (list
-           (gnc:make-html-table-header-cell
-            (_ "Account Name")))
-          (make-sub-headers max-level)
-          (list
-           (gnc:make-html-table-header-cell/markup
-            "number-header" (_ "Total")))))
+              (map (lambda (x) (handle-level-x-account 1 x))
+                   selected-accounts)
 
-        (map (lambda (x) (handle-level-x-account 1 x))
-             selected-accounts)
-
-        (if (null? selected-accounts)
-            (gnc:html-document-add-object!
-             doc
-             (gnc:make-html-text
-              (gnc:html-markup-p
-               (_ "No Tax Related accounts were found. \
+              (if (null? selected-accounts)
+                  (gnc:html-document-add-object!
+                   doc
+                   (gnc:make-html-text
+                    (gnc:html-markup-p
+                     (_ "No Tax Related accounts were found. \
 Go the the Tax Information dialog to set up tax-related accounts.")))))
 
-        doc)))
+              doc)))))
 
   (gnc:define-report
    'version 1
@@ -735,17 +740,16 @@ Go the the Tax Information dialog to set up tax-related accounts.")))))
                 (_ "This report shows your Taxable Income and \
 Deductable Expenses.")
                 report-obj
-		#t)))
-
-  (gnc:define-report
-   'version 1
-   'name (N_ "Export .TXF")
-   'menu-path (list gnc:menuname-taxes)
-   'options-generator tax-options-generator
-   'renderer (lambda (report-obj)
-               (generate-tax-or-txf
-                (_ "Taxable Income / Deductible Expenses")
-                (_ "This page shows your Taxable Income and \
+		#t))
+   'export-thunk (lambda (report-obj)
+                   (let ((choice (choose-export-format)))
+                     (case choice
+                       ((txf)
+                        (generate-tax-or-txf
+                         (_ "Taxable Income / Deductible Expenses")
+                         (_ "This page shows your Taxable Income and \
 Deductable Expenses.")
-                report-obj
-		#f))))
+                         report-obj
+                         #f)
+                        #f)
+                       (else choice))))))

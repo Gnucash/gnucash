@@ -294,8 +294,37 @@ gnc_report_window_stop_button_cb(GtkWidget * w, gpointer data) {
 static int
 gnc_report_window_export_button_cb(GtkWidget * w, gpointer data) {
   gnc_report_window       * report = data;
-  ENTER (" ");
-  gnc_html_export(report->html);
+  SCM get_export_thunk;
+  SCM export_thunk;
+  gboolean do_html;
+
+  get_export_thunk = gh_eval_str ("gnc:report-export-thunk");
+  export_thunk = gh_call1 (get_export_thunk, report->scm_report);
+
+  if (gh_procedure_p (export_thunk))
+  {
+    SCM result;
+
+    result = gh_call1 (export_thunk, report->scm_report);
+
+    if (gh_symbol_p (result))
+    {
+      char *symbol = gh_symbol2newstr (result, NULL);
+
+      do_html = (safe_strcmp (symbol, "html") == 0);
+
+      if (symbol)
+        free (symbol);
+    }
+    else
+      do_html = FALSE;
+  }
+  else
+    do_html = TRUE;
+
+  if (do_html)
+    gnc_html_export (report->html);
+
   return TRUE;
 }
 

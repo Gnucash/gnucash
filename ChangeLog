@@ -1,3 +1,30 @@
+2001-04-19  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-tax-info.c: implement tax info api
+
+	* src/gnome/account-tree.c: same as below
+
+	* src/gnome/window-acct-tree.c: add tax info field
+
+	* src/scm/report.scm: add an export callback for reports
+
+	* src/guile/gnc.gwp: wrap radio chooser api
+
+	* src/scm/report/taxtxf.scm: use export callback to choose
+	between html & txf
+
+	* src/gnome/window-report.c: implement export callback
+
+2001-04-18  Dave Peticolas  <dave@krondo.com>
+
+	* src/SplitLedger.c: fix for api change below
+
+	* src/gnc-ui.h: api change below
+
+	* src/gnome/query-user.c
+	(gnc_choose_radio_option_dialog_parented): use glist instead of
+	pointer array for list of strings argument
+
 2001-04-18  Bill Gribble  <grib@billgribble.com>
 
 	* src/gnome/dialog-options.c: don't destroy options dialog twice.

@@ -59,13 +59,18 @@ typedef enum
   ACCOUNT_BALANCE_EURO,
   ACCOUNT_TOTAL,   /* balance + children's balance with sign reversal */
   ACCOUNT_TOTAL_EURO,
+  ACCOUNT_TAX_INFO,
   NUM_ACCOUNT_FIELDS
 } AccountFieldCode;
 
-const char * gnc_ui_get_account_field_name (AccountFieldCode field);
+const char * gnc_ui_account_get_field_name (AccountFieldCode field);
 
-const char * gnc_ui_get_account_field_value_string (Account *account,
-                                                    AccountFieldCode field);
+/* Must g_free string when done */
+char * gnc_ui_account_get_field_value_string (Account *account,
+                                              AccountFieldCode field);
+
+/* Must g_free string when done */
+char * gnc_ui_account_get_tax_info_string (Account *account);
 
 gnc_numeric gnc_ui_account_get_balance (Account *account,
                                         gboolean include_children);

@@ -271,7 +271,7 @@ xaccQueryHasTerms(Query * q) {
 GList *
 xaccQueryGetTerms (Query *q)
 {
-   if (!q) return 0x0;
+   if (!q) return NULL;
    return q->terms;
 }
 
@@ -2338,6 +2338,36 @@ xaccQuerySetSortOrder(Query * q, sort_type_t primary,
 }
 
 /*******************************************************************
+ *  xaccQueryGetPrimarySortOrder
+ *******************************************************************/
+sort_type_t
+xaccQueryGetPrimarySortOrder(Query * q)
+{
+  if (!q) return BY_NONE;
+  return q->primary_sort;
+}
+
+/*******************************************************************
+ *  xaccQueryGetSecondarySortOrder
+ *******************************************************************/
+sort_type_t
+xaccQueryGetSecondarySortOrder(Query * q)
+{
+  if (!q) return BY_NONE;
+  return q->secondary_sort;
+}
+
+/*******************************************************************
+ *  xaccQueryGetTertiarySortOrder
+ *******************************************************************/
+sort_type_t
+xaccQueryGetTertiarySortOrder(Query * q)
+{
+  if (!q) return BY_NONE;
+  return q->tertiary_sort;
+}
+
+/*******************************************************************
  *  xaccQuerySetSortIncreasing
  *******************************************************************/
 void
@@ -2350,6 +2380,36 @@ xaccQuerySetSortIncreasing(Query * q, gboolean prim_increasing,
   q->secondary_increasing = sec_increasing;
   q->tertiary_increasing = tert_increasing;
   return;
+}
+
+/*******************************************************************
+ *  xaccQueryGetSortPrimaryIncreasing
+ *******************************************************************/
+gboolean
+xaccQueryGetSortPrimaryIncreasing (Query *q)
+{
+  if (!q) return TRUE;
+  return q->primary_increasing;
+}
+
+/*******************************************************************
+ *  xaccQueryGetSortSecondaryIncreasing
+ *******************************************************************/
+gboolean
+xaccQueryGetSortSecondaryIncreasing (Query *q)
+{
+  if (!q) return TRUE;
+  return q->secondary_increasing;
+}
+
+/*******************************************************************
+ *  xaccQueryGetSortTertiaryIncreasing
+ *******************************************************************/
+gboolean
+xaccQueryGetSortTertiaryIncreasing (Query *q)
+{
+  if (!q) return TRUE;
+  return q->tertiary_increasing;
 }
 
 /*******************************************************************

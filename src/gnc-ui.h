@@ -81,7 +81,7 @@ int      gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
                                                  const char *title,
                                                  const char *msg,
                                                  int default_value,
-                                                 char **radio_list);
+                                                 GList *radio_list);
 
 gboolean gnc_dup_trans_dialog (gncUIWidget parent, time_t *date_p,
                                const char *num, char **out_num);

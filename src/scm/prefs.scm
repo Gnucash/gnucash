@@ -584,7 +584,8 @@ transaction.") #t))
             (list->vector (list 'currency    (N_ "Currency") ""))
             (list->vector (list 'security    (N_ "Security") ""))
             (list->vector (list 'balance     (N_ "Balance") ""))
-            (list->vector (list 'total       (N_ "Total") "")))))
+            (list->vector (list 'total       (N_ "Total") ""))
+            (list->vector (list 'tax-info    (N_ "Tax Info") "")))))
 
     options))
 

@@ -66,11 +66,11 @@
   (define menu-hash (make-hash-table 23))
 
   (define (add-report-menu-item name report)
-    (if (gnc:report-in-menu? report)
+    (if (gnc:report-template-in-menu? report)
         (let ((title (string-append (_ "Report") ": " (_ name)))
-              (menu-path (gnc:report-menu-path report))
-              (menu-name (gnc:report-menu-name report))
-              (menu-tip (gnc:report-menu-tip report))
+              (menu-path (gnc:report-template-menu-path report))
+              (menu-name (gnc:report-template-menu-name report))
+              (menu-tip (gnc:report-template-menu-tip report))
               (item #f))
 
           (if (not menu-path)
@@ -96,7 +96,7 @@
                                 (gnc:report-template-name report))))
                      (gnc:main-window-open-report rept #f)))))
           (gnc:add-extension item))))
-  
+
   (gnc:add-extension menu)
 
   ;; add the menu option to edit style sheets 
@@ -131,9 +131,9 @@
                     ;; The data items in a report record
                     '(version name options-generator options-editor
                               renderer in-menu? menu-path menu-name
-                              menu-tip)))
+                              menu-tip export-thunk)))
 
-(define (gnc:define-report . args) 
+(define (gnc:define-report . args)
   ;; For now the version is ignored, but in the future it'll let us
   ;; change behaviors without breaking older reports.
   ;;
@@ -142,9 +142,18 @@
   ;; return as its final value an <html-document> object.
 
   (define (blank-report)
-    ;; Number of #f's == Number of data members
     ((record-constructor <report-template>)
-     #f #f #f gnc:default-options-editor #f #t #f #f #f))
+     #f ;version
+     #f ;name
+     #f ;options-generator
+     gnc:default-options-editor ;options-editor
+     #f ;renderer
+     #t ;in-menu?
+     #f ;menu-path
+     #f ;menu-name
+     #f ;menu-tip
+     #f ;export-thunk
+     ))
 
   (define (args-to-defn in-report-rec args)
     (let ((report-rec (if in-report-rec
@@ -175,14 +184,16 @@
   (record-accessor <report-template> 'options-editor))
 (define gnc:report-template-renderer
   (record-accessor <report-template> 'renderer))
-(define gnc:report-in-menu?
+(define gnc:report-template-in-menu?
   (record-accessor <report-template> 'in-menu?))
-(define gnc:report-menu-path
+(define gnc:report-template-menu-path
   (record-accessor <report-template> 'menu-path))
-(define gnc:report-menu-name
+(define gnc:report-template-menu-name
   (record-accessor <report-template> 'menu-name))
-(define gnc:report-menu-tip
+(define gnc:report-template-menu-tip
   (record-accessor <report-template> 'menu-tip))
+(define gnc:report-template-export-thunk
+  (record-accessor <report-template> 'export-thunk))
 
 (define (gnc:report-template-new-options/name template-name)
   (let ((templ (hash-ref *gnc:_report-templates_* template-name)))
@@ -210,7 +221,7 @@
               (string-append (gnc:html-style-sheet-name ss) 
                              (_ " Stylesheet"))))
            (gnc:get-html-style-sheets)))))
-    
+
     (if (procedure? generator)
         (let ((options (generator)))
           (gnc:register-option options stylesheet)
@@ -221,8 +232,8 @@
           (gnc:register-option options names)
           options))))
 
-(define <report> 
-  (make-record-type "<report>" 
+(define <report>
+  (make-record-type "<report>"
                     '(type id options parents children 
                            dirty? display-list editor-widget ctext)))
 
@@ -339,10 +350,19 @@
          (lambda (rep)
            (gnc:report-unregister-display (gnc:find-report rep) window))
          (gnc:report-parents report)))))
-      
+
 (define (gnc:make-report template-name . rest)
   (let ((r ((record-constructor <report>) 
-            template-name #f #f '() '() #t '() #f #f))
+            template-name ;type
+            #f ;id
+            #f ;options
+            '() ;parents
+            '() ;children
+            #t ;dirty
+            '() ;display-list
+            #f ;editor-widget
+            #f ;ctext
+            ))
         (template (hash-ref *gnc:_report-templates_* template-name))
         (id *gnc:_report-next-serial_*))
     (gnc:report-set-id! r id)
@@ -376,6 +396,14 @@
                     (gnc:report-type report))))
     (if template
         (gnc:report-template-options-editor template)
+        #f)))
+
+(define (gnc:report-export-thunk report)
+  (let ((template 
+         (hash-ref  *gnc:_report-templates_* 
+                    (gnc:report-type report))))
+    (if template
+        (gnc:report-template-export-thunk template)
         #f)))
 
 (define (gnc:report-name report) 

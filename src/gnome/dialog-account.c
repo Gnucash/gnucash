@@ -706,12 +706,12 @@ fill_helper(gpointer key, gpointer value, gpointer data)
   if(!full_name)
     full_name = g_strdup("");
 
-  account_field_name = g_strdup(gnc_ui_get_account_field_name(fs->field));
+  account_field_name = g_strdup(gnc_ui_account_get_field_name(fs->field));
   if (!account_field_name)
     account_field_name = g_strdup("");
 
-  account_field_value = 
-    g_strdup(gnc_ui_get_account_field_value_string(account, fs->field));
+  account_field_value =
+    gnc_ui_account_get_field_value_string(account, fs->field);
   if (!account_field_value)
     account_field_value = g_strdup("");
 

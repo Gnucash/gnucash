@@ -956,12 +956,13 @@ gnc_account_tree_set_view_info_real(GNCAccountTree *tree)
   tree->column_fields[i++] = ACCOUNT_TOTAL_EURO;
 
   tree->column_fields[i++] = ACCOUNT_NOTES;
+  tree->column_fields[i++] = ACCOUNT_TAX_INFO;
 
   tree->num_columns = i;
 
   for (i = 0; i < tree->num_columns; i++)
     tree->column_headings[i] =
-      gnc_ui_get_account_field_name(tree->column_fields[i]);
+      gnc_ui_account_get_field_name (tree->column_fields[i]);
 }
 
 static gint
@@ -1159,7 +1160,7 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
     field = tree->column_fields[i];
 
     if (tree->avi.show_field[field])
-      text[i] = g_strdup(gnc_ui_get_account_field_value_string(acc, field));
+      text[i] = gnc_ui_account_get_field_value_string(acc, field);
     else
       text[i] = NULL;
 

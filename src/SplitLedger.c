@@ -809,7 +809,7 @@ sr_balance_trans (SplitRegister *reg, Transaction *trans)
     int default_value;
     Account *default_account;
     Account *other_account;
-    char *radio_list[5] = { NULL, NULL, NULL, NULL, NULL };
+    GList *radio_list = NULL;
     const char *title   = _("Rebalance Transaction");
     const char *message = _("The current transaction is not balanced.");
     Split *split;
@@ -846,15 +846,19 @@ sr_balance_trans (SplitRegister *reg, Transaction *trans)
     if (default_account == other_account)
       two_accounts = FALSE;
 
-    radio_list[0] = _("Balance it manually");
-    radio_list[1] = _("Let GnuCash add an adjusting split");
+    radio_list = g_list_append (radio_list,
+                                _("Balance it manually"));
+    radio_list = g_list_append (radio_list,
+                                _("Let GnuCash add an adjusting split"));
 
     if (reg->type < NUM_SINGLE_REGISTER_TYPES)
     {
-      radio_list[2] = _("Adjust current account split total");
-      
+      radio_list = g_list_append (radio_list,
+                                  _("Adjust current account split total"));
+
       if (two_accounts)
-        radio_list[3] = _("Adjust other account split total");
+        radio_list = g_list_append (radio_list,
+                                    _("Adjust other account split total"));
 
       default_value = 2;
     }
@@ -866,6 +870,7 @@ sr_balance_trans (SplitRegister *reg, Transaction *trans)
                                                       message,
                                                       default_value,
                                                       radio_list);
+    g_list_free (radio_list);
 
     switch (choice)
     {
@@ -3065,29 +3070,35 @@ sr_split_auto_calc (SplitRegister *reg, Split *split, guint32 changed)
       !recalc_value &&
       !gnc_numeric_same (value, calc_value, denom, GNC_RND_ROUND))
   {
-    int i;
     int choice;
     int default_value;
-    char *radio_list[4] = { NULL, NULL, NULL, NULL };
+    GList *node;
+    GList *radio_list = NULL;
     const char *title = _("Recalculate Transaction");
     const char *message = _("The values entered for this transaction "
                             "are inconsistent.\nWhich value would you "
                             "like to have recalculated?");
 
     if (MOD_SHRS & changed)
-      radio_list[0] = g_strdup_printf ("%s (%s)", _("Shares"), _("Changed"));
+      radio_list = g_list_append (radio_list,
+                                  g_strdup_printf ("%s (%s)",
+                                                   _("Shares"), _("Changed")));
     else
-      radio_list[0] = g_strdup (_("Shares"));
+      radio_list = g_list_append (radio_list, g_strdup (_("Shares")));
 
     if (MOD_PRIC & changed)
-      radio_list[1] = g_strdup_printf ("%s (%s)", _("Price"), _("Changed"));
+      radio_list = g_list_append (radio_list,
+                                  g_strdup_printf ("%s (%s)",
+                                                   _("Price"), _("Changed")));
     else
-      radio_list[1] = g_strdup (_("Price"));
+      radio_list = g_list_append (radio_list, g_strdup (_("Price")));
 
     if (MOD_AMNT & changed)
-      radio_list[2] = g_strdup_printf ("%s (%s)", _("Value"), _("Changed"));
+      radio_list = g_list_append (radio_list,
+                                  g_strdup_printf ("%s (%s)",
+                                                   _("Value"), _("Changed")));
     else
-      radio_list[2] = g_strdup (_("Value"));
+      radio_list = g_list_append (radio_list, g_strdup (_("Value")));
 
     if (!(MOD_PRIC & changed))
       default_value = 1;
@@ -3104,8 +3115,10 @@ sr_split_auto_calc (SplitRegister *reg, Split *split, guint32 changed)
                                                       default_value,
                                                       radio_list);
 
-    for (i = 0; i < 3; i++)
-      g_free (radio_list[i]);
+    for (node = radio_list; node; node = node->next)
+      g_free (node->data);
+
+    g_list_free (radio_list);
 
     switch(choice)
     {

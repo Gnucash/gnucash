@@ -669,6 +669,9 @@ gnc_acct_tree_window_configure (GNCAcctTreeWin * info) {
     else if (safe_strcmp(node->data, "security") == 0)
       new_avi.show_field[ACCOUNT_SECURITY] = TRUE;
 
+    else if (safe_strcmp(node->data, "tax-info") == 0)
+      new_avi.show_field[ACCOUNT_TAX_INFO] = TRUE;
+
     else if (safe_strcmp(node->data, "balance") == 0)
     {
       new_avi.show_field[ACCOUNT_BALANCE] = TRUE;

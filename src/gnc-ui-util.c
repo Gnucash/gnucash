@@ -104,7 +104,7 @@ gnc_get_account_separator (void)
 
 
 const char *
-gnc_ui_get_account_field_name (AccountFieldCode field)
+gnc_ui_account_get_field_name (AccountFieldCode field)
 {
   g_return_val_if_fail ((field >= 0) && (field < NUM_ACCOUNT_FIELDS), NULL);
 
@@ -143,6 +143,8 @@ gnc_ui_get_account_field_name (AccountFieldCode field)
     case ACCOUNT_TOTAL_EURO :
       return _("Total");
       break;
+    case ACCOUNT_TAX_INFO :
+      return _("Tax Info");
     default:
       break;
   }
@@ -256,8 +258,8 @@ gnc_ui_account_get_balance (Account *account, gboolean include_children)
 }
 
 
-const char *
-gnc_ui_get_account_field_value_string (Account *account,
+char *
+gnc_ui_account_get_field_value_string (Account *account,
                                        AccountFieldCode field)
 {
   g_return_val_if_fail ((field >= 0) && (field < NUM_ACCOUNT_FIELDS), NULL);
@@ -268,34 +270,39 @@ gnc_ui_get_account_field_value_string (Account *account,
   switch (field)
   {
     case ACCOUNT_TYPE :
-      return xaccAccountGetTypeStr(xaccAccountGetType(account));
-      break;
+      return g_strdup (xaccAccountGetTypeStr(xaccAccountGetType(account)));
+
     case ACCOUNT_NAME :
-      return xaccAccountGetName(account);
-      break;
+      return g_strdup (xaccAccountGetName(account));
+
     case ACCOUNT_CODE :
-      return xaccAccountGetCode(account);
-      break;
+      return g_strdup (xaccAccountGetCode(account));
+
     case ACCOUNT_DESCRIPTION :
-      return xaccAccountGetDescription(account);
-      break;
+      return g_strdup (xaccAccountGetDescription(account));
+
     case ACCOUNT_NOTES :
-      return xaccAccountGetNotes(account);
-      break;
+      return g_strdup (xaccAccountGetNotes(account));
+
     case ACCOUNT_CURRENCY :
-      return gnc_commodity_get_printname(xaccAccountGetCurrency(account));
-      break;
+      return
+        g_strdup
+        (gnc_commodity_get_printname(xaccAccountGetCurrency(account)));
+
     case ACCOUNT_SECURITY :
-      return gnc_commodity_get_printname(xaccAccountGetSecurity(account));
-      break;
+      return
+        g_strdup
+        (gnc_commodity_get_printname(xaccAccountGetSecurity(account)));
+
     case ACCOUNT_BALANCE :
       {
         gnc_numeric balance = gnc_ui_account_get_balance(account, FALSE);
 
-        return xaccPrintAmount(balance,
-                               gnc_account_value_print_info (account, TRUE));
+        return g_strdup
+          (xaccPrintAmount (balance,
+                            gnc_account_value_print_info (account, TRUE)));
       }
-      break;
+
     case ACCOUNT_BALANCE_EURO :
       {
 	gnc_commodity * account_currency = 
@@ -304,19 +311,20 @@ gnc_ui_get_account_field_value_string (Account *account,
 	gnc_numeric euro_balance = gnc_convert_to_euro(account_currency,
                                                        balance);
 
-        return xaccPrintAmount(euro_balance,
-                               gnc_commodity_print_info (gnc_get_euro (),
-                                                         TRUE));
+        return g_strdup
+          (xaccPrintAmount(euro_balance,
+                           gnc_commodity_print_info (gnc_get_euro (), TRUE)));
       }
-      break;
+
     case ACCOUNT_TOTAL :
       {
 	gnc_numeric balance = gnc_ui_account_get_balance(account, TRUE);
 
-        return xaccPrintAmount(balance,
-                               gnc_account_value_print_info (account, TRUE));
+        return g_strdup
+          (xaccPrintAmount(balance,
+                           gnc_account_value_print_info (account, TRUE)));
       }
-      break;
+
     case ACCOUNT_TOTAL_EURO :
       {
 	gnc_commodity * account_currency =
@@ -325,11 +333,14 @@ gnc_ui_get_account_field_value_string (Account *account,
 	gnc_numeric euro_balance = gnc_convert_to_euro(account_currency,
                                                        balance);
 
-	return xaccPrintAmount(euro_balance,
-                               gnc_commodity_print_info (gnc_get_euro (),
-                                                         TRUE));
+	return g_strdup
+          (xaccPrintAmount(euro_balance,
+                           gnc_commodity_print_info (gnc_get_euro (), TRUE)));
       }
-      break;
+
+    case ACCOUNT_TAX_INFO:
+      return gnc_ui_account_get_tax_info_string (account);
+
     default:
       break;
   }

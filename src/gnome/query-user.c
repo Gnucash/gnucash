@@ -319,7 +319,7 @@ gnc_error_dialog_parented(GtkWindow *parent, const char *message)
 static void
 gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)
 {
-  int *result = (int *) data;
+  int *result = data;
 
   if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w)))
     *result = GPOINTER_TO_INT(gtk_object_get_user_data(GTK_OBJECT(w)));
@@ -331,15 +331,13 @@ gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)
  display a group of radio_buttons and return the index of
  the selected one
 
- radio_list should be a NULL terminated array
-
 */
 int
 gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
                                         const char *title, 
                                         const char *msg,
                                         int default_value,
-                                        char **radio_list)
+                                        GList *radio_list)
 {
   int radio_result = 0; /* initial selected value is first one */
   GtkWidget *vbox;
@@ -350,6 +348,7 @@ gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
   GtkWidget *dialog;
   GtkWidget *dvbox;
   GSList *group = NULL;
+  GList *node;
   int i;
 
   main_vbox = gtk_vbox_new(FALSE, 3);
@@ -371,9 +370,9 @@ gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
   gtk_container_add(GTK_CONTAINER(frame), vbox);
   gtk_widget_show(vbox);
 
-  for(i = 0; radio_list[i] != NULL; i++)
+  for (node = radio_list, i = 0; node; node = node->next, i++)
   {
-    radio_button = gtk_radio_button_new_with_label(group, radio_list[i]);
+    radio_button = gtk_radio_button_new_with_label(group, node->data);
     group = gtk_radio_button_group(GTK_RADIO_BUTTON(radio_button));
 
     if (i == default_value) /* default is first radio button */
