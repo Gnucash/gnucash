@@ -1,11 +1,33 @@
+/********************************************************************\
+ * qofinstance.c -- handler for fields common to all objects        *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * qofinstance.c
- *
  * Object instance holds many common fields that most
  * gnucash objects use.
  * 
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  */
+
+#include "gnc-trace.h"
 
 #include "kvp-util-p.h"
 #include "qofbook.h"
@@ -13,6 +35,10 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofinstance.h"
+
+static short module = MOD_ENGINE;
+
+/* ========================================================== */
 
 void 
 qof_instance_init (QofInstance *inst, QofBook *book)
@@ -53,6 +79,8 @@ qof_instance_get_slots (QofInstance *inst)
   return inst->kvp_data;
 }
 
+/* ========================================================== */
+
 void
 qof_instance_gemini (QofInstance *to, QofInstance *from)
 {
@@ -72,3 +100,31 @@ qof_instance_gemini (QofInstance *to, QofInstance *from)
   to->dirty = TRUE;
 }
 
+QofInstance *
+qof_instance_lookup_twin (QofInstance *src, QofBook *target_book)
+{
+   QofEntityTable *src_etable, *target_etable;
+   QofIdType etype;
+   KvpFrame *fr;
+   GUID * twin_guid;
+   QofInstance * twin;
+                                                                                
+   if (!src || !target_book) return NULL;
+   ENTER (" ");
+
+   fr = gnc_kvp_bag_find_by_guid (src->kvp_data, "gemini",
+                    "book_guid", &src->guid);
+                                                                                
+   twin_guid = kvp_frame_get_guid (fr, "inst_guid");
+
+   src_etable = qof_book_get_entity_table (src->book);
+   etype = qof_entity_type (src_etable, &src->guid);
+
+   target_etable = qof_book_get_entity_table (target_book);
+   twin = qof_entity_lookup (target_etable, twin_guid, etype);
+
+   LEAVE (" found twin=%p", twin);
+   return twin;
+}
+
+/* ========================== END OF FILE ======================= */
