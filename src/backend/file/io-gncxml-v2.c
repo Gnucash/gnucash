@@ -305,13 +305,7 @@ add_template_transaction_local( sixtp_gdv2 *data,
 static gboolean
 add_pricedb_local(sixtp_gdv2 *data, GNCPriceDB *db)
 {
-    QofBook *book;
-
-    book = data->book;
-
     /* gnc_pricedb_print_contents(db, stdout); */
-    gnc_pricedb_set_db(book, db);
-
     return TRUE;
 }
 

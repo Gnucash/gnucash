@@ -236,12 +236,13 @@ build_period_filepath (FileBackend *fbe, QofBook *book)
 }
 
 static void
-file_begin_edit (QofBackend *be, QofIdTypeConst typ, gpointer gp)
+file_begin_edit (QofBackend *be, QofInstance *inst)
 {
     FileBackend *fbe = (FileBackend *) be;
     QofBook *book = gp;
     const char * filepath;
 
+    QofIdTypeConst typ = QOF_ENTITY(inst)->e_type;
     if (strcmp (GNC_ID_PERIOD, typ)) return;
     filepath = build_period_filepath(fbe, book);
     PINFO (" ====================== book=%p filepath=%s\n", book, filepath);
