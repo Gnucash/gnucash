@@ -1,3 +1,15 @@
+2004-01-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc.h: add a pointer to the
+	  provider created from this descriptor.
+	* src/app-utils/gnc-druid-provider.c: set the provider pointer
+	  in the descriptor object.
+	* src/app-utils/gnc-druid.[ch]:
+	  - add pointer to the current provider list node.
+	  - add API to specifically jump to a particular provider
+	  - restructure code to reduce duplication
+	* src/import-export/import-parse.h: add GNCIF_NONE
+
 2004-01-16  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/gnc-druid-gnome.[ch]: move the next/prev signals to

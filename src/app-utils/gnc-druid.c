@@ -93,6 +93,14 @@ gnc_druid_set_page(GNCDruid* druid, GNCDruidPage* page)
   ((GNC_DRUID_GET_CLASS(druid))->set_page)(druid, page);
 }
 
+static GNCDruidProvider*
+gnc_druid_set_provider_node(GNCDruid* druid, GList *node)
+{
+  druid->this_provider = node;
+  druid->provider = (node ? node->data : NULL);
+  return druid->provider;
+}
+
 GNCDruidProvider*
 gnc_druid_next_provider(GNCDruid* druid)
 {
@@ -101,15 +109,13 @@ gnc_druid_next_provider(GNCDruid* druid)
   g_return_val_if_fail(druid, NULL);
   g_return_val_if_fail(IS_GNC_DRUID(druid), NULL);
 
-  if (!druid->provider) {
+  if (!druid->this_provider) {
     node = druid->providers;
   } else {
-    node = g_list_find(druid->providers, druid->provider);
-    node = node->next;
+    node = druid->this_provider->next;
   }
 
-  druid->provider = (node ? node->data : NULL);
-  return druid->provider;
+  return gnc_druid_set_provider_node(druid, node);
 }
 
 GNCDruidProvider*
@@ -123,22 +129,22 @@ gnc_druid_prev_provider(GNCDruid* druid)
   if (!druid->provider) {
     node = g_list_last(druid->providers);
   } else {
-    node = g_list_find(druid->providers, druid->provider);
-    node = node->prev;
+    node = druid->this_provider->prev;
   }
 
-  druid->provider = (node ? node->data : NULL);
-  return druid->provider;
+  return gnc_druid_set_provider_node(druid, node);
 }
 
-void
-gnc_druid_next_page(GNCDruid* druid)
+
+static void
+gnc_druid_change_page(GNCDruid *druid,
+		      GNCDruidProvider* (*next_prov)(GNCDruid*),
+		      GNCDruidPage* (*first_page)(GNCDruidProvider*),
+		      GNCDruidPage* (*next_page)(GNCDruidProvider*),
+		      gboolean first)
 {
   GNCDruidProvider *prov;
   GNCDruidPage* page = NULL;
-
-  g_return_if_fail(druid);
-  g_return_if_fail(IS_GNC_DRUID(druid));
 
   for (prov = druid->provider; !page; ) {
 
@@ -150,20 +156,22 @@ gnc_druid_next_page(GNCDruid* druid)
      * we hit the next of the provider list, we're done.
      */
 
-    if (!prov) {
+    if (!prov || first) {
 
       /* Nope, no provider */
-      prov = gnc_druid_next_provider(druid);
+      if (!prov || !first)
+	prov = next_prov(druid);
+
       if (!prov)
 	break;
 
       /* New provider -- get the first page */
-      page = gnc_druid_provider_first_page(prov);
+      page = first_page(prov);
 
     } else {
 
       /* Yep, try to get the next page */
-      page = gnc_druid_provider_next_page(prov);
+      page = next_page(prov);
     }
 
     /* If we didn't get a page, then we should go to the next provider */
@@ -177,44 +185,49 @@ gnc_druid_next_page(GNCDruid* druid)
   g_return_if_fail(page);
 }
 
-void
-gnc_druid_prev_page(GNCDruid* druid)
+static void
+gnc_druid_next_page_internal(GNCDruid* druid, gboolean first)
 {
-  GNCDruidProvider *prov;
-  GNCDruidPage* page = NULL;
+  gnc_druid_change_page(druid, gnc_druid_next_provider,
+			gnc_druid_provider_first_page, gnc_druid_provider_next_page,
+			first);
+}
 
+void
+gnc_druid_next_page(GNCDruid* druid)
+{
   g_return_if_fail(druid);
   g_return_if_fail(IS_GNC_DRUID(druid));
 
-  for (prov = druid->provider; !page; ) {
+  gnc_druid_next_page_internal(druid, FALSE);
+}
 
-    /* See gnc_druid_next_page for documentation */
+void
+gnc_druid_prev_page(GNCDruid* druid)
+{
+  g_return_if_fail(druid);
+  g_return_if_fail(IS_GNC_DRUID(druid));
 
-    if (!prov) {
+  gnc_druid_change_page(druid, gnc_druid_prev_provider,
+			gnc_druid_provider_last_page, gnc_druid_provider_prev_page,
+			FALSE);
+}
 
-      /* Nope, no provider */
-      prov = gnc_druid_prev_provider(druid);
-      if (!prov)
-	break;
+void
+gnc_druid_jump_to_provider(GNCDruid* druid, GNCDruidProvider* prov)
+{
+  GList *node;
 
-      /* New provider -- get the first page */
-      page = gnc_druid_provider_last_page(prov);
+  g_return_if_fail(druid);
+  g_return_if_fail(IS_GNC_DRUID(druid));
+  g_return_if_fail(prov);
+  g_return_if_fail(IS_GNC_DRUID_PROVIDER(prov));
 
-    } else {
+  node = g_list_find(druid->providers, prov);
+  g_return_if_fail(node);
 
-      /* Yep, try to get the next page */
-      page = gnc_druid_provider_prev_page(prov);
-    }
-
-    /* If we didn't get a page, then we should go to the next provider */
-    if (!page)
-      prov = NULL;
-  }
-
-  if (page)
-    gnc_druid_set_page(druid, page);
-
-  g_return_if_fail(page);
+  gnc_druid_set_provider_node(druid, node);
+  gnc_druid_next_page_internal(druid, TRUE);
 }
 
 /* Other functions */
@@ -238,7 +251,6 @@ GNCDruid* gnc_druid_new(const gchar* title, GList *providers, gpointer backend_c
   GList *prov_list = NULL;
   GList *node;
   GNCDruidProvider *prov;
-  GNCDruidPage *page;
   GNCDruidClass *gdc;
 
   g_return_val_if_fail(title, NULL);
@@ -277,9 +289,7 @@ GNCDruid* gnc_druid_new(const gchar* title, GList *providers, gpointer backend_c
   g_list_free(providers);
 
   /* Set the first page of the druid */
-  prov = gnc_druid_next_provider(druid);
-  page = gnc_druid_provider_first_page(prov);
-  gnc_druid_set_page(druid, page);
+  gnc_druid_next_page(druid);
 
   /* And return the new druid. */
   return druid;

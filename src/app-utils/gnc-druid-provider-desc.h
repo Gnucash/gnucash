@@ -20,6 +20,7 @@ typedef struct _GNCDruidProviderDesc GNCDruidProviderDesc;
 typedef struct _GNCDruidProviderDescClass GNCDruidProviderDescClass;
 
 #include "gnc-druid.h"
+#include "gnc-druid-provider.h"
 
 struct _GNCDruidProviderDesc
 {
@@ -30,6 +31,9 @@ struct _GNCDruidProviderDesc
   gboolean (*provider_needed)(GNCDruidCB*);
   gboolean (*next_cb)(GNCDruidCB*);
   gboolean (*prev_cb)(GNCDruidCB*);
+
+  /* The following are set internally for use by the backend */
+  GNCDruidProvider *	provider; /* a pointer to the provider */
 };
 
 struct _GNCDruidProviderDescClass

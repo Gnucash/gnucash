@@ -119,13 +119,14 @@ GNCDruidProvider* gnc_druid_provider_new(GNCDruid* druid_ctx,
   g_return_val_if_fail(druid_ctx, NULL);
   g_return_val_if_fail(IS_GNC_DRUID(druid_ctx), NULL);
   g_return_val_if_fail(typeTable, NULL);
+  g_return_val_if_fail(desc->name, NULL);
+  g_return_val_if_fail(!desc->provider, NULL);
 
   /* Lookup the UI Type provider table */
   table = g_hash_table_lookup(typeTable, druid_ctx->ui_type);
   g_return_val_if_fail(table, NULL);
 
   /* Now look up the actual provider creator for this provider type */
-  g_return_val_if_fail(desc->name, NULL);
   new_provider = g_hash_table_lookup(table, desc->name);
   g_return_val_if_fail(new_provider, NULL);
 
@@ -134,6 +135,7 @@ GNCDruidProvider* gnc_druid_provider_new(GNCDruid* druid_ctx,
   if (provider) {
     provider->druid = druid_ctx;
     provider->desc = desc;
+    desc->provider = provider;
   }
 
   return provider;

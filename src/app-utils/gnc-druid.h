@@ -33,8 +33,9 @@ struct _GNCDruid
   const gchar *ui_type;
 
   /* PROVIDED HEREIN */
-  GNCDruidProvider *provider;	/* current provider */
   GList *providers;		/* list of GNCProvider*; list is owned herein */
+  GList *this_provider;		/* a pointer to the current provider */
+  GNCDruidProvider *provider;	/* current provider */
 
   /* Backend information */
   gpointer be_ctx;		/* backend context pointer */
@@ -64,6 +65,9 @@ GNCDruidProvider* gnc_druid_prev_provider(GNCDruid*);
 
 void gnc_druid_next_page(GNCDruid*);
 void gnc_druid_prev_page(GNCDruid*);
+
+/* Reset the druid page by jumping to the provider. */
+void gnc_druid_jump_to_provider(GNCDruid*, GNCDruidProvider*);
 
 /* Other functions */
 
