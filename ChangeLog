@@ -1,3 +1,12 @@
+2003-05-12  David Hampton  <hampton@employees.org>
+
+	* src/quotes/finance-quote-check.in: 
+	* src/quotes/update-finance-quote.in: Add HTML::Parser to the list
+	of items checked/installed. #104197
+
+	* src/engine/Account.c (xaccAccountSetQuoteTZ): A null string is a
+	valid value. It stands for the local time zone. #104197
+
 2003-05-11  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-transfer.c: Fix transfer dialog to not

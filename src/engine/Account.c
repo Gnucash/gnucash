@@ -2927,7 +2927,6 @@ void
 xaccAccountSetQuoteTZ(Account *acc, const char *tz) 
 {
   if(!acc) return;
-  if(!tz) return;
 
   xaccAccountBeginEdit(acc);
   {
