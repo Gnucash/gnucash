@@ -93,12 +93,14 @@ else
   GNC_DOC_INSTALL_DIR='${pkgdatadir}/doc'
 fi
 
+GNC_ACCOUNTS_DIR=${GNC_SHAREDIR}/accounts
+
 AC_SUBST(GNC_CONFIGDIR)
 AC_SUBST(GNC_LIBDIR)
 AC_SUBST(GNC_SHAREDIR)
 AC_SUBST(GNC_SCM_INSTALL_DIR)
 AC_SUBST(GNC_DOC_INSTALL_DIR)
-
+AC_SUBST(GNC_ACCOUNTS_DIR)
 
 # We should always see these errors...
 CFLAGS="${CFLAGS} -Wall"
@@ -280,6 +282,8 @@ AC_SUBST(G_WRAP_LINK_ARGS)
 AC_OUTPUT(
           dnl # Makefiles
           Makefile
+          accounts/Makefile
+          accounts/C/Makefile
           debian/Makefile
           doc/Makefile
           doc/examples/Makefile
