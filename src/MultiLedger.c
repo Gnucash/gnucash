@@ -574,19 +574,23 @@ xaccDestroyLedgerDisplay (Account *acc)
    xaccLedgerDisplay *regData;
    int n;
 
+   if (!acc) return;
+
    /* find the single-account window for this account, if any */
    FIND_IN_LIST (xaccLedgerDisplay, regList, acc, leader, regData);
    if (regData) {
       if (regData->destroy) { (regData->destroy) (regData); }
+      xaccLedgerDisplayClose (regData);
    } 
 
    /* find the multiple-account window for this account, if any */
    FIND_IN_LIST (xaccLedgerDisplay, ledgerList, acc, leader, regData);
    if (regData) {
       if (regData->destroy) { (regData->destroy) (regData); }
+      xaccLedgerDisplayClose (regData);
    } 
 
-   /* cruise throught the miscellanous account windows */
+   /* cruise throught the miscellaneous account windows */
    if (!fullList) return;
    n = 0;
    regData = fullList[n];
@@ -596,6 +600,8 @@ xaccDestroyLedgerDisplay (Account *acc)
       got_one = ledgerIsMember (regData, acc);
       if (got_one) {
          if (regData->destroy) { (regData->destroy) (regData); }
+         xaccLedgerDisplayClose (regData);
+         n = -1;  /* since the above alters this list */
       }
       n++;
       regData = fullList[n];
@@ -615,8 +621,11 @@ xaccDestroyLedgerDisplay (Account *acc)
 void 
 xaccLedgerDisplayClose (xaccLedgerDisplay *regData)
 {
-  Account *acc = regData->leader;
+  Account *acc;
   
+  if (!regData) return;
+  acc = regData->leader;
+
   /* Save any unsaved changes */
   xaccSRSaveRegEntry (regData->ledger);
 
