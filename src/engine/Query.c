@@ -370,7 +370,7 @@ xaccQueryAddDateMatchTS (Query * q,
   tmp_q = gncQueryCreate ();
 
   if (use_start) {
-    pred_data = qof_query_date_predicate (QOF_QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, sts);
+    pred_data = qof_query_date_predicate (QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, sts);
     if (!pred_data) {
       gncQueryDestroy (tmp_q);
       return;
@@ -381,7 +381,7 @@ xaccQueryAddDateMatchTS (Query * q,
   }
 
   if (use_end) {
-    pred_data = qof_query_date_predicate (QOF_QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, ets);
+    pred_data = qof_query_date_predicate (QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, ets);
     if (!pred_data) {
       gncQueryDestroy (tmp_q);
       return;

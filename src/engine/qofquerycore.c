@@ -299,13 +299,13 @@ static int date_match_predicate (gpointer object, QofQueryAccess get_fcn,
   switch (pd->how) {
   case QOF_COMPARE_LT:
     return (compare < 0);
-  case QOF_QOF_COMPARE_LTE:
+  case QOF_COMPARE_LTE:
     return (compare <= 0);
   case QOF_COMPARE_EQUAL:
     return (compare == 0);
   case QOF_COMPARE_GT:
     return (compare > 0);
-  case QOF_QOF_COMPARE_GTE:
+  case QOF_COMPARE_GTE:
     return (compare >= 0);
   case QOF_COMPARE_NEQ:
     return (compare != 0);
@@ -418,13 +418,13 @@ static int numeric_match_predicate (gpointer object, QofQueryAccess get_fcn,
   switch (pd->how) {
   case QOF_COMPARE_LT:
     return (compare < 0);
-  case QOF_QOF_COMPARE_LTE:
+  case QOF_COMPARE_LTE:
     return (compare <= 0);
   case QOF_COMPARE_EQUAL:
     return compare;
   case QOF_COMPARE_GT:
     return (compare > 0);
-  case QOF_QOF_COMPARE_GTE:
+  case QOF_COMPARE_GTE:
     return (compare >= 0);
   case QOF_COMPARE_NEQ:
     return !compare;
@@ -675,13 +675,13 @@ static int int32_match_predicate (gpointer object, QofQueryAccess get_fcn,
   switch (pd->how) {
   case QOF_COMPARE_LT:
     return (val < pdata->val);
-  case QOF_QOF_COMPARE_LTE:
+  case QOF_COMPARE_LTE:
     return (val <= pdata->val);
   case QOF_COMPARE_EQUAL:
     return (val == pdata->val);
   case QOF_COMPARE_GT:
     return (val > pdata->val);
-  case QOF_QOF_COMPARE_GTE:
+  case QOF_COMPARE_GTE:
     return (val >= pdata->val);
   case QOF_COMPARE_NEQ:
     return (val != pdata->val);
@@ -762,13 +762,13 @@ static int int64_match_predicate (gpointer object, QofQueryAccess get_fcn,
   switch (pd->how) {
   case QOF_COMPARE_LT:
     return (val < pdata->val);
-  case QOF_QOF_COMPARE_LTE:
+  case QOF_COMPARE_LTE:
     return (val <= pdata->val);
   case QOF_COMPARE_EQUAL:
     return (val == pdata->val);
   case QOF_COMPARE_GT:
     return (val > pdata->val);
-  case QOF_QOF_COMPARE_GTE:
+  case QOF_COMPARE_GTE:
     return (val >= pdata->val);
   case QOF_COMPARE_NEQ:
     return (val != pdata->val);
@@ -849,13 +849,13 @@ static int double_match_predicate (gpointer object, QofQueryAccess get_fcn,
   switch (pd->how) {
   case QOF_COMPARE_LT:
     return (val < pdata->val);
-  case QOF_QOF_COMPARE_LTE:
+  case QOF_COMPARE_LTE:
     return (val <= pdata->val);
   case QOF_COMPARE_EQUAL:
     return (val == pdata->val);
   case QOF_COMPARE_GT:
     return (val > pdata->val);
-  case QOF_QOF_COMPARE_GTE:
+  case QOF_COMPARE_GTE:
     return (val >= pdata->val);
   case QOF_COMPARE_NEQ:
     return (val != pdata->val);
@@ -1109,11 +1109,11 @@ static int kvp_match_predicate (gpointer object, QofQueryAccess get_fcn,
   {
   case QOF_COMPARE_LT:
     return (compare < 0);
-  case QOF_QOF_COMPARE_LTE:
+  case QOF_COMPARE_LTE:
     return (compare <= 0);
   case QOF_COMPARE_EQUAL:
     return (compare == 0);
-  case QOF_QOF_COMPARE_GTE:
+  case QOF_COMPARE_GTE:
     return (compare >= 0);
   case QOF_COMPARE_GT:
     return (compare > 0);

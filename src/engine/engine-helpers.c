@@ -338,9 +338,9 @@ gnc_scm2amt_match_how (SCM how_scm)
   char *how = gh_symbol2newstr (how_scm, NULL);
 
   if (!safe_strcmp (how, "amt-match-atleast"))
-    res = QOF_QOF_COMPARE_GTE;
+    res = QOF_COMPARE_GTE;
   else if (!safe_strcmp (how, "amt-match-atmost"))
-    res = QOF_QOF_COMPARE_LTE;
+    res = QOF_COMPARE_LTE;
   else if (!safe_strcmp (how, "amt-match-exactly"))
     res = QOF_COMPARE_EQUAL;
   else {
@@ -361,11 +361,11 @@ gnc_scm2kvp_match_how (SCM how_scm)
   if (!safe_strcmp (how, "kvp-match-lt"))
     res = QOF_COMPARE_LT;
   else if (!safe_strcmp (how, "kvp-match-lte"))
-    res = QOF_QOF_COMPARE_LTE;
+    res = QOF_COMPARE_LTE;
   else if (!safe_strcmp (how, "kvp-match-eq"))
     res = QOF_COMPARE_EQUAL;
   else if (!safe_strcmp (how, "kvp-match-gte"))
-    res = QOF_QOF_COMPARE_GTE;
+    res = QOF_COMPARE_GTE;
   else if (!safe_strcmp (how, "kvp-match-gt"))
     res = QOF_COMPARE_GT;
   else {

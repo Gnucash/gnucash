@@ -129,10 +129,10 @@
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:query-compare-how> "QofQueryCompare")))
   (gw:enum-add-value! wt "QOF_COMPARE_LT" 'query-compare-lt)
-  (gw:enum-add-value! wt "QOF_QOF_COMPARE_LTE" 'query-compare-lte)
+  (gw:enum-add-value! wt "QOF_COMPARE_LTE" 'query-compare-lte)
   (gw:enum-add-value! wt "QOF_COMPARE_EQUAL" 'query-compare-equal)
   (gw:enum-add-value! wt "QOF_COMPARE_GT" 'query-compare-gt)
-  (gw:enum-add-value! wt "QOF_QOF_COMPARE_GTE" 'query-compare-gte)
+  (gw:enum-add-value! wt "QOF_COMPARE_GTE" 'query-compare-gte)
   (gw:enum-add-value! wt "QOF_COMPARE_NEQ" 'query-compare-neq)
   #t)
 

@@ -1555,14 +1555,14 @@ gncQueryPrintStringForHow (QofQueryCompare how)
   {
     case QOF_COMPARE_LT:
       return "QOF_COMPARE_LT";
-    case QOF_QOF_COMPARE_LTE:
-      return "QOF_QOF_COMPARE_LTE";
+    case QOF_COMPARE_LTE:
+      return "QOF_COMPARE_LTE";
     case QOF_COMPARE_EQUAL:
       return "QOF_COMPARE_EQUAL";
     case QOF_COMPARE_GT:
       return "QOF_COMPARE_GT";
-    case QOF_QOF_COMPARE_GTE:
-      return "QOF_QOF_COMPARE_GTE";
+    case QOF_COMPARE_GTE:
+      return "QOF_COMPARE_GTE";
     case QOF_COMPARE_NEQ:
       return "QOF_COMPARE_NEQ";
   }

@@ -54,10 +54,10 @@ typedef gpointer (*QofQueryAccess)(gpointer);
  */
 typedef enum {
   QOF_COMPARE_LT = 1,
-  QOF_QOF_COMPARE_LTE,
+  QOF_COMPARE_LTE,
   QOF_COMPARE_EQUAL,
   QOF_COMPARE_GT,
-  QOF_QOF_COMPARE_GTE,
+  QOF_COMPARE_GTE,
   QOF_COMPARE_NEQ
 } QofQueryCompare;
 
