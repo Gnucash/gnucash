@@ -35,7 +35,7 @@
        optname-from-date optname-to-date "a")
 
       (gnc:options-add-interval-choice! 
-       options pagename-general optname-stepsize "b")
+       options pagename-general optname-stepsize "b" 'MonthDelta)
 
       (add-option
        (gnc:make-account-list-option
@@ -51,14 +51,8 @@
 		(filter gnc:account-is-inc-exp? accounts)))
 	#t))
 
-      (add-option
-       (gnc:make-currency-option
-	pagename-general optname-report-currency
-	"d"
-	(_ "Select the display value for the currency")
-	(gnc:option-value
-	 (gnc:lookup-global-option "International"
-				   "Default Currency"))))
+      (gnc:options-add-currency! 
+       options pagename-general optname-report-currency "d")
       
       (add-option
        (gnc:make-simple-boolean-option
@@ -75,8 +69,9 @@
         pagename-display optname-stacked
         "ba" (_ "Show barchart as stacked?") #f))
 
-      (gnc:options-add-plot-size! options pagename-display 
-				  optname-plot-width optname-plot-height "c" 400 400)
+      (gnc:options-add-plot-size! 
+       options pagename-display 
+       optname-plot-width optname-plot-height "c" 400 400)
 
       (gnc:options-set-default-section options pagename-general)
 
@@ -144,10 +139,8 @@
 	   (exchange-fn (lambda (foreign)
                           (exchange-fn-internal foreign report-currency)))
 	   (dates-list (gnc:dateloop 
-			;; FIXME: gnc:dateloop is toast (see ML)
                         (gnc:timepair-start-day-time from-date-tp) 
-                        (gnc:timepair-end-day-time 
-                         (decdate to-date-tp DayDelta))
+                        (gnc:timepair-end-day-time to-date-tp)
                         (eval interval)))
            (income-collector-fn (collector-fn accounts #t))
            (expense-collector-fn  (collector-fn accounts #f))

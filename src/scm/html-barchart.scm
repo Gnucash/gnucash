@@ -36,7 +36,11 @@
                       col-colors 
                       row-labels-rotated?
 		      stacked?
-                      data)))
+                      data
+		      button-1-bar-urls button-2-bar-urls 
+		      button-3-bar-urls
+		      button-1-legend-urls button-2-legend-urls 
+		      button-3-legend-urls)))
 
 (define gnc:html-barchart? 
   (record-predicate <html-barchart>))
@@ -50,7 +54,8 @@
   (record-constructor <html-barchart>))
 
 (define (gnc:make-html-barchart)
-  (gnc:make-html-barchart-internal -1 -1 #f #f #f #f '() '() '() #f #f '()))
+  (gnc:make-html-barchart-internal -1 -1 #f #f #f #f '() '() '() 
+				   #f #f '() #f #f #f #f #f #f))
 
 (define gnc:html-barchart-data
   (record-accessor <html-barchart> 'data))
@@ -123,6 +128,42 @@
 
 (define gnc:html-barchart-set-subtitle!
   (record-modifier <html-barchart> 'subtitle))
+
+(define gnc:html-barchart-button-1-bar-urls
+  (record-accessor <html-barchart> 'button-1-bar-urls))
+
+(define gnc:html-barchart-set-button-1-bar-urls!
+  (record-modifier <html-barchart> 'button-1-bar-urls))
+
+(define gnc:html-barchart-button-2-bar-urls
+  (record-accessor <html-barchart> 'button-2-bar-urls))
+
+(define gnc:html-barchart-set-button-2-bar-urls!
+  (record-modifier <html-barchart> 'button-2-bar-urls))
+
+(define gnc:html-barchart-button-3-bar-urls
+  (record-accessor <html-barchart> 'button-3-bar-urls))
+
+(define gnc:html-barchart-set-button-3-bar-urls!
+  (record-modifier <html-barchart> 'button-3-bar-urls))
+
+(define gnc:html-barchart-button-1-legend-urls
+  (record-accessor <html-barchart> 'button-1-legend-urls))
+
+(define gnc:html-barchart-set-button-1-legend-urls!
+  (record-modifier <html-barchart> 'button-1-legend-urls))
+
+(define gnc:html-barchart-button-2-legend-urls
+  (record-accessor <html-barchart> 'button-2-legend-urls))
+
+(define gnc:html-barchart-set-button-2-legend-urls!
+  (record-modifier <html-barchart> 'button-2-legend-urls))
+
+(define gnc:html-barchart-button-3-legend-urls
+  (record-accessor <html-barchart> 'button-3-legend-urls))
+
+(define gnc:html-barchart-set-button-3-legend-urls!
+  (record-modifier <html-barchart> 'button-3-legend-urls))
 
 (define (gnc:html-barchart-append-row! barchart newrow)
   (let ((dd (gnc:html-barchart-data barchart)))

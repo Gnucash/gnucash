@@ -1,3 +1,21 @@
+2001-03-29  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/report-list.scm, Makefile.am: Added new file.
+
+	* src/scm/report/category-barchart.scm: Two new reports. Shows
+	barchart of income (or expense) categories over time.
+
+	* src/scm/report/income-expense-graph.scm: Use more
+	option-utilities.scm. Fixed gnc:dateloop usage (last interval was
+	wrong).
+
+	* src/scm/html-barchart.scm: Added record components for bar- and
+	legend-urls and their accessor/modifier functions. FIXME: They
+	don't get rendered yet -- somebody has to add that.
+
+	* src/scm/date-utilities.scm (gnc:dateloop): Fixed last interval
+	not to be longer than the specified end date.
+
 2001-03-29  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/engine/io-gncxml-v2.c (write_counts): don't add an amount if

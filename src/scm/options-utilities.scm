@@ -71,12 +71,12 @@
 
 ;; A date interval multichoice option.
 (define (gnc:options-add-interval-choice! 
-	 options pagename optname sort-tag)
+	 options pagename optname sort-tag default)
   (gnc:register-option 
    options
    (gnc:make-multichoice-option
     pagename optname
-    sort-tag (_ "The amount of time between data points") 'WeekDelta
+    sort-tag (_ "The amount of time between data points") default
     (list (vector 'DayDelta (_ "Day") (_ "Day"))
 	  (vector 'WeekDelta (_ "Week") (_ "Week"))
 	  (vector 'TwoWeekDelta (_ "2Week") (_ "Two Week"))

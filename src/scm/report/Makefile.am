@@ -4,20 +4,21 @@ gncscmdir = ${GNC_SCM_INSTALL_DIR}/report
 gncscm_DATA = \
   account-summary.scm \
   average-balance.scm \
-  pnl.scm \
+  category-barchart.scm \
+  hello-world.scm \
   income-expense-graph.scm \
   income-or-expense-pie.scm \
-  hello-world.scm \
+  pnl.scm \
   portfolio.scm \
   register.scm \
   report-list.scm \
-  stylesheet-plain.scm \
   stylesheet-fancy.scm \
+  stylesheet-plain.scm \
   table-test.scm \
   taxtxf.scm \
-  txf-export.scm \
-  txf-export-help.scm \
   transaction-report.scm \
+  txf-export-help.scm \
+  txf-export.scm \
   view-column.scm
 
 EXTRA_DIST = \

@@ -195,12 +195,18 @@
   (gnc:timepair-eq (gnc:timepair-canonical-day-time t1)
 		   (gnc:timepair-canonical-day-time t2)))
 
-;; Build a list of time intervals 
+;; Build a list of time intervals. 
+;;
+;; Note that the last interval will be shorter than <incr> if
+;; (<curd>-<endd>) is not an integer multiple of <incr>. If you don't
+;; want that you'll have to write another function.
 (define (gnc:dateloop curd endd incr) 
   (cond ((gnc:timepair-later curd endd)
 	 (let ((nextd (incdate curd incr)))
-	 (cons (list curd (decdate nextd SecDelta) '())
-	       (gnc:dateloop nextd endd incr))))
+	   (cond ((gnc:timepair-later nextd endd)
+		  (cons (list curd (decdate nextd SecDelta) '())
+			(gnc:dateloop nextd endd incr)))
+		  (else (cons (list curd endd '()) '())))))
 	(else '())))
 
 ; A reference zero date - the Beginning Of The Epoch

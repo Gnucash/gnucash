@@ -52,7 +52,7 @@
         #f #t))
 
       (gnc:options-add-interval-choice! 
-       options pagename-general (N_ "Step Size") "b")
+       options pagename-general (N_ "Step Size") "b" 'TwoWeekDelta)
 
       (register-option
        (gnc:make-simple-boolean-option

@@ -10,6 +10,7 @@
 (gnc:depend "report/average-balance.scm")
 (gnc:depend "report/income-expense-graph.scm")
 (gnc:depend "report/income-or-expense-pie.scm")
+(gnc:depend "report/category-barchart.scm")
 (gnc:depend "report/pnl.scm")
 (gnc:depend "report/hello-world.scm")
 (gnc:depend "report/portfolio.scm")
