@@ -553,7 +553,7 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
 
    /* if not, create it */
    if (!xfer_acc) {
-      xfer_acc = mallocAccount ();
+      xfer_acc = xaccMallocAccount ();
       xfer_acc->accountName = XtNewString (qifline);
       xfer_acc->description = XtNewString ("");
       xfer_acc->notes = XtNewString ("");
