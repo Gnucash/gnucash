@@ -1,5 +1,6 @@
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "single.h"
 
@@ -20,6 +21,16 @@ void xaccInitSingleCell (SingleCell *cell)
    cell->alignment = 0;
    cell->value = 0x0;
    cell->modify_verify = NULL;
+   cell->extdata = NULL;
+   cell->block = NULL;
+}
+
+void xaccSetSingleCellValue (SingleCell *cell, char *val)
+{
+
+   if (cell->value) free (cell->value);
+   cell->value = strdup (val);
+
 }
 
 /* ------------------ end of file ---------------------- */

@@ -17,6 +17,7 @@ typedef struct _CellBlock {
   short         *widths;        /* column widths */
   unsigned char *alignments;    /* column text alignments */
 
+  struct _Table *table;         /* back-pointer to table */
 } CellBlock;
 
 
@@ -24,6 +25,6 @@ CellBlock * xaccMallocCellBlock (int numrows, int numcols);
 void        xaccInitCellBlock (CellBlock *, int numrows, int numcols);
 
 /* add a cell to the array */
-void        xaccAddCell (CellBlock *, SingleCell *);
+void        xaccAddCell (CellBlock *, SingleCell *, int row, int col);
 
 #endif __XACC_CELL_H__

@@ -50,5 +50,7 @@ void        xaccRefreshTable (Table *);
 /* add a cell to the array */
 void        xaccSetCursor (Table *, CellBlock *);
 
+void        xaccSetTableValue (Table *, char *);
+
 #endif __XACC_TABLE_H__
 /* ================== end of file ======================= */

@@ -43,6 +43,7 @@ typedef struct _SingleCell {
   short width;    /* column width, in chars, not pixels */
   short alignment; /* column text alignment */
 
+  /* private data */
   char * value;   /* current value */
 
   const char * (*modify_verify) (const char *old, 
@@ -50,11 +51,15 @@ typedef struct _SingleCell {
                                  const char *new); 
 
 
+  struct _CellBlock *block;  /* back-pointer to parent container */
+  void * extdata;  /* generic extension mechanism */
 } SingleCell;
 
 
 SingleCell * xaccMallocSingleCell (void);
 void         xaccInitSingleCell (SingleCell *);
+
+void         xaccSetSingleCellValue (SingleCell *, char *);
 
 #endif /* __XACC_SINGLE_H__ */
 /* ------------------ end of file ---------------------- */

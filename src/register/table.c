@@ -76,6 +76,23 @@ xaccInitTable (Table * table, int tile_rows, int tile_cols)
 }
 
 /* ==================================================== */
+
+void
+xaccSetCursor (Table *table, CellBlock *curs)
+{
+   table->cursor = curs;
+
+   /* set back-pointer to table */
+   curs->table = (struct _Table *) table;
+}
+
+/* ==================================================== */
+
+void xaccSetTableValue (Table *table, char * val)
+{
+}
+
+/* ==================================================== */
 /* hack alert -- will core dump if numrows has changed, etc. */
 
 static

@@ -20,49 +20,52 @@ CreateReg(Widget parent ) {
    CellBlock *curs, *header;
    SingleCell *cell;
 
-   curs = xaccMallocCellBlock (2, 10);
    header = xaccMallocCellBlock (1, 10);
 
-   cell = xaccMallocPriceCell();
-   cell->row = 0;
-   cell->col = 3;
+   cell = xaccMallocDateCell();
    cell->width = 9;
-   xaccAddCell (header, cell);
+   xaccAddCell (header, cell, 0, 0);
    
    cell = xaccMallocPriceCell();
-   cell->row = 0;
-   cell->col = 4;
    cell->width = 9;
-   xaccAddCell (header, cell);
+   xaccAddCell (header, cell, 0, 3);
    
    cell = xaccMallocPriceCell();
-   cell->row = 0;
-   cell->col = 4;
    cell->width = 9;
-   xaccAddCell (curs, cell);
+   xaccAddCell (header, cell, 0, 4);
+
+   cell = xaccMallocTextCell();
+   cell->width = 9;
+   xaccAddCell (header, cell, DESC_CELL_R, DESC_CELL_C);
+   
+   /* --------------------------- */
+   curs = xaccMallocCellBlock (2, 10);
    
    cell = xaccMallocDateCell();
-   cell->row = 0;
-   cell->col = 0;
    cell->width = 9;
-   xaccAddCell (curs, cell);
+   xaccAddCell (curs, cell, 0, 0);
    
    cell = xaccMallocTextCell();
-   cell->row = DESC_CELL_R;
-   cell->col = DESC_CELL_C;
    cell->width = 9;
-   xaccAddCell (curs, cell);
+   xaccAddCell (curs, cell, DESC_CELL_R, DESC_CELL_C);
    
    cell = xaccMallocTextCell();
-   cell->row = MEMO_CELL_R;
-   cell->col = MEMO_CELL_C;
    cell->width = 9;
-   xaccAddCell (curs, cell);
+   xaccAddCell (curs, cell, MEMO_CELL_R, MEMO_CELL_C);
+
+   cell = xaccMallocPriceCell();
+   cell->width = 9;
+   xaccAddCell (curs, cell, 0, 3);
+   
+   cell = xaccMallocPriceCell();
+   cell->width = 9;
+   xaccAddCell (curs, cell, 0, 4);
+   
    
 
    table =  xaccMallocTable (0, 0);
-   table -> cursor = curs;
    table -> header = header;
+   xaccSetCursor (table, curs);
    xaccInitTable (table, 15, 1);
 
    xaccCreateTable (table, parent, "yodudue");

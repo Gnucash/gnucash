@@ -59,23 +59,24 @@ xaccInitCellBlock (CellBlock *arr, int numrows, int numcols)
 /* =================================================== */
 
 void        
-xaccAddCell (CellBlock *arr, SingleCell *cell) 
+xaccAddCell (CellBlock *arr, SingleCell *cell, int row, int col) 
 {
-   int i,j;
-
    if (!arr) return;
    if (!cell) return;
 
-   i = cell->row;
-   j = cell->col;
+   cell->row = row;
+   cell->col = col;
 
    /* avoid embarrasement if cell incorrectly specified */
-   if ((0 > i) || (0 > j)) return;
-   if ((i >= arr->numRows) || (j >= arr->numCols)) return;
+   if ((0 > row) || (0 > col)) return;
+   if ((row >= arr->numRows) || (col >= arr->numCols)) return;
 
-   arr->cells[i][j] = cell;
-   arr->widths[j] = cell->width;
-   arr->alignments[j] = cell->alignment;
+   arr->cells[row][col] = cell;
+   arr->widths[col] = cell->width;
+   arr->alignments[col] = cell->alignment;
+
+   /* install back-pointer to this container */
+   cell->block = (struct _CellBlock *) arr;
 }
 
 /* --------------- end of file ----------------- */
