@@ -675,15 +675,17 @@ xaccPrintAmountArgs (double val, gncBoolean print_currency_symbol,
 double xaccParseAmount (const char * instr, gncBoolean monetary)
 {
    struct lconv *lc = gnc_localeconv();
+   gncBoolean isneg = GNC_F;
    char *mstr, *str, *tok;
    double amount = 0.0;
    char negative_sign;
    char thousands_sep;
    char decimal_point;
    int len;
-   int isneg = 0;
 
    if (!instr) return 0.0;
+   if (*instr == '\0') return 0.0;
+
    mstr = strdup (instr);
    str = mstr;
 
@@ -699,23 +701,64 @@ double xaccParseAmount (const char * instr, gncBoolean monetary)
      decimal_point = lc->decimal_point[0];
    }
 
-   /* strip off garbage at end of the line */
-   tok = strchr (str, '\r');
-   if (tok) *tok = 0x0;
-   tok = strchr (str, '\n');
-   if (tok) *tok = 0x0;
+   /* strip off garbage at the beginning of the line */
+   while (*str != '\0')
+   {
+     switch (*str)
+     {
+       case '\r':
+       case '\n':
+       case ' ':
+       case '\t':
+         str++;
+         continue;
+         break;
+     }
 
-   /* search for a negative sign */
-   tok = strchr (str, negative_sign);
-   if (tok) {
-      isneg = 1;
-      str = tok + sizeof(char);
+     break;
    }
+
+   /* look for a negative sign */
+   if (*str == negative_sign) {
+      isneg = GNC_T;
+      str++;
+   }
+
+   if (*str == '\0') return 0.0;
+
+   /* go to end of string */
+   for (tok = str; *tok != '\0'; tok++)
+     ;
+
+   /* strip off garbage at end of the line */
+   while (--tok != str)
+   {
+     switch (*tok)
+     {
+       case '\r':
+       case '\n':
+       case ' ':
+       case '\t':
+         continue;
+         break;
+     }
+
+     break;
+   }
+
+   /* look for a negative sign at the end, some locales allow it,
+    * we'll just allow it everywhere. */
+   if (*tok == negative_sign) {
+      isneg = GNC_T;
+      *tok = '\0';
+   }
+
+   if (*str == '\0') return 0.0;
 
    /* remove thousands separator */
    tok = strchr (str, thousands_sep);
    while (tok) {
-      *tok = 0x0;
+      *tok = '\0';
       amount *= 1000.0;
       amount += ((double) (1000 * atoi (str)));
       str = tok + sizeof(char);
@@ -725,7 +768,7 @@ double xaccParseAmount (const char * instr, gncBoolean monetary)
    /* search for a decimal point */
    tok = strchr (str, decimal_point);
    if (tok) {
-      *tok = 0x0;
+      *tok = '\0';
       amount += ((double) (atoi (str)));
       str = tok + sizeof(char);
 
@@ -735,7 +778,7 @@ double xaccParseAmount (const char * instr, gncBoolean monetary)
 
          /* strip off garbage at end of the line */
          tok = strchr (str, ' ');
-         if (tok) *tok = 0x0;
+         if (tok) *tok = '\0';
    
          /* adjust for number of decimal places */
          len = strlen(str);

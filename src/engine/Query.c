@@ -1494,7 +1494,7 @@ xaccAccountMatchPredicate(Split * s, PredicateData * pd) {
   assert(s && pd);
   assert(pd->type == PD_ACCOUNT);
 
-  parent    = xaccSplitGetParent(s);
+  parent = xaccSplitGetParent(s);
   assert(parent);
 
   switch(pd->acct.how) {
@@ -1668,14 +1668,15 @@ xaccAmountMatchPredicate(Split * s, PredicateData * pd) {
   
   switch(pd->amount.amt_sgn) {
   case AMT_SGN_MATCH_CREDIT:
-    if(splitamt < 0.0) return 0;
+    if(splitamt > 0.0) return 0;
     break;
   case AMT_SGN_MATCH_DEBIT:
-    if(splitamt > 0.0) return 0;
+    if(splitamt < 0.0) return 0;
     break;
   default:
     break;
-  }  
+  }
+
   return value_match_predicate(splitamt, pd);  
 }
 
