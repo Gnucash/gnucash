@@ -1060,7 +1060,7 @@ gnc_locale_default_iso_currency_code (void)
 }
 
 gnc_commodity *
-gnc_locale_default_currency (void)
+gnc_locale_default_currency_nodefault (void)
 {
   gnc_commodity * currency;
   gnc_commodity_table *table;
@@ -1071,10 +1071,17 @@ gnc_locale_default_currency (void)
 
   currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_ISO, code);
 
-  if (currency)
-    return currency;
+  return (currency ? currency : NULL);
+}
 
-  return gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_ISO, "USD");
+gnc_commodity *
+gnc_locale_default_currency (void)
+{
+  gnc_commodity * currency = gnc_locale_default_currency_nodefault ();
+
+  return (currency ? currency :
+	  gnc_commodity_table_lookup (gnc_get_current_commodities (), 
+				      GNC_COMMODITY_NS_ISO, "USD"));
 }
 
 
@@ -1547,8 +1554,12 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 
    if (info.use_symbol)
    {
-     if (gnc_commodity_equiv (info.commodity, gnc_locale_default_currency ()))
+     /* There was a bug here: don't use gnc_locale_default_currency */
+     if (gnc_commodity_equiv (info.commodity, 
+			      gnc_locale_default_currency_nodefault ()))
+     {
        currency_symbol = lc->currency_symbol;
+     }
      else
      {
        if (info.commodity &&

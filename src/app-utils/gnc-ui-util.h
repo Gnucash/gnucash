@@ -142,7 +142,13 @@ PriceSourceCode gnc_get_source_code (const char * codename);
  * is given default (en_US) values.  */
 struct lconv * gnc_localeconv (void);
 
-/* Returns the default currency of the current locale. */
+/* Returns the default currency of the current locale, or NULL if no
+ * sensible currency could be identified from the locale. */
+gnc_commodity * gnc_locale_default_currency_nodefault (void);
+
+/* Returns the default currency of the current locale. WATCH OUT: If
+ * no currency could be identified from the locale, this one returns
+ * "USD", but this will have nothing to do with the actual locale. */
 gnc_commodity * gnc_locale_default_currency (void);
 
 /* Returns the default ISO currency string of the current locale. */

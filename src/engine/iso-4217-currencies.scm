@@ -144,7 +144,7 @@
 ( "Portuguese Escudo" "escudo" "centavo" "ISO4217" "PTE" "620" 100 100 ) ;; through 1998
 ( "Qatari Rial" "rial" "dirham" "ISO4217" "QAR" "634" 100 100 )
 ( "Romanian Leu" "leu" "bani"  "ISO4217" "ROL" "642" 100 100 )
-( "Russian Rouble" "rouble" "kopek" "ISO4217" "RUB" "810" 100 100 )
+( "Russian Rouble" "rouble" "kopek" "ISO4217" "RUR" "810" 100 100 )
 ( "Rwanda Franc" "franc" "centime" "ISO4217" "RWF" "646" 100 100 )
 ( "Samoan Tala" "tala" "sene" "ISO4217" "WST" "882" 100 100 )
 ( "Sao Tome and Principe Dobra" "Dobra" "centimo" "ISO4217" "STD" "678" 100 100 )

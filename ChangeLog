@@ -1,5 +1,13 @@
 2002-11-30  Christian Stimming  <stimming@tuhh.de>
 
+	* src/app-utils/gnc-ui-util.[hc]: Added
+	gnc_locale_default_currency_nodefault function since
+	locale_default_currency might return a non-locale related
+	currency. Fix xaccSPrintAmount. Fixes #95404.
+
+	* src/engine/iso-4217-currencies.scm ("rouble"): Fix mnemonic for
+	Russian Rouble which is "RUR" instead of RUB.
+
 	* src/business/business-gnome/business-gnome.scm,
 	src/gnome-utils/gnc-mdi-utils.c,
 	src/gnome-utils/gnc-menu-extensions.c,
