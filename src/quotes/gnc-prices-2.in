@@ -1,0 +1,148 @@
+#!/usr/bin/perl -w
+
+use strict;
+use English;
+use Quote;
+
+## Simple program to get quotes and feed them back to gnucash.
+
+## Input (on standard input - one line per entry)
+##
+## ("IBM" "YAHOO")
+## ("NT" "ASX")
+## ...
+
+## Output (on standard output, one output form per input line)
+##
+## on success:
+##   (quote (name . <security-name>) (date . <date>) (price . <price>)) 
+##
+## on failure:
+##   (error bad-input-line "some details")
+##   (error bad-quote-source "some details")
+##   (error quote-lookup-failed "some details")
+##   (error price-not-found "some details")
+##   (error misc "some details")
+
+## Exit status
+##
+## 0 - success
+## non-zero - failure
+
+# TODO:
+
+# Right now schemify_str is a hack.  It just supresses double quotes
+# in the output by replacing them with single quotes.  We should do
+# better, but that'll work for now.  I haven't thought it through
+# carefully, but can we just double all backslashes and backslash
+# escape all double quotes and get the right answer?
+
+# Right now this is more inefficient than it needs to be.  We ask for
+# each stock individually, but we should batch reqests to the same
+# source.  Perhaps later...
+
+my $exit_status = 0;
+
+my %quote_source_data =
+    ("YAHOO"        => [\&Quote::yahoo, "last"], 
+     "YAHOO_EUROPE" => [\&Quote::yahoo_europe, "last"],
+     "FIDELITY"     => [\&Quote::fidelity, "nav"],
+     "TRPRICE"      => [\&Quote::troweprice, "nav"],
+     "VANGUARD"     => [\&Quote::vanguard, "nav"],
+     "ASX"          => [\&Quote::asx, "last"],
+     "TIAACREF"     => [\&Quote::tiaacref, "nav"]);
+
+sub schemify_str {
+  my($str) = @_;
+
+  # Right now this is a hack.  We just make sure the outgoing string
+  # has no double quotes in it by mangling them all to single quotes.
+  # This is wrong, but it's better than letting dangerous strings
+  # through.  We can always improve this later.
+
+  # Have to do this because the perl-mode parser freaks out otherwise.
+  my $dq = '"';
+  my $sq = "'";
+
+  $str =~ s/$dq/$sq/gmo;
+  return $str;
+}
+
+my @lookup_items = ();
+
+while(<>) {
+
+  # This big ugly nasty thing just matches something like this
+  #
+  # ("FOO" "BAR")
+  #
+  # where, rougly speaking, whitespace is allowed almost everywhere,
+  # this text constitute the entire line, and the double-quotes and
+  # parens shown are the only occurences of those characters allowed
+  # in the line.
+
+  # Have to do this because the perl-mode parser freaks out otherwise.
+  my $dq = '"';
+
+  my $security_name;
+  my $quote_source_name;
+
+  if($_ =~ m/^\s* \(\s* $dq ([^$dq]+) $dq \s* $dq([^$dq]+)$dq  \s*\)  \s*$/ox) {
+    $security_name = $1;
+    $quote_source_name = $2;
+  } else {
+    my $scm_str = schemify_str($_);
+    print "(error bad-input-line \"Ignoring bad input line: $scm_str\")\n";
+    $exit_status |= 1;
+    # Yes this is ugly, but it really is what we mean here.
+    next;
+  }
+
+  my $quote_source_data = $quote_source_data{$quote_source_name};
+  
+  if(!$quote_source_data) {
+    # We don't have to schemify the source - the regexp filtered it.
+    print "(error bad-quote-source ";
+    print "\"Ignoring input line with bad source: $quote_source_name.\")\n";
+    $exit_status |= 1;
+    next;
+  }
+
+  my $quote_func = $$quote_source_data[0];
+  my $quote_hash_label = $$quote_source_data[1];
+
+  my %quote_data = &$quote_func($security_name);
+
+  if(!%quote_data) {
+    # We don't have to schemify the source or name - the regexp filtered it.
+    print "(error quote-lookup-failed ";
+    print "\"Lookup of $security_name at $quote_source_name failed.\")\n";
+    $exit_status |= 1;
+    next;
+  }    
+
+  my $security_price = $quote_data{$security_name, $quote_hash_label};
+  my $quote_date = $quote_data{$security_name, 'date'};
+
+  if(!$security_price) {
+    # We don't have to schemify the source or name - the regexp filtered it.
+    print "(error price-not-found " .
+        "\"Couldn't find price for $security_name " .
+            "in response from $quote_source_name.\")\n";
+    $exit_status |= 1;
+    next;
+  }    
+
+  ## We'll just let gnucash deal with the date...
+  $quote_date = schemify_str($quote_date);
+
+  ## Whew.  Finally.
+  print "(quote";
+  print " (name . \"$security_name\")";
+  print " (date . \"$quote_date\")";
+  print " (price . \"$security_price\")\n";
+}
+
+exit $exit_status;
+
+__END__
