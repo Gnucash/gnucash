@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2002-11-26 00:44+0100\n"
-"PO-Revision-Date: 2002-11-26 00:49+0100\n"
+"POT-Creation-Date: 2002-11-27 23:55+0100\n"
+"PO-Revision-Date: 2002-11-27 23:59+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -343,7 +343,7 @@ msgstr "Numerischer Fehler"
 #: src/gnome/dialog-commodities.c:331 src/gnome/dialog-price-edit-db.c:493
 #: src/gnome/glade/account.glade.h:63 src/gnome/glade/commodities.glade.h:12
 #: src/gnome/glade/price.glade.h:28
-#: src/import-export/generic-import.glade.h:22
+#: src/import-export/generic-import.glade.h:28
 #: src/register/ledger-core/split-register-model.c:212
 msgid "Type"
 msgstr "Art"
@@ -368,9 +368,8 @@ msgstr "Kontonummer"
 #: src/app-utils/gnc-ui-util.c:240
 #: src/business/business-gnome/glade/date-close.glade.h:1
 #: src/business/business-ledger/gncEntryLedgerModel.c:54
-#: src/gnome/glade/account.glade.h:16 src/gnome/glade/find.glade.h:20
-#: src/gnome/glade/tax.glade.h:5 src/gnome/reconcile-list.c:201
-#: src/import-export/generic-import.glade.h:7
+#: src/gnome/glade/account.glade.h:16 src/gnome/glade/tax.glade.h:5
+#: src/gnome/reconcile-list.c:201 src/import-export/generic-import.glade.h:7
 #: src/import-export/qif-import/qif.glade.h:26
 #: src/register/ledger-core/split-register-model.c:153
 msgid "Description"
@@ -397,7 +396,6 @@ msgstr "Währung/Aktie"
 #: intl-scm/guile-strings.c:155 intl-scm/guile-strings.c:1190
 #: intl-scm/guile-strings.c:1910 intl-scm/guile-strings.c:2186
 #: src/app-utils/gnc-ui-util.c:249 src/app-utils/gnc-ui-util.c:252
-#: src/gnome/glade/find.glade.h:10
 #: src/register/ledger-core/split-register-model.c:177
 #: src/register/ledger-core/split-register-model.c:317
 msgid "Balance"
@@ -475,7 +473,7 @@ msgstr "Anfangsbestand:"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:1906 intl-scm/guile-strings.c:2190
-#: src/app-utils/guile-util.c:1112 src/gnome/glade/find.glade.h:18
+#: src/app-utils/guile-util.c:1112
 #: src/register/ledger-core/split-register.c:1887
 msgid "Debit"
 msgstr "Belastung"
@@ -483,7 +481,6 @@ msgstr "Belastung"
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:119 intl-scm/guile-strings.c:1908
 #: intl-scm/guile-strings.c:2192 src/app-utils/guile-util.c:1158
-#: src/gnome/glade/find.glade.h:15
 #: src/register/ledger-core/split-register.c:1910
 #: src/register/ledger-core/split-register.c:1985
 #: src/register/ledger-core/split-register.c:2001
@@ -1398,8 +1395,7 @@ msgstr "Referenz"
 #: intl-scm/guile-strings.c:2238 intl-scm/guile-strings.c:2272
 #: intl-scm/guile-strings.c:2802
 #: src/business/business-gnome/glade/payment.glade.h:2
-#: src/gnome/glade/find.glade.h:5 src/gnome/reconcile-list.c:202
-#: src/import-export/generic-import.glade.h:4
+#: src/gnome/reconcile-list.c:202 src/import-export/generic-import.glade.h:4
 #: src/import-export/hbci/glade/hbci.glade.h:11
 #: src/import-export/qif-import/qif.glade.h:4
 msgid "Amount"
@@ -1416,8 +1412,8 @@ msgstr "Betrag"
 #: src/business/business-gnome/glade/payment.glade.h:3
 #: src/business/business-ledger/gncEntryLedgerModel.c:49
 #: src/gnome/dialog-price-edit-db.c:491 src/gnome/druid-loan.c:1470
-#: src/gnome/glade/find.glade.h:17 src/gnome/glade/price.glade.h:9
-#: src/gnome/reconcile-list.c:199 src/import-export/generic-import.glade.h:6
+#: src/gnome/glade/price.glade.h:9 src/gnome/reconcile-list.c:199
+#: src/import-export/generic-import.glade.h:6
 #: src/import-export/qif-import/qif.glade.h:25
 #: src/register/ledger-core/split-register-model.c:116
 msgid "Date"
@@ -1428,7 +1424,7 @@ msgstr "Datum"
 #: intl-scm/guile-strings.c:2014 intl-scm/guile-strings.c:2074
 #: intl-scm/guile-strings.c:2852
 #: src/business/business-gnome/glade/payment.glade.h:4
-#: src/gnome/glade/find.glade.h:48 src/import-export/generic-import.glade.h:13
+#: src/import-export/generic-import.glade.h:19
 #: src/register/ledger-core/split-register-model.c:205
 msgid "Memo"
 msgstr "Buchungstext"
@@ -1575,7 +1571,7 @@ msgstr "Entity ist kein Konto: %s"
 #: intl-scm/guile-strings.c:2028 intl-scm/guile-strings.c:2110
 #: intl-scm/guile-strings.c:2126
 #: src/business/business-gnome/business-utils.c:281
-#: src/gnome/glade/find.glade.h:50 src/gnome/glade/sched-xact.glade.h:120
+#: src/gnome/glade/sched-xact.glade.h:120
 msgid "None"
 msgstr "Keine"
 
@@ -2233,10 +2229,9 @@ msgstr ">"
 #: intl-scm/guile-strings.c:2788
 #: src/business/business-ledger/gncEntryLedgerModel.c:39
 #: src/gnome-utils/dialog-account.c:681 src/gnome/glade/account.glade.h:1
-#: src/gnome/glade/find.glade.h:1 src/gnome/glade/stocks.glade.h:1
-#: src/import-export/generic-import.glade.h:1
-#: src/import-export/hbci/gnc-hbci-gettrans.c:349
-#: src/import-export/hbci/gnc-hbci-gettrans.c:352
+#: src/gnome/glade/stocks.glade.h:1 src/import-export/generic-import.glade.h:1
+#: src/import-export/hbci/gnc-hbci-gettrans.c:362
+#: src/import-export/hbci/gnc-hbci-gettrans.c:365
 #: src/import-export/hbci/gnc-hbci-transfer.c:174
 #: src/import-export/hbci/gnc-hbci-transfer.c:177
 #: src/import-export/qif-import/qif.glade.h:1
@@ -2247,7 +2242,7 @@ msgstr "Konto"
 #. src/business/business-reports/invoice.scm
 #: intl-scm/guile-strings.c:2978
 #: src/business/business-ledger/gncEntryLedgerModel.c:44
-#: src/gnome/glade/find.glade.h:2 src/import-export/generic-import.glade.h:3
+#: src/import-export/generic-import.glade.h:3
 #: src/register/ledger-core/split-register-model.c:184
 msgid "Action"
 msgstr "Aktion"
@@ -2506,8 +2501,8 @@ msgstr ""
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:115 intl-scm/guile-strings.c:1152
 #: src/engine/Account.c:2183 src/import-export/hbci/glade/hbci.glade.h:12
-#: src/import-export/hbci/gnc-hbci-gettrans.c:350
-#: src/import-export/hbci/gnc-hbci-gettrans.c:353
+#: src/import-export/hbci/gnc-hbci-gettrans.c:363
+#: src/import-export/hbci/gnc-hbci-gettrans.c:366
 #: src/import-export/hbci/gnc-hbci-transfer.c:175
 #: src/import-export/hbci/gnc-hbci-transfer.c:178
 msgid "Bank"
@@ -2714,7 +2709,7 @@ msgstr "Jährlich: %2$u. %1$s"
 msgid "Orphan"
 msgstr "Ausbuchungskonto"
 
-#: src/engine/Scrub.c:316 src/import-export/generic-import.glade.h:10
+#: src/engine/Scrub.c:316 src/import-export/generic-import.glade.h:16
 msgid "Imbalance"
 msgstr "Ausgleichskonto"
 
@@ -2854,7 +2849,7 @@ msgid "New Account Hierarchy Setup"
 msgstr "Neuen Kontenrahmen erstellen"
 
 #: src/gnome/glade/account.glade.h:29
-#: src/import-export/generic-import.glade.h:15
+#: src/import-export/generic-import.glade.h:21
 #: src/import-export/hbci/glade/hbci.glade.h:71
 #: src/import-export/qif-import/qif.glade.h:88
 msgid "New?"
@@ -2892,7 +2887,7 @@ msgid "Price Quote Source"
 msgstr "Börsenkursquelle"
 
 #: src/gnome/glade/account.glade.h:41
-#: src/import-export/generic-import.glade.h:20
+#: src/import-export/generic-import.glade.h:26
 #: src/import-export/qif-import/qif.glade.h:126
 msgid "Select Account"
 msgstr "Konto auswählen"
@@ -3138,244 +3133,6 @@ msgstr "Wöchentlich"
 msgid "total"
 msgstr "Betrag"
 
-#: src/gnome-search/search.glade.h:3 src/gnome/glade/find.glade.h:3
-msgid "Add results to current search"
-msgstr "Ergebnisse zur aktuellen Suche hinzufügen"
-
-#. src/report/report-system/options-utilities.scm
-#: intl-scm/guile-strings.c:1070 src/gnome/glade/find.glade.h:4
-msgid "All"
-msgstr "Alle"
-
-#: src/gnome/glade/find.glade.h:6
-msgid "Any"
-msgstr "Einige"
-
-#: src/gnome/glade/find.glade.h:7
-msgid "At least"
-msgstr "Mindestens"
-
-#: src/gnome/glade/find.glade.h:8
-msgid "At most"
-msgstr "Maximal"
-
-#: src/gnome/glade/find.glade.h:9
-msgid "At most "
-msgstr "Maximal "
-
-#: src/gnome/glade/find.glade.h:11
-msgid "Balanced"
-msgstr "Ausgeglichen"
-
-#: src/gnome/glade/find.glade.h:12
-msgid "Case sensitive"
-msgstr "Groß-/Kleinschreibung beachten"
-
-#: src/gnome-search/search-reconciled.c:259 src/gnome/glade/find.glade.h:13
-msgid "Cleared"
-msgstr "Bestätigt"
-
-#: src/gnome/glade/find.glade.h:14
-msgid "Cleared (c)"
-msgstr "Bestätigt (b)"
-
-#: src/gnome/glade/find.glade.h:16
-msgid "Credit or Debit"
-msgstr "Gutschrift oder Belastung"
-
-#: src/gnome-search/search.glade.h:4 src/gnome/glade/find.glade.h:19
-msgid "Delete results from current search"
-msgstr "Ergebnisse von der aktuellen Suche löschen"
-
-#: src/gnome/glade/find.glade.h:21
-msgid "Ending "
-msgstr "Bis "
-
-#: src/gnome/glade/find.glade.h:22
-msgid "Exactly"
-msgstr "Genau"
-
-#. src/business/business-gnome/business-gnome.scm
-#: intl-scm/guile-strings.c:2668 src/gnome-search/search.glade.h:5
-#: src/gnome/glade/find.glade.h:23 src/gnome/glade/register.glade.h:28
-msgid "Find"
-msgstr "Suche"
-
-#: src/gnome/glade/find.glade.h:24
-msgid "Find "
-msgstr "Suche "
-
-#: src/gnome/glade/find.glade.h:25
-msgid "Find Transactions"
-msgstr "Geschäftsvorgänge suchen"
-
-#: src/gnome/glade/find.glade.h:26
-msgid "Find securities transactions of:"
-msgstr "Suche Wertpapier-Geschäftsvorgänge von:"
-
-#: src/gnome/glade/find.glade.h:27
-msgid "Find securities transactions with share price of:"
-msgstr "Suche Geschäftsvorgänge mit einem Anteils-/Aktienpreis von:"
-
-#: src/gnome/glade/find.glade.h:28
-msgid "Find splits whose Memo contains:"
-msgstr "Suche Buchungen, deren Buchungstext folgendes enthält:"
-
-#: src/gnome/glade/find.glade.h:29
-msgid "Find transactions affecting"
-msgstr "Finde Geschäftsvorgänge, die"
-
-#: src/gnome/glade/find.glade.h:30
-msgid "Find transactions occurring in the date range:"
-msgstr "Finde Geschäftsvorgänge im Zeitraum:"
-
-#: src/gnome/glade/find.glade.h:31
-msgid "Find transactions whose Action contains:"
-msgstr "Suche Geschäftsvorgänge, deren Aktionsfeld folgendes enthält:"
-
-#: src/gnome/glade/find.glade.h:32
-msgid "Find transactions whose Balance status is:"
-msgstr "Suche Geschäftsvorgänge mit folgendem Saldo:"
-
-#: src/gnome/glade/find.glade.h:33
-msgid "Find transactions whose Cleared status is:"
-msgstr "Suche Geschäftsvorgänge mit folgendem Bestätigt-Status:"
-
-#: src/gnome/glade/find.glade.h:34
-msgid "Find transactions whose Description contains:"
-msgstr "Suche Geschäftsvorgänge, deren Beschreibung folgendes enthält:"
-
-#: src/gnome/glade/find.glade.h:35
-msgid "Find transactions whose Number contains:"
-msgstr "Suche Geschäftsvorgänge, deren Nummern folgendes enthalten:"
-
-#: src/gnome/glade/find.glade.h:36
-msgid "Find transactions with the tag:"
-msgstr "Finde Geschäftsvorgänge mit dem Etikett:"
-
-#: src/gnome/glade/find.glade.h:37
-msgid "Match Accounts"
-msgstr "Passende Konten"
-
-#: src/gnome/glade/find.glade.h:38
-msgid "Match Action"
-msgstr "Passende Aktion"
-
-#: src/gnome/glade/find.glade.h:39
-msgid "Match Amount"
-msgstr "Passender Betrag"
-
-#: src/gnome/glade/find.glade.h:40
-msgid "Match Balance state"
-msgstr "Passender Saldo"
-
-#: src/gnome/glade/find.glade.h:41
-msgid "Match Cleared state"
-msgstr "Passender Bestätigt-Status"
-
-#: src/gnome/glade/find.glade.h:42
-msgid "Match Date"
-msgstr "Passendes Datum"
-
-#: src/gnome/glade/find.glade.h:43
-msgid "Match Description"
-msgstr "Passende Beschreibung"
-
-#: src/gnome/glade/find.glade.h:44
-msgid "Match Memo"
-msgstr "Passender Buchungstext"
-
-#: src/gnome/glade/find.glade.h:45
-msgid "Match number of shares"
-msgstr "Passende Anzahl von Anteilen"
-
-#: src/gnome/glade/find.glade.h:46
-msgid "Match share price"
-msgstr "Passende Anteils-Preise"
-
-#: src/gnome/glade/find.glade.h:47
-msgid "Match transaction tags (CURRENTLY INOPERABLE)"
-msgstr "Passende Geschäftsvorgangarten (z.Zt. außer Betrieb)"
-
-#: src/gnome-search/search.glade.h:7 src/gnome/glade/find.glade.h:49
-msgid "New search"
-msgstr "Neue Suche"
-
-#: src/gnome/glade/find.glade.h:51
-msgid "Not Balanced"
-msgstr "Nicht ausgeglichen"
-
-#: src/gnome/glade/find.glade.h:52
-msgid "Not cleared (n)"
-msgstr "Nicht bestätigt (n)"
-
-#. src/report/standard-reports/transaction.scm
-#: intl-scm/guile-strings.c:2010 src/gnome/glade/find.glade.h:53
-msgid "Number"
-msgstr "Nummer"
-
-#. src/report/standard-reports/price-scatter.scm
-#: intl-scm/guile-strings.c:1424 intl-scm/guile-strings.c:1498
-#: intl-scm/guile-strings.c:1688 intl-scm/guile-strings.c:1802
-#: intl-scm/guile-strings.c:1868 intl-scm/guile-strings.c:1902
-#: intl-scm/guile-strings.c:2094 intl-scm/guile-strings.c:2184
-#: intl-scm/guile-strings.c:2234 intl-scm/guile-strings.c:2990
-#: src/gnome/dialog-price-edit-db.c:494 src/gnome/glade/find.glade.h:54
-#: src/gnome/glade/price.glade.h:17
-#: src/register/ledger-core/split-register-model.c:242
-#: src/register/ledger-core/split-register.c:1696
-#: src/register/ledger-core/split-register.c:1698
-#: src/register/ledger-core/split-register.c:2044
-msgid "Price"
-msgstr "Preis"
-
-#: src/gnome/glade/find.glade.h:55
-msgid "Reconciled (y)"
-msgstr "Abgeglichen (j)"
-
-#: src/gnome-search/search.glade.h:8 src/gnome/glade/find.glade.h:56
-msgid "Refine current search"
-msgstr "Verfeinern der aktuellen Suche"
-
-#: src/gnome/glade/find.glade.h:57
-msgid "Regular expression"
-msgstr "Regulärer Ausdruck"
-
-#. src/report/standard-reports/advanced-portfolio.scm
-#: intl-scm/guile-strings.c:1800 intl-scm/guile-strings.c:1864
-#: intl-scm/guile-strings.c:1900 intl-scm/guile-strings.c:2090
-#: intl-scm/guile-strings.c:2182 intl-scm/guile-strings.c:2228
-#: src/gnome/glade/find.glade.h:58 src/gnome/glade/stocks.glade.h:23
-#: src/register/ledger-core/split-register-model.c:254
-#: src/register/ledger-core/split-register.c:1689
-#: src/register/ledger-core/split-register.c:1691
-msgid "Shares"
-msgstr "Anteile"
-
-#: src/gnome/glade/find.glade.h:59
-msgid "Starting "
-msgstr "Von "
-
-#: src/gnome/glade/find.glade.h:60
-msgid "Tags"
-msgstr "Etiketten"
-
-#: src/gnome-search/search.glade.h:12 src/gnome/glade/find.glade.h:61
-msgid "Type of search"
-msgstr "Suchtyp"
-
-#: src/gnome/glade/find.glade.h:62
-msgid "selected accounts:"
-msgstr "31/12/00"
-
-#: src/gnome/glade/find.glade.h:63
-msgid "shares"
-msgstr "Anteile"
-
-#: src/gnome/glade/find.glade.h:64
-msgid "splits having amounts of:"
-msgstr "Buchung mit folgendem Betrag:"
-
 #: src/gnome/glade/help.glade.h:1
 msgid "GnuCash Help"
 msgstr "Gnucash Hilfe"
@@ -3483,6 +3240,20 @@ msgstr "Letzter"
 #: src/gnome/glade/price.glade.h:16
 msgid "Net Asset Value"
 msgstr "Vermögenswert"
+
+#. src/report/standard-reports/price-scatter.scm
+#: intl-scm/guile-strings.c:1424 intl-scm/guile-strings.c:1498
+#: intl-scm/guile-strings.c:1688 intl-scm/guile-strings.c:1802
+#: intl-scm/guile-strings.c:1868 intl-scm/guile-strings.c:1902
+#: intl-scm/guile-strings.c:2094 intl-scm/guile-strings.c:2184
+#: intl-scm/guile-strings.c:2234 intl-scm/guile-strings.c:2990
+#: src/gnome/dialog-price-edit-db.c:494 src/gnome/glade/price.glade.h:17
+#: src/register/ledger-core/split-register-model.c:242
+#: src/register/ledger-core/split-register.c:1696
+#: src/register/ledger-core/split-register.c:1698
+#: src/register/ledger-core/split-register.c:2044
+msgid "Price"
+msgstr "Preis"
 
 #: src/gnome/glade/price.glade.h:18
 msgid "Price Editor"
@@ -3807,6 +3578,12 @@ msgstr "Enddatum:"
 #: src/gnome/glade/register.glade.h:27
 msgid "Erase all splits except the one for this account."
 msgstr "Alle Buchungen löschen, außer jene in diesem Konto."
+
+#. src/business/business-gnome/business-gnome.scm
+#: intl-scm/guile-strings.c:2668 src/gnome-search/search.glade.h:5
+#: src/gnome/glade/register.glade.h:28
+msgid "Find"
+msgstr "Suche"
 
 #: src/gnome/glade/register.glade.h:29
 msgid "Jump"
@@ -4980,6 +4757,17 @@ msgstr "Wählen Sie das Konto, für das Sie eine Aktienteilung eingeben möchten."
 #: src/gnome/glade/stocks.glade.h:22
 msgid "Share Distribution:"
 msgstr "Aktien Verteilung:"
+
+#. src/report/standard-reports/advanced-portfolio.scm
+#: intl-scm/guile-strings.c:1800 intl-scm/guile-strings.c:1864
+#: intl-scm/guile-strings.c:1900 intl-scm/guile-strings.c:2090
+#: intl-scm/guile-strings.c:2182 intl-scm/guile-strings.c:2228
+#: src/gnome/glade/stocks.glade.h:23
+#: src/register/ledger-core/split-register-model.c:254
+#: src/register/ledger-core/split-register.c:1689
+#: src/register/ledger-core/split-register.c:1691
+msgid "Shares"
+msgstr "Anteile"
 
 #: src/gnome/glade/stocks.glade.h:24
 msgid "Stock Account"
@@ -6410,6 +6198,10 @@ msgstr "hat Haben"
 msgid "Not Cleared"
 msgstr "Unbestätigt"
 
+#: src/gnome-search/search-reconciled.c:259
+msgid "Cleared"
+msgstr "Bestätigt"
+
 #: src/gnome-search/search-reconciled.c:262
 msgid "Reconciled"
 msgstr "Abgeglichen"
@@ -6464,9 +6256,25 @@ msgstr " Suchen "
 msgid "()"
 msgstr "()"
 
+#: src/gnome-search/search.glade.h:3
+msgid "Add results to current search"
+msgstr "Ergebnisse zur aktuellen Suche hinzufügen"
+
+#: src/gnome-search/search.glade.h:4
+msgid "Delete results from current search"
+msgstr "Ergebnisse von der aktuellen Suche löschen"
+
 #: src/gnome-search/search.glade.h:6
 msgid "New Item...."
 msgstr "Neuer Eintrag..."
+
+#: src/gnome-search/search.glade.h:7
+msgid "New search"
+msgstr "Neue Suche"
+
+#: src/gnome-search/search.glade.h:8
+msgid "Refine current search"
+msgstr "Verfeinern der aktuellen Suche"
 
 #: src/gnome-search/search.glade.h:9
 msgid "Search Criteria"
@@ -6479,6 +6287,10 @@ msgstr "Nach Einträgen suchen, für die gilt:"
 #: src/gnome-search/search.glade.h:11
 msgid "Search for..."
 msgstr "Suchen nach..."
+
+#: src/gnome-search/search.glade.h:12
+msgid "Type of search"
+msgstr "Suchtyp"
 
 #: src/gnome-utils/commodity.glade.h:1
 msgid "1 /"
@@ -7025,42 +6837,61 @@ msgid "Confidence"
 msgstr "Genauigkeit"
 
 #: src/import-export/generic-import.glade.h:9
+msgid ""
+"For a new transaction, click on the \"Other Account\" entry to choose the "
+"other (destination) account of this transaction.\n"
+"For a transaction that is a duplicate of an existing one, click on the "
+"\"Other Account\" or \"Description\" entry to \n"
+"check whether GnuCash chose the right existing transaction.\n"
+"To switch transactions between both states, click on the checkmark in the "
+"\"New\" column.\n"
+"When all new transactions have the correct destination account and all "
+"duplicates are matched with the right existing transaction, \n"
+"click \"Ok\"."
+msgstr ""
+"Für neue Buchungen, klicken Sie auf den Eintrag \"Anderes Konto\", um jenes zu wählen.\n"
+"Für Buchungen, die Duplikate einer existierenden sind, klicken Sie auf \"Anderes Konto\" oder \"Doppelte Buchung\", \n"
+"um die Zuordnung zu überprüfen.\n"
+"Um zwischen beiden Möglichkeiten umzuschalten, klicken Sie auf das Häkchen in der Spalte \"Neu\".\n"
+"Wenn allen neuen Buchungen ein \"Anderen Konto\" zugeordnet wurde und alle Duplikate richtig erkannt wurden, klicken Sie \"Ok\"."
+
+#: src/import-export/generic-import.glade.h:15
 msgid "Generic import transaction matcher"
 msgstr "Buchungszuordnung für Allgemeinen Import"
 
-#: src/import-export/generic-import.glade.h:11
+#: src/import-export/generic-import.glade.h:17
 msgid "Imported transaction:"
 msgstr "Importierte Buchungen:"
 
-#: src/import-export/generic-import.glade.h:12
+#: src/import-export/generic-import.glade.h:18
 msgid "List of downloaded transactions (source split shown):"
 msgstr ""
 "Liste der importierten Buchungen (angezeigt wird die Herkunftsbuchung):"
 
-#: src/import-export/generic-import.glade.h:14
+#: src/import-export/generic-import.glade.h:20
 #: src/import-export/qif-import/qif.glade.h:87
 msgid "New Account (child of selected) ..."
 msgstr "Neues Konto (Unterkonto) ..."
 
-#: src/import-export/generic-import.glade.h:16
+#: src/import-export/generic-import.glade.h:22
 msgid "Online account ID here..."
 msgstr "Online Kontonummer hier..."
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:1860 intl-scm/guile-strings.c:2086
-#: src/import-export/generic-import.glade.h:17
+#: src/import-export/generic-import.glade.h:23
 msgid "Other Account"
 msgstr "Anderes Konto"
 
-#: src/import-export/generic-import.glade.h:18
+#: src/import-export/generic-import.glade.h:24
 msgid "Please select or create an appropriate Gnucash account for:"
 msgstr "Auswählen oder Hinzufügen des passenden GnuCash Kontos:"
 
-#: src/import-export/generic-import.glade.h:19
+#: src/import-export/generic-import.glade.h:25
 msgid "Potential splits matching the selected transaction: "
 msgstr "Mögliche Buchungen, die zum aktuellen Geschäftsvorgang passen: "
 
-#: src/import-export/generic-import.glade.h:21
+#: src/import-export/generic-import.glade.h:27
 msgid "Select matching existing transaction"
 msgstr "Wählen Sie die zugeordnete, schon existierende Buchung"
 
@@ -7694,6 +7525,10 @@ msgstr "Vorgemerkter Saldo"
 #: src/import-export/hbci/gnc-hbci-getbalance.c:161
 msgid "booked balance"
 msgstr "Gebuchter Saldo"
+
+#: src/import-export/hbci/gnc-hbci-gettrans.c:205
+msgid "The HBCI import returned no transactions for the selected time period."
+msgstr "Es liegen keine Buchungen für die gewählte Zeitspanne vor."
 
 #: src/import-export/hbci/gnc-hbci-transfer.c:112
 msgid "Online HBCI Direct Debit Note"
@@ -11132,6 +10967,11 @@ msgid "Year"
 msgstr "Jahr"
 
 #. src/report/report-system/options-utilities.scm
+#: intl-scm/guile-strings.c:1070
+msgid "All"
+msgstr "Alle"
+
+#. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1072
 msgid "All accounts"
 msgstr "Alle Konten"
@@ -12648,6 +12488,11 @@ msgid "Sort by amount"
 msgstr "Sortieren nach Summe"
 
 #. src/report/standard-reports/transaction.scm
+#: intl-scm/guile-strings.c:2010
+msgid "Number"
+msgstr "Nummer"
+
+#. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2012
 msgid "Sort by check/transaction number"
 msgstr "Sortieren nach Scheck-/Buchungsnr."
@@ -14000,6 +13845,135 @@ msgstr "Folgendes Forderungen-Konto wollen Sie untersuchen"
 #: intl-scm/guile-strings.c:3104 intl-scm/guile-strings.c:3106
 msgid "Receivable Aging"
 msgstr "Entwicklung Forderungen"
+
+#~ msgid "Any"
+#~ msgstr "Einige"
+
+#~ msgid "At least"
+#~ msgstr "Mindestens"
+
+#~ msgid "At most"
+#~ msgstr "Maximal"
+
+#~ msgid "At most "
+#~ msgstr "Maximal "
+
+#~ msgid "Balanced"
+#~ msgstr "Ausgeglichen"
+
+#~ msgid "Case sensitive"
+#~ msgstr "Groß-/Kleinschreibung beachten"
+
+#~ msgid "Cleared (c)"
+#~ msgstr "Bestätigt (b)"
+
+#~ msgid "Credit or Debit"
+#~ msgstr "Gutschrift oder Belastung"
+
+#~ msgid "Ending "
+#~ msgstr "Bis "
+
+#~ msgid "Exactly"
+#~ msgstr "Genau"
+
+#~ msgid "Find "
+#~ msgstr "Suche "
+
+#~ msgid "Find Transactions"
+#~ msgstr "Geschäftsvorgänge suchen"
+
+#~ msgid "Find securities transactions of:"
+#~ msgstr "Suche Wertpapier-Geschäftsvorgänge von:"
+
+#~ msgid "Find securities transactions with share price of:"
+#~ msgstr "Suche Geschäftsvorgänge mit einem Anteils-/Aktienpreis von:"
+
+#~ msgid "Find splits whose Memo contains:"
+#~ msgstr "Suche Buchungen, deren Buchungstext folgendes enthält:"
+
+#~ msgid "Find transactions affecting"
+#~ msgstr "Finde Geschäftsvorgänge, die"
+
+#~ msgid "Find transactions occurring in the date range:"
+#~ msgstr "Finde Geschäftsvorgänge im Zeitraum:"
+
+#~ msgid "Find transactions whose Action contains:"
+#~ msgstr "Suche Geschäftsvorgänge, deren Aktionsfeld folgendes enthält:"
+
+#~ msgid "Find transactions whose Balance status is:"
+#~ msgstr "Suche Geschäftsvorgänge mit folgendem Saldo:"
+
+#~ msgid "Find transactions whose Cleared status is:"
+#~ msgstr "Suche Geschäftsvorgänge mit folgendem Bestätigt-Status:"
+
+#~ msgid "Find transactions whose Description contains:"
+#~ msgstr "Suche Geschäftsvorgänge, deren Beschreibung folgendes enthält:"
+
+#~ msgid "Find transactions whose Number contains:"
+#~ msgstr "Suche Geschäftsvorgänge, deren Nummern folgendes enthalten:"
+
+#~ msgid "Find transactions with the tag:"
+#~ msgstr "Finde Geschäftsvorgänge mit dem Etikett:"
+
+#~ msgid "Match Accounts"
+#~ msgstr "Passende Konten"
+
+#~ msgid "Match Action"
+#~ msgstr "Passende Aktion"
+
+#~ msgid "Match Amount"
+#~ msgstr "Passender Betrag"
+
+#~ msgid "Match Balance state"
+#~ msgstr "Passender Saldo"
+
+#~ msgid "Match Cleared state"
+#~ msgstr "Passender Bestätigt-Status"
+
+#~ msgid "Match Date"
+#~ msgstr "Passendes Datum"
+
+#~ msgid "Match Description"
+#~ msgstr "Passende Beschreibung"
+
+#~ msgid "Match Memo"
+#~ msgstr "Passender Buchungstext"
+
+#~ msgid "Match number of shares"
+#~ msgstr "Passende Anzahl von Anteilen"
+
+#~ msgid "Match share price"
+#~ msgstr "Passende Anteils-Preise"
+
+#~ msgid "Match transaction tags (CURRENTLY INOPERABLE)"
+#~ msgstr "Passende Geschäftsvorgangarten (z.Zt. außer Betrieb)"
+
+#~ msgid "Not Balanced"
+#~ msgstr "Nicht ausgeglichen"
+
+#~ msgid "Not cleared (n)"
+#~ msgstr "Nicht bestätigt (n)"
+
+#~ msgid "Reconciled (y)"
+#~ msgstr "Abgeglichen (j)"
+
+#~ msgid "Regular expression"
+#~ msgstr "Regulärer Ausdruck"
+
+#~ msgid "Starting "
+#~ msgstr "Von "
+
+#~ msgid "Tags"
+#~ msgstr "Etiketten"
+
+#~ msgid "selected accounts:"
+#~ msgstr "31/12/00"
+
+#~ msgid "shares"
+#~ msgstr "Anteile"
+
+#~ msgid "splits having amounts of:"
+#~ msgstr "Buchung mit folgendem Betrag:"
 
 #~ msgid "Transaction"
 #~ msgstr "Geschäftsvorgang"
