@@ -462,7 +462,7 @@ get_random_account(GNCSession *session)
     Account *ret;
     int tmp_int;
 
-    ret = xaccMallocAccount();
+    ret = xaccMallocAccount(session);
 
     xaccAccountBeginEdit(ret);
 

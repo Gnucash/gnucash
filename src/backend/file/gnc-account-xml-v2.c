@@ -377,7 +377,7 @@ dom_tree_to_account (xmlNodePtr node, GNCSession * session)
     Account *accToRet;
     gboolean successful;
 
-    accToRet = xaccMallocAccount();
+    accToRet = xaccMallocAccount(session);
     xaccAccountBeginEdit(accToRet);
 
     act_pdata.account = accToRet;

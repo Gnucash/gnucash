@@ -21,8 +21,8 @@
  *                                                                  *
  ********************************************************************/
 
-#ifndef _SIXTP_DOM_GENERATORS_H_
-#define _SIXTP_DOM_GENERATORS_H_
+#ifndef SIXTP_DOM_GENERATORS_H
+#define SIXTP_DOM_GENERATORS_H
 
 #include "config.h"
 

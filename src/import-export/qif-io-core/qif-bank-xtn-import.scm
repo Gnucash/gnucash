@@ -59,7 +59,7 @@
         ;; make the account if necessary 
         (if (not acct)
             (begin 
-              (set! acct (gnc:malloc-account))
+              (set! acct (gnc:malloc-account (gnc:get-current-session)))
               (gnc:account-begin-edit acct)
               (gnc:account-set-name acct acct-name)
               (gnc:account-commit-edit acct)

@@ -37,8 +37,8 @@
 #ifndef XACC_SCRUB_H
 #define XACC_SCRUB_H
 
-#include "Account.h"
 #include "Group.h"
+#include "gnc-engine.h"
 
 /* The ScrubOrphans() methods search for transacations that contain
  *    splits that do not have a parent account. These "orphaned splits"
@@ -58,10 +58,11 @@
  * The xaccGroupScrubOrphans() method performs this scrub for the 
  *    child accounts of this group.
  */
-void xaccTransScrubOrphans (Transaction *trans, AccountGroup *root);
-void xaccAccountScrubOrphans (Account *acc);
-void xaccAccountTreeScrubOrphans (Account *acc);
-void xaccGroupScrubOrphans (AccountGroup *grp);
+void xaccTransScrubOrphans (Transaction *trans, AccountGroup *root,
+                            GNCSession *session);
+void xaccAccountScrubOrphans (Account *acc, GNCSession *session);
+void xaccAccountTreeScrubOrphans (Account *acc, GNCSession *session);
+void xaccGroupScrubOrphans (AccountGroup *grp, GNCSession *session);
 
 /* The ScrubSplit methods ensure that splits with the same commodity
  *   and command currency have the same amount and value.
@@ -78,10 +79,10 @@ void xaccGroupScrubSplits (AccountGroup *group);
  *    account.
  */
 void xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
-                              Account *parent);
-void xaccAccountScrubImbalance (Account *acc);
-void xaccAccountTreeScrubImbalance (Account *acc);
-void xaccGroupScrubImbalance (AccountGroup *grp);
+                              Account *parent, GNCSession *session);
+void xaccAccountScrubImbalance (Account *acc, GNCSession *session);
+void xaccAccountTreeScrubImbalance (Account *acc, GNCSession *session);
+void xaccGroupScrubImbalance (AccountGroup *grp, GNCSession *session);
 
 /* The xaccTransScrubCurrency method fixes transactions without a
  * common_currency by using the old account currency and security

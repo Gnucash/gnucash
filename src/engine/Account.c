@@ -70,7 +70,7 @@ mark_account (Account *account)
 \********************************************************************/
 
 static void
-xaccInitAccount (Account * acc)
+xaccInitAccount (Account * acc, GNCSession *session)
 {
   acc->parent   = NULL;
   acc->children = NULL;
@@ -114,11 +114,15 @@ xaccInitAccount (Account * acc)
 \********************************************************************/
 
 Account *
-xaccMallocAccount (void)
+xaccMallocAccount (GNCSession *session)
 {
-  Account *acc = g_new (Account, 1);
+  Account *acc;
 
-  xaccInitAccount (acc);
+  g_return_val_if_fail (session, NULL);
+
+  acc = g_new (Account, 1);
+
+  xaccInitAccount (acc, session);
 
   gnc_engine_generate_event (&acc->guid, GNC_EVENT_CREATE);
 
@@ -126,11 +130,13 @@ xaccMallocAccount (void)
 }
 
 Account *
-xaccCloneAccountSimple(const Account *from)
+xaccCloneAccountSimple(const Account *from, GNCSession *session)
 {
     Account *ret;
 
-    ret = xaccMallocAccount();
+    ret = xaccMallocAccount (session);
+
+    g_return_val_if_fail (ret, NULL);
 
     ret->type = from->type;
 

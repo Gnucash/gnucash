@@ -104,6 +104,14 @@
 
   (gw:wrap-function
    mod
+   'gnc:get-current-session
+   '<gnc:Session*>
+   "gnc_get_current_session"
+   '()
+   "Get the current session.")
+
+  (gw:wrap-function
+   mod
    'gnc:exp-parser-init
    '<gw:void>
    "gnc_exp_parser_init"

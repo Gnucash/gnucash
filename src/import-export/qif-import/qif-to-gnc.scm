@@ -78,7 +78,7 @@
     ;; acct)
     (if (and existing-account (compatible? existing-account))
         existing-account 
-        (let ((new-acct (gnc:malloc-account))
+        (let ((new-acct (gnc:malloc-account (gnc:get-current-session)))
               (parent-acct #f)
               (parent-name #f)
               (acct-name #f)

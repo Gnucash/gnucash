@@ -390,7 +390,8 @@ gnc_ui_to_account(AccountWindow *aw)
 
   if (use_equity)
   {
-    if (!gnc_account_create_opening_balance (account, balance, date))
+    if (!gnc_account_create_opening_balance (account, balance, date,
+                                             gnc_get_current_session ()))
     {
       const char *message = _("Could not create opening balance.");
       gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
@@ -433,7 +434,7 @@ gnc_finish_ok (AccountWindow *aw,
     gnc_suspend_gui_refresh ();
 
     parent = aw_get_account (aw);
-    account = xaccMallocAccount ();
+    account = xaccMallocAccount (gnc_get_current_session ());
     aw->account = *xaccAccountGetGUID (account);
     aw->type = xaccAccountGetType (parent);
 
@@ -1415,7 +1416,7 @@ gnc_account_window_create(AccountWindow *aw)
 
   box = glade_xml_get_widget (xml, "parent_scroll");
 
-  aw->top_level_account = xaccMallocAccount();
+  aw->top_level_account = xaccMallocAccount(gnc_get_current_session ());
   xaccAccountSetName(aw->top_level_account, _("New top level account"));
 
   aw->parent_tree = gnc_account_tree_new_with_root(aw->top_level_account);
@@ -1614,7 +1615,7 @@ gnc_ui_new_account_window_internal (Account *base_account,
 
   aw->dialog_type = NEW_ACCOUNT;
 
-  account = xaccMallocAccount ();
+  account = xaccMallocAccount (gnc_get_current_session ());
   aw->account = *xaccAccountGetGUID (account);
 
   if (base_account)

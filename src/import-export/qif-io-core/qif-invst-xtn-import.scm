@@ -159,7 +159,7 @@
         ;; make the account if necessary 
         (if (not acct)
             (begin 
-              (set! acct (gnc:malloc-account))
+              (set! acct (gnc:malloc-account (gnc:get-current-session)))
               (gnc:account-set-name acct acct-name)
               (qif-io:acct-table-insert! gnc-acct-info 
                                          acct-name acct-type acct)))

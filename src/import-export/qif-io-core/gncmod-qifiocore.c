@@ -37,6 +37,11 @@ gnc_module_init(void) {
     return FALSE;
   }
 
+  /* load the engine (we depend on it) */
+  if(!gnc_module_load("gnucash/app-utils", 0)) {
+    return FALSE;
+  }
+
   /* load the QIF Scheme code */
   if(gh_eval_str("(use-modules (gnucash qif-io core))") ==
      SCM_BOOL_F) {

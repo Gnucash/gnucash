@@ -856,7 +856,7 @@ number of nanoseconds.")
    'gnc:malloc-account
    '<gnc:Account*>
    "xaccMallocAccount"
-   '()
+   '((<gnc:Session*> session))
    "Allocate a new account structure.")
 
   (gw:wrap-function

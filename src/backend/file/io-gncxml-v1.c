@@ -1326,7 +1326,8 @@ account_restore_start_handler(GSList* sibling_data,
                               const gchar *tag,
                               gchar **attrs)
 {
-  Account *acc = xaccMallocAccount();
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
+  Account *acc = xaccMallocAccount(pstatus->session);
   
   g_return_val_if_fail(acc, FALSE);
   xaccAccountBeginEdit(acc);

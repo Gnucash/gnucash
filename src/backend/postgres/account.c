@@ -250,7 +250,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    acc = xaccAccountLookup (&guid);
    if (!acc) 
    {
-      acc = xaccMallocAccount();
+      acc = xaccMallocAccount(be->session);
       xaccAccountBeginEdit(acc);
       xaccAccountSetGUID(acc, &guid);
    }
@@ -286,7 +286,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       parent = xaccAccountLookup (&guid);
       if (!parent)
       {
-         parent = xaccMallocAccount();
+         parent = xaccMallocAccount(be->session);
          xaccAccountBeginEdit(parent);
          xaccAccountSetGUID(parent, &guid);
       }

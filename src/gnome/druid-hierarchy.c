@@ -562,7 +562,7 @@ clone_account (const Account* from, gnc_commodity *com)
 {
   Account *ret;
 
-  ret = xaccCloneAccountSimple (from);
+  ret = xaccCloneAccountSimple (from, gnc_get_current_session ());
 
   xaccAccountSetCommodity (ret, com);
 
@@ -815,7 +815,8 @@ starting_balance_helper (Account *account, gpointer data)
 
   balance = get_final_balance (account);
   if (!gnc_numeric_zero_p (balance))
-    gnc_account_create_opening_balance (account, balance, time (NULL));
+    gnc_account_create_opening_balance (account, balance, time (NULL),
+                                        gnc_get_current_session ());
 
   return NULL;
 }

@@ -80,8 +80,11 @@ gnc_numeric gnc_ui_convert_balance_to_currency(gnc_numeric balance,
 gnc_numeric gnc_ui_account_get_balance (Account *account,
                                         gboolean include_children);
 
-gnc_numeric gnc_ui_account_get_reconciled_balance(Account *account, gboolean include_children);
-gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account, time_t date, gboolean include_children);
+gnc_numeric gnc_ui_account_get_reconciled_balance(Account *account,
+                                                  gboolean include_children);
+gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account,
+                                                   time_t date,
+                                                   gboolean include_children);
 
 const char * gnc_get_reconcile_str (char reconciled_flag);
 
@@ -94,10 +97,12 @@ typedef enum
 
 Account * gnc_find_or_create_equity_account (AccountGroup *group,
                                              GNCEquityType equity_type,
-                                             gnc_commodity *currency);
+                                             gnc_commodity *currency,
+                                             GNCSession *session);
 gboolean gnc_account_create_opening_balance (Account *account,
                                              gnc_numeric balance,
-                                             time_t date);
+                                             time_t date,
+                                             GNCSession *session);
 
 char * gnc_account_get_full_name (Account *account);
 

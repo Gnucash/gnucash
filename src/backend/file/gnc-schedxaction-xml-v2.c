@@ -424,7 +424,7 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
 
     g_return_val_if_fail( tree, FALSE );
 
-    sx = xaccSchedXactionMalloc( NULL );
+    sx = xaccSchedXactionMalloc( gdata->sessiondata );
 
     /* FIXME: this should be removed somewhere near 1.8 release time. */
     {

@@ -51,15 +51,17 @@
 
 static short module = MOD_SCRUB;
 static Account * GetOrMakeAccount (AccountGroup *root, Transaction *trans,
-                                   const char *name_root);
+                                   const char *name_root, GNCSession *session);
 
 /* ================================================================ */
 
 void
-xaccGroupScrubOrphans (AccountGroup *grp)
+xaccGroupScrubOrphans (AccountGroup *grp, GNCSession *session)
 {
   GList *list;
   GList *node;
+
+  g_return_if_fail (session);
 
   if (!grp)
     return;
@@ -70,25 +72,29 @@ xaccGroupScrubOrphans (AccountGroup *grp)
   {
     Account *account = node->data;
 
-    xaccAccountTreeScrubOrphans (account);
+    xaccAccountTreeScrubOrphans (account, session);
   }
 }
 
 void
-xaccAccountTreeScrubOrphans (Account *acc)
+xaccAccountTreeScrubOrphans (Account *acc, GNCSession *session)
 {
+  g_return_if_fail (session);
+
   if (!acc)
     return;
 
-  xaccGroupScrubOrphans (xaccAccountGetChildren(acc));
-  xaccAccountScrubOrphans (acc);
+  xaccGroupScrubOrphans (xaccAccountGetChildren(acc), session);
+  xaccAccountScrubOrphans (acc, session);
 }
 
 void
-xaccAccountScrubOrphans (Account *acc)
+xaccAccountScrubOrphans (Account *acc, GNCSession *session)
 {
   GList *node;
   const char *str;
+
+  g_return_if_fail (session);
 
   if (!acc)
     return;
@@ -102,14 +108,18 @@ xaccAccountScrubOrphans (Account *acc)
     Split *split = node->data;
 
     xaccTransScrubOrphans (xaccSplitGetParent (split),
-                           xaccAccountGetRoot (acc));
+                           xaccAccountGetRoot (acc),
+                           session);
   }
 }
 
 void
-xaccTransScrubOrphans (Transaction *trans, AccountGroup *root)
+xaccTransScrubOrphans (Transaction *trans, AccountGroup *root,
+                       GNCSession *session)
 {
   GList *node;
+
+  g_return_if_fail (session);
 
   if (!trans)
     return;
@@ -126,7 +136,7 @@ xaccTransScrubOrphans (Transaction *trans, AccountGroup *root)
 
     DEBUG ("Found an orphan \n");
 
-    orph = GetOrMakeAccount (root, trans, _("Orphan"));
+    orph = GetOrMakeAccount (root, trans, _("Orphan"), session);
     if (!orph)
       continue;
 
@@ -248,10 +258,12 @@ xaccSplitScrub (Split *split)
 /* ================================================================ */
 
 void
-xaccGroupScrubImbalance (AccountGroup *grp)
+xaccGroupScrubImbalance (AccountGroup *grp, GNCSession *session)
 {
   GList *list;
   GList *node;
+
+  g_return_if_fail (session);
 
   if (!grp) return;
 
@@ -261,22 +273,29 @@ xaccGroupScrubImbalance (AccountGroup *grp)
   {
     Account *account = node->data;
 
-    xaccAccountTreeScrubImbalance (account);
+    xaccAccountTreeScrubImbalance (account, session);
   }
 }
 
 void
-xaccAccountTreeScrubImbalance (Account *acc)
+xaccAccountTreeScrubImbalance (Account *acc, GNCSession *session)
 {
-  xaccGroupScrubImbalance (xaccAccountGetChildren(acc));
-  xaccAccountScrubImbalance (acc);
+  g_return_if_fail (session);
+
+  xaccGroupScrubImbalance (xaccAccountGetChildren(acc), session);
+  xaccAccountScrubImbalance (acc, session);
 }
 
 void
-xaccAccountScrubImbalance (Account *acc)
+xaccAccountScrubImbalance (Account *acc, GNCSession *session)
 {
   GList *node;
   const char *str;
+
+  g_return_if_fail (session);
+
+  if (!acc)
+    return;
 
   str = xaccAccountGetName(acc);
   str = str ? str : "(null)";
@@ -287,16 +306,18 @@ xaccAccountScrubImbalance (Account *acc)
     Split *split = node->data;
     Transaction *trans = xaccSplitGetParent(split);
 
-    xaccTransScrubImbalance (trans, xaccAccountGetRoot (acc), NULL);
+    xaccTransScrubImbalance (trans, xaccAccountGetRoot (acc), NULL, session);
   }
 }
 
 void
 xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
-                         Account *parent)
+                         Account *parent, GNCSession *session)
 {
   Split *balance_split = NULL;
   gnc_numeric imbalance;
+
+  g_return_if_fail (session);
 
   if (!trans)
     return;
@@ -312,7 +333,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
       return;
 
     if (!parent)
-      account = GetOrMakeAccount (root, trans, _("Imbalance"));
+      account = GetOrMakeAccount (root, trans, _("Imbalance"), session);
     else
       account = parent;
 
@@ -487,11 +508,13 @@ xaccGroupScrubCommodities (AccountGroup *group, GNCSession *session)
 
 static Account *
 GetOrMakeAccount (AccountGroup *root, Transaction *trans,
-                  const char *name_root)
+                  const char *name_root, GNCSession *session)
 {
   gnc_commodity * currency;
   char * accname;
   Account * acc;
+
+  g_return_val_if_fail (root, NULL);
 
   /* build the account name */
   currency = xaccTransGetCurrency (trans);
@@ -510,7 +533,7 @@ GetOrMakeAccount (AccountGroup *root, Transaction *trans,
   if (acc == NULL)
   {
     /* guess not. We'll have to build one */
-    acc = xaccMallocAccount ();
+    acc = xaccMallocAccount (session);
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, accname);
     xaccAccountSetCommodity (acc, currency);

@@ -802,7 +802,8 @@ equity_base_name (GNCEquityType equity_type)
 Account *
 gnc_find_or_create_equity_account (AccountGroup *group,
                                    GNCEquityType equity_type,
-                                   gnc_commodity *currency)
+                                   gnc_commodity *currency,
+                                   GNCSession *session)
 {
   Account *parent;
   Account *account;
@@ -868,7 +869,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   if (parent && xaccAccountGetType (parent) != EQUITY)
     parent == NULL;
 
-  account = xaccMallocAccount ();
+  account = xaccMallocAccount (session);
 
   xaccAccountBeginEdit (account);
 
@@ -895,7 +896,8 @@ gnc_find_or_create_equity_account (AccountGroup *group,
 gboolean
 gnc_account_create_opening_balance (Account *account,
                                     gnc_numeric balance,
-                                    time_t date)
+                                    time_t date,
+                                    GNCSession *session)
 {
   Account *equity_account;
   Transaction *trans;
@@ -909,7 +911,8 @@ gnc_account_create_opening_balance (Account *account,
   equity_account =
     gnc_find_or_create_equity_account (xaccAccountGetRoot (account),
                                        EQUITY_OPENING_BALANCE,
-                                       xaccAccountGetCommodity (account));
+                                       xaccAccountGetCommodity (account),
+                                       session);
   if (!equity_account)
     return FALSE;
 

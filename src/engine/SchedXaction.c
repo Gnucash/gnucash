@@ -26,20 +26,17 @@
 #include <glib.h>
 #include <string.h>
 
-#include "SchedXaction.h"
 #include "FreqSpec.h"
 #include "GNCIdP.h"
-#include "Transaction.h"
+#include "SX-ttinfo.h"
+#include "SchedXaction.h"
 #include "TransactionP.h"
 #include "date.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "messages.h"
-#include "Account.h"
-#include "Group.h"
+#include "gnc-session.h"
 #include "guid.h"
-#include "gnc-book.h"
-#include "SX-ttinfo.h"
+#include "messages.h"
 
 static short module = MOD_SX;
 
@@ -50,11 +47,15 @@ void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
 
 static void
-xaccSchedXactionInit( SchedXaction *sx, GNCBook *book)
+xaccSchedXactionInit( SchedXaction *sx, GNCSession *session)
 {
+        GNCBook             *book;
         AccountGroup        *ag;
         char                *name;
+
         sx->freq = xaccFreqSpecMalloc();
+
+        book = gnc_session_get_book (session);
 
         xaccGUIDNew( &sx->guid );
         xaccStoreEntity( sx, &sx->guid, GNC_ID_SCHEDXACTION );
@@ -71,12 +72,13 @@ xaccSchedXactionInit( SchedXaction *sx, GNCBook *book)
 	sx->dirty = TRUE;
 
         /* create a new template account for our splits */
-        sx->template_acct = xaccMallocAccount();
+        sx->template_acct = xaccMallocAccount(session);
         name = guid_to_string( &sx->guid );
         xaccAccountSetName( sx->template_acct, name );
-        xaccAccountSetCommodity( sx->template_acct,
-                                 gnc_commodity_new( "template", "template",
-                                                    "template", "template", 1 ) );
+        xaccAccountSetCommodity
+          (sx->template_acct,
+           gnc_commodity_new( "template", "template",
+                              "template", "template", 1 ) );
 	g_free( name );
         xaccAccountSetType( sx->template_acct, BANK );
         ag = gnc_book_get_template_group( book );
@@ -84,12 +86,16 @@ xaccSchedXactionInit( SchedXaction *sx, GNCBook *book)
 }
 
 SchedXaction*
-xaccSchedXactionMalloc( GNCBook *book )
+xaccSchedXactionMalloc(GNCSession *session)
 {
         SchedXaction *sx;
+
+        g_return_val_if_fail (session, NULL);
+
         sx = g_new0( SchedXaction, 1 );
-        xaccSchedXactionInit( sx, book );
+        xaccSchedXactionInit( sx, session );
         gnc_engine_generate_event( &sx->guid, GNC_EVENT_CREATE );
+
         return sx;
 }
 

@@ -22,8 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef _SIXTP_PARSERS_H_
-#define _SIXTP_PARSERS_H_
+#ifndef SIXTP_PARSERS_H
+#define SIXTP_PARSERS_H
 
 #include "sixtp.h"
 

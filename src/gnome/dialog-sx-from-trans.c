@@ -423,7 +423,7 @@ gnc_sx_create_from_trans(Transaction *trans)
 
   sxfti->trans = trans;
   
-  sxfti->sx = xaccSchedXactionMalloc(gnc_get_current_book ());
+  sxfti->sx = xaccSchedXactionMalloc(gnc_get_current_session ());
 
   sxfti_attach_callbacks(sxfti);
 

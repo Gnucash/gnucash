@@ -6,15 +6,12 @@
 (define (run-test)
   (gnc:module-system-init)
   (gnc:module-load "gnucash/engine" 0)
-  
-  (let ((group (gnc:malloc-account-group))
-        (acct (gnc:malloc-account)))
+
+  (let* ((session (gnc:session-new))
+         (group (gnc:malloc-account-group))
+         (acct (gnc:malloc-account session)))
     (gnc:account-begin-edit acct)
     (gnc:account-set-name acct "foo")
     (gnc:account-commit-edit acct)
     (gnc:group-insert-account group acct))
   #t)
-
-
-
-

@@ -127,8 +127,8 @@ gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);
  *    account.  The account should have been opened for editing 
  *    (by calling xaccAccountBeginEdit()) before calling this routine.
  */
-Account    * xaccMallocAccount (void);
-Account    * xaccCloneAccountSimple(const Account *from);
+Account    * xaccMallocAccount (GNCSession *session);
+Account    * xaccCloneAccountSimple(const Account *from, GNCSession *session);
 void         xaccAccountBeginEdit (Account *account);
 void         xaccAccountCommitEdit (Account *account);
 void         xaccAccountDestroy (Account *account);

@@ -250,14 +250,15 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
 }
 
 /** PROTOTYPES ******************************************************/
-static Account     *locateAccount (int acc_id); 
+static Account     *locateAccount (int acc_id, GNCSession *session); 
 
 static AccountGroup *readGroup( GNCSession *, int fd, Account *, int token );
 static Account      *readAccount( GNCSession *session, int fd,
                                   AccountGroup *, int token );
 static gboolean      readAccInfo( int fd, Account *, int token );
-static Transaction  *readTransaction( int fd, Account *, int token );
-static Split        *readSplit( int fd, int token );
+static Transaction  *readTransaction( GNCSession *session,
+                                      int fd, Account *, int token );
+static Split        *readSplit( GNCSession *session, int fd, int token );
 static char         *readString( int fd, int token );
 static time_t        readDMYDate( int fd, int token );
 static int           readTSDate( int fd, Timespec *, int token );
@@ -487,7 +488,7 @@ gnc_load_financials_from_fd(GNCSession *session, int fd)
     error_code = ERR_FILEIO_FILE_BAD_READ;
 
     /* create a lost account, put the missing accounts there */
-    acc = xaccMallocAccount();
+    acc = xaccMallocAccount(session);
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, _("Lost Accounts"));
     acc -> children = holder;
@@ -646,11 +647,11 @@ readAccount( GNCSession *session, int fd, AccountGroup *grp, int token )
     err = read( fd, &accID, sizeof(int) );
     if( err != sizeof(int) ) { return NULL; }
     XACC_FLIP_INT (accID);
-    acc = locateAccount (accID);
+    acc = locateAccount (accID, session);
     /* locateAccountAlways should always accounts that are open for
        editing in this situation */
   } else {
-    acc = xaccMallocAccount();
+    acc = xaccMallocAccount(session);
     xaccGroupInsertAccount (holder, acc);
     xaccAccountBeginEdit (acc);
   }
@@ -771,7 +772,7 @@ readAccount( GNCSession *session, int fd, AccountGroup *grp, int token )
   /* read the transactions */
   for( i=0; i<numTrans; i++ ) {
     Transaction *trans;
-    trans = readTransaction( fd, acc, token );
+    trans = readTransaction(session, fd, acc, token );
     if(trans == NULL ) {
       PERR ("Short Transaction Read: \n"
             "\texpected %d got %d transactions \n", numTrans, i);
@@ -823,8 +824,8 @@ readAccount( GNCSession *session, int fd, AccountGroup *grp, int token )
  */
 
 static Account *
-locateAccount (int acc_id) {
-
+locateAccount (int acc_id, GNCSession *session)
+{
    Account * acc;
    /* negative account ids denote no account */
    if (0 > acc_id) return NULL;   
@@ -841,7 +842,7 @@ locateAccount (int acc_id) {
 
    /* if neither, then it does not yet exist.  Create it.
     * Put it in the drunk tank. */
-   acc = xaccMallocAccount ();
+   acc = xaccMallocAccount (session);
    xaccAccountBeginEdit(acc);
    g_hash_table_insert(ids_to_unfinished_accounts,
                        (gpointer) acc_id,
@@ -925,7 +926,7 @@ xaccTransSetAction (Transaction *trans, const char *action)
 \********************************************************************/
 
 static Transaction *
-readTransaction( int fd, Account *acc, int revision)
+readTransaction(GNCSession *session, int fd, Account *acc, int revision)
   {
   int err=0;
   int acc_id;
@@ -1180,7 +1181,7 @@ readTransaction( int fd, Account *acc, int revision)
         }
       XACC_FLIP_INT (acc_id);
       DEBUG ("credit %d\n", acc_id);
-      peer_acc = locateAccount (acc_id);
+      peer_acc = locateAccount (acc_id, session);
   
       /* insert the split part of the transaction into 
        * the credited account */
@@ -1200,7 +1201,7 @@ readTransaction( int fd, Account *acc, int revision)
         }
       XACC_FLIP_INT (acc_id);
       DEBUG ("debit %d\n", acc_id);
-      peer_acc = locateAccount (acc_id);
+      peer_acc = locateAccount (acc_id, session);
       if (peer_acc) {
          Split *s0 = xaccTransGetSplit (trans, 0);
          Split *s1 = xaccTransGetSplit (trans, 1);
@@ -1222,7 +1223,7 @@ readTransaction( int fd, Account *acc, int revision)
       /* Version 5 files included a split that immediately
        * followed the transaction, before the destination splits.
        * Later versions don't have this. */
-      Split *split = readSplit (fd, revision);
+      Split *split = readSplit (session, fd, revision);
       xaccTransAppendSplit(trans, split);
     }
     
@@ -1236,7 +1237,7 @@ readTransaction( int fd, Account *acc, int revision)
     }
     XACC_FLIP_INT (numSplits);
     for (i = 0; i < numSplits; i++) {
-      Split *split = readSplit(fd, revision);
+      Split *split = readSplit(session, fd, revision);
       xaccTransAppendSplit(trans, split);
       
       if(!notes) {
@@ -1261,7 +1262,7 @@ readTransaction( int fd, Account *acc, int revision)
 \********************************************************************/
 
 static Split *
-readSplit ( int fd, int token )
+readSplit ( GNCSession *session, int fd, int token )
 {
   Account *peer_acc;
   Split *split;
@@ -1393,7 +1394,7 @@ readSplit ( int fd, int token )
   }
   XACC_FLIP_INT (acc_id);
   DEBUG ("account id %d", acc_id);
-  peer_acc = locateAccount (acc_id);
+  peer_acc = locateAccount (acc_id, session);
   xaccAccountInsertSplit (peer_acc, split);
 
   mark_potential_quote(split, share_price, num_shares);

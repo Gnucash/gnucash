@@ -103,7 +103,7 @@ typedef struct gncp_SchedXaction {
 /**
  * Creates and initializes a scheduled transaction.
  **/
-SchedXaction *xaccSchedXactionMalloc( GNCBook *book);
+SchedXaction *xaccSchedXactionMalloc(GNCSession *session);
 
 /*
  * returns true if the scheduled transaction is dirty and needs to

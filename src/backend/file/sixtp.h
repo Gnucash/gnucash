@@ -21,8 +21,8 @@
  *                                                                  *
  ********************************************************************/
 
-#ifndef _SIXTP_H_
-#define _SIXTP_H_
+#ifndef SIXTP_H
+#define SIXTP_H
 
 #include <glib.h>
 #include <stdio.h>

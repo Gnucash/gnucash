@@ -21,8 +21,8 @@
  *                                                                  *
  ********************************************************************/
 
-#ifndef _SIXTP_UTILS_H_
-#define _SIXTP_UTILS_H_
+#ifndef SIXTP_UTILS_H
+#define SIXTP_UTILS_H
 
 #include "date.h"
 

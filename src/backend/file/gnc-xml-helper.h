@@ -22,8 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef _GNC_XML_HELPER_H_
-#define _GNC_XML_HELPER_H_
+#ifndef GNC_XML_HELPER_H
+#define GNC_XML_HELPER_H
 
 #include "config.h"
 
