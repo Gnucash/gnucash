@@ -368,9 +368,6 @@ xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
   regData->set_help = NULL;
   regData->gui_hook = NULL;
   regData->dirty = FALSE;
-  regData->balance = 0.0;
-  regData->clearedBalance = 0.0;
-  regData->reconciledBalance = 0.0;
 
   /* store the displayed accounts */
   regData->displayed_accounts = g_list_copy(accounts);
@@ -437,6 +434,7 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
 {
   /* If we don't really need the redraw, don't do it. */
   if (!(regData->dirty)) return;
+
   regData->dirty = FALSE;  /* mark clean */
 
   /* The leader account is used by the register gui to
@@ -450,13 +448,6 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
 
   /* hack alert -- this computation of totals is incorrect 
    * for multi-account ledgers */
-
-  /* provide some convenience data for the the GUI window.
-   * If the GUI wants to display yet other stuff, it's on its own. */
-  regData->balance = DxaccAccountGetBalance (regData->leader);
-  regData->clearedBalance = DxaccAccountGetClearedBalance (regData->leader);
-  regData->reconciledBalance = 
-    DxaccAccountGetReconciledBalance(regData->leader);
 
   /* OK, now tell this specific GUI window to redraw itself ... */
   if (regData->redraw)

@@ -29,7 +29,6 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <math.h>
 
 #include "window-register.h"
 #include "gnc-ui.h"
@@ -1069,7 +1068,7 @@ print_check_cb(GtkWidget * widget, gpointer data)
 
     gh_apply(print_check,
              SCM_LIST4(gh_str02scm(payee),
-                       gh_double2scm(fabs(amount)),
+                       gh_double2scm(ABS(amount)),
                        gh_ulong2scm(date),
                        gh_str02scm(memo)));
   }
@@ -1833,46 +1832,48 @@ regRefresh(xaccLedgerDisplay *ledger)
   {
     char string[256];
     gboolean reverse = gnc_reverse_balance(ledger->leader);
-    double amount;
+    gnc_numeric amount;
 
     if (regData->balance_label != NULL)
     {
-      amount = ledger->balance;
+      amount = xaccAccountGetBalance (ledger->leader);
       if (reverse)
-        amount = -amount;
+        amount = gnc_numeric_neg (amount);
 
-      DxaccSPrintAmount(string, amount, print_info);
-      if(euro)
+      xaccSPrintAmount(string, amount, print_info);
+      if (euro)
       {
 	strcat(string, " / ");
 	DxaccSPrintAmount(string + strlen(string),
-                          gnc_convert_to_euro(currency, amount),
+                          gnc_convert_to_euro(currency,
+                                              gnc_numeric_to_double (amount)),
                           gnc_commodity_print_info (gnc_get_euro (), TRUE));
       }
 
-      gnc_set_label_color(regData->balance_label, amount);
-      gtk_label_set_text(GTK_LABEL(regData->balance_label),
-                         string);
+      gnc_set_label_color(regData->balance_label,
+                          gnc_numeric_to_double (amount));
+      gtk_label_set_text(GTK_LABEL(regData->balance_label), string);
     }
 
     if (regData->cleared_label != NULL)
     {
-      amount = ledger->clearedBalance;
+      amount = xaccAccountGetClearedBalance (ledger->leader);
       if (reverse)
-        amount = -amount;
+        amount = gnc_numeric_neg (amount);
 
-      DxaccSPrintAmount(string, amount, print_info);
-      if(euro)
+      xaccSPrintAmount(string, amount, print_info);
+      if (euro)
       {
 	strcat(string, " / ");
 	DxaccSPrintAmount(string + strlen(string),
-                          gnc_convert_to_euro(currency, amount),
+                          gnc_convert_to_euro(currency,
+                                              gnc_numeric_to_double (amount)),
                           gnc_commodity_print_info (gnc_get_euro (), TRUE));
       }
 
-      gnc_set_label_color(regData->cleared_label, amount);
-      gtk_label_set_text(GTK_LABEL(regData->cleared_label),
-                         string);
+      gnc_set_label_color(regData->cleared_label,
+                          gnc_numeric_to_double (amount));
+      gtk_label_set_text(GTK_LABEL(regData->cleared_label), string);
     }
 
     gnc_reg_set_window_name(regData);

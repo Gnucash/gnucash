@@ -49,10 +49,6 @@ struct _xaccLedgerDisplay {
   SplitRegisterType type;        /* register display type, usually equal to *
                                   * account type, but not always.           */
 
-  double balance;                /* balance */
-  double clearedBalance;
-  double reconciledBalance;
-
   /* GUI related stuff */
   gboolean dirty;                /* dirty flag, non zero if redraw needed   */
   SplitRegister *ledger;         /* main ledger window                      */
