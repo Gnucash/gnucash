@@ -59,4 +59,21 @@
 #define USE_XMHTML           0
 #endif
 
+/* try to keep if-def-based configs from breaking */
+#if 0==HAVE_Z
+#define HAVE_Z 1
+#endif
+
+#if 0==HAVE_PNG
+#define HAVE_PNG 1
+#endif
+
+#if 0==HAVE_JPEG
+#define HAVE_JPEG 1
+#endif
+
+#if 0==HAVE_XPM
+#define HAVE_XPM 1
+#endif
+
 #endif
