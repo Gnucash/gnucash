@@ -314,7 +314,8 @@ immediately, independent of the major goals.
 <dd>People *like* to be able to read file contents in ASCII. There are
     many unix tools for manipulating ASCII.  An ASCII equivalent of the
     current file format should be easy to develop ... just substitute
-    the writes with printf's.
+    the writes with printf's.  The tab-delimited format should 
+    be compatible with that of /rdb
     <p>
 
 <dt><b>Splits</b>
@@ -344,32 +345,48 @@ immediately, independent of the major goals.
 </dl>
 </p>
 
-<h2>Completed</h2>
+<h2>Status</h2>
 Well, just to show that we are getting things done.
 
 <dl>
+<dt><b>Version 1.1 Alpha</b>
+<dd>The Alpha development version 1.1 is out.  Features include:
+    <ul>
+    <li>Data engine cleanly separated from GUI
+    <li>Redesigned register infrastructure will make it much easier to
+        create new/customer register displays, and to port to other GUI's.
+    <li>Splits have been added to the engine; the GUI does not yet expose them.
+    </ul>
+    (January 1998)
+    <p>
+
 <dt><b>New Improved Web Site</b>
 <dd>A spiffy web site for all of this is needed, with good graphics and
     exciting text!! A mailing list, mailing list archives, and a live
-    CVS tree are all bonuses.
+    CVS tree are all bonuses. (December 1997)
     <p>
 </dl>
 
 
-
-<h2>Misc</h2>
+<h2>Volunteers</h2>
 Your name here as project contributor!
 <ul>
 <li>Linas Vepstas <linas@linas.org> is maintaining the current xacc
     and is attempting to coordinate the project work.
 <li>Robin Clark <rclark@cs.hmc.edu> is creating a register widget in QT/KDE
-<li>Henning Spruth hopes to work in internationalization & locale issues,
+<li>Henning Spruth <henning@regent.e-technik.tu-muenchen.de> 
+    hopes to work in internationalization & locale issues,
     including a translation to German.
 <li>Peter Norton <spacey@inch.com> is working on a GTK port of Xbae
 <li>Daniel R Risacher <risacher@worldnet.att.net> is working on a
     GTK ledger/register/spread-sheet infrastructure.
+<li>Michael Newlyn Blake <Michael.Blake@Frogtown.Com> hopes to putter 
+    around with QIF export.
 </ul>
-<p>
+This list only mentions the currently active developers; many, many others
+have contributed fixes and patches.  I've tried to credit them in the README.
+
+<h2>References</h2>
 <ul>
 <li><a href="http://www3.hmc.edu/~rclark/xacc/">X-Accountant Home Page</a>
 <li><a href="http://www.hex.net/~cbbrowne/finances.html">CBBrowne's List
@@ -405,7 +422,7 @@ Your name here as project contributor!
 </ul>
 
 <hr>
-Draft version 0.15 February 1998<br>
+Draft version 0.16 February 1998<br>
 Linas Vepstas <a href="mailto:linas@linas.org">linas@linas.org</a><br>
 Robin Clark <a href="mailto:rclark@hmc.edu">rclark@hmc.edu</a><br>
 </body>
