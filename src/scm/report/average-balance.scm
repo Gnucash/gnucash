@@ -417,5 +417,6 @@
   (gnc:define-report
    'version 1
    'name (N_ "Average Balance")
+   'menu-path (list "_Assets & Liabilities")
    'options-generator options-generator
    'renderer renderer))

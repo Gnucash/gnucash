@@ -1,3 +1,13 @@
+2001-04-11  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/average-balance.scm, category-barchart.scm,
+	income-expense-graph.scm, net-worth-timeseries.scm, portfolio.scm:
+	Added menu-path for reports.
+
+	* src/scm/report/account-piecharts.scm: Report title is now
+	fetched from Reportname option. Slices and legend now have
+	different URLs.
+
 2001-04-11  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-commodities.c: more work

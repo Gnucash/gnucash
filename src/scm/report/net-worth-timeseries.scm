@@ -229,6 +229,8 @@
    ;; untranslated value here!
    'name (N_ "Net Worth Barchart")
 
+   'menu-path (list "_Assets & Liabilities")
+
    ;; The options generator function defined above.
    'options-generator options-generator
 

@@ -44,6 +44,9 @@
       (optname-to-date (N_ "To"))
       (optname-report-currency (N_ "Report's currency"))
 
+      ;; defined in report.scm
+      (optname-reportname "Report name")
+
       (pagename-accounts (N_ "Accounts"))
       (optname-accounts (N_ "Accounts"))
       (optname-levels (N_ "Show Accounts until level"))
@@ -147,6 +150,7 @@
 	  (account-levels (op-value pagename-accounts optname-levels))
 	  (report-currency (op-value pagename-general
 				     optname-report-currency))
+	  (report-title (op-value pagename-general optname-reportname))
 
 	  (show-fullname? (op-value pagename-display optname-fullname))
 	  (show-total? (op-value pagename-display optname-show-total))
@@ -269,35 +273,45 @@
 		      (gnc:report-anchor-text
 		       (gnc:make-report reportname options))))))
 
-	;; set the URLs
-	(let ((urls 
-	       (map 
+	;; set the URLs; the slices are links to other reports
+	(gnc:html-piechart-set-button-1-slice-urls! 
+	 chart
+	 (map 
+	  (lambda (pair)
+	    (if (string? (cadr pair))
+		other-anchor
+		(let* ((acct (cadr pair))
+		       (subaccts 
+			(gnc:account-get-immediate-subaccounts acct)))       
+		  (if (null? subaccts)
+		      ;; if leaf-account, make this an anchor
+		      ;; to the register.
+		      (gnc:account-anchor-text (cadr pair))
+		      ;; if non-leaf account, make this a link
+		      ;; to another report which is run on the
+		      ;; immediate subaccounts of this account
+		      ;; (and including this account).
+		      (gnc:make-report-anchor
+		       reportname
+		       (gnc:report-options report-obj) 
+		       (list
+			(list pagename-accounts optname-accounts
+			      (cons acct subaccts))
+			(list pagename-accounts optname-levels
+			      (+ 1 tree-depth))
+			(list pagename-general optname-reportname
+			      ((if show-fullname?
+				   gnc:account-get-full-name
+				   gnc:account-get-name) acct))))))))
+	  combined))
+	
+	(gnc:html-piechart-set-button-1-legend-urls! 
+	 chart (map 
 		(lambda (pair)
 		  (if (string? (cadr pair))
 		      other-anchor
-			(let* ((acct (cadr pair))
-			      (subaccts 
-			       (gnc:account-get-immediate-subaccounts 
-				acct)))       
-			  (if (null? subaccts)
-			      ;; if leaf-account, make this an anchor
-			      ;; to the register.
-			      (gnc:account-anchor-text (cadr pair))
-			      ;; if non-leaf account, make this a link
-			      ;; to another report which is run on the
-			      ;; immediate subaccounts of this account
-			      ;; (and including this account).
-			      (gnc:make-report-anchor
-			       reportname
-			       (gnc:report-options report-obj) 
-			       (list
-				(list pagename-accounts optname-accounts
-				      (cons acct subaccts))
-				(list pagename-accounts optname-levels
-				      (+ 1 tree-depth))))))))
-		combined)))
-	  (gnc:html-piechart-set-button-1-slice-urls! chart urls)
-	  (gnc:html-piechart-set-button-1-legend-urls! chart urls))
+		      (gnc:account-anchor-text (cadr pair))))
+		combined))
 	
 	(gnc:html-piechart-set-title!
 	 chart report-title)
@@ -324,22 +338,23 @@
 		    
 		    "")))
 	
-	(gnc:html-piechart-set-labels!
-	 chart
-	 (map (lambda (pair)
-		(string-append
-		 (if (string? (cadr pair))
-		     (cadr pair)
-		     ((if show-fullname?
-			  gnc:account-get-full-name
-			  gnc:account-get-name) (cadr pair)))
-		 (if show-total?
-		     (string-append 
-		      " - "
-		      (gnc:amount->string (car pair) print-info))
-		     "")))
-	      combined))
-
+	(let ((urls
+	       (map 
+		(lambda (pair)
+		  (string-append
+		   (if (string? (cadr pair))
+		       (cadr pair)
+		       ((if show-fullname?
+			    gnc:account-get-full-name
+			    gnc:account-get-name) (cadr pair)))
+		   (if show-total?
+		       (string-append 
+			" - "
+			(gnc:amount->string (car pair) print-info))
+		       "")))
+		combined)))
+	  (gnc:html-piechart-set-labels! chart urls))
+	
 	(gnc:html-document-add-object! document chart) 
 
 	document)))
@@ -349,6 +364,9 @@
      (gnc:define-report
       'version 1
       'name (car l)
+      'menu-path (if (cadddr l)
+		     (list "_Income & Expense")
+		     (list "_Assets & Liabilities"))
       'options-generator (lambda () (options-generator (cadr l) 
 						       (cadddr l)))
       'renderer (lambda (report-obj)

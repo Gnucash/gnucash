@@ -212,6 +212,7 @@
    ;; untranslated value here!
    'name (N_ "Income/Expense Chart")
 
+   'menu-path (list "_Income & Expense")
    ;; The options generator function defined above.
    'options-generator options-generator
 

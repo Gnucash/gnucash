@@ -163,6 +163,7 @@
    ;; untranslated value here!
    'name (N_ "Investment Portfolio")
 
+   'menu-path (list "_Assets & Liabilities")
    ;; The options generator function defined above.
    'options-generator options-generator
 

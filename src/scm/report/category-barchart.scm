@@ -378,8 +378,10 @@
    (lambda (l)
      (gnc:define-report
       'version 1
-      ;; why I use a variable here? See comment at the top.
       'name (car l)
+      'menu-path (if (cadddr l)
+		     (list "_Income & Expense")
+		     (list "_Assets & Liabilities"))
       'options-generator (lambda () (options-generator (cadr l)))
       'renderer (lambda (report-obj)
 		  (category-barchart-renderer report-obj 
