@@ -12,6 +12,17 @@
  * when the user presses the tab key (and/or uses the arrow 
  * keys).
  *
+ * The xaccNextRight() method can be used to declare the
+ * traversal order from cell to cell.  If the indicated cell
+ * has the current input focus, then the next cell that will
+ * be traversed to will be the one indicated.  Traversing
+ * to the rright is usally performed with the tab key.
+ * Special traversal order to the left, up or down are not
+ * currently implemented.  To traverse out of the table entirely,
+ * the next_row&col should be set to negative values.  If
+ * a traversal back into the table occurs, then the cell that 
+ * will be entered will be the one with the negative values.
+ *
  * MEMBERS:
  * The right_traverse array indicates which cell chould be
  * traversed to when the tab key is pressed.

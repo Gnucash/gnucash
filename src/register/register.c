@@ -158,6 +158,7 @@ void xaccInitBasicRegister (BasicRegister *reg)
 
    /* -------------------------------- */   
    /* define the traversal order */
+   /* negative cells mean "traverse out of table" */
    xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C,  NUM_CELL_R,  NUM_CELL_C);
    xaccNextRight (curs,  NUM_CELL_R,  NUM_CELL_C, XFRM_CELL_R, XFRM_CELL_C);
    xaccNextRight (curs, XFRM_CELL_R, XFRM_CELL_C, DESC_CELL_R, DESC_CELL_C);
@@ -165,7 +166,7 @@ void xaccInitBasicRegister (BasicRegister *reg)
    xaccNextRight (curs, CRED_CELL_R, CRED_CELL_C, DEBT_CELL_R, DEBT_CELL_C);
    xaccNextRight (curs, DEBT_CELL_R, DEBT_CELL_C, ACTN_CELL_R, ACTN_CELL_C);
    xaccNextRight (curs, ACTN_CELL_R, ACTN_CELL_C, MEMO_CELL_R, MEMO_CELL_C);
-   xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, -1, -1);
+   xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, -DATE_CELL_R, -DATE_CELL_C);
 
 
    /* -------------------------------- */   

@@ -105,6 +105,10 @@ xaccInitTable (Table * table, int tile_rows, int tile_cols)
          table->entries[i][j] = strdup ("");
       }
    }
+
+   /* invalidate the "previous" traversed cell */
+   table->prev_phys_traverse_row = -1;
+   table->prev_phys_traverse_col = -1;
 }
 
 /* ==================================================== */
@@ -343,11 +347,6 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
             mvcbs->verify->doit = False;
             break;
          }
-         case XbaeTraverseCellReason: {
-            XbaeMatrixTraverseCellCallbackStruct *tcbs;
-            tcbs = (XbaeMatrixTraverseCellCallbackStruct *) cbs;
-            break;
-         }
          case XbaeLeaveCellReason: {
             XbaeMatrixLeaveCellCallbackStruct *lcbs;
             lcbs = (XbaeMatrixLeaveCellCallbackStruct *) cbs;
@@ -373,11 +372,6 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
       }
       case XbaeLeaveCellReason: {
          leaveCB (mw, cd, cb);
-         break;
-      }
-      case XbaeTraverseCellReason: {
-         verifyCursorPosition (table, row, col);
-         traverseCB (mw, cd, cb);
          break;
       }
    }
@@ -598,9 +592,37 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
    arr = table->cursor;
    cbs = (XbaeMatrixTraverseCellCallbackStruct *) cb;
 
-   /* compute the cell location */
    row = cbs->row;
    col = cbs->column;
+
+   verifyCursorPosition (table, row, col);
+
+   /* If the quark is zero, then it is likely that we are
+    * here because we traversed out of a cell that had a 
+    * ComboBox in it.  The ComboCell is clever enough to put
+    * us back into the register after tabing out of it.
+    * However, its not (cannot be) clever enough to pretend
+    * that it was a tab group in the register.  Thus,
+    * we will emulate that we left a tab group in the register
+    * to get here.  To put it more simply, we just set the 
+    * row and column to that of the ComboCell, which we had
+    * previously recorded, and continue on as if nothing 
+    * happened.  
+    * BTW -- note that we are emulating a normal, right-moving tab. 
+    * Backwards tabs are broken. 
+    */
+   if (NULLQUARK == cbs->qparam) {
+      if ((0==row) && (0==col)) {
+        if ((0 <= table->prev_phys_traverse_row) && 
+            (0 <= table->prev_phys_traverse_col)) {
+          cbs->qparam = QRight;
+          row = table->prev_phys_traverse_row;
+          col = table->prev_phys_traverse_col;
+        }
+      }
+   }
+
+   /* compute the cell location */
    rel_row = row - table->num_header_rows;
    rel_col = col;
    rel_row %= (arr->numRows);
@@ -614,20 +636,24 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
       /* if we are at the end of the traversal chain,
        * hop out of this tab group, and into the next.
        */
-      if ((-1 == next_row) || (-1 == next_col)) {
-         cbs->next_row    = 0;
-         cbs->next_column = 0;
+      if ((0 > next_row) || (0 > next_col)) {
+         /* reverse the sign of next_row, col to be positive. */
+         cbs->next_row    = row - rel_row - next_row; 
+         cbs->next_column = col - rel_col - next_col;
          cbs->qparam      = NULLQUARK; 
          if (table->next_tab_group) {
             XmProcessTraversal (table->next_tab_group, 
-                                /* XmTRAVERSE_NEXT_TAB_GROUP); */
                                 XmTRAVERSE_CURRENT); 
+
          }
       } else {
          cbs->next_row    = row - rel_row + next_row; 
          cbs->next_column = col - rel_col + next_col;
       }
-   }
+   } 
+
+   table->prev_phys_traverse_row = cbs->next_row;
+   table->prev_phys_traverse_col = cbs->next_column;
 }
 
 
@@ -681,13 +707,13 @@ xaccCreateTable (Table *table, Widget parent, char * name)
                   XmNcolumns,             table->num_phys_cols,
                   XmNcolumnWidths,        widths,
                   XmNcolumnAlignments,    alignments,
-                  XmNtraverseFixedCells,  False,
                   XmNgridType,            XmGRID_SHADOW_IN,
                   XmNshadowType,          XmSHADOW_ETCHED_IN,
                   XmNverticalScrollBarDisplayPolicy,XmDISPLAY_STATIC,
                   XmNselectScrollVisible, True,
-                  /* XmNnavigationType,      XmEXCLUSIVE_TAB_GROUP, */
-                  XmNnavigationType,      XmSTICKY_TAB_GROUP,  
+                  XmNtraverseFixedCells,  False,
+                  XmNnavigationType,      XmEXCLUSIVE_TAB_GROUP,
+                  /* XmNnavigationType,      XmSTICKY_TAB_GROUP,  */
                   NULL);
     
    XtManageChild (reg);
@@ -696,7 +722,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    XtAddCallback (reg, XmNenterCellCallback, cellCB, (XtPointer)table);
    XtAddCallback (reg, XmNleaveCellCallback, cellCB, (XtPointer)table);
    XtAddCallback (reg, XmNmodifyVerifyCallback, cellCB, (XtPointer)table);
-   XtAddCallback (reg, XmNtraverseCellCallback, cellCB, (XtPointer)table);
+   XtAddCallback (reg, XmNtraverseCellCallback, traverseCB, (XtPointer)table);
 
    table->table_widget = reg;
 

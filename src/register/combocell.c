@@ -301,9 +301,8 @@ static void dropDownCB (Widget w, XtPointer cd, XtPointer cb )
     XmComboBoxDropDownCallbackStruct *ddcb = 
                (XmComboBoxDropDownCallbackStruct *) cb;
 
-
    if (XmCR_HIDE_LIST == ddcb->reason) {
-      XmProcessTraversal(ab->parent, XmTRAVERSE_CURRENT);
+      XmProcessTraversal(ab->parent, XmTRAVERSE_CURRENT); 
    }
  
 #ifdef USE_COMPLEX_TRAVERSAL_LOGIC

@@ -450,10 +450,6 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
                                  XmNnavigationType, XmSTICKY_TAB_GROUP,
 				 NULL );
 
-  /* traverse to the buttons, when leaving the table */
-  xaccNextTabGroup (regData->ledger->table, buttonform);
-
-
   position = 0;                    /* puts the buttons in the right place */
   
   /* The "Record" button */
@@ -466,13 +462,15 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
-                                    XmNnavigationType,     XmTAB_GROUP,
+                                    XmNnavigationType,     XmEXCLUSIVE_TAB_GROUP, 
 				    NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
 		 recordCB, (XtPointer)regData );
   regData->record = widget;
 
+  /* traverse to the buttons, when leaving the table */
+  xaccNextTabGroup (regData->ledger->table, widget); 
 
   
   /* The "Cancel" button */
@@ -486,7 +484,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
-                                    XmNnavigationType,     XmTAB_GROUP,
+                                    /* XmNnavigationType,     XmTAB_GROUP, */
+                                    XmNnavigationType,     XmEXCLUSIVE_TAB_GROUP, 
 				    NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
@@ -503,7 +502,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
-                                    XmNnavigationType,     XmTAB_GROUP,
+                                    /* XmNnavigationType,     XmTAB_GROUP, */
+                                    XmNnavigationType,     XmEXCLUSIVE_TAB_GROUP, 
 				    NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
@@ -554,7 +554,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+1,
-                                    XmNnavigationType,     XmNONE,  /* don't tab here! */
+                                    XmNnavigationType,     XmTAB_GROUP,  /* don't tab here! */
 				    NULL );
   regData->balance = widget;
   

@@ -1,3 +1,17 @@
+/*
+ * FILE:
+ * table.h
+ *
+ * FUNCTION:
+ * The table is the complete, displayed table. 
+ * It consists of a header, followed by a simple 
+ * list of repeated entries.
+ *
+ * It provides the mechanism to handle tab-trversing.
+ *
+ * HISTORY:
+ * Copyright (c) 1998 Linas Vepstas
+ */
 
 #ifndef __XACC_TABLE_H__
 #define __XACC_TABLE_H__
@@ -5,11 +19,6 @@
 #include <Xm/Xm.h>
 #include "basiccell.h"
 #include "cellblock.h"
-
-/* the table is the complete, displayed table. */
-/* It consists of a header, followed by a simple 
- * list of repeated entries 
- */
 
 typedef struct _Table {
 
@@ -49,6 +58,16 @@ typedef struct _Table {
   int num_header_rows;
   int num_phys_rows;
   int num_phys_cols;
+
+  /* This class implements tab-key and arrow key 
+   * traversal through the cells of the table.  
+   * To perform this traversal, the location
+   * of the "previous" cell having input focus 
+   * is required.
+   */
+  int prev_phys_traverse_row;
+  int prev_phys_traverse_col;
+   
 } Table;
 
 
