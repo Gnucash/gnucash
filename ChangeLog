@@ -1,5 +1,8 @@
 2004-12-04  Derek Atkins  <derek@ihtfp.com>
 
+	* src/gnome/glade/register.glade:
+	  Increase "number" spin box to a maximum of 1billion.  Fixes #152772.
+
 	* src/business/business-core/gncInvoice.c:
 	  send an event when a payment is processed so the invoice gets
 	  updated as "paid" in the search window.
