@@ -168,15 +168,16 @@
   (let ((table '()))
     (hash-fold
      (lambda (key value p)
-       (if (gw:wcp-is-of-type? <gnc:commodity*> value)
+       (if (and value (gw:wcp-is-of-type? <gnc:commodity*> value))
            (set! table
                  (cons (list key 
                              (gnc:commodity-get-namespace value)
                              (gnc:commodity-get-mnemonic value))
-                       table)))
+                       table))
+           (display "write-commodities: something funny in hash table.\n"))
        #f) #f hashtab)
     (write table)))
-        
+
 
 (define (qif-import:save-map-prefs acct-map cat-map memo-map stock-map)
   (let* ((pref-dir (build-path (getenv "HOME") ".gnucash"))

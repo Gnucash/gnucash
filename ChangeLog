@@ -1,3 +1,15 @@
+2001-02-23  Bill Gribble  <grib@billgribble.com>
+
+	* src/scm/qif-import/qif-dialog-utils.scm: Be more flexible
+	about account types on QIF import
+
+	* src/scm/qif-import/qif-objects.scm: make sure the list of
+	allowed types is in the right order
+
+	* src/scm/qif-import/qif-to-gnc.scm: be more flexible about type;
+	check on parent type after creating child; don't set security on
+	non-{stock,mutual} accounts.
+
 2001-02-22  Christian Stimming  <stimming@tuhh.de>
 
 	* src/engine/Transaction.h: Added xaccSplitGetAmount to be used

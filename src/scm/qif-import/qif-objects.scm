@@ -518,7 +518,7 @@
     me))
 
 (define (qif-map-entry:allowed-parent-types self) 
-  (let ((types-list (qif-map-entry:allowed-types self)))
+  (let ((types-list (reverse (qif-map-entry:allowed-types self))))
     (define (add-types . rest)
       (for-each 
        (lambda (t)

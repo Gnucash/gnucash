@@ -18,7 +18,8 @@
 ;;  an existing or new account.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-import:find-or-make-acct acct-info currency security 
+(define (qif-import:find-or-make-acct acct-info check-types? 
+                                      currency security 
                                       gnc-acct-hash old-group new-group)
   (let* ((separator (string-ref (gnc:account-separator-char) 0))
          (gnc-name (qif-map-entry:gnc-name acct-info))
@@ -30,17 +31,6 @@
          (make-new-acct #f)
          (incompatible-acct #f))
     
-    (define (make-unique-name-variant long-name short-name)
-      (if (gnc:get-account-from-full-name old-group long-name separator)
-          (let loop ((count 2))
-            (let ((test-name 
-                   (string-append long-name (sprintf #f " %a" count))))
-              (if (gnc:get-account-from-full-name 
-                   old-group test-name separator)
-                  (loop (+ 1 count))
-                  (string-append short-name (sprintf #f " %a" count)))))
-          short-name))
-    
     (define (compatible? account)
       (let ((acc-type (gnc:account-get-type account))
             (acc-currency (gnc:account-get-currency account))
@@ -48,15 +38,34 @@
         (if (memv acc-type 
                   (list GNC-STOCK-TYPE GNC-MUTUAL-TYPE))
             (and 
-             (list? allowed-types)
-             (memv acc-type allowed-types)
+             (if check-types? 
+                 (and (list? allowed-types)
+                      (memv acc-type allowed-types))
+                 #t)
              (gnc:commodity-equiv? acc-currency currency)
-             (gnc:commodity-equiv? acc-security security))
+             (or (not security) 
+                 (gnc:commodity-equiv? acc-security security)))
             (and 
-             (list? allowed-types)
-             (memv acc-type allowed-types)
+             (if check-types? 
+                 (and 
+                  (list? allowed-types)
+                  (memv acc-type allowed-types))
+                 #t)
              (gnc:commodity-equiv? acc-currency currency)))))
-                 
+    
+    (define (make-unique-name-variant long-name short-name)
+      (if (gnc:get-account-from-full-name old-group long-name separator)
+          (let loop ((count 2))
+            (let* ((test-name 
+                    (string-append long-name (sprintf #f " %a" count)))
+                   (test-acct 
+                    (gnc:get-account-from-full-name old-group test-name 
+                                                    separator)))
+              (if (and test-acct (not (compatible? test-acct)))
+                  (loop (+ 1 count))
+                  (string-append short-name (sprintf #f " %a" count)))))
+          short-name))
+    
     ;; just because we found an account doesn't mean we can use it.
     ;; if the name is in use but the currency, security, or type are
     ;; incompatible, we need to create a new account with a modified
@@ -82,7 +91,10 @@
           (set! make-new-acct #t)
           (set! incompatible-acct #f)))
     
-    (if existing-account 
+    ;; here, existing-account means a previously *created* account
+    ;; (possibly a new account, possibly a copy of an existing gnucash
+    ;; acct)
+    (if (and existing-account (compatible? existing-account))
         existing-account 
         (let ((new-acct (gnc:malloc-account))
               (parent-acct #f)
@@ -116,18 +128,10 @@
           ;; make sure that if this is a nested account foo:bar:baz,
           ;; foo:bar and foo exist also.
           (if last-colon
-              (let ((pinfo (make-qif-map-entry)))
+              (begin 
                 (set! parent-name (substring gnc-name 0 last-colon))
                 (set! acct-name (substring gnc-name (+ 1 last-colon) 
-                                           (string-length gnc-name)))
-                (qif-map-entry:set-qif-name! pinfo parent-name)
-                (qif-map-entry:set-gnc-name! pinfo parent-name)
-                (qif-map-entry:set-allowed-types! 
-                 pinfo (qif-map-entry:allowed-parent-types acct-info))
-                
-                (set! parent-acct (qif-import:find-or-make-acct 
-                                   pinfo currency security 
-                                   gnc-acct-hash old-group new-group)))
+                                           (string-length gnc-name))))
               (begin 
                 (set! acct-name gnc-name)))
           
@@ -158,8 +162,20 @@
                 (if (qif-map-entry:allowed-types acct-info)
                     (gnc:account-set-type 
                      new-acct (car (qif-map-entry:allowed-types acct-info))))))
-          
           (gnc:account-commit-edit new-acct)
+
+          (if last-colon
+              (let ((pinfo (make-qif-map-entry)))
+                (qif-map-entry:set-qif-name! pinfo parent-name)
+                (qif-map-entry:set-gnc-name! pinfo parent-name)
+                (qif-map-entry:set-allowed-types! 
+                 acct-info (list (gnc:account-get-type new-acct)))
+                (qif-map-entry:set-allowed-types! 
+                 pinfo (qif-map-entry:allowed-parent-types acct-info))
+                
+                (set! parent-acct (qif-import:find-or-make-acct 
+                                   pinfo #t currency #f 
+                                   gnc-acct-hash old-group new-group))))
           (if parent-acct
               (gnc:account-insert-subaccount parent-acct new-acct)
               (gnc:group-insert-account new-group new-acct))
@@ -256,17 +272,17 @@
                  (equity? (memv GNC-EQUITY-TYPE ok-types)))
             
             (cond ((and equity? security)  ;; a "retained holdings" acct
-                   (qif-import:find-or-make-acct acctinfo 
+                   (qif-import:find-or-make-acct acctinfo #f
                                                  security security
                                                  gnc-acct-hash 
                                                  old-group new-group))
                   (security 
                    (qif-import:find-or-make-acct 
-                    acctinfo default-currency security
+                    acctinfo #f default-currency security
                     gnc-acct-hash old-group new-group))
                   (#t 
                    (qif-import:find-or-make-acct 
-                    acctinfo default-currency default-currency
+                    acctinfo #f default-currency #f
                     gnc-acct-hash old-group new-group)))))
         sorted-accounts-list)
        

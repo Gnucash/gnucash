@@ -385,8 +385,10 @@
               (set! entry 
                     (qif-import:guess-acct (qif-cat:name cat)
                                            (if (qif-cat:expense-cat cat)
-                                               (list GNC-EXPENSE-TYPE)
-                                               (list GNC-INCOME-TYPE))
+                                               (list GNC-EXPENSE-TYPE
+                                                     GNC-INCOME-TYPE)
+                                               (list GNC-INCOME-TYPE
+                                                     GNC-EXPENSE-TYPE))
                                            gnc-acct-info)))
           (qif-map-entry:set-description! 
            entry (qif-cat:description cat))
@@ -416,8 +418,8 @@
                                (qif-import:guess-acct
                                 xtn-cat
                                 (if (> (qif-split:amount split) 0)
-                                    (list GNC-INCOME-TYPE)
-                                    (list GNC-EXPENSE-TYPE))
+                                    (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE)
+                                    (list GNC-EXPENSE-TYPE GNC-INCOME-TYPE))
                                 gnc-acct-info)))
                      (qif-map-entry:set-display?! entry #t)
                      (hash-set! cat-hash xtn-cat entry)))))
@@ -492,8 +494,14 @@
                              (qif-map-entry:set-allowed-types!
                               entry 
                               (if (> (qif-split:amount split) 0)
-                                  (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE)
-                                  (list GNC-EXPENSE-TYPE GNC-INCOME-TYPE)))))
+                                  (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE
+                                        GNC-BANK-TYPE GNC-CCARD-TYPE 
+                                        GNC-LIABILITY-TYPE GNC-ASSET-TYPE
+                                        GNC-STOCK-TYPE GNC-MUTUAL-TYPE)
+                                  (list GNC-EXPENSE-TYPE GNC-INCOME-TYPE
+                                        GNC-BANK-TYPE GNC-CCARD-TYPE 
+                                        GNC-LIABILITY-TYPE GNC-ASSET-TYPE
+                                        GNC-STOCK-TYPE GNC-MUTUAL-TYPE)))))
                        (qif-map-entry:set-display?! entry #t)
                        (hash-set! memo-hash key-string entry)))))
              splits)))
@@ -599,13 +607,22 @@
                      (gnc:get-account-from-full-name 
                       (gnc:get-current-group)
                       (qif-map-entry:gnc-name map-entry)
-                      separator)))
-               (if existing-gnc-acct
+                      separator))
+                    (existing-type 
+                     (gnc:account-get-type existing-gnc-acct)))
+               (if (and existing-gnc-acct 
+                        (memv existing-type (list GNC-STOCK-TYPE 
+                                                  GNC-MUTUAL-TYPE)))
                    ;; gnc account already exists... we *know* what the 
                    ;; security is supposed to be 
-                   (hash-set! 
-                    stock-hash stock-name
-                    (gnc:account-get-security existing-gnc-acct))
+                   (let ((currency 
+                          (gnc:account-get-currency existing-gnc-acct))
+                         (security 
+                          (gnc:account-get-security existing-gnc-acct)))
+                     (if security 
+                         (hash-set! stock-hash stock-name security)
+                         (hash-set! stock-hash stock-name currency)))
+                   
                    ;; we know nothing about this security.. we need to 
                    ;; ask about it
                    (begin 
@@ -619,7 +636,7 @@
                                             100000))))))
          #f))
      #f acct-hash)
-
+    
     (if (not (null? names))
         (sort names string<?)
         #f)))
