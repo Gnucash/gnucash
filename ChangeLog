@@ -1,3 +1,14 @@
+2001-04-05  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/balance-sheet.scm: Relabel summary rows, fix
+	asset calculation bugs.
+
+2001-04-04  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/balance-sheet.scm: calculate retained profits
+	explicitly, display (liabilities + equity) to allow people
+	to check balances.
+
 2001-04-04  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/gnome/gnucash-sheet.c

@@ -133,7 +133,7 @@
                                commodity amount))))
 		     #f))
 	  (gnc:html-table-append-row!
-           table (list (_ "Retained Earnings") 
+           table (list (_ "Net Profit") 
                        (gnc:sum-collector-commodity 
                         balance report-commodity exchange-fn)))))
 				   
@@ -271,7 +271,10 @@
 	    (total-equity-balance 'minusmerge equity-balance #f)
 	    (total-equity-balance 'merge
 				  retained-profit-balance
-				  #f)
+				  #f)	    
+	    (sign-reversed-liability-balance 'minusmerge
+					     liability-balance
+					     #f)
 	    (equity-plus-liability 'merge
 				   sign-reversed-liability-balance
 				   #f)
@@ -280,9 +283,7 @@
 				   #f)
 				  
 			       
-	    (sign-reversed-liability-balance 'minusmerge
-					     liability-balance
-					     #f)
+
 	    
 	    ;; add the tables
 	    (gnc:html-table-prepend-row! asset-table (list "Assets"))	    
@@ -298,13 +299,13 @@
              asset-table retained-profit-balance
              show-fcur? exchange-fn report-currency)
 	    (add-subtotal-line
-             asset-table "Equity" total-equity-balance show-fcur?
+             asset-table "Total Equity" total-equity-balance show-fcur?
              exchange-fn report-currency)
 	    (add-subtotal-line
 	     asset-table "Liabilities & Equity" equity-plus-liability
 	     show-fcur? exchange-fn report-currency)
 	    (gnc:html-document-add-object! doc asset-table)
-;	    (gnc:free-account-group income-expense-accounts-group)
+
 	    ;; add currency information
 ;	    (gnc:html-document-add-object! 
 ;	     doc ;;(gnc:html-markup-p
