@@ -170,7 +170,7 @@ close_handler (gpointer user_data)
 }
 
 FindTransactionsDialog * 
-gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
+gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg) {
   FindTransactionsDialog * ftd = g_new0(FindTransactionsDialog, 1);
   GtkWidget *box;
   GtkWidget *edit;
@@ -209,8 +209,8 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   ftd->dialog = glade_xml_get_widget (xml, "Find Transactions");
 
   if(orig_ledg) {
-    ftd->q = xaccQueryCopy (xaccLedgerDisplayGetQuery (orig_ledg));
-    ftd->ledger_q = xaccLedgerDisplayGetQuery (orig_ledg);
+    ftd->q = xaccQueryCopy (gnc_ledger_display_get_query (orig_ledg));
+    ftd->ledger_q = gnc_ledger_display_get_query (orig_ledg);
   }
   else {
     ftd->q = NULL;
@@ -481,7 +481,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
                                       gpointer user_data) {
   FindTransactionsDialog * ftd = user_data;
 
-  xaccLedgerDisplay *ledger;
+  GNCLedgerDisplay *ledger;
 
   GList   * selected_accounts;
   char    * descript_match_text;
@@ -685,18 +685,18 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     break;
   }
 
-  ledger = xaccFindGeneralLedgerByQuery (ftd->ledger_q);
+  ledger = gnc_ledger_display_find_by_query (ftd->ledger_q);
   if(!ledger) {
     new_ledger = TRUE;
-    ledger = xaccLedgerDisplayQuery (new_q, SEARCH_LEDGER,
-                                     REG_STYLE_JOURNAL);
+    ledger = gnc_ledger_display_query (new_q, SEARCH_LEDGER,
+                                       REG_STYLE_JOURNAL);
   }
   else
-    xaccLedgerDisplaySetQuery (ledger, new_q);
+    gnc_ledger_display_set_query (ledger, new_q);
 
   xaccFreeQuery (new_q);
 
-  xaccLedgerDisplayRefresh(ledger);
+  gnc_ledger_display_refresh (ledger);
 
   if (new_ledger)
     regWindowLedger(ledger);

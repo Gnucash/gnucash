@@ -45,7 +45,7 @@ static short module = MOD_LEDGER;
 
 
 static gboolean
-sr_balance_trans (SplitRegister *reg, Transaction *trans)
+gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
 {
   gnc_numeric imbalance;
 
@@ -149,7 +149,7 @@ sr_balance_trans (SplitRegister *reg, Transaction *trans)
 }
 
 static gboolean
-trans_has_reconciled_splits (Transaction *trans)
+gnc_trans_has_reconciled_splits (Transaction *trans)
 {
   GList *node;
 
@@ -256,7 +256,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
       (pending_trans == old_trans) &&
       (old_trans != new_trans))
   {
-    if (sr_balance_trans (reg, old_trans))
+    if (gnc_split_register_balance_trans (reg, old_trans))
     {
       new_trans = old_trans;
       new_split = old_split;
@@ -274,9 +274,9 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
   }
   else if (old_trans &&
            (old_trans != new_trans) &&
-           !trans_has_reconciled_splits (old_trans) &&
+           !gnc_trans_has_reconciled_splits (old_trans) &&
            !info->first_pass &&
-           sr_balance_trans (reg, old_trans))
+           gnc_split_register_balance_trans (reg, old_trans))
   {
     /* no matter what, stay there so the user can see what happened */
     new_trans = old_trans;

@@ -87,7 +87,7 @@ struct _SchedXactionEditorDialog
         SchedXaction                 *sx;
         int new;
 
-        xaccLedgerDisplay         *ledger;
+        GNCLedgerDisplay         *ledger;
         GnucashRegister         *reg;
 
         GNCFrequency                 *gncfreq;
@@ -116,8 +116,7 @@ static void advance_toggle( GtkButton *b, SchedXactionEditorDialog *sxed );
 
 
 /* ledger standard-handlers */
-static void sxe_ledger_destroy( xaccLedgerDisplay *ld );
-static gncUIWidget sxe_ledger_get_parent( xaccLedgerDisplay *ld );
+static gncUIWidget sxe_ledger_get_parent( GNCLedgerDisplay *ld );
 
 /* ledger callbacks */
 static void sxe_register_record_cb( GnucashRegister *reg, gpointer d );
@@ -139,7 +138,7 @@ void
 sxd_close_handler ( gpointer user_data )
 {
         SchedXactionDialog        *sxd = user_data;
-        /* FIXME: is this all we have to do? */
+
         gnome_dialog_close( GNOME_DIALOG( sxd->dialog ) );
 }
 
@@ -149,9 +148,12 @@ sxed_close_handler ( gpointer user_data )
 {
         SchedXactionEditorDialog        *sxed = user_data;
 
-        /* FIXME: destroy, too... the ledger, especially. */
-        xaccLedgerDisplayClose( sxed->ledger );
-        free(sxed->sxGUIDstr);
+        gnc_ledger_display_close( sxed->ledger );
+        sxed->ledger = NULL;
+
+        g_free (sxed->sxGUIDstr);
+        sxed->sxGUIDstr = NULL;
+
         gnome_dialog_close( GNOME_DIALOG( sxed->dialog ) );
 }
 
@@ -166,8 +168,8 @@ static
 void
 editor_close_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
 {
-        /* FIXME: destroy ledger. */
-        gnc_close_gui_component_by_data( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed );
+        gnc_close_gui_component_by_data( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
+                                         sxed );
 }
 
 
@@ -191,7 +193,6 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         gint row;
         time_t tmpDate;
         GDate *gdate;
-
 
         gdate = g_date_new();
 
@@ -281,8 +282,8 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         }
 
         /* cleanup */
-        gnc_unregister_gui_component_by_data( DIALOG_SCHEDXACTION_CM_CLASS, sxed );
-        sxed_close_handler( (gpointer)sxed );
+        gnc_close_gui_component_by_data (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
+                                         sxed);
 }
 
 static void
@@ -316,13 +317,11 @@ static void
 scheduledxaction_dialog_destroy(GtkObject *object, gpointer data)
 {
         SchedXactionDialog *sxd = data;
-        // FIXME: apporpriate destruction, here?
-        if (sxd == NULL) {
-                return;
-        }
-        gnc_unregister_gui_component_by_data (DIALOG_SCHEDXACTION_CM_CLASS, sxd);
 
-        gtk_widget_destroy( sxd->dialog );
+        if (!sxd) return;
+
+        gnc_unregister_gui_component_by_data
+          (DIALOG_SCHEDXACTION_CM_CLASS, sxd);
 
         g_free(sxd);
 }
@@ -336,20 +335,12 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
         if (sxed == NULL)
                 return;
 
-        gnc_unregister_gui_component_by_data (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
-        /* FIXME: free the GNCFrequency widget */
+        gnc_unregister_gui_component_by_data
+          (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
 
-        /* FIXME: free the ledger */
-        /*
-          gtk_widget_destroy( xaccLedgerDisplayGetUserData( sxed->ledger )->window );
-          xaccLedgerDisplaySetUserData( ledger, NULL );
-        */
-        /* FIXME: free the necessary widgets */
-
-        gtk_widget_destroy( sxed->dialog );
         sxed->sx = NULL;
 
-        g_free(sxed);
+        g_free (sxed);
 }
 
 SchedXactionDialog*
@@ -363,9 +354,11 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         sxd = g_new0( SchedXactionDialog, 1 );
 
         /* sxd->dialog = create_Scheduled_Transaction_List(); */
-        sxd->gxml = gnc_glade_xml_new( "sched-xact.glade", "Scheduled Transaction List" );
-        sxd->dialog = glade_xml_get_widget( sxd->gxml, "Scheduled Transaction List" );
-        
+        sxd->gxml = gnc_glade_xml_new( "sched-xact.glade",
+                                       "Scheduled Transaction List" );
+        sxd->dialog = glade_xml_get_widget( sxd->gxml,
+                                            "Scheduled Transaction List" );
+
         sxdo = GTK_OBJECT(sxd->dialog);
 
         gnc_register_gui_component( DIALOG_SCHEDXACTION_CM_CLASS,
@@ -400,19 +393,20 @@ gnc_ui_scheduled_xaction_dialog_create(void)
 void
 gnc_ui_scheduled_xaction_dialog_destroy(SchedXactionDialog *sxd)
 {
-        // FIXME: appropriate destruction?
         if (sxd == NULL)
                 return;
+
         gnc_close_gui_component_by_data (DIALOG_SCHEDXACTION_CM_CLASS, sxd);
 }
 
 void
 gnc_ui_scheduled_xaction_editor_dialog_destroy(SchedXactionEditorDialog *sxed)
 {
-        // FIXME: appropriate destruction?
         if (sxed == NULL)
                 return;
-        gnc_close_gui_component_by_data (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
+
+        gnc_close_gui_component_by_data
+          (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
 }
 
 void
@@ -675,14 +669,13 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
                 GTK_FRAME( glade_xml_get_widget( sxed->gxml,
                                                  "tempxaction_frame" ) );
         sxed->sxGUIDstr = guid_to_string( xaccSchedXactionGetGUID(sxed->sx) );
-        sxed->ledger = xaccLedgerDisplayTemplateGL( sxed->sxGUIDstr );
+        sxed->ledger = gnc_ledger_display_template_gl( sxed->sxGUIDstr );
 
-        xaccLedgerDisplaySetHandlers( sxed->ledger,
-                                      sxe_ledger_destroy,
-                                      sxe_ledger_get_parent );
-        xaccLedgerDisplaySetUserData( sxed->ledger, (gpointer)sxed );
+        gnc_ledger_display_set_handlers( sxed->ledger,
+                                         NULL, sxe_ledger_get_parent );
+        gnc_ledger_display_set_user_data( sxed->ledger, (gpointer)sxed );
 
-        splitreg = xaccLedgerDisplayGetSR( sxed->ledger );
+        splitreg = gnc_ledger_display_get_split_register( sxed->ledger );
         /* FIXME: make configurable */
         gnucash_register_set_initial_rows( 6 );
 
@@ -716,7 +709,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         gnc_split_register_show_present_divider( splitreg, FALSE );
 
         /* force a refresh */
-        xaccLedgerDisplayRefresh( sxed->ledger );
+        gnc_ledger_display_refresh( sxed->ledger );
 }
 
 static
@@ -810,7 +803,8 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
 
                 splitList = xaccSchedXactionGetSplits( sxed->sx );
                 if ( splitList != NULL ) {
-                        splitReg = xaccLedgerDisplayGetSR( sxed->ledger );
+                        splitReg = gnc_ledger_display_get_split_register
+                          ( sxed->ledger );
                         gnc_split_register_load(splitReg, splitList, NULL );
                 } /* otherwise, use the existing stuff. */
         }
@@ -1033,22 +1027,12 @@ putSchedXactionInClist( gpointer data, gpointer user_data )
 }
 
 static
-void
-sxe_ledger_destroy( xaccLedgerDisplay *ld )
-{
-        /* FIXME?: see window-register.c:regDestroy
-           get and save size?
-           get and save table state? */
-        DEBUG( "FIXME: sxe_ledger_destroy called\n" );
-}
-
-static
 gncUIWidget
-sxe_ledger_get_parent( xaccLedgerDisplay *ld )
+sxe_ledger_get_parent( GNCLedgerDisplay *ld )
 {
         SchedXactionEditorDialog *sxed;
 
-        sxed = (SchedXactionEditorDialog*)xaccLedgerDisplayGetUserData( ld );
+        sxed = gnc_ledger_display_get_user_data( ld );
         /* FIXME: is this the direct parent?
            doesn't look like it from window-register.c:gnc_register_get_parent
         */
@@ -1077,7 +1061,7 @@ sxed_reg_recordCB( GtkWidget *w, gpointer d )
         SplitRegister        *reg;
         Transaction        *trans;
 
-        reg = xaccLedgerDisplayGetSR( sxed->ledger );
+        reg = gnc_ledger_display_get_split_register( sxed->ledger );
         trans = gnc_split_register_get_current_trans( reg );
         if ( !gnc_split_register_save( reg, TRUE ) )
                 return;
@@ -1095,7 +1079,8 @@ void
 sxed_reg_cancelCB( GtkWidget *w, gpointer d )
 {
         gnc_split_register_cancel_cursor_trans_changes(
-                xaccLedgerDisplayGetSR( ((SchedXactionEditorDialog *)d)->ledger ) );
+                gnc_ledger_display_get_split_register
+                ( ((SchedXactionEditorDialog *)d)->ledger ) );
 }
 
 /* FIXME */
@@ -1217,7 +1202,7 @@ sxed_reg_deleteCB( GtkWidget *w, gpointer d )
   Split *split;
   gint result;
 
-  reg = xaccLedgerDisplayGetSR (sxed->ledger);
+  reg = gnc_ledger_display_get_split_register (sxed->ledger);
 
   /* get the current split based on cursor position */
   split = gnc_split_register_get_current_split (reg);
@@ -1315,7 +1300,7 @@ void
 sxed_reg_duplicateCB( GtkWidget *w, gpointer d )
 {
         gnc_split_register_duplicate_current (
-                xaccLedgerDisplayGetSR (
+                gnc_ledger_display_get_split_register (
                         ((SchedXactionEditorDialog*)d)->ledger));
 }
 
@@ -1327,16 +1312,16 @@ sxed_reg_expand_trans_checkCB( GtkWidget *w, gpointer d )
           SplitRegister *reg;
 
           gnc_split_register_expand_current_trans
-            (xaccLedgerDisplayGetSR (sxed->ledger),
+            (gnc_ledger_display_get_split_register (sxed->ledger),
              GTK_CHECK_MENU_ITEM (w)->active );
 }
 
 static
 void
-refactor_jump_to_blank( xaccLedgerDisplay *ledger,
+refactor_jump_to_blank( GNCLedgerDisplay *ledger,
                         GnucashRegister *gncReg )
 {
-          SplitRegister *reg = xaccLedgerDisplayGetSR (ledger);
+          SplitRegister *reg = gnc_ledger_display_get_split_register (ledger);
           VirtualCellLocation vcell_loc;
           Split *blank;
 
@@ -1355,7 +1340,7 @@ sxed_reg_new_transCB( GtkWidget *w, gpointer d )
         SchedXactionEditorDialog *sxed = d;
         SplitRegister *reg;
         
-        reg = xaccLedgerDisplayGetSR (sxed->ledger);
+        reg = gnc_ledger_display_get_split_register (sxed->ledger);
         
         if (gnc_split_register_save (reg, TRUE))
                 gnc_split_register_redraw (reg);

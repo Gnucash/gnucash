@@ -40,11 +40,11 @@
 
 /* The xaccLedgerDisplay struct describes a single register/ledger
  * instance. */
-typedef struct _xaccLedgerDisplay xaccLedgerDisplay;
+typedef struct gnc_ledger_display GNCLedgerDisplay;
 
-typedef void (*LedgerDisplayDestroy) (xaccLedgerDisplay *ld);
-typedef gncUIWidget (*LedgerDisplayGetParent) (xaccLedgerDisplay *ld);
-typedef void (*LedgerDisplaySetHelp) (xaccLedgerDisplay *ld,
+typedef void (*GNCLedgerDisplayDestroy) (GNCLedgerDisplay *ld);
+typedef gncUIWidget (*GNCLedgerDisplayGetParent) (GNCLedgerDisplay *ld);
+typedef void (*GNCLedgerDisplaySetHelp) (GNCLedgerDisplay *ld,
                                       const char *help_str);
 
 typedef enum
@@ -53,37 +53,38 @@ typedef enum
   LD_SUBACCOUNT,
   LD_GL,
   LD_TEMPLATE,
-} LedgerDisplayType;
+} GNCLedgerDisplayType;
 
 
 /** Prototypes ******************************************************/
 
 /* returns the 'lead' account of a ledger display, or NULL if none. */
-Account * xaccLedgerDisplayLeader (xaccLedgerDisplay *ld);
+Account * gnc_ledger_display_leader (GNCLedgerDisplay *ld);
 
-LedgerDisplayType xaccLedgerDisplayType (xaccLedgerDisplay *ld);
+GNCLedgerDisplayType gnc_ledger_display_type (GNCLedgerDisplay *ld);
 
 /* get and set the user data associated with the ledger */
-void xaccLedgerDisplaySetUserData (xaccLedgerDisplay *ld, gpointer user_data);
-gpointer xaccLedgerDisplayGetUserData (xaccLedgerDisplay *ld);
+void gnc_ledger_display_set_user_data (GNCLedgerDisplay *ld,
+                                       gpointer user_data);
+gpointer gnc_ledger_display_get_user_data (GNCLedgerDisplay *ld);
 
 /* set the handlers used by the ledger display */
-void xaccLedgerDisplaySetHandlers (xaccLedgerDisplay *ld,
-                                   LedgerDisplayDestroy destroy,
-                                   LedgerDisplayGetParent get_parent);
+void gnc_ledger_display_set_handlers (GNCLedgerDisplay *ld,
+                                      GNCLedgerDisplayDestroy destroy,
+                                      GNCLedgerDisplayGetParent get_parent);
 
 /* return the split register associated with a ledger display */
-SplitRegister * xaccLedgerDisplayGetSR (xaccLedgerDisplay *ld);
+SplitRegister * gnc_ledger_display_get_split_register (GNCLedgerDisplay *ld);
 
 /* opens up a register window to display a single account */
-xaccLedgerDisplay * xaccLedgerDisplaySimple (Account *account);
+GNCLedgerDisplay * gnc_ledger_display_simple (Account *account);
 
 /* opens up a register window to display the parent account and all of
  * its children. */
-xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *account);
+GNCLedgerDisplay * gnc_ledger_display_subaccounts (Account *account);
 
-xaccLedgerDisplay * xaccLedgerDisplayGL (void);
-xaccLedgerDisplay * xaccLedgerDisplayGLTemplate (char *id);
+/* opens up a general ledger window */
+GNCLedgerDisplay * gnc_ledger_display_gl (void);
 
 /**
  * Displays a template ledger.
@@ -92,32 +93,33 @@ xaccLedgerDisplay * xaccLedgerDisplayGLTemplate (char *id);
  * Really, requires a GList of scheduled transactions and kvp-frame
  * data.
  **/
-xaccLedgerDisplay * xaccLedgerDisplayTemplateGL (char *id);
+GNCLedgerDisplay * gnc_ledger_display_template_gl (char *id);
 
 /* display a general ledger for an arbitrary query */
-xaccLedgerDisplay * xaccLedgerDisplayQuery (Query *query,
-                                            SplitRegisterType type,
-                                            SplitRegisterStyle style);
+GNCLedgerDisplay * gnc_ledger_display_query (Query *query,
+                                             SplitRegisterType type,
+                                             SplitRegisterStyle style);
 
 /* Set the query used for a register. */
-void xaccLedgerDisplaySetQuery (xaccLedgerDisplay *ledger_display, Query *q);
+void gnc_ledger_display_set_query (GNCLedgerDisplay *ledger_display,
+                                   Query *q);
 
 /* return the query associated with a ledger */
-Query * xaccLedgerDisplayGetQuery (xaccLedgerDisplay *ld);
+Query * gnc_ledger_display_get_query (GNCLedgerDisplay *ld);
 
 /* If the given ledger display still exists, return it. Otherwise,
  * return NULL */
-xaccLedgerDisplay * xaccFindGeneralLedgerByQuery (Query *q);
+GNCLedgerDisplay * gnc_ledger_display_find_by_query (Query *q);
 
 /* redisplay/redraw only the indicated window. Both routines do same
  * thing, they differ only by the argument they take. */
-void        xaccLedgerDisplayRefresh (xaccLedgerDisplay * ledger_display);
-void        xaccLedgerDisplayRefreshByReg (SplitRegister *reg);
+void gnc_ledger_display_refresh (GNCLedgerDisplay * ledger_display);
+void gnc_ledger_display_refresh_by_split_register (SplitRegister *reg);
 
 /* close the window */
-void        xaccLedgerDisplayClose (xaccLedgerDisplay * ledger_display);
+void gnc_ledger_display_close (GNCLedgerDisplay * ledger_display);
 
 /* close all ledger windows containing this account. */
-void        xaccDestroyLedgerDisplay (Account *account);
+void gnc_ledger_display_destroy_by_account (Account *account);
 
 #endif

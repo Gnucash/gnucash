@@ -45,20 +45,20 @@
 #define REGISTER_TEMPLATE_CM_CLASS   "register-template"
 
 
-struct _xaccLedgerDisplay
+struct gnc_ledger_display
 {
   GUID leader;
 
   Query *query;
 
-  LedgerDisplayType ld_type;
+  GNCLedgerDisplayType ld_type;
 
   SplitRegister *reg;
 
   gboolean loading;
 
-  LedgerDisplayDestroy destroy;
-  LedgerDisplayGetParent get_parent;
+  GNCLedgerDisplayDestroy destroy;
+  GNCLedgerDisplayGetParent get_parent;
 
   gpointer user_data;
 
@@ -71,20 +71,20 @@ static short module = MOD_LEDGER;
 
 
 /** Declarations ****************************************************/
-static xaccLedgerDisplay *
-xaccLedgerDisplayInternal (Account *lead_account, Query *q,
-                           LedgerDisplayType ld_type,
-                           SplitRegisterType reg_type,
-                           SplitRegisterStyle style,
-                           gboolean is_template);
-static void xaccLedgerDisplayRefreshInternal (xaccLedgerDisplay *ld,
-                                              GList *splits);
+static GNCLedgerDisplay *
+gnc_ledger_display_internal (Account *lead_account, Query *q,
+                             GNCLedgerDisplayType ld_type,
+                             SplitRegisterType reg_type,
+                             SplitRegisterStyle style,
+                             gboolean is_template);
+static void gnc_ledger_display_refresh_internal (GNCLedgerDisplay *ld,
+                                                 GList *splits);
 
 
 /** Implementations *************************************************/
 
 Account *
-xaccLedgerDisplayLeader (xaccLedgerDisplay *ld)
+gnc_ledger_display_leader (GNCLedgerDisplay *ld)
 {
   if (!ld)
     return NULL;
@@ -92,8 +92,8 @@ xaccLedgerDisplayLeader (xaccLedgerDisplay *ld)
   return xaccAccountLookup (&ld->leader);
 }
 
-LedgerDisplayType
-xaccLedgerDisplayType (xaccLedgerDisplay *ld)
+GNCLedgerDisplayType
+gnc_ledger_display_type (GNCLedgerDisplay *ld)
 {
   if (!ld)
     return -1;
@@ -102,7 +102,7 @@ xaccLedgerDisplayType (xaccLedgerDisplay *ld)
 }
 
 void
-xaccLedgerDisplaySetUserData (xaccLedgerDisplay *ld, gpointer user_data)
+gnc_ledger_display_set_user_data (GNCLedgerDisplay *ld, gpointer user_data)
 {
   if (!ld)
     return;
@@ -111,7 +111,7 @@ xaccLedgerDisplaySetUserData (xaccLedgerDisplay *ld, gpointer user_data)
 }
 
 gpointer
-xaccLedgerDisplayGetUserData (xaccLedgerDisplay *ld)
+gnc_ledger_display_get_user_data (GNCLedgerDisplay *ld)
 {
   if (!ld)
     return NULL;
@@ -120,9 +120,9 @@ xaccLedgerDisplayGetUserData (xaccLedgerDisplay *ld)
 }
 
 void
-xaccLedgerDisplaySetHandlers (xaccLedgerDisplay *ld,
-                              LedgerDisplayDestroy destroy,
-                              LedgerDisplayGetParent get_parent)
+gnc_ledger_display_set_handlers (GNCLedgerDisplay *ld,
+                                 GNCLedgerDisplayDestroy destroy,
+                                 GNCLedgerDisplayGetParent get_parent)
 {
   if (!ld)
     return;
@@ -132,7 +132,7 @@ xaccLedgerDisplaySetHandlers (xaccLedgerDisplay *ld,
 }
 
 SplitRegister *
-xaccLedgerDisplayGetSR (xaccLedgerDisplay *ld)
+gnc_ledger_display_get_split_register (GNCLedgerDisplay *ld)
 {
   if (!ld)
     return NULL;
@@ -141,7 +141,7 @@ xaccLedgerDisplayGetSR (xaccLedgerDisplay *ld)
 }
 
 Query *
-xaccLedgerDisplayGetQuery (xaccLedgerDisplay *ld)
+gnc_ledger_display_get_query (GNCLedgerDisplay *ld)
 {
   if (!ld)
     return NULL;
@@ -153,24 +153,24 @@ static gboolean
 find_by_leader (gpointer find_data, gpointer user_data)
 {
   Account *account = find_data;
-  xaccLedgerDisplay *ld = user_data;
+  GNCLedgerDisplay *ld = user_data;
 
   if (!account || !ld)
     return FALSE;
 
-  return (account == xaccLedgerDisplayLeader (ld));
+  return (account == gnc_ledger_display_leader (ld));
 }
 
 static gboolean
 find_by_account (gpointer find_data, gpointer user_data)
 {
   Account *account = find_data;
-  xaccLedgerDisplay *ld = user_data;
+  GNCLedgerDisplay *ld = user_data;
 
   if (!account || !ld)
     return FALSE;
 
-  if (account == xaccLedgerDisplayLeader (ld))
+  if (account == gnc_ledger_display_leader (ld))
     return TRUE;
 
   if (ld->ld_type == LD_SINGLE)
@@ -184,7 +184,7 @@ static gboolean
 find_by_query (gpointer find_data, gpointer user_data)
 {
   Query *q = find_data;
-  xaccLedgerDisplay *ld = user_data;
+  GNCLedgerDisplay *ld = user_data;
 
   if (!q || !ld)
     return FALSE;
@@ -196,7 +196,7 @@ static gboolean
 find_by_reg (gpointer find_data, gpointer user_data)
 {
   SplitRegister *reg = find_data;
-  xaccLedgerDisplay *ld = user_data;
+  GNCLedgerDisplay *ld = user_data;
 
   if (!reg || !ld)
     return FALSE;
@@ -228,7 +228,7 @@ gnc_get_default_register_style (void)
 }
 
 static SplitRegisterType
-get_reg_type (Account *leader, LedgerDisplayType ld_type)
+gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
 {
   GNCAccountType account_type;
   SplitRegisterType reg_type;
@@ -342,57 +342,36 @@ get_reg_type (Account *leader, LedgerDisplayType ld_type)
   return reg_type;
 }
 
-/********************************************************************\
- * regWindowSimple                                                  *
- *   opens up a register window to display a single account         *
- *                                                                  *
- * Args:   acc     - the account associated with this register      *
- * Return: regData - the register window instance                   *
-\********************************************************************/
-
-xaccLedgerDisplay *
-xaccLedgerDisplaySimple (Account *account)
+/* Opens up a register window to display a single account */
+GNCLedgerDisplay *
+gnc_ledger_display_simple (Account *account)
 {
   SplitRegisterType reg_type;
 
-  reg_type = get_reg_type (account, LD_SINGLE);
+  reg_type = gnc_get_reg_type (account, LD_SINGLE);
 
-  return xaccLedgerDisplayInternal (account, NULL, LD_SINGLE, reg_type,
-                                    gnc_get_default_register_style (), FALSE );
+  return gnc_ledger_display_internal (account, NULL, LD_SINGLE, reg_type,
+                                      gnc_get_default_register_style (),
+                                      FALSE);
 }
 
-/********************************************************************\
- * xaccLedgerDisplayAccGroup                                        *
- *   opens up a register window to display an account, and all      *
- *   of its children, in the same window                            *
- *                                                                  *
- * Args:   account - the account associated with this register      *
- * Return: the register window instance                             *
-\********************************************************************/
-
-xaccLedgerDisplay *
-xaccLedgerDisplayAccGroup (Account *account)
+/* Opens up a register window to display an account, and all of its
+ *   children, in the same window */
+GNCLedgerDisplay *
+gnc_ledger_display_subaccounts (Account *account)
 {
   SplitRegisterType reg_type;
 
-  reg_type = get_reg_type (account, LD_SUBACCOUNT);
+  reg_type = gnc_get_reg_type (account, LD_SUBACCOUNT);
 
-  return xaccLedgerDisplayInternal (account, NULL, LD_SUBACCOUNT,
-                                    reg_type, REG_STYLE_JOURNAL, FALSE );
+  return gnc_ledger_display_internal (account, NULL, LD_SUBACCOUNT,
+                                      reg_type, REG_STYLE_JOURNAL, FALSE);
 }
 
 
-
-/********************************************************************\
- * xaccLedgerDisplayGL                                              *
- *   opens up a general ledger window                               *
- *                                                                  *
- * Args:   none                                                     *
- * Return: the register window instance                             *
-\********************************************************************/
-
-xaccLedgerDisplay *
-xaccLedgerDisplayGL (void)
+/* Opens up a general ledger window. */
+GNCLedgerDisplay *
+gnc_ledger_display_gl (void)
 {
   Query *query;
   time_t start;
@@ -423,9 +402,9 @@ xaccLedgerDisplayGL (void)
                            FALSE, 0, 
                            QUERY_AND);
 
-  return xaccLedgerDisplayInternal (NULL, query, LD_GL,
-                                    GENERAL_LEDGER,
-                                    REG_STYLE_JOURNAL, FALSE );
+  return gnc_ledger_display_internal (NULL, query, LD_GL,
+                                      GENERAL_LEDGER,
+                                      REG_STYLE_JOURNAL, FALSE);
 }
 
 /**
@@ -435,14 +414,14 @@ xaccLedgerDisplayGL (void)
  * . set in a specific key value for new transactions which belong to
  *   this template ledger.
  **/
-xaccLedgerDisplay *
-xaccLedgerDisplayTemplateGL (char *id)
+GNCLedgerDisplay *
+gnc_ledger_display_template_gl (char *id)
 {
   GNCBook *book;
   Query *q;
   time_t start;
   struct tm *tm;
-  xaccLedgerDisplay *ld;
+  GNCLedgerDisplay *ld;
   SplitRegister *sr;
   AccountGroup *ag;
   Account *acct;
@@ -461,12 +440,12 @@ xaccLedgerDisplayTemplateGL (char *id)
   book = gncGetCurrentBook ();
   xaccQuerySetGroup (q, gnc_book_get_template_group(book));
 
-  ld = xaccLedgerDisplayInternal (NULL, q, LD_GL,
-                                  GENERAL_LEDGER,
-                                  REG_STYLE_JOURNAL,
-                                  TRUE); /* template mode?  TRUE. */
+  ld = gnc_ledger_display_internal (NULL, q, LD_GL,
+                                    GENERAL_LEDGER,
+                                    REG_STYLE_JOURNAL,
+                                    TRUE); /* template mode?  TRUE. */
 
-  sr = xaccLedgerDisplayGetSR (ld);
+  sr = gnc_ledger_display_get_split_register (ld);
 
   gnc_split_register_set_template_account (sr, acct);
 
@@ -474,9 +453,9 @@ xaccLedgerDisplayTemplateGL (char *id)
 }
 
 static gncUIWidget
-xaccLedgerDisplayParent (void *user_data)
+gnc_ledger_display_parent (void *user_data)
 {
-  xaccLedgerDisplay *regData = user_data;
+  GNCLedgerDisplay *regData = user_data;
 
   if (regData == NULL)
     return NULL;
@@ -488,7 +467,7 @@ xaccLedgerDisplayParent (void *user_data)
 }
 
 static void
-ledger_set_watches (xaccLedgerDisplay *ld, GList *splits)
+gnc_ledger_display_set_watches (GNCLedgerDisplay *ld, GList *splits)
 {
   GList *node;
 
@@ -512,7 +491,7 @@ ledger_set_watches (xaccLedgerDisplay *ld, GList *splits)
 static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
-  xaccLedgerDisplay *ld = user_data;
+  GNCLedgerDisplay *ld = user_data;
   const EventInfo *info;
   gboolean has_leader;
   GList *splits;
@@ -524,7 +503,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 
   if (has_leader)
   {
-    Account *leader = xaccLedgerDisplayLeader (ld);
+    Account *leader = gnc_ledger_display_leader (ld);
     if (!leader)
     {
       gnc_close_gui_component (ld->component_id);
@@ -544,15 +523,15 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 
   splits = xaccQueryGetSplits (ld->query);
 
-  ledger_set_watches (ld, splits);
+  gnc_ledger_display_set_watches (ld, splits);
 
-  xaccLedgerDisplayRefreshInternal (ld, splits);
+  gnc_ledger_display_refresh_internal (ld, splits);
 }
 
 static void
 close_handler (gpointer user_data)
 {
-  xaccLedgerDisplay *ld = user_data;
+  GNCLedgerDisplay *ld = user_data;
 
   if (!ld)
     return;
@@ -572,9 +551,9 @@ close_handler (gpointer user_data)
 }
 
 static void
-make_ledger_query (xaccLedgerDisplay *ld,
-                   gboolean show_all,
-                   SplitRegisterType type)
+gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
+                               gboolean show_all,
+                               SplitRegisterType type)
 {
   Account *leader;
   GList *accounts;
@@ -609,7 +588,7 @@ make_ledger_query (xaccLedgerDisplay *ld,
 
   xaccQuerySetGroup (ld->query, gncGetCurrentGroup());
 
-  leader = xaccLedgerDisplayLeader (ld);
+  leader = gnc_ledger_display_leader (ld);
 
   if (ld->ld_type == LD_SUBACCOUNT)
     accounts = xaccGroupGetSubAccounts (xaccAccountGetChildren (leader));
@@ -624,30 +603,22 @@ make_ledger_query (xaccLedgerDisplay *ld,
   g_list_free (accounts);
 }
 
-/********************************************************************\
- * xaccLedgerDisplayQuery                                           *
- *   opens up a ledger window for an arbitrary query                *
- *                                                                  *
- * Args:   query - the query to use for the register                *
- *         type  - the type of split register to open               *
- *         style - the style of register to use                     *
- * Return: the register window instance                             *
-\********************************************************************/
-xaccLedgerDisplay *
-xaccLedgerDisplayQuery (Query *query, SplitRegisterType type,
-                        SplitRegisterStyle style)
+/* Opens up a ledger window for an arbitrary query. */
+GNCLedgerDisplay *
+gnc_ledger_display_query (Query *query, SplitRegisterType type,
+                          SplitRegisterStyle style)
 {
-  return xaccLedgerDisplayInternal (NULL, query, LD_GL, type, style, FALSE);
+  return gnc_ledger_display_internal (NULL, query, LD_GL, type, style, FALSE);
 }
 
-static xaccLedgerDisplay *
-xaccLedgerDisplayInternal (Account *lead_account, Query *q,
-                           LedgerDisplayType ld_type,
-                           SplitRegisterType reg_type,
-                           SplitRegisterStyle style,
-                           gboolean is_template )
+static GNCLedgerDisplay *
+gnc_ledger_display_internal (Account *lead_account, Query *q,
+                             GNCLedgerDisplayType ld_type,
+                             SplitRegisterType reg_type,
+                             SplitRegisterStyle style,
+                             gboolean is_template )
 {
-  xaccLedgerDisplay *ld;
+  GNCLedgerDisplay *ld;
   gboolean show_all;
   const char *class;
   GList *splits;
@@ -724,7 +695,7 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
 
   }
 
-  ld = g_new (xaccLedgerDisplay, 1);
+  ld = g_new (GNCLedgerDisplay, 1);
 
   ld->leader = *xaccAccountGetGUID (lead_account);
   ld->query = NULL;
@@ -742,7 +713,7 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
   if (q)
     ld->query = xaccQueryCopy (q);
   else
-    make_ledger_query (ld, show_all, reg_type);
+    gnc_ledger_display_make_query (ld, show_all, reg_type);
 
   ld->component_id = gnc_register_gui_component (class,
                                                  refresh_handler,
@@ -754,19 +725,19 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
 
   ld->reg = gnc_split_register_new (reg_type, style, FALSE, is_template);
 
-  gnc_split_register_set_data (ld->reg, ld, xaccLedgerDisplayParent);
+  gnc_split_register_set_data (ld->reg, ld, gnc_ledger_display_parent);
 
   splits = xaccQueryGetSplits (ld->query);
 
-  ledger_set_watches (ld, splits);
+  gnc_ledger_display_set_watches (ld, splits);
 
-  xaccLedgerDisplayRefreshInternal (ld, splits);
+  gnc_ledger_display_refresh_internal (ld, splits);
 
   return ld;
 }
 
 void
-xaccLedgerDisplaySetQuery (xaccLedgerDisplay *ledger_display, Query *q)
+gnc_ledger_display_set_query (GNCLedgerDisplay *ledger_display, Query *q)
 {
   if (!ledger_display || !q)
     return;
@@ -777,8 +748,8 @@ xaccLedgerDisplaySetQuery (xaccLedgerDisplay *ledger_display, Query *q)
   ledger_display->query = xaccQueryCopy (q);
 }
 
-xaccLedgerDisplay *
-xaccFindGeneralLedgerByQuery (Query *q)
+GNCLedgerDisplay *
+gnc_ledger_display_find_by_query (Query *q)
 {
   if (!q)
     return NULL;
@@ -791,37 +762,39 @@ xaccFindGeneralLedgerByQuery (Query *q)
 \********************************************************************/
 
 static void
-xaccLedgerDisplayRefreshInternal (xaccLedgerDisplay *ld, GList *splits)
+gnc_ledger_display_refresh_internal (GNCLedgerDisplay *ld, GList *splits)
 {
   if (!ld || ld->loading)
     return;
 
   if (!gnc_split_register_full_refresh_ok (ld->reg))
   {
-    gnc_split_register_load_xfer_cells (ld->reg, xaccLedgerDisplayLeader (ld));
+    gnc_split_register_load_xfer_cells (ld->reg,
+                                        gnc_ledger_display_leader (ld));
     return;
   }
 
   ld->loading = TRUE;
 
-  gnc_split_register_load (ld->reg, splits, xaccLedgerDisplayLeader (ld));
+  gnc_split_register_load (ld->reg, splits,
+                           gnc_ledger_display_leader (ld));
 
   ld->loading = FALSE;
 }
 
 void
-xaccLedgerDisplayRefresh (xaccLedgerDisplay *ld)
+gnc_ledger_display_refresh (GNCLedgerDisplay *ld)
 {
   if (!ld || ld->loading)
     return;
 
-  xaccLedgerDisplayRefreshInternal (ld, xaccQueryGetSplits (ld->query));
+  gnc_ledger_display_refresh_internal (ld, xaccQueryGetSplits (ld->query));
 }
 
 void
-xaccLedgerDisplayRefreshByReg (SplitRegister *reg)
+gnc_ledger_display_refresh_by_split_register (SplitRegister *reg)
 {
-  xaccLedgerDisplay *ld;
+  GNCLedgerDisplay *ld;
 
   if (!reg)
     return;
@@ -830,7 +803,7 @@ xaccLedgerDisplayRefreshByReg (SplitRegister *reg)
                                      find_by_reg, reg);
   if (ld)
   {
-    xaccLedgerDisplayRefresh (ld);
+    gnc_ledger_display_refresh (ld);
     return;
   }
 
@@ -838,7 +811,7 @@ xaccLedgerDisplayRefreshByReg (SplitRegister *reg)
                                      find_by_reg, reg);
   if (ld)
   {
-    xaccLedgerDisplayRefresh (ld);
+    gnc_ledger_display_refresh (ld);
     return;
   }
 
@@ -846,16 +819,16 @@ xaccLedgerDisplayRefreshByReg (SplitRegister *reg)
                                      find_by_reg, reg);
   if (ld)
   {
-    xaccLedgerDisplayRefresh (ld);
+    gnc_ledger_display_refresh (ld);
     return;
   }
 
   ld = gnc_find_first_gui_component (REGISTER_TEMPLATE_CM_CLASS,
                                      find_by_reg, reg );
   if (ld)
-    {
-      xaccLedgerDisplayRefresh (ld);
-    }
+  {
+    gnc_ledger_display_refresh (ld);
+  }
 }
 
 /********************************************************************\
@@ -863,7 +836,8 @@ xaccLedgerDisplayRefreshByReg (SplitRegister *reg)
 \********************************************************************/
 
 static void
-xaccDestroyLedgerDisplayClass (Account *account, const char *component_class)
+gnc_destroy_ledger_display_class (Account *account,
+                                  const char *component_class)
 {
   GList *list;
   GList *node;
@@ -872,7 +846,7 @@ xaccDestroyLedgerDisplayClass (Account *account, const char *component_class)
 
   for (node = list; node; node = node->next)
   {
-    xaccLedgerDisplay *ld = node->data;
+    GNCLedgerDisplay *ld = node->data;
 
     gnc_close_gui_component (ld->component_id);
   }
@@ -881,20 +855,19 @@ xaccDestroyLedgerDisplayClass (Account *account, const char *component_class)
 }
 
 void
-xaccDestroyLedgerDisplay (Account *account)
+gnc_ledger_display_destroy_by_account (Account *account)
 {
   if (!account)
     return;
 
-  xaccDestroyLedgerDisplayClass (account, REGISTER_SINGLE_CM_CLASS);
-  xaccDestroyLedgerDisplayClass (account, REGISTER_SUBACCOUNT_CM_CLASS);
-  xaccDestroyLedgerDisplayClass (account, REGISTER_GL_CM_CLASS);
-  /* no TEMPLATE_CM_CLASS, because it doesn't correspond to any account
-   * FIXME: but there probably should be an analagous method */
+  gnc_destroy_ledger_display_class (account, REGISTER_SINGLE_CM_CLASS);
+  gnc_destroy_ledger_display_class (account, REGISTER_SUBACCOUNT_CM_CLASS);
+  gnc_destroy_ledger_display_class (account, REGISTER_GL_CM_CLASS);
+  /* no TEMPLATE_CM_CLASS, because it doesn't correspond to any account */
 }
 
 void
-xaccLedgerDisplayClose (xaccLedgerDisplay *ld)
+gnc_ledger_display_close (GNCLedgerDisplay *ld)
 {
   if (!ld)
     return;

@@ -524,7 +524,7 @@ change_func (gpointer key, gpointer value, gpointer field_code)
           break;
 
         /* Just refreshing won't work. */
-        xaccDestroyLedgerDisplay(account);
+        gnc_ledger_display_destroy_by_account (account);
 
         xaccAccountSetType(account, type);
       }
@@ -871,7 +871,7 @@ gnc_edit_account_ok(AccountWindow *aw)
 
   if (current_type != aw->type)
     /* Just refreshing won't work. */
-    xaccDestroyLedgerDisplay (account);
+    gnc_ledger_display_destroy_by_account (account);
 
   gnc_finish_ok (aw, change_type);
 

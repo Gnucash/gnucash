@@ -27,7 +27,7 @@
 #include "RegWindow.h"
 #include "gnc-ledger-display.h"
 
-RegWindow * regWindowLedger(xaccLedgerDisplay *ledger);
+RegWindow * regWindowLedger(GNCLedgerDisplay *ledger);
 
 void gnc_register_raise(RegWindow *regData);
 void gnc_register_jump_to_blank(RegWindow *regData);

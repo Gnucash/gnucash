@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __DIALOG_FIND_TRANSACTIONS_H_
-#define __DIALOG_FIND_TRANSACTIONS_H_
+#ifndef DIALOG_FIND_TRANSACTIONS_H
+#define DIALOG_FIND_TRANSACTIONS_H
 
 #include <gnome.h>
 
@@ -34,7 +34,7 @@ typedef struct _FindTransactionsDialog FindTransactionsDialog;
 
 
 FindTransactionsDialog * 
-gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * ledger);
+gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * ledger);
 
 void gnc_ui_find_transactions_dialog_destroy(FindTransactionsDialog * pcd);
 

@@ -143,12 +143,11 @@ static GUID copied_leader_guid;
 
 /** static prototypes *****************************************************/
 
-static gboolean xaccSRSaveRegEntryToSCM (SplitRegister *reg,
-                                         SCM trans_scm, SCM split_scm,
-                                         gboolean use_cut_semantics);
-static void xaccSRActuallySaveChangedCells (SplitRegister *reg,
-                                            Transaction *trans, Split *split);
-static gboolean sr_split_auto_calc (SplitRegister *reg, Split *split);
+static gboolean gnc_split_register_save_to_scm (SplitRegister *reg,
+                                                SCM trans_scm, SCM split_scm,
+                                                gboolean use_cut_semantics);
+static gboolean gnc_split_register_auto_calc (SplitRegister *reg,
+                                              Split *split);
 
 
 /** implementations *******************************************************/
@@ -657,8 +656,8 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
     if (new_item != SCM_UNDEFINED)
     {
       if (changed)
-        xaccSRSaveRegEntryToSCM(reg, SCM_UNDEFINED, new_item,
-                                use_cut_semantics);
+        gnc_split_register_save_to_scm (reg, SCM_UNDEFINED, new_item,
+                                        use_cut_semantics);
 
       copied_leader_guid = *xaccGUIDNULL();
     }
@@ -681,7 +680,8 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
         else
           split_scm = SCM_UNDEFINED;
 
-        xaccSRSaveRegEntryToSCM(reg, new_item, split_scm, use_cut_semantics);
+        gnc_split_register_save_to_scm (reg, new_item, split_scm,
+                                        use_cut_semantics);
       }
 
       copied_leader_guid = info->default_account;
@@ -1110,15 +1110,15 @@ gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg)
 void
 gnc_split_register_redraw (SplitRegister *reg) 
 {
-  xaccLedgerDisplayRefreshByReg (reg);
+  gnc_ledger_display_refresh_by_split_register (reg);
 }
 
 /* Copy from the register object to scheme. This needs to be
  * in sync with gnc_split_register_save and xaccSRSaveChangedCells. */
-/* jsled: This will need to be modified, as well. */
 static gboolean
-xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
-                         gboolean use_cut_semantics)
+gnc_split_register_save_to_scm (SplitRegister *reg,
+                                SCM trans_scm, SCM split_scm,
+                                gboolean use_cut_semantics)
 {
   SCM other_split_scm = SCM_UNDEFINED;
   Transaction *trans;
@@ -1356,7 +1356,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
 
    ENTER ("save split is %p \n", split);
 
-   if (!sr_split_auto_calc (reg, split))
+   if (!gnc_split_register_auto_calc (reg, split))
      return FALSE;
 
    gnc_suspend_gui_refresh ();
@@ -1473,7 +1473,7 @@ gnc_split_register_get_account (SplitRegister *reg, const char * cell_name)
 }
 
 static gboolean
-sr_split_auto_calc (SplitRegister *reg, Split *split)
+gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
 {
   PriceCell *cell;
   gboolean recalc_shares = FALSE;
@@ -1759,7 +1759,7 @@ sr_split_auto_calc (SplitRegister *reg, Split *split)
 }
 
 static GNCAccountType
-sr_type_to_account_type(SplitRegisterType sr_type)
+gnc_split_register_type_to_account_type (SplitRegisterType sr_type)
 {
   switch (sr_type)
   {
@@ -1805,7 +1805,9 @@ gnc_split_register_get_debit_string (SplitRegister *reg)
   if (info->debit_str)
     return info->debit_str;
 
-  info->debit_str = gnc_get_debit_string (sr_type_to_account_type (reg->type));
+  info->debit_str =
+    gnc_get_debit_string
+    (gnc_split_register_type_to_account_type (reg->type));
 
   if (info->debit_str)
     return info->debit_str;
@@ -1827,7 +1829,8 @@ gnc_split_register_get_credit_string (SplitRegister *reg)
     return info->credit_str;
 
   info->credit_str =
-    gnc_get_credit_string (sr_type_to_account_type (reg->type));
+    gnc_get_credit_string
+    (gnc_split_register_type_to_account_type (reg->type));
 
   if (info->credit_str)
     return info->credit_str;

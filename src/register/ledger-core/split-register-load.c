@@ -41,20 +41,20 @@ static short module = MOD_LEDGER;
 
 
 static void
-sr_add_transaction (SplitRegister *reg,
-                    Transaction *trans,
-                    Split *split,
-                    CellBlock *lead_cursor,
-                    CellBlock *split_cursor,
-                    gboolean visible_splits,
-                    gboolean start_primary_color,
-                    gboolean sort_splits,
-                    gboolean add_blank,
-                    Transaction *find_trans,
-                    Split *find_split,
-                    CursorClass find_class,
-                    int *new_split_row,
-                    VirtualCellLocation *vcell_loc)
+gnc_split_register_add_transaction (SplitRegister *reg,
+                                    Transaction *trans,
+                                    Split *split,
+                                    CellBlock *lead_cursor,
+                                    CellBlock *split_cursor,
+                                    gboolean visible_splits,
+                                    gboolean start_primary_color,
+                                    gboolean sort_splits,
+                                    gboolean add_blank,
+                                    Transaction *find_trans,
+                                    Split *find_split,
+                                    CursorClass find_class,
+                                    int *new_split_row,
+                                    VirtualCellLocation *vcell_loc)
 {
   GList *node;
 
@@ -365,10 +365,12 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     if (split == find_trans_split)
       new_trans_split_row = vcell_loc.virt_row;
 
-    sr_add_transaction (reg, trans, split, lead_cursor, split_cursor,
-                        multi_line, start_primary_color, TRUE, TRUE,
-                        find_trans, find_split, find_class,
-                        &new_split_row, &vcell_loc);
+    gnc_split_register_add_transaction (reg, trans, split,
+                                        lead_cursor, split_cursor,
+                                        multi_line, start_primary_color,
+                                        TRUE, TRUE,
+                                        find_trans, find_split, find_class,
+                                        &new_split_row, &vcell_loc);
 
     if (!multi_line)
       start_primary_color = !start_primary_color;
@@ -401,11 +403,12 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     save_loc.phys_col_offset = 0;
   }
 
-  sr_add_transaction (reg, trans, split, lead_cursor, split_cursor,
-                      multi_line, start_primary_color, FALSE,
-                      info->blank_split_edited, find_trans,
-                      find_split, find_class, &new_split_row,
-                      &vcell_loc);
+  gnc_split_register_add_transaction (reg, trans, split,
+                                      lead_cursor, split_cursor,
+                                      multi_line, start_primary_color, FALSE,
+                                      info->blank_split_edited, find_trans,
+                                      find_split, find_class, &new_split_row,
+                                      &vcell_loc);
 
   /* resize the table to the sizes we just counted above */
   /* num_virt_cols is always one. */

@@ -61,7 +61,8 @@ static gboolean use_red_for_negative = TRUE;
 
 
 static gboolean
-use_security_cells (SplitRegister *reg, VirtualLocation virt_loc)
+gnc_split_register_use_security_cells (SplitRegister *reg,
+                                       VirtualLocation virt_loc)
 {
   GNCAccountType account_type;
   CursorClass cursor_class;
@@ -194,7 +195,7 @@ gnc_split_register_get_price_label (VirtualLocation virt_loc,
 {
   SplitRegister *reg = user_data;
 
-  if (!use_security_cells (reg, virt_loc))
+  if (!gnc_split_register_use_security_cells (reg, virt_loc))
     return NULL;
 
   return _("Price");
@@ -206,7 +207,7 @@ gnc_split_register_get_shares_label (VirtualLocation virt_loc,
 {
   SplitRegister *reg = user_data;
 
-  if (!use_security_cells (reg, virt_loc))
+  if (!gnc_split_register_use_security_cells (reg, virt_loc))
     return NULL;
 
   return _("Shares");
@@ -772,7 +773,7 @@ gnc_split_register_get_price_entry (VirtualLocation virt_loc,
   gnc_numeric price;
   Split *split;
 
-  if (!use_security_cells (reg, virt_loc))
+  if (!gnc_split_register_use_security_cells (reg, virt_loc))
     return NULL;
 
   split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
@@ -794,7 +795,7 @@ gnc_split_register_get_shares_entry (VirtualLocation virt_loc,
   gnc_numeric shares;
   Split *split;
 
-  if (!use_security_cells (reg, virt_loc))
+  if (!gnc_split_register_use_security_cells (reg, virt_loc))
     return NULL;
 
   split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
@@ -1024,7 +1025,7 @@ gnc_split_register_get_security_io_flags (VirtualLocation virt_loc,
 {
   SplitRegister *reg = user_data;
 
-  if (use_security_cells (reg, virt_loc))
+  if (gnc_split_register_use_security_cells (reg, virt_loc))
     return XACC_CELL_ALLOW_ALL;
 
   return XACC_CELL_ALLOW_SHADOW;

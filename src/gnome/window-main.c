@@ -896,11 +896,12 @@ gnc_ui_mainWindow_nextrun_cb( GtkWidget *widget, gpointer d )
 }
 
 static void
-gnc_main_window_gl_cb(GtkWidget *widget, gpointer data) {
-  xaccLedgerDisplay *ld;
+gnc_main_window_gl_cb(GtkWidget *widget, gpointer data)
+{
+  GNCLedgerDisplay *ld;
   RegWindow *regData;
 
-  ld = xaccLedgerDisplayGL ();
+  ld = gnc_ledger_display_gl ();
 
   regData = regWindowLedger (ld);
 
