@@ -24,6 +24,7 @@
 #include <glib.h>
 #include <guile/gh.h>
 #include <string.h>
+#include <g-wrap-wct.h>
 
 #include "Backend.h"
 #include "global-options.h"
@@ -250,10 +251,12 @@ gnc_add_history (GNCSession * session)
 static void
 gnc_book_opened (void)
 {
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
   gh_call2 (gh_eval_str("gnc:hook-run-danglers"),
             gh_eval_str("gnc:*book-opened-hook*"),
-            gh_str02scm((char *) gnc_session_get_url(current_session))); 
+	    (current_session ? 
+	     gw_wcp_assimilate_ptr (current_session,
+				    gh_eval_str("<gnc:Session*>")) :
+	     SCM_BOOL_F));
 }
 
 void
@@ -272,10 +275,11 @@ gnc_file_new (void)
    * disable events so we don't get spammed by redraws. */
   gnc_engine_suspend_events ();
   
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
   gh_call2(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*book-closed-hook*"),
-           gh_str02scm((char *) gnc_session_get_url(session)));
+	   (session ?
+	    gw_wcp_assimilate_ptr (session, gh_eval_str("<gnc:Session*>")) :
+	    SCM_BOOL_F));
 
   gnc_session_destroy (session);
   current_session = NULL;
@@ -359,10 +363,12 @@ gnc_post_file_open (const char * filename)
 
   /* -------------- BEGIN CORE SESSION CODE ------------- */
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
   gh_call2(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*book-closed-hook*"),
-           gh_str02scm((char *) gnc_session_get_url(current_session)));
+	   (current_session ?
+	    gw_wcp_assimilate_ptr (current_session,
+				   gh_eval_str("<gnc:Session*>")) :
+	    SCM_BOOL_F));
   gnc_session_destroy (current_session);
   current_session = NULL;
 
@@ -569,9 +575,11 @@ gnc_file_save (void)
   gnc_book_mark_saved (gnc_session_get_book (session));
 
   /* save the main window state */
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
   gh_call1 (gh_eval_str("gnc:main-window-save-state"),
-            gh_str02scm((char *) gnc_session_get_url(current_session))); 
+	    (current_session ?
+	     gw_wcp_assimilate_ptr (current_session,
+				    gh_eval_str("<gnc:Session*>")) :
+	     SCM_BOOL_F));
 
   LEAVE (" ");
 }
@@ -700,10 +708,11 @@ gnc_file_quit (void)
    * transactions during shutdown would cause massive redraws */
   gnc_engine_suspend_events ();
 
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
   gh_call2(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*book-closed-hook*"),
-           gh_str02scm((char *) gnc_session_get_url(session)));           
+	   (session ?
+	    gw_wcp_assimilate_ptr (session, gh_eval_str("<gnc:Session*>")) :
+	    SCM_BOOL_F));
   
   gnc_session_destroy (session);
   current_session = NULL;

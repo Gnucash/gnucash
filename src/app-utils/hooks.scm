@@ -96,7 +96,7 @@
 (define gnc:*book-opened-hook*
   (gnc:hook-define 
    'book-opened-hook
-   "Run after book open.  Hook args: book URL."))
+   "Run after book open.  Hook args: <gnc:Session*>."))
 
 (define gnc:*new-book-hook*
   (gnc:hook-define 
@@ -106,7 +106,7 @@
 (define gnc:*book-closed-hook*
   (gnc:hook-define 
    'book-closed-hook
-   "Run before file close.  Hook args: book URL"))
+   "Run before file close.  Hook args: <gnc:Session*>"))
 
 (define gnc:*report-hook*
   (gnc:hook-define

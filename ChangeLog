@@ -6,6 +6,13 @@
 	* business-options.scm: Implement the kvp->scm and scm->kvp methods
 	  for the business options.
 
+	* hooks.scm: fix documentation
+	* gnc-file.c: change the open/closed book hooks to take a
+	  <gnc:Session*> instead of a string.
+	* binary-import.scm: fix the book-opened-hook.
+	* main-window.scm: fix the book-opened/closed-hook calls
+	* main.scm: fix the book-opened/closed-hook calls	  
+	
 2002-07-06  Derek Atkins  <derek@ihtfp.com>
 
 	* gw-kvp-spec.scm: wrap kvp_slot_set_slot_path_gslist(),

@@ -118,8 +118,9 @@ the account instead of opening a register.") #f))
 ;; book close.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:main-window-save-state book-url)
-  (let* ((conf-file-name (gnc:html-encode-string book-url))
+(define (gnc:main-window-save-state session)
+  (let* ((book-url (gnc:session-get-url session))
+	 (conf-file-name (gnc:html-encode-string book-url))
 	 (dotgnucash-dir (build-path (getenv "HOME") ".gnucash"))
          (file-dir (build-path dotgnucash-dir "books"))
          (save-file? #f)
@@ -151,8 +152,8 @@ the account instead of opening a register.") #f))
               (force-output)))
           (gnc:mdi-save (gnc:mdi-get-current) book-url)))))
 
-(define (gnc:main-window-book-close-handler book-url)
-    (gnc:main-window-save-state book-url)
+(define (gnc:main-window-book-close-handler session)
+    (gnc:main-window-save-state session)
 
     (let ((dead-reports '()))
       ;; get a list of the reports we'll be needing to nuke     
@@ -168,7 +169,7 @@ the account instead of opening a register.") #f))
          (hash-remove! *gnc:_reports_* dr))
        dead-reports)))
 
-(define (gnc:main-window-book-open-handler book-url)
+(define (gnc:main-window-book-open-handler session)
   (define (try-load file-suffix)
     (let ((file (build-path (getenv "HOME") ".gnucash" "books" file-suffix)))
       ;; make sure the books directory is there 
@@ -178,8 +179,9 @@ the account instead of opening a register.") #f))
                 (gnc:warn "failure loading " file)
                 #f))
           #f)))
-  (let ((conf-file-name (gnc:html-encode-string book-url))
-        (dead-reports '()))
+  (let* ((book-url (gnc:session-get-url session))
+	 (conf-file-name (gnc:html-encode-string book-url))
+	 (dead-reports '()))
     (if conf-file-name 
         (try-load conf-file-name))
     (gnc:mdi-restore (gnc:mdi-get-current) book-url)))

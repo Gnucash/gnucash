@@ -401,12 +401,13 @@ string and 'directories' must be a list of strings."
     (set-current-module original-module))
 
   (gnc:hook-add-dangler gnc:*book-opened-hook*
-                        (lambda (file)
+                        (lambda (session)
                           (if ((gnc:option-getter
                                 (gnc:lookup-global-option
                                  "Scheduled Transactions"
                                  "Run on GnuCash start" )))
-                              (gnc:sx-since-last-run-wrapper file))))
+                              (gnc:sx-since-last-run-wrapper
+			       (gnc:session-get-url session)))))
 
   (gnc:hook-add-dangler gnc:*new-book-hook*
                         (lambda ()
