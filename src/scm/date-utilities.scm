@@ -257,8 +257,8 @@
 
 (define (gnc:timepair-end-day-time tp)
   (let ((bdt (localtime (gnc:timepair->secs tp))))
-    (set-tm:sec bdtime 59)
-    (set-tm:min bdtime 59)
-    (set-tm:hour bdtime 23)
+    (set-tm:sec bdt 59)
+    (set-tm:min bdt 59)
+    (set-tm:hour bdt 23)
     (let ((newtime (car (mktime bdt))))
       (cons newtime 0))))

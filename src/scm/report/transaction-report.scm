@@ -579,7 +579,6 @@
     gnc:*transaction-report-options*)
 
 
-
   (define (gnc:trep-renderer options)
     (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
            (enddate (gnc:lookup-option options "Report Options" "To"))
@@ -602,7 +601,8 @@
            (accounts (gnc:option-value tr-report-account-op))
            (date-filter-pred (split-report-make-date-filter-predicate
                               (car (gnc:option-value begindate))
-                              (car (gnc:option-value enddate))))
+                              (car (gnc:timepair-end-day-time
+                                    (gnc:option-value enddate)))))
 	   (s1 (split-report-get-sort-spec-entry
 		(gnc:option-value tr-report-primary-key-op)
 		(eq? (gnc:option-value tr-report-primary-order-op) 'ascend)

@@ -112,8 +112,9 @@
 
     (let* ((from-option (gnc:lookup-option options "Report Options" "From"))
            (from-value (if from-option (gnc:option-value from-option) #f))
-           (to-value (gnc:option-value
-                      (gnc:lookup-option options "Report Options" "To"))))
+           (to-value (gnc:timepair-end-day-time
+                      (gnc:option-value
+                       (gnc:lookup-option options "Report Options" "To")))))
 
       (define (handle-level-1-account account options)
         (let ((type (gnc:account-type->symbol (gnc:account-get-type account))))

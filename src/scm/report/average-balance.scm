@@ -323,7 +323,7 @@
       (let ((acctcurrency "USD")
             (acctname "")
             (begindate (gov-fun "From"))
-            (enddate (gov-fun "To"))
+            (enddate (gnc:timepair-end-day-time (gov-fun "To")))
             (stepsize (eval (gov-fun "Step Size")))
             (plotstr (eval (gov-fun "Plot Type")))
             (accounts (gov-fun "Account"))
