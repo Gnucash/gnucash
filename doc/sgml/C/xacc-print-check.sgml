@@ -3,8 +3,6 @@
 <ARTHEADER>
 <TITLE>Printing Checks</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE>Printing Checks</TITLE>
 <PARA>You may print a GnuCash transaction as a check by selecting
     "Print Check" from the Transaction menu in a register display
     window.
@@ -20,7 +18,7 @@
     job.
 
     </PARA>
-<SECT2>
+<sect1>
 <TITLE>Check format</TITLE>
 <PARA>    </PARA>
 <PARA>In order to print a check, you must know where the
@@ -32,8 +30,8 @@
     which prints to any Quicken-compatible check forms.
 
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Custom Check Format</TITLE>
 <PARA>If you wish to print to a type of check form that is not in
     the <GUIMENU>Check Format</GUIMENU> option menu, select 
@@ -58,8 +56,8 @@
     can include them as standard in a future release.
 
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Check position</TITLE>
 <PARA>Printable check forms are available in several styles. In
     general, each printable sheet is divided into three sections,
@@ -71,8 +69,8 @@
     in the printing dialog.
 
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Custom check position</TITLE>
 <PARA>If the preset check positions do not work correctly for your
     check forms, you may choose <GUIMENU>Custom</GUIMENU> from the Check
@@ -83,8 +81,8 @@
     this measurement are those selected in the "Units" option
     menu.
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Date format</TITLE>
 <PARA>Select your preferred date format from the picker. The
     picker shows examples using the date of December 31,
@@ -96,8 +94,8 @@
     with a full or abbreviated month name instead of a number.
 
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>Custom date format</TITLE>
 <PARA>If you wish to use another date format besides those
     available in the picker, select <GUIMENU>Custom</GUIMENU> and enter a
@@ -106,8 +104,7 @@
     string is passed to <FUNCTION>strftime(3)</FUNCTION> as a format
     specifier.
   </PARA>
-</SECT2>
-</SECT1>
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
