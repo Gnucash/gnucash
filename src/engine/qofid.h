@@ -115,7 +115,7 @@ void qof_entity_init (QofEntity *, QofIdType, QofCollection *);
 void qof_entity_release (QofEntity *);
 
 /* Return the GUID of this entity */
-GUID * qof_entity_get_guid (QofEntity *);
+const GUID * qof_entity_get_guid (QofEntity *);
 
 /** collections of entities */
 QofCollection * qof_collection_new (QofIdType type);

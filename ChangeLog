@@ -17,6 +17,8 @@
 	* src/gnome/ui/gnc-main-window-ui.xml: Add the "Close Books" menu
 	item.
 
+	* src/engine/qofid.[ch]: Fix another crash caused by qof changes.
+
 2003-10-25  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-account.[ch]:
