@@ -7,6 +7,16 @@
                   Last Revised January 2003
 
 
+One often needs to know that the item 'bought' in one transaction
+is the same one as the item 'sold' in a different transaction.
+Lots are used to make this association.  One Lot holds all of the
+splits that involve the same item.   A lot is typically formed when
+the item is bought, and is closed when the item is sold out.
+A lot need not be a single item, it can be a quantity of the same
+thing e.g. 500 gallons of paint (sold off a few gallons at a time).
+Lots are required to correctly implement invoices, inventory,
+depreciation and stock market investment gains. 
+
 'Lots' capture a fundamental accounting idea behind AR/AP, billing,
 inventory, capital gains, depreciation and the like.  The basic idea
 is that a set of items is tracked together as a 'lot'; the date of 
@@ -416,7 +426,7 @@ XXX need to add a lot id, have it auto-gened by the scrubber.
 
 XXX It is a good idea to generate a gain/loss split for ever sale, not
 just the lot closure.  Need to tweak the register to hide/show as appropriate.
-Need to add a tag to the gain spl;it to indicate its's 'special' nature.
+Need to add a tag to the gain split to indicate its's 'special' nature.
 
 
 -------------------------- end of file ------------------------------
