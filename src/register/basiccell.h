@@ -1,4 +1,9 @@
+/*
+ * single.h
+ */
 
+#ifndef __XACC_SINGLE_H__
+#define __XACC_SINGLE_H__
 /* cell types */
 enum {
   DATE,     
@@ -23,40 +28,14 @@ typedef struct _SingleCell {
 
   char * value;   /* current value */
 
-  char * (*modify_verify) (char *)  /* modify verify callback */
+  char * (*modify_verify) (char *);  /* modify verify callback */
 
 
 } SingleCell;
 
-typedef struct _CellArray {
-
-  short numRows;
-  short numCols;
-
-  SingleCell **cells;  /* row-col array */
-
-  Widget reg;          /* the XbaeMatrix */
-} CellArray;
 
 SingleCell * xaccMallocSingleCell (void);
 void         xaccInitSingleCell (SingleCell *);
 
-
-CellArray * xaccMallocCellArray (void);
-void        xaccInitCellArray (CellArray *, int numrows, int numcols);
-void        xaccDestroyCellArray (CellArray *);
-
-/* add a cell to the array */
-void        xaccAddCell (SingleCell *);
-
-
-/* installs a callback to handle price recording */
-void        xaccInitPriceCell (SingleCell *);
-
-
-
-
-SingleCell * xaccMallocSingleCell (void)
-{
-
-}
+#endif /* __XACC_SINGLE_H__ */
+/* ------------------ end of file ---------------------- */
