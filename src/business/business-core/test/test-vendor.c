@@ -29,10 +29,12 @@ test_bool_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncVendor *, gboolean),
 		  gboolean (*get) (GncVendor *));
 
+#if 0
 static void
 test_gint_fcn (GNCBook *book, const char *message,
 	       void (*set) (GncVendor *, gint),
 	       gint (*get) (GncVendor *));
+#endif
 
 static void
 test_vendor (void)
@@ -149,6 +151,7 @@ test_bool_fcn (GNCBook *book, const char *message,
   gncVendorSetActive (vendor, FALSE); count++;
 }
 
+#if 0
 static void
 test_gint_fcn (GNCBook *book, const char *message,
 	       void (*set) (GncVendor *, gint),
@@ -163,6 +166,7 @@ test_gint_fcn (GNCBook *book, const char *message,
   do_test (get (vendor) == num, message);
   gncVendorSetActive (vendor, FALSE); count++;
 }
+#endif
 
 static void
 main_helper (int argc, char **argv)

@@ -1045,6 +1045,7 @@ void gncQuerySetBook (QueryNew *q, GNCBook *book)
 
 void gncQueryNewInit (void)
 {
+  PINFO("New Query Module Initialization");
   gncQueryCoreInit ();
   gncQueryObjectInit ();
 }

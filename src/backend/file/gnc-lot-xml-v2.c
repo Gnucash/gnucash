@@ -138,7 +138,6 @@ gnc_lot_end_handler(gpointer data_for_children,
     gxpf_data *gdata = (gxpf_data*)global_data;
     GNCBook *book = gdata->bookdata;
 
-	 ENTER("(lot=%p)", lot);
     successful = TRUE;
 
     if(parent_data)
@@ -156,6 +155,7 @@ gnc_lot_end_handler(gpointer data_for_children,
     g_return_val_if_fail(tree, FALSE);
 
     lot = dom_tree_to_lot(tree, book);
+    ENTER("(lot=%p)", lot);
     if(lot != NULL)
     {
         gdata->cb(tag, gdata->parsedata, lot);
@@ -173,8 +173,8 @@ dom_tree_to_lot (xmlNodePtr node, GNCBook *book)
     GNCLot *lot;
     gboolean successful;
 
-	 ENTER("(lot=%p)", lot);
     lot = gnc_lot_new(book);
+    ENTER("(lot=%p)", lot);
 
     pdata.lot = lot;
     pdata.book = book;

@@ -32,6 +32,13 @@ int libgncmod_business_backend_file_LTX_gnc_module_age      = 0;
 static GNCModule bus_core;
 static GNCModule file;
 
+/* forward references */
+char *libgncmod_business_backend_file_LTX_gnc_module_path(void);
+char *libgncmod_business_backend_file_LTX_gnc_module_description(void);
+int libgncmod_business_backend_file_LTX_gnc_module_init(int refcount);
+int libgncmod_business_backend_file_LTX_gnc_module_end(int refcount);
+
+
 char *
 libgncmod_business_backend_file_LTX_gnc_module_path(void) 
 {

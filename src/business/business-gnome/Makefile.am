@@ -110,7 +110,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gncmod-business-gnome.c: gw-business-gnome.h
+businessmod-gnome.c: gw-business-gnome.h
 
 gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h: .scm-links gw-business-gnome-spec.scm
 	FLAVOR=gnome guile -c \

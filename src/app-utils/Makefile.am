@@ -88,6 +88,11 @@ i18n.h: i18n.h.in
             -e 's:@-PACKAGE-@:${PACKAGE}:g' \
             -e 's:@-LOCALE_DIR-@:${LOCALE_DIR}:g'
 	mv $@.tmp $@
+
+## Make needs this dependency so that it doesn't try to automatically
+## generate dependencies before the i18n.h file is created.
+gnc-gettext-util.c: i18n.h
+
 # This has to be in BUILT_SOURCES because other files depend on it,
 # but it's never a target itself.
 BUILT_SOURCES = i18n.h

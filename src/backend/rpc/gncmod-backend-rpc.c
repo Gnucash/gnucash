@@ -25,6 +25,13 @@ int libgncmod_backend_rpc_LTX_gnc_module_age      = 0;
 
 GNCModule engine;
 
+/* forward references */
+char *libgncmod_backend_rpc_LTX_gnc_module_path(void);
+char *libgncmod_backend_rpc_LTX_gnc_module_description(void);
+int libgncmod_backend_rpc_LTX_gnc_module_init(int refcount);
+int libgncmod_backend_rpc_LTX_gnc_module_end(int refcount);
+
+
 char *
 libgncmod_backend_rpc_LTX_gnc_module_path(void) 
 {

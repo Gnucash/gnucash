@@ -22,6 +22,13 @@ int libgncmod_binary_import_LTX_gnc_module_current  = 0;
 int libgncmod_binary_import_LTX_gnc_module_revision = 0;
 int libgncmod_binary_import_LTX_gnc_module_age      = 0;
 
+/* forward references */
+char *libgncmod_binary_import_LTX_gnc_module_path(void);
+char *libgncmod_binary_import_LTX_gnc_module_description(void);
+int libgncmod_binary_import_LTX_gnc_module_init(int refcount);
+int libgncmod_binary_import_LTX_gnc_module_end(int refcount);
+
+
 char *
 libgncmod_binary_import_LTX_gnc_module_path(void) {
   return g_strdup("gnucash/import-export/binary-import");
