@@ -69,13 +69,14 @@ static void pgendEnable (PGBackend *be);
 
 #define FINISH_QUERY(conn) 					\
 {								\
+   int i=0;							\
    PGresult *result; 						\
    /* complete/commit the transaction, check the status */	\
    do {								\
       ExecStatusType status;					\
       result = PQgetResult((conn));				\
       if (!result) break;					\
-      PINFO ("got result");					\
+      PINFO ("clearing result %d", i);				\
       status = PQresultStatus(result);  			\
       if (PGRES_COMMAND_OK != status) {				\
          PERR("bad status");					\
@@ -83,6 +84,7 @@ static void pgendEnable (PGBackend *be);
          PQfinish ((conn));					\
       }								\
       PQclear(result);						\
+      i++;							\
    } while (result);						\
 }
 
@@ -271,7 +273,7 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    if (0>ndiffs) pgendStoreOneAccountOnly (be, acct, SQL_INSERT);
 
    /* make sure the account's commodity is in the commodity table */
-   com = xaccAccountGetCurrency (acct);
+   com = xaccAccountGetCommodity (acct);
    pgendStoreCommodityNoLock (be, com);
 
    LEAVE(" ");
@@ -330,6 +332,7 @@ pgendStoreTransaction (PGBackend *be, Transaction *trans)
              "LOCK TABLE gncTransaction IN EXCLUSIVE MODE; "
              "LOCK TABLE gncEntry IN EXCLUSIVE MODE; "
              "LOCK TABLE gncAccount IN EXCLUSIVE MODE; "
+             "LOCK TABLE gncCommodity IN EXCLUSIVE MODE; "
              );
    SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
@@ -547,6 +550,8 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
             pgendStoreTransaction (be, trans);
          }
       }
+      PQclear (result);
+      i++;
    } while (result);
 
    if (0 == nrows) 
@@ -647,6 +652,8 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
             db_splits = g_list_prepend (db_splits, s);
          }
       }
+      i++;
+      PQclear (result);
    } while (result);
 
    /* close out dangling edit session */
@@ -684,18 +691,82 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
 }
 
 /* ============================================================= */
+/* This routine restores all commodities in the database.
+ */
+
+static void
+pgendGetAllCommodities (PGBackend *be)
+{
+   gnc_commodity_table *comtab = gnc_engine_commodities();
+   PGresult *result;
+   char * buff;
+   int i, nrows;
+
+   ENTER ("be=%p", be);
+   if (!be) return;
+
+   if (!comtab) {
+      PERR ("can't get global commodity table");
+      return;
+   }
+
+   /* Get them ALL */
+   buff = "SELECT * FROM gncCommodity;";
+   SEND_QUERY (be, buff, );
+
+   i=0; nrows=0; 
+   do {
+      GET_RESULTS (be->connection, result);
+      {
+         int j, jrows;
+         int ncols = PQnfields (result);
+         jrows = PQntuples (result);
+         nrows += jrows;
+         PINFO ("query result %d has %d rows and %d cols",
+            i, nrows, ncols);
+
+         for (j=0; j<jrows; j++)
+         {
+            gnc_commodity *com;
+
+            /* first, lets see if we've already got this one */
+            com = gnc_commodity_table_lookup(comtab, 
+                     GET_DB_VAL("namespace",j), GET_DB_VAL("mnemonic",j));
+
+            if (com) continue;
+            /* no we don't ... restore it */
+            com = gnc_commodity_new (
+                     GET_DB_VAL("fullname",j), 
+                     GET_DB_VAL("namespace",j), 
+                     GET_DB_VAL("mnemonic",j),
+                     GET_DB_VAL("code",j),
+                     atoi(GET_DB_VAL("fraction",j)));
+
+            gnc_commodity_table_insert (comtab, com);
+         }
+      }
+
+      PQclear (result);
+      i++;
+   } while (result);
+
+   LEAVE (" ");
+}
+
+/* ============================================================= */
 /* This routine restores the account heirarchy of *all* accounts in the DB.
  * It implicitly assumes that the database has only one account
  * heirarchy in it, i.e. anny accounts without a parent will be stuffed
  * into the same top group.
  *
  * hack alert -- not all account fields being restored.
- * sepcifically, need to handle currency
+ * specifically, need to handle kvp data
  */
 
 static AccountGroup *
 pgendGetAllAccounts (PGBackend *be)
 {
+   gnc_commodity_table *comtab = gnc_engine_commodities();
    PGresult *result;
    AccountGroup *topgrp;
    char * buff;
@@ -704,6 +775,9 @@ pgendGetAllAccounts (PGBackend *be)
 
    ENTER ("be=%p", be);
    if (!be) return NULL;
+
+   /* first, make sure commodities table is up to date */
+   pgendGetAllCommodities (be);
 
    /* Get them ALL */
    buff = "SELECT * FROM gncAccount;";
@@ -748,7 +822,6 @@ pgendGetAllAccounts (PGBackend *be)
             /* hop through a couple of hoops for the commodity */
             /* it would be nice to simplify this ... */
             {
-               gnc_commodity_table *comtab;
                gnc_commodity *com;
                char *str, *name;
 
@@ -757,8 +830,11 @@ pgendGetAllAccounts (PGBackend *be)
                *name = 0;
                name += 2;
 
-               comtab = gnc_engine_commodities();
                com = gnc_commodity_table_lookup(comtab, str, name);
+PINFO ("found %p for %s-%s", com, str, name);
+PINFO ("found %p is for %s", com, 
+gnc_commodity_get_unique_name(com));
+
                xaccAccountSetCommodity(acc, com);
                g_free (str);
             }
@@ -944,7 +1020,7 @@ pgend_account_commit_edit (Backend * bend,
    SEND_QUERY (be,be->buff,333);
    FINISH_QUERY(be->connection);
 
-   /* mark this up so that we don't get that annoying gui dialog
+   /* Mark this up so that we don't get that annoying gui dialog
     * about having to save to file.  unfortunately,however, this
     * is too liberal, and could screw up synchronization if we've lost
     * contact with the back end at some point.  So hack alert -- fix 

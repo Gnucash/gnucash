@@ -32,4 +32,62 @@ This code only implements writing to the DB, not reading.
 
 -- 
 
+To Bo Done
+----------
+-- Implement acount and transaction deletion. Deleting an account or
+   transaction doesn't remove it from the database.
+
+-- Implement logging history in the sql server.  i.e. save the old
+   copies of stuff in log tables.  Make the username part of the 
+   logging scheme.
+
+-- Implement gui to ask user for username/password to log onto the
+   server. 
+
+-- Implement various advanced database features, such as checking the
+   user's permission to view/edit account by account ... (hmmm this
+   done by the dbadmin... using sql commands... which means if user
+   tries to write to something they're not allowed to write to,
+   then they should be bounced back.
+
+-- versioning verification in backend. The desired semantic for updates
+   should be like CVS: multiple nearly-simultaneous writers are allowed;
+   however, only one wins, and others are kicked back.  The losers know
+   themselves because they are trying to update info of the wrong
+   version. But right now, version is not done everyehwere, nor is it
+   done uniformely:
+   -- pgend_transaction_commit does it correctly.
+   -- pgTransactionSync  does not, it clobbers.
+   -- pgend_account_commit clobbers.
+   -- pgendAccountGroupSync is unfinished.
+   I'm not sure how critical this all is; with a small number of users
+   it shouldn'tbe a prblem.  With a huge number of users, each editing
+   the same transaction (unlikely!?) then there is risk of clobbered
+   data, but so what?
+
+-- fix rollback bug in gui.  If backend tells engine to rollback,
+   (e.g. on a new transaction), the gui still shows traces, instead
+   of kicking back.
+   This is a symptom of a lack of kick-back detection in gui.
+-- finish implementing pgendAccountGroupSync
+
+-- store account balances in database.  This will be tricky ...
+   -- need to write stored proceedures to recalc split balances
+   -- need to modify engine and maybe gui 
+-- urlencode all strings (escape single-quote mark)
+-- check multiuser operation
+-- allow user to enter url in gui dialog
+-- handle kvp frames
+-- implement account commit edit (actually, the check&rollback part)
+-- provide support for more query types in gncquery.c
+-- optimize for quantity of sql traffic -- there's a lot of it,
+   much of it proably un-needed.
+
+-- fix caching in the face of lost contact to the backend.  If the
+   backend can't contact its server, then we should just save up caches,
+   and then when contact with backend re-established, we should spit
+   them out.  But right now, this is brroken.  In particular, 
+   the use of xaccGrouparkSaved screws up some status bits ...
+
+
 
