@@ -136,14 +136,14 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
 #define NOOP(x)   /* a big old no-op */
 #define FREEUP(x)  { if(x) free(x); }
 
-#define FREE_ARR(arrname,freeup,killval)				\
+#define FREE_ARR(nrows,ncols,arrname,freeup,killval)			\
 {									\
    int i,j;								\
    /* free the arrname */						\
    if (table->arrname) {						\
-      for (i=0; i<table->num_phys_rows; i++) {				\
+      for (i=0; i<nrows; i++) {						\
          if (table->arrname[i]) {					\
-            for (j=0; j<table->num_phys_cols; j++) {			\
+            for (j=0; j<ncols; j++) {					\
                freeup (table->arrname[i][j]);				\
                table->arrname[i][j] = killval;				\
             }								\
@@ -156,23 +156,29 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
    table->arrname = NULL;						\
 }
 
+#define FREE_PARR(arrname,freeup,killval)				\
+   FREE_ARR (table->num_phys_rows, table->num_phys_cols, arrname,freeup,killval);
+
+#define FREE_VARR(arrname,freeup,killval)				\
+   FREE_ARR (table->num_virt_rows, table->num_virt_cols, arrname,freeup,killval);
+
 
 static void
 xaccFreeTableEntries (Table * table)
 {
    /* free the entries */
-   FREE_ARR (entries, FREEUP, NULL);
+   FREE_PARR (entries, FREEUP, NULL);
 
    /* free the locators */
-   FREE_ARR (locators, FREEUP, NULL);
+   FREE_PARR (locators, FREEUP, NULL);
 
    /* free the foreground and background color arrays */
-   FREE_ARR (bg_colors, NOOP, 0xffffff);
-   FREE_ARR (bg_colors, NOOP, 0x0);
+   FREE_PARR (bg_colors, NOOP, 0xffffff);
+   FREE_PARR (fg_colors, NOOP, 0x0);
 
    /* null out user data and handlers */
-   FREE_ARR (handlers,  NOOP, NULL);
-   FREE_ARR (user_data, NOOP, NULL);
+   FREE_VARR (handlers,  NOOP, NULL);
+   FREE_VARR (user_data, NOOP, NULL);
 }
 
 /* ==================================================== */
