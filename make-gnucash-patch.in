@@ -151,3 +151,4 @@ lib/g-wrap/stamp-h.in
 lib/g-wrap/*/Makefile.in
 src/guile/i18n.h
 make-gnucash-patch
+lib/g-wrap.configure
