@@ -27,26 +27,9 @@
 #define __ACCOUNT_H__
 
 #include "config.h"
+#include "AccInfo.h"
 #include "Transaction.h"
 
-/* The account types. 
- * Note: the actual values of these are *very* important, 
- * as it is the values, not the enums, that are stored 
- * in the file format! 
- */
-enum {
-  BANK = 0,
-  CASH = 1,
-  ASSET = 2,
-  CREDIT = 3,
-  LIABILITY = 4,
-  STOCK = 5,
-  MUTUAL= 6, 
-  INCOME = 7,
-  EXPENSE = 8,
-  EQUITY = 9,
-  NUM_ACCOUNT_TYPES = 10
-};
 
 /** PROTOTYPES ******************************************************/
 
