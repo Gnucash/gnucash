@@ -1,3 +1,18 @@
+2000-05-19  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/reconcile-list.c: use Queries to get the splits so
+	we can do sorting. Add an api call to change the sort order.
+
+	* src/engine/Query.c (xaccAmountMatchPredicate): debits are
+	positive, credits are negative.
+
+	* Makefile.in: install files and directories one at a time. If the
+	user does not have an install script, the one supplied in the
+	gnucash distribution can only handle one file at a time.
+
+	* src/engine/util.c (xaccParseAmount): allow negative sign to be
+	at the front or back of the amount.
+
 2000-05-18  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/window-reconcile.c: make the finish button sensitivity
@@ -153,7 +168,8 @@
 	* src/Makefile.in (CLEAN_SUBDIRS): add quotes.
 	(all targets): build g-wrap before guile. 
 
-	* Makefile.init.in (VERSION): Added to fix problems with rpm spec, etc.
+	* Makefile.init.in (VERSION): Added to fix problems with rpm spec,
+	etc.
 
 2000-05-08  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
