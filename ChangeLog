@@ -1,3 +1,8 @@
+2002-12-06  Christian Stimming  <stimming@tuhh.de>
+
+	* po/nl.po, po/uk.po: Updated translations by Hendrik-Jan Heins
+	<hjh@passys.nl> and Volodymyr M. Lisivka <lvm@mystery.lviv.net>.
+
 2002-12-06  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-control.c -- Fix the

@@ -128,6 +128,7 @@ Eric Hanchrow <offby1@blarg.net> updated currency documentation
 Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
 John Hasler <john@dhh.gt.org> engine patch
 Jon Kåre Hellan <hellan@acm.org> misc core dump fixes
+Hendrik-Jan Heins <hjh@passys.nl> Dutch translation
 Claus Hindsgaul <claus_h@image.dk> messages Danish translation
 Péter Hosszú <hosszu@web.de> Hungarian translation
 Tomokazu Iwashita <iwashita@center.nitech.ac.jp> Japanese translation of xea
@@ -147,6 +148,7 @@ Ted Lemon <mellon@andare.fugue.com> for NetBSD port
 Yannick Le Ny <y-le-ny@ifrance.com> French translations
 Frederic Lespez <frederic.lespez@wanadoo.fr> French account templates fixes.
 Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
+Volodymyr M. Lisivka <lvm@mystery.lviv.net> Ukrainian translation
 Duarte Loreto <happyguy_pt@hotmail.com> message and documentation Portuguese translations
 Kjartan Maraas <kmaraas@gnome.org> Norwegian translations
 Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work
