@@ -1,3 +1,8 @@
+2003-08-12  Christian Stimming  <stimming@tuhh.de>
+
+	* po/pt_BR.po: Updated Brazilian Portugese Translation by Jon
+	Lapham.
+
 2003-08-10  Matt Vanecek  <mevanecek@yahoo.com>
 
     * src/backend/postgres/PostgresBackend.c: Changed all the
