@@ -46,6 +46,7 @@
 #include "gnc-engine-util.h"
 
 #include "gncObject.h"
+#include "gncInvoice.h"
 
 #define _GNC_MOD_NAME	GNC_BILLTERM_MODULE_NAME
 
@@ -114,8 +115,11 @@ billterm_dom_tree_create (GncBillTerm *term)
     xmlAddChild(ret, int_to_dom_tree (billterm_invisible_string,
 				      gncBillTermGetInvisible (term)));
 
+    /* We should not be our own child */
+    if (gncBillTermGetChild(term) != term)
+      maybe_add_guid(ret, billterm_child_string, gncBillTermGetChild (term));
+
     maybe_add_guid(ret, billterm_parent_string, gncBillTermGetParent (term));
-    maybe_add_guid(ret, billterm_child_string, gncBillTermGetChild (term));
 
     switch (gncBillTermGetType (term)) {
     case GNC_TERM_TYPE_DAYS:
@@ -515,10 +519,163 @@ billterm_write (FILE *out, GNCBook *book)
   gncObjectForeach (_GNC_MOD_NAME, book, xml_add_billterm, (gpointer) out);
 }
 
+static gboolean
+billterm_is_grandchild (GncBillTerm *term)
+{
+  return (gncBillTermGetParent(gncBillTermGetParent(term)) != NULL);
+}
+
+static GncBillTerm *
+billterm_find_senior (GncBillTerm *term)
+{
+  GncBillTerm *temp, *parent, *gp = NULL;
+
+  temp = term;
+  do {
+    /* See if "temp" is a grandchild */
+    parent = gncBillTermGetParent(temp);
+    if (!parent)
+      break;
+    gp = gncBillTermGetParent(parent);
+    if (!gp)
+      break;
+
+    /* Yep, this is a grandchild.  Move up one generation and try again */
+    temp = parent;
+  } while (TRUE);
+
+  /* Ok, at this point temp points to the most senior child and parent
+   * should point to the top billterm (and gp should be NULL).  If
+   * parent is NULL then we are the most senior child (and have no
+   * children), so do nothing.  If temp == term then there is no
+   * grandparent, so do nothing.
+   *
+   * Do something if parent != NULL && temp != term
+   */
+  g_assert (gp == NULL);
+
+  /* return the most senior term */
+  return temp;
+}
+
+/* build a list of bill terms that are grandchildren or bogus (empty entry list). */
+static void
+billterm_scrub_cb (gpointer term_p, gpointer list_p)
+{
+  GncBillTerm *term = term_p;
+  GList **list = list_p;
+
+  if (billterm_is_grandchild(term) || gncBillTermGetType(term) == 0)
+    *list = g_list_prepend(*list, term);
+}
+
+/* for each invoice, check the bill terms.  If the bill terms are
+ * grandchildren, then fix them to point to the most senior child
+ */
+static void
+billterm_scrub_invoices (gpointer invoice_p, gpointer ht_p)
+{
+  GHashTable *ht = ht_p;
+  GncInvoice *invoice = invoice_p;
+  GncBillTerm *term, *new_bt;
+  gint32 count;
+
+  term = gncInvoiceGetTerms(invoice);
+  if (term) {
+    count = GPOINTER_TO_INT(g_hash_table_lookup(ht, term));
+    count++;
+    g_hash_table_insert(ht, term, GINT_TO_POINTER(count));
+    if (billterm_is_grandchild(term)) {
+      PINFO("Fixing i-billterm on invoice %s\n",
+	     guid_to_string(gncInvoiceGetGUID(invoice)));
+      new_bt = billterm_find_senior(term);
+      gncInvoiceBeginEdit(invoice);
+      gncInvoiceSetTerms(invoice, new_bt);
+      gncInvoiceCommitEdit(invoice);
+    }
+  }
+}
+
+static void
+billterm_scrub_cust (gpointer cust_p, gpointer ht_p)
+{
+  GHashTable *ht = ht_p;
+  GncCustomer *cust = cust_p;
+  GncBillTerm *term;
+  gint32 count;
+  
+  term = gncCustomerGetTerms(cust);
+  if (term) {
+    count = GPOINTER_TO_INT(g_hash_table_lookup(ht, term));
+    count++;
+    g_hash_table_insert(ht, term, GINT_TO_POINTER(count));
+  }
+}
+
+static void
+billterm_scrub_vendor (gpointer vendor_p, gpointer ht_p)
+{
+  GHashTable *ht = ht_p;
+  GncVendor *vendor = vendor_p;
+  GncBillTerm *term;
+  gint32 count;
+
+  term = gncVendorGetTerms(vendor);
+  if (term) {
+    count = GPOINTER_TO_INT(g_hash_table_lookup(ht, term));
+    count++;
+    g_hash_table_insert(ht, term, GINT_TO_POINTER(count));
+  }
+}
+
+static void
+billterm_reset_refcount (gpointer key, gpointer value, gpointer notused)
+{
+  GncBillTerm *term = key;
+  gint32 count = GPOINTER_TO_INT(value);
+
+  if (count != gncBillTermGetRefcount(term) && !gncBillTermGetInvisible(term)) {
+    PWARN("Fixing refcount on billterm %s (%lld -> %d)\n",
+	  guid_to_string(gncBillTermGetGUID(term)),
+	  gncBillTermGetRefcount(term), count)
+      gncBillTermSetRefcount(term, count);
+  }
+}
+
 static void
 billterm_scrub (GNCBook *book)
 {
+  GList *list = NULL;
+  GList *node;
+  GncBillTerm *parent, *term;
+  GHashTable *ht = g_hash_table_new(g_direct_hash, g_direct_equal);
 
+  gncObjectForeach (GNC_INVOICE_MODULE_NAME, book, billterm_scrub_invoices, ht);
+  gncObjectForeach (GNC_CUSTOMER_MODULE_NAME, book, billterm_scrub_cust, ht);
+  gncObjectForeach (GNC_VENDOR_MODULE_NAME, book, billterm_scrub_vendor, ht);
+  gncObjectForeach (_GNC_MOD_NAME, book, billterm_scrub_cb, &list);
+
+  /* destroy the list of "grandchildren" bill terms */
+  for (node = list; node; node = node->next) {
+    term = node->data;
+
+    PINFO ("deleting grandchild billterm: %s\n",
+	   guid_to_string(gncBillTermGetGUID(term)));
+
+    /* Make sure the parent has no children */
+    parent = gncBillTermGetParent(term);
+    gncBillTermSetChild(parent, NULL);
+
+    /* Destroy this bill term */
+    gncBillTermBeginEdit(term);
+    gncBillTermDestroy(term);
+  }
+
+  /* reset the refcounts as necessary */
+  g_hash_table_foreach(ht, billterm_reset_refcount, NULL);
+
+  g_list_free(list);
+  g_hash_table_destroy(ht);
 }
 
 void

@@ -31,6 +31,21 @@
 	Fixes bug #114888 -- don't generate phantom (parent) tax tables
 	and clean up any existing bogus tax tables.
 
+	* src/business/business-core/gncBillTerm.c:
+	  - keep a list of children so we can unref ourselves from our
+	    children when we get destroyed
+	  - deal with parentless children
+	* src/business/business-core/gncCustomer.c:
+	* src/business/business-core/gncInvoice.c:
+	* src/business/business-core/gncVendor.c:
+	  deal with properly un-ref'ing Bill Terms and Tax Tables
+	* src/business/business-core/file/gnc-bill-term-xml-v2.c:
+	  create a scrub function to clear up bogus bill terms due to
+	  bug #114888 which could cause bill terms to get created
+	  due to post/unpost of invoices.  Scrubs all invoices and
+	  fixes the reference to bill terms, and updates the refcounts.
+	Fixes bug #114888 for bill terms.
+
 2003-06-12  Christian Stimming  <stimming@tuhh.de>
 
 	* doc/TRANSLATION_HOWTO: Added, by Jon Lapham

@@ -37,6 +37,8 @@ struct _gncBillTerm {
   GncBillTerm *	child;		/* if non-null, we have not changed */
   gboolean	invisible;
 
+  GList *	children;	/* list of children for disconnection */
+
   int		editlevel;
   gboolean	do_free;
 
@@ -106,6 +108,9 @@ void gncBillTermDestroy (GncBillTerm *term)
 
 static void gncBillTermFree (GncBillTerm *term)
 {
+  GncBillTerm *child;
+  GList *list;
+
   if (!term) return;
 
   gnc_engine_generate_event (&term->guid, GNC_EVENT_DESTROY);
@@ -113,7 +118,39 @@ static void gncBillTermFree (GncBillTerm *term)
   CACHE_REMOVE (term->desc);
   remObj (term);
 
+  if (!term->do_free)
+    PERR("free a billterm without do_free set!");
+
+  /* disconnect from the children */
+  for (list = term->children; list; list=list->next) {
+    child = list->data;
+    gncBillTermSetParent(child, NULL);
+  }
+  g_list_free(term->children);
+
   g_free (term);
+}
+
+static void
+gncBillTermAddChild (GncBillTerm *table, GncBillTerm *child)
+{
+  g_return_if_fail(table);
+  g_return_if_fail(child);
+  g_return_if_fail(table->do_free == FALSE);
+
+  table->children = g_list_prepend(table->children, child);
+}
+
+static void
+gncBillTermRemoveChild (GncBillTerm *table, GncBillTerm *child)
+{
+  g_return_if_fail(table);
+  g_return_if_fail(child);
+
+  if (table->do_free)
+    return;
+
+  table->children = g_list_remove(table->children, child);
 }
 
 /* Set Functions */
@@ -201,7 +238,11 @@ void gncBillTermSetParent (GncBillTerm *term, GncBillTerm *parent)
 {
   if (!term) return;
   gncBillTermBeginEdit (term);
+  if (term->parent)
+    gncBillTermRemoveChild(term->parent, term);
   term->parent = parent;
+  if (parent)
+    gncBillTermAddChild(parent, term);
   term->refcount = 0;
   gncBillTermMakeInvisible (term);
   gncBillTermCommitEdit (term);
@@ -218,7 +259,7 @@ void gncBillTermSetChild (GncBillTerm *term, GncBillTerm *child)
 void gncBillTermIncRef (GncBillTerm *term)
 {
   if (!term) return;
-  if (term->parent) return;	/* children dont need refcounts */
+  if (term->parent || term->invisible) return;	/* children dont need refcounts */
   gncBillTermBeginEdit (term);
   term->refcount++;
   gncBillTermCommitEdit (term);
@@ -227,7 +268,7 @@ void gncBillTermIncRef (GncBillTerm *term)
 void gncBillTermDecRef (GncBillTerm *term)
 {
   if (!term) return;
-  if (term->parent) return;	/* children dont need refcounts */
+  if (term->parent || term->invisible) return;	/* children dont need refcounts */
   gncBillTermBeginEdit (term);
   term->refcount--;
   g_return_if_fail (term->refcount >= 0);
@@ -379,6 +420,7 @@ GncBillTerm *gncBillTermReturnChild (GncBillTerm *term, gboolean make_new)
 
   if (!term) return NULL;
   if (term->child) return term->child;
+  if (term->parent || term->invisible) return term;
   if (make_new) {
     child = gncBillTermCopy (term);
     gncBillTermSetChild (term, child);

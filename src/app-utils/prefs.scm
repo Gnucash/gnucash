@@ -181,6 +181,11 @@
   "d" (N_ "Enables support for the European Union EURO currency") 
   (gnc:is-euro-currency-code (gnc:locale-default-iso-currency-code))))
 
+(gnc:register-configuration-option
+ (gnc:make-dateformat-option
+  (N_ "International") (N_ "Printed Date Format")
+  "e" (N_ "The default date format used for printed dates") #f))
+
 
 ;;; Register options
 

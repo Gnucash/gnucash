@@ -105,6 +105,12 @@
     gnc:*business-label* (N_ "Default Vendor TaxTable")
     "f" (N_ "The default tax table to apply to vendors.")
     (lambda () #f) #f))
+
+  (reg-option
+   (gnc:make-dateformat-option
+    gnc:*business-label* (N_ "Prinable Date Format")
+    "g" (N_ "The default format to use for printable dates.")
+    #f))
 )
 
 (gnc:register-kvp-option-generator gnc:id-book book-options-generator)

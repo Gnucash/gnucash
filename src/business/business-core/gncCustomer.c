@@ -121,6 +121,11 @@ static void gncCustomerFree (GncCustomer *cust)
 
   remObj (cust);
 
+  if (cust->terms)
+    gncBillTermDecRef (cust->terms);
+  if (cust->taxtable)
+    gncTaxTableDecRef (cust->taxtable);
+
   g_free (cust);
 }
 
