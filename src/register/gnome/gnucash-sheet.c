@@ -1520,6 +1520,12 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 
 	/* Calculate tentative physical values */
         switch (event->keyval) {
+                case GDK_Return:
+                case GDK_KP_Enter:
+                        gtk_signal_emit_by_name(GTK_OBJECT(sheet->reg),
+                                                "activate_cursor");
+                        return TRUE;
+                        break;
 		case GDK_Tab:
                 case GDK_ISO_Left_Tab:
                         if (event->state & GDK_SHIFT_MASK) {
@@ -2274,29 +2280,6 @@ gnucash_register_get_type (void)
 }
 
 
-static gint
-gnucash_register_key_press_cb(GtkWidget *widget, GdkEventKey *event,
-                              gpointer data)
-{
-        GnucashRegister *reg = GNUCASH_REGISTER(data);
-
-        g_return_val_if_fail(widget != NULL, TRUE);
-        g_return_val_if_fail(GNUCASH_IS_SHEET(widget), TRUE);
-        g_return_val_if_fail(event != NULL, TRUE);
-
-        switch (event->keyval) {
-                case GDK_Return:
-                case GDK_KP_Enter:
-                        gtk_signal_emit_by_name(GTK_OBJECT(reg),
-                                                "activate_cursor");
-                        return TRUE;
-                        break;
-                default:
-                        return FALSE;
-        }
-}
-
-
 void
 gnucash_register_attach_popup(GnucashRegister *reg, GtkWidget *popup,
                               gpointer data)
@@ -2324,10 +2307,6 @@ gnucash_register_new (Table *table)
         sheet = gnucash_sheet_new (table);
         reg->sheet = sheet;
         GNUCASH_SHEET(sheet)->reg = widget;
-
-        gtk_signal_connect (GTK_OBJECT(sheet), "key_press_event",
-                            GTK_SIGNAL_FUNC(gnucash_register_key_press_cb),
-                            reg);
 
         header_canvas = gnucash_header_new (GNUCASH_SHEET(sheet));
         reg->header_canvas = header_canvas;

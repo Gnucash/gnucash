@@ -33,6 +33,7 @@
 #include <locale.h>
 
 #include "pricecell.h"
+#include "gnc-exp-parser.h"
 #include "util.h"
 
 
@@ -48,13 +49,43 @@ PriceDirect (BasicCell *bcell,
     char decimal_point;
     struct lconv *lc = gnc_localeconv();
     char *newval;
-  
+
     if (event->type != GDK_KEY_PRESS)
 	return FALSE;
-  
-    if (event->keyval != GDK_KP_Decimal)
-	return FALSE;
-  
+
+    switch (event->keyval)
+    {
+        case GDK_Return:
+            if (!cell->need_to_parse)
+                return FALSE;
+
+            if (!(event->state &
+                  (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK)))
+                return FALSE;
+
+        case GDK_KP_Enter:
+            {
+                char *error_loc;
+                double amount;
+
+                if (!cell->need_to_parse)
+                    return FALSE;
+
+                if (gnc_exp_parser_parse(cell->cell.value, &amount, &error_loc))
+                    xaccSetPriceCellValue (cell, amount);
+                else
+                    *cursor_position = error_loc - cell->cell.value;
+
+                return TRUE;
+            }
+
+        case GDK_KP_Decimal:
+            break;
+
+        default:
+            return FALSE;
+    }
+
     if (cell->monetary)
 	decimal_point = lc->mon_decimal_point[0];
     else
@@ -63,14 +94,14 @@ PriceDirect (BasicCell *bcell,
     /* Only one decimal point allowed in price : */
     if (strchr (bcell->value, decimal_point) != NULL)
 	return FALSE;
-  
+
     /* allocate space for newval_ptr : oldval + one letter ( the
        decimal_point ) */
     newval = g_new (char, strlen(bcell->value) + 2);
-  
+
     /* copy oldval up to the cursor position */
     strncpy (newval, bcell->value, *cursor_position);
-  
+
     /* insert the decimal_point at cursor position */
     newval[*cursor_position] = decimal_point;
 
