@@ -321,7 +321,25 @@ gnc_book_get_file_lock (GNCBook *book)
   strcpy (pathbuf, book->lockfile);
   path = strrchr (pathbuf, '.');
   sprintf (path, ".%lx.%d.LNK", gethostid(), getpid());
-  link (book->lockfile, pathbuf);
+
+  rc = link (book->lockfile, pathbuf);
+  if (rc)
+  {
+    /* If hard links aren't supported, just allow the lock. */
+    if (errno == EOPNOTSUPP)
+    {
+      book->linkfile = NULL;
+      return TRUE;
+    }
+
+    /* Otherwise, something else is wrong. */
+    gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
+    unlink (pathbuf);
+    close (book->lockfd);
+    unlink (book->lockfile);
+    return FALSE;
+  }
+
   rc = stat (book->lockfile, &statbuf);
   if (rc)
   {
@@ -335,7 +353,6 @@ gnc_book_get_file_lock (GNCBook *book)
 
   if (statbuf.st_nlink != 2)
   {
-    /* oops .. stat failed!  This can't happen! */
     gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
     unlink (pathbuf);
     close (book->lockfd);
