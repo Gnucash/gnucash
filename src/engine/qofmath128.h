@@ -42,6 +42,9 @@ typedef struct {
 /** Return true of two numbers are equal */
 inline gboolean equal128 (qofint128 a, qofint128 b);
 
+/** Return returns 1 if a>b, -1 if b>a, 0 if a == b */
+inline int cmp128 (qofint128 a, qofint128 b);
+
 /** Shift right by one bit (i.e. divide by two) */
 inline qofint128 shift128 (qofint128 x);
 

@@ -231,6 +231,28 @@ equal128 (qofint128 a, qofint128 b)
 	return 1;
 }
 
+/** Return returns 1 if a>b, -1 if b>a, 0 if a == b */
+inline int
+cmp128 (qofint128 a, qofint128 b)
+{
+   if ((0 == a.isneg) && b.isneg) return 1;
+   if (a.isneg && (0 == b.isneg)) return -1;
+   if (0 == a.isneg)
+   {
+     if (a.hi > b.hi) return 1;
+     if (a.hi < b.hi) return -1;
+     if (a.lo > b.lo) return 1;
+     if (a.lo < b.lo) return -1;
+     return 0;
+   }
+
+   if (a.hi > b.hi) return -1;
+   if (a.hi < b.hi) return 1;
+   if (a.lo > b.lo) return -1;
+   if (a.lo < b.lo) return 1;
+   return 0;
+}
+
 /** Return the greatest common factor of two 64-bit numbers */
 inline guint64
 gcf64(guint64 num, guint64 denom)
