@@ -446,12 +446,12 @@ gsr_create_menus( GNCSplitReg *gsr )
   gtk_widget_hide( mbar );
 
   gsr->edit_menu = glade_xml_get_widget( xml, "menu_edit_menu" );
-  g_object_ref( GTK_OBJECT(gsr->edit_menu) );
+  g_object_ref( gsr->edit_menu );
   mi = glade_xml_get_widget( xml, "menu_edit" );
   gtk_menu_item_remove_submenu( GTK_MENU_ITEM( mi ) );
 
   gsr->view_menu = glade_xml_get_widget( xml, "menu_view_menu" );
-  g_object_ref( GTK_OBJECT(gsr->view_menu) );
+  g_object_ref( gsr->view_menu );
   mi = glade_xml_get_widget( xml, "menu_view" );
   gtk_menu_item_remove_submenu( GTK_MENU_ITEM(mi) );
 
@@ -459,7 +459,7 @@ gsr_create_menus( GNCSplitReg *gsr )
   gsr->sort_submenu = glade_xml_get_widget( xml, "menu_sort_order_menu" );
 
   gsr->action_menu = glade_xml_get_widget( xml, "menu_actions_menu" );
-  g_object_ref( GTK_OBJECT(gsr->action_menu) );
+  g_object_ref( gsr->action_menu );
   mi = glade_xml_get_widget( xml, "menu_actions" );
   gtk_menu_item_remove_submenu( GTK_MENU_ITEM(mi) );
 

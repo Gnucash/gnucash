@@ -133,7 +133,7 @@ table_destroy_cb (Table *table)
 
         sheet = GNUCASH_SHEET (table->ui_data);
 
-        g_object_unref (GTK_WIDGET(sheet));
+        g_object_unref (sheet);
 
         table->ui_data = NULL;
 }
@@ -159,7 +159,7 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         table->gui_handlers.destroy = table_destroy_cb;
         table->ui_data = sheet;
 
-        g_object_ref (GTK_WIDGET(sheet));
+        g_object_ref (sheet);
 
         /* config the cell-block styles */
 

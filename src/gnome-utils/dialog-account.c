@@ -1453,7 +1453,7 @@ gnc_account_window_create(AccountWindow *aw)
   model = gnc_tree_model_account_new (group);
   gnc_tree_model_account_set_toplevel (GNC_TREE_MODEL_ACCOUNT (model), aw->top_level_account);
   gtk_tree_view_set_model (aw->parent_tree, model);
-  g_object_unref (G_OBJECT (model));
+  g_object_unref (model);
   
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("",

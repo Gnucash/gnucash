@@ -189,7 +189,7 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                                 /* width = gdk_string_width (font, text); */
 				cd->pixel_height = 0;
 				pango_layout_get_pixel_size (layout, &width, &cd->pixel_height);
-				g_object_unref (G_OBJECT (layout));
+				g_object_unref (layout);
                                 width += 2 * CELL_HPADDING;
                         }
                         else
@@ -296,7 +296,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
                         {
 				layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
 				pango_layout_get_pixel_size (layout, &sample_width, NULL);
-				g_object_unref (G_OBJECT (layout));
+				g_object_unref (layout);
                                 /*sample_width = gdk_string_width (font, text);*/
                                 sample_width += 2 * CELL_HPADDING;
                         }

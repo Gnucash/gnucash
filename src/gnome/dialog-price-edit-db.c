@@ -362,7 +362,7 @@ remove_old_clicked (GtkWidget *widget, gpointer data)
   gtk_widget_show (label);
 
   date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-  g_object_ref (G_OBJECT (date));
+  g_object_ref (date);
   gtk_object_sink (GTK_OBJECT (date));
 
   gtk_box_pack_start (GTK_BOX (vbox), date, FALSE, FALSE, 0);
@@ -391,7 +391,7 @@ remove_old_clicked (GtkWidget *widget, gpointer data)
     gnc_gui_refresh_all ();
   }
 
-  g_object_unref (G_OBJECT (date));
+  g_object_unref (date);
 }
 
 static void

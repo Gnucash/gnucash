@@ -436,8 +436,8 @@ account_types_tree_view_prepare (void)
 	selection_model = gnc_tree_model_selection_new (model);
 	tree_view = GTK_TREE_VIEW (hierarchy_get_widget ("account_types_tree_view"));
 	gtk_tree_view_set_model (tree_view, selection_model);
-	g_object_unref (G_OBJECT (model));
-	g_object_unref (G_OBJECT (selection_model));
+	g_object_unref (model);
+	g_object_unref (selection_model);
 
 	column = gnc_tree_model_selection_create_tree_view_column (GNC_TREE_MODEL_SELECTION (selection_model),
 								   _("Selected"));
@@ -505,7 +505,7 @@ on_choose_account_types_prepare (GnomeDruidPage  *gnomedruidpage,
       gtk_tree_view_append_column (tree_view, column);
       gtk_tree_view_set_expander_column (tree_view, column);
       gtk_tree_view_set_model (tree_view, model);
-      g_object_unref (G_OBJECT (model));
+      g_object_unref (model);
 
       gtk_label_set_text (datext, "");
     }
@@ -869,7 +869,7 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
   if (g_object_get_data (G_OBJECT (gnomedruidpage), "initialized") == NULL) {
     model = gnc_tree_model_account_new (our_final_group);
     gtk_tree_view_set_model (tree_view, model);
-    g_object_unref (G_OBJECT (model));
+    g_object_unref (model);
     selection = gtk_tree_view_get_selection (tree_view);
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
     g_signal_connect (G_OBJECT (selection), "changed",

@@ -148,7 +148,7 @@ gnc_tree_model_selection_finalize (GObject *object)
 
 	g_return_if_fail (model->priv != NULL);
 
-	g_object_unref (G_OBJECT (model->priv->child_model));
+	g_object_unref (model->priv->child_model);
 	g_hash_table_destroy (model->priv->selections);
 	g_free (model->priv);
 
@@ -163,7 +163,7 @@ gnc_tree_model_selection_new (GtkTreeModel *child_model)
 	model = g_object_new (GNC_TYPE_TREE_MODEL_SELECTION, NULL);
 
 	model->priv->child_model = child_model;
-	g_object_ref (G_OBJECT (child_model));
+	g_object_ref (child_model);
 	g_signal_connect (G_OBJECT (child_model), "row_changed",
 			  G_CALLBACK (gnc_tree_model_selection_row_changed), model);
 	g_signal_connect (G_OBJECT (child_model), "row_inserted",

@@ -1243,7 +1243,7 @@ gnc_acct_tree_window_new(const gchar * url)  {
   g_signal_connect (G_OBJECT (treewin->account_tree_view), "button-press-event",
 		    G_CALLBACK (gnc_acct_tree_button_press_cb), treewin);
   gtk_tree_view_set_model (treewin->account_tree_view, model);
-  g_object_unref (G_OBJECT (model));
+  g_object_unref (model);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("Account Name"),

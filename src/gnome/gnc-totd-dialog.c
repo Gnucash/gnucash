@@ -168,7 +168,7 @@ gnc_totd_dialog_init (GncTotdDialog *dialog)
 				  new_tip, -1);
 	g_free (new_tip);
 
-	g_object_unref (G_OBJECT (xml));
+	g_object_unref (xml);
 
 	gtk_widget_set_size_request (GTK_WIDGET (dialog), -1, -1);
 }

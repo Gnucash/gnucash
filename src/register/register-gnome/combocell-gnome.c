@@ -263,7 +263,7 @@ gnc_combo_cell_gui_destroy (BasicCell *bcell)
 		if (box != NULL && box->item_list != NULL)
                 {
 			combo_disconnect_signals(cell);
-			g_object_unref (G_OBJECT (box->item_list));
+			g_object_unref (box->item_list);
 			box->item_list = NULL;
 		}
 
@@ -666,7 +666,7 @@ gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer data)
 	box->sheet = sheet;
 	box->item_edit = item_edit;
 	box->item_list = gnc_item_edit_new_list(box->item_edit);
-	g_object_ref (G_OBJECT(box->item_list));
+	g_object_ref (box->item_list);
 	gtk_object_sink (GTK_OBJECT(box->item_list));
 
 	/* to mark cell as realized, remove the realize method */

@@ -82,7 +82,7 @@ gnc_plugin_manager_add_plugin (GncPluginManager *manager,
 	if (index >= 0)
 		return;
 
-	g_object_ref (G_OBJECT (plugin));
+	g_object_ref (plugin);
 
 	manager->priv->plugins = g_list_append (manager->priv->plugins, plugin);
 	g_hash_table_insert (manager->priv->plugins_table, g_strdup( gnc_plugin_get_name (plugin)),
@@ -110,7 +110,7 @@ gnc_plugin_manager_remove_plugin (GncPluginManager *manager,
 
 	g_signal_emit (G_OBJECT (manager), signals[PLUGIN_REMOVED], 0, plugin);
 
-	g_object_unref (G_OBJECT (plugin));
+	g_object_unref (plugin);
 }
 
 GList *

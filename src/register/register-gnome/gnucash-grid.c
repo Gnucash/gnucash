@@ -510,7 +510,7 @@ draw_cell (GnucashGrid *grid,
                          y + CELL_HPADDING,
                          layout);
 
-	g_object_unref (G_OBJECT (layout));
+	g_object_unref (layout);
 
         gdk_gc_set_clip_rectangle (grid->gc, NULL);
 }

@@ -65,7 +65,7 @@ option_menu_destroy_cb (GtkObject *obj, gpointer data)
 {
   GtkTooltips *tips = data;
 
-  g_object_unref (GTK_OBJECT (tips));
+  g_object_unref (tips);
 }
 
 /********************************************************************\
@@ -93,7 +93,7 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
 
   tooltips = gtk_tooltips_new();
 
-  g_object_ref (GTK_OBJECT (tooltips));
+  g_object_ref (tooltips);
   gtk_object_sink (GTK_OBJECT (tooltips));
 
   for (i = 0; i < num_options; i++)

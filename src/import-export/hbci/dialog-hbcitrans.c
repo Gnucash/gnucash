@@ -375,7 +375,7 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
     if (HBCI_Value_getValue (HBCI_Transaction_value (td->hbci_trans)) == 0.0) {
       gtk_widget_show_all (td->dialog); 
       values_ok = !gnc_verify_dialog
-	(GTK_WIDGET (td->dialog),
+	(td->dialog,
 	 TRUE,
 	 "%s",
 	 _("The amount is zero or the amount field could not be \n"

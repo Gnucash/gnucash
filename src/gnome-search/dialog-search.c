@@ -582,7 +582,7 @@ search_clear_criteria (GNCSearchWindow *sw)
   for (node = sw->crit_list; node; ) {
     GList *tmp = node->next;
     struct _crit_data *data = node->data;
-    g_object_ref (G_OBJECT(data->button));
+    g_object_ref (data->button);
     remove_element (data->button, sw);
     node = tmp;
   }

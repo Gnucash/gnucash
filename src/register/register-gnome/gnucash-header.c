@@ -197,7 +197,7 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                                          ypaint + CELL_HPADDING,
 					 layout);
 
-			g_object_unref (G_OBJECT (layout));
+			g_object_unref (layout);
 
                         gdk_gc_set_clip_rectangle (header->gc, NULL);
 

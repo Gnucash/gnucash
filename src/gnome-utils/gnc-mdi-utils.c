@@ -865,7 +865,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
        * changed) */
       if (GTK_WIDGET(childwin->toolbar)->parent)
       {
-        g_object_ref (GTK_WIDGET(childwin->toolbar));
+        g_object_ref (childwin->toolbar);
         gtk_container_remove (GTK_CONTAINER
                               (GTK_WIDGET(childwin->toolbar)->parent),
                               GTK_WIDGET(childwin->toolbar));

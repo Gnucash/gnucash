@@ -58,9 +58,9 @@ gnc_print_session_create(gboolean hand_built_pages) {
 
 void 
 gnc_print_session_destroy(PrintSession * ps) {
-  g_object_unref(GTK_OBJECT(ps->meta));
-  g_object_unref(GTK_OBJECT(ps->master));
-  g_object_unref(GTK_OBJECT(ps->default_font));
+  g_object_unref(ps->meta);
+  g_object_unref(ps->master);
+  g_object_unref(ps->default_font);
 
   g_free(ps);
 }
@@ -121,7 +121,7 @@ gnc_print_session_print(PrintSession * ps) {
   case 0: 
     /* print button */
     if(ps->master) {
-      g_object_unref(GTK_OBJECT(ps->master));
+      g_object_unref(ps->master);
       ps->master = NULL;
     }
     config = gnome_print_dialog_get_config (GNOME_PRINT_DIALOG (dialog));
@@ -132,7 +132,7 @@ gnc_print_session_print(PrintSession * ps) {
     
   case 1:
     if(ps->master) {
-      g_object_unref(GTK_OBJECT(ps->master));
+      g_object_unref(ps->master);
       ps->master = NULL;
     }
     config = gnome_print_dialog_get_config (GNOME_PRINT_DIALOG (dialog));

@@ -275,7 +275,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 		g_signal_connect (G_OBJECT (page->priv->tree_view), "button-press-event",
       				 G_CALLBACK (gnc_plugin_page_account_tree_button_press_cb), page);
 		gtk_tree_view_set_model (page->priv->tree_view, model);
-		g_object_unref (G_OBJECT (model));
+		g_object_unref (model);
 
 		column = gtk_tree_view_column_new ();
 		gtk_tree_view_column_set_title (column, _("Account Name"));

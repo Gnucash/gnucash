@@ -214,7 +214,7 @@ gnc_item_edit_free_draw_info_members(TextDrawInfo *info)
         if (info == NULL)
                 return;
 
-	g_object_unref (G_OBJECT (info->layout));
+	g_object_unref (info->layout);
 }
 
 static void

@@ -1580,7 +1580,7 @@ gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
   g_signal_handlers_disconnect_matched (G_OBJECT (entry), G_SIGNAL_MATCH_DATA,
 					0, 0, NULL, NULL, xferData);
 
-  g_object_unref (G_OBJECT (xferData->tips));
+  g_object_unref (xferData->tips);
 
   DEBUG("unregister component");
   gnc_unregister_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
@@ -1620,7 +1620,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
   xferData->tips = gtk_tooltips_new();
 
-  g_object_ref (G_OBJECT (xferData->tips));
+  g_object_ref (xferData->tips);
   gtk_object_sink (GTK_OBJECT (xferData->tips));
 
   /* default to quickfilling off of the "From" account. */

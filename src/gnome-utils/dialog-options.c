@@ -627,7 +627,7 @@ radiobutton_destroy_cb (GtkObject *obj, gpointer data)
 {
   GtkTooltips *tips = data;
 
-  g_object_unref (GTK_OBJECT (tips));
+  g_object_unref (tips);
 }
 
 static GtkWidget *
@@ -654,7 +654,7 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
 
   /* Create the tooltips */
   tooltips = gtk_tooltips_new ();
-  g_object_ref (GTK_OBJECT (tooltips));
+  g_object_ref (tooltips);
   gtk_object_sink (GTK_OBJECT (tooltips));
 
   /* Iterate over the options and create a radio button for each one */
@@ -1186,7 +1186,7 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
   propertybox->tips = gtk_tooltips_new();
   propertybox->option_db = odb;
 
-  g_object_ref (GTK_OBJECT (propertybox->tips));
+  g_object_ref (propertybox->tips);
   gtk_object_sink (GTK_OBJECT (propertybox->tips));
 
   num_sections = gnc_option_db_num_sections(odb);
@@ -1519,7 +1519,7 @@ gnc_options_dialog_destroy(GNCOptionWin * win)
   }
 
   if(win->tips) {
-    g_object_unref (GTK_OBJECT(win->tips));
+    g_object_unref (win->tips);
   }
 
   win->container = NULL;
