@@ -383,6 +383,15 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
   /* Show_entry ??? */
 
   /* Set completion character */
+  gnc_combo_cell_set_complete_char
+    ((ComboCell *)
+     gnc_table_layout_get_cell (table->layout, ENTRY_IACCT_CELL),
+     gnc_get_account_separator ());
+
+  gnc_combo_cell_set_complete_char
+    ((ComboCell *)
+     gnc_table_layout_get_cell (table->layout, ENTRY_BACCT_CELL),
+     gnc_get_account_separator ());
 
   /* enable callback for cursor user-driven moves */
   gnc_table_control_allow_move (table->control, TRUE);

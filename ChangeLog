@@ -11,6 +11,9 @@
 	* gnome-utils/dialog-account.c: change the BeginEdit() call on the
 	  (temporary) top-level account, so the SQL backend doesn't hate us
 	  for committing and account without a commodity.
+
+	* business/business-ledger/gncEntryLedgerLoad.c -- set the account
+	  completion character for the account cells.  Fixes bug #97098
 	
 2002-11-03  Christian Stimming  <stimming@tuhh.de>
 
