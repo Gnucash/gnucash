@@ -1,5 +1,8 @@
 2003-05-25  Derek Atkins  <derek@ihtfp.com>
 
+	* src/report/report-gnome/dialog-view-column.c: don't crash
+	  if you remove the last entry and then add another one.	
+
 	* src/business/business-reports/aging.scm:
 	  - Deal with the case where the first transaction found for a
 	    particular company is a payment (it used to just ignore it!

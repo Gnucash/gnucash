@@ -369,7 +369,7 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data) {
       }
     }
     
-    if(oldlength == r->contents_selected + 1) {
+    if(r->contents_selected > 0 && oldlength == r->contents_selected + 1) {
       r->contents_selected --;
     }
 
