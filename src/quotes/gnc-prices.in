@@ -132,7 +132,7 @@ die "Usage: $0 <gnucash-filename>" if $#ARGV < 0;
 # open the file, read all of the accounts
 print "Opening file $ARGV[0]\n";
 $sess = gnucash::xaccMallocSession ();
-$grp = gnucash::xaccSessionBeginFile ($sess,$ARGV[0]);
+$grp = gnucash::xaccSessionBegin ($sess, "file:".$ARGV[0]);
 
 die "failed to read file $ARGV[0], maybe its locked? " if (! $grp);
 
