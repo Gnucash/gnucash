@@ -102,14 +102,14 @@ run_test (void)
 
   if (!gnc_numeric_zero_p( new_amt))
   {
-    failure("Amount not zero after voiding");
+    failure("Amount of split0 not zero after voiding");
   }      
 
   new_val = xaccSplitGetValue(xaccTransGetSplit(transaction, 1));
  
   if (!(gnc_numeric_zero_p(new_val)))
   {
-    failure("Amount not zero after voiding");
+    failure("Value of split1 not zero after voiding");
   }
  
 
@@ -121,6 +121,55 @@ run_test (void)
   if(!(gnc_numeric_eq(old_val, xaccSplitVoidFormerValue(xaccTransGetSplit(transaction, 1)))))
   {
     failure("former value (after voiding) didn't match actual old value");
+  }
+
+  /*
+   * Retore the transaction to its former glory.
+   */
+  xaccTransUnvoid(transaction);
+
+  ts = xaccTransGetVoidTime (transaction);
+
+  /* figure at most 2 seconds difference */
+  if ((ts.tv_sec != 0) || (ts.tv_sec != 0))
+  {
+    failure("void time not zero after restore");
+  }
+
+  if (xaccTransGetVoidStatus(transaction))
+  {
+    failure("void status reports trus after restoring transaction");
+  }
+
+  if (xaccTransGetVoidReason(transaction))
+  {
+    failure("void reason exists after restoring transaction");
+  }
+ 
+  new_amt = xaccSplitGetAmount(xaccTransGetSplit(transaction, 0));
+  /* print_gnc_numeric(new_amt); */
+
+  if(!(gnc_numeric_eq(old_amt, new_amt)))
+  {
+    failure("Amount of split0 not correct after restoring transaction");
+  }      
+
+  new_val = xaccSplitGetValue(xaccTransGetSplit(transaction, 1));
+ 
+  if(!(gnc_numeric_eq(old_val, new_val)))
+  {
+    failure("Value of split1 not correct after restoring transaction");
+  }
+ 
+
+  if (!(gnc_numeric_zero_p(xaccSplitVoidFormerAmount(xaccTransGetSplit(transaction, 0)))))
+  {
+    failure("former amount (after restore) should be zero");
+  }
+
+  if (!(gnc_numeric_zero_p(xaccSplitVoidFormerValue(xaccTransGetSplit(transaction, 1)))))
+  {
+    failure("former value (after restore) should be zero");
   }
 
   return;

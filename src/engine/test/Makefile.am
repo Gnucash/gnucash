@@ -31,6 +31,7 @@ TESTS = \
   test-query \
   test-resolve-file-path \
   test-split-vs-account  \
+  test-transaction-reversal \
   test-transaction-voiding \
   test-freq-spec \
   test-scm-query
@@ -62,6 +63,7 @@ noinst_PROGRAMS = \
   test-resolve-file-path \
   test-scm-query \
   test-split-vs-account \
+  test-transaction-reversal \
   test-transaction-voiding
 
 EXTRA_DIST = \

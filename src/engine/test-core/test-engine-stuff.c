@@ -1026,8 +1026,11 @@ make_random_changes_to_transaction (GNCBook *book, Transaction *trans)
 {
   g_return_if_fail (trans && book);
 
-  if (xaccTransGetVoidStatus (trans))
+  if (xaccTransGetVoidStatus (trans)) {
+    if (get_random_int_in_range (1, 2) == 1)
+      xaccTransUnvoid (trans);
     return;
+  }
 
   xaccTransBeginEdit (trans);
 
