@@ -414,6 +414,16 @@ regRecalculateBalance( RegWindow *regData )
     dclearedBalance = xaccGetClearedBalance (acc, trans);
     share_balance = xaccGetShareBalance (acc, trans);
     
+    /* for income and expense acounts, we have to reverse
+     * the meaning of balance, since, in a cual entry
+     * system, income will show up as a credit to a 
+     * bank account, and a debit to the income account.
+     * Thus, positive and negative are interchanged */
+    if( (EXPENSE   == acc->type) ||
+        (INCOME    == acc->type) ) {
+      dbalance = - dbalance;
+    }
+
     if( reg != NULL )
       {
 #ifdef USE_NO_COLOR
@@ -1105,12 +1115,12 @@ regWindow( Widget parent, Account *acc )
         acc -> rows[0][DEP_CELL_C] = "Decrease";
         break;
       case INCOME:
-        acc -> rows[0][PAY_CELL_C] = "Charge";
-        acc -> rows[0][DEP_CELL_C] = "Income";
+        acc -> rows[0][PAY_CELL_C] = "Income";
+        acc -> rows[0][DEP_CELL_C] = "Charge";
         break;
       case EXPENSE:
-        acc -> rows[0][PAY_CELL_C] = "Expense";
-        acc -> rows[0][DEP_CELL_C] = "Rebate";
+        acc -> rows[0][PAY_CELL_C] = "Rebate";
+        acc -> rows[0][DEP_CELL_C] = "Expense";
         break;
       case EQUITY:
         acc -> rows[0][PAY_CELL_C] = "Surplus";

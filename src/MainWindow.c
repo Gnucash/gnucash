@@ -125,6 +125,14 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
        dbalance += acc->children->balance;
     }
     
+    /* the meaning of "balance" for income and expense 
+     * accounts is reversed, since a deposit of a paycheck in a
+     * bank account will appear as a debit of the corresponding
+     * amount in the income account */
+    if ((EXPENSE == acc->type) ||
+        (INCOME  == acc->type) ) {
+      dbalance = -dbalance;
+    }
     if( 0.0 > dbalance )
       sprintf( buf,"-$%.2f\0", DABS(dbalance) );
     else
@@ -701,7 +709,7 @@ xaccMainWindowRedisplayBalance (void)
             break;
          case INCOME:
          case EXPENSE:
-            profits += acc->balance;
+            profits -= acc->balance; /* flip the sign !! */
             break;
          case EQUITY:
          default:
@@ -788,11 +796,10 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     case FMB_OPEN: {
       char * newfile;
       DEBUG("FMB_OPEN");
-      if( xaccAccountGroupNotSaved (grp) && (NULL != datafile) )
-        {
-        char *msg = SAVE_MSG;
-        if( verifyBox(toplevel,msg) )
+      if( xaccAccountGroupNotSaved (grp) && (NULL != datafile) ) {
+        if( verifyBox(toplevel, SAVE_MSG) ) {
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
+          }
         }
       newfile = fileBox(toplevel,OPEN);
       if (newfile) {
@@ -812,7 +819,12 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     }
     case FMB_SAVE:
       DEBUG("FMB_SAVE");
-      /* ??? Somehow make sure all in-progress edits get committed! */
+      /* hack alert -- Somehow make sure all in-progress edits get committed! */
+      if (NULL == datafile) {
+        fileMenubarCB( mw, (XtPointer)FMB_SAVEAS, cb );
+        break;
+      }
+
       writeData( datafile, grp );
       xaccAccountGroupMarkSaved (grp);
       break;

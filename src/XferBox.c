@@ -32,23 +32,35 @@
  * Return: PopBox  - the xfer GUI structure                         *
 \********************************************************************/
 
+static void 
+XferBoxTraverse (PopBox *popGUI, AccountGroup *grp)
+{
+   Account * acc;
+   int n;
+
+   if (!grp) return;
+
+   /* build the xfer menu out of account names */
+   /* traverse sub-accounts ecursively */
+   n = 0;
+   acc = getAccount (grp, n);
+   while (acc) {
+      AddPopBoxMenuItem (popGUI, acc->accountName);
+      XferBoxTraverse (popGUI, acc->children);
+      n++;
+      acc = getAccount (grp, n);
+   }
+}
+
 PopBox *
 xferBox (Widget parent, AccountGroup *grp)
 {
    PopBox *popGUI;
    Account * acc;
-   int n;
 
    popGUI = popBox (parent);
 
-   /* build the xfer menu out of account names */
-   n = 0;
-   acc = getAccount (grp, n);
-   while (acc) {
-      AddPopBoxMenuItem (popGUI, acc->accountName);
-      n++;
-      acc = getAccount (grp, n);
-   }
+   XferBoxTraverse (popGUI, grp);
 
    return popGUI;
 }

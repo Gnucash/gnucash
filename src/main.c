@@ -35,9 +35,9 @@
 /** PROTOTYPES ******************************************************/
 
 /** GLOBALS *********************************************************/
-char    *datafile;
-Widget   toplevel;
-Boolean  realized=False;   /* Has the toplevel been realized? */
+char    *datafile = NULL;
+Widget   toplevel = 0;
+Boolean  realized = False;   /* Has the toplevel been realized? */
 XtAppContext app;
 
 /* The names of the different types of accounts.  For resource
