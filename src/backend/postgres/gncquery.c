@@ -87,6 +87,10 @@ sql_Query_destroy (sqlQuery *sq)
 
 /* =========================================================== */
 /* sorting order */
+/* We use DESC for increasing and ASC for decreasing,
+ * since the MaxSplits parameter refers to the *last*
+ * splits in the sort order. The real sorting will be
+ * done by the Query C code. */
 
 static char *
 sql_sort_order (char *p, sort_type_t sort_type, gboolean increasing)
@@ -99,17 +103,17 @@ sql_sort_order (char *p, sort_type_t sort_type, gboolean increasing)
          if (TRUE == increasing)
          {
             p = stpcpy (p,
-                        "gncTransaction.date_posted ASC, "
-                        "gncTransaction.num ASC, "
-                        "gncTransaction.date_entered ASC, "
+                        "gncTransaction.date_posted DESC, "
+                        "gncTransaction.num DESC, "
+                        "gncTransaction.date_entered DESC, "
                         "gncTransaction.description");
          }
          else
          {
             p = stpcpy (p,
-                        "gncTransaction.date_posted DESC, "
-                        "gncTransaction.num DESC, "
-                        "gncTransaction.date_entered DESC, "
+                        "gncTransaction.date_posted ASC, "
+                        "gncTransaction.num ASC, "
+                        "gncTransaction.date_entered ASC, "
                         "gncTransaction.description");
          }
          break;
@@ -181,11 +185,11 @@ sql_sort_order (char *p, sort_type_t sort_type, gboolean increasing)
 
    if (TRUE == increasing)
    {
-      p = stpcpy (p, " ASC ");
+      p = stpcpy (p, " DESC ");
    }
    else 
    {
-      p = stpcpy (p, " DESC ");
+      p = stpcpy (p, " ASC ");
    }
 
    return p;
