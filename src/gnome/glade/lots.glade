@@ -92,7 +92,7 @@ Account</label>
 
     <widget>
       <class>GtkVPaned</class>
-      <name>vpaned1</name>
+      <name>lot vpaned</name>
       <handle_size>10</handle_size>
       <gutter_size>6</gutter_size>
       <position>0</position>
@@ -302,7 +302,7 @@ Account</label>
 	<label_xalign>0</label_xalign>
 	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	<child>
-	  <shrink>False</shrink>
+	  <shrink>True</shrink>
 	  <resize>True</resize>
 	</child>
 

@@ -1430,6 +1430,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
   gnc_acct_tree_window_add_sensitive(win, edititems[1].widget);
   gnc_acct_tree_window_add_sensitive(win, edititems[2].widget);
   gnc_acct_tree_window_add_sensitive(win, actionitems[2].widget);
+  gnc_acct_tree_window_add_sensitive(win, actionitems[4].widget);
 
   /* Do not i18n these strings!!! */
   widget = gnc_mdi_child_find_toolbar_item(mc, "Open");

@@ -70,10 +70,11 @@ struct _GNCLotViewer
    GtkButton     * delete_button;
    GtkButton     * scrub_lot_button;
    GtkButton     * scrub_acc_button;
+   GtkPaned      * lot_hpaned;
+   GtkPaned      * lot_vpaned;
    GtkCList      * lot_clist;
    GtkText       * lot_notes;
    GtkEntry      * title_entry;
-   GtkPaned      * lot_hpaned;
    GtkCList      * mini_clist;
    GtkStatusbar  * status_bar;
 
@@ -444,8 +445,11 @@ gnc_lot_viewer_dialog (Account *account)
    lv->lot_clist = GTK_CLIST(glade_xml_get_widget (xml, "lot clist"));
    lv->lot_notes = GTK_TEXT(glade_xml_get_widget (xml, "lot notes text"));
    lv->title_entry = GTK_ENTRY (glade_xml_get_widget (xml, "lot title entry"));
+
+   lv->lot_vpaned = GTK_PANED (glade_xml_get_widget (xml, "lot vpaned"));
+   gtk_paned_set_position (lv->lot_vpaned, 200);   /* XXX hack to make visible */
    lv->lot_hpaned = GTK_PANED (glade_xml_get_widget (xml, "lot hpaned"));
-   gtk_paned_set_position (lv->lot_hpaned, 100);   /* XXX hack to make visible */
+   gtk_paned_set_position (lv->lot_hpaned, 200);   /* XXX hack to make visible */
 
    lv->mini_clist = GTK_CLIST(glade_xml_get_widget (xml, "mini clist"));
    lv->status_bar = GTK_STATUSBAR(glade_xml_get_widget (xml, "lot statusbar"));
