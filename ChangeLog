@@ -1,5 +1,10 @@
 2002-07-21  Christian Stimming  <stimming@tuhh.de>
 
+	* src/app-utils/guile-util.c (gnc_get_debit_string): Fix by Matt
+	Armstrong <matt@lickey.com> : Look for "Use accounting labels"
+	option is under the "Accounts" section.
+ 	(gnc_get_credit_string): ditto.
+
 	* src/backend/file/gnc-backend-file.c: File permission fix by Matt
 	Brubeck <mbrubeck@cs.hmc.edu>
 

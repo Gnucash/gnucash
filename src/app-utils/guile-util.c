@@ -1108,7 +1108,7 @@ gnc_get_debit_string(GNCAccountType account_type)
 
   initialize_scm_functions();
 
-  if (gnc_lookup_boolean_option("General", "Use accounting labels", FALSE))
+  if (gnc_lookup_boolean_option("Accounts", "Use accounting labels", FALSE))
     return g_strdup(_("Debit"));
 
   if ((account_type < NO_TYPE) || (account_type >= NUM_ACCOUNT_TYPES))
@@ -1154,7 +1154,7 @@ gnc_get_credit_string(GNCAccountType account_type)
 
   initialize_scm_functions();
 
-  if (gnc_lookup_boolean_option("General", "Use accounting labels", FALSE))
+  if (gnc_lookup_boolean_option("Accounts", "Use accounting labels", FALSE))
     return g_strdup(_("Credit"));
 
   if ((account_type < NO_TYPE) || (account_type >= NUM_ACCOUNT_TYPES))
