@@ -183,7 +183,13 @@ the account instead of opening a register.") #f))
         (try-load conf-file-name))
     (gnc:mdi-restore (gnc:mdi-get-current) book-url)))
 
+
+(gnc:hook-remove-dangler gnc:*book-opened-hook* 
+                         gnc:main-window-book-open-handler)
 (gnc:hook-add-dangler gnc:*book-opened-hook* 
                       gnc:main-window-book-open-handler)
+
+(gnc:hook-remove-dangler gnc:*book-closed-hook* 
+                         gnc:main-window-book-close-handler)
 (gnc:hook-add-dangler gnc:*book-closed-hook* 
                       gnc:main-window-book-close-handler)
