@@ -45,6 +45,7 @@
 /** DEBUGGING MACROS ************************************************/
 /* The debuging macros enable the setting of trace messages */
 
+/** If you modify this, modify the loglevel table in the .c file. */
 typedef enum
 {
   MOD_DUMMY   =  0,

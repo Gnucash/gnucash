@@ -185,6 +185,13 @@ void xaccFreqSpecSetComposite( FreqSpec *fs );
  **/
 void xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str );
 
+int xaccFreqSpecGetOnce( FreqSpec *fs, GDate *outGD );
+int xaccFreqSpecGetDaily( FreqSpec *fs, int *outRepeat );
+int xaccFreqSpecGetWeekly( FreqSpec *fs, int *outRepeat, int *outDayOfWeek );
+int xaccFreqSpecGetMonthly( FreqSpec *fs, int *outRepeat,
+                            int *outDayOfMonth, int *outMonthOffset );
+// FIXME: add month-relative
+
 /**
  * Returns the list of FreqSpecs in a COMPOSITE FreqSpec.
  * It is an error to use this if the type is not COMPOSITE.

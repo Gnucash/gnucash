@@ -284,6 +284,7 @@ xaccFreqSpecGetNextInstance(
 
         case DAILY: {
                         guint32 julian_in_date, julian_next_repeat, complete_intervals;
+
                         julian_in_date = g_date_julian( CONST_HACK in_date );
                         complete_intervals =
                                 (julian_in_date - fs->s.daily.offset_from_epoch) /
@@ -299,6 +300,7 @@ xaccFreqSpecGetNextInstance(
                          * of days, not week epoch offset and day in week offset.
                          * It is very similar to the daily repeat representation. */
                         guint32 julian_in_date, julian_next_repeat, complete_intervals;
+
                         julian_in_date = g_date_julian( CONST_HACK in_date );
                         complete_intervals =
                                 (julian_in_date - fs->s.weekly.offset_from_epoch) /
@@ -334,6 +336,7 @@ xaccFreqSpecGetNextInstance(
         case MONTHLY: {
                         guint32 in_months_from_epoch, after_repeat_in_month_interval,
                                 complete_intervals, next_repeat_months_from_epoch, month, year;
+
                         in_months_from_epoch = (g_date_year( CONST_HACK in_date )-1) * 12 +
                                 g_date_month( CONST_HACK in_date ) - 1;
                         complete_intervals =
@@ -370,6 +373,7 @@ xaccFreqSpecGetNextInstance(
                         guint32 in_months_from_epoch, after_repeat_in_month_interval,
                                 complete_intervals, next_repeat_months_from_epoch, month, year,
                                 wday_of_1st, day_of_repeat;
+
                         GDate date1;
                         in_months_from_epoch = (g_date_year( CONST_HACK in_date )-1) * 12 +
                                 g_date_month( CONST_HACK in_date ) - 1;
@@ -614,6 +618,47 @@ xaccFreqSpecSetComposite( FreqSpec *fs )
         fs->s.composites.subSpecs = NULL;
 }
 
+int
+xaccFreqSpecGetOnce( FreqSpec *fs, GDate *outGD )
+{
+        if ( fs->type != ONCE )
+                return -1;
+        *outGD = fs->s.once.date;
+        return 0;
+}
+
+int
+xaccFreqSpecGetDaily( FreqSpec *fs, int *outRepeat )
+{
+        if ( fs->type != DAILY )
+                return -1;
+        *outRepeat = fs->s.daily.interval_days;
+        return 0;
+}
+
+int
+xaccFreqSpecGetWeekly( FreqSpec *fs, int *outRepeat, int *outDayOfWeek )
+{
+        if ( fs->type != WEEKLY )
+                return -1;
+        *outRepeat = fs->s.weekly.interval_weeks;
+        *outDayOfWeek = fs->s.weekly.offset_from_epoch;
+        return 0;
+}
+
+int
+xaccFreqSpecGetMonthly( FreqSpec *fs, int *outRepeat, int *outDayOfMonth, int *outMonthOffset )
+{
+        if ( fs->type != MONTHLY )
+                return -1;
+        *outRepeat = fs->s.monthly.interval_months;
+        *outDayOfMonth = fs->s.monthly.day_of_month;
+        *outMonthOffset = fs->s.monthly.offset_from_epoch;
+        return 0;
+}
+
+// FIXME: add month-relative getter
+
 GList*
 xaccFreqSpecCompositeGet( FreqSpec *fs )
 {
@@ -648,11 +693,11 @@ xaccFreqSpecCompositesClear( FreqSpec *fs )
 void
 xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
 {
-        GList                *list;
-        FreqSpec        *tmpFS;
-        int                tmpInt;
-        char                *tmpStr;
-        int                i;
+        GList *list;
+        FreqSpec *tmpFS;
+        int tmpInt;
+        char *tmpStr;
+        int i;
 
         /* FIXME: fill in. */
         switch( xaccFreqSpecGetUIType( fs ) ) {
@@ -675,12 +720,23 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 break;
 
         case UIFREQ_DAILY_MF:
-                g_string_sprintf( str, "Daily [M-F]" );
-                if ( fs->s.weekly.interval_weeks > 1 ) {
-                        g_string_sprintfa( str, " (x%u)",
-                                           fs->s.weekly.interval_weeks );
+        { 
+                FreqSpec *subFS;
+                if ( g_list_length( fs->s.composites.subSpecs ) != 5 ) {
+                        PERR( "Invalid Daily[M-F] structure." );
+                        g_string_sprintf( str, "Daily[M-F]: error" );
+                        return;
                 }
-                break;
+                /* We assume that all of the weekly FreqSpecs that make up
+                   the Daily[M-F] FreqSpec have the same interval. */
+                subFS = (FreqSpec*)fs->s.composites.subSpecs->data;
+                g_string_sprintf( str, "Daily [M-F]" );
+                if ( subFS->s.weekly.interval_weeks > 1 ) {
+                        g_string_sprintfa( str, " (x%u)",
+                                           subFS->s.weekly.interval_weeks );
+                }
+        }
+        break;
 
         case UIFREQ_WEEKLY:
                 g_string_sprintf( str, "Weekly" );
@@ -692,6 +748,8 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
 
                 list = xaccFreqSpecCompositeGet( fs );
                 do {
+                        int dowIdx;
+
                         tmpFS = (FreqSpec*)list->data;
                         if ( xaccFreqSpecGetType(tmpFS) != WEEKLY ) {
                                 g_string_sprintf( str,
@@ -702,14 +760,9 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                                 tmpInt = tmpFS->s.weekly.interval_weeks;
                         }
                         /* put the first letter of the weekday name in
-                           the appropriate position.
-
-                           FIXME: need the offset from the day-of-week
-                           of the Julian epoch */
-                        /*
-                        tmpStr[tmpFS->specData.dateAnchor[1]] =
-                                weekDayNames[tmpFS->specData.dateAnchor[1]][0];
-                        */
+                           the appropriate position. */
+                        dowIdx = tmpFS->s.weekly.offset_from_epoch;
+                        tmpStr[dowIdx] = weekDayNames[dowIdx][0];
                 } while ( (list = g_list_next(list)) );
 
                 if ( tmpInt > 1 ) {
@@ -717,6 +770,10 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 }
                 g_string_sprintfa( str, ": %s", tmpStr );
                 g_free( tmpStr );
+                break;
+
+        case UIFREQ_BI_WEEKLY:
+                g_string_sprintf( str, "Bi-Weekly, %ss", weekDayNames[fs->s.weekly.offset_from_epoch % 7] );
                 break;
 
         case UIFREQ_SEMI_MONTHLY:
@@ -775,10 +832,9 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 g_string_sprintf( str, "Semi-Yearly" );
                 if ( fs->s.monthly.interval_months != 6 ) {
                         if ( (fs->s.monthly.interval_months % 6) != 0 ) {
-                                /* FIXME:error */
-                                printf( "ERROR: FreqSpec Semi-Yearly month-interval "
-                                        "is not a multiple of 6 [%d]",
-                                        fs->s.monthly.interval_months );
+                                PERR( "ERROR: FreqSpec Semi-Yearly month-interval "
+                                      "is not a multiple of 6 [%d]",
+                                      fs->s.monthly.interval_months );
                         }
                         g_string_sprintfa( str, " (x%u)",
                                            fs->s.monthly.interval_months/6 );
@@ -791,17 +847,15 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 g_string_sprintf( str, "Yearly" );
                 if ( fs->s.monthly.interval_months != 12 ) {
                         if ( (fs->s.monthly.interval_months % 12) != 0 ) {
-                                /* FIXME:error */
-                                printf( "ERROR: \"Yearly\" FreqSpec month-interval "
-                                        "is not a multiple of 12 [%d]",
-                                        fs->s.monthly.interval_months );
+                                PERR( "ERROR: \"Yearly\" FreqSpec month-interval "
+                                      "is not a multiple of 12 [%d]",
+                                      fs->s.monthly.interval_months );
                         }
                         g_string_sprintfa( str, " (x%u)",
                                            fs->s.monthly.interval_months/12 );
                 }
                 g_string_sprintfa( str, ": %s/%u",
-                                   /* FIXME: need the year-of-month value. */
-                                   monthInfo[/*fs->specData.dateAnchor[2]*/ 0].dshort,
+                                   monthInfo[fs->s.monthly.offset_from_epoch].dshort,
                                    fs->s.monthly.day_of_month );
                 break;
 

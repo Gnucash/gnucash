@@ -61,66 +61,50 @@ struct gncp_freq_spec {
         UIFreqType        uift;
         union u {
                 struct {
-                        GDate date; /** The date on which the single event occurs. */
+                         /** The date on which the single event occurs. */
+                        GDate date;
                 } once;
                 struct {
-                        guint interval_days; /** number of days from one repeat to the next. */
-                        guint offset_from_epoch; /** epoch is defined by glib to be 1/1/1. Offset measured in days. 0 <= offset < interval */
+                         /** number of days from one repeat to the next. */
+                        guint interval_days;
+                         /** epoch is defined by glib to be 1/1/1. Offset
+                             measured in days. 0 <= offset < interval */
+                        guint offset_from_epoch;
                 } daily;
                 struct {
                         /* A week here is measured as 7 days. The first week starts at epoch.
                          * 1/1/1 was a ?. */
-                        guint interval_weeks; /** number of weeks from one repeat to the next. */
-                        guint offset_from_epoch; /* offset measured in days.
-                                                  * This combines the week 
-                                                  * offset and the day of the 
-                                                  * week offset.  */
+
+                        /** number of weeks from one repeat to the next. */
+                        guint interval_weeks;
+                         /* offset measured in days.  This combines the week
+                          * offset and the day of the week offset.  */
+                        guint offset_from_epoch;
 /*                        guint offset_from_epoch;*/ /* offset measured in weeks, 0 <= offset < interval */
 /*                        guint day_of_week;*/ /* I'm not sure what days each value represents, but it's not important. */
                 } weekly;
                 struct {
-                        guint interval_months; /** number of months from one repeat to the next. */
-                        guint offset_from_epoch; /* offset measured in months */
-                        guint day_of_month; /* Which day of the month it occurs on. */
+                         /** number of months from one repeat to the next. */
+                        guint interval_months;
+                         /* offset measured in months */
+                        guint offset_from_epoch;
+                         /* Which day of the month it occurs on. */
+                        guint day_of_month;
                 } monthly;
                 struct {
-                        guint interval_months; /** Number of months from one repeat to the next. */
-                        guint offset_from_epoch; /* offset measured in months */
-                        guint weekday; /* stores a value equivalent to a GDateWeekday. */
-                        guint occurrence; /* the 1st occurrence to the 5th occurrence. */
+                         /** Number of months from one repeat to the next. */
+                        guint interval_months;
+                         /* offset measured in months */
+                        guint offset_from_epoch;
+                        /* stores a value equivalent to a GDateWeekday. */
+                        guint weekday;
+                         /* the 1st occurrence to the 5th occurrence. */
+                        guint occurrence;
                 } month_relative;
                 struct {
                         /** A list of specs for a composite freq. */
                         GList *subSpecs;
                 } composites;
-                /**
-                 * The dateAnchor anchors the spec to determinable days.
-                 *
-                 * ONCE:
-                 *   dA[0] contains time_t
-                 * DAILY:
-                 *   dA[0] contains day multiplier
-                 *   dA[1] contains offset from epoch.
-                 * WEEKLY:
-                 *   dA[0] contains week multiplier
-                 *   dA[1] contains 0..6 [sun-based]
-                 * SEMI_MONTHLY: bstanley disused...
-                 *   dA[0] contains month multiplier
-                 *   dA[1] contains the first date-of-month,
-                 *   dA[2] the second.
-                 * MONTHLY:
-                 *   dA[0] contains month multiplier
-                 *   dA[1] contains the date-of-month
-                 * MONTH_RELATIVE:
-                 *   dA[0] continas month multiplier
-                 *   dA[1] contains week number [1..5, 6=="last"]
-                 *    [1..5 is really 1..4.428 [31/7], but it's a UI issue]
-                 *   dA[2] contains 0..6 [sun-based day of week]
-                 * COMPOSITE:
-                 *   ... list ...
-                 * RELATIVE:
-                 *   ... don't know yet ...
-                 **/
         } s;
         GUID guid;
 };
