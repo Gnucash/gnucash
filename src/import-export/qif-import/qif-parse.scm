@@ -169,8 +169,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:parse-bang-field read-value)
-  (string->symbol (string-downcase! 
-                   (string-remove-trailing-space read-value))))
+  (let ((bang-field (string-downcase! 
+		     (string-remove-trailing-space read-value))))
+;; The QIF files output by the WWW site of Credit Lyonnais
+;; begin by:   !type bank
+;; instead of: !Type:bank
+    (if (>= (string-length bang-field) 5)
+	(if (string=? (substring bang-field 0 5) "type ")
+	    (string-set! bang-field 4 #\:)))
+
+    (string->symbol bang-field)))
 
 
 (define (qif-parse:parse-action-field read-value)

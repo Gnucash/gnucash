@@ -13,6 +13,12 @@
 	  find g-wrap-config
 
 	* remove src/experimental/ofx from the build system
+
+	* src/import-export/qif-import/qif-parse.scm:
+	* src/import-export/qif-io-core/qif-parse.scm:
+	  deal with broken QIF files that give broken bang-fields.  In
+	  particular, handle the case where it supplies "!Type Bank"
+	  instead of "!Type:Bank"
 	
 2002-12-03  Derek Atkins  <derek@ihtfp.com>
 
