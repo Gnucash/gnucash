@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "Transaction.h"
 #include "global-options.h"
 #include "gnc-book.h"
 #include "gnc-component-manager.h"
@@ -804,7 +805,7 @@ Account *
 gnc_find_or_create_equity_account (AccountGroup *group,
                                    GNCEquityType equity_type,
                                    gnc_commodity *currency,
-                                   GNCSession *session)
+                                   GNCBook *book)
 {
   Account *parent;
   Account *account;
@@ -870,7 +871,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   if (parent && xaccAccountGetType (parent) != EQUITY)
     parent == NULL;
 
-  account = xaccMallocAccount (session);
+  account = xaccMallocAccount (book);
 
   xaccAccountBeginEdit (account);
 
@@ -898,7 +899,7 @@ gboolean
 gnc_account_create_opening_balance (Account *account,
                                     gnc_numeric balance,
                                     time_t date,
-                                    GNCSession *session)
+                                    GNCBook *book)
 {
   Account *equity_account;
   Transaction *trans;
@@ -913,14 +914,14 @@ gnc_account_create_opening_balance (Account *account,
     gnc_find_or_create_equity_account (xaccAccountGetRoot (account),
                                        EQUITY_OPENING_BALANCE,
                                        xaccAccountGetCommodity (account),
-                                       session);
+                                       book);
   if (!equity_account)
     return FALSE;
 
   xaccAccountBeginEdit (account);
   xaccAccountBeginEdit (equity_account);
 
-  trans = xaccMallocTransaction (session);
+  trans = xaccMallocTransaction (book);
 
   xaccTransBeginEdit (trans);
 
@@ -928,7 +929,7 @@ gnc_account_create_opening_balance (Account *account,
   xaccTransSetDateSecs (trans, date);
   xaccTransSetDescription (trans, _("Opening Balance"));
 
-  split = xaccMallocSplit (session);
+  split = xaccMallocSplit (book);
 
   xaccTransAppendSplit (trans, split);
   xaccAccountInsertSplit (account, split);
@@ -938,7 +939,7 @@ gnc_account_create_opening_balance (Account *account,
 
   balance = gnc_numeric_neg (balance);
 
-  split = xaccMallocSplit (session);
+  split = xaccMallocSplit (book);
 
   xaccTransAppendSplit (trans, split);
   xaccAccountInsertSplit (equity_account, split);
