@@ -47,7 +47,7 @@ TARGET   = ../libregister.a
 ######################################################################
 SRCS = 	basiccell.c cellblock.c combocell.c \
 	datecell.c pricecell.c QuickFill.c quickfillcell.c \
-	recncell.c register.c table.c textcell.c table-allgui.c table-motif.c
+	recncell.c register.c textcell.c table-allgui.c table-motif.c
 OBJS = ${SRCS:.c=.o} 
 ######################################################################
 
