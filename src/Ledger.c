@@ -67,23 +67,25 @@ GetOtherAccName (Split *split)
 {
    Account *acc = NULL;
    Transaction *trans;
-   trans = (Transaction *) (split->parent);
+   trans = xaccSplitGetParent (split);
 
-   if (split != &(trans->source_split)) {
-      acc = (Account *) trans->source_split.acc;
+   if (0 == xaccTransIsSource (trans, split)) {
+      Split *split = xaccTransGetSourceSplit (trans);
+      acc = xaccSplitGetAccount (split);
    } else {
-      if (trans->dest_splits) {
-         if (NULL != trans->dest_splits[0]) {
-            /* if only one split, then use that */
-            if (NULL == trans->dest_splits[1]) {
-               acc = (Account *) trans->dest_splits[0]->acc;
-            } else {
-               return SPLIT_STR;
-            }
+      Split *split = xaccTransGetDestSplit (trans, 0);
+      if (NULL != split) {
+          Split *nother_split = xaccTransGetDestSplit (trans, 1);
+
+         /* if only one split, then use that */
+         if (NULL == nother_split) {
+            acc = xaccSplitGetAccount (split);
+         } else {
+            return SPLIT_STR;
          }
       } 
    }
-   if (acc) return acc->accountName;
+   if (acc) return xaccAccountGetName (acc);
    return "";
 }
 
@@ -100,14 +102,14 @@ xaccSaveRegEntry (BasicRegister *reg)
    /* get the handle to the current split and transaction */
    split = xaccGetCurrentSplit (reg);
    if (!split) return;
-   trans = (Transaction *) (split->parent);
+   trans = xaccSplitGetParent (split);
 
    /* use the changed flag to avoid heavy-weight updates
     * of the split & transaction fields. This will help
     * cut down on uneccessary register redraws.  */
    changed = xaccGetChangeFlag (reg);
    
-printf ("saving %s \n", trans->description);
+printf ("saving %s \n", xaccTransGetDescription(trans));
    /* copy the contents from the cursor to the split */
 
    if (MOD_DATE & changed) 
@@ -152,7 +154,7 @@ printf ("saving %s \n", trans->description);
 
    /* refresh the register windows *only* if something changed */
    if (changed) {
-      acc = (Account *) split->acc;
+      acc = xaccSplitGetAccount (split);
       accRefresh (acc);
    }
 }
@@ -165,24 +167,20 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
    Transaction *trans;
    char *accname;
    char buff[2];
+   Date *d;
 
    if (!split) return;
-   trans = (Transaction *) (split->parent);
+   trans = xaccSplitGetParent (split);
 
-printf ("load cell %s %2d/%2d/%4d \n", trans->description,
-trans->date.day, trans->date.month, trans->date.year);
+   d = xaccTransGetDate (trans);
+   xaccSetDateCellValue (reg->dateCell, d->day, d->month, d->year);
 
+   xaccSetBasicCellValue (reg->numCell, xaccTransGetNum (trans));
+   xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
+   xaccSetQuickFillCellValue (reg->descCell, xaccTransGetDescription (trans));
+   xaccSetBasicCellValue (reg->memoCell, xaccSplitGetMemo (split));
 
-   xaccSetDateCellValue (reg->dateCell, trans->date.day, 
-                                        trans->date.month,
-                                        trans->date.year);
-
-   xaccSetBasicCellValue (reg->numCell, trans->num);
-   xaccSetComboCellValue (reg->actionCell, split->action);
-   xaccSetQuickFillCellValue (reg->descCell, trans->description);
-   xaccSetBasicCellValue (reg->memoCell, split->memo);
-
-   buff[0] = split->reconciled;
+   buff[0] = xaccSplitGetReconcile (split);
    buff[1] = 0x0;
    xaccSetBasicCellValue (reg->recnCell, buff);
 
@@ -191,14 +189,13 @@ trans->date.day, trans->date.month, trans->date.year);
    xaccSetComboCellValue (reg->xfrmCell, accname);
 
    xaccSetDebCredCellValue (reg->debitCell, 
-                            reg->creditCell, split->damount);
+                            reg->creditCell, xaccSplitGetAmount (split));
 
-   xaccSetAmountCellValue (reg->balanceCell, split->balance);
+   xaccSetAmountCellValue (reg->balanceCell, xaccGetBalance (split));
 
-   xaccSetAmountCellValue (reg->priceCell, split->share_price);
-   xaccSetPriceCellValue  (reg->shrsCell,  split->share_balance);
-   xaccSetAmountCellValue (reg->valueCell, (split->share_price) *
-                                           (split->damount));
+   xaccSetAmountCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
+   xaccSetPriceCellValue  (reg->shrsCell,  xaccGetShareBalance (split));
+   xaccSetAmountCellValue (reg->valueCell, xaccSplitGetValue (split));
 
    reg->table->current_cursor->user_data = (void *) split;
 
@@ -274,14 +271,14 @@ printf ("load reg of %d entries --------------------------- \n",i);
 
    /* add new, disconnected transaction at the end */
    trans = xaccMallocTransaction ();
-   todaysDate (&(trans->date));
+   xaccTransSetDateToday (trans);
 
    phys_row = reg->header->numRows;
    phys_row += i * (reg->cursor->numRows);
    xaccSetCursor (table, reg->cursor, phys_row, 0, i+1, 0);
    xaccMoveCursor (table, phys_row, 0);
 
-   xaccLoadRegEntry (reg, &(trans->source_split));
+   xaccLoadRegEntry (reg, xaccTransGetSourceSplit (trans));
    
    /* restore the cursor to it original location */
    i++;
@@ -318,8 +315,8 @@ LoadXferCell (ComboCell *cell,  AccountGroup *grp)
    n = 0;
    acc = getAccount (grp, n);
    while (acc) {
-      xaccAddComboCellMenuItem (cell, acc->accountName);
-      LoadXferCell (cell, acc->children);
+      xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
+      LoadXferCell (cell, xaccAccountGetChildren (acc));
       n++;
       acc = getAccount (grp, n);
    }
