@@ -33,8 +33,8 @@
 #include "qofquerycore.h"
 
 /* Initalize the Query Core registry and install the default type handlers */
-void gnc_query_core_init(void);
-void gnc_query_core_shutdown (void);
+void qof_query_core_init(void);
+void qof_query_core_shutdown (void);
 
 /* 
  * An arbitrary Query Predicate.  Given the gnucash object and the
@@ -55,8 +55,8 @@ typedef int (*QueryCompare) (gpointer a, gpointer b,
 			     QofQueryAccess get_fcn);
 
 /* Lookup functions */
-QueryPredicate gnc_query_core_get_predicate (char const *type);
-QueryCompare gnc_query_core_get_compare (char const *type);
+QueryPredicate qof_query_core_get_predicate (char const *type);
+QueryCompare qof_query_core_get_compare (char const *type);
 
 /* Compare two predicates */
 gboolean qof_query_core_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2);

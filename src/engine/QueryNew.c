@@ -449,7 +449,7 @@ static void compile_sort (QueryNewSort_t sort, GNCIdType obj)
    * If not, check if this is the default sort.
    */
   if (sort->param_fcns) {
-    sort->comp_fcn = gnc_query_core_get_compare (resObj->param_type);
+    sort->comp_fcn = qof_query_core_get_compare (resObj->param_type);
 
     /* Hrm, perhaps this is an object compare, not a core compare? */
     if (sort->comp_fcn == NULL)
@@ -483,7 +483,7 @@ static void compile_terms (QueryNew *q)
        */
 
       if (qt->param_fcns)
-        qt->pred_fcn = gnc_query_core_get_predicate (resObj->param_type);
+        qt->pred_fcn = qof_query_core_get_predicate (resObj->param_type);
       else
         qt->pred_fcn = NULL;
     }
@@ -1170,14 +1170,14 @@ void gncQueryAddBooleanMatch (QueryNew *q, GSList *param_list, gboolean value,
 void gncQueryNewInit (void)
 {
   PINFO("New Query Module Initialization");
-  gnc_query_core_init ();
+  qof_query_core_init ();
   gncQueryObjectInit ();
 }
 
 void gncQueryNewShutdown (void)
 {
   gncQueryObjectShutdown ();
-  gncqofquerycore.hutdown ();
+  qof_query_core_shutdown ();
 }
 
 int gncQueryGetMaxResults (QueryNew *q)
