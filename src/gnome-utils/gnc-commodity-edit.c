@@ -44,9 +44,11 @@ const char * gnc_commodity_edit_get_string (gpointer ptr)
   return gnc_commodity_get_printname(comm);
 }
 
-gpointer gnc_commodity_edit_new_select (gpointer ptr, GtkWidget *toplevel)
+gpointer gnc_commodity_edit_new_select (gpointer arg, gpointer ptr,
+					GtkWidget *toplevel)
 {
   gnc_commodity * comm = (gnc_commodity *)ptr;
+  arg;
   return gnc_ui_select_commodity_modal(comm, toplevel);
 }
 

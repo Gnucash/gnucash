@@ -20,6 +20,7 @@ SUBDIRS = \
   scm \
   quotes \
   pixmaps \
+  business \
   optional
 
 # Engine Makefile.am file.
@@ -48,12 +49,12 @@ gnucash_LDADD = \
   gnome/libgncguile.la \
   gnome/libgncgnome.la \
   gnome/libgncguile.la \
+  ${GUILE_LIBS} \
   ${GUPPI_LIBS} \
   ${GNOME_LIBDIR} \
   ${GNOMEUI_LIBS} \
   ${GNOME_PRINT_LIBS} \
   ${G_WRAP_LINK_ARGS} \
-  ${GUILE_LIBS} \
   ${GTKHTML_LIBS} \
   ${GHTTP_LIBS} \
   ${GLADE_LIBS} \

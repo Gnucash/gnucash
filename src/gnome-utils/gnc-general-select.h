@@ -40,6 +40,14 @@ BEGIN_GNOME_DECLS
 #define GNC_GENERAL_SELECT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_general_select_get_type(), GNCGeneralSelectClass)
 #define GNC_IS_GENERAL_SELECT(obj)       GTK_CHECK_TYPE (obj, gnc_general_select_get_type ())
 
+typedef const char *	(*GNCGeneralSelectGetStringCB) (gpointer);
+typedef gpointer 	(*GNCGeneralSelectNewSelectCB) (gpointer cbarg, gpointer default_selection, GtkWidget *parent);
+
+typedef enum {
+  GNC_GENERAL_SELECT_TYPE_SELECT = 1,
+  GNC_GENERAL_SELECT_TYPE_EDIT = 2
+} GNCGeneralSelectType;
+
 typedef struct {
   GtkHBox hbox;
 
@@ -48,8 +56,9 @@ typedef struct {
 
   gpointer selected_item;
 
-  const char *	(*get_string) (gpointer ptr);
-  gpointer	(*new_select) (gpointer ptr, GtkWidget *toplevel);
+  GNCGeneralSelectGetStringCB	get_string;
+  GNCGeneralSelectNewSelectCB	new_select;
+  gpointer			cb_arg;
 } GNCGeneralSelect;
 
 typedef struct {
@@ -58,11 +67,11 @@ typedef struct {
   void 		(*changed) (GNCGeneralSelect *edit);
 } GNCGeneralSelectClass;
 
-typedef const char *	(*GNCGeneralSelectGetStringCB) (gpointer);
-typedef gpointer 	(*GNCGeneralSelectNewSelectCB) (gpointer, GtkWidget *);
 
-GtkWidget *gnc_general_select_new            (GNCGeneralSelectGetStringCB get_string,
-					      GNCGeneralSelectNewSelectCB new_select);
+GtkWidget *gnc_general_select_new            (GNCGeneralSelectType type,
+					      GNCGeneralSelectGetStringCB get_string,
+					      GNCGeneralSelectNewSelectCB new_select,
+					      gpointer cb_arg);
 void       gnc_general_select_set_selected   (GNCGeneralSelect *gsl,
 					      gpointer selected);
 gpointer   gnc_general_select_get_selected   (GNCGeneralSelect *gsl);

@@ -1458,8 +1458,10 @@ gnc_option_set_ui_widget(GNCOption *option,
     g_free(colon_name);
 
     enclosing = gtk_hbox_new(FALSE, 5);
-    value = gnc_general_select_new(gnc_commodity_edit_get_string,
-				   gnc_commodity_edit_new_select);
+    value = gnc_general_select_new(GNC_GENERAL_SELECT_TYPE_SELECT,
+				   gnc_commodity_edit_get_string,
+				   gnc_commodity_edit_new_select,
+				   NULL);
 
     gnc_option_set_widget (option, value);
     gnc_option_set_ui_value(option, FALSE);

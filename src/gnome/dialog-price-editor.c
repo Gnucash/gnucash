@@ -800,8 +800,10 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
 
   box = glade_xml_get_widget (xml, "commodity_box");
 
-  w = gnc_general_select_new (gnc_commodity_edit_get_string,
-			      gnc_commodity_edit_new_select);
+  w = gnc_general_select_new (GNC_GENERAL_SELECT_TYPE_SELECT,
+			      gnc_commodity_edit_get_string,
+			      gnc_commodity_edit_new_select,
+			      NULL);
   pdb_dialog->commodity_edit = w;
   gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
   gtk_widget_show (w);

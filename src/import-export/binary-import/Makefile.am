@@ -37,9 +37,9 @@ libgncmod_binary_import_la_LIBADD = \
   ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
   ${top_srcdir}/src/app-file/libgncmod-app-file.la \
   ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${GUILE_LIBS} \
   ${GNOMEUI_LIBS} \
   ${GNOME_LIBDIR} \
-  ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
 libgw_binary_import_la_SOURCES = gw-binary-import.c

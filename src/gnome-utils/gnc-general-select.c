@@ -163,7 +163,8 @@ select_cb(GtkButton * button, gpointer user_data)
 
         toplevel = gtk_widget_get_toplevel (GTK_WIDGET (button));
 
-        new_selection = (gsl->new_select)(gsl->selected_item, toplevel);
+        new_selection = (gsl->new_select)(gsl->cb_arg, gsl->selected_item,
+					  toplevel);
 
         /* NULL return means cancel; no change */
         if (new_selection == NULL)
@@ -173,14 +174,18 @@ select_cb(GtkButton * button, gpointer user_data)
 }
 
 static void
-create_children (GNCGeneralSelect *gsl)
+create_children (GNCGeneralSelect *gsl, GNCGeneralSelectType type)
 {
         gsl->entry = gtk_entry_new ();
         gtk_entry_set_editable (GTK_ENTRY (gsl->entry), FALSE);
 	gtk_box_pack_start (GTK_BOX (gsl), gsl->entry, TRUE, TRUE, 0);
         gtk_widget_show (gsl->entry);
 
-        gsl->button = gtk_button_new_with_label (_("Select..."));
+	if (type == GNC_GENERAL_SELECT_TYPE_SELECT)
+	  gsl->button = gtk_button_new_with_label (_("Select..."));
+	else if (type == GNC_GENERAL_SELECT_TYPE_EDIT)
+	  gsl->button = gtk_button_new_with_label (_("Edit..."));
+
 	gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
         gtk_signal_connect (GTK_OBJECT (gsl->button), "clicked",
                             select_cb, gsl);
@@ -196,8 +201,10 @@ create_children (GNCGeneralSelect *gsl)
  * Returns a GNCGeneralSelect widget.
  */
 GtkWidget *
-gnc_general_select_new (GNCGeneralSelectGetStringCB get_string,
-			GNCGeneralSelectNewSelectCB new_select)
+gnc_general_select_new (GNCGeneralSelectType type,
+			GNCGeneralSelectGetStringCB get_string,
+			GNCGeneralSelectNewSelectCB new_select,
+			gpointer cb_arg)
 {
 	GNCGeneralSelect *gsl;
 	g_return_val_if_fail (get_string != NULL, NULL);
@@ -205,9 +212,10 @@ gnc_general_select_new (GNCGeneralSelectGetStringCB get_string,
 
 	gsl = gtk_type_new (gnc_general_select_get_type ());
 
-	create_children (gsl);
+	create_children (gsl, type);
 	gsl->get_string = get_string;
 	gsl->new_select = new_select;
+	gsl->cb_arg = cb_arg;
 
 	return GTK_WIDGET (gsl);
 }

@@ -9,16 +9,16 @@ libgncmodule_la_SOURCES = gnc-module.c
 libgncmodule_la_LDFLAGS = -module
 libgncmodule_la_LIBADD = \
   ${G_WRAP_LINK_ARGS} \
-  ${GLIB_LIBS} \
   ${GUILE_LIBS} \
+  ${GLIB_LIBS} \
   -lltdl
 
 libgw_gnc_module_la_SOURCES = gw-gnc-module.c
 libgw_gnc_module_la_LDFLAGS = -module 
 libgw_gnc_module_la_LIBADD = libgncmodule.la \
   ${G_WRAP_LINK_ARGS} \
-  ${GLIB_LIBS} \
-  ${GUILE_LIBS}
+  ${GUILE_LIBS} \
+  ${GLIB_LIBS}
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = gnc-module.scm

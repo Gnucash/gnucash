@@ -7,8 +7,8 @@ libgncmod_tax_us_la_SOURCES = \
 
 libgncmod_tax_us_la_LDFLAGS = -module
 libgncmod_tax_us_la_LIBADD = \
- ${GLIB_LIBS} \
- ${GUILE_LIBS} 
+ ${GUILE_LIBS} \
+ ${GLIB_LIBS}
 
 AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS} ${GUILE_INCS}
 

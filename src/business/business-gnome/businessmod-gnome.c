@@ -1,0 +1,54 @@
+/*********************************************************************
+ * businessmod-core.c
+ * module definition/initialization for the Business GNOME UI module
+ * 
+ * Copyright (c) 2001 Derek Atkins <warlord@MIT.EDU>
+ *********************************************************************/
+
+#include <stdio.h>
+#include <guile/gh.h>
+#include <glib.h>
+
+#include "gnc-module.h"
+#include "gnc-module-api.h"
+#include "gw-business-gnome.h"
+
+/* version of the gnc module system interface we require */
+int gnc_module_system_interface = 0;
+
+/* module versioning uses libtool semantics. */
+int gnc_module_current  = 0;
+int gnc_module_revision = 0;
+int gnc_module_age      = 0;
+
+char *
+gnc_module_path(void) 
+{
+  return g_strdup("gnucash/business-gnome");
+}
+
+char * 
+gnc_module_description(void) 
+{
+  return g_strdup("The Gnucash business module GNOME UI");
+}
+
+int
+gnc_module_init(int refcount) 
+{
+  /* load business-core: we depend on it */
+  if (!gnc_module_load ("gnucash/business-core", 0)) {
+    return FALSE;
+  }
+
+  gh_eval_str("(use-modules (g-wrapped gw-business-gnome))");
+  gh_eval_str("(use-modules (gnucash business-gnome))");
+
+  return TRUE;
+}
+
+int
+gnc_module_end(int refcount) {
+  return TRUE;
+}
+

@@ -54,11 +54,77 @@
 (define (gnc:make-separator path)
   (gnc:make-extension 'separator #f #f path #f))
 
+(gnc:module-load "gnucash/business-gnome" 0)
+
+(define gnc:extensions-temp-business #f)
+
+(define (gnc:extensions-get-business)
+  (if gnc:extensions-temp-business
+      gnc:extensions-temp-business
+      (begin
+	(set! gnc:extensions-temp-business (gnc:business-create
+					    (gnc:get-current-session)))
+	gnc:extensions-temp-business)))
 
 (define (gnc:extensions-menu-setup)
   (define menu (gnc:make-menu "Extensions" (list "_Settings")))
 
+
+  (define new-job-item
+    (gnc:make-menu-item (N_ "Test New Job Dialog")
+			(N_ "Test New Job Dialog")
+			(list "Extensions" "")
+			(lambda ()
+			  (gnc:job-new #f (gnc:extensions-get-business)
+				       #f))))
+
+  (define select-job-item
+    (gnc:make-menu-item (N_ "Test Job Selection Dialog")
+			(N_ "Test Job Selection Dialog")
+			(list "Extensions" "")
+			(lambda ()
+			  (gnc:job-select #f (gnc:extensions-get-business)
+				       #f #f))))
+
+  (define new-vendor-item
+    (gnc:make-menu-item (N_ "Test New Vendor Dialog")
+			(N_ "Test New Vendor Dialog")
+			(list "Extensions" "")
+			(lambda ()
+			  (gnc:vendor-new #f (gnc:extensions-get-business)))))
+
+
+  (define select-vendor-item
+    (gnc:make-menu-item (N_ "Test Vendor Selection Dialog")
+			(N_ "Test Vendor Selection Dialog")
+			(list "Extensions" "")
+			(lambda ()
+			  (gnc:vendor-select (gnc:extensions-get-business)
+				       #f #f))))
+
+  (define new-employee-item
+    (gnc:make-menu-item (N_ "Test New Employee Dialog")
+			(N_ "Test New Employee Dialog")
+			(list "Extensions" "")
+			(lambda ()
+			  (gnc:employee-new #f (gnc:extensions-get-business)))))
+
+
+  (define select-employee-item
+    (gnc:make-menu-item (N_ "Test Employee Selection Dialog")
+			(N_ "Test Employee Selection Dialog")
+			(list "Extensions" "")
+			(lambda ()
+			  (gnc:employee-select (gnc:extensions-get-business)
+				       #f #f))))
+
   (gnc:add-extension menu)
+  (gnc:add-extension select-employee-item)
+  (gnc:add-extension new-employee-item)
+  (gnc:add-extension select-vendor-item)
+  (gnc:add-extension new-vendor-item)
+  (gnc:add-extension select-job-item)
+  (gnc:add-extension new-job-item)
 )
 
 (if (gnc:debugging?)

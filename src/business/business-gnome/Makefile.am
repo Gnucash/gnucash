@@ -1,0 +1,92 @@
+pkglib_LTLIBRARIES = libgncmod-business-gnome.la libgw-business-gnome.la
+
+AM_CFLAGS = \
+  -I${top_srcdir}/src \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/gnome \
+  -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/business/business-core \
+  ${GUILE_INCS} \
+  ${GNOME_INCLUDEDIR} \
+  ${GLADE_CFLAGS} \
+  ${GTKHTML_CFLAGS} \
+  ${G_WRAP_COMPILE_ARGS} \
+  ${GLIB_CFLAGS} \
+  -I${top_srcdir}/src/register/ledger-core \
+  -I${top_srcdir}/src/register/register-core
+
+libgncmod_business_gnome_la_SOURCES = \
+  businessmod-gnome.c \
+  business-chooser.c \
+  dialog-customer.c \
+  dialog-employee.c \
+  dialog-job.c \
+  dialog-job-select.c \
+  dialog-vendor.c
+
+noinst_HEADERS = \
+  business-chooser.h \
+  dialog-customer.h \
+  dialog-employee.h \
+  dialog-job.h \
+  dialog-job-select.h \
+  dialog-vendor.h
+
+libgncmod_business_gnome_la_LDFLAGS = -module
+
+libgncmod_business_gnome_la_LIBADD = \
+  ../business-core/libgncmod-business-core.la \
+  ${top_srcdir}/src/gnc-module/libgncmodule.la \
+  ${top_srcdir}/src/engine/libgncmod-engine.la \
+  ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${GUILE_LIBS} \
+  ${GNOMEUI_LIBS} \
+  ${G_WRAP_LINK_ARGS} \
+  ${GLIB_LIBS} \
+  ${EFENCE_LIBS}
+
+
+libgw_business_gnome_la_SOURCES = gw-business-gnome.c
+libgw_business_gnome_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
+
+gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+gncmod_DATA = business-gnome.scm
+
+gladedir = $(GNC_GLADE_DIR)
+glade_DATA = \
+  business-chooser.glade \
+  customer.glade \
+  employee.glade \
+  job.glade \
+  vendor.glade
+
+EXTRA_DIST = $(glade_DATA)
+
+gwmoddir = ${GNC_GWRAP_LIBDIR}
+gwmod_DATA = \
+  gw-business-gnome.scm \
+  gw-business-gnome-spec.scm
+
+.scm-links: 
+	rm -f gnucash g-wrapped
+	ln -sf . gnucash 
+	ln -sf . g-wrapped 
+	touch .scm-links
+
+gncmod-business-gnome.c: gw-business-gnome.h
+
+gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h: .scm-links gw-business-gnome-spec.scm
+	FLAVOR=gnome guile -c \
+	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
+	 (set! %load-path (cons \"${PWD}\" %load-path)) \
+	 (set! %load-path (cons \"../business-core\" %load-path)) \
+	 (set! %load-path (cons \"../../engine\" %load-path)) \
+	 (set! %load-path (cons \"../../gnome\" %load-path)) \
+	 (primitive-load \"./gw-business-gnome-spec.scm\") \
+	 (gw:generate-module \"gw-business-gnome\")"
+
+BUILT_SOURCES = gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h
+CLEANFILES = gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h gw-business-gnome.html

@@ -158,7 +158,6 @@ src/engine/gnc-engine-util.c
 src/app-file/gnc-file.c
 src/app-file/gncmod-app-file.c
 src/app-file/gnome/gnc-file-history.c
-src/app-file/gnome/gncmod-app-file-gnome.c
 src/app-file/gnome/gnc-file-dialog.c
 src/experimental/cgi-bin/fastcgi-hello.c
 src/experimental/cgi-bin/gnc-server.c
@@ -232,7 +231,6 @@ src/gnome/gnucash.desktop.in
 src/gnome/window-main-summarybar.c
 src/gnome/argv-list-converters.c
 src/gnome/file-utils.c
-src/guile/tip-of-the-day.c
 src/import-export/qif-import/dialog-account-picker.c
 src/import-export/qif-import/druid-qif-import.c
 src/import-export/qif-import/gncmod-qif-import.c

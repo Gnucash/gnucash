@@ -107,8 +107,10 @@ get_commodity_editor(void)
     GNCGeneralSelect *cur_editor;
 
     cur_editor =
-      GNC_GENERAL_SELECT (gnc_general_select_new(gnc_commodity_edit_get_string,
-						 gnc_commodity_edit_new_select));
+      GNC_GENERAL_SELECT (gnc_general_select_new(GNC_GENERAL_SELECT_TYPE_SELECT,
+						 gnc_commodity_edit_get_string,
+						 gnc_commodity_edit_new_select,
+						 NULL));
     gtk_widget_show (GTK_WIDGET(cur_editor));
     gnc_general_select_set_selected (cur_editor,
                                       gnc_locale_default_currency());

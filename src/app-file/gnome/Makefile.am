@@ -19,8 +19,7 @@ gncinclude_HEADERS = \
   gnc-file-history-gnome.h
 
 libgnc_app_file_gnome_la_LIBADD = \
+  ${GUILE_LIBS} \
   ${GNOMEUI_LIBS} \
   ${GNOME_LIBDIR} \
-  ${GLIB_LIBS} \
-  ${GUILE_LIBS}
-
+  ${GLIB_LIBS}

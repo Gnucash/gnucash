@@ -18,10 +18,11 @@ libgncmod_qif_import_la_LIBADD = \
   ${top_srcdir}/src/app-file/libgncmod-app-file.la \
   ${top_srcdir}/src/gnc-module/libgncmodule.la \
   ${top_srcdir}/src/engine/libgncmod-engine.la \
+  ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
-  ${GLIB_LIBS} \
-  ${GUILE_LIBS} 
+  ${GLIB_LIBS}
+
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/import-export
 gncscmmod_DATA = qif-import.scm 

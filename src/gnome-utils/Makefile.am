@@ -78,6 +78,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_srcdir}/src/calculation/libgncmod-calculation.la \
   ${top_srcdir}/src/network-utils/libgncmod-network-utils.la \
   ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
+  ${GUILE_LIBS} \
   ${GUPPI_LIBS} \
   ${GNOMEUI_LIBS} \
   ${GNOME_LIBDIR} \
