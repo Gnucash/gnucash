@@ -10,8 +10,6 @@
 (use-modules (g-wrapped gw-engine-spec))
 (use-modules (g-wrapped gw-glib-spec))
 (use-modules (g-wrapped gw-gnome-utils-spec))
-;; FIXME take out when finished creating report-gnome
-(use-modules (g-wrapped gw-report-gnome-spec))
 
 (let ((mod (gw:new-module "gw-gnc")))
   (define (standard-c-call-gen result func-call-code)
@@ -39,8 +37,6 @@
   (gw:module-depends-on mod "gw-engine")
   (gw:module-depends-on mod "gw-glib")
   (gw:module-depends-on mod "gw-gnome-utils")
-  ;; FIXME take out when finished creating report-gnome
-  (gw:module-depends-on mod "gw-report-gnome")
 
   (gw:module-set-guile-module! mod '(g-wrapped gw-gnc))
 
@@ -149,20 +145,12 @@
 
   (gw:wrap-function
    mod
-   'gnc:report-raise-editor
-   '<gw:void>
-   "gnc_report_raise_editor"
-   '((<gw:scm> report))
-   "Raise the report's editor window")
-
-  (gw:wrap-function
-   mod
    'gnc:main-window-open-report
    '<gw:void>
    "gnc_main_window_open_report"
    '((<gw:int> report-id) (<gw:bool> top-level))
    "Show report window")
-  
+
   (gw:wrap-function
    mod
    'gnc:style-sheet-dialog-open

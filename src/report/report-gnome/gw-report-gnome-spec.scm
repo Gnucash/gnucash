@@ -83,4 +83,12 @@
    "gnc_print_report"
    '((<gw:int> report-id))
    "Print a report with dialog support")
+
+  (gw:wrap-function
+   mod
+   'gnc:report-raise-editor
+   '<gw:void>
+   "gnc_report_raise_editor"
+   '((<gw:scm> report))
+   "Raise the report's editor window")
   )

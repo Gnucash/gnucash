@@ -132,7 +132,6 @@
 (export gnc:report-set-editor-widget!)
 (export gnc:report-ctext)
 (export gnc:report-set-ctext!)
-(export gnc:report-edit-options)
 (export gnc:make-report)
 (export gnc:restore-report)
 (export gnc:make-report-options)

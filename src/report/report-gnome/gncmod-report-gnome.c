@@ -31,7 +31,7 @@ gnc_module_description(void) {
 }
 
 static void
-lmod(char * mn) 
+lmod(char * mn)
 {
   char * form = g_strdup_printf("(use-modules %s)\n", mn);
   gh_eval_str(form);
@@ -55,6 +55,9 @@ gnc_module_init(int refcount) {
   if(!gnc_module_load("gnucash/report/report-system", 0)) {
     return FALSE;
   }
+
+  lmod ("(g-wrapped gw-report-gnome)");
+  lmod ("(gnucash report report-gnome)");
 
   return TRUE;
 }

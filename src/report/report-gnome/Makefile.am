@@ -37,10 +37,15 @@ libgw_report_gnome_la_LDFLAGS = -module
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-report-gnome.scm gw-report-gnome-spec.scm
 
+gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report
+gncmod_DATA = report-gnome.scm
+
 noinst_DATA = .scm-links
 
 EXTRA_DIST = \
-  .cvsignore
+  .cvsignore \
+  ${gwmod_DATA} \
+  ${gncmod_DATA}
 
 .scm-links: 
 	rm -f gnucash g-wrapped

@@ -223,20 +223,6 @@
 (define gnc:report-set-ctext!
   (record-modifier <report> 'ctext))
 
-(define (gnc:report-edit-options report) 
-  (let* ((editor-widg (gnc:report-editor-widget report)))
-    (if editor-widg
-        (gnc:report-raise-editor report)
-        (begin
-          (if (gnc:report-options report) 
-              (begin 
-                (set! editor-widg
-                      ((gnc:report-options-editor report)
-                       (gnc:report-options report)
-                       report))
-                (gnc:report-set-editor-widget! report editor-widg))
-              (gnc:warning-dialog "This report has no options."))))))
-
 (define (gnc:make-report template-name . rest)
   (let ((r ((record-constructor <report>) 
             template-name ;; type
