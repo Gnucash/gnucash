@@ -249,6 +249,7 @@ gncPostFileOpen (const char * filename)
   AccountGroup *new_group;
   char * newfile;
   int norr = 0;
+  GNCFileIOError io_err = 0;
 
   if (!filename) return;
 
@@ -284,48 +285,39 @@ gncPostFileOpen (const char * filename)
    * try-throw semantics, instead of this hodge-podge of testing 
    * return values.  -- linas jan 2001
    */
-  if (gnc_book_begin (new_book, newfile, FALSE))
+  gnc_book_begin (new_book, newfile, FALSE);
+  norr = gnc_book_get_error (new_book);
+
+  /* if file appears to be locked, ask the user ... */
+  if (EBUSY == norr) 
+  {
+     norr = 0;
+     if (gncLockFailHandler (newfile))
+     {
+        /* user told us to ignore locks. So ignore them. */
+        gnc_book_begin (new_book, newfile, TRUE);
+     }
+  }
+
+  /* for any other error, put up appropriate dialog */
+  uh_oh = show_book_error (new_book, newfile, norr);
+
+  if (!uh_oh)
   {
     if (gnc_book_load (new_book)) 
     {
        new_group = gnc_book_get_group (new_book);
     }
-  } 
-  else
-  {
+
+    /* for any other error, put up appropriate dialog */
     norr = gnc_book_get_error (new_book);
-    /* if file appears to be locked, ask the user ... */
-    if (EBUSY == norr) 
-    {
-       norr = 0;
-       if (gncLockFailHandler (newfile))
-       {
-          /* user told us to ignore locks. So ignore them. */
-          if (gnc_book_begin (new_book, newfile, TRUE))
-          {
-             if (gnc_book_load (new_book)) 
-             {
-                new_group = gnc_book_get_group (new_book);
-             } 
-          }
-       }
-     }
-  }
-  xaccLogEnable ();
-  gnc_unset_busy_cursor (NULL);
+    uh_oh = show_book_error (new_book, newfile, norr);
 
-  /* check for book errors, put up appropriate dialog */
-  if (!norr) norr = gnc_book_get_error (new_book);
-  uh_oh = show_book_error (new_book, newfile, norr);
-
-  if (!uh_oh)
-  {
-    GNCFileIOError io_err = gnc_book_get_file_error (new_book);
+    io_err = gnc_book_get_file_error (new_book);
 
     /* check for i/o error, put up appropriate error message */
-    uh_oh = show_file_error(io_err, newfile);
-    if (uh_oh)
-      new_group = NULL;
+    uh_oh += show_file_error(io_err, newfile);
+    if (uh_oh) new_group = NULL;
 
     /* Umm, came up empty-handed, i.e. the file was not found. */
     /* This is almost certainly not what the user wanted. */
@@ -337,6 +329,8 @@ gncPostFileOpen (const char * filename)
       uh_oh = TRUE;
     }
   }
+  xaccLogEnable ();
+  gnc_unset_busy_cursor (NULL);
 
   /* going down -- abandon ship */
   if (uh_oh) 
