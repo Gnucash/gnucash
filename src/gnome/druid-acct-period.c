@@ -452,10 +452,11 @@ ap_close_period (GnomeDruidPage *druidpage,
     gnc_file_save ();
     gnc_resume_gui_refresh ();
     gnc_engine_resume_events ();
+    gnc_gui_refresh_all ();  /* resume above should have been enough ??? */
   }
 
   /* Report the status back to the user. */
-  info->close_status = 0;  /* XXX fixme */
+  info->close_status = 0;  /* XXX fixme success or failure? */
 
   /* Find the next closing date ... */
   info->prev_closing_date = info->closing_date;

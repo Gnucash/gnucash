@@ -904,8 +904,8 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
                          gnc_sched_xaction_tools_submenu_template ),
     {
       GNOME_APP_UI_ITEM,
-      N_("Close Books (Experimental/Borken)"),
-      N_("Configure accounting periods"),
+      N_("Close Books"),
+      N_("Archive old data using accounting periods"),
       gnc_main_window_books_druid_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
