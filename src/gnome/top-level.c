@@ -167,7 +167,6 @@ gnc_html_register_url_cb (const char *location, const char *label,
   else if (strncmp ("guid=", location, 5) == 0)
   {
     GUID guid;
-    GNCIdType id_type;
     QofEntity *qofEnt;
 
     if (!string_to_guid (location + 5, &guid))
@@ -176,23 +175,23 @@ gnc_html_register_url_cb (const char *location, const char *label,
       return FALSE;
     }
 
-    //id_type = xaccGUIDType (&guid, gnc_get_current_book ());
-    //id_type = 
     qofEnt = qof_book_get_entity_by_guid( gnc_get_current_book(), &guid );
-    id_type = qofEnt->e_type;
-    if (id_type == GNC_ID_NONE || !safe_strcmp (id_type, GNC_ID_NULL))
+    if ( (qofEnt == NULL)
+         || (qofEnt->e_type == GNC_ID_NONE)
+         || !safe_strcmp( qofEnt->e_type, GNC_ID_NULL ))
     {
         result->error_message = g_strdup_printf (_("No such entity: %s"),
                                                  location);
         return FALSE;
     }
-    else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
+
+    else if (!safe_strcmp (qofEnt->e_type, GNC_ID_ACCOUNT))
     {
         account = xaccAccountLookup (&guid, gnc_get_current_book ());
 	page = gnc_plugin_page_register_new (account, FALSE);
 	gnc_main_window_open_page (NULL, page);
     }
-    else if (!safe_strcmp (id_type, GNC_ID_TRANS))
+    else if (!safe_strcmp (qofEnt->e_type, GNC_ID_TRANS))
     {
         trans = xaccTransLookup (&guid, gnc_get_current_book ());
         split = NULL;
@@ -215,7 +214,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
 	page = gnc_plugin_page_register_new (account, FALSE);
 	gnc_main_window_open_page (NULL, page);
     }
-    else if (!safe_strcmp (id_type, GNC_ID_SPLIT))
+    else if (!safe_strcmp (qofEnt->e_type, GNC_ID_SPLIT))
     {
         split = xaccSplitLookup (&guid, gnc_get_current_book ());
         if (!split)
@@ -264,7 +263,7 @@ gnc_html_price_url_cb (const char *location, const char *label,
   if (strncmp ("guid=", location, 5) == 0)
   {
       GUID guid;
-      GNCIdType id_type;
+      QofEntity *qofEnt;
 
       if (!string_to_guid (location + 5, &guid))
       {
@@ -272,16 +271,20 @@ gnc_html_price_url_cb (const char *location, const char *label,
 	  return FALSE;
       }
 
-      id_type = xaccGUIDType (&guid, gnc_get_current_book ());
-      if (id_type == GNC_ID_NONE || safe_strcmp (id_type, GNC_ID_PRICE))
+      qofEnt = qof_book_get_entity_by_guid( gnc_get_current_book(),
+                                            &guid );
+
+      if ( qofEnt == NULL
+           || qofEnt->e_type == GNC_ID_NONE
+           || safe_strcmp (qofEnt->e_type, GNC_ID_PRICE))
       {
           result->error_message =
 	    g_strdup_printf (_("Unsupported entity type: %s"), location);
 	  return FALSE;
       }
       if (!gnc_price_edit_by_guid (NULL, &guid)) {
-          result->error_message = g_strdup_printf (_("No such entity: %s"),
-						 location);
+          result->error_message = g_strdup_printf(_("No such entity: %s"),
+                                                  location);
 	  return FALSE;
       }
   }
