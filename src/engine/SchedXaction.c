@@ -29,6 +29,7 @@
 #include "FreqSpec.h"
 #include "GNCId.h"
 #include "Group.h"
+#include "GroupP.h"
 #include "SX-ttinfo.h"
 #include "SchedXactionP.h"
 #include "Transaction.h"
