@@ -38,6 +38,7 @@
 #include "date.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
+#include "gnc-event-p.h"
 #include "kvp_frame.h"
 #include "messages.h"
 
@@ -60,14 +61,16 @@ mark_account (Account *account)
 {
   if (account->parent)
     account->parent->saved = FALSE;
+
+  gnc_engine_generate_event (&account->guid, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
 \********************************************************************/
 
 static void
-xaccInitAccount (Account * acc) {
-
+xaccInitAccount (Account * acc)
+{
   acc->parent   = NULL;
   acc->children = NULL;
 
@@ -108,8 +111,12 @@ xaccInitAccount (Account * acc) {
 Account *
 xaccMallocAccount (void)
 {
-  Account *acc = g_new(Account, 1);
+  Account *acc = g_new (Account, 1);
+
   xaccInitAccount (acc);
+
+  gnc_engine_generate_event (&acc->guid, GNC_EVENT_CREATE);
+
   return acc;
 }
 
@@ -124,6 +131,8 @@ xaccFreeAccount (Account *acc)
 
   if (NULL == acc) return;
 
+  gnc_engine_generate_event (&acc->guid, GNC_EVENT_DESTROY);
+
   xaccRemoveEntity(&acc->guid);
 
   /* First, recursively free children */
@@ -135,10 +144,6 @@ xaccFreeAccount (Account *acc)
     Split *s = (Split *) lp->data;
     s->acc = NULL;
   }
-
-  /* destroy all of the splits. The xaccCommitEdit() call
-   * will automatically clean up orphaned transactions.
-   */
 
   /* FIXME: is this right? */
   acc->editlevel = 0;
@@ -459,8 +464,8 @@ check_open (Account *account)
 \********************************************************************/
 
 void
-xaccAccountInsertSplit ( Account *acc, Split *split ) {
-
+xaccAccountInsertSplit (Account *acc, Split *split)
+{
   if (!acc) return;
   if (!split) return;
 
@@ -476,7 +481,7 @@ xaccAccountInsertSplit ( Account *acc, Split *split ) {
       return;
   }
 #endif
-    
+
   xaccAccountBeginEdit(acc);
   {
     Account *oldacc;
@@ -504,14 +509,17 @@ xaccAccountInsertSplit ( Account *acc, Split *split ) {
     if (split->acc) xaccAccountRemoveSplit (split->acc, split);
     split->acc = acc;
 
-    if(acc->editlevel == 1) {
+    if (acc->editlevel == 1)
+    {
       acc->splits = g_list_insert_sorted(acc->splits, split, split_sort_func);
       acc->sort_dirty = FALSE;
-    } else {
-      acc->splits = g_list_prepend(acc->splits, split);
     }
+    else
+      acc->splits = g_list_prepend(acc->splits, split);
 
     mark_account (acc);
+    if (split->parent)
+      gnc_engine_generate_event (&split->parent->guid, GNC_EVENT_MODIFY);
   }
   xaccAccountCommitEdit(acc);
 }
@@ -520,7 +528,8 @@ xaccAccountInsertSplit ( Account *acc, Split *split ) {
 \********************************************************************/
 
 void
-xaccAccountRemoveSplit (Account *acc, Split *split) {
+xaccAccountRemoveSplit (Account *acc, Split *split)
+{
   if (!acc) return;
   if (!split) return;
   
@@ -544,6 +553,8 @@ xaccAccountRemoveSplit (Account *acc, Split *split) {
       split->acc = NULL;
 
       mark_account (acc);
+      if (split->parent)
+        gnc_engine_generate_event (&split->parent->guid, GNC_EVENT_MODIFY);
     }
   }
   xaccAccountCommitEdit(acc);
@@ -595,7 +606,8 @@ price_xfer(Split * s, gnc_numeric share_count) {
 }      
                               
 void
-xaccAccountRecomputeBalance( Account * acc ) {
+xaccAccountRecomputeBalance (Account * acc)
+{
   gnc_numeric  dbalance;
   gnc_numeric  dcleared_balance; 
   gnc_numeric  dreconciled_balance;
@@ -612,7 +624,7 @@ xaccAccountRecomputeBalance( Account * acc ) {
   dbalance = gnc_numeric_zero();
   dcleared_balance = gnc_numeric_zero();
   dreconciled_balance = gnc_numeric_zero();
-  share_balance    = gnc_numeric_zero();
+  share_balance = gnc_numeric_zero();
   share_cleared_balance = gnc_numeric_zero();
   share_reconciled_balance = gnc_numeric_zero();
 
@@ -622,7 +634,7 @@ xaccAccountRecomputeBalance( Account * acc ) {
     /* compute both dollar and share balances */
     share_balance = gnc_numeric_add_fixed(share_balance, split->damount);
     dbalance      = gnc_numeric_add_fixed(dbalance, split->value);
-    
+
     if( NREC != split -> reconciled ) {
       share_cleared_balance = 
         gnc_numeric_add_fixed(share_cleared_balance, split->damount);
@@ -1531,10 +1543,12 @@ xaccAccountSetPriceSrc(Account *acc, const char *src) {
     if((t == STOCK) || (t == MUTUAL)) {
       kvp_value *new_value = kvp_value_new_string(src);
       if(new_value) {
+        check_open (acc);
         kvp_frame_set_slot(xaccAccountGetSlots(acc),
                            "old-price-source",
                            new_value);
         kvp_value_delete(new_value);
+        mark_account (acc);
       } else {
         PERR ("xaccAccountSetPriceSrc: failed to allocate kvp_value.");
       }

@@ -1457,36 +1457,36 @@ xaccTransIsOpen (Transaction *trans)
 void
 xaccTransDestroy (Transaction *trans)
 {
-   GList *node;
+  GList *node;
 
-   if (!trans) return;
-   check_open (trans);
-   trans->open |= BEING_DESTROYED;
-   xaccTransWriteLog (trans, 'D');
+  if (!trans) return;
+  check_open (trans);
+  trans->open |= BEING_DESTROYED;
+  xaccTransWriteLog (trans, 'D');
 
-   for (node = trans->splits; node; node = node->next)
-   {
-      Split *split = node->data;
+  gnc_engine_generate_event (&trans->guid, GNC_EVENT_DESTROY);
 
-      mark_split (split);
+  for (node = trans->splits; node; node = node->next)
+  {
+    Split *split = node->data;
 
-      xaccAccountRemoveSplit (split->acc, split);
-      xaccAccountRecomputeBalance (split->acc); 
-      xaccRemoveEntity(&split->guid);
-      xaccFreeSplit (split);
+    mark_split (split);
 
-      node->data = NULL;
-   }
+    xaccAccountRemoveSplit (split->acc, split);
+    xaccAccountRecomputeBalance (split->acc); 
+    xaccRemoveEntity(&split->guid);
+    xaccFreeSplit (split);
 
-   g_list_free (trans->splits);
-   trans->splits = NULL;
+    node->data = NULL;
+  }
 
-   gnc_engine_generate_event (&trans->guid, GNC_EVENT_DESTROY);
+  g_list_free (trans->splits);
+  trans->splits = NULL;
 
-   xaccRemoveEntity(&trans->guid);
+  xaccRemoveEntity(&trans->guid);
 
-   /* the actual free is done with the commit call, else its rolled back */
-   /* xaccFreeTransaction (trans);  don't do this here ... */
+  /* the actual free is done with the commit call, else its rolled back */
+  /* xaccFreeTransaction (trans);  don't do this here ... */
 }
 
 /********************************************************************\
