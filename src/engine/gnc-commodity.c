@@ -527,8 +527,12 @@ printf ("duude get commodity table\n");
 void
 gnc_commodity_table_set_table(GNCBook *book, gnc_commodity_table *ct)
 {
+  gnc_commodity_table *old_ct;
   if (!book) return;
+
+  old_ct = gnc_commodity_table_get_table (book);
   gnc_book_set_data (book, GNC_COMMODITY_TABLE, ct);
+  gnc_commodity_table_destroy (old_ct);
 }
 
 /********************************************************************
