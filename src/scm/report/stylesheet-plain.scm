@@ -58,7 +58,7 @@
        (gnc:make-number-range-option 
         (_ "Tables")
         (_ "Table border width") "e" (_ "Bevel depth on tables")
-        1 0 20 0 1))
+        0 0 20 0 1))
       options))
   
   (define (plain-renderer options doc)
@@ -93,6 +93,14 @@
        'attribute (list "border" border)
        'attribute (list "cellspacing" spacing)
        'attribute (list "cellpadding" padding))
+
+      (let ((title (gnc:html-document-title doc)))
+        (if title
+            (gnc:html-document-add-object!
+             ssdoc
+             (gnc:make-html-text
+              (gnc:html-markup-p
+               (gnc:html-markup-h3 title))))))
       
       (gnc:html-document-append-objects! ssdoc (gnc:html-document-objects doc))
       ssdoc))

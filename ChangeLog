@@ -1,3 +1,41 @@
+2001-01-26  Bill Gribble  <grib@billgribble.com>
+
+	* src/gnome/gnc-gpg.{c,h}: if Linas can add useless prototype
+	code, so can I :) Gnucash now supports display of GPG-encrypted
+	HTML pages via another special <object> block.  
+
+	* src/gnome/gnc-html.c: Add support for GPG stuff.  Fix error 
+	reporting to display errors from GHTTP if available. 
+
+	* src/gnome/window-help.c: Add an Open button to open an arbitrary
+	URL.  The network IS the computer!
+
+	* src/scm/html-document.scm: Change interface to additional 
+	attributes on html-document-markup-start. 
+
+	* src/scm/html-table.scm: Fix rendering of <html-table-cell> to do
+	rowspan/colspan correctly.  Add new constructors to build <th>
+	<html-table-cells> in addition to <td>
+
+	* src/scm/report-utilities.scm: Rename misnamed d-gnc:foo
+	functions to gnc:foo.  d-gnc: is only for preexisting engine
+	interface functions that had signature changes.  there's nothing
+	inherently deprecated about using doubles in reports.
+
+	* src/scm/report.scm: Start trying to print backtraces on
+	exceptions in reports.  Only partially successful at this point;
+	the error gets printed but the backtrace won't.  Stay tuned.  You
+	need to run with --debug to see the error information.
+
+	* src/scm/report/account-summary.scm: Modify to use new 
+	table-cell ctors where appropriate.  Set justification for 
+	cells correctly. 
+
+	* src/scm/report/average-balance.scm: Add title. 
+
+	* src/scm/report/stylesheet-plain.scm: Render title in plain
+	stylesheet.  Set default table border to 0.
+	
 2001-01-15  Bill Gribble  <grib@billgribble.com>
 
 	* src/gnome/druid-qif-import.c: remove printout 

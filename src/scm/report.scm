@@ -185,32 +185,47 @@
     (hash-set! *gnc:_reports_* (gnc:report-id r) r)
     id))
 
+
 (define (gnc:find-report id) 
   (hash-ref  *gnc:_reports_* id))
 
+
 (define (gnc:report-run id)
-  (false-if-exception 
-   (let ((report (gnc:find-report id)))
-     (if report
-         (let ((template (hash-ref *gnc:_report-templates_* 
-                                   (gnc:report-type report))))
-           (if template
-               (let* ((renderer (gnc:report-template-renderer template))
-                      (doc (renderer (gnc:report-options report)))
-                      (stylesheet-name
-                       (symbol->string (gnc:option-value
-                                        (gnc:lookup-option 
-                                         (gnc:report-options report)
-                                         (_ "General") (_ "Stylesheet")))))
-                      (stylesheet 
-                       (gnc:html-style-sheet-find stylesheet-name))
-                      (html #f))
-                 (gnc:html-document-set-style-sheet! doc stylesheet)
-                 (set! html (gnc:html-document-render doc))
-;                 (display html)
-                 (gnc:report-set-ctext! report html)
-                 html)
-               #f))
-         #f))))
+  (catch 
+   #t
+   (lambda () (gnc:report-run-unsafe id))
+   (lambda (key . args)
+     (if (gnc:debugging?)
+         (begin 
+           (display (gnc:error->string key args))
+           (newline)))
+     #f)))
+
+
+(define (gnc:report-run-unsafe id)
+  (let ((report (gnc:find-report id)))
+    (if report
+        (let ((template (hash-ref *gnc:_report-templates_* 
+                                  (gnc:report-type report))))
+          (if template
+              (let* ((renderer (gnc:report-template-renderer template))
+                     (doc (renderer (gnc:report-options report)))
+                     (stylesheet-name
+                      (symbol->string (gnc:option-value
+                                       (gnc:lookup-option 
+                                        (gnc:report-options report)
+                                        (_ "General") (_ "Stylesheet")))))
+                     (stylesheet 
+                      (gnc:html-style-sheet-find stylesheet-name))
+                     (html #f))
+                (gnc:html-document-set-style-sheet! doc stylesheet)
+                (set! html (gnc:html-document-render doc))
+                (display html)
+                (gnc:report-set-ctext! report html)
+                html)
+              #f))
+        #f)))
   
+
+
 (gnc:hook-add-dangler gnc:*main-window-opened-hook* gnc:report-menu-setup)

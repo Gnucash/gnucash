@@ -216,6 +216,35 @@ gnc_help_window_reload_button_cb(GtkWidget * w, gpointer data) {
   return TRUE;
 }
 
+static void
+goto_string_cb(char * string, gpointer data) {
+  strncpy(data, string, 250);
+}
+
+static int
+gnc_help_window_goto_button_cb(GtkWidget * w, gpointer data) {
+  gnc_help_window * help = data;
+  int             retval = -1;
+  char            url[251] = "";
+  URLType         type;
+  char            * location = NULL;
+  char            * label = NULL;
+
+  GtkWidget * dlg = gnome_request_dialog(FALSE, 
+                                         _("Enter URI:"), "", 250,
+                                         &goto_string_cb, &url[0],
+                                         NULL);
+  retval = gnome_dialog_run_and_close(GNOME_DIALOG(dlg));
+  
+  if((retval == 0) && url && (strlen(url) > 0)) {
+    type = gnc_html_parse_url(help->html, url, &location, &label);
+    gnc_html_show_url(help->html, type, location, label, 0);
+    g_free(location);
+    g_free(label);
+  }
+  return TRUE;
+}
+
 
 /********************************************************************
  * topics-browser callbacks 
@@ -462,6 +491,7 @@ gnc_help_window_new (void) {
       GNOME_STOCK_PIXMAP_FORWARD,
       0, 0, NULL
     },
+    GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
       N_("Reload"),
       N_("Reload the current document"),
@@ -469,6 +499,15 @@ gnc_help_window_new (void) {
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
       GNOME_STOCK_PIXMAP_REFRESH,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Open"),
+      N_("Open a new document"),
+      gnc_help_window_goto_button_cb, help,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_OPEN,
       0, 0, NULL
     },
     { GNOME_APP_UI_ITEM,

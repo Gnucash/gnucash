@@ -21,7 +21,7 @@
 (gnc:depend "engine-utilities.scm")
 
 (define (gnc:amount->string amount info)
-  (d-gnc:amount->string-helper (exact->inexact amount) info))
+  (gnc:amount->string-helper (exact->inexact amount) info))
 
 (define (gnc:commodity-amount->string amount info)
   (gnc:amount->string-helper amount info))
@@ -365,7 +365,7 @@
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
 ;; are included in the calculation.
-(define (d-gnc:account-get-balance-at-date account date include-children?)
+(define (gnc:account-get-balance-at-date account date include-children?)
   (let ((children-balance
          (if include-children?
              (gnc:group-get-balance-at-date
@@ -452,9 +452,9 @@
 ;; get the change in balance from the 'from' date to the 'to' date.
 ;; this isn't quite as efficient as it could be, but it's a whole lot
 ;; simpler :)
-(define (d-gnc:account-get-balance-interval account from to include-children?)
-  (- (d-gnc:account-get-balance-at-date account to include-children?)
-     (d-gnc:account-get-balance-at-date account from include-children?)))
+(define (gnc:account-get-balance-interval account from to include-children?)
+  (- (gnc:account-get-balance-at-date account to include-children?)
+     (gnc:account-get-balance-at-date account from include-children?)))
 
 ;; the version which returns a commodity-collector
 (define (gnc:account-get-comm-balance-interval 
@@ -465,11 +465,11 @@
 				 account from include-children?) #f)
     this-collector))
 
-(define (d-gnc:group-get-balance-interval group from to)
+(define (gnc:group-get-balance-interval group from to)
   (apply +
          (gnc:group-map-accounts
           (lambda (account)
-            (d-gnc:account-get-balance-interval account from to #t)) group)))
+            (gnc:account-get-balance-interval account from to #t)) group)))
 
 ;; the version which returns a commodity-collector
 (define (gnc:group-get-comm-balance-interval group from to)

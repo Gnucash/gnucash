@@ -110,32 +110,18 @@
     (gnc:commodity-amount->string 
      (cadr pair) (gnc:commodity-print-info (car pair) #t)))
 
-  ;; returns a list with n one-space-strings (" ") which, hopefully,
-  ;; result in empty cells
+  ;; returns a list with n #f (empty cell) values 
   (define (make-empty-cells n)
     (if (> n 0)
-	(append (list " ") (make-empty-cells (- n 1)))
+	(cons #f (make-empty-cells (- n 1)))
 	'()))
 
-  ;; returns a html-table-cell object that has the content content and
-  ;; (hopefully) an option colspan=n
-  (define (make-cell-colspan n content)
-    (if (> n 0)
-	(let ((cell (gnc:make-html-table-cell)))
-	  (gnc:html-table-cell-set-col-span! cell n)
-	  (gnc:html-table-cell-append-objects! 
-	   cell content)
-	  cell)
-	content))
-    
-  ;; returns a list which is ready to be passed to the
-  ;; html-table-append-row! function (one row of our table)
+  ;; returns a list which makes up a row in the table
   (define (make-row acct end-date tree-depth current-depth subtot?)
     (append
      (make-empty-cells (- current-depth 1))
-     ;; the account name
-     (list (make-cell-colspan 
-	    (+ 1 (- tree-depth current-depth)) 
+     (list (gnc:make-html-table-cell/size 
+	    1 (+ 1 (- tree-depth current-depth)) 
 	    (gnc:make-html-text (gnc:html-markup-anchor
 				 (string-append 
 				  "gnc-register:account=" 
@@ -151,7 +137,7 @@
 	;; one gnc:numeric value. 
 	(commodity-value->string pair)))
      (make-empty-cells (- current-depth 1))))
-
+  
   ;; Goes through the list of accounts, runs make-row on each account.
   ;; If tree-depth and current-depth require, it will recursively call
   ;; itself on the list of children accounts.
@@ -183,25 +169,26 @@
       ;; start the recursive account processing
       (traverse-accounts accounts table end-date tree-depth 1 do-subtot?)
             
-      ;; set some column and table styles - needs to be improved.
-      (let ((bal-col (- (gnc:html-table-num-columns table) 1)))
+      ;; set default alignment to right, and override for the name
+      ;; columns
+      (gnc:html-table-set-style! 
+       table "td" 
+       'attribute '("align" "right")
+       'attribute '("valign" "top"))
+
+      (gnc:html-table-set-style! 
+       table "th" 
+       'attribute '("align" "right")
+       'attribute '("valign" "top"))
+
+      ;; there are tree-depth account name columns. 
+      (let loop ((col 0))
         (gnc:html-table-set-col-style! 
-         table 0 "td" 
-         'attribute '("align" "left"))
+         table col "td" 'attribute '("align" "left"))
         (gnc:html-table-set-col-style! 
-         table 0 "th" 
-         'attribute '("align" "left"))        
-        
-        (gnc:html-table-set-col-style! 
-         table bal-col "td" 
-         'attribute '("align" "right"))
-        (gnc:html-table-set-col-style! 
-         table bal-col "th" 
-         'attribute '("align" "right"))
-        
-        (gnc:html-table-set-style! 
-         table "td" 
-         'attribute '("valign" "top")))
+         table col "th" 'attribute '("align" "left"))
+        (if (< col (- tree-depth 1))
+            (loop (+ col 1))))
       
       table))
   
@@ -255,17 +242,16 @@
 	    (let ((table (build-acct-table accounts date-tp 
 					   tree-depth do-subtotals?)))
 	      ;; set some column headers 
-	      
-	      ;;(gnc:html-table-set-col-style! 
-	      ;; table 1 "table" 
-	      ;; 'attribute '("width" "100%"))
-	      (gnc:html-table-set-col-headers!
-	       table 
-	       (list (make-cell-colspan (- tree-depth 1) (_ "Account name"))
-		     (make-cell-colspan (- tree-depth 1) (_ "Balance"))))
-	      ;; add the table 
-	      (gnc:html-document-add-object! doc table)))
-          
+              (gnc:html-table-set-col-headers!
+               table 
+               (list (gnc:make-html-table-header-cell/size 
+                      1 tree-depth (_ "Account name"))
+                     (gnc:make-html-table-header-cell/size
+                      1 tree-depth (_ "Balance"))))
+
+              ;; add the table 
+              (gnc:html-document-add-object! doc table)))	        
+
           ;; error condition: no accounts specified
           (let ((p (gnc:make-html-text)))
             (gnc:html-text-append! 

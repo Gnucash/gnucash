@@ -150,15 +150,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  markup-rendering functions : markup-start and markup-end return
 ;;  pre-body and post-body HTML for the given markup tag.
+;;  the optional rest arguments are lists of attribute-value pairs:
+;;  (gnc:html-document-markup-start doc "markup" 
+;;                                 '("attr1" "value1") '("attr2" "value2"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:html-document-markup-start doc markup . rest)
   (let ((childinfo #f)
         (extra-attrib 
          (if (not (null? rest))
-             (car rest) #f))
+             rest #f))
         (show-result #f))
-
+    
     ;; merge the style stack to get a complete markup-style-info 
     ;; record ... should we cache these? 
     (for-each-in-order 
@@ -207,10 +210,12 @@
                      #f
                      attr))
                 (if extra-attrib
-                    (begin 
-                      (display " ")
-                      (display extra-attrib)
-                      (display " ")))
+                    (for-each
+                     (lambda (attr)
+                       (if (string? attr)
+                           (begin
+                             (display " ") (display attr))))
+                     extra-attrib))
                 (display ">")))
           (if (or face size color)
               (begin 

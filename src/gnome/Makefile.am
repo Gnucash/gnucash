@@ -32,6 +32,7 @@ libgncgnome_a_SOURCES = \
   gnc-currency-edit.c \
   gnc-datedelta.c \
   gnc-dateedit.c \
+  gnc-gpg.c \
   gnc-html-embedded.c \
   gnc-html-history.c \
   gnc-html.c \
@@ -86,6 +87,7 @@ noinst_HEADERS = \
   gnc-currency-edit.h \
   gnc-datedelta.h \
   gnc-dateedit.h \
+  gnc-gpg.h \
   gnc-html-embedded.h \
   gnc-html-history.h \
   gnc-html.h \

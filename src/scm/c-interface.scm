@@ -30,8 +30,9 @@
                 (display "\n\n" port)))))
     (false-if-exception
      (apply display-error (fluid-ref the-last-stack) port args))
-    (display-backtrace (fluid-ref the-last-stack) port))
-
+    (display-backtrace (fluid-ref the-last-stack) port)
+    (force-output port))
+  
   (false-if-exception
    (call-with-output-string write-error)))
 

@@ -45,6 +45,7 @@
 #include "dialog-utils.h"
 #include "window-register.h"
 #include "print-session.h"
+#include "gnc-gpg.h"
 #include "gnc-html.h"
 #include "gnc-html-history.h"
 #include "gnc-html-embedded.h"
@@ -85,8 +86,12 @@ struct request_info {
 static char error_404[] = 
 "<html><body><h3>Not found</h3><p>The specified URL could not be loaded.</body></html>";
 
+static char error_start[] = "<html><body><h3>Error</h3><p>There was an error loading the specified URL. <p>Error message: <p> ";
+static char error_end[] = "</body></html>";
+
 static char error_report[] = 
 "<html><body><h3>Report error</h3><p>An error occurred while running the report.</body></html>";
+
 
 /********************************************************************
  * gnc_html_parse_url
@@ -357,8 +362,13 @@ ghttp_check_callback(gpointer data) {
       break;
 
     case ghttp_error:
-      gtk_html_write(GTK_HTML(html->html), req->handle, error_404, 
-                     strlen(error_404));
+      gtk_html_write(GTK_HTML(html->html), req->handle, error_start, 
+                     strlen(error_start));
+      gtk_html_write(GTK_HTML(html->html), req->handle, 
+                     ghttp_get_error(req->request), 
+                     strlen(ghttp_get_error(req->request)));
+      gtk_html_write(GTK_HTML(html->html), req->handle, error_end, 
+                     strlen(error_end));
       gtk_html_end(GTK_HTML(html->html), req->handle, GTK_HTML_STREAM_ERROR);
       ghttp_request_destroy(req->request);
       req->request   = NULL;
@@ -570,7 +580,29 @@ gnc_html_guppi_redraw_cb(GtkHTMLEmbedded * eb,
                          gpointer data) {
   /* nothing special to do */
 }
+
+static char * 
+unescape_newlines(const gchar * in) {
+  char * ip = in;
+  char * retval = g_strdup(in);
+  char * op = retval;
+
+  for(ip=in; *ip; ip++) {
+    if((*ip == '\\') && (*(ip+1)=='n')) {
+      *op = '\012';
+      op++;
+      ip++;
+    }
+    else {
+      *op = *ip;
+      op++;
+    }
+  }
+  *op = 0;
+  return retval;
+}
 #endif /* USE_GUPPI */
+
 
 /********************************************************************
  * gnc_html_object_requested_cb - called when an applet needs to be
@@ -592,8 +624,11 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
       gtk_widget_show_all(widg);
       gtk_container_add(GTK_CONTAINER(eb), widg);
       gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
+      retval = TRUE;
     }
-    retval = TRUE;
+    else {
+      retval = FALSE;
+    }
   }
   else if(!strcmp(eb->classid, "gnc-guppi-bar")) {
 #ifdef USE_GUPPI
@@ -604,8 +639,11 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
       gtk_widget_show_all(widg);
       gtk_container_add(GTK_CONTAINER(eb), widg);
       gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
+      retval = TRUE;
     }
-    retval = TRUE;
+    else {
+      retval = FALSE;
+    }
   }
   else if(!strcmp(eb->classid, "gnc-guppi-scatter")) {
 #ifdef USE_GUPPI
@@ -616,8 +654,11 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
       gtk_widget_show_all(widg);
       gtk_container_add(GTK_CONTAINER(eb), widg);
       gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
+      retval = TRUE;
     }
-    retval = TRUE;
+    else {
+      retval = FALSE;
+    }
   }
   else if(!strcmp(eb->classid, "gnc-account-tree")) {
     widg = gnc_html_embedded_account_tree(eb->width, eb->height, 
@@ -626,8 +667,31 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
       gtk_widget_show_all(widg);
       gtk_container_add(GTK_CONTAINER(eb), widg);
       gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
+      retval = TRUE;
     }
-    retval = TRUE;
+    else {
+      retval = FALSE;
+    }
+  }
+  else if(!strcmp(eb->classid, "gnc-crypted-html")) {
+    /* we just want to take the data and stuff it into the widget,
+       blowing away the active streams.  crypted-html contains a
+       complete HTML page. */
+    char * cryptext  = unescape_newlines(eb->data);
+    char * cleartext = gnc_gpg_decrypt(cryptext, strlen(cryptext));
+    GtkHTMLStream * handle;
+    
+    if(cleartext && cleartext[0]) {
+      handle = gtk_html_begin(html);
+      gtk_html_write(html, handle, cleartext, strlen(cleartext));
+      gtk_html_end(html, handle, GTK_HTML_STREAM_OK);
+      retval = TRUE;
+    }
+    else {
+      retval = FALSE;
+    }
+    g_free(cleartext);
+    g_free(cryptext);
   }
 
 #if 0 && defined(USE_GUPPI)
@@ -748,6 +812,12 @@ gnc_html_key_cb(GtkWidget *widget, GdkEventKey *event, gpointer data) {
   return TRUE;
 }
 
+
+/********************************************************************
+ * gnc_html_button_press_cb
+ * mouse button callback (if any)
+ ********************************************************************/
+
 static int
 gnc_html_button_press_cb(GtkWidget * widg, GdkEventButton * event,
                          gpointer user_data) {
@@ -759,6 +829,26 @@ gnc_html_button_press_cb(GtkWidget * widg, GdkEventButton * event,
   }
   else {
     return FALSE;
+  }
+}
+
+
+/********************************************************************
+ * gnc_html_button_submit_cb
+ * form submission callback
+ ********************************************************************/
+
+static int
+gnc_html_submit_cb(GtkHTML * html, const gchar * method, 
+                   const gchar * action, const gchar * encoding,
+                   gpointer user_data) {
+  if(!strcasecmp(method, "get")) {
+    printf("GET submit: m='%s', a='%s', e='%s'\n",
+           method, action, encoding);
+  }
+  else if(!strcasecmp(method, "post")) {
+    printf("POST submit: m='%s', a='%s', e='%s'\n",
+           method, action, encoding);
   }
 }
 
@@ -982,6 +1072,9 @@ gnc_html_new() {
   
   gtk_signal_connect (GTK_OBJECT(retval->html), "key_press_event", 
                       GTK_SIGNAL_FUNC(gnc_html_key_cb), (gpointer)retval);
+  
+  gtk_signal_connect (GTK_OBJECT(retval->html), "submit", 
+                      GTK_SIGNAL_FUNC(gnc_html_submit_cb), (gpointer)retval);
   
   gtk_widget_show_all(GTK_WIDGET(retval->html));
   

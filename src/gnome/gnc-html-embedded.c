@@ -25,6 +25,7 @@
 #include <gnome.h>
 #include <glib.h>
 #ifdef USE_GUPPI
+/* #include <libguppi/guppi-memory.h> */
 #include <libguppitank/guppi-tank.h>
 #endif
 

@@ -1,7 +1,6 @@
 ;; -*-scheme-*- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; average-balance.scm
 ;; Report history of account balance and other info
-;; Plots the information with gnuplot
 ;;
 ;; Author makes no implicit or explicit guarantee of accuracy of 
 ;;  these calculations and accepts no responsibility for direct
@@ -24,8 +23,7 @@
            ;; register a configuration option for the report
            (register-option
             (lambda (new-option)
-              (gnc:register-option options 
-                                   new-option))))      
+              (gnc:register-option options new-option))))      
       ;; From date  
       (register-option
        (gnc:make-date-option
@@ -41,7 +39,7 @@
             (cons 'absolute (cons (car (mktime bdtime)) 0))))
         #f 
 	'absolute #f))
-
+      
       ;; to-date
       (register-option
        (gnc:make-date-option
@@ -54,7 +52,7 @@
             (set-tm:hour bdtime 23)
             (cons 'absolute (cons (car (mktime bdtime)) 0))))
         #f 'absolute #f))
-
+      
       ;; account(s) to do report on
       (register-option
        (gnc:make-account-list-option
@@ -249,6 +247,8 @@
            (document  (gnc:make-html-document))
            (startbal  0.0))
       
+      (gnc:html-document-set-title! document (_ "Avergae Balance"))
+
       (if (not (null? accounts))
           (let ((query (gnc:malloc-query))
                 (splits '())

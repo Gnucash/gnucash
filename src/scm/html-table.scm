@@ -40,28 +40,45 @@
 
 (define <html-table-cell>
   (make-record-type "<html-table-cell>"
-                    '(row-span col-span data style)))
+                    '(rowspan colspan tag data style)))
 
 (define gnc:make-html-table-cell-internal
   (record-constructor <html-table-cell>))
 
-(define (gnc:make-html-table-cell)
-  (gnc:make-html-table-cell-internal 1 1 '() (make-hash-table 7)))
+(define (gnc:make-html-table-cell . objects)
+  (gnc:make-html-table-cell-internal 1 1 "td" objects (make-hash-table 7)))
+
+(define (gnc:make-html-table-cell/size rowspan colspan . objects)
+  (gnc:make-html-table-cell-internal rowspan colspan "td"
+                                     objects (make-hash-table 7)))
+
+(define (gnc:make-html-table-header-cell . objects)
+  (gnc:make-html-table-cell-internal 1 1 "th" objects (make-hash-table 7)))
+
+(define (gnc:make-html-table-header-cell/size rowspan colspan . objects)
+  (gnc:make-html-table-cell-internal rowspan colspan "th"
+                                     objects (make-hash-table 7)))
 
 (define gnc:html-table-cell? 
   (record-predicate <html-table-cell>))
 
-(define gnc:html-table-cell-row-span
-  (record-accessor <html-table-cell> 'row-span))
+(define gnc:html-table-cell-rowspan
+  (record-accessor <html-table-cell> 'rowspan))
 
-(define gnc:html-table-cell-set-row-span!
-  (record-modifier <html-table-cell> 'row-span))
+(define gnc:html-table-cell-set-rowspan!
+  (record-modifier <html-table-cell> 'rowspan))
 
-(define gnc:html-table-cell-col-span
-  (record-accessor <html-table-cell> 'col-span))
+(define gnc:html-table-cell-colspan
+  (record-accessor <html-table-cell> 'colspan))
 
-(define gnc:html-table-cell-set-col-span!
-  (record-modifier <html-table-cell> 'col-span))
+(define gnc:html-table-cell-set-colspan!
+  (record-modifier <html-table-cell> 'colspan))
+
+(define gnc:html-table-cell-tag
+  (record-accessor <html-table-cell> 'tag))
+
+(define gnc:html-table-cell-set-tag!
+  (record-modifier <html-table-cell> 'tag))
 
 (define gnc:html-table-cell-data
   (record-accessor <html-table-cell> 'data))
@@ -93,12 +110,16 @@
   (with-output-to-string
     (lambda ()
       (gnc:html-document-push-style doc (gnc:html-table-cell-style cell))
-      (display (gnc:html-document-markup-start doc "td"))
+      (display (gnc:html-document-markup-start 
+                doc (gnc:html-table-cell-tag cell)
+                (sprintf #f "rowspan=%a" (gnc:html-table-cell-rowspan cell))
+                (sprintf #f "colspan=%a" (gnc:html-table-cell-colspan cell))))
       (for-each-in-order 
        (lambda (child) 
          (display (gnc:html-object-render child doc)))
        (gnc:html-table-cell-data cell))
-      (display (gnc:html-document-markup-end doc "td"))
+      (display (gnc:html-document-markup-end 
+                doc (gnc:html-table-cell-tag cell)))
       (gnc:html-document-pop-style doc))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -353,7 +374,7 @@
               (display (gnc:html-object-render c doc))
               (display (gnc:html-document-markup-end doc "caption")))))
       
-      ;; the first row is the column headers 
+      ;; the first row is the column headers.  Columns styles apply.
       (let ((ch (gnc:html-table-col-headers table))
             (colnum 0))
         (if ch 
@@ -362,14 +383,19 @@
                doc (gnc:html-table-col-headers-style table))
               (display (gnc:html-document-markup-start doc "tr"))
               (for-each-in-order 
-               (lambda (hdr)
+               (lambda (hdr)                 
                  (gnc:html-document-push-style 
                   doc (list-ref-safe (gnc:html-table-col-styles table) colnum))
-                 (display (gnc:html-document-markup-start doc "th"))
+                 (if (not (gnc:html-table-cell? hdr))
+                     (display (gnc:html-document-markup-start doc "th")))
                  (display (gnc:html-object-render hdr doc))
-                 (display (gnc:html-document-markup-end doc "th"))
+                 (if (not (gnc:html-table-cell? hdr))
+                     (display (gnc:html-document-markup-end doc "th")))
                  (gnc:html-document-pop-style doc)
-                 (set! colnum (+ 1 colnum)))
+                 (if (not (gnc:html-table-cell? hdr))
+                     (set! colnum (+ 1 colnum))
+                     (set! colnum (+ (gnc:html-table-cell-colspan hdr)
+                                     colnum))))               
                ch)
               (gnc:html-document-pop-style doc)
               )))
