@@ -138,7 +138,7 @@
 ( "Paraguay Guarani" "guarani" "centimo" "ISO4217" "PYG" "600" 100 100 )
 ( "Peruvian Nuevo Sol" "nuevo sol" "centimo"  "ISO4217" "PEN" "604" 100 100 )
 ( "Philippine Peso" "peso" "centavo" "ISO4217" "PHP" "608" 100 100 )
-( "Polish Zloty" "zloty" "groszy" "ISO4217" "PLZ" "616" 100 100 )
+( "Polish Zloty" "zloty" "groszy" "ISO4217" "PLN" "985" 100 100 )
 ( "Portuguese Escudo" "escudo" "centavo" "ISO4217" "PTE" "620" 100 100 ) ;; through 1998
 ( "Qatari Rial" "rial" "dirham" "ISO4217" "QAR" "634" 100 100 )
 ( "Romanian Leu" "leu" "bani"  "ISO4217" "ROL" "642" 100 100 )
