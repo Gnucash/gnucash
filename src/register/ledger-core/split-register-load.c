@@ -24,6 +24,7 @@
 
 #include "Group.h"
 #include "combocell.h"
+#include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
@@ -558,8 +559,7 @@ gnc_load_xfer_cell (ComboCell * cell, AccountGroup * grp)
     Account *account = node->data;
     char *name;
 
-    if (xaccAccountGetPlaceholder (account))
-	continue;
+    if (xaccAccountGetPlaceholder (account)) continue;
 
     name = xaccAccountGetFullName (account, gnc_get_account_separator ());
     if (name != NULL)
@@ -574,10 +574,132 @@ gnc_load_xfer_cell (ComboCell * cell, AccountGroup * grp)
   LEAVE ("\n");
 }
 
+/* ===================================================================== */
+/* In order to speed up register starts for registers htat have a huge
+ * number of accounts in them (where 'huge' is >500) we build a quickfill
+ * cache of account names.  This cache is needed because some users on 
+ * some machines experience register open times in the tens of seconds
+ * type timescales.  Building the quickfill list accounts for almost
+ * all of that cpu time (about 90% of the xfer_cell build time for 600 
+ * accounts).
+ */
+
+#define QKEY  "split_reg_shared_quickfill"
+
+typedef struct {
+  QuickFill *qf;
+  QofBook *book;
+  gint  listener;
+} QFB;
+
+static void 
+shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
+{
+  QFB *qfb = user_data;
+  gnc_quickfill_destroy (qfb->qf);
+  gnc_engine_unregister_event_handler (qfb->listener);
+  g_free (qfb);
+}
+
+/* Since we are maintaining a 'global' quickfill list, we need to 
+ * update it whenever the user creates a new account.  So listen
+ * for account modification events, and add new accounts.
+ */
+static void
+listen_for_account_events (GUID *guid, QofIdType type, 
+                           GNCEngineEventType event_type, 
+                           gpointer user_data)
+{
+  QFB *qfb = user_data;
+  QuickFill *qf = qfb->qf;
+  QuickFill *match;
+  char * name;
+  GdkWChar *wc_text;
+  const char *match_str;
+  QofCollection *col;
+  Account *account;
+
+  if (! (event_type & GNC_EVENT_MODIFY)) return;
+  if (QSTRCMP (type, GNC_ID_ACCOUNT)) return;
+
+  col = qof_book_get_collection (qfb->book, GNC_ID_ACCOUNT);
+  account = GNC_ACCOUNT (qof_collection_lookup_entity (col, guid));
+  name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+  if (NULL == name) return;
+
+  /* The match routines all expect wide-chars. */
+  if (gnc_mbstowcs (&wc_text, name) < 0)
+  {
+    PERR ("bad text conversion");
+    g_free (name);
+    return;
+  }
+
+  match = gnc_quickfill_get_string_match (qf, wc_text);
+  if (!match) goto add_string;
+  match_str = gnc_quickfill_string (match);
+  if (!match_str) goto add_string;
+  if (safe_strcmp (match_str, name)) goto add_string;
+
+  PINFO ("got match for %s", name);
+  goto done;
+
+add_string:
+  PINFO ("insert new account %s\n", name);
+  gnc_quickfill_insert (qf, name, QUICKFILL_ALPHA);
+done:
+  g_free(wc_text);  
+  g_free(name);
+}
+
+/* Build the quickfill list out of account names. 
+ * Essentially same loop as in gnc_load_xfer_cell() above.
+ */
+static QuickFill *
+build_shared_quickfill (QofBook *book, AccountGroup *group)
+{
+  QuickFill *qf;
+  GList *list, *node;
+  QFB *qfb;
+
+  qf = gnc_quickfill_new ();
+
+  list = xaccGroupGetSubAccounts (group);
+  for (node = list; node; node = node->next)
+  {
+    Account *account = node->data;
+    char *name;
+
+    if (xaccAccountGetPlaceholder (account)) continue;
+
+    name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+    if (name != NULL)
+    {
+      gnc_quickfill_insert (qf, name, QUICKFILL_ALPHA);
+      g_free(name);
+    }
+  }
+  g_list_free (list);
+
+
+  qfb = g_new0(QFB, 1);
+  qfb->qf = qf;
+  qfb->book = book;
+  qfb->listener = 
+     gnc_engine_register_event_handler (listen_for_account_events, qfb);
+
+  qof_book_set_data_fin (book, QKEY, qfb, shared_quickfill_destroy);
+
+  return qf;
+}
+
+
 void
 gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
 {
+  QofBook *book;
   AccountGroup *group;
+  QuickFill *qf;
   ComboCell *cell;
 
   group = xaccAccountGetRoot(base_account);
@@ -587,13 +709,24 @@ gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
   if (group == NULL)
     return;
 
+  book = xaccGroupGetBook (group);
+  qf = qof_book_get_data (book, QKEY);
+  if (!qf)
+  {
+    qf = build_shared_quickfill (book, group);
+  }
+
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
   gnc_combo_cell_clear_menu (cell);
+  gnc_combo_cell_use_quickfill_cache (cell, qf);
   gnc_load_xfer_cell (cell, group);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL);
   gnc_combo_cell_clear_menu (cell);
+  gnc_combo_cell_use_quickfill_cache (cell, qf);
   gnc_load_xfer_cell (cell, group);
 }
+
+/* ====================== END OF FILE ================================== */
