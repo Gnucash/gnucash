@@ -36,6 +36,15 @@
 	* src/gnome-utils/gnc-icons.c: Collapse common code into a function.  Use
 	the gnome2 file locate functionality.
 
+	* src/app-utils/gnc-component-manager.c:
+	* src/engine/gnc-event.c: Start ids with the number one.  Allows
+	zero to be used to indicate that a id is not set.
+
+	* src/gnome-utils/gnc-tree-view-account.c: Fix reference counting
+	on the filter model.
+	
+	* src/gnome/gnc-plugin-page-account-tree.c: Destroy account tree
+	page when the corresponding session is closed.
 
 2003-09-16  David Hampton  <hampton@employees.org>
 
