@@ -211,8 +211,16 @@ GSList *xaccGroupMapAccounts(AccountGroup *grp,
                              gpointer (*thunk)(Account *a, gpointer data),
                              gpointer data);
 
+/* The xaccGroupForEachAccount() method will traverse the AccountGroup
+ *    tree, calling 'func' on each account.   Traversal will stop when
+ *    func returns a non-null value, and the routine wil return with that 
+ *    value.  If 'deeply' is FALSE, then only the immediate children of 
+ *    the account will be traversed.  If TRUE, then the whole tree will
+ *    be traversed.
+ */
+
 gpointer xaccGroupForEachAccount (AccountGroup *grp,
-                                  gpointer (*thunk) (Account *a,
+                                  gpointer (*func) (Account *a,
                                                      gpointer data),
                                   gpointer data,
                                   gboolean deeply);
