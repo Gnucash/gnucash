@@ -27,7 +27,7 @@ gnc_module_description(void) {
 int 
 gnc_module_init(int refcount) {
   /* publish the g-wrapped Scheme bindings for libfoo */
-  gw_init_module_foo_gwrap();
+  gw_init_wrapset_foo_gwrap();
   
   /* use the Scheme "foo" module */
   gh_eval_str("(use-modules (gnucash foo))");
