@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofquery.h -- API for finding objects that can be queried        *
+ * qofquery.h -- find objects that match a certain expression.      *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,8 +21,9 @@
 \********************************************************************/
 
 /** @file qofquery.h
-    @breif API for finding objects that can be queried
+    @breif find objects that match a certain expression.
     @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
+    @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
 */
 
 
@@ -68,16 +69,23 @@ void qof_query_shutdown (void);
 
 GSList * qof_query_build_param_list (char const *param, ...);
 
-/** Create a new query.  A Query MUST be set with a 'search-for' type.
- *  you can create and set this value in one step or two */
+/** Create a new query.  A Query MUST be set with a 'search-for' 
+ *  type.  The results of the query is a list of the indicated 
+ *  search-for type.
+ */
 QofQuery * qof_query_create (void);
 QofQuery * qof_query_create_for (QofIdTypeConst obj_type);
 void qof_query_destroy (QofQuery *q);
 
-/** Set the object type to be searched for */
+/** Set the object type to be searched for.  The results of 
+ *  performuing the query will be a list of this obj_type.
+ */
 void qof_query_search_for (QofQuery *query, QofIdTypeConst obj_type);
 
-/** Set the book to be searched (you can search multiple books) */
+/** Set the book to be searched (you can search multiple books) 
+ *  If no books are set, no results will be returned (since there
+ *  is nothing to search over).
+ */
 void qof_query_set_book (QofQuery *q, QofBook *book);
 
 
@@ -109,13 +117,27 @@ void qof_query_add_guid_list_match (QofQuery *q, GSList *param_list,
                                GList *guid_list, QofGuidMatch options,
                                QofQueryOp op);
 
-void qof_query_add_boolean_match (QofQuery *q, GSList *param_list, gboolean value,
-                              QofQueryOp op);
+void qof_query_add_boolean_match (QofQuery *q, 
+                                  GSList *param_list, 
+                                  gboolean value,
+                                  QofQueryOp op);
 
-/** Run the query: */
+/** Perform the query, return the results.
+ *  The returned list is a list of the 'search-for' type that was
+ *  previously set with the qof_query_search_for() or the
+ *  qof_query_create_for() routines.  The returned list will have
+ *  been sorted using the indicated sort order, and trimed to the
+ *  max_results length.
+ *
+ *  Do NOT free the resulting list.  This list is managed internally
+ *  by QofQuery.
+ */
 GList * qof_query_run (QofQuery *query);
 
-/** Return the results of the last query, without re-running */
+/** Return the results of the last query, without causing the query to
+ *  be re-run.  Do NOT free the resulting list.  This list is managed
+ *  internally by QofQuery.
+ */
 GList * qof_query_last_run (QofQuery *query);
 
 void qof_query_clear (QofQuery *query);
@@ -141,8 +163,25 @@ QofQuery * qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op);
  */
 void qof_query_merge_in_place(QofQuery *q1, QofQuery *q2, QofQueryOp op);
 
-/** The lists become the property of the Query and will be freed
- * by the query when it is destroyed.
+/** 
+ * When a query is run, the results are sorted before being returned.
+ * This routine can be used to set the paramters on which the sort will
+ * be performed.  Two objects in the result list will be compared using
+ * the 'primary_sort_params', and sorted based on that order.  If the
+ * comparison shows that they are equal, then the
+ * 'secondary_sort_params' will be used.  If still equal, then the 
+ * tertiary params will be compared.  Any or all of these parameter
+ * lists may be NULL.  Any of these parameter lists may be set to
+ * QUERY_DEFAULT_SORT.
+ *
+ * Note that if there are more results than the 'max-results' value,
+ * then only the *last* max-results will be returned.  For example,
+ * if the sort is set to be increasing date order, then only the
+ * objects with the most recent dates will be returned.
+ *
+ * The input lists become the property of QofQuery and are managed
+ * by it.   They will be freed when the query is destroyed (or when
+ * new lists are set).
  */
 void qof_query_set_sort_order (QofQuery *q,
                            GSList *primary_sort_params,
@@ -152,15 +191,39 @@ void qof_query_set_sort_order (QofQuery *q,
 void qof_query_set_sort_options (QofQuery *q, gint prim_op, gint sec_op,
                              gint tert_op);
 
+/**
+ * When a query is run, the results are sorted before being returned.
+ * This routine can be used to control the direction of the ordering.
+ * A value of TRUE indicates the sort will be in increasing order,
+ * a value of FALSE will order results in decreasing order.
+ *
+ * Note that if there are more results than the 'max-results' value,
+ * then only the *last* max-results will be returned.  For example,
+ * if the sort is set to be increasing date order, then only the
+ * objects with the most recent dates will be returned.
+ */
 void qof_query_set_sort_increasing (QofQuery *q, gboolean prim_inc,
                                 gboolean sec_inc, gboolean tert_inc);
 
 
+/**
+ * Set the maximum number of results that should be returned. 
+ * If 'max-results' is set to -1, then all of the results are
+ * returned.  If there are more results than 'max-results',
+ * then the result list is trimmed.  Note that there is an
+ * important interplay between 'max-results' and the sort order:
+ * only the last bit of results are returned.  For example,
+ * if the sort order is set to be increasing date order, then 
+ * only the objects with the most recent dates will be returned.
+ */ 
 void qof_query_set_max_results (QofQuery *q, int n);
 
-/** Compare two queries for equality. This is a simplistic
+/** Compare two queries for equality. 
+ * Query terms are compared each to each.
+ * This is a simplistic
  * implementation -- logical equivalences between different
- * and/or trees are ignored. */
+ * and/or trees are ignored. 
+ */
 gboolean qof_query_equal (QofQuery *q1, QofQuery *q2);
 
 /* Print the Query in human-readable format.

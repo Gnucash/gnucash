@@ -287,9 +287,9 @@ static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
   g_return_val_if_fail (default_sort, 0);
 
   /* See if this is a default sort */
-  if (sort->use_default) {
-    if (default_sort)
-      return default_sort ((gpointer)a, (gpointer)b);
+  if (sort->use_default) 
+  {
+    if (default_sort) return default_sort ((gpointer)a, (gpointer)b);
     return 0;
   }
 
@@ -302,7 +302,8 @@ static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
   /* Do the list of conversions */
   conva = (gpointer)a;
   convb = (gpointer)b;
-  for (node = sort->param_fcns; node; node = node->next) {
+  for (node = sort->param_fcns; node; node = node->next) 
+  {
     get_fcn = node->data;
 
     /* The last term is really the "parameter getter",
@@ -314,10 +315,12 @@ static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
     conva = get_fcn (conva);
     convb = get_fcn (convb);
   }
-
   /* And now return the (appropriate) compare */
   if (sort->comp_fcn)
-    return sort->comp_fcn (conva, convb, sort->options, get_fcn);
+  {
+    int rc = sort->comp_fcn (conva, convb, sort->options, get_fcn);
+    return rc;
+  }
 
   return sort->obj_cmp (conva, convb);
 }
@@ -331,17 +334,23 @@ static int sort_func (gconstpointer a, gconstpointer b)
   g_return_val_if_fail (sortQuery, 0);
 
   retval = cmp_func (&(sortQuery->primary_sort), sortQuery->defaultSort, a, b);
-  if (retval == 0) {
+  if (retval == 0) 
+  {
     retval = cmp_func (&(sortQuery->secondary_sort), sortQuery->defaultSort,
                        a, b);
-    if (retval == 0) {
+    if (retval == 0) 
+    {
       retval = cmp_func (&(sortQuery->tertiary_sort), sortQuery->defaultSort,
                          a, b);
       return sortQuery->tertiary_sort.increasing ? retval : -retval;
-    } else {
+    } 
+    else 
+    {
       return sortQuery->secondary_sort.increasing ? retval : -retval;
     }
-  } else {
+  } 
+  else 
+  {
     return sortQuery->primary_sort.increasing ? retval : -retval;
   }
 }
@@ -360,7 +369,7 @@ check_object (QofQuery *q, gpointer object)
   QofQueryTerm * qt;
   int       and_terms_ok=1;
   
-  ENTER (" object=%p terms=%p\n", object, q->terms);
+  ENTER (" object=%p terms=%p", object, q->terms);
   for(or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) 
   {
     and_terms_ok = 1;
@@ -423,18 +432,18 @@ static GSList * compile_params (GSList *param_list, QofIdType start_obj,
   const QofQueryObject *objDef = NULL;
   GSList *fcns = NULL;
 
-  ENTER (" ");
+  ENTER ("param_list=%p id=%s", param_list, start_obj);
   g_return_val_if_fail (param_list, NULL);
   g_return_val_if_fail (start_obj, NULL);
   g_return_val_if_fail (final, NULL);
 
-  for (; param_list; param_list = param_list->next) {
+  for (; param_list; param_list = param_list->next) 
+  {
     QofIdType param_name = param_list->data;
     objDef = qof_query_object_get_parameter (start_obj, param_name);
 
     /* If it doesn't exist, then we've reached the end */
-    if (!objDef)
-      break;
+    if (!objDef) break;
 
     /* Save off this function */
     fcns = g_slist_prepend (fcns, objDef->param_getfcn);
@@ -446,7 +455,7 @@ static GSList * compile_params (GSList *param_list, QofIdType start_obj,
     start_obj = (QofIdType) objDef->param_type;
   }
 
-  LEAVE (" ");
+  LEAVE ("fcns=%p", fcns);
   return (g_slist_reverse (fcns));
 }
 
@@ -455,6 +464,7 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
 {
   const QofQueryObject *resObj = NULL;
 
+  ENTER ("sort=%p id=%s params=%p", sort, obj, sort->param_list);
   sort->use_default = FALSE;
 
   g_slist_free (sort->param_fcns);
@@ -463,8 +473,7 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
   sort->obj_cmp = NULL;
 
   /* An empty param_list implies "no sort" */
-  if (!sort->param_list)
-    return;
+  if (!sort->param_list) return;
 
   /* Walk the parameter list of obtain the parameter functions */
   sort->param_fcns = compile_params (sort->param_list, obj, &resObj);
@@ -472,15 +481,21 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
   /* If we have valid parameters, grab the compare function,
    * If not, check if this is the default sort.
    */
-  if (sort->param_fcns) {
+  if (sort->param_fcns) 
+  {
     sort->comp_fcn = qof_query_core_get_compare (resObj->param_type);
 
     /* Hrm, perhaps this is an object compare, not a core compare? */
     if (sort->comp_fcn == NULL)
+    {
       sort->obj_cmp = qof_query_object_default_sort (resObj->param_type);
-
-  } else if (!safe_strcmp (sort->param_list->data, QUERY_DEFAULT_SORT))
+    }
+  } 
+  else if (!safe_strcmp (sort->param_list->data, QUERY_DEFAULT_SORT))
+  {
     sort->use_default = TRUE;
+  }
+  LEAVE ("sort=%p id=%s", sort, obj);
 }
 
 static void compile_terms (QofQuery *q)
@@ -687,6 +702,7 @@ GList * qof_query_run (QofQuery *q)
   ENTER (" q=%p", q);
   if (!q) return NULL;
   g_return_val_if_fail (q->search_for, NULL);
+  g_return_val_if_fail (q->books, NULL);
 
   /* XXX: Prioritize the query terms? */
 
@@ -749,7 +765,7 @@ GList * qof_query_run (QofQuery *q)
   matching_objects = g_list_sort(matching_objects, sort_func);
   sortQuery = NULL;
 
-  /* crop the list to limit the number of splits */
+  /* Crop the list to limit the number of splits. */
   if((object_count > q->max_results) && (q->max_results > -1)) 
   {
     if(q->max_results > 0) 

@@ -207,9 +207,12 @@ GList* xaccFreqSpecCompositeGet( FreqSpec *fs );
 void xaccFreqSpecCompositeAdd( FreqSpec *fs, FreqSpec *fsToAdd );
 
 /**
- * Returns the next instance of the FreqSpec after a given input date.
- * Note that if the given date happens to be a repeat date,
- * then the next repeat date will be returned.
+ * Computes the next instance of the FreqSpec after a given input date.
+ * The object pointed at by 'out_date' is set to the computed value.
+ * The 'in_date' can be any date.  It is gaurenteed that the 'out_date'
+ * is strictly greater than the 'in_date'.  That is, if the 'in_date'
+ * happens to be a repeat date (e.g. a previous out_date), then
+ * the out_date will be the next repeat date after that.
  **/
 void xaccFreqSpecGetNextInstance( FreqSpec *fs,
                                   const GDate* in_date,
