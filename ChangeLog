@@ -1,3 +1,12 @@
+2001-05-30  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/sixtp-utils.c (timespec_secs_to_given_string): use
+	gnc_timezone
+
+	* src/engine/date.c (gnc_timezone): new func
+	(gnc_iso8601_to_timespec): use gnc_timezone
+	(gnc_timespec_to_iso8601_buff): use gnc_timezone
+
 2001-05-29  Dave Peticolas  <dave@krondo.com>
 
 	* configure.in: call new macro below

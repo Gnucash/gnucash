@@ -469,7 +469,6 @@ gnc_iso8601_to_timespec(const char *str, int do_localtime)
   }
   stm.tm_isdst = -1;
 
-
   /* timezone format can be +hh or +hhmm or +hh.mm (or -) */
   str += strcspn (str, "+-");
   buf[0] = str[0];
@@ -495,11 +494,13 @@ gnc_iso8601_to_timespec(const char *str, int do_localtime)
   /* adjust for the local timezone */
   if (do_localtime)
   {
+    struct tm *tm;
     time_t tz_hour = 0;
-    localtime (&tz_hour);   /* bogus call, forces 'timezone' to be set */
-    tz_hour = timezone/3600;
+
+    tm = localtime (&tz_hour);   /* bogus call, forces 'timezone' to be set */
+    tz_hour = gnc_timezone(tm)/3600;
     stm.tm_hour -= tz_hour;
-    stm.tm_min -= (timezone - 3600*tz_hour)/60;
+    stm.tm_min -= (gnc_timezone(tm) - 3600*tz_hour)/60;
   }
 
   /* compute number of seconds */
@@ -536,8 +537,8 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
   tmp = ts.tv_sec;
   localtime_r(&tmp, &parsed);
 
-  tz_hour = timezone/3600;
-  tz_min = (timezone - 3600*tz_hour)/60;
+  tz_hour = gnc_timezone (&parsed) / 3600;
+  tz_min = (gnc_timezone (&parsed) - 3600*tz_hour) / 60;
   if (0>tz_min) { tz_min +=60; tz_hour --; }
 
   /* we also have to print the sign by hand, to work around a bug
@@ -661,6 +662,26 @@ Timespec
 gnc_dmy2timespec_end (int day, int month, int year)
 {
   return gnc_dmy2timespec_internal (day, month, year, FALSE);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+long int
+gnc_timezone (struct tm *tm)
+{
+  g_return_val_if_fail (tm != NULL, 0);
+
+#ifdef HAVE_STRUCT_TM_GMTOFF
+  /* tm_gmtoff is seconds *east* of UTC and is
+   * already adjusted for daylight savings time. */
+  return -(tm->tm_gmtoff);
+#else
+  /* timezone is seconds *west* of UTC and is
+   * not adjusted for daylight savings time.
+   * In Spring, we spring forward, wheee! */
+  return timezone - (tm->tm_isdst > 0 ? 60 * 60 : 0);
+#endif
 }
 
 /********************** END OF FILE *********************************\

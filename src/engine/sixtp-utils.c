@@ -36,6 +36,7 @@
 #include "sixtp.h"
 #include "sixtp-utils.h"
 
+#include "date.h"
 #include "guid.h"
 #include "gnc-numeric.h"
 
@@ -463,6 +464,7 @@ timespec_secs_to_given_string (const Timespec *ts, gchar *str)
   struct tm parsed_time;
   size_t num_chars;
   time_t tmp_time;
+  long int tz;
   int minutes;
   int hours;
   int sign;
@@ -482,23 +484,14 @@ timespec_secs_to_given_string (const Timespec *ts, gchar *str)
 
   str += num_chars;
 
-  /* timezone is reversed */
-  sign = (timezone > 0) ? -1 : 1;
+  tz = gnc_timezone (&parsed_time);
 
-  minutes = ABS (timezone) / 60;
+  /* gnc_timezone is seconds west of UTC */
+  sign = (tz > 0) ? -1 : 1;
+
+  minutes = ABS (tz) / 60;
   hours = minutes / 60;
   minutes -= hours * 60;
-
-  if (parsed_time.tm_isdst > 0)
-    hours += sign;
-
-  /* check for rollover */
-  if (hours == -1)
-  {
-    hours = 0;
-    minutes = 60 - minutes;
-    sign *= -1;
-  }
 
   g_snprintf (str, TIMESPEC_SEC_FORMAT_MAX - num_chars,
               " %c%02d%02d", (sign > 0) ? '+' : '-', hours, minutes);
