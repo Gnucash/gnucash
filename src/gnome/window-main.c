@@ -983,7 +983,7 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
   {
     {
       GNOME_APP_UI_ITEM,
-      N_("_Manual"),
+      N_("_Gnucash Users Guide"),
       N_("Open the GnuCash Manual"),
       gnc_main_window_help_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
