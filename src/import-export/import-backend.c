@@ -226,14 +226,11 @@ void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
   }
 }
 
-GdkPixmap* gen_probability_pixmap(gint score, GNCImportSettings *settings, GtkWidget * widget)
+GdkPixmap* gen_probability_pixmap(gint score_original, GNCImportSettings *settings, GtkWidget * widget)
 {
   GdkPixmap* retval = NULL;
   gint i, j;
-  if (score < 0)
-    {
-      score = 0;
-    }
+  gint score;
   const gint height = 15;
   const gint width_each_bar = 7;
   gchar * green_bar = ("bggggb ");
@@ -243,7 +240,7 @@ GdkPixmap* gen_probability_pixmap(gint score, GNCImportSettings *settings, GtkWi
   const gint width_first_bar = 1;
   gchar * black_first_bar = ("b");
   const gint num_colors = 5;
-  gchar * size_str = g_strdup_printf("%d%s%d%s%d%s",(width_each_bar*score)+width_first_bar/*width*/," ",height," ",num_colors," 1"/*characters per pixel*/);
+  gchar * size_str;
   gchar * none_color_str = g_strdup_printf("  c None");
   gchar * green_color_str = g_strdup_printf("g c green");
   gchar * yellow_color_str = g_strdup_printf("y c yellow");
@@ -253,6 +250,16 @@ GdkPixmap* gen_probability_pixmap(gint score, GNCImportSettings *settings, GtkWi
 
   g_assert(settings);
   g_assert(widget);
+  if (score_original < 0)
+    {
+      score = 0;
+    }
+  else
+    {
+      score=score_original;
+    }
+  size_str = g_strdup_printf("%d%s%d%s%d%s",(width_each_bar*score)+width_first_bar/*width*/," ",height," ",num_colors," 1"/*characters per pixel*/);
+
   /*DEBUG("Begin");*/
   xpm[0]=size_str;
   xpm[1]=none_color_str;
