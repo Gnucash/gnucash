@@ -277,15 +277,16 @@
  	 sort-tag
  	 documentation-string
  	 default-value
-     setter-function-called-cb
-     option-widget-changed-cb)
+         setter-function-called-cb
+         option-widget-changed-cb)
    (let* ((value default-value)
           (value->string (lambda () (gnc:value->string value))))
      (gnc:make-option
       section name sort-tag 'boolean documentation-string
       (lambda () value)
       (lambda (x) (set! value x)
-                  (setter-function-called-cb x))
+                  (if (procedure? setter-function-called-cb)
+                      (setter-function-called-cb x)))
       (lambda () default-value)
       (gnc:restore-form-generator value->string)
       (lambda (x)
