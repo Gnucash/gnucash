@@ -730,6 +730,8 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
    * the reciprocal of its magnitude. */
   if(denom < 0) 
   {
+
+    /* XXX FIXME: use 128-bit math here ... */
     denom     = - denom;
     denom_neg = 1;
     temp_a    = (in.num < 0) ? -in.num : in.num;
@@ -766,9 +768,10 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
     out.denom = denom;
   }
 
-  if(remainder > 0) 
+  if (remainder) 
   {
-    switch(how) {
+    switch(how & GNC_NUMERIC_RND_MASK) 
+    {
     case GNC_HOW_RND_FLOOR:
       if(sign < 0) {
         out.num = out.num + 1;
