@@ -8,17 +8,6 @@
 
 #include "gnc-plugin.h"
 
-/*static void gnc_plugin_base_init (gpointer klass);
-
-enum {
-	MERGE_ACTIONS,
-	UNMERGE_ACTIONS,
-	LAST_SIGNAL
-};
-
-static guint         signals[LAST_SIGNAL] = { 0 };
-*/
-
 GType
 gnc_plugin_get_type (void)
 {
@@ -47,23 +36,23 @@ gnc_plugin_get_type (void)
 }
 
 void
-gnc_plugin_merge_actions (GncPlugin *plugin,
-			  EggMenuMerge *ui_merge)
+gnc_plugin_add_to_window (GncPlugin *plugin,
+			  GncMainWindow *window)
 {
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
-	g_return_if_fail (GNC_PLUGIN_GET_IFACE (plugin)->merge_actions != NULL);
+	g_return_if_fail (GNC_PLUGIN_GET_IFACE (plugin)->add_to_window != NULL);
 
-	GNC_PLUGIN_GET_IFACE (plugin)->merge_actions (plugin, ui_merge);
+	GNC_PLUGIN_GET_IFACE (plugin)->add_to_window (plugin, window);
 }
 
 void
-gnc_plugin_unmerge_actions (GncPlugin *plugin,
-			    EggMenuMerge *ui_merge)
+gnc_plugin_remove_from_window (GncPlugin *plugin,
+			       GncMainWindow *window)
 {
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
-	g_return_if_fail (GNC_PLUGIN_GET_IFACE (plugin)->unmerge_actions != NULL);
+	g_return_if_fail (GNC_PLUGIN_GET_IFACE (plugin)->remove_from_window != NULL);
 
-	GNC_PLUGIN_GET_IFACE (plugin)->unmerge_actions (plugin, ui_merge);
+	GNC_PLUGIN_GET_IFACE (plugin)->remove_from_window (plugin, window);
 }
 
 const gchar *

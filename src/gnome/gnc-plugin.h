@@ -7,8 +7,7 @@
 #ifndef __GNC_PLUGIN_H
 #define __GNC_PLUGIN_H
 
-#include "egg-menu-merge.h"
-
+#include "gnc-main-window.h"
 #include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
@@ -26,8 +25,8 @@ typedef struct {
 	GTypeInterface parent;
 
 	/* Virtual Table */
-	void (* merge_actions) (GncPlugin *plugin, EggMenuMerge *merge);
-	void (* unmerge_actions) (GncPlugin *plugin, EggMenuMerge *merge);
+	void (* add_to_window) (GncPlugin *plugin, GncMainWindow *window);
+	void (* remove_from_window) (GncPlugin *plugin, GncMainWindow *window);
 
 	const gchar *(* get_name) (GncPlugin *plugin);
 
@@ -37,10 +36,10 @@ typedef struct {
 /* function prototypes */
 GType          gnc_plugin_get_type        (void);
 
-void           gnc_plugin_merge_actions   (GncPlugin *plugin,
-					   EggMenuMerge *ui_merge);
-void           gnc_plugin_unmerge_actions (GncPlugin *plugin,
-					   EggMenuMerge *ui_merge);
+void           gnc_plugin_add_to_window      (GncPlugin *plugin,
+					      GncMainWindow *window);
+void           gnc_plugin_remove_from_window (GncPlugin *plugin,
+					      GncMainWindow *window);
 
 const gchar   *gnc_plugin_get_name        (GncPlugin *plugin);
 

@@ -47,6 +47,8 @@ void		  gnc_plugin_manager_remove_plugin (GncPluginManager *manager,
 						    GncPlugin *plugin);
 
 GList            *gnc_plugin_manager_get_plugins   (GncPluginManager *manager);
+GncPlugin        *gnc_plugin_manager_get_plugin    (GncPluginManager *manager,
+						    const gchar *name);
 
 G_END_DECLS
 

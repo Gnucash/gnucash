@@ -424,7 +424,7 @@ gnc_gui_init (SCM command_line)
     gtk_widget_show (GTK_WIDGET (main_window));
 
     /* FIXME Remove this test code */
-    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_account_tree_new (main_window));
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_account_tree_new ());
 
     /* Run the ui startup hooks. */
     {

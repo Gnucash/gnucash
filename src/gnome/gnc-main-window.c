@@ -31,6 +31,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
+#include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-split-reg.h"
 #include "gnc-ui.h"
@@ -99,7 +100,14 @@ struct GncMainWindowPrivate
 	EggActionGroup *action_group;
 
 	GncPluginPage *current_page;
+
+	GHashTable *merged_actions_table;
 };
+
+typedef struct {
+	guint merge_id;
+	EggActionGroup *action_group;
+} MergedActionEntry;
 
 static EggActionGroupEntry gnc_menu_entries [] = {
 
@@ -291,7 +299,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 	pos = gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) - 1;
 	if (gtk_notebook_get_current_page (GTK_NOTEBOOK (window->priv->notebook)) == pos) {
 		window->priv->current_page = page;
-		gnc_plugin_page_merge_actions (page,  window->ui_merge);
+		gnc_plugin_page_merge_actions (page, window->ui_merge);
 		gnc_plugin_page_selected (page);
 	} else {
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (window->priv->notebook),
@@ -336,6 +344,81 @@ gnc_main_window_get_current_page (GncMainWindow *window)
 	return window->priv->current_page;
 }
 
+void
+gnc_main_window_merge_actions (GncMainWindow *window,
+			       const gchar *group_name,
+			       EggActionGroupEntry *actions,
+			       guint n_actions,
+			       const gchar *ui_file,
+			       gpointer user_data)
+{
+	GncMainWindowActionData *data;
+	guint i;
+	MergedActionEntry *entry;
+
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+	g_return_if_fail (group_name != NULL);
+	g_return_if_fail (actions != NULL);
+	g_return_if_fail (n_actions > 0);
+	g_return_if_fail (ui_file != NULL);
+
+	data = g_new0 (GncMainWindowActionData, 1);
+	data->window = window;
+	data->data = user_data;
+
+	for (i = 0; i < n_actions; i++) {
+		actions[i].user_data = data;
+	}
+
+	entry = g_new0 (MergedActionEntry, 1);
+	entry->action_group = egg_action_group_new (group_name);
+	egg_action_group_add_actions (entry->action_group, actions, n_actions);
+	egg_menu_merge_insert_action_group (window->ui_merge, entry->action_group, 0);
+	entry->merge_id = egg_menu_merge_add_ui_from_file (window->ui_merge, ui_file, NULL);
+	egg_menu_merge_ensure_update (window->ui_merge);
+
+	g_hash_table_insert (window->priv->merged_actions_table, g_strdup (group_name), entry);
+}
+
+void
+gnc_main_window_unmerge_actions (GncMainWindow *window,
+				 const gchar *group_name)
+{
+	MergedActionEntry *entry;
+
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+	g_return_if_fail (group_name != NULL);
+
+	entry = g_hash_table_lookup (window->priv->merged_actions_table, group_name);
+
+	if (entry == NULL)
+		return;
+
+	egg_menu_merge_remove_action_group (window->ui_merge, entry->action_group);
+	egg_menu_merge_remove_ui (window->ui_merge, entry->merge_id);
+	egg_menu_merge_ensure_update (window->ui_merge);
+
+	g_hash_table_remove (window->priv->merged_actions_table, group_name);
+}
+
+EggActionGroup *
+gnc_main_window_get_action_group  (GncMainWindow *window,
+				   const gchar *group_name)
+{
+	MergedActionEntry *entry;
+
+	g_return_val_if_fail (GNC_IS_MAIN_WINDOW (window), NULL);
+	g_return_val_if_fail (group_name != NULL, NULL);
+
+	entry = g_hash_table_lookup (window->priv->merged_actions_table, group_name);
+
+	if (entry == NULL)
+		return NULL;
+
+	return entry->action_group;
+}
+
+
 static void
 gnc_main_window_class_init (GncMainWindowClass *klass)
 {
@@ -352,6 +435,8 @@ gnc_main_window_init (GncMainWindow *window)
 {
 	window->priv = g_new0 (GncMainWindowPrivate, 1);
 
+	window->priv->merged_actions_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+
 	gnc_main_window_setup_window (window);
 }
 
@@ -367,6 +452,7 @@ gnc_main_window_finalize (GObject *object)
 
 	g_return_if_fail (window->priv != NULL);
 
+	g_hash_table_destroy (window->priv->merged_actions_table);
 	g_free (window->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -392,8 +478,8 @@ gnc_main_window_add_plugin (gpointer plugin,
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
 
-	gnc_plugin_merge_actions (GNC_PLUGIN (plugin),
-				  GNC_MAIN_WINDOW (window)->ui_merge);
+	gnc_plugin_add_to_window (GNC_PLUGIN (plugin),
+				  GNC_MAIN_WINDOW (window));
 }
 
 static void
@@ -503,7 +589,7 @@ gnc_main_window_plugin_added (GncPlugin *manager,
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
 
-	gnc_plugin_merge_actions (plugin, window->ui_merge);
+	gnc_plugin_add_to_window (plugin, window);
 }
 
 static void
@@ -514,7 +600,7 @@ gnc_main_window_plugin_removed (GncPlugin *manager,
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
 
-	gnc_plugin_unmerge_actions (plugin, window->ui_merge);
+	gnc_plugin_remove_from_window (plugin, window);
 }
 
 
@@ -536,6 +622,29 @@ gnc_main_window_cmd_file_open (EggAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_file_open_new_window (EggAction *action, GncMainWindow *window)
 {
+	GncMainWindow *new_window;
+	const gchar *name;
+	gchar *uri;
+	GncPlugin *plugin;
+	GncPluginPage *page;
+
+	/* FIXME GNOME 2 Port (Open the correct view in the new window) */
+
+	new_window = gnc_main_window_new ();
+
+	if (window->priv->current_page != NULL) {
+		name = gnc_plugin_page_get_plugin_name (window->priv->current_page);
+		uri = gnc_plugin_page_get_uri (window->priv->current_page);
+		plugin = gnc_plugin_manager_get_plugin (gnc_plugin_manager_get (), name);
+		page = gnc_plugin_create_page (plugin, uri);
+
+		if (page != NULL) {
+			gnc_main_window_open_page (new_window, page);
+			gnc_main_window_close_page (window, window->priv->current_page);
+		}
+	}
+
+	gtk_widget_show (GTK_WIDGET (new_window));
 }
 
 static void

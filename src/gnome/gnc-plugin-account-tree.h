@@ -10,7 +10,6 @@
 #include <gtk/gtkwindow.h>
 
 #include "gnc-plugin.h"
-#include "gnc-main-window.h"
 
 G_BEGIN_DECLS
 
@@ -40,7 +39,7 @@ typedef struct {
 /* function prototypes */
 GType      gnc_plugin_account_tree_get_type (void);
 
-GncPlugin *gnc_plugin_account_tree_new      (GncMainWindow *main_window);
+GncPlugin *gnc_plugin_account_tree_new      (void);
 
 G_END_DECLS
 

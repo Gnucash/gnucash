@@ -6,6 +6,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include "gnc-plugin-account-tree.h"
 
 #include "gnc-plugin-page-account-tree.h"
@@ -18,13 +20,13 @@ static void gnc_plugin_account_tree_finalize (GObject *object);
 
 static void gnc_plugin_account_tree_plugin_init (GncPluginIface *iface);
 
-static void gnc_plugin_account_tree_merge_actions (GncPlugin *plugin, EggMenuMerge *ui_merge);
-static void gnc_plugin_account_tree_unmerge_actions (GncPlugin *plugin, EggMenuMerge *ui_merge);
+static void gnc_plugin_account_tree_add_to_window (GncPlugin *plugin, GncMainWindow *window);
+static void gnc_plugin_account_tree_remove_from_window (GncPlugin *plugin, GncMainWindow *window);
 static const gchar *gnc_plugin_account_tree_get_name (GncPlugin *plugin);
 static GncPluginPage *gnc_plugin_account_tree_create_page (GncPlugin *plugin, const gchar *uri);
 
 /* Command callbacks */
-static void gnc_plugin_account_tree_cmd_new_account_tree (EggAction *action, GncPluginAccountTree *plugin);
+static void gnc_plugin_account_tree_cmd_new_account_tree (EggAction *action, GncMainWindowActionData *data);
 
 static EggActionGroupEntry gnc_plugin_account_tree_actions [] = {
 	{ "FileNewAccountTreeAction", N_("New Account Tree"), NULL, NULL,
@@ -35,12 +37,6 @@ static guint gnc_plugin_account_tree_n_actions = G_N_ELEMENTS (gnc_plugin_accoun
 
 struct GncPluginAccountTreePrivate
 {
-	GncMainWindow *main_window;
-	
-	EggActionGroup *action_group;
-	guint merge_id;
-
-	GtkWidget *widget;
 };
 
 static GObjectClass *parent_class = NULL;
@@ -82,14 +78,12 @@ gnc_plugin_account_tree_get_type (void)
 }
 
 GncPlugin *
-gnc_plugin_account_tree_new (GncMainWindow *main_window)
+gnc_plugin_account_tree_new (void)
 {
 	GncPluginAccountTree *plugin;
 
 	plugin = g_object_new (GNC_TYPE_PLUGIN_ACCOUNT_TREE,
 			      NULL);
-
-	plugin->priv->main_window = main_window;
 
 	return GNC_PLUGIN (plugin);
 }
@@ -107,18 +101,7 @@ gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass)
 static void
 gnc_plugin_account_tree_init (GncPluginAccountTree *plugin)
 {
-	gint i;
-
 	plugin->priv = g_new0 (GncPluginAccountTreePrivate, 1);
-
-	/* Create menu and toolbar information */
-	for (i = 0; i < gnc_plugin_account_tree_n_actions; i++) {
-		gnc_plugin_account_tree_actions[i].user_data = plugin;
-	}
-
-	plugin->priv->action_group = egg_action_group_new ("GncPluginAccountTreeActions");
-	egg_action_group_add_actions (plugin->priv->action_group, gnc_plugin_account_tree_actions,
-				      gnc_plugin_account_tree_n_actions);
 }
 
 static void
@@ -137,40 +120,32 @@ gnc_plugin_account_tree_finalize (GObject *object)
 static void
 gnc_plugin_account_tree_plugin_init (GncPluginIface *iface)
 {
-	iface->merge_actions   = gnc_plugin_account_tree_merge_actions;
-	iface->unmerge_actions = gnc_plugin_account_tree_unmerge_actions;
-	iface->get_name        = gnc_plugin_account_tree_get_name;
-	iface->create_page     = gnc_plugin_account_tree_create_page;
+	iface->add_to_window      = gnc_plugin_account_tree_add_to_window;
+	iface->remove_from_window = gnc_plugin_account_tree_remove_from_window;
+	iface->get_name           = gnc_plugin_account_tree_get_name;
+	iface->create_page        = gnc_plugin_account_tree_create_page;
 }
 
 static void
-gnc_plugin_account_tree_merge_actions (GncPlugin *plugin,
-					    EggMenuMerge *ui_merge)
+gnc_plugin_account_tree_add_to_window (GncPlugin *plugin,
+				       GncMainWindow *window)
 {
-	GncPluginAccountTree *plugin_account_tree = GNC_PLUGIN_ACCOUNT_TREE(plugin);
-	
-	g_return_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (plugin_account_tree));
+	g_return_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (plugin));
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 
-	egg_menu_merge_insert_action_group (ui_merge, plugin_account_tree->priv->action_group, 0);
-
-	plugin_account_tree->priv->merge_id = egg_menu_merge_add_ui_from_file (ui_merge,
-									       GNC_UI_DIR "/gnc-plugin-account-tree-ui.xml",
-									       NULL);
-	egg_menu_merge_ensure_update (ui_merge);
+	gnc_main_window_merge_actions (window, "gnc-plugin-account-tree-default-actions",
+			               gnc_plugin_account_tree_actions, gnc_plugin_account_tree_n_actions,
+				       GNC_UI_DIR "/gnc-plugin-account-tree-ui.xml", plugin);
 }
 	
 static void
-gnc_plugin_account_tree_unmerge_actions (GncPlugin *plugin,
-					      EggMenuMerge *ui_merge)
+gnc_plugin_account_tree_remove_from_window (GncPlugin *plugin,
+					    GncMainWindow *window)
 {
-	GncPluginAccountTree *plugin_account_tree = GNC_PLUGIN_ACCOUNT_TREE(plugin);
-	
-	g_return_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (plugin_account_tree));
-	g_return_if_fail (plugin_account_tree->priv->merge_id != 0);
-	g_return_if_fail (plugin_account_tree->priv->action_group != NULL);
+	g_return_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (plugin));
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 
-	egg_menu_merge_remove_action_group (ui_merge, plugin_account_tree->priv->action_group);
-	egg_menu_merge_remove_ui (ui_merge, plugin_account_tree->priv->merge_id);
+	gnc_main_window_unmerge_actions (window, "gnc-plugin-account-tree-default-actions");
 }
 
 static const gchar *
@@ -183,16 +158,26 @@ static GncPluginPage *
 gnc_plugin_account_tree_create_page (GncPlugin *plugin,
 				     const gchar *uri)
 {
-	return NULL;
+	g_return_val_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (plugin), NULL);
+	g_return_val_if_fail (uri != NULL, NULL);
+
+	/* FIXME add better URI handling */
+	if (strcmp ("default:", uri)) {
+		return NULL;
+	}
+	
+	return gnc_plugin_page_account_tree_new ();
 }
 
 
 /* Command callbacks */
 static void
-gnc_plugin_account_tree_cmd_new_account_tree (EggAction *action, GncPluginAccountTree *plugin)
+gnc_plugin_account_tree_cmd_new_account_tree (EggAction *action, GncMainWindowActionData *data)
 {
 	GncPluginPage *page;
 
+	g_return_if_fail (data != NULL);
+
 	page = gnc_plugin_page_account_tree_new ();
-	gnc_main_window_open_page (plugin->priv->main_window, page);
+	gnc_main_window_open_page (data->window, page);
 }

@@ -1,5 +1,43 @@
 2003-05-26  Jan Arne Petersen  <jpetersen@uni-bonn.de>
 
+	Use different actions for different windows so that it is very easy
+	to use more than one main window. This fixes some 'Hacks' in the previous
+	plugin implementation and provides more features for the plugins.
+	The plugins are fixed and 'open in a new window' is implemented.
+	* src/gnome/gnc-main-window.c: (gnc_main_window_open_page),
+	(gnc_main_window_merge_actions), (gnc_main_window_unmerge_actions),
+	(gnc_main_window_get_action_group), (gnc_main_window_init),
+	(gnc_main_window_finalize), (gnc_main_window_add_plugin),
+	(gnc_main_window_plugin_added), (gnc_main_window_plugin_removed),
+	(gnc_main_window_cmd_file_open_new_window):
+	* src/gnome/gnc-main-window.h:
+	* src/gnome/gnc-plugin-manager.c: (gnc_plugin_manager_add_plugin),
+	(gnc_plugin_manager_remove_plugin),
+	(gnc_plugin_manager_get_plugin), (gnc_plugin_manager_init),
+	(gnc_plugin_manager_finalize):
+	* src/gnome/gnc-plugin-manager.h:
+	* src/gnome/gnc-plugin.c: (gnc_plugin_add_to_window),
+	(gnc_plugin_remove_from_window):
+	* src/gnome/gnc-plugin.h:
+	* src/gnome/gnc-plugin-account-tree.c:
+	(gnc_plugin_account_tree_new), (gnc_plugin_account_tree_init),
+	(gnc_plugin_account_tree_plugin_init),
+	(gnc_plugin_account_tree_add_to_window),
+	(gnc_plugin_account_tree_remove_from_window),
+	(gnc_plugin_account_tree_create_page),
+	(gnc_plugin_account_tree_cmd_new_account_tree):
+	* src/gnome/gnc-plugin-account-tree.h:
+	* src/gnome/top-level.c: (gnc_gui_init):
+	* src/import-export/qif-import/gnc-plugin-qif-import.c:
+	(gnc_plugin_qif_import_get_type), (gnc_plugin_qif_import_new),
+	(gnc_plugin_qif_import_plugin_init),
+	(gnc_plugin_qif_import_add_to_window),
+	(gnc_plugin_qif_import_remove_from_window),
+	(gnc_plugin_qif_import_cmd_new_qif_import):
+	* src/import-export/qif-import/gnc-plugin-qif-import.h:
+
+2003-05-26  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
 	Move the plugin handling from the main window into the
 	new plugin manager.
 	* src/gnome/Makefile.am:

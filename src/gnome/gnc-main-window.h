@@ -11,7 +11,6 @@
 
 #include "egg-menu-merge.h"
 
-#include "gnc-plugin.h"
 #include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
@@ -39,16 +38,32 @@ typedef struct {
 	GtkWindowClass parent;
 } GncMainWindowClass;
 
+typedef struct {
+	GncMainWindow *window;
+	gpointer data;
+} GncMainWindowActionData;
+
 /* function prototypes */
-GType          gnc_main_window_get_type          (void);
+GType           gnc_main_window_get_type          (void);
 
-GncMainWindow *gnc_main_window_new               (void);
+GncMainWindow  *gnc_main_window_new               (void);
 
-void           gnc_main_window_open_page	 (GncMainWindow *window,
-						  GncPluginPage *page);
-void           gnc_main_window_close_page	 (GncMainWindow *window,
-						  GncPluginPage *page);
-GncPluginPage *gnc_main_window_get_current_page  (GncMainWindow *window);
+void            gnc_main_window_open_page	  (GncMainWindow *window,
+						   GncPluginPage *page);
+void            gnc_main_window_close_page	  (GncMainWindow *window,
+						   GncPluginPage *page);
+GncPluginPage  *gnc_main_window_get_current_page  (GncMainWindow *window);
+
+void            gnc_main_window_merge_actions     (GncMainWindow *window,
+						   const gchar *group_name,
+						   EggActionGroupEntry *entries,
+						   guint n_entries,
+						   const gchar *ui_file,
+						   gpointer user_data);
+void            gnc_main_window_unmerge_actions   (GncMainWindow *window,
+						   const gchar *group_name);
+EggActionGroup *gnc_main_window_get_action_group  (GncMainWindow *window,
+                                                   const gchar *group_name);
 
 G_END_DECLS
 
