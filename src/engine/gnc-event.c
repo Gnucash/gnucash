@@ -207,4 +207,15 @@ gnc_engine_gen_event (QofEntity *entity, GNCEngineEventType event_type)
   gnc_engine_generate_event_internal (entity, event_type);
 }
 
+void 
+gnc_engine_generate_event (const GUID *guid, QofIdType e_type, 
+         GNCEngineEventType event_type)
+{
+  QofEntity ent;
+  ent.guid = *guid;
+  ent.e_type = e_type;
+  if (suspend_counter) return;
+  gnc_engine_generate_event_internal (&ent, event_type);
+}
+
 /* =========================== END OF FILE ======================= */

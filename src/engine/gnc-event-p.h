@@ -44,6 +44,9 @@
 void gnc_engine_gen_event (QofEntity *entity, 
 				GNCEngineEventType event_type);
 
+/* XXX deprecated, but still usedion on postgres backend */
+void gnc_engine_generate_event (const GUID *, QofIdType, GNCEngineEventType);
+
 /* generates an event even when events are suspended! */
 void gnc_engine_force_event (QofEntity *entity, 
 			     GNCEngineEventType event_type);
