@@ -25,7 +25,7 @@ typedef void (*foreachBackendTypeCB) (GNCIdTypeConst type,
 
 /* This is the Object Object descriptor */
 struct _gncObjectDef {
-  gint		version;	/* of the object interface */
+  gint		interface_version;	/* of this object interface */
   GNCIdType	name;		/* the Object's GNC_ID */
   const char *	type_label;	/* "Printable" type-label string */
 
