@@ -197,8 +197,9 @@ gnc_book_get_group (GNCBook *book)
 void
 gnc_book_set_group (GNCBook *book, AccountGroup *grp)
 {
-   if (!book) return;
-   book->topgroup = grp;
+  if(!book) return;
+  if(book->topgroup) xaccFreeAccountGroup(book->topgroup);
+  book->topgroup = grp;
 }
 
 /* ---------------------------------------------------------------------- */

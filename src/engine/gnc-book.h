@@ -120,6 +120,7 @@ GNCBackendError gnc_book_pop_error (GNCBook *book);
 
 
 AccountGroup *gnc_book_get_group (GNCBook *book);
+void gnc_book_set_group(GNCBook *book, AccountGroup *group);
 GNCPriceDB   *gnc_book_get_pricedb (GNCBook *book);
 
 guint gnc_book_count_transactions(GNCBook *book);
