@@ -24,42 +24,43 @@
 
 #include "config.h"
 
-#include <stdlib.h>
-#include <guile/gh.h>
 #include <gnome.h>
 #include <gtkhtml/gtkhtml.h>
+#include <guile/gh.h>
+#include <stdlib.h>
 
-#include "g-wrap.h"
-#include "gnc.h"
-#include "gnucash.h"
-#include "window-main.h"
-#include "dialog-account.h"
-#include "dialog-transfer.h"
-#include "global-options.h"
-#include "gnucash-sheet.h"
-#include "gnucash-color.h"
-#include "gnucash-style.h"
-#include "gnc-ui.h"
-#include "extensions.h"
-#include "window-help.h"
-#include "window-report.h"
-#include "dialog-utils.h"
-#include "FileIO.h"
+#include "AccWindow.h"
+#include "Destroy.h"
 #include "FileBox.h"
 #include "FileDialog.h"
+#include "FileIO.h"
 #include "MainWindow.h"
-#include "Destroy.h"
 #include "Refresh.h"
-#include "messages.h"
-#include "TransLog.h"
-#include "gnc-engine-util.h"
-#include "date.h"
-#include "AccWindow.h"
 #include "SplitLedger.h"
-#include "guile-util.h"
-#include "splitreg.h"
+#include "TransLog.h"
 #include "combocell.h"
+#include "date.h"
+#include "dialog-account.h"
+#include "dialog-transfer.h"
+#include "dialog-utils.h"
+#include "extensions.h"
+#include "g-wrap.h"
+#include "global-options.h"
+#include "gnc-component-manager.h"
+#include "gnc-engine-util.h"
+#include "gnc-ui.h"
+#include "gnc.h"
+#include "gnucash-color.h"
+#include "gnucash-sheet.h"
+#include "gnucash-style.h"
+#include "gnucash.h"
+#include "guile-util.h"
+#include "messages.h"
 #include "recncell.h"
+#include "splitreg.h"
+#include "window-help.h"
+#include "window-main.h"
+#include "window-report.h"
 
 
 /** PROTOTYPES ******************************************************/
@@ -154,12 +155,14 @@ gnucash_ui_init(void)
   {
     gnome_init("GnuCash", NULL, fake_argc, fake_argv);
     gnome_is_initialized = TRUE;
-    
+
+    gnc_component_manager_init ();
+
     /* initialization required for gtkhtml */
     gdk_rgb_init ();    
     gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
     gtk_widget_set_default_visual (gdk_rgb_get_visual ());
-    
+
     app = gnome_app_new("GnuCash", "GnuCash");
 
     gnc_configure_date_format();
@@ -290,7 +293,9 @@ gnc_ui_destroy (void)
     app = NULL;
   }
 
-  gnc_extensions_shutdown();
+  gnc_extensions_shutdown ();
+
+  gnc_component_manager_shutdown ();
 }
 
 /* ============================================================== */

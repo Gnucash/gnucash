@@ -26,6 +26,12 @@
 #include "gnc-event.h"
 
 
+typedef struct
+{
+  GNCEngineEventType event_mask;
+} EventInfo;
+
+
 /* GNCComponentRefreshHandler
  *   Handler invoked to inform the component that a refresh
  *   may be needed.
@@ -33,9 +39,9 @@
  * changes: if NULL, the component should perform a refresh.
  *
  *          if non-NULL, changes is a GUID hash that maps
- *          GUIDs to GNCEngineEventType bitmasks describing
- *          which events have been received. Entities not
- *          in the hash have not generated any events.
+ *          GUIDs to EventInfo structs describing which
+ *          events have been received. Entities not in
+ *          the hash have not generated any events.
  *          Entities which have been destroyed may not
  *          exist.
  *
@@ -47,9 +53,11 @@
  *          changed.
  *
  * Notes on refreshing: when the handler is invoked any engine
- *                      entities used by the component may be
- *                      deleted. 'Refreshing' the component may
- *                      require closing the component.
+ *                      entities used by the component may have
+ *                      already been deleted. 'Refreshing' the
+ *                      component may require closing the component.
+ *                      The component must not create, modify, or
+ *                      destroy engine entities during refresh.
  *
  * user_data: user_data supplied when component was registered.
  */
@@ -82,10 +90,23 @@ typedef gboolean (*GNCComponentFindHandler) (gpointer find_data,
 /* GNCComponentHandler
  *   Generic handler used in iterating over components.
  *
- * class: class of component
- * id:    id of component
+ * component_class: class of component
+ * component_id:    id of component
+ * iter_data:       user_data supplied by caller
  */
-typedef void (*GNCComponentHandler) (const char *class, gint id);
+typedef void (*GNCComponentHandler) (const char *class,
+                                     gint component_id,
+                                     gpointer iter_data);
+
+/* gnc_component_manager_init
+ *   Initialize the component manager.
+ */
+void gnc_component_manager_init (void);
+
+/* gnc_component_manager_shutdown
+ *   Shutdown the component manager.
+ */
+void gnc_component_manager_shutdown (void);
 
 /* gnc_register_gui_component
  *   Register a GUI component with the manager.
@@ -115,8 +136,8 @@ typedef void (*GNCComponentHandler) (const char *class, gint id);
  * Return:          id of component
  */
 gint gnc_register_gui_component (const char *component_class,
-                                 GNCComponentRefreshHandler refresh_cb,
-                                 GNCComponentCloseHandler close_cb,
+                                 GNCComponentRefreshHandler refresh_handler,
+                                 GNCComponentCloseHandler close_handler,
                                  gpointer user_data);
 
 /* gnc_gui_component_watch_entity
@@ -129,14 +150,15 @@ gint gnc_register_gui_component (const char *component_class,
  *               setting the mask to 0 turns off watching for the entity.
  */
 void gnc_gui_component_watch_entity (gint component_id,
-                                     GUID *entity,
+                                     const GUID *entity,
                                      GNCEngineEventType event_mask);
 
 /* gnc_gui_component_watch_entity_type
  *   Watch all entities of a particular type.
  *
  * component_id: id of component which is watching the entity type
- * entity_type:  type of entity to watch
+ * entity_type:  type of entity to watch, either GNC_ID_TRANS or
+ *               GNC_ID_ACCOUNT
  * event_mask:   mask which determines which kinds of events are watched
  *               setting the mask to 0 turns off watching for the entity type
  */
@@ -213,18 +235,21 @@ void gnc_close_gui_component (gint component_id);
 void gnc_close_gui_component_by_data (const char *component_class,
                                       gpointer user_data);
 
-/* gnc_find_gui_component
- *   Search components in the specified class.
+/* gnc_find_gui_components
+ *   Search for components in the specified class.
  *
  * component_class:     the class to search for components in
+ *                      must be non-NULL
  * find_cb:             the handler used to search for the component
+ *                      if NULL, all components in class are returned
  * find_data:           find_data passed to find_cb
  *
- * Returns: user_data of found component, or NULL if none found
+ * Returns: GList of user_data of found components, or NULL if none found
+ *          The list should be freed with g_list_free().
  */
-GList * gnc_find_gui_component (const char *component_class,
-                                GNCComponentFindHandler find_cb,
-                                gpointer find_data);
+GList * gnc_find_gui_components (const char *component_class,
+                                 GNCComponentFindHandler find_handler,
+                                 gpointer find_data);
 
 /* gnc_forall_gui_components
  *   Invoke 'handler' for components in the database.
