@@ -2,7 +2,8 @@
 
 	* src/gnome/new-user-callbacks.c
 	(on_chooseAccountTypesPage_prepare): suspend & resume gui
-	refreshes while loading accounts
+	refreshes while loading accounts.
+	add more suspend & resume calls for other big changes
 
 	* src/gnome/new-user-funs.c (gnc_create_newUserDialog): make clist
 	column titles passive

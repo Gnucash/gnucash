@@ -101,6 +101,8 @@ on_newUserDruidFinishPage_finish       (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data)
 {
+    gnc_suspend_gui_refresh ();
+
     if (our_final_group)
         xaccGroupForEachAccount (our_final_group, starting_balance_helper,
                                  NULL, TRUE);
@@ -116,6 +118,8 @@ on_newUserDruidFinishPage_finish       (GnomeDruidPage  *gnomedruidpage,
         xaccGroupConcatGroup(gnc_book_get_group(gncGetCurrentBook()),
                              our_final_group);
     }
+
+    gnc_resume_gui_refresh ();
 }
 
 static void
@@ -501,8 +505,10 @@ on_finalAccountDruidPage_prepare       (GnomeDruidPage  *gnomedruidpage,
         actlist = g_slist_append(actlist, gtk_clist_get_row_data(clist, row));
     }
 
+    gnc_suspend_gui_refresh ();
     delete_our_final_group();
     our_final_group = gnc_new_user_merge_groups(actlist);
+    gnc_resume_gui_refresh ();
 
     gnc_new_user_insert_final_accounts(GTK_CTREE(ctree), our_final_group);
 
