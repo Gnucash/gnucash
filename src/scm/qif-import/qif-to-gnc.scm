@@ -264,7 +264,7 @@
               (begin 
                 ;; create and fill in the GNC transaction
                 (let ((gnc-xtn (gnc:transaction-create)))
-                  (gnc:transaction-begin-edit gnc-xtn #t)
+                  (gnc:transaction-begin-edit gnc-xtn)
 
                   ;; build the transaction
                   (qif-import:qif-xtn-to-gnc-xtn 

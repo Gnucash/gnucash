@@ -700,7 +700,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
       affected_accounts = g_list_prepend(affected_accounts, a);
   }
 
-  xaccTransBeginEdit(trans, 1);
+  xaccTransBeginEdit(trans);
   xaccTransDestroy(trans);
   xaccTransCommitEdit(trans);
 

@@ -195,7 +195,7 @@ xaccSplitScrub (Split *split)
   trans_was_open = xaccTransIsOpen (trans);
 
   if (!trans_was_open)
-    xaccTransBeginEdit (trans, TRUE);
+    xaccTransBeginEdit (trans);
 
   xaccSplitSetShareAmount (split, xaccSplitGetValue (split));
 
@@ -303,7 +303,7 @@ xaccTransScrubImbalance (Transaction *trans)
     trans_was_open = xaccTransIsOpen (trans);
 
     if (!trans_was_open)
-      xaccTransBeginEdit (trans, TRUE);
+      xaccTransBeginEdit (trans);
 
     common_currency = xaccTransFindCommonCurrency (trans);
     account = xaccSplitGetAccount (balance_split);

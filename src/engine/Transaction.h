@@ -97,12 +97,7 @@ void          xaccTransDestroy (Transaction *trans);
 
 /* The xaccTransBeginEdit() method must be called before any changes
  *    are made to a transaction or any of its component splits.  If 
- *    this is not done, errors will result.  If the defer flag is set, 
- *    then the automated re-balancing of all splits in this transaction
- *    is deferred until the xaccTransCommitEdit() call. This allows 
- *    multiple splits to be edited, and quantities modified, and the
- *    whole system temporarily out of balance, up until the Commit
- *    call is made when double-entry is once again enforced.
+ *    this is not done, errors will result.
  *
  * The xaccTransCommitEdit() method indicates that the changes to the
  *    transaction and its splits are complete and should be made
@@ -118,7 +113,7 @@ void          xaccTransDestroy (Transaction *trans);
  *
  * The xaccTransIsOpen() method returns TRUE if the transaction
  *    is open for editing. Otherwise, it returns false.  */
-void          xaccTransBeginEdit (Transaction *trans, gboolean defer);
+void          xaccTransBeginEdit (Transaction *trans);
 void          xaccTransCommitEdit (Transaction *trans);
 void          xaccTransRollbackEdit (Transaction *trans);
 

@@ -146,7 +146,7 @@ xaccFreeAccount (Account *acc)
   for(lp = acc->splits; lp; lp = lp->next) {
     Split *s = (Split *) lp->data;
     t = s->parent;
-    xaccTransBeginEdit (t, TRUE);
+    xaccTransBeginEdit (t);
     xaccSplitDestroy (s);
     xaccTransCommitEdit (t);
   }

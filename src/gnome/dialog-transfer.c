@@ -722,7 +722,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     /* Create the transaction */
     trans = xaccMallocTransaction();
 
-    xaccTransBeginEdit(trans, TRUE);
+    xaccTransBeginEdit(trans);
     xaccTransSetDateSecs(trans, time);
 
     string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
@@ -762,7 +762,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     /* Create the transaction */
     trans = xaccMallocTransaction();
 
-    xaccTransBeginEdit(trans, TRUE);
+    xaccTransBeginEdit(trans);
     xaccTransSetDateSecs(trans, time);
 
     string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
@@ -808,7 +808,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     /* Create the transaction */
     trans = xaccMallocTransaction();
 
-    xaccTransBeginEdit(trans, TRUE);
+    xaccTransBeginEdit(trans);
     xaccTransSetDateSecs(trans, time);
 
     string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));

@@ -66,8 +66,7 @@ int force_double_entry = 0;
 typedef enum
 {
   BEGIN_EDIT      = 1 << 0,
-  DEFER_REBALANCE = 1 << 1,
-  BEING_DESTROYED = 1 << 2,
+  BEING_DESTROYED = 1 << 1,
 } TransFlags;
 
 /* arbitrary price per share increment FIXME */
@@ -76,9 +75,6 @@ typedef enum
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
-
-/* Prototypes *******************************************************/
-static void xaccSplitRebalance (Split *split);
 
 
 /********************************************************************\
@@ -385,8 +381,6 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price,
   s->value   = gnc_numeric_mul(s->damount, price, 
                                get_currency_denom(s), GNC_RND_ROUND);
 
-  /* force double entry to always balance */
-  xaccSplitRebalance (s);
   mark_split (s);
 }
 
@@ -403,8 +397,6 @@ xaccSplitSetSharePrice (Split *s, gnc_numeric price) {
   s->value = gnc_numeric_mul(s->damount, price, get_currency_denom(s),
                              GNC_RND_ROUND);
 
-  /* force double entry to always balance */
-  xaccSplitRebalance (s);
   mark_split (s);
 }
 
@@ -428,8 +420,6 @@ DxaccSplitSetShareAmount (Split *s, double damt) {
   s->value   = gnc_numeric_mul(s->damount, old_price, 
                                get_currency_denom(s), GNC_RND_ROUND);
   
-  /* force double entry to always balance */
-  xaccSplitRebalance (s);
   mark_split (s);
 }
 
@@ -439,7 +429,6 @@ xaccSplitSetShareAmount (Split *s, gnc_numeric amt) {
 
   s->damount = gnc_numeric_convert(amt, get_security_denom(s), GNC_RND_ROUND);
 
-  xaccSplitRebalance (s);
   mark_split (s);
 }
 
@@ -467,8 +456,6 @@ DxaccSplitSetValue (Split *s, double damt) {
                                  GNC_RND_ROUND);
   }
 
-  /* force double entry to always balance */
-  xaccSplitRebalance (s);
   mark_split (s);
 }
 
@@ -478,7 +465,6 @@ xaccSplitSetValue (Split *s, gnc_numeric amt) {
 
   s->value = gnc_numeric_convert(amt, get_currency_denom(s), GNC_RND_ROUND);;
 
-  xaccSplitRebalance (s);
   mark_split (s);
 }
 
@@ -1138,111 +1124,6 @@ xaccTransIsCommonExclSCurrency (Transaction *trans,
 /********************************************************************\
 \********************************************************************/
 
-/* hack alert -- the algorithm used in this rebalance routine
- * is less than intuitive, and could use some write-up.  
- * Maybe it does indeed do the right thing, but that is
- * not at all obvious.
- */
-
-static void
-xaccTransRebalance (Transaction * trans)
-{
-  return;
-
-  if (!trans || !trans->splits)
-    return;
-
-  xaccSplitRebalance (trans->splits->data);
-}
-
-void
-xaccSplitRebalance (Split *split)
-{
-  const gnc_commodity * base_currency = NULL;
-  Transaction *trans;
-  gnc_numeric value;
-  Split *s;
-
-  return;
-
-  trans = split->parent;
-
-  /* We might have gotten here if someone is manipulating
-   * a split that has not yet been inserted in a transaction.
-   * Rather than punishing them with an assert, lets just
-   * quietly return.
-   */
-  if (!trans) return;
-
-  if (DEFER_REBALANCE & (trans->open)) return;
-
-  if (split->acc)
-  {
-    const gnc_commodity * ra, * rb;
-
-    if (split->acc->editlevel > 0) return;
-
-    assert (trans->splits);
-    assert (trans->splits->data);
-
-    /* lets find out if we are dealing with multiple currencies,
-     * and which one(s) all of the splits have in common. */
-    ra = xaccAccountGetCurrency (split->acc);
-    rb = xaccAccountGetSecurity (split->acc);
-    base_currency = FindCommonCurrency (trans->splits, ra, rb);
-
-    if (!base_currency) {
-      GList *node;
-      PERR ("no common split currencies\n");
-      for (node = trans->splits; node; node = node->next) {
-        Split *s = node->data;
-
-        if (s->acc) {
-          PERR ("\taccount=%s currency=%s security=%s\n",
-                s->acc->accountName, 
-                gnc_commodity_get_printname(xaccAccountGetCurrency (s->acc)), 
-                gnc_commodity_get_printname(xaccAccountGetSecurity (s->acc)));
-        } else {
-          PERR ("\t*** No parent account *** \n");
-        }
-      }
-      assert (0);
-      return;
-    }
-  }
-  else
-  {
-    assert (trans->splits);
-    assert (trans->splits->data);
-  }
-
-  if (g_list_length (trans->splits) != 2)
-    return;
-
-  /* pick the other split */
-  if (split == trans->splits->data)
-    s = g_list_nth_data (trans->splits, 1);
-  else
-    s = trans->splits->data;
-
-  if (!s)
-    return;
-
-  /* the new value of the destination split will be the result.  */
-  value = xaccSplitsComputeValue (trans->splits, s, base_currency);
-
-  /* what do we do if the value is different in the denominator
-   * than the one for the account? */
-
-  /* KLUDGE -- bg */
-  xaccSplitSetBaseValue (s, gnc_numeric_neg (value), base_currency);
-  mark_split (s);
-  xaccAccountRecomputeBalance (s->acc); 
-}
-
-/********************************************************************\
-\********************************************************************/
-
 G_INLINE_FUNC void check_open (Transaction *trans);
 G_INLINE_FUNC void
 check_open (Transaction *trans)
@@ -1256,7 +1137,7 @@ check_open (Transaction *trans)
 }
 
 void
-xaccTransBeginEdit (Transaction *trans, gboolean defer)
+xaccTransBeginEdit (Transaction *trans)
 {
    char open;
    Backend *be;
@@ -1264,14 +1145,13 @@ xaccTransBeginEdit (Transaction *trans, gboolean defer)
    assert (trans);
    open = trans->open;
    trans->open = BEGIN_EDIT;
-   if (defer) trans->open |= DEFER_REBALANCE;
+
    if (open & BEGIN_EDIT) return;
 
    /* See if there's a backend.  If there is, invoke it. */
    be = xaccTransactionGetBackend (trans);
-   if (be && be->trans_begin_edit) {
-      (be->trans_begin_edit) (be, trans, defer);
-   }
+   if (be && be->trans_begin_edit)
+      (be->trans_begin_edit) (be, trans);
 
    xaccOpenLog ();
    xaccTransWriteLog (trans, 'B');
@@ -1338,11 +1218,6 @@ xaccTransCommitEdit (Transaction *trans)
      xaccSplitSetShareAmount(s, gnc_numeric_neg(split->damount));
      xaccSplitSetValue(s, gnc_numeric_neg(split->value));
    }
-
-   /*   xaccTransScrubSplits (trans); */
-
-   trans->open &= ~DEFER_REBALANCE;
-   xaccTransRebalance (trans);
 
    /* ------------------------------------------------- */
    /* OK, at this point, we are done making sure that 
@@ -1634,29 +1509,17 @@ xaccSplitDestroy (Split *split)
    assert (trans->splits);
    check_open (trans);
 
-   xaccRemoveEntity(&split->guid);
+   xaccRemoveEntity (&split->guid);
 
    ismember = (g_list_find (trans->splits, split) != NULL);
 
    assert (ismember);
 
-   /* If the account has three or more splits, 
-    * merely unlink & free the split. 
-    *
-    * Or if the account has only two splits, 
-    * then this destroy will leave only one split.
-    * Don't rebalance, as this will goof up the
-    * value of the remaining split. (The rebalance 
-    * happens later(?) during commit(?).)
-    */
    mark_split (split);
    xaccTransRemoveSplit (trans, split);
    xaccAccountRemoveSplit (split->acc, split);
    xaccAccountRecomputeBalance (split->acc);
    xaccFreeSplit (split);
-
-   if (g_list_length (trans->splits) > 1)
-     xaccTransRebalance (trans);
 }
 
 /********************************************************************\
@@ -1681,11 +1544,6 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
    /* now, insert the split into the array */
    split->parent = trans;
    trans->splits = g_list_append (trans->splits, split);
-
-   /* force double entry to always be consistent */
-   xaccSplitRebalance (split);
-   if (oldtrans && oldtrans != trans)
-     xaccTransRebalance (oldtrans);
 }
 
 /********************************************************************\

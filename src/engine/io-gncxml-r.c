@@ -3226,7 +3226,7 @@ txn_restore_start_handler(GSList* sibling_data,
 
   if(!trans) return(FALSE);
 
-  xaccTransBeginEdit(trans, 1);
+  xaccTransBeginEdit(trans);
 
   *data_for_children = trans;
 

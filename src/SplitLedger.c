@@ -1085,7 +1085,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       if (auto_trans == NULL)
         return FALSE;
 
-      xaccTransBeginEdit (trans, TRUE);
+      xaccTransBeginEdit (trans);
       gnc_copy_trans_onto_trans (auto_trans, trans, FALSE, FALSE);
 
       if (info->default_source_account != NULL)
@@ -1517,7 +1517,7 @@ LedgerDestroy (SplitRegister *reg)
         pending_trans = NULL;
       }
 
-      xaccTransBeginEdit (trans, TRUE);
+      xaccTransBeginEdit (trans);
       xaccTransDestroy (trans);
       xaccTransCommitEdit (trans);
 
@@ -1900,7 +1900,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 
     new_split = xaccMallocSplit();
 
-    xaccTransBeginEdit(trans, TRUE);
+    xaccTransBeginEdit(trans);
     xaccTransAppendSplit(trans, new_split);
     xaccTransCommitEdit(trans);
 
@@ -1930,7 +1930,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 
     gnc_copy_trans_onto_trans(trans, new_trans, FALSE, TRUE);
 
-    xaccTransBeginEdit(new_trans, TRUE);
+    xaccTransBeginEdit(new_trans);
     xaccTransSetDateSecs(new_trans, info->last_date_entered);
     xaccTransCommitEdit(new_trans);
 
@@ -2153,7 +2153,7 @@ xaccSRPasteCurrent (SplitRegister *reg)
     { /* We are on a null split in an expanded transaction. */
       split = xaccMallocSplit();
 
-      xaccTransBeginEdit(trans, TRUE);
+      xaccTransBeginEdit(trans);
       xaccTransAppendSplit(trans, split);
       xaccTransCommitEdit(trans);
     }
@@ -2262,7 +2262,7 @@ xaccSRDeleteCurrentSplit (SplitRegister *reg)
 
   account = xaccSplitGetAccount(split);
 
-  xaccTransBeginEdit(trans, TRUE);
+  xaccTransBeginEdit(trans);
   xaccAccountBeginEdit(account);
   xaccSplitDestroy(split);
   xaccAccountCommitEdit(account);
@@ -2314,7 +2314,7 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
       pending_trans = NULL;
     }
 
-    xaccTransBeginEdit (trans, TRUE);
+    xaccTransBeginEdit (trans);
     xaccTransDestroy (trans);
     xaccTransCommitEdit (trans);
 
@@ -2332,7 +2332,7 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
 
   accounts = gnc_trans_prepend_account_list(trans, NULL);
 
-  xaccTransBeginEdit(trans, TRUE);
+  xaccTransBeginEdit(trans);
   xaccTransDestroy(trans);
   xaccTransCommitEdit(trans);
 
@@ -2384,7 +2384,7 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
       pending_trans = NULL;
     }
 
-    xaccTransBeginEdit (trans, TRUE);
+    xaccTransBeginEdit (trans);
     xaccTransDestroy (trans);
     xaccTransCommitEdit (trans);
 
@@ -2403,7 +2403,7 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
   accounts = gnc_trans_prepend_account_list(trans, NULL);
   splits = gnc_trans_prepend_split_list(trans, NULL);
 
-  xaccTransBeginEdit(trans, TRUE);
+  xaccTransBeginEdit(trans);
   for (node = splits; node; node = node->next)
     if (node->data != split)
       xaccSplitDestroy(node->data);
@@ -2701,7 +2701,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
    if (pending_trans != trans) {
      if (xaccTransIsOpen (pending_trans))
        xaccTransCommitEdit (pending_trans);
-     xaccTransBeginEdit (trans, TRUE);
+     xaccTransBeginEdit (trans);
      pending_trans = trans;
      info->pending_trans_guid = *xaccTransGetGUID(trans);
    }
@@ -4238,7 +4238,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
 
     trans = xaccMallocTransaction ();
 
-    xaccTransBeginEdit (trans, TRUE);
+    xaccTransBeginEdit (trans);
     xaccTransSetDateSecs (trans, info->last_date_entered);
     blank_split = xaccMallocSplit ();
     xaccTransAppendSplit (trans, blank_split);

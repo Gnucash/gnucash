@@ -29,6 +29,7 @@ be created as a shared library for use by other programs.
 * Accounts::                    
 * Account Groups::              
 * GNCBooks::                    
+* Scrub::                       
 @end menu
 
 
@@ -46,22 +47,19 @@ arbitrary data (@pxref{Key-Value Pair Frames}).
 Transactions (@pxref{Transactions}) embody the notion of "double entry"
 accounting. A Transaction consists of a date, a description, a number, a
 list of one or more Splits, and a key-value frame. When double-entry
-rules are properly enabled in the engine (they are settable with various
-flags), the total value of the splits is forced to be zero.  Note that
-if there is just one split, its value must be zero; this is useful
-because a zero-valued split can store a price (useful for e.g. tracking
-stocks). If there are two splits, then the value of one must be
-positive, the other negative: this denotes that one account is credited,
-and another is debited by an equal amount. Positive Split values are
-'debits' and negative Split values are 'credits'. Forcing the Splits to
-'add up' to zero causes a double-entry accounting system to always
-balance.
+rules are enforced, the total value of the splits is zero.  Note that if
+there is just one split, its value must be zero for double-entry
+accounting; this is useful because a zero-valued split can store a price
+(useful for e.g. tracking stocks). If there are two splits, then the
+value of one must be positive, the other negative: this denotes that one
+account is credited, and another is debited by an equal amount. Positive
+Split values are 'debits' and negative Split values are 'credits'.
+Ensuring the Splits to 'add up' to zero causes a double-entry accounting
+system to always balance.
 
-Through various flags, forced double-entry can be disabled; this is
-often desirable for novice, home-oriented users. As an alternative, it
-may be better to leave double-entry enabled, but credit all dangling
-splits to some dummy account, and then simply not show that dummy
-account to the user.
+The engine does not enforce double-entry accounting, but provides an API
+to enable user-code to find unbalanced transactions and 'repair' them so
+that they are in balance. @xref{Scrub}.
 
 Note the sum of the values of Splits in a Transaction is always computed
 with respect to a currency; thus splits can be balanced even when they
@@ -1256,8 +1254,7 @@ Set the share price of @var{split} to @var{price}.
 @deftypefun void xaccSplitSetSharePriceAndAmount (Split * @var{split}, gnc_numeric @var{price}, gnc_numeric @var{amount})
 Set both the share price and share quantity of @var{split}. This routine
 is more efficent than calling @code{xaccSplitSetShareAmount} and
-@code{xaccSplitSetSharePrice} in succesion, because the parent Transaction
-is only rebalanced once. @xref{Transactions}.
+@code{xaccSplitSetSharePrice} in succesion.
 @end deftypefun
 
 @deftypefun void xaccSplitSetValue (Split * @var{split}, gnc_numeric @var{value})
@@ -1371,14 +1368,9 @@ be freed, or by @code{xaccTransRollbackEdit()}, in which case all the
 original Splits are put back into place.
 @end deftypefun
 
-@deftypefun void xaccTransBeginEdit (Transaction * @var{trans}, gboolean @var{defer})
+@deftypefun void xaccTransBeginEdit (Transaction * @var{trans})
 This method must be called before any changes are made to @var{trans} or
-any of its component Splits. If this is not done, errors will result. If
-@var{defer} is true, then the automated re-balancing of all Splits in
-this transaction is deferred until the @code{xaccTransCommitEdit()}
-call. This allows multiple splits to be edited, quantities modified,
-with the whole system temporarily out of balance, up until the
-Commit call is made when double-entry is once again enforced.
+any of its component Splits. If this is not done, errors will result.
 @end deftypefun
 
 @deftypefun void xaccTransCommitEdit (Transaction * @var{trans})
@@ -1511,7 +1503,7 @@ Set the description field of @var{trans} to @var{desc}.
 @tindex AccountGroup
 
 
-@node GNCBooks,  , Account Groups, Engine
+@node GNCBooks, Scrub, Account Groups, Engine
 @section GNCBooks
 @tindex GNCBook
 
@@ -1647,3 +1639,7 @@ Commit all changes that have been made to the book.
 Release the session lock. It will @emph{not} save the account group to
 a file. Thus, this method acts as an "abort" or "rollback" primitive.
 @end deftypefun
+
+
+@node Scrub,  , GNCBooks, Engine
+@section Scrub

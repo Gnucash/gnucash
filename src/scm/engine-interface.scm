@@ -250,7 +250,7 @@
       (begin
         ;; open the transaction for editing
         (if (not (gnc:transaction-is-open trans))
-            (gnc:transaction-begin-edit trans #t))
+            (gnc:transaction-begin-edit trans))
 
         ;; copy in the transaction values
         (let ((description (gnc:transaction-scm-get-description trans-scm))

@@ -818,7 +818,7 @@ readTransaction( int fd, Account *acc, int token )
 
   /* create a transaction structure */
   trans = xaccMallocTransaction();
-  xaccTransBeginEdit (trans, 1);  
+  xaccTransBeginEdit (trans);  
 
   /* add in one split -- xaccMallocTransaction no longer auto-creates them. */
   {

@@ -36,7 +36,7 @@ struct _backend
   int (*book_end) (GNCBook *);
   int (*account_begin_edit) (Backend *, Account *, int defer);
   int (*account_commit_edit) (Backend *, Account *);
-  int (*trans_begin_edit) (Backend *, Transaction *, int defer);
+  int (*trans_begin_edit) (Backend *, Transaction *);
   int (*trans_commit_edit) (Backend *, Transaction *new, Transaction *orig);
   int (*trans_rollback_edit) (Backend *, Transaction *);
 };
