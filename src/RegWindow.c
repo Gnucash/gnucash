@@ -93,6 +93,10 @@ typedef struct _RegWindow {
   PopBox         *xfrmbox;    /* ComboBox for transfers                  */
   PopBox         *xtobox;     /* ComboBox for transfers                  */
 
+  /* traversal stuff, to traverse through the combo boxes */
+  int prev_row;
+  int prev_col;
+
   /* structures for controlling the column layout */
   short          numCols;     /* number of columns in the register       */
 
@@ -1789,6 +1793,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   regData->currEntry   = 0;
   regData->insert      = 0;          /* the insert (cursor) position in
                                       * quickfill cells */
+  regData->prev_row    = 0;
+  regData->prev_col    = 0;
 
   /* count the number of accounts we are supposed to display,
    * and then, store them. */
@@ -1863,12 +1869,17 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   /* Create a PanedWindow Manager for the dialog box... the paned 
    * window is the parent of the two forms which comprise the two
    * areas of the dialog box */
+  /* Important Note: the paned window MUST have traversal enabled,
+   * otherwise the matrix cells will only get focus when the pointer
+   * is in the cell, which basically defeats the whole idea of a tab 
+   * group.  Put is another way: it is REALLY annoying to have to
+   * put the mouse in the cell being edited. */
   pane = XtVaCreateWidget( "pane", 
                            xmPanedWindowWidgetClass, regData->dialog,
                            XmNsashWidth,     1,
                            XmNsashHeight,    1,
                            XmNseparatorOn,   False,
-                           XmNtraversalOn,   False,
+                           XmNtraversalOn,   True,
                            XmNmarginHeight,  1,
                            XmNmarginWidth,   1,
                            XmNallowResize,   True,
@@ -2269,6 +2280,10 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
                             XmNshadowType,          XmSHADOW_ETCHED_IN,
                             XmNverticalScrollBarDisplayPolicy,XmDISPLAY_STATIC,
                             XmNselectScrollVisible, True,
+XmNnavigationType, XmEXCLUSIVE_TAB_GROUP,  
+/*
+XmNnavigationType, XmSTICKY_TAB_GROUP,  
+*/
                             NULL);
     
     regData->reg     = reg;
@@ -2411,6 +2426,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				    XmNleftPosition,       position,
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+1,
+                                    XmNnavigationType,     XmNONE,  /* don't tab here! */
 				    NULL );
   regData->balance = widget;
   
@@ -2901,6 +2917,33 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         XbaeMatrixTraverseCellCallbackStruct *tcbs =
         (XbaeMatrixTraverseCellCallbackStruct *)cb;
         
+        /* If the quark is zero, then it is likely that we are
+         * here because we traversed out of a cell that had a 
+         * PopBox in it.  The PopBox is clever enough to put
+         * us back into the register after tabing out of it.
+         * However, its not (cannot be) clever enough to pretend
+         * that it was a tab group in the register.  Thus,
+         * we will emulate that we left a tab group in the register
+         * to get here.  To put it more simply, we just set the 
+         * row and column to that of the PopBox, which we had
+         * previously recorded, and continue on as if nothing 
+         * happened.  
+         * BTW -- note that we are emulating a normal, right-moving tab. 
+         * Backwards tabs are probably broken. 
+         */
+        if (0 == tcbs->qparam) {
+          if ((0==row) && (0==col)) {
+             if ((0 != regData->prev_row) || (0 != regData->prev_col)) {
+               tcbs->qparam = QRight;
+               row = regData->prev_row;
+               col = regData->prev_col;
+             }
+          }
+        }
+
+        /* hack alert -- ledger traversal is broken
+         * Note: the traversal code is fairly broken for ledger windows.
+         * Sad, but true, fixing it is a major pain in the neck. */
         if( tcbs->qparam == QRight )
           {
           /* Don't need to check IN_DATE_CELL or IN_NUM_CELL because
@@ -2908,14 +2951,34 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           
           if( IN_XFRM_CELL(row,col) ) {
             tcbs->next_column = DESC_CELL_C;
+            tcbs->next_row = row;
           }
 
+          if ((GEN_LEDGER == regData->type) ||
+              (INC_LEDGER == regData->type) ||
+              (PORTFOLIO  == regData->type)) {
+            if( IN_XTO_CELL(row,col) ) {
+              tcbs->next_column = MEMO_CELL_C;
+              tcbs->next_row = row;
+            }
+          } 
+
           if( IN_ACTN_CELL(row,col) ) {
-            tcbs->next_column = MEMO_CELL_C;
-            if( regData->qf != NULL ) {
-              if( regData->qf->trans != NULL ) {
-                XbaeMatrixSetCell( reg, tcbs->next_row, tcbs->next_column,
-                                   regData->qf->trans->memo );
+            /* the cell that follows action depends on 
+             * whether its a ledger or not */
+            if ((GEN_LEDGER == regData->type) ||
+                (INC_LEDGER == regData->type) ||
+                (PORTFOLIO  == regData->type)) {
+              tcbs->next_column = XTO_CELL_C;
+              tcbs->next_row = row;
+            } else {
+              tcbs->next_column = MEMO_CELL_C;
+              tcbs->next_row = row;
+              if( regData->qf != NULL ) {
+                if( regData->qf->trans != NULL ) {
+                  XbaeMatrixSetCell( reg, tcbs->next_row, tcbs->next_column,
+                                     regData->qf->trans->memo );
+                }
               }
             }
           }
@@ -2946,7 +3009,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
             XbaeMatrixCommitEdit(reg,True);
             if( strcmp(XbaeMatrixGetCell(reg,tcbs->row,tcbs->column),"") != 0 )
               {
-              tcbs->next_row    = row+1;
+              tcbs->next_row    = row+ACTN_CELL_R;
               tcbs->next_column = ACTN_CELL_C;
               }
             else
@@ -2970,7 +3033,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           
           if( IN_DEP_CELL(row,col) )
             {
-            tcbs->next_row    = row+1;
+            tcbs->next_row    = row+ACTN_CELL_R;
             tcbs->next_column = ACTN_CELL_C;
             }
           
@@ -2982,6 +3045,9 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
             tcbs->next_column = MEMO_CELL_C;
             }
           }
+
+          regData->prev_row = tcbs->next_row;
+          regData->prev_col = tcbs->next_column;
         }
       }
       break;

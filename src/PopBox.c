@@ -18,6 +18,7 @@
  *                                                                  *
 \********************************************************************/
 
+#include <X11/keysym.h>
 #include <Xm/Xm.h>
 #include <ComboBox.h>
 #include <Xbae/Matrix.h>
@@ -37,6 +38,7 @@ typedef struct _PopBox {
 /** PROTOTYPES ******************************************************/
 
 static void selectCB (Widget w, XtPointer cd, XtPointer cb );
+static void dropDownCB (Widget w, XtPointer cd, XtPointer cb );
 
 /********************************************************************\
  * popBox                                                           *
@@ -80,6 +82,7 @@ popBox (Widget parent, int width, int drop_width)
    /* add callbacks to detect a selection */
    XtAddCallback (combobox, XmNselectionCallback, selectCB, (XtPointer)popData);
    XtAddCallback (combobox, XmNunselectionCallback, selectCB, (XtPointer)popData);
+   XtAddCallback (combobox, XmNdropDownCallback, dropDownCB, (XtPointer)popData);
 
    return popData;
 }
@@ -206,4 +209,30 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb )
     /* text = XmComboBoxGetString (ab->combobox); */
 }
 
+/********************************************************************\
+ * fix traversal by assuming that menu up due to a tab key 
+ * is a traversal change.  Return focus to the matrix widget,
+ * instead of letting it default to the next tab group.
+\********************************************************************/
+
+static void dropDownCB (Widget w, XtPointer cd, XtPointer cb )
+
+{
+    PopBox *ab = (PopBox *) cd;
+    XmComboBoxDropDownCallbackStruct *ddcb = 
+               (XmComboBoxDropDownCallbackStruct *) cb;
+
+   if (XmCR_HIDE_LIST == ddcb->reason) {
+      if (ddcb->event) {
+         if ((KeyPress == ddcb->event->type) || (KeyRelease == ddcb->event->type)) {
+            KeySym sim;
+            XKeyEvent *kev = (XKeyEvent *) ddcb->event;
+            sim = XLookupKeysym (kev, 0);
+            if (XK_Tab == sim) {
+               XmProcessTraversal(ab->reg, XmTRAVERSE_CURRENT);
+            }
+         }
+      }
+   }
+}
 /************************* END OF FILE ******************************/
