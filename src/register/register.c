@@ -9,6 +9,15 @@
  *
  * hack alert -- most of the code in this file should be 
  * replaced by a guile/scheme based config file.
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+THIS FILE IS OBSOLETEED BY SPLITREG.C
+
+
+
+
+
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas

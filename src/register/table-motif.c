@@ -770,11 +770,14 @@ xaccRefreshTableGUI (Table * table)
 {
 
 {int i;
-printf (" refresh numphysrows=%d numphyscols=%d \n",  table->num_phys_rows,table->num_phys_cols);
+printf (" refresh numphysrows=%d numphyscols=%d =========================\n", 
+table->num_phys_rows,table->num_phys_cols);
 for (i=0; i<table->num_phys_rows; i++) {
-printf ("cell %d\tcolor: 0x%x\tact:%s\tdescr: %s \n", i, 
-table->bg_colors[i][3], table->entries[i][2],
-table->entries[i][3]);
+printf ("cell %d\tcolor: 0x%x\tact:%s\tdescr: %s\tbaln: %s\n", i, 
+table->bg_colors[i][3], 
+table->entries[i][2],
+table->entries[i][3],
+table->entries[i][7]);
 }}
 
   RefreshColors (table, 0, table->num_phys_rows, 0, table->num_phys_cols);

@@ -97,7 +97,8 @@ struct _SplitRegister {
    DateCell      * dateCell;
    BasicCell     * numCell;
    QuickFillCell * descCell;
-   BasicCell     * recnCell;
+   BasicCell     * recnCell;   /* main transaction line reconcile */
+   BasicCell     * recsCell;   /* subsidiary split reconcile */
    PriceCell     * creditCell;
    PriceCell     * debitCell;
    PriceCell     * shrsCell;
