@@ -2067,7 +2067,9 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
     /* ----------------------------------- */
     /* set up column widths */
 
-    regData -> columnWidths[DATE_CELL_C] = 5;   /* also YEAR_CELL_C */
+    /* date column needs to be six-wide to get the accelerator
+     * keys to function when double-digit days & months appear */
+    regData -> columnWidths[DATE_CELL_C] = 6;   /* also YEAR_CELL_C */
     regData -> columnWidths[NUM_CELL_C]  = 6;   /* also ACTN_CELL_C */
     regData -> columnWidths[XFRM_CELL_C] = 14;  /* also XTO_CELL_C */
     regData -> columnWidths[DESC_CELL_C] = 30;  /* also MEMO_CELL_C */
@@ -2101,7 +2103,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
     /* ----------------------------------- */
     /* set up column alignments */
 
-    regData -> alignments[DATE_CELL_C] = XmALIGNMENT_END;
+    regData -> alignments[DATE_CELL_C] = XmALIGNMENT_CENTER;
     /* ACTN is in NUM_CELL, and needs to be visible */
     regData -> alignments[NUM_CELL_C]  = XmALIGNMENT_BEGINNING;  
     regData -> alignments[XFRM_CELL_C] = XmALIGNMENT_BEGINNING;  
