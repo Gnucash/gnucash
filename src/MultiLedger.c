@@ -592,6 +592,7 @@ xaccDestroyLedgerDisplay (Account *acc)
    } 
 
    /* cruise throught the miscellanous account windows */
+   if (!fullList) return;
    n = 0;
    regData = fullList[n];
    while (regData) {
