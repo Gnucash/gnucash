@@ -56,7 +56,9 @@ dispatch_menu_paths[GNC_DISP_LAST] = {
 gncUIWidget
 gnc_ui_get_toplevel (void)
 {
-  GList *containers = gtk_container_get_toplevels ();
+  GList *containers = gtk_window_list_toplevels ();
+  GList *containerstop = containers;
+
   GnomeApp *app = NULL;
   
   for (; containers; containers = containers->next)
@@ -77,6 +79,7 @@ gnc_ui_get_toplevel (void)
 
     break;
   }
+  g_list_free (containerstop);
 
   if (app)
     return GTK_WIDGET (app);
@@ -980,9 +983,9 @@ gnc_mdi_get_current (void)
 gboolean
 gnc_mdi_has_apps (void)
 {
-  GList *toplevels;
+  GList *toplevels, *containerstop;
 
-  for (toplevels = gtk_container_get_toplevels ();
+  for (containerstop = toplevels = gtk_window_list_toplevels ();
        toplevels;
        toplevels = toplevels->next)
   {
@@ -1000,6 +1003,7 @@ gnc_mdi_has_apps (void)
 
     return TRUE;
   }
+  g_list_free (containerstop);
 
   return FALSE;
 }

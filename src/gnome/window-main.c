@@ -188,7 +188,8 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
 static void
 gnc_refresh_main_window_info (void)
 {
-  GList *containers = gtk_container_get_toplevels ();
+  GList *containers = gtk_window_list_toplevels ();
+  GList *containerstop = containers;
 
   while (containers)
   {
@@ -202,6 +203,7 @@ gnc_refresh_main_window_info (void)
 
     containers = containers->next;
   }
+  g_list_free (containerstop);
 }
 
 

@@ -1,4 +1,27 @@
 
+2003-04-26 TomF changes for gnucash-gnome2-dev, 11th batch
+
+	* src/gnome-utils/cursors.c:
+	  Fix incorrect g_list_free.
+
+	* src/gnome/window-main.c,
+	* src/gnome-utils/gnc-mdi-utils.c,
+	* src/app-file/gnome/gnc-file-history.c:
+         Replace calls of deprecated gtk_container_get_toplevels by
+	  gtk_window_list_toplevels
+	  
+	* src/gnome-utils/dialog-options.c:
+	  Move gnc_options_register_stocks call to gnc_options_ui_initialize, 
+	  to be called just once for all stock items at module initialization.
+	  Remove include gtk/gtktextview.h.  It is included under gnome.h
+	* src/gnome-search/dialog-search.c: attach_element,
+	  gnc_search_dialog_init_widgets:
+	  Replace deprecated gnome_stock_new_with_icon, gnome_pixmap_button 
+	  by gtk_button_new_from_stock
+	* src/gnome-utils/gnc-date-edit.c: select_clicked:
+	  Remove inactivated block referencing deprecated gnome_stock_cursor_new  
+
+
 2003-04-02 TomF changes for gnucash-gnome2-dev, 10th batch
 	* src/gnome-utils/dialog-account.c
 	  Change declares of name to const gchar.

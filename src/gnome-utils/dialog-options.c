@@ -24,7 +24,6 @@
 
 #include <gnome.h>
 #include <g-wrap-wct.h>
-#include "gtk/gtktextview.h"
 
 #include "dialog-options.h"
 #include "dialog-utils.h"
@@ -1335,7 +1334,6 @@ void
 gnc_options_register_stocks (void)
 {
 	static gboolean done = FALSE;
-	GtkIconFactory *factory;
 	
 	GtkStockItem items[] = {
 		{ GTK_STOCK_APPLY		,"gnc_option_apply_button",	0, 0, NULL },
@@ -1352,10 +1350,6 @@ gnc_options_register_stocks (void)
 
 	gtk_stock_add (items, G_N_ELEMENTS (items));
 
-	factory = gtk_icon_factory_new ();
-	gtk_icon_factory_add_default (factory);
-
-	g_object_unref (G_OBJECT (factory));
 }
 
 
@@ -1390,8 +1384,6 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
     g_object_ref(vbox);
     gtk_object_sink(GTK_OBJECT(vbox));
   }
-
-  gnc_options_register_stocks ();
 
   buttonbox = gtk_hbutton_box_new ();
 
@@ -2874,6 +2866,8 @@ GNCOptionDef_t * gnc_options_ui_get_option (const char *option_name)
 
 void gnc_options_ui_initialize (void)
 {
+
+  gnc_options_register_stocks ();
   g_return_if_fail (optionTable == NULL);
   optionTable = g_hash_table_new (g_str_hash, g_str_equal);
 

@@ -239,7 +239,6 @@ static void
 select_clicked (GtkWidget *widget, GNCDateEdit *gde)
 {
 	struct tm mtm;
-        /*	GdkCursor *cursor; */
 
         /* This code is pretty much just copied from gtk_date_edit_get_date */
       	scanDate (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
@@ -282,17 +281,6 @@ select_clicked (GtkWidget *widget, GNCDateEdit *gde)
 	gtk_widget_grab_focus (gde->cal_popup);
 	gtk_grab_add (gde->cal_popup);
 
-#if 0
-	cursor = gnome_stock_cursor_new (GNOME_STOCK_CURSOR_DEFAULT);
-
-	gdk_pointer_grab (gde->cal_popup->window, TRUE,
-			  (GDK_BUTTON_PRESS_MASK
-			   | GDK_BUTTON_RELEASE_MASK
-			   | GDK_POINTER_MOTION_MASK),
-			  NULL, cursor, GDK_CURRENT_TIME);
-
-        gdk_cursor_destroy (cursor);
-#endif
 }
 
 typedef struct {

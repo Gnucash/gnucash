@@ -92,9 +92,9 @@ gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
     gnc_ui_set_cursor (w->window, GNC_CURSOR_BUSY, update_now);
   else
   {
-    GList *node;
+    GList *containerstop, *node;
 
-    for (node = gtk_window_list_toplevels (); node; node = node->next)
+    for (containerstop = node = gtk_window_list_toplevels (); node; node = node->next)
     {
       w = node->data;
 
@@ -102,8 +102,8 @@ gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
         continue;
 
       gnc_ui_set_cursor (w->window, GNC_CURSOR_BUSY, update_now);
-      g_list_free (node);
     }
+    g_list_free (containerstop);
   }
 }
 

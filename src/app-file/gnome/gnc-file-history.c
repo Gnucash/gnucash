@@ -158,8 +158,8 @@ gnc_history_add_file (const char *newfile)
 
   /* Update apps immediately */
   {
-    GList *containers = gtk_container_get_toplevels ();
-  
+    GList *containers = gtk_window_list_toplevels ();
+    GList *containerstop = containers; 
     while (containers)
     {
       GtkWidget *w = containers->data;
@@ -169,6 +169,7 @@ gnc_history_add_file (const char *newfile)
 
       containers = containers->next;
     }
+    g_list_free (containerstop);
   }
 }
 

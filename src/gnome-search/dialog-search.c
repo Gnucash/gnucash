@@ -613,7 +613,7 @@ remove_element (GtkWidget *button, GNCSearchWindow *sw)
 static void
 attach_element (GtkWidget *element, GNCSearchWindow *sw, int row)
 {
-  GtkWidget *pixmap, *remove;
+  GtkWidget *remove;
   struct _crit_data *data;
 
   data = gtk_object_get_data (GTK_OBJECT (element), "data");
@@ -621,8 +621,8 @@ attach_element (GtkWidget *element, GNCSearchWindow *sw, int row)
   gtk_table_attach (GTK_TABLE (sw->criteria_table), element, 0, 1, row, row+1,
 		    GTK_EXPAND | GTK_FILL, 0, 0, 0);
 
-  pixmap = gnome_stock_new_with_icon (GNOME_STOCK_PIXMAP_REMOVE);
-  remove = gnome_pixmap_button (pixmap, _("Remove"));
+  
+  remove = gtk_button_new_from_stock (GTK_STOCK_REMOVE);
   gtk_object_set_data (GTK_OBJECT (remove), "element", element);
   gtk_signal_connect (GTK_OBJECT (remove), "clicked", remove_element, sw);
   gtk_table_attach (GTK_TABLE (sw->criteria_table), remove, 1, 2, row, row+1,
@@ -821,7 +821,7 @@ static void
 gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
 {
   GladeXML *xml;
-  GtkWidget *label, *pixmap, *add, *box;
+  GtkWidget *label, *add, *box;
   GtkWidget *menu, *item, *omenu;
   GtkWidget *new_item_button;
   const char * type_label;
@@ -844,8 +844,8 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   gtk_label_set_text (GTK_LABEL (label), type_label);
 
   /* Set the 'add criterion' button */
-  pixmap = gnome_stock_new_with_icon (GNOME_STOCK_PIXMAP_ADD);
-  add = gnome_pixmap_button (pixmap, _("Add criterion"));
+  add = gtk_button_new_from_stock (GTK_STOCK_ADD);
+ 
   gtk_signal_connect (GTK_OBJECT (add), "clicked", add_criterion, sw);
   box = glade_xml_get_widget (xml, "add_button_box");
   gtk_box_pack_start (GTK_BOX (box), add, FALSE, FALSE, 3);
