@@ -138,10 +138,10 @@ CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} -Dbool=char
 INCLUDES =    -I@PERLINCL@/CORE   -I${top_srcdir}/src/engine
 
 
-libgncswig_la_LIBADD =    @GLIB_LIBS@   ${top_srcdir}/src/engine/AccInfo.lo   ${top_srcdir}/src/engine/Account.lo   ${top_srcdir}/src/engine/DateUtils.lo   ${top_srcdir}/src/engine/FileIO.lo   ${top_srcdir}/src/engine/GNCId.lo   ${top_srcdir}/src/engine/Group.lo   ${top_srcdir}/src/engine/LedgerUtils.lo   ${top_srcdir}/src/engine/Query.lo   ${top_srcdir}/src/engine/Queue.lo   ${top_srcdir}/src/engine/Scrub.lo   ${top_srcdir}/src/engine/Session.lo   ${top_srcdir}/src/engine/TransLog.lo   ${top_srcdir}/src/engine/Transaction.lo   ${top_srcdir}/src/engine/Backend.lo   ${top_srcdir}/src/engine/date.lo   ${top_srcdir}/src/engine/util.lo   ${top_srcdir}/src/engine/guid.lo   ${top_srcdir}/src/engine/md5.lo
+libgncswig_la_LIBADD =    @GLIB_LIBS@   ${top_srcdir}/src/engine/AccInfo.lo   ${top_srcdir}/src/engine/Account.lo   ${top_srcdir}/src/engine/DateUtils.lo   ${top_srcdir}/src/engine/FileIO.lo   ${top_srcdir}/src/engine/GNCId.lo   ${top_srcdir}/src/engine/Group.lo   ${top_srcdir}/src/engine/Query.lo   ${top_srcdir}/src/engine/Queue.lo   ${top_srcdir}/src/engine/Scrub.lo   ${top_srcdir}/src/engine/Session.lo   ${top_srcdir}/src/engine/TransLog.lo   ${top_srcdir}/src/engine/Transaction.lo   ${top_srcdir}/src/engine/Backend.lo   ${top_srcdir}/src/engine/date.lo   ${top_srcdir}/src/engine/util.lo   ${top_srcdir}/src/engine/guid.lo   ${top_srcdir}/src/engine/md5.lo
 
 
-SWIG_INPUT_HDRS :=    ${top_srcdir}/src/engine/AccInfo.h   ${top_srcdir}/src/engine/Account.h   ${top_srcdir}/src/engine/DateUtils.h   ${top_srcdir}/src/engine/FileIO.h   ${top_srcdir}/src/engine/GNCId.h   ${top_srcdir}/src/engine/Group.h   ${top_srcdir}/src/engine/LedgerUtils.h   ${top_srcdir}/src/engine/Query.h   ${top_srcdir}/src/engine/Queue.h   ${top_srcdir}/src/engine/Scrub.h   ${top_srcdir}/src/engine/Session.h   ${top_srcdir}/src/engine/TransLog.h   ${top_srcdir}/src/engine/Transaction.h   ${top_srcdir}/src/engine/date.h
+SWIG_INPUT_HDRS :=    ${top_srcdir}/src/engine/AccInfo.h   ${top_srcdir}/src/engine/Account.h   ${top_srcdir}/src/engine/DateUtils.h   ${top_srcdir}/src/engine/FileIO.h   ${top_srcdir}/src/engine/GNCId.h   ${top_srcdir}/src/engine/Group.h   ${top_srcdir}/src/engine/Query.h   ${top_srcdir}/src/engine/Queue.h   ${top_srcdir}/src/engine/Scrub.h   ${top_srcdir}/src/engine/Session.h   ${top_srcdir}/src/engine/TransLog.h   ${top_srcdir}/src/engine/Transaction.h   ${top_srcdir}/src/engine/date.h
 
 
 CLEANFILES =  gnucash.engine.i gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c gnucash-engine-perl5_wrap.c gnucash.pm gnucash.so
@@ -163,10 +163,9 @@ libgncswig_la_DEPENDENCIES =  ${top_srcdir}/src/engine/AccInfo.lo \
 ${top_srcdir}/src/engine/Account.lo \
 ${top_srcdir}/src/engine/DateUtils.lo \
 ${top_srcdir}/src/engine/FileIO.lo ${top_srcdir}/src/engine/GNCId.lo \
-${top_srcdir}/src/engine/Group.lo \
-${top_srcdir}/src/engine/LedgerUtils.lo \
-${top_srcdir}/src/engine/Query.lo ${top_srcdir}/src/engine/Queue.lo \
-${top_srcdir}/src/engine/Scrub.lo ${top_srcdir}/src/engine/Session.lo \
+${top_srcdir}/src/engine/Group.lo ${top_srcdir}/src/engine/Query.lo \
+${top_srcdir}/src/engine/Queue.lo ${top_srcdir}/src/engine/Scrub.lo \
+${top_srcdir}/src/engine/Session.lo \
 ${top_srcdir}/src/engine/TransLog.lo \
 ${top_srcdir}/src/engine/Transaction.lo \
 ${top_srcdir}/src/engine/Backend.lo ${top_srcdir}/src/engine/date.lo \

@@ -34,7 +34,6 @@
 #include "gnome-top-level.h"
 #include "ui-callbacks.h"
 #include "MultiLedger.h"
-#include "LedgerUtils.h"
 #include "MainWindow.h"
 #include "Refresh.h"
 #include "RegWindow.h"
@@ -2035,12 +2034,12 @@ startAdjBCB(GtkWidget * w, gpointer data)
 static void 
 xferCB(GtkWidget * w, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
   xaccLedgerDisplay *ledger = regData->ledger;
   Account *account = ledger->leader;
 
   if (account == NULL)
-    account = ledger->displayed_accounts[0];
+    account = g_list_nth_data(ledger->displayed_accounts, 0);
 
   if (account == NULL)
     return;

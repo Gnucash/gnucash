@@ -25,7 +25,6 @@
 #include "AdjBWindow.h"
 #include "Destroy.h"
 #include "Group.h"
-#include "LedgerUtils.h"
 #include "MultiLedger.h"
 #include "RecnWindow.h"
 

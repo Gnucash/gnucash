@@ -458,7 +458,7 @@ const char *
 gnc_locale_default_currency()
 {
   static char currency[4];
-  static gboolean got_it = FALSE;    /* pretty sure "static" is needed */
+  static gboolean got_it = FALSE;
   struct lconv *lc;
   int i;
 
@@ -490,7 +490,7 @@ gnc_locale_decimal_places( void )
     return( places );
 
   lc = gnc_localeconv();
-  places = (int)lc->frac_digits;
+  places = lc->frac_digits;
 
   /* frac_digits is already initialized by gnc_localeconv,
    * hopefully to a reasonable default.                    */

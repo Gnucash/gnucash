@@ -273,13 +273,13 @@ xaccGetAccountRoot (Account * acc)
   if (!acc) return NULL;
 
   /* find the root of the account group structure */
-  grp = (AccountGroup *) acc->parent;
+  grp = acc->parent;
   while (grp) {
     root = grp;
     parent_acc = grp -> parent;
     grp = NULL;
     if (parent_acc) {
-       grp = (AccountGroup *) parent_acc->parent;
+       grp = parent_acc->parent;
     }
   }
   return root;

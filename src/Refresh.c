@@ -23,7 +23,6 @@
 #include "top-level.h"
 
 #include "Refresh.h"
-#include "LedgerUtils.h"
 #include "MultiLedger.h"
 #include "RecnWindow.h"
 #include "AdjBWindow.h"

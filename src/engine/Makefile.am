@@ -13,7 +13,6 @@ libgncengine_la_SOURCES = \
   DateUtils.c \
   FileIO.c \
   Group.c \
-  LedgerUtils.c \
   Query.c \
   Queue.c \
   Scrub.c \
@@ -42,7 +41,6 @@ noinst_HEADERS = \
   GNCIdP.h \
   Group.h \
   GroupP.h \
-  LedgerUtils.h \
   Query.h \
   Queue.h \
   Scrub.h \

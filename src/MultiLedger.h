@@ -43,8 +43,7 @@ typedef struct _xaccLedgerDisplay xaccLedgerDisplay;
 
 struct _xaccLedgerDisplay {
   Account *leader;               /* leading. "master" account               */
-  Account **displayed_accounts;  /* The list of accounts shown here         */
-  short   numAcc;                /* number of accounts in list              */
+  GList   *displayed_accounts;   /* The list of accounts shown here         */
   Query   *query;                /* query engine & filter for displaying    */
 
   SplitRegisterType type;        /* register display type, usually equal to *
@@ -76,7 +75,7 @@ xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *account);
 
 /* display list of accounts in a general ledger. */
 xaccLedgerDisplay * xaccLedgerDisplayGeneral (Account *lead_account,
-                                              Account **account_list,
+                                              GList *accounts,
                                               SplitRegisterType type,
                                               SplitRegisterStyle style);
 

@@ -35,7 +35,6 @@ libgncswig_la_LIBADD = \
   ${top_srcdir}/src/engine/FileIO.lo \
   ${top_srcdir}/src/engine/GNCId.lo \
   ${top_srcdir}/src/engine/Group.lo \
-  ${top_srcdir}/src/engine/LedgerUtils.lo \
   ${top_srcdir}/src/engine/Query.lo \
   ${top_srcdir}/src/engine/Queue.lo \
   ${top_srcdir}/src/engine/Scrub.lo \
@@ -55,7 +54,6 @@ SWIG_INPUT_HDRS := \
   ${top_srcdir}/src/engine/FileIO.h \
   ${top_srcdir}/src/engine/GNCId.h \
   ${top_srcdir}/src/engine/Group.h \
-  ${top_srcdir}/src/engine/LedgerUtils.h \
   ${top_srcdir}/src/engine/Query.h \
   ${top_srcdir}/src/engine/Queue.h \
   ${top_srcdir}/src/engine/Scrub.h \
