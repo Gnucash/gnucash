@@ -41,6 +41,9 @@
 
 enum 
 {
+  BAD_TYPE = -1,
+  /* Not a type */
+
   BANK = 0,
   /* The bank account type denotes a savings or checking account
    * held at a bank.  Often interest bearing.

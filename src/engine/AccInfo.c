@@ -25,6 +25,11 @@
 #include "messages.h"
 #include "util.h"
 
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
+
+
 /* =========================================================== */
 
 #define GNC_RETURN_ENUM_AS_STRING(x) case x: return #x;
