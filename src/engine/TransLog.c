@@ -18,6 +18,8 @@
  *                                                                  *
 \********************************************************************/
 
+#define _GNU_SOURCE
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -118,6 +120,98 @@ xaccTransWriteLog (Transaction *trans)
    /* get data out to the disk */
    fflush (trans_log);
    fflush (split_log);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+
+char *
+xaccSplitAsString(Split *split, const char prefix[]) {
+  char *result = NULL;
+  size_t result_size;
+  FILE *stream = open_memstream(&result, &result_size); 
+  const char *split_memo = xaccSplitGetMemo(split);
+  const double split_value = xaccSplitGetValue(split);
+  Account *split_dest = xaccSplitGetAccount(split);
+  const char *dest_name =
+    split_dest ? xaccAccountGetName(split_dest) : NULL;
+
+  assert(stream);
+
+  fputc('\n', stream);
+  fputs(prefix, stream);
+  fprintf(stream, "  %10.2f | %15s | %s",
+          split_value,
+          dest_name ? dest_name : "<no-account-name>",
+          split_memo ? split_memo : "<no-split-memo>");
+  fclose(stream);
+  return(result);
+}
+
+char *
+xaccTransAsString(Transaction *txn, const char prefix[]) {
+  char *result = NULL;
+  size_t result_size;
+  FILE *stream = open_memstream(&result, &result_size); 
+  time_t date = xaccTransGetDate(txn);
+  const char *num = xaccTransGetNum(txn);
+  const char *desc = xaccTransGetDescription(txn);
+  const char *memo = xaccSplitGetMemo(xaccTransGetSplit(txn, 0));
+  const double total = xaccSplitGetValue(xaccTransGetSplit(txn, 0));
+  
+  assert(stream);
+
+  fputs(prefix, stream);
+  if(date) {
+    char *datestr = xaccTransGetDateStr(txn);
+    fprintf(stream, "%s", datestr);
+    free(datestr);
+  } else {
+    fprintf(stream, "<no-date>");
+  }
+  fputc(' ', stream); 
+  if(num) {
+    fputs(num, stream);
+  } else {
+    fprintf(stream, "<no-num>");
+  }
+
+  fputc('\n', stream);
+  fputs(prefix, stream);
+  if(desc) {
+    fputs("  ", stream);
+    fputs(desc, stream);
+  } else {
+    fprintf(stream, "<no-description>");
+  }
+  
+  fputc('\n', stream);
+  fputs(prefix, stream);
+  if(memo) {
+    fputs("  ", stream);
+    fputs(memo, stream);
+  } else {
+    fprintf(stream, "<no-transaction-memo>");
+  }
+  
+  {
+    int split_count = xaccTransCountSplits(txn);
+    int i;
+    for(i = 1; i < split_count; i++) {
+      Split *split = xaccTransGetSplit(txn, i);
+      char *split_text = xaccSplitAsString(split, prefix);
+      fputs(split_text, stream);
+      free(split_text);
+    }
+  }
+  fputc('\n', stream);
+
+  fputs(prefix, stream);
+  fprintf(stream, "  %10.2f -- Transaction total\n", total);
+  fclose(stream);
+
+  return(result);
 }
 
 /************************ END OF ************************************\
