@@ -641,6 +641,7 @@ AC_OUTPUT(
           src/calculation/Makefile 
           src/doc/Makefile
           src/doc/design/Makefile
+          src/doc/xml/Makefile
           src/engine/Makefile
           src/engine/test/Makefile
           src/engine/test-core/Makefile
