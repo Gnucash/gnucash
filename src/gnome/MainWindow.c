@@ -46,16 +46,18 @@ static void
 cram_accts_into_clist(GtkCList *list, AccountGroup *accts) {
   int count = xaccGetNumAccounts(accts);
   int i;
-  GtkWidget *item;
   
   for(i=0; i<count; i++) {
-    Account *acc = getAccount(accts, i);
+    Account *acc = xaccGroupGetAccount(accts, i);
     
-    gchar *rowstrs[] = { acc->accountName,
-                         acc->description,
-                         acc->notes };
+    gchar *rowstrs[3]; 
+    gint new_row;
     
-    gint new_row = gtk_clist_append(GTK_CLIST(list), rowstrs); 
+    rowstrs[0] = xaccAccountGetName (acc);
+    rowstrs[1] = xaccAccountGetDescription (acc);
+    rowstrs[2] = xaccAccountGetNotes (acc);
+    
+    new_row = gtk_clist_append(GTK_CLIST(list), rowstrs); 
 
     /* Set the row to point to the actual account so we can reach it
     trivially when the user selects the row.  (Should we use
@@ -73,14 +75,12 @@ main_window_init(AccountGroup *accts)
     
   GtkTooltips *tooltip; 
 
-  GtkWidget *label;
   GtkWidget *main_vbox;
   GtkWidget *button_bar;
     
   GtkWidget *menubar;
 
   GtkWidget *clist;
-  GtkWidget *list_item;
 
   GtkAcceleratorTable *accel;
 

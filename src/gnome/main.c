@@ -73,7 +73,6 @@ void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
   {
     /* load the accounts data from datafile*/
     topgroup = xaccMallocAccountGroup(); 
-    topgroup->new = TRUE;
   } 
 
   main_window_init(topgroup);
@@ -150,7 +149,6 @@ main( int argc, char *argv[] )
         gtk_widget_show ( dialog );
         
 	topgroup = xaccMallocAccountGroup(); 
-        topgroup->new = TRUE;
       }
     }
     /* Create main window */
