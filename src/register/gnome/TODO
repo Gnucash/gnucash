@@ -1,36 +1,10 @@
-UPDATED 08/28/99
+UPDATED June 03 2000
 
 
 *********************
 Overall Issues and Features.
 
-1.  Implement the comboboxes.  It should be possible to use the
-gtkcombowidget in src/gnome as a gnome_canvas_widget_item.  (This is
-partially implemented, but doesn't work yet.) Note that gtkcombowidget
-is a general purpose combobox, in that any widget can be put into the
-popup box.  In particular, we may also want to use it for a popup
-calendar in the date cells, or little calculator widgets ala Quicken.
-
-2.  Rob mentioned tab completion cells as a possible alternative to
-comboboxes; we should make this user-selectable.  It should
-be possible to use gcompletion.c in glib.
-
-3.  The cell traverse code is still a little rough, primarily
-because src/register/splitreg.c doesn't seem to be finished.
-In particular, we need hints for vertical movement and
-reverse-tabs.
-
-3.5  Related to the cell-traverse, we perhaps need to handle
-certain key-presses specially.  In particular, the enter
-key--we might want make this record the current
-transaction if it is complete enough, whatever that
-might mean.  Actually, the behavior of the enter
-key should be user-selectable;  it might act
-as a tab key ("accept the current cell, move to the
-next cell in this cursor") or as a record key ("accept
-the entire transaction").
-
-4.  The styles still need a lot of work.  I'm not sure whether
+1.  The styles still need a lot of work.  I'm not sure whether
 we should handle the styles entirely within the gnome register
 code, or try to make splitreg.c reasonably GUI independent.
 For example, things like fonts, cell colors, cell configurations,
@@ -38,54 +12,21 @@ etc. should be dynamically changeable by the user.  Also,
 the style dimension computation should take into account
 the font size.
 
-5.  Also, regarding the styles, I made some rather arbitrary
+2.  Also, regarding the styles, I made some rather arbitrary
 choices in setting up how the cells are layed out and drawn.
 (For example, the Reconcile cells aren't dealt with very well
 for multline cellblocks.)  And, it isn't clear that setting
-up layouts by percentages is the right way to go.  We may
-also want to be able to set borders as visible/invisible,  for
-example, at the beginning of split cursor.
+up layouts by percentages is the right way to go.
 
-6.  The "artwork" isn't great.  I'd like a better looking
+3.  The "artwork" isn't great.  I'd like a better looking
 cell cursor.
 
-7.  Can we make the cells sensitive to mouse clicks?  That is,
-it would be nice for a cell to behave like a gtkentry, in that
-the (keyboard) cursor can be positioned with the  mouse,
-and text selected, etc.  This is one disadvantage to the
-way the selected cells are drawn.
-
-8.  There's a bit of overdraw, but it isn't clear if optimizing
+4.  There's a bit of overdraw, but it isn't clear if optimizing
 the drawing is worth the effort.
-
-9.  There's a lot of g_new/g_free going on when the table is
-loaded, and we essentially copy the entire table data over
-to the GUI side.  Is this really necessary?  Also, one might
-investigate using the g_memchunk routines.  This
-might give better performance.
-
-10.  The header cells need fixing.  This could be either
-an issue for src/register/splitreg.c or for
-src/register/gnome/gnucash-style.c.  In particular,
-for the gnome register we need a one-line header
-for each of the possible cursor types.
 
 *********************
 
 Bugs
 
-1.  There seems to be a bug in the code that updates the
-current balance when a transaction is recorded.  I believe
-this is a bug in the table code, not the gnome register code,
-since this bug also appears with the old gtksheet implementation.
-
-2.  There are a few drawing bugs in the register;  this is mostly related
+1.  There are a few drawing bugs in the register;  this is mostly related
 to the style computation.
-
-3.  Not a bug, but the current action of pricecells could
-be improved.  Currently, if one types say '10' in a pricecell and presses
-tab, the cursor puts '10' in the current cell and moves
-to the next cell.  I would argue that it should put '10.00'
-in the current cell.
-
-
