@@ -1,3 +1,9 @@
+2003-02-22  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-register.c: Don't override the user's toolbar
+	style preference by calling gtk_widget_show_all() on the toolbar.
+	#102041
+
 2003-02-22  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/glade/account.glade: Increase height of
