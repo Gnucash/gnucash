@@ -2376,8 +2376,8 @@ msgstr ""
 
 #: po/guile_strings.txt:123
 msgid ""
-"The amount of federal income tax withheld (backup withholding) from "
-"1099-MISC income."
+"The amount of federal income tax withheld (backup withholding) from 1099-"
+"MISC income."
 msgstr ""
 
 #: po/guile_strings.txt:125
@@ -2410,9 +2410,9 @@ msgstr ""
 
 #: po/guile_strings.txt:130
 msgid ""
-"Interest paid on other indebtedness directly related to the rental property. "
-" This could include interest on a loan you took out and used the proceeds "
-"for your rental or royalty property."
+"Interest paid on other indebtedness directly related to the rental "
+"property.  This could include interest on a loan you took out and used the "
+"proceeds for your rental or royalty property."
 msgstr ""
 
 #: po/guile_strings.txt:131
@@ -2429,8 +2429,8 @@ msgstr ""
 #: po/guile_strings.txt:133
 msgid ""
 "The quarterly payments you make to your state taxing authority to cover the "
-"estimated tax due on income that is not subject to withholding (e.g., "
-"self-employment income, gains from sales of assets)."
+"estimated tax due on income that is not subject to withholding (e.g., self-"
+"employment income, gains from sales of assets)."
 msgstr ""
 
 #: po/guile_strings.txt:134
@@ -2620,10 +2620,10 @@ msgstr ""
 
 #: po/guile_strings.txt:179
 msgid ""
-"In order to take a bad debt deduction, you must show there was a true "
-"debtor-creditor relationship between you and the person who owes you money, "
-"the payments were previously included in income, the debt is worthless and "
-"steps were taken to collect."
+"In order to take a bad debt deduction, you must show there was a true debtor-"
+"creditor relationship between you and the person who owes you money, the "
+"payments were previously included in income, the debt is worthless and steps "
+"were taken to collect."
 msgstr ""
 
 #: po/guile_strings.txt:180
@@ -2745,8 +2745,8 @@ msgstr ""
 #: po/guile_strings.txt:205
 msgid ""
 "Contributions made to a H.R.10 (Keogh) Plan of a sole proprietor or "
-"partnership.  Depending on the type of plan, the deduction limit for a "
-"self-employed person is generally the smaller of $30,000 or a percentage of "
+"partnership.  Depending on the type of plan, the deduction limit for a self-"
+"employed person is generally the smaller of $30,000 or a percentage of "
 "taxable compensation."
 msgstr ""
 
@@ -2914,8 +2914,8 @@ msgstr ""
 msgid ""
 "Real estate or personal property taxes paid on farm property such as "
 "equipment, animals, buildings, land. Also include your portion of employment "
-"taxes paid for employees.  Federal highway use tax paid on trucks or "
-"truck-tractors is deductible."
+"taxes paid for employees.  Federal highway use tax paid on trucks or truck-"
+"tractors is deductible."
 msgstr ""
 
 #: po/guile_strings.txt:241
@@ -4996,9 +4996,9 @@ msgstr "De valgte konti i kontovalgslisten er:"
 
 #: po/guile_strings.txt:689
 msgid ""
-"Interest you receive on a take-back mortgage or other form of "
-"seller-financing that resulted from the sale of your home or other property. "
-" The buyer used the property as a personal residence."
+"Interest you receive on a take-back mortgage or other form of seller-"
+"financing that resulted from the sale of your home or other property.  The "
+"buyer used the property as a personal residence."
 msgstr ""
 
 #: po/guile_strings.txt:690
@@ -5741,10 +5741,10 @@ msgstr ""
 
 #: po/guile_strings.txt:833
 msgid ""
-"Ordinary and necessary business expenses for travel away from your tax home. "
-" Do not include meals and entertainment here. Include transportation between "
-"your home and business destination, lodging, taxi, tips, cleaning and "
-"laundry, etc."
+"Ordinary and necessary business expenses for travel away from your tax "
+"home.  Do not include meals and entertainment here. Include transportation "
+"between your home and business destination, lodging, taxi, tips, cleaning "
+"and laundry, etc."
 msgstr ""
 
 #: po/guile_strings.txt:834
@@ -5861,8 +5861,8 @@ msgstr ""
 #: po/guile_strings.txt:858
 msgid ""
 "Spouse contributions to a H.R.10 (Keogh) Plan set up by a sole proprietor or "
-"partnership. Depending on the type of plan, the deduction limit for a "
-"self-employed person is generally the smaller of $30,000 or a percentage of "
+"partnership. Depending on the type of plan, the deduction limit for a self-"
+"employed person is generally the smaller of $30,000 or a percentage of "
 "taxable compensation."
 msgstr ""
 
@@ -5993,8 +5993,8 @@ msgstr ""
 
 #: po/guile_strings.txt:885
 msgid ""
-"The amount of state income tax withheld (state backup withholding) from "
-"1099-MISC income."
+"The amount of state income tax withheld (state backup withholding) from 1099-"
+"MISC income."
 msgstr ""
 
 #: po/guile_strings.txt:887
@@ -6261,9 +6261,9 @@ msgstr ""
 
 #: po/guile_strings.txt:943
 msgid ""
-"Income in the form of patronage dividends, nonpatronage distributions, "
-"per-unit retain allocations, and redemption of nonqualified notices and "
-"per-unit retain allocations.  These are reported to you on Form 1099-PATR."
+"Income in the form of patronage dividends, nonpatronage distributions, per-"
+"unit retain allocations, and redemption of nonqualified notices and per-unit "
+"retain allocations.  These are reported to you on Form 1099-PATR."
 msgstr ""
 
 #: po/guile_strings.txt:944
@@ -7049,8 +7049,8 @@ msgstr ""
 #~ "This is for testing. Your reports probably shouldn't have an option like "
 #~ "this."
 #~ msgstr ""
-#~ "Dette er til test. Dine rapporter skal sikkert ikke have en valgmulighed som "
-#~ "denne."
+#~ "Dette er til test. Dine rapporter skal sikkert ikke have en valgmulighed "
+#~ "som denne."
 
 #~ msgid "Full"
 #~ msgstr "Fuld"
@@ -7173,10 +7173,11 @@ msgstr ""
 #~ msgstr "hoved_vindue_højde"
 
 #~ msgid ""
-#~ "Reverse Bank, Cash, Asset, Stock, Mutual Fund, Currency, and Expense Accounts"
+#~ "Reverse Bank, Cash, Asset, Stock, Mutual Fund, Currency, and Expense "
+#~ "Accounts"
 #~ msgstr ""
-#~ "Bank-, kontanter-, aktiver-, aktie-, obligations-, valuta- og udgifts-konti "
-#~ "i omvendt rækkefølge"
+#~ "Bank-, kontanter-, aktiver-, aktie-, obligations-, valuta- og udgifts-"
+#~ "konti i omvendt rækkefølge"
 
 #~ msgid "account_add_win_width"
 #~ msgstr "konto_add_vindue_bredde"
