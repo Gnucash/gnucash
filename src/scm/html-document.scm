@@ -151,24 +151,26 @@
    (append (gnc:html-document-objects doc) objects)))
 
 (define (gnc:html-document-fetch-markup-style doc markup)
-  (let ((style-info #f))
-    (if (not (null? (gnc:html-document-style-stack doc)))
+  (let ((style-info #f)
+	(style-stack (gnc:html-document-style-stack doc)))
+    (if (not (null? style-stack))
         (set! style-info 
               (gnc:html-style-table-fetch 
-               (car (gnc:html-document-style-stack doc))
-               (cdr (gnc:html-document-style-stack doc))
+               (car style-stack)
+               (cdr style-stack)
                markup)))
     (if (not style-info)
         (gnc:make-html-markup-style-info)
         style-info)))
 
 (define (gnc:html-document-fetch-data-style doc markup)
-  (let ((style-info #f))
+  (let ((style-info #f)
+	(style-stack (gnc:html-document-style-stack doc)))
     (if (not (null? (gnc:html-document-style-stack doc)))
         (set! style-info 
               (gnc:html-style-table-fetch 
-               (car (gnc:html-document-style-stack doc))
-               (cdr (gnc:html-document-style-stack doc))
+               (car style-stack)
+               (cdr style-stack)
                markup)))
     (if (not style-info)
         (gnc:make-html-data-style-info
@@ -246,9 +248,8 @@
   (let ((childinfo  (gnc:html-document-fetch-markup-style doc markup)))
     ;; now generate the end tag
     (let ((tag   (gnc:html-markup-style-info-tag childinfo))
-          (face  (gnc:html-markup-style-info-font-face childinfo))
-          (size  (gnc:html-markup-style-info-font-size childinfo))
-          (color (gnc:html-markup-style-info-font-color childinfo)))
+          (closing-font-tag? 
+	   (gnc:html-markup-style-info-closing-font-tag? childinfo)))
       ;; "" tags mean "show no tag"; #f tags means use default.
       (cond ((not tag)
              (set! tag markup))
@@ -256,7 +257,7 @@
              (set! tag #f)))
       (let* ((retval '())
              (push (lambda (l) (set! retval (cons l retval)))))
-        (if (or face size color)
+        (if closing-font-tag?
             (push "</font>\n"))
         (if tag 
             (begin 

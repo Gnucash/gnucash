@@ -1,3 +1,33 @@
+2001-03-01  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm (add-split-row): Now 
+	uses date-posted rather than date-entered.
+	(used-<foo>, build-column-used): use a vector rather than a 
+	record.  *Big* speedup :)
+
+	* src/scm/html-document.scm (gnc:document-fetch-markup-style): use
+	a let rather than repeated variable lookups.
+	(gnc:document-fetch-data-style): ditto.
+	(gnc:html-document-markup-end): use new closing-font-tag? variable
+	for more speedup.
+
+	* src/scm/html-document.scm (<html-markup-style-info>): add new
+	closing-font-tag? variable to speedup closing tags.  Also modify
+	setter functions to set closing-font-tag to appropriate values,
+	and add a setter and getter for it.
+	(gnc:html-style-info-markup-set): modify to set closing-font-tag
+	to appropriate state.
+	(gnc:html-style-info-markup-merge): modify to set closing-font-tag
+	to appropriate state
+
+	* src/scm/html-table.scm: replace for-each-in-order with for-each,
+	which has exactly the same semantics according to R5RS (which
+	guile is a superset of).  Was done in hope of speedup, but none
+	forthcoming.  Didn't change back because for-each is R5RS, but
+	for-each-in-order isn't.  Probably should make the substitution
+	globally.
+	
+
 2001-02-28  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/Transaction.c (xaccSplitsComputeValue): fix a bug

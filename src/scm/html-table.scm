@@ -118,7 +118,7 @@
            doc (gnc:html-table-cell-tag cell)
            (sprintf #f "rowspan=%a" (gnc:html-table-cell-rowspan cell))
            (sprintf #f "colspan=%a" (gnc:html-table-cell-colspan cell))))
-    (for-each-in-order 
+    (for-each 
      (lambda (child) 
        (push (gnc:html-object-render child doc)))
      (gnc:html-table-cell-data cell))
@@ -347,7 +347,7 @@
 ;     rows)
 
 ;    ;; append the elements of 'newrow' to the rowumns 
-;    (for-each-in-order
+;    (for-each
 ;     (lambda (newelt)
 ;       ;; find the row, or append one 
 ;       (if (not (null? rows))
@@ -528,7 +528,7 @@
              #f (gnc:html-table-col-styles table))
             
             ;; render the headers 
-            (for-each-in-order 
+            (for-each 
              (lambda (hdr) 
                (gnc:html-document-push-style 
                 doc (gnc:html-table-col-style table colnum))
@@ -559,7 +559,7 @@
     
     ;; now iterate over the rows 
     (let ((rownum 0) (colnum 0))
-      (for-each-in-order 
+      (for-each 
        (lambda (row) 
          (let ((rowstyle 
                 (gnc:html-table-row-style table rownum)))
@@ -572,7 +572,7 @@
            
            ;; write the column data, pushing the right column style 
            ;; each time, then the row style.  
-           (for-each-in-order 
+           (for-each 
             (lambda (datum)
               (let ((colstyle 
                      (gnc:html-table-col-style table colnum)))

@@ -39,6 +39,8 @@
 ;;  font-face   : string for <font face="">
 ;;  font-size   : string for <font size="">
 ;;  font-color  : color (a valid HTML color spec)
+;;  closing-font-tag: private data (computed from font-face, font-size, font-color)
+;;                    don't set directly, please!
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -69,6 +71,7 @@
                       font-face 
                       font-size 
                       font-color
+		      closing-font-tag?
                       inheritable?)))
 
 (define gnc:html-markup-style-info?
@@ -79,7 +82,7 @@
 
 (define (gnc:make-html-markup-style-info . rest)
   (let ((retval (gnc:make-html-markup-style-info-internal 
-                 #f (make-kvtable) #f #f #f #t)))
+                 #f (make-kvtable) #f #f #f #f #t)))
     (apply gnc:html-markup-style-info-set! retval rest)
     retval))
 
@@ -94,9 +97,14 @@
               (if (list? value)
                   (gnc:html-markup-style-info-set-attribute!
                    style (car value) (cadr value)))
-              (let ((modifier 
+	      (begin 
+		(if (memq field '(font-size font-face font-color))
+		    (gnc:html-markup-style-set-closing-font-tag 
+		     style 
+		     (not (eq? value #f))))
+		(let ((modifier 
                      (record-modifier <html-markup-style-info> field)))
-                (modifier style value)))
+                (modifier style value))))
           (loop (cddr arglist)))))
   style)
 
@@ -115,20 +123,42 @@
 (define gnc:html-markup-style-info-font-face
   (record-accessor <html-markup-style-info> 'font-face))
 
-(define gnc:html-markup-style-info-set-font-face!
+(define gnc:html-markup-style-info-set-font-face-internal!
   (record-modifier <html-markup-style-info> 'font-face))
+
+(define (gnc:html-markup-style-info-set-font-face! record value)
+  (begin
+    (gnc:html-markup-style-info-set-closing-font-tag! record (not (eq? value #f)))    (gnc:html-markup-style-info-set-font-face-internal! record value)))
 
 (define gnc:html-markup-style-info-font-size
   (record-accessor <html-markup-style-info> 'font-size))
 
-(define gnc:html-markup-style-info-set-font-size!
+(define gnc:html-markup-style-info-set-font-size-internal!
   (record-modifier <html-markup-style-info> 'font-size))
+
+(define (gnc:html-markup-style-info-set-font-size! record value)
+  (begin
+    (gnc:html-markup-style-info-set-closing-font-tag! record (not (eq? value #f)))
+    (gnc:html-markup-style-info-set-font-size-internal! record value)))
+
+
+
 
 (define gnc:html-markup-style-info-font-color
   (record-accessor <html-markup-style-info> 'font-color))
 
-(define gnc:html-markup-style-info-set-font-color!
+(define gnc:html-markup-style-info-set-font-color-internal!
   (record-modifier <html-markup-style-info> 'font-color))
+
+(define (gnc:html-markup-style-info-set-font-color! record value)
+  (begin
+    (gnc:html-markup-style-info-set-closing-font-tag! record (not (eq? value #f)))
+    (gnc:html-markup-style-info-set-font-color-internal! record value)))
+
+(define gnc:html-markup-style-info-closing-font-tag?
+  (record-accessor <html-markup-style-info> 'closing-font-tag?))
+(define gnc:html-markup-style-info-set-closing-font-tag!
+  (record-modifier <html-markup-style-info> 'closing-font-tag?))
 
 (define gnc:html-markup-style-info-inheritable? 
   (record-accessor <html-markup-style-info> 'inheritable?))
@@ -147,7 +177,9 @@
           (let* ((tag-1  (gnc:html-markup-style-info-tag s1))
                  (face-1 (gnc:html-markup-style-info-font-face s1))
                  (size-1 (gnc:html-markup-style-info-font-size s1))
-                 (color-1 (gnc:html-markup-style-info-font-color s1)))
+                 (color-1 (gnc:html-markup-style-info-font-color s1))
+		 (closing-font-tag?-1 
+		  (gnc:html-markup-style-info-closing-font-tag s1)))
             (gnc:make-html-markup-style-info-internal 
              ;; tag 
              (if tag-1 tag-1 (gnc:html-markup-style-info-tag s2))
@@ -171,6 +203,9 @@
              ;; color 
              (if color-1 color-1 
                  (gnc:html-markup-style-info-font-color s2))
+	     ;; closing font tag
+	     (or closting-font-tag?-1 
+		 (gnc:html-markup-style-info-closing-font-tag s2))
              ;; inheritable (get this always from child)
              (gnc:html-markup-style-info-inheritable? s1))))))
 

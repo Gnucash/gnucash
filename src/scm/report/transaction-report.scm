@@ -114,89 +114,78 @@
 	      (cons 'memo   (vector 'by-memo #f #f))
 	      (cons 'none    (vector 'by-none #f #f))))
       
-      (define <columns-used>
-	(make-record-type "<columns-used>"
-			  (list 'date 
-				'num 
-				'description 
-				'account 
-				'other-account 
-				'shares 
-				'price
-				'amount-single
-				'amount-double-positive
-				'amount-double-negative
-				'running-balance)))
+;      (define <columns-used>
+;	(make-record-type "<columns-used>"
+;			  (list 'date 
+;				'num 
+;				'description 
+;				'account 
+;				'other-account 
+;				'shares 
+;				'price
+;				'amount-single
+;				'amount-double-positive
+;				'amount-double-negative
+;				'running-balance)))
       
       (define (used-date columns-used)
-	((record-accessor <columns-used> 'date) columns-used))
+	(vector-ref columns-used 0))
       (define (used-num columns-used)
-	((record-accessor <columns-used> 'num) columns-used))
+	(vector-ref columns-used 1))
       (define (used-description columns-used)
-	((record-accessor <columns-used> 'description) columns-used))
+	(vector-ref columns-used 2))
       (define (used-account columns-used)
-	((record-accessor <columns-used> 'account) columns-used))
+	(vector-ref columns-used 3))
       (define (used-other-account columns-used)
-	((record-accessor <columns-used> 'other-account) columns-used))
+	(vector-ref columns-used 4))	
       (define (used-shares columns-used)
-	((record-accessor <columns-used> 'shares) columns-used))
+	(vector-ref columns-used 5))	
       (define (used-price columns-used)
-	((record-accessor <columns-used> 'price) columns-used))
+	(vector-ref columns-used 6))	
       (define (used-amount-single columns-used)
-	((record-accessor <columns-used> 'amount-single) columns-used))
+	(vector-ref columns-used 7))	
       (define (used-amount-double-positive columns-used)
-	((record-accessor <columns-used>
-                          'amount-double-positive) columns-used))
+	(vector-ref columns-used 8))	
       (define (used-amount-double-negative columns-used)
-	((record-accessor <columns-used>
-                          'amount-double-negative) columns-used))
+	(vector-ref columns-used 9))	
       (define (used-running-balance columns-used)
-	((record-accessor <columns-used> 'running-balance) columns-used))
-
+	(vector-ref columns-used 10))	
 
       (define (build-column-used options)   
 	(define (opt-val section name)
 	  (gnc:option-value 
 	   (gnc:lookup-option options section name)))
-	(define (columns-used-set-field record field value)
-	  ((record-modifier <columns-used> field) record value))
-	
-	(let ((column-list 
-	       ((record-constructor <columns-used>)
-                #f #f #f #f #f #f #f #f #f #f #f)))
+	(let ((column-list (make-vector 11 #f)))
 	  
 	  (define (opt-val section name)
 	    (gnc:option-value 
 	     (gnc:lookup-option options section name)))
 	  (if (opt-val (N_ "Display") (N_ "Date"))
-	      (columns-used-set-field column-list 'date #t))
+	      (vector-set! column-list 0 #t))
 	  (if (opt-val (N_ "Display") (N_ "Num"))
-	      (columns-used-set-field column-list 'num #t))
+	      (vector-set! column-list 1 #t))
 	  (if (opt-val (N_ "Display") (N_ "Description"))
-	      (columns-used-set-field column-list 'description #t))
+	      (vector-set! column-list 2 #t))
 	  (if (opt-val (N_ "Display") (N_ "Account"))
-	      (columns-used-set-field column-list 'account #t))
+	      (vector-set! column-list 3 #t))
 	  (if (opt-val (N_ "Display") (N_ "Other Account"))
-	      (columns-used-set-field column-list 'other-account #t))
+	      (vector-set! column-list 4 #t))
 	  (if (opt-val (N_ "Display") (N_ "Shares"))
-	      (columns-used-set-field column-list 'shares #t))
+	      (vector-set! column-list 5 #t))
 
 	  (if (opt-val (N_ "Display") (N_ "Price"))
-	      (columns-used-set-field column-list 'price #t))
+	      (vector-set! column-list 6 #t))
 ;   (gnc:warn "Amount Display" (opt-val (N_ "Display") (N_ "Amount")))
 
 	  (let ((amount-setting (opt-val (N_ "Display") (N_ "Amount"))))
 	    (if (eq? amount-setting 'single)
-		(columns-used-set-field column-list 'amount-single #t))
+	      (vector-set! column-list 7 #t))
 	    (if (eq? amount-setting 'double)
 		(begin 
-		  (columns-used-set-field column-list
-                                          'amount-double-positive #t)
-		  (columns-used-set-field column-list
-                                          'amount-double-negative #t)))
-	#f)
+	      (vector-set! column-list 8 #t)
+	      (vector-set! column-list 9 #t))))
 	  (if (opt-val (N_ "Display") (N_ "Running Balance"))
-	      (columns-used-set-field column-list 'running-balance #t))
+	      (vector-set! column-list 10 #t))
 	;  (gnc:debug "Column list:" column-list)
       column-list))
 
@@ -240,7 +229,7 @@
       
       (if (used-date column-vector)
 	  (addto! row-contents (gnc:timepair-to-datestring 
-				(gnc:transaction-get-date-entered parent))))
+				(gnc:transaction-get-date-posted parent))))
       
       
       (if (used-num column-vector)
