@@ -1032,9 +1032,6 @@ AC_OUTPUT( m4/Makefile  intl/Makefile
           debian/Makefile
           doc/Makefile
           doc/examples/Makefile
-          doc/sgml/Makefile
-          doc/sgml/C/Makefile
-          doc-tools/Makefile
           intl-scm/Makefile
           lib/Makefile
           lib/guile-www/Makefile

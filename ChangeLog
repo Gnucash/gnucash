@@ -1,3 +1,17 @@
+2002-12-16  Chris Lyttle  <chris@wilddev.net>
+
+	* Makefile.am: remove doc-tools dir
+	* configure.in: remove making in doc-tools, sgml dirs
+	* doc/Makefile.am: remove sgml dir
+	* src/scm/help-topics-index.scm: add indexes for new help docs
+	* doc-tools/build-help-index.in: removed
+	* doc-tools/dbadd.c: removed
+	* doc-tools/Makefile.am: removed
+	* doc-tools/.cvsignore: removed
+	* doc/manual/*: removed
+	* doc/sgml/*: removed
+	* doc/html/*: removed
+
 2002-12-15  David Hampton  <hampton@employees.org>
 
 	* src/report/standard-reports/advanced-portfolio.scm: 
