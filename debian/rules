@@ -7,14 +7,19 @@
 
 package=gnucash
 
+id= $(shell pwd)/debian/tmp
+
+#perlpriv =  $(id)$(shell perl -V:installprivlib | perl -pe 's/.*\'(.*)\'.*/\1/;')
+#perlarch = $(id)$(shell perl -V:installarchlib | perl -pe 's/.*\'(.*)\'.*/\1/;')
 build: build-stamp
 build-stamp:
 	dh_testdir
 	$(checkdir)
-	CFLAGS="-fsigned-char -g" ./configure --prefix=/usr
-	make depend
-	make gnome
-	touch build
+	./configure --prefix=/usr \
+		--sysconfdir=/etc \
+		--infodir=/usr/share/info \
+		--mandir=/usr/share/man
+	make 
 	touch build-stamp
 
 clean:
@@ -32,8 +37,16 @@ install-stamp: build-stamp
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	make install prefix=`pwd`/debian/tmp/usr GNC_DOCDIR=`pwd`/debian/tmp/usr/share/doc
-	strip `pwd`/debian/tmp/usr/lib/gnucash/gnucash.so
+	make install prefix=$(id)/usr sysconfdir=$(id)/etc GNC_DOC_INSTALL_DIR=$(id)/usr/share/doc/gnucash infodir=$(id)/usr/share/info mandir=$(id)/usr/share/man
+	rm -f $(id)/usr/share/doc/gnucash/COPYING.gz
+
+	# no perl anymore
+	#mkdir -p $(perlpriv)
+	#mv $(id)/usr/share/gnucash/perl/gnucash.pm $(perlpriv)
+	#mkdir -p $(perlarch)
+	#mv $(id)/usr/share/gnucash/perl/* $(perlarch)
+	#-rmdir -p $(id)/usr/share/gnucash/perl
+
 	touch install-stamp
 
 binary-indep: build install
