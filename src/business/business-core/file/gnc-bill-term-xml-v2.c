@@ -128,7 +128,7 @@ billterm_dom_tree_create (GncBillTerm *term)
       break;
 
     case GNC_TERM_TYPE_PROXIMO:
-      data = xmlNewChild (ret, NULL, gnc_daystype_string, NULL);
+      data = xmlNewChild (ret, NULL, gnc_proximotype_string, NULL);
       maybe_add_int (data, prox_dueday_string, gncBillTermGetDueDays (term));
       maybe_add_int (data, prox_discday_string,
 		     gncBillTermGetDiscountDays (term));
