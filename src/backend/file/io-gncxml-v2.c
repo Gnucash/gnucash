@@ -42,6 +42,7 @@
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofsession.h"
+#include "qofsession-p.h"
 
 #include "sixtp-dom-parsers.h"
 #include "io-gncxml-v2.h"
@@ -652,7 +653,7 @@ qof_session_load_from_xml_file_v2(QofSession *session)
     struct file_backend be_data;
 
     book = qof_session_get_book (session);
-    be = (QofBackend *)qof_book_get_backend(book);
+    be = qof_book_get_backend(book);
     gd = gnc_sixtp_gdv2_new(book, FALSE, file_rw_feedback, be->percentage);
 
     top_parser = sixtp_new();
@@ -1083,7 +1084,7 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
                  "book", 1,
                  NULL);
 
-    be = (QofBackend *)qof_book_get_backend(book);
+    be = qof_book_get_backend(book);
     gd = gnc_sixtp_gdv2_new(book, FALSE, file_rw_feedback, be->percentage);
     gd->counter.commodities_total =
       gnc_commodity_table_get_size(gnc_book_get_commodity_table(book));

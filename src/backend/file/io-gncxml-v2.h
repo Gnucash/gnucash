@@ -107,7 +107,7 @@ typedef struct
 
   sixtp *	(*create_parser) (void);
   gboolean	(*add_item)(sixtp_gdv2 *, gpointer obj);
-  int		(*get_count) (QofBook *);
+  int	      (*get_count) (QofBook *);
   void		(*write) (FILE*, QofBook*);
   void		(*scrub) (QofBook *);
 } GncXmlDataType_t;
@@ -122,7 +122,7 @@ typedef struct
 {
 	AccountList	*accts;
 	TransList	*transactions;
-        QofBook *book;
+	QofBook *book;
 } gnc_template_xaction_data;
 
 /* Call after loading each record */
