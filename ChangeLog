@@ -1,3 +1,8 @@
+2003-02-10  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/import-backend.c,h: 
+	* src/import-export/import-main-matcher.c: Apply most of cmorgan's patch for iterative destination account matching.  Optionally restricting to the transactions after the one being edited still need's to be implemented.
+
 2003-02-10  Derek Atkins  <derek@ihtfp.com>
 
 	* po/POTFILES.in: fox for the search-param.c move

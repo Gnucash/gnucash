@@ -68,6 +68,11 @@ struct _main_matcher_info
 #define DOWNLOADED_CLIST_ACTION_INFO 8
 static short module = MOD_IMPORT;
 
+/* Local prototypes */
+static void automatch_clist_transactions(GNCImportMainMatcher *info, GtkCList *clist);
+
+
+
 static char * fleche_xpm[] = {
 "17 22 41 1",
 " 	c None",
@@ -265,6 +270,9 @@ run_account_picker_dialog (GNCImportMainMatcher *info,
       gnc_import_TransInfo_set_destacc (trans_info,
 					new_acc,
 					TRUE);
+
+      /* Iterate through the transactions in a given clist to auto match them */
+      automatch_clist_transactions(info, (GtkCList*)info->clist);
     }
 }
 
@@ -822,5 +830,23 @@ void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans)
     }
   return;
 }/* end gnc_import_add_trans() */
+
+/* Iterate through the rows of the clist and try to automatch each of them */
+static void automatch_clist_transactions(GNCImportMainMatcher *info, GtkCList *clist)
+{
+  int row;
+  GNCImportTransInfo *trans_info;
+  
+  for(row = 0; row < clist->rows; row++)
+    {
+      trans_info = gtk_clist_get_row_data(clist, row);
+      
+      /* returns TRUE if we changed this row, so update it */
+      if(gnc_import_TransInfo_refresh_destacc(trans_info, NULL))
+	{
+	  refresh_clist_row(info, row, trans_info);
+	}
+    }
+}
 
 /** @} */
