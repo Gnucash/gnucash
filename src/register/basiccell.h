@@ -132,15 +132,17 @@
 #define __XACC_BASIC_CELL_H__
 
 typedef struct _BasicCell BasicCell;
+typedef unsigned int uint32;
 
 struct _BasicCell {
 
-  short width;           /* column width, in chars, not pixels */
-  short alignment;       /* column text alignment */
-  char  input_output;    /* zero if output-only */
-  int   bg_color;        /* background color, ARGB format */
-  int   fg_color;        /* forground (text) color ARGB format */
-  /* hack alert -- add support for e.g. bold fonts !?!?! */
+  short  width;           /* column width, in chars, not pixels */
+  short  alignment;       /* column text alignment */
+  char   input_output;    /* zero if output-only */
+  uint32 bg_color;        /* background color, ARGB format */
+  uint32 fg_color;        /* forground (text) color ARGB format */
+
+  /* hack alert -- add support for e.g. bold fonts !?!?! italic fonts ?? */
 
   char * value;          /* current value */
   unsigned int changed;  /* 2^32-1 if value modified */

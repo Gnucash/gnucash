@@ -84,8 +84,20 @@ void        xaccMotifResizeTable (Table * table,
                  int new_phys_rows, int new_phys_cols,
                  int new_virt_rows, int new_virt_cols);
 
-/* redraw the table GUI */
+/* The xaccRefreshTableGUI() routine causes the entire table 
+ * GUI to be redrawn with the values currently stored in the table.
+ * Because this redraws the entire table, the entire window will 
+ * flash colors. Consider using the RefreshCursorGUI routine below
+ * to minimize flashing.
+ */
 void        xaccRefreshTableGUI (Table *);
+
+/* The xaccRefreshCursorGUI() routine is like the xaccRefreshTableGUI()
+ * call, except that only the rows that are part of the current cursor are 
+ * redrawn. Thus, the use of this routine should result in significantly
+ * less screen color flashing than the use of the full-table refresh routine.
+ */
+void        xaccRefreshCursorGUI (Table *);
 
 #endif __XACC_TABLE_MOTIF_H__
 /* ================== end of file ======================= */

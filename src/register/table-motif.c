@@ -41,6 +41,7 @@ static void enterCB (Widget mw, XtPointer cd, XtPointer cb);
 static void leaveCB (Widget mw, XtPointer cd, XtPointer cb);
 static void modifyCB (Widget mw, XtPointer cd, XtPointer cb);
 static void traverseCB (Widget mw, XtPointer cd, XtPointer cb);
+static void doRefreshCursorGUI (Table * table, CellBlock *curs, int row, int col);
 
 /* The XrmQuarks are used to figure out the direction of
  * traversal from cell to cell */
@@ -80,10 +81,20 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
    /* if we are entering this cell, make sure that we've
     * moved the cursor, and that any subsidiary GUI elements
     * properly positioned.  Do this *before* we examine the 
-    * value of the "cuirrent cursor".
+    * value of the "current cursor".
     */
-   if (XbaeEnterCellReason == cbs->reason) {
+   if (XbaeEnterCellReason == cbs->reason) 
+   {
+      CellBlock *save_curs = table->current_cursor;
+      int save_phys_row = table->current_cursor_phys_row;
+      int save_phys_col = table->current_cursor_phys_col;
+
+      /* VerifyCursor will do all sorts of gui-indeopendent machinations */
       xaccVerifyCursorPosition (table, row, col);
+
+      /* make sure the old and the new cursor rows get redrawn */
+      xaccRefreshCursorGUI (table);
+      doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
    }
 
    /* can't edit outside of the physical space */
@@ -469,49 +480,6 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
 
 /* ==================================================== */
 
-static void
-SetupColorTable (Table *table)
-{
-
-   Display * dpy;
-   Window win;
-   XWindowAttributes wattr;
-   Colormap cmap;
-   XColor * colors;
-   int i, ncolors;
-
-   /* if already initialized, do nothing */
-   if (0 != table->ncolors) return;
-
-   /* get the number of colors in our colormap */
-   dpy = XtDisplay (table->table_widget);
-   win = XtWindow (table->table_widget);
-   XGetWindowAttributes (dpy, win, &wattr);
-   ncolors = wattr.visual->map_entries;
-   cmap = wattr.colormap;
-   table->ncolors = ncolors;
-
-   /* If the class is TrueColor, then there is no colormap.
-    * Punt for now.
-    */
-   if (TrueColor == wattr.visual->class) return;
-
-   /* if ncolors is greater than 16K, then we probably
-    * have a true-color display, and don't have a colormap.
-    * Punt. Hack Alert
-    */
-   if (16384 < ncolors) return;
-
-   /* get the color values */
-   /* hack alert -- remember to free this memory somewhere. */
-   colors = (XColor *) malloc ( ncolors * sizeof (XColor));
-   table->colors = colors;
-   for (i=0; i<ncolors; i++) { colors[i].pixel = i; }
-   XQueryColors (dpy, cmap, colors, ncolors);
-}
-
-/* ==================================================== */
-
 Widget
 xaccCreateTable (Table *table, Widget parent, char * name) 
 {
@@ -609,8 +577,80 @@ xaccCreateTable (Table *table, Widget parent, char * name)
 
 /* ==================================================== */
 
+#define NOOP(x)  /* do nothing */
+
+void
+xaccMotifResizeTable (Table * table,
+                 int new_phys_rows, int new_phys_cols,
+                 int new_virt_rows, int new_virt_cols)
+
+{
+   XACC_RESIZE_ARRAY ((table->num_phys_rows),
+               (table->num_phys_cols),
+               new_phys_rows,
+               new_phys_cols,
+               (table->bg_hues),
+               Pixel,
+               1,
+               NOOP);
+
+   XACC_RESIZE_ARRAY ((table->num_phys_rows),
+               (table->num_phys_cols),
+               new_phys_rows,
+               new_phys_cols,
+               (table->fg_hues),
+               Pixel,
+               0,
+               NOOP);
+}
+
+/* ==================================================== */
+
+static void
+SetupColorTable (Table *table)
+{
+
+   Display * dpy;
+   Window win;
+   XWindowAttributes wattr;
+   Colormap cmap;
+   XColor * colors;
+   int i, ncolors;
+
+   /* if already initialized, do nothing */
+   if (0 != table->ncolors) return;
+
+   /* get the number of colors in our colormap */
+   dpy = XtDisplay (table->table_widget);
+   win = XtWindow (table->table_widget);
+   XGetWindowAttributes (dpy, win, &wattr);
+   ncolors = wattr.visual->map_entries;
+   cmap = wattr.colormap;
+   table->ncolors = ncolors;
+
+   /* If the class is TrueColor, then there is no colormap.
+    * Punt for now.
+    */
+   if (TrueColor == wattr.visual->class) return;
+
+   /* if ncolors is greater than 16K, then we probably
+    * have a true-color display, and don't have a colormap.
+    * Punt. Hack Alert
+    */
+   if (16384 < ncolors) return;
+
+   /* get the color values */
+   /* hack alert -- remember to free this memory somewhere. */
+   colors = (XColor *) malloc ( ncolors * sizeof (XColor));
+   table->colors = colors;
+   for (i=0; i<ncolors; i++) { colors[i].pixel = i; }
+   XQueryColors (dpy, cmap, colors, ncolors);
+}
+
+/* ==================================================== */
+
 static Pixel 
-GetColormapIndex (Table *table, int argb)
+GetColormapIndex (Table *table, unsigned int argb)
 {
    XColor *colors = table->colors;
    int ncolors = table->ncolors;
@@ -658,49 +698,13 @@ GetColormapIndex (Table *table, int argb)
 
 /* ==================================================== */
 
-#define NOOP(x)  /* do nothing */
-
-void
-xaccMotifResizeTable (Table * table,
-                 int new_phys_rows, int new_phys_cols,
-                 int new_virt_rows, int new_virt_cols)
-
-{
-   XACC_RESIZE_ARRAY ((table->num_phys_rows),
-               (table->num_phys_cols),
-               new_phys_rows,
-               new_phys_cols,
-               (table->bg_hues),
-               Pixel,
-               1,
-               NOOP);
-
-   XACC_RESIZE_ARRAY ((table->num_phys_rows),
-               (table->num_phys_cols),
-               new_phys_rows,
-               new_phys_cols,
-               (table->fg_hues),
-               Pixel,
-               0,
-               NOOP);
-}
-
-/* ==================================================== */
-
-void        
-xaccRefreshTableGUI (Table * table)
+static void        
+RefreshColors (Table * table, int from_row, int to_row, int from_col, int to_col)
 {
    int iphys, jphys;
-   int bg_cache, fg_cache;
+   uint32 bg_cache, fg_cache;
    Pixel bg_cache_val, fg_cache_val;
    Pixel white, black;
-
-{int i;
-printf (" refresh numphysrows=%d numphyscols=%d \n",  table->num_phys_rows,table->num_phys_cols);
-for (i=0; i<table->num_phys_rows; i++) {
-printf ("cell %d color: 0x%x act:%s descr: %s \n", i, table->bg_colors[i][3], table->entries[i][2],
-table->entries[i][3]);
-}}
 
    /* make sure that the color table is initialized.
     * it would be slightly more efficient if we called 
@@ -709,6 +713,8 @@ table->entries[i][3]);
     */ 
    SetupColorTable (table);
 
+   /* hack alert -- try to store these values with the table, 
+    * for cpu efficiency */
    black = GetColormapIndex (table,  0x0);
    fg_cache = 0x0;
    fg_cache_val = black;
@@ -717,9 +723,9 @@ table->entries[i][3]);
    bg_cache = 0xffffff;
    bg_cache_val = white;
 
-   for (iphys=0; iphys<table->num_phys_rows; iphys++)
+   for (iphys=from_row; iphys<to_row; iphys++)
    {
-      for (jphys = 0; jphys < table->num_phys_cols; jphys++)
+      for (jphys=from_col; jphys<to_col; jphys++)
       {
          /* fill in the colormap entry that is the equivalent 
           * of th requested background color */
@@ -748,6 +754,22 @@ table->entries[i][3]);
          }
       }
    }
+}
+
+/* ==================================================== */
+
+void        
+xaccRefreshTableGUI (Table * table)
+{
+
+{int i;
+printf (" refresh numphysrows=%d numphyscols=%d \n",  table->num_phys_rows,table->num_phys_cols);
+for (i=0; i<table->num_phys_rows; i++) {
+printf ("cell %d color: 0x%x act:%s descr: %s \n", i, table->bg_colors[i][3], table->entries[i][2],
+table->entries[i][3]);
+}}
+
+  RefreshColors (table, 0, table->num_phys_rows, 0, table->num_phys_cols);
 
   XtVaSetValues (table->table_widget, XmNrows,    table->num_phys_rows,
                                       XmNcolumns, table->num_phys_cols,
@@ -756,6 +778,58 @@ table->entries[i][3]);
                                       XmNcolors, table->fg_hues,
                                       NULL);
 
+}
+
+/* ==================================================== */
+
+static void        
+doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
+{
+   int to_row, to_col;
+   int i,j;
+
+   /* if the current cursor is undefined, there is nothing to do. */
+   if (!curs) return;
+   if ((0 > from_row) || (0 > from_col)) return;
+
+   /* compute the physical bounds of the current cursor */
+   to_row = from_row + curs->numRows;
+   to_col = from_col + curs->numCols;
+
+   /* make sure the cached color values are correct */
+   RefreshColors (table, from_row, to_row, from_col, to_col);
+
+   /* disable update, so as to avoid unpleasent screen flashing */
+   /* Uhh, actually, this doesn't work, as expected ... is Xbae busted?
+    * XbaeMatrixDisableRedisplay (table->table_widget);
+    */
+
+   /* cycle through, cell by cell, copying our values to the widget */
+   for (i=from_row; i<to_row; i++) {
+      for (j=from_col; j<to_col; j++) {
+          XbaeMatrixSetCell           (table->table_widget, i,j, table->entries[i][j]);
+          XbaeMatrixSetCellBackground (table->table_widget, i,j, table->bg_hues[i][j]);
+          XbaeMatrixSetCellColor      (table->table_widget, i,j, table->fg_hues[i][j]);
+      }
+   }
+
+   /* OK, update the window */
+   /* Uhh, actually, this doesn't work, as expected ... 
+    * If False is used, then not everything gets updated properly,
+    * If True is used, then the whole window flashes.
+    * So in fact things work best in this enable/disable is left alone.
+    * XbaeMatrixEnableRedisplay (table->table_widget, True);
+    */
+}
+
+/* ==================================================== */
+
+void        
+xaccRefreshCursorGUI (Table * table)
+{
+   doRefreshCursorGUI (table, table->current_cursor,
+      table->current_cursor_phys_row,
+      table->current_cursor_phys_col);
 }
 
 /* ================== end of file ======================= */

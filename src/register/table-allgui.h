@@ -109,7 +109,13 @@ struct _Table {
   int num_virt_rows;
   int num_virt_cols;
 
-  /* the current cursor row/col is the virt row/col */
+  /* The position of the current cursor in "virtual" space
+   * is given by the virt_row and virt_col fields below.
+   * The fields termed "phys_row" and "phys_col" would
+   * be better termed phys row and column "origins", as the
+   * cursor extends down and to the right from the location
+   * given by the phys values.
+   */
   CellBlock *current_cursor;
   int current_cursor_phys_row;
   int current_cursor_phys_col;
@@ -128,8 +134,8 @@ struct _Table {
   /* background colors for each cell, format ARGB, 
    * and foreground (text) colors, format ARGB,
    * of dimension num_phys_rows * num_phys_cols */
-  int **bg_colors;
-  int **fg_colors;
+  uint **bg_colors;
+  uint **fg_colors;
 
   /* handler locators for each cell, 
    * of dimension num_phys_rows * num_phys_cols */

@@ -60,12 +60,23 @@ struct _CellBlock {
   short numRows;
   short numCols;
 
-  BasicCell ***cells;  /* row-col array */
-  /* the above array of pointers has dimensions of numRows*numCols.
-   * It is autonmatically created and managed by the routines below.
+  /* The array "cells" of pointers to cells has dimensions of numRows*numCols.
+   * It is automatically created and managed by the routines below.
    * It contains pointers to the cell handlers that are a part of
    * this "block".
    */
+  BasicCell ***cells;  /* row-col array */
+
+  /* The active_bg_color is the default color (in argb) for the cell
+   * backgrounds when this cell block needs to be "highlighted" in 
+   * some way (typically, when this cellblock represents the
+   * the currently active cursor).
+   *
+   * The passive_bg_color is the default color for the cell background
+   * (in argb format) when the cell block is not highlighted.
+   */
+  uint32 active_bg_color;
+  uint32 passive_bg_color;
 
   short     **right_traverse_r;
   short     **right_traverse_c;

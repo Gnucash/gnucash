@@ -227,9 +227,9 @@ xaccTableResize (Table * table,
                new_phys_rows,
                new_phys_cols,
                (table->bg_colors),
-               int,
-               (0xffffff),    /* white */
-               NOOP);         /* no-op */
+               uint32,
+               ((uint32) 0xffffff),  /* white */
+               NOOP);                /* no-op */
 
    /* resize the foreground color array (black text) */
    XACC_RESIZE_ARRAY ((table->num_phys_rows),
@@ -237,9 +237,9 @@ xaccTableResize (Table * table,
                new_phys_rows,
                new_phys_cols,
                (table->fg_colors),
-               int,
-               (0x0),         /* black */
-               NOOP);         /* no-op */
+               uint32,
+               ((uint32) 0x0),      /* black */
+               NOOP);               /* no-op */
 
 
    /* resize the user-data hooks */
@@ -310,92 +310,46 @@ xaccSetCursor (Table *table, CellBlock *curs,
 
 /* ==================================================== */
 
-void xaccMoveCursor (Table *table, int new_phys_row, int new_phys_col)
+static void 
+doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
 {
    int i,j;
    int phys_row_origin, phys_col_origin;
    int new_virt_row, new_virt_col;
    CellBlock *curs;
 
-   /* call the callback, allowing the app to commit any changes */
+   /* call the callback, allowing the app to commit any changes 
+    * associated with the current location of the cursor.   */
    if (table->move_cursor) {
       (table->move_cursor) (table, table->client_data);
    }
 
-   /* check for out-of-bounds conditions (which may be deliberate) */
-   if ((0 > new_phys_row) || (0 > new_phys_col)) {
-      new_virt_row = -1;
-      new_virt_col = -1;
-   } else {
-      new_virt_row = table->locators[new_phys_row][new_phys_col]->virt_row;
-      new_virt_col = table->locators[new_phys_row][new_phys_col]->virt_col;
-   }
+   /* Change the cell background colors to thier "passive" values.
+    * This denotes that the cursor has left this location (which means more or
+    * less the same thing as "the current location is no longer being edited.")
+    * (But only do this if the cursor has a valid current location) 
+    */
+   if ((0 <= table->current_cursor_phys_row) &&
+       (0 <= table->current_cursor_phys_col)) 
+   {
+      int r_origin = table->current_cursor_phys_row;
+      int c_origin = table->current_cursor_phys_col;
+      curs = table->current_cursor;
 
-   /* invalidate the cursor for now; we'll set it the the correct values below */
-   table->current_cursor_phys_row = -1;
-   table->current_cursor_phys_col = -1;
-   table->current_cursor_virt_row = -1;
-   table->current_cursor_virt_col = -1;
-   curs = table->current_cursor;
-   if (curs) curs->user_data = NULL;
-   table->current_cursor = NULL;
-
-   /* check for out-of-bounds conditions (which may be deliberate) */
-   if ((0 > new_virt_row) || (0 > new_virt_col)) return;
-   if (new_virt_row >= table->num_virt_rows) return;
-   if (new_virt_col >= table->num_virt_cols) return;
-
-   /* ok, we now have a valid position.  Find the new cursor to use,
-    * and initialize it's cells */
-   curs = table->handlers[new_virt_row][new_virt_col];
-   table->current_cursor = curs;
-
-   /* record the new virtual position ... */
-   table->current_cursor_virt_row = new_virt_row;
-   table->current_cursor_virt_col = new_virt_col;
-
-   /* compute some useful offsets ... */
-   phys_row_origin = new_phys_row;
-   phys_row_origin -= table->locators[new_phys_row][new_phys_col]->phys_row_offset;
-
-   phys_col_origin = new_phys_col;
-   phys_col_origin -= table->locators[new_phys_row][new_phys_col]->phys_col_offset;
-
-   table->current_cursor_phys_row = phys_row_origin;
-   table->current_cursor_phys_col = phys_col_origin;
-
-   /* update the cell values to reflect the new position */
-   for (i=0; i<curs->numRows; i++) {
-      for (j=0; j<curs->numCols; j++) {
-         BasicCell *cell;
+      for (i=0; i<curs->numRows; i++) {
+         for (j=0; j<curs->numCols; j++) {
+            BasicCell *cell;
          
-         cell = curs->cells[i][j];
-         if (cell) {
-            char * cell_val = table->entries[i+phys_row_origin][j+phys_col_origin];
-            xaccSetBasicCellValue (cell, cell_val);
-            cell->changed = 0;
+            table->bg_colors[i+r_origin][j+c_origin] = curs->passive_bg_color;
+            cell = curs->cells[i][j];
+            if (cell) {
+               table->bg_colors[i+r_origin][j+c_origin] = cell->bg_color;
+               table->fg_colors[i+r_origin][j+c_origin] = cell->fg_color;
+            }
          }
       }
    }
 
-   curs->user_data = table->user_data[new_virt_row][new_virt_col];
-}
-
-/* ==================================================== */
-/* same as above, but be sure to deal with GUI elements as well */
-
-void xaccMoveCursorGUI (Table *table, int new_phys_row, int new_phys_col)
-{
-   int i,j;
-   int phys_row_origin, phys_col_origin;
-   int new_virt_row, new_virt_col;
-   CellBlock *curs;
-
-   /* call the callback, allowing the app to commit any changes */
-   if (table->move_cursor) {
-      (table->move_cursor) (table, table->client_data);
-   }
-
    /* check for out-of-bounds conditions (which may be deliberate) */
    if ((0 > new_phys_row) || (0 > new_phys_col)) {
       new_virt_row = -1;
@@ -405,13 +359,12 @@ void xaccMoveCursorGUI (Table *table, int new_phys_row, int new_phys_col)
       new_virt_col = table->locators[new_phys_row][new_phys_col]->virt_col;
    }
 
-   curs = table->current_cursor;
-
    /* invalidate the cursor for now; we'll set it the the correct values below */
    table->current_cursor_phys_row = -1;
    table->current_cursor_phys_col = -1;
    table->current_cursor_virt_row = -1;
    table->current_cursor_virt_col = -1;
+   curs = table->current_cursor;
    if (curs) curs->user_data = NULL;
    table->current_cursor = NULL;
 
@@ -419,7 +372,7 @@ void xaccMoveCursorGUI (Table *table, int new_phys_row, int new_phys_col)
    if ((0 > new_virt_row) || (0 > new_virt_col)) {
       /* if the location is invalid, then we should take this 
        * as a command to unmap the cursor gui.  So do it .. */
-      if (curs) {
+      if (do_move_gui && curs) {
          for (i=0; i<curs->numRows; i++) {
             for (j=0; j<curs->numCols; j++) {
                BasicCell *cell;
@@ -463,26 +416,52 @@ void xaccMoveCursorGUI (Table *table, int new_phys_row, int new_phys_col)
       for (j=0; j<curs->numCols; j++) {
          BasicCell *cell;
          
+         /* change the cursor row to the active color */
+         table->bg_colors[i+phys_row_origin][j+phys_col_origin] = curs->active_bg_color;
+
          cell = curs->cells[i][j];
          if (cell) {
             char * cell_val = table->entries[i+phys_row_origin][j+phys_col_origin];
-            /* if a cell has a GUI, move that first, before setting
-             * the cell value.  Otherwise, we'll end up putting the 
-             * new values in the old cell locations, and that would 
-             * lead to confusion of all sorts. */
-            if (cell->move) {
-               (cell->move) (cell, i+phys_row_origin, j+phys_col_origin);
+
+            if (do_move_gui) {
+               /* if a cell has a GUI, move that first, before setting
+                * the cell value.  Otherwise, we'll end up putting the 
+                * new values in the old cell locations, and that would 
+                * lead to confusion of all sorts. */
+               if (cell->move) {
+                  (cell->move) (cell, i+phys_row_origin, j+phys_col_origin);
+               }
             }
 
-            /* OK, now set the cell value, after the move */
+            /* OK, now copy the string value from the table at large 
+             * into the cell handler. */
             xaccSetBasicCellValue (cell, cell_val);
             cell->changed = 0;
 
+            /* umm, a right now, we'll let the active cursor color override the
+             * individual cell defaults, but for now this is an experiment.
+             *
+             * table->bg_colors[i+phys_row_origin][j+phys_col_origin] = cell->bg_color;
+             * table->fg_colors[i+phys_row_origin][j+phys_col_origin] = cell->fg_color;
+             */
          }
       }
    }
 
    curs->user_data = table->user_data[new_virt_row][new_virt_col];
+}
+
+/* ==================================================== */
+
+void xaccMoveCursor (Table *table, int new_phys_row, int new_phys_col)
+{
+   doMoveCursor (table, new_phys_row, new_phys_col, 0);
+}
+
+/* same as above, but be sure to deal with GUI elements as well */
+void xaccMoveCursorGUI (Table *table, int new_phys_row, int new_phys_col)
+{
+   doMoveCursor (table, new_phys_row, new_phys_col, 1);
 }
 
 /* ==================================================== */
@@ -499,7 +478,7 @@ void xaccCommitCursor (Table *table)
    virt_row = table->current_cursor_virt_row;
    virt_col = table->current_cursor_virt_col;
 
-   /* cant commit if cursor is bad */
+   /* can't commit if cursor is bad */
    if ((0 > virt_row) || (0 > virt_col)) return;
    if (virt_row >= table->num_virt_rows) return;
    if (virt_col >= table->num_virt_cols) return;

@@ -39,6 +39,9 @@ CellBlock * xaccMallocCellBlock (int numrows, int numcols)
    arr->numRows = 0;
    arr->numCols = 0;
 
+   arr->active_bg_color = 0xffffff; /* white */
+   arr->passive_bg_color = 0xffffff; /* white */
+
    arr->user_data = NULL;
    arr->cells = NULL;
    arr->right_traverse_r = NULL;

@@ -3,7 +3,7 @@
  * pricecell.h
  *
  * FUNCTION:
- * The PriceCell object Implements a cell handler that
+ * The PriceCell object implements a cell handler that
  * knows about storing and displaying a price or amount.
  *
  * By default, the PriceCell is an input/output cell.
@@ -12,12 +12,15 @@
  * and numeric punctuation.  The punctuation accepted is *not*
  * currently internationalized.  Read the source for details.
  *
- * One output, it can display numeric values with two or three 
+ * On output, it can display numeric values with two or three 
  * decimal places.  A planned enhancement would be to store 
  * formating data with an instance of this cell. This is *not*
  * currently done.
  *
  * hack alert -- implement the above formating & internationalization.
+ *
+ * On output, it will display negative values in red text.
+ * hack alert -- the actual color (red) should be user configurable.
  *
  * The stored amount is stored as a double-precision floating point
  * variable. This should be sufficient precision to store trillions of

@@ -39,7 +39,17 @@
 
 static void PriceSetValue (BasicCell *, const char *);
 
-/* hack alert -- use color for cells as per old xacc */
+/* set the color of the text to red, if teh value is negative */
+/* hack alert -- the actual color should probably be configurable */
+#define COLORIZE(cell,amt) {			\
+   if (0.0 > amt) {				\
+      /* red */					\
+      cell->cell.fg_color = 0xff0000;		\
+   } else {					\
+      /* black */				\
+      cell->cell.fg_color = 0x0;		\
+   }						\
+}
 
 #define SET(cell,str) { 			\
    if ((cell)->value) free ((cell)->value);	\
@@ -128,6 +138,9 @@ void xaccSetPriceCellValue (PriceCell * cell, double amt)
       sprintf (buff, "%.3f", amt);
    }
    SET ( &(cell->cell), buff);
+
+   /* set the cell color to red if the value is negative */
+   COLORIZE (cell, amt);
 }
 
 /* ================================================ */
@@ -144,6 +157,9 @@ void xaccSetAmountCellValue (PriceCell * cell, double amt)
       sprintf (buff, "%.2f", amt);
    }
    SET ( &(cell->cell), buff);
+
+   /* set the cell color to red if the value is negative */
+   COLORIZE (cell, amt);
 }
 
 /* ================================================ */
@@ -163,10 +179,12 @@ void xaccSetDebCredCellValue (PriceCell * deb,
       sprintf (buff, "%.2f", amt);
       SET ( &(cred->cell), buff);
       SET ( &(deb->cell), "");
+      cred->cell.fg_color = 0x0;
    } else {
       sprintf (buff, "%.2f", -amt);
       SET ( &(cred->cell), "");
       SET ( &(deb->cell), buff);
+      deb->cell.fg_color = 0xff0000;
    }
 }
 

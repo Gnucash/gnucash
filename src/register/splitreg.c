@@ -363,6 +363,14 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    FANCY (balance, Price,     BALN);
 
    /* set the color of the cells in the transaction cursor */
+   /* hack alert -- the actual color should depend on the 
+    * type of register. */
+   curs->active_bg_color = 0xffdddd; /* pale red */
+   curs->passive_bg_color = 0xccccff; /* pale blue */
+
+   /* Need to declare the cell backgrounds as well, otherwise, 
+    * the cell default will override ehte cursor
+    */
    reg->descCell->cell.bg_color = 0xccccff;
    reg->balanceCell->cell.bg_color = 0xccccff;
    reg->dateCell->cell.bg_color = 0xccccff;
@@ -385,6 +393,9 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    FANCY (price,   Price,     PRIC);
    FANCY (value,   Price,     VALU);
 
+   /* set the color of the cells in the split cursor */
+   curs->active_bg_color = 0xffffdd; /* pale yellow */
+   curs->passive_bg_color = 0xffffff; /* white */
 
    /* --------------------------- */
    /* do some misc cell config */
