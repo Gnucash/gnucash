@@ -1,3 +1,12 @@
+2003-05-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.[ch]: define
+	  INVOICE_IS_PAID and create gncInvoiceIsPaid() function (the
+	  prototype already existed, but it was never implemented).
+	* src/business/business-gnome/dialog-invoice.c: add IS_PAID column
+	  and the ability to search for paid/not-paid invoices.
+	Fixes #106035.
+
 2003-05-25  Chris Lyttle  <chris@wilddev.net>
 
 	* configure.in: release 1.8.4

@@ -127,6 +127,7 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 #define INVOICE_POSTED	"date_posted"
 #define INVOICE_DUE	"date_due"
 #define INVOICE_IS_POSTED	"is_posted?"
+#define INVOICE_IS_PAID	"is_paid?"
 #define INVOICE_TERMS	"terms"
 #define INVOICE_BILLINGID	"billing_id"
 #define INVOICE_NOTES	"notes"
