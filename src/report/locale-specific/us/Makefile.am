@@ -45,8 +45,7 @@ gncscmothermoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmothermod_DATA = taxtxf.scm taxtxf-de_DE.scm
 
 EXTRA_DIST = \
-  ${gncscmothermod_DATA}
-
-#  ${gncscmmod_DATA} 
+  ${gncscmothermod_DATA} \
+  ${gncscmmod_DATA} 
 
 CLEANFILES = ${SCM_FILE_LINKS} gnucash report locale-specific us .scm-links
