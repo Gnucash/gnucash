@@ -960,7 +960,7 @@ gnc_register_create_tool_bar (RegWindow *regData)
 
   regData->toolbar = toolbar;
 
-  regData->split_button = toolbar_info[6].widget;
+  regData->split_button = toolbar_info[7].widget;
 
   return toolbar;
 }
@@ -1619,7 +1619,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
                                       register_window_menu);
 
   regData->double_line_check = style_menu[2].widget;
-  regData->split_menu_check = transaction_menu[6].widget;
+  regData->split_menu_check = transaction_menu[7].widget;
 
   /* Make sure the right style radio item is active */
   {
@@ -1748,7 +1748,7 @@ gnc_register_create_popup_menu (RegWindow *regData)
 
   popup = gnome_popup_menu_new (transaction_menu);
 
-  regData->split_popup_check = transaction_menu[6].widget;
+  regData->split_popup_check = transaction_menu[7].widget;
 
   return popup;
 }
