@@ -108,6 +108,7 @@
  */
 
 typedef struct _GNCPrice GNCPrice;
+typedef struct _GNCPriceLookup GNCPriceLookup;
 
 /****************/
 /* constructors */

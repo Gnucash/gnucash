@@ -48,6 +48,7 @@
 #include "Query.h"
 #include "Transaction.h"
 #include "gnc-book.h"
+#include "gnc-pricedb.h"
 
 /*
  * The book_begin() routine gives the backend a second initialization
@@ -157,6 +158,7 @@ struct _backend
   int (*price_commit_edit) (Backend *, GNCPrice *);
 
   void (*run_query) (Backend *, Query *);
+  void (*price_lookup) (Backend *, GNCPriceLookup *);
   void (*sync) (Backend *, AccountGroup *);
   void (*sync_price) (Backend *, GNCPriceDB *);
 

@@ -372,7 +372,7 @@ gnc_price_get_version(GNCPrice *p)
 }
 
 /* ==================================================================== */
-/* setters */
+/* price list manipulation functions */
 
 static gint
 compare_prices_by_date(gconstpointer a, gconstpointer b)
@@ -624,6 +624,7 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
 }
 
 /* ==================================================================== */
+/* lookup/query functions */
 
 GNCPrice *
 gnc_pricedb_lookup_latest(GNCPriceDB *db,
@@ -636,12 +637,23 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
 
   if(!db || !commodity || !currency) return NULL;
 
+  if (db->backend && db->backend->price_lookup)
+  {
+     GNCPriceLookup pl;
+     pl.type = LOOKUP_LATEST;
+     pl.commodity = commodity;
+     pl.currency = currency;
+     (db->backend->price_lookup) (db->backend, &pl);
+  }
+
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
   if(!currency_hash) return NULL;
 
   price_list = g_hash_table_lookup(currency_hash, currency);
   if(!price_list) return NULL;
 
+  /* This works magically because prices are inserted in date-sorted order,
+   * and the latest date always comes first. So return the first in the list.  */
   result = price_list->data;
   gnc_price_ref(result);
   return result;
@@ -658,6 +670,15 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
   GHashTable *currency_hash;
 
   if(!db || !commodity || !currency) return NULL;
+
+  if (db->backend && db->backend->price_lookup)
+  {
+     GNCPriceLookup pl;
+     pl.type = LOOKUP_ALL;
+     pl.commodity = commodity;
+     pl.currency = currency;
+     (db->backend->price_lookup) (db->backend, &pl);
+  }
 
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
   if(!currency_hash) return NULL;
@@ -685,6 +706,16 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
 
   if(!db || !c || !currency) return NULL;
 
+  if (db->backend && db->backend->price_lookup)
+  {
+     GNCPriceLookup pl;
+     pl.type = LOOKUP_AT_TIME;
+     pl.commodity = c;
+     pl.currency = currency;
+     pl.date = t;
+     (db->backend->price_lookup) (db->backend, &pl);
+  }
+
   currency_hash = g_hash_table_lookup(db->commodity_hash, c);
   if(!currency_hash) return NULL;
 
@@ -701,6 +732,79 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
     }
     item = item->next;
   }
+  return result;
+}
+
+
+GNCPrice *
+gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
+                                   gnc_commodity *c,
+                                   gnc_commodity *currency,
+                                   Timespec t)
+{
+  GList *price_list;
+  GNCPrice *current_price = NULL;
+  GNCPrice *next_price = NULL;
+  GNCPrice *result = NULL;
+  GList *item = NULL;
+  GHashTable *currency_hash;
+
+  if(!db || !c || !currency) return NULL;
+
+  if (db->backend && db->backend->price_lookup)
+  {
+     GNCPriceLookup pl;
+     pl.type = LOOKUP_NEAREST_IN_TIME;
+     pl.commodity = c;
+     pl.currency = currency;
+     pl.date = t;
+     (db->backend->price_lookup) (db->backend, &pl);
+  }
+
+  currency_hash = g_hash_table_lookup(db->commodity_hash, c);
+  if(!currency_hash) return NULL;
+
+  price_list = g_hash_table_lookup(currency_hash, currency);
+  if(!price_list) return NULL;
+
+  item = price_list;
+
+  /* default answer */
+  current_price = item->data;
+
+  /* find the first candidate past the one we want.  Remember that
+     prices are in most-recent-first order. */
+  while (!next_price && item) {
+    GNCPrice *p = item->data;
+    Timespec price_time = gnc_price_get_time(p);
+    if (timespec_cmp(&price_time, &t) <= 0) {
+      next_price = item->data;
+      break;
+    }
+    current_price = item->data;
+    item = item->next;
+  }
+
+  if (current_price) {
+    if (!next_price) {
+      result = current_price;
+    } else {
+      Timespec current_t = gnc_price_get_time(current_price);
+      Timespec next_t = gnc_price_get_time(next_price);
+      Timespec diff_current = timespec_diff(&current_t, &t);
+      Timespec diff_next = timespec_diff(&next_t, &t);
+      Timespec abs_current = timespec_abs(&diff_current);
+      Timespec abs_next = timespec_abs(&diff_next);
+      
+      if (timespec_cmp(&abs_current, &abs_next) <= 0) {
+	result = current_price;
+      } else {
+	result = next_price;
+      }
+    }
+  }
+
+  gnc_price_ref(result);
   return result;
 }
 
@@ -842,72 +946,7 @@ gnc_pricedb_foreach_price(GNCPriceDB *db,
 }
 
 /* ==================================================================== */
-
-GNCPrice *
-gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
-                                   gnc_commodity *c,
-                                   gnc_commodity *currency,
-                                   Timespec t)
-{
-  GList *price_list;
-  GNCPrice *current_price = NULL;
-  GNCPrice *next_price = NULL;
-  GNCPrice *result = NULL;
-  GList *item = NULL;
-  GHashTable *currency_hash;
-
-  if(!db || !c || !currency) return NULL;
-
-  currency_hash = g_hash_table_lookup(db->commodity_hash, c);
-  if(!currency_hash) return NULL;
-
-  price_list = g_hash_table_lookup(currency_hash, currency);
-  if(!price_list) return NULL;
-
-  item = price_list;
-
-  /* default answer */
-  current_price = item->data;
-
-  /* find the first candidate past the one we want.  Remember that
-     prices are in most-recent-first order. */
-  while (!next_price && item) {
-    GNCPrice *p = item->data;
-    Timespec price_time = gnc_price_get_time(p);
-    if (timespec_cmp(&price_time, &t) <= 0) {
-      next_price = item->data;
-      break;
-    }
-    current_price = item->data;
-    item = item->next;
-  }
-
-  if (current_price) {
-    if (!next_price) {
-      result = current_price;
-    } else {
-      Timespec current_t = gnc_price_get_time(current_price);
-      Timespec next_t = gnc_price_get_time(next_price);
-      Timespec diff_current = timespec_diff(&current_t, &t);
-      Timespec diff_next = timespec_diff(&next_t, &t);
-      Timespec abs_current = timespec_abs(&diff_current);
-      Timespec abs_next = timespec_abs(&diff_next);
-      
-      if (timespec_cmp(&abs_current, &abs_next) <= 0) {
-	result = current_price;
-      } else {
-	result = next_price;
-      }
-    }
-  }
-
-  gnc_price_ref(result);
-  return result;
-}
-
-/***************************************************************************/
-/* commodity substitution
- */
+/* commodity substitution */
 
 typedef struct {
   gnc_commodity *old_c;

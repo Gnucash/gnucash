@@ -305,6 +305,7 @@ xmlendNew (void)
   be->be.price_begin_edit = NULL;
   be->be.price_commit_edit = NULL;
   be->be.run_query = xmlbeRunQuery;
+  be->be.price_lookup = NULL;
   be->be.sync = NULL;
   be->be.sync_price = NULL;
   be->be.events_pending = NULL;

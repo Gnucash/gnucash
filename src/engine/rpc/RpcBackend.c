@@ -101,6 +101,7 @@ static void rpcendEnable (RPCBackend *be)
    be->be.price_begin_edit    = be->snr.price_begin_edit;
    be->be.price_commit_edit   = be->snr.price_commit_edit;
    be->be.run_query           = be->snr.run_query;
+   be->be.price_lookup        = be->snr.price_lookup;
    be->be.sync                = be->snr.sync;
    be->be.sync_price          = be->snr.sync_price;
 }
@@ -123,6 +124,7 @@ static void rpcendDisable (RPCBackend *be)
    be->snr.price_begin_edit    = be->be.price_begin_edit;
    be->snr.price_commit_edit   = be->be.price_commit_edit;
    be->snr.run_query           = be->be.run_query;
+   be->snr.price_lookup        = be->be.price_lookup;
    be->snr.sync                = be->be.sync;
    be->snr.sync_price          = be->be.sync_price;
 
@@ -135,6 +137,7 @@ static void rpcendDisable (RPCBackend *be)
    be->be.price_begin_edit    = NULL;
    be->be.price_commit_edit   = NULL;
    be->be.run_query           = NULL;
+   be->be.price_lookup        = NULL;
    be->be.sync                = NULL;
    be->be.sync_price          = NULL;
 }
@@ -583,6 +586,11 @@ static int rpcend_price_commit_edit (Backend *bend, GNCPrice *pr)
   return 0;
 }
 
+static void rpcend_price_lookup (Backend *bend, GNCPriceLookup *q)
+{
+  PERR ("not implemented");
+}
+
 static void rpcend_run_query (Backend *bend, Query *q)
 {
   RPCBackend *be = (RPCBackend *)bend;
@@ -928,6 +936,7 @@ static void rpcend_book_begin (GNCBook *book, const char *book_id,
   be->be.price_begin_edit = rpcend_price_begin_edit;
   be->be.price_commit_edit = rpcend_price_commit_edit;
   be->be.run_query = rpcend_run_query;
+  be->be.price_lookup = rpcend_price_lookup;
   be->be.sync = rpcend_sync;
   be->be.sync_price = rpcend_sync_price;
   be->be.events_pending = rpcend_events_pending;

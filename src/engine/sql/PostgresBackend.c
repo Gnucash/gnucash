@@ -1547,6 +1547,14 @@ pgendGetAllPrices (PGBackend *be, GNCPriceDB *prdb)
 }
 
 /* ============================================================= */
+
+static void
+pgendPriceLookup (Backend *be, GNCPriceLookup *look)
+{
+   PERR ("not implemented, type=%d", look->type);
+}
+
+/* ============================================================= */
 /* ============================================================= */
 /*         HIGHER LEVEL ROUTINES AND BACKEND PROPER              */
 /* ============================================================= */
@@ -2720,6 +2728,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.price_begin_edit = NULL;
             be->be.price_commit_edit = NULL;
             be->be.run_query = NULL;
+            be->be.price_lookup = NULL;
             be->be.sync = pgendSyncSingleFile;
             be->be.sync_price = pgendSyncPriceDBSingleFile;
             PWARN ("MODE_SINGLE_FILE is beta -- \n"
@@ -2739,6 +2748,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.price_begin_edit = pgend_price_begin_edit;
             be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = NULL;
+            be->be.price_lookup = NULL;
             be->be.sync = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
             PWARN ("MODE_SINGLE_UPDATE is beta -- \n"
@@ -2757,6 +2767,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.price_begin_edit = pgend_price_begin_edit;
             be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = pgendRunQueryToCheckpoint;
+            be->be.price_lookup = pgendPriceLookup;
             be->be.sync = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
             PWARN ("MODE_POLL is experimental -- you might corrupt your data\n");
@@ -2798,6 +2809,7 @@ pgendDisable (PGBackend *be)
    be->snr.price_begin_edit    = be->be.price_begin_edit;
    be->snr.price_commit_edit   = be->be.price_commit_edit;
    be->snr.run_query           = be->be.run_query;
+   be->snr.price_lookup        = be->be.price_lookup;
    be->snr.sync                = be->be.sync;
    be->snr.sync_price          = be->be.sync_price;
 
@@ -2809,6 +2821,7 @@ pgendDisable (PGBackend *be)
    be->be.price_begin_edit    = NULL;
    be->be.price_commit_edit   = NULL;
    be->be.run_query           = NULL;
+   be->be.price_lookup        = NULL;
    be->be.sync                = NULL;
    be->be.sync_price          = NULL;
 }
@@ -2835,6 +2848,7 @@ pgendEnable (PGBackend *be)
    be->be.price_begin_edit    = be->snr.price_begin_edit;
    be->be.price_commit_edit   = be->snr.price_commit_edit;
    be->be.run_query           = be->snr.run_query;
+   be->be.price_lookup        = be->snr.price_lookup;
    be->be.sync                = be->snr.sync;
    be->be.sync_price          = be->snr.sync_price;
 }
@@ -2870,6 +2884,7 @@ pgendInit (PGBackend *be)
    be->be.price_begin_edit = NULL;
    be->be.price_commit_edit = NULL;
    be->be.run_query = NULL;
+   be->be.price_lookup = NULL;
    be->be.sync = NULL;
    be->be.sync_price = NULL;
    be->be.events_pending = NULL;

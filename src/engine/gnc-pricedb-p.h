@@ -56,6 +56,24 @@ struct _GNCPriceDB {
   gboolean dirty;
 };
 
+/* These structs define the kind of price lookup being done
+ * so that it can be passed to the backend.  This is a rather
+ * cheesy, low-brow interface.  It could stand improvement.
+ */
+typedef enum {
+  LOOKUP_LATEST = 1,
+  LOOKUP_ALL,
+  LOOKUP_AT_TIME,
+  LOOKUP_NEAREST_IN_TIME
+} PriceLookupType;
+
+
+struct _GNCPriceLookup {
+  PriceLookupType type;
+  gnc_commodity  *commodity;
+  gnc_commodity  *currency;
+  Timespec        date;
+};
 
 void     gnc_pricedb_mark_clean(GNCPriceDB *db);
 void     gnc_pricedb_substitute_commodity(GNCPriceDB *db,
