@@ -603,12 +603,12 @@ gnc_configure_register_borders (void)
 
   use_vertical_lines = gnc_lookup_boolean_option("Register",
                                                  "Show Vertical Borders",
-                                                 TRUE);
+                                                 FALSE);
 
   
   use_horizontal_lines = gnc_lookup_boolean_option("Register",
                                                    "Show Horizontal Borders",
-                                                   TRUE);
+                                                   FALSE);
 
   gnucash_style_config_register_borders (use_vertical_lines,
                                          use_horizontal_lines);
@@ -803,9 +803,9 @@ gnc_configure_auto_decimal(void)
  *  Returns: Nothing
  */
 static void
-gnc_configure_auto_decimal_places_cb(void *not_used)
+gnc_configure_auto_decimal_places_cb (gpointer not_used)
 {
-  gnc_configure_auto_decimal_places();
+  gnc_configure_auto_decimal_places ();
 }
 
 /* gnc_configure_auto_decimal_places
@@ -815,14 +815,11 @@ gnc_configure_auto_decimal_places_cb(void *not_used)
  * Returns: Nothing
  */
 static void
-gnc_configure_auto_decimal_places(void)
+gnc_configure_auto_decimal_places (void)
 {
    gnc_set_auto_decimal_places
-      ( 
-         (int) gnc_lookup_number_option( "General",
-                                         "Auto Decimal Places",
-                                         2 )
-      );
+     (gnc_lookup_number_option("General",
+                               "Auto Decimal Places", 2));
 }
 
 
@@ -834,9 +831,9 @@ gnc_configure_auto_decimal_places(void)
  *  Returns: Nothing
  */
 static void
-gnc_configure_register_font_cb(void *not_used)
+gnc_configure_register_font_cb (gpointer not_used)
 {
-  gnc_configure_register_font();
+  gnc_configure_register_font ();
 }
 
 /* gnc_configure_register_font

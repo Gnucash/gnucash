@@ -1949,29 +1949,29 @@ regWindowLedger (xaccLedgerDisplay *ledger)
     GtkWidget *popup;
     guint num_rows;
 
-    table_frame = gtk_frame_new(NULL);
-    gnome_dock_set_client_area(GNOME_DOCK(register_dock), table_frame);
+    table_frame = gtk_frame_new (NULL);
+    gnome_dock_set_client_area (GNOME_DOCK(register_dock), table_frame);
 
-    num_rows = (guint) gnc_lookup_number_option("Register",
-                                                "Number of Rows", 15.0);
-    gnucash_register_set_initial_rows(num_rows);
+    num_rows = (guint) gnc_lookup_number_option ("Register",
+                                                 "Number of Rows", 20.0);
+    gnucash_register_set_initial_rows (num_rows);
 
-    register_widget = gnucash_register_new(reg->table);
-    gnc_table_init_gui(register_widget, reg);
+    register_widget = gnucash_register_new (reg->table);
+    gnc_table_init_gui (register_widget, reg);
 
-    gtk_container_add(GTK_CONTAINER(table_frame), register_widget);
+    gtk_container_add (GTK_CONTAINER(table_frame), register_widget);
 
-    regData->reg = GNUCASH_REGISTER(register_widget);
+    regData->reg = GNUCASH_REGISTER (register_widget);
     GNUCASH_SHEET(regData->reg->sheet)->window = register_window;
 
-    gtk_signal_connect(GTK_OBJECT(register_widget), "activate_cursor",
-                       GTK_SIGNAL_FUNC(gnc_register_record_cb), regData);
-    gtk_signal_connect(GTK_OBJECT(register_widget), "redraw_all",
-                       GTK_SIGNAL_FUNC(gnc_register_redraw_all_cb), regData);
+    gtk_signal_connect (GTK_OBJECT(register_widget), "activate_cursor",
+                        GTK_SIGNAL_FUNC(gnc_register_record_cb), regData);
+    gtk_signal_connect (GTK_OBJECT(register_widget), "redraw_all",
+                        GTK_SIGNAL_FUNC(gnc_register_redraw_all_cb), regData);
 
-    popup = gnc_register_create_popup_menu(regData);
-    gnucash_register_attach_popup(GNUCASH_REGISTER(register_widget),
-                                  popup, regData);
+    popup = gnc_register_create_popup_menu (regData);
+    gnucash_register_attach_popup (GNUCASH_REGISTER(register_widget),
+                                   popup, regData);
   }
 
   {
@@ -2000,6 +2000,7 @@ regWindowLedger (xaccLedgerDisplay *ledger)
         prefix = "reg_stock_win";
         width = &last_stock_width;
         break;
+
       default:
         prefix = "reg_win";
         width = &last_width;

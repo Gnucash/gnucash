@@ -439,17 +439,21 @@ draw_cell (GnucashGrid *grid,
         if ((text == NULL) || (*text == '\0'))
                 return;
 
-        y_offset = height - MAX(CELL_VPADDING, font->descent + 4);
+        y_offset = ((height / 2) +
+                    (((font->ascent + font->descent) / 2) - font->descent));
 
-        switch (gnc_table_get_align (table, virt_loc)) {
+        switch (gnc_table_get_align (table, virt_loc))
+        {
                 default:
                 case CELL_ALIGN_LEFT:
                         x_offset = CELL_HPADDING;
                         break;
+
                 case CELL_ALIGN_RIGHT:
                         x_offset = width - CELL_HPADDING
                                 - gdk_string_measure (font, text);
                         break;
+
                 case CELL_ALIGN_CENTER:
                         if (width < gdk_string_measure (font, text))
                                 x_offset = CELL_HPADDING;
@@ -460,9 +464,9 @@ draw_cell (GnucashGrid *grid,
                         break;
                 }
 
-        rect.x = x + CELL_HPADDING;
-        rect.y = y + CELL_VPADDING;
-        rect.width = width - 2 * CELL_HPADDING;
+        rect.x      = x + CELL_HPADDING;
+        rect.y      = y + CELL_VPADDING;
+        rect.width  = width - (2 * CELL_HPADDING);
         rect.height = height;
 
         gdk_gc_set_clip_rectangle (grid->gc, &rect);

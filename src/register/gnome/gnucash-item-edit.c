@@ -203,25 +203,27 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         dx = xd - x;
         dy = yd - y;
 
-        info->bg_rect.x = dx + CELL_HPADDING;
-        info->bg_rect.y = dy + CELL_VPADDING;
-        info->bg_rect.width = wd - (2 * CELL_HPADDING);
-        info->bg_rect.height = hd - (2 * CELL_VPADDING - info->font->descent);
+        info->bg_rect.x      = dx + CELL_HPADDING;
+        info->bg_rect.y      = dy + CELL_VPADDING;
+        info->bg_rect.width  = wd - (2 * CELL_HPADDING);
+        info->bg_rect.height = hd - (2 * CELL_VPADDING);
 
         toggle_space = item_edit->is_popup ? 
                 item_edit->popup_toggle.toggle_offset : 0;
 
-        info->text_rect.x = dx;
-        info->text_rect.y = dy + CELL_VPADDING;
-        info->text_rect.width = wd - toggle_space;
-        info->text_rect.height = hd - (2*CELL_VPADDING - info->font->descent);
+        info->text_rect.x      = dx;
+        info->text_rect.y      = dy + CELL_VPADDING;
+        info->text_rect.width  = wd - toggle_space;
+        info->text_rect.height = hd - (2 * CELL_VPADDING);
 
-        switch (gnc_table_get_align (table, item_edit->virt_loc)) {
+        switch (gnc_table_get_align (table, item_edit->virt_loc))
+        {
                 case CELL_ALIGN_RIGHT:
                         xoffset = info->text_rect.width -
                                   (2*CELL_HPADDING + total_width);
                         if (xoffset > 0)
                                 break;
+
                 default:
                         xoffset = MIN (CELL_HPADDING,
                                        info->text_rect.width -
@@ -232,9 +234,11 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         info->text_x1 = dx + xoffset;
         info->text_x2 = info->text_x1 + width_1;
         info->text_x3 = info->text_x2 + width_2;
-        info->text_y = dy + hd - MAX(CELL_VPADDING, info->font->descent + 4);
+        info->text_y  = (dy + (hd / 2) +
+                         (((info->font->ascent + info->font->descent) / 2)
+                          - info->font->descent));
 
-        info->cursor_x = info->text_x1 + pre_cursor_width;
+        info->cursor_x  = info->text_x1 + pre_cursor_width;
         info->cursor_y1 = info->text_y - info->font->ascent;
         info->cursor_y2 = info->text_y + info->font->descent;
 

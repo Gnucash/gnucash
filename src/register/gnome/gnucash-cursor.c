@@ -234,15 +234,15 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 			dw = item_cursor->w;
 			dh = item_cursor->h;
 
-			/* draw the double rectangle around the entire active 
+			/* draw the rectangle around the entire active
 			   virtual row */
 			gdk_gc_set_line_attributes (cursor->gc, 1,
 						    GDK_LINE_SOLID, -1, -1);
+
 			gdk_gc_set_foreground (cursor->gc, &gn_black);
-			gdk_gc_set_background (cursor->gc, &gn_white);
 
 			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
-					    dx+2, dy+2, dw-4, dh-4);
+					    dx + 1, dy, dw - 2, dh);
 			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
 					    dx, dy, dw, dh);
 
@@ -257,13 +257,10 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 			gdk_gc_set_line_attributes (cursor->gc, 1,
 						    GDK_LINE_SOLID, -1, -1);
 
-			gdk_gc_set_foreground (cursor->gc, &gn_light_gray);
+			gdk_gc_set_foreground (cursor->gc, &gn_black);
+
 			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
 					    dx+1, dy+1, dw-2, dh-2);
-
-			gdk_gc_set_foreground (cursor->gc, &gn_black);      
-			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
-					    dx+2, dy+2, dw-4, dh-4);
 			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
 					    dx, dy, dw, dh);
         }

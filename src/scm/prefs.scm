@@ -244,7 +244,7 @@ the account instead of opening a register.") #f))
  (gnc:make-number-range-option
   (N_ "Register") (N_ "Number of Rows")
   "d" (N_ "Default number of register rows to display.")
-   15.0 ;; default
+   20.0 ;; default
     1.0 ;; lower bound
   200.0 ;; upper bound
     0.0 ;; number of decimals
@@ -254,12 +254,12 @@ the account instead of opening a register.") #f))
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   (N_ "Register") (N_ "Show Vertical Borders")
-  "e" (N_ "By default, show vertical borders on the cells.") #t))
+  "e" (N_ "By default, show vertical borders on the cells.") #f))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   (N_ "Register") (N_ "Show Horizontal Borders")
-  "f" (N_ "By default, show horizontal borders on the cells.") #t))
+  "f" (N_ "By default, show horizontal borders on the cells.") #f))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option

@@ -141,7 +141,9 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                         if (!text)
                                 text = "";
 
-                        y_offset = h - MAX(CELL_VPADDING, font->descent + 4);
+                        y_offset = ((h / 2) +
+                                    (((font->ascent + font->descent) / 2) -
+                                     font->descent));
 
                         switch (gnc_table_get_align (table, virt_loc)) {
                         default:

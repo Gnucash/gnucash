@@ -556,13 +556,13 @@ gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
-        line_style = use_vertical_lines ?
+        line_style = use_horizontal_lines ?
                 CELL_BORDER_LINE_NORMAL : CELL_BORDER_LINE_NONE;
 
         borders->top    = line_style;
         borders->bottom = line_style;
 
-        line_style = use_horizontal_lines ?
+        line_style = use_vertical_lines ?
                 CELL_BORDER_LINE_NORMAL : CELL_BORDER_LINE_NONE;
 
         borders->left  = line_style;

@@ -1099,6 +1099,27 @@ xaccSplitRegisterGetCursorClass (SplitRegister *reg,
 
 /* ============================================== */
 
+CursorClass
+xaccCursorTypeToClass (CursorType cursor_type)
+{
+  switch (cursor_type)
+  {
+    case CURSOR_TYPE_SINGLE_LEDGER:
+    case CURSOR_TYPE_DOUBLE_LEDGER:
+    case CURSOR_TYPE_SINGLE_JOURNAL:
+    case CURSOR_TYPE_DOUBLE_JOURNAL:
+      return CURSOR_CLASS_TRANS;
+
+    case CURSOR_TYPE_SPLIT:
+      return CURSOR_CLASS_SPLIT;
+
+    default:
+      return CURSOR_CLASS_NONE;
+  }
+}
+
+/* ============================================== */
+
 static CellType
 sr_cell_type (SplitRegister *reg, void * cell)
 {

@@ -26,7 +26,7 @@
 #include "splitreg.h"
 #include "table-allgui.h"
 
-#define CELL_VPADDING 5
+#define CELL_VPADDING 3
 #define CELL_HPADDING 4
 
 

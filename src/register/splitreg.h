@@ -264,6 +264,8 @@ CursorClass     xaccSplitRegisterGetCurrentCursorClass (SplitRegister *reg);
 CursorClass    xaccSplitRegisterGetCursorClass (SplitRegister *reg,
                                                 VirtualCellLocation vcell_loc);
 
+CursorClass     xaccCursorTypeToClass (CursorType cursor_type);
+
 /* Returns the type of the current cell */
 CellType        xaccSplitRegisterGetCurrentCellType (SplitRegister *reg);
 

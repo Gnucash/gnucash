@@ -3991,14 +3991,15 @@ xaccSRGetCellBorderHandler (VirtualLocation virt_loc,
                             gpointer user_data)
 {
   SplitRegister *reg = user_data;
+  CursorClass cursor_class;
   VirtualCell *vcell;
 
   vcell = gnc_table_get_virtual_cell (reg->table, virt_loc.vcell_loc);
   if (!vcell || !vcell->cellblock)
     return;
 
-  if ((virt_loc.phys_col_offset < vcell->cellblock->start_col) ||
-      (virt_loc.phys_col_offset > vcell->cellblock->stop_col))
+  if (virt_loc.phys_col_offset < vcell->cellblock->start_col ||
+      virt_loc.phys_col_offset > vcell->cellblock->stop_col)
   {
     borders->top    = CELL_BORDER_LINE_NONE;
     borders->bottom = CELL_BORDER_LINE_NONE;
@@ -4007,7 +4008,17 @@ xaccSRGetCellBorderHandler (VirtualLocation virt_loc,
     return;
   }
 
-  if (vcell->cellblock->cursor_type == CURSOR_TYPE_SPLIT)
+  cursor_class = xaccCursorTypeToClass (vcell->cellblock->cursor_type);
+
+  if (cursor_class == CURSOR_CLASS_TRANS &&
+      virt_loc.phys_col_offset == vcell->cellblock->start_col)
+    borders->left   = CELL_BORDER_LINE_NONE;
+
+  if (cursor_class == CURSOR_CLASS_TRANS &&
+      virt_loc.phys_col_offset == vcell->cellblock->stop_col)
+    borders->right  = CELL_BORDER_LINE_NONE;
+
+  if (cursor_class == CURSOR_CLASS_SPLIT)
   {
     borders->top    = MIN (borders->top,    CELL_BORDER_LINE_LIGHT);
     borders->bottom = MIN (borders->bottom, CELL_BORDER_LINE_LIGHT);
