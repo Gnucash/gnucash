@@ -542,8 +542,8 @@ check_mult_div (void)
 			          gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE),
 						 a, b, "expected %s got %s = %s / %s for div reduce");
 		}
-
 	}
+
 	a = gnc_numeric_create(782592055622866ULL,89025);
 	b = gnc_numeric_create(2222554708930978ULL,85568);
 	/* Dividing the above pair overflows, in that after
@@ -588,14 +588,14 @@ check_mult_div (void)
 	check_binary_op (gnc_numeric_create(-102547458LL, 82718),
 			 gnc_numeric_div(c, d, 82718,
 					 GNC_HOW_DENOM_EXACT),
-			 a, b, "expected %s got %s = %s / %s for div round");
+			 c, d, "expected %s got %s = %s / %s for div round");
 
-// XXX this set of tests is not yet working right ... 
-// it should be overflowing not rounding 
-	check_binary_op (gnc_numeric_error (GNC_ERROR_OVERFLOW),
+	/* If we specify GNC_HOW_RND_NEVER, then we shoukld get an error,
+	 * since the exact result won't fit into a 64-bit quantity. */
+	check_binary_op (gnc_numeric_error (GNC_ERROR_REMAINDER),
 			 gnc_numeric_div(c, d, 82718,
 					 GNC_HOW_DENOM_EXACT|GNC_HOW_RND_NEVER),
-			 a, b, "expected %s got %s = %s / %s for div round");
+			 c, d, "expected %s got %s = %s / %s for div round");
 }
   
 /* ======================================================= */
