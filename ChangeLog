@@ -1,3 +1,9 @@
+2003-09-13  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/ofx/gnc-ofx-import.c:  use <libofx/libofx.h>
+	  instead of "libofx/libofx.h" as it's not part of our system.
+	  Fixes a dependency problem in 1.8.6 release.
+
 2003-09-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/file/gnc-*.c:
