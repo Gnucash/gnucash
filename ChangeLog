@@ -6,6 +6,13 @@
 	* src/gnome-utils/gw-gnome-utils-spec.scm: fix the description
 	  of gnc:mdi-show-progress.
 
+	* src/business/business-gnome/dialog-customer.c:
+	* src/business/business-gnome/dialog-employee.c:
+	* src/business/business-gnome/dialog-job.c:
+	* src/business/business-gnome/dialog-vendor.c:
+	  Enable changing the "ID" for different business objects.
+	  Fixes #108563.
+	
 2003-04-18  Herbert Thoma  <herbie@hthoma.de>
 
 	* src/engine/Account.c: move currency conversion to gnc-pricedb.c
