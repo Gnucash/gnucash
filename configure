@@ -737,7 +737,7 @@ fi
 
 PACKAGE=gnucash
 
-VERSION=1.3.100
+VERSION=1.5.0
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }

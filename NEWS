@@ -1,5 +1,12 @@
 Version history:
 ------- -------
+ 1.5.0  - 9 July 2000
+         o switch to gtkhtml widget
+         o updated French translations
+         o improved qif importing
+         o fix for g-wrap 0.9.4
+         o misc bug fixes
+
  1.3.100 - 12 June 2000
          o bug fixes
          o updated documentation
