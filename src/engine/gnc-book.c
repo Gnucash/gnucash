@@ -326,7 +326,7 @@ gnc_book_get_file_lock (GNCBook *book)
   if (rc)
   {
     /* If hard links aren't supported, just allow the lock. */
-    if (errno == EOPNOTSUPP)
+    if (errno == EOPNOTSUPP || errno == EPERM)
     {
       book->linkfile = NULL;
       return TRUE;
@@ -367,6 +367,30 @@ gnc_book_get_file_lock (GNCBook *book)
 
 /* ---------------------------------------------------------------------- */
 
+static gboolean
+is_gzipped_file(const gchar *name)
+{
+    unsigned char buf[2];
+    int fd = open(name, O_RDONLY);
+
+    if(fd == 0)
+    {
+        return FALSE;
+    }
+
+    if(read(fd, buf, 2) != 2)
+    {
+        return FALSE;
+    }
+
+    if(buf[0] == 037 && buf[1] == 0213)
+    {
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+    
 GNCBookFileType
 gnc_book_determine_file_type(GNCBook *book)
 {
@@ -375,6 +399,8 @@ gnc_book_determine_file_type(GNCBook *book)
         return GNC_BOOK_XML2_FILE;
     } else if(gnc_is_xml_data_file(name)) {
         return GNC_BOOK_XML1_FILE;
+    } else if(is_gzipped_file(name)) {
+        return GNC_BOOK_XML2_FILE;
     } else {
         return GNC_BOOK_BIN_FILE;
     }
@@ -450,8 +476,84 @@ gnc_book_load_from_file(GNCBook *book)
   current year/month/day/hour/minute/second. */
 
 static gboolean
+copy_file(const char *orig, const char *bkup)
+{
+    static int buf_size = 1024;
+    char buf[buf_size];
+    int orig_fd;
+    int bkup_fd;
+    ssize_t count_write;
+    ssize_t count_read;
+
+    orig_fd = open(orig, O_RDONLY);
+    if(orig_fd == -1)
+    {
+        return FALSE;
+    }
+    bkup_fd = creat(bkup, 0600);
+    if(bkup_fd == -1)
+    {
+        close(orig_fd);
+        return FALSE;
+    }
+
+    do
+    {
+        count_read = read(orig_fd, buf, buf_size);
+        if(count_read == -1 && errno != EINTR)
+        {
+            close(orig_fd);
+            close(bkup_fd);
+            return FALSE;
+        }
+
+        if(count_read > 0)
+        {
+            count_write = write(bkup_fd, buf, count_read);
+            if(count_write == -1)
+            {
+                close(orig_fd);
+                close(bkup_fd);
+                return FALSE;
+            }
+        }
+    } while(count_read > 0);
+
+    close(orig_fd);
+    close(bkup_fd);
+    
+    return TRUE;
+}
+        
+static gboolean
+gnc_int_link_or_make_backup(GNCBook *book, const char *orig, const char *bkup)
+{
+    int err_ret = link(orig, bkup);
+    if(err_ret != 0)
+    {
+        if(errno == EPERM || errno == EOPNOTSUPP)
+        {
+            err_ret = copy_file(orig, bkup);
+        }
+
+        if(!err_ret)
+        {
+            gnc_book_push_error(
+                book, ERR_BACKEND_MISC,
+                g_strdup_printf("unable to make file backup from %s to %s: %s",
+                                orig, bkup,
+                                strerror(errno) ? strerror(errno) : ""));
+            return FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
+static gboolean
 gnc_book_backup_file(GNCBook *book)
 {
+    gboolean bkup_ret;
     char *timestamp;
     char *backup;
     const char *datafile = gnc_book_get_file_path(book);
@@ -469,16 +571,12 @@ gnc_book_backup_file(GNCBook *book)
         char *bin_bkup = g_new(char, strlen(datafile) + strlen(back) + 1);
         strcpy(bin_bkup, datafile);
         strcat(bin_bkup, back);
-        if(link(datafile, bin_bkup) != 0)
+        bkup_ret = gnc_int_link_or_make_backup(book, datafile, bin_bkup);
+        g_free(bin_bkup);
+        if(!bkup_ret)
         {
-            gnc_book_push_error(
-                book, ERR_BACKEND_MISC,
-                g_strdup_printf("unable to make bin file backup: %s",
-                                strerror(errno) ? strerror(errno) : ""));
-            g_free(bin_bkup);
             return FALSE;
         }
-        g_free(bin_bkup);
     }
 
     timestamp = xaccDateUtilGetStampNow ();
@@ -489,19 +587,10 @@ gnc_book_backup_file(GNCBook *book)
     strcat (backup, ".xac");
     g_free (timestamp);
 
-    if(link(datafile, backup) != 0)
-    {
-        gnc_book_push_error(
-            book, ERR_BACKEND_MISC,
-            g_strdup_printf("unable to link backup file: %s",
-                            strerror(errno) ? strerror(errno) : ""));
-        g_free(backup);
-        return FALSE;
-    }
-    
+    bkup_ret = gnc_int_link_or_make_backup(book, datafile, backup);
     g_free(backup);
 
-    return TRUE;
+    return bkup_ret;
 }
 
 static gboolean
@@ -542,15 +631,8 @@ gnc_book_write_to_file(GNCBook *book,
           g_free(tmp_name);
           return FALSE;
       }
-      if(link(tmp_name, datafile) != 0)
+      if(!gnc_int_link_or_make_backup(book, tmp_name, datafile))
       {
-          gnc_book_push_error(
-              book, ERR_BACKEND_MISC,
-              g_strdup_printf("unable to link from temp filename %s to "
-                              "real filename %s: %s",
-                              tmp_name ? tmp_name : "(null)",
-                              datafile ? datafile : "(null)",
-                              strerror(errno) ? strerror(errno) : ""));
           g_free(tmp_name);
           return FALSE;
       }
@@ -579,7 +661,6 @@ gnc_book_write_to_file(GNCBook *book,
           /* already in an error just flow on through */
       }
       g_free(tmp_name);
-      gnc_book_push_error(book, ERR_BACKEND_MISC, NULL);
       return FALSE;
   }
 }
