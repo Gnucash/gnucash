@@ -195,7 +195,8 @@ gnc_verify_dialog_parented(gncUIWidget parent, const char *message,
   if (parent != NULL)
     gnome_dialog_set_parent(GNOME_DIALOG(verify_box), GTK_WINDOW(parent));
   else
-    gnome_dialog_set_parent(GNOME_DIALOG(verify_box), gnc_get_ui_data());
+    gnome_dialog_set_parent(GNOME_DIALOG(verify_box),
+                            GTK_WINDOW(gnc_get_ui_data()));
 
   gnome_dialog_set_default(GNOME_DIALOG(verify_box), yes_is_default ? 0 : 1);
 
@@ -375,7 +376,7 @@ gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
 			    NULL);
 
   if (parent)
-    gnome_dialog_set_parent (GNOME_DIALOG (dialog), parent);
+    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
 
   /* default to ok */
   gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
