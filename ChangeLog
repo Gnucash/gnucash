@@ -16,6 +16,11 @@
 	* src/engine/Account.c:
 	  - updated implementation of qofAccountSetParent().
 
+	* src/engine/Scrub.c:
+	* src/engine/Transaction.c:
+	  Add the transaction guid to some error warning messages.
+	  Fixes #165571.
+	
 2005-01-29  Derek Atkins  <derek@ihtfp.com>
 
 	David Montenegro's patch for bugs #95551, #124367.
