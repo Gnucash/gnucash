@@ -1,3 +1,7 @@
+2001-06-13  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-column-view.c: more libglade work
+
 2001-06-12  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/glade/report.glade: new file for old report dialogs

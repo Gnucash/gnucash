@@ -29,8 +29,6 @@
 #include "dialog-column-view.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
-#include "glade-cb-gnc-dialogs.h"
-#include "glade-gnc-dialogs.h"
 #include "messages.h"
 #include "option-util.h"
 #include "window-report.h"
@@ -50,6 +48,19 @@ struct gncp_column_view_edit {
   SCM       contents_list;
   int       contents_selected;
 };
+
+
+static void gnc_column_view_edit_add_cb(GtkButton * button,
+                                        gpointer user_data);
+static void gnc_column_view_edit_remove_cb(GtkButton * button,
+                                           gpointer user_data);
+static void gnc_edit_column_view_move_up_cb(GtkButton * button,
+                                            gpointer user_data);
+static void gnc_edit_column_view_move_down_cb(GtkButton * button,
+                                              gpointer user_data);
+static void gnc_column_view_edit_size_cb(GtkButton * button,
+                                         gpointer user_data);
+
 
 static void
 gnc_column_view_set_option(GNCOptionDB * odb, char * section, char * name,
@@ -205,7 +216,6 @@ GtkWidget *
 gnc_column_view_edit_options(SCM options, SCM view) {
   SCM get_editor = gh_eval_str("gnc:report-editor-widget");
   SCM ptr;
-  GtkObject * tlo;
   GtkWidget * editor;
 
   ptr = gh_call1(get_editor, view);
@@ -216,14 +226,35 @@ gnc_column_view_edit_options(SCM options, SCM view) {
   }
   else {
     gnc_column_view_edit * r = g_new0(gnc_column_view_edit, 1);
+    GladeXML *xml;
 
     r->optwin = gnc_options_dialog_new(TRUE, NULL);
-    
-    tlo = GTK_OBJECT(create_Edit_Column_View_Page());
-    
-    editor       = gtk_object_get_data(tlo, "view_contents_hbox");
-    r->available = gtk_object_get_data(tlo, "available_list");
-    r->contents  = gtk_object_get_data(tlo, "contents_list");  
+
+    xml = gnc_glade_xml_new ("report.glade", "view_contents_hbox");
+
+    glade_xml_signal_connect_data
+      (xml, "gnc_column_view_edit_add_cb",
+       GTK_SIGNAL_FUNC (gnc_column_view_edit_add_cb), r);
+
+    glade_xml_signal_connect_data
+      (xml, "gnc_column_view_edit_remove_cb",
+       GTK_SIGNAL_FUNC (gnc_column_view_edit_remove_cb), r);
+
+    glade_xml_signal_connect_data
+      (xml, "gnc_edit_column_view_move_up_cb",
+       GTK_SIGNAL_FUNC (gnc_edit_column_view_move_up_cb), r);
+
+    glade_xml_signal_connect_data
+      (xml, "gnc_edit_column_view_move_down_cb",
+       GTK_SIGNAL_FUNC (gnc_edit_column_view_move_down_cb), r);
+
+    glade_xml_signal_connect_data
+      (xml, "gnc_column_view_edit_size_cb",
+       GTK_SIGNAL_FUNC (gnc_column_view_edit_size_cb), r);
+
+    editor       = glade_xml_get_widget (xml, "view_contents_hbox");
+    r->available = GTK_CLIST (glade_xml_get_widget (xml, "available_list"));
+    r->contents  = GTK_CLIST (glade_xml_get_widget (xml, "contents_list"));
     r->options   = options;
     r->view      = view;
     r->available_selected = 0;
@@ -231,28 +262,24 @@ gnc_column_view_edit_options(SCM options, SCM view) {
     r->contents_selected = 0;
     r->contents_list = SCM_EOL;
     r->odb       = gnc_option_db_new(r->options);
-    
+
     gnc_build_options_dialog_contents(r->optwin, r->odb);
-    
-    gtk_widget_ref(editor);
-    gtk_container_remove(GTK_CONTAINER(tlo), editor);
+
     gtk_notebook_append_page(GTK_NOTEBOOK(gnc_options_dialog_notebook
                                           (r->optwin)),
                              editor, 
                              gtk_label_new(_("Contents")));
-    
+
     scm_protect_object(r->options);
     scm_protect_object(r->view);
     scm_protect_object(r->available_list);
     scm_protect_object(r->contents_list);
-    
-    gtk_object_set_data(tlo, "view_edit_struct", (gpointer)r);
-    
+
     gtk_signal_connect(GTK_OBJECT(r->available), "select_row", 
                        gnc_column_view_select_avail_cb, (gpointer)r);
     gtk_signal_connect(GTK_OBJECT(r->contents), "select_row", 
                        gnc_column_view_select_contents_cb, (gpointer)r);
-    
+
     update_display_lists(r);
 
     gtk_clist_column_titles_passive (r->available);
@@ -262,16 +289,15 @@ gnc_column_view_edit_options(SCM options, SCM view) {
                                     gnc_column_view_edit_apply_cb, r);
     gnc_options_dialog_set_close_cb(r->optwin, 
                                     gnc_column_view_edit_close_cb, r);
-    
+
     gtk_widget_show_all(gnc_options_dialog_widget(r->optwin));
     return gnc_options_dialog_widget(r->optwin);
   }
 }
 
-void
+static void
 gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
-  gnc_column_view_edit * r = 
-    gtk_object_get_data(GTK_OBJECT(user_data), "view_edit_struct");
+  gnc_column_view_edit * r = user_data;
   SCM make_report = gh_eval_str("gnc:make-report");
   SCM mark_report = gh_eval_str("gnc:report-set-needs-save?!");
   SCM find_report = gh_eval_str("gnc:find-report");
@@ -325,10 +351,9 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
   update_display_lists(r);
 }
 
-void
+static void
 gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data) {
-  gnc_column_view_edit * r = 
-    gtk_object_get_data(GTK_OBJECT(user_data), "view_edit_struct");
+  gnc_column_view_edit * r = user_data;
   SCM newlist = SCM_EOL;
   SCM oldlist = r->contents_list;
   int count;
@@ -363,10 +388,9 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data) {
   update_display_lists(r);
 }
 
-void
+static void
 gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data) {
-  gnc_column_view_edit * r = 
-    gtk_object_get_data(GTK_OBJECT(user_data), "view_edit_struct");
+  gnc_column_view_edit * r = user_data;
   SCM oldlist = r->contents_list;
   SCM newlist = SCM_EOL;
   SCM temp;
@@ -399,10 +423,9 @@ gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data) {
   }
 }
 
-void
+static void
 gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data) {
-  gnc_column_view_edit * r = 
-    gtk_object_get_data(GTK_OBJECT(user_data), "view_edit_struct");
+  gnc_column_view_edit * r = user_data;
   SCM oldlist = r->contents_list;
   SCM newlist = SCM_EOL;
   SCM temp;
@@ -435,9 +458,9 @@ gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data) {
   }
 }
 
-void
+static void
 gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data) {
-  gnc_column_view_edit * r;
+  gnc_column_view_edit * r = user_data;
   GtkWidget * rowspin;
   GtkWidget * colspin;
   GtkWidget * dlg;
@@ -445,8 +468,6 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data) {
   SCM current;
   int length;
   int dlg_ret;
-
-  r = gtk_object_get_data(GTK_OBJECT(user_data), "view_edit_struct");
 
   xml = gnc_glade_xml_new ("report.glade", "Edit Report Size");
   dlg = glade_xml_get_widget (xml, "Edit Report Size");

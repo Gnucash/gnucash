@@ -4,6 +4,16 @@
  * DO NOT compile it as part of your application.
  */
 
+gchar *s = N_("Available reports");
+gchar *s = N_("                       ");
+gchar *s = N_("Add  >>");
+gchar *s = N_("<< Remove");
+gchar *s = N_("Move up");
+gchar *s = N_("Move down");
+gchar *s = N_("Size...");
+gchar *s = N_("Report");
+gchar *s = N_("Cols");
+gchar *s = N_("Rows");
 gchar *s = N_("Report Size");
 gchar *s = N_("Enter report row/column span");
 gchar *s = N_("Row span:");
