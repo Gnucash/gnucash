@@ -219,7 +219,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     xmlNodePtr val_node;
     gchar *tmp_str1;
 
-    val_node = xmlNewChild(node, NULL, tag, NULL);
+    val_node = xmlNewTextChild(node, NULL, tag, NULL);
 
     switch(kvp_value_get_type(val))
     {

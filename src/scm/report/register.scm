@@ -110,6 +110,13 @@
 	  (addto! heading-list (_ "Balance")))
       (reverse heading-list)))
 
+  (define (gnc:split-get-balance-display split)
+    (let ((account (gnc:split-get-account split))
+          (balance (gnc:split-get-balance split)))
+      (if (and account (gnc:account-reverse-balance? account))
+          (gnc:numeric-neg balance)
+          balance)))
+
   (define (add-split-row table split column-vector row-style
                          transaction-info? split-info? double?)
     (let* ((row-contents '())
@@ -195,11 +202,12 @@
                        "number-cell"
                        (gnc:html-split-anchor
                         split
-                        (gnc:make-gnc-monetary currency
-                                               (gnc:split-get-balance split))))
+                        (gnc:make-gnc-monetary
+                         currency (gnc:split-get-balance-display split))))
                       " ")))
 
-      (gnc:html-table-append-row/markup! table row-style (reverse row-contents))
+      (gnc:html-table-append-row/markup! table row-style
+                                         (reverse row-contents))
       (if (and double? transaction-info? (description-col column-vector))
           (begin
             (let ((count 0))
@@ -216,7 +224,8 @@
                       (gnc:make-html-table-cell/size
                        1 (- (num-columns-required column-vector) count)
                        (gnc:transaction-get-notes parent)))
-              (gnc:html-table-append-row/markup! table row-style (reverse row-contents)))))
+              (gnc:html-table-append-row/markup! table row-style
+                                                 (reverse row-contents)))))
       split-value))
 
   (define (lookup-sort-key sort-option)
@@ -334,17 +343,27 @@
     (define (reg-report-invoice?)
       (opt-val "Invoice" "Make an invoice"))
 
-    (define (add-subtotal-row table used-columns
+    (define (add-subtotal-row leader table used-columns
                               subtotal-collector subtotal-style)
       (let ((currency-totals (subtotal-collector
                               'format gnc:make-gnc-monetary #f)))
+
         (define (colspan monetary)
-          (if (amount-single-col used-columns)
-              (amount-single-col used-columns)
-              (if (gnc:numeric-negative-p
-                   (gnc:gnc-monetary-amount monetary))
-                  (credit-col used-columns)
-                  (debit-col used-columns))))
+          (cond
+           ((balance-col used-columns) (balance-col used-columns))
+           ((amount-single-col used-columns) (amount-single-col used-columns))
+           ((gnc:numeric-negative-p (gnc:gnc-monetary-amount monetary))
+            (credit-col used-columns))
+           (else (debit-col used-columns))))
+
+        (define (display-subtotal monetary)
+          (if (or (balance-col used-columns) (amount-single-col used-columns))
+              (if (and leader (gnc:account-reverse-balance? leader))
+                  (gnc:monetary-neg monetary)
+                  monetary)
+              (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount monetary))
+                  (gnc:monetary-neg monetary)
+                  monetary)))
 
         (if (not (reg-report-invoice?))
             (gnc:html-table-append-row!
@@ -356,7 +375,7 @@
 
         (for-each (lambda (currency)
                     (gnc:html-table-append-row/markup! 
-                     table 
+                     table
 		     subtotal-style
                      (append (cons (gnc:make-html-table-cell/markup
                                     "total-label-cell" (_ "Total"))
@@ -364,12 +383,7 @@
                              (list (gnc:make-html-table-cell/size/markup
                                     1 (colspan currency)
                                     "total-number-cell"
-                                    (if
-                                     (and (credit-col used-columns)
-                                          (gnc:numeric-negative-p
-                                           (gnc:gnc-monetary-amount currency)))
-                                     (gnc:monetary-neg currency)
-                                     currency))))))
+                                    (display-subtotal currency))))))
                   currency-totals)))
 
     (define (add-other-split-rows split table used-columns row-style)
@@ -384,8 +398,9 @@
       (other-rows-driver split (gnc:split-get-parent split)
                          table used-columns 0))
 
-    (define (do-rows-with-subtotals splits 
-                                    table 
+    (define (do-rows-with-subtotals leader
+                                    splits
+                                    table
                                     used-columns
                                     width
                                     multi-rows?
@@ -393,7 +408,7 @@
                                     odd-row?
                                     total-collector)
       (if (null? splits)
-          (add-subtotal-row table used-columns
+          (add-subtotal-row leader table used-columns
                             total-collector "grand-total")
 
 	  (let* ((current (car splits))
@@ -419,14 +434,24 @@
 			     (gnc:gnc-monetary-commodity split-value)
 			     (gnc:gnc-monetary-amount split-value))
 
-	    (do-rows-with-subtotals rest 
-				    table 
+	    (do-rows-with-subtotals leader
+                                    rest
+				    table
 				    used-columns
                                     width 
 				    multi-rows?
                                     double?
                                     (not odd-row?)                       
 				    total-collector))))
+
+    (define (splits-leader splits)
+      (let ((accounts (map gnc:split-get-account splits)))
+        (if (null? accounts) #f
+            (begin
+              (set! accounts (cons (car accounts)
+                                   (delete (car accounts) (cdr accounts))))
+              (if (not (null? (cdr accounts))) #f
+                  (car accounts))))))
 
     (let* ((table (gnc:make-html-table))
            (used-columns (build-column-used options))
@@ -440,7 +465,8 @@
                           debit-string credit-string amount-string
                           multi-rows?))
 
-      (do-rows-with-subtotals splits
+      (do-rows-with-subtotals (splits-leader splits)
+                              splits
                               table
                               used-columns
                               width
@@ -600,12 +626,12 @@
          (debit-op (gnc:lookup-option options "__reg" "debit-string"))
          (credit-op (gnc:lookup-option options "__reg" "credit-string"))
          (account-op (gnc:lookup-option options "Display" "Account")))
-    
+
     (if invoice?
         (begin
           (set! journal? #f)
           (gnc:option-set-value account-op #f)))
-    
+
     (gnc:option-set-value invoice-op invoice?)
     (gnc:option-set-value query-op query)
     (gnc:option-set-value journal-op journal?)
