@@ -390,7 +390,8 @@ gnc_split_register_save_template_cells (gpointer save_data,
 
     value = gnc_table_layout_get_cell_value (reg->table->layout, FCRED_CELL);
     kvp_frame_set_slot_path( kvpf,kvp_value_new_string( value ), 
-			     "sched-xaction", "credit-formula",
+			     "sched-xaction",
+                             "credit-formula",
                              NULL);
 
     value = gnc_table_layout_get_cell_value (reg->table->layout, FDEBT_CELL);
@@ -398,9 +399,8 @@ gnc_split_register_save_template_cells (gpointer save_data,
     kvp_frame_set_slot_path( kvpf,  
                              kvp_value_new_string( value ),
                              "sched-xaction", 
-                             "debit_formula",
+                             "debit-formula",
                              NULL);
-
 
     DEBUG( "kvp_frame  after: %s\n", kvp_frame_to_string( kvpf ) );
 

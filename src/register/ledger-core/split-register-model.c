@@ -1144,7 +1144,7 @@ gnc_template_register_get_fdebt_entry (VirtualLocation virt_loc,
   return kvp_value_get_string
     (kvp_frame_get_slot_path (kvpf,
                               "sched-xaction",
-                              "debit_formula",
+                              "debit-formula",
                               NULL));
 }
 
@@ -1164,7 +1164,7 @@ gnc_template_register_get_fcred_entry (VirtualLocation virt_loc,
   return kvp_value_get_string
     (kvp_frame_get_slot_path (kvpf,
                               "sched-xaction",
-                              "credit_formula",
+                              "credit-formula",
                               NULL));
 }
 
