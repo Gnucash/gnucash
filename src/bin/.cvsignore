@@ -9,5 +9,6 @@ gnucash
 gnucash-env
 gnucash-run-script
 gnucash-make-guids
+guile
 .deps
 .libs
