@@ -1,7 +1,5 @@
 /********************************************************************
  * gnc-engine.h  -- top-level include file for Gnucash Engine       *
- * Copyright 2000 Bill Gribble <grib@billgribble.com>               *
- * Copyright 2001 Linas Vepstas <linas@linas.org>                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -26,6 +24,7 @@
 /** @file gnc-engine.h 
     @brief All type declarations for the whole Gnucash engine
     @author Copyright (C) 1997 Robin D. Clark
+    @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>
     @author Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>
 */
 
