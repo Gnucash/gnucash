@@ -4783,7 +4783,7 @@ msgstr "Halbjährlich: %u"
 #: src/engine/FreqSpec.c:936
 #, c-format
 msgid "Yearly (x%u): %s/%u"
-msgstr "Jährlich (%u Mal): %3$u. %2$s"
+msgstr "Jährlich (%1$u Mal): %3$u. %2$s"
 
 #. %s is the abbreviated name of the month; %u is
 #. the day of month
