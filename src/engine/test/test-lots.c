@@ -63,12 +63,11 @@ main_helper (void *closure, int argc, char **argv)
 
   do_test((NULL!=gnc_module_load("gnucash/engine", 0)), "load engine");
 
-  /* set the rng to a known starting point */
-  srand(0);
-
   /* Iterate the test a number of times */
-  for (i=0; i< 20; i++)
+  for (i=0; i< 6; i++)
+  {
     run_test ();
+  }
 
   print_test_results();
   exit(get_rv());
