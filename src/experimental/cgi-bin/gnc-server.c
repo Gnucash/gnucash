@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "gnc-book.h"
 #include "gnc-engine.h"
@@ -22,14 +23,13 @@
 int
 main (int argc, char *argv[]) 
 {
-   int fake_argc =1;
+   int err, fake_argc =1;
    char * fake_argv[] = {"hello", 0};
    GNCBook *book;
    AccountGroup *grp;
    char *bufp;
    int rc, sz;
    
-
    /* intitialize the engine */
    gnc_engine_init (fake_argc, fake_argv);
 
@@ -37,20 +37,10 @@ main (int argc, char *argv[])
    book = gnc_book_new ();
 
    rc = gnc_book_begin (book, "file:/tmp/demo.xac", FALSE);
-   if (!rc) {
-      int err = gnc_book_get_error (book);
-      /* 500 Server Error */
-      FCGI_SetExitStatus (500);
-      goto bookerrexit;
-   }
+   if (!rc) goto bookerrexit;
 
    rc = gnc_book_load (book);
-   if (!rc) {
-      int err = gnc_book_get_error (book);
-      /* 500 Server Error */
-      FCGI_SetExitStatus (500);
-      goto bookerrexit;
-   }
+   if (!rc) goto bookerrexit;
 
    /* the grp pointer points to our local cache of the data */
    grp = gnc_book_get_group (book);
@@ -65,47 +55,80 @@ main (int argc, char *argv[])
       char *request_method;
       int read_len=0;
 
-      /* get the METHOD=POST data */
+      /* get the request method */
       request_method = getenv ("REQUEST_METHOD");
-      if (!strcmp ("POST", request_method)) {
+
+      /* Lets pretend that method=get means user has logged 
+       * in.  Send the user the accounts and currencies, 
+       * but not the transactions/splits. */
+      if (!strcmp ("GET", request_method))
+      {
+         gncxml_write_group_to_buf(grp, &bufp, &sz);
+
+         /* print the HTTP header */
+         printf("Content-type: text/html\r\n"
+                "Content-Length: %d\r\n"
+               "\r\n", sz);
+   
+         /* send the xml to the client */
+         printf ("%s", bufp);
+         free (bufp);
+
+         /* wait for the next request */
+         continue;
+      }
+
+
+      if (!strcmp ("POST", request_method)) 
+      {
          char * content_length = getenv("CONTENT_LENGTH");
          read_len = atoi (content_length);
 
          /* read 'read_len' bytes from stdin ... */
+         bufp = (char *) malloc (read_len);
+         fread (bufp, read_len, 1, stdin);
+
+         /* conver the xml input into a gnucash query structure... */
+         q = gncxml_read_query (bufp, read_len);
+         xaccQuerySetGroup (q, grp);
+
+         /* hack -- limit to 30 splits ... */
+         xaccQuerySetMaxSplits (q, 30);
+         split_list = xaccQueryGetSplits (q);
+
+         xaccFreeQuery (q);
+
+         /* wait for the next request */
+         continue;
       }
 
-#if 0
-      /* conver the xml input into a gnucash query structure... */
-      q = gncxml_read_query (bufp, read_len);
-      xaccQuerySetGroup (q, grp);
+      /* if we got to here, an error -- unknown method */
+      printf("Content-type: text/plain\r\n"
+             "\r\n"
+             "unknown request type \n");
+   
 
-      /* hack ... */
-      xaccQuerySetMaxSplits (q, 30);
-       
-      split_list = xaccQueryGetSplits (q);
-#endif
-
-      /* generate the xml output */
-      /* hack -- we need to use the split list to generate the xml ... */
-      gncxml_write_to_buf(grp, &bufp, &sz);
-
-      /* print the HTTP header */
-      printf("Content-type: text/html\r\n"
-             "Content-Length: %d\r\n"
-            "\r\n", sz);
-
-
-      printf ("%s", bufp);
-      free (bufp);
-      // xaccFreeQuery (q);
    }
 
 bookerrexit:
+
+   err = gnc_book_get_error (book);
+
+   /* 500 Server Error */
+   FCGI_SetExitStatus (500);
+
+   printf("Content-type: text/plain\r\n\r\n"
+          "error was %s\n", strerror (err));
+
+   FCGI_Finish();
+
    /* close the book */
    gnc_book_destroy (book);
 
    /* shut down the engine */
    gnc_engine_shutdown ();
+
+   sleep (1);
 
    return 0;
 }
