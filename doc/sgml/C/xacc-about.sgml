@@ -1264,6 +1264,28 @@ For now, this is what we have.
          (114.2)</entry>
 <entry>8 (7.8)</entry>
 </row>
+<row>
+<entry>gnucash-1.6.0
+         June 2001</entry>
+<entry>139 files
+         (42.8+8.3)</entry>
+<entry>28 files
+         (5.7+2.0)</entry>
+<entry>23 files
+         (10.1+1.5)</entry>
+<entry>-</entry>
+<entry>132 files
+         (60.0+4.2)</entry>
+<entry>102 files
+         (6.2+0.8+27.3)</entry>
+<entry>64 files
+         (12.1)</entry>
+<entry>69 files
+         (12.9)</entry>
+<entry>455 files
+         (193.9)</entry>
+<entry>11 (18.7)</entry>
+</row>
 </tbody>
 </tgroup>
 </table>
