@@ -26,8 +26,7 @@
 #define HBCI_ACCOUNT_ID "account-id"
 #define HBCI_BANK_CODE "bank-code"
 #define HBCI_COUNTRY_CODE "country-code"
-#define HBCI_USERID_LIST "user-id-list"
-#define HBCI_BANK_LIST "bank-list"
+#define HBCI_CONFIGFILE "config-filename"
 
 /* Account */
 gchar *gnc_hbci_get_account_accountid (Account *a)
@@ -69,49 +68,18 @@ void gnc_hbci_set_account_countrycode (Account *a, gint code)
 
 
 /* GNCBook */
-GList *gnc_hbci_get_book_bankframelist (GNCBook *b)
+gchar *gnc_hbci_get_book_configfile (GNCBook *b)
 {
   kvp_frame *frame = gnc_hbci_get_book_kvp (b);
-  kvp_value *value = kvp_frame_get_slot (frame, HBCI_BANK_LIST);
-  return kvp_value_get_glist (value);
-}
-void gnc_hbci_set_book_bankframelist_nc (GNCBook *b, GList *banklist)
-{
-  kvp_frame *frame = gnc_hbci_get_book_kvp (b);
-  kvp_value *value = kvp_value_new_glist_nc (banklist);
-  kvp_frame_set_slot_nc (frame, HBCI_BANK_LIST, value);
-}
-gchar *gnc_hbci_get_bankframe_bankcode (kvp_frame *f)
-{
-  kvp_value *value = kvp_frame_get_slot (f, HBCI_BANK_CODE);
+  kvp_value *value = kvp_frame_get_slot (frame, HBCI_CONFIGFILE);
   return kvp_value_get_string (value);
 }
-gint gnc_hbci_get_bankframe_countrycode (kvp_frame *f)
+void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename)
 {
-  kvp_value *value = kvp_frame_get_slot (f, HBCI_COUNTRY_CODE);
-  return kvp_value_get_gint64 (value);
+  kvp_frame *frame = gnc_hbci_get_book_kvp (b);
+  kvp_value *value = kvp_value_new_string (filename);
+  kvp_frame_set_slot (frame, HBCI_CONFIGFILE, value);
 }
-GList *gnc_hbci_get_bankframe_userids (kvp_frame *f)
-{
-  kvp_value *value = kvp_frame_get_slot (f, HBCI_USERID_LIST);
-  return kvp_value_get_glist (value);
-}
-kvp_frame *gnc_hbci_bankframe_new (const char *bankcode,
-				   gint countrycode,
-				   const GList *userids)
-{
-  kvp_frame *newframe = kvp_frame_new();
-  kvp_frame_set_slot(newframe, HBCI_BANK_CODE, 
-		     kvp_value_new_string (bankcode));
-  kvp_frame_set_slot(newframe, HBCI_COUNTRY_CODE, 
-		     kvp_value_new_gint64 (countrycode));
-  kvp_frame_set_slot(newframe, HBCI_USERID_LIST,
-		     kvp_value_new_glist (userids));
-  return newframe;
-}
-
-  
-
 
 /* lowlevel */
 /* getters  for kvp frame in book */

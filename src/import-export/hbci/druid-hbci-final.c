@@ -31,7 +31,7 @@
 /* #include "Group.h" */
 #include "dialog-utils.h"
 #include "druid-utils.h"
-#include <openhbci/hbciapi.h>
+#include <openhbci/api.h>
 
 typedef struct 
 {

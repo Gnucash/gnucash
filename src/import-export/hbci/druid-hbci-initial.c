@@ -41,7 +41,7 @@
 /* #include "gnc-ui-util.h" */
 /* #include "io-example-account.h" */
 /* #include "top-level.h" */
-#include <openhbci/hbciapi.h>
+#include <openhbci/api.h>
 
 typedef struct 
 {

@@ -40,16 +40,8 @@ gint gnc_hbci_get_account_countrycode (Account *a);
 void gnc_hbci_set_account_countrycode (Account *a, gint code);
 
 /* GNCBook */
-GList *gnc_hbci_get_book_bankframelist (GNCBook *b);
-void gnc_hbci_set_book_bankframelist_nc (GNCBook *b, GList *banklist);
-
-gchar *gnc_hbci_get_bankframe_bankcode (kvp_frame *f);
-gint gnc_hbci_get_bankframe_countrycode (kvp_frame *f);
-GList *gnc_hbci_get_bankframe_userids (kvp_frame *f);
-
-kvp_frame *gnc_hbci_bankframe_new (const char *bankcode,
-				   gint countrycode,
-				   const GList *userids);
+gchar *gnc_hbci_get_book_configfile (GNCBook *b);
+void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename);
 
 /* lowlevel */
 /* getter for kvp frame in book */
