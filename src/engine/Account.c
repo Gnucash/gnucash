@@ -293,7 +293,7 @@ xaccAccountCommitEdit (Account *acc)
    * and then the splits ... */
   if (acc->do_free)
   {
-    GList *lp;
+    acc->editlevel++;
 
     /* First, recursively free children */
     xaccFreeAccountGroup (acc->children);
@@ -302,30 +302,23 @@ xaccAccountCommitEdit (Account *acc)
     PINFO ("freeing splits for account %p (%s)\n",
            acc, acc->accountName ? acc->accountName : "(null)");
 
-    /* any split pointing at this account needs to be unmarked */
-    for(lp = acc->splits; lp; lp = lp->next) 
+    while (acc->splits)
     {
-      xaccSplitSetAccount((Split *) lp->data, NULL);
-    }
-
-    for(lp = acc->splits; lp; lp = lp->next) 
-    {
-      Split *s = (Split *) lp->data;
+      Split *s = acc->splits->data;
       Transaction *t = s->parent;
+
       xaccTransBeginEdit (t);
       xaccSplitDestroy (s);
       xaccTransCommitEdit (t);
     }
 
-    /* free up array of split pointers */
-    g_list_free(acc->splits);
-    acc->splits = NULL;
-
     acc->core_dirty = TRUE;
+    acc->editlevel--;
   }
   else 
   {
     xaccAccountBringUpToDate(acc);
+    xaccGroupInsertAccount(acc->parent, acc); /* resort parent group */
   }
 
   /* See if there's a backend.  If there is, invoke it. */
@@ -1025,7 +1018,8 @@ xaccAccountOrder (Account **aa, Account **ab) {
   db = (*ab)->accountName;
   SAFE_STRCMP (da, db);
 
-  return 0;
+  /* guarantee a stable sort */
+  return guid_compare (&((*aa)->guid), &((*ab)->guid));
 }
 
 /********************************************************************\
