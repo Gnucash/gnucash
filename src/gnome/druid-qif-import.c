@@ -349,6 +349,8 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page) {
       default:
         printf("QIF import: something fishy.\n");
         next = NULL;
+        if (where > 3)
+          return NULL;
         break;
       }              
     }
@@ -400,8 +402,11 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page) {
         prev = g_list_last(wind->commodity_pages);
         break;
       default:
-        printf("QIF import: something fishy.\n");
+        if (wind->show_doc_pages)
+          printf("QIF import: something fishy.\n");
         prev = NULL;
+        if (where < 1)
+          return NULL;
         break;
       }              
     }
