@@ -148,8 +148,8 @@ struct _matchinfo
 \********************************************************************/
 
 static short module = MOD_IMPORT;
-static const double MATCH_ATM_FEE_TRESHOLD=3.00;
-static const int MATCH_DATE_TRESHOLD=4; /*within 4 days*/
+static const double MATCH_ATM_FEE_THRESHOLD=3.00;
+static const int MATCH_DATE_THRESHOLD=4; /*within 4 days*/
 static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = FALSE;
 static const int SHOW_NUMERIC_SCORE = FALSE;
 
@@ -823,7 +823,7 @@ static void split_find_match( struct _transmatcherdialog * matcher,
 	  match_info->probability=match_info->probability+3;
 	  DEBUG("heuristics:  probability + 3 (amount)");
 	}
-      else if(fabs(downloaded_split_amount-match_split_amount)<=MATCH_ATM_FEE_TRESHOLD)
+      else if(fabs(downloaded_split_amount-match_split_amount)<=MATCH_ATM_FEE_THRESHOLD)
 	{
 	  /* ATM fees are sometimes added directly in the transaction.  So you withdraw 100$ and get charged 101,25$
 	     in the same transaction */ 
@@ -851,10 +851,18 @@ static void split_find_match( struct _transmatcherdialog * matcher,
 	  match_info->probability=match_info->probability+2;
 	  DEBUG("heuristics:  probability + 2 (date)");
 	}
-      else if (datediff_day <= MATCH_DATE_TRESHOLD)
+      else if (datediff_day <= MATCH_DATE_THRESHOLD)
 	{
 	  match_info->probability=match_info->probability+1;
 	  DEBUG("heuristics:  probability + 1 (date)");
+	}
+      else if (datediff_day > 4*MATCH_DATE_THRESHOLD)
+	{
+	  /* ok, the factor '4' here is kind of arbitrary. Anyway,
+	     there needs to be extra punishment if this transaction
+	     lies awfully far away from this one. */
+	  match_info->probability=match_info->probability-1;
+	  DEBUG("heuristics:  probability - 1 (date)");
 	}
       
     
