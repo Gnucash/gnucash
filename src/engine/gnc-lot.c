@@ -59,6 +59,7 @@ gnc_lot_init (GNCLot *lot, QofBook *book)
    lot->account = NULL;
    lot->splits = NULL;
    lot->is_closed = -1;
+   lot->marker = 0;
   
    lot->book = book;
    qof_entity_guid_new (book->entity_table, &lot->guid);
