@@ -17,6 +17,9 @@
 #include "recncell.h"
 #include "messages.h"
 
+#include "gnc-component-manager.h"
+#include "gnc-ui.h"
+
 #include "gncEntry.h"
 #include "gncEntryLedger.h"
 #include "gncEntryLedgerP.h"
@@ -493,4 +496,104 @@ gnc_entry_ledger_get_entry_virt_loc (GncEntryLedger *ledger, GncEntry *entry,
     }
 
   return FALSE;
+}
+
+void
+gnc_entry_ledger_delete_current_entry (GncEntryLedger *ledger)
+{
+  GncEntry *entry;
+
+  if (!ledger)
+    return;
+
+  /* If there is no entry, just return */
+  entry = gnc_entry_ledger_get_current_entry (ledger);
+  if (!entry)
+    return;
+
+  /* If this is the blank entry, just cancel the changes */
+  if (entry == gnc_entry_ledger_get_blank_entry (ledger)) {
+    gnc_entry_ledger_cancel_cursor_changes (ledger);
+    return;
+  }
+
+  /* Ok, let's delete this entry */
+  gnc_suspend_gui_refresh ();
+  {
+    GncOrder *order;
+    GncInvoice *invoice;
+
+    order = gncEntryGetOrder (entry);
+    if (order)
+      gncOrderRemoveEntry (order, entry);
+
+    invoice = gncEntryGetInvoice (entry);
+    if (invoice)
+      gncInvoiceRemoveEntry (invoice, entry);
+
+    gncEntryDestroy (entry);
+    /* XXX: Commit the deletion? */
+  }
+  gnc_resume_gui_refresh ();
+}
+
+void
+gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
+{
+  GncEntry *entry;
+  gboolean changed;
+
+  if (!ledger)
+    return;
+
+  /* Be paranoid */
+  entry = gnc_entry_ledger_get_current_entry (ledger);
+  if (!entry)
+    return;
+
+  changed = gnc_table_current_cursor_changed (ledger->table, FALSE);
+
+  /* See if we're asked to duplicate an unchanged blank entry --
+   * there is no point in doing that.
+   */
+  if (!changed && entry == gnc_entry_ledger_get_blank_entry (ledger))
+    return;
+
+  gnc_suspend_gui_refresh ();
+
+  /* If the cursor has been edited, we are going to have to commit
+   * it before we can duplicate. Make sure the user wants to do that. */
+  if (changed) {
+    const char *message = _("The current entry has been changed.\n"
+			  "Would you like to save it?");
+    GNCVerifyResult result;
+
+    result = gnc_ok_cancel_dialog_parented (ledger->parent,      
+					    GNC_VERIFY_OK, message);
+
+    if (result == GNC_VERIFY_CANCEL) {
+      gnc_resume_gui_refresh ();
+      return;
+    }
+
+    if (!gnc_entry_ledger_commit_entry (ledger)) {
+      gnc_resume_gui_refresh ();
+      return;
+    }
+  }
+
+  /* Ok, we're ready to make the copy */
+  {
+    GncEntry * new_entry;
+
+    new_entry = gncEntryCreate (ledger->book);
+    gncEntryCopy (entry, new_entry);
+    gncEntrySetDate (new_entry, ledger->last_date_entered);
+
+    /* Set the hint for where to display on the refresh */
+    ledger->hint_entry = new_entry;
+  }
+
+  gnc_resume_gui_refresh ();
+  return;
 }

@@ -181,6 +181,8 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
   /* Figure out where we are going to */
   if (ledger->traverse_to_new) {
     find_entry = blank_entry;
+  } else if (ledger->hint_entry) {
+    find_entry = ledger->hint_entry;
   } else {
     find_entry = gnc_entry_ledger_get_current_entry(ledger);
 		/* XXX: get current entry (cursor_hint_xxx) */
@@ -292,6 +294,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
   /* Reset the ledger */
   ledger->traverse_to_new = FALSE;
+  ledger->hint_entry = NULL;
 
   /* Set the cell fractions */
 

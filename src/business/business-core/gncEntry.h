@@ -65,6 +65,8 @@ gnc_numeric gncEntryGetDiscount (GncEntry *entry);
 gint gncEntryGetDiscountType (GncEntry *entry);
 const char * gncEntryGetDiscountTypeStr (gint type);
 
+void gncEntryCopy (const GncEntry *src, GncEntry *dest);
+
 gnc_numeric gncEntryReturnValue (GncEntry *entry);
 gnc_numeric gncEntryReturnTaxValue (GncEntry *entry);
 

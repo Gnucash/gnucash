@@ -270,6 +270,30 @@ void gncEntrySetDirty (GncEntry *entry, gboolean dirty)
   entry->dirty = dirty;
 }
 
+void gncEntryCopy (const GncEntry *src, GncEntry *dest)
+{
+  if (!src || !dest) return;
+
+  dest->date 			= src->date;
+  dest->date_entered		= src->date_entered; /* ??? */
+  gncEntrySetDescription (dest, src->desc);
+  gncEntrySetAction (dest, src->action);
+  dest->quantity		= src->quantity;
+  dest->price			= src->price;
+  dest->tax			= src->tax;
+  dest->tax_type		= src->tax_type;
+  dest->discount		= src->discount;
+  dest->disc_type		= src->disc_type;
+  dest->account			= src->account;
+  dest->taxaccount		= src->taxaccount;
+
+  if (src->order)
+    gncOrderAddEntry (src->order, dest);
+
+  if (src->invoice)
+    gncInvoiceAddEntry (src->invoice, dest);
+}
+
 /* Get Functions */
 
 GNCBook * gncEntryGetBook (GncEntry *entry)

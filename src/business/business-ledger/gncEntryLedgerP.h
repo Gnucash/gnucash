@@ -24,6 +24,8 @@ struct GncEntryLedger_s {
 
   Timespec	last_date_entered;
 
+  GncEntry *	hint_entry;	/* A Hint for where to display */
+
   gncUIWidget	parent;
   GNCBook *	book;
   Table *	table;

@@ -100,4 +100,7 @@ gboolean gnc_entry_ledger_get_entry_virt_loc (GncEntryLedger *ledger,
 					      GncEntry *entry,
 					      VirtualCellLocation *vcell_loc);
 
+void gnc_entry_ledger_delete_current_entry (GncEntryLedger *ledger);
+void gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger);
+
 #endif /* GNC_ENTRY_LEDGER_H */

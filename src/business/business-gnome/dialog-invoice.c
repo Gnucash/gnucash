@@ -381,13 +381,61 @@ cancelCB (GtkWidget *widget, gpointer data)
 static void
 deleteCB (GtkWidget *widget, gpointer data)
 {
+  InvoiceWindow *iw = data;
+  GncEntry *entry;
+
+  if (!iw || !iw->ledger)
+    return;
+
+  /* get the current entry based on cursor position */
+  entry = gnc_entry_ledger_get_current_entry (iw->ledger);
+  if (!entry) {
+    gnc_entry_ledger_cancel_cursor_changes (iw->ledger);
+    return;
+  }
+
+  /* deleting the blank entry just cancels */
+  if (entry == gnc_entry_ledger_get_blank_entry (iw->ledger)) {
+    gnc_entry_ledger_cancel_cursor_changes (iw->ledger);
+    return;
+  }
+
+  /* Verify that the user really wants to delete this entry */
+  {
+    const char *message = _("Are you sure you want to delete the "
+			    "current entry?");
+    const char *order_warn = _("This entry is attached to an order and "
+			       "will be deleted from that as well!");
+    char *msg;
+    gboolean result;
+
+    if (gncEntryGetOrder (entry))
+      msg = g_strconcat (message, "\n\n", order_warn, NULL);
+    else
+      msg = g_strdup (message);
+
+    result = gnc_verify_dialog_parented (iw->dialog, FALSE, msg);
+    g_free (msg);
+
+    if (!result)
+      return;
+  }
+
+  /* Yep, let's delete */
+  gnc_entry_ledger_delete_current_entry (iw->ledger);
+  return;
 }
 
 static void
 duplicateCB (GtkWidget *widget, gpointer data)
 {
-}
+  InvoiceWindow *iw = data;
 
+  if (!iw || !iw->ledger)
+    return;
+
+  gnc_entry_ledger_duplicate_current_entry (iw->ledger);
+}
 
 static void
 blank_entry_cb (GtkWidget *widget, gpointer data)
