@@ -349,7 +349,7 @@ pgendProcessEvents (Backend *bend)
       local_obj_type = xaccGUIDType (&(ev->guid), be->book);
       if (GNC_ID_NONE != local_obj_type)
       {
-         gnc_engine_generate_event (&(ev->guid), local_obj_type);
+         gnc_engine_generate_event (&(ev->guid), ev->type);
       }
    
       g_free (ev);
