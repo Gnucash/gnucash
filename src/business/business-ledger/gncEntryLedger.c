@@ -452,7 +452,7 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
   tax_type = gnc_entry_ledger_get_type (ledger, ENTRY_TAXTYPE_CELL);
 
   gncEntryComputeValue (qty, price, tax, tax_type, discount, disc_type,
-			  value, tax_value);
+			  value, tax_value, NULL);
 }
 
 gboolean

@@ -404,7 +404,8 @@ GncEntry * gncEntryLookup (GNCBook *book, const GUID *guid)
 void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 			   gnc_numeric tax, gint tax_type,
 			   gnc_numeric discount, gint discount_type,
-			   gnc_numeric *value, gnc_numeric *tax_value)
+			   gnc_numeric *value, gnc_numeric *tax_value,
+			   gnc_numeric *discount_value)
 {
   gnc_numeric	subtotal;
   gnc_numeric	this_value;
@@ -422,6 +423,11 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
   this_value = gnc_numeric_sub (subtotal, discount, 10000 /* XXX */, GNC_RND_ROUND);
   if (discount_type & GNC_ENTRY_PRETAX_FLAG)
     subtotal = this_value;
+
+  /* Save the discount and value return values */
+
+  if (discount_value != NULL)
+    *discount_value = discount;
 
   if (value != NULL)
     *value = this_value;
@@ -441,7 +447,7 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 }
 
 void gncEntryGetValue (GncEntry *entry, gnc_numeric *value,
-		       gnc_numeric *tax_value)
+		       gnc_numeric *tax_value, gnc_numeric *discount_value)
 {
   if (!entry) return;
 
@@ -451,14 +457,14 @@ void gncEntryGetValue (GncEntry *entry, gnc_numeric *value,
 			       gncEntryGetTaxType (entry),
 			       gncEntryGetDiscount (entry),
 			       gncEntryGetDiscountType (entry),
-			       value, tax_value);
+			       value, tax_value, discount_value);
 }
 
 gnc_numeric gncEntryReturnValue (GncEntry *entry)
 {
   gnc_numeric val = gnc_numeric_zero ();
   if (!entry) return val;
-  gncEntryGetValue (entry, &val, NULL);
+  gncEntryGetValue (entry, &val, NULL, NULL);
   return val;
 }
 
@@ -466,7 +472,15 @@ gnc_numeric gncEntryReturnTaxValue (GncEntry *entry)
 {
   gnc_numeric val = gnc_numeric_zero ();
   if (!entry) return val;
-  gncEntryGetValue (entry, NULL, &val);
+  gncEntryGetValue (entry, NULL, &val, NULL);
+  return val;
+}
+
+gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry)
+{
+  gnc_numeric val = gnc_numeric_zero ();
+  if (!entry) return val;
+  gncEntryGetValue (entry, NULL, NULL, &val);
   return val;
 }
 

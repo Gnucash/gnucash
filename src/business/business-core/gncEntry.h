@@ -69,16 +69,19 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest);
 
 gnc_numeric gncEntryReturnValue (GncEntry *entry);
 gnc_numeric gncEntryReturnTaxValue (GncEntry *entry);
+gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry);
 
-/* Compute the Entry value and tax-value numbers, based on the
- * quantity, price, discount, tax, and discount/tax types
+/* Compute the Entry value, tax-value, and discount_value, based on the
+ * quantity, price, discount, tax, and discount/tax types.  Note that
+ * the value is the after-discount value.
  */
 void gncEntryGetValue (GncEntry *entry, gnc_numeric *value,
-		       gnc_numeric *tax_value);
+		       gnc_numeric *tax_value, gnc_numeric *discount);
 void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 			   gnc_numeric tax, gint tax_type,
 			   gnc_numeric discount, gint discount_type,
-			   gnc_numeric *value, gnc_numeric *tax_value);
+			   gnc_numeric *value, gnc_numeric *tax_value,
+			   gnc_numeric *discount_value);
 
 gint gncEntryGetTypeFromStr (const char *type);
 

@@ -373,7 +373,7 @@
    '<gnc:numeric>
    "gncEntryReturnValue"
    '((<gnc:GncEntry*> entry))
-   "Return the Entry's Value")
+   "Return the Entry's computed Value (after discount)")
 
   (gw:wrap-function
    ws
@@ -381,7 +381,15 @@
    '<gnc:numeric>
    "gncEntryReturnTaxValue"
    '((<gnc:GncEntry*> entry))
-   "Return the Entry's Tax Value")
+   "Return the Entry's computed Tax Value")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-discount-value
+   '<gnc:numeric>
+   "gncEntryReturnDiscountValue"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's computed Discount Value")
 
   (gw:wrap-function
    ws

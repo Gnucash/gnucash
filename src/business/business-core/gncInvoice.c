@@ -466,7 +466,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     Account *this_acc;
 
     /* Obtain the Entry Value and TaxValue */
-    gncEntryGetValue (entry, &value, &tax);
+    gncEntryGetValue (entry, &value, &tax, NULL);
 
     /* add the value for the account split */
     this_acc = gncEntryGetAccount (entry);
