@@ -57,7 +57,8 @@ typedef enum
   MOD_GUILE   =  9,
   MOD_BACKEND = 10,
   MOD_QUERY   = 11,
-  MOD_LAST    = 11
+  MOD_PRICE   = 12,
+  MOD_LAST    = 12
 } gncModuleType;
 
 typedef enum

@@ -38,7 +38,7 @@
 #include "guid.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_ENGINE;
+static short module = MOD_PRICE;
 
 /* ==================================================================== */
 /* GNCPrice functions
@@ -635,6 +635,7 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
   GNCPrice *result;
   GHashTable *currency_hash;
 
+  ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
   if(!db || !commodity || !currency) return NULL;
 
   if (db->backend && db->backend->price_lookup)
@@ -656,6 +657,7 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
    * and the latest date always comes first. So return the first in the list.  */
   result = price_list->data;
   gnc_price_ref(result);
+  LEAVE(" ");
   return result;
 }
 
@@ -669,6 +671,7 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
   GList *node;
   GHashTable *currency_hash;
 
+  ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
   if(!db || !commodity || !currency) return NULL;
 
   if (db->backend && db->backend->price_lookup)
@@ -690,6 +693,7 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
   for (node = result; node; node = node->next)
     gnc_price_ref (node->data);
 
+  LEAVE (" ");
   return result;
 }
 
@@ -704,6 +708,7 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
   GList *item = NULL;
   GHashTable *currency_hash;
 
+  ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
   if(!db || !c || !currency) return NULL;
 
   if (db->backend && db->backend->price_lookup)
@@ -732,6 +737,7 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
     }
     item = item->next;
   }
+  LEAVE (" ");
   return result;
 }
 
@@ -749,6 +755,7 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
   GList *item = NULL;
   GHashTable *currency_hash;
 
+  ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
   if(!db || !c || !currency) return NULL;
 
   if (db->backend && db->backend->price_lookup)
@@ -805,6 +812,7 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
   }
 
   gnc_price_ref(result);
+  LEAVE (" ");
   return result;
 }
 
@@ -941,8 +949,10 @@ gnc_pricedb_foreach_price(GNCPriceDB *db,
                           gpointer user_data,
                           gboolean stable_order)
 {
+  ENTER ("db=%p f=%p", db, f);
   if(stable_order) return stable_price_traversal(db, f, user_data);
   return unstable_price_traversal(db, f, user_data);
+  LEAVE (" ");
 }
 
 /* ==================================================================== */
