@@ -39,7 +39,8 @@ gnucash_SOURCES = \
   Destroy.c \
   EuroUtils.c \
   FileDialog.c \
-  Refresh.c
+  Refresh.c \
+  gnc-exp-parser.c
 
 noinst_HEADERS = \
   AccWindow.h \
@@ -55,6 +56,7 @@ noinst_HEADERS = \
   RegWindow.h \
   SplitLedger.h \
   file-history.h \
+  gnc-exp-parser.h \
   gnc-ui-common.h \
   messages.h \
   messages_i18n.h \
@@ -67,6 +69,7 @@ EXTRA_DIST = \
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GUILE_COMPILE_ARGS}
 
 INCLUDES = \
+  -I./calculation \
   -I./engine \
   -I./guile \
   -I./register

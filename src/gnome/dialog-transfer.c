@@ -158,7 +158,8 @@ gnc_xfer_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
   if ((string == NULL) || (*string == 0))
     return FALSE;
 
-  value = xaccParseAmount(string, TRUE);
+  value = 0.0;
+  xaccParseAmount(string, TRUE, &value, NULL);
 
   currency = xaccAccountGetCurrency(account);
 
@@ -325,7 +326,8 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   }
 
   string = gtk_entry_get_text(GTK_ENTRY(xferData->amount_entry));
-  amount = xaccParseAmount(string, TRUE);
+  amount = 0.0;
+  xaccParseAmount(string, TRUE, &amount, NULL);
 
   time = gnc_date_edit_get_date(GNC_DATE_EDIT(xferData->date_entry));
 

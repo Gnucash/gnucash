@@ -170,16 +170,17 @@ gui_to_fi(FinCalcDialog *fcd)
   fcd->financial_info.npp = strtol(string, NULL, 10);
 
   string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[INTEREST_RATE]));
-  fcd->financial_info.ir = xaccParseAmount(string, FALSE);
+  xaccParseAmount(string, FALSE, &fcd->financial_info.ir, NULL);
 
   string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[PRESENT_VALUE]));
-  fcd->financial_info.pv = xaccParseAmount(string, TRUE);
+  xaccParseAmount(string, TRUE, &fcd->financial_info.pv, NULL);
 
   string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[PERIODIC_PAYMENT]));
-  fcd->financial_info.pmt = xaccParseAmount(string, TRUE);
+  xaccParseAmount(string, TRUE, &fcd->financial_info.pmt, NULL);
 
   string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[FUTURE_VALUE]));
-  fcd->financial_info.fv = -xaccParseAmount(string, TRUE);
+  if (xaccParseAmount(string, TRUE, &fcd->financial_info.fv, NULL))
+    fcd->financial_info.fv = -fcd->financial_info.fv;
 
   i = gnc_option_menu_get_active(fcd->compounding_menu);
   fcd->financial_info.CF = periods[i];
@@ -327,7 +328,8 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value)
     case PERIODIC_PAYMENT:
     case FUTURE_VALUE:
       string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[INTEREST_RATE]));
-      dvalue = xaccParseAmount(string, FALSE);
+      dvalue = 0.0;
+      xaccParseAmount(string, FALSE, &dvalue, NULL);
       if (DEQ(dvalue, 0.0))
         return CALC_INTEREST_MSG;
       break;

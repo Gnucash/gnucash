@@ -8,7 +8,7 @@
 # This script requires the programs 'makepatch', 'gzip',
 # 'diff', and 'uuencode'.
 #
-# Author: Dave Peticolas <peticola@cs.ucdavis.edu>
+# Author: Dave Peticolas <dave@krondo.com>
 
 use strict;
 

@@ -110,15 +110,16 @@ gnc_ui_AdjBWindow_cancel_cb(GtkWidget * widget, gpointer data)
 static void
 gnc_ui_AdjBWindow_ok_cb(GtkWidget * widget, gpointer data)
 {
-  AdjBWindow *adjBData = (AdjBWindow *) data;
+  AdjBWindow *adjBData = data;
   Transaction *trans;
   Split *source_split;
-  time_t time;
-  double new_balance, current_balance;
+  double new_balance = 0.0;
+  double current_balance;
   gchar * string;
+  time_t time;
 
   string = gtk_entry_get_text(GTK_ENTRY(adjBData->balance_entry));
-  new_balance = xaccParseAmount(string, TRUE);
+  xaccParseAmount(string, TRUE, &new_balance, NULL);
   if (gnc_reverse_balance(adjBData->account))
     new_balance = -new_balance;
 
@@ -164,7 +165,8 @@ gnc_adjust_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 
   string = gtk_entry_get_text(entry);
 
-  value = xaccParseAmount(string, TRUE);
+  value = 0.0;
+  xaccParseAmount(string, TRUE, &value, NULL);
 
   currency = xaccAccountGetCurrency(account);
 

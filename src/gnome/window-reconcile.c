@@ -269,7 +269,8 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
 
   string = gtk_entry_get_text(entry);
 
-  value = xaccParseAmount(string, TRUE);
+  value = 0.0;
+  xaccParseAmount(string, TRUE, &value, NULL);
 
   account_type = xaccAccountGetType(account);
   if ((account_type == STOCK) || (account_type == MUTUAL) ||
@@ -413,7 +414,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
       string = gtk_entry_get_text(GTK_ENTRY(end_value));
 
-      *new_ending = xaccParseAmount(string, TRUE);
+      *new_ending = 0.0;
+      xaccParseAmount(string, TRUE, new_ending, NULL);
       *statement_date = gnc_date_edit_get_date(GNC_DATE_EDIT(date_value));
 
       if (gnc_reverse_balance(account))

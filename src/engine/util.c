@@ -25,16 +25,17 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <locale.h>
-#include <limits.h>
-#include <ctype.h>
-
-/* #include <glib.h> */
-
 #include "config.h"
+
+#include <ctype.h>
+#include <errno.h>
+#include <glib.h>
+#include <limits.h>
+#include <locale.h>
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "messages.h"
 #include "gnc-common.h"
 #include "util.h"
@@ -58,6 +59,10 @@ gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_DEBUG,        /* BACKEND */
   GNC_LOG_WARNING,      /* QUERY */
 };
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
+
 
 /* Set the logging level of the given module. */
 void
@@ -434,10 +439,12 @@ gnc_localeconv()
 
   gnc_lconv_set(&lc.decimal_point, ".");
   gnc_lconv_set(&lc.thousands_sep, ",");
+  gnc_lconv_set(&lc.grouping, "\003");
   gnc_lconv_set(&lc.int_curr_symbol, "USD ");
   gnc_lconv_set(&lc.currency_symbol, CURRENCY_SYMBOL);
   gnc_lconv_set(&lc.mon_decimal_point, ".");
   gnc_lconv_set(&lc.mon_thousands_sep, ",");
+  gnc_lconv_set(&lc.mon_grouping, "\003");
   gnc_lconv_set(&lc.negative_sign, "-");
 
   gnc_lconv_set_char(&lc.frac_digits, 2);
@@ -821,176 +828,427 @@ xaccPrintAmountArgs (double val, gboolean print_currency_symbol,
  * xaccParseAmount                                                  *
  *   parses amount strings using locale data                        *
  *                                                                  *
- * Args: str      -- pointer to string rep of num                   *
-         monetary -- boolean indicating whether value is monetary   *
- * Return: double -- the parsed amount                              *
+ * Args: in_str   -- pointer to string rep of num                   *
+ *       monetary -- boolean indicating whether value is monetary   *
+ *       result   -- pointer to result location, may be NULL        *
+ *       endstr   -- used to store first digit not used in parsing  *
+ * Return: gboolean -- TRUE if a number found and parsed            *
+ *                     If FALSE, result is not changed              *
 \********************************************************************/
 
-double xaccParseAmount (const char * instr, gboolean monetary)
+/* Parsing state machine states */
+typedef enum
 {
-   struct lconv *lc = gnc_localeconv();
-   gboolean isneg = FALSE;
-   char *mstr, *str, *tok;
-   double amount = 0.0;
-   char negative_sign;
-   char thousands_sep;
-   char decimal_point;
-   int len, i;
+  START_ST,       /* Parsing initial whitespace */
+  NEG_ST,         /* Parsed a negative sign */
+  PRE_GROUP_ST,   /* Parsing digits before grouping and decimal characters */
+  START_GROUP_ST, /* Start of a digit group encountered (possibly) */
+  IN_GROUP_ST,    /* Within a digit group */
+  FRAC_ST,        /* Parsing the fractional portion of a number */
+  DONE_ST,        /* Finished, number is correct module grouping constraints */
+  NO_NUM_ST       /* Finished, number was malformed */
+} ParseState;
 
-   if (!instr) return 0.0;
-   if (*instr == '\0') return 0.0;
+#define done_state(state) (((state) == DONE_ST) || ((state) == NO_NUM_ST))
 
-   mstr = strdup (instr);
-   str = mstr;
+G_INLINE_FUNC double
+fractional_multiplier (int num_decimals)
+{
+  switch (num_decimals)
+  {
+    case 8:
+      return 0.00000001;
+    case 7:
+      return 0.0000001;
+    case 6:
+      return 0.000001;
+      break;
+    case 5:
+      return 0.00001;
+    case 4:
+      return 0.0001;
+    case 3:
+      return 0.001;
+    case 2:
+      return 0.01;
+    case 1:
+      return 0.1;
+    default:
+      PERR("bad fraction length");
+      g_assert_not_reached();
+      break;
+  }
 
-   negative_sign = lc->negative_sign[0];
-   if (monetary)
-   {
-     thousands_sep = lc->mon_thousands_sep[0];
-     decimal_point = lc->mon_decimal_point[0];
-   }
-   else
-   {
-     thousands_sep = lc->thousands_sep[0];
-     decimal_point = lc->decimal_point[0];
-   }
+  return 0.0;
+}
 
-   /* strip off garbage at the beginning of the line */
-   while (*str != '\0')
-   {
-     switch (*str)
-     {
-       case '\r':
-       case '\n':
-       case ' ':
-       case '\t':
-         str++;
-         continue;
-         break;
-     }
+gboolean
+xaccParseAmount (const char * in_str, gboolean monetary, double *result,
+                 char **endstr)
+{
+  struct lconv *lc = gnc_localeconv();
+  gboolean is_negative;
+  gboolean got_decimal;
+  GList *group_data;
+  int group_count;
+  double value;
 
-     break;
-   }
+  ParseState state;
 
-   /* look for a negative sign */
-   if (*str == negative_sign) {
-      isneg = TRUE;
-      str++;
-   }
+  char negative_sign;
+  char decimal_point;
+  char group_separator;
+  const char *in;
+  char *out_str;
+  char *out;
 
-   if (*str == '\0') return 0.0;
+  /* Initialize *endstr to in_str */
+  if (endstr != NULL)
+    *endstr = (char *) in_str;
 
-   /* go to end of string */
-   for (tok = str; *tok != '\0'; tok++)
-     ;
+  if (in_str == NULL)
+    return FALSE;
 
-   /* strip off garbage at end of the line */
-   while (--tok != str)
-   {
-     switch (*tok)
-     {
-       case '\r':
-       case '\n':
-       case ' ':
-       case '\t':
-         continue;
-         break;
-     }
+  negative_sign = lc->negative_sign[0];
+  if (monetary)
+  {
+    group_separator = lc->mon_thousands_sep[0];
+    decimal_point = lc->mon_decimal_point[0];
+  }
+  else
+  {
+    group_separator = lc->thousands_sep[0];
+    decimal_point = lc->decimal_point[0];
+  }
 
-     break;
-   }
+  /* 'out_str' will be used to store digits for numeric conversion.
+   * 'out' will be used to traverse out_str. */
+  out = out_str = g_new(char, strlen(in_str) + 1);
 
-   /* look for a negative sign at the end, some locales allow it,
-    * we'll just allow it everywhere. */
-   if (*tok == negative_sign) {
-      isneg = TRUE;
-      *tok = '\0';
-   }
+  /* 'in' is used to traverse 'in_str'. */
+  in = in_str;
 
-   if (*str == '\0') return 0.0;
+  is_negative = FALSE;
+  got_decimal = FALSE;
+  group_data = NULL;
+  group_count = 0;
+  value = 0.0;
 
-   /* remove thousands separator */
-   tok = strchr (str, thousands_sep);
-   while (tok) {
-      *tok = '\0';
-      amount *= 1000.0;
-      amount += ((double) (1000 * atoi (str)));
-      str = tok + sizeof(char);
-      tok = strchr (str, thousands_sep);
-   }
+  /* Initialize the state machine */
+  state = START_ST;
 
-   /* search for a decimal point */
-   tok = strchr (str, decimal_point);
-   if (tok) {
-      *tok = '\0';
-      amount += ((double) (atoi (str)));
-      str = tok + sizeof(char);
+  /* This while loop implements a state machine for parsing numbers. */
+  while (TRUE)
+  {
+    ParseState next_state = state;
 
-      /* if there is anything trailing the decimal 
-       * point, convert it  */
-      if (str[0]) {
+    /* Note we never need to check for then end of 'in_str' explicitly.
+     * The 'else' clauses on all the state transitions will handle that. */
+    switch (state)
+    {
+      /* START_ST means we have parsed 0 or more whitespace characters */
+      case START_ST:
+        if (isdigit(*in))
+        {
+          *out++ = *in; /* we record the digits themselves in out_str
+                         * for later conversion by libc routines */
+          next_state = PRE_GROUP_ST;
+        }
+        else if (isspace(*in))
+        {
+        }
+        else if (*in == negative_sign)
+        {
+          is_negative = TRUE;
+          next_state = NEG_ST;
+        }
+        else
+        {
+          next_state = NO_NUM_ST;
+        }
 
-         /* strip off garbage at end of the line */
-         tok = strchr (str, ' ');
-         if (tok) *tok = '\0';
+        break;
 
-         /* adjust for number of decimal places */
-         len = strlen(str);
+      /* NEG_ST means we have just parsed a negative sign. For now,
+       * we only recognize formats where the negative sign comes first. */
+      case NEG_ST:
+        if (isdigit(*in))
+        {
+          *out++ = *in;
+          next_state = PRE_GROUP_ST;
+        }
+        else if (isspace(*in))
+        {
+        }
+        else
+        {
+          next_state = NO_NUM_ST;
+        }
 
-         if (len > 8)
-         {
-           str[8] = '\0';
-           len = 8;
-         }
+        break;
 
-         if (8 == len) {
-            amount += 0.00000001 * ((double) atoi (str));
-         } else
-         if (7 == len) {
-            amount += 0.0000001 * ((double) atoi (str));
-         } else
-         if (6 == len) {
-            amount += 0.000001 * ((double) atoi (str));
-         } else
-         if (5 == len) {
-            amount += 0.00001 * ((double) atoi (str));
-         } else
-         if (4 == len) {
-            amount += 0.0001 * ((double) atoi (str));
-         } else
-         if (3 == len) {
-            amount += 0.001 * ((double) atoi (str));
-         } else
-         if (2 == len) {
-            amount += 0.01 * ((double) atoi (str));
-         } else 
-         if (1 == len) {
-            amount += 0.1 * ((double) atoi (str));
-         } 
+      /* PRE_GROUP_ST means we have started parsing the number, but
+       * have not encountered a decimal point or a grouping character. */
+      case PRE_GROUP_ST:
+        if (isdigit(*in))
+        {
+          *out++ = *in;
+        }
+        else if (*in == decimal_point)
+        {
+          next_state = FRAC_ST;
+        }
+        else if (*in == group_separator)
+        {
+          next_state = START_GROUP_ST;
+        }
+        else
+        {
+          next_state = DONE_ST;
+        }
+
+        break;
+
+      /* START_GROUP_ST means we have just parsed a group character.
+       * Note that group characters might be whitespace!!! In general,
+       * if a decimal point or a group character is whitespace, we
+       * try to interpret it in the fashion that will allow parsing
+       * of the current number to continue. */
+      case START_GROUP_ST:
+        if (isdigit(*in))
+        {
+          *out++ = *in;
+          group_count++; /* We record the number of digits
+                          * in the group for later checking. */
+          next_state = IN_GROUP_ST;
+        }
+        else if (*in == decimal_point)
+        {
+          /* If we now get a decimal point, and both the decimal
+           * and the group separator are also whitespace, assume
+           * the last group separator was actually whitespace and
+           * stop parsing. Otherwise, there's a problem. */
+          if (isspace(group_separator) && isspace(decimal_point))
+            next_state = DONE_ST;
+          else
+            next_state = NO_NUM_ST;
+        }
+        else
+        {
+          /* If the last group separator is also whitespace,
+           * assume it was intended as such and stop parsing.
+           * Otherwise, there is a problem. */
+          if (isspace(group_separator))
+            next_state = DONE_ST;
+          else
+            next_state = NO_NUM_ST;
+        }
+
+        break;
+
+      /* IN_GROUP_ST means we are in the middle of parsing
+       * a group of digits. */
+      case IN_GROUP_ST:
+        if (isdigit(*in))
+        {
+          *out++ = *in;
+          group_count++; /* We record the number of digits
+                          * in the group for later checking. */
+        }
+        else if (*in == decimal_point)
+        {
+          next_state = FRAC_ST;
+        }
+        else if (*in == group_separator)
+        {
+          next_state = START_GROUP_ST;
+        }
+        else
+        {
+          next_state = DONE_ST;
+        }
+
+        break;
+
+      /* FRAC_ST means we are now parsing fractional digits. */
+      case FRAC_ST:
+        if (isdigit(*in))
+        {
+          *out++ = *in;
+        }
+        else if (*in == decimal_point)
+        {
+          /* If a subsequent decimal point is also whitespace,
+           * assume it was intended as such and stop parsing.
+           * Otherwise, there is a problem. */
+          if (isspace(decimal_point))
+            next_state = DONE_ST;
+          else
+            next_state = NO_NUM_ST;
+        }
+        else if (*in == group_separator)
+        {
+          /* If a subsequent group separator is also whitespace,
+           * assume it was intended as such and stop parsing.
+           * Otherwise, there is a problem. */
+          if (isspace(group_separator))
+            next_state = DONE_ST;
+          else
+            next_state = NO_NUM_ST;
+        }
+        else
+        {
+          next_state = DONE_ST;
+        }
+
+        break;
+
+      default:
+        PERR("bad state");
+        g_assert_not_reached();
+        break;
+    }
+
+    /* If we're moving out of the IN_GROUP_ST, record data for the group */
+    if ((state == IN_GROUP_ST) && (next_state != IN_GROUP_ST))
+    {
+      group_data = g_list_prepend(group_data, GINT_TO_POINTER(group_count));
+      group_count = 0;
+    }
+
+    /* If we're moving into the FRAC_ST or out of the machine
+     * without going through FRAC_ST, record the integral value. */
+    if (((next_state == FRAC_ST) && (state != FRAC_ST)) ||
+        ((next_state == DONE_ST) && !got_decimal))
+    {
+      *out = '\0';
+      value = strtod(out_str, NULL);
+
+      if (value == HUGE_VAL)
+      {
+        next_state = NO_NUM_ST;
+      }
+      else if (next_state == FRAC_ST)
+      {
+        /* reset the out pointer to record the fraction */
+        out = out_str;
+        *out = '\0';
+
+        got_decimal = TRUE;
+      }
+    }
+
+    state = next_state;
+    if (done_state (state))
+      break;
+
+    in++;
+  }
+
+  /* If there was an error, just quit */
+  if (state == NO_NUM_ST)
+  {
+    g_free(out_str);
+    g_list_free(group_data);
+    return FALSE;
+  }
+
+  /* If there were groups, validate them */
+  if (group_data != NULL)
+  {
+    gboolean good_grouping = TRUE;
+    GList *node;
+    char *group;
+
+    group = monetary ? lc->mon_grouping : lc->grouping;
+
+    /* The groups were built in reverse order. This
+     * is the easiest order to verify them in. */
+    for (node = group_data; node; node = node->next)
+    {
+      /* Verify group size */
+      if (*group != GPOINTER_TO_INT(node->data))
+      {
+        good_grouping = FALSE;
+        break;
       }
 
-   } else if( auto_decimal_enabled ) {
-      /* No decimal point and auto decimal point enabled, so assume that
-       * the value is an integer number of cents or a cent-type unit.
-       * For each auto decimal place requested, move the final decimal
-       * point one place to the left.
-       */
-      amount += ((double) (atoi (str)));
-      for( i = 0; i < auto_decimal_places; i++ )
-         amount *= 0.1;
+      /* Peek ahead at the next group code */
+      switch (group[1])
+      {
+        /* A null char means repeat the last group indefinitely */
+        case '\0':
+          break;
+        /* CHAR_MAX means no more grouping allowed */
+        case CHAR_MAX:
+          if (node->next != NULL)
+            good_grouping = FALSE;
+          break;
+        /* Anything else means another group size */
+        default:
+          group++;
+          break;
+      }
 
-      /* NOTE: further additions to amount after this point will
-       * generate incorrect results.
-       */
+      if (!good_grouping)
+        break;
+    }
 
-   } else {
-      amount += ((double) (atoi (str)));
-   }
+    g_list_free(group_data);
 
-   if (isneg) amount = -amount;
+    if (!good_grouping)
+    {
+      g_free(out_str);
+      return FALSE;
+    }
+  }
 
-   free (mstr);
-   return amount;
+  /* Cap the end of the fraction string, if any */
+  *out = '\0';
+
+  /* Add in fractional value */
+  if (got_decimal && (*out_str != '\0'))
+  {
+    size_t len;
+
+    len = strlen(out_str);
+
+    if (len > 8)
+    {
+      out_str[8] = '\0';
+      len = 8;
+    }
+
+    value += fractional_multiplier(len) * strtod(out_str, NULL);
+
+    if (value == HUGE_VAL)
+    {
+      g_free(out_str);
+      return FALSE;
+    }
+  }
+  else if (auto_decimal_enabled && !got_decimal)
+  {
+    /* No decimal point and auto decimal point enabled, so assume
+     * that the value is an integer number of cents or a cent-type
+     * unit. For each auto decimal place requested, move the final
+     * decimal point one place to the left. */
+    if ((auto_decimal_places > 0) && (auto_decimal_places < 9))
+      value *= fractional_multiplier(auto_decimal_places);
+  }
+
+  if (is_negative)
+    value = -value;
+
+  if (result != NULL)
+    *result = value;
+
+  if (endstr != NULL)
+    *endstr = (char *) in;
+
+  g_free (out_str);
+
+  return TRUE;
 }
 
 

@@ -180,7 +180,6 @@ extern char *strcasestr(const char *str1, const char *str2);
  * An alernate (better??) implementation might be  
  * #define strpskip(s,r) (s+strspn(s,r))
  */
-
 extern char * strpskip (const char * s, const char *reject);
 
 /********************************************************/
@@ -188,7 +187,6 @@ extern char * strpskip (const char * s, const char *reject);
  *    It accepts a number and prints it in the indicated base.
  *    The returned string should be freed when done.
  */
-
 char * ultostr (unsigned long val, int base);
 
 /* Returns true if string s is a number, possibly
@@ -268,8 +266,21 @@ const char * xaccPrintAmountArgs (double val,
                                   gboolean is_shares_value,
                                   const char *curr_code);
 
-/* Parse i18n amount strings */
-double xaccParseAmount (const char * instr, gboolean monetary);
+
+/* xaccParseAmount parses in_str to obtain a numeric result. The
+ *   routine will parse as much of in_str as it can to obtain a single
+ *   number. The number is parsed using the current locale information
+ *   and the 'monetary' flag. The routine will return TRUE if it
+ *   successfully parsed a number and FALSE otherwise. If TRUE is
+ *   returned and result is non-NULL, the value of the parsed number
+ *   is stored in *result. If FALSE is returned, *result is
+ *   unchanged. If TRUE is returned and endstr is non-NULL, the
+ *   location of the first character in in_str not used by the
+ *   parser will be returned in *endstr. If FALSE is returned
+ *   and endstr is non-NULL, *endstr will point to in_str.
+ */
+gboolean xaccParseAmount (const char * in_str, gboolean monetary,
+                          double *result, char **endstr);
 
 
 /** TEMPLATES ******************************************************/
