@@ -2207,9 +2207,9 @@ gnc_option_set_ui_value_string (GNCOption *option, gboolean use_default,
 {
   if (SCM_STRINGP(value))
   {
-    char *string = gh_scm2newstr(value, NULL);
+    /* char *string = gh_scm2newstr(value, NULL); */
+    char *string = SCM_STRING_CHARS(value);
     gtk_entry_set_text(GTK_ENTRY(widget), string);
-    free(string);
     return FALSE;
   }
   else
@@ -2222,12 +2222,12 @@ gnc_option_set_ui_value_text (GNCOption *option, gboolean use_default,
 {
   if (SCM_STRINGP(value))
   {
-    char *string = gh_scm2newstr(value, NULL);
+    /* char *string = gh_scm2newstr(value, NULL); */
+    char *string = SCM_STRING_CHARS(value);
     gint pos = 0;
     gtk_editable_delete_text(GTK_EDITABLE(widget), 0, -1);
     gtk_editable_insert_text(GTK_EDITABLE(widget),
 			     string, strlen (string), &pos);
-    free(string);
     return FALSE;
   }
   else
@@ -2492,14 +2492,13 @@ gnc_option_set_ui_value_font (GNCOption *option, gboolean use_default,
 {
   if (SCM_STRINGP(value))
   {
-    char *string = gh_scm2newstr(value, NULL);
+    /* char *string = gh_scm2newstr(value, NULL); */
+    char *string = SCM_STRING_CHARS(value);
     if ((string != NULL) && (*string != '\0'))
     {
       GnomeFontPicker *picker = GNOME_FONT_PICKER(widget);
       gnome_font_picker_set_font_name(picker, string);
     }
-    if(string)
-      free(string);
     return FALSE;
   }
   else
@@ -2513,7 +2512,8 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
   ENTER("option %p(%s)", option, gnc_option_name(option));
   if (SCM_STRINGP(value))
   {
-    char * string = gh_scm2newstr(value, NULL);
+    /* char * string = gh_scm2newstr(value, NULL); */
+    char *string = SCM_STRING_CHARS(value);
 
     if (string && *string)
     {
@@ -2522,8 +2522,6 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
       entry = GTK_ENTRY(gnome_pixmap_entry_gtk_entry(GNOME_PIXMAP_ENTRY(widget)));
       gtk_entry_set_text(entry, string);
     }
-    if(string)
-      free(string);
     LEAVE("FALSE");
     return FALSE;
   }

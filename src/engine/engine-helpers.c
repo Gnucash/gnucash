@@ -131,30 +131,44 @@ gnc_guid2scm(GUID guid)
 }
 
 GUID
-gnc_scm2guid(SCM guid_scm) {
-  char string[GUID_ENCODING_LENGTH + 1];
+gnc_scm2guid(SCM guid_scm) 
+{
   GUID guid;
+  char * str;
 
-  gh_get_substr(guid_scm, string, 0, GUID_ENCODING_LENGTH);
-  string[GUID_ENCODING_LENGTH] = '\0';
+  /* char string[GUID_ENCODING_LENGTH + 1]; */
+  /* gh_get_substr(guid_scm, string, 0, GUID_ENCODING_LENGTH); */
+  /* string[GUID_ENCODING_LENGTH] = '\0'; */
 
-  string_to_guid(string, &guid);
-
+  if (GUID_ENCODING_LENGTH != SCM_STRING_LENGTH (guid_scm))
+  {
+    return *guid_null();
+  }
+  str = SCM_STRING_CHARS (guid_scm);
+  string_to_guid(str, &guid);
   return guid;
 }
 
 int
-gnc_guid_p(SCM guid_scm) {
-  char string[GUID_ENCODING_LENGTH + 1];
+gnc_guid_p(SCM guid_scm) 
+{
   GUID guid;
+  char * str;
 
   if (!SCM_STRINGP(guid_scm))
     return FALSE;
 
-  gh_get_substr(guid_scm, string, 0, GUID_ENCODING_LENGTH);
-  string[GUID_ENCODING_LENGTH] = '\0';
+  /* char string[GUID_ENCODING_LENGTH + 1]; */
+  /* gh_get_substr(guid_scm, string, 0, GUID_ENCODING_LENGTH); */
+  /* string[GUID_ENCODING_LENGTH] = '\0'; */
 
-  return string_to_guid(string, &guid);
+  if (GUID_ENCODING_LENGTH != SCM_STRING_LENGTH (guid_scm))
+  {
+    return FALSE;
+  }
+  str = SCM_STRING_CHARS (guid_scm);
+
+  return string_to_guid(str, &guid);
 }
 
 
@@ -315,7 +329,8 @@ static QofGuidMatch
 gnc_scm2acct_match_how (SCM how_scm)
 {
   QofGuidMatch res;
-  char *how = gh_symbol2newstr (how_scm, NULL);
+  /* char *how = gh_symbol2newstr (how_scm, NULL); */
+  char *how = SCM_SYMBOL_CHARS (how_scm);
 
   if (!safe_strcmp (how, "acct-match-all"))
     res = QOF_GUID_MATCH_ALL;
@@ -327,8 +342,6 @@ gnc_scm2acct_match_how (SCM how_scm)
     PINFO ("invalid account match: %s", how);
     res = QOF_GUID_MATCH_NULL;
   }
-
-  if (how) free (how);
   return res;
 }
 
@@ -336,7 +349,8 @@ static QofQueryCompare
 gnc_scm2amt_match_how (SCM how_scm)
 {
   QofQueryCompare res;
-  char *how = gh_symbol2newstr (how_scm, NULL);
+  /* char *how = gh_symbol2newstr (how_scm, NULL); */
+  char *how = SCM_SYMBOL_CHARS (how_scm);
 
   if (!safe_strcmp (how, "amt-match-atleast"))
     res = QOF_COMPARE_GTE;
@@ -349,7 +363,6 @@ gnc_scm2amt_match_how (SCM how_scm)
     res = QOF_COMPARE_EQUAL;
   }
 
-  if (how) free (how);
   return res;
 }
 
@@ -357,7 +370,8 @@ static QofQueryCompare
 gnc_scm2kvp_match_how (SCM how_scm)
 {
   QofQueryCompare res;
-  char *how = gh_symbol2newstr (how_scm, NULL);
+  /* char *how = gh_symbol2newstr (how_scm, NULL); */
+  char *how = SCM_SYMBOL_CHARS (how_scm);
 
   if (!safe_strcmp (how, "kvp-match-lt"))
     res = QOF_COMPARE_LT;
@@ -373,8 +387,6 @@ gnc_scm2kvp_match_how (SCM how_scm)
     PINFO ("invalid kvp match: %s", how);
     res = QOF_COMPARE_EQUAL;
   }
-
-  if (how) free (how);
   return res;
 }
 
@@ -422,14 +434,13 @@ gnc_scm2balance_match_how (SCM how_scm, gboolean *resp)
   if (!SCM_NULLP (SCM_CDR (how_scm)))
     return FALSE;
 
-  how = gh_symbol2newstr (SCM_CAR (how_scm), NULL);
+  /* how = gh_symbol2newstr (SCM_CAR (how_scm), NULL); */
+  how = SCM_SYMBOL_CHARS (SCM_CAR(how_scm));
 
   if (!safe_strcmp (how, "balance-match-balanced"))
     *resp = TRUE;
   else
     *resp = FALSE;
-
-  if (how) free (how);
 
   return TRUE;
 }
@@ -443,7 +454,8 @@ gnc_scm2kvp_match_where (SCM where_scm)
   if (!SCM_LISTP (where_scm))
     return NULL;
 
-  where = gh_symbol2newstr (SCM_CAR (where_scm), NULL);
+  /* where = gh_symbol2newstr (SCM_CAR (where_scm), NULL); */
+  where = SCM_SYMBOL_CHARS (SCM_CAR(where_scm));
 
   if (!safe_strcmp (where, "kvp-match-split"))
     res = GNC_ID_SPLIT;
@@ -455,8 +467,6 @@ gnc_scm2kvp_match_where (SCM where_scm)
     PINFO ("Unknown kvp-match-where: %s", where);
     res = NULL;
   }
-
-  if (where) free (where);
   return res;
 }
 
@@ -516,7 +526,7 @@ static SCM
 gnc_query_numeric2scm (gnc_numeric val)
 {
   return scm_cons (gnc_gint64_to_scm (val.num),
-		  gnc_gint64_to_scm (val.denom));
+                  gnc_gint64_to_scm (val.denom));
 }
 
 static gboolean
@@ -535,7 +545,7 @@ gnc_query_scm2numeric (SCM pair)
   denom = SCM_CDR (pair);
 
   return gnc_numeric_create (gnc_scm_to_gint64 (num),
-			     gnc_scm_to_gint64 (denom));
+                             gnc_scm_to_gint64 (denom));
 }
 
 static SCM
@@ -571,9 +581,9 @@ gnc_query_scm2path (SCM path_scm)
     if (!SCM_STRINGP (key_scm))
       break;
 
-    tmp = gh_scm2newstr (key_scm, NULL);
+    /* tmp = gh_scm2newstr (key_scm, NULL); */
+    tmp = SCM_STRING_CHARS  (key_scm);
     key = g_strdup (tmp);
-    if (tmp) free (tmp);
 
     path = g_slist_prepend (path, key);
 
@@ -744,9 +754,9 @@ gnc_scm2KvpValue (SCM value_scm)
       break;
 
     case KVP_TYPE_STRING: {
-      char *str = gh_scm2newstr (val_scm, NULL);
+      /* char *str = gh_scm2newstr (val_scm, NULL); */
+      char * str = SCM_STRING_CHARS  (val_scm);
       value = kvp_value_new_string (str);
-      if (str) free (str);
       break;
     }
 
@@ -770,7 +780,7 @@ gnc_scm2KvpValue (SCM value_scm)
       gnc_numeric n;
 
       if (!gnc_query_numeric_p (val_scm))
-	return NULL;
+        return NULL;
 
       n = gnc_query_scm2numeric (val_scm);
 
@@ -844,20 +854,15 @@ gnc_scm2KvpFrame (SCM frame_scm)
     if (!SCM_STRINGP (key_scm))
       continue;
 
-    key = gh_scm2newstr (key_scm, NULL);
+    /* key = gh_scm2newstr (key_scm, NULL); */
+    key = SCM_STRING_CHARS  (key_scm);
     if (!key)
       continue;
 
     value = gnc_scm2KvpValue (val_scm);
-    if (!value)
-    {
-      free (key);
-      continue;
-    }
+    if (!value) continue;
 
     kvp_frame_set_slot_nc (frame, key, value);
-
-    free (key);
   }
 
   return frame;
@@ -870,7 +875,7 @@ gnc_queryterm2scm (QofQueryTerm *qt)
   QofQueryPredData *pd = NULL;
 
   qt_scm = scm_cons (gnc_query_path2scm (qof_query_term_get_param_path (qt)),
-		    qt_scm);
+                    qt_scm);
   qt_scm = scm_cons (SCM_BOOL (qof_query_term_is_inverted (qt)), qt_scm);
 
   pd = qof_query_term_get_pred_data (qt);
@@ -971,7 +976,8 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
     qt_scm = SCM_CDR (qt_scm);
     if (!SCM_SYMBOLP (scm))
       break;
-    type = gh_symbol2newstr (scm, NULL);
+    /* type = gh_symbol2newstr (scm, NULL); */
+    type = SCM_SYMBOL_CHARS (scm);
 
     /* QofCompareFunc */
     scm = SCM_CAR (qt_scm);
@@ -982,47 +988,47 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
     /* Now compute the predicate */
 
-    if (!safe_strcmp (type, QOF_TYPE_STRING)) {
+    if (!safe_strcmp (type, QOF_TYPE_STRING)) 
+    {
       QofStringMatch options;
       gboolean is_regex;
       char *matchstring;
 
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
-      if (SCM_NULLP (scm))
-	break;
+      if (SCM_NULLP (scm)) break;
       options = gnc_query_scm2string (scm);
 
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
-      if (!SCM_BOOLP (scm))
-	break;
+      if (!SCM_BOOLP (scm)) break;
       is_regex = SCM_NFALSEP (scm);
 
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
-      if (!SCM_STRINGP (scm))
-	break;
-      matchstring = gh_scm2newstr (scm, NULL);
+      if (!SCM_STRINGP (scm)) break;
+
+      /* matchstring = gh_scm2newstr (scm, NULL); */
+      matchstring = SCM_STRING_CHARS  (scm);
 
       pd = qof_query_string_predicate (compare_how, matchstring,
-				    options, is_regex);
-      free (matchstring);
-
-    } else if (!safe_strcmp (type, QOF_TYPE_DATE)) {
+                                    options, is_regex);
+    } 
+    else if (!safe_strcmp (type, QOF_TYPE_DATE)) 
+    {
       QofDateMatch options;
       Timespec date;
 
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
       if (SCM_NULLP (scm))
-	break;
+        break;
       options = gnc_query_scm2date (scm);
 
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
       if (SCM_NULLP (scm))
-	break;
+        break;
       date = gnc_timepair2timespec (scm);
 
       pd = qof_query_date_predicate (compare_how, options, date);
@@ -1034,13 +1040,13 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
       if (SCM_NULLP (scm))
-	break;
+        break;
       options = gnc_query_scm2numericop (scm);
 
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
       if (!gnc_query_numeric_p (scm))
-	break;
+        break;
       val = gnc_query_scm2numeric (scm);
 
       pd = qof_query_numeric_predicate (compare_how, options, val);
@@ -1052,13 +1058,13 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
       if (SCM_NULLP (scm))
-	break;
+        break;
       options = gnc_query_scm2guid (scm);
 
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
       if (!SCM_LISTP (scm))
-	break;
+        break;
       guids = gnc_scm2guid_glist (scm);
 
       pd = qof_query_guid_predicate (options, guids);
@@ -1071,7 +1077,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
       if (SCM_NULLP (scm))
-	break;
+        break;
       val = gnc_scm_to_gint64 (scm);
 
       pd = qof_query_int64_predicate (compare_how, val);
@@ -1082,7 +1088,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
       if (!SCM_NUMBERP (scm))
-	break;
+        break;
       val = scm_num2dbl (scm, __FUNCTION__);
 
       pd = qof_query_double_predicate (compare_how, val);
@@ -1093,7 +1099,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
       if (!SCM_BOOLP (scm))
-	break;
+        break;
       val = SCM_NFALSEP (scm);
 
       pd = qof_query_boolean_predicate (compare_how, val);
@@ -1105,33 +1111,34 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
       if (SCM_NULLP (scm))
-	break;
+        break;
       options = gnc_query_scm2char (scm);
 
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
       if (!SCM_STRINGP (scm))
-	break;
-      char_list = gh_scm2newstr (scm, NULL);
+        break;
+      /* char_list = gh_scm2newstr (scm, NULL); */
+      char_list = SCM_STRING_CHARS  (scm);
 
       pd = qof_query_char_predicate (options, char_list);
-      free (char_list);
-
-    } else if (!safe_strcmp (type, QOF_TYPE_KVP)) {
+    } 
+    else if (!safe_strcmp (type, QOF_TYPE_KVP)) 
+    {
       GSList *kvp_path;
       KvpValue *value;
 
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
       if (!SCM_LISTP (scm))
-	break;
+        break;
       kvp_path = gnc_query_scm2path (scm);
 
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
       if (SCM_NULLP (scm)) {
-	gnc_query_path_free (kvp_path);
-	break;
+        gnc_query_path_free (kvp_path);
+        break;
       }
       value = gnc_scm2KvpValue (scm);
 
@@ -1158,9 +1165,6 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
     gnc_query_path_free (path);
   }
 
-  if (type)
-    free (type);
-
   return q;
 }
 
@@ -1184,7 +1188,8 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
     /* pd_type */
     scm = SCM_CAR (query_term_scm);
     query_term_scm = SCM_CDR (query_term_scm);
-    pd_type = gh_symbol2newstr (scm, NULL);
+    /* pd_type = gh_symbol2newstr (scm, NULL); */
+    pd_type = SCM_SYMBOL_CHARS (scm);
 
     /* pr_type */
     if (SCM_NULLP (query_term_scm)) {
@@ -1193,7 +1198,8 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
     }
     scm = SCM_CAR (query_term_scm);
     query_term_scm = SCM_CDR (query_term_scm);
-    pr_type = gh_symbol2newstr (scm, NULL);
+    /* pr_type = gh_symbol2newstr (scm, NULL); */
+    pr_type = SCM_SYMBOL_CHARS (scm);
 
     /* sense */
     if (SCM_NULLP (query_term_scm)) {
@@ -1214,8 +1220,8 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       /* use_start */
       if (SCM_NULLP (query_term_scm)) {
-	PINFO ("null use_start");
-	break;
+        PINFO ("null use_start");
+        break;
       }
 
       scm = SCM_CAR (query_term_scm);
@@ -1224,7 +1230,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       /* start */
       if (SCM_NULLP (query_term_scm))
-	break;
+        break;
 
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
@@ -1232,7 +1238,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       /* use_end */
       if (SCM_NULLP (query_term_scm))
-	break;
+        break;
 
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
@@ -1240,7 +1246,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       /* end */
       if (SCM_NULLP (query_term_scm))
-	break;
+        break;
 
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
@@ -1250,7 +1256,9 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       ok = TRUE;
 
-    } else if (!safe_strcmp (pd_type, "pd-amount")) {
+    } 
+    else if (!safe_strcmp (pd_type, "pd-amount")) 
+    {
       QofQueryCompare how;
       QofNumericMatch amt_sgn;
       double amount;
@@ -1258,21 +1266,21 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       /* how */
       if (SCM_NULLP (query_term_scm))
-	break;
+        break;
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
       how = gnc_scm2amt_match_how (scm);
 
       /* amt_sgn */
       if (SCM_NULLP (query_term_scm))
-	break;
+        break;
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
       amt_sgn = gnc_query_scm2numericop (scm);
 
       /* amount */
       if (SCM_NULLP (query_term_scm))
-	break;
+        break;
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
       amount = scm_num2dbl (scm, __FUNCTION__);
@@ -1280,29 +1288,31 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       val = double_to_gnc_numeric (amount, GNC_DENOM_AUTO, GNC_RND_ROUND);
 
       if (!safe_strcmp (pr_type, "pr-price")) {
-	xaccQueryAddSharePriceMatch (q, val, how, QOF_QUERY_OR);
-	ok = TRUE;
+        xaccQueryAddSharePriceMatch (q, val, how, QOF_QUERY_OR);
+        ok = TRUE;
 
       } else if (!safe_strcmp (pr_type, "pr-shares")) {
-	xaccQueryAddSharesMatch (q, val, how, QOF_QUERY_OR);
-	ok = TRUE;
+        xaccQueryAddSharesMatch (q, val, how, QOF_QUERY_OR);
+        ok = TRUE;
 
       } else if (!safe_strcmp (pr_type, "pr-value")) {
-	xaccQueryAddValueMatch (q, val, amt_sgn, how, QOF_QUERY_OR);
-	ok = TRUE;
+        xaccQueryAddValueMatch (q, val, amt_sgn, how, QOF_QUERY_OR);
+        ok = TRUE;
 
       } else {
-	PINFO ("unknown amount predicate: %s", pr_type);
+        PINFO ("unknown amount predicate: %s", pr_type);
       }
 
-    } else if (!safe_strcmp (pd_type, "pd-account")) {
+    } 
+    else if (!safe_strcmp (pd_type, "pd-account")) 
+    {
       QofGuidMatch how;
       GList *account_guids;
 
       /* how */
       if (SCM_NULLP (query_term_scm)) {
-	PINFO ("pd-account: null how");
-	break;
+        PINFO ("pd-account: null how");
+        break;
       }
 
       scm = SCM_CAR (query_term_scm);
@@ -1311,8 +1321,8 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       /* account guids */
       if (SCM_NULLP (query_term_scm)) {
-	PINFO ("pd-account: null guids");
-	break;
+        PINFO ("pd-account: null guids");
+        break;
       }
 
       scm = SCM_CAR (query_term_scm);
@@ -1333,7 +1343,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       /* case_sens */
       if (SCM_NULLP (query_term_scm))
-	break;
+        break;
 
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
@@ -1341,7 +1351,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       /* use_regexp */
       if (SCM_NULLP (query_term_scm))
-	break;
+        break;
 
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
@@ -1349,34 +1359,35 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       /* matchstring */
       if (SCM_NULLP (query_term_scm))
-	break;
+        break;
 
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
-      matchstring = gh_scm2newstr (scm, NULL);
+      /* matchstring = gh_scm2newstr (scm, NULL); */
+      matchstring = SCM_STRING_CHARS  (scm);
 
       if (!safe_strcmp (pr_type, "pr-action")) {
-	xaccQueryAddActionMatch (q, matchstring, case_sens, use_regexp,
-				 QOF_QUERY_OR);
-	ok = TRUE;
+        xaccQueryAddActionMatch (q, matchstring, case_sens, use_regexp,
+                                 QOF_QUERY_OR);
+        ok = TRUE;
 
       } else if (!safe_strcmp (pr_type, "pr-desc")) {
-	xaccQueryAddDescriptionMatch (q, matchstring, case_sens,
-				      use_regexp, QOF_QUERY_OR);
-	ok = TRUE;
+        xaccQueryAddDescriptionMatch (q, matchstring, case_sens,
+                                      use_regexp, QOF_QUERY_OR);
+        ok = TRUE;
 
       } else if (!safe_strcmp (pr_type, "pr-memo")) {
-	xaccQueryAddMemoMatch (q, matchstring, case_sens, use_regexp,
-			       QOF_QUERY_OR);
-	ok = TRUE;
+        xaccQueryAddMemoMatch (q, matchstring, case_sens, use_regexp,
+                               QOF_QUERY_OR);
+        ok = TRUE;
 
       } else if (!safe_strcmp (pr_type, "pr-num")) {        
-	xaccQueryAddNumberMatch (q, matchstring, case_sens, use_regexp,
-				 QOF_QUERY_OR);
-	ok = TRUE;
+        xaccQueryAddNumberMatch (q, matchstring, case_sens, use_regexp,
+                                 QOF_QUERY_OR);
+        ok = TRUE;
 
       } else {
-	PINFO ("Unknown string predicate: %s", pr_type);
+        PINFO ("Unknown string predicate: %s", pr_type);
       }
 
     } else if (!safe_strcmp (pd_type, "pd-cleared")) {
@@ -1384,7 +1395,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       /* how */
       if (SCM_NULLP (query_term_scm))
-	break;
+        break;
 
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
@@ -1398,12 +1409,12 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       /* how */
       if (SCM_NULLP (query_term_scm))
-	break;
+        break;
 
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
       if (gnc_scm2balance_match_how (scm, &how) == FALSE)
-	break;
+        break;
 
       xaccQueryAddBalanceMatch (q, how, QOF_QUERY_OR);
       ok = TRUE;
@@ -1415,7 +1426,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       /* guid */
       if (SCM_NULLP (query_term_scm))
-	break;
+        break;
 
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
@@ -1424,9 +1435,9 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       /* id type */
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
-      tmp = gh_scm2newstr (scm, NULL);
+      /* tmp = gh_scm2newstr (scm, NULL); */
+      tmp = SCM_STRING_CHARS  (scm);
       id_type = g_strdup (tmp);
-      if (tmp) free (tmp);
 
       xaccQueryAddGUIDMatch (q, &guid, id_type, QOF_QUERY_OR);
       ok = TRUE;
@@ -1476,12 +1487,6 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
     }
 
   } while (FALSE);
-
-  if (pd_type)
-    free (pd_type);
-
-  if (pr_type)
-    free (pr_type);
 
   if (ok)
   {
@@ -1762,17 +1767,17 @@ gnc_query_sort_to_list (char * symbol)
     path = g_slist_prepend (path, QUERY_DEFAULT_SORT);
 
   } else if (!safe_strcmp (symbol, "by-date") ||
-	     !safe_strcmp (symbol, "by-date-rounded")) {
+             !safe_strcmp (symbol, "by-date-rounded")) {
     path = g_slist_prepend (path, TRANS_DATE_POSTED);
     path = g_slist_prepend (path, SPLIT_TRANS);
 
   } else if (!safe_strcmp (symbol, "by-date-entered") ||
-	     !safe_strcmp (symbol, "by-date-entered-rounded")) {
+             !safe_strcmp (symbol, "by-date-entered-rounded")) {
     path = g_slist_prepend (path, TRANS_DATE_ENTERED);
     path = g_slist_prepend (path, SPLIT_TRANS);
 
   } else if (!safe_strcmp (symbol, "by-date-reconciled") ||
-	     !safe_strcmp (symbol, "by-date-reconciled-rounded")) {
+             !safe_strcmp (symbol, "by-date-reconciled-rounded")) {
     path = g_slist_prepend (path, SPLIT_DATE_RECONCILED);
 
   } else if (!safe_strcmp (symbol, "by-num")) {
@@ -1808,8 +1813,6 @@ gnc_query_sort_to_list (char * symbol)
   } else {
     PERR ("Unknown sort-type, %s", symbol);
   }
-
-  free (symbol);
 
   return path;
 }
@@ -1852,7 +1855,8 @@ gnc_scm2query_v1 (SCM query_scm)
       break;
     }
 
-    symbol = gh_symbol2newstr (sym_scm, NULL);
+    /* symbol = gh_symbol2newstr (sym_scm, NULL); */
+    symbol = SCM_SYMBOL_CHARS (sym_scm);
     if (!symbol) {
       PERR ("No string found");
       ok = FALSE;
@@ -1865,41 +1869,40 @@ gnc_scm2query_v1 (SCM query_scm)
 
       q = gnc_scm2query_or_terms (value, gnc_QUERY_v1);
       if (!q) {
-	PINFO ("invalid terms");
+        PINFO ("invalid terms");
         ok = FALSE;
-        free (symbol);
         break;
       }
 
     } else if (safe_strcmp ("primary-sort", symbol) == 0) {
       if (!SCM_SYMBOLP (value)) {
-	PINFO ("Invalid primary sort");
+        PINFO ("Invalid primary sort");
         ok = FALSE;
-        free (symbol);
         break;
       }
 
-      primary_sort = gh_symbol2newstr (value, NULL);
+      /* primary_sort = gh_symbol2newstr (value, NULL); */
+      primary_sort = SCM_SYMBOL_CHARS (value);
 
     } else if (safe_strcmp ("secondary-sort", symbol) == 0) {
       if (!SCM_SYMBOLP (value)) {
-	PINFO ("Invalid secondary sort");
+        PINFO ("Invalid secondary sort");
         ok = FALSE;
-        free (symbol);
         break;
       }
 
-      secondary_sort = gh_symbol2newstr (value, NULL);
+      /* secondary_sort = gh_symbol2newstr (value, NULL); */
+      secondary_sort = SCM_SYMBOL_CHARS (value);
 
     } else if (safe_strcmp ("tertiary-sort", symbol) == 0) {
       if (!SCM_SYMBOLP (value)) {
-	PINFO ("Invalid tertiary sort");
+        PINFO ("Invalid tertiary sort");
         ok = FALSE;
-        free (symbol);
         break;
       }
 
-      tertiary_sort = gh_symbol2newstr (value, NULL);
+      /* tertiary_sort = gh_symbol2newstr (value, NULL); */
+      tertiary_sort = SCM_SYMBOL_CHARS (value);
 
     } else if (safe_strcmp ("primary-increasing", symbol) == 0) {
       primary_increasing = SCM_NFALSEP (value);
@@ -1912,9 +1915,8 @@ gnc_scm2query_v1 (SCM query_scm)
 
     } else if (safe_strcmp ("max-splits", symbol) == 0) {
       if (!SCM_NUMBERP (value)) {
-	PERR ("invalid max-splits");
+        PERR ("invalid max-splits");
         ok = FALSE;
-        free (symbol);
         break;
       }
 
@@ -1923,11 +1925,8 @@ gnc_scm2query_v1 (SCM query_scm)
     } else {
       PERR ("Unknown symbol: %s", symbol);
       ok = FALSE;
-      free (symbol);
       break;
     }
-
-    free (symbol);
   }
 
   if (ok) {
@@ -1938,20 +1937,11 @@ gnc_scm2query_v1 (SCM query_scm)
 
     qof_query_set_sort_order (q, s1, s2, s3);
     qof_query_set_sort_increasing (q, primary_increasing, secondary_increasing,
-			       tertiary_increasing);
+                               tertiary_increasing);
     xaccQuerySetMaxSplits (q, max_splits);
 
     return q;
   }
-
-  if (primary_sort)
-    free (primary_sort);
-
-  if (secondary_sort)
-    free (secondary_sort);
-
-  if (tertiary_sort)
-    free (tertiary_sort);
 
   xaccFreeQuery (q);
   return NULL;
@@ -1993,7 +1983,8 @@ gnc_scm2query_v2 (SCM query_scm)
       break;
     }
 
-    symbol = gh_symbol2newstr (sym_scm, NULL);
+    /* symbol = gh_symbol2newstr (sym_scm, NULL); */
+    symbol = SCM_SYMBOL_CHARS (sym_scm);
     if (!symbol) {
       ok = FALSE;
       break;
@@ -2006,43 +1997,38 @@ gnc_scm2query_v2 (SCM query_scm)
       q = gnc_scm2query_or_terms (value, gnc_QUERY_v2);
       if (!q) {
         ok = FALSE;
-        free (symbol);
         break;
       }
 
     } else if (!safe_strcmp ("search-for", symbol)) {
       if (!SCM_SYMBOLP (value)) {
-	ok = FALSE;
-	free (symbol);
-	break;
+        ok = FALSE;
+        break;
       }
-      search_for = gh_symbol2newstr (value, NULL);
+      /* search_for = gh_symbol2newstr (value, NULL); */
+      search_for = SCM_SYMBOL_CHARS (value);
 
     } else if (safe_strcmp ("primary-sort", symbol) == 0) {
       if (! gnc_query_scm2sort (value, &sp1, &so1, &si1)) {
         ok = FALSE;
-        free (symbol);
         break;
       }
 
     } else if (!safe_strcmp ("secondary-sort", symbol)) {
       if (! gnc_query_scm2sort (value, &sp2, &so2, &si2)) {
         ok = FALSE;
-        free (symbol);
         break;
       }
 
     } else if (!safe_strcmp ("tertiary-sort", symbol)) {
       if (! gnc_query_scm2sort (value, &sp3, &so3, &si3)) {
         ok = FALSE;
-        free (symbol);
         break;
       }
 
     } else if (!safe_strcmp ("max-results", symbol)) {
       if (!SCM_NUMBERP (value)) {
         ok = FALSE;
-        free (symbol);
         break;
       }
 
@@ -2050,11 +2036,8 @@ gnc_scm2query_v2 (SCM query_scm)
 
     } else {
       ok = FALSE;
-      free (symbol);
       break;
     }
-
-    free (symbol);
   }
 
   --scm_block_gc;
@@ -2097,14 +2080,14 @@ gnc_scm2query (SCM query_scm)
   }
 
   /* Ok, the LHS is the version and the RHS is the actual query list */
-  type = gh_symbol2newstr (q_type, NULL);
+  /* type = gh_symbol2newstr (q_type, NULL); */
+  type = SCM_SYMBOL_CHARS (q_type);
   if (!type)
     return NULL;
 
   if (!safe_strcmp (type, "query-v2"))
     q = gnc_scm2query_v2 (SCM_CDR (query_scm));
 
-  free (type);
   return q;
 }
 
@@ -2144,7 +2127,7 @@ gnc_scmAccountStagedTransactionTraversal(Account *a,
                                          SCM thunk) 
 {
   return xaccAccountStagedTransactionTraversal(a, new_marker,
-					       gnc_scm_traversal_adapter,
+                                               gnc_scm_traversal_adapter,
                                                &thunk);
 }
 
@@ -2187,7 +2170,7 @@ gnc_scm_to_gint64(SCM num)
   SCM bits;
   unsigned long c_bits;
   long long     c_result = 0;
-  int		i;
+  int                i;
 
   /* This doesn't work -- atm (bit-extract 4000 0 32) proves it */
   /*
@@ -2285,7 +2268,7 @@ gnc_numeric_to_scm(gnc_numeric arg)
   }
   
   return scm_call_2(maker, gnc_gint64_to_scm(gnc_numeric_num(arg)),
-		    gnc_gint64_to_scm(gnc_numeric_denom(arg)));
+                    gnc_gint64_to_scm(gnc_numeric_denom(arg)));
 }
 
 int

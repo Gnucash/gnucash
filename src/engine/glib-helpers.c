@@ -155,7 +155,13 @@ gnc_scm_to_glist_string(SCM list)
 
   while (!SCM_NULLP (list))
   {
-    glist = g_list_prepend (glist, gh_scm2newstr(SCM_CAR(list), NULL));
+    /* glist = g_list_prepend (glist, gh_scm2newstr(SCM_CAR(list), NULL)); */
+    char * str = SCM_STRING_CHARS (SCM_CAR(list));
+    if (str)
+    {
+      str = g_strdup (str);
+      glist = g_list_prepend (glist, str);
+    }
     list = SCM_CDR (list);
   }
 
