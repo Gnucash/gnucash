@@ -17,7 +17,7 @@ libgncgnome_la_LIBADD = ./libgncguile.la \
   ${top_builddir}/src/import-export/qif-import/libgncmod-qif-import.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
-  ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GLIB_LIBS} ${GUILE_LIBS}
+  ${GUILE_LIBS} ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GLIB_LIBS}
 
 libgw_gnc_la_SOURCES = gw-gnc.c
 libgw_gnc_la_LIBADD = ${G_WRAP_LINK_ARGS} ${GLIB_LIBS}
