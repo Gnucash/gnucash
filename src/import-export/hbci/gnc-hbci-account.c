@@ -131,12 +131,14 @@ const char *gnc_HBCI_Account_name1 (const gnc_HBCI_Account *hbci_acc)
 
 gchar *gnc_HBCI_Account_longname(const gnc_HBCI_Account *hacc)
 {
-    g_assert(hacc);
-    /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
-    return g_strdup_printf(_("%s at %s (code %s)"),
-			   gnc_HBCI_Account_accountId (hacc),
-			   HBCI_Bank_name (gnc_HBCI_Account_bank (hacc)),
-			   HBCI_Bank_bankCode (gnc_HBCI_Account_bank (hacc)));
+  g_assert(hacc);
+  /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
+  return g_strdup_printf(_("%s at %s (code %s)"),
+			 gnc_HBCI_Account_accountId (hacc),
+			 gnc_HBCI_Account_bank (hacc) ? 
+			 HBCI_Bank_name (gnc_HBCI_Account_bank (hacc)) : 
+			 gnc_HBCI_Account_bankCode (hacc),
+			 gnc_HBCI_Account_bankCode (hacc));
 }
 
 void *list_HBCI_Account_foreach(GList *h_list, 
@@ -241,12 +243,14 @@ gnc_HBCI_Account *gnc_HBCI_Account_from_kvp(kvp_frame *k, HBCI_API *api)
     /*printf("gnc_HBCI_Account_from_kvp: kvpframe has blz %s and ccode %d and accountid %s, bank %p\n",
       bankcode, countrycode, kvp_value_get_string
       (kvp_frame_get_slot(k, HBCI_ACCOUNT_ID)), bank);*/
+    if (!bank) {
+      printf("gnc_HBCI_Account_from_kvp: oops, the file has a HBCI_Account but its bank could not be found in the HBCI_API. Ignoring this account.\n");
+      return NULL;
+    }
     res = gnc_HBCI_Account_new(bank, 
 			       bankcode,
 			       kvp_value_get_string
 			       (kvp_frame_get_slot(k, HBCI_ACCOUNT_ID)));
-    if (!bank) 
-      printf("gnc_HBCI_Account_from_kvp: oops, no bank found.");
     gnc_HBCI_Account_set_currency(res, kvp_value_get_string
 				  (kvp_frame_get_slot(k, HBCI_ACCOUNT_CURRENCY)));
     gnc_HBCI_Account_set_name(res, kvp_value_get_string
@@ -295,9 +299,10 @@ static void glist_from_kvp_func(gpointer data, gpointer user_data)
 {
   struct _glistapi *mydata = user_data;
   kvp_value *k = data;
-  mydata->res = g_list_append(mydata->res, 
-			      gnc_HBCI_Account_from_kvp(kvp_value_get_frame(k),
-							mydata->api));
+  gnc_HBCI_Account *new_acc = gnc_HBCI_Account_from_kvp(kvp_value_get_frame(k),
+							mydata->api);
+  if (new_acc)
+    mydata->res = g_list_append(mydata->res, new_acc);
 }
 
 /** Creates a GList of gnc_HBCI_Account from a GList of kvp_values which

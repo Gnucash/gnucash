@@ -221,13 +221,16 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 
   response = HBCI_Job_responseData((HBCI_Job*)HBCI_OutboxJob_Job_const(trans_job));
   if (!response) {
-    /*printf("Got no responseData\n");*/
+    printf("gnc_hbci_gettrans_final: Got no responseData.\n");
     return FALSE;
   }
 
   trans_list = GWEN_DB_GetGroup(response, GWEN_PATH_FLAGS_NAMEMUSTEXIST, 
 				"transactions");
   if (!trans_list) {
+    printf("gnc_hbci_gettrans_final: No transactions section. Response was:\n");
+    GWEN_DB_Dump(response, stdout, 1);
+
     gnome_ok_dialog_parented 
       (_("The HBCI import returned no transactions for the selected time period."),
        GTK_WINDOW (parent));
@@ -238,6 +241,10 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 				GWEN_PATH_FLAGS_NAMEMUSTEXIST,
 				"booked");
 
+  if (!trans_list) {
+    printf("gnc_hbci_gettrans_final: No booked section. Response was:\n");
+    GWEN_DB_Dump(response, stdout, 1);
+  }
   if (trans_list && (GWEN_DB_Groups_Count(trans_list) > 0)) {
     struct trans_list_data data;
     GNCImportMainMatcher *importer_generic_gui = 
