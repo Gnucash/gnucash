@@ -1,3 +1,8 @@
+2002-08-28  Derek Atkins <derek@ihtfp.com>
+	* Update README to mention g-wrap 1.3.2 (instead of 1.1.9)
+	* Update ltmain.sh with a (commented-out) patch to maybe cope
+	  with the "make install DESTDIR=..." problem.
+
 2002-08-25  Derek Atkins <derek@ihtfp.com>
 	* Pull up change from 1.6 to make "make dist" work on swig subdir
 	without "swig" being installed.

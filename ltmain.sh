@@ -2253,6 +2253,9 @@ EOF
 	      # We cannot seem to hardcode it, guess we'll fake it.
 	      add_dir="-L$libdir"
 	      add="-l$name"
+	      # Cope with "make install --prefix=<xxx>" where <xxx> changed:
+	      # use this instead....
+	      # add="$ladir/$objdir/$linklib"
 	    fi
 
 	    if test "$linkmode" = prog; then
