@@ -391,6 +391,9 @@ void xaccParseQIFDate (Date * dat, char * str)
    *tok = 0x0;
    dat->year = atoi (str);
    dat->year += 1900;
+
+   /* a quickie Y2K fix for two digit dates with low values. */
+   if (1950 > dat->year) dat->year += 100;
 }
 
 /********************************************************************\
