@@ -37,9 +37,7 @@ gncscm_DATA = \
 gladedir = ${GNC_GLADE_DIR}
 glade_DATA = qif.glade
 
-CFLAGS = @CFLAGS@ ${G_WRAP_COMPILE_ARGS}
-
-INCLUDES = \
+CFLAGS = @CFLAGS@ \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
@@ -48,9 +46,10 @@ INCLUDES = \
   -I${top_srcdir}/src/guile \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
+  ${G_WRAP_COMPILE_ARGS} \
+  ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
-  ${GNOME_INCLUDEDIR} \
-  ${GUILE_INCS}
+  ${GNOME_INCLUDEDIR}
 
 EXTRA_DIST = \
   .cvsignore \
