@@ -709,7 +709,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
 
   /* Set the type label */
   label = glade_xml_get_widget (xml, "type_label");
-  type_label = gncObjectGetTypeLabel (sw->search_for);
+  type_label = _(gncObjectGetTypeLabel (sw->search_for));
   gtk_label_set_text (GTK_LABEL (label), type_label);
 
   /* Set the 'add criterion' button */
