@@ -1,3 +1,10 @@
+2004-04-19  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/balance-sheet.scm:
+	* src/report/standard-reports/pnl.scm:
+	  Fabien COELHO's zero-balance patch to remove accounts of
+	  zero balance from the report.
+
 2004-04-18  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Transaction.c: fix a comment to better explain why
