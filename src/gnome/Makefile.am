@@ -2,6 +2,8 @@ SUBDIRS = glade
 
 lib_LTLIBRARIES = libgncgnome.la
 
+libgncgnome_la_LDFLAGS = -module
+
 libgncgnome_la_SOURCES = \
   argv-list-converters.c \
   dialog-account.c \
