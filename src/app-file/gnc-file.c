@@ -850,6 +850,7 @@ gnc_file_quit (void)
 {
   QofSession *session;
 
+  gnc_set_busy_cursor (NULL, TRUE);
   session = qof_session_get_current_session ();
 
   /* disable events; otherwise the mass deletetion of accounts and
@@ -867,6 +868,7 @@ gnc_file_quit (void)
   qof_session_get_current_session ();
 
   gnc_engine_resume_events ();
+  gnc_unset_busy_cursor (NULL);
 }
 
 void
