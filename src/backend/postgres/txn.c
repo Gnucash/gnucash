@@ -196,7 +196,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       {
          DeleteTransInfo *dti = node->data;
 
-         pgendKVPDelete (be, dti->iguid);
+         pgendKVPDelete (be, dti->iguid, "e");
       }
    }
 
@@ -264,9 +264,9 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       for (node=start; node; node=node->next) 
       {
          Split * s = node->data;
-         if (0 != s->idata) pgendKVPDelete (be, s->idata);
+         if (0 != s->idata) pgendKVPDelete (be, s->idata, "e");
       }
-      if (0 != trans->idata) pgendKVPDelete (be, trans->idata);
+      if (0 != trans->idata) pgendKVPDelete (be, trans->idata, "t");
    }
 
    LEAVE(" ");

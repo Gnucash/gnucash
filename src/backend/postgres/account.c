@@ -470,7 +470,7 @@ pgend_account_commit_edit (Backend * bend,
    {
       const GUID *guid = xaccAccountGetGUID(acct);
       pgendStoreAuditAccount (be, acct, SQL_DELETE);
-      pgendKVPDelete (be, acct->idata);
+      pgendKVPDelete (be, acct->idata, "a");
 
       p = be->buff; *p = 0;
       p = stpcpy (p, "DELETE FROM gncAccount WHERE accountGuid='");
