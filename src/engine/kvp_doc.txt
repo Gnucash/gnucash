@@ -32,14 +32,16 @@ Use:  xaccGetMyFavoriteThing(), xaccSetMyFavoriteThing()
       which the user merely likes!
 
 
+Please put the keys in alphabetical order.
+
 --------------------------------------------------------------------------
 
-Name: user-keys
-Type: frame
-Entities: All
-Use: This frame is used to store keys which are editable directly by
-     the user. The program should not attach any semantics to keys
-     under this frame.
+Name: old-docref
+Type: string
+Entities: Transactions, Splits
+Use: This string holds the old Docref value which was supported in earlier
+     versions of GnuCash but which was never used for any purpose. The
+     value is retained in case any users were making use of it.
 
 Name: old-price-source
 Type: string
@@ -50,9 +52,15 @@ Use: This string holds the old Price Source code used by earlier versions
      is fully supported. The new version of Finance::Quote uses a different
      scheme to identify sources for price quotes.
 
-Name: old-docref
+Name: user-keys
+Type: frame
+Entities: All
+Use: This frame is used to store keys which are editable directly by
+     the user. The program should not attach any semantics to keys
+     under this frame.
+
+Name: notes
 Type: string
-Entities: Transactions, Splits
-Use: This string holds the old Docref value which was supported in earlier
-     versions of GnuCash but which was never used for any purpose. The
-     value is retained in case any users were making use of it.
+Entities: Account
+Use: Store the 'Notes' string which was previously stored in
+     the Account structure directly.
