@@ -810,6 +810,7 @@ xaccAccountSetSlots_nc(Account *account, kvp_frame *frame)
   }
   account->kvp_data = frame;
   account->core_dirty = TRUE;
+  mark_account (account);
   xaccAccountCommitEdit (account);
 }
 
@@ -1687,7 +1688,6 @@ xaccAccountGetDescendants (Account *acc)
 
    if (!acc) return NULL;
    accounts = xaccGroupGetSubAccounts(acc->children);
-   accounts = g_list_copy (accounts);
    return (accounts);
 }
 
