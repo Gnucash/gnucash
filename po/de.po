@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-08 08:54+0100\n"
+"POT-Creation-Date: 2004-03-23 18:16+0100\n"
 "PO-Revision-Date: 2004-03-10 22:04+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
@@ -501,8 +501,8 @@ msgstr "Automatische Buchung"
 #: src/business/business-core/gncInvoice.c:1097
 #: src/business/business-core/gncInvoice.c:1159
 #: src/business/business-ledger/gncEntryLedgerModel.c:125
-#: src/gnome/druid-loan.c:1746 src/gnome/druid-loan.c:2222
-#: src/gnome/druid-loan.c:2285 src/gnome/druid-loan.c:2299
+#: src/gnome/druid-loan.c:1784 src/gnome/druid-loan.c:2260
+#: src/gnome/druid-loan.c:2323 src/gnome/druid-loan.c:2337
 #: src/register/ledger-core/split-register.c:2029
 #: src/register/ledger-core/split-register.c:2034
 #: src/register/ledger-core/split-register.c:2043 intl-scm/guile-strings.c:501
@@ -543,7 +543,7 @@ msgstr "(Mandant)"
 #: src/business/business-gnome/glade/payment.glade:137
 #: src/business/business-ledger/gncEntryLedgerModel.c:55
 #: src/gnome/glade/price.glade:182 src/gnome/dialog-price-edit-db.c:501
-#: src/gnome/druid-loan.c:1745 src/gnome/reconcile-list.c:220
+#: src/gnome/druid-loan.c:1783 src/gnome/reconcile-list.c:220
 #: src/import-export/generic-import.glade:376
 #: src/import-export/generic-import.glade:660
 #: src/import-export/generic-import.glade:912
@@ -568,7 +568,7 @@ msgstr "Datum"
 #: src/import-export/generic-import.glade:738
 #: src/import-export/generic-import.glade:925
 #: src/import-export/generic-import.glade:1055
-#: src/import-export/hbci/glade/hbci.glade:1982
+#: src/import-export/hbci/glade/hbci.glade:1963
 #: src/import-export/qif-import/qif.glade:1636
 #: src/import-export/qif-import/qif.glade:1714 intl-scm/guile-strings.c:1836
 #: intl-scm/guile-strings.c:2634 intl-scm/guile-strings.c:2686
@@ -647,9 +647,9 @@ msgstr "Ausgewählte Zahlungsbedingungen löschen"
 #: src/business/business-gnome/glade/invoice.glade:2132
 #: src/business/dialog-tax-table/tax-tables.glade:168
 #: src/business/dialog-tax-table/tax-tables.glade:292
-#: src/gnome/glade/register.glade:1564 src/gnome/glade/sched-xact.glade:2605
+#: src/gnome/glade/register.glade:1564 src/gnome/glade/sched-xact.glade:2595
 #: src/gnome/window-acct-tree.c:888 src/gnome/window-reconcile.c:1452
-#: src/import-export/hbci/glade/hbci.glade:2495
+#: src/import-export/hbci/glade/hbci.glade:2476
 #: src/report/report-gnome/report.glade:304
 msgid "Delete"
 msgstr "Löschen"
@@ -728,7 +728,7 @@ msgstr "Anzahl Tage von jetzt an gerechnet"
 #: src/business/business-gnome/glade/billterms.glade:662
 #: src/business/business-gnome/glade/billterms.glade:873
 #: src/business/business-gnome/dialog-billterms.c:478
-#: src/gnome/glade/sched-xact.glade:1167 src/gnome-utils/gnc-date-delta.c:209
+#: src/gnome/glade/sched-xact.glade:1157 src/gnome-utils/gnc-date-delta.c:209
 #: intl-scm/guile-strings.c:2196
 msgid "Days"
 msgstr "Tage"
@@ -1408,7 +1408,7 @@ msgstr "Schließen"
 
 #: src/business/business-gnome/glade/invoice.glade:1243
 #: src/gnome/glade/commodities.glade:247 src/gnome/glade/price.glade:306
-#: src/gnome/glade/sched-xact.glade:2596 src/gnome/window-acct-tree.c:856
+#: src/gnome/glade/sched-xact.glade:2586 src/gnome/window-acct-tree.c:856
 #: src/gnome/window-reconcile.c:1445 src/gnome/gnc-split-reg.c:2318
 #: intl-scm/guile-strings.c:643 intl-scm/guile-strings.c:681
 msgid "Edit"
@@ -1730,7 +1730,7 @@ msgstr ""
 "angeben. Ihre Auswahl \"%s\" wird bereits benutzt."
 
 #: src/business/business-gnome/dialog-billterms.c:484
-#: src/engine/FreqSpec.c:970 src/import-export/hbci/druid-hbci-initial.c:820
+#: src/engine/FreqSpec.c:989 src/import-export/hbci/druid-hbci-initial.c:820
 #: src/import-export/hbci/druid-hbci-initial.c:1218
 #: src/import-export/hbci/hbci-interaction.c:178
 #: src/import-export/hbci/hbci-interaction.c:179
@@ -1897,9 +1897,9 @@ msgid "Username"
 msgstr "Benutzername"
 
 #: src/business/business-gnome/dialog-employee.c:720
-#: src/gnome/glade/commodities.glade:169 src/gnome/glade/sched-xact.glade:2530
-#: src/gnome/glade/sched-xact.glade:3863 src/gnome/glade/sched-xact.glade:4204
-#: src/gnome/dialog-commodities.c:355 src/gnome-utils/gnc-dense-cal.c:270
+#: src/gnome/glade/commodities.glade:169 src/gnome/glade/sched-xact.glade:2520
+#: src/gnome/glade/sched-xact.glade:3853 src/gnome/glade/sched-xact.glade:4194
+#: src/gnome/dialog-commodities.c:355 src/gnome-utils/gnc-dense-cal.c:274
 #: intl-scm/guile-strings.c:4016
 msgid "Name"
 msgstr "Name"
@@ -2222,10 +2222,11 @@ msgid "is not"
 msgstr "ist nicht"
 
 #: src/business/business-gnome/business-gnome-utils.c:314
-#: src/gnome/glade/sched-xact.glade:864 intl-scm/guile-strings.c:1240
-#: intl-scm/guile-strings.c:2722 intl-scm/guile-strings.c:2748
-#: intl-scm/guile-strings.c:2808 intl-scm/guile-strings.c:2810
-#: intl-scm/guile-strings.c:2912 intl-scm/guile-strings.c:2928
+#: src/engine/FreqSpec.c:730 src/gnome/glade/sched-xact.glade:854
+#: intl-scm/guile-strings.c:1240 intl-scm/guile-strings.c:2722
+#: intl-scm/guile-strings.c:2748 intl-scm/guile-strings.c:2808
+#: intl-scm/guile-strings.c:2810 intl-scm/guile-strings.c:2912
+#: intl-scm/guile-strings.c:2928
 msgid "None"
 msgstr "Keine"
 
@@ -2382,7 +2383,7 @@ msgid "$"
 msgstr "$"
 
 #: src/business/business-ledger/gncEntryLedgerLoad.c:33
-#: src/gnome/glade/sched-xact.glade:4651 intl-scm/guile-strings.c:3752
+#: src/gnome/glade/sched-xact.glade:4641 intl-scm/guile-strings.c:3752
 #: intl-scm/guile-strings.c:4076
 msgid "%"
 msgstr "%"
@@ -2724,104 +2725,104 @@ msgstr "Forderungen"
 msgid "A/Payable"
 msgstr "Verbindlichkeit"
 
-#: src/engine/FreqSpec.c:690
+#: src/engine/FreqSpec.c:704
 msgid "last day"
 msgstr "Monatsende"
 
-#: src/engine/FreqSpec.c:722
+#: src/engine/FreqSpec.c:740
 #, c-format
 msgid "Once: %s"
 msgstr "Einmalig: %s"
 
-#: src/engine/FreqSpec.c:731
+#: src/engine/FreqSpec.c:749
 #, c-format
 msgid "Daily (x%u)"
 msgstr "Täglich (%u Mal)"
 
-#: src/engine/FreqSpec.c:736 src/gnome/glade/sched-xact.glade:990
+#: src/engine/FreqSpec.c:754 src/gnome/glade/sched-xact.glade:980
 msgid "Daily"
 msgstr "Täglich"
 
-#: src/engine/FreqSpec.c:756
+#: src/engine/FreqSpec.c:774
 #, c-format
 msgid "Weekdays: (x%u)"
 msgstr "Wochentags: (%u Mal)"
 
-#: src/engine/FreqSpec.c:761
+#: src/engine/FreqSpec.c:779
 msgid "Weekdays"
 msgstr "Wochentags"
 
-#: src/engine/FreqSpec.c:799
+#: src/engine/FreqSpec.c:818
 #, c-format
 msgid "Weekly (x%d): %s"
 msgstr "Wöchentlich (%d Mal): %s"
 
-#: src/engine/FreqSpec.c:805
+#: src/engine/FreqSpec.c:824
 #, c-format
 msgid "Weekly: %s"
 msgstr "Wöchentlich: %s"
 
-#: src/engine/FreqSpec.c:812
+#: src/engine/FreqSpec.c:831
 #, c-format
 msgid "Bi-Weekly, %ss"
 msgstr "Zweiwöchentlich am %s"
 
-#: src/engine/FreqSpec.c:835
+#: src/engine/FreqSpec.c:854
 #, c-format
 msgid "Semi-monthly (x%u): %s, %s"
 msgstr "Halbmonatlich (%u Mal): am %s. und %s."
 
-#: src/engine/FreqSpec.c:846
+#: src/engine/FreqSpec.c:865
 #, c-format
 msgid "Semi-monthly: %s, %s"
 msgstr "Halbmonatlich: am %s. und %s."
 
-#: src/engine/FreqSpec.c:862
+#: src/engine/FreqSpec.c:881
 #, c-format
 msgid "Monthly (x%u): %u"
 msgstr "Monatlich (%u Mal): am %u."
 
-#: src/engine/FreqSpec.c:870
+#: src/engine/FreqSpec.c:889
 #, c-format
 msgid "Monthly: %u"
 msgstr "Monatlich: am %u."
 
-#: src/engine/FreqSpec.c:880
+#: src/engine/FreqSpec.c:899
 #, c-format
 msgid "Quarterly (x%u): %u"
 msgstr "Vierteljährlich (%u Mal): am %u."
 
-#: src/engine/FreqSpec.c:888
+#: src/engine/FreqSpec.c:907
 #, c-format
 msgid "Quarterly: %u"
 msgstr "Vierteljährlich: am %u."
 
-#: src/engine/FreqSpec.c:899
+#: src/engine/FreqSpec.c:918
 #, c-format
 msgid "Tri-Yearly (x%u): %u"
 msgstr "Alle 4 Monate (%u Mal): am %u."
 
-#: src/engine/FreqSpec.c:907
+#: src/engine/FreqSpec.c:926
 #, c-format
 msgid "Tri-Yearly: %u"
 msgstr "Alle 4 Monate: am %u."
 
-#: src/engine/FreqSpec.c:922
+#: src/engine/FreqSpec.c:941
 #, c-format
 msgid "Semi-Yearly (x%u): %u"
 msgstr "Halbjährlich (%u Mal): am %u."
 
-#: src/engine/FreqSpec.c:930
+#: src/engine/FreqSpec.c:949
 #, c-format
 msgid "Semi-Yearly: %u"
 msgstr "Halbjährlich: am %u."
 
-#: src/engine/FreqSpec.c:953
+#: src/engine/FreqSpec.c:972
 #, c-format
 msgid "Yearly (x%u): %s/%u"
 msgstr "Jährlich (%1$u Mal): %3$u. %2$s"
 
-#: src/engine/FreqSpec.c:963
+#: src/engine/FreqSpec.c:982
 #, c-format
 msgid "Yearly: %s/%u"
 msgstr "Jährlich: %2$u. %1$s"
@@ -3476,7 +3477,7 @@ msgstr ""
 msgid "Account Types"
 msgstr "Kontoarten"
 
-#: src/gnome/glade/account.glade:1125 src/gnome/glade/sched-xact.glade:4261
+#: src/gnome/glade/account.glade:1125 src/gnome/glade/sched-xact.glade:4251
 #: src/gnome-utils/dialog-options.c:791 src/gnome-utils/dialog-options.c:937
 msgid "Select All"
 msgstr "Alle auswählen"
@@ -3855,7 +3856,7 @@ msgstr "Währung:"
 msgid "Source:"
 msgstr "Quelle:"
 
-#: src/gnome/glade/price.glade:499 src/gnome/glade/sched-xact.glade:4670
+#: src/gnome/glade/price.glade:499 src/gnome/glade/sched-xact.glade:4660
 #: src/gnome-utils/commodity.glade:148 src/gnome-utils/commodity.glade:400
 msgid "Type:"
 msgstr "Typ:"
@@ -3881,7 +3882,7 @@ msgid "Date format:"
 msgstr "Datumsformat:"
 
 #: src/gnome/glade/print.glade:262 src/gnome/glade/sched-xact.glade:214
-#: src/gnome/glade/sched-xact.glade:4761 src/gnome/window-acct-tree.c:867
+#: src/gnome/glade/sched-xact.glade:4751 src/gnome/window-acct-tree.c:867
 #: src/report/report-gnome/window-report.c:884
 msgid "Options"
 msgstr "Optionen"
@@ -3940,17 +3941,17 @@ msgid "Heading"
 msgstr "Überschrift"
 
 #: src/gnome/glade/progress.glade:64
-#: src/import-export/hbci/glade/hbci.glade:2755
+#: src/import-export/hbci/glade/hbci.glade:2774
 msgid "%P %%"
 msgstr "%P %%"
 
-#: src/gnome/glade/sched-xact.glade:24 src/gnome/glade/sched-xact.glade:2634
+#: src/gnome/glade/sched-xact.glade:24 src/gnome/glade/sched-xact.glade:2624
 msgid "Edit Scheduled Transaction"
 msgstr "Terminierte Buchungen bearbeiten"
 
-#: src/gnome/glade/sched-xact.glade:135 src/gnome/glade/sched-xact.glade:2715
-#: src/gnome/glade/sched-xact.glade:3339 src/gnome/glade/sched-xact.glade:4983
-#: src/gnome/glade/sched-xact.glade:5268
+#: src/gnome/glade/sched-xact.glade:135 src/gnome/glade/sched-xact.glade:2705
+#: src/gnome/glade/sched-xact.glade:3329 src/gnome/glade/sched-xact.glade:4973
+#: src/gnome/glade/sched-xact.glade:5258
 #: src/import-export/hbci/glade/hbci.glade:504
 #: src/report/report-gnome/report.glade:112
 msgid "Name:"
@@ -3964,45 +3965,45 @@ msgstr "Zuletzt aufgetreten: "
 msgid "YYYY-MM-DD"
 msgstr "JJJJ-MM-TT"
 
-#: src/gnome/glade/sched-xact.glade:233 src/gnome/glade/sched-xact.glade:2772
+#: src/gnome/glade/sched-xact.glade:233 src/gnome/glade/sched-xact.glade:2762
 msgid "Conditional on splits not having variables"
 msgstr "Abhängig davon, daß Buchungen keine Variablen haben"
 
-#: src/gnome/glade/sched-xact.glade:235 src/gnome/glade/sched-xact.glade:2774
+#: src/gnome/glade/sched-xact.glade:235 src/gnome/glade/sched-xact.glade:2764
 msgid "Create Automatically"
 msgstr "Automatisch erstellen"
 
-#: src/gnome/glade/sched-xact.glade:263 src/gnome/glade/sched-xact.glade:2802
+#: src/gnome/glade/sched-xact.glade:263 src/gnome/glade/sched-xact.glade:2792
 msgid "Notify me when created"
 msgstr "Bei Erstellung benachrichtigen"
 
-#: src/gnome/glade/sched-xact.glade:290 src/gnome/glade/sched-xact.glade:2829
+#: src/gnome/glade/sched-xact.glade:290 src/gnome/glade/sched-xact.glade:2819
 msgid "Create "
 msgstr "Erstellen "
 
 #: src/gnome/glade/sched-xact.glade:330 src/gnome/glade/sched-xact.glade:407
-#: src/gnome/glade/sched-xact.glade:2870 src/gnome/glade/sched-xact.glade:2948
+#: src/gnome/glade/sched-xact.glade:2860 src/gnome/glade/sched-xact.glade:2938
 msgid " days in advance"
 msgstr " Tage im voraus"
 
-#: src/gnome/glade/sched-xact.glade:367 src/gnome/glade/sched-xact.glade:2907
+#: src/gnome/glade/sched-xact.glade:367 src/gnome/glade/sched-xact.glade:2897
 msgid "Remind me "
 msgstr "Erinnern "
 
-#: src/gnome/glade/sched-xact.glade:428 src/gnome/glade/sched-xact.glade:3118
+#: src/gnome/glade/sched-xact.glade:428 src/gnome/glade/sched-xact.glade:3108
 msgid "End"
 msgstr "Ende"
 
-#: src/gnome/glade/sched-xact.glade:448 src/gnome/glade/sched-xact.glade:2989
+#: src/gnome/glade/sched-xact.glade:448 src/gnome/glade/sched-xact.glade:2979
 msgid "No End"
 msgstr "Ohne Enddatum"
 
-#: src/gnome/glade/sched-xact.glade:481 src/gnome/glade/sched-xact.glade:3022
+#: src/gnome/glade/sched-xact.glade:481 src/gnome/glade/sched-xact.glade:3012
 msgid "End Date: "
 msgstr "Enddatum: "
 
-#: src/gnome/glade/sched-xact.glade:523 src/gnome/glade/sched-xact.glade:3075
-#: src/gnome/glade/sched-xact.glade:3547
+#: src/gnome/glade/sched-xact.glade:523 src/gnome/glade/sched-xact.glade:3065
+#: src/gnome/glade/sched-xact.glade:3537
 msgid "Number of Occurrences:"
 msgstr "Anzahl des Auftretens:"
 
@@ -4018,8 +4019,8 @@ msgstr "Verbleibendes Auftreten:"
 msgid "Remaining Number of Occurrences"
 msgstr "Verbleibende Anzahl des Auftretens"
 
-#: src/gnome/glade/sched-xact.glade:610 src/gnome/glade/sched-xact.glade:3130
-#: src/gnome/glade/sched-xact.glade:3143
+#: src/gnome/glade/sched-xact.glade:610 src/gnome/glade/sched-xact.glade:3120
+#: src/gnome/glade/sched-xact.glade:3133
 msgid "Recurrence Frequency"
 msgstr "Häufigkeit"
 
@@ -4027,157 +4028,157 @@ msgstr "Häufigkeit"
 msgid "Template Transaction"
 msgstr "Buchungsvorlage"
 
-#: src/gnome/glade/sched-xact.glade:717
+#: src/gnome/glade/sched-xact.glade:707
 msgid "This window should never be realized."
 msgstr "Dieses Fenster sollte nie erscheinen."
 
-#: src/gnome/glade/sched-xact.glade:748 src/gnome/glade/sched-xact.glade:3365
+#: src/gnome/glade/sched-xact.glade:738 src/gnome/glade/sched-xact.glade:3355
 msgid "Frequency:"
 msgstr "Häufigkeit:"
 
-#: src/gnome/glade/sched-xact.glade:774 src/gnome/glade/sched-xact.glade:4378
-#: src/gnome/glade/sched-xact.glade:5709
+#: src/gnome/glade/sched-xact.glade:764 src/gnome/glade/sched-xact.glade:4368
+#: src/gnome/glade/sched-xact.glade:5699
 msgid "Start Date:"
 msgstr "Anfangsdatum:"
 
-#: src/gnome/glade/sched-xact.glade:851
-#: src/gnome/dialog-scheduledxaction.c:1954
+#: src/gnome/glade/sched-xact.glade:841
+#: src/gnome/dialog-scheduledxaction.c:2045
 msgid "Not scheduled"
 msgstr "Nicht vorgemerkt"
 
-#: src/gnome/glade/sched-xact.glade:882
+#: src/gnome/glade/sched-xact.glade:872
 msgid "Select occurrence date above."
 msgstr "Wählen Sie oben ein Datum des Auftretens."
 
-#: src/gnome/glade/sched-xact.glade:901
+#: src/gnome/glade/sched-xact.glade:891
 msgid "Once"
 msgstr "Einmal"
 
-#: src/gnome/glade/sched-xact.glade:930 src/gnome/glade/sched-xact.glade:1019
-#: src/gnome/glade/sched-xact.glade:1648
+#: src/gnome/glade/sched-xact.glade:920 src/gnome/glade/sched-xact.glade:1009
+#: src/gnome/glade/sched-xact.glade:1638
 msgid "Every "
 msgstr "Alle "
 
-#: src/gnome/glade/sched-xact.glade:970
+#: src/gnome/glade/sched-xact.glade:960
 msgid "days."
 msgstr "Tage."
 
-#: src/gnome/glade/sched-xact.glade:1059 src/gnome/glade/sched-xact.glade:1148
+#: src/gnome/glade/sched-xact.glade:1049 src/gnome/glade/sched-xact.glade:1138
 msgid "weeks."
 msgstr "Wochen."
 
-#: src/gnome/glade/sched-xact.glade:1079
+#: src/gnome/glade/sched-xact.glade:1069
 msgid "Daily [M-F]"
 msgstr "Täglich [Mo-Fr]"
 
-#: src/gnome/glade/sched-xact.glade:1108 src/gnome/glade/sched-xact.glade:1401
-#: src/gnome/glade/sched-xact.glade:2236
+#: src/gnome/glade/sched-xact.glade:1098 src/gnome/glade/sched-xact.glade:1391
+#: src/gnome/glade/sched-xact.glade:2226
 msgid "Every"
 msgstr "Alle"
 
-#: src/gnome/glade/sched-xact.glade:1197 intl-scm/guile-strings.c:3244
+#: src/gnome/glade/sched-xact.glade:1187 intl-scm/guile-strings.c:3244
 msgid "Sunday"
 msgstr "Sonntag"
 
-#: src/gnome/glade/sched-xact.glade:1211 intl-scm/guile-strings.c:3246
+#: src/gnome/glade/sched-xact.glade:1201 intl-scm/guile-strings.c:3246
 msgid "Monday"
 msgstr "Montag"
 
-#: src/gnome/glade/sched-xact.glade:1225 intl-scm/guile-strings.c:3248
+#: src/gnome/glade/sched-xact.glade:1215 intl-scm/guile-strings.c:3248
 msgid "Tuesday"
 msgstr "Dienstag"
 
-#: src/gnome/glade/sched-xact.glade:1251 intl-scm/guile-strings.c:3250
+#: src/gnome/glade/sched-xact.glade:1241 intl-scm/guile-strings.c:3250
 msgid "Wednesday"
 msgstr "Mittwoch"
 
-#: src/gnome/glade/sched-xact.glade:1265 intl-scm/guile-strings.c:3252
+#: src/gnome/glade/sched-xact.glade:1255 intl-scm/guile-strings.c:3252
 msgid "Thursday"
 msgstr "Donnerstag"
 
-#: src/gnome/glade/sched-xact.glade:1279 intl-scm/guile-strings.c:3254
+#: src/gnome/glade/sched-xact.glade:1269 intl-scm/guile-strings.c:3254
 msgid "Friday"
 msgstr "Freitag"
 
-#: src/gnome/glade/sched-xact.glade:1305 intl-scm/guile-strings.c:3256
+#: src/gnome/glade/sched-xact.glade:1295 intl-scm/guile-strings.c:3256
 msgid "Saturday"
 msgstr "Samstag"
 
-#: src/gnome/glade/sched-xact.glade:1323
+#: src/gnome/glade/sched-xact.glade:1313
 msgid "Weekly"
 msgstr "Wöchentlich"
 
-#: src/gnome/glade/sched-xact.glade:1341
+#: src/gnome/glade/sched-xact.glade:1331
 msgid "Select initial date, above."
 msgstr "Wählen Sie oben ein Anfangsdatum."
 
-#: src/gnome/glade/sched-xact.glade:1360
+#: src/gnome/glade/sched-xact.glade:1350
 msgid "Bi-Weekly"
 msgstr "Zweiwöchentlich"
 
-#: src/gnome/glade/sched-xact.glade:1441 src/gnome/glade/sched-xact.glade:1688
+#: src/gnome/glade/sched-xact.glade:1431 src/gnome/glade/sched-xact.glade:1678
 msgid "months."
 msgstr "Monate."
 
-#: src/gnome/glade/sched-xact.glade:1470
+#: src/gnome/glade/sched-xact.glade:1460
 msgid "First on the:"
 msgstr "Zuerst am:"
 
-#: src/gnome/glade/sched-xact.glade:1543
+#: src/gnome/glade/sched-xact.glade:1533
 msgid "then on the:"
 msgstr "dann am:"
 
-#: src/gnome/glade/sched-xact.glade:1608
+#: src/gnome/glade/sched-xact.glade:1598
 msgid "Semi-Monthly"
 msgstr "Halbmonatlich"
 
-#: src/gnome/glade/sched-xact.glade:1717 src/gnome/glade/sched-xact.glade:1858
-#: src/gnome/glade/sched-xact.glade:1999 src/gnome/glade/sched-xact.glade:2142
+#: src/gnome/glade/sched-xact.glade:1707 src/gnome/glade/sched-xact.glade:1848
+#: src/gnome/glade/sched-xact.glade:1989 src/gnome/glade/sched-xact.glade:2132
 msgid "On the"
 msgstr "Am"
 
-#: src/gnome/glade/sched-xact.glade:1782 intl-scm/guile-strings.c:2812
+#: src/gnome/glade/sched-xact.glade:1772 intl-scm/guile-strings.c:2812
 #: intl-scm/guile-strings.c:2814
 msgid "Monthly"
 msgstr "monatlich"
 
-#: src/gnome/glade/sched-xact.glade:1812 src/gnome/glade/sched-xact.glade:1952
-#: src/gnome/glade/sched-xact.glade:2093
+#: src/gnome/glade/sched-xact.glade:1802 src/gnome/glade/sched-xact.glade:1942
+#: src/gnome/glade/sched-xact.glade:2083
 msgid "Occuring in"
 msgstr "In den Monaten"
 
-#: src/gnome/glade/sched-xact.glade:1922
+#: src/gnome/glade/sched-xact.glade:1912
 msgid "Quarterly"
 msgstr "Vierteljährlich"
 
-#: src/gnome/glade/sched-xact.glade:2063
+#: src/gnome/glade/sched-xact.glade:2053
 msgid "Tri-Yearly"
 msgstr "Dreimal pro Jahr"
 
-#: src/gnome/glade/sched-xact.glade:2206
+#: src/gnome/glade/sched-xact.glade:2196
 msgid "Semi-Yearly"
 msgstr "Halbjährlich"
 
-#: src/gnome/glade/sched-xact.glade:2276
+#: src/gnome/glade/sched-xact.glade:2266
 msgid "year(s)."
 msgstr "Jahre."
 
-#: src/gnome/glade/sched-xact.glade:2306 intl-scm/guile-strings.c:1736
+#: src/gnome/glade/sched-xact.glade:2296 intl-scm/guile-strings.c:1736
 #: intl-scm/guile-strings.c:1738
 msgid "Month"
 msgstr "Monat"
 
-#: src/gnome/glade/sched-xact.glade:2361 intl-scm/guile-strings.c:1724
+#: src/gnome/glade/sched-xact.glade:2351 intl-scm/guile-strings.c:1724
 #: intl-scm/guile-strings.c:1726
 msgid "Day"
 msgstr "Tag"
 
-#: src/gnome/glade/sched-xact.glade:2425 intl-scm/guile-strings.c:2816
+#: src/gnome/glade/sched-xact.glade:2415 intl-scm/guile-strings.c:2816
 #: intl-scm/guile-strings.c:2818
 msgid "Yearly"
 msgstr "Jährlich"
 
-#: src/gnome/glade/sched-xact.glade:2442 intl-scm/guile-strings.c:381
+#: src/gnome/glade/sched-xact.glade:2432 intl-scm/guile-strings.c:381
 #: intl-scm/guile-strings.c:451 intl-scm/guile-strings.c:895
 #: intl-scm/guile-strings.c:1298 intl-scm/guile-strings.c:1304
 #: intl-scm/guile-strings.c:1310 intl-scm/guile-strings.c:1316
@@ -4185,87 +4186,87 @@ msgstr "Jährlich"
 msgid "Scheduled Transactions"
 msgstr "Terminierte Buchungen"
 
-#: src/gnome/glade/sched-xact.glade:2543 src/gnome/glade/sched-xact.glade:3749
-#: src/gnome/glade/sched-xact.glade:4217 src/gnome-utils/gnc-dense-cal.c:271
+#: src/gnome/glade/sched-xact.glade:2533 src/gnome/glade/sched-xact.glade:3739
+#: src/gnome/glade/sched-xact.glade:4207 src/gnome-utils/gnc-dense-cal.c:275
 msgid "Frequency"
 msgstr "Häufigkeit"
 
-#: src/gnome/glade/sched-xact.glade:2556
+#: src/gnome/glade/sched-xact.glade:2546
 msgid "Next Occurrence"
 msgstr "Nächstes Auftreten"
 
-#: src/gnome/glade/sched-xact.glade:2587 src/gnome/window-acct-tree.c:878
+#: src/gnome/glade/sched-xact.glade:2577 src/gnome/window-acct-tree.c:878
 #: src/gnome/window-reconcile.c:1438 intl-scm/guile-strings.c:635
 #: intl-scm/guile-strings.c:641 intl-scm/guile-strings.c:673
 #: intl-scm/guile-strings.c:679 intl-scm/guile-strings.c:3562
 msgid "New"
 msgstr "Neu"
 
-#: src/gnome/glade/sched-xact.glade:2615
+#: src/gnome/glade/sched-xact.glade:2605
 msgid "Upcoming"
 msgstr "Geplante Terminierte Buchungen"
 
-#: src/gnome/glade/sched-xact.glade:2969
+#: src/gnome/glade/sched-xact.glade:2959
 msgid "Creation Options"
 msgstr "Erstellungs-Optionen"
 
-#: src/gnome/glade/sched-xact.glade:3174
+#: src/gnome/glade/sched-xact.glade:3164
 msgid "Record"
 msgstr "Speichern"
 
-#: src/gnome/glade/sched-xact.glade:3186
+#: src/gnome/glade/sched-xact.glade:3176
 msgid "REPLACEME with the Register control box"
 msgstr "REPLACEME with the Register control box"
 
-#: src/gnome/glade/sched-xact.glade:3210
+#: src/gnome/glade/sched-xact.glade:3200
 msgid "Template Transactions"
 msgstr "Buchungsvorlagen"
 
-#: src/gnome/glade/sched-xact.glade:3236
+#: src/gnome/glade/sched-xact.glade:3226
 msgid "Make Scheduled transaction"
 msgstr "Terminierte Buchung erstellen"
 
-#: src/gnome/glade/sched-xact.glade:3288
+#: src/gnome/glade/sched-xact.glade:3278
 msgid "Advanced..."
 msgstr "Erweitert..."
 
-#: src/gnome/glade/sched-xact.glade:3391
+#: src/gnome/glade/sched-xact.glade:3381
 msgid "Start Date: "
 msgstr "Anfangsdatum: "
 
-#: src/gnome/glade/sched-xact.glade:3471
+#: src/gnome/glade/sched-xact.glade:3461
 msgid "End "
 msgstr "Ende "
 
-#: src/gnome/glade/sched-xact.glade:3490
+#: src/gnome/glade/sched-xact.glade:3480
 msgid "Never End"
 msgstr "Endet nicht"
 
-#: src/gnome/glade/sched-xact.glade:3516 src/gnome/glade/sched-xact.glade:5735
+#: src/gnome/glade/sched-xact.glade:3506 src/gnome/glade/sched-xact.glade:5725
 msgid "End Date:"
 msgstr "Enddatum:"
 
-#: src/gnome/glade/sched-xact.glade:3607
+#: src/gnome/glade/sched-xact.glade:3597
 msgid "Since Last Run"
 msgstr "Seit letztem Aufruf"
 
-#: src/gnome/glade/sched-xact.glade:3622
+#: src/gnome/glade/sched-xact.glade:3612
 msgid "What to do, what to do?"
 msgstr "Was ist zu tun?"
 
-#: src/gnome/glade/sched-xact.glade:3643
+#: src/gnome/glade/sched-xact.glade:3633
 msgid "Creating transactions..."
 msgstr "Buchungen erstellen..."
 
-#: src/gnome/glade/sched-xact.glade:3662
+#: src/gnome/glade/sched-xact.glade:3652
 msgid "%v/%u (%p%%)"
 msgstr "%v/%u (%p%%)"
 
-#: src/gnome/glade/sched-xact.glade:3673
+#: src/gnome/glade/sched-xact.glade:3663
 msgid "Transaction Reminders"
 msgstr "Buchungserinnerungen"
 
-#: src/gnome/glade/sched-xact.glade:3693
+#: src/gnome/glade/sched-xact.glade:3683
 msgid ""
 "The listed Scheduled Transactions are to-be created soon. \n"
 "Select any which you would like to create now, and click\n"
@@ -4275,62 +4276,62 @@ msgstr ""
 "werden. Wählen Sie jene, die jetzt erstellt werden sollen, und klicken\n"
 "Sie \"Weiter\", um Sie jetzt erstellen zu lassen."
 
-#: src/gnome/glade/sched-xact.glade:3736
+#: src/gnome/glade/sched-xact.glade:3726
 msgid "Scheduled Transaction"
 msgstr "Terminierte Buchung"
 
-#: src/gnome/glade/sched-xact.glade:3762
+#: src/gnome/glade/sched-xact.glade:3752
 msgid "Days Away"
 msgstr "Tage in der Zukunft"
 
-#: src/gnome/glade/sched-xact.glade:3778
+#: src/gnome/glade/sched-xact.glade:3768
 msgid "Auto-Created Transactions Notification"
 msgstr "Benachrichtigung über automatisch erstellte Buchungen"
 
-#: src/gnome/glade/sched-xact.glade:3808
+#: src/gnome/glade/sched-xact.glade:3798
 msgid "To-Create Transaction Preparation"
 msgstr "Vorbereitung der zu erstellenden Buchungen"
 
-#: src/gnome/glade/sched-xact.glade:3876
+#: src/gnome/glade/sched-xact.glade:3866
 msgid "State"
 msgstr "Status"
 
-#: src/gnome/glade/sched-xact.glade:3911
+#: src/gnome/glade/sched-xact.glade:3901
 msgid "Disposition?"
 msgstr "Auswahl:"
 
-#: src/gnome/glade/sched-xact.glade:3947
+#: src/gnome/glade/sched-xact.glade:3937
 msgid "Variables"
 msgstr "Variablen"
 
-#: src/gnome/glade/sched-xact.glade:3993
+#: src/gnome/glade/sched-xact.glade:3983
 #: src/register/ledger-core/split-register.c:1720
 #: src/register/ledger-core/split-register.c:1722
 #: intl-scm/guile-strings.c:2432 intl-scm/guile-strings.c:2564
 msgid "Value"
 msgstr "Wert"
 
-#: src/gnome/glade/sched-xact.glade:4019
+#: src/gnome/glade/sched-xact.glade:4009
 msgid "Variable"
 msgstr "Variable"
 
-#: src/gnome/glade/sched-xact.glade:4059
+#: src/gnome/glade/sched-xact.glade:4049
 msgid "Value:"
 msgstr "Wert:"
 
-#: src/gnome/glade/sched-xact.glade:4092
+#: src/gnome/glade/sched-xact.glade:4082
 msgid "Template Transaction (Read-Only)"
 msgstr "Buchungsvorlage (schreibgeschützt)"
 
-#: src/gnome/glade/sched-xact.glade:4111
+#: src/gnome/glade/sched-xact.glade:4101
 msgid "Created Transaction Review"
 msgstr "Buchungsübersicht erstellt"
 
-#: src/gnome/glade/sched-xact.glade:4141
+#: src/gnome/glade/sched-xact.glade:4131
 msgid "Obsolete Scheduled Transactions"
 msgstr "Terminierte Buchung löschen"
 
-#: src/gnome/glade/sched-xact.glade:4161
+#: src/gnome/glade/sched-xact.glade:4151
 msgid ""
 "The following scheduled transactions have expired.\n"
 "Select those you wish to delete."
@@ -4338,23 +4339,23 @@ msgstr ""
 "Die folgenden terminierten Buchungen sind abgelaufen.\n"
 "Bitte wählen Sie jene, die Sie löschen möchten."
 
-#: src/gnome/glade/sched-xact.glade:4230
+#: src/gnome/glade/sched-xact.glade:4220
 msgid "Ended On"
 msgstr "Beendet am"
 
-#: src/gnome/glade/sched-xact.glade:4270
+#: src/gnome/glade/sched-xact.glade:4260
 msgid "Unselect All"
 msgstr "Keine auswählen"
 
-#: src/gnome/glade/sched-xact.glade:4282
+#: src/gnome/glade/sched-xact.glade:4272
 msgid "Mortgage/Loan Druid"
 msgstr "Hypothek/Darlehen Druide"
 
-#: src/gnome/glade/sched-xact.glade:4297
+#: src/gnome/glade/sched-xact.glade:4287
 msgid "Mortgage/Loan Repayment Setup"
 msgstr "Einrichtung Hypothek/Darlehen-Tilgung"
 
-#: src/gnome/glade/sched-xact.glade:4298
+#: src/gnome/glade/sched-xact.glade:4288
 msgid ""
 "This is a step-by-step method of creating a loan repayment setup\n"
 "within GnuCash.  In this Druid, you can input the parameters of\n"
@@ -4374,130 +4375,130 @@ msgstr ""
 "Wenn Sie einen Irrtum machen oder später Änderungen machen möchten,\n"
 "können Sie die erstellte Terminierte Buchung direkt ändern."
 
-#: src/gnome/glade/sched-xact.glade:4316
+#: src/gnome/glade/sched-xact.glade:4306
 msgid "Loan Information"
 msgstr "Darlehen Informationen"
 
-#: src/gnome/glade/sched-xact.glade:4352
+#: src/gnome/glade/sched-xact.glade:4342
 msgid "Interest Rate:"
 msgstr "Zinssatz:"
 
-#: src/gnome/glade/sched-xact.glade:4404
+#: src/gnome/glade/sched-xact.glade:4394
 msgid "Length:"
 msgstr "Länge:"
 
-#: src/gnome/glade/sched-xact.glade:4430 src/gnome/glade/sched-xact.glade:5009
-#: src/gnome/glade/sched-xact.glade:5216 src/gnome-utils/transfer.glade:123
+#: src/gnome/glade/sched-xact.glade:4420 src/gnome/glade/sched-xact.glade:4999
+#: src/gnome/glade/sched-xact.glade:5206 src/gnome-utils/transfer.glade:123
 #: src/gnome-utils/exchange-dialog.glade:118
 msgid "Amount:"
 msgstr "Betrag:"
 
-#: src/gnome/glade/sched-xact.glade:4456
+#: src/gnome/glade/sched-xact.glade:4446
 msgid "Loan Account:"
 msgstr "Darlehenskonto:"
 
-#: src/gnome/glade/sched-xact.glade:4696
+#: src/gnome/glade/sched-xact.glade:4686
 msgid "Months Remaining:"
 msgstr "Restliche Monate:"
 
-#: src/gnome/glade/sched-xact.glade:4745
+#: src/gnome/glade/sched-xact.glade:4735
 msgid "Interest Rate Change Frequency"
 msgstr "Änderungshäufigkeit des Zinssatzes"
 
-#: src/gnome/glade/sched-xact.glade:4781
+#: src/gnome/glade/sched-xact.glade:4771
 msgid "Do you..."
 msgstr "Möchten Sie..."
 
-#: src/gnome/glade/sched-xact.glade:4818
+#: src/gnome/glade/sched-xact.glade:4808
 msgid "... utilize an escrow account for payments?"
 msgstr "... Treuhandkonto für Zahlungen verwenden?"
 
-#: src/gnome/glade/sched-xact.glade:4850
+#: src/gnome/glade/sched-xact.glade:4840
 msgid "Escrow Account:"
 msgstr "Treuhandkonto:"
 
-#: src/gnome/glade/sched-xact.glade:4896
+#: src/gnome/glade/sched-xact.glade:4886
 msgid "Repayment"
 msgstr "Tilgung"
 
-#: src/gnome/glade/sched-xact.glade:4931 src/gnome/glade/sched-xact.glade:5242
+#: src/gnome/glade/sched-xact.glade:4921 src/gnome/glade/sched-xact.glade:5232
 msgid "Payment From:"
 msgstr "Zahlung von:"
 
-#: src/gnome/glade/sched-xact.glade:4957
+#: src/gnome/glade/sched-xact.glade:4947
 msgid "Principal To:"
 msgstr "Endbetrag Kapital an:"
 
-#: src/gnome/glade/sched-xact.glade:5035
+#: src/gnome/glade/sched-xact.glade:5025
 msgid "Interest To:"
 msgstr "Zinsen nach:"
 
-#: src/gnome/glade/sched-xact.glade:5150
+#: src/gnome/glade/sched-xact.glade:5140
 msgid "Repayment Frequency"
 msgstr "Tilgungshäufigkeit"
 
-#: src/gnome/glade/sched-xact.glade:5166
+#: src/gnome/glade/sched-xact.glade:5156
 msgid "<repayment type>"
 msgstr "<Tilgungsart>"
 
-#: src/gnome/glade/sched-xact.glade:5294
+#: src/gnome/glade/sched-xact.glade:5284
 msgid "Payment To (Escrow):"
 msgstr "Zahlung an (Treuhandkonto):"
 
-#: src/gnome/glade/sched-xact.glade:5393
+#: src/gnome/glade/sched-xact.glade:5383
 msgid "Payment From (Escrow):"
 msgstr "Zahlung von (Treuhandkonto):"
 
-#: src/gnome/glade/sched-xact.glade:5419
+#: src/gnome/glade/sched-xact.glade:5409
 msgid "Payment To:"
 msgstr "Zahlung an:"
 
-#: src/gnome/glade/sched-xact.glade:5446
+#: src/gnome/glade/sched-xact.glade:5436
 msgid "Specify Source Account"
 msgstr "Herkunftskonto auswählen"
 
-#: src/gnome/glade/sched-xact.glade:5469
+#: src/gnome/glade/sched-xact.glade:5459
 msgid "Use Escrow Account"
 msgstr "Treuhandkonto benutzen"
 
-#: src/gnome/glade/sched-xact.glade:5506
+#: src/gnome/glade/sched-xact.glade:5496
 msgid "Payment Frequency"
 msgstr "Zahlungshäufigkeit"
 
-#: src/gnome/glade/sched-xact.glade:5520
+#: src/gnome/glade/sched-xact.glade:5510
 msgid "Part of Payment Transaction"
 msgstr "Teil einer Zahlung"
 
-#: src/gnome/glade/sched-xact.glade:5546 intl-scm/guile-strings.c:2398
+#: src/gnome/glade/sched-xact.glade:5536 intl-scm/guile-strings.c:2398
 #: intl-scm/guile-strings.c:3318
 msgid "Other"
 msgstr "Weitere"
 
-#: src/gnome/glade/sched-xact.glade:5586
+#: src/gnome/glade/sched-xact.glade:5576
 msgid "Review"
 msgstr "Kontrolle"
 
-#: src/gnome/glade/sched-xact.glade:5639
+#: src/gnome/glade/sched-xact.glade:5629
 msgid "Range: "
 msgstr "Bereich: "
 
-#: src/gnome/glade/sched-xact.glade:5688 intl-scm/guile-strings.c:3986
+#: src/gnome/glade/sched-xact.glade:5678 intl-scm/guile-strings.c:3986
 msgid "Date Range"
 msgstr "Datumsbereich"
 
-#: src/gnome/glade/sched-xact.glade:5791
+#: src/gnome/glade/sched-xact.glade:5781
 msgid "Creation State"
 msgstr "Erstellen Status"
 
-#: src/gnome/glade/sched-xact.glade:5806
+#: src/gnome/glade/sched-xact.glade:5796
 msgid "Ignore"
 msgstr "Ignorieren"
 
-#: src/gnome/glade/sched-xact.glade:5819
+#: src/gnome/glade/sched-xact.glade:5809
 msgid "Postpone"
 msgstr "Verschieben"
 
-#: src/gnome/glade/sched-xact.glade:5832
+#: src/gnome/glade/sched-xact.glade:5822
 msgid "Create"
 msgstr "Erstellen"
 
@@ -4739,13 +4740,24 @@ msgstr "Sie müssen einen gültigen Betrag eingeben."
 msgid "Complete"
 msgstr "Komplett"
 
-#: src/gnome/dialog-scheduledxaction.c:274
+#: src/gnome/dialog-scheduledxaction.c:301
 msgid "This SX has changed; are you sure you want to cancel?"
 msgstr ""
 "Diese terminierte Buchung wurde geändert. Sind Sie sicher, daß Sie\n"
 "abbrechen wollen?"
 
-#: src/gnome/dialog-scheduledxaction.c:766
+#: src/gnome/dialog-scheduledxaction.c:750
+#, c-format
+msgid "Couldn't parse credit formula for split \"%s\"."
+msgstr ""
+
+#: src/gnome/dialog-scheduledxaction.c:779
+#, c-format
+msgid "Couldn't parse debit formula for split \"%s\"."
+msgstr ""
+
+#: src/gnome/dialog-scheduledxaction.c:819
+#: src/gnome/dialog-sx-from-trans.c:267
 msgid ""
 "The Scheduled Transaction Editor cannot automatically\n"
 "balance this transaction. Should it still be entered?"
@@ -4753,11 +4765,11 @@ msgstr ""
 "Der Terminierte-Buchungen-Editor kann diese Buchung nicht automatisch\n"
 "ausgeglichen erstellen. Soll sie trotzdem erstellt werden?"
 
-#: src/gnome/dialog-scheduledxaction.c:785
+#: src/gnome/dialog-scheduledxaction.c:838
 msgid "Please name the Scheduled Transaction."
 msgstr "Bitte geben Sie der terminierten Buchung einen Namen."
 
-#: src/gnome/dialog-scheduledxaction.c:809
+#: src/gnome/dialog-scheduledxaction.c:862
 #, c-format
 msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists.\n"
@@ -4766,7 +4778,7 @@ msgstr ""
 "Eine terminierte Buchung mit dem Namen \"%s\" existiert bereits. \n"
 "Sind Sie sicher, daß die aktuelle den gleichen Namen erhalten soll?"
 
-#: src/gnome/dialog-scheduledxaction.c:835
+#: src/gnome/dialog-scheduledxaction.c:888
 msgid ""
 "Scheduled Transactions with variables\n"
 "cannot be automatically created."
@@ -4774,15 +4786,23 @@ msgstr ""
 "Terminierte Buchungen mit Variablen können nicht automatisch erstellt\n"
 "werden."
 
-#: src/gnome/dialog-scheduledxaction.c:849
+#: src/gnome/dialog-scheduledxaction.c:897
+msgid ""
+"Scheduled Transactions without a template\n"
+"transaction cannot be automatically created."
+msgstr ""
+"Terminierte Buchungen ohne Buchungsvorlage können \n"
+"nicht automatisch erstellt werden."
+
+#: src/gnome/dialog-scheduledxaction.c:911
 msgid "Please provide a valid end selection."
 msgstr "Bitte geben Sie ein gültiges Enddatum ein."
 
-#: src/gnome/dialog-scheduledxaction.c:865
+#: src/gnome/dialog-scheduledxaction.c:927
 msgid "There must be some number of occurrences."
 msgstr "Es muß eine Anzahl des Auftretens geben."
 
-#: src/gnome/dialog-scheduledxaction.c:873
+#: src/gnome/dialog-scheduledxaction.c:935
 #, c-format
 msgid ""
 "The number of remaining occurrences (%d) is greater than the number of total "
@@ -4791,7 +4811,7 @@ msgstr ""
 "Die Zahl des verbleibenden Auftretens (%d) ist größer als die Zahl des "
 "totalen Auftretens (%d)."
 
-#: src/gnome/dialog-scheduledxaction.c:907
+#: src/gnome/dialog-scheduledxaction.c:969
 msgid ""
 "You have attempted to create a Scheduled Transaction which will never run.\n"
 "Do you really want to do this?"
@@ -4799,11 +4819,11 @@ msgstr ""
 "Sie versuchen gerade, eine Terminierte Buchung zu erstellen, die nie\n"
 "auftritt. Wollen Sie wirklich fortsetzen?"
 
-#: src/gnome/dialog-scheduledxaction.c:1542
+#: src/gnome/dialog-scheduledxaction.c:1616
 msgid "(never)"
 msgstr "(niemals)"
 
-#: src/gnome/dialog-scheduledxaction.c:1720
+#: src/gnome/dialog-scheduledxaction.c:1794
 msgid ""
 "The following transactions are presently being edited;\n"
 "are you sure you want to delete them?"
@@ -4811,17 +4831,29 @@ msgstr ""
 "Die folgenden Buchungssätze werden zur Zeit bearbeitet; wollen Sie\n"
 "diese wirklich löschen?"
 
-#: src/gnome/dialog-scheduledxaction.c:1723
+#: src/gnome/dialog-scheduledxaction.c:1797
 msgid "Delete the selected Scheduled Transactions?"
 msgstr "Ausgewählte terminierte Buchung löschen?"
 
-#: src/gnome/dialog-scheduledxaction.c:2039
+#: src/gnome/dialog-scheduledxaction.c:2139
 msgid ""
 "The current template transaction has been changed.\n"
 "Would you like to record the changes?"
 msgstr ""
 "Die aktuelle Buchungsvorlage wurde verändert.\n"
 "Soll sie gespeichert werden?"
+
+#: src/gnome/dialog-sx-from-trans.c:579
+msgid ""
+"The Scheduled Transaction is unbalanced.\n"
+"You are strongly encouraged to correct this situation."
+msgstr ""
+
+#: src/gnome/dialog-sx-from-trans.c:685
+msgid ""
+"Cannot create a Scheduled Transaction from a Transaction currently\n"
+"being edited. Please Enter the Transaction before Scheduling."
+msgstr ""
 
 #: src/gnome/dialog-sxsincelast.c:385 src/gnome/window-main.c:619
 #, c-format
@@ -4838,7 +4870,7 @@ msgstr[1] ""
 "Es gibt keine terminierten Buchungen, die erstellt werden sollen.\n"
 "(%d Buchungen automatisch erstellt)"
 
-#: src/gnome/dialog-sxsincelast.c:1370
+#: src/gnome/dialog-sxsincelast.c:1380
 msgid ""
 "Cancelling the Since-Last-Run dialog will revert all changes.\n"
 "Are you sure you want to lose all Scheduled Transaction changes?"
@@ -4847,23 +4879,23 @@ msgstr ""
 "Änderungen rückgängig gemacht. Sind Sie sicher, daß Sie alle\n"
 "Änderungen in den Terminierten Buchungen verwerfen wollen?"
 
-#: src/gnome/dialog-sxsincelast.c:1799
+#: src/gnome/dialog-sxsincelast.c:1809
 msgid "Ready to create"
 msgstr "Bereit zum Erstellen"
 
-#: src/gnome/dialog-sxsincelast.c:1801
+#: src/gnome/dialog-sxsincelast.c:1811
 msgid "Needs values for variables"
 msgstr "Werte für Variablen benötigt"
 
-#: src/gnome/dialog-sxsincelast.c:1805
+#: src/gnome/dialog-sxsincelast.c:1815
 msgid "Ignored"
 msgstr "Ignoriert"
 
-#: src/gnome/dialog-sxsincelast.c:1808
+#: src/gnome/dialog-sxsincelast.c:1818
 msgid "Postponed"
 msgstr "Auf später verschoben"
 
-#: src/gnome/dialog-sxsincelast.c:1936
+#: src/gnome/dialog-sxsincelast.c:1946
 msgid "Obsolete"
 msgstr "Veraltet"
 
@@ -4888,99 +4920,99 @@ msgstr "Tipp des Tages:"
 msgid "You must enter a valid balance."
 msgstr "Sie müssen einen gültigen Wert angeben."
 
-#: src/gnome/druid-loan.c:512
+#: src/gnome/druid-loan.c:550
 msgid "Fixed"
 msgstr "Festverzinslich"
 
-#: src/gnome/druid-loan.c:512
+#: src/gnome/druid-loan.c:550
 msgid "A Fixed-Rate loan"
 msgstr "Ein festverzinsliches Darlehen"
 
-#: src/gnome/druid-loan.c:514
+#: src/gnome/druid-loan.c:552
 msgid "3/1 Year"
 msgstr "3/1 ARM"
 
-#: src/gnome/druid-loan.c:514
+#: src/gnome/druid-loan.c:552
 msgid "A 3/1 Year ARM"
 msgstr "3/1 jährige Adjustable Rate Mortgage (zinsvariable Hypothek)"
 
-#: src/gnome/druid-loan.c:515
+#: src/gnome/druid-loan.c:553
 msgid "5/1 Year"
 msgstr "5/1 ARM"
 
-#: src/gnome/druid-loan.c:515
+#: src/gnome/druid-loan.c:553
 msgid "A 5/1 Year ARM"
 msgstr "5/1 jährige Adjustable Rate Mortgage (zinsvariable Hypothek)"
 
-#: src/gnome/druid-loan.c:516
+#: src/gnome/druid-loan.c:554
 msgid "7/1 Year"
 msgstr "7/1 ARM"
 
-#: src/gnome/druid-loan.c:516
+#: src/gnome/druid-loan.c:554
 msgid "A 7/1 Year ARM"
 msgstr "7/1 jährige Adjustable Rate Mortgage (zinsvariable Hypothek)"
 
-#: src/gnome/druid-loan.c:517
+#: src/gnome/druid-loan.c:555
 msgid "10/1 Year"
 msgstr "10/1 ARM"
 
-#: src/gnome/druid-loan.c:517
+#: src/gnome/druid-loan.c:555
 msgid "A 10/1 Year ARM"
 msgstr "10/1 jährige Adjustable Rate Mortgage (zinsvariable Hypothek)"
 
-#: src/gnome/druid-loan.c:602
+#: src/gnome/druid-loan.c:640
 #, c-format
 msgid "... pay \"%s\"?"
 msgstr "... \"%s\" zahlen?"
 
-#: src/gnome/druid-loan.c:614
+#: src/gnome/druid-loan.c:652
 msgid "via Escrow account?"
 msgstr "über Treuhandkonto?"
 
-#: src/gnome/druid-loan.c:785 src/register/ledger-core/split-register.c:2027
+#: src/gnome/druid-loan.c:823 src/register/ledger-core/split-register.c:2027
 msgid "Loan"
 msgstr "Darlehen"
 
-#: src/gnome/druid-loan.c:1015
+#: src/gnome/druid-loan.c:1053
 msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
 msgstr "Wollen Sie den Darlehen-Assistent wirklich abbrechen?"
 
-#: src/gnome/druid-loan.c:1132
+#: src/gnome/druid-loan.c:1170
 msgid "Please select a valid loan account."
 msgstr "Sie müssen ein gültiges Darlehen-Konto auswählen."
 
-#: src/gnome/druid-loan.c:1220
+#: src/gnome/druid-loan.c:1258
 msgid "Please select a valid Escrow Account."
 msgstr "Sie müssen ein gültiges Treuhand-Konto auswählen."
 
-#: src/gnome/druid-loan.c:1286 src/gnome/druid-loan.c:1507
+#: src/gnome/druid-loan.c:1324 src/gnome/druid-loan.c:1545
 msgid "Please select a valid \"from\" account."
 msgstr "Sie müssen ein gültiges Herkunftskonto angeben."
 
-#: src/gnome/druid-loan.c:1294 src/gnome/druid-loan.c:1516
+#: src/gnome/druid-loan.c:1332 src/gnome/druid-loan.c:1554
 msgid "Please select a valid \"to\" account."
 msgstr "Sie müssen ein gültiges Zielkonto angeben."
 
-#: src/gnome/druid-loan.c:1302
+#: src/gnome/druid-loan.c:1340
 msgid "Please select a valid \"interest\" account."
 msgstr "Sie müssen ein gültiges Zinskonto angeben."
 
-#: src/gnome/druid-loan.c:1414
+#: src/gnome/druid-loan.c:1452
 #, c-format
 msgid "Payment: \"%s\""
 msgstr "Zahlung: \"%s\""
 
-#: src/gnome/druid-loan.c:1747 src/gnome/druid-loan.c:2320
+#: src/gnome/druid-loan.c:1785 src/gnome/druid-loan.c:2358
 msgid "Principal"
 msgstr "Endbetrag Kapital"
 
-#: src/gnome/druid-loan.c:1748 src/gnome/druid-loan.c:2341
+#: src/gnome/druid-loan.c:1786 src/gnome/druid-loan.c:2379
 #: src/register/ledger-core/split-register.c:2035
 #: intl-scm/guile-strings.c:3474 intl-scm/guile-strings.c:3496
 msgid "Interest"
 msgstr "Zinsen"
 
-#: src/gnome/druid-loan.c:2221
+#: src/gnome/druid-loan.c:2259
 msgid "Escrow "
 msgstr "Treuhand "
 
@@ -6423,11 +6455,11 @@ msgstr "Von jetzt"
 msgid "Calendar"
 msgstr "Kalender"
 
-#: src/gnome-utils/gnc-dense-cal.c:276 intl-scm/guile-strings.c:1670
+#: src/gnome-utils/gnc-dense-cal.c:280 intl-scm/guile-strings.c:1670
 msgid "Date: "
 msgstr "Datum:"
 
-#: src/gnome-utils/gnc-dense-cal.c:1017
+#: src/gnome-utils/gnc-dense-cal.c:1028
 msgid "(unnamed)"
 msgstr "(unbenannt)"
 
@@ -6992,7 +7024,7 @@ msgid "280"
 msgstr "280"
 
 #: src/import-export/hbci/glade/hbci.glade:317
-#: src/import-export/hbci/glade/hbci.glade:2283
+#: src/import-export/hbci/glade/hbci.glade:2264
 msgid "Bank Code"
 msgstr "Bankleitzahl"
 
@@ -7380,85 +7412,85 @@ msgstr "Bankleitzahl"
 msgid "Recipient Name"
 msgstr "Empfänger: Name, Vorname / Firma"
 
-#: src/import-export/hbci/glade/hbci.glade:1930
-#: src/import-export/hbci/glade/hbci.glade:2179
+#: src/import-export/hbci/glade/hbci.glade:1911
+#: src/import-export/hbci/glade/hbci.glade:2160
 msgid "at Bank"
 msgstr "der Bank"
 
-#: src/import-export/hbci/glade/hbci.glade:1956
+#: src/import-export/hbci/glade/hbci.glade:1937
 msgid "(filled in automatically)"
 msgstr "(wird automatisch ausgefüllt)"
 
-#: src/import-export/hbci/glade/hbci.glade:2027
+#: src/import-export/hbci/glade/hbci.glade:2008
 msgid "Payment Purpose (only for recipient)"
 msgstr "Verwendungszweck - z.B. Kunden-Referenznummer - (nur für Empfänger)"
 
-#: src/import-export/hbci/glade/hbci.glade:2077
+#: src/import-export/hbci/glade/hbci.glade:2058
 msgid "Payment Purpose continued"
 msgstr "noch Verwendungszweck (ggf. noch Anschrift des Auftraggebers)"
 
-#: src/import-export/hbci/glade/hbci.glade:2127
+#: src/import-export/hbci/glade/hbci.glade:2108
 msgid "Originator Name"
 msgstr "Auftraggeber: Name, Vorname"
 
-#: src/import-export/hbci/glade/hbci.glade:2153
-#: src/import-export/hbci/glade/hbci.glade:2205
-#: src/import-export/hbci/glade/hbci.glade:2257
-#: src/import-export/hbci/glade/hbci.glade:2309
+#: src/import-export/hbci/glade/hbci.glade:2134
+#: src/import-export/hbci/glade/hbci.glade:2186
+#: src/import-export/hbci/glade/hbci.glade:2238
+#: src/import-export/hbci/glade/hbci.glade:2290
 msgid "something"
 msgstr "irgendwas"
 
-#: src/import-export/hbci/glade/hbci.glade:2231
+#: src/import-export/hbci/glade/hbci.glade:2212
 msgid "Originator Account Number"
 msgstr "Konto-Nr. des Auftraggebers"
 
-#: src/import-export/hbci/glade/hbci.glade:2419
+#: src/import-export/hbci/glade/hbci.glade:2400
 msgid "Add current"
 msgstr "Aktuelle hinzufügen"
 
-#: src/import-export/hbci/glade/hbci.glade:2476
+#: src/import-export/hbci/glade/hbci.glade:2457
 msgid "Sort"
 msgstr "Sortieren"
 
-#: src/import-export/hbci/glade/hbci.glade:2553
+#: src/import-export/hbci/glade/hbci.glade:2534
 msgid "Use Transaction Template"
 msgstr "Überweisungsvorlage:"
 
-#: src/import-export/hbci/glade/hbci.glade:2576
+#: src/import-export/hbci/glade/hbci.glade:2595
 msgid "HBCI Connection Window"
 msgstr "HBCI Verbindungsfenster"
 
-#: src/import-export/hbci/glade/hbci.glade:2649
-#: src/import-export/hbci/glade/hbci.glade:2722 intl-scm/guile-strings.c:3516
+#: src/import-export/hbci/glade/hbci.glade:2668
+#: src/import-export/hbci/glade/hbci.glade:2741 intl-scm/guile-strings.c:3516
 #: intl-scm/guile-strings.c:3522 intl-scm/guile-strings.c:3530
 msgid "Progress"
 msgstr "Verlauf"
 
-#: src/import-export/hbci/glade/hbci.glade:2670
+#: src/import-export/hbci/glade/hbci.glade:2689
 msgid "Current Job"
 msgstr "Momentaner Auftrag"
 
-#: src/import-export/hbci/glade/hbci.glade:2696
+#: src/import-export/hbci/glade/hbci.glade:2715
 msgid "Current Action"
 msgstr "Momentane Aktion"
 
-#: src/import-export/hbci/glade/hbci.glade:2827
+#: src/import-export/hbci/glade/hbci.glade:2846
 msgid "Log Messages"
 msgstr "Protokoll"
 
-#: src/import-export/hbci/glade/hbci.glade:2858
+#: src/import-export/hbci/glade/hbci.glade:2877
 msgid "Close when finished"
 msgstr "Fenster nach Verbindungsende schließen"
 
-#: src/import-export/hbci/glade/hbci.glade:2874
+#: src/import-export/hbci/glade/hbci.glade:2893
 msgid "Get Transactions Online"
 msgstr "Online Kontoumsätze abfragen"
 
-#: src/import-export/hbci/glade/hbci.glade:2944
+#: src/import-export/hbci/glade/hbci.glade:2963
 msgid "Date range of transactions to retrieve:"
 msgstr "Datumsbereich der abzurufenden Buchungen:"
 
-#: src/import-export/hbci/glade/hbci.glade:2961 intl-scm/guile-strings.c:2146
+#: src/import-export/hbci/glade/hbci.glade:2980 intl-scm/guile-strings.c:2146
 #: intl-scm/guile-strings.c:2232 intl-scm/guile-strings.c:2294
 #: intl-scm/guile-strings.c:2358 intl-scm/guile-strings.c:2438
 #: intl-scm/guile-strings.c:2694 intl-scm/guile-strings.c:3084
@@ -7468,20 +7500,20 @@ msgstr "Datumsbereich der abzurufenden Buchungen:"
 msgid "From"
 msgstr "Von"
 
-#: src/import-export/hbci/glade/hbci.glade:2980
+#: src/import-export/hbci/glade/hbci.glade:2999
 msgid "Last retrieval date"
 msgstr "Letztes Abrufdatum"
 
-#: src/import-export/hbci/glade/hbci.glade:3006
-#: src/import-export/hbci/glade/hbci.glade:3099
+#: src/import-export/hbci/glade/hbci.glade:3025
+#: src/import-export/hbci/glade/hbci.glade:3118
 msgid "Enter date:"
 msgstr "Datum eingeben:"
 
-#: src/import-export/hbci/glade/hbci.glade:3038
+#: src/import-export/hbci/glade/hbci.glade:3057
 msgid "Earliest possible date"
 msgstr "Frühestes mögliches Datum"
 
-#: src/import-export/hbci/glade/hbci.glade:3054 intl-scm/guile-strings.c:2148
+#: src/import-export/hbci/glade/hbci.glade:3073 intl-scm/guile-strings.c:2148
 #: intl-scm/guile-strings.c:2234 intl-scm/guile-strings.c:2296
 #: intl-scm/guile-strings.c:2360 intl-scm/guile-strings.c:2440
 #: intl-scm/guile-strings.c:2696 intl-scm/guile-strings.c:3086
@@ -7492,19 +7524,19 @@ msgstr "Frühestes mögliches Datum"
 msgid "To"
 msgstr "Bis"
 
-#: src/import-export/hbci/glade/hbci.glade:3073
+#: src/import-export/hbci/glade/hbci.glade:3092
 msgid "Now"
 msgstr "Jetzt"
 
-#: src/import-export/hbci/glade/hbci.glade:3135
+#: src/import-export/hbci/glade/hbci.glade:3154
 msgid "HBCI Version"
 msgstr "HBCI Version"
 
-#: src/import-export/hbci/glade/hbci.glade:3205
+#: src/import-export/hbci/glade/hbci.glade:3224
 msgid "Choose a HBCI Version to use with the selected bank:"
 msgstr "Wählen Sie eine HBCI-Version, die benutzt werden soll:"
 
-#: src/import-export/hbci/glade/hbci.glade:3246
+#: src/import-export/hbci/glade/hbci.glade:3265
 msgid "Version"
 msgstr "Version"
 
@@ -11284,7 +11316,9 @@ msgstr "Gesamtsumme anzeigen"
 #: intl-scm/guile-strings.c:1139
 msgid ""
 "Show a grand total of all accounts converted to the default report currency"
-msgstr "Gesamtsumme für alle Konten anzeigen, umgerechnet in die voreingestellte Währung für Berichte"
+msgstr ""
+"Gesamtsumme für alle Konten anzeigen, umgerechnet in die voreingestellte "
+"Währung für Berichte"
 
 #: intl-scm/guile-strings.c:1143 intl-scm/guile-strings.c:1145
 msgid "Show non currency commodities"
@@ -14680,48 +14714,6 @@ msgstr "Folgendes Forderungen-Konto wollen Sie untersuchen"
 msgid "Receivable Aging"
 msgstr "Entwicklung Forderungen"
 
-#~ msgid "Percent (%)"
-#~ msgstr "Prozent (%)"
-
-#~ msgid "Value ($)"
-#~ msgstr "Wert (Betrag)"
-
-#~ msgid "Use Commodity Value"
-#~ msgstr "Wert der Währung/Aktie benutzen"
-
-#~ msgid "Annual"
-#~ msgstr "Jährlich"
-
-#~ msgid "Bi-monthly"
-#~ msgstr "Alle zwei Monate"
-
-#~ msgid "Bi-weekly"
-#~ msgstr "Zweiwöchentlich"
-
-#~ msgid "Daily (360)"
-#~ msgstr "Täglich (360 Tage)"
-
-#~ msgid "Daily (365)"
-#~ msgstr "Täglich (365 Tage)"
-
-#~ msgid "Semi-annual"
-#~ msgstr "Halbjährlich"
-
-#~ msgid "Semi-monthly"
-#~ msgstr "Halbmonatlich"
-
-#~ msgid "Tri-annual"
-#~ msgstr "Dreimal pro Jahr"
-
-#~ msgid "Ask"
-#~ msgstr "Briefkurs"
-
-#~ msgid "Bid"
-#~ msgstr "Geldkurs"
-
-#~ msgid "Last"
-#~ msgstr "Zuletzt"
-
 #~ msgid "Bottom"
 #~ msgstr "Unten"
 
@@ -14730,9 +14722,6 @@ msgstr "Entwicklung Forderungen"
 
 #~ msgid "Custom"
 #~ msgstr "Benutzerdefiniert"
-
-#~ msgid "Deluxe(tm) Personal Checks US-Letter"
-#~ msgstr "Deluxe(tm) private Schecks US-Letter"
 
 #~ msgid "Inches"
 #~ msgstr "Inch"
