@@ -763,9 +763,9 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     xaccSplitSetMemo(from_split, string);
 
     /* finish transaction */
+    xaccTransCommitEdit(trans);
     xaccAccountCommitEdit(from);
     xaccAccountCommitEdit(curr);
-    xaccTransCommitEdit(trans);
 
     /* curr -> to transaction */
     /* Create the transaction */
@@ -803,9 +803,9 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     xaccSplitSetMemo(to_split, string);
 
     /* finish transaction */
+    xaccTransCommitEdit(trans);
     xaccAccountCommitEdit(curr);
     xaccAccountCommitEdit(to);
-    xaccTransCommitEdit(trans);
 
     /* Refresh everything */
     gnc_resume_gui_refresh ();
@@ -842,12 +842,10 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     /* Now do the 'to' account */
     xaccAccountBeginEdit(to);
     xaccAccountInsertSplit(to, to_split);
-    xaccAccountCommitEdit(to);
 
     /* Now do the 'from' account */
     xaccAccountBeginEdit(from);
     xaccAccountInsertSplit(from, from_split);
-    xaccAccountCommitEdit(from);
 
     /* do this after they go into their accounts */
     xaccSplitSetBaseValue (to_split, amount, to_currency);
@@ -856,6 +854,8 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
     /* finish transaction */
     xaccTransCommitEdit(trans);
+    xaccAccountCommitEdit(to);
+    xaccAccountCommitEdit(from);
 
     /* Refresh everything */
     gnc_resume_gui_refresh ();

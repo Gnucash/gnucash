@@ -339,6 +339,9 @@ stock_split_finish (GnomeDruidPage *druidpage,
                     gpointer user_data)
 {
   StockSplitInfo *info = user_data;
+  GList *account_commits;
+  GList *node;
+
   gnc_numeric amount;
   Transaction *trans;
   Account *account;
@@ -373,11 +376,12 @@ stock_split_finish (GnomeDruidPage *druidpage,
 
   split = xaccMallocSplit ();
 
+  xaccAccountBeginEdit (account);
+  account_commits = g_list_prepend (NULL, account);
+
   xaccTransAppendSplit (trans, split);
 
-  xaccAccountBeginEdit (account);
   xaccAccountInsertSplit (account, split);
-  xaccAccountCommitEdit (account);
 
   xaccSplitSetShareAmount (split, amount);
   xaccSplitMakeStockSplit (split);
@@ -397,6 +401,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
 
     memo = gtk_entry_get_text (GTK_ENTRY (info->memo_entry));
 
+
     /* asset split */
     account = gnc_account_tree_get_current_account
       (GNC_ACCOUNT_TREE (info->asset_tree));
@@ -404,8 +409,9 @@ stock_split_finish (GnomeDruidPage *druidpage,
     split = xaccMallocSplit ();
 
     xaccAccountBeginEdit (account);
+    account_commits = g_list_prepend (account_commits, account);
+
     xaccAccountInsertSplit (account, split);
-    xaccAccountCommitEdit (account);
 
     xaccTransAppendSplit (trans, split);
 
@@ -414,6 +420,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
 
     xaccSplitSetMemo (split, memo);
 
+
     /* income split */
     account = gnc_account_tree_get_current_account
       (GNC_ACCOUNT_TREE (info->income_tree));
@@ -421,8 +428,9 @@ stock_split_finish (GnomeDruidPage *druidpage,
     split = xaccMallocSplit ();
 
     xaccAccountBeginEdit (account);
+    account_commits = g_list_prepend (account_commits, account);
+
     xaccAccountInsertSplit (account, split);
-    xaccAccountCommitEdit (account);
 
     xaccTransAppendSplit (trans, split);
 
@@ -433,6 +441,10 @@ stock_split_finish (GnomeDruidPage *druidpage,
   }
 
   xaccTransCommitEdit (trans);
+
+  for (node = account_commits; node; node = node->next)
+    xaccAccountCommitEdit (node->data);
+  g_list_free (account_commits);
 
   gnc_resume_gui_refresh ();
 
