@@ -31,7 +31,7 @@ struct _gncTaxTable {
 
   Timespec	modtime;	/* internal date of last modtime */
   gint64	refcount;
-  GNCBook *	book;
+  QofBook *	book;
   GncTaxTable *	parent;		/* if non-null, we are an immutable child */
   GncTaxTable *	child;		/* if non-null, we have not changed */
   gboolean	invisible;
@@ -154,7 +154,7 @@ mod_table (GncTaxTable *table)
 }
 
 /* Create/Destroy Functions */
-GncTaxTable * gncTaxTableCreate (GNCBook *book)
+GncTaxTable * gncTaxTableCreate (QofBook *book)
 {
   GncTaxTable *table;
   if (!book) return NULL;
@@ -394,7 +394,7 @@ void gncTaxTableBeginEdit (GncTaxTable *table)
   GNC_BEGIN_EDIT (table, _GNC_MOD_NAME);
 }
 
-static void gncTaxTableOnError (GncTaxTable *table, GNCBackendError errcode)
+static void gncTaxTableOnError (GncTaxTable *table, QofBackendError errcode)
 {
   PERR("TaxTable Backend Failure: %d", errcode);
 }
@@ -413,14 +413,14 @@ void gncTaxTableCommitEdit (GncTaxTable *table)
 
 
 /* Get Functions */
-GncTaxTable * gncTaxTableLookup (GNCBook *book, const GUID *guid)
+GncTaxTable * gncTaxTableLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
   return xaccLookupEntity (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);
 }
 
-GncTaxTable *gncTaxTableLookupByName (GNCBook *book, const char *name)
+GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name)
 {
   GList *list = gncTaxTableGetTables (book);
 
@@ -432,7 +432,7 @@ GncTaxTable *gncTaxTableLookupByName (GNCBook *book, const char *name)
   return NULL;
 }
 
-GList * gncTaxTableGetTables (GNCBook *book)
+GList * gncTaxTableGetTables (QofBook *book)
 {
   struct _book_info *bi;
   if (!book) return NULL;
@@ -448,7 +448,7 @@ const GUID *gncTaxTableGetGUID (GncTaxTable *table)
   return &table->guid;
 }
 
-GNCBook *gncTaxTableGetBook (GncTaxTable *table)
+QofBook *gncTaxTableGetBook (GncTaxTable *table)
 {
   if (!table) return NULL;
   return table->book;
@@ -657,7 +657,7 @@ GUID gncTaxTableRetGUID (GncTaxTable *table)
   return table->guid;
 }
 
-GncTaxTable *gncTaxTableLookupDirect (GUID guid, GNCBook *book)
+GncTaxTable *gncTaxTableLookupDirect (GUID guid, QofBook *book)
 {
   if (!book) return NULL;
   return gncTaxTableLookup (book, &guid);
@@ -700,7 +700,7 @@ static void remObj (GncTaxTable *table)
   add_or_rem_object (table, FALSE);
 }
 
-static void _gncTaxTableCreate (GNCBook *book)
+static void _gncTaxTableCreate (QofBook *book)
 {
   struct _book_info *bi;
 
@@ -711,7 +711,7 @@ static void _gncTaxTableCreate (GNCBook *book)
   gnc_book_set_data (book, _GNC_MOD_NAME, bi);
 }
 
-static void _gncTaxTableDestroy (GNCBook *book)
+static void _gncTaxTableDestroy (QofBook *book)
 {
   struct _book_info *bi;
 
@@ -725,24 +725,24 @@ static void _gncTaxTableDestroy (GNCBook *book)
   g_free (bi);
 }
 
-static gboolean _gncTaxTableIsDirty (GNCBook *book)
+static gboolean _gncTaxTableIsDirty (QofBook *book)
 {
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
-static void _gncTaxTableMarkClean (GNCBook *book)
+static void _gncTaxTableMarkClean (QofBook *book)
 {
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncTaxTableForeach (GNCBook *book, foreachObjectCB cb,
+static void _gncTaxTableForeach (QofBook *book, foreachObjectCB cb,
 			      gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
 static GncObject_t gncTaxTableDesc = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Tax Table",
   _gncTaxTableCreate,

@@ -17,7 +17,7 @@ typedef struct _gncOrder GncOrder;
 
 /* Create/Destroy Functions */
 
-GncOrder *gncOrderCreate (GNCBook *book);
+GncOrder *gncOrderCreate (QofBook *book);
 void gncOrderDestroy (GncOrder *order);
 
 /* Set Functions */
@@ -36,7 +36,7 @@ void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry);
 
 /* Get Functions */
 
-GNCBook * gncOrderGetBook (GncOrder *order);
+QofBook * gncOrderGetBook (GncOrder *order);
 const GUID * gncOrderGetGUID (GncOrder *order);
 const char * gncOrderGetID (GncOrder *order);
 GncOwner * gncOrderGetOwner (GncOrder *order);
@@ -49,7 +49,7 @@ gboolean gncOrderGetActive (GncOrder *order);
 /* Get the list Entries */
 GList * gncOrderGetEntries (GncOrder *order);
 
-GncOrder * gncOrderLookup (GNCBook *book, const GUID *guid);
+GncOrder * gncOrderLookup (QofBook *book, const GUID *guid);
 gboolean gncOrderIsDirty (GncOrder *order);
 void gncOrderBeginEdit (GncOrder *order);
 void gncOrderCommitEdit (GncOrder *order);

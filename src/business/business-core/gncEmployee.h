@@ -17,7 +17,7 @@ typedef struct _gncEmployee GncEmployee;
 
 /* Create/Destroy Functions */
 
-GncEmployee *gncEmployeeCreate (GNCBook *book);
+GncEmployee *gncEmployeeCreate (QofBook *book);
 void gncEmployeeDestroy (GncEmployee *employee);
 
 /* Set Functions */
@@ -34,7 +34,7 @@ void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc);
 
 /* Get Functions */
 
-GNCBook * gncEmployeeGetBook (GncEmployee *employee);
+QofBook * gncEmployeeGetBook (GncEmployee *employee);
 const GUID * gncEmployeeGetGUID (GncEmployee *employee);
 const char * gncEmployeeGetID (GncEmployee *employee);
 const char * gncEmployeeGetUsername (GncEmployee *employee);
@@ -47,11 +47,11 @@ gnc_commodity * gncEmployeeGetCurrency (GncEmployee *employee);
 gboolean gncEmployeeGetActive (GncEmployee *employee);
 Account * gncEmployeeGetCCard (GncEmployee *employee);
 
-GncEmployee * gncEmployeeLookup (GNCBook *book, const GUID *guid);
+GncEmployee * gncEmployeeLookup (QofBook *book, const GUID *guid);
 gboolean gncEmployeeIsDirty (GncEmployee *employee);
 
 GUID gncEmployeeRetGUID (GncEmployee *employee);
-GncEmployee * gncEmployeeLookupDirect (GUID guid, GNCBook *book);
+GncEmployee * gncEmployeeLookupDirect (GUID guid, QofBook *book);
 
 void gncEmployeeBeginEdit (GncEmployee *employee);
 void gncEmployeeCommitEdit (GncEmployee *employee);

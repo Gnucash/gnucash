@@ -18,7 +18,7 @@
 #include "gncAddressP.h"
 
 struct _gncAddress {
-  GNCBook *	book;
+  QofBook *	book;
   const GUID *	parent_guid;
   gboolean	dirty;
   char *	name;
@@ -48,7 +48,7 @@ mark_address (GncAddress *address)
 
 /* Create/Destroy functions */
 
-GncAddress * gncAddressCreate (GNCBook *book, const GUID *parent)
+GncAddress * gncAddressCreate (QofBook *book, const GUID *parent)
 {
   GncAddress *addr;
 

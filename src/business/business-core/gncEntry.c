@@ -28,7 +28,7 @@
 #include "gncOrder.h"
 
 struct _gncEntry {
-  GNCBook *	book;
+  QofBook *	book;
 
   GUID		guid;
   Timespec	date;
@@ -179,7 +179,7 @@ mark_entry (GncEntry *entry)
 
 /* Create/Destroy Functions */
 
-GncEntry *gncEntryCreate (GNCBook *book)
+GncEntry *gncEntryCreate (QofBook *book)
 {
   GncEntry *entry;
   gnc_numeric zero = gnc_numeric_zero ();
@@ -592,7 +592,7 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
 
 /* Get Functions */
 
-GNCBook * gncEntryGetBook (GncEntry *entry)
+QofBook * gncEntryGetBook (GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->book;
@@ -760,7 +760,7 @@ GncOrder * gncEntryGetOrder (GncEntry *entry)
   return entry->order;
 }
 
-GncEntry * gncEntryLookup (GNCBook *book, const GUID *guid)
+GncEntry * gncEntryLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
   return xaccLookupEntity (gnc_book_get_entity_table (book),
@@ -1110,7 +1110,7 @@ void gncEntryBeginEdit (GncEntry *entry)
   GNC_BEGIN_EDIT (entry, _GNC_MOD_NAME);
 }
 
-static void gncEntryOnError (GncEntry *entry, GNCBackendError errcode)
+static void gncEntryOnError (GncEntry *entry, QofBackendError errcode)
 {
   PERR("Entry Backend Failure: %d", errcode);
 }
@@ -1162,34 +1162,34 @@ static void remObj (GncEntry *entry)
   gncBusinessRemoveObject (entry->book, _GNC_MOD_NAME, &entry->guid);
 }
 
-static void _gncEntryCreate (GNCBook *book)
+static void _gncEntryCreate (QofBook *book)
 {
   gncBusinessCreate (book, _GNC_MOD_NAME);
 }
 
-static void _gncEntryDestroy (GNCBook *book)
+static void _gncEntryDestroy (QofBook *book)
 {
   gncBusinessDestroy (book, _GNC_MOD_NAME);
 }
 
-static gboolean _gncEntryIsDirty (GNCBook *book)
+static gboolean _gncEntryIsDirty (QofBook *book)
 {
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
-static void _gncEntryMarkClean (GNCBook *book)
+static void _gncEntryMarkClean (QofBook *book)
 {
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncEntryForeach (GNCBook *book, foreachObjectCB cb,
+static void _gncEntryForeach (QofBook *book, foreachObjectCB cb,
 			      gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
 static GncObject_t gncEntryDesc = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Order/Invoice/Bill Entry",
   _gncEntryCreate,

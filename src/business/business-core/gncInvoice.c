@@ -32,7 +32,7 @@
 #include "gncOwner.h"
 
 struct _gncInvoice {
-  GNCBook *book;
+  QofBook *book;
   
   GUID		guid;
   char *	id;
@@ -98,7 +98,7 @@ mark_invoice (GncInvoice *invoice)
 
 /* Create/Destroy Functions */
 
-GncInvoice *gncInvoiceCreate (GNCBook *book)
+GncInvoice *gncInvoiceCreate (QofBook *book)
 {
   GncInvoice *invoice;
 
@@ -367,7 +367,7 @@ void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry)
 
 /* Get Functions */
 
-GNCBook * gncInvoiceGetBook (GncInvoice *invoice)
+QofBook * gncInvoiceGetBook (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->book;
@@ -607,7 +607,7 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
   kvp_frame *kvp;
   kvp_value *value;
   GUID *guid;
-  GNCBook *book;
+  QofBook *book;
 
   if (!lot) return NULL;
 
@@ -648,7 +648,7 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn)
   kvp_frame *kvp;
   kvp_value *value;
   GUID *guid;
-  GNCBook *book;
+  QofBook *book;
 
   if (!txn) return NULL;
 
@@ -1081,7 +1081,7 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
 		      gnc_numeric amount, Timespec date,
 		      const char *memo, const char *num)
 {
-  GNCBook *book;
+  QofBook *book;
   Transaction *txn;
   Split *split;
   GList *lot_list, *fifo = NULL;
@@ -1247,13 +1247,13 @@ GUID gncInvoiceRetGUID (GncInvoice *invoice)
   return invoice->guid;
 }
 
-GncInvoice * gncInvoiceLookupDirect (GUID guid, GNCBook *book)
+GncInvoice * gncInvoiceLookupDirect (GUID guid, QofBook *book)
 {
   if (!book) return NULL;
   return gncInvoiceLookup (book, &guid);
 }
 
-GncInvoice * gncInvoiceLookup (GNCBook *book, const GUID *guid)
+GncInvoice * gncInvoiceLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
   return xaccLookupEntity (gnc_book_get_entity_table (book),
@@ -1265,7 +1265,7 @@ void gncInvoiceBeginEdit (GncInvoice *invoice)
   GNC_BEGIN_EDIT (invoice, _GNC_MOD_NAME);
 }
 
-static void gncInvoiceOnError (GncInvoice *invoice, GNCBackendError errcode)
+static void gncInvoiceOnError (GncInvoice *invoice, QofBackendError errcode)
 {
   PERR("Invoice Backend Failure: %d", errcode);
 }
@@ -1314,27 +1314,27 @@ static void remObj (GncInvoice *invoice)
   gncBusinessRemoveObject (invoice->book, _GNC_MOD_NAME, &invoice->guid);
 }
 
-static void _gncInvoiceCreate (GNCBook *book)
+static void _gncInvoiceCreate (QofBook *book)
 {
   gncBusinessCreate (book, _GNC_MOD_NAME);
 }
 
-static void _gncInvoiceDestroy (GNCBook *book)
+static void _gncInvoiceDestroy (QofBook *book)
 {
   gncBusinessDestroy (book, _GNC_MOD_NAME);
 }
 
-static gboolean _gncInvoiceIsDirty (GNCBook *book)
+static gboolean _gncInvoiceIsDirty (QofBook *book)
 {
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
-static void _gncInvoiceMarkClean (GNCBook *book)
+static void _gncInvoiceMarkClean (QofBook *book)
 {
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncInvoiceForeach (GNCBook *book, foreachObjectCB cb,
+static void _gncInvoiceForeach (QofBook *book, foreachObjectCB cb,
 				gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
@@ -1358,7 +1358,7 @@ static const char * _gncInvoicePrintable (gpointer obj)
 }
 
 static GncObject_t gncInvoiceDesc = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Invoice",
   _gncInvoiceCreate,
@@ -1424,7 +1424,7 @@ gboolean gncInvoiceRegister (void)
   return gncObjectRegister (&gncInvoiceDesc);
 }
 
-gint64 gncInvoiceNextID (GNCBook *book)
+gint64 gncInvoiceNextID (QofBook *book)
 {
   return gnc_book_get_counter (book, _GNC_MOD_NAME);
 }

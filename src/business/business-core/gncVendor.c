@@ -28,7 +28,7 @@
 #include "gncAddress.h"
 
 struct _gncVendor {
-  GNCBook *	book;
+  QofBook *	book;
   GUID		guid;
   char *	id;
   char *	name;
@@ -70,7 +70,7 @@ mark_vendor (GncVendor *vendor)
 
 /* Create/Destroy Functions */
 
-GncVendor *gncVendorCreate (GNCBook *book)
+GncVendor *gncVendorCreate (QofBook *book)
 {
   GncVendor *vendor;
 
@@ -247,7 +247,7 @@ void gncVendorSetTaxTable (GncVendor *vendor, GncTaxTable *table)
 
 /* Get Functions */
 
-GNCBook * gncVendorGetBook (GncVendor *vendor)
+QofBook * gncVendorGetBook (GncVendor *vendor)
 {
   if (!vendor) return NULL;
   return vendor->book;
@@ -355,7 +355,7 @@ void gncVendorBeginEdit (GncVendor *vendor)
   GNC_BEGIN_EDIT (vendor, _GNC_MOD_NAME);
 }
 
-static void gncVendorOnError (GncVendor *vendor, GNCBackendError errcode)
+static void gncVendorOnError (GncVendor *vendor, QofBackendError errcode)
 {
   PERR("Vendor Backend Failure: %d", errcode);
 }
@@ -409,13 +409,13 @@ GUID gncVendorRetGUID (GncVendor *vendor)
   return vendor->guid;
 }
 
-GncVendor * gncVendorLookupDirect (GUID guid, GNCBook *book)
+GncVendor * gncVendorLookupDirect (GUID guid, QofBook *book)
 {
   if (!book) return NULL;
   return gncVendorLookup (book, &guid);
 }
 
-GncVendor * gncVendorLookup (GNCBook *book, const GUID *guid)
+GncVendor * gncVendorLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
   return xaccLookupEntity (gnc_book_get_entity_table (book),
@@ -440,27 +440,27 @@ static void remObj (GncVendor *vendor)
   gncBusinessRemoveObject (vendor->book, _GNC_MOD_NAME, &vendor->guid);
 }
 
-static void _gncVendorCreate (GNCBook *book)
+static void _gncVendorCreate (QofBook *book)
 {
   gncBusinessCreate (book, _GNC_MOD_NAME);
 }
 
-static void _gncVendorDestroy (GNCBook *book)
+static void _gncVendorDestroy (QofBook *book)
 {
   gncBusinessDestroy (book, _GNC_MOD_NAME);
 }
 
-static gboolean _gncVendorIsDirty (GNCBook *book)
+static gboolean _gncVendorIsDirty (QofBook *book)
 {
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
-static void _gncVendorMarkClean (GNCBook *book)
+static void _gncVendorMarkClean (QofBook *book)
 {
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncVendorForeach (GNCBook *book, foreachObjectCB cb,
+static void _gncVendorForeach (QofBook *book, foreachObjectCB cb,
 			       gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
@@ -477,7 +477,7 @@ static const char * _gncVendorPrintable (gpointer item)
 }
 
 static GncObject_t gncVendorDesc = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Vendor",
   _gncVendorCreate,
@@ -505,7 +505,7 @@ gboolean gncVendorRegister (void)
   return gncObjectRegister (&gncVendorDesc);
 }
 
-gint64 gncVendorNextID (GNCBook *book)
+gint64 gncVendorNextID (QofBook *book)
 {
   return gnc_book_get_counter (book, _GNC_MOD_NAME);
 }

@@ -29,7 +29,7 @@
 #include "gncOwner.h"
 
 struct _gncOrder {
-  GNCBook *book;
+  QofBook *book;
 
   GUID		guid;
   char *	id;
@@ -80,7 +80,7 @@ mark_order (GncOrder *order)
 
 /* Create/Destroy Functions */
 
-GncOrder *gncOrderCreate (GNCBook *book)
+GncOrder *gncOrderCreate (QofBook *book)
 {
   GncOrder *order;
 
@@ -242,7 +242,7 @@ void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry)
 
 /* Get Functions */
 
-GNCBook * gncOrderGetBook (GncOrder *order)
+QofBook * gncOrderGetBook (GncOrder *order)
 {
   if (!order) return NULL;
   return order->book;
@@ -305,7 +305,7 @@ GList * gncOrderGetEntries (GncOrder *order)
   return order->entries;
 }
 
-GncOrder * gncOrderLookup (GNCBook *book, const GUID *guid)
+GncOrder * gncOrderLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
   return xaccLookupEntity (gnc_book_get_entity_table (book),
@@ -330,7 +330,7 @@ void gncOrderBeginEdit (GncOrder *order)
   GNC_BEGIN_EDIT (order, _GNC_MOD_NAME);
 }
 
-static void gncOrderOnError (GncOrder *order, GNCBackendError errcode)
+static void gncOrderOnError (GncOrder *order, QofBackendError errcode)
 {
   PERR("Order Backend Failure: %d", errcode);
 }
@@ -379,27 +379,27 @@ static void remObj (GncOrder *order)
   gncBusinessRemoveObject (order->book, _GNC_MOD_NAME, &order->guid);
 }
 
-static void _gncOrderCreate (GNCBook *book)
+static void _gncOrderCreate (QofBook *book)
 {
   gncBusinessCreate (book, _GNC_MOD_NAME);
 }
 
-static void _gncOrderDestroy (GNCBook *book)
+static void _gncOrderDestroy (QofBook *book)
 {
   gncBusinessDestroy (book, _GNC_MOD_NAME);
 }
 
-static gboolean _gncOrderIsDirty (GNCBook *book)
+static gboolean _gncOrderIsDirty (QofBook *book)
 {
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
-static void _gncOrderMarkClean (GNCBook *book)
+static void _gncOrderMarkClean (QofBook *book)
 {
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncOrderForeach (GNCBook *book, foreachObjectCB cb,
+static void _gncOrderForeach (QofBook *book, foreachObjectCB cb,
 			      gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
@@ -423,7 +423,7 @@ static const char * _gncOrderPrintable (gpointer obj)
 }
 
 static GncObject_t gncOrderDesc = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Order",
   _gncOrderCreate,
@@ -455,7 +455,7 @@ gboolean gncOrderRegister (void)
   return gncObjectRegister (&gncOrderDesc);
 }
 
-gint64 gncOrderNextID (GNCBook *book)
+gint64 gncOrderNextID (QofBook *book)
 {
   return gnc_book_get_counter (book, _GNC_MOD_NAME);
 }

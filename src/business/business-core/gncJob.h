@@ -16,7 +16,7 @@ typedef struct _gncJob GncJob;
 
 /* Create/Destroy Functions */
 
-GncJob *gncJobCreate (GNCBook *book);
+GncJob *gncJobCreate (QofBook *book);
 void gncJobDestroy (GncJob *job);
 
 /* Set Functions */
@@ -32,7 +32,7 @@ void gncJobCommitEdit (GncJob *job);
 
 /* Get Functions */
 
-GNCBook * gncJobGetBook (GncJob *job);
+QofBook * gncJobGetBook (GncJob *job);
 const GUID * gncJobGetGUID (GncJob *job);
 const char * gncJobGetID (GncJob *job);
 const char * gncJobGetName (GncJob *job);
@@ -41,9 +41,9 @@ GncOwner * gncJobGetOwner (GncJob *job);
 gboolean gncJobGetActive (GncJob *job);
 
 GUID gncJobRetGUID (GncJob *job);
-GncJob *gncJobLookupDirect (GUID guid, GNCBook *book);
+GncJob *gncJobLookupDirect (GUID guid, QofBook *book);
 
-GncJob * gncJobLookup (GNCBook *book, const GUID *guid);
+GncJob * gncJobLookup (QofBook *book, const GUID *guid);
 gboolean gncJobIsDirty (GncJob *job);
 
 /* Other functions */

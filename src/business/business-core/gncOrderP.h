@@ -10,7 +10,7 @@
 #include "gncOrder.h"
 
 gboolean gncOrderRegister (void);
-gint64 gncOrderNextID (GNCBook *book);
+gint64 gncOrderNextID (QofBook *book);
 void gncOrderSetGUID (GncOrder *order, const GUID *guid);
 void gncOrderSetDirty (GncOrder *order, gboolean dirty);
 

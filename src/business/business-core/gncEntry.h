@@ -45,7 +45,7 @@ gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type
 
 /* Create/Destroy Functions */
 
-GncEntry *gncEntryCreate (GNCBook *book);
+GncEntry *gncEntryCreate (QofBook *book);
 void gncEntryDestroy (GncEntry *entry);
 
 /* SET FUNCTIONS */
@@ -82,7 +82,7 @@ void gncEntrySetBillPayment (GncEntry *entry, GncEntryPaymentType type);
 
 /* GET FUNCTIONS */
 /* Generic (shared) data */
-GNCBook * gncEntryGetBook (GncEntry *entry);
+QofBook * gncEntryGetBook (GncEntry *entry);
 const GUID * gncEntryGetGUID (GncEntry *entry);
 Timespec gncEntryGetDate (GncEntry *entry);
 Timespec gncEntryGetDateEntered (GncEntry *entry);
@@ -148,7 +148,7 @@ GncOrder * gncEntryGetOrder (GncEntry *entry);
 GncInvoice * gncEntryGetInvoice (GncEntry *entry);
 GncInvoice * gncEntryGetBill (GncEntry *entry);
 
-GncEntry * gncEntryLookup (GNCBook *book, const GUID *guid);
+GncEntry * gncEntryLookup (QofBook *book, const GUID *guid);
 
 gboolean gncEntryIsOpen (GncEntry *entry);
 void gncEntryBeginEdit (GncEntry *entry);

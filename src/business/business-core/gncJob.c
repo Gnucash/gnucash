@@ -27,7 +27,7 @@
 #include "gncJobP.h"
 
 struct _gncJob {
-  GNCBook *	book;
+  QofBook *	book;
   GUID		guid;
   char *	id;
   char *	name;
@@ -62,7 +62,7 @@ mark_job (GncJob *job)
 
 /* Create/Destroy Functions */
 
-GncJob *gncJobCreate (GNCBook *book)
+GncJob *gncJobCreate (QofBook *book)
 {
   GncJob *job;
 
@@ -221,7 +221,7 @@ void gncJobBeginEdit (GncJob *job)
   GNC_BEGIN_EDIT (job, _GNC_MOD_NAME);
 }
 
-static void gncJobOnError (GncJob *job, GNCBackendError errcode)
+static void gncJobOnError (GncJob *job, QofBackendError errcode)
 {
   PERR("Job Backend Failure: %d", errcode);
 }
@@ -240,7 +240,7 @@ void gncJobCommitEdit (GncJob *job)
 
 /* Get Functions */
 
-GNCBook * gncJobGetBook (GncJob *job)
+QofBook * gncJobGetBook (GncJob *job)
 {
   if (!job) return NULL;
   return job->book;
@@ -290,14 +290,14 @@ gboolean gncJobGetActive (GncJob *job)
   return job->active;
 }
 
-GncJob * gncJobLookup (GNCBook *book, const GUID *guid)
+GncJob * gncJobLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
   return xaccLookupEntity (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);
 }
 
-GncJob * gncJobLookupDirect (GUID guid, GNCBook *book)
+GncJob * gncJobLookupDirect (GUID guid, QofBook *book)
 {
   if (!book) return NULL;
   return gncJobLookup (book, &guid);
@@ -332,27 +332,27 @@ static void remObj (GncJob *job)
   gncBusinessRemoveObject (job->book, _GNC_MOD_NAME, &job->guid);
 }
 
-static void _gncJobCreate (GNCBook *book)
+static void _gncJobCreate (QofBook *book)
 {
   gncBusinessCreate (book, _GNC_MOD_NAME);
 }
 
-static void _gncJobDestroy (GNCBook *book)
+static void _gncJobDestroy (QofBook *book)
 {
   gncBusinessDestroy (book, _GNC_MOD_NAME);
 }
 
-static gboolean _gncJobIsDirty (GNCBook *book)
+static gboolean _gncJobIsDirty (QofBook *book)
 {
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
-static void _gncJobMarkClean (GNCBook *book)
+static void _gncJobMarkClean (QofBook *book)
 {
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncJobForeach (GNCBook *book, foreachObjectCB cb,
+static void _gncJobForeach (QofBook *book, foreachObjectCB cb,
 			    gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
@@ -369,7 +369,7 @@ static const char * _gncJobPrintable (gpointer item)
 }
 
 static GncObject_t gncJobDesc = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Job",
   _gncJobCreate,
@@ -399,7 +399,7 @@ gboolean gncJobRegister (void)
   return gncObjectRegister (&gncJobDesc);
 }
 
-gint64 gncJobNextID (GNCBook *book)
+gint64 gncJobNextID (QofBook *book)
 {
   return gnc_book_get_counter (book, _GNC_MOD_NAME);
 }

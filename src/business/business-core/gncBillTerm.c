@@ -36,7 +36,7 @@ struct _gncBillTerm {
   gint		cutoff;
 
   gint64	refcount;
-  GNCBook *	book;
+  QofBook *	book;
   GncBillTerm *	parent;		/* if non-null, we are an immutable child */
   GncBillTerm *	child;		/* if non-null, we have not changed */
   gboolean	invisible;
@@ -87,7 +87,7 @@ mark_term (GncBillTerm *term)
 }
 
 /* Create/Destroy Functions */
-GncBillTerm * gncBillTermCreate (GNCBook *book)
+GncBillTerm * gncBillTermCreate (QofBook *book)
 {
   GncBillTerm *term;
   if (!book) return NULL;
@@ -306,7 +306,7 @@ void gncBillTermBeginEdit (GncBillTerm *term)
   GNC_BEGIN_EDIT (term, _GNC_MOD_NAME);
 }
 
-static void gncBillTermOnError (GncBillTerm *term, GNCBackendError errcode)
+static void gncBillTermOnError (GncBillTerm *term, QofBackendError errcode)
 {
   PERR("BillTerm Backend Failure: %d", errcode);
 }
@@ -324,14 +324,14 @@ void gncBillTermCommitEdit (GncBillTerm *term)
 }
 
 /* Get Functions */
-GncBillTerm * gncBillTermLookup (GNCBook *book, const GUID *guid)
+GncBillTerm * gncBillTermLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
   return xaccLookupEntity (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);
 }
 
-GncBillTerm *gncBillTermLookupByName (GNCBook *book, const char *name)
+GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name)
 {
   GList *list = gncBillTermGetTerms (book);
 
@@ -343,7 +343,7 @@ GncBillTerm *gncBillTermLookupByName (GNCBook *book, const char *name)
   return NULL;
 }
 
-GList * gncBillTermGetTerms (GNCBook *book)
+GList * gncBillTermGetTerms (QofBook *book)
 {
   struct _book_info *bi;
   if (!book) return NULL;
@@ -359,7 +359,7 @@ const GUID *gncBillTermGetGUID (GncBillTerm *term)
   return &term->guid;
 }
 
-GNCBook *gncBillTermGetBook (GncBillTerm *term)
+QofBook *gncBillTermGetBook (GncBillTerm *term)
 {
   if (!term) return NULL;
   return term->book;
@@ -598,7 +598,7 @@ static void remObj (GncBillTerm *term)
   add_or_rem_object (term, FALSE);
 }
 
-static void _gncBillTermCreate (GNCBook *book)
+static void _gncBillTermCreate (QofBook *book)
 {
   struct _book_info *bi;
 
@@ -609,7 +609,7 @@ static void _gncBillTermCreate (GNCBook *book)
   gnc_book_set_data (book, _GNC_MOD_NAME, bi);
 }
 
-static void _gncBillTermDestroy (GNCBook *book)
+static void _gncBillTermDestroy (QofBook *book)
 {
   struct _book_info *bi;
 
@@ -623,24 +623,24 @@ static void _gncBillTermDestroy (GNCBook *book)
   g_free (bi);
 }
 
-static gboolean _gncBillTermIsDirty (GNCBook *book)
+static gboolean _gncBillTermIsDirty (QofBook *book)
 {
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
-static void _gncBillTermMarkClean (GNCBook *book)
+static void _gncBillTermMarkClean (QofBook *book)
 {
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncBillTermForeach (GNCBook *book, foreachObjectCB cb,
+static void _gncBillTermForeach (QofBook *book, foreachObjectCB cb,
 			      gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
 static GncObject_t gncBillTermDesc = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Billing Term",
   _gncBillTermCreate,

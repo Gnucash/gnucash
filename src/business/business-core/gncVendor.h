@@ -19,7 +19,7 @@ typedef struct _gncVendor GncVendor;
 
 /* Create/Destroy Functions */
 
-GncVendor *gncVendorCreate (GNCBook *book);
+GncVendor *gncVendorCreate (QofBook *book);
 void gncVendorDestroy (GncVendor *vendor);
 
 /* Set Functions */
@@ -43,7 +43,7 @@ void gncVendorCommitEdit (GncVendor *vendor);
 
 /* Get Functions */
 
-GNCBook * gncVendorGetBook (GncVendor *vendor);
+QofBook * gncVendorGetBook (GncVendor *vendor);
 const GUID * gncVendorGetGUID (GncVendor *vendor);
 const char * gncVendorGetID (GncVendor *vendor);
 const char * gncVendorGetName (GncVendor *vendor);
@@ -60,9 +60,9 @@ GncTaxTable* gncVendorGetTaxTable (GncVendor *vendor);
 GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all);
 
 GUID gncVendorRetGUID (GncVendor *vendor);
-GncVendor * gncVendorLookupDirect (GUID guid, GNCBook *book);
+GncVendor * gncVendorLookupDirect (GUID guid, QofBook *book);
 
-GncVendor * gncVendorLookup (GNCBook *book, const GUID *guid);
+GncVendor * gncVendorLookup (QofBook *book, const GUID *guid);
 gboolean gncVendorIsDirty (GncVendor *vendor);
 int gncVendorCompare (GncVendor *a, GncVendor *b);
 

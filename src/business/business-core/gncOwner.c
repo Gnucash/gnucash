@@ -265,7 +265,7 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
   kvp_frame *kvp;
   kvp_value *value;
   GUID *guid;
-  GNCBook *book;
+  QofBook *book;
   GncOwnerType type;
 
   if (!lot || !owner) return FALSE;

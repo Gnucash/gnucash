@@ -24,7 +24,7 @@ static void get_list (gpointer key, gpointer item, gpointer arg)
   iter->cb (item, iter->user_data);
 }
 
-void gncBusinessForeach (GNCBook *book, GNCIdType mod_name,
+void gncBusinessForeach (QofBook *book, GNCIdType mod_name,
 			 foreachObjectCB cb, gpointer user_data)
 {
   GncBookInfo *bi;
@@ -40,7 +40,7 @@ void gncBusinessForeach (GNCBook *book, GNCIdType mod_name,
     g_hash_table_foreach (bi->ht, get_list, &iter);
 }
 
-void gncBusinessCreate (GNCBook *book, GNCIdType mod_name)
+void gncBusinessCreate (QofBook *book, GNCIdType mod_name)
 {
   GncBookInfo *bi;
 
@@ -51,7 +51,7 @@ void gncBusinessCreate (GNCBook *book, GNCIdType mod_name)
   gnc_book_set_data (book, mod_name, bi);
 }
 
-void gncBusinessDestroy (GNCBook *book, GNCIdType mod_name)
+void gncBusinessDestroy (QofBook *book, GNCIdType mod_name)
 {
   GncBookInfo *bi;
 
@@ -64,7 +64,7 @@ void gncBusinessDestroy (GNCBook *book, GNCIdType mod_name)
   g_free (bi);
 }
 
-gboolean gncBusinessIsDirty (GNCBook *book, GNCIdType mod_name)
+gboolean gncBusinessIsDirty (QofBook *book, GNCIdType mod_name)
 {
   GncBookInfo *bi;
 
@@ -74,7 +74,7 @@ gboolean gncBusinessIsDirty (GNCBook *book, GNCIdType mod_name)
   return bi->is_dirty;
 }
 
-void gncBusinessSetDirtyFlag (GNCBook *book, GNCIdType mod_name,
+void gncBusinessSetDirtyFlag (QofBook *book, GNCIdType mod_name,
 			      gboolean is_dirty)
 {
   GncBookInfo *bi;
@@ -85,7 +85,7 @@ void gncBusinessSetDirtyFlag (GNCBook *book, GNCIdType mod_name,
   bi->is_dirty = is_dirty;
 }
 
-void gncBusinessAddObject (GNCBook *book, GNCIdType mod_name,
+void gncBusinessAddObject (QofBook *book, GNCIdType mod_name,
 			   gpointer obj, const GUID *guid)
 {
   GncBookInfo *bi;
@@ -95,7 +95,7 @@ void gncBusinessAddObject (GNCBook *book, GNCIdType mod_name,
   g_hash_table_insert (bi->ht, (gpointer)guid, obj);
 }
 
-void gncBusinessRemoveObject (GNCBook *book, GNCIdType mod_name,
+void gncBusinessRemoveObject (QofBook *book, GNCIdType mod_name,
 			      const GUID *guid)
 {
   GncBookInfo *bi;

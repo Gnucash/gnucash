@@ -29,7 +29,7 @@
 #include "gncAddress.h"
 
 struct _gncEmployee {
-  GNCBook *	book;
+  QofBook *	book;
   GUID		guid;
   char *	id;
   char *	username;
@@ -70,7 +70,7 @@ mark_employee (GncEmployee *employee)
 
 /* Create/Destroy Functions */
 
-GncEmployee *gncEmployeeCreate (GNCBook *book)
+GncEmployee *gncEmployeeCreate (QofBook *book)
 {
   GncEmployee *employee;
 
@@ -233,7 +233,7 @@ void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc)
 
 /* Get Functions */
 
-GNCBook * gncEmployeeGetBook (GncEmployee *employee)
+QofBook * gncEmployeeGetBook (GncEmployee *employee)
 {
   if (!employee) return NULL;
   return employee->book;
@@ -305,7 +305,7 @@ Account * gncEmployeeGetCCard (GncEmployee *employee)
   return employee->ccard_acc;
 }
 
-GncEmployee * gncEmployeeLookup (GNCBook *book, const GUID *guid)
+GncEmployee * gncEmployeeLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
   return xaccLookupEntity (gnc_book_get_entity_table (book),
@@ -320,7 +320,7 @@ GUID gncEmployeeRetGUID (GncEmployee *employee)
   return employee->guid;
 }
 
-GncEmployee * gncEmployeeLookupDirect (GUID guid, GNCBook *book)
+GncEmployee * gncEmployeeLookupDirect (GUID guid, QofBook *book)
 {
   if (!book) return NULL;
   return gncEmployeeLookup (book, &guid);
@@ -337,7 +337,7 @@ void gncEmployeeBeginEdit (GncEmployee *employee)
   GNC_BEGIN_EDIT (employee, _GNC_MOD_NAME);
 }
 
-static void gncEmployeeOnError (GncEmployee *employee, GNCBackendError errcode)
+static void gncEmployeeOnError (GncEmployee *employee, QofBackendError errcode)
 {
   PERR("Employee Backend Failure: %d", errcode);
 }
@@ -379,27 +379,27 @@ static void remObj (GncEmployee *employee)
   gncBusinessRemoveObject (employee->book, _GNC_MOD_NAME, &employee->guid);
 }
 
-static void _gncEmployeeCreate (GNCBook *book)
+static void _gncEmployeeCreate (QofBook *book)
 {
   gncBusinessCreate (book, _GNC_MOD_NAME);
 }
 
-static void _gncEmployeeDestroy (GNCBook *book)
+static void _gncEmployeeDestroy (QofBook *book)
 {
   gncBusinessDestroy (book, _GNC_MOD_NAME);
 }
 
-static gboolean _gncEmployeeIsDirty (GNCBook *book)
+static gboolean _gncEmployeeIsDirty (QofBook *book)
 {
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
-static void _gncEmployeeMarkClean (GNCBook *book)
+static void _gncEmployeeMarkClean (QofBook *book)
 {
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncEmployeeForeach (GNCBook *book, foreachObjectCB cb,
+static void _gncEmployeeForeach (QofBook *book, foreachObjectCB cb,
 				 gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
@@ -416,7 +416,7 @@ static const char * _gncEmployeePrintable (gpointer item)
 }
 
 static GncObject_t gncEmployeeDesc = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Employee",
   _gncEmployeeCreate,
@@ -444,7 +444,7 @@ gboolean gncEmployeeRegister (void)
   return gncObjectRegister (&gncEmployeeDesc);
 }
 
-gint64 gncEmployeeNextID (GNCBook *book)
+gint64 gncEmployeeNextID (QofBook *book)
 {
   return gnc_book_get_counter (book, _GNC_MOD_NAME);
 }

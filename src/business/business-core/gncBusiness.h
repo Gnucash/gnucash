@@ -16,17 +16,17 @@ typedef struct _gncBookInfo {
   gboolean	is_dirty;
 } GncBookInfo;
 
-void gncBusinessForeach (GNCBook *book, GNCIdType mod_name,
+void gncBusinessForeach (QofBook *book, GNCIdType mod_name,
 			 foreachObjectCB cb, gpointer user_data);
 
-void gncBusinessCreate (GNCBook *book, GNCIdType mod_name);
-void gncBusinessDestroy (GNCBook *book, GNCIdType mod_name);
-gboolean gncBusinessIsDirty (GNCBook *book, GNCIdType mod_name);
-void gncBusinessSetDirtyFlag (GNCBook *book, GNCIdType mod_name,
+void gncBusinessCreate (QofBook *book, GNCIdType mod_name);
+void gncBusinessDestroy (QofBook *book, GNCIdType mod_name);
+gboolean gncBusinessIsDirty (QofBook *book, GNCIdType mod_name);
+void gncBusinessSetDirtyFlag (QofBook *book, GNCIdType mod_name,
 			      gboolean is_dirty);
-void gncBusinessAddObject (GNCBook *book, GNCIdType mod_name,
+void gncBusinessAddObject (QofBook *book, GNCIdType mod_name,
 			   gpointer obj, const GUID *guid);
-void gncBusinessRemoveObject (GNCBook *book, GNCIdType mod_name,
+void gncBusinessRemoveObject (QofBook *book, GNCIdType mod_name,
 			      const GUID *guid);
 
 

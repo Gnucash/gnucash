@@ -19,7 +19,7 @@ typedef struct _gncInvoice GncInvoice;
 
 /* Create/Destroy Functions */
 
-GncInvoice *gncInvoiceCreate (GNCBook *book);
+GncInvoice *gncInvoiceCreate (QofBook *book);
 void gncInvoiceDestroy (GncInvoice *invoice);
 
 /* Set Functions */
@@ -45,7 +45,7 @@ void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry);
 
 /* Get Functions */
 
-GNCBook * gncInvoiceGetBook (GncInvoice *invoice);
+QofBook * gncInvoiceGetBook (GncInvoice *invoice);
 const GUID * gncInvoiceGetGUID (GncInvoice *invoice);
 const char * gncInvoiceGetID (GncInvoice *invoice);
 GncOwner * gncInvoiceGetOwner (GncInvoice *invoice);
@@ -116,9 +116,9 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn);
 GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot);
 
 GUID gncInvoiceRetGUID (GncInvoice *invoice);
-GncInvoice * gncInvoiceLookupDirect (GUID guid, GNCBook *book);
+GncInvoice * gncInvoiceLookupDirect (GUID guid, QofBook *book);
 
-GncInvoice * gncInvoiceLookup (GNCBook *book, const GUID *guid);
+GncInvoice * gncInvoiceLookup (QofBook *book, const GUID *guid);
 gboolean gncInvoiceIsDirty (GncInvoice *invoice);
 void gncInvoiceBeginEdit (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);
