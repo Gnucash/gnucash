@@ -19,8 +19,9 @@
 # Copyright (c) 1999-2000 Linas Vepstas
 
 use lib '@-GNC_PERLSHAREDIR-@';
-use Quote;
 use lib '@-GNC_PERLLIBDIR-@';
+
+use Finance::Quote;
 use gnucash;
 
 # --------------------------------------------------
@@ -133,6 +134,10 @@ $grp = gnucash::xaccSessionBeginFile ($sess,$ARGV[0]);
 
 die "failed to read file $ARGV[0], maybe its locked? " if (! $grp);
 
+# Create our quote object
+
+my $quote = Finance::Quote->new();
+
 # get a flat list of accounts in the file
 @acctlist = &account_flatlist ($grp);
 
@@ -167,19 +172,9 @@ foreach $acct (@acctlist)
 
       undef $price;  # undef to make sure later if($price) not broken
 
-      # assign to a list, beacuse if fetch fails assignment
-      # to a hash will raise a warning, as it will return a one
-      # element list. where the first element is undef
-      @quotes_list = &Quote::fetch($quotesrc, $security);
+      %quotes = $quote->fetch($quotesrc, $security);
 
-      # if and only if  there really is information then assign to the hash
-      %quotes = @quotes_list if $quotes_list[0];
-
-      # the fetch is OK if and only if information is returned AND
-      # it is maked as a success
-      # The first condition is needed becasue if no information 
-      # returned then %quotes is uninitialized and perl will raise a warning
-      unless ($quotes_list[0] && $quotes{$security,'success'})
+      unless ($quotes{$security,'success'})
       {
       	print "Lookup of $quotesrc/$security failed";
 	# Show the error if and only if there is an error message
@@ -196,11 +191,6 @@ foreach $acct (@acctlist)
 
       if ($price)
       {
-	# if and only if the price is served by Yahoo Europe AND is dealt on
-	# the London stock market then the price will be given in pence. So to
-	# convert this into GBP divide the price by 100 before storing the new price.
-	$price/=100 if (($security=~/.L$/i) && ($quotesrc eq 'YAHOO_EUROPE'));
-
         print "$name: $security $prodname last price = $price at $dayte\n";
         # This || construction will store the price if its not already 
         # stored (in the 28 hour period surrounding "dayte")

@@ -4,12 +4,9 @@ bin_SCRIPTS = gnc-prices
 perllibdir = ${GNC_LIBDIR}/perl
 
 perlsharedir = ${GNC_SHAREDIR}/perl
-perlshare_DATA = \
-  Quote.pm
 
 EXTRA_DIST = \
   .cvsignore \
-  Quote.pm \
   Quote_example.pl \
   gnc-prices-2.in \
   gnc-prices.in \
