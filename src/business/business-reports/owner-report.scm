@@ -295,8 +295,9 @@
 			  (lambda () #f) #f owner-type))
 
   (gnc:register-inv-option
-   (gnc:make-account-list-limited-option acct-string acct-string "" ""
-			    (lambda () '()) #f #f acct-type-list))
+   (gnc:make-account-sel-limited-option owner-page acct-string "w"
+					(N_ "The account to search for transactions")
+					#f #f acct-type-list))
 
   (gnc:options-add-report-date!
    gnc:*report-options* gnc:pagename-general
@@ -467,17 +468,13 @@
 	 (table '())
 	 (orders '())
 	 (query (gnc:malloc-query))
-	 (account-list (opt-val acct-string acct-string))
-	 (account #f)
+	 (account (opt-val owner-page acct-string))
 	 (owner (opt-val owner-page owner-string))
 	 (report-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
 	 (title #f)
 	 (book (gnc:get-current-book)))	;XXX Grab this from elsewhere
-
-    (if (not (null? account-list))
-	(set! account (car account-list)))
 
     (if (gnc:owner-is-valid? owner)
 	(begin
@@ -591,10 +588,10 @@
 (define (owner-report-create-internal report-name owner account)
   (let* ((options (gnc:make-report-options report-name))
 	 (owner-op (gnc:lookup-option options owner-page owner-string))
-	 (account-op (gnc:lookup-option options acct-string acct-string)))
+	 (account-op (gnc:lookup-option options owner-page acct-string)))
 
     (gnc:option-set-value owner-op owner)
-    (gnc:option-set-value account-op (list account))
+    (gnc:option-set-value account-op account)
     (gnc:make-report report-name options)))
 
 (define (owner-report-create owner account)

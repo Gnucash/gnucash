@@ -22,6 +22,14 @@
 	* configure.in: remove src/account-dialog/Makefile
 
 	* move gnc-account-sel.[ch] from src/gnome to src/gnome-utils
+
+	* app-utils/options.scm -- define new account-sel options that let you
+	  "select" an account.  You can only select one account using this option.
+	* app-utils/app-utils.scm -- export new account-sel option types
+	* gnome-utils/dialog-options.c -- use the GNCAccountSel to implement
+	  the account-sel option.
+	* business/business-reports/*.scm -- change to using the new account-sel
+	  option type.  Fixes bug #96137
 	
 2002-10-19  Christian Stimming  <stimming@tuhh.de>
 

@@ -62,6 +62,8 @@
 (export gnc:date-option-relative-time)
 (export gnc:make-account-list-option)
 (export gnc:make-account-list-limited-option)
+(export gnc:make-account-sel-option)
+(export gnc:make-account-sel-limited-option)
 (export gnc:multichoice-list-lookup)
 (export gnc:make-multichoice-option)
 (export gnc:make-multichoice-callback-option)

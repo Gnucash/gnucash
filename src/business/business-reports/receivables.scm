@@ -34,7 +34,7 @@
 (use-modules (gnucash report aging))
 (use-modules (gnucash report standard-reports))
 
-(define acc-page (N_ "Account"))
+(define acc-page gnc:pagename-general)
 (define this-acc (N_ "Receivables Account"))
 
 (define (options-generator)    
@@ -44,48 +44,20 @@
             (gnc:register-option options new-option))))
 
     (add-option
-     (gnc:make-account-list-limited-option
+     (gnc:make-account-sel-limited-option
       acc-page this-acc
-      "" ""
-      (lambda () '())
-      #f
-      #f
-      '(receivable)))
+      (N_ "The receivables account you wish to examine") "w"
+      #f #f '(receivable)))
 
     (aging-options-generator options)))
 
-(define (find-first-receivable-account)
-  (define (find-first-receivable group num-accounts index)
-    (if (>= index num-accounts)
-	#f
-	(let* ((this-account (gnc:group-get-account group index))
-	       (account-type (gw:enum-<gnc:AccountType>-val->sym
-			      (gnc:account-get-type this-account) #f)))
-	  (if (eq? account-type 'receivable)
-	      this-account
-	      (find-first-receivable group num-accounts (+ index 1))))))
-
-  (let* ((current-group (gnc:get-current-group))
-	 (num-accounts (gnc:group-get-num-accounts
-			current-group)))
-    (if (> num-accounts 0)
-	(find-first-receivable current-group num-accounts 0)
-	#f)))
-
 (define (receivables-renderer report-obj)
-
-  (define (get-op section name)
-    (gnc:lookup-option (gnc:report-options report-obj) section name))
-  
   (define (op-value section name)
-    (gnc:option-value (get-op section name)))
+    (gnc:option-value
+     (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
   (let* ((receivables-account (op-value acc-page this-acc)))
     (gnc:debug "receivables-account" receivables-account)
-
-    (if (null? receivables-account)
-	(set! receivables-account (find-first-receivable-account))
-	(set! receivables-account (car receivables-account)))
 
     (aging-renderer report-obj receivables-account #t)))
 
@@ -102,7 +74,7 @@
   (let* ((options (gnc:make-report-options (N_ "Receivable Aging")))
 	 (acct-op (gnc:lookup-option options acc-page this-acc)))
 
-    (gnc:option-set-value acct-op (list acct))
+    (gnc:option-set-value acct-op acct)
     (gnc:make-report "Receivable Aging" options)))
 
 (define (gnc:receivables-report-create-internal

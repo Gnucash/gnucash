@@ -631,6 +631,106 @@
      validator
      (cons multiple-selection acct-type-list) #f #f #f)))
 
+;; Just like gnc:make-account-sel-limited-option except it
+;; does not limit the types of accounts that are available
+;; to the user.
+(define (gnc:make-account-sel-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-getter
+         value-validator)
+
+  (gnc:make-account-sel-limited-option
+   section name sort-tag documentation-string
+   default-getter value-validator '()))
+
+;; account-sel options use the option-data as a pair; the car is
+;; ignored, the cdr is a list of account-types. If the cdr is an empty
+;; list, then all account types are shown.  Internally, the value is
+;; always a guid.  Externally, both guids and account pointers may be
+;; used to set the value of the option. The option always returns the
+;; "current" account pointer.
+(define (gnc:make-account-sel-limited-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-getter
+         value-validator
+	 acct-type-list)
+
+  (define (convert-to-guid item)
+    (if (string? item)
+        item
+        (gnc:account-get-guid item)))
+
+  (define (convert-to-account item)
+    (if (string? item)
+        (gnc:account-lookup item (gnc:get-current-book))
+        item))
+
+  (define (find-first-account)
+    (define (find-first group num-accounts index)
+      (if (>= index num-accounts)
+	  #f
+	  (let* ((this-account (gnc:group-get-account group index))
+		 (account-type (gw:enum-<gnc:AccountType>-val->sym
+				(gnc:account-get-type this-account) #f)))
+	    (if (if (null? acct-type-list) #t (member account-type acct-type-list))
+		this-account
+		(find-first group num-accounts (+ index 1))))))
+
+    (let* ((current-group (gnc:get-current-group))
+	   (num-accounts (gnc:group-get-num-accounts
+			  current-group)))
+      (if (> num-accounts 0)
+	  (find-first current-group num-accounts 0)
+	  #f)))
+
+  (define (get-default)
+    (if default-getter
+	(default-getter)
+	(find-first-account)))
+
+  (let* ((option (convert-to-guid (get-default)))
+         (option-set #f)
+         (getter (lambda () (convert-to-account
+			     (if option-set
+				 option
+				 (get-default)))))
+         (value->string (lambda ()
+                          (string-append
+                           "'" (gnc:value->string (if option-set option #f)))))
+         (validator
+          (if (not value-validator)
+              (lambda (account) (list #t account))
+              (lambda (account)
+                (value-validator (convert-to-account account))))))
+    (gnc:make-option
+     section name sort-tag 'account-sel documentation-string getter
+     (lambda (account)
+       (if (not account) (set! account (get-default)))
+       (set! account (convert-to-account account))
+       (let* ((result (validator account))
+	      (valid (car result))
+	      (value (cadr result)))
+	 (if valid
+	     (begin
+	       (set! option (convert-to-guid value))
+	       (set! option-set #t))
+	     (gnc:error "Illegal account value set"))))
+     (lambda () (convert-to-account (get-default)))
+     (gnc:restore-form-generator value->string)
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+	 (if (and v (string? v))
+	     (set! value v))))
+     validator
+     (cons #f acct-type-list) #f #f #f)))
+
 (define (gnc:multichoice-list-lookup list item )
   (cond
    ((null? list) #f)

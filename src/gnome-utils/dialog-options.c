@@ -23,12 +23,14 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <g-wrap-wct.h>
 
 #include "dialog-options.h"
 #include "dialog-utils.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
 #include "global-options.h"
+#include "gnc-account-sel.h"
 #include "gnc-account-tree.h"
 #include "gnc-commodity-edit.h"
 #include "gnc-general-select.h"
@@ -41,6 +43,7 @@
 #include "guile-util.h"
 #include "messages.h"
 #include "option-util.h"
+
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -1830,6 +1833,41 @@ gnc_option_set_ui_widget_account_list (GNCOption *option, GtkBox *page_box,
 }
 
 static GtkWidget *
+gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkBox *page_box,
+				  GtkTooltips *tooltips,
+				  char *name, char *documentation,
+				  /* Return values */
+				  GtkWidget **enclosing, gboolean *packed)
+{
+  GtkWidget *value;
+  GtkWidget *label;
+  GList *acct_type_list;
+  char * colon_name;
+
+  colon_name = g_strconcat(name, ":", NULL);
+  label = gtk_label_new(colon_name);
+  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+  g_free(colon_name);
+
+  acct_type_list = gnc_option_get_account_type_list(option);
+  value = gnc_account_sel_new();
+  gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(value), acct_type_list);
+
+  gtk_signal_connect(GTK_OBJECT(gnc_account_sel_gtk_entry(GNC_ACCOUNT_SEL(value))),
+		     "changed",
+		     GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);
+
+  gnc_option_set_widget (option, value);
+  gnc_option_set_ui_value(option, TRUE);
+
+  *enclosing = gtk_hbox_new(FALSE, 5);
+  gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
+  gtk_widget_show_all(*enclosing);
+  return value;
+}
+
+static GtkWidget *
 gnc_option_set_ui_widget_list (GNCOption *option, GtkBox *page_box,
 				  GtkTooltips *tooltips,
 				  char *name, char *documentation,
@@ -2287,6 +2325,25 @@ gnc_option_set_ui_value_account_list (GNCOption *option, gboolean use_default,
 }
 
 static gboolean
+gnc_option_set_ui_value_account_sel (GNCOption *option, gboolean use_default,
+				     GtkWidget *widget, SCM value)
+{
+  Account *acc = NULL;
+
+  if (value != SCM_BOOL_F) {
+    if (!gw_wcp_p(value))
+      scm_misc_error("gnc_optoin_set_ui_value_account_sel",
+		     "Option Value not a gw:wcp.", value);
+      
+    acc = gw_wcp_get_ptr(value);
+  }
+	
+  gnc_account_sel_set_account (GNC_ACCOUNT_SEL(widget), acc);
+
+  return FALSE;
+}
+
+static gboolean
 gnc_option_set_ui_value_list (GNCOption *option, gboolean use_default,
 				 GtkWidget *widget, SCM value)
 {
@@ -2580,6 +2637,22 @@ gnc_option_get_ui_value_account_list (GNCOption *option, GtkWidget *widget)
 }
 
 static SCM
+gnc_option_get_ui_value_account_sel (GNCOption *option, GtkWidget *widget)
+{
+  GNCAccountSel *gas;
+  Account* acc;
+  SCM result;
+
+  gas = GNC_ACCOUNT_SEL(widget);
+  acc = gnc_account_sel_get_account (gas);
+
+  if (!acc)
+    return SCM_BOOL_F;
+
+  return gw_wcp_assimilate_ptr(acc, gh_eval_str("<gnc:Account*>"));
+}
+
+static SCM
 gnc_option_get_ui_value_list (GNCOption *option, GtkWidget *widget)
 {
   SCM result;
@@ -2689,6 +2762,8 @@ static void gnc_options_initialize_options (void)
       gnc_option_set_ui_value_date, gnc_option_get_ui_value_date },
     { "account-list", gnc_option_set_ui_widget_account_list,
       gnc_option_set_ui_value_account_list, gnc_option_get_ui_value_account_list },
+    { "account-sel", gnc_option_set_ui_widget_account_sel,
+      gnc_option_set_ui_value_account_sel, gnc_option_get_ui_value_account_sel },
     { "list", gnc_option_set_ui_widget_list,
       gnc_option_set_ui_value_list, gnc_option_get_ui_value_list },
     { "number-range", gnc_option_set_ui_widget_number_range,

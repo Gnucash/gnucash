@@ -34,7 +34,7 @@
 (use-modules (gnucash report aging))
 (use-modules (gnucash report standard-reports))
 
-(define acc-page (N_ "Account"))
+(define acc-page gnc:pagename-general)
 (define this-acc (N_ "Payable Account"))
 
 (define (options-generator)    
@@ -44,49 +44,20 @@
             (gnc:register-option options new-option))))
 
     (add-option
-     (gnc:make-account-list-limited-option
+     (gnc:make-account-sel-limited-option
       acc-page this-acc
-      "" ""
-      (lambda () '())
-      #f
-      #f
-      '(payable)))
+      (N_ "The payable account you wish to examine") "zz"
+      #f #f '(payable)))
 
     (aging-options-generator options)))
 
-(define (find-first-payable-account)
-  (define (find-first-payable group num-accounts index)
-    (if (>= index num-accounts)
-	#f
-	(let* ((this-account (gnc:group-get-account group index))
-	       (account-type (gw:enum-<gnc:AccountType>-val->sym
-			      (gnc:account-get-type this-account) #f)))
-	  (if (eq? account-type 'payable)
-	      this-account
-	      (find-first-payable group num-accounts (+ index 1))))))
-
-  (let* ((current-group (gnc:get-current-group))
-	 (num-accounts (gnc:group-get-num-accounts
-			current-group)))
-    (if (> num-accounts 0)
-	(find-first-payable current-group num-accounts 0)
-	#f)))
-
 (define (payables-renderer report-obj)
+  (define (opt-val section name)
+    (gnc:option-value
+     (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
-  (define (get-op section name)
-    (gnc:lookup-option (gnc:report-options report-obj) section name))
-  
-  (define (op-value section name)
-    (gnc:option-value (get-op section name)))
-
-  (let* ((payables-account (op-value acc-page this-acc)))
+  (let ((payables-account (opt-val acc-page this-acc)))
     (gnc:debug "payables-account" payables-account)
-
-    (if (null? payables-account)
-	(set! payables-account (find-first-payable-account))
-	(set! payables-account (car payables-account)))
-
     (aging-renderer report-obj payables-account #f)))
 
 ;; Here we define the actual report with gnc:define-report
@@ -102,7 +73,7 @@
   (let* ((options (gnc:make-report-options (N_ "Payable Aging")))
 	 (acct-op (gnc:lookup-option options acc-page this-acc)))
 
-    (gnc:option-set-value acct-op (list acct))
+    (gnc:option-set-value acct-op acct)
     (gnc:make-report "Payable Aging" options)))
 
 (define (gnc:payables-report-create-internal
