@@ -418,6 +418,7 @@ AC_OUTPUT(
 	  po/Makefile.in
           rpm/Makefile
           src/Makefile
+          src/calculation/Makefile 
           src/doc/Makefile
           src/engine/Makefile
           src/engine/sql/Makefile
