@@ -414,6 +414,7 @@ Bob Drzyzgula <bob@mostly.com> for budgeting design notes
 Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
+Alexandru Harsanyi <haral@codec.ro> for misc core dumps & lockups.
 Jon K}re Hellan <jk@isdn-a33.itea.ntnu.no> misc core dump fixes
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
