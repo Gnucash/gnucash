@@ -45,12 +45,19 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
+/*
+ * Point where preferences switch control method from a set of
+ * notebook tabs to a list.
+ */
+#define MAX_TAB_COUNT 4
+
 static GHashTable *optionTable = NULL;
 
 struct gnc_option_win
 {
   GtkWidget  * container;
   GtkWidget  * notebook;
+  GtkWidget  * page_list;
 
   gboolean toplevel;
 
@@ -677,7 +684,7 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
   frame = gtk_frame_new (name);
 
   /* Create the button box */
-  box = gtk_vbutton_box_new ();
+  box = gtk_hbox_new (FALSE, 5);
   gtk_container_add (GTK_CONTAINER (frame), box);
 
   /* Create the tooltips */
@@ -1065,9 +1072,10 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
   GNCOption *option;
   GtkWidget *page_label;
   GtkWidget *page_content_box;
+  GtkWidget *listitem;
   gint num_options;
   const char *name;
-  gint i;
+  gint i, page_count;
 
   name = gnc_option_section_name(section);
   if (!name)
@@ -1085,7 +1093,11 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
   
   gtk_notebook_append_page(GTK_NOTEBOOK(propertybox->notebook), 
                            page_content_box, page_label);
-  
+
+  listitem = gtk_list_item_new_with_label(_(name));
+  gtk_widget_show(listitem);
+  gtk_container_add(GTK_CONTAINER(propertybox->page_list), listitem);
+
   num_options = gnc_option_section_num_options(section);
   for (i = 0; i < num_options; i++)
   {
@@ -1093,9 +1105,17 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     gnc_options_dialog_add_option(page_content_box, option,
                                   propertybox->tips);
   }
-  
-  return gtk_notebook_page_num(GTK_NOTEBOOK(propertybox->notebook),
-                               page_content_box);
+
+  page_count = gtk_notebook_page_num(GTK_NOTEBOOK(propertybox->notebook),
+				     page_content_box);
+
+  if (page_count > MAX_TAB_COUNT - 1) { /* Convert 1-based -> 0-based */
+    gtk_widget_show(propertybox->page_list);
+    gtk_notebook_set_show_tabs(GTK_NOTEBOOK(propertybox->notebook), FALSE);
+    gtk_notebook_set_show_border(GTK_NOTEBOOK(propertybox->notebook), FALSE);
+  }
+
+  return(page_count);
 }
 
 
@@ -1148,9 +1168,6 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
       default_page = page;
   }
 
-  if (default_page >= 0)
-    gtk_notebook_set_page(GTK_NOTEBOOK(propertybox->notebook), default_page);
-
   if (default_section_name != NULL)
     free(default_section_name);
 
@@ -1168,6 +1185,13 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
     }
   }
 
+  if (default_page >= 0) {
+    gtk_notebook_set_page(GTK_NOTEBOOK(propertybox->notebook), default_page);
+    gtk_list_select_item(GTK_LIST(propertybox->page_list), default_page);
+  } else {
+    /* GTKList doesn't default to selecting the first item. */
+    gtk_list_select_item(GTK_LIST(propertybox->page_list), 0);
+  }
   gnc_options_dialog_clear_changed(propertybox->container);
 }
 
@@ -1256,10 +1280,25 @@ gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data)
   gnc_options_dialog_changed_internal (win->container);
 }
 
+static void
+gnc_options_dialog_list_select_cb(GtkWidget * list, GtkWidget * item,
+				  gpointer data)
+{
+  GNCOptionWin * win = data;
+  gint index;
+
+  g_return_if_fail (list);
+  g_return_if_fail (win);
+
+  index = gtk_list_child_position(GTK_LIST(list), item);
+  gtk_notebook_set_page(GTK_NOTEBOOK(win->notebook), index);
+}
+
 GNCOptionWin *
 gnc_options_dialog_new(gboolean make_toplevel, gchar *title) {
   GNCOptionWin * retval = g_new0(GNCOptionWin, 1);
   GtkWidget * vbox;
+  GtkWidget * hbox;
   GtkWidget * buttonbox;
 
   GtkWidget * ok_button=NULL;
@@ -1271,6 +1310,7 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title) {
   retval->toplevel = make_toplevel;
 
   vbox     =  gtk_vbox_new(FALSE, 5);
+  hbox     =  gtk_hbox_new(FALSE, 5);
 
   if(make_toplevel) {
     retval->container = gtk_window_new(GDK_WINDOW_TOPLEVEL);
@@ -1340,9 +1380,16 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title) {
   gtk_box_pack_start(GTK_BOX(buttonbox), help_button, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(buttonbox), reset_button, TRUE, TRUE, 0);
 
+  retval->page_list = gtk_list_new();
+  gtk_signal_connect(GTK_OBJECT(retval->page_list), "select_child",
+                     GTK_SIGNAL_FUNC(gnc_options_dialog_list_select_cb),
+                     retval);
+
   retval->notebook = gtk_notebook_new();
-  gtk_box_pack_start(GTK_BOX(vbox), retval->notebook, TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(buttonbox), FALSE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox), retval->page_list, TRUE, TRUE, 5);
+  gtk_box_pack_start(GTK_BOX(hbox), retval->notebook, TRUE, TRUE, 5);
+  gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 5);
+  gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(buttonbox), FALSE, TRUE, 5);
 
   if(make_toplevel) {
     gtk_container_add(GTK_CONTAINER(retval->container), vbox);
@@ -1353,6 +1400,9 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title) {
   if(make_toplevel) {
     gtk_widget_show_all(retval->container);
   }
+
+  /* Hide list until there are "too many" tabs. */
+  gtk_widget_hide(retval->page_list);
   
   return retval;
 }
