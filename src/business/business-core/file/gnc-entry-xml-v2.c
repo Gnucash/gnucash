@@ -223,7 +223,7 @@ struct entry_pdata
   Account *acc;
 };
 
-static gboolean
+static inline gboolean
 set_string(xmlNodePtr node, GncEntry* entry,
            void (*func)(GncEntry *entry, const char *txt))
 {
@@ -235,19 +235,18 @@ set_string(xmlNodePtr node, GncEntry* entry,
   return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_timespec(xmlNodePtr node, GncEntry* entry,
            void (*func)(GncEntry *entry, Timespec ts))
 {
-  Timespec *ts = dom_tree_to_timespec (node);
-  g_return_val_if_fail(ts, FALSE);
+  Timespec ts = dom_tree_to_timespec (node);
+  g_return_val_if_fail(is_valid_timespec(ts), FALSE);
     
-  func(entry, *ts);
-  g_free(ts);
+  func(entry, ts);
   return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_numeric(xmlNodePtr node, GncEntry* entry,
            void (*func)(GncEntry *entry, gnc_numeric num))
 {
@@ -259,7 +258,7 @@ set_numeric(xmlNodePtr node, GncEntry* entry,
   return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_boolean(xmlNodePtr node, GncEntry* entry,
 	    void (*func)(GncEntry *entry, gboolean val))
 {
@@ -271,7 +270,7 @@ set_boolean(xmlNodePtr node, GncEntry* entry,
     return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_account(xmlNodePtr node, struct entry_pdata *pdata,
 	    void (*func)(GncEntry *entry, Account *acc))
 {
@@ -291,7 +290,7 @@ set_account(xmlNodePtr node, struct entry_pdata *pdata,
     return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_taxtable (xmlNodePtr node, struct entry_pdata *pdata,
 	      void (*func)(GncEntry *entry, GncTaxTable *taxtable))
 {

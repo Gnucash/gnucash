@@ -114,7 +114,7 @@ struct order_pdata
   GNCBook *book;
 };
 
-static gboolean
+static inline gboolean
 set_string(xmlNodePtr node, GncOrder* order,
            void (*func)(GncOrder *order, const char *txt))
 {
@@ -127,20 +127,18 @@ set_string(xmlNodePtr node, GncOrder* order,
   return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_timespec(xmlNodePtr node, GncOrder* order,
            void (*func)(GncOrder *order, Timespec ts))
 {
-  Timespec* ts = dom_tree_to_timespec(node);
-  g_return_val_if_fail(ts, FALSE);
+  Timespec ts = dom_tree_to_timespec(node);
+  g_return_val_if_fail(is_valid_timespec(ts), FALSE);
     
-  func(order, *ts);
-
-  g_free(ts);
+  func(order, ts);
   return TRUE;
 }
 
-static gboolean
+static inline gboolean
 order_guid_handler (xmlNodePtr node, gpointer order_pdata)
 {
     struct order_pdata *pdata = order_pdata;
