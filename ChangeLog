@@ -1,3 +1,17 @@
+2005-04-03  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-gnome-utils.c: Have gnucash read a private
+	RC file.  This makes it easy to apply styles to entire classes of
+	widgets in gnucsah without affecting any other application.
+
+	* src/gnome-utils/gnc-tree-view-account.c:
+	* src/gnome-utils/gnc-tree-view-commodity.c:
+	* src/gnome-utils/gnc-tree-view-price.c: Name a couple of new
+	widgets to make it easier to apply styles to them.
+
+	* doc/gtkrc-2.0.gnucash: Provide a sample RC file for gnucash.
+	This file needs work.
+
 2005-03-25  Neil Williams <linux@codehelp.co.uk>
 	* src/backend/qsf/qsf-backend.c: Support for
 	multiple references in the same entity.

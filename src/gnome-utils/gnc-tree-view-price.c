@@ -414,7 +414,7 @@ gnc_tree_view_price_new (QofBook *book)
 
   ENTER(" ");
   /* Create our view */
-  view = g_object_new (GNC_TYPE_TREE_VIEW_PRICE, NULL);
+  view = g_object_new (GNC_TYPE_TREE_VIEW_PRICE, "name", "price_tree", NULL);
   tree_view = GTK_TREE_VIEW (view);
 
   /* Create/get a pointer to the existing model for this set of books. */

@@ -380,7 +380,7 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 
   ENTER(" ");
   /* Create our view */
-  account_view = g_object_new (GNC_TYPE_TREE_VIEW_ACCOUNT, NULL);
+  account_view = g_object_new (GNC_TYPE_TREE_VIEW_ACCOUNT, "name", "account_tree", NULL);
   tree_view = GTK_TREE_VIEW (account_view);
 
   /* Create/get a pointer to the existing model for this set of books. */

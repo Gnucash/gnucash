@@ -103,6 +103,20 @@ gnc_gnome_locate_ui_file (const char *name)
   return fullname;
 }
 
+static void
+gnc_gtk_add_rc_file (void)
+{
+  const gchar *var;
+  gchar *str;
+
+  var = g_get_home_dir ();
+  if (var) {
+    str = g_build_filename (var, ".gtkrc-2.0.gnucash", NULL);
+    gtk_rc_add_default_file (str);
+    g_free (str);
+  }
+}
+
 SCM
 gnc_gnome_init (const char * arg0,
                 const char * progname,
@@ -131,6 +145,7 @@ gnc_gnome_init (const char * arg0,
 
   restargc = argv_length (restargv);
 
+  gnc_gtk_add_rc_file();
   gnucash_program =
     gnome_program_init("gnucash", version, LIBGNOMEUI_MODULE,
 		       restargc, restargv,
