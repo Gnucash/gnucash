@@ -60,28 +60,30 @@ CREATE INDEX gncEntry_acc_idx ON gncEntry (accountGuid);
 CREATE INDEX gncEntry_trn_idx ON gncEntry (transGuid);
 
 -- populate with some bogus data
-INSERT INTO gncAccount (accountGuid, accountName, type, description) VALUES
-    ('9101752f77d6615dcdc0fffe24f0de2',
-     'Swipe Trading Account', 
-     'STOCK',
-     'Swipe Brokers Margin Account');
-INSERT INTO gncAccount (accountGuid, accountName, type, description) VALUES
-    ('0d7c1819693c85c16d5556b37f6caf9d',
-     'Stock Dividends &amp; Distributions',
-     'BANK',
-     'Stock Dividends &amp; Distributions');
-
-INSERT INTO gncTransaction (transGuid, date_entered, 
-                date_posted, num, description) VALUES
-    ('2ebc806e72c17bdc3c2c4e964b82eff8',
-     '1998-07-01 11:00:00.345678 -0500',
-     '1998-07-02 11:00:00.678945 -0500',
-     '101aaa',
-     'Interest at 3.5%');
-
-INSERT INTO gncEntry (entryGuid, memo, reconciled, amountNum,valueNum) VALUES
-    ('d56a1146e414a30d6f2e251af2075f71',
-     'this is a split memo',
-     'Y',
-     700000,
-     700000);
+-- INSERT INTO gncAccount (accountGuid, parentGuid, accountName, type, description) VALUES
+--     ('9101752f77d6615dcdc0fffe24f0de24',
+--      '00000000000000000000000000000000',
+--      'Swipe Trading Account', 
+--      'STOCK',
+--      'Swipe Brokers Margin Account');
+-- INSERT INTO gncAccount (accountGuid, parentGuid, accountName, type, description) VALUES
+--     ('0d7c1819693c85c16d5556b37f6caf9d',
+--      '00000000000000000000000000000000',
+--      'Stock Dividends &amp; Distributions',
+--      'BANK',
+--      'Stock Dividends &amp; Distributions');
+-- 
+-- INSERT INTO gncTransaction (transGuid, date_entered, 
+--                 date_posted, num, description) VALUES
+--     ('2ebc806e72c17bdc3c2c4e964b82eff8',
+--      '1998-07-01 11:00:00.345678 -0500',
+--      '1998-07-02 11:00:00.678945 -0531',
+--      '101aaa',
+--      'Interest at 3.5%');
+-- 
+-- INSERT INTO gncEntry (entryGuid, memo, reconciled, amountNum,valueNum) VALUES
+--     ('d56a1146e414a30d6f2e251af2075f71',
+--      'this is a split memo',
+--      'Y',
+--      700000,
+--      700000);

@@ -24,57 +24,40 @@ typedef enum {
 
 typedef struct _builder sqlBuilder;
 
-extern sqlBuilder * sqlBuilder_new(void);
-extern void sqlBuilder_destroy (sqlBuilder *);
+sqlBuilder * sqlBuilder_new(void);
+void sqlBuilder_destroy (sqlBuilder *);
 
 /* Start building a new SQL query on table 'tablename' 
  * Previous query is erased.
  */
-extern void sqlBuild_Table (sqlBuilder *b,
-                           const char *tablename,
-                           sqlBuild_QType qtype);
+void sqlBuild_Table (sqlBuilder *b,
+                     const char *tablename,
+                     sqlBuild_QType qtype);
 
 
 /* Set tag-value pairs.  Each of these adds the indicated
  * tag and value to an UPDATE or INSERT statement.  For SELECT
  * statements, val may be NULL (and is ignored in any case).
  */
-extern void sqlBuild_Set_Str (sqlBuilder *b,
-                              const char *tag,
-                              const char *val);
-
-extern void sqlBuild_Set_Char (sqlBuilder *b,
-                              const char *tag,
-                              char val);
-
-extern void sqlBuild_Set_GUID (sqlBuilder *b,
-                               const char *tag,
-                               const GUID *val);
-
-extern void sqlBuild_Set_Date (sqlBuilder *b,
-                               const char *tag,
-                               Timespec val);
-
-extern void sqlBuild_Set_Int64 (sqlBuilder *b,
-                               const char *tag,
-                               gint64 val);
+void sqlBuild_Set_Str   (sqlBuilder *b, const char *tag, const char *val);
+void sqlBuild_Set_Char  (sqlBuilder *b, const char *tag, char val);
+void sqlBuild_Set_GUID  (sqlBuilder *b, const char *tag, const GUID *val);
+void sqlBuild_Set_Date  (sqlBuilder *b, const char *tag, Timespec val);
+void sqlBuild_Set_Int64 (sqlBuilder *b, const char *tag, gint64 val);
 
 
 /* build the update 'where' clause */
 /* typically, the primary tag is used in the where clauses */
 /* this where clause is used for both SELECT and UPDATE statements */
-extern void sqlBuild_Where_Str (sqlBuilder *b,
-                                const char *tag,
-                                const char *val);
-extern void sqlBuild_Where_GUID (sqlBuilder *b,
-                                const char *tag,
-                                const GUID *val);
+
+void sqlBuild_Where_Str  (sqlBuilder *b, const char *tag, const char *val);
+void sqlBuild_Where_GUID (sqlBuilder *b, const char *tag, const GUID *val);
 
 
 /* Get the completed query string back.  This query string is
  * probably general enough to work with almost any SQL db, 
  * I beleive. */
-extern const char *sqlBuild_Query (sqlBuilder *b);
+const char *sqlBuild_Query (sqlBuilder *b);
 
 
 #endif /* __SQL_BUILDER_H__ */

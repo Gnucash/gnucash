@@ -77,7 +77,10 @@ typedef struct timespec64 Timespec;
 
 /** Prototypes ******************************************************/
 
-gboolean timespec_equal(const Timespec *ta, const Timespec *tb);
+/* The timespec_cmp() routine returns 0 if ta equals tb, 
+ *     -1 if ta<tb, and +1 if ta>tb 
+ */
+int timespec_cmp (const Timespec *ta, const Timespec *tb);
 
 void setDateFormat(DateFormat df);
 
@@ -139,8 +142,9 @@ Timespec gnc_dmy2timespec (int day, int month, int year);
 /* Same as gnc_dmy2timespec, but last second of the day */
 Timespec gnc_dmy2timespec_end (int day, int month, int year);
 
-/* convert ISO-8601 style date/time string to Timespec 
- * for example: 1998-07-17 11:00:00.68-05 
+/* The gnc_iso8601_to_timespec() routine
+ * converts an ISO-8601 style date/time string to Timespec.
+ * For example: 1998-07-17 11:00:00.68-05 
  * is 680 milliseconds after 11 o'clock, central daylight time 
  */
 Timespec gnc_iso8601_to_timespec(const char *);

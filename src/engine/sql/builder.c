@@ -5,11 +5,14 @@
  * FUNCTION:
  * generic postgres backend query builder
  * compiles data types into sql queries
-
+ *
+ * Note: Postgres documentation states that the 
+ * maximum length of a query is 8192 bytes, and that
+ * longer queries are ignored ...
+ *
  * TBD hack alert XXX FIXME:
  * -- check for buffer overflow at end of each setter
  * -- write escape functions so that no char strings 
-      have single quotes that mess up sql ...
  */
 
 #define _GNU_SOURCE
@@ -68,8 +71,10 @@ sqlBuilder_new (void)
 void
 sqlBuilder_destroy (sqlBuilder*b)
 {
+   if (!b) return;
    g_free (b->tag_base);
    g_free (b->val_base);
+   g_free (b);
 }
 
 /* ================================================ */
@@ -192,15 +197,28 @@ sqlBuild_Set_GUID (sqlBuilder *b, const char *tag, const GUID *val)
 void
 sqlBuild_Set_Date (sqlBuilder *b, const char *tag, Timespec ts)
 {
+  int tz_hour, tz_min;
+  char cyn;
   char buf[512];
   time_t tmp;
   struct tm parsed;
   tmp = ts.tv_sec;
   localtime_r(&tmp, &parsed);
-  snprintf (buf, 512, "%4d-%02d-%02d %02d:%02d:%02d.%06ld %02ld",
+
+  tz_hour = timezone/3600;
+  tz_min = (timezone - 3600*tz_hour)/60;
+  if (0>tz_min) { tz_min +=60; tz_hour --; }
+
+  /* we also have to print the sign by hand, to work around a bug 
+   * in the glibc 2.1.3 printf (where %+02d fails to zero-pad)
+   */
+  cyn = '+';
+  if (0>tz_hour) { cyn = '-'; tz_hour = -tz_hour; }
+  
+  snprintf (buf, 512, "%4d-%02d-%02d %02d:%02d:%02d.%06ld %c%02d%02d",
        parsed.tm_year+1900, parsed.tm_mon+1, parsed.tm_mday, 
        parsed.tm_hour, parsed.tm_min, parsed.tm_sec,
-       ts.tv_nsec/1000, timezone/3600);
+       ts.tv_nsec/1000, cyn, tz_hour, tz_min);
   sqlBuild_Set_Str (b, tag, buf);
 }
 

@@ -17,13 +17,18 @@ struct _pgend {
    /* sql query compiler */
    sqlBuilder *builder;
 
-   /* postgres-specific conection data */
+   /* postgres-specific connection data */
+   char * hostname;
+   char * portno;
    char * dbName;
    PGconn * connection;
 
    /* scratch space for constructing queries */ 
    int bufflen;
    char *buff;
+
+   /* counter used to nest callback disables */
+   int nest_count;
 };
 
 /*

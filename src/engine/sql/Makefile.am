@@ -6,10 +6,12 @@ lib_LTLIBRARIES = libgnc_postgres.la
 
 libgnc_postgres_la_SOURCES = \
   builder.c \
+  gncquery.c \
   PostgresBackend.c 
 
 
 EXTRA_DIST = \
+  builder.h \
   PostgresBackend.h \
   README \
   demo.c \

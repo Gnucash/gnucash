@@ -1,8 +1,9 @@
+
+divert(-1)
 changecom(`/*', `*/')
 
 /* data dictionary for the gnucash tables */
 /* sql table description and manipulation macros */
-
 
 define(`account', `gncAccount, Account,
        accountName,    , char *, xaccAccountGetName(ptr),
@@ -29,10 +30,17 @@ define(`split', `gncEntry, Split,
        entryGUID,    KEY, GUID *,   xaccSplitGetGUID(ptr),
        ')
 
+/* note that for the date_entered, we use the sql database      */
+/* notion of 'current time'. This should help prevent clock     */
+/* skew problems between different simultaneous users           */
+/* Note also this means that the table entry is not             */
+/* date_entered,    , Timespec, xaccTransRetDateEnteredTS(ptr), */
+/* as one might have guessed                                    */
+
 define(`transaction', `gncTransaction, Transaction,
        num,            , char *,   xaccTransGetNum(ptr),
        description,    , char *,   xaccTransGetDescription(ptr),
-       date_entered,   , Timespec, xaccTransRetDateEnteredTS(ptr),
+       date_entered,   , char *,   "CURRENT",
        date_posted,    , Timespec, xaccTransRetDatePostedTS(ptr),
        transGUID,   KEY, GUID *,   xaccTransGetGUID(ptr),
        ')
@@ -168,7 +176,7 @@ pgendCompareOne`'xacc_type($@)`'Only (PGBackend *be,
 ')
 
 /* ------------------------------------------------------- */
-
+divert
 store_one_only(account)
 store_one_only(transaction)
 store_one_only(split)

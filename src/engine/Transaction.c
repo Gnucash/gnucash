@@ -219,8 +219,8 @@ xaccSplitEqual(const Split *sa, const Split *sb,
   if(kvp_frame_compare(sa->kvp_data, sb->kvp_data) != 0) return FALSE;
 
   if(sa->reconciled != sb->reconciled) return FALSE;
-  if(!timespec_equal(&(sa->date_reconciled),
-                     &(sb->date_reconciled))) return FALSE;
+  if(timespec_cmp(&(sa->date_reconciled),
+                  &(sb->date_reconciled))) return FALSE;
 
   if(!gnc_numeric_eq(sa->damount, sb->damount)) return FALSE;
   if(!gnc_numeric_eq(sa->value, sb->value)) return FALSE;
@@ -702,11 +702,11 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
     if(!guid_equal(&(ta->guid), &(tb->guid))) return FALSE;
   }
 
-  if(!timespec_equal(&(ta->date_entered), &(tb->date_entered))) return FALSE;
-  if(!timespec_equal(&(ta->date_posted), &(tb->date_posted))) return FALSE;
-  	/* Since we use cached strings, we can just compare pointer
-	 * equality for num and description
-	 */
+  if(timespec_cmp(&(ta->date_entered), &(tb->date_entered))) return FALSE;
+  if(timespec_cmp(&(ta->date_posted), &(tb->date_posted))) return FALSE;
+  /* Since we use cached strings, we can just compare pointer
+   * equality for num and description
+   */
   if(ta->num != tb->num) return FALSE;
   if(ta->description != tb->description) return FALSE;
 
@@ -1178,7 +1178,7 @@ xaccTransCommitEdit (Transaction *trans)
    Backend *be;
 
    if (!trans) return;
-   ENTER ("trans addr=%p\n", trans);
+   ENTER ("trans addr=%p", trans);
    check_open (trans);
 
    /* At this point, we check to see if we have a valid transaction.
@@ -1188,7 +1188,7 @@ xaccTransCommitEdit (Transaction *trans)
     */
    if (!trans->splits || (trans->open & BEING_DESTROYED))
    {
-      PINFO ("delete trans at addr=%p\n", trans);
+      PINFO ("delete trans at addr=%p", trans);
       /* Make a log in the journal before destruction.  */
       xaccTransWriteLog (trans, 'D');
       xaccRemoveEntity(&trans->guid);
@@ -1235,6 +1235,7 @@ xaccTransCommitEdit (Transaction *trans)
     */
 
    /* See if there's a backend.  If there is, invoke it. */
+   PINFO ("descr is %s", xaccTransGetDescription(trans));
    be = xaccTransactionGetBackend (trans);
    if (be && be->trans_commit_edit) {
       int rc = 0;
@@ -1244,7 +1245,7 @@ xaccTransCommitEdit (Transaction *trans)
          /* if the backend puked, then we must roll-back 
           * at this point, and let the user know that we failed.
           */
-        /* hack alert -- finish this */
+        /* XXX hack alert -- finish this */
       }
    }
 

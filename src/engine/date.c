@@ -50,12 +50,14 @@ static short module = MOD_ENGINE;
 /********************************************************************\
 \********************************************************************/
 
-gboolean
-timespec_equal(const Timespec *ta, const Timespec *tb)
+int
+timespec_cmp (const Timespec *ta, const Timespec *tb)
 {
-  if(ta->tv_sec != tb->tv_sec) return FALSE;
-  if(ta->tv_nsec != tb->tv_nsec) return FALSE;
-  return TRUE;
+  if(ta->tv_sec < tb->tv_sec) return -1;
+  if(ta->tv_sec > tb->tv_sec) return +1;
+  if(ta->tv_nsec < tb->tv_nsec) return -1;
+  if(ta->tv_nsec > tb->tv_nsec) return +1;
+  return 0;
 }
 
 /**
