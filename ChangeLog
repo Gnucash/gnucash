@@ -1,3 +1,7 @@
+2003-04-02  Benoit Grégoire <bock@step.polymtl.ca>
+
+	* po/fr.po: Updated Frensh translation.
+
 2003-04-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncEntry.h:  Move the definitions
