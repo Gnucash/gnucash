@@ -14,6 +14,9 @@ typedef struct _pgend PGBackend;
 struct _pgend {
    Backend be;
 
+   /* sql query compiler */
+   sqlBuilder *builder;
+
    /* postgres-specific conection data */
    char * dbName;
    PGconn * connection;

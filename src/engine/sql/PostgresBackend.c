@@ -1,10 +1,15 @@
 /* 
+ * FILE:
  * PostgressBackend.c
  *
+ * FUNCTION:
  * Implements the callbacks for the postgress backend.
- * this is somewhat seriously broken, poorly designed code.
- * its meant to be a quick hack just ot check things out.
+ * this is somewhat broken code.
+ * its a quick hack just to check things out.
  * it needs extensive review and design checking
+ *
+ * HISTORY:
+ * Copyright (c) 2000, 2001 Linas Vepstas
  * 
  */
 
@@ -14,11 +19,14 @@
 
 #include <glib.h>
 
+#include "AccountP.h"
 #include "BackendP.h"
+#include "builder.h"
 #include "Group.h"
 #include "gnc-book.h"
 #include "guid.h"
 #include "gnc-engine-util.h"
+#include "TransactionP.h"
 
 #include "PostgresBackend.h"
 
@@ -29,17 +37,17 @@ static short module = MOD_BACKEND;
  * It performs a minimal check to see that the send succeeded. 
  */
 
-#define SEND_QUERY(be) 						\
+#define SEND_QUERY(be,buff,retval) 				\
 {								\
    int rc;							\
-   rc = PQsendQuery (be->connection, be->buff);			\
+   rc = PQsendQuery (be->connection, buff);			\
    if (!rc)							\
    {								\
       /* hack alert -- we need kinder, gentler error handling */\
       PERR("send query failed:\n"				\
            "\t%s", PQerrorMessage(be->connection));		\
       PQfinish (be->connection);				\
-      return;							\
+      return retval;						\
    }								\
 }
 
@@ -58,10 +66,10 @@ static short module = MOD_BACKEND;
       ExecStatusType status;					\
       result = PQgetResult((conn));				\
       if (!result) break;					\
-      PINFO ("got result\n");					\
+      PINFO ("got result");					\
       status = PQresultStatus(result);  			\
       if (PGRES_COMMAND_OK != status) {				\
-         PERR("bad status\n");					\
+         PERR("bad status");					\
          PQclear(result);					\
          PQfinish ((conn));					\
       }								\
@@ -83,7 +91,7 @@ static short module = MOD_BACKEND;
    if ((PGRES_COMMAND_OK != status) &&				\
        (PGRES_TUPLES_OK  != status))				\
    {								\
-      PERR ("failed to get result to query\n");			\
+      PERR ("failed to get result to query");			\
       PQclear (result);						\
       /* hack alert need gentler, kinder error recovery */	\
       PQfinish (conn);						\
@@ -101,11 +109,11 @@ static short module = MOD_BACKEND;
    {								\
       int ncols = PQnfields (result);				\
       nrows += PQntuples (result);				\
-      PINFO ("query result %d has %d rows and %d cols\n",	\
+      PINFO ("query result %d has %d rows and %d cols",		\
            loopcounter, nrows, ncols);				\
    }								\
    if (1 < nrows) {						\
-      PERR ("unexpected duplicate records\n");			\
+      PERR ("unexpected duplicate records");			\
       break;							\
    } else if (1 == nrows) 
 
@@ -114,25 +122,50 @@ static short module = MOD_BACKEND;
  * database to values in the engine structs.
  */
 
-#define GET_DB_VAL(str) (PQgetvalue (result, 0, PQfnumber (result, str)))
+#define GET_DB_VAL(str,n) (PQgetvalue (result, n, PQfnumber (result, str)))
 
 #define COMP_STR(sqlname,fun,ndiffs) { 				\
-   if (strcmp (GET_DB_VAL(sqlname),fun)) {			\
-      PINFO("%s sql='%s', eng='%s'\n", sqlname, 		\
-         GET_DB_VAL (sqlname), fun); 				\
+   if (strcmp (GET_DB_VAL(sqlname,0),fun)) {			\
+      PINFO("%s sql='%s', eng='%s'", sqlname, 			\
+         GET_DB_VAL (sqlname,0), fun); 				\
       ndiffs++; 						\
    }								\
 }
 
 #define COMP_GUID(sqlname,fun, ndiffs) { 			\
    const char *tmp = guid_to_string(fun); 			\
-   if (strcmp (GET_DB_VAL(sqlname),tmp)) { 			\
-      PINFO("%s sql='%s', eng='%s'\n", sqlname, 		\
-         GET_DB_VAL(sqlname), tmp); 				\
+   if (strcmp (GET_DB_VAL(sqlname,0),tmp)) { 			\
+      PINFO("%s sql='%s', eng='%s'", sqlname, 			\
+         GET_DB_VAL(sqlname,0), tmp); 				\
       ndiffs++; 						\
    }								\
    free ((char *) tmp); 					\
 } 
+
+/* hack alert -- not-implemented comapre one char only */
+#define COMP_CHAR(sqlname,fun, ndiffs) { 			\
+}
+
+/* assumes the datestring is in ISO-8601 format 
+ * i.e. looks like 1998-07-17 11:00:00.68-05  
+ * hack-alert doesn't compare nano-seconds ..  
+ * that's becuase I suspect the sql db round nanoseconds off ... 
+ */
+#define COMP_DATE(sqlname,fun,ndiffs) { 			\
+    Timespec eng_time = fun;					\
+    Timespec sql_time = gnc_iso8601_to_timespec(		\
+                     GET_DB_VAL(sqlname,0)); 			\
+    if (eng_time.tv_sec != sql_time.tv_sec) {			\
+       time_t tmp = eng_time.tv_sec;				\
+       PINFO("%s sql='%s' eng=%s", sqlname, 			\
+         GET_DB_VAL(sqlname,0), ctime(&tmp)); 			\
+      ndiffs++; 						\
+   }								\
+}
+
+/* ============================================================= */
+
+#include "tmp.c"
 
 /* ============================================================= */
 /* This routine stores the indicated group structure into the database.
@@ -143,49 +176,8 @@ static short module = MOD_BACKEND;
 static void
 pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp, int update)
 {
-   Account *parent;
-   const char *parent_guid, *grp_guid;
-   int i, nacc;
-
    ENTER ("be=%p, grp=%p", be, grp);
    if (!be || !grp) return;
-
-#if 0
-   grp_guid = guid_to_string(xaccGroupGetGUID (grp));
-   parent = xaccGroupGetParentAccount(grp);
-   parent_guid = guid_to_string(xaccAccountGetGUID (parent));
-   nacc = xaccGroupGetNumAccounts(grp);
-
-   if (update) {
-      /* hack alert -- values should be escaped so that no '' apear in them */
-      snprintf (be->buff, be->bufflen, 
-               "UPDATE gncGroup SET "
-               "parentGuid ='%s' "
-               "WHERE"
-               "groupGuid='%s';",
-               parent_guid,
-               grp_guid
-               );
-   } else {
-      /* hack alert -- values should be escaped so that no '' apear in them */
-      snprintf (be->buff, be->bufflen, 
-               "INSERT INTO gncGroup "
-               "(groupGuid, parentGuid)"
-               " values "
-               "('%s', '%s');",
-               grp_guid,
-               parent_guid
-               );
-   }
-   free ((char *) grp_guid);
-   free ((char *) parent_guid);
-
-   SEND_QUERY(be);
-   
-   /* complete/commit the transaction, check the status */
-   FINISH_QUERY(be->connection);
-#endif
-
    LEAVE (" ");
 }
 
@@ -198,423 +190,10 @@ pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp, int update)
 static int 
 pgendCompareOneGroupOnly (PGBackend *be, AccountGroup *grp)
 {
-   const char *grp_guid;
-   PGresult *result;
-   int i=0, nrows=0, ndiffs=-1;
+   int ndiffs=-1;
 
    ENTER ("be=%p, grp=%p", be, grp);
    if (!be || !grp) return -1;
-
-#if 0
-   grp_guid = guid_to_string(xaccGroupGetGUID (grp));
-
-   /* try to find this group in the database */
-   /* hack alert -- values should be escaped so that no '' apear in them */
-   snprintf (be->buff, be->bufflen, 
-            "SELECT parentGuid "
-            "FROM gncGroup "
-            "WHERE groupGuid = '%s';",
-            grp_guid
-            );
-   free ((char *) grp_guid);
-
-   /* hack alert -- if error occurs here, what is the return value ????  */
-   SEND_QUERY (be);
-
-   i=0; nrows=0;
-   do {
-      GET_RESULTS (be->connection, result);
-      IF_ONE_ROW (result, nrows, i) {
- 
-         /* compared queried values to input values */
-         COMP_GUID ("parentGuid", 
-            xaccAccountGetGUID (xaccGroupGetParentAccount(grp)), ndiffs);
-      }
-
-      PQclear (result);
-      i++;
-   } while (result);
-
-   if (0 == nrows) ndiffs = -1;
-#endif
-
-   LEAVE (" ");
-   return ndiffs;
-}
-
-/* ============================================================= */
-/* This routine stores the indicated account structure into the database.
- * It does *not* chase pointers, traverse the tree, etc. 
- * It performs no locking.
- */
-
-static void
-pgendStoreOneAccountOnly (PGBackend *be, Account *acct, int update)
-{
-   const char *acct_guid, *parent_guid, *child_guid, *notes; 
-   ENTER ("be=%p, acct=%p", be, acct);
-   if (!be || !acct) return;
-
-#if 0
-   acct_guid = guid_to_string(xaccAccountGetGUID (acct));
-   parent_guid = guid_to_string(xaccGroupGetGUID (xaccAccountGetParent(acct)));
-   child_guid = guid_to_string(xaccGroupGetGUID (xaccAccountGetChildren(acct)));
-
-   /* This is technically incorrect since notes could be NULL */
-   notes = xaccAccountGetNotes(acct);
-   if(!notes) notes = "";
-
-   if (update) {
-      /* hack alert -- values should be escaped so that no '' apear in them */
-      snprintf (be->buff, be->bufflen, 
-               "UPDATE gncAccount SET "
-               "parentGuid='%s', childrenGuid='%s', "
-               "accountName='%s', accountCode='%s', description='%s', "
-               "notes='%s', type=%d, currency='%s', security='%s' "
-               "WHERE accountGuid='%s';",
-               parent_guid,
-               child_guid,
-               xaccAccountGetName (acct),
-               xaccAccountGetCode (acct),
-               xaccAccountGetDescription (acct),
-               notes,
-               xaccAccountGetType (acct),
-               xaccAccountGetCurrency (acct),
-               xaccAccountGetSecurity (acct),
-               acct_guid
-               );
-   } else {
-      /* hack alert -- values should be escaped so that no '' apear in them */
-      snprintf (be->buff, be->bufflen, 
-               "INSERT INTO gncAccount "
-               "(accountGuid, parentGuid, childrenGuid, "
-               "accountName, accountCode, description, notes, "
-               "type, currency, security)"
-               " values "
-               "('%s', '%s', '%s', '%s', '%s', '%s', '%s', "
-               "%d, '%s', '%s');",
-               acct_guid,
-               parent_guid,
-               child_guid,
-               xaccAccountGetName (acct),
-               xaccAccountGetCode (acct),
-               xaccAccountGetDescription (acct),
-               xaccAccountGetNotes (acct),
-               xaccAccountGetType (acct),
-               xaccAccountGetCurrency (acct),
-               xaccAccountGetSecurity (acct)
-               );
-   }
-   free ((char *) acct_guid);
-   free ((char *) parent_guid);
-   free ((char *) child_guid);
-
-   SEND_QUERY (be);
-   
-   /* complete/commit the transaction, check the status */
-   FINISH_QUERY(be->connection);
-#endif
-
-   LEAVE (" ");
-}
-
-/* ============================================================= */
-/* this routine routine returns non-zero if the indicated acount 
- * differs from that in the SQL database.
- * this routine grabs no locks.
- */
-
-static int 
-pgendCompareOneAccountOnly (PGBackend *be, Account *acct)
-{
-   const char *acct_guid, *notes;
-   PGresult *result;
-   int i=0, nrows=0, ndiffs=0;
-
-   ENTER ("be=%p, acct=%p", be, acct);
-   if (!be || !acct) return 0;
-
-   acct_guid = guid_to_string(xaccAccountGetGUID (acct));
-
-   /* try to find this account in the database */
-   /* hack alert -- values should be escaped so that no '' apear in them */
-   snprintf (be->buff, be->bufflen, 
-            "SELECT parentGuid, childrenGuid, accountName, accountCode, "
-            "description, notes, type, currency, security "
-            "FROM gncAccount "
-            "WHERE accountGuid = '%s';",
-            acct_guid
-            );
-   free ((char *) acct_guid);
-
-   /* hack alert -- if error occurs here, what is the return value ????  */
-   SEND_QUERY (be);
-
-   i=0; nrows=0;
-   do {
-      GET_RESULTS (be->connection, result);
-      IF_ONE_ROW (result, nrows, i) {
- 
-        notes = xaccAccountGetNotes(acct);
-        if(!notes) notes = "";
-
-         /* compared queried values to input values */
-         COMP_STR ("accountName", xaccAccountGetName(acct), ndiffs);
-         COMP_STR ("description", xaccAccountGetDescription(acct), ndiffs);
-         COMP_STR ("notes", notes, ndiffs);
-         // COMP_STR ("currency", xaccAccountGetCurrency(acct), ndiffs);
-         // COMP_STR ("security", xaccAccountGetSecurity(acct), ndiffs);
-
-         // COMP_GUID ("parentGuid", 
-         //   xaccGroupGetGUID (xaccAccountGetParent(acct)), ndiffs);
-         // COMP_GUID ("childrenGuid", 
-         //   xaccGroupGetGUID (xaccAccountGetChildren(acct)), ndiffs);
-
-         /* hack alert -- need to also do the account type */
-         /* hack alert -- need to also do additional acct info for
-            the specialty account types */
-      }
-
-      PQclear (result);
-      i++;
-   } while (result);
-
-   if (0 == nrows) ndiffs = -1;
-
-   LEAVE (" ");
-   return ndiffs;
-}
-
-/* ============================================================= */
-/* This routine stores the indicated transaction structure into the database.
- * It does *not* chase pointers, traverse the tree, etc. 
- * It performs no locking.
- */
-
-static void
-pgendStoreOneTransactionOnly (PGBackend *be, Transaction *trans, int update)
-{
-   const char * trans_guid;
-
-   ENTER ("be=%p, trans=%p", be, trans);
-   if (!be || !trans) return;
-
-   trans_guid = guid_to_string(xaccTransGetGUID (trans));
-
-   if (update) {
-      /* hack alert -- values should be escaped so that no '' apear in them */
-      snprintf (be->buff, be->bufflen, 
-               "UPDATE gncTransaction SET "
-               "num='%s', description='%s' "
-               "WHERE transGuid='%s';",
-               xaccTransGetNum (trans),
-               xaccTransGetDescription (trans),
-               trans_guid
-               );
-   } else {
-      /* hack alert -- values should be escaped so that no '' apear in them */
-      snprintf (be->buff, be->bufflen, 
-               "INSERT INTO gncTransaction "
-               "(transGuid, num, description)"
-               " values "
-               "('%s', '%s', '%s');",
-               trans_guid,
-               xaccTransGetNum (trans),
-               xaccTransGetDescription (trans)
-               );
-   }
-
-   free ((char *) trans_guid);
-
-   SEND_QUERY (be);
-   
-   /* complete/commit the transaction, check the status */
-   FINISH_QUERY(be->connection);
-
-   LEAVE (" ");
-}
-
-/* ============================================================= */
-/* this routine routine returns non-zero if the indicated transaction 
- * differs from that in the SQL database.
- * this routine grabs no locks.
- */
-
-static int 
-pgendCompareOneTransactionOnly (PGBackend *be, Transaction *trans)
-{
-   const char *trans_guid;
-   PGresult *result;
-   int i=0, nrows=0, ndiffs=0;
-
-   ENTER ("be=%p, trans=%p", be, trans);
-   if (!be || !trans) return 0;
-
-   trans_guid = guid_to_string(xaccTransGetGUID (trans));
-
-   /* try to find this transaction in the database */
-   /* hack alert -- values should be escaped so that no '' apear in them */
-   snprintf (be->buff, be->bufflen, 
-            "SELECT transGuid, date_entered, date_posted, num, description "
-            "FROM gncTransaction "
-            "WHERE transGuid = '%s';",
-            trans_guid
-            );
-   free ((char *) trans_guid);
-
-   /* hack alert -- if error occurs here, what is the return value ????  */
-   SEND_QUERY (be);
-
-   i=0; nrows=0;
-   do {
-      GET_RESULTS (be->connection, result);
-      IF_ONE_ROW (result, nrows, i) {
- 
-         /* compared queried values to input values */
-         COMP_STR ("num", xaccTransGetNum(trans), ndiffs);
-         COMP_STR ("description", xaccTransGetDescription(trans), ndiffs);
-
-         /* hack alert -- need to also do the dates */
-      }
-
-      PQclear (result);
-      i++;
-   } while (result);
-
-   if (0 == nrows) ndiffs = -1;
-
-   LEAVE (" ");
-   return ndiffs;
-}
-
-/* ============================================================= */
-/* this routine stores the indicated split in the database
- */
-
-static void
-pgendStoreOneSplitOnly (PGBackend *be, Split *split, int update)
-{
-   Timespec ts;
-   const char *split_guid, *acct_guid, *trans_guid;
-
-   ENTER ("be=%p, split=%p", be, split);
-   if (!be || !split) return;
-
-   split_guid = guid_to_string(xaccSplitGetGUID (split));
-   acct_guid =  guid_to_string(xaccAccountGetGUID (xaccSplitGetAccount(split)));
-   trans_guid = guid_to_string(xaccTransGetGUID (xaccSplitGetParent(split)));
-
-   /* hack alert date is not stored ... */
-   xaccSplitGetDateReconciledTS (split, &ts);
-
-   if (update) {
-      /* hack alert -- values should be escaped so that no '' apear in them */
-      snprintf (be->buff, be->bufflen, 
-               "UPDATE gncEntry SET "
-               "accountGuid='%s', transGuid='%s', memo='%s', action='%s', "
-               "reconciled='%c', amount=%g, share_price=%g "
-               "WHERE entryGuid='%s';",
-               acct_guid,
-               trans_guid,
-               xaccSplitGetMemo(split),
-               xaccSplitGetAction(split),
-               xaccSplitGetReconcile(split),
-               DxaccSplitGetShareAmount(split),
-               DxaccSplitGetSharePrice(split),
-               split_guid
-               );
-   } else {
-      /* hack alert -- values should be escaped so that no '' apear in them */
-      snprintf (be->buff, be->bufflen, 
-               "INSERT INTO gncEntry "
-               "(entryGuid, accountGuid, transGuid, memo, action,"
-               "reconciled, amount, share_price)"
-               " values "
-               "('%s', '%s', '%s', '%s', '%s', '%c', %g, %g);",
-               split_guid,
-               acct_guid,
-               trans_guid,
-               xaccSplitGetMemo(split),
-               xaccSplitGetAction(split),
-               xaccSplitGetReconcile(split),
-               DxaccSplitGetShareAmount(split),
-               DxaccSplitGetSharePrice(split)
-               );
-   }
-   free ((char *) split_guid);
-   free ((char *) acct_guid);
-   free ((char *) trans_guid);
-
-   SEND_QUERY (be);
-
-   /* complete/commit the transaction, check the status */
-   FINISH_QUERY(be->connection);
-
-   LEAVE (" ");
-}
-
-/* ============================================================= */
-/* this routine routine returns non-zero if the indicated split 
- * differs from that in the SQL database.
- * this routine grabs no locks.
- */
-
-static int 
-pgendCompareOneSplitOnly (PGBackend *be, Split *split)
-{
-   const char *split_guid;
-   PGresult *result;
-   int i=0, nrows=0, ndiffs=0;
-
-   ENTER ("be=%p, split=%p", be, split);
-   if (!be || !split) return;
-
-   split_guid = guid_to_string(xaccSplitGetGUID (split));
-
-   /* try to find this split in the database */
-   /* hack alert -- values should be escaped so that no '' apear in them */
-   snprintf (be->buff, be->bufflen, 
-            "SELECT accountGuid, transGuid, memo, action, "
-            "reconciled, amount, share_price "
-            "FROM gncEntry "
-            "WHERE entryGuid = '%s';",
-            split_guid
-            );
-   free ((char *) split_guid);
-
-   /* hack alert -- if error occurs here, what is the return value ????  */
-   SEND_QUERY (be);
-
-   i=0; nrows=0;
-   do {
-      GET_RESULTS (be->connection, result);
-      IF_ONE_ROW (result, nrows, i) {
- 
-         /* compared queried values to input values */
-         COMP_STR ("memo", xaccSplitGetMemo(split), ndiffs);
-         COMP_STR ("action", xaccSplitGetAction(split), ndiffs);
-         COMP_GUID ("accountGuid", 
-            xaccAccountGetGUID (xaccSplitGetAccount(split)), ndiffs);
-         COMP_GUID ("transGuid", 
-            xaccTransGetGUID (xaccSplitGetParent(split)), ndiffs);
-
-/* hack alert -- need to also compare recconcile flag, amount, and price */
-PINFO ("recn=%s amt=%s price=%s\n", GET_DB_VAL("reconciled"), 
-GET_DB_VAL("amount"),
-GET_DB_VAL("share_price"));
-/*
-            xaccSplitGetReconcile(split),
-            DxaccSplitGetShareAmount(split),
-            DxaccSplitGetSharePrice(split)
-*/
-
-      }
-
-      PQclear (result);
-      i++;
-   } while (result);
-
-   if (0 == nrows) ndiffs = -1;
 
    LEAVE (" ");
    return ndiffs;
@@ -632,7 +211,7 @@ ah hell. this is a bad idea maybe ....
 static void
 pgendStoreAccountMarkNoLock (PGBackend *be, Account *acct)
 {
-   int i, ndiffs, nsplits;
+   int ndiffs;
 
    if (!be || !acct) return;
 
@@ -648,9 +227,9 @@ pgendStoreAccountMarkNoLock (PGBackend *be, Account *acct)
    ndiffs = pgendCompareOneAccountOnly (be, acct);
 
    /* update account if there are differences ... */
-   if (0<ndiffs) pgendStoreOneAccountOnly (be, acct, 1);
+   if (0<ndiffs) pgendStoreOneAccountOnly (be, acct, SQL_UPDATE);
    /* insert account if it doesn't exist */
-   if (0>ndiffs) pgendStoreOneAccountOnly (be, acct, 0);
+   if (0>ndiffs) pgendStoreOneAccountOnly (be, acct, SQL_INSERT);
 
 }
 
@@ -671,9 +250,9 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans)
    ndiffs = pgendCompareOneTransactionOnly (be, trans);
 
    /* update transaction if there are differences ... */
-   if (0<ndiffs) pgendStoreOneTransactionOnly (be, trans, 1);
+   if (0<ndiffs) pgendStoreOneTransactionOnly (be, trans, SQL_UPDATE);
    /* insert trans if it doesn't exist */
-   if (0>ndiffs) pgendStoreOneTransactionOnly (be, trans, 0);
+   if (0>ndiffs) pgendStoreOneTransactionOnly (be, trans, SQL_INSERT);
 
    /* walk over the list of splits */
    nsplits = xaccTransCountSplits (trans);
@@ -683,9 +262,9 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans)
 
       ndiffs = pgendCompareOneSplitOnly (be, s);
       /* update split if there are differences ... */
-      if (0<ndiffs) pgendStoreOneSplitOnly (be, s, 1);
+      if (0<ndiffs) pgendStoreOneSplitOnly (be, s, SQL_UPDATE);
       /* insert split if it doesn't exist */
-      if (0>ndiffs) pgendStoreOneSplitOnly (be, s, 0);
+      if (0>ndiffs) pgendStoreOneSplitOnly (be, s, SQL_INSERT);
 
       /* check to see if the account that this split references is in
        * storage; if not, add it */
@@ -743,7 +322,7 @@ pgendStoreGroup (PGBackend *be, AccountGroup *grp)
 
    /* lock it up so that we store atomically */
    snprintf (be->buff, be->bufflen, "BEGIN;");
-   SEND_QUERY (be);
+   SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
 
    /* Clear the account marks; useful later to avoid recurision
@@ -762,7 +341,7 @@ pgendStoreGroup (PGBackend *be, AccountGroup *grp)
    xaccClearMarkDownGr (grp, 0);
 
    snprintf (be->buff, be->bufflen, "COMMIT;");
-   SEND_QUERY (be);
+   SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
 }
 
@@ -770,7 +349,7 @@ pgendStoreGroup (PGBackend *be, AccountGroup *grp)
 /* this routine fills in the structure pointed at by split
  * with data sucked out of the database.  It does only that 
  * one split,
- * hack alert unfinished, incom[plete 
+ * hack alert unfinished, incomplete 
  */
 
 static void
@@ -796,44 +375,53 @@ pgendGetOneSplitOnly (PGBackend *be, Split *split, GUID *guid)
 }
 
 /* ============================================================= */
+/* this routine returns a list of accounts
+ * hack alert unfinished, incomplete 
+ */
 
-AccountGroup *
-pgend_session_begin (GNCBook *sess, const char * sessionid)
+static GList *
+pgendGetAccounts (PGBackend *be)
 {
-   PGBackend *be;
+   PGresult *result;
+   GList *list=NULL;
+   char * buff;
+   int i, nrows;
 
-   if (!sess) return;
-   be = (PGBackend *) xaccGNCBookGetBackend (sess);
+   ENTER ("be=%p", be);
+   if (!be) return NULL;
 
-   ENTER("sessionid=%s", sessionid);
-   /* connect to a bogus database ... */
-   /* hack alert -- we should be parsing the sessionid for the
-    * hostname, port number, db name, etc... clean this up ... 
-    * format should be something like
-    * postgres://some.host.com:portno/db_name
-    */
-   be->dbName = g_strdup ("gnc_bogus");
-   be->connection = PQsetdbLogin (NULL, NULL, NULL, NULL, be->dbName, NULL, NULL);
+   buff = "SELECT * FROM gncAccount;";
+   SEND_QUERY (be, buff, NULL);
 
-   /* check the conmnection status */
-   if (CONNECTION_BAD == PQstatus(be->connection))
-   {
-      PERR("Connection to database '%s' failed:\n"
-           "\t%s", 
-           be->dbName, PQerrorMessage(be->connection));
-      PQfinish (be->connection);
-      return NULL;
-   }
+   i=0; nrows=0;
+   do {
+      GET_RESULTS (be->connection, result);
+      {
+         int j, jrows;
+         int ncols = PQnfields (result);
+         jrows = PQntuples (result);
+         nrows += jrows;
+         PINFO ("query result %d has %d rows and %d cols",
+            i, nrows, ncols);
 
-   DEBUGCMD (PQtrace(be->connection, stderr));
+         for (j=0; j<jrows; j++)
+         {
+            Account *acc = xaccMallocAccount();
+            GUID guid;
+            string_to_guid (GET_DB_VAL("accountGUID",j), &guid);
+            xaccAccountSetGUID(acc, &guid);
+            xaccAccountSetName(acc, GET_DB_VAL("accountName",j));
+            xaccAccountSetDescription(acc, GET_DB_VAL("description",j));
+            list = g_list_append (list, acc);
+         }
+      }
 
-/* hack alert --- */
-/* just a quickie place to dump stuff */
-// xaccGroupSetBackend (xaccGNCBookGetGroup(sess), &(be->be));
-// pgendStoreGroup (be, xaccGNCBookGetGroup(sess));
+      PQclear (result);
+      i++;
+   } while (result);
 
-   LEAVE(" ");
-   return NULL;
+   LEAVE (" ");
+   return list;
 }
 
 /* ============================================================= */
@@ -857,7 +445,7 @@ pgend_trans_commit_edit (Backend * bend,
              "LOCK TABLE gncEntry IN EXCLUSIVE MODE; "
              "LOCK TABLE gncAccount IN EXCLUSIVE MODE; "
              );
-   SEND_QUERY (be);
+   SEND_QUERY (be,be->buff, 555);
    FINISH_QUERY(be->connection);
 
    /* See if the database is in the state that we last left it in.
@@ -880,7 +468,7 @@ pgend_trans_commit_edit (Backend * bend,
 
    if (rollback) {
       snprintf (be->buff, be->bufflen, "ROLLBACK;");
-      SEND_QUERY (be);
+      SEND_QUERY (be,be->buff,444);
       FINISH_QUERY(be->connection);
 
       LEAVE (" ");
@@ -891,11 +479,73 @@ pgend_trans_commit_edit (Backend * bend,
    pgendStoreTransactionNoLock (be, trans);
 
    snprintf (be->buff, be->bufflen, "COMMIT;");
-   SEND_QUERY (be);
+   SEND_QUERY (be,be->buff,333);
    FINISH_QUERY(be->connection);
 
    LEAVE (" ");
    return 0;
+}
+
+/* ============================================================= */
+
+AccountGroup *
+pgend_session_begin (GNCBook *sess, const char * sessionid)
+{
+   AccountGroup *grp;
+   GList *accts;
+   PGBackend *be;
+
+   if (!sess) return NULL;
+   be = (PGBackend *) xaccGNCBookGetBackend (sess);
+
+   ENTER("sessionid=%s", sessionid);
+   /* connect to a bogus database ... */
+   /* hack alert -- we should be parsing the sessionid for the
+    * hostname, port number, db name, etc... clean this up ... 
+    * format should be something like
+    * postgres://some.host.com:portno/db_name
+    */
+   be->dbName = g_strdup ("gnc_bogus");
+   be->connection = PQsetdbLogin (NULL, NULL, NULL, NULL, be->dbName, NULL, NULL);
+
+   /* check the connection status */
+   if (CONNECTION_BAD == PQstatus(be->connection))
+   {
+      PERR("Connection to database '%s' failed:\n"
+           "\t%s", 
+           be->dbName, PQerrorMessage(be->connection));
+      PQfinish (be->connection);
+      return NULL;
+   }
+
+   DEBUGCMD (PQtrace(be->connection, stderr));
+
+   /* set the datestyle to something we can parse */
+   snprintf (be->buff, be->bufflen, "SET DATESTYLE='ISO';");
+   SEND_QUERY (be,be->buff,NULL);
+   FINISH_QUERY(be->connection);
+
+   grp = xaccMallocAccountGroup();
+   accts = pgendGetAccounts (be);
+   while (accts) 
+   {
+      xaccGroupInsertAccount(grp,(Account *) accts->data);
+      accts = accts->next;
+   }
+
+#if 0
+{
+/* stupid test */
+GUID guid;
+Transaction *trans=xaccMallocTransaction();
+string_to_guid ("2ebc806e72c17bdc3c2c4e964b82eff8", &guid);
+xaccTransSetGUID(trans,&guid);
+pgendCompareOneTransactionOnly (be,trans);
+}
+#endif
+
+   LEAVE(" ");
+   return grp;
 }
 
 /* ============================================================= */
@@ -925,6 +575,8 @@ pgendNew (void)
    /* postgres specific data */
    be->dbName = NULL;
    be->connection = NULL;
+
+   be->builder = sqlBuilder_new();
 
    be->buff = malloc (QBUFSIZE);
    be->bufflen = QBUFSIZE;

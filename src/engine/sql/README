@@ -1,29 +1,34 @@
 
-This directory contains very broken, very experimental code
-for sql support.  It doesn't work.  The instructions below are for
-developers who want to hack this code.
+This directory contains experimental code for sql/postgres
+support.  The code 'functions' but doesn't handle enough types 
+(e.g. dates, currencies) to be usable.  
 
+postgres install instructions
+-----------------------------
 1) Install postgresql server, client and devel packages.
 2) if installed from redhat, then running /etc/rc.d/init.d/postgresql 
    will setup and initialize all first-time setup & config.
 3) as root, su - postgres then run 'createuser' to add your user id
 
-4) run the script gnc-init.sh
+Gnucash-specific install steps
+------------------------------
+A) run the script gnc-init.sh
    This script will automatically create the needed tables
-5) type 'make' to build the demo client
-6) type 'demo' to run the demo client
+
+B) edit gnc-book.c and #define SQLHACK
+C) edit src/Makefile.am and add  engine/sql/libgnc_postgres.la 
+   and -lpq to LDADD
+D) cd src/engine/sql; m4 table.m4 > tmp.c; make
+E) cd ../../..; make; make install
 
 
 
 Development Notes
 -----------------
-There has got to be a far more elegant way of 'converting' c structs
-to sql and back.  Because basically, that's all tat this code wants
-to do: just convert the engine structs to/from corresponding records 
-in an sql database.
+The m4 macros are just automated ways of 'converting' an SQL table
+to a c struct, and back again.  macros because this is cut-n-paste code.
 
-This code only implements writing to the DB, not reading.  Its mostly 
-cut-n-paste code that does the same thing over & over again.
+This code only implements writing to the DB, not reading.  
 
 -- 
 
