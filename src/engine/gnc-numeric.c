@@ -53,6 +53,30 @@ static const char * _numeric_error_strings[] =
 
 static gint64 gnc_numeric_lcd(gnc_numeric a, gnc_numeric b);
 
+/* This function is small, simple, and used everywhere below, 
+ * lets try to inline it.
+ */
+inline GNCNumericErrorCode
+gnc_numeric_check(gnc_numeric in) 
+{
+  if(in.denom != 0) 
+  {
+    return GNC_ERROR_OK;
+  }
+  else if(in.num) 
+  {
+    if ((0 < in.num) || (-4 > in.num))
+    {
+       in.num = (gint64) GNC_ERROR_OVERFLOW;
+    }
+    return (GNCNumericErrorCode) in.num;
+  }
+  else 
+  {
+    return GNC_ERROR_ARG;
+  }
+}
+
 /********************************************************************
  *  gnc_numeric_zero_p
  ********************************************************************/
@@ -375,10 +399,12 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
   product.num   = a.num*b.num;
   product.denom = a.denom*b.denom;
   
+#if 0  /* currently, product denom won't ever be zero */
   if(product.denom < 0) {
     product.num   = -product.num;
     product.denom = -product.denom;
   }
+#endif
   
   if((denom == GNC_DENOM_AUTO) &&
      ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) 
@@ -963,10 +989,8 @@ gnc_numeric_create(gint64 num, gint64 denom) {
  ********************************************************************/
 
 gnc_numeric
-gnc_numeric_error(int error_code) {
-  if(abs(error_code) < 5) {
-    /*    PERR("%s", _numeric_error_strings[ - error_code]); */
-  }
+gnc_numeric_error(GNCNumericErrorCode error_code) 
+{
   return gnc_numeric_create(error_code, 0LL);
 }
 
@@ -1082,19 +1106,6 @@ gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
     *error = err;
   }
   return quot;
-}
-
-int
-gnc_numeric_check(gnc_numeric in) {
-  if(in.denom != 0) {
-    return GNC_ERROR_OK;
-  }
-  else if(in.num) {
-    return in.num;
-  }
-  else {
-    return GNC_ERROR_ARG;
-  }
 }
 
 /********************************************************************

@@ -54,7 +54,10 @@ struct _gnc_numeric {
  * This is a rational number, defined by nominator and denominator. */
 typedef struct _gnc_numeric gnc_numeric;
 
-/** bitmasks for HOW flags */
+/** bitmasks for HOW flags.
+ * bits 8-15 of 'how' are reserved for the number of significant
+ * digits to use in the output with GNC_DENOM_SIGFIG */ 
+
 #define GNC_NUMERIC_RND_MASK     0x0000000f
 #define GNC_NUMERIC_DENOM_MASK   0x000000f0
 #define GNC_NUMERIC_SIGFIGS_MASK 0x0000ff00
@@ -80,17 +83,14 @@ enum {
   GNC_DENOM_SIGFIG = 0x50
 };
 
-/** bits 8-15 of 'how' are reserved for the number of significant
- * digits to use in the output with GNC_DENOM_SIGFIG */ 
-
-/** errors */
-enum {
-  GNC_ERROR_OK         =  0,
-  GNC_ERROR_ARG        = -1,
-  GNC_ERROR_OVERFLOW   = -2,
-  GNC_ERROR_DENOM_DIFF = -3,
-  GNC_ERROR_REMAINDER  = -4
-};
+/** Error codes */
+typedef enum {
+  GNC_ERROR_OK         =  0,   /**< No error */
+  GNC_ERROR_ARG        = -1,   /**< Argument is not a valid number */
+  GNC_ERROR_OVERFLOW   = -2,   /**< Intermediate result overflow */
+  GNC_ERROR_DENOM_DIFF = -3,   /**< Argument denoms differ in GNC_DENOM_FIXED operation */
+  GNC_ERROR_REMAINDER  = -4    /**< Remainder part in GNC_RND_NEVER operation */
+} GNCNumericErrorCode;
 
 #define GNC_DENOM_AUTO 0
 
@@ -116,7 +116,7 @@ gnc_numeric double_to_gnc_numeric(double in, gint64 denom,
 const gchar *string_to_gnc_numeric(const gchar* str, gnc_numeric *n);
 
 /** make a special error-signalling gnc_numeric */
-gnc_numeric gnc_numeric_error(int error_code);
+gnc_numeric gnc_numeric_error(GNCNumericErrorCode error_code);
 /*@}*/
 
 /** @name Value accessors */
@@ -137,9 +137,10 @@ gchar *gnc_numeric_to_string(gnc_numeric n);
 /** @name Tests */
 /*@{*/
 /** Check for error signal in value. Returns GNC_ERROR_OK (==0) if
- * there is no error, or any error code if there is one
- * (e.g. GNC_ERROR_OVERFLOW) */ 
-int         gnc_numeric_check(gnc_numeric a);
+ *  the number appears to be valid, otherwise it returns the
+ *  type of error.
+ */ 
+GNCNumericErrorCode  gnc_numeric_check(gnc_numeric a);
 
 /** Returns 1 if the given gnc_numeric is 0 (zeros), else returns 0. */
 int gnc_numeric_zero_p(gnc_numeric a);                
