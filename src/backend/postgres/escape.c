@@ -28,6 +28,8 @@
  * Escapes the ' and \ characters in a string
  */
 
+#include "config.h"
+
 #define _GNU_SOURCE
 #include <glib.h>
 #include <string.h>

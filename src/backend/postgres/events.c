@@ -28,13 +28,13 @@
 #include <libpq-fe.h>  
 #include <stdlib.h>  
 
-#include "Backend.h"
-#include "BackendP.h"
 #include "events.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "gnc-event-p.h"
 #include "guid.h"
+#include "qofbackend.h"
+#include "qofbackend-p.h"
 #include "qofid.h"
 #include "qofid-p.h"
 

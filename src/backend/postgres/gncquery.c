@@ -41,16 +41,19 @@
 #include <glib.h>
 #include <string.h>
 
-#include "builder.h"
-#include "escape.h"
+#include "Account.h"
+#include "Transaction.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
-#include "gncquery.h"
-#include "Transaction.h"
-#include "Account.h"
 
-#include "QofQueryP.h"
-#include "QueryCoreP.h"
+#include "qofquery.h"
+#include "qofquery-p.h"
+#include "qofquerycore-p.h"
+#include "qofqueryobject.h"
+
+#include "gncquery.h"
+#include "builder.h"
+#include "escape.h"
 
 static short module = MOD_BACKEND;
 
@@ -167,16 +170,16 @@ sql_sort_get_type(char *p, GSList * path)
  * done by the Query C code. */
 
 static char *
-sql_sort_order(char *p, QofQuerySort_t sort)
+sql_sort_order(char *p, QofSortFunc sort)
 {
     GSList *path;
     gboolean increasing;
 
-    increasing = gncQofSortFuncGetIncreasing(sort);
+    increasing = qof_query_sort_get_increasing(sort);
 
     ENTER("incr=%d", increasing);
 
-    path = gncQofSortFuncGetParamPath(sort);
+    path = qof_query_sort_get_param_path(sort);
 
     if (path == NULL) {
         /* Ok, we're not sorting on anything here. */
