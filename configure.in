@@ -256,8 +256,7 @@ AC_SUBST(XMHTML_INC)
 # See if the <nana.h> header file can be found.
 AC_CHECK_HEADERS(nana.h)
 AC_CHECK_LIB(nana,L_buffer_create,
-	LIBNANA="-lnana")
-AC_SUBST(LIBNANA)
+       LIBS="${LIBS} -lnana") 
 
 ### ------------------------------------------------------------------------------
 # If readline exists, just assume that guile needs it.  It probably does.

@@ -2540,17 +2540,16 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  LIBNANA="-lnana"
+  LIBS="${LIBS} -lnana"
 else
   echo "$ac_t""no" 1>&6
 fi
-
-
+ 
 
 ### ------------------------------------------------------------------------------
 # If readline exists, just assume that guile needs it.  It probably does.
 echo $ac_n "checking for readline in -lreadline""... $ac_c" 1>&6
-echo "configure:2554: checking for readline in -lreadline" >&5
+echo "configure:2553: checking for readline in -lreadline" >&5
 ac_lib_var=`echo readline'_'readline | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2558,7 +2557,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lreadline  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2562 "configure"
+#line 2561 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2569,7 +2568,7 @@ int main() {
 readline()
 ; return 0; }
 EOF
-if { (eval echo configure:2573: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2572: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2605,11 +2604,11 @@ fi
 # results, so one failure makes all further attempts fail.
 
 echo $ac_n "checking for guile""... $ac_c" 1>&6
-echo "configure:2609: checking for guile" >&5
+echo "configure:2608: checking for guile" >&5
 
 GNC_LIBS_SAFE=${LIBS}
 echo $ac_n "checking for guile""... $ac_c" 1>&6
-echo "configure:2613: checking for guile" >&5
+echo "configure:2612: checking for guile" >&5
 if eval "test \"`echo '$''{'ac_cv_lib_guile'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2622,14 +2621,14 @@ else
         else
             LIBS="${GNC_TEST_LIBS} ${GNC_LIBS_SAFE}"
             cat > conftest.$ac_ext <<EOF
-#line 2626 "configure"
+#line 2625 "configure"
 #include "confdefs.h"
 #include<guile/gh.h>
 int main() {
 gh_eval_file;
 ; return 0; }
 EOF
-if { (eval echo configure:2633: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2632: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   GUILELIBS="${GNC_TEST_LIBS}"
 else
@@ -2656,7 +2655,7 @@ fi
 ### Plotutils
 
 echo $ac_n "checking for openpl in -lplot""... $ac_c" 1>&6
-echo "configure:2660: checking for openpl in -lplot" >&5
+echo "configure:2659: checking for openpl in -lplot" >&5
 ac_lib_var=`echo plot'_'openpl | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2664,7 +2663,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lplot $X_PRE_LIBS $MOTIF_LIBS $X_EXTRA_LIBS -lXaw $X_LIBS $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2668 "configure"
+#line 2667 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2675,7 +2674,7 @@ int main() {
 openpl()
 ; return 0; }
 EOF
-if { (eval echo configure:2679: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2678: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2931,7 +2930,6 @@ s%@X_LIBS@%$X_LIBS%g
 s%@X_EXTRA_LIBS@%$X_EXTRA_LIBS%g
 s%@XMHTML_TARGET@%$XMHTML_TARGET%g
 s%@XMHTML_INC@%$XMHTML_INC%g
-s%@LIBNANA@%$LIBNANA%g
 s%@GUILE_INC@%$GUILE_INC%g
 s%@GUILELIBS@%$GUILELIBS%g
 s%@HAVE_PLOTUTILS@%$HAVE_PLOTUTILS%g

@@ -49,7 +49,7 @@
 #include "util.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_REGISTER;
+static short module = MOD_GTK_REG;
 
 /* ==================================================== */
 
@@ -496,7 +496,7 @@ traverseCB (GtkWidget * mw, gpointer cd, gpointer cb) {
 
 static void
 table_activate_cell_cb(GtkSheet *s, gint row, gint column, gpointer data) {
-  L("activate_cell %d %d\n", row, column);
+  PINFO("activate_cell %d %d\n", row, column);
 
   
 
@@ -505,12 +505,12 @@ table_activate_cell_cb(GtkSheet *s, gint row, gint column, gpointer data) {
 
 static void
 table_set_cell_cb(GtkSheet *s, gint row, gint column, gpointer data) {
-  L("set_cell %d %d\n", row, column);
+  PINFO("set_cell %d %d\n", row, column);
 }
 
 static void
 table_changed_cb(GtkSheet *s, gint row, gint column, gpointer data) {
-  L("changed %d %d\n", row, column);
+  PINFO("changed %d %d\n", row, column);
 }
 
 #if 0
@@ -802,10 +802,10 @@ set_cell_color(GtkSheet *reg, Table *table, guint row, guint col,
   color.blue = (argb & 0xff) << 8;
   
   cmap = gtk_widget_get_colormap(GTK_WIDGET(reg));
-  I(cmap);
+  assert(cmap);
   
   success = gdk_color_alloc(cmap, &color);
-  I(success);
+  assert(success);
   
   {
     GtkSheetRange range;

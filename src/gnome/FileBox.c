@@ -64,7 +64,7 @@ void closeBoxCB( GtkWidget mw, gpointer *data );
 char *
 fileBox(const char * title, const char * filter) {
 
-  L("STUB: FileBox not implemented for GNOME yet...\n");
+  PERR("STUB: FileBox not implemented for GNOME yet...\n");
   return NULL;
   
 #if 0

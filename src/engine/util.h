@@ -55,7 +55,8 @@
 #define MOD_LEDGER     4
 #define MOD_GUI        5
 #define MOD_SCRUB      6
-#define MODULE_MAX     7
+#define MOD_GTK_REG    7
+#define MODULE_MAX     8
 
 extern int loglevel[MODULE_MAX];
 
