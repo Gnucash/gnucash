@@ -107,12 +107,33 @@
  * to work around the fact that the combo-box requires a width
  * in pixels, rather than in characters.  It would be nice if 
  * ComboBox supported the XmNunits resource, but it doesn't.  
+ *
+ * HISTORY:
+ * Copyright (c) 1998 Linas Vepstas
  */
+
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
 
 #ifndef __XACC_BASIC_CELL_H__
 #define __XACC_BASIC_CELL_H__
 
-typedef struct _BasicCell {
+typedef struct _BasicCell BasicCell;
+
+struct _BasicCell {
 
   short width;           /* column width, in chars, not pixels */
   short alignment;       /* column text alignment */
@@ -122,13 +143,13 @@ typedef struct _BasicCell {
   unsigned int changed;  /* 2^32-1 if value modified */
 
   /* "virtual", overloaded set-value method */
-  void         (*set_value)     (struct _BasicCell *,
+  void         (*set_value)     (BasicCell *,
                                  const char * new_value);
 
   /* cell-editing callbacks */
-  const char * (*enter_cell)    (struct _BasicCell *,
+  const char * (*enter_cell)    (BasicCell *,
                                  const char * current);
-  const char * (*modify_verify) (struct _BasicCell *,
+  const char * (*modify_verify) (BasicCell *,
                                  const char *old, 
                                  const char *add, 
                                  const char *new); 
@@ -136,20 +157,21 @@ typedef struct _BasicCell {
                                  const char * current);
 
   /* private, GUI-specific callbacks */
-  void         (* realize) (struct _BasicCell *, 
+  void         (* realize) (BasicCell *, 
                             void *gui_handle,
                             int pixel_width);
-  void         (* move)    (struct _BasicCell *, 
+  void         (* move)    (BasicCell *, 
                             int phys_row, int phys_col);
-  void         (* destroy) (struct _BasicCell *);
+  void         (* destroy) (BasicCell *);
 
   /* general hook for gui-private data */
   void * gui_private;
-} BasicCell;
+};
 
 
 BasicCell * xaccMallocBasicCell (void);
 void         xaccInitBasicCell (BasicCell *);
+void         xaccDestroyBasicCell (BasicCell *);
 
 void         xaccSetBasicCellValue (BasicCell *, const char *);
 

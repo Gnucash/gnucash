@@ -33,7 +33,7 @@
 #include "basiccell.h"
 #include "pricecell.h"
 
-static void PriceSetValue (struct _BasicCell *, const char *);
+static void PriceSetValue (BasicCell *, const char *);
 
 #define DECIMAL_PT  '.'
 
@@ -49,7 +49,7 @@ static void PriceSetValue (struct _BasicCell *, const char *);
  * decimal point in them */
 
 static const char * 
-PriceMV (struct _BasicCell *_cell, 
+PriceMV (BasicCell *_cell, 
          const char * oldval, 
          const char *change, 
          const char *newval)
@@ -104,6 +104,15 @@ xaccInitPriceCell (PriceCell *cell)
 
 /* ================================================ */
 
+void
+xaccDestroyPriceCell (PriceCell *cell)
+{
+   cell->amount = 0.0;
+   xaccDestroyBasicCell ( &(cell->cell));
+}
+
+/* ================================================ */
+
 void xaccSetPriceCellValue (PriceCell * cell, double amt)
 {
    char buff[40];
@@ -145,7 +154,7 @@ void xaccSetDebCredCellValue (PriceCell * deb,
 /* ================================================ */
 
 static void 
-PriceSetValue (struct _BasicCell *_cell, const char *str)
+PriceSetValue (BasicCell *_cell, const char *str)
 {
    char buff[40];
    PriceCell *cell = (PriceCell *) _cell;

@@ -1,3 +1,30 @@
+/*
+ * FILE:
+ * basiccell.c
+ *
+ * FUNCTION: 
+ * Implements the base class for the cell handler object.
+ * See the header file for additional documentation.
+ *
+ * HISTORY:
+ * Copyright (c) 1988 Linas Vepstas
+ */
+
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
 
 #include <stdlib.h>
 #include <string.h>
@@ -35,9 +62,27 @@ void xaccInitBasicCell (BasicCell *cell)
 
 /* ===================================================== */
 
+void xaccDestroyBasicCell (BasicCell *cell)
+{
+   /* give any gui elements a chance to clean up */
+   if (cell->destroy) {
+      (*(cell->destroy)) (cell);
+   }
+
+   /* free up data strings */
+   if (cell->value) {
+      free (cell->value);
+   }
+
+   /* help prevent access to freed memory */
+   xaccInitBasicCell (cell);
+}
+
+/* ===================================================== */
+
 void xaccSetBasicCellValue (BasicCell *cell, const char *val)
 {
-   void (*cb) (struct _BasicCell *, const char *);
+   void (*cb) (BasicCell *, const char *);
 
    cb = cell->set_value;
    if (cb) {
