@@ -302,7 +302,7 @@
 	  (exchange-fn foreign-monetary report-currency date))))
 
       (gnc:html-document-set-title! document report-title)
-      (warn commodity-list)
+      ;;(warn commodity-list)
 
       (if (not (null? accounts))
           (let ((query (gnc:malloc-query))
