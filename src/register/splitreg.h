@@ -88,21 +88,22 @@
 #define REG_STYLE_MASK      (0xff << 8) 
 
 /* modified flags -- indicate which cell values have been modified by user */
-#define MOD_NONE   0x000
-#define MOD_DATE   0x001
-#define MOD_NUM    0x002
-#define MOD_DESC   0x004
-#define MOD_RECN   0x008
+#define MOD_NONE   0x0000
+#define MOD_DATE   0x0001
+#define MOD_NUM    0x0002
+#define MOD_DESC   0x0004
+#define MOD_RECN   0x0008
 
-#define MOD_ACTN   0x010
-#define MOD_XFRM   0x020
-#define MOD_XTO    0x040
-#define MOD_MEMO   0x080
-#define MOD_AMNT   0x100
-#define MOD_PRIC   0x200
-#define MOD_VALU   0x400
-#define MOD_NEW    0x800
-#define MOD_ALL    0xfff
+#define MOD_ACTN   0x0010
+#define MOD_XFRM   0x0020
+#define MOD_XTO    0x0040
+#define MOD_MEMO   0x0080
+#define MOD_AMNT   0x0100
+#define MOD_NAMNT  0x0200
+#define MOD_PRIC   0x0400
+#define MOD_VALU   0x0800
+#define MOD_NEW    0x1000
+#define MOD_ALL    0x1fff
 
 /* The value of NUM_CELLS should be larger than the number of 
  * cells defined in the structure below!
@@ -138,6 +139,9 @@ struct _SplitRegister {
    PriceCell     * debitCell;
    PriceCell     * priceCell;
    PriceCell     * valueCell;
+
+   PriceCell     * ncreditCell;
+   PriceCell     * ndebitCell;
 
    /* the type of the register, must be one of the enumerated types
     * above *_REGISTER, *_LEDGER, above */

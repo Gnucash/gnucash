@@ -56,6 +56,10 @@
 #define PRIC_CELL      12
 #define VALU_CELL      13
 
+/* NCRED & NDEBT handle minus the usual quantities */
+#define NCRED_CELL     14
+#define NDEBT_CELL     15
+
 
 #define DATE_CELL_WIDTH    11
 #define NUM_CELL_WIDTH      7
@@ -67,6 +71,8 @@
 #define RECN_CELL_WIDTH     1
 #define DEBT_CELL_WIDTH    12
 #define CRED_CELL_WIDTH    12
+#define NDEBT_CELL_WIDTH   12
+#define NCRED_CELL_WIDTH   12
 #define PRIC_CELL_WIDTH     9
 #define VALU_CELL_WIDTH    10
 #define SHRS_CELL_WIDTH    10
@@ -84,7 +90,7 @@
    
 /* ============================================== */
 /* configLabels merely puts strings into the label cells 
- * it does *not* cop[y them to the header cursor */
+ * it does *not* copy them to the header cursor */
 
 static void
 configLabels (SplitRegister *reg)
@@ -267,8 +273,8 @@ configLayout (SplitRegister *reg)
             FANCY (ACTN,   action,   1,  0);
             FANCY (XFRM,   xfrm,     2,  0);
             BASIC (MEMO,   memo,     3,  0);
-            FANCY (DEBT,   debit,    5,  0);
-            FANCY (CRED,   credit,   6,  0);
+            FANCY (NDEBT,  ndebit,   5,  0);
+            FANCY (NCRED,  ncredit,  6,  0);
          }
          break;
 
@@ -330,8 +336,8 @@ configLayout (SplitRegister *reg)
             FANCY (ACTN,   action,   1,  0);
             FANCY (XFRM,   xfrm,     2,  0);
             BASIC (MEMO,   memo,     3,  0);
-            FANCY (DEBT,   debit,    5,  0);
-            FANCY (CRED,   credit,   6,  0);
+            FANCY (NDEBT,  ndebit,   5,  0);
+            FANCY (NCRED,  ncredit,  6,  0);
             FANCY (PRIC,   price,    7,  0);
             FANCY (VALU,   value,    8,  0);
             FANCY (SHRS,   shrs,     9,  0);
@@ -392,15 +398,6 @@ configTraverse (SplitRegister *reg)
 
    switch (type) {
       case BANK_REGISTER:
-      case CASH_REGISTER:
-      case ASSET_REGISTER:
-      case CREDIT_REGISTER:
-      case LIABILITY_REGISTER:
-      case INCOME_REGISTER:
-      case EXPENSE_REGISTER:
-      case EQUITY_REGISTER:
-      case INCOME_LEDGER:    /* hack alert do xto cell too */
-      case GENERAL_LEDGER:    /* hack alert do xto cell too */
          curs = reg->trans_cursor;
          FIRST_RIGHT (DATE_CELL_R, DATE_CELL_C);
          NEXT_RIGHT  (NUM_CELL_R,  NUM_CELL_C);
@@ -439,54 +436,6 @@ configTraverse (SplitRegister *reg)
             NEXT_RIGHT (-1-ACTN_CELL_R, -1-ACTN_CELL_C);
          }
          break;
-
-      case STOCK_REGISTER:
-      case PORTFOLIO:
-         curs = reg->trans_cursor;
-         FIRST_RIGHT (DATE_CELL_R, DATE_CELL_C);
-         NEXT_RIGHT (NUM_CELL_R,  NUM_CELL_C);
-         if (show_txfrm) {
-            NEXT_RIGHT (TXFRM_CELL_R, TXFRM_CELL_C);
-         }
-         NEXT_RIGHT (DESC_CELL_R, DESC_CELL_C);
-         if (show_tamount) {
-            NEXT_RIGHT (TDEBT_CELL_R, TDEBT_CELL_C);
-            NEXT_RIGHT (TCRED_CELL_R, TCRED_CELL_C);
-            NEXT_RIGHT (TPRIC_CELL_R, TPRIC_CELL_C);
-            NEXT_RIGHT (TVALU_CELL_R, TVALU_CELL_C);
-         }
-         /* if a multi-line display, hop down one line to the split cursor */
-         if (!double_line && !multi_line) {
-            NEXT_RIGHT (-1-DATE_CELL_R, -1-DATE_CELL_C);
-         } else {
-            NEXT_RIGHT (ACTN_CELL_R + curs->numRows, ACTN_CELL_C);
-         }
-
-         curs = reg->split_cursor;
-         FIRST_RIGHT (ACTN_CELL_R, ACTN_CELL_C);
-         NEXT_RIGHT (XFRM_CELL_R, XFRM_CELL_C);
-         NEXT_RIGHT (MEMO_CELL_R, MEMO_CELL_C);
-         if (show_samount) {
-            NEXT_RIGHT (DEBT_CELL_R, DEBT_CELL_C);
-            NEXT_RIGHT (CRED_CELL_R, CRED_CELL_C);
-            NEXT_RIGHT (PRIC_CELL_R, PRIC_CELL_C);
-            NEXT_RIGHT (VALU_CELL_R, VALU_CELL_C);
-         }
-         if (multi_line) {
-            NEXT_RIGHT (ACTN_CELL_R + curs->numRows, ACTN_CELL_C);
-         } else
-         if (double_line) {
-            /* if double-line, hop back one row */
-            NEXT_RIGHT (-1-DATE_CELL_R + curs->numRows, -1-DATE_CELL_C);
-         } else {
-            NEXT_RIGHT (-1-ACTN_CELL_R, -1-ACTN_CELL_C);
-         }
-         break;
-
-      default:
-         FIRST_RIGHT (DATE_CELL_R, DATE_CELL_C);
-         NEXT_RIGHT  (-1-DATE_CELL_R, -1-DATE_CELL_C);
-
    }
 #endif
 }
@@ -633,6 +582,9 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    NEW (price,   Price);
    NEW (value,   Price);
 
+   NEW (ncredit, Price);
+   NEW (ndebit,  Price);
+
    /* --------------------------- */
    /* configLabels merely puts strings into the label cells 
     * it does *not* cop[y them to the header cursor */
@@ -674,6 +626,8 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    reg->debitCell->blank_zero = 1;
    reg->creditCell->blank_zero = 1;
    reg->valueCell->blank_zero = 1;
+   reg->ndebitCell->blank_zero = 1;
+   reg->ncreditCell->blank_zero = 1;
 
    /* ok, now make sure the initail value of 0.0 is blanked.
     * if this is not done, then various oddball situations 
@@ -682,6 +636,8 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    xaccSetPriceCellValue (reg->debitCell, 0.0);
    xaccSetPriceCellValue (reg->creditCell, 0.0);
    xaccSetPriceCellValue (reg->valueCell, 0.0);
+   xaccSetPriceCellValue (reg->ndebitCell, 0.0);
+   xaccSetPriceCellValue (reg->ncreditCell, 0.0);
 
    /* use three decimal places to print share-related info.
     * The format is a printf-style format for a double.  */
@@ -796,6 +752,9 @@ xaccDestroySplitRegister (SplitRegister *reg)
    xaccDestroyPriceCell     (reg->priceCell);
    xaccDestroyPriceCell     (reg->valueCell);
 
+   xaccDestroyPriceCell     (reg->ncreditCell);
+   xaccDestroyPriceCell     (reg->ndebitCell);
+
    reg->dateCell    = NULL;
    reg->numCell     = NULL;
    reg->descCell    = NULL;
@@ -811,6 +770,9 @@ xaccDestroySplitRegister (SplitRegister *reg)
    reg->debitCell   = NULL;
    reg->priceCell   = NULL;
    reg->valueCell   = NULL;
+
+   reg->ncreditCell  = NULL;
+   reg->ndebitCell   = NULL;
 
    /* free the memory itself */
    free (reg);
@@ -838,6 +800,9 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
    changed |= MOD_AMNT & reg->debitCell->cell.changed;
    changed |= MOD_PRIC & reg->priceCell->cell.changed;
    changed |= MOD_VALU & reg->valueCell->cell.changed; 
+
+   changed |= MOD_NAMNT & reg->ncreditCell->cell.changed;
+   changed |= MOD_NAMNT & reg->ndebitCell->cell.changed;
 
    return changed;
 }
