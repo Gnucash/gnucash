@@ -1192,7 +1192,6 @@ simple_chars_only_parser_new(sixtp_end_handler end_handler) {
   sixtp_set_result_fail(top_level, generic_free_result);
   sixtp_set_chars_fail(top_level, generic_free_result);
   return(top_level);
-
 }
 
 
@@ -1770,7 +1769,7 @@ kvp_frame_slot_end_handler(gpointer data_for_children,
   if(key_node_count != 1) return(FALSE);
 
   value_cr->should_cleanup = TRUE;
-  kvp_frame_set_slot(f, (char *) key, (kvp_value *) value_cr->data);
+  kvp_frame_set_slot(f, key, (kvp_value *) value_cr->data);
   return(TRUE);
 }
 
@@ -3242,6 +3241,8 @@ generic_gnc_commodity_lookup_end_handler(gpointer data_for_children,
     }
   }
 
+  g_free(cpi->namespace);
+  g_free(cpi->id);
   g_free(cpi);
   return(ok);
 }
