@@ -415,7 +415,14 @@ xaccSplitRebalance (Split *split)
   double value = 0.0;
 
   trans = split->parent;
-  assert (trans);
+
+  /* We might have gotten here if someone is manipulating
+   * a split that has not yet been inserted in a transaction.
+   * Rather than punishing them with an assert, lets just
+   * quietly return. 
+   */
+  if (!trans) return;
+
   assert (trans->splits);
   assert (trans->splits[0]);
 

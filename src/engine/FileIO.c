@@ -751,6 +751,7 @@ readTransaction( int fd, Account *acc, int token )
         }
      }
   }
+  xaccTransCommitEdit (trans);  
 
   return trans;
 }
