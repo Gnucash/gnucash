@@ -1,3 +1,15 @@
+2004-12-04  Derek Atkins  <derek@ihtfp.com>
+
+	Fix some deprecated functions:
+	* src/gnome-utils/gnc-gnome-utils.c:
+	  gnome_pixmap_new_from_file -> gtk_image_new_from_file
+	* src/business/business-gnome/dialog-date-close.c:
+	  gnome_pixmap_new_from_file -> gtk_image_new_from_file
+	  gnome_unconditional_pixmap_file -> gnome_program_locate_file
+	* src/business/business-gnome/dialog-invoice.c:
+	  gnome_unconditional_pixmap_file -> gnome_program_locate_file
+	  gnome_pixmap_load_file -> gtk_image_new_from_file
+
 2004-11-30  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/Makefile.am:

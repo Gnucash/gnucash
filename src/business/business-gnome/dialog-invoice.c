@@ -255,9 +255,11 @@ iw_ask_unpost (InvoiceWindow *iw)
 
   iw->reset_tax_tables = FALSE;
 
-  s = gnome_unconditional_pixmap_file("gnome-question.png");
+  s = gnome_program_locate_file (NULL,
+				 GNOME_FILE_DOMAIN_PIXMAP,
+				 "gnome-question.png", TRUE, NULL);
   if (s) {
-    gnome_pixmap_load_file(GNOME_PIXMAP(pixmap), s);
+    pixmap = gtk_image_new_from_file(s);
     g_free(s);
   }
 

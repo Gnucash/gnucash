@@ -202,10 +202,10 @@ gnc_gnome_help (const char *file_name, const char *anchor)
 
 /********************************************************************\
  * gnc_gnome_get_pixmap                                             *
- *   returns a GnomePixmap widget given a pixmap filename           *
+ *   returns a GtkWidget given a pixmap filename                    *
  *                                                                  *
  * Args: none                                                       *
- * Returns: GnomePixmap widget or NULL if there was a problem       *
+ * Returns: GtkWidget or NULL if there was a problem                *
  \*******************************************************************/
 GtkWidget *
 gnc_gnome_get_pixmap (const char *name)
@@ -220,7 +220,8 @@ gnc_gnome_get_pixmap (const char *name)
     return NULL;
 
   DEBUG ("Loading pixmap file %s", fullname);
-  pixmap = gnome_pixmap_new_from_file (fullname);
+
+  pixmap = gtk_image_new_from_file (fullname);
   if (pixmap == NULL) {
     PERR ("Could not load pixmap");
   }
