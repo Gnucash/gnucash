@@ -223,6 +223,19 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
   if (!split) return;
   CHECK (acc);
 
+  /* if this split belongs to another account, make sure that
+   * the moving it is allowed by the currency denominations of 
+   * the old and new accounts
+   */
+  if (split->acc) {
+    if (acc->currency) {
+       if (!(split->acc->currency)) return;
+       if (strcmp (acc->currency, split->acc->currency)) return;
+    }  else { 
+       if (split->acc->currency) return;
+    }
+  }
+
   /* mark the account as having changed, and
    * the account group as requiring a save */
   acc -> changed = TRUE;
@@ -603,10 +616,9 @@ xaccMoveFarEnd (Split *split, Account *new_acc)
       return;
    }
 
-   /* remove the partner split from the old account */
+   /* move the partner split from the old account to the new */ 
    acc = (Account *) (partner_split->acc);
    if (acc != new_acc) {
-      xaccAccountRemoveSplit (acc, partner_split);
       xaccAccountInsertSplit (new_acc, partner_split);
    }
 }
