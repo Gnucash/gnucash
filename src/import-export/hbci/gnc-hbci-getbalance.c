@@ -28,7 +28,7 @@
 
 #include "gnc-ui.h"
 #include "gnc-numeric.h"
-#include "date.h"
+#include "gnc-date.h"
 #include "RecnWindow.h"
 
 #include "hbci-interaction.h"

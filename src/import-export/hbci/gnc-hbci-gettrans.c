@@ -28,7 +28,7 @@
 
 #include "gnc-ui.h"
 #include "gnc-numeric.h"
-#include "date.h"
+#include "gnc-date.h"
 #include "Transaction.h"
 #include "gnc-engine-util.h" 
 

@@ -29,7 +29,7 @@
 #include "gnc-ui.h"
 #include "gnc-numeric.h"
 #include "dialog-transfer.h"
-#include "date.h"
+#include "gnc-date.h"
 #include "Transaction.h"
 
 #include "hbci-interaction.h"
