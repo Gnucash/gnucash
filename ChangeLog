@@ -1,3 +1,10 @@
+2004-05-02  David Hampton  <hampton@employees.org>
+
+	* src/business/business-core/Makefile.am:
+	* src/business/business-gnome/Makefile.am:
+	* src/import-export/binary-import/Makefile.am: Work around
+	problems with libltdl3.
+
 2004-05-02  Christian Stimming  <stimming@tuhh.de>
 
 	* po/it.po: Updated Italian translation by Lorenzo Cappelletti
