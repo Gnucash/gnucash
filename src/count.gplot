@@ -1,0 +1,25 @@
+#
+# file: count.gplot
+# function: plot the number of lines of code in gnucash as function of date
+# To generate the graph, say "gnuplot count.gplot" at the command line
+#
+# history: created by Linas Vepstas July 2004
+#
+# set term x11
+# set term pbm
+# set term gif size 400,300
+set term pbm medium color
+set out 'count.png'
+set data style linespoints 
+set xdata time
+set timefmt "%d/%m/%Y"
+set format x "%m/%y"
+set xrange ["01/09/1997":"01/12/2003"]
+set title "Number of Lines of code in GnuCash"
+set key right
+set xlabel "Date"
+set logscale y
+set ylabel "KLOC"
+plot "count.dat" using 1:2	title "kloc"
+
+# pause 1000
