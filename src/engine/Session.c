@@ -467,7 +467,10 @@ xaccResolveFilePath (const char * filefrag)
 
    /* check for an absolute file path */
    if ('/' == *filefrag) {
-      return (strdup (filefrag));
+      rc = stat (filefrag, &statbuf);
+      if ((!rc) && (S_ISREG(statbuf.st_mode)))
+          return (strdup (filefrag));
+      return NULL;
    } 
 
    /* get conservative on the length so that sprintf(getpid()) works ... */
