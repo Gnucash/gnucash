@@ -175,7 +175,14 @@ verify_cell_interaction_OK(Table *table, const int row, const int col)
   /* compute the cell location */
   rel_row = table->locators[row][col]->phys_row_offset;
   rel_col = table->locators[row][col]->phys_col_offset;
-  
+
+  /* verify that cursor offsets are valid.  This may occur if 
+   * the app that is using the table has a paritally initialized
+   * cursor. (probably due to a prograing error, but maybe they 
+   * meant to do this). */
+  invalid = invalid || (0 > rel_row);
+  invalid = invalid || (0 > rel_col);
+
   /* check for a cell handler, but only if cell adress is valid */
   /* GTK may not need all these checks, but they don't hurt */
   if (arr && !invalid) {
