@@ -4,7 +4,12 @@ exec guile -s $0 "$@"
 
 (use-modules (srfi srfi-2))
 (use-modules (ice-9 slib))
-(require 'format)
+;; Test for simple-format
+(if (not (defined? 'simple-format))
+    (begin
+      (require 'format)
+      (export simple-format)
+      (define simple-format format)))
 
 (define *currency-file* (string-append (getenv "srcdir") "/" "iso-4217-currencies.scm"))
 (define *c-file-name* "iso-4217-currencies.c")
