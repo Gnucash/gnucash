@@ -1,5 +1,10 @@
 2002-10-28  Chris Lyttle  <chris@wilddev.net>
 
+	* NEWS: update for new release
+	* configure.in: update to new version 1.7.2
+
+2002-10-28  Chris Lyttle  <chris@wilddev.net>
+
 	* src/scm/help-topics-index.old: Moved old file to here for now
 	* src/scm/help-topics-index.scm: deleted the junk and put temp in
 	* doc/sgml/C/topic.dat: add help topic
