@@ -24,6 +24,7 @@ ltconfig
 ltmain.sh
 make-gnucash-patch
 stamp-h
+stamp-h1
 stamp-h.in
 install-stamp
 tags
