@@ -56,29 +56,45 @@
 #define TXN_TYPE_PAYMENT 'P'  /**< Transaction is a payment  */
 /**@}*/
 
-/** PROTOTYPES ******************************************************/
 
-/** @name Transaction ForceDoubleEntry getters/setters
+/** @name Configuration ForceDoubleEntry getters/setters
+ */
+/**@{*/
+/**
  * The xaccConfigSetForceDoubleEntry() and xaccConfigGetForceDoubleEntry()
  *    set and get the "force_double_entry" flag.  This flag determines how
  *    the splits in a transaction will be balanced.
  *
  *    The following values have significance:
+ *
  *    0 -- anything goes
+ *
  *    1 -- The sum of all splits in a transaction will be
  *         forced to be zero, even if this requires the
  *         creation of additional splits.  Note that a split
  *         whose value is zero (e.g. a stock price) can exist
  *         by itself. Otherwise, all splits must come in at
  *         least pairs.
+ *
  *    2 -- splits without parents will be forced into a
  *         lost & found account.  (Not implemented)
  */
-/**@{*/
 void   xaccConfigSetForceDoubleEntry (int force);
+/**
+ * The xaccConfigSetForceDoubleEntry() and xaccConfigGetForceDoubleEntry()
+ *    set and get the "force_double_entry" flag.  This flag determines how
+ *    the splits in a transaction will be balanced.
+ */
 int    xaccConfigGetForceDoubleEntry (void);
 /**@}*/
 
+
+/***************************************************************
+ * Transaction
+ */
+
+/** @name Transaction creation and editing */
+/**@{*/
 /** 
  The xaccMallocTransaction() will malloc memory and initialize it.
  Once created, it is usually unsafe to merely "free" this memory;
@@ -124,6 +140,19 @@ void          xaccTransRollbackEdit (Transaction *trans);
     is open for editing. Otherwise, it returns false.  */
 gboolean      xaccTransIsOpen (const Transaction *trans);
 
+/** The xaccTransLookup() subroutine will return the
+    transaction associated with the given id, or NULL
+    if there is no such transaction. */
+Transaction * xaccTransLookup (const GUID *guid, GNCBook *book);
+/** The xaccTransLookup() subroutine will return the
+    transaction associated with the given id, or NULL
+    if there is no such transaction. */
+Transaction * xaccTransLookupDirect (GUID guid, GNCBook *book);
+/**@}*/
+
+
+/** @name Transaction general getters/setters */
+/**@{*/
 /** The xaccTransGetGUID() subroutine will return the
     globally unique id associated with that transaction. */
 const GUID  * xaccTransGetGUID (const Transaction *trans);
@@ -132,110 +161,49 @@ const GUID  * xaccTransGetGUID (const Transaction *trans);
     associated with that transaction. */
 GUID          xaccTransReturnGUID (const Transaction *trans);
 
-/** The xaccTransLookup() subroutine will return the
-    transaction associated with the given id, or NULL
-    if there is no such transaction. */
-Transaction * xaccTransLookup (const GUID *guid, GNCBook *book);
-Transaction * xaccTransLookupDirect (GUID guid, GNCBook *book);
-
 /** Returns the book in which the transaction is stored */
 GNCBook *     xaccTransGetBook (const Transaction *trans);
 
 
-/** @name Transaction KVP frames setters/getters
+/** Returns the transaction's kvp_frame slots.
  *
  Transaction slots are used to store arbitrary strings, numbers, and
  structures which aren't members of the transaction struct.  */
-
-/**@{*/
 kvp_frame *xaccTransGetSlots(const Transaction *trans);
+
+/** Set the kvp_frame slots of this transaction to the given frm by
+ * directly using the frm pointer (i.e. non-copying). */
 void xaccTransSetSlots_nc(Transaction *t, kvp_frame *frm);
-/**@}*/
 
-/** @name Transaction date setters/getters
+
+/** Set the  Transaction Type
  *
- (Footnote: this shouldn't matter to a user, but anyone modifying
- the engine should understand that when xaccTransCommitEdit() is
- called, the date order of each of the component splits will be
- checked, and will be restored in ascending date order.) */
-
-/**@{*/
-   
-/** The xaccTransSetDate() method does the same thing as
-    xaccTransSetDate[Posted]Secs(), but takes a convenient
-    day-month-year format.*/
-void          xaccTransSetDate (Transaction *trans,
-                                int day, int mon, int year);
-
-/** The xaccTransSetDateSecs() method will modify the posted date of
-    the transaction, specified by a time_t (see ctime(3)). */
-void          xaccTransSetDateSecs (Transaction *trans, time_t time);
-
-/**     xaccTransSetDatePostedSecs() is just an alias for
-	xaccTransSetDateSecs() -- both functions access the same date. */
-void          xaccTransSetDatePostedSecs (Transaction *trans, time_t time);
-
-/**  The xaccTransSetDatePostedTS() method does the same thing as
-     xaccTransSetDate[Posted]Secs(), but takes a struct timespec64. */
-void          xaccTransSetDatePostedTS (Transaction *trans,
-                                        const Timespec *ts);
-
-/** @brief Modify the date of when the transaction was entered. */
-void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
-/** @brief Modify the date of when the transaction was entered. */
-void          xaccTransSetDateEnteredTS (Transaction *trans,
-                                        const Timespec *ts);
-
-/* Dates and txn-type for A/R and A/P "invoice" postings */
-void	      xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts);
-
-/* Retrieve the posted date of the transaction. (Although having
-   different function names, GetDate and GetDatePosted refer to the
-   same single date.)*/
-time_t        xaccTransGetDate (const Transaction *trans);
-void          xaccTransGetDatePostedTS (const Transaction *trans, Timespec *ts);
-Timespec      xaccTransRetDatePostedTS (const Transaction *trans);
-
-/* Retrieve the date of when the transaction was entered. */
-void          xaccTransGetDateEnteredTS (const Transaction *trans, Timespec *ts);
-Timespec      xaccTransRetDateEnteredTS (const Transaction *trans);
-
-/* Dates and txn-type for A/R and A/P "invoice" postings */
-Timespec      xaccTransRetDateDueTS (const Transaction *trans);
-void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
-
-/**@}*/
-
-/** @name Transaction Type getters/setters
- *
- See #define TXN_TYPE_NONE, TXN_TYPE_INVOICE and TXN_TYPE_PAYMENT */
-/**@{*/
+ * See #define TXN_TYPE_NONE, TXN_TYPE_INVOICE and TXN_TYPE_PAYMENT */
 void	      xaccTransSetTxnType (Transaction *trans, char type);
+/** Returns the  Transaction Type
+ *
+ * See #define TXN_TYPE_NONE, TXN_TYPE_INVOICE and TXN_TYPE_PAYMENT */
 char	      xaccTransGetTxnType (const Transaction *trans);
-/**@}*/
 
-/** @name Transaction general getters/setters */
-/**@{*/
 
-/* @brief Sets the transaction Number (or ID) field*/
+/** @brief Sets the transaction Number (or ID) field*/
 void          xaccTransSetNum (Transaction *trans, const char *num);
-/* @brief Sets the transaction Description */
+/** @brief Sets the transaction Description */
 void          xaccTransSetDescription (Transaction *trans, const char *desc);
-/* @brief Sets the transaction Notes
+/** @brief Sets the transaction Notes
  *
  The Notes field is only visible in the register in double-line mode */
 void          xaccTransSetNotes (Transaction *trans, const char *notes);
 
-/* @brief Gets the transaction Number (or ID) field*/
+/** @brief Gets the transaction Number (or ID) field*/
 const char *  xaccTransGetNum (const Transaction *trans);
-/* @brief Gets the transaction Description */
+/** @brief Gets the transaction Description */
 const char *  xaccTransGetDescription (const Transaction *trans);
-/* @brief Gets the transaction Notes
+/** @brief Gets the transaction Notes
  *
  The Notes field is only visible in the register in double-line mode */
 const char *  xaccTransGetNotes (const Transaction *trans);
 
-/**@}*/
 
 /** @brief Add a split to the transaction
  * 
@@ -262,30 +230,32 @@ Split *       xaccTransGetSplit (const Transaction *trans, int i);
 SplitList *   xaccTransGetSplitList (const Transaction *trans);
 
 
-/** @name Transaction ReadOnly functions */
-/**@{*/
+/** Set the transaction to be ReadOnly */
 void          xaccTransSetReadOnly (Transaction *trans, const char *reason);
+/** FIXME: document me */
 const char *  xaccTransGetReadOnly (const Transaction *trans);
+/** FIXME: document me */
 gboolean      xaccTransWarnReadOnly (const Transaction *trans);
-/**@}*/
 
-/** @brief returns the number of splits in a transaction. */
+/** Returns the number of splits in this transaction. */
 int           xaccTransCountSplits (const Transaction *trans);
 
+/** FIXME: document me */
 gboolean      xaccTransHasReconciledSplits (const Transaction *trans);
+/** FIXME: document me */
 gboolean      xaccTransHasReconciledSplitsByAccount (const Transaction *trans,
 						     const Account *account);
 
 
-/** @name Transaction Commmodity routines.
+/** Returns the commodity of this transaction.
  *
  * Each transaction's 'currency' is by definition
  * the balancing common currency for the splits in that transaction.
  * @note What happens if the Currency isn't set? */
-/**@{*/
 gnc_commodity * xaccTransGetCurrency (const Transaction *trans);
+
+/** Set the commodity of this transaction. */
 void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
-/**@}*/
 
 /** The xaccTransGetImbalance() method returns the total value of the
  * transaction.  In a pure double-entry system, this imbalance
@@ -298,7 +268,7 @@ void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
 gnc_numeric xaccTransGetImbalance (const Transaction * trans);
 
 /** The xaccTransGetAccountValue() method returns the total value applied
- *  to a paricular account.  In some cases there may be multiple Splits
+ *  to a particular account.  In some cases there may be multiple Splits
  *  in a single Transaction applied to one account (in particular when
  *  trying to balance Lots) -- this function is just a convienience to
  *  view everything at once.
@@ -306,6 +276,73 @@ gnc_numeric xaccTransGetImbalance (const Transaction * trans);
 gnc_numeric xaccTransGetAccountValue (const Transaction *trans, 
 				      const Account *account);
 
+/**
+ * The xaccTransOrder(ta,tb) method is useful for sorting.
+ *    return a negative value if transaction ta is dated earlier than tb, 
+ *    return a positive value if transaction ta is dated later than tb,
+ *    then compares num and description values, using the strcmp()
+ *    c-library routine, returning  what strcmp would return.
+ *    Finally, it returns zero if all of the above match.
+ *    Note that it does *NOT* compare its member splits.
+ */
+int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
+
+/**@}*/
+
+
+/** @name Transaction date setters/getters */
+/**@{*/
+   
+/** The xaccTransSetDate() method does the same thing as
+    xaccTransSetDate[Posted]Secs(), but takes a convenient
+    day-month-year format.
+
+ (Footnote: this shouldn't matter to a user, but anyone modifying
+ the engine should understand that when xaccTransCommitEdit() is
+ called, the date order of each of the component splits will be
+ checked, and will be restored in ascending date order.)
+ */
+void          xaccTransSetDate (Transaction *trans,
+                                int day, int mon, int year);
+
+/** The xaccTransSetDateSecs() method will modify the posted date of
+    the transaction, specified by a time_t (see ctime(3)). */
+void          xaccTransSetDateSecs (Transaction *trans, time_t time);
+
+/**     xaccTransSetDatePostedSecs() is just an alias for
+	xaccTransSetDateSecs() -- both functions access the same date. */
+void          xaccTransSetDatePostedSecs (Transaction *trans, time_t time);
+
+/**  The xaccTransSetDatePostedTS() method does the same thing as
+     xaccTransSetDate[Posted]Secs(), but takes a struct timespec64. */
+void          xaccTransSetDatePostedTS (Transaction *trans,
+                                        const Timespec *ts);
+
+/** @brief Modify the date of when the transaction was entered. */
+void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
+/** @brief Modify the date of when the transaction was entered. */
+void          xaccTransSetDateEnteredTS (Transaction *trans,
+                                        const Timespec *ts);
+
+/** Dates and txn-type for A/R and A/P "invoice" postings */
+void	      xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts);
+
+/** Retrieve the posted date of the transaction. (Although having
+   different function names, GetDate and GetDatePosted refer to the
+   same single date.)*/
+time_t        xaccTransGetDate (const Transaction *trans);
+void          xaccTransGetDatePostedTS (const Transaction *trans, Timespec *ts);
+Timespec      xaccTransRetDatePostedTS (const Transaction *trans);
+
+/** Retrieve the date of when the transaction was entered. */
+void          xaccTransGetDateEnteredTS (const Transaction *trans, Timespec *ts);
+Timespec      xaccTransRetDateEnteredTS (const Transaction *trans);
+
+/** Dates and txn-type for A/R and A/P "invoice" postings */
+Timespec      xaccTransRetDateDueTS (const Transaction *trans);
+void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
+
+/**@}*/
 
 
 /*-----------------------------------------------------------------------
@@ -613,7 +650,7 @@ int xaccSplitCompareOtherAccountFullNames(Split *sa, Split *sb);
 int xaccSplitCompareOtherAccountCodes(Split *sa, Split *sb);
 
 
-/*
+/**
  * These functions take a split, get the corresponding split on the
  * "other side" of the transaction, and extract either the name or code
  * of that split, reverting to returning a constant "Split" if the 
@@ -624,7 +661,9 @@ int xaccSplitCompareOtherAccountCodes(Split *sa, Split *sb);
  */
 
 char * xaccSplitGetCorrAccountFullName(const Split *sa, char seperator);
+/** document me */
 const char * xaccSplitGetCorrAccountName(const Split *sa);
+/** document me */
 const char * xaccSplitGetCorrAccountCode(const Split *sa);
 
 /*@}*/
@@ -667,17 +706,6 @@ void         DxaccSplitSetBaseValue (Split *split, double value,
 
 
 
-/**
- * The xaccTransOrder(ta,tb) method is useful for sorting.
- *    return a negative value if transaction ta is dated earlier than tb, 
- *    return a positive value if transaction ta is dated later than tb,
- *    then compares num and description values, using the strcmp()
- *    c-library routine, returning  what strcmp would return.
- *    Finally, it returns zero if all of the above match.
- *    Note that it does *NOT* compare its member splits.
- */
-int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
-
 
 /********************************************************************\
  * Miscellaneous utility routines.
@@ -706,14 +734,18 @@ Account * xaccGetAccountByFullName (Transaction *trans,
  */
 void xaccTransVoid(Transaction *transaction, 
 			 const char *reason);
-
+/** document me */
 gboolean xaccTransGetVoidStatus(const Transaction *transaction);
 
+/** document me */
 char *xaccTransGetVoidReason(const Transaction *transaction);
 
+/** document me */
 gnc_numeric xaccSplitVoidFormerAmount(const Split *split);
+/** document me */
 gnc_numeric xaccSplitVoidFormerValue(const Split *split);
 
+/** document me */
 Timespec xaccTransGetVoidTime(const Transaction *tr);
 /**@}*/
 
