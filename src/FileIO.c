@@ -247,7 +247,7 @@ xaccReadData( char *datafile )
 
     /* create a lost account, put the missing accounts there */
     acc = mallocAccount();
-    acc -> accountName = XtNewString (LOST_ACC_STR);
+    acc -> accountName = strdup (LOST_ACC_STR);
     acc -> children = (struct _account_group *) holder;
     insertAccount (grp, acc);
   } else {
@@ -538,7 +538,7 @@ readTransaction( int fd, Account *acc, int token )
       return NULL;
       }
     xaccTransSetMemo (trans, tmp);
-    XtFree (tmp);
+    free (tmp);
     
     /* action first introduced in version 3 of the file format */
     if (3 <= token) {
@@ -759,7 +759,7 @@ readSplit ( int fd, int token )
     return NULL;
     }
   xaccSplitSetMemo (split, tmp);
-  XtFree (tmp);
+  free (tmp);
   
   tmp = readString( fd, token );
   if( tmp == NULL )
@@ -850,12 +850,12 @@ readString( int fd, int token )
     return NULL;
   XACC_FLIP_INT (size);
   
-  str = (char *)XtMalloc(size);
+  str = (char *) malloc (size);
   err = read( fd, str, size );
   if( err != size )
     {
     printf( "Error: readString: size = %d err = %d str = %s\n", size, err, str );
-    XtFree(str);
+    free(str);
     return NULL;
     }
   

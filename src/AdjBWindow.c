@@ -236,6 +236,7 @@ adjBWindow( Widget parent, Account *acc )
   }
 
 /********************************************************************\
+ * Don't delete any structures, the close callback will do this     *
 \********************************************************************/
 
 void
@@ -243,9 +244,9 @@ xaccDestroyAdjBWindow (Account *acc)
 {
    AdjBWindow *adjBData;
 
-   REMOVE_FROM_LIST (AdjBWindow, adjBList, acc, acc, adjBData);
+   FIND_IN_LIST (AdjBWindow, adjBList, acc, acc, adjBData);
+   if (!adjBData) return;
    XtDestroyWidget (adjBData->dialog);
-   free (adjBData);
 }
 
 /********************************************************************\
@@ -264,7 +265,7 @@ adjBClose( Widget mw, XtPointer cd, XtPointer cb )
   AdjBWindow *adjBData = (AdjBWindow *)cd;
   Account *acc = adjBData->acc;
   
-  REMOVE_FROM_LIST (AdjBWindow, adjBList, acc, acc, adjBData);
+  REMOVE_FROM_LIST (AdjBWindow, adjBList, acc, acc);
   free(adjBData);
   
   DEBUG("closed AdjBWindow");

@@ -557,15 +557,16 @@ editAccWindow( Widget parent, Account *acc )
 }
 
 /********************************************************************\
+ * Don't delete any structures -- the close callback wil do this    *
 \********************************************************************/
 
 void xaccDestroyEditAccWindow (Account * acc)
 {
   EditAccWindow *editAccData;
 
-  REMOVE_FROM_LIST (EditAccWindow,editAccList,acc,account,editAccData); 
+  FIND_IN_LIST (EditAccWindow,editAccList,acc,account,editAccData); 
+  if (!editAccData) return;
   XtDestroyWidget (editAccData->dialog);
-  free (editAccData);
 }
 
 /********************************************************************\
@@ -585,7 +586,7 @@ closeEditAccWindow( Widget mw, XtPointer cd, XtPointer cb )
   EditAccWindow *editAccData = (EditAccWindow *)cd;
   Account *acc = editAccData->account;
 
-  REMOVE_FROM_LIST (EditAccWindow,editAccList,acc,account,editAccData); 
+  REMOVE_FROM_LIST (EditAccWindow,editAccList,acc,account); 
   free(editAccData);
   DEBUG("close EditAccWindow");
   }
@@ -917,6 +918,7 @@ editNotesWindow (Account *acc)
 }
 
 /********************************************************************\
+ * don't delete any structures; te close callack will do this       *
 \********************************************************************/
 
 void 
@@ -924,10 +926,10 @@ xaccDestroyEditNotesWindow (Account *acc)
 {
   EditNotesWindow *edwin;
 
-  REMOVE_FROM_LIST (EditNotesWindow,editNotesList,acc,account,edwin) 
+  FIND_IN_LIST (EditNotesWindow,editNotesList,acc,account,edwin) 
+  if (!edwin) return;
 
   xaccDestroyTextBox (edwin->tb);
-  free (edwin);
 }
 
 /********************************************************************\
@@ -937,8 +939,12 @@ static void
 closeEditNotesWindow( Widget mw, XtPointer cd, XtPointer cb )
 {
   EditNotesWindow *enw = (EditNotesWindow *) cd;
+  Account * acc = enw->account;
 
-  xaccDestroyEditNotesWindow (enw->account);
+  REMOVE_FROM_LIST (EditNotesWindow,editNotesList,acc,account) 
+
+  xaccDestroyTextBox (enw->tb);
+  free (enw);
 
   DEBUG("close EditNotesWindow");
 }

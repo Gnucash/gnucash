@@ -87,6 +87,7 @@ recnRefresh (Account *acc)
     RecnWindow *recnData; 
 
     FIND_IN_LIST (RecnWindow, recnList, acc, acc, recnData);
+    if (!recnData) return;
     
     /* NOTE: an improvement of the current design would be to use the
      *       user-data in the rows to detect where transactions need
@@ -758,6 +759,7 @@ recnWindow( Widget parent, Account *acc )
   }
 
 /********************************************************************\
+ * Don't delete any structures -- the close callback will handle this *
 \********************************************************************/
 
 void 
@@ -765,9 +767,9 @@ xaccDestroyRecnWindow (Account *acc)
 {
    RecnWindow *recnData;
 
-   REMOVE_FROM_LIST (RecnWindow, recnList, acc, acc, recnData);
+   FIND_IN_LIST (RecnWindow, recnList, acc, acc, recnData);
+   if (!recnData) return;
    XtDestroyWidget (recnData->dialog);
-   free (recnData);
 }
 
 /********************************************************************\
@@ -786,7 +788,7 @@ recnClose( Widget mw, XtPointer cd, XtPointer cb )
   RecnWindow *recnData = (RecnWindow *)cd;
   Account *acc = recnData->acc;
   
-  REMOVE_FROM_LIST (RecnWindow, recnList, acc, acc, recnData);
+  REMOVE_FROM_LIST (RecnWindow, recnList, acc, acc);
   free(recnData);
   
   DEBUG("closed RecnWindow");

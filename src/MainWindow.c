@@ -155,9 +155,10 @@ xaccDestroyMainArrow (Account *acc )
 {
    MainArrow *arrowData;
 
-   REMOVE_FROM_LIST (MainArrow, arrowList, acc, account, arrowData); 
-
+   FIND_IN_LIST (MainArrow, arrowList, acc, account, arrowData); 
    if (!arrowData) return;
+
+   REMOVE_FROM_LIST (MainArrow, arrowList, acc, account); 
 
    XtRemoveCallback (arrowData->arrowb, XmNactivateCallback,
                      expandListCB, (XtPointer *) arrowData);
