@@ -2090,7 +2090,7 @@ regWindowLedger (xaccLedgerDisplay *ledger)
       GnomeDockItemBehavior behavior;
       GtkWidget *dock_item;
 
-      behavior = GNOME_DOCK_ITEM_BEH_EXCLUSIVE;
+      behavior = GNOME_DOCK_ITEM_BEH_EXCLUSIVE | GNOME_DOCK_ITEM_BEH_NEVER_VERTICAL;
       if (!gnome_preferences_get_toolbar_detachable ())
         behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
 
