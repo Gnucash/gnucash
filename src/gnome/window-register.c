@@ -29,6 +29,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <time.h>
 
 #include "AccWindow.h"
 #include "EuroUtils.h"
@@ -90,6 +91,8 @@ struct _RegWindow
 
   GtkWidget * balance_label;
   GtkWidget * cleared_label;
+  GtkWidget * reconciled_label;
+  GtkWidget * future_label;
 
   GnucashRegister *reg;
 
@@ -111,9 +114,7 @@ static void gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data);
 static void gnc_reg_refresh_toolbar(RegWindow *regData);
 static void regDestroy(xaccLedgerDisplay *ledger);
 static void regSetHelp(xaccLedgerDisplay *ledger, const char *help_str);
-
 static void gnc_register_check_close(RegWindow *regData);
-
 static void cutCB(GtkWidget *w, gpointer data);
 static void copyCB(GtkWidget *w, gpointer data);
 static void pasteCB(GtkWidget *w, gpointer data);
@@ -148,13 +149,13 @@ static gboolean gnc_register_include_date(RegWindow *regData, time_t date);
  * Return: regData - the register window instance                   *
 \********************************************************************/
 RegWindow *
-regWindowSimple(Account *account)
+regWindowSimple (Account *account)
 {
   RegWindow *result = NULL;
-  xaccLedgerDisplay * ledger = xaccLedgerDisplaySimple(account);
+  xaccLedgerDisplay * ledger = xaccLedgerDisplaySimple (account);
 
   if (ledger != NULL)
-    result = regWindowLedger(ledger);
+    result = regWindowLedger (ledger);
 
   return result;
 }
@@ -168,10 +169,10 @@ regWindowSimple(Account *account)
  * Return: regData - the register window instance                   *
 \********************************************************************/
 RegWindow *
-regWindowAccGroup(Account *account)
+regWindowAccGroup (Account *account)
 {
   RegWindow *result = NULL;
-  xaccLedgerDisplay * ledger = xaccLedgerDisplayAccGroup(account);
+  xaccLedgerDisplay * ledger = xaccLedgerDisplayAccGroup (account);
 
   if (ledger != NULL)
     result = regWindowLedger(ledger);
@@ -188,7 +189,7 @@ regWindowAccGroup(Account *account)
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_register_raise(RegWindow *regData)
+gnc_register_raise (RegWindow *regData)
 {
   if (regData == NULL)
     return;
@@ -196,12 +197,12 @@ gnc_register_raise(RegWindow *regData)
   if (regData->window == NULL)
     return;
 
-  gtk_widget_show(regData->window);
+  gtk_widget_show (regData->window);
 
   if (regData->window->window == NULL)
     return;
 
-  gdk_window_raise(regData->window->window);
+  gdk_window_raise (regData->window->window);
 }
 
 
@@ -931,77 +932,110 @@ gnc_ui_find_transactions_cb (GtkWidget *widget, gpointer data)
     gnc_ui_find_transactions_dialog_create (NULL);
 }
 
-
 static GtkWidget *
-gnc_register_create_status_bar(RegWindow *regData)
+gnc_register_create_summary_bar (RegWindow *regData)
 {
   SplitRegister *reg;
-  GtkWidget *statusbar;
+  GtkWidget *summarybar;
   GtkWidget *hbox;
   GtkWidget *label;
 
-  statusbar = gnome_appbar_new(FALSE, /* no progress bar */
-			       TRUE,  /* has status area */
-			       GNOME_PREFERENCES_USER);
-
-  regData->statusbar = statusbar;
-
   reg = xaccLedgerDisplayGetSR (regData->ledger);
 
-  switch (reg->type)
+  if (reg->type >= NUM_SINGLE_REGISTER_TYPES)
   {
-    case GENERAL_LEDGER:
-    case INCOME_LEDGER:
-    case PORTFOLIO_LEDGER:
-    case SEARCH_LEDGER:
-      regData->cleared_label = NULL;
-      regData->balance_label = NULL;
-      return statusbar;
-    default:
-      break;
+    regData->cleared_label = NULL;
+    regData->balance_label = NULL;
+    regData->reconciled_label = NULL;
+    regData->future_label = NULL;
+
+    return NULL;
   }
 
-  hbox = gtk_hbox_new(FALSE, 2);
-  gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
-
-  label = gtk_label_new(_("Cleared:"));
-  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-  label = gtk_label_new("");
-  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-  regData->cleared_label = label;
-  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  summarybar = gtk_hbox_new (FALSE, 4);
 
   hbox = gtk_hbox_new(FALSE, 2);
-  gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
+  gtk_box_pack_start (GTK_BOX(summarybar), hbox, FALSE, FALSE, 5);
 
-  label = gtk_label_new(_("Balance:"));
-  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  label = gtk_label_new (_("Present:"));
+  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
+  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-  label = gtk_label_new("");
-  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+  label = gtk_label_new ("");
+  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
   regData->balance_label = label;
-  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+
+  hbox = gtk_hbox_new (FALSE, 2);
+  gtk_box_pack_start (GTK_BOX(summarybar), hbox, FALSE, FALSE, 5);
+
+  label = gtk_label_new (_("Future:"));
+  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
+  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+  label = gtk_label_new ("");
+  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
+  regData->future_label = label;
+  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+
+  hbox = gtk_hbox_new (FALSE, 2);
+  gtk_box_pack_start (GTK_BOX(summarybar), hbox, FALSE, FALSE, 5);
+
+  label = gtk_label_new (_("Cleared:"));
+  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
+  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+  label = gtk_label_new ("");
+  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
+  regData->cleared_label = label;
+  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+
+  hbox = gtk_hbox_new (FALSE, 2);
+  gtk_box_pack_start (GTK_BOX(summarybar), hbox, FALSE, FALSE, 5);
+
+  label = gtk_label_new (_("Reconciled:"));
+  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
+  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+  label = gtk_label_new ("");
+  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
+  regData->reconciled_label = label;
+  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+  return summarybar;
+}
+
+static GtkWidget *
+gnc_register_create_status_bar (RegWindow *regData)
+{
+  GtkWidget *statusbar;
+
+  statusbar = gnome_appbar_new (FALSE, /* no progress bar */
+                                TRUE,  /* has status area */
+                                GNOME_PREFERENCES_USER);
+
+  regData->statusbar = statusbar;
 
   return statusbar;
 }
 
 
 void
-gnc_register_jump_to_blank(RegWindow *regData)
+gnc_register_jump_to_blank (RegWindow *regData)
 {
   SplitRegister *reg = xaccLedgerDisplayGetSR (regData->ledger);
-  Split *blank;
   VirtualCellLocation vcell_loc;
+  Split *blank;
 
-  blank = xaccSRGetBlankSplit(reg);
+  blank = xaccSRGetBlankSplit (reg);
   if (blank == NULL)
     return;
 
-  if (xaccSRGetSplitVirtLoc(reg, blank, &vcell_loc))
-    gnucash_register_goto_virt_cell(regData->reg, vcell_loc);
+  if (xaccSRGetSplitVirtLoc (reg, blank, &vcell_loc))
+    gnucash_register_goto_virt_cell (regData->reg, vcell_loc);
 }
 
 
@@ -1888,6 +1922,27 @@ regWindowLedger (xaccLedgerDisplay *ledger)
                          GNOME_DOCK_TOP, 1, 0, 0, TRUE);
   }
 
+  /* The summary bar */
+  {
+    GtkWidget *summarybar;
+
+    summarybar = gnc_register_create_summary_bar (regData);
+    if (summarybar)
+    {
+      GtkWidget *dock_item;
+
+      dock_item = gnome_dock_item_new ("summarybar",
+                                       GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
+
+      gtk_container_set_border_width (GTK_CONTAINER (summarybar), 2);
+      gtk_container_add (GTK_CONTAINER (dock_item), summarybar);
+
+      gnome_dock_add_item (GNOME_DOCK (register_dock),
+                           GNOME_DOCK_ITEM (dock_item),
+                           GNOME_DOCK_TOP, 2, 0, 0, TRUE);
+    }
+  }
+
   /* The CreateTable will do the actual gui init, returning a widget */
   {
     GtkWidget *register_widget;
@@ -1986,6 +2041,41 @@ gnc_reg_refresh_toolbar (RegWindow *regData)
 }
 
 
+static gnc_numeric
+gnc_account_present_balance (Account *account)
+{
+  GList *list;
+  GList *node;
+  time_t today;
+  struct tm *tm;
+
+  if (!account)
+    return gnc_numeric_zero ();
+
+  today = time (NULL);
+
+  tm = localtime (&today);
+
+  tm->tm_hour = 23;
+  tm->tm_min = 59;
+  tm->tm_sec = 59;
+  tm->tm_isdst = -1;
+
+  today = mktime (tm);
+
+  list = xaccAccountGetSplitList (account);
+
+  for (node = g_list_last (list); node; node = node->prev)
+  {
+    Split *split = node->data;
+
+    if (xaccTransGetDate (xaccSplitGetParent (split)) <= today)
+      return xaccSplitGetBalance (split);
+  }
+
+  return gnc_numeric_zero ();
+}
+
 static void
 gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 {
@@ -2021,21 +2111,21 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
   if (regData->balance_label != NULL)
   {
-    amount = xaccAccountGetBalance (leader);
+    amount = gnc_account_present_balance (leader);
     if (reverse)
       amount = gnc_numeric_neg (amount);
 
-    xaccSPrintAmount(string, amount, print_info);
+    xaccSPrintAmount (string, amount, print_info);
     if (euro)
     {
-      strcat(string, " / ");
-      xaccSPrintAmount(string + strlen(string),
-                       gnc_convert_to_euro(currency, amount),
-                       gnc_commodity_print_info (gnc_get_euro (), TRUE));
+      strcat (string, " / ");
+      xaccSPrintAmount (string + strlen (string),
+                        gnc_convert_to_euro (currency, amount),
+                        gnc_commodity_print_info (gnc_get_euro (), TRUE));
     }
 
-    gnc_set_label_color(regData->balance_label, amount);
-    gtk_label_set_text(GTK_LABEL(regData->balance_label), string);
+    gnc_set_label_color (regData->balance_label, amount);
+    gtk_label_set_text (GTK_LABEL(regData->balance_label), string);
   }
 
   if (regData->cleared_label != NULL)
@@ -2044,17 +2134,55 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     if (reverse)
       amount = gnc_numeric_neg (amount);
 
-    xaccSPrintAmount(string, amount, print_info);
+    xaccSPrintAmount (string, amount, print_info);
+    if (euro)
+    {
+      strcat (string, " / ");
+      xaccSPrintAmount (string + strlen (string),
+                        gnc_convert_to_euro (currency, amount),
+                        gnc_commodity_print_info (gnc_get_euro (), TRUE));
+    }
+
+    gnc_set_label_color (regData->cleared_label, amount);
+    gtk_label_set_text (GTK_LABEL (regData->cleared_label), string);
+  }
+
+  if (regData->reconciled_label != NULL)
+  {
+    amount = xaccAccountGetReconciledBalance (leader);
+    if (reverse)
+      amount = gnc_numeric_neg (amount);
+
+    xaccSPrintAmount (string, amount, print_info);
     if (euro)
     {
       strcat(string, " / ");
-      xaccSPrintAmount(string + strlen(string),
-                       gnc_convert_to_euro(currency, amount),
-                       gnc_commodity_print_info (gnc_get_euro (), TRUE));
+      xaccSPrintAmount (string + strlen(string),
+                        gnc_convert_to_euro(currency, amount),
+                        gnc_commodity_print_info (gnc_get_euro (), TRUE));
     }
 
-    gnc_set_label_color(regData->cleared_label, amount);
-    gtk_label_set_text(GTK_LABEL(regData->cleared_label), string);
+    gnc_set_label_color (regData->reconciled_label, amount);
+    gtk_label_set_text (GTK_LABEL(regData->reconciled_label), string);
+  }
+
+  if (regData->future_label != NULL)
+  {
+    amount = xaccAccountGetBalance (leader);
+    if (reverse)
+      amount = gnc_numeric_neg (amount);
+
+    xaccSPrintAmount (string, amount, print_info);
+    if (euro)
+    {
+      strcat (string, " / ");
+      xaccSPrintAmount (string + strlen(string),
+                        gnc_convert_to_euro(currency, amount),
+                        gnc_commodity_print_info (gnc_get_euro (), TRUE));
+    }
+
+    gnc_set_label_color (regData->future_label, amount);
+    gtk_label_set_text (GTK_LABEL (regData->future_label), string);
   }
 
   gnc_reg_set_window_name (regData);
@@ -2152,7 +2280,7 @@ regDestroy (xaccLedgerDisplay *ledger)
 
 
 static void
-regSetHelp(xaccLedgerDisplay *ledger, const char *help_str)
+regSetHelp (xaccLedgerDisplay *ledger, const char *help_str)
 {
   RegWindow *regData = xaccLedgerDisplayGetUserData (ledger);
   const gchar *status;
@@ -2165,12 +2293,12 @@ regSetHelp(xaccLedgerDisplay *ledger, const char *help_str)
   else
     status = "";
 
-  gnome_appbar_set_default(GNOME_APPBAR(regData->statusbar), status);
+  gnome_appbar_set_default (GNOME_APPBAR(regData->statusbar), status);
 }
 
 
 static void 
-newAccountCB(GtkWidget * w, gpointer data)
+newAccountCB (GtkWidget * w, gpointer data)
 {
   gnc_ui_new_account_window (NULL);
 }
@@ -2184,11 +2312,11 @@ newAccountCB(GtkWidget * w, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-cutCB(GtkWidget *w, gpointer data)
+cutCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnucash_register_cut_clipboard(regData->reg);
+  gnucash_register_cut_clipboard (regData->reg);
 }
 
 
@@ -2200,11 +2328,11 @@ cutCB(GtkWidget *w, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-copyCB(GtkWidget *w, gpointer data)
+copyCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnucash_register_copy_clipboard(regData->reg);
+  gnucash_register_copy_clipboard (regData->reg);
 }
 
 
@@ -2216,11 +2344,11 @@ copyCB(GtkWidget *w, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-pasteCB(GtkWidget *w, gpointer data)
+pasteCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnucash_register_paste_clipboard(regData->reg);
+  gnucash_register_paste_clipboard (regData->reg);
 }
 
 
@@ -2232,7 +2360,7 @@ pasteCB(GtkWidget *w, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void
-cutTransCB(GtkWidget *w, gpointer data)
+cutTransCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
