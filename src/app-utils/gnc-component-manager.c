@@ -492,14 +492,6 @@ gnc_gui_component_watch_entity_type (gint component_id,
 {
   ComponentInfo *ci;
 
-  if (safe_strcmp (entity_type, GNC_ID_TRANS) &&
-      safe_strcmp (entity_type, GNC_ID_ACCOUNT))
-  {
-    PERR ("bad entity type: %s",
-	  (entity_type ? entity_type : "<null-entity-type>"));
-    return;
-  }
-
   ci = find_component (component_id);
   if (!ci)
   {
@@ -672,7 +664,7 @@ changes_match (ComponentEventInfo *cei, ComponentEventInfo *changes)
 
   /* check types first, for efficiency */
   changes->match = FALSE;
-  g_hash_table_foreach (changes->event_masks, match_type_helper, changes);
+  g_hash_table_foreach (changes->event_masks, match_type_helper, cei);
   if (changes->match)
     return TRUE;
 
