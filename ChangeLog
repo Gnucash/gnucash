@@ -1,5 +1,10 @@
 2001-06-17  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/gnome/gnucash-style.c (gnucash_font_load): new func
+	If gdk_fontset_load doesn't work, try gdk_font_load.
+	(gnucash_style_set_register_font_name): use gnucash_font_load
+	(gnucash_style_set_register_hint_font_name): use gnucash_font_load
+
 	* src/FileDialog.c (gncFileSave): save the window state on a save
 	(gncFileQuerySave): don't provide cancel option when the ui can't
 
