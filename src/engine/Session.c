@@ -448,7 +448,7 @@ MakeHomeDir (void)
       mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
    }
 
-   data = g_strconcat (path, "/data");
+   data = g_strconcat (path, "/data", NULL);
    rc = stat (data, &statbuf);
    if (rc)
       mkdir (data, S_IRWXU);
@@ -484,6 +484,7 @@ xaccResolveFilePath (const char * filefrag)
 
    /* check for an absolute file path */
    if ('/' == *filefrag) {
+      return strdup (filefrag);
       rc = stat (filefrag, &statbuf);
       if ((!rc) && (S_ISREG(statbuf.st_mode)))
           return (strdup (filefrag));
@@ -547,12 +548,12 @@ xaccResolveFilePath (const char * filefrag)
    /* OK, we didn't find the file. */
    /* If the user specified a simple filename (i.e. no slashes in it)
     * then create the file.  But if it has slashes in it, then creating
-    * a bnuch of directories seems like a bad idea; more likely, the user
+    * a bunch of directories seems like a bad idea; more likely, the user
     * specified a bad filename.  So return with error. */
    if (strchr (filefrag, '/')) {
       return NULL;
    }
-   
+
    /* Lets try creating a new file in $HOME/.gnucash/data */
    path = getenv ("HOME");
    if (path) {
