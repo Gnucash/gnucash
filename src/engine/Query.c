@@ -34,18 +34,521 @@
 #include <unistd.h>
 
 #include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
-#include "AccountP.h"
-#include "BackendP.h"
+#include "Account.h"
 #include "GNCId.h"
-#include "GroupP.h"
-#include "QueryP.h"
 #include "Query.h"
+#include "Transaction.h"
 #include "TransactionP.h"
 
 static short module = MOD_QUERY;
+
+#if 1
+
+static GSList *
+build_param_list_internal (const char *first, va_list rest)
+{
+  GSList *list = NULL;
+  char const *param;
+
+  for (param = first; param; param = va_arg (rest, const char *))
+    list = g_slist_prepend (list, (gpointer)param);
+
+  return (g_slist_reverse (list));
+}
+
+static GSList *
+build_param_list (char const *param, ...)
+{
+  GSList *param_list;
+  va_list ap;
+
+  if (!param)
+    return NULL;
+
+  va_start (ap, param);
+  param_list = build_param_list_internal (param, ap);
+  va_end (ap);
+
+  return param_list;
+}
+
+/********************************************************************
+ * xaccQueryGetSplitsUniqueTrans 
+ * Get splits but no more than one from a given transaction.
+ ********************************************************************/
+
+SplitList *
+xaccQueryGetSplitsUniqueTrans(Query *q)
+{
+  GList       * splits = xaccQueryGetSplits(q);
+  GList       * current;
+  GList       * result = NULL;
+  GHashTable  * trans_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
+
+  for (current = splits; current; current = current->next)
+  {
+    Split *split = current->data;
+    Transaction *trans = xaccSplitGetParent (split);
+
+    if (!g_hash_table_lookup (trans_hash, trans))
+    {
+      g_hash_table_insert (trans_hash, trans, trans);
+      result = g_list_prepend (result, split);
+    }
+  }
+
+  g_hash_table_destroy (trans_hash);
+
+  return g_list_reverse (result);
+}
+
+/********************************************************************
+ * xaccQueryGetTransactions 
+ * Get transactions matching the query terms, specifying whether 
+ * we require some or all splits to match 
+ ********************************************************************/
+
+static void
+query_match_all_filter_func(gpointer key, gpointer value, gpointer user_data) 
+{
+  Transaction * t = key;
+  int         num_matches = GPOINTER_TO_INT(value);
+  GList       ** matches = user_data;
+
+  if(num_matches == xaccTransCountSplits(t)) {
+    *matches = g_list_prepend(*matches, t);
+  }
+}
+
+static void
+query_match_any_filter_func(gpointer key, gpointer value, gpointer user_data) 
+{
+  Transaction * t = key;
+  GList       ** matches = user_data;
+  *matches = g_list_prepend(*matches, t);
+}
+
+TransList * 
+xaccQueryGetTransactions (Query * q, query_txn_match_t runtype) 
+{
+  GList       * splits = xaccQueryGetSplits(q);
+  GList       * current = NULL;
+  GList       * retval = NULL;
+  GHashTable  * trans_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
+  Transaction * trans = NULL;
+  gpointer    val = NULL;
+  int         count = 0;
+
+  /* iterate over matching splits, incrementing a match-count in
+   * the hash table */
+  for(current = splits; current; current=current->next) {
+    trans = xaccSplitGetParent((Split *)(current->data));
+    
+    /* don't waste time looking up unless we need the count 
+     * information */
+    if(runtype == QUERY_TXN_MATCH_ALL) {
+      val   = g_hash_table_lookup(trans_hash, trans);
+      count = GPOINTER_TO_INT(val);
+    }
+    g_hash_table_insert(trans_hash, trans, GINT_TO_POINTER(count + 1));
+  }
+  
+  /* now pick out the transactions that match */
+  if(runtype == QUERY_TXN_MATCH_ALL) {
+    g_hash_table_foreach(trans_hash, query_match_all_filter_func, 
+                         &retval);
+  }
+  else {
+    g_hash_table_foreach(trans_hash, query_match_any_filter_func, 
+                         &retval);
+  }
+
+  g_hash_table_destroy(trans_hash);
+
+  return retval;
+}
+
+/*******************************************************************
+ *  match-adding API 
+ *******************************************************************/
+
+void
+xaccQueryAddAccountMatch(Query *q, AccountList *acct_list,
+			 guid_match_t how, QueryOp op)
+{
+  GList *list = NULL;
+
+  if (!q) return;
+  for (; acct_list; acct_list = acct_list->next) {
+    Account *acc = acct_list->data;
+    const GUID *guid;
+
+    if (!acc) {
+      PWARN ("acct_list has NULL account");
+      continue;
+    }
+
+    guid = xaccAccountGetGUID (acc);
+    if (!guid) {
+      PWARN ("acct returns NULL GUID");
+      continue;
+    }
+
+    list = g_list_prepend (list, (gpointer)guid);
+  }
+  xaccQueryAddAccountGUIDMatch (q, list, how, op);
+  g_list_free (list);
+}
+
+void
+xaccQueryAddAccountGUIDMatch(Query *q, AccountGUIDList *guid_list,
+			     guid_match_t how, QueryOp op)
+{
+  QueryPredData_t pred_data;
+  GSList *param_list = NULL;
+
+  if (!q) return;
+
+  pred_data = gncQueryGUIDPredicate (how, guid_list);
+  if (!pred_data)
+    return;
+
+  switch (how) {
+  case GUID_MATCH_ANY:
+  case GUID_MATCH_NONE:
+    param_list = build_param_list (SPLIT_ACCOUNT, QUERY_PARAM_GUID, NULL);
+    break;
+  case GUID_MATCH_ALL:
+    param_list = build_param_list (SPLIT_TRANS, TRANS_SPLITLIST,
+				   SPLIT_ACCOUNT_GUID, NULL);
+    break;
+  default:
+    PERR ("Invalid match type: %d", how);
+  }
+
+  gncQueryAddTerm (q, param_list, pred_data, op);
+}
+
+void
+xaccQueryAddSingleAccountMatch(Query *q, Account *acc, QueryOp op)
+{
+  GList *list;
+  const GUID *guid;
+
+  if (!q || !acc)
+    return;
+
+  guid = xaccAccountGetGUID (acc);
+  g_return_if_fail (guid);
+
+  list = g_list_prepend (NULL, (gpointer)guid);
+  xaccQueryAddAccountGUIDMatch (q, list, GUID_MATCH_ANY, op);
+  g_list_free (list);
+}
+
+void
+xaccQueryAddStringMatch (Query* q, const char *matchstring,
+			 int case_sens, int use_regexp, QueryOp op,
+			 const char * path, ...)
+{
+  QueryPredData_t pred_data;
+  GSList *param_list;
+  va_list ap;
+
+  if (!path || !q)
+    return;
+
+  pred_data = gncQueryStringPredicate (COMPARE_EQUAL, (char *)matchstring,
+				       (case_sens ? STRING_MATCH_NORMAL :
+					STRING_MATCH_CASEINSENSITIVE),
+				       use_regexp);
+  if (!pred_data)
+    return;
+
+  va_start (ap, path);
+  param_list = build_param_list_internal (path, ap);
+  va_end (ap);
+
+  gncQueryAddTerm (q, param_list, pred_data, op);
+}
+
+void
+xaccQueryAddNumericMatch (Query *q, gnc_numeric amount, numeric_match_t sign,
+			  query_compare_t how, QueryOp op,
+			  const char * path, ...)
+{
+  QueryPredData_t pred_data;
+  GSList *param_list;
+  va_list ap;
+
+  if (!q || !path)
+    return;
+
+  pred_data = gncQueryNumericPredicate (how, sign, amount);
+  if (!pred_data)
+    return;
+
+  va_start (ap, path);
+  param_list = build_param_list_internal (path, ap);
+  va_end (ap);
+
+  gncQueryAddTerm (q, param_list, pred_data, op);
+}
+
+/* The DateMatch queries match transactions whose posted date
+ *    is in a date range.  If use_start is TRUE, then a matching
+ *    posted date will be greater than the start date.   If 
+ *    use_end is TRUE, then a match occurs for posted dates earlier 
+ *    than the end date.  If both flags are set, then *both* 
+ *    conditions must hold ('and').  If neither flag is set, then 
+ *    all transactions are matched.
+ */
+
+void
+xaccQueryAddDateMatchTS (Query * q, 
+			 int use_start, Timespec sts, 
+			 int use_end, Timespec ets,
+			 QueryOp op)
+{
+  Query *tmp_q = NULL;
+  QueryPredData_t pred_data;
+  GSList *param_list;
+
+  if (!q || (!use_start && !use_end))
+    return;
+
+  tmp_q = gncQueryCreate ();
+
+  if (use_start) {
+    pred_data = gncQueryDatePredicate (COMPARE_GTE, DATE_MATCH_NORMAL, sts);
+    if (!pred_data) {
+      gncQueryDestroy (tmp_q);
+      return;
+    }
+
+    param_list = build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
+    gncQueryAddTerm (tmp_q, param_list, pred_data, QUERY_AND);
+  }
+
+  if (use_end) {
+    pred_data = gncQueryDatePredicate (COMPARE_LTE, DATE_MATCH_NORMAL, ets);
+    if (!pred_data) {
+      gncQueryDestroy (tmp_q);
+      return;
+    }
+
+    param_list = build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
+    gncQueryAddTerm (tmp_q, param_list, pred_data, QUERY_AND);
+  }
+
+  gncQueryMergeInPlace (q, tmp_q, op);
+  gncQueryDestroy (tmp_q);
+}
+
+/********************************************************************
+ * xaccQueryAddDateMatch
+ * Add a date filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddDateMatch(Query * q, 
+                      int use_start, int sday, int smonth, int syear,
+                      int use_end, int eday, int emonth, int eyear,
+                      QueryOp op) 
+{
+  /* gcc -O3 will auto-inline this function, avoiding a call overhead */
+  xaccQueryAddDateMatchTS (q, use_start,
+                           gnc_dmy2timespec(sday, smonth, syear),
+                           use_end,
+                           gnc_dmy2timespec_end(eday, emonth, eyear),
+                           op);
+}
+
+/********************************************************************
+ * xaccQueryAddDateMatchTT
+ * Add a date filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddDateMatchTT(Query * q, 
+                        int    use_start,
+                        time_t stt,
+                        int    use_end,
+                        time_t ett,
+                        QueryOp op) 
+{
+  Timespec   sts;
+  Timespec   ets;
+  
+  sts.tv_sec  = (long long)stt;
+  sts.tv_nsec = 0;
+
+  ets.tv_sec  = (long long)ett;
+  ets.tv_nsec = 0;
+
+  /* gcc -O3 will auto-inline this function, avoiding a call overhead */
+  xaccQueryAddDateMatchTS (q, use_start, sts,
+                           use_end, ets, op);
+  
+}
+
+void
+xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op)
+{
+  QueryPredData_t pred_data;
+  GSList *param_list;
+  char chars[6];
+  int i = 0;
+
+  if (!q)
+    return;
+
+  if (how & CLEARED_CLEARED)
+    chars[i++] = CREC;
+  if (how & CLEARED_RECONCILED)
+    chars[i++] = YREC;
+  if (how & CLEARED_FROZEN)
+    chars[i++] = FREC;
+  if (how & CLEARED_NO)
+    chars[i++] = NREC;
+  if (how & CLEARED_VOIDED)
+    chars[i++] = VREC;
+  chars[i] = '\0';
+
+  pred_data = gncQueryCharPredicate (CHAR_MATCH_ANY, chars);
+  if (!pred_data)
+    return;
+
+  param_list = build_param_list (SPLIT_RECONCILE, NULL);
+
+  gncQueryAddTerm (q, param_list, pred_data, op);
+}
+
+void
+xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
+		      GNCIdType id_type, QueryOp op)
+{
+  GSList *param_list = NULL;
+
+  if (!q || !guid || !id_type)
+    return;
+
+  if (!safe_strcmp (id_type, GNC_ID_SPLIT)) 
+    param_list = build_param_list (QUERY_PARAM_GUID, NULL);
+  else if (!safe_strcmp (id_type, GNC_ID_TRANS))
+    param_list = build_param_list (SPLIT_TRANS, QUERY_PARAM_GUID, NULL);
+  else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
+    param_list = build_param_list (SPLIT_ACCOUNT, QUERY_PARAM_GUID, NULL);
+  else
+    PERR ("Invalid match type: %s", id_type);
+
+  gncQueryAddGUIDMatch (q, param_list, guid, op);
+}
+
+void
+xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
+		     query_compare_t how, GNCIdType id_type,
+		     QueryOp op)
+{
+  GSList *param_list = NULL;
+  QueryPredData_t pred_data;
+
+  if (!q || !path || !value || !id_type)
+    return;
+
+  pred_data = gncQueryKVPPredicate (how, path, value);
+  if (!pred_data)
+    return;
+
+  if (!safe_strcmp (id_type, GNC_ID_SPLIT)) 
+    param_list = build_param_list (SPLIT_KVP, NULL);
+  else if (!safe_strcmp (id_type, GNC_ID_TRANS))
+    param_list = build_param_list (SPLIT_TRANS, TRANS_KVP, NULL);
+  else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
+    param_list = build_param_list (SPLIT_ACCOUNT, ACCOUNT_KVP, NULL);
+  else
+    PERR ("Invalid match type: %s", id_type);
+
+  gncQueryAddTerm (q, param_list, pred_data, op);
+}
+
+/*******************************************************************
+ *  xaccQueryGetEarliestDateFound
+ *******************************************************************/
+
+time_t
+xaccQueryGetEarliestDateFound(Query * q) 
+{
+  GList * spl;
+  Split * sp;
+  time_t earliest = LONG_MAX;
+
+  if (!q) return 0;
+  spl = gncQueryLastRun (q);
+  if (!spl) return 0;
+
+  for(; spl; spl=spl->next) {
+    sp = spl->data;
+    if(sp->parent->date_posted.tv_sec < earliest) {
+      earliest = (time_t) sp->parent->date_posted.tv_sec;
+    }
+  }
+  return earliest;
+}
+
+/*******************************************************************
+ *  xaccQueryGetLatestDateFound
+ *******************************************************************/
+
+time_t
+xaccQueryGetLatestDateFound(Query * q) 
+{
+  Split  * sp;
+  GList  * spl;
+  time_t latest = 0;
+
+  if(!q) return 0;
+  spl = gncQueryLastRun (q);
+  if(!spl) return 0;
+
+  for(; spl; spl=spl->next) {
+    sp = spl->data;
+    if(sp->parent->date_posted.tv_sec > latest) {
+      latest = (time_t) sp->parent->date_posted.tv_sec;
+    }
+  }
+  return latest;
+}
+
+void
+xaccQuerySetSortOrder(Query *q, GList *p1, GList *p2, GList *p3)
+{
+  GSList *l1 = NULL, *l2 = NULL, *l3 = NULL;
+  GList *node;
+
+  for (node = p1; node; node = node->next)
+    l1 = g_slist_prepend (l1, node->data);
+
+  for (node = p2; node; node = node->next)
+    l2 = g_slist_prepend (l2, node->data);
+
+  for (node = p3; node; node = node->next)
+    l3 = g_slist_prepend (l3, node->data);
+
+  if (l1) l1 = g_slist_reverse (l1);
+  if (l2) l2 = g_slist_reverse (l2);
+  if (l3) l3 = g_slist_reverse (l3);
+
+  if (p1) g_list_free (p1);
+  if (p2) g_list_free (p2);
+  if (p3) g_list_free (p3);
+
+  gncQuerySetSortOrder (q, l1, l2, l3);
+}
+
+#else
 
 /* the Query makes a subset of all splits based on 3 things: 
  *   - an AND-OR tree of predicates which combine to make a 
@@ -3015,50 +3518,6 @@ DxaccQuerySetGroup(Query * q, AccountGroup *grp)
   xaccQuerySetBook (q, xaccGroupGetBook(grp));
 }
 
-/*******************************************************************
- *  xaccQueryGetEarliestDateFound
- *******************************************************************/
-
-time_t
-xaccQueryGetEarliestDateFound(Query * q) 
-{
-  GList * spl;
-  Split * sp;
-  time_t earliest = LONG_MAX;
-
-  if (!q) return 0;
-  if (!q->split_list) return 0;
-
-  for(spl = q->split_list; spl; spl=spl->next) {
-    sp = spl->data;
-    if(sp->parent->date_posted.tv_sec < earliest) {
-      earliest = (time_t) sp->parent->date_posted.tv_sec;
-    }
-  }
-  return earliest;
-}
-
-/*******************************************************************
- *  xaccQueryGetEarliestDateFound
- *******************************************************************/
-
-time_t
-xaccQueryGetLatestDateFound(Query * q) 
-{
-  Split  * sp;
-  GList  * spl;
-  time_t latest = 0;
-
-  if(!q) return 0;
-  if(!q->split_list) return 0;
-
-  for(spl = q->split_list; spl; spl=spl->next) {
-    sp = spl->data;
-    if(sp->parent->date_posted.tv_sec > latest) {
-      latest = (time_t) sp->parent->date_posted.tv_sec;
-    }
-  }
-  return latest;
-}
+#endif /* 0 */
 
 /* ======================== END OF FILE ======================= */

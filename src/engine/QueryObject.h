@@ -7,8 +7,6 @@
 #ifndef GNC_QUERYOBJECT_H
 #define GNC_QUERYOBJECT_H
 
-#include "QueryNew.h"
-
 /* Define an arbitrary function pointer for access functions.  This is
  * because C doesn't have templates, so we just cast a lot.  Real
  * functions must be of the form:
@@ -16,6 +14,9 @@
  * <param_type> function (object_type *obj);
  */
 typedef gpointer (*QueryAccess)(gpointer);
+
+#include "QueryNew.h"
+#include "QueryCore.h"
 
 /* This structure is for each queriable parameter in an object
  *

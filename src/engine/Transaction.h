@@ -511,4 +511,50 @@ gnc_numeric xaccSplitVoidFormerAmount(Split *split);
 gnc_numeric xaccSplitVoidFormerValue(Split *split);
 
 Timespec xaccTransGetVoidTime(Transaction *tr);
+
+/* Parameter names */
+#define SPLIT_KVP		"kvp"
+#define SPLIT_DATE_RECONCILED	"date-reconciled"
+#define SPLIT_BALANCE		"balance"
+#define SPLIT_CLEARED_BALANCE	"cleared-balance"
+#define SPLIT_RECONCILED_BALANCE	"reconciled-balance"
+#define SPLIT_MEMO		"memo"
+#define SPLIT_ACTION		"action"
+#define SPLIT_RECONCILE		"reconcile-flag"
+#define SPLIT_AMOUNT		"amount"
+#define SPLIT_SHARE_PRICE	"share-price"
+#define SPLIT_VALUE		"value"
+#define SPLIT_TYPE		"type"
+#define SPLIT_VOIDED_AMOUNT	"voided-amount"
+#define SPLIT_VOIDED_VALUE	"voided-value"
+#define SPLIT_TRANS		"trans"
+#define SPLIT_ACCOUNT		"account"
+#define SPLIT_ACCOUNT_GUID	"account-guid" /* for guid_match_all */
+
+/* used for SORTING ONLY */
+#define SPLIT_ACCT_FULLNAME	"acct-fullname"
+#define SPLIT_CORR_ACCT_NAME	"corr-acct-fullname"
+#define SPLIT_CORR_ACCT_CODE	"corr-acct-code"
+
+#define TRANS_KVP		"kvp"
+#define TRANS_NUM		"num"
+#define TRANS_DESCRIPTION	"desc"
+#define TRANS_DATE_ENTERED	"date-entered"
+#define TRANS_DATE_POSTED	"date-posted"
+#define TRANS_DATE_DUE		"date-due"
+#define TRANS_IMBALANCE		"trans-imbalance"
+#define TRANS_IS_BALANCED	"trans-balanced?"
+#define TRANS_TYPE		"type"
+#define TRANS_VOID_STATUS	"void-p"
+#define TRANS_VOID_REASON	"void-reason"
+#define TRANS_VOID_TIME		"void-time"
+#define TRANS_SPLITLIST		"split-list" /* for guid_match_all */
+
+/* Note, if you want to get the equivalent of "ACCT_MATCH_ALL" you
+ * need to create a search on the following parameter list:
+ * SPLIT->SPLIT_TRANS->TRANS_SPLITLIST->SPLIT_ACCOUNT_GUID.  If you do
+ * this, you might want to use the ACCOUNT_MATCH_ALL_TYPE as the
+ * override so the gnome-search dialog displays the right type.
+ */
+
 #endif /* XACC_TRANSACTION_H */

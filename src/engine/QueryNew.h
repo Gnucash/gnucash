@@ -8,12 +8,11 @@
 #define GNC_QUERYNEW_H
 
 #include "GNCId.h"
+#include "QueryCore.h"
 
 /* A Query */
 typedef struct querynew_s QueryNew;
 
-/* in case Query.h is included first... */
-#ifndef GNUCASH_QUERY_H
 /* Query Term Operators, for combining Query Terms */
 typedef enum {
   QUERY_AND=1,
@@ -22,116 +21,28 @@ typedef enum {
   QUERY_NOR,
   QUERY_XOR
 } QueryOp;
-#endif
 
-/* Standard Query Term comparitors, for how to process a query term.
- * Note that not all core types implement all comparitors
- */
-typedef enum {
-  COMPARE_LT = 1,
-  COMPARE_LTE,
-  COMPARE_EQUAL,
-  COMPARE_GT,
-  COMPARE_GTE,
-  COMPARE_NEQ
-} query_compare_t;
-
+/* Default sort object type */
 #define QUERY_DEFAULT_SORT	"GnucashQueryDefaultSortObject"
 
-/* "Known" Object Parameters */
+/* "Known" Object Parameters -- all objects must support these */
 #define QUERY_PARAM_BOOK	"book"
 #define QUERY_PARAM_GUID	"guid"
 
-#define SPLIT_KVP		"kvp"
-#define SPLIT_DATE_RECONCILED	"date-reconciled"
-#define SPLIT_BALANCE		"balance"
-#define SPLIT_CLEARED_BALANCE	"cleared-balance"
-#define SPLIT_RECONCILED_BALANCE	"reconciled-balance"
-#define SPLIT_MEMO		"memo"
-#define SPLIT_ACTION		"action"
-#define SPLIT_RECONCILE		"reconcile-flag"
-#define SPLIT_AMOUNT		"amount"
-#define SPLIT_SHARE_PRICE	"share-price"
-#define SPLIT_VALUE		"value"
-#define SPLIT_TYPE		"type"
-#define SPLIT_VOIDED_AMOUNT	"voided-amount"
-#define SPLIT_VOIDED_VALUE	"voided-value"
-#define SPLIT_TRANS		"trans"
-#define SPLIT_ACCOUNT		"account"
-#define SPLIT_ACCOUNT_GUID	"account-guid" /* for guid_match_all */
-
-#define TRANS_KVP		"kvp"
-#define TRANS_NUM		"num"
-#define TRANS_DESCRIPTON	"desc"
-#define TRANS_DATE_ENTERED	"date-entered"
-#define TRANS_DATE_POSTED	"date-posted"
-#define TRANS_DATE_DUE		"date-due"
-#define TRANS_TYPE		"type"
-#define TRANS_VOID_STATUS	"void-p"
-#define TRANS_VOID_REASON	"void-reason"
-#define TRANS_VOID_TIME		"void-time"
-#define TRANS_SPLITLIST		"split-list" /* for guid_match_all */
-
-#define ACCOUNT_KVP		"kvp"
-#define ACCOUNT_NAME_		"name"
-#define ACCOUNT_CODE_		"code"
-#define ACCOUNT_DESCRIPTION_	"desc"
-#define ACCOUNT_NOTES_		"notes"
-#define ACCOUNT_BALANCE_	"balance"
-#define ACCOUNT_CLEARED_BALANCE	"cleared-balance"
-#define ACCOUNT_RECONCILED_BALANCE	"reconciled-balance"
-#define ACCOUNT_TAX_RELATED	"tax-related-p"
-
-#define BOOK_KVP		"kvp"
-
-/* Type of Query Core Objects (String, Date, Numeric, GUID, etc. */
-typedef const char * QueryCoreType;
-
-/*
- * List of known core query types... 
- * Each core query type defines it's set of optional "comparitor qualifiers".
- */
-#define QUERYCORE_STRING	"string"
-typedef enum {
-  STRING_MATCH_NORMAL = 1,
-  STRING_MATCH_CASEINSENSITIVE
-} string_match_t;
-
-#define QUERYCORE_DATE		"date"
-typedef enum {
-  DATE_MATCH_NORMAL = 1,
-  DATE_MATCH_ROUNDED
-} date_match_t;
-
-#define QUERYCORE_NUMERIC	"numeric"
-#define QUERYCORE_DEBCRED	"debcred"
-typedef enum {
-  NUMERIC_MATCH_DEBIT = 1,
-  NUMERIC_MATCH_CREDIT,
-  NUMERIC_MATCH_ANY
-} numeric_match_t;
-
-#define QUERYCORE_GUID		"guid"
-typedef enum {
-  GUID_MATCH_ANY = 1,
-  GUID_MATCH_NONE,
-  GUID_MATCH_NULL,
-  GUID_MATCH_ALL		/* You _must_ pass a GList of objects! */
-} guid_match_t;
-
-#define QUERYCORE_INT64		"gint64"
-#define QUERYCORE_DOUBLE	"double"
-#define QUERYCORE_BOOLEAN	"boolean"
-#define QUERYCORE_KVP		"kvp"
-
-/* A CHAR type is for a RECNCell */
-#define QUERYCORE_CHAR		"character"
-typedef enum {
-  CHAR_MATCH_ANY = 1,
-  CHAR_MATCH_NONE
-} char_match_t;
-
 /* Basic API Functions */
+
+/* Create a new query.  A Query MUST be set with a 'search-for' type.
+ * you can create and set this value in one step or two */
+QueryNew * gncQueryCreate (void);
+QueryNew * gncQueryCreateFor (GNCIdTypeConst obj_type);
+void gncQueryDestroy (QueryNew *q);
+
+/* Set the object type to be searched for */
+void gncQuerySearchFor (QueryNew *query, GNCIdTypeConst obj_type);
+
+/* Set the book to be searched (you can search multiple books) */
+void gncQuerySetBook (QueryNew *q, GNCBook *book);
+
 
 /* This is the general function that adds a new Query Term to a query.
  * It will find the 'obj_type' object of the search item and compare
@@ -147,42 +58,52 @@ typedef enum {
  *
  * acct_name_pred_data = make_string_pred_data(STRING_MATCH_CASEINSENSITIVE,
  *					       account_name);
- * param_list = make_list (SPLIT_ACCOUNT, ACCOUNT_NAME);
+ * param_list = make_list (SPLIT_ACCOUNT, ACCOUNT_NAME, NULL);
  * gncQueryAddTerm (query, param_list, COMPARE_EQUAL,
  *		    acct_name_pred_data, QUERY_AND);
  */
 
-typedef struct query_pred_data *QueryPredData_t;
-
 void gncQueryAddTerm (QueryNew *query, GSList *param_list,
 		      QueryPredData_t pred_data, QueryOp op);
 
-void gncQuerySetBook (QueryNew *q, GNCBook *book);
 void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,
 			   const GUID *guid, QueryOp op);
 void gncQueryAddGUIDListMatch (QueryNew *q, GSList *param_list,
 			       GList *guid_list, guid_match_t options,
 			       QueryOp op);
 
-/* Run the query:
- *
- * ex: gncQueryRun (query, GNC_ID_SPLIT);
- */
-GList * gncQueryRun (QueryNew *query, GNCIdTypeConst obj_type);
+/* Run the query: */
+GList * gncQueryRun (QueryNew *query);
 
-QueryNew * gncQueryCreate (void);
-void gncQueryDestroy (QueryNew *q);
+/* Return the results of the last query, without re-running */
+GList * gncQueryLastRun (QueryNew *query);
 
 void gncQueryClear (QueryNew *query);
 void gncQueryPurgeTerms (QueryNew *q, GSList *param_list);
 int gncQueryHasTerms (QueryNew *q);
 int gncQueryNumTerms (QueryNew *q);
-GList * gncQueryGetTerms (QueryNew *q);
+
+gboolean gncQueryHasTermType (QueryNew *q, GSList *term_param);
 
 QueryNew * gncQueryCopy (QueryNew *q);
 QueryNew * gncQueryInvert(QueryNew *q);
+
+/* Merges two queries together.  Both queries must be compatible
+ * search-types.  If both queries are set, they must search for the
+ * same object type.  If only one is set, the resulting query will
+ * search for the set type.  If neither query has the search-type set,
+ * the result will be unset as well.
+ */
 QueryNew * gncQueryMerge(QueryNew *q1, QueryNew *q2, QueryOp op);
 
+/* Like gncQueryMerge, but this will merge q2 into q1.  q2 remains
+ * unchanged.
+ */
+void gncQueryMergeInPlace(QueryNew *q1, QueryNew *q2, QueryOp op);
+
+/* The lists become the property of the Query and will be freed
+ * by the query when it is destroyed.
+ */
 void gncQuerySetSortOrder (QueryNew *q,
 			   GSList *primary_sort_params,
 			   GSList *secondary_sort_params,
@@ -196,6 +117,10 @@ void gncQuerySetSortIncreasing (QueryNew *q, gboolean prim_inc,
 
 
 void gncQuerySetMaxResults (QueryNew *q, int n);
-int gncQueryGetMaxResults (QueryNew *q);
+
+/* compare two queries for equality. this is a simplistic
+ * implementation -- logical equivalences between different
+ * and/or trees are ignored. */
+gboolean gncQueryEqual (QueryNew *q1, QueryNew *q2);
 
 #endif /* GNC_QUERYNEW_H */

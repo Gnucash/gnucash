@@ -70,7 +70,7 @@ static sixtp* commodity_restore_parser_new(void);
 static sixtp* generic_gnc_commodity_lookup_parser_new(void);
 
 /* from Query-xml-parser-v1.c */
-static sixtp* query_server_parser_new (void);
+//static sixtp* query_server_parser_new (void);
 
 /* from sixtp-kvp-parser.c */
 static sixtp* kvp_frame_parser_new(void);
@@ -103,7 +103,7 @@ typedef struct {
   GNCPriceDB *pricedb;
 
   /* The query */
-  Query *query;
+  //  Query *query;
 
   GNCParseErr error;
 } GNCParseStatus;
@@ -167,12 +167,14 @@ gnc_parser_configure_for_input_version(GNCParseStatus *status, gint64 version)
     sixtp_add_sub_parser(status->gnc_parser, "ledger-data", ledger_data_pr);
   }
 
+#if 0
   /* add <query-server> */
   {
     sixtp *query_server_pr = query_server_parser_new();
     g_return_val_if_fail(query_server_pr, FALSE);
     sixtp_add_sub_parser(status->gnc_parser, "query-server", query_server_pr);
   }
+#endif
 
   return(TRUE);
 }
@@ -256,9 +258,11 @@ gnc_parser_before_child_handler(gpointer data_for_children,
     }
   }
 
+#if 0
   if(strcmp(child_tag, "query-server") == 0) {
     if(pstatus->query) return(FALSE);
   }
+#endif
   return(TRUE);
 }
 
@@ -284,6 +288,7 @@ gnc_parser_after_child_handler(gpointer data_for_children,
     child_result->should_cleanup = FALSE;
   }
 
+#if 0
   if(strcmp(child_tag, "query-server") == 0) 
   {
     g_return_val_if_fail(child_result, FALSE);
@@ -291,6 +296,7 @@ gnc_parser_after_child_handler(gpointer data_for_children,
     pstatus->query = (Query *) child_result->data;
     child_result->should_cleanup = FALSE;
   }
+#endif
   return(TRUE);
 }
 
@@ -342,7 +348,7 @@ gncxml_setup_for_read (GNCParseStatus *global_parse_status)
   global_parse_status->gnc_parser = gnc_pr;
   global_parse_status->account_group = NULL;
   global_parse_status->pricedb = NULL;
-  global_parse_status->query = NULL;
+  //  global_parse_status->query = NULL;
   global_parse_status->error = GNC_PARSE_ERR_NONE;
 
   return top_level_pr;
@@ -2179,6 +2185,8 @@ generic_gnc_commodity_lookup_parser_new(void)
 
   return(top_level);
 }
+
+#if 0
 /***********************************************************************/
 /* <query-server> (parent <gnc-data>)
 
@@ -2698,6 +2706,8 @@ query_server_parser_new (void)
 
   return(top_level);
 }
+#endif /* 0 */
+
 /***********************************************************************/
 /****************************************************************************/
 /* <transaction> (parent <ledger-data>)

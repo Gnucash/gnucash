@@ -343,13 +343,15 @@
                 (set! accounts
                       (delete-duplicates (append accounts subaccts)))))
 
-          (gnc:query-add-account-match query accounts 'acct-match-any 'query-and)
+          (gnc:query-add-account-match query accounts 'guid-match-any 'query-and)
           
           ;; match splits between start and end dates 
           (gnc:query-add-date-match-timepair
            query #t begindate #t enddate 'query-and)
-          (gnc:query-set-sort-order 
-           query 'by-date 'by-standard 'by-none)
+          (gnc:query-set-sort-order query
+				    (list gnc:split-trans gnc:trans-date-posted)
+				    (list gnc:query-default-sort)
+				    '())
           
           ;; get the query results 
           (set! splits (gnc:query-get-splits query))

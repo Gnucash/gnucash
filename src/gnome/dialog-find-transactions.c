@@ -30,19 +30,125 @@
 #include <time.h>
 
 #include "Query.h"
+#include "Transaction.h"
 #include "dialog-find-transactions.h"
-#include "dialog-utils.h"
-#include "gnc-account-tree.h"
-#include "gnc-amount-edit.h"
-#include "gnc-component-manager.h"
-#include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
 #include "gnc-ledger-display.h"
-#include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
-#include "window-help.h"
 #include "window-register.h"
+#include "search-param.h"
+
+struct _ftd_data {
+  QueryNew *		q;
+  QueryNew *		ledger_q;
+  GNCSearchWindow *	sw;
+};
+
+#if 1
+static void
+do_find_cb (QueryNew *query, gpointer user_data, gpointer *result)
+{
+  struct _ftd_data *ftd = user_data;
+  GNCLedgerDisplay *ledger;
+  gboolean new_ledger = FALSE;
+
+  ledger = gnc_ledger_display_find_by_query (ftd->ledger_q);
+  if(!ledger) {
+    new_ledger = TRUE;
+    ledger = gnc_ledger_display_query (query, SEARCH_LEDGER,
+                                       REG_STYLE_JOURNAL);
+  }
+  else
+    gnc_ledger_display_set_query (ledger, query);
+
+  gnc_ledger_display_refresh (ledger);
+
+  if (new_ledger)
+    regWindowLedger(ledger);
+
+  gncQueryDestroy (ftd->q);
+
+  gnc_search_dialog_destroy (ftd->sw);
+}
+
+static void
+free_ftd_cb (gpointer user_data)
+{
+  struct _ftd_data *ftd = user_data;
+
+  if (!ftd)
+    return;
+
+  g_free (ftd);
+}
+
+GNCSearchWindow * 
+gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
+{
+  GNCIdType type = GNC_ID_SPLIT;
+  struct _ftd_data *ftd;
+  static GList *params = NULL;
+  QueryNew *start_q, *show_q = NULL;
+
+  /* Build parameter list in reverse order */
+  if (params == NULL) {
+    params = gnc_search_param_prepend (params, "All Accounts",
+				       ACCOUNT_MATCH_ALL_TYPE,
+				       type, SPLIT_TRANS, TRANS_SPLITLIST,
+				       SPLIT_ACCOUNT_GUID, NULL);
+    params = gnc_search_param_prepend (params, "Account", GNC_ID_ACCOUNT,
+				       type, SPLIT_ACCOUNT, QUERY_PARAM_GUID,
+				       NULL);
+    params = gnc_search_param_prepend (params, "Balanced", NULL,
+				       type, SPLIT_TRANS, TRANS_IS_BALANCED,
+				       NULL);
+    /* XXX:FIXME add the 'cleared' parameter here */
+    params = gnc_search_param_prepend (params, "Share Price", NULL,
+				       type, SPLIT_SHARE_PRICE, NULL);
+    params = gnc_search_param_prepend (params, "Share Price", NULL,
+				       type, SPLIT_SHARE_PRICE, NULL);
+    params = gnc_search_param_prepend (params, "Shares", NULL,
+				       type, SPLIT_AMOUNT, NULL);
+    params = gnc_search_param_prepend (params, "Value", NULL,
+				       type, SPLIT_VALUE, NULL);
+    params = gnc_search_param_prepend (params, "Date Posted", NULL,
+				       type, SPLIT_TRANS, TRANS_DATE_POSTED,
+				       NULL);
+    params = gnc_search_param_prepend (params, "Action", NULL,
+				       type, SPLIT_ACTION, NULL);
+    params = gnc_search_param_prepend (params, "Number", NULL,
+				       type, SPLIT_TRANS, TRANS_NUM, NULL);
+    params = gnc_search_param_prepend (params, "Memo", NULL,
+				       type, SPLIT_MEMO, NULL);
+    params = gnc_search_param_prepend (params, "Description", NULL,
+				       type, SPLIT_TRANS, TRANS_DESCRIPTION,
+				       NULL);
+  }
+
+  ftd = g_new0 (struct _ftd_data, 1);
+
+  if(orig_ledg) {
+    ftd->ledger_q = gnc_ledger_display_get_query (orig_ledg);
+    start_q = show_q = gncQueryCopy (ftd->ledger_q);
+  } else {
+    start_q = gncQueryCreate ();
+    gncQuerySetBook (start_q, gnc_get_current_book ());
+    ftd->q = start_q;		/* save this to destroy it later */
+  }
+
+  ftd->sw = gnc_search_dialog_create (type, params, NULL, start_q, show_q,
+				      NULL, do_find_cb, NULL,
+				      ftd, free_ftd_cb);
+
+  if (!ftd->sw) {
+    free_ftd_cb (ftd);
+    return NULL;
+  }
+
+  return ftd->sw;
+}
+
+#else
 
 #define DIALOG_FIND_TRANS_CM_CLASS "dialog-find-trans"
 
@@ -721,3 +827,5 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
 
   gnc_ui_find_transactions_dialog_destroy(ftd);
 }
+
+#endif /* 0 */

@@ -1,3 +1,23 @@
+2002-06-05  Derek Atkins   <derek@ihtfp.com>
+
+	Integration of the new Query subsystem, to replace the old Query
+	infrastructure.  This also replaces the old "Find Transaction"
+	dialog with the new gnome-search dialog.  Registers, Reports, SXs,
+	etc. all test out fine.  Integration with SQL has been "done"
+	(i.e. it compiles cleanly) but not "tested."  Lots of the old code
+	is still there, but #ifdef'ed out.  That code will go away
+	shortly.
+
+	There is only one known loss-of-functionality: the query->xml-v1
+	converter was not re-implemented.  The current intention is, if
+	this functionality is required, to use the query->scm converter
+	and then convert the scm->string and insert that into an XML
+	document.
+
+	Fix a Transaction Void bug.
+	
+	Fix a few bugs in test code.
+
 2002-06-04  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-mdi-utils.c (gnc_mdi_destroy): Work around a

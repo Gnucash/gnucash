@@ -568,6 +568,7 @@ test_trans_query (Transaction *trans, gpointer data)
     failure_args ("test num returned", __FILE__, __LINE__,
                   "number of matching transactions %d not 1",
                   g_list_length (list));
+    g_list_free (list);
     return FALSE;
   }
 
@@ -577,6 +578,7 @@ test_trans_query (Transaction *trans, gpointer data)
   if (!xaccTransEqual (trans, list->data, TRUE, TRUE))
   {
     failure ("matching transaction is wrong");
+    g_list_free (list);
     return FALSE;
   }
 
@@ -585,6 +587,7 @@ test_trans_query (Transaction *trans, gpointer data)
   xaccFreeQuery (q);
   gnc_session_destroy (session);
   g_free (filename);
+  g_list_free (list);
 
   return TRUE;
 }

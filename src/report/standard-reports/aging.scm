@@ -272,7 +272,9 @@ more than one currency.  This report is not designed to cope with this possibili
     (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
     (gnc:query-add-single-account-match query account 'query-and)
     (gnc:query-add-date-match-timepair query #t begindate #t date 'query-and)
-    (gnc:query-set-sort-order query 'by-date 'by-none 'by-none)
+    (gnc:query-set-sort-order query 
+			      (list gnc:split-trans gnc:trans-date-posted)
+			      '() '())
     (gnc:query-set-sort-increasing query #t #t #t)))
      
 

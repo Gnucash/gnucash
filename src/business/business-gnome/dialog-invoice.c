@@ -1523,17 +1523,27 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
   }
 
   /* Build the queries */
-  q = gncQueryCreate ();
+  q = gncQueryCreateFor (type);
   gncQuerySetBook (q, book);
 
   /* If owner is supplied, limit all searches to invoices who's owner
-   * (or parent) is the supplied owner!  Show all invoices by this owner.
+   * or end-owner is the supplied owner!  Show all invoices by this
+   * owner.  If a Job is supplied, search for all invoices for that
+   * job, but if a Customer is supplied, search for all invoices owned
+   * by that Customer or any of that Customer's Jobs.  In other words,
+   * match on <supplied-owner's guid> == Invoice->Owner->GUID or
+   * Invoice->owner->parentGUID.
    */
   if (owner && gncOwnerGetGUID (owner)) {
     gncQueryAddGUIDMatch (q, g_slist_prepend
 			  (g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			   INVOICE_OWNER),
-			  gncOwnerGetGUID (owner), QUERY_AND);
+			  gncOwnerGetGUID (owner), QUERY_OR);
+
+    gncQueryAddGUIDMatch (q, g_slist_prepend
+			  (g_slist_prepend (NULL, OWNER_PARENTG),
+			   INVOICE_OWNER),
+			  gncOwnerGetGUID (owner), QUERY_OR);
 
     q2 = gncQueryCopy (q);
   }

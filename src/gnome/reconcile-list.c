@@ -34,6 +34,13 @@
 #include "reconcile-list.h"
 #include "Transaction.h"
 
+typedef enum {
+  BY_STANDARD = 0,
+  BY_NUM,
+  BY_DESC,
+  BY_AMOUNT
+} sort_type_t;
+
 
 /* Signal codes */
 enum
@@ -139,16 +146,18 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
     accounts = g_list_concat (accounts, children);
   }
 
-  xaccQueryAddAccountMatch (list->query, accounts, ACCT_MATCH_ANY, QUERY_AND);
+  xaccQueryAddAccountMatch (list->query, accounts, GUID_MATCH_ANY, QUERY_AND);
 
   g_list_free (accounts);
 
   if (type == RECLIST_CREDIT)
-    DxaccQueryAddValueMatch(list->query, 0.0, AMT_SGN_MATCH_CREDIT,
-                             AMT_MATCH_ATLEAST, QUERY_AND);
+    xaccQueryAddValueMatch(list->query, gnc_numeric_zero (),
+			   NUMERIC_MATCH_CREDIT,
+			   COMPARE_GTE, QUERY_AND);
   else
-    DxaccQueryAddValueMatch(list->query, 0.0, AMT_SGN_MATCH_DEBIT,
-                             AMT_MATCH_ATLEAST, QUERY_AND);
+    xaccQueryAddValueMatch(list->query, gnc_numeric_zero (),
+			   NUMERIC_MATCH_DEBIT,
+			   COMPARE_GTE, QUERY_AND);
 
   return GTK_WIDGET(list);
 }
@@ -840,10 +849,11 @@ gnc_reconcile_list_changed (GNCReconcileList *list)
  * Args: list - list to change the sort order for                   *
  * Returns: nothing                                                 *
 \********************************************************************/
-void
+static void
 gnc_reconcile_list_set_sort_order (GNCReconcileList *list, sort_type_t key)
 {
   gint column;
+  gboolean key_changed = FALSE;
   gboolean sort_order;
 
   g_return_if_fail (list != NULL);
@@ -866,6 +876,8 @@ gnc_reconcile_list_set_sort_order (GNCReconcileList *list, sort_type_t key)
     case BY_AMOUNT:	column = 3;	break;
   }
   list->increasing = (list->key == key) ? !list->increasing : TRUE;
+  if (list->key != key)
+    key_changed = TRUE;
   list->key = key;
   sort_order = list->increasing;
   if ((list->list_type == RECLIST_CREDIT) && (key == BY_AMOUNT))
@@ -877,10 +889,33 @@ gnc_reconcile_list_set_sort_order (GNCReconcileList *list, sort_type_t key)
 		GTK_SHADOW_ETCHED_IN);
   gtk_widget_show(list->title_arrow[column]);
 
-  /* Set the sort order for the engine */
-  xaccQuerySetSortOrder (list->query, key,
-                         (key == BY_STANDARD) ? BY_NONE : BY_STANDARD,
-                         BY_NONE);
+  /* Set the sort order for the engine, if the key changed */
+  if (key_changed)
+  {
+    GSList *p1 = NULL, *p2;
+
+    p2 = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
+
+    switch (key) {
+    case BY_STANDARD:
+      p1 = p2;
+      p2 = NULL;
+      break;
+    case BY_NUM:
+      p1 = g_slist_prepend (p1, TRANS_NUM);
+      p1 = g_slist_prepend (p1, SPLIT_TRANS);
+      break;
+    case BY_DESC:
+      p1 = g_slist_prepend (p1, TRANS_DESCRIPTION);
+      p1 = g_slist_prepend (p1, SPLIT_TRANS);
+      break;
+    case BY_AMOUNT:
+      p1 = g_slist_prepend (p1, SPLIT_VALUE);
+      break;
+    }
+    gncQuerySetSortOrder (list->query, p1, p2, NULL);
+  }
+
   xaccQuerySetSortIncreasing (list->query,
 			      sort_order,
 			      sort_order,

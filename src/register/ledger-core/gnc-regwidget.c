@@ -40,6 +40,19 @@ static void emit_expand_ent_cb( GtkWidget *widget, gpointer data );
 static void emit_blank_cb( GtkWidget *widget, gpointer data );
 static void emit_jump_cb( GtkWidget *widget, gpointer data );
 
+/* Easy way to pass the sort-type */
+typedef enum {
+  BY_NONE = 0,
+  BY_STANDARD,
+  BY_DATE,
+  BY_DATE_ENTERED,
+  BY_DATE_RECONCILED,
+  BY_NUM,
+  BY_AMOUNT,
+  BY_MEMO,
+  BY_DESC
+} sort_type_t;
+
 guint
 gnc_regWidget_get_type ()
 {
@@ -398,43 +411,60 @@ gnc_register_sort (GNCRegWidget *rw, sort_type_t sort_code)
 {
   Query *query = gnc_ledger_display_get_query (rw->ledger);
   gboolean show_present_divider = FALSE;
+  GSList *p1 = NULL, *p2 = NULL, *p3 = NULL, *standard;
   SplitRegister *reg;
 
   if (rw->sort_type == sort_code)
     return;
 
+  standard = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
+
   switch (sort_code)
   {
     case BY_STANDARD:
-      xaccQuerySetSortOrder(query, BY_STANDARD, BY_NONE, BY_NONE);
+      p1 = standard;
       show_present_divider = TRUE;
       break;
     case BY_DATE:
-      xaccQuerySetSortOrder(query, BY_DATE, BY_STANDARD, BY_NONE);
+      p1 = g_slist_prepend (p1, TRANS_DATE_POSTED);
+      p1 = g_slist_prepend (p1, SPLIT_TRANS);
+      p2 = standard;
       show_present_divider = TRUE;
       break;
     case BY_DATE_ENTERED:
-      xaccQuerySetSortOrder(query, BY_DATE_ENTERED, BY_STANDARD, BY_NONE);
+      p1 = g_slist_prepend (p1, TRANS_DATE_ENTERED);
+      p1 = g_slist_prepend (p1, SPLIT_TRANS);
+      p2 = standard;
       break;
     case BY_DATE_RECONCILED:
-      xaccQuerySetSortOrder(query, BY_RECONCILE, BY_DATE_RECONCILED,
-                            BY_STANDARD);
+      p1 = g_slist_prepend (p1, SPLIT_RECONCILE);
+      p2 = g_slist_prepend (p2, SPLIT_DATE_RECONCILED);
+      p3 = standard;
       break;
     case BY_NUM:
-      xaccQuerySetSortOrder(query, BY_NUM, BY_STANDARD, BY_NONE);
+      p1 = g_slist_prepend (p1, TRANS_NUM);
+      p1 = g_slist_prepend (p1, SPLIT_TRANS);
+      p2 = standard;
       break;
     case BY_AMOUNT:
-      xaccQuerySetSortOrder(query, BY_AMOUNT, BY_STANDARD, BY_NONE);
+      p1 = g_slist_prepend (p1, SPLIT_VALUE);
+      p2 = standard;
       break;
     case BY_MEMO:
-      xaccQuerySetSortOrder(query, BY_MEMO, BY_STANDARD, BY_NONE);
+      p1 = g_slist_prepend (p1, SPLIT_MEMO);
+      p2 = standard;
       break;
     case BY_DESC:
-      xaccQuerySetSortOrder(query, BY_DESC, BY_STANDARD, BY_NONE);
+      p1 = g_slist_prepend (p1, TRANS_DESCRIPTION);
+      p1 = g_slist_prepend (p1, SPLIT_TRANS);
+      p2 = standard;
       break;
     default:
+      g_slist_free (standard);
       g_return_if_fail (FALSE);
   }
+
+  gncQuerySetSortOrder (query, p1, p2, p3);
 
   reg = gnc_ledger_display_get_split_register (rw->ledger);
 
@@ -1350,6 +1380,7 @@ struct foo {
 static void 
 gnc_regWidget_init2( GNCRegWidget *rw, GNCLedgerDisplay *ledger, GtkWindow *win )
 {
+  static GSList *date_param = NULL;
   static struct foo bar[] = {
     { "enter_ent", recordCB },
     { "cancel_ent", cancelCB },
@@ -1411,10 +1442,15 @@ gnc_regWidget_init2( GNCRegWidget *rw, GNCLedgerDisplay *ledger, GtkWindow *win 
                                         "Show All Transactions",
                                         TRUE);
 
+  if (date_param == NULL) {
+    date_param = g_slist_prepend (NULL, TRANS_DATE_POSTED);
+    date_param = g_slist_prepend (date_param, SPLIT_TRANS);
+  }
+
   {
     Query *q = gnc_ledger_display_get_query (rw->ledger);
 
-    has_date = xaccQueryHasTermType (q, PD_DATE);
+    has_date = gncQueryHasTermType (q, date_param);
   }
 
   if (has_date)

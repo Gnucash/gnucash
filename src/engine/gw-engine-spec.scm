@@ -90,6 +90,7 @@
 
 (gw:wrap-as-wct ws '<gnc:GList*> "GList*" "const GList*")
 
+(gw:wrap-as-wct ws '<gnc:id-type> "GNCIdType" "GNCIdTypeConst")
 (gw:wrap-as-wct ws '<gnc:Account*> "Account*" "const Account*")
 (gw:wrap-as-wct ws '<gnc:Account**> "Account**" "const Account**")
 (gw:wrap-as-wct ws '<gnc:InvAcct*> "InvAcct*" "const InvAcct*")
@@ -105,7 +106,6 @@
                 "const gnc_commodity_table*")
 
 (gw:wrap-as-wct ws '<gnc:Query*> "Query *" "const Query *")
-(gw:wrap-as-wct ws '<gnc:QueryTerm*> "QueryTerm *" "const QueryTerm *")
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:event-type> "GNCEngineEventType")))
 
@@ -123,69 +123,29 @@
   (gw:enum-add-value! wt "QUERY_NOR" 'query-nor)
   (gw:enum-add-value! wt "QUERY_XOR" 'query-xor))
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:sort-type> "sort_type_t")))
-  (gw:enum-add-value! wt "BY_STANDARD" 'by-standard)
-  (gw:enum-add-value! wt "BY_DATE" 'by-date)
-  (gw:enum-add-value! wt "BY_DATE_ROUNDED" ' by-date-rounded)
-  (gw:enum-add-value! wt "BY_DATE_ENTERED" 'by-date-entered)
-  (gw:enum-add-value! wt "BY_DATE_ENTERED_ROUNDED" 'by-date-entered-rounded)
-  (gw:enum-add-value! wt "BY_DATE_RECONCILED" 'by-date-reconciled)
-  (gw:enum-add-value! wt "BY_DATE_RECONCILED_ROUNDED" 
-                      'by-date-reconciled-rounded)
-  (gw:enum-add-value! wt "BY_NUM" 'by-num)
-  (gw:enum-add-value! wt "BY_AMOUNT" 'by-amount)
-  (gw:enum-add-value! wt "BY_MEMO" 'by-memo)
-  (gw:enum-add-value! wt "BY_DESC" 'by-desc)
-  (gw:enum-add-value! wt "BY_RECONCILE" 'by-reconcile)
-  (gw:enum-add-value! wt "BY_ACCOUNT_FULL_NAME" 'by-account-full-name)
-  (gw:enum-add-value! wt "BY_ACCOUNT_CODE" 'by-account-code)
-  (gw:enum-add-value! wt "BY_CORR_ACCOUNT_FULL_NAME" 'by-corr-account-full-name)
-  (gw:enum-add-value! wt "BY_CORR_ACCOUNT_CODE" 'by-corr-account-code)
-  (gw:enum-add-value! wt "BY_NONE" 'by-none))
-
-(let ((wt (gw:wrap-enumeration ws '<gnc:query-term-type> "pd_type_t")))
-  (gw:enum-add-value! wt "PD_ACCOUNT" 'pd-account)
-  (gw:enum-add-value! wt "PD_AMOUNT" 'pd-amount)
-  (gw:enum-add-value! wt "PD_BALANCE" 'pd-balance)
-  (gw:enum-add-value! wt "PD_CLEARED" 'pd-cleared)
-  (gw:enum-add-value! wt "PD_DATE" 'pd-date)
-  (gw:enum-add-value! wt "PD_GUID" 'pd-guid)
-  (gw:enum-add-value! wt "PD_KVP" 'pd-kvp)
-  (gw:enum-add-value! wt "PD_MISC" 'pd-misc)
-  (gw:enum-add-value! wt "PD_STRING" 'pd-string)
+(let ((wt (gw:wrap-enumeration ws '<gnc:query-compare-how> "query_compare_t")))
+  (gw:enum-add-value! wt "COMPARE_LT" 'query-compare-lt)
+  (gw:enum-add-value! wt "COMPARE_LTE" 'query-compare-lte)
+  (gw:enum-add-value! wt "COMPARE_EQUAL" 'query-compare-equal)
+  (gw:enum-add-value! wt "COMPARE_GT" 'query-compare-gt)
+  (gw:enum-add-value! wt "COMPARE_GTE" 'query-compare-gte)
+  (gw:enum-add-value! wt "COMPARE_NEQ" 'query-compare-neq)
   #t)
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:query-pred-type> "pr_type_t")))
-  (gw:enum-add-value! wt "PR_ACCOUNT" 'pr-account)
-  (gw:enum-add-value! wt "PR_ACTION" 'pr-action)
-  (gw:enum-add-value! wt "PR_BALANCE" 'pr-balance)
-  (gw:enum-add-value! wt "PR_CLEARED" 'pr-cleared)
-  (gw:enum-add-value! wt "PR_DATE" 'pr-date)
-  (gw:enum-add-value! wt "PR_DESC" 'pr-desc)
-  (gw:enum-add-value! wt "PR_GUID" 'pr-guid)
-  (gw:enum-add-value! wt "PR_KVP" 'pr-kvp)
-  (gw:enum-add-value! wt "PR_MEMO" 'pr-memo)
-  (gw:enum-add-value! wt "PR_NUM" 'pr-num)
-  (gw:enum-add-value! wt "PR_PRICE" 'pr-price)
-  (gw:enum-add-value! wt "PR_SHRS" 'pr-shares)
-  (gw:enum-add-value! wt "PR_VALUE" 'pr-value)
+(let ((wt (gw:wrap-enumeration ws '<gnc:string-match-how> "string_match_t")))
+  (gw:enum-add-value! wt "STRING_MATCH_NORMAL" 'string-match-normal)
+  (gw:enum-add-value! wt "STRING_MATCH_CASEINSENSITIVE" 'string-match-caseinsensitive)
   #t)
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:acct-match-how> "acct_match_t")))
-  (gw:enum-add-value! wt "ACCT_MATCH_ALL" 'acct-match-all)
-  (gw:enum-add-value! wt "ACCT_MATCH_ANY" 'acct-match-any)
-  (gw:enum-add-value! wt "ACCT_MATCH_NONE" 'acct-match-none))
-
-(let ((wt (gw:wrap-enumeration ws '<gnc:amt-match-how> "amt_match_t")))
-  (gw:enum-add-value! wt "AMT_MATCH_ATLEAST" 'amt-match-atleast)
-  (gw:enum-add-value! wt "AMT_MATCH_ATMOST" 'amt-match-atmost)
-  (gw:enum-add-value! wt "AMT_MATCH_EXACTLY" 'amt-match-exactly)
+(let ((wt (gw:wrap-enumeration ws '<gnc:date-match-how> "date_match_t")))
+  (gw:enum-add-value! wt "DATE_MATCH_NORMAL" 'date-match-normal)
+  (gw:enum-add-value! wt "DATE_MATCH_ROUNDED" 'date-match-rounded)
   #t)
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:amt-match-sign> "amt_match_sgn_t")))
-  (gw:enum-add-value! wt "AMT_SGN_MATCH_EITHER" 'amt-sgn-match-either)
-  (gw:enum-add-value! wt "AMT_SGN_MATCH_CREDIT" 'amt-sgn-match-credit)
-  (gw:enum-add-value! wt "AMT_SGN_MATCH_DEBIT" 'amt-sgn-match-debit)
+(let ((wt (gw:wrap-enumeration ws '<gnc:numeric-match-how> "numeric_match_t")))
+  (gw:enum-add-value! wt "NUMERIC_MATCH_ANY" 'amt-sgn-match-either)
+  (gw:enum-add-value! wt "NUMERIC_MATCH_CREDIT" 'amt-sgn-match-credit)
+  (gw:enum-add-value! wt "NUMERIC_MATCH_DEBIT" 'amt-sgn-match-debit)
   #t)
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:cleared-match-how> "cleared_match_t")))
@@ -196,28 +156,21 @@
   (gw:enum-add-value! wt "CLEARED_VOIDED" 'cleared-match-voided)
   #t)
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:balance-match-how> "balance_match_t")))
-  (gw:enum-add-value! wt "BALANCE_BALANCED" 'balance-match-balanced)
-  (gw:enum-add-value! wt "BALANCE_UNBALANCED" 'balance-match-unbalanced)
+(let ((wt (gw:wrap-enumeration ws '<gnc:guid-match-how> "guid_match_t")))
+  (gw:enum-add-value! wt "GUID_MATCH_ALL" 'guid-match-all)
+  (gw:enum-add-value! wt "GUID_MATCH_ANY" 'guid-match-any)
+  (gw:enum-add-value! wt "GUID_MATCH_NULL" 'guid-match-null)
+  (gw:enum-add-value! wt "GUID_MATCH_NONE" 'guid-match-none)
   #t)
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:query-run-t> "query_run_t")))
-  (gw:enum-add-value! wt "QUERY_MATCH_ALL" 'query-match-all)    
-  (gw:enum-add-value! wt "QUERY_MATCH_ANY" 'query-match-any)
+(let ((wt (gw:wrap-enumeration ws '<gnc:char-match-how> "char_match_t")))
+  (gw:enum-add-value! wt "CHAR_MATCH_ANY" 'char-match-any)
+  (gw:enum-add-value! wt "CHAR_MATCH_NONE" 'char-match-none)
   #t)
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:kvp-match-how> "kvp_match_t")))
-  (gw:enum-add-value! wt "KVP_MATCH_LT" 'kvp-match-lt)
-  (gw:enum-add-value! wt "KVP_MATCH_LTE" 'kvp-match-lte)
-  (gw:enum-add-value! wt "KVP_MATCH_EQ" 'kvp-match-eq)
-  (gw:enum-add-value! wt "KVP_MATCH_GTE" 'kvp-match-gte)
-  (gw:enum-add-value! wt "KVP_MATCH_GT" 'kvp-match-gt)
-  #t)
-
-(let ((wt (gw:wrap-enumeration ws '<gnc:kvp-match-where> "kvp_match_where_t")))
-  (gw:enum-add-value! wt "KVP_MATCH_SPLIT" 'kvp-match-split)
-  (gw:enum-add-value! wt "KVP_MATCH_TRANS" 'kvp-match-trans)
-  (gw:enum-add-value! wt "KVP_MATCH_ACCOUNT" 'kvp-match-account)
+(let ((wt (gw:wrap-enumeration ws '<gnc:query-txn-match-t> "query_txn_match_t")))
+  (gw:enum-add-value! wt "QUERY_TXN_MATCH_ALL" 'query-txn-match-all)    
+  (gw:enum-add-value! wt "QUERY_TXN_MATCH_ANY" 'query-txn-match-any)
   #t)
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:kvp-value-t> "kvp_value_t")))
@@ -292,6 +245,45 @@
   ;;     (gw:enum-add-value! we "ERR_RPC_FAILED" 'rpc_failed)
   ;;     (gw:enum-add-value! we "ERR_RPC_NOT_ADDED" 'rpc_not_added)
   #t)
+
+;
+; Definitions from GNCId.h
+;
+(gw:wrap-value ws 'gnc:id-account '<gnc:id-type> "GNC_ID_ACCOUNT")
+(gw:wrap-value ws 'gnc:id-book '<gnc:id-type> "GNC_ID_BOOK")
+(gw:wrap-value ws 'gnc:id-lot '<gnc:id-type> "GNC_ID_LOT")
+(gw:wrap-value ws 'gnc:id-price '<gnc:id-type> "GNC_ID_PRICE")
+(gw:wrap-value ws 'gnc:id-split '<gnc:id-type> "GNC_ID_SPLIT")
+(gw:wrap-value ws 'gnc:id-schedxaction '<gnc:id-type> "GNC_ID_SCHEDXACTION")
+(gw:wrap-value ws 'gnc:id-session '<gnc:id-type> "GNC_ID_SESSION")
+(gw:wrap-value ws 'gnc:id-trans '<gnc:id-type> "GNC_ID_TRANS")
+
+;
+; Definitions for query parameter names
+;
+(gw:wrap-value ws 'gnc:query-default-sort '<gnc:id-type> "QUERY_DEFAULT_SORT")
+(gw:wrap-value ws 'gnc:split-trans '<gnc:id-type> "SPLIT_TRANS")
+(gw:wrap-value ws 'gnc:split-account '<gnc:id-type> "SPLIT_ACCOUNT")
+(gw:wrap-value ws 'gnc:split-value '<gnc:id-type> "SPLIT_VALUE")
+(gw:wrap-value ws 'gnc:split-memo '<gnc:id-type> "SPLIT_MEMO")
+
+(gw:wrap-value ws 'gnc:trans-date-posted '<gnc:id-type> "TRANS_DATE_POSTED")
+(gw:wrap-value ws 'gnc:trans-desc '<gnc:id-type> "TRANS_DESCRIPTION")
+(gw:wrap-value ws 'gnc:trans-num '<gnc:id-type> "TRANS_NUM")
+
+(gw:wrap-value ws 'gnc:account-name '<gnc:id-type> "ACCOUNT_NAME_")
+(gw:wrap-value ws 'gnc:account-code '<gnc:id-type> "ACCOUNT_CODE_")
+
+;
+; Special query parameter "sort" types
+;
+(gw:wrap-value ws 'gnc:split-account-fullname '<gnc:id-type>
+	       "SPLIT_ACCT_FULLNAME")
+(gw:wrap-value ws 'gnc:split-corr-account-fullname '<gnc:id-type>
+	       "SPLIT_CORR_ACCT_NAME")
+(gw:wrap-value ws 'gnc:split-corr-account-code '<gnc:id-type>
+	       "SPLIT_CORR_ACCT_CODE")
+
 
 (gw:wrap-function
  ws
@@ -990,6 +982,14 @@ children to this account.")
 
 (gw:wrap-function
  ws
+ 'gnc:group-get-book
+ '<gnc:Book*>
+ "xaccGroupGetBook"
+ '((<gnc:AccountGroup*> g))
+ "Return the GNCBook of group g.")
+
+(gw:wrap-function
+ ws
  'gnc:group-merge-accounts
  '<gw:void>
  "xaccGroupMergeAccounts"
@@ -1578,7 +1578,31 @@ of having a parent transaction with which one is working...")
  '<gnc:Query*>
  "xaccMallocQuery"
  '()
+ "Create a new (empty) Query structure to search for splits.")
+
+(gw:wrap-function
+ ws
+ 'gnc:query-create
+ '<gnc:Query*>
+ "gncQueryCreate"
+ '()
  "Create a new (empty) Query structure.")
+
+(gw:wrap-function
+ ws
+ 'gnc:query-create-for
+ '<gnc:Query*>
+ "gncQueryCreateFor"
+ '((<gnc:id-type> obj-type))
+ "Create a new (empty) Query structure to search for the supplied type.")
+
+(gw:wrap-function
+ ws
+ 'gnc:query-search-for
+ '<gw:void>
+ "gncQuerySearchFor"
+ '((<gnc:Query*> q) (<gnc:id-type> obj-type))
+ "Set the object-type to search for.")
 
 (gw:wrap-function
  ws
@@ -1595,14 +1619,6 @@ of having a parent transaction with which one is working...")
  "xaccQuerySetBook"
  '((<gnc:Query*> q) (<gnc:Book*> book))
  "Set the book that a query pertains to.")
-
-(gw:wrap-function
- ws
- 'd-gnc:query-set-group
- '<gw:void>
- "DxaccQuerySetGroup"
- '((<gnc:Query*> q) (<gnc:AccountGroup*> group))
- "(depricated; use query-set-book instead) Set the group that a query pertains to.")
 
 (gw:wrap-function
  ws
@@ -1632,9 +1648,9 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-purge-terms
  '<gw:void>
- "xaccQueryPurgeTerms"
- '((<gnc:Query*> q) (<gnc:query-term-type> tt))
- "Remove query terms of a particular type.")
+ "gncQueryPurgeTerms"
+ '((<gnc:Query*> q) ((gw:glist-of <gnc:id-type> caller-owned) param-path))
+ "Remove query terms of a particular parameter-path.")
 
 (gw:wrap-function
  ws
@@ -1655,7 +1671,7 @@ of having a parent transaction with which one is working...")
 (gw:wrap-function
  ws
  'gnc:query-get-splits-unique-trans
- '(gw:glist-of <gnc:Split*> callee-owned)
+ '(gw:glist-of <gnc:Split*> caller-owned)
  "xaccQueryGetSplitsUniqueTrans"
  '((<gnc:Query*> q))
  "Return a list of splits matching the Query, but at most one per transaction")
@@ -1663,9 +1679,9 @@ of having a parent transaction with which one is working...")
 (gw:wrap-function
  ws
  'gnc:query-get-transactions
- '(gw:glist-of <gnc:Transaction*> callee-owned)
+ '(gw:glist-of <gnc:Transaction*> caller-owned)
  "xaccQueryGetTransactions"
- '((<gnc:Query*> q) (<gnc:query-run-t> rt))
+ '((<gnc:Query*> q) (<gnc:query-txn-match-t> rt))
  "Find transactions with splits matching the Query.")
 
 (gw:wrap-function
@@ -1675,9 +1691,9 @@ of having a parent transaction with which one is working...")
  "xaccQueryAddAccountMatch"
  '((<gnc:Query*> q)
    ((gw:glist-of <gnc:Account*> caller-owned) accts)
-   (<gnc:acct-match-how> acctmatch)
+   (<gnc:guid-match-how> acctmatch)
    (<gnc:query-op> how))
- "Match one or all of a set of accounts.")
+ "Match splits against one or all of a set of accounts.")
 
 (gw:wrap-function
  ws
@@ -1685,7 +1701,7 @@ of having a parent transaction with which one is working...")
  '<gw:void>
  "xaccQueryAddSingleAccountMatch"
  '((<gnc:Query*> q) (<gnc:Account*> acct) (<gnc:query-op> how))
- "Match a single account.")
+ "Match splits against a single account.")
 
 (gw:wrap-function
  ws
@@ -1697,7 +1713,7 @@ of having a parent transaction with which one is working...")
    (<gw:int> case-sens)
    (<gw:int> use-regexp)
    (<gnc:query-op> how))
- "Match transaction description.")
+ "Match splits against the transaction description.")
 
 (gw:wrap-function
  ws
@@ -1709,7 +1725,7 @@ of having a parent transaction with which one is working...")
    (<gw:int> case-sens)
    (<gw:int> use-regexp)
    (<gnc:query-op> how))
- "Match the Number field.")
+ "Match splits against the Number field.")
 
 (gw:wrap-function
  ws
@@ -1721,41 +1737,41 @@ of having a parent transaction with which one is working...")
    (<gw:int> case-sens)
    (<gw:int> use-regexp)
    (<gnc:query-op> how))
- "Match the Action field (a string).")
+ "Match splits against the Action field (a string).")
 
 (gw:wrap-function
  ws
- 'd-gnc:query-add-share-price-match
+ 'gnc:query-add-share-price-match
  '<gw:void>
- "DxaccQueryAddSharePriceMatch"
+ "xaccQueryAddSharePriceMatch"
  '((<gnc:Query*> q)
-   (<gw:double> amount)
-   (<gnc:amt-match-how> mhow)
+   (<gnc:numeric> amount)
+   (<gnc:query-compare-how> mhow)
    (<gnc:query-op> how))
- "Match the share price (including inequalities)")
+ "Match splits against the share price (including inequalities)")
 
 (gw:wrap-function
  ws
- 'd-gnc:query-add-shares-match
+ 'gnc:query-add-shares-match
  '<gw:void>
- "DxaccQueryAddSharesMatch"
+ "xaccQueryAddSharesMatch"
  '((<gnc:Query*> q)
-   (<gw:double> amount)
-   (<gnc:amt-match-how> mhow)
+   (<gnc:numeric> amount)
+   (<gnc:query-compare-how> mhow)
    (<gnc:query-op> how))
- "Match the share price (ncluding inequalities)")
+ "Match splits against the share price (including inequalities)")
 
 (gw:wrap-function
  ws
- 'd-gnc:query-add-value-match
+ 'gnc:query-add-value-match
  '<gw:void>
- "DxaccQueryAddValueMatch"
+ "xaccQueryAddValueMatch"
  '((<gnc:Query*> q)
-   (<gw:double> value)
-   (<gnc:amt-match-sign> sgn)
-   (<gnc:amt-match-how> mhow)
+   (<gnc:numeric> amount)
+   (<gnc:numeric-match-how> match-sign)
+   (<gnc:query-compare-how> mhow)
    (<gnc:query-op> how))
- "Match the value (including inequalities)")
+ "Match splits against the value (including inequalities)")
 
 (gw:wrap-function
  ws
@@ -1797,7 +1813,7 @@ of having a parent transaction with which one is working...")
    (<gw:int> case-sens)
    (<gw:int> use-regexp)
    (<gnc:query-op> how))
- "Match the Number field.")
+ "Match splits against the Memo field.")
 
 (gw:wrap-function
  ws
@@ -1805,7 +1821,7 @@ of having a parent transaction with which one is working...")
  '<gw:void>
  "xaccQueryAddClearedMatch"
  '((<gnc:Query*> q) (<gnc:cleared-match-how> cleared-how) (<gnc:query-op> how))
- "match the cleared state.")
+ "match splits against the cleared state.")
 
 (gw:wrap-function
  ws
@@ -1813,9 +1829,9 @@ of having a parent transaction with which one is working...")
  '<gw:void>
  "xaccQuerySetSortOrder"
  '((<gnc:Query*> q)
-   (<gnc:sort-type> primary)
-   (<gnc:sort-type> secondary)
-   (<gnc:sort-type> tertiary))
+   ((gw:glist-of <gnc:id-type> callee-owned) primary)
+   ((gw:glist-of <gnc:id-type> callee-owned) secondary)
+   ((gw:glist-of <gnc:id-type> callee-owned) tertiary))
  "set sort order.")
 
 (gw:wrap-function
@@ -1831,11 +1847,11 @@ of having a parent transaction with which one is working...")
 
 (gw:wrap-function
  ws
- 'gnc:query-set-max-splits
+ 'gnc:query-set-max-results
  '<gw:void>
- "xaccQuerySetMaxSplits"
+ "gncQuerySetMaxResults"
  '((<gnc:Query*> q) (<gw:int> n))
- "Set the max number of splits to be returned by a query.")
+ "Set the max number of results to be returned by a query.")
 
 (gw:wrap-function
  ws

@@ -47,6 +47,10 @@
 #include "gnc-engine-util.h"
 #include "gncquery.h"
 #include "Transaction.h"
+#include "Account.h"
+
+#include "QueryNewP.h"
+#include "QueryCoreP.h"
 
 static short module = MOD_BACKEND;
 
@@ -85,6 +89,71 @@ sql_Query_destroy (sqlQuery *sq)
    g_free(sq);
 }
 
+/*
+ * non-default sort-type.  This combines most of the logic of
+ * sort_order and sort_distinct into one place
+ */
+static char *
+sql_sort_get_type (char *p, GSList *path)
+{
+  if (!safe_strcmp (path->data, SPLIT_TRANS)) {
+    path = path->next;
+    if (!path)
+      PERR ("AIEE -- sorting on the Transaction???");
+    
+    if (!safe_strcmp (path->data, TRANS_DATE_POSTED)) {
+      p = stpcpy (p, "gncTransaction.date_posted");
+    } else if (!safe_strcmp (path->data, TRANS_DATE_ENTERED)) {
+      p = stpcpy (p, "gncTransaction.date_entered");
+    } else if (!safe_strcmp (path->data, TRANS_NUM)) {
+      p = stpcpy (p, "gncTransaction.num");
+    } else if (!safe_strcmp (path->data, TRANS_DESCRIPTION)) {
+      p = stpcpy (p, "gncTransaction.description");
+    } else {
+      PERR ("Unknown Transaction parameter: %s", (char*)(path->data));
+    }
+
+  } else if (!safe_strcmp (path->data, SPLIT_ACCOUNT)) {
+    path = path->next;
+    if (!path)
+      PERR ("AIEE -- sorting on the Account??");
+
+    if (!safe_strcmp (path->data, ACCOUNT_CODE_)) {
+      /* XXX hack alert FIXME implement this */
+      PERR ("BY_ACCOUNT_CODE badly implemented");
+      p = stpcpy (p, "gncAccount.accountCode");
+    } else {
+      PERR ("Unknown Account parameter: %s", (char*)(path->data));
+    }
+
+  } else if (!safe_strcmp (path->data, SPLIT_DATE_RECONCILED)) {
+    p = stpcpy (p, "gncEntry.date_reconciled");
+  } else if (!safe_strcmp (path->data, SPLIT_MEMO)) {
+    p = stpcpy (p, "gncEntry.memo");
+  } else if (!safe_strcmp (path->data, SPLIT_RECONCILE)) {
+    p = stpcpy (p, "gncEntry.reconciled");
+  } else if (!safe_strcmp (path->data, SPLIT_VALUE)) {
+    p = stpcpy (p, "gncEntry.amount");
+  } else if (!safe_strcmp (path->data, SPLIT_ACCT_FULLNAME)) {
+    /* XXX hack alert FIXME implement this */
+    PERR ("BY_ACCOUNT_FULL_NAME badly implemented");
+    p = stpcpy (p, "gncAccount.accountName");
+  } else if (!safe_strcmp (path->data, SPLIT_CORR_ACCT_NAME)) {
+    /* XXX hack alert FIXME implement this */
+    PERR ("BY_CORR_ACCOUNT_FULL_NAME not implemented");
+    p = stpcpy (p, "gncAccount.accountName");
+  } else if (!safe_strcmp (path->data, SPLIT_CORR_ACCT_CODE)) {
+    /* XXX hack alert FIXME implement this */
+    PERR ("BY_CORR_ACCOUNT_CODE not implemented");
+    p = stpcpy (p, "gncAccount.accountCode");
+
+  } else {
+    PERR ("Unknown Split parameter: %s", (char*)(path->data));
+  }
+
+  return p;
+}
+
 /* =========================================================== */
 /* sorting order */
 /* We use DESC for increasing and ASC for decreasing,
@@ -93,94 +162,37 @@ sql_Query_destroy (sqlQuery *sq)
  * done by the Query C code. */
 
 static char *
-sql_sort_order (char *p, sort_type_t sort_type, gboolean increasing)
+sql_sort_order (char *p, QueryNewSort_t sort)
 {
-   ENTER ("sort type=%d, incr=%d", sort_type, increasing);
+   GSList *path;
+   gboolean increasing;
 
-   switch (sort_type)
-   {
-      case BY_STANDARD:
-         if (TRUE == increasing)
-         {
-            p = stpcpy (p,
-                        "gncTransaction.date_posted DESC, "
-                        "gncTransaction.num DESC, "
-                        "gncTransaction.date_entered DESC, "
-                        "gncTransaction.description");
-         }
-         else
-         {
-            p = stpcpy (p,
-                        "gncTransaction.date_posted ASC, "
-                        "gncTransaction.num ASC, "
-                        "gncTransaction.date_entered ASC, "
-                        "gncTransaction.description");
-         }
-         break;
-      case BY_DATE:
-         p = stpcpy (p, "gncTransaction.date_posted");
-         break;
-      case BY_DATE_ROUNDED:
-         /* XXX hack alert FIXME implement this */
-         PERR ("BY_DATE_ROUNDED badly implemented");
-         p = stpcpy (p, "gncTransaction.date_posted");
-         break;
-      case BY_DATE_ENTERED:
-         p = stpcpy (p, "gncTransaction.date_entered");
-         break;
-      case BY_DATE_ENTERED_ROUNDED:
-         /* XXX hack alert FIXME implement this */
-         PERR ("BY_DATE_ENTERED_ROUNDED badly implemented");
-         p = stpcpy (p, "gncTransaction.date_entered");
-         break;
-      case BY_DATE_RECONCILED:
-         p = stpcpy (p, "gncEntry.date_reconciled");
-         break;
-      case BY_DATE_RECONCILED_ROUNDED:
-         /* XXX hack alert FIXME implement this */
-         PERR ("BY_DATE_RECONCILED_ROUNDED badly implemented");
-         p = stpcpy (p, "gncEntry.date_reconciled");
-         break;
-      case BY_NUM:
-         p = stpcpy (p, "gncTransaction.num");
-         break;
-      case BY_AMOUNT:
-         p = stpcpy (p, "gncEntry.amount");
-         break;
-      case BY_MEMO:
-         p = stpcpy (p, "gncEntry.memo");
-         break;
-      case BY_DESC:
-         p = stpcpy (p, "gncTransaction.description");
-         break;
-      case BY_RECONCILE:
-         p = stpcpy (p, "gncEntry.reconciled");
-         break;
-      case BY_ACCOUNT_FULL_NAME:
-         /* XXX hack alert FIXME implement this */
-         PERR ("BY_ACCOUNT_FULL_NAME badly implemented");
-         p = stpcpy (p, "gncAccount.accountName");
-         break;
-      case BY_ACCOUNT_CODE:
-         /* XXX hack alert FIXME implement this */
-         PERR ("BY_ACCOUNT_CODE badly implemented");
-         p = stpcpy (p, "gncAccount.accountCode");
-         break;
-      case BY_CORR_ACCOUNT_FULL_NAME:
-         /* XXX hack alert FIXME implement this */
-         PERR ("BY_CORR_ACCOUNT_FULL_NAME not implemented");
-         p = stpcpy (p, "gncAccount.accountName");
-         break;
-      case BY_CORR_ACCOUNT_CODE:
-         /* XXX hack alert FIXME implement this */
-         PERR ("BY_CORR_ACCOUNT_CODE not implemented");
-         p = stpcpy (p, "gncAccount.accountCode");
-         break;
-      case BY_NONE:
-         break;
-      default:
-         PERR ("unknown sort type %d", sort_type);
-         break;
+   increasing = gncQuerySortGetIncreasing (sort);
+
+   ENTER ("incr=%d", increasing);
+
+   path = gncQuerySortGetParamPath (sort);
+   
+   if (path == NULL) {
+     /* Ok, we're not sorting on anything here. */
+     ;
+   } else if (!safe_strcmp (path->data, QUERY_DEFAULT_SORT)) {
+     if (TRUE == increasing) {
+       p = stpcpy (p,
+		   "gncTransaction.date_posted DESC, "
+		   "gncTransaction.num DESC, "
+		   "gncTransaction.date_entered DESC, "
+		   "gncTransaction.description");
+     } else {
+       p = stpcpy (p,
+		   "gncTransaction.date_posted ASC, "
+		   "gncTransaction.num ASC, "
+		   "gncTransaction.date_entered ASC, "
+		   "gncTransaction.description");
+     }
+
+   } else {
+     p = sql_sort_get_type (p, path);
    }
 
    if (TRUE == increasing)
@@ -199,69 +211,26 @@ sql_sort_order (char *p, sort_type_t sort_type, gboolean increasing)
 /* distinct clauses */
 
 static char *
-sql_sort_distinct (char *p, sort_type_t sort_type)
+sql_sort_distinct (char *p, QueryNewSort_t sort)
 {
-   ENTER ("sort type=%d", sort_type);
+   GSList *path;
+   ENTER (".");
 
-   if (BY_NONE != sort_type)
+   path = gncQuerySortGetParamPath (sort);
+
+   if (NULL != path)
    {
       p = stpcpy (p, ", ");
    }
 
-   switch (sort_type)
-   {
-      case BY_STANDARD:
-         p = stpcpy (p, "gncTransaction.date_posted, gncTransaction.num, "
-                        "gncTransaction.date_entered, gncTransaction.description");
-         break;
-      case BY_DATE:
-      case BY_DATE_ROUNDED:
-         p = stpcpy (p, "gncTransaction.date_posted");
-         break;
-      case BY_DATE_ENTERED:
-      case BY_DATE_ENTERED_ROUNDED:
-         p = stpcpy (p, "gncTransaction.date_entered");
-         break;
-      case BY_DATE_RECONCILED:
-      case BY_DATE_RECONCILED_ROUNDED:
-         p = stpcpy (p, "gncEntry.date_reconciled");
-         break;
-      case BY_NUM:
-         p = stpcpy (p, "gncTransaction.num");
-         break;
-      case BY_AMOUNT:
-         p = stpcpy (p, "gncEntry.amount");
-         break;
-      case BY_MEMO:
-         p = stpcpy (p, "gncEntry.memo");
-         break;
-      case BY_DESC:
-         p = stpcpy (p, "gncTransaction.description");
-         break;
-      case BY_RECONCILE:
-         p = stpcpy (p, "gncEntry.reconciled");
-         break;
-      case BY_ACCOUNT_FULL_NAME:
-         p = stpcpy (p, "gncAccount.accountName");
-         break;
-      case BY_ACCOUNT_CODE:
-         p = stpcpy (p, "gncAccount.accountCode");
-         break;
-      case BY_CORR_ACCOUNT_FULL_NAME:
-         /* XXX hack alert FIXME implement this */
-         PERR ("BY_CORR_ACCOUNT_FULL_NAME not implemented");
-         p = stpcpy (p, "gncAccount.accountName");
-         break;
-      case BY_CORR_ACCOUNT_CODE:
-         /* XXX hack alert FIXME implement this */
-         PERR ("BY_CORR_ACCOUNT_CODE not implemented");
-         p = stpcpy (p, "gncAccount.accountCode");
-         break;
-      case BY_NONE:
-         break;
-      default:
-         PERR ("unknown sort type %d", sort_type);
-         break;
+   if (path == NULL) {
+     ;
+
+   } else if (!safe_strcmp (path->data, QUERY_DEFAULT_SORT)) {
+     p = stpcpy (p, "gncTransaction.date_posted, gncTransaction.num, "
+		 "gncTransaction.date_entered, gncTransaction.description");
+   } else {
+     p = sql_sort_get_type (p, path);
    }
 
    return p;
@@ -272,37 +241,20 @@ sql_sort_distinct (char *p, sort_type_t sort_type)
 /* does sorting require a reference to this particular table? */
 
 static gboolean 
-sql_sort_sort_need_account (sort_type_t sort_type)
+sql_sort_sort_need_account (QueryNewSort_t sort)
 {
    gboolean need_account = FALSE;
-   ENTER ("sort type=%d", sort_type);
+   GSList *path;
+   ENTER (".");
 
-   switch (sort_type)
-   {
-      case BY_STANDARD:
-      case BY_AMOUNT:
-      case BY_DATE:
-      case BY_DATE_ROUNDED:
-      case BY_DATE_ENTERED:
-      case BY_DATE_ENTERED_ROUNDED:
-      case BY_DATE_RECONCILED:
-      case BY_DATE_RECONCILED_ROUNDED:
-      case BY_DESC:
-      case BY_MEMO:
-      case BY_NUM:
-      case BY_RECONCILE:
-      case BY_NONE:
-         break;
-      case BY_ACCOUNT_FULL_NAME:
-      case BY_ACCOUNT_CODE:
-      case BY_CORR_ACCOUNT_FULL_NAME:
-      case BY_CORR_ACCOUNT_CODE:
-         need_account = TRUE;
-         break;
-      default:
-         PERR ("unknown sort type %d", sort_type);
-         break;
-   }
+   path = gncQuerySortGetParamPath (sort);
+
+   if (path)
+     if (!safe_strcmp (path->data, SPLIT_ACCT_FULLNAME) ||
+	 !safe_strcmp (path->data, SPLIT_CORR_ACCT_NAME) ||
+	 !safe_strcmp (path->data, SPLIT_CORR_ACCT_CODE) ||
+	 !safe_strcmp (path->data, SPLIT_ACCOUNT))
+       need_account = TRUE;
 
    return need_account;
 }
@@ -311,23 +263,14 @@ static gboolean
 sql_sort_need_account (Query *q)
 {
    gboolean need_account = FALSE;
+   QueryNewSort_t s1, s2, s3;
 
-   sort_type_t sorter;
-   sorter = xaccQueryGetPrimarySortOrder(q);
-   if (BY_NONE != sorter)
-   {
-      need_account = sql_sort_sort_need_account(sorter);
-      sorter = xaccQueryGetSecondarySortOrder(q);
-      if (BY_NONE != sorter)
-      {
-         need_account = need_account || sql_sort_sort_need_account(sorter);
-         sorter = xaccQueryGetTertiarySortOrder(q);
-         if (BY_NONE != sorter)
-         {   
-            need_account = need_account || sql_sort_sort_need_account(sorter);
-         }
-      }
-   }
+   gncQueryGetSorts (q, &s1, &s2, &s3);
+
+   need_account = sql_sort_sort_need_account (s1) ||
+     sql_sort_sort_need_account (s2) ||
+     sql_sort_sort_need_account (s3);
+
    return need_account;
 }
 
@@ -335,38 +278,21 @@ sql_sort_need_account (Query *q)
 /* does sorting require a reference to this particular table? */
 
 static gboolean 
-sql_sort_sort_need_entry (sort_type_t sort_type)
+sql_sort_sort_need_entry (QueryNewSort_t sort)
 {
    gboolean need_entry = FALSE;
-   ENTER ("sort type=%d", sort_type);
+   GSList *path;
+   ENTER (".");
 
-   switch (sort_type)
-   {
-      case BY_STANDARD:
-      case BY_ACCOUNT_FULL_NAME:
-      case BY_ACCOUNT_CODE:
-      case BY_CORR_ACCOUNT_FULL_NAME:
-      case BY_CORR_ACCOUNT_CODE:
-      case BY_DATE:
-      case BY_DATE_ROUNDED:
-      case BY_DATE_ENTERED:
-      case BY_DATE_ENTERED_ROUNDED:
-      case BY_DESC:
-      case BY_NUM:
-      case BY_NONE:
-         break;
-      case BY_AMOUNT:
-      case BY_DATE_RECONCILED:
-      case BY_DATE_RECONCILED_ROUNDED:
-      case BY_MEMO:
-      case BY_RECONCILE:
-         need_entry = TRUE;
-         break;
-      default:
-         PERR ("unknown sort type %d", sort_type);
-         break;
-   }
+   path = gncQuerySortGetParamPath (sort);
 
+   if (path)
+     if (!safe_strcmp (path->data, SPLIT_VALUE) ||
+	 !safe_strcmp (path->data, SPLIT_DATE_RECONCILED) ||
+	 !safe_strcmp (path->data, SPLIT_MEMO) ||
+	 !safe_strcmp (path->data, SPLIT_RECONCILE))
+       need_entry = TRUE;
+   
    return need_entry;
 }
  
@@ -374,28 +300,19 @@ static gboolean
 sql_sort_need_entry (Query *q)
 {
    gboolean need_entry = FALSE;
+   QueryNewSort_t s1, s2, s3;
 
-   sort_type_t sorter;
-   sorter = xaccQueryGetPrimarySortOrder(q);
-   if (BY_NONE != sorter)
-   {
-      need_entry = sql_sort_sort_need_entry(sorter);
-      sorter = xaccQueryGetSecondarySortOrder(q);
-      if (BY_NONE != sorter)
-      {
-         need_entry = need_entry || sql_sort_sort_need_entry(sorter);
-         sorter = xaccQueryGetTertiarySortOrder(q);
-         if (BY_NONE != sorter)
-         {   
-            need_entry = need_entry || sql_sort_sort_need_entry(sorter);
-         }
-      }
-   }
+   gncQueryGetSorts (q, &s1, &s2, &s3);
+
+   need_entry = sql_sort_sort_need_entry (s1) ||
+     sql_sort_sort_need_entry (s2) ||
+     sql_sort_sort_need_entry (s3);
+
    return need_entry;
 }
 
 /* =========================================================== */
-/* Macro for PD_STRING query types
+/* Macro for QUERYCORE_STRING query types
  * Note that postgres supports both case-sensitive and 
  * case-insensitve string searches, and it also supports 
  * regex!  yahooo! 
@@ -405,92 +322,104 @@ sql_sort_need_entry (Query *q)
 {                                                             \
    const char *tmp;                                           \
                                                               \
-   if (0 == pd->str.sense)                                    \
-   {                                                          \
+   if (invert)                                                \
       sq->pq = stpcpy (sq->pq, "NOT (");                      \
-   }                                                          \
-   if (pd->str.use_regexp || !pd->str.case_sens)              \
+   if (pd->how == COMPARE_NEQ)                                \
+      sq->pq = stpcpy (sq->pq, "NOT (");                      \
+   if (pdata->is_regex || pdata->options == STRING_MATCH_CASEINSENSITIVE) \
      sq->pq = stpcpy(sq->pq, fieldname " ~");                 \
    else                                                       \
      sq->pq = stpcpy(sq->pq, fieldname " =");                 \
-   if (0 == pd->str.case_sens) {                              \
+   if (pdata->options == STRING_MATCH_NORMAL) { 	      \
       sq->pq = stpcpy(sq->pq, "*");                           \
    }                                                          \
    sq->pq = stpcpy(sq->pq, " '");                             \
-   tmp = sqlEscapeString (sq->escape, pd->str.matchstring);   \
+   tmp = sqlEscapeString (sq->escape, pdata->matchstring);    \
    sq->pq = stpcpy(sq->pq, tmp);                              \
    sq->pq = stpcpy(sq->pq, "'");                              \
-   if (0 == pd->str.sense)                                    \
-   {                                                          \
+   if (pd->how == COMPARE_NEQ)                                \
       sq->pq = stpcpy (sq->pq, ") ");                         \
-   }                                                          \
+   if (invert)                                                \
+      sq->pq = stpcpy (sq->pq, ") ");                         \
 }
 
 /* =========================================================== */
-/* Macro for PD_AMOUNT type terms.  The logic used here in the
+/* Macro for QUERYCORE_NUMERIC type terms.  The logic used here in the
  * SQL exactly matches that used in the Query.c code.  If
  * that code is incorrect or has changed, then the code below is 
  * broken as well. 
  */
 
-#define AMOUNT_TERM(fieldname,comtable)                              \
+#define AMOUNT_TERM(signcheck,fieldname,comtable)                    \
 {                                                                    \
-   if (0 == pd->amount.sense)                                        \
-   {                                                                 \
+   double amt = gnc_numeric_to_double (pdata->amount);               \
+								     \
+   if (invert)                                                       \
       sq->pq = stpcpy (sq->pq, "NOT (");                             \
-   }                                                                 \
-   switch(pd->amount.amt_sgn)                                        \
+                                                                     \
+   switch(pdata->options)                                            \
    {                                                                 \
-      case AMT_SGN_MATCH_CREDIT:                                     \
-         sq->pq = stpcpy(sq->pq, fieldname " <= 0 AND ");            \
+      case NUMERIC_MATCH_CREDIT:                                     \
+         sq->pq = stpcpy(sq->pq, signcheck " <= 0 AND ");            \
          break;                                                      \
-      case AMT_SGN_MATCH_DEBIT:                                      \
-         sq->pq = stpcpy(sq->pq, fieldname " >= 0 AND ");            \
+      case NUMERIC_MATCH_DEBIT:                                      \
+         sq->pq = stpcpy(sq->pq, signcheck " >= 0 AND ");            \
          break;                                                      \
       default:                                                       \
          break;                                                      \
    }                                                                 \
-   switch(pd->amount.how)                                            \
+   switch(pd->how)                                                   \
    {                                                                 \
-      case AMT_MATCH_ATLEAST:                                        \
+      case COMPARE_GTE:                                              \
          sq->pq = stpcpy(sq->pq,                                     \
-            "abs(" fieldname ") >= "comtable".fraction * float8");   \
-         sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); \
+            fieldname " >= "comtable" * float8");                    \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);                    \
          break;                                                      \
-      case AMT_MATCH_ATMOST:                                         \
+      case COMPARE_GT:                                               \
          sq->pq = stpcpy(sq->pq,                                     \
-            "abs(" fieldname ") <= "comtable".fraction * float8");   \
-         sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); \
+            fieldname " > "comtable" * float8");    \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
          break;                                                      \
-      case AMT_MATCH_EXACTLY:                                        \
+      case COMPARE_LTE:                                              \
          sq->pq = stpcpy(sq->pq,                                     \
-            "abs(abs(" fieldname ") - abs("comtable".fraction * float8"); \
-         sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); \
+            fieldname " <= "comtable" * float8");   \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
+         break;                                                      \
+      case COMPARE_LT:                                               \
+         sq->pq = stpcpy(sq->pq,                                     \
+            fieldname " < "comtable" * float8");    \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
+         break;                                                      \
+      case COMPARE_EQUAL:                                            \
+         sq->pq = stpcpy(sq->pq,                                     \
+            "abs(" fieldname " - abs("comtable" * float8"); \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
          sq->pq = stpcpy(sq->pq, ")) < 1");                          \
          break;                                                      \
+      case COMPARE_NEQ:                                              \
+         sq->pq = stpcpy(sq->pq,                                     \
+            "abs(" fieldname " - abs("comtable" * float8"); \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
+         sq->pq = stpcpy(sq->pq, ")) > 1");                          \
+         break;                                                      \
    }                                                                 \
-   if (0 == pd->amount.sense)                                        \
-   {                                                                 \
+   if (invert)                                                       \
       sq->pq = stpcpy (sq->pq, ") ");                                \
-   }                                                                 \
+                                                                     \
 }
 
 /* =========================================================== */
 /* Macro for PR_CLEARED term */
 
-#define CLR_TERM(howie,flagchar)                                  \
+#define CLR_TERM(flagchar)                                        \
 {                                                                 \
-   if (pd->cleared.how & howie)                                   \
-   {                                                              \
       if (got_one)                                                \
-      {                                                           \
          sq->pq = stpcpy(sq->pq, "OR ");                          \
-      }                                                           \
+                                                                  \
       sq->pq = stpcpy(sq->pq, "gncEntry.reconciled = '");         \
       *(sq->pq) = flagchar;  (sq->pq) ++;                         \
       sq->pq = stpcpy(sq->pq, "' ");                              \
-      got_one = 1;                                                \
-   }                                                              \
+      got_one++;                                                  \
 }
 
 /* =========================================================== */
@@ -542,24 +471,27 @@ kvp_path_name (GSList *path)
 }
 
 static const char *
-kvp_op_name (kvp_match_t how)
+compare_op_name (query_compare_t how)
 {
   switch (how)
   {
-    case KVP_MATCH_LT:
+    case COMPARE_LT:
       return " < ";
 
-    case KVP_MATCH_LTE:
+    case COMPARE_LTE:
       return " <= ";
 
-    case KVP_MATCH_EQ:
+    case COMPARE_EQUAL:
       return " = ";
 
-    case KVP_MATCH_GTE:
+    case COMPARE_GTE:
       return " >= ";
 
-    case KVP_MATCH_GT:
+    case COMPARE_GT:
       return " > ";
+
+    case COMPARE_NEQ:
+      return " != ";
 
     default:
       return NULL;
@@ -677,7 +609,8 @@ add_kvp_clause (sqlQuery *sq, const char *kvptable, const char *entity_table,
 }
 
 static void
-sqlQuery_kvp_build (sqlQuery *sq, KVPPredicateData *kpd)
+sqlQuery_kvp_build (sqlQuery *sq, GSList *sort_path, query_compare_t how,
+		    gboolean invert, query_kvp_t kpd)
 {
   kvp_value_t value_t;
   const char *kvptable;
@@ -690,12 +623,15 @@ sqlQuery_kvp_build (sqlQuery *sq, KVPPredicateData *kpd)
 
   g_return_if_fail (sq && kpd && kpd->path && kpd->value);
 
-  if (!(kpd->where & (KVP_MATCH_SPLIT | KVP_MATCH_TRANS | KVP_MATCH_ACCOUNT)))
+  if (safe_strcmp (sort_path->data, SPLIT_KVP) &&
+      ((safe_strcmp (sort_path->data, SPLIT_ACCOUNT) &&
+	safe_strcmp (sort_path->data, SPLIT_TRANS)) ||
+       safe_strcmp (sort_path->next->data, SPLIT_KVP)))
     return;
 
   value_t = kvp_value_get_type (kpd->value);
 
-  if (value_t == KVP_TYPE_GUID && kpd->how != KVP_MATCH_EQ)
+  if (value_t == KVP_TYPE_GUID && how != COMPARE_EQUAL)
   {
     PWARN ("guid non-equality comparison not supported");
     return;
@@ -706,19 +642,19 @@ sqlQuery_kvp_build (sqlQuery *sq, KVPPredicateData *kpd)
     return;
 
   path = kvp_path_name (kpd->path);
-  op = kvp_op_name (kpd->how);
+  op = compare_op_name (how);
   left = kvp_left_operand (kpd->value);
   right = kvp_right_operand (sq, kpd->value);
 
   list = NULL;
-  if (kpd->where & KVP_MATCH_SPLIT)
+  if (!safe_strcmp (sort_path->data, SPLIT_KVP))
     list = g_list_prepend (list, "gncEntry");
-  if (kpd->where & KVP_MATCH_TRANS)
+  else if (!safe_strcmp (sort_path->data, SPLIT_TRANS))
     list = g_list_prepend (list, "gncTransaction");
-  if (kpd->where & KVP_MATCH_ACCOUNT)
+  else
     list = g_list_prepend (list, "gncAccount");
 
-  if (!kpd->sense)
+  if (invert)
     sq->pq = stpcpy (sq->pq, "NOT ");
 
   sq->pq = stpcpy (sq->pq,
@@ -780,23 +716,31 @@ const char *
 sqlQuery_build (sqlQuery *sq, Query *q)
 {
    GList *il, *jl, *qterms, *andterms;
-   QueryTerm *qt;
-   PredicateData *pd;
    GList *tables = NULL;
+   GSList *path;
+   QueryNewTerm_t qt;
+   QueryPredData_t pd;
+   QueryNewSort_t s1, s2, s3;
    int more_or = 0;
    int more_and = 0;
    int max_rows;
+   gboolean invert;
    gboolean need_account_commodity = FALSE;
    gboolean need_trans_commodity = FALSE;
    gboolean need_account = FALSE;
    gboolean need_entry = FALSE;
-   sort_type_t sorter;
 
    if (!sq || !q) return NULL;
 
+   /* Only Split searches are allowed */
+   if (safe_strcmp (gncQueryGetSearchFor (q), GNC_ID_SPLIT)) {
+     PERR ("Only SPLITs are supported, not %s", gncQueryGetSearchFor (q));
+     return NULL;
+   }
+
    /* Determine whether the query will need to reference certain
     * tables. See note above for details. */
-   qterms = xaccQueryGetTerms (q);
+   qterms = gncQueryGetTerms (q);
 
    for (il=qterms; il; il=il->next)
    {
@@ -805,72 +749,36 @@ sqlQuery_build (sqlQuery *sq, Query *q)
 
       for (jl=andterms; jl; jl=jl->next)
       {
-         qt = (QueryTerm *)jl->data;
-         pd = &qt->data;
+         qt = (QueryNewTerm_t)jl->data;
+         pd = gncQueryTermGetPredData (qt);
+	 path = gncQueryTermGetParamPath (qt);
 
-         switch (pd->base.term_type) 
-         {
-            case PR_BALANCE:
-            case PR_DATE:
-            case PR_DESC:
-            case PR_MISC:
-            case PR_NUM:
-               break;
+	 g_assert (path);
 
-            case PR_ACCOUNT: 
-            case PR_ACTION:
-            case PR_CLEARED:
-            case PR_MEMO:
-            case PR_PRICE: 
-               need_entry = TRUE;
-               break;
-
-            case PR_BOOK: 
-               /* hack alert FIXME this sucks, since *all* queries will 
-                * have a PR_BOOK term in them, which is going to cause 
-                * this big old join, which is going to kill performance.
-                * Maybe we need to put the book in the transaction, for 
-                * performance ?? 
-                */
-               need_account = TRUE;
-               break;
-
-            case PR_VALUE:
-               need_entry = TRUE;
-               need_trans_commodity = TRUE;
-               break;
-
-            case PR_GUID:
-               if (!safe_strcmp (pd->guid.id_type, GNC_ID_ACCOUNT))
-               {
-                  need_account = TRUE;
-               }
-               else if (!safe_strcmp (pd->guid.id_type, GNC_ID_SPLIT))
-               {
-                  need_entry = TRUE;
-               }
-               break;
-
-            case PR_KVP:
-               if (pd->kvp.where & KVP_MATCH_SPLIT)
-               {
-                  need_entry = TRUE;
-               }
-               if (pd->kvp.where & KVP_MATCH_ACCOUNT)
-               {
-                  need_account = TRUE;
-               }
-               break;
-
-            case PR_SHRS: 
-               need_entry = TRUE;
-               need_account_commodity = TRUE;
-               need_account = TRUE;
-               break;
-
-            default:
-               break;
-         }
+	 if (!safe_strcmp (path->data, SPLIT_ACTION) ||
+	     !safe_strcmp (path->data, SPLIT_RECONCILE) ||
+	     !safe_strcmp (path->data, SPLIT_MEMO) ||
+	     !safe_strcmp (path->data, SPLIT_SHARE_PRICE)) {
+	   need_entry = TRUE;
+	 } else if (!safe_strcmp (path->data, SPLIT_VALUE)) {
+	   need_entry = TRUE;
+	   need_trans_commodity = TRUE;
+	 } else if (!safe_strcmp (pd->type_name, QUERYCORE_GUID)) {
+	   if (!safe_strcmp (path->data, QUERY_PARAM_GUID))
+	     need_entry = TRUE;
+	   else if (!safe_strcmp (path->data, SPLIT_ACCOUNT)) {
+	     need_account = TRUE;
+	   }
+	 } else if (!safe_strcmp (pd->type_name, QUERYCORE_KVP)) {
+	   if (!safe_strcmp (path->data, SPLIT_KVP))
+	     need_entry = TRUE;
+	   else if (!safe_strcmp (path->data, SPLIT_ACCOUNT))
+	     need_account = TRUE;
+	 } else if (!safe_strcmp (path->data, SPLIT_AMOUNT)) {
+	   need_entry = TRUE;
+	   need_account_commodity = TRUE;
+	   need_account = TRUE;
+	 }
       }
    }
 
@@ -883,10 +791,12 @@ sqlQuery_build (sqlQuery *sq, Query *q)
    sq->pq = stpcpy(sq->pq,
                    "SELECT DISTINCT gncTransaction.* ");
 
+   gncQueryGetSorts (q, &s1, &s2, &s3);
+
    /* For SELECT DISTINCT, ORDER BY expressions must appear in target list */
-   sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetPrimarySortOrder(q));
-   sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetSecondarySortOrder(q));
-   sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetTertiarySortOrder(q));
+   sq->pq = sql_sort_distinct (sq->pq, s1);
+   sq->pq = sql_sort_distinct (sq->pq, s2);
+   sq->pq = sql_sort_distinct (sq->pq, s3);
 
    /* add needed explicit tables. postgres can figure out the rest. */
    if (need_account_commodity)
@@ -953,348 +863,228 @@ sqlQuery_build (sqlQuery *sq, Query *q)
          if(more_and) sq->pq = stpcpy(sq->pq, " AND ");
          more_and = 1;
 
-         qt = (QueryTerm *)jl->data;
-         pd = &qt->data;
-         switch (pd->base.term_type) 
-         {
-            case PR_ACCOUNT: 
-            {
-               AccountList *acct;
+         qt = (QueryNewTerm_t )jl->data;
+         pd = gncQueryTermGetPredData (qt);
+	 path = gncQueryTermGetParamPath (qt);
+	 invert = gncQueryTermIsInverted (qt);
 
-               PINFO("term is PR_ACCOUNT");
+	 if (!safe_strcmp (pd->type_name, QUERYCORE_GUID)) {
+	   query_guid_t pdata = (query_guid_t) pd;
+	   GList *node;
+	   char * field = NULL;
 
-               if (!pd->acct.sense)
-               {
-                 sq->pq = stpcpy (sq->pq, "NOT ");
-               }
+	   PINFO("term is QUERYCORE_GUID");
 
-               sq->pq = stpcpy(sq->pq, "(");
+	   if (!safe_strcmp (path->data, QUERY_PARAM_GUID)) {
+	     field = "gncEntry.entryGUID";
+	     g_assert (pdata->options != GUID_MATCH_ANY);
 
-               for (acct = pd->acct.account_guids; acct; acct=acct->next)
-               {
-                 switch (pd->acct.how)
-                 {
-                   case ACCT_MATCH_NONE:
-                     sq->pq = stpcpy (sq->pq, "NOT ");
-                     /* fall through */
+	   } else if (!safe_strcmp (path->data, SPLIT_TRANS) &&
+		      !safe_strcmp (path->next->data, QUERY_PARAM_GUID)) {
+	     field = "gncEntry.transGUID";
+	     g_assert (pdata->options != GUID_MATCH_ANY);
 
-                   case ACCT_MATCH_ANY:
-                     sq->pq = stpcpy(sq->pq, "gncEntry.accountGuid='");
-                     sq->pq = guid_to_string_buff ((GUID*) acct->data, sq->pq);
-                     sq->pq = stpcpy(sq->pq, "'");
-                     break;
+	   } else if (!safe_strcmp (path->data, SPLIT_ACCOUNT) &&
+		      !safe_strcmp (path->next->data, QUERY_PARAM_GUID)) {
+	     field = "gncEntry.accountGUID";
+	     g_assert (pdata->options != GUID_MATCH_ANY);
 
-                   case ACCT_MATCH_ALL:
-                     sq->pq = stpcpy (sq->pq,
-                                      " EXISTS ( SELECT true FROM gncEntry e"
-                                      "          WHERE "
-                                      "e.transGuid = gncTransaction.transGuid"
-                                      " AND "
-                                      "e.accountGuid='");
-                     sq->pq = guid_to_string_buff ((GUID*) acct->data, sq->pq);
-                     sq->pq = stpcpy(sq->pq, "')");
+	   } else if (!safe_strcmp (path->data, SPLIT_TRANS) &&
+		      !safe_strcmp (path->next->data, TRANS_SPLITLIST) &&
+		      !safe_strcmp (path->next->next->data, SPLIT_ACCOUNT_GUID)) {
+	     field = "gncEntry.accountGUID";
+	     g_assert (pdata->options == GUID_MATCH_ANY);
 
-                     break;
+	   } else {
+	     PINFO ("Unknown GUID parameter, %s", (char*)path->data);
 
-                   default:
-                     PERR ("unexpected account match type: %d",pd->acct.how);
-                     break;
-                 }
+	     /* XXX: Need to support the Book GUID? (gncAccount.bookGUID) */
+	   }
 
-                 if (acct->next)
-                 {
-                   switch (pd->acct.how)
-                   {
-                     case ACCT_MATCH_ANY:
-                       sq->pq = stpcpy(sq->pq, " OR ");
-                       break;
+	   if (field != NULL) {
 
-                     case ACCT_MATCH_ALL:
-                     case ACCT_MATCH_NONE:
-                       sq->pq = stpcpy(sq->pq, " AND ");
-                       break;
+	     if (invert)
+	       sq->pq = stpcpy (sq->pq, "NOT ");
 
-                     default:
-                       PERR ("unexpected account match type: %d",pd->acct.how);
-                       break;
-                   }
-                 }
-               }
+	     sq->pq = stpcpy(sq->pq, "(");
 
-               sq->pq = stpcpy(sq->pq, ")");
+	     for (node = pdata->guids; node; node=node->next) {
 
-               break;
-            }
+	       switch (pdata->options) {
+	       case GUID_MATCH_NONE:
+		 sq->pq = stpcpy (sq->pq, "NOT ");
+		 /* fall through */
 
-            case PR_ACTION:
-               PINFO("term is PR_ACTION");
-               STRING_TERM ("gncEntry.action");
-               break;
+	       case GUID_MATCH_ANY:
+		 sq->pq = stpcpy (sq->pq, field);
+		 sq->pq = stpcpy (sq->pq, "='");
+		 sq->pq = guid_to_string_buff ((GUID*) node->data, sq->pq);
+		 sq->pq = stpcpy(sq->pq, "'");
+		 break;
 
-            case PR_BALANCE:
-            {
-               PINFO("term is PR_BALANCE");
-               PWARN("PR_BALANCE query term not properly implemented");
-               if (0 == pd->balance.sense)
-               {
-                  sq->pq = stpcpy (sq->pq, "NOT (");
-               }
-               if (pd->balance.how & BALANCE_BALANCED) 
-               {
-                  sq->pq = stpcpy(sq->pq, "TRUE ");
-               }
-               else 
-               {
-                  sq->pq = stpcpy(sq->pq, "FALSE ");
-               }
-               if (0 == pd->balance.sense)
-               {
-                  sq->pq = stpcpy (sq->pq, ") ");
-               }
-               break;
-            }
+	       case GUID_MATCH_ALL:
+		 sq->pq = stpcpy (sq->pq,
+				  " EXISTS ( SELECT true FROM gncEntry e"
+				  "          WHERE "
+				  "e.transGuid = gncTransaction.transGuid"
+				  " AND "
+				  "e.accountGuid='");
+		 sq->pq = guid_to_string_buff ((GUID*) node->data, sq->pq);
+		 sq->pq = stpcpy(sq->pq, "')");
 
-            case PR_BOOK: 
-            {
-               BookList *book;
+		 break;
 
-               PINFO("term is PR_BOOK");
+	       default:
+		 PERR ("unexpected guid match type: %d", pdata->options);
+		 break;
+	       }
 
-               if (!pd->book.sense)
-               {
-                 sq->pq = stpcpy (sq->pq, "NOT ");
-               }
+	       if (node->next) {
+		 switch (pdata->options) {
+		 case GUID_MATCH_ANY:
+		   sq->pq = stpcpy(sq->pq, " OR ");
+		   break;
 
-               sq->pq = stpcpy(sq->pq, "(");
+		 case GUID_MATCH_ALL:
+		 case GUID_MATCH_NONE:
+		   sq->pq = stpcpy(sq->pq, " AND ");
+		   break;
 
-               for (book = pd->book.book_guids; book; book=book->next)
-               {
-                 switch (pd->book.how)
-                 {
-                   case BOOK_MATCH_NONE:
-                     sq->pq = stpcpy (sq->pq, "NOT ");
-                     /* fall through */
+		 default:
+		   PERR ("unexpected account match type: %d", pdata->options);
+		   break;
+		 }
+	       }
+	     }
 
-                   case BOOK_MATCH_ANY:
-                     sq->pq = stpcpy(sq->pq, "gncAccount.bookGuid='");
-                     sq->pq = guid_to_string_buff ((GUID*) book->data, sq->pq);
-                     sq->pq = stpcpy(sq->pq, "'");
-                     break;
+	     sq->pq = stpcpy(sq->pq, ")");
+	   }
 
-                   default:
-                     PERR ("unexpected book match type: %d",pd->book.how);
-                     break;
-                 }
+	 } else if (!safe_strcmp (pd->type_name, QUERYCORE_STRING)) {
+	   query_string_t pdata = (query_string_t) pd;
 
-                 if (book->next)
-                 {
-                   switch (pd->book.how)
-                   {
-                     case BOOK_MATCH_ANY:
-                       sq->pq = stpcpy(sq->pq, " OR ");
-                       break;
+	   if (!safe_strcmp (path->data, SPLIT_ACTION)) {
+	     PINFO("term is PR_ACTION");
+	     STRING_TERM ("gncEntry.action");
 
-                     case BOOK_MATCH_NONE:
-                       sq->pq = stpcpy(sq->pq, " AND ");
-                       break;
+	   } else if (!safe_strcmp (path->data, SPLIT_MEMO)) {
+	     PINFO("term is PR_MEMO");
+	     STRING_TERM ("gncEntry.memo");
 
-                     default:
-                       PERR ("unexpected book match type: %d",pd->book.how);
-                       break;
-                   }
-                 }
-               }
+	   } else if (!safe_strcmp (path->data, SPLIT_TRANS)) {
+	     path = path->next;
 
-               sq->pq = stpcpy(sq->pq, ")");
+	     if (!path) {
+	       PINFO ("invalid transaction parameter");
 
-               break;
-            }
-
-            case PR_CLEARED:
-            {
-               int got_one = 0;
-               PINFO("term is PR_CLEARED");
-               if (0 == pd->cleared.sense)
-               {
-                  sq->pq = stpcpy (sq->pq, "NOT ");
-               }
-               sq->pq = stpcpy (sq->pq, "(");
-
-               CLR_TERM (CLEARED_NO, NREC);
-               CLR_TERM (CLEARED_CLEARED, CREC);
-               CLR_TERM (CLEARED_RECONCILED, YREC);
-               CLR_TERM (CLEARED_FROZEN, FREC);
-               CLR_TERM (CLEARED_VOIDED, VREC);
-
-               sq->pq = stpcpy (sq->pq, ") ");
-               break;
-            }
-
-            case PR_DATE:
-            {
-               PINFO("term is PR_DATE");
-               if (0 == pd->date.sense)
-               {
-                  sq->pq = stpcpy (sq->pq, "NOT (");
-               }
-               if (pd->date.use_start)
-               {
-                  sq->pq = stpcpy(sq->pq, "gncTransaction.date_posted >= '");
-                  sq->pq = gnc_timespec_to_iso8601_buff (pd->date.start,
-                                                         sq->pq);
-                  sq->pq = stpcpy(sq->pq, "' ");
-               }
-               if (pd->date.use_end)
-               {
-                  if (pd->date.use_start) 
-                  {
-                     sq->pq = stpcpy(sq->pq, "AND ");
-                  }
-                  sq->pq = stpcpy(sq->pq, "gncTransaction.date_posted <= '");
-                  sq->pq = gnc_timespec_to_iso8601_buff (pd->date.end, sq->pq);
-                  sq->pq = stpcpy(sq->pq, "' ");
-               }
-               if (!pd->date.use_start && !pd->date.use_end) 
-               {
-                  sq->pq = stpcpy(sq->pq, "TRUE ");
-               }
-               if (0 == pd->date.sense)
-               {
-                  sq->pq = stpcpy (sq->pq, ") ");
-               }
-               break;
-            }
-
-            case PR_DESC:
+	     } else if (!safe_strcmp (path->data, TRANS_DESCRIPTION)) {
                PINFO("term is PR_DESC");
                STRING_TERM ("gncTransaction.description");
-               break;
 
-            case PR_GUID:
-            {
-               PINFO("term is PR_GUID");
-               if (0 == pd->guid.sense)
-               {
-                  sq->pq = stpcpy (sq->pq, "NOT ");
-               }
-
-               sq->pq = stpcpy (sq->pq, " (");
-
-               if (pd->guid.id_type == GNC_ID_NONE ||
-                   !safe_strcmp (pd->guid.id_type, GNC_ID_NULL))
-               {
-                   sq->pq = stpcpy(sq->pq, "FALSE ");
-               }
-               else if (!safe_strcmp (pd->guid.id_type, GNC_ID_ACCOUNT))
-               {
-                   sq->pq = stpcpy(sq->pq, "gncAccount.accountGuid = '");
-                   sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
-                   sq->pq = stpcpy(sq->pq, "' ");
-               }
-               else if (!safe_strcmp (pd->guid.id_type, GNC_ID_TRANS))
-               {
-                   sq->pq = stpcpy(sq->pq, "gncTransaction.transGuid = '");
-                   sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
-                   sq->pq = stpcpy(sq->pq, "' ");
-               }
-               else if (!safe_strcmp (pd->guid.id_type, GNC_ID_SPLIT))
-               {
-                   sq->pq = stpcpy(sq->pq, "gncEntry.entryGuid = '");
-                   sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
-                   sq->pq = stpcpy(sq->pq, "' ");
-               }
-
-               sq->pq = stpcpy (sq->pq, ") ");
-
-               break;
-            }
-
-            case PR_KVP:
-               PINFO("term is PR_KVP");
-               sqlQuery_kvp_build (sq, &pd->kvp);
-               break;
-
-            case PR_MEMO:
-               PINFO("term is PR_MEMO");
-               STRING_TERM ("gncEntry.memo");
-               break;
-
-            case PR_MISC:
-               PINFO("term is PR_MISC");
-               sq->pq = stpcpy(sq->pq, "TRUE ");
-               break;
-
-            case PR_NUM:
+	     } else if (!safe_strcmp (path->data, TRANS_NUM)) {
                PINFO("term is PR_NUM");
                STRING_TERM ("gncTransaction.num");
-               break;
+	     } else
+	       PINFO ("unknown string (transaction) parameter: %s",
+		      (char*)(path->data));
+	   } else
+	     PINFO ("unknown string (split) parameter: %s",
+		    (char*)(path->data));
 
-            case PR_PRICE: {
-               PINFO("term is PR_PRICE");
 
-               if (0 == pd->amount.sense)
-               {
-                  sq->pq = stpcpy (sq->pq, "NOT (");
-               }
-               switch(pd->amount.amt_sgn) 
-               {
-                  case AMT_SGN_MATCH_CREDIT:
-                     sq->pq = stpcpy(sq->pq, "gncEntry.value / gncEntry.amount <= 0 AND "); 
-                     break;
-                  case AMT_SGN_MATCH_DEBIT:
-                     sq->pq = stpcpy(sq->pq, "gncEntry.value / gncEntry.amount >= 0 AND "); 
-                     break;
-                  default:
-                     break;
-               }
-               switch(pd->amount.how) 
-               {
-                  case AMT_MATCH_ATLEAST:
-                     sq->pq = stpcpy(sq->pq, 
-                        "gncHelperPrVal(gncEntry) >= gncHelperPrAmt(gncEntry) * float8"); 
-                     sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); 
-                     break;
-                  case AMT_MATCH_ATMOST:
-                     sq->pq = stpcpy(sq->pq, 
-                        "gncHelperPrVal(gncEntry) <= gncHelperPrAmt(gncEntry) * float8"); 
-                     sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); 
-                     break;
-                  case AMT_MATCH_EXACTLY:
-                     sq->pq = stpcpy(sq->pq, 
-                        "abs(gncHelperPrVal(gncEntry) -  gncHelperPrAmt(gncEntry) * float8"); 
-                     sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); 
-                     sq->pq = stpcpy(sq->pq, ") < 1");
-                     break;
-               }
-               if (0 == pd->amount.sense)
-               {
-                  sq->pq = stpcpy (sq->pq, ") ");
-               }
-               break;
-            }
+	 } else if (!safe_strcmp (pd->type_name, QUERYCORE_NUMERIC)) {
+	   query_numeric_t pdata = (query_numeric_t) pd;
 
-            case PR_SHRS: {
-               PINFO("term is PR_SHRS");
-               sq->pq = stpcpy(sq->pq, 
-                     "gncAccount.commodity = account_com.commodity AND ");
-               AMOUNT_TERM ("gncEntry.amount","account_com");
-               break;
-            }
 
-            case PR_VALUE:
-            {
-               PINFO("term is PR_VALUE");
-               sq->pq = stpcpy(sq->pq, 
-                     "gncTransaction.currency = trans_com.commodity AND ");
-               AMOUNT_TERM ("gncEntry.value","trans_com");
-               break;
-            }
+	   if (!safe_strcmp (path->data, SPLIT_AMOUNT)) {
+	     PINFO("term is PR_SHRS");
+	     sq->pq = stpcpy(sq->pq, 
+		     "gncAccount.commodity = account_com.commodity AND ");
+	     AMOUNT_TERM ("gncEntry.amount", "abs(gncEntry.amount)",
+			  "account_com.fraction");
 
-            default:
-               PERR ("unknown query term type %d", pd->base.term_type);
-               more_and = 0;
-               break;
-         }
+	   } else if (!safe_strcmp (path->data, SPLIT_VALUE)) {
+
+	     PINFO("term is PR_VALUE");
+	     sq->pq = stpcpy(sq->pq, 
+		     "gncTransaction.currency = trans_com.commodity AND ");
+	     AMOUNT_TERM ("gncEntry.value", "abs(gncEntry.value)",
+			  "trans_com.fraction");
+
+	   } else if (!safe_strcmp (path->data, SPLIT_SHARE_PRICE)) {
+
+	     PINFO("term is PR_PRICE");
+
+	     AMOUNT_TERM ("gncEntry.value / gncEntry.amount",
+			  "gncHelperPrVal(gncEntry)",
+			  "gncHelperPrAmt(gncEntry)");
+	   } else {
+
+	     PINFO ("Unknown NUMERIC: %s", (char*)(path->data));
+	   }
+
+	 } else if (!safe_strcmp (pd->type_name, QUERYCORE_DATE)) {
+	   query_date_t pdata = (query_date_t) pd;
+	   char * field = NULL;
+	   const char * op = NULL;
+
+	   PINFO("term is PR_DATE");
+	   if (invert) 
+	     sq->pq = stpcpy (sq->pq, "NOT (");
+
+	   if (!safe_strcmp (path->data, SPLIT_TRANS) &&
+	       !safe_strcmp (path->next->data, TRANS_DATE_POSTED))
+	     field = "gncTransaction.date_posted";
+
+	   op = compare_op_name (pd->how);
+
+	   if (field) {
+	     sq->pq = stpcpy (sq->pq, field);
+	     sq->pq = stpcpy (sq->pq, op);
+	     sq->pq = stpcpy (sq->pq, "'");
+	     sq->pq = gnc_timespec_to_iso8601_buff (pdata->date, sq->pq);
+	     sq->pq = stpcpy(sq->pq, "' ");
+	   }
+
+	   if (invert)
+	     sq->pq = stpcpy (sq->pq, ") ");
+
+	 } else if (!safe_strcmp (pd->type_name, QUERYCORE_CHAR)) {
+	   query_char_t pdata = (query_char_t) pd;
+	   int got_one = 0;
+
+	   if (!safe_strcmp (path->data, SPLIT_RECONCILE)) {
+
+	     PINFO("term is CHAR (Reconcile)");
+
+	     if (invert)
+	       sq->pq = stpcpy (sq->pq, "NOT (");
+             
+	     if (pdata->options == CHAR_MATCH_NONE)
+	       sq->pq = stpcpy (sq->pq, "NOT ");
+
+	     sq->pq = stpcpy (sq->pq, "(");
+	     
+	     while (pdata->char_list[got_one] != '\0')
+	       CLR_TERM (pdata->char_list[got_one]);
+	     
+	     sq->pq = stpcpy (sq->pq, ") ");
+
+	     if (invert)
+	       sq->pq = stpcpy (sq->pq, ") ");
+
+	   } else
+	     PINFO ("Unknown CHAR type, %s", (char*)(path->data));
+
+	 } else if (!safe_strcmp (pd->type_name, QUERYCORE_KVP)) {
+	   query_kvp_t pdata = (query_kvp_t)pd;
+
+	   PINFO("term is a KVP");
+	   sqlQuery_kvp_build (sq, path, pd->how, invert, pdata);
+
+	 } else {
+	   PINFO ("Unsupported Query Type: %s", pd->type_name);
+	 }
       }
 
       /* if there were and terms, close the brace */
@@ -1307,33 +1097,28 @@ sqlQuery_build (sqlQuery *sq, Query *q)
    /* implement sorting order as well; bad sorts lead to bad data
     * if the limit is set to a finite number of rows. 
     */
-   sorter = xaccQueryGetPrimarySortOrder(q);
-   if (BY_NONE != sorter)
+
+   if (gncQuerySortGetParamPath (s1) != NULL)
    {
       sq->pq = stpcpy(sq->pq, "ORDER BY ");
-      sq->pq = sql_sort_order (sq->pq, sorter,
-                               xaccQueryGetSortPrimaryIncreasing (q));
+      sq->pq = sql_sort_order (sq->pq, s1);
 
-      sorter = xaccQueryGetSecondarySortOrder(q);
-      if (BY_NONE != sorter)
+      if (gncQuerySortGetParamPath (s2) != NULL)
       {
          sq->pq = stpcpy(sq->pq, ", ");
-         sq->pq = sql_sort_order (sq->pq, sorter,
-                                  xaccQueryGetSortSecondaryIncreasing (q));
+         sq->pq = sql_sort_order (sq->pq, s2);
 
-         sorter = xaccQueryGetTertiarySortOrder(q);
-         if (BY_NONE != sorter)
+         if (gncQuerySortGetParamPath (s3) != NULL)
          {   
             sq->pq = stpcpy(sq->pq, ", ");
-            sq->pq = sql_sort_order (sq->pq, sorter,
-                                     xaccQueryGetSortTertiaryIncreasing (q));
+            sq->pq = sql_sort_order (sq->pq, s3);
          }
       }
    }
 
    /* ---------------------------------------------------- */
    /* limit the query result to a finite number of rows */
-   max_rows = xaccQueryGetMaxSplits (q);
+   max_rows = gncQueryGetMaxResults (q);
    if (0 <= max_rows)
    {
       sq->pq = stpcpy(sq->pq, " LIMIT ");

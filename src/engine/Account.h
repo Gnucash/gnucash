@@ -463,4 +463,21 @@ xaccAccountFindTransByDesc(Account *account, const char *description);
 Split *
 xaccAccountFindSplitByDesc(Account *account, const char *description);
 
+/* Account parameter names */
+
+#define ACCOUNT_KVP		"kvp"
+#define ACCOUNT_NAME_		"name"
+#define ACCOUNT_CODE_		"code"
+#define ACCOUNT_DESCRIPTION_	"desc"
+#define ACCOUNT_NOTES_		"notes"
+#define ACCOUNT_BALANCE_	"balance"
+#define ACCOUNT_CLEARED_BALANCE	"cleared-balance"
+#define ACCOUNT_RECONCILED_BALANCE	"reconciled-balance"
+#define ACCOUNT_TAX_RELATED	"tax-related-p"
+
+/* This is the type-override when you want to match all accounts.  Used
+ * in the gnome-search parameter list.  Be carefule when you use this.
+ */
+#define ACCOUNT_MATCH_ALL_TYPE	"account-match-all"
+
 #endif /* XACC_ACCOUNT_H */

@@ -1264,7 +1264,84 @@ free_random_kvp_path (GSList *path)
 static GNCIdType
 get_random_id_type (void)
 {
-  return get_random_string ();
+  switch (get_random_int_in_range (1,3)) {
+  case 1:
+    return GNC_ID_SPLIT;
+  case 2:
+    return GNC_ID_TRANS;
+  case 3:
+    return GNC_ID_ACCOUNT;
+  default:
+    return get_random_string ();
+  }
+}
+
+typedef enum {
+  BY_STANDARD = 1,
+  BY_DATE,
+  BY_DATE_ENTERED,
+  BY_DATE_RECONCILED,
+  BY_NUM,
+  BY_AMOUNT,
+  BY_MEMO,
+  BY_DESC,
+  BY_NONE
+} sort_type_t;
+
+static void
+set_query_sort (Query *q, sort_type_t sort_code)
+{
+  GSList *p1 = NULL, *p2 = NULL, *p3 = NULL, *standard;
+
+  standard = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
+
+  switch (sort_code)
+  {
+    case BY_STANDARD:
+      p1 = standard;
+      break;
+    case BY_DATE:
+      p1 = g_slist_prepend (p1, TRANS_DATE_POSTED);
+      p1 = g_slist_prepend (p1, SPLIT_TRANS);
+      p2 = standard;
+      break;
+    case BY_DATE_ENTERED:
+      p1 = g_slist_prepend (p1, TRANS_DATE_ENTERED);
+      p1 = g_slist_prepend (p1, SPLIT_TRANS);
+      p2 = standard;
+      break;
+    case BY_DATE_RECONCILED:
+      p1 = g_slist_prepend (p1, SPLIT_RECONCILE);
+      p2 = g_slist_prepend (p2, SPLIT_DATE_RECONCILED);
+      p3 = standard;
+      break;
+    case BY_NUM:
+      p1 = g_slist_prepend (p1, TRANS_NUM);
+      p1 = g_slist_prepend (p1, SPLIT_TRANS);
+      p2 = standard;
+      break;
+    case BY_AMOUNT:
+      p1 = g_slist_prepend (p1, SPLIT_VALUE);
+      p2 = standard;
+      break;
+    case BY_MEMO:
+      p1 = g_slist_prepend (p1, SPLIT_MEMO);
+      p2 = standard;
+      break;
+    case BY_DESC:
+      p1 = g_slist_prepend (p1, TRANS_DESCRIPTION);
+      p1 = g_slist_prepend (p1, SPLIT_TRANS);
+      p2 = standard;
+      break;
+    case BY_NONE:
+      g_slist_free (standard);
+      break;
+    default:
+      g_slist_free (standard);
+      g_return_if_fail (FALSE);
+  }
+
+  gncQuerySetSortOrder (q, p1, p2, p3);
 }
 
 Query *
@@ -1279,7 +1356,7 @@ get_random_query(void)
 
   while (num_terms-- > 0)
   {
-    pr_type_t pr_type;
+    gint pr_type;
     kvp_value *value;
     Timespec *start;
     Timespec *end;
@@ -1292,17 +1369,17 @@ get_random_query(void)
 
     switch (pr_type)
     {
-      case PR_ACCOUNT:
+      case 1: /*PR_ACCOUNT */
         guids = get_random_guids (10);
         xaccQueryAddAccountGUIDMatch
           (q,
            guids,
-           get_random_int_in_range (1, ACCT_MATCH_NONE),
+           get_random_int_in_range (1, GUID_MATCH_NONE),
            get_random_queryop ());
         free_random_guids (guids);
         break;
 
-      case PR_ACTION:
+      case 2: /*PR_ACTION */
         string = get_random_string ();
         xaccQueryAddActionMatch (q,
                                  string,
@@ -1312,14 +1389,14 @@ get_random_query(void)
         g_free (string);
         break;
 
-      case PR_BALANCE:
+      case 3: /* PR_BALANCE */
         xaccQueryAddBalanceMatch
           (q,
-           get_random_int_in_range (1, BALANCE_BALANCED | BALANCE_UNBALANCED),
+           get_random_boolean (),
            get_random_queryop ());
         break;
 
-      case PR_CLEARED:
+      case 4: /* PR_CLEARED */
         xaccQueryAddClearedMatch
           (q,
            get_random_int_in_range (1,
@@ -1331,7 +1408,7 @@ get_random_query(void)
            get_random_queryop ());
         break;
 
-      case PR_DATE:
+      case 5: /* PR_DATE */
         start = get_random_timespec ();
         end = get_random_timespec ();
         xaccQueryAddDateMatchTS (q, 
@@ -1344,7 +1421,7 @@ get_random_query(void)
         g_free (end);
         break;
 
-      case PR_DESC:
+      case 6: /* PR_DESC */
         string = get_random_string ();
         xaccQueryAddDescriptionMatch (q,
                                       string,
@@ -1354,7 +1431,7 @@ get_random_query(void)
         g_free (string);
         break;
 
-      case PR_GUID:
+      case 7: /* PR_GUID */
         guid = get_random_guid ();
         xaccQueryAddGUIDMatch (q,
                                guid,
@@ -1363,7 +1440,7 @@ get_random_query(void)
         g_free (guid);
         break;
 
-      case PR_KVP:
+      case 8: /* PR_KVP */
         path = get_random_kvp_path ();
         do
         {
@@ -1372,17 +1449,14 @@ get_random_query(void)
         xaccQueryAddKVPMatch (q,
                               path,
                               value,
-                              get_random_int_in_range (1, KVP_MATCH_GT),
-                              get_random_int_in_range (1,
-                                                       KVP_MATCH_SPLIT |
-                                                       KVP_MATCH_TRANS |
-                                                       KVP_MATCH_ACCOUNT),
+                              get_random_int_in_range (1, COMPARE_NEQ),
+                              get_random_id_type (),
                               get_random_queryop ());
         kvp_value_delete (value);
         free_random_kvp_path (path);
         break;
 
-      case PR_MEMO:
+      case 9: /* PR_MEMO */
         string = get_random_string ();
         xaccQueryAddMemoMatch (q,
                                string,
@@ -1392,7 +1466,7 @@ get_random_query(void)
         g_free (string);
         break;
 
-      case PR_NUM:
+      case 10: /* PR_NUM */
         string = get_random_string ();
         xaccQueryAddNumberMatch (q,
                                string,
@@ -1402,42 +1476,38 @@ get_random_query(void)
         g_free (string);
         break;
 
-      case PR_PRICE:
-        DxaccQueryAddSharePriceMatch
+      case 11: /*  PR_PRICE */
+        xaccQueryAddSharePriceMatch
           (q,
-           get_random_double (), 
-           get_random_int_in_range (1, AMT_MATCH_EXACTLY),
+           get_random_gnc_numeric (), 
+           get_random_int_in_range (1, COMPARE_NEQ),
            get_random_queryop ());
         break;
 
-      case PR_SHRS:
-        DxaccQueryAddSharesMatch
+      case 12: /* PR_SHRS */
+        xaccQueryAddSharesMatch
           (q,
-           get_random_double (), 
-           get_random_int_in_range (1, AMT_MATCH_EXACTLY),
+           get_random_gnc_numeric (), 
+           get_random_int_in_range (1, COMPARE_NEQ),
            get_random_queryop ());
         break;
 
-      case PR_VALUE:
-        DxaccQueryAddValueMatch
+      case 13: /* PR_VALUE */
+        xaccQueryAddValueMatch
           (q,
-           get_random_double (),
-           get_random_int_in_range (1, AMT_SGN_MATCH_DEBIT),
-           get_random_int_in_range (1, AMT_MATCH_EXACTLY),
+           get_random_gnc_numeric (),
+           get_random_int_in_range (1, NUMERIC_MATCH_ANY),
+           get_random_int_in_range (1, COMPARE_NEQ),
            get_random_queryop ());
         break;
 
-      case PR_MISC: /* PR_MISC shouldn't be used anyway :) */
       default:
         num_terms++;
         break;
     }
   }
 
-  xaccQuerySetSortOrder (q,
-                         get_random_int_in_range (1, BY_NONE),
-                         get_random_int_in_range (1, BY_NONE),
-                         get_random_int_in_range (1, BY_NONE));
+  set_query_sort (q, get_random_int_in_range (1, BY_NONE));
 
   xaccQuerySetSortIncreasing (q,
                               get_random_boolean (),
@@ -1547,7 +1617,7 @@ make_random_changes_to_session (GNCSession *session)
 
 typedef struct
 {
-  kvp_match_where_t where;
+  GNCIdType where;
   GSList *path;
   Query *q;
 } KVPQueryData;
@@ -1565,7 +1635,7 @@ add_kvp_value_query (const char *key, kvp_value *value, gpointer data)
                              add_kvp_value_query, data);
   else
     xaccQueryAddKVPMatch (kqd->q, kqd->path, value,
-                          KVP_MATCH_EQ, kqd->where,
+                          COMPARE_EQUAL, kqd->where,
                           QUERY_AND);
 
   node = g_slist_last (kqd->path);
@@ -1574,7 +1644,7 @@ add_kvp_value_query (const char *key, kvp_value *value, gpointer data)
 }
 
 static void
-add_kvp_query (Query *q, kvp_frame *frame, kvp_match_where_t where)
+add_kvp_query (Query *q, kvp_frame *frame, GNCIdType where)
 {
   KVPQueryData kqd;
 
@@ -1611,7 +1681,7 @@ Query *
 make_trans_query (Transaction *trans, TestQueryTypes query_types)
 {
   Account *a;
-  double d;
+  gnc_numeric n;
   Query *q;
   Split *s;
 
@@ -1636,17 +1706,17 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
     xaccQueryAddActionMatch (q, xaccSplitGetAction (s),
                              TRUE, FALSE, QUERY_AND);
 
-    d = gnc_numeric_to_double (xaccSplitGetValue (s));
-    DxaccQueryAddValueMatch (q, d, AMT_SGN_MATCH_EITHER,
-                              AMT_MATCH_EXACTLY, QUERY_AND);
+    n = xaccSplitGetValue (s);
+    xaccQueryAddValueMatch (q, n, NUMERIC_MATCH_ANY,
+                              COMPARE_EQUAL, QUERY_AND);
 
-    d = gnc_numeric_to_double (xaccSplitGetAmount (s));
-    DxaccQueryAddSharesMatch (q, d, AMT_MATCH_EXACTLY, QUERY_AND);
+    n = xaccSplitGetAmount (s);
+    xaccQueryAddSharesMatch (q, n, COMPARE_EQUAL, QUERY_AND);
 
     if (include_price)
     {
-      d = gnc_numeric_to_double (xaccSplitGetSharePrice (s));
-      DxaccQueryAddSharePriceMatch (q, d, AMT_MATCH_EXACTLY, QUERY_AND);
+      n = xaccSplitGetSharePrice (s);
+      xaccQueryAddSharePriceMatch (q, n, COMPARE_EQUAL, QUERY_AND);
     }
 
     {
@@ -1693,30 +1763,30 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
     GList * list;
     GList * node;
 
-    /* ACCT_MATCH_ALL */
+    /* GUID_MATCH_ALL */
     list = NULL;
     for (node = xaccTransGetSplitList (trans); node; node = node->next)
     {
       Split * split = node->data;
       list = g_list_prepend (list, xaccSplitGetAccount (split));
     }
-    xaccQueryAddAccountMatch (q, list, ACCT_MATCH_ALL, QUERY_AND);
+    xaccQueryAddAccountMatch (q, list, GUID_MATCH_ALL, QUERY_AND);
     g_list_free (list);
 
-    /* ACCT_MATCH_NONE */
+    /* GUID_MATCH_NONE */
     list = NULL;
     list = g_list_prepend (list, get_random_guid ());
     list = g_list_prepend (list, get_random_guid ());
     list = g_list_prepend (list, get_random_guid ());
-    xaccQueryAddAccountGUIDMatch (q, list, ACCT_MATCH_NONE, QUERY_AND);
+    xaccQueryAddAccountGUIDMatch (q, list, GUID_MATCH_NONE, QUERY_AND);
 
-    /* ACCT_MATCH_ANY */
+    /* GUID_MATCH_ANY */
     {
       GUID * guid = get_random_guid ();
       *guid = *xaccAccountGetGUID (a);
       list = g_list_prepend (list, guid);
     }
-    xaccQueryAddAccountGUIDMatch (q, list, ACCT_MATCH_ANY, QUERY_AND);
+    xaccQueryAddAccountGUIDMatch (q, list, GUID_MATCH_ANY, QUERY_AND);
 
     for (node = list; node; node = node->next)
       g_free (node->data);
@@ -1736,13 +1806,13 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
   }
 
   if (query_types & SPLIT_KVP_QT)
-    add_kvp_query (q, xaccSplitGetSlots (s), KVP_MATCH_SPLIT);
+    add_kvp_query (q, xaccSplitGetSlots (s), GNC_ID_SPLIT);
 
   if (query_types & TRANS_KVP_QT)
-    add_kvp_query (q, xaccTransGetSlots (trans), KVP_MATCH_TRANS);
+    add_kvp_query (q, xaccTransGetSlots (trans), GNC_ID_TRANS);
 
   if (query_types & ACCOUNT_KVP_QT)
-    add_kvp_query (q, xaccAccountGetSlots (a), KVP_MATCH_ACCOUNT);
+    add_kvp_query (q, xaccAccountGetSlots (a), GNC_ID_ACCOUNT);
 
   return q;
 }

@@ -423,10 +423,6 @@ gnc_ledger_display_gl (void)
 
   xaccQuerySetBook (query, gnc_get_current_book());
 
-  xaccQueryAddBalanceMatch (query,
-                            BALANCE_BALANCED | BALANCE_UNBALANCED,
-                            QUERY_AND);
-
   start = time (NULL);
 
   tm = localtime (&start);
@@ -466,6 +462,7 @@ gnc_ledger_display_template_gl (char *id)
   q = xaccMallocQuery ();
 
   book = gnc_get_current_book ();
+  xaccQuerySetBook (q, book);
 
   ag = gnc_book_get_template_group (book);
   acct = xaccGetAccountFromName (ag, id);
@@ -475,12 +472,7 @@ gnc_ledger_display_template_gl (char *id)
     PERR( "can't get template account for id \"%s\"\n", id );
   }
 
-  xaccQueryAddSingleBookMatch( q, book, QUERY_AND );
   xaccQueryAddSingleAccountMatch (q, acct, QUERY_AND);
-  xaccQuerySearchTemplateGroup( q, TRUE );
-
-  //PWARN ("cannot use queries in this way call <linas@linas.org> to fix");
-  //DxaccQuerySetGroup (q, gnc_book_get_template_group(book));
 
   ld = gnc_ledger_display_internal (NULL, q, LD_GL,
                                     GENERAL_LEDGER,
@@ -638,7 +630,7 @@ gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
   accounts = g_list_prepend (accounts, leader);
 
   xaccQueryAddAccountMatch (ld->query, accounts,
-                            ACCT_MATCH_ANY, QUERY_AND);
+                            GUID_MATCH_ANY, QUERY_AND);
 
   g_list_free (accounts);
 }

@@ -512,9 +512,12 @@
       (gnc:query-set-book query (gnc:get-current-book))
       (gnc:query-add-single-account-match query account 'query-and)
       (gnc:query-add-date-match-timepair query #f date #t date 'query-and) 
-      (gnc:query-set-sort-order query 'by-date 'by-standard 'by-none)
+      (gnc:query-set-sort-order query
+				(list gnc:split-trans gnc:trans-date-posted)
+				(list gnc:query-default-sort)
+				'())
       (gnc:query-set-sort-increasing query #t #t #t)
-      (gnc:query-set-max-splits query 1)
+      (gnc:query-set-max-results query 1)
       
       (set! splits (gnc:query-get-splits query))
       (gnc:free-query query)

@@ -2271,7 +2271,7 @@ create_autoCreate_ledger( sxSinceLastData *sxsld )
         Query *q;
 
         q = xaccMallocQuery();
-        xaccQueryAddSingleBookMatch( q, gnc_get_current_book(), QUERY_AND );
+	xaccQuerySetBook (q, gnc_get_current_book ());
         sxsld->ac_ledger = gnc_ledger_display_query( q,
                                                      GENERAL_LEDGER,
                                                      REG_STYLE_LEDGER );
@@ -2326,7 +2326,7 @@ create_created_ledger( sxSinceLastData *sxsld )
         Query *q;
 
         q = xaccMallocQuery();
-        xaccQueryAddSingleBookMatch( q, gnc_get_current_book(), QUERY_AND );
+	xaccQuerySetBook (q, gnc_get_current_book ());
         sxsld->created_ledger = gnc_ledger_display_query( q,
                                                           GENERAL_LEDGER,
                                                           REG_STYLE_LEDGER );

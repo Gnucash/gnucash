@@ -45,7 +45,7 @@
     (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
     (gnc:query-add-account-match query
                                  currency-accounts
-                                 'acct-match-any 'query-and)
+                                 'guid-match-any 'query-and)
     (gnc:query-add-date-match-timepair 
      query #f end-date-tp #t end-date-tp 'query-and) 
     

@@ -19,6 +19,8 @@
 #include "QueryObject.h"
 #include "QueryCore.h"
 
+#include "Transaction.h"	/* for the SPLIT_* and TRANS_* */
+
 #include "dialog-search.h"
 #include "search-core-type.h"
 #include "search-param.h"
@@ -303,7 +305,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
   gnc_gui_component_clear_watches (sw->component_id);
 
   /* Compute the actual results */
-  list = g_list_reverse (gncQueryRun (sw->q, sw->search_for));
+  list = g_list_reverse (gncQueryRun (sw->q));
 
   /* Add the list of items to the clist */
   for (; list; list = list->next) {
@@ -376,11 +378,11 @@ search_update_query (GNCSearchWindow *sw)
 
   /* Make sure we supply a book! */
   if (sw->start_q == NULL) {
-    sw->start_q = gncQueryCreate ();
+    sw->start_q = gncQueryCreateFor (sw->search_for);
     gncQuerySetBook (sw->start_q, gnc_get_current_book ());
   }
 
-  q = gncQueryCreate ();
+  q = gncQueryCreateFor (sw->search_for);
 
   /* Walk the list of criteria */
   for (node = sw->crit_list; node; node = node->next) {
@@ -470,14 +472,12 @@ search_find_cb (GtkButton *button, GNCSearchWindow *sw)
     return;
 
   search_update_query (sw);
-
-  if (sw->result_cb)
-    (sw->result_cb)(sw->q, sw->user_data, &(sw->selected_item));
-
   search_clear_criteria (sw);
   gnc_search_dialog_reset_widgets (sw);
 
-  if (!sw->result_cb)
+  if (sw->result_cb)
+    (sw->result_cb)(sw->q, sw->user_data, &(sw->selected_item));
+  else
     gnc_search_dialog_display_results (sw);
 }
 
@@ -496,7 +496,7 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
 
     if (!sw->q) {
       if (!sw->start_q) {
-	sw->start_q = gncQueryCreate ();
+	sw->start_q = gncQueryCreateFor (sw->search_for);
 	gncQuerySetBook (sw->start_q, gnc_get_current_book ());
       }
       sw->q = gncQueryCopy (sw->start_q);
@@ -888,11 +888,13 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
   g_return_val_if_fail (obj_type, NULL);
   g_return_val_if_fail (*obj_type != '\0', NULL);
   g_return_val_if_fail (param_list, NULL);
-  g_return_val_if_fail (display_list, NULL);
 
   /* Make sure the caller supplies callbacks xor result_callback */
   g_return_val_if_fail ((callbacks && !result_callback) ||
 			(!callbacks && result_callback), NULL);
+
+  if (callbacks)
+    g_return_val_if_fail (display_list, NULL);
 
   sw->search_for = obj_type;
   sw->params_list = param_list;
@@ -908,12 +910,12 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
 						   QUERY_PARAM_GUID);
   if (start_query)
     sw->start_q = gncQueryCopy (start_query);
+  sw->q = show_start_query;
 
   gnc_search_dialog_init_widgets (sw);
 
   /* Maybe display the original query results? */
   if (callbacks && show_start_query) {
-    sw->q = show_start_query;
     gnc_search_dialog_reset_widgets (sw);
     gnc_search_dialog_display_results (sw);
   }
@@ -973,7 +975,7 @@ get_params_list (GNCIdTypeConst type)
   GList *list = NULL;
 
   list = gnc_search_param_prepend (list, "Txn: All Accounts",
-				   "account-match-all",
+				   ACCOUNT_MATCH_ALL_TYPE,
 				   type, SPLIT_TRANS, TRANS_SPLITLIST,
 				   SPLIT_ACCOUNT_GUID, NULL);
   list = gnc_search_param_prepend (list, "Split Account", GNC_ID_ACCOUNT,

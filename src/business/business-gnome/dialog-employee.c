@@ -603,7 +603,7 @@ gnc_employee_search (GncEmployee *start, GNCBook *book)
   }
 
   /* Build the queries */
-  q = gncQueryCreate ();
+  q = gncQueryCreateFor (type);
   gncQuerySetBook (q, book);
 
   if (start) {

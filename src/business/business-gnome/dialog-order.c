@@ -866,7 +866,7 @@ gnc_order_search (GncOrder *start, GncOwner *owner, GNCBook *book)
   }
 
   /* Build the queries */
-  q = gncQueryCreate ();
+  q = gncQueryCreateFor (type);
   gncQuerySetBook (q, book);
 
   /* If owner is supplied, limit all searches to orders who's owner
@@ -875,7 +875,7 @@ gnc_order_search (GncOrder *start, GncOwner *owner, GNCBook *book)
   if (owner && gncOwnerGetGUID (owner)) {
     QueryNew *tmp, *q3;
 
-    q3 = gncQueryCreate ();
+    q3 = gncQueryCreateFor (type);
     gncQueryAddGUIDMatch (q3, g_slist_prepend
 			  (g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			   ORDER_OWNER),

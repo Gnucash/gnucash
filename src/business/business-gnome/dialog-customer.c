@@ -771,7 +771,7 @@ gnc_customer_search (GncCustomer *start, GNCBook *book)
   }
 
   /* Build the queries */
-  q = gncQueryCreate ();
+  q = gncQueryCreateFor (type);
   gncQuerySetBook (q, book);
 
   if (start) {

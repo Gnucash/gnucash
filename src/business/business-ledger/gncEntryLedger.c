@@ -269,7 +269,7 @@ void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,
   ledger->order = order;
 
   if (!ledger->query && order) {
-    ledger->query = gncQueryCreate ();
+    ledger->query = gncQueryCreateFor (GNC_ENTRY_MODULE_NAME);
     gncQuerySetBook (ledger->query, gncOrderGetBook (order));
     gncQueryAddGUIDMatch (ledger->query,
 			  g_slist_prepend (g_slist_prepend (NULL,
@@ -302,11 +302,11 @@ static void create_invoice_query (GncEntryLedger *ledger)
    */
   
   /* Term 1 */
-  ledger->query = gncQueryCreate ();
+  ledger->query = gncQueryCreateFor (GNC_ENTRY_MODULE_NAME);
   gncQuerySetBook (ledger->query, gncInvoiceGetBook (ledger->invoice));
 
   /* Term 2 */
-  q = gncQueryCreate ();
+  q = gncQueryCreateFor (GNC_ENTRY_MODULE_NAME);
   gncQueryAddGUIDMatch (q,
 			g_slist_prepend (g_slist_prepend (NULL,
 							  QUERY_PARAM_GUID),
@@ -316,7 +316,7 @@ static void create_invoice_query (GncEntryLedger *ledger)
   /* Term 3 */
   if (ledger->type == GNCENTRY_INVOICE_ENTRY &&
       gncOwnerGetEndGUID (gncInvoiceGetOwner (ledger->invoice)) != NULL) {
-    QueryNew *q2 = gncQueryCreate ();
+    QueryNew *q2 = gncQueryCreateFor (GNC_ENTRY_MODULE_NAME);
 
     /* entry_invoice->invoice_guid == NULL */
     gncQueryAddGUIDMatch (q2,

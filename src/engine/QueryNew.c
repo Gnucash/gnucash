@@ -15,16 +15,15 @@
 #include "gnc-engine-util.h"
 #include "gnc-book-p.h"
 #include "gncObject.h"
-//#include "BackendP.h"
+#include "BackendP.h"
 
 #include "QueryObjectP.h"
 #include "QueryCoreP.h"
-#include "QueryNew.h"
 #include "QueryNewP.h"
 
 static short module = MOD_QUERY;
 
-typedef struct {
+typedef struct query_new_term {
   GSList *		param_list;
   QueryPredData_t	pdata;
   gboolean		invert;
@@ -38,7 +37,7 @@ typedef struct {
   QueryPredicate	pred_fcn;
 } QueryNewTerm;
 
-typedef struct {
+typedef struct query_new_sort {
   GSList *	param_list;
   gint		options;
   gboolean	increasing;
@@ -52,20 +51,23 @@ typedef struct {
   GSList *	param_fcns;
   QuerySort	obj_cmp;	/* In case you are comparing objects */
   QueryCompare	comp_fcn;	/* When you are comparing core types */
-} QuerySort_t;
+} QueryNewSort;
 
 /* The QUERY structure */
 struct querynew_s {
+  /* The object type that we're searching for */
+  GNCIdType	search_for;
+
   /* terms is a list of the OR-terms in a sum-of-products 
    * logical expression. */
   GList *	terms;  
 
   /* sorting and chopping is independent of the search filter */
 
-  QuerySort_t	primary_sort;
-  QuerySort_t	secondary_sort;
-  QuerySort_t	tertiary_sort;
-  QuerySort	defaultSort;
+  QueryNewSort	primary_sort;
+  QueryNewSort	secondary_sort;
+  QueryNewSort	tertiary_sort;
+  QuerySort	defaultSort;	/* <- Computed from search_for */
 
   /* The maximum number of results to return */
   int		max_results;
@@ -76,7 +78,6 @@ struct querynew_s {
   /* cache the results so we don't have to run the whole search 
    * again until it's really necessary */
   int		changed;
-  GNCIdType	 last_run_type;
 
   GList *	results;
 };
@@ -194,14 +195,14 @@ copy_or_terms(GList * or_terms)
   return g_list_reverse(or);
 }
 
-static void copy_sort (QuerySort_t *dst, const QuerySort_t *src)
+static void copy_sort (QueryNewSort_t dst, const QueryNewSort_t src)
 {
   memcpy (dst, src, sizeof (*dst));
   dst->param_list = g_slist_copy (src->param_list);
   dst->param_fcns = g_slist_copy (src->param_fcns);
 }
 
-static void free_sort (QuerySort_t *s)
+static void free_sort (QueryNewSort_t s)
 {
   g_slist_free (s->param_list);
   s->param_list = NULL;
@@ -244,7 +245,7 @@ static void free_members (QueryNew *q)
   q->results = NULL;
 }
 
-static int cmp_func (QuerySort_t *sort, QuerySort default_sort,
+static int cmp_func (QueryNewSort_t sort, QuerySort default_sort,
 		     gconstpointer a, gconstpointer b)
 {
   GSList *node;
@@ -394,7 +395,7 @@ static GSList * compile_params (GSList *param_list, GNCIdType start_obj,
   return (g_slist_reverse (fcns));
 }
 
-static void compile_sort (QuerySort_t *sort, GNCIdType obj)
+static void compile_sort (QueryNewSort_t sort, GNCIdType obj)
 {
   const QueryObjectDef *resObj = NULL;
 
@@ -431,7 +432,7 @@ static void compile_terms (QueryNew *q)
   GList *or_ptr, *and_ptr;
 
   /* Find the specific functions for this Query.  Note that the
-   * Query's last_run_type should now be set to the new type.
+   * Query's search_for should now be set to the new type.
    */
   for (or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) {
     for (and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
@@ -442,7 +443,7 @@ static void compile_terms (QueryNew *q)
       qt->param_fcns = NULL;
 
       /* Walk the parameter list of obtain the parameter functions */
-      qt->param_fcns = compile_params (qt->param_list, q->last_run_type,
+      qt->param_fcns = compile_params (qt->param_list, q->search_for,
 				       &resObj);
 
       /* If we have valid parameters, grab the predicate function,
@@ -457,11 +458,11 @@ static void compile_terms (QueryNew *q)
   }
 
   /* Update the sort functions */
-  compile_sort (&(q->primary_sort), q->last_run_type);
-  compile_sort (&(q->secondary_sort), q->last_run_type);
-  compile_sort (&(q->tertiary_sort), q->last_run_type);
+  compile_sort (&(q->primary_sort), q->search_for);
+  compile_sort (&(q->secondary_sort), q->search_for);
+  compile_sort (&(q->tertiary_sort), q->search_for);
 
-  q->defaultSort = gncQueryObjectDefaultSort (q->last_run_type);
+  q->defaultSort = gncQueryObjectDefaultSort (q->search_for);
 }
 
 static void check_item_cb (gpointer object, gpointer user_data)
@@ -514,18 +515,6 @@ static GList * merge_books (GList *l1, GList *l2)
 
 /********************************************************************/
 /* PUBLISHED API FUNCTIONS */
-
-void gncQueryNewInit (void)
-{
-  gncQueryCoreInit ();
-  gncQueryObjectInit ();
-}
-
-void gncQueryNewShutdown (void)
-{
-  gncQueryObjectShutdown ();
-  gncQueryCoreShutdown ();
-}
 
 void gncQueryAddTerm (QueryNew *q, GSList *param_list,		      
 		      QueryPredData_t pred_data, QueryOp op)
@@ -582,21 +571,20 @@ void gncQueryPurgeTerms (QueryNew *q, GSList *param_list)
   }
 }
 
-GList * gncQueryRun (QueryNew *q, GNCIdTypeConst obj_type)
+GList * gncQueryRun (QueryNew *q)
 {
   GList *matching_objects = NULL;
   GList *node;
   int	object_count = 0;
 
-  if (!q || !obj_type) return NULL;
+  if (!q) return NULL;
+  g_return_val_if_fail (q->search_for, NULL);
 
   /* XXX: Prioritize the query terms? */
 
   /* prepare the Query for processing */
-  if (q->changed || safe_strcmp (q->last_run_type, obj_type)) {
-    q->last_run_type = (GNCIdType)obj_type;
+  if (q->changed)
     compile_terms (q);
-  }		    
 
   /* Now run the query over all the objects and save the results */
   {
@@ -608,16 +596,14 @@ GList * gncQueryRun (QueryNew *q, GNCIdTypeConst obj_type)
     /* For each book */
     for (node=q->books; node; node=node->next) {
       GNCBook *book = node->data;
-#if 0				/* XXX FIXME! */
       Backend *be = book->backend;
 
       /* query the backend */
       if (be && be->run_query)
 	(be->run_query) (be, q);
-#endif
 
       /* and then iterate over all the objects */
-      gncObjectForeach (obj_type, book, check_item_cb, &qcb);
+      gncObjectForeach (q->search_for, book, check_item_cb, &qcb);
     }
 
     matching_objects = qcb.list;
@@ -675,6 +661,15 @@ GList * gncQueryRun (QueryNew *q, GNCIdTypeConst obj_type)
   return matching_objects;
 }
 
+GList *
+gncQueryLastRun (QueryNew *query)
+{
+  if (!query)
+    return NULL;
+
+  return query->results;
+}
+
 void gncQueryClear (QueryNew *query)
 {
   QueryNew *q2 = gncQueryCreate ();
@@ -695,6 +690,27 @@ QueryNew * gncQueryCreate (void)
   return qp;
 }
 
+void gncQuerySearchFor (QueryNew *q, GNCIdTypeConst obj_type)
+{
+  if (!q || !obj_type)
+    return;
+
+  if (safe_strcmp (q->search_for, obj_type)) {
+    q->search_for = (GNCIdType) obj_type;
+    q->changed = 1;
+  }
+}
+
+QueryNew * gncQueryCreateFor (GNCIdTypeConst obj_type)
+{
+  QueryNew *q;
+  if (!obj_type)
+    return NULL;
+  q = gncQueryCreate ();
+  gncQuerySearchFor (q, obj_type);
+  return q;
+}
+
 int gncQueryHasTerms (QueryNew *q)
 {
   if (!q) return 0;
@@ -711,10 +727,23 @@ int gncQueryNumTerms (QueryNew *q)
   return n;
 }
 
-GList * gncQueryGetTerms (QueryNew *q)
+gboolean gncQueryHasTermType (QueryNew *q, GSList *term_param)
 {
-  if (!q) return NULL;
-  return q->terms;
+  GList *or;
+  GList *and;
+
+  if (!q || !term_param)
+    return FALSE;
+
+  for(or = q->terms; or; or = or->next) {
+    for(and = or->data; and; and = and->next) {
+      QueryNewTerm *qt = and->data;
+      if (!param_list_cmp (term_param, qt->param_list))
+	return TRUE;
+    }
+  }
+
+  return FALSE;
 }
 
 void gncQueryDestroy (QueryNew *q)
@@ -760,6 +789,9 @@ QueryNew * gncQueryInvert (QueryNew *q)
   GList  * new_oterm;
   int    num_or_terms;
 
+  if (!q)
+    return NULL;
+
   num_or_terms = g_list_length(q->terms);
 
   switch(num_or_terms) 
@@ -775,6 +807,8 @@ QueryNew * gncQueryInvert (QueryNew *q)
     retval = gncQueryCreate();
     retval->max_results = q->max_results;
     retval->books = g_list_copy (q->books);
+    retval->search_for = q->search_for;
+    retval->changed = 1;
 
     aterms = g_list_nth_data(q->terms, 0);
     new_oterm = NULL;
@@ -803,6 +837,7 @@ QueryNew * gncQueryInvert (QueryNew *q)
     retval = gncQueryMerge(iright, ileft, QUERY_AND);
     retval->books          = g_list_copy (q->books);
     retval->max_results    = q->max_results;
+    retval->search_for	   = q->search_for;
     retval->changed        = 1;
 
     gncQueryDestroy(iright);
@@ -827,8 +862,14 @@ QueryNew * gncQueryMerge(QueryNew *q1, QueryNew *q2, QueryOp op)
   QueryNew * i1, * i2;
   QueryNew * t1, * t2;
   GList * i, * j;
+  GNCIdType search_for;
 
   if(!q1 || !q2 ) return NULL;
+  if (q1->search_for && q2->search_for)
+    g_return_val_if_fail (safe_strcmp (q1->search_for, q2->search_for) == 0,
+			  NULL);
+
+  search_for = (q1->search_for ? q1->search_for : q2->search_for);
 
   switch(op) 
   {
@@ -893,7 +934,21 @@ QueryNew * gncQueryMerge(QueryNew *q1, QueryNew *q2, QueryOp op)
     break;
   }
 
+  retval->search_for = search_for;
   return retval;
+}
+
+void
+gncQueryMergeInPlace(QueryNew *q1, QueryNew *q2, QueryOp op)
+{
+  QueryNew *tmp_q;
+
+  if (!q1 || !q2)
+    return;
+
+  tmp_q = gncQueryMerge (q1, q2, op);
+  swap_terms (q1, tmp_q);
+  gncQueryDestroy (tmp_q);
 }
 
 void
@@ -901,13 +956,19 @@ gncQuerySetSortOrder (QueryNew *q,
 		      GSList *params1, GSList *params2, GSList *params3)
 {
   if (!q) return;
+  if (q->primary_sort.param_list)
+    g_slist_free (q->primary_sort.param_list);
   q->primary_sort.param_list = params1;
   q->primary_sort.options = 0;
 
+  if (q->secondary_sort.param_list)
+    g_slist_free (q->secondary_sort.param_list);
   q->secondary_sort.param_list = params2;
   q->secondary_sort.options = 0;
 
-  q->tertiary_sort.param_list = params2;
+  if (q->tertiary_sort.param_list)
+    g_slist_free (q->tertiary_sort.param_list);
+  q->tertiary_sort.param_list = params3;
   q->tertiary_sort.options = 0;
 
   q->changed = 1;
@@ -935,12 +996,6 @@ void gncQuerySetMaxResults (QueryNew *q, int n)
 {
   if (!q) return;
   q->max_results = n;
-}
-
-int gncQueryGetMaxResults (QueryNew *q)
-{
-  if (!q) return 0;
-  return q->max_results;
 }
 
 void gncQueryAddGUIDListMatch (QueryNew *q, GSList *param_list,
@@ -985,3 +1040,148 @@ void gncQuerySetBook (QueryNew *q, GNCBook *book)
 			gnc_book_get_guid(book), QUERY_AND);
 }
 
+/**********************************************************************/
+/* PRIVATE PUBLISHED API FUNCTIONS                                    */
+
+void gncQueryNewInit (void)
+{
+  gncQueryCoreInit ();
+  gncQueryObjectInit ();
+}
+
+void gncQueryNewShutdown (void)
+{
+  gncQueryObjectShutdown ();
+  gncQueryCoreShutdown ();
+}
+
+int gncQueryGetMaxResults (QueryNew *q)
+{
+  if (!q) return 0;
+  return q->max_results;
+}
+
+GNCIdType gncQueryGetSearchFor (QueryNew *q)
+{
+  if (!q) return NULL;
+  return q->search_for;
+}
+
+GList * gncQueryGetTerms (QueryNew *q)
+{
+  if (!q) return NULL;
+  return q->terms;
+}
+
+GSList * gncQueryTermGetParamPath (QueryNewTerm_t qt)
+{
+  if (!qt)
+    return NULL;
+  return qt->param_list;
+}
+
+QueryPredData_t gncQueryTermGetPredData (QueryNewTerm_t qt)
+{
+  if (!qt)
+    return NULL;
+  return qt->pdata;
+}
+
+gboolean gncQueryTermIsInverted (QueryNewTerm_t qt)
+{
+  if (!qt)
+    return FALSE;
+  return qt->invert;
+}
+
+void gncQueryGetSorts (QueryNew *q, QueryNewSort_t *primary,
+		       QueryNewSort_t *secondary, QueryNewSort_t *tertiary)
+{
+  if (!q)
+    return;
+  if (primary)
+    *primary = &(q->primary_sort);
+  if (secondary)
+    *secondary = &(q->secondary_sort);
+  if (tertiary)
+    *tertiary = &(q->tertiary_sort);
+}
+
+GSList * gncQuerySortGetParamPath (QueryNewSort_t qs)
+{
+  if (!qs)
+    return NULL;
+  return qs->param_list;
+}
+
+gint gncQuerySortGetSortOptions (QueryNewSort_t qs)
+{
+  if (!qs)
+    return 0;
+  return qs->options;
+}
+
+gboolean gncQuerySortGetIncreasing (QueryNewSort_t qs)
+{
+  if (!qs)
+    return FALSE;
+  return qs->increasing;
+}
+
+static gboolean gncQueryTermEqual (QueryNewTerm_t qt1, QueryNewTerm_t qt2)
+{
+  if (qt1 == qt2) return TRUE;
+  if (!qt1 || !qt2) return FALSE;
+
+  if (qt1->invert != qt2->invert) return FALSE;
+  if (param_list_cmp (qt1->param_list, qt2->param_list)) return FALSE;
+  return gncQueryCorePredicateEqual (qt1->pdata, qt2->pdata);
+}
+
+static gboolean gncQuerySortEqual (QueryNewSort_t qs1, QueryNewSort_t qs2)
+{
+  if (qs1 == qs2) return TRUE;
+  if (!qs1 || !qs2) return FALSE;
+
+  /* "Empty" sorts are equivalent, regardless of the flags */
+  if (!qs1->param_list && !qs2->param_list) return TRUE;
+
+  if (qs1->options != qs2->options) return FALSE;
+  if (qs1->increasing != qs2->increasing) return FALSE;
+  return (param_list_cmp (qs1->param_list, qs2->param_list) == 0);
+}
+
+gboolean gncQueryEqual (QueryNew *q1, QueryNew *q2)
+{
+  GList *or1, *or2;
+
+  if (q1 == q2) return TRUE;
+  if (!q1 || !q2) return FALSE;
+
+  if (g_list_length (q1->terms) != g_list_length (q2->terms)) return FALSE;
+  if (q1->max_results != q2->max_results) return FALSE;
+
+  for (or1 = q1->terms, or2 = q2->terms; or1;
+       or1 = or1->next, or2 = or2->next)
+  {
+    GList *and1, *and2;
+
+    and1 = or1->data;
+    and2 = or2->data;
+
+    if (g_list_length (and1) != g_list_length (and2)) return FALSE;
+
+    for ( ; and1; and1 = and1->next, and2 = and2->next)
+      if (!gncQueryTermEqual (and1->data, and2->data))
+        return FALSE;
+  }
+
+  if (!gncQuerySortEqual (&(q1->primary_sort), &(q2->primary_sort)))
+    return FALSE;
+  if (!gncQuerySortEqual (&(q1->secondary_sort), &(q2->secondary_sort)))
+    return FALSE;
+  if (!gncQuerySortEqual (&(q1->tertiary_sort), &(q2->tertiary_sort)))
+    return FALSE;
+
+  return TRUE;
+}

@@ -24,7 +24,7 @@ static GList *
 gnc_entry_ledger_get_entries (GncEntryLedger *ledger)
 {
   if (ledger->query)
-    return gncQueryRun (ledger->query, GNC_ENTRY_MODULE_NAME);
+    return gncQueryRun (ledger->query);
 
   //  g_warning ("No query to run?");
   return NULL;

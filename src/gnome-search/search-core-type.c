@@ -26,6 +26,7 @@
 #include <gnome.h>
 
 #include "QueryNew.h"
+#include "Account.h"		/* for ACCOUNT_MATCH_ALL_TYPE */
 
 #include "search-core-type.h"
 #include "search-string.h"
@@ -264,7 +265,7 @@ init_table (void)
 				 (GNCSearchCoreNew) gnc_search_boolean_new);
   gnc_search_core_register_type (GNC_ID_ACCOUNT,
 				 (GNCSearchCoreNew) gnc_search_account_new);
-  gnc_search_core_register_type ("account-match-all",
+  gnc_search_core_register_type (ACCOUNT_MATCH_ALL_TYPE,
 				 (GNCSearchCoreNew) 
 				 gnc_search_account_matchall_new);
 }

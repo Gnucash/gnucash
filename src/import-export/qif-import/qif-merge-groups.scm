@@ -10,13 +10,15 @@
   (let ((query (gnc:malloc-query))
         (xtns #f))
 
+    (gnc:query-set-book query (gnc:group-get-book group))
+
     ;; we want to find all transactions with every split inside the
     ;; account group.
     (gnc:query-add-account-match query
                                  (gnc:group-get-subaccounts group)
-                                 'acct-match-any 'query-or)
-    (d-gnc:query-set-group query group)
-    (set! xtns (gnc:query-get-transactions query 'query-match-all))
+                                 'guid-match-any 'query-or)
+
+    (set! xtns (gnc:query-get-transactions query 'query-txn-match-all))
     
     ;; lose the query 
     (gnc:free-query query)
@@ -42,7 +44,7 @@
     (for-each
      (lambda (xtn) 
        (let ((query (gnc:malloc-query)))         
-         (d-gnc:query-set-group query old-group)
+	 (gnc:query-set-book query (gnc:group-get-book old-group))
          
          ;; the date should be close to the same.. +/- a week. 
          (let ((date (gnc:transaction-get-date-posted xtn)))               
@@ -53,11 +55,11 @@
          ;; for each split in the transaction, add a term to match the 
          ;; properties of one split 
          (let ((q-splits (gnc:malloc-query)))
-           (d-gnc:query-set-group q-splits old-group)
+	   (gnc:query-set-book q-splits (gnc:group-get-book old-group))
            (for-each 
             (lambda (split)
               (let ((sq (gnc:malloc-query)))
-                (d-gnc:query-set-group sq old-group)
+		(gnc:query-set-book sq (gnc:group-get-book old-group))
                 
                 ;; we want to match the account in the old group that
                 ;; has the same name as an account in the new group.  If
@@ -74,9 +76,9 @@
                 ;; we want the value for the split to match the value
                 ;; the old-group split.  We should really check for
                 ;; fuzziness.
-                (d-gnc:query-add-value-match 
-                 sq (gnc:numeric-to-double (gnc:split-get-value split))
-                 'amt-sgn-match-either 'amt-match-exactly
+                (gnc:query-add-value-match 
+                 sq (gnc:split-get-value split)
+                 'amt-sgn-match-either 'query-compare-equal
                  'query-and)
                 
                 ;; now merge into the split query.  Reminder: q-splits
@@ -98,7 +100,7 @@
          
          ;; now that we have built a query, get transactions in the old
          ;; account group that matches it.
-         (let ((old-xtns (gnc:query-get-transactions query 'query-match-all)))
+         (let ((old-xtns (gnc:query-get-transactions query 'query-txn-match-all)))
            (set! old-xtns (map 
                            (lambda (elt)
                              (cons elt #f)) old-xtns))

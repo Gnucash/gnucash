@@ -3,7 +3,6 @@ glade_DATA = \
 	account.glade \
 	commodities.glade \
 	fincalc.glade \
-	find.glade \
 	help.glade \
 	newuser.glade \
 	price.glade \

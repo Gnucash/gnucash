@@ -24,18 +24,9 @@
 #ifndef GNUCASH_QUERY_P_H
 #define GNUCASH_QUERY_P_H
 
-#include <sys/types.h>
-#include <time.h>
-#include <glib.h>
-#include <regex.h>
-
-#include "date.h" 
-#include "gnc-engine.h" 
-#include "GNCId.h" 
-#include "guid.h" 
-#include "kvp_frame.h" 
 #include "Query.h" 
 
+#if 0
 
 typedef struct {
   pd_type_t       type;
@@ -160,6 +151,6 @@ void xaccQueryAddPredicate (Query * q, PredicateData *pred, QueryOp op);
 /* This is useful for network systems */
 Predicate xaccQueryGetPredicate (pr_type_t term_type);
 
-
+#endif /* 0 */
 
 #endif /* GNUCASH_QUERY_P_H */

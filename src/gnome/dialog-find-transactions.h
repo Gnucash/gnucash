@@ -27,15 +27,9 @@
 #include <gnome.h>
 
 #include "gnc-ledger-display.h"
+#include "dialog-search.h"
 
-
-typedef struct _SelectDateDialog SelectDateDialog;
-typedef struct _FindTransactionsDialog FindTransactionsDialog;
-
-
-FindTransactionsDialog * 
+GNCSearchWindow *
 gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * ledger);
-
-void gnc_ui_find_transactions_dialog_destroy(FindTransactionsDialog * pcd);
 
 #endif

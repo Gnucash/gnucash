@@ -963,39 +963,43 @@ Credit Card, and Income accounts")))))
     ;; 'sorting-key-option-value (vector 'query-sorting-key
     ;; subtotal-function subtotal-renderer))
     (list (cons 'account-name  (vector 
-                                'by-account-full-name 
+                                (list gnc:split-account-fullname)
                                 split-account-full-name-same-p 
                                 render-account-full-name-subheading
                                 render-account-full-name-subtotal))
           (cons 'account-code  (vector 
-                                'by-account-code 
+                                (list gnc:split-account gnc:account-code)
                                 split-account-code-same-p
                                 render-account-code-subheading
                                 render-account-code-subtotal))
-          (cons 'exact-time          (vector 'by-date #f #f #f))
+          (cons 'exact-time    (vector
+				(list gnc:split-trans gnc:trans-date-posted)
+				#f #f #f))
           (cons 'date          (vector
-                                'by-date #f #f #f))
+                                (list gnc:split-trans gnc:trans-date-posted)
+				#f #f #f))
 	  (cons 'register-order 
 		 (vector
-		  'by-standard
+		  (list gnc:query-default-sort)
 		  #f 
 		  #f 
 		  #f))
           (cons 'corresponding-acc-name
-                (vector 'by-corr-account-full-name 
+                (vector (list gnc:split-corr-account-fullname)
                         split-same-corr-account-full-name-p 
                         render-corresponding-account-name-subheading
                         render-corresponding-account-name-subtotal))
           (cons 'corresponding-acc-code
-                (vector 'by-corr-account-code 
+                (vector (list gnc:split-corr-account-code)
                         split-same-corr-account-code-p 
                         render-corresponding-account-code-subheading
                         render-corresponding-account-code-subtotal))
-          (cons 'amount (vector 'by-amount #f #f #f))
-          (cons 'description (vector 'by-desc #f #f #f))
-          (cons 'number (vector 'by-num #f #f #f))
-          (cons 'memo   (vector 'by-memo #f #f #f))
-          (cons 'none   (vector 'by-none #f #f #f))))
+          (cons 'amount (vector (list gnc:split-value) #f #f #f))
+          (cons 'description (vector (list gnc:split-trans gnc:trans-desc)
+				     #f #f #f))
+          (cons 'number (vector (list gnc:split-trans gnc:trans-num) #f #f #f))
+          (cons 'memo   (vector (list gnc:split-memo) #f #f #f))
+          (cons 'none   (vector '() #f #f #f))))
 
   (define date-comp-funcs-assoc-list
     ;; Extra list for date option. Each entry: (cons
@@ -1087,13 +1091,14 @@ Credit Card, and Income accounts")))))
 	      ;;(gnc:warn "query is:" query)
           (gnc:query-add-account-match query
                                        c_account_1
-                                       'acct-match-any 'query-and)
+                                       'guid-match-any 'query-and)
           (gnc:query-add-date-match-timepair
            query #t begindate #t enddate 'query-and)
           (gnc:query-set-sort-order query
-                                    (get-query-sortkey primary-key)
-                                    (get-query-sortkey secondary-key)
-                                    'by-none)
+				    (get-query-sortkey primary-key)
+				    (get-query-sortkey secondary-key)
+				    '())
+
           (gnc:query-set-sort-increasing query
                                          (eq? primary-order 'ascend)
                                          (eq? secondary-order 'ascend)

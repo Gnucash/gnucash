@@ -51,7 +51,7 @@ find_appropriate_node(xmlNodePtr node, Split *spl)
             {
                 gnc_numeric *num = dom_tree_to_gnc_numeric(mark2);
 
-                if(gnc_numeric_equal(*num, xaccSplitGetValue(spl)))
+                if(gnc_numeric_eq(*num, xaccSplitGetValue(spl)))
                 {
                     amount_good = TRUE;
                 }
@@ -127,7 +127,7 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
         {
             gnc_numeric *num = dom_tree_to_gnc_numeric(mark);
 
-            if(!gnc_numeric_equal(*num, xaccSplitGetValue(spl)))
+            if(!gnc_numeric_eq(*num, xaccSplitGetValue(spl)))
             {
                 printf("values differ\n");
                 g_free(num);
@@ -139,7 +139,7 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
         {
             gnc_numeric *num = dom_tree_to_gnc_numeric(mark);
 
-            if(!gnc_numeric_equal(*num, xaccSplitGetAmount(spl)))
+            if(!gnc_numeric_eq(*num, xaccSplitGetAmount(spl)))
             {
                 printf("quantities differ\n");
                 g_free(num);
@@ -310,10 +310,11 @@ test_add_transaction(const char *tag, gpointer globaldata, gpointer data)
     xaccTransSetCurrency (trans, gdata->com);
     xaccTransCommitEdit (trans);
 
-    do_test_args(xaccTransEqual(gdata->trn, trans, TRUE, TRUE),
-                 "gnc_transaction_sixtp_parser_create",
-                 __FILE__, __LINE__,
-                 "%d", gdata->value);
+    if (!do_test_args(xaccTransEqual(gdata->trn, trans, TRUE, TRUE),
+		      "gnc_transaction_sixtp_parser_create",
+		      __FILE__, __LINE__,
+		      "%d", gdata->value))
+      return FALSE;
 
     gdata->new_trn = trans;
 
@@ -325,7 +326,7 @@ test_transaction(void)
 {
     int i;
 
-    for(i = 0; i < 20; i++)
+    for(i = 0; i < 50; i++)
     {
         Transaction *ran_trn;
         xmlNodePtr test_node;

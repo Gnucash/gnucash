@@ -21,23 +21,26 @@ test_trans_query (Transaction *trans, gpointer data)
   q = make_trans_query (trans, ALL_QT);
   xaccQuerySetBook (q, book);
 
-  list = xaccQueryGetTransactions (q, QUERY_MATCH_ANY);
+  list = xaccQueryGetTransactions (q, QUERY_TXN_MATCH_ANY);
   if (g_list_length (list) != 1)
   {
     failure_args ("test number returned", __FILE__, __LINE__,
                   "number of matching transactions %d not 1",
                   g_list_length (list));
+    g_list_free (list);
     return FALSE;
   }
 
   if (list->data != trans)
   {
     failure ("matching transaction is wrong");
+    g_list_free (list);
     return FALSE;
   }
 
   success ("found right transaction");
   xaccFreeQuery (q);
+  g_list_free (list);
 
   return TRUE;
 }
@@ -64,6 +67,8 @@ static void
 main_helper (int argc, char **argv)
 {
   gnc_module_load("gnucash/engine", 0);
+
+  g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
 
   xaccLogDisable ();
 

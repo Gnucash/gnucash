@@ -305,8 +305,8 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     char *str_a;
     char *str_b;
 
-    str_a = gnc_numeric_to_string (sa->amount);
-    str_b = gnc_numeric_to_string (sb->amount);
+    str_a = gnc_numeric_to_string (sa->value);
+    str_b = gnc_numeric_to_string (sb->value);
 
     PWARN ("values differ: %s vs %s", str_a, str_b);
 
@@ -3018,8 +3018,8 @@ xaccTransVoid(Transaction *transaction,
     val = kvp_value_new_gnc_numeric(amt);
     kvp_frame_set_slot_nc(frame, void_former_val_str, val);
 
-    split->amount = zero;
-	 split->value = zero;
+    xaccSplitSetAmount (split, zero);
+    xaccSplitSetValue (split, zero);
     xaccSplitSetReconcile(split, VREC);
   }
 
@@ -3149,6 +3149,11 @@ static gpointer split_account_guid_getter (gpointer obj)
   return ((gpointer)xaccAccountGetGUID (acc));
 }
 
+static gpointer no_op (gpointer obj)
+{
+  return obj;
+}
+
 gboolean xaccSplitRegister (void)
 {
   static const QueryObjectDef params[] = {
@@ -3178,12 +3183,24 @@ gboolean xaccSplitRegister (void)
     { SPLIT_TRANS, GNC_ID_TRANS, (QueryAccess)xaccSplitGetParent },
     { SPLIT_ACCOUNT, GNC_ID_ACCOUNT, (QueryAccess)xaccSplitGetAccount },
     { SPLIT_ACCOUNT_GUID, QUERYCORE_GUID, split_account_guid_getter },
+    { SPLIT_ACCT_FULLNAME, SPLIT_ACCT_FULLNAME, no_op },
+    { SPLIT_CORR_ACCT_NAME, SPLIT_CORR_ACCT_NAME, no_op },
+    { SPLIT_CORR_ACCT_CODE, SPLIT_CORR_ACCT_CODE, no_op },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccSplitGetBook },
     { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess) xaccSplitGetGUID },
     { NULL },
   };
 
   gncQueryObjectRegister (GNC_ID_SPLIT, (QuerySort)xaccSplitDateOrder, params);
+  gncQueryObjectRegister (SPLIT_ACCT_FULLNAME,
+			  (QuerySort)xaccSplitCompareAccountFullNames,
+			  NULL);
+  gncQueryObjectRegister (SPLIT_CORR_ACCT_NAME,
+			  (QuerySort)xaccSplitCompareOtherAccountFullNames,
+			  NULL);
+  gncQueryObjectRegister (SPLIT_CORR_ACCT_CODE,
+			  (QuerySort)xaccSplitCompareOtherAccountCodes,
+			  NULL);
 
   return gncObjectRegister (&split_object_def);
 }
@@ -3206,15 +3223,25 @@ static GncObject_t trans_object_def = {
   xaccTransGetDescription	/* printable */
 };
 
+static gboolean
+trans_is_balanced_p (Transaction *txn)
+{
+  if (!txn)
+    return FALSE;
+  return (gnc_numeric_zero_p (xaccTransGetImbalance (txn)));
+}
+
 gboolean xaccTransRegister (void)
 {
   static QueryObjectDef params[] = {
     { TRANS_KVP, QUERYCORE_KVP, (QueryAccess)xaccTransGetSlots },
     { TRANS_NUM, QUERYCORE_STRING, (QueryAccess)xaccTransGetNum },
-    { TRANS_DESCRIPTON, QUERYCORE_STRING, (QueryAccess)xaccTransGetDescription },
+    { TRANS_DESCRIPTION, QUERYCORE_STRING, (QueryAccess)xaccTransGetDescription },
     { TRANS_DATE_ENTERED, QUERYCORE_DATE, (QueryAccess)xaccTransRetDateEnteredTS },
     { TRANS_DATE_POSTED, QUERYCORE_DATE, (QueryAccess)xaccTransRetDatePostedTS },
     { TRANS_DATE_DUE, QUERYCORE_DATE, (QueryAccess)xaccTransRetDateDueTS },
+    { TRANS_IMBALANCE, QUERYCORE_NUMERIC, (QueryAccess)xaccTransGetImbalance },
+    { TRANS_IS_BALANCED, QUERYCORE_BOOLEAN, (QueryAccess)trans_is_balanced_p },
     { TRANS_TYPE, QUERYCORE_CHAR, (QueryAccess)xaccTransGetTxnType },
     { TRANS_VOID_STATUS, QUERYCORE_BOOLEAN, (QueryAccess)xaccTransGetVoidStatus },
     { TRANS_VOID_REASON, QUERYCORE_STRING, (QueryAccess)xaccTransGetVoidReason },

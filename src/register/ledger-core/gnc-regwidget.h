@@ -69,7 +69,7 @@ struct _GNCRegWidget {
   /* The actual sheet widget */
   GnucashRegister *reg;
 
-  sort_type_t sort_type;
+  gint sort_type;
 };
 
 struct _GNCRegWidgetClass {

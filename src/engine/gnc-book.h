@@ -97,4 +97,8 @@ guint gnc_book_count_transactions(GNCBook *book);
  */
 gint64 gnc_book_get_counter (GNCBook *book, const char *counter_name);
 
+/* Book parameter names */
+
+#define BOOK_KVP		"kvp"
+
 #endif /* GNC_BOOK_H */

@@ -549,7 +549,7 @@ gnc_job_search (GncJob *start, GncOwner *owner, GNCBook *book)
   }
 
   /* Build the queries */
-  q = gncQueryCreate ();
+  q = gncQueryCreateFor (type);
   gncQuerySetBook (q, book);
 
   /* If owner is supplied, limit all searches to invoices who's owner
