@@ -1,5 +1,9 @@
 2002-12-22  Chris Lyttle  <chris@wilddev.net>
 
+	* rpm/gnucash.spec.in: require g-wrap 1.3.4
+
+2002-12-22  Chris Lyttle  <chris@wilddev.net>
+
 	* NEWS: release 1.7.6
 	* configure.in: release 1.7.6
 
