@@ -409,6 +409,7 @@ Fixes & Patches:
 Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
 Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
+Per Bojsen <bojsen@worldnet.att.net> core dump fix
 Christopher B. Browne <cbbrowne@hex.net> for perl, scheme scripts
 Graham Chapman <grahamc@zeta.org.au> for the xacc-rpts addon package
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
