@@ -49,7 +49,7 @@ AC_ARG_WITH( motif-libraries,
 # -I...libgnomesupport is to fix bug in gnome-1.3 release
 AC_ARG_WITH( gnome, 
        [  --with-gnome=PATH       specify where to look for gnome includes and libs],
-       X_LIBS="${X_LIBS} -L$with_gnome/lib" X_CFLAGS="$X_CFLAGS -I$with_gnome/include -I$with_gnome/include/libgnomesupport" )
+       X_LIBS="${X_LIBS} -L$with_gnome/lib" X_CFLAGS="$X_CFLAGS -I$with_gnome/include -I$with_gnome/lib/gnome-libs/include" )
 
 AC_ARG_WITH( gnome-includes, 
        [  --with-gnome-includes=DIR    specify where to look for gnome includes],
