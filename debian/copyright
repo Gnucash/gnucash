@@ -13,7 +13,7 @@ Copyright:
 	Gnucash is under the GNU GPL.
 
 	Copyright (C) 1997 Robin D. Clark
-	Copyright (C) 1997 Linas Vepstas
+	Copyright (C) 1997-2002 Linas Vepstas <linas@linas.org>
 
 	This program is free software; you can redistribute it and/or 
 	modify it under the terms of the GNU General Public License as
@@ -29,44 +29,6 @@ Copyright:
 	along with this program; if not, write to the Free Software Foundation, 
 	Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-The source package includes the Motif widget ComboBox-1.33, which is GPL:
-
-	(c) 1993, 1994 Harald Albrecht
-	This software is Free Software. Please refer to the file
-	COPYING, which you should have received together this file and the
-	source code of the combo box widget.  However if you find this
-	widget to be useful, you are encouraged to donate a reasonable
-	amount to a charitable institution -- there are enough people
-	out there who need help! Sometimes I got the strong impression
-	that programmers tend to get lost in their own "virtual reality"
-	- sitting in front of their screen, hacking new algorithms and
-	forget about everything around them.  So please don't forget
-	about people who need help.
-
-The source package includes a modified version of the Motif widget
-XbaeMatrix, which is available under a BSD-like license:
-
-	Copyright (c) 1991, 1992 Bell Communications Research, Inc.  (Bellcore)
-	Copyright (c) 1995-97 Andrew Lister
-	All Rights Reserved.
-
-	Permission  to use, copy, modify  and distribute this material for any
-	purpose and  without  fee is  hereby granted,  provided that the above
-	copyright notices and this permission notice appear in all copies, and
-	that the name  of any author  not be used  in advertising or publicity
-	pertaining  to  this material   without  the specific,  prior  written
-	permission of an  authorized  representative of Bellcore  and  current
-	maintainer.
-
-	BELLCORE AND OTHER CONTRIBUTORS MAKE  NO REPRESENTATIONS AND EXTEND NO
-	WARRANTIES, EXPRESS   OR  IMPLIED, WITH  RESPECT  TO  THE INFORMATION,
-	INCLUDING, BUT    NOT    LIMITED  TO,  THE   IMPLIED   WARRANTIES   OF
-	MERCHANTABILITY  AND FITNESS FOR  ANY   PARTICULAR  PURPOSE, AND   THE
-	WARRANTY     AGAINST INFRINGEMENT OF    PATENTS  OR OTHER INTELLECTUAL
-	PROPERTY RIGHTS. THE  SOFTWARE IS PROVIDED  "AS  IS", AND IN NO  EVENT
-	SHALL ANY AUTHOR OR ANY OF THEIR AFFILIATES BE LIABLE FOR ANY DAMAGES,
-	INCLUDING ANY  LOST   PROFITS OR  OTHER INCIDENTAL   OR  CONSEQUENTIAL
-	DAMAGES RELATING TO THE INFORMATION.
 
 On Debian GNU/Linux systems, the complete text of the GNU General
 Public License can be found in `/usr/share/common-licenses/GPL'.
