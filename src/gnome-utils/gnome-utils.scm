@@ -1,7 +1,7 @@
 (define-module (gnucash gnome-utils))
 
 (use-modules (g-wrapped gw-gnome-utils))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/app-utils" 0)
