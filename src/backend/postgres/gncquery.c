@@ -739,6 +739,13 @@ sqlQuery_kvp_build (sqlQuery *sq, KVPPredicateData *kpd)
  * the tables that are not referenced.  But that is not the case
  * as of Postgres 7.1. This code is needed: it delivers a big
  * performance boost.
+ *
+ * Specifically, I am refering to the 'need_account' and the
+ * 'need_entry' booleans.  These serve no functional purpose:  
+ * You'd get exactly the same results if you just set these to 
+ * TRUE.  But they affect performance tremendously, and there 
+ * are hundreds of lines of extra logic to compute these for 
+ * the sole reason of optimizing performance. 
  */
 
 const char *
