@@ -121,6 +121,8 @@ xaccLotFill (GNCLot *lot)
    {
       Split *subsplit;
 
+PINFO ("duuuuude split=%s %s", gnc_numeric_to_string
+(split->amount),gnc_numeric_to_string (split->value));
       subsplit = xaccSplitAssignToLot (split, lot);
       if (subsplit == split)
       {
@@ -184,7 +186,7 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
 
       /* Now, total up the values */
       value = gnc_numeric_add (value, xaccSplitGetValue (s), 
-                  GNC_DENOM_AUTO, GNC_DENOM_EXACT);
+                  GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
       PINFO ("Split=%p value=%s Accum Lot value=%s", s,
           gnc_numeric_to_string (s->value),
           gnc_numeric_to_string (value));
@@ -257,9 +259,21 @@ xaccScrubSubSplitPrice (Split *split, int maxmult, int maxamtscu)
       dst_amt = xaccSplitGetAmount (s);
       dst_val = xaccSplitGetValue (s);
       target_val = gnc_numeric_mul (dst_amt, src_val,
-                        GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+                        GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
       target_val = gnc_numeric_div (target_val, src_amt,
-                        scu, GNC_DENOM_EXACT);
+                        scu, GNC_HOW_DENOM_EXACT|GNC_HOW_RND_ROUND);
+      if (gnc_numeric_check (target_val))
+      {
+         PERR ("Numeric overflow of value\n"
+               "\tAcct=%s txn=%s\n"
+               "\tdst_amt=%s src_val=%s src_amt=%s\n",
+               xaccAccountGetName (s->acc),
+               xaccTransGetDescription(txn),
+               gnc_numeric_to_string(dst_amt),
+               gnc_numeric_to_string(src_val),
+               gnc_numeric_to_string(src_amt));
+         continue;
+      }
 
       /* If the required price changes are 'small', do nothing.
        * That is a case that the user will have to deal with

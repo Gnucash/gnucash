@@ -445,12 +445,24 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
        */
       val_tot = split->value;
       val_a = gnc_numeric_mul (amt_a, val_tot, 
-                        GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+                        GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
       tmp = gnc_numeric_div (val_a, amt_tot, 
-                        gnc_numeric_denom(val_tot), GNC_DENOM_EXACT);
+                        gnc_numeric_denom(val_tot), 
+                        GNC_HOW_RND_ROUND| GNC_HOW_DENOM_EXACT);
 
       val_a = tmp;
       val_b = gnc_numeric_sub_fixed (val_tot, val_a);
+      if (gnc_numeric_check(val_a))
+      {
+         PERR("Numeric overflow\n"
+              "Acct=%s Txn=%s\n"
+              "\tval_tot=%s amt_a=%s amt_tot=%s\n",
+              xaccAccountGetName(acc),
+              xaccTransGetDescription(trans),
+              gnc_numeric_to_string(val_tot),
+              gnc_numeric_to_string(amt_a),
+              gnc_numeric_to_string(amt_tot));
+      }
 
       PINFO ("split value is = %s = %s + %s",
               gnc_numeric_to_string(val_tot),
@@ -616,6 +628,10 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
        split->gains_split, split->gains,
        kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 
+PINFO ("duude split amt=%s val=%s \n",
+          gnc_numeric_to_string (split->amount),
+          gnc_numeric_to_string (split->value));
+
    /* Make sure the status flags and pointers are initialized */
    if (GAINS_STATUS_UNKNOWN == split->gains) xaccSplitDetermineGainStatus(split);
    if (pcy->PolicyIsOpeningSplit (pcy, lot, split))
@@ -707,6 +723,10 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    pcy->PolicyGetLotOpening (pcy, lot, &opening_amount, &opening_value,
        &opening_currency);
 
+PINFO ("duude lot opener amt=%s val=%s \n",
+          gnc_numeric_to_string (opening_amount),
+          gnc_numeric_to_string (opening_value));
+
    /* Check to make sure the lot-opening currency and this split
     * use the same currency */
    if (FALSE == gnc_commodity_equiv (currency, opening_currency))
@@ -747,11 +767,13 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     * cap_gain = current_value - cost_basis 
     */
    value = gnc_numeric_mul (opening_value, split->amount,
-                   GNC_DENOM_AUTO, GNC_RND_NEVER|GNC_DENOM_REDUCE);
+                            GNC_DENOM_AUTO, 
+                            GNC_HOW_RND_NEVER|GNC_HOW_DENOM_REDUCE);
    value = gnc_numeric_div (value, opening_amount, 
-                   gnc_numeric_denom(opening_value), GNC_DENOM_EXACT);
+                            gnc_numeric_denom(opening_value), 
+                            GNC_HOW_DENOM_EXACT|GNC_HOW_RND_ROUND);
    value = gnc_numeric_sub (value, split->value,
-                           GNC_DENOM_AUTO, GNC_DENOM_LCD);
+                            GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
    PINFO ("Open amt=%s val=%s;  split amt=%s val=%s; gains=%s\n",
           gnc_numeric_to_string (opening_amount),
           gnc_numeric_to_string (opening_value),
@@ -760,7 +782,16 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
           gnc_numeric_to_string (value));
    if (gnc_numeric_check (value))
    {
-      PERR ("Numeric overflow during gains calculation");
+      PERR ("Numeric overflow during gains calculation\n"
+            "Acct=%s Txn=%s\n"
+            "\tOpen amt=%s val=%s\n\tsplit amt=%s val=%s\n\tgains=%s\n",
+             xaccAccountGetName(split->acc),
+             xaccTransGetDescription(split->parent),
+             gnc_numeric_to_string (opening_amount),
+             gnc_numeric_to_string (opening_value),
+             gnc_numeric_to_string (split->amount),
+             gnc_numeric_to_string (split->value),
+             gnc_numeric_to_string (value));
       return;
    }
 
@@ -875,6 +906,7 @@ gnc_numeric
 xaccSplitGetCapGains(Split * split)
 {
    if (!split) return gnc_numeric_zero();
+   ENTER("(split=%p)", split);
 
    if (GAINS_STATUS_UNKNOWN == split->gains) xaccSplitDetermineGainStatus(split);
    if ((split->gains & GAINS_STATUS_A_VDIRTY) || 
@@ -892,6 +924,7 @@ xaccSplitGetCapGains(Split * split)
       split = split->gains_split;
    }
 
+   LEAVE("(split=%p)", split);
    if (!split) return gnc_numeric_zero();
 
    return split->value;
@@ -910,6 +943,7 @@ xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
     * then the cap gains are changed. To capture this, we need 
     * to mark all splits dirty if the opening splits are dirty. */
 
+   ENTER("(lot=%p)", lot);
    pcy = lot->account->policy;
    for (node=lot->splits; node; node=node->next)
    {
@@ -939,6 +973,7 @@ xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
       Split *s = node->data;
       xaccSplitComputeCapGains (s, gain_acc);
    }
+   LEAVE("(lot=%p)", lot);
 }
 
 /* ============================================================== */
@@ -1002,6 +1037,7 @@ xaccTransScrubGains (Transaction *trans, Account *gain_acc)
 {
    SplitList *node;
 
+   ENTER("(trans=%p)", trans);
    /* Lock down posted date, its to be synced to the posted date 
     * for the source of the cap gains. */
    xaccScrubGainsDate(trans);
@@ -1036,6 +1072,7 @@ restart:
          xaccSplitComputeCapGains (split, gain_acc);
       }
    }
+   LEAVE("(trans=%p)", trans);
 }
 
 /* =========================== END OF FILE ======================= */

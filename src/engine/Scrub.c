@@ -144,9 +144,19 @@ xaccTransScrubOrphans (Transaction *trans)
     if (split->acc)
     {
       TransScrubOrphansFast (trans, xaccAccountGetRoot(split->acc));
-      break;
+      return;
     }
   }
+
+  /* If we got to here, then *none* of the splits belonged to an 
+   * account.  Not a happy situation.  We should dig an account
+   * out of the book the transaction belongs to.
+   * XXX we should probably *always* to this, instead of the above loop!
+   */
+  PINFO ("Free Floating Transaction!");
+  QofBook *book = xaccTransGetBook (trans);
+  AccountGroup *root = xaccGetAccountGroup (book);
+  TransScrubOrphansFast (trans, root);
 }
 
 /* ================================================================ */
@@ -344,7 +354,27 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     if (!root) 
     { 
        Split *s = slist->data; 
+       if (NULL == s->acc)
+       {
+          /* This should never occur, since xaccTransScrubSplits()
+           * above should have fixed things up.  */
+          PERR ("Split is not assigned to any account");
+       }
        root = xaccAccountGetRoot (s->acc);
+       if (NULL == root)
+       {
+          /* This should never occur, accounts are always 
+           * in an account group */
+          PERR ("Can't find root account");
+          QofBook *book = xaccTransGetBook (trans);
+          root = xaccGetAccountGroup (book);
+       }
+       if (NULL == root)
+       {
+          /* This can't occur, things should be in books */
+          PERR ("Bad data corruption, no root account in book");
+          return;
+       }
     }
     account = xaccScrubUtilityGetOrMakeAccount (root, 
         trans->common_currency, _("Imbalance"));
