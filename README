@@ -175,7 +175,9 @@ The following packages are required to be installed to run GnuCash:
 
   guppi: version 0.35.3 should work.  Version 0.35.5 is required for
    some advanced functionality.  This can be found at
-   ftp://ftp.gnome.org/pub/GNOME/stable/sources/Guppi.
+   ftp://ftp.gnome.org/pub/GNOME/stable/sources/Guppi.  You may need
+   to configure it with `--prefix=/usr' in order for gnucash's
+   `configure' to find the guppi library.
 
   libgal: any recent version should work.  This is a GNOME related
    library used by several different programs.  You can find it at
