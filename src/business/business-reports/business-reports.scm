@@ -10,6 +10,10 @@
 (gnc:module-load "gnucash/report/standard-reports" 0)
 (gnc:module-load "gnucash/business-utils" 0)
 
+;; this defines gnc:url-type-ownerreport and pulls in gnome-utils
+;; to define gnc:html-build-url
+(gnc:module-load "gnucash/business-gnome" 0)
+
 (define gnc:menuname-business-reports (N_ "Business Reports"))
 
 (define (guid-ref type guid)

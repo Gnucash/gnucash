@@ -1,3 +1,11 @@
+2003-01-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-reports/business-reports.scm -- need to
+	  load business-gnome module, which loads gnome-utils module, for
+	  a couple HTML definitions (which should eventually be moved
+	  elsewhere so that the reports themselves don't depend on
+	  gnome...  This fixes Wilddev's report problem.
+
 2003-01-21  David Hampton  <hampton@employees.org>
 
 	* src/quotes/finance-quote-helper.in: Fix problem getting quotes
