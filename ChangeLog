@@ -1,4 +1,9 @@
-2002-07-05  Derek Atkins  <derek@ihtf.com>
+2002-07-06  Derek Atkins  <derek@ihtfp.com>
+
+	* gw-kvp-spec.scm: wrap kvp_slot_set_slot_path_gslist(),
+	  kvp_slot_get_slot_path_gslist(), and gnc_book_get_slots()
+
+2002-07-05  Derek Atkins  <derek@ihtfp.com>
 
 	* gw-engine-spec.scm: wrap gnc_lot_get_split_list
 	* gw-business-core-spec.scm: wrap gncInvoiceGetPosted{Acc,Txn,Lot}
