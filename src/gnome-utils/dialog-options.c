@@ -2517,9 +2517,9 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
 
     if (string && *string)
     {
+      GtkEntry *entry;
       DEBUG("string = %s", string);
-      GtkEntry *entry =
-	GTK_ENTRY(gnome_pixmap_entry_gtk_entry(GNOME_PIXMAP_ENTRY(widget)));
+      entry = GTK_ENTRY(gnome_pixmap_entry_gtk_entry(GNOME_PIXMAP_ENTRY(widget)));
       gtk_entry_set_text(entry, string);
     }
     if(string)
