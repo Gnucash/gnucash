@@ -2,6 +2,9 @@
 	* business-core/test/*.c -- fix the tests for begin/commit edit
 
 	* src/scm/main.scm -- fix the load of price-quotes on guile-1.4.1
+
+	* README/README.cvs -- update to reference how to "properly" use
+	  autogen.sh
 	
 2002-11-21  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c: Tweak the matching

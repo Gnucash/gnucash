@@ -1,7 +1,24 @@
-This file contains guidelines for those with CVS write access.
+This file contains guidelines for using Gnucash from CVS.
 They have been adapted from the guidelines for gnome-libs by
 Miguel de Icaza who adapted them from guidelines written by
 Owen Taylor.
+
+ + In order to build GnuCash from CVS, you need to run the autogen.sh
+   command to generate and execute a configure script.  When building
+   from CVS you should ALWAYS pass your configure options directly to
+   autogen.sh.  For example:
+
+	./autogen.sh --enable-ofx --enable-opt-style-install --prefix=/opt/gnucash
+
+   Autogen will automatically generate the configure script and then
+   run it WITH SPECIAL ARGUMENTS to make sure certain files get built.
+   If you run "configure" without these special arguments, it is very likely
+   that GnuCash will fail to build.
+
+   If in doubt, you can run autogen.sh, run ./configure --help,
+   then re-run autogen.sh with your options.
+
+When making changes to GnuCash and trying to commit to the repository:
 
  + Ask first. If your changes are major, or could possibly break existing
    code, you should always ask. If your change is minor and you have
@@ -60,3 +77,6 @@ Owen Taylor.
 
 Dave Peticolas
 June 21, 2002
+
+Derek Atkins
+November 21, 2002
