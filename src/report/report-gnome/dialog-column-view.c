@@ -24,7 +24,7 @@
 
 #include <gnome.h>
 #include <guile/gh.h>
-#include <g-wrap-runtime-guile.h>
+#include <g-wrap-wct.h>
 
 #include "dialog-column-view.h"
 #include "dialog-options.h"
