@@ -136,7 +136,7 @@ balance at a given time"))
 
     (gnc:options-add-plot-size!
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "d" 500 250)
+     optname-plot-width optname-plot-height "d" 500 350)
 
     (gnc:options-set-default-section options gnc:pagename-general)      
 

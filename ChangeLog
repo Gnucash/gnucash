@@ -1,3 +1,12 @@
+2002-01-29  Dave Peticolas  <dave@krondo.com>
+
+	* src/report/standard-reports/account-piecharts.scm: bump up default
+	pie chart height
+
+	* src/bin/overrides/gnucash-env.in: set LTDL_LIBRARY_PATH, too
+
+	* macros/gnome-gdk-pixbuf.m4: fix bug
+
 2002-01-12  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/gw-glib-spec.scm: remove
