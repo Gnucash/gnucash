@@ -1,3 +1,9 @@
+2005-02-06  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/date.c: Fix the last-day-of-month computation for
+	  leap years.  Need to use modulo, not divide.  (Patch by
+	  Neil Williams.
+
 2005-02-06  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-gettrans.c: Fix HBCI date range
