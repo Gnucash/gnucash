@@ -2,60 +2,93 @@
 .\" Process this file with
 .\" groff -man -Tascii foo.1
 .\"
-.TH GNUCASH 1 "MARCH 2000" Version "1.3.x"
+.TH GNUCASH 1 "January 2002" Version "1.6.6"
 .SH NAME
 gnucash \- personal finance manager
 .SH SYNOPSIS
-.B gnucash [--debug] [
+.B gnucash [options] [
 .I accounts.gnc
 .B ]
 .SH DESCRIPTION
-.B gnucash
+.B GnuCash
 is a personal accounting package that allows you to record
-and track income, expenses, assets, and investments.  It supports
+and track income, expenses, assets, and investments. It supports
 reconciliation, has substantial reporting capabilities, and is
-extensible using guile.  It can import QIF data from Quicken(TM) and
+extensible using guile. It can import QIF data from Quicken(TM) and
 many other commercial accounting packages. It uses GTK+ and GNOME to
 provide an attractive user interface, and has extensive online help.
 
 .SH OPTIONS
+.IP --version
+Show
+.B GnuCash
+version
+.IP --usage
+Show
+.B GnuCash
+usage information
+.IP --help
+Show this help message
 .IP --debug
-Turn on debug mode.  Mainly of interest to developers.
+Enable debugging mode
+.IP --loglevel LOGLEVEL
+Set the logging level from 0 (least) to 6 (most)
+.IP --nofile
+Do not load the last file opened
+.IP --config-dir CONFIGDIR
+Set configuration directory
+.IP --share-dir SHAREDIR
+Set shared directory
+.IP --load-path LOADPATH
+Set the search path for .scm files
+.IP --doc-path DOCPATH
+Set the search path for documentation files
+.IP --evaluate
+Evaluate the guile command
+.IP --load FILE
+Load the given .scm file
+.IP --add-price-quote FILE
+Add price quotes to the given data file
 .SH FILES
 .I ~/.gnucash/config.auto
 .RS
-Automatically generated per-user configuration file.  DO NOT EDIT 
+Automatically generated per-user configuration file.  DO NOT EDIT
 MANUALLY!
 .SH ENVIRONMENT
 .IP GNC_DEBUG
 Enable debugging output.  This allows you to turn on the debugging
-earlier in the startup process than you can with 
+earlier in the startup process than you can with
 .B --debug.
+.IP GNC_RUN_AS_SHELL
+If set, makes
+.B GnuCash
+pop up in a guile shell with all the GnuCash functions loaded. See
+the README for more details.
+.IP GNC_BOOTSTRAP_SCM
+Location of the initial bootstrapping scheme code.  Hopefully, you
+won't need to change this.
 .IP GNC_SCM_LOAD_PATH
-An override for the 
-.B gnucash
-scheme load path.  You shouldn't need to alter this.  For more
+An override for the
+.B GnuCash
+scheme load path. You shouldn't need to alter this.  For more
 information see the README file.
 .SH BUGS
-.B gnucash
-is beta software, and consequently still has bugs and incomplete
-features.  QIF import, in particular, is still incomplete at this
-stage.  Please report any bugs using the bug reporting form on the 
-.B gnucash 
+.B Please report any bugs using the bug reporting form on the
+.B GnuCash
 web site.
 
 .SH "SEE ALSO"
 .BR gnc-prices (1),
 
-.B gnucash 
+.B GnuCash
 has extensive on-line help available from the "help" menu.
 
-Additional information and the latest version is available 
+Additional information and the latest version is available
 at the web site:
 .B http://gnucash.org
 
 .SH AUTHOR
 Robert Merkel <rgmerk@mira.net> wrote this manpage.  
 
-.B gnucash
+.B GnuCash
 was written by Robin Clark, Linas Vepstas, and a cast of thousands.
