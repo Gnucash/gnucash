@@ -204,8 +204,11 @@ similar transactions.
 <GLOSSTERM><email> rclark@hmc.edu</email> Robin Clark</GLOSSTERM>
 <GLOSSDEF>
 <PARA>wrote the original <application>X-Accountant</application> in
-Motif as a school project, taking it to version 0.9 by October
-1997.</PARA>
+    Motif as a school project, taking it to version 0.9 by October
+    1997.  Although every single
+    line of his code has been re-written, his name appears as a
+    credit in almost every file.  Such is the magic of copyrights.
+</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
@@ -217,11 +220,16 @@ Motif as a school project, taking it to version 0.9 by October
       combobox and arrows would make an even slicker GUI, rewrote the
       <application>X-Accountant</application> internals to add
       double-entry, an account hierarchy, split out a transaction
-      mini-engine, add support for stocks, and spiff up the help
-      menus. This was version 1.0 as of January 1998. Since then, for
-      version 1.1, the engine was expanded and refined, and the
+      mini-engine, add support for stocks, and spiffed up the help
+      menus. That was version 1.0 as of January 1998. For
+      version 1.1 &amp; 1.2, the engine was expanded and refined, and the
       register window code completely redesigned and made mostly
-      Motif-(and GUI-)independent. Did some prototype OFX work.</PARA>
+      Motif-(and GUI-)independent. 
+    Linas is now active with Gnumatic Incorporated, a company formed to
+    enhance and support GnuCash for everyone, from home desktop users
+    to commercial and professional accountants.
+</PARA>
+
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
@@ -230,36 +238,49 @@ Motif as a school project, taking it to version 0.9 by October
 <GLOSSDEF>
 <PARA>publicized the <application>GnoMoney</application> project widely
       and broadly, and then changed its name to
-      <application>GnuCash</application>. Jeremy created the
-      gnucash.org web site, registered the domain, got the initial
-      GTK/gnome code working.</PARA>
+      <application>GnuCash</application>. 
+      (Actually, put the selection
+      of the name up to popular vote.  Democracy is not
+      a good way to pick names.)
+      Jeremy registered the domain name, and created and maintained
+      the gnucash.org web site for years,
+      and got the initial GTK/gnome code working.
+      </PARA>
+
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
 <GLOSSTERM><email> rlb@cs.utexas.edu</email> Rob Browning</GLOSSTERM>
 <GLOSSDEF>
-<PARA>abused everyone for not using perl, and then after we
-      added perl support, dumped perl in favor of guile/scheme
-      support. Rob maintains the build infrastructure, is handling
-      the whole guile/perl extension language thing, and is dealing
-      with configuration and configurability.</PARA>
+<PARA>abused everyone for not using Perl, and then after we
+      added Perl support, dumped Perl in favor of Guile/Scheme
+      support.  Rob built the build
+      infrastructure, hacked the gtk code, and is whacking the file format.
+      Also, the re-write of reports and statement downloading in scheme,
+      the g-wrap guile wrapper, and the user preferences.
+</PARA>
+
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
 <GLOSSTERM><email> dave@krondo.com</email> Dave Peticolas</GLOSSTERM>
 <GLOSSDEF>
 <PARA>hacks obsessively on GnuCash. But he can stop anytime he
-      wants to. Really.</PARA>
+      wants to. Really.
+      (As he is now the gatekeeper of the GnuCash CVS tree, be nice to him,
+      or he may decide to stop hacking in the middle of your patch).
+      </PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
 <GLOSSTERM><email> grib@billgribble.com</email> Bill
       Gribble</GLOSSTERM>
 <GLOSSDEF>
-<PARA>works magic. If your checks print wrong, blame him. If
-      you don't like the amount printed on your checks, blame him.
-      If you don't like your your bank balances, your bank, or your
-      life, blame him too.</PARA>
+<PARA>
+    is not shy, or softly spoken.  So don't be shy if you find a bug in
+    his code: QIF import, query API and transaction search, check-printing,
+    commodity and currency support, gtkhtml integration and report printing.
+    </PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 </GLOSSLIST>
