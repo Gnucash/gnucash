@@ -249,11 +249,11 @@ gnc_druid_pf_gnome_build(GNCDruid* druid, GNCDruidProviderDesc* desc)
   prov_base->pages = g_list_prepend(NULL, page);
 
   /* Build the file entry */
-  file_entry = GNOME_FILE_ENTRY(gnome_file_entry_new(desc->title, desc->title));
+  file_entry = GNOME_FILE_ENTRY(gnome_file_entry_new(desc_f->history_id, desc->title));
   g_assert(file_entry);
   prov->file_entry = file_entry;
   gnome_file_entry_set_modal(file_entry, TRUE);
-  gnome_file_entry_set_default_path(file_entry, desc_f->last_directory);
+  gnome_file_entry_set_default_path(file_entry, desc_f->last_dir);
 
   /* Set the page properties */
   if (desc->title)

@@ -19,6 +19,14 @@
 	* src/app-utils/gnc-druid-provider-desc-edge.c:
 	  don't need to cast to the cuperclass -- just use it directly.
 
+	* src/app-utils/gnc-druid-provider-desc/file.[ch]:
+	  add a history_id as a separate member for where to store
+	  file choice history
+	* src/gnome-utils/gnc-druid-provider-file-gnome.c:
+	  use new history_id member
+	* src/import-export/qif-import/gnc-druid-test.c:
+	  set file history_id
+
 2004-02-07  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/gnc-druid-provider-desc-file.[ch]:

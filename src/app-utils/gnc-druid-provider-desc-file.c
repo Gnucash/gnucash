@@ -35,8 +35,10 @@ gnc_druid_provider_desc_file_finalize (GObject *obj)
 
   if (desc->text)
     g_free(desc->text);
-  if (desc->last_directory)
-    g_free(desc->last_directory);
+  if (desc->last_dir)
+    g_free(desc->last_dir);
+  if (desc->history_id)
+    g_free(desc->history_id);
 
   G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
@@ -50,6 +52,7 @@ gnc_druid_provider_desc_file_init (GNCDruidProviderDescFile *o)
 GNCDruidProviderDescFile*
 gnc_druid_provider_desc_file_new_with_data(const gchar* title,
 					   const gchar* text,
+					   const gchar* history_id,
 					   const gchar* last_dir,
 					   gboolean glob,
 					   GNCDruidProviderCB next_cb,
@@ -66,6 +69,8 @@ gnc_druid_provider_desc_file_new_with_data(const gchar* title,
 
   if (text)
     gnc_druid_provider_desc_file_set_text(desc, text);
+  if (history_id)
+    gnc_druid_provider_desc_file_set_history_id(desc, history_id);
   if (last_dir)
     gnc_druid_provider_desc_file_set_last_dir(desc, last_dir);
   if (title)
@@ -95,7 +100,20 @@ gnc_druid_provider_desc_file_set_last_dir(GNCDruidProviderDescFile* desc,
   g_return_if_fail(IS_GNC_DRUID_PROVIDER_DESC_FILE(desc));
   g_return_if_fail(last_dir);
 
-  if (desc->last_directory)
-    g_free(desc->last_directory);
-  desc->last_directory = g_strdup(last_dir);
+  if (desc->last_dir)
+    g_free(desc->last_dir);
+  desc->last_dir = g_strdup(last_dir);
+}
+
+void
+gnc_druid_provider_desc_file_set_history_id(GNCDruidProviderDescFile* desc,
+					    const gchar* history_id)
+{
+  g_return_if_fail(desc);
+  g_return_if_fail(IS_GNC_DRUID_PROVIDER_DESC_FILE(desc));
+  g_return_if_fail(history_id);
+
+  if (desc->history_id)
+    g_free(desc->history_id);
+  desc->history_id = g_strdup(history_id);
 }

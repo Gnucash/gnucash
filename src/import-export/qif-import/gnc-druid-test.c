@@ -69,6 +69,7 @@ gnc_dt_test_build_providers(void)
   desc_file =
     gnc_druid_provider_desc_file_new_with_data("Test Druid New File",
 					       "Choose a file",
+					       "test-druid-history",
 					       "/tmp",
 					       TRUE,
 					       gnc_dt_test_add_file,
