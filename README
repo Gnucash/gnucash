@@ -123,7 +123,7 @@ Motif or Lesstif  --
            Lesstif 0.86.9  works ... but some menus come out 2 pixels high.(?)
            Lesstif 0.87.0: broken (missing symbols for XmeDrawShadows, etc.)
            Lesstif 0.88.1  works
-           Lesstif 0.89.0  works?
+           Lesstif 0.89.0  broken ... can't save files
 
 XmHTML  -- Provides HTML display capabilities. Used for Help Dialogues, Reports.
            Require version 1.1.4 or later
