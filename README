@@ -65,6 +65,9 @@ Features include:
     in that portfolio.
   - Written in C, with perl, scheme and tcl support for easy
     configuration and extensibility.
+  - File access is locked in a network-safe fashion, preventing
+    accidental damage if several users attempt to access the 
+    same file, even if the file is NFS-mounted.
 
 Home Page:
 ----------
