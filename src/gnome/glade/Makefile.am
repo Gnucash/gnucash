@@ -10,7 +10,6 @@ glade_DATA = \
 	print.glade \
 	progress.glade \
 	register.glade \
-	report.glade \
 	stocks.glade \
 	tax.glade \
 	transfer.glade \
