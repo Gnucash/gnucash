@@ -88,6 +88,34 @@ xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
 }
 
 /* =============================================== */
+/* not only do we set the cell contents, but we 
+ * make the gui reflect the right value too.
+ */
+
+void 
+xaccSetComboCellValue (ComboCell *cell, const char * str)
+{
+   PopBox * box;
+
+   xaccSetBasicCellValue (&(cell->cell), str);
+   box = (PopBox *) (cell->cell.gui_private);
+
+   if (str) {
+      if (0x0 != str[0]) {
+         XmString choosen;
+         /* convert String to XmString ... arghhh */
+         choosen = XmCvtCTToXmString ((char *) str);
+         XmComboBoxSelectItem (box->combobox, choosen, False);
+         XmStringFree (choosen);
+      } else {
+         XmComboBoxClearItemSelection (box->combobox);
+      } 
+   } else {
+      XmComboBoxClearItemSelection (box->combobox);
+   }
+}
+
+/* =============================================== */
 
 static
 void realizeCombo (struct _BasicCell *bcell, void *w, int pixel_width)
@@ -323,6 +351,7 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb )
 
    XbaeMatrixSetCell (box->parent, box->currow, box->curcol, choice); 
    xaccSetBasicCellValue (&(cell->cell), choice);
+printf ("celectcb choice %s \n", choice);
    XtFree (choice);
 
    /* a diffeent way of getting the user's selection ... */

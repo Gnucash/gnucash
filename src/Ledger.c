@@ -97,6 +97,7 @@ xaccSaveRegEntry (BasicRegister *reg)
    if (!split) return;
    trans = (Transaction *) (split->parent);
    
+printf ("saving %s \n", trans->description);
    /* copy the contents from the cursor to the split */
    xaccTransSetDate (trans, reg->dateCell->date.tm_mday,
                             reg->dateCell->date.tm_mon+1,
@@ -108,13 +109,15 @@ xaccSaveRegEntry (BasicRegister *reg)
    xaccSplitSetAction (split, reg->actionCell->cell.value);
    xaccSplitSetReconcile (split, reg->recnCell->value[0]);
 
-   /* hack alert -- do transfers */
-
+   /* if the user changed thw value of the xfrm cell, 
+    * then move the far end oof the split to the new location.
+    */
    xfr = GetPeerAccName (split);
    if (strcmp (xfr, reg->xfrmCell->cell.value) &&
        strcmp (SPLIT_STR, reg->xfrmCell->cell.value)) {
       Split *peer_split;
 
+printf ("xfr from %s to %x \n", xfr,  reg->xfrmCell->cell.value);
       peer_split = GetPeerSplit (split);
       if (peer_split) {
          acc = (Account *) (peer_split->acc);
@@ -153,7 +156,7 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
                                         trans->date.year);
 
    xaccSetBasicCellValue (reg->numCell, trans->num);
-   xaccSetBasicCellValue (&(reg->actionCell->cell), split->action);
+   xaccSetComboCellValue (reg->actionCell, split->action);
    xaccSetQuickFillCellValue (reg->descCell, trans->description);
    xaccSetBasicCellValue (reg->memoCell, split->memo);
 
@@ -162,9 +165,8 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
    xaccSetBasicCellValue (reg->recnCell, buff);
 
    /* the transfer account */
-   /* hack alert -- this is incorrect for splits in general */
    accname = GetPeerAccName (split);
-   xaccSetBasicCellValue (&(reg->xfrmCell->cell), accname);
+   xaccSetComboCellValue (reg->xfrmCell, accname);
 
    xaccSetDebCredCellValue (reg->debitCell, 
                             reg->creditCell, split->damount);
@@ -217,13 +219,13 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
 }
 
 /* ======================================================== */
+/* walk account tree recursively, pulling out all the names */
 
-void xaccLoadXferCell (ComboCell *cell,  AccountGroup *grp)
+static void 
+LoadXferCell (ComboCell *cell,  AccountGroup *grp)
 {
    Account * acc;
    int n;
-
-   xaccAddComboCellMenuItem (cell, SPLIT_STR);
 
    if (!grp) return;
 
@@ -233,10 +235,18 @@ void xaccLoadXferCell (ComboCell *cell,  AccountGroup *grp)
    acc = getAccount (grp, n);
    while (acc) {
       xaccAddComboCellMenuItem (cell, acc->accountName);
-      xaccLoadXferCell (cell, acc->children);
+      LoadXferCell (cell, acc->children);
       n++;
       acc = getAccount (grp, n);
    }
+}
+
+/* ======================================================== */
+
+void xaccLoadXferCell (ComboCell *cell,  AccountGroup *grp)
+{
+   xaccAddComboCellMenuItem (cell, SPLIT_STR);
+   LoadXferCell (cell, grp);
 }
 
 /* =======================  end of file =================== */

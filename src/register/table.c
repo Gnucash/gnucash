@@ -330,6 +330,11 @@ void xaccMoveCursor (Table *table, int virt_row, int virt_col)
    int iphys,jphys;
    BasicCell *cell;
 
+printf ("move cursor from %d %d to %d %d \n",
+table->current_cursor_row,
+table->current_cursor_col,
+virt_row, virt_col);
+
    /* call the callback, allowing the app to commit any changes */
    if (table->move_cursor) {
       (table->move_cursor) (table, table->client_data);
@@ -461,6 +466,11 @@ verifyCursorPosition (Table *table, int phys_row, int phys_col)
 
    if ((virt_row != table->current_cursor_row) ||
        (virt_col != table->current_cursor_col)) {
+
+printf ("verify cursor bad cur %d %d new %d %d \n",
+table->current_cursor_row,
+table->current_cursor_col,
+virt_row, virt_col);
 
       /* before leaving, the current virtual position,
        * commit any aedits that have been accumulated 
@@ -664,6 +674,11 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
          cbs->doit = False;
       }
    }
+
+   /* record this position as the cell that will be
+    * traversed out of if a traverse even happens */
+   table->prev_phys_traverse_row = row;
+   table->prev_phys_traverse_col = col;
 }
 
 /* ==================================================== */
@@ -828,7 +843,7 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
    row = cbs->row;
    col = cbs->column;
 
-   verifyCursorPosition (table, row, col);
+printf ("traverse from %d %d %s %d\n", row, col, cbs->param, cbs->qparam);
 
    /* If the quark is zero, then it is likely that we are
     * here because we traversed out of a cell that had a 
@@ -851,9 +866,12 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
           cbs->qparam = QRight;
           row = table->prev_phys_traverse_row;
           col = table->prev_phys_traverse_col;
+printf ("null quark emulate rows %d %d \n", row, col);
         }
       }
    }
+
+   verifyCursorPosition (table, row, col);
 
    /* compute the cell location */
    rel_row = row - table->num_header_rows;
@@ -886,6 +904,11 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
 
    table->prev_phys_traverse_row = cbs->next_row;
    table->prev_phys_traverse_col = cbs->next_column;
+
+printf ("traverse all said & done %d %d \n", 
+table->prev_phys_traverse_row,
+table->prev_phys_traverse_col);
+
 }
 
 
