@@ -250,7 +250,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   
   g_date_set_time(&date, trans_t);
  
-  fs = xaccFreqSpecMalloc();
+  fs = xaccFreqSpecMalloc(gnc_get_current_session ());
 
   /* get the frequency */
 
@@ -274,7 +274,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   case FREQ_WEEKLY:
     g_date_add_days(&date, 7);
     
-    tmpfs = xaccFreqSpecMalloc();
+    tmpfs = xaccFreqSpecMalloc(gnc_get_current_session ());
     xaccFreqSpecSetComposite(fs);
     xaccFreqSpecSetWeekly(tmpfs, &date, 1);
     xaccFreqSpecSetUIType(fs, UIFREQ_WEEKLY);

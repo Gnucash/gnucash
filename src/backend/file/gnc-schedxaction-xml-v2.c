@@ -358,7 +358,7 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
 
     g_return_val_if_fail( node, FALSE );
 
-    fs = dom_tree_to_freqSpec( xmlGetLastChild( node ) );
+    fs = dom_tree_to_freqSpec( xmlGetLastChild( node ), pdata->session );
     xaccSchedXactionSetFreqSpec( sx, fs );
 
     return TRUE;

@@ -119,8 +119,11 @@ struct uiFreqTypeTuple uiFreqTypeStrs[] = {
 /**
  * Struct passed around as user-data when parsing the FreqSpec.
  **/
-typedef struct _freqSpecParseData {
+typedef struct
+{
         FreqSpec        *fs;              /* FreqSpec we're parsing into. */
+        GNCSession      *session;         /* Session we're loading into. */
+
         /* fields used in the union of unions... :) */
         GDate                 once_day;     /* once */
         gint64                interval;     /* all [except once] */
@@ -142,8 +145,6 @@ fspd_init( fsParseData *fspd )
                 = 0;
         g_date_clear( &fspd->once_day, 1 );
 }
-
-FreqSpec *dom_tree_to_freqSpec(xmlNodePtr node);
 
 xmlNodePtr
 gnc_freqSpec_dom_tree_create( FreqSpec *fs )
@@ -396,7 +397,7 @@ fs_subelement_handler( xmlNodePtr node, gpointer data )
         fsParseData *fspd = data;
         FreqSpec        *fs;
         gboolean        successful;
-        fs = dom_tree_to_freqSpec( node );
+        fs = dom_tree_to_freqSpec( node, fspd->session );
         if ( fs == NULL )
                 return FALSE;
         fspd->list = g_list_append( fspd->list, fs );
@@ -556,6 +557,7 @@ gnc_freqSpec_end_handler(gpointer data_for_children,
         sixtp_gdv2                *globaldata = (sixtp_gdv2*)global_data;
 
         fspd_init( &fspd );
+        fspd.session = globaldata->session;
 
         /* this won't actually get invoked [FreqSpecs aren't top-level
            elements]; see dom_tree_to_freqSpec(), below. */
@@ -567,7 +569,7 @@ gnc_freqSpec_end_handler(gpointer data_for_children,
 
         g_return_val_if_fail( tree, FALSE );
 
-        fspd.fs = xaccFreqSpecMalloc();
+        fspd.fs = xaccFreqSpecMalloc(globaldata->session);
         successful = dom_tree_generic_parse( tree, fs_dom_handlers, &fspd );
         if (!successful) {
                 xmlElemDump( stdout, NULL, tree );
@@ -586,14 +588,14 @@ gnc_freqSpec_sixtp_parser_create(void)
 }
 
 FreqSpec*
-dom_tree_to_freqSpec(xmlNodePtr node)
+dom_tree_to_freqSpec(xmlNodePtr node, GNCSession *session)
 {
     gboolean        successful;
     fsParseData        fspd;
 
     fspd_init( &fspd );
 
-    fspd.fs = xaccFreqSpecMalloc();
+    fspd.fs = xaccFreqSpecMalloc(session);
     successful = dom_tree_generic_parse( node, fs_dom_handlers, &fspd );
     if ( !successful ) {
         xaccFreqSpecFree( fspd.fs );

@@ -30,6 +30,7 @@
 #include <glib.h>
 
 #include "GNCId.h"
+#include "gnc-engine.h"
 
 /**
  * Frequency specification.
@@ -84,7 +85,7 @@ typedef struct gncp_freq_spec FreqSpec;
 /**
  * Allocates memory for a FreqSpec and initializes it.
  **/
-FreqSpec* xaccFreqSpecMalloc(void);
+FreqSpec* xaccFreqSpecMalloc(GNCSession *session);
 
 /**
  * destroys any private data belonging to the FreqSpec.

@@ -53,7 +53,7 @@ xaccSchedXactionInit( SchedXaction *sx, GNCSession *session)
         AccountGroup        *ag;
         char                *name;
 
-        sx->freq = xaccFreqSpecMalloc();
+        sx->freq = xaccFreqSpecMalloc(session);
 
         book = gnc_session_get_book (session);
 

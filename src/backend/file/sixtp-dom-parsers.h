@@ -43,7 +43,7 @@ GUID* dom_tree_to_guid(xmlNodePtr node);
 gnc_commodity* dom_tree_to_commodity_ref(xmlNodePtr node, GNCSession *session);
 gnc_commodity *dom_tree_to_commodity_ref_no_engine(xmlNodePtr node);
 
-FreqSpec* dom_tree_to_freqSpec( xmlNodePtr node );
+FreqSpec* dom_tree_to_freqSpec( xmlNodePtr node, GNCSession *session );
 
 Timespec* dom_tree_to_timespec(xmlNodePtr node);
 GDate* dom_tree_to_gdate(xmlNodePtr node);

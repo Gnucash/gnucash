@@ -21,16 +21,17 @@
  *                                                                  *
 \********************************************************************/
 
-#include <math.h>
 #include "config.h"
 
-#include <time.h>
 #include <glib.h>
+#include <math.h>
+#include <time.h>
 
+#include "FreqSpec.h"
+#include "dialog-utils.h"
 #include "gnc-engine-util.h"
 #include "gnc-frequency.h"
-#include "dialog-utils.h"
-#include "FreqSpec.h"
+#include "gnc-ui-util.h"
 
 static short module = MOD_SX;
 
@@ -611,7 +612,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
           for ( i=1; i<6; i++ ) {
                   *gd2 = *gd; 
                   g_date_add_days( gd2, i );
-                  tmpFS = xaccFreqSpecMalloc();
+                  tmpFS = xaccFreqSpecMalloc(gnc_get_current_session ());
                   xaccFreqSpecSetWeekly( tmpFS, gd2, tmpInt );
                   xaccFreqSpecCompositeAdd( fs, tmpFS );
           }
@@ -638,7 +639,8 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
                   o = glade_xml_get_widget( gf->gxml, str );
                   if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o) ) ) {
 
-                          tmpFS = xaccFreqSpecMalloc();
+                          tmpFS = xaccFreqSpecMalloc
+                            (gnc_get_current_session ());
                           xaccFreqSpecSetUIType( tmpFS, uift );
                           /*  struct-copy is expected to work, here */
                           /*  [wish we didn't have to know about the GDate implementation...] */
@@ -670,7 +672,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
 
     o = glade_xml_get_widget( gf->gxml, "semimonthly_first" );
     day = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
-    tmpFS = xaccFreqSpecMalloc();
+    tmpFS = xaccFreqSpecMalloc(gnc_get_current_session ());
     tmpTm = g_new0( struct tm, 1 );
     g_date_to_struct_tm( gd, tmpTm );
     if ( day >= tmpTm->tm_mday ) {
@@ -687,7 +689,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
 
     o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
     day = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
-    tmpFS = xaccFreqSpecMalloc();
+    tmpFS = xaccFreqSpecMalloc(gnc_get_current_session ());
     tmpTimeT = gnome_date_edit_get_date( gf->startDate );
     gd = g_date_new();
     g_date_set_time( gd, tmpTimeT );
@@ -799,7 +801,8 @@ static void
 update_cal( GNCFrequency *gf, GtkCalendar *cal )
 {
   FreqSpec  *fs;
-  fs = xaccFreqSpecMalloc();
+
+  fs = xaccFreqSpecMalloc(gnc_get_current_session ());
   gnc_frequency_save_state( gf, fs, NULL );
   mark_calendar( cal, fs );
   xaccFreqSpecFree( fs );

@@ -133,7 +133,7 @@ void subSpecsListMapDelete( gpointer data, gpointer user_data );
 
 
 /** Local Prototypes *****/
-static void xaccFreqSpecInit( FreqSpec *fs );
+
 
 static const char *
 get_wday_name(guint day)
@@ -173,21 +173,29 @@ get_abbrev_month_name(guint month)
  **/
 
 static void
-xaccFreqSpecInit( FreqSpec *fs )
+xaccFreqSpecInit( FreqSpec *fs, GNCSession *session )
 {
         g_return_if_fail( fs );
+        g_return_if_fail (session);
+
         xaccGUIDNew( &fs->guid );
         xaccStoreEntity( fs, &fs->guid, GNC_ID_FREQSPEC );
+
         fs->type = INVALID;
         fs->uift = UIFREQ_ONCE;
+
         memset( &(fs->s), 0, sizeof(fs->s) );
 }
 
 FreqSpec*
-xaccFreqSpecMalloc(void)
+xaccFreqSpecMalloc(GNCSession *session)
 {
-        FreqSpec        *fs = g_new0(FreqSpec, 1);
-        xaccFreqSpecInit( fs );
+        FreqSpec        *fs;
+
+        g_return_val_if_fail (session, NULL);
+
+        fs = g_new0(FreqSpec, 1);
+        xaccFreqSpecInit( fs, session );
         /* FIXME:event */
         gnc_engine_generate_event( &fs->guid, GNC_EVENT_CREATE );
         return fs;
