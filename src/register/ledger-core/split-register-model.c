@@ -897,6 +897,36 @@ gnc_split_register_get_notes_help (VirtualLocation virt_loc,
 }
 
 static const char *
+gnc_split_register_get_vnotes_entry (VirtualLocation virt_loc,
+				     gboolean translate,
+				     gboolean *conditionally_changed,
+				     gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  Transaction *trans;
+  Split *split;
+
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+  trans = xaccSplitGetParent (split);
+
+  return xaccTransGetVoidReason(trans);
+}
+
+static char *
+gnc_split_register_get_vnotes_help (VirtualLocation virt_loc,
+				    gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  const char *help;
+
+  help = gnc_table_get_entry (reg->table, virt_loc);
+  if (!help || *help == '\0')
+    help = _("Reason the transaction was voided");
+
+  return g_strdup (help);
+}
+
+static const char *
 gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
                                    gboolean translate,
                                    gboolean *conditionally_changed,
@@ -1564,6 +1594,9 @@ gnc_split_register_cursor_is_readonly (VirtualLocation virt_loc,
   txn = xaccSplitGetParent (split);
   if (!txn) return FALSE;
 
+  if (xaccTransGetReadOnly(txn))
+    return(TRUE);
+
   type = xaccTransGetTxnType (txn);
   return (type == TXN_TYPE_INVOICE);
 }
@@ -1945,6 +1978,10 @@ gnc_split_register_model_new (void)
                                      NOTES_CELL);
 
   gnc_table_model_set_entry_handler (model,
+                                     gnc_split_register_get_vnotes_entry,
+                                     VNOTES_CELL);
+
+  gnc_table_model_set_entry_handler (model,
                                      gnc_split_register_get_rate_entry,
                                      RATE_CELL);
 
@@ -2138,6 +2175,10 @@ gnc_split_register_model_new (void)
                                     NOTES_CELL);
 
   gnc_table_model_set_help_handler (model,
+                                    gnc_split_register_get_vnotes_help,
+                                    VNOTES_CELL);
+
+  gnc_table_model_set_help_handler (model,
                                     gnc_split_register_get_xfrm_help,
                                     XFRM_CELL);
 
@@ -2208,6 +2249,11 @@ gnc_split_register_model_new (void)
                                  (model,
                                   gnc_split_register_get_standard_io_flags,
                                   NOTES_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+				  gnc_split_register_get_inactive_io_flags,
+                                  VNOTES_CELL);
 
   gnc_table_model_set_io_flags_handler
                                  (model,
