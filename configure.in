@@ -381,9 +381,13 @@ AC_SUBST(DB_LIBS)
 GNOME_XML_CFLAGS=`$GNOME_CONFIG --cflags xml`
 
 AC_SUBST(GNOME_XML_CFLAGS)
+
+oLIBS="$LIBS"
+LIBS="$LIBS $GNOME_XML_LIB"
 AC_CHECK_LIB(xml, xmlElemDump, [:], [
   AC_MSG_ERROR([libxml 1.8.3 or newer required for GnuCash])
   ])
+LIBS="$oLIBS"
 
 
 ### --------------------------------------------------------------------------
