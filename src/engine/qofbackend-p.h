@@ -109,11 +109,11 @@
  *    to ERR_BACKEND_MOD_DESTROY from this routine, so that the 
  *    engine can properly clean up.
  *
- * The compile_query() method compiles a Gnucash query object into
+ * The compile_query() method compiles a QOF query object into
  *    a backend-specific data structure and returns the compiled
  *    query.  For an SQL backend, the contents of the query object
- *    need to be turned into a corresponding SQL query statement, and
- *    sent to the database for evaluation.
+ *    are typically turned into a corresponding SQL query statement, 
+ *    and sent to the database for evaluation.
  *
  * The free_query() method frees the data structure returned from 
  *    compile_query()
