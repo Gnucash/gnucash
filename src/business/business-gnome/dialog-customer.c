@@ -75,9 +75,10 @@ struct _customer_window {
   GtkWidget *	credit_amount;
 
   GtkWidget *	active_check;
-  GtkWidget *	taxincluded_check;
+  GtkWidget *	taxincluded_menu;
   GtkWidget *	notes_text;
 
+  GncTaxIncluded taxincluded;
   GncBillTerm *	terms;
   CustomerDialogType	dialog_type;
   GUID		customer_guid;
@@ -146,8 +147,7 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
 
   gncCustomerSetActive (cust, gtk_toggle_button_get_active
 			(GTK_TOGGLE_BUTTON (cw->active_check)));
-  gncCustomerSetTaxIncluded (cust, gtk_toggle_button_get_active
-			     (GTK_TOGGLE_BUTTON (cw->taxincluded_check)));
+  gncCustomerSetTaxIncluded (cust, cw->taxincluded);
   gncCustomerSetNotes (cust, gtk_editable_get_chars
 		       (GTK_EDITABLE (cw->notes_text), 0, -1));
 
@@ -420,7 +420,7 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
   cw->shipemail_entry = glade_xml_get_widget (xml, "shipemail_entry");
 
   cw->active_check = glade_xml_get_widget (xml, "active_check");
-  cw->taxincluded_check = glade_xml_get_widget (xml, "tax_included_check");
+  cw->taxincluded_menu = glade_xml_get_widget (xml, "tax_included_menu");
   cw->notes_text = glade_xml_get_widget (xml, "notes_text");
 
   cw->terms_menu = glade_xml_get_widget (xml, "terms_menu");
@@ -538,9 +538,6 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (cw->active_check),
                                 gncCustomerGetActive (cust));
 
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (cw->taxincluded_check),
-				  gncCustomerGetTaxIncluded (cust));
-
     string = gncCustomerGetNotes (cust);
     gtk_editable_delete_text (GTK_EDITABLE (cw->notes_text), 0, -1);
     gtk_editable_insert_text (GTK_EDITABLE (cw->notes_text), string,
@@ -571,6 +568,8 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
 
   /* I know that cust exists here -- either passed in or just created */
 
+  cw->taxincluded = gncCustomerGetTaxIncluded (cust);
+  gnc_ui_taxincluded_optionmenu (cw->taxincluded_menu, &cw->taxincluded);
   gnc_ui_billterms_optionmenu (cw->terms_menu, bookp, TRUE, &cw->terms);
 
 

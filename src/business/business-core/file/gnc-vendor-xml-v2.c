@@ -222,8 +222,10 @@ vendor_taxincluded_handler (xmlNodePtr node, gpointer vendor_pdata)
     gboolean ret;
 
     ret = dom_tree_to_integer(node, &val);
-    if (ret)
-      gncVendorSetTaxIncluded(pdata->vendor, (gboolean)val);
+    if (ret) {
+      if (!val) val = GNC_TAXINCLUDED_USEGLOBAL;
+      gncVendorSetTaxIncluded(pdata->vendor, (GncTaxIncluded)val);
+    }
 
     return ret;
 }

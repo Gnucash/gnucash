@@ -12,6 +12,7 @@ typedef struct _gncCustomer GncCustomer;
 #include "gnc-book.h"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
+#include "gncTaxTable.h"
 #include "gncJob.h"
 
 #include "gnc-numeric.h"
@@ -29,7 +30,7 @@ void gncCustomerSetID (GncCustomer *customer, const char *id);
 void gncCustomerSetName (GncCustomer *customer, const char *name);
 void gncCustomerSetNotes (GncCustomer *customer, const char *notes);
 void gncCustomerSetTerms (GncCustomer *customer, GncBillTerm *term);
-void gncCustomerSetTaxIncluded (GncCustomer *customer, gboolean taxincl);
+void gncCustomerSetTaxIncluded (GncCustomer *customer, GncTaxIncluded taxincl);
 void gncCustomerSetActive (GncCustomer *customer, gboolean active);
 void gncCustomerSetDiscount (GncCustomer *customer, gnc_numeric discount);
 void gncCustomerSetCredit (GncCustomer *customer, gnc_numeric credit);
@@ -50,7 +51,7 @@ GncAddress * gncCustomerGetAddr (GncCustomer *customer);
 GncAddress * gncCustomerGetShipAddr (GncCustomer *customer);
 const char * gncCustomerGetNotes (GncCustomer *customer);
 GncBillTerm * gncCustomerGetTerms (GncCustomer *customer);
-gboolean gncCustomerGetTaxIncluded (GncCustomer *customer);
+GncTaxIncluded gncCustomerGetTaxIncluded (GncCustomer *customer);
 gboolean gncCustomerGetActive (GncCustomer *customer);
 gnc_numeric gncCustomerGetDiscount (GncCustomer *customer);
 gnc_numeric gncCustomerGetCredit (GncCustomer *customer);

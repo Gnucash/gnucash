@@ -245,8 +245,10 @@ customer_taxincluded_handler (xmlNodePtr node, gpointer cust_pdata)
     gboolean ret;
 
     ret = dom_tree_to_integer(node, &val);
-    if (ret)
-      gncCustomerSetTaxIncluded(pdata->customer, (gboolean)val);
+    if (ret) {
+      if (!val) val = GNC_TAXINCLUDED_USEGLOBAL;
+      gncCustomerSetTaxIncluded(pdata->customer, (GncTaxIncluded)val);
+    }
 
     return ret;
 }

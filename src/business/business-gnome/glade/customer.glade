@@ -688,13 +688,15 @@
 	      </widget>
 
 	      <widget>
-		<class>GtkCheckButton</class>
-		<name>tax_included_check</name>
-		<border_width>3</border_width>
-		<can_focus>True</can_focus>
-		<label>Tax Included</label>
-		<active>False</active>
-		<draw_indicator>True</draw_indicator>
+		<class>GtkLabel</class>
+		<name>label34</name>
+		<label>Tax Included: </label>
+		<justify>GTK_JUSTIFY_RIGHT</justify>
+		<wrap>False</wrap>
+		<xalign>1</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -762,15 +764,12 @@
 	      </widget>
 
 	      <widget>
-		<class>GtkLabel</class>
-		<name>label32</name>
-		<label></label>
-		<justify>GTK_JUSTIFY_CENTER</justify>
-		<wrap>False</wrap>
-		<xalign>0.5</xalign>
-		<yalign>0.5</yalign>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
+		<class>GtkOptionMenu</class>
+		<name>tax_included_menu</name>
+		<can_focus>True</can_focus>
+		<items>(taxincluded)
+</items>
+		<initial_choice>0</initial_choice>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>

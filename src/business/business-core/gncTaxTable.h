@@ -19,13 +19,20 @@ typedef struct _gncAccountValue GncAccountValue;
 #define GNC_TAXTABLE_MODULE_NAME "gncTaxTable"
 
 /*
- *  How to interpret the amount.
+ * How to interpret the amount.
  * You can interpret it as a VALUE or a PERCENT.
  */
 typedef enum {
   GNC_AMT_TYPE_VALUE = 1,
   GNC_AMT_TYPE_PERCENT
 } GncAmountType;
+
+/* How to interpret the TaxIncluded */
+typedef enum {
+  GNC_TAXINCLUDED_YES = 1,
+  GNC_TAXINCLUDED_NO,
+  GNC_TAXINCLUDED_USEGLOBAL,
+} GncTaxIncluded;
 
 /* Create/Destroy Functions */
 GncTaxTable * gncTaxTableCreate (GNCBook *book);

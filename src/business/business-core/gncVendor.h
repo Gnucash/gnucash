@@ -12,6 +12,7 @@ typedef struct _gncVendor GncVendor;
 #include "gnc-book.h"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
+#include "gncTaxTable.h"
 #include "gncJob.h"
 
 #define GNC_VENDOR_MODULE_NAME "gncVendor"
@@ -27,7 +28,7 @@ void gncVendorSetID (GncVendor *vendor, const char *id);
 void gncVendorSetName (GncVendor *vendor, const char *name);
 void gncVendorSetNotes (GncVendor *vendor, const char *notes);
 void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms);
-void gncVendorSetTaxIncluded (GncVendor *vendor, gboolean taxincl);
+void gncVendorSetTaxIncluded (GncVendor *vendor, GncTaxIncluded taxincl);
 void gncVendorSetCommodity (GncVendor *vendor, gnc_commodity *com);
 void gncVendorSetActive (GncVendor *vendor, gboolean active);
 
@@ -45,7 +46,7 @@ const char * gncVendorGetName (GncVendor *vendor);
 GncAddress * gncVendorGetAddr (GncVendor *vendor);
 const char * gncVendorGetNotes (GncVendor *vendor);
 GncBillTerm * gncVendorGetTerms (GncVendor *vendor);
-gboolean gncVendorGetTaxIncluded (GncVendor *vendor);
+GncTaxIncluded gncVendorGetTaxIncluded (GncVendor *vendor);
 gnc_commodity * gncVendorGetCommodity (GncVendor *vendor);
 gboolean gncVendorGetActive (GncVendor *vendor);
 

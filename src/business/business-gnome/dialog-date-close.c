@@ -314,7 +314,7 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
     gtk_signal_connect (GTK_OBJECT (ddc->post_date), "date_changed",
 			post_date_changed_cb, ddc);
     gtk_widget_set_sensitive (ddc->date, FALSE);
-    post_date_changed_cb (ddc->post_date, ddc);
+    post_date_changed_cb (GNC_DATE_EDIT (ddc->post_date), ddc);
   } else
     gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *ddue);
 

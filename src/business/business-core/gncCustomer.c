@@ -35,7 +35,7 @@ struct _gncCustomer {
   gnc_commodity	* commodity;
   gnc_numeric	discount;
   gnc_numeric	credit;
-  gboolean	taxincluded;
+  GncTaxIncluded taxincluded;
   gboolean	active;
   GList *	jobs;
   gboolean	dirty;
@@ -76,7 +76,7 @@ GncCustomer *gncCustomerCreate (GNCBook *book)
   cust->shipaddr = gncAddressCreate (book, &cust->guid);
   cust->discount = gnc_numeric_zero();
   cust->credit = gnc_numeric_zero();
-  cust->taxincluded = FALSE;
+  cust->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   cust->active = TRUE;
   cust->jobs = NULL;
 
@@ -163,7 +163,7 @@ void gncCustomerSetTerms (GncCustomer *cust, GncBillTerm *terms)
   mark_customer (cust);
 }
 
-void gncCustomerSetTaxIncluded (GncCustomer *cust, gboolean taxincl)
+void gncCustomerSetTaxIncluded (GncCustomer *cust, GncTaxIncluded taxincl)
 {
   if (!cust) return;
   if (taxincl == cust->taxincluded) return;
@@ -295,9 +295,9 @@ GncBillTerm * gncCustomerGetTerms (GncCustomer *cust)
   return cust->terms;
 }
 
-gboolean gncCustomerGetTaxIncluded (GncCustomer *cust)
+GncTaxIncluded gncCustomerGetTaxIncluded (GncCustomer *cust)
 {
-  if (!cust) return FALSE;
+  if (!cust) return GNC_TAXINCLUDED_USEGLOBAL;
   return cust->taxincluded;
 }
 

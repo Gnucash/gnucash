@@ -31,7 +31,7 @@ struct _gncVendor {
   GncBillTerm *	terms;
   GncAddress *	addr;
   gnc_commodity * commodity;
-  gboolean	taxincluded;
+  GncTaxIncluded taxincluded;
   gboolean	active;
   GList *	jobs;
   gboolean	dirty;
@@ -69,7 +69,7 @@ GncVendor *gncVendorCreate (GNCBook *book)
   vendor->name = CACHE_INSERT ("");
   vendor->notes = CACHE_INSERT ("");
   vendor->addr = gncAddressCreate (book, &vendor->guid);
-  vendor->taxincluded = FALSE;
+  vendor->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   vendor->active = TRUE;
 
   xaccGUIDNew (&vendor->guid, book);
@@ -154,7 +154,7 @@ void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms)
   mark_vendor (vendor);
 }
 
-void gncVendorSetTaxIncluded (GncVendor *vendor, gboolean taxincl)
+void gncVendorSetTaxIncluded (GncVendor *vendor, GncTaxIncluded taxincl)
 {
   if (!vendor) return;
   if (taxincl == vendor->taxincluded) return;
@@ -224,9 +224,9 @@ GncBillTerm * gncVendorGetTerms (GncVendor *vendor)
   return vendor->terms;
 }
 
-gboolean gncVendorGetTaxIncluded (GncVendor *vendor)
+GncTaxIncluded gncVendorGetTaxIncluded (GncVendor *vendor)
 {
-  if (!vendor) return FALSE;
+  if (!vendor) return GNC_TAXINCLUDED_USEGLOBAL;
   return vendor->taxincluded;
 }
 

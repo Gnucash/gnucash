@@ -15,6 +15,7 @@
 #include "recncell.h"
 #include "combocell.h"
 #include "messages.h"
+#include "global-options.h"
 
 #include "gncEntry.h"
 #include "gncEntryLedger.h"
@@ -191,6 +192,46 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
       blank_entry = gncEntryCreate (ledger->book);
       gncEntrySetDate (blank_entry, ledger->last_date_entered);
       ledger->blank_entry_guid = *gncEntryGetGUID (blank_entry);
+
+      if (ledger->type == GNCENTRY_INVOICE_ENTRY) {
+	GncOwner *owner = gncInvoiceGetOwner (ledger->invoice);
+	GncTaxTable *table = NULL;
+	GncTaxIncluded taxincluded_p = GNC_TAXINCLUDED_USEGLOBAL;
+	gboolean taxincluded;
+	gnc_numeric discount = gnc_numeric_zero ();
+
+	owner = gncOwnerGetEndOwner (owner);
+	switch (gncOwnerGetType (owner)) {
+	case GNC_OWNER_CUSTOMER:
+	  taxincluded_p = gncCustomerGetTaxIncluded (owner->owner.customer);
+	  discount = gncCustomerGetDiscount (owner->owner.customer);
+	  break;
+	case GNC_OWNER_VENDOR:
+	  taxincluded_p = gncVendorGetTaxIncluded (owner->owner.vendor);
+	  break;
+	default:
+	}
+
+	/* XXX: Get the default tax-table */
+
+	/* Compute the default taxincluded */
+	switch (taxincluded_p) {
+	case GNC_TAXINCLUDED_YES:
+	  taxincluded = TRUE;
+	  break;
+	case GNC_TAXINCLUDED_NO:
+	  taxincluded = FALSE;
+	  break;
+	case GNC_TAXINCLUDED_USEGLOBAL:
+	  taxincluded = gnc_lookup_boolean_option ("Business",
+						   "Tax Included?", FALSE);
+	  break;
+	}
+
+	gncEntrySetTaxTable (blank_entry, table);
+	gncEntrySetTaxIncluded (blank_entry, taxincluded);
+	gncEntrySetDiscount (blank_entry, discount);
+      }
       break;
     default:
       ledger->blank_entry_guid = *xaccGUIDNULL ();

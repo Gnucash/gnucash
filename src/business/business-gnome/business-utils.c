@@ -368,3 +368,33 @@ gnc_ui_taxtables_optionmenu (GtkWidget *omenu, GNCBook *book,
 			   (GenericLookup_t)gncTaxTableGetName,
 			   (gpointer *)choice);
 }
+
+void
+gnc_ui_taxincluded_optionmenu (GtkWidget *omenu, GncTaxIncluded *choice)
+{
+  GtkWidget *menu;
+  int current = 0, index = 0;
+
+  if (!omenu || !choice) return;
+
+  menu = gtk_menu_new ();
+  
+  add_menu_item (menu, _("Yes"), (gpointer *)choice,
+		 GINT_TO_POINTER (GNC_TAXINCLUDED_YES));
+  if (*choice == GNC_TAXINCLUDED_YES) current = index;
+  index++;
+
+  add_menu_item (menu, _("No"), (gpointer *)choice,
+		 GINT_TO_POINTER (GNC_TAXINCLUDED_NO));
+  if (*choice == GNC_TAXINCLUDED_NO) current = index;
+  index++;
+
+  add_menu_item (menu, _("Use Global"), (gpointer *)choice,
+		 GINT_TO_POINTER (GNC_TAXINCLUDED_USEGLOBAL));
+  if (*choice == GNC_TAXINCLUDED_USEGLOBAL) current = index;
+  index++;
+
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
+  gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), current);
+  gtk_widget_show (menu);
+}

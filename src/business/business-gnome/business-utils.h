@@ -46,4 +46,7 @@ void
 gnc_ui_taxtables_optionmenu (GtkWidget *omenu, GNCBook *book,
 			     gboolean none_ok, GncTaxTable **choice);
 
+/* Build an option menu for choosing a GncTaxIncluded */
+void gnc_ui_taxincluded_optionmenu (GtkWidget *omenu, GncTaxIncluded *choice);
+
 #endif /* GNC_BUSINESS_UTILS_H_ */

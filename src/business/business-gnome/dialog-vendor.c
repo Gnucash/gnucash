@@ -62,9 +62,10 @@ struct _vendor_window {
   GtkWidget *	terms_menu;
 
   GtkWidget *	active_check;
-  GtkWidget *	taxincluded_check;
+  GtkWidget *	taxincluded_menu;
   GtkWidget *	notes_text;
 
+  GncTaxIncluded taxincluded;
   GncBillTerm *	terms;
   VendorDialogType	dialog_type;
   GUID		vendor_guid;
@@ -115,8 +116,7 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
 
   gncVendorSetActive (vendor, gtk_toggle_button_get_active
 			(GTK_TOGGLE_BUTTON (vw->active_check)));
-  gncVendorSetTaxIncluded (vendor, gtk_toggle_button_get_active
-			     (GTK_TOGGLE_BUTTON (vw->taxincluded_check)));
+  gncVendorSetTaxIncluded (vendor, vw->taxincluded);
   gncVendorSetNotes (vendor, gtk_editable_get_chars
 		       (GTK_EDITABLE (vw->notes_text), 0, -1));
   gncVendorSetTerms (vendor, vw->terms);
@@ -333,7 +333,7 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
   vw->email_entry = glade_xml_get_widget (xml, "email_entry");
 
   vw->active_check = glade_xml_get_widget (xml, "active_check");
-  vw->taxincluded_check = glade_xml_get_widget (xml, "tax_included_check");
+  vw->taxincluded_menu = glade_xml_get_widget (xml, "tax_included_menu");
   vw->notes_text = glade_xml_get_widget (xml, "notes_text");
   vw->terms_menu = glade_xml_get_widget (xml, "terms_menu");
 
@@ -403,9 +403,6 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (vw->active_check),
                                 gncVendorGetActive (vendor));
 
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (vw->taxincluded_check),
-				  gncVendorGetTaxIncluded (vendor));
-
     string = gncVendorGetNotes (vendor);
     gtk_editable_delete_text (GTK_EDITABLE (vw->notes_text), 0, -1);
     gtk_editable_insert_text (GTK_EDITABLE (vw->notes_text), string,
@@ -437,6 +434,8 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
 
   /* I know that vendor exists here -- either passed in or just created */
 
+  vw->taxincluded = gncVendorGetTaxIncluded (vendor);
+  gnc_ui_taxincluded_optionmenu (vw->taxincluded_menu, &vw->taxincluded);
   gnc_ui_billterms_optionmenu (vw->terms_menu, bookp, TRUE, &vw->terms);
 
 
