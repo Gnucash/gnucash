@@ -54,8 +54,11 @@ struct _gnc_html {
   GtkWidget * container;
   GtkWidget * html;
 
+
+  /* the current_link is ... ???? */
   gchar     * current_link; 
 
+  /* the base location is ... ???? */
   URLType   base_type;
   gchar     * base_location;
 
@@ -64,9 +67,12 @@ struct _gnc_html {
   GncHTMLLoadCB     load_cb;
   GncHTMLFlyoverCB  flyover_cb;
   GncHTMLButtonCB   button_cb;
-  ghttp_request     * request; 
 
+
+  /* the difference between request and requests is ... ?? */
+  ghttp_request     * request; 
   GList             * requests;
+
   gpointer          flyover_cb_data;
   gpointer          load_cb_data;
   gpointer          button_cb_data;
@@ -75,6 +81,7 @@ struct _gnc_html {
 };
 
 struct request_info {
+  gchar         * uri;
   ghttp_request * request;
   GtkHTMLStream * handle;
 };
@@ -317,24 +324,23 @@ ghttp_check_callback(gpointer data) {
     switch(status) {
     case ghttp_done:
       if (ghttp_get_body_len(req->request) > 0) {      
-#if 0
         {
           /* hack alert  FIXME:
            * This code tries to see if the returned body is
            * in fact gnc xml code. If it seems to be, then we 
            * load it as data, rather than loading it into the 
            * gtkhtml widget.  My gut impression is that we should 
-           * probably be doing this somewhere else, not here ....
-           * But I can't think of another place for now. -- linas
+           * probably be doing this somewhere else, some other
+           * way, not here .... But I can't think of anything 
+           * better for now. -- linas
            */
           const char * bufp = ghttp_get_body(req->request);
           bufp += strspn (bufp, " /t/v/f/n/r");
           if (!strncmp (bufp, "<?xml version", 13)) {
-            gncFileOpenFile ((char *) fullurl);
-            return;
+            gncFileOpenFile ((char *) req->uri);
+            return TRUE;
           } 
         }
-#endif
         
         gtk_html_write(GTK_HTML(html->html), 
                        req->handle, 
@@ -400,6 +406,7 @@ gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle) {
 
   info->request = ghttp_request_new();
   info->handle  = handle;
+  info->uri  = g_strdup (uri);
   ghttp_set_uri(info->request, uri);
   ghttp_set_header(info->request, http_hdr_User_Agent, 
                    "gnucash/1.5 (Financial Browser for Linux; http://gnucash.org)");
@@ -998,6 +1005,7 @@ gnc_html_cancel(gnc_html * html) {
       if(current->data) {
         struct request_info * r = current->data;
         ghttp_request_destroy(r->request);
+        g_free(r->uri);
         g_free(r);
         current->data = NULL;
       }
