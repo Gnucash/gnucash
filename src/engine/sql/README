@@ -298,11 +298,6 @@ operation is probably OK.
 
 -- NOTIFY is not updating main window balances ...
 
--- notify does not update main window or account info after an 
-   edit.
-
--- transaction deletion not handled by notify
-
 -- during sync, detect and report conflicting edits to accounts 
    and transactions.  See the notes for pgendSync() for details
    as to what this is about.  For the first pass, this is not a 
