@@ -2,3 +2,48 @@
 This directory is intended to hold any external code that is needed in
 order to build gnucash, but isn't considered widely available.
 
+------------------------------------------------
+
+gtkhtml: gtkhtml is the soon-to-be-released replacement for the
+gtk-xmhtml widget that gnucash has used up to now.  It has a few nifty
+new features.  The most important one for gnucash's purposes is that
+it has direct support for gnome-print, which means that we can now get
+nice-looking printouts of reports and help documents.
+
+It also works as an HTML editor, but I haven't tried that yet; might
+be nice for future stuff like "live" report editing.
+
+YOU HAVE TO BUILD AND INSTALL GTKHTML BEFORE TRYING TO BUILD GNUCASH.   
+
+I suggest that you install it using the same $prefix you use to
+install gnucash.
+
+Building and installing gtkhtml:
+--------------------------------
+
+The default configure options for gtkhtml depend on the 'oaf' and
+'gconf' packages, which are not yet available/functional, and we don't
+need their functionality.  It's important to turn them off in the
+configure step.  --without-gconf turns them both off.
+
+If your gnucash install prefix is $prefix,
+
+   cd gtkhtml 
+   ./autogen.sh --prefix=$prefix --without-bonobo --without-gconf
+   make 
+   make install
+
+   export GNOME_PATH=$prefix
+   
+The 'export GNOME_PATH' is critical if you are installing gtkhtml
+somewhere besides /usr ; without it, the gnome-config script that
+gnucash's configure depends on won't know that gtkhtml is installed.
+
+If you have built and installed gtkhtml correctly, you should be able
+to run the command 'gnome-config --libs gtkhtml' and see some
+semi-meaningful output.  If it reports 'Unknown library gtkhtml' you
+need to make sure GNOME_PATH is set to your $prefix for gtkhtml.
+
+Once gnome-config reports the correct locations for gtkhtml, you can
+go through the normal gnucash configure/build process.
+
