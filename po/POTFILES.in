@@ -5,6 +5,7 @@ src/FileDialog.c
 src/SplitLedger.c
 src/engine/Account.c
 src/engine/Scrub.c
+src/engine/Transaction.c
 src/engine/io-gncbin-r.c
 src/gnc-exp-parser.c
 src/gnc-ui-util.c
@@ -25,8 +26,8 @@ src/gnome/dialog-utils.c
 src/gnome/druid-commodity.c
 src/gnome/druid-qif-import.c
 src/gnome/druid-stock-split.c
-src/gnome/file-history.c
 src/gnome/glade-gnc-dialogs.c
+src/gnome/glade-support.c
 src/gnome/gnc-commodity-edit.c
 src/gnome/gnc-datedelta.c
 src/gnome/gnc-dateedit.c
@@ -44,6 +45,7 @@ src/gnome/window-reconcile.c
 src/gnome/window-register.c
 src/gnome/window-report.c
 src/guile/gnucash.c
+src/guile/guile-util.c
 src/register/gnome/gnucash-style.c
 src/register/splitreg.c
 src/scm/gnumeric/guile-strings.c

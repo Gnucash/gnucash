@@ -24,14 +24,14 @@
 
 #include "config.h"
 
-#include <stdio.h>
 #include <gnome.h>
+#include <stdio.h>
 
-#include "window-help.h"
+#include "glade-cb-gnc-dialogs.h"
+#include "gnc-ui.h"
 #include "messages.h"
 #include "print-session.h"
-#include "gnc-ui.h"
-#include "glade-cb-gnc-dialogs.h"
+#include "window-help.h"
 
 
 PrintSession * 
@@ -82,9 +82,10 @@ gnc_print_session_done(PrintSession * ps) {
 
 void
 gnc_print_session_print(PrintSession * ps) {
-  GtkWidget * dialog    = gnome_print_dialog_new("Print Gnucash Document", 0);
+  GtkWidget * dialog    =
+    gnome_print_dialog_new(_("Print Gnucash Document"), 0);
   int button            = gnome_dialog_run(GNOME_DIALOG(dialog));
-  
+
   switch(button) {
   case 0: 
     /* print button */
@@ -135,6 +136,6 @@ gnc_print_session_preview(PrintSession * ps) {
                                       GNOME_PRINT_META(ps->meta)); 
   gnome_print_context_close(pc);
   
-  preview = gnome_print_master_preview_new(ps->master, "Print Preview");
+  preview = gnome_print_master_preview_new(ps->master, _("Print Preview"));
   gtk_widget_show_all(GTK_WIDGET(preview));
 }
