@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5\n"
 "POT-Creation-Date: 2001-06-05 20:08+0200\n"
-"PO-Revision-Date: 2001-06-05 21:12+02:00\n"
+"PO-Revision-Date: 2001-06-06 17:06+02:00\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -527,7 +527,7 @@ msgstr "-- Mehrteilige Buchung --"
 #: src/engine/Transaction.c:2043 src/gnome/druid-stock-split.c:395
 #: src/gnome/window-register.c:869 src/register/splitreg.c:241
 msgid "Split"
-msgstr "Teilbuchung"
+msgstr "Mehrteilig"
 
 #: src/engine/io-gncbin-r.c:482
 msgid "Lost Accounts"
@@ -3805,7 +3805,7 @@ msgstr "Gehe zur freien Zeile am Ende dieses Registers"
 
 #: src/gnome/window-register.c:886
 msgid "Jump"
-msgstr "Gegenbuchung"
+msgstr "Gegenstück"
 
 #: src/gnome/window-register.c:887 src/gnome/window-register.c:1519
 #: src/gnome/window-register.c:1708
@@ -3975,7 +3975,7 @@ msgstr "D_uplizieren"
 
 #: src/gnome/window-register.c:1501 src/gnome/window-register.c:1690
 msgid "_Split"
-msgstr "_Teilbuchung"
+msgstr "Mehr_teilige Buchung"
 
 #: src/gnome/window-register.c:1509 src/gnome/window-register.c:1698
 msgid "_Blank"
