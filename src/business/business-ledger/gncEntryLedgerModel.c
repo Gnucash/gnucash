@@ -319,14 +319,31 @@ static const char * get_value_entry (VirtualLocation virt_loc,
 {
   GncEntryLedger *ledger = user_data;
   gnc_numeric value;
-  GncEntry *entry;
 
-  entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+  /* Check if this is the current cursor */
+  if (virt_cell_loc_equal (ledger->table->current_cursor_loc.vcell_loc,
+			   virt_loc.vcell_loc)) {
+    gnc_numeric qty, price, discount, tax;
+    gint disc_type, tax_type;
 
-  if (entry == gncEntryLookup (ledger->book, &(ledger->blank_entry_guid)))
-    return NULL;
+    gnc_entry_ledger_get_numeric (ledger, ENTRY_QTY_CELL, &qty);
+    gnc_entry_ledger_get_numeric (ledger, ENTRY_PRIC_CELL, &price);
+    gnc_entry_ledger_get_numeric (ledger, ENTRY_DISC_CELL, &discount);
+    gnc_entry_ledger_get_numeric (ledger, ENTRY_TAX_CELL, &tax);
 
-  gncEntryGetValue (entry, &value, NULL);
+    disc_type = gnc_entry_ledger_get_type (ledger, ENTRY_DISTYPE_CELL);
+    tax_type = gnc_entry_ledger_get_type (ledger, ENTRY_TAXTYPE_CELL);
+
+    gncEntryComputeValue (qty, price, tax, tax_type, discount, disc_type,
+			  &value, NULL);
+  } else {
+    GncEntry *entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+
+    if (entry == gncEntryLookup (ledger->book, &(ledger->blank_entry_guid)))
+      return NULL;
+
+    gncEntryGetValue (entry, &value, NULL);
+  }
 
   if (gnc_numeric_zero_p (value))
     return NULL;
