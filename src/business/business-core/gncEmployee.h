@@ -19,11 +19,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * Copyright (C) 2001 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
+/** @addtogroup Business
+    @{ */
+/** @addtogroup Employee
+    @{ */
+/** @file gncEmployee.h
+    @brief Employee Interface
+    @author Copyright (C) 2001 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_EMPLOYEE_H_
 #define GNC_EMPLOYEE_H_
@@ -40,13 +43,17 @@ typedef struct _gncEmployee GncEmployee;
 #define GNC_IS_EMPLOYEE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_EMPLOYEE))
 #define GNC_EMPLOYEE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_EMPLOYEE, GncEmployee))
 
-/* Create/Destroy Functions */
-
+/** @name Create/Destroy Functions */
+/** @{ */
 GncEmployee *gncEmployeeCreate (QofBook *book);
 void gncEmployeeDestroy (GncEmployee *employee);
+void gncEmployeeBeginEdit (GncEmployee *employee);
+void gncEmployeeCommitEdit (GncEmployee *employee);
+int gncEmployeeCompare (GncEmployee *a, GncEmployee *b);
+/** @} */
 
-/* Set Functions */
-
+/** @name Set Functions */
+/** @{ */
 void gncEmployeeSetID (GncEmployee *employee, const char *id);
 void gncEmployeeSetUsername (GncEmployee *employee, const char *username);
 void gncEmployeeSetLanguage (GncEmployee *employee, const char *language);
@@ -56,9 +63,10 @@ void gncEmployeeSetRate (GncEmployee *employee, gnc_numeric rate);
 void gncEmployeeSetCurrency (GncEmployee *employee, gnc_commodity * currency);
 void gncEmployeeSetActive (GncEmployee *employee, gboolean active);
 void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc);
+/** @} */
 
-/* Get Functions */
-
+/** @name Get Functions */
+/** @{ */
 QofBook * gncEmployeeGetBook (GncEmployee *employee);
 const char * gncEmployeeGetID (GncEmployee *employee);
 const char * gncEmployeeGetUsername (GncEmployee *employee);
@@ -70,6 +78,7 @@ gnc_numeric gncEmployeeGetRate (GncEmployee *employee);
 gnc_commodity * gncEmployeeGetCurrency (GncEmployee *employee);
 gboolean gncEmployeeGetActive (GncEmployee *employee);
 Account * gncEmployeeGetCCard (GncEmployee *employee);
+/** @} */
 
 
 /** Return a pointer to the instance gncEmployee that is identified
@@ -84,9 +93,6 @@ Account * gncEmployeeGetCCard (GncEmployee *employee);
 gboolean gncEmployeeIsDirty (GncEmployee *employee);
 
 
-void gncEmployeeBeginEdit (GncEmployee *employee);
-void gncEmployeeCommitEdit (GncEmployee *employee);
-int gncEmployeeCompare (GncEmployee *a, GncEmployee *b);
 
 #define EMPLOYEE_ID	"id"
 #define EMPLOYEE_USERNAME	"username"
@@ -98,3 +104,5 @@ int gncEmployeeCompare (GncEmployee *a, GncEmployee *b);
 #define gncEmployeeLookupDirect(G,B) gncEmployeeLookup((B),&(G))
 
 #endif /* GNC_EMPLOYEE_H_ */
+/** @} */
+/** @} */

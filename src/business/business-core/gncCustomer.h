@@ -19,11 +19,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * Copyright (C) 2001,2002 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
+/** @addtogroup Business
+    @{ */
+/** @addtogroup Customer
+    @{ */
+/** @file gncCustomer.h
+    @brief Core Customer Interface 
+    @author Copyright (C) 2001,2002 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_CUSTOMER_H_
 #define GNC_CUSTOMER_H_
@@ -45,12 +48,16 @@ typedef struct _gncCustomer GncCustomer;
 #define GNC_IS_CUSTOMER(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_CUSTOMER))
 #define GNC_CUSTOMER(obj)     (QOF_CHECK_CAST((obj), GNC_ID_CUSTOMER, GncCustomer))
 
-/* Create/Destroy Functions */
-
+/** @name Create/Destroy Functions */
+/** @{ */
 GncCustomer *gncCustomerCreate (QofBook *book);
 void gncCustomerDestroy (GncCustomer *customer);
+void gncCustomerBeginEdit (GncCustomer *customer);
+void gncCustomerCommitEdit (GncCustomer *customer);
+/** @} */
 
-/* Set Functions */
+/** @name Set Functions */
+/** @{ */
 
 void gncCustomerSetID (GncCustomer *customer, const char *id);
 void gncCustomerSetName (GncCustomer *customer, const char *name);
@@ -67,11 +74,10 @@ void gncCustomerSetTaxTable (GncCustomer *customer, GncTaxTable *table);
 
 void gncCustomerAddJob (GncCustomer *customer, GncJob *job);
 void gncCustomerRemoveJob (GncCustomer *customer, GncJob *job);
+/** @} */
 
-void gncCustomerBeginEdit (GncCustomer *customer);
-void gncCustomerCommitEdit (GncCustomer *customer);
-
-/* Get Functions */
+/** @name Get Functions */
+/** @{ */
 /** Return a pointer to the instance gncCustomer that is identified
  *  by the guid, and is residing in the book. Returns NULL if the 
  *  instance can't be found.
@@ -98,6 +104,7 @@ GncTaxTable* gncCustomerGetTaxTable (GncCustomer *customer);
 
 KvpFrame *gncCustomerGetSlots (GncCustomer *customer);
 GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
+/** @} */
 
 
 
@@ -109,10 +116,12 @@ int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
 #define CUSTOMER_ADDR	"addr"
 #define CUSTOMER_SHIPADDR	"shipaddr"
 
-/* deprecated functions, should be removed */
+/** @deprecated functions, should be removed */
 #define gncCustomerGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 #define gncCustomerRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
 #define gncCustomerGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
 #define gncCustomerLookupDirect(g,b) gncCustomerLookup((b), &(g))
 
 #endif /* GNC_CUSTOMER_H_ */
+/** @} */
+/** @} */
