@@ -46,6 +46,11 @@
    "gnc-report:id="
    (number->string report-id)))
 
+(define (gnc:price-anchor-text price)
+  (string-append
+   "gnc-price:guid=" 
+   (gnc:price-get-guid price)))
+
 ;; Make a new report and return the anchor to it. The new report of
 ;; type 'reportname' will have the option values copied from
 ;; 'src-options', and additionally this function sets all options
@@ -90,6 +95,15 @@
   (gnc:make-html-text (gnc:html-markup-anchor
                        (gnc:transaction-anchor-text trans)
                        text)))
+
+(define (gnc:html-price-anchor price value)
+  (gnc:make-html-text (if price
+                          (gnc:html-markup-anchor
+                           (gnc:price-anchor-text price)
+			   (if value
+			       value
+			       (gnc:price-get-value price)))
+                          value)))
 
 (define (gnc:assign-colors num-colors)
   (define base-colors '("red" "orange" "yellow" "green"

@@ -33,6 +33,7 @@
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define optname-price-source (N_ "Price Source"))
+(define optname-zero-shares (N_ "Include accounts with no shares"))
 
 (define (options-generator)
   (let* ((options (gnc:new-options)) 
@@ -68,6 +69,13 @@
                                 (filter gnc:account-is-stock? accounts)))
       #t))
 
+    (gnc:register-option 
+     options 
+     (gnc:make-simple-boolean-option
+      gnc:pagename-accounts optname-zero-shares "e" 
+      (N_ "Include accounts that have a zero share balances.")
+      #f))
+    
     (gnc:options-set-default-section options gnc:pagename-general)      
     options))
 
@@ -87,14 +95,13 @@
     (gnc:option-value (get-op section name)))
   
   (define (table-add-stock-rows table accounts to-date
-                                currency price-fn collector)
+                                currency price-fn include-empty collector)
 
     (define (table-add-stock-rows-internal accounts odd-row?)
       (if (null? accounts) collector
           (let* ((row-style (if odd-row? "normal-row" "alternate-row"))
                  (current (car accounts))
                  (rest (cdr accounts))
-                 (name (gnc:account-get-name current))
                  (commodity (gnc:account-get-commodity current))
                  (ticker-symbol (gnc:commodity-get-mnemonic commodity))
                  (listing (gnc:commodity-get-namespace commodity))
@@ -102,30 +109,35 @@
                                   current to-date #f))
                  (units (cadr (unit-collector 'getpair commodity #f)))
 
-                 (price-value (price-fn commodity currency to-date))
+                 (price-info (price-fn commodity currency to-date))
                  
                  (value-num (gnc:numeric-mul
                              units 
-                             price-value
+                             (cdr price-info)
                              (gnc:commodity-get-fraction currency)
                              GNC-RND-ROUND))
 
                  (value (gnc:make-gnc-monetary currency value-num)))
-            (collector 'add currency value-num)
-            (gnc:html-table-append-row/markup!
-             table
-             row-style
-             (list name
-                   ticker-symbol
-                   listing
-                   (gnc:make-html-table-header-cell/markup
-                    "number-cell" (gnc:numeric-to-double units))
-                   (gnc:make-html-table-header-cell/markup
-                    "number-cell" (gnc:make-gnc-monetary currency
-                                                         price-value))
-                   (gnc:make-html-table-header-cell/markup
-                    "number-cell" value)))
-            (table-add-stock-rows-internal rest (not odd-row?)))))
+	    (if (or include-empty (not (gnc:numeric-zero-p units)))
+		(begin (collector 'add currency value-num)
+		       (gnc:html-table-append-row/markup!
+			table
+			row-style
+			(list (gnc:html-account-anchor current)
+			      ticker-symbol
+			      listing
+			      (gnc:make-html-table-header-cell/markup
+			       "number-cell" (gnc:numeric-to-double units))
+			      (gnc:make-html-table-header-cell/markup
+			       "number-cell"
+			       (gnc:html-price-anchor
+				(car price-info)
+				(gnc:make-gnc-monetary currency
+						       (cdr price-info))))
+			      (gnc:make-html-table-header-cell/markup
+			       "number-cell" value)))
+		       (table-add-stock-rows-internal rest (not odd-row?)))
+		(table-add-stock-rows-internal rest odd-row?)))))
 
     (table-add-stock-rows-internal accounts #t))
 
@@ -140,6 +152,8 @@
                                   gnc:optname-reportname))
         (price-source (get-option gnc:pagename-general
                                   optname-price-source))
+        (include-empty (get-option gnc:pagename-accounts
+                                  optname-zero-shares))
 
         (collector   (gnc:make-commodity-collector))
         ;; document will be the HTML document that we return.
@@ -165,8 +179,8 @@
                           (gnc:get-commoditylist-totalavg-prices
                            commodity-list currency to-date)))
                      (lambda (foreign domestic date) 
-                       (gnc:pricealist-lookup-nearest-in-time
-                        pricealist foreign date))))
+                       (cons #f (gnc:pricealist-lookup-nearest-in-time
+				 pricealist foreign date)))))
                   ('pricedb-latest 
                    (lambda (foreign domestic date) 
                      (let ((price
@@ -174,9 +188,8 @@
                              pricedb foreign domestic)))
                        (if price
                            (let ((v (gnc:price-get-value price)))
-                             (gnc:price-unref price)
-                             v)
-                           (gnc:numeric-zero)))))
+                             (cons price v))
+                           (cons #f (gnc:numeric-zero))))))
                   ('pricedb-nearest 
                    (lambda (foreign domestic date) 
                      (let ((price
@@ -184,9 +197,8 @@
                              pricedb foreign domestic date)))
                        (if price
                            (let ((v (gnc:price-get-value price)))
-                             (gnc:price-unref price)
-                             v)
-                           (gnc:numeric-zero))))))))
+                             (cons price v))
+                           (cons #f (gnc:numeric-zero)))))))))
           
           (gnc:html-table-set-col-headers!
            table
@@ -199,7 +211,7 @@
           
           (table-add-stock-rows
            table accounts to-date currency 
-           price-fn collector)
+           price-fn include-empty collector)
           
           (gnc:html-table-append-row/markup!
            table

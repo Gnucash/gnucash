@@ -1129,6 +1129,14 @@ when no longer needed.")
 
 (gw:wrap-function
  ws
+ 'gnc:price-get-guid
+ '<gnc:guid-scm>
+ "gnc_price_return_guid"
+ '((<gnc:Price*> a))
+ "Get the GUID of a price.")
+
+(gw:wrap-function
+ ws
  'gnc:price-unref
  '<gw:void>
  "gnc_price_unref"

@@ -39,6 +39,7 @@ typedef enum { URL_TYPE_FILE, URL_TYPE_JUMP,
                URL_TYPE_HELP,       /* for a gnucash help window */
                URL_TYPE_XMLDATA,    /* links to gnucash XML data files */ 
                URL_TYPE_ACTION,     /* for special SUBMIT actions */ 
+               URL_TYPE_PRICE,      /* for price editor popups */
                URL_TYPE_OTHER } URLType;
 
 #include "gnc-html-history.h"

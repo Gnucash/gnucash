@@ -92,7 +92,7 @@
 	  <class>GtkScrolledWindow</class>
 	  <name>scrolledwindow32</name>
 	  <border_width>3</border_width>
-	  <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	  <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
 	  <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
 	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
 	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>

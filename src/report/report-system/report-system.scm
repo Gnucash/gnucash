@@ -78,6 +78,7 @@
 (export gnc:html-account-anchor)
 (export gnc:html-split-anchor)
 (export gnc:html-transaction-anchor)
+(export gnc:html-price-anchor)
 (export gnc:assign-colors)
 (export gnc:html-table-append-ruler!)
 (export gnc:html-table-append-ruler/markup!)

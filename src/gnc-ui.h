@@ -109,6 +109,16 @@ gboolean gnc_dup_trans_dialog (gncUIWidget parent, time_t *date_p,
                                const char *num, char **out_num);
 void     gnc_tax_info_dialog (gncUIWidget parent);
 void     gnc_stock_split_dialog (Account * initial);
+
+typedef enum
+{
+  GNC_PRICE_EDIT,
+  GNC_PRICE_NEW,
+} GNCPriceEditType;
+
+GNCPrice* gnc_price_edit_dialog (gncUIWidget parent, GNCPrice *price,
+				GNCPriceEditType type);
+GNCPrice * gnc_price_edit_by_guid (GtkWidget * parent, const GUID * guid);
 void     gnc_prices_dialog (gncUIWidget parent);
 void     gnc_commodities_dialog (gncUIWidget parent);
 

@@ -232,6 +232,50 @@ gnc_html_register_url_cb (const char *location, const char *label,
   return TRUE;
 }
 
+static gboolean
+gnc_html_price_url_cb (const char *location, const char *label,
+		       gboolean new_window, GNCURLResult *result)
+{
+  g_return_val_if_fail (location != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  result->load_to_stream = FALSE;
+
+  /* href="gnc-register:guid=12345678901234567890123456789012" */
+  if (strncmp ("guid=", location, 5) == 0)
+  {
+      GUID guid;
+      GNCIdType id_type;
+
+      if (!string_to_guid (location + 5, &guid))
+      {
+	  result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
+	  return FALSE;
+      }
+
+      id_type = xaccGUIDType (&guid, gnc_get_current_book ());
+      if (id_type == GNC_ID_NONE || safe_strcmp (id_type, GNC_ID_PRICE))
+      {
+          result->error_message =
+	    g_strdup_printf (_("Unsupported entity type: %s"), location);
+	  return FALSE;
+      }
+      if (!gnc_price_edit_by_guid (NULL, &guid)) {
+          result->error_message = g_strdup_printf (_("No such entity: %s"),
+						 location);
+	  return FALSE;
+      }
+  }
+  else
+  {
+      result->error_message = g_strdup_printf (_("Badly formed URL %s"),
+					       location);
+      return FALSE;
+  }
+
+  return TRUE;
+}
+
 static void
 gnc_commodity_help_cb (void)
 {
@@ -328,6 +372,9 @@ gnc_gui_init (SCM command_line)
 
     gnc_html_register_url_handler (URL_TYPE_REGISTER,
                                    gnc_html_register_url_cb);
+
+    gnc_html_register_url_handler (URL_TYPE_PRICE,
+                                   gnc_html_price_url_cb);
 
     gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
 

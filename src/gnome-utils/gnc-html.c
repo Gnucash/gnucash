@@ -209,6 +209,9 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
     else if(!strcmp(protocol, "gnc-help")) {
       retval = URL_TYPE_HELP;
     }
+    else if(!strcmp(protocol, "gnc-price")) {
+      retval = URL_TYPE_PRICE;
+    } 
     else {
       PWARN("unhandled URL type for '%s'", url ? url : "(null)");
       retval = URL_TYPE_OTHER;
@@ -353,7 +356,7 @@ extract_base_name(URLType type, const gchar * path) {
 static char * url_type_names[] = {
   "file:", "", "http:", "ftp:", "https:", 
   "gnc-register:", "gnc-acct-tree:", "gnc-report:", "gnc-options:", "gnc-scm:",
-  "gnc-help:", "gnc-xml:", "gnc-action:", ""
+  "gnc-help:", "gnc-xml:", "gnc-action:", "gnc-price:", ""
 };
 
 

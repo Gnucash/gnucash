@@ -62,6 +62,7 @@ gnc_price_create (GNCBook *book)
   p->do_free = FALSE;
   p->version = 0;
   p->version_check = 0;
+  p->value = gnc_numeric_zero();
 
   p->book = book;
   p->entity_table = gnc_book_get_entity_table (book);
@@ -385,6 +386,13 @@ gnc_price_get_guid (GNCPrice *p)
 {
   if (!p) return xaccGUIDNULL();
   return &p->guid;
+}
+
+const GUID
+gnc_price_return_guid (GNCPrice *p)
+{
+  if (!p) return *xaccGUIDNULL();
+  return p->guid;
 }
 
 GNCBook *

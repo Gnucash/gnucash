@@ -29,6 +29,7 @@ libgncgnome_la_SOURCES = \
   dialog-find-transactions.c \
   dialog-new-user.c \
   dialog-price-editor.c \
+  dialog-price-edit-db.c \
   dialog-print-check.c \
   dialog-progress.c \
   dialog-sx-from-trans.c \
