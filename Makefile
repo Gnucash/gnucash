@@ -75,6 +75,3 @@ install: $(TARGET)
 	$(INSTALL) $(TARGET).bin $(PREFIX)/bin/$(TARGET).bin
 	@mkdir -p $(PREFIX)/$(DOCDIR)
 	$(INSTALL_DATA) Docs/* $(PREFIX)/$(DOCDIR)
-	@echo "Remember to set XACC_HELP to" $(PREFIX)/$DOCDIR
-
-
