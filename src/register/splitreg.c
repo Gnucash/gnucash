@@ -253,7 +253,12 @@ configAction (SplitRegister *reg)
          xaccAddComboCellMenuItem ( reg->actionCell, FEE_STR);
          break;
       case CREDIT_REGISTER:
+         xaccAddComboCellMenuItem ( reg->actionCell, ATM_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, CREDIT_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, FEE_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, ONLINE_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
          break;
       case LIABILITY_REGISTER:

@@ -2308,7 +2308,7 @@ fi
 
 
 # We should always see these errors...
-CFLAGS="${CFLAGS} -Wall -Werror-implicit-function-declaration"
+CFLAGS="${CFLAGS} -Wall"
 
 # Check whether --enable-debug or --disable-debug was given.
 if test "${enable_debug+set}" = set; then
