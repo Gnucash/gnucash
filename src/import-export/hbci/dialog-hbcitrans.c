@@ -72,6 +72,7 @@ gnc_hbci_trans (GtkWidget *parent,
     GtkWidget *orig_bankname_label;
     GtkWidget *orig_bankcode_label;
     GtkWidget *amount_edit;
+    GtkWidget *exec_later_button;
     
     g_assert 
       (recp_name_entry = glade_xml_get_widget (xml, "recp_name_entry"));
@@ -95,11 +96,16 @@ gnc_hbci_trans (GtkWidget *parent,
       (orig_bankname_label = glade_xml_get_widget (xml, "orig_bankname_label"));
     g_assert
       (orig_bankcode_label = glade_xml_get_widget (xml, "orig_bankcode_label"));
+    g_assert
+      (exec_later_button = glade_xml_get_widget (xml, "exec_later_button"));
 
     amount_edit = gnc_amount_edit_new();
     gtk_box_pack_start_defaults(GTK_BOX(amount_hbox), amount_edit);
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount_edit), 
       TRUE);
+
+    /* Make this button insensitive since it's still unimplemented. */
+    gtk_widget_set_sensitive (GTK_WIDGET (exec_later_button), FALSE);
     
     /* Fill in the values from the objects */
     gtk_label_set_text (GTK_LABEL (orig_name_label), 

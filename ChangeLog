@@ -1,3 +1,9 @@
+2002-10-16  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-account-picker.c,
+	dialog-hbci-trans.c, glade/hbci.glade: Grey out unimplemented
+	buttons.
+
 2002-10-16  Derek Atkins  <derek@ihtfp.com>
 	* add more debugging to new PostgresBackend functions
 

@@ -217,7 +217,8 @@ hbci_account_picker_dialog(HBCIInitialInfo *info, Account *initial_sel) {
   Account *retaccount;
   //char * scmname;
   GladeXML *xml;
-
+  GtkWidget *new_account_button;
+  
   wind = g_new0(HBCIAccountPickerDialog, 1);
 
   xml = gnc_glade_xml_new ("hbci.glade", "HBCI Setup Account Picker");
@@ -226,13 +227,19 @@ hbci_account_picker_dialog(HBCIInitialInfo *info, Account *initial_sel) {
   //  (xml, "gnc_ui_qif_account_picker_new_cb",
   //   GTK_SIGNAL_FUNC (gnc_ui_qif_account_picker_new_cb), wind);
 
-  wind->dialog     = glade_xml_get_widget (xml, "HBCI Setup Account Picker");
-  wind->treeview   = glade_xml_get_widget (xml, "account_tree");
+  g_assert
+    (wind->dialog = glade_xml_get_widget (xml, "HBCI Setup Account Picker"));
+  g_assert
+    (wind->treeview   = glade_xml_get_widget (xml, "account_tree"));
+  g_assert
+    (new_account_button = glade_xml_get_widget (xml, "new_account_button"));
   wind->hbci_info   = info;
 
   wind->select  = initial_sel;
   wind->hash = g_hash_table_new(&g_direct_hash, &g_direct_equal);
 
+  /* Make this button insensitive since it's still unimplemented. */
+  gtk_widget_set_sensitive (GTK_WIDGET (new_account_button), FALSE);
   
   gtk_signal_connect(GTK_OBJECT(wind->treeview), "tree_select_row",
                      GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_select_cb),
