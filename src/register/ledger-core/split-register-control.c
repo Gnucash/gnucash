@@ -831,6 +831,78 @@ gnc_split_register_auto_completion (SplitRegister *reg,
   return TRUE;
 }
 
+static void
+gnc_split_register_traverse_check_stock_action (SplitRegister *reg, const char *cell_name)
+{
+  BasicCell *cell;
+  gnc_numeric shares;
+  gboolean buy, sell;
+  const char *name;
+
+  if (!gnc_cell_name_equal (cell_name, ACTN_CELL) ||
+      !gnc_table_layout_get_cell_changed (reg->table->layout,
+					  ACTN_CELL, FALSE))
+    return;
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL);
+  if (!cell)
+    return;
+  name = ((ComboCell *)cell)->cell.value;
+  if ((name == NULL) || (*name == '\0'))
+    return;
+
+  buy  = safe_strcmp (name, ACTION_BUY_STR)  == 0;
+  sell = safe_strcmp (name, ACTION_SELL_STR) == 0;
+  if (!buy && !sell)
+    return;
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL);
+  if (!cell)
+    return;
+  shares = gnc_price_cell_get_value ((PriceCell *) cell);
+
+  if ((buy  && !gnc_numeric_positive_p (shares)) ||
+      (sell &&  gnc_numeric_positive_p (shares))) {
+    gnc_price_cell_set_value ((PriceCell *)cell, gnc_numeric_neg (shares));
+    gnc_basic_cell_set_changed (cell, TRUE);
+  }
+}
+
+static void
+gnc_split_register_traverse_check_stock_shares (SplitRegister *reg, const char *cell_name)
+{
+  BasicCell *cell;
+  gnc_numeric shares;
+  gboolean buy;
+  const char *name;
+
+  if (!gnc_cell_name_equal (cell_name, SHRS_CELL) ||
+      !gnc_table_layout_get_cell_changed (reg->table->layout,
+					  SHRS_CELL, FALSE))
+    return;
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL);
+  if (!cell)
+    return;
+  shares = gnc_price_cell_get_value ((PriceCell *) cell);
+  if (gnc_numeric_zero_p (shares))
+    return;
+  buy  = gnc_numeric_positive_p (shares);
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL);
+  if (!cell)
+    return;
+  name = ((ComboCell *)cell)->cell.value;
+
+  if (buy && (safe_strcmp (name, ACTION_BUY_STR) != 0)) {
+    gnc_combo_cell_set_value((ComboCell *)cell, ACTION_BUY_STR);
+    gnc_basic_cell_set_changed (cell, TRUE);
+  } else if (safe_strcmp (name, ACTION_SELL_STR) != 0) {
+    gnc_combo_cell_set_value((ComboCell *)cell, ACTION_SELL_STR);
+    gnc_basic_cell_set_changed (cell, TRUE);
+  }
+}
+
 static gboolean
 gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
                              gncTableTraversalDir dir,
@@ -923,6 +995,14 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 						   &info->full_refresh);
   } while (FALSE);
 
+  /* See if we are leaving an action field */
+  if ((reg->type == STOCK_REGISTER) ||
+      (reg->type == PORTFOLIO_LEDGER) ||
+      (reg->type == CURRENCY_REGISTER)) {
+    gnc_split_register_traverse_check_stock_action (reg, cell_name);
+    gnc_split_register_traverse_check_stock_shares (reg, cell_name);
+  }
+ 
   /* See if we are tabbing off the end of the very last line */
   do
   {

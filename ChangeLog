@@ -6,6 +6,12 @@
 
 2002-11-12  David Hampton  <hampton@employees.org>
 
+	* src/register/ledger-core/split-register-control.c
+	(gnc_split_register_traverse): Check for leaving an action or a
+	shares cell in a stock register. Enforce the rule that "Buys" must
+	be a positive number of shares and "Sells" must be a negative
+	number of shares. #92270
+
 	* src/register/ledger-core/split-register-load.c
 	(gnc_split_register_add_transaction): Don't sort transaction
 	splits here. This function gets called every time you switch

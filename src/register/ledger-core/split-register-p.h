@@ -30,6 +30,8 @@
 #define SPLIT_TRANS_STR _("-- Split Transaction --")
 #define STOCK_SPLIT_STR _("-- Stock Split --")
 
+#define ACTION_BUY_STR  _("Buy")
+#define ACTION_SELL_STR _("Sell")
 struct sr_info
 {
   /* The blank split at the bottom of the register */

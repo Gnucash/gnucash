@@ -2035,8 +2035,8 @@ gnc_split_register_config_action (SplitRegister *reg)
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
     case CURRENCY_REGISTER:
-      gnc_combo_cell_add_menu_item (cell, _("Buy"));
-      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, ACTION_BUY_STR);
+      gnc_combo_cell_add_menu_item (cell, ACTION_SELL_STR);
       gnc_combo_cell_add_menu_item (cell, _("Price"));
       gnc_combo_cell_add_menu_item (cell, _("Fee"));
       /* Action: Dividend */
