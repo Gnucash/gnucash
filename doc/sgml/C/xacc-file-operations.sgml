@@ -51,7 +51,7 @@
 	    its current name.</para>
 	    </listitem>
 	<listitem><para><emphasis>Save as</emphasis>: Save the current data under a new 
-	    name.</listitem>
+	    name.</para></listitem>
 	<listitem><para><emphasis><link linkend="xacc-export-accounts">Export Accounts</link>
 	      </emphasis>: Export your account structure, without any transactions.  Useful
 	    for making templates for others, or as a simple, but still useful way to close
@@ -71,7 +71,7 @@
 	  </listitem>
 	<listitem><para><emphasis>Short cuts to previously opened files</emphasis>: 
 	    the previous four or so 
-	  GnuCash files you have opened will appear.  Select them to open.</listitem>
+	  GnuCash files you have opened will appear.  Select them to open.</para></listitem>
 
 	<listitem><para><emphasis>Move to New Window</emphasis>: create a new 
 	    top-level window.  See <link linkend="xacc-toplevel">here for more details.</link>
