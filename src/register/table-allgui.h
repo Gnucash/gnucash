@@ -111,6 +111,7 @@ struct _VirtualCell
 {
   CellBlock *cellblock;  /* Array of physical cells */
   gpointer   vcell_data; /* Used by higher-level code */
+  gboolean   visible;    /* visible in the GUI */
 };
 
 

@@ -400,7 +400,7 @@ queue_sync (ItemEdit *item_edit)
 
         item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
  
-        gnome_canvas_request_redraw (canvas, x, y, x+w, y+h);
+        gnome_canvas_request_redraw (canvas, x, y, x+w+1, y+h+1);
 }
 
 void

@@ -405,6 +405,8 @@ gnc_virtual_cell_construct (gpointer _vcell, gpointer user_data)
     vcell->vcell_data = table->vcell_data_allocator();
   else
     vcell->vcell_data = NULL;
+
+  vcell->visible = TRUE;
 }
 
 /* ==================================================== */

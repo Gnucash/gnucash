@@ -137,7 +137,7 @@ gnucash_grid_find_block_origin_by_pixel (GnucashGrid *grid,
         SheetBlockStyle *style;
         VirtualCellLocation vc_loc = { 1, 0 };
         int pixel = 0;
- 
+
         g_return_val_if_fail(y >= 0, FALSE);
         g_return_val_if_fail(x >= 0, FALSE);
 

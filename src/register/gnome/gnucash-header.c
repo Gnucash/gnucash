@@ -185,7 +185,12 @@ gnucash_header_request_redraw (GnucashHeader *header)
 {
         GnomeCanvas *canvas = GNOME_CANVAS_ITEM(header)->canvas;
 
-        gnome_canvas_request_redraw (canvas, 0, 0, INT_MAX/2 -1, INT_MAX/2 -1);
+        if (header->style == NULL)
+                return;
+
+        gnome_canvas_request_redraw (canvas, 0, 0,
+                                     header->style->dimensions->width + 1,
+                                     header->style->dimensions->height + 1);
 }
 
 

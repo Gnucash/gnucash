@@ -69,6 +69,8 @@ typedef struct
 
         gint origin_x; /* x origin of block */
         gint origin_y; /* y origin of block */
+
+        gboolean visible; /* is block visible */
 } SheetBlock;
 
 
@@ -162,12 +164,6 @@ SheetBlock *gnucash_sheet_get_block (GnucashSheet *sheet,
 
 gint gnucash_sheet_col_max_width (GnucashSheet *sheet,
                                   gint virt_col, gint cell_col);
-
-gint gnucash_sheet_col_get_distance(GnucashSheet *sheet,
-                                    int v_row, int v_col_a, int v_col_b);
-
-gint gnucash_sheet_row_get_distance (GnucashSheet *sheet,
-                                     int v_row_a, int v_row_b);
 
 void gnucash_sheet_redraw_all (GnucashSheet *sheet);
 
