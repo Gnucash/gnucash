@@ -2439,8 +2439,9 @@ gnucash_register_attach_popup (GnucashRegister *reg,
                                gpointer data)
 {
         g_return_if_fail (GNUCASH_IS_REGISTER(reg));
-        g_return_if_fail (GTK_IS_WIDGET(popup));
         g_return_if_fail (reg->sheet != NULL);
+	if (popup)
+	  g_return_if_fail (GTK_IS_WIDGET(popup));
 
         gnucash_sheet_set_popup (GNUCASH_SHEET (reg->sheet), popup, data);
 }
