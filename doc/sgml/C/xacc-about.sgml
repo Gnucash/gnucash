@@ -25,17 +25,17 @@ offers, have a look at the <link linkend="xacc-features">Features
     are intended to be stable, only seeing maintenance to fix bugs,
     and "odd" sub-versions indicate an "experimental" stream that
     seeks to add enhancement.
-    The latest stable release is 1.4.x; if you don't intend to
+    The latest stable release is 1.6.x; if you don't intend to
     do development work, you should be using either this version,
     or an older stable version. These versions are fairly stable,
     with all currently known bugs fixed.
-    The present "experimental" stream is gnucash-1.5.x, which is
+    The present "experimental" stream is gnucash-1.7.x, which is
     now almost at beta-test stage.  This is the version you are
     using right now, obviously!   If you are using this version
     with real data, PLEASE MAKE BACKUPS REGULARLY!
 
-    Once the 1.5.x series stabilizes, the next stable series
-    will be 1.6.x.
+    Once the 1.7.x series stabilizes, the next stable series
+    will be 1.8.x.
 
  </para>
 <para>If you wish to "hack" on the experimental version, you should
