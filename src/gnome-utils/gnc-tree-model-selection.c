@@ -252,7 +252,7 @@ gnc_tree_model_selection_create_tree_view_column (GncTreeModelSelection *model,
 	GtkTreeViewColumn *column;
 
 	renderer = gtk_cell_renderer_toggle_new ();
-	g_object_set (G_OBJECT (renderer), "activatable", TRUE);
+	g_object_set (G_OBJECT (renderer), "activatable", TRUE, NULL);
 	g_signal_connect (G_OBJECT (renderer), "toggled",
 			  G_CALLBACK (gnc_tree_model_selection_toggled), model);
 
