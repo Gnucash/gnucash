@@ -31,7 +31,7 @@
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ * Copyright (c) 1998, 1999, 2000, 2003 Linas Vepstas
  */
 
 #include "config.h"
@@ -41,6 +41,7 @@
 #include <string.h>
 
 #include "Account.h"
+#include "AccountP.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "Scrub.h"
@@ -57,12 +58,12 @@ static Account * GetOrMakeAccount (AccountGroup *root, Transaction *trans,
 /* ================================================================ */
 
 void
-xaccGroupScrubOrphans (AccountGroup *grp, GNCBook *book)
+xaccGroupScrubOrphans (AccountGroup *grp)
 {
   GList *list;
   GList *node;
 
-  if (!grp || !book) return;
+  if (!grp) return;
 
   list = xaccGroupGetAccountList (grp);
 
@@ -70,26 +71,26 @@ xaccGroupScrubOrphans (AccountGroup *grp, GNCBook *book)
   {
     Account *account = node->data;
 
-    xaccAccountTreeScrubOrphans (account, book);
+    xaccAccountTreeScrubOrphans (account);
   }
 }
 
 void
-xaccAccountTreeScrubOrphans (Account *acc, GNCBook *book)
+xaccAccountTreeScrubOrphans (Account *acc)
 {
-  if (!acc || !book) return;
+  if (!acc) return;
 
-  xaccGroupScrubOrphans (xaccAccountGetChildren(acc), book);
-  xaccAccountScrubOrphans (acc, book);
+  xaccGroupScrubOrphans (xaccAccountGetChildren(acc));
+  xaccAccountScrubOrphans (acc);
 }
 
 void
-xaccAccountScrubOrphans (Account *acc, GNCBook *book)
+xaccAccountScrubOrphans (Account *acc)
 {
   GList *node;
   const char *str;
 
-  if (!acc || !book) return;
+  if (!acc) return;
 
   str = xaccAccountGetName (acc);
   str = str ? str : "(null)";
@@ -100,18 +101,16 @@ xaccAccountScrubOrphans (Account *acc, GNCBook *book)
     Split *split = node->data;
 
     xaccTransScrubOrphans (xaccSplitGetParent (split),
-                           xaccAccountGetRoot (acc),
-                           book);
+                           xaccAccountGetRoot (acc));
   }
 }
 
 void
-xaccTransScrubOrphans (Transaction *trans, AccountGroup *root,
-                       GNCBook *book)
+xaccTransScrubOrphans (Transaction *trans, AccountGroup *root)
 {
   GList *node;
 
-  if (!trans || !book) return;
+  if (!trans) return;
 
   for (node = xaccTransGetSplitList (trans); node; node = node->next)
   {
@@ -247,12 +246,12 @@ xaccSplitScrub (Split *split)
 /* ================================================================ */
 
 void
-xaccGroupScrubImbalance (AccountGroup *grp, GNCBook *book)
+xaccGroupScrubImbalance (AccountGroup *grp)
 {
   GList *list;
   GList *node;
 
-  if (!grp || !book) return;
+  if (!grp) return;
 
   list = xaccGroupGetAccountList (grp);
 
@@ -260,26 +259,24 @@ xaccGroupScrubImbalance (AccountGroup *grp, GNCBook *book)
   {
     Account *account = node->data;
 
-    xaccAccountTreeScrubImbalance (account, book);
+    xaccAccountTreeScrubImbalance (account);
   }
 }
 
 void
-xaccAccountTreeScrubImbalance (Account *acc, GNCBook *book)
+xaccAccountTreeScrubImbalance (Account *acc)
 {
-  g_return_if_fail (book);
-
-  xaccGroupScrubImbalance (xaccAccountGetChildren(acc), book);
-  xaccAccountScrubImbalance (acc, book);
+  xaccGroupScrubImbalance (xaccAccountGetChildren(acc));
+  xaccAccountScrubImbalance (acc);
 }
 
 void
-xaccAccountScrubImbalance (Account *acc, GNCBook *book)
+xaccAccountScrubImbalance (Account *acc)
 {
   GList *node;
   const char *str;
 
-  if (!acc || !book) return;
+  if (!acc) return;
 
   str = xaccAccountGetName(acc);
   str = str ? str : "(null)";
@@ -290,18 +287,18 @@ xaccAccountScrubImbalance (Account *acc, GNCBook *book)
     Split *split = node->data;
     Transaction *trans = xaccSplitGetParent(split);
 
-    xaccTransScrubImbalance (trans, xaccAccountGetRoot (acc), NULL, book);
+    xaccTransScrubImbalance (trans, xaccAccountGetRoot (acc), NULL);
   }
 }
 
 void
 xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
-                         Account *parent, GNCBook *book)
+                         Account *parent)
 {
   Split *balance_split = NULL;
   gnc_numeric imbalance;
 
-  if (!trans || !book) return;
+  if (!trans || !root) return;
 
   xaccTransScrubSplits (trans);
 
@@ -335,7 +332,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     /* put split into account before setting split value */
     if (!balance_split)
     {
-      balance_split = xaccMallocSplit (book);
+      balance_split = xaccMallocSplit (root->book);
 
       xaccAccountBeginEdit (account);
       xaccAccountInsertSplit (account, balance_split);
@@ -394,16 +391,16 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 /* ================================================================ */
 
 void
-xaccTransScrubCurrency (Transaction *trans, GNCBook *book)
+xaccTransScrubCurrency (Transaction *trans)
 {
   gnc_commodity *currency;
 
-  if (!trans || !book) return;
+  if (!trans) return;
 
   currency = xaccTransGetCurrency (trans);
   if (currency) return;
   
-  currency = xaccTransFindOldCommonCurrency (trans, book);
+  currency = xaccTransFindOldCommonCurrency (trans, trans->book);
   if (currency)
   {
     xaccTransBeginEdit (trans);
@@ -465,23 +462,23 @@ xaccTransScrubCurrency (Transaction *trans, GNCBook *book)
 /* ================================================================ */
 
 void
-xaccAccountScrubCommodity (Account *account, GNCBook *book)
+xaccAccountScrubCommodity (Account *account)
 {
   gnc_commodity *commodity;
 
-  if (!account || !book) return;
+  if (!account) return;
 
   commodity = xaccAccountGetCommodity (account);
   if (commodity) return;
 
-  commodity = DxaccAccountGetSecurity (account, book);
+  commodity = DxaccAccountGetSecurity (account, account->book);
   if (commodity)
   {
     xaccAccountSetCommodity (account, commodity);
     return;
   }
 
-  commodity = DxaccAccountGetCurrency (account, book);
+  commodity = DxaccAccountGetCurrency (account, account->book);
   if (commodity)
   {
     xaccAccountSetCommodity (account, commodity);
@@ -496,35 +493,31 @@ xaccAccountScrubCommodity (Account *account, GNCBook *book)
 static gboolean
 scrub_trans_currency_helper (Transaction *t, gpointer data)
 {
-  GNCBook *book = data;
-
-  xaccTransScrubCurrency (t, book);
-
+  xaccTransScrubCurrency (t);
   return TRUE;
 }
 
 static gpointer
 scrub_account_commodity_helper (Account *account, gpointer data)
 {
-  GNCBook *book = data;
-
-  xaccAccountScrubCommodity (account, book);
+  xaccAccountScrubCommodity (account);
   xaccAccountDeleteOldData (account);
 
   return NULL;
 }
 
 void
-xaccGroupScrubCommodities (AccountGroup *group, GNCBook *book)
+xaccGroupScrubCommodities (AccountGroup *group)
 {
-  if (!group || !book) return;
+  if (!group) return;
 
   xaccAccountGroupBeginEdit (group);
 
-  xaccGroupForEachTransaction (group, scrub_trans_currency_helper, book);
+/* XXX */
+  xaccGroupForEachTransaction (group, scrub_trans_currency_helper, group->book);
 
   xaccGroupForEachAccount (group, scrub_account_commodity_helper,
-                           book, TRUE);
+                           group->book, TRUE);
 
   xaccAccountGroupCommitEdit (group);
 }
