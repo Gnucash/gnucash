@@ -5,6 +5,7 @@ RANLIB   = ranlib
 INCLPATH = -I/usr/include \
            -I/usr/X11R6/include/. \
            -I./../../include \
+           -I./../engine \
            -I./../../lib/ComboBox-1.33 \
            -I./../../lib/Xbae-4.6.2-linas 
 

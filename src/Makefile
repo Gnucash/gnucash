@@ -58,9 +58,9 @@ LIBENG   = libengine.a
 ######################################################################
 SRCS = AccWindow.c AccountMenu.c AdjBWindow.c    \
        BuildMenu.c Destroy.c FileBox.c HelpWindow.c \
-       Ledger.c LedgerUtils.c MainWindow.c  \
+       Ledger.c MainWindow.c  \
        RecnWindow.c RegWindow.c Reports.c TextBox.c  \
-       XferWindow.c main.c util.c xtutil.c
+       XferWindow.c main.c  xtutil.c
 # OBJS = ${SRCS:.c=.o} $(LIBHTMLW) $(LIBXBAE) $(LIBCOMBO)
 OBJS = ${SRCS:.c=.o} $(LIBENG) $(LIBREG) $(LIBXMHTML) $(LIBXBAE) $(LIBCOMBO)
 ######################################################################

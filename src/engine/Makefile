@@ -39,7 +39,8 @@ LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib
 TARGET   = ../libengine.a
 
 ######################################################################
-SRCS = Account.c FileIO.c Group.c QIFIO.c Transaction.c date.c 
+SRCS = Account.c FileIO.c Group.c LedgerUtils.c QIFIO.c \
+       Transaction.c date.c util.c 
 OBJS = ${SRCS:.c=.o} 
 ######################################################################
 
