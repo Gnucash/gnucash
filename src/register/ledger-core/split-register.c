@@ -1104,7 +1104,6 @@ gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg)
   xaccTransRollbackEdit (pending_trans);
 
   info->pending_trans_guid = *xaccGUIDNULL ();
-  info->full_refresh = TRUE;
 
   gnc_resume_gui_refresh ();
 }
@@ -1474,7 +1473,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
 
 Account *
 gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
-					const char *name, gboolean *new)
+					const char *name, gboolean *refresh)
 {
   const char *placeholder = _("The account %s does not allow transactions.\n");
   const char *missing = _("The account %s does not exist.\n"
@@ -1482,9 +1481,6 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
   char *fullname;
   ComboCell *cell = (ComboCell *) bcell;
   Account *account;
-
-  /* No changes, as yet. */
-  *new = FALSE;
 
   /* Find the account */
   account = xaccGetAccountFromFullName (gnc_get_current_group (),
@@ -1497,10 +1493,11 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
       return NULL;
     
     /* User said yes, they want to create a new account. */
+    *refresh = FALSE;
     account = gnc_ui_new_accounts_from_name_window (name);
     if (!account)
       return NULL;
-    *new = TRUE;
+    *refresh = TRUE;
 
     /* Now have a new account. Update the cell with the name as created. */
     fullname = xaccAccountGetFullName (account, gnc_get_account_separator ());
