@@ -2700,6 +2700,7 @@ trap 'rm -fr `echo "Makefile
           src/guile/Makefile
           src/guile/gnucash.h
           src/scm/Makefile
+          src/scm/startup/Makefile
           src/scm/startup/init.scm
           src/gnome/Makefile
           src/motif/Makefile
@@ -2813,6 +2814,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
           src/guile/Makefile
           src/guile/gnucash.h
           src/scm/Makefile
+          src/scm/startup/Makefile
           src/scm/startup/init.scm
           src/gnome/Makefile
           src/motif/Makefile

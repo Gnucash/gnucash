@@ -3,6 +3,75 @@
 
 (define gnc:*command-line-files* #f)
 
+(define gnc:*arg-defs*
+  (list
+   
+   (cons
+    "shell"
+    (cons 'boolean (lambda (val) #t)))
+
+   (cons
+    "usage"
+    (cons 'boolean
+          (lambda (val)
+            (gnc:config-var-value-set! gnc:*arg-show-usage* #f val))))
+   (cons
+    "help"
+    (cons 'boolean
+          (lambda (val)
+            (gnc:config-var-value-set! gnc:*arg-show-help* #f val))))
+   (cons
+    "debug"
+    (cons 'boolean
+          (lambda (val)
+            (gnc:config-var-value-set! gnc:*debugging?* #f val))))
+   
+   (cons
+    "startup-dir"
+    (cons 'string
+          (lambda (val)
+            (gnc:config-var-value-set! gnc:*startup-dir* #f val))))
+   
+   (cons
+    "config-dir"
+    (cons 'string
+          (lambda (val)
+            (gnc:config-var-value-set! gnc:*config-dir* #f val))))
+   
+   (cons
+    "share-dir"
+    (cons 'string
+          (lambda (val)
+            (gnc:config-var-value-set! gnc:*share-dir* #f val))))
+   
+
+   (cons
+    "load-path"
+    (cons 'string
+          (lambda (val)
+            (let ((path-list
+                   (call-with-input-string val (lambda (port) (read port)))))
+              (if (list? path-list)
+                  (gnc:config-var-value-set! gnc:*load-path* #f path-list)
+                  (begin
+                    (gnc:error "non-list given for --load-path: " val)
+                    (gnc:shutdown 1)))))))
+   
+   (cons
+    "doc-path"
+    (cons 'string
+          (lambda (val)
+            (let ((path-list
+                   (call-with-input-string val (lambda (port) (read port)))))
+              (if (list? path-list)
+                  (gnc:config-var-value-set! gnc:*doc-path* #f path-list)
+                  (begin
+                    (gnc:error "non-list given for --doc-path: " val)
+                    (gnc:shutdown 1)))))))
+   
+   (cons "load-user-config" (cons 'boolean gnc:load-user-config-if-needed))
+   (cons "load-system-config" (cons 'boolean gnc:load-system-config-if-needed))))
+
 (define (gnc:cmd-line-get-boolean-arg args)
   ;; --arg         means #t
   ;; --arg true    means #t
@@ -56,35 +125,38 @@
             (set! rest (cdr rest))
             (set! files-to-open (cons item files-to-open)))
           
-          ;; Got something that looks like an option...
-          (let* ((arg-string (make-shared-substring item 2))
-                 (arg-def (assoc-ref gnc:*prefs* arg-string)))
+          (if (string=? "--" item)
+              ;; ignore --
+              (set! rest (cdr rest))
+              ;; Got something that looks like an option...
+              (let* ((arg-string (make-shared-substring item 2))
+                     (arg-def (assoc-ref gnc:*arg-defs* arg-string)))
             
-            (if (not arg-def)
-                (begin
-                  (gnc:prefs-show-usage)
-                  (set! result #f)
-                  (set! quit? #t))
-                
-                (let* ((arg-type (car arg-def))
-                       (arg-parse-result
-                        (case arg-type
-                          ((boolean) (gnc:cmd-line-get-boolean-arg (cdr rest)))
-                          ((string) (gnc:cmd-line-get-string-arg (cdr rest)))
-                          ((integer)
-                           (gnc:cmd-line-get-integer-arg (cdr rest)))
-                          (else
-                           (gnc:error "bad argument type " arg-type ".")
-                           (gnc:shutdown 1)))))
-
-                  (if (not arg-parse-result)
-                      (begin                
-                        (set result #f)
-                        (set! quit? #t))
-                      (let ((parsed-value (car arg-parse-result))
-                            (remaining-args (cadr arg-parse-result)))
-                        ((cdr arg-def) parsed-value) 
-                        (set! rest remaining-args))))))))
+                (if (not arg-def)
+                    (begin
+                      (gnc:prefs-show-usage)
+                      (set! result #f)
+                      (set! quit? #t))
+                    
+                    (let* ((arg-type (car arg-def))
+                           (arg-parse-result
+                            (case arg-type
+                              ((boolean) (gnc:cmd-line-get-boolean-arg (cdr rest)))
+                              ((string) (gnc:cmd-line-get-string-arg (cdr rest)))
+                              ((integer)
+                               (gnc:cmd-line-get-integer-arg (cdr rest)))
+                              (else
+                               (gnc:error "bad argument type " arg-type ".")
+                               (gnc:shutdown 1)))))
+                      
+                      (if (not arg-parse-result)
+                          (begin                
+                            (set result #f)
+                            (set! quit? #t))
+                          (let ((parsed-value (car arg-parse-result))
+                                (remaining-args (cadr arg-parse-result)))
+                            ((cdr arg-def) parsed-value) 
+                            (set! rest remaining-args)))))))))
     (if result
         (gnc:debug "files to open: " files-to-open))
     
