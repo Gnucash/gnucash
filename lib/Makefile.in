@@ -32,9 +32,12 @@ include @top_srcdir@/Makefile.init
 #   install      -- ??todo??
 #
 
+GTKSHEET_DIR := @GTKSHEET_DIR@
+
 ######################################################################
 # See Makefile.common for information about these variables.
 CLEAN_SUBDIRS := XmHTML-1.1.0 ComboBox-1.33 Xbae-4.6.2-linas
+CLEAN_SUBDIRS += ${GTKSHEET_DIR}
 ######################################################################
 
 all:
@@ -54,6 +57,7 @@ motif:
 	@cd Xbae-4.6.2-linas; $(MAKE) default
 
 gnome:
+	@cd ${GTKSHEET_DIR};  $(MAKE) default
 
 qt:
 

@@ -36,3 +36,5 @@ urlget:
      http://www.fts.frontec.se/~dast/curl/
      Its now called "curl", not "urlget".
 
+gtksheet:
+  -- This is the basis for the GNOME version's register.
