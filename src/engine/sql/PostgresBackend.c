@@ -446,8 +446,9 @@ pgendRunQuery (Backend *bend, Query *q)
    sqlQuery *sq;
    GList *node, *anode, *xaction_list= NULL, *acct_list = NULL;
 
-   ENTER (" ");
+   ENTER ("be=%p, qry=%p", be, q);
    if (!be || !q) return;
+   be->version_check = (guint32) time(0);
 
    gnc_engine_suspend_events();
    pgendDisable(be);
@@ -564,6 +565,8 @@ pgendSync (Backend *bend, AccountGroup *grp)
    PGBackend *be = (PGBackend *)bend;
    ENTER ("be=%p, grp=%p", be, grp);
 
+   be->version_check = (guint32) time(0);
+
    /* store the account group hierarchy, and then all transactions */
    pgendStoreGroup (be, grp);
    pgendStoreAllTransactions (be, grp);
@@ -662,7 +665,9 @@ pgendSyncPriceDB (Backend *bend, GNCPriceDB *prdb)
 {
    PGBackend *be = (PGBackend *)bend;
    ENTER ("be=%p, prdb=%p", be, prdb);
+   if (!be || !prdb) return;
 
+   be->version_check = (guint32) time(0);
    pgendStorePriceDB (be, prdb);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
@@ -1033,6 +1038,7 @@ pgend_book_load_poll (Backend *bend)
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
+   be->version_check = (guint32) time(0);
 
    pgendKVPInit(be);
    grp = pgendGetAllAccounts (be, NULL);
@@ -1088,6 +1094,7 @@ pgend_book_load_single (Backend *bend)
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
+   be->version_check = (guint32) time(0);
 
    pgendKVPInit(be);
    grp = pgendGetAllAccounts (be, NULL);
@@ -1116,6 +1123,7 @@ pgend_price_load_single (Backend *bend)
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
+   be->version_check = (guint32) time(0);
 
    prdb = pgendGetAllPrices (be, NULL);
 
@@ -1750,6 +1758,8 @@ pgendInit (PGBackend *be)
    be->last_account = ts;
    be->last_price = ts;
    be->last_transaction = ts;
+
+   be->version_check = (guint32) ts.tv_sec;
 
    be->builder = sqlBuilder_new();
 

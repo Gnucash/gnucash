@@ -117,6 +117,7 @@ pgendStorePriceNoLock (PGBackend *be, GNCPrice *pr,
      if (0 < pgendPriceCompareVersion (be, pr)) return;
    }
    pr->version ++;  /* be sure to update the version !! */
+   pr->version_check = be->version_check;
 
    /* make sure that we've stored the commodity 
     * and currency before we store the price.
@@ -442,6 +443,7 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
       return 445;
    }
    pr->version ++;   /* be sure to update the version !! */
+   pr->version_check = be->version_check;
 
    if (pr->do_free) 
    {

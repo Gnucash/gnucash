@@ -53,6 +53,8 @@ typedef enum {
    MODE_EVENT
 } AccessMode;
 
+#define MAX_VERSION_AGE 10
+
 struct _pgend {
    Backend be;
 
@@ -90,6 +92,8 @@ struct _pgend {
    Timespec last_account;
    Timespec last_price;
    Timespec last_transaction;
+
+   guint32 version_check; /* data aging timestamp */
 
    /* scratch space for constructing queries */ 
    int bufflen;

@@ -141,6 +141,7 @@ struct _account {
 
   /* version number, used for tracking multiuser updates */
   gint32 version;
+  guint32  version_check;  /* data aging timestamp */
 
   GList *splits;           /* list of split pointers */
 

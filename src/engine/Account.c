@@ -109,6 +109,7 @@ xaccInitAccount (Account * acc)
   acc->splits      = NULL;
 
   acc->version = 0;
+  acc->version_check = 0;
   acc->editlevel = 0;
   acc->balance_dirty = FALSE;
   acc->sort_dirty = FALSE;

@@ -336,8 +336,8 @@ operation is probably OK.
    backend can't contact its server, then we should just save up caches,
    and then when contact with backend re-established, we should spit
    them out.  The pgendSync routine should more or less do the trick;
-   note, however, that the file format needs to save the version number
-   ...
+   note, however, that the XML file format needs to save the version 
+   number ...
 
 -- Implement various advanced database features, such as checking the
    user's permission to view/edit account by account ... (hmmm this

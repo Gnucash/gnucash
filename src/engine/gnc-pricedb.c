@@ -58,6 +58,7 @@ gnc_price_create(void)
   p->not_saved = FALSE;
   p->do_free = FALSE;
   p->version = 0;
+  p->version_check = 0;
   xaccGUIDNew (&p->guid);
   xaccStoreEntity(p, &p->guid, GNC_ID_PRICE); 
   gnc_engine_generate_event (&p->guid, GNC_EVENT_CREATE);
