@@ -3,10 +3,6 @@
 
 (define-module (gnucash report register))
 
-(export gnc:show-register-report)
-(export gnc:print-register-report)
-(export gnc:show-invoice-report)
-
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
 (require 'record)
@@ -641,14 +637,4 @@
     (gnc:option-set-value credit-op credit-string)
     (func (gnc:make-report "Register" options))))
 
-(define (gnc:show-register-report . rest)
-  (apply gnc:apply-register-report
-         (cons gnc:report-window (cons #f rest))))
-
-(define (gnc:print-register-report . rest)
-  (apply gnc:apply-register-report
-         (cons gnc:print-report (cons #f rest))))
-
-(define (gnc:show-invoice-report . rest)
-  (apply gnc:apply-register-report
-         (cons gnc:report-window (cons #t rest))))
+(export gnc:apply-register-report)
