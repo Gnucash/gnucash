@@ -42,28 +42,40 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 
-// static short module = MOD_LOT;
+static short module = MOD_LOT;
 
-/* ========================================================== */
+/* ================================================================= */
+
+static KvpFrame *
+is_subsplit (Split *split)
+{
+   KvpValue *kval;
+   KvpFrame *ksub;
+
+   if (!split) return NULL;
+   g_return_val_if_fail (split->parent, NULL);
+
+   /* If there are no sub-splits, then there's nothing to do. */
+   kval = kvp_frame_get_slot (split->kvp_data, "lot-split");
+   if (!kval) return NULL;  
+
+   ksub = kvp_value_get_frame (kval);
+   g_return_val_if_fail (ksub, NULL);
+
+   return ksub;
+}
+
+/* ================================================================= */
 
 void
 xaccScrubSubSplitPrice (Split *split)
 {
-   KvpValue *kval;
-   KvpFrame *ksub;
    gnc_numeric src_amt, src_val;
    SplitList *node;
 
-   if (!split) return;
-   g_return_if_fail (split->parent);
+   if (NULL == is_subsplit (split)) return;
 
-   /* If there are no sub-splits, then there's nothing to do. */
-   kval = kvp_frame_get_value (split->kvp_data, "lot-split");
-   if (!kval) return;  
-
-   ksub = kvp_value_get_frame (kval);
-   g_return_if_fail (ksub);
-
+   ENTER (" ");
    /* Get 'price' of the indicated split */
    src_amt = xaccSplitGetAmount (split);
    src_val = xaccSplitGetValue (split);
@@ -75,7 +87,7 @@ xaccScrubSubSplitPrice (Split *split)
    {
       Split *s = node->data;
       Transaction *txn = s->parent;
-      gnc_numeric dst_amt, dst_value, target_val;
+      gnc_numeric dst_amt, dst_val, target_val;
       gnc_numeric delta;
       int scu;
 
@@ -108,6 +120,53 @@ xaccScrubSubSplitPrice (Split *split)
       xaccSplitSetValue (s, target_val);
       xaccTransCommitEdit (txn);
    }
+   LEAVE (" ");
 }
+
+/* ================================================================= */
+
+#if LATER
+
+static void
+merge_splits (Split *sa, Split *sb)
+{
+   Transaction *txn;
+
+   txn = sa->parent;
+   xaccTransBeginEdit (txn);
+   /* whack kvp of b, remove gem kvp of a */
+   /* whack memo etc. b */
+   /* set reconsile to no */
+   /* add amounts, values */
+
+   xaccTransCommitEdit (txn);
+   
+}
+
+void 
+xaccScrubMergeSubSplits (Split *split)
+{
+   KvpFrame *sf;
+   SplitList *node;
+   GNCLot *lot;
+
+   sf = is_subsplit (split);
+   if (!sf) return;
+
+   lot = xaccSplitGetLot (split);
+
+   ENTER (" ");
+   for (node=split->parent->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      if (xaccSplitGetLot (s) != lot) continue;
+
+      /* OK, this split is in the same lot (and thus same account)
+       * as the indicated split.  It must be a subsplit. Merge the
+       * two back together again. */
+   }
+   LEAVE (" ");
+}
+#endif
 
 /* ========================== END OF FILE  ========================= */
