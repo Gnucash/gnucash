@@ -40,6 +40,7 @@
 
 #include "basiccell.h"
 #include "datecell.h"
+#include "util.h"
 
 static void setDateCellValue (BasicCell *, const char *);
 
@@ -47,6 +48,9 @@ static void setDateCellValue (BasicCell *, const char *);
    if ((cell)->value) free ((cell)->value);	\
    (cell)->value = strdup (str);		\
 }
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_REGISTER;
 
 /* ================================================ */
 
@@ -281,7 +285,7 @@ DateLeave (BasicCell *_cell, const char * curr)
 
 /* ================================================ */
 /* for most practical purposes, the commit function
- * is identical to the DateLeave function, excpet that
+ * is identical to the DateLeave function, except that
  * it returns no value (and is publically visible)
  */
 
@@ -289,13 +293,15 @@ void
 xaccCommitDateCell (DateCell *cell)
 {
    char buff[30];
+   ENTER ("xaccCommitDateCell(): value is %s \n", cell->cell.value);
    xaccParseDate (&(cell->date), cell->cell.value);
    printDate (buff, cell->date.tm_mday, 
-                  cell->date.tm_mon+1, 
-                  cell->date.tm_year+1900);
+                    cell->date.tm_mon+1, 
+                    cell->date.tm_year+1900);
 
    if (cell->cell.value) free (cell->cell.value);
    cell->cell.value = strdup (buff);
+   LEAVE ("xaccCommitDateCell(): value is %s \n", cell->cell.value);
 }
 
 /* ================================================ */
