@@ -500,7 +500,7 @@ AC_ARG_ENABLE( hbci,
        HBCI_DIR=hbci)
 if test x${HBCI_DIR} = xhbci ;
 then
-    AM_PATH_OPENHBCI(0.9.3)
+    AM_PATH_OPENHBCI(0.9.4)
     HBCI_LIBS="${OPENHBCI_LIBS}"
     HBCI_CFLAGS="${OPENHBCI_CXXFLAGS}"
 

@@ -70,6 +70,8 @@
 	
 2002-12-07  Christian Stimming  <stimming@tuhh.de>
 
+	* configure.in: Require openhbci 0.9.4 for HBCI version choosing.
+
 	* src/import-export/import-backend.c: Fix adding the balancing
 	split.
 
