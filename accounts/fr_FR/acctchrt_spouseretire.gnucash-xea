@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Comptes d'épargne retraite de l'épouse
+    </gnc-act:title>
+    <gnc-act:short-description>
+     Compte d'épargne retraite avec ses sous-comptes d'investissements relatifs de l'épouse
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Vous devriez sélectionner cet ensemble de comptes si vous avez des comptes d'épargne retraite de l'épouse(actions, obligations, fonds communs, fonds d'indices, intérêts, dividendes).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Actif</act:name>
+  <act:id type="new">96d9b17add59eb4c7edec7ed241af755</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Actif</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Investissements</act:name>
+  <act:id type="new">f46c9f777b1730c6b5f4a1faf9e31708</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Investissements</act:description>
+  <act:parent type="new">96d9b17add59eb4c7edec7ed241af755</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Retraite de l'épouse</act:name>
+  <act:id type="new">4426b41837adc284f96b291c31022844</act:id>
+  <act:type>BANK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Retraite de l'épouse</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">IRA, 401(k), or other retirement</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">f46c9f777b1730c6b5f4a1faf9e31708</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Obligations</act:name>
+  <act:id type="new">c8e7c315502547e51bfdd5a70b5cdd2e</act:id>
+  <act:type>STOCK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Obligations</act:description>
+  <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Actions</act:name>
+  <act:id type="new">b8838eb77b9603e035e1f7b440d468ae</act:id>
+  <act:type>STOCK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Actions</act:description>
+  <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Marché d'indices</act:name>
+  <act:id type="new">0ec1a5b402ceea10d95445a2b31c41a1</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Marché d'indices/act:description>
+  <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Fonds communs</act:name>
+  <act:id type="new">d9ed01f9b8f9845bc3f68f3e0afb021f</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Fonds communs</act:description>
+  <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->
