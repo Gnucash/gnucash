@@ -25,20 +25,20 @@
 #include <gnome.h>
 #include <glib.h>
 
-#include "gnc-ui.h"
-#include "finvar.h"
-#include "gnc-engine-util.h"
 #include "FileDialog.h"
-#include "gnc-book.h"
-#include "Transaction.h"
 #include "Group.h"
-#include "gnc-numeric.h"
 #include "SchedXaction.h"
-#include "gnc-component-manager.h"
-#include "SplitLedger.h"
-#include "gnc-ui-util.h"
-#include "gnc-exp-parser.h"
+#include "Transaction.h"
 #include "dialog-utils.h"
+#include "finvar.h"
+#include "gnc-book.h"
+#include "gnc-component-manager.h"
+#include "gnc-engine-util.h"
+#include "gnc-exp-parser.h"
+#include "gnc-numeric.h"
+#include "gnc-ui-util.h"
+#include "gnc-ui.h"
+#include "split-register.h"
 
 #include "dialog-sxsincelast.h"
 

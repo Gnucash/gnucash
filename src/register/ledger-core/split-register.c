@@ -20,7 +20,7 @@
 
 /* 
  * FILE:
- * SplitLedger.c
+ * split-register.c
  *
  * FUNCTION:
  * Provide view for SplitRegister object.
@@ -108,7 +108,6 @@
 #include "Account.h"
 #include "FileDialog.h"
 #include "MultiLedger.h"
-#include "SplitLedger.h"
 #include "combocell.h"
 #include "datecell.h"
 #include "global-options.h"
@@ -124,6 +123,7 @@
 #include "quickfillcell.h"
 #include "recncell.h"
 #include "splitreg.h"
+#include "split-register.h"
 #include "split-register-model-save.h"
 #include "table-allgui.h"
 

@@ -29,7 +29,6 @@
 #include "Group.h"
 #include "MultiLedger.h"
 #include "Query.h"
-#include "SplitLedger.h"
 #include "Transaction.h"
 #include "FileDialog.h"
 #include "date.h"

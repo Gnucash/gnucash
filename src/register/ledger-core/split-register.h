@@ -1,5 +1,5 @@
 /********************************************************************\
- * SplitLedger.h -- split ledger api                                *
+ * split-register.h -- split register api                           *
  * Copyright (C) 1998-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef XACC_SPLIT_LEDGER_H
-#define XACC_SPLIT_LEDGER_H
+#ifndef SPLIT_REGISTER_H
+#define SPLIT_REGISTER_H
 
 #include <glib.h>
 
@@ -207,4 +207,5 @@ void gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
 			       gboolean use_cut_semantics,
 			       gboolean do_commit);
 
-#endif /* XACC_SPLIT_LEDGER_H */
+#endif
+

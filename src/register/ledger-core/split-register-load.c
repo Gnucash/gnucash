@@ -24,7 +24,6 @@
 
 #include "FileDialog.h"
 #include "Group.h"
-#include "SplitLedger.h"
 #include "combocell.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
@@ -33,6 +32,7 @@
 #include "numcell.h"
 #include "quickfillcell.h"
 #include "recncell.h"
+#include "split-register.h"
 #include "split-register-p.h"
 
 

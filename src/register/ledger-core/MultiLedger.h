@@ -31,7 +31,7 @@
 #include "Account.h"
 #include "Query.h"
 #include "splitreg.h"
-#include "SplitLedger.h"
+#include "split-register.h"
 #include "SchedXaction.h"
 #include "Transaction.h"
 
@@ -120,6 +120,5 @@ void        xaccLedgerDisplayClose (xaccLedgerDisplay * ledger_display);
 /* close all ledger windows containing this account. */
 void        xaccDestroyLedgerDisplay (Account *account);
 
-#endif /* MULTI_LEDGER_H */
+#endif
 
-/************************** END OF FILE *************************/

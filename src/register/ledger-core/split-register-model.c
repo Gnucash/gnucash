@@ -25,7 +25,6 @@
 #include <glib.h>
 
 #include "FileDialog.h"
-#include "SplitLedger.h"
 #include "Group.h"
 #include "global-options.h"
 #include "gnc-engine-util.h"
@@ -33,6 +32,7 @@
 #include "gnc-ui-util.h"
 #include "pricecell.h"
 #include "recncell.h"
+#include "split-register.h"
 #include "split-register-model.h"
 #include "split-register-model-save.h"
 #include "split-register-p.h"

@@ -22,22 +22,22 @@
 
 #include "config.h"
 
-#include <gnome.h>
 #include <glib.h>
+#include <gnome.h>
 
-#include "gnc-engine-util.h"
 #include "FileDialog.h"
-#include "gnc-book.h"
-#include "Transaction.h"
 #include "Group.h"
-#include "gnc-numeric.h"
 #include "SchedXaction.h"
-#include "gnc-component-manager.h"
+#include "Transaction.h"
 #include "dialog-nextrun.h"
-#include "SplitLedger.h"
-#include "gnc-ui-util.h"
-#include "gnc-exp-parser.h"
 #include "dialog-utils.h"
+#include "gnc-book.h"
+#include "gnc-component-manager.h"
+#include "gnc-engine-util.h"
+#include "gnc-exp-parser.h"
+#include "gnc-numeric.h"
+#include "gnc-ui-util.h"
+#include "split-register.h"
 
 #define DIALOG_NEXTRUN_CM_CLASS "dialog-nextrun"
 
