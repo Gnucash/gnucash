@@ -29,11 +29,6 @@ GNC_TEST_DEPS := \
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-#TESTS_ENVIRONMENT = \
-#  GNC_MODULE_PATH=
-#  GUILE_LOAD_PATH=..:${G_WRAP_MODULE_DIR}:mod-foo:mod-bar:mod-baz \
-#  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:mod-foo:mod-bar:mod-baz:misc-mods:..:
-
 noinst_PROGRAMS = \
   test-load-c \
   test-modsysver \
